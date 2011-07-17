@@ -246,7 +246,7 @@ int getNextAIAssignment(const char *name)
 {
 	int ai = matchAIbyName(name);
 	int match = aidata[ai].assigned;
-	
+
 	for (int i = 0; i < game.maxPlayers; i++)
 	{
 		if (ai == NetPlay.players[i].ai)
@@ -645,7 +645,7 @@ static bool OptionsInet(void)			//internet options
 	sContext.mx			= 0;
 	sContext.my			= 0;
 	widgGetFromID(psConScreen, CON_IP)->clicked(&sContext);
-	
+
 	SettingsUp = true;
 	return true;
 }
@@ -684,7 +684,7 @@ bool joinGame(const char* host, uint32_t port)
 	{
 		return false;
 	}
-    
+
     // Set playername to the used lobby username.
     if (lobbyclient.isAuthenticated())
     {
@@ -729,7 +729,7 @@ bool joinGame(const char* host, uint32_t port)
 
 		return false;
 	}
-    
+
 	ingame.localJoiningInProgress	= true;
 
 	loadMultiStats(sPlayer,&playerStats);
@@ -844,11 +844,11 @@ static void addGames(void)
 		case ERROR_WRONGVERSION:
 			txt = _("Wrong Game Version!");
 			break;
-		case ERROR_WRONGDATA: 
+		case ERROR_WRONGDATA:
 			 txt = _("You have an incompatible mod.");
 			 break;
 		// AFAIK, the only way this can really happy is if the Host's file is named wrong, or a client side error.
-		case ERROR_UNKNOWNFILEISSUE: 
+		case ERROR_UNKNOWNFILEISSUE:
 			 txt = _("Host couldn't send file?");
 			 debug(LOG_POPUP, "Warzone couldn't complete a file request.\n\nPossibly, Host's file is incorrect. Check your logs for more details.");
 			 break;
@@ -1520,12 +1520,12 @@ static void addGameOptions()
 		widgSetButtonState(psWScreen, MULTIOP_PASSWORD_BUT, WBUT_DISABLE);
 	}
 	// buttons.
-	
+
 	// game type
 	addBlueForm(MULTIOP_OPTIONS,MULTIOP_GAMETYPE,_("Scavengers"),MCOL0,MROW5,MULTIOP_BLUEFORMW,27);
-	addMultiBut(psWScreen, MULTIOP_GAMETYPE, MULTIOP_CAMPAIGN, MCOL1, 2, MULTIOP_BUTW, MULTIOP_BUTH, _("Scavengers"), 
+	addMultiBut(psWScreen, MULTIOP_GAMETYPE, MULTIOP_CAMPAIGN, MCOL1, 2, MULTIOP_BUTW, MULTIOP_BUTH, _("Scavengers"),
 	            IMAGE_SCAVENGERS_ON, IMAGE_SCAVENGERS_ON_HI, true);
-	addMultiBut(psWScreen, MULTIOP_GAMETYPE, MULTIOP_SKIRMISH, MCOL2, 2, MULTIOP_BUTW, MULTIOP_BUTH, _("No Scavengers"), 
+	addMultiBut(psWScreen, MULTIOP_GAMETYPE, MULTIOP_SKIRMISH, MCOL2, 2, MULTIOP_BUTW, MULTIOP_BUTH, _("No Scavengers"),
 	            IMAGE_SCAVENGERS_OFF, IMAGE_SCAVENGERS_OFF_HI, true);
 
 	widgSetButtonState(psWScreen, MULTIOP_CAMPAIGN,	0);
@@ -1559,11 +1559,11 @@ static void addGameOptions()
     {
         sstrcpy(sPlayer, lobbyclient.getUser().toUtf8().constData());
     }
-    
+
 	addMultiEditBox(MULTIOP_OPTIONS, MULTIOP_PNAME, MCOL0, MROW1, _("Select Player Name"), (char*) sPlayer, IMAGE_EDIT_PLAYER, IMAGE_EDIT_PLAYER_HI, MULTIOP_PNAME_ICON);
-        
+
     // Dont allow player name changes when he's authenticated to the lobby.
-	if (lobbyclient.isAuthenticated())
+	if (NetPlay.bComms && lobbyclient.isAuthenticated())
 	{
 		widgSetButtonState(psWScreen, MULTIOP_PNAME, WEDBS_DISABLE);
 		widgSetButtonState(psWScreen, MULTIOP_PNAME_ICON, WBUT_DISABLE);
@@ -1694,9 +1694,9 @@ static void addGameOptions()
 		}
 
 	addBlueForm(MULTIOP_OPTIONS, MULTIOP_MAP_PREVIEW, _("Map Preview"), MCOL0, MROW10, MULTIOP_BLUEFORMW, 27);
-	addMultiBut(psWScreen,MULTIOP_MAP_PREVIEW, MULTIOP_MAP_BUT, MCOL2, 2, MULTIOP_BUTW, MULTIOP_BUTH, 
+	addMultiBut(psWScreen,MULTIOP_MAP_PREVIEW, MULTIOP_MAP_BUT, MCOL2, 2, MULTIOP_BUTW, MULTIOP_BUTH,
 	            _("Click to see Map"), IMAGE_FOG_OFF, IMAGE_FOG_OFF_HI, true);
-	widgSetButtonState(psWScreen, MULTIOP_MAP_BUT,0); //1 = OFF  0=ON 
+	widgSetButtonState(psWScreen, MULTIOP_MAP_BUT,0); //1 = OFF  0=ON
 
 	// cancel
 	addMultiBut(psWScreen,MULTIOP_OPTIONS,CON_CANCEL,
@@ -1717,7 +1717,7 @@ static void addGameOptions()
 	if (ingame.bHostSetup)
 	{
 		addMultiBut(psWScreen,MULTIOP_OPTIONS,MULTIOP_STRUCTLIMITS,MULTIOP_STRUCTLIMITSX,MULTIOP_STRUCTLIMITSY,
-		            35, 28, challengeActive ? _("Show Structure Limits") : _("Set Structure Limits"), 
+		            35, 28, challengeActive ? _("Show Structure Limits") : _("Set Structure Limits"),
 		            IMAGE_SLIM, IMAGE_SLIM_HI, IMAGE_SLIM_HI);
 	}
 
@@ -3274,7 +3274,7 @@ void startMultiplayerGame(void)
 		resetDataHash();	// need to reset it, since host's data has changed.
 		createLimitSet();
 		debug(LOG_NET,"sending our options to all clients");
-		sendOptions(); 
+		sendOptions();
 		NEThaltJoining();							// stop new players entering.
 		ingame.TimeEveryoneIsInGame = 0;
 		ingame.isAllPlayersDataOK = false;
@@ -3286,7 +3286,7 @@ void startMultiplayerGame(void)
 	setRevealStatus(game.fog);
 	war_SetFog(!game.fog);
 
-	debug(LOG_NET, "title mode STARTGAME is set--Starting Game!"); 
+	debug(LOG_NET, "title mode STARTGAME is set--Starting Game!");
 	changeTitleMode(STARTGAME);
 
 	bHosted = false;
@@ -3437,7 +3437,7 @@ void frontendMultiMessages(void)
 			break;
 		}
 		case NET_FIREUP:					// campaign game started.. can fire the whole shebang up...
-			debug(LOG_NET, "NET_FIREUP was received ..."); 
+			debug(LOG_NET, "NET_FIREUP was received ...");
 			if(ingame.localOptionsReceived)
 			{
 				debug(LOG_NET, "& local Options Received (MP game)");
@@ -3688,7 +3688,7 @@ bool startMultiOptions(bool bReenter)
 			ingame.pStructureLimits = NULL;
 		}
 	}
-	
+
 	if(!bReenter)
 	{
 		teamChooserUp = -1;
@@ -3844,7 +3844,7 @@ void displayRemoteGame(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGH
 		// FIXME: Need a Wrong version icon!
 		iV_DrawImage(FrontImages,IMAGE_NOJOIN,x+18,y+11);
 	}
-	
+
 	//draw type overlay.
 	if (lGame->isPrivate)	// check to see if it is a private game
 	{
@@ -4009,7 +4009,7 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *p
 			iV_SetFont(font_regular);
 			iV_SetTextColour(WZCOL_FORM_TEXT);
 		}
-		
+
 		if(getMultiStats(j).played < 5)
 		{
 			iV_DrawImage(FrontImages, IMAGE_MEDAL_DUMMY, x + 4, y + 13);
