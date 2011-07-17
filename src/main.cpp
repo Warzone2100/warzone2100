@@ -1294,11 +1294,12 @@ int main(int argc, char *argv[])
 	else
 	{
 		mainwindow.show();
-																mainwindow.setMinimumSize(w, h);
+		mainwindow.setMinimumSize(w, h);
 		mainwindow.setMaximumSize(w, h);
 	}
 
 	mainwindow.setSwapInterval(war_GetVsync());
+	war_SetVsync(mainwindow.swapInterval() > 0);
 
 	mainwindow.setReadyToPaint();
 
