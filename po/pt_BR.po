@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-07-11 21:43+0200\n"
+"POT-Creation-Date: 2011-07-17 20:05+0000\n"
 "PO-Revision-Date: 2011-06-17 15:09-0300\n"
 "Last-Translator: Artur Filipe <tucalipe@gmail.com>\n"
 "Language-Team: Brazilian Portugese <warzone-dev@gna.org>\n"
@@ -11999,31 +11999,31 @@ msgstr "Hovercraft Canhão de Hiper Velocidade Píton"
 msgid "System locale"
 msgstr "Localização do Sistema"
 
-#: lib/netplay/netlobby.cpp:110
-#: lib/netplay/netlobby.cpp:117
+#: lib/netplay/netlobby.cpp:102
 msgid "Received invalid addGame data."
 msgstr ""
 
+#: lib/netplay/netlobby.cpp:140
 #: lib/netplay/netlobby.cpp:163
-#: lib/netplay/netlobby.cpp:192
-#: lib/netplay/netlobby.cpp:218
+#: lib/netplay/netlobby.cpp:183
 #, fuzzy
 msgid "Create a game first!"
 msgstr "Localizar um objeto do jogo"
 
-#: lib/netplay/netlobby.cpp:501
+#: lib/netplay/netlobby.cpp:426
 msgid "Received invalid login data."
 msgstr ""
 
-#: lib/netplay/netlobby.cpp:626
-#: lib/netplay/netlobby.cpp:639
-#: lib/netplay/netlobby.cpp:650
-#: lib/netplay/netlobby.cpp:666
-#: lib/netplay/netlobby.cpp:676
+#: lib/netplay/netlobby.cpp:518
+#: lib/netplay/netlobby.cpp:531
+#: lib/netplay/netlobby.cpp:542
+#: lib/netplay/netlobby.cpp:560
+#: lib/netplay/netlobby.cpp:569
+#: lib/netplay/netlobby.cpp:578
 msgid "Failed to communicate with the lobby."
 msgstr ""
 
-#: lib/netplay/netlobby.cpp:696
+#: lib/netplay/netlobby.cpp:589
 #, c-format
 msgid "Got server error: %s"
 msgstr ""
@@ -12041,6 +12041,51 @@ msgstr ""
 #, c-format
 msgid "Error connecting to the lobby server: %s. Make sure port %d can receive incoming connections. If you're using a router configure it to use UPnP, or to forward the port to your system."
 msgstr ""
+
+#: po/custom/mac-infoplist.txt:1
+msgid ""
+"Copyright © 1999-2004 Eidos Interactive.\n"
+"Copyright © 2005-2010 The Warzone 2100 Project"
+msgstr ""
+"Copyright © 1999-2004 Eidos Interactive.\n"
+"Copyright © 2005-2010 The Warzone 2100 Project"
+
+#: po/custom/mac-infoplist.txt:2
+#: po/custom/warzone2100.desktop.txt:2
+msgid "Warzone 2100"
+msgstr "Warzone 2100"
+
+#: po/custom/mac-infoplist.txt:3
+msgid "Warzone 2100 Map / Mod File"
+msgstr "Arquivo de Mapa/Mod de Warzone 2100"
+
+#: po/custom/mac-infoplist.txt:4
+msgid "Warzone 2100 Campaign Mod File"
+msgstr "Arquivo de Mod de Campanha do Warzone 2100"
+
+#: po/custom/mac-infoplist.txt:5
+msgid "Warzone 2100 Multiplayer Mod File"
+msgstr "Arquivo de Mod Multiplayer de Warzone 2100"
+
+#: po/custom/mac-infoplist.txt:6
+msgid "Warzone 2100 Global Mod File"
+msgstr "Arquivo de Mod Global de Warzone 2100"
+
+#: po/custom/mac-infoplist.txt:7
+msgid "Warzone"
+msgstr "Warzone"
+
+#: po/custom/mac-infoplist.txt:8
+msgid "Warzone 2100 Music Mod File"
+msgstr "Arquivo de Mùsica do Warzone 2100"
+
+#: po/custom/warzone2100.desktop.txt:1
+msgid "Postnuclear realtime strategy"
+msgstr "Estratégia Realtime Pós-Nuclear"
+
+#: po/custom/warzone2100.desktop.txt:3
+msgid "Strategy Game"
+msgstr "Jogo de Estratégia"
 
 #: src/challenge.cpp:219
 #: src/hci.cpp:916
@@ -12365,13 +12410,13 @@ msgstr "Fora de sincronia"
 msgid "Cannot Build. Oil Resource Burning."
 msgstr "Não pode construir. Poço em chamas."
 
-#: src/display.cpp:1828
-#: src/display.cpp:2403
+#: src/display.cpp:1837
+#: src/display.cpp:2424
 #, c-format
 msgid "%s - Damage %d%% - Experience %.1f, %s"
 msgstr "%s - Dano %d%% - Experiência %.1f, %s"
 
-#: src/display.cpp:1844
+#: src/display.cpp:1853
 #, c-format
 msgid "%s - Allied - Damage %d%% - Experience %d, %s"
 msgstr "%s - Aliado - Danos %d%% - Experiência %d, %s"
@@ -12384,77 +12429,77 @@ msgstr "Unidade Perdida!"
 msgid "Structure Restored"
 msgstr "Estrutura Restaurada"
 
-#: src/droid.cpp:2727
+#: src/droid.cpp:2724
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
 msgstr[0] "Grupo %u selecionado - %u Unidade"
 msgstr[1] "Grupo %u selecionado - %u Unidades"
 
-#: src/droid.cpp:2740
+#: src/droid.cpp:2737
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
 msgstr[0] "%u unidade atribuída ao Grupo %u"
 msgstr[1] "%u unidades atribuídas ao Grupo %u"
 
-#: src/droid.cpp:2753
+#: src/droid.cpp:2750
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
 msgstr[0] "Centrado no Grupo %u - %u Unidade"
 msgstr[1] "Centrado no Grupo %u - %u Unidades"
 
-#: src/droid.cpp:2757
+#: src/droid.cpp:2754
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] "Alinhamento com o grupo %u - %u Unidade"
 msgstr[1] "Alinhamento com o grupo %u - %u Unidades"
 
-#: src/droid.cpp:3084
+#: src/droid.cpp:3081
 msgid "Rookie"
 msgstr "Recruta"
 
-#: src/droid.cpp:3085
+#: src/droid.cpp:3082
 msgctxt "rank"
 msgid "Green"
 msgstr "Soldado"
 
-#: src/droid.cpp:3086
+#: src/droid.cpp:3083
 msgid "Trained"
 msgstr "Treinado"
 
-#: src/droid.cpp:3087
+#: src/droid.cpp:3084
 msgid "Regular"
 msgstr "Regular"
 
-#: src/droid.cpp:3088
+#: src/droid.cpp:3085
 msgid "Professional"
 msgstr "Tenente"
 
-#: src/droid.cpp:3089
+#: src/droid.cpp:3086
 msgid "Veteran"
 msgstr "Veterano"
 
-#: src/droid.cpp:3090
+#: src/droid.cpp:3087
 msgid "Elite"
 msgstr "Elite"
 
-#: src/droid.cpp:3091
+#: src/droid.cpp:3088
 msgid "Special"
 msgstr "Força Especial"
 
-#: src/droid.cpp:3092
+#: src/droid.cpp:3089
 msgid "Hero"
 msgstr "Herói"
 
-#: src/droid.cpp:4114
+#: src/droid.cpp:4111
 #, c-format
 msgid "%s wanted to give you a %s but you have too many!"
 msgstr "%s quis te dar um %s mas você já tem demais!"
 
-#: src/droid.cpp:4118
+#: src/droid.cpp:4115
 #, c-format
 msgid "You wanted to give %s a %s but they have too many!"
 msgstr "Você tentou dar %s para %s, mas eles já têm demais!"
@@ -12523,7 +12568,7 @@ msgid "Challenges"
 msgstr "Desafios"
 
 #: src/frontend.cpp:220
-#: src/ingameop.cpp:272
+#: src/ingameop.cpp:273
 msgid "Load Game"
 msgstr "Carregar Jogo"
 
@@ -12532,9 +12577,9 @@ msgid "SINGLE PLAYER"
 msgstr "UM JOGADOR"
 
 #: src/frontend.cpp:308
-#: src/ingameop.cpp:493
-#: src/mission.cpp:2527
-#: src/mission.cpp:2628
+#: src/ingameop.cpp:494
+#: src/mission.cpp:2528
+#: src/mission.cpp:2629
 msgid "Load Saved Game"
 msgstr "Carregar Jogo Salvo"
 
@@ -12556,7 +12601,7 @@ msgid "Video Options"
 msgstr "Opções de Vídeo"
 
 #: src/frontend.cpp:367
-#: src/ingameop.cpp:267
+#: src/ingameop.cpp:268
 msgid "Audio Options"
 msgstr "Opções de Áudio"
 
@@ -12605,7 +12650,7 @@ msgstr "Linhas de Varredura"
 #: src/frontend.cpp:786
 #: src/frontend.cpp:858
 #: src/frontend.cpp:912
-#: src/frontend.cpp:950
+#: src/frontend.cpp:951
 #: src/frontend.cpp:998
 #: src/frontend.cpp:1010
 #: src/frontend.cpp:1022
@@ -12677,17 +12722,17 @@ msgid "GRAPHICS OPTIONS"
 msgstr "OPÇÕES GRÁFICAS"
 
 #: src/frontend.cpp:664
-#: src/ingameop.cpp:167
+#: src/ingameop.cpp:168
 msgid "Voice Volume"
 msgstr "Volume da Voz"
 
 #: src/frontend.cpp:668
-#: src/ingameop.cpp:172
+#: src/ingameop.cpp:173
 msgid "FX Volume"
 msgstr "Volume dos Sons"
 
 #: src/frontend.cpp:672
-#: src/ingameop.cpp:177
+#: src/ingameop.cpp:178
 msgid "Music Volume"
 msgstr "Volume da Música"
 
@@ -12717,7 +12762,8 @@ msgid "Texture size"
 msgstr "Tamanho da Textura"
 
 #: src/frontend.cpp:768
-msgid "Vertical sync*"
+#, fuzzy
+msgid "Vertical sync"
 msgstr "V-Sync*"
 
 #: src/frontend.cpp:803
@@ -12832,8 +12878,8 @@ msgid "MAP SAVED!"
 msgstr "MAPA SALVO!"
 
 #: src/hci.cpp:1573
-#: src/loop.cpp:563
-#: src/loop.cpp:579
+#: src/loop.cpp:564
+#: src/loop.cpp:580
 msgid "GAME SAVED: "
 msgstr "JOGO SALVO:"
 
@@ -12972,9 +13018,9 @@ msgid "Start Edit Mode"
 msgstr "Modo Editar Início"
 
 #: src/hci.cpp:3669
-#: src/ingameop.cpp:112
-#: src/ingameop.cpp:256
-#: src/ingameop.cpp:260
+#: src/ingameop.cpp:113
+#: src/ingameop.cpp:257
+#: src/ingameop.cpp:261
 msgid "Quit"
 msgstr "Sair"
 
@@ -13011,46 +13057,46 @@ msgstr "Tab mover para direita"
 msgid "Ally progress"
 msgstr "Progresso do Aliado"
 
-#: src/ingameop.cpp:111
-#: src/ingameop.cpp:195
-#: src/ingameop.cpp:264
+#: src/ingameop.cpp:112
+#: src/ingameop.cpp:196
+#: src/ingameop.cpp:265
 msgid "Resume Game"
 msgstr "Resumir Jogo"
 
-#: src/ingameop.cpp:134
+#: src/ingameop.cpp:135
 msgid "WARNING: You're the host. If you quit, the game ends for everyone!"
 msgstr "ATENÇÃO: Você é o hospedeiro Se você sair, o jogo acaba para todos!"
 
-#: src/ingameop.cpp:186
-#: src/ingameop.cpp:521
+#: src/ingameop.cpp:187
+#: src/ingameop.cpp:522
 msgid "Tactical UI (Target Origin Icon): Show"
 msgstr "Interface de Usuário Tática (Icone de Origem do Alvo): Exibir"
 
-#: src/ingameop.cpp:191
-#: src/ingameop.cpp:525
+#: src/ingameop.cpp:192
+#: src/ingameop.cpp:526
 msgid "Tactical UI (Target Origin Icon): Hide"
 msgstr "Interface de Usuário Tática (Icone de Origem do Alvo): Esconder"
 
-#: src/ingameop.cpp:274
-#: src/ingameop.cpp:497
-#: src/mission.cpp:2514
-#: src/mission.cpp:2631
+#: src/ingameop.cpp:275
+#: src/ingameop.cpp:498
+#: src/mission.cpp:2515
+#: src/mission.cpp:2632
 msgid "Save Game"
 msgstr "Salvar"
 
-#: src/ingameop.cpp:338
+#: src/ingameop.cpp:339
 msgid "Host has quit the game!"
 msgstr "O hospedeiro saiu do jogo!"
 
-#: src/ingameop.cpp:344
+#: src/ingameop.cpp:345
 msgid "The game can't continue without the host."
 msgstr "O jogo não pode continuar sem o hosp."
 
-#: src/ingameop.cpp:350
+#: src/ingameop.cpp:351
 msgid "-->  QUIT  <--"
 msgstr "--> SAIR <--"
 
-#: src/init.cpp:404
+#: src/init.cpp:405
 #, c-format
 msgid ""
 "The required mod could not be loaded: %s\n"
@@ -13962,42 +14008,42 @@ msgstr "Localizar um objeto do jogo"
 msgid "Toggle Driving Mode"
 msgstr "Liga/Desliga Modo Dirigir"
 
-#: src/loop.cpp:570
-#: src/loop.cpp:586
+#: src/loop.cpp:571
+#: src/loop.cpp:587
 msgid "Could not save game!"
 msgstr "Impossível salvar o jogo!"
 
-#: src/mission.cpp:2075
+#: src/mission.cpp:2076
 msgid "Load Transport"
 msgstr "Carregar Transportes"
 
-#: src/mission.cpp:2462
+#: src/mission.cpp:2463
 msgid "OBJECTIVE ACHIEVED by cheating!"
 msgstr "OBJETIVO ARQUIVADO por trapaça!"
 
-#: src/mission.cpp:2462
+#: src/mission.cpp:2463
 msgid "OBJECTIVE ACHIEVED"
 msgstr "OBJETIVO ARQUIVADO"
 
-#: src/mission.cpp:2468
+#: src/mission.cpp:2469
 msgid "OBJECTIVE FAILED--and you cheated!"
 msgstr "FALHA NO OBJETIVO--e você trapaçeou!"
 
-#: src/mission.cpp:2468
+#: src/mission.cpp:2469
 msgid "OBJECTIVE FAILED"
 msgstr "FALHA NO OBJETIVO"
 
-#: src/mission.cpp:2493
-#: src/mission.cpp:2533
-#: src/mission.cpp:2645
+#: src/mission.cpp:2494
+#: src/mission.cpp:2534
+#: src/mission.cpp:2646
 msgid "Quit To Main Menu"
 msgstr "Sair para o Menu Principal"
 
-#: src/mission.cpp:2501
+#: src/mission.cpp:2502
 msgid "Continue Game"
 msgstr "Continuar o Jogo"
 
-#: src/mission.cpp:2596
+#: src/mission.cpp:2597
 msgid "GAME SAVED :"
 msgstr "JOGO SALVO :"
 
@@ -14938,51 +14984,6 @@ msgstr " - Finalizado em %s"
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "Versão %s%s%s%s"
-
-#: po/custom/warzone2100.desktop.txt:1
-msgid "Postnuclear realtime strategy"
-msgstr "Estratégia Realtime Pós-Nuclear"
-
-#: po/custom/warzone2100.desktop.txt:2
-#: po/custom/mac-infoplist.txt:2
-msgid "Warzone 2100"
-msgstr "Warzone 2100"
-
-#: po/custom/warzone2100.desktop.txt:3
-msgid "Strategy Game"
-msgstr "Jogo de Estratégia"
-
-#: po/custom/mac-infoplist.txt:1
-msgid ""
-"Copyright © 1999-2004 Eidos Interactive.\n"
-"Copyright © 2005-2010 The Warzone 2100 Project"
-msgstr ""
-"Copyright © 1999-2004 Eidos Interactive.\n"
-"Copyright © 2005-2010 The Warzone 2100 Project"
-
-#: po/custom/mac-infoplist.txt:3
-msgid "Warzone 2100 Map / Mod File"
-msgstr "Arquivo de Mapa/Mod de Warzone 2100"
-
-#: po/custom/mac-infoplist.txt:4
-msgid "Warzone 2100 Campaign Mod File"
-msgstr "Arquivo de Mod de Campanha do Warzone 2100"
-
-#: po/custom/mac-infoplist.txt:5
-msgid "Warzone 2100 Multiplayer Mod File"
-msgstr "Arquivo de Mod Multiplayer de Warzone 2100"
-
-#: po/custom/mac-infoplist.txt:6
-msgid "Warzone 2100 Global Mod File"
-msgstr "Arquivo de Mod Global de Warzone 2100"
-
-#: po/custom/mac-infoplist.txt:7
-msgid "Warzone"
-msgstr "Warzone"
-
-#: po/custom/mac-infoplist.txt:8
-msgid "Warzone 2100 Music Mod File"
-msgstr "Arquivo de Mùsica do Warzone 2100"
 
 #~ msgid "Could not resolve masterserver name (%s)!"
 #~ msgstr "Não foi possível resolver o nome do servidor mestre (%s)!"
