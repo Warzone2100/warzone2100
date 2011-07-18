@@ -445,17 +445,17 @@ RETURN_CODES Client::logout()
         freeError();
     }
 
-    // Clear auth data.
-    useAuth_ = false;
-    user_.clear();
-    token_.clear();
-    session_.clear();
-
     // Tell the lobby that we want to logout.
     if (call_("logout") != LOBBY_NO_ERROR)
     {
         return lastError_.code;
     }
+
+    // Clear auth data.
+    isAuthenticated_ = false;
+    user_.clear();
+    token_.clear();
+    session_.clear();
 
     freeCallResult_();
     return LOBBY_NO_ERROR;
