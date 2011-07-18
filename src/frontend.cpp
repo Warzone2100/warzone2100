@@ -948,11 +948,11 @@ bool runVideoOptionsMenu(void)
 			war_SetVsync(WzMainWindow::instance()->swapInterval() > 0);
 			if (war_GetVsync())
 			{
-				widgSetString(psWScreen, FRONTEND_VSYNC_R, _("Off"));
+				widgSetString(psWScreen, FRONTEND_VSYNC_R, _("On"));
 			}
 			else
 			{
-				widgSetString(psWScreen, FRONTEND_VSYNC_R, _("On"));
+				widgSetString(psWScreen, FRONTEND_VSYNC_R, _("Off"));
 			}
 			break;
 		}
