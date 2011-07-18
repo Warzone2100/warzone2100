@@ -4505,10 +4505,6 @@ bool gameLoadV(PHYSFS_file* fileHandle, unsigned int version)
 	if (version >= VERSION_38)
 	{
 		setOverrideMods(saveGameData.modList);
-		if (saveGameData.sGame.map[0])
-		{
-			setOverrideMap(saveGameData.sGame.map, saveGameData.sGame.maxPlayers);
-		}
 	}
 
 	// All savegames from version 34 or before are little endian so swap them. All
