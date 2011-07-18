@@ -359,9 +359,8 @@ BOOL rebuildSearchPath( searchPathMode mode, BOOL force )
 #ifdef DEBUG
 					debug(LOG_WZ, "Adding [%s] to search path", curSearchPath->path);
 #endif // DEBUG
-					// Add maps and global and multiplay mods
+					// Add global and multiplay mods
 					PHYSFS_addToSearchPath( curSearchPath->path, PHYSFS_APPEND );
-					addSubdirs( curSearchPath->path, "maps", PHYSFS_APPEND, NULL, false );
 					addSubdirs( curSearchPath->path, "mods/music", PHYSFS_APPEND, NULL, false );
 					addSubdirs( curSearchPath->path, "mods/global", PHYSFS_APPEND, use_override_mods?override_mods:global_mods, true );
 					addSubdirs( curSearchPath->path, "mods", PHYSFS_APPEND, use_override_mods?override_mods:global_mods, true );
@@ -388,6 +387,15 @@ BOOL rebuildSearchPath( searchPathMode mode, BOOL force )
 					sstrcat(tmpstr, "base.wz");
 					PHYSFS_addToSearchPath( tmpstr, PHYSFS_APPEND );
 
+					curSearchPath = curSearchPath->higherPriority;
+				}
+				curSearchPath = searchPathRegistry;
+				while (curSearchPath->lowerPriority)
+					curSearchPath = curSearchPath->lowerPriority;
+				// Add maps last, so files in them don't override game data
+                                while (curSearchPath)
+				{
+					addSubdirs(curSearchPath->path, "maps", PHYSFS_APPEND, NULL, false);
 					curSearchPath = curSearchPath->higherPriority;
 				}
 				break;
