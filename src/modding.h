@@ -26,8 +26,7 @@ void removeSubdirs( const char * basedir, const char * subdir, char * checkList[
 void printSearchPath( void );
 
 void setOverrideMods(char * modlist);
-void setOverrideMap(char* map, int maxPlayers);
-void clearOverrides(void);
+void clearOverrideMods(void);
 
 void addLoadedMod(const char * modname);
 void clearLoadedMods(void);
