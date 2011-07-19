@@ -4590,7 +4590,6 @@ bool scrSetNoGoArea(void)
 
 // -----------------------------------------------------------------------------------------
 // set the zoom level for the radar
-// What is the script doing setting radar zoom? Commenting out for now. - Per
 bool scrSetRadarZoom(void)
 {
 	SDWORD	level;
@@ -4599,7 +4598,7 @@ bool scrSetRadarZoom(void)
 	{
 		return true;
 	}
-#if 0
+
 	if (level < 0 || level > 2)
 	{
 		ASSERT( false, "scrSetRadarZoom: zoom level out of range" );
@@ -4607,7 +4606,7 @@ bool scrSetRadarZoom(void)
 	}
 
 	SetRadarZoom((UWORD)level);
-#endif
+
 	return true;
 }
 
