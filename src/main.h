@@ -52,4 +52,7 @@ extern char * override_mods[MAX_MODS];
 extern char * override_mod_list;
 extern bool use_override_mods;
 
+void setCurrentMap(char* map, int maxPlayers);
+extern char *current_map[3];
+
 #endif // __INCLUDED_SRC_MAIN_H__

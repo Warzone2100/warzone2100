@@ -47,6 +47,7 @@
 #include "research.h"
 #include "lib/framework/lexer_input.h"
 #include "effects.h"
+#include "main.h"
 
 extern int lev_get_lineno(void);
 extern char* lev_get_text(void);
@@ -685,7 +686,8 @@ bool levLoadData(const char* name, char *pSaveName, GAME_TYPE saveType)
 		}
 	}
 
-	if (!rebuildSearchPath(psNewLevel->dataDir, false))
+	setCurrentMap(psNewLevel->pName, psNewLevel->players);
+	if (!rebuildSearchPath(psNewLevel->dataDir, true))
 	{
 		return false;
 	}

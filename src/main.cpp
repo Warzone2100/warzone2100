@@ -119,6 +119,8 @@ char * override_mods[MAX_MODS] = { NULL };
 char * override_mod_list = NULL;
 bool use_override_mods = false;
 
+char *current_map[3] = { NULL };
+
 char * loaded_mods[MAX_MODS] = { NULL };
 char * mod_list = NULL;
 int num_loaded_mods = 0;
@@ -272,6 +274,32 @@ void setOverrideMods(char * modlist)
 	override_mods[i+1] = NULL;
 	override_mod_list = modlist;
 	use_override_mods = true;
+}
+
+void setCurrentMap(char* map, int maxPlayers)
+{
+	free(current_map[0]);
+	free(current_map[1]);
+	// Transform "Sk-Rush-T2" into "4c-Rush.wz" so it can be matched by the map loader
+	current_map[0] = (char*)malloc(strlen(map) + 1 + 7);
+	snprintf(current_map[0], 3, "%d", maxPlayers);
+	strcat(current_map[0], "c-");
+	if (strncmp(map, "Sk-", 3) == 0)
+	{
+		strcat(current_map[0], map + 3);
+	}
+	else
+	{
+		strcat(current_map[0], map);
+	}
+	if (strncmp(current_map[0] + strlen(current_map[0]) - 3, "-T", 2) == 0)
+	{
+		current_map[0][strlen(current_map[0]) - 3] = '\0';
+	}
+	current_map[1] = (char*)malloc(strlen(map) + 1 + 7);
+	strcpy(current_map[1], current_map[0]);
+	strcat(current_map[1],".wz");
+	current_map[2] = NULL;
 }
 
 void clearOverrideMods(void)

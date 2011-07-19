@@ -357,6 +357,15 @@ bool rebuildSearchPath( searchPathMode mode, bool force )
 				curSearchPath = searchPathRegistry;
 				while (curSearchPath->lowerPriority)
 					curSearchPath = curSearchPath->lowerPriority;
+				// Add the selected map first, for mapmod support
+				while (curSearchPath)
+				{
+					addSubdirs(curSearchPath->path, "maps", PHYSFS_APPEND, current_map, false);
+					curSearchPath = curSearchPath->higherPriority;
+				}
+				curSearchPath = searchPathRegistry;
+				while (curSearchPath->lowerPriority)
+					curSearchPath = curSearchPath->lowerPriority;
 				while( curSearchPath )
 				{
 #ifdef DEBUG
@@ -907,6 +916,8 @@ bool stageOneShutDown(void)
 
 	debug(LOG_TEXTURE, "=== stageOneShutDown ===");
 	pie_TexShutDown();
+	// no map for the main menu
+	setCurrentMap((char*)"", 1);
 	// Use mod_multiplay as the default (campaign might have set it to mod_singleplayer)
 	rebuildSearchPath( mod_multiplay, true );
 	pie_TexInit(); // restart it
