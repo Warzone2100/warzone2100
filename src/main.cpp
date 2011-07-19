@@ -322,31 +322,6 @@ void addLoadedMod(const char * modname)
 		return;
 	}
 	char *mod = strdup(modname);
-	int modlen = strlen(mod);
-	if (modlen >= 3 && strcmp(&mod[modlen-3], ".wz")==0)
-	{
-		// remove ".wz" from end
-		mod[modlen-3] = 0;
-		modlen -= 3;
-	}
-	if (modlen >= 4 && strcmp(&mod[modlen-4], ".cam")==0)
-	{
-		// remove ".cam.wz" from end
-		mod[modlen-4] = 0;
-		modlen -= 4;
-	}
-	else if (modlen >= 4 && strcmp(&mod[modlen-4], ".mod")==0)
-	{
-		// remove ".mod.wz" from end
-		mod[modlen-4] = 0;
-		modlen -= 4;
-	}
-	else if (modlen >= 5 && strcmp(&mod[modlen-5], ".gmod")==0)
-	{
-		// remove ".gmod.wz" from end
-		mod[modlen-5] = 0;
-		modlen -= 5;
-	}
 	// Yes, this is an online insertion sort.
 	// I swear, for the numbers of mods this is going to be dealing with
 	// (i.e. 0 to 2), it really is faster than, say, Quicksort.
