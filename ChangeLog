@@ -1,3 +1,10 @@
+master_20110719
+ * General:
+   *Fix: Set the right authentication flag on logouts. (commit:2cb5bab0311c644453bc8a1b2d82311f399b541d)
+   *Fix: Displayed Vsync status was inverted if toggled. (commit:7dbf108ad688dce25c86bdc21062c95c9a31c5ac)
+   *Fix: Handle the trap cursor support for windows a bit differently. (ticket:2813, commit:c10d9ef8d403de633fe3c3df205e29c695caeba0)
+   *Fix: Vsync turned off on start up, affected Windows and some Linux.(commit:866aeb950b1f7b55bb6eea1a8bd273bcc1c7302c)
+
 master_20110717
  * General:
    * Change: Revert to unit limits of 2.3, our engine can't handle so many units at once. (ticket:2812, commit:8b8d2b676ada1b48338e271576150ae42b95ef11)
