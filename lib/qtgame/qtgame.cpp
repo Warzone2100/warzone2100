@@ -28,10 +28,13 @@ void QtGameWidget::trapMouse()
 	} while (result != GrabSuccess && count < 15);
 #elif defined(WZ_WS_WIN32)
 	RECT lpRect;
-	lpRect.top = y();
-	lpRect.left = x();
-	lpRect.bottom = y() + size().height();
-	lpRect.right = x() + size().width();
+	QRect qRect = QtGameWidget::geometry();
+
+	lpRect.top = qRect.top();
+	lpRect.left = qRect.left();
+	lpRect.bottom = qRect.bottom();
+	lpRect.right = qRect.right();
+
 	ClipCursor(&lpRect);
 #endif
 	mCursorTrapped = true;
