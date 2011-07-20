@@ -586,10 +586,22 @@ static void initialize_ConfigDir(void)
  */
 static void initialize_PhysicsFS(const char* argv_0)
 {
+	int result = PHYSFS_init(argv_0);
+
+	if (!result)
+	{
+		debug(LOG_FATAL, "There was a problem trying to init Physfs.  Error was %s", PHYSFS_getLastError());
+		exit(-1);
+	}
+}
+
+static void check_Physfs(void)
+{
+	const PHYSFS_ArchiveInfo **i;
+	char buf[100];
+	bool zipfound = false;
 	PHYSFS_Version compiled;
 	PHYSFS_Version linked;
-
-	PHYSFS_init(argv_0);
 
 	PHYSFS_VERSION(&compiled);
 	PHYSFS_getLinkedVersion(&linked);
@@ -601,6 +613,20 @@ static void initialize_PhysicsFS(const char* argv_0)
 	if (linked.major < 2)
 	{
 		debug(LOG_FATAL, "At least version 2 of PhysicsFS required!");
+		exit(-1);
+	}
+
+    for (i = PHYSFS_supportedArchiveTypes(); *i != NULL; i++)
+    {
+		debug(LOG_WZ, "[**] Supported archive(s): [%s], which is [%s].", (*i)->extension, (*i)->description);
+		if (!strncasecmp("zip", (*i)->extension, 3) && !zipfound)
+		{
+			zipfound = true;
+		}
+    }
+	if (!zipfound)
+	{
+		debug(LOG_FATAL, "Your Physfs wasn't compiled with zip support.  Please recompile Physfs with zip support.  Exiting program.");
 		exit(-1);
 	}
 }
@@ -1083,6 +1109,9 @@ int main(int argc, char *argv[])
 	debug_register_callback( debug_callback_win32debug, NULL, NULL, NULL );
 #endif // WZ_OS_WIN && DEBUG_INSANE
 
+	// *****
+	// NOTE: Try *NOT* to use debug() output routines without some other method of informing the user.  All this output is sent to /dev/nul at this point on some platforms!
+	// *****
 	if (!getUTF8CmdLine(&utfargc, &utfargv))
 	{
 		return EXIT_FAILURE;
@@ -1103,19 +1132,12 @@ int main(int argc, char *argv[])
 		return EXIT_FAILURE;
 	}
 
-	debug(LOG_WZ, "Using language: %s", getLanguage());
-
-	debug(LOG_MEMORY, "sizeof: SIMPLE_OBJECT=%ld, BASE_OBJECT=%ld, DROID=%ld, STRUCTURE=%ld, FEATURE=%ld, PROJECTILE=%ld",
-	      (long)sizeof(SIMPLE_OBJECT), (long)sizeof(BASE_OBJECT), (long)sizeof(DROID), (long)sizeof(STRUCTURE), (long)sizeof(FEATURE), (long)sizeof(PROJECTILE));
-
 	/* Initialize the write/config directory for PhysicsFS.
 	 * This needs to be done __after__ the early commandline parsing,
 	 * because the user might tell us to use an alternative configuration
 	 * directory.
 	 */
 	initialize_ConfigDir();
-
-	debug(LOG_WZ, "Warzone 2100 - %s", version_getFormattedVersionString());
 
 	/*** Initialize directory structure ***/
 	make_dir(ScreenDumpPath, "screenshots", NULL);
@@ -1142,6 +1164,14 @@ int main(int argc, char *argv[])
 			newtime->tm_mon, newtime->tm_mday, newtime->tm_hour, newtime->tm_min, newtime->tm_sec );
 		debug_register_callback( debug_callback_file, debug_callback_file_init, debug_callback_file_exit, buf );
 	}
+
+	// NOTE: it is now safe to use debug() calls to make sure output gets captured.
+	check_Physfs();
+	debug(LOG_WZ, "Warzone 2100 - %s", version_getFormattedVersionString());
+	debug(LOG_WZ, "Using language: %s", getLanguage());
+	debug(LOG_MEMORY, "sizeof: SIMPLE_OBJECT=%ld, BASE_OBJECT=%ld, DROID=%ld, STRUCTURE=%ld, FEATURE=%ld, PROJECTILE=%ld",
+	      (long)sizeof(SIMPLE_OBJECT), (long)sizeof(BASE_OBJECT), (long)sizeof(DROID), (long)sizeof(STRUCTURE), (long)sizeof(FEATURE), (long)sizeof(PROJECTILE));
+
 
 	/* Put in the writedir root */
 	sstrcpy(KeyMapPath, "keymap.map");
