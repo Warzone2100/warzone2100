@@ -26,9 +26,6 @@
 
 #include "lib/framework/frame.h"
 
-// For isHumanPlayer
-#include "lib/netplay/netplay.h"
-
 #include "action.h"
 #include "cmddroid.h"
 #include "combat.h"
@@ -222,7 +219,7 @@ static BASE_OBJECT *aiSearchSensorTargets(BASE_OBJECT *psObj, int weapon_slot, W
 				{
 					*targetOrigin = ORIGIN_SENSOR;
 				}
-
+				
 				if (isCB)
 				{
 					if (targetOrigin)
@@ -298,7 +295,7 @@ static SDWORD targetAttackWeight(BASE_OBJECT *psTarget, BASE_OBJECT *psAttacker,
 					//go through all enemy weapons
 					for(weaponSlot = 0; !bTargetingCmd && weaponSlot < ((STRUCTURE *)psTarget)->numWeaps; weaponSlot++)
 					{
-						if (((STRUCTURE *)psTarget)->psTarget[weaponSlot] ==
+						if (((STRUCTURE *)psTarget)->psTarget[weaponSlot] == 
 						    (BASE_OBJECT *)psAttackerDroid->psGroup->psCommander)
 						{
 							bTargetingCmd = true;
@@ -746,7 +743,7 @@ bool aiChooseTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget, int weapon_slot
 	{
 		*targetOrigin = ORIGIN_UNKNOWN;
 	}
-
+		
 	/* Get the sensor range */
 	switch (psObj->type)
 	{
@@ -1066,7 +1063,7 @@ void aiUpdateDroid(DROID *psDroid)
 
 	lookForTarget = false;
 	updateTarget = false;
-
+	
 	// look for a target if doing nothing
 	if (orderState(psDroid, DORDER_NONE) ||
 		orderState(psDroid, DORDER_GUARD) ||

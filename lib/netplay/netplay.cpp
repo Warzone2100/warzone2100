@@ -786,7 +786,7 @@ int NETclose(void)
 {
 	unsigned int i;
 
-	// reset flag
+	// reset flag 
 	NEThaltJoining();
 
 	debug(LOG_NET, "Terminating sockets.");
@@ -1332,7 +1332,7 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 /*
 *	Checks to see if a human player is still with us.
 *	@note: resuscitation isn't possible with current code, so once we lose
-*	the socket, then we have no way to connect with them again. Future
+*	the socket, then we have no way to connect with them again. Future 
 *	item to enhance.
 */
 static void NETcheckPlayers(void)
@@ -1415,7 +1415,7 @@ bool NETrecvNet(NETQUEUE *queue, uint8_t *type)
 		else if (*pSocket == NULL)
 		{
 			// If there is a error in NET_fillBuffer() then socket is already invalid.
-			// This means that the player dropped / disconnected for whatever reason.
+			// This means that the player dropped / disconnected for whatever reason. 
 			debug(LOG_INFO, "Player, (player %u) seems to have dropped/disconnected.", (unsigned)current);
 
 			if (NetPlay.isHost)
@@ -1484,10 +1484,10 @@ bool NETrecvGame(NETQUEUE *queue, uint8_t *type)
 
 // ////////////////////////////////////////////////////////////////////////
 // File Transfer programs.
-/** Send file. It returns % of file sent when 100 it's complete. Call until it returns 100.
+/** Send file. It returns % of file sent when 100 it's complete. Call until it returns 100. 
 *  @TODO: more error checking (?) different file types (?)
 *          Maybe should close file handle, and seek each time?
-*
+*     
 *  @NOTE: MAX_FILE_TRANSFER_PACKET is set to 2k per packet since 7*2 = 14K which is pretty
 *         much our limit.  Don't screw with that without having a bigger buffer!
 *         NET_BUFFER_SIZE is at 16k.  (also remember text chat, plus all the other cruff)
@@ -1600,7 +1600,7 @@ UBYTE NETrecvFile(NETQUEUE queue)
 				else
 				{
 					uint32_t reason = STUCK_IN_FILE_LOOP;
-
+	
 					NETend();
 					// we should never get here, it means, that the game can't detect the level, but we have the file.
 					// so we kick this player out.
@@ -2024,7 +2024,7 @@ bool NEThostGame(const char* SessionName, const char* PlayerName,
 	NetPlay.maxPlayers = plyrs;
 	NETlogEntry("Hosting game, resetting ban list.", SYNC_FLAG, 0);
 	if (IPlist)
-	{
+	{ 
 		free(IPlist);
 		IPlist = NULL;
 	}
@@ -2709,45 +2709,3 @@ static void addToBanList(const char *ip, const char *name)
 		numBans = 0;
 	}
 }
-
-
-// ////////////////////////////////////////////////////////////////////////////
-// to determine human/computer players and responsibilities of each..
-bool isHumanPlayer(int player)
-{
-    if (player >= MAX_PLAYERS || player < 0)
-    {
-        return false;   // obvious, really
-    }
-    return NetPlay.players[player].allocated;
-}
-
-// returns player responsible for 'player'
-int whosResponsible(int player)
-{
-    if (isHumanPlayer(player))
-    {
-        return player;          // Responsible for him or her self
-    }
-    else if (player == selectedPlayer)
-    {
-        return player;          // We are responsibly for ourselves
-    }
-    else
-    {
-        return NET_HOST_ONLY;   // host responsible for all AIs
-    }
-}
-
-//returns true if selected player is responsible for 'player'
-bool myResponsibility(int player)
-{
-    return whosResponsible(player) == selectedPlayer;
-}
-
-//returns true if 'player' is responsible for 'playerinquestion'
-bool responsibleFor(int player, int playerinquestion)
-{
-    return whosResponsible(playerinquestion) == player;
-}
-

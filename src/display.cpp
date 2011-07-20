@@ -32,9 +32,6 @@
 #include "lib/framework/fixedpoint.h"
 #include "lib/framework/wzapp_c.h"
 
-// isHumanPlayer
-#include "lib/netplay/netplay.h"
-
 #include "action.h"
 #include "display.h"
 #include "map.h"

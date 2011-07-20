@@ -452,6 +452,46 @@ bool setPlayerName(int player, const char *sName)
 	return true;
 }
 
+// ////////////////////////////////////////////////////////////////////////////
+// to determine human/computer players and responsibilities of each..
+bool isHumanPlayer(int player)
+{
+	if (player >= MAX_PLAYERS || player < 0)
+	{
+		return false;	// obvious, really
+	}
+	return NetPlay.players[player].allocated;
+}
+
+// returns player responsible for 'player'
+int whosResponsible(int player)
+{
+	if (isHumanPlayer(player))
+	{
+		return player;			// Responsible for him or her self
+	}
+	else if (player == selectedPlayer)
+	{
+		return player;			// We are responsibly for ourselves
+	}
+	else
+	{
+		return NET_HOST_ONLY;	// host responsible for all AIs
+	}
+}
+
+//returns true if selected player is responsible for 'player'
+bool myResponsibility(int player)
+{
+	return whosResponsible(player) == selectedPlayer;
+}
+
+//returns true if 'player' is responsible for 'playerinquestion'
+bool responsibleFor(int player, int playerinquestion)
+{
+	return whosResponsible(playerinquestion) == player;
+}
+
 int scavengerSlot()
 {
 	// Scavengers used to always be in position 7, when scavengers were only supported in less than 8 player maps.
