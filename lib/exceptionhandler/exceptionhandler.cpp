@@ -749,7 +749,7 @@ void setupExceptionHandler(int argc, const char ** argv, const char *packageVers
 
 #if defined(WZ_OS_WIN)
 # if defined(WZ_CC_MINGW)
-	ExchndlSetup();
+	ExchndlSetup(packageVersion);
 # else
 	prevExceptionHandler = SetUnhandledExceptionFilter(windowsExceptionHandler);
 # endif // !defined(WZ_CC_MINGW)

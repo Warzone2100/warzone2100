@@ -26,8 +26,6 @@
 #include "lib/framework/frame.h"
 #include "dumpinfo.h"
 #include "exchndl.h"
-// FIXME: #include from src/
-#include "src/version.h"
 
 #include <assert.h>
 #include <windows.h>
@@ -1120,7 +1118,7 @@ LONG WINAPI TopLevelExceptionFilter(PEXCEPTION_POINTERS pExceptionInfo)
 			TCHAR szBuffer[4196];
 
 			FormatMessage(
-				FORMAT_MESSAGE_ALLOCATE_BUFFER | 
+				FORMAT_MESSAGE_ALLOCATE_BUFFER |
 				FORMAT_MESSAGE_FROM_SYSTEM |
 				FORMAT_MESSAGE_IGNORE_INSERTS,
 				NULL,
@@ -1130,7 +1128,7 @@ LONG WINAPI TopLevelExceptionFilter(PEXCEPTION_POINTERS pExceptionInfo)
 				0, NULL );
 
 			wsprintf(szBuffer, _T("Exception handler failed with error %d: %s\n"), dw, lpMsgBuf);
-			MessageBox((HWND)MB_ICONEXCLAMATION, szBuffer, _T("Error"), MB_OK); 
+			MessageBox((HWND)MB_ICONEXCLAMATION, szBuffer, _T("Error"), MB_OK);
 
 			LocalFree(lpMsgBuf);
 			debug(LOG_ERROR, "Exception handler failed to create file!");
@@ -1160,7 +1158,7 @@ LONG WINAPI TopLevelExceptionFilter(PEXCEPTION_POINTERS pExceptionInfo)
 				wchar_t szBuffer[4196];
 
 				FormatMessageW(
-					FORMAT_MESSAGE_ALLOCATE_BUFFER | 
+					FORMAT_MESSAGE_ALLOCATE_BUFFER |
 					FORMAT_MESSAGE_FROM_SYSTEM |
 					FORMAT_MESSAGE_IGNORE_INSERTS,
 					NULL,
@@ -1186,7 +1184,7 @@ LONG WINAPI TopLevelExceptionFilter(PEXCEPTION_POINTERS pExceptionInfo)
 		return EXCEPTION_CONTINUE_SEARCH;
 }
 
-void ExchndlSetup()
+void ExchndlSetup(const char *packageVersion)
 {
 # if defined(WZ_CC_MINGW)
 	wchar_t miniDumpPath[PATH_MAX] = {'\0'};
@@ -1199,7 +1197,7 @@ void ExchndlSetup()
 	prevExceptionFilter = SetUnhandledExceptionFilter(TopLevelExceptionFilter);
 
 	// Retrieve the current version
-	formattedVersionString = strdup(version_getFormattedVersionString());
+	formattedVersionString = strdup(packageVersion);
 
 	// Because of UAC on vista / win7 we use this to write our dumps to (unless we override it via OverrideRPTDirectory())
 	// NOTE: CSIDL_PERSONAL =  C:\Users\user name\Documents
