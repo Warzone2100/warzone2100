@@ -466,7 +466,6 @@ bool systemInitialise(void)
 	{
 		return false;
 	}
-	consoleInit();
 
 	buildMapList();
 

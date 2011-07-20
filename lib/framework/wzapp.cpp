@@ -220,6 +220,8 @@ void WzMainWindow::initializeGL()
 	QtGameWidget::initializeGL();
 }
 
+#if 0
+// Re-enable when Qt's font rendering is improved.
 void WzMainWindow::drawPixmap(int XPos, int YPos, QPixmap *pix)
 {
 	QPainter painter(context()->device());
@@ -229,6 +231,7 @@ void WzMainWindow::drawPixmap(int XPos, int YPos, QPixmap *pix)
 	rendStatesRendModeHack();  // rendStates.rendMode = REND_ALPHA;
 	pie_SetRendMode(REND_OPAQUE);		// beat state machinery into submission
 }
+#endif
 
 void WzMainWindow::resizeGL(int width, int height)
 {

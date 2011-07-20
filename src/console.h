@@ -39,7 +39,6 @@ enum CONSOLE_TEXT_JUSTIFICATION
 
 extern char ConsoleString[MAX_CONSOLE_TMP_STRING_LENGTH];
 
-void consoleInit(void);
 bool addConsoleMessage(const char *messageText, CONSOLE_TEXT_JUSTIFICATION jusType, SDWORD player);
 void updateConsoleMessages(void);
 void initConsoleMessages(void);
@@ -49,6 +48,7 @@ void flushConsoleMessages(void);
 void setConsoleBackdropStatus(bool state);
 void enableConsoleDisplay(bool state);
 bool getConsoleDisplayStatus(void);
+void setDefaultConsoleJust(CONSOLE_TEXT_JUSTIFICATION defJ);
 void setConsoleSizePos(UDWORD x, UDWORD y, UDWORD width);
 void setConsolePermanence(bool state, bool bClearOld);
 bool mouseOverConsoleBox(void);
