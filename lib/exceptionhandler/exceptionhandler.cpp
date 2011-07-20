@@ -736,7 +736,7 @@ static bool fetchProgramPath(char * const programPath, size_t const bufSize, con
  *
  * \param programCommand Command used to launch this program. Only used for POSIX handler.
  */
-void setupExceptionHandler(int argc, const char ** argv)
+void setupExceptionHandler(int argc, const char ** argv, const char *packageVersion)
 {
 #if defined(WZ_OS_UNIX) && !defined(WZ_OS_MAC)
 	const char *programCommand;
@@ -744,7 +744,7 @@ void setupExceptionHandler(int argc, const char ** argv)
 #endif
 #if !defined(WZ_OS_MAC)
 	// Initialize info required for the debug dumper
-	dbgDumpInit(argc, argv);
+	dbgDumpInit(argc, argv, packageVersion);
 #endif
 
 #if defined(WZ_OS_WIN)
@@ -786,7 +786,7 @@ bool OverrideRPTDirectory(char *newPath)
 		TCHAR szBuffer[4196];
 
 		FormatMessage(
-			FORMAT_MESSAGE_ALLOCATE_BUFFER | 
+			FORMAT_MESSAGE_ALLOCATE_BUFFER |
 			FORMAT_MESSAGE_FROM_SYSTEM |
 			FORMAT_MESSAGE_IGNORE_INSERTS,
 			NULL,
@@ -796,7 +796,7 @@ bool OverrideRPTDirectory(char *newPath)
 			0, NULL );
 
 		wsprintf(szBuffer, _T("Exception handler failed setting new directory with error %d: %s\n"), dw, lpMsgBuf);
-		MessageBox((HWND)MB_ICONEXCLAMATION, szBuffer, _T("Error"), MB_OK); 
+		MessageBox((HWND)MB_ICONEXCLAMATION, szBuffer, _T("Error"), MB_OK);
 
 		LocalFree(lpMsgBuf);
 

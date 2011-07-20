@@ -1118,7 +1118,7 @@ int main(int argc, char *argv[])
 	}
 	QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));	// make Qt treat all C strings in Warzone as UTF-8
 
-	setupExceptionHandler(utfargc, utfargv);
+	setupExceptionHandler(utfargc, utfargv, version_getFormattedVersionString());
 
 	/*** Initialize PhysicsFS ***/
 	initialize_PhysicsFS(utfargv[0]);
