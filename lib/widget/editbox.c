@@ -555,10 +555,6 @@ void editBoxRun(W_EDITBOX *psWidget, W_CONTEXT *psContext)
 			debug(LOG_INPUT, "EditBox cursor backspace");
 			break;
 		case INPBUF_TAB :
-			putSelection(&pBuffer, &pBufferAllocated, &pos);
-
-			/* Update the printable text */
-			fitStringEnd(pBuffer, psWidget->width, &printStart, &printChars, &printWidth);
 			debug(LOG_INPUT, "EditBox cursor tab");
 			break;
 		case INPBUF_CR :
@@ -574,6 +570,22 @@ void editBoxRun(W_EDITBOX *psWidget, W_CONTEXT *psContext)
 			break;
 
 		default:
+			if (keyDown(KEY_LCTRL) || keyDown(KEY_RCTRL))
+			{
+				switch (key)
+				{
+					case KEY_V:
+						putSelection(&pBuffer, &pBufferAllocated, &pos);
+
+						/* Update the printable text */
+						fitStringEnd(pBuffer, psWidget->width, &printStart, &printChars, &printWidth);
+						debug(LOG_INPUT, "EditBox paste");
+						break;
+					default:
+						break;
+				}
+				break;
+			}
 			/* Dealt with everything else this must be a printable character */
 			if (editState == WEDBS_INSERT)
 			{
