@@ -22,17 +22,19 @@
 
 #include "lib/framework/types.h"
 
+typedef enum {
+    SCANLINES_OFF,
+    SCANLINES_50,
+    SCANLINES_BLACK
+} SCANLINE_MODE;
+
 extern bool seq_Play(const char* filename);
 extern bool seq_Playing(void);
 extern bool seq_Update(void);
 extern void seq_Shutdown(void);
 extern int seq_GetFrameNumber(void);
 extern void seq_SetDisplaySize(int sizeX, int sizeY, int posX, int posY);
-
-typedef enum {
-	SCANLINES_OFF,
-	SCANLINES_50,
-	SCANLINES_BLACK
-} SCANLINE_MODE;
+extern void seq_setScanlineMode(SCANLINE_MODE mode);
+extern SCANLINE_MODE seq_getScanlineMode(void);
 
 #endif // __INCLUDED_LIB_SEQUENCE_SEQUENCE_H__

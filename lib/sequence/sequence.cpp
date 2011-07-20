@@ -65,7 +65,6 @@
 #include "lib/sound/audio.h"
 #include "lib/sound/openal_error.h"
 #include "lib/sound/mixer.h"
-#include "src/warzoneconfig.h"
 
 #include <theora/theora.h>
 #include <physfs.h>
@@ -564,7 +563,7 @@ bool seq_Play(const char* filename)
 	if (fpInfile == NULL)
 	{
 		info("unable to open '%s' for playback", filename);
-		
+
 		fpInfile = PHYSFS_openRead("novideo.ogg");
 		if (fpInfile == NULL)
 		{
@@ -759,7 +758,6 @@ bool seq_Play(const char* filename)
 		char *blackframe = (char *)calloc(1, texture_width * texture_height * 4);
 
 		// disable scanlines if the video is too large for the texture or shown too small
-		use_scanlines = war_getScanlineMode();
 		if (videodata.ti.frame_height * 2 > texture_height || videoY2 < videodata.ti.frame_height * 2)
 			use_scanlines = SCANLINES_OFF;
 
@@ -1075,4 +1073,14 @@ void seq_SetDisplaySize(int sizeX, int sizeY, int posX, int posY)
 
 	ScrnvidXpos = posX;
 	ScrnvidYpos = posY;
+}
+
+void seq_setScanlineMode(SCANLINE_MODE mode)
+{
+    use_scanlines = mode;
+}
+
+SCANLINE_MODE seq_getScanlineMode(void)
+{
+    return use_scanlines;
 }

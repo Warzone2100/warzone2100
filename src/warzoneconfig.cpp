@@ -45,7 +45,6 @@
 struct WARZONE_GLOBALS
 {
 	FMV_MODE	FMVmode;
-	SCANLINE_MODE scanlines;
 	bool		bFog;
 	SWORD		effectsLevel;
 	bool		Fullscreen;
@@ -211,13 +210,13 @@ FMV_MODE war_GetFMVmode(void)
 void war_setScanlineMode(SCANLINE_MODE mode)
 {
 	debug(LOG_VIDEO, "%d", mode);
-	warGlobs.scanlines = mode;
+    seq_setScanlineMode(mode);
 }
 
 SCANLINE_MODE war_getScanlineMode(void)
 {
-	debug(LOG_VIDEO, "%d", warGlobs.scanlines);
-	return warGlobs.scanlines;
+	debug(LOG_VIDEO, "%d", seq_getScanlineMode());
+	return seq_getScanlineMode();
 }
 
 void war_SetPauseOnFocusLoss(bool enabled)
