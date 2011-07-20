@@ -598,7 +598,6 @@ static void initialize_PhysicsFS(const char* argv_0)
 static void check_Physfs(void)
 {
 	const PHYSFS_ArchiveInfo **i;
-	char buf[100];
 	bool zipfound = false;
 	PHYSFS_Version compiled;
 	PHYSFS_Version linked;
