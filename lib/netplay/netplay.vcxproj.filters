@@ -15,6 +15,9 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{b947b883-ea36-4d89-909a-79dc15e9a968}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\3rdparty\miniupnpc\upnpreplyparse.c">
@@ -67,18 +70,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="netlog.h">
-      <Filter>Source Files\miniUPnP\header files</Filter>
-    </ClInclude>
-    <ClInclude Include="netplay.h">
-      <Filter>Source Files\miniUPnP\header files</Filter>
-    </ClInclude>
-    <ClInclude Include="netsocket.h">
-      <Filter>Source Files\miniUPnP\header files</Filter>
-    </ClInclude>
-    <ClInclude Include="nettypes.h">
-      <Filter>Source Files\miniUPnP\header files</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\3rdparty\miniupnpc\bsdqueue.h">
       <Filter>Source Files\miniUPnP\header files</Filter>
     </ClInclude>
@@ -120,6 +111,24 @@
     </ClInclude>
     <ClInclude Include="..\..\3rdparty\miniupnpc\upnpreplyparse.h">
       <Filter>Source Files\miniUPnP\header files</Filter>
+    </ClInclude>
+    <ClInclude Include="netlobby.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="netqueue.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="netlog.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="netplay.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="netsocket.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nettypes.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

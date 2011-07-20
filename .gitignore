@@ -227,6 +227,8 @@ macosx/configs/codeident
 *.diff
 *.dep
 *.user
+*.lib
+*.dll
 data/*.dll
 data/config/*
 data/etc/*
