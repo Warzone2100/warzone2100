@@ -152,9 +152,9 @@ unsigned NET_PlayerConnectionStatus[CONNECTIONSTATUS_NORMAL][MAX_PLAYERS];
  **            ie ("trunk", "2.1.3", "3.0", ...)
  ************************************************************************************
 **/
-char VersionString[VersionStringSize] = "master, netcode 4.1012";
-static int NETCODE_VERSION_MAJOR = 4;
-static int NETCODE_VERSION_MINOR = 1012;
+char VersionString[VersionStringSize] = "master, netcode 5.0";
+static int NETCODE_VERSION_MAJOR = 5;
+static int NETCODE_VERSION_MINOR = 0;
 
 // The Lobby Client - declared external in netplay.h
 Lobby::Client lobbyclient;
