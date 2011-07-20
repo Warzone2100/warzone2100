@@ -391,14 +391,6 @@ void W_EDITBOX::run(W_CONTEXT *psContext)
 			debug(LOG_INPUT, "EditBox cursor backspace");
 			break;
 		case INPBUF_TAB :
-			{
-				QClipboard *clipboard = QApplication::clipboard();
-				aText = clipboard->text(QClipboard::Selection);                           // try X11 specific buffer first
-				if (aText.isEmpty()) aText = clipboard->text(QClipboard::Clipboard);      // if not, try generic clipboard
-			}
-			insPos = aText.length();
-			/* Update the printable text */
-			fitStringEnd();
 			debug(LOG_INPUT, "EditBox cursor tab");
 			break;
 		case INPBUF_CR :
@@ -414,6 +406,26 @@ void W_EDITBOX::run(W_CONTEXT *psContext)
 			break;
 
 		default:
+			if (keyDown(KEY_LCTRL) || keyDown(KEY_RCTRL))
+			{
+				switch (key)
+				{
+					case KEY_V:
+						{
+							QClipboard *clipboard = QApplication::clipboard();
+							aText = clipboard->text(QClipboard::Selection);                           // try X11 specific buffer first
+							if (aText.isEmpty()) aText = clipboard->text(QClipboard::Clipboard);      // if not, try generic clipboard
+						}
+						insPos = aText.length();
+						/* Update the printable text */
+						fitStringEnd();
+						debug(LOG_INPUT, "EditBox paste");
+						break;
+					default:
+						break;
+				}
+				break;
+			}
 			/* Dealt with everything else this must be a printable character */
 			if (editState == WEDBS_INSERT)
 			{
