@@ -160,10 +160,6 @@ extern WZ_DECL_WARN_UNUSED_RESULT DROID_TEMPLATE	*IdToTemplate(UDWORD tempId,UDW
 extern const char* getPlayerName(int player);
 extern bool setPlayerName(int player, const char *sName);
 extern const char* getPlayerColourName(int player);
-extern bool isHumanPlayer(int player);				//to tell if the player is a computer or not.
-extern bool myResponsibility(int player);
-extern bool responsibleFor(int player, int playerinquestion);
-extern int whosResponsible(int player);
 int scavengerSlot();    // Returns the player number that scavengers would have if they were enabled.
 int scavengerPlayer();  // Returns the player number that the scavengers have, or -1 if disabled.
 extern Vector3i cameraToHome		(UDWORD player,bool scroll);

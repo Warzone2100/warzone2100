@@ -27,7 +27,6 @@
 #include "lib/framework/frame.h"
 #include "lib/framework/wzapp_c.h"
 #include "gtime.h"
-#include "src/multiplay.h"
 #include "lib/netplay/netplay.h"
 
 #include <time.h>
@@ -48,9 +47,9 @@ static UDWORD	baseTime;
 /** When the game paused, so that gameTime can be adjusted when the game restarts. */
 static SDWORD	pauseStart;
 
-/** 
-  * Count how many times gameTimeStop has been called without a game time start. 
-  * We use this to ensure that we can properly nest stop commands. 
+/**
+  * Count how many times gameTimeStop has been called without a game time start.
+  * We use this to ensure that we can properly nest stop commands.
   **/
 static UDWORD	stopCount;
 
@@ -193,10 +192,10 @@ void gameTimeUpdate()
 			baseTime = currTime;
 			timeOffset = graphicsTime;
 
-			debug(LOG_SYNC, "Waiting for other players. gameTime = %u, player times are {%s}", gameTime, listToString("%u", ", ", gameQueueTime, gameQueueTime + game.maxPlayers).c_str());
+			debug(LOG_SYNC, "Waiting for other players. gameTime = %u, player times are {%s}", gameTime, listToString("%u", ", ", gameQueueTime, gameQueueTime + NetPlay.maxPlayers).c_str());
 			mayUpdate = false;
 
-			for (player = 0; player < game.maxPlayers; ++player)
+			for (player = 0; player < NetPlay.maxPlayers; ++player)
 			{
 				if (!checkPlayerGameTime(player))
 				{
@@ -225,8 +224,8 @@ void gameTimeUpdate()
 			updateLatency();
 			if (crcError)
 			{
-				debug(LOG_ERROR, "Synch error, gameTimes were: {%s}", listToString("%10u", ", ", gameQueueCheckTime, gameQueueCheckTime + game.maxPlayers).c_str());
-				debug(LOG_ERROR, "Synch error, CRCs were:      {%s}", listToString("0x%08X", ", ", gameQueueCheckCrc, gameQueueCheckCrc + game.maxPlayers).c_str());
+				debug(LOG_ERROR, "Synch error, gameTimes were: {%s}", listToString("%10u", ", ", gameQueueCheckTime, gameQueueCheckTime + NetPlay.maxPlayers).c_str());
+				debug(LOG_ERROR, "Synch error, CRCs were:      {%s}", listToString("0x%08X", ", ", gameQueueCheckCrc, gameQueueCheckCrc + NetPlay.maxPlayers).c_str());
 				crcError = false;
 			}
 		}
@@ -363,7 +362,7 @@ static void updateLatency()
 	uint16_t prevDiscreteChosenLatency = discreteChosenLatency;
 
 	// Find out what latency has been agreed on, next.
-	for (player = 0; player < game.maxPlayers; ++player)
+	for (player = 0; player < NetPlay.maxPlayers; ++player)
 	{
 		if (!NetPlay.players[player].kick)  // .kick: Don't wait for dropped players.
 		{
@@ -396,7 +395,7 @@ void sendPlayerGameTime()
 	uint32_t checkTime = gameTime;
 	uint32_t checkCrc = nextDebugSync();
 
-	for (player = 0; player < game.maxPlayers; ++player)
+	for (player = 0; player < NetPlay.maxPlayers; ++player)
 	{
 		if (!myResponsibility(player) && whosResponsible(player) != realSelectedPlayer)
 		{
@@ -450,7 +449,7 @@ bool checkPlayerGameTime(unsigned player)
 	if (player == NET_ALL_PLAYERS)
 	{
 		begin = 0;
-		end = game.maxPlayers;
+		end = NetPlay.maxPlayers;
 	}
 
 	for (player = begin; player < end; ++player)
@@ -468,7 +467,7 @@ void setPlayerGameTime(unsigned player, uint32_t time)
 {
 	if (player == NET_ALL_PLAYERS)
 	{
-		for (player = 0; player < game.maxPlayers; ++player)
+		for (player = 0; player < NetPlay.maxPlayers; ++player)
 		{
 			gameQueueTime[player] = time;
 		}

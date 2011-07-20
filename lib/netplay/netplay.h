@@ -195,7 +195,7 @@ enum
 };
 
 // ////////////////////////////////////////////////////////////////////////
-// Player information. Filled when players join, never re-ordered. selectedPlayer global points to 
+// Player information. Filled when players join, never re-ordered. selectedPlayer global points to
 // currently controlled player.
 struct PLAYER
 {
@@ -323,5 +323,11 @@ void _syncDebugBacktrace(const char *function);                  ///< Adds a bac
 void resetSyncDebug(void);                                       ///< Resets the syncDebug, so syncDebug from a previous game doesn't cause a spurious desynch dump.
 uint32_t nextDebugSync(void);                                    ///< Returns a CRC corresponding to all syncDebug() calls since the last nextDebugSync() or resetSyncDebug() call.
 bool checkDebugSync(uint32_t checkGameTime, uint32_t checkCrc);  ///< Dumps all syncDebug() calls from that gameTime, if the CRC doesn't match.
+
+extern bool isHumanPlayer(int player);              //to tell if the player is a computer or not.
+extern int whosResponsible(int player);
+extern bool myResponsibility(int player);
+extern bool responsibleFor(int player, int playerinquestion);
+
 
 #endif
