@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-07-11 21:43+0200\n"
+"POT-Creation-Date: 2011-07-23 15:27+0200\n"
 "PO-Revision-Date: 2011-05-03 10:10+0100\n"
 "Last-Translator: Saber Nyoki <nsa_server@hotmail.com>\n"
 "Language-Team: Spanish <warzone-dev@gna.org>\n"
@@ -12006,31 +12006,31 @@ msgstr "Cañón HPV Pitón Oruga"
 msgid "System locale"
 msgstr "Idioma del sistema"
 
-#: lib/netplay/netlobby.cpp:110
-#: lib/netplay/netlobby.cpp:117
+#: lib/netplay/netlobby.cpp:102
 msgid "Received invalid addGame data."
 msgstr ""
 
+#: lib/netplay/netlobby.cpp:140
 #: lib/netplay/netlobby.cpp:163
-#: lib/netplay/netlobby.cpp:192
-#: lib/netplay/netlobby.cpp:218
+#: lib/netplay/netlobby.cpp:183
 #, fuzzy
 msgid "Create a game first!"
 msgstr "Rastrear un objeto del juego."
 
-#: lib/netplay/netlobby.cpp:501
+#: lib/netplay/netlobby.cpp:426
 msgid "Received invalid login data."
 msgstr ""
 
-#: lib/netplay/netlobby.cpp:626
-#: lib/netplay/netlobby.cpp:639
-#: lib/netplay/netlobby.cpp:650
-#: lib/netplay/netlobby.cpp:666
-#: lib/netplay/netlobby.cpp:676
+#: lib/netplay/netlobby.cpp:518
+#: lib/netplay/netlobby.cpp:531
+#: lib/netplay/netlobby.cpp:542
+#: lib/netplay/netlobby.cpp:560
+#: lib/netplay/netlobby.cpp:569
+#: lib/netplay/netlobby.cpp:578
 msgid "Failed to communicate with the lobby."
 msgstr ""
 
-#: lib/netplay/netlobby.cpp:696
+#: lib/netplay/netlobby.cpp:589
 #, c-format
 msgid "Got server error: %s"
 msgstr ""
@@ -12048,6 +12048,51 @@ msgstr ""
 #, c-format
 msgid "Error connecting to the lobby server: %s. Make sure port %d can receive incoming connections. If you're using a router configure it to use UPnP, or to forward the port to your system."
 msgstr ""
+
+#: po/custom/mac-infoplist.txt:1
+msgid ""
+"Copyright © 1999-2004 Eidos Interactive.\n"
+"Copyright © 2005-2010 The Warzone 2100 Project"
+msgstr ""
+
+#: po/custom/mac-infoplist.txt:2
+#: po/custom/warzone2100.desktop.txt:2
+msgid "Warzone 2100"
+msgstr ""
+
+#: po/custom/mac-infoplist.txt:3
+msgid "Warzone 2100 Map / Mod File"
+msgstr ""
+
+#: po/custom/mac-infoplist.txt:4
+msgid "Warzone 2100 Campaign Mod File"
+msgstr ""
+
+#: po/custom/mac-infoplist.txt:5
+#, fuzzy
+msgid "Warzone 2100 Multiplayer Mod File"
+msgstr "Iniciar Audio Multijugador"
+
+#: po/custom/mac-infoplist.txt:6
+msgid "Warzone 2100 Global Mod File"
+msgstr ""
+
+#: po/custom/mac-infoplist.txt:7
+msgid "Warzone"
+msgstr ""
+
+#: po/custom/mac-infoplist.txt:8
+msgid "Warzone 2100 Music Mod File"
+msgstr ""
+
+#: po/custom/warzone2100.desktop.txt:1
+msgid "Postnuclear realtime strategy"
+msgstr ""
+
+#: po/custom/warzone2100.desktop.txt:3
+#, fuzzy
+msgid "Strategy Game"
+msgstr "Guardar Partida"
 
 #: src/challenge.cpp:219
 #: src/hci.cpp:916
@@ -12372,13 +12417,13 @@ msgstr "Desincronizado"
 msgid "Cannot Build. Oil Resource Burning."
 msgstr "No se puede construir. Yacimiento de petróleo ardiendo."
 
-#: src/display.cpp:1828
-#: src/display.cpp:2403
+#: src/display.cpp:1837
+#: src/display.cpp:2424
 #, fuzzy, c-format
 msgid "%s - Damage %d%% - Experience %.1f, %s"
 msgstr "%s - Daño %d%% - Experiencia %d, %s"
 
-#: src/display.cpp:1844
+#: src/display.cpp:1853
 #, c-format
 msgid "%s - Allied - Damage %d%% - Experience %d, %s"
 msgstr "%s Aliado - Daño %d%% - Experiencia %d, %s"
@@ -12391,77 +12436,77 @@ msgstr "¡Unidad destruída!"
 msgid "Structure Restored"
 msgstr "Estructura Restaurada"
 
-#: src/droid.cpp:2727
+#: src/droid.cpp:2724
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
 msgstr[0] "Grupo %u seleccionado - %u Unidad"
 msgstr[1] "Grupo %u seleccionado - %u Unidades"
 
-#: src/droid.cpp:2740
+#: src/droid.cpp:2737
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
 msgstr[0] "%u unidad asignada al Grupo %u"
 msgstr[1] "%u unidades asignadas al Grupo %u"
 
-#: src/droid.cpp:2753
+#: src/droid.cpp:2750
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
 msgstr[0] "Centrado en el Grupo %u - %u Unidad"
 msgstr[1] "Centrado en el Grupo %u - %u Unidades"
 
-#: src/droid.cpp:2757
+#: src/droid.cpp:2754
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] "Alineando con el Grupo %u - %u Unidad"
 msgstr[1] "Alineando con el Grupo %u - %u Unidades"
 
-#: src/droid.cpp:3084
+#: src/droid.cpp:3081
 msgid "Rookie"
 msgstr "Novato"
 
-#: src/droid.cpp:3085
+#: src/droid.cpp:3082
 msgctxt "rank"
 msgid "Green"
 msgstr "Principiante"
 
-#: src/droid.cpp:3086
+#: src/droid.cpp:3083
 msgid "Trained"
 msgstr "Entrenado"
 
-#: src/droid.cpp:3087
+#: src/droid.cpp:3084
 msgid "Regular"
 msgstr "Regular"
 
-#: src/droid.cpp:3088
+#: src/droid.cpp:3085
 msgid "Professional"
 msgstr "Profesional"
 
-#: src/droid.cpp:3089
+#: src/droid.cpp:3086
 msgid "Veteran"
 msgstr "Veterano"
 
-#: src/droid.cpp:3090
+#: src/droid.cpp:3087
 msgid "Elite"
 msgstr "Élite"
 
-#: src/droid.cpp:3091
+#: src/droid.cpp:3088
 msgid "Special"
 msgstr "Especial"
 
-#: src/droid.cpp:3092
+#: src/droid.cpp:3089
 msgid "Hero"
 msgstr "Héroe"
 
-#: src/droid.cpp:4114
+#: src/droid.cpp:4111
 #, c-format
 msgid "%s wanted to give you a %s but you have too many!"
 msgstr "¡%s quiso darte un %s pero tienes demasiados!"
 
-#: src/droid.cpp:4118
+#: src/droid.cpp:4115
 #, c-format
 msgid "You wanted to give %s a %s but they have too many!"
 msgstr "¡Intentaste dar a %s un %s pero tiene demasiados!"
@@ -12530,7 +12575,7 @@ msgid "Challenges"
 msgstr "Desafíos"
 
 #: src/frontend.cpp:220
-#: src/ingameop.cpp:272
+#: src/ingameop.cpp:273
 msgid "Load Game"
 msgstr "Cargar Partida"
 
@@ -12539,9 +12584,9 @@ msgid "SINGLE PLAYER"
 msgstr "UN JUGADOR"
 
 #: src/frontend.cpp:308
-#: src/ingameop.cpp:493
-#: src/mission.cpp:2527
-#: src/mission.cpp:2628
+#: src/ingameop.cpp:494
+#: src/mission.cpp:2528
+#: src/mission.cpp:2629
 msgid "Load Saved Game"
 msgstr "Cargar Partida Guardada"
 
@@ -12563,7 +12608,7 @@ msgid "Video Options"
 msgstr "Opciones de Vídeo"
 
 #: src/frontend.cpp:367
-#: src/ingameop.cpp:267
+#: src/ingameop.cpp:268
 msgid "Audio Options"
 msgstr "Opciones de Audio"
 
@@ -12612,7 +12657,7 @@ msgstr ""
 #: src/frontend.cpp:786
 #: src/frontend.cpp:858
 #: src/frontend.cpp:912
-#: src/frontend.cpp:950
+#: src/frontend.cpp:955
 #: src/frontend.cpp:998
 #: src/frontend.cpp:1010
 #: src/frontend.cpp:1022
@@ -12645,7 +12690,7 @@ msgstr "Agitar pantalla"
 #: src/frontend.cpp:586
 #: src/frontend.cpp:772
 #: src/frontend.cpp:917
-#: src/frontend.cpp:955
+#: src/frontend.cpp:951
 #: src/frontend.cpp:994
 #: src/frontend.cpp:1006
 #: src/frontend.cpp:1018
@@ -12684,17 +12729,17 @@ msgid "GRAPHICS OPTIONS"
 msgstr "OPCIONES GRÁFICAS"
 
 #: src/frontend.cpp:664
-#: src/ingameop.cpp:167
+#: src/ingameop.cpp:168
 msgid "Voice Volume"
 msgstr "Volumen de Voces"
 
 #: src/frontend.cpp:668
-#: src/ingameop.cpp:172
+#: src/ingameop.cpp:173
 msgid "FX Volume"
 msgstr "Volumen de Sonidos"
 
 #: src/frontend.cpp:672
-#: src/ingameop.cpp:177
+#: src/ingameop.cpp:178
 msgid "Music Volume"
 msgstr "Volumen de Música"
 
@@ -12724,7 +12769,8 @@ msgid "Texture size"
 msgstr "Tamaño de las texturas"
 
 #: src/frontend.cpp:768
-msgid "Vertical sync*"
+#, fuzzy
+msgid "Vertical sync"
 msgstr "Sincronización Vertical"
 
 #: src/frontend.cpp:803
@@ -12830,7 +12876,7 @@ msgid "GAME OPTIONS"
 msgstr "OPCIONES DE JUEGO"
 
 #: src/frontend.cpp:1343
-#: src/multiint.cpp:2612
+#: src/multiint.cpp:2613
 msgid "Mod: "
 msgstr "Mod:"
 
@@ -12839,8 +12885,8 @@ msgid "MAP SAVED!"
 msgstr "¡MAPA GUARDADO!"
 
 #: src/hci.cpp:1573
-#: src/loop.cpp:563
-#: src/loop.cpp:579
+#: src/loop.cpp:564
+#: src/loop.cpp:580
 msgid "GAME SAVED: "
 msgstr "PARTIDA GUARDADA:"
 
@@ -12979,9 +13025,9 @@ msgid "Start Edit Mode"
 msgstr "Iniciar modo de Edición"
 
 #: src/hci.cpp:3669
-#: src/ingameop.cpp:112
-#: src/ingameop.cpp:256
-#: src/ingameop.cpp:260
+#: src/ingameop.cpp:113
+#: src/ingameop.cpp:257
+#: src/ingameop.cpp:261
 msgid "Quit"
 msgstr "Salir"
 
@@ -13018,46 +13064,46 @@ msgstr "Tab Desplazamiento Derecha"
 msgid "Ally progress"
 msgstr "Progreso aliado"
 
-#: src/ingameop.cpp:111
-#: src/ingameop.cpp:195
-#: src/ingameop.cpp:264
+#: src/ingameop.cpp:112
+#: src/ingameop.cpp:196
+#: src/ingameop.cpp:265
 msgid "Resume Game"
 msgstr "Continuar Partida"
 
-#: src/ingameop.cpp:134
+#: src/ingameop.cpp:135
 msgid "WARNING: You're the host. If you quit, the game ends for everyone!"
 msgstr "¡ATENCIÓN: Eres el anfitrión. Si te vas, el juego acaba para todos!"
 
-#: src/ingameop.cpp:186
-#: src/ingameop.cpp:521
+#: src/ingameop.cpp:187
+#: src/ingameop.cpp:522
 msgid "Tactical UI (Target Origin Icon): Show"
 msgstr "UI Táctica (Icono de origen de objetivo): Mostrar"
 
-#: src/ingameop.cpp:191
-#: src/ingameop.cpp:525
+#: src/ingameop.cpp:192
+#: src/ingameop.cpp:526
 msgid "Tactical UI (Target Origin Icon): Hide"
 msgstr "UI Táctica (Icono de origen de objetivo): Ocultar"
 
-#: src/ingameop.cpp:274
-#: src/ingameop.cpp:497
-#: src/mission.cpp:2514
-#: src/mission.cpp:2631
+#: src/ingameop.cpp:275
+#: src/ingameop.cpp:498
+#: src/mission.cpp:2515
+#: src/mission.cpp:2632
 msgid "Save Game"
 msgstr "Guardar Partida"
 
-#: src/ingameop.cpp:338
+#: src/ingameop.cpp:339
 msgid "Host has quit the game!"
 msgstr "¡El anfitrión ha abandonado la partida!"
 
-#: src/ingameop.cpp:344
+#: src/ingameop.cpp:345
 msgid "The game can't continue without the host."
 msgstr "La partida no puede continuar sin el anfitrión"
 
-#: src/ingameop.cpp:350
+#: src/ingameop.cpp:351
 msgid "-->  QUIT  <--"
 msgstr "--> SALIR <--"
 
-#: src/init.cpp:404
+#: src/init.cpp:405
 #, c-format
 msgid ""
 "The required mod could not be loaded: %s\n"
@@ -13969,42 +14015,42 @@ msgstr "Rastrear un objeto del juego."
 msgid "Toggle Driving Mode"
 msgstr "Alternar Cámara de Seguimiento"
 
-#: src/loop.cpp:570
-#: src/loop.cpp:586
+#: src/loop.cpp:571
+#: src/loop.cpp:587
 msgid "Could not save game!"
 msgstr "¡No se pudo guardar la partida!"
 
-#: src/mission.cpp:2075
+#: src/mission.cpp:2076
 msgid "Load Transport"
 msgstr "Cargar Transporte"
 
-#: src/mission.cpp:2462
+#: src/mission.cpp:2463
 msgid "OBJECTIVE ACHIEVED by cheating!"
 msgstr "¡OBJETIVO CUMPLIDO con trampas!"
 
-#: src/mission.cpp:2462
+#: src/mission.cpp:2463
 msgid "OBJECTIVE ACHIEVED"
 msgstr "OBJETIVO CUMPLIDO"
 
-#: src/mission.cpp:2468
+#: src/mission.cpp:2469
 msgid "OBJECTIVE FAILED--and you cheated!"
 msgstr "OBJETIVO FALLADO-- ¡e hiciste trampas!"
 
-#: src/mission.cpp:2468
+#: src/mission.cpp:2469
 msgid "OBJECTIVE FAILED"
 msgstr "OBJETIVO FALLADO"
 
-#: src/mission.cpp:2493
-#: src/mission.cpp:2533
-#: src/mission.cpp:2645
+#: src/mission.cpp:2494
+#: src/mission.cpp:2534
+#: src/mission.cpp:2646
 msgid "Quit To Main Menu"
 msgstr "Salir al Menú Principal"
 
-#: src/mission.cpp:2501
+#: src/mission.cpp:2502
 msgid "Continue Game"
 msgstr "Continuar Partida"
 
-#: src/mission.cpp:2596
+#: src/mission.cpp:2597
 msgid "GAME SAVED :"
 msgstr "¡PARTIDA GUARDADA!"
 
@@ -14377,71 +14423,71 @@ msgstr "No puedes cambiar la IA en un desafío"
 msgid "CHAT"
 msgstr "CHAT"
 
-#: src/multiint.cpp:2617
+#: src/multiint.cpp:2618
 msgid "All players need to have the same mods to join your game."
 msgstr "Todos los jugadores necesitan tener los mismos mods para unirse"
 
-#: src/multiint.cpp:2775
+#: src/multiint.cpp:2776
 #, c-format
 msgid "*** password [%s] is now required! ***"
 msgstr "*** ¡contraseña [%s] requerida! ***"
 
-#: src/multiint.cpp:2783
+#: src/multiint.cpp:2784
 msgid "*** password is NOT required! ***"
 msgstr "*** ¡contraseña no requerida! ***"
 
-#: src/multiint.cpp:3024
+#: src/multiint.cpp:3025
 msgid "Sorry! Failed to host the game."
 msgstr "¡Lo sentimos! No se pudo hospedar la partida"
 
-#: src/multiint.cpp:3145
+#: src/multiint.cpp:3146
 msgid "'Locked Teams' mode enabled"
 msgstr "Modo de Equipos Fijos Activado"
 
-#: src/multiint.cpp:3226
+#: src/multiint.cpp:3227
 #, c-format
 msgid "The host has kicked %s from the game!"
 msgstr "¡El anfitrión ha expulsado a %s de la partida!"
 
-#: src/multiint.cpp:3296
+#: src/multiint.cpp:3297
 msgid "Host is Starting Game"
 msgstr "Anfitrión Comenzando Partida"
 
-#: src/multiint.cpp:3837
+#: src/multiint.cpp:3838
 msgid "Players"
 msgstr "Jugadores"
 
-#: src/multiint.cpp:3899
+#: src/multiint.cpp:3900
 #, fuzzy, c-format
 msgid "Click to take player slot %d"
 msgstr "Click para cambiar el color de jugador."
 
-#: src/multiint.cpp:3908
-#: src/multiint.cpp:4101
+#: src/multiint.cpp:3909
+#: src/multiint.cpp:4102
 msgid "Open"
 msgstr ""
 
-#: src/multiint.cpp:3908
-#: src/multiint.cpp:4102
+#: src/multiint.cpp:3909
+#: src/multiint.cpp:4103
 #, fuzzy
 msgid "Closed"
 msgstr "Cerrar"
 
-#: src/multiint.cpp:3959
+#: src/multiint.cpp:3960
 #, c-format
 msgid "Sending Map: %d%% "
 msgstr "Enviando Mapa: %d%%"
 
-#: src/multiint.cpp:3967
+#: src/multiint.cpp:3968
 #, c-format
 msgid "Map: %d%% downloaded"
 msgstr "Mapa: %d%% descargado"
 
-#: src/multiint.cpp:3993
+#: src/multiint.cpp:3994
 msgid "HOST"
 msgstr "ANFITRIÓN"
 
-#: src/multiint.cpp:4000
+#: src/multiint.cpp:4001
 #: src/multimenu.cpp:774
 msgid "Ping"
 msgstr "Ping"
@@ -14822,12 +14868,12 @@ msgstr "Tiempo Jugado Total: %s"
 msgid "You cheated!"
 msgstr "¡Hiciste trampa!"
 
-#: src/scriptfuncs.cpp:9448
+#: src/scriptfuncs.cpp:9447
 #, c-format
 msgid "Beacon received from %s!"
 msgstr "¡Baliza recibida de %s!"
 
-#: src/scriptfuncs.cpp:9494
+#: src/scriptfuncs.cpp:9493
 #, c-format
 msgid "Beacon %d"
 msgstr "Baliza %d"
@@ -14947,51 +14993,6 @@ msgstr " - Construido %s"
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "Versión: %s%s%s%s"
-
-#: po/custom/warzone2100.desktop.txt:1
-msgid "Postnuclear realtime strategy"
-msgstr ""
-
-#: po/custom/warzone2100.desktop.txt:2
-#: po/custom/mac-infoplist.txt:2
-msgid "Warzone 2100"
-msgstr ""
-
-#: po/custom/warzone2100.desktop.txt:3
-#, fuzzy
-msgid "Strategy Game"
-msgstr "Guardar Partida"
-
-#: po/custom/mac-infoplist.txt:1
-msgid ""
-"Copyright © 1999-2004 Eidos Interactive.\n"
-"Copyright © 2005-2010 The Warzone 2100 Project"
-msgstr ""
-
-#: po/custom/mac-infoplist.txt:3
-msgid "Warzone 2100 Map / Mod File"
-msgstr ""
-
-#: po/custom/mac-infoplist.txt:4
-msgid "Warzone 2100 Campaign Mod File"
-msgstr ""
-
-#: po/custom/mac-infoplist.txt:5
-#, fuzzy
-msgid "Warzone 2100 Multiplayer Mod File"
-msgstr "Iniciar Audio Multijugador"
-
-#: po/custom/mac-infoplist.txt:6
-msgid "Warzone 2100 Global Mod File"
-msgstr ""
-
-#: po/custom/mac-infoplist.txt:7
-msgid "Warzone"
-msgstr ""
-
-#: po/custom/mac-infoplist.txt:8
-msgid "Warzone 2100 Music Mod File"
-msgstr ""
 
 #~ msgid "Could not resolve masterserver name (%s)!"
 #~ msgstr "¡No se pudo resolver el nombre del servidor maestro (%s)!"

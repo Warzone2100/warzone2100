@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-07-11 21:43+0200\n"
+"POT-Creation-Date: 2011-07-23 15:27+0200\n"
 "PO-Revision-Date: 2009-05-13 16:12+0800\n"
 "Last-Translator: Terra <wz2100cn@gmail.com>\n"
 "Language-Team: Simplified Chinese <zh_CN@li.org>\n"
@@ -12147,30 +12147,30 @@ msgstr "重型加农炮"
 msgid "System locale"
 msgstr "系统语言"
 
-#: lib/netplay/netlobby.cpp:110
-#: lib/netplay/netlobby.cpp:117
+#: lib/netplay/netlobby.cpp:102
 msgid "Received invalid addGame data."
 msgstr ""
 
+#: lib/netplay/netlobby.cpp:140
 #: lib/netplay/netlobby.cpp:163
-#: lib/netplay/netlobby.cpp:192
-#: lib/netplay/netlobby.cpp:218
+#: lib/netplay/netlobby.cpp:183
 msgid "Create a game first!"
 msgstr ""
 
-#: lib/netplay/netlobby.cpp:501
+#: lib/netplay/netlobby.cpp:426
 msgid "Received invalid login data."
 msgstr ""
 
-#: lib/netplay/netlobby.cpp:626
-#: lib/netplay/netlobby.cpp:639
-#: lib/netplay/netlobby.cpp:650
-#: lib/netplay/netlobby.cpp:666
-#: lib/netplay/netlobby.cpp:676
+#: lib/netplay/netlobby.cpp:518
+#: lib/netplay/netlobby.cpp:531
+#: lib/netplay/netlobby.cpp:542
+#: lib/netplay/netlobby.cpp:560
+#: lib/netplay/netlobby.cpp:569
+#: lib/netplay/netlobby.cpp:578
 msgid "Failed to communicate with the lobby."
 msgstr ""
 
-#: lib/netplay/netlobby.cpp:696
+#: lib/netplay/netlobby.cpp:589
 #, c-format
 msgid "Got server error: %s"
 msgstr ""
@@ -12188,6 +12188,51 @@ msgstr ""
 #, c-format
 msgid "Error connecting to the lobby server: %s. Make sure port %d can receive incoming connections. If you're using a router configure it to use UPnP, or to forward the port to your system."
 msgstr ""
+
+#: po/custom/mac-infoplist.txt:1
+msgid ""
+"Copyright © 1999-2004 Eidos Interactive.\n"
+"Copyright © 2005-2010 The Warzone 2100 Project"
+msgstr ""
+
+#: po/custom/mac-infoplist.txt:2
+#: po/custom/warzone2100.desktop.txt:2
+msgid "Warzone 2100"
+msgstr ""
+
+#: po/custom/mac-infoplist.txt:3
+msgid "Warzone 2100 Map / Mod File"
+msgstr ""
+
+#: po/custom/mac-infoplist.txt:4
+msgid "Warzone 2100 Campaign Mod File"
+msgstr ""
+
+#: po/custom/mac-infoplist.txt:5
+#, fuzzy
+msgid "Warzone 2100 Multiplayer Mod File"
+msgstr "开始多人游戏音频"
+
+#: po/custom/mac-infoplist.txt:6
+msgid "Warzone 2100 Global Mod File"
+msgstr ""
+
+#: po/custom/mac-infoplist.txt:7
+msgid "Warzone"
+msgstr ""
+
+#: po/custom/mac-infoplist.txt:8
+msgid "Warzone 2100 Music Mod File"
+msgstr ""
+
+#: po/custom/warzone2100.desktop.txt:1
+msgid "Postnuclear realtime strategy"
+msgstr ""
+
+#: po/custom/warzone2100.desktop.txt:3
+#, fuzzy
+msgid "Strategy Game"
+msgstr "保存游戏"
 
 #: src/challenge.cpp:219
 #: src/hci.cpp:916
@@ -12516,13 +12561,13 @@ msgstr ""
 msgid "Cannot Build. Oil Resource Burning."
 msgstr "油井在燃烧, 无法建造钻油塔"
 
-#: src/display.cpp:1828
-#: src/display.cpp:2403
+#: src/display.cpp:1837
+#: src/display.cpp:2424
 #, fuzzy, c-format
 msgid "%s - Damage %d%% - Experience %.1f, %s"
 msgstr "%s - 损伤 %d%% - 经验 %d, %s"
 
-#: src/display.cpp:1844
+#: src/display.cpp:1853
 #, fuzzy, c-format
 msgid "%s - Allied - Damage %d%% - Experience %d, %s"
 msgstr "%s - 损伤 %d%% - 经验 %d, %s"
@@ -12535,78 +12580,78 @@ msgstr "单位被摧毁! "
 msgid "Structure Restored"
 msgstr "重建建筑物"
 
-#: src/droid.cpp:2727
+#: src/droid.cpp:2724
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
 msgstr[0] "已选择 %u 号编队 - %u 单位"
 
-#: src/droid.cpp:2740
+#: src/droid.cpp:2737
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
 msgstr[0] "%u 单位已指派为 %u 号编队"
 
-#: src/droid.cpp:2753
+#: src/droid.cpp:2750
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
 msgstr[0] "移动视野中心到 %u 号编队 - %u 单位"
 
-#: src/droid.cpp:2757
+#: src/droid.cpp:2754
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/droid.cpp:3084
+#: src/droid.cpp:3081
 #, fuzzy
 msgid "Rookie"
 msgstr "新兵部队: %u"
 
-#: src/droid.cpp:3085
+#: src/droid.cpp:3082
 #, fuzzy
 msgctxt "rank"
 msgid "Green"
 msgstr "绿色"
 
-#: src/droid.cpp:3086
+#: src/droid.cpp:3083
 #, fuzzy
 msgid "Trained"
 msgstr "作训部队: %u"
 
-#: src/droid.cpp:3087
+#: src/droid.cpp:3084
 #, fuzzy
 msgid "Regular"
 msgstr "标准部队: %u"
 
-#: src/droid.cpp:3088
+#: src/droid.cpp:3085
 msgid "Professional"
 msgstr "专业部队"
 
-#: src/droid.cpp:3089
+#: src/droid.cpp:3086
 msgid "Veteran"
 msgstr "老兵部队"
 
-#: src/droid.cpp:3090
+#: src/droid.cpp:3087
 msgid "Elite"
 msgstr "精锐部队"
 
-#: src/droid.cpp:3091
+#: src/droid.cpp:3088
 msgid "Special"
 msgstr "特种部队"
 
-#: src/droid.cpp:3092
+#: src/droid.cpp:3089
 msgid "Hero"
 msgstr "英雄部队"
 
-#: src/droid.cpp:4114
+#: src/droid.cpp:4111
 #, c-format
 msgid "%s wanted to give you a %s but you have too many!"
 msgstr ""
 
-#: src/droid.cpp:4118
+#: src/droid.cpp:4115
 #, c-format
 msgid "You wanted to give %s a %s but they have too many!"
 msgstr ""
@@ -12676,7 +12721,7 @@ msgid "Challenges"
 msgstr ""
 
 #: src/frontend.cpp:220
-#: src/ingameop.cpp:272
+#: src/ingameop.cpp:273
 msgid "Load Game"
 msgstr "载入游戏"
 
@@ -12685,9 +12730,9 @@ msgid "SINGLE PLAYER"
 msgstr "单人游戏"
 
 #: src/frontend.cpp:308
-#: src/ingameop.cpp:493
-#: src/mission.cpp:2527
-#: src/mission.cpp:2628
+#: src/ingameop.cpp:494
+#: src/mission.cpp:2528
+#: src/mission.cpp:2629
 msgid "Load Saved Game"
 msgstr "载入游戏"
 
@@ -12709,7 +12754,7 @@ msgid "Video Options"
 msgstr "视频选项"
 
 #: src/frontend.cpp:367
-#: src/ingameop.cpp:267
+#: src/ingameop.cpp:268
 msgid "Audio Options"
 msgstr "音频选项"
 
@@ -12759,7 +12804,7 @@ msgstr ""
 #: src/frontend.cpp:786
 #: src/frontend.cpp:858
 #: src/frontend.cpp:912
-#: src/frontend.cpp:950
+#: src/frontend.cpp:955
 #: src/frontend.cpp:998
 #: src/frontend.cpp:1010
 #: src/frontend.cpp:1022
@@ -12792,7 +12837,7 @@ msgstr "屏幕震动"
 #: src/frontend.cpp:586
 #: src/frontend.cpp:772
 #: src/frontend.cpp:917
-#: src/frontend.cpp:955
+#: src/frontend.cpp:951
 #: src/frontend.cpp:994
 #: src/frontend.cpp:1006
 #: src/frontend.cpp:1018
@@ -12832,17 +12877,17 @@ msgid "GRAPHICS OPTIONS"
 msgstr "游戏选项"
 
 #: src/frontend.cpp:664
-#: src/ingameop.cpp:167
+#: src/ingameop.cpp:168
 msgid "Voice Volume"
 msgstr "语音音量"
 
 #: src/frontend.cpp:668
-#: src/ingameop.cpp:172
+#: src/ingameop.cpp:173
 msgid "FX Volume"
 msgstr "声效音量"
 
 #: src/frontend.cpp:672
-#: src/ingameop.cpp:177
+#: src/ingameop.cpp:178
 msgid "Music Volume"
 msgstr "音乐音量"
 
@@ -12873,7 +12918,7 @@ msgid "Texture size"
 msgstr "质材尺寸"
 
 #: src/frontend.cpp:768
-msgid "Vertical sync*"
+msgid "Vertical sync"
 msgstr ""
 
 #: src/frontend.cpp:803
@@ -12984,7 +13029,7 @@ msgid "GAME OPTIONS"
 msgstr "游戏选项"
 
 #: src/frontend.cpp:1343
-#: src/multiint.cpp:2612
+#: src/multiint.cpp:2613
 msgid "Mod: "
 msgstr ""
 
@@ -12994,8 +13039,8 @@ msgid "MAP SAVED!"
 msgstr "游戏已保存! "
 
 #: src/hci.cpp:1573
-#: src/loop.cpp:563
-#: src/loop.cpp:579
+#: src/loop.cpp:564
+#: src/loop.cpp:580
 #, fuzzy
 msgid "GAME SAVED: "
 msgstr "游戏已保存! "
@@ -13141,9 +13186,9 @@ msgid "Start Edit Mode"
 msgstr "开始时没有基地"
 
 #: src/hci.cpp:3669
-#: src/ingameop.cpp:112
-#: src/ingameop.cpp:256
-#: src/ingameop.cpp:260
+#: src/ingameop.cpp:113
+#: src/ingameop.cpp:257
+#: src/ingameop.cpp:261
 msgid "Quit"
 msgstr "退出"
 
@@ -13182,47 +13227,47 @@ msgstr ""
 msgid "Ally progress"
 msgstr "生产成本"
 
-#: src/ingameop.cpp:111
-#: src/ingameop.cpp:195
-#: src/ingameop.cpp:264
+#: src/ingameop.cpp:112
+#: src/ingameop.cpp:196
+#: src/ingameop.cpp:265
 msgid "Resume Game"
 msgstr "继续游戏"
 
-#: src/ingameop.cpp:134
+#: src/ingameop.cpp:135
 msgid "WARNING: You're the host. If you quit, the game ends for everyone!"
 msgstr ""
 
-#: src/ingameop.cpp:186
-#: src/ingameop.cpp:521
+#: src/ingameop.cpp:187
+#: src/ingameop.cpp:522
 msgid "Tactical UI (Target Origin Icon): Show"
 msgstr ""
 
-#: src/ingameop.cpp:191
-#: src/ingameop.cpp:525
+#: src/ingameop.cpp:192
+#: src/ingameop.cpp:526
 msgid "Tactical UI (Target Origin Icon): Hide"
 msgstr ""
 
-#: src/ingameop.cpp:274
-#: src/ingameop.cpp:497
-#: src/mission.cpp:2514
-#: src/mission.cpp:2631
+#: src/ingameop.cpp:275
+#: src/ingameop.cpp:498
+#: src/mission.cpp:2515
+#: src/mission.cpp:2632
 msgid "Save Game"
 msgstr "保存游戏"
 
-#: src/ingameop.cpp:338
+#: src/ingameop.cpp:339
 #, fuzzy
 msgid "Host has quit the game!"
 msgstr "主机已经离开了游戏! "
 
-#: src/ingameop.cpp:344
+#: src/ingameop.cpp:345
 msgid "The game can't continue without the host."
 msgstr ""
 
-#: src/ingameop.cpp:350
+#: src/ingameop.cpp:351
 msgid "-->  QUIT  <--"
 msgstr ""
 
-#: src/init.cpp:404
+#: src/init.cpp:405
 #, c-format
 msgid ""
 "The required mod could not be loaded: %s\n"
@@ -14142,45 +14187,45 @@ msgstr ""
 msgid "Toggle Driving Mode"
 msgstr ""
 
-#: src/loop.cpp:570
-#: src/loop.cpp:586
+#: src/loop.cpp:571
+#: src/loop.cpp:587
 #, fuzzy
 msgid "Could not save game!"
 msgstr "载入游戏"
 
-#: src/mission.cpp:2075
+#: src/mission.cpp:2076
 msgid "Load Transport"
 msgstr "登陆运输飞船"
 
-#: src/mission.cpp:2462
+#: src/mission.cpp:2463
 #, fuzzy
 msgid "OBJECTIVE ACHIEVED by cheating!"
 msgstr "任务目标完成"
 
-#: src/mission.cpp:2462
+#: src/mission.cpp:2463
 msgid "OBJECTIVE ACHIEVED"
 msgstr "任务目标完成"
 
-#: src/mission.cpp:2468
+#: src/mission.cpp:2469
 #, fuzzy
 msgid "OBJECTIVE FAILED--and you cheated!"
 msgstr "任务目标失败"
 
-#: src/mission.cpp:2468
+#: src/mission.cpp:2469
 msgid "OBJECTIVE FAILED"
 msgstr "任务目标失败"
 
-#: src/mission.cpp:2493
-#: src/mission.cpp:2533
-#: src/mission.cpp:2645
+#: src/mission.cpp:2494
+#: src/mission.cpp:2534
+#: src/mission.cpp:2646
 msgid "Quit To Main Menu"
 msgstr "退回到主菜单"
 
-#: src/mission.cpp:2501
+#: src/mission.cpp:2502
 msgid "Continue Game"
 msgstr "继续游戏"
 
-#: src/mission.cpp:2596
+#: src/mission.cpp:2597
 #, fuzzy
 msgid "GAME SAVED :"
 msgstr "游戏已保存! "
@@ -14564,72 +14609,72 @@ msgstr ""
 msgid "CHAT"
 msgstr "聊天"
 
-#: src/multiint.cpp:2617
+#: src/multiint.cpp:2618
 msgid "All players need to have the same mods to join your game."
 msgstr ""
 
-#: src/multiint.cpp:2775
+#: src/multiint.cpp:2776
 #, c-format
 msgid "*** password [%s] is now required! ***"
 msgstr ""
 
-#: src/multiint.cpp:2783
+#: src/multiint.cpp:2784
 msgid "*** password is NOT required! ***"
 msgstr ""
 
-#: src/multiint.cpp:3024
+#: src/multiint.cpp:3025
 msgid "Sorry! Failed to host the game."
 msgstr ""
 
-#: src/multiint.cpp:3145
+#: src/multiint.cpp:3146
 #, fuzzy
 msgid "'Locked Teams' mode enabled"
 msgstr "已锁定团队"
 
-#: src/multiint.cpp:3226
+#: src/multiint.cpp:3227
 #, c-format
 msgid "The host has kicked %s from the game!"
 msgstr "主玩家将 %s 踢出游戏!"
 
-#: src/multiint.cpp:3296
+#: src/multiint.cpp:3297
 msgid "Host is Starting Game"
 msgstr "主玩家正在开始游戏"
 
-#: src/multiint.cpp:3837
+#: src/multiint.cpp:3838
 msgid "Players"
 msgstr "玩家"
 
-#: src/multiint.cpp:3899
+#: src/multiint.cpp:3900
 #, fuzzy, c-format
 msgid "Click to take player slot %d"
 msgstr "保护"
 
-#: src/multiint.cpp:3908
-#: src/multiint.cpp:4101
+#: src/multiint.cpp:3909
+#: src/multiint.cpp:4102
 msgid "Open"
 msgstr ""
 
-#: src/multiint.cpp:3908
-#: src/multiint.cpp:4102
+#: src/multiint.cpp:3909
+#: src/multiint.cpp:4103
 #, fuzzy
 msgid "Closed"
 msgstr "关闭"
 
-#: src/multiint.cpp:3959
+#: src/multiint.cpp:3960
 #, c-format
 msgid "Sending Map: %d%% "
 msgstr ""
 
-#: src/multiint.cpp:3967
+#: src/multiint.cpp:3968
 #, c-format
 msgid "Map: %d%% downloaded"
 msgstr ""
 
-#: src/multiint.cpp:3993
+#: src/multiint.cpp:3994
 msgid "HOST"
 msgstr ""
 
-#: src/multiint.cpp:4000
+#: src/multiint.cpp:4001
 #: src/multimenu.cpp:774
 msgid "Ping"
 msgstr ""
@@ -15027,12 +15072,12 @@ msgstr "总游戏时间 - %s"
 msgid "You cheated!"
 msgstr ""
 
-#: src/scriptfuncs.cpp:9448
+#: src/scriptfuncs.cpp:9447
 #, c-format
 msgid "Beacon received from %s!"
 msgstr ""
 
-#: src/scriptfuncs.cpp:9494
+#: src/scriptfuncs.cpp:9493
 #, c-format
 msgid "Beacon %d"
 msgstr ""
@@ -15149,51 +15194,6 @@ msgstr ""
 #: src/version.cpp:155
 #, c-format
 msgid "Version %s%s%s%s"
-msgstr ""
-
-#: po/custom/warzone2100.desktop.txt:1
-msgid "Postnuclear realtime strategy"
-msgstr ""
-
-#: po/custom/warzone2100.desktop.txt:2
-#: po/custom/mac-infoplist.txt:2
-msgid "Warzone 2100"
-msgstr ""
-
-#: po/custom/warzone2100.desktop.txt:3
-#, fuzzy
-msgid "Strategy Game"
-msgstr "保存游戏"
-
-#: po/custom/mac-infoplist.txt:1
-msgid ""
-"Copyright © 1999-2004 Eidos Interactive.\n"
-"Copyright © 2005-2010 The Warzone 2100 Project"
-msgstr ""
-
-#: po/custom/mac-infoplist.txt:3
-msgid "Warzone 2100 Map / Mod File"
-msgstr ""
-
-#: po/custom/mac-infoplist.txt:4
-msgid "Warzone 2100 Campaign Mod File"
-msgstr ""
-
-#: po/custom/mac-infoplist.txt:5
-#, fuzzy
-msgid "Warzone 2100 Multiplayer Mod File"
-msgstr "开始多人游戏音频"
-
-#: po/custom/mac-infoplist.txt:6
-msgid "Warzone 2100 Global Mod File"
-msgstr ""
-
-#: po/custom/mac-infoplist.txt:7
-msgid "Warzone"
-msgstr ""
-
-#: po/custom/mac-infoplist.txt:8
-msgid "Warzone 2100 Music Mod File"
 msgstr ""
 
 #~ msgid "MULTI PLAYER"

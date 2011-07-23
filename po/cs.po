@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-07-11 21:43+0200\n"
+"POT-Creation-Date: 2011-07-23 15:27+0200\n"
 "PO-Revision-Date: 2008-05-09 16:05+0000\n"
 "Last-Translator: Lubos <alvinx12@centrum.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
@@ -12054,30 +12054,30 @@ msgstr ""
 msgid "System locale"
 msgstr "Systémové místo"
 
-#: lib/netplay/netlobby.cpp:110
-#: lib/netplay/netlobby.cpp:117
+#: lib/netplay/netlobby.cpp:102
 msgid "Received invalid addGame data."
 msgstr ""
 
+#: lib/netplay/netlobby.cpp:140
 #: lib/netplay/netlobby.cpp:163
-#: lib/netplay/netlobby.cpp:192
-#: lib/netplay/netlobby.cpp:218
+#: lib/netplay/netlobby.cpp:183
 msgid "Create a game first!"
 msgstr ""
 
-#: lib/netplay/netlobby.cpp:501
+#: lib/netplay/netlobby.cpp:426
 msgid "Received invalid login data."
 msgstr ""
 
-#: lib/netplay/netlobby.cpp:626
-#: lib/netplay/netlobby.cpp:639
-#: lib/netplay/netlobby.cpp:650
-#: lib/netplay/netlobby.cpp:666
-#: lib/netplay/netlobby.cpp:676
+#: lib/netplay/netlobby.cpp:518
+#: lib/netplay/netlobby.cpp:531
+#: lib/netplay/netlobby.cpp:542
+#: lib/netplay/netlobby.cpp:560
+#: lib/netplay/netlobby.cpp:569
+#: lib/netplay/netlobby.cpp:578
 msgid "Failed to communicate with the lobby."
 msgstr ""
 
-#: lib/netplay/netlobby.cpp:696
+#: lib/netplay/netlobby.cpp:589
 #, c-format
 msgid "Got server error: %s"
 msgstr ""
@@ -12095,6 +12095,50 @@ msgstr ""
 #, c-format
 msgid "Error connecting to the lobby server: %s. Make sure port %d can receive incoming connections. If you're using a router configure it to use UPnP, or to forward the port to your system."
 msgstr ""
+
+#: po/custom/mac-infoplist.txt:1
+msgid ""
+"Copyright © 1999-2004 Eidos Interactive.\n"
+"Copyright © 2005-2010 The Warzone 2100 Project"
+msgstr ""
+
+#: po/custom/mac-infoplist.txt:2
+#: po/custom/warzone2100.desktop.txt:2
+msgid "Warzone 2100"
+msgstr ""
+
+#: po/custom/mac-infoplist.txt:3
+msgid "Warzone 2100 Map / Mod File"
+msgstr ""
+
+#: po/custom/mac-infoplist.txt:4
+msgid "Warzone 2100 Campaign Mod File"
+msgstr ""
+
+#: po/custom/mac-infoplist.txt:5
+msgid "Warzone 2100 Multiplayer Mod File"
+msgstr ""
+
+#: po/custom/mac-infoplist.txt:6
+msgid "Warzone 2100 Global Mod File"
+msgstr ""
+
+#: po/custom/mac-infoplist.txt:7
+msgid "Warzone"
+msgstr ""
+
+#: po/custom/mac-infoplist.txt:8
+msgid "Warzone 2100 Music Mod File"
+msgstr ""
+
+#: po/custom/warzone2100.desktop.txt:1
+msgid "Postnuclear realtime strategy"
+msgstr ""
+
+#: po/custom/warzone2100.desktop.txt:3
+#, fuzzy
+msgid "Strategy Game"
+msgstr "Uložit hru"
 
 #: src/challenge.cpp:219
 #: src/hci.cpp:916
@@ -12425,13 +12469,13 @@ msgstr ""
 msgid "Cannot Build. Oil Resource Burning."
 msgstr "Nemohu stavět. Ropný vrt hoří."
 
-#: src/display.cpp:1828
-#: src/display.cpp:2403
+#: src/display.cpp:1837
+#: src/display.cpp:2424
 #, fuzzy, c-format
 msgid "%s - Damage %d%% - Experience %.1f, %s"
 msgstr "%s - Poškození %d%% - Zkušenosti %d, %s"
 
-#: src/display.cpp:1844
+#: src/display.cpp:1853
 #, fuzzy, c-format
 msgid "%s - Allied - Damage %d%% - Experience %d, %s"
 msgstr "%s - Poškození %d%% - Zkušenosti %d, %s"
@@ -12445,7 +12489,7 @@ msgstr "Jednotka ztracena!"
 msgid "Structure Restored"
 msgstr "Budova obnovena"
 
-#: src/droid.cpp:2727
+#: src/droid.cpp:2724
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
@@ -12453,7 +12497,7 @@ msgstr[0] "Skupina %u vybrána - %u Jednotka"
 msgstr[1] "Skupina %u vybrána - %u Jednotky"
 msgstr[2] "Skupina %u vybrána - %u Jednotek"
 
-#: src/droid.cpp:2740
+#: src/droid.cpp:2737
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
@@ -12461,7 +12505,7 @@ msgstr[0] "%u jednotka začleněna do Skupiny %u"
 msgstr[1] "%u jednotky začleněny do Skupiny %u"
 msgstr[2] "%u jednotek začleněno do Skupiny %u"
 
-#: src/droid.cpp:2753
+#: src/droid.cpp:2750
 #, fuzzy, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
@@ -12469,7 +12513,7 @@ msgstr[0] "Zameřeno na skupinu %u - %u jednotka"
 msgstr[1] "Zameřeno na skupinu %u - %u jednotky"
 msgstr[2] "Zameřeno na skupinu %u - %u jednotek"
 
-#: src/droid.cpp:2757
+#: src/droid.cpp:2754
 #, fuzzy, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
@@ -12477,50 +12521,50 @@ msgstr[0] "Vyrovnání se skupinou %u - %u jednotka"
 msgstr[1] "Vyrovnání se skupinou %u - %u jednotky"
 msgstr[2] "Vyrovnání se skupinou %u - %u jednotek"
 
-#: src/droid.cpp:3084
+#: src/droid.cpp:3081
 msgid "Rookie"
 msgstr "Nováček"
 
-#: src/droid.cpp:3085
+#: src/droid.cpp:3082
 msgctxt "rank"
 msgid "Green"
 msgstr "Zelenáč"
 
-#: src/droid.cpp:3086
+#: src/droid.cpp:3083
 #, fuzzy
 msgid "Trained"
 msgstr "Trénovaný"
 
-#: src/droid.cpp:3087
+#: src/droid.cpp:3084
 msgid "Regular"
 msgstr "Běžný"
 
-#: src/droid.cpp:3088
+#: src/droid.cpp:3085
 msgid "Professional"
 msgstr "Profesionální"
 
-#: src/droid.cpp:3089
+#: src/droid.cpp:3086
 msgid "Veteran"
 msgstr "Veterán"
 
-#: src/droid.cpp:3090
+#: src/droid.cpp:3087
 msgid "Elite"
 msgstr "Elita"
 
-#: src/droid.cpp:3091
+#: src/droid.cpp:3088
 msgid "Special"
 msgstr "Speciální"
 
-#: src/droid.cpp:3092
+#: src/droid.cpp:3089
 msgid "Hero"
 msgstr "Hrdina"
 
-#: src/droid.cpp:4114
+#: src/droid.cpp:4111
 #, c-format
 msgid "%s wanted to give you a %s but you have too many!"
 msgstr ""
 
-#: src/droid.cpp:4118
+#: src/droid.cpp:4115
 #, c-format
 msgid "You wanted to give %s a %s but they have too many!"
 msgstr ""
@@ -12593,7 +12637,7 @@ msgid "Challenges"
 msgstr ""
 
 #: src/frontend.cpp:220
-#: src/ingameop.cpp:272
+#: src/ingameop.cpp:273
 msgid "Load Game"
 msgstr "Nahraj Hru"
 
@@ -12602,9 +12646,9 @@ msgid "SINGLE PLAYER"
 msgstr "HRA JEDNOHO HRÁČE"
 
 #: src/frontend.cpp:308
-#: src/ingameop.cpp:493
-#: src/mission.cpp:2527
-#: src/mission.cpp:2628
+#: src/ingameop.cpp:494
+#: src/mission.cpp:2528
+#: src/mission.cpp:2629
 msgid "Load Saved Game"
 msgstr "Načti Uloženou Hru"
 
@@ -12627,7 +12671,7 @@ msgid "Video Options"
 msgstr "Zvuková nastavení"
 
 #: src/frontend.cpp:367
-#: src/ingameop.cpp:267
+#: src/ingameop.cpp:268
 msgid "Audio Options"
 msgstr "Zvuková nastavení"
 
@@ -12677,7 +12721,7 @@ msgstr ""
 #: src/frontend.cpp:786
 #: src/frontend.cpp:858
 #: src/frontend.cpp:912
-#: src/frontend.cpp:950
+#: src/frontend.cpp:955
 #: src/frontend.cpp:998
 #: src/frontend.cpp:1010
 #: src/frontend.cpp:1022
@@ -12710,7 +12754,7 @@ msgstr ""
 #: src/frontend.cpp:586
 #: src/frontend.cpp:772
 #: src/frontend.cpp:917
-#: src/frontend.cpp:955
+#: src/frontend.cpp:951
 #: src/frontend.cpp:994
 #: src/frontend.cpp:1006
 #: src/frontend.cpp:1018
@@ -12750,17 +12794,17 @@ msgid "GRAPHICS OPTIONS"
 msgstr "HERNÍ NASTAVENÍ"
 
 #: src/frontend.cpp:664
-#: src/ingameop.cpp:167
+#: src/ingameop.cpp:168
 msgid "Voice Volume"
 msgstr "Hlasitost řeči"
 
 #: src/frontend.cpp:668
-#: src/ingameop.cpp:172
+#: src/ingameop.cpp:173
 msgid "FX Volume"
 msgstr "Hlasitost efektů"
 
 #: src/frontend.cpp:672
-#: src/ingameop.cpp:177
+#: src/ingameop.cpp:178
 msgid "Music Volume"
 msgstr "Hlasitost hudby"
 
@@ -12791,7 +12835,7 @@ msgid "Texture size"
 msgstr "Velikost textury"
 
 #: src/frontend.cpp:768
-msgid "Vertical sync*"
+msgid "Vertical sync"
 msgstr ""
 
 #: src/frontend.cpp:803
@@ -12904,7 +12948,7 @@ msgid "GAME OPTIONS"
 msgstr "HERNÍ NASTAVENÍ"
 
 #: src/frontend.cpp:1343
-#: src/multiint.cpp:2612
+#: src/multiint.cpp:2613
 msgid "Mod: "
 msgstr ""
 
@@ -12914,8 +12958,8 @@ msgid "MAP SAVED!"
 msgstr "HRA ULOŽENA!"
 
 #: src/hci.cpp:1573
-#: src/loop.cpp:563
-#: src/loop.cpp:579
+#: src/loop.cpp:564
+#: src/loop.cpp:580
 #, fuzzy
 msgid "GAME SAVED: "
 msgstr "HRA ULOŽENA!"
@@ -13066,9 +13110,9 @@ msgid "Start Edit Mode"
 msgstr "Začni bez Základen"
 
 #: src/hci.cpp:3669
-#: src/ingameop.cpp:112
-#: src/ingameop.cpp:256
-#: src/ingameop.cpp:260
+#: src/ingameop.cpp:113
+#: src/ingameop.cpp:257
+#: src/ingameop.cpp:261
 msgid "Quit"
 msgstr "Ukončit"
 
@@ -13107,47 +13151,47 @@ msgstr ""
 msgid "Ally progress"
 msgstr "Panel průběhu"
 
-#: src/ingameop.cpp:111
-#: src/ingameop.cpp:195
-#: src/ingameop.cpp:264
+#: src/ingameop.cpp:112
+#: src/ingameop.cpp:196
+#: src/ingameop.cpp:265
 msgid "Resume Game"
 msgstr "Pokračovat ve hře"
 
-#: src/ingameop.cpp:134
+#: src/ingameop.cpp:135
 msgid "WARNING: You're the host. If you quit, the game ends for everyone!"
 msgstr ""
 
-#: src/ingameop.cpp:186
-#: src/ingameop.cpp:521
+#: src/ingameop.cpp:187
+#: src/ingameop.cpp:522
 msgid "Tactical UI (Target Origin Icon): Show"
 msgstr ""
 
-#: src/ingameop.cpp:191
-#: src/ingameop.cpp:525
+#: src/ingameop.cpp:192
+#: src/ingameop.cpp:526
 msgid "Tactical UI (Target Origin Icon): Hide"
 msgstr ""
 
-#: src/ingameop.cpp:274
-#: src/ingameop.cpp:497
-#: src/mission.cpp:2514
-#: src/mission.cpp:2631
+#: src/ingameop.cpp:275
+#: src/ingameop.cpp:498
+#: src/mission.cpp:2515
+#: src/mission.cpp:2632
 msgid "Save Game"
 msgstr "Uložit hru"
 
-#: src/ingameop.cpp:338
+#: src/ingameop.cpp:339
 #, fuzzy
 msgid "Host has quit the game!"
 msgstr "Hostitel opustil hru!"
 
-#: src/ingameop.cpp:344
+#: src/ingameop.cpp:345
 msgid "The game can't continue without the host."
 msgstr ""
 
-#: src/ingameop.cpp:350
+#: src/ingameop.cpp:351
 msgid "-->  QUIT  <--"
 msgstr ""
 
-#: src/init.cpp:404
+#: src/init.cpp:405
 #, c-format
 msgid ""
 "The required mod could not be loaded: %s\n"
@@ -14087,45 +14131,45 @@ msgstr ""
 msgid "Toggle Driving Mode"
 msgstr ""
 
-#: src/loop.cpp:570
-#: src/loop.cpp:586
+#: src/loop.cpp:571
+#: src/loop.cpp:587
 #, fuzzy
 msgid "Could not save game!"
 msgstr "Nahrát uloženou hru"
 
-#: src/mission.cpp:2075
+#: src/mission.cpp:2076
 msgid "Load Transport"
 msgstr "Naložit transport"
 
-#: src/mission.cpp:2462
+#: src/mission.cpp:2463
 #, fuzzy
 msgid "OBJECTIVE ACHIEVED by cheating!"
 msgstr "CÍL SPLNĚN"
 
-#: src/mission.cpp:2462
+#: src/mission.cpp:2463
 msgid "OBJECTIVE ACHIEVED"
 msgstr "CÍL SPLNĚN"
 
-#: src/mission.cpp:2468
+#: src/mission.cpp:2469
 #, fuzzy
 msgid "OBJECTIVE FAILED--and you cheated!"
 msgstr "SELHÁNÍ"
 
-#: src/mission.cpp:2468
+#: src/mission.cpp:2469
 msgid "OBJECTIVE FAILED"
 msgstr "SELHÁNÍ"
 
-#: src/mission.cpp:2493
-#: src/mission.cpp:2533
-#: src/mission.cpp:2645
+#: src/mission.cpp:2494
+#: src/mission.cpp:2534
+#: src/mission.cpp:2646
 msgid "Quit To Main Menu"
 msgstr "Vyskočit do hlavního menu"
 
-#: src/mission.cpp:2501
+#: src/mission.cpp:2502
 msgid "Continue Game"
 msgstr "Pokračovat ve hře"
 
-#: src/mission.cpp:2596
+#: src/mission.cpp:2597
 #, fuzzy
 msgid "GAME SAVED :"
 msgstr "HRA ULOŽENA!"
@@ -14510,72 +14554,72 @@ msgstr ""
 msgid "CHAT"
 msgstr "CHAT"
 
-#: src/multiint.cpp:2617
+#: src/multiint.cpp:2618
 msgid "All players need to have the same mods to join your game."
 msgstr ""
 
-#: src/multiint.cpp:2775
+#: src/multiint.cpp:2776
 #, c-format
 msgid "*** password [%s] is now required! ***"
 msgstr ""
 
-#: src/multiint.cpp:2783
+#: src/multiint.cpp:2784
 msgid "*** password is NOT required! ***"
 msgstr ""
 
-#: src/multiint.cpp:3024
+#: src/multiint.cpp:3025
 msgid "Sorry! Failed to host the game."
 msgstr ""
 
-#: src/multiint.cpp:3145
+#: src/multiint.cpp:3146
 #, fuzzy
 msgid "'Locked Teams' mode enabled"
 msgstr "Pevné Týmy"
 
-#: src/multiint.cpp:3226
+#: src/multiint.cpp:3227
 #, c-format
 msgid "The host has kicked %s from the game!"
 msgstr "Hostitel vyhodil %s ze hry!"
 
-#: src/multiint.cpp:3296
+#: src/multiint.cpp:3297
 msgid "Host is Starting Game"
 msgstr "Host začíná hru"
 
-#: src/multiint.cpp:3837
+#: src/multiint.cpp:3838
 msgid "Players"
 msgstr "Hráči"
 
-#: src/multiint.cpp:3899
+#: src/multiint.cpp:3900
 #, fuzzy, c-format
 msgid "Click to take player slot %d"
 msgstr "Radar ukazuje barvy hráčů"
 
-#: src/multiint.cpp:3908
-#: src/multiint.cpp:4101
+#: src/multiint.cpp:3909
+#: src/multiint.cpp:4102
 msgid "Open"
 msgstr ""
 
-#: src/multiint.cpp:3908
-#: src/multiint.cpp:4102
+#: src/multiint.cpp:3909
+#: src/multiint.cpp:4103
 #, fuzzy
 msgid "Closed"
 msgstr "Zavřít"
 
-#: src/multiint.cpp:3959
+#: src/multiint.cpp:3960
 #, c-format
 msgid "Sending Map: %d%% "
 msgstr ""
 
-#: src/multiint.cpp:3967
+#: src/multiint.cpp:3968
 #, c-format
 msgid "Map: %d%% downloaded"
 msgstr ""
 
-#: src/multiint.cpp:3993
+#: src/multiint.cpp:3994
 msgid "HOST"
 msgstr ""
 
-#: src/multiint.cpp:4000
+#: src/multiint.cpp:4001
 #: src/multimenu.cpp:774
 msgid "Ping"
 msgstr ""
@@ -14973,12 +15017,12 @@ msgstr "Celkový Čas Hry - %s"
 msgid "You cheated!"
 msgstr ""
 
-#: src/scriptfuncs.cpp:9448
+#: src/scriptfuncs.cpp:9447
 #, c-format
 msgid "Beacon received from %s!"
 msgstr ""
 
-#: src/scriptfuncs.cpp:9494
+#: src/scriptfuncs.cpp:9493
 #, c-format
 msgid "Beacon %d"
 msgstr ""
@@ -15098,50 +15142,6 @@ msgstr ""
 #: src/version.cpp:155
 #, c-format
 msgid "Version %s%s%s%s"
-msgstr ""
-
-#: po/custom/warzone2100.desktop.txt:1
-msgid "Postnuclear realtime strategy"
-msgstr ""
-
-#: po/custom/warzone2100.desktop.txt:2
-#: po/custom/mac-infoplist.txt:2
-msgid "Warzone 2100"
-msgstr ""
-
-#: po/custom/warzone2100.desktop.txt:3
-#, fuzzy
-msgid "Strategy Game"
-msgstr "Uložit hru"
-
-#: po/custom/mac-infoplist.txt:1
-msgid ""
-"Copyright © 1999-2004 Eidos Interactive.\n"
-"Copyright © 2005-2010 The Warzone 2100 Project"
-msgstr ""
-
-#: po/custom/mac-infoplist.txt:3
-msgid "Warzone 2100 Map / Mod File"
-msgstr ""
-
-#: po/custom/mac-infoplist.txt:4
-msgid "Warzone 2100 Campaign Mod File"
-msgstr ""
-
-#: po/custom/mac-infoplist.txt:5
-msgid "Warzone 2100 Multiplayer Mod File"
-msgstr ""
-
-#: po/custom/mac-infoplist.txt:6
-msgid "Warzone 2100 Global Mod File"
-msgstr ""
-
-#: po/custom/mac-infoplist.txt:7
-msgid "Warzone"
-msgstr ""
-
-#: po/custom/mac-infoplist.txt:8
-msgid "Warzone 2100 Music Mod File"
 msgstr ""
 
 #~ msgid "MULTI PLAYER"

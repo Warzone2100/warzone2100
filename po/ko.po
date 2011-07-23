@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100 2.3_branch\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-07-11 21:43+0200\n"
+"POT-Creation-Date: 2011-07-23 15:27+0200\n"
 "PO-Revision-Date: 2010-11-23 21:01+0900\n"
 "Last-Translator: Joshua Shin <urgood2@gmail.com>\n"
 "Language-Team: Korean Translation Team <urgood2@gmail.com>\n"
@@ -12055,31 +12055,31 @@ msgstr "초고속도 캐논 파이썬 호버추진"
 msgid "System locale"
 msgstr "사용자 시스템 언어"
 
-#: lib/netplay/netlobby.cpp:110
-#: lib/netplay/netlobby.cpp:117
+#: lib/netplay/netlobby.cpp:102
 msgid "Received invalid addGame data."
 msgstr ""
 
+#: lib/netplay/netlobby.cpp:140
 #: lib/netplay/netlobby.cpp:163
-#: lib/netplay/netlobby.cpp:192
-#: lib/netplay/netlobby.cpp:218
+#: lib/netplay/netlobby.cpp:183
 #, fuzzy
 msgid "Create a game first!"
 msgstr "게임 개체 트레이스(trace)하기"
 
-#: lib/netplay/netlobby.cpp:501
+#: lib/netplay/netlobby.cpp:426
 msgid "Received invalid login data."
 msgstr ""
 
-#: lib/netplay/netlobby.cpp:626
-#: lib/netplay/netlobby.cpp:639
-#: lib/netplay/netlobby.cpp:650
-#: lib/netplay/netlobby.cpp:666
-#: lib/netplay/netlobby.cpp:676
+#: lib/netplay/netlobby.cpp:518
+#: lib/netplay/netlobby.cpp:531
+#: lib/netplay/netlobby.cpp:542
+#: lib/netplay/netlobby.cpp:560
+#: lib/netplay/netlobby.cpp:569
+#: lib/netplay/netlobby.cpp:578
 msgid "Failed to communicate with the lobby."
 msgstr ""
 
-#: lib/netplay/netlobby.cpp:696
+#: lib/netplay/netlobby.cpp:589
 #, c-format
 msgid "Got server error: %s"
 msgstr ""
@@ -12097,6 +12097,56 @@ msgstr ""
 #, c-format
 msgid "Error connecting to the lobby server: %s. Make sure port %d can receive incoming connections. If you're using a router configure it to use UPnP, or to forward the port to your system."
 msgstr ""
+
+#: po/custom/mac-infoplist.txt:1
+msgid ""
+"Copyright © 1999-2004 Eidos Interactive.\n"
+"Copyright © 2005-2010 The Warzone 2100 Project"
+msgstr ""
+
+#: po/custom/mac-infoplist.txt:2
+#: po/custom/warzone2100.desktop.txt:2
+#, fuzzy
+msgid "Warzone 2100"
+msgstr "워존"
+
+#: po/custom/mac-infoplist.txt:3
+#, fuzzy
+msgid "Warzone 2100 Map / Mod File"
+msgstr "워존 2100 맵 Mod File"
+
+#: po/custom/mac-infoplist.txt:4
+#, fuzzy
+msgid "Warzone 2100 Campaign Mod File"
+msgstr "워존 2100 멀티플레이어 Mod File"
+
+#: po/custom/mac-infoplist.txt:5
+#, fuzzy
+msgid "Warzone 2100 Multiplayer Mod File"
+msgstr "워존 2100 캠페인 Mod File"
+
+#: po/custom/mac-infoplist.txt:6
+#, fuzzy
+msgid "Warzone 2100 Global Mod File"
+msgstr "워존 2100 글로벌 Mod File"
+
+#: po/custom/mac-infoplist.txt:7
+msgid "Warzone"
+msgstr ""
+
+#: po/custom/mac-infoplist.txt:8
+#, fuzzy
+msgid "Warzone 2100 Music Mod File"
+msgstr "워존 2100 음악 Mod File"
+
+#: po/custom/warzone2100.desktop.txt:1
+msgid "Postnuclear realtime strategy"
+msgstr ""
+
+#: po/custom/warzone2100.desktop.txt:3
+#, fuzzy
+msgid "Strategy Game"
+msgstr "게임 저장"
 
 #: src/challenge.cpp:219
 #: src/hci.cpp:916
@@ -12428,13 +12478,13 @@ msgstr ""
 msgid "Cannot Build. Oil Resource Burning."
 msgstr "건설이 불가능합니다. 석유 자원이 타고 있습니다"
 
-#: src/display.cpp:1828
-#: src/display.cpp:2403
+#: src/display.cpp:1837
+#: src/display.cpp:2424
 #, fuzzy, c-format
 msgid "%s - Damage %d%% - Experience %.1f, %s"
 msgstr "%s - 데미지 %d%% - 경험치 %d, %s"
 
-#: src/display.cpp:1844
+#: src/display.cpp:1853
 #, c-format
 msgid "%s - Allied - Damage %d%% - Experience %d, %s"
 msgstr "%s - 동맹군 - 데미지 %d%% - 경험치 %d, %s"
@@ -12448,76 +12498,76 @@ msgid "Structure Restored"
 msgstr "구조물이 복구되었습니다"
 
 # ask about form 0, 1, 2, etc
-#: src/droid.cpp:2727
+#: src/droid.cpp:2724
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
 msgstr[0] "부대 %u가(이) 선택되었습니다 - 유닛 %u개"
 
-#: src/droid.cpp:2740
+#: src/droid.cpp:2737
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
 msgstr[0] "유닛 %u개가 부대 %u에 할당되었습니다"
 
-#: src/droid.cpp:2753
+#: src/droid.cpp:2750
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
 msgstr[0] "부대 %u를(을) 중심으로 - 유닛 %u개"
 
-#: src/droid.cpp:2757
+#: src/droid.cpp:2754
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] "부대 %u와(과) 정렬하였습니다 - 유닛 %u개"
 
-#: src/droid.cpp:3084
+#: src/droid.cpp:3081
 msgid "Rookie"
 msgstr "루키"
 
-#: src/droid.cpp:3085
+#: src/droid.cpp:3082
 msgctxt "rank"
 msgid "Green"
 msgstr "그린"
 
 # finished training,
 # is now intern
-#: src/droid.cpp:3086
+#: src/droid.cpp:3083
 msgid "Trained"
 msgstr "견습병"
 
 # 정규 사병 = regular soldier
-#: src/droid.cpp:3087
+#: src/droid.cpp:3084
 msgid "Regular"
 msgstr "정규병"
 
-#: src/droid.cpp:3088
+#: src/droid.cpp:3085
 msgid "Professional"
 msgstr "프로페셔널"
 
-#: src/droid.cpp:3089
+#: src/droid.cpp:3086
 msgid "Veteran"
 msgstr "베테랑"
 
-#: src/droid.cpp:3090
+#: src/droid.cpp:3087
 msgid "Elite"
 msgstr "엘리트"
 
-#: src/droid.cpp:3091
+#: src/droid.cpp:3088
 msgid "Special"
 msgstr "스페셜"
 
-#: src/droid.cpp:3092
+#: src/droid.cpp:3089
 msgid "Hero"
 msgstr "히어로"
 
-#: src/droid.cpp:4114
+#: src/droid.cpp:4111
 #, c-format
 msgid "%s wanted to give you a %s but you have too many!"
 msgstr "%s가 당신에게 %s를(을) 주고 싶어하지만 이미 수가 너무 많습니다!"
 
-#: src/droid.cpp:4118
+#: src/droid.cpp:4115
 #, fuzzy, c-format
 msgid "You wanted to give %s a %s but they have too many!"
 msgstr "%s가 당신에게 %s를(을) 주고 싶어하지만 이미 수가 너무 많습니다!"
@@ -12586,7 +12636,7 @@ msgid "Challenges"
 msgstr "챌런지(도전)"
 
 #: src/frontend.cpp:220
-#: src/ingameop.cpp:272
+#: src/ingameop.cpp:273
 msgid "Load Game"
 msgstr "게임 로드"
 
@@ -12595,9 +12645,9 @@ msgid "SINGLE PLAYER"
 msgstr "싱글 플레이어"
 
 #: src/frontend.cpp:308
-#: src/ingameop.cpp:493
-#: src/mission.cpp:2527
-#: src/mission.cpp:2628
+#: src/ingameop.cpp:494
+#: src/mission.cpp:2528
+#: src/mission.cpp:2629
 msgid "Load Saved Game"
 msgstr "저장된 게임 로드하기"
 
@@ -12619,7 +12669,7 @@ msgid "Video Options"
 msgstr "비디오 옵션"
 
 #: src/frontend.cpp:367
-#: src/ingameop.cpp:267
+#: src/ingameop.cpp:268
 msgid "Audio Options"
 msgstr "오디오 옵션"
 
@@ -12668,7 +12718,7 @@ msgstr ""
 #: src/frontend.cpp:786
 #: src/frontend.cpp:858
 #: src/frontend.cpp:912
-#: src/frontend.cpp:950
+#: src/frontend.cpp:955
 #: src/frontend.cpp:998
 #: src/frontend.cpp:1010
 #: src/frontend.cpp:1022
@@ -12701,7 +12751,7 @@ msgstr "화면 떨림(Shake)"
 #: src/frontend.cpp:586
 #: src/frontend.cpp:772
 #: src/frontend.cpp:917
-#: src/frontend.cpp:955
+#: src/frontend.cpp:951
 #: src/frontend.cpp:994
 #: src/frontend.cpp:1006
 #: src/frontend.cpp:1018
@@ -12740,17 +12790,17 @@ msgid "GRAPHICS OPTIONS"
 msgstr "그래픽 옵션"
 
 #: src/frontend.cpp:664
-#: src/ingameop.cpp:167
+#: src/ingameop.cpp:168
 msgid "Voice Volume"
 msgstr "음성 볼륨"
 
 #: src/frontend.cpp:668
-#: src/ingameop.cpp:172
+#: src/ingameop.cpp:173
 msgid "FX Volume"
 msgstr "특수 효과음 볼륨 "
 
 #: src/frontend.cpp:672
-#: src/ingameop.cpp:177
+#: src/ingameop.cpp:178
 msgid "Music Volume"
 msgstr "음악 볼륨"
 
@@ -12780,7 +12830,8 @@ msgid "Texture size"
 msgstr "텍스쳐 크기"
 
 #: src/frontend.cpp:768
-msgid "Vertical sync*"
+#, fuzzy
+msgid "Vertical sync"
 msgstr "수직동기화(V sync)*"
 
 #: src/frontend.cpp:803
@@ -12890,7 +12941,7 @@ msgid "GAME OPTIONS"
 msgstr "게임 옵션"
 
 #: src/frontend.cpp:1343
-#: src/multiint.cpp:2612
+#: src/multiint.cpp:2613
 msgid "Mod: "
 msgstr "Mod (Modification):"
 
@@ -12899,8 +12950,8 @@ msgid "MAP SAVED!"
 msgstr "맵이 저장되었습니다!"
 
 #: src/hci.cpp:1573
-#: src/loop.cpp:563
-#: src/loop.cpp:579
+#: src/loop.cpp:564
+#: src/loop.cpp:580
 #, fuzzy
 msgid "GAME SAVED: "
 msgstr "게임이 저장되었습니다 : "
@@ -13040,9 +13091,9 @@ msgid "Start Edit Mode"
 msgstr "편집 모드 시작하기"
 
 #: src/hci.cpp:3669
-#: src/ingameop.cpp:112
-#: src/ingameop.cpp:256
-#: src/ingameop.cpp:260
+#: src/ingameop.cpp:113
+#: src/ingameop.cpp:257
+#: src/ingameop.cpp:261
 msgid "Quit"
 msgstr "종료"
 
@@ -13083,46 +13134,46 @@ msgstr "오른쪽으로 탭 스크롤"
 msgid "Ally progress"
 msgstr "건설(빌드) 포인트"
 
-#: src/ingameop.cpp:111
-#: src/ingameop.cpp:195
-#: src/ingameop.cpp:264
+#: src/ingameop.cpp:112
+#: src/ingameop.cpp:196
+#: src/ingameop.cpp:265
 msgid "Resume Game"
 msgstr "일시 중지 해제"
 
-#: src/ingameop.cpp:134
+#: src/ingameop.cpp:135
 msgid "WARNING: You're the host. If you quit, the game ends for everyone!"
 msgstr "경고: 당신이 호스트입니다. 당신이 게임을 퇴장하면, 게임이 모두 종료됩니다!"
 
-#: src/ingameop.cpp:186
-#: src/ingameop.cpp:521
+#: src/ingameop.cpp:187
+#: src/ingameop.cpp:522
 msgid "Tactical UI (Target Origin Icon): Show"
 msgstr ""
 
-#: src/ingameop.cpp:191
-#: src/ingameop.cpp:525
+#: src/ingameop.cpp:192
+#: src/ingameop.cpp:526
 msgid "Tactical UI (Target Origin Icon): Hide"
 msgstr ""
 
-#: src/ingameop.cpp:274
-#: src/ingameop.cpp:497
-#: src/mission.cpp:2514
-#: src/mission.cpp:2631
+#: src/ingameop.cpp:275
+#: src/ingameop.cpp:498
+#: src/mission.cpp:2515
+#: src/mission.cpp:2632
 msgid "Save Game"
 msgstr "게임 저장"
 
-#: src/ingameop.cpp:338
+#: src/ingameop.cpp:339
 msgid "Host has quit the game!"
 msgstr "호스트(Host)가 게임을 종료하였습니다!"
 
-#: src/ingameop.cpp:344
+#: src/ingameop.cpp:345
 msgid "The game can't continue without the host."
 msgstr "이 게임은 호스트 없이 계속할 수 없습니다."
 
-#: src/ingameop.cpp:350
+#: src/ingameop.cpp:351
 msgid "-->  QUIT  <--"
 msgstr "-->  종료  <--"
 
-#: src/init.cpp:404
+#: src/init.cpp:405
 #, c-format
 msgid ""
 "The required mod could not be loaded: %s\n"
@@ -14042,42 +14093,42 @@ msgstr "게임 개체 트레이스(trace)하기"
 msgid "Toggle Driving Mode"
 msgstr "유닛 운전 모드 켜짐/꺼짐"
 
-#: src/loop.cpp:570
-#: src/loop.cpp:586
+#: src/loop.cpp:571
+#: src/loop.cpp:587
 msgid "Could not save game!"
 msgstr "게임을 저장할 수 없습니다!"
 
-#: src/mission.cpp:2075
+#: src/mission.cpp:2076
 msgid "Load Transport"
 msgstr "수송선에 싣기"
 
-#: src/mission.cpp:2462
+#: src/mission.cpp:2463
 msgid "OBJECTIVE ACHIEVED by cheating!"
 msgstr "목표 달성 (치팅했습니다!)"
 
-#: src/mission.cpp:2462
+#: src/mission.cpp:2463
 msgid "OBJECTIVE ACHIEVED"
 msgstr "목표 달성"
 
-#: src/mission.cpp:2468
+#: src/mission.cpp:2469
 msgid "OBJECTIVE FAILED--and you cheated!"
 msgstr "목표 달성 실패--그리고 치트를 사용했습니다!"
 
-#: src/mission.cpp:2468
+#: src/mission.cpp:2469
 msgid "OBJECTIVE FAILED"
 msgstr "목표 달성 실패"
 
-#: src/mission.cpp:2493
-#: src/mission.cpp:2533
-#: src/mission.cpp:2645
+#: src/mission.cpp:2494
+#: src/mission.cpp:2534
+#: src/mission.cpp:2646
 msgid "Quit To Main Menu"
 msgstr "메인 메뉴로 종료하기"
 
-#: src/mission.cpp:2501
+#: src/mission.cpp:2502
 msgid "Continue Game"
 msgstr "게임 계속하기"
 
-#: src/mission.cpp:2596
+#: src/mission.cpp:2597
 msgid "GAME SAVED :"
 msgstr "게임이 저장되었습니다 : "
 
@@ -14456,71 +14507,71 @@ msgstr ""
 msgid "CHAT"
 msgstr "채팅"
 
-#: src/multiint.cpp:2617
+#: src/multiint.cpp:2618
 msgid "All players need to have the same mods to join your game."
 msgstr "모든 플레이어는 당신과 같은 mod를 사용해야만 게임에 참여할 수 있습니다"
 
-#: src/multiint.cpp:2775
+#: src/multiint.cpp:2776
 #, c-format
 msgid "*** password [%s] is now required! ***"
 msgstr "*** 이제 비밀번호 [%s] 가 요구됩니다! ***"
 
-#: src/multiint.cpp:2783
+#: src/multiint.cpp:2784
 msgid "*** password is NOT required! ***"
 msgstr "*** 비밀번호가 요구되지 않습니다! ***"
 
-#: src/multiint.cpp:3024
+#: src/multiint.cpp:3025
 msgid "Sorry! Failed to host the game."
 msgstr "죄송합니다! 게임 호스팅이 실패하였습니다"
 
-#: src/multiint.cpp:3145
+#: src/multiint.cpp:3146
 msgid "'Locked Teams' mode enabled"
 msgstr "'팀 잠금' 모드가 켜졌습니다"
 
-#: src/multiint.cpp:3226
+#: src/multiint.cpp:3227
 #, c-format
 msgid "The host has kicked %s from the game!"
 msgstr "호스트가 %s를 게임에서 퇴장시켰습니다!"
 
-#: src/multiint.cpp:3296
+#: src/multiint.cpp:3297
 msgid "Host is Starting Game"
 msgstr "호스트가 게임을 시작하고 있습니다"
 
-#: src/multiint.cpp:3837
+#: src/multiint.cpp:3838
 msgid "Players"
 msgstr "플레이어"
 
-#: src/multiint.cpp:3899
+#: src/multiint.cpp:3900
 #, fuzzy, c-format
 msgid "Click to take player slot %d"
 msgstr "사용자 설정을 변경하려면 클릭하십시오"
 
-#: src/multiint.cpp:3908
-#: src/multiint.cpp:4101
+#: src/multiint.cpp:3909
+#: src/multiint.cpp:4102
 msgid "Open"
 msgstr ""
 
-#: src/multiint.cpp:3908
-#: src/multiint.cpp:4102
+#: src/multiint.cpp:3909
+#: src/multiint.cpp:4103
 #, fuzzy
 msgid "Closed"
 msgstr "닫기"
 
-#: src/multiint.cpp:3959
+#: src/multiint.cpp:3960
 #, c-format
 msgid "Sending Map: %d%% "
 msgstr "맵을 보내는 중: %d%% "
 
-#: src/multiint.cpp:3967
+#: src/multiint.cpp:3968
 #, c-format
 msgid "Map: %d%% downloaded"
 msgstr "맵: %d%% 다운로드 완료"
 
-#: src/multiint.cpp:3993
+#: src/multiint.cpp:3994
 msgid "HOST"
 msgstr "호스트"
 
-#: src/multiint.cpp:4000
+#: src/multiint.cpp:4001
 #: src/multimenu.cpp:774
 msgid "Ping"
 msgstr "핑(Ping)"
@@ -14914,12 +14965,12 @@ msgstr "총 게임 시간소요 - %s"
 msgid "You cheated!"
 msgstr "당신이 치트했습니다!"
 
-#: src/scriptfuncs.cpp:9448
+#: src/scriptfuncs.cpp:9447
 #, c-format
 msgid "Beacon received from %s!"
 msgstr "%s이 표지를 보냈습니다!"
 
-#: src/scriptfuncs.cpp:9494
+#: src/scriptfuncs.cpp:9493
 #, c-format
 msgid "Beacon %d"
 msgstr "표지 %d"
@@ -15038,56 +15089,6 @@ msgstr " - 빌드 날짜 %s"
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "버젼 %s%s%s%s"
-
-#: po/custom/warzone2100.desktop.txt:1
-msgid "Postnuclear realtime strategy"
-msgstr ""
-
-#: po/custom/warzone2100.desktop.txt:2
-#: po/custom/mac-infoplist.txt:2
-#, fuzzy
-msgid "Warzone 2100"
-msgstr "워존"
-
-#: po/custom/warzone2100.desktop.txt:3
-#, fuzzy
-msgid "Strategy Game"
-msgstr "게임 저장"
-
-#: po/custom/mac-infoplist.txt:1
-msgid ""
-"Copyright © 1999-2004 Eidos Interactive.\n"
-"Copyright © 2005-2010 The Warzone 2100 Project"
-msgstr ""
-
-#: po/custom/mac-infoplist.txt:3
-#, fuzzy
-msgid "Warzone 2100 Map / Mod File"
-msgstr "워존 2100 맵 Mod File"
-
-#: po/custom/mac-infoplist.txt:4
-#, fuzzy
-msgid "Warzone 2100 Campaign Mod File"
-msgstr "워존 2100 멀티플레이어 Mod File"
-
-#: po/custom/mac-infoplist.txt:5
-#, fuzzy
-msgid "Warzone 2100 Multiplayer Mod File"
-msgstr "워존 2100 캠페인 Mod File"
-
-#: po/custom/mac-infoplist.txt:6
-#, fuzzy
-msgid "Warzone 2100 Global Mod File"
-msgstr "워존 2100 글로벌 Mod File"
-
-#: po/custom/mac-infoplist.txt:7
-msgid "Warzone"
-msgstr ""
-
-#: po/custom/mac-infoplist.txt:8
-#, fuzzy
-msgid "Warzone 2100 Music Mod File"
-msgstr "워존 2100 음악 Mod File"
 
 #~ msgid "Could not resolve masterserver name (%s)!"
 #~ msgstr "마스터서버 이름을 확인할 수 없습니다 (%s)!"
