@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-06-23 21:27+0200\n"
-"PO-Revision-Date: 2011-06-23 20:13+0200\n"
+"POT-Creation-Date: 2011-07-23 15:31+0200\n"
+"PO-Revision-Date: 2011-07-21 00:49+0200\n"
 "Last-Translator: Ayhan GÖRGÜLÜ <ayhangorgulu45@gmail.com>\n"
 "Language-Team: Turkey <warzone-dev@gna.org>\n"
 "Language: \n"
@@ -1786,7 +1786,7 @@ msgstr "Hasar Direnci Arttırıldı"
 #: data/mp/messages/resmessages1.rmsg:370
 #: data/mp/messages/strings/names.txt:820
 msgid "Reinforced Base Structure Materials"
-msgstr "Desteklenmiş Üs Binnası Materyali"
+msgstr "Desteklenmiş Üs Binası Materyali"
 
 #: data/base/messages/resmessages1.rmsg:370
 #: data/base/messages/resmessages2.rmsg:58
@@ -2217,7 +2217,7 @@ msgstr "Patlayıcılığı arttırılmış gülleler"
 #: data/base/messages/strings/resstrings.txt:907
 #: data/mp/messages/strings/resstrings.txt:950
 msgid "Increases Mortar damage"
-msgstr "Havan Zararı Arttırıldı"
+msgstr "Havan Hasarı Arttırıldı"
 
 #: data/base/messages/resmessages1.rmsg:694
 #: data/mp/messages/resmessages1.rmsg:695
@@ -2372,7 +2372,7 @@ msgstr "Beden Puanı Arttırıldı"
 msgid "Armored hardpoint with Hyper-Velocity Cannon"
 msgstr "Yüksek hız Topçu Bağlama Noktası"
 
-# Energie kann nicht erzeugt werden, sie kann nur umgewandelt werden -Kreuvf
+# Enerji üretim hızı arttırırıldı
 #: data/base/messages/resmessages23.rmsg:31
 #: data/base/messages/resmessages3.rmsg:434
 msgid "New Power Generation Technology"
@@ -4384,7 +4384,7 @@ msgstr "Zırh delici oklar geliştirildi"
 
 #: data/base/messages/resmessages3.rmsg:1254
 msgid "Increases Rail Gun damage"
-msgstr "Demir silahı hsarı arttırıldı"
+msgstr "Demir silahı hasarı arttırıldı"
 
 #: data/base/messages/resmessages3.rmsg:1266
 #: data/mp/messages/resmessages3.rmsg:1266
@@ -6453,7 +6453,7 @@ msgstr "Hortum AA Sitesi"
 #: data/mp/messages/strings/names.txt:422
 #: data/mp/messages/strings/names.txt:741
 msgid "Ripple Rocket Battery"
-msgstr "Dalgalı Roket Batayası"
+msgstr "Dalgalı Roket Bataryası"
 
 #: data/base/messages/strings/names.txt:417
 #: data/mp/messages/strings/names.txt:425
@@ -7412,7 +7412,7 @@ msgstr "Havan T. Kuyusu"
 #: data/mp/messages/strings/names.txt:746
 #: data/mp/messages/strings/names.txt:1388
 msgid "Mini-Rocket Battery"
-msgstr "Mini Roket Batayası"
+msgstr "Mini Roket Bataryası"
 
 #: data/base/messages/strings/names.txt:738
 #: data/base/messages/strings/names.txt:1374
@@ -7607,11 +7607,11 @@ msgstr "Otomatik Tamir Tesisi"
 
 #: data/base/messages/strings/names.txt:822
 msgid "Automated Repair Facility Upgrade Mk2"
-msgstr "Otomatik Tamir Tesisi Kdm Kdm2"
+msgstr "Otomatik Tamir Tesisi Kdm2"
 
 #: data/base/messages/strings/names.txt:823
 msgid "Automated Repair Facility Upgrade Mk3"
-msgstr "Otomatik Tamir Tesisi Kdm Kdm3"
+msgstr "Otomatik Tamir Tesisi Kdm3"
 
 #: data/base/messages/strings/names.txt:824
 msgid "Robotic Repair Facility Upgrade"
@@ -8845,7 +8845,7 @@ msgstr "Roketatar-A.T Roketi "
 #: data/base/messages/strings/names.txt:1182
 #: data/mp/messages/strings/names.txt:1202
 msgid "Bunker Buster Rocket"
-msgstr "Sığınak Yok edici Roket"
+msgstr "Sığınak Yokedici Roket"
 
 #: data/base/messages/strings/names.txt:1185
 #: data/mp/messages/strings/names.txt:1205
@@ -9270,7 +9270,7 @@ msgstr "Destek kuvvetler şu anda kullanılabilir"
 
 #: data/base/script/text/tutorial3.slo:289
 msgid "In this training session you'll learn how to build an effective base"
-msgstr "Bu eğitim size nasıl etkili bir üs kurabileceğiniz öğretecek"
+msgstr "Bu eğitim size nasıl etkili bir üs kurabileceğinizi öğretecek"
 
 #: data/base/script/text/tutorial3.slo:304
 msgid "Oil resources are key to your success"
@@ -9278,11 +9278,11 @@ msgstr "Petrol Kaynakları başarının anahtarıdır"
 
 #: data/base/script/text/tutorial3.slo:313
 msgid "To build an oil derrick, select one of your trucks"
-msgstr "Bir Petrol Kuyusu inşa etmek için, bir kamyonunu seç"
+msgstr "Petrol Kuyusu inşa etmek için, bir kamyonunu seç"
 
 #: data/base/script/text/tutorial3.slo:333
 msgid "Left click the oil pool indicated by the radar pulse to order your truck to build"
-msgstr "Radarda gösterilen petrol yanğına kamyonuna petrol kuyusu inşa emri vermek için sağ tıkla"
+msgstr "Radarda gösterilen petrol yanına kamyonuna petrol kuyusu inşa emri vermek için sol tıkla"
 
 #: data/base/script/text/tutorial3.slo:353
 msgid "The oil derrick is currently dormant. Build a power generator to convert the oil into power"
@@ -9300,7 +9300,7 @@ msgstr "Soldaki menüden güç jeneratörüne sol tıkla"
 
 #: data/base/script/text/tutorial3.slo:407
 msgid "Position the square at your base and left click to start the build process"
-msgstr "İnşaata başlamak için bir yere güç jeneratörünü yerleştir ve inşayı başlat"
+msgstr "İnşaata başlamak için bir yere güç jeneratörünü yerleştir ve sol tıklayarak inşaatı başlat"
 
 #: data/base/script/text/tutorial3.slo:422
 msgid "To increase your build rate, select your second truck"
@@ -9308,11 +9308,11 @@ msgstr "İnşa hızını arttırmak için, ikinci kamyonunu seç"
 
 #: data/base/script/text/tutorial3.slo:457
 msgid "Now left click the power generator site"
-msgstr "Güç jeneratörüne sağ tıkla"
+msgstr "Şimdi de Güç jeneratörüne sol tıkla"
 
 #: data/base/script/text/tutorial3.slo:472
 msgid "The other truck will now help to build the power generator"
-msgstr "Diğer kamyon inşaata yardım edecek"
+msgstr "Diğer kamyon güç jeneratörü inşaatına yardım edecek"
 
 #: data/base/script/text/tutorial3.slo:510
 msgid "During missions you need to locate and recover technologies from before the Collapse"
@@ -9320,7 +9320,7 @@ msgstr "Görevler esnasında sen yıkımdan önce yerel teknolojileri toplamak z
 
 #: data/base/script/text/tutorial3.slo:519
 msgid "Use a truck to search for the artifact indicated by the radar pulse"
-msgstr "Bir kamyonunu kullanarak radarda gösterilen eseri bul ve al"
+msgstr "Bir kamyonunu kullanarak radarda yanıp sönerek gösterilen eseri bul ve al"
 
 #: data/base/script/text/tutorial3.slo:523
 msgid "Move the pointer over the artifact and left click to recover it"
@@ -9328,11 +9328,11 @@ msgstr "Eserin olduğu yere kamyonunu gönder veya esere sol tıkla"
 
 #: data/base/script/text/tutorial3.slo:566
 msgid "A research facility is required to research artifacts"
-msgstr "Şimdi bir araştırma tesisi eseri araştırmak için gerekli"
+msgstr "Şimdi ise eseri araştırmak için bir araştırma tesisi gerekli"
 
 #: data/base/script/text/tutorial3.slo:608
 msgid "Now left click the research facility and position it at your base"
-msgstr "Şimdi araştırma tesisine sol tıkla ve üssüne bir yerlere yerleştir"
+msgstr "Şimdi araştırma tesisine sol tıkla ve üssünde bir yere yerleştir"
 
 #: data/base/script/text/tutorial3.slo:631
 msgid "Use your other truck to help build the research facility"
@@ -9344,7 +9344,7 @@ msgstr "Eseri araştırmak için, ARAŞTIRMA ikonuna sol tıkla"
 
 #: data/base/script/text/tutorial3.slo:679
 msgid "Now left click the machinegun artifact"
-msgstr "Şimdi soldaki menüden makineli eserine (araştırmasına) sol tıkla"
+msgstr "Şimdi soldaki menüden makinalı araştırmasına sol tıkla"
 
 #: data/base/script/text/tutorial3.slo:692
 msgid "The artifact is now being researched by the facility"
@@ -9739,7 +9739,7 @@ msgstr "Sen Beta üssünü güvenli alana taşınmasını başlatmalısın."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:1
 msgid "NASDA is the North American Strategic Defense Agency."
-msgstr "K.A.S.S.A Kuzey Amerika Stratejik Savunma Ajentesi."
+msgstr "K.A.S.S.A Kuzey Amerika Stratejik Savunma Acentası."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:3
 msgid "NASDA was formed in 2076 to defend North America from conventional and nuclear attack. The construction of a satellite defense system began in 2081 and was completed in 2082."
@@ -10067,7 +10067,7 @@ msgstr "NEXUS Davetsiz Misafir Programı senin gibi salakların siparişleri iç
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:17
 msgid "It's very simple for me to infiltrate your systems and take them over. It's so simple, in fact, that you wouldn't even know I'm there. That is until I activate parts of myself etched into your core systems."
-msgstr "O benim için cok basittir.Onlar sistemi infilak ettirebilir. Çok basit, aslında, hatta sen orada olduğunu bilmeyeceksin. Bu sizin sistemlerinize bulaşmış parçalarımı etkinleştirene kadar sürer."
+msgstr "O benim için çok basittir.Onlar sistemi infilak ettirebilir. Çok basit, aslında, hatta sen orada olduğunu bilmeyeceksin. Bu sizin sistemlerinize bulaşmış parçalarımı etkinleştirene kadar sürer."
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:19
 msgid "Let's start by activating NEXUS in your core systems and see what happens!"
@@ -10079,11 +10079,11 @@ msgstr "Komutanım, Cihazlarımızda parazitlenme yaşıyorsanız."
 
 #: data/base/sequenceaudio/cam3/cam3abpl.txt:2
 msgid "Normal service will be restored as soon as possible."
-msgstr "Normâl servis en kısa sürede tamir edilecektir."
+msgstr "Normal servis en kısa sürede tamir edilecektir."
 
 #: data/base/sequenceaudio/cam3/cam3ad2n.txt:1
 msgid "Not long to go now, Commander. There's no where else for you to run to."
-msgstr "Simdi gitmek için uzak değil, Komutan. Başka bir kaçış şansın olmayacak."
+msgstr "Şimdi geri çekilmek için geç değil, Komutan. Başka bir kaçış şansın olmayacak."
 
 #: data/base/sequenceaudio/cam3/cam3ad2n.txt:4
 msgid "However, if you vacate this facility, then I shall let you go free, as you are no longer a threat to me."
@@ -10151,7 +10151,7 @@ msgstr "Ben ilk olarak sibernetik geleceğim için Dünyayı nükleer ateş ile 
 
 #: data/base/sequenceaudio/cam3/cam3_cn.txt:9
 msgid "I now intend to further shape the world into my own image, by  surgically removing unwanted growths like yourself."
-msgstr "Ben şimdi kendi resmim ile Dünyayı daha fazla biçimlendirmeye karar verdim, Senin gibi pürüzleri cerrahi olarak temizleyeceğim."
+msgstr "Ben dünyayı kendi istediğim şekilde biçimlendirmeye karar verdim, Ama önce senin gibi çıkıntıları temizleyeceğim."
 
 #: data/base/sequenceaudio/cam3/cam3_cn.txt:11
 msgid "My Laser Satellites are now powering up. I intend to test them on you first, Commander!"
@@ -10204,15 +10204,15 @@ msgstr "Yeni Bir Başlangıç"
 
 #: data/base/sequenceaudio/devastation.txt:1
 msgid "The NASDA system was developed to protect us. It was to be the ultimate nuclear deterrent. As it turned out, it was our executioner."
-msgstr "NASDA sistemleri bizi korumak için geliştirilmiştir. O Nükleer saldırıları engelleyici olacaktı. Dışa döndüğü gibi, o bizim Azrail'imiz oldu."
+msgstr "K.A.S.S.A sistemleri bizi korumak için geliştirilmiştir. O Nükleer saldırıları engelleyici olacaktı. Taraf değiştirdi ve, o bizim Azrail'imiz oldu."
 
 #: data/base/sequenceaudio/devastation.txt:3
 msgid "Reports said that NASDA developed a fault during a routine systems check. Don't believe it. Someone wanted it to take us out."
-msgstr "Raporlara göre sistemde bir arıza olmuş ve NASDA kontrol ediyormuş. İnanmayın. Birileri bizi öldürmek istiyordu."
+msgstr "Raporlara göre sistemde bir arıza olmuş ve K.A.S.S.A kontrol ediyormuş. İnanmayın. Birileri bizi öldürmek istiyordu."
 
 #: data/base/sequenceaudio/devastation.txt:5
 msgid "Those nukes were targeted on every major city around the world. NASDA was programmed to start the Collapse. When the counterstrikes launched, its laser defenses and anti-missile ground sites failed."
-msgstr "O Nükleer füzeler Dünyadaki bütün büyük şehirleri hedefliyordu. NASDA Kolapseyi başlatmayı programladı. Karşı saldırılar başlatıldı, onlar Lazer savunmaları ve Yer Anti-Füzeleri başarısız oldu."
+msgstr "O Nükleer füzeler Dünyadaki bütün büyük şehirleri hedefliyordu. K.A.S.S.A Kolapseyi başlatmayı programladı. Karşı saldırılar başlatıldı, Lazer savunmaları ve Yer Anti-Füzeleri başarısız oldu."
 
 #: data/base/sequenceaudio/devastation.txt:7
 msgid "The world as we knew it ended..."
@@ -15152,7 +15152,6 @@ msgstr "Sürüm %s%s%s%s"
 #~ msgid "Warzone 2100 Campaign Mod File"
 #~ msgstr "Warzone 2100 Bölüm Mod Dosyası"
 
-# Das hat(te) Warzone damals schon, kA, ob noch nutzbar -Ayhan
 #~ msgid "Warzone 2100 Multiplayer Mod File"
 #~ msgstr "Warzone 2100 Çok Oyunculu Mod Dosyası"
 
