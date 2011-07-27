@@ -41,8 +41,8 @@ int main(int argc, char **argv)
 		return -1;
 	}
 	
-    physfs_init(argv[0]);
-    strcpy(filename, physfs_addmappath(argv[1]));
+	physfs_init(argv[0]);
+	strcpy(filename, physfs_addmappath(argv[1]));
 
 	map = mapLoad(filename);
 	if (!map)
@@ -50,32 +50,32 @@ int main(int argc, char **argv)
 		fprintf(stderr, "Failed to load map %s\n", filename);
 		return -1;
 	}
-    
-    p_filename = strrchr(filename, '/');
-    if (p_filename)
-    {
-        p_filename++;
-        base = strdup(p_filename);
-    }
-    else
-    {
-        base = strdup(filename);
-    }    
-    if (!PHYSFS_exists(base))
-    {
-        PHYSFS_mkdir(base);
-    }
-    physfs_shutdown();
+	
+	p_filename = strrchr(filename, '/');
+	if (p_filename)
+	{
+		p_filename++;
+		base = strdup(p_filename);
+	}
+	else
+	{
+		base = strdup(filename);
+	}
+	if (!PHYSFS_exists(base))
+	{
+		PHYSFS_mkdir(base);
+	}
+	physfs_shutdown();
 
-    p_filename = strstr(base, "c-");
-    if (p_filename)
-    {
-        mapname = strdup(p_filename + 2);
-    }
-    else
-    {
-        mapname = strdup(base);
-    }    
+	p_filename = strstr(base, "c-");
+	if (p_filename)
+	{
+		mapname = strdup(p_filename + 2);
+	}
+	else
+	{
+		mapname = strdup(base);
+	}
 
 	/*** Map configuration ***/
 #if 0
@@ -108,8 +108,8 @@ int main(int argc, char **argv)
 #endif
 
 	/*** Game data ***/
-    strcpy(filename, base);
-    strcat(filename, "/game.ini");    
+	strcpy(filename, base);
+	strcat(filename, "/game.ini");
 	fp = fopen(filename, "w");
 	if (!fp)
 	{
@@ -232,7 +232,7 @@ int main(int argc, char **argv)
 			int j, capacity = 0;
 
 			if (strcmp(psObj->name, "A0PowMod1") == 0 || strcmp(psObj->name, "A0FacMod1") == 0
-			    || strcmp(psObj->name, "A0ResearchModule1") == 0)
+				|| strcmp(psObj->name, "A0ResearchModule1") == 0)
 			{
 				continue; // do not write modules as separate entries
 			}

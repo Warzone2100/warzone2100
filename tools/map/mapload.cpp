@@ -34,7 +34,7 @@ GAMEMAP *mapLoad(char *filename)
 	bool		littleEndian = true;
 	PHYSFS_file	*fp = NULL;
 	bool		counted[MAX_PLAYERS];
-    uint16_t    pType;
+	uint16_t	pType;
 
 	// this cries out for a class based design
 	#define readU8(v) ( littleEndian ? PHYSFS_readULE8(fp, v) : PHYSFS_readUBE8(fp, v) )
@@ -43,7 +43,7 @@ GAMEMAP *mapLoad(char *filename)
 	#define readS8(v) ( littleEndian ? PHYSFS_readSLE8(fp, v) : PHYSFS_readSBE8(fp, v) )
 	#define readS16(v) ( littleEndian ? PHYSFS_readSLE16(fp, v) : PHYSFS_readSBE16(fp, v) )
 	#define readS32(v) ( littleEndian ? PHYSFS_readSLE32(fp, v) : PHYSFS_readSBE32(fp, v) )
-    
+	
 	/* === Load map data === */
 
 	strcpy(path, filename);
@@ -62,12 +62,12 @@ GAMEMAP *mapLoad(char *filename)
 		goto mapfailure;
 	}
 	else if (PHYSFS_read(fp, aFileType, 4, 1) != 1
-	    || !readU32(&map->mapVersion)
-	    || !readU32(&map->width)
-	    || !readU32(&map->height)
-	    || aFileType[0] != 'm'
-	    || aFileType[1] != 'a'
-	    || aFileType[2] != 'p')
+		|| !readU32(&map->mapVersion)
+		|| !readU32(&map->width)
+		|| !readU32(&map->height)
+		|| aFileType[0] != 'm'
+		|| aFileType[1] != 'a'
+		|| aFileType[2] != 'p')
 	{
 		debug(LOG_ERROR, "Bad header in %s", path);
 		goto failure;
@@ -126,7 +126,7 @@ GAMEMAP *mapLoad(char *filename)
 	for (i = 0; i < map->numGateways; i++)
 	{
 		if (!readU8(&map->mGateways[i].x1) || !readU8(&map->mGateways[i].y1)
-		    || !readU8(&map->mGateways[i].x2) || !readU8(&map->mGateways[i].y2))
+			|| !readU8(&map->mGateways[i].x2) || !readU8(&map->mGateways[i].y2))
 		{
 			debug(LOG_ERROR, "%s: Failed to read gateway info", path);
 			goto failure;
@@ -146,11 +146,11 @@ mapfailure:
 		goto failure;
 	}
 	else if (PHYSFS_read(fp, aFileType, 4, 1) != 1
-	    || aFileType[0] != 'g'
-	    || aFileType[1] != 'a'
-	    || aFileType[2] != 'm'
-	    || aFileType[3] != 'e'
-	    || !readU32(&map->gameVersion))
+		|| aFileType[0] != 'g'
+		|| aFileType[1] != 'a'
+		|| aFileType[2] != 'm'
+		|| aFileType[3] != 'e'
+		|| !readU32(&map->gameVersion))
 	{
 		debug(LOG_ERROR, "Bad header in %s", path);
 		goto failure;
@@ -160,12 +160,12 @@ mapfailure:
 		littleEndian = false;
 	}
 	if (!readU32(&map->gameTime)
-	    || !readU32(&map->gameType)
-	    || !readS32(&map->scrollMinX)
-	    || !readS32(&map->scrollMinY)
-	    || !readU32(&map->scrollMaxX)
-	    || !readU32(&map->scrollMaxY)
-	    || PHYSFS_read(fp, map->levelName, 20, 1) != 1)
+		|| !readU32(&map->gameType)
+		|| !readS32(&map->scrollMinX)
+		|| !readS32(&map->scrollMinY)
+		|| !readU32(&map->scrollMaxX)
+		|| !readU32(&map->scrollMaxY)
+		|| PHYSFS_read(fp, map->levelName, 20, 1) != 1)
 	{
 		debug(LOG_ERROR, "Bad data in %s", filename);
 		goto failure;
@@ -205,12 +205,12 @@ mapfailure:
 		goto featfailure;
 	}
 	else if (PHYSFS_read(fp, aFileType, 4, 1) != 1
-	    || aFileType[0] != 'f'
-	    || aFileType[1] != 'e'
-	    || aFileType[2] != 'a'
-	    || aFileType[3] != 't'
-	    || !readU32(&map->featVersion)
-	    || !readU32(&map->numFeatures))
+		|| aFileType[0] != 'f'
+		|| aFileType[1] != 'e'
+		|| aFileType[2] != 'a'
+		|| aFileType[3] != 't'
+		|| !readU32(&map->featVersion)
+		|| !readU32(&map->numFeatures))
 	{
 		debug(LOG_ERROR, "Bad features header in %s", path);
 		goto failure;
@@ -228,13 +228,13 @@ mapfailure:
 			nameLength = 40;
 		}
 		if (PHYSFS_read(fp, psObj->name, nameLength, 1) != 1
-		    || !readU32(&psObj->id)
-		    || !readU32(&psObj->x) || !readU32(&psObj->y) || !readU32(&psObj->z)
-		    || !readU32(&psObj->direction)
-		    || !readU32(&psObj->player)
-		    || !readU32(&dummy) // BOOL inFire
-		    || !readU32(&dummy) // burnStart
-		    || !readU32(&dummy)) // burnDamage
+			|| !readU32(&psObj->id)
+			|| !readU32(&psObj->x) || !readU32(&psObj->y) || !readU32(&psObj->z)
+			|| !readU32(&psObj->direction)
+			|| !readU32(&psObj->player)
+			|| !readU32(&dummy) // BOOL inFire
+			|| !readU32(&dummy) // burnStart
+			|| !readU32(&dummy)) // burnDamage
 		{
 			debug(LOG_ERROR, "Failed to read feature from %s", path);
 			goto failure;
@@ -269,57 +269,57 @@ featfailure:
 		goto terrainfailure;
 	}
 	else if (PHYSFS_read(fp, aFileType, 4, 1) != 1
-	    || aFileType[0] != 't'
-	    || aFileType[1] != 't'
-	    || aFileType[2] != 'y'
-	    || aFileType[3] != 'p'
-	    || !readU32(&map->terrainVersion)
-	    || !readU32(&map->numTerrainTypes))
+		|| aFileType[0] != 't'
+		|| aFileType[1] != 't'
+		|| aFileType[2] != 'y'
+		|| aFileType[3] != 'p'
+		|| !readU32(&map->terrainVersion)
+		|| !readU32(&map->numTerrainTypes))
 	{
 		debug(LOG_ERROR, "Bad features header in %s", path);
 		goto failure;
 	}
 	
-    if (map->numTerrainTypes >= MAX_TILE_TEXTURES)
-    {
-        // Workaround for fugly map editor bug, since we can't fix the map editor
-        map->numTerrainTypes = MAX_TILE_TEXTURES - 1;
-    }
+	if (map->numTerrainTypes >= MAX_TILE_TEXTURES)
+	{
+		// Workaround for fugly map editor bug, since we can't fix the map editor
+		map->numTerrainTypes = MAX_TILE_TEXTURES - 1;
+	}
 
-    // reset the terrain table
-    memset(terrainTypes, 0, sizeof(terrainTypes));
+	// reset the terrain table
+	memset(terrainTypes, 0, sizeof(terrainTypes));
 
-    for (i = 0; i < map->numTerrainTypes; i++)
-    {
-        readU16(&pType);
-        
-        if (pType > TER_MAX)
-        {
-            debug(LOG_ERROR, "loadTerrainTypeMap: terrain type out of range");
-            goto terrainfailure;
-        }
+	for (i = 0; i < map->numTerrainTypes; i++)
+	{
+		readU16(&pType);
+		
+		if (pType > TER_MAX)
+		{
+			debug(LOG_ERROR, "loadTerrainTypeMap: terrain type out of range");
+			goto terrainfailure;
+		}
 
-        terrainTypes[i] = (uint8_t)pType;
-    }
+		terrainTypes[i] = (uint8_t)pType;
+	}
 
-    if (terrainTypes[0] == 1 && terrainTypes[1] == 0 && terrainTypes[2] == 2)
-    {
-        map->tileset = TILESET_ARIZONA;
-    }
-    else if (terrainTypes[0] == 2 && terrainTypes[1] == 2 && terrainTypes[2] == 2)
-    {
-        map->tileset = TILESET_URBAN;
-    }
-    else if (terrainTypes[0] == 0 && terrainTypes[1] == 0 && terrainTypes[2] == 2)
-    {
-        map->tileset = TILESET_ROCKIES;
-    }
-    else
-    {
-        debug(LOG_ERROR, "Unknown terrain signature in %s: %hu %hu %hu", path,
-              terrainTypes[0], terrainTypes[1], terrainTypes[2]);
-        goto failure;
-    }    
+	if (terrainTypes[0] == 1 && terrainTypes[1] == 0 && terrainTypes[2] == 2)
+	{
+		map->tileset = TILESET_ARIZONA;
+	}
+	else if (terrainTypes[0] == 2 && terrainTypes[1] == 2 && terrainTypes[2] == 2)
+	{
+		map->tileset = TILESET_URBAN;
+	}
+	else if (terrainTypes[0] == 0 && terrainTypes[1] == 0 && terrainTypes[2] == 2)
+	{
+		map->tileset = TILESET_ROCKIES;
+	}
+	else
+	{
+		debug(LOG_ERROR, "Unknown terrain signature in %s: %hu %hu %hu", path,
+			  terrainTypes[0], terrainTypes[1], terrainTypes[2]);
+		goto failure;
+	}
 	
 	PHYSFS_close(fp);
 terrainfailure:
@@ -336,12 +336,12 @@ terrainfailure:
 	if (fp)
 	{
 		if (PHYSFS_read(fp, aFileType, 4, 1) != 1
-		    || aFileType[0] != 's'
-		    || aFileType[1] != 't'
-		    || aFileType[2] != 'r'
-		    || aFileType[3] != 'u'
-		    || !readU32(&map->structVersion)
-		    || !readU32(&map->numStructures))
+			|| aFileType[0] != 's'
+			|| aFileType[1] != 't'
+			|| aFileType[2] != 'r'
+			|| aFileType[3] != 'u'
+			|| !readU32(&map->structVersion)
+			|| !readU32(&map->numStructures))
 		{
 			debug(LOG_ERROR, "Bad structure header in %s", path);
 			goto failure;
@@ -362,42 +362,42 @@ terrainfailure:
 				nameLength = 40;
 			}
 			if (PHYSFS_read(fp, psObj->name, nameLength, 1) != 1
-			    || !readU32(&psObj->id)
-			    || !readU32(&psObj->x) || !readU32(&psObj->y) || !readU32(&psObj->z)
-			    || !readU32(&psObj->direction)
-			    || !readU32(&psObj->player)
-			    || !readU32(&dummy) // BOOL inFire
-			    || !readU32(&dummy) // burnStart
-			    || !readU32(&dummy) // burnDamage
-			    || !readU8(&dummy8)	// status - causes structure padding
-			    || !readU8(&dummy8)	// structure padding
-			    || !readU8(&dummy8)	// structure padding
-			    || !readU8(&dummy8) // structure padding
-			    || !readS32(&dummyS32) // currentBuildPts - aligned on 4 byte boundary
-			    || !readU32(&dummy) // body
-			    || !readU32(&dummy) // armour
-			    || !readU32(&dummy) // resistance
-			    || !readU32(&dummy) // dummy1
-			    || !readU32(&dummy) // subjectInc
-			    || !readU32(&dummy) // timeStarted
-			    || !readU32(&dummy) // output
-			    || !readU32(&dummy) // capacity
-			    || !readU32(&dummy)) // quantity
+				|| !readU32(&psObj->id)
+				|| !readU32(&psObj->x) || !readU32(&psObj->y) || !readU32(&psObj->z)
+				|| !readU32(&psObj->direction)
+				|| !readU32(&psObj->player)
+				|| !readU32(&dummy) // BOOL inFire
+				|| !readU32(&dummy) // burnStart
+				|| !readU32(&dummy) // burnDamage
+				|| !readU8(&dummy8)	// status - causes structure padding
+				|| !readU8(&dummy8)	// structure padding
+				|| !readU8(&dummy8)	// structure padding
+				|| !readU8(&dummy8) // structure padding
+				|| !readS32(&dummyS32) // currentBuildPts - aligned on 4 byte boundary
+				|| !readU32(&dummy) // body
+				|| !readU32(&dummy) // armour
+				|| !readU32(&dummy) // resistance
+				|| !readU32(&dummy) // dummy1
+				|| !readU32(&dummy) // subjectInc
+				|| !readU32(&dummy) // timeStarted
+				|| !readU32(&dummy) // output
+				|| !readU32(&dummy) // capacity
+				|| !readU32(&dummy)) // quantity
 			{
 				debug(LOG_ERROR, "Failed to read structure from %s", path);
 				goto failure;
 			}
 			if (map->structVersion >= 12
-			    && (!readU32(&dummy)    // factoryInc
-			        || !readU8(&dummy8) // loopsPerformed - causes structure padding
-			        || !readU8(&dummy8) // structure padding
-			        || !readU8(&dummy8) // structure padding
-			        || !readU8(&dummy8) // structure padding
-			        || !readU32(&dummy) // powerAccrued - aligned on 4 byte boundary
-			        || !readU32(&dummy) // dummy2
-			        || !readU32(&dummy) // droidTimeStarted
-			        || !readU32(&dummy) // timeToBuild
-			        || !readU32(&dummy))) // timeStartHold
+				&& (!readU32(&dummy)	// factoryInc
+					|| !readU8(&dummy8) // loopsPerformed - causes structure padding
+					|| !readU8(&dummy8) // structure padding
+					|| !readU8(&dummy8) // structure padding
+					|| !readU8(&dummy8) // structure padding
+					|| !readU32(&dummy) // powerAccrued - aligned on 4 byte boundary
+					|| !readU32(&dummy) // dummy2
+					|| !readU32(&dummy) // droidTimeStarted
+					|| !readU32(&dummy) // timeToBuild
+					|| !readU32(&dummy))) // timeStartHold
 			{
 				debug(LOG_ERROR, "Failed to read structure v12 part from %s", path);
 				goto failure;
@@ -460,12 +460,12 @@ terrainfailure:
 	if (fp)
 	{
 		if (PHYSFS_read(fp, aFileType, 4, 1) != 1
-		    || aFileType[0] != 'd'
-		    || aFileType[1] != 'i'
-		    || aFileType[2] != 'n'
-		    || aFileType[3] != 't'
-		    || !readU32(&map->droidVersion)
-		    || !readU32(&map->numDroids))
+			|| aFileType[0] != 'd'
+			|| aFileType[1] != 'i'
+			|| aFileType[2] != 'n'
+			|| aFileType[3] != 't'
+			|| !readU32(&map->droidVersion)
+			|| !readU32(&map->numDroids))
 		{
 			debug(LOG_ERROR, "Bad droid header in %s", path);
 			goto failure;
@@ -482,13 +482,13 @@ terrainfailure:
 				nameLength = 40;
 			}
 			if (PHYSFS_read(fp, psObj->name, nameLength, 1) != 1
-			    || !readU32(&psObj->id)
-			    || !readU32(&psObj->x) || !readU32(&psObj->y) || !readU32(&psObj->z)
-			    || !readU32(&psObj->direction)
-			    || !readU32(&psObj->player)
-			    || !readU32(&dummy) // BOOL inFire
-			    || !readU32(&dummy) // burnStart
-			    || !readU32(&dummy)) // burnDamage
+				|| !readU32(&psObj->id)
+				|| !readU32(&psObj->x) || !readU32(&psObj->y) || !readU32(&psObj->z)
+				|| !readU32(&psObj->direction)
+				|| !readU32(&psObj->player)
+				|| !readU32(&dummy) // BOOL inFire
+				|| !readU32(&dummy) // burnStart
+				|| !readU32(&dummy)) // burnDamage
 			{
 				debug(LOG_ERROR, "Failed to read droid from %s", path);
 				goto failure;

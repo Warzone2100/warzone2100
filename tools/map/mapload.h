@@ -43,20 +43,20 @@ enum {
 
 enum TerrainType
 {
-    TER_SAND,
-    TER_SANDYBRUSH,
-    TER_BAKEDEARTH,
-    TER_GREENMUD,
-    TER_REDBRUSH,
-    TER_PINKROCK,
-    TER_ROAD,
-    TER_WATER,
-    TER_CLIFFFACE,
-    TER_RUBBLE,
-    TER_SHEETICE,
-    TER_SLUSH,
+	TER_SAND,
+	TER_SANDYBRUSH,
+	TER_BAKEDEARTH,
+	TER_GREENMUD,
+	TER_REDBRUSH,
+	TER_PINKROCK,
+	TER_ROAD,
+	TER_WATER,
+	TER_CLIFFFACE,
+	TER_RUBBLE,
+	TER_SHEETICE,
+	TER_SLUSH,
 
-    TER_MAX,
+	TER_MAX,
 };
 
 typedef struct _lnd_object_type
@@ -72,7 +72,7 @@ typedef struct _lnd_object_type
 
 typedef enum _tileset_type
 {
-    TILESET_ARIZONA	= 0,
+	TILESET_ARIZONA	= 0,
 	TILESET_URBAN	= 1,
 	TILESET_ROCKIES	= 2
 } TILESET;
@@ -118,12 +118,12 @@ extern uint8_t terrainTypes[MAX_TILE_TEXTURES];
 
 static inline unsigned short TileNumber_tile(unsigned short tilenumber)
 {
-    return tilenumber & TILE_NUMMASK;
+	return tilenumber & TILE_NUMMASK;
 }
 
 static inline unsigned char terrainType(const MAPTILE * tile)
 {
-    return terrainTypes[TileNumber_tile(tile->texture)];
+	return terrainTypes[TileNumber_tile(tile->texture)];
 }
 
 // map.h: 357
@@ -132,12 +132,12 @@ static inline unsigned char terrainType(const MAPTILE * tile)
 // map.h: 370
 static inline int32_t map_coord(int32_t worldCoord)
 {
-    return worldCoord >> TILE_SHIFT;
+	return worldCoord >> TILE_SHIFT;
 }
 
 static inline MAPTILE *mapTile(GAMEMAP *map, int x, int y)
 {
-        return &map->mMapTiles[y * map->width + x];
+		return &map->mMapTiles[y * map->width + x];
 }
 
 static inline GATEWAY *mapGateway(GAMEMAP *map, int index)
