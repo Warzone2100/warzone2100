@@ -458,6 +458,7 @@ AC_CONFIG_FILES([Makefile
 		lib/sound/Makefile
 		lib/widget/Makefile
 		lib/qtgame/Makefile
+		tools/map/Makefile
 		src/Makefile])
 AC_OUTPUT
 

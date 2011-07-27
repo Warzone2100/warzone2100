@@ -11,6 +11,7 @@ SUBDIRS = \
 	  lib/netplay \
 	  lib/widget \
 	  lib/qtgame \
+	  tools/map \
 	  src \
 	  data \
 	  po \

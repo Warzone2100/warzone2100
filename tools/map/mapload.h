@@ -21,6 +21,11 @@
 #ifndef __INCLUDED_TOOLS_MAPLOAD_H__
 #define __INCLUDED_TOOLS_MAPLOAD_H__
 
+#include <stdint.h>
+#include <stdbool.h>
+#include "lib/framework/wzglobal.h"
+#include "lib/framework/physfs_ext.h"
+
 #define MAX_LEVEL_SIZE	20
 #define TILE_HEIGHT	128
 #define TILE_WIDTH	128
