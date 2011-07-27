@@ -70,7 +70,7 @@ bool savePngInternal(const char *filename, unsigned char *pixels, int w, int h, 
 	png_write_info(pngp, infop);
 
 	/* Create pointers to each row of the data, as libpng wants it */
-	row_pointers = malloc(sizeof(png_bytep) * h);
+	row_pointers = (png_byte **)malloc(sizeof(png_bytep) * h);
 	for (y = 0; y < h; y++)
 	{
 		row_pointers[y] = pixels + (y * w * bytes);

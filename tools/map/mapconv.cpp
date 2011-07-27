@@ -1,11 +1,7 @@
 // Converter from old Warzone (savegame) map format to new format.
 
-// gcc -o ~/bin/mapconv mapconv.c mapload.c pngsave.c -I. -lphysfs -g -I../../lib/framework -lpng -Wall
+#include "maplib.h"
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <limits.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <errno.h>
@@ -34,8 +30,7 @@ static const char *tilesetTextures[] = { "Arizona", "Urban", "Rockies" };
 
 int main(int argc, char **argv)
 {
-	char filename[PATH_MAX], base[PATH_MAX], mapname[PATH_MAX];
-	char path[PATH_MAX], *delim;
+	char filename[PATH_MAX], *p_filename, *base, *mapname;
 	GAMEMAP *map;
 	FILE *fp;
 	int i;
@@ -45,43 +40,42 @@ int main(int argc, char **argv)
 		printf("Usage: %s <map>\n", argv[0]);
 		return -1;
 	}
-	strcpy(path, argv[1]);
-	delim = strrchr(path, '/');
-	if (delim)
-	{
-		*delim = '\0';
-		delim++;
-		strcpy(filename, delim);
-	}
-	else
-	{
-		path[0] = '.';
-		path[1] = '\0';
-		strcpy(filename, argv[1]);
-	}
+	
+    physfs_init(argv[0]);
+    strcpy(filename, physfs_addmappath(argv[1]));
 
-	PHYSFS_init(argv[0]);
-	PHYSFS_addToSearchPath(path, 1);
 	map = mapLoad(filename);
-	PHYSFS_deinit();
 	if (!map)
 	{
-		fprintf(stderr, "Failed to load map %s from %s\n", filename, path);
+		fprintf(stderr, "Failed to load map %s\n", filename);
 		return -1;
 	}
+    
+    p_filename = strrchr(filename, '/');
+    if (p_filename)
+    {
+        p_filename++;
+        base = strdup(p_filename);
+    }
+    else
+    {
+        base = strdup(filename);
+    }    
+    if (!PHYSFS_exists(base))
+    {
+        PHYSFS_mkdir(base);
+    }
+    physfs_shutdown();
 
-	delim = strstr(filename, "c-");
-	if (delim)
-	{
-		strcpy(mapname, delim + 2);
-	}
-	else
-	{
-		strcpy(mapname, filename);
-	}
-
-
-	strcpy(base, argv[1]);
+    p_filename = strstr(base, "c-");
+    if (p_filename)
+    {
+        mapname = strdup(p_filename + 2);
+    }
+    else
+    {
+        mapname = strdup(base);
+    }    
 
 	/*** Map configuration ***/
 #if 0
@@ -114,8 +108,8 @@ int main(int argc, char **argv)
 #endif
 
 	/*** Game data ***/
-	strcpy(filename, base);
-	strcat(filename, "/game.ini");
+    strcpy(filename, base);
+    strcat(filename, "/game.ini");    
 	fp = fopen(filename, "w");
 	if (!fp)
 	{

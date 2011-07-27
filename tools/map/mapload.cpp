@@ -1,13 +1,11 @@
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <limits.h>
+// tool "framework"
+#include "maplib.h"
+
+// Self
 #include "mapload.h"
 
-#define MAX_PLAYERS	8
-#define MAP_MAXAREA	(256 * 256)
-#define debug(z, ...) do { fprintf(stderr, __VA_ARGS__); fprintf(stderr, "\n"); } while (0)
-#define ARRAY_SIZE(a) (sizeof(a) / sizeof((a)[0]))
+// Global
+uint8_t terrainTypes[MAX_TILE_TEXTURES];
 
 void mapFree(GAMEMAP *map)
 {
@@ -30,13 +28,13 @@ void mapFree(GAMEMAP *map)
 GAMEMAP *mapLoad(char *filename)
 {
 	char		path[PATH_MAX];
-	GAMEMAP		*map = malloc(sizeof(*map));
+	GAMEMAP		*map = (GAMEMAP *)malloc(sizeof(*map));
 	uint32_t	i, j, gwVersion;
 	char		aFileType[4];
 	bool		littleEndian = true;
 	PHYSFS_file	*fp = NULL;
-	uint16_t	terrainSignature[3];
 	bool		counted[MAX_PLAYERS];
+    uint16_t    *pType;
 
 	// this cries out for a class based design
 	#define readU8(v) ( littleEndian ? PHYSFS_readULE8(fp, v) : PHYSFS_readUBE8(fp, v) )
@@ -45,7 +43,7 @@ GAMEMAP *mapLoad(char *filename)
 	#define readS8(v) ( littleEndian ? PHYSFS_readSLE8(fp, v) : PHYSFS_readSBE8(fp, v) )
 	#define readS16(v) ( littleEndian ? PHYSFS_readSLE16(fp, v) : PHYSFS_readSBE16(fp, v) )
 	#define readS32(v) ( littleEndian ? PHYSFS_readSLE32(fp, v) : PHYSFS_readSBE32(fp, v) )
-
+    
 	/* === Load map data === */
 
 	strcpy(path, filename);
@@ -91,7 +89,7 @@ GAMEMAP *mapLoad(char *filename)
 	}
 
 	/* Allocate the memory for the map */
-	map->mMapTiles = calloc(map->width * map->height, sizeof(*map->mMapTiles));
+	map->mMapTiles = (MAPTILE *)calloc(map->width * map->height, sizeof(*map->mMapTiles));
 	if (!map->mMapTiles)
 	{
 		debug(LOG_ERROR, "Out of memory");
@@ -110,7 +108,7 @@ GAMEMAP *mapLoad(char *filename)
 			goto failure;
 		}
 
-		map->mMapTiles[i].texture = texture;
+		map->mMapTiles[i].texture = static_cast<TerrainType>(texture);
 		map->mMapTiles[i].height = height;
 		for (j = 0; j < MAX_PLAYERS; j++)
 		{
@@ -124,7 +122,7 @@ GAMEMAP *mapLoad(char *filename)
 		goto failure;
 	}
 
-	map->mGateways = calloc(map->numGateways, sizeof(*map->mGateways));
+	map->mGateways = (GATEWAY *)calloc(map->numGateways, sizeof(*map->mGateways));
 	for (i = 0; i < map->numGateways; i++)
 	{
 		if (!readU8(&map->mGateways[i].x1) || !readU8(&map->mGateways[i].y1)
@@ -217,7 +215,7 @@ mapfailure:
 		debug(LOG_ERROR, "Bad features header in %s", path);
 		goto failure;
 	}
-	map->mLndObjects[IMD_FEATURE] = malloc(sizeof(*map->mLndObjects[IMD_FEATURE]) * map->numFeatures);
+	map->mLndObjects[IMD_FEATURE] = (LND_OBJECT *)malloc(sizeof(*map->mLndObjects[IMD_FEATURE]) * map->numFeatures);
 	for(i = 0; i < map->numFeatures; i++)
 	{
 		LND_OBJECT *psObj = &map->mLndObjects[IMD_FEATURE][i];
@@ -281,29 +279,48 @@ featfailure:
 		debug(LOG_ERROR, "Bad features header in %s", path);
 		goto failure;
 	}
-	if (!readU16(&terrainSignature[0]) || !readU16(&terrainSignature[1]) || !readU16(&terrainSignature[2]))
-	{
-		debug(LOG_ERROR, "Could not read terrain signature from %s", path);
-		goto failure;
-	}
-	if (terrainSignature[0] == 1 && terrainSignature[1] == 0 && terrainSignature[2] == 2)
-	{
-		map->tileset = TILESET_ARIZONA;
-	}
-	else if (terrainSignature[0] == 2 && terrainSignature[1] == 2 && terrainSignature[2] == 2)
-	{
-		map->tileset = TILESET_URBAN;
-	}
-	else if (terrainSignature[0] == 0 && terrainSignature[1] == 0 && terrainSignature[2] == 2)
-	{
-		map->tileset = TILESET_ROCKIES;
-	}
-	else
-	{
-		debug(LOG_ERROR, "Unknown terrain signature in %s: %hu %hu %hu", path, 
-		      terrainSignature[0], terrainSignature[1], terrainSignature[2]);
-		goto failure;
-	}
+	
+    if (map->numTerrainTypes >= MAX_TILE_TEXTURES)
+    {
+        // Workaround for fugly map editor bug, since we can't fix the map editor
+        map->numTerrainTypes = MAX_TILE_TEXTURES - 1;
+    }
+
+    // reset the terrain table
+    memset(terrainTypes, 0, sizeof(terrainTypes));
+
+    for (i = 0; i < map->numTerrainTypes; i++)
+    {
+        readU16(pType);
+        
+        if (*pType > TER_MAX)
+        {
+            debug(LOG_ERROR, "loadTerrainTypeMap: terrain type out of range");
+            goto terrainfailure;
+        }
+
+        terrainTypes[i] = (uint8_t)*pType;        
+    }
+
+    if (terrainTypes[0] == 1 && terrainTypes[1] == 0 && terrainTypes[2] == 2)
+    {
+        map->tileset = TILESET_ARIZONA;
+    }
+    else if (terrainTypes[0] == 2 && terrainTypes[1] == 2 && terrainTypes[2] == 2)
+    {
+        map->tileset = TILESET_URBAN;
+    }
+    else if (terrainTypes[0] == 0 && terrainTypes[1] == 0 && terrainTypes[2] == 2)
+    {
+        map->tileset = TILESET_ROCKIES;
+    }
+    else
+    {
+        debug(LOG_ERROR, "Unknown terrain signature in %s: %hu %hu %hu", path,
+              terrainTypes[0], terrainTypes[1], terrainTypes[2]);
+        goto failure;
+    }    
+	
 	PHYSFS_close(fp);
 terrainfailure:
 
@@ -329,7 +346,7 @@ terrainfailure:
 			debug(LOG_ERROR, "Bad structure header in %s", path);
 			goto failure;
 		}
-		map->mLndObjects[IMD_STRUCTURE] = malloc(sizeof(*map->mLndObjects[IMD_STRUCTURE]) * map->numStructures);
+		map->mLndObjects[IMD_STRUCTURE] = (LND_OBJECT *)malloc(sizeof(*map->mLndObjects[IMD_STRUCTURE]) * map->numStructures);
 		for (i = 0; i < map->numStructures; i++)
 		{
 			LND_OBJECT *psObj = &map->mLndObjects[IMD_STRUCTURE][i];
@@ -453,7 +470,7 @@ terrainfailure:
 			debug(LOG_ERROR, "Bad droid header in %s", path);
 			goto failure;
 		}
-		map->mLndObjects[IMD_DROID] = malloc(sizeof(*map->mLndObjects[IMD_DROID]) * map->numDroids);
+		map->mLndObjects[IMD_DROID] = (LND_OBJECT *)malloc(sizeof(*map->mLndObjects[IMD_DROID]) * map->numDroids);
 		for (i = 0; i < map->numDroids; i++)
 		{
 			LND_OBJECT *psObj = &map->mLndObjects[IMD_DROID][i];
