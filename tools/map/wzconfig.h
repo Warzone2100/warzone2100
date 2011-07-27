@@ -1,9 +1,9 @@
 #ifndef TOOLS_MAP_WZCONFIG_H
 #define TOOLS_MAP_WZCONFIG_H
 
-#include <qt4/QtCore/QSettings>
-#include <qt4/QtCore/QString>
-#include <qt4/QtCore/QStringList>
+#include <QtCore/QSettings>
+#include <QtCore/QString>
+#include <QtCore/QStringList>
 
 struct Rotation;
 struct Vector3i;

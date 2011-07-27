@@ -1,13 +1,3 @@
-/*
-g++ -Wall -I. -DQT_SHARED -I/usr/include/qt4 -I/usr/include/qt4/QtCore -I/usr/include/qt4/QtGui \
-    -o map2preview map2preview.cpp mapload.c pngsave.c wzconfig.cpp \
-    -lz -lphysfs -lpng -I../../lib/framework -L/usr/local/lib -lQtCore -lQtGui
-
-*/
-
-// Mingw
-// i686-pc-mingw32-g++ -O0 -g --static -o map2preview.exe map2preview.cpp mapload.c pngsave.c -I. -I../../lib/framework -L/opt/mingw/usr/i686-pc-mingw32/lib -lpng15 -lz -lphysfs -lshfolder -lshlwapi -lpsapi -lshell32 -lws2_32 -liphlpapi -Wall
-
 // tool "framework"
 #include "maplib.h"
 
@@ -203,10 +193,6 @@ int main(int argc, char **argv)
     {
         base = strdup(filename);
     }    
-    if (!PHYSFS_exists(base))
-    {
-        PHYSFS_mkdir(base);
-    }
     
     map = mapLoad(filename);
     free(filename);
@@ -277,16 +263,18 @@ int main(int argc, char **argv)
     }
     else
     {
-        debug(LOG_ERROR, "Cannot add structure data, please convert base data first.\nUse mapconf for that.");
+        debug(LOG_ERROR, "Cannot add structure data, please convert base data first.\nUse \"mapconv %s\" for that.", argv[1]);
     }
 
     strcpy(tmpFile, base);
-    strcat(tmpFile, "/preview.png");
+    strcat(tmpFile, ".png");
 
     QImage image(imageData, mapWidth, mapHeight, QImage::Format_RGB888);
     image.scaled(previewWidth, previewHeight, Qt::KeepAspectRatio).save(tmpFile, "PNG");
     // savePng(tmpFile, imageData, previewWidth, previewHeight);
-   
+
+    free(imageData);
+    
     mapFree(map);
         
     physfs_shutdown();

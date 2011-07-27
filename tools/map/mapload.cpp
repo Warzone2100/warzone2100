@@ -34,7 +34,7 @@ GAMEMAP *mapLoad(char *filename)
 	bool		littleEndian = true;
 	PHYSFS_file	*fp = NULL;
 	bool		counted[MAX_PLAYERS];
-    uint16_t    *pType;
+    uint16_t    pType;
 
 	// this cries out for a class based design
 	#define readU8(v) ( littleEndian ? PHYSFS_readULE8(fp, v) : PHYSFS_readUBE8(fp, v) )
@@ -291,15 +291,15 @@ featfailure:
 
     for (i = 0; i < map->numTerrainTypes; i++)
     {
-        readU16(pType);
+        readU16(&pType);
         
-        if (*pType > TER_MAX)
+        if (pType > TER_MAX)
         {
             debug(LOG_ERROR, "loadTerrainTypeMap: terrain type out of range");
             goto terrainfailure;
         }
 
-        terrainTypes[i] = (uint8_t)*pType;        
+        terrainTypes[i] = (uint8_t)pType;
     }
 
     if (terrainTypes[0] == 1 && terrainTypes[1] == 0 && terrainTypes[2] == 2)

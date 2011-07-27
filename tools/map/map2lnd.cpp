@@ -5,10 +5,9 @@
 
 // gcc -o ~/bin/map2lnd map2lnd.c mapload.c -I. -lphysfs -g -I../../lib/framework -Wall
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <limits.h>
+// Tool framework
+#include "maplib.h"
+
 #include "mapload.h"
 
 #define GRDLANDVERSION	4

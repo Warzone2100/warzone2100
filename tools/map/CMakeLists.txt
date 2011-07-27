@@ -9,14 +9,27 @@ if (NOT CMAKE_BUILD_TYPE)
       FORCE)
 endif ()
 
-find_package(PhysFS 2 REQUIRED)
+# For Static builds
+IF(LIBTYPE STREQUAL "STATIC")
+    ADD_DEFINITIONS("-DQT_STATIC")
+    ADD_DEFINITIONS("-DQT_NODLL")
+    SET(CMAKE_EXE_LINKER_FLAGS -static)
+    SET(QT_IS_STATIC 1)
+    SET(QT_CONFIG "static")
 
-find_package(PNG REQUIRED)
+    find_package(ZLIB REQUIRED)
+    find_package(JPEG REQUIRED)
+    find_package(TIFF REQUIRED)
 
-set(QT_USE_IMPORTED_TARGETS TRUE)
+    SET(QT_DEPS ${JPEG_LIBRARY} ${TIFF_LIBRARY} "mng" "lcms")
+endif()
+
 find_package(Qt4 REQUIRED)
 include(${QT_USE_FILE})
 add_definitions(${QT_DEFINITIONS})
+
+find_package(PNG 1.5 REQUIRED)
+find_package(PhysFS 2 REQUIRED)
 
 # Ugly OS-X Fix, should find a better way.
 IF(${CMAKE_SYSTEM_NAME} MATCHES "^Darwin")
@@ -61,35 +74,35 @@ set(EXECUTABLE_OUTPUT_PATH "${CMAKE_BINARY_DIR}/bin")
 
 INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR} "${CMAKE_SOURCE_DIR}/../.." ${PNG_INCLUDE_DIR} ${OPENGL_INCLUDE_DIR} ${QT_INCLUDES} ${PHYSFS_INCLUDE_DIR})
 
-set(MAPTOOLS_LIBS ${PNG_LIBRARIES} ${PHYSFS_LIBRARY} ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY})
+set(MAPTOOLS_LIBS ${PNG_LIBRARIES} ${ZLIB_LIBRARIES} ${PHYSFS_LIBRARY} ${QT_LIBRARIES} ${QT_DEPS})
 
 # map2lnd
-# ADD_EXECUTABLE(map2lnd
-#                map2lnd.cpp
-#                mapload.cpp)
-# TARGET_LINK_LIBRARIES(map2lnd ${MAPTOOLS_LIBS})
+ADD_EXECUTABLE(map2lnd
+                map2lnd.cpp
+                maplib.cpp
+                mapload.cpp)
+TARGET_LINK_LIBRARIES(map2lnd ${MAPTOOLS_LIBS})
 
 # map2png
-# ADD_EXECUTABLE(map2png
-#                map2png.cpp
-#                mapload.cpp
-#                pngsave.cpp)
-# TARGET_LINK_LIBRARIES(map2png ${MAPTOOLS_LIBS})
+ADD_EXECUTABLE(map2png
+                map2png.cpp
+                maplib.cpp
+                mapload.cpp
+                pngsave.cpp)
+TARGET_LINK_LIBRARIES(map2png ${MAPTOOLS_LIBS})
 
 # map2preview
 ADD_EXECUTABLE(map2preview
                map2preview.cpp
                maplib.cpp
                mapload.cpp
-               pngsave.cpp
                wzconfig.cpp)
 TARGET_LINK_LIBRARIES(map2preview ${MAPTOOLS_LIBS})
 
-# map2png
+# mapconv
 ADD_EXECUTABLE(mapconv
                mapconv.cpp
                maplib.cpp
-               mapload.cpp
-               pngsave.cpp)
+               mapload.cpp)
 TARGET_LINK_LIBRARIES(mapconv ${MAPTOOLS_LIBS})
 
