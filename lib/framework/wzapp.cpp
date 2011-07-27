@@ -110,14 +110,6 @@ unsigned int screenWidth = 0;
 unsigned int screenHeight = 0;
 static void inputAddBuffer(UDWORD key, utf_32_char unicode);
 static int WZkeyToQtKey(int code);
-/*!
- * The mainloop.
- * Fetches events, executes appropriate code
- */
-void WzMainWindow::tick()
-{
-	updateGL();  // Calls paintGL(), which may not be called directly.
-}
 
 void WzMainWindow::loadCursor(CURSOR cursor, int x, int y, QImageReader &buffer)
 {
@@ -130,11 +122,8 @@ WzMainWindow::WzMainWindow(QSize resolution, const QGLFormat &format, QWidget *p
 {
 	myself = this;
 	notReadyToPaint = true;
-	timer = new QTimer(this);
 	tickCount.start();
-	connect(timer, SIGNAL(timeout()), this, SLOT(tick()));
 	for (int i = 0; i < CURSOR_MAX; cursors[i++] = NULL) ;
-	timer->start(0);
 	setAutoFillBackground(false);
 	setAutoBufferSwap(false);
 	setMouseTracking(true);
@@ -275,6 +264,7 @@ void WzMainWindow::paintGL()
 
 	// Tell the input system about the start of another frame
 	inputNewFrame();
+	update();	// add a new paint event for constant redraws
 }
 
 void WzMainWindow::setCursor(CURSOR index)

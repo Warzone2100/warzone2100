@@ -22,7 +22,6 @@
 
 #include <QtGui/QApplication>
 #include <QtGui/QImageReader>
-#include <QtCore/QTimer>
 #include <QtOpenGL/QGLWidget>
 #include <QtCore/QBuffer>
 #include <QtCore/QTime>
@@ -71,7 +70,6 @@ private:
 	MOUSE_KEY_CODE buttonToIdx(Qt::MouseButton button);
 
 	QCursor *cursors[CURSOR_MAX];
-	QTimer *timer;
 	QTime tickCount;
 	QFont regularFont, boldFont, smallFont, scaledFont;
 	bool notReadyToPaint;  ///< HACK Don't draw during initial show(), since some global variables apparently aren't set up.
@@ -96,7 +94,6 @@ public:
 #endif
 
 public slots:
-	void tick();
 	void close();
 };
 
