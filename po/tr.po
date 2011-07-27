@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-07-23 15:27+0200\n"
-"PO-Revision-Date: 2011-07-21 00:49+0200\n"
+"POT-Creation-Date: 2011-07-27 15:55+0200\n"
+"PO-Revision-Date: 2011-07-26 16:10+0200\n"
 "Last-Translator: Ayhan GÖRGÜLÜ <ayhangorgulu45@gmail.com>\n"
 "Language-Team: Turkey <warzone-dev@gna.org>\n"
 "Language: \n"
@@ -721,7 +721,7 @@ msgstr "Yeni Silah Tareti Kullanılabilir"
 #: data/base/messages/resmessages12.rmsg:122
 #: data/mp/messages/resmessages12.rmsg:122
 msgid ".50-calibre heavy machinegun"
-msgstr ".50-Kalibrelik (12.7mm) ağır makineli"
+msgstr ".50-Kalibrelik (12.7mm) ağır makinalı"
 
 #: data/base/messages/resmessages12.rmsg:123
 #: data/base/messages/resmessages1.rmsg:617
@@ -2693,14 +2693,14 @@ msgstr "Harika Hedefler: Üs Binaları, piyadeler, tekerlekli araçlar"
 #: data/base/messages/resmessages23.rmsg:213
 #: data/mp/messages/resmessages23.rmsg:213
 msgid "Multi-barrel, rapid-fire machinegun"
-msgstr "Çoklu-bariyel, hızlı ateşlenebilir makineli"
+msgstr "Çoklu-bariyel, hızlı ateşlenebilir makinalı"
 
 #: data/base/messages/resmessages23.rmsg:215
 #: data/mp/messages/resmessages23.rmsg:215
 #: data/mp/messages/resmessagesall.rmsg:893
 #: data/mp/messages/resmessagesall.rmsg:906
 msgid "Replaces all machineguns"
-msgstr "Tüm makineliler ile değiştirilecek"
+msgstr "Tüm makinalılar ile değiştirilecek"
 
 #: data/base/messages/resmessages2.rmsg:4
 #: data/base/messages/resmessages3.rmsg:4
@@ -3332,7 +3332,7 @@ msgstr "Dörtlü 80mm uçaksavar silahı"
 #: data/mp/messages/resmessages2.rmsg:616
 #: data/mp/messages/strings/resstrings.txt:683
 msgid "30mm Anti-Aircraft machinegun"
-msgstr "30mm Uçaksavar makineli"
+msgstr "30mm Uçaksavar makinalı"
 
 #: data/base/messages/resmessages2.rmsg:629
 #: data/base/messages/strings/resstrings.txt:654
@@ -3340,7 +3340,7 @@ msgstr "30mm Uçaksavar makineli"
 #: data/mp/messages/resmessagesall.rmsg:774
 #: data/mp/messages/strings/resstrings.txt:689
 msgid "Quad 30mm Anti-Aircraft machinegun"
-msgstr "Dörtlü 30mm Uçaksavar makineli"
+msgstr "Dörtlü 30mm Uçaksavar makinalı"
 
 #: data/base/messages/resmessages2.rmsg:642
 #: data/base/messages/strings/resstrings.txt:660
@@ -5763,7 +5763,7 @@ msgstr "Kamyon"
 #: data/mp/messages/strings/names.txt:176
 #: data/mp/messages/strings/names.txt:1838
 msgid "Machinegun Viper Wheels"
-msgstr "Makineli Engerek Tekerlekler"
+msgstr "Makinalı Engerek Tekerlekler"
 
 #: data/base/messages/strings/names.txt:143
 #: data/mp/messages/strings/names.txt:143
@@ -5791,7 +5791,7 @@ msgstr "Hafif Topçu Engerek Paletler"
 #: data/mp/messages/strings/names.txt:149
 #: data/mp/messages/strings/names.txt:1435
 msgid "Heavy Machinegun Cobra Half-tracks"
-msgstr "Ağır Makineli Kobra Yarım Paletler"
+msgstr "Ağır Makinalı Kobra Yarım Paletler"
 
 #: data/base/messages/strings/names.txt:149
 #: data/mp/messages/strings/names.txt:150
@@ -5822,24 +5822,24 @@ msgstr "Tamir Tareti Engerek Yarım Paletler"
 #: data/mp/messages/strings/names.txt:177
 #: data/mp/messages/strings/names.txt:1839
 msgid "Twin Machinegun Viper Wheels"
-msgstr "Çift Makineli Engerek Tekerlekler"
+msgstr "Çift Makinalı Engerek Tekerlekler"
 
 #: data/base/messages/strings/names.txt:175
 #: data/mp/messages/strings/names.txt:178
 msgid "Twin Machinegun Viper Half-tracks"
-msgstr "Çift Makineli Engerek Yarım Paletler"
+msgstr "Çift Makinalı Engerek Yarım Paletler"
 
 #: data/base/messages/strings/names.txt:176
 #: data/mp/messages/strings/names.txt:179
 msgid "Heavy Machinegun Viper Half-tracks"
-msgstr "Ağır Makineli Engerek Yarım Paletler"
+msgstr "Ağır Makinalı Engerek Yarım Paletler"
 
 #: data/base/messages/strings/names.txt:177
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1840
 #: data/mp/messages/strings/names.txt:180
 #: data/mp/messages/strings/names.txt:1846
 msgid "Heavy Machinegun Viper Tracks"
-msgstr "Ağır Makineli Engerek Paletler"
+msgstr "Ağır Makinalı Engerek Paletler"
 
 #: data/base/messages/strings/names.txt:178
 #: data/mp/messages/strings/names.txt:181
@@ -6485,7 +6485,7 @@ msgstr "DİvK Radar Kulesi"
 #: data/mp/messages/strings/names.txt:430
 #: data/mp/messages/strings/names.txt:773
 msgid "Heavy Machinegun Hardpoint"
-msgstr "Ağır Makineli Bağlama Noktası"
+msgstr "Ağır Makinalı Bağlama Noktası"
 
 #: data/base/messages/strings/names.txt:432
 #: data/base/messages/strings/names.txt:765
@@ -6527,18 +6527,18 @@ msgstr "Roketatar Bağlama Noktası"
 #: data/mp/messages/strings/names.txt:437
 #: data/mp/messages/strings/names.txt:764
 msgid "Machinegun Guard Tower"
-msgstr "Makineli Koruma Kulesi"
+msgstr "Makinalı Koruma Kulesi"
 
 #: data/base/messages/strings/names.txt:439
 #: data/mp/messages/strings/names.txt:438
 msgid "Twin Machinegun Guard Tower"
-msgstr "Çift Makineli Koruma Kulesi"
+msgstr "Çift Makinalı Koruma Kulesi"
 
 #: data/base/messages/strings/names.txt:440
 #: data/mp/messages/strings/names.txt:439
 #: data/mp/messages/strings/names.txt:765
 msgid "Heavy Machinegun Tower"
-msgstr "Ağır Makineli Kulesi"
+msgstr "Ağır Makinalı Kulesi"
 
 #: data/base/messages/strings/names.txt:441
 #: data/base/messages/strings/names.txt:757
@@ -6566,14 +6566,14 @@ msgstr "Mini Roket Kulesi"
 #: data/mp/messages/strings/names.txt:495
 #: data/mp/messages/strings/names.txt:742
 msgid "Machinegun Bunker"
-msgstr "Makineli Sığınak"
+msgstr "Makinalı Sığınak"
 
 #: data/base/messages/strings/names.txt:447
 #: data/base/messages/strings/names.txt:498
 #: data/mp/messages/strings/names.txt:446
 #: data/mp/messages/strings/names.txt:497
 msgid "Twin Machinegun Bunker"
-msgstr "Çift Makineli Sığınak"
+msgstr "Çift Makinalı Sığınak"
 
 #: data/base/messages/strings/names.txt:448
 #: data/base/messages/strings/names.txt:500
@@ -6582,7 +6582,7 @@ msgstr "Çift Makineli Sığınak"
 #: data/mp/messages/strings/names.txt:499
 #: data/mp/messages/strings/names.txt:743
 msgid "Heavy Machinegun Bunker"
-msgstr "Ağır Makineli Sığınak"
+msgstr "Ağır Makinalı Sığınak"
 
 #: data/base/messages/strings/names.txt:449
 #: data/base/messages/strings/names.txt:735
@@ -9333,7 +9333,7 @@ msgstr "Eser araştıma tesisinde araştırılmaya başlandı"
 
 #: data/base/script/text/tutorial3.slo:712
 msgid "The researched machinegun can now be used to design a new vehicle"
-msgstr "Araştırılan makineli şimdi tasarımda kullanılabilir hale geldi"
+msgstr "Araştırılan makinalı şimdi tasarımda kullanılabilir hale geldi"
 
 #: data/base/script/text/tutorial3.slo:729
 msgid "Left click the flashing DESIGN icon"
@@ -9357,7 +9357,7 @@ msgstr "Tekerlekler ikonuna sağ tıkla"
 
 #: data/base/script/text/tutorial3.slo:799
 msgid "Then left click the machinegun to complete your design"
-msgstr "Son olarak makineliyi seç ve tasarımı tamamla"
+msgstr "Son olarak makinalıyı seç ve tasarımı tamamla"
 
 #: data/base/script/text/tutorial3.slo:830
 msgid "To finalize your design, left click the CLOSE icon"
@@ -10253,7 +10253,7 @@ msgstr "Ağır Tamir Tareti Kobra Hovercraft"
 #: data/mp/messages/strings/names.txt:1829
 #: data/mp/messages/strings/names.txt:1840
 msgid "Heavy Machinegun Viper Wheels"
-msgstr "Ağır Makineli Engerek Tekerlekler"
+msgstr "Ağır Makinalı Engerek Tekerlekler"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1824
 #: data/mp/messages/strings/names.txt:1830
@@ -10270,7 +10270,7 @@ msgstr "Tank Öldürücü P. Devesi Hovercraft"
 #: data/mp/messages/strings/names.txt:1832
 #: data/mp/messages/strings/names.txt:1847
 msgid "Heavy Machinegun Cobra Tracks"
-msgstr "Ağır Makineli Kobra Paletler"
+msgstr "Ağır Makinalı Kobra Paletler"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1827
 #: data/mp/messages/strings/names.txt:1833
@@ -10280,17 +10280,17 @@ msgstr "Ağır Topçu Kobra hovercraft"
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1835
 #: data/mp/messages/strings/names.txt:1841
 msgid "Heavy Machinegun Cobra Wheels"
-msgstr "Ağır Makineli  Kobra Tekerlekler"
+msgstr "Ağır Makinalı Kobra Tekerlekler"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1836
 #: data/mp/messages/strings/names.txt:1842
 msgid "Heavy Machinegun Cobra Hover"
-msgstr "Ağır Makineli  Kobra Hovercraft"
+msgstr "Ağır Makinalı Kobra Hovercraft"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1838
 #: data/mp/messages/strings/names.txt:1844
 msgid "Machinegun Viper Tracks"
-msgstr "Makineli Engerek Tekerlekler"
+msgstr "Makinalı Engerek Tekerlekler"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1839
 #: data/mp/messages/strings/names.txt:1845
@@ -10498,7 +10498,7 @@ msgstr "Felaket F.  P. Devesi Paletler"
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1898
 #: data/mp/messages/strings/names.txt:1904
 msgid "Heavy Machinegun Scorpion Tracks"
-msgstr "Ağır Makineli Akrep Paletler"
+msgstr "Ağır Makinalı Akrep Paletler"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1900
 #: data/mp/messages/strings/names.txt:1906
@@ -10611,7 +10611,7 @@ msgstr "Ağır Lazer Wyvern Paletler"
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1933
 #: data/mp/messages/strings/names.txt:1939
 msgid "Machinegun Viper Half-Tracks"
-msgstr "Makineli Engerek Yarım Paletler"
+msgstr "Makinalı Engerek Yarım Paletler"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1934
 #: data/mp/messages/strings/names.txt:1940
@@ -10646,7 +10646,7 @@ msgstr "Hücüm Silahı Piton Yarım Paletler"
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1942
 #: data/mp/messages/strings/names.txt:1948
 msgid "Heavy Machinegun Scorpion Half Tracks"
-msgstr "Ağır Makineli Akrep Yarım Paletler"
+msgstr "Ağır Makinalı Akrep Yarım Paletler"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1943
 #: data/mp/messages/strings/names.txt:1949
@@ -10751,7 +10751,7 @@ msgstr "Alev Atıcı Yeniden Yükle Süresi -15%"
 #: data/mp/messages/resmessages23.rmsg:175
 #: data/mp/messages/resmessages2.rmsg:890
 msgid "Machinegun reload time -15%"
-msgstr "Makineli Yeniden Yükleme Süresi-15%"
+msgstr "Makinalı Yeniden Yükleme Süresi-15%"
 
 #: data/mp/messages/resmessages12.rmsg:162
 #: data/mp/messages/resmessages23.rmsg:188
@@ -10873,7 +10873,7 @@ msgstr "Alev Atıcı Hasarı +25%"
 #: data/mp/messages/resmessages3.rmsg:1007
 #: data/mp/messages/resmessages3.rmsg:1020
 msgid "Machinegun damage +25%"
-msgstr "Makineli Hasarı +25%"
+msgstr "Makinalı Hasarı +25%"
 
 #: data/mp/messages/resmessages1.rmsg:683
 #: data/mp/messages/resmessages2.rmsg:916
@@ -11316,12 +11316,12 @@ msgstr "Girdap AA Silahlı Bağlama Noktası Kullanılabilir"
 
 #: data/mp/messages/resmessagesall.rmsg:878
 msgid "Quad 80mm Anti-Aircraft machinegun"
-msgstr "Dörtlü 80mm AA Makineli"
+msgstr "Dörtlü 80mm AA Makinalı"
 
 #: data/mp/messages/resmessagesall.rmsg:891
 #: data/mp/messages/resmessagesall.rmsg:904
 msgid "Twin Multi-barrel, rapid-fire machinegun"
-msgstr "Çift namlulu hızlı ateşlenebilir makineli"
+msgstr "Çift namlulu hızlı ateşlenebilir makinalı"
 
 #: data/mp/messages/resmessagesall.rmsg:903
 msgid "Hardpoint Twin Assault Gun Available"
@@ -12070,7 +12070,7 @@ msgstr ""
 #: lib/netplay/netplay.cpp:2066
 #, c-format
 msgid "Error connecting to the lobby server: %s. Make sure port %d can receive incoming connections. If you're using a router configure it to use UPnP, or to forward the port to your system."
-msgstr ""
+msgstr "Bekleme odası sunucusuna bağlanırken hata: %s. Port %d un gelen mesajlara erişebilir olduğuna emin olun .Eğer bir yönlendirici kullanıyorsanız, onu UPnP veya sisteminizin ileri port'unu kullanabilir hale getirin."
 
 #: po/custom/mac-infoplist.txt:1
 msgid ""
@@ -12828,13 +12828,15 @@ msgstr "Ekranı Çevir"
 
 #: src/frontend.cpp:1030
 #: src/frontend.cpp:1104
+#, fuzzy
 msgid "Middle Mouse"
 msgstr "Orta Tuş"
 
 #: src/frontend.cpp:1034
 #: src/frontend.cpp:1099
+#, fuzzy
 msgid "Right Mouse"
-msgstr "Sağ Tuş"
+msgstr "Açık Mavi"
 
 #: src/frontend.cpp:1038
 msgid "MOUSE OPTIONS"
@@ -14410,6 +14412,7 @@ msgid "You cannot change difficulty in a challenge"
 msgstr "Mücadele modunda zorluğu değiştiremezsin"
 
 #: src/multiint.cpp:2328
+#, fuzzy
 msgid "Click to change difficulty"
 msgstr "Zorluğu değiştirmek için tıkla"
 
@@ -14438,8 +14441,9 @@ msgid "Click to change player colour"
 msgstr "Oyuncu renklerini değiştirmek için tıkla"
 
 #: src/multiint.cpp:2514
+#, fuzzy
 msgid "Click to change player position"
-msgstr "Oyuncu pozisyonunu değiştirmek için tıkla"
+msgstr "Oyuncu ayarlarını değiştirmek için tıkla"
 
 #: src/multiint.cpp:2520
 msgid "Click to change AI"
@@ -14455,7 +14459,7 @@ msgstr "SOHBET"
 
 #: src/multiint.cpp:2618
 msgid "All players need to have the same mods to join your game."
-msgstr "TÜm oyuncular oyununa girebilmek için aynı moda ihtiyaç duyar."
+msgstr "Tüm oyuncular oyununa girebilmek için aynı moda ihtiyaç duyar."
 
 #: src/multiint.cpp:2776
 #, c-format
@@ -14699,7 +14703,7 @@ msgstr "Yeşil"
 
 #: src/multiplay.cpp:1942
 msgid "Orange"
-msgstr "Portakal Sarısı"
+msgstr "Turuncu"
 
 #: src/multiplay.cpp:1943
 msgid "Grey"
@@ -14933,8 +14937,9 @@ msgid "Unable to locate any Commanders!"
 msgstr "Hiç Komutan birimi bulunamadı!"
 
 #: src/structure.cpp:2646
+#, fuzzy
 msgid "Command Control Limit Reached - Production Halted"
-msgstr "Komuta Kontrol Limitine Ulaştın - Üretim Durduruldu"
+msgstr "Kontrol Limitine Ulaştın - Üretim Durduruldu"
 
 # nix Gruppe! -Kreuvf
 #: src/structure.cpp:5838
@@ -15025,72 +15030,6 @@ msgstr " - %s İnşa"
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "Sürüm %s%s%s%s"
-
-#~ msgid "Could not resolve masterserver name (%s)!"
-#~ msgstr "Konnte Lobbyserver-Namen nicht auflösen (%s)!"
-
-#~ msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
-#~ msgstr "Lobi Sunucusu ile iletişim kurulamadı! TCP-Port %u u açıkmı?"
-
-#~ msgid "MULTI PLAYER"
-#~ msgstr "ÇOK OYUNCULU"
-
-#~ msgid "Join Game"
-#~ msgstr "Oyuna Katıl"
-
-#~ msgid "CONNECTION"
-#~ msgstr "BAĞLANTI"
-
-#~ msgid "Lobby"
-#~ msgstr "Bekleme Odası"
-
-#~ msgid "IP"
-#~ msgstr "IP"
-
-#~ msgid "Searching"
-#~ msgstr "Araştırılıyor..."
-
-#~ msgid "Run in cheat mode"
-#~ msgstr "Sohbet modunda devam ettir"
-
-#~ msgid "Colored Cursors*"
-#~ msgstr "Renkli İmleçler*"
-
-#~ msgid "Congratulations your successful evacuation of Beta Base."
-#~ msgstr "Başarılı bir şekilde Beta üssünü boşaltınız için tebrikler."
-
-#~ msgid "Player colour"
-#~ msgstr "Oyuncu rengi"
-
-#~ msgid "Truck ordered to build Oil Derrick"
-#~ msgstr "Kamyon'a bir Petrol Kuyusu inşatı emri verildi."
-
-#~ msgid "2 trucks ordered to build Oil Derrick"
-#~ msgstr "2 kamyona bir Petrol Kuyusu inşatı emri verildi."
-
-#~ msgid "%d trucks ordered to build Oil Derrick"
-#~ msgstr "%d kamyon'lara bir Petrol Kuyusu inşatı emri verildi."
-
-#~ msgid "Kick player"
-#~ msgstr "Oyundan at"
-
-#~ msgid " (modified and switched locally)"
-#~ msgstr " (duzenlenmis ve anahtarlanmis yerel dil dosyasi)"
-
-#~ msgid " (switched locally)"
-#~ msgstr " (yerel anahtarli)"
-
-#~ msgid "Player position"
-#~ msgstr "Oyuncu pozisyonu"
-
-#~ msgid "Infinite Production"
-#~ msgstr "Sınırsız Üretim"
-
-#~ msgid "Plascrete MK3"
-#~ msgstr "Plas Girit Kdm3"
-
-#~ msgid "Player number"
-#~ msgstr "Oyuncu numarası"
 
 #~ msgid "Cobra Hover Heavy-Repair"
 #~ msgstr "Kobra Hovercraft Ağır tamir Tareti"
@@ -15213,13 +15152,41 @@ msgstr "Sürüm %s%s%s%s"
 #~ msgstr "Wyvern Ağır Lazer Paletler"
 
 #~ msgid "Viper Machinegun Half-Track"
-#~ msgstr "Engerek Makineli Yarım Paletler"
+#~ msgstr "Engerek Makinalı Yarım Paletler"
 
 #~ msgid "Viper Flamer Half-Track"
 #~ msgstr "Engerek Alev Atıcı Yarım Paletler"
 
+#~ msgid "Disconnected from lobby server. Failed to register game."
+#~ msgstr "Bekleme Odası sunucu bağlantısı kesildi. Oyun kaydedilemedi"
+
+#~ msgid "Could not resolve masterserver name (%s)!"
+#~ msgstr "Konnte Lobbyserver-Namen nicht auflösen (%s)!"
+
+#~ msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
+#~ msgstr "Lobi Sunucusu ile iletişim kurulamadı! TCP-Port %u u açıkmı?"
+
 #~ msgid ": Unknown cheat code."
 #~ msgstr ": Bilinmeyen Hile Kodu."
+
+#~ msgid "Run in cheat mode"
+#~ msgstr "Sohbet modunda devam ettir"
+
+#~ msgid "MULTI PLAYER"
+#~ msgstr "ÇOK OYUNCULU"
+
+#~ msgid "Join Game"
+#~ msgstr "Oyuna Katıl"
+
+#~ msgid "Colored Cursors*"
+#~ msgstr "Renkli İmleçler*"
+
+#~ msgctxt "right mouse button"
+#~ msgid "Right Button"
+#~ msgstr "Sağ Tuş"
+
+#~ msgid "Infinite Production"
+#~ msgstr "Sınırsız Üretim"
 
 #~ msgid "Player %u is cheating him/herself a new droid army of %s(s)."
 #~ msgstr "Oyuncu %u droid ordusunu hile ile kuruyor %s."
@@ -15227,8 +15194,53 @@ msgstr "Sürüm %s%s%s%s"
 #~ msgid "You found %u power in an oil drum"
 #~ msgstr "Sen %u güç varili buldun."
 
+#~ msgid "CONNECTION"
+#~ msgstr "BAĞLANTI"
+
+#~ msgid "Lobby"
+#~ msgstr "Bekleme Odası"
+
+#~ msgid "IP"
+#~ msgstr "IP"
+
+#~ msgid "Searching"
+#~ msgstr "Araştırılıyor..."
+
+#~ msgid "Player colour"
+#~ msgstr "Oyuncu rengi"
+
+#~ msgid "Kick player"
+#~ msgstr "Oyundan at"
+
+#~ msgid "Player number"
+#~ msgstr "Oyuncu numarası"
+
 #~ msgid "kicked %s : %s from the game, and added them to the banned list!"
 #~ msgstr "%s : %s oyundan atıldı ve engelli listesine kaydedildi!"
+
+#~ msgid " (modified and switched locally)"
+#~ msgstr " (duzenlenmis ve anahtarlanmis yerel dil dosyasi)"
+
+#~ msgid " (switched locally)"
+#~ msgstr " (yerel anahtarli)"
+
+#~ msgid "Congratulations your successful evacuation of Beta Base."
+#~ msgstr "Başarılı bir şekilde Beta üssünü boşaltınız için tebrikler."
+
+#~ msgid "Truck ordered to build Oil Derrick"
+#~ msgstr "Kamyon'a bir Petrol Kuyusu inşatı emri verildi."
+
+#~ msgid "2 trucks ordered to build Oil Derrick"
+#~ msgstr "2 kamyona bir Petrol Kuyusu inşatı emri verildi."
+
+#~ msgid "%d trucks ordered to build Oil Derrick"
+#~ msgstr "%d kamyon'lara bir Petrol Kuyusu inşatı emri verildi."
+
+#~ msgid "Player position"
+#~ msgstr "Oyuncu pozisyonu"
+
+#~ msgid "Plascrete MK3"
+#~ msgstr "Plas Girit Kdm3"
 
 #~ msgid "Mini-Rocket accuracy +10%"
 #~ msgstr "Mini Roket Hedef Tutturması +10%"
