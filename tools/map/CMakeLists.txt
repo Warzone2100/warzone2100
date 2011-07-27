@@ -29,9 +29,8 @@ if (NOT WZ_BUILD_DIR)
     message (SEND_ERROR "Warzone's config.h not found")
 endif ()
 if (NOT WZ_SOURCE_DIR)
-    message (SEND_ERROR "Warzone's framework library include dir not found")
+    message (SEND_ERROR "Warzone's source dir not found")
 else ()
-    # HACK to allow including like "lib/framework/whatever.h"
     set (WZ_FRAMEWORK_INCLUDE_DIRS ${WZ_SOURCE_DIR} ${WZ_BUILD_DIR} CACHE INTERNAL "")
 endif ()
 
@@ -104,7 +103,7 @@ set(EXECUTABLE_OUTPUT_PATH "${CMAKE_BINARY_DIR}/bin")
 
 include_directories(${WZ_FRAMEWORK_INCLUDE_DIRS} ${PNG_INCLUDE_DIR} ${OPENGL_INCLUDE_DIR} ${QT_INCLUDES} ${PHYSFS_INCLUDE_DIR})
 
-set(MAPTOOLS_LIBS ${PNG_LIBRARIES} ${ZLIB_LIBRARIES} ${PHYSFS_LIBRARY} ${QT_LIBRARIES})
+set(MAPTOOLS_LIBS ${PNG_LIBRARIES} ${PHYSFS_LIBRARY} ${QT_LIBRARIES})
 
 # map2lnd
 ADD_EXECUTABLE(map2lnd
