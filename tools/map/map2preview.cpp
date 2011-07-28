@@ -3,12 +3,10 @@
 
 #include "mapload.h"
 #include "pngsave.h"
-#include "wzconfig.h"
 
-// Qt Core
-#include <QtCore/QString>
-#include <QtCore/QFile>
+#include "vector.h"
 
+// Qt Gui
 #include <QtGui/QImage>
 
 struct PreviewColors
@@ -76,95 +74,37 @@ Vector3i clanColours[]=
 const uint16_t previewWidth = 512;
 const uint16_t previewHeight = 512;
 
-static int getPlayer(WzConfig &ini, int maxPlayers)
+static void paintStructureData(uchar *imageData, GAMEMAP *map)
 {
-	if (ini.contains("player"))
-	{
-		QVariant result = ini.value("player");
-		if (result.toString().startsWith("scavenger"))
-		{
-			// game.mapHasScavengers = true;
-			// return scavengerSlot();
-			return qMax(maxPlayers, 7);
-		}
-		return result.toInt();
-	}
-	else if (ini.contains("startpos"))
-	{
-		int position = ini.value("startpos").toInt();
-//		 for (int i = 0; i < map.numPlayers; i++)
-//		 {
-//			 if (NetPlay.players[i].position == position)
-//			 {
-//				 return i;
-//			 }
-//		 }
-		return position;
-	}
-//	ASSERT(false, "No player info found!");
-	return 0;
-}
-
-
-static bool paintStructureData(uchar *imageData, const char* structfile, int maxPlayers, int mapWidth)
-{
-	uint32_t playerid = 0, xx, yy;
-	bool HQ = false;
+	uint32_t xx, yy;
 	Vector3i color;
 	
-	WzConfig ini(structfile);
-	if (ini.status() != WzConfig::NoError)
+	for (int i = 0; i < map->numStructures; i++)
 	{
-		debug(LOG_ERROR, "Could not open %s", structfile);
-		return false;
-	}
+		LND_OBJECT *psObj = &map->mLndObjects[IMD_STRUCTURE][i];
 
-	foreach(QString group, ini.childGroups())
-	{
-		ini.beginGroup(group);
-		QString name = ini.value("name").toString();
-		Vector3i pos = ini.vector3i("position"); // Position pos = ini.vector3i("position");
-		playerid = getPlayer(ini, maxPlayers);
-
-		if (name.startsWith("A0CommandCentre"))
+		if (strcmp(psObj->name, "A0PowMod1") == 0 ||
+			strcmp(psObj->name, "A0FacMod1") == 0 ||
+			strcmp(psObj->name, "A0ResearchModule1") == 0)
 		{
-			HQ = true;
-			xx = map_coord(pos.x);
-			yy = map_coord(pos.y);
+			continue; // ignore modules.
 		}
-		else
-		{
-			HQ = false;
-			xx = map_coord(pos.x);
-			yy = map_coord(pos.y);
-		}
-
-		// playerid = getPlayerColour(RemapPlayerNumber(playerid));
-/*		if (playerid == 3)  // in this case 3 = palette entry for black.
-		{
-			color = clanColours[2];
-		}
-		else
-		{*/
-		color = clanColours[playerid];
-//		}
-
-		if (HQ)
+		
+		color = clanColours[psObj->player];
+		if (strcmp(psObj->name, "A0CommandCentre") == 0)
 		{
 			color = Vector3i(0xFF,0,0xFF); // base/palette.txt - WZCOL_MAP_PREVIEW_HQ
 		}
 
-		uchar* p = imageData + (3 * (yy * mapWidth + xx));
+		xx = map_coord(psObj->x);
+		yy = map_coord(psObj->y);
+
+		uchar* p = imageData + (3 * (yy * static_cast<int>(map->width) + xx));
 		p[0] = color.x;
 		p[1] = color.y;
 		p[2] = color.z;
-		
-		ini.endGroup();
 	}
-
-	return true;
 }
-
 
 int main(int argc, char **argv)
 {
@@ -254,23 +194,14 @@ int main(int argc, char **argv)
 		}
 	}
 
-	strcpy(tmpFile, base);
-	strcat(tmpFile, "/struct.ini");
-	if (QFile::exists(tmpFile))
-	{
-		paintStructureData(imageData, tmpFile, map->numPlayers, mapWidth);
-	}
-	else
-	{
-		debug(LOG_ERROR, "Cannot add structure data, please convert base data first.\nUse \"mapconv %s\" for that.", argv[1]);
-	}
+	paintStructureData(imageData, map);
 
 	strcpy(tmpFile, base);
 	strcat(tmpFile, ".png");
 
 	QImage image(imageData, mapWidth, mapHeight, QImage::Format_RGB888);
 	image.scaled(previewWidth, previewHeight, Qt::KeepAspectRatio).save(tmpFile, "PNG");
-	// savePng(tmpFile, imageData, previewWidth, previewHeight);
+	//savePng(tmpFile, imageData, mapWidth, mapHeight);
 
 	free(imageData);
 	

@@ -96,7 +96,7 @@ ADD_EXECUTABLE(map2preview
                map2preview.cpp
                maplib.cpp
                mapload.cpp
-               wzconfig.cpp)
+               pngsave.cpp)
 TARGET_LINK_LIBRARIES(map2preview ${MAPTOOLS_LIBS})
 
 # mapconv
