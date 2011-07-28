@@ -38,6 +38,9 @@ char* physfs_addmappath(char *path)
             // Remove the path
             p_path++;
             strcpy(p_result, p_path);
+
+			path[strlen(path) - strlen(result) - 1] = '\0';
+			PHYSFS_mount(path, NULL, 1);
         }
         else
         {
