@@ -89,13 +89,13 @@ static void paintStructureData(uchar *imageData, GAMEMAP *map)
 		{
 			continue; // ignore modules.
 		}
-		
+
 		color = clanColours[psObj->player];
 		if (strcmp(psObj->name, "A0CommandCentre") == 0)
 		{
 			color = Vector3i(0xFF,0,0xFF); // base/palette.txt - WZCOL_MAP_PREVIEW_HQ
 		}
-
+		
 		xx = map_coord(psObj->x);
 		yy = map_coord(psObj->y);
 
