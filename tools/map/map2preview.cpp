@@ -6,9 +6,6 @@
 
 #include "vector.h"
 
-// Qt Gui
-#include <QtGui/QImage>
-
 struct PreviewColors
 {
 	Vector3i  cliffLow;
@@ -52,7 +49,7 @@ static const PreviewColors pRockiesColors = {
 
 Vector3i clanColours[]=
 {   // see frontend2.png for team color order.
-	// [r,g,b,a]
+	// [r,g,b]
 	Vector3i (0,255,0),			// green  Player 0
 	Vector3i (255,210,40),		// orange Player 1
 	Vector3i (255,255,255),		// grey   Player 2
@@ -71,12 +68,12 @@ Vector3i clanColours[]=
 	Vector3i (128,128,0)		// brown	   Player F
 };
 
-const uint16_t previewWidth = 512;
-const uint16_t previewHeight = 512;
-
-static void paintStructureData(uchar *imageData, GAMEMAP *map)
+static void paintStructureData(uint8_t *pixels, GAMEMAP *map)
 {
-	uint32_t xx, yy;
+	const int width  = (int) map->width;
+	const int height  = (int) map->height;
+	uint8_t (*p)[width][3] = (uint8_t (*)[width][3])pixels;
+	uint32_t x, y;
 	Vector3i color;
 	
 	for (int i = 0; i < map->numStructures; i++)
@@ -96,13 +93,12 @@ static void paintStructureData(uchar *imageData, GAMEMAP *map)
 			color = Vector3i(0xFF,0,0xFF); // base/palette.txt - WZCOL_MAP_PREVIEW_HQ
 		}
 		
-		xx = map_coord(psObj->x);
-		yy = map_coord(psObj->y);
+		x = map_coord(psObj->x);
+		y = height - 1 - map_coord(psObj->y); // Origin at the top
 
-		uchar* p = imageData + (3 * (yy * static_cast<int>(map->width) + xx));
-		p[0] = color.x;
-		p[1] = color.y;
-		p[2] = color.z;
+		p[y][x][0] = color.x;
+		p[y][x][1] = color.y;
+		p[y][x][2] = color.z;
 	}
 }
 
@@ -111,7 +107,7 @@ int main(int argc, char **argv)
 	char *filename, *p_filename;
 	char *base, tmpFile[PATH_MAX];
 	GAMEMAP *map;
-	MAPTILE		 *psTile;
+	MAPTILE *psTile;
 
 	if (argc != 2)
 	{
@@ -155,58 +151,57 @@ int main(int argc, char **argv)
 		break;
 	}
 
-	int mapWidth = static_cast<int>(map->width);
-	int mapHeight = static_cast<int>(map->height);
-
+	const int mapWidth = (int) map->width;
+	const int mapHeight = (int) map->height;
 	int col;
-	uchar* imageData = (uchar*)malloc(sizeof(uchar) * mapWidth * mapHeight * 3);	 // used for the texture
-	
+
+	// RGB888 pixels
+	uint8_t (*pixels)[mapWidth][3] = (uint8_t (*)[mapWidth][3]) malloc(sizeof(uint8_t) * mapWidth * mapHeight * 3);
+
 	for (int y = 0; y < mapHeight; y++)
 	{
 		for (int x = 0; x < mapWidth; x++)
 		{
-			psTile = mapTile(map, x, y);
-			uchar* const p = imageData + (3 * (y * mapWidth + x));
+			// We're placing the origin at the top for aesthetic reasons
+			psTile = mapTile(map, x, mapHeight-1-y);
 			col = psTile->height / 2; // 2 = ELEVATION_SCALE
 			switch(terrainType(psTile))
 			{
 				case TER_CLIFFFACE:
-					p[0] = tileColors->cliffLow.x + (tileColors->cliffHigh.x - tileColors->cliffLow.x) * col / 256;
-					p[1] = tileColors->cliffLow.y + (tileColors->cliffHigh.y - tileColors->cliffLow.y) * col / 256;
-					p[2] = tileColors->cliffLow.z + (tileColors->cliffHigh.z - tileColors->cliffLow.z) * col / 256;
+					pixels[y][x][0] = tileColors->cliffLow.x + (tileColors->cliffHigh.x - tileColors->cliffLow.x) * col / 256;
+					pixels[y][x][1] = tileColors->cliffLow.y + (tileColors->cliffHigh.y - tileColors->cliffLow.y) * col / 256;
+					pixels[y][x][2] = tileColors->cliffLow.z + (tileColors->cliffHigh.z - tileColors->cliffLow.z) * col / 256;
 				break;
 				case TER_WATER:
-					p[0] = tileColors->water.x;
-					p[1] = tileColors->water.y;
-					p[2] = tileColors->water.z;
+					pixels[y][x][0] = tileColors->water.x;
+					pixels[y][x][1] = tileColors->water.y;
+					pixels[y][x][2] = tileColors->water.z;
 				break;
 				case TER_ROAD:
-					p[0] = tileColors->roadLow.x + (tileColors->roadHigh.x - tileColors->roadLow.x) * col / 256;
-					p[1] = tileColors->roadLow.y + (tileColors->roadHigh.y - tileColors->roadLow.y) * col / 256;
-					p[2] = tileColors->roadLow.z + (tileColors->roadHigh.z - tileColors->roadLow.z) * col / 256;
+					pixels[y][x][0] = tileColors->roadLow.x + (tileColors->roadHigh.x - tileColors->roadLow.x) * col / 256;
+					pixels[y][x][1] = tileColors->roadLow.y + (tileColors->roadHigh.y - tileColors->roadLow.y) * col / 256;
+					pixels[y][x][2] = tileColors->roadLow.z + (tileColors->roadHigh.z - tileColors->roadLow.z) * col / 256;
 				break;
 				default:
-					p[0] = tileColors->groundLow.x + (tileColors->groundHigh.x - tileColors->groundLow.x) * col / 256;
-					p[1] = tileColors->groundLow.y + (tileColors->groundHigh.y - tileColors->groundLow.y) * col / 256;
-					p[2] = tileColors->groundLow.z + (tileColors->groundHigh.z - tileColors->groundLow.z) * col / 256;
+					pixels[y][x][0] = tileColors->groundLow.x + (tileColors->groundHigh.x - tileColors->groundLow.x) * col / 256;
+					pixels[y][x][1] = tileColors->groundLow.y + (tileColors->groundHigh.y - tileColors->groundLow.y) * col / 256;
+					pixels[y][x][2] = tileColors->groundLow.z + (tileColors->groundHigh.z - tileColors->groundLow.z) * col / 256;
 				break;
 			}
 		}
 	}
 
-	paintStructureData(imageData, map);
+	paintStructureData((uint8_t*)pixels, map);
 
 	strcpy(tmpFile, base);
 	strcat(tmpFile, ".png");
 
-	QImage image(imageData, mapWidth, mapHeight, QImage::Format_RGB888);
-	image.scaled(previewWidth, previewHeight, Qt::KeepAspectRatio).save(tmpFile, "PNG");
-	//savePng(tmpFile, imageData, mapWidth, mapHeight);
+	savePng(tmpFile, (uint8_t*)pixels, mapWidth, mapHeight);
 
-	free(imageData);
-	
+	free((void*)pixels);
+
 	mapFree(map);
-		
+
 	physfs_shutdown();
 
 	return 0;

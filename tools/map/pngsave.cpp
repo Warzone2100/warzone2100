@@ -16,15 +16,25 @@ static inline void PNGWriteCleanup(png_infop *info_ptr, png_structp *png_ptr, FI
 		fclose(fileHandle);
 }
 
-static bool savePngInternal(const char *fileName, unsigned char *pixels, int w, int h, int bitdepth, int color_type)
+static bool savePngInternal(const char *fileName, uint8_t *pixels, int w, int h, int bitdepth, int color_type)
 {
-	unsigned char** scanlines = NULL;
+	uint8_t **scanlines = NULL;
 	png_infop info_ptr = NULL;
 	png_structp png_ptr = NULL;
 	FILE *fp;
 	
 	if (fileName == NULL || *fileName == '\0' || pixels == NULL)
 	{
+		return false;
+	}
+	if (w <= 0 || h <= 0)
+	{
+		debug(LOG_ERROR, "Unsupported image dimensions: %d x %d", w, h);
+		return false;
+	}
+	if (bitdepth <= 0)
+	{
+		debug(LOG_ERROR, "Unsupported bit depth: %d", bitdepth);
 		return false;
 	}
 	if (!(fp = fopen(fileName, "wb")))
@@ -58,19 +68,32 @@ static bool savePngInternal(const char *fileName, unsigned char *pixels, int w, 
 	}
 	else
 	{
-		unsigned int channelsPerPixel = 3;
-		unsigned int currentRow, row_stride;
+		unsigned currentRow, row_stride;
+		unsigned channelsPerPixel;
 
-		if (color_type == PNG_COLOR_TYPE_GRAY)
+		switch (color_type)
 		{
-			channelsPerPixel = 1;
+			case PNG_COLOR_TYPE_GRAY:
+				channelsPerPixel = 1;
+				break;
+			case PNG_COLOR_TYPE_RGB:
+				channelsPerPixel = 3;
+				break;
+			case PNG_COLOR_TYPE_RGBA:
+				channelsPerPixel = 4;
+				break;
+			default:
+				debug(LOG_ERROR, "Unsupported pixel format.\n");
+				PNGWriteCleanup(&info_ptr, &png_ptr, fp);
+				return false;
 		}
+
 		row_stride = w * channelsPerPixel * bitdepth / 8;
 
-		scanlines = (unsigned char **)malloc(sizeof(unsigned char *) * h);
+		scanlines = (uint8_t **)malloc(sizeof(uint8_t *) * h);
 		if (scanlines == NULL)
 		{
-			debug(LOG_ERROR, "pie_PNGSaveFile: Couldn't allocate memory\n");
+			debug(LOG_ERROR, "Couldn't allocate memory\n");
 			PNGWriteCleanup(&info_ptr, &png_ptr, fp);
 			return false;
 		}
@@ -111,7 +134,8 @@ static bool savePngInternal(const char *fileName, unsigned char *pixels, int w, 
 		// Create an array of scanlines
 		for (currentRow = 0; currentRow < h; ++currentRow)
 		{
-			// We're filling the scanline from the bottom up here,
+			// png scanlines are ordered from top-to-bottom
+			// so we fill the scanline from the top to the bottom here
 			// otherwise we'd have a vertically mirrored image.
 			scanlines[currentRow] = pixels + row_stride * (h - currentRow - 1);
 		}
@@ -129,11 +153,19 @@ static bool savePngInternal(const char *fileName, unsigned char *pixels, int w, 
 }
 
 /**************************************************************************
-  Save an RGBA8888 image buffer to a PNG file.
+  Save an RGB888 image buffer to a PNG file.
 **************************************************************************/
-bool savePng(const char *filename, char *pixels, int w, int h)
+bool savePng(const char *filename, uint8_t *pixels, int w, int h)
 {
-	return savePngInternal(filename, (unsigned char *)pixels, w, h, 8, PNG_COLOR_TYPE_RGBA);
+	return savePngInternal(filename, pixels, w, h, 8, PNG_COLOR_TYPE_RGB);
+}
+
+/**************************************************************************
+  Save an ARGB8888 image buffer to a PNG file.
+**************************************************************************/
+bool savePngARGB32(const char *filename, uint8_t *pixels, int w, int h)
+{
+	return savePngInternal(filename, pixels, w, h, 8, PNG_COLOR_TYPE_RGBA);
 }
 
 /**************************************************************************
@@ -141,7 +173,7 @@ bool savePng(const char *filename, char *pixels, int w, int h)
 **************************************************************************/
 bool savePngI16(const char *filename, uint16_t *pixels, int w, int h)
 {
-	return savePngInternal(filename, (unsigned char *)pixels, w, h, 16, PNG_COLOR_TYPE_GRAY);
+	return savePngInternal(filename, (uint8_t *)pixels, w, h, 16, PNG_COLOR_TYPE_GRAY);
 }
 
 /**************************************************************************
@@ -149,5 +181,5 @@ bool savePngI16(const char *filename, uint16_t *pixels, int w, int h)
 **************************************************************************/
 bool savePngI8(const char *filename, uint8_t *pixels, int w, int h)
 {
-	return savePngInternal(filename, (unsigned char *)pixels, w, h, 8, PNG_COLOR_TYPE_GRAY);
+	return savePngInternal(filename, pixels, w, h, 8, PNG_COLOR_TYPE_GRAY);
 }
