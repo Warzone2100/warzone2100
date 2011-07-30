@@ -70,12 +70,10 @@ Vector3i clanColours[]=
 
 static void paintStructureData(uint8_t *pixels, GAMEMAP *map)
 {
-	const int width  = (int) map->width;
 	const int height  = (int) map->height;
-	uint8_t (*p)[width][3] = (uint8_t (*)[width][3])pixels;
 	uint32_t x, y;
 	Vector3i color;
-	
+
 	for (int i = 0; i < map->numStructures; i++)
 	{
 		LND_OBJECT *psObj = &map->mLndObjects[IMD_STRUCTURE][i];
@@ -92,13 +90,14 @@ static void paintStructureData(uint8_t *pixels, GAMEMAP *map)
 		{
 			color = Vector3i(0xFF,0,0xFF); // base/palette.txt - WZCOL_MAP_PREVIEW_HQ
 		}
-		
+
 		x = map_coord(psObj->x);
 		y = height - 1 - map_coord(psObj->y); // Origin at the top
 
-		p[y][x][0] = color.x;
-		p[y][x][1] = color.y;
-		p[y][x][2] = color.z;
+		uint8_t * const p = &pixels[(y * map->width + x) * 3];
+		p[0] = color.x;
+		p[1] = color.y;
+		p[2] = color.z;
 	}
 }
 
@@ -156,7 +155,7 @@ int main(int argc, char **argv)
 	int col;
 
 	// RGB888 pixels
-	uint8_t (*pixels)[mapWidth][3] = (uint8_t (*)[mapWidth][3]) malloc(sizeof(uint8_t) * mapWidth * mapHeight * 3);
+	uint8_t *pixels = (uint8_t*) malloc(sizeof(uint8_t) * mapWidth * mapHeight * 3);
 
 	for (int y = 0; y < mapHeight; y++)
 	{
@@ -165,40 +164,41 @@ int main(int argc, char **argv)
 			// We're placing the origin at the top for aesthetic reasons
 			psTile = mapTile(map, x, mapHeight-1-y);
 			col = psTile->height / 2; // 2 = ELEVATION_SCALE
+			uint8_t * const p = &pixels[(y * map->width + x) * 3];
 			switch(terrainType(psTile))
 			{
 				case TER_CLIFFFACE:
-					pixels[y][x][0] = tileColors->cliffLow.x + (tileColors->cliffHigh.x - tileColors->cliffLow.x) * col / 256;
-					pixels[y][x][1] = tileColors->cliffLow.y + (tileColors->cliffHigh.y - tileColors->cliffLow.y) * col / 256;
-					pixels[y][x][2] = tileColors->cliffLow.z + (tileColors->cliffHigh.z - tileColors->cliffLow.z) * col / 256;
+					p[0] = tileColors->cliffLow.x + (tileColors->cliffHigh.x - tileColors->cliffLow.x) * col / 256;
+					p[1] = tileColors->cliffLow.y + (tileColors->cliffHigh.y - tileColors->cliffLow.y) * col / 256;
+					p[2] = tileColors->cliffLow.z + (tileColors->cliffHigh.z - tileColors->cliffLow.z) * col / 256;
 				break;
 				case TER_WATER:
-					pixels[y][x][0] = tileColors->water.x;
-					pixels[y][x][1] = tileColors->water.y;
-					pixels[y][x][2] = tileColors->water.z;
+					p[0] = tileColors->water.x;
+					p[1] = tileColors->water.y;
+					p[2] = tileColors->water.z;
 				break;
 				case TER_ROAD:
-					pixels[y][x][0] = tileColors->roadLow.x + (tileColors->roadHigh.x - tileColors->roadLow.x) * col / 256;
-					pixels[y][x][1] = tileColors->roadLow.y + (tileColors->roadHigh.y - tileColors->roadLow.y) * col / 256;
-					pixels[y][x][2] = tileColors->roadLow.z + (tileColors->roadHigh.z - tileColors->roadLow.z) * col / 256;
+					p[0] = tileColors->roadLow.x + (tileColors->roadHigh.x - tileColors->roadLow.x) * col / 256;
+					p[1] = tileColors->roadLow.y + (tileColors->roadHigh.y - tileColors->roadLow.y) * col / 256;
+					p[2] = tileColors->roadLow.z + (tileColors->roadHigh.z - tileColors->roadLow.z) * col / 256;
 				break;
 				default:
-					pixels[y][x][0] = tileColors->groundLow.x + (tileColors->groundHigh.x - tileColors->groundLow.x) * col / 256;
-					pixels[y][x][1] = tileColors->groundLow.y + (tileColors->groundHigh.y - tileColors->groundLow.y) * col / 256;
-					pixels[y][x][2] = tileColors->groundLow.z + (tileColors->groundHigh.z - tileColors->groundLow.z) * col / 256;
+					p[0] = tileColors->groundLow.x + (tileColors->groundHigh.x - tileColors->groundLow.x) * col / 256;
+					p[1] = tileColors->groundLow.y + (tileColors->groundHigh.y - tileColors->groundLow.y) * col / 256;
+					p[2] = tileColors->groundLow.z + (tileColors->groundHigh.z - tileColors->groundLow.z) * col / 256;
 				break;
 			}
 		}
 	}
 
-	paintStructureData((uint8_t*)pixels, map);
+	paintStructureData(pixels, map);
 
 	strcpy(tmpFile, base);
 	strcat(tmpFile, ".png");
 
-	savePng(tmpFile, (uint8_t*)pixels, mapWidth, mapHeight);
+	savePng(tmpFile, pixels, mapWidth, mapHeight);
 
-	free((void*)pixels);
+	free(pixels);
 
 	mapFree(map);
 
