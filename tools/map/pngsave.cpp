@@ -1,7 +1,11 @@
 // Framework
 #include "maplib.h"
 
-#include <png.h>
+#if defined(__MACOSX__)
+# include <Png/png.h>
+#else
+# include <png.h>
+#endif
 
 #include "pngsave.h"
 

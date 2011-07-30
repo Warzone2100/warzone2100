@@ -24,7 +24,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include "lib/framework/wzglobal.h"
-#include "lib/framework/physfs_ext.h"
+#include "lib/framework/physfs_ext.h" // Also includes physfs.h
 
 #define MAX_LEVEL_SIZE	20
 #define TILE_HEIGHT	128

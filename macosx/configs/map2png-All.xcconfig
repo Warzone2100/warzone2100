@@ -1,27 +1,12 @@
-// Warzone settings for all configurations
+// map2png settings for all configurations
+
+#include "Base-Tools.xcconfig"
 
 
-INSTALL_PATH = $(HOME)/Applications
-LD_RUNPATH_SEARCH_PATHS = @loader_path/../Frameworks
-PREBINDING = NO
-APPLY_RULES_IN_COPY_FILES = YES
-INFOPLIST_FILE = Resources/Warzone-Info.plist
-INFOPLIST_OTHER_PREPROCESSOR_FLAGS = -traditional
-INFOPLIST_PREFIX_HEADER = $(SRCROOT)/build/autorevision.h
-INFOPLIST_PREPROCESS = YES
-PRODUCT_NAME = Warzone
-WRAPPER_EXTENSION = app
+PRODUCT_NAME = map2png
 
-FRAMEWORK_SEARCH_PATHS = $(inherited) $(FRAMEWORK_SEARCH_PATHS_QUOTED_1) $(FRAMEWORK_SEARCH_PATHS_QUOTED_2) $(FRAMEWORK_SEARCH_PATHS_QUOTED_3)
-
-HEADER_SEARCH_PATHS = $(inherited) $(HEADER_SEARCH_PATHS_QUOTED_1)
-
-LIBRARY_SEARCH_PATHS = $(inherited) $(LIBRARY_SEARCH_PATHS_QUOTED_1) $(LIBRARY_SEARCH_PATHS_QUOTED_3)
-
-USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/.."
-GCC_ENABLE_SSE3_EXTENSIONS = YES // -msse3
-GCC_MODEL_TUNING = G5
 GCC_PREPROCESSOR_DEFINITIONS = $(inherited) $(BUILD_PREPROCESSOR_DEFINITIONS)
+
 
 OTHER_CFLAGS = $(FlagsForCandCpp) $(WarnForC) $(inherited)
 OTHER_CFLAGS[arch=i386] = $(inherited) // intel 32 bit only

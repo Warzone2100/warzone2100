@@ -4,16 +4,17 @@
 #include <QtCore/qglobal.h>
 
 // framework
-#include "config.h"
+#if defined(__MACOSX__)
+#  include "lib/framework/config-macosx.h"
+#else
+#  include "config.h"
+#endif
 #include "lib/framework/types.h"
-#include "lib/framework/physfs_ext.h"
+#include "lib/framework/physfs_ext.h" // Also includes physfs.h
 
 #include <cstdlib>
 #include <stdio.h>
 #include <string.h>
-
-// Physfs
-#include <physfs.h>
 
 // framework/debug.h
 #define ARRAY_SIZE(a) (sizeof(a) / sizeof((a)[0]))

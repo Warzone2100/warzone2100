@@ -19,7 +19,11 @@
 #ifndef _physfs_ext_h
 #define _physfs_ext_h
 
-#include <physfs.h>
+#if defined(__MACOSX__)
+# include <PhysFS/physfs.h>
+#else
+# include <physfs.h>
+#endif
 
 #define PHYSFS_APPEND 1
 #define PHYSFS_PREPEND 0
