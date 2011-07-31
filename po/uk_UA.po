@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Warzone 2100 version 2.2.3\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-07-23 15:27+0200\n"
+"POT-Creation-Date: 2011-08-01 01:18+0200\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Меденцій Олександр <olexandr1986@i.ua>\n"
 "Language-Team: \n"
@@ -13151,7 +13151,7 @@ msgstr "Гра не може продовжуватись без хосту."
 msgid "-->  QUIT  <--"
 msgstr "-->  ВИХІД  <--"
 
-#: src/init.cpp:405
+#: src/init.cpp:422
 #, c-format
 msgid ""
 "The required mod could not be loaded: %s\n"

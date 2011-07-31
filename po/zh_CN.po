@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-07-23 15:27+0200\n"
+"POT-Creation-Date: 2011-08-01 01:18+0200\n"
 "PO-Revision-Date: 2009-05-13 16:12+0800\n"
 "Last-Translator: Terra <wz2100cn@gmail.com>\n"
 "Language-Team: Simplified Chinese <zh_CN@li.org>\n"
@@ -13267,7 +13267,7 @@ msgstr ""
 msgid "-->  QUIT  <--"
 msgstr ""
 
-#: src/init.cpp:405
+#: src/init.cpp:422
 #, c-format
 msgid ""
 "The required mod could not be loaded: %s\n"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-07-23 15:27+0200\n"
+"POT-Creation-Date: 2011-08-01 01:18+0200\n"
 "PO-Revision-Date: 2010-05-10 16:59+0200\n"
 "Last-Translator: erlando <erlando112@hotmail.com>\n"
 "Language-Team: Estonian <ee@li.org>\n"
@@ -13132,7 +13132,7 @@ msgstr "Mäng ei saa ilma võõrustajata jätkuda."
 msgid "-->  QUIT  <--"
 msgstr "--> LOOBU <--"
 
-#: src/init.cpp:405
+#: src/init.cpp:422
 #, c-format
 msgid ""
 "The required mod could not be loaded: %s\n"

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: WZ2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-07-23 15:27+0200\n"
+"POT-Creation-Date: 2011-08-01 01:18+0200\n"
 "PO-Revision-Date: \n"
 "Last-Translator: metalwarrior95 <metalwarrioroften@gmail.com>\n"
 "Language-Team: \n"
@@ -13143,7 +13143,7 @@ msgstr "Igra se ne može nastaviti ako nema hosta."
 msgid "-->  QUIT  <--"
 msgstr "---> IZLAZ <---"
 
-#: src/init.cpp:405
+#: src/init.cpp:422
 #, c-format
 msgid ""
 "The required mod could not be loaded: %s\n"

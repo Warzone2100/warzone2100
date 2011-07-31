@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Warzone 2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-07-23 15:27+0200\n"
+"POT-Creation-Date: 2011-08-01 01:18+0200\n"
 "PO-Revision-Date: 2011-06-07 22:29+0100\n"
 "Last-Translator: Molnár Gábor <b1afy7@gmail.com>\n"
 "Language-Team: Magyar (Hungary) <meszaros.tomi@hotmail.com>\n"
@@ -13123,7 +13123,7 @@ msgstr "A játék nem folytatható a játékmester nélkül."
 msgid "-->  QUIT  <--"
 msgstr "--> KILÉPÉS <--"
 
-#: src/init.cpp:405
+#: src/init.cpp:422
 #, c-format
 msgid ""
 "The required mod could not be loaded: %s\n"

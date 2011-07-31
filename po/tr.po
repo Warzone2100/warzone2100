@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-07-27 15:55+0200\n"
+"POT-Creation-Date: 2011-08-01 01:18+0200\n"
 "PO-Revision-Date: 2011-07-26 16:10+0200\n"
 "Last-Translator: Ayhan GÖRGÜLÜ <ayhangorgulu45@gmail.com>\n"
 "Language-Team: Turkey <warzone-dev@gna.org>\n"
@@ -13131,7 +13131,7 @@ msgstr "Oyun Kurucu olmadan devam edemez."
 msgid "-->  QUIT  <--"
 msgstr "-->  ÇIKIŞ  <--"
 
-#: src/init.cpp:405
+#: src/init.cpp:422
 #, c-format
 msgid ""
 "The required mod could not be loaded: %s\n"
