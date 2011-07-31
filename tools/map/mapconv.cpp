@@ -237,6 +237,7 @@ int main(int argc, char **argv)
 				continue; // do not write modules as separate entries
 			}
 
+			if (psObj->id == 0) psObj->id = 0xFEDBCA98; // fix broken ID
 			MADD("\n[structure_%04u]", psObj->id);
 			MADD("id = %u", psObj->id);
 			MADD("position = %u, %u, %u", psObj->x, psObj->y, psObj->z);
