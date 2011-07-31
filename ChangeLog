@@ -1,9 +1,19 @@
 master_20110719
  * General:
-   *Fix: Set the right authentication flag on logouts. (commit:2cb5bab0311c644453bc8a1b2d82311f399b541d)
-   *Fix: Displayed Vsync status was inverted if toggled. (commit:7dbf108ad688dce25c86bdc21062c95c9a31c5ac)
-   *Fix: Handle the trap cursor support for windows a bit differently. (ticket:2813, commit:c10d9ef8d403de633fe3c3df205e29c695caeba0)
-   *Fix: Vsync turned off on start up, affected Windows and some Linux.(commit:866aeb950b1f7b55bb6eea1a8bd273bcc1c7302c)
+   * Fix: Maps can never override game data (ticket:2825, commit:e0007a217e282326856a23c932665b9a82c379a9)
+   * Fix: Make mod savegames work properly (ticket:2735, ticket:2825, commit:5216760744be407deece8d90d4a755dd5f1e421f)
+ * UI:
+   * Change: Use Ctrl-V instead of Tab to paste in edit boxes (ticket:2830, commit:08d2bae4e5f84829ed9ac657b001cde23f6664b2)
+   * Fix: Show correct vsync status (commit:7dbf108ad688dce25c86bdc21062c95c9a31c5ac)
+   * Fix: Make trap cursor on Windows use the correct area (ticket:2813, commit:c10d9ef8d403de633fe3c3df205e29c695caeba0)
+ * Graphics:
+   * Fix: Correctly set vsync on start up (commit:866aeb950b1f7b55bb6eea1a8bd273bcc1c7302c)
+   * Fix: Use QuesoGLC for all font rendering (ticket:2824, ticket:2565, commit:f35bcccdeec67bfef53cc4c7552d30f94fe4f696)
+ * Multiplayer:
+   * Fix: Maps Startup, Basingstoke, Littleegypt, Rollinghills, Bananas, Beggarskanyon, Mizamaze, Thepit and Yinyyang, which were broken by an error in the conversion to ini format (ticket:2833, commit:ca8595f25a377026f1ea399d3011fa63fbef58e2)
+   * Fix: Only reset authentication flags when logout succeeded (commit:2cb5bab0311c644453bc8a1b2d82311f399b541d)
+ * Translations:
+   * Update: Turkish (ticket:2831, ticket:2840, commit:f829395d963652346c354f8997c482423b314fe8, commit:b827f9e918ed0b622fb668efbc0591918f2803a7
 
 master_20110717
  * General:
