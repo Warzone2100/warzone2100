@@ -1,4 +1,4 @@
-master_20110719
+master_20110801
  * General:
    * Fix: Maps can never override game data (ticket:2825, commit:e0007a217e282326856a23c932665b9a82c379a9)
    * Fix: Make mod savegames work properly (ticket:2735, ticket:2825, commit:5216760744be407deece8d90d4a755dd5f1e421f)
