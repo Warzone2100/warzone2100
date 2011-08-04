@@ -17,7 +17,6 @@ MOCEDFILES = $(MOCHEADER:%.h=%_moc.cpp)
 	$(MOC4) -o $@ $<
 
 BUILT_SOURCES = \
-	$(MOCEDFILES) \
 	resource_lexer.lex.cpp \
 	resource_parser.tab.cpp \
 	resource_parser.tab.hpp \

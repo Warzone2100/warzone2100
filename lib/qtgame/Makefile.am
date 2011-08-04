@@ -8,7 +8,6 @@ MOCEDFILES = $(MOCHEADER:%.h=%_moc.cpp)
 %_moc.cpp: %.h
 	$(MOC4) -o $@ $<
 
-BUILT_SOURCES = $(MOCEDFILES)
 CLEANFILES = $(MOCEDFILES)
 
 noinst_LIBRARIES = libqtgame.a
