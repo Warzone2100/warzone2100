@@ -1590,7 +1590,7 @@ bool scrBuildDroid(void)
 
 	if (productionRun != 1)
 	{
-		debug(LOG_ERROR, "A script is trying to build a different number (%d) than 1 droid.", productionRun);
+		debug(LOG_WARNING, "A script is trying to build a different number (%d) than 1 droid.", productionRun);
 	}
 	structSetManufacture(psFactory, psTemplate, ModeQueue);
 
