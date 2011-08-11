@@ -2149,7 +2149,7 @@ void orderDroidObj(DROID *psDroid, DROID_ORDER order, BASE_OBJECT *psObj, QUEUE_
 
 	ASSERT(psDroid != NULL, "Invalid unit pointer");
 	ASSERT(validOrderForObj(order), "Invalid order for object");
-	ASSERT(!isBlueprint(psObj), "Target is a blueprint");
+	ASSERT(!isBlueprint(psObj), "Target %s is a blueprint", objInfo(psObj));
 
 	if (mode == ModeQueue) //ajl
 	{
@@ -2582,7 +2582,7 @@ static bool orderDroidLocAdd(DROID *psDroid, DROID_ORDER order, UDWORD x, UDWORD
 // add an object order to a droids order list
 static bool orderDroidObjAdd(DROID *psDroid, DROID_ORDER order, BASE_OBJECT *psObj[DROID_MAXWEAPS])
 {
-	ASSERT(!isBlueprint(psObj[0]), "Target is a blueprint");
+	ASSERT(!isBlueprint(psObj[0]), "Target %s for queue is a blueprint", objInfo(psObj[0]));
 
 	// check can queue the order
 	if (order != DORDER_ATTACK &&
