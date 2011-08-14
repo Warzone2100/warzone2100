@@ -39,6 +39,7 @@ EXTRA_DIST= \
 	autorevision.conf \
 	config.rpath \
 	configure.ac \
+	pkg/dpkg \
 	macosx
 
 # get rid of SVN stuff in the tarball
