@@ -100,7 +100,6 @@ if [ ! -d "${DirectorY}" ]; then
     exit 1
 else
     mv "${DirectorY}" "${OutDir}"
-    cd "${SRCROOT}"; xcodeindex; cd external
 fi
 
 exit 0
