@@ -158,14 +158,11 @@ bool screenInitialise()
 	return true;
 }
 
-
-/* Release the DD objects */
 void screenShutDown(void)
 {
-		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_ACCUM_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_ACCUM_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 }
-
 
 void screen_SetBackDropFromFile(const char* filename)
 {
@@ -448,4 +445,3 @@ void screenDumpToDisk(const char* path)
 	}
 	screendump_required = true;
 }
-

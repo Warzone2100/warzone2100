@@ -143,20 +143,7 @@ bool frameInitialise()
 
 	if (!screenInitialise())
 	{
-/* FIX ME for QT!
-		if (fullScreen)
-		{
-			info("Trying windowed mode now.");
-			if (!screenInitialise(width, height, bitDepth, fsaa, false, vsync))
-			{
 		return false;
-	}
-		}
-		else
-		{
-			return false;
-		}
-*/
 	}
 
 	/* Initialise the input system */
