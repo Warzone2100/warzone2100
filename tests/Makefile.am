@@ -14,7 +14,7 @@ qtscripttest_LDADD = $(PHYSFS_LIBS) $(QT4_LIBS)
 
 modeltest_SOURCES = modeltest.c
 
-maptest_SOURCES = ../tools/map/mapload.cpp maptest.c
+maptest_SOURCES = ../tools/map/mapload.cpp maptest.cpp
 maptest_LDADD = $(PHYSFS_LIBS) $(PNG_LIBS)
 
 noinst_HEADERS = ../tools/map/mapload.h lint.h
