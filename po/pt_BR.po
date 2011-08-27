@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-07-23 15:27+0200\n"
-"PO-Revision-Date: 2011-06-17 15:09-0300\n"
+"POT-Creation-Date: 2011-08-27 23:14+0200\n"
+"PO-Revision-Date: 2011-08-27 17:12-0300\n"
 "Last-Translator: Artur Filipe <tucalipe@gmail.com>\n"
 "Language-Team: Brazilian Portugese <warzone-dev@gna.org>\n"
 "Language: \n"
@@ -12001,18 +12001,17 @@ msgstr "Localização do Sistema"
 
 #: lib/netplay/netlobby.cpp:102
 msgid "Received invalid addGame data."
-msgstr ""
+msgstr "Dados addGame inválidos recebidos."
 
 #: lib/netplay/netlobby.cpp:140
 #: lib/netplay/netlobby.cpp:163
 #: lib/netplay/netlobby.cpp:183
-#, fuzzy
 msgid "Create a game first!"
-msgstr "Localizar um objeto do jogo"
+msgstr "Crie um jogo antes!"
 
 #: lib/netplay/netlobby.cpp:426
 msgid "Received invalid login data."
-msgstr ""
+msgstr "Dados de login inválidos recebidos."
 
 #: lib/netplay/netlobby.cpp:518
 #: lib/netplay/netlobby.cpp:531
@@ -12021,12 +12020,12 @@ msgstr ""
 #: lib/netplay/netlobby.cpp:569
 #: lib/netplay/netlobby.cpp:578
 msgid "Failed to communicate with the lobby."
-msgstr ""
+msgstr "Falha ao comunicar com o lobby."
 
 #: lib/netplay/netlobby.cpp:589
 #, c-format
 msgid "Got server error: %s"
-msgstr ""
+msgstr "Erro de servidor: %s"
 
 #: lib/netplay/netplay.cpp:184
 #: lib/netplay/netplay.cpp:744
@@ -12035,12 +12034,12 @@ msgstr "Entre a senha aqui"
 
 #: lib/netplay/netplay.cpp:2061
 msgid "Game not in the lobby, please login first!"
-msgstr ""
+msgstr "O jogo não está no lobby, faça login antes!"
 
 #: lib/netplay/netplay.cpp:2066
 #, c-format
 msgid "Error connecting to the lobby server: %s. Make sure port %d can receive incoming connections. If you're using a router configure it to use UPnP, or to forward the port to your system."
-msgstr ""
+msgstr "Erro ao conectar com o servidor de lobby: %s. Tenha certeza de que a porta %d está aberta para conexões de entrada. Se você está usando um roteador, configure-o para usar UPnP, ou encaminhe a porta ao seu sistema."
 
 #: po/custom/mac-infoplist.txt:1
 msgid ""
@@ -12762,9 +12761,8 @@ msgid "Texture size"
 msgstr "Tamanho da Textura"
 
 #: src/frontend.cpp:768
-#, fuzzy
 msgid "Vertical sync"
-msgstr "V-Sync*"
+msgstr "Sincronia Vertical"
 
 #: src/frontend.cpp:803
 #: src/frontend.cpp:864
@@ -13096,7 +13094,7 @@ msgstr "O jogo não pode continuar sem o hosp."
 msgid "-->  QUIT  <--"
 msgstr "--> SAIR <--"
 
-#: src/init.cpp:405
+#: src/init.cpp:422
 #, c-format
 msgid ""
 "The required mod could not be loaded: %s\n"
@@ -13317,9 +13315,9 @@ msgid "FPS display is disabled."
 msgstr "FPS não serão mostrados"
 
 #: src/keybind.cpp:548
-#, fuzzy, c-format
+#, c-format
 msgid "FPS %d; PIEs %d; polys %d; Terr. polys %d; States %d"
-msgstr "FPS %d; Limite de FPS: %d; PIEs %d; polys %d; Terr. polys %d; Membros %d"
+msgstr "FPS %d; PIEs %d; poligs. %d; Poligs. de Terr. %d; Estados %d"
 
 #: src/keybind.cpp:579
 #, c-format
@@ -14131,11 +14129,11 @@ msgstr "Não há jogos disponíveis"
 
 #: src/multiint.cpp:832
 msgid "Authentication failed or not Authenticated"
-msgstr ""
+msgstr "Falha na autenticação ou não autenticado"
 
 #: src/multiint.cpp:835
 msgid "The lobby rejected you!"
-msgstr ""
+msgstr "O lobby te rejeitou!"
 
 #: src/multiint.cpp:838
 msgid "Game is full"
@@ -14178,17 +14176,16 @@ msgid "Host Game"
 msgstr "Hospedar Jogo"
 
 #: src/multiint.cpp:1143
-#, fuzzy
 msgid "Connect IP"
-msgstr "Erro de conexão"
+msgstr "Conectar a IP"
 
 #: src/multiint.cpp:1146
 msgid "Login"
-msgstr ""
+msgstr "Login"
 
 #: src/multiint.cpp:1147
 msgid "Logout"
-msgstr ""
+msgstr "Logout"
 
 #: src/multiint.cpp:1151
 msgid "Refresh Games List"
@@ -14205,20 +14202,19 @@ msgstr "OK"
 
 #: src/multiint.cpp:1243
 msgid "LOBBY LOGIN"
-msgstr ""
+msgstr "LOGIN DO LOBBY"
 
 #: src/multiint.cpp:1253
 msgid "Username:"
-msgstr ""
+msgstr "Usuário:"
 
 #: src/multiint.cpp:1276
-#, fuzzy
 msgid "Password:"
-msgstr "Entre a Senha:"
+msgstr "Senha:"
 
 #: src/multiint.cpp:1299
 msgid "Use your wz2100.net credentials here."
-msgstr ""
+msgstr "Use seu login do wz2100.net aqui."
 
 #: src/multiint.cpp:1448
 msgid "Tanks disabled!!"
