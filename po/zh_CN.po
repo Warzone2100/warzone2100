@@ -3,15 +3,14 @@
 # Copyright (c) 2008 Rosetta Contributors and Canonical Ltd 2008
 # This file is distributed under the same license as the warzone2100 package.
 #
-# Converted from zh_TW Version made by Chi Hsin Tsau<chtsau@gmail.com>, 2008.
-# Tung-hsu Han<tunghsu.han@gmail.com> Converted, 2011.
-# Tunghsu, 2011.
+# Converted from zh_TW Version which originally made by Chi Hsin Tsau<chtsau@gmail.com>, 2008.
+# Converted and Updated by Tung-hsu Han<tunghsu.han@gmail.com> , 2011.
 msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-08-27 16:11+0200\n"
-"PO-Revision-Date: 2011-08-27 17:44+0800\n"
+"POT-Creation-Date: 2011-08-28 15:50+0200\n"
+"PO-Revision-Date: 2011-08-28 11:34+0800\n"
 "Last-Translator: Tunghsu\n"
 "Language-Team: Chinese Simplified <kde-i18n-doc@kde.org>\n"
 "Language: \n"
@@ -724,7 +723,7 @@ msgstr "可搭载新的武器装备"
 #: data/base/messages/resmessages12.rmsg:122
 #: data/mp/messages/resmessages12.rmsg:122
 msgid ".50-calibre heavy machinegun"
-msgstr "口径50cm、重型机枪"
+msgstr "口径0.5英寸、重型机枪"
 
 #: data/base/messages/resmessages12.rmsg:123
 #: data/base/messages/resmessages1.rmsg:617
@@ -1136,7 +1135,7 @@ msgstr "增加加农炮系武器伤害"
 #: data/base/messages/resmessages12.rmsg:239
 #: data/mp/messages/resmessages12.rmsg:239
 msgid "Rocket tracks the laser designator to the target"
-msgstr "火箭会跟随雷射指向器的轨迹攻击目标"
+msgstr "火箭会跟随激光指向器的轨迹攻击目标"
 
 #: data/base/messages/resmessages12.rmsg:240
 #: data/base/messages/resmessages1.rmsg:747
@@ -2129,17 +2128,17 @@ msgstr "推进动力：轮"
 #: data/base/messages/resmessages1.rmsg:538
 #: data/mp/messages/resmessages1.rmsg:539
 msgid "Light Cannon firing 40mm rounds"
-msgstr "轻型加农炮，装载40cm弹药"
+msgstr "轻型加农炮，装载40mm弹药"
 
 #: data/base/messages/resmessages1.rmsg:551
 #: data/mp/messages/resmessages1.rmsg:552
 msgid "Medium Cannon firing 76mm rounds"
-msgstr "中型加农炮，装载76cm弹药"
+msgstr "中型加农炮，装载76mm弹药"
 
 #: data/base/messages/resmessages1.rmsg:564
 #: data/mp/messages/resmessages1.rmsg:565
 msgid "Heavy Cannon firing 120 mm rounds"
-msgstr "重型加农炮，装载120cm弹药"
+msgstr "重型加农炮，装载120mm弹药"
 
 #: data/base/messages/resmessages1.rmsg:577
 #: data/mp/messages/resmessages1.rmsg:578
@@ -2182,12 +2181,12 @@ msgstr "增加火焰喷射伤害"
 #: data/base/messages/resmessages1.rmsg:616
 #: data/mp/messages/resmessages1.rmsg:617
 msgid "7.62mm machinegun"
-msgstr "口径 7.62cm 机枪"
+msgstr "口径 7.62mm 机枪"
 
 #: data/base/messages/resmessages1.rmsg:629
 #: data/mp/messages/resmessages1.rmsg:630
 msgid "Twin 7.62mm machineguns"
-msgstr "口径 7.62cm 双管机枪"
+msgstr "口径 7.62mm 双管机枪"
 
 #: data/base/messages/resmessages1.rmsg:642
 #: data/mp/messages/resmessages1.rmsg:643
@@ -2646,7 +2645,7 @@ msgstr "投弹瞄准器升级"
 
 #: data/base/messages/resmessages23.rmsg:161
 msgid "Laser designator paints and guides bombs to the target"
-msgstr "雷射指向器提供武器导引指向目标功能"
+msgstr "激光指向器提供武器导引指向目标功能"
 
 #: data/base/messages/resmessages23.rmsg:162
 #: data/base/messages/resmessages2.rmsg:734
@@ -2680,7 +2679,7 @@ msgstr "炮弹会侦测并自动导向散发热源的目标"
 #: data/base/messages/resmessages23.rmsg:200
 #: data/mp/messages/resmessages23.rmsg:200
 msgid "105mm multi-barrel Howitzer may be assigned to a sensor"
-msgstr "口径105cm、多管榴弹炮、可指派给雷达导引"
+msgstr "口径105mm、多管榴弹炮、可指派给雷达导引"
 
 #: data/base/messages/resmessages23.rmsg:201
 #: data/base/messages/resmessages2.rmsg:799
@@ -3303,7 +3302,7 @@ msgstr "可装备新的防空武器"
 #: data/mp/messages/resmessages2.rmsg:590
 #: data/mp/messages/strings/resstrings.txt:669
 msgid "Twin 80mm flak weapon"
-msgstr "双管、口径80cm、防空火炮武器"
+msgstr "双管、口径80mm、防空火炮武器"
 
 #: data/base/messages/resmessages2.rmsg:591
 #: data/base/messages/resmessages2.rmsg:604
@@ -3332,14 +3331,14 @@ msgstr "仅限空中目标"
 #: data/mp/messages/resmessages2.rmsg:603
 #: data/mp/messages/strings/resstrings.txt:675
 msgid "Quad 80mm flak weapon"
-msgstr "四管、口径80cm、防空火炮武器"
+msgstr "四管、口径80mm、防空火炮武器"
 
 #: data/base/messages/resmessages2.rmsg:616
 #: data/base/messages/strings/resstrings.txt:648
 #: data/mp/messages/resmessages2.rmsg:616
 #: data/mp/messages/strings/resstrings.txt:681
 msgid "30mm Anti-Aircraft machinegun"
-msgstr "口径30cm、防空机枪"
+msgstr "口径30mm、防空机枪"
 
 #: data/base/messages/resmessages2.rmsg:629
 #: data/base/messages/strings/resstrings.txt:654
@@ -3347,7 +3346,7 @@ msgstr "口径30cm、防空机枪"
 #: data/mp/messages/resmessagesall.rmsg:759
 #: data/mp/messages/strings/resstrings.txt:687
 msgid "Quad 30mm Anti-Aircraft machinegun"
-msgstr "四管、口径30cm、防空机枪"
+msgstr "四管、口径30mm、防空机枪"
 
 #: data/base/messages/resmessages2.rmsg:642
 #: data/base/messages/strings/resstrings.txt:660
@@ -3477,7 +3476,7 @@ msgstr "自动锁定热散射源"
 #: data/mp/messages/resmessages2.rmsg:746
 #: data/mp/messages/strings/resstrings.txt:763
 msgid "Hyper-velocity automatic-cannon firing 88mm rounds"
-msgstr "高速自动加农炮，装载88cm弹药"
+msgstr "高速自动加农炮，装载88mm弹药"
 
 #: data/base/messages/resmessages2.rmsg:748
 #: data/base/messages/strings/resstrings.txt:732
@@ -3491,7 +3490,7 @@ msgstr "取代中型加农炮"
 #: data/mp/messages/resmessages2.rmsg:759
 #: data/mp/messages/strings/resstrings.txt:769
 msgid "76mm hyper-velocity quad-barrel automatic-cannon"
-msgstr "高速四管自动加农炮，口径76cm"
+msgstr "高速四管自动加农炮，口径76mm"
 
 #: data/base/messages/resmessages2.rmsg:772
 #: data/base/messages/strings/resstrings.txt:758
@@ -3513,21 +3512,22 @@ msgstr "环氧丙烷凝胶可在超高的温度下燃烧"
 #: data/mp/messages/resmessages2.rmsg:798
 #: data/mp/messages/strings/resstrings.txt:811
 msgid "105mm Howitzer may be assigned to a sensor"
-msgstr "口径105cm榴弹炮，可指派给雷达导引"
+msgstr "口径105mm榴弹炮，可指派给雷达导引"
 
 #: data/base/messages/resmessages2.rmsg:811
 #: data/base/messages/strings/resstrings.txt:780
 #: data/mp/messages/resmessages2.rmsg:811
 #: data/mp/messages/strings/resstrings.txt:819
 msgid "155mm Howitzer may be assigned to a sensor"
-msgstr "口径155cm榴弹炮，可指派给雷达导引"
+msgstr "口径155mm榴弹炮，可指派给雷达导引"
 
 #: data/base/messages/resmessages2.rmsg:824
 #: data/base/messages/strings/resstrings.txt:788
 #: data/mp/messages/resmessages2.rmsg:824
 #: data/mp/messages/strings/resstrings.txt:827
+#, fuzzy
 msgid "105m Howitzer firing incendiaries, may be assigned to a sensor"
-msgstr "口径105cm燃烧榴弹炮，可指派给雷达导引"
+msgstr "口径105mm燃烧榴弹炮，可指派给雷达导引"
 
 #: data/base/messages/resmessages2.rmsg:825
 #: data/base/messages/strings/resstrings.txt:789
@@ -3726,7 +3726,7 @@ msgstr "装备有天谴导弹之生化人步兵"
 #: data/base/messages/resmessages3.rmsg:135
 #: data/mp/messages/resmessages3.rmsg:135
 msgid "Armed with flashlight laser"
-msgstr "装备有激光雷射之生化人步兵"
+msgstr "装备有激光激光之生化人步兵"
 
 #: data/base/messages/resmessages3.rmsg:147
 #: data/base/messages/resmessages3.rmsg:160
@@ -3758,7 +3758,7 @@ msgstr "装备有突击枪之生化人步兵"
 #: data/base/messages/resmessages3.rmsg:200
 #: data/mp/messages/resmessages3.rmsg:200
 msgid "Armed with Flashlight Laser"
-msgstr "装备有激光雷射之生化人步兵"
+msgstr "装备有激光激光之生化人步兵"
 
 #: data/base/messages/resmessages3.rmsg:202
 #: data/mp/messages/resmessages3.rmsg:202
@@ -3798,11 +3798,11 @@ msgstr "可发射新星风暴（Novastorm）导弹"
 #: data/base/messages/resmessages3.rmsg:291
 #: data/mp/messages/resmessages3.rmsg:291
 msgid "Armored strongpoint with Flashlight laser"
-msgstr "装备有激光雷射之据点"
+msgstr "装备有激光激光之据点"
 
 #: data/base/messages/resmessages3.rmsg:304
 msgid "Armored strongpoint with Pulse Laser"
-msgstr "装备有脉冲雷射之据点"
+msgstr "装备有脉冲激光之据点"
 
 #: data/base/messages/resmessages3.rmsg:317
 #: data/mp/messages/resmessages3.rmsg:317
@@ -3832,7 +3832,7 @@ msgstr "装备有天谴导弹之要塞"
 #: data/base/messages/resmessages3.rmsg:382
 #: data/mp/messages/resmessages3.rmsg:382
 msgid "Armored hardpoint with Flashlight laser"
-msgstr "装备有激光雷射之要塞"
+msgstr "装备有激光激光之要塞"
 
 #: data/base/messages/resmessages3.rmsg:395
 #: data/mp/messages/resmessages3.rmsg:395
@@ -4064,7 +4064,7 @@ msgstr "高爆性穿甲防空炮弹（HEAP Flak）"
 #: data/base/messages/resmessages3.rmsg:837
 #: data/mp/messages/resmessages3.rmsg:837
 msgid "Chainfeed loader eradicates jams and improves performance"
-msgstr "连锁装弹系统避免卡弹的发生并改善装载弹药之效能"
+msgstr "连锁装填系统避免卡弹的发生并改善装载弹药之效能"
 
 #: data/base/messages/resmessages3.rmsg:850
 #: data/mp/messages/resmessages3.rmsg:850
@@ -4115,12 +4115,12 @@ msgstr "高爆性穿甲弹壳（HEAP Shells）"
 #: data/mp/messages/resmessages3.rmsg:953
 #: data/mp/messages/resmessagesall.rmsg:472
 msgid "New Laser Weapon Available"
-msgstr "可搭载新的雷射武器"
+msgstr "可搭载新的激光武器"
 
 #: data/base/messages/resmessages3.rmsg:941
 #: data/mp/messages/resmessages3.rmsg:941
 msgid "Generates and concentrates bursts of laser energy"
-msgstr "产生并集中雷射的能量"
+msgstr "产生并集中激光的能量"
 
 #: data/base/messages/resmessages3.rmsg:942
 #: data/base/messages/resmessages3.rmsg:955
@@ -4132,7 +4132,7 @@ msgstr "最佳目标：生化人步兵"
 #: data/base/messages/resmessages3.rmsg:954
 #: data/mp/messages/resmessages3.rmsg:954
 msgid "Fires pulses of laser light"
-msgstr "发射脉冲雷射光"
+msgstr "发射脉冲激光"
 
 #: data/base/messages/resmessages3.rmsg:966
 #: data/base/messages/resmessages3.rmsg:979
@@ -4141,16 +4141,16 @@ msgstr "发射脉冲雷射光"
 #: data/mp/messages/resmessages3.rmsg:979
 #: data/mp/messages/resmessages3.rmsg:992
 msgid "Laser Upgrade"
-msgstr "雷射升级"
+msgstr "激光升级"
 
 #: data/base/messages/resmessages3.rmsg:967
 #: data/mp/messages/resmessages3.rmsg:967
 msgid "Improvement in laser optics reduces light dispersal"
-msgstr "改善雷射系统的光学结构使之不易发散"
+msgstr "改善激光系统的光学结构使之不易发散"
 
 #: data/base/messages/resmessages3.rmsg:968
 msgid "Increases Laser accuracy"
-msgstr "增加雷射系武器准确率"
+msgstr "增加激光系武器准确率"
 
 #: data/base/messages/resmessages3.rmsg:969
 #: data/base/messages/resmessages3.rmsg:982
@@ -4159,25 +4159,25 @@ msgstr "增加雷射系武器准确率"
 #: data/mp/messages/resmessages3.rmsg:982
 #: data/mp/messages/resmessages3.rmsg:995
 msgid "All lasers upgraded automatically"
-msgstr "自动升级所有雷射系武器"
+msgstr "自动升级所有激光系武器"
 
 #: data/base/messages/resmessages3.rmsg:980
 #: data/mp/messages/resmessages3.rmsg:980
 msgid "Improvement in laser emission density"
-msgstr "改善雷射系统的发射极之密度"
+msgstr "改善激光系统的发射极之密度"
 
 #: data/base/messages/resmessages3.rmsg:981
 msgid "Increases Laser damage"
-msgstr "增加雷射攻击力"
+msgstr "增加激光攻击力"
 
 #: data/base/messages/resmessages3.rmsg:993
 #: data/mp/messages/resmessages3.rmsg:993
 msgid "Improved Energizer reduces laser recharge time"
-msgstr "改善雷射系统的能量系统减少重新充填的时间"
+msgstr "改善激光系统的能量系统减少重新充填的时间"
 
 #: data/base/messages/resmessages3.rmsg:994
 msgid "Increases Laser ROF"
-msgstr "增加雷射系武器射速"
+msgstr "增加激光系武器射速"
 
 #: data/base/messages/resmessages3.rmsg:1006
 #: data/mp/messages/resmessages3.rmsg:1006
@@ -4571,7 +4571,7 @@ msgstr "高爆性锥形装填导弹"
 #: data/base/messages/resmessagesall.rmsg:174
 #: data/mp/messages/resmessagesall.rmsg:213
 msgid "Laser designator paints and guides rounds to the target"
-msgstr "雷射指向器提供武器导引指向目标功能"
+msgstr "激光指向器提供武器导引指向目标功能"
 
 #: data/base/messages/strings/cam1strings.txt:3
 #: data/base/sequenceaudio/cam1/c001.txa:12
@@ -5524,7 +5524,7 @@ msgstr "基地座标正在下载中"
 
 #: data/base/messages/strings/cam3strings.txt:121
 msgid "NORTHERN SECTOR MISSION: Laser Satellites"
-msgstr "北部地区任务：雷射卫星"
+msgstr "北部地区任务：激光卫星"
 
 #: data/base/messages/strings/cam3strings.txt:122
 msgid "We are detecting strong energy surges from orbit."
@@ -5532,7 +5532,7 @@ msgstr "在卫星轨道上我们侦测到了大量的能量波"
 
 #: data/base/messages/strings/cam3strings.txt:123
 msgid "The laser satellites are charged and moving towards our position."
-msgstr "雷射卫星正在充填能量并往我们所在的位置前进"
+msgstr "激光卫星正在充填能量并往我们所在的位置前进"
 
 #: data/base/messages/strings/cam3strings.txt:126
 msgid "The 2nd Team Gamma base is at this location."
@@ -5544,7 +5544,7 @@ msgstr "我们必须在短时间内撤离这个基地转进到GAMMA基地"
 
 #: data/base/messages/strings/cam3strings.txt:130
 msgid "The laser satellites are not functioning properly, they are misfiring."
-msgstr "雷射卫星并没有正确击中目标"
+msgstr "激光卫星并没有正确击中目标"
 
 #: data/base/messages/strings/cam3strings.txt:131
 msgid "They are directing their fire towards this position."
@@ -6674,12 +6674,12 @@ msgstr "榴弹炮炮台"
 #: data/mp/messages/strings/names.txt:755
 #: data/mp/messages/strings/names.txt:1382
 msgid "Flashlight Emplacement"
-msgstr "激光雷射炮台"
+msgstr "激光激光炮台"
 
 #: data/base/messages/strings/names.txt:466
 #: data/base/messages/strings/names.txt:776
 msgid "Flashlight Hardpoint"
-msgstr "激光雷射要塞"
+msgstr "激光激光要塞"
 
 #: data/base/messages/strings/names.txt:467
 #: data/base/messages/strings/names.txt:777
@@ -6780,7 +6780,7 @@ msgstr "地狱风暴"
 #: data/mp/messages/strings/names.txt:500
 #: data/mp/messages/strings/names.txt:1100
 msgid "Pulse Laser"
-msgstr "脉冲雷射"
+msgstr "脉冲激光"
 
 #: data/base/messages/strings/names.txt:495
 #: data/base/messages/strings/names.txt:540
@@ -6998,7 +6998,7 @@ msgstr "VTOL（突击加农炮）"
 #: data/base/messages/strings/names.txt:563
 #: data/mp/messages/strings/names.txt:572
 msgid "VTOL Pulse Laser"
-msgstr "VTOL（脉冲雷射）"
+msgstr "VTOL（脉冲激光）"
 
 #: data/base/messages/strings/names.txt:565
 #: data/mp/messages/strings/names.txt:574
@@ -7284,7 +7284,7 @@ msgstr "生化人步兵（天谴导弹）"
 
 #: data/base/messages/strings/names.txt:681
 msgid "Flashlight Gunner Cyborg"
-msgstr "生化人步兵（激光雷射）"
+msgstr "生化人步兵（激光激光）"
 
 #: data/base/messages/strings/names.txt:683
 #: data/mp/messages/strings/names.txt:694
@@ -7319,7 +7319,7 @@ msgstr "跳跃生化人步兵（天谴导弹）"
 #: data/base/messages/strings/names.txt:689
 #: data/mp/messages/strings/names.txt:700
 msgid "Jump Flashlight Gunner"
-msgstr "跳跃生化人步兵（激光雷射炮）"
+msgstr "跳跃生化人步兵（激光激光炮）"
 
 #: data/base/messages/strings/names.txt:691
 #: data/mp/messages/strings/names.txt:702
@@ -7426,7 +7426,7 @@ msgstr "迷你火箭炮"
 #: data/base/messages/strings/names.txt:1374
 #: data/mp/messages/strings/names.txt:1394
 msgid "Pulse Laser Emplacement"
-msgstr "脉冲雷射炮台"
+msgstr "脉冲激光炮台"
 
 #: data/base/messages/strings/names.txt:742
 #: data/mp/messages/strings/names.txt:757
@@ -8193,17 +8193,17 @@ msgstr "防空火炮弹药送料斗三型"
 #: data/base/messages/strings/names.txt:996
 #: data/mp/messages/strings/names.txt:1013
 msgid "AA Chainfeed Loader"
-msgstr "防空火炮连锁装弹系统一型"
+msgstr "防空火炮连锁装填系统一型"
 
 #: data/base/messages/strings/names.txt:997
 #: data/mp/messages/strings/names.txt:1014
 msgid "AA Chainfeed Loader Mk2"
-msgstr "防空火炮连锁装弹系统二型"
+msgstr "防空火炮连锁装填系统二型"
 
 #: data/base/messages/strings/names.txt:998
 #: data/mp/messages/strings/names.txt:1015
 msgid "AA Chainfeed Loader Mk3"
-msgstr "防空火炮连锁装弹系统三型"
+msgstr "防空火炮连锁装填系统三型"
 
 #: data/base/messages/strings/names.txt:1003
 msgid "Cluster Bombs Bay"
@@ -8230,7 +8230,7 @@ msgstr "热相感应投弹瞄准器"
 
 #: data/base/messages/strings/names.txt:1009
 msgid "Laser Guided Bombsight"
-msgstr "雷射导引投弹瞄准器"
+msgstr "激光导引投弹瞄准器"
 
 #: data/base/messages/strings/names.txt:1010
 msgid "Target Acquisition Bombsight"
@@ -8239,12 +8239,12 @@ msgstr "目标追踪投弹瞄准器"
 #: data/base/messages/strings/names.txt:1012
 #: data/mp/messages/strings/names.txt:1029
 msgid "Cannon Laser Rangefinder"
-msgstr "加农炮雷射测距仪"
+msgstr "加农炮激光测距仪"
 
 #: data/base/messages/strings/names.txt:1013
 #: data/mp/messages/strings/names.txt:1030
 msgid "Cannon Laser Designator"
-msgstr "加农炮雷射指向器"
+msgstr "加农炮激光指向器"
 
 #: data/base/messages/strings/names.txt:1014
 #: data/mp/messages/strings/names.txt:1031
@@ -8324,32 +8324,32 @@ msgstr "加农炮高速装填系统三型"
 #: data/base/messages/strings/names.txt:1039
 #: data/mp/messages/strings/names.txt:1056
 msgid "Improved Laser Focusing"
-msgstr "改进雷射对焦系统一型"
+msgstr "改进激光对焦系统一型"
 
 #: data/base/messages/strings/names.txt:1040
 #: data/mp/messages/strings/names.txt:1057
 msgid "Improved Laser Focusing Mk2"
-msgstr "改进雷射对焦系统二型"
+msgstr "改进激光对焦系统二型"
 
 #: data/base/messages/strings/names.txt:1041
 #: data/mp/messages/strings/names.txt:1058
 msgid "Improved Laser Focusing Mk3"
-msgstr "改进雷射对焦系统三型"
+msgstr "改进激光对焦系统三型"
 
 #: data/base/messages/strings/names.txt:1042
 #: data/mp/messages/strings/names.txt:1059
 msgid "Hi-Energy Laser Emitter"
-msgstr "高能雷射发射极一型"
+msgstr "高能激光发射极一型"
 
 #: data/base/messages/strings/names.txt:1043
 #: data/mp/messages/strings/names.txt:1060
 msgid "Hi-Energy Laser Emitter Mk2"
-msgstr "高能雷射发射极二型"
+msgstr "高能激光发射极二型"
 
 #: data/base/messages/strings/names.txt:1044
 #: data/mp/messages/strings/names.txt:1061
 msgid "Hi-Energy Laser Emitter Mk3"
-msgstr "高能雷射发射极三型"
+msgstr "高能激光发射极三型"
 
 #: data/base/messages/strings/names.txt:1045
 #: data/mp/messages/strings/names.txt:1062
@@ -8493,7 +8493,7 @@ msgstr "榴弹炮快速装填"
 #: data/base/messages/strings/names.txt:1082
 #: data/mp/messages/strings/names.txt:1099
 msgid "Laser - Flashlight"
-msgstr "雷射-激光雷射"
+msgstr "激光-激光激光"
 
 #: data/base/messages/strings/names.txt:1085
 #: data/mp/messages/strings/names.txt:1102
@@ -8790,7 +8790,7 @@ msgstr "缆线火箭导引系统"
 #: data/base/messages/strings/names.txt:1168
 #: data/mp/messages/strings/names.txt:1172
 msgid "Rocket Laser Designator"
-msgstr "雷射火箭导引系统"
+msgstr "激光火箭导引系统"
 
 #: data/base/messages/strings/names.txt:1169
 #: data/mp/messages/strings/names.txt:1173
@@ -9027,7 +9027,7 @@ msgstr "机器人实验室"
 #: data/base/messages/strings/names.txt:1324
 #: data/mp/messages/strings/names.txt:1344
 msgid "Laser Optics Laboratory"
-msgstr "雷射光学实验室"
+msgstr "激光学实验室"
 
 #: data/base/messages/strings/names.txt:1325
 #: data/base/messages/strings/names.txt:1337
@@ -9100,7 +9100,7 @@ msgstr "碉堡终结者"
 #: data/mp/messages/strings/names.txt:1458
 #: data/mp/messages/strings/names.txt:1524
 msgid "Flashlight Gunner"
-msgstr "激光雷射"
+msgstr "激光激光"
 
 #: data/base/messages/strings/names.txt:1439
 #: data/mp/messages/strings/names.txt:1459
@@ -9137,12 +9137,12 @@ msgstr "履带式蟒蛇坦克（突击枪）"
 #: data/base/messages/strings/names.txt:1467
 #: data/mp/messages/strings/names.txt:1487
 msgid "Flashlight"
-msgstr "激光雷射"
+msgstr "激光激光"
 
 #: data/base/messages/strings/names.txt:1468
 #: data/mp/messages/strings/names.txt:1488
 msgid "VTOL Flashlight"
-msgstr "VTOL激光雷射"
+msgstr "VTOL激光激光"
 
 #: data/base/messages/strings/names.txt:1471
 #: data/base/messages/strings/names.txt:1472
@@ -9449,11 +9449,11 @@ msgstr "由特遣队传来了讯息"
 
 #: data/base/sequenceaudio/cam1/c001end.txt:4
 msgid "Mayday! Mayday!"
-msgstr ""
+msgstr "救命！救命！"
 
 #: data/base/sequenceaudio/cam1/c001end.txt:5
 msgid "Please assist!..."
-msgstr ""
+msgstr "请帮帮我"
 
 #: data/base/sequenceaudio/cam1/c001.txa:1
 msgid "CAMPAIGN ONE"
@@ -9474,7 +9474,7 @@ msgstr "计画目标"
 
 #: data/base/sequenceaudio/cam1/c001.txa:6
 msgid "A New Era"
-msgstr ""
+msgstr "新时代"
 
 #: data/base/sequenceaudio/cam1/c001.txa:8
 msgid "Morning, July 4th, 2100"
@@ -9482,7 +9482,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam1/c001.txa:9
 msgid "In-flight to Western Sector"
-msgstr ""
+msgstr "与西方国家交战"
 
 #: data/base/sequenceaudio/cam1/c001.txa:10
 #, fuzzy
@@ -9491,7 +9491,7 @@ msgstr "Alpha 中队被消灭了"
 
 #: data/base/sequenceaudio/cam1/c001.txt:1
 msgid "Transport destinations follow:"
-msgstr ""
+msgstr "以下是运输目的地："
 
 #: data/base/sequenceaudio/cam1/c001.txt:2
 msgid "Alpha - Western Sector...."
@@ -9534,7 +9534,7 @@ msgstr "我们刚刚接收到这个讯息"
 #: data/base/sequenceaudio/cam1/cam1cnp.txt:4
 #: data/base/sequenceaudio/cam1/sub13np2.txt:4
 msgid "Your attacks upon us will not go unpunished."
-msgstr ""
+msgstr "你对我们的攻击不会逃脱惩罚"
 
 #: data/base/sequenceaudio/cam1/cam1cnp.txt:5
 #: data/base/sequenceaudio/cam1/sub13np2.txt:5
@@ -9544,7 +9544,7 @@ msgstr "恭喜你打败了The New Paradigm"
 
 #: data/base/sequenceaudio/cam1/cam1dnp.txt:4
 msgid "All attack groups commence attack on enemy."
-msgstr ""
+msgstr "所有攻击单位一同打击敌人"
 
 #: data/base/sequenceaudio/cam1/cam1dnp.txt:5
 #, fuzzy
@@ -9568,7 +9568,7 @@ msgstr "然后摧毁这个营区"
 
 #: data/base/sequenceaudio/cam1/cam1out2.txt:1
 msgid "Open your systems to me."
-msgstr ""
+msgstr "对我开放你的系统"
 
 #: data/base/sequenceaudio/cam1/cam1out2.txt:2
 msgid "Let me meld with your machines and cyborgs."
@@ -10447,15 +10447,15 @@ msgstr "履带式蟒蛇坦克（高斯加农炮）"
 
 #: data/mods/multiplay/ntw/messages/strings/names.txt:1348
 msgid "Python Pulse Laser Tracks"
-msgstr "履带式蟒蛇坦克（脉冲雷射）"
+msgstr "履带式蟒蛇坦克（脉冲激光）"
 
 #: data/mods/multiplay/ntw/messages/strings/names.txt:1349
 msgid "Tiger Pulse Laser Tracks"
-msgstr "履带式虎式坦克（脉冲雷射）"
+msgstr "履带式虎式坦克（脉冲激光）"
 
 #: data/mods/multiplay/ntw/messages/strings/names.txt:1350
 msgid "Tiger Heavy Laser Tracks"
-msgstr "履带式虎式坦克（高能雷射）"
+msgstr "履带式虎式坦克（高能激光）"
 
 #: data/mods/multiplay/ntw/messages/strings/names.txt:1351
 msgid "Wyvern Gauss Cannon Tracks"
@@ -10463,7 +10463,7 @@ msgstr "履带式双足飞龙坦克（高斯加农炮）"
 
 #: data/mods/multiplay/ntw/messages/strings/names.txt:1352
 msgid "Wyvern Pulse Laser Tracks"
-msgstr "履带式双足飞龙坦克（脉冲雷射）"
+msgstr "履带式双足飞龙坦克（脉冲激光）"
 
 #: data/mods/multiplay/ntw/messages/strings/names.txt:1353
 msgid "Wyvern Heavy Laser Tracks"
@@ -10559,7 +10559,7 @@ msgstr "履带式螳螂坦克（轨道炮）"
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1850
 #: data/mp/messages/strings/names.txt:1862
 msgid "Pulse Laser Mantis Tracks"
-msgstr "履带式螳螂坦克（脉冲雷射）"
+msgstr "履带式螳螂坦克（脉冲激光）"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1851
 #: data/mp/messages/strings/names.txt:1863
@@ -10821,17 +10821,17 @@ msgstr "履带式蟒蛇坦克（高速加农炮）"
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1926
 #: data/mp/messages/strings/names.txt:1938
 msgid "Pulse Laser Python Tracks"
-msgstr "履带式蟒蛇坦克（脉冲雷射）"
+msgstr "履带式蟒蛇坦克（脉冲激光）"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1927
 #: data/mp/messages/strings/names.txt:1939
 msgid "Pulse Laser Tiger Tracks"
-msgstr "履带式虎式坦克（脉冲雷射）"
+msgstr "履带式虎式坦克（脉冲激光）"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1928
 #: data/mp/messages/strings/names.txt:1940
 msgid "Heavy Laser Tiger Tracks"
-msgstr "履带式虎式坦克（高能雷射）"
+msgstr "履带式虎式坦克（高能激光）"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1929
 #: data/mp/messages/strings/names.txt:1941
@@ -10841,12 +10841,12 @@ msgstr "履带式双足飞龙坦克（高斯加农炮）"
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1930
 #: data/mp/messages/strings/names.txt:1942
 msgid "Pulse Laser Wyvern Tracks"
-msgstr "履带式双足飞龙坦克（脉冲雷射）"
+msgstr "履带式双足飞龙坦克（脉冲激光）"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1931
 #: data/mp/messages/strings/names.txt:1943
 msgid "Heavy Laser Wyvern Tracks"
-msgstr "履带式双足飞龙坦克（高能雷射）"
+msgstr "履带式双足飞龙坦克（高能激光）"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1933
 #: data/mp/messages/strings/names.txt:1945
@@ -10904,13 +10904,13 @@ msgstr "突击加农炮防卫塔"
 #: data/mp/messages/strings/names.txt:1956
 #, fuzzy
 msgid "Pulse Laser Leopard Hover"
-msgstr "脉冲雷射"
+msgstr "脉冲激光"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1945
 #: data/mp/messages/strings/names.txt:1957
 #, fuzzy
 msgid "Pulse Laser Panther Hover"
-msgstr "脉冲雷射"
+msgstr "脉冲激光"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1946
 #: data/mp/messages/strings/names.txt:1958
@@ -10922,7 +10922,7 @@ msgstr "轨道炮系武器升级"
 #: data/mp/messages/strings/names.txt:1959
 #, fuzzy
 msgid "Pulse Laser Tiger Hover"
-msgstr "履带式虎式坦克（脉冲雷射）"
+msgstr "履带式虎式坦克（脉冲激光）"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1948
 #: data/mp/messages/strings/names.txt:1960
@@ -10940,7 +10940,7 @@ msgstr "天谴导弹防卫塔"
 #: data/mp/messages/strings/names.txt:1962
 #, fuzzy
 msgid "Flashlight Retribution Hover"
-msgstr "激光雷射"
+msgstr "激光激光"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1951
 #: data/mp/messages/strings/names.txt:1963
@@ -10987,57 +10987,57 @@ msgstr "中量级车身：惩罚者"
 #: data/mp/messages/resmessages12.rmsg:58
 #, fuzzy
 msgid "Construction speed +10%"
-msgstr "增加建筑速度"
+msgstr "增加建筑速度 +10%"
 
 #: data/mp/messages/resmessages12.rmsg:97
 #: data/mp/messages/resmessagesall.rmsg:214
 #, fuzzy
 msgid "Cannon accuracy +10%"
-msgstr "增加加农炮系武器准确率"
+msgstr "加农炮系武器准确率 +10%"
 
 #: data/mp/messages/resmessages12.rmsg:110
 #, fuzzy
 msgid "Flamer reload time -15%"
-msgstr "自动装填喷射一型"
+msgstr "火焰喷射自动装填时间 -15%"
 
 #: data/mp/messages/resmessages12.rmsg:136
 #: data/mp/messages/resmessages23.rmsg:175
 #: data/mp/messages/resmessages2.rmsg:890
 #, fuzzy
 msgid "Machinegun reload time -15%"
-msgstr "机枪系武器升级"
+msgstr "机枪系武自动装填时间 -15%"
 
 #: data/mp/messages/resmessages12.rmsg:162
 #: data/mp/messages/resmessages23.rmsg:188
 #: data/mp/messages/resmessages3.rmsg:1176
 #, fuzzy
 msgid "Mortar accuracy +10%"
-msgstr "增加迫击炮准确率"
+msgstr "迫击炮准确率 +10%"
 
 #: data/mp/messages/resmessages12.rmsg:175
 #: data/mp/messages/resmessages3.rmsg:1189
 #, fuzzy
 msgid "Mortar reload time -10%"
-msgstr "迫击炮自动装载系统一型"
+msgstr "迫击炮自动装填时间 -15%"
 
 #: data/mp/messages/resmessages12.rmsg:201
 #: data/mp/messages/resmessages1.rmsg:735
 #, fuzzy
 msgid "Rocket reload time -15%"
-msgstr "火箭自动装载系统一型"
+msgstr "火箭自动装填时间 -15%"
 
 #: data/mp/messages/resmessages12.rmsg:214
 #: data/mp/messages/resmessages3.rmsg:890
 #, fuzzy
 msgid "Cannon reload time -10%"
-msgstr "加农炮自动装填系统一型"
+msgstr "加农炮自动装填时间 -10%"
 
 #: data/mp/messages/resmessages12.rmsg:227
 #: data/mp/messages/resmessages1.rmsg:579
 #: data/mp/messages/resmessages3.rmsg:877
 #, fuzzy
 msgid "Cannon damage +25%"
-msgstr "增加加农炮系武器伤害"
+msgstr "加农炮系武器伤害 +25%"
 
 #: data/mp/messages/resmessages12.rmsg:240
 #: data/mp/messages/resmessages1.rmsg:709
@@ -11045,19 +11045,19 @@ msgstr "增加加农炮系武器伤害"
 #: data/mp/messages/resmessagesall.rmsg:175
 #, fuzzy
 msgid "Rocket accuracy +10%"
-msgstr "增加火箭系武器准确率"
+msgstr "火箭系武器准确率 +10%"
 
 #: data/mp/messages/resmessages1.rmsg:32
 #: data/mp/messages/resmessages3.rmsg:71
 #: data/mp/messages/resmessages3.rmsg:84
 #, fuzzy
 msgid "Kinetic Armor +35%, Body Points +35%"
-msgstr "增加热能防御及HP"
+msgstr "热能防御及HP +35%"
 
 #: data/mp/messages/resmessages1.rmsg:97
 #, fuzzy
 msgid "Armour +35%, Body Points +30%"
-msgstr "增加物理防御及HP"
+msgstr "物理防御 +35% HP +30%"
 
 #: data/mp/messages/resmessages1.rmsg:122
 #, fuzzy
@@ -11074,29 +11074,29 @@ msgstr "装备有枪骑兵反坦克火箭的防卫塔"
 #: data/mp/messages/resmessages3.rmsg:422
 #, fuzzy
 msgid "Repair Speed +100%"
-msgstr "加快修理速度"
+msgstr "修理速度 +100%"
 
 #: data/mp/messages/resmessages1.rmsg:306
 #, no-c-format
 msgid "Factory output speed +100% per module"
-msgstr ""
+msgstr "工厂生产速度 +100%"
 
 #: data/mp/messages/resmessages1.rmsg:319
 #: data/mp/messages/resmessagesall.rmsg:786
 msgid "Factory output speed +60%"
-msgstr ""
+msgstr "工厂生产速度 +60%"
 
 #: data/mp/messages/resmessages1.rmsg:345
 #, fuzzy
 msgid "Research speed +85%"
-msgstr "已研发完成： %s"
+msgstr "研发速度 +85%"
 
 #: data/mp/messages/resmessages1.rmsg:358
 #: data/mp/messages/resmessages2.rmsg:370
 #: data/mp/messages/resmessages3.rmsg:448
 #, fuzzy
 msgid "Research speed +30%"
-msgstr "已研发完成： %s"
+msgstr "研发速度 +30%"
 
 #: data/mp/messages/resmessages1.rmsg:371
 #: data/mp/messages/resmessages2.rmsg:58
@@ -11107,7 +11107,7 @@ msgstr "已研发完成： %s"
 #: data/mp/messages/resmessages3.rmsg:474
 #, fuzzy
 msgid "Armor +35%, Body Points +30%"
-msgstr "增加防御力及HP"
+msgstr "防御力 +35% HP +30%"
 
 #: data/mp/messages/resmessages1.rmsg:462
 #: data/mp/messages/resmessages2.rmsg:500
@@ -11115,7 +11115,7 @@ msgstr "增加防御力及HP"
 #: data/mp/messages/resmessages3.rmsg:682
 #, fuzzy
 msgid "Vehicle speed +5%"
-msgstr "车身"
+msgstr "车辆制造速度 +5%"
 
 #: data/mp/messages/resmessages1.rmsg:475
 #: data/mp/messages/resmessages2.rmsg:513
@@ -11123,7 +11123,7 @@ msgstr "车身"
 #: data/mp/messages/resmessages3.rmsg:708
 #, fuzzy
 msgid "Kinetic armor +30%, body points +30%"
-msgstr "增加物理防御及HP"
+msgstr "物理防御及HP +30%"
 
 #: data/mp/messages/resmessages1.rmsg:553
 #: data/mp/messages/resmessages1.rmsg:566
@@ -11137,7 +11137,7 @@ msgstr "最佳目标：坦克与炮台"
 #: data/mp/messages/resmessagesall.rmsg:773
 #, fuzzy
 msgid "Flamer damage +25%"
-msgstr "增加火焰喷射伤害"
+msgstr "火焰喷射伤害 +25%"
 
 #: data/mp/messages/resmessages1.rmsg:644
 #: data/mp/messages/resmessages1.rmsg:657
@@ -11146,13 +11146,13 @@ msgstr "增加火焰喷射伤害"
 #: data/mp/messages/resmessages3.rmsg:1020
 #, fuzzy
 msgid "Machinegun damage +25%"
-msgstr "增加机枪系武器攻击力"
+msgstr "机枪系武器攻击力 +25%"
 
 #: data/mp/messages/resmessages1.rmsg:683
 #: data/mp/messages/resmessages2.rmsg:916
 #, fuzzy
 msgid "Mortar damage +25%"
-msgstr "增加迫击炮攻击力"
+msgstr "迫击炮攻击力 +25%"
 
 #: data/mp/messages/resmessages1.rmsg:722
 #: data/mp/messages/resmessages1.rmsg:761
@@ -11160,23 +11160,23 @@ msgstr "增加迫击炮攻击力"
 #: data/mp/messages/resmessages2.rmsg:942
 #, fuzzy
 msgid "Rocket damage +25%"
-msgstr "增加火箭系武器攻击力"
+msgstr "火箭系武器攻击力 +25%"
 
 #: data/mp/messages/resmessages23.rmsg:32
 msgid "Power output +25%"
-msgstr ""
+msgstr "电力输出 +25%"
 
 #: data/mp/messages/resmessages23.rmsg:45
 #: data/mp/messages/resmessages3.rmsg:513
 #, fuzzy
 msgid "Construction speed +20%"
-msgstr "增加建筑速度"
+msgstr "建筑速度 +20%"
 
 #: data/mp/messages/resmessages23.rmsg:136
 #: data/mp/messages/resmessages2.rmsg:643
 #: data/mp/messages/resmessages3.rmsg:812
 msgid "AA accuracy +10%"
-msgstr ""
+msgstr "高射炮准确率 +10%"
 
 #: data/mp/messages/resmessages23.rmsg:160
 #: data/mp/messages/resmessages2.rmsg:732
@@ -11194,22 +11194,22 @@ msgstr "改善高爆性弹头"
 #: data/mp/messages/resmessages2.rmsg:734
 #: data/mp/messages/resmessages3.rmsg:864
 msgid "Bomb damage +25%"
-msgstr ""
+msgstr "炸弹攻击力 +25%"
 
 #: data/mp/messages/resmessages2.rmsg:6
 #, fuzzy
 msgid "Thermal Armor +45%"
-msgstr "热能装甲一型"
+msgstr "热能装甲 +45%"
 
 #: data/mp/messages/resmessages2.rmsg:19
 #, fuzzy
 msgid "Kinetic Armor +35%, and Body Points +35%"
-msgstr "增加热能防御及HP"
+msgstr "物理防御及HP +35"
 
 #: data/mp/messages/resmessages2.rmsg:357
 #, fuzzy
 msgid "Factory production rate +60%"
-msgstr "工厂生产速率增加"
+msgstr "工厂生产速率 +60%"
 
 #: data/mp/messages/resmessages2.rmsg:358
 #: data/mp/messages/resmessagesall.rmsg:787
@@ -11220,41 +11220,41 @@ msgstr "自动升级所有VTOL工厂"
 #: data/mp/messages/resmessages2.rmsg:409
 #: data/mp/messages/resmessages3.rmsg:500
 msgid "Rearming speed +30%"
-msgstr ""
+msgstr "装填速度 +30%"
 
 #: data/mp/messages/resmessages2.rmsg:526
 #, fuzzy
 msgid "Thermal armor +40%"
-msgstr "热能装甲一型"
+msgstr "热能装甲 +40%"
 
 #: data/mp/messages/resmessages2.rmsg:656
 #: data/mp/messages/resmessages3.rmsg:825
 #, fuzzy
 msgid "AA Flak damage +25%"
-msgstr "增加防空高射炮攻击力"
+msgstr "高射炮攻击力 +25%"
 
 #: data/mp/messages/resmessages2.rmsg:669
 #: data/mp/messages/resmessages3.rmsg:838
 msgid "AA reload time -15%"
-msgstr ""
+msgstr "高射炮装填时间 -15%"
 
 #: data/mp/messages/resmessages2.rmsg:838
 #: data/mp/messages/resmessages3.rmsg:903
 #, fuzzy
 msgid "Howitzer accuracy +10%"
-msgstr "增加榴弹炮系武器准确率"
+msgstr "榴弹炮系武器准确率 +10%"
 
 #: data/mp/messages/resmessages2.rmsg:851
 #: data/mp/messages/resmessages3.rmsg:916
 #, fuzzy
 msgid "Howitzer damage +25%"
-msgstr "增加榴弹炮攻击力"
+msgstr "榴弹炮攻击力 +25%"
 
 #: data/mp/messages/resmessages2.rmsg:864
 #: data/mp/messages/resmessages3.rmsg:929
 #, fuzzy
 msgid "Howitzer reload time -10%"
-msgstr "榴弹炮自动装填器一型"
+msgstr "榴弹炮自动装填时间 -10%"
 
 #: data/mp/messages/resmessages2.rmsg:928
 #, fuzzy
@@ -11264,7 +11264,7 @@ msgstr "高爆性反坦克弹头"
 #: data/mp/messages/resmessages3.rmsg:6
 #, fuzzy
 msgid "Thermal Armor +35%"
-msgstr "热能装甲三型"
+msgstr "热能装甲 +35%"
 
 #: data/mp/messages/resmessages3.rmsg:304
 #, fuzzy
@@ -11273,88 +11273,88 @@ msgstr "装备有火焰喷射的防卫塔"
 
 #: data/mp/messages/resmessages3.rmsg:435
 msgid "Power output +30%"
-msgstr ""
+msgstr "电力输出 +30%"
 
 #: data/mp/messages/resmessages3.rmsg:721
 #: data/mp/messages/resmessagesall.rmsg:838
 #, fuzzy
 msgid "Thermal Armor +40%"
-msgstr "热能装甲一型"
+msgstr "热能装甲 +40%"
 
 #: data/mp/messages/resmessages3.rmsg:968
 #, fuzzy
 msgid "Laser accuracy +10%"
-msgstr "增加雷射系武器准确率"
+msgstr "激光系武器准确率 +10%"
 
 #: data/mp/messages/resmessages3.rmsg:981
 #, fuzzy
 msgid "Laser damage +25%"
-msgstr "增加雷射攻击力"
+msgstr "激光攻击力 +25%"
 
 #: data/mp/messages/resmessages3.rmsg:994
 msgid "Laser reload time -15%"
-msgstr ""
+msgstr "激光武器装填时间 -15%"
 
 #: data/mp/messages/resmessages3.rmsg:1059
 #: data/mp/messages/resmessages3.rmsg:1072
 #, fuzzy
 msgid "Missile accuracy +10%"
-msgstr "增加导弹准确率"
+msgstr "导弹准确率 +10%"
 
 #: data/mp/messages/resmessages3.rmsg:1085
 #, fuzzy
 msgid "Missile damage +25%"
-msgstr "增加导弹攻击力"
+msgstr "导弹攻击力 +10%"
 
 #: data/mp/messages/resmessages3.rmsg:1150
 #: data/mp/messages/resmessages3.rmsg:1163
 #, fuzzy
 msgid "Missile reload time -15%"
-msgstr "任务进行时间 - %s"
+msgstr "导弹装填时间 -15%"
 
 #: data/mp/messages/resmessages3.rmsg:1241
 #, fuzzy
 msgid "Rail Gun accuracy +10%"
-msgstr "增加轨道炮系武器准确率"
+msgstr "轨道炮系武器准确率 +10%"
 
 #: data/mp/messages/resmessages3.rmsg:1254
 #, fuzzy
 msgid "Rail Gun damage +25%"
-msgstr "增加轨道炮系武器攻击力"
+msgstr "轨道炮系武器攻击力 +25%"
 
 #: data/mp/messages/resmessages3.rmsg:1267
 #, fuzzy
 msgid "Rail Gun reload time -15%"
-msgstr "轨道炮系武器升级"
+msgstr "轨道炮系武器装填时间 -15% "
 
 #: data/mp/messages/resmessagesall.rmsg:84
 #, fuzzy
 msgid "Sensor Range +25%"
-msgstr "雷达可视距离"
+msgstr "雷达可视距离 +25%"
 
 #: data/mp/messages/resmessagesall.rmsg:96
 #, fuzzy
 msgid "Improved Thermal Emissions detection"
-msgstr "可侦测热能放射"
+msgstr "改进的侦测热能放射"
 
 #: data/mp/messages/resmessagesall.rmsg:97
 #, fuzzy
 msgid "Sensor Range +15%"
-msgstr "雷达可视距离"
+msgstr "雷达可视距离 +15%"
 
 #: data/mp/messages/resmessagesall.rmsg:109
 #, fuzzy
 msgid "Advanced Thermal Emissions detection"
-msgstr "可侦测热能放射"
+msgstr "高级的侦测热能放射"
 
 #: data/mp/messages/resmessagesall.rmsg:110
 #, fuzzy
 msgid "Sensor Range +10%"
-msgstr "雷达可视距离"
+msgstr "雷达可视距离 +10%"
 
 #: data/mp/messages/resmessagesall.rmsg:135
 msgid "Radar detector tower detects enemy sensors"
-msgstr ""
+msgstr "我方雷达检测到敌军监控"
 
 #: data/mp/messages/resmessagesall.rmsg:136
 #, fuzzy
@@ -11449,7 +11449,7 @@ msgstr "装备有火箭（坦克杀手）的生化人步兵"
 
 #: data/mp/messages/resmessagesall.rmsg:473
 msgid "Fires heavy pulses of laser light"
-msgstr "发射高能脉冲雷射光"
+msgstr "发射高能脉冲激光"
 
 #: data/mp/messages/resmessagesall.rmsg:474
 msgid "Best Targets: Heavy cyborgs"
@@ -11457,7 +11457,7 @@ msgstr "最佳目标：重装生化人步兵"
 
 #: data/mp/messages/resmessagesall.rmsg:486
 msgid "76mm twin-barrel automatic-cannon"
-msgstr "口径76cm、双管自动加农炮"
+msgstr "口径76mm、双管自动加农炮"
 
 #: data/mp/messages/resmessagesall.rmsg:498
 #: data/mp/messages/resmessagesall.rmsg:511
@@ -11470,7 +11470,7 @@ msgstr "可观测到整个战场"
 
 #: data/mp/messages/resmessagesall.rmsg:501
 msgid "Does not offer sensor targeting"
-msgstr ""
+msgstr "不提供监控目标行为"
 
 #: data/mp/messages/resmessagesall.rmsg:512
 #: data/mp/messages/resmessagesall.rmsg:707
@@ -11514,7 +11514,7 @@ msgstr "最佳目标：坦克"
 
 #: data/mp/messages/resmessagesall.rmsg:577
 msgid "Armored strongpoint with Heavy Laser"
-msgstr "装备有高能雷射之据点"
+msgstr "装备有高能激光之据点"
 
 #: data/mp/messages/resmessagesall.rmsg:590
 msgid "Armored guard tower with EMP Cannon"
@@ -11522,7 +11522,7 @@ msgstr "装备有电磁脉冲加农炮的防卫塔"
 
 #: data/mp/messages/resmessagesall.rmsg:603
 msgid "Armed with Cyborg Pulse Laser"
-msgstr "装备有脉冲雷射之生化人步兵"
+msgstr "装备有脉冲激光之生化人步兵"
 
 #: data/mp/messages/resmessagesall.rmsg:616
 msgid "Armed with Cyborg Rail Gun"
@@ -11602,11 +11602,11 @@ msgstr "装备电磁脉冲迫击炮阵地"
 
 #: data/mp/messages/resmessagesall.rmsg:823
 msgid "Laser AA Gun Available"
-msgstr "可使用防空雷射武器"
+msgstr "可使用防空激光武器"
 
 #: data/mp/messages/resmessagesall.rmsg:824
 msgid "Twin Medium Anti-Aircraft Laser"
-msgstr "双管中级的防空雷射炮（取代旋风级防空炮）"
+msgstr "双管中级的防空激光炮（取代旋风级防空炮）"
 
 #: data/mp/messages/resmessagesall.rmsg:849
 msgid "Hardpoint Avenger SAM Site Available"
@@ -11618,7 +11618,7 @@ msgstr "可建造装备有暴风级高射炮之要塞"
 
 #: data/mp/messages/resmessagesall.rmsg:863
 msgid "Quad 80mm Anti-Aircraft machinegun"
-msgstr "四管、口径80cm、防空机枪"
+msgstr "四管、口径80mm、防空机枪"
 
 #: data/mp/messages/resmessagesall.rmsg:876
 #: data/mp/messages/resmessagesall.rmsg:889
@@ -11735,7 +11735,7 @@ msgstr "火焰喷射要塞"
 #: data/mp/messages/strings/names.txt:753
 #, fuzzy
 msgid "Pulse Laser Tower"
-msgstr "脉冲雷射"
+msgstr "脉冲激光"
 
 #: data/mp/messages/strings/names.txt:513
 #: data/mp/messages/strings/names.txt:1138
@@ -12097,16 +12097,16 @@ msgstr "超级生化人步兵（坦克杀手火箭）"
 #: data/mp/messages/strings/names.txt:1684
 #: data/mp/messages/strings/names.txt:1685
 msgid "Heavy Laser"
-msgstr "高能雷射"
+msgstr "高能激光"
 
 #: data/mp/messages/strings/names.txt:1686
 msgid "VTOL Heavy Laser"
-msgstr "VTOL（高能雷射）"
+msgstr "VTOL（高能激光）"
 
 #: data/mp/messages/strings/names.txt:1687
 #: data/mp/messages/strings/names.txt:1688
 msgid "Heavy Laser Emplacement"
-msgstr "高能雷射炮台"
+msgstr "高能激光炮台"
 
 #: data/mp/messages/strings/names.txt:1694
 #: data/mp/messages/strings/names.txt:1695
@@ -12166,7 +12166,7 @@ msgstr "森伯斯特级高射炮"
 #: data/mp/messages/strings/names.txt:1735
 #: data/mp/messages/strings/names.txt:1736
 msgid "Super Pulse Laser Cyborg"
-msgstr "超级生化人步兵（脉冲雷射）"
+msgstr "超级生化人步兵（脉冲激光）"
 
 #: data/mp/messages/strings/names.txt:1738
 #: data/mp/messages/strings/names.txt:1739
@@ -12267,7 +12267,7 @@ msgstr "电磁脉冲迫击炮阵地"
 #: data/mp/messages/strings/names.txt:1792
 #: data/mp/messages/strings/names.txt:1794
 msgid "Stormbringer AA Laser"
-msgstr "兴风者级防空雷射"
+msgstr "兴风者级防空激光"
 
 #: data/mp/messages/strings/names.txt:1793
 #: data/mp/messages/strings/names.txt:1795
@@ -12375,9 +12375,9 @@ msgid "Enter password here"
 msgstr "在这里输入密码"
 
 #: lib/netplay/netplay.c:3254
-#, fuzzy, c-format
+#, c-format
 msgid "Error connecting to the lobby server: %s. Make sure port %d can receive incoming connections. If you're using a router configure it to use UPnP, or to forward the port to your system."
-msgstr "连接Lobby服务器时发生错误"
+msgstr "连接Lobby服务器时发生错误：%s.确定%d端口可以接收 数据。如果你在使用路由器请将它设置为UPnP，或转发这个端口到你的系统"
 
 #: lib/netplay/netplay.c:3261
 msgid "Disconnected from lobby server. Failed to register game."
@@ -12800,14 +12800,14 @@ msgid "Hero"
 msgstr "英雄"
 
 #: src/droid.c:4862
-#, c-format
+#, fuzzy, c-format
 msgid "%s wanted to give you a %s but you have too many!"
-msgstr ""
+msgstr "%sa 想给你一个 %s 但你已经有很多了！"
 
 #: src/droid.c:4866
-#, c-format
+#, fuzzy, c-format
 msgid "You wanted to give %s a %s but they have too many!"
-msgstr ""
+msgstr "你想要给 %sa %s 但是他已经有很多了！"
 
 #: src/frontend.c:97
 msgid "Single Player"
@@ -12837,11 +12837,11 @@ msgstr "离开游戏"
 
 #: src/frontend.c:105
 msgid "MAIN MENU"
-msgstr "主选单"
+msgstr "主菜单"
 
 #: src/frontend.c:156
 msgid "Fast Play"
-msgstr "马上玩！"
+msgstr "快速游戏"
 
 #: src/frontend.c:157
 msgid "TUTORIALS"
@@ -12872,7 +12872,7 @@ msgstr "单人战役模式"
 #: src/frontend.c:214
 #, fuzzy
 msgid "Challenges"
-msgstr "拾荒者"
+msgstr "挑战模式"
 
 #: src/frontend.c:215
 #: src/ingameop.c:281
@@ -12881,7 +12881,7 @@ msgstr "载入游戏"
 
 #: src/frontend.c:217
 msgid "SINGLE PLAYER"
-msgstr "SINGLE PLAYER"
+msgstr "单人游戏"
 
 #: src/frontend.c:294
 #: src/ingameop.c:507
@@ -12892,7 +12892,7 @@ msgstr "载入已储存的游戏"
 
 #: src/frontend.c:346
 msgid "MULTI PLAYER"
-msgstr "MULTIPLAYER"
+msgstr "多人游戏"
 
 #: src/frontend.c:348
 msgid "Host Game"
@@ -12955,7 +12955,7 @@ msgstr "全萤幕"
 
 #: src/frontend.c:503
 msgid "Scanlines"
-msgstr ""
+msgstr "扫描线"
 
 #: src/frontend.c:507
 #: src/frontend.c:528
@@ -12982,7 +12982,7 @@ msgstr "关闭"
 #: src/frontend.c:511
 #: src/frontend.c:677
 msgid "50%"
-msgstr ""
+msgstr "50%"
 
 #: src/frontend.c:515
 #: src/frontend.c:682
@@ -13095,7 +13095,7 @@ msgstr "游戏选项"
 
 #: src/frontend.c:988
 msgid "* May negatively affect performance"
-msgstr ""
+msgstr "可能对性能造成负面影响"
 
 #: src/frontend.c:992
 #, fuzzy
@@ -13108,12 +13108,12 @@ msgstr "捕捉滑鼠"
 
 #: src/frontend.c:1015
 msgid "Colored Cursors*"
-msgstr ""
+msgstr "彩色指针"
 
 #: src/frontend.c:1028
 #, fuzzy
 msgid "Switch Mouse Buttons"
-msgstr "滑鼠选项"
+msgstr "鼠标选项"
 
 #: src/frontend.c:1040
 #, fuzzy
@@ -13124,13 +13124,13 @@ msgstr "向左旋转"
 #: src/frontend.c:1131
 msgctxt "middle mouse button"
 msgid "Middle Button"
-msgstr ""
+msgstr "鼠标中键"
 
 #: src/frontend.c:1047
 #: src/frontend.c:1126
 msgctxt "right mouse button"
 msgid "Right Button"
-msgstr ""
+msgstr "鼠标右键"
 
 #: src/frontend.c:1051
 #, fuzzy
@@ -13178,7 +13178,7 @@ msgstr "单位颜色"
 
 #: src/frontend.c:1211
 msgid "Radar"
-msgstr ""
+msgstr "雷达"
 
 #: src/frontend.c:1212
 #: src/frontend.c:1261
@@ -13189,7 +13189,7 @@ msgstr "向右旋转"
 #: src/frontend.c:1212
 #: src/frontend.c:1261
 msgid "Fixed"
-msgstr ""
+msgstr "已修复"
 
 #: src/frontend.c:1218
 #: src/frontend.c:1238
@@ -13199,7 +13199,7 @@ msgstr "游戏选项"
 #: src/frontend.c:1379
 #: src/multiint.c:2212
 msgid "Mod: "
-msgstr ""
+msgstr "Mod："
 
 #: src/hci.c:1345
 #, fuzzy
@@ -13265,7 +13265,7 @@ msgstr "能源"
 
 #: src/hci.c:3999
 msgid "Map:"
-msgstr ""
+msgstr "Map："
 
 #: src/hci.c:4013
 #, fuzzy
@@ -13289,11 +13289,11 @@ msgstr "储存游戏"
 
 #: src/hci.c:4030
 msgid "New"
-msgstr ""
+msgstr "新的"
 
 #: src/hci.c:4031
 msgid "New Blank Map"
-msgstr ""
+msgstr "新空地图"
 
 #: src/hci.c:4069
 msgid "Tile"
@@ -13329,7 +13329,7 @@ msgstr "在地图上加入特征"
 
 #: src/hci.c:4108
 msgid "Pause"
-msgstr ""
+msgstr "暂停"
 
 #: src/hci.c:4109
 msgid "Pause or unpause the game"
@@ -13341,7 +13341,7 @@ msgstr "使地图上所有物件等高"
 
 #: src/hci.c:4133
 msgid "Edit"
-msgstr ""
+msgstr "编辑"
 
 #: src/hci.c:4134
 #, fuzzy
@@ -13400,7 +13400,7 @@ msgstr "返回游戏"
 
 #: src/ingameop.c:142
 msgid "WARNING: You're the host. If you quit, the game ends for everyone!"
-msgstr ""
+msgstr "警告：你是主玩家。如果那你退出，所有玩家将不得不停止游戏！"
 
 #: src/ingameop.c:283
 #: src/ingameop.c:511
@@ -13416,11 +13416,12 @@ msgstr "主玩家已离开游戏"
 
 #: src/ingameop.c:358
 msgid "The game can't continue without the host."
-msgstr ""
+msgstr "没有主玩家游戏不能继续"
 
 #: src/ingameop.c:364
+#, fuzzy
 msgid "-->  QUIT  <--"
-msgstr ""
+msgstr "-->退出<--"
 
 #: src/init.c:419
 #, c-format
@@ -13439,7 +13440,7 @@ msgstr "能量增加"
 #: src/intelmap.c:243
 #: src/keybind.c:1371
 msgid "PAUSED"
-msgstr "暂停"
+msgstr "已暂停"
 
 #: src/intelmap.c:409
 msgid "Research Update"
@@ -13569,8 +13570,9 @@ msgid "Sorry, that cheat is disabled in multiplayer games."
 msgstr "抱歉，多人游戏中无法使用此作弊码"
 
 #: src/keybind.c:143
+#, fuzzy
 msgid "Warning! This cheat is buggy.  We recommend to NOT use it."
-msgstr ""
+msgstr "警告：这个作弊方式有点小问题。我们建议不要使用。"
 
 #: src/keybind.c:212
 msgid "Lets us see what you see!"
@@ -13600,7 +13602,7 @@ msgstr "玩家%u 利用作弊（除错）模式建立了一个新droid: %s."
 #: src/keybind.c:1869
 #, c-format
 msgid "(Player %u) is using cheat :%s"
-msgstr ""
+msgstr "玩家 %u 正在作弊：%s"
 
 #: src/keybind.c:386
 msgid "Hard as nails!!!"
@@ -13680,19 +13682,19 @@ msgstr "传来讯息..."
 
 #: src/keybind.c:1262
 msgid "CHEATS ARE NOW ENABLED!"
-msgstr ""
+msgstr "现在允许作弊！"
 
 #: src/keybind.c:1262
 msgid "CHEATS ARE NOW DISABLED!"
-msgstr ""
+msgstr "现在不允许作弊！"
 
 #: src/keybind.c:1319
 msgid "God Mode ON"
-msgstr ""
+msgstr "上帝模式打开"
 
 #: src/keybind.c:1319
 msgid "God Mode OFF"
-msgstr ""
+msgstr "上帝模式关闭"
 
 #: src/keybind.c:1331
 msgid "View Aligned to North"
@@ -13701,7 +13703,7 @@ msgstr "View Aligned to North"
 #: src/keybind.c:1340
 #, fuzzy, c-format
 msgid "Trap cursor %s"
-msgstr "捕捉滑鼠"
+msgstr "捕捉鼠标"
 
 #: src/keybind.c:1421
 msgid "Researched EVERYTHING for you!"
@@ -14295,11 +14297,11 @@ msgstr "向右旋转"
 
 #: src/keymap.c:443
 msgid "Lower tile height"
-msgstr ""
+msgstr "降低标题亮度"
 
 #: src/keymap.c:444
 msgid "Toggles on/off DEMO Mode"
-msgstr ""
+msgstr "开关演示模式"
 
 #: src/keymap.c:445
 #, fuzzy
@@ -14351,11 +14353,11 @@ msgstr "可开始研发指挥官系统"
 
 #: src/keymap.c:457
 msgid "Toggle watch window"
-msgstr ""
+msgstr "开启或关闭查看窗口"
 
 #: src/keymap.c:458
 msgid "Trace a game object"
-msgstr ""
+msgstr "跟踪一个游戏中的物体"
 
 #: src/keymap.c:459
 #, fuzzy
@@ -14403,12 +14405,12 @@ msgstr "继续游戏"
 #: src/move.c:2944
 #, c-format
 msgid "You found %u power in an oil drum."
-msgstr ""
+msgstr "你在钻油井发现了 %u 电力"
 
 #: src/move.c:2951
 #, c-format
 msgid "You found %u power in an oil drum"
-msgstr ""
+msgstr "你在钻油井发现了 %u 电力"
 
 #: src/multigifts.c:172
 #, c-format
@@ -14494,35 +14496,35 @@ msgstr "可使用新的科技"
 
 #: src/multiint.c:730
 msgid "Game is full"
-msgstr ""
+msgstr "游戏人数已满"
 
 #: src/multiint.c:734
 msgid "You were kicked!"
-msgstr ""
+msgstr "你被踢了！"
 
 #: src/multiint.c:737
 msgid "Wrong Game Version!"
-msgstr ""
+msgstr "错误的游戏版本"
 
 #: src/multiint.c:740
 msgid "You have an incompatible mod."
-msgstr ""
+msgstr "你有一个不兼容的mod"
 
 #: src/multiint.c:745
 msgid "Host couldn't send file?"
-msgstr ""
+msgstr "主玩家不能发送文件？"
 
 #: src/multiint.c:749
 msgid "Incorrect Password!"
-msgstr ""
+msgstr "不正确的密码！"
 
 #: src/multiint.c:752
 msgid "Host has dropped connection!"
-msgstr ""
+msgstr "主玩家掉线了！"
 
 #: src/multiint.c:756
 msgid "Connection Error"
-msgstr ""
+msgstr "连接错误"
 
 #: src/multiint.c:897
 msgid "Searching"
@@ -14543,11 +14545,11 @@ msgstr "按一下看地图"
 
 #: src/multiint.c:1007
 msgid "OK"
-msgstr ""
+msgstr "确定"
 
 #: src/multiint.c:1129
 msgid "Tanks disabled!!"
-msgstr ""
+msgstr "坦克被禁用"
 
 #: src/multiint.c:1130
 #, fuzzy
@@ -14556,7 +14558,7 @@ msgstr "可生产新的生化人步兵"
 
 #: src/multiint.c:1131
 msgid "VTOLs disabled."
-msgstr ""
+msgstr "VTOL被禁用"
 
 #: src/multiint.c:1181
 #: src/multiint.c:1188
@@ -14691,7 +14693,7 @@ msgstr "按一下开始"
 
 #: src/multiint.c:1942
 msgid "READY?"
-msgstr ""
+msgstr "准备好了吗？"
 
 #: src/multiint.c:1979
 msgid "PLAYERS"
@@ -14704,11 +14706,11 @@ msgstr "锁定同盟模式"
 
 #: src/multiint.c:2073
 msgid "Click to change player settings"
-msgstr ""
+msgstr "点击这里更改玩家设置"
 
 #: src/multiint.c:2104
 msgid "Click to adjust AI difficulty"
-msgstr ""
+msgstr "点击这里更改AI难度"
 
 #: src/multiint.c:2183
 msgid "CHAT"
@@ -14716,20 +14718,20 @@ msgstr "聊天"
 
 #: src/multiint.c:2217
 msgid "All players need to have the same mods to join your game."
-msgstr ""
+msgstr "所有玩家需要使用相同的mod以便进入游戏"
 
 #: src/multiint.c:2377
-#, c-format
+#, fuzzy, c-format
 msgid "*** password [%s] is now required! ***"
-msgstr ""
+msgstr "*** 需要密码 ***"
 
 #: src/multiint.c:2385
 msgid "*** password is NOT required! ***"
-msgstr ""
+msgstr "*** 不需要密码 ***"
 
 #: src/multiint.c:2628
 msgid "Sorry! Failed to host the game."
-msgstr ""
+msgstr "对不起！本机无法作为游戏主要服务器"
 
 #: src/multiint.c:2713
 msgid "'Locked Teams' mode enabled"
@@ -14753,16 +14755,16 @@ msgstr "玩家"
 #: src/multiint.c:3588
 #, c-format
 msgid "Sending Map: %d%% "
-msgstr ""
+msgstr "发送地图：%d%%"
 
 #: src/multiint.c:3597
 #, c-format
 msgid "Map: %d%% downloaded"
-msgstr ""
+msgstr "地图：%d%%下载完成"
 
 #: src/multiint.c:3623
 msgid "HOST"
-msgstr ""
+msgstr "主玩家"
 
 #: src/multijoin.c:98
 #: src/multijoin.c:99
@@ -14777,12 +14779,12 @@ msgstr "%s 已离开游戏"
 #: src/multijoin.c:229
 #, c-format
 msgid "File transfer has been aborted for %d."
-msgstr ""
+msgstr "由于%d，文件传输中断"
 
 #: src/multijoin.c:361
 #, c-format
 msgid "%s (%u) has an incompatible mod, and has been kicked."
-msgstr ""
+msgstr "%s(%u)有一个不兼容的mod，已经被踢出"
 
 #: src/multijoin.c:405
 #, c-format
@@ -14800,8 +14802,9 @@ msgid "Apply Defaults and Return To Previous Screen"
 msgstr "回到前一个画面"
 
 #: src/multilimit.c:316
+#, fuzzy
 msgid "Limits reset to default values"
-msgstr ""
+msgstr "重置限制至默认状态"
 
 #: src/multimenu.c:610
 msgid "Technology level 1"
@@ -14879,12 +14882,12 @@ msgstr "提供玩家能源"
 #: src/multimenu.c:1496
 #, c-format
 msgid "kicked %s : %s from the game, and added them to the banned list!"
-msgstr ""
+msgstr "%s : %s 被踢出，并加入黑名单"
 
 #: src/multiplay.c:277
 #, c-format
 msgid "Kicking player %s, because they tried to bypass data integrity check!"
-msgstr ""
+msgstr "踢出玩家 %s，因为他们试图绕过数据完整性检查！"
 
 #: src/multiplay.c:1132
 #, fuzzy
@@ -14893,11 +14896,11 @@ msgstr "同盟"
 
 #: src/multiplay.c:1140
 msgid "(private to "
-msgstr ""
+msgstr "私密"
 
 #: src/multiplay.c:1153
 msgid "[invalid]"
-msgstr ""
+msgstr "[无效]"
 
 #: src/multiplay.c:2035
 msgid "Green"
@@ -15056,7 +15059,7 @@ msgstr "全部游戏时间 - %s"
 #: src/scores.c:449
 #, c-format
 msgid "You cheated!"
-msgstr ""
+msgstr "你作弊了"
 
 #: src/scriptfuncs.c:3171
 msgid "YOU ARE VICTORIOUS!"
@@ -15338,7 +15341,7 @@ msgstr "版本 %s%s%s%s"
 #~ msgstr "野蛮人步兵"
 
 #~ msgid "LasSat"
-#~ msgstr "雷射卫星"
+#~ msgstr "激光卫星"
 
 #~ msgid "Czech"
 #~ msgstr "捷克语"
@@ -15721,7 +15724,7 @@ msgstr "版本 %s%s%s%s"
 #~ msgstr "履带式螳螂坦克（轨道炮）"
 
 #~ msgid "Mantis Tracks Pulse Laser"
-#~ msgstr "履带式螳螂坦克（脉冲雷射）"
+#~ msgstr "履带式螳螂坦克（脉冲激光）"
 
 #~ msgid "Python Tracks Lancer"
 #~ msgstr "履带式蟒蛇坦克（轻骑兵火箭）"
@@ -15884,10 +15887,10 @@ msgstr "版本 %s%s%s%s"
 #~ msgstr "敌方单位"
 
 #~ msgid "LasSat firing"
-#~ msgstr "激光雷射卫星发射"
+#~ msgstr "激光激光卫星发射"
 
 #~ msgid "LasSats firing"
-#~ msgstr "激光雷射卫星发射"
+#~ msgstr "激光激光卫星发射"
 
 #~ msgid "Satellite Uplink"
 #~ msgstr "卫星上传"
