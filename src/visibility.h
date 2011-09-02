@@ -53,6 +53,8 @@ int arcOfFire(const SIMPLE_OBJECT* psViewer, const BASE_OBJECT* psTarget, int we
 // Find the wall that is blocking LOS to a target (if any)
 extern STRUCTURE* visGetBlockingWall(const BASE_OBJECT* psViewer, const BASE_OBJECT* psTarget);
 
+bool hasSharedVision(unsigned viewer, unsigned ally);
+
 extern void processVisibilitySelf(BASE_OBJECT *psObj);
 extern void processVisibilityVision(BASE_OBJECT *psViewer);
 extern void processVisibilityLevel(BASE_OBJECT *psObj);

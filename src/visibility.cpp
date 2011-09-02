@@ -509,7 +509,7 @@ STRUCTURE* visGetBlockingWall(const BASE_OBJECT* psViewer, const BASE_OBJECT* ps
 	return NULL;
 }
 
-static bool hasSharedVision(unsigned viewer, unsigned ally)
+bool hasSharedVision(unsigned viewer, unsigned ally)
 {
 	ASSERT_OR_RETURN(false, viewer < MAX_PLAYERS && ally < MAX_PLAYERS, "Bad viewer %u or ally %u.", viewer, ally);
 

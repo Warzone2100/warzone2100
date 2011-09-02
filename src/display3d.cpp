@@ -276,6 +276,7 @@ void NotifyUserOfError(char *msg)
 	lastErrorTime = gameTime2;
 }
 
+// Saves the clickable blueprints, in order to check if they were clicked on.
 static inline void saveOrDeleteBlueprint(STRUCTURE *blueprint)
 {
 	if (blueprint->status == SS_BLUEPRINT_PLANNED)
@@ -288,6 +289,7 @@ static inline void saveOrDeleteBlueprint(STRUCTURE *blueprint)
 	}
 }
 
+// Saves the clickable blueprints, in order to check if they were clicked on.
 static inline void copyOrIgnoreBlueprint(STRUCTURE *blueprint)
 {
 	if (blueprint->status == SS_BLUEPRINT_PLANNED)
@@ -1601,20 +1603,27 @@ void displayBlueprints(void)
 
 	// now we draw the blueprints for all ordered buildings
 	clearBlueprints();  // Delete old blueprints and draw new ones.
-	for (psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
+	for (int player = 0; player < MAX_PLAYERS; ++player)
 	{
-		if (psDroid->droidType == DROID_CONSTRUCT || psDroid->droidType == DROID_CYBORG_CONSTRUCT)
+		if (!hasSharedVision(selectedPlayer, player))
 		{
-			renderBuildOrder(psDroid->order, psDroid->psTarStats, psDroid->orderX, psDroid->orderY, psDroid->orderX2, psDroid->orderY2, psDroid->orderDirection, SS_BLUEPRINT_PLANNED);
-			//now look thru' the list of orders to see if more building sites
-			for (order = psDroid->listPendingBegin; order < (int)psDroid->asOrderList.size(); order++)
+			continue;
+		}
+		STRUCT_STATES state = player == selectedPlayer? SS_BLUEPRINT_PLANNED : SS_BLUEPRINT_PLANNED_BY_ALLY;
+		for (psDroid = apsDroidLists[player]; psDroid; psDroid = psDroid->psNext)
+		{
+			if (psDroid->droidType == DROID_CONSTRUCT || psDroid->droidType == DROID_CYBORG_CONSTRUCT)
 			{
-				OrderListEntry const *o = &psDroid->asOrderList[order];
-				renderBuildOrder(o->order, (BASE_STATS *)o->psOrderTarget, o->x, o->y, o->x2, o->y2, o->direction, SS_BLUEPRINT_PLANNED);
+				renderBuildOrder(psDroid->order, psDroid->psTarStats, psDroid->orderX, psDroid->orderY, psDroid->orderX2, psDroid->orderY2, psDroid->orderDirection, state);
+				//now look thru' the list of orders to see if more building sites
+				for (order = psDroid->listPendingBegin; order < (int)psDroid->asOrderList.size(); order++)
+				{
+					OrderListEntry const *o = &psDroid->asOrderList[order];
+					renderBuildOrder(o->order, (BASE_STATS *)o->psOrderTarget, o->x, o->y, o->x2, o->y2, o->direction, state);
+				}
 			}
 		}
 	}
-
 }
 
 /// Draw Factory Delivery Points
@@ -2026,6 +2035,8 @@ static PIELIGHT getBlueprintColour(STRUCT_STATES state)
 			return WZCOL_BLUEPRINT_INVALID;
 		case SS_BLUEPRINT_PLANNED:
 			return WZCOL_BLUEPRINT_PLANNED;
+		case SS_BLUEPRINT_PLANNED_BY_ALLY:
+			return WZCOL_BLUEPRINT_PLANNED_BY_ALLY;
 		default:
 			debug(LOG_ERROR, "this is not a blueprint");
 			return WZCOL_WHITE;
