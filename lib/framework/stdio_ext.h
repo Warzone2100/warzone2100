@@ -111,4 +111,9 @@ do { \
 	sprintf(*var, fmt,  __VA_ARGS__); \
 } while(0)
 
+/// Equivalent to vasprintf, except that strp is NULL instead of undefined, if the function returns -1. Does not give compiler warnings/-Werrors if not checking the return value.
+int vasprintfNull(char** strp, const char* format, va_list ap);
+/// Equivalent to asprintf, except that strp is NULL instead of undefined, if the function returns -1. Does not give compiler warnings/-Werrors if not checking the return value.
+int asprintfNull(char** strp, const char* format, ...);
+
 #endif // STDIO_EXT_H

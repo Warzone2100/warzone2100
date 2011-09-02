@@ -2058,11 +2058,11 @@ bool NEThostGame(const char* SessionName, const char* PlayerName,
 		Lobby::LOBBY_ERROR* error = lobbyclient.getError();
 		if (error->code == Lobby::LOGIN_REQUIRED)
 		{
-			asprintf(&motd, _("Game not in the lobby, please login first!"));
+			asprintfNull(&motd, _("Game not in the lobby, please login first!"));
 		}
 		else
 		{
-			asprintf(&motd,
+			asprintfNull(&motd,
 				_("Error connecting to the lobby server: %s. Make sure port %d can receive incoming connections. If you're using a router configure it to use UPnP, or to forward the port to your system."),
 				lobbyclient.getHost().toUtf8().constData(),
 				gameserver_port

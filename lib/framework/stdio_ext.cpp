@@ -145,3 +145,25 @@ int wz_snprintf(char* str, size_t size, const char* format, ...)
 	return count;
 }
 #endif
+
+int vasprintfNull(char** strp, const char* format, va_list ap)
+{
+	int count = vasprintf(strp, format, ap);
+
+	if (count == -1)  // If count == -1, strp is currently undefined.
+		strp = NULL;
+
+	return count;
+}
+
+int asprintfNull(char** strp, const char* format, ...)
+{
+	va_list ap;
+	int count;
+
+	va_start(ap, format);
+		count = vasprintfNull(strp, format, ap);
+	va_end(ap);
+
+	return count;
+}

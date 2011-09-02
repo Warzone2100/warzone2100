@@ -136,7 +136,7 @@ int main(int argc, char **argv)
 		return EXIT_FAILURE;
 	}
 
-	const PreviewColors* tileColors;
+	const PreviewColors* tileColors = NULL;
 	switch (map->tileset)
 	{
 	case TILESET_ARIZONA:

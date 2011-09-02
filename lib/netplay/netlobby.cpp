@@ -103,7 +103,7 @@ RETURN_CODES Client::addGame(char** result, const uint32_t port, const uint32_t 
     }
 
     gameId_ = resultMap["gameId"].toLongLong();
-    asprintf(result, resultMap["result"].toString().toUtf8().constData());
+    asprintfNull(result, resultMap["result"].toString().toUtf8().constData());
 
     freeCallResult_();
     return LOBBY_NO_ERROR;
@@ -603,7 +603,7 @@ RETURN_CODES Client::setError_(const RETURN_CODES code, const char* message, ...
 
     va_list ap;
     va_start(ap, message);
-    vasprintf(&buff, message, ap);
+    vasprintfNull(&buff, message, ap);
     va_end(ap);
 
     lastError_.code = code;
