@@ -624,6 +624,18 @@ void WzMainWindow::realHandleKeyEvent(QKeyEvent *event, bool pressed)
 			case Qt::Key_7                  :	lastKey = setKey(KEY_KP_7, pressed); break;
 			case Qt::Key_8                  :	lastKey = setKey(KEY_KP_8, pressed); break;
 			case Qt::Key_9                  :	lastKey = setKey(KEY_KP_9, pressed); break;
+#ifndef WZ_OS_MAC  // Anything except mac
+			case Qt::Key_Home               :	lastKey = setKey(KEY_KP_7, pressed); break;
+			case Qt::Key_Up                 :	lastKey = setKey(KEY_KP_8, pressed); break;
+			case Qt::Key_PageUp             :	lastKey = setKey(KEY_KP_9, pressed); break;
+			case Qt::Key_Left               :	lastKey = setKey(KEY_KP_4, pressed); break;
+			case Qt::Key_Clear              :	lastKey = setKey(KEY_KP_5, pressed); break;
+			case Qt::Key_Right              :	lastKey = setKey(KEY_KP_6, pressed); break;
+			case Qt::Key_End                :	lastKey = setKey(KEY_KP_1, pressed); break;
+			case Qt::Key_Down               :	lastKey = setKey(KEY_KP_2, pressed); break;
+			case Qt::Key_PageDown           :	lastKey = setKey(KEY_KP_3, pressed); break;
+			case Qt::Key_Insert             :	lastKey = setKey(KEY_KP_0, pressed); break;
+#else  // Mac-specific, arrow keys are numpad on the mac.
 			case Qt::Key_Home               :	lastKey = setKey(KEY_HOME, pressed); break;
 			case Qt::Key_Up                 :	lastKey = setKey(KEY_UPARROW, pressed); break;
 			case Qt::Key_PageUp             :	lastKey = setKey(KEY_PAGEUP, pressed); break;
@@ -634,6 +646,7 @@ void WzMainWindow::realHandleKeyEvent(QKeyEvent *event, bool pressed)
 			case Qt::Key_Down               :	lastKey = setKey(KEY_DOWNARROW, pressed); break;
 			case Qt::Key_PageDown           :	lastKey = setKey(KEY_PAGEDOWN, pressed); break;
 			case Qt::Key_Insert             :	lastKey = setKey(KEY_INSERT, pressed); break;
+#endif
 			case Qt::Key_Delete             :	lastKey = setKey(KEY_KP_FULLSTOP, pressed); break;
 			case Qt::Key_Plus               :	lastKey = setKey(KEY_KP_PLUS, pressed); break;
 			case Qt::Key_Minus              :	lastKey = setKey(KEY_KP_MINUS, pressed); break;
