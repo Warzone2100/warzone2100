@@ -312,7 +312,7 @@ STRUCTURE *getTileBlueprint(int mapX, int mapY)
 	for (std::vector<STRUCTURE *>::const_iterator i = blueprints.begin(); i != blueprints.end(); ++i)
 	{
 		STRUCTURE *psStruct = *i;
-		Vector2i size(getStructureWidth(psStruct)*TILE_UNITS, getStructureBreadth(psStruct)*TILE_UNITS);
+		Vector2i size = getStructureSize(psStruct)*TILE_UNITS;
 		if (abs(mouse.x - psStruct->pos.x) < size.x/2 && abs(mouse.y - psStruct->pos.y) < size.y/2)
 		{
 			return psStruct;  // This blueprint was clicked on.

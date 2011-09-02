@@ -36,8 +36,8 @@ UDWORD getComponentDroidRadius(DROID *psDroid);
 UDWORD getComponentDroidTemplateRadius(DROID_TEMPLATE *psDroid);
 UDWORD getComponentRadius(BASE_STATS *psComponent);
 UDWORD getResearchRadius(BASE_STATS *Stat);
-UDWORD getStructureSize(STRUCTURE *psStructure);
-UDWORD getStructureStatSize(STRUCTURE_STATS *Stats);
+UDWORD getStructureSizeMax(STRUCTURE *psStructure);
+UDWORD getStructureStatSizeMax(STRUCTURE_STATS *Stats);
 
 #define OBJECT_RADIUS				(128)
 #define COMPONENT_RADIUS			(64)

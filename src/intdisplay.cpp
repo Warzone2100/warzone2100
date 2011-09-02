@@ -2325,7 +2325,7 @@ void CreateIMDButton(IMAGEFILE *ImageFile, UWORD ImageID, void *Object, UDWORD P
 		}
 		else if(IMDType == IMDTYPE_STRUCTURE)
 		{
-			basePlateSize = getStructureSize((STRUCTURE*)Object);
+			basePlateSize = getStructureSizeMax((STRUCTURE*)Object);
 			if(basePlateSize == 1)
 			{
 				Size = 2;//small structure
@@ -2344,7 +2344,7 @@ void CreateIMDButton(IMAGEFILE *ImageFile, UWORD ImageID, void *Object, UDWORD P
 		}
 		else if(IMDType == IMDTYPE_STRUCTURESTAT)
 		{
-			basePlateSize= getStructureStatSize((STRUCTURE_STATS*)Object);
+			basePlateSize = getStructureStatSizeMax((STRUCTURE_STATS*)Object);
 			if(basePlateSize == 1)
 			{
 				Size = 2;//small structure

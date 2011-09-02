@@ -439,7 +439,7 @@ static void displayStructureBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset
 	position.y = 0;
 	position.z = BUTTON_DEPTH*2;//getStructureStatSize(stat)  * 38 * OBJECT_RADIUS;
 
-	Radius = getStructureStatSize(stat);
+	Radius = getStructureStatSizeMax(stat);
 	if(Radius <= 128) {
 		scale = SMALL_STRUCT_SCALE;
 	} else if(Radius <= 256) {

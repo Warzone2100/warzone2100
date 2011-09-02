@@ -147,13 +147,13 @@ UDWORD getResearchRadius(BASE_STATS *Stat)
 }
 
 
-UDWORD getStructureSize(STRUCTURE *psStructure)
+UDWORD getStructureSizeMax(STRUCTURE *psStructure)
 {
 	//radius based on base plate size
 	return MAX(psStructure->pStructureType->baseWidth, psStructure->pStructureType->baseBreadth);
 }
 
-UDWORD getStructureStatSize(STRUCTURE_STATS *Stats)
+UDWORD getStructureStatSizeMax(STRUCTURE_STATS *Stats)
 {
 	//radius based on base plate size
 	return MAX(Stats->baseWidth, Stats->baseBreadth);

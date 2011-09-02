@@ -79,7 +79,7 @@ void renderResearchToBuffer(RESEARCH *psResearch, UDWORD OriginX, UDWORD OriginY
 			IMDType = IMDTYPE_STRUCTURESTAT;
 			psResGraphic = psResearch->psStat;
 			//set up the scale
-			basePlateSize= getStructureStatSize((STRUCTURE_STATS*)psResearch->psStat);
+			basePlateSize= getStructureStatSizeMax((STRUCTURE_STATS*)psResearch->psStat);
 			if(basePlateSize == 1)
 			{
 				scale = RESEARCH_COMPONENT_SCALE / 2;
