@@ -32,6 +32,7 @@ Global
 		Debug|Win32 = Debug|Win32
 		Release|Win32 = Release|Win32
 		STLport-Debug|Win32 = STLport-Debug|Win32
+		STLport-Release|Win32 = STLport-Release|Win32
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{BDDCCB7B-F4F7-4768-A1C3-AE20E9F5FDFC}.(STLport)-Debug|Win32.ActiveCfg = STLport-Debug|Win32
@@ -44,6 +45,8 @@ Global
 		{BDDCCB7B-F4F7-4768-A1C3-AE20E9F5FDFC}.Release|Win32.Build.0 = Release|Win32
 		{BDDCCB7B-F4F7-4768-A1C3-AE20E9F5FDFC}.STLport-Debug|Win32.ActiveCfg = STLport-Debug|Win32
 		{BDDCCB7B-F4F7-4768-A1C3-AE20E9F5FDFC}.STLport-Debug|Win32.Build.0 = STLport-Debug|Win32
+		{BDDCCB7B-F4F7-4768-A1C3-AE20E9F5FDFC}.STLport-Release|Win32.ActiveCfg = STLport-Release|Win32
+		{BDDCCB7B-F4F7-4768-A1C3-AE20E9F5FDFC}.STLport-Release|Win32.Build.0 = STLport-Release|Win32
 		{E538D7A9-0660-4979-95F4-80B0C5C11DA7}.(STLport)-Debug|Win32.ActiveCfg = STLport-Debug|Win32
 		{E538D7A9-0660-4979-95F4-80B0C5C11DA7}.(STLport)-Debug|Win32.Build.0 = STLport-Debug|Win32
 		{E538D7A9-0660-4979-95F4-80B0C5C11DA7}.(STLport)-Release|Win32.ActiveCfg = STLport-Release|Win32
@@ -54,6 +57,8 @@ Global
 		{E538D7A9-0660-4979-95F4-80B0C5C11DA7}.Release|Win32.Build.0 = Release|Win32
 		{E538D7A9-0660-4979-95F4-80B0C5C11DA7}.STLport-Debug|Win32.ActiveCfg = STLport-Debug|Win32
 		{E538D7A9-0660-4979-95F4-80B0C5C11DA7}.STLport-Debug|Win32.Build.0 = STLport-Debug|Win32
+		{E538D7A9-0660-4979-95F4-80B0C5C11DA7}.STLport-Release|Win32.ActiveCfg = STLport-Release|Win32
+		{E538D7A9-0660-4979-95F4-80B0C5C11DA7}.STLport-Release|Win32.Build.0 = STLport-Release|Win32
 		{8136A1F0-463E-44F6-B0B2-64B12F4C27BA}.(STLport)-Debug|Win32.ActiveCfg = STLport-Debug|Win32
 		{8136A1F0-463E-44F6-B0B2-64B12F4C27BA}.(STLport)-Debug|Win32.Build.0 = STLport-Debug|Win32
 		{8136A1F0-463E-44F6-B0B2-64B12F4C27BA}.(STLport)-Release|Win32.ActiveCfg = STLport-Release|Win32
@@ -64,6 +69,8 @@ Global
 		{8136A1F0-463E-44F6-B0B2-64B12F4C27BA}.Release|Win32.Build.0 = Release|Win32
 		{8136A1F0-463E-44F6-B0B2-64B12F4C27BA}.STLport-Debug|Win32.ActiveCfg = STLport-Debug|Win32
 		{8136A1F0-463E-44F6-B0B2-64B12F4C27BA}.STLport-Debug|Win32.Build.0 = STLport-Debug|Win32
+		{8136A1F0-463E-44F6-B0B2-64B12F4C27BA}.STLport-Release|Win32.ActiveCfg = STLport-Release|Win32
+		{8136A1F0-463E-44F6-B0B2-64B12F4C27BA}.STLport-Release|Win32.Build.0 = STLport-Release|Win32
 		{30F5FC4A-31F5-42F5-9581-45309559382F}.(STLport)-Debug|Win32.ActiveCfg = STLport-Debug|Win32
 		{30F5FC4A-31F5-42F5-9581-45309559382F}.(STLport)-Debug|Win32.Build.0 = STLport-Debug|Win32
 		{30F5FC4A-31F5-42F5-9581-45309559382F}.(STLport)-Release|Win32.ActiveCfg = STLport-Release|Win32
@@ -74,6 +81,8 @@ Global
 		{30F5FC4A-31F5-42F5-9581-45309559382F}.Release|Win32.Build.0 = Release|Win32
 		{30F5FC4A-31F5-42F5-9581-45309559382F}.STLport-Debug|Win32.ActiveCfg = STLport-Debug|Win32
 		{30F5FC4A-31F5-42F5-9581-45309559382F}.STLport-Debug|Win32.Build.0 = STLport-Debug|Win32
+		{30F5FC4A-31F5-42F5-9581-45309559382F}.STLport-Release|Win32.ActiveCfg = STLport-Release|Win32
+		{30F5FC4A-31F5-42F5-9581-45309559382F}.STLport-Release|Win32.Build.0 = STLport-Release|Win32
 		{2D0B0F06-3CA2-46C7-908D-5C7098645021}.(STLport)-Debug|Win32.ActiveCfg = STLport-Debug|Win32
 		{2D0B0F06-3CA2-46C7-908D-5C7098645021}.(STLport)-Debug|Win32.Build.0 = STLport-Debug|Win32
 		{2D0B0F06-3CA2-46C7-908D-5C7098645021}.(STLport)-Release|Win32.ActiveCfg = STLport-Release|Win32
@@ -84,6 +93,8 @@ Global
 		{2D0B0F06-3CA2-46C7-908D-5C7098645021}.Release|Win32.Build.0 = Release|Win32
 		{2D0B0F06-3CA2-46C7-908D-5C7098645021}.STLport-Debug|Win32.ActiveCfg = STLport-Debug|Win32
 		{2D0B0F06-3CA2-46C7-908D-5C7098645021}.STLport-Debug|Win32.Build.0 = STLport-Debug|Win32
+		{2D0B0F06-3CA2-46C7-908D-5C7098645021}.STLport-Release|Win32.ActiveCfg = STLport-Release|Win32
+		{2D0B0F06-3CA2-46C7-908D-5C7098645021}.STLport-Release|Win32.Build.0 = STLport-Release|Win32
 		{C7698ECE-9255-4A60-8091-A9A76E8BE911}.(STLport)-Debug|Win32.ActiveCfg = STLport-Debug|Win32
 		{C7698ECE-9255-4A60-8091-A9A76E8BE911}.(STLport)-Debug|Win32.Build.0 = STLport-Debug|Win32
 		{C7698ECE-9255-4A60-8091-A9A76E8BE911}.(STLport)-Release|Win32.ActiveCfg = STLport-Release|Win32
@@ -94,6 +105,8 @@ Global
 		{C7698ECE-9255-4A60-8091-A9A76E8BE911}.Release|Win32.Build.0 = Release|Win32
 		{C7698ECE-9255-4A60-8091-A9A76E8BE911}.STLport-Debug|Win32.ActiveCfg = STLport-Debug|Win32
 		{C7698ECE-9255-4A60-8091-A9A76E8BE911}.STLport-Debug|Win32.Build.0 = STLport-Debug|Win32
+		{C7698ECE-9255-4A60-8091-A9A76E8BE911}.STLport-Release|Win32.ActiveCfg = STLport-Release|Win32
+		{C7698ECE-9255-4A60-8091-A9A76E8BE911}.STLport-Release|Win32.Build.0 = STLport-Release|Win32
 		{4D637147-73F9-4A51-944B-34BF78E6C6DC}.(STLport)-Debug|Win32.ActiveCfg = STLport-Debug|Win32
 		{4D637147-73F9-4A51-944B-34BF78E6C6DC}.(STLport)-Debug|Win32.Build.0 = STLport-Debug|Win32
 		{4D637147-73F9-4A51-944B-34BF78E6C6DC}.(STLport)-Release|Win32.ActiveCfg = STLport-Release|Win32
@@ -104,6 +117,8 @@ Global
 		{4D637147-73F9-4A51-944B-34BF78E6C6DC}.Release|Win32.Build.0 = Release|Win32
 		{4D637147-73F9-4A51-944B-34BF78E6C6DC}.STLport-Debug|Win32.ActiveCfg = STLport-Debug|Win32
 		{4D637147-73F9-4A51-944B-34BF78E6C6DC}.STLport-Debug|Win32.Build.0 = STLport-Debug|Win32
+		{4D637147-73F9-4A51-944B-34BF78E6C6DC}.STLport-Release|Win32.ActiveCfg = STLport-Release|Win32
+		{4D637147-73F9-4A51-944B-34BF78E6C6DC}.STLport-Release|Win32.Build.0 = STLport-Release|Win32
 		{EFE011B6-4C0B-40AA-9F18-5AD599E70D28}.(STLport)-Debug|Win32.ActiveCfg = STLport-Debug|Win32
 		{EFE011B6-4C0B-40AA-9F18-5AD599E70D28}.(STLport)-Debug|Win32.Build.0 = STLport-Debug|Win32
 		{EFE011B6-4C0B-40AA-9F18-5AD599E70D28}.(STLport)-Release|Win32.ActiveCfg = STLport-Release|Win32
@@ -114,6 +129,8 @@ Global
 		{EFE011B6-4C0B-40AA-9F18-5AD599E70D28}.Release|Win32.Build.0 = Release|Win32
 		{EFE011B6-4C0B-40AA-9F18-5AD599E70D28}.STLport-Debug|Win32.ActiveCfg = STLport-Debug|Win32
 		{EFE011B6-4C0B-40AA-9F18-5AD599E70D28}.STLport-Debug|Win32.Build.0 = STLport-Debug|Win32
+		{EFE011B6-4C0B-40AA-9F18-5AD599E70D28}.STLport-Release|Win32.ActiveCfg = STLport-Release|Win32
+		{EFE011B6-4C0B-40AA-9F18-5AD599E70D28}.STLport-Release|Win32.Build.0 = STLport-Release|Win32
 		{33979915-684A-4885-BFEA-2A4CCC5A5FD6}.(STLport)-Debug|Win32.ActiveCfg = STLport-Debug|Win32
 		{33979915-684A-4885-BFEA-2A4CCC5A5FD6}.(STLport)-Debug|Win32.Build.0 = STLport-Debug|Win32
 		{33979915-684A-4885-BFEA-2A4CCC5A5FD6}.(STLport)-Release|Win32.ActiveCfg = STLport-Release|Win32
@@ -124,6 +141,8 @@ Global
 		{33979915-684A-4885-BFEA-2A4CCC5A5FD6}.Release|Win32.Build.0 = Release|Win32
 		{33979915-684A-4885-BFEA-2A4CCC5A5FD6}.STLport-Debug|Win32.ActiveCfg = STLport-Debug|Win32
 		{33979915-684A-4885-BFEA-2A4CCC5A5FD6}.STLport-Debug|Win32.Build.0 = STLport-Debug|Win32
+		{33979915-684A-4885-BFEA-2A4CCC5A5FD6}.STLport-Release|Win32.ActiveCfg = STLport-Release|Win32
+		{33979915-684A-4885-BFEA-2A4CCC5A5FD6}.STLport-Release|Win32.Build.0 = STLport-Release|Win32
 		{9DC871E4-D58D-4AF6-85A6-7DF7A39B8C18}.(STLport)-Debug|Win32.ActiveCfg = STLport-Debug|Win32
 		{9DC871E4-D58D-4AF6-85A6-7DF7A39B8C18}.(STLport)-Debug|Win32.Build.0 = STLport-Debug|Win32
 		{9DC871E4-D58D-4AF6-85A6-7DF7A39B8C18}.(STLport)-Release|Win32.ActiveCfg = STLport-Release|Win32
@@ -134,16 +153,20 @@ Global
 		{9DC871E4-D58D-4AF6-85A6-7DF7A39B8C18}.Release|Win32.Build.0 = Release|Win32
 		{9DC871E4-D58D-4AF6-85A6-7DF7A39B8C18}.STLport-Debug|Win32.ActiveCfg = STLport-Debug|Win32
 		{9DC871E4-D58D-4AF6-85A6-7DF7A39B8C18}.STLport-Debug|Win32.Build.0 = STLport-Debug|Win32
-		{D16B1CC1-0A16-48B0-8868-5E573F7F96DF}.(STLport)-Debug|Win32.ActiveCfg = Debug|Win32
-		{D16B1CC1-0A16-48B0-8868-5E573F7F96DF}.(STLport)-Debug|Win32.Build.0 = Debug|Win32
-		{D16B1CC1-0A16-48B0-8868-5E573F7F96DF}.(STLport)-Release|Win32.ActiveCfg = Release|Win32
-		{D16B1CC1-0A16-48B0-8868-5E573F7F96DF}.(STLport)-Release|Win32.Build.0 = Release|Win32
+		{9DC871E4-D58D-4AF6-85A6-7DF7A39B8C18}.STLport-Release|Win32.ActiveCfg = STLport-Release|Win32
+		{9DC871E4-D58D-4AF6-85A6-7DF7A39B8C18}.STLport-Release|Win32.Build.0 = STLport-Release|Win32
+		{D16B1CC1-0A16-48B0-8868-5E573F7F96DF}.(STLport)-Debug|Win32.ActiveCfg = STLport-Debug|Win32
+		{D16B1CC1-0A16-48B0-8868-5E573F7F96DF}.(STLport)-Debug|Win32.Build.0 = STLport-Debug|Win32
+		{D16B1CC1-0A16-48B0-8868-5E573F7F96DF}.(STLport)-Release|Win32.ActiveCfg = STLport-Release|Win32
+		{D16B1CC1-0A16-48B0-8868-5E573F7F96DF}.(STLport)-Release|Win32.Build.0 = STLport-Release|Win32
 		{D16B1CC1-0A16-48B0-8868-5E573F7F96DF}.Debug|Win32.ActiveCfg = Debug|Win32
 		{D16B1CC1-0A16-48B0-8868-5E573F7F96DF}.Debug|Win32.Build.0 = Debug|Win32
 		{D16B1CC1-0A16-48B0-8868-5E573F7F96DF}.Release|Win32.ActiveCfg = Release|Win32
 		{D16B1CC1-0A16-48B0-8868-5E573F7F96DF}.Release|Win32.Build.0 = Release|Win32
 		{D16B1CC1-0A16-48B0-8868-5E573F7F96DF}.STLport-Debug|Win32.ActiveCfg = STLport-Debug|Win32
 		{D16B1CC1-0A16-48B0-8868-5E573F7F96DF}.STLport-Debug|Win32.Build.0 = STLport-Debug|Win32
+		{D16B1CC1-0A16-48B0-8868-5E573F7F96DF}.STLport-Release|Win32.ActiveCfg = STLport-Release|Win32
+		{D16B1CC1-0A16-48B0-8868-5E573F7F96DF}.STLport-Release|Win32.Build.0 = STLport-Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

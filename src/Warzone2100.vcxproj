@@ -28,13 +28,13 @@
     <ConfigurationType>Application</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
     <WholeProgramOptimization>true</WholeProgramOptimization>
-    <BisonParserAfterTargets>PreBuildEvent</BisonParserAfterTargets>
+    <BisonParserAfterTargets>CustomBuild</BisonParserAfterTargets>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='STLport-Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
     <WholeProgramOptimization>true</WholeProgramOptimization>
-    <BisonParserAfterTargets>PreBuildEvent</BisonParserAfterTargets>
+    <BisonParserAfterTargets>CustomBuild</BisonParserAfterTargets>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -95,6 +95,8 @@
     <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\devpkg\libsx86;$(Qtdir)\lib;$(LibraryPath)</LibraryPath>
     <LibraryPath Condition="'$(Configuration)|$(Platform)'=='STLport-Release|Win32'">..\devpkg\libsx86;$(Qtdir)\lib;$(LibraryPath)</LibraryPath>
     <ExtensionsToDeleteOnClean Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">*.lex.cpp;*.tab.cpp;*.tab.hpp;$(ExtensionsToDeleteOnClean)</ExtensionsToDeleteOnClean>
+    <BisonParserBeforeTargets Condition="'$(Configuration)|$(Platform)'=='STLport-Release|Win32'">Midl</BisonParserBeforeTargets>
+    <BisonParserBeforeTargets Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Midl</BisonParserBeforeTargets>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <PreBuildEvent>
@@ -127,7 +129,7 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>zlibstat.lib;libogg_static.lib;libvorbis_static.lib;libvorbisfile_static.lib;OpenAL32.lib;glc32.lib;OpenGL32.lib;GLU32.lib;shfolder.lib;winmm.lib;Iphlpapi.lib;ws2_32.lib;dbghelp.lib;physfs.lib;glew.lib;libtheora_static.lib;libpng15.lib;QtGui4.lib;QtOpenGL4.lib;QtCore4.lib;QtMain.lib;QtScript4.lib;QtScriptTools4.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libogg_static.lib;libvorbis_static.lib;libvorbisfile_static.lib;OpenAL32.lib;glc32.lib;OpenGL32.lib;GLU32.lib;shfolder.lib;winmm.lib;Iphlpapi.lib;ws2_32.lib;dbghelp.lib;physfs.lib;glew.lib;libtheora_static.lib;libpng15.lib;QtGui4.lib;QtOpenGL4.lib;QtCore4.lib;QtMain.lib;QtScript4.lib;QtScriptTools4.lib;QtNetwork4.lib;qjson.lib;zlibstat.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(ProjectName)-Dbg.exe</OutputFile>
       <AdditionalLibraryDirectories>$(SolutionDir)\..\devpkg\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>MSVCRT.lib;libcmt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
@@ -205,10 +207,10 @@
     </PreBuildEvent>
     <BisonParser>
       <Defines>true</Defines>
-      <OutputFile>$(SolutionDir)$(ProjectName).tab.cpp</OutputFile>
+      <OutputFile>%(Filename).tab.cpp</OutputFile>
     </BisonParser>
     <FlexGenerator>
-      <OutputFile>$(ProjectDir)$(ProjectName).lex.cpp</OutputFile>
+      <OutputFile>%(Filename).lex.cpp</OutputFile>
     </FlexGenerator>
     <ClCompile>
       <AdditionalIncludeDirectories>$(SolutionDir)\..;$(SolutionDir)\..\lib\sqlite3;$(SolutionDir)\..\devpkg\include;$(SolutionDir)\..\devpkg\include\SDL;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -220,7 +222,7 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>zlibstat.lib;libogg_static.lib;libvorbis_static.lib;libvorbisfile_static.lib;OpenAL32.lib;glc32.lib;OpenGL32.lib;GLU32.lib;shfolder.lib;winmm.lib;ws2_32.lib;dbghelp.lib;Iphlpapi.lib;physfs.lib;glew.lib;libtheora_static.lib;libpng15.lib;QtGui4.lib;QtOpenGL4.lib;QtCore4.lib;QtMain.lib;QtScript4.lib;QtScriptTools4.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libogg_static.lib;libvorbis_static.lib;libvorbisfile_static.lib;OpenAL32.lib;glc32.lib;OpenGL32.lib;GLU32.lib;shfolder.lib;winmm.lib;Iphlpapi.lib;ws2_32.lib;dbghelp.lib;physfs.lib;glew.lib;libtheora_static.lib;libpng15.lib;QtGui4.lib;QtOpenGL4.lib;QtCore4.lib;QtMain.lib;QtScript4.lib;QtScriptTools4.lib;QtNetwork4.lib;qjson.lib;zlibstat.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)\..\devpkg\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>libcmt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -241,10 +243,10 @@
     </PreBuildEvent>
     <BisonParser>
       <Defines>true</Defines>
-      <OutputFile>$(SolutionDir)$(ProjectName).tab.cpp</OutputFile>
+      <OutputFile>%(Filename).tab.cpp</OutputFile>
     </BisonParser>
     <FlexGenerator>
-      <OutputFile>$(ProjectDir)$(ProjectName).lex.cpp</OutputFile>
+      <OutputFile>%(Filename).lex.cpp</OutputFile>
     </FlexGenerator>
     <ClCompile>
       <AdditionalIncludeDirectories>$(SolutionDir)\..;$(SolutionDir)\..\lib\sqlite3;$(SolutionDir)\..\devpkg\include;$(SolutionDir)\..\devpkg\include\SDL;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
