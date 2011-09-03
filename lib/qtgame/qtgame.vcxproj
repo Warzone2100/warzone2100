@@ -58,10 +58,13 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>..\..\;..\devpkg\include;..\devpkg\stlport5.2.1\stlport;$(Qtdir)\include;$(IncludePath)</IncludePath>
+    <IncludePath>..\..\;..\devpkg\include;..\..\devpkg\include;..\devpkg\stlport5.2.1\stlport;$(Qtdir)\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='STLport-Debug|Win32'">
     <IncludePath>..\..\;..\devpkg\include;..\devpkg\stlport5.2.1\stlport;$(Qtdir)\include;..\..\devpkg\include;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <IncludePath>..\..\;..\devpkg\include;..\..\devpkg\include;..\devpkg\stlport5.2.1\stlport;$(Qtdir)\include;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSdkDir)include;$(FrameworkSDKDir)\include</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
