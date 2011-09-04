@@ -1,6 +1,6 @@
 2011-00-00: Version 2.3.9
  * Multiplayer:
-   * Change: Make AI nastier (commit:2e13cb5420fa65554535f9c9dea7026fa992b21c)
+   * Change: Some AI improvements from master (commit:2e13cb5420fa65554535f9c9dea7026fa992b21c, commit:07542186d48dbf0069ec503e845f4f9986438ad3)
 
 2011-05-17: Version 2.3.8
  * General:
