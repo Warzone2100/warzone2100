@@ -18,7 +18,7 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 /**
- * @file raycast.c
+ * @file raycast.cpp
  *
  * Raycasting routine that gives intersection points with map tiles.
  *
@@ -30,33 +30,101 @@
 #include "map.h" // TILE_UNITS
 #include "display3d.h" // clipXY()
 
-
 struct HeightCallbackHelp_t
 {
 	const int height;
 	uint16_t pitch;
 };
 
+static void initSteps(int32_t srcM, int32_t dstM, int32_t &tile, int32_t &step, int32_t &cur, int32_t &end)
+{
+	int increasing = srcM < dstM;
+	step = -1 + 2*increasing;
+	tile = srcM - step;
+	cur = srcM + increasing;
+	end = dstM + increasing;
+}
+
+// Finds the next intersection of the line with a vertical grid line (or with a horizontal grid line, if called with x and y swapped).
+static bool tryStep(int32_t &tile, int32_t step, int32_t &cur, int32_t end, int32_t &px, int32_t &py, int32_t sx, int32_t sy, int32_t dx, int32_t dy)
+{
+	tile += step;
+
+	if (cur == end)
+	{
+		return false;  // No more vertical grid lines to cross before reaching the endpoint.
+	}
+
+	// Find the point on the line with the x coordinate world_coord(cur).
+	px = world_coord(cur);
+	py = sy + int64_t(px - sx) * (dy - sy)/(dx - sx);
+
+	cur += step;
+	return true;
+}
 
 void rayCast(Vector3i src, uint16_t direction, uint32_t length, RAY_CALLBACK callback, void *data)
 {
-	uint32_t currLen;
-	for (currLen = 0; currLen < length; currLen += TILE_UNITS)
-	{
-		Vector3i curr = src + Vector3i(iSinCosR(direction, currLen), 0);
-		// stop at the edge of the map
-		if (curr.x < 0 || curr.x >= world_coord(mapWidth) ||
-			curr.y < 0 || curr.y >= world_coord(mapHeight))
-		{
-			return;
-		}
+	Vector3i dst = src + Vector3i(iSinCosR(direction, length), 0);
 
-		if (!callback(curr, currLen, data))
-		{
-			// callback doesn't want any more points so return
-			return;
-		}
+	if (!callback(src, 0, data) || src == dst)  // Start at src.
+	{
+		return;  // Callback gave up after the first point, or there are no other points.
 	}
+
+	Vector2i srcM = map_coord(src);
+	Vector2i dstM = map_coord(dst);
+
+	Vector2i step, tile, cur, end;
+	initSteps(srcM.x, dstM.x, tile.x, step.x, cur.x, end.x);
+	initSteps(srcM.y, dstM.y, tile.y, step.y, cur.y, end.y);
+
+	Vector2i prev(0, 0);  // Dummy initialisation.
+	bool first = true;
+	Vector2i nextX(0, 0), nextY(0, 0);  // Dummy initialisations.
+	bool canX = tryStep(tile.x, step.x, cur.x, end.x, nextX.x, nextX.y, src.x, src.y, dst.x, dst.y);
+	bool canY = tryStep(tile.y, step.y, cur.y, end.y, nextY.y, nextY.x, src.y, src.x, dst.y, dst.x);
+	while (canX || canY)
+	{
+		int32_t xDist = abs(nextX.x - src.x) + abs(nextX.y - src.y);
+		int32_t yDist = abs(nextY.x - src.x) + abs(nextY.y - src.y);
+		Vector2i sel;
+		Vector2i selTile;
+		if (canX && (!canY || xDist < yDist))  // The line crosses a vertical grid line next.
+		{
+			sel = nextX;
+			selTile = tile;
+			canX = tryStep(tile.x, step.x, cur.x, end.x, nextX.x, nextX.y, src.x, src.y, dst.x, dst.y);
+		}
+		else  // The line crosses a horizontal grid line next.
+		{
+			assert(canY);
+			sel = nextY;
+			selTile = tile;
+			canY = tryStep(tile.y, step.y, cur.y, end.y, nextY.y, nextY.x, src.y, src.x, dst.y, dst.x);
+		}
+		if (!first)
+		{
+			// Find midpoint.
+			Vector2i avg = (prev + sel)/2;
+			// But make sure it's on the right tile, since it could be off-by-one if the line passes exactly through a grid intersection.
+			avg.x = std::min(std::max(avg.x, world_coord(selTile.x)), world_coord(selTile.x + 1) - 1);
+			avg.y = std::min(std::max(avg.y, world_coord(selTile.y)), world_coord(selTile.y + 1) - 1);
+			if (!worldOnMap(avg) || !callback(Vector3i(avg, src.z), iHypot(avg), data))
+			{
+				return;  // Callback doesn't want any more points, or we reached the edge of the map, so return.
+			}
+		}
+		prev = sel;
+		first = false;
+	}
+
+	// Include the endpoint.
+	if (!worldOnMap(dst))
+	{
+		return;  // Stop, since reached the edge of the map.
+	}
+	callback(dst, iHypot(dst), data);
 }
 
 //-----------------------------------------------------------------------------------
