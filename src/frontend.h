@@ -79,6 +79,7 @@ void addTopForm(void);
 void addBottomForm(void);
 void addBackdrop(void);
 void addTextButton(UDWORD id, UDWORD PosX, UDWORD PosY, const char *txt, unsigned int style);
+void addSmallTextButton(UDWORD id, UDWORD PosX, UDWORD PosY, const char *txt, unsigned int style);
 void addTextHint(UDWORD id, UDWORD PosX, UDWORD PosY, const char *txt);
 void addText(UDWORD id, UDWORD PosX, UDWORD PosY, const char *txt, UDWORD formID);
 void addSideText(UDWORD id, UDWORD PosX, UDWORD PosY, const char *txt);
@@ -142,6 +143,9 @@ BOOL CancelPressed(void);
 #define FRONTEND_POS7Y			250
 #define FRONTEND_POS7M			290
 
+#define FRONTEND_POS8X			-30				// special case for our hyperlink
+#define FRONTEND_POS8Y			278
+
 #define FRONTEND_SIDEX			44
 #define FRONTEND_SIDEY			FRONTEND_BOTFORMY
 #define FRONTEND_LOGOW			248
@@ -161,6 +165,7 @@ enum
 	FRONTEND_LOADCAM2,					// loading via --GAME CAM_2A
 	FRONTEND_LOADCAM3,					// loading via --GAME CAM_3A
 	FRONTEND_PASSWORDFORM,
+	FRONTEND_HYPERLINK,
 	// begin menu
 	FRONTEND_SINGLEPLAYER	= 20100,	// title screen
 	FRONTEND_MULTIPLAYER,
