@@ -24,12 +24,12 @@
  * Alex Lee. Pumpkin Studios. Eidos PLC 98,
  */
 
+#include "lib/framework/wzapp.h"
+
 #if defined(WZ_OS_WIN)
-#  include <Shellapi.h> /* For ShellExecute  */
+#  include <shellapi.h> /* For ShellExecute  */
 #endif
 
-
-#include "lib/framework/wzapp.h"
 #include "lib/framework/input.h"
 #include "lib/ivis_opengl/bitimage.h"
 #include "lib/ivis_opengl/pieblitfunc.h"
