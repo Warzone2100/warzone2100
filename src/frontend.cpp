@@ -24,6 +24,11 @@
  * Alex Lee. Pumpkin Studios. Eidos PLC 98,
  */
 
+#if defined(WZ_OS_WIN)
+#  include <Shellapi.h> /* For ShellExecute  */
+#endif
+
+
 #include "lib/framework/wzapp.h"
 #include "lib/framework/input.h"
 #include "lib/ivis_opengl/bitimage.h"
@@ -106,11 +111,28 @@ static bool startTitleMenu(void)
 	addTextButton(FRONTEND_PLAYINTRO, FRONTEND_POS6X, FRONTEND_POS6Y, _("View Intro"), WBUT_TXTCENTRE);
 
 	addTextButton(FRONTEND_QUIT, FRONTEND_POS7X, FRONTEND_POS7Y, _("Quit Game"), WBUT_TXTCENTRE);
-
 	addSideText(FRONTEND_SIDETEXT, FRONTEND_SIDEX, FRONTEND_SIDEY, _("MAIN MENU"));
+
+	addSmallTextButton(FRONTEND_HYPERLINK, FRONTEND_POS8X, FRONTEND_POS8Y, _("Visit our official site: http://wz2100.net"), 0);
 
 	return true;
 }
+
+static void runHyperlink(void)
+{
+	//FIXME: There is no decent way we can re-init the display to switch to window or fullscreen within game. refs: screenToggleMode().
+
+#if defined(WZ_OS_WIN)
+	ShellExecute(NULL, L"open", L"http://wz2100.net/", NULL, NULL, SW_SHOWNORMAL);
+#elif defined (WZ_OS_MAC)
+	// For the macs
+	system("open http://wz2100.net");
+#else
+	// for linux
+	system("xdg-open http://wz2100.net &");
+#endif
+}
+
 
 bool runTitleMenu(void)
 {
@@ -137,6 +159,9 @@ bool runTitleMenu(void)
 			break;
 		case FRONTEND_PLAYINTRO:
 			changeTitleMode(SHOWINTRO);
+			break;
+		case FRONTEND_HYPERLINK:
+			runHyperlink();
 			break;
 		default:
 			break;
@@ -1476,6 +1501,10 @@ void displayTextOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL
 		{
 			iV_SetTextColour(WZCOL_TEXT_BRIGHT);
 		}
+		else if (psWidget->id == FRONTEND_HYPERLINK)				// special case for our hyperlink										
+		{
+			iV_SetTextColour(WZCOL_YELLOW);
+		}
 		else														// dont highlight
 		{
 			iV_SetTextColour(WZCOL_TEXT_MEDIUM);
@@ -1665,6 +1694,49 @@ void addTextButton(UDWORD id,  UDWORD PosX, UDWORD PosY, const char *txt, unsign
 	}
 }
 
+void addSmallTextButton(UDWORD id,  UDWORD PosX, UDWORD PosY, const char *txt, unsigned int style)
+{
+	W_BUTINIT sButInit;
+
+	memset(&sButInit, 0, sizeof(W_BUTINIT));
+	sButInit.formID = FRONTEND_BOTFORM;
+	sButInit.id = id;
+	sButInit.x = (short)PosX;
+	sButInit.y = (short)PosY;
+
+	// Align
+	if ( !(style & WBUT_TXTCENTRE) )
+	{
+		iV_SetFont(font_small);
+		sButInit.width = (short)(iV_GetTextWidth(txt)+10);
+		sButInit.x+=35;
+	}
+	else
+	{
+		sButInit.style |= WBUT_TXTCENTRE;
+		sButInit.width = FRONTEND_BUTWIDTH;
+	}
+
+	// Enable right clicks
+	if (style & WBUT_SECONDARY)
+	{
+		sButInit.style |= WBUT_SECONDARY;
+	}
+
+	sButInit.UserData = (style & WBUT_DISABLE); // store disable state
+
+	sButInit.height = FRONTEND_BUTHEIGHT;
+	sButInit.pDisplay = displayTextOption;
+	sButInit.FontID = font_small;
+	sButInit.pText = txt;
+	widgAddButton(psWScreen, &sButInit);
+	
+	// Disable button
+	if (style & WBUT_DISABLE)									
+	{
+		widgSetButtonState(psWScreen, id, WBUT_DISABLE);
+	}
+}
 // ////////////////////////////////////////////////////////////////////////////
 void addFESlider(UDWORD id, UDWORD parent, UDWORD x, UDWORD y, UDWORD stops, UDWORD pos)
 {
