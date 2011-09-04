@@ -984,8 +984,6 @@ static bool startMouseOptionsMenu(void)
 	addTopForm();
 	addBottomForm();
 
-	addTextHint(FRONTEND_TAKESEFFECT, FRONTEND_POS1X + 48, FRONTEND_POS1Y + 24, _("* May negatively affect performance"));
-
 	////////////
 	// mouseflip
 	addTextButton(FRONTEND_MFLIP,	 FRONTEND_POS2X-35,   FRONTEND_POS2Y, _("Reverse Rotation"), 0);
@@ -1012,26 +1010,26 @@ static bool startMouseOptionsMenu(void)
 	
 	////////////
 	// left-click orders
-	addTextButton(FRONTEND_MBUTTONS,	 FRONTEND_POS2X-35,   FRONTEND_POS5Y, _("Switch Mouse Buttons"), 0);
+	addTextButton(FRONTEND_MBUTTONS,	 FRONTEND_POS2X-35,   FRONTEND_POS4Y, _("Switch Mouse Buttons"), 0);
 	if( getRightClickOrders() )
 	{	// right-click orders
-		addTextButton(FRONTEND_MBUTTONS_R, FRONTEND_POS2M-25,  FRONTEND_POS5Y, _("On"), 0);
+		addTextButton(FRONTEND_MBUTTONS_R, FRONTEND_POS2M-25,  FRONTEND_POS4Y, _("On"), 0);
 	}
 	else
 	{	// left-click orders
-		addTextButton(FRONTEND_MBUTTONS_R, FRONTEND_POS2M-25,  FRONTEND_POS5Y, _("Off"), 0);
+		addTextButton(FRONTEND_MBUTTONS_R, FRONTEND_POS2M-25,  FRONTEND_POS4Y, _("Off"), 0);
 	}
 
 	////////////
 	// middle-click rotate
-	addTextButton(FRONTEND_MMROTATE,	 FRONTEND_POS2X-35,   FRONTEND_POS6Y, _("Rotate Screen"), 0);
+	addTextButton(FRONTEND_MMROTATE,	 FRONTEND_POS2X-35,   FRONTEND_POS5Y, _("Rotate Screen"), 0);
 	if( getMiddleClickRotate() )
 	{	// right-click orders
-		addTextButton(FRONTEND_MMROTATE_R, FRONTEND_POS2M-25,  FRONTEND_POS6Y, _("Middle Mouse"), 0);
+		addTextButton(FRONTEND_MMROTATE_R, FRONTEND_POS2M-25,  FRONTEND_POS5Y, _("Middle Mouse"), 0);
 	}
 	else
 	{	// left-click orders
-		addTextButton(FRONTEND_MMROTATE_R, FRONTEND_POS2M-25,  FRONTEND_POS6Y, _("Right Mouse"), 0);
+		addTextButton(FRONTEND_MMROTATE_R, FRONTEND_POS2M-25,  FRONTEND_POS5Y, _("Right Mouse"), 0);
 	}
 
 	// Add some text down the side of the form
