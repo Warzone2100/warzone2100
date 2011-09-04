@@ -3049,14 +3049,9 @@ void orderSelectedStatsLocDir(UDWORD player, DROID_ORDER order, BASE_STATS *psSt
 {
 	DROID		*psCurr;
 
-//turn off the build queue availability until desired release date!
-#ifdef DISABLE_BUILD_QUEUE
-	add = false;
-#endif
-
 	for(psCurr = apsDroidLists[player]; psCurr; psCurr=psCurr->psNext)
 	{
-		if (psCurr->selected)
+		if (psCurr->selected && isConstructionDroid(psCurr))
 		{
 			if (add)
 			{
@@ -3075,11 +3070,6 @@ void orderSelectedStatsLocDir(UDWORD player, DROID_ORDER order, BASE_STATS *psSt
 void orderSelectedStatsTwoLocDir(UDWORD player, DROID_ORDER order, BASE_STATS *psStats, UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y2, uint16_t direction, bool add)
 {
 	DROID		*psCurr;
-
-//turn off the build queue availability until desired release date!
-#ifdef DISABLE_BUILD_QUEUE
-	add = false;
-#endif
 
 	for(psCurr = apsDroidLists[player]; psCurr; psCurr=psCurr->psNext)
 	{

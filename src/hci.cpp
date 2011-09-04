@@ -320,9 +320,6 @@ typedef BASE_STATS *(* OBJ_GETSTATS)(BASE_OBJECT *psObj);
 /* Function type for setting the appropriate stats for an object */
 typedef bool (* OBJ_SETSTATS)(BASE_OBJECT *psObj, BASE_STATS *psStats);
 
-/* The current object list being used by the object screen */
-static BASE_OBJECT		*psObjList;
-
 /* functions to select and get stats from the current object list */
 static OBJ_SELECT		objSelectFunc;
 OBJ_GETSTATS		objGetStatsFunc;
@@ -1847,7 +1844,7 @@ INT_RETVAL intRunWidgets(void)
 						// Set the droid order
 						if (intNumSelectedDroids(DROID_CONSTRUCT) == 0
 						    && intNumSelectedDroids(DROID_CYBORG_CONSTRUCT) == 0
-						    && psObjSelected != NULL)
+						    && psObjSelected != NULL && isConstructionDroid(psObjSelected))
 						{
 							orderDroidStatsTwoLocDir((DROID *)psObjSelected, DORDER_LINEBUILD, psPositionStats, structX, structY, structX2, structY2, player.r.y, ModeQueue);
 						}
@@ -3874,7 +3871,6 @@ static bool intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,b
 
 	/* Reset the current object and store the current list */
 	psObjSelected = NULL;
-	psObjList = psObjects;
 
 	/* Create the basic form */
 
