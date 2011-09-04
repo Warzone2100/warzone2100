@@ -24,6 +24,10 @@
  * Alex Lee. Pumpkin Studios. Eidos PLC 98,
  */
 
+#if defined(WZ_OS_WIN)
+#   include <Shellapi.h> /* For ShellExecute */
+#endif
+
 #include "lib/framework/frame.h"
 #include "lib/framework/input.h"
 #include "lib/ivis_common/rendmode.h"
