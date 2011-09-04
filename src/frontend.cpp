@@ -123,7 +123,7 @@ static void runHyperlink(void)
 	//FIXME: There is no decent way we can re-init the display to switch to window or fullscreen within game. refs: screenToggleMode().
 
 #if defined(WZ_OS_WIN)
-	ShellExecute(NULL, L"open", L"http://wz2100.net/", NULL, NULL, SW_SHOWNORMAL);
+	ShellExecuteW(NULL, L"open", L"http://wz2100.net/", NULL, NULL, SW_SHOWNORMAL);
 #elif defined (WZ_OS_MAC)
 	// For the macs
 	system("open http://wz2100.net");
