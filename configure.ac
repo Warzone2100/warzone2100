@@ -527,7 +527,7 @@ AS_IF([test -z "$PERL"],[
 
 AS_IF([test -z "$A2X" -o -z "$WKHTMLTOPDF"],[
 	AC_MSG_NOTICE()
-	AC_MSG_WARN([a2x or wkhtmltopdf not found, can't convert documentation. This doesn't affect building the game,
+	AC_MSG_WARN([a2x (asciidoc) or wkhtmltopdf not found, can't convert documentation. This doesn't affect building the game,
 		but means that things like "make dist" and building a Windows installer will fail.])
 ])
 
