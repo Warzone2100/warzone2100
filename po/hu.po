@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Warzone 2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-08-26 22:54+0200\n"
+"POT-Creation-Date: 2011-09-07 21:16+0200\n"
 "PO-Revision-Date: 2011-06-22 22:41+0100\n"
 "Last-Translator: Molnár Gábor <b1afy7@gmail.com>\n"
 "Language-Team: Magyar (Hungary) <meszaros.tomi@hotmail.com>\n"
@@ -12612,385 +12612,389 @@ msgstr "%s %s-t akart neked adni, de neked már így is túl sok van!"
 msgid "You wanted to give %s a %s but they have too many!"
 msgstr "%s-t akartál adni %s de neki már így is túl sok van."
 
-#: src/frontend.c:97
+#: src/frontend.c:102
 msgid "Single Player"
 msgstr "Egyjátékos mód"
 
-#: src/frontend.c:98
+#: src/frontend.c:103
 msgid "Multi Player"
 msgstr "Többjátékos mód"
 
-#: src/frontend.c:99
-#: src/frontend.c:155
+#: src/frontend.c:104
+#: src/frontend.c:181
 msgid "Tutorial"
 msgstr ""
 
-#: src/frontend.c:100
+#: src/frontend.c:105
 #: src/hci.c:3957
 msgid "Options"
 msgstr "Beállítások"
 
-#: src/frontend.c:101
+#: src/frontend.c:106
 msgid "View Intro"
 msgstr "Intro"
 
-#: src/frontend.c:103
+#: src/frontend.c:108
 msgid "Quit Game"
 msgstr "Kilépés a játékból"
 
-#: src/frontend.c:105
+#: src/frontend.c:110
 msgid "MAIN MENU"
 msgstr "FŐ MENÜ"
 
-#: src/frontend.c:156
+#: src/frontend.c:112
+msgid "Visit our official site: http://wz2100.net"
+msgstr ""
+
+#: src/frontend.c:182
 msgid "Fast Play"
 msgstr "Gyors Játék"
 
-#: src/frontend.c:157
+#: src/frontend.c:183
 msgid "TUTORIALS"
 msgstr ""
 
 #. TRANSLATORS: "Return", in this context, means "return to previous screen/menu"
-#: src/frontend.c:159
-#: src/frontend.c:218
-#: src/frontend.c:351
-#: src/frontend.c:421
-#: src/frontend.c:572
-#: src/frontend.c:728
-#: src/frontend.c:835
-#: src/frontend.c:1054
-#: src/frontend.c:1215
+#: src/frontend.c:185
+#: src/frontend.c:244
+#: src/frontend.c:377
+#: src/frontend.c:447
+#: src/frontend.c:598
+#: src/frontend.c:754
+#: src/frontend.c:861
+#: src/frontend.c:1080
+#: src/frontend.c:1241
 msgctxt "menu"
 msgid "Return"
 msgstr "Vissza"
 
-#: src/frontend.c:212
+#: src/frontend.c:238
 msgid "New Campaign"
 msgstr "Új Küldetés"
 
-#: src/frontend.c:213
+#: src/frontend.c:239
 msgid "Start Skirmish Game"
 msgstr "Csata indítása"
 
-#: src/frontend.c:214
+#: src/frontend.c:240
 msgid "Challenges"
 msgstr "Kihívás"
 
-#: src/frontend.c:215
+#: src/frontend.c:241
 #: src/ingameop.c:281
 msgid "Load Game"
 msgstr "Játék Betöltése"
 
-#: src/frontend.c:217
+#: src/frontend.c:243
 msgid "SINGLE PLAYER"
 msgstr "EGYJÁTÉKOS"
 
-#: src/frontend.c:294
+#: src/frontend.c:320
 #: src/ingameop.c:507
 #: src/mission.c:2820
 #: src/mission.c:2925
 msgid "Load Saved Game"
 msgstr "Mentett játék betöltése"
 
-#: src/frontend.c:346
+#: src/frontend.c:372
 msgid "MULTI PLAYER"
 msgstr "TÖBBJÁTÉKOS"
 
-#: src/frontend.c:348
+#: src/frontend.c:374
 msgid "Host Game"
 msgstr "Játékmester játéka"
 
-#: src/frontend.c:349
+#: src/frontend.c:375
 msgid "Join Game"
 msgstr ""
 
-#: src/frontend.c:414
+#: src/frontend.c:440
 #: src/multiint.c:1176
 msgid "OPTIONS"
 msgstr "BEÁLLÍTÁSOK"
 
-#: src/frontend.c:415
+#: src/frontend.c:441
 msgid "Game Options"
 msgstr "Játék Beállítások"
 
-#: src/frontend.c:416
+#: src/frontend.c:442
 msgid "Graphics Options"
 msgstr "Grafikai Beállítások"
 
-#: src/frontend.c:417
+#: src/frontend.c:443
 msgid "Video Options"
 msgstr "Video beállítás"
 
-#: src/frontend.c:418
+#: src/frontend.c:444
 #: src/ingameop.c:276
 msgid "Audio Options"
 msgstr "Hang beállítás"
 
-#: src/frontend.c:419
+#: src/frontend.c:445
 msgid "Mouse Options"
 msgstr "Egér beállítás"
 
-#: src/frontend.c:420
+#: src/frontend.c:446
 msgid "Key Mappings"
 msgstr "Billentyűzet beállítása"
 
-#: src/frontend.c:482
+#: src/frontend.c:508
 msgid "Video Playback"
 msgstr "Video visszajátszás"
 
-#: src/frontend.c:486
-#: src/frontend.c:662
+#: src/frontend.c:512
+#: src/frontend.c:688
 msgid "1X"
 msgstr ""
 
-#: src/frontend.c:490
-#: src/frontend.c:652
+#: src/frontend.c:516
+#: src/frontend.c:678
 msgid "2X"
 msgstr ""
 
-#: src/frontend.c:494
-#: src/frontend.c:657
-#: src/frontend.c:803
-#: src/frontend.c:857
+#: src/frontend.c:520
+#: src/frontend.c:683
+#: src/frontend.c:829
+#: src/frontend.c:883
 msgid "Fullscreen"
 msgstr "Teljes képernyő"
 
-#: src/frontend.c:503
+#: src/frontend.c:529
 msgid "Scanlines"
 msgstr ""
 
-#: src/frontend.c:507
-#: src/frontend.c:528
-#: src/frontend.c:548
-#: src/frontend.c:564
+#: src/frontend.c:533
+#: src/frontend.c:554
+#: src/frontend.c:574
 #: src/frontend.c:590
-#: src/frontend.c:624
-#: src/frontend.c:642
-#: src/frontend.c:687
-#: src/frontend.c:828
-#: src/frontend.c:913
-#: src/frontend.c:951
-#: src/frontend.c:999
-#: src/frontend.c:1011
-#: src/frontend.c:1023
-#: src/frontend.c:1035
-#: src/frontend.c:1071
-#: src/frontend.c:1084
-#: src/frontend.c:1098
-#: src/frontend.c:1112
+#: src/frontend.c:616
+#: src/frontend.c:650
+#: src/frontend.c:668
+#: src/frontend.c:713
+#: src/frontend.c:854
+#: src/frontend.c:939
+#: src/frontend.c:977
+#: src/frontend.c:1025
+#: src/frontend.c:1037
+#: src/frontend.c:1049
+#: src/frontend.c:1061
+#: src/frontend.c:1097
+#: src/frontend.c:1110
+#: src/frontend.c:1124
+#: src/frontend.c:1138
 msgid "Off"
 msgstr "Ki"
 
-#: src/frontend.c:511
-#: src/frontend.c:677
+#: src/frontend.c:537
+#: src/frontend.c:703
 msgid "50%"
 msgstr ""
 
-#: src/frontend.c:515
-#: src/frontend.c:682
+#: src/frontend.c:541
+#: src/frontend.c:708
 #: src/multiplay.c:2038
 msgid "Black"
 msgstr "Fekete"
 
-#: src/frontend.c:521
+#: src/frontend.c:547
 msgid "Screen Shake"
 msgstr "Képernyő Villódzás"
 
-#: src/frontend.c:524
-#: src/frontend.c:552
-#: src/frontend.c:560
-#: src/frontend.c:595
-#: src/frontend.c:629
-#: src/frontend.c:638
-#: src/frontend.c:824
-#: src/frontend.c:918
-#: src/frontend.c:956
-#: src/frontend.c:995
-#: src/frontend.c:1007
-#: src/frontend.c:1019
-#: src/frontend.c:1031
-#: src/frontend.c:1076
-#: src/frontend.c:1089
-#: src/frontend.c:1103
-#: src/frontend.c:1117
+#: src/frontend.c:550
+#: src/frontend.c:578
+#: src/frontend.c:586
+#: src/frontend.c:621
+#: src/frontend.c:655
+#: src/frontend.c:664
+#: src/frontend.c:850
+#: src/frontend.c:944
+#: src/frontend.c:982
+#: src/frontend.c:1021
+#: src/frontend.c:1033
+#: src/frontend.c:1045
+#: src/frontend.c:1057
+#: src/frontend.c:1102
+#: src/frontend.c:1115
+#: src/frontend.c:1129
+#: src/frontend.c:1143
 msgid "On"
 msgstr "Be"
 
-#: src/frontend.c:533
+#: src/frontend.c:559
 #: src/multiint.c:1246
 msgid "Fog"
 msgstr "Köd"
 
-#: src/frontend.c:536
-#: src/frontend.c:611
+#: src/frontend.c:562
+#: src/frontend.c:637
 msgid "Mist"
 msgstr "Homály"
 
-#: src/frontend.c:540
-#: src/frontend.c:605
+#: src/frontend.c:566
+#: src/frontend.c:631
 #: src/multiint.c:1248
 msgid "Fog Of War"
 msgstr ""
 
-#: src/frontend.c:545
+#: src/frontend.c:571
 msgid "Subtitles"
 msgstr "Feliratok"
 
-#: src/frontend.c:557
+#: src/frontend.c:583
 msgid "Shadows"
 msgstr "Árnyékok"
 
-#: src/frontend.c:568
+#: src/frontend.c:594
 msgid "GRAPHICS OPTIONS"
 msgstr "GRAFIKA BEÁLLÍTÁS"
 
-#: src/frontend.c:716
+#: src/frontend.c:742
 #: src/ingameop.c:179
 msgid "Voice Volume"
 msgstr "Beszéd hang"
 
-#: src/frontend.c:720
+#: src/frontend.c:746
 #: src/ingameop.c:184
 msgid "FX Volume"
 msgstr "FX hang"
 
-#: src/frontend.c:724
+#: src/frontend.c:750
 #: src/ingameop.c:189
 msgid "Music Volume"
 msgstr "Zenei hang"
 
-#: src/frontend.c:731
+#: src/frontend.c:757
 msgid "AUDIO OPTIONS"
 msgstr "HANG BEÁLLÍTÁS"
 
-#: src/frontend.c:796
+#: src/frontend.c:822
 msgid "* Takes effect on game restart"
 msgstr ""
 
-#: src/frontend.c:799
+#: src/frontend.c:825
 msgid "Graphics Mode*"
 msgstr "Grafikus Mód*"
 
-#: src/frontend.c:807
-#: src/frontend.c:852
+#: src/frontend.c:833
+#: src/frontend.c:878
 msgid "Windowed"
 msgstr "Ablakos"
 
-#: src/frontend.c:811
+#: src/frontend.c:837
 msgid "Resolution*"
 msgstr "Felbontás*"
 
-#: src/frontend.c:816
+#: src/frontend.c:842
 msgid "Texture size"
 msgstr "Szöveg méret"
 
-#: src/frontend.c:820
+#: src/frontend.c:846
 msgid "Vertical sync*"
 msgstr "Vízszintes szinkronizáció"
 
-#: src/frontend.c:832
+#: src/frontend.c:858
 msgid "VIDEO OPTIONS"
 msgstr "VIDEO BEÁLLÍTÁS"
 
-#: src/frontend.c:988
+#: src/frontend.c:1014
 msgid "* May negatively affect performance"
 msgstr "* Hátrányosan érintheti a sebességet"
 
-#: src/frontend.c:992
+#: src/frontend.c:1018
 msgid "Reverse Rotation"
 msgstr "Fordított forgatás"
 
-#: src/frontend.c:1003
+#: src/frontend.c:1029
 msgid "Trap Cursor"
 msgstr ""
 
-#: src/frontend.c:1015
+#: src/frontend.c:1041
 msgid "Colored Cursors*"
 msgstr "Kiszínezett Kurzorok"
 
 # célpont megadása jobb gombról átkerül a balra
-#: src/frontend.c:1028
+#: src/frontend.c:1054
 msgid "Switch Mouse Buttons"
 msgstr "Váltott egérparancs"
 
-#: src/frontend.c:1040
+#: src/frontend.c:1066
 msgid "Rotate Screen"
 msgstr "Balra forgatás"
 
-#: src/frontend.c:1043
-#: src/frontend.c:1131
+#: src/frontend.c:1069
+#: src/frontend.c:1157
 msgctxt "middle mouse button"
 msgid "Middle Button"
 msgstr "Középső Gomb"
 
-#: src/frontend.c:1047
-#: src/frontend.c:1126
+#: src/frontend.c:1073
+#: src/frontend.c:1152
 msgctxt "right mouse button"
 msgid "Right Button"
 msgstr "Jobb Gomb"
 
-#: src/frontend.c:1051
+#: src/frontend.c:1077
 msgid "MOUSE OPTIONS"
 msgstr "EGÉR BEÁLLÍTÁS"
 
-#: src/frontend.c:1166
-#: src/frontend.c:1236
+#: src/frontend.c:1192
+#: src/frontend.c:1262
 msgid "Difficulty"
 msgstr "Nehézség"
 
-#: src/frontend.c:1170
-#: src/frontend.c:1244
-#: src/frontend.c:1281
+#: src/frontend.c:1196
+#: src/frontend.c:1270
+#: src/frontend.c:1307
 msgid "Easy"
 msgstr "Könnyű"
 
-#: src/frontend.c:1173
-#: src/frontend.c:1247
+#: src/frontend.c:1199
 #: src/frontend.c:1273
+#: src/frontend.c:1299
 msgid "Normal"
 msgstr "Normális"
 
-#: src/frontend.c:1177
-#: src/frontend.c:1250
-#: src/frontend.c:1277
+#: src/frontend.c:1203
+#: src/frontend.c:1276
+#: src/frontend.c:1303
 msgid "Hard"
 msgstr "Nehéz"
 
-#: src/frontend.c:1182
-#: src/frontend.c:1237
+#: src/frontend.c:1208
+#: src/frontend.c:1263
 msgid "Scroll Speed"
 msgstr "Görgetés sebessége"
 
-#: src/frontend.c:1196
-#: src/frontend.c:1234
+#: src/frontend.c:1222
+#: src/frontend.c:1260
 msgid "Language"
 msgstr "Nyelv"
 
-#: src/frontend.c:1208
-#: src/frontend.c:1235
+#: src/frontend.c:1234
+#: src/frontend.c:1261
 msgid "Unit Colour"
 msgstr "Egység Színek"
 
-#: src/frontend.c:1211
+#: src/frontend.c:1237
 msgid "Radar"
 msgstr ""
 
-#: src/frontend.c:1212
-#: src/frontend.c:1261
+#: src/frontend.c:1238
+#: src/frontend.c:1287
 msgid "Rotating"
 msgstr "Jobbra forgatás"
 
-#: src/frontend.c:1212
-#: src/frontend.c:1261
+#: src/frontend.c:1238
+#: src/frontend.c:1287
 msgid "Fixed"
 msgstr "Rögzített"
 
-#: src/frontend.c:1218
-#: src/frontend.c:1238
+#: src/frontend.c:1244
+#: src/frontend.c:1264
 msgid "GAME OPTIONS"
 msgstr "JÁTÉK OPCIÓK"
 
-#: src/frontend.c:1379
+#: src/frontend.c:1405
 #: src/multiint.c:2212
 msgid "Mod: "
 msgstr "Mód:"

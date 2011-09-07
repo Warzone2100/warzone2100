@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-05-17 01:48+0200\n"
+"POT-Creation-Date: 2011-09-07 21:16+0200\n"
 "PO-Revision-Date: 2009-05-11 00:21+0800\n"
 "Last-Translator: \n"
 "Language-Team: zh_TW\n"
@@ -12381,10 +12381,10 @@ msgstr ""
 
 #: src/challenge.c:188
 #: src/hci.c:999
-#: src/hci.c:3814
-#: src/hci.c:3965
-#: src/hci.c:4416
-#: src/hci.c:5622
+#: src/hci.c:3823
+#: src/hci.c:3974
+#: src/hci.c:4425
+#: src/hci.c:5631
 #: src/intelmap.c:539
 #: src/intorder.c:787
 #: src/loadsave.c:267
@@ -12697,17 +12697,17 @@ msgstr "玩家"
 msgid "Player dropped"
 msgstr "玩家"
 
-#: src/display.c:1743
+#: src/display.c:1758
 msgid "Cannot Build. Oil Resource Burning."
 msgstr "油田燃燒中，無法建築鑽油井"
 
-#: src/display.c:1923
-#: src/display.c:2534
+#: src/display.c:1938
+#: src/display.c:2549
 #, c-format
 msgid "%s - Damage %d%% - Experience %.1f, %s"
 msgstr "%s - 損傷 %d%% - 經驗值 %.1f, %s"
 
-#: src/display.c:1939
+#: src/display.c:1954
 #, fuzzy, c-format
 msgid "%s - Allied - Damage %d%% - Experience %d, %s"
 msgstr "%s - 損傷 %d%% - 經驗值 %d, %s"
@@ -12791,393 +12791,397 @@ msgstr ""
 msgid "You wanted to give %s a %s but they have too many!"
 msgstr ""
 
-#: src/frontend.c:97
+#: src/frontend.c:102
 msgid "Single Player"
 msgstr "單人遊戲"
 
-#: src/frontend.c:98
+#: src/frontend.c:103
 msgid "Multi Player"
 msgstr "多人遊戲"
 
-#: src/frontend.c:99
-#: src/frontend.c:155
+#: src/frontend.c:104
+#: src/frontend.c:181
 msgid "Tutorial"
 msgstr "教學模式"
 
-#: src/frontend.c:100
-#: src/hci.c:3948
+#: src/frontend.c:105
+#: src/hci.c:3957
 msgid "Options"
 msgstr "選項"
 
-#: src/frontend.c:101
+#: src/frontend.c:106
 msgid "View Intro"
 msgstr "影片介紹"
 
-#: src/frontend.c:103
+#: src/frontend.c:108
 msgid "Quit Game"
 msgstr "離開遊戲"
 
-#: src/frontend.c:105
+#: src/frontend.c:110
 msgid "MAIN MENU"
 msgstr "主選單"
 
-#: src/frontend.c:156
+#: src/frontend.c:112
+msgid "Visit our official site: http://wz2100.net"
+msgstr ""
+
+#: src/frontend.c:182
 msgid "Fast Play"
 msgstr "馬上玩！"
 
-#: src/frontend.c:157
+#: src/frontend.c:183
 msgid "TUTORIALS"
 msgstr "教學模式"
 
 #. TRANSLATORS: "Return", in this context, means "return to previous screen/menu"
-#: src/frontend.c:159
-#: src/frontend.c:218
-#: src/frontend.c:351
-#: src/frontend.c:421
-#: src/frontend.c:572
-#: src/frontend.c:728
-#: src/frontend.c:835
-#: src/frontend.c:1054
-#: src/frontend.c:1215
+#: src/frontend.c:185
+#: src/frontend.c:244
+#: src/frontend.c:377
+#: src/frontend.c:447
+#: src/frontend.c:598
+#: src/frontend.c:754
+#: src/frontend.c:861
+#: src/frontend.c:1080
+#: src/frontend.c:1241
 msgctxt "menu"
 msgid "Return"
 msgstr "返回"
 
-#: src/frontend.c:212
+#: src/frontend.c:238
 msgid "New Campaign"
 msgstr "新的任務"
 
-#: src/frontend.c:213
+#: src/frontend.c:239
 msgid "Start Skirmish Game"
 msgstr "單人戰役模式"
 
-#: src/frontend.c:214
+#: src/frontend.c:240
 #, fuzzy
 msgid "Challenges"
 msgstr "拾荒者"
 
-#: src/frontend.c:215
+#: src/frontend.c:241
 #: src/ingameop.c:281
 msgid "Load Game"
 msgstr "載入遊戲"
 
-#: src/frontend.c:217
+#: src/frontend.c:243
 msgid "SINGLE PLAYER"
 msgstr "SINGLE PLAYER"
 
-#: src/frontend.c:294
+#: src/frontend.c:320
 #: src/ingameop.c:507
 #: src/mission.c:2820
 #: src/mission.c:2925
 msgid "Load Saved Game"
 msgstr "載入已儲存的遊戲"
 
-#: src/frontend.c:346
+#: src/frontend.c:372
 msgid "MULTI PLAYER"
 msgstr "MULTIPLAYER"
 
-#: src/frontend.c:348
+#: src/frontend.c:374
 msgid "Host Game"
 msgstr "開啟遊戲"
 
-#: src/frontend.c:349
+#: src/frontend.c:375
 msgid "Join Game"
 msgstr "加入遊戲"
 
-#: src/frontend.c:414
+#: src/frontend.c:440
 #: src/multiint.c:1176
 msgid "OPTIONS"
 msgstr "選項"
 
-#: src/frontend.c:415
+#: src/frontend.c:441
 msgid "Game Options"
 msgstr "遊戲選項"
 
-#: src/frontend.c:416
+#: src/frontend.c:442
 msgid "Graphics Options"
 msgstr "圖形選項"
 
-#: src/frontend.c:417
+#: src/frontend.c:443
 msgid "Video Options"
 msgstr "顯示選項"
 
-#: src/frontend.c:418
+#: src/frontend.c:444
 #: src/ingameop.c:276
 msgid "Audio Options"
 msgstr "音效選項"
 
-#: src/frontend.c:419
+#: src/frontend.c:445
 msgid "Mouse Options"
 msgstr "滑鼠選項"
 
-#: src/frontend.c:420
+#: src/frontend.c:446
 msgid "Key Mappings"
 msgstr "鍵盤配置"
 
-#: src/frontend.c:482
+#: src/frontend.c:508
 msgid "Video Playback"
 msgstr "播放影片"
 
-#: src/frontend.c:486
-#: src/frontend.c:662
+#: src/frontend.c:512
+#: src/frontend.c:688
 msgid "1X"
 msgstr "1倍大小"
 
-#: src/frontend.c:490
-#: src/frontend.c:652
+#: src/frontend.c:516
+#: src/frontend.c:678
 msgid "2X"
 msgstr "2倍大小"
 
-#: src/frontend.c:494
-#: src/frontend.c:657
-#: src/frontend.c:803
-#: src/frontend.c:857
+#: src/frontend.c:520
+#: src/frontend.c:683
+#: src/frontend.c:829
+#: src/frontend.c:883
 msgid "Fullscreen"
 msgstr "全螢幕"
 
-#: src/frontend.c:503
+#: src/frontend.c:529
 msgid "Scanlines"
 msgstr ""
 
-#: src/frontend.c:507
-#: src/frontend.c:528
-#: src/frontend.c:548
-#: src/frontend.c:564
+#: src/frontend.c:533
+#: src/frontend.c:554
+#: src/frontend.c:574
 #: src/frontend.c:590
-#: src/frontend.c:624
-#: src/frontend.c:642
-#: src/frontend.c:687
-#: src/frontend.c:828
-#: src/frontend.c:913
-#: src/frontend.c:951
-#: src/frontend.c:999
-#: src/frontend.c:1011
-#: src/frontend.c:1023
-#: src/frontend.c:1035
-#: src/frontend.c:1071
-#: src/frontend.c:1084
-#: src/frontend.c:1098
-#: src/frontend.c:1112
+#: src/frontend.c:616
+#: src/frontend.c:650
+#: src/frontend.c:668
+#: src/frontend.c:713
+#: src/frontend.c:854
+#: src/frontend.c:939
+#: src/frontend.c:977
+#: src/frontend.c:1025
+#: src/frontend.c:1037
+#: src/frontend.c:1049
+#: src/frontend.c:1061
+#: src/frontend.c:1097
+#: src/frontend.c:1110
+#: src/frontend.c:1124
+#: src/frontend.c:1138
 msgid "Off"
 msgstr "關閉"
 
-#: src/frontend.c:511
-#: src/frontend.c:677
+#: src/frontend.c:537
+#: src/frontend.c:703
 msgid "50%"
 msgstr ""
 
-#: src/frontend.c:515
-#: src/frontend.c:682
+#: src/frontend.c:541
+#: src/frontend.c:708
 #: src/multiplay.c:2038
 msgid "Black"
 msgstr "黑色"
 
-#: src/frontend.c:521
+#: src/frontend.c:547
 msgid "Screen Shake"
 msgstr "震動螢幕"
 
-#: src/frontend.c:524
-#: src/frontend.c:552
-#: src/frontend.c:560
-#: src/frontend.c:595
-#: src/frontend.c:629
-#: src/frontend.c:638
-#: src/frontend.c:824
-#: src/frontend.c:918
-#: src/frontend.c:956
-#: src/frontend.c:995
-#: src/frontend.c:1007
-#: src/frontend.c:1019
-#: src/frontend.c:1031
-#: src/frontend.c:1076
-#: src/frontend.c:1089
-#: src/frontend.c:1103
-#: src/frontend.c:1117
+#: src/frontend.c:550
+#: src/frontend.c:578
+#: src/frontend.c:586
+#: src/frontend.c:621
+#: src/frontend.c:655
+#: src/frontend.c:664
+#: src/frontend.c:850
+#: src/frontend.c:944
+#: src/frontend.c:982
+#: src/frontend.c:1021
+#: src/frontend.c:1033
+#: src/frontend.c:1045
+#: src/frontend.c:1057
+#: src/frontend.c:1102
+#: src/frontend.c:1115
+#: src/frontend.c:1129
+#: src/frontend.c:1143
 msgid "On"
 msgstr "開啟"
 
-#: src/frontend.c:533
+#: src/frontend.c:559
 #: src/multiint.c:1246
 msgid "Fog"
 msgstr "迷霧"
 
-#: src/frontend.c:536
-#: src/frontend.c:611
+#: src/frontend.c:562
+#: src/frontend.c:637
 msgid "Mist"
 msgstr "迷霧"
 
-#: src/frontend.c:540
-#: src/frontend.c:605
+#: src/frontend.c:566
+#: src/frontend.c:631
 #: src/multiint.c:1248
 msgid "Fog Of War"
 msgstr "完全迷霧"
 
-#: src/frontend.c:545
+#: src/frontend.c:571
 msgid "Subtitles"
 msgstr "字幕"
 
-#: src/frontend.c:557
+#: src/frontend.c:583
 msgid "Shadows"
 msgstr "影子"
 
-#: src/frontend.c:568
+#: src/frontend.c:594
 #, fuzzy
 msgid "GRAPHICS OPTIONS"
 msgstr "遊戲選項"
 
-#: src/frontend.c:716
+#: src/frontend.c:742
 #: src/ingameop.c:179
 msgid "Voice Volume"
 msgstr "語音音量"
 
-#: src/frontend.c:720
+#: src/frontend.c:746
 #: src/ingameop.c:184
 msgid "FX Volume"
 msgstr "音效音量"
 
-#: src/frontend.c:724
+#: src/frontend.c:750
 #: src/ingameop.c:189
 msgid "Music Volume"
 msgstr "背景音樂音量"
 
-#: src/frontend.c:731
+#: src/frontend.c:757
 #, fuzzy
 msgid "AUDIO OPTIONS"
 msgstr "遊戲選項"
 
-#: src/frontend.c:796
+#: src/frontend.c:822
 msgid "* Takes effect on game restart"
 msgstr "*重啟遊戲後生效"
 
-#: src/frontend.c:799
+#: src/frontend.c:825
 msgid "Graphics Mode*"
 msgstr "圖形模式*"
 
-#: src/frontend.c:807
-#: src/frontend.c:852
+#: src/frontend.c:833
+#: src/frontend.c:878
 msgid "Windowed"
 msgstr "視窗模式"
 
-#: src/frontend.c:811
+#: src/frontend.c:837
 msgid "Resolution*"
 msgstr "解析度*"
 
-#: src/frontend.c:816
+#: src/frontend.c:842
 msgid "Texture size"
 msgstr "貼圖精細度"
 
-#: src/frontend.c:820
+#: src/frontend.c:846
 msgid "Vertical sync*"
 msgstr "垂直同步*"
 
-#: src/frontend.c:832
+#: src/frontend.c:858
 #, fuzzy
 msgid "VIDEO OPTIONS"
 msgstr "遊戲選項"
 
-#: src/frontend.c:988
+#: src/frontend.c:1014
 msgid "* May negatively affect performance"
 msgstr ""
 
-#: src/frontend.c:992
+#: src/frontend.c:1018
 #, fuzzy
 msgid "Reverse Rotation"
 msgstr "反向滑鼠"
 
-#: src/frontend.c:1003
+#: src/frontend.c:1029
 msgid "Trap Cursor"
 msgstr "捕捉滑鼠"
 
-#: src/frontend.c:1015
+#: src/frontend.c:1041
 msgid "Colored Cursors*"
 msgstr ""
 
-#: src/frontend.c:1028
+#: src/frontend.c:1054
 #, fuzzy
 msgid "Switch Mouse Buttons"
 msgstr "滑鼠選項"
 
-#: src/frontend.c:1040
+#: src/frontend.c:1066
 #, fuzzy
 msgid "Rotate Screen"
 msgstr "向左旋轉"
 
-#: src/frontend.c:1043
-#: src/frontend.c:1131
+#: src/frontend.c:1069
+#: src/frontend.c:1157
 msgctxt "middle mouse button"
 msgid "Middle Button"
 msgstr ""
 
-#: src/frontend.c:1047
-#: src/frontend.c:1126
+#: src/frontend.c:1073
+#: src/frontend.c:1152
 msgctxt "right mouse button"
 msgid "Right Button"
 msgstr ""
 
-#: src/frontend.c:1051
+#: src/frontend.c:1077
 #, fuzzy
 msgid "MOUSE OPTIONS"
 msgstr "遊戲選項"
 
-#: src/frontend.c:1166
-#: src/frontend.c:1236
+#: src/frontend.c:1192
+#: src/frontend.c:1262
 msgid "Difficulty"
 msgstr "難度"
 
-#: src/frontend.c:1170
-#: src/frontend.c:1244
-#: src/frontend.c:1281
+#: src/frontend.c:1196
+#: src/frontend.c:1270
+#: src/frontend.c:1307
 msgid "Easy"
 msgstr "容易"
 
-#: src/frontend.c:1173
-#: src/frontend.c:1247
+#: src/frontend.c:1199
 #: src/frontend.c:1273
+#: src/frontend.c:1299
 msgid "Normal"
 msgstr "普通"
 
-#: src/frontend.c:1177
-#: src/frontend.c:1250
-#: src/frontend.c:1277
+#: src/frontend.c:1203
+#: src/frontend.c:1276
+#: src/frontend.c:1303
 msgid "Hard"
 msgstr "困難"
 
-#: src/frontend.c:1182
-#: src/frontend.c:1237
+#: src/frontend.c:1208
+#: src/frontend.c:1263
 msgid "Scroll Speed"
 msgstr "捲動速度"
 
-#: src/frontend.c:1196
-#: src/frontend.c:1234
+#: src/frontend.c:1222
+#: src/frontend.c:1260
 msgid "Language"
 msgstr "語言"
 
-#: src/frontend.c:1208
-#: src/frontend.c:1235
+#: src/frontend.c:1234
+#: src/frontend.c:1261
 msgid "Unit Colour"
 msgstr "單位顏色"
 
-#: src/frontend.c:1211
+#: src/frontend.c:1237
 msgid "Radar"
 msgstr ""
 
-#: src/frontend.c:1212
-#: src/frontend.c:1261
+#: src/frontend.c:1238
+#: src/frontend.c:1287
 #, fuzzy
 msgid "Rotating"
 msgstr "向右旋轉"
 
-#: src/frontend.c:1212
-#: src/frontend.c:1261
+#: src/frontend.c:1238
+#: src/frontend.c:1287
 msgid "Fixed"
 msgstr ""
 
-#: src/frontend.c:1218
-#: src/frontend.c:1238
+#: src/frontend.c:1244
+#: src/frontend.c:1264
 msgid "GAME OPTIONS"
 msgstr "遊戲選項"
 
-#: src/frontend.c:1379
+#: src/frontend.c:1405
 #: src/multiint.c:2212
 msgid "Mod: "
 msgstr ""
@@ -13187,7 +13191,7 @@ msgstr ""
 msgid "MAP SAVED!"
 msgstr "遊戲已儲存"
 
-#: src/hci.c:1692
+#: src/hci.c:1699
 #: src/loop.c:530
 #: src/loop.c:546
 #: src/mission.c:2891
@@ -13195,181 +13199,181 @@ msgstr "遊戲已儲存"
 msgid "GAME SAVED :"
 msgstr "遊戲已儲存"
 
-#: src/hci.c:2082
+#: src/hci.c:2089
 msgid "Failed to create building"
 msgstr "建築物建造失敗"
 
-#: src/hci.c:2105
+#: src/hci.c:2112
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new structure: %s."
 msgstr "玩家 %u 利用作弊（除錯）模式建立了一個新建築物: %s."
 
-#: src/hci.c:2120
+#: src/hci.c:2127
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new feature: %s."
 msgstr "玩家 %u 利用作弊（除錯）模式建立了一個新功能: %s."
 
-#: src/hci.c:2141
+#: src/hci.c:2148
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid: %s."
 msgstr "玩家 %u 利用作弊（除錯）模式建立了一個新droid: %s."
 
-#: src/hci.c:3716
+#: src/hci.c:3725
 msgid "Commanders (F6)"
 msgstr "指揮命令 （F6）"
 
-#: src/hci.c:3732
+#: src/hci.c:3741
 msgid "Intelligence Display (F5)"
 msgstr "顯示任務及情報（F5）"
 
-#: src/hci.c:3748
+#: src/hci.c:3757
 msgid "Manufacture (F1)"
 msgstr "生產新的單位 （F1）"
 
-#: src/hci.c:3764
+#: src/hci.c:3773
 msgid "Design (F4)"
 msgstr "設計新的單位（F4）"
 
-#: src/hci.c:3780
+#: src/hci.c:3789
 msgid "Research (F2)"
 msgstr "研發新科技（F2）"
 
-#: src/hci.c:3796
+#: src/hci.c:3805
 msgid "Build (F3)"
 msgstr "建造新的建築物 （F3）"
 
-#: src/hci.c:3876
+#: src/hci.c:3885
 #: src/multiint.c:1293
 #: src/multimenu.c:764
 msgid "Power"
 msgstr "能源"
 
-#: src/hci.c:3990
+#: src/hci.c:3999
 msgid "Map:"
 msgstr ""
 
-#: src/hci.c:4004
+#: src/hci.c:4013
 #, fuzzy
 msgid "Load"
 msgstr "載入遊戲"
 
-#: src/hci.c:4005
+#: src/hci.c:4014
 #, fuzzy
 msgid "Load Map File"
 msgstr "載入遊戲"
 
-#: src/hci.c:4012
+#: src/hci.c:4021
 #, fuzzy
 msgid "Save"
 msgstr "儲存遊戲"
 
-#: src/hci.c:4013
+#: src/hci.c:4022
 #, fuzzy
 msgid "Save Map File"
 msgstr "儲存遊戲"
 
-#: src/hci.c:4021
+#: src/hci.c:4030
 msgid "New"
 msgstr ""
 
-#: src/hci.c:4022
+#: src/hci.c:4031
 msgid "New Blank Map"
 msgstr ""
 
-#: src/hci.c:4060
+#: src/hci.c:4069
 msgid "Tile"
 msgstr "貼圖"
 
-#: src/hci.c:4061
+#: src/hci.c:4070
 msgid "Place tiles on map"
 msgstr "在地圖上加入貼圖"
 
-#: src/hci.c:4070
+#: src/hci.c:4079
 msgid "Unit"
 msgstr "單位"
 
-#: src/hci.c:4071
+#: src/hci.c:4080
 msgid "Place Unit on map"
 msgstr "在地圖上加入單位"
 
-#: src/hci.c:4079
+#: src/hci.c:4088
 msgid "Struct"
 msgstr "建築"
 
-#: src/hci.c:4080
+#: src/hci.c:4089
 msgid "Place Structures on map"
 msgstr "在地圖上加入建築物"
 
-#: src/hci.c:4088
+#: src/hci.c:4097
 msgid "Feat"
 msgstr "特徵"
 
-#: src/hci.c:4089
+#: src/hci.c:4098
 msgid "Place Features on map"
 msgstr "在地圖上加入特徵"
 
-#: src/hci.c:4099
+#: src/hci.c:4108
 msgid "Pause"
 msgstr ""
 
-#: src/hci.c:4100
+#: src/hci.c:4109
 msgid "Pause or unpause the game"
 msgstr "暫停（或繼續）遊戲"
 
-#: src/hci.c:4114
+#: src/hci.c:4123
 msgid "Align height of all map objects"
 msgstr "使地圖上所有物件等高"
 
-#: src/hci.c:4124
+#: src/hci.c:4133
 msgid "Edit"
 msgstr ""
 
-#: src/hci.c:4125
+#: src/hci.c:4134
 #, fuzzy
 msgid "Start Edit Mode"
 msgstr "開始時無基地"
 
-#: src/hci.c:4139
+#: src/hci.c:4148
 #: src/ingameop.c:119
 #: src/ingameop.c:264
 #: src/ingameop.c:269
 msgid "Quit"
 msgstr "退出"
 
-#: src/hci.c:4140
+#: src/hci.c:4149
 msgid "Exit Game"
 msgstr "離開遊戲"
 
-#: src/hci.c:4165
+#: src/hci.c:4174
 #, fuzzy
 msgid "Current Player:"
 msgstr "多人遊戲"
 
-#: src/hci.c:4501
+#: src/hci.c:4510
 #: src/intdisplay.c:209
 #: src/intdisplay.c:252
 #: src/intdisplay.c:303
 msgid "Progress Bar"
 msgstr "進度條"
 
-#: src/hci.c:5459
+#: src/hci.c:5468
 #, fuzzy
 msgid "Infinite Production"
 msgstr "循環生產"
 
-#: src/hci.c:5537
+#: src/hci.c:5546
 msgid "Factory Delivery Point"
 msgstr "工廠單位產出點"
 
-#: src/hci.c:5556
+#: src/hci.c:5565
 msgid "Loop Production"
 msgstr "循環生產"
 
-#: src/hci.c:5647
+#: src/hci.c:5656
 msgid "Tab Scroll left"
 msgstr "頁簽向左捲動"
 
-#: src/hci.c:5664
+#: src/hci.c:5673
 msgid "Tab Scroll right"
 msgstr "頁簽向右捲動"
 
@@ -13403,7 +13407,7 @@ msgstr ""
 msgid "-->  QUIT  <--"
 msgstr ""
 
-#: src/init.c:390
+#: src/init.c:419
 #, c-format
 msgid ""
 "The required mod could not be loaded: %s\n"
@@ -13418,7 +13422,7 @@ msgid "Power Accrued"
 msgstr "能量增加"
 
 #: src/intelmap.c:243
-#: src/keybind.c:1369
+#: src/keybind.c:1371
 msgid "PAUSED"
 msgstr "暫停"
 
@@ -13545,286 +13549,286 @@ msgstr "指定VTOL工廠生產"
 msgid "Circle"
 msgstr "圓（循環）"
 
-#: src/keybind.c:135
+#: src/keybind.c:137
 msgid "Sorry, that cheat is disabled in multiplayer games."
 msgstr "抱歉，多人遊戲中無法使用此作弊碼"
 
-#: src/keybind.c:141
+#: src/keybind.c:143
 msgid "Warning! This cheat is buggy.  We recommend to NOT use it."
 msgstr ""
 
-#: src/keybind.c:210
+#: src/keybind.c:212
 msgid "Lets us see what you see!"
 msgstr "讓我看看你看到了什麼！"
 
-#: src/keybind.c:212
+#: src/keybind.c:214
 msgid "Fine, weapon & sensor display is off!"
 msgstr "關閉細節、武器及雷達顯示"
 
-#: src/keybind.c:344
+#: src/keybind.c:346
 #, fuzzy, c-format
 msgid "Player %u is cheating him/herself a new droid army of %s(s)."
 msgstr "玩家 %u 利用作弊（除錯）模式建立了一個新droid: %s."
 
-#: src/keybind.c:383
-#: src/keybind.c:413
-#: src/keybind.c:430
-#: src/keybind.c:474
-#: src/keybind.c:582
-#: src/keybind.c:622
-#: src/keybind.c:728
-#: src/keybind.c:1259
-#: src/keybind.c:1316
-#: src/keybind.c:1418
-#: src/keybind.c:1515
-#: src/keybind.c:1826
-#: src/keybind.c:1867
+#: src/keybind.c:385
+#: src/keybind.c:415
+#: src/keybind.c:432
+#: src/keybind.c:476
+#: src/keybind.c:584
+#: src/keybind.c:624
+#: src/keybind.c:730
+#: src/keybind.c:1261
+#: src/keybind.c:1318
+#: src/keybind.c:1420
+#: src/keybind.c:1517
+#: src/keybind.c:1828
+#: src/keybind.c:1869
 #, c-format
 msgid "(Player %u) is using cheat :%s"
 msgstr ""
 
-#: src/keybind.c:384
+#: src/keybind.c:386
 msgid "Hard as nails!!!"
 msgstr "像爪子一樣硬！！"
 
-#: src/keybind.c:398
+#: src/keybind.c:400
 msgid "Takings thing easy!"
 msgstr "讓事情變簡單！"
 
-#: src/keybind.c:414
+#: src/keybind.c:416
 msgid "1000 big ones!!!"
 msgstr "1000 big ones!!!"
 
-#: src/keybind.c:431
+#: src/keybind.c:433
 msgid "Power overwhelming"
 msgstr "巨大的能量"
 
-#: src/keybind.c:446
+#: src/keybind.c:448
 msgid "Back to normality!"
 msgstr "回到正常狀態"
 
-#: src/keybind.c:459
+#: src/keybind.c:461
 msgid "Getting tricky!"
 msgstr "得到技巧！"
 
-#: src/keybind.c:475
+#: src/keybind.c:477
 msgid "Twice as nice!"
 msgstr "給我兩倍的力量！！"
 
-#: src/keybind.c:486
+#: src/keybind.c:488
 msgid "FPS display is enabled."
 msgstr "FPS顯示開啟"
 
-#: src/keybind.c:490
+#: src/keybind.c:492
 msgid "FPS display is disabled."
 msgstr "FPS顯示關閉"
 
-#: src/keybind.c:514
+#: src/keybind.c:516
 #, c-format
 msgid "FPS %d; FPS-Limit: %d; PIEs %d; polys %d; Terr. polys %d; States %d"
 msgstr "FPS %d; FPS限制: %d; PIEs %d; polys %d; Terr. polys %d; 狀態 %d"
 
-#: src/keybind.c:546
+#: src/keybind.c:548
 #, c-format
 msgid "(Player %u) is using a cheat :Num Droids: %d  Num Structures: %d  Num Features: %d"
 msgstr ""
 
-#: src/keybind.c:583
+#: src/keybind.c:585
 msgid "Infinite power disabled"
 msgstr "無限制能源：關"
 
-#: src/keybind.c:583
+#: src/keybind.c:585
 msgid "Infinite power enabled"
 msgstr "無限制能源：開"
 
-#: src/keybind.c:623
+#: src/keybind.c:625
 msgid "All items made available"
 msgstr "可使用所有的項目"
 
-#: src/keybind.c:729
+#: src/keybind.c:731
 msgid "Fog on"
 msgstr "戰爭迷霧開啟"
 
-#: src/keybind.c:729
+#: src/keybind.c:731
 msgid "Fog off"
 msgstr "戰爭迷霧關閉"
 
-#: src/keybind.c:1148
+#: src/keybind.c:1150
 #, c-format
 msgid "Warning!  This cheat can cause dire problems later on! [%s]"
 msgstr ""
 
-#: src/keybind.c:1148
+#: src/keybind.c:1150
 #, fuzzy
 msgid "Ending Mission."
 msgstr "傳來訊息..."
 
-#: src/keybind.c:1260
+#: src/keybind.c:1262
 msgid "CHEATS ARE NOW ENABLED!"
 msgstr ""
 
-#: src/keybind.c:1260
+#: src/keybind.c:1262
 msgid "CHEATS ARE NOW DISABLED!"
 msgstr ""
 
-#: src/keybind.c:1317
+#: src/keybind.c:1319
 msgid "God Mode ON"
 msgstr ""
 
-#: src/keybind.c:1317
+#: src/keybind.c:1319
 msgid "God Mode OFF"
 msgstr ""
 
-#: src/keybind.c:1329
+#: src/keybind.c:1331
 msgid "View Aligned to North"
 msgstr "View Aligned to North"
 
-#: src/keybind.c:1338
+#: src/keybind.c:1340
 #, fuzzy, c-format
 msgid "Trap cursor %s"
 msgstr "捕捉滑鼠"
 
-#: src/keybind.c:1419
+#: src/keybind.c:1421
 msgid "Researched EVERYTHING for you!"
 msgstr "替你研發所有科技！"
 
-#: src/keybind.c:1452
+#: src/keybind.c:1454
 #, c-format
 msgid "(Player %u) is using cheat :%s %s"
 msgstr ""
 
-#: src/keybind.c:1453
+#: src/keybind.c:1455
 #, fuzzy
 msgid "Researched"
 msgstr "研發新科技"
 
-#: src/keybind.c:1473
+#: src/keybind.c:1475
 msgid "Only displaying energy bars when selected"
 msgstr ""
 
-#: src/keybind.c:1476
+#: src/keybind.c:1478
 msgid "Always displaying energy bars for units"
 msgstr ""
 
-#: src/keybind.c:1479
+#: src/keybind.c:1481
 msgid "Always displaying energy bars for units and structures"
 msgstr ""
 
-#: src/keybind.c:1501
+#: src/keybind.c:1503
 msgid "Demo mode off - Returning to normal game mode"
 msgstr "關閉展示模式—回到正常遊戲模式"
 
-#: src/keybind.c:1516
+#: src/keybind.c:1518
 #, fuzzy
 msgid "Debug menu is Open"
 msgstr "建築選單將重新開啟"
 
-#: src/keybind.c:1547
+#: src/keybind.c:1549
 #, fuzzy
 msgid "Unable to locate any oil derricks!"
 msgstr "找不到任何工程車單位！"
 
-#: src/keybind.c:1768
+#: src/keybind.c:1770
 msgid "Oh, the weather outside is frightful... SNOW"
 msgstr "喔，外面的天氣真糟...下雪"
 
-#: src/keybind.c:1774
+#: src/keybind.c:1776
 msgid "Singing in the rain, I'm singing in the rain... RAIN"
 msgstr "下雨啦～下雨啦～"
 
-#: src/keybind.c:1780
+#: src/keybind.c:1782
 msgid "Forecast : Clear skies for all areas... NO WEATHER"
 msgstr "天氣預報：一整片晴朗的天空。"
 
-#: src/keybind.c:1825
+#: src/keybind.c:1827
 msgid "Warning! This can have drastic consequences if used incorrectly in missions."
 msgstr ""
 
-#: src/keybind.c:1827
+#: src/keybind.c:1829
 #, fuzzy
 msgid "All enemies destroyed by cheating!"
 msgstr "敵軍已經死了...由於你作弊的關係.."
 
-#: src/keybind.c:1868
+#: src/keybind.c:1870
 msgid "Destroying selected droids and structures!"
 msgstr ""
 
-#: src/keybind.c:2387
+#: src/keybind.c:2389
 msgid "Centered on player HQ, direction NORTH"
 msgstr "視角移至主基地，面向北方"
 
-#: src/keybind.c:2399
+#: src/keybind.c:2401
 msgid "Unable to locate HQ!"
 msgstr "無法定位至主基地"
 
-#: src/keybind.c:2406
+#: src/keybind.c:2408
 msgid "Formation speed limiting has been removed from the game due to bugs."
 msgstr ""
 
-#: src/keybind.c:2455
+#: src/keybind.c:2457
 msgid "Vertical rotation direction: Normal"
 msgstr ""
 
-#: src/keybind.c:2460
+#: src/keybind.c:2462
 msgid "Vertical rotation direction: Flipped"
 msgstr ""
 
-#: src/keybind.c:2469
+#: src/keybind.c:2471
 msgid "Screen shake when things die: Off"
 msgstr ""
 
-#: src/keybind.c:2474
+#: src/keybind.c:2476
 msgid "Screen shake when things die: On"
 msgstr ""
 
-#: src/keybind.c:2519
-#: src/keybind.c:2562
+#: src/keybind.c:2521
+#: src/keybind.c:2564
 #, fuzzy
 msgid "Sorry, but game speed cannot be changed in multiplayer."
 msgstr "抱歉，多人遊戲中無法使用此作弊碼"
 
-#: src/keybind.c:2540
-#: src/keybind.c:2583
-#: src/keybind.c:2605
+#: src/keybind.c:2542
+#: src/keybind.c:2585
+#: src/keybind.c:2607
 msgid "Game Speed Reset"
 msgstr "重設遊戲速度"
 
-#: src/keybind.c:2544
+#: src/keybind.c:2546
 #, c-format
 msgid "Game Speed Increased to %3.1f"
 msgstr "遊戲速度增加至 %3.1f"
 
-#: src/keybind.c:2587
+#: src/keybind.c:2589
 #, c-format
 msgid "Game Speed Reduced to %3.1f"
 msgstr "遊戲速度減少至 %3.1f"
 
-#: src/keybind.c:2617
+#: src/keybind.c:2619
 msgid "Radar showing friend-foe colors"
 msgstr "雷達顯示友軍顏色"
 
-#: src/keybind.c:2621
+#: src/keybind.c:2623
 msgid "Radar showing player colors"
 msgstr "雷達顯示玩家顏色"
 
-#: src/keybind.c:2641
+#: src/keybind.c:2643
 msgid "Radar showing only objects"
 msgstr "雷達僅顯示物件"
 
-#: src/keybind.c:2644
+#: src/keybind.c:2646
 msgid "Radar blending terrain and height"
 msgstr "雷達描繪地形及高度"
 
-#: src/keybind.c:2647
+#: src/keybind.c:2649
 msgid "Radar showing terrain"
 msgstr "雷達顯示地形"
 
-#: src/keybind.c:2650
+#: src/keybind.c:2652
 #, fuzzy
 msgid "Radar showing revealed terrain"
 msgstr "雷達顯示地形"
 
-#: src/keybind.c:2653
+#: src/keybind.c:2655
 msgid "Radar showing height"
 msgstr "雷達顯示高度"
 

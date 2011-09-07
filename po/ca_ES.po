@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100-master_20110320qt\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-05-17 01:48+0200\n"
+"POT-Creation-Date: 2011-09-07 21:16+0200\n"
 "PO-Revision-Date: 2011-04-03 19:45+0200\n"
 "Last-Translator: Àngel Mompó <mecatxis@gmail.com>\n"
 "Language-Team:   <ca@dodds.net>\n"
@@ -12209,10 +12209,10 @@ msgstr "No s'ha pogut comunicar amb el servidor de sales! el port TCP %u està o
 
 #: src/challenge.c:188
 #: src/hci.c:999
-#: src/hci.c:3814
-#: src/hci.c:3965
-#: src/hci.c:4416
-#: src/hci.c:5622
+#: src/hci.c:3823
+#: src/hci.c:3974
+#: src/hci.c:4425
+#: src/hci.c:5631
 #: src/intelmap.c:539
 #: src/intorder.c:787
 #: src/loadsave.c:267
@@ -12523,17 +12523,17 @@ msgstr "Ha marxat un jugador"
 msgid "Player dropped"
 msgstr "Ha caigut un jugador"
 
-#: src/display.c:1743
+#: src/display.c:1758
 msgid "Cannot Build. Oil Resource Burning."
 msgstr "No es pot construir. El pou de petroli està incendiat."
 
-#: src/display.c:1923
-#: src/display.c:2534
+#: src/display.c:1938
+#: src/display.c:2549
 #, c-format
 msgid "%s - Damage %d%% - Experience %.1f, %s"
 msgstr "%s - Desperfectes %d%% - Experiència %.1f, %s"
 
-#: src/display.c:1939
+#: src/display.c:1954
 #, c-format
 msgid "%s - Allied - Damage %d%% - Experience %d, %s"
 msgstr "%s - Aliat - Desperfectes %d%% - Experiència %d, %s"
@@ -12621,386 +12621,390 @@ msgstr "%s vol donar-vos un %s però en teniu masses!"
 msgid "You wanted to give %s a %s but they have too many!"
 msgstr "Voleu donar %s a %s però en té masses!"
 
-#: src/frontend.c:97
+#: src/frontend.c:102
 msgid "Single Player"
 msgstr "Un jugador"
 
-#: src/frontend.c:98
+#: src/frontend.c:103
 msgid "Multi Player"
 msgstr "Partida en xarxa"
 
-#: src/frontend.c:99
-#: src/frontend.c:155
+#: src/frontend.c:104
+#: src/frontend.c:181
 msgid "Tutorial"
 msgstr "Aprenentatge"
 
-#: src/frontend.c:100
-#: src/hci.c:3948
+#: src/frontend.c:105
+#: src/hci.c:3957
 msgid "Options"
 msgstr "Opcions"
 
-#: src/frontend.c:101
+#: src/frontend.c:106
 msgid "View Intro"
 msgstr "Veure la introducció"
 
-#: src/frontend.c:103
+#: src/frontend.c:108
 msgid "Quit Game"
 msgstr "Sortir"
 
-#: src/frontend.c:105
+#: src/frontend.c:110
 msgid "MAIN MENU"
 msgstr "MENÚ PRINCIPAL"
 
-#: src/frontend.c:156
+#: src/frontend.c:112
+msgid "Visit our official site: http://wz2100.net"
+msgstr ""
+
+#: src/frontend.c:182
 msgid "Fast Play"
 msgstr "Partida ràpida"
 
-#: src/frontend.c:157
+#: src/frontend.c:183
 msgid "TUTORIALS"
 msgstr "APRENENTATGE"
 
 #. TRANSLATORS: "Return", in this context, means "return to previous screen/menu"
-#: src/frontend.c:159
-#: src/frontend.c:218
-#: src/frontend.c:351
-#: src/frontend.c:421
-#: src/frontend.c:572
-#: src/frontend.c:728
-#: src/frontend.c:835
-#: src/frontend.c:1054
-#: src/frontend.c:1215
+#: src/frontend.c:185
+#: src/frontend.c:244
+#: src/frontend.c:377
+#: src/frontend.c:447
+#: src/frontend.c:598
+#: src/frontend.c:754
+#: src/frontend.c:861
+#: src/frontend.c:1080
+#: src/frontend.c:1241
 msgctxt "menu"
 msgid "Return"
 msgstr "Torna"
 
-#: src/frontend.c:212
+#: src/frontend.c:238
 msgid "New Campaign"
 msgstr "Campanya nova"
 
-#: src/frontend.c:213
+#: src/frontend.c:239
 msgid "Start Skirmish Game"
 msgstr "﻿Escaramussa"
 
-#: src/frontend.c:214
+#: src/frontend.c:240
 msgid "Challenges"
 msgstr "Desafiaments"
 
-#: src/frontend.c:215
+#: src/frontend.c:241
 #: src/ingameop.c:281
 msgid "Load Game"
 msgstr "Carrega una part."
 
-#: src/frontend.c:217
+#: src/frontend.c:243
 msgid "SINGLE PLAYER"
 msgstr "UN JUGADOR"
 
-#: src/frontend.c:294
+#: src/frontend.c:320
 #: src/ingameop.c:507
 #: src/mission.c:2820
 #: src/mission.c:2925
 msgid "Load Saved Game"
 msgstr "Carrega una partida desada"
 
-#: src/frontend.c:346
+#: src/frontend.c:372
 msgid "MULTI PLAYER"
 msgstr "JOC EN XARXA"
 
-#: src/frontend.c:348
+#: src/frontend.c:374
 msgid "Host Game"
 msgstr "Crea una partida"
 
-#: src/frontend.c:349
+#: src/frontend.c:375
 msgid "Join Game"
 msgstr "Uneix-te a una partida"
 
-#: src/frontend.c:414
+#: src/frontend.c:440
 #: src/multiint.c:1176
 msgid "OPTIONS"
 msgstr "OPCIONS"
 
-#: src/frontend.c:415
+#: src/frontend.c:441
 msgid "Game Options"
 msgstr "Opcions del joc"
 
-#: src/frontend.c:416
+#: src/frontend.c:442
 msgid "Graphics Options"
 msgstr "Opcions dels gràfics"
 
-#: src/frontend.c:417
+#: src/frontend.c:443
 msgid "Video Options"
 msgstr "Opcions dels vídeos"
 
-#: src/frontend.c:418
+#: src/frontend.c:444
 #: src/ingameop.c:276
 msgid "Audio Options"
 msgstr "Opcions de l'àudio"
 
-#: src/frontend.c:419
+#: src/frontend.c:445
 msgid "Mouse Options"
 msgstr "Opcions del ratolí"
 
-#: src/frontend.c:420
+#: src/frontend.c:446
 msgid "Key Mappings"
 msgstr "Mapatge de tecles"
 
-#: src/frontend.c:482
+#: src/frontend.c:508
 msgid "Video Playback"
 msgstr "Reprod. dels vídeos"
 
-#: src/frontend.c:486
-#: src/frontend.c:662
+#: src/frontend.c:512
+#: src/frontend.c:688
 msgid "1X"
 msgstr "1X"
 
-#: src/frontend.c:490
-#: src/frontend.c:652
+#: src/frontend.c:516
+#: src/frontend.c:678
 msgid "2X"
 msgstr "2X"
 
-#: src/frontend.c:494
-#: src/frontend.c:657
-#: src/frontend.c:803
-#: src/frontend.c:857
+#: src/frontend.c:520
+#: src/frontend.c:683
+#: src/frontend.c:829
+#: src/frontend.c:883
 msgid "Fullscreen"
 msgstr "Pant. completa"
 
-#: src/frontend.c:503
+#: src/frontend.c:529
 msgid "Scanlines"
 msgstr ""
 
-#: src/frontend.c:507
-#: src/frontend.c:528
-#: src/frontend.c:548
-#: src/frontend.c:564
+#: src/frontend.c:533
+#: src/frontend.c:554
+#: src/frontend.c:574
 #: src/frontend.c:590
-#: src/frontend.c:624
-#: src/frontend.c:642
-#: src/frontend.c:687
-#: src/frontend.c:828
-#: src/frontend.c:913
-#: src/frontend.c:951
-#: src/frontend.c:999
-#: src/frontend.c:1011
-#: src/frontend.c:1023
-#: src/frontend.c:1035
-#: src/frontend.c:1071
-#: src/frontend.c:1084
-#: src/frontend.c:1098
-#: src/frontend.c:1112
+#: src/frontend.c:616
+#: src/frontend.c:650
+#: src/frontend.c:668
+#: src/frontend.c:713
+#: src/frontend.c:854
+#: src/frontend.c:939
+#: src/frontend.c:977
+#: src/frontend.c:1025
+#: src/frontend.c:1037
+#: src/frontend.c:1049
+#: src/frontend.c:1061
+#: src/frontend.c:1097
+#: src/frontend.c:1110
+#: src/frontend.c:1124
+#: src/frontend.c:1138
 msgid "Off"
 msgstr "Inactiu"
 
-#: src/frontend.c:511
-#: src/frontend.c:677
+#: src/frontend.c:537
+#: src/frontend.c:703
 msgid "50%"
 msgstr ""
 
-#: src/frontend.c:515
-#: src/frontend.c:682
+#: src/frontend.c:541
+#: src/frontend.c:708
 #: src/multiplay.c:2038
 msgid "Black"
 msgstr "Negre"
 
-#: src/frontend.c:521
+#: src/frontend.c:547
 msgid "Screen Shake"
 msgstr "Tremolor de pant."
 
-#: src/frontend.c:524
-#: src/frontend.c:552
-#: src/frontend.c:560
-#: src/frontend.c:595
-#: src/frontend.c:629
-#: src/frontend.c:638
-#: src/frontend.c:824
-#: src/frontend.c:918
-#: src/frontend.c:956
-#: src/frontend.c:995
-#: src/frontend.c:1007
-#: src/frontend.c:1019
-#: src/frontend.c:1031
-#: src/frontend.c:1076
-#: src/frontend.c:1089
-#: src/frontend.c:1103
-#: src/frontend.c:1117
+#: src/frontend.c:550
+#: src/frontend.c:578
+#: src/frontend.c:586
+#: src/frontend.c:621
+#: src/frontend.c:655
+#: src/frontend.c:664
+#: src/frontend.c:850
+#: src/frontend.c:944
+#: src/frontend.c:982
+#: src/frontend.c:1021
+#: src/frontend.c:1033
+#: src/frontend.c:1045
+#: src/frontend.c:1057
+#: src/frontend.c:1102
+#: src/frontend.c:1115
+#: src/frontend.c:1129
+#: src/frontend.c:1143
 msgid "On"
 msgstr "Actiu"
 
-#: src/frontend.c:533
+#: src/frontend.c:559
 #: src/multiint.c:1246
 msgid "Fog"
 msgstr "Boira"
 
-#: src/frontend.c:536
-#: src/frontend.c:611
+#: src/frontend.c:562
+#: src/frontend.c:637
 msgid "Mist"
 msgstr "Boirina"
 
-#: src/frontend.c:540
-#: src/frontend.c:605
+#: src/frontend.c:566
+#: src/frontend.c:631
 #: src/multiint.c:1248
 msgid "Fog Of War"
 msgstr "Fum de guerra"
 
-#: src/frontend.c:545
+#: src/frontend.c:571
 msgid "Subtitles"
 msgstr "Subtitols"
 
-#: src/frontend.c:557
+#: src/frontend.c:583
 msgid "Shadows"
 msgstr "Ombres"
 
-#: src/frontend.c:568
+#: src/frontend.c:594
 msgid "GRAPHICS OPTIONS"
 msgstr "OPCIONS DELS GRÀFICS"
 
-#: src/frontend.c:716
+#: src/frontend.c:742
 #: src/ingameop.c:179
 msgid "Voice Volume"
 msgstr "Volum veu"
 
-#: src/frontend.c:720
+#: src/frontend.c:746
 #: src/ingameop.c:184
 msgid "FX Volume"
 msgstr "Volum efectes"
 
-#: src/frontend.c:724
+#: src/frontend.c:750
 #: src/ingameop.c:189
 msgid "Music Volume"
 msgstr "Volum música"
 
-#: src/frontend.c:731
+#: src/frontend.c:757
 msgid "AUDIO OPTIONS"
 msgstr "OPCIONS DE L'ÀUDIO"
 
-#: src/frontend.c:796
+#: src/frontend.c:822
 msgid "* Takes effect on game restart"
 msgstr "* Té efecte quan reinicieu"
 
-#: src/frontend.c:799
+#: src/frontend.c:825
 msgid "Graphics Mode*"
 msgstr "Mode gràfic*"
 
-#: src/frontend.c:807
-#: src/frontend.c:852
+#: src/frontend.c:833
+#: src/frontend.c:878
 msgid "Windowed"
 msgstr "Finestra"
 
-#: src/frontend.c:811
+#: src/frontend.c:837
 msgid "Resolution*"
 msgstr "Resolució*"
 
-#: src/frontend.c:816
+#: src/frontend.c:842
 msgid "Texture size"
 msgstr "Mida de la textura"
 
-#: src/frontend.c:820
+#: src/frontend.c:846
 msgid "Vertical sync*"
 msgstr "Sincro. vertical*"
 
-#: src/frontend.c:832
+#: src/frontend.c:858
 msgid "VIDEO OPTIONS"
 msgstr "OPCIONS DE VIDEO"
 
-#: src/frontend.c:988
+#: src/frontend.c:1014
 msgid "* May negatively affect performance"
 msgstr "* Pot afectar negativament al rendiment"
 
-#: src/frontend.c:992
+#: src/frontend.c:1018
 msgid "Reverse Rotation"
 msgstr "Rotació inversa"
 
-#: src/frontend.c:1003
+#: src/frontend.c:1029
 msgid "Trap Cursor"
 msgstr "Captura el cursor"
 
-#: src/frontend.c:1015
+#: src/frontend.c:1041
 msgid "Colored Cursors*"
 msgstr "Cursors de colors*"
 
-#: src/frontend.c:1028
+#: src/frontend.c:1054
 msgid "Switch Mouse Buttons"
 msgstr "Intercanvia els botons"
 
-#: src/frontend.c:1040
+#: src/frontend.c:1066
 msgid "Rotate Screen"
 msgstr "Rota la pantalla"
 
-#: src/frontend.c:1043
-#: src/frontend.c:1131
+#: src/frontend.c:1069
+#: src/frontend.c:1157
 #, fuzzy
 msgctxt "middle mouse button"
 msgid "Middle Button"
 msgstr "Botó del mig"
 
-#: src/frontend.c:1047
-#: src/frontend.c:1126
+#: src/frontend.c:1073
+#: src/frontend.c:1152
 #, fuzzy
 msgctxt "right mouse button"
 msgid "Right Button"
 msgstr "Botó dret"
 
-#: src/frontend.c:1051
+#: src/frontend.c:1077
 msgid "MOUSE OPTIONS"
 msgstr "OPCIONS DEL RATOLÍ"
 
-#: src/frontend.c:1166
-#: src/frontend.c:1236
+#: src/frontend.c:1192
+#: src/frontend.c:1262
 msgid "Difficulty"
 msgstr "Dificultat"
 
-#: src/frontend.c:1170
-#: src/frontend.c:1244
-#: src/frontend.c:1281
+#: src/frontend.c:1196
+#: src/frontend.c:1270
+#: src/frontend.c:1307
 msgid "Easy"
 msgstr "Fàcil"
 
-#: src/frontend.c:1173
-#: src/frontend.c:1247
+#: src/frontend.c:1199
 #: src/frontend.c:1273
+#: src/frontend.c:1299
 msgid "Normal"
 msgstr "Normal"
 
-#: src/frontend.c:1177
-#: src/frontend.c:1250
-#: src/frontend.c:1277
+#: src/frontend.c:1203
+#: src/frontend.c:1276
+#: src/frontend.c:1303
 msgid "Hard"
 msgstr "Difícil"
 
-#: src/frontend.c:1182
-#: src/frontend.c:1237
+#: src/frontend.c:1208
+#: src/frontend.c:1263
 msgid "Scroll Speed"
 msgstr "Veloc. desplaçament"
 
-#: src/frontend.c:1196
-#: src/frontend.c:1234
+#: src/frontend.c:1222
+#: src/frontend.c:1260
 msgid "Language"
 msgstr "Idioma"
 
-#: src/frontend.c:1208
-#: src/frontend.c:1235
+#: src/frontend.c:1234
+#: src/frontend.c:1261
 msgid "Unit Colour"
 msgstr "Color de les unitats"
 
-#: src/frontend.c:1211
+#: src/frontend.c:1237
 msgid "Radar"
 msgstr "Radar"
 
-#: src/frontend.c:1212
-#: src/frontend.c:1261
+#: src/frontend.c:1238
+#: src/frontend.c:1287
 msgid "Rotating"
 msgstr "Giratori"
 
-#: src/frontend.c:1212
-#: src/frontend.c:1261
+#: src/frontend.c:1238
+#: src/frontend.c:1287
 msgid "Fixed"
 msgstr "Fixe"
 
-#: src/frontend.c:1218
-#: src/frontend.c:1238
+#: src/frontend.c:1244
+#: src/frontend.c:1264
 msgid "GAME OPTIONS"
 msgstr "OPCIONS DE JOC"
 
-#: src/frontend.c:1379
+#: src/frontend.c:1405
 #: src/multiint.c:2212
 msgid "Mod: "
 msgstr "Mod:"
@@ -13009,181 +13013,181 @@ msgstr "Mod:"
 msgid "MAP SAVED!"
 msgstr "S'HA DESAT EL MAPA!"
 
-#: src/hci.c:1692
+#: src/hci.c:1699
 #: src/loop.c:530
 #: src/loop.c:546
 #: src/mission.c:2891
 msgid "GAME SAVED :"
 msgstr "S'HA DESAT LA PARTIDA:"
 
-#: src/hci.c:2082
+#: src/hci.c:2089
 msgid "Failed to create building"
 msgstr "No s'ha pogut crear l'edifici"
 
-#: src/hci.c:2105
+#: src/hci.c:2112
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new structure: %s."
 msgstr "El jugador %u està fent trampes (mode depuració) amb una nova estructura: %s"
 
-#: src/hci.c:2120
+#: src/hci.c:2127
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new feature: %s."
 msgstr "El jugador %u està fent trampes (mode depuració) amb una nova funció: %s"
 
-#: src/hci.c:2141
+#: src/hci.c:2148
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid: %s."
 msgstr "El jugador %u està fent trampes (mode depuració) amb un nou ciborg: %s"
 
-#: src/hci.c:3716
+#: src/hci.c:3725
 msgid "Commanders (F6)"
 msgstr "Comandants (F6)"
 
-#: src/hci.c:3732
+#: src/hci.c:3741
 msgid "Intelligence Display (F5)"
 msgstr "Pantalla d'intel·ligència (F5)"
 
-#: src/hci.c:3748
+#: src/hci.c:3757
 msgid "Manufacture (F1)"
 msgstr "Fabricació (F1)"
 
-#: src/hci.c:3764
+#: src/hci.c:3773
 msgid "Design (F4)"
 msgstr "Disseny (F4)"
 
-#: src/hci.c:3780
+#: src/hci.c:3789
 msgid "Research (F2)"
 msgstr "Recerca (F2)"
 
-#: src/hci.c:3796
+#: src/hci.c:3805
 msgid "Build (F3)"
 msgstr "Construcció (F3)"
 
-#: src/hci.c:3876
+#: src/hci.c:3885
 #: src/multiint.c:1293
 #: src/multimenu.c:764
 msgid "Power"
 msgstr "Energia"
 
-#: src/hci.c:3990
+#: src/hci.c:3999
 msgid "Map:"
 msgstr "Mapa:"
 
-#: src/hci.c:4004
+#: src/hci.c:4013
 msgid "Load"
 msgstr "Carrega"
 
-#: src/hci.c:4005
+#: src/hci.c:4014
 msgid "Load Map File"
 msgstr "Carrega un fitxer de mapa"
 
-#: src/hci.c:4012
+#: src/hci.c:4021
 msgid "Save"
 msgstr "Desa"
 
-#: src/hci.c:4013
+#: src/hci.c:4022
 msgid "Save Map File"
 msgstr "Desa un fitxer de mapa"
 
-#: src/hci.c:4021
+#: src/hci.c:4030
 msgid "New"
 msgstr "Nou"
 
-#: src/hci.c:4022
+#: src/hci.c:4031
 msgid "New Blank Map"
 msgstr "Nou mapa buit"
 
-#: src/hci.c:4060
+#: src/hci.c:4069
 msgid "Tile"
 msgstr "Rajola"
 
-#: src/hci.c:4061
+#: src/hci.c:4070
 msgid "Place tiles on map"
 msgstr "Posa rajoles al mapa"
 
-#: src/hci.c:4070
+#: src/hci.c:4079
 msgid "Unit"
 msgstr "Unitat"
 
-#: src/hci.c:4071
+#: src/hci.c:4080
 msgid "Place Unit on map"
 msgstr "Posa unitats al mapa"
 
-#: src/hci.c:4079
+#: src/hci.c:4088
 msgid "Struct"
 msgstr "Estructura"
 
-#: src/hci.c:4080
+#: src/hci.c:4089
 msgid "Place Structures on map"
 msgstr "Posa estructures al mapa"
 
-#: src/hci.c:4088
+#: src/hci.c:4097
 msgid "Feat"
 msgstr "Funció"
 
-#: src/hci.c:4089
+#: src/hci.c:4098
 msgid "Place Features on map"
 msgstr "Posa una nova funció al mapa"
 
-#: src/hci.c:4099
+#: src/hci.c:4108
 msgid "Pause"
 msgstr "Pausa"
 
-#: src/hci.c:4100
+#: src/hci.c:4109
 msgid "Pause or unpause the game"
 msgstr "Posa o treu la pausa de la partida"
 
-#: src/hci.c:4114
+#: src/hci.c:4123
 msgid "Align height of all map objects"
 msgstr "Alinea l'alçada de tots els objectes del mapa"
 
-#: src/hci.c:4124
+#: src/hci.c:4133
 msgid "Edit"
 msgstr "Edita"
 
-#: src/hci.c:4125
+#: src/hci.c:4134
 msgid "Start Edit Mode"
 msgstr "Inicia el mode d'edició"
 
-#: src/hci.c:4139
+#: src/hci.c:4148
 #: src/ingameop.c:119
 #: src/ingameop.c:264
 #: src/ingameop.c:269
 msgid "Quit"
 msgstr "Surt"
 
-#: src/hci.c:4140
+#: src/hci.c:4149
 msgid "Exit Game"
 msgstr "Surt de la partida"
 
-#: src/hci.c:4165
+#: src/hci.c:4174
 msgid "Current Player:"
 msgstr "Jugador actual:"
 
-#: src/hci.c:4501
+#: src/hci.c:4510
 #: src/intdisplay.c:209
 #: src/intdisplay.c:252
 #: src/intdisplay.c:303
 msgid "Progress Bar"
 msgstr "Barra de progrés"
 
-#: src/hci.c:5459
+#: src/hci.c:5468
 msgid "Infinite Production"
 msgstr "Producció infinita"
 
-#: src/hci.c:5537
+#: src/hci.c:5546
 msgid "Factory Delivery Point"
 msgstr "Punt de lliurament de la fàbrica"
 
-#: src/hci.c:5556
+#: src/hci.c:5565
 msgid "Loop Production"
 msgstr "Producció en bucle"
 
-#: src/hci.c:5647
+#: src/hci.c:5656
 msgid "Tab Scroll left"
 msgstr "Desplaça la pestanya a l'esquerra"
 
-#: src/hci.c:5664
+#: src/hci.c:5673
 msgid "Tab Scroll right"
 msgstr "Desplaça la pestanya a la dreta"
 
@@ -13216,7 +13220,7 @@ msgstr "La partida no pot continuar sense l'amfitrió."
 msgid "-->  QUIT  <--"
 msgstr "-->  Surt  <--"
 
-#: src/init.c:390
+#: src/init.c:419
 #, c-format
 msgid ""
 "The required mod could not be loaded: %s\n"
@@ -13234,7 +13238,7 @@ msgid "Power Accrued"
 msgstr "Energia acumulada"
 
 #: src/intelmap.c:243
-#: src/keybind.c:1369
+#: src/keybind.c:1371
 msgid "PAUSED"
 msgstr "EN PAUSA"
 
@@ -13361,279 +13365,279 @@ msgstr "Assigna la producció de la fàbrica de convertiplans"
 msgid "Circle"
 msgstr "Cercle"
 
-#: src/keybind.c:135
+#: src/keybind.c:137
 msgid "Sorry, that cheat is disabled in multiplayer games."
 msgstr "Ho lamento, aquesta trampa està deshabilitada a les partides multijugador."
 
-#: src/keybind.c:141
+#: src/keybind.c:143
 msgid "Warning! This cheat is buggy.  We recommend to NOT use it."
 msgstr "Alerta! Aquesta trampa pot contenir errades. Us recomanem que NO la feu servir."
 
-#: src/keybind.c:210
+#: src/keybind.c:212
 msgid "Lets us see what you see!"
 msgstr "Deixeu-me veure el que veieu!"
 
-#: src/keybind.c:212
+#: src/keybind.c:214
 msgid "Fine, weapon & sensor display is off!"
 msgstr "Molt bé, la pantalla de les armes i els sensors està apagada!"
 
-#: src/keybind.c:344
+#: src/keybind.c:346
 #, fuzzy, c-format
 msgid "Player %u is cheating him/herself a new droid army of %s(s)."
 msgstr "El jugador %u està fent trampes (mode depuració) amb un nou ciborg: %s"
 
-#: src/keybind.c:383
-#: src/keybind.c:413
-#: src/keybind.c:430
-#: src/keybind.c:474
-#: src/keybind.c:582
-#: src/keybind.c:622
-#: src/keybind.c:728
-#: src/keybind.c:1259
-#: src/keybind.c:1316
-#: src/keybind.c:1418
-#: src/keybind.c:1515
-#: src/keybind.c:1826
-#: src/keybind.c:1867
+#: src/keybind.c:385
+#: src/keybind.c:415
+#: src/keybind.c:432
+#: src/keybind.c:476
+#: src/keybind.c:584
+#: src/keybind.c:624
+#: src/keybind.c:730
+#: src/keybind.c:1261
+#: src/keybind.c:1318
+#: src/keybind.c:1420
+#: src/keybind.c:1517
+#: src/keybind.c:1828
+#: src/keybind.c:1869
 #, c-format
 msgid "(Player %u) is using cheat :%s"
 msgstr "(El jugador %u) fa servir trampes :%s"
 
-#: src/keybind.c:384
+#: src/keybind.c:386
 msgid "Hard as nails!!!"
 msgstr "Dur com les ungles!!!"
 
-#: src/keybind.c:398
+#: src/keybind.c:400
 msgid "Takings thing easy!"
 msgstr "Agafant-se les coses amb calma!"
 
-#: src/keybind.c:414
+#: src/keybind.c:416
 msgid "1000 big ones!!!"
 msgstr "1000 dels grossos!!!"
 
-#: src/keybind.c:431
+#: src/keybind.c:433
 msgid "Power overwhelming"
 msgstr "Energia desbordant"
 
-#: src/keybind.c:446
+#: src/keybind.c:448
 msgid "Back to normality!"
 msgstr "Tornada a la normalitat"
 
-#: src/keybind.c:459
+#: src/keybind.c:461
 msgid "Getting tricky!"
 msgstr "Us esteu tornant trampós!"
 
-#: src/keybind.c:475
+#: src/keybind.c:477
 msgid "Twice as nice!"
 msgstr "El doble de bonic!"
 
-#: src/keybind.c:486
+#: src/keybind.c:488
 msgid "FPS display is enabled."
 msgstr "S'ha habilitat el visor de FPS"
 
-#: src/keybind.c:490
+#: src/keybind.c:492
 msgid "FPS display is disabled."
 msgstr "S'ha deshabilitat el visor de FPS"
 
-#: src/keybind.c:514
+#: src/keybind.c:516
 #, c-format
 msgid "FPS %d; FPS-Limit: %d; PIEs %d; polys %d; Terr. polys %d; States %d"
 msgstr "FPS: %d; Límit-FPS: %d; PIEs %d; polis %d; Polis terr. %d; Estats %d"
 
-#: src/keybind.c:546
+#: src/keybind.c:548
 #, c-format
 msgid "(Player %u) is using a cheat :Num Droids: %d  Num Structures: %d  Num Features: %d"
 msgstr "(Jugador %u) fa servir una trampa: Nº ciborgs: %d  Nº estructures: %d  Nº Funcions: %d"
 
-#: src/keybind.c:583
+#: src/keybind.c:585
 msgid "Infinite power disabled"
 msgstr "Energia infinita deshabilitada"
 
-#: src/keybind.c:583
+#: src/keybind.c:585
 msgid "Infinite power enabled"
 msgstr "Energia infinita habilitada"
 
-#: src/keybind.c:623
+#: src/keybind.c:625
 msgid "All items made available"
 msgstr "Estan disponibles tots els objectes"
 
-#: src/keybind.c:729
+#: src/keybind.c:731
 msgid "Fog on"
 msgstr "Boira activada"
 
-#: src/keybind.c:729
+#: src/keybind.c:731
 msgid "Fog off"
 msgstr "Boira desactivada"
 
-#: src/keybind.c:1148
+#: src/keybind.c:1150
 #, c-format
 msgid "Warning!  This cheat can cause dire problems later on! [%s]"
 msgstr "Alerta!  Aquesta trampa pot portar problemes tard o d'hora! [%s]"
 
-#: src/keybind.c:1148
+#: src/keybind.c:1150
 msgid "Ending Mission."
 msgstr "Es finalitza la missió."
 
-#: src/keybind.c:1260
+#: src/keybind.c:1262
 msgid "CHEATS ARE NOW ENABLED!"
 msgstr "LES TRAMPES ESTAN HABILITADES!"
 
-#: src/keybind.c:1260
+#: src/keybind.c:1262
 msgid "CHEATS ARE NOW DISABLED!"
 msgstr "LES TRAMPES ESTAN DESHABILITADES"
 
-#: src/keybind.c:1317
+#: src/keybind.c:1319
 msgid "God Mode ON"
 msgstr "Mode Déu activat"
 
-#: src/keybind.c:1317
+#: src/keybind.c:1319
 msgid "God Mode OFF"
 msgstr "Mode Déu desactivat"
 
-#: src/keybind.c:1329
+#: src/keybind.c:1331
 msgid "View Aligned to North"
 msgstr "Vista alineada al nord"
 
-#: src/keybind.c:1338
+#: src/keybind.c:1340
 #, c-format
 msgid "Trap cursor %s"
 msgstr "Cursor atrapat %s"
 
-#: src/keybind.c:1419
+#: src/keybind.c:1421
 msgid "Researched EVERYTHING for you!"
 msgstr "TOT investigat per vos!"
 
-#: src/keybind.c:1452
+#: src/keybind.c:1454
 #, c-format
 msgid "(Player %u) is using cheat :%s %s"
 msgstr "(Jugador %u) fa servir una trampa: %s %s"
 
-#: src/keybind.c:1453
+#: src/keybind.c:1455
 msgid "Researched"
 msgstr "Investigat"
 
-#: src/keybind.c:1473
+#: src/keybind.c:1475
 msgid "Only displaying energy bars when selected"
 msgstr "Només es mostra les barres d'energia quan es selecciona"
 
-#: src/keybind.c:1476
+#: src/keybind.c:1478
 msgid "Always displaying energy bars for units"
 msgstr "Sempre mostra les barres d'energia de les unitats"
 
-#: src/keybind.c:1479
+#: src/keybind.c:1481
 msgid "Always displaying energy bars for units and structures"
 msgstr "Sempre mostra les barres d'energia de les unitats i estructures"
 
-#: src/keybind.c:1501
+#: src/keybind.c:1503
 msgid "Demo mode off - Returning to normal game mode"
 msgstr "Mode demo apagat - Es torna al mode de joc normal"
 
-#: src/keybind.c:1516
+#: src/keybind.c:1518
 msgid "Debug menu is Open"
 msgstr "S'ha obert el menú de depuració"
 
-#: src/keybind.c:1547
+#: src/keybind.c:1549
 msgid "Unable to locate any oil derricks!"
 msgstr "No es pot trobar cap pou de petroli!"
 
-#: src/keybind.c:1768
+#: src/keybind.c:1770
 msgid "Oh, the weather outside is frightful... SNOW"
 msgstr "Oh, el temps fora és glaçat... NEVA"
 
-#: src/keybind.c:1774
+#: src/keybind.c:1776
 msgid "Singing in the rain, I'm singing in the rain... RAIN"
 msgstr "Cantant sota la pluja, «I'm singing in the rain...» Plou"
 
-#: src/keybind.c:1780
+#: src/keybind.c:1782
 msgid "Forecast : Clear skies for all areas... NO WEATHER"
 msgstr "El temps: Cels clars arreu... SENSE TEMPS"
 
-#: src/keybind.c:1825
+#: src/keybind.c:1827
 msgid "Warning! This can have drastic consequences if used incorrectly in missions."
 msgstr "Alerta! Això pot tenir conseqüències dràstiques si es fa servir malament a les missions."
 
-#: src/keybind.c:1827
+#: src/keybind.c:1829
 msgid "All enemies destroyed by cheating!"
 msgstr "Tots els enemics han estat destruïts fent trampes!"
 
-#: src/keybind.c:1868
+#: src/keybind.c:1870
 msgid "Destroying selected droids and structures!"
 msgstr "Es destrueixen els ciborgs i estructures seleccionats!"
 
-#: src/keybind.c:2387
+#: src/keybind.c:2389
 msgid "Centered on player HQ, direction NORTH"
 msgstr "Centrat en el QG del jugador, direcció NORD"
 
-#: src/keybind.c:2399
+#: src/keybind.c:2401
 msgid "Unable to locate HQ!"
 msgstr "No es pot localitzar el QG"
 
-#: src/keybind.c:2406
+#: src/keybind.c:2408
 msgid "Formation speed limiting has been removed from the game due to bugs."
 msgstr "El límit de velocitat de les formacions ha estat retirat del joc per que té errades."
 
-#: src/keybind.c:2455
+#: src/keybind.c:2457
 msgid "Vertical rotation direction: Normal"
 msgstr "Direcció de rotació vertical: Normal"
 
-#: src/keybind.c:2460
+#: src/keybind.c:2462
 msgid "Vertical rotation direction: Flipped"
 msgstr "Direcció de rotació vertical: Canviada"
 
-#: src/keybind.c:2469
+#: src/keybind.c:2471
 msgid "Screen shake when things die: Off"
 msgstr "Tremolor de pantalla quan les coses es moren: Apagat"
 
-#: src/keybind.c:2474
+#: src/keybind.c:2476
 msgid "Screen shake when things die: On"
 msgstr "Tremolor de pantalla quan les coses es moren: Encés"
 
-#: src/keybind.c:2519
-#: src/keybind.c:2562
+#: src/keybind.c:2521
+#: src/keybind.c:2564
 msgid "Sorry, but game speed cannot be changed in multiplayer."
 msgstr "Lamentablement la velocitat del joc no es pot canviar en una partida en xarxa."
 
-#: src/keybind.c:2540
-#: src/keybind.c:2583
-#: src/keybind.c:2605
+#: src/keybind.c:2542
+#: src/keybind.c:2585
+#: src/keybind.c:2607
 msgid "Game Speed Reset"
 msgstr "Es restaura la velocitat de la partida"
 
-#: src/keybind.c:2544
+#: src/keybind.c:2546
 #, c-format
 msgid "Game Speed Increased to %3.1f"
 msgstr "La velocitat de la partida s'ha incrementat en %3.1f"
 
-#: src/keybind.c:2587
+#: src/keybind.c:2589
 #, c-format
 msgid "Game Speed Reduced to %3.1f"
 msgstr "La velocitat de la partida s'ha disminuït en %3.1f"
 
-#: src/keybind.c:2617
+#: src/keybind.c:2619
 msgid "Radar showing friend-foe colors"
 msgstr "El radar mostra els colors amics-enemics"
 
-#: src/keybind.c:2621
+#: src/keybind.c:2623
 msgid "Radar showing player colors"
 msgstr "El radar mostra el color dels jugadors"
 
-#: src/keybind.c:2641
+#: src/keybind.c:2643
 msgid "Radar showing only objects"
 msgstr "El radar només mostra objectes"
 
-#: src/keybind.c:2644
+#: src/keybind.c:2646
 msgid "Radar blending terrain and height"
 msgstr "El radar barreja el terreny i l'alçada"
 
-#: src/keybind.c:2647
+#: src/keybind.c:2649
 msgid "Radar showing terrain"
 msgstr "El radar mostra el terreny"
 
-#: src/keybind.c:2650
+#: src/keybind.c:2652
 msgid "Radar showing revealed terrain"
 msgstr "El radar mostra el terreny conegut"
 
-#: src/keybind.c:2653
+#: src/keybind.c:2655
 msgid "Radar showing height"
 msgstr "El radar mostra l'alçada"
 

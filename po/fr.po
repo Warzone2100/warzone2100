@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-05-17 01:48+0200\n"
+"POT-Creation-Date: 2011-09-07 21:16+0200\n"
 "PO-Revision-Date: 2010-04-21 08:32-0500\n"
 "Last-Translator: Gilles J. Séguin <segg2@videotron.ca>\n"
 "Language-Team: French <warzone-dev@gna.org>\n"
@@ -12307,10 +12307,10 @@ msgstr "Impossible de communiquer avec le serveur maître ! Le port TCP %u est-
 
 #: src/challenge.c:188
 #: src/hci.c:999
-#: src/hci.c:3814
-#: src/hci.c:3965
-#: src/hci.c:4416
-#: src/hci.c:5622
+#: src/hci.c:3823
+#: src/hci.c:3974
+#: src/hci.c:4425
+#: src/hci.c:5631
 #: src/intelmap.c:539
 #: src/intorder.c:787
 #: src/loadsave.c:267
@@ -12620,17 +12620,17 @@ msgstr "Joueur à quitter"
 msgid "Player dropped"
 msgstr "Joueur échapper"
 
-#: src/display.c:1743
+#: src/display.c:1758
 msgid "Cannot Build. Oil Resource Burning."
 msgstr "Construction Impossible. Le Gisement de Pétrole est en Feu."
 
-#: src/display.c:1923
-#: src/display.c:2534
+#: src/display.c:1938
+#: src/display.c:2549
 #, c-format
 msgid "%s - Damage %d%% - Experience %.1f, %s"
 msgstr "%s - Endommagé à %d%% - Expérience %.1f, %s"
 
-#: src/display.c:1939
+#: src/display.c:1954
 #, c-format
 msgid "%s - Allied - Damage %d%% - Experience %d, %s"
 msgstr "%s - Allié - Endommagé à %d%% - Expérience %d, %s"
@@ -12718,391 +12718,395 @@ msgstr ""
 msgid "You wanted to give %s a %s but they have too many!"
 msgstr ""
 
-#: src/frontend.c:97
+#: src/frontend.c:102
 msgid "Single Player"
 msgstr "Un Joueur"
 
-#: src/frontend.c:98
+#: src/frontend.c:103
 msgid "Multi Player"
 msgstr "Multi-joueurs"
 
-#: src/frontend.c:99
-#: src/frontend.c:155
+#: src/frontend.c:104
+#: src/frontend.c:181
 msgid "Tutorial"
 msgstr "Tutoriel"
 
-#: src/frontend.c:100
-#: src/hci.c:3948
+#: src/frontend.c:105
+#: src/hci.c:3957
 msgid "Options"
 msgstr "Options"
 
-#: src/frontend.c:101
+#: src/frontend.c:106
 msgid "View Intro"
 msgstr "Voir Intro"
 
-#: src/frontend.c:103
+#: src/frontend.c:108
 msgid "Quit Game"
 msgstr "Quitter la partie"
 
-#: src/frontend.c:105
+#: src/frontend.c:110
 msgid "MAIN MENU"
 msgstr "MENU PRINCIPAL"
 
-#: src/frontend.c:156
+#: src/frontend.c:112
+msgid "Visit our official site: http://wz2100.net"
+msgstr ""
+
+#: src/frontend.c:182
 msgid "Fast Play"
 msgstr "Partie Rapide"
 
-#: src/frontend.c:157
+#: src/frontend.c:183
 msgid "TUTORIALS"
 msgstr "TUTORIELS"
 
 #. TRANSLATORS: "Return", in this context, means "return to previous screen/menu"
-#: src/frontend.c:159
-#: src/frontend.c:218
-#: src/frontend.c:351
-#: src/frontend.c:421
-#: src/frontend.c:572
-#: src/frontend.c:728
-#: src/frontend.c:835
-#: src/frontend.c:1054
-#: src/frontend.c:1215
+#: src/frontend.c:185
+#: src/frontend.c:244
+#: src/frontend.c:377
+#: src/frontend.c:447
+#: src/frontend.c:598
+#: src/frontend.c:754
+#: src/frontend.c:861
+#: src/frontend.c:1080
+#: src/frontend.c:1241
 msgctxt "menu"
 msgid "Return"
 msgstr "Menu précédent"
 
-#: src/frontend.c:212
+#: src/frontend.c:238
 msgid "New Campaign"
 msgstr "Nouvelle Campagne"
 
-#: src/frontend.c:213
+#: src/frontend.c:239
 msgid "Start Skirmish Game"
 msgstr "Démarrer escarmouche"
 
-#: src/frontend.c:214
+#: src/frontend.c:240
 msgid "Challenges"
 msgstr "Défis"
 
-#: src/frontend.c:215
+#: src/frontend.c:241
 #: src/ingameop.c:281
 msgid "Load Game"
 msgstr "Charger une Partie"
 
-#: src/frontend.c:217
+#: src/frontend.c:243
 msgid "SINGLE PLAYER"
 msgstr "UN JOUEUR"
 
-#: src/frontend.c:294
+#: src/frontend.c:320
 #: src/ingameop.c:507
 #: src/mission.c:2820
 #: src/mission.c:2925
 msgid "Load Saved Game"
 msgstr "Charger une partie Enregistrée"
 
-#: src/frontend.c:346
+#: src/frontend.c:372
 msgid "MULTI PLAYER"
 msgstr "MULTI-JOUEURS"
 
-#: src/frontend.c:348
+#: src/frontend.c:374
 msgid "Host Game"
 msgstr "Créer une Nouvelle Partie"
 
-#: src/frontend.c:349
+#: src/frontend.c:375
 msgid "Join Game"
 msgstr "Joindre une Partie"
 
-#: src/frontend.c:414
+#: src/frontend.c:440
 #: src/multiint.c:1176
 msgid "OPTIONS"
 msgstr ""
 
-#: src/frontend.c:415
+#: src/frontend.c:441
 msgid "Game Options"
 msgstr "Options du Jeu"
 
-#: src/frontend.c:416
+#: src/frontend.c:442
 msgid "Graphics Options"
 msgstr "Options Graphiques"
 
-#: src/frontend.c:417
+#: src/frontend.c:443
 msgid "Video Options"
 msgstr "Options Vidéos"
 
-#: src/frontend.c:418
+#: src/frontend.c:444
 #: src/ingameop.c:276
 msgid "Audio Options"
 msgstr "Options Audio"
 
-#: src/frontend.c:419
+#: src/frontend.c:445
 msgid "Mouse Options"
 msgstr "Options souris"
 
-#: src/frontend.c:420
+#: src/frontend.c:446
 msgid "Key Mappings"
 msgstr "Raccourcis Clavier"
 
-#: src/frontend.c:482
+#: src/frontend.c:508
 msgid "Video Playback"
 msgstr "Affichage des Vidéos"
 
-#: src/frontend.c:486
-#: src/frontend.c:662
+#: src/frontend.c:512
+#: src/frontend.c:688
 msgid "1X"
 msgstr "1X"
 
-#: src/frontend.c:490
-#: src/frontend.c:652
+#: src/frontend.c:516
+#: src/frontend.c:678
 msgid "2X"
 msgstr "2X"
 
-#: src/frontend.c:494
-#: src/frontend.c:657
-#: src/frontend.c:803
-#: src/frontend.c:857
+#: src/frontend.c:520
+#: src/frontend.c:683
+#: src/frontend.c:829
+#: src/frontend.c:883
 msgid "Fullscreen"
 msgstr "Plein Écran"
 
-#: src/frontend.c:503
+#: src/frontend.c:529
 msgid "Scanlines"
 msgstr ""
 
-#: src/frontend.c:507
-#: src/frontend.c:528
-#: src/frontend.c:548
-#: src/frontend.c:564
+#: src/frontend.c:533
+#: src/frontend.c:554
+#: src/frontend.c:574
 #: src/frontend.c:590
-#: src/frontend.c:624
-#: src/frontend.c:642
-#: src/frontend.c:687
-#: src/frontend.c:828
-#: src/frontend.c:913
-#: src/frontend.c:951
-#: src/frontend.c:999
-#: src/frontend.c:1011
-#: src/frontend.c:1023
-#: src/frontend.c:1035
-#: src/frontend.c:1071
-#: src/frontend.c:1084
-#: src/frontend.c:1098
-#: src/frontend.c:1112
+#: src/frontend.c:616
+#: src/frontend.c:650
+#: src/frontend.c:668
+#: src/frontend.c:713
+#: src/frontend.c:854
+#: src/frontend.c:939
+#: src/frontend.c:977
+#: src/frontend.c:1025
+#: src/frontend.c:1037
+#: src/frontend.c:1049
+#: src/frontend.c:1061
+#: src/frontend.c:1097
+#: src/frontend.c:1110
+#: src/frontend.c:1124
+#: src/frontend.c:1138
 msgid "Off"
 msgstr "Désactivé"
 
-#: src/frontend.c:511
-#: src/frontend.c:677
+#: src/frontend.c:537
+#: src/frontend.c:703
 msgid "50%"
 msgstr ""
 
-#: src/frontend.c:515
-#: src/frontend.c:682
+#: src/frontend.c:541
+#: src/frontend.c:708
 #: src/multiplay.c:2038
 msgid "Black"
 msgstr "Noir"
 
-#: src/frontend.c:521
+#: src/frontend.c:547
 msgid "Screen Shake"
 msgstr "Tremblements de l'écran (explosion)"
 
-#: src/frontend.c:524
-#: src/frontend.c:552
-#: src/frontend.c:560
-#: src/frontend.c:595
-#: src/frontend.c:629
-#: src/frontend.c:638
-#: src/frontend.c:824
-#: src/frontend.c:918
-#: src/frontend.c:956
-#: src/frontend.c:995
-#: src/frontend.c:1007
-#: src/frontend.c:1019
-#: src/frontend.c:1031
-#: src/frontend.c:1076
-#: src/frontend.c:1089
-#: src/frontend.c:1103
-#: src/frontend.c:1117
+#: src/frontend.c:550
+#: src/frontend.c:578
+#: src/frontend.c:586
+#: src/frontend.c:621
+#: src/frontend.c:655
+#: src/frontend.c:664
+#: src/frontend.c:850
+#: src/frontend.c:944
+#: src/frontend.c:982
+#: src/frontend.c:1021
+#: src/frontend.c:1033
+#: src/frontend.c:1045
+#: src/frontend.c:1057
+#: src/frontend.c:1102
+#: src/frontend.c:1115
+#: src/frontend.c:1129
+#: src/frontend.c:1143
 msgid "On"
 msgstr "Activé"
 
-#: src/frontend.c:533
+#: src/frontend.c:559
 #: src/multiint.c:1246
 msgid "Fog"
 msgstr "Brouillard"
 
-#: src/frontend.c:536
-#: src/frontend.c:611
+#: src/frontend.c:562
+#: src/frontend.c:637
 msgid "Mist"
 msgstr "Brume"
 
-#: src/frontend.c:540
-#: src/frontend.c:605
+#: src/frontend.c:566
+#: src/frontend.c:631
 #: src/multiint.c:1248
 msgid "Fog Of War"
 msgstr "Brouillard de guerre"
 
-#: src/frontend.c:545
+#: src/frontend.c:571
 msgid "Subtitles"
 msgstr "Sous-titres"
 
-#: src/frontend.c:557
+#: src/frontend.c:583
 msgid "Shadows"
 msgstr "Ombres"
 
-#: src/frontend.c:568
+#: src/frontend.c:594
 msgid "GRAPHICS OPTIONS"
 msgstr "OPTIONS GRAPHIQUES"
 
-#: src/frontend.c:716
+#: src/frontend.c:742
 #: src/ingameop.c:179
 msgid "Voice Volume"
 msgstr "Volume de la Voix"
 
-#: src/frontend.c:720
+#: src/frontend.c:746
 #: src/ingameop.c:184
 msgid "FX Volume"
 msgstr "Volume des Bruits(FX)"
 
-#: src/frontend.c:724
+#: src/frontend.c:750
 #: src/ingameop.c:189
 msgid "Music Volume"
 msgstr "Volume de la Musique"
 
-#: src/frontend.c:731
+#: src/frontend.c:757
 msgid "AUDIO OPTIONS"
 msgstr "OPTIONS AUDIO"
 
-#: src/frontend.c:796
+#: src/frontend.c:822
 msgid "* Takes effect on game restart"
 msgstr "* Le jeu doit être redémarré pour que ces options s'appliquent"
 
-#: src/frontend.c:799
+#: src/frontend.c:825
 msgid "Graphics Mode*"
 msgstr "Paramètres Visuels*"
 
-#: src/frontend.c:807
-#: src/frontend.c:852
+#: src/frontend.c:833
+#: src/frontend.c:878
 msgid "Windowed"
 msgstr "Fenêtré"
 
-#: src/frontend.c:811
+#: src/frontend.c:837
 msgid "Resolution*"
 msgstr "Résolution*"
 
-#: src/frontend.c:816
+#: src/frontend.c:842
 msgid "Texture size"
 msgstr "Taille des Textures"
 
-#: src/frontend.c:820
+#: src/frontend.c:846
 msgid "Vertical sync*"
 msgstr "Fréquence da rafraîchissement verticale*"
 
-#: src/frontend.c:832
+#: src/frontend.c:858
 #, fuzzy
 msgid "VIDEO OPTIONS"
 msgstr "OPTIONS VIDÉOS"
 
-#: src/frontend.c:988
+#: src/frontend.c:1014
 msgid "* May negatively affect performance"
 msgstr "* Risque de diminuer les performances"
 
-#: src/frontend.c:992
+#: src/frontend.c:1018
 msgid "Reverse Rotation"
 msgstr "Rotation Inversée"
 
-#: src/frontend.c:1003
+#: src/frontend.c:1029
 msgid "Trap Cursor"
 msgstr "Piéger le Curseur"
 
-#: src/frontend.c:1015
+#: src/frontend.c:1041
 msgid "Colored Cursors*"
 msgstr "Curseur Coloré*"
 
-#: src/frontend.c:1028
+#: src/frontend.c:1054
 #, fuzzy
 msgid "Switch Mouse Buttons"
 msgstr "Inverser les Boutons de la Souris"
 
-#: src/frontend.c:1040
+#: src/frontend.c:1066
 #, fuzzy
 msgid "Rotate Screen"
 msgstr "Rotation vers la Gauche"
 
-#: src/frontend.c:1043
-#: src/frontend.c:1131
+#: src/frontend.c:1069
+#: src/frontend.c:1157
 #, fuzzy
 msgctxt "middle mouse button"
 msgid "Middle Button"
 msgstr "Souris milieu"
 
-#: src/frontend.c:1047
-#: src/frontend.c:1126
+#: src/frontend.c:1073
+#: src/frontend.c:1152
 #, fuzzy
 msgctxt "right mouse button"
 msgid "Right Button"
 msgstr "Souris droite"
 
-#: src/frontend.c:1051
+#: src/frontend.c:1077
 #, fuzzy
 msgid "MOUSE OPTIONS"
 msgstr "OPTIONS SOURIS"
 
-#: src/frontend.c:1166
-#: src/frontend.c:1236
+#: src/frontend.c:1192
+#: src/frontend.c:1262
 msgid "Difficulty"
 msgstr "Difficulté"
 
-#: src/frontend.c:1170
-#: src/frontend.c:1244
-#: src/frontend.c:1281
+#: src/frontend.c:1196
+#: src/frontend.c:1270
+#: src/frontend.c:1307
 msgid "Easy"
 msgstr "Facile"
 
-#: src/frontend.c:1173
-#: src/frontend.c:1247
+#: src/frontend.c:1199
 #: src/frontend.c:1273
+#: src/frontend.c:1299
 msgid "Normal"
 msgstr "Normale"
 
-#: src/frontend.c:1177
-#: src/frontend.c:1250
-#: src/frontend.c:1277
+#: src/frontend.c:1203
+#: src/frontend.c:1276
+#: src/frontend.c:1303
 msgid "Hard"
 msgstr "Difficile"
 
-#: src/frontend.c:1182
-#: src/frontend.c:1237
+#: src/frontend.c:1208
+#: src/frontend.c:1263
 msgid "Scroll Speed"
 msgstr "Vitesse de Défilement"
 
-#: src/frontend.c:1196
-#: src/frontend.c:1234
+#: src/frontend.c:1222
+#: src/frontend.c:1260
 msgid "Language"
 msgstr "Langue"
 
-#: src/frontend.c:1208
-#: src/frontend.c:1235
+#: src/frontend.c:1234
+#: src/frontend.c:1261
 msgid "Unit Colour"
 msgstr "Couleur des Unités"
 
-#: src/frontend.c:1211
+#: src/frontend.c:1237
 msgid "Radar"
 msgstr "Radar"
 
-#: src/frontend.c:1212
-#: src/frontend.c:1261
+#: src/frontend.c:1238
+#: src/frontend.c:1287
 #, fuzzy
 msgid "Rotating"
 msgstr "Rotation vers la Droite"
 
-#: src/frontend.c:1212
-#: src/frontend.c:1261
+#: src/frontend.c:1238
+#: src/frontend.c:1287
 msgid "Fixed"
 msgstr ""
 
-#: src/frontend.c:1218
-#: src/frontend.c:1238
+#: src/frontend.c:1244
+#: src/frontend.c:1264
 msgid "GAME OPTIONS"
 msgstr "OPTIONS"
 
-#: src/frontend.c:1379
+#: src/frontend.c:1405
 #: src/multiint.c:2212
 msgid "Mod: "
 msgstr "Mod: "
@@ -13111,7 +13115,7 @@ msgstr "Mod: "
 msgid "MAP SAVED!"
 msgstr "Carte SAUVEGARDÉE!"
 
-#: src/hci.c:1692
+#: src/hci.c:1699
 #: src/loop.c:530
 #: src/loop.c:546
 #: src/mission.c:2891
@@ -13119,181 +13123,181 @@ msgstr "Carte SAUVEGARDÉE!"
 msgid "GAME SAVED :"
 msgstr "PARTIE SAUVEGARDÉE!"
 
-#: src/hci.c:2082
+#: src/hci.c:2089
 msgid "Failed to create building"
 msgstr "Échec de la création du bâtiment"
 
-#: src/hci.c:2105
+#: src/hci.c:2112
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new structure: %s."
 msgstr "Le joueur %u Triche (Il se sert du debug menu pour se construire un nouveau bâtiment: %s.)"
 
-#: src/hci.c:2120
+#: src/hci.c:2127
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new feature: %s."
 msgstr "Le joueur %u Triche (Il se sert du debug menu pour s'obtenir une nouvelle technologie: %s.)"
 
-#: src/hci.c:2141
+#: src/hci.c:2148
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid: %s."
 msgstr "Le joueur %u Triche (Il se sert du debug menu pour se faire une nouvelle unitée: %s.)"
 
-#: src/hci.c:3716
+#: src/hci.c:3725
 msgid "Commanders (F6)"
 msgstr "Commandants (F6)"
 
-#: src/hci.c:3732
+#: src/hci.c:3741
 msgid "Intelligence Display (F5)"
 msgstr "Panneau d'Informations (F5)"
 
-#: src/hci.c:3748
+#: src/hci.c:3757
 msgid "Manufacture (F1)"
 msgstr "Assemblage (F1)"
 
-#: src/hci.c:3764
+#: src/hci.c:3773
 msgid "Design (F4)"
 msgstr "Conception (F4)"
 
-#: src/hci.c:3780
+#: src/hci.c:3789
 msgid "Research (F2)"
 msgstr "Recherche (F2)"
 
-#: src/hci.c:3796
+#: src/hci.c:3805
 msgid "Build (F3)"
 msgstr "Construction (F3)"
 
-#: src/hci.c:3876
+#: src/hci.c:3885
 #: src/multiint.c:1293
 #: src/multimenu.c:764
 msgid "Power"
 msgstr "Énergie"
 
-#: src/hci.c:3990
+#: src/hci.c:3999
 msgid "Map:"
 msgstr ""
 
-#: src/hci.c:4004
+#: src/hci.c:4013
 #, fuzzy
 msgid "Load"
 msgstr "Charger une Partie"
 
-#: src/hci.c:4005
+#: src/hci.c:4014
 #, fuzzy
 msgid "Load Map File"
 msgstr "Charger une Partie"
 
-#: src/hci.c:4012
+#: src/hci.c:4021
 #, fuzzy
 msgid "Save"
 msgstr "Sauvegarder"
 
-#: src/hci.c:4013
+#: src/hci.c:4022
 #, fuzzy
 msgid "Save Map File"
 msgstr "Sauvegarder"
 
-#: src/hci.c:4021
+#: src/hci.c:4030
 msgid "New"
 msgstr ""
 
-#: src/hci.c:4022
+#: src/hci.c:4031
 msgid "New Blank Map"
 msgstr ""
 
-#: src/hci.c:4060
+#: src/hci.c:4069
 msgid "Tile"
 msgstr "Tuile"
 
-#: src/hci.c:4061
+#: src/hci.c:4070
 msgid "Place tiles on map"
 msgstr "Placer des tuiles sur la carte"
 
-#: src/hci.c:4070
+#: src/hci.c:4079
 msgid "Unit"
 msgstr "Unité"
 
-#: src/hci.c:4071
+#: src/hci.c:4080
 msgid "Place Unit on map"
 msgstr "Placer des Unités sur la carte"
 
-#: src/hci.c:4079
+#: src/hci.c:4088
 msgid "Struct"
 msgstr "Structure"
 
-#: src/hci.c:4080
+#: src/hci.c:4089
 msgid "Place Structures on map"
 msgstr "Placer des Bâtiments sur la carte"
 
-#: src/hci.c:4088
+#: src/hci.c:4097
 msgid "Feat"
 msgstr "Fonction"
 
-#: src/hci.c:4089
+#: src/hci.c:4098
 msgid "Place Features on map"
 msgstr "Placer les éléments sur la carte"
 
-#: src/hci.c:4099
+#: src/hci.c:4108
 msgid "Pause"
 msgstr "Pause"
 
-#: src/hci.c:4100
+#: src/hci.c:4109
 msgid "Pause or unpause the game"
 msgstr "Mettre en pause ou enlever la pause"
 
-#: src/hci.c:4114
+#: src/hci.c:4123
 msgid "Align height of all map objects"
 msgstr "Align height of all map objects"
 
-#: src/hci.c:4124
+#: src/hci.c:4133
 msgid "Edit"
 msgstr "Édit"
 
-#: src/hci.c:4125
+#: src/hci.c:4134
 #, fuzzy
 msgid "Start Edit Mode"
 msgstr "Commencer sans Base"
 
-#: src/hci.c:4139
+#: src/hci.c:4148
 #: src/ingameop.c:119
 #: src/ingameop.c:264
 #: src/ingameop.c:269
 msgid "Quit"
 msgstr "Quitter"
 
-#: src/hci.c:4140
+#: src/hci.c:4149
 msgid "Exit Game"
 msgstr "Quitter"
 
-#: src/hci.c:4165
+#: src/hci.c:4174
 #, fuzzy
 msgid "Current Player:"
 msgstr "Multi-joueurs"
 
-#: src/hci.c:4501
+#: src/hci.c:4510
 #: src/intdisplay.c:209
 #: src/intdisplay.c:252
 #: src/intdisplay.c:303
 msgid "Progress Bar"
 msgstr "Barre de Progression"
 
-#: src/hci.c:5459
+#: src/hci.c:5468
 #, fuzzy
 msgid "Infinite Production"
 msgstr "Production en boucle"
 
-#: src/hci.c:5537
+#: src/hci.c:5546
 msgid "Factory Delivery Point"
 msgstr "Point de Livraison"
 
-#: src/hci.c:5556
+#: src/hci.c:5565
 msgid "Loop Production"
 msgstr "Production en boucle"
 
-#: src/hci.c:5647
+#: src/hci.c:5656
 msgid "Tab Scroll left"
 msgstr "Défilement à Gauche"
 
-#: src/hci.c:5664
+#: src/hci.c:5673
 msgid "Tab Scroll right"
 msgstr "Défilement à droite"
 
@@ -13327,7 +13331,7 @@ msgstr "La partie ne peux continuer sans l'hôte."
 msgid "-->  QUIT  <--"
 msgstr "-->  QUITTER  <--"
 
-#: src/init.c:390
+#: src/init.c:419
 #, c-format
 msgid ""
 "The required mod could not be loaded: %s\n"
@@ -13345,7 +13349,7 @@ msgid "Power Accrued"
 msgstr "Puissance Accrue"
 
 #: src/intelmap.c:243
-#: src/keybind.c:1369
+#: src/keybind.c:1371
 msgid "PAUSED"
 msgstr "PAUSE"
 
@@ -13472,285 +13476,285 @@ msgstr "Lui assigner la production d'une usine de VTOLs"
 msgid "Circle"
 msgstr "Cercle"
 
-#: src/keybind.c:135
+#: src/keybind.c:137
 msgid "Sorry, that cheat is disabled in multiplayer games."
 msgstr "Désolé, ce code est désactivé durant les jeux multijoueurs."
 
-#: src/keybind.c:141
+#: src/keybind.c:143
 msgid "Warning! This cheat is buggy.  We recommend to NOT use it."
 msgstr "Attention ! Ce code est buggé. Nous vous recommandons de ne PAS l'utiliser."
 
-#: src/keybind.c:210
+#: src/keybind.c:212
 msgid "Lets us see what you see!"
 msgstr "Voyons voir ce que tu vois !"
 
-#: src/keybind.c:212
+#: src/keybind.c:214
 msgid "Fine, weapon & sensor display is off!"
 msgstr "C'est bon, je désactive l'affichage des senseurs !"
 
-#: src/keybind.c:344
+#: src/keybind.c:346
 #, fuzzy, c-format
 msgid "Player %u is cheating him/herself a new droid army of %s(s)."
 msgstr "Le joueur %u Triche (Il se sert du debug menu pour se faire une nouvelle unitée: %s.)"
 
-#: src/keybind.c:383
-#: src/keybind.c:413
-#: src/keybind.c:430
-#: src/keybind.c:474
-#: src/keybind.c:582
-#: src/keybind.c:622
-#: src/keybind.c:728
-#: src/keybind.c:1259
-#: src/keybind.c:1316
-#: src/keybind.c:1418
-#: src/keybind.c:1515
-#: src/keybind.c:1826
-#: src/keybind.c:1867
+#: src/keybind.c:385
+#: src/keybind.c:415
+#: src/keybind.c:432
+#: src/keybind.c:476
+#: src/keybind.c:584
+#: src/keybind.c:624
+#: src/keybind.c:730
+#: src/keybind.c:1261
+#: src/keybind.c:1318
+#: src/keybind.c:1420
+#: src/keybind.c:1517
+#: src/keybind.c:1828
+#: src/keybind.c:1869
 #, c-format
 msgid "(Player %u) is using cheat :%s"
 msgstr "Le joueur %u utilise un code de triche :%s"
 
-#: src/keybind.c:384
+#: src/keybind.c:386
 msgid "Hard as nails!!!"
 msgstr "Mange-toi ça dans les dents !!!"
 
-#: src/keybind.c:398
+#: src/keybind.c:400
 msgid "Takings thing easy!"
 msgstr "Prend ça cool !"
 
-#: src/keybind.c:414
+#: src/keybind.c:416
 msgid "1000 big ones!!!"
 msgstr "Chaos"
 
-#: src/keybind.c:431
+#: src/keybind.c:433
 msgid "Power overwhelming"
 msgstr "Surcharge de Puissance"
 
-#: src/keybind.c:446
+#: src/keybind.c:448
 msgid "Back to normality!"
 msgstr "De Retour à la Normalité !"
 
-#: src/keybind.c:459
+#: src/keybind.c:461
 msgid "Getting tricky!"
 msgstr "Sois plus Audacieux !"
 
-#: src/keybind.c:475
+#: src/keybind.c:477
 msgid "Twice as nice!"
 msgstr "À Deux, c'est Mieux !"
 
-#: src/keybind.c:486
+#: src/keybind.c:488
 msgid "FPS display is enabled."
 msgstr "L'affichage du nombre d'images par secondes est activé"
 
-#: src/keybind.c:490
+#: src/keybind.c:492
 msgid "FPS display is disabled."
 msgstr "L'affichage du nombre d'images par secondes est desactivé"
 
-#: src/keybind.c:514
+#: src/keybind.c:516
 #, c-format
 msgid "FPS %d; FPS-Limit: %d; PIEs %d; polys %d; Terr. polys %d; States %d"
 msgstr "FPS %d; Limite-FPSt: %d; PIEs %d; polys %d; Terr. polys %d; Etats %d"
 
-#: src/keybind.c:546
+#: src/keybind.c:548
 #, c-format
 msgid "(Player %u) is using a cheat :Num Droids: %d  Num Structures: %d  Num Features: %d"
 msgstr "(le joueur %u) utiloise une tricherie :Num Droids: %d  Num Structures: %d  Num Features: %d"
 
-#: src/keybind.c:583
+#: src/keybind.c:585
 msgid "Infinite power disabled"
 msgstr "Énergie Infinie Désactivée (c'est bien !)"
 
-#: src/keybind.c:583
+#: src/keybind.c:585
 msgid "Infinite power enabled"
 msgstr "Énergie Infinie activée (Espèce de Tricheur !)"
 
-#: src/keybind.c:623
+#: src/keybind.c:625
 msgid "All items made available"
 msgstr "Tout les éléments sont disponibles"
 
-#: src/keybind.c:729
+#: src/keybind.c:731
 msgid "Fog on"
 msgstr "Brouillard activé"
 
-#: src/keybind.c:729
+#: src/keybind.c:731
 msgid "Fog off"
 msgstr "Brouillard désactivé"
 
-#: src/keybind.c:1148
+#: src/keybind.c:1150
 #, c-format
 msgid "Warning!  This cheat can cause dire problems later on! [%s]"
 msgstr "Avertissement!  Cette tricherie peut causé dire problèmes plus tard! [%s]"
 
-#: src/keybind.c:1148
+#: src/keybind.c:1150
 msgid "Ending Mission."
 msgstr "Termine la mission"
 
-#: src/keybind.c:1260
+#: src/keybind.c:1262
 msgid "CHEATS ARE NOW ENABLED!"
 msgstr "LES TRICHERIES SONT MAINTENANT ACTIVÉS !"
 
-#: src/keybind.c:1260
+#: src/keybind.c:1262
 msgid "CHEATS ARE NOW DISABLED!"
 msgstr "LES TRICHERIES SONT DÉSACTIVÉS !"
 
-#: src/keybind.c:1317
+#: src/keybind.c:1319
 msgid "God Mode ON"
 msgstr "Mode dieu-tout-puissant activé"
 
-#: src/keybind.c:1317
+#: src/keybind.c:1319
 msgid "God Mode OFF"
 msgstr "Mode dieu-tout-puissant désactivé !"
 
-#: src/keybind.c:1329
+#: src/keybind.c:1331
 msgid "View Aligned to North"
 msgstr "Caméra Réorientée vers le Nord"
 
-#: src/keybind.c:1338
+#: src/keybind.c:1340
 #, c-format
 msgid "Trap cursor %s"
 msgstr "Piéger le Curseur %s"
 
-#: src/keybind.c:1419
+#: src/keybind.c:1421
 msgid "Researched EVERYTHING for you!"
 msgstr "Chercheur Exténué : On a fait du mieux qu'on a pu et on croit qu'on a réussi !"
 
-#: src/keybind.c:1452
+#: src/keybind.c:1454
 #, c-format
 msgid "(Player %u) is using cheat :%s %s"
 msgstr "Le joueur %u utilise un code de triche:%s %s"
 
-#: src/keybind.c:1453
+#: src/keybind.c:1455
 #, fuzzy
 msgid "Researched"
 msgstr "Menu Recherche"
 
-#: src/keybind.c:1473
+#: src/keybind.c:1475
 msgid "Only displaying energy bars when selected"
 msgstr "Afficher seulement l'énergie des unitées sélectionnées"
 
-#: src/keybind.c:1476
+#: src/keybind.c:1478
 msgid "Always displaying energy bars for units"
 msgstr "Toujours afficher l'énergie des unitées"
 
-#: src/keybind.c:1479
+#: src/keybind.c:1481
 msgid "Always displaying energy bars for units and structures"
 msgstr "Toujours afficher l'énergie des unitées et bâtiments"
 
-#: src/keybind.c:1501
+#: src/keybind.c:1503
 msgid "Demo mode off - Returning to normal game mode"
 msgstr "Mode Démonstration désactivé - Retour au Jeu Normal"
 
-#: src/keybind.c:1516
+#: src/keybind.c:1518
 #, fuzzy
 msgid "Debug menu is Open"
 msgstr "Le menu de débogage est Ouvert"
 
-#: src/keybind.c:1547
+#: src/keybind.c:1549
 #, fuzzy
 msgid "Unable to locate any oil derricks!"
 msgstr "Impossible de localiser le moindre Véhicule de Construction !"
 
-#: src/keybind.c:1768
+#: src/keybind.c:1770
 msgid "Oh, the weather outside is frightful... SNOW"
 msgstr "Brrr... Il fait si froid... IL NEIGE"
 
-#: src/keybind.c:1774
+#: src/keybind.c:1776
 msgid "Singing in the rain, I'm singing in the rain... RAIN"
 msgstr "Singing in the rain, I'm singing in the rain... IL PLEUT"
 
-#: src/keybind.c:1780
+#: src/keybind.c:1782
 msgid "Forecast : Clear skies for all areas... NO WEATHER"
 msgstr "Prévisions Locales : Ciel dégagé dans toute la Région... AUCUNE MÉTÉO"
 
-#: src/keybind.c:1825
+#: src/keybind.c:1827
 msgid "Warning! This can have drastic consequences if used incorrectly in missions."
 msgstr "Attention ! Ceci peut avoir des conséquences désastreuses si il est mal utilisé dans les missions."
 
-#: src/keybind.c:1827
+#: src/keybind.c:1829
 #, fuzzy
 msgid "All enemies destroyed by cheating!"
 msgstr "L'ennemi a été détruit par un TRICHEUR !!!"
 
-#: src/keybind.c:1868
+#: src/keybind.c:1870
 msgid "Destroying selected droids and structures!"
 msgstr "Destroying selected droids and structures!"
 
-#: src/keybind.c:2387
+#: src/keybind.c:2389
 msgid "Centered on player HQ, direction NORTH"
 msgstr "Vue Centrée sur le quartier général, direction NORD"
 
-#: src/keybind.c:2399
+#: src/keybind.c:2401
 msgid "Unable to locate HQ!"
 msgstr "Impossible de localiser le Quartier Général !"
 
-#: src/keybind.c:2406
+#: src/keybind.c:2408
 msgid "Formation speed limiting has been removed from the game due to bugs."
 msgstr "Formation speed limiting has been removed from the game due to bugs."
 
-#: src/keybind.c:2455
+#: src/keybind.c:2457
 msgid "Vertical rotation direction: Normal"
 msgstr "Vertical rotation direction: Normal"
 
-#: src/keybind.c:2460
+#: src/keybind.c:2462
 msgid "Vertical rotation direction: Flipped"
 msgstr "Vertical rotation direction: Flipped"
 
-#: src/keybind.c:2469
+#: src/keybind.c:2471
 msgid "Screen shake when things die: Off"
 msgstr "L'Écran brasse lorsque des choses meurts: Off"
 
-#: src/keybind.c:2474
+#: src/keybind.c:2476
 msgid "Screen shake when things die: On"
 msgstr "L'Écran brasse lorsque des choses meurts: On"
 
-#: src/keybind.c:2519
-#: src/keybind.c:2562
+#: src/keybind.c:2521
+#: src/keybind.c:2564
 #, fuzzy
 msgid "Sorry, but game speed cannot be changed in multiplayer."
 msgstr "Désolé, ce code est désactivé durant les jeux multijoueurs."
 
-#: src/keybind.c:2540
-#: src/keybind.c:2583
-#: src/keybind.c:2605
+#: src/keybind.c:2542
+#: src/keybind.c:2585
+#: src/keybind.c:2607
 msgid "Game Speed Reset"
 msgstr "Réinitialisation de la Vitesse du Jeu"
 
-#: src/keybind.c:2544
+#: src/keybind.c:2546
 #, c-format
 msgid "Game Speed Increased to %3.1f"
 msgstr "Vitesse de Jeu augmentée à %3.1f"
 
-#: src/keybind.c:2587
+#: src/keybind.c:2589
 #, c-format
 msgid "Game Speed Reduced to %3.1f"
 msgstr "Vitesse de Jeu réduite à %3.1f"
 
-#: src/keybind.c:2617
+#: src/keybind.c:2619
 msgid "Radar showing friend-foe colors"
 msgstr "Radar Bicolore Ami-Ennemi"
 
-#: src/keybind.c:2621
+#: src/keybind.c:2623
 msgid "Radar showing player colors"
 msgstr "Radar montrant les couleurs des joueurs"
 
-#: src/keybind.c:2641
+#: src/keybind.c:2643
 msgid "Radar showing only objects"
 msgstr "Radar ne montrant que les objets"
 
-#: src/keybind.c:2644
+#: src/keybind.c:2646
 msgid "Radar blending terrain and height"
 msgstr "Radar mélangeant terrain et hauteur"
 
-#: src/keybind.c:2647
+#: src/keybind.c:2649
 msgid "Radar showing terrain"
 msgstr "Radar montrant le terrain"
 
-#: src/keybind.c:2650
+#: src/keybind.c:2652
 #, fuzzy
 msgid "Radar showing revealed terrain"
 msgstr "Radar montrant le terrain"
 
-#: src/keybind.c:2653
+#: src/keybind.c:2655
 msgid "Radar showing height"
 msgstr "Radar montrant la hauteur"
 
