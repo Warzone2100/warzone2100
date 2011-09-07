@@ -40,7 +40,9 @@ EXTRA_DIST= \
 	config.rpath \
 	configure.ac \
 	pkg/dpkg \
-	macosx
+	macosx \
+	po/custom/mac-infoplist.txt \
+	po/custom/warzone2100.desktop.txt
 
 # get rid of SVN stuff in the tarball
 dist-hook:
