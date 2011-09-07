@@ -20,6 +20,10 @@
 
 #include <locale.h>
 
+#if defined(WZ_OS_WIN)
+#include <physfs.h>
+#endif
+
 #ifdef WZ_OS_MAC
 # include <CoreFoundation/CoreFoundation.h>
 # include <CoreFoundation/CFURL.h>
