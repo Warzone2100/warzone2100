@@ -77,8 +77,10 @@ noinst_HEADERS = \
 	wzfs.h \
 	wzglobal.h
 
+nodist_libframework_a_SOURCES = \
+	wzapp_moc.cpp
+
 libframework_a_SOURCES = \
-	wzapp_moc.cpp \
 	wzapp.cpp \
 	resource_lexer.lex.cpp \
 	resource_parser.tab.cpp \
