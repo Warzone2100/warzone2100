@@ -21,17 +21,8 @@
 #include <physfs.h>
 
 #ifndef WZ_NOSOUND
+#define OV_EXCLUDE_STATIC_CALLBACKS
 #  include <vorbis/vorbisfile.h>
-#  if defined(VORBIS_NEEDS_HACK)
-/* HACK: Dummy reference vorbisfile.h symbols to prevent warnings */
-static WZ_DECL_UNUSED void MKID(dummy)(void)
-{
-	(void)OV_CALLBACKS_DEFAULT;
-	(void)OV_CALLBACKS_NOCLOSE;
-	(void)OV_CALLBACKS_STREAMONLY;
-	(void)OV_CALLBACKS_STREAMONLY_NOCLOSE;
-}
-# endif
 #endif
 
 #ifdef __BIG_ENDIAN__
