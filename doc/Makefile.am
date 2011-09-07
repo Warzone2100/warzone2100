@@ -67,15 +67,15 @@ dist_man6_MANS = \
 	warzone2100.6
 
 warzone2100.6: warzone2100.6.asciidoc
-	$(A2X) -f manpage -D . $(srcdir)/warzone2100.6.asciidoc
+	$(A2X) -f manpage -D $(srcdir) $(srcdir)/warzone2100.6.asciidoc
 
 quickstartguide.html: quickstartguide.asciidoc
-	$(A2X) -f xhtml -D . $(srcdir)/quickstartguide.asciidoc
+	$(A2X) -f xhtml -D $(srcdir) $(srcdir)/quickstartguide.asciidoc
 
 if WKHTMLTOPDF_AVAILABLE
 
 quickstartguide.pdf: quickstartguide.html
-	$(WKHTMLTOPDF) quickstartguide.html quickstartguide.pdf
+	$(WKHTMLTOPDF) $(srcdir)/quickstartguide.html $(srcdir)/quickstartguide.pdf
 
 endif
 
