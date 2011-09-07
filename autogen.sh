@@ -193,6 +193,6 @@ echo "+ removing config.cache ... "
 rm -f config.cache
 
 echo
-echo "Now type './configure && make' to compile."
+echo "Now type '$SRCDIR/configure && make' to compile."
 
 exit 0
