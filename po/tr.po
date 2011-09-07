@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
 "POT-Creation-Date: 2011-09-07 20:15+0200\n"
-"PO-Revision-Date: 2011-07-26 16:10+0200\n"
+"PO-Revision-Date: 2011-09-07 09:05+0200\n"
 "Last-Translator: Ayhan GÖRGÜLÜ <ayhangorgulu45@gmail.com>\n"
 "Language-Team: Turkey <warzone-dev@gna.org>\n"
 "Language: \n"
@@ -12031,18 +12031,17 @@ msgstr "Yerel Sistem"
 
 #: lib/netplay/netlobby.cpp:102
 msgid "Received invalid addGame data."
-msgstr ""
+msgstr "Geçersiz Oyun kurma verisi alındı"
 
 #: lib/netplay/netlobby.cpp:140
 #: lib/netplay/netlobby.cpp:163
 #: lib/netplay/netlobby.cpp:183
-#, fuzzy
 msgid "Create a game first!"
-msgstr "Bir oyun objesini izle"
+msgstr "İlk olarak bir oyun kur!"
 
 #: lib/netplay/netlobby.cpp:426
 msgid "Received invalid login data."
-msgstr ""
+msgstr "Geçersiz giriş verisi alındı"
 
 #: lib/netplay/netlobby.cpp:518
 #: lib/netplay/netlobby.cpp:531
@@ -12051,12 +12050,12 @@ msgstr ""
 #: lib/netplay/netlobby.cpp:569
 #: lib/netplay/netlobby.cpp:578
 msgid "Failed to communicate with the lobby."
-msgstr ""
+msgstr "Bekleme Odasıyla iletişim kesildi"
 
 #: lib/netplay/netlobby.cpp:589
 #, c-format
 msgid "Got server error: %s"
-msgstr ""
+msgstr "Sunucu hatası var: %s"
 
 #: lib/netplay/netplay.cpp:184
 #: lib/netplay/netplay.cpp:744
@@ -12065,7 +12064,7 @@ msgstr "Parolayı buraya gir"
 
 #: lib/netplay/netplay.cpp:2061
 msgid "Game not in the lobby, please login first!"
-msgstr ""
+msgstr "Oyun bekleme odasında değil, lütfen giriş yapın!"
 
 #: lib/netplay/netplay.cpp:2066
 #, c-format
@@ -12797,7 +12796,6 @@ msgid "Texture size"
 msgstr "Yazı Boyutu"
 
 #: src/frontend.cpp:793
-#, fuzzy
 msgid "Vertical sync"
 msgstr "Dikey senk."
 
@@ -12828,15 +12826,13 @@ msgstr "Ekranı Çevir"
 
 #: src/frontend.cpp:1053
 #: src/frontend.cpp:1127
-#, fuzzy
 msgid "Middle Mouse"
-msgstr "Orta Tuş"
+msgstr "Orta Fare Tuşu"
 
 #: src/frontend.cpp:1057
 #: src/frontend.cpp:1122
-#, fuzzy
 msgid "Right Mouse"
-msgstr "Açık Mavi"
+msgstr "Sağ Fare Tuşu"
 
 #: src/frontend.cpp:1061
 msgid "MOUSE OPTIONS"
@@ -13353,9 +13349,9 @@ msgid "FPS display is disabled."
 msgstr "FPS-Görünüşü devre dışı."
 
 #: src/keybind.cpp:548
-#, fuzzy, c-format
+#, c-format
 msgid "FPS %d; PIEs %d; polys %d; Terr. polys %d; States %d"
-msgstr "FPS %d; FPS-Sınır: %d; PIEs %d; Polys %d; Terr. polys %d; States %d"
+msgstr "FPS %d; PIEs %d; özgü sohbet mesaj renkleri %d; Terr. özgü sohbet mesaj renkleri %d; Derece %d"
 
 #: src/keybind.cpp:579
 #, c-format
@@ -14170,11 +14166,11 @@ msgstr "Geçerli oyun yok"
 
 #: src/multiint.cpp:832
 msgid "Authentication failed or not Authenticated"
-msgstr ""
+msgstr "Kimlik doğrulama başarısız veya geçersiz kimlik"
 
 #: src/multiint.cpp:835
 msgid "The lobby rejected you!"
-msgstr ""
+msgstr "Bekleme odası seni reddetti"
 
 #: src/multiint.cpp:838
 msgid "Game is full"
@@ -14217,17 +14213,16 @@ msgid "Host Game"
 msgstr "Oyun Kur"
 
 #: src/multiint.cpp:1143
-#, fuzzy
 msgid "Connect IP"
-msgstr "Bağlantı Hatası"
+msgstr "Bağlantı IP'si"
 
 #: src/multiint.cpp:1146
 msgid "Login"
-msgstr ""
+msgstr "Giriş"
 
 #: src/multiint.cpp:1147
 msgid "Logout"
-msgstr ""
+msgstr "Çıkış"
 
 #: src/multiint.cpp:1151
 msgid "Refresh Games List"
@@ -14244,20 +14239,19 @@ msgstr "TAMAM"
 
 #: src/multiint.cpp:1243
 msgid "LOBBY LOGIN"
-msgstr ""
+msgstr "BEKLEME ODASINA GİRİŞ"
 
 #: src/multiint.cpp:1253
 msgid "Username:"
-msgstr ""
+msgstr "Kullanıcı adı:"
 
 #: src/multiint.cpp:1276
-#, fuzzy
 msgid "Password:"
 msgstr "Şifreyi gir:"
 
 #: src/multiint.cpp:1299
 msgid "Use your wz2100.net credentials here."
-msgstr ""
+msgstr "Burada wz2100.net kimlik bilgilerini giriş yapmak için kullan"
 
 #: src/multiint.cpp:1448
 msgid "Tanks disabled!!"
@@ -14412,7 +14406,6 @@ msgid "You cannot change difficulty in a challenge"
 msgstr "Mücadele modunda zorluğu değiştiremezsin"
 
 #: src/multiint.cpp:2328
-#, fuzzy
 msgid "Click to change difficulty"
 msgstr "Zorluğu değiştirmek için tıkla"
 
@@ -14441,9 +14434,8 @@ msgid "Click to change player colour"
 msgstr "Oyuncu renklerini değiştirmek için tıkla"
 
 #: src/multiint.cpp:2514
-#, fuzzy
 msgid "Click to change player position"
-msgstr "Oyuncu ayarlarını değiştirmek için tıkla"
+msgstr "Oyun pozisyonunu ayarlarını değiştirmek için tıkla"
 
 #: src/multiint.cpp:2520
 msgid "Click to change AI"
@@ -14937,7 +14929,6 @@ msgid "Unable to locate any Commanders!"
 msgstr "Hiç Komutan birimi bulunamadı!"
 
 #: src/structure.cpp:2638
-#, fuzzy
 msgid "Command Control Limit Reached - Production Halted"
 msgstr "Kontrol Limitine Ulaştın - Üretim Durduruldu"
 
