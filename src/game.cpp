@@ -6376,6 +6376,9 @@ bool plotStructurePreview16(char *backDropSprite, Vector2i playeridpos[])
 			backDropSprite[3 * ((yy * BACKDROP_HACK_WIDTH) + xx) + 2] = color.byte.b;
 			ini.endGroup();
 		}
+		// And now we need to show features.
+		plotFeature(backDropSprite);
+
 		return true;
 	}
 
