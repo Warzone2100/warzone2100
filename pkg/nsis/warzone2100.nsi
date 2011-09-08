@@ -36,10 +36,10 @@
   OutFile "${OUTFILE}"
 
   ;Default installation folder
-  InstallDir "$PROGRAMFILES\${PACKAGE_NAME} Trunk"
+  InstallDir "$PROGRAMFILES\${PACKAGE_NAME}-${PACKAGE_VERSION}"
 
   ;Get installation folder from registry if available
-  InstallDirRegKey HKLM "Software\${PACKAGE_NAME} Trunk" ""
+  InstallDirRegKey HKLM "Software\${PACKAGE_NAME}-${PACKAGE_VERSION}" ""
 
   ;Request application privileges for Windows Vista
   RequestExecutionLevel admin
@@ -83,7 +83,7 @@ VIAddVersionKey "ProductVersion"	"${PACKAGE_VERSION}"
 
   ;Start Menu Folder Page Configuration (for MUI_PAGE_STARTMENU)
   !define MUI_STARTMENUPAGE_REGISTRY_ROOT "HKLM"
-  !define MUI_STARTMENUPAGE_REGISTRY_KEY "Software\${PACKAGE_NAME}"
+  !define MUI_STARTMENUPAGE_REGISTRY_KEY "Software\${PACKAGE_NAME}-${PACKAGE_VERSION}"
   !define MUI_STARTMENUPAGE_REGISTRY_VALUENAME "Start Menu Folder"
 
   ; These indented statements modify settings for MUI_PAGE_FINISH
@@ -228,18 +228,18 @@ Section $(TEXT_SecBase) SecBase
   File "${EXTDIR}\etc\fonts\DejaVuSans-Bold.ttf"
 
   ;Store installation folder
-  WriteRegStr HKLM "Software\${PACKAGE_NAME}" "" $INSTDIR
+  WriteRegStr HKLM "Software\${PACKAGE_NAME}-${PACKAGE_VERSION}" "" $INSTDIR
 
   ; Write the Windows-uninstall keys
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PACKAGE_NAME}" "DisplayName" "${PACKAGE_NAME}"
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PACKAGE_NAME}" "DisplayVersion" "${PACKAGE_VERSION}"
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PACKAGE_NAME}" "DisplayIcon" "$INSTDIR\${PACKAGE}.exe,0"
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PACKAGE_NAME}" "Publisher" "Warzone 2100 Project"
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PACKAGE_NAME}" "URLInfoAbout" "${PACKAGE_BUGREPORT}"
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PACKAGE_NAME}" "InstallLocation" "$INSTDIR"
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PACKAGE_NAME}" "UninstallString" "$INSTDIR\uninstall.exe"
-  WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PACKAGE_NAME}" "NoModify" 1
-  WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PACKAGE_NAME}" "NoRepair" 1
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PACKAGE_NAME}-${PACKAGE_VERSION}" "DisplayName" "${PACKAGE_NAME}-${PACKAGE_VERSION}"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PACKAGE_NAME}-${PACKAGE_VERSION}" "DisplayVersion" "${PACKAGE_VERSION}"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PACKAGE_NAME}-${PACKAGE_VERSION}" "DisplayIcon" "$INSTDIR\${PACKAGE}.exe,0"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PACKAGE_NAME}-${PACKAGE_VERSION}" "Publisher" "Warzone 2100 Project"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PACKAGE_NAME}-${PACKAGE_VERSION}" "URLInfoAbout" "${PACKAGE_BUGREPORT}"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PACKAGE_NAME}-${PACKAGE_VERSION}" "InstallLocation" "$INSTDIR"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PACKAGE_NAME}-${PACKAGE_VERSION}" "UninstallString" "$INSTDIR\uninstall.exe"
+  WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PACKAGE_NAME}-${PACKAGE_VERSION}" "NoModify" 1
+  WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PACKAGE_NAME}-${PACKAGE_VERSION}" "NoRepair" 1
 
   ;Create uninstaller
   WriteUninstaller "$INSTDIR\uninstall.exe"
@@ -247,16 +247,16 @@ Section $(TEXT_SecBase) SecBase
   !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
     SetOutPath "$INSTDIR"	
     ;Create shortcuts
-    CreateDirectory "$SMPROGRAMS\$STARTMENU_FOLDER"
-    CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Uninstall.lnk" "$INSTDIR\uninstall.exe"
-    CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\${PACKAGE_NAME}.lnk" "$INSTDIR\${PACKAGE}.exe"
-    CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Quick Start Guide (html).lnk" "$INSTDIR\doc\quickstartguide.html"
-    CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Quick Start Guide (pdf).lnk" "$INSTDIR\doc\quickstartguide.pdf"
+    CreateDirectory "$SMPROGRAMS\$STARTMENU_FOLDER-${PACKAGE_VERSION}"
+    CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER-${PACKAGE_VERSION}\Uninstall.lnk" "$INSTDIR\uninstall.exe"
+    CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER-${PACKAGE_VERSION}\${PACKAGE_NAME}.lnk" "$INSTDIR\${PACKAGE}.exe"
+    CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER-${PACKAGE_VERSION}\Quick Start Guide (html).lnk" "$INSTDIR\doc\quickstartguide.html"
+    CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER-${PACKAGE_VERSION}\Quick Start Guide (pdf).lnk" "$INSTDIR\doc\quickstartguide.pdf"
 
   !insertmacro MUI_STARTMENU_WRITE_END
 
   SetOutPath "$INSTDIR"	
-  CreateShortCut "$DESKTOP\${PACKAGE_NAME}.lnk" "$INSTDIR\${PACKAGE}.exe"
+  CreateShortCut "$DESKTOP\${PACKAGE_NAME}-${PACKAGE_VERSION}.lnk" "$INSTDIR\${PACKAGE}.exe"
 SectionEnd
 
 
@@ -280,7 +280,7 @@ Section $(TEXT_SecOriginalMod) SecOriginalMod
   SetOutPath "$INSTDIR"
 
   !insertmacro MUI_STARTMENU_WRITE_BEGIN "Application"
-    CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\${PACKAGE_NAME} - Old 1.10 Balance.lnk" "$INSTDIR\${PACKAGE}.exe" "--mod_mp=old-1.10-balance.wz"
+    CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER-${PACKAGE_VERSION}\${PACKAGE_NAME}- Old 1.10 Balance.lnk" "$INSTDIR\${PACKAGE}.exe" "--mod_mp=old-1.10-balance.wz"
   !insertmacro MUI_STARTMENU_WRITE_END
 
 SectionEnd
@@ -858,20 +858,20 @@ Section "Uninstall"
   
 ; remove the desktop shortcut icon
 
-  Delete "$DESKTOP\${PACKAGE_NAME}.lnk"
+  Delete "$DESKTOP\${PACKAGE_NAME}-${PACKAGE_VERSION}.lnk"
 
 ; and now, lets really remove the startmenu entries...
 
   !insertmacro MUI_STARTMENU_GETFOLDER Application $MUI_TEMP
 
-  Delete "$SMPROGRAMS\$MUI_TEMP\Uninstall.lnk"
-  Delete "$SMPROGRAMS\$MUI_TEMP\${PACKAGE_NAME}.lnk"
-  Delete "$SMPROGRAMS\$MUI_TEMP\${PACKAGE_NAME} - Old 1.10 Balance.lnk"
-  Delete "$SMPROGRAMS\$MUI_TEMP\Quick Start Guide (html).lnk"
-  Delete "$SMPROGRAMS\$MUI_TEMP\Quick Start Guide (pdf).lnk"
+  Delete "$SMPROGRAMS\$MUI_TEMP-${PACKAGE_VERSION}\Uninstall.lnk"
+  Delete "$SMPROGRAMS\$MUI_TEMP-${PACKAGE_VERSION}\${PACKAGE_NAME}.lnk"
+  Delete "$SMPROGRAMS\$MUI_TEMP-${PACKAGE_VERSION}\${PACKAGE_NAME}- Old 1.10 Balance.lnk"
+  Delete "$SMPROGRAMS\$MUI_TEMP-${PACKAGE_VERSION}\Quick Start Guide (html).lnk"
+  Delete "$SMPROGRAMS\$MUI_TEMP-${PACKAGE_VERSION}\Quick Start Guide (pdf).lnk"
 
   ;Delete empty start menu parent diretories
-  StrCpy $MUI_TEMP "$SMPROGRAMS\$MUI_TEMP"
+  StrCpy $MUI_TEMP "$SMPROGRAMS\$MUI_TEMP-${PACKAGE_VERSION}"
 
   startMenuDeleteLoop:
 	ClearErrors
@@ -883,12 +883,12 @@ Section "Uninstall"
     StrCmp $MUI_TEMP $SMPROGRAMS startMenuDeleteLoopDone startMenuDeleteLoop
   startMenuDeleteLoopDone:
 
-  DeleteRegValue HKLM "Software\${PACKAGE_NAME}" "Start Menu Folder"
-  DeleteRegValue HKLM "Software\${PACKAGE_NAME}" ""
-  DeleteRegKey /ifempty HKLM "Software\${PACKAGE_NAME}"
+  DeleteRegValue HKLM "Software\${PACKAGE_NAME}-${PACKAGE_VERSION}" "Start Menu Folder"
+  DeleteRegValue HKLM "Software\${PACKAGE_NAME}-${PACKAGE_VERSION}" ""
+  DeleteRegKey /ifempty HKLM "Software\${PACKAGE_NAME}-${PACKAGE_VERSION}"
 
   ; Unregister with Windows' uninstall system
-  DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PACKAGE_NAME}"
+  DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PACKAGE_NAME}-${PACKAGE_VERSION}"
 
 SectionEnd
 
