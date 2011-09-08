@@ -71,6 +71,11 @@ work anymore.
 *--(no)sound*::
       Toggle the sound.
 
+*--(no)texturecompression*::
+      Toggle texture compression (default on). At least on systems where Mesa's
+      libtxc-dxtn handles texture compression, loading is slower with it enabled.
+      In-game FPS are also higher though.
+
 The fullscreen/window, resolution,  sound,  and  shadows  settings  are
 stored,  so  they  only  need to be specified once, or when you want to
 change them.

@@ -53,7 +53,7 @@ bool pie_Initialise(void)
 	pie_TexInit();
 
 	/* Find texture compression extension */
-	if (GLEW_ARB_texture_compression)
+	if (GLEW_ARB_texture_compression && wz_texture_compression != GL_RGBA)
 	{
 		debug(LOG_TEXTURE, "Texture compression: Yes");
 		wz_texture_compression = GL_COMPRESSED_RGBA_ARB;

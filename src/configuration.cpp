@@ -66,6 +66,7 @@ bool loadConfig()
 	if (ini.contains("music_enabled")) war_SetMusicEnabled(ini.value("music_enabled").toBool());
 	if (ini.contains("language")) setLanguage(ini.value("language").toString().toUtf8().constData());
 	if (ini.contains("nomousewarp")) setMouseWarp(ini.value("nomousewarp").toBool());
+	if (ini.contains("notexturecompression")) wz_texture_compression = GL_RGBA;
 	showFPS = ini.value("showFPS", false).toBool();
 	scroll_speed_accel = ini.value("scroll", DEFAULTSCROLL).toInt();
 	setShakeStatus(ini.value("shake", false).toBool());

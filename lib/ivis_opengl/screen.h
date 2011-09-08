@@ -34,6 +34,7 @@
 #endif
 
 #include "lib/framework/types.h"
+#include "lib/framework/vector.h"
 
 /* ------------------------------------------------------------------------------------------- */
 
