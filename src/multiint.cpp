@@ -3671,6 +3671,7 @@ bool startMultiOptions(bool bReenter)
 	netPlayersUpdated = true;
 
 	addBackdrop();
+	loadMapPreview(false);
 	addTopForm();
 
 	if (getLobbyError() != ERROR_CHEAT)
