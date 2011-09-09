@@ -2782,6 +2782,7 @@ static void processMultiopWidgets(UDWORD id)
 
 		SendColourRequest(colourChooserUp, id - MULTIOP_COLCHOOSER);
 		closeColourChooser();
+		loadMapPreview(false);
 		addPlayerBox(  !ingame.bHostSetup || bHosted);
 	}
 
@@ -2803,6 +2804,7 @@ static void processMultiopWidgets(UDWORD id)
 
 		SendPositionRequest(colourChooserUp, id - MULTIOP_PLAYCHOOSER);
 		closeColourChooser();
+		loadMapPreview(false);
 		addPlayerBox(  !ingame.bHostSetup || bHosted);
 	}
 }
@@ -2959,10 +2961,12 @@ void frontendMultiMessages(void)
 
 		case NET_COLOURREQUEST:
 			recvColourRequest();
+			loadMapPreview(false);
 			break;
 
 		case NET_POSITIONREQUEST:
 			recvPositionRequest();
+			loadMapPreview(false);
 			break;
 
 		case NET_TEAMREQUEST:
@@ -3297,6 +3301,7 @@ BOOL startMultiOptions(BOOL bReenter)
 	netPlayersUpdated = true;
 
 	addBackdrop();
+	loadMapPreview(false);
 	addTopForm();
 
 	if (getLobbyError() != ERROR_CHEAT)
