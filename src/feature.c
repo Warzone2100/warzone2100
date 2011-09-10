@@ -619,6 +619,8 @@ bool destroyFeature(FEATURE *psDel)
 								psTile->psObject = NULL;
 								texture = TileNumber_texture(psTile->texture) | RUBBLE_TILE;
 								psTile->texture = (UWORD)texture;
+								CLEAR_TILE_TALLSTRUCTURE(psTile);
+								CLEAR_TILE_NOTBLOCKING(psTile);
 							}
 							else
 							{
