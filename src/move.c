@@ -330,7 +330,8 @@ static BOOL moveDroidToBase(DROID *psDroid, UDWORD x, UDWORD y, BOOL bFormation)
 		psDroid->sMove.psFormation = NULL;
 		return true;
 	}
-	else if (isVtolDroid(psDroid) || (game.maxPlayers > 0 && psDroid->droidType == DROID_TRANSPORTER))
+	// NOTE: While Vtols can fly, then can't go through things, like the transporter.
+	else if ((game.maxPlayers > 0 && psDroid->droidType == DROID_TRANSPORTER))
 	{
 		fpathSetDirectRoute(psDroid, x, y);
 		retVal = FPR_OK;
