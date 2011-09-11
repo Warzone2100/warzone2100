@@ -9,9 +9,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-09-07 21:16+0200\n"
-"PO-Revision-Date: 2008-05-09 16:08+0000\n"
-"Last-Translator: carson <Unknown>\n"
+"POT-Creation-Date: 2011-09-11 12:45+0200\n"
+"PO-Revision-Date: 2011-09-11 13:13+0100\n"
+"Last-Translator: Cyp <Cyp>\n"
 "Language-Team: Dansk <da@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -22,34 +22,28 @@ msgstr ""
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: data/base/messages/messages.rmsg:4
-#, fuzzy
 msgid "Structure Research Completed"
-msgstr "Forskning fuldendt"
+msgstr "Bygningsforskning fuldendt"
 
 #: data/base/messages/messages.rmsg:14
-#, fuzzy
 msgid "Power Research Completed"
-msgstr "Forskning fuldendt"
+msgstr "Kraftforskning fuldendt"
 
 #: data/base/messages/messages.rmsg:24
-#, fuzzy
 msgid "Computer Research Completed"
-msgstr "Forskning fuldendt"
+msgstr "Computerforskning fuldendt"
 
 #: data/base/messages/messages.rmsg:34
-#, fuzzy
 msgid "Unit Research Completed"
-msgstr "Forskning fuldendt"
+msgstr "Enhedforskning fuldendt"
 
 #: data/base/messages/messages.rmsg:44
-#, fuzzy
 msgid "Systems Research Completed"
-msgstr "Forskning fuldendt"
+msgstr "Systemforskning fuldendt"
 
 #: data/base/messages/messages.rmsg:54
-#, fuzzy
 msgid "Weapon Research Completed"
-msgstr "Forskning fuldendt"
+msgstr "Våbenforskning fuldendt"
 
 #: data/base/messages/resmessages12.rmsg:4
 #: data/base/messages/resmessages12.rmsg:17
@@ -214,7 +208,7 @@ msgstr "Forskning fuldendt"
 #: data/mp/messages/strings/resstrings.txt:333
 #: data/mp/messages/strings/resstrings.txt:349
 msgid "New Defensive Structure Available"
-msgstr ""
+msgstr "Nyt forsvarsbygning tilgængelig"
 
 #: data/base/messages/resmessages12.rmsg:5
 #: data/mp/messages/resmessages12.rmsg:5
@@ -357,7 +351,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:268
 #: data/mp/messages/strings/resstrings.txt:274
 msgid "Defensive Strength: Medium"
-msgstr ""
+msgstr "Forsvarsstyrke: Mellem"
 
 #: data/base/messages/resmessages12.rmsg:18
 #: data/mp/messages/resmessages12.rmsg:18
@@ -503,7 +497,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:336
 #: data/mp/messages/strings/resstrings.txt:352
 msgid "Defensive Strength: High"
-msgstr ""
+msgstr "Forsvarsstyrke: Høj"
 
 #: data/base/messages/resmessages12.rmsg:44
 #: data/mp/messages/resmessages12.rmsg:44
@@ -517,20 +511,20 @@ msgstr ""
 #: data/mp/messages/resmessages23.rmsg:43
 #: data/mp/messages/resmessages3.rmsg:511
 msgid "Research Breakthrough Improves Construction Rates"
-msgstr ""
+msgstr "Forskningsgennembrud forøger konstruktionshastigheden"
 
 #: data/base/messages/resmessages12.rmsg:57
 #: data/base/messages/resmessages23.rmsg:44
 #: data/mp/messages/resmessages12.rmsg:57
 #: data/mp/messages/resmessages23.rmsg:44
 msgid "Improved Engineering Techniques"
-msgstr ""
+msgstr "Forbedrede ingenørteknikker"
 
 #: data/base/messages/resmessages12.rmsg:58
 #: data/base/messages/resmessages23.rmsg:45
 #: data/base/messages/resmessages3.rmsg:513
 msgid "Increases construction speed"
-msgstr ""
+msgstr "Forøger konstruktionshastigheden"
 
 #: data/base/messages/resmessages12.rmsg:59
 #: data/base/messages/resmessages23.rmsg:46
@@ -539,7 +533,7 @@ msgstr ""
 #: data/mp/messages/resmessages23.rmsg:46
 #: data/mp/messages/resmessages3.rmsg:514
 msgid "All trucks upgraded automatically"
-msgstr ""
+msgstr "Alle lastbiler automatisk opgraderede"
 
 #: data/base/messages/resmessages12.rmsg:69
 #: data/base/messages/resmessages1.rmsg:4
@@ -585,7 +579,7 @@ msgstr "Watt"
 #: data/mp/messages/resmessages2.rmsg:447
 #: data/mp/messages/strings/resstrings.txt:514
 msgid "New fire detection systems"
-msgstr ""
+msgstr "Nye branddetekteringssystemer"
 
 #: data/base/messages/resmessages12.rmsg:84
 #: data/base/messages/resmessages23.rmsg:58
@@ -621,17 +615,17 @@ msgstr ""
 #: data/mp/messages/resmessages3.rmsg:888
 #: data/mp/messages/resmessagesall.rmsg:212
 msgid "Cannon Upgrade"
-msgstr ""
+msgstr "Kanonopgradering"
 
 #: data/base/messages/resmessages12.rmsg:96
 #: data/mp/messages/resmessages12.rmsg:96
 msgid "Determines range to target"
-msgstr ""
+msgstr "Bestemmer afstand til mål"
 
 #: data/base/messages/resmessages12.rmsg:97
 #: data/base/messages/resmessagesall.rmsg:175
 msgid "Increases Cannon accuracy"
-msgstr ""
+msgstr "Forbedrer kanonnøjagtigheden"
 
 #: data/base/messages/resmessages12.rmsg:98
 #: data/base/messages/resmessages12.rmsg:215
@@ -648,7 +642,7 @@ msgstr ""
 #: data/mp/messages/resmessages3.rmsg:891
 #: data/mp/messages/resmessagesall.rmsg:215
 msgid "All cannons upgraded automatically"
-msgstr ""
+msgstr "Alle kanoner automatisk opgraderede"
 
 #: data/base/messages/resmessages12.rmsg:108
 #: data/base/messages/resmessages1.rmsg:602
@@ -729,7 +723,7 @@ msgstr ""
 #: data/base/messages/resmessages12.rmsg:122
 #: data/mp/messages/resmessages12.rmsg:122
 msgid ".50-calibre heavy machinegun"
-msgstr ""
+msgstr ".50-kaliber tung maskingevær"
 
 #: data/base/messages/resmessages12.rmsg:123
 #: data/base/messages/resmessages1.rmsg:617
@@ -841,9 +835,8 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:689
 #: data/mp/messages/strings/resstrings.txt:721
 #: data/mp/messages/strings/resstrings.txt:727
-#, fuzzy
 msgid "Body Points: Medium"
-msgstr "Total pansring"
+msgstr "Skrogpoint: Mellem"
 
 #: data/base/messages/resmessages12.rmsg:134
 #: data/base/messages/resmessages1.rmsg:641
@@ -866,7 +859,7 @@ msgstr "Total pansring"
 #: data/mp/messages/strings/resstrings.txt:886
 #: data/mp/messages/strings/resstrings.txt:898
 msgid "Machinegun Upgrade"
-msgstr ""
+msgstr "Maskingeværopgradering"
 
 #: data/base/messages/resmessages12.rmsg:135
 #: data/mp/messages/resmessages12.rmsg:135
@@ -879,7 +872,7 @@ msgstr ""
 #: data/base/messages/strings/resstrings.txt:859
 #: data/mp/messages/strings/resstrings.txt:900
 msgid "Increases Machinegun ROF"
-msgstr ""
+msgstr "Forøger maskingeværkadancen"
 
 #: data/base/messages/resmessages12.rmsg:137
 #: data/base/messages/resmessages1.rmsg:644
@@ -902,7 +895,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:889
 #: data/mp/messages/strings/resstrings.txt:901
 msgid "All machineguns upgraded automatically"
-msgstr ""
+msgstr "Alle maskingevær automatisk opgraderede"
 
 #: data/base/messages/resmessages12.rmsg:147
 #: data/base/messages/resmessages1.rmsg:667
@@ -986,7 +979,7 @@ msgstr ""
 #: data/mp/messages/resmessagesall.rmsg:345
 #: data/mp/messages/strings/resstrings.txt:935
 msgid "Body Points: Very Low"
-msgstr ""
+msgstr "Skrogpoint: Meget lav"
 
 #: data/base/messages/resmessages12.rmsg:160
 #: data/base/messages/resmessages12.rmsg:173
@@ -1060,7 +1053,7 @@ msgstr ""
 #: data/mp/messages/resmessagesall.rmsg:186
 #: data/mp/messages/resmessagesall.rmsg:199
 msgid "New Rocket Available"
-msgstr ""
+msgstr "Nyt raket tilgængelig"
 
 #: data/base/messages/resmessages12.rmsg:187
 #: data/mp/messages/resmessages12.rmsg:187
@@ -1091,7 +1084,7 @@ msgstr ""
 #: data/mp/messages/resmessagesall.rmsg:173
 #: data/mp/messages/strings/resstrings.txt:1008
 msgid "Rocket Upgrade"
-msgstr ""
+msgstr "Raketopgradering"
 
 #: data/base/messages/resmessages12.rmsg:200
 #: data/mp/messages/resmessages12.rmsg:200
@@ -1100,7 +1093,7 @@ msgstr ""
 
 #: data/base/messages/resmessages12.rmsg:201
 msgid "Increases Rocket ROF"
-msgstr ""
+msgstr "Forøger raketkadance"
 
 #: data/base/messages/resmessages12.rmsg:202
 #: data/base/messages/resmessages12.rmsg:241
@@ -1121,12 +1114,12 @@ msgstr ""
 #: data/mp/messages/resmessagesall.rmsg:176
 #: data/mp/messages/strings/resstrings.txt:1011
 msgid "All rockets upgraded automatically"
-msgstr ""
+msgstr "Alle raketter automatisk opgraderede"
 
 #: data/base/messages/resmessages12.rmsg:214
 #: data/base/messages/resmessages3.rmsg:890
 msgid "Increases Cannon ROF"
-msgstr ""
+msgstr "Forøger kanonkadance"
 
 #: data/base/messages/resmessages12.rmsg:226
 #: data/mp/messages/resmessages12.rmsg:226
@@ -1137,7 +1130,7 @@ msgstr ""
 #: data/base/messages/resmessages1.rmsg:578
 #: data/base/messages/resmessages3.rmsg:877
 msgid "Increases Cannon damage"
-msgstr ""
+msgstr "Forøger kanonskade"
 
 #: data/base/messages/resmessages12.rmsg:239
 #: data/mp/messages/resmessages12.rmsg:239
@@ -1148,12 +1141,12 @@ msgstr ""
 #: data/base/messages/resmessages1.rmsg:747
 #: data/base/messages/resmessagesall.rmsg:136
 msgid "Increases Rocket accuracy"
-msgstr ""
+msgstr "Forbedrer raketnøjagtighed"
 
 #: data/base/messages/resmessages12.rmsg:252
 #: data/mp/messages/resmessages12.rmsg:252
 msgid "Heavy anti-tank rocket"
-msgstr ""
+msgstr "Tung antikampvognsraket"
 
 #: data/base/messages/resmessages12.rmsg:253
 #: data/base/messages/resmessages1.rmsg:539
@@ -1182,7 +1175,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:764
 #: data/mp/messages/strings/resstrings.txt:770
 msgid "Best Targets: Vehicles"
-msgstr ""
+msgstr "Bedste mål: Køretøj"
 
 #: data/base/messages/resmessages12.rmsg:265
 #: data/mp/messages/resmessages12.rmsg:265
@@ -1192,7 +1185,7 @@ msgstr ""
 #: data/base/messages/resmessages12.rmsg:266
 #: data/mp/messages/resmessages12.rmsg:266
 msgid "Best Targets: Base structures"
-msgstr ""
+msgstr "Best Targets: Basebygninger"
 
 #: data/base/messages/resmessages1.rmsg:5
 #: data/mp/messages/resmessages1.rmsg:5
@@ -1223,9 +1216,8 @@ msgstr ""
 #: data/mp/messages/resmessagesall.rmsg:943
 #: data/mp/messages/resmessagesall.rmsg:956
 #: data/mp/messages/strings/resstrings.txt:771
-#, fuzzy
 msgid "Body Points: High"
-msgstr "Total pansring"
+msgstr "Skrogpoint: Høj"
 
 #: data/base/messages/resmessages1.rmsg:17
 #: data/base/messages/resmessages3.rmsg:17
@@ -1234,7 +1226,7 @@ msgstr "Total pansring"
 #: data/mp/messages/resmessages3.rmsg:17
 #: data/mp/messages/resmessages3.rmsg:30
 msgid "Computer Technology Breakthrough"
-msgstr ""
+msgstr "Computerteknologigennembrud"
 
 #: data/base/messages/resmessages1.rmsg:18
 #: data/mp/messages/resmessages1.rmsg:18
@@ -1244,12 +1236,12 @@ msgstr ""
 #: data/base/messages/resmessages1.rmsg:19
 #: data/mp/messages/resmessages1.rmsg:19
 msgid "Cyborgs can now be researched"
-msgstr ""
+msgstr "Cyborger kan nu forskes"
 
 #: data/base/messages/resmessages1.rmsg:20
 #: data/mp/messages/resmessages1.rmsg:20
 msgid "New research options available"
-msgstr ""
+msgstr "Nye forskningsvalg tilgængelige"
 
 #: data/base/messages/resmessages1.rmsg:30
 #: data/base/messages/resmessages2.rmsg:17
@@ -1339,12 +1331,12 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:51
 #: data/mp/messages/strings/resstrings.txt:83
 msgid "New Cyborg Available"
-msgstr ""
+msgstr "Ny cyborg tilgængelig"
 
 #: data/base/messages/resmessages1.rmsg:44
 #: data/mp/messages/resmessages1.rmsg:44
 msgid "Armed with Cyborg Machinegun"
-msgstr ""
+msgstr "Bevæbnet med cyborgmaskingevær"
 
 #: data/base/messages/resmessages1.rmsg:46
 #: data/base/messages/resmessages1.rmsg:59
@@ -1399,7 +1391,7 @@ msgstr ""
 #: data/base/messages/resmessages1.rmsg:57
 #: data/mp/messages/resmessages1.rmsg:57
 msgid "Armed with Cyborg Cannon"
-msgstr ""
+msgstr "Bevæbnet med cyborgkanon"
 
 #: data/base/messages/resmessages1.rmsg:70
 #: data/mp/messages/resmessages1.rmsg:70
@@ -1422,7 +1414,7 @@ msgstr ""
 #: data/mp/messages/resmessages3.rmsg:225
 #: data/mp/messages/strings/resstrings.txt:121
 msgid "Defenses Improved"
-msgstr ""
+msgstr "Forsvar forbedret"
 
 #: data/base/messages/resmessages1.rmsg:96
 #: data/mp/messages/resmessages1.rmsg:96
@@ -1431,7 +1423,7 @@ msgstr ""
 
 #: data/base/messages/resmessages1.rmsg:97
 msgid "Increases Armour and Body Points"
-msgstr ""
+msgstr "Forøger panser og skrogpoint"
 
 #: data/base/messages/resmessages1.rmsg:98
 #: data/base/messages/resmessages2.rmsg:59
@@ -1444,17 +1436,17 @@ msgstr ""
 #: data/mp/messages/resmessages3.rmsg:228
 #: data/mp/messages/strings/resstrings.txt:124
 msgid "All defenses and walls upgraded automatically"
-msgstr ""
+msgstr "Alle forsvar og mure automatisk opgraderede"
 
 #: data/base/messages/resmessages1.rmsg:109
 #: data/mp/messages/resmessages1.rmsg:109
 msgid "Steel tower with machinegun"
-msgstr ""
+msgstr "Ståltårn med maskingevær"
 
 #: data/base/messages/resmessages1.rmsg:111
 #: data/mp/messages/resmessages1.rmsg:111
 msgid "Defensive Strength: Low"
-msgstr ""
+msgstr "Forsvarsstyrke: Lav"
 
 #: data/base/messages/resmessages1.rmsg:122
 msgid "Armored guard tower with Mini-Pod Rocket"
@@ -1506,7 +1498,7 @@ msgstr ""
 #: data/mp/messages/resmessages1.rmsg:227
 #: data/mp/messages/strings/resstrings.txt:351
 msgid "Prevents enemy movement"
-msgstr ""
+msgstr "Forhindrer fjendebevægelse"
 
 #: data/base/messages/resmessages1.rmsg:238
 #: data/base/messages/resmessages1.rmsg:264
@@ -1519,13 +1511,12 @@ msgstr ""
 #: data/mp/messages/resmessagesall.rmsg:17
 #: data/mp/messages/resmessagesall.rmsg:30
 msgid "New Base Structure Available"
-msgstr ""
+msgstr "Ny basebygning tilgængelig"
 
 #: data/base/messages/resmessages1.rmsg:239
 #: data/mp/messages/resmessages1.rmsg:239
-#, fuzzy
 msgid "New Repair Facility Repairs Damaged Units"
-msgstr "Vælg alle svært skadet enheder"
+msgstr "Nyt reperationsfacilitet reparerer beskadigede enheder"
 
 #: data/base/messages/resmessages1.rmsg:240
 #: data/mp/messages/resmessages1.rmsg:240
@@ -1545,23 +1536,21 @@ msgstr ""
 #: data/mp/messages/resmessages2.rmsg:329
 #: data/mp/messages/resmessages3.rmsg:420
 #: data/mp/messages/strings/resstrings.txt:359
-#, fuzzy
 msgid "Repair Facility Improved"
-msgstr "Reperationsgevinst - Reperation"
+msgstr "Reperationsfacilitet forbedret"
 
 #: data/base/messages/resmessages1.rmsg:252
 #: data/mp/messages/resmessages1.rmsg:252
 msgid "New automated repair techniques"
-msgstr ""
+msgstr "Nye automatiserede reparationsteknikker"
 
 #: data/base/messages/resmessages1.rmsg:253
 #: data/base/messages/resmessages2.rmsg:331
 #: data/base/messages/resmessages3.rmsg:422
 #: data/base/messages/strings/resstrings.txt:335
 #: data/mp/messages/strings/resstrings.txt:361
-#, fuzzy
 msgid "Increases Repair Speed"
-msgstr "Forøg spillehastighed"
+msgstr "Forøger reperationshastighed"
 
 #: data/base/messages/resmessages1.rmsg:254
 #: data/base/messages/resmessages2.rmsg:332
@@ -1572,7 +1561,7 @@ msgstr "Forøg spillehastighed"
 #: data/mp/messages/resmessages3.rmsg:423
 #: data/mp/messages/strings/resstrings.txt:362
 msgid "All repair facilities upgraded automatically"
-msgstr ""
+msgstr "Alle reparationsfaciliteter automatisk opgraderede"
 
 #: data/base/messages/resmessages1.rmsg:265
 #: data/mp/messages/resmessages1.rmsg:265
@@ -1587,7 +1576,7 @@ msgstr ""
 #: data/base/messages/resmessages1.rmsg:267
 #: data/mp/messages/resmessages1.rmsg:267
 msgid "Controls up to five commanders"
-msgstr ""
+msgstr "Styrer op til fem kommandøre"
 
 #: data/base/messages/resmessages1.rmsg:277
 #: data/base/messages/resmessages2.rmsg:342
@@ -1599,14 +1588,13 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:373
 #: data/mp/messages/strings/resstrings.txt:381
 msgid "Cyborg Production Improved"
-msgstr ""
+msgstr "Cyborgproduktion forbedret"
 
 #: data/base/messages/resmessages1.rmsg:278
 #: data/base/messages/strings/names.txt:783
 #: data/mp/messages/resmessages1.rmsg:278
-#, fuzzy
 msgid "Automated Cyborg Production"
-msgstr "Gentag produktion"
+msgstr "Automatiseret cyborgproduktion"
 
 #: data/base/messages/resmessages1.rmsg:279
 #: data/base/messages/resmessages2.rmsg:344
@@ -1638,14 +1626,13 @@ msgstr ""
 #: data/mp/messages/resmessages1.rmsg:291
 #: data/mp/messages/strings/names.txt:407
 #: data/mp/messages/strings/names.txt:797
-#, fuzzy
 msgid "Cyborg Factory"
-msgstr "Find næste cyborg fabrik"
+msgstr "Cyborgfabrik"
 
 #: data/base/messages/resmessages1.rmsg:292
 #: data/mp/messages/resmessages1.rmsg:292
 msgid "Produces Cyborgs"
-msgstr ""
+msgstr "Fremstiller cyborger"
 
 #: data/base/messages/resmessages1.rmsg:293
 #: data/mp/messages/resmessages1.rmsg:293
@@ -1663,7 +1650,7 @@ msgstr ""
 #: data/mp/messages/resmessagesall.rmsg:784
 #: data/mp/messages/strings/resstrings.txt:437
 msgid "Production Improved"
-msgstr ""
+msgstr "Produktion forbedret"
 
 #: data/base/messages/resmessages1.rmsg:304
 #: data/mp/messages/resmessages1.rmsg:304
@@ -1689,16 +1676,14 @@ msgstr ""
 #: data/mp/messages/resmessages1.rmsg:317
 #: data/mp/messages/strings/resstrings.txt:391
 #: data/mp/messages/strings/resstrings.txt:399
-#, fuzzy
 msgid "Vehicle Production Improved"
-msgstr "Fremdrift"
+msgstr "Køretøjsproduktion forbedret"
 
 #: data/base/messages/resmessages1.rmsg:317
 #: data/base/messages/strings/names.txt:794
 #: data/mp/messages/resmessages1.rmsg:318
-#, fuzzy
 msgid "Automated Factory Production"
-msgstr "Gentag produktion"
+msgstr "Automatiseret fabriksproduktion"
 
 #: data/base/messages/resmessages1.rmsg:319
 #: data/base/messages/resmessages2.rmsg:358
@@ -1727,23 +1712,22 @@ msgstr ""
 #: data/base/messages/resmessages1.rmsg:331
 #: data/mp/messages/resmessages1.rmsg:332
 msgid "Burns oil more efficiently"
-msgstr ""
+msgstr "Brænder olie mere effektivt"
 
 #: data/base/messages/resmessages1.rmsg:332
 #: data/mp/messages/resmessages1.rmsg:333
 msgid "Use a truck to add the module to a power generator"
-msgstr ""
+msgstr "Brug en lastbil for at tilføje modulet til en kraftværk"
 
 #: data/base/messages/resmessages1.rmsg:342
 #: data/mp/messages/resmessages1.rmsg:343
-#, fuzzy
 msgid "Research Module Available"
-msgstr "Forskning fuldendt"
+msgstr "Forskningsmodul tilgængelig"
 
 #: data/base/messages/resmessages1.rmsg:343
 #: data/mp/messages/resmessages1.rmsg:344
 msgid "Research module expands research facilities"
-msgstr ""
+msgstr "Forskningsmodul udvider forskningscentre"
 
 #: data/base/messages/resmessages1.rmsg:344
 #: data/base/messages/resmessages1.rmsg:357
@@ -1751,14 +1735,13 @@ msgstr ""
 #: data/base/messages/resmessages3.rmsg:448
 #: data/base/messages/strings/resstrings.txt:391
 #: data/mp/messages/strings/resstrings.txt:417
-#, fuzzy
 msgid "Increases research speed"
-msgstr "Forøg spillehastighed"
+msgstr "Forøger forskningshastighed"
 
 #: data/base/messages/resmessages1.rmsg:345
 #: data/mp/messages/resmessages1.rmsg:346
 msgid "Use a truck to add the module to a research facility"
-msgstr ""
+msgstr "Brug en lastbil for at tilføje modulet til et forskingscenter"
 
 #: data/base/messages/resmessages1.rmsg:355
 #: data/base/messages/resmessages2.rmsg:368
@@ -1768,14 +1751,13 @@ msgstr ""
 #: data/mp/messages/resmessages2.rmsg:368
 #: data/mp/messages/resmessages3.rmsg:446
 #: data/mp/messages/strings/resstrings.txt:415
-#, fuzzy
 msgid "Research Improved"
-msgstr "Forskning fuldendt"
+msgstr "Forskning forbedret"
 
 #: data/base/messages/resmessages1.rmsg:356
 #: data/mp/messages/resmessages1.rmsg:357
 msgid "Synaptic link data analysis"
-msgstr ""
+msgstr "Synaptisk lænk dataanalyse"
 
 #: data/base/messages/resmessages1.rmsg:358
 #: data/base/messages/resmessages2.rmsg:371
@@ -1786,7 +1768,7 @@ msgstr ""
 #: data/mp/messages/resmessages3.rmsg:449
 #: data/mp/messages/strings/resstrings.txt:418
 msgid "All research facilities upgraded automatically"
-msgstr ""
+msgstr "Alle forskningscentre automatisk opgraderede"
 
 #: data/base/messages/resmessages1.rmsg:368
 #: data/base/messages/resmessages2.rmsg:381
@@ -1798,9 +1780,8 @@ msgstr ""
 #: data/mp/messages/resmessages3.rmsg:459
 #: data/mp/messages/resmessages3.rmsg:472
 #: data/mp/messages/strings/resstrings.txt:425
-#, fuzzy
 msgid "Increases Damage Resistance"
-msgstr "Forøg spillehastighed"
+msgstr "Forøger skademodstand"
 
 #: data/base/messages/resmessages1.rmsg:369
 #: data/base/messages/strings/names.txt:805
@@ -1821,7 +1802,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:123
 #: data/mp/messages/strings/resstrings.txt:427
 msgid "Increases Armor and Body Points"
-msgstr ""
+msgstr "Forøger panser og skrogpoint"
 
 #: data/base/messages/resmessages1.rmsg:371
 #: data/base/messages/resmessages2.rmsg:384
@@ -1834,7 +1815,7 @@ msgstr ""
 #: data/mp/messages/resmessages3.rmsg:475
 #: data/mp/messages/strings/resstrings.txt:428
 msgid "All base structures upgraded automatically"
-msgstr ""
+msgstr "Alle basens bygninger automatisk opgraderede"
 
 #: data/base/messages/resmessages1.rmsg:381
 #: data/mp/messages/resmessages1.rmsg:382
@@ -1849,7 +1830,7 @@ msgstr ""
 #: data/base/messages/resmessages1.rmsg:383
 #: data/mp/messages/resmessages1.rmsg:384
 msgid "Good scout vehicle"
-msgstr ""
+msgstr "Godt spejderkøretøj"
 
 #: data/base/messages/resmessages1.rmsg:384
 #: data/mp/messages/resmessages1.rmsg:385
@@ -2031,9 +2012,8 @@ msgstr ""
 #: data/mp/messages/resmessages3.rmsg:693
 #: data/mp/messages/resmessages3.rmsg:706
 #: data/mp/messages/strings/resstrings.txt:604
-#, fuzzy
 msgid "Vehicle Bodies Improved"
-msgstr "Skrog"
+msgstr "Køretøjsskrog forbedret"
 
 #: data/base/messages/resmessages1.rmsg:474
 #: data/base/messages/resmessages2.rmsg:513
@@ -2057,14 +2037,13 @@ msgstr ""
 
 #: data/base/messages/resmessages1.rmsg:486
 #: data/mp/messages/resmessages1.rmsg:487
-#, fuzzy
 msgid "Armored Half-tracks"
-msgstr "Vælg alle halv-bælter"
+msgstr "Panseret halv-bælter"
 
 #: data/base/messages/resmessages1.rmsg:487
 #: data/mp/messages/resmessages1.rmsg:488
 msgid "Speed: Medium"
-msgstr ""
+msgstr "Hastighed: Mellem"
 
 #: data/base/messages/resmessages1.rmsg:499
 #: data/mp/messages/resmessages1.rmsg:500
@@ -2076,7 +2055,7 @@ msgstr ""
 #: data/mp/messages/resmessages1.rmsg:501
 #: data/mp/messages/resmessages1.rmsg:527
 msgid "Speed: Fast"
-msgstr ""
+msgstr "Hastighed: Hurtig"
 
 #: data/base/messages/resmessages1.rmsg:501
 #: data/base/messages/resmessages1.rmsg:527
@@ -2121,27 +2100,25 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:813
 #: data/mp/messages/strings/resstrings.txt:821
 #: data/mp/messages/strings/resstrings.txt:829
-#, fuzzy
 msgid "Body Points: Low"
-msgstr "Total pansring"
+msgstr "Skrogpoint: Lav"
 
 #: data/base/messages/resmessages1.rmsg:512
 #: data/mp/messages/resmessages1.rmsg:513
 msgid "Armored Tracks"
-msgstr ""
+msgstr "Panseret bælter"
 
 #: data/base/messages/resmessages1.rmsg:513
 #: data/mp/messages/resmessages1.rmsg:514
 msgid "Speed: Slow"
-msgstr ""
+msgstr "Hastighed: Lav"
 
 #: data/base/messages/resmessages1.rmsg:525
 #: data/base/messages/strings/names.txt:976
 #: data/mp/messages/resmessages1.rmsg:526
 #: data/mp/messages/strings/names.txt:993
-#, fuzzy
 msgid "Wheeled Propulsion"
-msgstr "Fremdrift"
+msgstr "Hjulet fremdrift"
 
 #: data/base/messages/resmessages1.rmsg:538
 #: data/mp/messages/resmessages1.rmsg:539
@@ -2182,7 +2159,7 @@ msgstr ""
 #: data/mp/messages/resmessages1.rmsg:593
 #: data/mp/messages/resmessagesall.rmsg:371
 msgid "Body Points: Very low"
-msgstr ""
+msgstr "Skrogpoint: Meget lav"
 
 #: data/base/messages/resmessages1.rmsg:603
 #: data/mp/messages/resmessages1.rmsg:604
@@ -2200,12 +2177,12 @@ msgstr "Forøg spillehastighed"
 #: data/base/messages/resmessages1.rmsg:616
 #: data/mp/messages/resmessages1.rmsg:617
 msgid "7.62mm machinegun"
-msgstr ""
+msgstr "7.62mm maskingevær"
 
 #: data/base/messages/resmessages1.rmsg:629
 #: data/mp/messages/resmessages1.rmsg:630
 msgid "Twin 7.62mm machineguns"
-msgstr ""
+msgstr "Dobbelte 7.62mm maskingeværer"
 
 #: data/base/messages/resmessages1.rmsg:642
 #: data/mp/messages/resmessages1.rmsg:643
@@ -2219,9 +2196,8 @@ msgstr ""
 #: data/base/messages/resmessages3.rmsg:1020
 #: data/base/messages/strings/resstrings.txt:847
 #: data/mp/messages/strings/resstrings.txt:888
-#, fuzzy
 msgid "Increases Machinegun damage"
-msgstr "IP adressse eller computernavn"
+msgstr "Forøger maskingeværskade"
 
 #: data/base/messages/resmessages1.rmsg:655
 #: data/mp/messages/resmessages1.rmsg:656
@@ -2254,7 +2230,7 @@ msgstr ""
 #: data/base/messages/resmessages1.rmsg:695
 #: data/mp/messages/resmessages1.rmsg:696
 msgid "Best Targets: Wheeled and hover vehicles"
-msgstr ""
+msgstr "Bedste mål: Hjulet og svævekøretøj"
 
 #: data/base/messages/resmessages1.rmsg:706
 #: data/base/messages/resmessages1.rmsg:719
@@ -2265,7 +2241,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:986
 #: data/mp/messages/strings/resstrings.txt:994
 msgid "Mini-Rocket Upgrade"
-msgstr ""
+msgstr "Miniraketopgradering"
 
 #: data/base/messages/resmessages1.rmsg:707
 #: data/mp/messages/resmessages1.rmsg:708
@@ -2274,7 +2250,7 @@ msgstr ""
 
 #: data/base/messages/resmessages1.rmsg:708
 msgid "Increases Mini-Rocket accuracy"
-msgstr ""
+msgstr "Forøger miniraketnøjagtigheden"
 
 #: data/base/messages/resmessages1.rmsg:709
 #: data/base/messages/resmessages1.rmsg:722
@@ -2285,7 +2261,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:989
 #: data/mp/messages/strings/resstrings.txt:997
 msgid "All mini-rockets upgraded automatically"
-msgstr ""
+msgstr "Alle miniraketter automatisk opgraderede"
 
 #: data/base/messages/resmessages1.rmsg:720
 #: data/mp/messages/resmessages1.rmsg:721
@@ -2297,16 +2273,17 @@ msgstr ""
 #: data/base/messages/strings/resstrings.txt:945
 #: data/mp/messages/strings/resstrings.txt:988
 msgid "Increases Mini-Rocket damage"
-msgstr ""
+msgstr "Forøger miniraketskade"
 
 #: data/base/messages/resmessages1.rmsg:733
 #: data/mp/messages/resmessages1.rmsg:734
+#, fuzzy
 msgid "Automated reload system"
-msgstr ""
+msgstr "Automatiseret genopladningssystem"
 
 #: data/base/messages/resmessages1.rmsg:734
 msgid "Increases Mini-Rockets ROF"
-msgstr ""
+msgstr "Forøger miniraketkadance"
 
 #: data/base/messages/resmessages1.rmsg:746
 #: data/mp/messages/resmessages1.rmsg:747
@@ -2323,14 +2300,14 @@ msgstr ""
 #: data/base/messages/strings/resstrings.txt:967
 #: data/mp/messages/strings/resstrings.txt:1010
 msgid "Increases Rocket damage"
-msgstr ""
+msgstr "Forøger raketskade"
 
 #: data/base/messages/resmessages23.rmsg:4
 #: data/base/messages/resmessages3.rmsg:56
 #: data/mp/messages/resmessages23.rmsg:4
 #: data/mp/messages/resmessages3.rmsg:56
 msgid "Cyborg Propulsion Improved"
-msgstr ""
+msgstr "Cyborgfremdrift forbedret"
 
 #: data/base/messages/resmessages23.rmsg:5
 #: data/base/messages/resmessages2.rmsg:538
@@ -2361,7 +2338,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:645
 #: data/mp/messages/strings/resstrings.txt:655
 msgid "New armored construction"
-msgstr ""
+msgstr "Ny panseret konstruktion"
 
 #: data/base/messages/resmessages23.rmsg:6
 #: data/base/messages/resmessages2.rmsg:539
@@ -2391,9 +2368,8 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:636
 #: data/mp/messages/strings/resstrings.txt:646
 #: data/mp/messages/strings/resstrings.txt:656
-#, fuzzy
 msgid "Increases Body Points"
-msgstr "Total pansring"
+msgstr "Forøger skrogpoint"
 
 #: data/base/messages/resmessages23.rmsg:18
 #: data/mp/messages/resmessages23.rmsg:18
@@ -2415,7 +2391,7 @@ msgstr ""
 #: data/mp/messages/resmessages23.rmsg:33
 #: data/mp/messages/resmessages3.rmsg:436
 msgid "All power generators upgraded automatically"
-msgstr ""
+msgstr "Alle kraftværk automatisk opgraderede"
 
 #: data/base/messages/resmessages23.rmsg:57
 #: data/base/messages/resmessages23.rmsg:83
@@ -2674,7 +2650,7 @@ msgstr ""
 #: data/base/messages/strings/resstrings.txt:715
 #: data/mp/messages/strings/resstrings.txt:748
 msgid "Increases Bombing accuracy"
-msgstr ""
+msgstr "Forøger bombenøjagtigheden"
 
 #: data/base/messages/resmessages23.rmsg:163
 #: data/base/messages/resmessages2.rmsg:735
@@ -2726,7 +2702,7 @@ msgstr ""
 #: data/mp/messages/resmessagesall.rmsg:878
 #: data/mp/messages/resmessagesall.rmsg:891
 msgid "Replaces all machineguns"
-msgstr ""
+msgstr "Erstatter alle maskingevær"
 
 #: data/base/messages/resmessages2.rmsg:4
 #: data/base/messages/resmessages3.rmsg:4
@@ -2734,9 +2710,8 @@ msgstr ""
 #: data/mp/messages/resmessages2.rmsg:4
 #: data/mp/messages/resmessages3.rmsg:4
 #: data/mp/messages/strings/resstrings.txt:43
-#, fuzzy
 msgid "Cyborg Thermal Armor Improved"
-msgstr "Termisk panser"
+msgstr "Cyborg termisk panser forøget"
 
 #: data/base/messages/resmessages2.rmsg:5
 #: data/base/messages/resmessages3.rmsg:5
@@ -2751,9 +2726,8 @@ msgstr ""
 #: data/base/messages/resmessages3.rmsg:6
 #: data/base/messages/strings/resstrings.txt:43
 #: data/mp/messages/strings/resstrings.txt:45
-#, fuzzy
 msgid "Thermal Armor increased"
-msgstr "Termisk panser"
+msgstr "Termisk panser forøget"
 
 #: data/base/messages/resmessages2.rmsg:18
 #: data/base/messages/resmessages2.rmsg:512
@@ -2779,8 +2753,9 @@ msgstr ""
 #: data/base/messages/strings/resstrings.txt:66
 #: data/mp/messages/resmessages2.rmsg:44
 #: data/mp/messages/strings/resstrings.txt:84
+#, fuzzy
 msgid "Armed with Cyborg Assault Gun"
-msgstr ""
+msgstr "Bevæbnet med cyborgoverfaldsgevær"
 
 #: data/base/messages/resmessages2.rmsg:57
 #: data/base/messages/strings/resstrings.txt:104
@@ -2990,29 +2965,28 @@ msgstr ""
 #: data/mp/messages/resmessages2.rmsg:330
 #: data/mp/messages/strings/resstrings.txt:360
 msgid "New robotic repair techniques"
-msgstr ""
+msgstr "Nye robotiske reperationsteknikker"
 
 #: data/base/messages/resmessages2.rmsg:343
 #: data/base/messages/strings/names.txt:786
 #: data/base/messages/strings/resstrings.txt:348
 #: data/mp/messages/resmessages2.rmsg:343
 #: data/mp/messages/strings/resstrings.txt:374
-#, fuzzy
 msgid "Robotic Cyborg Production"
-msgstr "Gentag produktion"
+msgstr "Robotisk cyborgproduktion"
 
 #: data/base/messages/resmessages2.rmsg:356
 #: data/base/messages/strings/resstrings.txt:366
 #: data/mp/messages/resmessages2.rmsg:356
 #: data/mp/messages/strings/resstrings.txt:392
 msgid "New Robotic Techniques improve factory production"
-msgstr ""
+msgstr "Nye robotiske teknikker forbedrer fabriksproduktion"
 
 #: data/base/messages/resmessages2.rmsg:357
 #: data/base/messages/strings/resstrings.txt:367
 #: data/mp/messages/strings/resstrings.txt:393
 msgid "Increases factory production rate"
-msgstr ""
+msgstr "Forbedrer fabriksproduktionshastigheden"
 
 #: data/base/messages/resmessages2.rmsg:369
 #: data/base/messages/strings/names.txt:835
@@ -3021,7 +2995,7 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:850
 #: data/mp/messages/strings/resstrings.txt:416
 msgid "Dedicated Synaptic Link Data Analysis"
-msgstr ""
+msgstr "Dedikeret synaptisk lænk dataanalyse"
 
 #: data/base/messages/resmessages2.rmsg:382
 #: data/base/messages/strings/names.txt:808
@@ -3037,9 +3011,8 @@ msgstr ""
 #: data/base/messages/strings/resstrings.txt:412
 #: data/mp/messages/resmessages2.rmsg:395
 #: data/mp/messages/strings/resstrings.txt:438
-#, fuzzy
 msgid "Robotic VTOL Production"
-msgstr "Gentag produktion"
+msgstr "Robotisk VTOL-produktion"
 
 #: data/base/messages/resmessages2.rmsg:396
 #: data/base/messages/resmessages3.rmsg:487
@@ -3047,8 +3020,9 @@ msgstr "Gentag produktion"
 #: data/mp/messages/resmessages2.rmsg:396
 #: data/mp/messages/resmessages3.rmsg:487
 #: data/mp/messages/strings/resstrings.txt:439
+#, fuzzy
 msgid "Increases VTOL factory output"
-msgstr ""
+msgstr "Forøger VTOL-fabriksudkast"
 
 #: data/base/messages/resmessages2.rmsg:397
 #: data/base/messages/resmessages3.rmsg:488
@@ -3112,7 +3086,7 @@ msgstr ""
 #: data/mp/messages/resmessages2.rmsg:422
 #: data/mp/messages/strings/resstrings.txt:489
 msgid "Replaces existing sensor tower"
-msgstr ""
+msgstr "Erstatter eksisterende sensortårn"
 
 #: data/base/messages/resmessages2.rmsg:423
 #: data/base/messages/resmessagesall.rmsg:59
@@ -3232,9 +3206,8 @@ msgstr ""
 #: data/base/messages/resmessages3.rmsg:721
 #: data/base/messages/strings/resstrings.txt:583
 #: data/mp/messages/strings/resstrings.txt:616
-#, fuzzy
 msgid "Increases Thermal Armor"
-msgstr "Termisk panser"
+msgstr "Forøger termisk panser"
 
 #: data/base/messages/resmessages2.rmsg:537
 #: data/base/messages/resmessages2.rmsg:550
@@ -3264,9 +3237,8 @@ msgstr "Termisk panser"
 #: data/mp/messages/strings/resstrings.txt:634
 #: data/mp/messages/strings/resstrings.txt:644
 #: data/mp/messages/strings/resstrings.txt:654
-#, fuzzy
 msgid "Vehicle Propulsion Improved"
-msgstr "Fremdrift"
+msgstr "Køretøjsfremdrift forbedret"
 
 #: data/base/messages/resmessages2.rmsg:540
 #: data/base/messages/resmessages3.rmsg:735
@@ -3275,7 +3247,7 @@ msgstr "Fremdrift"
 #: data/mp/messages/resmessages3.rmsg:735
 #: data/mp/messages/strings/resstrings.txt:627
 msgid "All half-tracks upgraded automatically"
-msgstr ""
+msgstr "Alle halv-bælter automatisk opgraderede"
 
 #: data/base/messages/resmessages2.rmsg:553
 #: data/base/messages/resmessages3.rmsg:748
@@ -3284,7 +3256,7 @@ msgstr ""
 #: data/mp/messages/resmessages3.rmsg:748
 #: data/mp/messages/strings/resstrings.txt:637
 msgid "All hovers upgraded automatically"
-msgstr ""
+msgstr "Alle svævere automatisk opgraderede"
 
 #: data/base/messages/resmessages2.rmsg:566
 #: data/base/messages/resmessages3.rmsg:761
@@ -3293,7 +3265,7 @@ msgstr ""
 #: data/mp/messages/resmessages3.rmsg:761
 #: data/mp/messages/strings/resstrings.txt:647
 msgid "All tracks upgraded automatically"
-msgstr ""
+msgstr "Alle bælter automatisk opgraderede"
 
 #: data/base/messages/resmessages2.rmsg:579
 #: data/base/messages/resmessages3.rmsg:774
@@ -3302,7 +3274,7 @@ msgstr ""
 #: data/mp/messages/resmessages3.rmsg:774
 #: data/mp/messages/strings/resstrings.txt:657
 msgid "All wheels upgraded automatically"
-msgstr ""
+msgstr "Alle hjul automatisk opgraderede"
 
 #: data/base/messages/resmessages2.rmsg:589
 #: data/base/messages/resmessages2.rmsg:602
@@ -3454,7 +3426,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:720
 #: data/mp/messages/strings/resstrings.txt:726
 msgid "Best Targets: Base Structures and Defenses"
-msgstr ""
+msgstr "Bedste mål: Basebygninger og forsvar"
 
 #: data/base/messages/resmessages2.rmsg:694
 #: data/base/messages/strings/resstrings.txt:692
@@ -3489,7 +3461,7 @@ msgstr ""
 #: data/mp/messages/resmessages2.rmsg:721
 #: data/mp/messages/strings/resstrings.txt:738
 msgid "Best Targets: Defenses"
-msgstr ""
+msgstr "Bedste mål: Forsvar"
 
 #: data/base/messages/resmessages2.rmsg:733
 #: data/base/messages/strings/resstrings.txt:714
@@ -3509,7 +3481,7 @@ msgstr ""
 #: data/mp/messages/resmessages2.rmsg:748
 #: data/mp/messages/strings/resstrings.txt:765
 msgid "Replaces Medium Cannon"
-msgstr ""
+msgstr "Erstatter mellem kanon"
 
 #: data/base/messages/resmessages2.rmsg:759
 #: data/base/messages/strings/resstrings.txt:736
@@ -3739,7 +3711,7 @@ msgstr ""
 #: data/mp/messages/resmessages3.rmsg:109
 #: data/mp/messages/resmessages3.rmsg:174
 msgid "Armed with Needle Gun"
-msgstr ""
+msgstr "Bevæbnet med nålgevær"
 
 #: data/base/messages/resmessages3.rmsg:122
 #: data/base/messages/resmessages3.rmsg:187
@@ -3872,7 +3844,7 @@ msgstr ""
 #: data/base/messages/resmessages3.rmsg:421
 #: data/mp/messages/resmessages3.rmsg:421
 msgid "Advanced repair techniques"
-msgstr ""
+msgstr "Advanceret reperationsteknikker"
 
 #: data/base/messages/resmessages3.rmsg:435
 #: data/mp/messages/resmessages3.rmsg:434
@@ -3901,9 +3873,8 @@ msgstr ""
 #: data/base/messages/resmessages3.rmsg:486
 #: data/base/messages/strings/names.txt:854
 #: data/mp/messages/resmessages3.rmsg:486
-#, fuzzy
 msgid "Advanced VTOL Production"
-msgstr "Gentag produktion"
+msgstr "Advanceret VTOL-produktion"
 
 #: data/base/messages/resmessages3.rmsg:499
 #: data/base/messages/strings/names.txt:846
@@ -3941,9 +3912,8 @@ msgstr ""
 
 #: data/base/messages/resmessages3.rmsg:566
 #: data/mp/messages/resmessages3.rmsg:566
-#, fuzzy
 msgid "Steals technology from enemies"
-msgstr "Send forskningsresultater"
+msgstr "Stjæler forskning fra fjender"
 
 #: data/base/messages/resmessages3.rmsg:576
 #: data/base/messages/resmessages3.rmsg:589
@@ -4013,7 +3983,7 @@ msgstr ""
 #: data/base/messages/resmessages3.rmsg:631
 #: data/mp/messages/resmessages3.rmsg:631
 msgid "Expensive to produce"
-msgstr ""
+msgstr "Dyr at fremstille"
 
 #: data/base/messages/resmessages3.rmsg:641
 #: data/mp/messages/resmessages3.rmsg:641
@@ -4023,7 +3993,7 @@ msgstr ""
 #: data/base/messages/resmessages3.rmsg:644
 #: data/mp/messages/resmessages3.rmsg:644
 msgid "Expensive and slow to produce"
-msgstr ""
+msgstr "Dyr og langsom at fremstille"
 
 #: data/base/messages/resmessages3.rmsg:654
 #: data/mp/messages/resmessages3.rmsg:654
@@ -4042,7 +4012,7 @@ msgstr ""
 #: data/mp/messages/resmessagesall.rmsg:722
 #: data/mp/messages/resmessagesall.rmsg:735
 msgid "Very expensive to produce"
-msgstr ""
+msgstr "Meget dyr at fremstille"
 
 #: data/base/messages/resmessages3.rmsg:668
 #: data/base/messages/strings/names.txt:948
@@ -4153,7 +4123,7 @@ msgstr ""
 #: data/mp/messages/resmessages3.rmsg:942
 #: data/mp/messages/resmessages3.rmsg:955
 msgid "Best Targets: Cyborgs"
-msgstr ""
+msgstr "Bedste mål: Cyborger"
 
 #: data/base/messages/resmessages3.rmsg:954
 #: data/mp/messages/resmessages3.rmsg:954
@@ -4176,7 +4146,7 @@ msgstr ""
 
 #: data/base/messages/resmessages3.rmsg:968
 msgid "Increases Laser accuracy"
-msgstr ""
+msgstr "Forøger lasernøjagtigheden"
 
 #: data/base/messages/resmessages3.rmsg:969
 #: data/base/messages/resmessages3.rmsg:982
@@ -4185,17 +4155,16 @@ msgstr ""
 #: data/mp/messages/resmessages3.rmsg:982
 #: data/mp/messages/resmessages3.rmsg:995
 msgid "All lasers upgraded automatically"
-msgstr ""
+msgstr "Alle laser automatisk opgraderede"
 
 #: data/base/messages/resmessages3.rmsg:980
 #: data/mp/messages/resmessages3.rmsg:980
 msgid "Improvement in laser emission density"
-msgstr ""
+msgstr "Forbedring i laseremissionsdensitet"
 
 #: data/base/messages/resmessages3.rmsg:981
-#, fuzzy
 msgid "Increases Laser damage"
-msgstr "Forøg spillehastighed"
+msgstr "Forøger laserskade"
 
 #: data/base/messages/resmessages3.rmsg:993
 #: data/mp/messages/resmessages3.rmsg:993
@@ -4203,9 +4172,8 @@ msgid "Improved Energizer reduces laser recharge time"
 msgstr ""
 
 #: data/base/messages/resmessages3.rmsg:994
-#, fuzzy
 msgid "Increases Laser ROF"
-msgstr "Forøg spillehastighed"
+msgstr "Forøger laserkadance"
 
 #: data/base/messages/resmessages3.rmsg:1006
 #: data/mp/messages/resmessages3.rmsg:1006
@@ -4245,7 +4213,7 @@ msgstr ""
 #: data/mp/messages/resmessages3.rmsg:1148
 #: data/mp/messages/resmessages3.rmsg:1161
 msgid "Missile Upgrade"
-msgstr ""
+msgstr "Missilopgradering"
 
 #: data/base/messages/resmessages3.rmsg:1058
 #: data/mp/messages/resmessages3.rmsg:1058
@@ -4255,7 +4223,7 @@ msgstr ""
 #: data/base/messages/resmessages3.rmsg:1059
 #: data/base/messages/resmessages3.rmsg:1072
 msgid "Increases Missile accuracy"
-msgstr ""
+msgstr "Forøger missilnøjagtigheden"
 
 #: data/base/messages/resmessages3.rmsg:1060
 #: data/base/messages/resmessages3.rmsg:1073
@@ -4268,7 +4236,7 @@ msgstr ""
 #: data/mp/messages/resmessages3.rmsg:1151
 #: data/mp/messages/resmessages3.rmsg:1164
 msgid "All missiles upgraded automatically"
-msgstr ""
+msgstr "Alle missiler automatisk opgraderede"
 
 #: data/base/messages/resmessages3.rmsg:1071
 #: data/mp/messages/resmessages3.rmsg:1071
@@ -4283,7 +4251,7 @@ msgstr ""
 
 #: data/base/messages/resmessages3.rmsg:1085
 msgid "Increases Missile damage"
-msgstr ""
+msgstr "Forøger missilskade"
 
 #: data/base/messages/resmessages3.rmsg:1096
 #: data/base/messages/resmessages3.rmsg:1109
@@ -4296,7 +4264,7 @@ msgstr ""
 #: data/mp/messages/resmessages3.rmsg:1097
 #: data/mp/messages/resmessagesall.rmsg:850
 msgid "Surface-to-air missile"
-msgstr ""
+msgstr "Overflade-til-luft missil"
 
 #: data/base/messages/resmessages3.rmsg:1098
 #: data/base/messages/resmessages3.rmsg:1111
@@ -4311,7 +4279,7 @@ msgstr ""
 #: data/mp/messages/resmessages3.rmsg:1110
 #: data/mp/messages/resmessagesall.rmsg:746
 msgid "Heavy surface-to-air missile"
-msgstr ""
+msgstr "Tung overflade-til-luft missil"
 
 #: data/base/messages/resmessages3.rmsg:1122
 #: data/base/messages/resmessages3.rmsg:1135
@@ -4345,7 +4313,7 @@ msgstr ""
 #: data/base/messages/resmessages3.rmsg:1150
 #: data/base/messages/resmessages3.rmsg:1163
 msgid "Increases Missile ROF"
-msgstr ""
+msgstr "Forøger missilkadance"
 
 #: data/base/messages/resmessages3.rmsg:1162
 #: data/mp/messages/resmessages3.rmsg:1162
@@ -4481,9 +4449,8 @@ msgstr ""
 #: data/mp/messages/resmessagesall.rmsg:45
 #: data/mp/messages/resmessagesall.rmsg:357
 #: data/mp/messages/strings/resstrings.txt:471
-#, fuzzy
 msgid "Automatically Repairs Damaged Units"
-msgstr "Vælg alle svært skadet enheder"
+msgstr "Reparerer automatisk beskadigede enheder"
 
 #: data/base/messages/resmessagesall.rmsg:46
 #: data/base/messages/strings/resstrings.txt:446
@@ -4502,9 +4469,8 @@ msgstr ""
 #: data/mp/messages/resmessagesall.rmsg:57
 #: data/mp/messages/resmessagesall.rmsg:514
 #: data/mp/messages/resmessagesall.rmsg:709
-#, fuzzy
 msgid "Improved sensor range"
-msgstr "Rækkevide"
+msgstr "Forbedret sensorrækkevide"
 
 #: data/base/messages/resmessagesall.rmsg:58
 #: data/mp/messages/resmessagesall.rmsg:58
@@ -4513,9 +4479,8 @@ msgstr ""
 
 #: data/base/messages/resmessagesall.rmsg:70
 #: data/mp/messages/resmessagesall.rmsg:70
-#, fuzzy
 msgid "Extended sensor range"
-msgstr "Rækkevide"
+msgstr "Udvidet sensorrækkevide"
 
 #: data/base/messages/resmessagesall.rmsg:71
 #: data/mp/messages/resmessagesall.rmsg:71
@@ -4530,9 +4495,8 @@ msgstr ""
 #: data/mp/messages/resmessagesall.rmsg:82
 #: data/mp/messages/resmessagesall.rmsg:95
 #: data/mp/messages/resmessagesall.rmsg:108
-#, fuzzy
 msgid "Sensors Improved"
-msgstr "Watt"
+msgstr "Sensorer forbedret"
 
 #: data/base/messages/resmessagesall.rmsg:83
 #: data/mp/messages/resmessagesall.rmsg:83
@@ -4540,9 +4504,8 @@ msgid "New Thermal Emissions detection"
 msgstr ""
 
 #: data/base/messages/resmessagesall.rmsg:84
-#, fuzzy
 msgid "Extends Sensor Range"
-msgstr "Rækkevide"
+msgstr "Forøger sensorrækkevide"
 
 #: data/base/messages/resmessagesall.rmsg:85
 #: data/mp/messages/resmessagesall.rmsg:85
@@ -4584,7 +4547,7 @@ msgstr ""
 #: data/base/messages/resmessagesall.rmsg:123
 #: data/mp/messages/resmessagesall.rmsg:162
 msgid "Speed: VTOL"
-msgstr ""
+msgstr "Hastighed: VTOL"
 
 #: data/base/messages/resmessagesall.rmsg:135
 #: data/mp/messages/resmessagesall.rmsg:174
@@ -4866,9 +4829,8 @@ msgid "ALPHA BASE INTELLIGENCE REPORT: NEXUS"
 msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:102
-#, fuzzy
 msgid "New objective."
-msgstr "Denne mission"
+msgstr "Nyt mål."
 
 #: data/base/messages/strings/cam1strings.txt:103
 msgid "We have detected and isolated an intruder program."
@@ -5300,9 +5262,8 @@ msgstr ""
 
 #: data/base/messages/strings/cam2strings.txt:153
 #: data/base/messages/strings/cam3strings.txt:30
-#, fuzzy
 msgid "Good luck, Commander."
-msgstr "Vælg kommandør 1"
+msgstr "Held og lykke, kommandør."
 
 #: data/base/messages/strings/cam3strings.txt:4
 #: data/base/sequenceaudio/cam3/c003.txa:4
@@ -6059,9 +6020,8 @@ msgstr ""
 
 #: data/base/messages/strings/names.txt:207
 #: data/mp/messages/strings/names.txt:210
-#, fuzzy
 msgid "Cannon Fire Truck"
-msgstr "Brandbil"
+msgstr "Kanonbrandbil"
 
 #: data/base/messages/strings/names.txt:208
 #: data/mp/messages/strings/names.txt:211
@@ -6196,9 +6156,8 @@ msgstr "Afstandståge"
 
 #: data/base/messages/strings/names.txt:247
 #: data/mp/messages/strings/names.txt:250
-#, fuzzy
 msgid "Transport Body"
-msgstr "Transportskib"
+msgstr "Transportskrog"
 
 #: data/base/messages/strings/names.txt:300
 #: data/base/messages/strings/names.txt:542
@@ -6206,7 +6165,6 @@ msgstr "Transportskib"
 #: data/mp/messages/strings/names.txt:303
 #: data/mp/messages/strings/names.txt:550
 #: data/mp/messages/strings/names.txt:657
-#, fuzzy
 msgid "Command Turret"
 msgstr "Kommandotårn"
 
@@ -6220,63 +6178,62 @@ msgstr ""
 #: data/base/messages/strings/names.txt:315
 #: data/mp/messages/strings/names.txt:318
 msgid "Wheels"
-msgstr ""
+msgstr "Hjul"
 
 #: data/base/messages/strings/names.txt:316
 #: data/mp/messages/strings/names.txt:319
 msgid "Wheels II"
-msgstr ""
+msgstr "Hjul II"
 
 #: data/base/messages/strings/names.txt:317
 #: data/mp/messages/strings/names.txt:320
 msgid "Wheels III"
-msgstr ""
+msgstr "Hjul III"
 
 #: data/base/messages/strings/names.txt:318
 #: data/mp/messages/strings/names.txt:321
 msgid "Tracks"
-msgstr ""
+msgstr "Bælter"
 
 #: data/base/messages/strings/names.txt:319
 #: data/mp/messages/strings/names.txt:322
 msgid "Tracks II"
-msgstr ""
+msgstr "Bælter II"
 
 #: data/base/messages/strings/names.txt:320
 #: data/mp/messages/strings/names.txt:323
 msgid "Tracks III"
-msgstr ""
+msgstr "Bælter III"
 
 #: data/base/messages/strings/names.txt:321
 #: data/mp/messages/strings/names.txt:324
-#, fuzzy
 msgid "Hover"
-msgstr "General"
+msgstr "Svæve"
 
 #: data/base/messages/strings/names.txt:322
 #: data/mp/messages/strings/names.txt:325
 msgid "Hover II"
-msgstr ""
+msgstr "Svæve II"
 
 #: data/base/messages/strings/names.txt:323
 #: data/mp/messages/strings/names.txt:326
 msgid "Hover III"
-msgstr ""
+msgstr "Svæve III"
 
 #: data/base/messages/strings/names.txt:324
 #: data/mp/messages/strings/names.txt:327
 msgid "VTOL"
-msgstr ""
+msgstr "VTOL"
 
 #: data/base/messages/strings/names.txt:325
 #: data/mp/messages/strings/names.txt:328
 msgid "VTOL II"
-msgstr ""
+msgstr "VTOL II"
 
 #: data/base/messages/strings/names.txt:326
 #: data/mp/messages/strings/names.txt:329
 msgid "VTOL III"
-msgstr ""
+msgstr "VTOL III"
 
 #: data/base/messages/strings/names.txt:327
 #: data/mp/messages/strings/names.txt:330
@@ -6293,21 +6250,21 @@ msgstr "Vælg alle halv-bælter"
 #: data/base/messages/strings/names.txt:329
 #: data/mp/messages/strings/names.txt:332
 msgid "Half-tracks III"
-msgstr ""
+msgstr "Halv-bælter III"
 
 #: data/base/messages/strings/names.txt:330
 #: data/base/messages/strings/names.txt:693
 #: data/mp/messages/strings/names.txt:333
 #: data/mp/messages/strings/names.txt:704
 msgid "Cyborg Propulsion II"
-msgstr ""
+msgstr "Cyborgfremdrift II"
 
 #: data/base/messages/strings/names.txt:331
 #: data/base/messages/strings/names.txt:694
 #: data/mp/messages/strings/names.txt:334
 #: data/mp/messages/strings/names.txt:705
 msgid "Cyborg Propulsion III"
-msgstr ""
+msgstr "Cyborgfremdrift III"
 
 #: data/base/messages/strings/names.txt:334
 #: data/mp/messages/strings/names.txt:337
@@ -6401,73 +6358,66 @@ msgstr "Tårn"
 
 #: data/base/messages/strings/names.txt:383
 #: data/mp/messages/strings/names.txt:390
-#, fuzzy
 msgid "Oil Derrick"
-msgstr "Find næste oliebrøn"
+msgstr "Oliebrønd"
 
 #: data/base/messages/strings/names.txt:384
 #: data/mp/messages/strings/names.txt:391
-#, fuzzy
 msgid "Command Center"
-msgstr "Kommandører"
+msgstr "Kommandocenter"
 
 #: data/base/messages/strings/names.txt:385
 #: data/mp/messages/strings/names.txt:392
 msgid "Factory"
-msgstr ""
+msgstr "Fabrik"
 
 #: data/base/messages/strings/names.txt:386
 #: data/base/messages/strings/names.txt:793
 #: data/mp/messages/strings/names.txt:393
 #: data/mp/messages/strings/names.txt:808
 msgid "Factory Module"
-msgstr ""
+msgstr "Fabriksmodul"
 
 #: data/base/messages/strings/names.txt:387
 #: data/mp/messages/strings/names.txt:394
-#, fuzzy
 msgid "Power Generator"
-msgstr "Find næste kraftværk"
+msgstr "Kraftværk"
 
 #: data/base/messages/strings/names.txt:388
 #: data/base/messages/strings/names.txt:816
 #: data/mp/messages/strings/names.txt:395
 #: data/mp/messages/strings/names.txt:831
-#, fuzzy
 msgid "Power Module"
-msgstr "Indsalmet energi"
+msgstr "Kraftmodul"
 
 #: data/base/messages/strings/names.txt:389
 #: data/mp/messages/strings/names.txt:396
-#, fuzzy
 msgid "Research Facility"
-msgstr "Find næste forskningscenter"
+msgstr "Forskningscenter"
 
 #: data/base/messages/strings/names.txt:390
 #: data/base/messages/strings/names.txt:831
 #: data/mp/messages/strings/names.txt:397
 #: data/mp/messages/strings/names.txt:846
-#, fuzzy
 msgid "Research Module"
-msgstr "Forskningsopdatering"
+msgstr "Forskningsmodul"
 
 #: data/base/messages/strings/names.txt:391
 #: data/mp/messages/strings/names.txt:398
 msgid "Demolish Structure"
-msgstr ""
+msgstr "Nedriv bygning"
 
 #: data/base/messages/strings/names.txt:393
 #: data/base/messages/strings/names.txt:1448
 #: data/mp/messages/strings/names.txt:400
 #: data/mp/messages/strings/names.txt:1468
 msgid "Repair Center"
-msgstr ""
+msgstr "Reperationscenter"
 
 #: data/base/messages/strings/names.txt:394
 #: data/mp/messages/strings/names.txt:401
-#, fuzzy
 msgid "Command Relay Center"
-msgstr "Kommandører"
+msgstr "Kommandovideresendingscenter"
 
 #: data/base/messages/strings/names.txt:395
 #: data/mp/messages/strings/names.txt:402
@@ -6484,7 +6434,7 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:406
 #: data/mp/messages/strings/names.txt:865
 msgid "VTOL Factory"
-msgstr ""
+msgstr "VTOL-fabrik"
 
 #: data/base/messages/strings/names.txt:402
 #: data/base/messages/strings/names.txt:721
@@ -6586,7 +6536,7 @@ msgstr ""
 
 #: data/base/messages/strings/names.txt:428
 msgid "VTOL Radar Tower"
-msgstr ""
+msgstr "VTOL-radartårn"
 
 #: data/base/messages/strings/names.txt:431
 #: data/base/messages/strings/names.txt:764
@@ -6645,9 +6595,8 @@ msgstr ""
 #: data/base/messages/strings/names.txt:440
 #: data/mp/messages/strings/names.txt:448
 #: data/mp/messages/strings/names.txt:771
-#, fuzzy
 msgid "Heavy Machinegun Tower"
-msgstr "Vælg alle halv-bælter"
+msgstr "Tung maskingeværtårn"
 
 #: data/base/messages/strings/names.txt:441
 #: data/base/messages/strings/names.txt:757
@@ -6667,9 +6616,8 @@ msgstr "Watt"
 #: data/base/messages/strings/names.txt:443
 #: data/mp/messages/strings/names.txt:451
 #: data/mp/messages/strings/names.txt:774
-#, fuzzy
 msgid "Mini-Rocket Tower"
-msgstr "Vælg alle halv-bælter"
+msgstr "Minirakettårn"
 
 #: data/base/messages/strings/names.txt:446
 #: data/base/messages/strings/names.txt:496
@@ -6723,7 +6671,7 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:464
 #: data/mp/messages/strings/names.txt:767
 msgid "Tank Traps"
-msgstr ""
+msgstr "Kampvognsfælder"
 
 #: data/base/messages/strings/names.txt:455
 #: data/base/messages/strings/names.txt:457
@@ -6732,7 +6680,7 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:465
 #: data/mp/messages/strings/names.txt:768
 msgid "Dragon's Teeth"
-msgstr ""
+msgstr "Dragetænder"
 
 #: data/base/messages/strings/names.txt:460
 #: data/base/messages/strings/names.txt:842
@@ -6797,28 +6745,28 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:482
 #: data/mp/messages/strings/names.txt:1050
 msgid "Light Cannon"
-msgstr ""
+msgstr "Let kanon"
 
 #: data/base/messages/strings/names.txt:475
 #: data/base/messages/strings/names.txt:1034
 #: data/mp/messages/strings/names.txt:483
 #: data/mp/messages/strings/names.txt:1051
 msgid "Medium Cannon"
-msgstr ""
+msgstr "Mellem kanon"
 
 #: data/base/messages/strings/names.txt:476
 #: data/base/messages/strings/names.txt:1035
 #: data/mp/messages/strings/names.txt:484
 #: data/mp/messages/strings/names.txt:1052
 msgid "Heavy Cannon"
-msgstr ""
+msgstr "Tung kanon"
 
 #: data/base/messages/strings/names.txt:477
 #: data/base/messages/strings/names.txt:1036
 #: data/mp/messages/strings/names.txt:485
 #: data/mp/messages/strings/names.txt:1053
 msgid "Hyper Velocity Cannon"
-msgstr ""
+msgstr "Hyperhastighed kanon"
 
 #: data/base/messages/strings/names.txt:478
 #: data/base/messages/strings/names.txt:1037
@@ -6866,7 +6814,7 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:500
 #: data/mp/messages/strings/names.txt:1100
 msgid "Pulse Laser"
-msgstr ""
+msgstr "Pulslaser"
 
 #: data/base/messages/strings/names.txt:495
 #: data/base/messages/strings/names.txt:540
@@ -6874,23 +6822,22 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:503
 #: data/mp/messages/strings/names.txt:548
 #: data/mp/messages/strings/names.txt:1115
-#, fuzzy
 msgid "Machinegun"
-msgstr "Søger"
+msgstr "Maskingevær"
 
 #: data/base/messages/strings/names.txt:497
 #: data/base/messages/strings/names.txt:1099
 #: data/mp/messages/strings/names.txt:505
 #: data/mp/messages/strings/names.txt:1116
 msgid "Twin Machinegun"
-msgstr ""
+msgstr "Dobbelt maskingevær"
 
 #: data/base/messages/strings/names.txt:499
 #: data/base/messages/strings/names.txt:1100
 #: data/mp/messages/strings/names.txt:507
 #: data/mp/messages/strings/names.txt:1117
 msgid "Heavy Machinegun"
-msgstr ""
+msgstr "Tung maskingevær"
 
 #: data/base/messages/strings/names.txt:501
 #: data/base/messages/strings/names.txt:1101
@@ -6909,7 +6856,7 @@ msgstr ""
 #: data/base/messages/strings/names.txt:505
 #: data/base/messages/strings/names.txt:1121
 msgid "Angel Missile"
-msgstr ""
+msgstr "Engel missil"
 
 #: data/base/messages/strings/names.txt:506
 #: data/base/messages/strings/names.txt:1119
@@ -6961,8 +6908,9 @@ msgstr ""
 
 #: data/base/messages/strings/names.txt:517
 #: data/mp/messages/strings/names.txt:525
+#, fuzzy
 msgid "Pepperpot"
-msgstr ""
+msgstr "Peberkværn"
 
 #: data/base/messages/strings/names.txt:518
 #: data/mp/messages/strings/names.txt:526
@@ -7243,7 +7191,7 @@ msgstr ""
 #: data/base/messages/strings/names.txt:649
 #: data/mp/messages/strings/names.txt:658
 msgid "Synaptic Link"
-msgstr ""
+msgstr "Synaptisk lænk"
 
 #: data/base/messages/strings/names.txt:651
 #: data/mp/messages/strings/names.txt:660
@@ -7262,36 +7210,33 @@ msgstr ""
 
 #: data/base/messages/strings/names.txt:655
 #: data/mp/messages/strings/names.txt:664
-#, fuzzy
 msgid "Cyborg Thermal Armor"
-msgstr "Termisk panser"
+msgstr "Cyborg termisk panser"
 
 #: data/base/messages/strings/names.txt:656
 #: data/mp/messages/strings/names.txt:665
-#, fuzzy
 msgid "Cyborg Thermal Armor Mk2"
-msgstr "Termisk panser"
+msgstr "Cyborg termisk panser Mk2"
 
 #: data/base/messages/strings/names.txt:657
 #: data/mp/messages/strings/names.txt:666
-#, fuzzy
 msgid "Cyborg Thermal Armor Mk3"
-msgstr "Termisk panser"
+msgstr "Cyborg termisk panser Mk3"
 
 #: data/base/messages/strings/names.txt:658
 #: data/mp/messages/strings/names.txt:667
 msgid "Cyborg High Intensity Thermal Armor"
-msgstr ""
+msgstr "Cyborg højintensitet termisk panser"
 
 #: data/base/messages/strings/names.txt:659
 #: data/mp/messages/strings/names.txt:668
 msgid "Cyborg High Intensity Thermal Armor Mk2"
-msgstr ""
+msgstr "Cyborg højintensitet termisk panser Mk2"
 
 #: data/base/messages/strings/names.txt:660
 #: data/mp/messages/strings/names.txt:669
 msgid "Cyborg High Intensity Thermal Armor Mk3"
-msgstr ""
+msgstr "Cyborg højintensitet termisk panser Mk3"
 
 #: data/base/messages/strings/names.txt:662
 #: data/mp/messages/strings/names.txt:671
@@ -7356,9 +7301,8 @@ msgstr "Spillere"
 
 #: data/base/messages/strings/names.txt:676
 #: data/mp/messages/strings/names.txt:687
-#, fuzzy
 msgid "Machinegunner Cyborg"
-msgstr "Søger"
+msgstr "Maskingeværcyborg"
 
 #: data/base/messages/strings/names.txt:677
 msgid "Lancer Cyborg"
@@ -7429,8 +7373,9 @@ msgstr "Svær"
 
 #: data/base/messages/strings/names.txt:699
 #: data/mp/messages/strings/names.txt:710
+#, fuzzy
 msgid "NP-Hardcrete"
-msgstr ""
+msgstr "Nondeterministisk polynomialtid hård \"crete\""
 
 #: data/base/messages/strings/names.txt:701
 #: data/mp/messages/strings/names.txt:712
@@ -7593,72 +7538,70 @@ msgstr ""
 
 #: data/base/messages/strings/names.txt:780
 #: data/mp/messages/strings/names.txt:795
-#, fuzzy
 msgid "Command Relay Post"
-msgstr "Kommandører"
+msgstr "Kommandovideresendingsstation"
 
 #: data/base/messages/strings/names.txt:784
 msgid "Automated Cyborg Production Mk2"
-msgstr ""
+msgstr "Automatiseret cyborgproduktion Mk2"
 
 #: data/base/messages/strings/names.txt:785
 msgid "Automated Cyborg Production Mk3"
-msgstr ""
+msgstr "Automatiseret cyborgproduktion Mk3"
 
 #: data/base/messages/strings/names.txt:787
 msgid "Robotic Cyborg Production Mk2"
-msgstr ""
+msgstr "Robotisk cyborgproduktion Mk2"
 
 #: data/base/messages/strings/names.txt:788
 msgid "Robotic Cyborg Production Mk3"
-msgstr ""
+msgstr "Robotisk cyborgproduktion Mk3"
 
 #: data/base/messages/strings/names.txt:789
 #: data/mp/messages/resmessagesall.rmsg:798
 msgid "Advanced Cyborg Production"
-msgstr ""
+msgstr "Advanceret cyborgproduktion"
 
 #: data/base/messages/strings/names.txt:790
 msgid "Advanced Cyborg Production Mk2"
-msgstr ""
+msgstr "Advanceret cyborgproduktion Mk2"
 
 #: data/base/messages/strings/names.txt:791
 msgid "Advanced Cyborg Production Mk3"
-msgstr ""
+msgstr "Advanceret cyborgproduktion Mk3"
 
 #: data/base/messages/strings/names.txt:795
 msgid "Automated Factory Production Mk2"
-msgstr ""
+msgstr "Automatiseret fabriksproduktion Mk2"
 
 #: data/base/messages/strings/names.txt:796
 msgid "Automated Factory Production Mk3"
-msgstr ""
+msgstr "Automatiseret fabriksproduktion Mk3"
 
 #: data/base/messages/strings/names.txt:797
-#, fuzzy
 msgid "Robotic Factory Production"
-msgstr "Gentag produktion"
+msgstr "Robotisk fabriksproduktion"
 
 #: data/base/messages/strings/names.txt:798
 msgid "Robotic Factory Production Mk2"
-msgstr ""
+msgstr "Robotisk fabriksproduktion Mk2"
 
 #: data/base/messages/strings/names.txt:799
 msgid "Robotic Factory Production Mk3"
-msgstr ""
+msgstr "Robotisk fabriksproduktion Mk3"
 
 #: data/base/messages/strings/names.txt:800
 #: data/mp/messages/resmessagesall.rmsg:785
 msgid "Advanced Factory Production"
-msgstr ""
+msgstr "Advanceret fabriksproduktion"
 
 #: data/base/messages/strings/names.txt:801
 msgid "Advanced Factory Production Mk2"
-msgstr ""
+msgstr "Advanceret fabriksproduktion Mk2"
 
 #: data/base/messages/strings/names.txt:802
 msgid "Advanced Factory Production Mk3"
-msgstr ""
+msgstr "Advanceret fabriksproduktion Mk3"
 
 #: data/base/messages/strings/names.txt:806
 #: data/mp/messages/strings/names.txt:821
@@ -7704,9 +7647,8 @@ msgstr ""
 #: data/base/messages/strings/names.txt:1449
 #: data/mp/messages/strings/names.txt:835
 #: data/mp/messages/strings/names.txt:1469
-#, fuzzy
 msgid "Repair Facility"
-msgstr "Reperationsgevinst - Reperation"
+msgstr "Reperationsfacilitet"
 
 #: data/base/messages/strings/names.txt:821
 #: data/mp/messages/strings/names.txt:836
@@ -7722,9 +7664,8 @@ msgid "Automated Repair Facility Upgrade Mk3"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:824
-#, fuzzy
 msgid "Robotic Repair Facility Upgrade"
-msgstr "Reperationsgevinst - Reperation"
+msgstr "Robotisk reperationsfacilitetsopgradering"
 
 #: data/base/messages/strings/names.txt:825
 msgid "Robotic Repair Facility Upgrade Mk2"
@@ -7735,9 +7676,8 @@ msgid "Robotic Repair Facility Upgrade Mk3"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:827
-#, fuzzy
 msgid "Advanced Repair Facility Upgrade"
-msgstr "Reperationsgevinst - Reperation"
+msgstr "Advanceret reperationsfacilitetsopgradering"
 
 #: data/base/messages/strings/names.txt:828
 msgid "Advanced Repair Facility Upgrade Mk2"
@@ -7808,14 +7748,12 @@ msgid "Robotic VTOL Rearming Mk4"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:852
-#, fuzzy
 msgid "Robotic VTOL Production Mk2"
-msgstr "Gentag produktion"
+msgstr "Robotisk fabriksproduktion Mk2"
 
 #: data/base/messages/strings/names.txt:853
-#, fuzzy
 msgid "Robotic VTOL Production Mk3"
-msgstr "Gentag produktion"
+msgstr "Robotisk fabriksproduktion Mk3"
 
 #: data/base/messages/strings/names.txt:855
 msgid "Advanced VTOL Production Mk2"
@@ -7828,7 +7766,7 @@ msgstr ""
 #: data/base/messages/strings/names.txt:858
 #: data/mp/messages/strings/names.txt:873
 msgid "Cyborg Self-Repair"
-msgstr ""
+msgstr "Cyborgselvreperation"
 
 #: data/base/messages/strings/names.txt:859
 #: data/mp/messages/strings/names.txt:874
@@ -7873,7 +7811,7 @@ msgstr ""
 #: data/base/messages/strings/names.txt:870
 #: data/mp/messages/strings/names.txt:885
 msgid "Vehicle Self-Repair"
-msgstr ""
+msgstr "Køretøjselvreperation"
 
 #: data/base/messages/strings/names.txt:871
 #: data/mp/messages/strings/names.txt:886
@@ -7887,9 +7825,8 @@ msgstr ""
 
 #: data/base/messages/strings/names.txt:874
 #: data/mp/messages/strings/names.txt:891
-#, fuzzy
 msgid "Sensor Upgrade"
-msgstr "Rækkevide"
+msgstr "Sensoropgradering"
 
 #: data/base/messages/strings/names.txt:876
 #: data/mp/messages/strings/names.txt:893
@@ -8024,33 +7961,28 @@ msgstr ""
 # This is always 1000 ingame... any reason to have this at all? is it ever used?
 #: data/base/messages/strings/names.txt:918
 #: data/mp/messages/strings/names.txt:935
-#, fuzzy
 msgid "Sensor Lock"
-msgstr "Watt"
+msgstr "Sensorlås"
 
 #: data/base/messages/strings/names.txt:922
 #: data/mp/messages/strings/names.txt:939
-#, fuzzy
 msgid "Thermal Armor"
 msgstr "Termisk panser"
 
 #: data/base/messages/strings/names.txt:923
 #: data/mp/messages/strings/names.txt:940
-#, fuzzy
 msgid "Thermal Armor Mk2"
-msgstr "Termisk panser"
+msgstr "Termisk panser Mk2"
 
 #: data/base/messages/strings/names.txt:924
 #: data/mp/messages/strings/names.txt:941
-#, fuzzy
 msgid "Thermal Armor Mk3"
-msgstr "Termisk panser"
+msgstr "Termisk panser Mk3"
 
 #: data/base/messages/strings/names.txt:925
 #: data/mp/messages/strings/names.txt:942
-#, fuzzy
 msgid "High Intensity Thermal Armor"
-msgstr "Termisk panser"
+msgstr "Højintensitet termisk panser"
 
 #: data/base/messages/strings/names.txt:926
 #: data/mp/messages/strings/names.txt:943
@@ -8199,57 +8131,48 @@ msgstr ""
 
 #: data/base/messages/strings/names.txt:964
 #: data/mp/messages/strings/names.txt:981
-#, fuzzy
 msgid "Hover Propulsion"
-msgstr "Fremdrift"
+msgstr "Svævefremdrift"
 
 #: data/base/messages/strings/names.txt:965
 #: data/mp/messages/strings/names.txt:982
-#, fuzzy
 msgid "Hover Propulsion II"
-msgstr "Fremdrift"
+msgstr "Svævefremdrift II"
 
 #: data/base/messages/strings/names.txt:967
 #: data/mp/messages/strings/names.txt:984
-#, fuzzy
 msgid "Half-tracked Propulsion"
-msgstr "Fabriksgevinst - Fremdrift"
+msgstr "Halvbæltefremdrift"
 
 #: data/base/messages/strings/names.txt:968
 #: data/mp/messages/strings/names.txt:985
-#, fuzzy
 msgid "Half-tracked Propulsion II"
-msgstr "Fabriksgevinst - Fremdrift"
+msgstr "Halvbæltefremdrift II"
 
 #: data/base/messages/strings/names.txt:970
 #: data/mp/messages/strings/names.txt:987
-#, fuzzy
 msgid "Tracked Propulsion"
-msgstr "Fremdrift"
+msgstr "Bæltefremdrift"
 
 #: data/base/messages/strings/names.txt:971
 #: data/mp/messages/strings/names.txt:988
-#, fuzzy
 msgid "Tracked Propulsion II"
-msgstr "Fremdrift"
+msgstr "Bæltefremdrift II"
 
 #: data/base/messages/strings/names.txt:973
 #: data/mp/messages/strings/names.txt:990
-#, fuzzy
 msgid "VTOL Propulsion"
-msgstr "Fremdrift"
+msgstr "VTOL fremdrift"
 
 #: data/base/messages/strings/names.txt:974
 #: data/mp/messages/strings/names.txt:991
-#, fuzzy
 msgid "VTOL Propulsion II"
-msgstr "Fremdrift"
+msgstr "VTOL fremdrift II"
 
 #: data/base/messages/strings/names.txt:977
 #: data/mp/messages/strings/names.txt:994
-#, fuzzy
 msgid "Wheeled Propulsion II"
-msgstr "Fremdrift"
+msgstr "Hjulfremdrift II"
 
 #: data/base/messages/strings/names.txt:984
 #: data/mp/messages/strings/names.txt:1001
@@ -8620,7 +8543,7 @@ msgstr ""
 #: data/base/messages/strings/names.txt:1085
 #: data/mp/messages/strings/names.txt:1102
 msgid "Hardened MG Bullets"
-msgstr ""
+msgstr "Hærdet MG-kugler"
 
 #: data/base/messages/strings/names.txt:1086
 #: data/mp/messages/strings/names.txt:1103
@@ -8679,12 +8602,12 @@ msgstr ""
 #: data/base/messages/strings/names.txt:1103
 #: data/mp/messages/strings/names.txt:1120
 msgid "Target Prediction Missiles"
-msgstr ""
+msgstr "Målforudsigningsmissiler"
 
 #: data/base/messages/strings/names.txt:1104
 #: data/mp/messages/strings/names.txt:1121
 msgid "Search & Destroy Missiles"
-msgstr ""
+msgstr "Søg & ødelægge missiler"
 
 #: data/base/messages/strings/names.txt:1105
 #: data/mp/messages/strings/names.txt:1122
@@ -8977,7 +8900,7 @@ msgstr ""
 #: data/base/messages/strings/names.txt:1185
 #: data/mp/messages/strings/names.txt:1205
 msgid "Tank Killer Rocket"
-msgstr ""
+msgstr "Kampvognsdræberraket"
 
 #: data/base/messages/strings/names.txt:1187
 #: data/mp/messages/strings/names.txt:1207
@@ -9051,12 +8974,12 @@ msgstr ""
 #: data/base/messages/strings/names.txt:1211
 #: data/mp/messages/strings/names.txt:1231
 msgid "Look-Out Tower"
-msgstr ""
+msgstr "Udkigstårn"
 
 #: data/base/messages/strings/names.txt:1212
 #: data/mp/messages/strings/names.txt:1232
 msgid "Cannon Tower"
-msgstr ""
+msgstr "Kannontårn"
 
 #: data/base/messages/strings/names.txt:1235
 #: data/mp/messages/strings/names.txt:1255
@@ -9066,18 +8989,17 @@ msgstr ""
 #: data/base/messages/strings/names.txt:1236
 #: data/mp/messages/strings/names.txt:1256
 msgid "Oil Resource"
-msgstr ""
+msgstr "Olieresours"
 
 #: data/base/messages/strings/names.txt:1262
 #: data/mp/messages/strings/names.txt:1282
 msgid "Bridge"
-msgstr ""
+msgstr "Bro"
 
 #: data/base/messages/strings/names.txt:1265
 #: data/mp/messages/strings/names.txt:1285
-#, fuzzy
 msgid "Ruined Factory"
-msgstr "Find næste fabrik"
+msgstr "Ødelagt fabrik"
 
 #: data/base/messages/strings/names.txt:1266
 #: data/mp/messages/strings/names.txt:1286
@@ -9087,22 +9009,22 @@ msgstr ""
 #: data/base/messages/strings/names.txt:1267
 #: data/mp/messages/strings/names.txt:1287
 msgid "Hut"
-msgstr ""
+msgstr "Hytte"
 
 #: data/base/messages/strings/names.txt:1275
 #: data/mp/messages/strings/names.txt:1295
 msgid "Oil Drum"
-msgstr ""
+msgstr "Olietønde"
 
 #: data/base/messages/strings/names.txt:1293
 #: data/mp/messages/strings/names.txt:1313
 msgid "Wreck"
-msgstr ""
+msgstr "Vrag"
 
 #: data/base/messages/strings/names.txt:1295
 #: data/mp/messages/strings/names.txt:1315
 msgid "Wrecked Tank"
-msgstr ""
+msgstr "Kampvognsvrag"
 
 #: data/base/messages/strings/names.txt:1313
 #: data/mp/messages/strings/names.txt:1333
@@ -9116,9 +9038,8 @@ msgstr ""
 
 #: data/base/messages/strings/names.txt:1315
 #: data/mp/messages/strings/names.txt:1335
-#, fuzzy
 msgid "Wrecked Vehicle"
-msgstr "Nyt design"
+msgstr "Ødelagt køretøj"
 
 #: data/base/messages/strings/names.txt:1316
 #: data/mp/messages/strings/names.txt:1336
@@ -9238,9 +9159,8 @@ msgstr ""
 
 #: data/base/messages/strings/names.txt:1440
 #: data/mp/messages/strings/names.txt:1460
-#, fuzzy
 msgid "Downed Transport"
-msgstr "Fyld transportskib"
+msgstr "Nedskudt transportskib"
 
 #: data/base/messages/strings/names.txt:1458
 #: data/mods/multiplay/ntw/messages/strings/names.txt:1356
@@ -9327,7 +9247,7 @@ msgstr ""
 #: data/mp/messages/resmessagesall.rmsg:356
 #: data/mp/messages/strings/resstrings.txt:470
 msgid "Heavy repair unit"
-msgstr ""
+msgstr "Tung reperationsenhed"
 
 #: data/base/messages/strings/resstrings.txt:449
 #: data/mp/messages/strings/resstrings.txt:477
@@ -9336,9 +9256,8 @@ msgstr ""
 
 #: data/base/messages/strings/resstrings.txt:451
 #: data/mp/messages/strings/resstrings.txt:479
-#, fuzzy
 msgid "Increases repair speed"
-msgstr "Forøg spillehastighed"
+msgstr "Forøger reperationshastighed"
 
 #: data/base/messages/strings/resstrings.txt:452
 #: data/mp/messages/strings/resstrings.txt:480
@@ -9374,7 +9293,7 @@ msgstr ""
 #: data/base/messages/strings/resstrings.txt:953
 #: data/mp/messages/strings/resstrings.txt:996
 msgid "Increases Mini-Rocket ROF"
-msgstr ""
+msgstr "Forøger miniraketkadancen"
 
 #: data/base/script/fastplay/s-demo.slo:366
 #: data/base/script/text/cam1-1.slo:258
@@ -9382,26 +9301,25 @@ msgstr ""
 #: data/base/script/text/cam1-4a.slo:590
 #: data/base/script/text/cam1-7.slo:506
 #: data/base/script/text/genexp.slo:999
-#, fuzzy
 msgid "Return to LZ"
-msgstr "Tilbagetrækning til HQ"
+msgstr "Returnere til LZ"
 
 #: data/base/script/text/cam1-7.slo:913
 #: data/base/script/text/cam2cx.slo:270
 #: data/base/script/text/genexp.slo:854
 msgid "Enemy Escaping"
-msgstr "Fjenden flygte"
+msgstr "Fjenden flygter"
 
 #: data/base/script/text/cam2dx.slo:40
 #: data/base/script/text/cam3a-d1x.slo:99
 #: data/base/script/text/cam3a-d2x.slo:109
 msgid "Objective Destroyed"
-msgstr ""
+msgstr "Objektiv ødelagt"
 
 #: data/base/script/text/cam2dx.slo:63
 #: data/base/script/text/cam3a-d1x.slo:129
 msgid "Objective Captured"
-msgstr ""
+msgstr "Objektiv fanget"
 
 #: data/base/script/text/cam3-2x.slo:118
 msgid "Reinforcements are now available"
@@ -9413,11 +9331,12 @@ msgstr ""
 
 #: data/base/script/text/tutorial3.slo:304
 msgid "Oil resources are key to your success"
-msgstr ""
+msgstr "Oliebrønde er nøglen til din success"
 
 #: data/base/script/text/tutorial3.slo:313
+#, fuzzy
 msgid "To build an oil derrick, select one of your trucks"
-msgstr ""
+msgstr "For at bygge en oliedims, vælg en af dine lastbile"
 
 #: data/base/script/text/tutorial3.slo:333
 msgid "Left click the oil pool indicated by the radar pulse to order your truck to build"
@@ -9530,9 +9449,8 @@ msgid "Now left click the factory icon and position it at your base"
 msgstr ""
 
 #: data/base/script/text/tutorial3.slo:914
-#, fuzzy
 msgid "Select a location for your factory"
-msgstr "Find næste cyborg fabrik"
+msgstr "Vælg en placering til din fabrik"
 
 #: data/base/script/text/tutorial3.slo:933
 msgid "The delivery point is indicated by the number 1"
@@ -9560,19 +9478,19 @@ msgstr ""
 
 #: data/base/script/text/tutorial3.slo:1013
 msgid "Now left click the units you want to build from the menu at the left"
-msgstr ""
+msgstr "Venstreklikke nu på de enheder du vil bygge, på menuen til venstre"
 
 #: data/base/script/text/tutorial3.slo:1027
 msgid "Please wait whilst the factory manufactures the new unit(s)"
-msgstr ""
+msgstr "Venligst vente mens fabrikken fremstiller de(n) ny(e) enhed(er)"
 
 #: data/base/script/text/tutorial3.slo:1052
 msgid "Congratulations commander - you are ready for your first mission"
-msgstr ""
+msgstr "Tillykke kommandør — du er nu klar til din første mission"
 
 #: data/base/sequenceaudio/cam1/c001end.txt:1
 msgid "Incoming Transmission"
-msgstr ""
+msgstr "Indkommende transmission"
 
 #: data/base/sequenceaudio/cam1/c001end.txt:3
 msgid "Transmission from Beta Base"
@@ -9584,7 +9502,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam1/c001end.txt:5
 msgid "Please assist!..."
-msgstr ""
+msgstr "Venligst hjælpe!..."
 
 #: data/base/sequenceaudio/cam1/c001.txa:1
 msgid "CAMPAIGN ONE"
@@ -9599,9 +9517,8 @@ msgid "Dawn, July 4th, 2100"
 msgstr ""
 
 #: data/base/sequenceaudio/cam1/c001.txa:5
-#, fuzzy
 msgid "Project HQ"
-msgstr "Målsætninger"
+msgstr "Projekt HK"
 
 #: data/base/sequenceaudio/cam1/c001.txa:6
 msgid "A New Era"
@@ -9609,7 +9526,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam1/c001.txa:8
 msgid "Morning, July 4th, 2100"
-msgstr ""
+msgstr "Morgen, 4. Juli, 2100"
 
 #: data/base/sequenceaudio/cam1/c001.txa:9
 msgid "In-flight to Western Sector"
@@ -9621,7 +9538,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam1/c001.txt:1
 msgid "Transport destinations follow:"
-msgstr ""
+msgstr "Transportdestinationer følger:"
 
 #: data/base/sequenceaudio/cam1/c001.txt:2
 msgid "Alpha - Western Sector...."
@@ -9691,7 +9608,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam1/cam1out2.txt:1
 msgid "Open your systems to me."
-msgstr ""
+msgstr "Åben dine systemer til mig."
 
 #: data/base/sequenceaudio/cam1/cam1out2.txt:2
 msgid "Let me meld with your machines and cyborgs."
@@ -9703,15 +9620,15 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam1/cam1out2.txt:5
 msgid "Together we can create a new world."
-msgstr ""
+msgstr "Sammen kan vi skabe en ny verden."
 
 #: data/base/sequenceaudio/cam1/cam1out2.txt:7
 msgid "I can give you power beyond your wildest dreams."
-msgstr ""
+msgstr "Jeg kan give jer magt som overgår dine vildeste drømme."
 
 #: data/base/sequenceaudio/cam1/cam1out2.txt:9
 msgid "Open your systems to me and you will be strong."
-msgstr ""
+msgstr "Åben dine systemer til mig, og du vil være stærk."
 
 #: data/base/sequenceaudio/cam1/cam1out2.txt:10
 msgid "I can raise you as gods upon the blasted earth."
@@ -9735,8 +9652,9 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam1/cam1out4.txt:5
 #: data/base/sequenceaudio/cam2/cam2_2n2.txt:1
+#, fuzzy
 msgid "As I once cleansed the world with fire, I will destroy you and your puny Project!!"
-msgstr ""
+msgstr "Efter at jeg har renset verdenen med ild, vil jeg ødelægge dig og din trivielle projekt!!"
 
 #: data/base/sequenceaudio/cam1/cam1out5.txt:4
 msgid "Nexus then removed itself from the system, destroying its memory banks, and removing all traces of its external connections."
@@ -9752,7 +9670,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam1/cam1out5.txt:10
 msgid "It has technology and weapons. It knows about us, and it's not friendly."
-msgstr ""
+msgstr "Den har teknologi og våben. Den kender til os, og den er ikke venlig."
 
 #: data/base/sequenceaudio/cam1/map1a_c.txt:4
 msgid "The Synaptic Link was developed by the Reed Corporation in conjunction with the US Military."
@@ -9780,7 +9698,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam1/sub13np1.txt:4
 msgid "Warning!"
-msgstr ""
+msgstr "Advarsel!"
 
 #: data/base/sequenceaudio/cam1/sub13np1.txt:5
 msgid "You are entering a restricted area."
@@ -9796,7 +9714,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam1/sub13np1.txt:9
 msgid "Message Ends."
-msgstr ""
+msgstr "Besked afslutter."
 
 #: data/base/sequenceaudio/cam1/sub13np2.txt:8
 msgid "You will be destroyed."
@@ -9808,7 +9726,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam1/sub1_4bn.txt:4
 msgid "You have done well."
-msgstr ""
+msgstr "Du har gjort godt."
 
 #: data/base/sequenceaudio/cam1/sub1_4bn.txt:5
 msgid "Once we have analyzed and authenticated the technology, your reward  will follow."
@@ -9848,7 +9766,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam2/c002.txa:4
 msgid "Morning, September 1st, 2100"
-msgstr ""
+msgstr "Morgen, 1. September, 2100"
 
 #: data/base/sequenceaudio/cam2/c002.txa:5
 msgid "In-flight to Eastern Sector"
@@ -10024,7 +9942,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam2/cam2bcol.txt:9
 msgid "Attack!"
-msgstr ""
+msgstr "Angrib!"
 
 #: data/base/sequenceaudio/cam2/cam2dico.txt:1
 msgid "Warriors of the Collective, Nexus has given us the power of the machine so that we can destroy all that oppose us."
@@ -10036,7 +9954,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam2/cam2dico.txt:4
 msgid "Cleanse and destroy!!"
-msgstr ""
+msgstr "Rense og ødelægge!!"
 
 #: data/base/sequenceaudio/cam2/cam2diin.txt:1
 msgid "Warriors of the Collective. You have performed well."
@@ -10091,9 +10009,8 @@ msgid "Team Gamma is currently scouting the silo's location and monitoring NEXUS
 msgstr ""
 
 #: data/base/sequenceaudio/cam3/c3ad2n2.txt:1
-#, fuzzy
 msgid "Time's up commander!!"
-msgstr "Find næste kommandør"
+msgstr "Tiden er udløbet, kommandør!!"
 
 #: data/base/sequenceaudio/cam3/c3ad2pl3.txt:1
 msgid "Commander, we are detecting NEXUS forces from these coordinates..."
@@ -10124,9 +10041,8 @@ msgid "Please note that all entrances to the underground complex have been seale
 msgstr ""
 
 #: data/base/sequenceaudio/cam3/cam32a2.txt:1
-#, fuzzy
 msgid "Glad you could make it, Commander."
-msgstr "Vælg kommandør 1"
+msgstr "Glad for at du kunne nå det, kommandør."
 
 #: data/base/sequenceaudio/cam3/cam32a2.txt:4
 msgid "Enemy strike VTOLs have got us pinned down. We've managed to hold off cyborgs and tanks, but we haven't been able to make any progress along the valley."
@@ -10154,7 +10070,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam3/cam32alp.txt:8
 msgid "Please assist."
-msgstr ""
+msgstr "Venligst hjælpe."
 
 #: data/base/sequenceaudio/cam3/cam32pl2.txt:4
 msgid "Commander, forces from Team Alpha escaped the nuclear attack on Alpha Base."
@@ -10310,16 +10226,16 @@ msgstr ""
 
 #: data/base/sequenceaudio/devastation.txa:6
 msgid "The Collapse"
-msgstr ""
+msgstr "Collapsen"
 
 #: data/base/sequenceaudio/devastation.txa:8
 msgid "January 19th, 2086"
-msgstr ""
+msgstr "19. Januar, 2086"
 
 #: data/base/sequenceaudio/devastation.txa:9
 #: data/base/sequenceaudio/devastation.txa:17
 msgid "North America"
-msgstr ""
+msgstr "Nordamerika"
 
 #: data/base/sequenceaudio/devastation.txa:10
 msgid "Nuclear Winter"
@@ -10327,7 +10243,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/devastation.txa:12
 msgid "Midnight, April 10th, 2086"
-msgstr ""
+msgstr "Midnat, 10. April, 2086"
 
 #: data/base/sequenceaudio/devastation.txa:13
 msgid "Rocky Mountains"
@@ -10335,15 +10251,15 @@ msgstr ""
 
 #: data/base/sequenceaudio/devastation.txa:14
 msgid "Safety"
-msgstr ""
+msgstr "Sikkerhed"
 
 #: data/base/sequenceaudio/devastation.txa:16
 msgid "Dawn, April 4th, 2100"
-msgstr ""
+msgstr "Solnedgang, 4. April, 2100"
 
 #: data/base/sequenceaudio/devastation.txa:18
 msgid "A New Beginning"
-msgstr ""
+msgstr "En ny begyndelse"
 
 #: data/base/sequenceaudio/devastation.txt:1
 msgid "The NASDA system was developed to protect us. It was to be the ultimate nuclear deterrent. As it turned out, it was our executioner."
@@ -10359,7 +10275,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/devastation.txt:7
 msgid "The world as we knew it ended..."
-msgstr ""
+msgstr "Verden som vi kendte den afsluttede..."
 
 #: data/base/sequenceaudio/devastation.txt:9
 msgid "The Nuclear Winter hit hard. Disease and famine claimed most of us who had survived the nuclear strikes. Wars over cans of dog food took even more."
@@ -11170,9 +11086,8 @@ msgstr ""
 #: data/mp/messages/resmessages12.rmsg:136
 #: data/mp/messages/resmessages23.rmsg:175
 #: data/mp/messages/resmessages2.rmsg:890
-#, fuzzy
 msgid "Machinegun reload time -15%"
-msgstr "Søger"
+msgstr "Maskingeværgenopladningstid -15%"
 
 #: data/mp/messages/resmessages12.rmsg:162
 #: data/mp/messages/resmessages23.rmsg:188
@@ -11229,9 +11144,8 @@ msgstr ""
 #: data/mp/messages/resmessages1.rmsg:253
 #: data/mp/messages/resmessages2.rmsg:331
 #: data/mp/messages/resmessages3.rmsg:422
-#, fuzzy
 msgid "Repair Speed +100%"
-msgstr "Forøg spillehastighed"
+msgstr "Reperationshastighed +100%"
 
 #: data/mp/messages/resmessages1.rmsg:306
 #, no-c-format
@@ -11244,16 +11158,14 @@ msgid "Factory output speed +60%"
 msgstr ""
 
 #: data/mp/messages/resmessages1.rmsg:345
-#, fuzzy
 msgid "Research speed +85%"
-msgstr "Forskning fuldendt: %s"
+msgstr "Forskningshastighed +85%"
 
 #: data/mp/messages/resmessages1.rmsg:358
 #: data/mp/messages/resmessages2.rmsg:370
 #: data/mp/messages/resmessages3.rmsg:448
-#, fuzzy
 msgid "Research speed +30%"
-msgstr "Forskning fuldendt: %s"
+msgstr "Forskningshastighed +30%"
 
 #: data/mp/messages/resmessages1.rmsg:371
 #: data/mp/messages/resmessages2.rmsg:58
@@ -11269,9 +11181,8 @@ msgstr ""
 #: data/mp/messages/resmessages2.rmsg:500
 #: data/mp/messages/resmessages3.rmsg:669
 #: data/mp/messages/resmessages3.rmsg:682
-#, fuzzy
 msgid "Vehicle speed +5%"
-msgstr "Skrog"
+msgstr "Køretøjshastighed +5%"
 
 #: data/mp/messages/resmessages1.rmsg:475
 #: data/mp/messages/resmessages2.rmsg:513
@@ -11298,9 +11209,8 @@ msgstr "Forøg spillehastighed"
 #: data/mp/messages/resmessages2.rmsg:877
 #: data/mp/messages/resmessages3.rmsg:1007
 #: data/mp/messages/resmessages3.rmsg:1020
-#, fuzzy
 msgid "Machinegun damage +25%"
-msgstr "IP adressse eller computernavn"
+msgstr "Maskingeværskade +25%"
 
 #: data/mp/messages/resmessages1.rmsg:683
 #: data/mp/messages/resmessages2.rmsg:916
@@ -11332,9 +11242,8 @@ msgstr ""
 #: data/mp/messages/resmessages23.rmsg:160
 #: data/mp/messages/resmessages2.rmsg:732
 #: data/mp/messages/resmessages3.rmsg:862
-#, fuzzy
 msgid "Bomb Upgrade"
-msgstr "Energi forbrug"
+msgstr "Bombeopgradering"
 
 #: data/mp/messages/resmessages23.rmsg:161
 msgid "Improved trinitramine explosive formula"
@@ -11344,21 +11253,19 @@ msgstr ""
 #: data/mp/messages/resmessages2.rmsg:734
 #: data/mp/messages/resmessages3.rmsg:864
 msgid "Bomb damage +25%"
-msgstr ""
+msgstr "Bombeskade +25%"
 
 #: data/mp/messages/resmessages2.rmsg:6
-#, fuzzy
 msgid "Thermal Armor +45%"
-msgstr "Termisk panser"
+msgstr "Termisk panser +45%"
 
 #: data/mp/messages/resmessages2.rmsg:19
 msgid "Kinetic Armor +35%, and Body Points +35%"
 msgstr ""
 
 #: data/mp/messages/resmessages2.rmsg:357
-#, fuzzy
 msgid "Factory production rate +60%"
-msgstr "Gentag produktion"
+msgstr "Fabriksproduktionshastighed +60%"
 
 #: data/mp/messages/resmessages2.rmsg:358
 #: data/mp/messages/resmessagesall.rmsg:787
@@ -11371,9 +11278,8 @@ msgid "Rearming speed +30%"
 msgstr ""
 
 #: data/mp/messages/resmessages2.rmsg:526
-#, fuzzy
 msgid "Thermal armor +40%"
-msgstr "Termisk panser"
+msgstr "Termisk panser +40%"
 
 #: data/mp/messages/resmessages2.rmsg:656
 #: data/mp/messages/resmessages3.rmsg:825
@@ -11406,9 +11312,8 @@ msgid "High Explosive Anti-Tank warheads"
 msgstr ""
 
 #: data/mp/messages/resmessages3.rmsg:6
-#, fuzzy
 msgid "Thermal Armor +35%"
-msgstr "Termisk panser"
+msgstr "Termisk panser +35%"
 
 #: data/mp/messages/resmessages3.rmsg:304
 msgid "Armored guard tower with Pulse Laser"
@@ -11420,18 +11325,16 @@ msgstr ""
 
 #: data/mp/messages/resmessages3.rmsg:721
 #: data/mp/messages/resmessagesall.rmsg:838
-#, fuzzy
 msgid "Thermal Armor +40%"
-msgstr "Termisk panser"
+msgstr "Termisk panser +40%"
 
 #: data/mp/messages/resmessages3.rmsg:968
 msgid "Laser accuracy +10%"
 msgstr ""
 
 #: data/mp/messages/resmessages3.rmsg:981
-#, fuzzy
 msgid "Laser damage +25%"
-msgstr "Forøg spillehastighed"
+msgstr "Laserskade +25%"
 
 #: data/mp/messages/resmessages3.rmsg:994
 msgid "Laser reload time -15%"
@@ -11448,9 +11351,8 @@ msgstr ""
 
 #: data/mp/messages/resmessages3.rmsg:1150
 #: data/mp/messages/resmessages3.rmsg:1163
-#, fuzzy
 msgid "Missile reload time -15%"
-msgstr "Anvendt tid: %s"
+msgstr "Missilgenopladningstid -15%"
 
 #: data/mp/messages/resmessages3.rmsg:1241
 msgid "Rail Gun accuracy +10%"
@@ -11465,28 +11367,24 @@ msgid "Rail Gun reload time -15%"
 msgstr ""
 
 #: data/mp/messages/resmessagesall.rmsg:84
-#, fuzzy
 msgid "Sensor Range +25%"
-msgstr "Rækkevide"
+msgstr "Sensorrækkevide +25%"
 
 #: data/mp/messages/resmessagesall.rmsg:96
 msgid "Improved Thermal Emissions detection"
 msgstr ""
 
 #: data/mp/messages/resmessagesall.rmsg:97
-#, fuzzy
 msgid "Sensor Range +15%"
-msgstr "Rækkevide"
+msgstr "Sensorrækkevide +15%"
 
 #: data/mp/messages/resmessagesall.rmsg:109
-#, fuzzy
 msgid "Advanced Thermal Emissions detection"
-msgstr "Gentag produktion"
+msgstr "Advanceret termisk emmisionsdetektion"
 
 #: data/mp/messages/resmessagesall.rmsg:110
-#, fuzzy
 msgid "Sensor Range +10%"
-msgstr "Rækkevide"
+msgstr "Sensorrækkevide +10%"
 
 #: data/mp/messages/resmessagesall.rmsg:135
 msgid "Radar detector tower detects enemy sensors"
@@ -11502,11 +11400,11 @@ msgstr ""
 
 #: data/mp/messages/resmessagesall.rmsg:225
 msgid "Cyborg Transport Available"
-msgstr ""
+msgstr "Cyborgtransport tilgængelig"
 
 #: data/mp/messages/resmessagesall.rmsg:226
 msgid "Armed with Machinegun"
-msgstr ""
+msgstr "Bevæbnet med maskingevær"
 
 #: data/mp/messages/resmessagesall.rmsg:228
 msgid "Requires heavy VTOL factory to produce"
@@ -11530,7 +11428,7 @@ msgstr ""
 
 #: data/mp/messages/resmessagesall.rmsg:291
 msgid "Armed with grenades"
-msgstr ""
+msgstr "Bevæbnet med granater"
 
 #: data/mp/messages/resmessagesall.rmsg:304
 msgid "Combat engineer with construction ability"
@@ -11570,16 +11468,16 @@ msgstr ""
 
 #: data/mp/messages/resmessagesall.rmsg:421
 msgid "Armed with medium cannon"
-msgstr ""
+msgstr "Bevæbnet med mellem kanon"
 
 #: data/mp/messages/resmessagesall.rmsg:434
 #: data/mp/messages/resmessagesall.rmsg:447
 msgid "Armed with hyper velocity cannon"
-msgstr ""
+msgstr "Bevæbnet med hyperhastighedskanon"
 
 #: data/mp/messages/resmessagesall.rmsg:460
 msgid "Armed with tank killer rockets"
-msgstr ""
+msgstr "Bevæbnet med kampvognsdræberraketter"
 
 #: data/mp/messages/resmessagesall.rmsg:473
 msgid "Fires heavy pulses of laser light"
@@ -11600,7 +11498,7 @@ msgstr ""
 
 #: data/mp/messages/resmessagesall.rmsg:499
 msgid "Complete battlefield visibility"
-msgstr ""
+msgstr "Fuldstændig synlighed af kampmarken"
 
 #: data/mp/messages/resmessagesall.rmsg:501
 msgid "Does not offer sensor targeting"
@@ -11613,11 +11511,11 @@ msgstr ""
 
 #: data/mp/messages/resmessagesall.rmsg:524
 msgid "New Advanced Weapon Available"
-msgstr ""
+msgstr "Nyt avanceret våben tilgængelig"
 
 #: data/mp/messages/resmessagesall.rmsg:525
 msgid "Very slow recharge time"
-msgstr ""
+msgstr "Meget langsom genopladningstid"
 
 #: data/mp/messages/resmessagesall.rmsg:526
 msgid "Immense damage infliction capability"
@@ -11634,7 +11532,7 @@ msgstr ""
 #: data/mp/messages/resmessagesall.rmsg:551
 #: data/mp/messages/resmessagesall.rmsg:564
 msgid "Plasma Cannon firing plasma"
-msgstr ""
+msgstr "Plasmakanon skyder plasma"
 
 #: data/mp/messages/resmessagesall.rmsg:565
 #: data/mp/messages/resmessagesall.rmsg:643
@@ -11643,7 +11541,7 @@ msgstr ""
 #: data/mp/messages/resmessagesall.rmsg:682
 #: data/mp/messages/resmessagesall.rmsg:695
 msgid "Best Targets : Vehicles"
-msgstr ""
+msgstr "Bedste mål: Køretøj"
 
 #: data/mp/messages/resmessagesall.rmsg:577
 msgid "Armored strongpoint with Heavy Laser"
@@ -11674,7 +11572,7 @@ msgstr ""
 #: data/mp/messages/resmessagesall.rmsg:670
 #: data/mp/messages/resmessagesall.rmsg:683
 msgid "Defensive Strength : High"
-msgstr ""
+msgstr "Forsvarsstyrke: Høj"
 
 #: data/mp/messages/resmessagesall.rmsg:655
 msgid "Uses advanced cannon technology"
@@ -11698,7 +11596,7 @@ msgstr ""
 
 #: data/mp/messages/resmessagesall.rmsg:719
 msgid "Medium Super Heavy Body"
-msgstr ""
+msgstr "Mellem supertung krop"
 
 #: data/mp/messages/resmessagesall.rmsg:720
 msgid "More armor and body points than Vengeance"
@@ -11706,19 +11604,19 @@ msgstr ""
 
 #: data/mp/messages/resmessagesall.rmsg:721
 msgid "Slow moving Body"
-msgstr ""
+msgstr "Langsombevægende krop"
 
 #: data/mp/messages/resmessagesall.rmsg:732
 msgid "Large Super Heavy Body"
-msgstr ""
+msgstr "Stor supertung krop"
 
 #: data/mp/messages/resmessagesall.rmsg:733
 msgid "Maximum armor and body points"
-msgstr ""
+msgstr "Maksimum panser og skrogpoint"
 
 #: data/mp/messages/resmessagesall.rmsg:734
 msgid "Very slow moving Body"
-msgstr ""
+msgstr "Meget langsombevægende krop"
 
 #: data/mp/messages/resmessagesall.rmsg:745
 msgid "Hardpoint Vindicator SAM Site Available"
@@ -11787,9 +11685,8 @@ msgstr ""
 
 #: data/mp/messages/strings/names.txt:15
 #: data/mp/messages/strings/names.txt:682
-#, fuzzy
 msgid "Cyborg Transport"
-msgstr "Fyld transportskib"
+msgstr "Cyborgtransport"
 
 #: data/mp/messages/strings/names.txt:144
 #, fuzzy
@@ -11948,57 +11845,48 @@ msgid "Hyper Velocity Cannon Hardpoint"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:809
-#, fuzzy
 msgid "Automated Manufacturing"
-msgstr "Gentag produktion"
+msgstr "Automatiseret produktion"
 
 #: data/mp/messages/strings/names.txt:812
-#, fuzzy
 msgid "Robotic Manufacturing"
-msgstr "Fabrikering"
+msgstr "Robotisk produktion"
 
 #: data/mp/messages/strings/names.txt:815
-#, fuzzy
 msgid "Advanced Manufacturing"
-msgstr "Gentag produktion"
+msgstr "Advanceret produktion"
 
 #: data/mp/messages/strings/names.txt:817
-#, fuzzy
 msgid "Self-Replicating Manufacturing"
-msgstr "Find næste cyborg fabrik"
+msgstr "Selvduplikerende produktion"
 
 #: data/mp/messages/strings/names.txt:818
 msgid "Advanced Manufacturing Mk3"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:839
-#, fuzzy
 msgid "Robotic Repair Facility"
-msgstr "Reperationsgevinst - Reperation"
+msgstr "Robotisk reperationsfacilitet"
 
 #: data/mp/messages/strings/names.txt:841
-#, fuzzy
 msgid "Advanced Repair Facility"
-msgstr "Reperationsgevinst - Reperation"
+msgstr "Advanceret reperationsfacilitet"
 
 #: data/mp/messages/strings/names.txt:842
-#, fuzzy
 msgid "Robotic Repair Facility Mk3"
-msgstr "Reperationsgevinst - Reperation"
+msgstr "Robotisk reperationsfacilitet Mk3"
 
 #: data/mp/messages/strings/names.txt:843
-#, fuzzy
 msgid "Advanced Repair Facility Mk2"
-msgstr "Reperationsgevinst - Reperation"
+msgstr "Advanceret reperationsfacilitet Mk2"
 
 #: data/mp/messages/strings/names.txt:844
-#, fuzzy
 msgid "Advanced Repair Facility Mk3"
-msgstr "Reperationsgevinst - Reperation"
+msgstr "Advanceret reperationsfacilitet Mk3"
 
 #: data/mp/messages/strings/names.txt:889
 msgid "Auto-Repair"
-msgstr ""
+msgstr "Autoreperation"
 
 #: data/mp/messages/strings/names.txt:900
 #: data/mp/messages/strings/names.txt:1651
@@ -12097,14 +11985,12 @@ msgid "Bunker Buster Cobra Hover"
 msgstr "Kommandører"
 
 #: data/mp/messages/strings/names.txt:1520
-#, fuzzy
 msgid "Sensor Upgrade Mk2"
-msgstr "Rækkevide"
+msgstr "Sensoropgradering Mk2"
 
 #: data/mp/messages/strings/names.txt:1521
-#, fuzzy
 msgid "Sensor Upgrade Mk3"
-msgstr "Rækkevide"
+msgstr "Sensoropgradering Mk3"
 
 #: data/mp/messages/strings/names.txt:1522
 msgid "Vapor Turbine Generator Mk2"
@@ -12135,8 +12021,9 @@ msgid "Combat Engineer"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:1635
+#, fuzzy
 msgid "Cyborg Mechanic"
-msgstr ""
+msgstr "Cyborg mekanik"
 
 #: data/mp/messages/strings/names.txt:1639
 #: data/mp/messages/strings/names.txt:1640
@@ -12223,12 +12110,11 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:1684
 #: data/mp/messages/strings/names.txt:1685
 msgid "Heavy Laser"
-msgstr ""
+msgstr "Tung laser"
 
 #: data/mp/messages/strings/names.txt:1686
-#, fuzzy
 msgid "VTOL Heavy Laser"
-msgstr "Kommandører"
+msgstr "VTOL tung laser"
 
 #: data/mp/messages/strings/names.txt:1687
 #: data/mp/messages/strings/names.txt:1688
@@ -12264,7 +12150,7 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:1722
 #: data/mp/messages/strings/names.txt:1723
 msgid "Plasma Cannon"
-msgstr ""
+msgstr "Plasmakanon"
 
 #: data/mp/messages/strings/names.txt:1724
 #: data/mp/messages/strings/names.txt:1725
@@ -12274,7 +12160,7 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:1727
 #, fuzzy
 msgid "Sunburst AA Rocket Array"
-msgstr "Vælg alle halv-bælter"
+msgstr "Solsprænging AA raketgitter"
 
 #: data/mp/messages/strings/names.txt:1728
 msgid "Sunburst AA"
@@ -12338,7 +12224,7 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:1763
 #: data/mp/messages/strings/names.txt:1764
 msgid "Cannon Fortress"
-msgstr ""
+msgstr "Kanonfæstning"
 
 #: data/mp/messages/strings/names.txt:1766
 #: data/mp/messages/strings/names.txt:1767
@@ -12366,7 +12252,7 @@ msgstr ""
 
 #: data/mp/messages/strings/names.txt:1780
 msgid "Dragon"
-msgstr ""
+msgstr "Drage"
 
 #: data/mp/messages/strings/names.txt:1782
 msgid "Superhot Plasmite gel"
@@ -12450,21 +12336,18 @@ msgstr ""
 
 #: data/mp/messages/strings/names.txt:1819
 #: data/mp/messages/strings/names.txt:1820
-#, fuzzy
 msgid "Command Turret II"
-msgstr "Kommandotårn"
+msgstr "Kommandotårn II"
 
 #: data/mp/messages/strings/names.txt:1821
 #: data/mp/messages/strings/names.txt:1822
-#, fuzzy
 msgid "Command Turret III"
-msgstr "Kommandotårn"
+msgstr "Kommandotårn III"
 
 #: data/mp/messages/strings/names.txt:1823
 #: data/mp/messages/strings/names.txt:1824
-#, fuzzy
 msgid "Command Turret IV"
-msgstr "Kommandotårn"
+msgstr "Kommandotårn IV"
 
 #: data/mp/messages/strings/names.txt:1886
 #, fuzzy
@@ -12490,8 +12373,8 @@ msgstr "Vælg alle halv-bælter"
 msgid "Hyper Velocity Cannon Python Hover"
 msgstr "Kommandører"
 
-#: lib/framework/i18n.c:89
-#: lib/framework/i18n.c:150
+#: lib/framework/i18n.c:93
+#: lib/framework/i18n.c:154
 #, fuzzy
 msgid "System locale"
 msgstr "Elektronik"
@@ -12499,7 +12382,7 @@ msgstr "Elektronik"
 #: lib/netplay/netplay.c:1288
 #: lib/netplay/netplay.c:2223
 msgid "Enter password here"
-msgstr ""
+msgstr "Indtast kodeord her"
 
 #: lib/netplay/netplay.c:3254
 #, c-format
@@ -12539,7 +12422,7 @@ msgstr "Luk"
 
 #: src/cheat.c:136
 msgid ": Unknown cheat code."
-msgstr ""
+msgstr ": Ukendt snydekode."
 
 #: src/clparse.c:81
 msgid "Run in cheat mode"
@@ -12551,15 +12434,15 @@ msgstr ""
 
 #: src/clparse.c:82
 msgid "data directory"
-msgstr ""
+msgstr "datakatalog"
 
 #: src/clparse.c:83
 msgid "Set configuration directory"
-msgstr ""
+msgstr "Vælg konfigurationskatalog"
 
 #: src/clparse.c:83
 msgid "configuration directory"
-msgstr ""
+msgstr "konfigurationskatalog"
 
 #: src/clparse.c:84
 msgid "Show debug for given level"
@@ -12591,11 +12474,11 @@ msgstr "Indlæs et bestemt spil"
 
 #: src/clparse.c:88
 msgid "game-name"
-msgstr ""
+msgstr "spilnavn"
 
 #: src/clparse.c:89
 msgid "Show this help message and exit"
-msgstr ""
+msgstr "Vis denne hjælpebesked og gå ud"
 
 #: src/clparse.c:90
 msgid "Enable a global mod"
@@ -12645,15 +12528,15 @@ msgstr ""
 
 #: src/clparse.c:100
 msgid "WIDTHxHEIGHT"
-msgstr ""
+msgstr "BREDDE×HØJDE"
 
 #: src/clparse.c:101
 msgid "Enable shadows"
-msgstr ""
+msgstr "Slå skygger til"
 
 #: src/clparse.c:102
 msgid "Disable shadows"
-msgstr ""
+msgstr "Slå skygger fra"
 
 #: src/clparse.c:103
 msgid "Enable sound"
@@ -12661,15 +12544,15 @@ msgstr "Aktivér lyd"
 
 #: src/clparse.c:104
 msgid "Disable sound"
-msgstr ""
+msgstr "Slå lyd fra"
 
 #: src/clparse.c:105
 msgid "Activate self-test"
-msgstr ""
+msgstr "Aktiver selvtest"
 
 #: src/clparse.c:106
 msgid "connect directly to IP/hostname"
-msgstr ""
+msgstr "forbind direkte til IP/hostname"
 
 #: src/clparse.c:106
 msgid "host"
@@ -12752,7 +12635,7 @@ msgstr "Produktionsomkostninger"
 #: src/design.c:846
 #: src/design.c:867
 msgid "Total Body Points"
-msgstr "Total pansring"
+msgstr "Total skrogpoint"
 
 #: src/design.c:1063
 #: src/design.c:1095
@@ -12766,13 +12649,13 @@ msgstr ""
 #: src/design.c:1552
 #: src/design.c:1580
 msgid "Sensor Range"
-msgstr "Rækkevide"
+msgstr "Sensorrækkevidde"
 
 # This is always 1000 ingame... any reason to have this at all? is it ever used?
 #: src/design.c:1564
 #: src/design.c:1589
 msgid "Sensor Power"
-msgstr "Watt"
+msgstr "Sensoreffekt"
 
 #: src/design.c:1612
 #: src/design.c:1628
@@ -12789,7 +12672,7 @@ msgstr "Effektivitet"
 #: src/design.c:1729
 #: src/design.c:1765
 msgid "Range"
-msgstr "Rækkevide"
+msgstr "Rækkevidde"
 
 #: src/design.c:1741
 #: src/design.c:1774
@@ -12830,29 +12713,27 @@ msgid "Systems"
 msgstr "Systemer"
 
 #: src/display3d.c:589
-#, fuzzy
 msgid "Player left"
-msgstr "Spiller"
+msgstr "Spiller udgik"
 
 #: src/display3d.c:589
-#, fuzzy
 msgid "Player dropped"
-msgstr "Spiller"
+msgstr "Spiller mistet"
 
 #: src/display.c:1758
 msgid "Cannot Build. Oil Resource Burning."
-msgstr "Kan ikke bygge på brændende oilebrøn."
+msgstr "Kan ikke bygge på brændende oilebrønd."
 
 #: src/display.c:1938
 #: src/display.c:2549
-#, fuzzy, c-format
+#, c-format
 msgid "%s - Damage %d%% - Experience %.1f, %s"
-msgstr "%s - Skade %d%% - Drab %d, %s"
+msgstr "%s - Skade %d%% - Oplevelse %.1f, %s"
 
 #: src/display.c:1954
-#, fuzzy, c-format
+#, c-format
 msgid "%s - Allied - Damage %d%% - Experience %d, %s"
-msgstr "%s - Skade %d%% - Drab %d, %s"
+msgstr "%s - Allierede - Skade %d%% - Oplevelse %d, %s"
 
 #: src/droid.c:192
 msgid "Unit Lost!"
@@ -12873,22 +12754,22 @@ msgstr[1] "Gruppe %u valgt - %u Enheder"
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
-msgstr[0] "%u Enheder tildelt gruppe %u"
-msgstr[1] "%u Enheder tildelt gruppe %u"
+msgstr[0] "%u enhed tildelt gruppe %u"
+msgstr[1] "%u enheder tildelt gruppe %u"
 
 #: src/droid.c:3560
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
-msgstr[0] "Fokuseret på gruppe %u - %u Enheder"
+msgstr[0] "Fokuseret på gruppe %u - %u Enhed"
 msgstr[1] "Fokuseret på gruppe %u - %u Enheder"
 
 #: src/droid.c:3564
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
-msgstr[0] "Korigerede med gruppe %u - %u Enheder"
-msgstr[1] "Korigerede med gruppe %u - %u Enheder"
+msgstr[0] "Korrigerede med gruppe %u - %u Enhed"
+msgstr[1] "Korrigerede med gruppe %u - %u Enheder"
 
 #: src/droid.c:3827
 msgid "Rookie"
@@ -12930,22 +12811,20 @@ msgstr "Helt"
 #: src/droid.c:4862
 #, c-format
 msgid "%s wanted to give you a %s but you have too many!"
-msgstr ""
+msgstr "%s ville give dig en %s, men du har for mange!"
 
 #: src/droid.c:4866
 #, c-format
 msgid "You wanted to give %s a %s but they have too many!"
-msgstr ""
+msgstr "Du ville give %s en %s, men de har for mange!"
 
 #: src/frontend.c:102
-#, fuzzy
 msgid "Single Player"
-msgstr "Solokampange"
+msgstr "Enkeltspiller"
 
 #: src/frontend.c:103
-#, fuzzy
 msgid "Multi Player"
-msgstr "Flerbruger spil"
+msgstr "Flerspiller"
 
 #: src/frontend.c:104
 #: src/frontend.c:181
@@ -12958,9 +12837,8 @@ msgid "Options"
 msgstr "Indstillinger"
 
 #: src/frontend.c:106
-#, fuzzy
 msgid "View Intro"
-msgstr "Find næste truck"
+msgstr "Vis introduktion"
 
 #: src/frontend.c:108
 msgid "Quit Game"
@@ -12972,7 +12850,7 @@ msgstr "HOVED MENU"
 
 #: src/frontend.c:112
 msgid "Visit our official site: http://wz2100.net"
-msgstr ""
+msgstr "Besøg vores officielle side: http://wz2100.net"
 
 #: src/frontend.c:182
 msgid "Fast Play"
@@ -13006,9 +12884,8 @@ msgid "Start Skirmish Game"
 msgstr "Værten starter spillet"
 
 #: src/frontend.c:240
-#, fuzzy
 msgid "Challenges"
-msgstr "Hestekrafter"
+msgstr "Udfordringer"
 
 #: src/frontend.c:241
 #: src/ingameop.c:281
@@ -13039,7 +12916,7 @@ msgid "Join Game"
 msgstr "Forbind til vært"
 
 #: src/frontend.c:440
-#: src/multiint.c:1176
+#: src/multiint.c:1166
 msgid "OPTIONS"
 msgstr "TILVALG"
 
@@ -13052,9 +12929,8 @@ msgid "Graphics Options"
 msgstr "Grafik indstillinger"
 
 #: src/frontend.c:443
-#, fuzzy
 msgid "Video Options"
-msgstr "Lyd indstillinger"
+msgstr "Videoindstillinger"
 
 #: src/frontend.c:444
 #: src/ingameop.c:276
@@ -13062,9 +12938,8 @@ msgid "Audio Options"
 msgstr "Lyd indstillinger"
 
 #: src/frontend.c:445
-#, fuzzy
 msgid "Mouse Options"
-msgstr "Spil indstillinger"
+msgstr "Musindstillinger"
 
 #: src/frontend.c:446
 msgid "Key Mappings"
@@ -13072,28 +12947,28 @@ msgstr "Tastatur indstillinger"
 
 #: src/frontend.c:508
 msgid "Video Playback"
-msgstr ""
+msgstr "Videoafspilning"
 
 #: src/frontend.c:512
 #: src/frontend.c:688
 msgid "1X"
-msgstr ""
+msgstr "1X"
 
 #: src/frontend.c:516
 #: src/frontend.c:678
 msgid "2X"
-msgstr ""
+msgstr "2X"
 
 #: src/frontend.c:520
 #: src/frontend.c:683
 #: src/frontend.c:829
 #: src/frontend.c:883
 msgid "Fullscreen"
-msgstr ""
+msgstr "Fuldskærm"
 
 #: src/frontend.c:529
 msgid "Scanlines"
-msgstr ""
+msgstr "Skanlinjer"
 
 #: src/frontend.c:533
 #: src/frontend.c:554
@@ -13120,7 +12995,7 @@ msgstr "Fra"
 #: src/frontend.c:537
 #: src/frontend.c:703
 msgid "50%"
-msgstr ""
+msgstr "50%"
 
 #: src/frontend.c:541
 #: src/frontend.c:708
@@ -13153,7 +13028,7 @@ msgid "On"
 msgstr "Til"
 
 #: src/frontend.c:559
-#: src/multiint.c:1246
+#: src/multiint.c:1236
 msgid "Fog"
 msgstr "Tåge"
 
@@ -13164,7 +13039,7 @@ msgstr "Afstandståge"
 
 #: src/frontend.c:566
 #: src/frontend.c:631
-#: src/multiint.c:1248
+#: src/multiint.c:1238
 msgid "Fog Of War"
 msgstr "Krigståge"
 
@@ -13174,12 +13049,11 @@ msgstr "Undertekster"
 
 #: src/frontend.c:583
 msgid "Shadows"
-msgstr ""
+msgstr "Skygger"
 
 #: src/frontend.c:594
-#, fuzzy
 msgid "GRAPHICS OPTIONS"
-msgstr "SPIL INDSTILLINGER"
+msgstr "GRAFIKINDSTILLINGER"
 
 #: src/frontend.c:742
 #: src/ingameop.c:179
@@ -13197,13 +13071,12 @@ msgid "Music Volume"
 msgstr "Musik volume"
 
 #: src/frontend.c:757
-#, fuzzy
 msgid "AUDIO OPTIONS"
-msgstr "SPIL INDSTILLINGER"
+msgstr "AUDIOINDSTILLINGER"
 
 #: src/frontend.c:822
 msgid "* Takes effect on game restart"
-msgstr ""
+msgstr "* Tager effekt, når spillet genstartes"
 
 #: src/frontend.c:825
 msgid "Graphics Mode*"
@@ -13216,66 +13089,59 @@ msgstr "Vindue"
 
 #: src/frontend.c:837
 msgid "Resolution*"
-msgstr ""
+msgstr "Opløsning*"
 
 #: src/frontend.c:842
-#, fuzzy
 msgid "Texture size"
-msgstr "Besvar ild"
+msgstr "Mønsteropløsning"
 
 #: src/frontend.c:846
 msgid "Vertical sync*"
 msgstr ""
 
 #: src/frontend.c:858
-#, fuzzy
 msgid "VIDEO OPTIONS"
-msgstr "SPIL INDSTILLINGER"
+msgstr "VIDEOINDSTILLINGER"
 
 #: src/frontend.c:1014
 msgid "* May negatively affect performance"
 msgstr ""
 
 #: src/frontend.c:1018
-#, fuzzy
 msgid "Reverse Rotation"
-msgstr "Omvendt mus"
+msgstr "Omvendt drejning"
 
 #: src/frontend.c:1029
-#, fuzzy
 msgid "Trap Cursor"
-msgstr "Transportskib"
+msgstr "Fang musepointer"
 
 #: src/frontend.c:1041
 msgid "Colored Cursors*"
 msgstr ""
 
 #: src/frontend.c:1054
-#, fuzzy
 msgid "Switch Mouse Buttons"
-msgstr "Spil indstillinger"
+msgstr "Byt museknapper"
 
 #: src/frontend.c:1066
-#, fuzzy
 msgid "Rotate Screen"
-msgstr "Drej til venstre"
+msgstr "Drej skærm"
 
 #: src/frontend.c:1069
 #: src/frontend.c:1157
 msgctxt "middle mouse button"
 msgid "Middle Button"
-msgstr ""
+msgstr "Mellemknap"
 
 #: src/frontend.c:1073
 #: src/frontend.c:1152
 msgctxt "right mouse button"
 msgid "Right Button"
-msgstr ""
+msgstr "Højreknap"
 
 #: src/frontend.c:1077
-#, fuzzy
 msgid "MOUSE OPTIONS"
-msgstr "SPIL INDSTILLINGER"
+msgstr "MUSINDSTILLINGER"
 
 #: src/frontend.c:1192
 #: src/frontend.c:1262
@@ -13317,18 +13183,17 @@ msgstr "Holdfarve"
 
 #: src/frontend.c:1237
 msgid "Radar"
-msgstr ""
+msgstr "Radar"
 
 #: src/frontend.c:1238
 #: src/frontend.c:1287
-#, fuzzy
 msgid "Rotating"
-msgstr "Drej til højre"
+msgstr "Drejer"
 
 #: src/frontend.c:1238
 #: src/frontend.c:1287
 msgid "Fixed"
-msgstr ""
+msgstr "Forudvalgt"
 
 #: src/frontend.c:1244
 #: src/frontend.c:1264
@@ -13336,22 +13201,20 @@ msgid "GAME OPTIONS"
 msgstr "SPIL INDSTILLINGER"
 
 #: src/frontend.c:1405
-#: src/multiint.c:2212
+#: src/multiint.c:2202
 msgid "Mod: "
 msgstr ""
 
 #: src/hci.c:1345
-#, fuzzy
 msgid "MAP SAVED!"
-msgstr "SPIL GEMT!"
+msgstr "KORT GEMT!"
 
 #: src/hci.c:1699
 #: src/loop.c:530
 #: src/loop.c:546
 #: src/mission.c:2891
-#, fuzzy
 msgid "GAME SAVED :"
-msgstr "SPIL GEMT!"
+msgstr "SPIL GEMT :"
 
 #: src/hci.c:2089
 msgid "Failed to create building"
@@ -13360,17 +13223,17 @@ msgstr ""
 #: src/hci.c:2112
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new structure: %s."
-msgstr ""
+msgstr "Spiller %u snyder (debugmenu) sig selv til en ny bygning: %s."
 
 #: src/hci.c:2127
-#, c-format
+#, fuzzy, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new feature: %s."
-msgstr ""
+msgstr "Spiller %u snyder (debugmenu) sig selv til en ny feature: %s."
 
 #: src/hci.c:2148
-#, c-format
+#, fuzzy, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid: %s."
-msgstr ""
+msgstr "Spiller %u snyder (debugmenu) sig selv til en ny droid: %s."
 
 #: src/hci.c:3725
 msgid "Commanders (F6)"
@@ -13382,9 +13245,8 @@ msgid "Intelligence Display (F5)"
 msgstr "Kommando Pult"
 
 #: src/hci.c:3757
-#, fuzzy
 msgid "Manufacture (F1)"
-msgstr "Fabrikering"
+msgstr "Fabrikere (F1)"
 
 #: src/hci.c:3773
 msgid "Design (F4)"
@@ -13399,70 +13261,62 @@ msgid "Build (F3)"
 msgstr "Konstruktion (F3)"
 
 #: src/hci.c:3885
-#: src/multiint.c:1293
+#: src/multiint.c:1283
 #: src/multimenu.c:764
 msgid "Power"
 msgstr "Kraft"
 
 #: src/hci.c:3999
 msgid "Map:"
-msgstr ""
+msgstr "Kort:"
 
 #: src/hci.c:4013
-#, fuzzy
 msgid "Load"
-msgstr "Indlæs spil"
+msgstr "Indlæs"
 
 #: src/hci.c:4014
-#, fuzzy
 msgid "Load Map File"
-msgstr "Indlæs spil"
+msgstr "Indlæs kortfil"
 
 #: src/hci.c:4021
-#, fuzzy
 msgid "Save"
-msgstr "Gem spil"
+msgstr "Gem"
 
 #: src/hci.c:4022
-#, fuzzy
 msgid "Save Map File"
-msgstr "Gem spil"
+msgstr "Gem kortfil"
 
 #: src/hci.c:4030
 msgid "New"
-msgstr ""
+msgstr "Nyt"
 
 #: src/hci.c:4031
 msgid "New Blank Map"
-msgstr ""
+msgstr "Nyt tomt kort"
 
 #: src/hci.c:4069
-#, fuzzy
 msgid "Tile"
-msgstr "fil"
+msgstr "Klinke"
 
 #: src/hci.c:4070
-#, fuzzy
 msgid "Place tiles on map"
-msgstr "Tabte bygninger"
+msgstr "Placer klinker på kortet"
 
 #: src/hci.c:4079
 msgid "Unit"
 msgstr "Enhed"
 
 #: src/hci.c:4080
-#, fuzzy
 msgid "Place Unit on map"
-msgstr "Tabte bygninger"
+msgstr "Placer enhed på kortet"
 
 #: src/hci.c:4088
 msgid "Struct"
 msgstr ""
 
 #: src/hci.c:4089
-#, fuzzy
 msgid "Place Structures on map"
-msgstr "Tabte bygninger"
+msgstr "Placer bygninger på kortet"
 
 #: src/hci.c:4097
 msgid "Feat"
@@ -13471,16 +13325,15 @@ msgstr ""
 #: src/hci.c:4098
 #, fuzzy
 msgid "Place Features on map"
-msgstr "Tabte bygninger"
+msgstr "Placer Features på kortet"
 
 #: src/hci.c:4108
 msgid "Pause"
-msgstr ""
+msgstr "Pause"
 
 #: src/hci.c:4109
-#, fuzzy
 msgid "Pause or unpause the game"
-msgstr "Værten har forladt spillet"
+msgstr "Pause eller fortsætte spillet"
 
 #: src/hci.c:4123
 msgid "Align height of all map objects"
@@ -13507,9 +13360,8 @@ msgid "Exit Game"
 msgstr "Forlad spil"
 
 #: src/hci.c:4174
-#, fuzzy
 msgid "Current Player:"
-msgstr "Flerbruger spil"
+msgstr "Nuværende spiller:"
 
 #: src/hci.c:4510
 #: src/intdisplay.c:209
@@ -13519,9 +13371,8 @@ msgid "Progress Bar"
 msgstr "Statuslinje"
 
 #: src/hci.c:5468
-#, fuzzy
 msgid "Infinite Production"
-msgstr "Gentag produktion"
+msgstr "Uendelig produktion"
 
 #: src/hci.c:5546
 msgid "Factory Delivery Point"
@@ -13547,7 +13398,7 @@ msgstr "Genoptag spil"
 
 #: src/ingameop.c:142
 msgid "WARNING: You're the host. If you quit, the game ends for everyone!"
-msgstr ""
+msgstr "ADVARSEL: Du er værten. Hvis du går ud, slutte spillet for allesamen!"
 
 #: src/ingameop.c:283
 #: src/ingameop.c:511
@@ -13557,13 +13408,12 @@ msgid "Save Game"
 msgstr "Gem spil"
 
 #: src/ingameop.c:352
-#, fuzzy
 msgid "Host has quit the game!"
-msgstr "Værten har forladt spillet"
+msgstr "Værten har forladt spillet!"
 
 #: src/ingameop.c:358
 msgid "The game can't continue without the host."
-msgstr ""
+msgstr "Spillet kan ikke fortsætte uden værten."
 
 #: src/ingameop.c:364
 msgid "-->  QUIT  <--"
@@ -13712,13 +13562,12 @@ msgid "Assign VTOL Factory Production"
 msgstr ""
 
 #: src/intorder.c:183
-#, fuzzy
 msgid "Circle"
-msgstr "fil"
+msgstr "Cirkel"
 
 #: src/keybind.c:137
 msgid "Sorry, that cheat is disabled in multiplayer games."
-msgstr ""
+msgstr "Beklager, denne snyd fungerer ikke i flerbrugerspil."
 
 #: src/keybind.c:143
 msgid "Warning! This cheat is buggy.  We recommend to NOT use it."
@@ -13752,11 +13601,11 @@ msgstr ""
 #: src/keybind.c:1869
 #, c-format
 msgid "(Player %u) is using cheat :%s"
-msgstr ""
+msgstr "(Spiller %u) bruger snyd: %s"
 
 #: src/keybind.c:386
 msgid "Hard as nails!!!"
-msgstr ""
+msgstr "Hård som søm!!!"
 
 #: src/keybind.c:400
 msgid "Takings thing easy!"
@@ -13802,25 +13651,23 @@ msgstr ""
 
 #: src/keybind.c:585
 msgid "Infinite power disabled"
-msgstr ""
+msgstr "Uendelig kraft slået fra"
 
 #: src/keybind.c:585
 msgid "Infinite power enabled"
-msgstr ""
+msgstr "Uendelig kraft slået til"
 
 #: src/keybind.c:625
 msgid "All items made available"
 msgstr "Forstærkninger er ankommet"
 
 #: src/keybind.c:731
-#, fuzzy
 msgid "Fog on"
-msgstr "Tåge"
+msgstr "Tåge tændt"
 
 #: src/keybind.c:731
-#, fuzzy
 msgid "Fog off"
-msgstr "Tåge"
+msgstr "Tåge slukket"
 
 #: src/keybind.c:1150
 #, c-format
@@ -13829,15 +13676,15 @@ msgstr ""
 
 #: src/keybind.c:1150
 msgid "Ending Mission."
-msgstr ""
+msgstr "Afslutter mission."
 
 #: src/keybind.c:1262
 msgid "CHEATS ARE NOW ENABLED!"
-msgstr ""
+msgstr "SNYD ER NU SLÅET TIL!"
 
 #: src/keybind.c:1262
 msgid "CHEATS ARE NOW DISABLED!"
-msgstr ""
+msgstr "SNYD ER NU SLÅET FRA!"
 
 #: src/keybind.c:1319
 msgid "God Mode ON"
@@ -13852,35 +13699,34 @@ msgid "View Aligned to North"
 msgstr "Indret kamera til nordlig retning"
 
 #: src/keybind.c:1340
-#, fuzzy, c-format
+#, c-format
 msgid "Trap cursor %s"
-msgstr "Transportskib"
+msgstr "Fang musepointer %s"
 
 #: src/keybind.c:1421
 msgid "Researched EVERYTHING for you!"
-msgstr ""
+msgstr "Forsket ALT til dig!"
 
 #: src/keybind.c:1454
 #, c-format
 msgid "(Player %u) is using cheat :%s %s"
-msgstr ""
+msgstr "(Spiller %u) bruger snyd :%s %s"
 
 #: src/keybind.c:1455
-#, fuzzy
 msgid "Researched"
-msgstr "Forskning"
+msgstr "Forsket"
 
 #: src/keybind.c:1475
 msgid "Only displaying energy bars when selected"
-msgstr ""
+msgstr "Viser kun energibar når valgt"
 
 #: src/keybind.c:1478
 msgid "Always displaying energy bars for units"
-msgstr ""
+msgstr "Viser altid energibar for enheder"
 
 #: src/keybind.c:1481
 msgid "Always displaying energy bars for units and structures"
-msgstr ""
+msgstr "Viser altid energibar for enheder og bygninger"
 
 #: src/keybind.c:1503
 msgid "Demo mode off - Returning to normal game mode"
@@ -13892,9 +13738,8 @@ msgid "Debug menu is Open"
 msgstr "Konstruktionsmenuen vil genåbne"
 
 #: src/keybind.c:1549
-#, fuzzy
 msgid "Unable to locate any oil derricks!"
-msgstr "Kan ikke finde nogle trucks!"
+msgstr "Kan ikke finde nogle oliebrønde!"
 
 #: src/keybind.c:1770
 msgid "Oh, the weather outside is frightful... SNOW"
@@ -13951,7 +13796,7 @@ msgstr ""
 #: src/keybind.c:2521
 #: src/keybind.c:2564
 msgid "Sorry, but game speed cannot be changed in multiplayer."
-msgstr ""
+msgstr "Beklager, spilhastigheden kan ikke ændres i flerbrugerspil."
 
 #: src/keybind.c:2542
 #: src/keybind.c:2585
@@ -14002,9 +13847,9 @@ msgid "KEY MAPPING"
 msgstr "TASTATUR MAPPING"
 
 #: src/keyedit.c:374
-#: src/multiint.c:533
-#: src/multiint.c:961
-#: src/multiint.c:1379
+#: src/multiint.c:523
+#: src/multiint.c:951
+#: src/multiint.c:1369
 msgid "Return To Previous Screen"
 msgstr "Tilbage"
 
@@ -14066,9 +13911,8 @@ msgid "Toggle Sensor display"
 msgstr "Slå konsol display til/fra"
 
 #: src/keymap.c:311
-#, fuzzy
 msgid "Assign Group 0"
-msgstr "Tildel gruppe 1"
+msgstr "Tildel gruppe 0"
 
 #: src/keymap.c:312
 msgid "Assign Group 1"
@@ -14205,11 +14049,11 @@ msgstr "Vis spillemenu"
 
 #: src/keymap.c:356
 msgid "Zoom Radar Out"
-msgstr "Zoom radaen ud"
+msgstr "Zoom radaren ud"
 
 #: src/keymap.c:357
 msgid "Zoom Radar In"
-msgstr "Zoom radaen ind"
+msgstr "Zoom radaren ind"
 
 #: src/keymap.c:358
 msgid "Zoom In"
@@ -14273,7 +14117,7 @@ msgstr "Kig mod vest"
 
 #: src/keymap.c:373
 msgid "View next Oil Derrick"
-msgstr "Find næste oliebrøn"
+msgstr "Find næste oliebrønd"
 
 #: src/keymap.c:374
 msgid "View next Repair Unit"
@@ -14281,7 +14125,7 @@ msgstr "Find næste reperationsenhed"
 
 #: src/keymap.c:375
 msgid "View next Truck"
-msgstr "Find næste truck"
+msgstr "Find næste lastbil"
 
 #: src/keymap.c:376
 msgid "View next Sensor Unit"
@@ -14317,7 +14161,7 @@ msgstr "Tilbagetrækning til HQ"
 
 #: src/keymap.c:396
 msgid "Send Text Message"
-msgstr "Send tekst besked"
+msgstr "Send tekstbesked"
 
 #: src/keymap.c:399
 msgid "Drop a beacon"
@@ -14333,14 +14177,12 @@ msgid "Sensor display Off"
 msgstr ""
 
 #: src/keymap.c:403
-#, fuzzy
 msgid "Toggles shadows"
-msgstr "Slå radar til/fra"
+msgstr "Slår skygger til/fra"
 
 #: src/keymap.c:404
-#, fuzzy
 msgid "Trap cursor"
-msgstr "Transportskib"
+msgstr "Fang musepointer"
 
 #: src/keymap.c:405
 #, fuzzy
@@ -14392,7 +14234,6 @@ msgid "Show frame rate"
 msgstr ""
 
 #: src/keymap.c:426
-#, fuzzy
 msgid "Select all Similar Units"
 msgstr "Vælg alle lignende enheder"
 
@@ -14430,9 +14271,8 @@ msgid "Show all keyboard mappings - use pause!"
 msgstr ""
 
 #: src/keymap.c:441
-#, fuzzy
 msgid "Toggle visibility"
-msgstr "Slå interface til/fra"
+msgstr "Slå synlighed til/fra"
 
 #: src/keymap.c:442
 #, fuzzy
@@ -14449,12 +14289,11 @@ msgstr ""
 
 #: src/keymap.c:445
 msgid "End Mission"
-msgstr ""
+msgstr "Afslut mission"
 
 #: src/keymap.c:446
-#, fuzzy
 msgid "Toggles All fog"
-msgstr "Slå aliance status til/fra"
+msgstr "Slår tåge til/fra"
 
 #: src/keymap.c:447
 msgid "Trigger some weather"
@@ -14469,14 +14308,12 @@ msgid "Realign height of all objects on the map"
 msgstr ""
 
 #: src/keymap.c:452
-#, fuzzy
 msgid "Make all items available"
-msgstr "Forstærkninger er ankommet"
+msgstr "Gør alt tilgængeligt"
 
 #: src/keymap.c:453
-#, fuzzy
 msgid "Kill Selected Unit(s)"
-msgstr "Forær enheder"
+msgstr "Dræb valgte enhed(er)"
 
 #: src/keymap.c:454
 #, fuzzy
@@ -14507,27 +14344,24 @@ msgstr "Forfølgelseskamera"
 
 #: src/loop.c:537
 #: src/loop.c:553
-#, fuzzy
 msgid "Could not save game!"
-msgstr "Hent et gemt spil"
+msgstr "Kunne ikke gemme spillet!"
 
 #: src/mission.c:2360
 msgid "Load Transport"
 msgstr "Fyld transportskib"
 
 #: src/mission.c:2754
-#, fuzzy
 msgid "OBJECTIVE ACHIEVED by cheating!"
-msgstr "MISSIONEN LYKKEDES"
+msgstr "MISSIONEN LYKKEDES ved snyd!"
 
 #: src/mission.c:2754
 msgid "OBJECTIVE ACHIEVED"
 msgstr "MISSIONEN LYKKEDES"
 
 #: src/mission.c:2760
-#, fuzzy
 msgid "OBJECTIVE FAILED--and you cheated!"
-msgstr "MISSIONEN FEJLEDE"
+msgstr "MISSIONEN FEJLEDE--og du snød!"
 
 #: src/mission.c:2760
 msgid "OBJECTIVE FAILED"
@@ -14543,12 +14377,12 @@ msgstr "Tilbage til hovedmenu"
 msgid "Continue Game"
 msgstr "Fortsæt spil"
 
-#: src/move.c:2944
+#: src/move.c:2945
 #, c-format
 msgid "You found %u power in an oil drum."
 msgstr ""
 
-#: src/move.c:2951
+#: src/move.c:2952
 #, c-format
 msgid "You found %u power in an oil drum"
 msgstr ""
@@ -14561,12 +14395,12 @@ msgstr "%s Giver dig en rekonniseringsrapport"
 #: src/multigifts.c:192
 #, c-format
 msgid "%s Gives you a %s"
-msgstr ""
+msgstr "%s giver dig en %s"
 
 #: src/multigifts.c:243
 #, c-format
 msgid "Tried to give away a non-empty %s - but this is not allowed."
-msgstr ""
+msgstr "Forsøgt at give bort en ikke-tom %s - men dette er ikke tilladt."
 
 #: src/multigifts.c:302
 #, c-format
@@ -14574,9 +14408,9 @@ msgid "%s Gives You Technology Documents"
 msgstr "%s Giver dig teknologi"
 
 #: src/multigifts.c:340
-#, fuzzy, c-format
+#, c-format
 msgid "%s Gives You %u Power"
-msgstr "%s Giver dig energi"
+msgstr "%s giver dig %u energi"
 
 #: src/multigifts.c:360
 #, c-format
@@ -14603,311 +14437,302 @@ msgstr "%s Danner aliance med %s"
 msgid "You Discover Blueprints For %s"
 msgstr "Du opdager plantegninger for %s"
 
-#: src/multiint.c:467
+#: src/multiint.c:457
 #: src/multilimit.c:192
 msgid "Accept Settings"
 msgstr "Akceptér opsætning"
 
-#: src/multiint.c:469
-#: src/multiint.c:1009
-#, fuzzy
+#: src/multiint.c:459
+#: src/multiint.c:999
 msgid "Cancel"
-msgstr "Turkis"
+msgstr "Annuler"
 
-#: src/multiint.c:480
+#: src/multiint.c:470
 msgid "IP Address or Machine Name"
 msgstr "IP adressse eller computernavn"
 
-#: src/multiint.c:530
+#: src/multiint.c:520
 msgid "CONNECTION"
 msgstr "FORBINDELSE"
 
-#: src/multiint.c:535
+#: src/multiint.c:525
 msgid "Lobby"
 msgstr ""
 
-#: src/multiint.c:536
+#: src/multiint.c:526
 msgid "IP"
 msgstr "IP"
 
-#: src/multiint.c:727
-#, fuzzy
+#: src/multiint.c:717
 msgid "No games are available"
-msgstr "Forstærkninger er tilgængelige."
+msgstr "Ingen spil er tilgængelige"
+
+#: src/multiint.c:720
+msgid "Game is full"
+msgstr "Spillet er fuld"
+
+#: src/multiint.c:724
+msgid "You were kicked!"
+msgstr "Du er blevet smidt ud!"
+
+#: src/multiint.c:727
+msgid "Wrong Game Version!"
+msgstr "Forkert spilversion!"
 
 #: src/multiint.c:730
-msgid "Game is full"
-msgstr ""
-
-#: src/multiint.c:734
-msgid "You were kicked!"
-msgstr ""
-
-#: src/multiint.c:737
-msgid "Wrong Game Version!"
-msgstr ""
-
-#: src/multiint.c:740
 msgid "You have an incompatible mod."
-msgstr ""
+msgstr "Du har et inkompatibelt mod."
 
-#: src/multiint.c:745
+#: src/multiint.c:735
 msgid "Host couldn't send file?"
-msgstr ""
+msgstr "Værten kunne ikke sende en fil?"
 
-#: src/multiint.c:749
+#: src/multiint.c:739
 msgid "Incorrect Password!"
-msgstr ""
+msgstr "Forkert kodeord!"
 
-#: src/multiint.c:752
+#: src/multiint.c:742
 msgid "Host has dropped connection!"
-msgstr ""
+msgstr "Værten har slukket forbindelsen!"
 
-#: src/multiint.c:756
+#: src/multiint.c:746
 msgid "Connection Error"
-msgstr ""
+msgstr "Forbindelsesfejl"
 
-#: src/multiint.c:897
+#: src/multiint.c:887
 msgid "Searching"
 msgstr "Søger"
 
-#: src/multiint.c:958
+#: src/multiint.c:948
 msgid "GAMES"
 msgstr "SPIL"
 
-#: src/multiint.c:966
+#: src/multiint.c:956
 msgid "Refresh Games List"
 msgstr "Opdatér spilliste"
 
-#: src/multiint.c:986
+#: src/multiint.c:976
 msgid "Enter Password:"
-msgstr ""
+msgstr "Indtast kodeord:"
 
-#: src/multiint.c:1007
+#: src/multiint.c:997
 msgid "OK"
-msgstr ""
+msgstr "OK"
 
-#: src/multiint.c:1129
+#: src/multiint.c:1119
 msgid "Tanks disabled!!"
-msgstr ""
+msgstr "Tanks slået fra!!"
 
-#: src/multiint.c:1130
+#: src/multiint.c:1120
 msgid "Cyborgs disabled."
-msgstr ""
+msgstr "Cyborger slået fra."
 
-#: src/multiint.c:1131
+#: src/multiint.c:1121
 msgid "VTOLs disabled."
-msgstr ""
+msgstr "VTOLer slået fra."
 
-#: src/multiint.c:1181
-#: src/multiint.c:1188
+#: src/multiint.c:1171
+#: src/multiint.c:1178
 msgid "Select Game Name"
 msgstr "Vælg spilnavn"
 
-#: src/multiint.c:1181
+#: src/multiint.c:1171
 #, fuzzy
 msgid "One-Player Skirmish"
 msgstr "Spil mod computeren"
 
-#: src/multiint.c:1191
+#: src/multiint.c:1181
 msgid "Select Map"
 msgstr "Vælg kort"
 
-#: src/multiint.c:1199
+#: src/multiint.c:1189
 msgid "Click to set Password"
-msgstr ""
+msgstr "Klik for at vælge kodeord"
 
-#: src/multiint.c:1209
-#: src/multiint.c:1210
+#: src/multiint.c:1199
+#: src/multiint.c:1200
 #, fuzzy
 msgid "Scavengers"
 msgstr "Hestekrafter"
 
-#: src/multiint.c:1212
+#: src/multiint.c:1202
 #, fuzzy
 msgid "No Scavengers"
 msgstr "Hestekrafter"
 
-#: src/multiint.c:1243
-#, fuzzy
+#: src/multiint.c:1233
 msgid "Select Player Name"
-msgstr "Flerbruger spil"
+msgstr "Vælg spillernavn"
 
-#: src/multiint.c:1249
+#: src/multiint.c:1239
 msgid "Distance Fog"
 msgstr "Afstandståge"
 
-#: src/multiint.c:1260
+#: src/multiint.c:1250
 #: src/multimenu.c:757
 msgid "Alliances"
 msgstr "Aliancer"
 
-#: src/multiint.c:1263
+#: src/multiint.c:1253
 msgid "No Alliances"
 msgstr "Uden alliancer"
 
-#: src/multiint.c:1265
+#: src/multiint.c:1255
 msgid "Allow Alliances"
 msgstr "Med alliancer"
 
-#: src/multiint.c:1269
+#: src/multiint.c:1259
 msgid "Locked Teams"
 msgstr "Låste hold"
 
-#: src/multiint.c:1295
+#: src/multiint.c:1285
 msgid "Low Power Levels"
 msgstr "Sparsom energi"
 
-#: src/multiint.c:1297
+#: src/multiint.c:1287
 msgid "Medium Power Levels"
 msgstr "Medium energi"
 
-#: src/multiint.c:1299
+#: src/multiint.c:1289
 msgid "High Power Levels"
 msgstr "Meget energi"
 
-#: src/multiint.c:1331
+#: src/multiint.c:1321
 msgid "Base"
 msgstr "Base"
 
-#: src/multiint.c:1333
+#: src/multiint.c:1323
 msgid "Start with No Bases"
 msgstr "Start uden baser"
 
-#: src/multiint.c:1335
+#: src/multiint.c:1325
 msgid "Start with Bases"
 msgstr "Start med baser"
 
-#: src/multiint.c:1337
+#: src/multiint.c:1327
 msgid "Start with Advanced Bases"
 msgstr "Start med advancerede baser"
 
-#: src/multiint.c:1369
+#: src/multiint.c:1359
+#, fuzzy
 msgid "Map Preview"
-msgstr ""
+msgstr "Preview af kort"
 
-#: src/multiint.c:1371
+#: src/multiint.c:1361
 msgid "Click to see Map"
-msgstr ""
+msgstr "Klik for at se kort"
 
-#: src/multiint.c:1385
+#: src/multiint.c:1375
 #, fuzzy
 msgid "Start Hosting Game"
 msgstr "Værten starter spillet"
 
-#: src/multiint.c:1393
-#, fuzzy
+#: src/multiint.c:1383
 msgid "Show Structure Limits"
-msgstr "Tabte bygninger"
+msgstr "Vis bygningsbegrænsninger"
 
-#: src/multiint.c:1393
-#, fuzzy
+#: src/multiint.c:1383
 msgid "Set Structure Limits"
-msgstr "Tabte bygninger"
+msgstr "Vælg bygningsbegrænsinger"
 
-#: src/multiint.c:1479
-#, fuzzy
+#: src/multiint.c:1469
 msgid "Player colour"
-msgstr "Spiller"
+msgstr "Spillerens farve"
 
-#: src/multiint.c:1495
-#, fuzzy
+#: src/multiint.c:1485
 msgid "Kick player"
-msgstr "2 spillere"
+msgstr "Smid spiller ud"
 
-#: src/multiint.c:1506
-#, fuzzy
+#: src/multiint.c:1496
 msgid "Player number"
-msgstr "Spiller"
+msgstr "Spillernummer"
 
-#: src/multiint.c:1899
-#, fuzzy
+#: src/multiint.c:1889
 msgid "Team"
-msgstr "Hurtgigt spil"
+msgstr "Hold"
+
+#: src/multiint.c:1922
+msgid "Waiting for other players"
+msgstr "Venter på andre spillere"
+
+#: src/multiint.c:1928
+msgid "Click when ready"
+msgstr "Klik når klar"
 
 #: src/multiint.c:1932
-msgid "Waiting for other players"
-msgstr ""
-
-#: src/multiint.c:1938
-msgid "Click when ready"
-msgstr ""
-
-#: src/multiint.c:1942
 msgid "READY?"
-msgstr ""
+msgstr "KLAR?"
 
-#: src/multiint.c:1979
+#: src/multiint.c:1969
 msgid "PLAYERS"
 msgstr "SPILLERE"
 
-#: src/multiint.c:2033
-#, fuzzy
+#: src/multiint.c:2023
 msgid "Choose Team"
-msgstr "Låste hold"
+msgstr "Vælg hold"
 
-#: src/multiint.c:2073
+#: src/multiint.c:2063
+#, fuzzy
 msgid "Click to change player settings"
-msgstr ""
+msgstr "Klik for at ændre spiller-settings."
 
-#: src/multiint.c:2104
+#: src/multiint.c:2094
 msgid "Click to adjust AI difficulty"
-msgstr ""
+msgstr "Klik for at justere AI-sværhedsgraden"
 
-#: src/multiint.c:2183
+#: src/multiint.c:2173
 msgid "CHAT"
 msgstr "BESKEDER"
 
-#: src/multiint.c:2217
+#: src/multiint.c:2207
 msgid "All players need to have the same mods to join your game."
-msgstr ""
+msgstr "Alle spillere skal have samme mods for at gå ind i dit spil."
 
-#: src/multiint.c:2377
+#: src/multiint.c:2367
 #, c-format
 msgid "*** password [%s] is now required! ***"
-msgstr ""
+msgstr "*** kodeord [%s] er nu nødvendig! ***"
 
-#: src/multiint.c:2385
+#: src/multiint.c:2375
 msgid "*** password is NOT required! ***"
-msgstr ""
+msgstr "*** kodeord er Unødvendig! ***"
 
-#: src/multiint.c:2628
+#: src/multiint.c:2618
 msgid "Sorry! Failed to host the game."
 msgstr ""
 
-#: src/multiint.c:2713
-#, fuzzy
+#: src/multiint.c:2703
 msgid "'Locked Teams' mode enabled"
-msgstr "Låste hold"
+msgstr "'Låste hold' slået til"
 
-#: src/multiint.c:2752
-#: src/multiint.c:2802
+#: src/multiint.c:2742
+#: src/multiint.c:2793
 #: src/multimenu.c:1494
-#, fuzzy, c-format
+#, c-format
 msgid "The host has kicked %s from the game!"
-msgstr "%s har forladt spillet"
+msgstr "Værten har smidt %s fra spillet"
 
-#: src/multiint.c:2885
+#: src/multiint.c:2877
 msgid "Host is Starting Game"
 msgstr "Værten starter spillet"
 
-#: src/multiint.c:3482
+#: src/multiint.c:3477
 msgid "Players"
 msgstr "Spillere"
 
-#: src/multiint.c:3588
+#: src/multiint.c:3583
 #, c-format
 msgid "Sending Map: %d%% "
-msgstr ""
+msgstr "Sender kort: %d%% "
 
-#: src/multiint.c:3597
+#: src/multiint.c:3592
 #, c-format
 msgid "Map: %d%% downloaded"
-msgstr ""
+msgstr "Kort: %d%% nedhentet"
 
-#: src/multiint.c:3623
+#: src/multiint.c:3618
 msgid "HOST"
-msgstr ""
+msgstr "VÆRT"
 
 #: src/multijoin.c:98
 #: src/multijoin.c:99
@@ -14922,7 +14747,7 @@ msgstr "%s har forladt spillet"
 #: src/multijoin.c:229
 #, c-format
 msgid "File transfer has been aborted for %d."
-msgstr ""
+msgstr "Filoverførsel er blevet annuleret for %d."
 
 #: src/multijoin.c:361
 #, c-format
@@ -14935,9 +14760,8 @@ msgid "%s is Joining the Game"
 msgstr "%s kom med i spillet"
 
 #: src/multijoin.c:415
-#, fuzzy
 msgid "System message:"
-msgstr "Elektronik"
+msgstr "Systembesked:"
 
 #: src/multilimit.c:185
 #, fuzzy
@@ -14950,19 +14774,19 @@ msgstr ""
 
 #: src/multimenu.c:610
 msgid "Technology level 1"
-msgstr ""
+msgstr "Teknologi niveau 1"
 
 #: src/multimenu.c:618
 msgid "Technology level 2"
-msgstr ""
+msgstr "Teknologi niveau 2"
 
 #: src/multimenu.c:624
 msgid "Technology level 3"
-msgstr ""
+msgstr "Teknologi niveau 3"
 
 #: src/multimenu.c:630
 msgid "Any number of players"
-msgstr ""
+msgstr "Arbitrær antal spillere"
 
 #: src/multimenu.c:637
 msgid "2 players"
@@ -14986,22 +14810,20 @@ msgstr "Drabte"
 
 #: src/multimenu.c:763
 #: src/multimenu.c:768
-#, fuzzy
 msgid "Units"
-msgstr "Enhed"
+msgstr "Enheder"
 
 #: src/multimenu.c:773
 msgid "Ping"
 msgstr "Ping"
 
 #: src/multimenu.c:777
-#, fuzzy
 msgid "Structs"
-msgstr "Tabte bygninger"
+msgstr "Bygninger"
 
 #: src/multimenu.c:1139
 msgid "Channel"
-msgstr ""
+msgstr "Kanal"
 
 #: src/multimenu.c:1154
 msgid "Toggle Alliance State"
@@ -15017,7 +14839,7 @@ msgstr "Send forskningsresultater"
 
 #: src/multimenu.c:1186
 msgid "Hand Over Selected Units"
-msgstr "Forær enheder"
+msgstr "Forær valgte enheder"
 
 #: src/multimenu.c:1192
 msgid "Give Power To Player"
@@ -15031,20 +14853,19 @@ msgstr ""
 #: src/multiplay.c:277
 #, c-format
 msgid "Kicking player %s, because they tried to bypass data integrity check!"
-msgstr ""
+msgstr "Sparker spiller %s ud, fordi de forsøgte at omgå dataintegretetskontrol!"
 
 #: src/multiplay.c:1132
-#, fuzzy
 msgid "(allies"
-msgstr "Aliancer"
+msgstr "(allierede"
 
 #: src/multiplay.c:1140
 msgid "(private to "
-msgstr ""
+msgstr "(privat til "
 
 #: src/multiplay.c:1153
 msgid "[invalid]"
-msgstr ""
+msgstr "[ugyldig]"
 
 #: src/multiplay.c:2035
 msgid "Green"
@@ -15090,42 +14911,42 @@ msgstr "Forskningsgevinst"
 #: src/scores.c:99
 #, c-format
 msgid "Own Units: %u"
-msgstr ""
+msgstr "Egne enheder: %u"
 
 #: src/scores.c:100
 #, c-format
 msgid "Enemy Units: %u"
-msgstr ""
+msgstr "Fjendtlige enheder: %u"
 
 #: src/scores.c:101
 #, c-format
 msgid "Own Structures: %u"
-msgstr ""
+msgstr "Egne bygninger: %u"
 
 #: src/scores.c:102
 #, c-format
 msgid "Enemy Structures: %u"
-msgstr ""
+msgstr "Fjendtlige bygninger: %u"
 
 #: src/scores.c:103
 #, c-format
 msgid "Units Manufactured: %u"
-msgstr ""
+msgstr "Enheder fremstillet: %u"
 
 #: src/scores.c:104
 #, c-format
 msgid "Total Units: %u"
-msgstr ""
+msgstr "Enheder i alt: %u"
 
 #: src/scores.c:105
 #, c-format
 msgid "Structures Built: %u"
-msgstr ""
+msgstr "Bygninger bygget: %u"
 
 #: src/scores.c:106
 #, c-format
 msgid "Total Structures: %u"
-msgstr ""
+msgstr "Bygninger i alt: %u"
 
 #: src/scores.c:108
 #, c-format
@@ -15133,7 +14954,7 @@ msgid "Rookie: %u"
 msgstr "Utrænet: %u"
 
 #: src/scores.c:109
-#, fuzzy, c-format
+#, c-format
 msgctxt "rank"
 msgid "Green: %u"
 msgstr "Grøn: %u"
@@ -15203,7 +15024,7 @@ msgstr "Total anvendt tid: %s"
 #: src/scores.c:449
 #, c-format
 msgid "You cheated!"
-msgstr ""
+msgstr "Du snød!"
 
 #: src/scriptfuncs.c:3171
 msgid "YOU ARE VICTORIOUS!"
@@ -15237,7 +15058,7 @@ msgstr "Kan ikke finde nogle reperationsenheder!"
 
 #: src/selection.c:437
 msgid "Unable to locate any Trucks!"
-msgstr "Kan ikke finde nogle trucks!"
+msgstr "Kan ikke finde nogle lastbiler!"
 
 #: src/selection.c:440
 msgid "Unable to locate any Sensor Units!"
@@ -15248,17 +15069,16 @@ msgid "Unable to locate any Commanders!"
 msgstr "Kan ikke finde nogle kommandører!"
 
 #: src/structure.c:2743
-#, fuzzy
 msgid "Control Limit Reached - Production Halted"
 msgstr "Kommandobegrænsning nået - indstiller produktion"
 
 #: src/structure.c:5936
 #: src/structure.c:5961
-#, fuzzy, c-format
+#, c-format
 msgid "%s - %u Unit assigned - Damage %3.0f%%"
 msgid_plural "%s - %u Units assigned - Damage %3.0f%%"
-msgstr[0] "%s - Skade %3.0f%%"
-msgstr[1] "%s - Skade %3.0f%%"
+msgstr[0] "%s - %u Enhed tildelt - Skade %3.0f%%"
+msgstr[1] "%s - %u Enheder tildelt - Skade %3.0f%%"
 
 #: src/structure.c:5966
 #: src/structure.c:5980
@@ -15269,9 +15089,9 @@ msgid "%s - Damage %3.0f%%"
 msgstr "%s - Skade %3.0f%%"
 
 #: src/structure.c:6016
-#, fuzzy, c-format
+#, c-format
 msgid "%s - Connected %u of %u - Damage %3.0f%%"
-msgstr "%s - Forbundet %u af %u"
+msgstr "%s - Forbundet %u af %u - Skade %3.0f%%"
 
 #: src/structure.c:6151
 #: src/structure.c:6200
@@ -15293,7 +15113,7 @@ msgstr "Fabriksgevinst - Skrog"
 
 #: src/structure.c:6521
 msgid "Factory Reward - Weapon"
-msgstr "Frabriskgevinst - Våben"
+msgstr "Fabriksgevinst - Våben"
 
 #: src/structure.c:6530
 msgid "Factory Reward - Nothing"
@@ -15318,31 +15138,31 @@ msgstr "Forstærkninger er ankommet"
 
 #: src/version.c:143
 msgid " (modified and switched locally)"
-msgstr ""
+msgstr " (lokalt byttet og modificeret)"
 
 #: src/version.c:145
 msgid " (modified locally)"
-msgstr ""
+msgstr " (lokalt modificeret)"
 
 #: src/version.c:147
 msgid " (switched locally)"
-msgstr ""
+msgstr " (lokalt byttet)"
 
 #: src/version.c:154
 msgid " - DEBUG"
-msgstr ""
+msgstr " - DEBUG"
 
 #: src/version.c:163
 #, c-format
 msgid " - Built %s"
-msgstr ""
+msgstr " - Bygget %s"
 
 #. TRANSLATORS: This string looks as follows when expanded.
 #. "Version <version name/number> <working copy state><BUILD DATE><BUILD TYPE>"
 #: src/version.c:173
 #, c-format
 msgid "Version %s%s%s%s"
-msgstr ""
+msgstr "Version %s%s%s%s"
 
 #~ msgid "Truck ordered to build Oil Derrick"
 #~ msgstr "Truck beordret til at bygge oliebrøn."
