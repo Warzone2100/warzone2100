@@ -28,6 +28,227 @@ static const char *tilesetTextures[] = { "Arizona", "Urban", "Rockies" };
 
 #define MADD(...) do { fprintf(fp, __VA_ARGS__); fprintf(fp, "\n"); } while(0)
 
+const char *conversionTable[3][255];   // convert old terrain numbers to decal labels
+int terrainTable[3][255];              // convert old terrain numbers of new ones
+
+#define T_WATER               0
+#define T_CLIFF               1
+#define T_CLIFF_VARIANT       2
+#define T_LOW                 3
+#define T_LOW_VARIANT         4              
+#define T_STANDARD            5
+#define T_STANDARD_VARIANT    6
+#define T_TILES               7
+#define T_TILES_VARIANT       8
+#define T_HIGH                9
+#define T_HIGH_VARIANT       10
+#define T_WET                11
+#define T_TOUGH              12
+#define T_SPECIAL1           13
+#define T_SPECIAL2           14
+#define T_REARM              15
+
+#define ARIZONA_SAND 1
+#define ARIZONA_RED 2
+#define ARIZONA_MUD 3
+#define ARIZONA_CLIFF 4
+#define ARIZONA_TILES 5
+#define ARIZONA_GRASS 6
+#define URBAN_MUD 7
+#define URBAN_RUBBLE 8
+#define URBAN_GREEN 9
+#define URBAN_TILES_SMALL 10
+#define URBAN_TILES_MEDIUM 11
+#define URBAN_TILES_LARGE 12
+#define URBAN_CLIFFS 13
+#define URBAN_ROCKS 14
+#define URBAN_BURNED 15
+#define ROCKIES_GRASS 16
+#define ROCKIES_EARTH 17
+#define ROCKIES_CLIFF 18
+#define ROCKIES_TILES 19
+#define ROCKIES_SNOWGRASS 20
+#define ROCKIES_SNOW 21
+#define ROCKIES_SNOWROCK 22
+#define ROCKIES_MUD 23
+#define ROCKIES_SNOWCLIFF 24
+#define INVALID 255
+
+static void validateTables(void)
+{
+	int i;
+	for (i = 0; i < 78; i++) if (terrainTable[0][i] == INVALID) { printf("invalid %d\n", i); abort(); }
+	for (i = 0; i < 80; i++) if (terrainTable[1][i] == INVALID) { printf("invalid %d\n", i); abort(); }
+	for (i = 0; i < 79; i++) if (terrainTable[2][i] == INVALID) { printf("invalid %d\n", i); abort(); }
+}
+
+static void fillConversionTables(void)
+{
+	memset(terrainTable, INVALID, sizeof(terrainTable));
+
+	terrainTable[0][0] = ARIZONA_SAND;
+	terrainTable[0][1] = ARIZONA_SAND;
+	terrainTable[0][2] = ARIZONA_SAND;
+	terrainTable[0][4] = ARIZONA_SAND;
+	terrainTable[0][9] = ARIZONA_SAND;
+	terrainTable[0][10] = ARIZONA_SAND;
+	terrainTable[0][11] = ARIZONA_SAND;
+	terrainTable[0][12] = ARIZONA_SAND;
+	terrainTable[0][13] = ARIZONA_SAND;
+	terrainTable[0][14] = ARIZONA_SAND;
+	terrainTable[0][15] = ARIZONA_SAND;
+	terrainTable[0][16] = ARIZONA_SAND;
+	terrainTable[0][27] = ARIZONA_SAND;
+	terrainTable[0][28] = ARIZONA_SAND;
+	terrainTable[0][40] = ARIZONA_SAND;
+	terrainTable[0][42] = ARIZONA_SAND;
+	terrainTable[0][43] = ARIZONA_SAND;
+	terrainTable[0][55] = ARIZONA_SAND;
+	terrainTable[0][63] = ARIZONA_SAND;
+	terrainTable[0][64] = ARIZONA_SAND;
+	terrainTable[0][65] = ARIZONA_SAND;
+	terrainTable[0][66] = ARIZONA_SAND;
+
+	terrainTable[0][20] = ARIZONA_RED;
+	terrainTable[0][29] = ARIZONA_RED;
+	terrainTable[0][34] = ARIZONA_RED;
+	terrainTable[0][35] = ARIZONA_RED;
+	terrainTable[0][37] = ARIZONA_RED;
+	terrainTable[0][41] = ARIZONA_RED;
+	terrainTable[0][44] = ARIZONA_RED;
+	terrainTable[0][47] = ARIZONA_RED;
+	terrainTable[0][48] = ARIZONA_RED;
+	terrainTable[0][49] = ARIZONA_RED;
+	terrainTable[0][50] = ARIZONA_RED;
+	terrainTable[0][51] = ARIZONA_RED;
+	terrainTable[0][52] = ARIZONA_RED;
+	terrainTable[0][53] = ARIZONA_RED;
+	terrainTable[0][54] = ARIZONA_RED;
+	terrainTable[0][56] = ARIZONA_RED;
+	terrainTable[0][57] = ARIZONA_RED;
+	terrainTable[0][58] = ARIZONA_RED;
+	terrainTable[0][59] = ARIZONA_RED;
+	terrainTable[0][60] = ARIZONA_RED;
+	terrainTable[0][61] = ARIZONA_RED;
+	terrainTable[0][67] = ARIZONA_RED;
+	terrainTable[0][68] = ARIZONA_RED;
+	terrainTable[0][69] = ARIZONA_RED;
+	terrainTable[0][70] = ARIZONA_RED;
+	terrainTable[0][72] = ARIZONA_RED;
+	terrainTable[0][73] = ARIZONA_RED;
+	terrainTable[0][74] = ARIZONA_RED;
+	terrainTable[0][76] = ARIZONA_RED;
+
+	terrainTable[0][3] = ARIZONA_MUD;
+	terrainTable[0][5] = ARIZONA_MUD;
+	terrainTable[0][6] = ARIZONA_MUD;
+	terrainTable[0][7] = ARIZONA_MUD;
+	terrainTable[0][8] = ARIZONA_MUD;
+	terrainTable[0][26] = ARIZONA_MUD;
+	terrainTable[0][36] = ARIZONA_MUD;
+	terrainTable[0][38] = ARIZONA_MUD;
+	terrainTable[0][39] = ARIZONA_MUD;
+	terrainTable[0][62] = ARIZONA_MUD;
+
+	terrainTable[0][17] = T_WATER;
+
+	terrainTable[0][18] = ARIZONA_CLIFF;
+	terrainTable[0][45] = ARIZONA_CLIFF; // ?
+	terrainTable[0][46] = ARIZONA_CLIFF; // ?
+	terrainTable[0][75] = ARIZONA_CLIFF; // ?
+
+	terrainTable[0][19] = ARIZONA_TILES;
+	terrainTable[0][21] = ARIZONA_TILES;
+	terrainTable[0][22] = ARIZONA_TILES;
+	terrainTable[0][77] = ARIZONA_TILES;
+
+	terrainTable[0][23] = ARIZONA_GRASS;
+	terrainTable[0][24] = ARIZONA_GRASS;
+	terrainTable[0][25] = ARIZONA_GRASS;
+	terrainTable[0][30] = ARIZONA_GRASS;
+	terrainTable[0][31] = ARIZONA_GRASS;
+	terrainTable[0][32] = ARIZONA_GRASS;
+	terrainTable[0][33] = ARIZONA_GRASS;
+
+	terrainTable[1][0] = URBAN_BURNED;
+	terrainTable[1][1] = URBAN_BURNED;
+	terrainTable[1][2] = URBAN_BURNED;
+	terrainTable[1][3] = URBAN_BURNED;
+
+	terrainTable[1][4] = URBAN_RUBBLE;
+	terrainTable[1][5] = URBAN_RUBBLE;
+	terrainTable[1][6] = URBAN_RUBBLE;
+	terrainTable[1][7] = URBAN_RUBBLE;
+	terrainTable[1][8] = URBAN_RUBBLE;
+	terrainTable[1][9] = URBAN_RUBBLE;
+	terrainTable[1][10] = URBAN_RUBBLE;
+
+	memset(conversionTable, 0, sizeof(conversionTable));
+	// TODO: 0, 9, 11, 28 should be 'dry_grass', but we need to make it first
+	conversionTable[0][37] = "road_damage";
+	conversionTable[0][47] = "road_end";
+	conversionTable[0][49] = "tracks_faint";
+	conversionTable[0][50] = "tracks_turn";
+	conversionTable[0][51] = "tracks";
+	conversionTable[0][52] = "tracks_end";
+	conversionTable[0][55] = "crater";
+	conversionTable[0][56] = "crater2";
+	conversionTable[0][57] = "road_junction";
+	conversionTable[0][58] = "crater3";
+	conversionTable[0][59] = "road";
+	conversionTable[0][62] = "crater4";
+	conversionTable[0][63] = "crater_slice_1";
+	conversionTable[0][64] = "crater_slice_2";
+	conversionTable[0][65] = "crater_slice_3";
+	conversionTable[0][66] = "crater_slice_4";
+	conversionTable[0][67] = "crater_slice_5";
+	conversionTable[0][68] = "crater_slice_6";
+	conversionTable[0][69] = "crater_slice_7";
+	conversionTable[0][72] = "tracks_junction";
+	conversionTable[0][73] = "tracks_cross";
+	//conversionTable[0][73] = "rubble"; TODO
+	conversionTable[1][1] = "rocks";
+	//conversionTable[1][5] = "rubble_piece"; TODO
+	conversionTable[1][21] = "rocks2";
+	//conversionTable[1][28] = "sewer_hole"; TODO
+	conversionTable[1][36] = "grass";
+	conversionTable[1][40] = "wide_road";
+	conversionTable[1][41] = "wide_road_end";
+	conversionTable[1][42] = "wide_road";
+	conversionTable[1][43] = "wide_road_end";
+	conversionTable[1][44] = "wide_road_end";
+	conversionTable[1][45] = "wide_road_end";
+	conversionTable[1][46] = "wide_road_damage";
+	conversionTable[1][47] = "wide_road_rubble";
+	conversionTable[1][52] = "rocks3";
+	conversionTable[1][55] = "dark_crater";
+	conversionTable[1][56] = "dark_crater2";
+	conversionTable[1][57] = "dark_crater3";
+	conversionTable[2][1] = "rocks3";
+	conversionTable[2][8] = "snow_tiny";
+	conversionTable[2][13] = "road_junction";
+	conversionTable[2][27] = "rocks4";
+	conversionTable[2][28] = "rocks5";
+	conversionTable[2][37] = "road_damage";
+	conversionTable[2][43] = "snow_tiny2";
+	conversionTable[2][47] = "snow_tiny3";
+	conversionTable[2][49] = "tracks_faint";
+	conversionTable[2][50] = "tracks_turn";
+	conversionTable[2][51] = "tracks";
+	conversionTable[2][52] = "tracks_end";
+	conversionTable[2][56] = "crater5";
+	conversionTable[2][57] = "splatter";
+	conversionTable[2][58] = "crater6";
+	conversionTable[2][59] = "road";
+	conversionTable[2][60] = "road_end";
+	conversionTable[2][62] = "crater7";
+	conversionTable[2][70] = "snow_tiny4";
+	conversionTable[2][72] = "tracks_junction";
+	conversionTable[2][73] = "snow_massive";
+	conversionTable[2][74] = "snow_light";
+	conversionTable[2][75] = "snow";
+}
+
 int main(int argc, char **argv)
 {
 	char filename[PATH_MAX], *p_filename, *base, *mapname;
@@ -41,6 +262,8 @@ int main(int argc, char **argv)
 		return -1;
 	}
 	
+	fillConversionTables();
+	validateTables();
 	physfs_init(argv[0]);
 	strcpy(filename, physfs_addmappath(argv[1]));
 
@@ -157,46 +380,54 @@ int main(int argc, char **argv)
 	}
 	fclose(fp);
 
-#if 0
 	/*** Terrain data ***/
 	if (map->mapVersion > 0)
 	{
-		uint16_t *terrain, *rotate;
-		uint8_t *height, *flip;
 		MAPTILE *psTile = mapTile(map, 0, 0);
+		uint8_t *terrain = new uint8_t[map->width * map->height];
+		uint8_t *height = new uint8_t[map->width * map->height];
+		uint16_t rotate;
+		uint8_t flip;
 
-		terrain = malloc(map->width * map->height * 2);
-		height = malloc(map->width * map->height);
-		rotate = malloc(map->width * map->height * 2);
-		flip = malloc(map->width * map->height);
+		strcpy(filename, base);
+		strcat(filename, "/decals.ini");
+		printf("writing %s\n", filename);
+		fp = fopen(filename, "w");
+		if (!fp) printf("%s: %s\n", filename, strerror(errno));
 		for (i = 0; i < map->width * map->height; i++)
 		{
+			const char *decal = conversionTable[map->tileset][psTile->texture & TILE_NUMMASK];
+
 			height[i] = psTile->height;
 			terrain[i] = psTile->texture & TILE_NUMMASK;
-			rotate[i] = ((psTile->texture & TILE_ROTMASK) >> TILE_ROTSHIFT) * 90;
-			flip[i] = TRI_FLIPPED(psTile) ? 255 : 0;
+			rotate = ((psTile->texture & TILE_ROTMASK) >> TILE_ROTSHIFT) * 90;
+			flip = TRI_FLIPPED(psTile) ? 255 : 0;
 
 			psTile++;
+
+			if (!decal) continue;
+
+			// Write decal info
+			MADD("[decal_%d]", i);
+			MADD("decal = %s", decal);
+			MADD("x = %u", i % map->width);
+			MADD("y = %u", i / map->height);
+			MADD("flip = %u", (unsigned)flip);
+			MADD("rotate = %u\n", (unsigned)rotate);
 		}
+		fclose(fp);
+
 		strcpy(filename, base);
-		strcat(filename, "/map-001/terrain.png");
-		savePngI16(filename, terrain, map->width, map->height);
+		strcat(filename, "/terrain.png");
+		savePngI8(filename, terrain, map->width, map->height);
 		strcpy(filename, base);
-		strcat(filename, "/map-001/height.png");
+		strcat(filename, "/height.png");
 		savePngI8(filename, height, map->width, map->height);
-		strcpy(filename, base);
-		strcat(filename, "/map-001/rotations.png");
-		savePngI16(filename, rotate, map->width, map->height);
-		strcpy(filename, base);
-		strcat(filename, "/map-001/flips.png");
-		savePngI8(filename, flip, map->width, map->height);
-		free(height);
-		free(terrain);
-		free(rotate);
-		free(flip);
+
+		delete [] height;
+		delete [] terrain;
 	}
 
-#endif
 	/*** Features ***/
 	if (map->featVersion > 0)
 	{
