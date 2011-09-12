@@ -129,7 +129,8 @@ static void runHyperlink(void)
 	system("open http://wz2100.net");
 #else
 	// for linux
-	system("xdg-open http://wz2100.net &");
+	int stupidWarning = system("xdg-open http://wz2100.net &");
+	(void)stupidWarning;  // Why is system() a warn_unused_result function..?
 #endif
 }
 
