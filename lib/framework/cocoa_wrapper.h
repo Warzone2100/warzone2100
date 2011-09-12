@@ -38,4 +38,22 @@ void cocoaShowAlert(const char *message, const char *information, unsigned style
 
 #endif // WZ_OS_MAC
 
+#ifdef WZ_WS_MAC
+#include <QtCore/QList>
+#include <QtCore/QSize>
+
+/*!
+ * Appends available screen resolutions from every connected screen to
+ * the given list that are larger than the given minimum size and match
+ * a screen's current bit depth and refresh rate.
+ *
+ * \param resolutions A list to append resolution sizes to
+ * \param minWidth
+ * \param minHeight
+ * \return true on success, false otherwise
+ */
+bool cocoaAppendAvailableScreenResolutions(QList<QSize> &resolutions, int minWidth, int minHeight);
+
+#endif // WZ_WS_MAC
+
 #endif // __INCLUDED_LIB_FRAMEWORK_COCOA_WRAPPER_H__

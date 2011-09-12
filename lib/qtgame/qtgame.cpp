@@ -12,6 +12,10 @@
 #include <QX11Info>
 #endif
 
+#ifdef WZ_WS_MAC
+#include "cocoa_wrapper.h"
+#endif
+
 /* Overloaded QWidget functions to handle resolution changing */
 
 void QtGameWidget::trapMouse()
@@ -194,10 +198,9 @@ void QtGameWidget::updateResolutionList()
 		}
 	}
 #elif defined(WZ_WS_MAC)
-	Q_UNUSED(minWidth);
-	Q_UNUSED(minHeight);
-	qWarning("Resolution query support for Mac not written yet");
+	cocoaAppendAvailableScreenResolutions(mResolutions, minWidth, minHeight);
 #endif
+	// TODO: Sorting would be nice.
 }
 
 QGLFormat QtGameWidget::adjustFormat(const QGLFormat &format)
