@@ -918,6 +918,13 @@ bool runVideoOptionsMenu(void)
 					current = 0;
 			}
 
+			// We can't pick resolutions if there are any.
+			if (modes.isEmpty())
+			{
+				debug(LOG_ERROR,"No resolutions available to change.");
+				break;
+			}
+
 			// Set the new width and height (takes effect on restart)
 			war_SetWidth(modes[current].width());
 			war_SetHeight(modes[current].height());
