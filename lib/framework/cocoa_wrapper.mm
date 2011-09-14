@@ -63,25 +63,33 @@ bool cocoaAppendAvailableScreenResolutions(QList<QSize> &resolutions, int minWid
 		return false;
 	}
 
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
 	bool modern = (CGDisplayCopyAllDisplayModes != NULL); // where 'modern' means >= 10.6
+#endif
 
 	for (uint32_t i = 0; i < displayCount; i++)
 	{
 		CFArrayRef displayModes;
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
 		if (modern)
 		{
 			displayModes = CGDisplayCopyAllDisplayModes(displays[i], NULL);
 		}
 		else
+#endif
 		{
 			displayModes = CGDisplayAvailableModes(displays[i]);
 		}
 
-		double currentRefreshRate;
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
 		CFStringRef currentPixelEncoding = NULL;
+#endif
+		double currentRefreshRate;
 		int curBPP, curBPS, curSPP;
 
 #define dictget(DICT, TYPE, KEY, VAR) CFNumberGetValue((CFNumberRef)CFDictionaryGetValue(DICT, KEY), kCFNumber##TYPE##Type, VAR)
+
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
 		if (modern)
 		{
 			CGDisplayModeRef currentDisplayMode = CGDisplayCopyDisplayMode(displays[i]);
@@ -90,6 +98,7 @@ bool cocoaAppendAvailableScreenResolutions(QList<QSize> &resolutions, int minWid
 			CFRelease(currentDisplayMode);
 		}
 		else
+#endif
 		{
 			CFDictionaryRef currentDisplayMode = CGDisplayCurrentMode(displays[i]);
 			dictget(currentDisplayMode, Double, kCGDisplayRefreshRate, &currentRefreshRate);
@@ -104,6 +113,7 @@ bool cocoaAppendAvailableScreenResolutions(QList<QSize> &resolutions, int minWid
 			double refreshRate;
 			bool pixelEncodingsEqual;
 
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
 			if (modern)
 			{
 				CGDisplayModeRef displayMode = (CGDisplayModeRef)CFArrayGetValueAtIndex(displayModes, j);
@@ -115,6 +125,7 @@ bool cocoaAppendAvailableScreenResolutions(QList<QSize> &resolutions, int minWid
 				CFRelease(pixelEncoding);
 			}
 			else
+#endif
 			{
 				CFDictionaryRef displayMode = (CFDictionaryRef)CFArrayGetValueAtIndex(displayModes, j);
 				dictget(displayMode, Int, kCGDisplayWidth, &width);
@@ -138,11 +149,13 @@ bool cocoaAppendAvailableScreenResolutions(QList<QSize> &resolutions, int minWid
 
 #undef dictget
 
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
 		if (modern)
 		{
 			CFRelease(currentPixelEncoding);
 			CFRelease(displayModes);
 		}
+#endif
 	}
 
 	return true;
