@@ -918,13 +918,13 @@ bool runVideoOptionsMenu(void)
 			}
 
 			// We can't pick resolutions if there are any.
-            if(modes.isEmpty())
-            {
-                qWarning("No resolutions available to change.");
-                break;
-            }
-            
-            // Set the new width and height (takes effect on restart)
+			if(modes.isEmpty())
+			{
+				qWarning("No resolutions available to change.");
+				break;
+			}
+
+			// Set the new width and height (takes effect on restart)
 			war_SetWidth(modes[current].width());
 			war_SetHeight(modes[current].height());
 
