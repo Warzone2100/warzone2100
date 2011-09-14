@@ -13,7 +13,7 @@
 #endif
 
 #ifdef WZ_WS_MAC
-#include "cocoa_wrapper.h"
+#include "macosx_screen_resolutions.h"
 #endif
 
 /* Overloaded QWidget functions to handle resolution changing */
@@ -198,7 +198,7 @@ void QtGameWidget::updateResolutionList()
 		}
 	}
 #elif defined(WZ_WS_MAC)
-	cocoaAppendAvailableScreenResolutions(mResolutions, minWidth, minHeight);
+	macosxAppendAvailableScreenResolutions(mResolutions, minWidth, minHeight);
 #endif
 	// TODO: Sorting would be nice.
 }

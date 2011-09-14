@@ -11,11 +11,12 @@ MOCEDFILES = $(MOCHEADER:%.h=%_moc.cpp)
 CLEANFILES = $(MOCEDFILES)
 
 noinst_LIBRARIES = libqtgame.a
-noinst_HEADERS = qtgame.h swapinterval.h $(MOCHEADER)
+noinst_HEADERS = qtgame.h swapinterval.h macosx_screen_resolutions.h $(MOCHEADER)
 
 nodist_libqtgame_a_SOURCES = \
 	qtgame_moc.cpp
 
 libqtgame_a_SOURCES = \
 	qtgame.cpp \
-	swapinterval.cpp
+	swapinterval.cpp \
+	macosx_screen_resolutions.h
