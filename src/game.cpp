@@ -4749,8 +4749,8 @@ static bool loadSaveStructure2(const char *pFileName, STRUCTURE **ppList)
 			}
 			if (ini.contains("Factory/template"))
 			{
-				QString templName(ini.value("Factory/template").toString());
-				psFactory->psSubject = getTemplateFromTranslatedNameNoPlayer(templName.toUtf8().constData());
+				int templId(ini.value("Factory/template").toInt());
+				psFactory->psSubject = getTemplateFromMultiPlayerID(templId);
 				//if the build has started set the powerAccrued = powerRequired to sync the interface
 				if (psFactory->timeStarted != ACTION_START_TIME && psFactory->psSubject)
 				{
@@ -4976,7 +4976,7 @@ bool writeStructFile(const char *pFileName)
 					ini.setValue("Factory/pendingCount", psFactory->pendingCount);
 					ini.setValue("Factory/secondaryOrder", psFactory->secondaryOrder);
 
-					if (psFactory->psSubject != NULL) ini.setValue("Factory/template", psFactory->psSubject->pName);
+					if (psFactory->psSubject != NULL) ini.setValue("Factory/template", psFactory->psSubject->multiPlayerID);
 					FLAG_POSITION *psFlag = ((FACTORY *)psCurr->pFunctionality)->psAssemblyPoint;
 					if (psFlag != NULL)
 					{
