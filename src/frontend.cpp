@@ -920,7 +920,7 @@ bool runVideoOptionsMenu(void)
 			// We can't pick resolutions if there are any.
 			if (modes.isEmpty())
 			{
-				debug("No resolutions available to change.");
+				debug(LOG_ERROR,"No resolutions available to change.");
 				break;
 			}
 
