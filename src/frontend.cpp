@@ -918,9 +918,9 @@ bool runVideoOptionsMenu(void)
 			}
 
 			// We can't pick resolutions if there are any.
-			if(modes.isEmpty())
+			if (modes.isEmpty())
 			{
-				qWarning("No resolutions available to change.");
+				debug("No resolutions available to change.");
 				break;
 			}
 
