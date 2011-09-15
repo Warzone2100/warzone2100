@@ -16,7 +16,7 @@ EXTRA_DIST = \
 	macosx_screen_resolutions.h macosx_screen_resolutions.cpp
 
 noinst_LIBRARIES = libqtgame.a
-noinst_HEADERS = qtgame.h swapinterval.h $(MOCHEADER) \
+noinst_HEADERS = qtgame.h swapinterval.h $(MOCHEADER)
 
 nodist_libqtgame_a_SOURCES = \
 	qtgame_moc.cpp
