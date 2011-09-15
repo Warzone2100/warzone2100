@@ -683,7 +683,7 @@
 		976AE8280EA0B59A00F2473F /* timer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 976AE8260EA0B59A00F2473F /* timer.cpp */; };
 		97AEAB780E8C1C5100A10721 /* Ogg.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02356E090BD3BCFE00E9A019 /* Ogg.framework */; };
 		97AEAB790E8C1C5100A10721 /* Vorbis.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02DDA7EE0BD3C03F0049AB60 /* Vorbis.framework */; };
-		BFFD67691421661B00967210 /* macosx_screen_resolutions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BFFD67671421661B00967210 /* macosx_screen_resolutions.cpp */; };
+		BFFD67691421661B00967210 /* macosx_screen_resolutions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BFFD67671421661B00967210 /* macosx_screen_resolutions.cpp */; settings = {COMPILER_FLAGS = "-fno-tree-vectorize -fno-strict-aliasing"; }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXBuildRule section */
