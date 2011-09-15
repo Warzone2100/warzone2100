@@ -24,12 +24,12 @@
 
 #define DEG(degrees) ((degrees) * 8192 / 45)
 
-static const char *tilesetTextures[] = { "Arizona", "Urban", "Rockies" };
+static const char *tilesetTextures[] = { "arizona", "urban", "rockies" };
 
 #define MADD(...) do { fprintf(fp, __VA_ARGS__); fprintf(fp, "\n"); } while(0)
 
-const char *conversionTable[3][255];   // convert old terrain numbers to decal labels
-int terrainTable[3][255];              // convert old terrain numbers of new ones
+static const char *conversionTable[3][255];   // convert old terrain numbers to decal labels
+static int terrainTable[3][255];              // convert old terrain numbers of new ones
 
 #define T_WATER               0
 #define T_CLIFF               1
@@ -43,145 +43,290 @@ int terrainTable[3][255];              // convert old terrain numbers of new one
 #define T_HIGH                9
 #define T_HIGH_VARIANT       10
 #define T_WET                11
-#define T_TOUGH              12
+#define T_TOUGH              12 // also used as underwater tile?
 #define T_SPECIAL1           13
 #define T_SPECIAL2           14
 #define T_REARM              15
 
-#define ARIZONA_SAND 1
-#define ARIZONA_RED 2
-#define ARIZONA_MUD 3
-#define ARIZONA_CLIFF 4
-#define ARIZONA_TILES 5
-#define ARIZONA_GRASS 6
-#define URBAN_MUD 7
-#define URBAN_RUBBLE 8
-#define URBAN_GREEN 9
-#define URBAN_TILES_SMALL 10
-#define URBAN_TILES_MEDIUM 11
-#define URBAN_TILES_LARGE 12
-#define URBAN_CLIFFS 13
-#define URBAN_ROCKS 14
-#define URBAN_BURNED 15
-#define ROCKIES_GRASS 16
-#define ROCKIES_EARTH 17
-#define ROCKIES_CLIFF 18
-#define ROCKIES_TILES 19
-#define ROCKIES_SNOWGRASS 20
-#define ROCKIES_SNOW 21
-#define ROCKIES_SNOWROCK 22
-#define ROCKIES_MUD 23
-#define ROCKIES_SNOWCLIFF 24
 #define INVALID 255
 
 static void validateTables(void)
 {
 	int i;
-	for (i = 0; i < 78; i++) if (terrainTable[0][i] == INVALID) { printf("invalid %d\n", i); abort(); }
-	for (i = 0; i < 80; i++) if (terrainTable[1][i] == INVALID) { printf("invalid %d\n", i); abort(); }
-	for (i = 0; i < 79; i++) if (terrainTable[2][i] == INVALID) { printf("invalid %d\n", i); abort(); }
+	for (i = 0; i < 78; i++) if (terrainTable[0][i] == INVALID) { printf("invalid arizona %d\n", i); abort(); }
+	for (i = 0; i < 80; i++) if (terrainTable[1][i] == INVALID) { printf("invalid urban %d\n", i); abort(); }
+	for (i = 0; i < 79; i++) if (terrainTable[2][i] == INVALID) { printf("invalid rockies %d\n", i); abort(); }
 }
 
 static void fillConversionTables(void)
 {
-	memset(terrainTable, INVALID, sizeof(terrainTable));
+	int i;
+	for (i = 0; i < 255; i++) terrainTable[0][i] = INVALID;
+	for (i = 0; i < 255; i++) terrainTable[1][i] = INVALID;
+	for (i = 0; i < 255; i++) terrainTable[2][i] = INVALID;
 
-	terrainTable[0][0] = ARIZONA_SAND;
-	terrainTable[0][1] = ARIZONA_SAND;
-	terrainTable[0][2] = ARIZONA_SAND;
-	terrainTable[0][4] = ARIZONA_SAND;
-	terrainTable[0][9] = ARIZONA_SAND;
-	terrainTable[0][10] = ARIZONA_SAND;
-	terrainTable[0][11] = ARIZONA_SAND;
-	terrainTable[0][12] = ARIZONA_SAND;
-	terrainTable[0][13] = ARIZONA_SAND;
-	terrainTable[0][14] = ARIZONA_SAND;
-	terrainTable[0][15] = ARIZONA_SAND;
-	terrainTable[0][16] = ARIZONA_SAND;
-	terrainTable[0][27] = ARIZONA_SAND;
-	terrainTable[0][28] = ARIZONA_SAND;
-	terrainTable[0][40] = ARIZONA_SAND;
-	terrainTable[0][42] = ARIZONA_SAND;
-	terrainTable[0][43] = ARIZONA_SAND;
-	terrainTable[0][55] = ARIZONA_SAND;
-	terrainTable[0][63] = ARIZONA_SAND;
-	terrainTable[0][64] = ARIZONA_SAND;
-	terrainTable[0][65] = ARIZONA_SAND;
-	terrainTable[0][66] = ARIZONA_SAND;
+	// arizona
 
-	terrainTable[0][20] = ARIZONA_RED;
-	terrainTable[0][29] = ARIZONA_RED;
-	terrainTable[0][34] = ARIZONA_RED;
-	terrainTable[0][35] = ARIZONA_RED;
-	terrainTable[0][37] = ARIZONA_RED;
-	terrainTable[0][41] = ARIZONA_RED;
-	terrainTable[0][44] = ARIZONA_RED;
-	terrainTable[0][47] = ARIZONA_RED;
-	terrainTable[0][48] = ARIZONA_RED;
-	terrainTable[0][49] = ARIZONA_RED;
-	terrainTable[0][50] = ARIZONA_RED;
-	terrainTable[0][51] = ARIZONA_RED;
-	terrainTable[0][52] = ARIZONA_RED;
-	terrainTable[0][53] = ARIZONA_RED;
-	terrainTable[0][54] = ARIZONA_RED;
-	terrainTable[0][56] = ARIZONA_RED;
-	terrainTable[0][57] = ARIZONA_RED;
-	terrainTable[0][58] = ARIZONA_RED;
-	terrainTable[0][59] = ARIZONA_RED;
-	terrainTable[0][60] = ARIZONA_RED;
-	terrainTable[0][61] = ARIZONA_RED;
-	terrainTable[0][67] = ARIZONA_RED;
-	terrainTable[0][68] = ARIZONA_RED;
-	terrainTable[0][69] = ARIZONA_RED;
-	terrainTable[0][70] = ARIZONA_RED;
-	terrainTable[0][72] = ARIZONA_RED;
-	terrainTable[0][73] = ARIZONA_RED;
-	terrainTable[0][74] = ARIZONA_RED;
-	terrainTable[0][76] = ARIZONA_RED;
+	terrainTable[0][0] = T_LOW_VARIANT;	// yellow sand
+	terrainTable[0][1] = T_LOW;
+	terrainTable[0][2] = T_LOW;
+	terrainTable[0][4] = T_LOW;
+	terrainTable[0][9] = T_LOW_VARIANT;
+	terrainTable[0][10] = T_LOW;
+	terrainTable[0][11] = T_LOW_VARIANT;
+	terrainTable[0][12] = T_LOW;
+	terrainTable[0][13] = T_LOW;
+	terrainTable[0][14] = T_LOW;
+	terrainTable[0][15] = T_LOW;
+	terrainTable[0][16] = T_LOW;
+	terrainTable[0][27] = T_LOW;
+	terrainTable[0][28] = T_LOW;
+	terrainTable[0][40] = T_LOW;
+	terrainTable[0][42] = T_LOW;
+	terrainTable[0][43] = T_LOW;
+	terrainTable[0][55] = T_LOW;
+	terrainTable[0][63] = T_LOW;
+	terrainTable[0][64] = T_LOW;
+	terrainTable[0][65] = T_LOW;
+	terrainTable[0][66] = T_LOW;
 
-	terrainTable[0][3] = ARIZONA_MUD;
-	terrainTable[0][5] = ARIZONA_MUD;
-	terrainTable[0][6] = ARIZONA_MUD;
-	terrainTable[0][7] = ARIZONA_MUD;
-	terrainTable[0][8] = ARIZONA_MUD;
-	terrainTable[0][26] = ARIZONA_MUD;
-	terrainTable[0][36] = ARIZONA_MUD;
-	terrainTable[0][38] = ARIZONA_MUD;
-	terrainTable[0][39] = ARIZONA_MUD;
-	terrainTable[0][62] = ARIZONA_MUD;
+	terrainTable[0][20] = T_STANDARD;	// red sand
+	terrainTable[0][29] = T_STANDARD_VARIANT;
+	terrainTable[0][34] = T_STANDARD;
+	terrainTable[0][35] = T_STANDARD_VARIANT;
+	terrainTable[0][37] = T_STANDARD;
+	terrainTable[0][41] = T_STANDARD;
+	terrainTable[0][44] = T_STANDARD;
+	terrainTable[0][47] = T_STANDARD;
+	terrainTable[0][48] = T_STANDARD;
+	terrainTable[0][49] = T_STANDARD;
+	terrainTable[0][50] = T_STANDARD;
+	terrainTable[0][51] = T_STANDARD;
+	terrainTable[0][52] = T_STANDARD;
+	terrainTable[0][53] = T_STANDARD_VARIANT;
+	terrainTable[0][54] = T_STANDARD_VARIANT;
+	terrainTable[0][56] = T_STANDARD;
+	terrainTable[0][57] = T_STANDARD;
+	terrainTable[0][58] = T_STANDARD;
+	terrainTable[0][59] = T_STANDARD;
+	terrainTable[0][60] = T_STANDARD;
+	terrainTable[0][61] = T_STANDARD;
+	terrainTable[0][67] = T_STANDARD;
+	terrainTable[0][68] = T_STANDARD;
+	terrainTable[0][69] = T_STANDARD;
+	terrainTable[0][70] = T_STANDARD;
+	terrainTable[0][72] = T_STANDARD;
+	terrainTable[0][73] = T_STANDARD;
+	terrainTable[0][76] = T_STANDARD;
+
+	terrainTable[0][74] = T_SPECIAL1;	// another red sand variant
+
+	terrainTable[0][3] = T_TOUGH;	// mud
+	terrainTable[0][5] = T_TOUGH;
+	terrainTable[0][6] = T_TOUGH;
+	terrainTable[0][7] = T_TOUGH;
+	terrainTable[0][8] = T_TOUGH;
+	terrainTable[0][26] = T_TOUGH;
+	terrainTable[0][36] = T_TOUGH;
+	terrainTable[0][38] = T_TOUGH;
+	terrainTable[0][39] = T_TOUGH;
+	terrainTable[0][62] = T_TOUGH;
 
 	terrainTable[0][17] = T_WATER;
 
-	terrainTable[0][18] = ARIZONA_CLIFF;
-	terrainTable[0][45] = ARIZONA_CLIFF; // ?
-	terrainTable[0][46] = ARIZONA_CLIFF; // ?
-	terrainTable[0][75] = ARIZONA_CLIFF; // ?
+	terrainTable[0][18] = T_CLIFF;
+	terrainTable[0][45] = T_CLIFF; // ?
+	terrainTable[0][46] = T_CLIFF; // ?
+	terrainTable[0][71] = T_CLIFF;
+	terrainTable[0][75] = T_CLIFF; // ?
 
-	terrainTable[0][19] = ARIZONA_TILES;
-	terrainTable[0][21] = ARIZONA_TILES;
-	terrainTable[0][22] = ARIZONA_TILES;
-	terrainTable[0][77] = ARIZONA_TILES;
+	terrainTable[0][19] = T_TILES;
+	terrainTable[0][21] = T_TILES;
+	terrainTable[0][22] = T_TILES;
+	terrainTable[0][77] = T_TILES;
 
-	terrainTable[0][23] = ARIZONA_GRASS;
-	terrainTable[0][24] = ARIZONA_GRASS;
-	terrainTable[0][25] = ARIZONA_GRASS;
-	terrainTable[0][30] = ARIZONA_GRASS;
-	terrainTable[0][31] = ARIZONA_GRASS;
-	terrainTable[0][32] = ARIZONA_GRASS;
-	terrainTable[0][33] = ARIZONA_GRASS;
+	terrainTable[0][23] = T_WET;	// green grass
+	terrainTable[0][24] = T_WET;
+	terrainTable[0][25] = T_WET;
+	terrainTable[0][30] = T_WET;
+	terrainTable[0][31] = T_WET;
+	terrainTable[0][32] = T_WET;
+	terrainTable[0][33] = T_WET;
 
-	terrainTable[1][0] = URBAN_BURNED;
-	terrainTable[1][1] = URBAN_BURNED;
-	terrainTable[1][2] = URBAN_BURNED;
-	terrainTable[1][3] = URBAN_BURNED;
+	// urban
 
-	terrainTable[1][4] = URBAN_RUBBLE;
-	terrainTable[1][5] = URBAN_RUBBLE;
-	terrainTable[1][6] = URBAN_RUBBLE;
-	terrainTable[1][7] = URBAN_RUBBLE;
-	terrainTable[1][8] = URBAN_RUBBLE;
-	terrainTable[1][9] = URBAN_RUBBLE;
-	terrainTable[1][10] = URBAN_RUBBLE;
+	terrainTable[1][0] = T_LOW;	// urban burned
+	terrainTable[1][1] = T_LOW_VARIANT;
+	terrainTable[1][2] = T_LOW;
+	terrainTable[1][3] = T_LOW;
+	terrainTable[1][32] = T_LOW;
+	terrainTable[1][35] = T_LOW;
+	terrainTable[1][41] = T_LOW;
+	terrainTable[1][57] = T_LOW;
+	terrainTable[1][63] = T_LOW;
+	terrainTable[1][64] = T_LOW;
+	terrainTable[1][65] = T_LOW;
+	terrainTable[1][66] = T_LOW;
+
+	terrainTable[1][17] = T_WATER;
+
+	terrainTable[1][11] = T_SPECIAL1; // dark tiles
+	terrainTable[1][12] = T_SPECIAL1;
+	terrainTable[1][18] = T_SPECIAL1;
+	terrainTable[1][40] = T_SPECIAL1; // road tiles
+	terrainTable[1][42] = T_SPECIAL1;
+	terrainTable[1][46] = T_SPECIAL1;
+	terrainTable[1][47] = T_SPECIAL1;
+	terrainTable[1][49] = T_SPECIAL1;
+	terrainTable[1][53] = T_SPECIAL1;
+	terrainTable[1][62] = T_SPECIAL1;
+
+	terrainTable[1][4] = T_STANDARD;
+	terrainTable[1][5] = T_STANDARD_VARIANT;
+	terrainTable[1][6] = T_STANDARD;
+	terrainTable[1][7] = T_STANDARD;
+	terrainTable[1][8] = T_STANDARD_VARIANT;
+	terrainTable[1][9] = T_STANDARD;
+	terrainTable[1][10] = T_STANDARD;
+	terrainTable[1][23] = T_STANDARD;
+	terrainTable[1][24] = T_STANDARD;
+	terrainTable[1][25] = T_STANDARD;
+	terrainTable[1][26] = T_STANDARD;
+	terrainTable[1][29] = T_STANDARD;
+	terrainTable[1][43] = T_STANDARD;
+	terrainTable[1][44] = T_STANDARD;
+	terrainTable[1][54] = T_STANDARD;
+	terrainTable[1][55] = T_STANDARD;
+	terrainTable[1][58] = T_STANDARD;
+	terrainTable[1][67] = T_STANDARD;
+	terrainTable[1][68] = T_STANDARD;
+	terrainTable[1][72] = T_STANDARD;
+	terrainTable[1][78] = T_STANDARD;
+	terrainTable[1][80] = T_STANDARD;
+
+	terrainTable[1][22] = T_HIGH;
+	terrainTable[1][31] = T_HIGH_VARIANT;
+	terrainTable[1][33] = T_HIGH;
+	terrainTable[1][34] = T_HIGH;
+	terrainTable[1][36] = T_HIGH;
+	terrainTable[1][38] = T_HIGH;
+	terrainTable[1][60] = T_HIGH;
+	terrainTable[1][73] = T_HIGH;
+	terrainTable[1][76] = T_HIGH;
+
+	terrainTable[1][37] = T_WET;
+	terrainTable[1][39] = T_WET;
+	terrainTable[1][45] = T_WET;
+	terrainTable[1][50] = T_WET;
+	terrainTable[1][77] = T_WET;
+	terrainTable[1][79] = T_WET;
+
+	terrainTable[1][13] = T_TILES;
+	terrainTable[1][14] = T_TILES;
+	terrainTable[1][15] = T_TILES;
+	terrainTable[1][16] = T_TILES;
+	terrainTable[1][19] = T_TILES_VARIANT;
+	terrainTable[1][20] = T_TILES;
+	terrainTable[1][21] = T_TILES;
+	terrainTable[1][27] = T_TILES;
+	terrainTable[1][28] = T_TILES;
+	terrainTable[1][30] = T_TILES;
+	terrainTable[1][48] = T_TILES;
+	terrainTable[1][51] = T_TILES;
+	terrainTable[1][52] = T_TILES;
+	terrainTable[1][56] = T_TILES;
+	terrainTable[1][59] = T_TILES;
+	terrainTable[1][61] = T_TILES;
+	terrainTable[1][71] = T_TILES;
+	terrainTable[1][74] = T_TILES;
+	terrainTable[1][75] = T_TILES;
+
+	terrainTable[1][69] = T_CLIFF;
+	terrainTable[1][70] = T_CLIFF;
+
+	// rockies
+
+	terrainTable[2][0] = T_LOW;
+	terrainTable[2][1] = T_LOW;
+	terrainTable[2][2] = T_LOW;
+	terrainTable[2][3] = T_LOW;
+	terrainTable[2][4] = T_STANDARD;
+	terrainTable[2][5] = T_STANDARD;
+	terrainTable[2][6] = T_STANDARD;
+	terrainTable[2][7] = T_STANDARD;
+	terrainTable[2][8] = T_STANDARD;
+	terrainTable[2][9] = T_CLIFF;
+	terrainTable[2][10] = T_STANDARD;
+	terrainTable[2][11] = T_STANDARD;
+	terrainTable[2][12] = T_STANDARD;
+	terrainTable[2][13] = T_WET;
+	terrainTable[2][14] = T_LOW;
+	terrainTable[2][15] = T_LOW;
+	terrainTable[2][16] = T_LOW;
+	terrainTable[2][17] = T_WATER;
+	terrainTable[2][18] = T_CLIFF;
+	terrainTable[2][19] = T_TILES;
+	terrainTable[2][20] = T_TOUGH;
+	terrainTable[2][21] = T_TILES;
+	terrainTable[2][22] = T_TILES;
+	terrainTable[2][23] = T_LOW_VARIANT;
+	terrainTable[2][24] = T_LOW_VARIANT;
+	terrainTable[2][25] = T_LOW;
+	terrainTable[2][26] = T_LOW;
+	terrainTable[2][27] = T_TOUGH;
+	terrainTable[2][28] = T_TOUGH;
+	terrainTable[2][29] = T_CLIFF;
+	terrainTable[2][30] = T_CLIFF;
+	terrainTable[2][31] = T_STANDARD;
+	terrainTable[2][32] = T_STANDARD;
+	terrainTable[2][33] = T_STANDARD;
+	terrainTable[2][34] = T_LOW;
+	terrainTable[2][35] = T_LOW;
+	terrainTable[2][36] = T_TOUGH;
+	terrainTable[2][37] = T_TOUGH;
+	terrainTable[2][38] = T_TOUGH;
+	terrainTable[2][39] = T_TOUGH;
+	terrainTable[2][40] = T_STANDARD;
+	terrainTable[2][41] = T_STANDARD;
+	terrainTable[2][42] = T_CLIFF;
+	terrainTable[2][43] = T_STANDARD;
+	terrainTable[2][44] = T_CLIFF;
+	terrainTable[2][45] = T_CLIFF;
+	terrainTable[2][46] = T_CLIFF;
+	terrainTable[2][47] = T_LOW_VARIANT;
+	terrainTable[2][48] = T_STANDARD;
+	terrainTable[2][49] = T_TOUGH;
+	terrainTable[2][50] = T_TOUGH;
+	terrainTable[2][51] = T_TOUGH;
+	terrainTable[2][52] = T_TOUGH;
+	terrainTable[2][53] = T_TOUGH;
+	terrainTable[2][54] = T_HIGH;
+	terrainTable[2][55] = T_STANDARD;
+	terrainTable[2][56] = T_TOUGH;
+	terrainTable[2][57] = T_STANDARD_VARIANT;
+	terrainTable[2][58] = T_LOW;
+	terrainTable[2][59] = T_TOUGH;
+	terrainTable[2][60] = T_TOUGH;
+	terrainTable[2][61] = T_CLIFF;
+	terrainTable[2][62] = T_STANDARD;
+	terrainTable[2][63] = T_CLIFF;
+	terrainTable[2][64] = T_HIGH;
+	terrainTable[2][65] = T_HIGH;
+	terrainTable[2][66] = T_HIGH;
+	terrainTable[2][67] = T_HIGH;
+	terrainTable[2][68] = T_CLIFF;
+	terrainTable[2][69] = T_CLIFF_VARIANT;
+	terrainTable[2][70] = T_HIGH;
+	terrainTable[2][71] = T_CLIFF;
+	terrainTable[2][72] = T_TOUGH;
+	terrainTable[2][73] = T_TOUGH; // ?
+	terrainTable[2][74] = T_LOW_VARIANT;
+	terrainTable[2][75] = T_TOUGH; // ?
+	terrainTable[2][76] = T_CLIFF;
+	terrainTable[2][77] = T_CLIFF_VARIANT;
+	terrainTable[2][78] = T_CLIFF;
+
+	// decals
 
 	memset(conversionTable, 0, sizeof(conversionTable));
 	// TODO: 0, 9, 11, 28 should be 'dry_grass', but we need to make it first
@@ -385,10 +530,11 @@ int main(int argc, char **argv)
 	{
 		MAPTILE *psTile = mapTile(map, 0, 0);
 		uint8_t *terrain = new uint8_t[map->width * map->height];
-		uint8_t *height = new uint8_t[map->width * map->height];
+		uint8_t *height = new uint8_t[map->width * 2 * map->height * 2];
 		uint16_t rotate;
 		uint8_t flip;
 
+		memset(height, 0, map->width * 2 * map->height * 2);
 		strcpy(filename, base);
 		strcat(filename, "/decals.ini");
 		printf("writing %s\n", filename);
@@ -397,9 +543,15 @@ int main(int argc, char **argv)
 		for (i = 0; i < map->width * map->height; i++)
 		{
 			const char *decal = conversionTable[map->tileset][psTile->texture & TILE_NUMMASK];
+			const int x = i % map->width;
+			const int y = i / map->width;
 
-			height[i] = psTile->height;
-			terrain[i] = psTile->texture & TILE_NUMMASK;
+			height[y * 2 * map->width * 2 + x * 2 + 0] = psTile->height;
+			height[y * 2 * map->width * 2 + x * 2 + 1] = psTile->height;
+			height[(y * 2 + 1) * map->width * 2 + x * 2 + 0] = psTile->height;
+			height[(y * 2 + 1) * map->width * 2 + x * 2 + 1] = psTile->height;
+
+			terrain[i] = terrainTable[map->tileset][psTile->texture & TILE_NUMMASK];
 			rotate = ((psTile->texture & TILE_ROTMASK) >> TILE_ROTSHIFT) * 90;
 			flip = TRI_FLIPPED(psTile) ? 255 : 0;
 
@@ -418,11 +570,12 @@ int main(int argc, char **argv)
 		fclose(fp);
 
 		strcpy(filename, base);
+		strcat(filename, "/height.png");
+		savePngI8(filename, height, map->width * 2, map->height * 2);
+
+		strcpy(filename, base);
 		strcat(filename, "/terrain.png");
 		savePngI8(filename, terrain, map->width, map->height);
-		strcpy(filename, base);
-		strcat(filename, "/height.png");
-		savePngI8(filename, height, map->width, map->height);
 
 		delete [] height;
 		delete [] terrain;
