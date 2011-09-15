@@ -19,4 +19,4 @@ nodist_libqtgame_a_SOURCES = \
 libqtgame_a_SOURCES = \
 	qtgame.cpp \
 	swapinterval.cpp \
-	macosx_screen_resolutions.h
+	macosx_screen_resolutions.cpp
