@@ -683,6 +683,7 @@
 		976AE8280EA0B59A00F2473F /* timer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 976AE8260EA0B59A00F2473F /* timer.cpp */; };
 		97AEAB780E8C1C5100A10721 /* Ogg.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02356E090BD3BCFE00E9A019 /* Ogg.framework */; };
 		97AEAB790E8C1C5100A10721 /* Vorbis.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02DDA7EE0BD3C03F0049AB60 /* Vorbis.framework */; };
+		BFFD67691421661B00967210 /* macosx_screen_resolutions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BFFD67671421661B00967210 /* macosx_screen_resolutions.cpp */; settings = {COMPILER_FLAGS = "-fno-tree-vectorize -fno-strict-aliasing"; }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXBuildRule section */
@@ -1989,6 +1990,8 @@
 		976AE8270EA0B59A00F2473F /* timer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = timer.h; path = ../lib/sequence/timer.h; sourceTree = SOURCE_ROOT; };
 		97AEAB330E8C1B5200A10721 /* Theora.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Theora.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		97F013D10EDEAE5C004947E5 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		BFFD67671421661B00967210 /* macosx_screen_resolutions.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = macosx_screen_resolutions.cpp; path = ../lib/qtgame/macosx_screen_resolutions.cpp; sourceTree = SOURCE_ROOT; };
+		BFFD67681421661B00967210 /* macosx_screen_resolutions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = macosx_screen_resolutions.h; path = ../lib/qtgame/macosx_screen_resolutions.h; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -2978,6 +2981,8 @@
 		4313231513BE86360023280C /* QtGame */ = {
 			isa = PBXGroup;
 			children = (
+				BFFD67671421661B00967210 /* macosx_screen_resolutions.cpp */,
+				BFFD67681421661B00967210 /* macosx_screen_resolutions.h */,
 				437FB24913CE5CA900E7EF5B /* swapinterval.cpp */,
 				437FB24A13CE5CA900E7EF5B /* swapinterval.h */,
 				437FB24B13CE5CA900E7EF5B /* swapinterval.mm */,
@@ -4823,6 +4828,7 @@
 				4313231A13BE866B0023280C /* qtgame.cpp in Sources */,
 				43DD1BCE13662006003AA9EC /* netlobby.cpp in Sources */,
 				437FB24D13CE5CA900E7EF5B /* swapinterval.mm in Sources */,
+				BFFD67691421661B00967210 /* macosx_screen_resolutions.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
