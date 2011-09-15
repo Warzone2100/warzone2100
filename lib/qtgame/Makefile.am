@@ -10,8 +10,13 @@ MOCEDFILES = $(MOCHEADER:%.h=%_moc.cpp)
 
 CLEANFILES = $(MOCEDFILES)
 
+EXTRA_DIST = \
+	wzapp.h.qwth \
+	swapinterval.mm \
+	macosx_screen_resolutions.h macosx_screen_resolutions.cpp
+
 noinst_LIBRARIES = libqtgame.a
-noinst_HEADERS = qtgame.h swapinterval.h $(MOCHEADER)
+noinst_HEADERS = qtgame.h swapinterval.h $(MOCHEADER) \
 
 nodist_libqtgame_a_SOURCES = \
 	qtgame_moc.cpp

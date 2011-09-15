@@ -35,7 +35,9 @@ CLEANFILES = \
 
 EXTRA_DIST = \
 	resource_lexer.l resource_parser.y \
-	strres_lexer.l strres_parser.y
+	strres_lexer.l strres_parser.y \
+	qtgame.h.qwth \
+	cocoa_wrapper.h cocoa_wrapper.mm
 
 noinst_LIBRARIES = libframework.a
 noinst_HEADERS = \
