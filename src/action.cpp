@@ -153,12 +153,14 @@ const char* getDroidActionName(DROID_ACTION action)
 	return name[action];
 }
 
-/* Check if a target is at correct range to attack */
-static bool actionInAttackRange(DROID *psDroid, BASE_OBJECT *psObj, int weapon_slot)
+//! given a Droid (psDroid) and a target (psObj), this function checks if the 
+//! weapon number (weapon_slot) is in range ( less than maximum and greater than mininum range) to fire.
+//! The function uses the droid range stance to decide what range (short, long or optimum) it must use.
+//! Returns true if it is in range, and false if it is not.
+bool actionInAttackRange(DROID *psDroid, BASE_OBJECT *psObj, int weapon_slot)
 {
 	SDWORD			dx, dy, radSq, rangeSq, longRange;
-	WEAPON_STATS	*psStats;
-	int compIndex;
+	WEAPON_STATS	*psStats = getWeaponStats(psDroid, weapon_slot);
 
 	CHECK_DROID(psDroid);
 	if (psDroid->asWeaps[0].nStat == 0)
@@ -171,11 +173,10 @@ static bool actionInAttackRange(DROID *psDroid, BASE_OBJECT *psObj, int weapon_s
 
 	radSq = dx*dx + dy*dy;
 
-	compIndex = psDroid->asWeaps[weapon_slot].nStat;
-	ASSERT_OR_RETURN( false, compIndex < numWeaponStats, "Invalid range referenced for numWeaponStats, %d > %d", compIndex, numWeaponStats);
-	psStats = asWeaponStats + compIndex;
 
-	if (psDroid->order == DORDER_ATTACKTARGET
+	//// Choose which range the droid will use, depending on the stance.
+	// if it has already an order to attack, then use long range.
+	if ((psDroid->order == DORDER_ATTACKTARGET || psDroid->order == DORDER_ATTACK)
 		&& secondaryGetState(psDroid, DSO_HALTTYPE) == DSS_HALT_HOLD)
 	{
 		longRange = proj_GetLongRange(psStats);
@@ -185,8 +186,8 @@ static bool actionInAttackRange(DROID *psDroid, BASE_OBJECT *psObj, int weapon_s
 	{
 		switch (psDroid->secondaryOrder & DSS_ARANGE_MASK)
 		{
+		// Use optimum range: choose what is the range with the highest hit chance.
 		case DSS_ARANGE_DEFAULT:
-			//if (psStats->shortHit > psStats->longHit)
 			if (weaponShortHit(psStats, psDroid->player) > weaponLongHit(psStats, psDroid->player))
 			{
 				rangeSq = psStats->shortRange * psStats->shortRange;
@@ -212,51 +213,11 @@ static bool actionInAttackRange(DROID *psDroid, BASE_OBJECT *psObj, int weapon_s
 		}
 	}
 
-	/* check max range */
+	//// do the calculation to see if the droid is in range.
+	// check max range
 	if ( radSq <= rangeSq )
 	{
-		/* check min range */
-		rangeSq = psStats->minRange * psStats->minRange;
-		if ( radSq >= rangeSq || !proj_Direct( psStats ) )
-		{
-			return true;
-		}
-	}
-
-	return false;
-}
-
-
-// check if a target is within weapon range
-bool actionInRange(DROID *psDroid, BASE_OBJECT *psObj, int weapon_slot)
-{
-	SDWORD			dx, dy, radSq, rangeSq, longRange;
-	WEAPON_STATS	*psStats;
-	int compIndex;
-
-	CHECK_DROID(psDroid);
-
-	if (psDroid->asWeaps[0].nStat == 0)
-	{
-		return false;
-	}
-
-	compIndex = psDroid->asWeaps[weapon_slot].nStat;
-	ASSERT_OR_RETURN( false, compIndex < numWeaponStats, "Invalid range referenced for numWeaponStats, %d > %d", compIndex, numWeaponStats);
-	psStats = asWeaponStats + compIndex;
-
-	dx = (SDWORD)psDroid->pos.x - (SDWORD)psObj->pos.x;
-	dy = (SDWORD)psDroid->pos.y - (SDWORD)psObj->pos.y;
-
-	radSq = dx*dx + dy*dy;
-
-	longRange = proj_GetLongRange(psStats);
-	rangeSq = longRange * longRange;
-
-	/* check max range */
-	if ( radSq <= rangeSq )
-	{
-		/* check min range */
+		// check min range
 		rangeSq = psStats->minRange * psStats->minRange;
 		if ( radSq >= rangeSq || !proj_Direct( psStats ) )
 		{
@@ -1187,7 +1148,7 @@ void actionUpdateDroid(DROID *psDroid)
 				if ((psDroid->order == DORDER_ATTACK || psDroid->order == DORDER_ATTACKTARGET) &&
 				    psDroid->psActionTarget[i] != psDroid->psActionTarget[0] &&
 				    validTarget(psDroid, psDroid->psActionTarget[0], i) &&
-				    actionInRange(psDroid, psDroid->psActionTarget[0], i))
+				    actionInAttackRange(psDroid, psDroid->psActionTarget[0], i))
 				{
 					setDroidActionTarget(psDroid, psDroid->psActionTarget[0], i);
 				}
@@ -1213,7 +1174,7 @@ void actionUpdateDroid(DROID *psDroid)
 
 			if (nonNullWeapon[i]
 			 && actionVisibleTarget(psDroid, psActionTarget, i)
-			 && actionInRange(psDroid, psActionTarget, i))
+			 && actionInAttackRange(psDroid, psActionTarget, i))
 			{
 				WEAPON_STATS* const psWeapStats = &asWeaponStats[psDroid->asWeaps[i].nStat];
 				bHasTarget = true;
@@ -1315,7 +1276,7 @@ void actionUpdateDroid(DROID *psDroid)
 					psWeapStats = &asWeaponStats[psDroid->asWeaps[i].nStat];
 					if (actionVisibleTarget(psDroid, psDroid->psActionTarget[0], i))
 					{
-						if ( actionInRange(psDroid, psDroid->psActionTarget[0], i) )
+						if ( actionInAttackRange(psDroid, psDroid->psActionTarget[0], i) )
 						{
 							if ( psDroid->player == selectedPlayer )
 							{
@@ -1430,40 +1391,38 @@ void actionUpdateDroid(DROID *psDroid)
 							chaseBloke = true;
 						}
 
-
-						if (actionInAttackRange(psDroid, psDroid->psActionTarget[0], i)
-						 && !chaseBloke)
+						
+						if (actionInAttackRange(psDroid, psDroid->psActionTarget[0], i))
 						{
-							/* Stop the droid moving any closer */
-		//				    ASSERT( psDroid->pos.x != 0 && psDroid->pos.y != 0,
-		//						"moveUpdateUnit: Unit at (0,0)" );
-
-							/* init vtol attack runs count if necessary */
-							if ( psPropStats->propulsionType == PROPULSION_TYPE_LIFT )
+							// if it can't fire while moving
+							if (!chaseBloke)
 							{
-								psDroid->action = DACTION_VTOLATTACK;
-								//actionAddVtolAttackRun( psDroid );
-								//actionUpdateVtolAttack( psDroid );
-							}
-							else
-							{
-								moveStopDroid(psDroid);
-
-								if (psWeapStats->rotate)
+								/* init vtol attack runs count if necessary */
+								if ( psPropStats->propulsionType == PROPULSION_TYPE_LIFT )
 								{
-									psDroid->action = DACTION_ATTACK;
+									psDroid->action = DACTION_VTOLATTACK;
 								}
 								else
 								{
-									psDroid->action = DACTION_ROTATETOATTACK;
-									moveTurnDroid(psDroid, psDroid->psActionTarget[0]->pos.x,psDroid->psActionTarget[0]->pos.y);
+									// then stop the droid moving any closer
+									moveStopDroid(psDroid);
+									
+									if (psWeapStats->rotate)
+									{
+										psDroid->action = DACTION_ATTACK;
+									}
+									else
+									{
+										psDroid->action = DACTION_ROTATETOATTACK;
+										moveTurnDroid(psDroid, psDroid->psActionTarget[0]->pos.x,psDroid->psActionTarget[0]->pos.y);
+									}
 								}
 							}
-						}
-						else if ( actionInRange(psDroid, psDroid->psActionTarget[0], i) )
-						{
-							// fire while closing range
-							combFire(&psDroid->asWeaps[i], psDroid, psDroid->psActionTarget[0], i);
+							else
+							{
+								// fire while closing range
+								combFire(&psDroid->asWeaps[i], psDroid, psDroid->psActionTarget[0], i);
+							}
 						}
 					}
 				}

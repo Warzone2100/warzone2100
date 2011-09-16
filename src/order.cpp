@@ -745,7 +745,7 @@ void orderUpdateDroid(DROID *psDroid)
 		}
 		else if (!isVtolDroid(psDroid)
 		      && psDroid->psTarget == psDroid->psActionTarget[0]
-		      && actionInRange(psDroid, psDroid->psTarget, 0)
+		      && actionInAttackRange(psDroid, psDroid->psTarget, 0)
 		      && (psWall = visGetBlockingWall(psDroid, psDroid->psTarget))
 		      && psWall->player != psDroid->player)
 		{
@@ -757,7 +757,7 @@ void orderUpdateDroid(DROID *psDroid)
 		{
 			if ((psDroid->order == DORDER_ATTACKTARGET) &&
 				secondaryGetState(psDroid, DSO_HALTTYPE) == DSS_HALT_HOLD &&
-				!actionInRange(psDroid, psDroid->psTarget, 0) )
+				!actionInAttackRange(psDroid, psDroid->psTarget, 0) )
 			{
 				// on hold orders give up
 				psDroid->order = DORDER_NONE;
