@@ -2,7 +2,7 @@
  *
  * @section intro_sec Introduction
  *
- * Welcome to the Warzone2100 Resurrection Project's code library! We are still only starting
+ * Welcome to the Warzone 2100 Project's code library! We are still only starting
  * to document this code base, but it should already be useful for quickly browsing around the
  * code and getting an idea of what exists and how things work.
  *
@@ -10,12 +10,12 @@
  *
  * @subsection step1 Step 1: Read the wiki documentation
  *
- * We have a great deal of documentation on our <a href="http://wiki.wz2100.net/">wiki page</a> which
- * may help get you started. Please also take notice of our <a href="http://wiki.wz2100.net/Coding_style">style guide</a>!
+ * We have a great deal of documentation on our <a href="http://developer.wz2100.net/">wiki page</a> which
+ * may help get you started. Please also take notice of our <a href="http://developer.wz2100.net/wiki/CodingStyle">style guide</a>!
  *
- * @subsection step2 Step 2: Skim main.c
+ * @subsection step2 Step 2: Skim main.cpp
  *
- * You may want to begin reading code with main.c, since this is where execution begins,
+ * You may want to begin reading code with <a href="main_8cpp.html">main.cpp</a>, since this is where execution begins,
  * and trace code paths from here.
  *
  * Have fun!
