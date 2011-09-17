@@ -155,7 +155,7 @@ const char* getDroidActionName(DROID_ACTION action)
 
 //! given a Droid (psDroid) and a target (psObj), this function checks if the 
 //! weapon number (weapon_slot) is in range ( less than maximum and greater than mininum range) to fire.
-//! The function uses the droid range stance to decide what range (short, long or optimum) it must use.
+//! This function uses the droid range stance to decide what range (short, long or optimum) it must use.
 //! Returns true if it is in range, and false if it is not.
 bool actionInAttackRange(DROID *psDroid, BASE_OBJECT *psObj, int weapon_slot)
 {
@@ -163,6 +163,8 @@ bool actionInAttackRange(DROID *psDroid, BASE_OBJECT *psObj, int weapon_slot)
 	WEAPON_STATS	*psStats = getWeaponStats(psDroid, weapon_slot);
 
 	CHECK_DROID(psDroid);
+	CHECK_OBJECT(psObj);
+	
 	if (psDroid->asWeaps[0].nStat == 0)
 	{
 		return false;
@@ -173,19 +175,9 @@ bool actionInAttackRange(DROID *psDroid, BASE_OBJECT *psObj, int weapon_slot)
 
 	radSq = dx*dx + dy*dy;
 
-
 	//// Choose which range the droid will use, depending on the stance.
-	// if it has already an order to attack, then use long range.
-	if ((psDroid->order == DORDER_ATTACKTARGET || psDroid->order == DORDER_ATTACK)
-		&& secondaryGetState(psDroid, DSO_HALTTYPE) == DSS_HALT_HOLD)
+	switch (psDroid->secondaryOrder & DSS_ARANGE_MASK)
 	{
-		longRange = proj_GetLongRange(psStats);
-		rangeSq = longRange * longRange;
-	}
-	else
-	{
-		switch (psDroid->secondaryOrder & DSS_ARANGE_MASK)
-		{
 		// Use optimum range: choose what is the range with the highest hit chance.
 		case DSS_ARANGE_DEFAULT:
 			if (weaponShortHit(psStats, psDroid->player) > weaponLongHit(psStats, psDroid->player))
@@ -210,7 +202,6 @@ bool actionInAttackRange(DROID *psDroid, BASE_OBJECT *psObj, int weapon_slot)
 			longRange = proj_GetLongRange(psStats);
 			rangeSq = longRange * longRange;
 			break;
-		}
 	}
 
 	//// do the calculation to see if the droid is in range.
