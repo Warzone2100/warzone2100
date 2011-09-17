@@ -78,7 +78,9 @@ void actionDroid(DROID *psDroid, DROID_ACTION action,
 bool actionTargetTurret(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, WEAPON *psWeapon);
 
 /** Realign turret. */
-void actionAlignTurret(BASE_OBJECT *psObj, int weapon_slot);
+void actionAlignTurret(STRUCTURE *psStructure, int weapon_slot);
+
+void actionAlignTurret(DROID *psDroid, int weapon_slot);
 
 /** Check if a target is within weapon range. */
 bool actionInAttackRange(DROID *psDroid, BASE_OBJECT *psObj, int weapon_slot);

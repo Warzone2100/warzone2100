@@ -153,6 +153,7 @@ const char* getDroidActionName(DROID_ACTION action)
 	return name[action];
 }
 
+
 //! given a Droid (psDroid) and a target (psObj), this function checks if the 
 //! weapon number (weapon_slot) is in range ( less than maximum and greater than mininum range) to fire.
 //! This function uses the droid range stance to decide what range (short, long or optimum) it must use.
@@ -160,7 +161,8 @@ const char* getDroidActionName(DROID_ACTION action)
 bool actionInAttackRange(DROID *psDroid, BASE_OBJECT *psObj, int weapon_slot)
 {
 	SDWORD			dx, dy, radSq, rangeSq, longRange;
-	WEAPON_STATS	*psStats = getWeaponStats(psDroid, weapon_slot);
+	WEAPON_STATS	*psStats;
+	int compIndex;
 
 	CHECK_DROID(psDroid);
 	CHECK_OBJECT(psObj);
@@ -174,6 +176,10 @@ bool actionInAttackRange(DROID *psDroid, BASE_OBJECT *psObj, int weapon_slot)
 	dy = (SDWORD)psDroid->pos.y - (SDWORD)psObj->pos.y;
 
 	radSq = dx*dx + dy*dy;
+
+	compIndex = psDroid->asWeaps[weapon_slot].nStat;
+	ASSERT_OR_RETURN( false, compIndex < numWeaponStats, "Invalid range referenced for numWeaponStats, %d > %d", compIndex, numWeaponStats);
+	psStats = asWeaponStats + compIndex;
 
 	//// Choose which range the droid will use, depending on the stance.
 	switch (psDroid->secondaryOrder & DSS_ARANGE_MASK)
@@ -257,13 +263,13 @@ bool actionInsideMinRange(DROID *psDroid, BASE_OBJECT *psObj, WEAPON_STATS *psSt
 }
 
 
-// Realign turret
-void actionAlignTurret(BASE_OBJECT *psObj, int weapon_slot)
+//! given a Droid (psDroid), this function is called to allign its weapon (weapon_slot) to default position.
+void actionAlignTurret(DROID *psDroid, int weapon_slot)
 {
-	int32_t         rotation;
-	uint16_t        nearest = 0;
-	uint16_t        tRot;
-	uint16_t        tPitch;
+	int32_t	rotation;
+	uint16_t nearest = 0;
+	uint16_t tRot;
+	uint16_t tPitch;
 
 	//default turret rotation 0
 	tRot = 0;
@@ -271,46 +277,51 @@ void actionAlignTurret(BASE_OBJECT *psObj, int weapon_slot)
 	//get the maximum rotation this frame
 	rotation = gameTimeAdjustedIncrement(DEG(ACTION_TURRET_ROTATION_RATE));
 
-	switch (psObj->type)
-	{
-	case OBJ_DROID:
-		tRot = ((DROID *)psObj)->asWeaps[weapon_slot].rot.direction;
-		tPitch = ((DROID *)psObj)->asWeaps[weapon_slot].rot.pitch;
-		break;
-	case OBJ_STRUCTURE:
-		tRot = ((STRUCTURE *)psObj)->asWeaps[weapon_slot].rot.direction;
-		tPitch = ((STRUCTURE *)psObj)->asWeaps[weapon_slot].rot.pitch;
-
-		// now find the nearest 90 degree angle
-		nearest = (uint16_t)((tRot + DEG(45)) / DEG(90) * DEG(90));  // Cast wrapping indended.
-		break;
-	default:
-		ASSERT(!"invalid object type", "invalid object type");
-		return;
-	}
+	tRot = psDroid->asWeaps[weapon_slot].rot.direction;
+	tPitch = psDroid->asWeaps[weapon_slot].rot.pitch;
 
 	tRot += clip(angleDelta(nearest - tRot), -rotation, rotation);  // Addition wrapping intended.
 
 	// align the turret pitch
 	tPitch += clip(angleDelta(0 - tPitch), -rotation/2, rotation/2);  // Addition wrapping intended.
 
-	switch (psObj->type)
-	{
-	case OBJ_DROID:
-		((DROID *)psObj)->asWeaps[weapon_slot].rot.direction = tRot;
-		((DROID *)psObj)->asWeaps[weapon_slot].rot.pitch = tPitch;
-		break;
-	case OBJ_STRUCTURE:
-		((STRUCTURE *)psObj)->asWeaps[weapon_slot].rot.direction = tRot;
-		((STRUCTURE *)psObj)->asWeaps[weapon_slot].rot.pitch = tPitch;
-		break;
-	default:
-		ASSERT(!"invalid object type", "invalid object type");
-		return;
-	}
+	psDroid->asWeaps[weapon_slot].rot.direction = tRot;
+	psDroid->asWeaps[weapon_slot].rot.pitch = tPitch;
 }
 
-/* returns true if on target */
+
+//! given a Structure (psStructure), this function is called to allign its weapon (weapon_slot) to default position.
+void actionAlignTurret(STRUCTURE *psStructure, int weapon_slot)
+{
+	int32_t		rotation;
+	uint16_t	nearest = 0;
+	uint16_t	tRot;
+	uint16_t	tPitch;
+
+	//default turret rotation 0
+	tRot = 0;
+
+	//get the maximum rotation this frame
+	rotation = gameTimeAdjustedIncrement(DEG(ACTION_TURRET_ROTATION_RATE));
+
+
+	tRot = psStructure->asWeaps[weapon_slot].rot.direction;
+	tPitch = psStructure->asWeaps[weapon_slot].rot.pitch;
+
+	// now find the nearest 90 degree angle
+	nearest = (uint16_t)((tRot + DEG(45)) / DEG(90) * DEG(90));  // Cast wrapping indended.
+
+	tRot += clip(angleDelta(nearest - tRot), -rotation, rotation);  // Addition wrapping intended.
+
+	// align the turret pitch
+	tPitch += clip(angleDelta(0 - tPitch), -rotation/2, rotation/2);  // Addition wrapping intended.
+
+	psStructure->asWeaps[weapon_slot].rot.direction = tRot;
+	psStructure->asWeaps[weapon_slot].rot.pitch = tPitch;
+}
+
+
+//! given an attacker (psAttacker) and a target (psTarget), this function is called to target the turret of a attacker's weapon (psWeapon) to the target.
 bool actionTargetTurret(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, WEAPON *psWeapon)
 {
 	WEAPON_STATS *psWeapStats = asWeaponStats + psWeapon->nStat;
@@ -413,17 +424,11 @@ bool actionTargetTurret(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, WEAPON *
 
 		targetPitch = iAtan2(dz, dxy);
 
-		/* invert calculations for bottom-mounted weapons (i.e. for vtols) */
-		//if (bInvert) { why do anything here? }
-
 		pitchError = angleDelta(targetPitch - tPitch);
 
 		tPitch += clip(pitchError, -pitchRate, pitchRate);  // Addition wrapping intended.
 		tPitch = (uint16_t)clip(angleDelta(tPitch), pitchLowerLimit, pitchUpperLimit);  // Cast wrapping intended.
 		onTarget = onTarget && targetPitch == tPitch;
-
-		/* re-invert result for bottom-mounted weapons (i.e. for vtols) */
-		//if (bInvert) { why do anything here? }
 
 	}
 
@@ -434,10 +439,12 @@ bool actionTargetTurret(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, WEAPON *
 }
 
 
-// return whether a droid can see a target to fire on it
+//! Given a Droid (psDroid) and a target (psTarget), this function calculates if the Droid's weapon (weapon_slot) can fire at the target.
+//! It uses the function lineOfFire for direct fire and tests if the target is visible for the Droid's player for indirect fire.
+//! returns true if target is visible and false if it's not.
 bool actionVisibleTarget(DROID *psDroid, BASE_OBJECT *psTarget, int weapon_slot)
 {
-	WEAPON_STATS	*psStats;
+	WEAPON_STATS *psStats;
 	int compIndex;
 
 	CHECK_DROID(psDroid);
@@ -634,8 +641,7 @@ static void actionUpdateTransporter( DROID *psDroid )
 }
 
 
-// calculate a position for units to pull back to if they
-// need to increase the range between them and a target
+//! given a object (psObj) and a target (psTarget), this function calculates a position (px,py) for the object to move to increase the range between him and the target.
 static void actionCalcPullBackPoint(BASE_OBJECT *psObj, BASE_OBJECT *psTarget, SDWORD *px, SDWORD *py)
 {
 	SDWORD xdiff,ydiff, len;
