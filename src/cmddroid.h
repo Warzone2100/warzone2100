@@ -27,49 +27,49 @@
 #include "cmddroiddef.h"
 #include "droiddef.h"
 
-// Initialise the command droids
+//! Initialises the command droids singleton
 extern bool cmdDroidInit(void);
 
-// ShutDown the command droids
+//! ShutDown the command droids singleton
 extern void cmdDroidShutDown(void);
 
-// Make new command droids available
+//! Make new command droids available
 extern void cmdDroidAvailable(BRAIN_STATS *psBrainStats, SDWORD player);
 
-// update the command droids
+//! update the command droids
 extern void cmdDroidUpdate(void);
 
-// add a droid to a command group
+//! add the psDroid to a group commanded by psCommander
 extern void cmdDroidAddDroid(DROID *psCommander, DROID *psDroid);
 
-// return the current target designator for a player
+//! returns the current target designator of a player
 extern DROID *cmdDroidGetDesignator(UDWORD player);
 
-// set the current target designator for a player
+//! set the current target designator of a player
 extern void cmdDroidSetDesignator(DROID *psDroid);
 
-// set the current target designator for a player
+//! clear the current target designator of a player
 extern void cmdDroidClearDesignator(UDWORD player);
 
-// get the index of the command droid
+//! get the index of the command droid
 extern SDWORD cmdDroidGetIndex(DROID *psCommander);
 
-// get the maximum group size for a command droid
+//! get the maximum group size supported by psCommander
 extern unsigned int cmdDroidMaxGroup(const DROID* psCommander);
 
-// update the kills of a command droid if psKiller is in a command group
+//! update the kills of a command droid if psKiller is in a command group
 extern void cmdDroidUpdateKills(DROID *psKiller, uint32_t experienceInc);
 
-// get the level of a droids commander, if any
+//! get the level of a droids commander, if any
 extern unsigned int cmdGetCommanderLevel(const DROID* psDroid);
 
-// returns true if a unit in question has is assigned to a commander
+//! returns true if a unit in question has is assigned to a commander
 extern bool hasCommander(const DROID* psDroid);
 
-// note that commander experience should be increased
+//! note that commander experience should be increased
 extern void cmdDroidMultiExpBoost(bool bDoit);
 
-// check whether commander experience should be increased
+//! check whether commander experience should be increased
 extern bool cmdGetDroidMultiExpBoost(void);
 
 #endif // __INCLUDED_SRC_CMDDROID_H__
