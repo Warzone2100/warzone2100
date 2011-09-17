@@ -451,7 +451,9 @@ static inline CONSTRUCT_STATS *getConstructStats(DROID *psDroid)
 
 static inline WEAPON_STATS *getWeaponStats(DROID *psDroid, int weapon_slot)
 {
-	return asWeaponStats + psDroid->asWeaps[weapon_slot].nStat;
+	compIndex = psDroid->asWeaps[weapon_slot].nStat;
+	ASSERT_OR_RETURN( false, compIndex < numWeaponStats, "Invalid range referenced for numWeaponStats, %d > %d", compIndex, numWeaponStats);
+	return asWeaponStats + compIndex;
 }
 
 static inline Rotation getInterpolatedWeaponRotation(DROID *psDroid, int weaponSlot, uint32_t time)
