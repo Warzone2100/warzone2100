@@ -54,12 +54,12 @@
 			isa = PBXAggregateTarget;
 			buildConfigurationList = 43FA570F10FF8EBB0074E914 /* Build configuration list for PBXAggregateTarget "Setup Prebuilt Components" */;
 			buildPhases = (
-				433360A711A0796D00380F5E /* Qt */,
 				4345290E1130F84E002AD731 /* msgfmt */,
 				433360B311A079F700380F5E /* Moc */,
 				43B8FF2D127CD57D006F5A13 /* Fonts */,
 				43CEADC3141D6E810001637B /* fontconfig */,
 				43CEADC6141D6EEE0001637B /* freetype */,
+				433360A711A0796D00380F5E /* Qt */,
 			);
 			dependencies = (
 			);
@@ -969,6 +969,13 @@
 			remoteGlobalIDString = 438B0C05137730FE008184FC;
 			remoteInfo = "Fetch Third Party Sources";
 		};
+		43A5C28D14266DC4009A415F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 02356D660BD3BB2600E9A019 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 43FA570C10FF8E9B0074E914;
+			remoteInfo = "Setup Prebuilt Components";
+		};
 		43AA707013C804580015B52B /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 02356D660BD3BB2600E9A019 /* Project object */;
@@ -987,7 +994,7 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = 02356D660BD3BB2600E9A019 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 02356D820BD3BB4100E9A019 /* Zlib */;
+			remoteGlobalIDString = 02356D820BD3BB4100E9A019;
 			remoteInfo = Zlib;
 		};
 		43D1808A1336B74E001906EB /* PBXContainerItemProxy */ = {
@@ -1895,8 +1902,8 @@
 		43C3B9C0118BEBE0000BBE59 /* barkmel.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = barkmel.c; path = external/libvorbis/lib/barkmel.c; sourceTree = "<group>"; };
 		43C3B9C1118BEBE0000BBE59 /* psytune.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = psytune.c; path = external/libvorbis/lib/psytune.c; sourceTree = "<group>"; };
 		43C3B9C2118BEBE0000BBE59 /* tone.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = tone.c; path = external/libvorbis/lib/tone.c; sourceTree = "<group>"; };
-		43CEAE20141D71560001637B /* libfontconfig.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfontconfig.a; path = "external/usr-fontconfig/local/lib/libfontconfig.a"; sourceTree = "<group>"; };
-		43CEAE21141D71560001637B /* libfreetype.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfreetype.a; path = "external/usr-freetype/local/lib/libfreetype.a"; sourceTree = "<group>"; };
+		43CEAE20141D71560001637B /* libfontconfig.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfontconfig.a; path = "external/usr-fontconfig/local/lib/libfontconfig.a"; sourceTree = SOURCE_ROOT; };
+		43CEAE21141D71560001637B /* libfreetype.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfreetype.a; path = "external/usr-freetype/local/lib/libfreetype.a"; sourceTree = SOURCE_ROOT; };
 		43CEAE35141D72850001637B /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
 		43D180611336B536001906EB /* wzfs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = wzfs.h; path = ../lib/framework/wzfs.h; sourceTree = SOURCE_ROOT; };
 		43D180AF1336B99C001906EB /* physfs_casefolding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = physfs_casefolding.h; path = external/physfs/physfs_casefolding.h; sourceTree = "<group>"; };
@@ -2301,16 +2308,16 @@
 		0246A0D00BD3CBE1004D1C70 /* Framework */ = {
 			isa = PBXGroup;
 			children = (
+				43DF5A8912BEE01B00DD5A37 /* cocoa_wrapper.mm */,
+				4333606F11A0731500380F5E /* wzapp.cpp */,
 				43A6285913A6C4A400C6B786 /* geometry.cpp */,
 				43A6285A13A6C4A400C6B786 /* geometry.h */,
 				43D180611336B536001906EB /* wzfs.h */,
 				43DF5A8812BEE01B00DD5A37 /* cocoa_wrapper.h */,
-				43DF5A8912BEE01B00DD5A37 /* cocoa_wrapper.mm */,
 				43B8F282127C8F9D006F5A13 /* crc.cpp */,
 				43B8F283127C8F9D006F5A13 /* crc.h */,
 				43B8F284127C8F9D006F5A13 /* opengl.h */,
 				4333606E11A0731500380F5E /* wzapp_c.h */,
-				4333606F11A0731500380F5E /* wzapp.cpp */,
 				4333607011A0731500380F5E /* wzapp.h */,
 				4333607111A0731500380F5E /* wzapp.h.qwth */,
 				974964250F5ABBE100A38899 /* endian_hack.h */,
@@ -2529,6 +2536,7 @@
 		0246A1970BD3CCC3004D1C70 /* Warzone */ = {
 			isa = PBXGroup;
 			children = (
+				0246A21D0BD3CCDB004D1C70 /* main.cpp */,
 				43F1D9CE1343F542001478EC /* qtscript.cpp */,
 				43F1D9CF1343F542001478EC /* qtscript.h */,
 				43F1D9D01343F542001478EC /* qtscriptfuncs.cpp */,
@@ -2656,7 +2664,6 @@
 				0246A21A0BD3CCDB004D1C70 /* loadsave.h */,
 				0246A21B0BD3CCDB004D1C70 /* loop.cpp */,
 				0246A21C0BD3CCDB004D1C70 /* loop.h */,
-				0246A21D0BD3CCDB004D1C70 /* main.cpp */,
 				0246A21E0BD3CCDB004D1C70 /* map.cpp */,
 				0246A21F0BD3CCDB004D1C70 /* map.h */,
 				0246A2200BD3CCDB004D1C70 /* mapdisplay.cpp */,
@@ -4072,6 +4079,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				43A5C28E14266DC4009A415F /* PBXTargetDependency */,
 				4366718913D1FD6100FE85BA /* PBXTargetDependency */,
 				43CEAE26141D71D10001637B /* PBXTargetDependency */,
 			);
@@ -5309,6 +5317,11 @@
 			isa = PBXTargetDependency;
 			target = 438B0C05137730FE008184FC /* Fetch Third Party Sources */;
 			targetProxy = 438B0C4013773421008184FC /* PBXContainerItemProxy */;
+		};
+		43A5C28E14266DC4009A415F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 43FA570C10FF8E9B0074E914 /* Setup Prebuilt Components */;
+			targetProxy = 43A5C28D14266DC4009A415F /* PBXContainerItemProxy */;
 		};
 		43AA707113C804580015B52B /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
