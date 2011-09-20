@@ -1,3 +1,18 @@
+master_XXXXXXXX
+ * General:
+   * Change: Show planned structure blueprints to allies (commit:86c945152515478c9982677bd1e482fbc6ff2362)
+   * Fix: Prevent VTOLs from getting stuck on buildings (ticket:2534, commit:818e9b423601c923ae0267293d68e64e2830de5c)
+   * Fix: Prevent droids getting strange orders after loading a savegame (commit:d74a73a34d6ac2e4b006792e95f72855a668804c)
+   * Fix: Factories build properly again after loading a savegame (commit:850e0e5e004172c6873d6fdfda51bd2607c19aca)
+ * UI:
+   * Fix: Correct player placement/colours and buildings in the map preview (ticket:2859, commit:0d6a27380de7dc286d6e0131b3e4e2a26c200f1b, commit:4de9642cd9bc91285eefe6b223cbda3c1493fd59)
+ * Translations:
+   * Update: Simplified Chinese (ticket:2858, ticket:2869, commit:614ca9a8672e09e45bdf926f9144a4e7d437aea5, commit:8e29659f64096d574949098054b4b68942587c54, commit:cd3f9edc42043aee1560386ff0dfda8bda2d5e49)
+   * Update: Hungarian (ticket:2865, commit:58668d7fd54fe1245a6ca49012663636d124fbe0)
+   * Update: Brazilian (ticket:2868, commit:fbee38857ac66f4902743ab95d26e792ee620e6f)
+   * Update: Turkish (ticket:2884, commit:31da7b5d4d23e57bbbcc81b1f0ec576dccfd66ce)
+   * Update: Danish (commit:1c8d7e4e0450a40ccffd113ac58bde12ea3893ca)
+
 master_20110801
  * General:
    * Fix: Maps can never override game data (ticket:2825, commit:e0007a217e282326856a23c932665b9a82c379a9)
