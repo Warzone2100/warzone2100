@@ -74,8 +74,6 @@
 #define DEFEND_CMD_MAXDIST		(TILE_UNITS * 8)
 #define DEFEND_CMD_BASEDIST		(TILE_UNITS * 5)
 
-// how big an area for a repair droid to cover
-#define REPAIR_MAXDIST		(TILE_UNITS * 5)
 // how big an area for a constructor droid to cover
 #define CONSTRUCT_MAXDIST		(TILE_UNITS * 8)
 
@@ -157,55 +155,6 @@ static void orderCheckGuardPosition(DROID *psDroid, SDWORD range)
 			actionDroid(psDroid, DACTION_MOVE, psDroid->orderX, psDroid->orderY);
 		}
 	}
-}
-
-/*For a given repair droid, check if there are any damaged droids within
-a defined range*/
-BASE_OBJECT * checkForRepairRange(DROID *psDroid,DROID *psTarget)
-{
-	DROID		*psCurr;
-
-	ASSERT( psDroid->droidType == DROID_REPAIR || psDroid->droidType ==
-        DROID_CYBORG_REPAIR, "checkForRepairRange:Invalid droid type" );
-
-	if(psTarget != NULL
-		&& psTarget->died)
-	{
-		psTarget = NULL;
-	}
-
-	// if guarding a unit - always check that first
-	psCurr = (DROID*)orderStateObj(psDroid, DORDER_GUARD);
-	if (psCurr != NULL
-	 && psCurr->type == OBJ_DROID
-	 && droidIsDamaged(psCurr))
-	{
-		return psCurr;
-	}
-
-	if ((psTarget != NULL) &&
-		(psTarget->type == OBJ_DROID) &&
-		(psTarget->player == psDroid->player))
-	{
-		psCurr = psTarget->psNext;
-	}
-	else
-	{
-		psCurr = apsDroidLists[psDroid->player];
-	}
-	for (; psCurr != NULL; psCurr = psCurr->psNext)
-	{
-		//check for damage
-		if (droidIsDamaged(psCurr) && visibleObject(psDroid, psCurr, false)
-		    && droidSqDist(psDroid, psCurr) <
-		       // Hold position? Repair range, else repair max dist
-		       ((psDroid->order==DORDER_NONE && secondaryGetState(psDroid, DSO_HALTTYPE)==DSS_HALT_HOLD) ?
-		        REPAIR_RANGE : REPAIR_MAXDIST*REPAIR_MAXDIST) )
-		{
-			return psCurr;
-		}
-	}
-	return NULL;
 }
 
 /*For a given constructor droid, check if there are any damaged buildings within
@@ -317,13 +266,9 @@ void orderUpdateDroid(DROID *psDroid)
 		         && !orderState(psDroid, DORDER_GUARD))
 		{
 			psObj = NULL;
-			if (psDroid->action == DACTION_NONE)
+			if (psDroid->action == DACTION_NONE || psDroid->action == DACTION_SULK)
 			{
-				psObj = checkForRepairRange(psDroid,NULL);
-			}
-			else if (psDroid->action == DACTION_SULK)
-			{
-				psObj = checkForRepairRange(psDroid,(DROID *)psDroid->psActionTarget[0]);
+				psObj = aiBestNearestToRepair(psDroid);
 			}
 			if (psObj)
 			{
@@ -518,7 +463,7 @@ void orderUpdateDroid(DROID *psDroid)
 						break;
 					case DROID_REPAIR:
 					case DROID_CYBORG_REPAIR:
-						psObj = checkForRepairRange(psDroid, NULL);
+						psObj = aiBestNearestToRepair(psDroid);
 						if (psObj)
 						{
 							actionDroid(psDroid, DACTION_DROIDREPAIR, psObj);
@@ -1189,13 +1134,9 @@ void orderUpdateDroid(DROID *psDroid)
 		psObj = NULL;
 		if ((psDroid->droidType == DROID_REPAIR || psDroid->droidType == DROID_CYBORG_REPAIR))
 		{
-			if (psDroid->action == DACTION_NONE)
+			if (psDroid->action == DACTION_NONE || psDroid->action == DACTION_SULK)
 			{
-				psObj = checkForRepairRange(psDroid,NULL);
-			}
-			else if (psDroid->action == DACTION_SULK)
-			{
-				psObj = checkForRepairRange(psDroid,(DROID *)psDroid->psActionTarget[0]);
+				psObj = aiBestNearestToRepair(psDroid);
 			}
 			if (psObj)
 			{

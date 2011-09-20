@@ -309,10 +309,6 @@ extern bool droidStartClearing( DROID *psDroid );
    returns true while continues */
 extern bool droidUpdateClearing( DROID *psDroid );
 
-/*For a given repair droid, check if there are any damaged droids within
-a defined range*/
-extern BASE_OBJECT * checkForRepairRange(DROID *psDroid,DROID *psTarget);
-
 /// Returns true iff the droid has VTOL propulsion, and is not a transport.
 extern bool isVtolDroid(const DROID* psDroid);
 /// Returns true iff the droid has VTOL propulsion and is moving.
