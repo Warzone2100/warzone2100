@@ -1,6 +1,26 @@
 2011-00-00: Version 2.3.9
+ * General:
+   * Change: Show damage on all buildings (ticket:2634, commit: eabe72073c5e594f7849cd53460b25ae95b3371e)
+   * Change: Use Ctrl-V instead of Tab to paste in edit boxes (ticket:2830, commit:d2f4b5a162151d3dac14e45931e727b181c9ef22)
+   * Change: Mouse wheel scrolling in research and build menus (ticket:2110, commit:6a41d3f59f962800b2e0e3eba7e696f48dc46b36)
+   * Fix: Make units follow their orders better (ticket:2391, commit:2c31de52476f81f6ef368a38483c912c08c69c22)
+   * Fix: Make sure files in sequences.wz override included ones, so localized videos are always used (ticket:2728, commit:4830009833b8b89c9dde0080fe862505246c6b8a)
+   * Fix: Maps can never override game data (ticket:2825, commit:1838d20c1db487f3e03a5cf8e0f4f3a668b20a5c)
+   * Fix: Make mod savegames work properly (ticket:2735, ticket:2825, commit:5886695119364b59f94aa81c3db8d0952dcf59b9)
+   * Fix: Prevent VTOLs from getting stuck on buildings (ticket:2534, commit:d1c93494dee2f1b929776edadc3bad1f7d364491, commit:419ae406336d006c8042e820e9cdec47ecb9d8ff)
+ * UI:
+   * Fix: Properly update player colours in the map preview (commit:c52d627b85ac038fdcc6203bc5f4499b8c4a6c2c)
  * Multiplayer:
    * Change: Some AI improvements from master (commit:2e13cb5420fa65554535f9c9dea7026fa992b21c, commit:07542186d48dbf0069ec503e845f4f9986438ad3)
+ * Translations:
+   * Update: Dutch (ticket:2723, commit:4545d492f2c0a47edc69e88540d3f1f389bb7154)
+   * Update: Turkish (ticket:2727, ticket:2794, ticket:2831, ticket:2840, commit:09ac275217921068ef15e09fadf9be73c00f31f7, commit:bbda88a5ff8aaf7b548c1bc4e9caa7bd60bc4708, commit:a406df2af1c80256dcba47d26537a840d558679e, commit:fcec0a3062972edbeeebc6a10e90b661cab0b88a)
+   * Update: German (ticket:2729, commit:205120cc0e70bd892cc220c36ee10fb3b724c9ce)
+   * Update: Hungarian (ticket:2738, ticket:2747, ticket:2754, ticket:2782, ticket:2865, commit:03c83546afbdfa63ac25d813391394e7d82cddb9, commit:994e8f9022bdd7d6ffebe721c5c85bd4808ab90e, commit:7bb82c66d56c179e486ce3f0df2c1b097d4793ef, commit:7189dcf2a4885b09b35c749d74cf3820a3d51b23, commit:67686dd337997ba18cd0e607dc0125f4fa79f2a2)
+   * Update: Spanish (ticket:2788, commit:d721bb662cae4a91e3bcdf629393c595fa39ab89)
+   * Update: Brazilian (ticket:2786, commit:29e8872533efdcb5b3a642e9f83d7df7e1a309cf)
+   * Update: Simplified Chinese (ticket:2858, ticket:2869, commit:989e65c43e370a2298bcf5224b356db3f9747a35, commit:64067a5b668584067151db44d8e15f68961b3625, commit:81da3ed3071330985efe96538b4f0bd068ec32f6)
+   * Update: Danish (commit:4e6dfcf01d4521b1aa5b34150a626e2dc746887f)
 
 2011-05-17: Version 2.3.8
  * General:
