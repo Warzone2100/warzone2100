@@ -700,13 +700,15 @@ DROID *aiBestNearestToRepair(DROID *psDroid)
 	gridStartIterate(psDroid->pos.x, psDroid->pos.y, droidRange);
 	for (BASE_OBJECT* psTarget = gridIterate(); psTarget != NULL; psTarget = gridIterate())
 	{
-		double nearestDroidToTargetDistance = 0;// base value, used to ai
-		double worstTargetHealth = 1;			// base value, used to ai
-		
+		int64_t nearestDroidToTargetDistance = 0;// base value, used to ai
+		int64_t worstTargetHealth = 1;			// base value, used to ai
+
 		// if it is of the same alliance, it is a droid, it is damaged, is visible and is not probably doomed, then we can repair it
 		if (aiCheckAlliances(psTarget->player,psDroid->player)
 							&& psTarget->type == OBJ_DROID
+							&& psTarget != psDroid
 							&& droidIsDamaged((DROID*)psTarget)
+							&& !(isVtolDroid((DROID*)psTarget) && isFlying((DROID*)psTarget)) // vtol and flying
 							&& visibleObject(psDroid, psTarget, false)
 							&& !aiObjectIsProbablyDoomed(psTarget))
 		{
