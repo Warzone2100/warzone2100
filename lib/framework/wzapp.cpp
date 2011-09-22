@@ -129,6 +129,7 @@ WzMainWindow::WzMainWindow(QSize resolution, const QGLFormat &format, QWidget *p
 	setMouseTracking(true);
 
 	setWindowIcon(QIcon(QPixmap::fromImage(QImage("wz::images/warzone2100.png", "PNG"))));
+	setWindowTitle(PACKAGE_NAME);
 
 	QImageReader buffer("wz::images/intfac5.png", "PNG");
 	if (!buffer.canRead())
