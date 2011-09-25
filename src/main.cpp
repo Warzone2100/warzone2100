@@ -1367,6 +1367,7 @@ int main(int argc, char *argv[])
 	debug_MEMSTATS();
 #endif
 	debug(LOG_MAIN, "Entering main loop");
+	mainwindow.update(); // kick off painting, needed on macosx
 	app.exec();
 	saveConfig();
 	systemShutdown();
