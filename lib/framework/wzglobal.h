@@ -39,6 +39,11 @@
 #  include "config.h"
 #elif defined(__MACOSX__)
 #  include "config-macosx.h"
+#elif !defined(__MACOSX__) && !defined(HAVE_CONFIG_H)
+#  define PACKAGE "warzone2100"
+#  define PACKAGE_BUGREPORT "http://wz2100.net/"
+#  define PACKAGE_NAME "Warzone 2100"
+#  define PACKAGE_TARNAME "warzone2100"
 #endif
 
 
