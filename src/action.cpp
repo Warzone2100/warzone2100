@@ -181,7 +181,7 @@ bool actionInAttackRange(DROID *psDroid, BASE_OBJECT *psObj, int weapon_slot)
 	ASSERT_OR_RETURN( false, compIndex < numWeaponStats, "Invalid range referenced for numWeaponStats, %d > %d", compIndex, numWeaponStats);
 	psStats = asWeaponStats + compIndex;
 
-	//// Choose which range the droid will use, depending on the stance.
+	// Choose which range the droid will use, depending on the stance.
 	switch (psDroid->secondaryOrder & DSS_ARANGE_MASK)
 	{
 		// Use optimum range: choose what is the range with the highest hit chance.
@@ -210,7 +210,7 @@ bool actionInAttackRange(DROID *psDroid, BASE_OBJECT *psObj, int weapon_slot)
 			break;
 	}
 
-	//// do the calculation to see if the droid is in range.
+	// do the calculation to see if the droid is in range.
 	// check max range
 	if ( radSq <= rangeSq )
 	{
@@ -1273,7 +1273,7 @@ void actionUpdateDroid(DROID *psDroid)
 					psWeapStats = &asWeaponStats[psDroid->asWeaps[i].nStat];
 					if (actionVisibleTarget(psDroid, psDroid->psActionTarget[0], i))
 					{
-						if ( actionInAttackRange(psDroid, psDroid->psActionTarget[0], i) )
+						if (actionInAttackRange(psDroid, psDroid->psActionTarget[0], i))
 						{
 							if ( psDroid->player == selectedPlayer )
 							{

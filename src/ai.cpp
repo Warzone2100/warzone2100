@@ -668,9 +668,9 @@ DROID *aiBestNearestToRepair(DROID *psDroid)
 	// if guarding a unit, check that first
 	DROID* psGuardingDroid = (DROID*)orderStateObj(psDroid, DORDER_GUARD);
 	if (psGuardingDroid != NULL
-		&& psGuardingDroid->type == OBJ_DROID
-		&& droidIsDamaged(psGuardingDroid)
-		&& !aiObjectIsProbablyDoomed(psGuardingDroid)
+	    && psGuardingDroid->type == OBJ_DROID
+	    && droidIsDamaged(psGuardingDroid)
+	    && !aiObjectIsProbablyDoomed(psGuardingDroid)
 		)
 	{
 		return psGuardingDroid;
@@ -681,10 +681,10 @@ DROID *aiBestNearestToRepair(DROID *psDroid)
 	{
 		DROID* psRepairingDroid = (DROID*)psDroid->psActionTarget[0];
 		if (psRepairingDroid != NULL
-			&& psRepairingDroid->type == OBJ_DROID
-			&& droidIsDamaged(psRepairingDroid)
-			&& !aiObjectIsProbablyDoomed(psRepairingDroid)
-			)
+		    && psRepairingDroid->type == OBJ_DROID
+		    && droidIsDamaged(psRepairingDroid)
+		    && !aiObjectIsProbablyDoomed(psRepairingDroid)
+		    )
 		{
 			return psRepairingDroid;
 		}
@@ -693,8 +693,7 @@ DROID *aiBestNearestToRepair(DROID *psDroid)
 	DROID *psMostLikelyTarget = NULL;
 
 	// the range to search is given by REPAIR_RANGE in case is on hold, or REPAIR_MAXDIST^2 if not.
-	int droidRange = ((psDroid->order==DORDER_NONE && secondaryGetState(psDroid, DSO_HALTTYPE)==DSS_HALT_HOLD) ?
-					  REPAIR_RANGE : REPAIR_MAXDIST*REPAIR_MAXDIST);
+	int droidRange = ((psDroid->order==DORDER_NONE && secondaryGetState(psDroid, DSO_HALTTYPE)==DSS_HALT_HOLD) ? REPAIR_RANGE : REPAIR_MAXDIST*REPAIR_MAXDIST);
 
 	// iterate on all objects within range
 	gridStartIterate(psDroid->pos.x, psDroid->pos.y, droidRange);
