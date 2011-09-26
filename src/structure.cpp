@@ -1339,7 +1339,7 @@ static void buildFlatten(STRUCTURE *pStructure, int h)
 void alignStructure(STRUCTURE *psBuilding)
 {
 	/* DEFENSIVE structures are pulled to the terrain */
-	if (psBuilding->pStructureType->type != REF_DEFENSE)
+	if (psBuilding->pStructureType->type != REF_DEFENSE && psBuilding->pStructureType->type != REF_WALL && psBuilding->pStructureType->type != REF_WALLCORNER)
 	{
 		int mapH = foundationHeight(psBuilding);
 

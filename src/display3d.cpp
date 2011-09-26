@@ -2473,11 +2473,8 @@ static bool	renderWallSection(STRUCTURE *psStructure)
 {
 	SDWORD			structX, structY, height;
 	PIELIGHT		brightness;
-	iIMDShape		*imd;
 	SDWORD			rotation;
 	Vector3i			dv;
-	UDWORD			i;
-	Vector3f			*temp;
 	int				pieFlag, pieFlagData;
 
 	if(psStructure->visible[selectedPlayer] || demoGetStatus())
@@ -2489,31 +2486,8 @@ static bool	renderWallSection(STRUCTURE *psStructure)
 		structY = psStructure->pos.y;
 
 		brightness = structureBrightness(psStructure);
+		pie_SetShaderStretchDepth(psStructure->pos.z - psStructure->foundationDepth);
 
-		/*
-		Right, now the tricky bit, we need to bugger about with the coordinates of the imd to make it
-		fit tightly to the ground and to neighbours.
-		*/
-		imd = psStructure->pStructureType->pBaseIMD;
-		if(imd != NULL)
-		{
-			UDWORD centreHeight;
-
-			// Get a copy of the points
-			memcpy(alteredPoints,imd->points,imd->npoints*sizeof(Vector3i));
-			// Get the height of the centre point for reference
-			centreHeight = map_Height(structX,structY);
-			// Now we got through the shape looking for vertices on the edge
-			for(i=0; i<(UDWORD)imd->npoints; i++)
-			{
-				UDWORD pointHeight;
-				SDWORD shift;
-
-				pointHeight = map_Height(structX+alteredPoints[i].x,structY-alteredPoints[i].z);
-				shift = centreHeight - pointHeight;
-				alteredPoints[i].y -= shift;
-			}
-		}
 		/* Establish where it is in the world */
 		dv.x = structX - player.p.x;
 		dv.z = -(structY - player.p.z);
@@ -2540,21 +2514,6 @@ static bool	renderWallSection(STRUCTURE *psStructure)
 
 		rotation = psStructure->rot.direction;
 		pie_MatRotY(-rotation);
-
-		if(imd != NULL)
-		{
-			// Make the imd pointer to the vertex list point to ours
-			temp = imd->points;
-			imd->points = alteredPoints;
-			// Actually render it
-			pie_Draw3DShape(imd, 0, getPlayerColour(psStructure->player), brightness, 0, 0);
-			imd->points = temp;
-		}
-
-		imd = psStructure->sDisplay.imd;
-		temp = imd->points;
-
-		flattenImd(imd, structX, structY, UNDEG(psStructure->rot.direction));
 
 		/* Actually render it */
 		if ( (psStructure->status == SS_BEING_BUILT ) ||
@@ -2584,9 +2543,8 @@ static bool	renderWallSection(STRUCTURE *psStructure)
 				}
 				pieFlagData = 0;
 			}
-			pie_Draw3DShape(imd, 0, getPlayerColour(psStructure->player), brightness, pieFlag, pieFlagData);
+			pie_Draw3DShape(psStructure->sDisplay.imd, 0, getPlayerColour(psStructure->player), brightness, pieFlag, pieFlagData);
 		}
-		imd->points = temp;
 
 		{
 			Vector3i zero(0, 0, 0);
@@ -2597,6 +2555,7 @@ static bool	renderWallSection(STRUCTURE *psStructure)
 			psStructure->sDisplay.screenY = s.y;
 		}
 
+		pie_SetShaderStretchDepth(0);
 		pie_MatEnd();
 
 		return(true);
