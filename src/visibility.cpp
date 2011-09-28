@@ -167,7 +167,6 @@ static void doWaveTerrain(int sx, int sy, int sz, unsigned radius, int rayPlayer
 			continue;
 		}
 		psTile = mapTile(mapX, mapY);
-
 		tileHeight = psTile->height;
 		perspectiveHeight = (tileHeight - sz) * tiles[i].invRadius;
 
@@ -530,7 +529,7 @@ static void setSeenBy(BASE_OBJECT *psObj, unsigned viewer, int val /*= UBYTE_MAX
 }
 
 // Calculate which objects we should know about based on alliances and satellite view.
-void processVisibilitySelf(BASE_OBJECT *psObj)
+static void processVisibilitySelf(BASE_OBJECT *psObj)
 {
 	int viewer;
 
@@ -554,7 +553,7 @@ void processVisibilitySelf(BASE_OBJECT *psObj)
 }
 
 // Calculate which objects we can see. Better to call after processVisibilitySelf, since that check is cheaper.
-void processVisibilityVision(BASE_OBJECT *psViewer)
+static void processVisibilityVision(BASE_OBJECT *psViewer)
 {
 	BASE_OBJECT *psObj;
 
