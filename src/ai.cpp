@@ -704,12 +704,12 @@ DROID *aiBestNearestToRepair(DROID *psDroid)
 
 		// if it is of the same alliance, it is a droid, it is damaged, is visible and is not probably doomed, then we can repair it
 		if (aiCheckAlliances(psTarget->player,psDroid->player)
-							&& psTarget->type == OBJ_DROID
-							&& psTarget != psDroid
-							&& droidIsDamaged((DROID*)psTarget)
-							&& !(isVtolDroid((DROID*)psTarget) && isFlying((DROID*)psTarget)) // vtol and flying
-							&& visibleObject(psDroid, psTarget, false)
-							&& !aiObjectIsProbablyDoomed(psTarget))
+		                     && psTarget->type == OBJ_DROID
+                             && psTarget != psDroid
+                             && droidIsDamaged((DROID*)psTarget)
+                             && !(isVtolDroid((DROID*)psTarget) && isFlying((DROID*)psTarget)) // vtol and flying
+                             && visibleObject(psDroid, psTarget, false)
+                             && !aiObjectIsProbablyDoomed(psTarget))
 		{
 			// this part of the code is used to minimize the weighted sum = targetHealth*healthWeight + targetArmor*(1-healthWeight). The healthWeight is a value [0,1] which states the force that the targetHealth should have. For instance, if healthWeight = 1, then sum = targetHealth, which means that the distance is not taken into account for the calculation
 

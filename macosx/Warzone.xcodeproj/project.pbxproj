@@ -5402,8 +5402,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 43025DFE1120A4CA006C49B1 /* Project-All.xcconfig */;
 			buildSettings = {
-				GCC_VERSION = com.apple.compilers.llvmgcc42;
-				SDKROOT = "";
 			};
 			name = Debug;
 		};
@@ -5411,8 +5409,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 43025DFE1120A4CA006C49B1 /* Project-All.xcconfig */;
 			buildSettings = {
-				GCC_VERSION = com.apple.compilers.llvmgcc42;
-				SDKROOT = "";
 			};
 			name = Release;
 		};
@@ -5672,8 +5668,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 43025DFE1120A4CA006C49B1 /* Project-All.xcconfig */;
 			buildSettings = {
-				GCC_VERSION = com.apple.compilers.llvmgcc42;
-				SDKROOT = "";
 			};
 			name = StaticAnalyzer;
 		};
