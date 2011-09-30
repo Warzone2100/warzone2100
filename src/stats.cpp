@@ -3491,7 +3491,7 @@ void adjustMaxDesignStats(void)
 }
 
 /* Check if an object has a weapon */
-bool objHasWeapon(BASE_OBJECT *psObj)
+bool objHasWeapon(const BASE_OBJECT *psObj)
 {
 
 	//check if valid type
@@ -3513,7 +3513,7 @@ bool objHasWeapon(BASE_OBJECT *psObj)
 	return false;
 }
 
-SENSOR_STATS *objActiveRadar(BASE_OBJECT *psObj)
+SENSOR_STATS *objActiveRadar(const BASE_OBJECT *psObj)
 {
 	SENSOR_STATS	*psStats = NULL;
 	int				compIndex;
@@ -3542,7 +3542,7 @@ SENSOR_STATS *objActiveRadar(BASE_OBJECT *psObj)
 	return psStats;
 }
 
-bool objRadarDetector(BASE_OBJECT *psObj)
+bool objRadarDetector(const BASE_OBJECT *psObj)
 {
 	if (psObj->type == OBJ_STRUCTURE)
 	{

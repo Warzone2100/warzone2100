@@ -355,16 +355,16 @@ extern UDWORD getMaxWeaponDamage(void);
 extern UDWORD getMaxWeaponROF(void);
 extern UDWORD getMaxPropulsionSpeed(void);
 
-extern bool objHasWeapon(BASE_OBJECT *psObj);
+extern bool objHasWeapon(const BASE_OBJECT *psObj);
 
 extern void statsInitVars(void);
 
 /* Wrappers */
 
 /** If object is an active radar (has sensor turret), then return a pointer to its sensor stats. If not, return NULL. */
-SENSOR_STATS *objActiveRadar(BASE_OBJECT *psObj);
+SENSOR_STATS *objActiveRadar(const BASE_OBJECT *psObj);
 
 /** Returns whether object has a radar detector sensor. */
-bool objRadarDetector(BASE_OBJECT *psObj);
+bool objRadarDetector(const BASE_OBJECT *psObj);
 
 #endif // __INCLUDED_SRC_STATS_H__

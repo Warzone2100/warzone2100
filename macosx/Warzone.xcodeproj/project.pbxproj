@@ -54,10 +54,12 @@
 			isa = PBXAggregateTarget;
 			buildConfigurationList = 43FA570F10FF8EBB0074E914 /* Build configuration list for PBXAggregateTarget "Setup Prebuilt Components" */;
 			buildPhases = (
-				433360A711A0796D00380F5E /* Qt */,
 				4345290E1130F84E002AD731 /* msgfmt */,
 				433360B311A079F700380F5E /* Moc */,
 				43B8FF2D127CD57D006F5A13 /* Fonts */,
+				43CEADC3141D6E810001637B /* fontconfig */,
+				43CEADC6141D6EEE0001637B /* freetype */,
+				433360A711A0796D00380F5E /* Qt */,
 			);
 			dependencies = (
 			);
@@ -505,10 +507,8 @@
 		4366721D13D1FFB900FE85BA /* transform.c in Sources */ = {isa = PBXBuildFile; fileRef = 436671F513D1FFB900FE85BA /* transform.c */; };
 		4366721E13D1FFB900FE85BA /* unicode.c in Sources */ = {isa = PBXBuildFile; fileRef = 436671F613D1FFB900FE85BA /* unicode.c */; };
 		4366722A13D20B5700FE85BA /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43B8FD34127CB13F006F5A13 /* OpenGL.framework */; };
-		4366724513D20E7500FE85BA /* libfreetype.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4366724413D20E7500FE85BA /* libfreetype.dylib */; };
 		4366727413D211AE00FE85BA /* QuesoGLC.framework in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 4366718213D1FD5600FE85BA /* QuesoGLC.framework */; };
 		4366729613D2122700FE85BA /* QuesoGLC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4366718213D1FD5600FE85BA /* QuesoGLC.framework */; };
-		436673A213D23A1E00FE85BA /* libfontconfig.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 436673A113D23A1E00FE85BA /* libfontconfig.dylib */; };
 		4371B60F11D93FD1005A67AB /* pngpriv.h in Headers */ = {isa = PBXBuildFile; fileRef = 4371B60D11D93FD0005A67AB /* pngpriv.h */; };
 		437FB24D13CE5CA900E7EF5B /* swapinterval.mm in Sources */ = {isa = PBXBuildFile; fileRef = 437FB24B13CE5CA900E7EF5B /* swapinterval.mm */; };
 		438BDDF31129DC9A00998660 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 438BDDD71129DC9A00998660 /* InfoPlist.strings */; };
@@ -553,6 +553,11 @@
 		43C3B9BF118BEB63000BBE59 /* setup_44p51.h in Headers */ = {isa = PBXBuildFile; fileRef = 43C3B9BD118BEB63000BBE59 /* setup_44p51.h */; };
 		43C3B9C5118BEBE0000BBE59 /* tone.c in Sources */ = {isa = PBXBuildFile; fileRef = 43C3B9C2118BEBE0000BBE59 /* tone.c */; };
 		43C3B9E0118BEC40000BBE59 /* res_books_51.h in Headers */ = {isa = PBXBuildFile; fileRef = 43C3B9B4118BEA9D000BBE59 /* res_books_51.h */; };
+		43CEAE22141D71560001637B /* libfontconfig.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 43CEAE20141D71560001637B /* libfontconfig.a */; };
+		43CEAE23141D71570001637B /* libfreetype.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 43CEAE21141D71560001637B /* libfreetype.a */; };
+		43CEAE27141D71DA0001637B /* Zlib.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02356D830BD3BB4100E9A019 /* Zlib.framework */; };
+		43CEAE34141D72840001637B /* libiconv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 43B9DE3813846038004C7351 /* libiconv.dylib */; };
+		43CEAE36141D72850001637B /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 43CEAE35141D72850001637B /* libxml2.dylib */; };
 		43D180B01336B99C001906EB /* physfs_casefolding.h in Headers */ = {isa = PBXBuildFile; fileRef = 43D180AF1336B99C001906EB /* physfs_casefolding.h */; };
 		43D338581364F5A8005F6725 /* connecthostport.c in Sources */ = {isa = PBXBuildFile; fileRef = 43D338561364F5A8005F6725 /* connecthostport.c */; };
 		43D338591364F5A8005F6725 /* connecthostport.h in Headers */ = {isa = PBXBuildFile; fileRef = 43D338571364F5A8005F6725 /* connecthostport.h */; };
@@ -965,6 +970,13 @@
 			remoteGlobalIDString = 438B0C05137730FE008184FC;
 			remoteInfo = "Fetch Third Party Sources";
 		};
+		43A5C28D14266DC4009A415F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 02356D660BD3BB2600E9A019 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 43FA570C10FF8E9B0074E914;
+			remoteInfo = "Setup Prebuilt Components";
+		};
 		43AA707013C804580015B52B /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 02356D660BD3BB2600E9A019 /* Project object */;
@@ -978,6 +990,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = 02356D740BD3BB3400E9A019;
 			remoteInfo = Warzone;
+		};
+		43CEAE25141D71D10001637B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 02356D660BD3BB2600E9A019 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 02356D820BD3BB4100E9A019;
+			remoteInfo = Zlib;
 		};
 		43D1808A1336B74E001906EB /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -1784,8 +1803,6 @@
 		436671F413D1FFB900FE85BA /* texture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = texture.h; path = external/quesoglc/src/texture.h; sourceTree = "<group>"; };
 		436671F513D1FFB900FE85BA /* transform.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = transform.c; path = external/quesoglc/src/transform.c; sourceTree = "<group>"; };
 		436671F613D1FFB900FE85BA /* unicode.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = unicode.c; path = external/quesoglc/src/unicode.c; sourceTree = "<group>"; };
-		4366724413D20E7500FE85BA /* libfreetype.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libfreetype.dylib; path = usr/local/lib/libfreetype.dylib; sourceTree = SDKROOT; };
-		436673A113D23A1E00FE85BA /* libfontconfig.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libfontconfig.dylib; path = usr/X11/lib/libfontconfig.dylib; sourceTree = SDKROOT; };
 		4371B60D11D93FD0005A67AB /* pngpriv.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = pngpriv.h; path = external/libpng/pngpriv.h; sourceTree = "<group>"; };
 		437FB24913CE5CA900E7EF5B /* swapinterval.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = swapinterval.cpp; path = ../lib/qtgame/swapinterval.cpp; sourceTree = SOURCE_ROOT; };
 		437FB24A13CE5CA900E7EF5B /* swapinterval.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = swapinterval.h; path = ../lib/qtgame/swapinterval.h; sourceTree = SOURCE_ROOT; };
@@ -1886,6 +1903,9 @@
 		43C3B9C0118BEBE0000BBE59 /* barkmel.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = barkmel.c; path = external/libvorbis/lib/barkmel.c; sourceTree = "<group>"; };
 		43C3B9C1118BEBE0000BBE59 /* psytune.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = psytune.c; path = external/libvorbis/lib/psytune.c; sourceTree = "<group>"; };
 		43C3B9C2118BEBE0000BBE59 /* tone.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = tone.c; path = external/libvorbis/lib/tone.c; sourceTree = "<group>"; };
+		43CEAE20141D71560001637B /* libfontconfig.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfontconfig.a; path = "external/usr-fontconfig/local/lib/libfontconfig.a"; sourceTree = SOURCE_ROOT; };
+		43CEAE21141D71560001637B /* libfreetype.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfreetype.a; path = "external/usr-freetype/local/lib/libfreetype.a"; sourceTree = SOURCE_ROOT; };
+		43CEAE35141D72850001637B /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
 		43D180611336B536001906EB /* wzfs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = wzfs.h; path = ../lib/framework/wzfs.h; sourceTree = SOURCE_ROOT; };
 		43D180AF1336B99C001906EB /* physfs_casefolding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = physfs_casefolding.h; path = external/physfs/physfs_casefolding.h; sourceTree = "<group>"; };
 		43D338561364F5A8005F6725 /* connecthostport.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = connecthostport.c; sourceTree = "<group>"; };
@@ -2135,8 +2155,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				4366722A13D20B5700FE85BA /* OpenGL.framework in Frameworks */,
-				4366724513D20E7500FE85BA /* libfreetype.dylib in Frameworks */,
-				436673A213D23A1E00FE85BA /* libfontconfig.dylib in Frameworks */,
+				43CEAE27141D71DA0001637B /* Zlib.framework in Frameworks */,
+				43CEAE34141D72840001637B /* libiconv.dylib in Frameworks */,
+				43CEAE36141D72850001637B /* libxml2.dylib in Frameworks */,
+				43CEAE23141D71570001637B /* libfreetype.a in Frameworks */,
+				43CEAE22141D71560001637B /* libfontconfig.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2288,16 +2311,16 @@
 		0246A0D00BD3CBE1004D1C70 /* Framework */ = {
 			isa = PBXGroup;
 			children = (
+				43DF5A8912BEE01B00DD5A37 /* cocoa_wrapper.mm */,
+				4333606F11A0731500380F5E /* wzapp.cpp */,
 				43A6285913A6C4A400C6B786 /* geometry.cpp */,
 				43A6285A13A6C4A400C6B786 /* geometry.h */,
 				43D180611336B536001906EB /* wzfs.h */,
 				43DF5A8812BEE01B00DD5A37 /* cocoa_wrapper.h */,
-				43DF5A8912BEE01B00DD5A37 /* cocoa_wrapper.mm */,
 				43B8F282127C8F9D006F5A13 /* crc.cpp */,
 				43B8F283127C8F9D006F5A13 /* crc.h */,
 				43B8F284127C8F9D006F5A13 /* opengl.h */,
 				4333606E11A0731500380F5E /* wzapp_c.h */,
-				4333606F11A0731500380F5E /* wzapp.cpp */,
 				4333607011A0731500380F5E /* wzapp.h */,
 				4333607111A0731500380F5E /* wzapp.h.qwth */,
 				974964250F5ABBE100A38899 /* endian_hack.h */,
@@ -2516,6 +2539,7 @@
 		0246A1970BD3CCC3004D1C70 /* Warzone */ = {
 			isa = PBXGroup;
 			children = (
+				0246A21D0BD3CCDB004D1C70 /* main.cpp */,
 				43F1D9CE1343F542001478EC /* qtscript.cpp */,
 				43F1D9CF1343F542001478EC /* qtscript.h */,
 				43F1D9D01343F542001478EC /* qtscriptfuncs.cpp */,
@@ -2643,7 +2667,6 @@
 				0246A21A0BD3CCDB004D1C70 /* loadsave.h */,
 				0246A21B0BD3CCDB004D1C70 /* loop.cpp */,
 				0246A21C0BD3CCDB004D1C70 /* loop.h */,
-				0246A21D0BD3CCDB004D1C70 /* main.cpp */,
 				0246A21E0BD3CCDB004D1C70 /* map.cpp */,
 				0246A21F0BD3CCDB004D1C70 /* map.h */,
 				0246A2200BD3CCDB004D1C70 /* mapdisplay.cpp */,
@@ -2878,8 +2901,7 @@
 				43B8FD32127CB13F006F5A13 /* OpenAL.framework */,
 				43B8FD34127CB13F006F5A13 /* OpenGL.framework */,
 				43B9DE3813846038004C7351 /* libiconv.dylib */,
-				4366724413D20E7500FE85BA /* libfreetype.dylib */,
-				436673A113D23A1E00FE85BA /* libfontconfig.dylib */,
+				43CEAE35141D72850001637B /* libxml2.dylib */,
 			);
 			name = "System frameworks";
 			sourceTree = "<group>";
@@ -2997,6 +3019,8 @@
 			isa = PBXGroup;
 			children = (
 				4333611D11A07FB900380F5E /* QT */,
+				43CEAE20141D71560001637B /* libfontconfig.a */,
+				43CEAE21141D71560001637B /* libfreetype.a */,
 			);
 			name = "External frameworks";
 			sourceTree = "<group>";
@@ -4060,7 +4084,9 @@
 			buildRules = (
 			);
 			dependencies = (
+				43A5C28E14266DC4009A415F /* PBXTargetDependency */,
 				4366718913D1FD6100FE85BA /* PBXTargetDependency */,
+				43CEAE26141D71D10001637B /* PBXTargetDependency */,
 			);
 			name = QuesoGLC;
 			productName = QuesoGLC;
@@ -4475,7 +4501,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "DirectorY=\"libpng-1.5.4\"\nOutDir=\"libpng\"\nFileName=\"libpng-1.5.4.tar.gz\"\nSourceDLP=\"http://downloads.sourceforge.net/project/libpng/libpng15/1.5.4/libpng-1.5.4.tar.gz\"\nMD5Sum=\"dea4d1fd671160424923e92ff0cdda78\"\n\nconfigs/FetchSource.sh \"${DirectorY}\" \"${OutDir}\" \"${FileName}\" \"${SourceDLP}\" \"${MD5Sum}\"\nexit ${?}\n";
+			shellScript = "DirectorY=\"libpng-1.5.5\"\nOutDir=\"libpng\"\nFileName=\"libpng-1.5.5.tar.gz\"\nSourceDLP=\"http://downloads.sourceforge.net/project/libpng/libpng15/1.5.5/libpng-1.5.5.tar.gz\"\nMD5Sum=\"003bcac022125029bae4818d74c42a94\"\n\nconfigs/FetchSource.sh \"${DirectorY}\" \"${OutDir}\" \"${FileName}\" \"${SourceDLP}\" \"${MD5Sum}\"\nexit ${?}\n";
 		};
 		438B0C26137732A5008184FC /* Ogg - Fetch source */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -4546,6 +4572,34 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "DirectorY=\"fonts_\"\nOutDir=\"fonts\"\nFileName=\"fonts.tar.gz\"\nBuiltDLP=\"http://downloads.sourceforge.net/project/warzone2100/build-tools/mac/fonts.tar.gz\"\nMD5Sum=\"1b8805b36f6f1ba71026d6b5ece1ed52\"\n\nconfigs/FetchPrebuilt.sh \"${DirectorY}\" \"${OutDir}\" \"${FileName}\" \"${BuiltDLP}\" \"${MD5Sum}\"\nexit ${?}\n\n# tar -czf fonts.tar.gz --exclude '.DS_Store' fonts_";
+		};
+		43CEADC3141D6E810001637B /* fontconfig */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = fontconfig;
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "DirectorY=\"usr\"\nOutDir=\"usr-fontconfig\"\nFileName=\"fontconfig-2.8.0-darwin9-bin3.tar.gz\"\nBuiltDLP=\"http://r.research.att.com/libs/fontconfig-2.8.0-darwin9-bin3.tar.gz\"\nMD5Sum=\"5d53bd02deb019ac972481afef05562c\"\n\nconfigs/FetchPrebuilt.sh \"${DirectorY}\" \"${OutDir}\" \"${FileName}\" \"${BuiltDLP}\" \"${MD5Sum}\"\nexit ${?}\n";
+		};
+		43CEADC6141D6EEE0001637B /* freetype */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = freetype;
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "DirectorY=\"usr\"\nOutDir=\"usr-freetype\"\nFileName=\"freetype-2.4.4-darwin9-bin4.tar.gz\"\nBuiltDLP=\"http://r.research.att.com/libs/freetype-2.4.4-darwin9-bin4.tar.gz\"\nMD5Sum=\"1c782dbe8176d987666cdc0e73194862\"\n\nconfigs/FetchPrebuilt.sh \"${DirectorY}\" \"${OutDir}\" \"${FileName}\" \"${BuiltDLP}\" \"${MD5Sum}\"\nexit ${?}\n";
 		};
 		43D180761336B6BF001906EB /* Run autorevision */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -5270,6 +5324,11 @@
 			target = 438B0C05137730FE008184FC /* Fetch Third Party Sources */;
 			targetProxy = 438B0C4013773421008184FC /* PBXContainerItemProxy */;
 		};
+		43A5C28E14266DC4009A415F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 43FA570C10FF8E9B0074E914 /* Setup Prebuilt Components */;
+			targetProxy = 43A5C28D14266DC4009A415F /* PBXContainerItemProxy */;
+		};
 		43AA707113C804580015B52B /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 43AA702913C7FC640015B52B /* QJson */;
@@ -5279,6 +5338,11 @@
 			isa = PBXTargetDependency;
 			target = 02356D740BD3BB3400E9A019 /* Warzone */;
 			targetProxy = 43AE78FC10F0F4F500FED5D3 /* PBXContainerItemProxy */;
+		};
+		43CEAE26141D71D10001637B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 02356D820BD3BB4100E9A019 /* Zlib */;
+			targetProxy = 43CEAE25141D71D10001637B /* PBXContainerItemProxy */;
 		};
 		43D1808B1336B74E001906EB /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;

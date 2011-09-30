@@ -198,7 +198,11 @@ void QtGameWidget::updateResolutionList()
 		}
 	}
 #elif defined(WZ_WS_MAC)
-	macosxAppendAvailableScreenResolutions(mResolutions, minWidth, minHeight);
+	macosxAppendAvailableScreenResolutions(mResolutions, QSize(minWidth, minHeight), pos());
+
+	// OS X will restore the resolution itself upon process termination.
+	mOriginalRefreshRate = 0;
+	mOriginalDepth = 0;
 #endif
 	// TODO: Sorting would be nice.
 }
@@ -289,8 +293,9 @@ bool QtGameWidget::setResolution(const QSize res, int rate, int depth)
 		return false;
 	}
 #elif defined(WZ_WS_MAC)
-	qWarning("Resolution change support for Mac not written yet");
-	return false;
+	if (res != QSize(0,0)) {
+		macosxSetScreenResolution(res, pos());
+	}
 #endif
 	mCurrentResolution = res;
 	QGLWidget::setFixedSize(res);

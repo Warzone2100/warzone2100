@@ -2041,14 +2041,14 @@ UDWORD calcDroidBaseSpeed(DROID_TEMPLATE *psTemplate, UDWORD weight, UBYTE playe
 		speed = (asPropulsionTypes[(asPropulsionStats + psTemplate->
 			asParts[COMP_PROPULSION])->propulsionType].powerRatioMult *
 			bodyPower(asBodyStats + psTemplate->asParts[COMP_BODY],
-			player, CYBORG_BODY_UPGRADE)) / weight;
+			player, CYBORG_BODY_UPGRADE)) / MAX(1, weight);
 	}
 	else
 	{
 		speed = (asPropulsionTypes[(asPropulsionStats + psTemplate->
 			asParts[COMP_PROPULSION])->propulsionType].powerRatioMult *
 			bodyPower(asBodyStats + psTemplate->asParts[COMP_BODY],
-			player, DROID_BODY_UPGRADE)) / weight;
+			player, DROID_BODY_UPGRADE)) / MAX(1, weight);
 	}
 
 	// reduce the speed of medium/heavy VTOLs

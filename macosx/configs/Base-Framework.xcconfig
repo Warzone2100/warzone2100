@@ -9,3 +9,4 @@ LD_RUNPATH_SEARCH_PATHS = @loader_path @loader_path/.
 PREBINDING = NO
 FRAMEWORK_VERSION = A
 INFOPLIST_FILE = Resources/GenericFramework-Info.plist
+ALWAYS_SEARCH_USER_PATHS = NO

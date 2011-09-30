@@ -55,8 +55,6 @@ extern STRUCTURE* visGetBlockingWall(const BASE_OBJECT* psViewer, const BASE_OBJ
 
 bool hasSharedVision(unsigned viewer, unsigned ally);
 
-extern void processVisibilitySelf(BASE_OBJECT *psObj);
-extern void processVisibilityVision(BASE_OBJECT *psViewer);
 extern void processVisibilityLevel(BASE_OBJECT *psObj);
 
 extern void processVisibility(void);  ///< Calls processVisibilitySelf and processVisibilityVision on all objects.

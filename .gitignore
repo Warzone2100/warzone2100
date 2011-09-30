@@ -11,6 +11,8 @@
 *.gmo
 *.pyc
 *.wz
+# Doxygen files
+/doc/code/html
 # LaTeX generated (binary) files
 *.aux
 *.log

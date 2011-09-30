@@ -36,7 +36,6 @@ macosx/prebuilt:
 EXTRA_DIST= \
 	build_tools/autorevision.sh \
 	autogen.sh \
-	autorevision.conf \
 	config.rpath \
 	configure.ac \
 	pkg/dpkg \

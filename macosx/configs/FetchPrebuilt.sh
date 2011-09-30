@@ -6,6 +6,8 @@ OutDir="$2"
 FileName="$3"
 BuiltDLP="$4"
 MD5Sum="$5"
+BackupDLP="http://wz2100.net/~dak180/BuildTools/Mac/"
+
 
 # Make sure we are in the right place
 cd "${SRCROOT}"
@@ -52,8 +54,10 @@ cd prebuilt
 if [ ! -f "${FileName}" ]; then
     echo "Fetching ${FileName}"
     if ! curl -LfO --connect-timeout "30" "${BuiltDLP}"; then
-        echo "error: Unable to fetch ${BuiltDLP}" >&2
-        exit 1
+        if ! curl -LfOC - --connect-timeout "30" "${BackupDLP}${FileName}"; then
+			echo "error: Unable to fetch ${SourceDLP}" >&2
+			exit 1
+        fi
     fi
 else
     echo "${FileName} already exists, skipping"

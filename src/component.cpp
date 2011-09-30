@@ -42,7 +42,6 @@
 
 #define GetRadius(x) ((x)->sradius)
 
-#define BLIP_ANIM_DURATION			200
 #define	DEFAULT_COMPONENT_TRANSLUCENCY	128
 #define	DROID_EMP_SPREAD	(20 - rand()%40)
 
@@ -992,9 +991,7 @@ void displayComponentButtonObject(DROID *psDroid, Vector3i *Rotation, Vector3i *
 // multiple turrets display removed the pointless mountRotation
 void displayComponentObject(DROID *psDroid)
 {
-	Vector3i	position, rotation;
-	UDWORD	tileX,tileY;
-	MAPTILE	*psTile;
+	Vector3i position, rotation;
 	Spacetime st = interpolateObjectSpacetime(psDroid, graphicsTime);
 
 	leftFirst = angleDelta(player.r.y - st.rot.direction) <= 0;
@@ -1051,19 +1048,8 @@ void displayComponentObject(DROID *psDroid)
 	}
 	else
 	{
-		// make sure it's not over water.
-		tileX = st.pos.x/TILE_UNITS;
-		tileY = st.pos.y/TILE_UNITS;
-		// double check it's on map
-		if ( tileX < mapWidth && tileY < mapHeight )
-		{
-			psTile = mapTile(tileX,tileY);
-			if (terrainType(psTile) != TER_WATER)
-			{
-				int frame = gameTime/BLIP_ANIM_DURATION + psDroid->id % 8192; // de-sync the blip effect, but don't overflow the int
-				pie_Draw3DShape(getImdFromIndex(MI_BLIP), frame, 0, WZCOL_WHITE, pie_ADDITIVE, psDroid->visible[selectedPlayer] / 2);
-			}
-		}
+		int frame = gameTime/BLIP_ANIM_DURATION + psDroid->id % 8192; // de-sync the blip effect, but don't overflow the int
+		pie_Draw3DShape(getImdFromIndex(MI_BLIP), frame, 0, WZCOL_WHITE, pie_ADDITIVE, psDroid->visible[selectedPlayer] / 2);
 	}
 	pie_MatEnd();
 }

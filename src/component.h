@@ -39,6 +39,7 @@ UDWORD getResearchRadius(BASE_STATS *Stat);
 UDWORD getStructureSizeMax(STRUCTURE *psStructure);
 UDWORD getStructureStatSizeMax(STRUCTURE_STATS *Stats);
 
+#define BLIP_ANIM_DURATION			(200)
 #define OBJECT_RADIUS				(128)
 #define COMPONENT_RADIUS			(64)
 #define DESIGN_DROID_SCALE			(200)
