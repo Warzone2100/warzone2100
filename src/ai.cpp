@@ -676,8 +676,8 @@ DROID *aiBestNearestToRepair(DROID *psDroid)
 		return psGuardingDroid;
 	}
 
-	// if waiting for a valid path
-	if (psDroid->action == DACTION_SULK)
+	// if waiting for a valid path or already repairing a droid
+	if (psDroid->action == DACTION_SULK || psDroid->action == DACTION_DROIDREPAIR)
 	{
 		DROID* psRepairingDroid = (DROID*)psDroid->psActionTarget[0];
 		if (psRepairingDroid != NULL
