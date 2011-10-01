@@ -36,6 +36,9 @@
 #define ALLIANCES			1
 #define	ALLIANCES_TEAMS		2			//locked teams
 
+// how big an area for a repair droid to cover
+#define REPAIR_MAXDIST		(TILE_UNITS * 5)
+
 // alliances
 extern uint8_t alliances[MAX_PLAYER_SLOTS][MAX_PLAYER_SLOTS];
 extern PlayerMask alliancebits[MAX_PLAYER_SLOTS];
@@ -60,6 +63,11 @@ void aiUpdateDroid(DROID *psDroid);
 // returns integer representing quality of choice, -1 if failed
 int aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot, int extraRange = 0);
 int aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot, void const *extraRange);
+
+//! Given a DROID_REPAIR droid or a DROID_CYBORG_REPAIR, this function iterates on the mapgrid's repair range (using REPAIR_RANGE if the unit is on DSS_HALT_HOLD or REPAIR_MAXDIST) to obtain the best droid to repair.
+//! The best droid to repair is implemented minimizing the function \f$f = health*healthWeight + distance*(1-healthWeight)\f$ where health is droid's body/originalbody, distance is distance/repairRange, and healthWeight was arbitrary choosen as 0.75 .
+//! This function returns a target to repair, or NULL if none was found.
+DROID* aiBestNearestToRepair(DROID *psDroid);
 
 // Are there a lot of bullets heading towards the structure?
 bool aiObjectIsProbablyDoomed(BASE_OBJECT *psObject);

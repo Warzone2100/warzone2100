@@ -661,6 +661,78 @@ int aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot, i
 	return failure;
 }
 
+DROID *aiBestNearestToRepair(DROID *psDroid)
+{
+	ASSERT_OR_RETURN(NULL, psDroid->droidType == DROID_REPAIR || psDroid->droidType == DROID_CYBORG_REPAIR, "aiBestNearestToRepair: Invalid droid type" );
+
+	// if guarding a unit, check that first
+	DROID* guardedDroid = castDroid(orderStateObj(psDroid, DORDER_GUARD));
+	if (guardedDroid != NULL
+	    && droidIsDamaged(guardedDroid)
+	    && !aiObjectIsProbablyDoomed(guardedDroid)
+	    )
+	{
+		return guardedDroid;
+	}
+
+	// if waiting for a valid path or already repairing a droid
+	if (psDroid->action == DACTION_SULK || psDroid->action == DACTION_DROIDREPAIR)
+	{
+		DROID* psRepairingDroid = (DROID*)psDroid->psActionTarget[0];
+		if (psRepairingDroid != NULL
+		    && psRepairingDroid->type == OBJ_DROID
+		    && droidIsDamaged(psRepairingDroid)
+		    && !aiObjectIsProbablyDoomed(psRepairingDroid)
+		    )
+		{
+			return psRepairingDroid;
+		}
+	}
+
+	DROID *psMostLikelyTarget = NULL;
+
+	// the range to search is given by REPAIR_RANGE in case is on hold, or REPAIR_MAXDIST^2 if not.
+	int droidRange = ((psDroid->order==DORDER_NONE && secondaryGetState(psDroid, DSO_HALTTYPE)==DSS_HALT_HOLD) ? REPAIR_RANGE : REPAIR_MAXDIST*REPAIR_MAXDIST);
+
+
+	int64_t bestDroidRepairWeight = (int64_t)100*1073741824; // the weight of the best droid to repair.
+
+	// iterate on all objects within range
+	gridStartIterate(psDroid->pos.x, psDroid->pos.y, droidRange);
+	for (BASE_OBJECT* psTarget = gridIterate(); psTarget != NULL; psTarget = gridIterate())
+	{
+		// if it is of the same alliance, it is a droid, it is damaged, is visible and is not probably doomed, then we can repair it
+		if (aiCheckAlliances(psTarget->player,psDroid->player)
+		                     && psTarget->type == OBJ_DROID
+		                     && psTarget != psDroid
+		                     && droidIsDamaged((DROID*)psTarget)
+		                     && !(isVtolDroid((DROID*)psTarget) && isFlying((DROID*)psTarget)) // vtol and flying
+		                     && visibleObject(psDroid, psTarget, false)
+		                     && !aiObjectIsProbablyDoomed(psTarget))
+		{
+			// this part of the code is used to minimize the weighted sum = targetHealth*healthWeight + targetDistance*(100-healthWeight). The healthWeight is a value [0,100] which states the force that the targetHealth should have. For instance, if healthWeight = 100, then sum = targetHealth, which means that the distance is not taken into account for the calculation
+
+			const int64_t targetDistance = ((int64_t) droidSqDist(psDroid, psTarget))*1073741824/droidRange; // relative distance
+			const int64_t targetHealth = ((int64_t) (psTarget->body))*1073741824/((DROID*)psTarget)->originalBody; // relative health
+
+			// this is the relative amount of weight that is given to health
+			const int64_t healthWeight = 75;
+
+			// total weight given to the current droid.
+			const int64_t droidRepairWeight = targetHealth*healthWeight + targetDistance*(100 - healthWeight);
+
+			// if this target is on a worse condition than the worst potential repair droid
+			if (droidRepairWeight < bestDroidRepairWeight)
+			{
+				// then use this as the most likely target
+				bestDroidRepairWeight = droidRepairWeight;
+				psMostLikelyTarget = (DROID*)psTarget;
+			}
+		}
+	}
+	return psMostLikelyTarget;
+}
+
 // Are there a lot of bullets heading towards the droid?
 static bool aiDroidIsProbablyDoomed(DROID *psDroid)
 {
