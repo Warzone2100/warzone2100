@@ -666,14 +666,14 @@ DROID *aiBestNearestToRepair(DROID *psDroid)
 	ASSERT_OR_RETURN(NULL, psDroid->droidType == DROID_REPAIR || psDroid->droidType == DROID_CYBORG_REPAIR, "aiBestNearestToRepair: Invalid droid type" );
 
 	// if guarding a unit, check that first
-	DROID* psGuardingDroid = (DROID*)orderStateObj(psDroid, DORDER_GUARD);
-	if (psGuardingDroid != NULL
-	    && psGuardingDroid->type == OBJ_DROID
-	    && droidIsDamaged(psGuardingDroid)
-	    && !aiObjectIsProbablyDoomed(psGuardingDroid)
+	DROID* guardedDroid = castDroid(orderStateObj(psDroid, DORDER_GUARD));
+	if (guardedDroid != NULL
+	    && guardedDroid->type == OBJ_DROID
+	    && droidIsDamaged(guardedDroid)
+	    && !aiObjectIsProbablyDoomed(guardedDroid)
 		)
 	{
-		return psGuardingDroid;
+		return guardedDroid;
 	}
 
 	// if waiting for a valid path or already repairing a droid
@@ -699,8 +699,7 @@ DROID *aiBestNearestToRepair(DROID *psDroid)
 	gridStartIterate(psDroid->pos.x, psDroid->pos.y, droidRange);
 	for (BASE_OBJECT* psTarget = gridIterate(); psTarget != NULL; psTarget = gridIterate())
 	{
-		int64_t nearestDroidToTargetDistance = 0;// base value, used to ai
-		int64_t worstTargetHealth = 1;			// base value, used to ai
+        int64_t bestDroidRepairWeight = 0; // the weight of the best droid to repair.
 
 		// if it is of the same alliance, it is a droid, it is damaged, is visible and is not probably doomed, then we can repair it
 		if (aiCheckAlliances(psTarget->player,psDroid->player)
@@ -713,18 +712,17 @@ DROID *aiBestNearestToRepair(DROID *psDroid)
 		{
 			// this part of the code is used to minimize the weighted sum = targetHealth*healthWeight + targetArmor*(1-healthWeight). The healthWeight is a value [0,1] which states the force that the targetHealth should have. For instance, if healthWeight = 1, then sum = targetHealth, which means that the distance is not taken into account for the calculation
 
-			const int64_t droidToTargetDistance = droidSqDist(psDroid, psTarget)*1073741824/droidRange; // relative distance
-			const int64_t targetHealth = (psTarget->body)*1073741824/((DROID*)psTarget)->originalBody; // relative health
+			const int64_t droidToTargetDistance = ((int64_t) droidSqDist(psDroid, psTarget))*1073741824/droidRange; // relative distance
+			const int64_t targetHealth = ((int64_t) (psTarget->body))*1073741824/((DROID*)psTarget)->originalBody; // relative health
 
 			// this is the relative amount of weight that is given to armor
 			const int64_t healthWeight = 75;
 
 			// if this target is on a worse condition than the previous one
-			if (targetHealth*healthWeight + droidToTargetDistance*(100 - healthWeight) > nearestDroidToTargetDistance + worstTargetHealth*healthWeight + nearestDroidToTargetDistance*(100 - healthWeight))
+			if (targetHealth*healthWeight + droidToTargetDistance*(100 - healthWeight) > bestDroidRepairWeight)
 			{
-				// than use this as the most likelly target
-				worstTargetHealth = targetHealth;
-				nearestDroidToTargetDistance = droidToTargetDistance;
+				// then use this as the most likely target
+                bestDroidRepairWeight = targetHealth*healthWeight + droidToTargetDistance*(100 - healthWeight);
 				psMostLikelyTarget = (DROID*)psTarget;
 			}
 		}
