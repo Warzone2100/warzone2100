@@ -64,9 +64,9 @@
 
 #include "random.h"
 
-//! How much time a droid runs after it fails do respond due to low moral.
+//! How long a droid runs after it fails do respond due to low moral.
 #define RUN_TIME		8000
-//! How much time a droid runs burning after it fails do respond due to low moral.
+//! How long a droid runs burning after it fails do respond due to low moral.
 #define RUN_BURN_TIME	10000
 
 //! The distance a droid has in guard mode.
@@ -2604,6 +2604,7 @@ DROID_ORDER chooseOrderLoc(DROID *psDroid, UDWORD x,UDWORD y, bool altOrder)
 
 //! Given a player and a location, this function sends the selected droids an order to a location. If a delivery point is selected, it is moved to a new location.
 //! If add is true then the order is queued in the droids.
+//! This function should only be called from UI.
 void orderSelectedLoc(uint32_t player, uint32_t x, uint32_t y, bool add)
 {
 	DROID			*psCurr;
