@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-09-07 21:16+0200\n"
-"PO-Revision-Date: 2010-10-24 13:31+0200\n"
+"POT-Creation-Date: 2011-10-02 19:48+0200\n"
+"PO-Revision-Date: 2011-10-02 13:24+0200\n"
 "Last-Translator: Adrian Mos <adimosh@live.com>\n"
 "Language-Team: Romanian <ro@li.org>\n"
 "Language: ro\n"
@@ -2471,12 +2471,12 @@ msgstr ""
 #: data/base/messages/resmessages23.rmsg:97
 #: data/mp/messages/resmessages23.rmsg:97
 msgid "Assigned VTOLs attack the enemy units"
-msgstr ""
+msgstr "DAV-urile asociate atacă unitățile inamice"
 
 #: data/base/messages/resmessages23.rmsg:98
 #: data/mp/messages/resmessages23.rmsg:98
 msgid "Strike mission continues until enemy destroyed or they retreat"
-msgstr ""
+msgstr "Misiunea de atac continuă până când inamicul e distrus sau în retragere"
 
 #: data/base/messages/resmessages23.rmsg:108
 #: data/base/messages/resmessages2.rmsg:433
@@ -2519,12 +2519,12 @@ msgstr ""
 #: data/mp/messages/resmessages3.rmsg:550
 #: data/mp/messages/strings/resstrings.txt:527
 msgid "VTOL Strike Improved"
-msgstr ""
+msgstr "Puterea DAV mărită"
 
 #: data/base/messages/resmessages23.rmsg:122
 #: data/mp/messages/resmessages23.rmsg:122
 msgid "Improved target recognition systems"
-msgstr ""
+msgstr "Sisteme îmbunătățite de recunoaștere a țintei"
 
 #: data/base/messages/resmessages23.rmsg:123
 #: data/base/messages/resmessages2.rmsg:461
@@ -2535,7 +2535,7 @@ msgstr ""
 #: data/mp/messages/resmessages3.rmsg:552
 #: data/mp/messages/strings/resstrings.txt:529
 msgid "Extends VTOL Strike Range"
-msgstr ""
+msgstr "Extinde raza de acțiune a DAV-urilor"
 
 #: data/base/messages/resmessages23.rmsg:124
 #: data/base/messages/resmessages2.rmsg:462
@@ -2545,8 +2545,9 @@ msgstr ""
 #: data/mp/messages/resmessages2.rmsg:462
 #: data/mp/messages/resmessages3.rmsg:553
 #: data/mp/messages/strings/resstrings.txt:530
+#, fuzzy
 msgid "All VTOL Strike sensors upgraded automatically"
-msgstr ""
+msgstr "Toți senzorii DAV îmbunătățiți automat"
 
 #: data/base/messages/resmessages23.rmsg:134
 #: data/base/messages/resmessages2.rmsg:641
@@ -2688,14 +2689,14 @@ msgstr "Ținta ideală: Clădiri, infanterie, vehicule cu roți"
 #: data/base/messages/resmessages23.rmsg:213
 #: data/mp/messages/resmessages23.rmsg:213
 msgid "Multi-barrel, rapid-fire machinegun"
-msgstr ""
+msgstr "Mitralieră cu țevi multiple și rată mare de foc"
 
 #: data/base/messages/resmessages23.rmsg:215
 #: data/mp/messages/resmessages23.rmsg:215
 #: data/mp/messages/resmessagesall.rmsg:878
 #: data/mp/messages/resmessagesall.rmsg:891
 msgid "Replaces all machineguns"
-msgstr ""
+msgstr "Înlocuiește toate mitralierele"
 
 #: data/base/messages/resmessages2.rmsg:4
 #: data/base/messages/resmessages3.rmsg:4
@@ -2704,7 +2705,7 @@ msgstr ""
 #: data/mp/messages/resmessages3.rmsg:4
 #: data/mp/messages/strings/resstrings.txt:43
 msgid "Cyborg Thermal Armor Improved"
-msgstr ""
+msgstr "Armura termală a cyborgilor îmbunătățită"
 
 #: data/base/messages/resmessages2.rmsg:5
 #: data/base/messages/resmessages3.rmsg:5
@@ -2740,14 +2741,14 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:52
 #: data/mp/messages/strings/resstrings.txt:102
 msgid "Armed with Bunker Buster rocket"
-msgstr ""
+msgstr "Înarmat cu rachetă Bunker Buster"
 
 #: data/base/messages/resmessages2.rmsg:44
 #: data/base/messages/strings/resstrings.txt:66
 #: data/mp/messages/resmessages2.rmsg:44
 #: data/mp/messages/strings/resstrings.txt:84
 msgid "Armed with Cyborg Assault Gun"
-msgstr ""
+msgstr "Înarmat cu Mitralieră de Asalt pentru Cyborgi"
 
 #: data/base/messages/resmessages2.rmsg:57
 #: data/base/messages/strings/resstrings.txt:104
@@ -2815,7 +2816,7 @@ msgstr ""
 #: data/mp/messages/resmessages2.rmsg:122
 #: data/mp/messages/strings/resstrings.txt:160
 msgid "Indirect fire rocket battery"
-msgstr ""
+msgstr "Baterie de rachete cu foc indirect"
 
 #: data/base/messages/resmessages2.rmsg:135
 #: data/base/messages/strings/resstrings.txt:154
@@ -2894,7 +2895,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:245
 #: data/mp/messages/strings/resstrings.txt:251
 msgid "Automatically targets enemies in range"
-msgstr ""
+msgstr "Țintește automat inamicii din rază"
 
 #: data/base/messages/resmessages2.rmsg:226
 #: data/base/messages/strings/resstrings.txt:198
@@ -2978,7 +2979,7 @@ msgstr ""
 #: data/base/messages/strings/resstrings.txt:367
 #: data/mp/messages/strings/resstrings.txt:393
 msgid "Increases factory production rate"
-msgstr ""
+msgstr "Mărește productivitatea fabricilor"
 
 #: data/base/messages/resmessages2.rmsg:369
 #: data/base/messages/strings/names.txt:835
@@ -3004,7 +3005,7 @@ msgstr ""
 #: data/mp/messages/resmessages2.rmsg:395
 #: data/mp/messages/strings/resstrings.txt:438
 msgid "Robotic VTOL Production"
-msgstr ""
+msgstr "Producție robotică a DAV-urilor"
 
 #: data/base/messages/resmessages2.rmsg:396
 #: data/base/messages/resmessages3.rmsg:487
@@ -3013,7 +3014,7 @@ msgstr ""
 #: data/mp/messages/resmessages3.rmsg:487
 #: data/mp/messages/strings/resstrings.txt:439
 msgid "Increases VTOL factory output"
-msgstr ""
+msgstr "Mărește productivitatea fabricilor DAV"
 
 #: data/base/messages/resmessages2.rmsg:397
 #: data/base/messages/resmessages3.rmsg:488
@@ -3022,7 +3023,7 @@ msgstr ""
 #: data/mp/messages/resmessages3.rmsg:488
 #: data/mp/messages/strings/resstrings.txt:440
 msgid "All VTOL factories upgraded automatically"
-msgstr ""
+msgstr "Toate fabricile DAV îmbunătățite automat"
 
 #: data/base/messages/resmessages2.rmsg:407
 #: data/base/messages/resmessages3.rmsg:498
@@ -3031,7 +3032,7 @@ msgstr ""
 #: data/mp/messages/resmessages3.rmsg:498
 #: data/mp/messages/strings/resstrings.txt:447
 msgid "VTOL Rearming Times Reduced"
-msgstr ""
+msgstr "Timpii reînarmăreii DAV-urilor reduși"
 
 #: data/base/messages/resmessages2.rmsg:408
 #: data/base/messages/strings/names.txt:843
@@ -3070,7 +3071,7 @@ msgstr "Turn cu senzor îmbunătățit disponibil"
 #: data/mp/messages/resmessages2.rmsg:421
 #: data/mp/messages/strings/resstrings.txt:488
 msgid "New construction techniques improve tower"
-msgstr ""
+msgstr "Noi tehnici de construcție îmbunătățesc turnurile"
 
 #: data/base/messages/resmessages2.rmsg:422
 #: data/base/messages/strings/resstrings.txt:461
@@ -3088,14 +3089,14 @@ msgstr "Înlocuiește actualul turn cu senzor"
 #: data/mp/messages/resmessagesall.rmsg:72
 #: data/mp/messages/strings/resstrings.txt:490
 msgid "May be assigned as spotter for indirect fire weapons"
-msgstr ""
+msgstr "Poate fi asociat ca detector pentru armele cu foc indirect"
 
 #: data/base/messages/resmessages2.rmsg:434
 #: data/base/messages/strings/resstrings.txt:480
 #: data/mp/messages/resmessages2.rmsg:434
 #: data/mp/messages/strings/resstrings.txt:508
 msgid "VTOL CB turret detects enemy indirect fire batteries"
-msgstr ""
+msgstr "Turela DAV-AB detectează bateriile de foc indirect inamice"
 
 #: data/base/messages/resmessages2.rmsg:460
 #: data/base/messages/strings/resstrings.txt:500
@@ -3438,7 +3439,7 @@ msgstr ""
 #: data/mp/messages/resmessages2.rmsg:708
 #: data/mp/messages/strings/resstrings.txt:732
 msgid "Best Targets: Base Structures"
-msgstr ""
+msgstr "Ținta ideală: Clădiri"
 
 #: data/base/messages/resmessages2.rmsg:720
 #: data/base/messages/strings/resstrings.txt:704
@@ -3522,7 +3523,7 @@ msgstr ""
 #: data/mp/messages/resmessages2.rmsg:825
 #: data/mp/messages/strings/resstrings.txt:828
 msgid "Best Targets: Base Structures, bunkers"
-msgstr ""
+msgstr "Ținta ideală: Clădiri, Buncăre"
 
 #: data/base/messages/resmessages2.rmsg:836
 #: data/base/messages/resmessages2.rmsg:849
@@ -3709,7 +3710,7 @@ msgstr ""
 #: data/mp/messages/resmessages3.rmsg:122
 #: data/mp/messages/resmessages3.rmsg:187
 msgid "Armed with Scourge anti-tank missile"
-msgstr ""
+msgstr "Înarmat cu rachetă anti-tanc Scourge"
 
 #: data/base/messages/resmessages3.rmsg:135
 #: data/mp/messages/resmessages3.rmsg:135
@@ -3736,7 +3737,7 @@ msgstr ""
 #: data/base/messages/resmessages3.rmsg:148
 #: data/mp/messages/resmessages3.rmsg:148
 msgid "Armed with Lancer anti-tank missile"
-msgstr ""
+msgstr "Înarmat cu rachetă anti-tanc Lancer"
 
 #: data/base/messages/resmessages3.rmsg:161
 #: data/mp/messages/resmessages3.rmsg:161
@@ -3746,12 +3747,12 @@ msgstr ""
 #: data/base/messages/resmessages3.rmsg:200
 #: data/mp/messages/resmessages3.rmsg:200
 msgid "Armed with Flashlight Laser"
-msgstr ""
+msgstr "Înarmat cu laser Flashlight"
 
 #: data/base/messages/resmessages3.rmsg:202
 #: data/mp/messages/resmessages3.rmsg:202
 msgid "Requires cyborg factory to produce"
-msgstr ""
+msgstr "Necesită fabrică de cyborgi pentru producție"
 
 #: data/base/messages/resmessages3.rmsg:213
 #: data/mp/messages/resmessages3.rmsg:213
@@ -3937,7 +3938,7 @@ msgstr ""
 #: data/mp/messages/resmessages3.rmsg:617
 #: data/mp/messages/resmessagesall.rmsg:409
 msgid "On-board diagnostic and repair systems"
-msgstr ""
+msgstr "Sistem integrat de diagnosticare și reparații"
 
 #: data/base/messages/resmessages3.rmsg:579
 #: data/mp/messages/resmessages3.rmsg:579
@@ -3949,22 +3950,22 @@ msgstr "Permite auto-reparația pe toți cyborgii"
 #: data/mp/messages/resmessages3.rmsg:591
 #: data/mp/messages/resmessages3.rmsg:604
 msgid "Built-in diagnostic and repair systems"
-msgstr ""
+msgstr "Sistem integrat de diagnosticare și reparații"
 
 #: data/base/messages/resmessages3.rmsg:592
 #: data/mp/messages/resmessages3.rmsg:592
 msgid "Enables self-repair in all base structures"
-msgstr ""
+msgstr "Permite auto-reparația în toate clădirile"
 
 #: data/base/messages/resmessages3.rmsg:605
 #: data/mp/messages/resmessages3.rmsg:605
 msgid "Enables self-repair in all defenses"
-msgstr ""
+msgstr "Permite auto-reparația în toate clădirile defensive"
 
 #: data/base/messages/resmessages3.rmsg:618
 #: data/mp/messages/resmessages3.rmsg:618
 msgid "Enables self-repair in all vehicles"
-msgstr ""
+msgstr "Permite auto-reparația în toate vehiculele"
 
 #: data/base/messages/resmessages3.rmsg:628
 #: data/mp/messages/resmessages3.rmsg:628
@@ -4036,7 +4037,7 @@ msgstr ""
 #: data/mp/messages/resmessages3.rmsg:787
 #: data/mp/messages/resmessages3.rmsg:800
 msgid "All VTOLs upgraded automatically"
-msgstr ""
+msgstr "Toate DAV-urile îmbunătățite automat"
 
 #: data/base/messages/resmessages3.rmsg:811
 #: data/mp/messages/resmessages3.rmsg:811
@@ -4352,7 +4353,7 @@ msgstr ""
 #: data/base/messages/resmessages3.rmsg:1240
 #: data/mp/messages/resmessages3.rmsg:1240
 msgid "Computer predicts and compensates for target's movement"
-msgstr ""
+msgstr "Computer-ul prezice mișcarea țintei și compensează"
 
 #: data/base/messages/resmessages3.rmsg:1241
 msgid "Increases Rail Gun accuracy"
@@ -4393,47 +4394,47 @@ msgstr "Noi opțiuni de construcție disponibile"
 #: data/base/messages/resmessagesall.rmsg:5
 #: data/mp/messages/resmessagesall.rmsg:5
 msgid "Titanium-reinforced concrete"
-msgstr ""
+msgstr "Beton ranforsat cu titan"
 
 #: data/base/messages/resmessagesall.rmsg:6
 #: data/mp/messages/resmessagesall.rmsg:6
 msgid "Enables Hardcrete walls"
-msgstr ""
+msgstr "Permite ziduri de beton"
 
 #: data/base/messages/resmessagesall.rmsg:18
 #: data/mp/messages/resmessagesall.rmsg:18
 msgid "VTOL factory enables VTOL production"
-msgstr ""
+msgstr "Fabrica DAV permite construcția DAV-urilor"
 
 #: data/base/messages/resmessagesall.rmsg:19
 #: data/mp/messages/resmessagesall.rmsg:19
 msgid "VTOL rearming pads required to keep VTOLs flying"
-msgstr ""
+msgstr "Stațiile de reînarmare DAV sunt necesare pentru a menține DAV-urile în zbor"
 
 #: data/base/messages/resmessagesall.rmsg:20
 #: data/mp/messages/resmessagesall.rmsg:20
 msgid "May be upgraded using factory modules"
-msgstr ""
+msgstr "Poate fi îmbunătăpțită folosindu-se module de fabrică"
 
 #: data/base/messages/resmessagesall.rmsg:31
 #: data/mp/messages/resmessagesall.rmsg:31
 msgid "Refuels, rearms and repairs VTOLs"
-msgstr ""
+msgstr "Reîncarcă, repară și re-alimentează DAV-uri"
 
 #: data/base/messages/resmessagesall.rmsg:32
 #: data/mp/messages/resmessagesall.rmsg:32
 msgid "Assign a VTOL by selecting the rearming pad as its target"
-msgstr ""
+msgstr "Asociază un DAV prin selectarea stației ca țintă a acestuia"
 
 #: data/base/messages/resmessagesall.rmsg:33
 #: data/mp/messages/resmessagesall.rmsg:33
 msgid "The VTOL returns to the selected pad for rearming"
-msgstr ""
+msgstr "DAV-ul se întoarce la stația selectată pentru reînarmare"
 
 #: data/base/messages/resmessagesall.rmsg:44
 #: data/mp/messages/resmessagesall.rmsg:44
 msgid "Battlefield repair unit"
-msgstr ""
+msgstr "Unitate de reparație pe câmpul de luptă"
 
 #: data/base/messages/resmessagesall.rmsg:45
 #: data/base/messages/strings/resstrings.txt:445
@@ -4441,7 +4442,7 @@ msgstr ""
 #: data/mp/messages/resmessagesall.rmsg:357
 #: data/mp/messages/strings/resstrings.txt:471
 msgid "Automatically Repairs Damaged Units"
-msgstr ""
+msgstr "Repară automat unitățile avariate"
 
 #: data/base/messages/resmessagesall.rmsg:46
 #: data/base/messages/strings/resstrings.txt:446
@@ -4449,29 +4450,29 @@ msgstr ""
 #: data/mp/messages/resmessagesall.rmsg:358
 #: data/mp/messages/strings/resstrings.txt:472
 msgid "Or damaged units may be selected as target"
-msgstr ""
+msgstr "Sau pot fi selectate unități avariate ca țintă"
 
 #: data/base/messages/resmessagesall.rmsg:56
 #: data/mp/messages/resmessagesall.rmsg:56
 msgid "New Systems Turret Available For Design"
-msgstr ""
+msgstr "O nouă turelă de sisteme este disponibilă pentru scheme"
 
 #: data/base/messages/resmessagesall.rmsg:57
 #: data/mp/messages/resmessagesall.rmsg:57
 #: data/mp/messages/resmessagesall.rmsg:514
 #: data/mp/messages/resmessagesall.rmsg:709
 msgid "Improved sensor range"
-msgstr ""
+msgstr "Raza senzorilor mărită"
 
 #: data/base/messages/resmessagesall.rmsg:58
 #: data/mp/messages/resmessagesall.rmsg:58
 msgid "Makes excellent scout vehicle"
-msgstr ""
+msgstr "Constituie un excelent vehicul de explorare"
 
 #: data/base/messages/resmessagesall.rmsg:70
 #: data/mp/messages/resmessagesall.rmsg:70
 msgid "Extended sensor range"
-msgstr ""
+msgstr "Rază mărită a senzorilor"
 
 #: data/base/messages/resmessagesall.rmsg:71
 #: data/mp/messages/resmessagesall.rmsg:71
@@ -4479,7 +4480,7 @@ msgstr ""
 #: data/mp/messages/resmessagesall.rmsg:513
 #: data/mp/messages/resmessagesall.rmsg:708
 msgid "Keeps map areas under constant surveillance"
-msgstr ""
+msgstr "Menține porțiuni ale hărții sub monitorizare constantă"
 
 #: data/base/messages/resmessagesall.rmsg:82
 #: data/mp/messages/resmessagesall.rmsg:82
@@ -4502,7 +4503,7 @@ msgstr "Extinde raza senzorilor"
 #: data/mp/messages/resmessagesall.rmsg:98
 #: data/mp/messages/resmessagesall.rmsg:111
 msgid "All sensors upgraded automatically"
-msgstr ""
+msgstr "Toți senzorii îmbunătățiți automat"
 
 #: data/base/messages/resmessagesall.rmsg:96
 #: data/mp/messages/resmessagesall.rmsg:122
@@ -5043,7 +5044,7 @@ msgstr "Un comandant inamic colectează un transport de la NEXUS la această loc
 
 #: data/base/messages/strings/cam2strings.txt:52
 msgid "Once at the LZ, eradicate the enemy commander and recover the shipment."
-msgstr "Odată ajunși la ZA, eradichează comandantul inamic și recuperează conținutul."
+msgstr "Odată ajunși la ZA, elimină comandantul inamic și recuperează conținutul."
 
 #: data/base/messages/strings/cam2strings.txt:53
 msgid "Then return to the LZ."
@@ -5056,179 +5057,179 @@ msgstr "Vești grave despre NASDA."
 #: data/base/messages/strings/cam2strings.txt:58
 #: data/base/messages/strings/cam2strings.txt:63
 msgid "TRANSPORT MISSION: Search for and Destroy Convoy"
-msgstr ""
+msgstr "MISIUNE DE TRANSPORT: Caută și distruge convoiul"
 
 #: data/base/messages/strings/cam2strings.txt:59
 msgid "The shipment you recovered was a decoy."
-msgstr ""
+msgstr "Transportul recuperat de tine a fost o momeală."
 
 #: data/base/messages/strings/cam2strings.txt:60
 msgid "We have detected another convoy proceeding along the river."
-msgstr ""
+msgstr "Am detectat un alt convoi mergând de-a lungul râului."
 
 #: data/base/messages/strings/cam2strings.txt:64
 msgid "You are to intercept the convoy and recover its cargo."
-msgstr ""
+msgstr "Trebuie să îl interceptezi și să recuperezi marfa transportată."
 
 #: data/base/messages/strings/cam2strings.txt:65
 msgid "Enemy VTOLs are likely to be flying close escort."
-msgstr ""
+msgstr "Cel mai probabil, DAV-uri inamice vor escorta convoiul."
 
 #: data/base/messages/strings/cam2strings.txt:68
 #: data/base/messages/strings/cam2strings.txt:72
 msgid "TRANSPORT MISSION: Rescue civilians from Containment Camp"
-msgstr ""
+msgstr "MISIUNE DE TRANSPORT: Salvează civilii din lagărul de izolare"
 
 #: data/base/messages/strings/cam2strings.txt:69
 msgid "The Collective are processing and exterminating civilians at this base."
-msgstr ""
+msgstr "Colectivul procesează și extermină civili la această bază."
 
 #: data/base/messages/strings/cam2strings.txt:73
 msgid "You are to rescue the civilians."
-msgstr ""
+msgstr "Trebuie să salvezi civilii."
 
 #: data/base/messages/strings/cam2strings.txt:74
 msgid "Then destroy the camp."
-msgstr ""
+msgstr "După aceea, să distrugi baza."
 
 #: data/base/messages/strings/cam2strings.txt:77
 msgid "BETA BASE MISSION: Destroy Enemy Air Base and Recover VTOLs."
-msgstr ""
+msgstr "MISIUNEA BAZEI BETA: Distruge baza aeriană inamică și recuperează DAV-uri."
 
 #: data/base/messages/strings/cam2strings.txt:78
 msgid "Analysis of flight paths indicate that The Collective's VTOLs originate from here."
-msgstr ""
+msgstr "Analiza căilor de zbor indică locația originală a DAV-urilor aici."
 
 #: data/base/messages/strings/cam2strings.txt:81
 msgid "BETA BASE MISSION: Destroy Enemy Air Base and Recover VTOLs"
-msgstr ""
+msgstr "MISIUNEA BAZEI BETA: Distruge baza aeriană inamică și recuperează DAV-uri"
 
 #: data/base/messages/strings/cam2strings.txt:82
 msgid "The location of the enemy airbase is here; this is your primary objective."
-msgstr ""
+msgstr "Locația bazei aeriene inamice este aiciș acesta e obiectivul principal."
 
 #: data/base/messages/strings/cam2strings.txt:83
 msgid "Eradicate all Collective forces and recover all artifacts."
-msgstr ""
+msgstr "Elimină toqate forțele Colectivului și recuperează artefactele."
 
 #: data/base/messages/strings/cam2strings.txt:86
 #: data/base/messages/strings/cam2strings.txt:91
 msgid "SECONDARY MISSION: Destroy or Drive Off Enemy Transport"
-msgstr ""
+msgstr "MISIUNE SECUNDARĂ: Distruge sau alungă transportul inamic"
 
 #: data/base/messages/strings/cam2strings.txt:87
 msgid "The Collective are rounding up all civilians in this area."
-msgstr ""
+msgstr "Colectivul strânge toți civilii din această zonă."
 
 #: data/base/messages/strings/cam2strings.txt:88
 msgid "They are then flying them to an unknown location."
-msgstr ""
+msgstr "Apoi, îi transportă spre o locație necunoscută."
 
 #: data/base/messages/strings/cam2strings.txt:92
 msgid "Destroy or drive off The Collective's transport."
-msgstr ""
+msgstr "Distruge sau alungă transportul Colectivului."
 
 #: data/base/messages/strings/cam2strings.txt:93
 msgid "Rescue as many civilians as possible."
-msgstr ""
+msgstr "Salvează câți civili poți."
 
 #: data/base/messages/strings/cam2strings.txt:96
 #: data/base/messages/strings/cam2strings.txt:101
 msgid "TRANSPORT MISSION: Destroy Reactor"
-msgstr ""
+msgstr "MISIUNE SECUNDARĂ: Distruge reactorul"
 
 #: data/base/messages/strings/cam2strings.txt:97
 msgid "The Collective are searching for knowledge of nuclear reactors."
-msgstr ""
+msgstr "Colectivul caută informații despre reactoare nucleare."
 
 #: data/base/messages/strings/cam2strings.txt:98
 msgid "They must be stopped."
-msgstr ""
+msgstr "Trebuie opriți."
 
 #: data/base/messages/strings/cam2strings.txt:102
 msgid "Proceed from the LZ to the reactor and destroy it."
-msgstr ""
+msgstr "De la ZA, pornește spre reactor și distruge-l."
 
 #: data/base/messages/strings/cam2strings.txt:103
 msgid "Do not allow the Collective to bring the reactor on-line."
-msgstr ""
+msgstr "Nu permite Colectivului să reușească să-l pornească."
 
 #: data/base/messages/strings/cam2strings.txt:106
 msgid "BETA BASE MISSION: Capture NASDA Central"
-msgstr ""
+msgstr "MISIUNEA BAZEI BETA: Capturează sediul central NASDA"
 
 #: data/base/messages/strings/cam2strings.txt:107
 msgid "Capture NASDA central before NEXUS and the Collective can use it."
-msgstr ""
+msgstr "Capturează NASDA înainte ca NEXUS și colectivul să îl poată folosi."
 
 #: data/base/messages/strings/cam2strings.txt:111
 #: data/base/messages/strings/cam2strings.txt:116
 #: data/base/messages/strings/cam2strings.txt:121
 msgid "TRANSPORT MISSION: Satellite Uplink Site"
-msgstr ""
+msgstr "MISIUNE DE TRANSPORT: Baza de legătură la satelit"
 
 #: data/base/messages/strings/cam2strings.txt:112
 msgid "NEXUS is searching for still functioning memory banks."
-msgstr ""
+msgstr "NEXUS caută bancuri de memorie încă funcționale."
 
 #: data/base/messages/strings/cam2strings.txt:113
 msgid "Part of its consciousness has moved to a remote NASDA control-site."
-msgstr ""
+msgstr "Și-a mutat parte din sine către o bază de control NASDA."
 
 #: data/base/messages/strings/cam2strings.txt:117
 msgid "We are detecting transmissions from this site that are reaching high orbit."
-msgstr ""
+msgstr "Detectăm transmisiuni de la această locație care ajung pe orbită."
 
 #: data/base/messages/strings/cam2strings.txt:118
 msgid "NEXUS has now reconnected itself with the NASDA satellites."
-msgstr ""
+msgstr "NEXUS s-a reconectat la sateliții NASDA."
 
 #: data/base/messages/strings/cam2strings.txt:122
 msgid "Use the transport to carry a strike force to this site."
-msgstr ""
+msgstr "Folosește transportorul pentru a duce o echipă de asalt la această locație."
 
 #: data/base/messages/strings/cam2strings.txt:123
 msgid "Destroy the site and return to your base."
-msgstr ""
+msgstr "Distruge-o, apoi întoarce-te la bază."
 
 #: data/base/messages/strings/cam2strings.txt:126
 msgid "TRANSPORT MISSION: Destroy Enemy SAM Sites"
-msgstr ""
+msgstr "MISIUNE DE TRANSPORT: Distruge amplasamentele RSA inamice"
 
 #: data/base/messages/strings/cam2strings.txt:127
 msgid "If you are to escape, eradicate the surface-to-air missile sites around your base."
-msgstr ""
+msgstr "Dacă este să poți evada, trebuie eradicate toate amplasamentele de rachete sol-aer din jurul bazei."
 
 #: data/base/messages/strings/cam2strings.txt:128
 msgid "Fly to the LZ, then head overland to destroy the SAM sites."
-msgstr ""
+msgstr "Zboară până la ZA, după aceea pornește pe jos și distruge amplasamentele RSA."
 
 #: data/base/messages/strings/cam2strings.txt:131
 #: data/base/messages/strings/cam2strings.txt:136
 msgid "TRANSPORT MISSION: Establish Safe Haven"
-msgstr ""
+msgstr "MISIUNE DE TRANSPORT: Crează o zonă sigură"
 
 #: data/base/messages/strings/cam2strings.txt:132
 msgid "We can confirm a missile is heading for Alpha Base."
-msgstr ""
+msgstr "Putem confirma că ținta rachetei este baza Alpha."
 
 #: data/base/messages/strings/cam2strings.txt:133
 msgid "You are to establish a safe haven for evacuation of Beta Base."
-msgstr ""
+msgstr "Misiunea ta este să creezi o zonă sigură pentru evacuarea bazei Beta."
 
 #: data/base/messages/strings/cam2strings.txt:137
 msgid "Eradicate any enemy and secure the area."
-msgstr ""
+msgstr "Elimină orice inamici și asigură zona."
 
 #: data/base/messages/strings/cam2strings.txt:138
 msgid "Once a safe haven is established, return to the LZ for further orders."
-msgstr ""
+msgstr "Odată zona sigură creată, întoarce-te la ZA pentru noi ordine."
 
 #: data/base/messages/strings/cam2strings.txt:141
 #: data/base/messages/strings/cam2strings.txt:146
 #: data/base/messages/strings/cam2strings.txt:151
 msgid "BETA BASE MISSION: Evacuate!"
-msgstr ""
+msgstr "MISIUNEA BAZEI BETA: Evacuarea!"
 
 #: data/base/messages/strings/cam2strings.txt:142
 msgid "Commander, we have grave news."
@@ -5236,67 +5237,67 @@ msgstr "Comandante, avem vești foarte triste."
 
 #: data/base/messages/strings/cam2strings.txt:143
 msgid "Alpha base has been destroyed by nuclear missile attack."
-msgstr ""
+msgstr "Baza Alpha a fost distrusă de un atac nuclear."
 
 #: data/base/messages/strings/cam2strings.txt:147
 msgid "The Collective are unaware of the nuclear attack and have air units heading for your base."
-msgstr ""
+msgstr "Colectivul nu știe de atacurile nucleare și își îndreaptă unitățile aeriene spre baza ta."
 
 #: data/base/messages/strings/cam2strings.txt:148
 msgid "This message was intercepted a few moments ago..."
-msgstr ""
+msgstr "Acest mesaj a fost interceptat în urmă cu câteva momente..."
 
 #: data/base/messages/strings/cam2strings.txt:152
 msgid "You must transport as many of your forces as possible."
-msgstr ""
+msgstr "Trebuie să transporți cât mai multe din forțele tale poți."
 
 #: data/base/messages/strings/cam2strings.txt:153
 #: data/base/messages/strings/cam3strings.txt:30
 msgid "Good luck, Commander."
-msgstr ""
+msgstr "Mult succes, Comandante."
 
 #: data/base/messages/strings/cam3strings.txt:4
 #: data/base/sequenceaudio/cam3/c003.txa:4
 #: data/base/sequenceaudio/cam3/c003.txa:14
 msgid "TRANSPORT MISSION: Northern Sector"
-msgstr ""
+msgstr "MISIUNE DE TRANSPORT: Sectorul nordic"
 
 #: data/base/messages/strings/cam3strings.txt:5
 #: data/base/sequenceaudio/cam3/c003.txa:5
 msgid "Congratulations on your successful evacuation of Beta Base."
-msgstr ""
+msgstr "Felicitări pentru evacuarea cu succes a bazei Beta."
 
 #: data/base/messages/strings/cam3strings.txt:6
 #: data/base/sequenceaudio/cam3/c003.txa:6
 msgid "NEXUS has gained access to nuclear weapons and is determined to destroy the Project."
-msgstr ""
+msgstr "NEXUS a căpătat acces la arme nucleare și e hotărât să distrugă Proiectul."
 
 #: data/base/messages/strings/cam3strings.txt:9
 msgid "Take your forces to the Northern Sector"
-msgstr ""
+msgstr "Du-ți forțele către sectorul nordic"
 
 #: data/base/messages/strings/cam3strings.txt:10
 #: data/base/sequenceaudio/cam3/c003.txa:15
 msgid "Once at the mountains secure an LZ. Then establish a forward base."
-msgstr ""
+msgstr "Odată ajunși în munți, securizează o ZA. După aceea, întemeiază o bază înaintată."
 
 #: data/base/messages/strings/cam3strings.txt:11
 #: data/base/sequenceaudio/cam3/c003.txa:16
 msgid "Team Gamma will contact you there."
-msgstr ""
+msgstr "Echipa Gamma te va contacta acolo."
 
 #: data/base/messages/strings/cam3strings.txt:14
 msgid "TRANSPORT MISSION: Establish A Forward Base"
-msgstr ""
+msgstr "MISIUNE DE TRANSPORT: Întemeiază o bază înaintată"
 
 #: data/base/messages/strings/cam3strings.txt:15
 #: data/base/sequenceaudio/cam3/c003.txt:7
 msgid "Commander, the success of the Project lies with you."
-msgstr ""
+msgstr "Comandante, succesul Proiectului depinde de tine."
 
 #: data/base/messages/strings/cam3strings.txt:16
 msgid "Secure an LZ, then establish a forward base."
-msgstr ""
+msgstr "Asigură o ZA, după care întemeiază o bază."
 
 #: data/base/messages/strings/cam3strings.txt:19
 #: data/base/messages/strings/cam3strings.txt:28
@@ -5348,7 +5349,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam3strings.txt:43
 msgid "AWAY TEAM UPDATE"
-msgstr ""
+msgstr "ACTUALIZĂRILE ECHIPELOR PLECATE"
 
 #: data/base/messages/strings/cam3strings.txt:44
 msgid "All communication with the away team was lost after the nuclear explosions."
@@ -5372,7 +5373,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam3strings.txt:53
 msgid "NEXUS DEFEATED"
-msgstr ""
+msgstr "NEXUS ÎNVINS"
 
 #: data/base/messages/strings/cam3strings.txt:54
 msgid "Commander, we have defeated NEXUS."
@@ -5476,11 +5477,11 @@ msgstr ""
 
 #: data/base/messages/strings/cam3strings.txt:105
 msgid "This is our current position."
-msgstr ""
+msgstr "Aceasta este poziția noastră curentă."
 
 #: data/base/messages/strings/cam3strings.txt:106
 msgid "Take control of our forces and lead us."
-msgstr ""
+msgstr "Ia control asupra forțelor noastre și condu-ne."
 
 #: data/base/messages/strings/cam3strings.txt:109
 msgid "Control transfer successful."
@@ -5492,7 +5493,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam3strings.txt:113
 msgid "Incoming Transmission..."
-msgstr ""
+msgstr "Recepționăm o transmisie..."
 
 #: data/base/messages/strings/cam3strings.txt:116
 msgid "Elements of Team Gamma have contacted us."
@@ -6408,7 +6409,7 @@ msgstr "Groapă cu Piperniță"
 #: data/mp/messages/strings/names.txt:496
 #: data/mp/messages/strings/names.txt:760
 msgid "Hellstorm Emplacement"
-msgstr ""
+msgstr "Amplasament Hellstorm"
 
 #: data/base/messages/strings/names.txt:409
 #: data/base/messages/strings/names.txt:715
@@ -6555,7 +6556,7 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:752
 #: data/mp/messages/strings/names.txt:773
 msgid "Lancer Tower"
-msgstr ""
+msgstr "Turn Lancer"
 
 #: data/base/messages/strings/names.txt:443
 #: data/mp/messages/strings/names.txt:451
@@ -6747,8 +6748,9 @@ msgstr "Amplasament Cutremurător"
 
 #: data/base/messages/strings/names.txt:487
 #: data/mp/messages/strings/names.txt:495
+#, fuzzy
 msgid "Hellstorm"
-msgstr ""
+msgstr "Hellstorm"
 
 #: data/base/messages/strings/names.txt:492
 #: data/base/messages/strings/names.txt:1083
@@ -6803,8 +6805,9 @@ msgstr "Rachetă Înger"
 #: data/base/messages/strings/names.txt:1119
 #: data/mp/messages/strings/names.txt:514
 #: data/mp/messages/strings/names.txt:1136
+#, fuzzy
 msgid "Vindicator SAM"
-msgstr ""
+msgstr "RSA Vindicator"
 
 #: data/base/messages/strings/names.txt:507
 #: data/base/messages/strings/names.txt:1122
@@ -6876,7 +6879,7 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:529
 #: data/mp/messages/strings/names.txt:1161
 msgid "Gauss Cannon"
-msgstr ""
+msgstr "Tun Gauss"
 
 #: data/base/messages/strings/names.txt:523
 #: data/base/messages/strings/names.txt:1181
@@ -6885,8 +6888,9 @@ msgstr ""
 
 #: data/base/messages/strings/names.txt:524
 #: data/mp/messages/strings/names.txt:532
+#, fuzzy
 msgid "Bunker Buster"
-msgstr ""
+msgstr "Bunker Buster"
 
 #: data/base/messages/strings/names.txt:526
 #: data/base/messages/strings/names.txt:1183
@@ -6909,8 +6913,9 @@ msgstr ""
 
 #: data/base/messages/strings/names.txt:529
 #: data/mp/messages/strings/names.txt:537
+#, fuzzy
 msgid "VTOL Bunker Buster"
-msgstr ""
+msgstr "Bunker Buster DAV"
 
 #: data/base/messages/strings/names.txt:530
 #: data/mp/messages/strings/names.txt:538
@@ -6919,8 +6924,9 @@ msgstr ""
 
 #: data/base/messages/strings/names.txt:531
 #: data/mp/messages/strings/names.txt:539
+#, fuzzy
 msgid "VTOL Lancer"
-msgstr ""
+msgstr "Lancer DAV"
 
 #: data/base/messages/strings/names.txt:532
 #: data/mp/messages/strings/names.txt:540
@@ -6956,7 +6962,7 @@ msgstr ""
 #: data/base/messages/strings/names.txt:560
 #: data/mp/messages/strings/names.txt:569
 msgid "VTOL Cannon"
-msgstr ""
+msgstr "Tun DAV"
 
 #: data/base/messages/strings/names.txt:561
 #: data/mp/messages/strings/names.txt:570
@@ -6966,7 +6972,7 @@ msgstr ""
 #: data/base/messages/strings/names.txt:562
 #: data/mp/messages/strings/names.txt:571
 msgid "VTOL Assault Cannon"
-msgstr ""
+msgstr "Tun de asalt DAV"
 
 #: data/base/messages/strings/names.txt:563
 #: data/mp/messages/strings/names.txt:572
@@ -6976,22 +6982,22 @@ msgstr ""
 #: data/base/messages/strings/names.txt:565
 #: data/mp/messages/strings/names.txt:574
 msgid "VTOL Machinegun"
-msgstr ""
+msgstr "Mitralieră DAV"
 
 #: data/base/messages/strings/names.txt:566
 #: data/mp/messages/strings/names.txt:575
 msgid "VTOL Twin Machinegun"
-msgstr ""
+msgstr "Mitralieră dublă DAV"
 
 #: data/base/messages/strings/names.txt:567
 #: data/mp/messages/strings/names.txt:576
 msgid "VTOL Heavy Machinegun"
-msgstr ""
+msgstr "Mitralieră grea DAV"
 
 #: data/base/messages/strings/names.txt:568
 #: data/mp/messages/strings/names.txt:577
 msgid "VTOL Assault Gun"
-msgstr ""
+msgstr "Mitralieră de asalt DAV"
 
 #: data/base/messages/strings/names.txt:569
 #: data/mp/messages/strings/names.txt:578
@@ -7057,7 +7063,7 @@ msgstr ""
 #: data/base/messages/strings/names.txt:624
 #: data/mp/messages/strings/names.txt:633
 msgid "ADVANCED RESEARCH"
-msgstr ""
+msgstr "CERCETARE AVANSATĂ"
 
 #: data/base/messages/strings/names.txt:625
 #: data/mp/messages/strings/names.txt:634
@@ -7127,121 +7133,123 @@ msgstr ""
 #: data/base/messages/strings/names.txt:649
 #: data/mp/messages/strings/names.txt:658
 msgid "Synaptic Link"
-msgstr ""
+msgstr "Legătura Sinaptică"
 
 #: data/base/messages/strings/names.txt:651
 #: data/mp/messages/strings/names.txt:660
 msgid "Missile Targeting Codes"
-msgstr ""
+msgstr "Coduri de țintire pentru rachete"
 
 #: data/base/messages/strings/names.txt:652
 #: data/mp/messages/strings/names.txt:661
 msgid "Second Level Missile Targeting Codes"
-msgstr ""
+msgstr "Al doilea nivel de coduri de țintire pentru rachete"
 
 #: data/base/messages/strings/names.txt:653
 #: data/mp/messages/strings/names.txt:662
 msgid "Third Level Missile Firing Codes"
-msgstr ""
+msgstr "Al treilea nivel de coduri de țintire pentru rachete"
 
 #: data/base/messages/strings/names.txt:655
 #: data/mp/messages/strings/names.txt:664
 msgid "Cyborg Thermal Armor"
-msgstr ""
+msgstr "Armură termală pentru cyborgi"
 
 #: data/base/messages/strings/names.txt:656
 #: data/mp/messages/strings/names.txt:665
 msgid "Cyborg Thermal Armor Mk2"
-msgstr ""
+msgstr "Armură termală pentru cyborgi Mk2"
 
 #: data/base/messages/strings/names.txt:657
 #: data/mp/messages/strings/names.txt:666
 msgid "Cyborg Thermal Armor Mk3"
-msgstr ""
+msgstr "Armură termală pentru cyborgi Mk3"
 
 #: data/base/messages/strings/names.txt:658
 #: data/mp/messages/strings/names.txt:667
 msgid "Cyborg High Intensity Thermal Armor"
-msgstr ""
+msgstr "Armură termală de mare intensitate pentru cyborgi"
 
 #: data/base/messages/strings/names.txt:659
 #: data/mp/messages/strings/names.txt:668
 msgid "Cyborg High Intensity Thermal Armor Mk2"
-msgstr ""
+msgstr "Armură termală de mare intensitate pentru cyborgi Mk2"
 
 #: data/base/messages/strings/names.txt:660
 #: data/mp/messages/strings/names.txt:669
 msgid "Cyborg High Intensity Thermal Armor Mk3"
-msgstr ""
+msgstr "Armură termală de mare intensitate pentru cyborgi Mk3"
 
 #: data/base/messages/strings/names.txt:662
 #: data/mp/messages/strings/names.txt:671
 msgid "Cyborg Composite Alloys"
-msgstr ""
+msgstr "Aliaje compozite pentru cyborgi"
 
 #: data/base/messages/strings/names.txt:663
 #: data/mp/messages/strings/names.txt:672
 msgid "Cyborg Composite Alloys Mk2"
-msgstr ""
+msgstr "Aliaje compozite pentru cyborgi Mk2"
 
 #: data/base/messages/strings/names.txt:664
 #: data/mp/messages/strings/names.txt:673
 msgid "Cyborg Composite Alloys Mk3"
-msgstr ""
+msgstr "Aliaje compozite pentru cyborgi Mk3"
 
 #: data/base/messages/strings/names.txt:665
 #: data/mp/messages/strings/names.txt:674
 msgid "Cyborg Dense Composite Alloys"
-msgstr ""
+msgstr "Aliaje compozite dense pentru cyborgi"
 
 #: data/base/messages/strings/names.txt:666
 #: data/mp/messages/strings/names.txt:675
 msgid "Cyborg Dense Composite Alloys Mk2"
-msgstr ""
+msgstr "Aliaje compozite dense pentru cyborgi Mk2"
 
 #: data/base/messages/strings/names.txt:667
 #: data/mp/messages/strings/names.txt:676
 msgid "Cyborg Dense Composite Alloys Mk3"
-msgstr ""
+msgstr "Aliaje compozite dense pentru cyborgi Mk3"
 
 #: data/base/messages/strings/names.txt:668
 #: data/mp/messages/strings/names.txt:677
 msgid "Cyborg Superdense Composite Alloys"
-msgstr ""
+msgstr "Aliaje compozite superdense pentru cyborgi"
 
 #: data/base/messages/strings/names.txt:669
 #: data/mp/messages/strings/names.txt:678
 msgid "Cyborg Superdense Composite Alloys Mk2"
-msgstr ""
+msgstr "Aliaje compozite superdense pentru cyborgi Mk2"
 
 #: data/base/messages/strings/names.txt:670
 #: data/mp/messages/strings/names.txt:679
 msgid "Cyborg Superdense Composite Alloys Mk3"
-msgstr ""
+msgstr "Aliaje compozite superdense pentru cyborgi Mk3"
 
 #: data/base/messages/strings/names.txt:673
 #: data/mp/messages/strings/names.txt:684
+#, fuzzy
 msgid "Bunker Blaster Cyborg"
-msgstr ""
+msgstr "Cyborg Bunker Buster"
 
 #: data/base/messages/strings/names.txt:674
 #: data/mp/messages/strings/names.txt:685
 msgid "Heavy Gunner Cyborg"
-msgstr ""
+msgstr "Cyborg cu armament greu"
 
 #: data/base/messages/strings/names.txt:675
 #: data/mp/messages/strings/names.txt:686
 msgid "Flamer Cyborg"
-msgstr ""
+msgstr "Cyborg aruncător de flăcări"
 
 #: data/base/messages/strings/names.txt:676
 #: data/mp/messages/strings/names.txt:687
 msgid "Machinegunner Cyborg"
-msgstr ""
+msgstr "Cyborg mitralior"
 
 #: data/base/messages/strings/names.txt:677
+#, fuzzy
 msgid "Lancer Cyborg"
-msgstr ""
+msgstr "Cyborg cu Lancer"
 
 #: data/base/messages/strings/names.txt:678
 msgid "Assault Gunner Cyborg"
@@ -7419,41 +7427,44 @@ msgstr ""
 #: data/base/messages/strings/names.txt:1363
 #: data/mp/messages/strings/names.txt:764
 #: data/mp/messages/strings/names.txt:1383
+#, fuzzy
 msgid "Avenger SAM Site"
-msgstr ""
+msgstr "Amplasament RSA Avenger"
 
 #: data/base/messages/strings/names.txt:750
 #: data/base/messages/strings/names.txt:1364
 #: data/mp/messages/strings/names.txt:765
 #: data/mp/messages/strings/names.txt:1384
+#, fuzzy
 msgid "Vindicator SAM Site"
-msgstr ""
+msgstr "Amplasament RSA Vindicator"
 
 #: data/base/messages/strings/names.txt:756
 msgid "Heavy Machinegun Guard Tower"
-msgstr ""
+msgstr "Turn cu mitralieră grea"
 
 #: data/base/messages/strings/names.txt:758
 msgid "Lancer Guard Tower"
-msgstr ""
+msgstr "Turn cu lansator de rachete"
 
 #: data/base/messages/strings/names.txt:759
 msgid "Mini-Rocket Guard Tower"
-msgstr ""
+msgstr "Turn cu mini-rachete"
 
 #: data/base/messages/strings/names.txt:772
 #: data/base/messages/strings/names.txt:1382
 #: data/mp/messages/strings/names.txt:787
 #: data/mp/messages/strings/names.txt:1402
 msgid "Scourge Missile Hardpoint"
-msgstr ""
+msgstr "Turn cu rachete Năpastă"
 
 #: data/base/messages/strings/names.txt:774
 #: data/base/messages/strings/names.txt:1380
 #: data/mp/messages/strings/names.txt:789
 #: data/mp/messages/strings/names.txt:1400
+#, fuzzy
 msgid "Tank Killer Hardpoint"
-msgstr ""
+msgstr "Turn cu rachete Tank Killer"
 
 #: data/base/messages/strings/names.txt:775
 #: data/base/messages/strings/names.txt:1381
@@ -7465,12 +7476,12 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:793
 #: data/mp/messages/strings/names.txt:1403
 msgid "Gauss Cannon Hardpoint"
-msgstr ""
+msgstr "Turn cu tun Gauss"
 
 #: data/base/messages/strings/names.txt:780
 #: data/mp/messages/strings/names.txt:795
 msgid "Command Relay Post"
-msgstr ""
+msgstr "Centru de comandă"
 
 #: data/base/messages/strings/names.txt:784
 msgid "Automated Cyborg Production Mk2"
@@ -7712,17 +7723,17 @@ msgstr ""
 #: data/base/messages/strings/names.txt:862
 #: data/mp/messages/strings/names.txt:877
 msgid "Defenses Self-Repair"
-msgstr ""
+msgstr "Reparație automată pentru clădiri defensive"
 
 #: data/base/messages/strings/names.txt:863
 #: data/mp/messages/strings/names.txt:878
 msgid "Automated Defenses Repair Mk2"
-msgstr ""
+msgstr "Reparație automată pentru clădiri defensive Mk2"
 
 #: data/base/messages/strings/names.txt:864
 #: data/mp/messages/strings/names.txt:879
 msgid "Automated Defenses Repair Mk3"
-msgstr ""
+msgstr "Reparație automată pentru clădiri defensive Mk3"
 
 #: data/base/messages/strings/names.txt:866
 #: data/mp/messages/strings/names.txt:881
@@ -7808,17 +7819,17 @@ msgstr "Turelă AB"
 #: data/base/messages/strings/names.txt:893
 #: data/mp/messages/strings/names.txt:910
 msgid "CB Sensor Upgrade"
-msgstr ""
+msgstr "Îmbunătățire a senzorilor AB"
 
 #: data/base/messages/strings/names.txt:894
 #: data/mp/messages/strings/names.txt:911
 msgid "CB Sensor Upgrade 2"
-msgstr ""
+msgstr "Îmbunătățire a senzorilor AB 2"
 
 #: data/base/messages/strings/names.txt:895
 #: data/mp/messages/strings/names.txt:912
 msgid "CB Sensor Upgrade 3"
-msgstr ""
+msgstr "Îmbunătățire a senzorilor AB 3"
 
 #: data/base/messages/strings/names.txt:897
 #: data/mp/messages/strings/names.txt:914
@@ -7873,19 +7884,19 @@ msgstr ""
 
 #: data/base/messages/strings/names.txt:913
 msgid "NEXUS Intruder Program"
-msgstr ""
+msgstr "Program intrus NEXUS"
 
 #: data/base/messages/strings/names.txt:914
 msgid "NEXUS Resistance Circuits"
-msgstr ""
+msgstr "Circuite de rezistență NEXUS"
 
 #: data/base/messages/strings/names.txt:915
 msgid "NEXUS Resistance Circuits Mk2"
-msgstr ""
+msgstr "Circuite de rezistență NEXUS Mk2"
 
 #: data/base/messages/strings/names.txt:916
 msgid "NEXUS Resistance Circuits Mk3"
-msgstr ""
+msgstr "Circuite de rezistență NEXUS Mk3"
 
 #: data/base/messages/strings/names.txt:918
 #: data/mp/messages/strings/names.txt:935
@@ -8015,47 +8026,47 @@ msgstr ""
 #: data/base/messages/strings/names.txt:953
 #: data/mp/messages/strings/names.txt:970
 msgid "Composite Alloys"
-msgstr ""
+msgstr "Aliaje compozite"
 
 #: data/base/messages/strings/names.txt:954
 #: data/mp/messages/strings/names.txt:971
 msgid "Composite Alloys Mk2"
-msgstr ""
+msgstr "Aliaje compozite Mk2"
 
 #: data/base/messages/strings/names.txt:955
 #: data/mp/messages/strings/names.txt:972
 msgid "Composite Alloys Mk3"
-msgstr ""
+msgstr "Aliaje compozite Mk3"
 
 #: data/base/messages/strings/names.txt:956
 #: data/mp/messages/strings/names.txt:973
 msgid "Dense Composite Alloys"
-msgstr ""
+msgstr "Aliaje compozite dense"
 
 #: data/base/messages/strings/names.txt:957
 #: data/mp/messages/strings/names.txt:974
 msgid "Dense Composite Alloys Mk2"
-msgstr ""
+msgstr "Aliaje compozite dense Mk2"
 
 #: data/base/messages/strings/names.txt:958
 #: data/mp/messages/strings/names.txt:975
 msgid "Dense Composite Alloys Mk3"
-msgstr ""
+msgstr "Aliaje compozite dense Mk3"
 
 #: data/base/messages/strings/names.txt:959
 #: data/mp/messages/strings/names.txt:976
 msgid "Superdense Composite Alloys"
-msgstr ""
+msgstr "Aliaje compozite superdense"
 
 #: data/base/messages/strings/names.txt:960
 #: data/mp/messages/strings/names.txt:977
 msgid "Superdense Composite Alloys Mk2"
-msgstr ""
+msgstr "Aliaje compozite superdense Mk2"
 
 #: data/base/messages/strings/names.txt:961
 #: data/mp/messages/strings/names.txt:978
 msgid "Superdense Composite Alloys Mk3"
-msgstr ""
+msgstr "Aliaje compozite superdense Mk3"
 
 #: data/base/messages/strings/names.txt:964
 #: data/mp/messages/strings/names.txt:981
@@ -8165,17 +8176,17 @@ msgstr ""
 #: data/base/messages/strings/names.txt:996
 #: data/mp/messages/strings/names.txt:1013
 msgid "AA Chainfeed Loader"
-msgstr ""
+msgstr "Încărcător AA pe lanț"
 
 #: data/base/messages/strings/names.txt:997
 #: data/mp/messages/strings/names.txt:1014
 msgid "AA Chainfeed Loader Mk2"
-msgstr ""
+msgstr "Încărcător AA pe lanț Mk2"
 
 #: data/base/messages/strings/names.txt:998
 #: data/mp/messages/strings/names.txt:1015
 msgid "AA Chainfeed Loader Mk3"
-msgstr ""
+msgstr "Încărcător AA pe lanț Mk3"
 
 #: data/base/messages/strings/names.txt:1003
 msgid "Cluster Bombs Bay"
@@ -8198,11 +8209,11 @@ msgstr "Încărcătură de bombe cu thermit"
 
 #: data/base/messages/strings/names.txt:1008
 msgid "Thermal Imaging Bombsight"
-msgstr ""
+msgstr "Bombe cu senzori de temperatură"
 
 #: data/base/messages/strings/names.txt:1009
 msgid "Laser Guided Bombsight"
-msgstr ""
+msgstr "Bombe ghidate prin laser"
 
 #: data/base/messages/strings/names.txt:1010
 msgid "Target Acquisition Bombsight"
@@ -8211,12 +8222,12 @@ msgstr ""
 #: data/base/messages/strings/names.txt:1012
 #: data/mp/messages/strings/names.txt:1029
 msgid "Cannon Laser Rangefinder"
-msgstr ""
+msgstr "Țintire laser pentru tunuri"
 
 #: data/base/messages/strings/names.txt:1013
 #: data/mp/messages/strings/names.txt:1030
 msgid "Cannon Laser Designator"
-msgstr ""
+msgstr "Ochire laser pentru tunuri"
 
 #: data/base/messages/strings/names.txt:1014
 #: data/mp/messages/strings/names.txt:1031
@@ -8371,22 +8382,22 @@ msgstr "Gel pentru aruncător super-fierbinte MK3"
 #: data/base/messages/strings/names.txt:1055
 #: data/mp/messages/strings/names.txt:1072
 msgid "Flamer Autoloader"
-msgstr ""
+msgstr "Auto-încărcător al aruncătorului de flăcări"
 
 #: data/base/messages/strings/names.txt:1056
 #: data/mp/messages/strings/names.txt:1073
 msgid "Flamer Autoloader Mk2"
-msgstr ""
+msgstr "Auto-încărcător al aruncătorului de flăcări Mk2"
 
 #: data/base/messages/strings/names.txt:1057
 #: data/mp/messages/strings/names.txt:1074
 msgid "Flamer Autoloader Mk3"
-msgstr ""
+msgstr "Auto-încărcător al aruncătorului de flăcări - Mk3"
 
 #: data/base/messages/strings/names.txt:1059
 #: data/mp/messages/strings/names.txt:1076
 msgid "Heavy Flamer - Inferno"
-msgstr ""
+msgstr "Aruncător de flăcări greu - Infern"
 
 #: data/base/messages/strings/names.txt:1062
 #: data/mp/messages/strings/names.txt:1079
@@ -8411,7 +8422,7 @@ msgstr ""
 #: data/base/messages/strings/names.txt:1068
 #: data/mp/messages/strings/names.txt:1085
 msgid "Target Prediction Artillery Shells"
-msgstr ""
+msgstr "Obuze de artilerie cu predicție de țintă"
 
 #: data/base/messages/strings/names.txt:1070
 #: data/mp/messages/strings/names.txt:1087
@@ -8465,12 +8476,12 @@ msgstr ""
 #: data/base/messages/strings/names.txt:1082
 #: data/mp/messages/strings/names.txt:1099
 msgid "Laser - Flashlight"
-msgstr ""
+msgstr "Laser - Lanternă"
 
 #: data/base/messages/strings/names.txt:1085
 #: data/mp/messages/strings/names.txt:1102
 msgid "Hardened MG Bullets"
-msgstr ""
+msgstr "Gloanțe de mitralieră întărite"
 
 #: data/base/messages/strings/names.txt:1086
 #: data/mp/messages/strings/names.txt:1103
@@ -9131,12 +9142,12 @@ msgstr "Siloz de rachete nucleare"
 #: data/base/messages/strings/resstrings.txt:234
 #: data/mp/messages/strings/resstrings.txt:260
 msgid "Armored guard tower with Heavy Machinegun"
-msgstr ""
+msgstr "Turn armat, dotat cu mitralieră grea"
 
 #: data/base/messages/strings/resstrings.txt:240
 #: data/mp/messages/strings/resstrings.txt:266
 msgid "Armored guard tower with Flamer"
-msgstr ""
+msgstr "Turn armat, dotat cu aruncător de flăcări"
 
 #: data/base/messages/strings/resstrings.txt:246
 #: data/mp/messages/strings/resstrings.txt:272
@@ -9146,7 +9157,7 @@ msgstr ""
 #: data/base/messages/strings/resstrings.txt:260
 #: data/mp/messages/strings/resstrings.txt:286
 msgid "Armored bunker with Heavy Machinegun"
-msgstr ""
+msgstr "Buncăr armat, dotat cu mitralieră grea"
 
 #: data/base/messages/strings/resstrings.txt:280
 #: data/mp/messages/strings/resstrings.txt:306
@@ -9783,27 +9794,27 @@ msgstr "De acum este sigur că Nexus a fost responsabil de Colaps."
 
 #: data/base/sequenceaudio/cam2/cam26afm.txt:4
 msgid "During the early stages of the Collapse, NASDA technicians switched off  the infected systems in order to isolate the spread of Nexus. This seems to have prevented the LasSats from firing during the counterstrikes."
-msgstr ""
+msgstr "În primele stadii ale Colapsului, tehnicienii NASDA au închis sistemele infectate pentru a opri răspândirea NEXUS. Aceasta pare să fi fost motivul pentru care sateliții laser nu au tras în timpul represaliilor."
 
 #: data/base/sequenceaudio/cam2/cam26afm.txt:6
 msgid "The ensuing nuclear-magnetic pulses wiped clean large amounts of NASDA's memory banks, shattering its core processor, and sent shockwaves blasting through Nexus."
-msgstr ""
+msgstr "Pulsurile magnetice rezultante au șters mare parte din bancurile de memorie NASDA, distrugând procesorul central și trimițând unde de șoc prin NEXUS."
 
 #: data/base/sequenceaudio/cam2/cam26afm.txt:8
 msgid "Nexus was fried as whole sections of its consciousness were obliterated in the counterstrikes."
-msgstr ""
+msgstr "NEXUS a fost ars după ce mari părți din conștiința sa au fost distruse în timpul represaliilor."
 
 #: data/base/sequenceaudio/cam2/cam26bfm.txt:1
 msgid "Commander we are detecting transmissions from this site that are reaching high orbit."
-msgstr ""
+msgstr "Comandante, detectăm transmisiuni de la această locație care ajung pe orbită."
 
 #: data/base/sequenceaudio/cam2/cam26bfm.txt:3
 msgid "Nexus has now reconnected itself with the NASDA satellites."
-msgstr ""
+msgstr "NEXUS este acum reconectat la sateliții NASDA."
 
 #: data/base/sequenceaudio/cam2/cam26bfm.txt:5
 msgid "This poses a major threat to the Project and to our survival."
-msgstr ""
+msgstr "Aceasta este o amenințare serioasă împotriva Proiectului și a supraviețuirii noastre."
 
 #: data/base/sequenceaudio/cam2/cam26pl1.txt:1
 msgid "Analysis of NASDA Central leaves no doubt that The Collective has introduced the Nexus Intruder Virus to it."
@@ -10909,35 +10920,35 @@ msgstr ""
 #: data/mp/messages/resmessages23.rmsg:188
 #: data/mp/messages/resmessages3.rmsg:1176
 msgid "Mortar accuracy +10%"
-msgstr ""
+msgstr "Precizia mortarelor +10%"
 
 #: data/mp/messages/resmessages12.rmsg:175
 #: data/mp/messages/resmessages3.rmsg:1189
 msgid "Mortar reload time -10%"
-msgstr ""
+msgstr "Timpii de reîncărcare a mortarelor -10%"
 
 #: data/mp/messages/resmessages12.rmsg:201
 #: data/mp/messages/resmessages1.rmsg:735
 msgid "Rocket reload time -15%"
-msgstr ""
+msgstr "Timpii de reîncărcare a rachetelor -15%"
 
 #: data/mp/messages/resmessages12.rmsg:214
 #: data/mp/messages/resmessages3.rmsg:890
 msgid "Cannon reload time -10%"
-msgstr ""
+msgstr "Timpii de reîncărcare a tunurilor -10%"
 
 #: data/mp/messages/resmessages12.rmsg:227
 #: data/mp/messages/resmessages1.rmsg:579
 #: data/mp/messages/resmessages3.rmsg:877
 msgid "Cannon damage +25%"
-msgstr ""
+msgstr "Puterea tunurilor +25%"
 
 #: data/mp/messages/resmessages12.rmsg:240
 #: data/mp/messages/resmessages1.rmsg:709
 #: data/mp/messages/resmessages1.rmsg:748
 #: data/mp/messages/resmessagesall.rmsg:175
 msgid "Rocket accuracy +10%"
-msgstr ""
+msgstr "Precizia rachetelor +10%"
 
 #: data/mp/messages/resmessages1.rmsg:32
 #: data/mp/messages/resmessages3.rmsg:71
@@ -10975,7 +10986,7 @@ msgstr ""
 
 #: data/mp/messages/resmessages1.rmsg:345
 msgid "Research speed +85%"
-msgstr ""
+msgstr "Viteza de cercetare +85%"
 
 #: data/mp/messages/resmessages1.rmsg:358
 #: data/mp/messages/resmessages2.rmsg:370
@@ -10998,7 +11009,7 @@ msgstr ""
 #: data/mp/messages/resmessages3.rmsg:669
 #: data/mp/messages/resmessages3.rmsg:682
 msgid "Vehicle speed +5%"
-msgstr ""
+msgstr "Viteza vehiculelor +5%"
 
 #: data/mp/messages/resmessages1.rmsg:475
 #: data/mp/messages/resmessages2.rmsg:513
@@ -11017,7 +11028,7 @@ msgstr ""
 #: data/mp/messages/resmessages2.rmsg:786
 #: data/mp/messages/resmessagesall.rmsg:773
 msgid "Flamer damage +25%"
-msgstr ""
+msgstr "Puterea aruncătoarelor de flăcări +25%"
 
 #: data/mp/messages/resmessages1.rmsg:644
 #: data/mp/messages/resmessages1.rmsg:657
@@ -12157,8 +12168,8 @@ msgstr ""
 msgid "Hyper Velocity Cannon Python Hover"
 msgstr ""
 
-#: lib/framework/i18n.c:89
-#: lib/framework/i18n.c:150
+#: lib/framework/i18n.c:93
+#: lib/framework/i18n.c:154
 msgid "System locale"
 msgstr "Limba sistemului"
 
@@ -12696,7 +12707,7 @@ msgid "Join Game"
 msgstr "Alătură-te unui joc"
 
 #: src/frontend.c:440
-#: src/multiint.c:1176
+#: src/multiint.c:1166
 msgid "OPTIONS"
 msgstr "OPȚIUNI"
 
@@ -12808,7 +12819,7 @@ msgid "On"
 msgstr "Activat"
 
 #: src/frontend.c:559
-#: src/multiint.c:1246
+#: src/multiint.c:1236
 msgid "Fog"
 msgstr "Ceață"
 
@@ -12819,7 +12830,7 @@ msgstr "Negură"
 
 #: src/frontend.c:566
 #: src/frontend.c:631
-#: src/multiint.c:1248
+#: src/multiint.c:1238
 msgid "Fog Of War"
 msgstr "Ceața bătăliei"
 
@@ -12981,7 +12992,7 @@ msgid "GAME OPTIONS"
 msgstr "OPȚIUNI DE JOC"
 
 #: src/frontend.c:1405
-#: src/multiint.c:2212
+#: src/multiint.c:2202
 msgid "Mod: "
 msgstr "Modificare:"
 
@@ -13040,7 +13051,7 @@ msgid "Build (F3)"
 msgstr "Construcție (F3)"
 
 #: src/hci.c:3885
-#: src/multiint.c:1293
+#: src/multiint.c:1283
 #: src/multimenu.c:764
 msgid "Power"
 msgstr "Energie"
@@ -13619,9 +13630,9 @@ msgid "KEY MAPPING"
 msgstr ""
 
 #: src/keyedit.c:374
-#: src/multiint.c:533
-#: src/multiint.c:961
-#: src/multiint.c:1379
+#: src/multiint.c:523
+#: src/multiint.c:951
+#: src/multiint.c:1369
 msgid "Return To Previous Screen"
 msgstr ""
 
@@ -14083,7 +14094,7 @@ msgstr "Ucide unitatea selectată/unitățile selectate"
 
 #: src/keymap.c:454
 msgid "Toggle god Mode Status"
-msgstr ""
+msgstr "Activează/dezactivează modul invincibil"
 
 #: src/keymap.c:455
 msgid "Display Options Screen"
@@ -14140,12 +14151,12 @@ msgstr "Ieșire în meniul principal"
 msgid "Continue Game"
 msgstr "Continuă Jocul"
 
-#: src/move.c:2944
+#: src/move.c:2945
 #, c-format
 msgid "You found %u power in an oil drum."
 msgstr "Ai găsit %u într-un butoi de petrol."
 
-#: src/move.c:2951
+#: src/move.c:2952
 #, c-format
 msgid "You found %u power in an oil drum"
 msgstr "Ai găsit %u într-un butoi de petrol."
@@ -14200,294 +14211,294 @@ msgstr "%s a format o alianță cu %s"
 msgid "You Discover Blueprints For %s"
 msgstr "Ai descoperit scheme pentru %s"
 
-#: src/multiint.c:467
+#: src/multiint.c:457
 #: src/multilimit.c:192
 msgid "Accept Settings"
 msgstr "Acceptă Setările"
 
-#: src/multiint.c:469
-#: src/multiint.c:1009
+#: src/multiint.c:459
+#: src/multiint.c:999
 msgid "Cancel"
 msgstr "Anulare"
 
-#: src/multiint.c:480
+#: src/multiint.c:470
 msgid "IP Address or Machine Name"
 msgstr "Adresă IP sau numele calculatorului"
 
-#: src/multiint.c:530
+#: src/multiint.c:520
 msgid "CONNECTION"
 msgstr "CONEXIUNE"
 
-#: src/multiint.c:535
+#: src/multiint.c:525
 msgid "Lobby"
 msgstr "Arenă"
 
-#: src/multiint.c:536
+#: src/multiint.c:526
 msgid "IP"
 msgstr "IP"
 
-#: src/multiint.c:727
+#: src/multiint.c:717
 msgid "No games are available"
 msgstr "Nici un joc disponibil"
 
-#: src/multiint.c:730
+#: src/multiint.c:720
 msgid "Game is full"
 msgstr "Jocul este plin"
 
-#: src/multiint.c:734
+#: src/multiint.c:724
 msgid "You were kicked!"
 msgstr "Ai fost eliminat!"
 
-#: src/multiint.c:737
+#: src/multiint.c:727
 msgid "Wrong Game Version!"
 msgstr "Versiune de joc greșită!"
 
-#: src/multiint.c:740
+#: src/multiint.c:730
 msgid "You have an incompatible mod."
 msgstr "Ai o modificare incomkpatibilă."
 
-#: src/multiint.c:745
+#: src/multiint.c:735
 msgid "Host couldn't send file?"
 msgstr "Gazda nu a putut transmite fișierul?"
 
-#: src/multiint.c:749
+#: src/multiint.c:739
 msgid "Incorrect Password!"
 msgstr "Parolă incorectă!"
 
-#: src/multiint.c:752
+#: src/multiint.c:742
 msgid "Host has dropped connection!"
 msgstr "Gazda a întrerupt conexiunea!"
 
-#: src/multiint.c:756
+#: src/multiint.c:746
 msgid "Connection Error"
 msgstr "Eroare de conexiune"
 
-#: src/multiint.c:897
+#: src/multiint.c:887
 msgid "Searching"
 msgstr "Căutare"
 
-#: src/multiint.c:958
+#: src/multiint.c:948
 msgid "GAMES"
 msgstr "JOCURI"
 
-#: src/multiint.c:966
+#: src/multiint.c:956
 msgid "Refresh Games List"
 msgstr "Reîmprospătează lista de jocuri"
 
-#: src/multiint.c:986
+#: src/multiint.c:976
 msgid "Enter Password:"
 msgstr "Introdu parola:"
 
-#: src/multiint.c:1007
+#: src/multiint.c:997
 msgid "OK"
 msgstr "Acceptă"
 
-#: src/multiint.c:1129
+#: src/multiint.c:1119
 msgid "Tanks disabled!!"
 msgstr "Tancurile dezactivate!!"
 
-#: src/multiint.c:1130
+#: src/multiint.c:1120
 msgid "Cyborgs disabled."
 msgstr "Cyborgii dezactivați."
 
-#: src/multiint.c:1131
+#: src/multiint.c:1121
 msgid "VTOLs disabled."
 msgstr "DAV-urile dezactivate."
 
-#: src/multiint.c:1181
-#: src/multiint.c:1188
+#: src/multiint.c:1171
+#: src/multiint.c:1178
 msgid "Select Game Name"
 msgstr "Selectează numele jocului"
 
-#: src/multiint.c:1181
+#: src/multiint.c:1171
 msgid "One-Player Skirmish"
 msgstr "Luptă individuală"
 
-#: src/multiint.c:1191
+#: src/multiint.c:1181
 msgid "Select Map"
 msgstr "Alege harta"
 
-#: src/multiint.c:1199
+#: src/multiint.c:1189
 msgid "Click to set Password"
 msgstr "Click pentru a seta o parolă"
 
-#: src/multiint.c:1209
-#: src/multiint.c:1210
+#: src/multiint.c:1199
+#: src/multiint.c:1200
 msgid "Scavengers"
 msgstr "Bandiți"
 
-#: src/multiint.c:1212
+#: src/multiint.c:1202
 msgid "No Scavengers"
 msgstr "Fără bandiți"
 
-#: src/multiint.c:1243
+#: src/multiint.c:1233
 msgid "Select Player Name"
 msgstr "Selectează numele jucătorului"
 
-#: src/multiint.c:1249
+#: src/multiint.c:1239
 msgid "Distance Fog"
 msgstr "Ceață la distanță"
 
-#: src/multiint.c:1260
+#: src/multiint.c:1250
 #: src/multimenu.c:757
 msgid "Alliances"
 msgstr "Alianțe"
 
-#: src/multiint.c:1263
+#: src/multiint.c:1253
 msgid "No Alliances"
 msgstr "Fără alianțe"
 
-#: src/multiint.c:1265
+#: src/multiint.c:1255
 msgid "Allow Alliances"
 msgstr "Permite alianțele"
 
-#: src/multiint.c:1269
+#: src/multiint.c:1259
 msgid "Locked Teams"
 msgstr "Echipe blocate"
 
-#: src/multiint.c:1295
+#: src/multiint.c:1285
 msgid "Low Power Levels"
 msgstr "Nivel mic de energie"
 
-#: src/multiint.c:1297
+#: src/multiint.c:1287
 msgid "Medium Power Levels"
 msgstr "Nivel mediu de energie"
 
-#: src/multiint.c:1299
+#: src/multiint.c:1289
 msgid "High Power Levels"
 msgstr "Nivel mare de energie"
 
-#: src/multiint.c:1331
+#: src/multiint.c:1321
 msgid "Base"
 msgstr "Bază"
 
-#: src/multiint.c:1333
+#: src/multiint.c:1323
 msgid "Start with No Bases"
 msgstr "Pornire fără baze"
 
-#: src/multiint.c:1335
+#: src/multiint.c:1325
 msgid "Start with Bases"
 msgstr "Pornire cu baze"
 
-#: src/multiint.c:1337
+#: src/multiint.c:1327
 msgid "Start with Advanced Bases"
 msgstr "Pornire cu baze avansate"
 
-#: src/multiint.c:1369
+#: src/multiint.c:1359
 msgid "Map Preview"
 msgstr "Vizionare Hartă"
 
-#: src/multiint.c:1371
+#: src/multiint.c:1361
 msgid "Click to see Map"
 msgstr "Click pentru a vedea Harta"
 
-#: src/multiint.c:1385
+#: src/multiint.c:1375
 msgid "Start Hosting Game"
 msgstr "Începe găzduirea jocului"
 
-#: src/multiint.c:1393
+#: src/multiint.c:1383
 msgid "Show Structure Limits"
 msgstr "Arată limitele pentru clădiri"
 
-#: src/multiint.c:1393
+#: src/multiint.c:1383
 msgid "Set Structure Limits"
 msgstr "Setează limitele pentru clădiri"
 
-#: src/multiint.c:1479
+#: src/multiint.c:1469
 msgid "Player colour"
 msgstr "Culoarea jucătorului"
 
-#: src/multiint.c:1495
+#: src/multiint.c:1485
 msgid "Kick player"
 msgstr "Eliminare jucător"
 
-#: src/multiint.c:1506
+#: src/multiint.c:1496
 msgid "Player number"
 msgstr "Numărul jucătorului"
 
-#: src/multiint.c:1899
+#: src/multiint.c:1889
 msgid "Team"
 msgstr "Echipă"
 
-#: src/multiint.c:1932
+#: src/multiint.c:1922
 msgid "Waiting for other players"
 msgstr "Așteptare pentru alți jucători"
 
-#: src/multiint.c:1938
+#: src/multiint.c:1928
 msgid "Click when ready"
 msgstr "Click când ești pregătit"
 
-#: src/multiint.c:1942
+#: src/multiint.c:1932
 msgid "READY?"
 msgstr "PREGĂTIT?"
 
-#: src/multiint.c:1979
+#: src/multiint.c:1969
 msgid "PLAYERS"
 msgstr "JUCĂTORI"
 
-#: src/multiint.c:2033
+#: src/multiint.c:2023
 msgid "Choose Team"
 msgstr "Alege Echipa"
 
-#: src/multiint.c:2073
+#: src/multiint.c:2063
 msgid "Click to change player settings"
 msgstr "Click pentru a schimba setările jucătorului"
 
-#: src/multiint.c:2104
+#: src/multiint.c:2094
 msgid "Click to adjust AI difficulty"
 msgstr "Click pentru a ajusta dificultatea IA"
 
-#: src/multiint.c:2183
+#: src/multiint.c:2173
 msgid "CHAT"
 msgstr "CONVERSAȚIE"
 
-#: src/multiint.c:2217
+#: src/multiint.c:2207
 msgid "All players need to have the same mods to join your game."
 msgstr "Toți jucătorii trebuie să aibă aceleași modificări pentru a putea juca."
 
-#: src/multiint.c:2377
+#: src/multiint.c:2367
 #, c-format
 msgid "*** password [%s] is now required! ***"
 msgstr "*** parola [%s] este de acum necesară! ***"
 
-#: src/multiint.c:2385
+#: src/multiint.c:2375
 msgid "*** password is NOT required! ***"
 msgstr "*** parola NU este necesară! ***"
 
-#: src/multiint.c:2628
+#: src/multiint.c:2618
 msgid "Sorry! Failed to host the game."
 msgstr "Scuze! Jocul nu s-a putut găzdui."
 
-#: src/multiint.c:2713
+#: src/multiint.c:2703
 msgid "'Locked Teams' mode enabled"
 msgstr "Modul „Echipe Blocate” activat"
 
-#: src/multiint.c:2752
-#: src/multiint.c:2802
+#: src/multiint.c:2742
+#: src/multiint.c:2793
 #: src/multimenu.c:1494
 #, c-format
 msgid "The host has kicked %s from the game!"
 msgstr "Gazda l-a eliminat pe %s din joc!"
 
-#: src/multiint.c:2885
+#: src/multiint.c:2877
 msgid "Host is Starting Game"
 msgstr "Gazda Începe Jocul"
 
-#: src/multiint.c:3482
+#: src/multiint.c:3477
 msgid "Players"
 msgstr "Jucători"
 
-#: src/multiint.c:3588
+#: src/multiint.c:3583
 #, c-format
 msgid "Sending Map: %d%% "
 msgstr "Trimitere de hartă: %d%%"
 
-#: src/multiint.c:3597
+#: src/multiint.c:3592
 #, c-format
 msgid "Map: %d%% downloaded"
 msgstr "Harta: %d%% descărcată"
 
-#: src/multiint.c:3623
+#: src/multiint.c:3618
 msgid "HOST"
 msgstr "GAZDĂ"
 
@@ -14831,12 +14842,12 @@ msgstr "Limita de control atinsă - Producția oprită"
 
 #: src/structure.c:5936
 #: src/structure.c:5961
-#, fuzzy, c-format
+#, c-format
 msgid "%s - %u Unit assigned - Damage %3.0f%%"
 msgid_plural "%s - %u Units assigned - Damage %3.0f%%"
-msgstr[0] "%s - %u unitate asociată"
-msgstr[1] "%s - %u unități asociate"
-msgstr[2] "%s - %u unități asociate"
+msgstr[0] "%s - %u Unități asociate - Avarii %3.0f%%"
+msgstr[1] "%s - %u Unități asociate - Avarii %3.0f%%"
+msgstr[2] "%s - %u Unități asociate - Avarii %3.0f%%"
 
 #: src/structure.c:5966
 #: src/structure.c:5980
@@ -14847,9 +14858,9 @@ msgid "%s - Damage %3.0f%%"
 msgstr "%s - Avarii %3.0f%%"
 
 #: src/structure.c:6016
-#, fuzzy, c-format
+#, c-format
 msgid "%s - Connected %u of %u - Damage %3.0f%%"
-msgstr "%s - Conectate %u din %u"
+msgstr "%s - Connectate %u din %u - Avarii %3.0f%%"
 
 #: src/structure.c:6151
 #: src/structure.c:6200
