@@ -17,8 +17,11 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/** @file
- *  Function prototypes for giving droids orders
+/*!
+ *
+ * @file
+ * Function prototypes for giving droids orders.
+ *
  */
 
 #ifndef __INCLUDED_SRC_ORDER_H__

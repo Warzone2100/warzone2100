@@ -17,8 +17,11 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/** @file
- *  order releated structures.
+/*!
+ *
+ * @file
+ * Order releated structures.
+ *
  */
 
 #ifndef __INCLUDED_SRC_ORDERDEF_H__
@@ -51,7 +54,7 @@ enum DROID_ORDER
 	DORDER_RUN,             //!< run away after moral failure
 	DORDER_EMBARK,          //!< 16 - board a transporter
 	DORDER_DISEMBARK,       //!< get off a transporter
-	DORDER_ATTACKTARGET,	//!< 18 - a suggestion to attack something i.e. the target was chosen because the droid could see it.
+	DORDER_ATTACKTARGET,    //!< 18 - a suggestion to attack something i.e. the target was chosen because the droid could see it.
 	DORDER_COMMANDERSUPPORT,//!< Assigns droid to the target commander.
 	DORDER_BUILDMODULE,     //!< 20 - build a module (power, research or factory)
 	DORDER_RECYCLE,         //!< return to factory to be recycled

@@ -17,12 +17,12 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*
- * order.cpp
+/*!
  *
- * Functions for setting the orders of a droid or group of droids
+ * @file
+ * Functions for setting the orders of a droid or group of droids.
  *
- */
+ !*/
 #include <string.h>
 
 #include "lib/framework/frame.h"
