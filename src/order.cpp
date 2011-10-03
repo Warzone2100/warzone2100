@@ -17,12 +17,13 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*!
+/**
  *
  * @file
  * Functions for setting the orders of a droid or group of droids.
  *
- !*/
+ */
+
 #include <string.h>
 
 #include "lib/framework/frame.h"
@@ -64,50 +65,57 @@
 
 #include "random.h"
 
-//! How long a droid runs after it fails do respond due to low moral.
+/** How long a droid runs after it fails do respond due to low moral. */
 #define RUN_TIME		8000
-//! How long a droid runs burning after it fails do respond due to low moral.
+
+/** How long a droid runs burning after it fails do respond due to low moral. */
 #define RUN_BURN_TIME	10000
 
-//! The distance a droid has in guard mode.
+/** The distance a droid has in guard mode. */
 #define DEFEND_MAXDIST		(TILE_UNITS * 3)
-//! The distance a droid has in guard mode.
-//! @todo seems to be used as equivalent to GUARD_MAXDIST.
+
+/** The distance a droid has in guard mode. 
+ * @todo seems to be used as equivalent to GUARD_MAXDIST.
+ */
 #define DEFEND_BASEDIST		(TILE_UNITS * 3)
-//! The distance a droid has in guard mode. Equivalent to GUARD_MAXDIST, but used for droids being on a command group.
+
+/** The distance a droid has in guard mode. Equivalent to GUARD_MAXDIST, but used for droids being on a command group. */
 #define DEFEND_CMD_MAXDIST		(TILE_UNITS * 8)
-//! The distance a droid has in guard mode. Equivalent to GUARD_BASEDIST, but used for droids being on a command group.
+
+/** The distance a droid has in guard mode. Equivalent to GUARD_BASEDIST, but used for droids being on a command group. */
 #define DEFEND_CMD_BASEDIST		(TILE_UNITS * 5)
 
-//! The maximum distance a repair droid has in guard mode.
+/** The maximum distance a repair droid has in guard mode. */
 #define REPAIR_MAXDIST		(TILE_UNITS * 5)
-//! The maximum distance a constructor droid has in guard mode.
+
+/** The maximum distance a constructor droid has in guard mode. */
 #define CONSTRUCT_MAXDIST		(TILE_UNITS * 8)
 
-//! The maximum distance allowed to a droid to move out of the path on a patrol/scout.
+/** The maximum distance allowed to a droid to move out of the path on a patrol/scout. */
 #define SCOUT_DIST			(TILE_UNITS * 8)
 
-//! The maximum distance allowed to a droid to move out of the path if already attacking a target on a patrol/scout.
+/** The maximum distance allowed to a droid to move out of the path if already attacking a target on a patrol/scout. */
 #define SCOUT_ATTACK_DIST	(TILE_UNITS * 5)
 
-//! This instance is singleton of RUN_DATA. It has the information of each player about retreat position and minimum moral/health for a unit to retreat to.
+/** This instance is a global instance of RUN_DATA. It has the information of each player about retreat position and minimum moral/health for a unit to retreat to. */
 RUN_DATA	asRunData[MAX_PLAYERS];
-
 
 static bool secondaryGotPrimaryOrder(DROID *psDroid, DROID_ORDER order);
 
 static void orderClearDroidList(DROID *psDroid);
 
-//! Whether an order effect has been displayed
-//! @todo better documentation required.
+/** Whether an order effect has been displayed
+ * @todo better documentation required.
+ */
 static bool bOrderEffectDisplayed = false;
-//! What the droid's action/order it is currently. This is used to debug purposes, jointly with showSAMPLES().
+
+/** What the droid's action/order it is currently. This is used to debug purposes, jointly with showSAMPLES(). */
 extern char DROIDDOING[512];
 //////////////////////////////////////////////////////////////////
 
 //////////////////////////////////////////////////////////////////
 
-//! This function initializes asRunData, allocking it. It should be called AFTER every mission so that asRunData gets reset.
+/** This function initializes asRunData, allocking it. It should be called AFTER every mission so that asRunData gets reset. */
 void initRunData(void)
 {
     UBYTE   i;
@@ -119,9 +127,9 @@ void initRunData(void)
 }
 
 
-//! Given a droid psDroid with guard order and a range, if it is off range, this function sends an action to the droid to move to its target if its target is on range, or to move to its order position.
-//! @todo unit doesn't shoot while returning to the guard position.
-//! @todo if the target is off range, the function does nothing.
+/** This function checkes if the droid is off range. If yes, it uses actionDroid() to makes the droid to move to its target if its target is on range, or to move to its order position if not.
+ * @todo droid doesn't shoot while returning to the guard position.
+ */
 static void orderCheckGuardPosition(DROID *psDroid, SDWORD range)
 {
 	SDWORD		xdiff, ydiff;
@@ -167,7 +175,10 @@ static void orderCheckGuardPosition(DROID *psDroid, SDWORD range)
 }
 
 
-//! For a given repair droid, check if there are any damaged droids within a defined range.
+/** This function checks if there are any damaged droids within a defined range. 
+ * It returns the damaged droid if there is any, and or NULL if none was found.
+ * @todo this function performs a cycle on all droids of a given player, which is ineficient. Suggestion to improve it.
+ */
 BASE_OBJECT * checkForRepairRange(DROID *psDroid,DROID *psTarget)
 {
 	DROID		*psCurr;
@@ -216,9 +227,10 @@ BASE_OBJECT * checkForRepairRange(DROID *psDroid,DROID *psTarget)
 }
 
 
-//! Given a constructor droid or cyborg psDroid, this function checks if there are any structures to repair on a given radius defined by REPAIR_RANGE if it is on secundary state  onHold, and REPAIR_MAXDIST*REPAIR_MAXDIST if not.
-//! It returns a damaged structure if any was found or NULL if none was found.
-//! @todo this function performs a cycle on all buildings of a given player, which is ineficient. Suggest to look at function aiBestNearestToRepair and reproduce it to this case.
+/** This function checks if there are any structures to repair on a given radius near the droid defined by REPAIR_RANGE if it is on secundary state onHold, and REPAIR_MAXDIST*REPAIR_MAXDIST if not on hold.
+ * It returns a damaged structure if any was found or NULL if none was found.
+ * @todo this function performs a cycle on all buildings of a given player, which is ineficient. Suggestion to improve it.
+ */
 BASE_OBJECT * checkForDamagedStruct(DROID *psDroid, STRUCTURE *psTarget)
 {
 	STRUCTURE		*psCurr;
@@ -257,7 +269,10 @@ BASE_OBJECT * checkForDamagedStruct(DROID *psDroid, STRUCTURE *psTarget)
 	return NULL;
 }
 
-//! Given a droid psDroid, this function updates all the orders status, according with psdroid's current order and state.
+
+/** This function updates all the orders status, according with psdroid's current order and state.
+ * @todo This is as quite complex function. Suggestion to try to refactor it.
+ */
 void orderUpdateDroid(DROID *psDroid)
 {
 	BASE_OBJECT		*psObj;
@@ -1251,8 +1266,9 @@ void orderUpdateDroid(DROID *psDroid)
 }
 
 
-//! Given a droid group psGroup and an order data psData, this function gives all members of the psGroup the order psData.
-//! If the order data is to recover an artifact, the order is only given to the closest droid to the artifact.
+/** This function sends all members of the psGroup the order psData using orderDroidBase().
+ * If the order data is to recover an artifact, the order is only given to the closest droid to the artifact.
+ */
 static void orderCmdGroupBase(DROID_GROUP *psGroup, DROID_ORDER_DATA *psData)
 {
 	DROID	*psCurr, *psChosen;
@@ -1296,10 +1312,14 @@ static void orderCmdGroupBase(DROID_GROUP *psGroup, DROID_ORDER_DATA *psData)
 	}
 }
 
-//! The minimum delay to be used on orderPlayFireSupportAudio() for fire support sound.
+
+/** The minimum delay to be used on orderPlayFireSupportAudio() for fire support sound.*/
 #define	AUDIO_DELAY_FIRESUPPORT		(3*GAME_TICKS_PER_SEC)
 
-//! Given a base object, this function chooses the sound to play after the object is assigned to fire support a specific unit. Uses audio_QueueTrackMinDelay() to play the sound.
+
+/** This function chooses the sound to play after the object is assigned to fire support a specific unit. Uses audio_QueueTrackMinDelay() to play the sound.
+ * @todo this function is about playing audio. I'm not sure this should be in here.
+ */
 static void orderPlayFireSupportAudio( BASE_OBJECT *psObj )
 {
 	DROID		*psDroid = NULL;
@@ -1350,8 +1370,9 @@ static void orderPlayFireSupportAudio( BASE_OBJECT *psObj )
 }
 
 
-//! Given a droid psDroid and an order psOrder, this function actually tells the droid to perform that order. 
-//! This function is called everytime one wants to send a direct order to a droid.
+/** This function actually tells the droid to perform the psOrder.
+ * This function is called everytime to send a direct order to a droid.
+ */
 void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 {
 	UDWORD		iFactoryDistSq;
@@ -1948,7 +1969,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 }
 
 
-//! Given a droid psDroid, this function gives the droid an order. If mode == ModeQueue, it adds order to the droid's order list.
+/** This function send the droid an order. Uses sendDroidInfo() if mode == ModeQueue and orderDroidBase() if not. */
 void orderDroid(DROID *psDroid, DROID_ORDER order, QUEUE_MODE mode)
 {
 	DROID_ORDER_DATA	sOrder;
@@ -1982,7 +2003,10 @@ void orderDroid(DROID *psDroid, DROID_ORDER order, QUEUE_MODE mode)
 	}
 }
 
-//! Given a droid psDroid and an order, this function compares the current droid's order to that order. Returns true if they are the same, false else.
+
+/* This function compares the current droid's order to the order.
+ * Returns true if they are the same, false else.
+ */
 bool orderState(DROID *psDroid, DROID_ORDER order)
 {
 	if (order == DORDER_RTR)
@@ -1993,7 +2017,8 @@ bool orderState(DROID *psDroid, DROID_ORDER order)
 	return psDroid->order == order;
 }
 
-//! Given an order, this function returns true if it is an acceptable order to give for a given location on the map.
+
+/* This function returns true if the order is an acceptable order to give for a given location on the map.*/
 bool validOrderForLoc(DROID_ORDER order)
 {
 	return (order == DORDER_NONE ||	order == DORDER_MOVE ||	order == DORDER_GUARD ||
@@ -2003,7 +2028,10 @@ bool validOrderForLoc(DROID_ORDER order)
 		order == DORDER_CIRCLE);
 }
 
-//! Given a droid psDroid, an order and a location, this function sends the droid an order with a location. If the mode is ModeQueue, then the order is added to the droid's order list, else, a DROID_ORDER_DATA is alloc and the old order list is erased.
+
+/* This function sends the droid an order with a location.
+ * If the mode is ModeQueue, the order is added to the droid's order list using sendDroidInfo(), else, a DROID_ORDER_DATA is alloc, the old order list is erased, and the order is sent using orderDroidBase().
+ */
 void orderDroidLoc(DROID *psDroid, DROID_ORDER order, UDWORD x, UDWORD y, QUEUE_MODE mode)
 {
 	DROID_ORDER_DATA	sOrder;
@@ -2027,7 +2055,9 @@ void orderDroidLoc(DROID *psDroid, DROID_ORDER order, UDWORD x, UDWORD y, QUEUE_
 }
 
 
-//! Given a droid this function attributes the order's location to (pX,pY). Returns true if the order has a location, false if not.
+/** This function attributes the order's location to (pX,pY) if the order is the same as the droid.
+ * Returns true if it was attributed and false if not.
+ */
 bool orderStateLoc(DROID *psDroid, DROID_ORDER order, UDWORD *pX, UDWORD *pY)
 {
 	if (order != psDroid->order)
@@ -2052,7 +2082,8 @@ bool orderStateLoc(DROID *psDroid, DROID_ORDER order, UDWORD *pX, UDWORD *pY)
 	return false;
 }
 
-//! Given an order, this function returns true if it is a valid order to give to an object and false if it's not.
+
+/** This function returns true if the order is a valid order to give to an object and false if it's not.*/
 bool validOrderForObj(DROID_ORDER order)
 {
 	return (order == DORDER_NONE || order == DORDER_HELPBUILD || order == DORDER_DEMOLISH ||
@@ -2063,7 +2094,10 @@ bool validOrderForObj(DROID_ORDER order)
 		order == DORDER_REARM || order == DORDER_CLEARWRECK || order == DORDER_RECOVER);
 }
 
-//! Given a droid psDroid, an order and an object, this function sends the droid an order with an object. If the mode is ModeQueue, then the order is added to the droid's order list, else, a DROID_ORDER_DATA is alloc and the old order list is erased.
+
+/** This function sends an order with an object to the droid.
+ * If the mode is ModeQueue, the order is added to the droid's order list using sendDroidInfo(), else, a DROID_ORDER_DATA is alloc, the old order list is erased, and the order is sent using orderDroidBase().
+ */
 void orderDroidObj(DROID *psDroid, DROID_ORDER order, BASE_OBJECT *psObj, QUEUE_MODE mode)
 {
 	DROID_ORDER_DATA	sOrder;
@@ -2087,9 +2121,10 @@ void orderDroidObj(DROID *psDroid, DROID_ORDER order, BASE_OBJECT *psObj, QUEUE_
 }
 
 
-//! Given a droid and an order, this function returns the order's target if it has one, and NULL if the order is not a target order.
-//! @todo the first switch can be removed and substituted by orderState() function.
-//! @todo the use of this function is somewhat superfluous on some cases. Investigate.
+/** This function returns the order's target if it has one, and NULL if the order is not a target order.
+ * @todo the first switch can be removed and substituted by orderState() function.
+ * @todo the use of this function is somewhat superfluous on some cases. Investigate.
+ */
 BASE_OBJECT* orderStateObj(DROID *psDroid, DROID_ORDER order)
 {
 	bool	match = false;
@@ -2174,7 +2209,9 @@ BASE_OBJECT* orderStateObj(DROID *psDroid, DROID_ORDER order)
 }
 
 
-//! Given a droid psDroid, an order, a location and a stats, this function sends the droid an order with an object. If the mode is ModeQueue, then the order is added to the droid's order list, else, a DROID_ORDER_DATA is alloc and the old order list is erased.
+/** This function sends the droid an order with a location and stats. 
+ * If the mode is ModeQueue, the order is added to the droid's order list using sendDroidInfo(), else, a DROID_ORDER_DATA is alloc, the old order list is erased, and the order is sent using orderDroidBase().
+ */
 void orderDroidStatsLocDir(DROID *psDroid, DROID_ORDER order, BASE_STATS *psStats, UDWORD x, UDWORD y, uint16_t direction, QUEUE_MODE mode)
 {
 	DROID_ORDER_DATA	sOrder;
@@ -2199,8 +2236,10 @@ void orderDroidStatsLocDir(DROID *psDroid, DROID_ORDER order, BASE_STATS *psStat
 	orderDroidBase(psDroid, &sOrder);
 }
 
-//! Given a droid psDroid, an order, a location and a stats, this function adds that order to the droid's list using sendDroidInfo().
-//! @todo seems closely related with orderDroidStatsLocDir(). See if this can be incorporated on it.
+
+/** This function adds that order to the droid's list using sendDroidInfo().
+ * @todo seems closely related with orderDroidStatsLocDir(). See if this one can be incorporated on it.
+ */
 void orderDroidStatsLocDirAdd(DROID *psDroid, DROID_ORDER order, BASE_STATS *psStats, UDWORD x, UDWORD y, uint16_t direction, bool add)
 {
 	ASSERT(psDroid != NULL, "Invalid unit pointer");
@@ -2215,7 +2254,7 @@ void orderDroidStatsLocDirAdd(DROID *psDroid, DROID_ORDER order, BASE_STATS *psS
 }
 
 
-//! Equivalent to orderDroidStatsLocDir(), but uses two locations.
+/** Equivalent to orderDroidStatsLocDir(), but uses two locations.*/
 void orderDroidStatsTwoLocDir(DROID *psDroid, DROID_ORDER order, BASE_STATS *psStats, UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y2, uint16_t direction, QUEUE_MODE mode)
 {
 	DROID_ORDER_DATA	sOrder;
@@ -2243,8 +2282,10 @@ void orderDroidStatsTwoLocDir(DROID *psDroid, DROID_ORDER order, BASE_STATS *psS
 	orderDroidBase(psDroid, &sOrder);
 }
 
-//! Equivalent to orderDroidStatsLocDirAdd(), but uses two locations.
-//! @todo seems closely related with orderDroidStatsTwoLocDir(). See if this can be incorporated on it.
+
+/** Equivalent to orderDroidStatsLocDirAdd(), but uses two locations.
+ * @todo seems closely related with orderDroidStatsTwoLocDir(). See if this can be incorporated on it.
+ */
 void orderDroidStatsTwoLocDirAdd(DROID *psDroid, DROID_ORDER order, BASE_STATS *psStats, UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y2, uint16_t direction)
 {
 	ASSERT(psDroid != NULL, "Invalid unit pointer");
@@ -2255,7 +2296,9 @@ void orderDroidStatsTwoLocDirAdd(DROID *psDroid, DROID_ORDER order, BASE_STATS *
 }
 
 
-//! Given a droid psDroid and an order, this function returns false if droid's order and order don't match. Else ppsStats = psDroid->psTarStats, (pX,pY) = psDroid.(orderX,orderY) and it returns true.
+/** This function returns false if droid's order and order don't match or the order is not a location order. Else ppsStats = psDroid->psTarStats, (pX,pY) = psDroid.(orderX,orderY) and it returns true.
+ * @todo seems closely related to orderStateLoc()
+ */
 bool orderStateStatsLoc(DROID *psDroid, DROID_ORDER order, BASE_STATS **ppsStats, UDWORD *pX, UDWORD *pY)
 {
 	bool	match = false;
@@ -2303,7 +2346,7 @@ bool orderStateStatsLoc(DROID *psDroid, DROID_ORDER order, BASE_STATS **ppsStats
 }
 
 
-//! @todo needs documentation.
+/** @todo needs documentation.*/
 static OrderListEntry orderDataToOrderList(DROID_ORDER_DATA const *psOrder)
 {
 	OrderListEntry list;
@@ -2321,7 +2364,7 @@ static OrderListEntry orderDataToOrderList(DROID_ORDER_DATA const *psOrder)
 }
 
 
-//! @todo needs documentation.
+/** @todo needs documentation.*/
 void orderDroidAddPending(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 {
 	ASSERT(psDroid != NULL, "Invalid unit pointer");
@@ -2345,8 +2388,9 @@ void orderDroidAddPending(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 }
 
 
-//! add an order to a droids order list
-//! @todo needs better documentation.
+/** Add an order to a droid's order list
+ * @todo needs better documentation.
+ */
 void orderDroidAdd(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 {
 	ASSERT(psDroid != NULL, "Invalid unit pointer");
@@ -2373,7 +2417,7 @@ void orderDroidAdd(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 }
 
 
-//! Given a droid, this function goes to the droid's order list and sets a new order to it from its order list.
+/** This function goes to the droid's order list and sets a new order to it from its order list.*/
 bool orderDroidList(DROID *psDroid)
 {
 	DROID_ORDER_DATA	sOrder;
@@ -2417,9 +2461,6 @@ bool orderDroidList(DROID *psDroid)
 		sOrder.direction = psDroid->asOrderList[0].direction;
 		orderDroidListEraseRange(psDroid, 0, 1);
 
-		//qba'g fraq OHVYQ beqref va zhygvcynlre
-		//  && !(fBeqre.beqre == QBEQRE_OHVYQ || fBeqre.beqre == QBEQRE_YVAROHVYQ)
-		// Previous comment and code was so mind-bogglingly insane, that it makes more sense after rot13.
 		orderDroidBase(psDroid, &sOrder);
 		syncDebugDroid(psDroid, 'o');
 
@@ -2430,7 +2471,7 @@ bool orderDroidList(DROID *psDroid)
 }
 
 
-//! Given a droid, this function goes to the droid's order list and erases its elements from indexBegin to indexEnd.
+/** This function goes to the droid's order list and erases its elements from indexBegin to indexEnd.*/
 void orderDroidListEraseRange(DROID *psDroid, unsigned indexBegin, unsigned indexEnd)
 {
 	// Erase elements
@@ -2443,7 +2484,7 @@ void orderDroidListEraseRange(DROID *psDroid, unsigned indexBegin, unsigned inde
 }
 
 
-//! Given a droid, this function clears all the synchronised orders from the list, calling orderDroidListEraseRange() from 0 to psDroid->listSize.
+/** This function clears all the synchronised orders from the list, calling orderDroidListEraseRange() from 0 to psDroid->listSize.*/
 void orderClearDroidList(DROID *psDroid)
 {
 	syncDebug("droid%d list cleared", psDroid->id);
@@ -2451,7 +2492,7 @@ void orderClearDroidList(DROID *psDroid)
 }
 
 
-//! Given a droid and a target psTarget, this function clears all the orders from droid's order list that don't have target as psTarget.
+/** This function clears all the orders from droid's order list that don't have target as psTarget.*/
 void orderClearTargetFromDroidList(DROID *psDroid, BASE_OBJECT *psTarget)
 {
 	for (unsigned i = 0; i < psDroid->asOrderList.size(); ++i)
@@ -2469,7 +2510,7 @@ void orderClearTargetFromDroidList(DROID *psDroid, BASE_OBJECT *psTarget)
 }
 
 
-//! Given a droid psDroid, this function checks its order list. If a given order needs a target and the target has died, the order is removed from the list.
+/** This function checks its order list: if a given order needs a target and the target has died, the order is removed from the list.*/
 void orderCheckList(DROID *psDroid)
 {
 	for (unsigned i = 0; i < psDroid->asOrderList.size(); ++i)
@@ -2501,8 +2542,9 @@ void orderCheckList(DROID *psDroid)
 }
 
 
-//! Given a droid, an order and a location, this function sends the droid an order with a location using sendDroidInfo().
-//! @todo it is very close to what orderDroidLoc() function does. Suggestion to refract them.
+/** This function sends the droid an order with a location using sendDroidInfo().
+ * @todo it is very close to what orderDroidLoc() function does. Suggestion to refract them.
+ */
 static bool orderDroidLocAdd(DROID *psDroid, DROID_ORDER order, UDWORD x, UDWORD y, bool add = true)
 {
 	// can only queue move, scout, and disembark orders
@@ -2517,8 +2559,9 @@ static bool orderDroidLocAdd(DROID *psDroid, DROID_ORDER order, UDWORD x, UDWORD
 }
 
 
-//! Given a droid, an order and an object, this function sends the droid an order with a location using sendDroidInfo().
-//! @todo it is very close to what orderDroidObj() function does. Suggestion to refract them.
+/** This function sends the droid an order with a location using sendDroidInfo().
+ * @todo it is very close to what orderDroidObj() function does. Suggestion to refract them.
+ */
 static bool orderDroidObjAdd(DROID *psDroid, DROID_ORDER order, BASE_OBJECT *psObj[DROID_MAXWEAPS])
 {
 	ASSERT(!isBlueprint(psObj[0]), "Target %s for queue is a blueprint", objInfo(psObj[0]));
@@ -2543,7 +2586,7 @@ static bool orderDroidObjAdd(DROID *psDroid, DROID_ORDER order, BASE_OBJECT *psO
 }
 
 
-//! Given a droid and a location, this function returns an order which is assigned according to the location and droid. Uses altOrder flag to choose between an order or an altOrder (left click or alt+leftclick).
+/** This function returns an order which is assigned according to the location and droid. Uses altOrder flag to choose between a direct order or an altOrder.*/
 DROID_ORDER chooseOrderLoc(DROID *psDroid, UDWORD x,UDWORD y, bool altOrder)
 {
 	DROID_ORDER		order = DORDER_NONE;
@@ -2602,9 +2645,10 @@ DROID_ORDER chooseOrderLoc(DROID *psDroid, UDWORD x,UDWORD y, bool altOrder)
 }
 
 
-//! Given a player and a location, this function sends the selected droids an order to a location. If a delivery point is selected, it is moved to a new location.
-//! If add is true then the order is queued in the droids.
-//! This function should only be called from UI.
+/** This function sends the selected droids an order to given a location. If a delivery point is selected, it is moved to a new location.
+ * If add is true then the order is queued.
+ * This function should only be called from UI.
+ */
 void orderSelectedLoc(uint32_t player, uint32_t x, uint32_t y, bool add)
 {
 	DROID			*psCurr;
@@ -2643,7 +2687,7 @@ void orderSelectedLoc(uint32_t player, uint32_t x, uint32_t y, bool add)
 }
 
 
-//! Given a droid and an object, this function returns an order according to the droid, object and altOrder.
+/** This function returns an order according to the droid, object (target) and altOrder.*/
 DROID_ORDER chooseOrderObj(DROID *psDroid, BASE_OBJECT *psObj, bool altOrder)
 {
 	DROID_ORDER		order;
@@ -2905,10 +2949,12 @@ DROID_ORDER chooseOrderObj(DROID *psDroid, BASE_OBJECT *psObj, bool altOrder)
 	return order;
 }
 
-//! Given a player, this function runs through all its droids and if the droid is vtol and is selected and is attacking, uses audio_QueueTrack() to play a sound.
-//! @todo this function has variable psObj unused. Consider removing it from function.
-//! @todo this function runs through all the player's droids, but only uses the selected ones. Consider an efficiency improvement in here.
-//! @todo current scope of this function is quite small. Consider refactoring it.
+
+/** This function runs through all the player's droids and if the droid is vtol and is selected and is attacking, uses audio_QueueTrack() to play a sound.
+ * @todo this function has variable psObj unused. Consider removing it from argument.
+ * @todo this function runs through all the player's droids, but only uses the selected ones. Consider an efficiency improvement in here.
+ * @todo current scope of this function is quite small. Consider refactoring it.
+ */
 static void orderPlayOrderObjAudio( UDWORD player, BASE_OBJECT *psObj )
 {
 	DROID	*psDroid;
@@ -2937,9 +2983,11 @@ static void orderPlayOrderObjAudio( UDWORD player, BASE_OBJECT *psObj )
 	}
 }
 
-//! Given a player and an object, this function sends orders to all the selected droids according to the object.
-//! If add is true, the orders are queued.
-//! @todo this function runs through all the player's droids, but only uses the selected ones. Consider an efficiency improvement in here.
+
+/** This function sends orders to all the selected droids according to the object.
+ * If add is true, the orders are queued.
+ * @todo this function runs through all the player's droids, but only uses the selected ones. Consider an efficiency improvement in here.
+ */
 void orderSelectedObjAdd(UDWORD player, BASE_OBJECT *psObj, bool add)
 {
 	DROID		*psCurr;
@@ -2981,16 +3029,17 @@ void orderSelectedObjAdd(UDWORD player, BASE_OBJECT *psObj, bool add)
 }
 
 
-//! Calls orderSelectedObjAdd with add = false.
+/** This function just calls orderSelectedObjAdd with add = false.*/
 void orderSelectedObj(UDWORD player, BASE_OBJECT *psObj)
 {
 	orderSelectedObjAdd(player, psObj, false);
 }
 
 
-//! Given a player, this function send an order with localization and stauts to selected droids.
-//! If add is true, the orders are queued.
-//! @todo this function runs through all the player's droids, but only uses the selected ones and the ones that are construction droids. Consider an efficiency improvement.
+/** Given a player, this function send an order with localization and status to selected droids.
+ * If add is true, the orders are queued.
+ * @todo this function runs through all the player's droids, but only uses the selected ones and the ones that are construction droids. Consider an efficiency improvement.
+ */
 void orderSelectedStatsLocDir(UDWORD player, DROID_ORDER order, BASE_STATS *psStats, UDWORD x, UDWORD y, uint16_t direction, bool add)
 {
 	DROID		*psCurr;
@@ -3012,8 +3061,9 @@ void orderSelectedStatsLocDir(UDWORD player, DROID_ORDER order, BASE_STATS *psSt
 }
 
 
-//! Same as orderSelectedStatsLocDir() but with two locations.
-//! @todo this function runs through all the player's droids, but only uses the selected ones. Consider an efficiency improvement.
+/** Same as orderSelectedStatsLocDir() but with two locations.
+ * @todo this function runs through all the player's droids, but only uses the selected ones. Consider an efficiency improvement.
+ */
 void orderSelectedStatsTwoLocDir(UDWORD player, DROID_ORDER order, BASE_STATS *psStats, UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y2, uint16_t direction, bool add)
 {
 	DROID		*psCurr;
@@ -3035,7 +3085,7 @@ void orderSelectedStatsTwoLocDir(UDWORD player, DROID_ORDER order, BASE_STATS *p
 }
 
 
-//! Given a player, this function runs though all its units to check if any of then is a transporter. Returns the transporter droid if any was found, and NULL else.
+/** This function runs though all player's droids to check if any of then is a transporter. Returns the transporter droid if any was found, and NULL else.*/
 DROID *FindATransporter(unsigned player)
 {
 	DROID *psDroid;
@@ -3051,7 +3101,7 @@ DROID *FindATransporter(unsigned player)
 }
 
 
-//! Given a player and a factory type, this function runs though all its structures to check if any is of factory type. Returns the structure if any was found, and NULL else.
+/** Given a factory type, this function runs though all player's structures to check if any is of factory type. Returns the structure if any was found, and NULL else.*/
 static STRUCTURE *FindAFactory(UDWORD player, UDWORD factoryType)
 {
 	STRUCTURE *psStruct;
@@ -3071,7 +3121,7 @@ static STRUCTURE *FindAFactory(UDWORD player, UDWORD factoryType)
 }
 
 
-//! Given a player, this function runs though all its structures to check if any of then is a repair facility. Returns the strcture  if any was found, and NULL else.
+/** This function runs though all player's structures to check if any of then is a repair facility. Returns the structure if any was found, and NULL else.*/
 static STRUCTURE *FindARepairFacility(unsigned player)
 {
 	STRUCTURE *psStruct;
@@ -3087,7 +3137,7 @@ static STRUCTURE *FindARepairFacility(unsigned player)
 }
 
 
-//! Given a droid and a secondary order sec, this function returns true if the droid supports the order, and false if not.
+/** This function returns true if the droid supports the secondary order, and false if not.*/
 bool secondarySupported(DROID *psDroid, SECONDARY_ORDER sec)
 {
 	bool supported;
@@ -3163,7 +3213,7 @@ bool secondarySupported(DROID *psDroid, SECONDARY_ORDER sec)
 }
 
 
-//! Given a droid and a secondary order, this function returns the droid order's secondary state of that secondary order.
+/** This function returns the droid order's secondary state of the secondary order.*/
 SECONDARY_STATE secondaryGetState(DROID *psDroid, SECONDARY_ORDER sec)
 {
 	uint32_t state;
@@ -3255,8 +3305,9 @@ static char *secondaryPrintFactories(UDWORD state)
 #endif
 
 
-//! Given a droid and a secondary repair state, this function returns true if the droid needs repair according to the repair state, and in case there are some other droids selected, deselect those that are going to repair.
-//! @todo there is some problem related with REPAIRLEV_HIGH and REPAIRLEV_LOW that needs to be fixed.
+/** This function returns true if the droid needs repair according to the repair state, and in case there are some other droids selected, deselect those that are going to repair.
+ * @todo there is some problem related with the values of REPAIRLEV_HIGH and REPAIRLEV_LOW that needs to be fixed.
+ */
 static bool secondaryCheckDamageLevelDeselect(DROID *psDroid, SECONDARY_STATE repairState)
 {
 	unsigned repairLevel;
@@ -3290,7 +3341,7 @@ static bool secondaryCheckDamageLevelDeselect(DROID *psDroid, SECONDARY_STATE re
 }
 
 
-//! Given a droid, this function checks its damage level against its secondary state. If the damage level is too high, the it sends an order to the unit to return to repair.
+/** This function checks the droid damage level against its secondary state. If the damage level is too high, then it sends an order to the droid to return to repair.*/
 void secondaryCheckDamageLevel(DROID *psDroid)
 {
 	if (secondaryCheckDamageLevelDeselect(psDroid, secondaryGetState(psDroid, DSO_REPAIR_LEVEL)))
@@ -3318,7 +3369,7 @@ void secondaryCheckDamageLevel(DROID *psDroid)
 }
 
 
-//! Given a droid, a secondary order and a secondary state, this function returns true if it assigned that state to the droid and false if it failed.
+/** This function assigns a state to a droid. It returns true if it assigned and false if it failed to assign.*/
 bool secondarySetState(DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STATE State, QUEUE_MODE mode)
 {
 	UDWORD		CurrState, factType, prodType;
@@ -3648,8 +3699,9 @@ bool secondarySetState(DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STATE Stat
 }
 
 
-//! Given a droid and an order, this function returns false and resets the droid's secondary order.
-//! @todo this function seems strange (always return false?), and is only used once. Consider refactoring it to something more tangible.
+/** This function returns false and resets the droid's secondary order.
+ * @todo this function seems strange (always return false?) and is only used once on the entire code. Consider refactoring it to something more tangible.
+ */
 bool secondaryGotPrimaryOrder(DROID *psDroid, DROID_ORDER order)
 {
 	UDWORD	oldState;
@@ -3680,8 +3732,10 @@ bool secondaryGotPrimaryOrder(DROID *psDroid, DROID_ORDER order)
 }
 
 
-//! Given a player, a group number and a state, this function assign all droids of that group to that state.
-//! @todo this function runs through all the player's droids. Consider something more efficient to select a group.
+/** This function assigns all droids of the group to the state.
+ * @todo this function runs through all the player's droids. Consider something more efficient to select a group.
+ * @todo SECONDARY_STATE argument is called "state", which is not current style. Suggestion to change it to "pState".
+ */
 static void secondarySetGroupState(UDWORD player, UDWORD group, SECONDARY_ORDER sec, SECONDARY_STATE state)
 {
 	DROID	*psCurr;
@@ -3697,9 +3751,10 @@ static void secondarySetGroupState(UDWORD player, UDWORD group, SECONDARY_ORDER 
 }
 
 
-//! Given a player and group, this function returns the average secondary state that group.
-//! @todo this function runs through all the player's droids. Consider something more efficient to select a group.
-//! @todo this function uses a "local" define. Consider removing it, refactoring this function.
+/** This function returns the average secondary state of a numerical group of a player.
+ * @todo this function runs through all the player's droids. Consider something more efficient to select a group.
+ * @todo this function uses a "local" define. Consider removing it, refactoring this function.
+ */
 static SECONDARY_STATE secondaryGetAverageGroupState(UDWORD player, UDWORD group, UDWORD mask)
 {
 #define MAX_STATES		5
@@ -3745,9 +3800,10 @@ static SECONDARY_STATE secondaryGetAverageGroupState(UDWORD player, UDWORD group
 }
 
 
-//! Given a player and a group, sets all its the members to have the same secondary state as the average secondary state of the group.
-//! @todo this function runs through all the player's droids. Consider something more efficient to select a group.
-//! @todo this function uses a "local" define. Consider removing it, refactoring this function.
+/** This function sets all the group's members to have the same secondary state as the average secondary state of the group.
+ * @todo this function runs through all the player's droids. Consider something more efficient to select a group.
+ * @todo this function uses a "local" define. Consider removing it, refactoring this function.
+ */
 void secondarySetAverageGroupState(UDWORD player, UDWORD group)
 {
 	// lookup table for orders and masks
@@ -3769,7 +3825,7 @@ void secondarySetAverageGroupState(UDWORD player, UDWORD group)
 }
 
 
-//! Given a player, this function runs through all its droids and check if their moral is below the minimum moral to flee. If it is, then the order DORDER_RUN is set to it.
+/** This function runs through all player's droids and check if their moral is below the minimum moral to flee. If it is, then it uses the orderDroid() to send the order DORDER_RUN to the droid.*/
 void orderMoralCheck(UDWORD player)
 {
 	DROID	*psCurr;
@@ -3833,8 +3889,9 @@ void orderMoralCheck(UDWORD player)
 }
 
 
-//! Given a group of units, this function runs through all its droids and check if their moral is below the minimum moral to flee. If it is, then the order DORDER_RUN is set to that droid.
-//! @todo this fuction is near a duplicate of orderMoralCheck(). A better approach to erase one of then should be tried.
+/** This function runs through all group's droids and check if their moral is below the minimum moral to flee. If it is, then the order DORDER_RUN is set to that droid.
+ * @todo this fuction is near a duplicate of orderMoralCheck(). A better approach to erase this one should be tried.
+ */
 void orderGroupMoralCheck(DROID_GROUP *psGroup)
 {
 	DROID		*psCurr;
@@ -3900,7 +3957,9 @@ void orderGroupMoralCheck(DROID_GROUP *psGroup)
 }
 
 
-//! Given a droid, this function checks if its health level is below a minimum health to flee. If it is, then the order DORDER_RUN is set to it.
+/** This function checks if the droid's health level is below a minimum health to flee. 
+ * If it is, then it uses the orderDroid() to send the order DORDER_RUN to the droid.
+ */
 void orderHealthCheck(DROID *psDroid)
 {
 	DROID		*psCurr;
@@ -3972,8 +4031,10 @@ void orderHealthCheck(DROID *psDroid)
 }
 
 
-//! Given a structure, a secondary order and a secondary state, this function changes the structure's secondary state to be that state.Returns true if it changed it, and false if did not.
-//! @todo SECONDARY_STATE argument is called "State", which is not current style. change it to "pState".
+/** This function changes the structure's secondary state to be the function input's state.
+ * Returns true if the function changed the structure's state, and false if it did not.
+ * @todo SECONDARY_STATE argument is called "State", which is not current style. Suggestion to change it to "pState".
+ */
 bool setFactoryState(STRUCTURE *psStruct, SECONDARY_ORDER sec, SECONDARY_STATE State)
 {
 	UDWORD		CurrState;
@@ -4042,7 +4103,9 @@ bool setFactoryState(STRUCTURE *psStruct, SECONDARY_ORDER sec, SECONDARY_STATE S
 }
 
 
-//! Given a structure, a secondary order and a secondary state pState, this function sets pState to be the structure's secondary state.Returns true if structure is factory, and false if it is not.
+/** This function sets the structure's secondary state to be pState.
+ * @todo This function always returns true, except on an ASSERT which is not a good design.
+ */
 bool getFactoryState(STRUCTURE *psStruct, SECONDARY_ORDER sec, SECONDARY_STATE *pState)
 {
 	UDWORD	state;
@@ -4077,8 +4140,9 @@ bool getFactoryState(STRUCTURE *psStruct, SECONDARY_ORDER sec, SECONDARY_STATE *
 }
 
 
-//! lasSat structure can select a target
-//! @todo improve documentation: it is not clear what this function performs by the current documentation.
+/** lasSat structure can select a target
+ * @todo improve documentation: it is not clear what this function performs by the current documentation.
+ */
 void orderStructureObj(UDWORD player, BASE_OBJECT *psObj)
 {
 	STRUCTURE   *psStruct;
@@ -4125,7 +4189,9 @@ void orderStructureObj(UDWORD player, BASE_OBJECT *psObj)
 }
 
 
-//! Given an order, this function maps the enum to its name, returning its enum name as a char*
+/** This function maps the order enum to its name, returning its enum name as a (const char*)
+ * Formally, this function is equivalent to a stl map: for a given key (enum), returns a mapped value (char*).
+ */
 const char* getDroidOrderName(DROID_ORDER order)
 {
 	switch (order)
