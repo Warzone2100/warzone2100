@@ -116,14 +116,12 @@ void cmdDroidAddDroid(DROID *psCommander, DROID *psDroid)
 }
 
 
-/** This function return the current target designator of a player.*/
 DROID *cmdDroidGetDesignator(UDWORD player)
 {
 	return apsCmdDesignator[player];
 }
 
 
-/** This function sets player's target designator to be the droid.*/
 void cmdDroidSetDesignator(DROID *psDroid)
 {
 	if (psDroid->droidType != DROID_COMMAND)
@@ -135,7 +133,6 @@ void cmdDroidSetDesignator(DROID *psDroid)
 }
 
 
-/** This function sets the current target designator to NULL.*/
 void cmdDroidClearDesignator(UDWORD player)
 {
 	apsCmdDesignator[player] = NULL;
@@ -169,14 +166,12 @@ SDWORD cmdDroidGetIndex(DROID *psCommander)
 }
 
 
-/** This function sets bMultiExpBoost to bDoit.*/
 void cmdDroidMultiExpBoost(bool bDoit)
 {
 	bMultiExpBoost = bDoit;
 }
 
 
-/** This function returns bMultiExpBoost.*/
 bool cmdGetDroidMultiExpBoost()
 {
 	return bMultiExpBoost;
