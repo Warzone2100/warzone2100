@@ -1194,11 +1194,6 @@ void researchResult(UDWORD researchIndex, UBYTE player, bool bDisplay, STRUCTURE
 			compInc = pResearch->pReplacedArtefacts[inc]->ref - statRefStart(type);
 			apCompLists[player][type][compInc] = REDUNDANT;
 		}
-		//check if the component is a brain
-		if (type == COMP_BRAIN)
-		{
-			cmdDroidAvailable(asBrainStats + compInc, player);
-		}
 		//check if self repair has come on line
 		if (type == COMP_REPAIRUNIT)
 		{
