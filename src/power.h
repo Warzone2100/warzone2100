@@ -67,15 +67,6 @@ int64_t getPrecisePower(unsigned player);
 /** Resets the power levels for all players when power is turned back on. */
 void powerCalc(bool on);
 
-/** Temp function to give all players some power when a new game has been loaded. */
-void newGameInitPower(void);
-
-/** Defines which structure types draw power - returns true if use power. */
-extern bool structUsesPower(STRUCTURE *psStruct);
-
-/** Defines which droid types draw power - returns true if use power. */
-extern bool droidUsesPower(DROID *psDroid);
-
 /** Flag used to check for power calculations to be done or not. */
 extern	bool			powerCalculated;
 

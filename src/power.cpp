@@ -316,65 +316,6 @@ int64_t getPrecisePower(unsigned player)
 	return asPower[player].currentPower;
 }
 
-/*Temp function to give all players some power when a new game has been loaded*/
-void newGameInitPower(void)
-{
-	UDWORD		inc;
-
-	for (inc=0; inc < MAX_PLAYERS; inc++)
-	{
-		addPower(inc, 400);
-	}
-}
-
-/*defines which structure types draw power - returns true if use power*/
-bool structUsesPower(STRUCTURE *psStruct)
-{
-    bool    bUsesPower = false;
-
-	ASSERT( psStruct != NULL,
-		"structUsesPower: Invalid Structure pointer" );
-
-    switch(psStruct->pStructureType->type)
-    {
-        case REF_FACTORY:
-	    case REF_CYBORG_FACTORY:
-    	case REF_VTOL_FACTORY:
-	    case REF_RESEARCH:
-	    case REF_REPAIR_FACILITY:
-            bUsesPower = true;
-            break;
-        default:
-            bUsesPower = false;
-            break;
-    }
-
-    return bUsesPower;
-}
-
-/*defines which droid types draw power - returns true if use power*/
-bool droidUsesPower(DROID *psDroid)
-{
-    bool    bUsesPower = false;
-
-	ASSERT(psDroid != NULL,	"droidUsesPower: Invalid unit pointer" );
-
-    switch(psDroid->droidType)
-    {
-        case DROID_CONSTRUCT:
-	    case DROID_REPAIR:
-        case DROID_CYBORG_CONSTRUCT:
-        case DROID_CYBORG_REPAIR:
-            bUsesPower = true;
-            break;
-        default:
-            bUsesPower = false;
-            break;
-    }
-
-    return bUsesPower;
-}
-
 // Why is there randomity in the power code?
 static int randomRound(int64_t val)
 {

@@ -214,7 +214,7 @@ _keymapsave keyMapSaveTable[] =
 	kf_AddHelpBlip,				//Add a beacon
 	kf_AllAvailable,
 	kf_ToggleDebugMappings,
-	kf_NewPlayerPower,
+	kf_NOOP,
 	kf_TogglePauseMode,
 	kf_MaxScrollLimits,
 	kf_DebugDroidInfo,
@@ -476,7 +476,6 @@ void	keyInitMappings( bool bForceDefaults )
 	keyAddMapping(KEYMAP__DEBUG, KEY_IGNORE, KEY_N, KEYMAP_PRESSED, kf_GiveTemplateSet,				"Give template set(s) to player 0 ");
 	keyAddMapping(KEYMAP__DEBUG, KEY_LCTRL, KEY_KP_MINUS, KEYMAP_PRESSED, kf_SystemClose,			"System Close (EXIT)");			//not working right now
 	keyAddMapping(KEYMAP__DEBUG, KEY_LCTRL, KEY_I, KEYMAP_PRESSED, kf_RecalcLighting,				"Recalculate lighting");
-	keyAddMapping(KEYMAP__DEBUG, KEY_LCTRL, KEY_N, KEYMAP_PRESSED, kf_NewPlayerPower,				"New game player power");
 
 	// This is not needed, use ctrl-o
 	keyAddMapping(KEYMAP__DEBUG, KEY_LALT, KEY_F1, KEYMAP_PRESSED, kf_SelectPlayer,					"Select player  0");

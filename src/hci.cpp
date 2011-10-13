@@ -2862,17 +2862,11 @@ void intObjectSelected(BASE_OBJECT *psObj)
 					((STRUCTURE *)psObj)->pStructureType->type == REF_CYBORG_FACTORY ||
 					((STRUCTURE *)psObj)->pStructureType->type == REF_VTOL_FACTORY)
 				{
-
 					intAddManufacture((STRUCTURE *)psObj);
-
-					//widgHide(psWScreen, IDOBJ_FORM);
 				}
 				else if (((STRUCTURE *)psObj)->pStructureType->type == REF_RESEARCH)
 				{
-
 					intAddResearch((STRUCTURE *)psObj);
-
-					//widgHide(psWScreen, IDOBJ_FORM);
 				}
 			}
 			break;

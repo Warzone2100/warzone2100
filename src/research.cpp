@@ -1969,13 +1969,8 @@ void cancelResearch(STRUCTURE *psBuilding, QUEUE_MODE mode)
 		return;
 	}
 	topicInc = ((RESEARCH *)psResFac->psSubject) - asResearch;
-	if (topicInc > numResearch)
-	{
-		ASSERT( false, "cancelResearch: invalid research topic" );
-		return;
-	}
+	ASSERT_OR_RETURN(, topicInc <= numResearch, "Invalid research topic %u (max %u)", topicInc, numResearch);
 	pPlayerRes = asPlayerResList[psBuilding->player] + topicInc;
-
 	if (psBuilding->pStructureType->type == REF_RESEARCH)
 	{
 		if (mode == ModeQueue)

@@ -1175,21 +1175,6 @@ void	kf_EndMissionOffWorld( void )
 
 	eventFireCallbackTrigger((TRIGGER_TYPE)CALL_MISSION_END);
 }
-// --------------------------------------------------------------------------
-/* Initialise the player power levels*/
-void	kf_NewPlayerPower( void )
-{
-#ifndef DEBUG
-	// Bail out if we're running a _true_ multiplayer game
-	if (runningMultiplayer())
-	{
-		noMPCheatMsg();
-		return;
-	}
-#endif
-
-	newGameInitPower();
-}
 
 // --------------------------------------------------------------------------
 // Display multiplayer guff.

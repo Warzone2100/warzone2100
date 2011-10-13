@@ -177,10 +177,10 @@ void intUpdateProgressBar(WIDGET *psWidget, W_CONTEXT *psContext)
 		return;
 	}
 
-	switch (psObj->type) {
+	switch (psObj->type)
+	{
 		case OBJ_DROID:						// If it's a droid and...
 			Droid = (DROID*)psObj;
-
 
 			if(DroidIsBuilding(Droid))  // Is it a building.
 			{
