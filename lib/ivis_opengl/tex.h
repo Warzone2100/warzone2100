@@ -24,7 +24,7 @@
 #include "png_util.h"
 
 
-#define iV_TEX_MAX 128
+#define iV_TEX_MAX 255
 #define iV_TEX_INVALID 0
 #define iV_TEXNAME_MAX 64
 
