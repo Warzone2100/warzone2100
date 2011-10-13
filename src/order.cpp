@@ -127,7 +127,7 @@ void initRunData(void)
 }
 
 
-/** This function checkes if the droid is off range. If yes, it uses actionDroid() to makes the droid to move to its target if its target is on range, or to move to its order position if not.
+/** This function checks if the droid is off range. If yes, it uses actionDroid() to make the droid to move to its target if its target is on range, or to move to its order position if not.
  * @todo droid doesn't shoot while returning to the guard position.
  */
 static void orderCheckGuardPosition(DROID *psDroid, SDWORD range)
@@ -1969,7 +1969,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 }
 
 
-/** This function send the droid an order. Uses sendDroidInfo() if mode == ModeQueue and orderDroidBase() if not. */
+/** This function sends the droid an order. It uses sendDroidInfo() if mode == ModeQueue and orderDroidBase() if not. */
 void orderDroid(DROID *psDroid, DROID_ORDER order, QUEUE_MODE mode)
 {
 	DROID_ORDER_DATA	sOrder;
@@ -2004,7 +2004,7 @@ void orderDroid(DROID *psDroid, DROID_ORDER order, QUEUE_MODE mode)
 }
 
 
-/* This function compares the current droid's order to the order.
+/** This function compares the current droid's order to the order.
  * Returns true if they are the same, false else.
  */
 bool orderState(DROID *psDroid, DROID_ORDER order)
@@ -2018,7 +2018,7 @@ bool orderState(DROID *psDroid, DROID_ORDER order)
 }
 
 
-/* This function returns true if the order is an acceptable order to give for a given location on the map.*/
+/** This function returns true if the order is an acceptable order to give for a given location on the map.*/
 bool validOrderForLoc(DROID_ORDER order)
 {
 	return (order == DORDER_NONE ||	order == DORDER_MOVE ||	order == DORDER_GUARD ||
@@ -2029,7 +2029,7 @@ bool validOrderForLoc(DROID_ORDER order)
 }
 
 
-/* This function sends the droid an order with a location.
+/** This function sends the droid an order with a location.
  * If the mode is ModeQueue, the order is added to the droid's order list using sendDroidInfo(), else, a DROID_ORDER_DATA is alloc, the old order list is erased, and the order is sent using orderDroidBase().
  */
 void orderDroidLoc(DROID *psDroid, DROID_ORDER order, UDWORD x, UDWORD y, QUEUE_MODE mode)
