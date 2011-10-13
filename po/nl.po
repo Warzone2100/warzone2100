@@ -2,9 +2,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-09-07 21:16+0200\n"
-"PO-Revision-Date: 2011-05-17 15:50+0100\n"
-"Last-Translator: Nino <nino_romans@hotmail.com>\n"
+"POT-Creation-Date: 2011-10-13 07:36+0200\n"
+"PO-Revision-Date: 2011-10-09 18:24+0100\n"
+"Last-Translator: Chris <chris205@hotmail.com>\n"
 "Language-Team: Dutch <vertaling@vrijschrift.org>\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
@@ -18,7 +18,7 @@ msgstr "Gebouwonderzoek voltooid"
 
 #: data/base/messages/messages.rmsg:14
 msgid "Power Research Completed"
-msgstr "Energie-onderzoek voltooid"
+msgstr "Energieonderzoek voltooid"
 
 #: data/base/messages/messages.rmsg:24
 msgid "Computer Research Completed"
@@ -204,7 +204,7 @@ msgstr "Nieuwe verdedigingswerken beschikbaar"
 #: data/base/messages/resmessages12.rmsg:5
 #: data/mp/messages/resmessages12.rmsg:5
 msgid "Armored Mortar battery pit"
-msgstr "Gepantserde mortier batterij pit"
+msgstr "Gepantserde mortier kuil"
 
 #: data/base/messages/resmessages12.rmsg:6
 #: data/base/messages/resmessages12.rmsg:19
@@ -347,12 +347,12 @@ msgstr "Verdedigende kracht: Gemiddeld"
 #: data/base/messages/resmessages12.rmsg:18
 #: data/mp/messages/resmessages12.rmsg:18
 msgid "Mini-rocket armored strongpoint"
-msgstr "Mini-Raketten Gepantserd krachtpunt"
+msgstr "Gepantserde Mini-Raket vesting"
 
 #: data/base/messages/resmessages12.rmsg:31
 #: data/mp/messages/resmessages12.rmsg:31
 msgid "Armored hardpoint with Heavy Machinegun"
-msgstr "Gepantserd hardpoint met Zwaar machine geweer"
+msgstr "Gepantserde vesting met Zwaar Machinegeweer"
 
 #: data/base/messages/resmessages12.rmsg:32
 #: data/base/messages/resmessages12.rmsg:45
@@ -493,7 +493,7 @@ msgstr "Verdedigende kracht: Hoog"
 #: data/base/messages/resmessages12.rmsg:44
 #: data/mp/messages/resmessages12.rmsg:44
 msgid "Armored hardpoint with Lancer AT missile"
-msgstr "Gepantserd hardpoint met Lancer AT raketten"
+msgstr "Gepantserde vesting met Lansier AT raketten"
 
 #: data/base/messages/resmessages12.rmsg:56
 #: data/base/messages/resmessages23.rmsg:43
@@ -502,7 +502,7 @@ msgstr "Gepantserd hardpoint met Lancer AT raketten"
 #: data/mp/messages/resmessages23.rmsg:43
 #: data/mp/messages/resmessages3.rmsg:511
 msgid "Research Breakthrough Improves Construction Rates"
-msgstr "Onderzoeks doorbraak verbeterd bouwsnelheden"
+msgstr "Doorbraak onderzoek verbeterd bouwsnelheden"
 
 #: data/base/messages/resmessages12.rmsg:57
 #: data/base/messages/resmessages23.rmsg:44
@@ -515,7 +515,7 @@ msgstr "Verbeterde ontwikkel technieken"
 #: data/base/messages/resmessages23.rmsg:45
 #: data/base/messages/resmessages3.rmsg:513
 msgid "Increases construction speed"
-msgstr "Verbeterde bouwsnelheden"
+msgstr "Verhoogt bouwsnelheden"
 
 #: data/base/messages/resmessages12.rmsg:59
 #: data/base/messages/resmessages23.rmsg:46
@@ -531,26 +531,26 @@ msgstr "Alle vrachtwagens automatisch verbeterd"
 #: data/mp/messages/resmessages12.rmsg:69
 #: data/mp/messages/resmessages1.rmsg:4
 msgid "New Systems Turret Available for Design"
-msgstr "Nieuwe systeemkoepel beschikbaar voor ontwerp"
+msgstr "Nieuwe geschutstoren beschikbaar voor ontwerp"
 
 #: data/base/messages/resmessages12.rmsg:70
 #: data/mp/messages/resmessages12.rmsg:70
 msgid "Counter-battery turret detects enemy indirect fire batteries"
-msgstr "Contra-batterij toren detecteerd indirecte vijhandelijke afgevuurde batterijen"
+msgstr "Contra-batterij toren detecteerd indirecte vijandelijke lanceer-batterijen"
 
 #: data/base/messages/resmessages12.rmsg:71
 #: data/base/messages/resmessagesall.rmsg:97
 #: data/mp/messages/resmessages12.rmsg:71
 #: data/mp/messages/resmessagesall.rmsg:123
 msgid "Orders assigned indirect fire units to fire at the enemy batteries"
-msgstr "Orders toegewezen aan indirect lanceer-batterij om te vuren op de vijandelijke lanceer-batterij"
+msgstr "Orders toegewezen aan indirecte lanceer-batterij om te vuren op de vijandelijke lanceer-batterij"
 
 #: data/base/messages/resmessages12.rmsg:72
 #: data/base/messages/resmessagesall.rmsg:98
 #: data/mp/messages/resmessages12.rmsg:72
 #: data/mp/messages/resmessagesall.rmsg:124
 msgid "Counter-battery fire continues until enemy battery is suppressed"
-msgstr "Contra-batterij vuurt continu totdat vijandelijke batterij is onderdrukt"
+msgstr "Contra-batterij vuurt continu totdat vijandelijke batterij onderdrukt is"
 
 #: data/base/messages/resmessages12.rmsg:82
 #: data/base/messages/resmessages23.rmsg:56
@@ -603,7 +603,7 @@ msgstr "Alle CB-sensoren automatisch verbeterd"
 #: data/mp/messages/resmessages3.rmsg:888
 #: data/mp/messages/resmessagesall.rmsg:212
 msgid "Cannon Upgrade"
-msgstr "Kanon Verbetering"
+msgstr "Kanon verbetering"
 
 #: data/base/messages/resmessages12.rmsg:96
 #: data/mp/messages/resmessages12.rmsg:96
@@ -613,7 +613,7 @@ msgstr "Bepaald afstand tot doel"
 #: data/base/messages/resmessages12.rmsg:97
 #: data/base/messages/resmessagesall.rmsg:175
 msgid "Increases Cannon accuracy"
-msgstr "Verbetert precisie Kanon"
+msgstr "Verhoogt Kanon nauwkeurigheid"
 
 #: data/base/messages/resmessages12.rmsg:98
 #: data/base/messages/resmessages12.rmsg:215
@@ -630,7 +630,7 @@ msgstr "Verbetert precisie Kanon"
 #: data/mp/messages/resmessages3.rmsg:891
 #: data/mp/messages/resmessagesall.rmsg:215
 msgid "All cannons upgraded automatically"
-msgstr "Alle kanonnen automatisch verbeterd"
+msgstr "Alle Kanonnen automatisch verbeterd"
 
 #: data/base/messages/resmessages12.rmsg:108
 #: data/base/messages/resmessages1.rmsg:602
@@ -642,7 +642,7 @@ msgstr "Alle kanonnen automatisch verbeterd"
 #: data/mp/messages/resmessagesall.rmsg:771
 #: data/mp/messages/strings/resstrings.txt:802
 msgid "Flamer Upgrade"
-msgstr "Vlammenwerper-verbetering"
+msgstr "Vlammenwerper verbetering"
 
 #: data/base/messages/resmessages12.rmsg:109
 #: data/base/messages/resmessages12.rmsg:213
@@ -657,7 +657,7 @@ msgstr "Automatisch laadmechanisme vervangt handmatige lader"
 
 #: data/base/messages/resmessages12.rmsg:110
 msgid "Increases Flamer ROF"
-msgstr "Verhoogt vuurfrequentie van vlammenwerper"
+msgstr "Verhoogt vuurfrequentie van Vlammenwerper"
 
 #: data/base/messages/resmessages12.rmsg:111
 #: data/base/messages/resmessages1.rmsg:605
@@ -669,7 +669,7 @@ msgstr "Verhoogt vuurfrequentie van vlammenwerper"
 #: data/mp/messages/resmessagesall.rmsg:774
 #: data/mp/messages/strings/resstrings.txt:805
 msgid "All flamers upgraded automatically"
-msgstr "Alle vlammenwerpers automatisch verbeterd"
+msgstr "Alle Vlammenwerpers automatisch verbeterd"
 
 #: data/base/messages/resmessages12.rmsg:121
 #: data/base/messages/resmessages1.rmsg:537
@@ -710,7 +710,7 @@ msgstr "Nieuwe geschutskoepel beschikbaar"
 #: data/base/messages/resmessages12.rmsg:122
 #: data/mp/messages/resmessages12.rmsg:122
 msgid ".50-calibre heavy machinegun"
-msgstr ".50-kaliber Zwaar Machinegeweer"
+msgstr ".50 kaliber Zwaar Machinegeweer"
 
 #: data/base/messages/resmessages12.rmsg:123
 #: data/base/messages/resmessages1.rmsg:617
@@ -823,7 +823,7 @@ msgstr "Beste doelen: infanterie, basis gebouwen, voertuigen"
 #: data/mp/messages/strings/resstrings.txt:721
 #: data/mp/messages/strings/resstrings.txt:727
 msgid "Body Points: Medium"
-msgstr "Carrosseriepunten: gemiddeld"
+msgstr "Carrosseriepunten: Gemiddeld"
 
 #: data/base/messages/resmessages12.rmsg:134
 #: data/base/messages/resmessages1.rmsg:641
@@ -851,7 +851,7 @@ msgstr "Machinegeweer verbetert"
 #: data/base/messages/resmessages12.rmsg:135
 #: data/mp/messages/resmessages12.rmsg:135
 msgid "Chaingun mechanism replaces belt-feed"
-msgstr "Chaingun mechanisme vervangt band-lader"
+msgstr "Kettinggeweer mechanisme vervangt band lader"
 
 #: data/base/messages/resmessages12.rmsg:136
 #: data/base/messages/resmessages23.rmsg:175
@@ -859,7 +859,7 @@ msgstr "Chaingun mechanisme vervangt band-lader"
 #: data/base/messages/strings/resstrings.txt:859
 #: data/mp/messages/strings/resstrings.txt:900
 msgid "Increases Machinegun ROF"
-msgstr "Verbetert vuurfrequentie Machinegeweer"
+msgstr "Verhoogt vuurfrequentie Machinegeweer"
 
 #: data/base/messages/resmessages12.rmsg:137
 #: data/base/messages/resmessages1.rmsg:644
@@ -882,7 +882,7 @@ msgstr "Verbetert vuurfrequentie Machinegeweer"
 #: data/mp/messages/strings/resstrings.txt:889
 #: data/mp/messages/strings/resstrings.txt:901
 msgid "All machineguns upgraded automatically"
-msgstr "Alle machinegeweren automatisch verbeterd"
+msgstr "Alle Machinegeweren automatisch verbeterd"
 
 #: data/base/messages/resmessages12.rmsg:147
 #: data/base/messages/resmessages1.rmsg:667
@@ -909,7 +909,7 @@ msgstr "Alle machinegeweren automatisch verbeterd"
 #: data/mp/messages/strings/resstrings.txt:826
 #: data/mp/messages/strings/resstrings.txt:932
 msgid "New Indirect Fire Weapon Available"
-msgstr "Nieuw indirect vuur-wapen beschikbaar"
+msgstr "Nieuw indirect vuurwapen beschikbaar"
 
 #: data/base/messages/resmessages12.rmsg:148
 #: data/base/messages/resmessages2.rmsg:902
@@ -930,7 +930,7 @@ msgstr "Kan worden toegewezen aan een sensor"
 #: data/mp/messages/resmessagesall.rmsg:344
 #: data/mp/messages/strings/resstrings.txt:934
 msgid "Best Targets: Base structures, infantry, wheeled vehicles"
-msgstr "Beste doelen: basis gebouwen, infanterie, voertuigen"
+msgstr "Beste doelen: nasis gebouwen, infanterie, voertuigen"
 
 #: data/base/messages/resmessages12.rmsg:150
 #: data/base/messages/resmessages12.rmsg:189
@@ -966,7 +966,7 @@ msgstr "Beste doelen: basis gebouwen, infanterie, voertuigen"
 #: data/mp/messages/resmessagesall.rmsg:345
 #: data/mp/messages/strings/resstrings.txt:935
 msgid "Body Points: Very Low"
-msgstr "Carrosseriepunten: zeer laag"
+msgstr "Carrosseriepunten: Zeer laag"
 
 #: data/base/messages/resmessages12.rmsg:160
 #: data/base/messages/resmessages12.rmsg:173
@@ -985,18 +985,18 @@ msgstr "Carrosseriepunten: zeer laag"
 #: data/mp/messages/resmessages3.rmsg:1187
 #: data/mp/messages/strings/resstrings.txt:948
 msgid "Mortar Upgrade"
-msgstr "Mortier Verbetering"
+msgstr "Mortier verbetering"
 
 #: data/base/messages/resmessages12.rmsg:161
 #: data/mp/messages/resmessages12.rmsg:161
 msgid "Targeting systems compensate for distance and weather conditions"
-msgstr "Doel systemen  compenseren voor afstand en weer condities"
+msgstr "Doel systemen compenseren voor afstand en weercondities"
 
 #: data/base/messages/resmessages12.rmsg:162
 #: data/base/messages/resmessages23.rmsg:188
 #: data/base/messages/resmessages3.rmsg:1176
 msgid "Increases Mortar accuracy"
-msgstr "Verhoogt precisie Mortier"
+msgstr "Verhoogt mortier nauwkeurigheid"
 
 #: data/base/messages/resmessages12.rmsg:163
 #: data/base/messages/resmessages12.rmsg:176
@@ -1025,7 +1025,7 @@ msgstr "Automatische lader vervangt handmatige voeder"
 #: data/base/messages/resmessages12.rmsg:175
 #: data/base/messages/resmessages3.rmsg:1189
 msgid "Increases Mortar ROF"
-msgstr "Verbetert vuurfrequentie Mortier"
+msgstr "Verhoogt vuurfrequentie mortier"
 
 #: data/base/messages/resmessages12.rmsg:186
 #: data/base/messages/resmessages12.rmsg:251
@@ -1050,7 +1050,7 @@ msgstr "Raketartillerie; kan worden toegewezen aan een sensor"
 #: data/base/messages/resmessages12.rmsg:188
 #: data/mp/messages/resmessages12.rmsg:188
 msgid "Best Targets: Vehicles and Emplacements"
-msgstr "Beste doelen: voertuigen en emplacements"
+msgstr "Beste doelen: voertuigen en opstellingen"
 
 #: data/base/messages/resmessages12.rmsg:199
 #: data/base/messages/resmessages12.rmsg:238
@@ -1076,11 +1076,11 @@ msgstr "Raket verbetering"
 #: data/base/messages/resmessages12.rmsg:200
 #: data/mp/messages/resmessages12.rmsg:200
 msgid "Autoloader increases reload rate"
-msgstr "Autolader verbetert herlaad tijd"
+msgstr "Automatische lader verbetert herlaadtijd"
 
 #: data/base/messages/resmessages12.rmsg:201
 msgid "Increases Rocket ROF"
-msgstr "Verbetert vuurfrequentie Raket"
+msgstr "Verhoogt vuurfrequentie raket"
 
 #: data/base/messages/resmessages12.rmsg:202
 #: data/base/messages/resmessages12.rmsg:241
@@ -1106,34 +1106,34 @@ msgstr "Alle raketten automatisch verbeterd"
 #: data/base/messages/resmessages12.rmsg:214
 #: data/base/messages/resmessages3.rmsg:890
 msgid "Increases Cannon ROF"
-msgstr "Verbetert vuurfrequentie Kanon"
+msgstr "Verhoogt vuurfrequentie Kanon"
 
 #: data/base/messages/resmessages12.rmsg:226
 #: data/mp/messages/resmessages12.rmsg:226
 msgid "Armor-Piercing Fin-Stabilized Discarding Sabot"
-msgstr "Pantserdoorborende vingestabilizeerde weggooi kogel"
+msgstr "Pantserdoorborende vingestabilizeerde weggooi manchet "
 
 #: data/base/messages/resmessages12.rmsg:227
 #: data/base/messages/resmessages1.rmsg:578
 #: data/base/messages/resmessages3.rmsg:877
 msgid "Increases Cannon damage"
-msgstr "Verbetert schade Kanon"
+msgstr "Verhoogt Kanonschade"
 
 #: data/base/messages/resmessages12.rmsg:239
 #: data/mp/messages/resmessages12.rmsg:239
 msgid "Rocket tracks the laser designator to the target"
-msgstr "Raket volgt de Laser-bepaler naar het doel"
+msgstr "Raket volgt de laser aanduiding naar het doel"
 
 #: data/base/messages/resmessages12.rmsg:240
 #: data/base/messages/resmessages1.rmsg:747
 #: data/base/messages/resmessagesall.rmsg:136
 msgid "Increases Rocket accuracy"
-msgstr "Verbetert precisie Raket"
+msgstr "Verhoogt raket nauwkeurigheid "
 
 #: data/base/messages/resmessages12.rmsg:252
 #: data/mp/messages/resmessages12.rmsg:252
 msgid "Heavy anti-tank rocket"
-msgstr "Zwaare anti-tank raket"
+msgstr "Zware anti-tank raket"
 
 #: data/base/messages/resmessages12.rmsg:253
 #: data/base/messages/resmessages1.rmsg:539
@@ -1162,7 +1162,7 @@ msgstr "Zwaare anti-tank raket"
 #: data/mp/messages/strings/resstrings.txt:764
 #: data/mp/messages/strings/resstrings.txt:770
 msgid "Best Targets: Vehicles"
-msgstr "Beste doelen: Voertuigen"
+msgstr "Beste doelen: voertuigen"
 
 #: data/base/messages/resmessages12.rmsg:265
 #: data/mp/messages/resmessages12.rmsg:265
@@ -1172,12 +1172,12 @@ msgstr "Vuurt salvo's van mini-raketten"
 #: data/base/messages/resmessages12.rmsg:266
 #: data/mp/messages/resmessages12.rmsg:266
 msgid "Best Targets: Base structures"
-msgstr "Beste Doelen: Basis Gebouwen"
+msgstr "Beste doelen: basis gebouwen"
 
 #: data/base/messages/resmessages1.rmsg:5
 #: data/mp/messages/resmessages1.rmsg:5
 msgid "New battlefield computer system"
-msgstr "Nieuw slagveld-computersysteem"
+msgstr "Nieuw slagveld computersysteem"
 
 #: data/base/messages/resmessages1.rmsg:6
 #: data/mp/messages/resmessages1.rmsg:6
@@ -1204,7 +1204,7 @@ msgstr "Commandant leidt groepen en fungeert als fabrieksafleverpunt"
 #: data/mp/messages/resmessagesall.rmsg:956
 #: data/mp/messages/strings/resstrings.txt:771
 msgid "Body Points: High"
-msgstr "Carrosseriepunten: hoog"
+msgstr "Carrosseriepunten: Hoog"
 
 #: data/base/messages/resmessages1.rmsg:17
 #: data/base/messages/resmessages3.rmsg:17
@@ -1213,7 +1213,7 @@ msgstr "Carrosseriepunten: hoog"
 #: data/mp/messages/resmessages3.rmsg:17
 #: data/mp/messages/resmessages3.rmsg:30
 msgid "Computer Technology Breakthrough"
-msgstr "Computer Technologische doorbraak"
+msgstr "Computer technologische doorbraak"
 
 #: data/base/messages/resmessages1.rmsg:18
 #: data/mp/messages/resmessages1.rmsg:18
@@ -1280,7 +1280,7 @@ msgstr "Verhoogt kinetisch pantser en carrosseriepunten"
 #: data/mp/messages/strings/resstrings.txt:36
 #: data/mp/messages/strings/resstrings.txt:46
 msgid "All Cyborgs upgraded automatically"
-msgstr "Alle cyborgs automatisch verbeterd"
+msgstr "Alle Cyborgs automatisch verbeterd"
 
 #: data/base/messages/resmessages1.rmsg:43
 #: data/base/messages/resmessages1.rmsg:56
@@ -1318,7 +1318,7 @@ msgstr "Alle cyborgs automatisch verbeterd"
 #: data/mp/messages/strings/resstrings.txt:51
 #: data/mp/messages/strings/resstrings.txt:83
 msgid "New Cyborg Available"
-msgstr "Nieuwe cyborg beschikbaar"
+msgstr "Nieuwe Cyborg beschikbaar"
 
 #: data/base/messages/resmessages1.rmsg:44
 #: data/mp/messages/resmessages1.rmsg:44
@@ -1388,7 +1388,7 @@ msgstr "Gewapend met Cyborg Vlammenwerper"
 #: data/base/messages/resmessages1.rmsg:83
 #: data/mp/messages/resmessages1.rmsg:83
 msgid "Armed with Lance Anti-Tank rocket"
-msgstr "Gewapend met Lancier Anti-Tank Raket"
+msgstr "Gewapend met lansier anti-tank raket"
 
 #: data/base/messages/resmessages1.rmsg:95
 #: data/base/messages/resmessages2.rmsg:56
@@ -1406,7 +1406,7 @@ msgstr "Verdedigingen verbeterd"
 #: data/base/messages/resmessages1.rmsg:96
 #: data/mp/messages/resmessages1.rmsg:96
 msgid "Improved Titanium-reinforced concrete"
-msgstr "Verbeterd Titanium-gewapend beton"
+msgstr "Verbeterd titanium gewapend beton"
 
 #: data/base/messages/resmessages1.rmsg:97
 msgid "Increases Armour and Body Points"
@@ -1428,7 +1428,7 @@ msgstr "Alle verdedigingswerken en muren automatisch verbeterd"
 #: data/base/messages/resmessages1.rmsg:109
 #: data/mp/messages/resmessages1.rmsg:109
 msgid "Steel tower with machinegun"
-msgstr "Stalen toren met Machinegeweer"
+msgstr "Stalen toren met machinegeweer"
 
 #: data/base/messages/resmessages1.rmsg:111
 #: data/mp/messages/resmessages1.rmsg:111
@@ -1437,48 +1437,48 @@ msgstr "Defensieve kracht: Laag"
 
 #: data/base/messages/resmessages1.rmsg:122
 msgid "Armored guard tower with Mini-Pod Rocket"
-msgstr "Bewapende wachttoren met Mini-Pod Raket"
+msgstr "Gepantserde wachttoren met Mini-Pod raketten"
 
 #: data/base/messages/resmessages1.rmsg:135
 #: data/mp/messages/resmessages1.rmsg:135
 msgid "Armored bunker with Machinegun"
-msgstr "Gewapende bunker met Machinegeweer"
+msgstr "Gepantserde bunker met Machinegeweer"
 
 #: data/base/messages/resmessages1.rmsg:148
 msgid "Armored bunker with Lancer AT rocket"
-msgstr "Gewapende bunker met Lancier Anti-Tank Raket"
+msgstr "Gepantserde bunker met lansier anti-tank raket"
 
 #: data/base/messages/resmessages1.rmsg:161
 #: data/mp/messages/resmessages1.rmsg:161
 msgid "Armored bunker with Flamer"
-msgstr "Gewapende bunker met Vlammenwerper"
+msgstr "Gepantserde bunker met Vlammenwerper"
 
 #: data/base/messages/resmessages1.rmsg:174
 #: data/mp/messages/resmessages1.rmsg:174
 msgid "Armored bunker with Light Cannon"
-msgstr "Gewapende bunker met Licht Kanon"
+msgstr "Gepantserde bunker met Licht kanon"
 
 #: data/base/messages/resmessages1.rmsg:187
 #: data/mp/messages/resmessages1.rmsg:187
 msgid "Armored hardpoint with Light Cannon"
-msgstr "Gepantserde vesting met Licht Kanon"
+msgstr "Gepantserde vesting met Licht kanon"
 
 #: data/base/messages/resmessages1.rmsg:200
 #: data/mp/messages/resmessages1.rmsg:200
 msgid "Armored hardpoint with Medium Cannon"
-msgstr "Gepantserde vesting met Gemiddeld Kanon"
+msgstr "Gepantserde vesting met Gemiddeld kanon"
 
 #: data/base/messages/resmessages1.rmsg:213
 #: data/mp/messages/resmessages1.rmsg:213
 msgid "Armored hardpoint with Heavy Cannon"
-msgstr "Gepantserde vesting met Zwaar Kanon"
+msgstr "Gepantserde vesting met Zwaar kanon"
 
 #: data/base/messages/resmessages1.rmsg:226
 #: data/base/messages/strings/resstrings.txt:324
 #: data/mp/messages/resmessages1.rmsg:226
 #: data/mp/messages/strings/resstrings.txt:350
 msgid "Reinforced concrete tank traps"
-msgstr "Verstevigde betonnen tank-vallen"
+msgstr "Verstevigde betonnen tank vallen"
 
 #: data/base/messages/resmessages1.rmsg:227
 #: data/base/messages/strings/resstrings.txt:325
@@ -1513,7 +1513,7 @@ msgstr "Gebruik het commandopaneel om eenheden ter reparatie terug te sturen"
 #: data/base/messages/resmessages1.rmsg:241
 #: data/mp/messages/resmessages1.rmsg:241
 msgid "Or select the Repair Facility as a unit's target"
-msgstr "of selecteer de reparatie faciliteit als doel"
+msgstr "Of selecteer de reparatie faciliteit als doel"
 
 #: data/base/messages/resmessages1.rmsg:251
 #: data/base/messages/resmessages2.rmsg:329
@@ -1553,7 +1553,7 @@ msgstr "Alle reparatievoorzieningen automatisch verbeterd"
 #: data/base/messages/resmessages1.rmsg:265
 #: data/mp/messages/resmessages1.rmsg:265
 msgid "Enables command turret research"
-msgstr "Staat onderzoek naar commano koepel toe"
+msgstr "Staat onderzoek naar commando koepel toe"
 
 #: data/base/messages/resmessages1.rmsg:266
 #: data/mp/messages/resmessages1.rmsg:266
@@ -1581,7 +1581,7 @@ msgstr "Cyborgproductie verbeterd"
 #: data/base/messages/strings/names.txt:783
 #: data/mp/messages/resmessages1.rmsg:278
 msgid "Automated Cyborg Production"
-msgstr "Geautomatiseerde cyborg-productie"
+msgstr "Geautomatiseerde Cyborg productie"
 
 #: data/base/messages/resmessages1.rmsg:279
 #: data/base/messages/resmessages2.rmsg:344
@@ -1593,7 +1593,7 @@ msgstr "Geautomatiseerde cyborg-productie"
 #: data/mp/messages/strings/resstrings.txt:375
 #: data/mp/messages/strings/resstrings.txt:383
 msgid "Increases Cyborg factory output"
-msgstr "Verbetert cyborgfabrieksuitvoer"
+msgstr "Verhoogt fabrieksuitvoer van Cyborg"
 
 #: data/base/messages/resmessages1.rmsg:280
 #: data/base/messages/resmessages2.rmsg:345
@@ -1605,7 +1605,7 @@ msgstr "Verbetert cyborgfabrieksuitvoer"
 #: data/mp/messages/strings/resstrings.txt:376
 #: data/mp/messages/strings/resstrings.txt:384
 msgid "All Cyborg factories upgraded automatically"
-msgstr "Alle cyborgfabrieken automatisch verbeterd"
+msgstr "Alle Cyborgfabrieken automatisch verbeterd"
 
 #: data/base/messages/resmessages1.rmsg:291
 #: data/base/messages/strings/names.txt:399
@@ -1619,12 +1619,12 @@ msgstr "Cyborgfabriek"
 #: data/base/messages/resmessages1.rmsg:292
 #: data/mp/messages/resmessages1.rmsg:292
 msgid "Produces Cyborgs"
-msgstr "Produceert cyborgs"
+msgstr "Produceert Cyborgs"
 
 #: data/base/messages/resmessages1.rmsg:293
 #: data/mp/messages/resmessages1.rmsg:293
 msgid "Research makes additional Cyborgs available"
-msgstr "Onderzoek maakt nog meer cyborgs beschikbaar"
+msgstr "Onderzoek maakt nog meer Cyborgs beschikbaar"
 
 #: data/base/messages/resmessages1.rmsg:303
 #: data/base/messages/resmessages2.rmsg:394
@@ -1680,7 +1680,7 @@ msgstr "Geautomatiseerde fabrieksproductie"
 #: data/mp/messages/strings/resstrings.txt:394
 #: data/mp/messages/strings/resstrings.txt:402
 msgid "All vehicle factories upgraded automatically"
-msgstr "Alle voertuigfabriek automatisch verbeterd"
+msgstr "Alle voertuigfabrieken automatisch verbeterd"
 
 #: data/base/messages/resmessages1.rmsg:329
 #: data/mp/messages/resmessages1.rmsg:330
@@ -1699,7 +1699,7 @@ msgstr "Verbeterde prestaties van energiegenerator"
 #: data/base/messages/resmessages1.rmsg:331
 #: data/mp/messages/resmessages1.rmsg:332
 msgid "Burns oil more efficiently"
-msgstr "Verbrandt olie effectiever"
+msgstr "Verbrandt olie efficiënter"
 
 #: data/base/messages/resmessages1.rmsg:332
 #: data/mp/messages/resmessages1.rmsg:333
@@ -1744,7 +1744,7 @@ msgstr "Onderzoek verbeterd"
 #: data/base/messages/resmessages1.rmsg:356
 #: data/mp/messages/resmessages1.rmsg:357
 msgid "Synaptic link data analysis"
-msgstr "Synaptische schakel-dataverwerking"
+msgstr "Synaptische Link dataverwerking"
 
 #: data/base/messages/resmessages1.rmsg:358
 #: data/base/messages/resmessages2.rmsg:371
@@ -1775,7 +1775,7 @@ msgstr "Verhoogt schadebestendigheid"
 #: data/mp/messages/resmessages1.rmsg:370
 #: data/mp/messages/strings/names.txt:820
 msgid "Reinforced Base Structure Materials"
-msgstr "Verbeterde materialen voor basis gebouwen"
+msgstr "Versterkte materialen voor basis gebouwen"
 
 #: data/base/messages/resmessages1.rmsg:370
 #: data/base/messages/resmessages2.rmsg:58
@@ -1854,7 +1854,7 @@ msgstr "Project's Gemiddelde Carroserie"
 #: data/base/messages/resmessages1.rmsg:408
 #: data/mp/messages/resmessages1.rmsg:409
 msgid "Medium body increases armor and body points"
-msgstr "Gemiddelde carrosserie verhoogt pantser en carrosseriepunten"
+msgstr "Gemiddelde Carrosserie verhoogt pantser en carrosseriepunten"
 
 #: data/base/messages/resmessages1.rmsg:409
 #: data/mp/messages/resmessages1.rmsg:410
@@ -1896,7 +1896,7 @@ msgstr "Project's Zware Carrosserie"
 #: data/base/messages/resmessages1.rmsg:434
 #: data/mp/messages/resmessages1.rmsg:435
 msgid "Heavy body increases armor and body points"
-msgstr "Zware carrosserie verhoogt pantser en carrosseriepunten"
+msgstr "Zware Carrosserie verhoogt pantser en carrosseriepunten"
 
 #: data/base/messages/resmessages1.rmsg:435
 #: data/mp/messages/resmessages1.rmsg:436
@@ -1941,7 +1941,7 @@ msgstr "Energiekosten en productietijd gelijk aan Python"
 #: data/mp/messages/resmessages3.rmsg:680
 #: data/mp/messages/strings/resstrings.txt:592
 msgid "Vehicle Engine Upgrade"
-msgstr "Voertuig Motor Upgrade"
+msgstr "Voertuig motor verbetering"
 
 #: data/base/messages/resmessages1.rmsg:460
 #: data/base/messages/strings/names.txt:942
@@ -1957,7 +1957,7 @@ msgstr "Injectiemotor"
 #: data/base/messages/strings/resstrings.txt:561
 #: data/mp/messages/strings/resstrings.txt:594
 msgid "Improves vehicle speed"
-msgstr "Verbetert Voertuig snelheid"
+msgstr "Verbetert voertuigsnelheid"
 
 #: data/base/messages/resmessages1.rmsg:462
 #: data/base/messages/resmessages1.rmsg:475
@@ -2000,7 +2000,7 @@ msgstr "Alle voertuigen automatisch verbeterd"
 #: data/mp/messages/resmessages3.rmsg:706
 #: data/mp/messages/strings/resstrings.txt:604
 msgid "Vehicle Bodies Improved"
-msgstr "Voertuig lichamen verbetert"
+msgstr "Voertuig carrosserie verbetert"
 
 #: data/base/messages/resmessages1.rmsg:474
 #: data/base/messages/resmessages2.rmsg:513
@@ -2025,24 +2025,24 @@ msgstr "Nieuwe aandrijving beschikbaar"
 #: data/base/messages/resmessages1.rmsg:486
 #: data/mp/messages/resmessages1.rmsg:487
 msgid "Armored Half-tracks"
-msgstr "Bepantserde Half-Banden"
+msgstr "Bepantserde halfrupsvoertuig"
 
 #: data/base/messages/resmessages1.rmsg:487
 #: data/mp/messages/resmessages1.rmsg:488
 msgid "Speed: Medium"
-msgstr "Snelheid: gemiddeld"
+msgstr "Snelheid: Gemiddeld"
 
 #: data/base/messages/resmessages1.rmsg:499
 #: data/mp/messages/resmessages1.rmsg:500
 msgid "Amphibious hover propulsion"
-msgstr "Amfibious Luchtkussenaandrijving"
+msgstr "Amfibisch luchtkussenaandrijving"
 
 #: data/base/messages/resmessages1.rmsg:500
 #: data/base/messages/resmessages1.rmsg:526
 #: data/mp/messages/resmessages1.rmsg:501
 #: data/mp/messages/resmessages1.rmsg:527
 msgid "Speed: Fast"
-msgstr "Snelheid: snel"
+msgstr "Snelheid: Snel"
 
 #: data/base/messages/resmessages1.rmsg:501
 #: data/base/messages/resmessages1.rmsg:527
@@ -2088,17 +2088,17 @@ msgstr "Snelheid: snel"
 #: data/mp/messages/strings/resstrings.txt:821
 #: data/mp/messages/strings/resstrings.txt:829
 msgid "Body Points: Low"
-msgstr "Carrosseriepunten: laag"
+msgstr "Carrosseriepunten: Laag"
 
 #: data/base/messages/resmessages1.rmsg:512
 #: data/mp/messages/resmessages1.rmsg:513
 msgid "Armored Tracks"
-msgstr "Bepansterde Tracks"
+msgstr "Gepansterde rupsband"
 
 #: data/base/messages/resmessages1.rmsg:513
 #: data/mp/messages/resmessages1.rmsg:514
 msgid "Speed: Slow"
-msgstr "Snelheid: langzaam"
+msgstr "Snelheid: Langzaam"
 
 #: data/base/messages/resmessages1.rmsg:525
 #: data/base/messages/strings/names.txt:976
@@ -2110,27 +2110,27 @@ msgstr "Wielaandrijving"
 #: data/base/messages/resmessages1.rmsg:538
 #: data/mp/messages/resmessages1.rmsg:539
 msgid "Light Cannon firing 40mm rounds"
-msgstr "Licht Kanon vuurt 40mm kogels"
+msgstr "Licht kanon vuurt 40mm kogels"
 
 #: data/base/messages/resmessages1.rmsg:551
 #: data/mp/messages/resmessages1.rmsg:552
 msgid "Medium Cannon firing 76mm rounds"
-msgstr "Gemiddeld Kanon vuurt 76mm kogels"
+msgstr "Gemiddeld kanon vuurt 76mm kogels"
 
 #: data/base/messages/resmessages1.rmsg:564
 #: data/mp/messages/resmessages1.rmsg:565
 msgid "Heavy Cannon firing 120 mm rounds"
-msgstr "Zwaar Kanon vuurt 120mm kogels"
+msgstr "Zwaar kanon vuurt 120mm kogels"
 
 #: data/base/messages/resmessages1.rmsg:577
 #: data/mp/messages/resmessages1.rmsg:578
 msgid "High Explosive Anti-Tank Cannon Shells"
-msgstr "Hoog explosieve Anti-Tank Kanonskogels"
+msgstr "Hoog explosieve anti-tank kanonskogels"
 
 #: data/base/messages/resmessages1.rmsg:590
 #: data/mp/messages/resmessages1.rmsg:591
 msgid "Flame-thrower firing Propylene Oxide gel"
-msgstr "Vlammenwerper vuurt Propyleen Oxide Gel"
+msgstr "Vlammenwerper vuurt propyleen oxide gel"
 
 #: data/base/messages/resmessages1.rmsg:591
 #: data/base/messages/resmessages2.rmsg:773
@@ -2140,25 +2140,25 @@ msgstr "Vlammenwerper vuurt Propyleen Oxide Gel"
 #: data/mp/messages/resmessagesall.rmsg:370
 #: data/mp/messages/strings/resstrings.txt:796
 msgid "Best Targets: Bunkers, wheeled and hover vehicles"
-msgstr "Beste doelen: bunkers, wiel- en vluchtkussenaangedreven voertuigen"
+msgstr "Beste doelen: bunkers, wiel- en luchtkussenaangedreven voertuigen"
 
 #: data/base/messages/resmessages1.rmsg:592
 #: data/mp/messages/resmessages1.rmsg:593
 #: data/mp/messages/resmessagesall.rmsg:371
 msgid "Body Points: Very low"
-msgstr "Carrosseriepunten: zeer laag"
+msgstr "Carrosseriepunten: Zeer laag"
 
 #: data/base/messages/resmessages1.rmsg:603
 #: data/mp/messages/resmessages1.rmsg:604
 msgid "Propylene Oxide gel treated to burn at higher temperatures"
-msgstr "Propyleen Odide Gel behandeld om op hogere temperaturen te branden"
+msgstr "Propyleen oxide gel behandeld om op hogere temperaturen te branden"
 
 #: data/base/messages/resmessages1.rmsg:604
 #: data/base/messages/resmessages2.rmsg:786
 #: data/base/messages/strings/resstrings.txt:767
 #: data/mp/messages/strings/resstrings.txt:804
 msgid "Increases Flamer damage"
-msgstr "Verhoogt vlammenwerperschade"
+msgstr "Verhoogt Vlammenwerperschade"
 
 #: data/base/messages/resmessages1.rmsg:616
 #: data/mp/messages/resmessages1.rmsg:617
@@ -2173,7 +2173,7 @@ msgstr "Dubbele 7.62mm Machinegeweer"
 #: data/base/messages/resmessages1.rmsg:642
 #: data/mp/messages/resmessages1.rmsg:643
 msgid "Hardened case machinegun bullets"
-msgstr "Geharde Machinegeweer kogelkast"
+msgstr "Geharde Machinegeweer kogelomhulsels"
 
 #: data/base/messages/resmessages1.rmsg:643
 #: data/base/messages/resmessages1.rmsg:656
@@ -2206,7 +2206,7 @@ msgstr "Verbetert hoog explosieve kanonskogels"
 #: data/base/messages/strings/resstrings.txt:907
 #: data/mp/messages/strings/resstrings.txt:950
 msgid "Increases Mortar damage"
-msgstr "Verbetert schade Mortier"
+msgstr "Verbetert mortierschade"
 
 #: data/base/messages/resmessages1.rmsg:694
 #: data/mp/messages/resmessages1.rmsg:695
@@ -2232,11 +2232,11 @@ msgstr "Mini-Raket verbetert"
 #: data/base/messages/resmessages1.rmsg:707
 #: data/mp/messages/resmessages1.rmsg:708
 msgid "Fin-stabilization improves flight trajectory"
-msgstr "Vingestabilizatie verbetert vluchttraject"
+msgstr "Vinstabilisatie verbetert vluchttraject"
 
 #: data/base/messages/resmessages1.rmsg:708
 msgid "Increases Mini-Rocket accuracy"
-msgstr "Verbeterde precisie Mini-Raket"
+msgstr "Verhoogt Mini-Raket nauwkeurigheid "
 
 #: data/base/messages/resmessages1.rmsg:709
 #: data/base/messages/resmessages1.rmsg:722
@@ -2259,7 +2259,7 @@ msgstr "Verbeterde vormgeving oorlogskoppen"
 #: data/base/messages/strings/resstrings.txt:945
 #: data/mp/messages/strings/resstrings.txt:988
 msgid "Increases Mini-Rocket damage"
-msgstr "Verbeterde Mini-Raket schade"
+msgstr "Verhoogt Mini-Raket schade"
 
 #: data/base/messages/resmessages1.rmsg:733
 #: data/mp/messages/resmessages1.rmsg:734
@@ -2268,7 +2268,7 @@ msgstr "Automatisch herlaad systeem"
 
 #: data/base/messages/resmessages1.rmsg:734
 msgid "Increases Mini-Rockets ROF"
-msgstr "Verbeterde vuurfrequentie Mini-Raket"
+msgstr "Verhoogt Mini-Raket vuurfrequentie "
 
 #: data/base/messages/resmessages1.rmsg:746
 #: data/mp/messages/resmessages1.rmsg:747
@@ -2278,14 +2278,14 @@ msgstr "Volgt en richt in vluchtzijnde raket naar doel"
 #: data/base/messages/resmessages1.rmsg:759
 #: data/mp/messages/resmessages1.rmsg:760
 msgid "High Explosive Anti-Tank warhead"
-msgstr "Hoog explosieve Anti-Tank kernkop"
+msgstr "Hoog explosieve anti-tank kernkop"
 
 #: data/base/messages/resmessages1.rmsg:760
 #: data/base/messages/resmessages2.rmsg:942
 #: data/base/messages/strings/resstrings.txt:967
 #: data/mp/messages/strings/resstrings.txt:1010
 msgid "Increases Rocket damage"
-msgstr "Verbeterde schade Raket"
+msgstr "Verhoogt raketschade"
 
 #: data/base/messages/resmessages23.rmsg:4
 #: data/base/messages/resmessages3.rmsg:56
@@ -2359,12 +2359,12 @@ msgstr "Verhoogt carrosseriepunten"
 #: data/base/messages/resmessages23.rmsg:18
 #: data/mp/messages/resmessages23.rmsg:18
 msgid "Armored hardpoint with Hyper-Velocity Cannon"
-msgstr "Bepantserde vesting met Hyper-Sneheids Kanon"
+msgstr "Gepantserde vesting met Hyper-Sneheids Kanon"
 
 #: data/base/messages/resmessages23.rmsg:31
 #: data/base/messages/resmessages3.rmsg:434
 msgid "New Power Generation Technology"
-msgstr "Nieuwe energiegeneratie-technologie"
+msgstr "Nieuwe energiegeneratie technologie"
 
 #: data/base/messages/resmessages23.rmsg:32
 #: data/mp/messages/resmessages23.rmsg:31
@@ -2385,7 +2385,7 @@ msgstr "Alle energiegeneratoren automatisch verbeterd"
 #: data/mp/messages/resmessages23.rmsg:83
 #: data/mp/messages/resmessages3.rmsg:525
 msgid "Improved fire detection systems"
-msgstr "Verbeterde lanceer detectie systeem"
+msgstr "Verbeterde lanceer detectie systemen"
 
 #: data/base/messages/resmessages23.rmsg:69
 #: data/base/messages/resmessages23.rmsg:95
@@ -2420,7 +2420,7 @@ msgstr "VTOL met orders vallen de vijandelijke batterijen aan"
 #: data/mp/messages/resmessages2.rmsg:436
 #: data/mp/messages/strings/resstrings.txt:510
 msgid "VTOLs attack until enemy battery is suppressed"
-msgstr "VTOL's vallen aan totdat vijandelijke batterij is onderdrukt"
+msgstr "VTOL's vallen aan totdat vijandelijke batterij onderdrukt is"
 
 #: data/base/messages/resmessages23.rmsg:82
 #: data/base/messages/resmessages2.rmsg:446
@@ -2442,7 +2442,7 @@ msgstr "VTOL CB verbetert"
 #: data/mp/messages/resmessages3.rmsg:539
 #: data/mp/messages/strings/resstrings.txt:515
 msgid "Extends VTOL CB Range"
-msgstr "Verbetert VTOL CB bereik"
+msgstr "Vergroot VTOL CB bereik"
 
 #: data/base/messages/resmessages23.rmsg:85
 #: data/base/messages/resmessages2.rmsg:449
@@ -2490,7 +2490,7 @@ msgstr "Nieuwe systeemkoepel beschikbaar"
 #: data/base/messages/resmessages23.rmsg:109
 #: data/mp/messages/resmessages23.rmsg:109
 msgid "VTOL Strike turret used to spot targets"
-msgstr "VTOL Aanvalskoepel wordt gebruikt om doelen op te sporen"
+msgstr "VTOL aanvalskoepel wordt gebruikt om doelen op te sporen"
 
 #: data/base/messages/resmessages23.rmsg:110
 #: data/mp/messages/resmessages23.rmsg:110
@@ -2500,7 +2500,7 @@ msgstr "Toegewezen VTOL's vallen de aangewezen doelen aan"
 #: data/base/messages/resmessages23.rmsg:111
 #: data/mp/messages/resmessages23.rmsg:111
 msgid "Select new targets to continue the VTOL strikes"
-msgstr "Selecteer nieuwe doelen om te VTOL aanvallen voort te zetten"
+msgstr "Selecteer nieuwe doelen om de VTOL aanvallen voort te zetten"
 
 #: data/base/messages/resmessages23.rmsg:121
 #: data/base/messages/resmessages2.rmsg:459
@@ -2511,12 +2511,12 @@ msgstr "Selecteer nieuwe doelen om te VTOL aanvallen voort te zetten"
 #: data/mp/messages/resmessages3.rmsg:550
 #: data/mp/messages/strings/resstrings.txt:527
 msgid "VTOL Strike Improved"
-msgstr "VTOL Aanval verbeterd"
+msgstr "VTOL aanval verbeterd"
 
 #: data/base/messages/resmessages23.rmsg:122
 #: data/mp/messages/resmessages23.rmsg:122
 msgid "Improved target recognition systems"
-msgstr "Verbeterde doel erken systemen"
+msgstr "Verbeterde doel herken systemen"
 
 #: data/base/messages/resmessages23.rmsg:123
 #: data/base/messages/resmessages2.rmsg:461
@@ -2527,7 +2527,7 @@ msgstr "Verbeterde doel erken systemen"
 #: data/mp/messages/resmessages3.rmsg:552
 #: data/mp/messages/strings/resstrings.txt:529
 msgid "Extends VTOL Strike Range"
-msgstr "Vergroot bereik VTOL Aanval"
+msgstr "Vergroot bereik VTOL aanval"
 
 #: data/base/messages/resmessages23.rmsg:124
 #: data/base/messages/resmessages2.rmsg:462
@@ -2538,7 +2538,7 @@ msgstr "Vergroot bereik VTOL Aanval"
 #: data/mp/messages/resmessages3.rmsg:553
 #: data/mp/messages/strings/resstrings.txt:530
 msgid "All VTOL Strike sensors upgraded automatically"
-msgstr "Alle VTOL-aanval-sensoren automatisch verbeterd"
+msgstr "Alle VTOL aanvals sensoren automatisch verbeterd"
 
 #: data/base/messages/resmessages23.rmsg:134
 #: data/base/messages/resmessages2.rmsg:641
@@ -2572,7 +2572,7 @@ msgstr "Zelf geleidende raket aangedreven granaat"
 #: data/base/messages/strings/resstrings.txt:661
 #: data/mp/messages/strings/resstrings.txt:694
 msgid "Increases AA accuracy"
-msgstr "Verbetert precisie AA"
+msgstr "Verhoogt AA nauwkeurigheid "
 
 #: data/base/messages/resmessages23.rmsg:137
 #: data/base/messages/resmessages2.rmsg:644
@@ -2589,7 +2589,7 @@ msgstr "Verbetert precisie AA"
 #: data/mp/messages/strings/resstrings.txt:695
 #: data/mp/messages/strings/resstrings.txt:713
 msgid "All AA weapons upgraded automatically"
-msgstr "Alle AA-wapens automatisch verbeterd"
+msgstr "Alle AA wapens automatisch verbeterd"
 
 #: data/base/messages/resmessages23.rmsg:147
 #: data/base/messages/resmessages2.rmsg:706
@@ -2605,7 +2605,7 @@ msgstr "Alle AA-wapens automatisch verbeterd"
 #: data/mp/messages/strings/resstrings.txt:730
 #: data/mp/messages/strings/resstrings.txt:736
 msgid "New Bomb Bay Available"
-msgstr "Nieuw Bommenluik beschikbaar"
+msgstr "Nieuwe bommenluik beschikbaar"
 
 #: data/base/messages/resmessages23.rmsg:148
 #: data/mp/messages/resmessages23.rmsg:148
@@ -2615,7 +2615,7 @@ msgstr "Laat brandbommen vallen"
 #: data/base/messages/resmessages23.rmsg:149
 #: data/mp/messages/resmessages23.rmsg:149
 msgid "Best Targets: Bunkers and Hardpoints"
-msgstr "Beste doelen: bunker en vestingen"
+msgstr "Beste doelen: bunkers en vestingen"
 
 #: data/base/messages/resmessages23.rmsg:160
 #: data/base/messages/resmessages2.rmsg:732
@@ -2627,7 +2627,7 @@ msgstr "Bombardeerviezier verbetert"
 
 #: data/base/messages/resmessages23.rmsg:161
 msgid "Laser designator paints and guides bombs to the target"
-msgstr "Laser-onderscheider markeert en geleid bommen naar het doel"
+msgstr "Laser aanduiding markeert en geleid bommen naar het doel"
 
 #: data/base/messages/resmessages23.rmsg:162
 #: data/base/messages/resmessages2.rmsg:734
@@ -2635,7 +2635,7 @@ msgstr "Laser-onderscheider markeert en geleid bommen naar het doel"
 #: data/base/messages/strings/resstrings.txt:715
 #: data/mp/messages/strings/resstrings.txt:748
 msgid "Increases Bombing accuracy"
-msgstr "Verbetert precisie bombarderen"
+msgstr "Verhoogt bombardeer nauwkeurigheid "
 
 #: data/base/messages/resmessages23.rmsg:163
 #: data/base/messages/resmessages2.rmsg:735
@@ -2646,22 +2646,22 @@ msgstr "Verbetert precisie bombarderen"
 #: data/mp/messages/resmessages3.rmsg:865
 #: data/mp/messages/strings/resstrings.txt:749
 msgid "All bomb bays upgraded automatically"
-msgstr "Alle Bommenluiken automatisch verbetert"
+msgstr "Alle bommenluiken automatisch verbeterd"
 
 #: data/base/messages/resmessages23.rmsg:174
 #: data/mp/messages/resmessages23.rmsg:174
 msgid "Robotic advances make new chaingun upgrade available"
-msgstr "Gerobotiseerde verbetering maken Chaingun verbetering beschikbaar"
+msgstr "Gerobotiseerde verbetering maken kettinggeweer verbetering beschikbaar"
 
 #: data/base/messages/resmessages23.rmsg:187
 #: data/mp/messages/resmessages23.rmsg:187
 msgid "Shells detect and home to thermal heat signatures"
-msgstr "Granaten detecteren en vliegen op thermale hitteplekken"
+msgstr "Granaten detecteren en vliegen op thermale hitteplekken in"
 
 #: data/base/messages/resmessages23.rmsg:200
 #: data/mp/messages/resmessages23.rmsg:200
 msgid "105mm multi-barrel Howitzer may be assigned to a sensor"
-msgstr "105mm multi-vat Houwitser kan worden toegewezen aan een sensor"
+msgstr "105mm multi-vat houwitser kan worden toegewezen aan een sensor"
 
 #: data/base/messages/resmessages23.rmsg:201
 #: data/base/messages/resmessages2.rmsg:799
@@ -2680,14 +2680,14 @@ msgstr "Beste doelen: basis gebouwen, infanterie, voertuigen"
 #: data/base/messages/resmessages23.rmsg:213
 #: data/mp/messages/resmessages23.rmsg:213
 msgid "Multi-barrel, rapid-fire machinegun"
-msgstr "Multi-vat, snelvurend Machinegeweer"
+msgstr "Multi-vat, snelvurend machinegeweer"
 
 #: data/base/messages/resmessages23.rmsg:215
 #: data/mp/messages/resmessages23.rmsg:215
 #: data/mp/messages/resmessagesall.rmsg:878
 #: data/mp/messages/resmessagesall.rmsg:891
 msgid "Replaces all machineguns"
-msgstr "Vervangt alle machine geweren"
+msgstr "Vervangt alle machinegeweren"
 
 #: data/base/messages/resmessages2.rmsg:4
 #: data/base/messages/resmessages3.rmsg:4
@@ -2696,7 +2696,7 @@ msgstr "Vervangt alle machine geweren"
 #: data/mp/messages/resmessages3.rmsg:4
 #: data/mp/messages/strings/resstrings.txt:43
 msgid "Cyborg Thermal Armor Improved"
-msgstr "Cyborg-hitteschild verbeterd"
+msgstr "Cyborg hitteschild verbeterd"
 
 #: data/base/messages/resmessages2.rmsg:5
 #: data/base/messages/resmessages3.rmsg:5
@@ -2732,7 +2732,7 @@ msgstr "Gelaagde dichte composiet legeringen en energie-absorberende vezels"
 #: data/mp/messages/strings/resstrings.txt:52
 #: data/mp/messages/strings/resstrings.txt:102
 msgid "Armed with Bunker Buster rocket"
-msgstr "Gewapend met Bunker Breker Raket"
+msgstr "Gewapend met Bunker Breker raket"
 
 #: data/base/messages/resmessages2.rmsg:44
 #: data/base/messages/strings/resstrings.txt:66
@@ -2746,7 +2746,7 @@ msgstr "Bewapend met Cyborg Aanvalsgeweer"
 #: data/mp/messages/resmessages2.rmsg:57
 #: data/mp/messages/strings/resstrings.txt:122
 msgid "High-tensile concrete reinforced with boron"
-msgstr "Hoog rekbaar beton versterkt met Boron"
+msgstr "Hoog rekbaar beton versterkt met borium"
 
 #: data/base/messages/resmessages2.rmsg:70
 #: data/base/messages/strings/resstrings.txt:120
@@ -2772,7 +2772,7 @@ msgstr "AA platform met Cycloon koepel"
 #: data/mp/messages/strings/resstrings.txt:139
 #: data/mp/messages/strings/resstrings.txt:151
 msgid "Automatically targets VTOLs"
-msgstr "Doelt automatische op VTOL's"
+msgstr "Doelt automatisch op VTOL's"
 
 #: data/base/messages/resmessages2.rmsg:83
 #: data/base/messages/strings/resstrings.txt:126
@@ -2786,7 +2786,7 @@ msgstr "AA platform met Orkaan koepel"
 #: data/mp/messages/resmessages2.rmsg:84
 #: data/mp/messages/strings/resstrings.txt:145
 msgid "Automatically targets VTOL"
-msgstr "Doelt automatische op VTOL's"
+msgstr "Doelt automatisch op VTOL's"
 
 #: data/base/messages/resmessages2.rmsg:96
 #: data/base/messages/strings/resstrings.txt:132
@@ -2807,35 +2807,35 @@ msgstr "AA platform met Tornado koepel"
 #: data/mp/messages/resmessages2.rmsg:122
 #: data/mp/messages/strings/resstrings.txt:160
 msgid "Indirect fire rocket battery"
-msgstr "Indirect lanceer raket-batterij"
+msgstr "Indirecte lanceer raket batterij"
 
 #: data/base/messages/resmessages2.rmsg:135
 #: data/base/messages/strings/resstrings.txt:154
 #: data/mp/messages/resmessages2.rmsg:135
 #: data/mp/messages/strings/resstrings.txt:174
 msgid "Armored Bombard battery pit"
-msgstr "Bepantserde Pothond batterij pit"
+msgstr "Bepantserde Pothond batterij kuil"
 
 #: data/base/messages/resmessages2.rmsg:148
 #: data/base/messages/strings/resstrings.txt:168
 #: data/mp/messages/resmessages2.rmsg:148
 #: data/mp/messages/strings/resstrings.txt:188
 msgid "Armored howitzer emplacement"
-msgstr "Bepantserde Houwitser emplacement"
+msgstr "Bepantserde Houwitser vesting"
 
 #: data/base/messages/resmessages2.rmsg:161
 #: data/base/messages/strings/resstrings.txt:174
 #: data/mp/messages/resmessages2.rmsg:161
 #: data/mp/messages/strings/resstrings.txt:194
 msgid "Armored Ground Shaker howitzer emplacement"
-msgstr "Bepantserde Grond Schudder Houwitser emplacement"
+msgstr "Bepantserde Grond Schudder Houwitser vesting"
 
 #: data/base/messages/resmessages2.rmsg:174
 #: data/base/messages/strings/resstrings.txt:160
 #: data/mp/messages/resmessages2.rmsg:174
 #: data/mp/messages/strings/resstrings.txt:180
 msgid "Armored Pepperpot mortar battery pit"
-msgstr "Bepantserde Pepperpot Mortier pit"
+msgstr "Bepantserde Pepperpot mortier kuil"
 
 #: data/base/messages/resmessages2.rmsg:187
 #: data/base/messages/resmessages2.rmsg:200
@@ -2846,14 +2846,14 @@ msgstr "Bepantserde Pepperpot Mortier pit"
 #: data/mp/messages/strings/resstrings.txt:202
 #: data/mp/messages/strings/resstrings.txt:208
 msgid "Armored Hellstorm howitzer emplacement"
-msgstr "Bepantserde Helstorm Houwitser emplacement"
+msgstr "Bepantserde Helstorm Houwitser vesting"
 
 #: data/base/messages/resmessages2.rmsg:213
 #: data/base/messages/strings/resstrings.txt:192
 #: data/mp/messages/resmessages2.rmsg:213
 #: data/mp/messages/strings/resstrings.txt:214
 msgid "Armored strongpoint with Tank Killer rocket"
-msgstr "Bepantserde vesting met Tank Sloper Raket"
+msgstr "Bepantserde vesting met Tank Sloper raket"
 
 #: data/base/messages/resmessages2.rmsg:214
 #: data/base/messages/resmessages2.rmsg:227
@@ -2957,7 +2957,7 @@ msgstr "Nieuwe gerobotiseerde reparatie technieken"
 #: data/mp/messages/resmessages2.rmsg:343
 #: data/mp/messages/strings/resstrings.txt:374
 msgid "Robotic Cyborg Production"
-msgstr "Gerobotiseerde cyborg-productie"
+msgstr "Gerobotiseerde Cyborg productie"
 
 #: data/base/messages/resmessages2.rmsg:356
 #: data/base/messages/strings/resstrings.txt:366
@@ -2970,7 +2970,7 @@ msgstr "Nieuwe gerobotiseerde technieken verbeteren fabrieksproductie"
 #: data/base/messages/strings/resstrings.txt:367
 #: data/mp/messages/strings/resstrings.txt:393
 msgid "Increases factory production rate"
-msgstr "Verbetert productiesnelheid van fabrieken"
+msgstr "Verhoogt productiesnelheid van fabrieken"
 
 #: data/base/messages/resmessages2.rmsg:369
 #: data/base/messages/strings/names.txt:835
@@ -2996,7 +2996,7 @@ msgstr "Versterkte materialen voor basis gebouwen"
 #: data/mp/messages/resmessages2.rmsg:395
 #: data/mp/messages/strings/resstrings.txt:438
 msgid "Robotic VTOL Production"
-msgstr "Gerobotiseerde VTOL-productie"
+msgstr "Gerobotiseerde VTOL productie"
 
 #: data/base/messages/resmessages2.rmsg:396
 #: data/base/messages/resmessages3.rmsg:487
@@ -3005,7 +3005,7 @@ msgstr "Gerobotiseerde VTOL-productie"
 #: data/mp/messages/resmessages3.rmsg:487
 #: data/mp/messages/strings/resstrings.txt:439
 msgid "Increases VTOL factory output"
-msgstr "Verbetert VTOL fabrieksuitkomst"
+msgstr "Verhoogt VTOL fabrieksproductie"
 
 #: data/base/messages/resmessages2.rmsg:397
 #: data/base/messages/resmessages3.rmsg:488
@@ -3014,7 +3014,7 @@ msgstr "Verbetert VTOL fabrieksuitkomst"
 #: data/mp/messages/resmessages3.rmsg:488
 #: data/mp/messages/strings/resstrings.txt:440
 msgid "All VTOL factories upgraded automatically"
-msgstr "Alle VTOL-fabrieken automatisch verbeterd"
+msgstr "Alle VTOL fabrieken automatisch verbeterd"
 
 #: data/base/messages/resmessages2.rmsg:407
 #: data/base/messages/resmessages3.rmsg:498
@@ -3276,7 +3276,7 @@ msgstr "Alle wielen automatisch verbeterd"
 #: data/mp/messages/strings/resstrings.txt:680
 #: data/mp/messages/strings/resstrings.txt:686
 msgid "New AA Turret Available"
-msgstr "Nieuwe AA-koepel beschikbaar"
+msgstr "Nieuwe AA koepel beschikbaar"
 
 #: data/base/messages/resmessages2.rmsg:590
 #: data/base/messages/strings/resstrings.txt:636
@@ -3312,14 +3312,14 @@ msgstr "Alleen luchtdoelen"
 #: data/mp/messages/resmessages2.rmsg:603
 #: data/mp/messages/strings/resstrings.txt:675
 msgid "Quad 80mm flak weapon"
-msgstr "Quad 80mm luchtgeschutswapen"
+msgstr "Quad 80mm luchtgeschuts wapen"
 
 #: data/base/messages/resmessages2.rmsg:616
 #: data/base/messages/strings/resstrings.txt:648
 #: data/mp/messages/resmessages2.rmsg:616
 #: data/mp/messages/strings/resstrings.txt:681
 msgid "30mm Anti-Aircraft machinegun"
-msgstr "30mm Anti-Vliegtuig Machinegeweer"
+msgstr "30mm anti-vliegtuig Machinegeweer"
 
 #: data/base/messages/resmessages2.rmsg:629
 #: data/base/messages/strings/resstrings.txt:654
@@ -3327,7 +3327,7 @@ msgstr "30mm Anti-Vliegtuig Machinegeweer"
 #: data/mp/messages/resmessagesall.rmsg:759
 #: data/mp/messages/strings/resstrings.txt:687
 msgid "Quad 30mm Anti-Aircraft machinegun"
-msgstr "Quad 30mm Anti-Vliegtuig Machinegeweer"
+msgstr "Quad 30mm AA Machinegeweer"
 
 #: data/base/messages/resmessages2.rmsg:642
 #: data/base/messages/strings/resstrings.txt:660
@@ -3343,7 +3343,7 @@ msgstr "Detecteert en grijpt vast aan VTOL motor emissie"
 #: data/mp/messages/resmessages3.rmsg:823
 #: data/mp/messages/strings/resstrings.txt:702
 msgid "AA Flak Upgrade"
-msgstr "AA luchtgeschut verbetering"
+msgstr "AA luchtgeschuts verbetering"
 
 #: data/base/messages/resmessages2.rmsg:655
 #: data/base/messages/strings/resstrings.txt:670
@@ -3380,7 +3380,7 @@ msgstr "Terugslag lader voor AA munitie hopper"
 #: data/base/messages/strings/resstrings.txt:679
 #: data/mp/messages/strings/resstrings.txt:712
 msgid "Increases AA ROF"
-msgstr "Verbetert vuurfrequentie van AA geschut"
+msgstr "Verhoogt vuurfrequentie van AA geschut"
 
 #: data/base/messages/resmessages2.rmsg:680
 #: data/base/messages/resmessages2.rmsg:693
@@ -3391,14 +3391,14 @@ msgstr "Verbetert vuurfrequentie van AA geschut"
 #: data/mp/messages/strings/resstrings.txt:718
 #: data/mp/messages/strings/resstrings.txt:724
 msgid "New Proximity Bomb Turret Available"
-msgstr "Nieuwe Omgevingsbom koepel beschikbaar"
+msgstr "Nieuwe omgevingsbom koepel beschikbaar"
 
 #: data/base/messages/resmessages2.rmsg:681
 #: data/base/messages/strings/resstrings.txt:686
 #: data/mp/messages/resmessages2.rmsg:681
 #: data/mp/messages/strings/resstrings.txt:719
 msgid "Bomb turret explodes in proximity to enemy"
-msgstr "Bombardeer koepel explodeert in omgeving van vijands"
+msgstr "Bombardeer koepel explodeert in omgeving van vijanden"
 
 #: data/base/messages/resmessages2.rmsg:682
 #: data/base/messages/resmessages2.rmsg:695
@@ -3416,14 +3416,14 @@ msgstr "Beste doelen: basis gebouwen en verdedigingswerken"
 #: data/mp/messages/resmessages2.rmsg:694
 #: data/mp/messages/strings/resstrings.txt:725
 msgid "Superbomb turret explodes in proximity to enemy"
-msgstr "Superbombardeer toren explodeert in omgeving van vijand"
+msgstr "Superbombardeer toren explodeert in omgeving van vijanden"
 
 #: data/base/messages/resmessages2.rmsg:707
 #: data/base/messages/strings/resstrings.txt:698
 #: data/mp/messages/resmessages2.rmsg:707
 #: data/mp/messages/strings/resstrings.txt:731
 msgid "Drops High Explosive Cluster bombs"
-msgstr "Laat hoog explosieve Cluster Bomben vallen"
+msgstr "Laat hoog explosieve Clusterbommen vallen"
 
 #: data/base/messages/resmessages2.rmsg:708
 #: data/base/messages/strings/resstrings.txt:699
@@ -3457,21 +3457,21 @@ msgstr "Grijpt vast op thermale emissie"
 #: data/mp/messages/resmessages2.rmsg:746
 #: data/mp/messages/strings/resstrings.txt:763
 msgid "Hyper-velocity automatic-cannon firing 88mm rounds"
-msgstr "Hyper-Snelheids automatische Kanon vuurt 88mm kogels"
+msgstr "Hyper-Snelheids automatische kanon vuurt 88mm kogels"
 
 #: data/base/messages/resmessages2.rmsg:748
 #: data/base/messages/strings/resstrings.txt:732
 #: data/mp/messages/resmessages2.rmsg:748
 #: data/mp/messages/strings/resstrings.txt:765
 msgid "Replaces Medium Cannon"
-msgstr "Vervangt Medium Geschut"
+msgstr "Vervangt Gemiddeld kanon"
 
 #: data/base/messages/resmessages2.rmsg:759
 #: data/base/messages/strings/resstrings.txt:736
 #: data/mp/messages/resmessages2.rmsg:759
 #: data/mp/messages/strings/resstrings.txt:769
 msgid "76mm hyper-velocity quad-barrel automatic-cannon"
-msgstr "76mm Hyper-Snelheids quad-vat automatisch Kanon"
+msgstr "76mm Hyper-Snelheids quad-vat automatisch kanon"
 
 #: data/base/messages/resmessages2.rmsg:772
 #: data/base/messages/strings/resstrings.txt:758
@@ -3493,14 +3493,14 @@ msgstr "Propyleen Oxide Gel behandeld om te branden op superhete temperaturen"
 #: data/mp/messages/resmessages2.rmsg:798
 #: data/mp/messages/strings/resstrings.txt:811
 msgid "105mm Howitzer may be assigned to a sensor"
-msgstr "105mm houwitser kan toegewezen worden aan een sensor"
+msgstr "105mm Houwitser kan toegewezen worden aan een sensor"
 
 #: data/base/messages/resmessages2.rmsg:811
 #: data/base/messages/strings/resstrings.txt:780
 #: data/mp/messages/resmessages2.rmsg:811
 #: data/mp/messages/strings/resstrings.txt:819
 msgid "155mm Howitzer may be assigned to a sensor"
-msgstr "155mm houwitser kan toegewezen worden aan een sensor"
+msgstr "155mm Houwitser kan toegewezen worden aan een sensor"
 
 #: data/base/messages/resmessages2.rmsg:824
 #: data/base/messages/strings/resstrings.txt:788
@@ -3542,7 +3542,7 @@ msgstr "Houwitser verbetering"
 #: data/base/messages/strings/resstrings.txt:795
 #: data/mp/messages/strings/resstrings.txt:834
 msgid "Increases Howitzer accuracy"
-msgstr "Verbetert precisie van Houwitser"
+msgstr "Verhoogt Houwitser nauwkeurigheid "
 
 #: data/base/messages/resmessages2.rmsg:839
 #: data/base/messages/resmessages2.rmsg:852
@@ -3563,7 +3563,7 @@ msgstr "Verbetert precisie van Houwitser"
 #: data/mp/messages/strings/resstrings.txt:843
 #: data/mp/messages/strings/resstrings.txt:851
 msgid "All howitzers upgraded automatically"
-msgstr "Alle houwitsers automatisch verbeterd"
+msgstr "Alle Houwitsers automatisch verbeterd"
 
 #: data/base/messages/resmessages2.rmsg:850
 #: data/base/messages/strings/resstrings.txt:802
@@ -3578,14 +3578,14 @@ msgstr "Hoog explosieve granaten"
 #: data/base/messages/strings/resstrings.txt:803
 #: data/mp/messages/strings/resstrings.txt:842
 msgid "Increases Howitzer damage"
-msgstr "Verbetert Houwitser schade"
+msgstr "Verhoogt Houwitser schade"
 
 #: data/base/messages/resmessages2.rmsg:864
 #: data/base/messages/resmessages3.rmsg:929
 #: data/base/messages/strings/resstrings.txt:811
 #: data/mp/messages/strings/resstrings.txt:850
 msgid "Increases Howitzer ROF"
-msgstr "Vebetert vuurfrequentie Houwitser"
+msgstr "Verhoogt Houwitser vuurfrequentie "
 
 #: data/base/messages/resmessages2.rmsg:876
 #: data/base/messages/strings/resstrings.txt:846
@@ -3599,7 +3599,7 @@ msgstr "Pantserdoorborende kogels met wolfraam punten"
 #: data/mp/messages/resmessages2.rmsg:889
 #: data/mp/messages/strings/resstrings.txt:899
 msgid "Improved chaingun mechanism"
-msgstr "Verbeterde Chaingun mechanisme"
+msgstr "Verbeterde kettinggeweer mechanisme"
 
 #: data/base/messages/resmessages2.rmsg:915
 #: data/base/messages/strings/resstrings.txt:906
@@ -3629,7 +3629,7 @@ msgstr "NEXUS Indringer Programma geanalyseerd"
 #: data/base/messages/resmessages3.rmsg:19
 #: data/mp/messages/resmessages3.rmsg:19
 msgid "Intruder parasite isolated"
-msgstr "Indringend parasiet geisoleerd"
+msgstr "Indringende parasiet geisoleerd"
 
 #: data/base/messages/resmessages3.rmsg:20
 #: data/base/messages/resmessages3.rmsg:33
@@ -3651,7 +3651,7 @@ msgstr "Computer systemen kunnen nu worden afgeschermd tegen NEXUS"
 #: data/base/messages/resmessages3.rmsg:43
 #: data/mp/messages/resmessages3.rmsg:43
 msgid "New Cyborg Research Available"
-msgstr "Nieuw cyborg-onderzoek beschikbaar"
+msgstr "Nieuwe Cyborg onderzoek beschikbaar"
 
 #: data/base/messages/resmessages3.rmsg:44
 #: data/mp/messages/resmessages3.rmsg:44
@@ -3723,7 +3723,7 @@ msgstr "Gewapend met Zaklamp-Laser"
 #: data/mp/messages/strings/resstrings.txt:95
 #: data/mp/messages/strings/resstrings.txt:101
 msgid "New Jump Cyborg Available"
-msgstr "Nieuw springcyborg beschikbaar"
+msgstr "Nieuwe Spring Cyborg beschikbaar"
 
 #: data/base/messages/resmessages3.rmsg:148
 #: data/mp/messages/resmessages3.rmsg:148
@@ -3787,12 +3787,12 @@ msgstr "Gewapende vesting met Puls-Laser"
 #: data/base/messages/resmessages3.rmsg:317
 #: data/mp/messages/resmessages3.rmsg:317
 msgid "Armored strongpoint with Rail Gun"
-msgstr "Gewapende vesting met Rail Gun"
+msgstr "Gewapende vesting met Railgun"
 
 #: data/base/messages/resmessages3.rmsg:330
 #: data/mp/messages/resmessages3.rmsg:330
 msgid "Armored strongpoint with Gauss Cannon"
-msgstr "Gewapende vesting met Gauss Kanon"
+msgstr "Gewapende vesting met Gauss kanon"
 
 #: data/base/messages/resmessages3.rmsg:343
 #: data/mp/messages/resmessages3.rmsg:343
@@ -3817,12 +3817,12 @@ msgstr "Gewapende vesting met Zaklamp-Laser"
 #: data/base/messages/resmessages3.rmsg:395
 #: data/mp/messages/resmessages3.rmsg:395
 msgid "Armored hardpoint with Rail Gun"
-msgstr "Gewapende Vesting met Rail Gun"
+msgstr "Gewapende Vesting met Railgun"
 
 #: data/base/messages/resmessages3.rmsg:408
 #: data/mp/messages/resmessages3.rmsg:408
 msgid "Armored hardpoint with Gauss Cannon"
-msgstr "Gewapende vesting met Gauss Kanon"
+msgstr "Gewapende vesting met Gauss kanon"
 
 #: data/base/messages/resmessages3.rmsg:421
 #: data/mp/messages/resmessages3.rmsg:421
@@ -3839,7 +3839,7 @@ msgstr "Gasturbine verhoogt energieuitvoer"
 #: data/mp/messages/resmessages3.rmsg:447
 #: data/mp/messages/strings/names.txt:853
 msgid "Neural Synapse Research Brain"
-msgstr "Neuraal Synatische  Onderzoeks Brein"
+msgstr "Neuraal Synaptische Onderzoeks Brein"
 
 #: data/base/messages/resmessages3.rmsg:460
 #: data/base/messages/strings/names.txt:811
@@ -3857,7 +3857,7 @@ msgstr "Materialen met hoge dichtheid voor basis gebouwen"
 #: data/base/messages/strings/names.txt:854
 #: data/mp/messages/resmessages3.rmsg:486
 msgid "Advanced VTOL Production"
-msgstr "Geavanceerde VTOL-productie"
+msgstr "Geavanceerde VTOL productie"
 
 #: data/base/messages/resmessages3.rmsg:499
 #: data/base/messages/strings/names.txt:846
@@ -3874,7 +3874,7 @@ msgstr "Geavanceerde genietechnieken"
 #: data/base/messages/resmessages3.rmsg:538
 #: data/mp/messages/resmessages3.rmsg:538
 msgid "Advanced fire detection systems"
-msgstr "Geavanceerde lanceer-detectie systeem"
+msgstr "Geavanceerde lanceer-detectie systemen"
 
 #: data/base/messages/resmessages3.rmsg:551
 #: data/mp/messages/resmessages3.rmsg:551
@@ -4007,7 +4007,7 @@ msgstr "Gasturbine"
 #: data/base/messages/resmessages3.rmsg:681
 #: data/mp/messages/resmessages3.rmsg:681
 msgid "Ionizing Turbine Engine"
-msgstr "Ioniserende Turbine Motor"
+msgstr "Ioniserende Turbinemotor"
 
 #: data/base/messages/resmessages3.rmsg:785
 #: data/base/messages/resmessages3.rmsg:798
@@ -4021,7 +4021,7 @@ msgstr "Nieuwe energiezuinige aandrijving"
 #: data/mp/messages/resmessages3.rmsg:786
 #: data/mp/messages/resmessages3.rmsg:799
 msgid "Body Points and Speed Increased"
-msgstr "Carrosseriepunten en snelheid verbeterd"
+msgstr "Carrosseriepunten en snelheid verhoogd"
 
 #: data/base/messages/resmessages3.rmsg:787
 #: data/base/messages/resmessages3.rmsg:800
@@ -4099,14 +4099,14 @@ msgstr "Nieuw laserwapen beschikbaar"
 #: data/base/messages/resmessages3.rmsg:941
 #: data/mp/messages/resmessages3.rmsg:941
 msgid "Generates and concentrates bursts of laser energy"
-msgstr "Genereert en concentreert stralen van Laser energie"
+msgstr "Genereert en concentreert stralen van laserenergie"
 
 #: data/base/messages/resmessages3.rmsg:942
 #: data/base/messages/resmessages3.rmsg:955
 #: data/mp/messages/resmessages3.rmsg:942
 #: data/mp/messages/resmessages3.rmsg:955
 msgid "Best Targets: Cyborgs"
-msgstr "Beste Doelen: Cyborgs"
+msgstr "Beste doelen: cyborgs"
 
 #: data/base/messages/resmessages3.rmsg:954
 #: data/mp/messages/resmessages3.rmsg:954
@@ -4129,7 +4129,7 @@ msgstr "Verbetering in laser optiek reduceert lichtverlies"
 
 #: data/base/messages/resmessages3.rmsg:968
 msgid "Increases Laser accuracy"
-msgstr "Verbetert precisie van Laser"
+msgstr "Verhoogt Laser nauwkeurigheid "
 
 #: data/base/messages/resmessages3.rmsg:969
 #: data/base/messages/resmessages3.rmsg:982
@@ -4147,16 +4147,16 @@ msgstr "Verbetering in de dichtheid van de laser emissie"
 
 #: data/base/messages/resmessages3.rmsg:981
 msgid "Increases Laser damage"
-msgstr "Verbetert schade van Laser"
+msgstr "Verhoogt schade van Laser"
 
 #: data/base/messages/resmessages3.rmsg:993
 #: data/mp/messages/resmessages3.rmsg:993
 msgid "Improved Energizer reduces laser recharge time"
-msgstr "Verbeterde Energizer reduceert laser herlaad tijd"
+msgstr "Verbeterde energizer reduceert laser herlaad tijd"
 
 #: data/base/messages/resmessages3.rmsg:994
 msgid "Increases Laser ROF"
-msgstr "Verbetert vuurfrequentie Laser"
+msgstr "Verhoogt Laser vuurfrequentie "
 
 #: data/base/messages/resmessages3.rmsg:1006
 #: data/mp/messages/resmessages3.rmsg:1006
@@ -4183,7 +4183,7 @@ msgstr "Anti-tank raket"
 #: data/base/messages/resmessages3.rmsg:1045
 #: data/mp/messages/resmessages3.rmsg:1045
 msgid "Bunker buster missile"
-msgstr "Bunker Buster Raket"
+msgstr "Bunker Breker Raket"
 
 #: data/base/messages/resmessages3.rmsg:1057
 #: data/base/messages/resmessages3.rmsg:1070
@@ -4196,7 +4196,7 @@ msgstr "Bunker Buster Raket"
 #: data/mp/messages/resmessages3.rmsg:1148
 #: data/mp/messages/resmessages3.rmsg:1161
 msgid "Missile Upgrade"
-msgstr "Raket Upgrade"
+msgstr "Raket verbetering"
 
 #: data/base/messages/resmessages3.rmsg:1058
 #: data/mp/messages/resmessages3.rmsg:1058
@@ -4206,7 +4206,7 @@ msgstr "Computer aan boord voorspelt verplaatsing van doelen"
 #: data/base/messages/resmessages3.rmsg:1059
 #: data/base/messages/resmessages3.rmsg:1072
 msgid "Increases Missile accuracy"
-msgstr "Verbetert de nauwkeurigheid van raketten"
+msgstr "Verhoogt de nauwkeurigheid van raketten"
 
 #: data/base/messages/resmessages3.rmsg:1060
 #: data/base/messages/resmessages3.rmsg:1073
@@ -4224,7 +4224,7 @@ msgstr "Alle raketten automatisch verbeterd"
 #: data/base/messages/resmessages3.rmsg:1071
 #: data/mp/messages/resmessages3.rmsg:1071
 msgid "Missile actively seeks and homes on targets"
-msgstr "Raket zoekt en vliegt op doelen"
+msgstr "Raket zoekt en vliegt op doelen in"
 
 #: data/base/messages/resmessages3.rmsg:1084
 #: data/mp/messages/resmessages3.rmsg:863
@@ -4234,14 +4234,14 @@ msgstr "Lage thermonuclaire kernkop"
 
 #: data/base/messages/resmessages3.rmsg:1085
 msgid "Increases Missile damage"
-msgstr "Vergroot schade van raketten"
+msgstr "Verhoogt schade van raketten"
 
 #: data/base/messages/resmessages3.rmsg:1096
 #: data/base/messages/resmessages3.rmsg:1109
 #: data/mp/messages/resmessages3.rmsg:1096
 #: data/mp/messages/resmessages3.rmsg:1109
 msgid "New SAM Turret Available"
-msgstr "Nieuwe SAM-koepel beschikbaar"
+msgstr "Nieuwe SAM koepel beschikbaar"
 
 #: data/base/messages/resmessages3.rmsg:1097
 #: data/mp/messages/resmessages3.rmsg:1097
@@ -4256,13 +4256,13 @@ msgstr "Land-naar-Lucht Raket"
 #: data/mp/messages/resmessagesall.rmsg:747
 #: data/mp/messages/resmessagesall.rmsg:851
 msgid "Best Targets: Aerial targets only"
-msgstr "Beste Doelen: Alleen Luchtdoelen"
+msgstr "Beste doelen: alleen luchtdoelen"
 
 #: data/base/messages/resmessages3.rmsg:1110
 #: data/mp/messages/resmessages3.rmsg:1110
 #: data/mp/messages/resmessagesall.rmsg:746
 msgid "Heavy surface-to-air missile"
-msgstr "Zwaare grond-naar-lucht raket"
+msgstr "Zware land-naar-lucht raket"
 
 #: data/base/messages/resmessages3.rmsg:1122
 #: data/base/messages/resmessages3.rmsg:1135
@@ -4281,12 +4281,12 @@ msgstr "Hoog explosieve artillerie raket"
 #: data/mp/messages/resmessages3.rmsg:1124
 #: data/mp/messages/resmessages3.rmsg:1137
 msgid "Best Targets: Base structures and cyborgs"
-msgstr "Beste doelen: basis gebouwen en Cyborgs"
+msgstr "Beste doelen: basis gebouwen en cyborgs"
 
 #: data/base/messages/resmessages3.rmsg:1136
 #: data/mp/messages/resmessages3.rmsg:1136
 msgid "High explosive heavy artillery missile"
-msgstr "Hoog explosieve zwaar artillery raket"
+msgstr "Hoog explosieve zware artillerie raket"
 
 #: data/base/messages/resmessages3.rmsg:1149
 #: data/mp/messages/resmessages3.rmsg:1149
@@ -4296,7 +4296,7 @@ msgstr "Raketten detecteren en pinnen vast op doel terwijl ze laden"
 #: data/base/messages/resmessages3.rmsg:1150
 #: data/base/messages/resmessages3.rmsg:1163
 msgid "Increases Missile ROF"
-msgstr "Verhoogt Raket ROF"
+msgstr "Verhoogt Raket vuurfrequentie"
 
 #: data/base/messages/resmessages3.rmsg:1162
 #: data/mp/messages/resmessages3.rmsg:1162
@@ -4315,22 +4315,22 @@ msgstr "Zelf geleidende raket-bekrachtigde granaten"
 #: data/mp/messages/resmessages3.rmsg:1213
 #: data/mp/messages/resmessages3.rmsg:1226
 msgid "New Rail Gun Available"
-msgstr "Nieuwe Rail Gun beschikbaar"
+msgstr "Nieuwe Railgun beschikbaar"
 
 #: data/base/messages/resmessages3.rmsg:1201
 #: data/mp/messages/resmessages3.rmsg:1201
 msgid "Rapid fire rail gun firing needle darts"
-msgstr "Snelvurende Rail Gun vuurt naalden"
+msgstr "Snelvurende Railgun vuurt naalden"
 
 #: data/base/messages/resmessages3.rmsg:1214
 #: data/mp/messages/resmessages3.rmsg:1214
 msgid "Rail gun firing armor-piercing darts"
-msgstr "Rail Gun vuurt pantserdoorborende darts"
+msgstr "Railgun vuurt pantserdoorborende darts"
 
 #: data/base/messages/resmessages3.rmsg:1227
 #: data/mp/messages/resmessages3.rmsg:1227
 msgid "Heavy rail gun firing large kinetic energy darts"
-msgstr "Zware Rail Gun vuurt grote kinetische energie darts"
+msgstr "Zware Railgun vuurt grote kinetische energie darts"
 
 #: data/base/messages/resmessages3.rmsg:1239
 #: data/base/messages/resmessages3.rmsg:1252
@@ -4339,7 +4339,7 @@ msgstr "Zware Rail Gun vuurt grote kinetische energie darts"
 #: data/mp/messages/resmessages3.rmsg:1252
 #: data/mp/messages/resmessages3.rmsg:1265
 msgid "Rail Gun Upgrade"
-msgstr "Rail Gun verbetering"
+msgstr "Railgun verbetering"
 
 #: data/base/messages/resmessages3.rmsg:1240
 #: data/mp/messages/resmessages3.rmsg:1240
@@ -4348,7 +4348,7 @@ msgstr "Computer voorspelt en compenseert voor verplaatsing van doel"
 
 #: data/base/messages/resmessages3.rmsg:1241
 msgid "Increases Rail Gun accuracy"
-msgstr "Verbetert precisie van Rail Gun"
+msgstr "Verhoogt Railgun nauwkeurigheid "
 
 #: data/base/messages/resmessages3.rmsg:1242
 #: data/base/messages/resmessages3.rmsg:1255
@@ -4357,7 +4357,7 @@ msgstr "Verbetert precisie van Rail Gun"
 #: data/mp/messages/resmessages3.rmsg:1255
 #: data/mp/messages/resmessages3.rmsg:1268
 msgid "All rail guns upgraded automatically"
-msgstr "Alle Rail Guns automatisch verbetert"
+msgstr "Alle Railguns automatisch verbetert"
 
 #: data/base/messages/resmessages3.rmsg:1253
 #: data/mp/messages/resmessages3.rmsg:1253
@@ -4366,16 +4366,16 @@ msgstr "Verbeterde pantserdoorborende darts"
 
 #: data/base/messages/resmessages3.rmsg:1254
 msgid "Increases Rail Gun damage"
-msgstr "Verbetert schade van Rail Gun"
+msgstr "Verhoogt schade van Railgun"
 
 #: data/base/messages/resmessages3.rmsg:1266
 #: data/mp/messages/resmessages3.rmsg:1266
 msgid "Increased gauss output speeds up reload time"
-msgstr "Verhoogde Gauss uitlaatsnelheid verbetert herlaad tijd"
+msgstr "Verhoogde Gauss uitlaatsnelheid verbetert herlaadtijd"
 
 #: data/base/messages/resmessages3.rmsg:1267
 msgid "Increases Rail Gun ROF"
-msgstr "Verbetert vuurfrequentie van Rail Gun"
+msgstr "Verhoogt vuurfrequentie van Railgun"
 
 #: data/base/messages/resmessagesall.rmsg:4
 #: data/mp/messages/resmessagesall.rmsg:4
@@ -4420,7 +4420,7 @@ msgstr "Wijs een VTOL toe door de Herbewapeningplatform te selcteren als doel"
 #: data/base/messages/resmessagesall.rmsg:33
 #: data/mp/messages/resmessagesall.rmsg:33
 msgid "The VTOL returns to the selected pad for rearming"
-msgstr "De VTOL keert terug naar het geselecteerd platform voor herbewapening"
+msgstr "De VTOL keert terug naar het geselecteerde platform voor herbewapening"
 
 #: data/base/messages/resmessagesall.rmsg:44
 #: data/mp/messages/resmessagesall.rmsg:44
@@ -4458,7 +4458,7 @@ msgstr "Verbeterd sensorbereik"
 #: data/base/messages/resmessagesall.rmsg:58
 #: data/mp/messages/resmessagesall.rmsg:58
 msgid "Makes excellent scout vehicle"
-msgstr "Maakt excellent verkenningsvoertuig"
+msgstr "Uitstekend verkenningsvoertuig"
 
 #: data/base/messages/resmessagesall.rmsg:70
 #: data/mp/messages/resmessagesall.rmsg:70
@@ -4471,7 +4471,7 @@ msgstr "Uitgebreid sensorbereik"
 #: data/mp/messages/resmessagesall.rmsg:513
 #: data/mp/messages/resmessagesall.rmsg:708
 msgid "Keeps map areas under constant surveillance"
-msgstr "Houd map gedeeltes onder constante controle"
+msgstr "Houdt map gedeeltes onder constante controle"
 
 #: data/base/messages/resmessagesall.rmsg:82
 #: data/mp/messages/resmessagesall.rmsg:82
@@ -4499,7 +4499,7 @@ msgstr "Alle sensoren automatisch verbeterd"
 #: data/base/messages/resmessagesall.rmsg:96
 #: data/mp/messages/resmessagesall.rmsg:122
 msgid "Counter-battery tower detects enemy indirect fire batteries"
-msgstr "Contra-batterij toren detecteert vijandelijk indirect lanceer-batterij"
+msgstr "Contra-batterij toren detecteert vijandelijk indirecte lanceer-batterij"
 
 #: data/base/messages/resmessagesall.rmsg:108
 #: data/mp/messages/resmessagesall.rmsg:147
@@ -4559,7 +4559,7 @@ msgstr "Objectief: Zoek en herstel neurale synaps technologie"
 #: data/base/messages/strings/cam1strings.txt:4
 #: data/base/sequenceaudio/cam1/c001.txa:13
 msgid "Establish a base, then search for a Pre-Collapse structure."
-msgstr "Bouw een basis, Zoek dan voor de Pre-Collapse Gebouw."
+msgstr "Bouw een basis,  zoek dan voor een gebouw van voor de ineenstorting."
 
 #: data/base/messages/strings/cam1strings.txt:5
 #: data/base/sequenceaudio/cam1/c001.txa:14
@@ -4572,7 +4572,7 @@ msgstr "ALPHA BASIS MISSIE: Scavenger Raiders"
 
 #: data/base/messages/strings/cam1strings.txt:8
 msgid "Scavenger raiders are approaching our base."
-msgstr "Scavenger raider naderen onze basis."
+msgstr "Scavenger raiders naderen onze basis."
 
 #: data/base/messages/strings/cam1strings.txt:9
 msgid "Defend the base then destroy the Scavenger camps."
@@ -4581,11 +4581,11 @@ msgstr "Verdedig de basis vernietig daarna de Scavenger kampen."
 #: data/base/messages/strings/cam1strings.txt:11
 #: data/base/messages/strings/cam1strings.txt:65
 msgid "ALPHA BASE MISSION: Power Surge Detected"
-msgstr "ALPHA BASIS MISSIE: Energie golf gedetecteerd"
+msgstr "ALPHA BASIS MISSIE: Energiegolf gedetecteerd"
 
 #: data/base/messages/strings/cam1strings.txt:12
 msgid "A power surge has been detected to the south of our position."
-msgstr "Een energie golf is gedetecteerd in het zuiden van onze positie."
+msgstr "Een energiegolf is gedetecteerd in het zuiden van onze positie."
 
 #: data/base/messages/strings/cam1strings.txt:13
 msgid "Investigate and secure the area."
@@ -4597,15 +4597,15 @@ msgstr "ALPHA BASIS MISSIE: Het Nieuwe Paradigm"
 
 #: data/base/messages/strings/cam1strings.txt:16
 msgid "The New Paradigm control superior weapons technology."
-msgstr "Het Nieuwe Paradigm Heeft superieure wapens technologie."
+msgstr "Het Nieuwe Paradigm heeft superieure wapen technologie."
 
 #: data/base/messages/strings/cam1strings.txt:17
 msgid "They may have the synaptic link technology, it's vital we retrieve it."
-msgstr "Hun kunnen de synaptische link technologie hebben, het is vitaal dat we deze krijgen."
+msgstr "Hun kunnen de synaptische Link technologie hebben, het is vitaal dat we deze krijgen."
 
 #: data/base/messages/strings/cam1strings.txt:19
 msgid "TRANSPORT MISSION: Locate and Recover Artifacts"
-msgstr "TRANSPORT MISSIE: Zoek en Herstel Artifacts"
+msgstr "TRANSPORT MISSIE: Zoek en herstel artefacten"
 
 #: data/base/messages/strings/cam1strings.txt:20
 msgid "Load an attack force into the transport."
@@ -4613,11 +4613,11 @@ msgstr "Laad een aanvals kracht in het transport."
 
 #: data/base/messages/strings/cam1strings.txt:21
 msgid "On landing, explore the ruins and recover any artifacts."
-msgstr "Bij landing, Doorzoek de ruïnes en herstel alle artifacts."
+msgstr "Bij landing, doorzoek de ruïnes en herstel alle artefacten"
 
 #: data/base/messages/strings/cam1strings.txt:23
 msgid "TRANSPORT MISSION: Investigate Research Center"
-msgstr "TRANSPORT MISSIE: Onderzoek Onderzoeks Centrum"
+msgstr "TRANSPORT MISSIE: Onderzoek onderzoekscentrum"
 
 #: data/base/messages/strings/cam1strings.txt:24
 msgid "Investigate the area and recover any artifacts present."
@@ -4630,7 +4630,7 @@ msgstr "Versterkingen zijn beschikbaar"
 
 #: data/base/messages/strings/cam1strings.txt:27
 msgid "TRANSPORT MISSION: Encoded Signals Detected"
-msgstr "TRANSPORT MISSIE: Gecodeerde Signalen Gedetecteerd"
+msgstr "TRANSPORT MISSIE: Gecodeerde signalen gedetecteerd"
 
 #: data/base/messages/strings/cam1strings.txt:28
 msgid "Take a scout force to investigate these signals."
@@ -4638,15 +4638,15 @@ msgstr "Neem een verkenningsteam en investigeer deze signalen."
 
 #: data/base/messages/strings/cam1strings.txt:29
 msgid "Use your trucks to build defenses at your LZ."
-msgstr "Gebruik je vrachtwagens om verdedigingen op te trekken bij je LZ."
+msgstr "Gebruik je vrachtwagens om verdedigingen op te zetten bij je LZ."
 
 #: data/base/messages/strings/cam1strings.txt:31
 msgid "TRANSPORT MISSION: Enemy Transmissions Detected"
-msgstr "TRANSPORT MISSIE: Vijandelijke Transmissie's Gedecteerd"
+msgstr "TRANSPORT MISSIE: Vijandelijke transmissie's gedecteerd"
 
 #: data/base/messages/strings/cam1strings.txt:32
 msgid "Scout the designated area for enemy research facilities."
-msgstr "Verken het aangewezen gebied voor vijandelijke Onderzoeks Centra"
+msgstr "Verken het aangewezen gebied voor vijandelijke onderzoeks centra."
 
 #: data/base/messages/strings/cam1strings.txt:33
 msgid "Proceed to LZ#2. Do not engage the enemy at this time."
@@ -4654,19 +4654,19 @@ msgstr "Ga door na LZ#2. Ga niet in gevecht met de vijand op dit moment."
 
 #: data/base/messages/strings/cam1strings.txt:35
 msgid "TRANSPORT MISSION: Synaptic Link Location"
-msgstr "TRANSPORT MISSIE: Synaptische Link Locatie"
+msgstr "TRANSPORT MISSIE: Synaptische Link locatie"
 
 #: data/base/messages/strings/cam1strings.txt:36
 msgid "The New Paradigm are analyzing synaptic link technology at this location."
-msgstr "De New Paradigm is op deze locatie een synaptische link technologie aan het onderzoeken."
+msgstr "De New Paradigm is op deze locatie een synaptische Link technologie aan het onderzoeken."
 
 #: data/base/messages/strings/cam1strings.txt:37
 msgid "Assemble an attack team and recover the synaptic link technology."
-msgstr "Stel een aanvalsteam samen en haal de synaptische link technologie."
+msgstr "Stel een aanvalsteam samen en haal de synaptische Link technologie."
 
 #: data/base/messages/strings/cam1strings.txt:39
 msgid "TRANSPORT MISSION: New Objectives"
-msgstr "TRASNPORT MISSIE: Nieuwe Doelen"
+msgstr "TRASNPORT MISSIE: Nieuwe doelen"
 
 #: data/base/messages/strings/cam1strings.txt:40
 msgid "New Paradigm are searching for artifacts in this vicinity."
@@ -4678,7 +4678,7 @@ msgstr "Onderschep hen. Laat ze niet ontsnappen uit dit gebied."
 
 #: data/base/messages/strings/cam1strings.txt:43
 msgid "TRANSPORT MISSION: Enemy Base Under Construction"
-msgstr "TRANSPORT MISSIE: Vijandelijke Basis In Constructie"
+msgstr "TRANSPORT MISSIE: Vijandelijke basis In constructie"
 
 #: data/base/messages/strings/cam1strings.txt:44
 msgid "Enemy forces are establishing a forward base at this location."
@@ -4690,7 +4690,7 @@ msgstr "Vernietig de basis en stel het gebied veilig."
 
 #: data/base/messages/strings/cam1strings.txt:48
 msgid "ALPHA BASE MISSION: Establish a Forward Base"
-msgstr "ALFA BASIS MISSIE: Bouw Een Vooruitgeschoven Basis"
+msgstr "ALFA BASIS MISSIE: Bouw een vooruitgeschoven basis"
 
 #: data/base/messages/strings/cam1strings.txt:49
 msgid "Establish a forward base on the plateau."
@@ -4702,7 +4702,7 @@ msgstr "Bouw verdedigingswerken."
 
 #: data/base/messages/strings/cam1strings.txt:52
 msgid "ALPHA BASE MISSION: Counter Attack"
-msgstr "ALFA BASIS MISSIE: Contra Aanval"
+msgstr "ALFA BASIS MISSIE: Tegenaanval"
 
 #: data/base/messages/strings/cam1strings.txt:53
 msgid "Enemy forces are approaching from the east and north."
@@ -4710,15 +4710,15 @@ msgstr "Vijandelijke krachten naderen vanuit het oosten en noorden."
 
 #: data/base/messages/strings/cam1strings.txt:54
 msgid "Hold the bases and repulse any attacks."
-msgstr "Houd de basis en dring de aanvallen terug."
+msgstr "Houd de basis en sla de aanvallen af."
 
 #: data/base/messages/strings/cam1strings.txt:56
 msgid "ALPHA BASE MISSION: Incoming Transmission"
-msgstr "ALFA BASIS MISSIE: Inkomende Transmissie"
+msgstr "ALFA BASIS MISSIE: Inkomende transmissie"
 
 #: data/base/messages/strings/cam1strings.txt:57
 msgid "We are detecting enemy forces at these locations."
-msgstr "We vijandelijke krachten op deze locaties."
+msgstr "Wij detecteren vijandelijke krachten op deze locaties."
 
 #: data/base/messages/strings/cam1strings.txt:58
 msgid "This is our chance to defeat the New Paradigm and destroy their base."
@@ -4736,11 +4736,11 @@ msgstr " "
 
 #: data/base/messages/strings/cam1strings.txt:66
 msgid "Congratulations Commander."
-msgstr "Gefeliciteerd Comander."
+msgstr "Gefeliciteerd Commandant."
 
 #: data/base/messages/strings/cam1strings.txt:67
 msgid "We now have a further task for you."
-msgstr "We hebben nu een andere taak voor jou."
+msgstr "Wij hebben nu een andere taak voor jou."
 
 #: data/base/messages/strings/cam1strings.txt:70
 msgid "ALPHA BASE MISSION: Locate and Recover Artifacts"
@@ -4776,11 +4776,11 @@ msgstr "Niks te melden."
 
 #: data/base/messages/strings/cam1strings.txt:85
 msgid "We've discovered no artifacts and encountered no hostiles."
-msgstr "We hebben geen artefacten gevonden en geen vijanden tegengekomen."
+msgstr "We hebben geen artefacten gevonden en zijn geen vijanden tegengekomen."
 
 #: data/base/messages/strings/cam1strings.txt:88
 msgid "ALPHA BASE INTELLIGENCE REPORT: Enemy Attack"
-msgstr "ALFA BASIS INTELIGENTIE RAPORT: Vijandelijke Aanvallen"
+msgstr "ALFA BASIS INTELIGENTIE RAPORT: Vijandelijke aanvallen"
 
 #: data/base/messages/strings/cam1strings.txt:89
 msgid "We are detecting an enemy attack force at this location."
@@ -4792,7 +4792,7 @@ msgstr "PRIMAIR DOEL"
 
 #: data/base/messages/strings/cam1strings.txt:94
 msgid "This structure is your primary objective."
-msgstr "Dit gebouw is je primair doel."
+msgstr "Dit gebouw is je primaire doel."
 
 #: data/base/messages/strings/cam1strings.txt:95
 msgid "Search for and recover any artifacts here."
@@ -4824,11 +4824,11 @@ msgstr "Suplementeel"
 
 #: data/base/messages/strings/cam1strings.txt:109
 msgid "The synaptic link technology was at this location but was removed."
-msgstr "De synaptische link technologie was op deze locatie maar is weggehaald."
+msgstr "De synaptische Link technologie was op deze locatie maar is weggehaald."
 
 #: data/base/messages/strings/cam1strings.txt:111
 msgid "Establish a forward base then continue the search for the synaptic link."
-msgstr "Bouw een vooruitgeschoven basis waarna je verdergaat met de zoektocht voor de synaptische link."
+msgstr "Bouw een vooruitgeschoven basis waarna je verdergaat met de zoektocht voor de synaptische Link ."
 
 #: data/base/messages/strings/cam1strings.txt:114
 msgid "INCOMING TRANSMISSION"
@@ -4836,7 +4836,7 @@ msgstr "INKOMENDE TRANSMISSIE"
 
 #: data/base/messages/strings/cam1strings.txt:115
 msgid "Decoding in progress....."
-msgstr "Decoderen bezig....."
+msgstr "Bezig met decoderen....."
 
 #: data/base/messages/strings/cam1strings.txt:119
 msgid "Commander."
@@ -4860,7 +4860,7 @@ msgstr "Vernietig de basis en haal enige artefacten aanwezig op."
 
 #: data/base/messages/strings/cam1strings.txt:128
 msgid "The synaptic link technology has been recovered!"
-msgstr "De synaptische link technologie is opgehaald!"
+msgstr "De synaptische Link technologie is opgehaald!"
 
 #: data/base/messages/strings/cam1strings.txt:129
 msgid "Initial research confirms it will be of great benefit to the Project."
@@ -4884,7 +4884,7 @@ msgstr "De oorsprong is uit het oosten."
 
 #: data/base/messages/strings/cam1strings.txt:140
 msgid "POWER MODULE ARTIFACT"
-msgstr "Energie module Artifact"
+msgstr "Energie module Artefact"
 
 #: data/base/messages/strings/cam1strings.txt:141
 msgid "Research the power module artifact."
@@ -4916,18 +4916,18 @@ msgstr "We hebben twee conversaties met het opgenomen, uitpakken volgt..."
 
 #: data/base/messages/strings/cam1strings.txt:155
 msgid "We'll keep you informed of further developments"
-msgstr "We houden je geinformeerd van verdere ontwikkelingen"
+msgstr "We houden je geinformeerd van verdere ontwikkelingen."
 
 #: data/base/messages/strings/cam1strings.txt:157
 #: data/base/sequenceaudio/cam1/c001end.txt:7
 msgid "Commander you are to assist Team Beta"
-msgstr "Comander je gaat Team Beta assisteren"
+msgstr "Commandant je gaat Team Beta assisteren"
 
 #: data/base/messages/strings/cam2strings.txt:4
 #: data/base/sequenceaudio/cam2/c002.txa:8
 #: data/base/sequenceaudio/cam2/c002.txa:14
 msgid "BETA BASE MISSION: Eastern Sector"
-msgstr "BETA BASIS MISSIE: Oost Sector"
+msgstr "BETA BASIS MISSIE: Oostelijke sector"
 
 #: data/base/messages/strings/cam2strings.txt:5
 #: data/base/sequenceaudio/cam2/c002.txa:9
@@ -4941,13 +4941,13 @@ msgstr "Je moet het verdedigen en het behouden."
 #: data/base/messages/strings/cam2strings.txt:9
 #: data/base/sequenceaudio/cam2/c002.txa:16
 msgid "BETA BASE MISSION: Defend and Fortify"
-msgstr "BETA BASIS MISSIE: Verdedig en Versterk"
+msgstr "BETA BASIS MISSIE: Verdedig en versterk"
 
 #: data/base/messages/strings/cam2strings.txt:10
 #: data/base/messages/strings/cam2strings.txt:33
 #: data/base/sequenceaudio/cam2/c002.txa:17
 msgid "Be sure to fortify the perimeter and establish anti-aircraft defenses."
-msgstr "Versterk de afzetting en bouw Anti-Vliegtuig verdedigingswerken."
+msgstr "Versterk de afzetting en bouw AA verdedigingswerken."
 
 #: data/base/messages/strings/cam2strings.txt:11
 #: data/base/messages/strings/cam2strings.txt:34
@@ -4991,15 +4991,15 @@ msgstr "Team Beta zoekt voor de Verticale Opstijg en Land (VTOL) technologie."
 
 #: data/base/messages/strings/cam2strings.txt:29
 msgid "It's believed to be at a pre-Collapse airbase in this area."
-msgstr "Er wordt gedacht dat er een luchtbasis van voor de 'Collapse' in dit gebied."
+msgstr "Er wordt gedacht dat het in een luchtbasis is van voor de 'Collapse' in dit gebied."
 
 #: data/base/messages/strings/cam2strings.txt:32
 msgid "Team Beta under heavy attack"
-msgstr "Team Beta is onder zwaar vuur"
+msgstr "Team Beta is onder zwaar vuur."
 
 #: data/base/messages/strings/cam2strings.txt:37
 msgid "BETA BASE MISSION: Hold at all costs"
-msgstr "BETA BASIS MISSIE: Behoud ondanks alle kosten"
+msgstr "BETA BASIS MISSIE: Behoud ondanks alle kosten."
 
 #: data/base/messages/strings/cam2strings.txt:38
 msgid "We are detecting coded bitstream signals from the Collective."
@@ -5007,7 +5007,7 @@ msgstr "We detecteren gecodeerde bitstroom signalen van de Collective."
 
 #: data/base/messages/strings/cam2strings.txt:42
 msgid "BETA BASE MISSION: Hold At All Costs"
-msgstr "BETA BASIS MISSIE: Behoud ondanks alle kosten"
+msgstr "BETA BASIS MISSIE: Behoud ondanks alle kosten."
 
 #: data/base/messages/strings/cam2strings.txt:43
 msgid "We are detecting ground and aerial forces from the north."
@@ -5069,7 +5069,7 @@ msgstr "Vijandelijke VTOL's zullen waarschijnlijk op korte afstand meevliegen."
 #: data/base/messages/strings/cam2strings.txt:68
 #: data/base/messages/strings/cam2strings.txt:72
 msgid "TRANSPORT MISSION: Rescue civilians from Containment Camp"
-msgstr "TRANSPORT MISSIE: Red de burgers van de Opsluitingskampen"
+msgstr "TRANSPORT MISSIE: Red de burgers van de opsluitingskampen"
 
 #: data/base/messages/strings/cam2strings.txt:69
 msgid "The Collective are processing and exterminating civilians at this base."
@@ -5077,7 +5077,7 @@ msgstr "De Collective is burgers aan het vermoorden op deze basis."
 
 #: data/base/messages/strings/cam2strings.txt:73
 msgid "You are to rescue the civilians."
-msgstr "Je moet de mensen redden!"
+msgstr "Je moet de burgers redden!"
 
 #: data/base/messages/strings/cam2strings.txt:74
 msgid "Then destroy the camp."
@@ -5097,7 +5097,7 @@ msgstr "BETA BASIS MISSIE: Vernietig vijandelijke luchtbasis en haal VTOL's op"
 
 #: data/base/messages/strings/cam2strings.txt:82
 msgid "The location of the enemy airbase is here; this is your primary objective."
-msgstr "De locatie van de vijandelijke luchtbasis is hier; dit is je primair doel."
+msgstr "De locatie van de vijandelijke luchtbasis is hier; dit is je primaire doel."
 
 #: data/base/messages/strings/cam2strings.txt:83
 msgid "Eradicate all Collective forces and recover all artifacts."
@@ -5151,7 +5151,7 @@ msgstr "BETA BASIS MISSIE: Neem NASDA Central over."
 
 #: data/base/messages/strings/cam2strings.txt:107
 msgid "Capture NASDA central before NEXUS and the Collective can use it."
-msgstr "Neem NASDA central over voordat NEXUS en de Collective het kan gebruiken."
+msgstr "Neem NASDA central over voordat NEXUS en de Collective het kunnen gebruiken."
 
 #: data/base/messages/strings/cam2strings.txt:111
 #: data/base/messages/strings/cam2strings.txt:116
@@ -5198,7 +5198,7 @@ msgstr "Vlieg naar de LZ, ga dan overland om de SAM sites te vernietigen."
 #: data/base/messages/strings/cam2strings.txt:131
 #: data/base/messages/strings/cam2strings.txt:136
 msgid "TRANSPORT MISSION: Establish Safe Haven"
-msgstr "TRANSPORT MISSIE: Bouw een Veilige Basis"
+msgstr "TRANSPORT MISSIE: Bouw een veilige basis"
 
 #: data/base/messages/strings/cam2strings.txt:132
 msgid "We can confirm a missile is heading for Alpha Base."
@@ -5206,7 +5206,7 @@ msgstr "We bevestigen dat er een raket op weg is naar de Alfa Basis."
 
 #: data/base/messages/strings/cam2strings.txt:133
 msgid "You are to establish a safe haven for evacuation of Beta Base."
-msgstr "Je zult een veilige plek moeten bouwen voor de evacuatie van Beta Basis."
+msgstr "Je zult een veilige plek moeten bouwen voor de evacuatie van Beta basis."
 
 #: data/base/messages/strings/cam2strings.txt:137
 msgid "Eradicate any enemy and secure the area."
@@ -5214,7 +5214,7 @@ msgstr "Vernietig de vijand en stel het gebied veilig."
 
 #: data/base/messages/strings/cam2strings.txt:138
 msgid "Once a safe haven is established, return to the LZ for further orders."
-msgstr "Zogauw een veilige plek is gebouwd, ga dan terug naar LZ voor verdere orders."
+msgstr "Zo gauw een veilige plek is gebouwd, ga dan terug naar LZ voor verdere orders."
 
 #: data/base/messages/strings/cam2strings.txt:141
 #: data/base/messages/strings/cam2strings.txt:146
@@ -5224,7 +5224,7 @@ msgstr "BETA BASIS MISSIE: Evacueren"
 
 #: data/base/messages/strings/cam2strings.txt:142
 msgid "Commander, we have grave news."
-msgstr "Commadant, wij hebben graf nieuws."
+msgstr "Commadant, wij hebben slecht nieuws."
 
 #: data/base/messages/strings/cam2strings.txt:143
 msgid "Alpha base has been destroyed by nuclear missile attack."
@@ -5251,21 +5251,21 @@ msgstr "Success, commandant."
 #: data/base/sequenceaudio/cam3/c003.txa:4
 #: data/base/sequenceaudio/cam3/c003.txa:14
 msgid "TRANSPORT MISSION: Northern Sector"
-msgstr "TRANSPORT MISSIE: Noord Sector"
+msgstr "TRANSPORT MISSIE: Noordelijke sector"
 
 #: data/base/messages/strings/cam3strings.txt:5
 #: data/base/sequenceaudio/cam3/c003.txa:5
 msgid "Congratulations on your successful evacuation of Beta Base."
-msgstr "Gefeliciteerd met uw succes van het evacueren van de Beta Basis."
+msgstr "Gefeliciteerd met je succes van het evacueren van de Beta Basis."
 
 #: data/base/messages/strings/cam3strings.txt:6
 #: data/base/sequenceaudio/cam3/c003.txa:6
 msgid "NEXUS has gained access to nuclear weapons and is determined to destroy the Project."
-msgstr "NEXUS heeft toegang tot nuclaire wapens en is beslist om het project te vernietigen."
+msgstr "NEXUS heeft toegang tot nuclaire wapens en heeft beslist om het project te vernietigen."
 
 #: data/base/messages/strings/cam3strings.txt:9
 msgid "Take your forces to the Northern Sector"
-msgstr "Neem uw krachten naar de noord sector."
+msgstr "Neem je krachten naar de noordelijke sector."
 
 #: data/base/messages/strings/cam3strings.txt:10
 #: data/base/sequenceaudio/cam3/c003.txa:15
@@ -5275,7 +5275,7 @@ msgstr "Eenmaal in de bergen stel je de LZ veilig. Ga dan een vooruitgeschoven b
 #: data/base/messages/strings/cam3strings.txt:11
 #: data/base/sequenceaudio/cam3/c003.txa:16
 msgid "Team Gamma will contact you there."
-msgstr "Team Gamma neemt contact met u op zodra u daar bent."
+msgstr "Team Gamma neemt contact met je op zodra je daar bent."
 
 #: data/base/messages/strings/cam3strings.txt:14
 msgid "TRANSPORT MISSION: Establish A Forward Base"
@@ -5284,7 +5284,7 @@ msgstr "TRANSPORT MISSIE: Bouw een vooruitgeschoven basis"
 #: data/base/messages/strings/cam3strings.txt:15
 #: data/base/sequenceaudio/cam3/c003.txt:7
 msgid "Commander, the success of the Project lies with you."
-msgstr "Commadant, het succes van het project ligt in uw handen."
+msgstr "Commadant, het succes van het project ligt in je handen."
 
 #: data/base/messages/strings/cam3strings.txt:16
 msgid "Secure an LZ, then establish a forward base."
@@ -5293,7 +5293,7 @@ msgstr "Stel de LZ veilig, bouw daarna een vooruitgeschoven basis."
 #: data/base/messages/strings/cam3strings.txt:19
 #: data/base/messages/strings/cam3strings.txt:28
 msgid "TRANSPORT MISSION: Missile Launch Site Coordinates"
-msgstr "TRANSPORT MISSIE: Raket Laceer Platform Coordinaten"
+msgstr "TRANSPORT MISSIE: Raket laceer platform coördinaten"
 
 #: data/base/messages/strings/cam3strings.txt:20
 msgid "We have located the site of the missile launches."
@@ -5305,13 +5305,13 @@ msgstr "Er waren een of meer raketten op deze NASDA site."
 
 #: data/base/messages/strings/cam3strings.txt:24
 msgid "We are transmitting coordinates of an LZ near the silos."
-msgstr "We sturen de coordinaten van een LZ bij de silo's."
+msgstr "We sturen de coördinaten van een LZ bij de silo's."
 
 #: data/base/messages/strings/cam3strings.txt:25
 #: data/base/messages/strings/cam3strings.txt:61
 #: data/base/sequenceaudio/cam3/cam32pl2.txt:1
 msgid "Coordinate Download Completed."
-msgstr "Downloaden coordinaten compleet."
+msgstr "Downloaden van de coördinaten voltooid."
 
 #: data/base/messages/strings/cam3strings.txt:29
 msgid "Secure your LZ, then head overland to destroy the missile silo."
@@ -5332,7 +5332,7 @@ msgstr "Lucht-lift door transport is niet mogelijk. Je zult overland moeten gaan
 
 #: data/base/messages/strings/cam3strings.txt:39
 msgid "The mountain range to the east should shield you from the blast."
-msgstr "Het berg bereik in het oosten zou je moeten beschermen tegen de explosie."
+msgstr "De bergen in het oosten zouden je moeten beschermen tegen de explosie."
 
 #: data/base/messages/strings/cam3strings.txt:40
 msgid "The valley is your only chance of escape."
@@ -5340,11 +5340,11 @@ msgstr "De vallei is je enige kans om te onstnappen."
 
 #: data/base/messages/strings/cam3strings.txt:43
 msgid "AWAY TEAM UPDATE"
-msgstr "WEG TEAM UPDATE"
+msgstr "AWAY TEAM UPDATE"
 
 #: data/base/messages/strings/cam3strings.txt:44
 msgid "All communication with the away team was lost after the nuclear explosions."
-msgstr "Alle communicatie met het weg team is verloren naar de nuclaire explosie"
+msgstr "Alle communicatie met het andere team is verloren na de nuclaire explosie."
 
 #: data/base/messages/strings/cam3strings.txt:45
 msgid "Their last transmission indicated they were heading back to base."
@@ -5360,7 +5360,7 @@ msgstr "Je gaat Team Gamma assisteren."
 
 #: data/base/messages/strings/cam3strings.txt:50
 msgid "On reaching Gamma Base, help secure the area from further NEXUS attacks."
-msgstr "Eenmaal bij Gamma Basis, beveilig het gebied tegen verdere NEXUS aanvallen"
+msgstr "Eenmaal bij Gamma Basis, beveilig het gebied tegen verdere NEXUS aanvallen."
 
 #: data/base/messages/strings/cam3strings.txt:53
 msgid "NEXUS DEFEATED"
@@ -5384,7 +5384,7 @@ msgstr "TRANSPORT MISSIE: Team Alfa Gedecteerd"
 
 #: data/base/messages/strings/cam3strings.txt:65
 msgid "Take a scout force to these coordinates and evaluate the situation."
-msgstr "Neem een verkenner naar deze coordinaten en bekijk de situatie."
+msgstr "Neem een verkenner naar deze coördinaten en bekijk de situatie."
 
 #: data/base/messages/strings/cam3strings.txt:66
 msgid "Determine whether they are Team Alpha. If so, rescue and escort them back to the LZ."
@@ -5400,11 +5400,11 @@ msgstr "NOORDELIJKE SECTOR MISSIE: Team Alfa Ondervraging"
 
 #: data/base/messages/strings/cam3strings.txt:72
 msgid "Team Alpha power transfer in progress."
-msgstr "Team Alfa power overslag bezig."
+msgstr "Team Alfa energie overslag bezig."
 
 #: data/base/messages/strings/cam3strings.txt:75
 msgid "Commander, after you left the Western Sector we recovered this artifact."
-msgstr "Commander, nadat je de Westelijke Sector heb verlaten vonden we dit artefact."
+msgstr "Commandant, nadat je de Westelijke Sector hebt verlaten vonden we dit artefact."
 
 #: data/base/messages/strings/cam3strings.txt:76
 msgid "The benefits from researching it could be vast."
@@ -5412,7 +5412,7 @@ msgstr "De voordelen om dit te onderzoeken zijn enorm."
 
 #: data/base/messages/strings/cam3strings.txt:79
 msgid "Enemy forces are ....... from these coordinates."
-msgstr "Vijandelijke krachten zijn ....... van deze coordinaten."
+msgstr "Vijandelijke krachten zijn ....... van deze coördinaten."
 
 #: data/base/messages/strings/cam3strings.txt:80
 msgid "Defend the base and ........ the ......."
@@ -5428,7 +5428,7 @@ msgstr "TRANSPORT MISSIE: Overval de NEXUS krachten"
 
 #: data/base/messages/strings/cam3strings.txt:85
 msgid "Commander, your decisive actions halted the spread of NEXUS."
-msgstr "Commander, je besluitvaardige acties hebben de verspreiding van NEXUS gestopt."
+msgstr "Commandant, je besluitvaardige acties hebben de verspreiding van NEXUS gestopt."
 
 #: data/base/messages/strings/cam3strings.txt:86
 msgid "Before NEXUS was expelled, we intercepted this message - Decoding completed."
@@ -5436,7 +5436,7 @@ msgstr "Voordat NEXUS verdreven was, hebben we dit bericht onderschept - Decoder
 
 #: data/base/messages/strings/cam3strings.txt:89
 msgid "A NEXUS task force is heading for these coordinates."
-msgstr "Een NEXUS team is op weg naar deze coordinaten."
+msgstr "Een NEXUS team is op weg naar deze coördinaten."
 
 #: data/base/messages/strings/cam3strings.txt:90
 msgid "You have an opportunity to destroy NEXUS before they get there."
@@ -5484,7 +5484,7 @@ msgstr "Betreed nieuwe zone."
 
 #: data/base/messages/strings/cam3strings.txt:113
 msgid "Incoming Transmission..."
-msgstr "Inkomende Transmissie..."
+msgstr "Inkomende transmissie..."
 
 #: data/base/messages/strings/cam3strings.txt:116
 msgid "Elements of Team Gamma have contacted us."
@@ -5496,11 +5496,11 @@ msgstr "Zij beweren vrij te zijn van NEXUS, en bieden hun basis als platform voo
 
 #: data/base/messages/strings/cam3strings.txt:118
 msgid "Base coordinates download in progress."
-msgstr "Basis coordinaten worden gedownload."
+msgstr "Basis coördinaten worden gedownload."
 
 #: data/base/messages/strings/cam3strings.txt:121
 msgid "NORTHERN SECTOR MISSION: Laser Satellites"
-msgstr "NOORDELIJKE SECTOR MISSIE: Laser Satellieten"
+msgstr "NOORDELIJKE SECTOR MISSIE: Laser satellieten"
 
 #: data/base/messages/strings/cam3strings.txt:122
 msgid "We are detecting strong energy surges from orbit."
@@ -5520,7 +5520,7 @@ msgstr "We hebben gelimiteerde tijd om deze basis te evacueren en naar Gamma Bas
 
 #: data/base/messages/strings/cam3strings.txt:130
 msgid "The laser satellites are not functioning properly, they are misfiring."
-msgstr "De laser satellieten werken volledig, ze missen."
+msgstr "De laser satellieten werken niet optimaal, ze missen."
 
 #: data/base/messages/strings/cam3strings.txt:131
 msgid "They are directing their fire towards this position."
@@ -5532,7 +5532,7 @@ msgstr "We moeten deze basis snel evacueren."
 
 #: data/base/messages/strings/cam3strings.txt:135
 msgid "Team Gamma reports a missile silo at this location."
-msgstr "Team Gamma raporteert een raket silo op deze locatie."
+msgstr "Team Gamma rapporteert een raket silo op deze locatie."
 
 #: data/base/messages/strings/cam3strings.txt:136
 msgid "They believe that the silo contains missiles capable of reaching high orbit."
@@ -5659,7 +5659,7 @@ msgstr "Instructies beginnen:"
 #: data/base/messages/strings/genstrings.txt:7
 #: data/mods/multiplay/ntw/messages/strings/genstrings.txt:7
 msgid "Scavenger Outpost"
-msgstr "Aaseters voorpost"
+msgstr "Aaseter buitenpost"
 
 #: data/base/messages/strings/genstrings.txt:8
 #: data/mods/multiplay/ntw/messages/strings/genstrings.txt:8
@@ -5691,7 +5691,7 @@ msgstr "Missiedoel"
 #: data/base/messages/strings/genstrings.txt:15
 #: data/mods/multiplay/ntw/messages/strings/genstrings.txt:15
 msgid "Pre-Collapse Research Center"
-msgstr "Onderzoekscentrum van voor de Ineenstorting"
+msgstr "Onderzoekscentrum van voor de ineenstorting"
 
 #: data/base/messages/strings/genstrings.txt:17
 #: data/mods/multiplay/ntw/messages/strings/genstrings.txt:17
@@ -6667,7 +6667,7 @@ msgstr "Scourge Raket Toren"
 #: data/mp/messages/strings/names.txt:478
 #: data/mp/messages/strings/names.txt:777
 msgid "Needle Gun Tower"
-msgstr "Needle Gun Toren"
+msgstr "Naaldgeweer Toren"
 
 #: data/base/messages/strings/names.txt:471
 #: data/base/messages/strings/names.txt:743
@@ -6827,7 +6827,7 @@ msgstr "Mortier"
 #: data/base/messages/strings/names.txt:514
 #: data/mp/messages/strings/names.txt:522
 msgid "Mortar Emplacement"
-msgstr "Mortier Emplacement"
+msgstr "Mortier vesting"
 
 #: data/base/messages/strings/names.txt:515
 #: data/mp/messages/strings/names.txt:523
@@ -6837,7 +6837,7 @@ msgstr "Bombard"
 #: data/base/messages/strings/names.txt:516
 #: data/mp/messages/strings/names.txt:524
 msgid "Bombard Emplacement"
-msgstr "Bombard Emplacement"
+msgstr "Bombard vesting"
 
 #: data/base/messages/strings/names.txt:517
 #: data/mp/messages/strings/names.txt:525
@@ -6847,21 +6847,21 @@ msgstr "Pepperpot"
 #: data/base/messages/strings/names.txt:518
 #: data/mp/messages/strings/names.txt:526
 msgid "Pepperpot Emplacement"
-msgstr "Pepperpot Emplacement"
+msgstr "Pepperpot vesting"
 
 #: data/base/messages/strings/names.txt:519
 #: data/base/messages/strings/names.txt:1142
 #: data/mp/messages/strings/names.txt:527
 #: data/mp/messages/strings/names.txt:1159
 msgid "Needle Gun"
-msgstr "Needle Gun"
+msgstr "Naaldgeweer"
 
 #: data/base/messages/strings/names.txt:520
 #: data/base/messages/strings/names.txt:1143
 #: data/mp/messages/strings/names.txt:528
 #: data/mp/messages/strings/names.txt:1160
 msgid "Rail Gun"
-msgstr "Rail Gun"
+msgstr "Railgun"
 
 #: data/base/messages/strings/names.txt:521
 #: data/base/messages/strings/names.txt:1144
@@ -6902,7 +6902,7 @@ msgstr "Tank Sloper"
 #: data/base/messages/strings/names.txt:529
 #: data/mp/messages/strings/names.txt:537
 msgid "VTOL Bunker Buster"
-msgstr "VTOL Bunker Buster"
+msgstr "VTOL Bunkebeuker"
 
 #: data/base/messages/strings/names.txt:530
 #: data/mp/messages/strings/names.txt:538
@@ -6912,7 +6912,7 @@ msgstr "VTOL Mini-Raket"
 #: data/base/messages/strings/names.txt:531
 #: data/mp/messages/strings/names.txt:539
 msgid "VTOL Lancer"
-msgstr "VTOL Lancer"
+msgstr "VTOL Lansier"
 
 #: data/base/messages/strings/names.txt:532
 #: data/mp/messages/strings/names.txt:540
@@ -6968,17 +6968,17 @@ msgstr "VTOL Puls Laser"
 #: data/base/messages/strings/names.txt:565
 #: data/mp/messages/strings/names.txt:574
 msgid "VTOL Machinegun"
-msgstr "VTOL Machinegun"
+msgstr "VTOL Machinegeweer"
 
 #: data/base/messages/strings/names.txt:566
 #: data/mp/messages/strings/names.txt:575
 msgid "VTOL Twin Machinegun"
-msgstr "VTOL Dubbele Machinegun"
+msgstr "VTOL Dubbele Machinegeweer"
 
 #: data/base/messages/strings/names.txt:567
 #: data/mp/messages/strings/names.txt:576
 msgid "VTOL Heavy Machinegun"
-msgstr "VTOL Zwaar Machinegun"
+msgstr "VTOL Zwaar Machinegeweer"
 
 #: data/base/messages/strings/names.txt:568
 #: data/mp/messages/strings/names.txt:577
@@ -6988,12 +6988,12 @@ msgstr "VTOL Assault Gun"
 #: data/base/messages/strings/names.txt:569
 #: data/mp/messages/strings/names.txt:578
 msgid "VTOL Needle Gun"
-msgstr "VTOL Needle Gun"
+msgstr "VTOL Naaldgeweer"
 
 #: data/base/messages/strings/names.txt:570
 #: data/mp/messages/strings/names.txt:579
 msgid "VTOL Rail Gun"
-msgstr "VTOL Rail Gun"
+msgstr "VTOL Railgun"
 
 #: data/base/messages/strings/names.txt:572
 #: data/mp/messages/strings/names.txt:581
@@ -7012,7 +7012,7 @@ msgstr "VTOL Cluster Bommenluik"
 #: data/base/messages/strings/names.txt:576
 #: data/mp/messages/strings/names.txt:585
 msgid "VTOL Heap Bomb Bay"
-msgstr "VTOL Heap Bomb Bay"
+msgstr "VTOL Heap Bommenluik"
 
 #: data/base/messages/strings/names.txt:577
 #: data/mp/messages/strings/names.txt:586
@@ -7241,7 +7241,7 @@ msgstr "Aanvals Schutter Cyborg"
 
 #: data/base/messages/strings/names.txt:679
 msgid "Needle Gunner Cyborg"
-msgstr "Cyborg met Naald Geweer"
+msgstr "Cyborg met Naaldgeweer"
 
 #: data/base/messages/strings/names.txt:680
 msgid "Scourge Cyborg"
@@ -7349,21 +7349,21 @@ msgstr "Plasmabeton Mk3"
 #: data/base/messages/strings/names.txt:717
 #: data/base/messages/strings/names.txt:1373
 msgid "HPV Cannon Emplacement"
-msgstr "HPV Kanon Emplacement"
+msgstr "HPV Kanon vesting"
 
 #: data/base/messages/strings/names.txt:720
 #: data/base/messages/strings/names.txt:1371
 #: data/mp/messages/strings/names.txt:735
 #: data/mp/messages/strings/names.txt:1391
 msgid "Tank Killer Emplacement"
-msgstr "Tank Sloper Emplacement"
+msgstr "Tank Sloper vesting"
 
 #: data/base/messages/strings/names.txt:723
 #: data/base/messages/strings/names.txt:1452
 #: data/mp/messages/strings/names.txt:738
 #: data/mp/messages/strings/names.txt:1472
 msgid "Bombard Pit"
-msgstr "Pothond Pit"
+msgstr "Pothond kuil"
 
 #: data/base/messages/strings/names.txt:728
 msgid "Angel Missile Battery"
@@ -7379,7 +7379,7 @@ msgstr "Aartsengel Raket Batterij"
 #: data/mp/messages/strings/names.txt:745
 #: data/mp/messages/strings/names.txt:1236
 msgid "Mortar Pit"
-msgstr "Mortier Pit"
+msgstr "Mortier kuil"
 
 #: data/base/messages/strings/names.txt:731
 #: data/mp/messages/strings/names.txt:746
@@ -7391,21 +7391,21 @@ msgstr "Mini-Raket Batterij"
 #: data/base/messages/strings/names.txt:1374
 #: data/mp/messages/strings/names.txt:1394
 msgid "Pulse Laser Emplacement"
-msgstr "Puls Laser Emplacement"
+msgstr "Puls Laser vesting"
 
 #: data/base/messages/strings/names.txt:742
 #: data/mp/messages/strings/names.txt:757
 msgid "Rail Gun Emplacement"
-msgstr "Rail Geweer Emplacement"
+msgstr "Rail Geweer vesting"
 
 #: data/base/messages/strings/names.txt:744
 msgid "Assault Cannon Emplacement"
-msgstr "Aanvals Kanon Emplacement"
+msgstr "Aanvals Kanon vesting"
 
 #: data/base/messages/strings/names.txt:746
 #: data/mp/messages/strings/names.txt:426
 msgid "Assault Gun Emplacement"
-msgstr "Aanvals Geweer emplacement"
+msgstr "Aanvals Geweer vesting"
 
 #: data/base/messages/strings/names.txt:749
 #: data/base/messages/strings/names.txt:1363
@@ -7423,7 +7423,7 @@ msgstr "Verdediger SAM Platform"
 
 #: data/base/messages/strings/names.txt:756
 msgid "Heavy Machinegun Guard Tower"
-msgstr "Zwaar machinegeweer-wachttoren"
+msgstr "Zwaar machinegeweer wachttoren"
 
 #: data/base/messages/strings/names.txt:758
 msgid "Lancer Guard Tower"
@@ -9159,7 +9159,7 @@ msgstr "Zelf-klonende Fabriek Productie"
 #: data/mp/messages/resmessagesall.rmsg:356
 #: data/mp/messages/strings/resstrings.txt:470
 msgid "Heavy repair unit"
-msgstr "Zwaare reparatie eenheid"
+msgstr "Zware reparatie eenheid"
 
 #: data/base/messages/strings/resstrings.txt:449
 #: data/mp/messages/strings/resstrings.txt:477
@@ -9284,7 +9284,7 @@ msgstr "De andere vrachtwagen zal nu meehelpen de energiegenerator te bouwen"
 
 #: data/base/script/text/tutorial3.slo:510
 msgid "During missions you need to locate and recover technologies from before the Collapse"
-msgstr "Tijdens missies zal je technologieën van voor de Ineenstorting moeten vinden en terugwinnen"
+msgstr "Tijdens missies zal je technologieën van voor de ineenstorting moeten vinden en terugwinnen"
 
 #: data/base/script/text/tutorial3.slo:519
 msgid "Use a truck to search for the artifact indicated by the radar pulse"
@@ -9420,7 +9420,7 @@ msgstr "VELDTOCHT EEN"
 
 #: data/base/sequenceaudio/cam1/c001.txa:2
 msgid "WESTERN SECTOR"
-msgstr "WESTERLIJKE SECTOR"
+msgstr "WESTELIJKE SECTOR"
 
 #: data/base/sequenceaudio/cam1/c001.txa:4
 msgid "Dawn, July 4th, 2100"
@@ -9468,7 +9468,7 @@ msgstr "Naderen Landingszone. Team Alfa overleg begint."
 
 #: data/base/sequenceaudio/cam1/c001.txt:9
 msgid "Commander, you lead Team Alpha, one of three expeditionary teams sent out by the Project to recover artifacts from before the Collapse."
-msgstr "Commander, jij leid Team Alfa, een van de drie expeditie teams uitgezonden door het Project om artefacten te verzamelen van voor de Collapse."
+msgstr "Commandant, jij leid Team Alfa, een van de drie expeditie teams uitgezonden door het Project om artefacten te verzamelen van voor de ineenstorting."
 
 #: data/base/sequenceaudio/cam1/c001.txt:11
 msgid "Your destination lies in the western zone."
@@ -9476,7 +9476,7 @@ msgstr "Je bestemming ligt in de westelijke sector."
 
 #: data/base/sequenceaudio/cam1/cam1ccom.txt:4
 msgid "Commander, we have recovered a command turret from the New Paradigm."
-msgstr "Commander, we hebben een commando koepel van de New Paradigm."
+msgstr "Commandant, we hebben een commando koepel van de New Paradigm."
 
 #: data/base/sequenceaudio/cam1/cam1ccom.txt:6
 msgid "This turret allows commanders to coordinate attacks between assigned units and to act as a delivery point for factories. Researching and using this technology has the highest priority."
@@ -9498,7 +9498,7 @@ msgstr "Je bent in overtreding van de New Paradigm."
 
 #: data/base/sequenceaudio/cam1/cam1dnp.txt:4
 msgid "All attack groups commence attack on enemy."
-msgstr "Alle aanvalsgroepen begin met aanvallen van de vijand."
+msgstr "Alle aanvalsgroepen begin met aanvallen op de vijand."
 
 #: data/base/sequenceaudio/cam1/cam1dnp.txt:5
 msgid "They are in contravention of the New Paradigm."
@@ -9563,7 +9563,7 @@ msgstr "Je kunt me hier verslaan, maar ik zal weer herrijzen."
 #: data/base/sequenceaudio/cam1/cam1out4.txt:5
 #: data/base/sequenceaudio/cam2/cam2_2n2.txt:1
 msgid "As I once cleansed the world with fire, I will destroy you and your puny Project!!"
-msgstr "Zoals ik deze wereld al heb gereinigd met vuur, zal ik jouw en je nietig Project vernietigen!!"
+msgstr "Zoals ik deze wereld al heb gereinigd met vuur, zal ik jouw en je nietige Project vernietigen!!"
 
 #: data/base/sequenceaudio/cam1/cam1out5.txt:4
 msgid "Nexus then removed itself from the system, destroying its memory banks, and removing all traces of its external connections."
@@ -9595,7 +9595,7 @@ msgstr "De link heeft een hogesnelheids data overzet poort welke in kan pluggen 
 
 #: data/base/sequenceaudio/cam1/map1a_c.txt:10
 msgid "More importantly the development of the synaptic link made the creation of cyborgs possible. Early attempts at power suits for individual soldiers failed as they proved to be slow and unresponsive."
-msgstr "Nog belangrijker deze ontwikkeling van de synaptische link heeft het gebruik van Cyborgs mogelijk gemaakt. Eerdere pogingen van powerpakken voor individuele soldaten faalden omdat ze te langzaam waren en niet reageerden."
+msgstr "Nog belangrijker was dat deze ontwikkeling van de synaptische link het gebruik van Cyborgs mogelijk maakt. Eerdere pogingen van powerpakken voor individuele soldaten faalden omdat ze te langzaam waren en niet reageerden."
 
 #: data/base/sequenceaudio/cam1/map1a_c.txt:12
 msgid "The synaptic link allowed soldiers to be placed in power suits that they controlled as easily as their own bodies. Power suits allowed infantry to function effectively on the battlefields of the 21st Century."
@@ -9631,7 +9631,7 @@ msgstr "Je zult worden vernietigd."
 
 #: data/base/sequenceaudio/cam1/sub14anp.txt:4
 msgid "NEXUS, the synaptic technology you required has been recovered and sent for collection."
-msgstr "NEXUS, de synaptische technologie die je nodig hebt is terug en opgestuurd voor op te halen."
+msgstr "NEXUS, de synaptische technologie die je nodig hebt is terug en opgestuurd om op te halen."
 
 #: data/base/sequenceaudio/cam1/sub1_4bn.txt:4
 msgid "You have done well."
@@ -9655,7 +9655,7 @@ msgstr "We hebben zijn ultieme doel of funtie nog niet ontdekt. In zijn huidige 
 
 #: data/base/sequenceaudio/cam1/sub17fmv.txt:8
 msgid "Further analysis was prevented by the manual shutdown of the system by our technicians to prevent additional contamination by the Nexus Intruder Program."
-msgstr "Verdere analyse is voorkomen door de handmatige stopzetting van het systeem door onze techneuten om verdere schade en besmetting van het Nexus Indringer Programa te voorkomen."
+msgstr "Verdere analyse is voorkomen door de handmatige stopzetting van het systeem door onze techneuten om verdere schade en besmetting van het Nexus Indringer Programma te voorkomen."
 
 #: data/base/sequenceaudio/cam1/sub17fmv.txt:10
 msgid "However, the spread of the Nexus Intruder Program was not checked by New Paradigm. We need to capture New Paradigm's core systems to further investigate Nexus and determine its origins."
@@ -9663,7 +9663,7 @@ msgstr "Maar, het verspreiden van het Nexus Indringer Programma is niet gecontro
 
 #: data/base/sequenceaudio/cam1/sub17fmv.txt:12
 msgid "Commander, you are to curtail the New Paradigm's activities in this sector and locate their main base."
-msgstr "Commander, je gaat de New Paradigm's activiteiten in deze sector beperken en je gaat op zoek naar hun hoofd basis."
+msgstr "Commandant, je gaat de New Paradigm's activiteiten in deze sector beperken en je gaat op zoek naar hun hoofd basis."
 
 #: data/base/sequenceaudio/cam2/c002.txa:1
 msgid "CAMPAIGN TWO"
@@ -9695,7 +9695,7 @@ msgstr "DE COLLECTIVE"
 
 #: data/base/sequenceaudio/cam2/c2diif2.txt:1
 msgid "Commander, a new launch has been detected."
-msgstr "Commander, een nieuwe lancering is gedetecteerd."
+msgstr "Commandant, een nieuwe lancering is gedetecteerd."
 
 #: data/base/sequenceaudio/cam2/c2diif2.txt:2
 msgid "It is likely to be targeted at your location."
@@ -9719,7 +9719,7 @@ msgstr "In 2085 vuurde de NASDA satelieten hun kernbommen op de aarde."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:8
 msgid "There were also ground-based sites. Many of these were destroyed in the nuclear counterstrikes, but there's bound to be some out there."
-msgstr "Er waren ook grond-basis platform. Veel van deze werden vernietigd in de nucleaire contra aanvallen, maar er zijn er nog een paar over."
+msgstr "Er waren ook grond-basis platform. Veel van deze werden vernietigd in de nucleaire tegenaanvallen, maar er zijn er nog een paar over."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:10
 msgid "The NASDA satellites also contained pulse-lasers designed to shoot down missiles approaching North America."
@@ -9727,7 +9727,7 @@ msgstr "De NASDA satellieten hadden ook een Puls-Laser ontwikkeld om raketten ka
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:12
 msgid "During the counterstrikes, these LasSats failed to fire. If brought into operation, these LasSats could inflict major damage on ground targets."
-msgstr "Gedurende de contra aanvallen, deze LasSats faalden om te vuren. Als ze actief waren, konden deze LasSats flinke schade aan grond doelen."
+msgstr "Gedurende de tegenaanvallen,  faalden deze LasSats om te vuren. Als ze actief waren, konden deze LasSats flinke schade aan grond doelen aanrichten."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:14
 msgid "All nukes targeted at  North America found their targets."
@@ -9771,11 +9771,11 @@ msgstr "Analyse geeft aan dat deze systemen onderdeel waren voor het controle sy
 
 #: data/base/sequenceaudio/cam2/cam26afm.txt:2
 msgid "It's now certain that Nexus was responsible for The Collapse."
-msgstr "Het is nu zeker dat Nexus de oorzaak was van de Collapse."
+msgstr "Het is nu zeker dat Nexus de oorzaak was van de ineenstorting."
 
 #: data/base/sequenceaudio/cam2/cam26afm.txt:4
 msgid "During the early stages of the Collapse, NASDA technicians switched off  the infected systems in order to isolate the spread of Nexus. This seems to have prevented the LasSats from firing during the counterstrikes."
-msgstr "Tijdens de eerdere stadia van de Collapse, NASDA techneuten schakelden de geinfecteerde systemen uit om verspreiding van Nexus te voorkomen. Dit lijkt de oorzaak te zijn waarom de LasSats niet vuurden tijdens de contra aanvallen."
+msgstr "Tijdens de eerdere stadia van de ineenstoring,  schakelden de NASDA techneuten de geinfecteerde systemen uit om verspreiding van Nexus te voorkomen. Dit lijkt de oorzaak te zijn waarom de LasSats niet vuurden tijdens de tegenaanvallen."
 
 #: data/base/sequenceaudio/cam2/cam26afm.txt:6
 msgid "The ensuing nuclear-magnetic pulses wiped clean large amounts of NASDA's memory banks, shattering its core processor, and sent shockwaves blasting through Nexus."
@@ -9783,11 +9783,11 @@ msgstr "De nucleair-magnetische pulsen leegden grote delen van de NASDA's geheug
 
 #: data/base/sequenceaudio/cam2/cam26afm.txt:8
 msgid "Nexus was fried as whole sections of its consciousness were obliterated in the counterstrikes."
-msgstr "Nexus was gebakken doordat complete secties van zijn bewustzijn zijn vernietigd in de contra aanvallen."
+msgstr "Nexus was gebakken doordat complete secties van zijn bewustzijn zijn vernietigd in de tegenaanvallen."
 
 #: data/base/sequenceaudio/cam2/cam26bfm.txt:1
 msgid "Commander we are detecting transmissions from this site that are reaching high orbit."
-msgstr "Commander we detecteren transmissie's van dit platform welke hoog in atmosfeer komen."
+msgstr "Commandant we detecteren transmissie's van dit platform welke hoog in atmosfeer komen."
 
 #: data/base/sequenceaudio/cam2/cam26bfm.txt:3
 msgid "Nexus has now reconnected itself with the NASDA satellites."
@@ -9803,11 +9803,11 @@ msgstr "Analyse van de NASDA Centrale laat twijfel over dat de Collective een Ne
 
 #: data/base/sequenceaudio/cam2/cam26pl1.txt:3
 msgid "The nuclear reactor was going to be used to power a vast network of pre-Collapse computer systems."
-msgstr "De nucleaire reactor zou worden gebruikt om een groot netwerk van pre-Collapse computer systemen."
+msgstr "De nucleaire reactor zou worden gebruikt om een groot netwerk van pre-Collapse computer systemen van energie te voorzien."
 
 #: data/base/sequenceaudio/cam2/cam27fmv.txt:1
 msgid "Commander, we have just detected a missile launch at these coordinates."
-msgstr "Commander, we hebben een raket lancering gedetecteerd op deze coordinaten."
+msgstr "Commandant, we hebben een raket lancering gedetecteerd op deze coördinaten."
 
 #: data/base/sequenceaudio/cam2/cam27fmv.txt:3
 msgid "Team Gamma are sending a team to investigate the launch site and to prevent any further launches."
@@ -9883,7 +9883,7 @@ msgstr "Jullie moeten hun stoppen."
 
 #: data/base/sequenceaudio/cam2/cam2dipl.txt:1
 msgid "Decoding Transmission..."
-msgstr "Decoderen Transmissie..."
+msgstr "Transmissie Decoderen ..."
 
 #: data/base/sequenceaudio/cam3/c003.txa:1
 msgid "CAMPAIGN THREE"
@@ -9923,11 +9923,11 @@ msgstr "De tijd is op commander!!"
 
 #: data/base/sequenceaudio/cam3/c3ad2pl3.txt:1
 msgid "Commander, we are detecting NEXUS forces from these coordinates..."
-msgstr "Commander, we detecteren Nexus troepen vanuit deze coordinaten..."
+msgstr "Commandant, we detecteren Nexus troepen vanuit deze coördinaten..."
 
 #: data/base/sequenceaudio/cam3/cam3_1bn.txt:1
 msgid "Well done Commander, you've prevented my last missile from launching."
-msgstr "Goed gedaan Commander, je hebt mijn laatste raketlanceering voorkomen."
+msgstr "Goed gedaan commandant, je hebt mijn laatste raketlanceering voorkomen."
 
 #: data/base/sequenceaudio/cam3/cam3_1bn.txt:2
 msgid "Such a shame. Your Project HQ would have made a wonderful target."
@@ -9947,11 +9947,11 @@ msgstr "Omdat ik hem niet kan lanceren, zal hij ontploffen waar hij is."
 
 #: data/base/sequenceaudio/cam3/cam3_1bn.txt:11
 msgid "Please note that all entrances to the underground complex have been sealed. Goodbye, Commander."
-msgstr "Let wel dat alle toegangen naar het ondergrondscomplex zijn afgesloten. Vaarwel, Commander."
+msgstr "Let wel dat alle toegangen naar het ondergrondscomplex zijn afgesloten. Vaarwel, commandant."
 
 #: data/base/sequenceaudio/cam3/cam32a2.txt:1
 msgid "Glad you could make it, Commander."
-msgstr "Goed dat je kon komen, Commandant."
+msgstr "Goed dat je kon komen, commandant."
 
 #: data/base/sequenceaudio/cam3/cam32a2.txt:4
 msgid "Enemy strike VTOLs have got us pinned down. We've managed to hold off cyborgs and tanks, but we haven't been able to make any progress along the valley."
@@ -9959,7 +9959,7 @@ msgstr "Vijandelijke aanvals VTOL's hebben ons klemgezet. We zijn in staat tanks
 
 #: data/base/sequenceaudio/cam3/cam32a2.txt:7
 msgid "Can you try and reach us with anti-aircraft units?"
-msgstr "Kun je proberen om ons te bereiken met Anti-Vliegtuig units?"
+msgstr "Kun je proberen om ons te bereiken met AA units?"
 
 #: data/base/sequenceaudio/cam3/cam32alp.txt:1
 msgid "This is Team Alpha. Repeat, this is Team Alpha. We require immediate assistance."
@@ -9983,7 +9983,7 @@ msgstr "Assisteer alsjeblieft."
 
 #: data/base/sequenceaudio/cam3/cam32pl2.txt:4
 msgid "Commander, forces from Team Alpha escaped the nuclear attack on Alpha Base."
-msgstr "Commander, troepen van Team Alfa zijn ontsnapt aan de nucleaire aanval op Alfa Basis."
+msgstr "Commandant, troepen van Team Alfa zijn ontsnapt aan de nucleaire aanval op Alfa Basis."
 
 #: data/base/sequenceaudio/cam3/cam34mu1.txt:1
 msgid "We are experiencing some interference from NEXUS."
@@ -9995,7 +9995,7 @@ msgstr "Je moet zijn commando centrum vernietigen voordat we de controle verliez
 
 #: data/base/sequenceaudio/cam3/cam34mu2.txt:1
 msgid "Commander, welcome to NEXUS!"
-msgstr "Commander, welkom bij NEXUS!"
+msgstr "Commandant, welkom bij NEXUS!"
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:1
 msgid "The Reed Corporation was founded by Dr Allan Reed. In 2080, Dr Reed landed a contract with the US Military to develop the synaptic link technology."
@@ -10003,7 +10003,7 @@ msgstr "De Reed Corporation is gesticht door Dr Allan Reed. In 2080, Dr Reed slo
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:3
 msgid "After patenting the synaptic link five years later, Dr Reed continued his researches into cybernetics."
-msgstr "Na het patent om de synaptische link vijf jaar laten, Dr Reed ging verder met de onderzoeken in Cybernetica."
+msgstr "Na het patent om de synaptische link vijf jaar laten,  ging Dr Reed verder met de onderzoeken in Cybernetica."
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:5
 msgid "His goal this time was to allow transfer of human consciousness into data streams that could meld with computer technologies. While in Cyberspace the operator's bodies were kept in immersion tanks."
@@ -10011,15 +10011,15 @@ msgstr "Zijn doel was om menselijke bewustheid om te zetten in data en aan compu
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:7
 msgid "Backed again by the military, Dr Reed began work on the NEXUS Intruder Program. After three years with little progress, the military abandoned the Nexus Project and cut Dr Reed's funding."
-msgstr "Weer in samenwerking met de Military, Dr Reed begon met werken aan het NEXUS Indringer Programma. Na drie jaar met weinig voortgang, de Military liet het NEXUS Project in de steek en stopte met het financieren van Dr Reed."
+msgstr "Weer in samenwerking met de Military, begon Dr Reed  met werken aan het NEXUS Indringer Programma. Na drie jaar met weinig voortgang, liet de Military het NEXUS Project in de steek en stopte met het financieren van Dr Reed."
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:9
 msgid "Reports from the time claim that Dr Reed was furious and vowed to have his revenge on all who got in his way."
-msgstr "Raporten van die tijd claimen dat Dr Reed was furieus en zweerde dat hij wraak zou hebben op iedereen die in de weg zou staan."
+msgstr "Raporten van die tijd claimen dat Dr Reed furieus was en zweerde dat hij wraak zou hebben op iedereen die in de weg zou staan."
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:11
 msgid "It appears that Dr Reed may have succeeded in his goals and completed the Nexus Intruder Program."
-msgstr "Het schijnt dat Dr Reed kan zijn geslaagd in zijn doelen door het afmaken van het Nexus Indringer Programma."
+msgstr "Het schijnt dat Dr Reed  geslaagd kan zijn in zijn doelen door het afmaken van het Nexus Indringer Programma."
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:12
 msgid "The similarity between NEXUS and Dr Reed is striking."
@@ -10043,7 +10043,7 @@ msgstr "Laten we beginnen met het activeren van NEXUS in je hoofd systemen en ki
 
 #: data/base/sequenceaudio/cam3/cam3abpl.txt:1
 msgid "Commander, we are experiencing interference with our equipment."
-msgstr "Commander, we ervaren interventie met onze uitrusting."
+msgstr "Commandant, we ervaren interventie met onze uitrusting."
 
 #: data/base/sequenceaudio/cam3/cam3abpl.txt:2
 msgid "Normal service will be restored as soon as possible."
@@ -10051,7 +10051,7 @@ msgstr "Normale services zullen zo snel mogelijk worden hersteld."
 
 #: data/base/sequenceaudio/cam3/cam3ad2n.txt:1
 msgid "Not long to go now, Commander. There's no where else for you to run to."
-msgstr "Niet zo lang meer, Commander. Je kunt nergens meer naar toe rennen."
+msgstr "Niet zo lang meer, commandant. Je kunt nergens meer naar toe rennen."
 
 #: data/base/sequenceaudio/cam3/cam3ad2n.txt:4
 msgid "However, if you vacate this facility, then I shall let you go free, as you are no longer a threat to me."
@@ -10063,7 +10063,7 @@ msgstr "Je hebt vijf minuten om te reageren anders wordt het tijd om te bakken!"
 
 #: data/base/sequenceaudio/cam3/cam3bg.txt:1
 msgid "Commander, we are under attack by NEXUS cyborgs and tanks. Please help as we...."
-msgstr "Commander, we worden aangevallen door NEXUS Cyborgs en tanks. Alsjeblief help ons als we..."
+msgstr "Commandant, we worden aangevallen door NEXUS Cyborgs en tanks. Alsjeblief help ons als we..."
 
 #: data/base/sequenceaudio/cam3/cam3bg.txt:3
 msgid "...cannot hold out much longer.  Repeat, please help, we cannot hold out much longer...."
@@ -10071,7 +10071,7 @@ msgstr "...niet langer houden. Herhaal, Alsjeblief help, we kunnen het niet lang
 
 #: data/base/sequenceaudio/cam3/cam3_bn.txt:1
 msgid "Ah, Commander, so good of you to join us here at Nexus base."
-msgstr "Ah Commander, goed van je om ons hier te treffen op de Nexus Basis."
+msgstr "Ah commandant, goed van je om ons hier te treffen op de Nexus Basis."
 
 #: data/base/sequenceaudio/cam3/cam3_bn.txt:3
 msgid "It was very useful having Gamma Team set up here in the mountains."
@@ -10099,7 +10099,7 @@ msgstr "Je troepen zijn nu van mij! Welkom bij Nexus."
 
 #: data/base/sequenceaudio/cam3/cam3_cn.txt:1
 msgid "Commander, you're proving to be more resilient than I thought."
-msgstr "Commander, je bewijst dat je je sneller kan herstellen dan dat ik dacht."
+msgstr "Commandant, je bewijst dat je je sneller kan herstellen dan dat ik dacht."
 
 #: data/base/sequenceaudio/cam3/cam3_cn.txt:2
 msgid "Such a pity that you refused to join me earlier."
@@ -10111,7 +10111,7 @@ msgstr "Maar dat maakt niks uit, want je zult hier niet veel langer zijn."
 
 #: data/base/sequenceaudio/cam3/cam3_cn.txt:6
 msgid "After much searching and reprogramming, I've finally got all my systems back on-line."
-msgstr "Na veel zoeken en herprogrameren, heb ik eindelijk alle systemene weer online."
+msgstr "Na veel zoeken en herprogrameren, heb ik eindelijk alle systemen weer online."
 
 #: data/base/sequenceaudio/cam3/cam3_cn.txt:8
 msgid "Once I destroyed the world with nuclear fire to clear the way for my cybernetic future."
@@ -10119,11 +10119,11 @@ msgstr "Zogauw ik de wereld heb vernietigd met nucleair vuur kan ik de weg vrijm
 
 #: data/base/sequenceaudio/cam3/cam3_cn.txt:9
 msgid "I now intend to further shape the world into my own image, by  surgically removing unwanted growths like yourself."
-msgstr "I zal nu de wereld verder vormen naar mijn beeld, door chirurgisch ongewenste groei zoals jij te verwijderen."
+msgstr "Ik zal nu de wereld verder vormen naar mijn beeld, door chirurgisch ongewenste groei zoals jij te verwijderen."
 
 #: data/base/sequenceaudio/cam3/cam3_cn.txt:11
 msgid "My Laser Satellites are now powering up. I intend to test them on you first, Commander!"
-msgstr "Mijn Laser Satellieten zijn nu aan het opladen. Ik zal ze eerst op jouw testen, Commander!"
+msgstr "Mijn Laser Satellieten zijn nu aan het opladen. Ik zal ze eerst op jouw testen, commandant!"
 
 #: data/base/sequenceaudio/devastation.txa:4
 msgid "Dusk, November 3rd, 2085"
@@ -10135,7 +10135,7 @@ msgstr "Aarde, Atmosfeer"
 
 #: data/base/sequenceaudio/devastation.txa:6
 msgid "The Collapse"
-msgstr "De Collapse"
+msgstr "De ineenstorting"
 
 #: data/base/sequenceaudio/devastation.txa:8
 msgid "January 19th, 2086"
@@ -10172,15 +10172,15 @@ msgstr "Een nieuw begin"
 
 #: data/base/sequenceaudio/devastation.txt:1
 msgid "The NASDA system was developed to protect us. It was to be the ultimate nuclear deterrent. As it turned out, it was our executioner."
-msgstr "Het NASDA systeem was ontwikkeld om ons te beschermen. Het was om nucleair gevaar om te weren. Zoals bleek was het onze executie."
+msgstr "Het NASDA systeem was ontwikkeld om ons te beschermen. Het was om nucleair gevaar af te weren. Zoals bleek was het onze executie."
 
 #: data/base/sequenceaudio/devastation.txt:3
 msgid "Reports said that NASDA developed a fault during a routine systems check. Don't believe it. Someone wanted it to take us out."
-msgstr "Raporten zeggen dat NASDA een fout heeft ontwikkeld tijdens een routine systeem check. Geloof het niet. Iemand wilt ons dood."
+msgstr "Rapporten zeggen dat NASDA een fout heeft ontwikkeld tijdens een routine systeem check. Geloof het niet. Iemand wilt ons dood."
 
 #: data/base/sequenceaudio/devastation.txt:5
 msgid "Those nukes were targeted on every major city around the world. NASDA was programmed to start the Collapse. When the counterstrikes launched, its laser defenses and anti-missile ground sites failed."
-msgstr "Die kernraketten waren gericht op alle grote steden rond de wereld. NASDA was geprogrameerd om de Collapse te starten. Zogauw de contra aanvallen begonnen, werkte de laser verdeding en anti-raket platformen niet meer."
+msgstr "Die kernraketten waren gericht op alle grote steden rond de wereld. NASDA was geprogrameerd om de ineenstorting te starten. Zogauw de tegenaanvallen begonnen, werkte de laser verdeding en anti-raket platformen niet meer."
 
 #: data/base/sequenceaudio/devastation.txt:7
 msgid "The world as we knew it ended..."
@@ -10212,7 +10212,7 @@ msgstr "We waren eindelijk klaar om het Project te beginnen."
 
 #: data/base/sequenceaudio/outro.txt:1
 msgid "After many long months of struggle, we defeated NEXUS."
-msgstr "Naar vele lange maanden van gevechten, versloeg we NEXUS."
+msgstr "Naar vele lange maanden van gevechten, versloegen we NEXUS."
 
 #: data/base/sequenceaudio/outro.txt:3
 msgid "The war started by Dr Reed was over."
@@ -11186,7 +11186,7 @@ msgstr "Sensor Bereik +15%"
 
 #: data/mp/messages/resmessagesall.rmsg:109
 msgid "Advanced Thermal Emissions detection"
-msgstr "Gavanceerde Thermische Emissie detectie"
+msgstr "Geavanceerde Thermische Emissie detectie"
 
 #: data/mp/messages/resmessagesall.rmsg:110
 msgid "Sensor Range +10%"
@@ -11893,11 +11893,11 @@ msgstr "Super Tank Sloper Cyborg"
 #: data/mp/messages/strings/names.txt:1684
 #: data/mp/messages/strings/names.txt:1685
 msgid "Heavy Laser"
-msgstr "Zwaare Laser"
+msgstr "Zware Laser"
 
 #: data/mp/messages/strings/names.txt:1686
 msgid "VTOL Heavy Laser"
-msgstr "VTOL Zwaare Laser"
+msgstr "VTOL Zware Laser"
 
 #: data/mp/messages/strings/names.txt:1687
 #: data/mp/messages/strings/names.txt:1688
@@ -12149,8 +12149,8 @@ msgstr "Mini-Raket Reeks Cobra Banden"
 msgid "Hyper Velocity Cannon Python Hover"
 msgstr "Hyper Snelheidskanon Python Luchtkussen"
 
-#: lib/framework/i18n.c:89
-#: lib/framework/i18n.c:150
+#: lib/framework/i18n.c:93
+#: lib/framework/i18n.c:154
 msgid "System locale"
 msgstr "Systeemtaal"
 
@@ -12688,7 +12688,7 @@ msgid "Join Game"
 msgstr "Deelnemen aan spel"
 
 #: src/frontend.c:440
-#: src/multiint.c:1176
+#: src/multiint.c:1166
 msgid "OPTIONS"
 msgstr "OPTIES"
 
@@ -12800,7 +12800,7 @@ msgid "On"
 msgstr "Aan"
 
 #: src/frontend.c:559
-#: src/multiint.c:1246
+#: src/multiint.c:1236
 msgid "Fog"
 msgstr "Mist"
 
@@ -12811,7 +12811,7 @@ msgstr "Nevel"
 
 #: src/frontend.c:566
 #: src/frontend.c:631
-#: src/multiint.c:1248
+#: src/multiint.c:1238
 msgid "Fog Of War"
 msgstr "Oorlogsmist"
 
@@ -12973,7 +12973,7 @@ msgid "GAME OPTIONS"
 msgstr "SPELINSTELLINGEN"
 
 #: src/frontend.c:1405
-#: src/multiint.c:2212
+#: src/multiint.c:2202
 msgid "Mod: "
 msgstr "Mod:"
 
@@ -13032,7 +13032,7 @@ msgid "Build (F3)"
 msgstr "Bouw (F3)"
 
 #: src/hci.c:3885
-#: src/multiint.c:1293
+#: src/multiint.c:1283
 #: src/multimenu.c:764
 msgid "Power"
 msgstr "Energie"
@@ -13167,7 +13167,7 @@ msgstr "Spel hervatten"
 
 #: src/ingameop.c:142
 msgid "WARNING: You're the host. If you quit, the game ends for everyone!"
-msgstr "WAARSCHUWING: Als je de host bent. Als je het spel sluit, zal het spel stoppen voor iedereen!"
+msgstr "WAARSCHUWING: Jij bent de host. Als je het spel sluit, zal het spel stoppen voor iedereen!"
 
 #: src/ingameop.c:283
 #: src/ingameop.c:511
@@ -13614,9 +13614,9 @@ msgid "KEY MAPPING"
 msgstr "KERN KAARTEN"
 
 #: src/keyedit.c:374
-#: src/multiint.c:533
-#: src/multiint.c:961
-#: src/multiint.c:1379
+#: src/multiint.c:523
+#: src/multiint.c:951
+#: src/multiint.c:1369
 msgid "Return To Previous Screen"
 msgstr "Terug naar vorig scherm"
 
@@ -13818,11 +13818,11 @@ msgstr "Zoom radar uit"
 
 #: src/keymap.c:357
 msgid "Zoom Radar In"
-msgstr "Zoem radar in"
+msgstr "Zoom radar in"
 
 #: src/keymap.c:358
 msgid "Zoom In"
-msgstr "Zom in"
+msgstr "Zoom in"
 
 #: src/keymap.c:359
 msgid "Zoom Out"
@@ -14135,12 +14135,12 @@ msgstr "Afsluiten naar hoofdmenu"
 msgid "Continue Game"
 msgstr "Spel vervolgen"
 
-#: src/move.c:2944
+#: src/move.c:2945
 #, c-format
 msgid "You found %u power in an oil drum."
 msgstr "jij hebt %u energie gevonden in een olie ton."
 
-#: src/move.c:2951
+#: src/move.c:2952
 #, c-format
 msgid "You found %u power in an oil drum"
 msgstr "jij hebt %u energie gevonden in een olie ton"
@@ -14195,294 +14195,294 @@ msgstr "%s vormt een bondgenootschap met %s"
 msgid "You Discover Blueprints For %s"
 msgstr "Je ontdekt blauwdrukken voor %s"
 
-#: src/multiint.c:467
+#: src/multiint.c:457
 #: src/multilimit.c:192
 msgid "Accept Settings"
 msgstr "Accepteer instellingen"
 
-#: src/multiint.c:469
-#: src/multiint.c:1009
+#: src/multiint.c:459
+#: src/multiint.c:999
 msgid "Cancel"
 msgstr "Annuleren"
 
-#: src/multiint.c:480
+#: src/multiint.c:470
 msgid "IP Address or Machine Name"
 msgstr "IP-adres of computernaam"
 
-#: src/multiint.c:530
+#: src/multiint.c:520
 msgid "CONNECTION"
 msgstr "VERBINDING"
 
-#: src/multiint.c:535
+#: src/multiint.c:525
 msgid "Lobby"
 msgstr "Lobby"
 
-#: src/multiint.c:536
+#: src/multiint.c:526
 msgid "IP"
 msgstr "IP"
 
-#: src/multiint.c:727
+#: src/multiint.c:717
 msgid "No games are available"
 msgstr "Geen spellen zijn beschikbaar"
 
-#: src/multiint.c:730
+#: src/multiint.c:720
 msgid "Game is full"
 msgstr "Spel is vol"
 
-#: src/multiint.c:734
+#: src/multiint.c:724
 msgid "You were kicked!"
-msgstr "jij bent eruit geschopt!"
+msgstr "Je bent eruit geschopt!"
 
-#: src/multiint.c:737
+#: src/multiint.c:727
 msgid "Wrong Game Version!"
 msgstr "Verkeerde spel versie!"
 
-#: src/multiint.c:740
+#: src/multiint.c:730
 msgid "You have an incompatible mod."
 msgstr "Je hebt een incompatiebele mod."
 
-#: src/multiint.c:745
+#: src/multiint.c:735
 msgid "Host couldn't send file?"
 msgstr "Host kon geen bestanden versturen?"
 
-#: src/multiint.c:749
+#: src/multiint.c:739
 msgid "Incorrect Password!"
 msgstr "Incorrect wachtwoord!"
 
-#: src/multiint.c:752
+#: src/multiint.c:742
 msgid "Host has dropped connection!"
 msgstr "Gastheer heeft de connectie verbroken!"
 
-#: src/multiint.c:756
+#: src/multiint.c:746
 msgid "Connection Error"
 msgstr "Connectie fout"
 
-#: src/multiint.c:897
+#: src/multiint.c:887
 msgid "Searching"
 msgstr "Zoeken"
 
-#: src/multiint.c:958
+#: src/multiint.c:948
 msgid "GAMES"
 msgstr "SPELLEN"
 
-#: src/multiint.c:966
+#: src/multiint.c:956
 msgid "Refresh Games List"
 msgstr "Ververs lijst met spellen"
 
-#: src/multiint.c:986
+#: src/multiint.c:976
 msgid "Enter Password:"
 msgstr "Vul wachtwoord in:"
 
-#: src/multiint.c:1007
+#: src/multiint.c:997
 msgid "OK"
 msgstr "OK"
 
-#: src/multiint.c:1129
+#: src/multiint.c:1119
 msgid "Tanks disabled!!"
 msgstr "Tanks gediskwalificeerd!!"
 
-#: src/multiint.c:1130
+#: src/multiint.c:1120
 msgid "Cyborgs disabled."
 msgstr "Cyborgs uitgeschakeld."
 
-#: src/multiint.c:1131
+#: src/multiint.c:1121
 msgid "VTOLs disabled."
 msgstr "VTOL gediskwalificeerd."
 
-#: src/multiint.c:1181
-#: src/multiint.c:1188
+#: src/multiint.c:1171
+#: src/multiint.c:1178
 msgid "Select Game Name"
 msgstr "Kies spelnaam"
 
-#: src/multiint.c:1181
+#: src/multiint.c:1171
 msgid "One-Player Skirmish"
 msgstr "Enkele-speler Schermutseling"
 
-#: src/multiint.c:1191
+#: src/multiint.c:1181
 msgid "Select Map"
 msgstr "Kies kaart"
 
-#: src/multiint.c:1199
+#: src/multiint.c:1189
 msgid "Click to set Password"
 msgstr "Klik om wachtwoord intevullen"
 
-#: src/multiint.c:1209
-#: src/multiint.c:1210
+#: src/multiint.c:1199
+#: src/multiint.c:1200
 msgid "Scavengers"
 msgstr "Scavengers"
 
-#: src/multiint.c:1212
+#: src/multiint.c:1202
 msgid "No Scavengers"
 msgstr "Geen Scavengers"
 
-#: src/multiint.c:1243
+#: src/multiint.c:1233
 msgid "Select Player Name"
 msgstr "Kies spelernaam"
 
-#: src/multiint.c:1249
+#: src/multiint.c:1239
 msgid "Distance Fog"
 msgstr "Afstandsmist"
 
-#: src/multiint.c:1260
+#: src/multiint.c:1250
 #: src/multimenu.c:757
 msgid "Alliances"
 msgstr "Bondgenootschappen toestaan"
 
-#: src/multiint.c:1263
+#: src/multiint.c:1253
 msgid "No Alliances"
 msgstr "Geen bondgenootschappen toestaan"
 
-#: src/multiint.c:1265
+#: src/multiint.c:1255
 msgid "Allow Alliances"
 msgstr "Bondgenootschappen toestaan"
 
-#: src/multiint.c:1269
+#: src/multiint.c:1259
 msgid "Locked Teams"
 msgstr "Vergrendelde ploegen"
 
-#: src/multiint.c:1295
+#: src/multiint.c:1285
 msgid "Low Power Levels"
 msgstr "Lage energieniveaus"
 
-#: src/multiint.c:1297
+#: src/multiint.c:1287
 msgid "Medium Power Levels"
 msgstr "Normale energieniveaus"
 
-#: src/multiint.c:1299
+#: src/multiint.c:1289
 msgid "High Power Levels"
 msgstr "Hoge energieniveaus"
 
-#: src/multiint.c:1331
+#: src/multiint.c:1321
 msgid "Base"
 msgstr "Basis"
 
-#: src/multiint.c:1333
+#: src/multiint.c:1323
 msgid "Start with No Bases"
 msgstr "Start zonder basis"
 
-#: src/multiint.c:1335
+#: src/multiint.c:1325
 msgid "Start with Bases"
 msgstr "Start met basis"
 
-#: src/multiint.c:1337
+#: src/multiint.c:1327
 msgid "Start with Advanced Bases"
 msgstr "Start met gevanceerde basis"
 
-#: src/multiint.c:1369
+#: src/multiint.c:1359
 msgid "Map Preview"
 msgstr "Kaartvoorbeeld"
 
-#: src/multiint.c:1371
+#: src/multiint.c:1361
 msgid "Click to see Map"
 msgstr "Klik om kaart te zien"
 
-#: src/multiint.c:1385
+#: src/multiint.c:1375
 msgid "Start Hosting Game"
 msgstr "Optreden als gastheer"
 
-#: src/multiint.c:1393
+#: src/multiint.c:1383
 msgid "Show Structure Limits"
-msgstr "Gebouwen Limiet Laten Zien"
+msgstr "Gebouwen limiet laten zien"
 
-#: src/multiint.c:1393
+#: src/multiint.c:1383
 msgid "Set Structure Limits"
 msgstr "Gebouwlimiet instellen"
 
-#: src/multiint.c:1479
+#: src/multiint.c:1469
 msgid "Player colour"
 msgstr "Speler kleur"
 
-#: src/multiint.c:1495
+#: src/multiint.c:1485
 msgid "Kick player"
 msgstr "Verwijder speler"
 
-#: src/multiint.c:1506
+#: src/multiint.c:1496
 msgid "Player number"
 msgstr "Speler nummer"
 
-#: src/multiint.c:1899
+#: src/multiint.c:1889
 msgid "Team"
 msgstr "Ploeg"
 
-#: src/multiint.c:1932
+#: src/multiint.c:1922
 msgid "Waiting for other players"
 msgstr "Op andere spelers wachten"
 
-#: src/multiint.c:1938
+#: src/multiint.c:1928
 msgid "Click when ready"
 msgstr "Klik zodra klaar"
 
-#: src/multiint.c:1942
+#: src/multiint.c:1932
 msgid "READY?"
 msgstr "KLAAR?"
 
-#: src/multiint.c:1979
+#: src/multiint.c:1969
 msgid "PLAYERS"
 msgstr "SPELERS"
 
-#: src/multiint.c:2033
+#: src/multiint.c:2023
 msgid "Choose Team"
 msgstr "Kies Team"
 
-#: src/multiint.c:2073
+#: src/multiint.c:2063
 msgid "Click to change player settings"
 msgstr "Klik om de speler instellingen te wijzigen"
 
-#: src/multiint.c:2104
+#: src/multiint.c:2094
 msgid "Click to adjust AI difficulty"
-msgstr "Klik om de AI moeilijkhijd aan te passen"
+msgstr "Klik om de AI moeilijksheidsgraad aan te passen"
 
-#: src/multiint.c:2183
+#: src/multiint.c:2173
 msgid "CHAT"
 msgstr "BABBEL"
 
-#: src/multiint.c:2217
+#: src/multiint.c:2207
 msgid "All players need to have the same mods to join your game."
 msgstr "Alle spelers moeten dezelfde mod hebben om mee te kunnen doen."
 
-#: src/multiint.c:2377
+#: src/multiint.c:2367
 #, c-format
 msgid "*** password [%s] is now required! ***"
 msgstr "*** wachtwoord [%s] is nu nodig! ***"
 
-#: src/multiint.c:2385
+#: src/multiint.c:2375
 msgid "*** password is NOT required! ***"
 msgstr "*** Er is GEEN wachtwoord nodig! ***"
 
-#: src/multiint.c:2628
+#: src/multiint.c:2618
 msgid "Sorry! Failed to host the game."
 msgstr "Sorry! Niet mogelijk om het spel te hosten."
 
-#: src/multiint.c:2713
+#: src/multiint.c:2703
 msgid "'Locked Teams' mode enabled"
 msgstr "Vergrendelde ploegen"
 
-#: src/multiint.c:2752
-#: src/multiint.c:2802
+#: src/multiint.c:2742
+#: src/multiint.c:2793
 #: src/multimenu.c:1494
 #, c-format
 msgid "The host has kicked %s from the game!"
 msgstr "De gastheer heeft %s uit het spel verwijderd!"
 
-#: src/multiint.c:2885
+#: src/multiint.c:2877
 msgid "Host is Starting Game"
 msgstr "Gastheer start spel"
 
-#: src/multiint.c:3482
+#: src/multiint.c:3477
 msgid "Players"
 msgstr "Spelers"
 
-#: src/multiint.c:3588
+#: src/multiint.c:3583
 #, c-format
 msgid "Sending Map: %d%% "
 msgstr "Stuurt Kaart: %d%%"
 
-#: src/multiint.c:3597
+#: src/multiint.c:3592
 #, c-format
 msgid "Map: %d%% downloaded"
 msgstr "Kaart: %d%% gedownload"
 
-#: src/multiint.c:3623
+#: src/multiint.c:3618
 msgid "HOST"
 msgstr "HOST"
 
