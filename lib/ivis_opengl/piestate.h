@@ -88,6 +88,8 @@ bool pie_LoadShaders(void);
 void pie_DeactivateShader(void);
 void pie_ActivateShader(SHADER_MODE shaderMode, PIELIGHT teamcolour, int maskpage, int normalpage);
 void pie_SetShaderStretchDepth(float stretch);
+void pie_SetShaderTime(uint32_t shaderTime);
+void pie_SetShaderEcmEffect(bool value);
 
 /* Errors control routine */
 #define glErrors() \

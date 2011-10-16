@@ -43,7 +43,7 @@ enum OBJECT_TYPE
 
 struct TILEPOS
 {
-	UBYTE x, y;
+	UBYTE x, y, type;
 };
 
 /*

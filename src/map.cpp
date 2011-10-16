@@ -194,9 +194,12 @@ bool mapNew(UDWORD width, UDWORD height)
 		psTile->illumination = 255;
 		psTile->level = psTile->illumination;
 		memset(psTile->watchers, 0, sizeof(psTile->watchers));
+		memset(psTile->sensors, 0, sizeof(psTile->sensors));
+		memset(psTile->jammers, 0, sizeof(psTile->jammers));
 		psTile->colour= WZCOL_WHITE;
 		psTile->tileExploredBits = 0;
 		psTile->sensorBits = 0;
+		psTile->jammerBits = 0;
 		psTile++;
 	}
 
@@ -839,7 +842,10 @@ bool mapLoad(char *filename, bool preview)
 
 		// Visibility stuff
 		memset(psMapTiles[i].watchers, 0, sizeof(psMapTiles[i].watchers));
+		memset(psMapTiles[i].sensors, 0, sizeof(psMapTiles[i].sensors));
+		memset(psMapTiles[i].jammers, 0, sizeof(psMapTiles[i].jammers));
 		psMapTiles[i].sensorBits = 0;
+		psMapTiles[i].jammerBits = 0;
 		psMapTiles[i].tileExploredBits = 0;
 	}
 

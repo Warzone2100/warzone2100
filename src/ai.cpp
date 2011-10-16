@@ -910,48 +910,7 @@ bool aiChooseSensorTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget)
 	}
 
 	/* See if there is something in range */
-	if (radarDetector)
-	{
-		BASE_OBJECT	*psCurr, *psTemp = NULL;
-		int		tarDist = SDWORD_MAX;
-
-		gridStartIterate(psObj->pos.x, psObj->pos.y, PREVIOUS_DEFAULT_GRID_SEARCH_RADIUS);
-		psCurr = gridIterate();
-		while (psCurr != NULL)
-		{
-			if ((psCurr->type == OBJ_STRUCTURE || psCurr->type == OBJ_DROID) &&
-			    !aiObjectIsProbablyDoomed(psCurr))
-			{
-				if (!aiCheckAlliances(psCurr->player,psObj->player)
-				    && objActiveRadar(psCurr))
-				{
-					// See if in twice *their* sensor range
-					const int xdiff = psCurr->pos.x - psObj->pos.x;
-					const int ydiff = psCurr->pos.y - psObj->pos.y;
-					const unsigned int distSq = xdiff * xdiff + ydiff * ydiff;
-					const int targetSensor = objSensorRange(psCurr) * 2;
-					const unsigned int sensorSquared = targetSensor * targetSensor;
-
-					if (distSq < sensorSquared && distSq < tarDist)
-					{
-						psTemp = psCurr;
-						tarDist = distSq;
-					}
-				}
-			}
-			psCurr = gridIterate();
-		}
-
-		if (psTemp)
-		{
-			objTrace(psTemp->id, "Targetted by radar detector %d", (int)psObj->id);
-			objTrace(psObj->id, "Targetting radar %d", (int)psTemp->id);
-			ASSERT(!psTemp->died, "aiChooseSensorTarget gave us a dead target");
-			*ppsTarget = psTemp;
-			return true;
-		}
-	}
-	else if (psObj->type == OBJ_DROID)
+	if (psObj->type == OBJ_DROID)
 	{
 		BASE_OBJECT	*psTarget = NULL;
 

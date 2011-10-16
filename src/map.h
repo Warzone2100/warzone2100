@@ -107,6 +107,9 @@ struct MAPTILE
 	uint8_t			ground;			///< The ground type used for the terrain renderer
 	uint16_t                fireEndTime;            ///< The (uint16_t)(gameTime / GAME_TICKS_PER_UPDATE) that BITS_ON_FIRE should be cleared.
 	int32_t                 waterLevel;             ///< At what height is the water for this tile
+	PlayerMask		jammerBits;             ///< bit per player, who is jamming tile
+	uint8_t                 sensors[MAX_PLAYERS];   ///< player sees this tile with this many radar sensors
+	uint8_t                 jammers[MAX_PLAYERS];   ///< player jams the tile with this many objects
 };
 
 /* The size and contents of the map */

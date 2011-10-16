@@ -47,6 +47,7 @@
 #define OLD_TEXTURE_SIZE_FIX 256.0f
 
 //Render style flags for all pie draw functions
+#define pie_ECM                 0x1
 #define pie_TRANSLUCENT         0x2
 #define pie_ADDITIVE            0x4
 #define pie_FORCE_FOG			0x8

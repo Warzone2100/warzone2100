@@ -175,6 +175,12 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELI
 		}
 		pie_SetRendMode(REND_OPAQUE);
 	}
+	if (pieFlag & pie_ECM)
+	{
+		pie_SetRendMode(REND_ALPHA);
+		light = true;
+		pie_SetShaderEcmEffect(true);
+	}
 
 	if (light)
 	{
@@ -236,6 +242,7 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELI
 	{
 		pie_DeactivateShader();
 	}
+	pie_SetShaderEcmEffect(false);
 
 	if (pieFlag & pie_BUTTON)
 	{

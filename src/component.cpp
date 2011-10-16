@@ -524,23 +524,20 @@ static void displayCompObj(DROID *psDroid, bool bButton)
 	ASSERT_OR_RETURN( , psPropStats != NULL, "invalid propulsion stats pointer");
 
 	//set pieflag for button object or ingame object
-	if ( bButton )
+	if (bButton)
 	{
 		pieFlag = pie_BUTTON;
-	}
-	else
-	{
-		pieFlag = 0;
-	}
-
-	if(!bButton)
-	{
-		brightness = pal_SetBrightness(psDroid->illumination);
-		pieFlag = pie_SHADOW;
-	}
-	else
-	{
 		brightness = WZCOL_WHITE;
+	}
+	else
+	{
+		MAPTILE *psTile = worldTile(psDroid->pos.x, psDroid->pos.y);
+		pieFlag = pie_SHADOW;
+		if (psTile->jammerBits & alliancebits[psDroid->player])
+		{
+			pieFlag |= pie_ECM;
+		}
+		brightness = pal_SetBrightness(psDroid->illumination);
 	}
 
 	/* set default components transparent */

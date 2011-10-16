@@ -628,6 +628,9 @@ void draw3DScene( void )
 	/* What frame number are we on? */
 	currentGameFrame = frameGetFrameNumber();
 
+	// Tell shader system what the time is
+	pie_SetShaderTime(graphicsTime);
+
 	/* Build the drag quad */
 	if(dragBox3D.status == DRAG_RELEASED)
 	{
@@ -1282,8 +1285,14 @@ void	renderAnimComponent( const COMPONENT_OBJECT *psObj )
 			spacetime.pos.z,
 			-(spacetime.pos.y - player.p.z)
 		);
-		SDWORD iPlayer;
+		int iPlayer, pieFlag = pie_STATIC_SHADOW;
 		PIELIGHT brightness;
+		MAPTILE *psTile = worldTile(psParentObj->pos.x, psParentObj->pos.y);
+
+		if (psTile->jammerBits & alliancebits[psParentObj->player])
+		{
+			pieFlag |= pie_ECM;
+		}
 
 		psParentObj->sDisplay.frameNumber = currentGameFrame;
 
@@ -1351,7 +1360,7 @@ void	renderAnimComponent( const COMPONENT_OBJECT *psObj )
 		pie_MatRotZ(-psObj->orientation.y);
 		pie_MatRotX(-psObj->orientation.x);
 
-		pie_Draw3DShape(psObj->psShape, 0, iPlayer, brightness, pie_STATIC_SHADOW, 0);
+		pie_Draw3DShape(psObj->psShape, 0, iPlayer, brightness, pieFlag, 0);
 
 		/* clear stack */
 		pie_MatEnd();
@@ -2047,17 +2056,30 @@ static PIELIGHT getBlueprintColour(STRUCT_STATES state)
 /// Draw the structures
 void	renderStructure(STRUCTURE *psStructure)
 {
-	int			i, structX, structY, colour, rotation, frame, animFrame, pieFlag, pieFlagData;
+	int			i, structX, structY, colour, rotation, frame, animFrame, pieFlag, pieFlagData, ecmFlag = 0;
 	PIELIGHT		buildingBrightness;
 	Vector3i		dv;
 	bool			bHitByElectronic = false;
 	bool			defensive = false;
 	iIMDShape		*strImd = psStructure->sDisplay.imd;
+	MAPTILE			*psTile = worldTile(psStructure->pos.x, psStructure->pos.y);
 
 	if (psStructure->pStructureType->type == REF_WALL || psStructure->pStructureType->type == REF_WALLCORNER
 	    || psStructure->pStructureType->type == REF_GATE)
 	{
 		renderWallSection(psStructure);
+		return;
+	}
+	if (psStructure->visible[selectedPlayer] < UBYTE_MAX && psStructure->visible[selectedPlayer] > 0 && !demoGetStatus())
+	{
+		dv.x = psStructure->pos.x - player.p.x;
+		dv.z = -(psStructure->pos.y - player.p.z);
+		dv.y = psStructure->pos.z;
+		pie_MatBegin();
+		pie_TRANSLATE(dv.x,dv.y,dv.z);
+		int frame = gameTime / BLIP_ANIM_DURATION + psStructure->id % 8192; // de-sync the blip effect, but don't overflow the int
+		pie_Draw3DShape(getImdFromIndex(MI_BLIP), frame, 0, WZCOL_WHITE, pie_ADDITIVE, psStructure->visible[selectedPlayer] / 2);
+		pie_MatEnd();
 		return;
 	}
 	else if (!psStructure->visible[selectedPlayer] && !demoGetStatus())
@@ -2067,6 +2089,11 @@ void	renderStructure(STRUCTURE *psStructure)
 	else if (psStructure->pStructureType->type == REF_DEFENSE)
 	{
 		defensive = true;
+	}
+
+	if (psTile->jammerBits & alliancebits[psStructure->player])
+	{
+		ecmFlag = pie_ECM;
 	}
 
 	colour = getPlayerColour(psStructure->player);
@@ -2129,7 +2156,7 @@ void	renderStructure(STRUCTURE *psStructure)
 			}
 			else
 			{
-				pieFlag = pie_TRANSLUCENT | pie_FORCE_FOG;
+				pieFlag = pie_TRANSLUCENT | pie_FORCE_FOG | ecmFlag;
 				pieFlagData = 255;
 			}
 			pie_Draw3DShape(psStructure->pStructureType->pBaseIMD, 0, colour, buildingBrightness, pieFlag, pieFlagData);
@@ -2161,7 +2188,7 @@ void	renderStructure(STRUCTURE *psStructure)
 		}
 		else
 		{
-			pieFlag = pie_STATIC_SHADOW;
+			pieFlag = pie_STATIC_SHADOW | ecmFlag;
 			pieFlagData = 0;
 		}
 		if (defensive && !structureIsBlueprint(psStructure) && !(strImd->flags & iV_IMD_NOSTRETCH))
@@ -2223,7 +2250,7 @@ void	renderStructure(STRUCTURE *psStructure)
 			}
 			else
 			{
-				pieFlag = pie_SHADOW;
+				pieFlag = pie_SHADOW | ecmFlag;
 				pieFlagData = 0;
 			}
 
@@ -2471,14 +2498,20 @@ void	renderDeliveryPoint(FLAG_POSITION *psPosition, bool blueprint)
 /// Draw a piece of wall
 static bool	renderWallSection(STRUCTURE *psStructure)
 {
-	SDWORD			structX, structY, height;
+	int			structX, structY, height, ecmFlag = 0;
 	PIELIGHT		brightness;
 	SDWORD			rotation;
 	Vector3i			dv;
 	int				pieFlag, pieFlagData;
+	MAPTILE			*psTile = worldTile(psStructure->pos.x, psStructure->pos.y);
 
 	if(psStructure->visible[selectedPlayer] || demoGetStatus())
 	{
+		if (psTile->jammerBits & alliancebits[psStructure->player])
+		{
+			ecmFlag = pie_ECM;
+		}
+
 		height = psStructure->sDisplay.imd->max.y;
 		psStructure->sDisplay.frameNumber = currentGameFrame;
 		/* Get it's x and y coordinates so we don't have to deref. struct later */
@@ -2521,7 +2554,7 @@ static bool	renderWallSection(STRUCTURE *psStructure)
 			(psStructure->status == SS_BEING_BUILT && psStructure->pStructureType->type == REF_RESOURCE_EXTRACTOR) )
 		{
 			pie_Draw3DShape(psStructure->sDisplay.imd, 0, getPlayerColour(psStructure->player),
-			                brightness, pie_HEIGHT_SCALED|pie_SHADOW, structHeightScale(psStructure) * pie_RAISE_SCALE);
+					brightness, pie_HEIGHT_SCALED|pie_SHADOW|ecmFlag, structHeightScale(psStructure) * pie_RAISE_SCALE);
 		}
 		else
 		{
@@ -2543,7 +2576,7 @@ static bool	renderWallSection(STRUCTURE *psStructure)
 				}
 				pieFlagData = 0;
 			}
-			pie_Draw3DShape(psStructure->sDisplay.imd, 0, getPlayerColour(psStructure->player), brightness, pieFlag, pieFlagData);
+			pie_Draw3DShape(psStructure->sDisplay.imd, 0, getPlayerColour(psStructure->player), brightness, pieFlag|ecmFlag, pieFlagData);
 		}
 
 		{

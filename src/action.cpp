@@ -1971,8 +1971,7 @@ void actionUpdateDroid(DROID *psDroid)
 		actionTargetTurret(psDroid, psDroid->psActionTarget[0], &psDroid->asWeaps[0]);
 
 		// WSS shouldn't get a free pass to hit anything on map
-		if ((cbSensorDroid(psDroid) && asSensorStats[psDroid->asBits[COMP_SENSOR].nStat].type != SUPER_SENSOR)
-		    || objRadarDetector(psDroid))
+		if (cbSensorDroid(psDroid) && asSensorStats[psDroid->asBits[COMP_SENSOR].nStat].type != SUPER_SENSOR)
 		{
 			// don't move to the target, just make sure it is visible
 			// Anyone commenting this out will get a knee capping from John.

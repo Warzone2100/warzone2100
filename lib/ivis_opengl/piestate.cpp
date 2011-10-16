@@ -39,10 +39,12 @@
 // Variables for the coloured mouse cursor
 static GLuint shaderProgram[SHADER_MAX];
 static GLfloat shaderStretch = 0;
-static GLint locTeam, locStretch, locTCMask, locFog, locNormalMap;
+static GLint locTeam, locStretch, locTCMask, locFog, locNormalMap, locEcm, locTime;
 static SHADER_MODE currentShaderMode = SHADER_NONE;
 unsigned int pieStateCount = 0; // Used in pie_GetResetCounts
 static RENDER_STATE rendStates;
+static GLint ecmState = 0;
+static GLfloat timeState = 0.0f;
 
 void rendStatesRendModeHack()
 {
@@ -312,6 +314,21 @@ void pie_DeactivateShader(void)
 	glUseProgram(0);
 }
 
+void pie_SetShaderTime(uint32_t shaderTime)
+{
+	uint32_t base = shaderTime % 1000;
+	if (base > 500)
+	{
+		base = 1000 - base;	// cycle
+	}
+	timeState = (GLfloat)base / 1000.0f;
+}
+
+void pie_SetShaderEcmEffect(bool value)
+{
+	ecmState = (int)value;
+}
+
 void pie_SetShaderStretchDepth(float stretch)
 {
 	shaderStretch = stretch;
@@ -334,6 +351,8 @@ void pie_ActivateShader(SHADER_MODE shaderMode, PIELIGHT teamcolour, int maskpag
 		locTCMask = glGetUniformLocation(shaderProgram[shaderMode], "tcmask");
 		locNormalMap = glGetUniformLocation(shaderProgram[shaderMode], "normalmap");
 		locFog = glGetUniformLocation(shaderProgram[shaderMode], "fogEnabled");
+		locEcm = glGetUniformLocation(shaderProgram[shaderMode], "ecmEffect");
+		locTime = glGetUniformLocation(shaderProgram[shaderMode], "graphicsCycle");
 
 		// These never change
 		glUniform1i(locTex0, 0);
@@ -349,6 +368,8 @@ void pie_ActivateShader(SHADER_MODE shaderMode, PIELIGHT teamcolour, int maskpag
 	glUniform1i(locTCMask, maskpage != iV_TEX_INVALID);
 	glUniform1i(locNormalMap, normalpage != iV_TEX_INVALID);
 	glUniform1i(locFog, rendStates.fog);
+	glUniform1f(locTime, timeState);
+	glUniform1i(locEcm, ecmState);
 
 	if (maskpage != iV_TEX_INVALID)
 	{
