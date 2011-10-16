@@ -181,6 +181,7 @@ lib/netplay/netplay.cpp
 lib/netplay/netqueue.cpp
 lib/netplay/netsocket.cpp
 lib/netplay/nettypes.cpp
+lib/qtgame/macosx_screen_resolutions.cpp
 lib/qtgame/qtgame.cpp
 lib/qtgame/swapinterval.cpp
 lib/script/codeprint.cpp
