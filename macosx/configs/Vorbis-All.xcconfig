@@ -1,0 +1,11 @@
+// Vorbis settings for all configurations
+
+#include "Base-Framework.xcconfig"
+
+
+INFOPLIST_FILE = Resources/vorbis/Info.plist
+PRODUCT_NAME = Vorbis
+HEADER_SEARCH_PATHS = $(inherited)
+USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/external/libvorbis/lib/"
+
+WARNING_CFLAGS = -Wno-comment

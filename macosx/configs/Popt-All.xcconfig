@@ -1,0 +1,11 @@
+// Popt settings for all configurations
+
+#include "Base-Framework.xcconfig"
+
+
+PRODUCT_NAME = Popt
+GCC_PRECOMPILE_PREFIX_HEADER = YES
+GCC_PREFIX_HEADER = "$(SDK_DIR)/System/Library/Frameworks/Carbon.framework/Headers/Carbon.h"
+GCC_PREPROCESSOR_DEFINITIONS = $(inherited) $(GCC_PREPROCESSOR_DEFINITIONS_QUOTED_1) HAVE_UNISTD_H HAVE_STPCPY HAVE_STRERROR
+
+GCC_PREPROCESSOR_DEFINITIONS_QUOTED_1 = PACKAGE=\"popt\"

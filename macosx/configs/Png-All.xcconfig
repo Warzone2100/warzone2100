@@ -1,0 +1,9 @@
+// Png settings for all configurations
+
+#include "Base-Framework.xcconfig"
+
+
+PRODUCT_NAME = Png
+FRAMEWORK_SEARCH_PATHS = $(inherited) $(FRAMEWORK_SEARCH_PATHS_QUOTED_2)
+
+GCC_WARN_INHIBIT_ALL_WARNINGS = YES

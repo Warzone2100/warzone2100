@@ -1,0 +1,11 @@
+// Theora settings for all configurations
+
+#include "Base-Framework.xcconfig"
+
+
+INFOPLIST_FILE = Resources/theora/Info.plist
+PRODUCT_NAME = Theora
+HEADER_SEARCH_PATHS =  $(inherited)
+USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/external/libtheora/lib" "$(SRCROOT)/external/libtheora/include/**"
+
+WARNING_CFLAGS = -Wno-parentheses // Silence warnings that are not ours

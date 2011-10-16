@@ -6,6 +6,7 @@ OutDir="$2"
 FileName="$3"
 SourceDLP="$4"
 MD5Sum="$5"
+BackupDLP="http://wz2100.net/~dak180/BuildTools/external/"
 
 
 # Make sure we are in the right place
@@ -54,8 +55,10 @@ fi
 if [ ! -r "${FileName}" ]; then
     echo "Fetching ${SourceDLP}"
     if ! curl -Lfo "${FileName}" --connect-timeout "30" "${SourceDLP}"; then
-        echo "error: Unable to fetch ${SourceDLP}" >&2
-        exit 1
+        if ! curl -LfOC - --connect-timeout "30" "${BackupDLP}${FileName}"; then
+			echo "error: Unable to fetch ${SourceDLP}" >&2
+			exit 1
+        fi
     fi
 else
     echo "${FileName} already exists, skipping"
@@ -73,7 +76,7 @@ fi
 
 # Unpack
 ExtensioN=`echo ${FileName} | sed -e 's:^.*\.\([^.]*\):\1:'`
-if [ "${ExtensioN}" = "gz" ]; then
+if [[ "${ExtensioN}" = "gz" ]] || [[ "${ExtensioN}" = "tgz" ]]; then
     if ! tar -zxf "${FileName}"; then
         echo "error: Unpacking ${FileName} failed" >&2
         exit 1
@@ -97,7 +100,6 @@ if [ ! -d "${DirectorY}" ]; then
     exit 1
 else
     mv "${DirectorY}" "${OutDir}"
-    cd "${SRCROOT}"; xcodeindex; cd external
 fi
 
 exit 0

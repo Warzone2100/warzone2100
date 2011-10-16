@@ -1,0 +1,6 @@
+// Gettext settings for Release configuration
+
+#include "Gettext-All.xcconfig"
+
+
+GCC_ENABLE_FIX_AND_CONTINUE = NO
