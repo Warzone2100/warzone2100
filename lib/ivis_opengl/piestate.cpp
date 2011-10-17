@@ -91,17 +91,13 @@ void pie_EnableFog(bool val)
 	{
 		debug(LOG_FOG, "pie_EnableFog: Setting fog to %s", val ? "ON" : "OFF");
 		rendStates.fogEnabled = val;
-		if (val == true)
+		if (val)
 		{
 			pie_SetFogColour(WZCOL_FOG);
 		}
 		else
 		{
-			PIELIGHT black;
-
-			black.rgba = 0;
-			black.byte.a = 255;
-			pie_SetFogColour(black); // clear background to black
+			pie_SetFogColour(WZCOL_BLACK); // clear background to black
 		}
 	}
 }

@@ -175,24 +175,20 @@ void war_SetFog(bool val)
 	{
 		warGlobs.bFog = val;
 	}
-	if (warGlobs.bFog == true)
+	if (warGlobs.bFog)
 	{
 		setRevealStatus(false);
 	}
 	else
 	{
-		PIELIGHT black;
-
 		setRevealStatus(true);
-		black.rgba = 0;
-		black.byte.a = 255;
-		pie_SetFogColour(black);
+		pie_SetFogColour(WZCOL_BLACK);
 	}
 }
 
 bool war_GetFog(void)
 {
-	return  warGlobs.bFog;
+	return warGlobs.bFog;
 }
 
 /***************************************************************************/
