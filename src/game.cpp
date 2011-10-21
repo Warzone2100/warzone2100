@@ -325,7 +325,7 @@ static bool serializeMultiplayerGame(PHYSFS_file* fileHandle, const MULTIPLAYERG
 	 || PHYSFS_write(fileHandle, dummy8c, 1, 8) != 8
 	 || !PHYSFS_writeUBE8(fileHandle, serializeMulti->maxPlayers)
 	 || PHYSFS_write(fileHandle, serializeMulti->name, 1, 128) != 128
-	 || !PHYSFS_writeSBE32(fileHandle, serializeMulti->fog)
+	 || !PHYSFS_writeSBE32(fileHandle, 0)
 	 || !PHYSFS_writeUBE32(fileHandle, serializeMulti->power)
 	 || !PHYSFS_writeUBE8(fileHandle, serializeMulti->base)
 	 || !PHYSFS_writeUBE8(fileHandle, serializeMulti->alliance)
@@ -371,8 +371,6 @@ static bool deserializeMultiplayerGame(PHYSFS_file* fileHandle, MULTIPLAYERGAME*
 		return false;
 	}
 	challengeActive = dummy8;	// hack
-
-	serializeMulti->fog = boolFog;
 
 	for (i = 0; i < MAX_PLAYERS; ++i)
 	{
@@ -736,8 +734,8 @@ static bool serializeSaveGameV15Data(PHYSFS_file* fileHandle, const SAVE_GAME_V1
 
 	return (PHYSFS_writeUBE32(fileHandle, serializeGame->RubbleTile)
 	     && PHYSFS_writeUBE32(fileHandle, serializeGame->WaterTile)
-	     && PHYSFS_writeUBE32(fileHandle, serializeGame->fogColour)
-	     && PHYSFS_writeUBE32(fileHandle, serializeGame->fogState));
+	     && PHYSFS_writeUBE32(fileHandle, 0)
+	     && PHYSFS_writeUBE32(fileHandle, 0));
 }
 
 static bool deserializeSaveGameV15Data(PHYSFS_file* fileHandle, SAVE_GAME_V15* serializeGame)
@@ -1684,43 +1682,9 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 
 		if (saveGameVersion >= VERSION_15)//V21
 		{
-			PIELIGHT colour;
-
 			offWorldKeepLists	= saveGameData.offWorldKeepLists;
 			setRubbleTile(saveGameData.RubbleTile);
 			setUnderwaterTile(saveGameData.WaterTile);
-			if (saveGameData.fogState == 0)//no fog
-			{
-				pie_EnableFog(false);
-				fogStatus = 0;
-			}
-			else if (saveGameData.fogState == 1)//fog using old code assume background and depth
-			{
-				if (war_GetFog())
-				{
-					pie_EnableFog(true);
-				}
-				else
-				{
-					pie_EnableFog(false);
-				}
-				fogStatus = FOG_BACKGROUND + FOG_DISTANCE;
-			}
-			else//version 18+ fog
-			{
-				if (war_GetFog())
-				{
-					pie_EnableFog(true);
-				}
-				else
-				{
-					pie_EnableFog(false);
-				}
-				fogStatus = saveGameData.fogState;
-				fogStatus &= FOG_FLAGS;
-			}
-			colour.rgba = saveGameData.fogColour;
-			pie_SetFogColour(colour);
 		}
 		if (saveGameVersion >= VERSION_19)//V21
 		{
@@ -2927,8 +2891,6 @@ static void endian_SaveGameV(SAVE_GAME* psSaveGame, UDWORD version)
 	if(version >= VERSION_15) {
 		endian_udword(&psSaveGame->RubbleTile);
 		endian_udword(&psSaveGame->WaterTile);
-		endian_udword(&psSaveGame->fogColour);
-		endian_udword(&psSaveGame->fogState);
 	}
 	/* GAME_SAVE_V14 includes GAME_SAVE_V12 */
 	if(version >= VERSION_14) {
@@ -3450,43 +3412,9 @@ bool gameLoadV(PHYSFS_file* fileHandle, unsigned int version)
 
 	if (version >= VERSION_15)
 	{
-		PIELIGHT colour;
-
 		offWorldKeepLists	= saveGameData.offWorldKeepLists;
 		setRubbleTile(saveGameData.RubbleTile);
 		setUnderwaterTile(saveGameData.WaterTile);
-		if (saveGameData.fogState == 0)//no fog
-		{
-			pie_EnableFog(false);
-			fogStatus = 0;
-		}
-		else if (saveGameData.fogState == 1)//fog using old code assume background and depth
-		{
-			if (war_GetFog())
-			{
-				pie_EnableFog(true);
-			}
-			else
-			{
-				pie_EnableFog(false);
-			}
-			fogStatus = FOG_BACKGROUND + FOG_DISTANCE;
-		}
-		else//version 18+ fog
-		{
-			if (war_GetFog())
-			{
-				pie_EnableFog(true);
-			}
-			else
-			{
-				pie_EnableFog(false);
-			}
-			fogStatus = saveGameData.fogState;
-			fogStatus &= FOG_FLAGS;
-		}
-		colour.rgba = saveGameData.fogColour;
-		pie_SetFogColour(colour);
 	}
 
 	if (version >= VERSION_17)
@@ -3758,12 +3686,6 @@ static bool writeGameFile(const char* fileName, SDWORD saveType)
 	saveGame.offWorldKeepLists = offWorldKeepLists;
 	saveGame.RubbleTile	= getRubbleTileNum();
 	saveGame.WaterTile	= getWaterTileNum();
-	saveGame.fogColour	= pie_GetFogColour().rgba;
-	saveGame.fogState	= fogStatus;
-	if(pie_GetFogEnabled())
-	{
-		saveGame.fogState	= fogStatus | FOG_ENABLED;
-	}
 
 	for (i = 0; i < MAX_PLAYERS; ++i)
 	{

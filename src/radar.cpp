@@ -334,7 +334,7 @@ static PIELIGHT appliedRadarColour(RADAR_DRAW_MODE radarDrawMode, MAPTILE *WTile
 	PIELIGHT WScr = WZCOL_BLACK;	// squelch warning
 
 	// draw radar terrain on/off feature
-	if ((getRevealStatus() || radarDrawMode == RADAR_MODE_TERRAIN_SEEN) && !TEST_TILE_VISIBLE(selectedPlayer, WTile))
+	if ((!getRevealStatus() || radarDrawMode == RADAR_MODE_TERRAIN_SEEN) && !TEST_TILE_VISIBLE(selectedPlayer, WTile))
 	{
 		return WZCOL_RADAR_BACKGROUND;
 	}
@@ -357,6 +357,12 @@ static PIELIGHT appliedRadarColour(RADAR_DRAW_MODE radarDrawMode, MAPTILE *WTile
 				col.byte.g /= 2;
 			}
 			if (!hasSensorOnTile(WTile, selectedPlayer))
+			{
+				col.byte.r /= 2;
+				col.byte.b /= 2;
+				col.byte.g /= 2;
+			}
+			if (!TEST_TILE_VISIBLE(selectedPlayer, WTile))
 			{
 				col.byte.r /= 2;
 				col.byte.b /= 2;

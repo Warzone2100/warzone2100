@@ -84,7 +84,6 @@ bool loadConfig()
 	war_setScanlineMode((SCANLINE_MODE)ini.value("scanlines", SCANLINES_OFF).toInt());
 	seq_SetSubtitles(ini.value("subtitles", true).toBool());
 	setDifficultyLevel((DIFFICULTY_LEVEL)ini.value("difficulty", DL_NORMAL).toInt());
-	war_SetFog(ini.value("visfog", true).toBool());
 	war_SetSPcolor(ini.value("colour", 0).toInt());	// default is green (0)
 	sstrcpy(game.name, ini.value("gameName", _("My Game")).toString().toUtf8().constData());
 	sstrcpy(sPlayer, ini.value("playerName", _("Player")).toString().toUtf8().constData());
@@ -100,7 +99,6 @@ bool loadConfig()
 		game.maxPlayers = 4;
 	}
 	game.power = ini.value("power", LEV_MED).toInt();
-	game.fog = ini.value("fog").toBool();
 	game.base = ini.value("base", CAMP_BASE).toInt();
 	game.alliance = ini.value("alliance", NO_ALLIANCES).toInt();
 	memset(&ingame.phrases, 0, sizeof(ingame.phrases));
@@ -188,7 +186,6 @@ bool saveConfig()
 	}
 	ini.setValue("showFPS", (SDWORD)showFPS);
 	ini.setValue("scroll",(SDWORD)scroll_speed_accel);		// scroll
-	ini.setValue("visfog",(SDWORD)(!war_GetFog()));			// fogtype
 	ini.setValue("shake",(SDWORD)(getShakeStatus()));		// screenshake
 	ini.setValue("mouseflip",(SDWORD)(getInvertMouseStatus()));	// flipmouse
 	ini.setValue("nomousewarp", (SDWORD)getMouseWarp()); 		// mouse warp
@@ -226,7 +223,6 @@ bool saveConfig()
 			ini.setValue("maxPlayers", game.maxPlayers);		// maxPlayers
 			ini.setValue("power", game.power);				// power
 			ini.setValue("base", game.base);				// size of base
-			ini.setValue("fog", game.fog);					// fog 'o war
 			ini.setValue("alliance", game.alliance);		// allow alliances
 		}
 		ini.setValue("playerName", (char*)sPlayer);		// player name
@@ -292,7 +288,6 @@ bool reloadMPConfig(void)
 		ini.setValue("maxPlayers", game.maxPlayers);		// maxPlayers
 		ini.setValue("power", game.power);				// power
 		ini.setValue("base", game.base);				// size of base
-		ini.setValue("fog", game.fog);					// fog 'o war
 		ini.setValue("alliance", game.alliance);		// allow alliances
 		return true;
 	}
@@ -310,7 +305,6 @@ bool reloadMPConfig(void)
 		game.maxPlayers = ini.value("maxPlayers").toInt();	// FIXME: horrible kluge, MUST match map above
 	}
 	game.power = ini.value("power", LEV_MED).toInt();
-	game.fog = ini.value("fog").toBool();
 	game.base = ini.value("base", CAMP_BASE).toInt();
 	game.alliance = ini.value("alliance", NO_ALLIANCES).toInt();
 

@@ -389,11 +389,8 @@ void featureUpdate(FEATURE *psFeat)
 {
 	syncDebugFeature(psFeat, '<');
 
-   //	if(getRevealStatus())
-   //	{
-		// update the visibility for the feature
-		processVisibilityLevel((BASE_OBJECT *)psFeat);
-   //	}
+	// update the visibility for the feature
+	processVisibilityLevel((BASE_OBJECT *)psFeat);
 
 	switch (psFeat->psStats->subType)
 	{

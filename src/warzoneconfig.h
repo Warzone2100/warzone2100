@@ -54,8 +54,6 @@ enum FSAA_LEVEL
  */
 /***************************************************************************/
 extern void	war_SetDefaultStates(void);
-extern void war_SetFog(bool val);
-extern bool war_GetFog(void);
 extern void war_SetFMVmode(FMV_MODE mode);
 extern FMV_MODE war_GetFMVmode(void);
 extern void war_SetAllowSubtitles(bool);

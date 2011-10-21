@@ -503,39 +503,27 @@ static bool startGraphicsOptionsMenu(void)
 	}
 
 	////////////
-	// fog
-	addTextButton(FRONTEND_FOGTYPE,	 FRONTEND_POS5X-35,   FRONTEND_POS5Y, _("Fog"), 0);
-	if(war_GetFog())
-	{
-		addTextButton(FRONTEND_FOGTYPE_R,FRONTEND_POS5M-55,FRONTEND_POS5Y, _("Mist"), 0);
-	}
-	else
-	{
-		addTextButton(FRONTEND_FOGTYPE_R,FRONTEND_POS5M-55,FRONTEND_POS5Y, _("Fog Of War"), 0);
-	}
-
-	////////////
 	//subtitle mode.
-	addTextButton(FRONTEND_SUBTITLES, FRONTEND_POS6X - 35, FRONTEND_POS6Y, _("Subtitles"), 0);
+	addTextButton(FRONTEND_SUBTITLES, FRONTEND_POS6X - 35, FRONTEND_POS5Y, _("Subtitles"), 0);
 	if (!seq_GetSubtitles())
 	{
-		addTextButton(FRONTEND_SUBTITLES_R, FRONTEND_POS6M - 55, FRONTEND_POS6Y, _("Off"), 0);
+		addTextButton(FRONTEND_SUBTITLES_R, FRONTEND_POS6M - 55, FRONTEND_POS5Y, _("Off"), 0);
 	}
 	else
 	{
-		addTextButton(FRONTEND_SUBTITLES_R, FRONTEND_POS6M - 55, FRONTEND_POS6Y, _("On"), 0);
+		addTextButton(FRONTEND_SUBTITLES_R, FRONTEND_POS6M - 55, FRONTEND_POS5Y, _("On"), 0);
 	}
 
 	////////////
 	//shadows
-	addTextButton(FRONTEND_SHADOWS, FRONTEND_POS7X - 35, FRONTEND_POS7Y, _("Shadows"), 0);
+	addTextButton(FRONTEND_SHADOWS, FRONTEND_POS7X - 35, FRONTEND_POS6Y, _("Shadows"), 0);
 	if (getDrawShadows())
 	{
-		addTextButton(FRONTEND_SHADOWS_R, FRONTEND_POS7M - 55,  FRONTEND_POS7Y, _("On"), 0);
+		addTextButton(FRONTEND_SHADOWS_R, FRONTEND_POS7M - 55,  FRONTEND_POS6Y, _("On"), 0);
 	}
 	else
 	{	// not flipped
-		addTextButton(FRONTEND_SHADOWS_R, FRONTEND_POS7M - 55,  FRONTEND_POS7Y, _("Off"), 0);
+		addTextButton(FRONTEND_SHADOWS_R, FRONTEND_POS7M - 55,  FRONTEND_POS6Y, _("Off"), 0);
 	}
 
 	// Add some text down the side of the form
@@ -569,22 +557,6 @@ bool runGraphicsOptionsMenu(void)
 			widgSetString(psWScreen,FRONTEND_SSHAKE_R, _("On"));
 		}
 		break;
-
-	case FRONTEND_FOGTYPE:
-	case FRONTEND_FOGTYPE_R:
-	if (war_GetFog())
-	{	// turn off crap fog, turn on vis fog.
-		debug(LOG_FOG, "runGameOptions2Menu: Fog of war ON, visual fog OFF");
-		war_SetFog(false);
-		widgSetString(psWScreen,FRONTEND_FOGTYPE_R, _("Fog Of War"));
-	}
-	else
-	{	// turn off vis fog, turn on normal crap fog.
-		debug(LOG_FOG, "runGameOptions2Menu: Fog of war OFF, visual fog ON");
-		war_SetFog(true);
-		widgSetString(psWScreen,FRONTEND_FOGTYPE_R, _("Mist"));
-	}
-	break;
 
 	case FRONTEND_QUIT:
 		changeTitleMode(OPTIONS);

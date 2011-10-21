@@ -1569,22 +1569,8 @@ static void addGameOptions()
 		widgSetButtonState(psWScreen, MULTIOP_PNAME_ICON, WBUT_DISABLE);
 	}
 
-	// Fog type
-	addBlueForm(MULTIOP_OPTIONS,MULTIOP_FOG,_("Fog"),MCOL0,MROW6,MULTIOP_BLUEFORMW,27);
-
-	addMultiBut(psWScreen,MULTIOP_FOG,MULTIOP_FOG_ON ,MCOL1,2,MULTIOP_BUTW,MULTIOP_BUTH, _("Fog Of War"), IMAGE_FOG_OFF, IMAGE_FOG_OFF_HI,true);//black stuff
-	addMultiBut(psWScreen,MULTIOP_FOG,MULTIOP_FOG_OFF,MCOL2,2,MULTIOP_BUTW,MULTIOP_BUTH, _("Distance Fog"),IMAGE_FOG_ON,IMAGE_FOG_ON_HI,true);
-	if(game.fog)
-	{
-		widgSetButtonState(psWScreen, MULTIOP_FOG_ON,WBUT_LOCK);
-	}
-	else
-	{
-		widgSetButtonState(psWScreen, MULTIOP_FOG_OFF,WBUT_LOCK);
-	}
-
 		// alliances
-		addBlueForm(MULTIOP_OPTIONS, MULTIOP_ALLIANCES, _("Alliances"), MCOL0, MROW7, MULTIOP_BLUEFORMW, 27);
+		addBlueForm(MULTIOP_OPTIONS, MULTIOP_ALLIANCES, _("Alliances"), MCOL0, MROW6, MULTIOP_BLUEFORMW, 27);
 
 		addMultiBut(psWScreen,MULTIOP_ALLIANCES,MULTIOP_ALLIANCE_N,MCOL1,2,MULTIOP_BUTW,MULTIOP_BUTH,
 				_("No Alliances"),IMAGE_NOALLI,IMAGE_NOALLI_HI,true);
@@ -1617,7 +1603,7 @@ static void addGameOptions()
 			break;
 		}
 
-		addBlueForm(MULTIOP_OPTIONS, MULTIOP_POWER, _("Power"), MCOL0, MROW8, MULTIOP_BLUEFORMW, 27);
+		addBlueForm(MULTIOP_OPTIONS, MULTIOP_POWER, _("Power"), MCOL0, MROW7, MULTIOP_BLUEFORMW, 27);
 		addMultiBut(psWScreen,MULTIOP_POWER,MULTIOP_POWLEV_LOW,MCOL1,2,MULTIOP_BUTW,MULTIOP_BUTH,
 			_("Low Power Levels"),IMAGE_POWLO,IMAGE_POWLO_HI,true);
 		addMultiBut(psWScreen,MULTIOP_POWER,MULTIOP_POWLEV_MED,MCOL2,2,MULTIOP_BUTW,MULTIOP_BUTH,
@@ -1655,7 +1641,7 @@ static void addGameOptions()
 			}
 		}
 
-		addBlueForm(MULTIOP_OPTIONS, MULTIOP_BASETYPE, _("Base"), MCOL0, MROW9, MULTIOP_BLUEFORMW, 27);
+		addBlueForm(MULTIOP_OPTIONS, MULTIOP_BASETYPE, _("Base"), MCOL0, MROW8, MULTIOP_BLUEFORMW, 27);
 		addMultiBut(psWScreen,MULTIOP_BASETYPE,MULTIOP_CLEAN,MCOL1,2,MULTIOP_BUTW,MULTIOP_BUTH,
 				_("Start with No Bases"), IMAGE_NOBASE,IMAGE_NOBASE_HI,true);
 		addMultiBut(psWScreen,MULTIOP_BASETYPE,MULTIOP_BASE,MCOL2,2,MULTIOP_BUTW,MULTIOP_BUTH,
@@ -1693,7 +1679,7 @@ static void addGameOptions()
 			break;
 		}
 
-	addBlueForm(MULTIOP_OPTIONS, MULTIOP_MAP_PREVIEW, _("Map Preview"), MCOL0, MROW10, MULTIOP_BLUEFORMW, 27);
+	addBlueForm(MULTIOP_OPTIONS, MULTIOP_MAP_PREVIEW, _("Map Preview"), MCOL0, MROW9, MULTIOP_BLUEFORMW, 27);
 	addMultiBut(psWScreen,MULTIOP_MAP_PREVIEW, MULTIOP_MAP_BUT, MCOL2, 2, MULTIOP_BUTW, MULTIOP_BUTH,
 	            _("Click to see Map"), IMAGE_FOG_OFF, IMAGE_FOG_OFF_HI, true);
 	widgSetButtonState(psWScreen, MULTIOP_MAP_BUT,0); //1 = OFF  0=ON
@@ -2643,9 +2629,6 @@ static void disableMultiButs(void)
 
 	if (!NetPlay.isHost)
 	{
-		if( game.fog) widgSetButtonState(psWScreen,MULTIOP_FOG_OFF ,WBUT_DISABLE);		//fog
-		if(!game.fog) widgSetButtonState(psWScreen,MULTIOP_FOG_ON ,WBUT_DISABLE);
-
 			if(game.base != CAMP_CLEAN)	widgSetButtonState(psWScreen,MULTIOP_CLEAN ,WBUT_DISABLE);	// camapign subtype.
 			if(game.base != CAMP_BASE)	widgSetButtonState(psWScreen,MULTIOP_BASE ,WBUT_DISABLE);
 			if(game.base != CAMP_WALLS)	widgSetButtonState(psWScreen,MULTIOP_DEFENCE,WBUT_DISABLE);
@@ -2818,32 +2801,6 @@ static void processMultiopWidgets(UDWORD id)
 			widgSetButtonState(psWScreen, MULTIOP_SKIRMISH,WBUT_LOCK);
 			game.scavengers = false;
 			resetReadyStatus(false);
-			if(bHosted)
-			{
-				sendOptions();
-			}
-			break;
-
-		case MULTIOP_FOG_ON:
-			widgSetButtonState(psWScreen, MULTIOP_FOG_ON,WBUT_LOCK);
-			widgSetButtonState(psWScreen, MULTIOP_FOG_OFF,0);
-			game.fog = true;
-
-			resetReadyStatus(false);
-
-			if(bHosted)
-			{
-				sendOptions();
-			}
-			break;
-
-		case MULTIOP_FOG_OFF:
-			widgSetButtonState(psWScreen, MULTIOP_FOG_ON,0);
-			widgSetButtonState(psWScreen, MULTIOP_FOG_OFF,WBUT_LOCK);
-			game.fog = false;
-
-			resetReadyStatus(false);
-
 			if(bHosted)
 			{
 				sendOptions();
@@ -3283,10 +3240,6 @@ void startMultiplayerGame(void)
 		SendFireUp();								//bcast a fireup message
 	}
 
-	// set the fog correctly..
-	setRevealStatus(game.fog);
-	war_SetFog(!game.fog);
-
 	debug(LOG_NET, "title mode STARTGAME is set--Starting Game!");
 	changeTitleMode(STARTGAME);
 
@@ -3445,10 +3398,6 @@ void frontendMultiMessages(void)
 				ingame.TimeEveryoneIsInGame = 0;			// reset time
 				resetDataHash();
 				decideWRF();
-
-				// set the fog correctly..
-				setRevealStatus(game.fog);
-				war_SetFog(!game.fog);
 
 				bMultiPlayer = true;
 				bMultiMessages = true;

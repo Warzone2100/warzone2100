@@ -355,7 +355,7 @@ static PIELIGHT structureBrightness(STRUCTURE *psStructure)
 			}
 			buildingBrightness = pal_SetBrightness(200 + brightVar);
 		}
-		if (!demoGetStatus() && getRevealStatus())
+		if (!demoGetStatus() && !getRevealStatus())
 		{
 			buildingBrightness = pal_SetBrightness(avGetObjLightLevel((BASE_OBJECT*)psStructure, buildingBrightness.byte.r));
 		}
@@ -1346,7 +1346,7 @@ void	renderAnimComponent( const COMPONENT_OBJECT *psObj )
 		else
 		{
 			brightness = pal_SetBrightness(UBYTE_MAX);
-			if(getRevealStatus())
+			if (!getRevealStatus())
 			{
 				brightness = pal_SetBrightness(avGetObjLightLevel((BASE_OBJECT*)psParentObj, brightness.byte.r));
 			}
@@ -1855,7 +1855,7 @@ void	renderFeature(FEATURE *psFeature)
 	SDWORD		rotation;
 	PIELIGHT	brightness;
 	Vector3i dv;
-	bool bForceDraw = ( !getRevealStatus() && psFeature->psStats->visibleAtStart);
+	bool bForceDraw = ( getRevealStatus() && psFeature->psStats->visibleAtStart);
 	int shadowFlags = 0;
 
 	if (!psFeature->visible[selectedPlayer] && !demoGetStatus() && !bForceDraw)
@@ -1900,7 +1900,7 @@ void	renderFeature(FEATURE *psFeature)
 	{
 		brightness = pal_SetBrightness(200);
 	}
-	else if (getRevealStatus())
+	else if (!getRevealStatus())
 	{
 		brightness = pal_SetBrightness(avGetObjLightLevel((BASE_OBJECT*)psFeature, brightness.byte.r));
 	}

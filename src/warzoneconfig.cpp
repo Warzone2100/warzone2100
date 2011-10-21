@@ -46,7 +46,6 @@
 struct WARZONE_GLOBALS
 {
 	FMV_MODE	FMVmode;
-	bool		bFog;
 	SWORD		effectsLevel;
 	bool		Fullscreen;
 	bool		soundEnabled;
@@ -83,7 +82,6 @@ static WARZONE_GLOBALS	warGlobs;//STATIC use or write an access function if you 
 void war_SetDefaultStates(void)//Sets all states
 {
 	//set those here and reset in clParse or loadConfig
-	war_SetFog(false);
 	war_setFSAA(0);
 	war_setSoundEnabled( true );
 	war_SetPauseOnFocusLoss(false);
@@ -164,32 +162,6 @@ void war_SetHeight(UDWORD height)
 UDWORD war_GetHeight(void)
 {
 	return warGlobs.height;
-}
-
-/***************************************************************************/
-/***************************************************************************/
-void war_SetFog(bool val)
-{
-	debug(LOG_FOG, "Visual fog turned %s", val ? "ON" : "OFF");
-
-	if (warGlobs.bFog != val)
-	{
-		warGlobs.bFog = val;
-	}
-	if (warGlobs.bFog)
-	{
-		setRevealStatus(false);
-	}
-	else
-	{
-		setRevealStatus(true);
-		pie_SetFogColour(WZCOL_BLACK);
-	}
-}
-
-bool war_GetFog(void)
-{
-	return warGlobs.bFog;
 }
 
 /***************************************************************************/

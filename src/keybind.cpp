@@ -1257,6 +1257,7 @@ void	kf_ToggleDebugMappings( void )
 void	kf_ToggleGodMode( void )
 {
 	const char* cmsg;
+	static bool pastReveal = true;
 
 #ifndef DEBUG
 	// Bail out if we're running a _true_ multiplayer game (to prevent MP cheating)
@@ -1273,7 +1274,7 @@ void	kf_ToggleGodMode( void )
 		int player;
 
 		godMode = false;
-		setRevealStatus(game.fog);
+		setRevealStatus(pastReveal);
 		// now hide the features
 		while (psFeat)
 		{
@@ -1302,7 +1303,8 @@ void	kf_ToggleGodMode( void )
 	{
 		godMode = true; // view all structures and droids
 		revealAll(selectedPlayer);
-		setRevealStatus(false); // view the entire map
+		pastReveal = getRevealStatus();
+		setRevealStatus(true); // view the entire map
 	}
 
 	sasprintf((char**)&cmsg, _("(Player %u) is using cheat :%s"),

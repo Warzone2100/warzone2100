@@ -67,6 +67,7 @@ extern char	buildTime[8];
 // send complete game info set!
 void sendOptions()
 {
+	bool dummy = true;
 	unsigned int i;
 
 	NETbeginEncode(NETbroadcastQueue(), NET_OPTIONS);
@@ -76,7 +77,7 @@ void sendOptions()
 	NETstring(game.map, 128);
 	NETuint8_t(&game.maxPlayers);
 	NETstring(game.name, 128);
-	NETbool(&game.fog);
+	NETbool(&dummy);
 	NETuint32_t(&game.power);
 	NETuint8_t(&game.base);
 	NETuint8_t(&game.alliance);
@@ -143,6 +144,7 @@ static bool checkGameWdg(const char *nm)
 void recvOptions(NETQUEUE queue)
 {
 	unsigned int i;
+	bool dummy = true;
 
 	debug(LOG_NET, "Receiving options from host");
 	NETbeginDecode(queue, NET_OPTIONS);
@@ -152,7 +154,7 @@ void recvOptions(NETQUEUE queue)
 	NETstring(game.map, 128);
 	NETuint8_t(&game.maxPlayers);
 	NETstring(game.name, 128);
-	NETbool(&game.fog);
+	NETbool(&dummy);
 	NETuint32_t(&game.power);
 	NETuint8_t(&game.base);
 	NETuint8_t(&game.alliance);

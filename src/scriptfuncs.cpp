@@ -3802,26 +3802,7 @@ bool scrSetBackgroundFog(void)
 		return false;
 	}
 
-	//jps 17 feb 99 just set the status let other code worry about fogEnable/reveal
-	if (bState)//true, so go to false
-	{
-		//restart fog if it was off
-		if ((fogStatus == 0) && war_GetFog() && !(bMultiPlayer && game.fog))
-		{
-			pie_EnableFog(true);
-		}
-		fogStatus |= FOG_BACKGROUND;//set lowest bit of 3
-	}
-	else
-	{
-		fogStatus &= FOG_FLAGS-FOG_BACKGROUND;//clear middle bit of 3
-		//disable fog if it longer used
-		if (fogStatus == 0)
-		{
-			pie_SetFogStatus(false);
-			pie_EnableFog(false);
-		}
-	}
+	// no-op
 
 	return true;
 }
@@ -3836,25 +3817,8 @@ bool scrSetDepthFog(void)
 	{
 		return false;
 	}
-	if (bState)//true, so go to false
-	{
-		//restart fog if it was off
-		if ((fogStatus == 0) && war_GetFog() )
-		{
-			pie_EnableFog(true);
-		}
-		fogStatus |= FOG_DISTANCE;//set lowest bit of 3
-	}
-	else
-	{
-		fogStatus &= FOG_FLAGS-FOG_DISTANCE;//clear middle bit of 3
-		//disable fog if it longer used
-		if (fogStatus == 0)
-		{
-			pie_SetFogStatus(false);
-			pie_EnableFog(false);
-		}
-	}
+
+	// no-op
 
 	return true;
 }
@@ -3871,15 +3835,11 @@ bool scrSetFogColour(void)
 		return false;
 	}
 
-	if (war_GetFog())
-	{
-		scrFogColour.byte.r = red;
-		scrFogColour.byte.g = green;
-		scrFogColour.byte.b = blue;
-		scrFogColour.byte.a = 255;
-
-		pie_SetFogColour(scrFogColour);
-	}
+	scrFogColour.byte.r = red;
+	scrFogColour.byte.g = green;
+	scrFogColour.byte.b = blue;
+	scrFogColour.byte.a = 255;
+	pie_SetFogColour(scrFogColour);
 
 	return true;
 }
@@ -7178,14 +7138,8 @@ bool scrFogTileInRange(void)
 					//closer than last one?
 					if(wDist < wBestDist)
 					{
-						//tmpX = i;
-						//tmpY = j;
-						//if(pickATileGen(&tmpX, &tmpY, 4,zonedPAT))	//can reach (don't need many passes)
 						if(zonedPAT(i,j))	//Can reach this tile
 						{
-							//if((tmpX == i) && (tmpY == j))	//can't allow to change coords, otherwise might send to the same unrevealed tile next time
-															//and units will stuck forever
-							//{
 							if((threadRange <= 0) || (!ThreatInRange(player, threadRange, world_coord(i), world_coord(j), false)))
 							{
 									wBestDist = wDist;
@@ -7193,7 +7147,6 @@ bool scrFogTileInRange(void)
 									tBestY = j;
 									ok = true;
 							}
-							//}
 						}
 					}
 				}
