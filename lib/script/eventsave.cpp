@@ -145,10 +145,9 @@ static bool eventSaveContext(char *pBuffer, UDWORD *pSize)
 					// internal type
 					if (pBuffer != NULL)
 					{
-/* FIXME: this does not work for VAL_OBJ_GETSET, VAL_FUNC_EXTERN */
+						/* FIXME: this does not work for VAL_OBJ_GETSET, VAL_FUNC_EXTERN */
 						*((UDWORD *)pPos) = (UDWORD)psVal->v.ival;
 						endian_udword((UDWORD*)pPos);
-						
 						pPos += sizeof(UDWORD);
 					}
 
@@ -159,8 +158,7 @@ static bool eventSaveContext(char *pBuffer, UDWORD *pSize)
 					// user defined type
 					saveFunc = asScrTypeTab[psVal->type - VAL_USERTYPESTART].saveFunc;
 
-					ASSERT( saveFunc != NULL,
-						"eventSaveContext: no save function for type %d\n", psVal->type );
+					ASSERT(saveFunc != NULL, "No save function for type %d\n", psVal->type);
 
 					// reserve some space to store how many bytes the value uses
 					if (pBuffer != NULL)
@@ -172,8 +170,7 @@ static bool eventSaveContext(char *pBuffer, UDWORD *pSize)
 
 					if (!saveFunc(psVal, pPos, &valSize))
 					{
-						debug( LOG_FATAL, "eventSaveContext: couldn't get variable value size" );
-						abort();
+						debug(LOG_FATAL, "Could not get variable value size");
 						return false;
 					}
 
@@ -191,14 +188,12 @@ static bool eventSaveContext(char *pBuffer, UDWORD *pSize)
 				if (numVars <= 0)
 				{
 					// done all the variables
-					ASSERT( psCVals->psNext == NULL,
-						"eventSaveContext: number of context variables does not match the script code" );
+					ASSERT(psCVals->psNext == NULL, "Number of context variables does not match the script code");
 					break;
 				}
 			}
 		}
-		ASSERT( numVars == 0,
-			"eventSaveContext: number of context variables does not match the script code" );
+		ASSERT(numVars == 0, "Number of context variables does not match the script code (%d)", numVars);
 	}
 
 	// actually store how many contexts have been saved
@@ -324,13 +319,11 @@ static bool eventLoadContext(const SDWORD version, char *pBuffer, UDWORD *pSize)
 					}
 					break;
 				case VAL_OBJ_GETSET:
-/* FIXME: saving pointer on disk! */
 					data.v.pObjGetSet = *((SCRIPT_VARFUNC*)pPos);
 					pPos += sizeof(SCRIPT_VARFUNC);
 					size += sizeof(SCRIPT_VARFUNC);
 					break;
 				case VAL_FUNC_EXTERN:
-/* FIXME: saving pointer on disk! */
 					data.v.pFuncExtern = *((SCRIPT_FUNC*)pPos);
 					pPos += sizeof(SCRIPT_FUNC);
 					size += sizeof(SCRIPT_FUNC);

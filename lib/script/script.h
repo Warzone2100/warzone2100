@@ -146,11 +146,7 @@ extern bool eventAddValueCreate(INTERP_TYPE type, VAL_CREATE_FUNC create);
 extern bool eventAddValueRelease(INTERP_TYPE type, VAL_RELEASE_FUNC release);
 
 // Create a new context for a script
-extern bool eventNewContext(SCRIPT_CODE *psCode,
-							CONTEXT_RELEASE release, SCRIPT_CONTEXT **ppsContext);
-
-// Copy a context, including variable values
-extern bool eventCopyContext(SCRIPT_CONTEXT *psContext, SCRIPT_CONTEXT **ppsNew);
+extern bool eventNewContext(SCRIPT_CODE *psCode, CONTEXT_RELEASE release, SCRIPT_CONTEXT **ppsContext);
 
 // Add a new object to the trigger system
 // Time is the application time at which all the triggers are to be started
@@ -160,12 +156,10 @@ extern bool eventRunContext(SCRIPT_CONTEXT *psContext, UDWORD time);
 extern void eventRemoveContext(SCRIPT_CONTEXT *psContext);
 
 // Set a global variable value for a context
-extern bool eventSetContextVar(SCRIPT_CONTEXT *psContext, UDWORD index,
-							   INTERP_VAL *data);
+extern bool eventSetContextVar(SCRIPT_CONTEXT *psContext, UDWORD index, INTERP_VAL *data);
 
 // Get the value pointer for a variable index
-extern bool eventGetContextVal(SCRIPT_CONTEXT *psContext, UDWORD index,
-							   INTERP_VAL **ppsVal);
+extern bool eventGetContextVal(SCRIPT_CONTEXT *psContext, UDWORD index, INTERP_VAL **ppsVal);
 
 // Process all the currently active triggers
 // Time is the application time at which all the triggers are to be processed
