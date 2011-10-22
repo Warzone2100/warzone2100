@@ -631,7 +631,7 @@ FunctionEnd
   LangString TEXT_SecFMVs ${LANG_GERMAN} "Videos"
   LangString DESC_SecFMVs ${LANG_GERMAN} "Videos herunterladen und installieren."
 
-  LangString TEXT_SecFMVs_Eng ${LANG_GERMAN} "English (HQ)"
+  LangString TEXT_SecFMVs_EngHi ${LANG_GERMAN} "English (HQ)"
   LangString DESC_SecFMVs_EngHi ${LANG_GERMAN} "Die englischen Videos in erhoben Qualität herunterladen und installieren(920 MiB)."
 
   LangString TEXT_SecFMVs_Eng ${LANG_GERMAN} "English"
