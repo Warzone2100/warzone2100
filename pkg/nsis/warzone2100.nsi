@@ -323,10 +323,21 @@ SectionGroupEnd
 
 SectionGroup $(TEXT_SecFMVs) SecFMVs
 
+
+Section /o $(TEXT_SecFMVs_EngHi) SecFMVs_EngHi
+
+  IfFileExists "sequences.wz" +5
+    NSISdl::download "http://downloads.sourceforge.net/project/warzone2100/warzone2100/Videos/high-quality-en/sequences.wz"               "sequences.wz"
+    Pop $R0 ; Get the return value
+    StrCmp $R0 "success" +2
+      MessageBox MB_OK|MB_ICONSTOP "Download of videos failed: $R0"
+
+SectionEnd
+
 Section /o $(TEXT_SecFMVs_Eng) SecFMVs_Eng
 
   IfFileExists "sequences.wz" +5
-    NSISdl::download "http://downloads.sourceforge.net/project/warzone2100/warzone2100/Videos/2.2/standard-quality-en/sequences.wz"               "sequences.wz"
+    NSISdl::download "http://downloads.sourceforge.net/project/warzone2100/warzone2100/Videos/standard-quality-en/sequences.wz"               "sequences.wz"
     Pop $R0 ; Get the return value
     StrCmp $R0 "success" +2
       MessageBox MB_OK|MB_ICONSTOP "Download of videos failed: $R0"
@@ -336,7 +347,7 @@ SectionEnd
 Section /o $(TEXT_SecFMVs_EngLo) SecFMVs_EngLo
 
   IfFileExists "sequences.wz" +5
-    NSISdl::download "http://downloads.sourceforge.net/project/warzone2100/warzone2100/Videos/2.2/low-quality-en/sequences.wz"               "sequences.wz"
+    NSISdl::download "http://downloads.sourceforge.net/project/warzone2100/warzone2100/Videos/low-quality-en/sequences.wz"               "sequences.wz"
     Pop $R0 ; Get the return value
     StrCmp $R0 "success" +2
       MessageBox MB_OK|MB_ICONSTOP "Download of videos failed: $R0"
@@ -465,6 +476,11 @@ SectionGroupEnd
 Function .onInit
   !insertmacro MUI_LANGDLL_DISPLAY
   
+  # increase required size of section 'SecFMVs_EngHi' by file size
+  SectionGetSize ${SecFMVs_EngHi} $0
+  IntOp $0 $0 + 671938;135
+  SectionSetSize ${SecFMVs_EngHi} $0
+
   # increase required size of section 'SecFMVs_Eng' by file size
   SectionGetSize ${SecFMVs_Eng} $0
   IntOp $0 $0 + 571937;134
@@ -487,14 +503,17 @@ Function .onInit
   SectionSetFlags ${SecFMVs} $0
   
   ;FIXME: Select default video sub-component
+  ; Default is still set to standard instead of high, since there is a ~450MB difference
   StrCpy $5 ${SecFMVs_Eng}
 FunctionEnd
 
 Function .onSelChange
 ${If} ${SectionIsSelected} ${SecFMVs_Eng}
+${OrIf} ${SectionIsSelected} ${SecFMVs_EngHi}
 ${OrIf} ${SectionIsSelected} ${SecFMVs_EngLo}
 ;${OrIf} ${SectionIsSelected} ${SecFMVs_Ger}
 	!insertmacro StartRadioButtons $5
+		!insertmacro RadioButton ${SecFMVs_EngHi}
 		!insertmacro RadioButton ${SecFMVs_Eng}
 		!insertmacro RadioButton ${SecFMVs_EngLo}
 ;		!insertmacro RadioButton ${SecFMVs_Ger}
@@ -560,12 +579,15 @@ FunctionEnd
   LangString TEXT_SecFMVs ${LANG_ENGLISH} "Videos"
   LangString DESC_SecFMVs ${LANG_ENGLISH} "Download and install in-game cutscenes."
 
+  LangString TEXT_SecFMVs_EngHi ${LANG_ENGLISH} "English"
+  LangString DESC_SecFMVs_EngHi ${LANG_ENGLISH} "Download and install higher-quality English in-game cutscenes (920 MB)."
+
   LangString TEXT_SecFMVs_Eng ${LANG_ENGLISH} "English"
   LangString DESC_SecFMVs_Eng ${LANG_ENGLISH} "Download and install English in-game cutscenes (545 MB)."
-  
+
   LangString TEXT_SecFMVs_EngLo ${LANG_ENGLISH} "English (LQ)"
   LangString DESC_SecFMVs_EngLo ${LANG_ENGLISH} "Download and install a low-quality version of English in-game cutscenes (162 MB)."
-  
+
   LangString TEXT_SecFMVs_Ger ${LANG_ENGLISH} "German"
   LangString DESC_SecFMVs_Ger ${LANG_ENGLISH} "Download and install German in-game cutscenes (460 MB)."
   
@@ -574,7 +596,7 @@ FunctionEnd
 
   LangString TEXT_SecNLS_WinFonts ${LANG_ENGLISH} "WinFonts"
   LangString DESC_SecNLS_WinFonts ${LANG_ENGLISH} "Include Windows Fonts folder into the search path. Enable this if you want to use custom fonts in config file or having troubles with standard font. Can be slow on Vista and later!"
-  
+
   LangString TEXT_SecDyDoAIMod ${LANG_ENGLISH} "DyDo-AI"
   LangString DESC_SecDyDoAIMod ${LANG_ENGLISH} "DyDo-AI: New computer opponent"
 
@@ -601,12 +623,15 @@ FunctionEnd
   LangString TEXT_SecFMVs ${LANG_DUTCH} "Videos"
   LangString DESC_SecFMVs ${LANG_DUTCH} "Download and install in-game cutscenes."
 
+  LangString TEXT_SecFMVs_EngHi ${LANG_DUTCH} "English (HQ)"
+  LangString DESC_SecFMVs_EngHi ${LANG_DUTCH} "Download and install higher-quality English in-game cutscenes (920 MB)."
+
   LangString TEXT_SecFMVs_Eng ${LANG_DUTCH} "English"
   LangString DESC_SecFMVs_Eng ${LANG_DUTCH} "Download and install English in-game cutscenes (545 MB)."
-  
+
   LangString TEXT_SecFMVs_EngLo ${LANG_DUTCH} "English (LQ)"
   LangString DESC_SecFMVs_EngLo ${LANG_DUTCH} "Download and install a low-quality version of English in-game cutscenes (162 MB)."
-  
+
   LangString TEXT_SecFMVs_Ger ${LANG_DUTCH} "German"
   LangString DESC_SecFMVs_Ger ${LANG_DUTCH} "Download and install German in-game cutscenes (460 MB)."
 
@@ -642,12 +667,15 @@ FunctionEnd
   LangString TEXT_SecFMVs ${LANG_GERMAN} "Videos"
   LangString DESC_SecFMVs ${LANG_GERMAN} "Videos herunterladen und installieren."
 
+  LangString TEXT_SecFMVs_Eng ${LANG_GERMAN} "English (HQ)"
+  LangString DESC_SecFMVs_EngHi ${LANG_GERMAN} "Die englischen Videos in erhoben Qualitдt herunterladen und installieren(920 MiB)."
+
   LangString TEXT_SecFMVs_Eng ${LANG_GERMAN} "English"
   LangString DESC_SecFMVs_Eng ${LANG_GERMAN} "Die englischen Videos herunterladen und installieren (545 MiB)."
-  
+
   LangString TEXT_SecFMVs_EngLo ${LANG_GERMAN} "English (LQ)"
   LangString DESC_SecFMVs_EngLo ${LANG_GERMAN} "Die englischen Videos in geringer Qualitдt herunterladen und installieren (162 MiB)."
-  
+
   LangString TEXT_SecFMVs_Ger ${LANG_GERMAN} "German"
   LangString DESC_SecFMVs_Ger ${LANG_GERMAN} "Die deutschen Videos herunterladen und installieren (460 MiB)."
   
@@ -683,15 +711,18 @@ FunctionEnd
   LangString TEXT_SecFMVs ${LANG_RUSSIAN} "Видео"
   LangString DESC_SecFMVs ${LANG_RUSSIAN} "Скачать и установить внутриигровые ролики."
 
+  LangString TEXT_SecFMVs_EngHi ${LANG_RUSSIAN} "Английские (HQ)"
+  LangString DESC_SecFMVs_EngHi ${LANG_RUSSIAN} "Download and install higher-quality English in-game cutscenes (920 MB)."
+
   LangString TEXT_SecFMVs_Eng ${LANG_RUSSIAN} "Английские"
   LangString DESC_SecFMVs_Eng ${LANG_RUSSIAN} "Скачать и установить внутриигровые ролики на английском языке (545 MB)."
-  
+
   LangString TEXT_SecFMVs_EngLo ${LANG_RUSSIAN} "Английские (LQ)"
   LangString DESC_SecFMVs_EngLo ${LANG_RUSSIAN} "Скачать и установить внутриигровые ролики (низкого качества) на английском языке (162 MB)."
-  
+
   LangString TEXT_SecFMVs_Ger ${LANG_RUSSIAN} "Немецкие"
   LangString DESC_SecFMVs_Ger ${LANG_RUSSIAN} "Скачать и установить внутриигровые ролики на немецком языке (460 MB)."
-  
+
   LangString TEXT_SecNLS ${LANG_RUSSIAN} "Языковые файлы"
   LangString DESC_SecNLS ${LANG_RUSSIAN} "Поддержка Русского и других языков."
 
@@ -720,6 +751,7 @@ FunctionEnd
 	
     !insertmacro MUI_DESCRIPTION_TEXT ${SecFMVs} $(DESC_SecFMVs)
 	!insertmacro MUI_DESCRIPTION_TEXT ${SecFMVs_Eng} $(DESC_SecFMVs_Eng)
+	!insertmacro MUI_DESCRIPTION_TEXT ${SecFMVs_EngHi} $(DESC_SecFMVs_EngHi)
 	!insertmacro MUI_DESCRIPTION_TEXT ${SecFMVs_EngLo} $(DESC_SecFMVs_EngLo)
 ;	!insertmacro MUI_DESCRIPTION_TEXT ${SecFMVs_Ger} $(DESC_SecFMVs_Ger)
 
