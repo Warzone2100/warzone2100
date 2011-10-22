@@ -273,7 +273,7 @@ enum INTERP_RUNTYPE
 extern SDWORD aOpSize[];
 
 /* Check if two types are equivalent */
-extern bool interpCheckEquiv(INTERP_TYPE to, INTERP_TYPE from) WZ_DECL_PURE;
+extern bool interpCheckEquiv(INTERP_TYPE to, INTERP_TYPE from);
 
 // Initialise the interpreter
 extern bool interpInitialise(void);

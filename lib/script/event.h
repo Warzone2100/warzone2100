@@ -39,24 +39,12 @@ struct VAL_CHUNK
 	VAL_CHUNK *             psNext;
 };
 
-
-/* The number of links in a context event link chunk */
-#define CONTEXT_LINKS	10
-/* One chunk of event links for a script context */
-struct LINK_CHUNK
-{
-	SWORD			aLinks[CONTEXT_LINKS];
-
-	LINK_CHUNK *            psNext;
-};
-
 // Whether a context is released when there are no active triggers for it
 enum CONTEXT_RELEASE
 {
 	CR_RELEASE,		// release the context
 	CR_NORELEASE,	// do not release the context
 };
-
 
 /* The data needed within an object to run a script */
 struct SCRIPT_CONTEXT
@@ -126,7 +114,6 @@ enum SCR_USER_TYPES
 	ST_MAXTYPE,									// maximum possible type - should always be last
 };
 
-
 // The list of currently active triggers
 extern ACTIVE_TRIGGER	*psTrigList;
 
@@ -135,7 +122,6 @@ extern ACTIVE_TRIGGER	*psCallbackList;
 
 // The currently allocated contexts
 extern SCRIPT_CONTEXT	*psContList;
-
 
 /* Initialise the event system */
 extern bool eventInitialise(void);
