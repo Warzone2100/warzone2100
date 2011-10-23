@@ -1471,7 +1471,7 @@ static bool writeStructLimitsFile(const char *pFileName);
 static bool readFiresupportDesignators(const char *pFileName);
 static bool writeFiresupportDesignators(const char *pFileName);
 
-static bool writeScriptState(char *pFileName);
+static bool writeScriptState(const char *pFileName);
 
 static bool gameLoad(const char* fileName);
 
@@ -6108,24 +6108,14 @@ bool writeFiresupportDesignators(const char *pFileName)
 
 // -----------------------------------------------------------------------------------------
 // write the event state to a file on disk
-static bool	writeScriptState(char *pFileName)
+static bool	writeScriptState(const char *pFileName)
 {
-	static const int32_t current_event_version = 4;
 	char	jsFilename[PATH_MAX], *ext;
 
-	char	*pBuffer;
-	UDWORD	fileSize;
-
-	if (!eventSaveState(current_event_version, &pBuffer, &fileSize))
+	if (!eventSaveState(pFileName))
 	{
 		return false;
 	}
-
-	if (!saveFile(pFileName, pBuffer, fileSize))
-	{
-		return false;
-	}
-	free(pBuffer);
 
 	// The below belongs to the new javascript stuff
 	strcpy(jsFilename, pFileName);
@@ -6141,9 +6131,7 @@ static bool	writeScriptState(char *pFileName)
 // load the script state given a .gam name
 bool loadScriptState(char *pFileName)
 {
-	char	*pFileData;
 	char	jsFilename[PATH_MAX];
-	UDWORD	fileSize;
 
 	pFileName[strlen(pFileName) - 4] = '\0';
 
@@ -6159,15 +6147,7 @@ bool loadScriptState(char *pFileName)
 	// change the file extension
 	strcat(pFileName, "/scriptstate.es");
 
-	pFileData = fileLoadBuffer;
-	if (!loadFileToBuffer(pFileName, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
-	{
-		debug( LOG_ERROR, "loadScriptState: couldn't load %s", pFileName );
-
-		return false;
-	}
-
-	if (!eventLoadState(pFileData, fileSize))
+	if (!eventLoadState(pFileName))
 	{
 		return false;
 	}

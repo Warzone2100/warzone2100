@@ -25,6 +25,7 @@
 #ifndef _parse_h
 #define _parse_h
 
+#include "lib/framework/wzapp.h"
 #include <physfs.h>
 
 #include "interpreter.h"
@@ -107,9 +108,9 @@ enum ACCESS_TYPE
 // function pointer for script variable saving
 // if pBuffer is NULL the script system is just asking how much space the saved variable will require
 // otherwise pBuffer points to an array to store the value in
-typedef bool (*SCR_VAL_SAVE)(INTERP_VAL *psVal, char *pBuffer, UDWORD *pSize);
+typedef bool (*SCR_VAL_SAVE)(INTERP_VAL *psVal, WzConfig &ini);
 // function pointer for script variable loading
-typedef bool (*SCR_VAL_LOAD)(SDWORD version, INTERP_VAL *psVal, char *pBuffer, UDWORD size);
+typedef bool (*SCR_VAL_LOAD)(INTERP_VAL *psVal, WzConfig &ini);
 
 /* Type for a user type symbol */
 struct TYPE_SYMBOL
