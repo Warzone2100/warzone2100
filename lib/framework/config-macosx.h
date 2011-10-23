@@ -264,13 +264,13 @@
 #define PACKAGE_NAME "Warzone 2100"
 
 /* Define to the full name and version of this package. */
-#define PACKAGE_STRING "Warzone 2100 2.3 svn"
+#define PACKAGE_STRING "Warzone 2100 2.3.9"
 
 /* Define to the one symbol short name of this package. */
 #define PACKAGE_TARNAME "warzone2100"
 
 /* Define to the version of this package. */
-#define PACKAGE_VERSION "2.3.0"
+#define PACKAGE_VERSION "2.3.9"
 
 /* Define if <inttypes.h> exists and defines unusable PRI* macros. */
 /* #undef PRI_MACROS_BROKEN */
