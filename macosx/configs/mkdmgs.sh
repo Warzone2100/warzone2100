@@ -4,16 +4,18 @@
 simgfl="http://downloads.sourceforge.net/project/warzone2100/build-tools/mac/wztemplate.sparseimage"
 simgflnme="wztemplate.sparseimage"
 simgflmd5="da10e06f2b9b2b565e70dd8e98deaaad"
-sequence="http://downloads.sourceforge.net/project/warzone2100/warzone2100/Videos/2.2/standard-quality-en/sequences.wz"
+sequence="http://downloads.sourceforge.net/project/warzone2100/warzone2100/Videos/high-quality-en/sequences.wz"
 sequencenme="sequences.wz"
-sequencelo="http://downloads.sourceforge.net/project/warzone2100/warzone2100/Videos/2.2/low-quality-en/sequences.wz"
+sequencemd5="9a1ee8e8e054a0ad5ef5efb63e361bcc"
+sequencelo="http://downloads.sourceforge.net/project/warzone2100/warzone2100/Videos/standard-quality-en/sequences.wz"
 sequencelonme="sequences-lo.wz"
+sequencelomd5="9f2fda0e5382689590926f02a7ee1f38"
 relbuild="build/${CONFIGURATION}/"
 dmgout="build/dmgout"
 coident="${SRCROOT}/configs/codeident"
 
 # Fail if not release
-if [ "${CONFIGURATION}" = "Debug" ]; then
+if [ ! "${CONFIGURATION}" = "Release" ]; then
 	echo "error: This should only be run as Release" >&2
 	exit 1
 fi
@@ -32,12 +34,26 @@ signd () {
 		# Sign the frameworks
 		local framelst=`\ls -1 "${appth}/Contents/Frameworks" | sed -n 's:.framework$:&:p'`
 		for fsignd in ${framelst}; do
-			 if [ -d "${appth}/Contents/Frameworks/${fsignd}/Versions/A" ]; then
+			if [ -d "${appth}/Contents/Frameworks/${fsignd}/Versions/A" ]; then
 				codesign -vfs "${idetd}" --keychain "CodeSign" --verify "${appth}/Contents/Frameworks/${fsignd}/Versions/A"
 			fi
 		done
 	else
 		echo "warning: No codeident file found; code will not be signed."
+	fi
+}
+
+# Check our sums
+ckmd5 () {
+	local FileName="${1}"
+	local MD5Sum="${2}"
+	local MD5SumLoc=`md5 -q "${FileName}"`
+	if [ -z "${MD5SumLoc}" ]; then
+		echo "error: Unable to compute md5 for ${FileName}" >&2
+		exit 1
+	elif [ "${MD5SumLoc}" != "${MD5Sum}" ]; then
+		echo "error: MD5 does not match for ${FileName}" >&2
+		exit 1
 	fi
 }
 
@@ -50,6 +66,7 @@ if [ ! -f "$simgflnme" ]; then
 		echo "error: Unable to fetch $simgfl" >&2
 		exit 1
 	fi
+	ckmd5 "${simgflnme}" "${simgflmd5}"
 else
 	echo "$simgflnme already exists, skipping"
 fi
@@ -58,31 +75,29 @@ fi
 
 # Comment out the following to skip the high qual seq
 # if [ ! -f "$sequencenme" ]; then
-#	 echo "Fetching $sequencenme"
-#	 if [ -f "${HOME}/Library/Application Support/Warzone 2100 master/sequences.wz" ]; then
-#		 cp "${HOME}/Library/Application Support/Warzone 2100 master/sequences.wz" "$sequencenme"
-#	 elif ! curl -L --connect-timeout "30" -o "$sequencenme" "$sequence"; then
-#		 echo "error: Unable to fetch $sequence" >&2
-#		 exit 1
-#	 fi
+# 	echo "Fetching $sequencenme"
+# 	elif ! curl -L --connect-timeout "30" -o "$sequencenme" "$sequence"; then
+# 		echo "error: Unable to fetch $sequence" >&2
+# 		exit 1
+# 	fi
+# 	ckmd5 "$sequencenme" "$sequencemd5"
 # else
-#	 echo "$sequencenme already exists, skipping"
+# 	echo "$sequencenme already exists, skipping"
 # fi
 #
 
 # Comment out the following to skip the low qual seq
 # if [ ! -f "$sequencelonme" ]; then
-#	 echo "Fetching $sequencelonme"
-#	 if [ -f "${HOME}/Applications/Build/wz2100/dmgmaker/sequences-lo.wz" ]; then
-#		 cp "${HOME}/Applications/Build/wz2100/dmgmaker/sequences-lo.wz" "$sequencelonme"
-#	 elif [ -f "${HOME}/Library/Application Support/Warzone 2100 master/sequences-lq.wz" ]; then
-#		 cp "${HOME}/Library/Application Support/Warzone 2100 master/sequences-lq.wz" "$sequencelonme"
-#	 elif ! curl -L --connect-timeout "30" -o "$sequencelonme" "$sequencelo"; then
-#		 echo "error: Unable to fetch $sequencelo" >&2
-#		 exit 1
-#	 fi
+# 	echo "Fetching $sequencelonme"
+# 	if [ -f "/Library/Application Support/Warzone 2100/sequences.wz" ]; then
+# 		cp "/Library/Application Support/Warzone 2100/sequences.wz" "$sequencenme"
+# 	elif ! curl -L --connect-timeout "30" -o "$sequencelonme" "$sequencelo"; then
+# 		echo "error: Unable to fetch $sequencelo" >&2
+# 		exit 1
+# 	fi
+# 	ckmd5 "$sequencelonme" "$sequencelomd5"
 # else
-#	 echo "$sequencelonme already exists, skipping"
+# 	echo "$sequencelonme already exists, skipping"
 # fi
 # 
 
@@ -172,7 +187,7 @@ hdiutil convert temp/wztemplatecopy.sparseimage -format UDZO -o out/warzone2100-
 
 if [ -f "$sequencelonme" ]; then
 	echo "== Creating LQ DMG =="
-	hdiutil resize -size 420m temp/wztemplatecopy.sparseimage
+	hdiutil resize -size 770m temp/wztemplatecopy.sparseimage
 	mountpt=`hdiutil mount temp/wztemplatecopy.sparseimage | tr -d "\t" | sed -E 's:(/dev/disk[0-9])( +)(/Volumes/Warzone 2100):\1:'`
 	cp sequences-lo.wz /Volumes/Warzone\ 2100/Warzone.app/Contents/Resources/data/sequences.wz
 	signd
@@ -186,7 +201,7 @@ fi
 
 if [ -f "$sequencenme" ]; then
 	echo "== Creating HQ DMG =="
-	hdiutil resize -size 770m temp/wztemplatecopy.sparseimage
+	hdiutil resize -size 1145m temp/wztemplatecopy.sparseimage
 	mountpt=`hdiutil mount temp/wztemplatecopy.sparseimage | tr -d "\t" | sed -E 's:(/dev/disk[0-9])( +)(/Volumes/Warzone 2100):\1:'`
 	rm /Volumes/Warzone\ 2100/Warzone.app/Contents/Resources/data/sequences.wz
 	cp sequences.wz /Volumes/Warzone\ 2100/Warzone.app/Contents/Resources/data/sequences.wz
