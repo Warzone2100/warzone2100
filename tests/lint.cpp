@@ -36,11 +36,9 @@
 #include <QtCore/QSettings>
 #include <QtCore/QFile>
 
+// TODO -- parse and check that all setTimer, removeTimer and queue calls have quoted first parameters
+
 // TODO -- these should go into a common header
-enum SCRIPT_TRIGGER_TYPE
-{
-	TRIGGER_GAME_INIT
-};
 #define CAMP_CLEAN                              0                       // campaign subtypes
 #define CAMP_BASE                               1
 #define CAMP_WALLS                              2
@@ -521,6 +519,21 @@ static QScriptValue js_translate(QScriptContext *context, QScriptEngine *engine)
 	return QScriptValue(context->argument(0));
 }
 
+static QScriptValue js_playerPower(QScriptContext *context, QScriptEngine *engine)
+{
+	ARG_COUNT_EXACT(1);
+	ARG_PLAYER(0);
+	return QScriptValue(1000);
+}
+
+static QScriptValue js_isStructureAvailable(QScriptContext *context, QScriptEngine *engine)
+{
+	ARG_COUNT_EXACT(2);
+	ARG_STRING(0);
+	ARG_PLAYER(1);
+	return QScriptValue(true);
+}
+
 bool testPlayerScript(QString path, int player, int difficulty)
 {
 	QScriptEngine *engine = new QScriptEngine();
@@ -574,6 +587,8 @@ bool testPlayerScript(QString path, int player, int difficulty)
 	engine->globalObject().setProperty("groupAddDroid", engine->newFunction(js_groupAddDroid));
 	engine->globalObject().setProperty("groupSize", engine->newFunction(js_groupSize));
 	engine->globalObject().setProperty("orderDroidLoc", engine->newFunction(js_orderDroidLoc));
+	engine->globalObject().setProperty("playerPower", engine->newFunction(js_playerPower));
+	engine->globalObject().setProperty("isStructureAvailable", engine->newFunction(js_isStructureAvailable));
 
 	// Functions that operate on the current player only
 	engine->globalObject().setProperty("centreView", engine->newFunction(js_centreView));
@@ -622,6 +637,8 @@ bool testPlayerScript(QString path, int player, int difficulty)
 	// Now set gameTime to something proper
 	engine->globalObject().setProperty("gameTime", 10101, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 
+	callFunction(engine, "eventStartLevel", QScriptValueList());
+
 	// Call other events
 	{
 		QScriptValueList args;
@@ -637,6 +654,7 @@ bool testPlayerScript(QString path, int player, int difficulty)
 	}
 
 	// Now test timers
+	// TODO -- implement object parameters
 	QMutableListIterator<timerNode> iter(timers);
 	while (iter.hasNext())
 	{

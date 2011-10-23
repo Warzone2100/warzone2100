@@ -663,6 +663,15 @@ static QScriptValue js_playerPower(QScriptContext *context, QScriptEngine *engin
 	return QScriptValue(getPower(player));
 }
 
+static QScriptValue js_isStructureAvailable(QScriptContext *context, QScriptEngine *engine)
+{
+	QString building = context->argument(0).toString();
+	int index = getStructStatFromName(building.toUtf8().constData());
+	int player = context->argument(1).toInt32();
+	return QScriptValue(apStructTypeLists[player][index] == AVAILABLE
+			    && asStructLimits[player][index].currentQuantity < asStructLimits[player][index].limit);
+}
+
 // ----------------------------------------------------------------------------------------
 // Register functions with scripting system
 
@@ -687,6 +696,7 @@ bool registerFunctions(QScriptEngine *engine)
 	engine->globalObject().setProperty("groupSize", engine->newFunction(js_groupSize));
 	engine->globalObject().setProperty("orderDroidLoc", engine->newFunction(js_orderDroidLoc));
 	engine->globalObject().setProperty("playerPower", engine->newFunction(js_playerPower));
+	engine->globalObject().setProperty("isStructureAvailable", engine->newFunction(js_isStructureAvailable));
 
 	// Functions that operate on the current player only
 	engine->globalObject().setProperty("centreView", engine->newFunction(js_centreView));

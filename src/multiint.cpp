@@ -290,8 +290,11 @@ void loadMultiScripts()
 		if (bMultiPlayer && game.type == SKIRMISH && (!NetPlay.players[i].allocated || i == selectedPlayer)
 		    && NetPlay.players[i].ai >= 0 && myResponsibility(i))
 		{
-			resLoadFile("SCRIPT", aidata[NetPlay.players[i].ai].slo);
-			resLoadFile("SCRIPTVAL", aidata[NetPlay.players[i].ai].vlo);
+			if (aidata[NetPlay.players[i].ai].slo[0] != '\0')
+			{
+				resLoadFile("SCRIPT", aidata[NetPlay.players[i].ai].slo);
+				resLoadFile("SCRIPTVAL", aidata[NetPlay.players[i].ai].vlo);
+			}
 			if (aidata[NetPlay.players[i].ai].js[0] != '\0')
 			{
 				loadPlayerScript(QString("multiplay/skirmish/") + aidata[NetPlay.players[i].ai].js, i, NetPlay.players[i].difficulty);
@@ -551,8 +554,8 @@ void readAIs()
 		AIDATA ai;
 		aiconf.beginGroup("AI");
 		sstrcpy(ai.name, aiconf.value("name", "error").toString().toAscii().constData());
-		sstrcpy(ai.slo, aiconf.value("slo", "error").toString().toAscii().constData());
-		sstrcpy(ai.vlo, aiconf.value("vlo", "error").toString().toAscii().constData());
+		sstrcpy(ai.slo, aiconf.value("slo", "").toString().toAscii().constData());
+		sstrcpy(ai.vlo, aiconf.value("vlo", "").toString().toAscii().constData());
 		sstrcpy(ai.js, aiconf.value("js", "").toString().toAscii().constData());
 		sstrcpy(ai.tip, aiconf.value("tip", "Click to choose this AI").toString().toAscii().constData());
 		if (strcmp(ai.name, "Nexus") == 0)
