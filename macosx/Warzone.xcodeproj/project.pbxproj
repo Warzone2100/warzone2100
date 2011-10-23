@@ -799,7 +799,7 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = 02356D660BD3BB2600E9A019 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 43D9C53D144B91C600FD63B1 /* MiniUPnPc */;
+			remoteGlobalIDString = 43D9C53D144B91C600FD63B1;
 			remoteInfo = MiniUPnPc;
 		};
 		43FA571010FF8ED90074E914 /* PBXContainerItemProxy */ = {
