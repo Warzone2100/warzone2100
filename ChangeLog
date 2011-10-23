@@ -1,4 +1,4 @@
-2011-00-00: Version 2.3.9
+2011-10-23: Version 2.3.9
  * General:
    * Change: Show damage on all buildings (ticket:2634, commit: eabe72073c5e594f7849cd53460b25ae95b3371e)
    * Change: Use Ctrl-V instead of Tab to paste in edit boxes (ticket:2830, commit:d2f4b5a162151d3dac14e45931e727b181c9ef22)
