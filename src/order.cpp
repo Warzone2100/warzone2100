@@ -42,6 +42,7 @@
 #include "intorder.h"
 #include "orderdef.h"
 #include "transporter.h"
+#include "qtscript.h"
 #include "group.h"
 #include "cmddroid.h"
 #include "lib/script/script.h"
@@ -332,6 +333,7 @@ void orderUpdateDroid(DROID *psDroid)
 				{
 					// the script can call startMission for this callback for offworld missions
 					eventFireCallbackTrigger((TRIGGER_TYPE)CALL_START_NEXT_LEVEL);
+					triggerEvent(TRIGGER_START_LEVEL);
 				}
 			}
 		}
@@ -420,6 +422,7 @@ void orderUpdateDroid(DROID *psDroid)
 			{
 			    //the script can call startMission for this callback for offworld missions
 			    eventFireCallbackTrigger((TRIGGER_TYPE)CALL_START_NEXT_LEVEL);
+			    triggerEvent(TRIGGER_START_LEVEL);
 
 			    /* clear order */
 			    psDroid->order = DORDER_NONE;
@@ -1156,6 +1159,7 @@ void orderUpdateDroid(DROID *psDroid)
 				{
 					// the script can call startMission for this callback for offworld missions
 					eventFireCallbackTrigger((TRIGGER_TYPE)CALL_START_NEXT_LEVEL);
+					triggerEvent(TRIGGER_START_LEVEL);
 				}
 			}
 		}

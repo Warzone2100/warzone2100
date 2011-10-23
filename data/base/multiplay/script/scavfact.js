@@ -82,7 +82,7 @@ function eventGameInit()
 	attackGroup = newGroup();	// allocate a new group
 	groupAddArea(attackGroup, 0, 0, (mapWidth * 128), (mapHeight * 128));
 	scavtick();
-	setGlobalTimer("scavtick", 15000);	// start a constant timer function
+	setTimer("scavtick", 15000);	// start a constant timer function
 }
 
 // deal with a droid being built by us

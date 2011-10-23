@@ -111,6 +111,7 @@ QScriptValue convStructure(QScriptEngine *engine)
 	value.setProperty("y", 11, QScriptValue::ReadOnly);
 	value.setProperty("z", 0, QScriptValue::ReadOnly);
 	value.setProperty("player", 1, QScriptValue::ReadOnly);
+	value.setProperty("selected", 0, QScriptValue::ReadOnly);
 	return value;
 }
 
@@ -122,6 +123,7 @@ QScriptValue convDroid(QScriptEngine *engine)
 	value.setProperty("y", 11, QScriptValue::ReadOnly);
 	value.setProperty("z", 0, QScriptValue::ReadOnly);
 	value.setProperty("player", 1, QScriptValue::ReadOnly);
+	value.setProperty("selected", 0, QScriptValue::ReadOnly);
 	return value;
 }
 
@@ -133,6 +135,7 @@ QScriptValue convObj(QScriptEngine *engine)
 	value.setProperty("y", 11, QScriptValue::ReadOnly);
 	value.setProperty("z", 0, QScriptValue::ReadOnly);
 	value.setProperty("player", 1, QScriptValue::ReadOnly);
+	value.setProperty("selected", 0, QScriptValue::ReadOnly);
 	return value;
 }
 
@@ -442,13 +445,15 @@ static QScriptValue js_removeTimer(QScriptContext *context, QScriptEngine *engin
 
 /// Special scripting function that registers a non-specific timer event. Note: Functions must be passed
 /// quoted, otherwise they will be inlined!
-static QScriptValue js_setGlobalTimer(QScriptContext *context, QScriptEngine *engine)
+static QScriptValue js_setTimer(QScriptContext *context, QScriptEngine *engine)
 {
-	ARG_COUNT_EXACT(2);
+	ARG_COUNT_VAR(2, 3);
 	ARG_STRING(0);
 	ARG_NUMBER(1);
+	if (context->argumentCount() == 3) ARG_OBJ(2);
 	QString funcName = context->argument(0).toString();
 	// TODO - check that a function by that name exists
+	// TODO - object argument
 	int player = engine->globalObject().property("me").toInt32();
 	timerNode node(engine, funcName, player);
 	timers.push_back(node);
@@ -457,14 +462,15 @@ static QScriptValue js_setGlobalTimer(QScriptContext *context, QScriptEngine *en
 
 /// Special scripting function that registers a object-specific timer event. Note: Functions must be passed
 /// quoted, otherwise they will be inlined!
-static QScriptValue js_setObjectTimer(QScriptContext *context, QScriptEngine *engine)
+static QScriptValue js_queue(QScriptContext *context, QScriptEngine *engine)
 {
-	ARG_COUNT_EXACT(2);
+	ARG_COUNT_VAR(2, 3);
 	ARG_STRING(0);
 	ARG_NUMBER(1);
-	ARG_OBJ(2);
+	if (context->argumentCount() == 3) ARG_OBJ(2);
 	QString funcName = context->argument(0).toString();
 	// TODO - check that a function by that name exists
+	// TODO - object argument
 	int player = engine->globalObject().property("me").toInt32();
 	timerNode node(engine, funcName, player);
 	timers.push_back(node);
@@ -536,8 +542,8 @@ bool testPlayerScript(QString path, int player, int difficulty)
 		return false;
 	}
 	// Special functions
-	engine->globalObject().setProperty("setGlobalTimer", engine->newFunction(js_setGlobalTimer));
-	engine->globalObject().setProperty("setObjectTimer", engine->newFunction(js_setObjectTimer));
+	engine->globalObject().setProperty("setTimer", engine->newFunction(js_setTimer));
+	engine->globalObject().setProperty("queue", engine->newFunction(js_queue));
 	engine->globalObject().setProperty("removeTimer", engine->newFunction(js_removeTimer));
 	engine->globalObject().setProperty("include", engine->newFunction(js_include));
 

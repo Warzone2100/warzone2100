@@ -41,16 +41,23 @@
 
 #include "qtscriptfuncs.h"
 
+enum timerType
+{
+	TIMER_REPEAT, TIMER_ONESHOT_READY, TIMER_ONESHOT_DONE
+};
+
 struct timerNode
 {
 	QString function;
 	QScriptEngine *engine;
-	QString baseobj;
+	int baseobj;
 	int frameTime;
 	int ms;
 	int player;
+	timerType type;
 	timerNode() {}
-	timerNode(QScriptEngine *caller, QString val, int plr, int frame) : function(val) { player = plr; ms = frame; frameTime = frame + gameTime; engine = caller; }
+	timerNode(QScriptEngine *caller, QString val, int plr, int frame)
+		: function(val), engine(caller), baseobj(-1), frameTime(frame + gameTime), ms(frame), player(plr), type(TIMER_REPEAT) {}
 	bool operator== (const timerNode &t) { return function == t.function && player == t.player; }
 	// implement operator less TODO
 };
@@ -112,28 +119,41 @@ static QScriptValue js_removeTimer(QScriptContext *context, QScriptEngine *engin
 	return QScriptValue();
 }
 
-/// Special scripting function that registers a non-specific timer event. Note: Functions must be passed
-/// quoted, otherwise they will be inlined!
-static QScriptValue js_setGlobalTimer(QScriptContext *context, QScriptEngine *engine)
+/// Special scripting function that registers a timer event. Note: Functions must be passed
+/// quoted, otherwise they will be inlined! If a third parameter is passed, this must be an
+/// object, which is then passed to the timer. If the object is dead, the timer stops.
+static QScriptValue js_setTimer(QScriptContext *context, QScriptEngine *engine)
 {
 	QString funcName = context->argument(0).toString();
 	QScriptValue ms = context->argument(1);
 	int player = engine->globalObject().property("me").toInt32();
-	timerNode node(engine, funcName, player, ms.toInt32() + gameTime);
+	timerNode node(engine, funcName, player, ms.toInt32());
+	if (context->argumentCount() == 3)
+	{
+		QScriptValue obj = context->argument(2);
+		node.baseobj = obj.property("id").toInt32();
+	}
+	node.type = TIMER_REPEAT;
 	timers.push_back(node);
 	return QScriptValue();
 }
 
-/// Special scripting function that registers a object-specific timer event. Note: Functions must be passed
-/// quoted, otherwise they will be inlined!
-static QScriptValue js_setObjectTimer(QScriptContext *context, QScriptEngine *engine)
+/// Special scripting function that queues up a function to call once at a later time frame.
+/// Note: Functions must be passed quoted, otherwise they will be inlined! If a third
+/// parameter is passed, this must be an object, which is then passed to the timer. If
+/// the object is dead, the timer stops.
+static QScriptValue js_queue(QScriptContext *context, QScriptEngine *engine)
 {
 	QString funcName = context->argument(0).toString();
 	QScriptValue ms = context->argument(1);
-	QScriptValue obj = context->argument(2);
 	int player = engine->globalObject().property("me").toInt32();
 	timerNode node(engine, funcName, player, ms.toInt32());
-	node.baseobj = obj.toString();
+	if (context->argumentCount() == 3)
+	{
+		QScriptValue obj = context->argument(2);
+		node.baseobj = obj.property("id").toInt32();
+	}
+	node.type = TIMER_ONESHOT_READY;
 	timers.push_back(node);
 	return QScriptValue();
 }
@@ -195,10 +215,24 @@ bool updateScripts()
 
 		engine->globalObject().setProperty("gameTime", gameTime, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	}
+	// Weed out dead timers
+	for (int i = 0; i < timers.count(); )
+	{
+		const timerNode node = timers.at(i);
+		if (node.type == TIMER_ONESHOT_DONE || (node.baseobj > NOT_CURRENT_LIST && !IdToPointer(node.baseobj, node.player)))
+		{
+			timers.removeAt(i);
+		}
+		else
+		{
+			i++;
+		}
+	}
 	// Check for timers, and run them if applicable.
 	// TODO - load balancing
 	QList<timerNode> runlist; // make a new list here, since we might trample all over the timer list during execution
 	QList<timerNode>::iterator iter;
+	// Weed out dead timers
 	for (iter = timers.begin(); iter != timers.end(); iter++)
 	{
 		if (iter->frameTime <= gameTime)
@@ -206,10 +240,20 @@ bool updateScripts()
 			iter->frameTime = iter->ms + gameTime;	// update for next invokation
 			runlist.append(*iter);
 		}
+		else if (iter->type == TIMER_ONESHOT_READY)
+		{
+			iter->type = TIMER_ONESHOT_DONE;
+			runlist.append(*iter);
+		}
 	}
 	for (iter = runlist.begin(); iter != runlist.end(); iter++)
 	{
-		callFunction(iter->engine, iter->function, QScriptValueList());
+		QScriptValueList args;
+		if (iter->baseobj > NOT_CURRENT_LIST)
+		{
+			args += convObj(IdToPointer(iter->baseobj, iter->player), iter->engine);
+		}
+		callFunction(iter->engine, iter->function, args);
 	}
 	return true;
 }
@@ -241,8 +285,8 @@ bool loadPlayerScript(QString path, int player, int difficulty)
 	ASSERT_OR_RETURN(false, !engine->hasUncaughtException(), "Uncaught exception at line %d, file %s: %s", 
 	                 engine->uncaughtExceptionLineNumber(), path.toAscii().constData(), result.toString().toAscii().constData());
 	// Special functions
-	engine->globalObject().setProperty("setGlobalTimer", engine->newFunction(js_setGlobalTimer));
-	engine->globalObject().setProperty("setObjectTimer", engine->newFunction(js_setObjectTimer));
+	engine->globalObject().setProperty("setTimer", engine->newFunction(js_setTimer));
+	engine->globalObject().setProperty("queue", engine->newFunction(js_queue));
 	engine->globalObject().setProperty("removeTimer", engine->newFunction(js_removeTimer));
 	engine->globalObject().setProperty("include", engine->newFunction(js_include));
 
@@ -300,11 +344,12 @@ bool saveScriptStates(const char *filename)
 		ini.beginGroup(QString("triggers_") + QString::number(i));
 		ini.setValue("player", node.player);
 		ini.setValue("function", node.function.toUtf8().constData());
-		if (!node.baseobj.isEmpty())
+		if (!node.baseobj >= NOT_CURRENT_LIST)
 		{
-			ini.setValue("object", node.baseobj.toUtf8().constData());
+			ini.setValue("object", QVariant(node.baseobj));
 		}
 		ini.setValue("frame", node.frameTime);
+		ini.setValue("type", (int)node.type);
 		ini.setValue("ms", node.ms);
 		ini.endGroup();
 	}
@@ -343,7 +388,8 @@ bool loadScriptStates(const char *filename)
 			debug(LOG_SAVE, "Registering trigger %d for player %d", i, node.player);
 			node.engine = findEngineForPlayer(node.player);
 			node.function = ini.value("function").toString();
-			node.baseobj = ini.value("baseobj", QString()).toString();
+			node.baseobj = ini.value("baseobj", -1).toInt();
+			node.type = (timerType)ini.value("type", TIMER_REPEAT).toInt();
 			timers.push_back(node);
 			ini.endGroup();
 		}
@@ -378,6 +424,9 @@ bool triggerEvent(SCRIPT_TRIGGER_TYPE trigger)
 		{
 		case TRIGGER_GAME_INIT:
 			callFunction(engine, "eventGameInit", QScriptValueList());
+			break;
+		case TRIGGER_START_LEVEL:
+			callFunction(engine, "eventStartLevel", QScriptValueList());
 			break;
 		}
 	}

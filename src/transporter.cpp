@@ -41,6 +41,7 @@
 #include "mission.h"
 #include "objects.h"
 #include "display.h"
+#include "qtscript.h"
 #include "lib/script/script.h"
 #include "scripttabs.h"
 #include "order.h"
@@ -1638,6 +1639,7 @@ bool updateTransporter(DROID *psTransporter)
 
 			//the script can call startMission for this callback for offworld missions
 			eventFireCallbackTrigger((TRIGGER_TYPE)CALL_START_NEXT_LEVEL);
+			triggerEvent(TRIGGER_START_LEVEL);
 
 			// clear order
 			psTransporter->order = DORDER_NONE;

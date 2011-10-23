@@ -36,6 +36,7 @@
 #include "intdisplay.h"
 #include "mission.h"
 #include "projectile.h"
+#include "qtscript.h"
 #include "random.h"
 #include "research.h"
 #include "scriptcb.h"
@@ -998,6 +999,7 @@ void actionUpdateDroid(DROID *psDroid)
 				{
 					//the script can call startMission for this callback for offworld missions
 					eventFireCallbackTrigger((TRIGGER_TYPE)CALL_START_NEXT_LEVEL);
+					triggerEvent(TRIGGER_START_LEVEL);
 				}
 			}
 		}

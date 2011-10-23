@@ -68,6 +68,7 @@
 #include "mission.h"
 #include "modding.h"
 #include "multiplay.h"
+#include "qtscript.h"
 #include "research.h"
 #include "scripttabs.h"
 #include "seqdisp.h"
@@ -821,6 +822,7 @@ static void startGameLoop(void)
 	if (game.type == SKIRMISH)
 	{
 		eventFireCallbackTrigger((TRIGGER_TYPE)CALL_START_NEXT_LEVEL);
+		triggerEvent(TRIGGER_START_LEVEL);
 	}
 	screen_disableMapPreview();
 }

@@ -4,10 +4,6 @@
 // contains the rules for starting and ending a game.
 // as well as warning messages.
 //
-
-// TODO set tech level as a global, and set that up here as well
-// TODO use gameTime instead of t second ticker...
-
 // /////////////////////////////////////////////////////////////////
 
 var lastHitTime = 0;
@@ -122,7 +118,7 @@ function eventGameInit()
 			}
 		}
 	}
-	setGlobalTimer("checkEndConditions", 100);
+	setTimer("checkEndConditions", 100);
 }
 
 // /////////////////////////////////////////////////////////////////

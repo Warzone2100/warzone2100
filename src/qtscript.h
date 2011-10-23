@@ -27,7 +27,8 @@
 
 enum SCRIPT_TRIGGER_TYPE
 {
-	TRIGGER_GAME_INIT
+	TRIGGER_GAME_INIT,
+	TRIGGER_START_LEVEL
 };
 
 // ----------------------------------------------

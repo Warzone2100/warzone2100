@@ -59,6 +59,7 @@ QScriptValue convStructure(STRUCTURE *psStruct, QScriptEngine *engine)
 	value.setProperty("y", psStruct->pos.y, QScriptValue::ReadOnly);
 	value.setProperty("z", psStruct->pos.z, QScriptValue::ReadOnly);
 	value.setProperty("player", psStruct->player, QScriptValue::ReadOnly);
+	value.setProperty("selected", psStruct->selected, QScriptValue::ReadOnly);
 	return value;
 }
 
@@ -71,6 +72,7 @@ QScriptValue convDroid(DROID *psDroid, QScriptEngine *engine)
 	value.setProperty("y", psDroid->pos.y, QScriptValue::ReadOnly);
 	value.setProperty("z", psDroid->pos.z, QScriptValue::ReadOnly);
 	value.setProperty("player", psDroid->player, QScriptValue::ReadOnly);
+	value.setProperty("selected", psDroid->selected, QScriptValue::ReadOnly);
 	return value;
 }
 
@@ -83,6 +85,7 @@ QScriptValue convObj(BASE_OBJECT *psObj, QScriptEngine *engine)
 	value.setProperty("y", psObj->pos.y, QScriptValue::ReadOnly);
 	value.setProperty("z", psObj->pos.z, QScriptValue::ReadOnly);
 	value.setProperty("player", psObj->player, QScriptValue::ReadOnly);
+	value.setProperty("selected", psObj->selected, QScriptValue::ReadOnly);
 	return value;
 }
 
@@ -654,6 +657,12 @@ static QScriptValue js_translate(QScriptContext *context, QScriptEngine *engine)
 	return QScriptValue(gettext(context->argument(0).toString().toUtf8().constData()));
 }
 
+static QScriptValue js_playerPower(QScriptContext *context, QScriptEngine *engine)
+{
+	int player = context->argument(0).toInt32();
+	return QScriptValue(getPower(player));
+}
+
 // ----------------------------------------------------------------------------------------
 // Register functions with scripting system
 
@@ -677,6 +686,7 @@ bool registerFunctions(QScriptEngine *engine)
 	engine->globalObject().setProperty("groupAddDroid", engine->newFunction(js_groupAddDroid));
 	engine->globalObject().setProperty("groupSize", engine->newFunction(js_groupSize));
 	engine->globalObject().setProperty("orderDroidLoc", engine->newFunction(js_orderDroidLoc));
+	engine->globalObject().setProperty("playerPower", engine->newFunction(js_playerPower));
 
 	// Functions that operate on the current player only
 	engine->globalObject().setProperty("centreView", engine->newFunction(js_centreView));
