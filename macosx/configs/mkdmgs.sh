@@ -76,7 +76,7 @@ fi
 # Comment out the following to skip the high qual seq
 if [ ! -f "$sequencenme" ]; then
 	echo "Fetching $sequencenme"
-	elif ! curl -L --connect-timeout "30" -o "$sequencenme" "$sequence"; then
+	if ! curl -L --connect-timeout "30" -o "$sequencenme" "$sequence"; then
 		echo "error: Unable to fetch $sequence" >&2
 		exit 1
 	fi
@@ -90,7 +90,7 @@ fi
 if [ ! -f "$sequencelonme" ]; then
 	echo "Fetching $sequencelonme"
 	if [ -f "/Library/Application Support/Warzone 2100/sequences.wz" ]; then
-		cp "/Library/Application Support/Warzone 2100/sequences.wz" "$sequencenme"
+		cp "/Library/Application Support/Warzone 2100/sequences.wz" "$sequencelonme"
 	elif ! curl -L --connect-timeout "30" -o "$sequencelonme" "$sequencelo"; then
 		echo "error: Unable to fetch $sequencelo" >&2
 		exit 1
