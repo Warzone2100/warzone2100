@@ -579,7 +579,7 @@ FunctionEnd
   LangString TEXT_SecFMVs ${LANG_ENGLISH} "Videos"
   LangString DESC_SecFMVs ${LANG_ENGLISH} "Download and install in-game cutscenes."
 
-  LangString TEXT_SecFMVs_EngHi ${LANG_ENGLISH} "English"
+  LangString TEXT_SecFMVs_EngHi ${LANG_ENGLISH} "English (HQ)"
   LangString DESC_SecFMVs_EngHi ${LANG_ENGLISH} "Download and install higher-quality English in-game cutscenes (920 MB)."
 
   LangString TEXT_SecFMVs_Eng ${LANG_ENGLISH} "English"
