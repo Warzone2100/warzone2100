@@ -52,27 +52,16 @@
 
 QScriptValue convStructure(STRUCTURE *psStruct, QScriptEngine *engine)
 {
-	QScriptValue value = engine->newObject();
-	ASSERT_OR_RETURN(value, psStruct, "No object for conversion");
-	value.setProperty("id", psStruct->id, QScriptValue::ReadOnly);
-	value.setProperty("x", psStruct->pos.x, QScriptValue::ReadOnly);
-	value.setProperty("y", psStruct->pos.y, QScriptValue::ReadOnly);
-	value.setProperty("z", psStruct->pos.z, QScriptValue::ReadOnly);
-	value.setProperty("player", psStruct->player, QScriptValue::ReadOnly);
-	value.setProperty("selected", psStruct->selected, QScriptValue::ReadOnly);
+	QScriptValue value = convObj(psStruct, engine);
+	value.setProperty("status", (int)psStruct->status, QScriptValue::ReadOnly);
 	return value;
 }
 
 QScriptValue convDroid(DROID *psDroid, QScriptEngine *engine)
 {
-	QScriptValue value = engine->newObject();
-	ASSERT_OR_RETURN(value, psDroid, "No object for conversion");
-	value.setProperty("id", psDroid->id, QScriptValue::ReadOnly);
-	value.setProperty("x", psDroid->pos.x, QScriptValue::ReadOnly);
-	value.setProperty("y", psDroid->pos.y, QScriptValue::ReadOnly);
-	value.setProperty("z", psDroid->pos.z, QScriptValue::ReadOnly);
-	value.setProperty("player", psDroid->player, QScriptValue::ReadOnly);
-	value.setProperty("selected", psDroid->selected, QScriptValue::ReadOnly);
+	QScriptValue value = convObj(psDroid, engine);
+	value.setProperty("action", (int)psDroid->action, QScriptValue::ReadOnly);
+	value.setProperty("order", (int)psDroid->order, QScriptValue::ReadOnly);
 	return value;
 }
 
@@ -81,9 +70,9 @@ QScriptValue convObj(BASE_OBJECT *psObj, QScriptEngine *engine)
 	QScriptValue value = engine->newObject();
 	ASSERT_OR_RETURN(value, psObj, "No object for conversion");
 	value.setProperty("id", psObj->id, QScriptValue::ReadOnly);
-	value.setProperty("x", psObj->pos.x, QScriptValue::ReadOnly);
-	value.setProperty("y", psObj->pos.y, QScriptValue::ReadOnly);
-	value.setProperty("z", psObj->pos.z, QScriptValue::ReadOnly);
+	value.setProperty("x", map_coord(psObj->pos.x), QScriptValue::ReadOnly);
+	value.setProperty("y", map_coord(psObj->pos.y), QScriptValue::ReadOnly);
+	value.setProperty("z", map_coord(psObj->pos.z), QScriptValue::ReadOnly);
 	value.setProperty("player", psObj->player, QScriptValue::ReadOnly);
 	value.setProperty("selected", psObj->selected, QScriptValue::ReadOnly);
 	return value;
@@ -271,10 +260,10 @@ static QScriptValue js_groupAddArea(QScriptContext *context, QScriptEngine *engi
 {
 	int groupId = context->argument(0).toInt32();
 	int player = engine->globalObject().property("me").toInt32();
-	int x1 = context->argument(1).toInt32();
-	int y1 = context->argument(2).toInt32();
-	int x2 = context->argument(3).toInt32();
-	int y2 = context->argument(4).toInt32();
+	int x1 = world_coord(context->argument(1).toInt32());
+	int y1 = world_coord(context->argument(2).toInt32());
+	int x2 = world_coord(context->argument(3).toInt32());
+	int y2 = world_coord(context->argument(4).toInt32());
 	DROID_GROUP *psGroup = grpFind(groupId);
 
 	SCRIPT_ASSERT(context, psGroup, "Invalid group index %d", groupId);
@@ -327,11 +316,11 @@ static QScriptValue js_getDerrick(QScriptContext *context, QScriptEngine *engine
 
 static QScriptValue js_distBetweenTwoPoints(QScriptContext *context, QScriptEngine *engine)
 {
-	int x1 = context->argument(0).toInt32();
-	int y1 = context->argument(1).toInt32();
-	int x2 = context->argument(2).toInt32();
-	int y2 = context->argument(3).toInt32();
-	return QScriptValue(hypotf(x1 - x2, y1 - y2));
+	int x1 = context->argument(0).toNumber();
+	int y1 = context->argument(1).toNumber();
+	int x2 = context->argument(2).toNumber();
+	int y2 = context->argument(3).toNumber();
+	return QScriptValue(iHypot(x1 - x2, y1 - y2));
 }
 
 static QScriptValue js_groupSize(QScriptContext *context, QScriptEngine *)
@@ -353,8 +342,8 @@ static QScriptValue js_orderDroidLoc(QScriptContext *context, QScriptEngine *)
 	DROID_ORDER order = (DROID_ORDER)orderVal.toInt32();
 	DROID *psDroid = IdToDroid(id, player);
 	SCRIPT_ASSERT(context, psDroid, "Droid id %d not found belonging to player %d", id, player);
-	SCRIPT_ASSERT(context, worldOnMap(x, y), "Outside map bounds (%d, %d)", x, y);
-	orderDroidLoc(psDroid, order, x, y, ModeQueue);
+	SCRIPT_ASSERT(context, tileOnMap(x, y), "Outside map bounds (%d, %d)", x, y);
+	orderDroidLoc(psDroid, order, world_coord(x), world_coord(y), ModeQueue);
 	return QScriptValue();
 }
 
@@ -438,7 +427,7 @@ static QScriptValue js_centreView(QScriptContext *context, QScriptEngine *engine
 {
 	int x = context->argument(0).toInt32();
 	int y = context->argument(1).toInt32();
-	setViewPos(map_coord(x), map_coord(y), false);
+	setViewPos(x, y, false);
 	Q_UNUSED(engine);
 	return QScriptValue();
 }
@@ -454,9 +443,9 @@ static QScriptValue js_playSound(QScriptContext *context, QScriptEngine *engine)
 	int soundID = audio_GetTrackID(sound.toUtf8().constData());
 	if (context->argumentCount() > 1)
 	{
-		int x = context->argument(1).toInt32();
-		int y = context->argument(2).toInt32();
-		int z = context->argument(3).toInt32();
+		int x = world_coord(context->argument(1).toInt32());
+		int y = world_coord(context->argument(2).toInt32());
+		int z = world_coord(context->argument(3).toInt32());
 		audio_QueueTrackPos(soundID, x, y, z);
 	}
 	else
@@ -738,6 +727,9 @@ bool registerFunctions(QScriptEngine *engine)
 	engine->globalObject().setProperty("NO_ALLIANCES", NO_ALLIANCES, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("ALLIANCES", ALLIANCES, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("ALLIANCES_TEAMS", ALLIANCES_TEAMS, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("BEING_BUILT", SS_BEING_BUILT, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("BUILT", SS_BUILT, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("BEING_DEMOLISHED", SS_BEING_DEMOLISHED, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 
 	return true;
 }

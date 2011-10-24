@@ -49,6 +49,13 @@
 #define LEV_MED                                 700
 #define LEV_HI                                  1000
 
+enum STRUCT_STATES
+{
+	SS_BEING_BUILT,
+	SS_BUILT,
+	SS_BEING_DEMOLISHED
+};
+
 struct timerNode
 {
 	QString function;
@@ -100,40 +107,31 @@ static int obj_uid = 11;
 #define ARG_DROID(vnum)	ARG_OBJ(vnum)
 #define ARG_STRUCT(vnum) ARG_OBJ(vnum)
 
+static QScriptValue convObj(QScriptEngine *engine)
+{
+	QScriptValue value = engine->newObject();
+	value.setProperty("id", obj_uid++, QScriptValue::ReadOnly);
+	value.setProperty("x", 11, QScriptValue::ReadOnly);
+	value.setProperty("y", 11, QScriptValue::ReadOnly);
+	value.setProperty("z", 0, QScriptValue::ReadOnly);
+	value.setProperty("player", 1, QScriptValue::ReadOnly);
+	value.setProperty("selected", 0, QScriptValue::ReadOnly);
+	return value;
+}
+
 // These functions invent new imaginary objects
-QScriptValue convStructure(QScriptEngine *engine)
+static QScriptValue convStructure(QScriptEngine *engine)
 {
-	QScriptValue value = engine->newObject();
-	value.setProperty("id", obj_uid++, QScriptValue::ReadOnly);
-	value.setProperty("x", 11, QScriptValue::ReadOnly);
-	value.setProperty("y", 11, QScriptValue::ReadOnly);
-	value.setProperty("z", 0, QScriptValue::ReadOnly);
-	value.setProperty("player", 1, QScriptValue::ReadOnly);
-	value.setProperty("selected", 0, QScriptValue::ReadOnly);
+	QScriptValue value = convObj(engine);
+	value.setProperty("status", (int)SS_BUILT, QScriptValue::ReadOnly);
 	return value;
 }
 
-QScriptValue convDroid(QScriptEngine *engine)
+static QScriptValue convDroid(QScriptEngine *engine)
 {
-	QScriptValue value = engine->newObject();
-	value.setProperty("id", obj_uid++, QScriptValue::ReadOnly);
-	value.setProperty("x", 11, QScriptValue::ReadOnly);
-	value.setProperty("y", 11, QScriptValue::ReadOnly);
-	value.setProperty("z", 0, QScriptValue::ReadOnly);
-	value.setProperty("player", 1, QScriptValue::ReadOnly);
-	value.setProperty("selected", 0, QScriptValue::ReadOnly);
-	return value;
-}
-
-QScriptValue convObj(QScriptEngine *engine)
-{
-	QScriptValue value = engine->newObject();
-	value.setProperty("id", obj_uid++, QScriptValue::ReadOnly);
-	value.setProperty("x", 11, QScriptValue::ReadOnly);
-	value.setProperty("y", 11, QScriptValue::ReadOnly);
-	value.setProperty("z", 0, QScriptValue::ReadOnly);
-	value.setProperty("player", 1, QScriptValue::ReadOnly);
-	value.setProperty("selected", 0, QScriptValue::ReadOnly);
+	QScriptValue value = convObj(engine);
+	value.setProperty("action", 0, QScriptValue::ReadOnly);
+	value.setProperty("order", 0, QScriptValue::ReadOnly);
 	return value;
 }
 
@@ -462,9 +460,9 @@ static QScriptValue js_setTimer(QScriptContext *context, QScriptEngine *engine)
 /// quoted, otherwise they will be inlined!
 static QScriptValue js_queue(QScriptContext *context, QScriptEngine *engine)
 {
-	ARG_COUNT_VAR(2, 3);
+	ARG_COUNT_VAR(1, 3);
 	ARG_STRING(0);
-	ARG_NUMBER(1);
+	if (context->argumentCount() > 1) ARG_NUMBER(1);
 	if (context->argumentCount() == 3) ARG_OBJ(2);
 	QString funcName = context->argument(0).toString();
 	// TODO - check that a function by that name exists
@@ -630,6 +628,9 @@ bool testPlayerScript(QString path, int player, int difficulty)
 	engine->globalObject().setProperty("NO_ALLIANCES", NO_ALLIANCES, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("ALLIANCES", ALLIANCES, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("ALLIANCES_TEAMS", ALLIANCES_TEAMS, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("BEING_BUILT", SS_BEING_BUILT, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("BUILT", SS_BUILT, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("BEING_DEMOLISHED", SS_BEING_DEMOLISHED, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 
 	// Call init
 	callFunction(engine, "eventGameInit", QScriptValueList());

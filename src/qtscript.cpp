@@ -145,9 +145,13 @@ static QScriptValue js_setTimer(QScriptContext *context, QScriptEngine *engine)
 static QScriptValue js_queue(QScriptContext *context, QScriptEngine *engine)
 {
 	QString funcName = context->argument(0).toString();
-	QScriptValue ms = context->argument(1);
+	int ms = 0;
+	if (context->argumentCount() > 1)
+	{
+		ms = context->argument(1).toInt32();
+	}
 	int player = engine->globalObject().property("me").toInt32();
-	timerNode node(engine, funcName, player, ms.toInt32());
+	timerNode node(engine, funcName, player, ms);
 	if (context->argumentCount() == 3)
 	{
 		QScriptValue obj = context->argument(2);
@@ -238,11 +242,10 @@ bool updateScripts()
 		if (iter->frameTime <= gameTime)
 		{
 			iter->frameTime = iter->ms + gameTime;	// update for next invokation
-			runlist.append(*iter);
-		}
-		else if (iter->type == TIMER_ONESHOT_READY)
-		{
-			iter->type = TIMER_ONESHOT_DONE;
+			if (iter->type == TIMER_ONESHOT_READY)
+			{
+				iter->type = TIMER_ONESHOT_DONE; // unless there is none
+			}
 			runlist.append(*iter);
 		}
 	}
