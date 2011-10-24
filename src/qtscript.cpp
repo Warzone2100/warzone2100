@@ -219,7 +219,7 @@ bool updateScripts()
 	for (int i = 0; i < timers.count(); )
 	{
 		const timerNode node = timers.at(i);
-		if (node.type == TIMER_ONESHOT_DONE || (node.baseobj > NOT_CURRENT_LIST && !IdToPointer(node.baseobj, node.player)))
+		if (node.type == TIMER_ONESHOT_DONE || (node.baseobj > 0 && !IdToPointer(node.baseobj, node.player)))
 		{
 			timers.removeAt(i);
 		}
@@ -249,7 +249,7 @@ bool updateScripts()
 	for (iter = runlist.begin(); iter != runlist.end(); iter++)
 	{
 		QScriptValueList args;
-		if (iter->baseobj > NOT_CURRENT_LIST)
+		if (iter->baseobj > 0)
 		{
 			args += convObj(IdToPointer(iter->baseobj, iter->player), iter->engine);
 		}
@@ -344,7 +344,7 @@ bool saveScriptStates(const char *filename)
 		ini.beginGroup(QString("triggers_") + QString::number(i));
 		ini.setValue("player", node.player);
 		ini.setValue("function", node.function.toUtf8().constData());
-		if (!node.baseobj >= NOT_CURRENT_LIST)
+		if (!node.baseobj >= 0)
 		{
 			ini.setValue("object", QVariant(node.baseobj));
 		}

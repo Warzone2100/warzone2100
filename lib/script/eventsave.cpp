@@ -67,6 +67,7 @@ static bool eventSaveContext(WzConfig &ini)
 
 				ini.beginGroup(QString::number(countVar));
 				ini.setValue("type", QVariant(psVal->type));
+				ini.setValue("typename", QString(scriptTypeToString(psVal->type))); // for debugging
 
 				// store the variable value
 				if (psVal->type == VAL_STRING)
@@ -142,7 +143,7 @@ static bool eventLoadContext(WzConfig &ini)
 
 	if (numContext == 0)
 	{
-		debug(LOG_ERROR, "No script contexts found -- failed to load script data");
+		debug(LOG_FATAL, "No script contexts found -- failed to load script data");
 		return false;
 	}
 
@@ -159,6 +160,7 @@ static bool eventLoadContext(WzConfig &ini)
 		// create the context
 		if (!eventNewContext(psCode, release, &psCCont))
 		{
+			debug(LOG_FATAL, "Failed to create new context");
 			return false;
 		}
 		if (numVars != psCode->numGlobals + psCode->arraySize)
@@ -280,7 +282,7 @@ static bool eventFindContext(SDWORD id, SCRIPT_CONTEXT **ppsContext)
 }
 
 // save a list of triggers
-static bool eventSaveTriggerList(ACTIVE_TRIGGER *psList, WzConfig &ini)
+static bool eventSaveTriggerList(ACTIVE_TRIGGER *psList, QString tname, WzConfig &ini)
 {
 	int numTriggers = 0, context = 0;
 
@@ -291,7 +293,7 @@ static bool eventSaveTriggerList(ACTIVE_TRIGGER *psList, WzConfig &ini)
 			debug(LOG_FATAL, "Could not find context");
 			return false;
 		}
-		ini.beginGroup("trigger_" + QString::number(numTriggers));
+		ini.beginGroup(tname + "_" + QString::number(numTriggers));
 		ini.setValue("time", QVariant(psCurr->testTime));
 		ini.setValue("context", QVariant(context));
 		ini.setValue("type", QVariant(psCurr->type));
@@ -301,22 +303,22 @@ static bool eventSaveTriggerList(ACTIVE_TRIGGER *psList, WzConfig &ini)
 		ini.endGroup();
 		numTriggers++;
 	}
-	ini.setValue("general/triggers", QVariant(numTriggers));
+	ini.setValue("general/num" + tname, QVariant(numTriggers));
 	return true;
 }
 
 // load a list of triggers
-static bool eventLoadTriggerList(WzConfig &ini)
+static bool eventLoadTriggerList(WzConfig &ini, QString tname)
 {
 	UDWORD			event, offset, time;
 	int			numTriggers, context, type, trigger;
 	SCRIPT_CONTEXT		*psContext;
 
-	numTriggers = ini.value("general/triggers").toInt();
+	numTriggers = ini.value("general/num" + tname).toInt();
 
 	for (int i = 0; i < numTriggers; i++)
 	{
-		ini.beginGroup("trigger_" + QString::number(i));
+		ini.beginGroup(tname + "_" + QString::number(i));
 		time = ini.value("time").toInt();
 		context = ini.value("context").toInt();
 		if (!eventFindContext(context, &psContext))
@@ -342,7 +344,7 @@ static bool eventLoadTriggerList(WzConfig &ini)
 bool eventSaveState(const char *pFilename)
 {
 	WzConfig ini(pFilename);
-	if (!eventSaveContext(ini) || !eventSaveTriggerList(psTrigList, ini) || !eventSaveTriggerList(psCallbackList, ini))
+	if (!eventSaveContext(ini) || !eventSaveTriggerList(psTrigList, "trig", ini) || !eventSaveTriggerList(psCallbackList, "callback", ini))
 	{
 		return false;
 	}
@@ -354,7 +356,7 @@ bool eventLoadState(const char *pFilename)
 {
 	WzConfig ini(pFilename);
 	// load the event contexts
-	if (!eventLoadContext(ini) || !eventLoadTriggerList(ini) || !eventLoadTriggerList(ini))
+	if (!eventLoadContext(ini) || !eventLoadTriggerList(ini, "trig") || !eventLoadTriggerList(ini, "callback"))
 	{
 		return false;
 	}

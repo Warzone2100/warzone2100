@@ -730,7 +730,7 @@ bool scrValDefSave(INTERP_VAL *psVal, WzConfig &ini)
 	case ST_STRUCTURE:
 	case ST_FEATURE:
 		// just save the id
-		if (psVal->v.oval && ((BASE_OBJECT *)psVal->v.oval)->died > NOT_CURRENT_LIST)
+		if (psVal->v.oval && ((BASE_OBJECT *)psVal->v.oval)->died <= NOT_CURRENT_LIST)
 		{
 			ini.setValue("data", QVariant(((BASE_OBJECT *)psVal->v.oval)->id));
 		}
