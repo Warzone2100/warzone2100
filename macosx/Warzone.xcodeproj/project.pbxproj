@@ -490,6 +490,7 @@
 		432BE3F810D9CD4000A486AB /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 432BE3EE10D9CB4D00A486AB /* InfoPlist.strings */; };
 		432BE40210D9CF6F00A486AB /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 432BE3FE10D9CF1300A486AB /* InfoPlist.strings */; };
 		432BE41A10D9D32000A486AB /* SDL.framework in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 432BE34C10D9C21900A486AB /* SDL.framework */; };
+		433D0EBA14552C1100DE96B5 /* MiniUPnPc.framework in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 43D9C53E144B91C600FD63B1 /* MiniUPnPc.framework */; };
 		4350394A12B6FE2500C6BD27 /* gzclose.c in Sources */ = {isa = PBXBuildFile; fileRef = 4350394512B6FE2500C6BD27 /* gzclose.c */; };
 		4350394B12B6FE2500C6BD27 /* gzguts.h in Headers */ = {isa = PBXBuildFile; fileRef = 4350394612B6FE2500C6BD27 /* gzguts.h */; };
 		4350394C12B6FE2500C6BD27 /* gzlib.c in Sources */ = {isa = PBXBuildFile; fileRef = 4350394712B6FE2500C6BD27 /* gzlib.c */; };
@@ -799,7 +800,7 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = 02356D660BD3BB2600E9A019 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 43D9C53D144B91C600FD63B1 /* MiniUPnPc */;
+			remoteGlobalIDString = 43D9C53D144B91C600FD63B1;
 			remoteInfo = MiniUPnPc;
 		};
 		43FA571010FF8ED90074E914 /* PBXContainerItemProxy */ = {
@@ -853,6 +854,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				433D0EBA14552C1100DE96B5 /* MiniUPnPc.framework in Copy frameworks */,
 				432BE41A10D9D32000A486AB /* SDL.framework in Copy frameworks */,
 				023ECC500E9318D600D9E7C3 /* Theora.framework in Copy frameworks */,
 				02548E0A0D159F4400B4B3B9 /* QuesoGLC.framework in Copy frameworks */,
