@@ -25,6 +25,12 @@
 #include "qtscript.h"
 #include "featuredef.h"
 
+enum SCRIPT_TYPES
+{
+	POSITION = OBJ_NUM_TYPES,
+	AREA,
+};
+
 #include <QtScript/QScriptEngine>
 
 // ----------------------------------------------
@@ -38,5 +44,6 @@ QScriptValue convDroid(DROID *psDroid, QScriptEngine *engine);
 QScriptValue convStructure(STRUCTURE *psStruct, QScriptEngine *engine);
 QScriptValue convObj(BASE_OBJECT *psObj, QScriptEngine *engine);
 QScriptValue convFeature(FEATURE *psFeature, QScriptEngine *engine);
+QScriptValue convMax(BASE_OBJECT *psObj, QScriptEngine *engine);
 
 #endif

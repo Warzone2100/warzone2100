@@ -63,6 +63,18 @@ struct timerNode
 	// implement operator less TODO
 };
 
+struct bindNode
+{
+	QString funcName;
+	int type;
+	int id;
+	int player;
+	QScriptEngine *engine;
+};
+
+/// Bind functions to primary object functions.
+static QHash<int, bindNode> bindings;
+
 /// List of timer events for scripts. Before running them, we sort the list then run as many as we have time for.
 /// In this way, we implement load balancing of events and keep frame rates tidy for users. Since scripts run on the
 /// host, we do not need to worry about each peer simulating the world differently.
@@ -163,6 +175,52 @@ static QScriptValue js_queue(QScriptContext *context, QScriptEngine *engine)
 	return QScriptValue();
 }
 
+void scriptRemoveObject(const BASE_OBJECT *psObj)
+{
+	for (QHash<int, bindNode>::iterator i = bindings.find(psObj->id); i != bindings.end(); i++)
+	{
+		int id = i.key();
+		bindNode node = i.value();
+		BASE_OBJECT *psObj = IdToPointer(id, node.player);
+		if (psObj && !psObj->died)
+		{
+			QScriptValueList args;
+			args += convMax(psObj, node.engine);
+			callFunction(node.engine, node.funcName, args);
+		}
+		bindings.erase(i);
+	}
+}
+
+/// Special scripting function that binds a function call to an object. The function
+/// is called before the object is destroyed.
+/// Note: Functions must be passed quoted, otherwise they will be inlined! If a third
+/// parameter is passed, this must be a player, which may be used for filtering.
+static QScriptValue js_bind(QScriptContext *context, QScriptEngine *engine)
+{
+	bindNode node;
+	QScriptValue objv = context->argument(1);
+	node.type = objv.property("type").toInt32();
+	node.player = -1;
+	node.funcName = context->argument(0).toString();
+	node.engine = engine;
+	node.player = objv.property("player").toInt32();
+	node.id = objv.property("id").toInt32();
+	if (node.type == OBJ_DROID || node.type == OBJ_STRUCTURE || node.type == OBJ_FEATURE)
+	{
+		BASE_OBJECT *psObj = IdToPointer(node.id, node.player);
+		if (psObj && !psObj->died)
+		{
+			bindings.insert(node.id, node);
+		}
+	}
+	else
+	{
+		debug(LOG_ERROR, "Trying to bind to illegal object type");
+	}
+	return QScriptValue();
+}
+
 // Currently breaks the lint test, so use with care
 static QScriptValue js_include(QScriptContext *context, QScriptEngine *engine)
 {
@@ -204,6 +262,7 @@ bool initScripts()
 bool shutdownScripts()
 {
 	timers.clear();
+	bindings.clear();
 	internalNamespace.clear();
 	while (!scripts.isEmpty())
 	{
@@ -294,6 +353,7 @@ bool loadPlayerScript(QString path, int player, int difficulty)
 	engine->globalObject().setProperty("queue", engine->newFunction(js_queue));
 	engine->globalObject().setProperty("removeTimer", engine->newFunction(js_removeTimer));
 	engine->globalObject().setProperty("include", engine->newFunction(js_include));
+	engine->globalObject().setProperty("bind", engine->newFunction(js_bind));
 
 	// Special global variables
 	engine->globalObject().setProperty("me", player, QScriptValue::ReadOnly | QScriptValue::Undeletable);

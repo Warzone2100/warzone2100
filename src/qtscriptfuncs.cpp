@@ -87,6 +87,17 @@ QScriptValue convObj(BASE_OBJECT *psObj, QScriptEngine *engine)
 	return value;
 }
 
+QScriptValue convMax(BASE_OBJECT *psObj, QScriptEngine *engine)
+{
+	switch (psObj->type)
+	{
+	case OBJ_DROID: return convDroid((DROID *)psObj, engine);
+	case OBJ_STRUCTURE: return convStructure((STRUCTURE *)psObj, engine);
+	case OBJ_FEATURE: return convFeature((FEATURE *)psObj, engine);
+	default: ASSERT(false, "No such supported object type"); return convObj(psObj, engine);
+	}
+}
+
 // ----------------------------------------------------------------------------------------
 // Label system (function defined in qtscript.h header)
 //
@@ -94,12 +105,6 @@ QScriptValue convObj(BASE_OBJECT *psObj, QScriptEngine *engine)
 struct labeltype { Vector2i p1, p2; int id; int type; int player; };
 
 static QHash<QString, labeltype> labels;
-
-enum SCRIPT_TYPES
-{
-	POSITION = OBJ_NUM_TYPES,
-	AREA,
-};
 
 // Load labels
 bool loadLabels(const char *filename)

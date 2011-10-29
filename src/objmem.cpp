@@ -44,6 +44,7 @@
 #include "mapgrid.h"
 #include "combat.h"
 #include "visibility.h"
+#include "qtscript.h"
 
 #ifdef DEBUG
 static SDWORD factoryDeliveryPointCheck[MAX_PLAYERS][NUM_FLAG_TYPES][MAX_FACTORY];
@@ -242,6 +243,8 @@ static inline void destroyObject(OBJECT* list[], OBJECT* object)
 {
 	ASSERT(object != NULL,
 	       "destroyObject: Invalid pointer");
+
+	scriptRemoveObject(object);
 
 	// If the message to remove is the first one in the list then mark the next one as the first
 	if (list[object->player] == object)

@@ -58,6 +58,9 @@ bool loadLabels(const char *filename);
 /// Write map labels to savegame (implemented in qtscriptfuncs.cpp)
 bool writeLabels(const char *filename);
 
+/// Tell script system that an object has been removed.
+void scriptRemoveObject(const BASE_OBJECT *psObj);
+
 // ----------------------------------------------
 // Event functions
 
