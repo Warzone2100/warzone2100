@@ -1,5 +1,0 @@
-This is a qwth file; it does nothing but tell xcode to use moc on the file named without the '.qwth'.
-
-Where the file to be moced is '${name}', the qwth file is named '${name}.qwth' and the resulting file will be named '${name}.moc.cpp'
-
-Use for any other purpose will result in being roundly moced.

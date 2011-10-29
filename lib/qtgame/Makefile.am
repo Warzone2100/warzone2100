@@ -11,7 +11,6 @@ MOCEDFILES = $(MOCHEADER:%.h=%_moc.cpp)
 CLEANFILES = $(MOCEDFILES)
 
 EXTRA_DIST = \
-	qtgame.h.qwth \
 	swapinterval.mm \
 	macosx_screen_resolutions.h macosx_screen_resolutions.cpp
 
