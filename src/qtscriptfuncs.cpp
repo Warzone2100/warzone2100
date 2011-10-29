@@ -54,6 +54,14 @@ QScriptValue convStructure(STRUCTURE *psStruct, QScriptEngine *engine)
 {
 	QScriptValue value = convObj(psStruct, engine);
 	value.setProperty("status", (int)psStruct->status, QScriptValue::ReadOnly);
+	value.setProperty("type", (int)OBJ_STRUCTURE, QScriptValue::ReadOnly);
+	return value;
+}
+
+QScriptValue convFeature(FEATURE *psFeature, QScriptEngine *engine)
+{
+	QScriptValue value = convObj(psFeature, engine);
+	value.setProperty("type", (int)OBJ_FEATURE, QScriptValue::ReadOnly);
 	return value;
 }
 
@@ -62,6 +70,7 @@ QScriptValue convDroid(DROID *psDroid, QScriptEngine *engine)
 	QScriptValue value = convObj(psDroid, engine);
 	value.setProperty("action", (int)psDroid->action, QScriptValue::ReadOnly);
 	value.setProperty("order", (int)psDroid->order, QScriptValue::ReadOnly);
+	value.setProperty("type", (int)OBJ_DROID, QScriptValue::ReadOnly);
 	return value;
 }
 
@@ -79,9 +88,160 @@ QScriptValue convObj(BASE_OBJECT *psObj, QScriptEngine *engine)
 }
 
 // ----------------------------------------------------------------------------------------
+// Label system (function defined in qtscript.h header)
+//
+
+struct labeltype { Vector2i p1, p2; int id; int type; int player; };
+
+static QHash<QString, labeltype> labels;
+
+enum SCRIPT_TYPES
+{
+	POSITION = OBJ_NUM_TYPES,
+	AREA,
+};
+
+// Load labels
+bool loadLabels(const char *filename)
+{
+	if (!PHYSFS_exists(filename))
+	{
+		debug(LOG_SAVE, "No %s found -- use fallback method", filename);
+		return false;
+	}
+	WzConfig ini(filename);
+	if (ini.status() != QSettings::NoError)
+	{
+		debug(LOG_ERROR, "No label file %s", filename);
+		return false;
+	}
+	labels.clear();
+	QStringList list = ini.childGroups();
+	for (int i = 0; i < list.size(); ++i)
+	{
+		ini.beginGroup(list[i]);
+		labeltype p;
+		QString label(ini.value("label").toString());
+		if (labels.contains(label))
+		{
+			debug(LOG_ERROR, "Duplicate label found");
+		}
+		else if (list[i].startsWith("position"))
+		{
+			p.p1 = ini.vector2i("pos");
+			p.p2 = p.p1;
+			p.type = POSITION;
+			p.player = -1;
+			p.id = -1;
+			labels.insert(label, p);
+		}
+		else if (list[i].startsWith("area"))
+		{
+			p.p1 = ini.vector2i("pos1");
+			p.p2 = ini.vector2i("pos2");
+			p.type = AREA;
+			p.player = -1;
+			p.id = -1;
+			labels.insert(label, p);
+		}
+		else if (list[i].startsWith("object"))
+		{
+			p.id = ini.value("id").toInt();
+			p.type = ini.value("type").toInt();
+			p.player = ini.value("player").toInt();
+			labels.insert(label, p);
+		}
+		else
+		{
+			debug(LOG_ERROR, "Misnamed group in %s", filename);
+		}
+		ini.endGroup();
+	}
+	return true;
+}
+
+bool writeLabels(const char *filename)
+{
+	int c[3];
+	memset(c, 0, sizeof(c));
+	WzConfig ini(filename);
+	if (ini.status() != QSettings::NoError)
+	{
+		debug(LOG_ERROR, "Could not open %s", filename);
+		return false;
+	}
+	for (QHash<QString, labeltype>::const_iterator i = labels.constBegin(); i != labels.constEnd(); i++)
+	{
+		QString key = i.key();
+		labeltype l = i.value();
+		if (l.type == POSITION)
+		{
+			ini.beginGroup("position_" + QString::number(c[0]++));
+			ini.setVector2i("pos", l.p1);
+			ini.setValue("label", key);
+			ini.endGroup();
+		}
+		else if (l.type == AREA)
+		{
+			ini.beginGroup("area_" + QString::number(c[1]++));
+			ini.setVector2i("pos1", l.p1);
+			ini.setVector2i("pos2", l.p2);
+			ini.setValue("label", key);
+			ini.endGroup();
+		}
+		else
+		{
+			ini.beginGroup("object_" + QString::number(c[2]++));
+			ini.setValue("id", l.id);
+			ini.setValue("player", l.player);
+			ini.setValue("type", l.type);
+			ini.setValue("label", key);
+			ini.endGroup();
+		}
+	}
+	return true;
+}
+
+// ----------------------------------------------------------------------------------------
 // Script functions
 //
 // All script functions should be prefixed with "js_" then followed by same name as in script.
+
+static QScriptValue js_label(QScriptContext *context, QScriptEngine *engine)
+{
+	QString label = context->argument(0).toString();
+	QScriptValue ret;
+	if (labels.contains(label))
+	{
+		labeltype p = labels.value(label);
+		if (p.type == AREA || p.type == POSITION)
+		{
+			ret.setProperty("x", map_coord(p.p1.x), QScriptValue::ReadOnly);
+			ret.setProperty("y", map_coord(p.p1.y), QScriptValue::ReadOnly);
+		}
+		if (p.type == AREA)
+		{
+			ret.setProperty("x2", map_coord(p.p2.x), QScriptValue::ReadOnly);
+			ret.setProperty("xy", map_coord(p.p2.y), QScriptValue::ReadOnly);
+		}
+		else if (p.type == OBJ_DROID)
+		{
+			DROID *psDroid = IdToDroid(p.id, p.player);
+			if (psDroid) ret = convDroid(psDroid, engine);
+		}
+		else if (p.type == OBJ_STRUCTURE)
+		{
+			STRUCTURE *psStruct = IdToStruct(p.id, p.player);
+			if (psStruct) ret = convStructure(psStruct, engine);
+		}
+		else if (p.type == OBJ_FEATURE)
+		{
+			FEATURE *psFeature = IdToFeature(p.id, p.player);
+			if (psFeature) ret = convFeature(psFeature, engine);
+		}
+	}
+	return ret;
+}
 
 static QScriptValue js_enumGroup(QScriptContext *context, QScriptEngine *engine)
 {
@@ -668,6 +828,7 @@ bool registerFunctions(QScriptEngine *engine)
 {
 	// Register functions to the script engine here
 	engine->globalObject().setProperty("_", engine->newFunction(js_translate));
+	engine->globalObject().setProperty("label", engine->newFunction(js_label));
 
 	// General functions -- geared for use in AI scripts
 	//engine->globalObject().setProperty("getDerrick", engine->newFunction(js_getDerrick));

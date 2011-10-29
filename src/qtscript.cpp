@@ -35,6 +35,7 @@
 #include <QtCore/QStringList>
 #include <QtCore/QSettings>
 
+#include "lib/framework/wzapp.h"
 #include "lib/framework/file.h"
 #include "lib/gamelib/gtime.h"
 #include "multiplay.h"
@@ -74,7 +75,7 @@ static QList<QScriptEngine *> scripts;
 static QHash<QString, int> internalNamespace;
 
 // Call a function by name
-static bool callFunction(QScriptEngine *engine, QString function, QScriptValueList args)
+static bool callFunction(QScriptEngine *engine, const QString &function, const QScriptValueList &args)
 {
 	QScriptValue value = engine->globalObject().property(function);
 	if (!value.isValid() || !value.isFunction())
@@ -162,6 +163,7 @@ static QScriptValue js_queue(QScriptContext *context, QScriptEngine *engine)
 	return QScriptValue();
 }
 
+// Currently breaks the lint test, so use with care
 static QScriptValue js_include(QScriptContext *context, QScriptEngine *engine)
 {
 	QString path = context->argument(0).toString();

@@ -52,6 +52,12 @@ bool loadPlayerScript(QString path, int player, int difficulty);
 bool loadScriptStates(const char *filename);
 bool saveScriptStates(const char *filename);
 
+/// Load map labels (implemented in qtscriptfuncs.cpp)
+bool loadLabels(const char *filename);
+
+/// Write map labels to savegame (implemented in qtscriptfuncs.cpp)
+bool writeLabels(const char *filename);
+
 // ----------------------------------------------
 // Event functions
 

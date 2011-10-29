@@ -23,6 +23,7 @@
 
 #include "lib/framework/frame.h"
 #include "qtscript.h"
+#include "featuredef.h"
 
 #include <QtScript/QScriptEngine>
 
@@ -32,8 +33,10 @@
 /// Register functions to engine context
 bool registerFunctions(QScriptEngine *engine);
 
+// Utility conversion functions
 QScriptValue convDroid(DROID *psDroid, QScriptEngine *engine);
 QScriptValue convStructure(STRUCTURE *psStruct, QScriptEngine *engine);
 QScriptValue convObj(BASE_OBJECT *psObj, QScriptEngine *engine);
+QScriptValue convFeature(FEATURE *psFeature, QScriptEngine *engine);
 
 #endif

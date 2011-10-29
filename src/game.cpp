@@ -1841,6 +1841,11 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 	aFileName[fileExten - 1] = '\0';
 	strcat(aFileName, "/");
 
+	// Load labels
+	aFileName[fileExten] = '\0';
+	strcat(aFileName, "labels.ini");
+	loadLabels(aFileName);
+
 	//the terrain type WILL only change with Campaign changes (well at the moment!)
 	if (gameType != GTYPE_SCENARIO_EXPAND || UserSaveGame)
 	{
@@ -2473,6 +2478,11 @@ bool saveGame(char *aFileName, GAME_TYPE saveType)
 		debug(LOG_ERROR, "saveGame: writeMapFile(\"%s\") failed", CurrentFileName);
 		goto error;
 	}
+
+	// Save labels
+	CurrentFileName[fileExtension] = '\0';
+	strcat(CurrentFileName, "labels.ini");
+	writeLabels(CurrentFileName);
 
 	//create the droids filename
 	CurrentFileName[fileExtension] = '\0';
@@ -4196,6 +4206,7 @@ static bool loadSaveDroid(const char *pFileName, DROID **ppsCurrentDroidLists)
 		{
 			addDroid(psDroid, ppsCurrentDroidLists);
 		}
+
 		ini.endGroup();
 	}
 	return true;
