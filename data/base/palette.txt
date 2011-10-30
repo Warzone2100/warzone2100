@@ -84,3 +84,4 @@ E0,E0,E0,ff	// team11 - white
 10,00,40,ff	// team15 - ultraviolet
 40,60,00,ff	// team16 - brown
 32,4b,a0,ff	// blueprint planned by ally
+ff,80,40,ff	// default form bar text

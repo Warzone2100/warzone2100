@@ -378,6 +378,7 @@ enum _w_colour
 	WCOL_CURSOR,	///< Edit Box cursor colour
 	WCOL_TIPBKGRND,	///< Background for the tool tip window
 	WCOL_DISABLE,	///< Text colour on a disabled button
+	WCOL_BARTEXT,   ///< Text colour on a bar graph.
 
 	WCOL_MAX,	///< All colour numbers are less than this
 };

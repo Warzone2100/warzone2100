@@ -153,6 +153,7 @@ void intUpdateCommandExp(WIDGET *psWidget, W_CONTEXT *psContext);
 // callback to update the command droid factories
 void intUpdateCommandFact(WIDGET *psWidget, W_CONTEXT *psContext);
 
+QString formatTime(int time);
 void intUpdateProgressBar(WIDGET *psWidget, W_CONTEXT *psContext);
 
 void intUpdateOptionText(WIDGET *psWidget, W_CONTEXT *psContext);

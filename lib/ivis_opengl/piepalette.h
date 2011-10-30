@@ -108,8 +108,9 @@
 #define WZCOL_TEAM15                                    psPalette[83]
 #define WZCOL_TEAM16                                    psPalette[84]
 #define WZCOL_BLUEPRINT_PLANNED_BY_ALLY                 psPalette[85]
+#define WZCOL_FORM_BARTEXT                              psPalette[86]
 
-#define WZCOL_MAX                                       86
+#define WZCOL_MAX                                       87
 
 //*************************************************************************
 

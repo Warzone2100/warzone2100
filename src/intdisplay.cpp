@@ -151,6 +151,13 @@ void SetFormAudioIDs(int OpenID,int CloseID)
 }
 
 
+QString formatTime(int time)
+{
+	char timeText[20];
+	ssprintf(timeText, "%d:%02d", time/60, time%60);
+	return timeText;
+}
+
 // Widget callback to update the progress bar in the object stats screen.
 //
 void intUpdateProgressBar(WIDGET *psWidget, W_CONTEXT *psContext)
@@ -232,14 +239,9 @@ void intUpdateProgressBar(WIDGET *psWidget, W_CONTEXT *psContext)
 				BarGraph->majorCol = WZCOL_YELLOW;
 				//and change the tool tip
 				widgSetTipText((WIDGET*)BarGraph, _("Construction Progress"));
+				BarGraph->text = formatTime(timeToBuild);
 
-				if((int) BuildPoints < 0){
-					BuildPoints=0;
-				}
-				else if (BuildPoints > Range)
-				{
-					BuildPoints = Range;
-				}
+				BuildPoints = clip(BuildPoints, 0, Range);
 				// prevent a division by 0 error
 				if (Range == 0)
 				{
@@ -283,6 +285,8 @@ void intUpdateProgressBar(WIDGET *psWidget, W_CONTEXT *psContext)
 						gameTime - Research->timeStartHold))) / GAME_TICKS_PER_SEC;
 
 						BuildPoints+= pPlayerRes->currentPoints;
+
+						BarGraph->text.clear();
 					}
 					else
 					{
@@ -291,6 +295,10 @@ void intUpdateProgressBar(WIDGET *psWidget, W_CONTEXT *psContext)
 						researchPoints * (gameTime - Research->timeStarted) / GAME_TICKS_PER_SEC;
 
 						BuildPoints+= pPlayerRes->currentPoints;
+
+						RESEARCH_FACILITY *res = (RESEARCH_FACILITY*)Structure->pFunctionality;
+						int timeToResearch = (res->psSubject->researchPoints - asPlayerResList[selectedPlayer][res->psSubject - asResearch].currentPoints) / std::max(res->researchPoints, 1u);
+						BarGraph->text = formatTime(timeToResearch);
 					}
 				}
 				if (BuildPoints > Range)
@@ -3326,6 +3334,7 @@ void intDisplayAllyBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGH
 {
 	W_BARGRAPH *psBar = (W_BARGRAPH *)psWidget;
 	unsigned bestCompletion = 0;
+	int bestTimeToResearch = 3600000;
 	for (int player = 0; player < MAX_PLAYERS; ++player)
 	{
 		if (player != selectedPlayer && aiCheckAlliances(selectedPlayer, player))
@@ -3342,11 +3351,17 @@ void intDisplayAllyBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGH
 						bestCompletion = completion;
 						psBar->majorCol = pal_GetTeamColour(getPlayerColour(player));
 					}
+
+					RESEARCH_FACILITY *res = (RESEARCH_FACILITY*)psOtherStruct->pFunctionality;
+					int timeToResearch = (res->psSubject->researchPoints - asPlayerResList[player][res->psSubject - asResearch].currentPoints) / std::max(res->researchPoints, 1u);
+					bestTimeToResearch = std::min(bestTimeToResearch, timeToResearch);
 					break;
 				}
 			}
 		}
 	}
+
+	((W_BARGRAPH *)psWidget)->text = formatTime(bestTimeToResearch);
 
 	((W_BARGRAPH *)psWidget)->majorSize = PERCENT(bestCompletion, asResearch[psWidget->UserData].researchPoints);
 	barGraphDisplayTrough(psWidget, xOffset, yOffset, pColours);

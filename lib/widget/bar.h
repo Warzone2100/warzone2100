@@ -41,6 +41,7 @@ struct W_BARGRAPH : public WIDGET
 	PIELIGHT	majorCol;			// Colour for the major bar
 	PIELIGHT	minorCol;			// Colour for the minor bar
 	const char	*pTip;				// The tool tip for the graph
+	QString         text;
 };
 
 /* Create a barGraph widget data structure */
