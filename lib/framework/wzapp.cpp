@@ -977,11 +977,11 @@ void inputLoseFocus()
 	/* Lost the window focus, have to take this as a global key up */
 	for(i = 0; i < KEY_MAXSCAN; i++)
 	{
-		aKeyState[i].state = KEY_RELEASED;
+		aKeyState[i].state = KEY_UP;
 	}
 	for (i = 0; i < 6; i++)
 	{
-		aMouseState[i].state = KEY_RELEASED;
+		aMouseState[i].state = KEY_UP;
 	}
 }
 
