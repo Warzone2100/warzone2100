@@ -69,10 +69,8 @@ VIAddVersionKey "ProductVersion"	"${PACKAGE_VERSION}"
   !define MUI_HEADERIMAGE
   !define MUI_HEADERIMAGE_BITMAP "${TOP_SRCDIR}\icons\wz2100header.bmp"
   !define MUI_HEADERIMAGE_RIGHT
-
-  !define MUI_WELCOMEPAGE_TITLE "Welcome to Warzone 2100 v. ${PACKAGE_VERSION}" 
+  !define MUI_WELCOMEPAGE_TITLE "Welcome to Warzone 2100 v. ${PACKAGE_VERSION}"
   !define MUI_WELCOMEPAGE_TEXT   "$(WZWelcomeText)"
-
   !define MUI_WELCOMEFINISHPAGE_BITMAP "${TOP_SRCDIR}\icons\wz2100welcome.bmp"
   !define MUI_UNWELCOMEFINISHPAGE_BITMAP "${TOP_SRCDIR}\icons\wz2100welcome.bmp"
 
@@ -127,7 +125,6 @@ VIAddVersionKey "ProductVersion"	"${PACKAGE_VERSION}"
   ;Only for solid compression (by default, solid compression is enabled for BZIP2 and LZMA)
 
   !insertmacro MUI_RESERVEFILE_LANGDLL
-;--------------------------------
 Function WelcomePageSetupLinkPre
   !insertmacro MUI_INSTALLOPTIONS_WRITE "ioSpecial.ini" "Field 3" "Bottom" "142" ; limit size of the upper label
   !insertmacro MUI_INSTALLOPTIONS_WRITE "ioSpecial.ini" "Settings" "Numfields" "4" ; increase counter
@@ -138,9 +135,8 @@ Function WelcomePageSetupLinkPre
   !insertmacro MUI_INSTALLOPTIONS_WRITE "ioSpecial.ini" "Field 4" "Right" "300"
   !insertmacro MUI_INSTALLOPTIONS_WRITE "ioSpecial.ini" "Field 4" "Top" "160"
   !insertmacro MUI_INSTALLOPTIONS_WRITE "ioSpecial.ini" "Field 4" "Bottom" "172"
-
 FunctionEnd
- 
+
 Function WelcomePageSetupLinkShow
   Push $0
   GetDlgItem $0 $MUI_HWND 1203
@@ -555,7 +551,7 @@ FunctionEnd
   LangString TEXT_SecFMVs ${LANG_ENGLISH} "Videos"
   LangString DESC_SecFMVs ${LANG_ENGLISH} "Download and install in-game cutscenes."
 
-  LangString TEXT_SecFMVs_EngHi ${LANG_ENGLISH} "English"
+  LangString TEXT_SecFMVs_EngHi ${LANG_ENGLISH} "English (HQ)"
   LangString DESC_SecFMVs_EngHi ${LANG_ENGLISH} "Download and install higher-quality English in-game cutscenes (920 MB)."
 
   LangString TEXT_SecFMVs_Eng ${LANG_ENGLISH} "English"
@@ -632,7 +628,7 @@ FunctionEnd
   LangString DESC_SecFMVs ${LANG_GERMAN} "Videos herunterladen und installieren."
 
   LangString TEXT_SecFMVs_EngHi ${LANG_GERMAN} "English (HQ)"
-  LangString DESC_SecFMVs_EngHi ${LANG_GERMAN} "Die englischen Videos in erhoben Qualität herunterladen und installieren(920 MiB)."
+  LangString DESC_SecFMVs_EngHi ${LANG_GERMAN} "Videos in besserer Qualität und auf Englisch herunterladen und installieren (920 MiB)."
 
   LangString TEXT_SecFMVs_Eng ${LANG_GERMAN} "English"
   LangString DESC_SecFMVs_Eng ${LANG_GERMAN} "Die englischen Videos herunterladen und installieren (545 MiB)."
