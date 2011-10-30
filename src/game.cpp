@@ -4097,7 +4097,10 @@ static bool loadSaveDroid(const char *pFileName, DROID **ppsCurrentDroidLists)
 		turnOffMultiMsg(false);
 
 		// Copy the values across
-		psDroid->id = id;	// force correct ID
+		if (id > 0)
+		{
+			psDroid->id = id; // force correct ID, unless ID is set to eg -1, in which case we should keep new ID (useful for starting units in campaign)
+		}
 		ASSERT(id != 0, "Droid ID should never be zero here");
 		psDroid->body = healthValue(ini, psDroid->originalBody);
 		psDroid->inFire = ini.value("inFire", 0).toInt();
@@ -4637,7 +4640,10 @@ static bool loadSaveStructure2(const char *pFileName, STRUCTURE **ppList)
 			ini.endGroup();
 			continue;
 		}
-		psStructure->id = id;
+		if (id > 0)
+		{
+			psStructure->id = id;	// force correct ID
+		}
 		psStructure->inFire = ini.value("inFire", 0).toInt();
 		psStructure->burnDamage = ini.value("burnDamage", 0).toInt();
 		psStructure->burnStart = ini.value("burnStart", 0).toInt();

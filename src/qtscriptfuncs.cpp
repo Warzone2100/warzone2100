@@ -215,7 +215,7 @@ bool writeLabels(const char *filename)
 static QScriptValue js_label(QScriptContext *context, QScriptEngine *engine)
 {
 	QString label = context->argument(0).toString();
-	QScriptValue ret;
+	QScriptValue ret = engine->newObject();
 	if (labels.contains(label))
 	{
 		labeltype p = labels.value(label);
@@ -245,6 +245,7 @@ static QScriptValue js_label(QScriptContext *context, QScriptEngine *engine)
 			if (psFeature) ret = convFeature(psFeature, engine);
 		}
 	}
+	else debug(LOG_ERROR, "label %s not found!", label.toUtf8().constData());
 	return ret;
 }
 
