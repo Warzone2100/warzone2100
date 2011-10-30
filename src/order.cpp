@@ -693,7 +693,6 @@ void orderUpdateDroid(DROID *psDroid)
 	case DORDER_REPAIR:
 	case DORDER_DROIDREPAIR:
 	case DORDER_RESTORE:
-	case DORDER_CLEARWRECK:
 		if (psDroid->action == DACTION_NONE ||
 			psDroid->psTarget == NULL)
 		{
@@ -1932,17 +1931,6 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		setDroidTarget(psDroid, psOrder->psObj);
 		actionDroid(psDroid, DACTION_RESTORE, psOrder->psObj);
 		break;
-	case DORDER_CLEARWRECK:
-		if (!(psDroid->droidType == DROID_CONSTRUCT || psDroid->droidType == DROID_CYBORG_CONSTRUCT))
-		{
-			break;
-		}
-		psDroid->order = DORDER_CLEARWRECK;
-		psDroid->orderX = psOrder->psObj->pos.x;
-		psDroid->orderY = psOrder->psObj->pos.y;
-		setDroidTarget(psDroid, psOrder->psObj);
-		actionDroid(psDroid, DACTION_CLEARWRECK, psOrder->psObj);
-		break;
 	case DORDER_REARM:
 		// didn't get executed before
 		if (!isVtolDroid(psDroid))
@@ -2095,7 +2083,7 @@ bool validOrderForObj(DROID_ORDER order)
 		order == DORDER_OBSERVE || order == DORDER_ATTACKTARGET || order == DORDER_RTR ||
 		order == DORDER_RTR_SPECIFIED || order == DORDER_EMBARK || order == DORDER_GUARD ||
 		order == DORDER_DROIDREPAIR || order == DORDER_RESTORE || order == DORDER_BUILDMODULE ||
-		order == DORDER_REARM || order == DORDER_CLEARWRECK || order == DORDER_RECOVER);
+		order == DORDER_REARM || order == DORDER_RECOVER);
 }
 
 
@@ -2443,7 +2431,6 @@ bool orderDroidList(DROID *psDroid)
 		case DORDER_OBSERVE:
 		case DORDER_DROIDREPAIR:
 		case DORDER_FIRESUPPORT:
-		case DORDER_CLEARWRECK:
 		case DORDER_DEMOLISH:
 		case DORDER_HELPBUILD:
 		case DORDER_BUILDMODULE:
@@ -2526,7 +2513,6 @@ void orderCheckList(DROID *psDroid)
 		    order == DORDER_OBSERVE ||
 		    order == DORDER_DROIDREPAIR ||
 		    order == DORDER_FIRESUPPORT ||
-		    order == DORDER_CLEARWRECK ||
 		    order == DORDER_DEMOLISH ||
 		    order == DORDER_HELPBUILD ||
 		    order == DORDER_BUILDMODULE)
@@ -2576,7 +2562,6 @@ static bool orderDroidObjAdd(DROID *psDroid, DROID_ORDER order, BASE_OBJECT *psO
 		order != DORDER_OBSERVE &&
 		order != DORDER_DROIDREPAIR &&
 		order != DORDER_FIRESUPPORT &&
-		order != DORDER_CLEARWRECK &&
         order != DORDER_DEMOLISH &&
         order != DORDER_HELPBUILD &&
         order != DORDER_BUILDMODULE)
@@ -2696,7 +2681,6 @@ DROID_ORDER chooseOrderObj(DROID *psDroid, BASE_OBJECT *psObj, bool altOrder)
 {
 	DROID_ORDER		order;
 	STRUCTURE		*psStruct;
-	FEATURE			*psFeature;
 
 	if (psDroid->droidType == DROID_TRANSPORTER)
 	{
@@ -2928,21 +2912,6 @@ DROID_ORDER chooseOrderObj(DROID *psDroid, BASE_OBJECT *psObj, bool altOrder)
 			{
 				order = DORDER_GUARD;
 			}
-		}
-	}
-	//check for constructor droid clearing up wrecked buildings
-	else if ((psDroid->droidType == DROID_CONSTRUCT || psDroid->droidType == DROID_CYBORG_CONSTRUCT)
-	         && psObj->type == OBJ_FEATURE)
-	{
-		psFeature = (FEATURE *) psObj;
-		ASSERT(psObj != NULL, "Invalid feature pointer");
-		if (psFeature->psStats->subType == FEAT_BUILD_WRECK)
-		{
-			order = DORDER_CLEARWRECK;
-		}
-		else
-		{
-			order = DORDER_NONE;
 		}
 	}
 	else
@@ -4230,7 +4199,7 @@ const char* getDroidOrderName(DROID_ORDER order)
 		case DORDER_RESTORE:                  return "DORDER_RESTORE";
 		case DORDER_SCOUT:                    return "DORDER_SCOUT";
 		case DORDER_RUNBURN:                  return "DORDER_RUNBURN";
-		case DORDER_CLEARWRECK:               return "DORDER_CLEARWRECK";
+		case DORDER_UNUSED:                   return "DORDER_UNUSED";
 		case DORDER_PATROL:                   return "DORDER_PATROL";
 		case DORDER_REARM:                    return "DORDER_REARM";
 		case DORDER_RECOVER:                  return "DORDER_RECOVER";

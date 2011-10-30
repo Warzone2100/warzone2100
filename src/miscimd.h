@@ -27,7 +27,6 @@
 
 extern bool initMiscImds( void );
 extern iIMDShape	*getImdFromIndex(UDWORD	index);
-extern iIMDShape	*getRandomWreckageImd( void );
 extern iIMDShape	*getRandomDebrisImd( void );
 
 #define	MAX_DEBRIS		5

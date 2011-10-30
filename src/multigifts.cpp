@@ -607,7 +607,7 @@ void recvMultiPlayerFeature(NETQUEUE queue)
 // must match _feature_type in featuredef.h
 static const char *feature_names[] =
 {
-	"FEAT_BUILD_WRECK",
+	"FEAT_UNUSED",
 	"FEAT_HOVER",
 	"FEAT_TANK",
 	"FEAT_GEN_ARTE",
@@ -615,7 +615,7 @@ static const char *feature_names[] =
 	"FEAT_BOULDER",
 	"FEAT_VEHICLE",
 	"FEAT_BUILDING",
-	"FEAT_DROID",
+	"FEAT_UNUSED",
 	"FEAT_LOS_OBJ",
 	"FEAT_OIL_DRUM",
 	"FEAT_TREE",

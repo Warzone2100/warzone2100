@@ -172,7 +172,6 @@ UDWORD	scroll_speed_accel;
 
 static bool	buildingDamaged(STRUCTURE *psStructure);
 static bool	repairDroidSelected(UDWORD player);
-static DROID *constructorDroidSelected(UDWORD player);
 static bool vtolDroidSelected(UDWORD player);
 static bool	anyDroidSelected(UDWORD player);
 static bool cyborgDroidSelected(UDWORD player);
@@ -1906,21 +1905,6 @@ static void dealWithLMBStructure(STRUCTURE* psStructure, SELECTION_TYPE selectio
 		}
 		else
 		{
-			//if selected object is an upgradeable structure then don't
-			//inform the interface (if not fully upgraded) and a any droid
-			//is selected
-/*			if (!(((psStructure->pStructureType->type == REF_FACTORY &&
-				((FACTORY *)psStructure->pFunctionality)->capacity <
-				NUM_FACTORY_MODULES) ||
-				(psStructure->pStructureType->type == REF_RESEARCH &&
-				((RESEARCH_FACILITY *)psStructure->pFunctionality)->capacity <
-				NUM_RESEARCH_MODULES) ||
-				(psStructure->pStructureType->type == REF_VTOL_FACTORY &&
-				((FACTORY *)psStructure->pFunctionality)->capacity <
-				NUM_FACTORY_MODULES)) &&
-				//constructorDroidSelected(selectedPlayer)))
-				anyDroidSelected(selectedPlayer)))*/
-
 			// now only display interface if nothing selected
 			if (!anyDroidSelected(selectedPlayer))
 			{
@@ -1987,15 +1971,6 @@ static void dealWithLMBStructure(STRUCTURE* psStructure, SELECTION_TYPE selectio
 
 static void dealWithLMBFeature(FEATURE* psFeature)
 {
-	//some features are targetable
-	//check for constructor droid trying to remove wrecked building first
-	if (psFeature->psStats->subType == FEAT_BUILD_WRECK &&
-		(constructorDroidSelected(selectedPlayer) != NULL) )
-	{
-		orderSelectedObjAdd(selectedPlayer, (BASE_OBJECT*)psFeature, ctrlShiftDown());
-		FeedbackOrderGiven();
-	}
-
 	//go on to check for
 	if (psFeature->psStats->damageable)
 	{
@@ -2007,7 +1982,6 @@ static void dealWithLMBFeature(FEATURE* psFeature)
 		}
 		FeedbackOrderGiven();
 	}
-
 
 	//clicking an oil field should start a build..
 	if(psFeature->psStats->subType == FEAT_OIL_RESOURCE)
@@ -2072,7 +2046,6 @@ static void dealWithLMBFeature(FEATURE* psFeature)
 				break;
 			}
 			case FEAT_BOULDER:
-			case FEAT_BUILD_WRECK:
 			case FEAT_HOVER:
 			case FEAT_OIL_RESOURCE:
 			case FEAT_VEHICLE:
@@ -2768,10 +2741,6 @@ STRUCTURE	*psStructure;
 			{
 				retVal = MT_RESOURCE;
 			}
-			else if(((FEATURE *)psNotDroid)->psStats->subType == FEAT_BUILD_WRECK)
-			{
-				retVal = MT_WRECKFEATURE;
-			}
 			else
 			{
 				retVal = MT_BLOCKING;
@@ -3035,27 +3004,6 @@ bool	repairDroidSelected(UDWORD player)
 
 	//didn't find one...
 	return false;
-
-}
-
-/*Looks through the list of selected players droids to see if one is a constructor droid*/
-static DROID *constructorDroidSelected(UDWORD player)
-{
-	DROID	*psCurr;
-
-	for (psCurr = apsDroidLists[player]; psCurr != NULL; psCurr = psCurr->psNext)
-	{
-		//if (psCurr->selected && psCurr->droidType == DROID_CONSTRUCT)
-		if (psCurr->selected && (
-			psCurr->droidType == DROID_CONSTRUCT ||
-			psCurr->droidType == DROID_CYBORG_CONSTRUCT))
-		{
-			return psCurr;
-		}
-	}
-
-	//didn't find one...
-	return NULL;
 
 }
 

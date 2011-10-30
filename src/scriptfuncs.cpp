@@ -1888,8 +1888,7 @@ bool scrAddFeature(void)
 
 	psStat = (FEATURE_STATS *)(asFeatureStats + iFeat);
 
-	ASSERT( psStat != NULL,
-			"scrAddFeature: Invalid feature pointer" );
+	ASSERT(psStat != NULL, "Invalid feature pointer");
 
 	if ( psStat != NULL )
 	{
@@ -1902,20 +1901,7 @@ bool scrAddFeature(void)
 			iTestX = map_coord(psFeat->pos.x);
 			iTestY = map_coord(psFeat->pos.y);
 
-			if ( (iTestX == iMapX) && (iTestY == iMapY) )
-			{
-				if ( psFeat->psStats->subType == FEAT_BUILD_WRECK )
-				{
-					/* remove feature */
-					removeFeature( psFeat );
-					break;
-				}
-				else
-				{
-					ASSERT( false,
-					"scrAddFeature: building feature on tile already occupied\n" );
-				}
-			}
+			ASSERT(iTestX != iMapX || iTestY != iMapY, "Building feature on tile already occupied");
 		}
 
 		psFeat = buildFeature( psStat, iX, iY, false );

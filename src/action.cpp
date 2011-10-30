@@ -121,7 +121,7 @@ const char* getDroidActionName(DROID_ACTION action)
 		"DACTION_TRANSPORTIN",			// 13 move transporter onworld
 		"DACTION_DROIDREPAIR",			// repairing a droid
 		"DACTION_RESTORE",				// 15 restore resistance points of a structure
-		"DACTION_CLEARWRECK",				// clearing building wreckage
+		"DACTION_UNUSED",
 		"DACTION_MOVEFIRE",				// 17
 		"DACTION_MOVETOBUILD",			// moving to a new building location
 		"DACTION_MOVETODEMOLISH",			// 19 moving to a new demolition location
@@ -136,7 +136,7 @@ const char* getDroidActionName(DROID_ACTION action)
 		"DACTION_WAITDURINGREPAIR",		// waiting to be repaired by a facility
 		"DACTION_MOVETODROIDREPAIR",		// 29 moving to a new location next to droid to be repaired
 		"DACTION_MOVETORESTORE",			// moving to a low resistance structure
-		"DACTION_MOVETOCLEAR",			// 31 moving to a building wreck location
+		"DACTION_UNUSED2",
 		"DACTION_MOVETOREARM",			// (32)moving to a rearming pad - VTOLS
 		"DACTION_WAITFORREARM",			// (33)waiting for rearm - VTOLS
 		"DACTION_MOVETOREARMPOINT",		// (34)move to rearm point - VTOLS - this actually moves them onto the pad
@@ -1762,7 +1762,6 @@ void actionUpdateDroid(DROID *psDroid)
 		break;
 	case DACTION_MOVETODEMOLISH:
 	case DACTION_MOVETOREPAIR:
-	case DACTION_MOVETOCLEAR:
 	case DACTION_MOVETORESTORE:
 		if (!psDroid->psTarStats)
 		{
@@ -1783,9 +1782,6 @@ void actionUpdateDroid(DROID *psDroid)
 				break;
 			case DACTION_MOVETOREPAIR:
 				psDroid->action = droidStartRepair(psDroid) ? DACTION_REPAIR : DACTION_NONE;
-				break;
-			case DACTION_MOVETOCLEAR:
-				psDroid->action = droidStartClearing(psDroid) ? DACTION_CLEARWRECK : DACTION_NONE;
 				break;
 			case DACTION_MOVETORESTORE:
 				psDroid->action = droidStartRestore(psDroid) ? DACTION_RESTORE : DACTION_NONE;
@@ -1818,7 +1814,6 @@ void actionUpdateDroid(DROID *psDroid)
 
 	case DACTION_DEMOLISH:
 	case DACTION_REPAIR:
-	case DACTION_CLEARWRECK:
 	case DACTION_RESTORE:
 		if (!psDroid->psTarStats)
 		{
@@ -1835,10 +1830,6 @@ void actionUpdateDroid(DROID *psDroid)
 		case DACTION_REPAIR:
 			// DACTION_MOVETOREPAIR;
 			actionUpdateFunc = droidUpdateRepair;
-			break;
-		case DACTION_CLEARWRECK:
-			// DACTION_MOVETOCLEAR;
-			actionUpdateFunc = droidUpdateClearing;
 			break;
 		case DACTION_RESTORE:
 			// DACTION_MOVETORESTORE;
@@ -1874,16 +1865,6 @@ void actionUpdateDroid(DROID *psDroid)
 		{
 			//use 0 for non-combat(only 1 'weapon')
 			actionTargetTurret(psDroid, psDroid->psActionTarget[0], &psDroid->asWeaps[0]);
-		}
-		else if (psDroid->action == DACTION_CLEARWRECK)
-		{
-			//see if there is any other wreckage in the area
-			FEATURE* const psNextWreck = checkForWreckage(psDroid);
-			psDroid->action = DACTION_NONE;
-			if (psNextWreck)
-			{
-				orderDroidObj(psDroid, DORDER_CLEARWRECK, psNextWreck, ModeImmediate);
-			}
 		}
 		else
 		{
@@ -2643,19 +2624,6 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 		setDroidActionTarget(psDroid, psAction->psObj, 0);
 		moveDroidTo(psDroid, psAction->x, psAction->y);
 		break;
-	case DACTION_CLEARWRECK:
-		ASSERT( psDroid->order == DORDER_CLEARWRECK,
-			"cannot start clear action without a clear order" );
-		psDroid->action = DACTION_MOVETOCLEAR;
-		psDroid->actionPos.x = psAction->x;
-		psDroid->actionPos.y = psAction->y;
-		ASSERT( (psDroid->psTarget != NULL) && (psDroid->psTarget->type == OBJ_FEATURE),
-			"invalid target for demolish order" );
-		psDroid->psTarStats = (BASE_STATS *)((FEATURE *)psDroid->psTarget)->psStats;
-		setDroidActionTarget(psDroid, psDroid->psTarget, 0);
-		moveDroidTo(psDroid, psAction->x, psAction->y);
-		break;
-
 	default:
 		ASSERT(!"unknown action", "actionUnitBase: unknown action");
 		break;

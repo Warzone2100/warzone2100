@@ -80,8 +80,6 @@ static const StringToEnum<FEATURE_TYPE> map_FEATURE_TYPE[] =
 	{ "OIL RESOURCE", FEAT_OIL_RESOURCE },
 	{ "BOULDER", FEAT_BOULDER },
 	{ "VEHICLE", FEAT_VEHICLE },
-	{ "DROID WRECK", FEAT_DROID },
-	{ "BUILDING WRECK", FEAT_BUILD_WRECK },
 	{ "BUILDING", FEAT_BUILDING },
 	{ "OIL DRUM", FEAT_OIL_DRUM },
 	{ "TREE", FEAT_TREE },
@@ -255,8 +253,7 @@ FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,bool FromSave)
 	psFeature->pos.x = x;
 	psFeature->pos.y = y;
 
-	/* Dump down the building wrecks at random angles - still looks shit though */
-	if(psStats->subType == FEAT_BUILD_WRECK || psStats->subType == FEAT_TREE)
+	if (psStats->subType == FEAT_TREE)
 	{
 		psFeature->rot.direction = gameRand(DEG_360);
 	}
@@ -290,14 +287,7 @@ FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,bool FromSave)
 	mapY = map_coord(y) - psStats->baseBreadth/2;
 
 	// set up the imd for the feature
-	if(psFeature->psStats->subType==FEAT_BUILD_WRECK)
-	{
-		psFeature->sDisplay.imd = getRandomWreckageImd();
-	}
-	else
-	{
-		psFeature->sDisplay.imd = psStats->psImd;
-  	}
+	psFeature->sDisplay.imd = psStats->psImd;
 
 	ASSERT_OR_RETURN(NULL, psFeature->sDisplay.imd, "No IMD for feature");		// make sure we have an imd.
 
@@ -332,7 +322,7 @@ FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,bool FromSave)
 					auxSetBlocking(mapX + width, mapY + breadth, AIR_BLOCKED);
 				}
 
-				if (psStats->subType != FEAT_GEN_ARTE && psStats->subType != FEAT_OIL_DRUM && psStats->subType != FEAT_BUILD_WRECK)
+				if (psStats->subType != FEAT_GEN_ARTE && psStats->subType != FEAT_OIL_DRUM)
 				{
 					auxSetBlocking(mapX + width, mapY + breadth, FEATURE_BLOCKED);
 				}
@@ -345,16 +335,6 @@ FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,bool FromSave)
 		}
 	}
 	psFeature->pos.z = map_TileHeight(mapX,mapY);//jps 18july97
-
-//	// set up the imd for the feature
-//	if(psFeature->psStats->subType==FEAT_BUILD_WRECK)
-//	{
-//		psFeature->sDisplay.imd = wreckageImds[rand()%MAX_WRECKAGE];
-//	}
-//	else
-//	{
-//		psFeature->sDisplay.imd = psStats->psImd;
-// 	}
 
 	return psFeature;
 }
@@ -391,20 +371,6 @@ void featureUpdate(FEATURE *psFeat)
 
 	// update the visibility for the feature
 	processVisibilityLevel((BASE_OBJECT *)psFeat);
-
-	switch (psFeat->psStats->subType)
-	{
-	case FEAT_DROID:
-	case FEAT_BUILD_WRECK:
-//		//kill off wrecked droids and structures after 'so' long
-//		if ((gameTime - psFeat->born) > WRECK_LIFETIME)
-//		{
-			destroyFeature(psFeat); // get rid of the now!!!
-//		}
-		return;
-	default:
-		break;
-	}
 
 	syncDebugFeature(psFeat, '>');
 }
@@ -597,76 +563,4 @@ SDWORD getFeatureStatFromName( const char *pName )
 		}
 	}
 	return -1;
-}
-
-
-/*looks around the given droid to see if there is any building
-wreckage to clear*/
-FEATURE	* checkForWreckage(DROID *psDroid)
-{
-	FEATURE		*psFeature;
-	UDWORD		startX, startY, incX, incY;
-	SDWORD		x=0, y=0;
-
-	startX = map_coord(psDroid->pos.x);
-	startY = map_coord(psDroid->pos.y);
-
-	//look around the droid - max 2 tiles distance
-	for (incX = 1, incY = 1; incX < WRECK_SEARCH; incX++, incY++)
-	{
-		/* across the top */
-		y = startY - incY;
-		for(x = startX - incX; x < (SDWORD)(startX + incX); x++)
-		{
-			if(TileHasFeature(mapTile(x,y)))
-			{
-				psFeature = getTileFeature(x, y);
-				if(psFeature && psFeature->psStats->subType == FEAT_BUILD_WRECK)
-				{
-					return psFeature;
-				}
-			}
-		}
-		/* the right */
-		x = startX + incX;
-		for(y = startY - incY; y < (SDWORD)(startY + incY); y++)
-		{
-			if(TileHasFeature(mapTile(x,y)))
-			{
-				psFeature = getTileFeature(x, y);
-				if(psFeature && psFeature->psStats->subType == FEAT_BUILD_WRECK)
-				{
-					return psFeature;
-				}
-			}
-		}
-		/* across the bottom*/
-		y = startY + incY;
-		for(x = startX + incX; x > (SDWORD)(startX - incX); x--)
-		{
-			if(TileHasFeature(mapTile(x,y)))
-			{
-				psFeature = getTileFeature(x, y);
-				if(psFeature && psFeature->psStats->subType == FEAT_BUILD_WRECK)
-				{
-					return psFeature;
-				}
-			}
-		}
-
-		/* the left */
-		x = startX - incX;
-		for(y = startY + incY; y > (SDWORD)(startY - incY); y--)
-		{
-			if(TileHasFeature(mapTile(x,y)))
-			{
-				psFeature = getTileFeature(x, y);
-				if(psFeature && psFeature->psStats->subType == FEAT_BUILD_WRECK)
-				{
-					return psFeature;
-				}
-			}
-		}
-	}
-	return NULL;
 }

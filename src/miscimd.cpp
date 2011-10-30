@@ -125,24 +125,6 @@ iIMDShape	*getImdFromIndex(UDWORD	index)
 }
 // -------------------------------------------------------------------------------
 
-iIMDShape	*getRandomWreckageImd( void )
-{
-	iIMDShape *WreckageIMD;
-
-	// Get a random wreckage
-	WreckageIMD=(getImdFromIndex(MI_WRECK0 + rand()%((MI_WRECK4-MI_WRECK0)+1)));
-
-	// if it doesn't exsist (cam2) then get the first one
-	if (WreckageIMD==NULL)
-	{
-		WreckageIMD=(getImdFromIndex(MI_WRECK0));
-	}
-	// check to make sure one exists  (will fail on renderfeature if null)
-	assert(WreckageIMD);
-
-	return(WreckageIMD);
-}
-
 // -------------------------------------------------------------------------------
 iIMDShape	*getRandomDebrisImd( void )
 {

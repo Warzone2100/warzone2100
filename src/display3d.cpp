@@ -4178,7 +4178,6 @@ static	void	doConstructionLines( void )
 
 					else if ((psDroid->action == DACTION_DEMOLISH) ||
 							(psDroid->action == DACTION_REPAIR) ||
-							(psDroid->action == DACTION_CLEARWRECK) ||
 							(psDroid->action == DACTION_RESTORE))
 					{
 						if(psDroid->psActionTarget[0])
@@ -4255,14 +4254,13 @@ static void addConstructionLine(DROID *psDroid, STRUCTURE *psStructure)
 	// set the colour
 	colour = pal_SetBrightness(UBYTE_MAX);
 
-	if (psDroid->action == DACTION_DEMOLISH || psDroid->action == DACTION_CLEARWRECK)
+	if (psDroid->action == DACTION_DEMOLISH)
 	{
-		colour.byte.g = 0;
 		colour.byte.b = 0;
 	} else {
 		colour.byte.r = 0;
-		colour.byte.g = 0;
 	}
+	colour.byte.g = 0;
 
 	pie_TransColouredTriangle(pts, colour);
 }

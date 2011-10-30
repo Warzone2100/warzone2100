@@ -303,12 +303,6 @@ extern bool droidUnderRepair(DROID *psDroid);
 //count how many Command Droids exist in the world at any one moment
 extern UBYTE checkCommandExist(UBYTE player);
 
-/* Set up a droid to clear a wrecked building feature - returns true if successful */
-extern bool droidStartClearing( DROID *psDroid );
-/* Update a construction droid while it is clearing
-   returns true while continues */
-extern bool droidUpdateClearing( DROID *psDroid );
-
 /*For a given repair droid, check if there are any damaged droids within
 a defined range*/
 extern BASE_OBJECT * checkForRepairRange(DROID *psDroid,DROID *psTarget);
