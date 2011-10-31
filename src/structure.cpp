@@ -105,9 +105,6 @@
 //Maximium slope of the terrin for building a structure
 #define MAX_INCLINE		50//80//40
 
-/* percentage of repair points cost to player power */
-#define	REPAIR_FACILITY_COST_PERCENT	10
-
 /* droid construction smoke cloud constants */
 #define	DROID_CONSTRUCTION_SMOKE_OFFSET	30
 #define	DROID_CONSTRUCTION_SMOKE_HEIGHT	20

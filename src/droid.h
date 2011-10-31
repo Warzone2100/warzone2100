@@ -367,12 +367,6 @@ extern void SelectDroid(DROID *psDroid);
 // De-select a droid and do any necessary housekeeping.
 extern void DeSelectDroid(DROID *psDroid);
 
-/*calculate the power cost to repair a droid*/
-extern UWORD powerReqForDroidRepair(DROID *psDroid);
-
-/*power cost for One repair point*/
-extern UWORD repairPowerPoint(DROID *psDroid);
-
 /* audio finished callback */
 extern bool droidAudioTrackStopped( void *psObj );
 

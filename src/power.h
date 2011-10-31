@@ -27,13 +27,6 @@
 /** Free power on collection of oildrum. */
 #define OILDRUM_POWER		100
 
-/** Used to determine the power cost of repairing a droid.
-    Definately DON'T WANT the brackets round 1/2 - it will equate to zero! */
-#define REPAIR_POWER_FACTOR 1/5
-
-/** Used to multiply all repair calculations by to avaoid rounding errors. */
-#define POWER_FACTOR        100
-
 /** Allocate the space for the playerPower. */
 extern bool allocPlayerPower(void);
 

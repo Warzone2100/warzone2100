@@ -220,7 +220,6 @@ struct REPAIR_FACILITY
 	UDWORD                          power;                  /* Power used in repairing */
 	UDWORD                          timeStarted;            /* Time repair started on current object */
 	BASE_OBJECT                     *psObj;                 /* Object being repaired */
-	UDWORD                          powerAccrued;           /* Used to keep track of power before repairing a droid */
 	FLAG_POSITION                   *psDeliveryPoint;       /* Place for the repaired droids to assemble at */
 	UDWORD                          currentPtsAdded;        /* stores the amount of body points added to the unit that is being worked on */
 

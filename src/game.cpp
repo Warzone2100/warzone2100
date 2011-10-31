@@ -4770,7 +4770,6 @@ static bool loadSaveStructure2(const char *pFileName, STRUCTURE **ppList)
 			psRepair = ((REPAIR_FACILITY *)psStructure->pFunctionality);
 			psRepair->power = ((REPAIR_DROID_FUNCTION *) psStructure->pStructureType->asFuncList[0])->repairPoints;
 			psRepair->timeStarted = ini.value("Repair/timeStarted").toInt();
-			psRepair->powerAccrued = ini.value("Repair/powerAccrued").toInt();
 			psRepair->currentPtsAdded = ini.value("Repair/currentPtsAdded").toInt();
 			if (ini.contains("Repair/deliveryPoint/pos"))
 			{
@@ -4958,7 +4957,6 @@ bool writeStructFile(const char *pFileName)
 				{
 					REPAIR_FACILITY *psRepair = ((REPAIR_FACILITY *)psCurr->pFunctionality);
 					ini.setValue("Repair/timeStarted", psRepair->timeStarted);
-					ini.setValue("Repair/powerAccrued", psRepair->powerAccrued);
 					ini.setValue("Repair/currentPtsAdded", psRepair->currentPtsAdded);
 					if (psRepair->psObj)
 					{
@@ -5057,10 +5055,6 @@ bool loadSaveStructurePointers(QString filename, STRUCTURE **ppList)
 				ASSERT(tid >= 0 && tplayer >= 0, "Bad repair ID %d for player %d for building %d", tid, tplayer, id);
 				psRepair->psObj = getBaseObjFromData(tid, tplayer, ttype);
 				ASSERT(psRepair->psObj, "Repair target %d not found for building %d", tid, id);
-				if (psRepair->timeStarted != ACTION_START_TIME && psRepair->psObj && psRepair->psObj->type == OBJ_DROID)
-				{
-					psRepair->powerAccrued = powerReqForDroidRepair((DROID*)psRepair->psObj);
-				}
 			}
 			if (ini.contains("Rearm/target/id"))
 			{

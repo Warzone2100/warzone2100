@@ -1438,9 +1438,6 @@ bool droidUpdateDroidRepair(DROID *psRepairDroid)
 	psDroidToRepair = (DROID *)psRepairDroid->psActionTarget[0];
 	ASSERT_OR_RETURN(false, psDroidToRepair->type == OBJ_DROID, "Target is not a unit");
 
-	// FIXME: add power cost for repair
-	// remember that self repair is free
-
 	iRepairPoints = repairPoints(asRepairStats + psRepairDroid->
 		asBits[COMP_REPAIRUNIT].nStat, psRepairDroid->player);
 
@@ -4370,23 +4367,6 @@ void DeSelectDroid(DROID *psDroid)
 {
 	psDroid->selected = false;
 	intRefreshScreen();
-}
-
-/*calculate the power cost to repair a droid*/
-UWORD powerReqForDroidRepair(DROID *psDroid)
-{
-	UWORD   powerReq;//powerPercent;
-
-	powerReq = (UWORD)(repairPowerPoint(psDroid) * (psDroid->originalBody - psDroid->body));
-
-	return powerReq;
-}
-
-/*power cost for One repair point*/
-UWORD repairPowerPoint(DROID *psDroid)
-{
-    return (UWORD)(((POWER_FACTOR * calcDroidPower(psDroid)) / psDroid->originalBody) *
-        REPAIR_POWER_FACTOR);
 }
 
 /** Callback function for stopped audio tracks
