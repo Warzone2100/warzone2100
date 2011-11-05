@@ -948,13 +948,6 @@ bool recvResearchStatus(NETQUEUE queue)
 			MakeResearchStarted(pPlayerRes);
 			psResFacilty->timeStarted		= ACTION_START_TIME;
 			psResFacilty->timeStartHold		= 0;
-			psResFacilty->timeToResearch	= pResearch->researchPoints / MAX(psResFacilty->researchPoints, 1);
-
-			// A failsafe of some sort
-			if (psResFacilty->timeToResearch == 0)
-			{
-				psResFacilty->timeToResearch = 1;
-			}
 		}
 
 	}

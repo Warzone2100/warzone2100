@@ -5485,13 +5485,6 @@ static bool setResearchStats(BASE_OBJECT *psObj, BASE_STATS *psStats)
 		MakeResearchStarted(pPlayerRes);
 		psResFacilty->timeStarted = ACTION_START_TIME;
 		psResFacilty->timeStartHold = 0;
-		psResFacilty->timeToResearch = pResearch->researchPoints / psResFacilty->researchPoints;
-		//check for zero research time - usually caused by 'silly' data!
-		if (psResFacilty->timeToResearch == 0)
-		{
-			//set to 1/1000th sec - ie very fast!
-			psResFacilty->timeToResearch = 1;
-		}
 		//stop the button from flashing once a topic has been chosen
 		stopReticuleButtonFlash(IDRET_RESEARCH);
 	}

@@ -4731,7 +4731,6 @@ static bool loadSaveStructure2(const char *pFileName, STRUCTURE **ppList)
 			psResearch->powerAccrued = ini.value("Research/powerAccrued", psResearch->powerAccrued).toInt();
 			//clear subject
 			psResearch->psSubject = NULL;
-			psResearch->timeToResearch = 0;
 			psResearch->timeStarted = 0;
 			psResearch->timeStartHold = 0;
 			//set the subject
@@ -4741,7 +4740,6 @@ static bool loadSaveStructure2(const char *pFileName, STRUCTURE **ppList)
 				if (researchId != NULL_ID)
 				{
 					psResearch->psSubject = asResearch + researchId;
-					psResearch->timeToResearch = (asResearch + researchId)->researchPoints / psResearch->researchPoints;
 					psResearch->timeStarted = ini.value("Research/timeStarted").toInt();
 					psResearch->timeStartHold = ini.value("Research/timeStartHold").toInt();
 				}

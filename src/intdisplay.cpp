@@ -255,8 +255,6 @@ void intUpdateProgressBar(WIDGET *psWidget, W_CONTEXT *psContext)
 				Research = StructureGetResearch(Structure);
 				pPlayerRes = asPlayerResList[selectedPlayer] +
 				             ((RESEARCH *)Research->psSubject - asResearch);
-				//this is no good if you change which lab is researching the topic and one lab is faster
-				//Range = Research->timeToResearch;
 				Range = ((RESEARCH *)((RESEARCH_FACILITY*)Structure->pFunctionality)->psSubject)->researchPoints;
 				//check started to research
 				if (Research->timeStarted == ACTION_START_TIME)

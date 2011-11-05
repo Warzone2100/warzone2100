@@ -159,12 +159,9 @@ struct RESEARCH_FACILITY
 	UDWORD		capacity;				/* Number of upgrade modules added*/
 	UDWORD		timeStarted;			/* The time the building started on the subject*/
 	UDWORD		researchPoints;			/* Research Points produced per research cycle*/
-	UDWORD		timeToResearch;			/* Time taken to research the topic*/
 	RESEARCH *      psBestTopic;                    // The topic with the most research points that was last performed
-	UDWORD		powerAccrued;			/* used to keep track of power before
-										   researching a topic*/
+	UDWORD		powerAccrued;			/* used to keep track of power before researching a topic*/
 	UDWORD		timeStartHold;		    /* The time the research facility was put on hold*/
-
 };
 
 enum FACTORY_STATUS_PENDING

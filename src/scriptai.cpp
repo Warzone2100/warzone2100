@@ -1631,9 +1631,8 @@ bool skTopicAvail(UWORD inc, UDWORD player)
 // ********************************************************************************************
 bool scrSkDoResearch(void)
 {
-	SDWORD				player, bias;//,timeToResearch;//,*x,*y;
+	SDWORD				player, bias;
 	UWORD				i;
-
 	STRUCTURE			*psBuilding;
 	RESEARCH_FACILITY	*psResFacilty;
 
