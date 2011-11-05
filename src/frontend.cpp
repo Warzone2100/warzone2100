@@ -316,19 +316,6 @@ bool runSinglePlayerMenu(void)
 				frontEndNewGame();
 				break;
 
-			case FRONTEND_LOADCAM2:
-				SPinit();
-				sstrcpy(aLevelName, "CAM_2A");
-				changeTitleMode(STARTGAME);
-				initLoadingScreen(true);
-				break;
-
-			case FRONTEND_LOADCAM3:
-				SPinit();
-				sstrcpy(aLevelName, "CAM_3A");
-				changeTitleMode(STARTGAME);
-				initLoadingScreen(true);
-				break;
 			case FRONTEND_LOADGAME:
 				SPinit();
 				addLoadSave(LOAD_FRONTEND, _("Load Saved Game"));	// change mode when loadsave returns
@@ -386,7 +373,7 @@ static bool startOptionsMenu(void)
 	addTopForm();
 	addBottomForm();
 
-	addSideText	 (FRONTEND_SIDETEXT ,	FRONTEND_SIDEX,FRONTEND_SIDEY, _("OPTIONS"));
+	addSideText(FRONTEND_SIDETEXT, FRONTEND_SIDEX,FRONTEND_SIDEY, _("OPTIONS"));
 	addTextButton(FRONTEND_GAMEOPTIONS,	FRONTEND_POS2X,FRONTEND_POS2Y, _("Game Options"), WBUT_TXTCENTRE);
 	addTextButton(FRONTEND_GRAPHICSOPTIONS, FRONTEND_POS3X,FRONTEND_POS3Y, _("Graphics Options"), WBUT_TXTCENTRE);
 	addTextButton(FRONTEND_VIDEOOPTIONS, FRONTEND_POS4X,FRONTEND_POS4Y, _("Video Options"), WBUT_TXTCENTRE);
@@ -405,7 +392,6 @@ bool runOptionsMenu(void)
 	id = widgRunScreen(psWScreen);						// Run the current set of widgets
 	switch(id)
 	{
-
 	case FRONTEND_GAMEOPTIONS:
 		changeTitleMode(GAME);
 		break;
@@ -674,7 +660,7 @@ static bool startAudioOptionsMenu(void)
 	addMultiBut(psWScreen, FRONTEND_BOTFORM, FRONTEND_QUIT, 10, 10, 30, 29, P_("menu", "Return"), IMAGE_RETURN, IMAGE_RETURN_HI, IMAGE_RETURN_HI);
 
 	//add some text down the side of the form
-	addSideText	 (FRONTEND_SIDETEXT ,	FRONTEND_SIDEX,FRONTEND_SIDEY, _("AUDIO OPTIONS"));
+	addSideText(FRONTEND_SIDETEXT, FRONTEND_SIDEX, FRONTEND_SIDEY, _("AUDIO OPTIONS"));
 
 
 	return true;
@@ -687,7 +673,6 @@ bool runAudioOptionsMenu(void)
 	id = widgRunScreen(psWScreen);						// Run the current set of widgets
 	switch(id)
 	{
-
 	case FRONTEND_FX:
 	case FRONTEND_3D_FX:
 	case FRONTEND_MUSIC:
@@ -1052,7 +1037,6 @@ bool runMouseOptionsMenu(void)
 
 	switch (id)
 	{
-
 		case FRONTEND_MFLIP:
 		case FRONTEND_MFLIP_R:
 			if( getInvertMouseStatus() )
@@ -1263,7 +1247,7 @@ bool runGameOptionsMenu(void)
 
 	case FRONTEND_SCROLLSPEED_SL:
 		scroll_speed_accel = widgGetSliderPos(psWScreen,FRONTEND_SCROLLSPEED_SL) * 100; //0-1600
-		if(scroll_speed_accel ==0)		// make sure you CAN scroll.
+		if (scroll_speed_accel == 0)		// make sure you CAN scroll.
 		{
 			scroll_speed_accel = 100;
 		}
