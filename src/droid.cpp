@@ -4320,11 +4320,6 @@ void deleteTemplateFromProduction(DROID_TEMPLATE *psTemplate, unsigned player, Q
 
 					// Clear the factory's subject.
 					psFactory->psSubject = NULL;
-					//return any accrued power
-					if (psFactory->powerAccrued)
-					{
-						addPower(psStruct->player, psFactory->powerAccrued);
-					}
 
 					if (player == productionPlayer)
 					{

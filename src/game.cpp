@@ -4668,7 +4668,6 @@ static bool loadSaveStructure2(const char *pFileName, STRUCTURE **ppList)
 			psFactory->capacity = 0; // increased when built
 			psFactory->productionLoops = ini.value("Factory/productionLoops", psFactory->productionLoops).toInt();
 			psFactory->timeStarted = ini.value("Factory/timeStarted", psFactory->timeStarted).toInt();
-			psFactory->powerAccrued = ini.value("Factory/powerAccrued", psFactory->powerAccrued).toInt();
 			psFactory->timeToBuild = ini.value("Factory/timeToBuild", psFactory->timeToBuild).toInt();
 			psFactory->timeStartHold = ini.value("Factory/timeStartHold", psFactory->timeStartHold).toInt();
 			psFactory->loopsPerformed = ini.value("Factory/loopsPerformed", psFactory->loopsPerformed).toInt();
@@ -4690,11 +4689,6 @@ static bool loadSaveStructure2(const char *pFileName, STRUCTURE **ppList)
 			{
 				int templId(ini.value("Factory/template").toInt());
 				psFactory->psSubject = getTemplateFromMultiPlayerID(templId);
-				//if the build has started set the powerAccrued = powerRequired to sync the interface
-				if (psFactory->timeStarted != ACTION_START_TIME && psFactory->psSubject)
-				{
-					psFactory->powerAccrued = psFactory->psSubject->powerPoints;
-				}
 			}
 			if (ini.contains("Factory/assemblyPoint/pos"))
 			{
@@ -4727,8 +4721,6 @@ static bool loadSaveStructure2(const char *pFileName, STRUCTURE **ppList)
 				//build the appropriate number of modules
 				buildStructure(psModule, psStructure->pos.x, psStructure->pos.y, psStructure->player, true);
 			}
-			//this is set up during module build - if the stats have changed it will also set up with the latest value
-			psResearch->powerAccrued = ini.value("Research/powerAccrued", psResearch->powerAccrued).toInt();
 			//clear subject
 			psResearch->psSubject = NULL;
 			psResearch->timeStarted = 0;
@@ -4747,11 +4739,6 @@ static bool loadSaveStructure2(const char *pFileName, STRUCTURE **ppList)
 				{
 					debug(LOG_ERROR, "Failed to look up research target %s", ini.value("Research/target").toString().toUtf8().constData());
 				}
-			}
-			// if started research, set powerAccrued = powerRequired
-			if (psResearch->timeStarted != ACTION_START_TIME && psResearch->psSubject)
-			{
-				psResearch->powerAccrued = ((RESEARCH *)psResearch->psSubject)->researchPower;
 			}
 			break;
 		case REF_POWER_GEN:
@@ -4787,7 +4774,6 @@ static bool loadSaveStructure2(const char *pFileName, STRUCTURE **ppList)
 		}
 		psStructure->body = healthValue(ini, structureBody(psStructure));
 		psStructure->currentBuildPts = ini.value("currentBuildPts", psStructure->pStructureType->buildPoints).toInt();
-		psStructure->currentPowerAccrued = ini.value("currentPowerAccrued", 0).toInt();
 		if (psStructure->status == SS_BUILT)
 		{
 			switch (psStructure->pStructureType->type)
@@ -4892,8 +4878,7 @@ bool writeStructFile(const char *pFileName)
 #endif
 				}
 			}
-			if (psCurr->pStructureType->buildPoints != psCurr->currentPowerAccrued) ini.setValue("currentBuildPts", psCurr->currentBuildPts);
-			if (psCurr->currentPowerAccrued) ini.setValue("currentPowerAccrued", psCurr->currentPowerAccrued);
+			ini.setValue("currentBuildPts", psCurr->currentBuildPts);
 			if (psCurr->pFunctionality)
 			{
 				if (psCurr->pStructureType->type == REF_FACTORY || psCurr->pStructureType->type == REF_CYBORG_FACTORY
@@ -4903,7 +4888,6 @@ bool writeStructFile(const char *pFileName)
 					ini.setValue("modules", psFactory->capacity);
 					ini.setValue("Factory/productionLoops", psFactory->productionLoops);
 					ini.setValue("Factory/timeStarted", psFactory->timeStarted);
-					ini.setValue("Factory/powerAccrued", psFactory->powerAccrued);
 					ini.setValue("Factory/timeToBuild", psFactory->timeToBuild);
 					ini.setValue("Factory/timeStartHold", psFactory->timeStartHold);
 					ini.setValue("Factory/loopsPerformed", psFactory->loopsPerformed);
@@ -4939,7 +4923,6 @@ bool writeStructFile(const char *pFileName)
 				else if (psCurr->pStructureType->type == REF_RESEARCH)
 				{
 					ini.setValue("modules", ((RESEARCH_FACILITY *)psCurr->pFunctionality)->capacity);
-					ini.setValue("Research/powerAccrued", ((RESEARCH_FACILITY *)psCurr->pFunctionality)->powerAccrued);
 					ini.setValue("Research/timeStartHold", ((RESEARCH_FACILITY *)psCurr->pFunctionality)->timeStartHold);
 					if (((RESEARCH_FACILITY *)psCurr->pFunctionality)->psSubject)
 					{

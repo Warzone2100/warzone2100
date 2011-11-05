@@ -160,7 +160,6 @@ struct RESEARCH_FACILITY
 	UDWORD		timeStarted;			/* The time the building started on the subject*/
 	UDWORD		researchPoints;			/* Research Points produced per research cycle*/
 	RESEARCH *      psBestTopic;                    // The topic with the most research points that was last performed
-	UDWORD		powerAccrued;			/* used to keep track of power before researching a topic*/
 	UDWORD		timeStartHold;		    /* The time the research facility was put on hold*/
 };
 
@@ -182,7 +181,6 @@ struct FACTORY
 	UBYTE				loopsPerformed;		/* how many times the loop has been performed*/
 	UBYTE				productionOutput;	/* Droid Build Points Produced Per
 											   Build Cycle*/
-	UDWORD				powerAccrued;		/* used to keep track of power before building a droid*/
 	DROID_TEMPLATE *                psSubject;              ///< The subject the structure is working on.
 	DROID_TEMPLATE *                psSubjectPending;       ///< The subject the structure is going to working on. (Pending = not yet synchronised.)
 	FACTORY_STATUS_PENDING          statusPending;          ///< Pending = not yet synchronised.
@@ -252,7 +250,6 @@ struct STRUCTURE : public BASE_OBJECT
 	STRUCTURE_STATS     *pStructureType;            /* pointer to the structure stats for this type of building */
 	STRUCT_STATES       status;                     /* defines whether the structure is being built, doing nothing or performing a function */
 	SWORD               currentBuildPts;            /* the build points currently assigned to this structure */
-	SWORD               currentPowerAccrued;        /* the power accrued for building this structure */
 	SWORD               resistance;                 /* current resistance points, 0 = cannot be attacked electrically */
 	UDWORD              lastResistance;             /* time the resistance was last increased*/
 	FUNCTIONALITY       *pFunctionality;            /* pointer to structure that contains fields necessary for functionality */

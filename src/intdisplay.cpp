@@ -259,10 +259,9 @@ void intUpdateProgressBar(WIDGET *psWidget, W_CONTEXT *psContext)
 				//check started to research
 				if (Research->timeStarted == ACTION_START_TIME)
 				{
-					//BuildPoints = 0;
 					//if not started building show how much power accrued
 					Range = ((RESEARCH *)Research->psSubject)->researchPower;
-					BuildPoints = Research->powerAccrued;
+					BuildPoints = 0;
 					//set the colour of the bar to green
 					BarGraph->majorCol = WZCOL_GREEN;
 					//and change the tool tip

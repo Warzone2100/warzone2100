@@ -934,16 +934,6 @@ bool recvResearchStatus(NETQUEUE queue)
 			pResearch				= asResearch + index;
 			psResFacilty->psSubject = pResearch;
 
-			// If they have previously started but cancelled there is no need to accure power
-			if (IsResearchCancelled(pPlayerRes))
-			{
-				psResFacilty->powerAccrued	= pResearch->researchPower;
-			}
-			else
-			{
-				psResFacilty->powerAccrued	= 0;
-			}
-
 			// Start the research
 			MakeResearchStarted(pPlayerRes);
 			psResFacilty->timeStarted		= ACTION_START_TIME;

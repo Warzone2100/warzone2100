@@ -1895,25 +1895,17 @@ void cancelResearch(STRUCTURE *psBuilding, QUEUE_MODE mode)
 		//check if waiting to accrue power
 		if (psResFac->timeStarted == ACTION_START_TIME)
 		{
-			//return the power
-			addPower(psBuilding->player, psResFac->powerAccrued);
-			psResFac->powerAccrued = 0;
 			// Reset this topic as not having been researched
 			ResetResearchStatus(pPlayerRes);
 		}
 		else
 		{
-			// only PC version saves these
-			/*store the points - need to keep this so can add points after the topic
-			has been cancelled and restarted*/
-			pPlayerRes->currentPoints += (psResFac->researchPoints * (gameTime -
-			psResFac->timeStarted)) / GAME_TICKS_PER_SEC;
-
+			/* store the points - need to keep this so can add points after the topic has been cancelled and restarted */
+			pPlayerRes->currentPoints += (psResFac->researchPoints * (gameTime - psResFac->timeStarted)) / GAME_TICKS_PER_SEC;
 
 			// Set the researched flag
 			MakeResearchCancelled(pPlayerRes);
 		}
-
 
 		// Initialise the research facility's subject
 		psResFac->psSubject = NULL;

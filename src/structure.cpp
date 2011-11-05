@@ -1119,7 +1119,6 @@ bool structSetManufacture(STRUCTURE *psStruct, DROID_TEMPLATE *psTempl, QUEUE_MO
 		}
 
 		psFact->timeStarted = ACTION_START_TIME;//gameTime;
-		psFact->powerAccrued = 0;
 		psFact->timeStartHold = 0;
 
 		psFact->timeToBuild = psTempl->buildPoints / psFact->productionOutput;
@@ -1553,7 +1552,6 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 
 		psBuilding->status = SS_BEING_BUILT;
 		psBuilding->currentBuildPts = 0;
-		psBuilding->currentPowerAccrued = 0;
 
 		alignStructure(psBuilding);
 
@@ -1850,7 +1848,6 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 
 			//initialise the build points
 			psBuilding->currentBuildPts = 0;
-			psBuilding->currentPowerAccrued = 0;
 			//start building again
 			psBuilding->status = SS_BEING_BUILT;
 			if (psBuilding->player == selectedPlayer && !FromSave)
@@ -3629,7 +3626,7 @@ void _syncDebugStructure(const char *function, STRUCTURE const *psStruct, char c
 			break;
 	}
 
-	_syncDebug(function, "%c structure%d = p%d;pos(%d,%d,%d),stat%d,type%d%s%.0d,bld%d,pwr%d,bp%d, power = %"PRId64"", ch,
+	_syncDebug(function, "%c structure%d = p%d;pos(%d,%d,%d),stat%d,type%d%s%.0d,bld%d,bp%d, power = %"PRId64"", ch,
 	          psStruct->id,
 
 	          psStruct->player,
@@ -3637,7 +3634,6 @@ void _syncDebugStructure(const char *function, STRUCTURE const *psStruct, char c
 	          psStruct->status,
 	          psStruct->pStructureType->type, refStr, ref,
 	          psStruct->currentBuildPts,
-	          psStruct->currentPowerAccrued,
 	          psStruct->body,
 
 	          getPrecisePower(psStruct->player));

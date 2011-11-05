@@ -5470,16 +5470,6 @@ static bool setResearchStats(BASE_OBJECT *psObj, BASE_STATS *psStats)
 		//set the subject up
 		psResFacilty->psSubject = pResearch;
 
-		if (IsResearchCancelled(pPlayerRes))
-		{
-			//set up as if all power available for cancelled topics
-			psResFacilty->powerAccrued = pResearch->researchPower;
-		}
-		else
-		{
-			psResFacilty->powerAccrued = 0;
-		}
-
 		sendResearchStatus(psBuilding,count,selectedPlayer,true);	// inform others, I'm researching this.
 
 		MakeResearchStarted(pPlayerRes);
