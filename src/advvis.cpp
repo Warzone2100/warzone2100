@@ -31,7 +31,7 @@
 // ------------------------------------------------------------------------------------
 #define FADE_IN_TIME	(GAME_TICKS_PER_SEC/10)
 #define	START_DIVIDE	(8)
-#define MIN_ILLUM       (25.0f)
+#define MIN_ILLUM       (45.0f)
 
 /// Whether unexplored tiles should be shown as just darker fog. Left here as a future option
 /// for scripts, since campaign may still want total darkness on unexplored tiles.
