@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
 "POT-Creation-Date: 2011-11-05 16:22+0100\n"
-"PO-Revision-Date: 2010-12-14 22:19+0100\n"
+"PO-Revision-Date: 2011-11-05 15:45+0100\n"
 "Last-Translator: Cristian Odorico <generalchris@hotmail.it>\n"
 "Language-Team: Italian <warzone-dev@gna.org>\n"
 "Language: it\n"
@@ -11361,19 +11361,16 @@ msgid "Mini-Rocket Array Cobra Half-tracks"
 msgstr "Artiglieria di Minirazzi Cobra Semicingoli"
 
 #: data/mp/messages/strings/names.txt:351
-#, fuzzy
 msgid "Jammer Tower"
-msgstr "Torre di Guardia con Inceneritore"
+msgstr "Torre di Disturbo"
 
 #: data/mp/messages/strings/names.txt:352
-#, fuzzy
 msgid "Jammer Turret"
 msgstr "Torretta di Disturbo"
 
 #: data/mp/messages/strings/names.txt:353
-#, fuzzy
 msgid "Electronic Countermeasures"
-msgstr "Laboratorio di elettronica"
+msgstr "Contromisure Elettroniche"
 
 #: data/mp/messages/strings/names.txt:363
 #: data/mp/messages/strings/names.txt:1703
@@ -12013,18 +12010,17 @@ msgstr "System locale"
 
 #: lib/netplay/netlobby.cpp:102
 msgid "Received invalid addGame data."
-msgstr ""
+msgstr "Ricevuti dati addGame non validi."
 
 #: lib/netplay/netlobby.cpp:140
 #: lib/netplay/netlobby.cpp:163
 #: lib/netplay/netlobby.cpp:183
-#, fuzzy
 msgid "Create a game first!"
-msgstr "Traccia un oggetto del gioco"
+msgstr "Crea una partita prima!"
 
 #: lib/netplay/netlobby.cpp:426
 msgid "Received invalid login data."
-msgstr ""
+msgstr "Ricevuti dati di login non validi."
 
 #: lib/netplay/netlobby.cpp:518
 #: lib/netplay/netlobby.cpp:531
@@ -12033,12 +12029,12 @@ msgstr ""
 #: lib/netplay/netlobby.cpp:569
 #: lib/netplay/netlobby.cpp:578
 msgid "Failed to communicate with the lobby."
-msgstr ""
+msgstr "Comunicazione con la lobby fallita."
 
 #: lib/netplay/netlobby.cpp:589
 #, c-format
 msgid "Got server error: %s"
-msgstr ""
+msgstr "Errore del server: %s"
 
 #: lib/netplay/netplay.cpp:184
 #: lib/netplay/netplay.cpp:744
@@ -12047,57 +12043,57 @@ msgstr "Inserisci qua la password"
 
 #: lib/netplay/netplay.cpp:2061
 msgid "Game not in the lobby, please login first!"
-msgstr ""
+msgstr "Partita non presente nella lobby, eseguire prima il login!"
 
 #: lib/netplay/netplay.cpp:2066
 #, c-format
 msgid "Error connecting to the lobby server: %s. Make sure port %d can receive incoming connections. If you're using a router configure it to use UPnP, or to forward the port to your system."
-msgstr ""
+msgstr "Errore nella connessione al server della lobby: %s. Fai in modo che la porta %d possa ricevere connessioni in entrata. Se stai usando un router configuralo per usare l'UPnP, o esegui il port forward al tuo sistema."
 
 #: po/custom/mac-infoplist.txt:1
 msgid ""
 "Copyright © 1999-2004 Eidos Interactive.\n"
 "Copyright © 2005-2010 The Warzone 2100 Project"
 msgstr ""
+"Copyright © 1999-2004 Eidos Interactive.\n"
+"Copyright © 2005-2010 The Warzone 2100 Project"
 
 #: po/custom/mac-infoplist.txt:2
 #: po/custom/warzone2100.desktop.txt:2
 msgid "Warzone 2100"
-msgstr ""
+msgstr "Warzone 2100"
 
 #: po/custom/mac-infoplist.txt:3
 msgid "Warzone 2100 Map / Mod File"
-msgstr ""
+msgstr "Warzone 2100 Map / Mod File"
 
 #: po/custom/mac-infoplist.txt:4
 msgid "Warzone 2100 Campaign Mod File"
-msgstr ""
+msgstr "Warzone 2100 Campaign Mod File"
 
 #: po/custom/mac-infoplist.txt:5
-#, fuzzy
 msgid "Warzone 2100 Multiplayer Mod File"
-msgstr "Avvia l'Audio Multigiocatore"
+msgstr "Warzone 2100 Multiplayer Mod File"
 
 #: po/custom/mac-infoplist.txt:6
 msgid "Warzone 2100 Global Mod File"
-msgstr ""
+msgstr "Warzone 2100 Global Mod File"
 
 #: po/custom/mac-infoplist.txt:7
 msgid "Warzone"
-msgstr ""
+msgstr "Warzone"
 
 #: po/custom/mac-infoplist.txt:8
 msgid "Warzone 2100 Music Mod File"
-msgstr ""
+msgstr "Warzone 2100 Music Mod File"
 
 #: po/custom/warzone2100.desktop.txt:1
 msgid "Postnuclear realtime strategy"
-msgstr ""
+msgstr "Strategia in tempo reale postnucleare"
 
 #: po/custom/warzone2100.desktop.txt:3
-#, fuzzy
 msgid "Strategy Game"
-msgstr "Salva Partita"
+msgstr "Gioco di Strategia"
 
 #: src/challenge.cpp:219
 #: src/hci.cpp:913
@@ -12259,9 +12255,8 @@ msgid "Disable texture compression"
 msgstr ""
 
 #: src/configuration.cpp:89
-#, fuzzy
 msgid "My Game"
-msgstr "Esci dal Gioco"
+msgstr "Mia partita"
 
 #: src/configuration.cpp:90
 #: src/multistat.cpp:124
@@ -12433,9 +12428,9 @@ msgstr "Impossibile costruire. Risorsa d'olio in fiamme."
 
 #: src/display.cpp:1836
 #: src/display.cpp:2398
-#, fuzzy, c-format
+#, c-format
 msgid "%s - Damage %d%% - Experience %.1f, %s"
-msgstr "%s - Danno %d%% - Esperienza %d, %s"
+msgstr "%s - Danno %d%% - Esperienza %.1f, %s"
 
 #: src/display.cpp:1852
 #, c-format
@@ -12557,7 +12552,7 @@ msgstr "MENU PRINCIPALE"
 
 #: src/frontend.cpp:116
 msgid "Visit our official site: http://wz2100.net"
-msgstr ""
+msgstr "Visita il nostro sito ufficiale: http//wz2100.net"
 
 #: src/frontend.cpp:187
 msgid "Fast Play"
@@ -12661,7 +12656,7 @@ msgstr "A schermo pieno"
 
 #: src/frontend.cpp:463
 msgid "Scanlines"
-msgstr ""
+msgstr "Linee di scansione"
 
 #: src/frontend.cpp:467
 #: src/frontend.cpp:488
@@ -12688,7 +12683,7 @@ msgstr "Off"
 #: src/frontend.cpp:471
 #: src/frontend.cpp:609
 msgid "50%"
-msgstr ""
+msgstr "50%"
 
 #: src/frontend.cpp:475
 #: src/frontend.cpp:614
@@ -12771,15 +12766,13 @@ msgid "Texture size"
 msgstr "Dimensione della Texture"
 
 #: src/frontend.cpp:751
-#, fuzzy
 msgid "Vertical sync"
 msgstr "Sincronia verticale"
 
 #: src/frontend.cpp:786
 #: src/frontend.cpp:847
-#, fuzzy
 msgid "Unsupported"
-msgstr "Trasportatore"
+msgstr "Non supportato"
 
 #: src/frontend.cpp:791
 msgid "VIDEO OPTIONS"
@@ -12803,15 +12796,13 @@ msgstr "Ruota lo schermo"
 
 #: src/frontend.cpp:1018
 #: src/frontend.cpp:1091
-#, fuzzy
 msgid "Middle Mouse"
-msgstr "Pulsante centrale"
+msgstr "Pulsante centrale del Mouse"
 
 #: src/frontend.cpp:1022
 #: src/frontend.cpp:1086
-#, fuzzy
 msgid "Right Mouse"
-msgstr "Pulsante destro"
+msgstr "Pulsante destro del Mouse"
 
 #: src/frontend.cpp:1026
 msgid "MOUSE OPTIONS"
@@ -13062,9 +13053,8 @@ msgid "Tab Scroll right"
 msgstr "Scorri tabella a Destra"
 
 #: src/hci.cpp:5187
-#, fuzzy
 msgid "Ally progress"
-msgstr "Progresso della produzione"
+msgstr "Progresso degli alleati"
 
 #: src/ingameop.cpp:112
 #: src/ingameop.cpp:196
@@ -13326,9 +13316,9 @@ msgid "FPS display is disabled."
 msgstr "FPS display è disattivato."
 
 #: src/keybind.cpp:548
-#, fuzzy, c-format
+#, c-format
 msgid "FPS %d; PIEs %d; polys %d; Terr. polys %d; States %d"
-msgstr "FPS %d; Limite-FPS: %d; PIEs %d; polys %d; Terr. polys %d: States %d"
+msgstr "FPS %d; PIEs %d; polys %d; Terr. polys %d: Stati %d"
 
 #: src/keybind.cpp:579
 #, c-format
@@ -14112,13 +14102,12 @@ msgid "You Discover Blueprints For %s"
 msgstr "Hai scoperto i progetti per %s"
 
 #: src/multiint.cpp:219
-#, fuzzy
 msgid "Medium"
-msgstr "Velocità: media"
+msgstr "Medio"
 
 #: src/multiint.cpp:219
 msgid "Insane"
-msgstr ""
+msgstr "Pazzo"
 
 #: src/multiint.cpp:612
 #: src/multilimit.cpp:190
@@ -14141,11 +14130,11 @@ msgstr "Non ci sono partite disponibili."
 
 #: src/multiint.cpp:835
 msgid "Authentication failed or not Authenticated"
-msgstr ""
+msgstr "Autenticazione fallita o non Autenticato"
 
 #: src/multiint.cpp:838
 msgid "The lobby rejected you!"
-msgstr ""
+msgstr "La lobby ti ha rifiutato!"
 
 #: src/multiint.cpp:841
 msgid "Game is full"
@@ -14188,17 +14177,16 @@ msgid "Host Game"
 msgstr "Ospita una partita"
 
 #: src/multiint.cpp:1146
-#, fuzzy
 msgid "Connect IP"
-msgstr "Errore di connessione"
+msgstr "Connettiti all'IP"
 
 #: src/multiint.cpp:1149
 msgid "Login"
-msgstr ""
+msgstr "Login"
 
 #: src/multiint.cpp:1150
 msgid "Logout"
-msgstr ""
+msgstr "Logout"
 
 #: src/multiint.cpp:1154
 msgid "Refresh Games List"
@@ -14215,20 +14203,19 @@ msgstr "OK"
 
 #: src/multiint.cpp:1246
 msgid "LOBBY LOGIN"
-msgstr ""
+msgstr "LOGIN LOBBY"
 
 #: src/multiint.cpp:1256
 msgid "Username:"
-msgstr ""
+msgstr "Username:"
 
 #: src/multiint.cpp:1279
-#, fuzzy
 msgid "Password:"
-msgstr "Inserisci la password:"
+msgstr "Password:"
 
 #: src/multiint.cpp:1302
 msgid "Use your wz2100.net credentials here."
-msgstr ""
+msgstr "Usa le tue credenziali di wz2100.net qua"
 
 #: src/multiint.cpp:1451
 msgid "Tanks disabled!!"
@@ -14339,36 +14326,35 @@ msgstr "Imposta i limiti di strutture"
 
 #: src/multiint.cpp:1804
 msgid "DIFFICULTY"
-msgstr ""
+msgstr "DIFFICOLTA'"
 
 #: src/multiint.cpp:1818
 msgid "Less aggressive and starts with less units"
-msgstr ""
+msgstr "Meno aggressivo e inizia con meno unità"
 
 #: src/multiint.cpp:1819
-#, fuzzy
 msgid "Plays nice"
-msgstr "Giocatore"
+msgstr "Gioca decentemente"
 
 #: src/multiint.cpp:1820
 msgid "No holds barred"
-msgstr ""
+msgstr "Senza esclusione di colpi"
 
 #: src/multiint.cpp:1821
 msgid "Starts with advantages and gets twice as much oil from derricks"
-msgstr ""
+msgstr "Inizia con vantaggi e riceve il doppio dell'energia dai tralicci"
 
 #: src/multiint.cpp:1849
 msgid "CHOOSE AI"
-msgstr ""
+msgstr "SCEGLI AI"
 
 #: src/multiint.cpp:1865
 msgid "Allow human players to join in this slot"
-msgstr ""
+msgstr "Permetti a giocatori umani di entrare in questo slot"
 
 #: src/multiint.cpp:1873
 msgid "Leave this slot unused"
-msgstr ""
+msgstr "Lascia questo slot inutilizzato"
 
 #: src/multiint.cpp:2276
 msgid "Team"
@@ -14376,12 +14362,11 @@ msgstr "Squadra"
 
 #: src/multiint.cpp:2317
 msgid "You cannot change difficulty in a challenge"
-msgstr ""
+msgstr "Non puoi cambiare la difficolta"
 
 #: src/multiint.cpp:2317
-#, fuzzy
 msgid "Click to change difficulty"
-msgstr "Clicca per modificare la difficoltà dell'AI"
+msgstr "Clicca per modificare la difficoltà"
 
 #: src/multiint.cpp:2334
 msgid "Click when ready"
@@ -14396,32 +14381,28 @@ msgid "PLAYERS"
 msgstr "GIOCATORI"
 
 #: src/multiint.cpp:2417
-#, fuzzy
 msgid "Click to change to this slot"
-msgstr "Clicca per cambiare le impostazione del giocatore"
+msgstr "Clicca per cambiare a questo slot"
 
 #: src/multiint.cpp:2445
 msgid "Choose Team"
 msgstr "Scegli la squadra"
 
 #: src/multiint.cpp:2475
-#, fuzzy
 msgid "Click to change player colour"
-msgstr "Clicca per cambiare le impostazione del giocatore"
+msgstr "Clicca per cambiare il colore del giocatore"
 
 #: src/multiint.cpp:2503
-#, fuzzy
 msgid "Click to change player position"
-msgstr "Clicca per cambiare le impostazione del giocatore"
+msgstr "Clicca per cambiare la posizione del giocatore"
 
 #: src/multiint.cpp:2509
-#, fuzzy
 msgid "Click to change AI"
-msgstr "Clicca per cambiare le impostazione del giocatore"
+msgstr "Clicca per cambiare AI"
 
 #: src/multiint.cpp:2513
 msgid "You cannot change AI in a challenge"
-msgstr ""
+msgstr "Non puoi cambiare la difficolta dell'AI in una sfida"
 
 #: src/multiint.cpp:2575
 msgid "CHAT"
@@ -14462,20 +14443,19 @@ msgid "Players"
 msgstr "Giocatori"
 
 #: src/multiint.cpp:3853
-#, fuzzy, c-format
+#, c-format
 msgid "Click to take player slot %d"
-msgstr "Clicca per cambiare le impostazione del giocatore"
+msgstr "Clicca per prendere lo slot del player %d"
 
 #: src/multiint.cpp:3862
 #: src/multiint.cpp:4055
 msgid "Open"
-msgstr ""
+msgstr "Aperto"
 
 #: src/multiint.cpp:3862
 #: src/multiint.cpp:4056
-#, fuzzy
 msgid "Closed"
-msgstr "Chiudi"
+msgstr "Chiuso"
 
 #: src/multiint.cpp:3913
 #, c-format
@@ -14562,44 +14542,36 @@ msgid "8 players"
 msgstr "8 giocatori"
 
 #: src/multimenu.cpp:147
-#, fuzzy
 msgid "9 players"
-msgstr "2 giocatori"
+msgstr "9 giocatori"
 
 #: src/multimenu.cpp:147
-#, fuzzy
 msgid "10 players"
-msgstr "2 giocatori"
+msgstr "10 giocatori"
 
 #: src/multimenu.cpp:147
-#, fuzzy
 msgid "11 players"
-msgstr "2 giocatori"
+msgstr "11 giocatori"
 
 #: src/multimenu.cpp:147
-#, fuzzy
 msgid "12 players"
-msgstr "2 giocatori"
+msgstr "12 giocatori"
 
 #: src/multimenu.cpp:147
-#, fuzzy
 msgid "13 players"
-msgstr "3 giocatori"
+msgstr "13 giocatori"
 
 #: src/multimenu.cpp:147
-#, fuzzy
 msgid "14 players"
-msgstr "4 giocatori"
+msgstr "14 giocatori"
 
 #: src/multimenu.cpp:147
-#, fuzzy
 msgid "15 players"
-msgstr "5 giocatori"
+msgstr "15 giocatori"
 
 #: src/multimenu.cpp:147
-#, fuzzy
 msgid "16 players"
-msgstr "6 giocatori"
+msgstr "16 giocatori"
 
 #: src/multimenu.cpp:620
 msgid "Technology level 1"
@@ -14705,36 +14677,35 @@ msgstr "Azzurro"
 
 #: src/multiplay.cpp:1932
 msgid "Yellow"
-msgstr ""
+msgstr "Giallo"
 
 #: src/multiplay.cpp:1933
 msgid "Purple"
-msgstr ""
+msgstr "Viola"
 
 #: src/multiplay.cpp:1934
 msgid "White"
-msgstr ""
+msgstr "Bianco"
 
 #: src/multiplay.cpp:1935
-#, fuzzy
 msgid "Bright blue"
-msgstr "Pulsante destro"
+msgstr "Blue luminoso"
 
 #: src/multiplay.cpp:1936
 msgid "Neon green"
-msgstr ""
+msgstr "Verde neon"
 
 #: src/multiplay.cpp:1937
 msgid "Infrared"
-msgstr ""
+msgstr "Infrarosso"
 
 #: src/multiplay.cpp:1938
 msgid "Ultraviolet"
-msgstr ""
+msgstr "Ultravioletto"
 
 #: src/multiplay.cpp:1939
 msgid "Brown"
-msgstr ""
+msgstr "Marrone"
 
 #: src/order.cpp:827
 msgid "We can't do that! We must be a Cyborg unit to use a Cyborg Transport!"
@@ -14916,17 +14887,16 @@ msgid "Unable to locate any Commanders!"
 msgstr "Impossibile localizzare alcun Comandante!"
 
 #: src/structure.cpp:2632
-#, fuzzy
 msgid "Command Control Limit Reached - Production Halted"
 msgstr "Limite di Controllo Raggiunto - Produzione Arrestata"
 
 #: src/structure.cpp:5822
 #: src/structure.cpp:5847
-#, fuzzy, c-format
+#, c-format
 msgid "%s - %u Unit assigned - Damage %3.0f%%"
 msgid_plural "%s - %u Units assigned - Damage %3.0f%%"
-msgstr[0] "%s - %u Unità Assegnata"
-msgstr[1] "%s - %u Unità Assegnate"
+msgstr[0] "%s - %u Unità Assegnata - Danno %3.0f%%"
+msgstr[1] "%s - %u Unità Assegnate - Danni %3.0f%%"
 
 #: src/structure.cpp:5852
 #: src/structure.cpp:5920
@@ -14937,9 +14907,9 @@ msgid "%s - Damage %3.0f%%"
 msgstr "%s - Danno %3.0f%%"
 
 #: src/structure.cpp:5902
-#, fuzzy, c-format
+#, c-format
 msgid "%s - Connected %u of %u - Damage %3.0f%%"
-msgstr "%s - Collegati %u di %u"
+msgstr "%s - Collegati %u di %u - Danni %3.0f%%"
 
 #: src/structure.cpp:6065
 #: src/structure.cpp:6110
