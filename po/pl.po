@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-10-26 22:31+0200\n"
+"POT-Creation-Date: 2011-11-05 16:22+0100\n"
 "PO-Revision-Date: 2010-12-11 17:00+0100\n"
 "Last-Translator: Michał D. aka Emdek <emdeck@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
@@ -12124,146 +12124,154 @@ msgstr "Zapisz grę"
 msgid "Close"
 msgstr "Zamknij"
 
-#: src/clparse.cpp:238
+#: src/clparse.cpp:242
 msgid "Set configuration directory"
 msgstr "Ustaw katalog z konfiguracją"
 
-#: src/clparse.cpp:238
+#: src/clparse.cpp:242
 msgid "configuration directory"
 msgstr "katalog z konfiguracją"
 
-#: src/clparse.cpp:239
+#: src/clparse.cpp:243
 msgid "Set default data directory"
 msgstr "Ustaw domyślny katalog danych"
 
-#: src/clparse.cpp:239
+#: src/clparse.cpp:243
 msgid "data directory"
 msgstr "katalog danych"
 
-#: src/clparse.cpp:240
+#: src/clparse.cpp:244
 msgid "Show debug for given level"
 msgstr "Pokaż odpluskwianie dla danego poziomu"
 
-#: src/clparse.cpp:240
+#: src/clparse.cpp:244
 msgid "debug level"
 msgstr "poziom odpluskwiania"
 
-#: src/clparse.cpp:241
+#: src/clparse.cpp:245
 msgid "Log debug output to file"
 msgstr "Loguj odpluskwianie do pliku"
 
-#: src/clparse.cpp:241
+#: src/clparse.cpp:245
 msgid "file"
 msgstr "plik"
 
-#: src/clparse.cpp:242
+#: src/clparse.cpp:246
 msgid "Flush all debug output written to stderr"
 msgstr "Wyślij dane odpluskwiania do stderr"
 
-#: src/clparse.cpp:243
+#: src/clparse.cpp:247
 msgid "Play in fullscreen mode"
 msgstr "Graj na pełnym ekranie"
 
-#: src/clparse.cpp:244
+#: src/clparse.cpp:248
 msgid "Load a specific game"
 msgstr "Wczytaj specyficzną grę"
 
-#: src/clparse.cpp:244
+#: src/clparse.cpp:248
 msgid "game-name"
 msgstr "gra-nazwa"
 
-#: src/clparse.cpp:245
+#: src/clparse.cpp:249
 msgid "Show this help message and exit"
 msgstr "Pokaż ten ekran pomocy i wyjdź"
 
-#: src/clparse.cpp:246
+#: src/clparse.cpp:250
 msgid "Enable a global mod"
 msgstr "Włącz mod globalny"
 
-#: src/clparse.cpp:246
-#: src/clparse.cpp:247
-#: src/clparse.cpp:248
+#: src/clparse.cpp:250
+#: src/clparse.cpp:251
+#: src/clparse.cpp:252
 msgid "mod"
 msgstr "mod"
 
-#: src/clparse.cpp:247
+#: src/clparse.cpp:251
 msgid "Enable a campaign only mod"
 msgstr "Włącz mod do kampanii"
 
-#: src/clparse.cpp:248
+#: src/clparse.cpp:252
 msgid "Enable a multiplay only mod"
 msgstr "Włącz mod do multi"
 
-#: src/clparse.cpp:249
+#: src/clparse.cpp:253
 msgid "Disable asserts"
 msgstr "Wyłącz asercje"
 
-#: src/clparse.cpp:250
+#: src/clparse.cpp:254
 msgid "Causes a crash to test the crash handler"
 msgstr "Powoduje awarię w celu sprawdzenia obsługi awarii"
 
-#: src/clparse.cpp:251
+#: src/clparse.cpp:255
 msgid "Load a saved game"
 msgstr "Wczytaj zapisaną grę"
 
-#: src/clparse.cpp:251
+#: src/clparse.cpp:255
 msgid "savegame"
 msgstr "zapisana gra"
 
-#: src/clparse.cpp:252
+#: src/clparse.cpp:256
 msgid "Play in windowed mode"
 msgstr "Graj w oknie"
 
-#: src/clparse.cpp:253
+#: src/clparse.cpp:257
 msgid "Show version information and exit"
 msgstr "Wyświetl informację o wersji i wyjdź"
 
-#: src/clparse.cpp:254
+#: src/clparse.cpp:258
 msgid "Set the resolution to use"
 msgstr "Ustaw rozdzielczość"
 
-#: src/clparse.cpp:254
+#: src/clparse.cpp:258
 msgid "WIDTHxHEIGHT"
 msgstr "SZEROKOŚĆxWYSOKOŚĆ"
 
-#: src/clparse.cpp:255
+#: src/clparse.cpp:259
 msgid "Enable shadows"
 msgstr "Włącz cienie"
 
-#: src/clparse.cpp:256
+#: src/clparse.cpp:260
 msgid "Disable shadows"
 msgstr "Wyłącz cienie"
 
-#: src/clparse.cpp:257
+#: src/clparse.cpp:261
 msgid "Enable sound"
 msgstr "Włącz dźwięk"
 
-#: src/clparse.cpp:258
+#: src/clparse.cpp:262
 msgid "Disable sound"
 msgstr "Wyłącz dźwięk"
 
-#: src/clparse.cpp:259
+#: src/clparse.cpp:263
 msgid "Activate self-test"
 msgstr "Aktywuj autotest"
 
-#: src/clparse.cpp:260
+#: src/clparse.cpp:264
 msgid "connect directly to IP/hostname"
 msgstr "połącz od razu przez IP/nazwę hosta"
 
-#: src/clparse.cpp:260
+#: src/clparse.cpp:264
 msgid "host"
 msgstr "host"
 
-#: src/clparse.cpp:261
+#: src/clparse.cpp:265
 msgid "go directly to host screen"
 msgstr "Idź od razu na ekran hosta"
 
-#: src/configuration.cpp:88
+#: src/clparse.cpp:266
+msgid "Enable texture compression"
+msgstr ""
+
+#: src/clparse.cpp:267
+msgid "Disable texture compression"
+msgstr ""
+
+#: src/configuration.cpp:89
 #, fuzzy
 msgid "My Game"
 msgstr "Wyjdź z gry"
 
-#: src/configuration.cpp:89
+#: src/configuration.cpp:90
 #: src/multistat.cpp:124
 msgid "Player"
 msgstr "Gracz"
@@ -12427,17 +12435,17 @@ msgstr "Oczekiwanie na graczy"
 msgid "Out of sync"
 msgstr ""
 
-#: src/display.cpp:1649
+#: src/display.cpp:1648
 msgid "Cannot Build. Oil Resource Burning."
 msgstr "Nie można budować. Płonie ropa."
 
-#: src/display.cpp:1837
-#: src/display.cpp:2425
+#: src/display.cpp:1836
+#: src/display.cpp:2398
 #, fuzzy, c-format
 msgid "%s - Damage %d%% - Experience %.1f, %s"
 msgstr "%s - Obrażenia %d%% - Doświadczenie %d, %s"
 
-#: src/display.cpp:1853
+#: src/display.cpp:1852
 #, c-format
 msgid "%s - Allied - Damage %d%% - Experience %d, %s"
 msgstr "%s - Sojusznik - Obrażenia %d%% - Doświadczenie %d, %s"
@@ -12446,11 +12454,11 @@ msgstr "%s - Sojusznik - Obrażenia %d%% - Doświadczenie %d, %s"
 msgid "Unit Lost!"
 msgstr "Jednostka utracona!"
 
-#: src/droid.cpp:1377
+#: src/droid.cpp:1310
 msgid "Structure Restored"
 msgstr "Struktura odbudowana"
 
-#: src/droid.cpp:2724
+#: src/droid.cpp:2654
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
@@ -12458,7 +12466,7 @@ msgstr[0] "Wybrana grupa %u - %u jednostka"
 msgstr[1] "Wybrana grupa %u - %u jednostki"
 msgstr[2] "Wybrana grupa %u - %u jednostek"
 
-#: src/droid.cpp:2737
+#: src/droid.cpp:2667
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
@@ -12466,7 +12474,7 @@ msgstr[0] "%u jednostka przypisana do Grupy %u"
 msgstr[1] "%u jednostki przypisane do Grupy %u"
 msgstr[2] "%u jednostek przypisano do Grupy %u"
 
-#: src/droid.cpp:2750
+#: src/droid.cpp:2680
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
@@ -12474,7 +12482,7 @@ msgstr[0] "Wyśrodkowano na grupie %u - %u jednostka"
 msgstr[1] "Wyśrodkowano na grupie %u - %u jednostki"
 msgstr[2] "Wyśrodkowano na grupie %u - %u jednostek"
 
-#: src/droid.cpp:2754
+#: src/droid.cpp:2684
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
@@ -12483,49 +12491,49 @@ msgstr[1] "Wyrównanie z grupą %u - %u jednostki"
 msgstr[2] "Wyrównanie z grupą %u - %u jednostek"
 
 # I had really trouble with this one. This word has no meaning in Polish so I decided to translate it as 'Newbe'
-#: src/droid.cpp:3081
+#: src/droid.cpp:3011
 msgid "Rookie"
 msgstr "Nowicjusz"
 
-#: src/droid.cpp:3082
+#: src/droid.cpp:3012
 msgctxt "rank"
 msgid "Green"
 msgstr "Zielony"
 
-#: src/droid.cpp:3083
+#: src/droid.cpp:3013
 msgid "Trained"
 msgstr "Wyszkolony"
 
-#: src/droid.cpp:3084
+#: src/droid.cpp:3014
 msgid "Regular"
 msgstr "Zawodowy"
 
-#: src/droid.cpp:3085
+#: src/droid.cpp:3015
 msgid "Professional"
 msgstr "Profesjonalny"
 
-#: src/droid.cpp:3086
+#: src/droid.cpp:3016
 msgid "Veteran"
 msgstr "Weteran"
 
-#: src/droid.cpp:3087
+#: src/droid.cpp:3017
 msgid "Elite"
 msgstr "Elita"
 
-#: src/droid.cpp:3088
+#: src/droid.cpp:3018
 msgid "Special"
 msgstr "Specjalny"
 
-#: src/droid.cpp:3089
+#: src/droid.cpp:3019
 msgid "Hero"
 msgstr "Bohater"
 
-#: src/droid.cpp:4111
+#: src/droid.cpp:4041
 #, c-format
 msgid "%s wanted to give you a %s but you have too many!"
 msgstr "%s chciał dać ci %s ale masz już ich zbyt wiele!"
 
-#: src/droid.cpp:4115
+#: src/droid.cpp:4045
 #, c-format
 msgid "You wanted to give %s a %s but they have too many!"
 msgstr "Chciałeś dać %s %s ale ma ich już ich zbyt wiele!"
@@ -12575,12 +12583,12 @@ msgstr "SZKOLENIA"
 #. TRANSLATORS: "Return", in this context, means "return to previous screen/menu"
 #: src/frontend.cpp:190
 #: src/frontend.cpp:249
-#: src/frontend.cpp:396
-#: src/frontend.cpp:534
-#: src/frontend.cpp:674
-#: src/frontend.cpp:809
-#: src/frontend.cpp:1044
-#: src/frontend.cpp:1191
+#: src/frontend.cpp:383
+#: src/frontend.cpp:520
+#: src/frontend.cpp:660
+#: src/frontend.cpp:794
+#: src/frontend.cpp:1029
+#: src/frontend.cpp:1175
 msgctxt "menu"
 msgid "Return"
 msgstr "Powrót"
@@ -12606,282 +12614,282 @@ msgstr "Załaduj grę"
 msgid "SINGLE PLAYER"
 msgstr "JEDEN GRACZ"
 
-#: src/frontend.cpp:334
+#: src/frontend.cpp:321
 #: src/ingameop.cpp:494
 #: src/mission.cpp:2528
 #: src/mission.cpp:2629
 msgid "Load Saved Game"
 msgstr "Załaduj zapisany stan gry"
 
-#: src/frontend.cpp:389
+#: src/frontend.cpp:376
 #: src/multiint.cpp:1495
 msgid "OPTIONS"
 msgstr "OPCJE"
 
-#: src/frontend.cpp:390
+#: src/frontend.cpp:377
 msgid "Game Options"
 msgstr "Ustawienia gry"
 
-#: src/frontend.cpp:391
+#: src/frontend.cpp:378
 msgid "Graphics Options"
 msgstr "Opcje grafiki"
 
-#: src/frontend.cpp:392
+#: src/frontend.cpp:379
 msgid "Video Options"
 msgstr "Ustawienia obrazu"
 
-#: src/frontend.cpp:393
+#: src/frontend.cpp:380
 #: src/ingameop.cpp:268
 msgid "Audio Options"
 msgstr "Ustawienia dźwięku"
 
-#: src/frontend.cpp:394
+#: src/frontend.cpp:381
 msgid "Mouse Options"
 msgstr "Ustawienia myszki"
 
-#: src/frontend.cpp:395
+#: src/frontend.cpp:382
 msgid "Key Mappings"
 msgstr "Skróty klawiszowe"
 
-#: src/frontend.cpp:456
+#: src/frontend.cpp:442
 msgid "Video Playback"
 msgstr "Odtwarzanie filmów"
 
-#: src/frontend.cpp:460
-#: src/frontend.cpp:608
+#: src/frontend.cpp:446
+#: src/frontend.cpp:594
 msgid "1X"
 msgstr "1X"
 
-#: src/frontend.cpp:464
-#: src/frontend.cpp:598
+#: src/frontend.cpp:450
+#: src/frontend.cpp:584
 msgid "2X"
 msgstr "2X"
 
-#: src/frontend.cpp:468
-#: src/frontend.cpp:603
-#: src/frontend.cpp:749
-#: src/frontend.cpp:832
+#: src/frontend.cpp:454
+#: src/frontend.cpp:589
+#: src/frontend.cpp:734
+#: src/frontend.cpp:817
 msgid "Fullscreen"
 msgstr "Pełny ekran"
 
-#: src/frontend.cpp:477
+#: src/frontend.cpp:463
 msgid "Scanlines"
 msgstr ""
 
-#: src/frontend.cpp:481
-#: src/frontend.cpp:502
-#: src/frontend.cpp:510
-#: src/frontend.cpp:526
-#: src/frontend.cpp:552
-#: src/frontend.cpp:570
-#: src/frontend.cpp:588
-#: src/frontend.cpp:633
-#: src/frontend.cpp:774
-#: src/frontend.cpp:784
-#: src/frontend.cpp:856
-#: src/frontend.cpp:917
-#: src/frontend.cpp:960
-#: src/frontend.cpp:1001
-#: src/frontend.cpp:1013
-#: src/frontend.cpp:1025
-#: src/frontend.cpp:1061
-#: src/frontend.cpp:1074
-#: src/frontend.cpp:1088
+#: src/frontend.cpp:467
+#: src/frontend.cpp:488
+#: src/frontend.cpp:496
+#: src/frontend.cpp:512
+#: src/frontend.cpp:538
+#: src/frontend.cpp:556
+#: src/frontend.cpp:574
+#: src/frontend.cpp:619
+#: src/frontend.cpp:759
+#: src/frontend.cpp:769
+#: src/frontend.cpp:841
+#: src/frontend.cpp:902
+#: src/frontend.cpp:945
+#: src/frontend.cpp:986
+#: src/frontend.cpp:998
+#: src/frontend.cpp:1010
+#: src/frontend.cpp:1045
+#: src/frontend.cpp:1058
+#: src/frontend.cpp:1072
 msgid "Off"
 msgstr "Wyłącz"
 
-#: src/frontend.cpp:485
-#: src/frontend.cpp:623
+#: src/frontend.cpp:471
+#: src/frontend.cpp:609
 msgid "50%"
 msgstr ""
 
-#: src/frontend.cpp:489
-#: src/frontend.cpp:628
-#: src/multiplay.cpp:1944
+#: src/frontend.cpp:475
+#: src/frontend.cpp:614
+#: src/multiplay.cpp:1927
 msgid "Black"
 msgstr "Czarny"
 
-#: src/frontend.cpp:495
+#: src/frontend.cpp:481
 msgid "Screen Shake"
 msgstr "Wstrząsy ekranu"
 
-#: src/frontend.cpp:498
-#: src/frontend.cpp:514
-#: src/frontend.cpp:522
-#: src/frontend.cpp:557
-#: src/frontend.cpp:575
-#: src/frontend.cpp:584
-#: src/frontend.cpp:770
-#: src/frontend.cpp:922
-#: src/frontend.cpp:956
-#: src/frontend.cpp:997
-#: src/frontend.cpp:1009
-#: src/frontend.cpp:1021
-#: src/frontend.cpp:1066
-#: src/frontend.cpp:1079
-#: src/frontend.cpp:1093
+#: src/frontend.cpp:484
+#: src/frontend.cpp:500
+#: src/frontend.cpp:508
+#: src/frontend.cpp:543
+#: src/frontend.cpp:561
+#: src/frontend.cpp:570
+#: src/frontend.cpp:755
+#: src/frontend.cpp:907
+#: src/frontend.cpp:941
+#: src/frontend.cpp:982
+#: src/frontend.cpp:994
+#: src/frontend.cpp:1006
+#: src/frontend.cpp:1050
+#: src/frontend.cpp:1063
+#: src/frontend.cpp:1077
 msgid "On"
 msgstr "Włącz"
 
-#: src/frontend.cpp:507
+#: src/frontend.cpp:493
 msgid "Subtitles"
 msgstr "Napisy"
 
-#: src/frontend.cpp:519
+#: src/frontend.cpp:505
 msgid "Shadows"
 msgstr "Cienie"
 
-#: src/frontend.cpp:530
+#: src/frontend.cpp:516
 msgid "GRAPHICS OPTIONS"
 msgstr "USTAWIENIA GRAFIKI"
 
-#: src/frontend.cpp:662
+#: src/frontend.cpp:648
 #: src/ingameop.cpp:168
 msgid "Voice Volume"
 msgstr "Głośność mowy"
 
-#: src/frontend.cpp:666
+#: src/frontend.cpp:652
 #: src/ingameop.cpp:173
 msgid "FX Volume"
 msgstr "Głośność efektów"
 
-#: src/frontend.cpp:670
+#: src/frontend.cpp:656
 #: src/ingameop.cpp:178
 msgid "Music Volume"
 msgstr "Głośność muzyki"
 
-#: src/frontend.cpp:677
+#: src/frontend.cpp:663
 msgid "AUDIO OPTIONS"
 msgstr "USTAWIENIA DŹWIĘKU"
 
-#: src/frontend.cpp:742
+#: src/frontend.cpp:727
 msgid "* Takes effect on game restart"
 msgstr "* Wymaga restartu gry"
 
-#: src/frontend.cpp:745
+#: src/frontend.cpp:730
 msgid "Graphics Mode*"
 msgstr "Tryb graficzny*"
 
-#: src/frontend.cpp:753
-#: src/frontend.cpp:827
+#: src/frontend.cpp:738
+#: src/frontend.cpp:812
 msgid "Windowed"
 msgstr "W oknie"
 
-#: src/frontend.cpp:757
+#: src/frontend.cpp:742
 msgid "Resolution*"
 msgstr "Rozdzielczość*"
 
-#: src/frontend.cpp:762
+#: src/frontend.cpp:747
 msgid "Texture size"
 msgstr "Rozmiar tekstury"
 
-#: src/frontend.cpp:766
+#: src/frontend.cpp:751
 #, fuzzy
 msgid "Vertical sync"
 msgstr "Synchron. pionowa*"
 
-#: src/frontend.cpp:801
-#: src/frontend.cpp:862
+#: src/frontend.cpp:786
+#: src/frontend.cpp:847
 #, fuzzy
 msgid "Unsupported"
 msgstr "Transportowiec"
 
-#: src/frontend.cpp:806
+#: src/frontend.cpp:791
 msgid "VIDEO OPTIONS"
 msgstr "USTAWIENIA WIDEO"
 
-#: src/frontend.cpp:994
+#: src/frontend.cpp:979
 msgid "Reverse Rotation"
 msgstr "Odwróć rotację"
 
-#: src/frontend.cpp:1005
+#: src/frontend.cpp:990
 msgid "Trap Cursor"
 msgstr "Złap kursor"
 
-#: src/frontend.cpp:1018
+#: src/frontend.cpp:1003
 msgid "Switch Mouse Buttons"
 msgstr "Odwróć przyciski"
 
-#: src/frontend.cpp:1030
+#: src/frontend.cpp:1015
 msgid "Rotate Screen"
 msgstr "Obracanie ekranu"
 
-#: src/frontend.cpp:1033
-#: src/frontend.cpp:1107
+#: src/frontend.cpp:1018
+#: src/frontend.cpp:1091
 #, fuzzy
 msgid "Middle Mouse"
 msgstr "Środkowy przycisk"
 
-#: src/frontend.cpp:1037
-#: src/frontend.cpp:1102
+#: src/frontend.cpp:1022
+#: src/frontend.cpp:1086
 #, fuzzy
 msgid "Right Mouse"
 msgstr "Prawy przycisk"
 
-#: src/frontend.cpp:1041
+#: src/frontend.cpp:1026
 msgid "MOUSE OPTIONS"
 msgstr "USTAWIENIA MYSZKI"
 
-#: src/frontend.cpp:1142
-#: src/frontend.cpp:1212
+#: src/frontend.cpp:1126
+#: src/frontend.cpp:1196
 msgid "Difficulty"
 msgstr "Poziom trudności"
 
-#: src/frontend.cpp:1146
-#: src/frontend.cpp:1220
-#: src/frontend.cpp:1257
+#: src/frontend.cpp:1130
+#: src/frontend.cpp:1204
+#: src/frontend.cpp:1241
 #: src/multiint.cpp:219
 msgid "Easy"
 msgstr "Łatwy"
 
-#: src/frontend.cpp:1149
-#: src/frontend.cpp:1223
-#: src/frontend.cpp:1249
+#: src/frontend.cpp:1133
+#: src/frontend.cpp:1207
+#: src/frontend.cpp:1233
 msgid "Normal"
 msgstr "Normalny"
 
-#: src/frontend.cpp:1153
-#: src/frontend.cpp:1226
-#: src/frontend.cpp:1253
+#: src/frontend.cpp:1137
+#: src/frontend.cpp:1210
+#: src/frontend.cpp:1237
 #: src/multiint.cpp:219
 msgid "Hard"
 msgstr "Trudny"
 
-#: src/frontend.cpp:1158
-#: src/frontend.cpp:1213
+#: src/frontend.cpp:1142
+#: src/frontend.cpp:1197
 msgid "Scroll Speed"
 msgstr "Szybkość przewijania"
 
-#: src/frontend.cpp:1172
-#: src/frontend.cpp:1210
+#: src/frontend.cpp:1156
+#: src/frontend.cpp:1194
 msgid "Language"
 msgstr "Język"
 
-#: src/frontend.cpp:1184
-#: src/frontend.cpp:1211
+#: src/frontend.cpp:1168
+#: src/frontend.cpp:1195
 msgid "Unit Colour"
 msgstr "Kolor jednostek"
 
-#: src/frontend.cpp:1187
+#: src/frontend.cpp:1171
 msgid "Radar"
 msgstr "Radar"
 
-#: src/frontend.cpp:1188
-#: src/frontend.cpp:1237
+#: src/frontend.cpp:1172
+#: src/frontend.cpp:1221
 msgid "Rotating"
 msgstr "Obracający się"
 
-#: src/frontend.cpp:1188
-#: src/frontend.cpp:1237
+#: src/frontend.cpp:1172
+#: src/frontend.cpp:1221
 msgid "Fixed"
 msgstr "Nieruchomy"
 
-#: src/frontend.cpp:1194
-#: src/frontend.cpp:1214
+#: src/frontend.cpp:1178
+#: src/frontend.cpp:1198
 msgid "GAME OPTIONS"
 msgstr "USTAWIENIA GRY"
 
-#: src/frontend.cpp:1346
+#: src/frontend.cpp:1330
 #: src/multiint.cpp:2602
 msgid "Mod: "
 msgstr "Mod: "
@@ -13047,7 +13055,7 @@ msgid "Current Player:"
 msgstr "Aktualny gracz:"
 
 #: src/hci.cpp:3977
-#: src/intdisplay.cpp:276
+#: src/intdisplay.cpp:275
 msgid "Progress Bar"
 msgstr "Pasek postępu"
 
@@ -13122,17 +13130,17 @@ msgstr ""
 "\n"
 "Warzone spróbuje załadować grę bez niego."
 
-#: src/intdisplay.cpp:199
+#: src/intdisplay.cpp:206
 #, fuzzy
 msgid "Build Progress"
 msgstr "Prędkość budowania"
 
-#: src/intdisplay.cpp:234
+#: src/intdisplay.cpp:241
 #, fuzzy
 msgid "Construction Progress"
 msgstr "Jednostka budująca"
 
-#: src/intdisplay.cpp:269
+#: src/intdisplay.cpp:268
 msgid "Power Accrued"
 msgstr "Moc zwiększona"
 
@@ -14671,103 +14679,103 @@ msgstr "Przesyła energię graczowi"
 msgid "Kicking player %s, because they tried to bypass data integrity check!"
 msgstr "Gracz %s wyrzucony z powodu próby pominięcia sprawdzenia integralności danych!"
 
-#: src/multiplay.cpp:1056
+#: src/multiplay.cpp:1039
 msgid "(allies"
 msgstr "(sojusznicy"
 
-#: src/multiplay.cpp:1064
+#: src/multiplay.cpp:1047
 msgid "(private to "
 msgstr "(prywatny dla"
 
-#: src/multiplay.cpp:1077
+#: src/multiplay.cpp:1060
 msgid "[invalid]"
 msgstr "[nieprawidłowy]"
 
-#: src/multiplay.cpp:1941
+#: src/multiplay.cpp:1924
 msgid "Green"
 msgstr "Zielony"
 
-#: src/multiplay.cpp:1942
+#: src/multiplay.cpp:1925
 msgid "Orange"
 msgstr "Pomarańczowy"
 
-#: src/multiplay.cpp:1943
+#: src/multiplay.cpp:1926
 msgid "Grey"
 msgstr "Szary"
 
-#: src/multiplay.cpp:1945
+#: src/multiplay.cpp:1928
 msgid "Red"
 msgstr "Czerwony"
 
-#: src/multiplay.cpp:1946
+#: src/multiplay.cpp:1929
 msgid "Blue"
 msgstr "Niebieski"
 
-#: src/multiplay.cpp:1947
+#: src/multiplay.cpp:1930
 msgid "Pink"
 msgstr "Różowy"
 
-#: src/multiplay.cpp:1948
+#: src/multiplay.cpp:1931
 msgid "Cyan"
 msgstr "Turkusowy"
 
-#: src/multiplay.cpp:1949
+#: src/multiplay.cpp:1932
 msgid "Yellow"
 msgstr ""
 
-#: src/multiplay.cpp:1950
+#: src/multiplay.cpp:1933
 msgid "Purple"
 msgstr ""
 
-#: src/multiplay.cpp:1951
+#: src/multiplay.cpp:1934
 msgid "White"
 msgstr ""
 
-#: src/multiplay.cpp:1952
+#: src/multiplay.cpp:1935
 #, fuzzy
 msgid "Bright blue"
 msgstr "Prawy przycisk"
 
-#: src/multiplay.cpp:1953
+#: src/multiplay.cpp:1936
 msgid "Neon green"
 msgstr ""
 
-#: src/multiplay.cpp:1954
+#: src/multiplay.cpp:1937
 msgid "Infrared"
 msgstr ""
 
-#: src/multiplay.cpp:1955
+#: src/multiplay.cpp:1938
 msgid "Ultraviolet"
 msgstr ""
 
-#: src/multiplay.cpp:1956
+#: src/multiplay.cpp:1939
 msgid "Brown"
 msgstr ""
 
-#: src/order.cpp:828
+#: src/order.cpp:827
 msgid "We can't do that! We must be a Cyborg unit to use a Cyborg Transport!"
 msgstr "Nie możemy tego zrobić! Tylko cyborgi mogą korzystać Transportowca cyborgów!"
 
-#: src/qtscriptfuncs.cpp:473
-#: src/scriptfuncs.cpp:3272
+#: src/qtscriptfuncs.cpp:639
+#: src/scriptfuncs.cpp:3258
 msgid "YOU ARE VICTORIOUS!"
 msgstr "ZWYCIĘŻYŁEŚ!"
 
-#: src/qtscriptfuncs.cpp:478
-#: src/scriptfuncs.cpp:3276
+#: src/qtscriptfuncs.cpp:644
+#: src/scriptfuncs.cpp:3262
 msgid "YOU WERE DEFEATED!"
 msgstr "ZOSTAŁEŚ POKONANY!"
 
-#: src/research.cpp:1734
+#: src/research.cpp:1649
 #, c-format
 msgid "Research completed: %s"
 msgstr "Badania ukończone: %s"
 
-#: src/research.cpp:1739
+#: src/research.cpp:1654
 msgid "Research Completed"
 msgstr "Badania ukończone"
 
-#: src/research.cpp:2555
+#: src/research.cpp:2462
 msgid "Research Award"
 msgstr "Technologia skradziona"
 
@@ -14889,12 +14897,12 @@ msgstr "Całkowity czas gry - %s"
 msgid "You cheated!"
 msgstr "Oszukiwałeś!"
 
-#: src/scriptfuncs.cpp:9400
+#: src/scriptfuncs.cpp:9386
 #, c-format
 msgid "Beacon received from %s!"
 msgstr "Sygnał otrzymany od %s!"
 
-#: src/scriptfuncs.cpp:9446
+#: src/scriptfuncs.cpp:9432
 #, c-format
 msgid "Beacon %d"
 msgstr "Sygnał %d"
@@ -14924,13 +14932,13 @@ msgstr "Niemożna odnaleźć jednostek z radarami!"
 msgid "Unable to locate any Commanders!"
 msgstr "Niemożna odnaleźć dowódców!"
 
-#: src/structure.cpp:2638
+#: src/structure.cpp:2632
 #, fuzzy
 msgid "Command Control Limit Reached - Production Halted"
 msgstr "Limit kontrolny osiągnięty - produkcja wstrzymana"
 
-#: src/structure.cpp:5829
-#: src/structure.cpp:5854
+#: src/structure.cpp:5822
+#: src/structure.cpp:5847
 #, fuzzy, c-format
 msgid "%s - %u Unit assigned - Damage %3.0f%%"
 msgid_plural "%s - %u Units assigned - Damage %3.0f%%"
@@ -14938,51 +14946,51 @@ msgstr[0] "%s - %u Jednostka przydzielona"
 msgstr[1] "%s - %u Jednostki przydzielone"
 msgstr[2] "%s - %u Jednostek przydzielonych"
 
-#: src/structure.cpp:5859
-#: src/structure.cpp:5927
-#: src/structure.cpp:5943
-#: src/structure.cpp:5957
+#: src/structure.cpp:5852
+#: src/structure.cpp:5920
+#: src/structure.cpp:5935
+#: src/structure.cpp:5949
 #, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - Uszkodzenia %3.0f%%"
 
-#: src/structure.cpp:5909
+#: src/structure.cpp:5902
 #, fuzzy, c-format
 msgid "%s - Connected %u of %u - Damage %3.0f%%"
 msgstr "%s - Połączony %u z %u"
 
-#: src/structure.cpp:6073
-#: src/structure.cpp:6118
+#: src/structure.cpp:6065
+#: src/structure.cpp:6110
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Uszkodzony elektronicznie"
 
 # This maybe sound weird, but I translated this as 'stolen technology'
-#: src/structure.cpp:6355
+#: src/structure.cpp:6347
 msgid "Electronic Reward - Visibility Report"
 msgstr "Technologia skradziona - raport widoczności"
 
-#: src/structure.cpp:6395
+#: src/structure.cpp:6387
 msgid "Factory Reward - Propulsion"
 msgstr "Technologia skradziona - Napęd"
 
-#: src/structure.cpp:6419
+#: src/structure.cpp:6411
 msgid "Factory Reward - Body"
 msgstr "Technologia skradziona - Kadłub"
 
-#: src/structure.cpp:6443
+#: src/structure.cpp:6435
 msgid "Factory Reward - Weapon"
 msgstr "Technologia skradziona - Broń"
 
-#: src/structure.cpp:6452
+#: src/structure.cpp:6444
 msgid "Factory Reward - Nothing"
 msgstr "Technologia skradziona - Brak"
 
-#: src/structure.cpp:6480
+#: src/structure.cpp:6472
 msgid "Repair Facility Award - Repair"
 msgstr "Technologia skradziona - Naprawa"
 
-#: src/structure.cpp:6487
+#: src/structure.cpp:6479
 msgid "Repair Facility Award - Nothing"
 msgstr "Technologia skradziona - Brak"
 
