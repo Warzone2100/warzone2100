@@ -33,14 +33,20 @@ extern bool allocPlayerPower(void);
 /** Clear the playerPower. */
 extern void clearPlayerPower(void);
 
+/// Removes any pending power request from this structure.
+void delPowerRequest(STRUCTURE *psStruct);
+
+/// Checks how much power must be accumulated, before the power request from this structure can be satisfied.
+int32_t checkPowerRequest(STRUCTURE *psStruct);
+
 /** Reset the power levels when a power_gen or resource_extractor is destroyed. */
 extern bool resetPlayerPower(UDWORD player, STRUCTURE *psStruct);
 
 /** Check the available power. */
 bool checkPower(int player, uint32_t quantity);
 
-extern int requestPowerFor(int player, int32_t amount, int points);
-extern int requestPrecisePowerFor(int player, int64_t amount, int points);
+int requestPowerFor(STRUCTURE *psStruct, int32_t amount, int points);
+int requestPrecisePowerFor(STRUCTURE *psStruct, int64_t amount, int points);
 
 extern void addPower(int player, int32_t quantity);
 
@@ -62,7 +68,5 @@ void powerCalc(bool on);
 
 /** Flag used to check for power calculations to be done or not. */
 extern	bool			powerCalculated;
-
-extern void throttleEconomy(void);
 
 #endif // __INCLUDED_SRC_POWER_H__

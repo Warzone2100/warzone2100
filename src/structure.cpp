@@ -912,7 +912,7 @@ void structureBuild(STRUCTURE *psStruct, DROID *psDroid, int buildPoints)
 		{
 			buildPoints = newBuildPoints - psStruct->currentBuildPts + 1;
 		}
-		buildPointsToAdd = requestPowerFor(psStruct->player, powerNeeded, buildPoints);
+		buildPointsToAdd = requestPowerFor(psStruct, powerNeeded, buildPoints);
 	}
 	else
 	{
@@ -3190,7 +3190,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 				if (pointsToAdd > 0 && pResearch->researchPoints > 0)  // might be a "free" research
 				{
 					int64_t powerNeeded = (int64_t(pResearch->researchPower * pointsToAdd) << 32) / pResearch->researchPoints;
-					pPlayerRes->currentPoints += requestPrecisePowerFor(psStructure->player, powerNeeded, pointsToAdd);
+					pPlayerRes->currentPoints += requestPrecisePowerFor(psStructure, powerNeeded, pointsToAdd);
 					psResFacility->timeStarted = gameTime;
 				}
 				syncDebug("Research at %u/%u.", pPlayerRes->currentPoints, pResearch->researchPoints);
@@ -3300,7 +3300,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 				int64_t powerNeeded = ((int64_t)(((DROID_TEMPLATE *)pSubject)->powerPoints*secondsElapsed*psFactory->productionOutput) << 32)/((DROID_TEMPLATE*)pSubject)->buildPoints;
 				if (secondsElapsed > 0)
 				{
-					progress = requestPrecisePowerFor(psStructure->player, powerNeeded, secondsElapsed);
+					progress = requestPrecisePowerFor(psStructure, powerNeeded, secondsElapsed);
 					psFactory->timeToBuild -= progress;
 					psFactory->timeStarted = psFactory->timeStarted + secondsElapsed*GAME_TICKS_PER_SEC;
 				}
@@ -4807,6 +4807,8 @@ bool removeStruct(STRUCTURE *psDel, bool bDestroy)
 	{
 		intRefreshScreen();
 	}
+
+	delPowerRequest(psDel);
 
 	return resourceFound;
 }

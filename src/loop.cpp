@@ -299,8 +299,6 @@ GAMECODE gameLoop(void)
 
 			fireWaitingCallbacks(); //Now is the good time to fire waiting callbacks (since interpreter is off now)
 
-			throttleEconomy();
-
 			for(i = 0; i < MAX_PLAYERS; i++)
 			{
 				//update the current power available for a player
