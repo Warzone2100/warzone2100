@@ -40,8 +40,9 @@ struct W_BARGRAPH : public WIDGET
 	int             precision;                      // Number of places after the decimal point to display, 0 by default.
 	PIELIGHT	majorCol;			// Colour for the major bar
 	PIELIGHT	minorCol;			// Colour for the minor bar
+	PIELIGHT        textCol;                        // Colour for the text on the bar.
 	const char	*pTip;				// The tool tip for the graph
-	QString         text;
+	QString         text;                           // Text on the bar.
 };
 
 /* Create a barGraph widget data structure */

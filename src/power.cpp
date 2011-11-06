@@ -132,7 +132,7 @@ void delPowerRequest(STRUCTURE *psStruct)
 
 static int64_t checkPrecisePowerRequest(STRUCTURE *psStruct)
 {
-	PlayerPower *p = &asPower[psStruct->player];
+	PlayerPower const *p = &asPower[psStruct->player];
 
 	int64_t requiredPower = 0;
 	for (size_t n = 0; n < p->powerQueue.size(); ++n)
@@ -140,18 +140,33 @@ static int64_t checkPrecisePowerRequest(STRUCTURE *psStruct)
 		requiredPower += p->powerQueue[n].amount;
 		if (p->powerQueue[n].id == psStruct->id)
 		{
-			p->powerQueue.erase(p->powerQueue.begin() + n);
-			return requiredPower;
+			if (requiredPower <= p->currentPower)
+			{
+				return -1;  // Have enough power.
+			}
+			return requiredPower - p->currentPower;
 		}
 	}
 
-	ASSERT(false, "Checking power for nonexistent power request.");
-	return 1000000*FP_ONE;
+	return -1;
 }
 
 int32_t checkPowerRequest(STRUCTURE *psStruct)
 {
-	return checkPrecisePowerRequest(psStruct) / FP_ONE;
+	int64_t power = checkPrecisePowerRequest(psStruct);
+	return power != -1? power / FP_ONE : -1;
+}
+
+static int64_t getQueuedPower(unsigned player)
+{
+	PlayerPower const *p = &asPower[player];
+
+	int64_t requiredPower = 0;
+	for (size_t n = 0; n < p->powerQueue.size(); ++n)
+	{
+		requiredPower += p->powerQueue[n].amount;
+	}
+	return requiredPower;
 }
 
 static void syncDebugEconomy(unsigned player, char ch)
@@ -320,7 +335,7 @@ int32_t getPower(unsigned player)
 {
 	ASSERT(player < MAX_PLAYERS, "Bad player (%u)", player);
 
-	return asPower[player].currentPower >> 32;
+	return asPower[player].currentPower / FP_ONE;
 }
 
 int64_t getPrecisePower(unsigned player)
@@ -328,6 +343,13 @@ int64_t getPrecisePower(unsigned player)
 	ASSERT(player < MAX_PLAYERS, "Bad player (%u)", player);
 
 	return asPower[player].currentPower;
+}
+
+int32_t getPowerMinusQueued(unsigned player)
+{
+	ASSERT(player < MAX_PLAYERS, "Bad player (%u)", player);
+
+	return (asPower[player].currentPower - getQueuedPower(player)) / FP_ONE;
 }
 
 bool requestPowerFor(STRUCTURE *psStruct, int32_t amount)

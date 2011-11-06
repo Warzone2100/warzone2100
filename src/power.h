@@ -37,6 +37,7 @@ extern void clearPlayerPower(void);
 void delPowerRequest(STRUCTURE *psStruct);
 
 /// Checks how much power must be accumulated, before the power request from this structure can be satisfied.
+/// Returns -1 if there is no power request or if there is enough power already.
 int32_t checkPowerRequest(STRUCTURE *psStruct);
 
 /** Reset the power levels when a power_gen or resource_extractor is destroyed. */
@@ -62,6 +63,7 @@ void setPrecisePower(unsigned player, int64_t power);
 /** Get the amount of power current held by the given player. */
 int32_t getPower(unsigned player);
 int64_t getPrecisePower(unsigned player);
+int32_t getPowerMinusQueued(unsigned player);
 
 /** Resets the power levels for all players when power is turned back on. */
 void powerCalc(bool on);

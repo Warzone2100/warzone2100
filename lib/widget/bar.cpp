@@ -57,6 +57,7 @@ W_BARGRAPH::W_BARGRAPH(W_BARINIT const *init)
 	, precision(init->precision)
 	, majorCol(init->sCol)
 	, minorCol(init->sMinorCol)
+	, textCol(WZCOL_BLACK)
 	, pTip(init->pTip)
 {
 	/* Set the display function */
@@ -215,16 +216,16 @@ static void barGraphDisplayText(W_BARGRAPH *barGraph, int x0, int x1, int y1, PI
 	if (!barGraph->text.isEmpty())
 	{
 		QByteArray utf = barGraph->text.toUtf8();
+		iV_SetFont(font_small);
 		int textWidth = iV_GetTextWidth(utf.constData());
 		Vector2i pos((x0 + x1 - textWidth)/2, y1);
-		iV_SetFont(font_small);
 		iV_SetTextColour(WZCOL_BLACK);  // Add a shadow, to make it visible against any background.
 		for (int dx = -1; dx <= 1; ++dx)
 			for (int dy = -1; dy <= 1; ++dy)
 			{
 				iV_DrawText(utf.constData(), pos.x + dx*1.25f, pos.y + dy*1.25f);
 			}
-		iV_SetTextColour(pColours[WCOL_BARTEXT]);
+		iV_SetTextColour(barGraph->textCol);
 		iV_DrawText(utf.constData(), pos.x, pos.y - 0.25f);
 		iV_DrawText(utf.constData(), pos.x, pos.y + 0.25f);  // Draw twice, to make it more visible.
 	}
