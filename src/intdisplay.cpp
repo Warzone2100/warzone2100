@@ -233,7 +233,7 @@ void intUpdateProgressBar(WIDGET *psWidget, W_CONTEXT *psContext)
 				Manufacture = StructureGetFactory(Structure);
 
 				Range = FactoryGetTemplate(Manufacture)->buildPoints / Manufacture->productionOutput;
-				timeToBuild = Manufacture->psSubject != NULL? Manufacture->timeToBuild : Range;  // If psSubject == NULL, this is not yet synched, and Manufacture->timeToBuild is not set correctly.
+				timeToBuild = Manufacture->psSubject != NULL? Manufacture->buildPointsRemaining / Manufacture->productionOutput : Range;  // If psSubject == NULL, this is not yet synched, and Manufacture->timeToBuild is not set correctly.
 				BuildPoints = Range - timeToBuild;
 				//set the colour of the bar to yellow
 				BarGraph->majorCol = WZCOL_YELLOW;

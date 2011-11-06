@@ -187,12 +187,12 @@ struct FACTORY
 	unsigned                        pendingCount;           ///< Number of messages sent but not yet processed.
 
 	UDWORD				timeStarted;		/* The time the building started on the subject*/
-	UDWORD				timeToBuild;		/* Time taken to build one droid */
+	//UDWORD				timeToBuild;		/* Time taken to build one droid */
+	int                             buildPointsRemaining;   ///< Build points required to finish building the droid.
 	UDWORD				timeStartHold;		/* The time the factory was put on hold*/
 	FLAG_POSITION		*psAssemblyPoint;	/* Place for the new droids to assemble at */
 	struct DROID		*psCommander;	    // command droid to produce droids for (if any)
 	uint32_t                        secondaryOrder;         ///< Secondary order state for all units coming out of the factory.
-                                            // added AB 22/04/99
 };
 
 struct RES_EXTRACTOR
@@ -253,6 +253,7 @@ struct STRUCTURE : public BASE_OBJECT
 	SWORD               resistance;                 /* current resistance points, 0 = cannot be attacked electrically */
 	UDWORD              lastResistance;             /* time the resistance was last increased*/
 	FUNCTIONALITY       *pFunctionality;            /* pointer to structure that contains fields necessary for functionality */
+	bool                builtThisTick;              ///< True iff someone tried building the structure this tick. If construction hasn't started, remove the structure.
 
 	/* The weapons on the structure */
 	UWORD		numWeaps;

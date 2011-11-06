@@ -868,71 +868,53 @@ int32_t getStructureDamage(const STRUCTURE *psStructure)
 /// Also can deconstruct (demolish) a building if passed negative buildpoints
 void structureBuild(STRUCTURE *psStruct, DROID *psDroid, int buildPoints)
 {
-	int before, after;
-	int powerNeeded;
-	int buildPointsToAdd;
-	int player;
-	int newBuildPoints = (int)psStruct->currentBuildPts; // beware, unsigned
-	DROID *psCurr;
-	newBuildPoints += buildPoints;
-	ASSERT(newBuildPoints <= 1 + 3 * (int)psStruct->pStructureType->buildPoints, "unsigned int underflow?");
-	CLIP(newBuildPoints, 0, psStruct->pStructureType->buildPoints);
-
 	if (psDroid && !aiCheckAlliances(psStruct->player,psDroid->player))
 	{
 		// Enemy structure
-		buildPoints = 0;
-		powerNeeded = 0;
-		buildPointsToAdd = 0;
+		return;
 	}
 	else if (psStruct->pStructureType->type != REF_FACTORY_MODULE)
 	{
-		for (player = 0; player < 8; player++)
+		for (unsigned player = 0; player < MAX_PLAYERS; player++)
 		{
-			for (psCurr = apsDroidLists[player]; psCurr; psCurr = psCurr->psNext)
+			for (DROID *psCurr = apsDroidLists[player]; psCurr != NULL; psCurr = psCurr->psNext)
 			{
 				// An enemy droid is blocking it
 				if ((STRUCTURE *) orderStateObj(psCurr, DORDER_BUILD) == psStruct
 				 && !aiCheckAlliances(psStruct->player,psCurr->player))
 				{
-					buildPoints = 0;
-					powerNeeded = 0;
-					buildPointsToAdd = 0;
-					break;
+					return;
 				}
 			}
 		}
 	}
-	if (buildPoints > 0)
+	psStruct->builtThisTick = true;
+	if (psStruct->currentBuildPts <= 0 && buildPoints > 0)
 	{
-		// Check if there is enough power to perform this construction work
-		powerNeeded = (newBuildPoints * structPowerToBuild(psStruct))/psStruct->pStructureType->buildPoints -
-		               (psStruct->currentBuildPts * structPowerToBuild(psStruct))/psStruct->pStructureType->buildPoints;
-		if (buildPoints > newBuildPoints - psStruct->currentBuildPts)
+		// Just starting to build structure, need power for it.
+		bool haveEnoughPower = requestPowerFor(psStruct, structPowerToBuild(psStruct));
+		if (!haveEnoughPower)
 		{
-			buildPoints = newBuildPoints - psStruct->currentBuildPts + 1;
+			buildPoints = 0;  // No power to build.
 		}
-		buildPointsToAdd = requestPowerFor(psStruct, powerNeeded, buildPoints);
-	}
-	else
-	{
-		// get half the power back for demolishing 
-		powerNeeded = (newBuildPoints * structureTotalReturn(psStruct))/(psStruct->pStructureType->buildPoints) -
-		               (psStruct->currentBuildPts * structureTotalReturn(psStruct))/(psStruct->pStructureType->buildPoints);
-		buildPointsToAdd = buildPoints;
-		addPower(psStruct->player, -powerNeeded);
 	}
 
-	newBuildPoints = (int)psStruct->currentBuildPts; // beware, unsigned
-	newBuildPoints += buildPointsToAdd;
+	int newBuildPoints = psStruct->currentBuildPts + buildPoints;
+	ASSERT(newBuildPoints <= 1 + 3 * (int)psStruct->pStructureType->buildPoints, "unsigned int underflow?");
+	CLIP(newBuildPoints, 0, psStruct->pStructureType->buildPoints);
+
+	if (psStruct->currentBuildPts > 0 && newBuildPoints <= 0)
+	{
+		// Demolished structure, return some power.
+		addPower(psStruct->player, structureTotalReturn(psStruct));
+	}
 
 	ASSERT(newBuildPoints <= 1 + 3 * (int)psStruct->pStructureType->buildPoints, "unsigned int underflow?");
 	CLIP(newBuildPoints, 0, psStruct->pStructureType->buildPoints);
 
-	before = (9 * psStruct->currentBuildPts * structureBody(psStruct) ) / (10 * psStruct->pStructureType->buildPoints);
+	int deltaBody = quantiseFraction(9 * structureBody(psStruct), 10 * psStruct->pStructureType->buildPoints, newBuildPoints, psStruct->currentBuildPts);
 	psStruct->currentBuildPts = newBuildPoints;
-	after =  (9 * psStruct->currentBuildPts * structureBody(psStruct) ) / (10 * psStruct->pStructureType->buildPoints);
-	psStruct->body = std::max<int>(psStruct->body + after - before, 1);
+	psStruct->body = std::max<int>(psStruct->body + deltaBody, 1);
 
 	//check if structure is built
 	if (buildPoints > 0 && psStruct->currentBuildPts >= (SDWORD)psStruct->pStructureType->buildPoints)
@@ -1008,9 +990,26 @@ void structureBuild(STRUCTURE *psStruct, DROID *psDroid, int buildPoints)
 	}
 }
 
+static bool structureHasModules(STRUCTURE *psStruct)
+{
+	if (psStruct->pStructureType->type == REF_POWER_GEN)
+	{
+		return psStruct->pFunctionality->powerGenerator.capacity != 0;
+	}
+	if (StructIsFactory(psStruct))
+	{
+		return psStruct->pFunctionality->factory.capacity != 0;
+	}
+	if (psStruct->pStructureType->type == REF_RESEARCH)
+	{
+		return psStruct->pFunctionality->researchFacility.capacity != 0;
+	}
+	return false;
+}
+
 static int structureTotalReturn(STRUCTURE *psStruct)
 {
-	int result = structPowerToBuild(psStruct)/2.0f;
+	int result = structPowerToBuild(psStruct)/2;
 
 	if(psStruct->pStructureType->type == REF_POWER_GEN)
 	{
@@ -1018,7 +1017,7 @@ static int structureTotalReturn(STRUCTURE *psStruct)
 		if (psStruct->pFunctionality->powerGenerator.capacity)
 		{
 			//so add the power required to build the base struct
-			result += psStruct->pStructureType->powerToBuild/2.0f;
+			result += psStruct->pStructureType->powerToBuild/2;
 		}
 	}
 	else
@@ -1031,7 +1030,7 @@ static int structureTotalReturn(STRUCTURE *psStruct)
 				//if large factory - add half power for one upgrade
 				if (psStruct->pFunctionality->factory.capacity > SIZE_MEDIUM)
 				{
-					result += structPowerToBuild(psStruct) / 2.0f;
+					result += structPowerToBuild(psStruct) / 2;
 				}
 			}
 		}
@@ -1040,7 +1039,7 @@ static int structureTotalReturn(STRUCTURE *psStruct)
 			if (psStruct->pFunctionality->researchFacility.capacity)
 			{
 				//add half power for base struct
-				result += psStruct->pStructureType->powerToBuild/2.0f;
+				result += psStruct->pStructureType->powerToBuild/2;
 			}
 		}
 	}
@@ -1121,13 +1120,9 @@ bool structSetManufacture(STRUCTURE *psStruct, DROID_TEMPLATE *psTempl, QUEUE_MO
 		psFact->timeStarted = ACTION_START_TIME;//gameTime;
 		psFact->timeStartHold = 0;
 
-		psFact->timeToBuild = psTempl->buildPoints / psFact->productionOutput;
-		//check for zero build time - usually caused by 'silly' data!
-		if (psFact->timeToBuild == 0)
-		{
-			//set to 1/1000th sec - ie very fast!
-			psFact->timeToBuild = 1;
-		}
+		psFact->buildPointsRemaining = psTempl->buildPoints;
+		//check for zero build time - usually caused by 'silly' data! If so, set to 1 build point - ie very fast!
+		psFact->buildPointsRemaining = std::max(psFact->buildPointsRemaining, 1);
 	}
 	if (psStruct->player == productionPlayer)
 	{
@@ -1850,6 +1845,7 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 			psBuilding->currentBuildPts = 0;
 			//start building again
 			psBuilding->status = SS_BEING_BUILT;
+			psBuilding->builtThisTick = true;  // Don't abandon the structure first tick.
 			if (psBuilding->player == selectedPlayer && !FromSave)
 			{
 				intRefreshScreen();
@@ -3154,6 +3150,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 			//if on hold don't do anything
 			if (psResFacility->timeStartHold)
 			{
+				delPowerRequest(psStructure);
 				return;
 			}
 
@@ -3182,16 +3179,23 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 				}
 
 				ASSERT_OR_RETURN(, gameTime >= psResFacility->timeStarted, "research seems to have started in the future");
-				// formula written this way to prevent rounding error
-				pointsToAdd = (psResFacility->researchPoints * gameTime) / GAME_TICKS_PER_SEC -
-				              (psResFacility->researchPoints * psResFacility->timeStarted) / GAME_TICKS_PER_SEC;
+				pointsToAdd = gameTimeAdjustedAverage(psResFacility->researchPoints);
 				pointsToAdd = MIN(pointsToAdd, pResearch->researchPoints - pPlayerRes->currentPoints);
+
+				psResFacility->timeStarted = gameTime;
+
+				if (pointsToAdd > 0 && pPlayerRes->currentPoints == 0)
+				{
+					bool haveEnoughPower = requestPowerFor(psStructure, pResearch->researchPower);
+					if (!haveEnoughPower)
+					{
+						pointsToAdd = 0;
+					}
+				}
 
 				if (pointsToAdd > 0 && pResearch->researchPoints > 0)  // might be a "free" research
 				{
-					int64_t powerNeeded = (int64_t(pResearch->researchPower * pointsToAdd) << 32) / pResearch->researchPoints;
-					pPlayerRes->currentPoints += requestPrecisePowerFor(psStructure, powerNeeded, pointsToAdd);
-					psResFacility->timeStarted = gameTime;
+					pPlayerRes->currentPoints += pointsToAdd;
 				}
 				syncDebug("Research at %u/%u.", pPlayerRes->currentPoints, pResearch->researchPoints);
 
@@ -3293,23 +3297,23 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 				psFactory->timeStarted = gameTime;
 			}
 
-			if (psFactory->timeToBuild > 0)
+			if (psFactory->buildPointsRemaining > 0)
 			{
-				int progress;
-				int secondsElapsed = (gameTime - psFactory->timeStarted) / GAME_TICKS_PER_SEC;
-				int64_t powerNeeded = ((int64_t)(((DROID_TEMPLATE *)pSubject)->powerPoints*secondsElapsed*psFactory->productionOutput) << 32)/((DROID_TEMPLATE*)pSubject)->buildPoints;
-				if (secondsElapsed > 0)
+				int progress = gameTimeAdjustedAverage(psFactory->productionOutput);
+				if (psFactory->buildPointsRemaining == psFactory->psSubject->buildPoints && progress > 0)
 				{
-					progress = requestPrecisePowerFor(psStructure, powerNeeded, secondsElapsed);
-					psFactory->timeToBuild -= progress;
-					psFactory->timeStarted = psFactory->timeStarted + secondsElapsed*GAME_TICKS_PER_SEC;
+					// We're just starting to build, check for power.
+					bool haveEnoughPower = requestPowerFor(psStructure, psFactory->psSubject->powerPoints);
+					if (!haveEnoughPower)
+					{
+						progress = 0;
+					}
 				}
+				psFactory->buildPointsRemaining -= progress;
 			}
 
 			//check for manufacture to be complete
-			if ((psFactory->timeToBuild <= 0) &&
-				!IsFactoryCommanderGroupFull(psFactory) &&
-				!CheckHaltOnMaxUnitsReached(psStructure))
+			if ((psFactory->buildPointsRemaining <= 0) && !IsFactoryCommanderGroupFull(psFactory) && !CheckHaltOnMaxUnitsReached(psStructure))
 			{
 				if (isMission)
 				{
@@ -3733,6 +3737,12 @@ void structureUpdate(STRUCTURE *psBuilding, bool mission)
 		}
 	}
 
+	if (psBuilding->status == SS_BEING_BUILT && psBuilding->currentBuildPts == 0 && !psBuilding->builtThisTick && !structureHasModules(psBuilding))
+	{
+		removeStruct(psBuilding, true);  // If giving up on building something, remove the structure (and remove it from the power queue).
+	}
+	psBuilding->builtThisTick = false;
+
 	/* Only add smoke if they're visible and they can 'burn' */
 	if (!mission && psBuilding->visible[selectedPlayer] && canSmoke(psBuilding))
 	{
@@ -3864,6 +3874,7 @@ void structureUpdate(STRUCTURE *psBuilding, bool mission)
 STRUCTURE::STRUCTURE(uint32_t id, unsigned player)
 	: BASE_OBJECT(OBJ_STRUCTURE, id, player)
 	, pFunctionality(NULL)
+	, builtThisTick(true)
 	, psCurAnim(NULL)
 {}
 
@@ -5911,10 +5922,10 @@ void printStructureInfo(STRUCTURE *psStructure)
 #ifdef DEBUG
 		if (getDebugMappingStatus())
 		{
-			CONPRINTF(ConsoleString, (ConsoleString, "%s - Damage % 3.2f%% - Unique ID %u - Production Output: %u - TimeToBuild: %u",
+			CONPRINTF(ConsoleString, (ConsoleString, "%s - Damage % 3.2f%% - Unique ID %u - Production Output: %u - BuildPointsRemaining: %u",
 					  getStatName(psStructure->pStructureType), getStructureDamage(psStructure) * (100.f/65536.f), psStructure->id,
 					  psStructure->pFunctionality->factory.productionOutput,
-					  psStructure->pFunctionality->factory.timeToBuild));
+					  psStructure->pFunctionality->factory.buildPointsRemaining));
 		}
 		else
 #endif
@@ -6658,23 +6669,17 @@ void cancelProduction(STRUCTURE *psBuilding, QUEUE_MODE mode)
 	//check its the correct factory
 	if (psFactory->psSubject)
 	{
-		// give the power back that was used until now
-		int secondsToBuild = psFactory->psSubject->buildPoints/psFactory->productionOutput;
-		int secondsElapsed = secondsToBuild - psFactory->timeToBuild;
-		int powerUsed = 0;
-		if (secondsElapsed > secondsToBuild) // can happen if factory's been upgraded since droid was created
+		if (psFactory->buildPointsRemaining < psFactory->psSubject->buildPoints)
 		{
-			secondsElapsed = secondsToBuild;
+			// We started building, so give the power back that was used.
+			addPower(psBuilding->player, psFactory->psSubject->powerPoints);
 		}
-		if (secondsElapsed > 0)
-		{
-			powerUsed = (int)psFactory->psSubject->powerPoints*secondsElapsed / secondsToBuild;
-		}
-		addPower(psBuilding->player, powerUsed);
 
 		//clear the factory's subject
 		psFactory->psSubject = NULL;
 	}
+
+	delPowerRequest(psBuilding);
 }
 
 
@@ -6715,6 +6720,7 @@ void holdProduction(STRUCTURE *psBuilding, QUEUE_MODE mode)
 		}
 	}
 
+	delPowerRequest(psBuilding);
 }
 
 /*release a factory's production run from hold*/

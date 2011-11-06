@@ -45,8 +45,8 @@ extern bool resetPlayerPower(UDWORD player, STRUCTURE *psStruct);
 /** Check the available power. */
 bool checkPower(int player, uint32_t quantity);
 
-int requestPowerFor(STRUCTURE *psStruct, int32_t amount, int points);
-int requestPrecisePowerFor(STRUCTURE *psStruct, int64_t amount, int points);
+bool requestPowerFor(STRUCTURE *psStruct, int32_t amount);
+bool requestPrecisePowerFor(STRUCTURE *psStruct, int64_t amount);
 
 extern void addPower(int player, int32_t quantity);
 

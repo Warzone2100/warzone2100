@@ -1024,7 +1024,7 @@ bool droidStartBuild(DROID *psDroid)
 			cancelBuild(psDroid);
 			return false;
 		}
-		psStruct->body /= 10; // structures start at 10% health
+		psStruct->body = (psStruct->body + 9) / 10;  // Structures start at 10% health. Round up.
 	}
 	else
 	{

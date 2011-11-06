@@ -330,16 +330,16 @@ int64_t getPrecisePower(unsigned player)
 	return asPower[player].currentPower;
 }
 
-int requestPowerFor(STRUCTURE *psStruct, int32_t amount, int points)
+bool requestPowerFor(STRUCTURE *psStruct, int32_t amount)
 {
-	return requestPrecisePowerFor(psStruct, amount*FP_ONE, points);
+	return requestPrecisePowerFor(psStruct, amount*FP_ONE);
 }
 
-int requestPrecisePowerFor(STRUCTURE *psStruct, int64_t amount, int points)
+bool requestPrecisePowerFor(STRUCTURE *psStruct, int64_t amount)
 {
-	if (points == 0 || amount <= 0 || !powerCalculated)
+	if (amount <= 0 || !powerCalculated)
 	{
-		return points;
+		return true;
 	}
 
 	bool haveEnoughPower = addPowerRequest(psStruct->player, psStruct->id, amount);
@@ -349,8 +349,8 @@ int requestPrecisePowerFor(STRUCTURE *psStruct, int64_t amount, int points)
 		asPower[psStruct->player].currentPower -= amount;
 		delPowerRequest(psStruct);
 		syncDebug("requestPrecisePowerFor%d,%u amount%"PRId64"", psStruct->player, psStruct->id, amount);
-		return points;
+		return true;
 	}
 	syncDebug("requestPrecisePowerFor%d,%u wait,amount%"PRId64"", psStruct->player, psStruct->id, amount);
-	return 0; // no power this frame
+	return false;  // Not enough power in the queue.
 }

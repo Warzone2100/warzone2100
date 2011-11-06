@@ -4668,7 +4668,7 @@ static bool loadSaveStructure2(const char *pFileName, STRUCTURE **ppList)
 			psFactory->capacity = 0; // increased when built
 			psFactory->productionLoops = ini.value("Factory/productionLoops", psFactory->productionLoops).toInt();
 			psFactory->timeStarted = ini.value("Factory/timeStarted", psFactory->timeStarted).toInt();
-			psFactory->timeToBuild = ini.value("Factory/timeToBuild", psFactory->timeToBuild).toInt();
+			psFactory->buildPointsRemaining = ini.value("Factory/buildPointsRemaining", psFactory->buildPointsRemaining).toInt();
 			psFactory->timeStartHold = ini.value("Factory/timeStartHold", psFactory->timeStartHold).toInt();
 			psFactory->loopsPerformed = ini.value("Factory/loopsPerformed", psFactory->loopsPerformed).toInt();
 			psFactory->productionOutput = ini.value("Factory/productionOutput", psFactory->productionOutput).toInt();
@@ -4888,7 +4888,7 @@ bool writeStructFile(const char *pFileName)
 					ini.setValue("modules", psFactory->capacity);
 					ini.setValue("Factory/productionLoops", psFactory->productionLoops);
 					ini.setValue("Factory/timeStarted", psFactory->timeStarted);
-					ini.setValue("Factory/timeToBuild", psFactory->timeToBuild);
+					ini.setValue("Factory/buildPointsRemaining", psFactory->buildPointsRemaining);
 					ini.setValue("Factory/timeStartHold", psFactory->timeStartHold);
 					ini.setValue("Factory/loopsPerformed", psFactory->loopsPerformed);
 					ini.setValue("Factory/productionOutput", psFactory->productionOutput);

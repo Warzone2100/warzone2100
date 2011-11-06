@@ -139,7 +139,7 @@ extern void	getTimeComponents(UDWORD time, UDWORD *hours, UDWORD *minutes, UDWOR
 extern float graphicsTimeFraction;  ///< Private performance calculation. Do not use.
 extern float realTimeFraction;  ///< Private performance calculation. Do not use.
 
-/// Returns the value times deltaGameTime, converted to seconds.
+/// Returns the value times deltaGameTime, converted to seconds. The return value is rounded down.
 static inline int32_t gameTimeAdjustedIncrement(int value)
 {
 	return value * (int)deltaGameTime / GAME_TICKS_PER_SEC;
@@ -153,6 +153,19 @@ static inline float graphicsTimeAdjustedIncrement(float value)
 static inline float realTimeAdjustedIncrement(float value)
 {
 	return value * realTimeFraction;
+}
+
+/// Returns numerator/denominator * (newTime - oldTime). Rounds up or down such that the average return value is right, if oldTime is always the previous newTime.
+static inline WZ_DECL_CONST int quantiseFraction(int numerator, int denominator, int newTime, int oldTime)
+{
+	int64_t newValue = (int64_t)newTime * numerator/denominator;
+	int64_t oldValue = (int64_t)oldTime * numerator/denominator;
+	return newValue - oldValue;
+}
+/// Returns the value times deltaGameTime, converted to seconds. The return value is rounded up or down, such that it is exactly right on average.
+static inline int32_t gameTimeAdjustedAverage(int value)
+{
+	return quantiseFraction(value, GAME_TICKS_PER_SEC, gameTime + deltaGameTime, gameTime);
 }
 
 void sendPlayerGameTime(void);                            ///< Sends a GAME_GAME_TIME message with gameTime plus latency to our game queues.

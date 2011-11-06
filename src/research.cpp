@@ -1805,6 +1805,7 @@ void holdResearch(STRUCTURE *psBuilding, QUEUE_MODE mode)
 		}
 	}
 
+	delPowerRequest(psBuilding);
 }
 
 /*release a research facility from hold*/
@@ -1909,6 +1910,8 @@ void cancelResearch(STRUCTURE *psBuilding, QUEUE_MODE mode)
 
 		// Initialise the research facility's subject
 		psResFac->psSubject = NULL;
+
+		delPowerRequest(psBuilding);
 	}
 }
 
