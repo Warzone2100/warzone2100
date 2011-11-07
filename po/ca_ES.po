@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100-master_20110320qt\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-11-05 16:22+0100\n"
+"POT-Creation-Date: 2011-11-07 21:36+0100\n"
 "PO-Revision-Date: 2011-04-03 19:45+0200\n"
 "Last-Translator: Àngel Mompó <mecatxis@gmail.com>\n"
 "Language-Team:   <ca@dodds.net>\n"
@@ -12873,8 +12873,8 @@ msgid "MAP SAVED!"
 msgstr "S'HA DESAT EL MAPA!"
 
 #: src/hci.cpp:1570
-#: src/loop.cpp:554
-#: src/loop.cpp:570
+#: src/loop.cpp:552
+#: src/loop.cpp:568
 msgid "GAME SAVED: "
 msgstr "S'HA DESAT LA PARTIDA: "
 
@@ -13028,7 +13028,7 @@ msgid "Current Player:"
 msgstr "Jugador actual:"
 
 #: src/hci.cpp:3977
-#: src/intdisplay.cpp:275
+#: src/intdisplay.cpp:328
 msgid "Progress Bar"
 msgstr "Barra de progrés"
 
@@ -13102,15 +13102,15 @@ msgstr ""
 "\n"
 "Warzone provarà de carregar la partida sense ell."
 
-#: src/intdisplay.cpp:206
+#: src/intdisplay.cpp:214
 msgid "Build Progress"
 msgstr "Progrés de la fabricació"
 
-#: src/intdisplay.cpp:241
+#: src/intdisplay.cpp:295
 msgid "Construction Progress"
 msgstr "Progres de la construcció"
 
-#: src/intdisplay.cpp:268
+#: src/intdisplay.cpp:320
 msgid "Power Accrued"
 msgstr "Energia acumulada"
 
@@ -14003,8 +14003,8 @@ msgstr "Traça un objecte de la partida"
 msgid "Toggle Driving Mode"
 msgstr "Commuta el mode de conducció"
 
-#: src/loop.cpp:561
-#: src/loop.cpp:577
+#: src/loop.cpp:559
+#: src/loop.cpp:575
 msgid "Could not save game!"
 msgstr "No s'ha pogut desar el joc!"
 
@@ -14730,7 +14730,7 @@ msgstr "S'ha completat la recerca: %s"
 msgid "Research Completed"
 msgstr "S'ha completat la recerca"
 
-#: src/research.cpp:2462
+#: src/research.cpp:2465
 msgid "Research Award"
 msgstr "Premi de recerca"
 
@@ -14886,62 +14886,62 @@ msgstr "No es pot trobar cap unitat de sensor!"
 msgid "Unable to locate any Commanders!"
 msgstr "No es pot trobar cap comandant!"
 
-#: src/structure.cpp:2632
+#: src/structure.cpp:2628
 msgid "Command Control Limit Reached - Production Halted"
 msgstr "S'ha arribat al límit de control del comandament - S'atura la producció"
 
-#: src/structure.cpp:5822
-#: src/structure.cpp:5847
+#: src/structure.cpp:5837
+#: src/structure.cpp:5862
 #, fuzzy, c-format
 msgid "%s - %u Unit assigned - Damage %3.0f%%"
 msgid_plural "%s - %u Units assigned - Damage %3.0f%%"
 msgstr[0] "%s - %u unitats assignada"
 msgstr[1] "%s - %u unitats assignades"
 
-#: src/structure.cpp:5852
-#: src/structure.cpp:5920
+#: src/structure.cpp:5867
 #: src/structure.cpp:5935
-#: src/structure.cpp:5949
+#: src/structure.cpp:5950
+#: src/structure.cpp:5964
 #, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - Desperfectes %3.0f%%"
 
-#: src/structure.cpp:5902
+#: src/structure.cpp:5917
 #, fuzzy, c-format
 msgid "%s - Connected %u of %u - Damage %3.0f%%"
 msgstr "%s - connectat a %u de %u"
 
-#: src/structure.cpp:6065
-#: src/structure.cpp:6110
+#: src/structure.cpp:6080
+#: src/structure.cpp:6125
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Danyat electrònicament"
 
-#: src/structure.cpp:6347
+#: src/structure.cpp:6362
 msgid "Electronic Reward - Visibility Report"
 msgstr "Recompensa electrònica - Informe de visibilitat"
 
-#: src/structure.cpp:6387
+#: src/structure.cpp:6402
 msgid "Factory Reward - Propulsion"
 msgstr "Recompensa de fabricació - Propulsió"
 
-#: src/structure.cpp:6411
+#: src/structure.cpp:6426
 msgid "Factory Reward - Body"
 msgstr "Recompensa de fabricació - Cos"
 
-#: src/structure.cpp:6435
+#: src/structure.cpp:6450
 msgid "Factory Reward - Weapon"
 msgstr "Recompensa de fabricació - Arma"
 
-#: src/structure.cpp:6444
+#: src/structure.cpp:6459
 msgid "Factory Reward - Nothing"
 msgstr "Recompensa de fabricació - Res"
 
-#: src/structure.cpp:6472
+#: src/structure.cpp:6487
 msgid "Repair Facility Award - Repair"
 msgstr "Recompensa de reparació - Reparació"
 
-#: src/structure.cpp:6479
+#: src/structure.cpp:6494
 msgid "Repair Facility Award - Nothing"
 msgstr "Recompensa de reparació - Res"
 

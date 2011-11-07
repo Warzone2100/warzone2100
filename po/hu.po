@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Warzone 2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-11-05 16:22+0100\n"
+"POT-Creation-Date: 2011-11-07 21:36+0100\n"
 "PO-Revision-Date: 2011-06-22 22:41+0100\n"
 "Last-Translator: Molnár Gábor <b1afy7@gmail.com>\n"
 "Language-Team: Magyar (Hungary) <meszaros.tomi@hotmail.com>\n"
@@ -12894,8 +12894,8 @@ msgid "MAP SAVED!"
 msgstr "JÁTÉK MENTVE!"
 
 #: src/hci.cpp:1570
-#: src/loop.cpp:554
-#: src/loop.cpp:570
+#: src/loop.cpp:552
+#: src/loop.cpp:568
 #, fuzzy
 msgid "GAME SAVED: "
 msgstr "JÁTÉK MENTVE"
@@ -13050,7 +13050,7 @@ msgid "Current Player:"
 msgstr "Jelenlegi játék:"
 
 #: src/hci.cpp:3977
-#: src/intdisplay.cpp:275
+#: src/intdisplay.cpp:328
 msgid "Progress Bar"
 msgstr ""
 
@@ -13125,17 +13125,17 @@ msgstr ""
 "\n"
 "Warzone megpróbálja betölteni a játékot nélküle."
 
-#: src/intdisplay.cpp:206
+#: src/intdisplay.cpp:214
 #, fuzzy
 msgid "Build Progress"
 msgstr "Építési pontok"
 
-#: src/intdisplay.cpp:241
+#: src/intdisplay.cpp:295
 #, fuzzy
 msgid "Construction Progress"
 msgstr "Építő egység"
 
-#: src/intdisplay.cpp:268
+#: src/intdisplay.cpp:320
 msgid "Power Accrued"
 msgstr "Energia felhalmozva"
 
@@ -14029,8 +14029,8 @@ msgstr "Játékcél felkutatása"
 msgid "Toggle Driving Mode"
 msgstr "Egységkövető kamera"
 
-#: src/loop.cpp:561
-#: src/loop.cpp:577
+#: src/loop.cpp:559
+#: src/loop.cpp:575
 msgid "Could not save game!"
 msgstr "Nem lehet menteni a játékot!"
 
@@ -14770,7 +14770,7 @@ msgstr "Kutatás befejezett: %s"
 msgid "Research Completed"
 msgstr "Kutatás befejezett"
 
-#: src/research.cpp:2462
+#: src/research.cpp:2465
 msgid "Research Award"
 msgstr "Kutatós díj"
 
@@ -14926,63 +14926,63 @@ msgstr "Képtelen lokalizálni bármely érzékelős egységet!"
 msgid "Unable to locate any Commanders!"
 msgstr "Képtelen lokalizálni bármely parancsnokot!"
 
-#: src/structure.cpp:2632
+#: src/structure.cpp:2628
 #, fuzzy
 msgid "Command Control Limit Reached - Production Halted"
 msgstr "Szabályozási értéket elérték - Termelés megállt"
 
-#: src/structure.cpp:5822
-#: src/structure.cpp:5847
+#: src/structure.cpp:5837
+#: src/structure.cpp:5862
 #, fuzzy, c-format
 msgid "%s - %u Unit assigned - Damage %3.0f%%"
 msgid_plural "%s - %u Units assigned - Damage %3.0f%%"
 msgstr[0] "%s - %u Unit assigned"
 msgstr[1] "%s - %u Units assigned"
 
-#: src/structure.cpp:5852
-#: src/structure.cpp:5920
+#: src/structure.cpp:5867
 #: src/structure.cpp:5935
-#: src/structure.cpp:5949
+#: src/structure.cpp:5950
+#: src/structure.cpp:5964
 #, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - Kár %3.0f%%"
 
-#: src/structure.cpp:5902
+#: src/structure.cpp:5917
 #, fuzzy, c-format
 msgid "%s - Connected %u of %u - Damage %3.0f%%"
 msgstr "%s - Kapcsolódott %u of %u"
 
-#: src/structure.cpp:6065
-#: src/structure.cpp:6110
+#: src/structure.cpp:6080
+#: src/structure.cpp:6125
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Elektronikusan sérült"
 
-#: src/structure.cpp:6347
+#: src/structure.cpp:6362
 msgid "Electronic Reward - Visibility Report"
 msgstr "Elektronikus jutalom - Felderítési jelentés"
 
-#: src/structure.cpp:6387
+#: src/structure.cpp:6402
 msgid "Factory Reward - Propulsion"
 msgstr "Gyári jutalom - hajtómű"
 
-#: src/structure.cpp:6411
+#: src/structure.cpp:6426
 msgid "Factory Reward - Body"
 msgstr "Gyári jutalom - karosszéria"
 
-#: src/structure.cpp:6435
+#: src/structure.cpp:6450
 msgid "Factory Reward - Weapon"
 msgstr "Gyári jutalom - fegyver"
 
-#: src/structure.cpp:6444
+#: src/structure.cpp:6459
 msgid "Factory Reward - Nothing"
 msgstr "Gyári jutalom - nincs"
 
-#: src/structure.cpp:6472
+#: src/structure.cpp:6487
 msgid "Repair Facility Award - Repair"
 msgstr "Szervizüzem jutalom - javítás"
 
-#: src/structure.cpp:6479
+#: src/structure.cpp:6494
 msgid "Repair Facility Award - Nothing"
 msgstr "Szervizüzem jutalom - nincs"
 

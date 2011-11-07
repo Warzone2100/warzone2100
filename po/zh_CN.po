@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-11-05 16:22+0100\n"
+"POT-Creation-Date: 2011-11-07 21:36+0100\n"
 "PO-Revision-Date: 2011-08-28 11:34+0800\n"
 "Last-Translator: Tunghsu\n"
 "Language-Team: Chinese Simplified <kde-i18n-doc@kde.org>\n"
@@ -13102,8 +13102,8 @@ msgid "MAP SAVED!"
 msgstr "游戏已储存"
 
 #: src/hci.cpp:1570
-#: src/loop.cpp:554
-#: src/loop.cpp:570
+#: src/loop.cpp:552
+#: src/loop.cpp:568
 #, fuzzy
 msgid "GAME SAVED: "
 msgstr "游戏已储存"
@@ -13264,7 +13264,7 @@ msgid "Current Player:"
 msgstr "多人游戏"
 
 #: src/hci.cpp:3977
-#: src/intdisplay.cpp:275
+#: src/intdisplay.cpp:328
 msgid "Progress Bar"
 msgstr "进度条"
 
@@ -13337,17 +13337,17 @@ msgid ""
 "Warzone will try to load the game without it."
 msgstr ""
 
-#: src/intdisplay.cpp:206
+#: src/intdisplay.cpp:214
 #, fuzzy
 msgid "Build Progress"
 msgstr "建筑物HP（Build Points）"
 
-#: src/intdisplay.cpp:241
+#: src/intdisplay.cpp:295
 #, fuzzy
 msgid "Construction Progress"
 msgstr "建筑单位"
 
-#: src/intdisplay.cpp:268
+#: src/intdisplay.cpp:320
 msgid "Power Accrued"
 msgstr "能量增加"
 
@@ -14272,8 +14272,8 @@ msgstr "跟踪一个游戏中的物体"
 msgid "Toggle Driving Mode"
 msgstr "开启或关闭追踪视角"
 
-#: src/loop.cpp:561
-#: src/loop.cpp:577
+#: src/loop.cpp:559
+#: src/loop.cpp:575
 #, fuzzy
 msgid "Could not save game!"
 msgstr "载入已储存的游戏"
@@ -15035,7 +15035,7 @@ msgstr "已研发完成： %s"
 msgid "Research Completed"
 msgstr "已研发完成"
 
-#: src/research.cpp:2462
+#: src/research.cpp:2465
 msgid "Research Award"
 msgstr "研发中心奖励"
 
@@ -15190,62 +15190,62 @@ msgstr "找不到任何雷达单位！"
 msgid "Unable to locate any Commanders!"
 msgstr "找不到任何指挥官车！"
 
-#: src/structure.cpp:2632
+#: src/structure.cpp:2628
 #, fuzzy
 msgid "Command Control Limit Reached - Production Halted"
 msgstr "已达到可控制单位总数上限，停止生产新单位"
 
-#: src/structure.cpp:5822
-#: src/structure.cpp:5847
+#: src/structure.cpp:5837
+#: src/structure.cpp:5862
 #, fuzzy, c-format
 msgid "%s - %u Unit assigned - Damage %3.0f%%"
 msgid_plural "%s - %u Units assigned - Damage %3.0f%%"
 msgstr[0] "%s - 已指派 %u 单位"
 
-#: src/structure.cpp:5852
-#: src/structure.cpp:5920
+#: src/structure.cpp:5867
 #: src/structure.cpp:5935
-#: src/structure.cpp:5949
+#: src/structure.cpp:5950
+#: src/structure.cpp:5964
 #, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - 损伤 %3.0f%%"
 
-#: src/structure.cpp:5902
+#: src/structure.cpp:5917
 #, fuzzy, c-format
 msgid "%s - Connected %u of %u - Damage %3.0f%%"
 msgstr "%s - 连接钻油井数量 %u of %u"
 
-#: src/structure.cpp:6065
-#: src/structure.cpp:6110
+#: src/structure.cpp:6080
+#: src/structure.cpp:6125
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s -电子伤害"
 
-#: src/structure.cpp:6347
+#: src/structure.cpp:6362
 msgid "Electronic Reward - Visibility Report"
 msgstr "电子回馈—可检视报告"
 
-#: src/structure.cpp:6387
+#: src/structure.cpp:6402
 msgid "Factory Reward - Propulsion"
 msgstr "工厂奖励—推进动力"
 
-#: src/structure.cpp:6411
+#: src/structure.cpp:6426
 msgid "Factory Reward - Body"
 msgstr "工厂奖励—车身"
 
-#: src/structure.cpp:6435
+#: src/structure.cpp:6450
 msgid "Factory Reward - Weapon"
 msgstr "工厂奖励—武器"
 
-#: src/structure.cpp:6444
+#: src/structure.cpp:6459
 msgid "Factory Reward - Nothing"
 msgstr "工厂奖励—无"
 
-#: src/structure.cpp:6472
+#: src/structure.cpp:6487
 msgid "Repair Facility Award - Repair"
 msgstr "修理中心奖励—修理"
 
-#: src/structure.cpp:6479
+#: src/structure.cpp:6494
 msgid "Repair Facility Award - Nothing"
 msgstr "修理工厂回馈—无"
 

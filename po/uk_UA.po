@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Warzone 2100 version 2.2.3\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-11-05 16:22+0100\n"
+"POT-Creation-Date: 2011-11-07 21:36+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Меденцій Олександр <olexandr1986@i.ua>\n"
 "Language-Team: \n"
@@ -12916,8 +12916,8 @@ msgid "MAP SAVED!"
 msgstr "МАПУ ЗБЕРЕЖЕНО!"
 
 #: src/hci.cpp:1570
-#: src/loop.cpp:554
-#: src/loop.cpp:570
+#: src/loop.cpp:552
+#: src/loop.cpp:568
 msgid "GAME SAVED: "
 msgstr "ГРУ ЗБЕРЕЖЕНО:"
 
@@ -13077,7 +13077,7 @@ msgid "Current Player:"
 msgstr "Кілька Гравців"
 
 #: src/hci.cpp:3977
-#: src/intdisplay.cpp:275
+#: src/intdisplay.cpp:328
 msgid "Progress Bar"
 msgstr "Індикатор Прогресу"
 
@@ -13154,17 +13154,17 @@ msgstr ""
 "\n"
 "Warzone спробує запустити гру без нього."
 
-#: src/intdisplay.cpp:206
+#: src/intdisplay.cpp:214
 #, fuzzy
 msgid "Build Progress"
 msgstr "Ефективність Інженерного Обладнання"
 
-#: src/intdisplay.cpp:241
+#: src/intdisplay.cpp:295
 #, fuzzy
 msgid "Construction Progress"
 msgstr "Помилка З’єднання"
 
-#: src/intdisplay.cpp:268
+#: src/intdisplay.cpp:320
 msgid "Power Accrued"
 msgstr "Накопичена Енергія"
 
@@ -14076,8 +14076,8 @@ msgstr ""
 msgid "Toggle Driving Mode"
 msgstr "Задіяти Відслідковувальну Камеру"
 
-#: src/loop.cpp:561
-#: src/loop.cpp:577
+#: src/loop.cpp:559
+#: src/loop.cpp:575
 msgid "Could not save game!"
 msgstr "Не вдалося зберегти гру!"
 
@@ -14823,7 +14823,7 @@ msgstr "Дослідження Завершено: %s"
 msgid "Research Completed"
 msgstr "Дослідження Завершено"
 
-#: src/research.cpp:2462
+#: src/research.cpp:2465
 msgid "Research Award"
 msgstr "Винагорода Досліджень"
 
@@ -14979,63 +14979,63 @@ msgstr "Не можу знайти жодного Сенсорного Підр�
 msgid "Unable to locate any Commanders!"
 msgstr "Не можу знайти  жодного Командира!"
 
-#: src/structure.cpp:2632
+#: src/structure.cpp:2628
 #, fuzzy
 msgid "Command Control Limit Reached - Production Halted"
 msgstr "Досягнуто Межі Контролю - Виробництво Призупинене"
 
-#: src/structure.cpp:5822
-#: src/structure.cpp:5847
+#: src/structure.cpp:5837
+#: src/structure.cpp:5862
 #, fuzzy, c-format
 msgid "%s - %u Unit assigned - Damage %3.0f%%"
 msgid_plural "%s - %u Units assigned - Damage %3.0f%%"
 msgstr[0] "%s - %u Підрозділ закріплено"
 msgstr[1] "%s - %u Підрозділи закріплено"
 
-#: src/structure.cpp:5852
-#: src/structure.cpp:5920
+#: src/structure.cpp:5867
 #: src/structure.cpp:5935
-#: src/structure.cpp:5949
+#: src/structure.cpp:5950
+#: src/structure.cpp:5964
 #, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - Пошкоджено %3.0f%%"
 
-#: src/structure.cpp:5902
+#: src/structure.cpp:5917
 #, fuzzy, c-format
 msgid "%s - Connected %u of %u - Damage %3.0f%%"
 msgstr "%s - Під'єднано %u з %u"
 
-#: src/structure.cpp:6065
-#: src/structure.cpp:6110
+#: src/structure.cpp:6080
+#: src/structure.cpp:6125
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Електронних Ушкоджень"
 
-#: src/structure.cpp:6347
+#: src/structure.cpp:6362
 msgid "Electronic Reward - Visibility Report"
 msgstr "Електронна Винагорода - Звіт про Зону Видимості"
 
-#: src/structure.cpp:6387
+#: src/structure.cpp:6402
 msgid "Factory Reward - Propulsion"
 msgstr "Винагорода Фабрики - Ходова"
 
-#: src/structure.cpp:6411
+#: src/structure.cpp:6426
 msgid "Factory Reward - Body"
 msgstr "Винагорода Фабрики - Корпус"
 
-#: src/structure.cpp:6435
+#: src/structure.cpp:6450
 msgid "Factory Reward - Weapon"
 msgstr "Винагорода Фабрики - Озброєння"
 
-#: src/structure.cpp:6444
+#: src/structure.cpp:6459
 msgid "Factory Reward - Nothing"
 msgstr "Винагорода Фабрики - Нічого"
 
-#: src/structure.cpp:6472
+#: src/structure.cpp:6487
 msgid "Repair Facility Award - Repair"
 msgstr "Винагорода Ремонтної Майстерні - Ремонт"
 
-#: src/structure.cpp:6479
+#: src/structure.cpp:6494
 msgid "Repair Facility Award - Nothing"
 msgstr "Винагорода Ремонтної Майстерні - Нічого"
 

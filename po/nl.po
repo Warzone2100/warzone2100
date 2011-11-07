@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-11-05 16:22+0100\n"
+"POT-Creation-Date: 2011-11-07 21:36+0100\n"
 "PO-Revision-Date: 2011-10-09 18:24+0100\n"
 "Last-Translator: Chris <chris205@hotmail.com>\n"
 "Language-Team: Dutch <vertaling@vrijschrift.org>\n"
@@ -12874,8 +12874,8 @@ msgid "MAP SAVED!"
 msgstr "MAP OPGESLAGEN!"
 
 #: src/hci.cpp:1570
-#: src/loop.cpp:554
-#: src/loop.cpp:570
+#: src/loop.cpp:552
+#: src/loop.cpp:568
 #, fuzzy
 msgid "GAME SAVED: "
 msgstr "SPEL OPGESLAGEN :"
@@ -13030,7 +13030,7 @@ msgid "Current Player:"
 msgstr "Huidige Speler:"
 
 #: src/hci.cpp:3977
-#: src/intdisplay.cpp:275
+#: src/intdisplay.cpp:328
 msgid "Progress Bar"
 msgstr "Voortgangsbalk"
 
@@ -13104,17 +13104,17 @@ msgstr ""
 "\n"
 "Warzone zal proberen het spel zonder de mod te laden."
 
-#: src/intdisplay.cpp:206
+#: src/intdisplay.cpp:214
 #, fuzzy
 msgid "Build Progress"
 msgstr "Bouw-punten"
 
-#: src/intdisplay.cpp:241
+#: src/intdisplay.cpp:295
 #, fuzzy
 msgid "Construction Progress"
 msgstr "Constructie Eenheid"
 
-#: src/intdisplay.cpp:268
+#: src/intdisplay.cpp:320
 msgid "Power Accrued"
 msgstr "Energie toegenomen"
 
@@ -14007,8 +14007,8 @@ msgstr "Traceert een spel object"
 msgid "Toggle Driving Mode"
 msgstr "Schakel Rijdende Modus"
 
-#: src/loop.cpp:561
-#: src/loop.cpp:577
+#: src/loop.cpp:559
+#: src/loop.cpp:575
 msgid "Could not save game!"
 msgstr "Kon het spel NIET opslaan!"
 
@@ -14752,7 +14752,7 @@ msgstr "Onderzoek voltooid: %s"
 msgid "Research Completed"
 msgstr "Onderzoek voltooid"
 
-#: src/research.cpp:2462
+#: src/research.cpp:2465
 msgid "Research Award"
 msgstr "Onderzoeksonderscheiding"
 
@@ -14908,63 +14908,63 @@ msgstr "Kon geen sensoreenheden vinden!"
 msgid "Unable to locate any Commanders!"
 msgstr "Kon geen commandanten vinden!"
 
-#: src/structure.cpp:2632
+#: src/structure.cpp:2628
 #, fuzzy
 msgid "Command Control Limit Reached - Production Halted"
 msgstr "Commando controlelimiet bereikt - Productie gestopt"
 
-#: src/structure.cpp:5822
-#: src/structure.cpp:5847
+#: src/structure.cpp:5837
+#: src/structure.cpp:5862
 #, c-format
 msgid "%s - %u Unit assigned - Damage %3.0f%%"
 msgid_plural "%s - %u Units assigned - Damage %3.0f%%"
 msgstr[0] "%s - %u Eenheid toegewezen - Schade %3.0f%%"
 msgstr[1] "%s - %u Eenheden toegewezen - Schade %3.0f%%"
 
-#: src/structure.cpp:5852
-#: src/structure.cpp:5920
+#: src/structure.cpp:5867
 #: src/structure.cpp:5935
-#: src/structure.cpp:5949
+#: src/structure.cpp:5950
+#: src/structure.cpp:5964
 #, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - Schade %3.0f%%"
 
-#: src/structure.cpp:5902
+#: src/structure.cpp:5917
 #, c-format
 msgid "%s - Connected %u of %u - Damage %3.0f%%"
 msgstr "%s - Verbonden met %u van %u - Schade %3.0f%%"
 
-#: src/structure.cpp:6065
-#: src/structure.cpp:6110
+#: src/structure.cpp:6080
+#: src/structure.cpp:6125
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Elektronisch beschadigd"
 
-#: src/structure.cpp:6347
+#: src/structure.cpp:6362
 msgid "Electronic Reward - Visibility Report"
 msgstr "Elektronische onderscheiding - Zichtbaarheidsverslag"
 
-#: src/structure.cpp:6387
+#: src/structure.cpp:6402
 msgid "Factory Reward - Propulsion"
 msgstr "Fabrieksonderscheiding - Aandrijving"
 
-#: src/structure.cpp:6411
+#: src/structure.cpp:6426
 msgid "Factory Reward - Body"
 msgstr "Fabrieksonderscheiding - Carrosserie"
 
-#: src/structure.cpp:6435
+#: src/structure.cpp:6450
 msgid "Factory Reward - Weapon"
 msgstr "Fabrieksonderscheiding - Wapen"
 
-#: src/structure.cpp:6444
+#: src/structure.cpp:6459
 msgid "Factory Reward - Nothing"
 msgstr "Fabrieksonderscheiding - Niets"
 
-#: src/structure.cpp:6472
+#: src/structure.cpp:6487
 msgid "Repair Facility Award - Repair"
 msgstr "Reparatie-onderscheiding - Reparatie"
 
-#: src/structure.cpp:6479
+#: src/structure.cpp:6494
 msgid "Repair Facility Award - Nothing"
 msgstr "Reparatie-onderscheiding - Niets"
 
