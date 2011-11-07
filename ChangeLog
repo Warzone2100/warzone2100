@@ -1,3 +1,15 @@
+master_20111107
+ * General:
+   * Change: Power is now deducted fully at the start of production (commit:43ce2e586e15d482831ed4f9a2532b41bb599867, commit:b780ec8d25211e01659a9a7be9bbe300701d1903)
+ * UI:
+   * Change: Show ETA on production and research progress bars (commit:f4dba73b0c45711420bcd8816f1b5c2a1735f9ad)
+   * Change: Show power needed to start production (commit:a63604fd15f97dcf56be27e762bc00be73b899d8)
+   * Change: Show ETA for construction (commit:3f22dbc11132158909bb8e30a0ea41ff88b34e2a)
+   * Fix: Prevent random mouse clicks e.g. when saving/loading a game (ticket:2887, commit:588978ae40c969d5e6b9cbe701b8f6f452cee76b)
+ * Translations:
+   * Update: Spanish (ticket:2916, commit:cdd76ef511ff8cb0d1417c05b3f4590278a2f4b8)
+   * Update: Italian (ticket:2932, ticket:2935, commit:8ec5831657fb323e961b7471fb22616ccb11f7df, commit:d3ee6bfca8ac009671b6803964b957d003d8be73)
+
 master_20111026
  * General:
    * Change: Show planned structure blueprints to allies (commit:86c945152515478c9982677bd1e482fbc6ff2362)
