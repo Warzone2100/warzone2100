@@ -1,9 +1,3 @@
-%.tab.hpp %.tab.cpp:: %.y
-	$(YACC) $(YFLAGS) $(AM_YFLAGS) -o$@ $<
-
-%.lex.hpp %.lex.cpp:: %.l
-	$(LEX) $(LFLAGS) $(AM_LFLAGS) -o$@ $<
-
 AM_CPPFLAGS = -DYY_NO_INPUT $(PHYSFS_CFLAGS) $(PNG_CFLAGS) $(OGGVORBIS_CFLAGS) $(OPENAL_CFLAGS) $(OPENGLC_CFLAGS) $(OPENGL_CFLAGS) $(WZ_CPPFLAGS) $(GLEW_CFLAGS)
 AM_CFLAGS = $(WZ_CFLAGS)
 AM_CXXFLAGS = $(WZ_CXXFLAGS) $(QT4_CFLAGS)
@@ -17,23 +11,13 @@ autorevision.h: $(warzone2100_SOURCES) $(warzone2100_LIBS)
 
 BUILT_SOURCES = \
 	autorevision.h \
-	level_lexer.lex.cpp \
-	message_lexer.lex.cpp \
-	message_parser.tab.cpp \
-	message_parser.tab.hpp \
-	scriptvals_lexer.lex.cpp \
-	scriptvals_parser.tab.cpp \
-	scriptvals_parser.tab.hpp
+	message_parser.h \
+	scriptvals_parser.h
 
 CLEANFILES = $(BUILT_SOURCES)
 
 EXTRA_DIST = \
-	autorevision.h \
-	message_lexer.l \
-	message_parser.y \
-	scriptvals_lexer.l \
-	scriptvals_parser.y \
-	level_lexer.l
+	autorevision.h
 
 bin_PROGRAMS = warzone2100
 noinst_HEADERS = \
@@ -106,7 +90,6 @@ noinst_HEADERS = \
 	messagedef.h \
 	message.h \
 	messagely.h \
-	message_parser.tab.hpp \
 	miscimd.h \
 	missiondef.h \
 	mission.h \
@@ -148,7 +131,6 @@ noinst_HEADERS = \
 	scriptobj.h \
 	scripttabs.h \
 	scriptvals.h \
-	scriptvals_parser.tab.hpp \
 	selection.h \
 	seqdisp.h \
 	statsdef.h \
@@ -215,7 +197,7 @@ warzone2100_SOURCES = \
 	keybind.cpp \
 	keyedit.cpp \
 	keymap.cpp \
-	level_lexer.lex.cpp \
+	level_lexer.lpp \
 	levels.cpp \
 	lighting.cpp \
 	loadsave.cpp \
@@ -226,8 +208,8 @@ warzone2100_SOURCES = \
 	mapgrid.cpp \
 	mechanics.cpp \
 	message.cpp \
-	message_lexer.lex.cpp \
-	message_parser.tab.cpp \
+	message_lexer.lpp \
+	message_parser.ypp \
 	miscimd.cpp \
 	mission.cpp \
 	move.cpp \
@@ -264,8 +246,8 @@ warzone2100_SOURCES = \
 	scriptobj.cpp \
 	scripttabs.cpp \
 	scriptvals.cpp \
-	scriptvals_lexer.lex.cpp \
-	scriptvals_parser.tab.cpp \
+	scriptvals_lexer.lpp \
+	scriptvals_parser.ypp \
 	selection.cpp \
 	seqdisp.cpp \
 	stats.cpp \
@@ -301,3 +283,4 @@ warzone2100_LDADD = $(warzone2100_LIBS) $(LTLIBINTL) $(PHYSFS_LIBS) $(PNG_LIBS) 
 if MINGW32
 warzone2100_LDADD += $(top_builddir)/win32/warzone2100.o $(WIN32_LIBS)
 endif
+

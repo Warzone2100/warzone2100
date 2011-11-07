@@ -35,6 +35,9 @@ AC_PROG_VERSION_CHECK([bison], [1.31])
 
 AC_PROG_LEX
 AC_PROG_VERSION_CHECK([${LEX}], [2.5.33], [2.5.34])
+# Hack to make sure flex produces files with names ylwrap expects.
+FLEX_FLAGS="-o lex.yy.c"
+AC_SUBST([FLEX_FLAGS])
 
 AX_WITH_PROG([PERL], [perl])
 AX_PROG_PERL_VERSION([5.10], [], [ PERL="" ])

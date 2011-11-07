@@ -1,9 +1,3 @@
-%.tab.hpp %.tab.cpp:: %.y
-	$(YACC) $(YFLAGS) $(AM_YFLAGS) -o$@ $<
-
-%.lex.cpp:: %.l
-	$(LEX) $(LFLAGS) $(AM_LFLAGS) -o$@ $<
-
 AM_CPPFLAGS = -DYY_NO_INPUT $(WZ_CPPFLAGS) $(QT4_CFLAGS)
 AM_CFLAGS = $(WZ_CFLAGS)
 AM_CXXFLAGS = $(WZ_CXXFLAGS) $(QT4_CFLAGS)
@@ -17,33 +11,19 @@ MOCEDFILES = $(MOCHEADER:%.h=%_moc.cpp)
 	$(MOC4) -o $@ $<
 
 BUILT_SOURCES = \
-	resource_lexer.lex.cpp \
-	resource_parser.tab.cpp \
-	resource_parser.tab.hpp \
-	strres_lexer.lex.cpp \
-	strres_parser.tab.cpp \
-	strres_parser.tab.hpp
+	resource_parser.h \
+	strres_parser.h
 
 CLEANFILES = \
-	$(MOCEDFILES) \
-	resource_lexer.lex.cpp \
-	resource_parser.tab.cpp \
-	resource_parser.tab.hpp \
-	strres_lexer.lex.cpp \
-	strres_parser.tab.cpp \
-	strres_parser.tab.hpp
+	$(MOCEDFILES)
 
 EXTRA_DIST = \
-	resource_lexer.l resource_parser.y \
-	strres_lexer.l strres_parser.y \
 	cocoa_wrapper.h cocoa_wrapper.mm
 
 noinst_LIBRARIES = libframework.a
 noinst_HEADERS = \
 	$(MOCHEADER) \
 	wzapp_c.h \
-	strres_parser.tab.hpp \
-	resource_parser.tab.hpp \
 	crc.h \
 	cursors.h \
 	debug.h \
@@ -83,10 +63,10 @@ nodist_libframework_a_SOURCES = \
 
 libframework_a_SOURCES = \
 	wzapp.cpp \
-	resource_lexer.lex.cpp \
-	resource_parser.tab.cpp \
-	strres_lexer.lex.cpp \
-	strres_parser.tab.cpp \
+	resource_lexer.lpp \
+	resource_parser.ypp \
+	strres_lexer.lpp \
+	strres_parser.ypp \
 	crc.cpp \
 	debug.cpp \
 	frame.cpp \
@@ -99,3 +79,4 @@ libframework_a_SOURCES = \
 	treap.cpp \
 	trig.cpp \
 	utf.cpp
+
