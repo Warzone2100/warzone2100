@@ -227,7 +227,12 @@ void intUpdateProgressBar(WIDGET *psWidget, W_CONTEXT *psContext)
 					}
 					else
 					{
-						BarGraph->text.clear();  // TODO Hard to estimate time remaining, since number of trucks can vary.
+						BarGraph->text.clear();
+						if (Structure->lastBuildRate > 0)
+						{
+							int timeToBuild = (Structure->pStructureType->buildPoints - Structure->currentBuildPts) / Structure->lastBuildRate;
+							BarGraph->text = formatTime(timeToBuild);
+						}
 					}
 
 					if (BuildPoints > Range)

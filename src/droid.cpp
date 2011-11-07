@@ -1137,7 +1137,7 @@ bool droidUpdateBuild(DROID *psDroid)
 	pointsToAdd = constructPoints * (gameTime - psDroid->actionStarted) /
 		GAME_TICKS_PER_SEC;
 
-	structureBuild(psStruct, psDroid, pointsToAdd - psDroid->actionPoints);
+	structureBuild(psStruct, psDroid, pointsToAdd - psDroid->actionPoints, constructPoints);
 
 	//store the amount just added
 	psDroid->actionPoints = pointsToAdd;

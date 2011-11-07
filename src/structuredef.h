@@ -253,7 +253,8 @@ struct STRUCTURE : public BASE_OBJECT
 	SWORD               resistance;                 /* current resistance points, 0 = cannot be attacked electrically */
 	UDWORD              lastResistance;             /* time the resistance was last increased*/
 	FUNCTIONALITY       *pFunctionality;            /* pointer to structure that contains fields necessary for functionality */
-	bool                builtThisTick;              ///< True iff someone tried building the structure this tick. If construction hasn't started, remove the structure.
+	int                 buildRate;                  ///< Rate that this structure is being built, calculated each tick. Only meaningful if status == SS_BEING_BUILT. If construction hasn't started and build rate is 0, remove the structure.
+	int                 lastBuildRate;              ///< Needed if wanting the buildRate between buildRate being reset to 0 each tick and the trucks calculating it.
 
 	/* The weapons on the structure */
 	UWORD		numWeaps;

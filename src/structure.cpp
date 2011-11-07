@@ -866,7 +866,7 @@ int32_t getStructureDamage(const STRUCTURE *psStructure)
 
 /// Add buildPoints to the structures currentBuildPts, due to construction work by the droid
 /// Also can deconstruct (demolish) a building if passed negative buildpoints
-void structureBuild(STRUCTURE *psStruct, DROID *psDroid, int buildPoints)
+void structureBuild(STRUCTURE *psStruct, DROID *psDroid, int buildPoints, int buildRate)
 {
 	if (psDroid && !aiCheckAlliances(psStruct->player,psDroid->player))
 	{
@@ -888,7 +888,7 @@ void structureBuild(STRUCTURE *psStruct, DROID *psDroid, int buildPoints)
 			}
 		}
 	}
-	psStruct->builtThisTick = true;
+	psStruct->buildRate += buildRate;  // buildRate = buildPoints/GAME_UPDATES_PER_SEC, but might be rounded up or down each tick, so can't use buildPoints to get a stable number.
 	if (psStruct->currentBuildPts <= 0 && buildPoints > 0)
 	{
 		// Just starting to build structure, need power for it.
@@ -1845,7 +1845,7 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 			psBuilding->currentBuildPts = 0;
 			//start building again
 			psBuilding->status = SS_BEING_BUILT;
-			psBuilding->builtThisTick = true;  // Don't abandon the structure first tick.
+			psBuilding->buildRate = 1;  // Don't abandon the structure first tick, so set to nonzero.
 			if (psBuilding->player == selectedPlayer && !FromSave)
 			{
 				intRefreshScreen();
@@ -3737,11 +3737,12 @@ void structureUpdate(STRUCTURE *psBuilding, bool mission)
 		}
 	}
 
-	if (psBuilding->status == SS_BEING_BUILT && psBuilding->currentBuildPts == 0 && !psBuilding->builtThisTick && !structureHasModules(psBuilding))
+	if (psBuilding->status == SS_BEING_BUILT && psBuilding->currentBuildPts == 0 && psBuilding->buildRate == 0 && !structureHasModules(psBuilding))
 	{
 		removeStruct(psBuilding, true);  // If giving up on building something, remove the structure (and remove it from the power queue).
 	}
-	psBuilding->builtThisTick = false;
+	psBuilding->lastBuildRate = psBuilding->buildRate;
+	psBuilding->buildRate = 0;  // Reset to 0, each truck building us will add to our buildRate.
 
 	/* Only add smoke if they're visible and they can 'burn' */
 	if (!mission && psBuilding->visible[selectedPlayer] && canSmoke(psBuilding))
@@ -3874,7 +3875,8 @@ void structureUpdate(STRUCTURE *psBuilding, bool mission)
 STRUCTURE::STRUCTURE(uint32_t id, unsigned player)
 	: BASE_OBJECT(OBJ_STRUCTURE, id, player)
 	, pFunctionality(NULL)
-	, builtThisTick(true)
+	, buildRate(1)  // Initialise to 1 instead of 0, to make sure we don't get destroyed first tick due to inactivity.
+	, lastBuildRate(0)
 	, psCurAnim(NULL)
 {}
 

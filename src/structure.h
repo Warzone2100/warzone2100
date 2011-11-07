@@ -113,7 +113,7 @@ extern bool	structureStatsShutDown(void);
 int requestOpenGate(STRUCTURE *psStructure);
 
 int32_t structureDamage(STRUCTURE *psStructure, UDWORD damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, HIT_SIDE impactSide);
-extern void structureBuild(STRUCTURE *psStructure, DROID *psDroid, int buildPoints);
+extern void structureBuild(STRUCTURE *psStructure, DROID *psDroid, int buildPoints, int buildRate = 1);
 extern void structureDemolish(STRUCTURE *psStructure, DROID *psDroid, int buildPoints);
 extern bool structureRepair(STRUCTURE *psStruct, DROID *psDroid, int buildPoints);
 /* Set the type of droid for a factory to build */
