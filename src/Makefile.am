@@ -6,7 +6,9 @@ AM_YFLAGS = -d
 
 version.o: autorevision.h
 
-autorevision.h: $(warzone2100_SOURCES) $(warzone2100_LIBS)
+.PHONY: autorevision.h
+
+autorevision.h:
 	(cd $(top_srcdir) && ./build_tools/autorevision.sh $(abs_top_builddir)/src/autorevision.h || true)
 
 BUILT_SOURCES = \
