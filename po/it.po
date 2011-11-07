@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-11-05 16:22+0100\n"
-"PO-Revision-Date: 2011-11-05 15:45+0100\n"
+"POT-Creation-Date: 2011-11-07 18:42+0100\n"
+"PO-Revision-Date: 2011-11-07 09:47+0100\n"
 "Last-Translator: Cristian Odorico <generalchris@hotmail.it>\n"
 "Language-Team: Italian <warzone-dev@gna.org>\n"
 "Language: it\n"
@@ -12248,11 +12248,11 @@ msgstr "Vai direttamente alla schermata host"
 
 #: src/clparse.cpp:266
 msgid "Enable texture compression"
-msgstr ""
+msgstr "Abilita la compressione delle texture"
 
 #: src/clparse.cpp:267
 msgid "Disable texture compression"
-msgstr ""
+msgstr "Disabilita la compressione delle texture"
 
 #: src/configuration.cpp:89
 msgid "My Game"
