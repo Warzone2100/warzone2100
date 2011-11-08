@@ -31,8 +31,11 @@
 #include "lib/script/script.h"
 
 /* Get the Yacc definitions */
+#if defined (WZ_CC_MSVC)
+#include "script_parser.hpp"
+#else
 #include "script_parser.h"
-
+#endif
 // fwrite declared with warn_unused_result, resulting in mysterious errors in "%%" on some distros.
 static inline bool no_warn_unused_result(int ignore) { if (ignore) {} return true; }
 #define fwrite(a, b, c, d) no_warn_unused_result(fwrite(a, b, c, d))

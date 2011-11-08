@@ -26,8 +26,12 @@
 
 #include "lib/gamelib/parser.h"
 
+#if defined (WZ_CC_MSVC)
+#include "audp_parser.hpp"
+#else
 /* Get the Yacc definitions */
 #include "audp_parser.h"
+#endif
 
 // fwrite declared with warn_unused_result, resulting in mysterious errors in "%%" on some distros.
 static inline bool no_warn_unused_result(int ignore) { if (ignore) {} return true; }

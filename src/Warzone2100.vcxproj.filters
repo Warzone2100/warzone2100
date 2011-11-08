@@ -156,9 +156,6 @@
     <ClCompile Include="keymap.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="level_lexer.lex.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="levels.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -187,12 +184,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="message.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="message_lexer.lex.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="message_parser.tab.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="miscimd.cpp">
@@ -297,12 +288,6 @@
     <ClCompile Include="scriptvals.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="scriptvals_lexer.lex.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="scriptvals_parser.tab.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="selection.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -349,6 +334,21 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="qtscriptfuncs.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="scriptvals_parser.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="scriptvals_lexer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="message_parser.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="message_lexer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="level_lexer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -739,27 +739,27 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <FlexGenerator Include="level_lexer.l">
-      <Filter>FlexBison</Filter>
-    </FlexGenerator>
-    <FlexGenerator Include="message_lexer.l">
-      <Filter>FlexBison</Filter>
-    </FlexGenerator>
-    <FlexGenerator Include="scriptvals_lexer.l">
-      <Filter>FlexBison</Filter>
-    </FlexGenerator>
-  </ItemGroup>
-  <ItemGroup>
-    <BisonParser Include="message_parser.y">
-      <Filter>FlexBison</Filter>
-    </BisonParser>
-    <BisonParser Include="scriptvals_parser.y">
-      <Filter>FlexBison</Filter>
-    </BisonParser>
-  </ItemGroup>
-  <ItemGroup>
     <ResourceCompile Include="..\win32\warzone2100.rc">
       <Filter>Resource Files</Filter>
     </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <FlexGenerator Include="level_lexer.lpp">
+      <Filter>FlexBison</Filter>
+    </FlexGenerator>
+    <FlexGenerator Include="message_lexer.lpp">
+      <Filter>FlexBison</Filter>
+    </FlexGenerator>
+    <FlexGenerator Include="scriptvals_lexer.lpp">
+      <Filter>FlexBison</Filter>
+    </FlexGenerator>
+  </ItemGroup>
+  <ItemGroup>
+    <BisonParser Include="message_parser.ypp">
+      <Filter>FlexBison</Filter>
+    </BisonParser>
+    <BisonParser Include="scriptvals_parser.ypp">
+      <Filter>FlexBison</Filter>
+    </BisonParser>
   </ItemGroup>
 </Project>

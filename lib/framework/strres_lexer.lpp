@@ -34,8 +34,11 @@
 #include <physfs.h>
 
 /* Get the Yacc definitions */
+#if defined (WZ_CC_MSVC)
+#include "strres_parser.hpp"
+#else
 #include "strres_parser.h"
-
+#endif
 #include "lib/framework/lexer_input.h"
 
 // fwrite declared with warn_unused_result, resulting in mysterious errors in "%%" on some distros.

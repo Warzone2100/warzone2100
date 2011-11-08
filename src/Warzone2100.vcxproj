@@ -157,11 +157,11 @@
     <BisonParser>
       <Defines>true</Defines>
       <NoGenLineDirectives>false</NoGenLineDirectives>
-      <OutputFile>%(Filename).tab.cpp</OutputFile>
+      <OutputFile>%(Filename).cpp</OutputFile>
       <RenameExternalSymbols>%(Filename)</RenameExternalSymbols>
     </BisonParser>
     <FlexGenerator>
-      <OutputFile>%(Filename).lex.cpp</OutputFile>
+      <OutputFile>%(Filename).cpp</OutputFile>
       <TraceMode>false</TraceMode>
       <ScannerPrefix>%(Filename)</ScannerPrefix>
     </FlexGenerator>
@@ -322,7 +322,7 @@
     <ClCompile Include="keybind.cpp" />
     <ClCompile Include="keyedit.cpp" />
     <ClCompile Include="keymap.cpp" />
-    <ClCompile Include="level_lexer.lex.cpp" />
+    <ClCompile Include="level_lexer.cpp" />
     <ClCompile Include="levels.cpp" />
     <ClCompile Include="lighting.cpp" />
     <ClCompile Include="loadsave.cpp" />
@@ -333,8 +333,8 @@
     <ClCompile Include="mapgrid.cpp" />
     <ClCompile Include="mechanics.cpp" />
     <ClCompile Include="message.cpp" />
-    <ClCompile Include="message_lexer.lex.cpp" />
-    <ClCompile Include="message_parser.tab.cpp" />
+    <ClCompile Include="message_lexer.cpp" />
+    <ClCompile Include="message_parser.cpp" />
     <ClCompile Include="miscimd.cpp" />
     <ClCompile Include="mission.cpp" />
     <ClCompile Include="move.cpp" />
@@ -371,8 +371,8 @@
     <ClCompile Include="scriptobj.cpp" />
     <ClCompile Include="scripttabs.cpp" />
     <ClCompile Include="scriptvals.cpp" />
-    <ClCompile Include="scriptvals_lexer.lex.cpp" />
-    <ClCompile Include="scriptvals_parser.tab.cpp" />
+    <ClCompile Include="scriptvals_lexer.cpp" />
+    <ClCompile Include="scriptvals_parser.cpp" />
     <ClCompile Include="selection.cpp" />
     <ClCompile Include="seqdisp.cpp" />
     <ClCompile Include="stats.cpp" />
@@ -519,15 +519,6 @@
     <ClInclude Include="wrappers.h" />
   </ItemGroup>
   <ItemGroup>
-    <FlexGenerator Include="level_lexer.l" />
-    <FlexGenerator Include="message_lexer.l" />
-    <FlexGenerator Include="scriptvals_lexer.l" />
-  </ItemGroup>
-  <ItemGroup>
-    <BisonParser Include="message_parser.y" />
-    <BisonParser Include="scriptvals_parser.y" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\lib\exceptionhandler\exceptionhandler.vcxproj">
       <Project>{9dc871e4-d58d-4af6-85a6-7df7a39b8c18}</Project>
     </ProjectReference>
@@ -569,6 +560,23 @@
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\win32\warzone2100.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <FlexGenerator Include="level_lexer.lpp">
+      <FileType>Document</FileType>
+    </FlexGenerator>
+    <FlexGenerator Include="message_lexer.lpp">
+      <FileType>Document</FileType>
+    </FlexGenerator>
+    <BisonParser Include="message_parser.ypp">
+      <FileType>Document</FileType>
+    </BisonParser>
+    <FlexGenerator Include="scriptvals_lexer.lpp">
+      <FileType>Document</FileType>
+    </FlexGenerator>
+    <BisonParser Include="scriptvals_parser.ypp">
+      <FileType>Document</FileType>
+    </BisonParser>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

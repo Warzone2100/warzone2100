@@ -100,11 +100,11 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='STLport-Debug|Win32'">
     <FlexGenerator>
-      <OutputFile>%(Filename).lex.cpp</OutputFile>
+      <OutputFile>%(Filename).cpp</OutputFile>
     </FlexGenerator>
     <BisonParser>
       <Defines>true</Defines>
-      <OutputFile>%(Filename).tab.cpp</OutputFile>
+      <OutputFile>%(Filename).cpp</OutputFile>
     </BisonParser>
     <ClCompile>
       <Optimization>Disabled</Optimization>
@@ -155,8 +155,8 @@
   <ItemGroup>
     <ClCompile Include="anim.cpp" />
     <ClCompile Include="animobj.cpp" />
-    <ClCompile Include="audp_lexer.lex.cpp" />
-    <ClCompile Include="audp_parser.tab.cpp" />
+    <ClCompile Include="audp_lexer.cpp" />
+    <ClCompile Include="audp_parser.cpp" />
     <ClCompile Include="gtime.cpp" />
     <ClCompile Include="hashtable.cpp" />
   </ItemGroup>
@@ -169,10 +169,12 @@
     <ClInclude Include="parser.h" />
   </ItemGroup>
   <ItemGroup>
-    <FlexGenerator Include="audp_lexer.l" />
-  </ItemGroup>
-  <ItemGroup>
-    <BisonParser Include="audp_parser.y" />
+    <FlexGenerator Include="audp_lexer.lpp">
+      <FileType>Document</FileType>
+    </FlexGenerator>
+    <BisonParser Include="audp_parser.ypp">
+      <FileType>Document</FileType>
+    </BisonParser>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

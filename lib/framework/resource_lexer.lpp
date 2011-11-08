@@ -28,8 +28,11 @@
 #include "lib/framework/resly.h"
 
 /* Get the Yacc definitions */
+#if defined (WZ_CC_MSVC)
+#include "resource_parser.hpp"
+#else
 #include "resource_parser.h"
-
+#endif
 extern void res_error(const char* msg);
 
 #include "lib/framework/lexer_input.h"

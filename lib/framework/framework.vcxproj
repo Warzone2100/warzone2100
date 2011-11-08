@@ -106,11 +106,11 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='STLport-Debug|Win32'">
     <FlexGenerator>
-      <OutputFile>%(Filename).lex.cpp</OutputFile>
+      <OutputFile>%(Filename).cpp</OutputFile>
     </FlexGenerator>
     <BisonParser>
       <Defines>true</Defines>
-      <OutputFile>%(Filename).tab.cpp</OutputFile>
+      <OutputFile>%(Filename).cpp</OutputFile>
     </BisonParser>
     <ClCompile>
       <Optimization>Disabled</Optimization>
@@ -178,7 +178,7 @@
     <ClCompile Include="geometry.cpp" />
     <ClCompile Include="i18n.cpp" />
     <ClCompile Include="lexer_input.cpp" />
-    <ClCompile Include="resource_lexer.lex.cpp">
+    <ClCompile Include="resource_lexer.cpp">
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)%(Filename)1.obj</ObjectFileName>
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='STLport-Debug|Win32'">$(IntDir)%(Filename)1.obj</ObjectFileName>
       <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
@@ -188,23 +188,15 @@
       <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
       <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='STLport-Release|Win32'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
     </ClCompile>
-    <ClCompile Include="resource_parser.tab.cpp" />
+    <ClCompile Include="resource_parser.cpp" />
     <ClCompile Include="stdio_ext.cpp" />
     <ClCompile Include="strres.cpp" />
-    <ClCompile Include="strres_lexer.lex.cpp" />
-    <ClCompile Include="strres_parser.tab.cpp" />
+    <ClCompile Include="strres_lexer.cpp" />
+    <ClCompile Include="strres_parser.cpp" />
     <ClCompile Include="treap.cpp" />
     <ClCompile Include="trig.cpp" />
     <ClCompile Include="utf.cpp" />
     <ClCompile Include="wzapp.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <FlexGenerator Include="resource_lexer.l" />
-    <FlexGenerator Include="strres_lexer.l" />
-  </ItemGroup>
-  <ItemGroup>
-    <BisonParser Include="resource_parser.y" />
-    <BisonParser Include="strres_parser.y" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\exceptionhandler\exceptionhandler.vcxproj">
@@ -247,6 +239,20 @@
     <ClInclude Include="wzapp_c.h" />
     <ClInclude Include="wzfs.h" />
     <ClInclude Include="wzglobal.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <FlexGenerator Include="resource_lexer.lpp">
+      <FileType>Document</FileType>
+    </FlexGenerator>
+    <BisonParser Include="resource_parser.ypp">
+      <FileType>Document</FileType>
+    </BisonParser>
+    <FlexGenerator Include="strres_lexer.lpp">
+      <FileType>Document</FileType>
+    </FlexGenerator>
+    <BisonParser Include="strres_parser.ypp">
+      <FileType>Document</FileType>
+    </BisonParser>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

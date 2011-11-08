@@ -32,8 +32,11 @@
 #include "src/scriptvals.h"
 
 /* Get the Yacc definitions */
+#if defined (WZ_CC_MSVC)
+#include "scriptvals_parser.hpp"
+#else
 #include "scriptvals_parser.h"
-
+#endif
 
 /* Maximum length for any TEXT value */
 #ifndef YYLMAX

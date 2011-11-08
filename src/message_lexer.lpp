@@ -28,7 +28,11 @@
 #include "src/messagedef.h"
 
 /* Get the Yacc definitions */
+#if defined (WZ_CC_MSVC)
+#include "message_parser.hpp"
+#else
 #include "message_parser.h"
+#endif
 
 #include "lib/framework/lexer_input.h"
 #include "src/messagely.h"

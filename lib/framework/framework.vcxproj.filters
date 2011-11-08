@@ -32,22 +32,10 @@
     <ClCompile Include="lexer_input.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="resource_lexer.lex.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="resource_parser.tab.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="stdio_ext.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="strres.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="strres_lexer.lex.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="strres_parser.tab.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="treap.cpp">
@@ -65,22 +53,18 @@
     <ClCompile Include="geometry.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <FlexGenerator Include="resource_lexer.l">
-      <Filter>FlexBison</Filter>
-    </FlexGenerator>
-    <FlexGenerator Include="strres_lexer.l">
-      <Filter>FlexBison</Filter>
-    </FlexGenerator>
-  </ItemGroup>
-  <ItemGroup>
-    <BisonParser Include="resource_parser.y">
-      <Filter>FlexBison</Filter>
-    </BisonParser>
-    <BisonParser Include="strres_parser.y">
-      <Filter>FlexBison</Filter>
-    </BisonParser>
+    <ClCompile Include="resource_lexer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="resource_parser.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="strres_lexer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="strres_parser.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="crc.h">
@@ -185,5 +169,21 @@
     <ClInclude Include="wzglobal.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <FlexGenerator Include="resource_lexer.lpp">
+      <Filter>FlexBison</Filter>
+    </FlexGenerator>
+    <FlexGenerator Include="strres_lexer.lpp">
+      <Filter>FlexBison</Filter>
+    </FlexGenerator>
+  </ItemGroup>
+  <ItemGroup>
+    <BisonParser Include="resource_parser.ypp">
+      <Filter>FlexBison</Filter>
+    </BisonParser>
+    <BisonParser Include="strres_parser.ypp">
+      <Filter>FlexBison</Filter>
+    </BisonParser>
   </ItemGroup>
 </Project>
