@@ -12658,7 +12658,7 @@ msgstr "ANA MENÜ"
 
 #: src/frontend.c:112
 msgid "Visit our official site: http://wz2100.net"
-msgstr ""
+msgstr "Resmi internet sitemizi ziyaret edin: http://wz2100.net"
 
 #: src/frontend.c:182
 msgid "Fast Play"
