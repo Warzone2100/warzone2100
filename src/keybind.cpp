@@ -2374,10 +2374,12 @@ void	kf_ToggleVisibility( void )
 {
 	if(getRevealStatus())
 	{
+		console("Reveal OFF");
 		setRevealStatus(false);
 	}
 	else
 	{
+		console("Reveal ON");
 		setRevealStatus(true);
 	}
 }
@@ -2699,11 +2701,6 @@ void kf_ToggleRadarAllyEnemy(void)
 void kf_ToggleRadarTerrain(void)
 {
 	radarDrawMode = (RADAR_DRAW_MODE)(radarDrawMode + 1);
-
-	if (radarDrawMode == RADAR_MODE_TERRAIN_SEEN && getRevealStatus())
-	{
-		radarDrawMode = (RADAR_DRAW_MODE)(radarDrawMode + 1);  // skip this radar mode for fog of war mode
-	}
 	if (radarDrawMode >= NUM_RADAR_MODES)
 	{
 		radarDrawMode = (RADAR_DRAW_MODE)0;
@@ -2718,9 +2715,6 @@ void kf_ToggleRadarTerrain(void)
 			break;
 		case RADAR_MODE_TERRAIN:
 			CONPRINTF(ConsoleString, (ConsoleString, _("Radar showing terrain")));
-			break;
-		case RADAR_MODE_TERRAIN_SEEN:
-			CONPRINTF(ConsoleString, (ConsoleString, _("Radar showing revealed terrain")));
 			break;
 		case RADAR_MODE_HEIGHT_MAP:
 			CONPRINTF(ConsoleString, (ConsoleString, _("Radar showing height")));

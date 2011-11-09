@@ -333,8 +333,8 @@ static PIELIGHT appliedRadarColour(RADAR_DRAW_MODE radarDrawMode, MAPTILE *WTile
 {
 	PIELIGHT WScr = WZCOL_BLACK;	// squelch warning
 
-	// draw radar terrain on/off feature
-	if ((!getRevealStatus() || radarDrawMode == RADAR_MODE_TERRAIN_SEEN) && !TEST_TILE_VISIBLE(selectedPlayer, WTile))
+	// draw radar on/off feature
+	if (!getRevealStatus() && !TEST_TILE_VISIBLE(selectedPlayer, WTile))
 	{
 		return WZCOL_RADAR_BACKGROUND;
 	}
@@ -342,7 +342,6 @@ static PIELIGHT appliedRadarColour(RADAR_DRAW_MODE radarDrawMode, MAPTILE *WTile
 	switch(radarDrawMode)
 	{
 		case RADAR_MODE_TERRAIN:
-		case RADAR_MODE_TERRAIN_SEEN:
 		{
 			// draw radar terrain on/off feature
 			PIELIGHT col = tileColours[TileNumber_tile(WTile->texture)];
@@ -353,20 +352,20 @@ static PIELIGHT appliedRadarColour(RADAR_DRAW_MODE radarDrawMode, MAPTILE *WTile
 			if (terrainType(WTile) == TER_CLIFFFACE)
 			{
 				col.byte.r /= 2;
-				col.byte.b /= 2;
 				col.byte.g /= 2;
+				col.byte.b /= 2;
 			}
 			if (!hasSensorOnTile(WTile, selectedPlayer))
 			{
-				col.byte.r /= 2;
-				col.byte.b /= 2;
-				col.byte.g /= 2;
+				col.byte.r = col.byte.r * 2 / 3;
+				col.byte.g = col.byte.g * 2 / 3;
+				col.byte.b = col.byte.b * 2 / 3;
 			}
 			if (!TEST_TILE_VISIBLE(selectedPlayer, WTile))
 			{
 				col.byte.r /= 2;
-				col.byte.b /= 2;
 				col.byte.g /= 2;
+				col.byte.b /= 2;
 			}
 			WScr = col;
 		}
@@ -382,14 +381,20 @@ static PIELIGHT appliedRadarColour(RADAR_DRAW_MODE radarDrawMode, MAPTILE *WTile
 			if (terrainType(WTile) == TER_CLIFFFACE)
 			{
 				col.byte.r /= 2;
-				col.byte.b /= 2;
 				col.byte.g /= 2;
+				col.byte.b /= 2;
 			}
 			if (!hasSensorOnTile(WTile, selectedPlayer))
 			{
+				col.byte.r = col.byte.r * 2 / 3;
+				col.byte.g = col.byte.g * 2 / 3;
+				col.byte.b = col.byte.b * 2 / 3;
+			}
+			if (!TEST_TILE_VISIBLE(selectedPlayer, WTile))
+			{
 				col.byte.r /= 2;
-				col.byte.b /= 2;
 				col.byte.g /= 2;
+				col.byte.b /= 2;
 			}
 			WScr = col;
 		}
