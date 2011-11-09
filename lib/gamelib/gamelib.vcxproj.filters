@@ -40,7 +40,7 @@
     <ClInclude Include="animobj.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="audp_parser.tab.hpp">
+    <ClInclude Include="audp_parser.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="gtime.h">

@@ -77,11 +77,11 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <FlexGenerator>
-      <OutputFile>%(Filename).lex.cpp</OutputFile>
+      <OutputFile>%(Filename).cpp</OutputFile>
     </FlexGenerator>
     <BisonParser>
       <Defines>true</Defines>
-      <OutputFile>%(Filename).tab.cpp</OutputFile>
+      <OutputFile>%(Filename).cpp</OutputFile>
     </BisonParser>
     <ClCompile>
       <Optimization>Disabled</Optimization>
@@ -124,7 +124,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <BisonParser>
       <Defines>true</Defines>
-      <OutputFile>%(Filename).tab.cpp</OutputFile>
+      <OutputFile>%(Filename).cpp</OutputFile>
     </BisonParser>
     <ClCompile>
       <AdditionalIncludeDirectories>$(SolutionDir)\..;$(SolutionDir)\..\devpkg\include;$(SolutionDir)\..\devpkg\include\SDL;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -139,7 +139,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='STLport-Release|Win32'">
     <BisonParser>
       <Defines>true</Defines>
-      <OutputFile>%(Filename).tab.cpp</OutputFile>
+      <OutputFile>%(Filename).cpp</OutputFile>
     </BisonParser>
     <ClCompile>
       <AdditionalIncludeDirectories>$(SolutionDir)\..;$(SolutionDir)\..\devpkg\include;$(SolutionDir)\..\devpkg\include\SDL;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -165,7 +165,7 @@
     <ClCompile Include="stack.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="chat_parser.tab.hpp" />
+    <ClInclude Include="chat_parser.hpp" />
     <ClInclude Include="chat_processing.h" />
     <ClInclude Include="codeprint.h" />
     <ClInclude Include="event.h" />
@@ -173,7 +173,7 @@
     <ClInclude Include="interpreter.h" />
     <ClInclude Include="parse.h" />
     <ClInclude Include="script.h" />
-    <ClInclude Include="script_parser.tab.hpp" />
+    <ClInclude Include="script_parser.hpp" />
     <ClInclude Include="stack.h" />
   </ItemGroup>
   <ItemGroup>

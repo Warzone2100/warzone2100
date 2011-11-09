@@ -121,9 +121,6 @@
     <ClInclude Include="resly.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="resource_parser.tab.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="stdio_ext.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -131,9 +128,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="strres.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="strres_parser.tab.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="strresly.h">
@@ -167,6 +161,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="wzglobal.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="resource_parser.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="strres_parser.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

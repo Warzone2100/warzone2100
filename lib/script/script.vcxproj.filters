@@ -46,9 +46,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="chat_parser.tab.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="chat_processing.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -70,10 +67,13 @@
     <ClInclude Include="script.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="script_parser.tab.hpp">
+    <ClInclude Include="stack.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="stack.h">
+    <ClInclude Include="chat_parser.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="script_parser.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

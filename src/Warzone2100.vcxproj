@@ -106,11 +106,11 @@
     <BisonParser>
       <Defines>true</Defines>
       <NoGenLineDirectives>false</NoGenLineDirectives>
-      <OutputFile>%(Filename).tab.cpp</OutputFile>
+      <OutputFile>%(Filename).cpp</OutputFile>
       <RenameExternalSymbols>%(Filename)</RenameExternalSymbols>
     </BisonParser>
     <FlexGenerator>
-      <OutputFile>%(Filename).lex.cpp</OutputFile>
+      <OutputFile>%(Filename).cpp</OutputFile>
       <TraceMode>false</TraceMode>
       <ScannerPrefix>%(Filename)</ScannerPrefix>
     </FlexGenerator>
@@ -207,10 +207,10 @@
     </PreBuildEvent>
     <BisonParser>
       <Defines>true</Defines>
-      <OutputFile>%(Filename).tab.cpp</OutputFile>
+      <OutputFile>%(Filename).cpp</OutputFile>
     </BisonParser>
     <FlexGenerator>
-      <OutputFile>%(Filename).lex.cpp</OutputFile>
+      <OutputFile>%(Filename).cpp</OutputFile>
     </FlexGenerator>
     <ClCompile>
       <AdditionalIncludeDirectories>$(SolutionDir)\..;$(SolutionDir)\..\lib\sqlite3;$(SolutionDir)\..\devpkg\include;$(SolutionDir)\..\devpkg\include\SDL;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -243,10 +243,10 @@
     </PreBuildEvent>
     <BisonParser>
       <Defines>true</Defines>
-      <OutputFile>%(Filename).tab.cpp</OutputFile>
+      <OutputFile>%(Filename).cpp</OutputFile>
     </BisonParser>
     <FlexGenerator>
-      <OutputFile>%(Filename).lex.cpp</OutputFile>
+      <OutputFile>%(Filename).cpp</OutputFile>
     </FlexGenerator>
     <ClCompile>
       <AdditionalIncludeDirectories>$(SolutionDir)\..;$(SolutionDir)\..\lib\sqlite3;$(SolutionDir)\..\devpkg\include;$(SolutionDir)\..\devpkg\include\SDL;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -456,7 +456,7 @@
     <ClInclude Include="mapgrid.h" />
     <ClInclude Include="mechanics.h" />
     <ClInclude Include="message.h" />
-    <ClInclude Include="message_parser.tab.hpp" />
+    <ClInclude Include="message_parser.hpp" />
     <ClInclude Include="messagedef.h" />
     <ClInclude Include="messagely.h" />
     <ClInclude Include="miscimd.h" />
@@ -499,7 +499,7 @@
     <ClInclude Include="scriptobj.h" />
     <ClInclude Include="scripttabs.h" />
     <ClInclude Include="scriptvals.h" />
-    <ClInclude Include="scriptvals_parser.tab.hpp" />
+    <ClInclude Include="scriptvals_parser.hpp" />
     <ClInclude Include="selection.h" />
     <ClInclude Include="seqdisp.h" />
     <ClInclude Include="stats.h" />
