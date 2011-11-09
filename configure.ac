@@ -393,7 +393,7 @@ fi
 
 # Look for PhysicsFS
 AC_CHECK_HEADER(physfs.h, , AC_MSG_ERROR([PhysicsFS header not found.]))
-AC_CHECK_LIB(physfs, PHYSFS_init, AC_SUBST([PHYSFS_LIBS], [-lphysfs]), AC_MSG_ERROR([PhysicsFS not found.]), [${WIN32_LIBS}])
+AC_CHECK_LIB(physfs, PHYSFS_mount, AC_SUBST([PHYSFS_LIBS], [-lphysfs]), AC_MSG_ERROR([PhysicsFS 2 not found.]), [${WIN32_LIBS}])
 
 if test "x$host_os_mingw32" != "xyes" ; then
 	AC_CHECK_HEADER(X11/extensions/Xrandr.h, , AC_MSG_ERROR([Xrandr header not found.]))
