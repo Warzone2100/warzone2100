@@ -38,7 +38,7 @@ static AUDIO_SAMPLE *g_psSampleQueue = NULL;
 static bool			g_bAudioEnabled = false;
 static bool			g_bAudioPaused = false;
 static AUDIO_SAMPLE g_sPreviousSample;
-static int			g_iPreviousSampleTime;
+static int			g_iPreviousSampleTime = 0;
 
 /** Counts the number of samples in the SampleQueue
  *  \return the number of samples in the SampleQueue
@@ -94,14 +94,18 @@ bool audio_Disabled( void )
 // =======================================================================================================================
 // =======================================================================================================================
 //
-bool audio_Init( AUDIO_CALLBACK pStopTrackCallback )
+bool audio_Init(AUDIO_CALLBACK pStopTrackCallback, bool really_enable)
 {
 	// init audio system
 	g_sPreviousSample.iTrack = NO_SAMPLE;
 	g_sPreviousSample.x = SAMPLE_COORD_INVALID;
 	g_sPreviousSample.y = SAMPLE_COORD_INVALID;
 	g_sPreviousSample.z = SAMPLE_COORD_INVALID;
-	g_bAudioEnabled = sound_Init();
+	g_bAudioEnabled = really_enable;
+	if (g_bAudioEnabled)
+	{
+		g_bAudioEnabled = sound_Init();
+	}
 	if (g_bAudioEnabled)
 	{
 		sound_SetStoppedCallback( pStopTrackCallback );
@@ -1202,7 +1206,7 @@ void audioTest()
 		dummyCB(NULL);
 
 		assert(audio_Shutdown());
-		assert(audio_Init(dummyCB));
+		assert(audio_Init(dummyCB, true));
 		assert(!audio_Disabled());
 		audio_Update();
 	}

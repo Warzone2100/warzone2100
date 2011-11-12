@@ -1787,17 +1787,18 @@ void	kf_MovePause( void )
 // --------------------------------------------------------------------------
 void	kf_MoveToLastMessagePos( void )
 {
-	SDWORD	iX, iY, iZ;
+	int iX, iY, iZ;
 
 	if (!audio_GetPreviousQueueTrackPos( &iX, &iY, &iZ ))
 	{
 		return;
 	}
-
-// Should use requestRadarTrack but the camera gets jammed so use setViewpos - GJ
-//		requestRadarTrack( iX, iY );
-	setViewPos( map_coord(iX), map_coord(iY), true );
+	if (iX != 0 && iY != 0)
+	{
+		setViewPos(map_coord(iX), map_coord(iY), true);
+	}
 }
+
 // --------------------------------------------------------------------------
 /* Makes it snow if it's not snowing and stops it if it is */
 void	kf_ToggleWeather( void )

@@ -493,20 +493,17 @@ bool systemInitialise(void)
 		return false;
 	}
 
-	if ( war_getSoundEnabled() )
+	if (!audio_Init(droidAudioTrackStopped, war_getSoundEnabled()))
 	{
-		if (!audio_Init(droidAudioTrackStopped))
-		{
-			debug(LOG_SOUND, "Could not initialise audio system: Continuing without audio");
-		}
-		if (war_GetMusicEnabled())
-		{
-			cdAudio_Open(UserMusicPath);
-		}
+		debug(LOG_SOUND, "Continuing without audio");
+	}
+	if (war_getSoundEnabled() && war_GetMusicEnabled())
+	{
+		cdAudio_Open(UserMusicPath);
 	}
 	else
 	{
-		debug(LOG_SOUND, "Sound disabled");
+		debug(LOG_SOUND, "Music disabled");
 	}
 
 	if (!dataInitLoadFuncs()) // Pass all the data loading functions to the framework library

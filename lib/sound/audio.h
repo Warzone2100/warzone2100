@@ -23,7 +23,7 @@
 
 #include "track.h"
 
-extern bool		audio_Init( AUDIO_CALLBACK pStopTrackCallback );
+extern bool		audio_Init(AUDIO_CALLBACK pStopTrackCallback, bool really_init);
 extern void		audio_Update(void);
 extern bool		audio_Shutdown(void);
 extern bool		audio_Disabled( void );
