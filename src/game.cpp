@@ -4006,6 +4006,15 @@ static bool loadSaveDroidPointers(const QString &pFileName, DROID **ppsCurrentDr
 			ASSERT(psObj->type == OBJ_STRUCTURE, "Droid base structure not a structure");
 			setSaveDroidBase(psDroid, (STRUCTURE *)psObj);
 		}
+		if (ini.contains("commander"))
+		{
+			int tid = ini.value("commander", -1).toInt();
+			DROID *psCommander = (DROID *)getBaseObjFromData(tid, psDroid->player, OBJ_DROID);
+			ASSERT(psCommander, "Failed to find droid commander");
+			psCommander->psGroup = NULL;
+			psCommander->psGrpNext = NULL;
+			cmdDroidAddDroid(psCommander, psDroid);
+		}
 		ini.endGroup();
 	}
 	return true;
