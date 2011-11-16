@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-11-05 16:22+0100\n"
+"POT-Creation-Date: 2011-11-16 19:54+0100\n"
 "PO-Revision-Date: 2008-05-09 16:39+0000\n"
 "Last-Translator: Giel van Schijndel <me@mortis.eu>\n"
 "Language-Team: Latin\n"
@@ -12447,17 +12447,17 @@ msgstr ""
 msgid "Out of sync"
 msgstr ""
 
-#: src/display.cpp:1648
+#: src/display.cpp:1654
 msgid "Cannot Build. Oil Resource Burning."
 msgstr ""
 
-#: src/display.cpp:1836
-#: src/display.cpp:2398
+#: src/display.cpp:1842
+#: src/display.cpp:2404
 #, c-format
 msgid "%s - Damage %d%% - Experience %.1f, %s"
 msgstr ""
 
-#: src/display.cpp:1852
+#: src/display.cpp:1858
 #, c-format
 msgid "%s - Allied - Damage %d%% - Experience %d, %s"
 msgstr ""
@@ -12905,8 +12905,8 @@ msgid "MAP SAVED!"
 msgstr ""
 
 #: src/hci.cpp:1570
-#: src/loop.cpp:554
-#: src/loop.cpp:570
+#: src/loop.cpp:552
+#: src/loop.cpp:568
 msgid "GAME SAVED: "
 msgstr ""
 
@@ -13064,7 +13064,6 @@ msgid "Current Player:"
 msgstr ""
 
 #: src/hci.cpp:3977
-#: src/intdisplay.cpp:275
 msgid "Progress Bar"
 msgstr ""
 
@@ -13135,18 +13134,22 @@ msgid ""
 "Warzone will try to load the game without it."
 msgstr ""
 
-#: src/intdisplay.cpp:206
+#: src/intdisplay.cpp:208
+msgid "Waiting for Power"
+msgstr ""
+
+#: src/intdisplay.cpp:257
 msgid "Build Progress"
 msgstr ""
 
-#: src/intdisplay.cpp:241
+#: src/intdisplay.cpp:279
 msgid "Construction Progress"
 msgstr ""
 
-#: src/intdisplay.cpp:268
+#: src/intdisplay.cpp:296
 #, fuzzy
-msgid "Power Accrued"
-msgstr "Vigor Adquirāvi"
+msgid "Research Progress"
+msgstr "Invenio"
 
 #: src/intelmap.cpp:242
 #: src/keybind.cpp:1363
@@ -13304,8 +13307,8 @@ msgstr ""
 #: src/keybind.cpp:1310
 #: src/keybind.cpp:1420
 #: src/keybind.cpp:1549
-#: src/keybind.cpp:1906
-#: src/keybind.cpp:1947
+#: src/keybind.cpp:1907
+#: src/keybind.cpp:1948
 #, c-format
 msgid "(Player %u) is using cheat :%s"
 msgstr ""
@@ -13448,104 +13451,100 @@ msgstr ""
 msgid "Unable to locate any oil derricks!"
 msgstr ""
 
-#: src/keybind.cpp:1808
+#: src/keybind.cpp:1809
 msgid "Oh, the weather outside is frightful... SNOW"
 msgstr ""
 
-#: src/keybind.cpp:1814
+#: src/keybind.cpp:1815
 msgid "Singing in the rain, I'm singing in the rain... RAIN"
 msgstr ""
 
-#: src/keybind.cpp:1820
+#: src/keybind.cpp:1821
 msgid "Forecast : Clear skies for all areas... NO WEATHER"
 msgstr ""
 
-#: src/keybind.cpp:1905
+#: src/keybind.cpp:1906
 msgid "Warning! This can have drastic consequences if used incorrectly in missions."
 msgstr ""
 
-#: src/keybind.cpp:1907
+#: src/keybind.cpp:1908
 msgid "All enemies destroyed by cheating!"
 msgstr ""
 
-#: src/keybind.cpp:1948
+#: src/keybind.cpp:1949
 msgid "Destroying selected droids and structures!"
 msgstr ""
 
-#: src/keybind.cpp:2459
+#: src/keybind.cpp:2462
 msgid "Centered on player HQ, direction NORTH"
 msgstr ""
 
-#: src/keybind.cpp:2471
+#: src/keybind.cpp:2474
 msgid "Unable to locate HQ!"
 msgstr ""
 
-#: src/keybind.cpp:2478
+#: src/keybind.cpp:2481
 msgid "Formation speed limiting has been removed from the game due to bugs."
 msgstr ""
 
-#: src/keybind.cpp:2527
+#: src/keybind.cpp:2530
 msgid "Vertical rotation direction: Normal"
 msgstr ""
 
-#: src/keybind.cpp:2532
+#: src/keybind.cpp:2535
 msgid "Vertical rotation direction: Flipped"
 msgstr ""
 
-#: src/keybind.cpp:2541
+#: src/keybind.cpp:2544
 msgid "Screen shake when things die: Off"
 msgstr ""
 
-#: src/keybind.cpp:2546
+#: src/keybind.cpp:2549
 msgid "Screen shake when things die: On"
 msgstr ""
 
-#: src/keybind.cpp:2592
-#: src/keybind.cpp:2635
+#: src/keybind.cpp:2595
+#: src/keybind.cpp:2638
 msgid "Sorry, but game speed cannot be changed in multiplayer."
 msgstr ""
 
-#: src/keybind.cpp:2613
-#: src/keybind.cpp:2656
-#: src/keybind.cpp:2678
+#: src/keybind.cpp:2616
+#: src/keybind.cpp:2659
+#: src/keybind.cpp:2681
 msgid "Game Speed Reset"
 msgstr ""
 
-#: src/keybind.cpp:2617
+#: src/keybind.cpp:2620
 #, c-format
 msgid "Game Speed Increased to %3.1f"
 msgstr ""
 
-#: src/keybind.cpp:2660
+#: src/keybind.cpp:2663
 #, c-format
 msgid "Game Speed Reduced to %3.1f"
 msgstr ""
 
-#: src/keybind.cpp:2690
+#: src/keybind.cpp:2693
 msgid "Radar showing friend-foe colors"
 msgstr ""
 
-#: src/keybind.cpp:2694
+#: src/keybind.cpp:2697
 msgid "Radar showing player colors"
 msgstr ""
 
-#: src/keybind.cpp:2714
+#: src/keybind.cpp:2712
 msgid "Radar showing only objects"
 msgstr ""
 
-#: src/keybind.cpp:2717
+#: src/keybind.cpp:2715
 msgid "Radar blending terrain and height"
 msgstr ""
 
-#: src/keybind.cpp:2720
+#: src/keybind.cpp:2718
 msgid "Radar showing terrain"
 msgstr ""
 
-#: src/keybind.cpp:2723
-msgid "Radar showing revealed terrain"
-msgstr ""
-
-#: src/keybind.cpp:2726
+#: src/keybind.cpp:2721
 msgid "Radar showing height"
 msgstr ""
 
@@ -14041,8 +14040,8 @@ msgstr ""
 msgid "Toggle Driving Mode"
 msgstr ""
 
-#: src/loop.cpp:561
-#: src/loop.cpp:577
+#: src/loop.cpp:559
+#: src/loop.cpp:575
 msgid "Could not save game!"
 msgstr ""
 
@@ -14766,7 +14765,7 @@ msgstr ""
 msgid "Research Completed"
 msgstr ""
 
-#: src/research.cpp:2462
+#: src/research.cpp:2465
 msgid "Research Award"
 msgstr ""
 
@@ -14922,62 +14921,62 @@ msgstr ""
 msgid "Unable to locate any Commanders!"
 msgstr ""
 
-#: src/structure.cpp:2632
+#: src/structure.cpp:2629
 msgid "Command Control Limit Reached - Production Halted"
 msgstr ""
 
-#: src/structure.cpp:5822
-#: src/structure.cpp:5847
+#: src/structure.cpp:5838
+#: src/structure.cpp:5863
 #, c-format
 msgid "%s - %u Unit assigned - Damage %3.0f%%"
 msgid_plural "%s - %u Units assigned - Damage %3.0f%%"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/structure.cpp:5852
-#: src/structure.cpp:5920
-#: src/structure.cpp:5935
-#: src/structure.cpp:5949
+#: src/structure.cpp:5868
+#: src/structure.cpp:5936
+#: src/structure.cpp:5951
+#: src/structure.cpp:5965
 #, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr ""
 
-#: src/structure.cpp:5902
+#: src/structure.cpp:5918
 #, c-format
 msgid "%s - Connected %u of %u - Damage %3.0f%%"
 msgstr ""
 
-#: src/structure.cpp:6065
-#: src/structure.cpp:6110
+#: src/structure.cpp:6081
+#: src/structure.cpp:6126
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr ""
 
-#: src/structure.cpp:6347
+#: src/structure.cpp:6377
 msgid "Electronic Reward - Visibility Report"
 msgstr ""
 
-#: src/structure.cpp:6387
+#: src/structure.cpp:6417
 msgid "Factory Reward - Propulsion"
 msgstr ""
 
-#: src/structure.cpp:6411
+#: src/structure.cpp:6441
 msgid "Factory Reward - Body"
 msgstr ""
 
-#: src/structure.cpp:6435
+#: src/structure.cpp:6465
 msgid "Factory Reward - Weapon"
 msgstr ""
 
-#: src/structure.cpp:6444
+#: src/structure.cpp:6474
 msgid "Factory Reward - Nothing"
 msgstr ""
 
-#: src/structure.cpp:6472
+#: src/structure.cpp:6502
 msgid "Repair Facility Award - Repair"
 msgstr ""
 
-#: src/structure.cpp:6479
+#: src/structure.cpp:6509
 msgid "Repair Facility Award - Nothing"
 msgstr ""
 
@@ -15013,6 +15012,10 @@ msgstr ""
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr ""
+
+#, fuzzy
+#~ msgid "Power Accrued"
+#~ msgstr "Vigor Adquirāvi"
 
 #, fuzzy
 #~ msgid "Mini-Rocket accuracy +10%"

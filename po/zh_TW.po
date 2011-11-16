@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-11-05 16:22+0100\n"
+"POT-Creation-Date: 2011-11-16 19:54+0100\n"
 "PO-Revision-Date: 2009-05-11 00:21+0800\n"
 "Last-Translator: \n"
 "Language-Team: zh_TW\n"
@@ -12616,17 +12616,17 @@ msgstr "等待其他玩家"
 msgid "Out of sync"
 msgstr ""
 
-#: src/display.cpp:1648
+#: src/display.cpp:1654
 msgid "Cannot Build. Oil Resource Burning."
 msgstr "油田燃燒中，無法建築鑽油井"
 
-#: src/display.cpp:1836
-#: src/display.cpp:2398
+#: src/display.cpp:1842
+#: src/display.cpp:2404
 #, fuzzy, c-format
 msgid "%s - Damage %d%% - Experience %.1f, %s"
 msgstr "%s - 損傷 %d%% - 經驗值 %d, %s"
 
-#: src/display.cpp:1852
+#: src/display.cpp:1858
 #, fuzzy, c-format
 msgid "%s - Allied - Damage %d%% - Experience %d, %s"
 msgstr "%s - 損傷 %d%% - 經驗值 %d, %s"
@@ -13079,8 +13079,8 @@ msgid "MAP SAVED!"
 msgstr "遊戲已儲存"
 
 #: src/hci.cpp:1570
-#: src/loop.cpp:554
-#: src/loop.cpp:570
+#: src/loop.cpp:552
+#: src/loop.cpp:568
 #, fuzzy
 msgid "GAME SAVED: "
 msgstr "遊戲已儲存"
@@ -13241,7 +13241,6 @@ msgid "Current Player:"
 msgstr "多人遊戲"
 
 #: src/hci.cpp:3977
-#: src/intdisplay.cpp:275
 msgid "Progress Bar"
 msgstr "進度條"
 
@@ -13314,19 +13313,25 @@ msgid ""
 "Warzone will try to load the game without it."
 msgstr ""
 
-#: src/intdisplay.cpp:206
+#: src/intdisplay.cpp:208
+#, fuzzy
+msgid "Waiting for Power"
+msgstr "等待其他玩家"
+
+#: src/intdisplay.cpp:257
 #, fuzzy
 msgid "Build Progress"
 msgstr "建築物HP（Build Points）"
 
-#: src/intdisplay.cpp:241
+#: src/intdisplay.cpp:279
 #, fuzzy
 msgid "Construction Progress"
 msgstr "建築單位"
 
-#: src/intdisplay.cpp:268
-msgid "Power Accrued"
-msgstr "能量增加"
+#: src/intdisplay.cpp:296
+#, fuzzy
+msgid "Research Progress"
+msgstr "改善研發科技能力"
 
 #: src/intelmap.cpp:242
 #: src/keybind.cpp:1363
@@ -13483,8 +13488,8 @@ msgstr "關閉細節、武器及雷達顯示"
 #: src/keybind.cpp:1310
 #: src/keybind.cpp:1420
 #: src/keybind.cpp:1549
-#: src/keybind.cpp:1906
-#: src/keybind.cpp:1947
+#: src/keybind.cpp:1907
+#: src/keybind.cpp:1948
 #, c-format
 msgid "(Player %u) is using cheat :%s"
 msgstr ""
@@ -13630,107 +13635,102 @@ msgstr "建築選單將重新開啟"
 msgid "Unable to locate any oil derricks!"
 msgstr "找不到任何工程車單位！"
 
-#: src/keybind.cpp:1808
+#: src/keybind.cpp:1809
 msgid "Oh, the weather outside is frightful... SNOW"
 msgstr "喔，外面的天氣真糟...下雪"
 
-#: src/keybind.cpp:1814
+#: src/keybind.cpp:1815
 msgid "Singing in the rain, I'm singing in the rain... RAIN"
 msgstr "下雨啦～下雨啦～"
 
-#: src/keybind.cpp:1820
+#: src/keybind.cpp:1821
 msgid "Forecast : Clear skies for all areas... NO WEATHER"
 msgstr "天氣預報：一整片晴朗的天空。"
 
-#: src/keybind.cpp:1905
+#: src/keybind.cpp:1906
 msgid "Warning! This can have drastic consequences if used incorrectly in missions."
 msgstr ""
 
-#: src/keybind.cpp:1907
+#: src/keybind.cpp:1908
 #, fuzzy
 msgid "All enemies destroyed by cheating!"
 msgstr "敵軍已經死了...由於你作弊的關係.."
 
-#: src/keybind.cpp:1948
+#: src/keybind.cpp:1949
 msgid "Destroying selected droids and structures!"
 msgstr ""
 
-#: src/keybind.cpp:2459
+#: src/keybind.cpp:2462
 msgid "Centered on player HQ, direction NORTH"
 msgstr "視角移至主基地，面向北方"
 
-#: src/keybind.cpp:2471
+#: src/keybind.cpp:2474
 msgid "Unable to locate HQ!"
 msgstr "無法定位至主基地"
 
-#: src/keybind.cpp:2478
+#: src/keybind.cpp:2481
 msgid "Formation speed limiting has been removed from the game due to bugs."
 msgstr ""
 
-#: src/keybind.cpp:2527
+#: src/keybind.cpp:2530
 msgid "Vertical rotation direction: Normal"
 msgstr ""
 
-#: src/keybind.cpp:2532
+#: src/keybind.cpp:2535
 msgid "Vertical rotation direction: Flipped"
 msgstr ""
 
-#: src/keybind.cpp:2541
+#: src/keybind.cpp:2544
 msgid "Screen shake when things die: Off"
 msgstr ""
 
-#: src/keybind.cpp:2546
+#: src/keybind.cpp:2549
 msgid "Screen shake when things die: On"
 msgstr ""
 
-#: src/keybind.cpp:2592
-#: src/keybind.cpp:2635
+#: src/keybind.cpp:2595
+#: src/keybind.cpp:2638
 #, fuzzy
 msgid "Sorry, but game speed cannot be changed in multiplayer."
 msgstr "抱歉，多人遊戲中無法使用此作弊碼"
 
-#: src/keybind.cpp:2613
-#: src/keybind.cpp:2656
-#: src/keybind.cpp:2678
+#: src/keybind.cpp:2616
+#: src/keybind.cpp:2659
+#: src/keybind.cpp:2681
 msgid "Game Speed Reset"
 msgstr "重設遊戲速度"
 
-#: src/keybind.cpp:2617
+#: src/keybind.cpp:2620
 #, c-format
 msgid "Game Speed Increased to %3.1f"
 msgstr "遊戲速度增加至 %3.1f"
 
-#: src/keybind.cpp:2660
+#: src/keybind.cpp:2663
 #, c-format
 msgid "Game Speed Reduced to %3.1f"
 msgstr "遊戲速度減少至 %3.1f"
 
-#: src/keybind.cpp:2690
+#: src/keybind.cpp:2693
 msgid "Radar showing friend-foe colors"
 msgstr "雷達顯示友軍顏色"
 
-#: src/keybind.cpp:2694
+#: src/keybind.cpp:2697
 msgid "Radar showing player colors"
 msgstr "雷達顯示玩家顏色"
 
-#: src/keybind.cpp:2714
+#: src/keybind.cpp:2712
 msgid "Radar showing only objects"
 msgstr "雷達僅顯示物件"
 
-#: src/keybind.cpp:2717
+#: src/keybind.cpp:2715
 msgid "Radar blending terrain and height"
 msgstr "雷達描繪地形及高度"
 
-#: src/keybind.cpp:2720
+#: src/keybind.cpp:2718
 msgid "Radar showing terrain"
 msgstr "雷達顯示地形"
 
-#: src/keybind.cpp:2723
-#, fuzzy
-msgid "Radar showing revealed terrain"
-msgstr "雷達顯示地形"
-
-#: src/keybind.cpp:2726
+#: src/keybind.cpp:2721
 msgid "Radar showing height"
 msgstr "雷達顯示高度"
 
@@ -14244,8 +14244,8 @@ msgstr ""
 msgid "Toggle Driving Mode"
 msgstr "開啟或關閉追蹤視角"
 
-#: src/loop.cpp:561
-#: src/loop.cpp:577
+#: src/loop.cpp:559
+#: src/loop.cpp:575
 #, fuzzy
 msgid "Could not save game!"
 msgstr "載入已儲存的遊戲"
@@ -15005,7 +15005,7 @@ msgstr "已研發完成： %s"
 msgid "Research Completed"
 msgstr "已研發完成"
 
-#: src/research.cpp:2462
+#: src/research.cpp:2465
 msgid "Research Award"
 msgstr "研發中心獎勵"
 
@@ -15160,61 +15160,61 @@ msgstr "找不到任何雷達單位！"
 msgid "Unable to locate any Commanders!"
 msgstr "找不到任何指揮官車！"
 
-#: src/structure.cpp:2632
+#: src/structure.cpp:2629
 msgid "Command Control Limit Reached - Production Halted"
 msgstr "已達到可控制單位總數上限，停止生產新單位"
 
-#: src/structure.cpp:5822
-#: src/structure.cpp:5847
+#: src/structure.cpp:5838
+#: src/structure.cpp:5863
 #, fuzzy, c-format
 msgid "%s - %u Unit assigned - Damage %3.0f%%"
 msgid_plural "%s - %u Units assigned - Damage %3.0f%%"
 msgstr[0] "%s - 已指派 %u  單位"
 
-#: src/structure.cpp:5852
-#: src/structure.cpp:5920
-#: src/structure.cpp:5935
-#: src/structure.cpp:5949
+#: src/structure.cpp:5868
+#: src/structure.cpp:5936
+#: src/structure.cpp:5951
+#: src/structure.cpp:5965
 #, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - 損傷 %3.0f%%"
 
-#: src/structure.cpp:5902
+#: src/structure.cpp:5918
 #, fuzzy, c-format
 msgid "%s - Connected %u of %u - Damage %3.0f%%"
 msgstr "%s - 連接鑽油井數量 %u of %u"
 
-#: src/structure.cpp:6065
-#: src/structure.cpp:6110
+#: src/structure.cpp:6081
+#: src/structure.cpp:6126
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s -電子傷害"
 
-#: src/structure.cpp:6347
+#: src/structure.cpp:6377
 msgid "Electronic Reward - Visibility Report"
 msgstr "電子回饋—可檢視報告"
 
-#: src/structure.cpp:6387
+#: src/structure.cpp:6417
 msgid "Factory Reward - Propulsion"
 msgstr "工廠獎勵—推進動力"
 
-#: src/structure.cpp:6411
+#: src/structure.cpp:6441
 msgid "Factory Reward - Body"
 msgstr "工廠獎勵—車身"
 
-#: src/structure.cpp:6435
+#: src/structure.cpp:6465
 msgid "Factory Reward - Weapon"
 msgstr "工廠獎勵—武器"
 
-#: src/structure.cpp:6444
+#: src/structure.cpp:6474
 msgid "Factory Reward - Nothing"
 msgstr "工廠獎勵—無"
 
-#: src/structure.cpp:6472
+#: src/structure.cpp:6502
 msgid "Repair Facility Award - Repair"
 msgstr "修理中心獎勵—修理"
 
-#: src/structure.cpp:6479
+#: src/structure.cpp:6509
 msgid "Repair Facility Award - Nothing"
 msgstr "修理工廠回饋—無"
 
@@ -15250,6 +15250,13 @@ msgstr " - Built %s"
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "版本 %s%s%s%s"
+
+#~ msgid "Power Accrued"
+#~ msgstr "能量增加"
+
+#, fuzzy
+#~ msgid "Radar showing revealed terrain"
+#~ msgstr "雷達顯示地形"
 
 #~ msgid "Fog"
 #~ msgstr "迷霧"

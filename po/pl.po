@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-11-05 16:22+0100\n"
+"POT-Creation-Date: 2011-11-16 19:54+0100\n"
 "PO-Revision-Date: 2010-12-11 17:00+0100\n"
 "Last-Translator: Michał D. aka Emdek <emdeck@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
@@ -12435,17 +12435,17 @@ msgstr "Oczekiwanie na graczy"
 msgid "Out of sync"
 msgstr ""
 
-#: src/display.cpp:1648
+#: src/display.cpp:1654
 msgid "Cannot Build. Oil Resource Burning."
 msgstr "Nie można budować. Płonie ropa."
 
-#: src/display.cpp:1836
-#: src/display.cpp:2398
+#: src/display.cpp:1842
+#: src/display.cpp:2404
 #, fuzzy, c-format
 msgid "%s - Damage %d%% - Experience %.1f, %s"
 msgstr "%s - Obrażenia %d%% - Doświadczenie %d, %s"
 
-#: src/display.cpp:1852
+#: src/display.cpp:1858
 #, c-format
 msgid "%s - Allied - Damage %d%% - Experience %d, %s"
 msgstr "%s - Sojusznik - Obrażenia %d%% - Doświadczenie %d, %s"
@@ -12899,8 +12899,8 @@ msgid "MAP SAVED!"
 msgstr "MAPA ZAPISANA!"
 
 #: src/hci.cpp:1570
-#: src/loop.cpp:554
-#: src/loop.cpp:570
+#: src/loop.cpp:552
+#: src/loop.cpp:568
 #, fuzzy
 msgid "GAME SAVED: "
 msgstr "GRA ZAPISANA :"
@@ -13055,7 +13055,6 @@ msgid "Current Player:"
 msgstr "Aktualny gracz:"
 
 #: src/hci.cpp:3977
-#: src/intdisplay.cpp:275
 msgid "Progress Bar"
 msgstr "Pasek postępu"
 
@@ -13130,19 +13129,25 @@ msgstr ""
 "\n"
 "Warzone spróbuje załadować grę bez niego."
 
-#: src/intdisplay.cpp:206
+#: src/intdisplay.cpp:208
+#, fuzzy
+msgid "Waiting for Power"
+msgstr "Oczekiwanie na graczy"
+
+#: src/intdisplay.cpp:257
 #, fuzzy
 msgid "Build Progress"
 msgstr "Prędkość budowania"
 
-#: src/intdisplay.cpp:241
+#: src/intdisplay.cpp:279
 #, fuzzy
 msgid "Construction Progress"
 msgstr "Jednostka budująca"
 
-#: src/intdisplay.cpp:268
-msgid "Power Accrued"
-msgstr "Moc zwiększona"
+#: src/intdisplay.cpp:296
+#, fuzzy
+msgid "Research Progress"
+msgstr "Badania ulepszone"
 
 #: src/intelmap.cpp:242
 #: src/keybind.cpp:1363
@@ -13299,8 +13304,8 @@ msgstr "Dobra, pokazywanie broni i radarów wyłączone!"
 #: src/keybind.cpp:1310
 #: src/keybind.cpp:1420
 #: src/keybind.cpp:1549
-#: src/keybind.cpp:1906
-#: src/keybind.cpp:1947
+#: src/keybind.cpp:1907
+#: src/keybind.cpp:1948
 #, c-format
 msgid "(Player %u) is using cheat :%s"
 msgstr "(Gracz %u) używa oszustwa :%s"
@@ -13442,104 +13447,100 @@ msgstr "Menu odpluskwiania jest otwarte"
 msgid "Unable to locate any oil derricks!"
 msgstr "Niemożna odnaleźć platform wydobywczych!"
 
-#: src/keybind.cpp:1808
+#: src/keybind.cpp:1809
 msgid "Oh, the weather outside is frightful... SNOW"
 msgstr "Już święta?... ŚNIEG"
 
-#: src/keybind.cpp:1814
+#: src/keybind.cpp:1815
 msgid "Singing in the rain, I'm singing in the rain... RAIN"
 msgstr "Zebrały się ciemne chmury... DESZCZ"
 
-#: src/keybind.cpp:1820
+#: src/keybind.cpp:1821
 msgid "Forecast : Clear skies for all areas... NO WEATHER"
 msgstr "Prognoza: Czyste niebo na całym obszarze... BRAK POGODY"
 
-#: src/keybind.cpp:1905
+#: src/keybind.cpp:1906
 msgid "Warning! This can have drastic consequences if used incorrectly in missions."
 msgstr "Ostrzeżenie! Może to mieć drastyczne konsekwencje w przypadku niewłaściwego użycia w misjach."
 
-#: src/keybind.cpp:1907
+#: src/keybind.cpp:1908
 msgid "All enemies destroyed by cheating!"
 msgstr "Wszyscy przeciwnicy zniszczeni przez oszukiwanie!"
 
-#: src/keybind.cpp:1948
+#: src/keybind.cpp:1949
 msgid "Destroying selected droids and structures!"
 msgstr "Niszczenie zaznaczonych droidów i struktur!"
 
-#: src/keybind.cpp:2459
+#: src/keybind.cpp:2462
 msgid "Centered on player HQ, direction NORTH"
 msgstr "Wyśrodkowano na kwaterę główną gracza, kierunek PÓŁNOC"
 
-#: src/keybind.cpp:2471
+#: src/keybind.cpp:2474
 msgid "Unable to locate HQ!"
 msgstr "Nie udało się zlokalizować kwatery głównej!"
 
-#: src/keybind.cpp:2478
+#: src/keybind.cpp:2481
 msgid "Formation speed limiting has been removed from the game due to bugs."
 msgstr "Limit szybkości tworzenia został usunięty z gry z powodu błędów."
 
-#: src/keybind.cpp:2527
+#: src/keybind.cpp:2530
 msgid "Vertical rotation direction: Normal"
 msgstr "Kierunek pionowej rotacji: normalny"
 
-#: src/keybind.cpp:2532
+#: src/keybind.cpp:2535
 msgid "Vertical rotation direction: Flipped"
 msgstr "Kierunek pionowej rotacji: odbity"
 
-#: src/keybind.cpp:2541
+#: src/keybind.cpp:2544
 msgid "Screen shake when things die: Off"
 msgstr "Wstrząsy ekranu gdy coś ginie: Wyłączone"
 
-#: src/keybind.cpp:2546
+#: src/keybind.cpp:2549
 msgid "Screen shake when things die: On"
 msgstr "Wstrząsy ekranu gdy coś ginie: Włączone"
 
-#: src/keybind.cpp:2592
-#: src/keybind.cpp:2635
+#: src/keybind.cpp:2595
+#: src/keybind.cpp:2638
 msgid "Sorry, but game speed cannot be changed in multiplayer."
 msgstr "Przepraszamy, prędkość gry nie może zostać zmieniona w grze wieloosobowej."
 
-#: src/keybind.cpp:2613
-#: src/keybind.cpp:2656
-#: src/keybind.cpp:2678
+#: src/keybind.cpp:2616
+#: src/keybind.cpp:2659
+#: src/keybind.cpp:2681
 msgid "Game Speed Reset"
 msgstr "Przywróć normalną prędkość gry"
 
-#: src/keybind.cpp:2617
+#: src/keybind.cpp:2620
 #, c-format
 msgid "Game Speed Increased to %3.1f"
 msgstr "Prędkość gry zwiększona do %3.1f"
 
-#: src/keybind.cpp:2660
+#: src/keybind.cpp:2663
 #, c-format
 msgid "Game Speed Reduced to %3.1f"
 msgstr "Prędkość gry zmniejszona do %3.1f"
 
-#: src/keybind.cpp:2690
+#: src/keybind.cpp:2693
 msgid "Radar showing friend-foe colors"
 msgstr "Radar pokazuje kolory przyjaciel-wróg"
 
-#: src/keybind.cpp:2694
+#: src/keybind.cpp:2697
 msgid "Radar showing player colors"
 msgstr "Radar pokazuje kolory graczy"
 
-#: src/keybind.cpp:2714
+#: src/keybind.cpp:2712
 msgid "Radar showing only objects"
 msgstr "Radar pokazuje tylko obiekty"
 
-#: src/keybind.cpp:2717
+#: src/keybind.cpp:2715
 msgid "Radar blending terrain and height"
 msgstr "Radar pokazuje teren i wysokość"
 
-#: src/keybind.cpp:2720
+#: src/keybind.cpp:2718
 msgid "Radar showing terrain"
 msgstr "Radar pokazuje teren"
 
-#: src/keybind.cpp:2723
-msgid "Radar showing revealed terrain"
-msgstr "Radar pokazuje ujawniony teren"
-
-#: src/keybind.cpp:2726
+#: src/keybind.cpp:2721
 msgid "Radar showing height"
 msgstr "Radar pokazuje wysokość"
 
@@ -14033,8 +14034,8 @@ msgstr "Śledź obiekt gry"
 msgid "Toggle Driving Mode"
 msgstr "Przełącz tryb kierowania "
 
-#: src/loop.cpp:561
-#: src/loop.cpp:577
+#: src/loop.cpp:559
+#: src/loop.cpp:575
 msgid "Could not save game!"
 msgstr "Niemożna zapisać gry!"
 
@@ -14775,7 +14776,7 @@ msgstr "Badania ukończone: %s"
 msgid "Research Completed"
 msgstr "Badania ukończone"
 
-#: src/research.cpp:2462
+#: src/research.cpp:2465
 msgid "Research Award"
 msgstr "Technologia skradziona"
 
@@ -14932,13 +14933,13 @@ msgstr "Niemożna odnaleźć jednostek z radarami!"
 msgid "Unable to locate any Commanders!"
 msgstr "Niemożna odnaleźć dowódców!"
 
-#: src/structure.cpp:2632
+#: src/structure.cpp:2629
 #, fuzzy
 msgid "Command Control Limit Reached - Production Halted"
 msgstr "Limit kontrolny osiągnięty - produkcja wstrzymana"
 
-#: src/structure.cpp:5822
-#: src/structure.cpp:5847
+#: src/structure.cpp:5838
+#: src/structure.cpp:5863
 #, fuzzy, c-format
 msgid "%s - %u Unit assigned - Damage %3.0f%%"
 msgid_plural "%s - %u Units assigned - Damage %3.0f%%"
@@ -14946,51 +14947,51 @@ msgstr[0] "%s - %u Jednostka przydzielona"
 msgstr[1] "%s - %u Jednostki przydzielone"
 msgstr[2] "%s - %u Jednostek przydzielonych"
 
-#: src/structure.cpp:5852
-#: src/structure.cpp:5920
-#: src/structure.cpp:5935
-#: src/structure.cpp:5949
+#: src/structure.cpp:5868
+#: src/structure.cpp:5936
+#: src/structure.cpp:5951
+#: src/structure.cpp:5965
 #, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - Uszkodzenia %3.0f%%"
 
-#: src/structure.cpp:5902
+#: src/structure.cpp:5918
 #, fuzzy, c-format
 msgid "%s - Connected %u of %u - Damage %3.0f%%"
 msgstr "%s - Połączony %u z %u"
 
-#: src/structure.cpp:6065
-#: src/structure.cpp:6110
+#: src/structure.cpp:6081
+#: src/structure.cpp:6126
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Uszkodzony elektronicznie"
 
 # This maybe sound weird, but I translated this as 'stolen technology'
-#: src/structure.cpp:6347
+#: src/structure.cpp:6377
 msgid "Electronic Reward - Visibility Report"
 msgstr "Technologia skradziona - raport widoczności"
 
-#: src/structure.cpp:6387
+#: src/structure.cpp:6417
 msgid "Factory Reward - Propulsion"
 msgstr "Technologia skradziona - Napęd"
 
-#: src/structure.cpp:6411
+#: src/structure.cpp:6441
 msgid "Factory Reward - Body"
 msgstr "Technologia skradziona - Kadłub"
 
-#: src/structure.cpp:6435
+#: src/structure.cpp:6465
 msgid "Factory Reward - Weapon"
 msgstr "Technologia skradziona - Broń"
 
-#: src/structure.cpp:6444
+#: src/structure.cpp:6474
 msgid "Factory Reward - Nothing"
 msgstr "Technologia skradziona - Brak"
 
-#: src/structure.cpp:6472
+#: src/structure.cpp:6502
 msgid "Repair Facility Award - Repair"
 msgstr "Technologia skradziona - Naprawa"
 
-#: src/structure.cpp:6479
+#: src/structure.cpp:6509
 msgid "Repair Facility Award - Nothing"
 msgstr "Technologia skradziona - Brak"
 
@@ -15026,6 +15027,12 @@ msgstr " - Zbudowana %s"
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "Wersja %s%s%s%s"
+
+#~ msgid "Power Accrued"
+#~ msgstr "Moc zwiększona"
+
+#~ msgid "Radar showing revealed terrain"
+#~ msgstr "Radar pokazuje ujawniony teren"
 
 #~ msgid "Fog"
 #~ msgstr "Mgła"

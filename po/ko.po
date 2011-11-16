@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100 2.3_branch\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-11-05 16:22+0100\n"
+"POT-Creation-Date: 2011-11-16 19:54+0100\n"
 "PO-Revision-Date: 2010-11-23 21:01+0900\n"
 "Last-Translator: Joshua Shin <urgood2@gmail.com>\n"
 "Language-Team: Korean Translation Team <urgood2@gmail.com>\n"
@@ -12482,17 +12482,17 @@ msgstr "다른 플레이어를 더 기다리고 있습니다"
 msgid "Out of sync"
 msgstr ""
 
-#: src/display.cpp:1648
+#: src/display.cpp:1654
 msgid "Cannot Build. Oil Resource Burning."
 msgstr "건설이 불가능합니다. 석유 자원이 타고 있습니다"
 
-#: src/display.cpp:1836
-#: src/display.cpp:2398
+#: src/display.cpp:1842
+#: src/display.cpp:2404
 #, fuzzy, c-format
 msgid "%s - Damage %d%% - Experience %.1f, %s"
 msgstr "%s - 데미지 %d%% - 경험치 %d, %s"
 
-#: src/display.cpp:1852
+#: src/display.cpp:1858
 #, c-format
 msgid "%s - Allied - Damage %d%% - Experience %d, %s"
 msgstr "%s - 동맹군 - 데미지 %d%% - 경험치 %d, %s"
@@ -12942,8 +12942,8 @@ msgid "MAP SAVED!"
 msgstr "맵이 저장되었습니다!"
 
 #: src/hci.cpp:1570
-#: src/loop.cpp:554
-#: src/loop.cpp:570
+#: src/loop.cpp:552
+#: src/loop.cpp:568
 #, fuzzy
 msgid "GAME SAVED: "
 msgstr "게임이 저장되었습니다 : "
@@ -13098,7 +13098,6 @@ msgid "Current Player:"
 msgstr "현재 플레이어: "
 
 #: src/hci.cpp:3977
-#: src/intdisplay.cpp:275
 msgid "Progress Bar"
 msgstr "진행률 표시줄"
 
@@ -13176,22 +13175,28 @@ msgstr ""
 "\n"
 "Warzone은 게임을 mod 없이 로드 해보겠습니다."
 
+#: src/intdisplay.cpp:208
+#, fuzzy
+msgid "Waiting for Power"
+msgstr "다른 플레이어를 더 기다리고 있습니다"
+
 # Build Points
 # Points used to determine how long something takes to build.
 # For building structures, for instance, the time is calculated as the build points of the structure divided by the build points of the truck.
-#: src/intdisplay.cpp:206
+#: src/intdisplay.cpp:257
 #, fuzzy
 msgid "Build Progress"
 msgstr "건설(빌드) 포인트"
 
-#: src/intdisplay.cpp:241
+#: src/intdisplay.cpp:279
 #, fuzzy
 msgid "Construction Progress"
 msgstr "건설 유닛"
 
-#: src/intdisplay.cpp:268
-msgid "Power Accrued"
-msgstr "전력 축적량"
+#: src/intdisplay.cpp:296
+#, fuzzy
+msgid "Research Progress"
+msgstr "연구가 개선되었습니다"
 
 #: src/intelmap.cpp:242
 #: src/keybind.cpp:1363
@@ -13348,8 +13353,8 @@ msgstr "흠, 그래! 무기 & 센서 보기가 꺼졌습니다"
 #: src/keybind.cpp:1310
 #: src/keybind.cpp:1420
 #: src/keybind.cpp:1549
-#: src/keybind.cpp:1906
-#: src/keybind.cpp:1947
+#: src/keybind.cpp:1907
+#: src/keybind.cpp:1948
 #, c-format
 msgid "(Player %u) is using cheat :%s"
 msgstr "(플레이어 %u) 가 치트를 사용하고 있습니다 :%s"
@@ -13491,105 +13496,101 @@ msgstr "디버그 메뉴가 열였습니다"
 msgid "Unable to locate any oil derricks!"
 msgstr "유정 탑을 찾을 수 없습니다!"
 
-#: src/keybind.cpp:1808
+#: src/keybind.cpp:1809
 msgid "Oh, the weather outside is frightful... SNOW"
 msgstr "오, 바깥 날씨가 무시무시하군요... 눈"
 
-#: src/keybind.cpp:1814
+#: src/keybind.cpp:1815
 msgid "Singing in the rain, I'm singing in the rain... RAIN"
 msgstr "빗속에서 노래, 난 비 속에서 노래 하네... 비"
 
-#: src/keybind.cpp:1820
+#: src/keybind.cpp:1821
 msgid "Forecast : Clear skies for all areas... NO WEATHER"
 msgstr "일기 예보 : 모든 영역에 맑은 하늘입니다... 청천백일"
 
-#: src/keybind.cpp:1905
+#: src/keybind.cpp:1906
 msgid "Warning! This can have drastic consequences if used incorrectly in missions."
 msgstr "경고! 임무 수용 중 잘못 사용하면 엄청 안 좋은 결과를 볼 수도 있습니다."
 
-#: src/keybind.cpp:1907
+#: src/keybind.cpp:1908
 msgid "All enemies destroyed by cheating!"
 msgstr "치트로 모든 적을 파괴하였습니다!"
 
-#: src/keybind.cpp:1948
+#: src/keybind.cpp:1949
 msgid "Destroying selected droids and structures!"
 msgstr "선택된 병사와 구조물을 파괴합니다!"
 
-#: src/keybind.cpp:2459
+#: src/keybind.cpp:2462
 msgid "Centered on player HQ, direction NORTH"
 msgstr "플레이어의 본부를 중심으로, 북쪽 방향"
 
-#: src/keybind.cpp:2471
+#: src/keybind.cpp:2474
 msgid "Unable to locate HQ!"
 msgstr "본부를 찾지 못하였습니다!"
 
-#: src/keybind.cpp:2478
+#: src/keybind.cpp:2481
 msgid "Formation speed limiting has been removed from the game due to bugs."
 msgstr "편대 속도 제한은 버그로 인해 게임에서 제거되었습니다."
 
-#: src/keybind.cpp:2527
+#: src/keybind.cpp:2530
 msgid "Vertical rotation direction: Normal"
 msgstr "수직 회전 방향: 기본"
 
-#: src/keybind.cpp:2532
+#: src/keybind.cpp:2535
 msgid "Vertical rotation direction: Flipped"
 msgstr "수직 회전 방향: 뒤집어짐"
 
-#: src/keybind.cpp:2541
+#: src/keybind.cpp:2544
 msgid "Screen shake when things die: Off"
 msgstr "무엇이 죽을 때 화면 흔들림: 꺼짐"
 
-#: src/keybind.cpp:2546
+#: src/keybind.cpp:2549
 msgid "Screen shake when things die: On"
 msgstr "무엇이 죽을 때 화면 흔들림: 켜짐"
 
-#: src/keybind.cpp:2592
-#: src/keybind.cpp:2635
+#: src/keybind.cpp:2595
+#: src/keybind.cpp:2638
 msgid "Sorry, but game speed cannot be changed in multiplayer."
 msgstr "죄송합니다, 멀티플레이어 게임에서는 게임 속도를 바꿀 수 없습니다."
 
-#: src/keybind.cpp:2613
-#: src/keybind.cpp:2656
-#: src/keybind.cpp:2678
+#: src/keybind.cpp:2616
+#: src/keybind.cpp:2659
+#: src/keybind.cpp:2681
 msgid "Game Speed Reset"
 msgstr "게임 속도 리셋"
 
-#: src/keybind.cpp:2617
+#: src/keybind.cpp:2620
 #, c-format
 msgid "Game Speed Increased to %3.1f"
 msgstr "%3.1f 로 게임 속도가 증가되었습니다"
 
-#: src/keybind.cpp:2660
+#: src/keybind.cpp:2663
 #, c-format
 msgid "Game Speed Reduced to %3.1f"
 msgstr "%3.1f 로 게임 속도가 감소되었습니다"
 
 # 아군/적군
-#: src/keybind.cpp:2690
+#: src/keybind.cpp:2693
 msgid "Radar showing friend-foe colors"
 msgstr "레이더에 아군-적군 색깔이 나옵니다"
 
-#: src/keybind.cpp:2694
+#: src/keybind.cpp:2697
 msgid "Radar showing player colors"
 msgstr "레이더에 플레이어들의 색깔이 나옵니다"
 
-#: src/keybind.cpp:2714
+#: src/keybind.cpp:2712
 msgid "Radar showing only objects"
 msgstr "레이더에 물체만 나옵니다"
 
-#: src/keybind.cpp:2717
+#: src/keybind.cpp:2715
 msgid "Radar blending terrain and height"
 msgstr "레이더에 지형과 고도가 혼합되 나옵니다"
 
-#: src/keybind.cpp:2720
+#: src/keybind.cpp:2718
 msgid "Radar showing terrain"
 msgstr "레이더에 지형이 나옵니다"
 
-#: src/keybind.cpp:2723
-msgid "Radar showing revealed terrain"
-msgstr "드러난 지형이 레이더에 나옵니다"
-
-#: src/keybind.cpp:2726
+#: src/keybind.cpp:2721
 msgid "Radar showing height"
 msgstr "레이더에 고도가 나옵니다"
 
@@ -14085,8 +14086,8 @@ msgstr "게임 개체 트레이스(trace)하기"
 msgid "Toggle Driving Mode"
 msgstr "유닛 운전 모드 켜짐/꺼짐"
 
-#: src/loop.cpp:561
-#: src/loop.cpp:577
+#: src/loop.cpp:559
+#: src/loop.cpp:575
 msgid "Could not save game!"
 msgstr "게임을 저장할 수 없습니다!"
 
@@ -14831,7 +14832,7 @@ msgstr "연구 완료: %s"
 msgid "Research Completed"
 msgstr "연구 완료"
 
-#: src/research.cpp:2462
+#: src/research.cpp:2465
 msgid "Research Award"
 msgstr "연구 상"
 
@@ -14986,62 +14987,62 @@ msgstr "센서 유닛을 찾을 수 없습니다!"
 msgid "Unable to locate any Commanders!"
 msgstr "사령관을 찾을 수 없습니다!"
 
-#: src/structure.cpp:2632
+#: src/structure.cpp:2629
 #, fuzzy
 msgid "Command Control Limit Reached - Production Halted"
 msgstr "제어 한계에 도달하였습니다 - 생산이 중단되었습니다"
 
-#: src/structure.cpp:5822
-#: src/structure.cpp:5847
+#: src/structure.cpp:5838
+#: src/structure.cpp:5863
 #, fuzzy, c-format
 msgid "%s - %u Unit assigned - Damage %3.0f%%"
 msgid_plural "%s - %u Units assigned - Damage %3.0f%%"
 msgstr[0] "%s - 유닛 %u개 할당되었습니다"
 
-#: src/structure.cpp:5852
-#: src/structure.cpp:5920
-#: src/structure.cpp:5935
-#: src/structure.cpp:5949
+#: src/structure.cpp:5868
+#: src/structure.cpp:5936
+#: src/structure.cpp:5951
+#: src/structure.cpp:5965
 #, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - 데미지 %3.0f%%"
 
-#: src/structure.cpp:5902
+#: src/structure.cpp:5918
 #, fuzzy, c-format
 msgid "%s - Connected %u of %u - Damage %3.0f%%"
 msgstr "%s - %u개 연결 되었습니다 (전체 %u개)"
 
-#: src/structure.cpp:6065
-#: src/structure.cpp:6110
+#: src/structure.cpp:6081
+#: src/structure.cpp:6126
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - 전자적으로 손상됨"
 
-#: src/structure.cpp:6347
+#: src/structure.cpp:6377
 msgid "Electronic Reward - Visibility Report"
 msgstr "전자적 보상 - 시계보고"
 
-#: src/structure.cpp:6387
+#: src/structure.cpp:6417
 msgid "Factory Reward - Propulsion"
 msgstr "공장 보상 - 추진력"
 
-#: src/structure.cpp:6411
+#: src/structure.cpp:6441
 msgid "Factory Reward - Body"
 msgstr "공장 보상 - 차체"
 
-#: src/structure.cpp:6435
+#: src/structure.cpp:6465
 msgid "Factory Reward - Weapon"
 msgstr "공장 보상 - 무기"
 
-#: src/structure.cpp:6444
+#: src/structure.cpp:6474
 msgid "Factory Reward - Nothing"
 msgstr "공장 보상 - 없음"
 
-#: src/structure.cpp:6472
+#: src/structure.cpp:6502
 msgid "Repair Facility Award - Repair"
 msgstr "수리 시설 상 - 수리"
 
-#: src/structure.cpp:6479
+#: src/structure.cpp:6509
 msgid "Repair Facility Award - Nothing"
 msgstr "수리 시설 상 - 없음"
 
@@ -15077,6 +15078,12 @@ msgstr " - 빌드 날짜 %s"
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "버젼 %s%s%s%s"
+
+#~ msgid "Power Accrued"
+#~ msgstr "전력 축적량"
+
+#~ msgid "Radar showing revealed terrain"
+#~ msgstr "드러난 지형이 레이더에 나옵니다"
 
 #~ msgid "Fog"
 #~ msgstr "안개"

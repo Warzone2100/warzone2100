@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Warzone 2100 version 2.2.3\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-11-05 16:22+0100\n"
+"POT-Creation-Date: 2011-11-16 19:54+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Меденцій Олександр <olexandr1986@i.ua>\n"
 "Language-Team: \n"
@@ -12457,17 +12457,17 @@ msgstr "Чекаємо інших гравців"
 msgid "Out of sync"
 msgstr ""
 
-#: src/display.cpp:1648
+#: src/display.cpp:1654
 msgid "Cannot Build. Oil Resource Burning."
 msgstr "Будівництво Неможливе. Через пожежу на Нафтовому Родовищі"
 
-#: src/display.cpp:1836
-#: src/display.cpp:2398
+#: src/display.cpp:1842
+#: src/display.cpp:2404
 #, fuzzy, c-format
 msgid "%s - Damage %d%% - Experience %.1f, %s"
 msgstr "%s - Пошкоджень %d%% - Вбито %d, %s"
 
-#: src/display.cpp:1852
+#: src/display.cpp:1858
 #, c-format
 msgid "%s - Allied - Damage %d%% - Experience %d, %s"
 msgstr "%s - Союзник - Пошкоджень %d%% - Вбито %d, %s"
@@ -12916,8 +12916,8 @@ msgid "MAP SAVED!"
 msgstr "МАПУ ЗБЕРЕЖЕНО!"
 
 #: src/hci.cpp:1570
-#: src/loop.cpp:554
-#: src/loop.cpp:570
+#: src/loop.cpp:552
+#: src/loop.cpp:568
 msgid "GAME SAVED: "
 msgstr "ГРУ ЗБЕРЕЖЕНО:"
 
@@ -13077,7 +13077,6 @@ msgid "Current Player:"
 msgstr "Кілька Гравців"
 
 #: src/hci.cpp:3977
-#: src/intdisplay.cpp:275
 msgid "Progress Bar"
 msgstr "Індикатор Прогресу"
 
@@ -13154,19 +13153,25 @@ msgstr ""
 "\n"
 "Warzone спробує запустити гру без нього."
 
-#: src/intdisplay.cpp:206
+#: src/intdisplay.cpp:208
+#, fuzzy
+msgid "Waiting for Power"
+msgstr "Чекаємо інших гравців"
+
+#: src/intdisplay.cpp:257
 #, fuzzy
 msgid "Build Progress"
 msgstr "Ефективність Інженерного Обладнання"
 
-#: src/intdisplay.cpp:241
+#: src/intdisplay.cpp:279
 #, fuzzy
 msgid "Construction Progress"
 msgstr "Помилка З’єднання"
 
-#: src/intdisplay.cpp:268
-msgid "Power Accrued"
-msgstr "Накопичена Енергія"
+#: src/intdisplay.cpp:296
+#, fuzzy
+msgid "Research Progress"
+msgstr "Підвищується ефективність досліджень"
 
 #: src/intelmap.cpp:242
 #: src/keybind.cpp:1363
@@ -13323,8 +13328,8 @@ msgstr "Добре, показ радіусу сенсору на зброї в�
 #: src/keybind.cpp:1310
 #: src/keybind.cpp:1420
 #: src/keybind.cpp:1549
-#: src/keybind.cpp:1906
-#: src/keybind.cpp:1947
+#: src/keybind.cpp:1907
+#: src/keybind.cpp:1948
 #, c-format
 msgid "(Player %u) is using cheat :%s"
 msgstr "(Гравець %u) застосовує шахрайство :%s"
@@ -13467,104 +13472,100 @@ msgstr "Меню налагодження Відкрито"
 msgid "Unable to locate any oil derricks!"
 msgstr "Не можу знайти жодного Інженера!"
 
-#: src/keybind.cpp:1808
+#: src/keybind.cpp:1809
 msgid "Oh, the weather outside is frightful... SNOW"
 msgstr "Ох, погода на дворі жахлива... СНІГ"
 
-#: src/keybind.cpp:1814
+#: src/keybind.cpp:1815
 msgid "Singing in the rain, I'm singing in the rain... RAIN"
 msgstr "Дощику, дощику... зварю тобі борщику... ДОЩ"
 
-#: src/keybind.cpp:1820
+#: src/keybind.cpp:1821
 msgid "Forecast : Clear skies for all areas... NO WEATHER"
 msgstr "Прогноз погоди : Ясне небо у всіх районах... ЖОДНИХ ЗМІН ПОГОДИ"
 
-#: src/keybind.cpp:1905
+#: src/keybind.cpp:1906
 msgid "Warning! This can have drastic consequences if used incorrectly in missions."
 msgstr "Обережно! Це може призвести до непередбачуваних наслідків при неправильному застосуванні на місіях."
 
-#: src/keybind.cpp:1907
+#: src/keybind.cpp:1908
 msgid "All enemies destroyed by cheating!"
 msgstr "Всіх ворогів знищено за допомогою шахрайства!"
 
-#: src/keybind.cpp:1948
+#: src/keybind.cpp:1949
 msgid "Destroying selected droids and structures!"
 msgstr "Обрані підрозділи та будівлі буде знищено!"
 
-#: src/keybind.cpp:2459
+#: src/keybind.cpp:2462
 msgid "Centered on player HQ, direction NORTH"
 msgstr "Вид відцентровано на Штабі гравця у північному напрямку"
 
-#: src/keybind.cpp:2471
+#: src/keybind.cpp:2474
 msgid "Unable to locate HQ!"
 msgstr "Не вдалося знайти Штаб!"
 
-#: src/keybind.cpp:2478
+#: src/keybind.cpp:2481
 msgid "Formation speed limiting has been removed from the game due to bugs."
 msgstr "Обмеження швижкості формації було видалено з гри через баги."
 
-#: src/keybind.cpp:2527
+#: src/keybind.cpp:2530
 msgid "Vertical rotation direction: Normal"
 msgstr "Напрямок вертикального обертання: Нормальний"
 
-#: src/keybind.cpp:2532
+#: src/keybind.cpp:2535
 msgid "Vertical rotation direction: Flipped"
 msgstr "Напрямок вертикального обертання: Обернений"
 
-#: src/keybind.cpp:2541
+#: src/keybind.cpp:2544
 msgid "Screen shake when things die: Off"
 msgstr "Трясіння екрану при знищенні підрозділів: Вимкнене"
 
-#: src/keybind.cpp:2546
+#: src/keybind.cpp:2549
 msgid "Screen shake when things die: On"
 msgstr "Трясіння екрану при знищенні підрозділів: Задіяне"
 
-#: src/keybind.cpp:2592
-#: src/keybind.cpp:2635
+#: src/keybind.cpp:2595
+#: src/keybind.cpp:2638
 msgid "Sorry, but game speed cannot be changed in multiplayer."
 msgstr "На жаль, швидкість гри не можу бути змінена у мультиплеєрі."
 
-#: src/keybind.cpp:2613
-#: src/keybind.cpp:2656
-#: src/keybind.cpp:2678
+#: src/keybind.cpp:2616
+#: src/keybind.cpp:2659
+#: src/keybind.cpp:2681
 msgid "Game Speed Reset"
 msgstr "Швидкість Гри Нормалізовано"
 
-#: src/keybind.cpp:2617
+#: src/keybind.cpp:2620
 #, c-format
 msgid "Game Speed Increased to %3.1f"
 msgstr "Швидкість Гри Підвищено до %3.1f"
 
-#: src/keybind.cpp:2660
+#: src/keybind.cpp:2663
 #, c-format
 msgid "Game Speed Reduced to %3.1f"
 msgstr "Швидкість Гри Знижено до %3.1f"
 
-#: src/keybind.cpp:2690
+#: src/keybind.cpp:2693
 msgid "Radar showing friend-foe colors"
 msgstr "Радар показує кольори свій-чужий"
 
-#: src/keybind.cpp:2694
+#: src/keybind.cpp:2697
 msgid "Radar showing player colors"
 msgstr "Радар показує кольори гравців"
 
-#: src/keybind.cpp:2714
+#: src/keybind.cpp:2712
 msgid "Radar showing only objects"
 msgstr "Радар показує лише об’єкти"
 
-#: src/keybind.cpp:2717
+#: src/keybind.cpp:2715
 msgid "Radar blending terrain and height"
 msgstr "Радар відображає місцевість та рельєф"
 
-#: src/keybind.cpp:2720
+#: src/keybind.cpp:2718
 msgid "Radar showing terrain"
 msgstr "Радар показує місцевість"
 
-#: src/keybind.cpp:2723
-msgid "Radar showing revealed terrain"
-msgstr "Радар показує розвідану місцевість"
-
-#: src/keybind.cpp:2726
+#: src/keybind.cpp:2721
 msgid "Radar showing height"
 msgstr "Радар показує рельєф"
 
@@ -14076,8 +14077,8 @@ msgstr ""
 msgid "Toggle Driving Mode"
 msgstr "Задіяти Відслідковувальну Камеру"
 
-#: src/loop.cpp:561
-#: src/loop.cpp:577
+#: src/loop.cpp:559
+#: src/loop.cpp:575
 msgid "Could not save game!"
 msgstr "Не вдалося зберегти гру!"
 
@@ -14823,7 +14824,7 @@ msgstr "Дослідження Завершено: %s"
 msgid "Research Completed"
 msgstr "Дослідження Завершено"
 
-#: src/research.cpp:2462
+#: src/research.cpp:2465
 msgid "Research Award"
 msgstr "Винагорода Досліджень"
 
@@ -14979,63 +14980,63 @@ msgstr "Не можу знайти жодного Сенсорного Підр�
 msgid "Unable to locate any Commanders!"
 msgstr "Не можу знайти  жодного Командира!"
 
-#: src/structure.cpp:2632
+#: src/structure.cpp:2629
 #, fuzzy
 msgid "Command Control Limit Reached - Production Halted"
 msgstr "Досягнуто Межі Контролю - Виробництво Призупинене"
 
-#: src/structure.cpp:5822
-#: src/structure.cpp:5847
+#: src/structure.cpp:5838
+#: src/structure.cpp:5863
 #, fuzzy, c-format
 msgid "%s - %u Unit assigned - Damage %3.0f%%"
 msgid_plural "%s - %u Units assigned - Damage %3.0f%%"
 msgstr[0] "%s - %u Підрозділ закріплено"
 msgstr[1] "%s - %u Підрозділи закріплено"
 
-#: src/structure.cpp:5852
-#: src/structure.cpp:5920
-#: src/structure.cpp:5935
-#: src/structure.cpp:5949
+#: src/structure.cpp:5868
+#: src/structure.cpp:5936
+#: src/structure.cpp:5951
+#: src/structure.cpp:5965
 #, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - Пошкоджено %3.0f%%"
 
-#: src/structure.cpp:5902
+#: src/structure.cpp:5918
 #, fuzzy, c-format
 msgid "%s - Connected %u of %u - Damage %3.0f%%"
 msgstr "%s - Під'єднано %u з %u"
 
-#: src/structure.cpp:6065
-#: src/structure.cpp:6110
+#: src/structure.cpp:6081
+#: src/structure.cpp:6126
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Електронних Ушкоджень"
 
-#: src/structure.cpp:6347
+#: src/structure.cpp:6377
 msgid "Electronic Reward - Visibility Report"
 msgstr "Електронна Винагорода - Звіт про Зону Видимості"
 
-#: src/structure.cpp:6387
+#: src/structure.cpp:6417
 msgid "Factory Reward - Propulsion"
 msgstr "Винагорода Фабрики - Ходова"
 
-#: src/structure.cpp:6411
+#: src/structure.cpp:6441
 msgid "Factory Reward - Body"
 msgstr "Винагорода Фабрики - Корпус"
 
-#: src/structure.cpp:6435
+#: src/structure.cpp:6465
 msgid "Factory Reward - Weapon"
 msgstr "Винагорода Фабрики - Озброєння"
 
-#: src/structure.cpp:6444
+#: src/structure.cpp:6474
 msgid "Factory Reward - Nothing"
 msgstr "Винагорода Фабрики - Нічого"
 
-#: src/structure.cpp:6472
+#: src/structure.cpp:6502
 msgid "Repair Facility Award - Repair"
 msgstr "Винагорода Ремонтної Майстерні - Ремонт"
 
-#: src/structure.cpp:6479
+#: src/structure.cpp:6509
 msgid "Repair Facility Award - Nothing"
 msgstr "Винагорода Ремонтної Майстерні - Нічого"
 
@@ -15071,6 +15072,12 @@ msgstr " - Збудовано %s"
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "Версія %s%s%s%s"
+
+#~ msgid "Power Accrued"
+#~ msgstr "Накопичена Енергія"
+
+#~ msgid "Radar showing revealed terrain"
+#~ msgstr "Радар показує розвідану місцевість"
 
 #~ msgid "Fog"
 #~ msgstr "Туман"

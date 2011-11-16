@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-11-07 21:36+0100\n"
+"POT-Creation-Date: 2011-11-16 19:54+0100\n"
 "PO-Revision-Date: 2011-11-09 00:58+0200\n"
 "Last-Translator: Ayhan GÖRGÜLÜ <ayhangorgulu45@gmail.com>\n"
 "Language-Team: Turkey <warzone-dev@gna.org>\n"
@@ -12444,17 +12444,17 @@ msgstr "Diğer oyuncular bekleniyor"
 msgid "Out of sync"
 msgstr "Senkronize edilmemiş"
 
-#: src/display.cpp:1648
+#: src/display.cpp:1654
 msgid "Cannot Build. Oil Resource Burning."
 msgstr "İnşa edilemiyor. Petrol Kaynağı Yanıyor."
 
-#: src/display.cpp:1836
-#: src/display.cpp:2398
+#: src/display.cpp:1842
+#: src/display.cpp:2404
 #, c-format
 msgid "%s - Damage %d%% - Experience %.1f, %s"
 msgstr "%s - Hasar %d%% - Tecrübe %.1f, %s"
 
-#: src/display.cpp:1852
+#: src/display.cpp:1858
 #, c-format
 msgid "%s - Allied - Damage %d%% - Experience %d, %s"
 msgstr "%s - Müttefik - Hasar %d%% - Tecrübe %d, %s"
@@ -13056,7 +13056,6 @@ msgid "Current Player:"
 msgstr "Geçerli Oyuncu:"
 
 #: src/hci.cpp:3977
-#: src/intdisplay.cpp:328
 msgid "Progress Bar"
 msgstr "İlerleme Çubuğu"
 
@@ -13130,17 +13129,23 @@ msgstr ""
 "\n"
 "Warzone , o olmadan oyunu yüklemeye çalışacak."
 
-#: src/intdisplay.cpp:214
+#: src/intdisplay.cpp:208
+#, fuzzy
+msgid "Waiting for Power"
+msgstr "Diğer oyuncular bekleniyor"
+
+#: src/intdisplay.cpp:257
 msgid "Build Progress"
 msgstr "Bina Devam ediyor"
 
-#: src/intdisplay.cpp:295
+#: src/intdisplay.cpp:279
 msgid "Construction Progress"
 msgstr "İnşaat Devam ediyor"
 
-#: src/intdisplay.cpp:320
-msgid "Power Accrued"
-msgstr "Güç Birikmiş"
+#: src/intdisplay.cpp:296
+#, fuzzy
+msgid "Research Progress"
+msgstr "Araştırma Geliştirildi"
 
 #: src/intelmap.cpp:242
 #: src/keybind.cpp:1363
@@ -13297,8 +13302,8 @@ msgstr "İyi, Silah & algılayıcı ışıkları kapalı!"
 #: src/keybind.cpp:1310
 #: src/keybind.cpp:1420
 #: src/keybind.cpp:1549
-#: src/keybind.cpp:1906
-#: src/keybind.cpp:1947
+#: src/keybind.cpp:1907
+#: src/keybind.cpp:1948
 #, c-format
 msgid "(Player %u) is using cheat :%s"
 msgstr "(Player %u) şu hileyi kullandı: %s"
@@ -13443,105 +13448,101 @@ msgstr "Yerel Petrol Pompaları Devre Dışı!"
 
 # Let it snow, let it snow, let it snow..
 # Von daher sollte das unübersetzt bleiben -Kreuvf
-#: src/keybind.cpp:1808
+#: src/keybind.cpp:1809
 msgid "Oh, the weather outside is frightful... SNOW"
 msgstr "Vay canına, dışarda hava korkunç.. KAR"
 
 # Das Lied ist im Original Englisch --> bleibt unübersetzt -Kreuvf
-#: src/keybind.cpp:1814
+#: src/keybind.cpp:1815
 msgid "Singing in the rain, I'm singing in the rain... RAIN"
 msgstr "Yağmurda şarkı söyle, Ben yağmurda şarkı söylüyorum... YAĞMUR"
 
-#: src/keybind.cpp:1820
+#: src/keybind.cpp:1821
 msgid "Forecast : Clear skies for all areas... NO WEATHER"
 msgstr "Hava Durumu: Yer yerde gökyüzü temiz...YAĞIŞ YOK"
 
-#: src/keybind.cpp:1905
+#: src/keybind.cpp:1906
 msgid "Warning! This can have drastic consequences if used incorrectly in missions."
 msgstr "Dikkat! Misyonların yanlış kullanılmasının ciddi etkileri olabilir."
 
-#: src/keybind.cpp:1907
+#: src/keybind.cpp:1908
 msgid "All enemies destroyed by cheating!"
 msgstr "Tüm düşmanların hile ile yok edildi!"
 
-#: src/keybind.cpp:1948
+#: src/keybind.cpp:1949
 msgid "Destroying selected droids and structures!"
 msgstr "Seçili Birimler ve Birimler Yok Ediliyor!"
 
-#: src/keybind.cpp:2459
+#: src/keybind.cpp:2462
 msgid "Centered on player HQ, direction NORTH"
 msgstr "Görüntü Merkezi: Genel Merkez, Yön: KUZEY"
 
-#: src/keybind.cpp:2471
+#: src/keybind.cpp:2474
 msgid "Unable to locate HQ!"
 msgstr "Yerel Genel Merkez Devre Dışı!"
 
-#: src/keybind.cpp:2478
+#: src/keybind.cpp:2481
 msgid "Formation speed limiting has been removed from the game due to bugs."
 msgstr "Hata nedeniyle formasyon hız limiti kaldırıldı."
 
-#: src/keybind.cpp:2527
+#: src/keybind.cpp:2530
 msgid "Vertical rotation direction: Normal"
 msgstr "Dikey Yön: Normal"
 
-#: src/keybind.cpp:2532
+#: src/keybind.cpp:2535
 msgid "Vertical rotation direction: Flipped"
 msgstr "Dikey Yön: Saygısız"
 
-#: src/keybind.cpp:2541
+#: src/keybind.cpp:2544
 msgid "Screen shake when things die: Off"
 msgstr "Bişeyler öldüğünde ekran sarsıntısı: Kapalı"
 
-#: src/keybind.cpp:2546
+#: src/keybind.cpp:2549
 msgid "Screen shake when things die: On"
 msgstr "Bişeyler öldüğünde ekran sarsıntısı: Açık"
 
-#: src/keybind.cpp:2592
-#: src/keybind.cpp:2635
+#: src/keybind.cpp:2595
+#: src/keybind.cpp:2638
 msgid "Sorry, but game speed cannot be changed in multiplayer."
 msgstr "Üzgünüm, fakat oyun hızı çoklu oyunculu oyunlarda değiştirilemez"
 
-#: src/keybind.cpp:2613
-#: src/keybind.cpp:2656
-#: src/keybind.cpp:2678
+#: src/keybind.cpp:2616
+#: src/keybind.cpp:2659
+#: src/keybind.cpp:2681
 msgid "Game Speed Reset"
 msgstr "Oyun Hızı Sıfırlandı"
 
-#: src/keybind.cpp:2617
+#: src/keybind.cpp:2620
 #, c-format
 msgid "Game Speed Increased to %3.1f"
 msgstr "Oyun Hızı %3.1f  yükseltildi"
 
-#: src/keybind.cpp:2660
+#: src/keybind.cpp:2663
 #, c-format
 msgid "Game Speed Reduced to %3.1f"
 msgstr "Oyun Hızı %3.1f  ' indirildi"
 
-#: src/keybind.cpp:2690
+#: src/keybind.cpp:2693
 msgid "Radar showing friend-foe colors"
 msgstr "Radar Dost-Düşman haritasını gösterecek"
 
-#: src/keybind.cpp:2694
+#: src/keybind.cpp:2697
 msgid "Radar showing player colors"
 msgstr "Radar oyuncu renklerini gösterecek"
 
-#: src/keybind.cpp:2714
+#: src/keybind.cpp:2712
 msgid "Radar showing only objects"
 msgstr "Radar sadece nesneleri gösterecek"
 
-#: src/keybind.cpp:2717
+#: src/keybind.cpp:2715
 msgid "Radar blending terrain and height"
 msgstr "Radar bölge ve yüksekliği gösterecek"
 
-#: src/keybind.cpp:2720
+#: src/keybind.cpp:2718
 msgid "Radar showing terrain"
 msgstr "Radar bölgeyi gösterecek"
 
-#: src/keybind.cpp:2723
-msgid "Radar showing revealed terrain"
-msgstr "Radar keşfedilen alanı gösterecek"
-
-#: src/keybind.cpp:2726
+#: src/keybind.cpp:2721
 msgid "Radar showing height"
 msgstr "Radar yüksekliği gösterecek"
 
@@ -14916,64 +14917,64 @@ msgstr "Hiç Algılayıcı birimi bulunamadı!"
 msgid "Unable to locate any Commanders!"
 msgstr "Hiç Komutan birimi bulunamadı!"
 
-#: src/structure.cpp:2628
+#: src/structure.cpp:2629
 msgid "Command Control Limit Reached - Production Halted"
 msgstr "Kontrol Limitine Ulaştın - Üretim Durduruldu"
 
 # nix Gruppe! -Kreuvf
-#: src/structure.cpp:5837
-#: src/structure.cpp:5862
+#: src/structure.cpp:5838
+#: src/structure.cpp:5863
 #, c-format
 msgid "%s - %u Unit assigned - Damage %3.0f%%"
 msgid_plural "%s - %u Units assigned - Damage %3.0f%%"
 msgstr[0] "%s - %u Birim atandı - Hasar %3.0f%%"
 msgstr[1] "%s - %u Birimler atandı - Hasar %3.0f%%"
 
-#: src/structure.cpp:5867
-#: src/structure.cpp:5935
-#: src/structure.cpp:5950
-#: src/structure.cpp:5964
+#: src/structure.cpp:5868
+#: src/structure.cpp:5936
+#: src/structure.cpp:5951
+#: src/structure.cpp:5965
 #, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - Hasar %3.0f%%"
 
-#: src/structure.cpp:5917
+#: src/structure.cpp:5918
 #, c-format
 msgid "%s - Connected %u of %u - Damage %3.0f%%"
 msgstr "%s - Bağlandı %u de %u - Hasar %3.0f%%"
 
-#: src/structure.cpp:6080
-#: src/structure.cpp:6125
+#: src/structure.cpp:6081
+#: src/structure.cpp:6126
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Elektronik Hasar Aldı"
 
 # Reward ist zwar nicht Beute, aber im Krieg erbeutet man eben Dinge -Kreuvf
-#: src/structure.cpp:6362
+#: src/structure.cpp:6377
 msgid "Electronic Reward - Visibility Report"
 msgstr "Elektronik Ödül - Görünebilirlik Raporu"
 
-#: src/structure.cpp:6402
+#: src/structure.cpp:6417
 msgid "Factory Reward - Propulsion"
 msgstr "Fabrika Ödülü - Yürütücü"
 
-#: src/structure.cpp:6426
+#: src/structure.cpp:6441
 msgid "Factory Reward - Body"
 msgstr "Fabrika Ödülü - Beden"
 
-#: src/structure.cpp:6450
+#: src/structure.cpp:6465
 msgid "Factory Reward - Weapon"
 msgstr "Fabrika Ödülü - Silah"
 
-#: src/structure.cpp:6459
+#: src/structure.cpp:6474
 msgid "Factory Reward - Nothing"
 msgstr "Fabrika Ödülü - Sıfır"
 
-#: src/structure.cpp:6487
+#: src/structure.cpp:6502
 msgid "Repair Facility Award - Repair"
 msgstr "Tamir Tesisi Ödülü - Tamir"
 
-#: src/structure.cpp:6494
+#: src/structure.cpp:6509
 msgid "Repair Facility Award - Nothing"
 msgstr "Tamir Tesisi Ödülü - Sıfır"
 
@@ -15009,6 +15010,12 @@ msgstr " - %s İnşa"
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "Sürüm %s%s%s%s"
+
+#~ msgid "Power Accrued"
+#~ msgstr "Güç Birikmiş"
+
+#~ msgid "Radar showing revealed terrain"
+#~ msgstr "Radar keşfedilen alanı gösterecek"
 
 #~ msgid "Fog"
 #~ msgstr "Sis"

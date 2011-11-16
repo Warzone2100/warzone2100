@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Warzone 2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-11-05 16:22+0100\n"
+"POT-Creation-Date: 2011-11-16 19:54+0100\n"
 "PO-Revision-Date: 2011-06-22 22:41+0100\n"
 "Last-Translator: Molnár Gábor <b1afy7@gmail.com>\n"
 "Language-Team: Magyar (Hungary) <meszaros.tomi@hotmail.com>\n"
@@ -12434,17 +12434,17 @@ msgstr "Várakozás további játékosra"
 msgid "Out of sync"
 msgstr ""
 
-#: src/display.cpp:1648
+#: src/display.cpp:1654
 msgid "Cannot Build. Oil Resource Burning."
 msgstr "Nem lehet építeni, amíg az olajmező lángol."
 
-#: src/display.cpp:1836
-#: src/display.cpp:2398
+#: src/display.cpp:1842
+#: src/display.cpp:2404
 #, fuzzy, c-format
 msgid "%s - Damage %d%% - Experience %.1f, %s"
 msgstr "%s - Sérülés %d%% - Tapasztalat %d, %s"
 
-#: src/display.cpp:1852
+#: src/display.cpp:1858
 #, c-format
 msgid "%s - Allied - Damage %d%% - Experience %d, %s"
 msgstr "%s - szövetséges - kár %d%% - tapasztalat %d, %s"
@@ -12894,8 +12894,8 @@ msgid "MAP SAVED!"
 msgstr "JÁTÉK MENTVE!"
 
 #: src/hci.cpp:1570
-#: src/loop.cpp:554
-#: src/loop.cpp:570
+#: src/loop.cpp:552
+#: src/loop.cpp:568
 #, fuzzy
 msgid "GAME SAVED: "
 msgstr "JÁTÉK MENTVE"
@@ -13050,7 +13050,6 @@ msgid "Current Player:"
 msgstr "Jelenlegi játék:"
 
 #: src/hci.cpp:3977
-#: src/intdisplay.cpp:275
 msgid "Progress Bar"
 msgstr ""
 
@@ -13125,19 +13124,25 @@ msgstr ""
 "\n"
 "Warzone megpróbálja betölteni a játékot nélküle."
 
-#: src/intdisplay.cpp:206
+#: src/intdisplay.cpp:208
+#, fuzzy
+msgid "Waiting for Power"
+msgstr "Várakozás további játékosra"
+
+#: src/intdisplay.cpp:257
 #, fuzzy
 msgid "Build Progress"
 msgstr "Építési pontok"
 
-#: src/intdisplay.cpp:241
+#: src/intdisplay.cpp:279
 #, fuzzy
 msgid "Construction Progress"
 msgstr "Építő egység"
 
-#: src/intdisplay.cpp:268
-msgid "Power Accrued"
-msgstr "Energia felhalmozva"
+#: src/intdisplay.cpp:296
+#, fuzzy
+msgid "Research Progress"
+msgstr "Kutatás fejlesztve"
 
 #: src/intelmap.cpp:242
 #: src/keybind.cpp:1363
@@ -13295,8 +13300,8 @@ msgstr "Bírság, fegyver és érzékelő kijelző kikapcsolva!"
 #: src/keybind.cpp:1310
 #: src/keybind.cpp:1420
 #: src/keybind.cpp:1549
-#: src/keybind.cpp:1906
-#: src/keybind.cpp:1947
+#: src/keybind.cpp:1907
+#: src/keybind.cpp:1948
 #, c-format
 msgid "(Player %u) is using cheat :%s"
 msgstr "(%u játékos) %s csalást használta"
@@ -13438,104 +13443,100 @@ msgstr "Hibakeresés menü nyitva"
 msgid "Unable to locate any oil derricks!"
 msgstr "Nem található olajkút!"
 
-#: src/keybind.cpp:1808
+#: src/keybind.cpp:1809
 msgid "Oh, the weather outside is frightful... SNOW"
 msgstr "Oh, az időjárás kint rémisztő... HÓ"
 
-#: src/keybind.cpp:1814
+#: src/keybind.cpp:1815
 msgid "Singing in the rain, I'm singing in the rain... RAIN"
 msgstr "Énekelek az esőben, Én énekelek az esőben... ESŐ"
 
-#: src/keybind.cpp:1820
+#: src/keybind.cpp:1821
 msgid "Forecast : Clear skies for all areas... NO WEATHER"
 msgstr "Előrejelzés: Tiszta idő minden területen... NINCS IDŐJÁRÁS VÁLTOZÁS"
 
-#: src/keybind.cpp:1905
+#: src/keybind.cpp:1906
 msgid "Warning! This can have drastic consequences if used incorrectly in missions."
 msgstr "Figyelem! Drasztikus következményekkel járhat, amennyiben nem a megfelelően használják a küldetések során."
 
-#: src/keybind.cpp:1907
+#: src/keybind.cpp:1908
 msgid "All enemies destroyed by cheating!"
 msgstr "Csalással minden ellenséget elpusztított!"
 
-#: src/keybind.cpp:1948
+#: src/keybind.cpp:1949
 msgid "Destroying selected droids and structures!"
 msgstr "A kiválasztott épületek és droidok lerombolása."
 
-#: src/keybind.cpp:2459
+#: src/keybind.cpp:2462
 msgid "Centered on player HQ, direction NORTH"
 msgstr "Főhadiszállása központosítva, észak felé irányítva"
 
-#: src/keybind.cpp:2471
+#: src/keybind.cpp:2474
 msgid "Unable to locate HQ!"
 msgstr "Képtelen, hogy lokalizálja főhadiszállást!"
 
-#: src/keybind.cpp:2478
+#: src/keybind.cpp:2481
 msgid "Formation speed limiting has been removed from the game due to bugs."
 msgstr "Hibák miatt el lett távolítva a hadrendi sebességkorlátozás."
 
-#: src/keybind.cpp:2527
+#: src/keybind.cpp:2530
 msgid "Vertical rotation direction: Normal"
 msgstr "Vízszintes forgatás iránya: Normál"
 
-#: src/keybind.cpp:2532
+#: src/keybind.cpp:2535
 msgid "Vertical rotation direction: Flipped"
 msgstr "Vízszintes forgatás iránya: Tükrözve"
 
-#: src/keybind.cpp:2541
+#: src/keybind.cpp:2544
 msgid "Screen shake when things die: Off"
 msgstr "A képernyő rázkódásának kikapcsolása egység elvesztésekor"
 
-#: src/keybind.cpp:2546
+#: src/keybind.cpp:2549
 msgid "Screen shake when things die: On"
 msgstr "A képernyő rázkódásának bekapcsolása egység elvesztésekor"
 
-#: src/keybind.cpp:2592
-#: src/keybind.cpp:2635
+#: src/keybind.cpp:2595
+#: src/keybind.cpp:2638
 msgid "Sorry, but game speed cannot be changed in multiplayer."
 msgstr "Elnézést, de a játék sebessége nem változtatható többjátékos módban."
 
-#: src/keybind.cpp:2613
-#: src/keybind.cpp:2656
-#: src/keybind.cpp:2678
+#: src/keybind.cpp:2616
+#: src/keybind.cpp:2659
+#: src/keybind.cpp:2681
 msgid "Game Speed Reset"
 msgstr "Játék Sebesség Újraindítás"
 
-#: src/keybind.cpp:2617
+#: src/keybind.cpp:2620
 #, c-format
 msgid "Game Speed Increased to %3.1f"
 msgstr "Játék Sebesség Növekedett %3.1f nek"
 
-#: src/keybind.cpp:2660
+#: src/keybind.cpp:2663
 #, c-format
 msgid "Game Speed Reduced to %3.1f"
 msgstr "Játék sebesség Csökkenő %3.1f nek"
 
-#: src/keybind.cpp:2690
+#: src/keybind.cpp:2693
 msgid "Radar showing friend-foe colors"
 msgstr "A radar, ami barátot vagy ellenséget mutat, elszíneződik"
 
-#: src/keybind.cpp:2694
+#: src/keybind.cpp:2697
 msgid "Radar showing player colors"
 msgstr "Radar mutatja a színezett játékost"
 
-#: src/keybind.cpp:2714
+#: src/keybind.cpp:2712
 msgid "Radar showing only objects"
 msgstr "Radar mutatja csak az objektumot "
 
-#: src/keybind.cpp:2717
+#: src/keybind.cpp:2715
 msgid "Radar blending terrain and height"
 msgstr "Radar keverés terep és magasság"
 
-#: src/keybind.cpp:2720
+#: src/keybind.cpp:2718
 msgid "Radar showing terrain"
 msgstr "Radar mutatja a terepet"
 
-#: src/keybind.cpp:2723
-msgid "Radar showing revealed terrain"
-msgstr "Radar mutatja a felderített terepet"
-
-#: src/keybind.cpp:2726
+#: src/keybind.cpp:2721
 msgid "Radar showing height"
 msgstr "Radar mutatja a magasságot"
 
@@ -14029,8 +14030,8 @@ msgstr "Játékcél felkutatása"
 msgid "Toggle Driving Mode"
 msgstr "Egységkövető kamera"
 
-#: src/loop.cpp:561
-#: src/loop.cpp:577
+#: src/loop.cpp:559
+#: src/loop.cpp:575
 msgid "Could not save game!"
 msgstr "Nem lehet menteni a játékot!"
 
@@ -14770,7 +14771,7 @@ msgstr "Kutatás befejezett: %s"
 msgid "Research Completed"
 msgstr "Kutatás befejezett"
 
-#: src/research.cpp:2462
+#: src/research.cpp:2465
 msgid "Research Award"
 msgstr "Kutatós díj"
 
@@ -14926,63 +14927,63 @@ msgstr "Képtelen lokalizálni bármely érzékelős egységet!"
 msgid "Unable to locate any Commanders!"
 msgstr "Képtelen lokalizálni bármely parancsnokot!"
 
-#: src/structure.cpp:2632
+#: src/structure.cpp:2629
 #, fuzzy
 msgid "Command Control Limit Reached - Production Halted"
 msgstr "Szabályozási értéket elérték - Termelés megállt"
 
-#: src/structure.cpp:5822
-#: src/structure.cpp:5847
+#: src/structure.cpp:5838
+#: src/structure.cpp:5863
 #, fuzzy, c-format
 msgid "%s - %u Unit assigned - Damage %3.0f%%"
 msgid_plural "%s - %u Units assigned - Damage %3.0f%%"
 msgstr[0] "%s - %u Unit assigned"
 msgstr[1] "%s - %u Units assigned"
 
-#: src/structure.cpp:5852
-#: src/structure.cpp:5920
-#: src/structure.cpp:5935
-#: src/structure.cpp:5949
+#: src/structure.cpp:5868
+#: src/structure.cpp:5936
+#: src/structure.cpp:5951
+#: src/structure.cpp:5965
 #, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - Kár %3.0f%%"
 
-#: src/structure.cpp:5902
+#: src/structure.cpp:5918
 #, fuzzy, c-format
 msgid "%s - Connected %u of %u - Damage %3.0f%%"
 msgstr "%s - Kapcsolódott %u of %u"
 
-#: src/structure.cpp:6065
-#: src/structure.cpp:6110
+#: src/structure.cpp:6081
+#: src/structure.cpp:6126
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Elektronikusan sérült"
 
-#: src/structure.cpp:6347
+#: src/structure.cpp:6377
 msgid "Electronic Reward - Visibility Report"
 msgstr "Elektronikus jutalom - Felderítési jelentés"
 
-#: src/structure.cpp:6387
+#: src/structure.cpp:6417
 msgid "Factory Reward - Propulsion"
 msgstr "Gyári jutalom - hajtómű"
 
-#: src/structure.cpp:6411
+#: src/structure.cpp:6441
 msgid "Factory Reward - Body"
 msgstr "Gyári jutalom - karosszéria"
 
-#: src/structure.cpp:6435
+#: src/structure.cpp:6465
 msgid "Factory Reward - Weapon"
 msgstr "Gyári jutalom - fegyver"
 
-#: src/structure.cpp:6444
+#: src/structure.cpp:6474
 msgid "Factory Reward - Nothing"
 msgstr "Gyári jutalom - nincs"
 
-#: src/structure.cpp:6472
+#: src/structure.cpp:6502
 msgid "Repair Facility Award - Repair"
 msgstr "Szervizüzem jutalom - javítás"
 
-#: src/structure.cpp:6479
+#: src/structure.cpp:6509
 msgid "Repair Facility Award - Nothing"
 msgstr "Szervizüzem jutalom - nincs"
 
@@ -15020,6 +15021,12 @@ msgstr " - Épített %s"
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "Verzió %s%s%s%s"
+
+#~ msgid "Power Accrued"
+#~ msgstr "Energia felhalmozva"
+
+#~ msgid "Radar showing revealed terrain"
+#~ msgstr "Radar mutatja a felderített terepet"
 
 #~ msgid "Fog"
 #~ msgstr "Köd"

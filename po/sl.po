@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-11-05 16:22+0100\n"
+"POT-Creation-Date: 2011-11-16 19:54+0100\n"
 "PO-Revision-Date: 2009-06-10 14:43+0100\n"
 "Last-Translator: Tomaž Povšin <tomaz.povsin@gmail.com>\n"
 "Language-Team: Slovenian <sl@li.org>\n"
@@ -12570,17 +12570,17 @@ msgstr "Čakanje ostalih igralcev"
 msgid "Out of sync"
 msgstr ""
 
-#: src/display.cpp:1648
+#: src/display.cpp:1654
 msgid "Cannot Build. Oil Resource Burning."
 msgstr "Gradnja ni možna. Vir nafte gori."
 
-#: src/display.cpp:1836
-#: src/display.cpp:2398
+#: src/display.cpp:1842
+#: src/display.cpp:2404
 #, fuzzy, c-format
 msgid "%s - Damage %d%% - Experience %.1f, %s"
 msgstr "%s - Poškodbe %d%% - Izkušenj %d %s"
 
-#: src/display.cpp:1852
+#: src/display.cpp:1858
 #, fuzzy, c-format
 msgid "%s - Allied - Damage %d%% - Experience %d, %s"
 msgstr "%s - Poškodbe %d%% - Izkušenj %d %s"
@@ -13044,8 +13044,8 @@ msgid "MAP SAVED!"
 msgstr "MAPA SHRANJENA!"
 
 #: src/hci.cpp:1570
-#: src/loop.cpp:554
-#: src/loop.cpp:570
+#: src/loop.cpp:552
+#: src/loop.cpp:568
 #, fuzzy
 msgid "GAME SAVED: "
 msgstr "IGRA SHRANJENA:"
@@ -13206,7 +13206,6 @@ msgid "Current Player:"
 msgstr "Več igralcev"
 
 #: src/hci.cpp:3977
-#: src/intdisplay.cpp:275
 msgid "Progress Bar"
 msgstr "Črta napredka"
 
@@ -13279,17 +13278,23 @@ msgid ""
 "Warzone will try to load the game without it."
 msgstr ""
 
-#: src/intdisplay.cpp:206
+#: src/intdisplay.cpp:208
+#, fuzzy
+msgid "Waiting for Power"
+msgstr "Čakanje ostalih igralcev"
+
+#: src/intdisplay.cpp:257
 msgid "Build Progress"
 msgstr "Potek gradnje"
 
-#: src/intdisplay.cpp:241
+#: src/intdisplay.cpp:279
 msgid "Construction Progress"
 msgstr "Potek izdelave"
 
-#: src/intdisplay.cpp:268
-msgid "Power Accrued"
-msgstr "Moč povečana"
+#: src/intdisplay.cpp:296
+#, fuzzy
+msgid "Research Progress"
+msgstr "Raziskovanje izboljšano"
 
 #: src/intelmap.cpp:242
 #: src/keybind.cpp:1363
@@ -13446,8 +13451,8 @@ msgstr "Vredu, prikaz orožja & senzorjev je izklopljen!"
 #: src/keybind.cpp:1310
 #: src/keybind.cpp:1420
 #: src/keybind.cpp:1549
-#: src/keybind.cpp:1906
-#: src/keybind.cpp:1947
+#: src/keybind.cpp:1907
+#: src/keybind.cpp:1948
 #, c-format
 msgid "(Player %u) is using cheat :%s"
 msgstr "(Igralec %u) uporablja goljufijo :%s"
@@ -13590,106 +13595,101 @@ msgstr "Razhroščevalni meni je odprt"
 msgid "Unable to locate any oil derricks!"
 msgstr "Ni mogoče najti nobenih tovornjakov!"
 
-#: src/keybind.cpp:1808
+#: src/keybind.cpp:1809
 msgid "Oh, the weather outside is frightful... SNOW"
 msgstr "Oh, vreme zunaj je strašno... SNEG"
 
-#: src/keybind.cpp:1814
+#: src/keybind.cpp:1815
 msgid "Singing in the rain, I'm singing in the rain... RAIN"
 msgstr "Pojem v dežju, jaz pojem v dežju... DEŽ"
 
-#: src/keybind.cpp:1820
+#: src/keybind.cpp:1821
 msgid "Forecast : Clear skies for all areas... NO WEATHER"
 msgstr "Napoved : jasno nebo za vsa območja... NI VREMENA"
 
-#: src/keybind.cpp:1905
+#: src/keybind.cpp:1906
 msgid "Warning! This can have drastic consequences if used incorrectly in missions."
 msgstr "Opozorilo! To ima lahko drastične posledice, če se nepravilno uporabi v misijah"
 
-#: src/keybind.cpp:1907
+#: src/keybind.cpp:1908
 msgid "All enemies destroyed by cheating!"
 msgstr "Vsi sovražniki uničeni z goljufanjem!"
 
-#: src/keybind.cpp:1948
+#: src/keybind.cpp:1949
 msgid "Destroying selected droids and structures!"
 msgstr "Uničevanje izbranih droidov in zgradb!"
 
-#: src/keybind.cpp:2459
+#: src/keybind.cpp:2462
 msgid "Centered on player HQ, direction NORTH"
 msgstr "Centriran na GS igralca, smer SEVER"
 
-#: src/keybind.cpp:2471
+#: src/keybind.cpp:2474
 msgid "Unable to locate HQ!"
 msgstr "Ni mogoče najti GS!"
 
-#: src/keybind.cpp:2478
+#: src/keybind.cpp:2481
 msgid "Formation speed limiting has been removed from the game due to bugs."
 msgstr ""
 
-#: src/keybind.cpp:2527
+#: src/keybind.cpp:2530
 msgid "Vertical rotation direction: Normal"
 msgstr ""
 
-#: src/keybind.cpp:2532
+#: src/keybind.cpp:2535
 msgid "Vertical rotation direction: Flipped"
 msgstr ""
 
-#: src/keybind.cpp:2541
+#: src/keybind.cpp:2544
 msgid "Screen shake when things die: Off"
 msgstr ""
 
-#: src/keybind.cpp:2546
+#: src/keybind.cpp:2549
 msgid "Screen shake when things die: On"
 msgstr ""
 
-#: src/keybind.cpp:2592
-#: src/keybind.cpp:2635
+#: src/keybind.cpp:2595
+#: src/keybind.cpp:2638
 #, fuzzy
 msgid "Sorry, but game speed cannot be changed in multiplayer."
 msgstr "Oprostite, ta goljufija je onemogočena v igrah z večimi igralci."
 
-#: src/keybind.cpp:2613
-#: src/keybind.cpp:2656
-#: src/keybind.cpp:2678
+#: src/keybind.cpp:2616
+#: src/keybind.cpp:2659
+#: src/keybind.cpp:2681
 msgid "Game Speed Reset"
 msgstr "Hitrost igre ponastavljena"
 
-#: src/keybind.cpp:2617
+#: src/keybind.cpp:2620
 #, c-format
 msgid "Game Speed Increased to %3.1f"
 msgstr "Hitrost igre povečana na %3.1f"
 
-#: src/keybind.cpp:2660
+#: src/keybind.cpp:2663
 #, c-format
 msgid "Game Speed Reduced to %3.1f"
 msgstr "Hitrost igre zmanjšana na %3.1f"
 
-#: src/keybind.cpp:2690
+#: src/keybind.cpp:2693
 msgid "Radar showing friend-foe colors"
 msgstr "Radar kaže barve prijateja-sovražnika"
 
-#: src/keybind.cpp:2694
+#: src/keybind.cpp:2697
 msgid "Radar showing player colors"
 msgstr "Radar kaže barve igralca"
 
-#: src/keybind.cpp:2714
+#: src/keybind.cpp:2712
 msgid "Radar showing only objects"
 msgstr "Radar kaže samo predmete"
 
-#: src/keybind.cpp:2717
+#: src/keybind.cpp:2715
 msgid "Radar blending terrain and height"
 msgstr "Radar združuje teren in višino "
 
-#: src/keybind.cpp:2720
+#: src/keybind.cpp:2718
 msgid "Radar showing terrain"
 msgstr "Radar kaže teren"
 
-#: src/keybind.cpp:2723
-#, fuzzy
-msgid "Radar showing revealed terrain"
-msgstr "Radar kaže teren"
-
-#: src/keybind.cpp:2726
+#: src/keybind.cpp:2721
 msgid "Radar showing height"
 msgstr "Radar kaže višino"
 
@@ -14203,8 +14203,8 @@ msgstr ""
 msgid "Toggle Driving Mode"
 msgstr "Nastavi sledilno kamero"
 
-#: src/loop.cpp:561
-#: src/loop.cpp:577
+#: src/loop.cpp:559
+#: src/loop.cpp:575
 msgid "Could not save game!"
 msgstr "Ni bilo mogoče shraniti igre!"
 
@@ -14958,7 +14958,7 @@ msgstr "Raziskava dokončana: %s"
 msgid "Research Completed"
 msgstr "Raziskava dokončana"
 
-#: src/research.cpp:2462
+#: src/research.cpp:2465
 msgid "Research Award"
 msgstr "Raziskovalna nagrada"
 
@@ -15116,12 +15116,12 @@ msgstr "Ni mogoče najti nobenih senzorskih enot!"
 msgid "Unable to locate any Commanders!"
 msgstr "Ni mogoče najti nobenih poveljnikov!"
 
-#: src/structure.cpp:2632
+#: src/structure.cpp:2629
 msgid "Command Control Limit Reached - Production Halted"
 msgstr "Meja poveljniškega nadzora dosežena - izdelava ustavljena"
 
-#: src/structure.cpp:5822
-#: src/structure.cpp:5847
+#: src/structure.cpp:5838
+#: src/structure.cpp:5863
 #, fuzzy, c-format
 msgid "%s - %u Unit assigned - Damage %3.0f%%"
 msgid_plural "%s - %u Units assigned - Damage %3.0f%%"
@@ -15130,50 +15130,50 @@ msgstr[1] "%s - %u enota dodeljena"
 msgstr[2] "%s - %u enoti dodeljeni"
 msgstr[3] "%s - %u enote dodeljene"
 
-#: src/structure.cpp:5852
-#: src/structure.cpp:5920
-#: src/structure.cpp:5935
-#: src/structure.cpp:5949
+#: src/structure.cpp:5868
+#: src/structure.cpp:5936
+#: src/structure.cpp:5951
+#: src/structure.cpp:5965
 #, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - Poškodbe %3.0f%%"
 
-#: src/structure.cpp:5902
+#: src/structure.cpp:5918
 #, fuzzy, c-format
 msgid "%s - Connected %u of %u - Damage %3.0f%%"
 msgstr "%s - povezane %u od %u"
 
-#: src/structure.cpp:6065
-#: src/structure.cpp:6110
+#: src/structure.cpp:6081
+#: src/structure.cpp:6126
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - elektronsko poškodovan"
 
-#: src/structure.cpp:6347
+#: src/structure.cpp:6377
 msgid "Electronic Reward - Visibility Report"
 msgstr "Elektronska nagrada - poročilo o vidljivosti"
 
-#: src/structure.cpp:6387
+#: src/structure.cpp:6417
 msgid "Factory Reward - Propulsion"
 msgstr "Nagrada tovarne - pogon"
 
-#: src/structure.cpp:6411
+#: src/structure.cpp:6441
 msgid "Factory Reward - Body"
 msgstr "Nagrada tovarne - telo"
 
-#: src/structure.cpp:6435
+#: src/structure.cpp:6465
 msgid "Factory Reward - Weapon"
 msgstr "Nagrada tovarne - orožje"
 
-#: src/structure.cpp:6444
+#: src/structure.cpp:6474
 msgid "Factory Reward - Nothing"
 msgstr "Nagrada tovarne - nič"
 
-#: src/structure.cpp:6472
+#: src/structure.cpp:6502
 msgid "Repair Facility Award - Repair"
 msgstr "Nagrada stavbe za popravila - popravilo"
 
-#: src/structure.cpp:6479
+#: src/structure.cpp:6509
 msgid "Repair Facility Award - Nothing"
 msgstr "Nagrada stavbe za popravila - nič"
 
@@ -15209,6 +15209,13 @@ msgstr "- Zgrajen %s"
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "Verzija %s%s%s%s"
+
+#~ msgid "Power Accrued"
+#~ msgstr "Moč povečana"
+
+#, fuzzy
+#~ msgid "Radar showing revealed terrain"
+#~ msgstr "Radar kaže teren"
 
 #~ msgid "Fog"
 #~ msgstr "Megla"
