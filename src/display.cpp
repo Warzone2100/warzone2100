@@ -1104,6 +1104,12 @@ static void calcScroll(float *y, float *dydt, float accel, float decel, float ta
 {
 	double tMid;
 
+	// Stop instantly, if trying to change direction.
+	if (targetVelocity * *dydt < -1e-8f)
+	{
+		*dydt = 0;
+	}
+
 	if (targetVelocity < *dydt)
 	{
 		accel = -accel;
