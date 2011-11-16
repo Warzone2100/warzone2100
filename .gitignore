@@ -109,7 +109,9 @@ Makefile.in
 /ltmain.sh
 /missing
 /stamp-h1
+/ylwrap
 /po/POTFILES
+/po/messages.mo
 /po/remove-potcdate.sed
 /po/stamp-po
 /po/warzone2100.pot
