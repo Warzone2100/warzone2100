@@ -556,9 +556,15 @@ void intDisplayPowerBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DEC
 	SDWORD		iX,iY;
 	static char		szVal[8];
 
+	double desiredPower = getPowerMinusQueued(selectedPlayer);
+	static double displayPower;
+	static unsigned lastRealTime;
+	displayPower = desiredPower + (displayPower - desiredPower)*exp((realTime - lastRealTime) / -80.);  // If realTime < lastRealTime, then exp() returns 0 due to unsigned overflow.
+	lastRealTime = realTime;
+
 	ManPow = ManuPower / POWERBAR_SCALE;
-	Avail = getPowerMinusQueued(selectedPlayer) / POWERBAR_SCALE;
-	realPower = getPowerMinusQueued(selectedPlayer) - ManuPower;
+	Avail = displayPower / POWERBAR_SCALE;
+	realPower = displayPower - ManuPower;
 
 	BarWidth = BarGraph->width;
 	iV_SetFont(font_regular);
