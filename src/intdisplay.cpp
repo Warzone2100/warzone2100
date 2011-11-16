@@ -150,19 +150,64 @@ void SetFormAudioIDs(int OpenID,int CloseID)
 	FormCloseCount = 0;
 }
 
+static void setBarGraphValue(W_BARGRAPH *barGraph, PIELIGHT colour, int value, int range)
+{
+	barGraph->majorCol = colour;
+	barGraph->majorSize = PERNUM(WBAR_SCALE, clip(value, 0, range), range);
+	barGraph->style &= ~WIDG_HIDDEN;
+}
 
-static QString formatTime(int time)
+static void formatEmpty(W_BARGRAPH *barGraph)
+{
+	barGraph->text.clear();
+	setBarGraphValue(barGraph, WZCOL_BLACK, 0, 1);
+}
+
+static void formatTimeText(W_BARGRAPH *barGraph, int time)
 {
 	char timeText[20];
 	ssprintf(timeText, "%d:%02d", time/60, time%60);
-	return timeText;
+	barGraph->text = timeText;
+	barGraph->textCol = WZCOL_CONSTRUCTION_BARTEXT;
 }
 
-static QString formatPower(int power)
+static void formatTime(W_BARGRAPH *barGraph, int buildPointsDone, int buildPointsTotal, int buildRate, char const *toolTip)
+{
+	widgSetTipText(barGraph, toolTip);
+
+	if (buildRate != 0)
+	{
+		int timeToBuild = (buildPointsTotal - buildPointsDone) / buildRate;
+
+		formatTimeText(barGraph, timeToBuild);
+	}
+	else
+	{
+		barGraph->text.clear();
+	}
+
+	setBarGraphValue(barGraph, WZCOL_YELLOW, buildPointsDone, buildPointsTotal);
+}
+
+static void formatPowerText(W_BARGRAPH *barGraph, int neededPower)
 {
 	char powerText[20];
-	ssprintf(powerText, "%d", power);
-	return powerText;
+	ssprintf(powerText, "%d", neededPower);
+	barGraph->text = powerText;
+	barGraph->textCol = WZCOL_POWERQUEUE_BARTEXT;
+}
+
+static void formatPower(W_BARGRAPH *barGraph, int neededPower, int powerToBuild)
+{
+	if (neededPower == -1 || powerToBuild == 0)
+	{
+		formatEmpty(barGraph);
+		return;
+	}
+
+	widgSetTipText(barGraph, _("Waiting for Power"));
+	formatPowerText(barGraph, neededPower);
+	setBarGraphValue(barGraph, WZCOL_GREEN, powerToBuild - neededPower, powerToBuild);
 }
 
 // Widget callback to update the progress bar in the object stats screen.
@@ -175,7 +220,6 @@ void intUpdateProgressBar(WIDGET *psWidget, W_CONTEXT *psContext)
 	FACTORY				*Manufacture;
 	RESEARCH_FACILITY	*Research;
 	PLAYER_RESEARCH		*pPlayerRes;
-	UDWORD				BuildPoints,Range;
 	W_BARGRAPH			*BarGraph = (W_BARGRAPH*)psWidget;
 
 	psObj = (BASE_OBJECT*)BarGraph->pUserData;	// Get the object associated with this widget.
@@ -191,6 +235,9 @@ void intUpdateProgressBar(WIDGET *psWidget, W_CONTEXT *psContext)
 		return;
 	}
 
+	BarGraph->majorSize = 0;
+	BarGraph->style |= WIDG_HIDDEN;
+
 	switch (psObj->type)
 	{
 		case OBJ_DROID:						// If it's a droid and...
@@ -205,51 +252,15 @@ void intUpdateProgressBar(WIDGET *psWidget, W_CONTEXT *psContext)
 				if (Structure)
 				{
 					//show progress of build
-					Range =  Structure->pStructureType->buildPoints;	// And how long it takes to build.
-					BuildPoints = Structure->currentBuildPts;			// How near to completion.
-					//set the colour of the bar to yellow
-					BarGraph->majorCol = WZCOL_YELLOW;
-					BarGraph->textCol = WZCOL_CONSTRUCTION_BARTEXT;
-					//and change the tool tip
-					widgSetTipText((WIDGET*)BarGraph, _("Build Progress"));
-
-					int neededPower = checkPowerRequest(Structure);
-					if (neededPower != -1)
+					if (Structure->currentBuildPts != 0)
 					{
-						BarGraph->majorCol = WZCOL_GREEN;
-						BarGraph->textCol = WZCOL_POWERQUEUE_BARTEXT;
-						if (neededPower <= Structure->pStructureType->powerToBuild)
-						{
-							Range = Structure->pStructureType->powerToBuild;
-							BuildPoints = Range - neededPower;
-						}
-						BarGraph->text = formatPower(neededPower);
+						formatTime(BarGraph, Structure->currentBuildPts, Structure->pStructureType->buildPoints, Structure->lastBuildRate, _("Build Progress"));
 					}
 					else
 					{
-						BarGraph->text.clear();
-						if (Structure->lastBuildRate > 0)
-						{
-							int timeToBuild = (Structure->pStructureType->buildPoints - Structure->currentBuildPts) / Structure->lastBuildRate;
-							BarGraph->text = formatTime(timeToBuild);
-						}
+						formatPower(BarGraph, checkPowerRequest(Structure), Structure->pStructureType->powerToBuild);
 					}
-
-					if (BuildPoints > Range)
-					{
-						BuildPoints = Range;
-					}
-					BarGraph->majorSize = (UWORD)PERNUM(WBAR_SCALE,BuildPoints,Range);
-					BarGraph->style &= ~WIDG_HIDDEN;
 				}
-				else
-				{
-					BarGraph->majorSize = 0;
-					BarGraph->style |= WIDG_HIDDEN;
-				}
-			} else {
-				BarGraph->majorSize = 0;
-				BarGraph->style |= WIDG_HIDDEN;
 			}
 			break;
 
@@ -260,122 +271,34 @@ void intUpdateProgressBar(WIDGET *psWidget, W_CONTEXT *psContext)
 			{
 				Manufacture = StructureGetFactory(Structure);
 
-				Range = FactoryGetTemplate(Manufacture)->buildPoints;
-				int remaining = Manufacture->psSubject != NULL? Manufacture->buildPointsRemaining : Range;  // If psSubject == NULL, this is not yet synched, and Manufacture->timeToBuild is not set correctly.
-				BuildPoints = Range - remaining;
 				if (Manufacture->psSubject != NULL && Manufacture->buildPointsRemaining < Manufacture->psSubject->buildPoints)
 				{
 					// Started production. Set the colour of the bar to yellow.
-					BarGraph->majorCol = WZCOL_YELLOW;
-					BarGraph->textCol = WZCOL_CONSTRUCTION_BARTEXT;
-					int timeToBuild = remaining / Manufacture->productionOutput;
-					BarGraph->text = formatTime(timeToBuild);
+					int buildPointsTotal = FactoryGetTemplate(Manufacture)->buildPoints;
+					int buildRate = Manufacture->timeStartHold == 0? Manufacture->productionOutput : 0;
+					formatTime(BarGraph, buildPointsTotal - Manufacture->buildPointsRemaining, buildPointsTotal, buildRate, _("Construction Progress"));
 				}
 				else
 				{
 					// Not yet started production.
-					BarGraph->majorCol = WZCOL_GREEN;
-					BarGraph->textCol = WZCOL_POWERQUEUE_BARTEXT;
 					int neededPower = checkPowerRequest(Structure);
-					if (neededPower != -1)
-					{
-						if (Manufacture->psSubject != NULL && neededPower <= Manufacture->psSubject->powerPoints)
-						{
-							Range = Manufacture->psSubject->powerPoints;
-							BuildPoints = Range - neededPower;
-						}
-						BarGraph->text = formatPower(neededPower);
-					}
-					else
-					{
-						BarGraph->text.clear();  // Don't display -1 if production is paused or pending.
-					}
+					int powerToBuild = Manufacture->psSubject != NULL? Manufacture->psSubject->powerPoints : 0;
+					formatPower(BarGraph, neededPower, powerToBuild);
 				}
-				//and change the tool tip
-				widgSetTipText((WIDGET*)BarGraph, _("Construction Progress"));
-
-				BuildPoints = clip(BuildPoints, 0, Range);
-				// prevent a division by 0 error
-				if (Range == 0)
-				{
-					Range = 1;
-				}
-				BarGraph->majorSize = (UWORD)PERNUM(WBAR_SCALE,BuildPoints,Range);
-				BarGraph->style &= ~WIDG_HIDDEN;
 			}
 			else if(StructureIsResearching(Structure))  // Is it researching.
 			{
 				Research = StructureGetResearch(Structure);
 				pPlayerRes = asPlayerResList[selectedPlayer] + (Research->psSubject - asResearch);
-				Range = Research->psSubject->researchPoints;
-				//check started to research
-				if (Research->timeStarted == ACTION_START_TIME)
+				if (pPlayerRes->currentPoints != 0)
 				{
-					//if not started building show how much power accrued
-					Range = Research->psSubject->researchPower;
-					BuildPoints = 0;
-					//set the colour of the bar to green
-					BarGraph->majorCol = WZCOL_GREEN;
-					//and change the tool tip
-					widgSetTipText(BarGraph, _("Power Accrued"));
+					int researchRate = Research->timeStartHold == 0? Research->researchPoints : 0;
+					formatTime(BarGraph, pPlayerRes->currentPoints, Research->psSubject->researchPoints, researchRate, _("Research Progress"));
 				}
 				else
 				{
-					//set the colour of the bar to yellow
-					BarGraph->majorCol = WZCOL_YELLOW;
-					BarGraph->textCol = WZCOL_CONSTRUCTION_BARTEXT;
-					//and change the tool tip
-					widgSetTipText(BarGraph, _("Progress Bar"));
-					//if on hold need to take it into account
-					if (Research->timeStartHold)
-					{
-
-						BuildPoints = Research->researchPoints * (Research->timeStartHold - Research->timeStarted) / GAME_TICKS_PER_SEC;
-
-						BuildPoints+= pPlayerRes->currentPoints;
-
-						BarGraph->text.clear();
-					}
-					else
-					{
-
-						BuildPoints = Research->researchPoints * (gameTime - Research->timeStarted) / GAME_TICKS_PER_SEC;
-
-						BuildPoints+= pPlayerRes->currentPoints;
-
-						int neededPower = checkPowerRequest(Structure);
-						if (neededPower == -1)
-						{
-							int timeToResearch = (Research->psSubject->researchPoints - asPlayerResList[selectedPlayer][Research->psSubject - asResearch].currentPoints) / std::max(Research->researchPoints, 1u);
-							BarGraph->text = formatTime(timeToResearch);
-						}
-						else
-						{
-							BarGraph->majorCol = WZCOL_GREEN;
-							BarGraph->textCol = WZCOL_POWERQUEUE_BARTEXT;
-							if (neededPower <= Research->psSubject->researchPower)
-							{
-								Range = Research->psSubject->researchPower;
-								BuildPoints = Range - neededPower;
-							}
-							BarGraph->text = formatPower(neededPower);
-						}
-					}
+					formatPower(BarGraph, checkPowerRequest(Structure), Research->psSubject->researchPower);
 				}
-				if (BuildPoints > Range)
-				{
-					BuildPoints = Range;
-				}
-				// prevent a division by 0 error
-				if (Range == 0)
-				{
-					Range = 1;
-				}
-				BarGraph->majorSize = (UWORD)PERNUM(WBAR_SCALE,BuildPoints,Range);
-				BarGraph->style &= ~WIDG_HIDDEN;
-			} else {
-				BarGraph->majorSize = 0;
-				BarGraph->style |= WIDG_HIDDEN;
 			}
 
 			break;
@@ -3438,18 +3361,14 @@ void intDisplayAllyBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGH
 	if (bestTimeToResearch != researchNotStarted)
 	{
 		// Show research progress.
-		psBar->textCol = WZCOL_CONSTRUCTION_BARTEXT;
-		psBar->text = formatTime(bestTimeToResearch);
-
-		psBar->majorSize = PERCENT(bestCompletion, asResearch[psWidget->UserData].researchPoints);
+		formatTimeText(psBar, bestTimeToResearch);
+		setBarGraphValue(psBar, psBar->majorCol, bestCompletion, asResearch[psWidget->UserData].researchPoints);
 	}
-	else
+	else if (bestPowerNeeded != researchNotStarted)
 	{
 		// Show how much power is needed, before research can start.
-		psBar->textCol = WZCOL_POWERQUEUE_BARTEXT;
-		psBar->text = formatPower(bestPowerNeeded);
-
-		psBar->majorSize = PERCENT(std::max(researchPowerCost - bestPowerNeeded, 0), researchPowerCost);
+		formatPowerText(psBar, bestPowerNeeded);
+		setBarGraphValue(psBar, psBar->majorCol, researchPowerCost - bestPowerNeeded, researchPowerCost);
 	}
 	barGraphDisplayTrough(psWidget, xOffset, yOffset, pColours);
 }
