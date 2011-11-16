@@ -855,10 +855,11 @@ int32_t structureDamage(STRUCTURE *psStructure, UDWORD damage, WEAPON_CLASS weap
 
 int32_t getStructureDamage(const STRUCTURE *psStructure)
 {
-	int32_t health;
 	CHECK_STRUCTURE(psStructure);
 
-	health = (int64_t)65536 * psStructure->body / structureBody(psStructure);
+	unsigned maxBody = structureBodyBuilt(psStructure);
+
+	int64_t health = (int64_t)65536 * psStructure->body / maxBody;
 	CLIP(health, 0, 65536);
 
 	return 65536 - health;
@@ -6221,6 +6222,20 @@ bool validStructResistance(STRUCTURE *psStruct)
 	return bTarget;
 }
 
+unsigned structureBodyBuilt(STRUCTURE const *psStructure)
+{
+	unsigned maxBody = structureBody(psStructure);
+
+	if (psStructure->status == SS_BEING_BUILT || psStructure->status == SS_BEING_DEMOLISHED)
+	{
+		// Calculate the body points the structure would have, if not damaged.
+		unsigned unbuiltBody = (maxBody + 9) / 10;  // See droidStartBuild() in droid.cpp.
+		unsigned deltaBody = (uint64_t)9 * maxBody * psStructure->currentBuildPts / (10 * psStructure->pStructureType->buildPoints);  // See structureBuild() in structure.cpp.
+		maxBody = unbuiltBody + deltaBody;
+	}
+
+	return maxBody;
+}
 
 /*Access functions for the upgradeable stats of a structure*/
 UDWORD structureBody(const STRUCTURE *psStructure)

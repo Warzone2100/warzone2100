@@ -272,6 +272,7 @@ extern bool checkSpecificStructExists(UDWORD structInc, UDWORD player);
 extern int32_t getStructureDamage(const STRUCTURE* psStructure);
 
 /*Access functions for the upgradeable stats of a structure*/
+unsigned structureBodyBuilt(STRUCTURE const *psStruct);  ///< Returns the maximum body points of a structure with the current number of build points.
 extern UDWORD	structureBody(const STRUCTURE *psStruct);
 extern UDWORD	structureArmour(STRUCTURE_STATS *psStats, UBYTE player);
 extern UDWORD	structureResistance(STRUCTURE_STATS *psStats, UBYTE player);

@@ -2875,6 +2875,11 @@ static void drawStructureHealth(STRUCTURE *psStruct)
 	{
 		//show body points
 		health = (1. - getStructureDamage(psStruct)/65536.f) * 100;
+
+		// If structure is incomplete, make bar correspondingly thinner.
+		int maxBody = structureBody(psStruct);
+		int maxBodyBuilt = structureBodyBuilt(psStruct);
+		width = (uint64_t)width * maxBodyBuilt / maxBody;
 	}
 	if (health > REPAIRLEV_HIGH)
 	{
@@ -2893,7 +2898,7 @@ static void drawStructureHealth(STRUCTURE *psStruct)
 	}
 	health = (((width*10000)/100)*health)/10000;
 	health*=2;
-	pie_BoxFill(scrX-scrR-1, scrY-1, scrX+scrR+1, scrY+3, WZCOL_RELOAD_BACKGROUND);
+	pie_BoxFill(scrX-scrR-1, scrY-1, scrX-scrR+2*width+1, scrY+3, WZCOL_RELOAD_BACKGROUND);
 	pie_BoxFill(scrX-scrR, scrY, scrX-scrR+health, scrY+1, powerCol);
 	pie_BoxFill(scrX-scrR, scrY+1, scrX-scrR+health, scrY+2, powerColShadow);
 }
