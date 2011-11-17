@@ -1423,10 +1423,10 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 			return NULL;
 		}
 
-		if (!FromSave && (pStructureType->type == REF_WALL || pStructureType->type == REF_GATE))
+		if (!FromSave && isWallCombiningStructureType(pStructureType))
 		{
-			wallType = structChooseWallType(player, map_coord(x), map_coord(y));
-			if (wallType == WALL_CORNER && pStructureType->type != REF_GATE)
+			wallType = structChooseWallType(player, map_coord(x), map_coord(y));  // This makes neighbouring walls match us, even if we're a hardpoint, not a wall.
+			if (wallType == WALL_CORNER && pStructureType->type == REF_WALL)
 			{
 				if (pStructureType->asFuncList[0]->type == WALL_TYPE)
 				{
