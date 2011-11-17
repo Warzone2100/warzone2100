@@ -1474,12 +1474,6 @@ static void drawLineBuild(STRUCTURE_STATS *psStats, int left, int right, int up,
 		return;
 	}
 
-	int dir = 0;
-	if ((psStats->type == REF_WALL || psStats->type == REF_GATE) && left == right && up != down)
-	{
-		dir = DEG(90); // rotate so walls will look like walls
-	}
-
 	for (int i = left; i <= right; ++i)
 	{
 		for (int j = up; j <= down; ++j)
@@ -1489,7 +1483,7 @@ static void drawLineBuild(STRUCTURE_STATS *psStats, int left, int right, int up,
 				continue; // construction has started
 			}
 			Vector2i pos(world_coord(i) + world_coord(1)/2, world_coord(j) + world_coord(1)/2);
-			Blueprint blueprint(psStats, pos, dir, state);
+			Blueprint blueprint(psStats, pos, direction, state);
 			blueprints.push_back(blueprint);
 		}
 	}
@@ -1642,6 +1636,7 @@ void displayBlueprints(void)
 						blueprint->stats = ((WALL_FUNCTION *)blueprint->stats->asFuncList[0])->pCornerStat;
 					}
 					break;
+				case WALL_NEUTRAL: break;
 			}
 		}
 

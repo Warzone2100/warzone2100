@@ -1137,21 +1137,10 @@ bool structSetManufacture(STRUCTURE *psStruct, DROID_TEMPLATE *psTempl, QUEUE_MO
 // look at where other walls are to decide what type of wall to build
 static WallOrientation structWallScan(bool aWallPresent[5][5], int x, int y)
 {
-	if (aWallPresent[x-1][y] || aWallPresent[x+1][y])
-	{
-		if (aWallPresent[x][y-1] || aWallPresent[x][y+1])
-		{
-			return WALL_CORNER;
-		}
-		else
-		{
-			return WALL_HORIZ;
-		}
-	}
-	else
-	{
-		return WALL_VERT;
-	}
+	bool horiz = aWallPresent[x - 1][y] || aWallPresent[x + 1][y];
+	bool vert  = aWallPresent[x][y - 1] || aWallPresent[x][y + 1];
+	const WallOrientation orientations[2][2] = {{WALL_NEUTRAL, WALL_HORIZ}, {WALL_VERT, WALL_CORNER}};
+	return orientations[vert][horiz];
 }
 
 static bool isWallCombiningStructureType(STRUCTURE_STATS *pStructureType)
@@ -1192,6 +1181,33 @@ static void structFindWallBlueprints(int mapX, int mapY, bool aWallPresent[5][5]
 	}
 }
 
+static bool wallBlockingTerrainJoin(int mapX, int mapY)
+{
+	MAPTILE *psTile = mapTile(mapX, mapY);
+	return terrainType(psTile) == TER_WATER || terrainType(psTile) == TER_CLIFFFACE || psTile->psObject != NULL;
+}
+
+static WallOrientation structWallScanTerrain(bool aWallPresent[5][5], int mapX, int mapY)
+{
+	WallOrientation orientation = structWallScan(aWallPresent, 2, 2);
+
+	if (orientation == WALL_NEUTRAL)
+	{
+		// If neutral, try choosing horizontal or vertical based on terrain, but don't change to corner type.
+		aWallPresent[2][1] = wallBlockingTerrainJoin(mapX, mapY - 1);
+		aWallPresent[2][3] = wallBlockingTerrainJoin(mapX, mapY + 1);
+		aWallPresent[1][2] = wallBlockingTerrainJoin(mapX - 1, mapY);
+		aWallPresent[3][2] = wallBlockingTerrainJoin(mapX + 1, mapY);
+		orientation = structWallScan(aWallPresent, 2, 2);
+		if (orientation == WALL_CORNER)
+		{
+			orientation = WALL_NEUTRAL;
+		}
+	}
+
+	return orientation;
+}
+
 WallOrientation structChooseWallTypeBlueprint(int mapX, int mapY)
 {
 	bool            aWallPresent[5][5];
@@ -1203,7 +1219,7 @@ WallOrientation structChooseWallTypeBlueprint(int mapX, int mapY)
 	structFindWallBlueprints(mapX, mapY, aWallPresent);
 
 	// finally return the type for this wall
-	return structWallScan(aWallPresent, 2, 2);
+	return structWallScanTerrain(aWallPresent, mapX, mapY);
 }
 
 // Choose a type of wall for a location - and update any neighbouring walls
@@ -1268,7 +1284,7 @@ static WallOrientation structChooseWallType(unsigned player, int mapX, int mapY)
 						// change to a horizontal wall
 						psStruct->rot.direction = 0;
 					}
-					else
+					else if (scanType == WALL_VERT)
 					{
 						// change to a vertical wall
 						psStruct->rot.direction = DEG(90);
@@ -1279,7 +1295,7 @@ static WallOrientation structChooseWallType(unsigned player, int mapX, int mapY)
 	}
 
 	// finally return the type for this wall
-	return structWallScan(aWallPresent, 2,2);
+	return structWallScanTerrain(aWallPresent, mapX, mapY);
 }
 
 
@@ -1564,7 +1580,12 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 		// rotate a wall if necessary
 		if (!FromSave && (pStructureType->type == REF_WALL || pStructureType->type == REF_GATE))
 		{
-			psBuilding->rot.direction = wallType == WALL_VERT? DEG(90) : DEG(0);
+			switch (wallType)
+			{
+				case WALL_HORIZ: psBuilding->rot.direction = DEG(0); break;
+				case WALL_VERT:  psBuilding->rot.direction = DEG(90); break;
+				default: break;
+			}
 		}
 
 		//set up the sensor stats

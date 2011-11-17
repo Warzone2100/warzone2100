@@ -352,9 +352,10 @@ typedef UPGRADE		REARM_UPGRADE;
 
 enum WallOrientation
 {
-	WALL_HORIZ,
-	WALL_VERT,
-	WALL_CORNER,
+	WALL_NEUTRAL,  ///< Arbitrary wall orientation
+	WALL_HORIZ,    ///< Wall like this: -
+	WALL_VERT,     ///< Wall like this: |
+	WALL_CORNER,   ///< Wall like this: +
 };
 
 #endif // __INCLUDED_STRUCTUREDEF_H__
