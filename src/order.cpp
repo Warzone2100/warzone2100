@@ -2363,12 +2363,19 @@ void orderDroidAddPending(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 
 	psDroid->asOrderList.push_back(orderDataToOrderList(psOrder));
 
-	//don't display the arrow-effects with build orders since unnecessary
-	if (!bOrderEffectDisplayed && (psOrder->order != DORDER_BUILD || psOrder->order != DORDER_LINEBUILD || psOrder->order != DORDER_BUILDMODULE || psOrder->order != DORDER_HELPBUILD))
+	// Only display one arrow, bOrderEffectDisplayed must be set to false once per arrow.
+	if (!bOrderEffectDisplayed)
 	{
 		Vector3i position;
-		position.x = psOrder->x;
-		position.z = psOrder->y;
+		if (psOrder->psObj == NULL)
+		{
+			position.x = psOrder->x;
+			position.z = psOrder->y;
+		}
+		else
+		{
+			position = swapYZ(psOrder->psObj->pos);
+		}
 		position.y = map_Height(position.x, position.z) + 32;
 		if (psOrder->psObj != NULL && psOrder->psObj->sDisplay.imd != NULL)
 		{
