@@ -1576,7 +1576,8 @@ void actionUpdateDroid(DROID *psDroid)
 				{
 					// structure on the build location - see if it is the same type
 					STRUCTURE* const psStruct = getTileStructure(map_coord(psDroid->orderX), map_coord(psDroid->orderY));
-					if (psStruct->pStructureType == (STRUCTURE_STATS *)psDroid->psTarStats)
+					if (psStruct->pStructureType == (STRUCTURE_STATS *)psDroid->psTarStats ||
+					    (((STRUCTURE_STATS *)psDroid->psTarStats)->type == REF_WALL && psStruct->pStructureType->type == REF_WALLCORNER))
 					{
 						// same type - do a help build
 						syncDebug("Reached build target: do-help");
