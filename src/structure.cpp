@@ -1159,11 +1159,19 @@ static SDWORD structWallScan(bool aWallPresent[5][5], SDWORD x, SDWORD y)
 	}
 }
 
+static bool isWallCombiningStructure(STRUCTURE *psStruct)
+{
+	return psStruct->pStructureType->type == REF_WALL ||
+	       psStruct->pStructureType->type == REF_GATE ||
+	       psStruct->pStructureType->type == REF_WALLCORNER ||
+	       (psStruct->pStructureType->type == REF_DEFENSE && psStruct->pStructureType->strength == STRENGTH_HARD) || 
+	       (psStruct->pStructureType->type == REF_BLASTDOOR && psStruct->pStructureType->strength == STRENGTH_HARD);  // fortresses
+}
+
 // Choose a type of wall for a location - and update any neighbouring walls
 static SDWORD structChooseWallType(UDWORD player, UDWORD mapX, UDWORD mapY)
 {
 	bool		aWallPresent[5][5];
-	SDWORD		xdiff,ydiff, x,y;
 	STRUCTURE	*psStruct;
 	STRUCTURE	*apsStructs[5][5];
 	SDWORD		neighbourType, scanType;
@@ -1172,29 +1180,23 @@ static SDWORD structChooseWallType(UDWORD player, UDWORD mapX, UDWORD mapY)
 
 	// scan around the location looking for walls
 	memset(aWallPresent, 0, sizeof(aWallPresent));
-	for(psStruct=apsStructLists[player]; psStruct; psStruct=psStruct->psNext)
+	for (int y = -2; y <= 2; ++y)
+		for (int x = -2; x <= 2; ++x)
 	{
-		xdiff = (SDWORD)mapX - map_coord((SDWORD)psStruct->pos.x);
-		ydiff = (SDWORD)mapY - map_coord((SDWORD)psStruct->pos.y);
-		if (xdiff >= -2 && xdiff <= 2 &&
-			ydiff >= -2 && ydiff <= 2 &&
-			(psStruct->pStructureType->type == REF_WALL ||
-			psStruct->pStructureType->type == REF_GATE ||
-			psStruct->pStructureType->type == REF_WALLCORNER ||
-			(psStruct->pStructureType->type == REF_DEFENSE && psStruct->pStructureType->strength == STRENGTH_HARD) || 
-			(psStruct->pStructureType->type == REF_BLASTDOOR && psStruct->pStructureType->strength == STRENGTH_HARD))) // fortresses
+		psStruct = castStructure(mapTile(mapX + x, mapY + y)->psObject);
+		if (psStruct != NULL && isWallCombiningStructure(psStruct) && aiCheckAlliances(player, psStruct->player))
 		{
-			aWallPresent[xdiff+2][ydiff+2] = true;
-			apsStructs[xdiff+2][ydiff+2] = psStruct;
+			aWallPresent[x + 2][y + 2] = true;
+			apsStructs[x + 2][y + 2] = psStruct;
 		}
 	}
 	// add in the wall about to be built
 	aWallPresent[2][2] = true;
 
 	// now make sure that all the walls around this one are OK
-	for(x=1; x<=3; x+=1)
+	for (int x = 1; x <= 3; ++x)
 	{
-		for(y=1; y<=3; y+=1)
+		for (int y = 1; y <= 3; ++y)
 		{
 			// do not look at walls diagonally from this wall
 			if (((x == 2 && y != 2) ||
@@ -1239,7 +1241,7 @@ static SDWORD structChooseWallType(UDWORD player, UDWORD mapX, UDWORD mapY)
 							sx = psStruct->pos.x; sy = psStruct->pos.y;
 							removeStruct(psStruct, true);
 							powerCalc(false);
-							psStruct = buildStructure(psStats, sx,sy, player, true);
+							psStruct = buildStructure(psStats, sx,sy, psStruct->player, true);
 							powerCalc(true);
 							if (psStruct != NULL)
 							{
