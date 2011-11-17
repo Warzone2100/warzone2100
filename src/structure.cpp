@@ -92,11 +92,6 @@
 
 #include "random.h"
 
-// Possible types of wall to build
-#define WALL_HORIZ		0
-#define WALL_VERT		1
-#define WALL_CORNER		2
-
 #define STR_RECOIL_TIME	(GAME_TICKS_PER_SEC/4)
 
 // Maximum Distance allowed between a friendly structure and an assembly point.
@@ -1140,7 +1135,7 @@ bool structSetManufacture(STRUCTURE *psStruct, DROID_TEMPLATE *psTempl, QUEUE_MO
 */
 
 // look at where other walls are to decide what type of wall to build
-static SDWORD structWallScan(bool aWallPresent[5][5], SDWORD x, SDWORD y)
+static WallOrientation structWallScan(bool aWallPresent[5][5], int x, int y)
 {
 	if (aWallPresent[x-1][y] || aWallPresent[x+1][y])
 	{
@@ -1159,17 +1154,60 @@ static SDWORD structWallScan(bool aWallPresent[5][5], SDWORD x, SDWORD y)
 	}
 }
 
-static bool isWallCombiningStructure(STRUCTURE *psStruct)
+static bool isWallCombiningStructureType(STRUCTURE_STATS *pStructureType)
 {
-	return psStruct->pStructureType->type == REF_WALL ||
-	       psStruct->pStructureType->type == REF_GATE ||
-	       psStruct->pStructureType->type == REF_WALLCORNER ||
-	       (psStruct->pStructureType->type == REF_DEFENSE && psStruct->pStructureType->strength == STRENGTH_HARD) || 
-	       (psStruct->pStructureType->type == REF_BLASTDOOR && psStruct->pStructureType->strength == STRENGTH_HARD);  // fortresses
+	return pStructureType->type == REF_WALL ||
+	       pStructureType->type == REF_GATE ||
+	       pStructureType->type == REF_WALLCORNER ||
+	       (pStructureType->type == REF_DEFENSE && pStructureType->strength == STRENGTH_HARD) ||
+	       (pStructureType->type == REF_BLASTDOOR && pStructureType->strength == STRENGTH_HARD);  // fortresses
+}
+
+static void structFindWalls(unsigned player, int mapX, int mapY, bool aWallPresent[5][5], STRUCTURE *apsStructs[5][5])
+{
+	for (int y = -2; y <= 2; ++y)
+		for (int x = -2; x <= 2; ++x)
+	{
+		STRUCTURE *psStruct = castStructure(mapTile(mapX + x, mapY + y)->psObject);
+		if (psStruct != NULL && isWallCombiningStructureType(psStruct->pStructureType) && aiCheckAlliances(player, psStruct->player))
+		{
+			aWallPresent[x + 2][y + 2] = true;
+			apsStructs[x + 2][y + 2] = psStruct;
+		}
+	}
+	// add in the wall about to be built
+	aWallPresent[2][2] = true;
+}
+
+static void structFindWallBlueprints(int mapX, int mapY, bool aWallPresent[5][5])
+{
+	for (int y = -2; y <= 2; ++y)
+		for (int x = -2; x <= 2; ++x)
+	{
+		STRUCTURE_STATS *stats = getTileBlueprintStats(mapX + x, mapY + y);
+		if (stats != NULL && isWallCombiningStructureType(stats))
+		{
+			aWallPresent[x + 2][y + 2] = true;
+		}
+	}
+}
+
+WallOrientation structChooseWallTypeBlueprint(int mapX, int mapY)
+{
+	bool            aWallPresent[5][5];
+	STRUCTURE *     apsStructs[5][5];
+
+	// scan around the location looking for walls
+	memset(aWallPresent, 0, sizeof(aWallPresent));
+	structFindWalls(selectedPlayer, mapX, mapY, aWallPresent, apsStructs);
+	structFindWallBlueprints(mapX, mapY, aWallPresent);
+
+	// finally return the type for this wall
+	return structWallScan(aWallPresent, 2, 2);
 }
 
 // Choose a type of wall for a location - and update any neighbouring walls
-static SDWORD structChooseWallType(UDWORD player, UDWORD mapX, UDWORD mapY)
+static WallOrientation structChooseWallType(unsigned player, int mapX, int mapY)
 {
 	bool		aWallPresent[5][5];
 	STRUCTURE	*psStruct;
@@ -1178,18 +1216,7 @@ static SDWORD structChooseWallType(UDWORD player, UDWORD mapX, UDWORD mapY)
 
 	// scan around the location looking for walls
 	memset(aWallPresent, 0, sizeof(aWallPresent));
-	for (int y = -2; y <= 2; ++y)
-		for (int x = -2; x <= 2; ++x)
-	{
-		psStruct = castStructure(mapTile(mapX + x, mapY + y)->psObject);
-		if (psStruct != NULL && isWallCombiningStructure(psStruct) && aiCheckAlliances(player, psStruct->player))
-		{
-			aWallPresent[x + 2][y + 2] = true;
-			apsStructs[x + 2][y + 2] = psStruct;
-		}
-	}
-	// add in the wall about to be built
-	aWallPresent[2][2] = true;
+	structFindWalls(player, mapX, mapY, aWallPresent, apsStructs);
 
 	// now make sure that all the walls around this one are OK
 	for (int x = 1; x <= 3; ++x)

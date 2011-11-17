@@ -385,6 +385,8 @@ extern bool IsStatExpansionModule(STRUCTURE_STATS *psStats);
 bool structureIsBlueprint(STRUCTURE *psStructure);
 bool isBlueprint(BASE_OBJECT *psObject);
 
+WallOrientation structChooseWallTypeBlueprint(int mapX, int mapY);  ///< Which orientation should a wall blueprint at this position have?
+
 /*checks that the structure stats have loaded up as expected - must be done after
 all StructureStats parts have been loaded*/
 extern bool checkStructureStats(void);

@@ -315,25 +315,40 @@ void NotifyUserOfError(char *msg)
 	lastErrorTime = gameTime2;
 }
 
-STRUCTURE *getTileBlueprint(int mapX, int mapY)
+static Blueprint getTileBlueprint(int mapX, int mapY)
 {
-	static STRUCTURE *psStruct = NULL;
-
 	Vector2i mouse(world_coord(mapX) + TILE_UNITS/2, world_coord(mapY) + TILE_UNITS/2);
 
 	for (std::vector<Blueprint>::const_iterator blueprint = blueprints.begin(); blueprint != blueprints.end(); ++blueprint)
 	{
 		Vector2i size = getStructureStatsSize(blueprint->stats, blueprint->dir)*TILE_UNITS;
-		if (blueprint->state == SS_BLUEPRINT_PLANNED &&
-		    abs(mouse.x - blueprint->pos.x) < size.x/2 && abs(mouse.y - blueprint->pos.y) < size.y/2)
+		if (abs(mouse.x - blueprint->pos.x) < size.x/2 && abs(mouse.y - blueprint->pos.y) < size.y/2)
 		{
-			delete psStruct;  // Delete previously returned structure, if any.
-			psStruct = blueprint->buildBlueprint();
-			return psStruct;  // This blueprint was clicked on.
+			return *blueprint;
 		}
 	}
 
+	return Blueprint(NULL, Vector2i(), 0, SS_BEING_BUILT);
+}
+
+STRUCTURE *getTileBlueprintStructure(int mapX, int mapY)
+{
+	static STRUCTURE *psStruct = NULL;
+
+	Blueprint blueprint = getTileBlueprint(mapX, mapY);
+	if (blueprint.state == SS_BLUEPRINT_PLANNED)
+	{
+		delete psStruct;  // Delete previously returned structure, if any.
+		psStruct = blueprint.buildBlueprint();
+		return psStruct;  // This blueprint was clicked on.
+	}
+
 	return NULL;
+}
+
+STRUCTURE_STATS *getTileBlueprintStats(int mapX, int mapY)
+{
+	return getTileBlueprint(mapX, mapY).stats;
 }
 
 static PIELIGHT structureBrightness(STRUCTURE *psStructure)
@@ -1613,6 +1628,23 @@ void displayBlueprints(void)
 	// Actually render everything.
 	for (std::vector<Blueprint>::iterator blueprint = blueprints.begin(); blueprint != blueprints.end(); ++blueprint)
 	{
+		// Rotate wall if needed.
+		if (blueprint->stats->type == REF_WALL || blueprint->stats->type == REF_GATE)
+		{
+			WallOrientation orientation = structChooseWallTypeBlueprint(map_coord(blueprint->pos.x), map_coord(blueprint->pos.y));
+			switch (orientation)
+			{
+				case WALL_HORIZ:  blueprint->dir = DEG(0); break;
+				case WALL_VERT:   blueprint->dir = DEG(90); break;
+				case WALL_CORNER:
+					if (blueprint->stats->type != REF_GATE)
+					{
+						blueprint->stats = ((WALL_FUNCTION *)blueprint->stats->asFuncList[0])->pCornerStat;
+					}
+					break;
+			}
+		}
+
 		blueprint->renderBlueprint();
 	}
 }

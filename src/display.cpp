@@ -1429,7 +1429,7 @@ UDWORD		dispX,dispY,dispR;
 
 	if (psReturn == NULL)
 	{
-		psReturn = getTileBlueprint(mouseTileX, mouseTileY);
+		psReturn = getTileBlueprintStructure(mouseTileX, mouseTileY);
 	}
 
 	/* Send the result back - if it's null then we clicked on an area of terrain */
@@ -2724,7 +2724,7 @@ STRUCTURE	*psStructure;
 		psNotDroid = getTileOccupier(mouseTileX, mouseTileY);
 		if (psNotDroid == NULL)
 		{
-			psNotDroid = getTileBlueprint(mouseTileX, mouseTileY);
+			psNotDroid = getTileBlueprintStructure(mouseTileX, mouseTileY);
 		}
 	}
 
