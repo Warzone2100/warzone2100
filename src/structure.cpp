@@ -1357,7 +1357,7 @@ static void buildFlatten(STRUCTURE *pStructure, int h)
 void alignStructure(STRUCTURE *psBuilding)
 {
 	/* DEFENSIVE structures are pulled to the terrain */
-	if (psBuilding->pStructureType->type != REF_DEFENSE && psBuilding->pStructureType->type != REF_WALL && psBuilding->pStructureType->type != REF_WALLCORNER)
+	if (psBuilding->pStructureType->type != REF_DEFENSE && psBuilding->pStructureType->type != REF_GATE && psBuilding->pStructureType->type != REF_WALL && psBuilding->pStructureType->type != REF_WALLCORNER)
 	{
 		int mapH = foundationHeight(psBuilding);
 
@@ -1507,7 +1507,7 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 
 				/* Remove any walls underneath the building. You can build defense buildings on top
 				 * of walls, you see. This is not the place to test whether we own it! */
-				if (pStructureType->type == REF_DEFENSE && TileHasWall(psTile))
+				if ((pStructureType->type == REF_DEFENSE || pStructureType->type == REF_GATE) && TileHasWall(psTile))
 				{
 					removeStruct((STRUCTURE *)psTile->psObject, true);
 				}
@@ -4301,6 +4301,7 @@ bool validLocation(BASE_STATS *psStats, unsigned x, unsigned y, uint16_t directi
 				if (valid &&	// only do if necessary
 					(!(psBuilding->type == REF_REPAIR_FACILITY ||
 					psBuilding->type == REF_DEFENSE ||
+					psBuilding->type == REF_GATE ||
 					psBuilding->type == REF_WALL)))
 				{
 					/*cannot build on ground that is too steep*/
@@ -4355,7 +4356,7 @@ bool validLocation(BASE_STATS *psStats, unsigned x, unsigned y, uint16_t directi
 							psTile = mapTile(i,j);
 							if (TileIsOccupied(psTile))
 							{
-								if (TileHasWall(psTile) && (psBuilding->type == REF_DEFENSE || psBuilding->type == REF_WALL))
+								if (TileHasWall(psTile) && (psBuilding->type == REF_DEFENSE || psBuilding->type == REF_GATE || psBuilding->type == REF_WALL))
 								{
 									psStruct = getTileStructure(i,j);
 									if (psStruct != NULL &&

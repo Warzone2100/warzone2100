@@ -1585,10 +1585,11 @@ void actionUpdateDroid(DROID *psDroid)
 						helpBuild = true;
 					}
 					else if ((psStruct->pStructureType->type == REF_WALL ||
-					psStruct->pStructureType->type == REF_WALLCORNER) &&
-						((STRUCTURE_STATS *)psDroid->psTarStats)->type == REF_DEFENSE)
+					          psStruct->pStructureType->type == REF_WALLCORNER) &&
+					         (((STRUCTURE_STATS *)psDroid->psTarStats)->type == REF_DEFENSE ||
+					          ((STRUCTURE_STATS *)psDroid->psTarStats)->type == REF_GATE))
 					{
-							// building a gun tower over a wall - OK
+							// building a gun tower or gate over a wall - OK
 							if (droidStartBuild(psDroid))
 							{
 								syncDebug("Reached build target: tower");
@@ -1648,7 +1649,7 @@ void actionUpdateDroid(DROID *psDroid)
 							helpBuild = true;
 						}
 						else if ((psStruct->pStructureType->type == REF_WALL || psStruct->pStructureType->type == REF_WALLCORNER) &&
-								((STRUCTURE_STATS *)psDroid->psTarStats)->type == REF_DEFENSE)
+						         (((STRUCTURE_STATS *)psDroid->psTarStats)->type == REF_DEFENSE || ((STRUCTURE_STATS *)psDroid->psTarStats)->type == REF_GATE))
 						{
 							// building a gun tower over a wall - OK
 							if (droidStartBuild(psDroid))
