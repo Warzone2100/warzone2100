@@ -1175,8 +1175,6 @@ static SDWORD structChooseWallType(UDWORD player, UDWORD mapX, UDWORD mapY)
 	STRUCTURE	*psStruct;
 	STRUCTURE	*apsStructs[5][5];
 	SDWORD		neighbourType, scanType;
-	STRUCTURE_STATS	*psStats;
-	UDWORD		sx,sy;
 
 	// scan around the location looking for walls
 	memset(aWallPresent, 0, sizeof(aWallPresent));
@@ -1233,26 +1231,9 @@ static SDWORD structChooseWallType(UDWORD player, UDWORD mapX, UDWORD mapY)
 						// change to a corner
 						if (!psStruct->pStructureType->asFuncList.empty() && psStruct->pStructureType->asFuncList[0]->type == WALL_TYPE)
 						{
-							const int     oldBody = psStruct->body;
-							UDWORD        oldBuildPoints = psStruct->currentBuildPts;
-							STRUCT_STATES oldStatus = psStruct->status;
-
-							psStats = ((WALL_FUNCTION *)psStruct->pStructureType->asFuncList[0])->pCornerStat;
-							sx = psStruct->pos.x; sy = psStruct->pos.y;
-							removeStruct(psStruct, true);
-							powerCalc(false);
-							psStruct = buildStructure(psStats, sx,sy, psStruct->player, true);
-							powerCalc(true);
-							if (psStruct != NULL)
-							{
-								psStruct->status = oldStatus;
-								psStruct->body = oldBody;
-								psStruct->currentBuildPts = (SWORD)oldBuildPoints;
-								if (oldStatus != SS_BEING_BUILT)
-								{
-									buildingComplete(psStruct);
-								}
-							}
+							STRUCTURE_STATS *psStats = ((WALL_FUNCTION *)psStruct->pStructureType->asFuncList[0])->pCornerStat;
+							psStruct->pStructureType = psStats;
+							psStruct->sDisplay.imd = psStats->pIMD;
 						}
 					}
 					else if (scanType == WALL_HORIZ)
