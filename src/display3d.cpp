@@ -255,7 +255,46 @@ static BASE_OBJECT *psSensorObj = NULL;
 static UDWORD	destTargetX,destTargetY;
 static UDWORD	destTileX=0,destTileY=0;
 
-static std::vector<STRUCTURE *> blueprints;
+struct Blueprint
+{
+	Blueprint(STRUCTURE_STATS *stats, Vector2i pos, uint16_t dir, STRUCT_STATES state)
+		: stats(stats)
+		, pos(pos)
+		, dir(dir)
+		, state(state)
+	{}
+	int compare(Blueprint const &b) const
+	{
+		if (stats->ref != b.stats->ref) return stats->ref < b.stats->ref? -1 : 1;
+		if (pos.x != b.pos.x) return pos.x < b.pos.x? -1 : 1;
+		if (pos.y != b.pos.y) return pos.y < b.pos.y? -1 : 1;
+		if (dir != b.dir) return dir < b.dir? -1 : 1;
+		if (state != b.state) return state < b.state? -1 : 1;
+		return 0;
+	}
+	bool operator <(Blueprint const &b) const { return compare(b) < 0; }
+	bool operator ==(Blueprint const &b) const { return compare(b) == 0; }
+	STRUCTURE *buildBlueprint() const  ///< Must delete after use.
+	{
+		return ::buildBlueprint(stats, pos.x, pos.y, dir, state);
+	}
+	void renderBlueprint() const
+	{
+		if (clipXY(pos.x, pos.y))
+		{
+			STRUCTURE *psStruct = buildBlueprint();
+			renderStructure(psStruct);
+			delete psStruct;
+		}
+	}
+
+	STRUCTURE_STATS *stats;
+	Vector2i pos;
+	uint16_t dir;
+	STRUCT_STATES state;
+};
+
+static std::vector<Blueprint> blueprints;
 
 #define	TARGET_TO_SENSOR_TIME	((4*(GAME_TICKS_PER_SEC))/5)
 #define	DEST_TARGET_TIME	(GAME_TICKS_PER_SEC/4)
@@ -276,47 +315,20 @@ void NotifyUserOfError(char *msg)
 	lastErrorTime = gameTime2;
 }
 
-// Saves the clickable blueprints, in order to check if they were clicked on.
-static inline void saveOrDeleteBlueprint(STRUCTURE *blueprint)
-{
-	if (blueprint->status == SS_BLUEPRINT_PLANNED)
-	{
-		blueprints.push_back(blueprint);
-	}
-	else
-	{
-		delete blueprint;
-	}
-}
-
-// Saves the clickable blueprints, in order to check if they were clicked on.
-static inline void copyOrIgnoreBlueprint(STRUCTURE *blueprint)
-{
-	if (blueprint->status == SS_BLUEPRINT_PLANNED)
-	{
-		blueprints.push_back(new STRUCTURE(*blueprint));
-	}
-}
-
-static inline void clearBlueprints()
-{
-	for (std::vector<STRUCTURE *>::iterator i = blueprints.begin(); i != blueprints.end(); ++i)
-	{
-		delete *i;
-	}
-	blueprints.clear();
-}
-
 STRUCTURE *getTileBlueprint(int mapX, int mapY)
 {
+	static STRUCTURE *psStruct = NULL;
+
 	Vector2i mouse(world_coord(mapX) + TILE_UNITS/2, world_coord(mapY) + TILE_UNITS/2);
 
-	for (std::vector<STRUCTURE *>::const_iterator i = blueprints.begin(); i != blueprints.end(); ++i)
+	for (std::vector<Blueprint>::const_iterator blueprint = blueprints.begin(); blueprint != blueprints.end(); ++blueprint)
 	{
-		STRUCTURE *psStruct = *i;
-		Vector2i size = getStructureSize(psStruct)*TILE_UNITS;
-		if (abs(mouse.x - psStruct->pos.x) < size.x/2 && abs(mouse.y - psStruct->pos.y) < size.y/2)
+		Vector2i size = getStructureStatsSize(blueprint->stats, blueprint->dir)*TILE_UNITS;
+		if (blueprint->state == SS_BLUEPRINT_PLANNED &&
+		    abs(mouse.x - blueprint->pos.x) < size.x/2 && abs(mouse.y - blueprint->pos.y) < size.y/2)
 		{
+			delete psStruct;  // Delete previously returned structure, if any.
+			psStruct = blueprint->buildBlueprint();
 			return psStruct;  // This blueprint was clicked on.
 		}
 	}
@@ -1441,60 +1453,31 @@ void displayStaticObjects( void )
 
 static void drawLineBuild(STRUCTURE_STATS *psStats, int left, int right, int up, int down, uint16_t direction, STRUCT_STATES state)
 {
-	int i, j;
-	STRUCTURE *blueprint;
-	unsigned width, height;
-
 	if (left != right && up != down)
 	{
 		// not a line, so don't draw
 		return;
 	}
 
-	if (((direction + 0x2000) & 0x4000) == 0)
-	{
-		width  = sBuildDetails.width;
-		height = sBuildDetails.height;
-	}
-	else
-	{
-		// Rotated 90°, swap width and height
-		width  = sBuildDetails.height;
-		height = sBuildDetails.width;
-	}
-
-	blueprint = buildBlueprint(psStats,
-	                           world_coord(left)+world_coord(width)/2,
-	                           world_coord(up)+world_coord(height)/2,
-	                           direction,
-	                           state);
-	ASSERT_OR_RETURN(, blueprint != NULL, "No blueprint created");
-
+	int dir = 0;
 	if ((psStats->type == REF_WALL || psStats->type == REF_GATE) && left == right && up != down)
 	{
-		blueprint->rot.direction = DEG(90); // rotate so walls will look like walls
+		dir = DEG(90); // rotate so walls will look like walls
 	}
 
-	for(i = left; i < right + 1; i++)
+	for (int i = left; i <= right; ++i)
 	{
-		for(j = up; j < down + 1; j++)
+		for (int j = up; j <= down; ++j)
 		{
 			if (TileHasStructure(mapTile(i,j)))
 			{
 				continue; // construction has started
 			}
-			blueprint->pos.x = world_coord(i)+world_coord(1)/2;
-			blueprint->pos.y = world_coord(j)+world_coord(1)/2;
-			blueprint->pos.z = map_Height(blueprint->pos.x, blueprint->pos.y) + world_coord(1)/10;
-			if (clipXY(blueprint->pos.x, blueprint->pos.y))
-			{
-				renderStructure(blueprint);
-			}
-			copyOrIgnoreBlueprint(blueprint);
+			Vector2i pos(world_coord(i) + world_coord(1)/2, world_coord(j) + world_coord(1)/2);
+			Blueprint blueprint(psStats, pos, dir, state);
+			blueprints.push_back(blueprint);
 		}
 	}
-
-	delete blueprint;
 }
 
 static void renderBuildOrder(int32_t order, BASE_STATS *stats, int32_t x, int32_t y, int32_t x2, int32_t y2, uint16_t dir, STRUCT_STATES state)
@@ -1515,26 +1498,20 @@ static void renderBuildOrder(int32_t order, BASE_STATS *stats, int32_t x, int32_
 	}
 	else if (order == DORDER_BUILD && !TileHasStructure(mapTile(map_coord(x), map_coord(y))))
 	{
-		STRUCTURE *blueprint = buildBlueprint((STRUCTURE_STATS *)stats, x, y, dir, state);
-		if (clipXY(x,y))
-		{
-			renderStructure(blueprint);
-		}
-		saveOrDeleteBlueprint(blueprint);
+		Blueprint blueprint((STRUCTURE_STATS *)stats, Vector2i(x, y), dir, state);
+		blueprints.push_back(blueprint);
 	}
 }
 
 void displayBlueprints(void)
 {
-	STRUCTURE *blueprint;
-	DROID *psDroid;
-	int order;
-	STRUCT_STATES state;
+	blueprints.clear();  // Delete old blueprints and draw new ones.
 
 	if ( (buildState == BUILD3D_VALID || buildState == BUILD3D_POS) &&
 	     sBuildDetails.x > 0 && sBuildDetails.x < mapWidth &&
 	     sBuildDetails.y > 0 && sBuildDetails.y < mapHeight)
 	{
+		STRUCT_STATES state;
 		if (buildState == BUILD3D_VALID)
 		{
 			state = SS_BLUEPRINT_VALID;
@@ -1558,7 +1535,7 @@ void displayBlueprints(void)
 				up = MIN(wallDrag.y1, wallDrag.y2);
 				down = MAX(wallDrag.y1, wallDrag.y2);
 
-				drawLineBuild((STRUCTURE_STATS *)sBuildDetails.psStats, left, right, up, down, player.r.y, state);
+				drawLineBuild((STRUCTURE_STATS *)sBuildDetails.psStats, left, right, up, down, (player.r.y + 0x2000)&0xC000, state);
 			}
 			else
 			{
@@ -1575,13 +1552,9 @@ void displayBlueprints(void)
 					height = sBuildDetails.width;
 				}
 				// a single building
-				blueprint = buildBlueprint((STRUCTURE_STATS *)sBuildDetails.psStats,
-										   world_coord(sBuildDetails.x)+world_coord(width)/2,
-										   world_coord(sBuildDetails.y)+world_coord(height)/2,
-										   player.r.y,
-										   state);
-				renderStructure(blueprint);
-				delete blueprint;  // Not SS_BLUEPRINT_PLANNED, no point saving.
+				Vector2i pos(world_coord(sBuildDetails.x)+world_coord(width)/2, world_coord(sBuildDetails.y)+world_coord(height)/2);
+				Blueprint blueprint((STRUCTURE_STATS *)sBuildDetails.psStats, pos, (player.r.y + 0x2000)&0xC000, state);
+				blueprints.push_back(blueprint);
 			}
 		}
 		else
@@ -1611,7 +1584,6 @@ void displayBlueprints(void)
 	}
 
 	// now we draw the blueprints for all ordered buildings
-	clearBlueprints();  // Delete old blueprints and draw new ones.
 	for (int player = 0; player < MAX_PLAYERS; ++player)
 	{
 		if (!hasSharedVision(selectedPlayer, player))
@@ -1619,19 +1591,29 @@ void displayBlueprints(void)
 			continue;
 		}
 		STRUCT_STATES state = player == selectedPlayer? SS_BLUEPRINT_PLANNED : SS_BLUEPRINT_PLANNED_BY_ALLY;
-		for (psDroid = apsDroidLists[player]; psDroid; psDroid = psDroid->psNext)
+		for (DROID *psDroid = apsDroidLists[player]; psDroid; psDroid = psDroid->psNext)
 		{
 			if (psDroid->droidType == DROID_CONSTRUCT || psDroid->droidType == DROID_CYBORG_CONSTRUCT)
 			{
 				renderBuildOrder(psDroid->order, psDroid->psTarStats, psDroid->orderX, psDroid->orderY, psDroid->orderX2, psDroid->orderY2, psDroid->orderDirection, state);
 				//now look thru' the list of orders to see if more building sites
-				for (order = psDroid->listPendingBegin; order < (int)psDroid->asOrderList.size(); order++)
+				for (int order = psDroid->listPendingBegin; order < (int)psDroid->asOrderList.size(); order++)
 				{
 					OrderListEntry const *o = &psDroid->asOrderList[order];
 					renderBuildOrder(o->order, (BASE_STATS *)o->psOrderTarget, o->x, o->y, o->x2, o->y2, o->direction, state);
 				}
 			}
 		}
+	}
+
+	// Erase duplicate blueprints.
+	std::sort(blueprints.begin(), blueprints.end());
+	blueprints.erase(std::unique(blueprints.begin(), blueprints.end()), blueprints.end());
+
+	// Actually render everything.
+	for (std::vector<Blueprint>::iterator blueprint = blueprints.begin(); blueprint != blueprints.end(); ++blueprint)
+	{
+		blueprint->renderBlueprint();
 	}
 }
 
