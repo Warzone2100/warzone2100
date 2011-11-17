@@ -2990,7 +2990,7 @@ void orderSelectedObjAdd(UDWORD player, BASE_OBJECT *psObj, bool add)
 
 			order = chooseOrderObj(psCurr, psObj, specialOrderKeyDown());
 			// see if the order can be added to the list
-			if (!(add && orderDroidObjAdd(psCurr, order, &psObj)))
+			if (order != DORDER_NONE && !(add && orderDroidObjAdd(psCurr, order, &psObj)))
 			{
 				// if not just do it straight off
 				orderDroidObj(psCurr, order, psObj, ModeQueue);
