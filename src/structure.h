@@ -145,6 +145,9 @@ extern UDWORD fillStructureList(STRUCTURE_STATS **ppList, UDWORD selectedPlayer,
 x and y in tile-coords*/
 extern bool validLocation(BASE_STATS *psStats, unsigned x, unsigned y, uint16_t direction, unsigned player, bool bCheckBuildQueue);
 
+bool isWall(STRUCTURE_TYPE type);                                    ///< Structure is a wall. Not completely sure it handles all cases.
+bool isBuildableOnWalls(STRUCTURE_TYPE type);                        ///< Structure can be built on walls. Not completely sure it handles all cases.
+
 /* for a new structure, find a location along an edge which the droid can get
 to and return this as the destination for the droid */
 //extern bool getDroidDestination(STRUCTURE_STATS *psPositionStats, UDWORD structX,

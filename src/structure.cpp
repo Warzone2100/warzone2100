@@ -1145,11 +1145,23 @@ static WallOrientation structWallScan(bool aWallPresent[5][5], int x, int y)
 
 static bool isWallCombiningStructureType(STRUCTURE_STATS *pStructureType)
 {
-	return pStructureType->type == REF_WALL ||
-	       pStructureType->type == REF_GATE ||
-	       pStructureType->type == REF_WALLCORNER ||
-	       (pStructureType->type == REF_DEFENSE && pStructureType->strength == STRENGTH_HARD) ||
-	       (pStructureType->type == REF_BLASTDOOR && pStructureType->strength == STRENGTH_HARD);  // fortresses
+	STRUCTURE_TYPE type = pStructureType->type;
+	STRUCT_STRENGTH strength = pStructureType->strength;
+	return type == REF_WALL ||
+	       type == REF_GATE ||
+	       type == REF_WALLCORNER ||
+	       (type == REF_DEFENSE && strength == STRENGTH_HARD) ||
+	       (type == REF_BLASTDOOR && strength == STRENGTH_HARD);  // fortresses
+}
+
+bool isWall(STRUCTURE_TYPE type)
+{
+	return type == REF_WALL || type == REF_WALLCORNER;
+}
+
+bool isBuildableOnWalls(STRUCTURE_TYPE type)
+{
+	return type == REF_DEFENSE || type == REF_GATE;
 }
 
 static void structFindWalls(unsigned player, int mapX, int mapY, bool aWallPresent[5][5], STRUCTURE *apsStructs[5][5])
@@ -1507,13 +1519,13 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 
 				/* Remove any walls underneath the building. You can build defense buildings on top
 				 * of walls, you see. This is not the place to test whether we own it! */
-				if ((pStructureType->type == REF_DEFENSE || pStructureType->type == REF_GATE) && TileHasWall(psTile))
+				if (isBuildableOnWalls(pStructureType->type) && TileHasWall(psTile))
 				{
 					removeStruct((STRUCTURE *)psTile->psObject, true);
 				}
 
 				// don't really think this should be done here, but dont know otherwise.alexl
-				if(pStructureType->type == REF_WALLCORNER || pStructureType->type == REF_WALL)
+				if (isWall(pStructureType->type))
 				{
 					if (TileHasStructure(mapTile(map.x + width, map.y + breadth)))
 					{

@@ -1466,6 +1466,12 @@ void displayStaticObjects( void )
 	pie_SetDepthOffset(0.0f);
 }
 
+static bool tileHasIncompatibleStructure(MAPTILE const *tile, STRUCTURE_STATS const *stats)
+{
+	STRUCTURE *psStruct = castStructure(tile->psObject);
+	return psStruct != NULL && (!isWall(psStruct->pStructureType->type) || !isBuildableOnWalls(stats->type));
+}
+
 static void drawLineBuild(STRUCTURE_STATS *psStats, int left, int right, int up, int down, uint16_t direction, STRUCT_STATES state)
 {
 	if (left != right && up != down)
@@ -1478,7 +1484,7 @@ static void drawLineBuild(STRUCTURE_STATS *psStats, int left, int right, int up,
 	{
 		for (int j = up; j <= down; ++j)
 		{
-			if (TileHasStructure(mapTile(i,j)))
+			if (tileHasIncompatibleStructure(mapTile(i,j), psStats))
 			{
 				continue; // construction has started
 			}
@@ -1489,9 +1495,10 @@ static void drawLineBuild(STRUCTURE_STATS *psStats, int left, int right, int up,
 	}
 }
 
-static void renderBuildOrder(int32_t order, BASE_STATS *stats, int32_t x, int32_t y, int32_t x2, int32_t y2, uint16_t dir, STRUCT_STATES state)
+static void renderBuildOrder(int32_t order, STRUCTURE_STATS *stats, int32_t x, int32_t y, int32_t x2, int32_t y2, uint16_t dir, STRUCT_STATES state)
 {
 	if (!stats) return;
+
 	//draw the current build site if its a line of structures
 	if (order == DORDER_LINEBUILD)
 	{
@@ -1503,11 +1510,11 @@ static void renderBuildOrder(int32_t order, BASE_STATS *stats, int32_t x, int32_
 		up = MIN(map_coord(y), map_coord(y2));
 		down = MAX(map_coord(y), map_coord(y2));
 
-		drawLineBuild((STRUCTURE_STATS *)stats, left, right, up, down, dir, state);
+		drawLineBuild(stats, left, right, up, down, dir, state);
 	}
-	else if (order == DORDER_BUILD && !TileHasStructure(mapTile(map_coord(x), map_coord(y))))
+	else if (order == DORDER_BUILD && !tileHasIncompatibleStructure(mapTile(map_coord(x), map_coord(y)), stats))
 	{
-		Blueprint blueprint((STRUCTURE_STATS *)stats, Vector2i(x, y), dir, state);
+		Blueprint blueprint(stats, Vector2i(x, y), dir, state);
 		blueprints.push_back(blueprint);
 	}
 }
@@ -1604,12 +1611,12 @@ void displayBlueprints(void)
 		{
 			if (psDroid->droidType == DROID_CONSTRUCT || psDroid->droidType == DROID_CYBORG_CONSTRUCT)
 			{
-				renderBuildOrder(psDroid->order, psDroid->psTarStats, psDroid->orderX, psDroid->orderY, psDroid->orderX2, psDroid->orderY2, psDroid->orderDirection, state);
+				renderBuildOrder(psDroid->order, (STRUCTURE_STATS *)psDroid->psTarStats, psDroid->orderX, psDroid->orderY, psDroid->orderX2, psDroid->orderY2, psDroid->orderDirection, state);
 				//now look thru' the list of orders to see if more building sites
 				for (int order = psDroid->listPendingBegin; order < (int)psDroid->asOrderList.size(); order++)
 				{
 					OrderListEntry const *o = &psDroid->asOrderList[order];
-					renderBuildOrder(o->order, (BASE_STATS *)o->psOrderTarget, o->x, o->y, o->x2, o->y2, o->direction, state);
+					renderBuildOrder(o->order, (STRUCTURE_STATS *)o->psOrderTarget, o->x, o->y, o->x2, o->y2, o->direction, state);
 				}
 			}
 		}
