@@ -111,7 +111,7 @@ extern SDWORD	getCentreX( void );
 extern SDWORD	getCentreZ( void );
 
 STRUCTURE *getTileBlueprintStructure(int mapX, int mapY);  ///< Gets the blueprint at those coordinates, if any. Previous return value becomes invalid.
-STRUCTURE_STATS *getTileBlueprintStats(int mapX, int mapY);  ///< Gets the structure stats of the blueprint at those coordinates, if any.
+STRUCTURE_STATS const *getTileBlueprintStats(int mapX, int mapY);  ///< Gets the structure stats of the blueprint at those coordinates, if any.
 
 extern SDWORD mouseTileX, mouseTileY;
 extern Vector2i mousePos;

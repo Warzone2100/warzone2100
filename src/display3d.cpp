@@ -257,7 +257,7 @@ static UDWORD	destTileX=0,destTileY=0;
 
 struct Blueprint
 {
-	Blueprint(STRUCTURE_STATS *stats, Vector2i pos, uint16_t dir, STRUCT_STATES state)
+	Blueprint(STRUCTURE_STATS const *stats, Vector2i pos, uint16_t dir, STRUCT_STATES state)
 		: stats(stats)
 		, pos(pos)
 		, dir(dir)
@@ -288,7 +288,7 @@ struct Blueprint
 		}
 	}
 
-	STRUCTURE_STATS *stats;
+	STRUCTURE_STATS const *stats;
 	Vector2i pos;
 	uint16_t dir;
 	STRUCT_STATES state;
@@ -346,7 +346,7 @@ STRUCTURE *getTileBlueprintStructure(int mapX, int mapY)
 	return NULL;
 }
 
-STRUCTURE_STATS *getTileBlueprintStats(int mapX, int mapY)
+STRUCTURE_STATS const *getTileBlueprintStats(int mapX, int mapY)
 {
 	return getTileBlueprint(mapX, mapY).stats;
 }
@@ -1469,10 +1469,26 @@ void displayStaticObjects( void )
 static bool tileHasIncompatibleStructure(MAPTILE const *tile, STRUCTURE_STATS const *stats)
 {
 	STRUCTURE *psStruct = castStructure(tile->psObject);
-	return psStruct != NULL && (!isWall(psStruct->pStructureType->type) || !isBuildableOnWalls(stats->type));
+	if (psStruct == NULL)
+	{
+		return false;
+	}
+	if (psStruct->status == SS_BEING_BUILT)
+	{
+		return true;
+	}
+	if (isWall(psStruct->pStructureType->type) && isBuildableOnWalls(stats->type))
+	{
+		return false;
+	}
+	if (IsStatExpansionModule(stats))
+	{
+		return false;
+	}
+	return true;
 }
 
-static void drawLineBuild(STRUCTURE_STATS *psStats, int left, int right, int up, int down, uint16_t direction, STRUCT_STATES state)
+static void drawLineBuild(STRUCTURE_STATS const *psStats, int left, int right, int up, int down, uint16_t direction, STRUCT_STATES state)
 {
 	if (left != right && up != down)
 	{
@@ -1495,9 +1511,18 @@ static void drawLineBuild(STRUCTURE_STATS *psStats, int left, int right, int up,
 	}
 }
 
-static void renderBuildOrder(int32_t order, STRUCTURE_STATS *stats, int32_t x, int32_t y, int32_t x2, int32_t y2, uint16_t dir, STRUCT_STATES state)
+static void renderBuildOrder(int32_t order, void *statsOrStructure, int32_t x, int32_t y, int32_t x2, int32_t y2, uint16_t dir, STRUCT_STATES state)
 {
-	if (!stats) return;
+	if (!statsOrStructure) return;
+
+	STRUCTURE_STATS const *stats = (STRUCTURE_STATS const *)statsOrStructure;
+	if (order == DORDER_BUILDMODULE)
+	{
+		STRUCTURE const *structure = (STRUCTURE const *)statsOrStructure;
+		stats = getModuleStat(structure);
+		x = structure->pos.x;
+		y = structure->pos.y;
+	}
 
 	//draw the current build site if its a line of structures
 	if (order == DORDER_LINEBUILD)
@@ -1512,7 +1537,7 @@ static void renderBuildOrder(int32_t order, STRUCTURE_STATS *stats, int32_t x, i
 
 		drawLineBuild(stats, left, right, up, down, dir, state);
 	}
-	else if (order == DORDER_BUILD && !tileHasIncompatibleStructure(mapTile(map_coord(x), map_coord(y)), stats))
+	if ((order == DORDER_BUILD || order == DORDER_BUILDMODULE) && !tileHasIncompatibleStructure(mapTile(map_coord(x), map_coord(y)), stats))
 	{
 		Blueprint blueprint(stats, Vector2i(x, y), dir, state);
 		blueprints.push_back(blueprint);
@@ -1611,12 +1636,12 @@ void displayBlueprints(void)
 		{
 			if (psDroid->droidType == DROID_CONSTRUCT || psDroid->droidType == DROID_CYBORG_CONSTRUCT)
 			{
-				renderBuildOrder(psDroid->order, (STRUCTURE_STATS *)psDroid->psTarStats, psDroid->orderX, psDroid->orderY, psDroid->orderX2, psDroid->orderY2, psDroid->orderDirection, state);
+				renderBuildOrder(psDroid->order, psDroid->psTarStats, psDroid->orderX, psDroid->orderY, psDroid->orderX2, psDroid->orderY2, psDroid->orderDirection, state);
 				//now look thru' the list of orders to see if more building sites
 				for (int order = psDroid->listPendingBegin; order < (int)psDroid->asOrderList.size(); order++)
 				{
 					OrderListEntry const *o = &psDroid->asOrderList[order];
-					renderBuildOrder(o->order, (STRUCTURE_STATS *)o->psOrderTarget, o->x, o->y, o->x2, o->y2, o->direction, state);
+					renderBuildOrder(o->order, o->psOrderTarget, o->x, o->y, o->x2, o->y2, o->direction, state);
 				}
 			}
 		}

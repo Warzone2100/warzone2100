@@ -253,19 +253,12 @@ static void auxStructureClosedGate(STRUCTURE *psStructure)
 	}
 }
 
-bool IsStatExpansionModule(STRUCTURE_STATS *psStats)
+bool IsStatExpansionModule(STRUCTURE_STATS const *psStats)
 {
 	// If the stat is any of the 3 expansion types ... then return true
-	if(	psStats->type == REF_POWER_MODULE  ||
-		psStats->type == REF_FACTORY_MODULE  ||
-		psStats->type == REF_RESEARCH_MODULE )
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
+	return psStats->type == REF_POWER_MODULE ||
+	       psStats->type == REF_FACTORY_MODULE  ||
+	       psStats->type == REF_RESEARCH_MODULE;
 }
 
 bool structureIsBlueprint(STRUCTURE *psStructure)
@@ -1143,7 +1136,7 @@ static WallOrientation structWallScan(bool aWallPresent[5][5], int x, int y)
 	return orientations[vert][horiz];
 }
 
-static bool isWallCombiningStructureType(STRUCTURE_STATS *pStructureType)
+static bool isWallCombiningStructureType(STRUCTURE_STATS const *pStructureType)
 {
 	STRUCTURE_TYPE type = pStructureType->type;
 	STRUCT_STRENGTH strength = pStructureType->strength;
@@ -1185,7 +1178,7 @@ static void structFindWallBlueprints(int mapX, int mapY, bool aWallPresent[5][5]
 	for (int y = -2; y <= 2; ++y)
 		for (int x = -2; x <= 2; ++x)
 	{
-		STRUCTURE_STATS *stats = getTileBlueprintStats(mapX + x, mapY + y);
+		STRUCTURE_STATS const *stats = getTileBlueprintStats(mapX + x, mapY + y);
 		if (stats != NULL && isWallCombiningStructureType(stats))
 		{
 			aWallPresent[x + 2][y + 2] = true;
@@ -1913,7 +1906,7 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 	return psBuilding;
 }
 
-STRUCTURE *buildBlueprint(STRUCTURE_STATS *psStats, int32_t x, int32_t y, uint16_t direction, STRUCT_STATES state)
+STRUCTURE *buildBlueprint(STRUCTURE_STATS const *psStats, int32_t x, int32_t y, uint16_t direction, STRUCT_STATES state)
 {
 	STRUCTURE *blueprint;
 
@@ -1922,7 +1915,7 @@ STRUCTURE *buildBlueprint(STRUCTURE_STATS *psStats, int32_t x, int32_t y, uint16
 
 	blueprint = new STRUCTURE(0, selectedPlayer);
 	// construct the fake structure
-	blueprint->pStructureType = psStats;
+	blueprint->pStructureType = const_cast<STRUCTURE_STATS *>(psStats);  // Couldn't be bothered to fix const correctness everywhere.
 	blueprint->visible[selectedPlayer] = UBYTE_MAX;
 	blueprint->sDisplay.imd = psStats->pIMD;
 	blueprint->pos.x = x;
