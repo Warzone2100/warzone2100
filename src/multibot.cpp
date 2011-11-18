@@ -42,11 +42,11 @@
 #include "console.h"
 #include "mapgrid.h"
 #include "multirecv.h"
+#include "transporter.h"
 
 #include <vector>
 #include <algorithm>
 
-#define ANYPLAYER	99
 
 enum SubType
 {
@@ -254,22 +254,20 @@ bool recvDroidEmbark(NETQUEUE queue)
  *
  *  \sa sendDroidEmbark(),recvDroidEmbark(),recvDroidDisEmbark()
  */
-bool sendDroidDisEmbark(const DROID* psDroid, const DROID* psTransporter)
+bool sendDroidDisembark(DROID const *psTransporter, DROID const *psDroid)
 {
 	if (!bMultiMessages)
 		return true;
 
 	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_DROIDDISEMBARK);
 	{
-		uint8_t player = psDroid->player;
-		uint32_t droidID = psDroid->id;
-		uint32_t transporterID = psTransporter->id;
-		Position pos = droidGetPrecisePosition(psDroid);
+		uint32_t player = psTransporter->player;
+		uint32_t droidId = psDroid->id;
+		uint32_t transportId = psTransporter->id;
 
-		NETuint8_t(&player);
-		NETuint32_t(&droidID);
-		NETuint32_t(&transporterID);
-		NETPosition(&pos);
+		NETuint32_t(&player);
+		NETuint32_t(&droidId);
+		NETuint32_t(&transportId);
 	}
 	return NETend();
 }
@@ -285,15 +283,13 @@ bool recvDroidDisEmbark(NETQUEUE queue)
 
 	NETbeginDecode(queue, GAME_DROIDDISEMBARK);
 	{
-		uint8_t player;
+		uint32_t player;
 		uint32_t droidID;
 		uint32_t transporterID;
-		Position pos;
 
-		NETuint8_t(&player);
+		NETuint32_t(&player);
 		NETuint32_t(&droidID);
 		NETuint32_t(&transporterID);
-		NETPosition(&pos);
 
 		NETend();
 
@@ -326,25 +322,7 @@ bool recvDroidDisEmbark(NETQUEUE queue)
 			return false;
 		}
 
-		// remove it from the transporter
-		psFoundDroid->psGroup->remove(psFoundDroid);
-
-		// and add it back to the bloody droid list
-		addDroid(psFoundDroid, apsDroidLists);
-
-		// Add it back into the world at the x/y
-		droidSetPrecisePosition(psFoundDroid, pos);
-
-		if (!droidOnMap(psFoundDroid))
-		{
-			debug(LOG_ERROR, "droid %d disembarked was NOT on map?", psFoundDroid->id);
-			return false;
-		}
-
-		updateDroidOrientation(psFoundDroid);
-
-		// Initialise the movement data
-		initDroidMovement(psFoundDroid);
+		transporterRemoveDroid(psTransporterDroid, psFoundDroid, ModeImmediate);
 	}
 	return true;
 }

@@ -151,7 +151,6 @@ static  UWORD           objMajor = 0, objMinor = 0;
 
 /*functions */
 static bool intAddTransporterContents(void);
-static void transporterRemoveDroid(UDWORD id);
 static void setCurrentTransporter(UDWORD id);
 static void intRemoveTransContentNoAnim(void);
 static bool intAddTransButtonForm(void);
@@ -1078,16 +1077,29 @@ static void _intProcessTransporter(UDWORD id)
 	{
 		//got to have a current transporter for this to work - and can't be flying
 		if (psCurrTransporter != NULL && !transporterFlying(psCurrTransporter))
-        {
-    		transporterRemoveDroid(id);
-	    	/*refresh the Contents list */
-		    intAddTransporterContents();
-    		if (onMission)
-	    	{
-		    	/*refresh the Avail list */
-			    intAddDroidsAvailForm();
-		    }
-        }
+		{
+			unsigned currID = IDTRANS_CONTSTART;
+			DROID *psDroid;
+			for (psDroid = psCurrTransporter->psGroup->psList; psDroid != NULL && psDroid != psCurrTransporter; psDroid = psDroid->psGrpNext)
+			{
+				if (currID == id)
+				{
+					break;
+				}
+				currID++;
+			}
+			if (psDroid != NULL)
+			{
+				transporterRemoveDroid(psCurrTransporter, psDroid, ModeQueue);
+			}
+			/*refresh the Contents list */
+			intAddTransporterContents();
+			if (onMission)
+			{
+				/*refresh the Avail list */
+				intAddDroidsAvailForm();
+			}
+		}
 	}
 	else if (id == IDTRANS_CLOSE)
 	{
@@ -1259,116 +1271,81 @@ void setCurrentTransporter(UDWORD id)
 }
 
 /*removes a droid from the group associated with the transporter*/
-void transporterRemoveDroid(UDWORD id)
+void transporterRemoveDroid(DROID *psTransport, DROID *psDroid, QUEUE_MODE mode)
 {
-	DROID		*psDroid, *psNext;
-	UDWORD		currID;
-	UDWORD		droidX, droidY;
-	DROID_GROUP	*psGroup;
+	ASSERT(psTransport != NULL && psDroid != NULL, "Something NULL");
 
-	ASSERT( psCurrTransporter != NULL, "transporterRemoveUnit:can't remove units" );
-
-	if (bMultiMessages)
+	if (bMultiMessages && mode == ModeQueue)
 	{
-		// Not sure how to fix this...
-		debug(LOG_ERROR, "TODO: Can't unload single droids, sending order to unload all at once, because this code is so convoluted.");
-		// All at once is better than nothing...
-		orderDroidLoc(psCurrTransporter, DORDER_DISEMBARK, psCurrTransporter->pos.x, psCurrTransporter->pos.y, ModeQueue);
+		sendDroidDisembark(psTransport, psDroid);
 		return;
 	}
 
-	currID = IDTRANS_CONTSTART;
-	for (psDroid = psCurrTransporter->psGroup->psList; psDroid != NULL && psDroid !=
-		psCurrTransporter; psDroid = psNext)
+	/*if we're offWorld we can't pick a tile without swapping the map
+	pointers - can't be bothered so just do this...*/
+	if (onMission)
 	{
-		psNext = psDroid->psGrpNext;
-		if (currID == id)
-		{
-			break;
-		}
-		currID++;
+		psDroid->pos.x = INVALID_XY;
+		psDroid->pos.y = INVALID_XY;
 	}
-	if (psDroid)
+	else
 	{
-		/*if we're offWorld we can't pick a tile without swapping the map
-		pointers - can't be bothered so just do this...*/
-		if (onMission)
+		Vector2i droidPos;
+		if (bMultiPlayer)
 		{
-			psDroid->pos.x = INVALID_XY;
-			psDroid->pos.y = INVALID_XY;
+			//set the units next to the transporter's current location
+			droidPos = map_coord(psTransport->pos);
 		}
 		else
 		{
-			if (bMultiPlayer)
-			{
-				//set the units next to the transporter's current location
-				droidX = map_coord(psCurrTransporter->pos.x);
-				droidY = map_coord(psCurrTransporter->pos.y);
-			}
-			else
-			{
-				//pick a tile because save games won't remember where the droid was when it was loaded
-				droidX = map_coord(getLandingX(0));
-				droidY = map_coord(getLandingY(0));
-			}
-			if (!pickATileGen(&droidX, &droidY,LOOK_FOR_EMPTY_TILE,zonedPAT))
-			{
-				ASSERT( false, "transporterRemoveUnit: Unable to find a valid location" );
-			}
-			psDroid->pos.x = (UWORD)world_coord(droidX);
-			psDroid->pos.y = (UWORD)world_coord(droidY);
-			psDroid->pos.z = map_Height(psDroid->pos.x, psDroid->pos.y);
+			//pick a tile because save games won't remember where the droid was when it was loaded
+			droidPos = map_coord(Vector2i(getLandingX(0), getLandingY(0)));
 		}
-
-		// remove it from the transporter group
-		psDroid->psGroup->remove(psDroid);
-
-		//add it back into apsDroidLists
-		if (onMission)
+		if (!pickATileGen(&droidPos, LOOK_FOR_EMPTY_TILE, zonedPAT))
 		{
-			//addDroid(psDroid, mission.apsBuiltDroids);
-			addDroid(psDroid, mission.apsDroidLists);
+			ASSERT(false, "Unable to find a valid location");
 		}
-		else
-		{
-			// add the droid back onto the droid list
-			addDroid(psDroid, apsDroidLists);
-
-			//inform all other players about that
-			if (bMultiMessages)
-			{
-				sendDroidDisEmbark(psDroid,psCurrTransporter);
-			}
-		}
-
-		if (psDroid->pos.x != INVALID_XY)
-		{
-			// We can update the orders now, since everyone has been
-			// notified of the droid exiting the transporter
-			updateDroidOrientation(psDroid);
-		}
-		//initialise the movement data
-		initDroidMovement(psDroid);
-		//reset droid orders
-		orderDroid(psDroid, DORDER_STOP, ModeImmediate);
-		psDroid->cluster = 0;
-		// check if it is a commander
-		if (psDroid->droidType == DROID_COMMAND)
-		{
-			psGroup = grpCreate();
-			psGroup->add(psDroid);
-		}
-		psDroid->selected = true;
-
-		if (calcRemainingCapacity(psCurrTransporter))
-		{
-			//make sure the button isn't flashing
-			stopMissionButtonFlash(IDTRANS_LAUNCH);
-		}
+		psDroid->pos = Vector3i(world_coord(droidPos), map_Height(psDroid->pos));
 	}
 
-	// we want to sync with all clients *now*.
-	ForceDroidSync(psDroid);
+	// remove it from the transporter group
+	psDroid->psGroup->remove(psDroid);
+
+	//add it back into apsDroidLists
+	if (onMission)
+	{
+		addDroid(psDroid, mission.apsDroidLists);
+	}
+	else
+	{
+		// add the droid back onto the droid list
+		addDroid(psDroid, apsDroidLists);
+	}
+
+	if (psDroid->pos.x != INVALID_XY)
+	{
+		// We can update the orders now, since everyone has been
+		// notified of the droid exiting the transporter
+		updateDroidOrientation(psDroid);
+	}
+	//initialise the movement data
+	initDroidMovement(psDroid);
+	//reset droid orders
+	orderDroid(psDroid, DORDER_STOP, ModeImmediate);
+	psDroid->cluster = 0;
+	// check if it is a commander
+	if (psDroid->droidType == DROID_COMMAND)
+	{
+		DROID_GROUP *psGroup = grpCreate();
+		psGroup->add(psDroid);
+	}
+	psDroid->selected = true;
+
+	if (calcRemainingCapacity(psTransport))
+	{
+		//make sure the button isn't flashing
+		stopMissionButtonFlash(IDTRANS_LAUNCH);
+	}
 }
 
 /*adds a droid to the current transporter via the interface*/
@@ -1438,7 +1415,7 @@ void transporterAddDroid(DROID *psTransporter, DROID *psDroidToAdd)
 		// adding to transporter unit's group list
 		psTransporter->psGroup->add(psDroidToAdd);
 		
-		if (bMultiMessages)
+		if (bMultiMessages && !isInSync())
 		{
 			//inform all other players to update their local lists
 			sendDroidEmbark(psDroidToAdd,psTransporter);

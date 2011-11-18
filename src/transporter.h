@@ -46,6 +46,7 @@ extern void intProcessTransporter(UDWORD id);
 
 /*Adds a droid to the transporter, removing it from the world*/
 extern void transporterAddDroid(DROID *psTransporter, DROID *psDroidToAdd);
+void transporterRemoveDroid(DROID *psTransport, DROID *psDroid, QUEUE_MODE mode);
 /*check to see if the droid can fit on the Transporter - return true if fits*/
 extern bool checkTransporterSpace(DROID *psTransporter, DROID *psAssigned);
 /*calculates how much space is remaining on the transporter - allows droids to take

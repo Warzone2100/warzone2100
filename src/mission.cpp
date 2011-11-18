@@ -1900,12 +1900,6 @@ void unloadTransporter(DROID *psTransporter, UDWORD x, UDWORD y, bool goingHome)
 				//swap the droid and map pointers
 				swapMissionPointers();
 			}
-
-			// Inform all other players
-			if (bMultiMessages)
-			{
-				sendDroidDisEmbark(psDroid, psTransporter);
-			}
 		}
 
 		/* trigger script callback detailing group about to disembark */

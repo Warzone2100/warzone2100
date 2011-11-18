@@ -254,6 +254,7 @@ extern bool	pickATile2				(UDWORD *x, UDWORD *y, UDWORD numIterations);
 extern	bool	zonedPAT(UDWORD x, UDWORD y);
 extern	bool	pickATileGen(UDWORD *x, UDWORD *y, UBYTE numIterations,
 					 bool (*function)(UDWORD x, UDWORD y));
+bool pickATileGen(Vector2i *pos, unsigned numIterations, bool (*function)(UDWORD x, UDWORD y));
 extern	bool	pickATileGenThreat(UDWORD *x, UDWORD *y, UBYTE numIterations, SDWORD threatRange,
 					 SDWORD player, bool (*function)(UDWORD x, UDWORD y));
 

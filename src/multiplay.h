@@ -204,7 +204,7 @@ extern bool SendCmdGroup		(DROID_GROUP *psGroup, UWORD x, UWORD y, BASE_OBJECT *
 
 extern bool sendDroidSecondary	(const DROID* psDroid, SECONDARY_ORDER sec, SECONDARY_STATE state);
 extern bool sendDroidEmbark     (const DROID* psDroid, const DROID* psTransporter);
-extern bool sendDroidDisEmbark  (const DROID* psDroid, const DROID* psTransporter);
+bool sendDroidDisembark(DROID const *psTransporter, DROID const *psDroid);
 
 // Startup. mulitopt
 extern bool multiTemplateSetup	(void);

@@ -3226,6 +3226,14 @@ bool	pickATileGen(UDWORD *x, UDWORD *y, UBYTE numIterations,
 	return pickATileGenThreat(x, y, numIterations, -1, -1, function);
 }
 
+bool pickATileGen(Vector2i *pos, unsigned numIterations, bool (*function)(UDWORD x, UDWORD y))
+{
+	UDWORD x = pos->x, y = pos->y;
+	bool ret = pickATileGenThreat(&x, &y, numIterations, -1, -1, function);
+	*pos = Vector2i(x, y);
+	return ret;
+}
+
 /// find a tile for which the passed function will return true without any threat in the specified range 
 bool	pickATileGenThreat(UDWORD *x, UDWORD *y, UBYTE numIterations, SDWORD threatRange,
 					 SDWORD player, bool (*function)(UDWORD x, UDWORD y))
