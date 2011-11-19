@@ -489,13 +489,20 @@ void	removeDroidBase(DROID *psDel)
 	}
 
 	// Check to see if constructor droid currently trying to find a location to build
-	if ((psDel->droidType == DROID_CONSTRUCT || psDel->droidType == DROID_CYBORG_CONSTRUCT)
-	    && psDel->player == selectedPlayer && psDel->selected)
+	if (psDel->player == selectedPlayer && psDel->selected && isConstructionDroid(psDel))
 	{
 		// If currently trying to build, kill off the placement
 		if (tryingToGetLocation())
 		{
-			kill3DBuilding();
+			int numSelectedConstructors = 0;
+			for (DROID *psDroid = apsDroidLists[psDel->player]; psDroid != NULL; psDroid = psDroid->psNext)
+			{
+				numSelectedConstructors += psDroid->selected && isConstructionDroid(psDroid);
+			}
+			if (numSelectedConstructors <= 1)  // If we were the last selected construction droid.
+			{
+				kill3DBuilding();
+			}
 		}
 	}
 
