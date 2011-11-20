@@ -39,12 +39,10 @@
 // maximum random pause for firing
 #define RANDOM_PAUSE	500
 
-// Watermelon:real projectile
 /* Fire a weapon at something */
 bool combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, int weapon_slot)
 {
 	WEAPON_STATS	*psStats;
-	UDWORD                  damLevel;
 	UDWORD			firePause;
 	SDWORD			longRange;
 	DROID			*psDroid = NULL;
@@ -88,26 +86,6 @@ bool combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 
 	/* See when the weapon last fired to control it's rate of fire */
 	firePause = weaponFirePause(psStats, psAttacker->player);
-
-	// increase the pause if heavily damaged
-	switch (psAttacker->type)
-	{
-	case OBJ_DROID:
-		psDroid = (DROID *)psAttacker;
-		damLevel = PERCENT(psDroid->body, psDroid->originalBody);
-		break;
-	case OBJ_STRUCTURE:
-		damLevel = PERCENT(((STRUCTURE *)psAttacker)->body, structureBody((STRUCTURE *)psAttacker));
-		break;
-	default:
-		damLevel = 100;
-		break;
-	}
-
-	if (damLevel < HEAVY_DAMAGE_LEVEL)
-	{
-		firePause += firePause;
-	}
 
 	if (gameTime - psWeap->lastFired <= firePause)
 	{

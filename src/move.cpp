@@ -1351,13 +1351,13 @@ static bool moveReachedWayPoint(DROID *psDroid)
 
 #define MAX_SPEED_PITCH  60
 
-/** Calculate the new speed for a droid based on factors like damage and pitch.
+/** Calculate the new speed for a droid based on factors like pitch.
  *  @todo Remove hack for steep slopes not properly marked as blocking on some maps.
  */
 SDWORD moveCalcDroidSpeed(DROID *psDroid)
 {
 	const uint16_t		maxPitch = DEG(MAX_SPEED_PITCH);
-	UDWORD			mapX,mapY, damLevel;
+	UDWORD			mapX, mapY;
 	int			speed, pitch;
 	WEAPON_STATS		*psWStats;
 
@@ -1378,13 +1378,6 @@ SDWORD moveCalcDroidSpeed(DROID *psDroid)
 		// not properly marked as being cliffs, but too steep to drive over.
 		// This confuses the heck out of the path-finding code! - Per
 		speed = 10;
-	}
-
-	// slow down damaged droids
-	damLevel = PERCENT(psDroid->body, psDroid->originalBody);
-	if (damLevel < HEAVY_DAMAGE_LEVEL)
-	{
-		speed = 2 * speed / 3;
 	}
 
 	// stop droids that have just fired a no fire while moving weapon
