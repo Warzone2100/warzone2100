@@ -1204,8 +1204,6 @@ static void proj_ImpactFunc( PROJECTILE *psObj )
 								turnOffMultiMsg(true);
 							}
 
-							//Watermelon:uses a slightly different check for angle,
-							// since fragment of a project is from the explosion spot not from the projectile start position
 							relativeDamage = droidDamage(psCurrD, damage, psStats->weaponClass, psStats->weaponSubClass);
 
 							turnOffMultiMsg(false);	// multiplay msgs back on.
@@ -1470,11 +1468,8 @@ static void proj_checkBurnDamage( BASE_OBJECT *apsList, PROJECTILE *psProj)
 					debug(LOG_NEVER, "Burn damage of %d to object %d, player %d\n",
 							damageToDo, psCurr->id, psCurr->player);
 
-					//Watermelon:just assume the burn damage is from FRONT
 					relativeDamage = objectDamage(psCurr, damageToDo, psStats->weaponClass,psStats->weaponSubClass);
-
 					psCurr->burnDamage += damageToDo;
-
 					proj_UpdateKills(psProj, relativeDamage);
 				}
 				/* The damage could be negative if the object
