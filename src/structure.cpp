@@ -815,16 +815,16 @@ void handleAbandonedStructures()
  * \param weaponSubClass the subclass of the weapon that deals the damage
  * \return < 0 when the dealt damage destroys the structure, > 0 when the structure survives
  */
-int32_t structureDamage(STRUCTURE *psStructure, UDWORD damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, HIT_SIDE impactSide)
+int32_t structureDamage(STRUCTURE *psStructure, UDWORD damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass)
 {
 	int32_t relativeDamage;
 
 	CHECK_STRUCTURE(psStructure);
 
 	debug(LOG_ATTACK, "structure id %d, body %d, armour %d, damage: %d",
-		  psStructure->id, psStructure->body, psStructure->armour[impactSide][weaponClass], damage);
+		  psStructure->id, psStructure->body, psStructure->armour[weaponClass], damage);
 
-	relativeDamage = objDamage(psStructure, damage, structureBody(psStructure), weaponClass, weaponSubClass, impactSide);
+	relativeDamage = objDamage(psStructure, damage, structureBody(psStructure), weaponClass, weaponSubClass);
 
 	// If the shell did sufficient damage to destroy the structure
 	if (relativeDamage < 0)
@@ -1639,15 +1639,9 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 			}
 		}
 
-		// Structures currently do not have varied armour
-		for (i = 0; i < NUM_HIT_SIDES; i++)
+		for (int j = 0; j < WC_NUM_WEAPON_CLASSES; j++)
 		{
-			int j;
-
-			for (j = 0; j < WC_NUM_WEAPON_CLASSES; j++)
-			{
-				psBuilding->armour[i][j] = (UWORD)structureArmour(pStructureType, (UBYTE)player);
-			}
+			psBuilding->armour[j] = (UWORD)structureArmour(pStructureType, (UBYTE)player);
 		}
 		psBuilding->resistance = (UWORD)structureResistance(pStructureType, (UBYTE)player);
 		psBuilding->lastResistance = ACTION_START_TIME;
@@ -5882,7 +5876,7 @@ void printStructureInfo(STRUCTURE *psStructure)
 		{
 			CONPRINTF(ConsoleString, (ConsoleString, "%s - %d Units assigned - ID %d - armour %d|%d - sensor range %hu - ECM %u - born %u - depth %.02f",
 				getStatName(psStructure->pStructureType), countAssignedDroids(psStructure),
-				psStructure->id, psStructure->armour[0][WC_KINETIC], psStructure->armour[0][WC_HEAT],
+				psStructure->id, psStructure->armour[WC_KINETIC], psStructure->armour[WC_HEAT],
 					structSensorRange(psStructure), structConcealment(psStructure), psStructure->born, psStructure->foundationDepth));
 		} else
 #endif

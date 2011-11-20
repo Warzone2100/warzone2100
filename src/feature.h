@@ -54,7 +54,7 @@ extern bool destroyFeature(FEATURE *psDel);
 /* get a feature stat id from its name */
 extern SDWORD getFeatureStatFromName(const char *pName);
 
-int32_t featureDamage(FEATURE *psFeature, UDWORD damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, HIT_SIDE impactSide);
+int32_t featureDamage(FEATURE *psFeature, UDWORD damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass);
 
 extern void     featureInitVars(void);
 

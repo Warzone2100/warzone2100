@@ -656,7 +656,7 @@ static bool _intAddDesign( bool bShowCentreScreen )
 	sBarInit.sMinorCol.byte.b = DES_CLICKBARMINORBLUE;
 	sBarInit.pDisplay = intDisplayStatsBar;
 	sBarInit.pTip = _("Kinetic Armour");
-	sBarInit.iRange = (UWORD)getMaxBodyArmour();//DBAR_BODYMAXARMOUR;
+	sBarInit.iRange = getMaxBodyArmour();
 	if (!widgAddBarGraph(psWScreen, &sBarInit))
 	{
 		return true;
@@ -665,7 +665,7 @@ static bool _intAddDesign( bool bShowCentreScreen )
 	sBarInit.id = IDDES_BODYARMOUR_H;
 	sBarInit.y  = DES_STATBAR_Y2;	//+= DES_CLICKBARHEIGHT + DES_CLICKGAP;
 	sBarInit.pTip = _("Thermal Armour");
-	sBarInit.iRange = (UWORD)getMaxBodyArmour();//DBAR_BODYMAXARMOUR;
+	sBarInit.iRange = getMaxBodyArmour();
 	if (!widgAddBarGraph(psWScreen, &sBarInit))
 	{
 		return true;
@@ -705,7 +705,7 @@ static bool _intAddDesign( bool bShowCentreScreen )
 	sLabInit.pTip = _("Kinetic Armour");
 	sLabInit.pDisplay = intDisplayImage;
 	//just to confuse things even more - the graphics were named incorrectly!
-	sLabInit.UserData = IMAGE_DES_ARMOUR_EXPLOSIVE;//IMAGE_DES_ARMOUR_KINETIC;
+	sLabInit.UserData = IMAGE_DES_ARMOUR_EXPLOSIVE;
 	if (!widgAddLabel(psWScreen, &sLabInit))
 	{
 		return true;
@@ -714,7 +714,7 @@ static bool _intAddDesign( bool bShowCentreScreen )
 	sLabInit.y += DES_CLICKBARHEIGHT + DES_CLICKGAP;
 	sLabInit.pTip = _("Thermal Armour");
 	sLabInit.pDisplay = intDisplayImage;
-	sLabInit.UserData = IMAGE_DES_ARMOUR_KINETIC;//IMAGE_DES_ARMOUR_EXPLOSIVE;
+	sLabInit.UserData = IMAGE_DES_ARMOUR_KINETIC;
 	if (!widgAddLabel(psWScreen, &sLabInit))
 	{
 		return true;
@@ -2799,25 +2799,13 @@ static void intSetBodyStats(BODY_STATS *psStats)
 	widgSetTip( psWScreen, IDDES_BODYFORM, getStatName(psStats) );
 
 	/* armour */
-	//	size = WBAR_SCALE * psStats->armourValue/DBAR_BODYMAXARMOUR;
 	//do kinetic armour
-	widgSetBarSize(psWScreen, IDDES_BODYARMOUR_K, bodyArmour(psStats,
-		(UBYTE)selectedPlayer, DROID_BODY_UPGRADE, WC_KINETIC, 0));
+	widgSetBarSize(psWScreen, IDDES_BODYARMOUR_K, bodyArmour(psStats, selectedPlayer, DROID_BODY_UPGRADE, WC_KINETIC));
 	//do heat armour
-	widgSetBarSize(psWScreen, IDDES_BODYARMOUR_H, bodyArmour(psStats,
-		(UBYTE)selectedPlayer, DROID_BODY_UPGRADE, WC_HEAT, 0));
-	/* body points */
-	/*size = WBAR_SCALE * psStats->body/DBAR_BODYMAXPOINTS;
-	if (size > WBAR_SCALE)
-	{
-		size = WBAR_SCALE;
-	}
-	widgSetBarSize(psWScreen, IDDES_BODYPOINTS, size);*/
+	widgSetBarSize(psWScreen, IDDES_BODYARMOUR_H, bodyArmour(psStats, selectedPlayer, DROID_BODY_UPGRADE, WC_HEAT));
 	/* power */
 	//widgSetBarSize(psWScreen, IDDES_BODYPOWER, psStats->powerOutput);
-	widgSetBarSize(psWScreen, IDDES_BODYPOWER, bodyPower(psStats,
-		(UBYTE)selectedPlayer,DROID_BODY_UPGRADE));
-
+	widgSetBarSize(psWScreen, IDDES_BODYPOWER, bodyPower(psStats, selectedPlayer, DROID_BODY_UPGRADE));
 	/* weight */
 	widgSetBarSize(psWScreen, IDDES_BODYWEIGHT, psStats->weight);
 
@@ -2840,26 +2828,11 @@ static void intSetBodyShadowStats(BODY_STATS *psStats)
 	if (psStats)
 	{
 		/* armour - kinetic*/
-		//size = WBAR_SCALE * psStats->armourValue/DBAR_BODYMAXARMOUR;
-		//widgSetMinorBarSize(psWScreen, IDDES_BODYARMOUR_K,psStats->armourValue[WC_KINETIC]);
-		widgSetMinorBarSize(psWScreen, IDDES_BODYARMOUR_K, bodyArmour(psStats,
-			(UBYTE)selectedPlayer, DROID_BODY_UPGRADE, WC_KINETIC, 0));
+		widgSetMinorBarSize(psWScreen, IDDES_BODYARMOUR_K, bodyArmour(psStats, selectedPlayer, DROID_BODY_UPGRADE, WC_KINETIC));
 		//armour - heat
-		//widgSetMinorBarSize(psWScreen, IDDES_BODYARMOUR_H,psStats->armourValue[WC_HEAT]);
-		widgSetMinorBarSize(psWScreen, IDDES_BODYARMOUR_H,bodyArmour(psStats,
-			(UBYTE)selectedPlayer, DROID_BODY_UPGRADE, WC_HEAT, 0));
-		/* body points */
-//			size = WBAR_SCALE * psStats->bodyPoints/DBAR_BODYMAXPOINTS;
-//			if (size > WBAR_SCALE)
-//			{
-//				size = WBAR_SCALE;
-//			}
-//			widgSetMinorBarSize(psWScreen, IDDES_BODYPOINTS, size);
+		widgSetMinorBarSize(psWScreen, IDDES_BODYARMOUR_H,bodyArmour(psStats, selectedPlayer, DROID_BODY_UPGRADE, WC_HEAT));
 		/* power */
-		//widgSetMinorBarSize(psWScreen, IDDES_BODYPOWER, psStats->powerOutput);
-		widgSetMinorBarSize(psWScreen, IDDES_BODYPOWER, bodyPower(psStats,
-			(UBYTE)selectedPlayer, DROID_BODY_UPGRADE));
-
+		widgSetMinorBarSize(psWScreen, IDDES_BODYPOWER, bodyPower(psStats, selectedPlayer, DROID_BODY_UPGRADE));
 		/* weight */
 		widgSetMinorBarSize(psWScreen, IDDES_BODYWEIGHT, psStats->weight);
 	}
@@ -2868,7 +2841,6 @@ static void intSetBodyShadowStats(BODY_STATS *psStats)
 		/* Reset the shadow bars */
 		widgSetMinorBarSize(psWScreen, IDDES_BODYARMOUR_K, 0);
 		widgSetMinorBarSize(psWScreen, IDDES_BODYARMOUR_H, 0);
-//		widgSetMinorBarSize(psWScreen, IDDES_BODYPOINTS, 0);
 		widgSetMinorBarSize(psWScreen, IDDES_BODYPOWER, 0);
 		widgSetMinorBarSize(psWScreen, IDDES_BODYWEIGHT, 0);
 	}

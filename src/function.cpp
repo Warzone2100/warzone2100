@@ -1018,7 +1018,7 @@ void structureBodyUpgrade(FUNCTION *pFunction, STRUCTURE *psBuilding)
 
 void structureArmourUpgrade(FUNCTION *pFunction, STRUCTURE *psBuilding)
 {
-	UWORD	increase, prevBaseArmour, newBaseArmour, i, j;
+	UWORD	increase, prevBaseArmour, newBaseArmour;
 
 	switch(psBuilding->pStructureType->type)
 	{
@@ -1040,13 +1040,9 @@ void structureArmourUpgrade(FUNCTION *pFunction, STRUCTURE *psBuilding)
 
 	if (newBaseArmour > prevBaseArmour)
 	{
-		// TODO: support advanced armour system
-		for (i = 0; i < NUM_HIT_SIDES; i++)
+		for (int j = 0; j < WC_NUM_WEAPON_CLASSES; j++)
 		{
-			for (j = 0; j < WC_NUM_WEAPON_CLASSES; j++)
-			{
-				psBuilding->armour[i][j] = (UWORD)((psBuilding->armour[i][j] * newBaseArmour) / prevBaseArmour);
-			}
+			psBuilding->armour[j] = (UWORD)((psBuilding->armour[j] * newBaseArmour) / prevBaseArmour);
 		}
 	}
 }

@@ -48,8 +48,8 @@ bool combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 if any support a counter battery sensor*/
 void counterBatteryFire(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget);
 
-int32_t objDamage(BASE_OBJECT *psObj, UDWORD damage, UDWORD originalhp, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, HIT_SIDE impactSide);
+int32_t objDamage(BASE_OBJECT *psObj, UDWORD damage, UDWORD originalhp, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass);
 
-unsigned int objGuessFutureDamage(WEAPON_STATS *psStats, unsigned int player, BASE_OBJECT *psTarget, HIT_SIDE impactSide);
+unsigned int objGuessFutureDamage(WEAPON_STATS *psStats, unsigned int player, BASE_OBJECT *psTarget);
 
 #endif // __INCLUDED_SRC_COMBAT_H__

@@ -163,19 +163,18 @@ void featureStatsShutDown(void)
  *  \param psFeature feature to deal damage to
  *  \param damage amount of damage to deal
  *  \param weaponClass,weaponSubClass the class and subclass of the weapon that deals the damage
- *  \param impactSide the side/directon on which the feature is hit
  *  \return < 0 never, >= 0 always
  */
-int32_t featureDamage(FEATURE *psFeature, UDWORD damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, HIT_SIDE impactSide)
+int32_t featureDamage(FEATURE *psFeature, UDWORD damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass)
 {
 	int32_t relativeDamage;
 
 	ASSERT_OR_RETURN(0, psFeature != NULL, "Invalid feature pointer");
 
 	debug(LOG_ATTACK, "feature (id %d): body %d armour %d damage: %d",
-	      psFeature->id, psFeature->body, psFeature->armour[impactSide][weaponClass], damage);
+	      psFeature->id, psFeature->body, psFeature->armour[weaponClass], damage);
 
-	relativeDamage = objDamage((BASE_OBJECT *)psFeature, damage, psFeature->psStats->body, weaponClass, weaponSubClass, impactSide);
+	relativeDamage = objDamage((BASE_OBJECT *)psFeature, damage, psFeature->psStats->body, weaponClass, weaponSubClass);
 
 	// If the shell did sufficient damage to destroy the feature
 	if (relativeDamage < 0)
@@ -197,7 +196,6 @@ FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,bool FromSave)
 	UDWORD		mapX, mapY;
 	UDWORD		width,breadth, foundationMin,foundationMax, height;
 	UDWORD		startX,startY,max,min;
-	SDWORD		i;
 	//try and create the Feature
 	FEATURE *psFeature = new FEATURE(generateSynchronisedObjectId(), psStats);
 
@@ -268,15 +266,9 @@ FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,bool FromSave)
 	// it has never been drawn
 	psFeature->sDisplay.frameNumber = 0;
 
-	// note that the advanced armour system current unused for features
-	for (i = 0; i < NUM_HIT_SIDES; i++)
+	for (int j = 0; j < WC_NUM_WEAPON_CLASSES; j++)
 	{
-		int j;
-
-		for (j = 0; j < WC_NUM_WEAPON_CLASSES; j++)
-		{
-			psFeature->armour[i][j] = psFeature->psStats->armourValue;
-		}
+		psFeature->armour[j] = psFeature->psStats->armourValue;
 	}
 
 	memset(psFeature->seenThisTick, 0, sizeof(psFeature->seenThisTick));

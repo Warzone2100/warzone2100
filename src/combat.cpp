@@ -436,10 +436,9 @@ void counterBatteryFire(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget)
  * \param damage amount of damage to deal
  * \param weaponClass the class of the weapon that deals the damage
  * \param weaponSubClass the subclass of the weapon that deals the damage
- * \param angle angle of impact (from the damage dealing projectile in relation to this object)
  * \return < 0 when the dealt damage destroys the object, > 0 when the object survives
  */
-int32_t objDamage(BASE_OBJECT *psObj, UDWORD damage, UDWORD originalhp, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, HIT_SIDE impactSide)
+int32_t objDamage(BASE_OBJECT *psObj, UDWORD damage, UDWORD originalhp, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass)
 {
 	int	actualDamage, armour, level = 1;
 
@@ -462,7 +461,7 @@ int32_t objDamage(BASE_OBJECT *psObj, UDWORD damage, UDWORD originalhp, WEAPON_C
 	// apply game difficulty setting
 	damage = modifyForDifficultyLevel(damage, psObj->player != selectedPlayer);
 
-	armour = psObj->armour[impactSide][weaponClass];
+	armour = psObj->armour[weaponClass];
 
 	debug(LOG_ATTACK, "objDamage(%d): body %d armour %d damage: %d", psObj->id, psObj->body, armour, damage);
 
@@ -496,7 +495,7 @@ int32_t objDamage(BASE_OBJECT *psObj, UDWORD damage, UDWORD originalhp, WEAPON_C
 	actualDamage = MAX(actualDamage, MIN_WEAPON_DAMAGE);
 
 	objTrace(psObj->id, "objDamage: Penetrated %d", actualDamage);
-	syncDebug("damage%u dam%u,o%u,wc%d.%d,is%d,ar%d,lev%d,aDam%d", psObj->id, damage, originalhp, weaponClass, weaponSubClass, impactSide, armour, level, actualDamage);
+	syncDebug("damage%u dam%u,o%u,wc%d.%d,ar%d,lev%d,aDam%d", psObj->id, damage, originalhp, weaponClass, weaponSubClass, armour, level, actualDamage);
 
 	// for some odd reason, we have 0 hitpoints.
 	if (!originalhp)
@@ -524,13 +523,11 @@ int32_t objDamage(BASE_OBJECT *psObj, UDWORD damage, UDWORD originalhp, WEAPON_C
  * \param damage amount of damage to deal
  * \param weaponClass the class of the weapon that deals the damage
  * \param weaponSubClass the subclass of the weapon that deals the damage
- * \param angle angle of impact (from the damage dealing projectile in relation to this object)
  * \return guess at amount of damage
  */
-unsigned int objGuessFutureDamage(WEAPON_STATS *psStats, unsigned int player, BASE_OBJECT *psTarget, HIT_SIDE i)
+unsigned int objGuessFutureDamage(WEAPON_STATS *psStats, unsigned int player, BASE_OBJECT *psTarget)
 {
 	unsigned int damage;
-	int impactSide;
 	int	actualDamage, armour = 0, level = 1;
 
 	if (psTarget == NULL)
@@ -548,8 +545,7 @@ unsigned int objGuessFutureDamage(WEAPON_STATS *psStats, unsigned int player, BA
 	// apply game difficulty setting
 	damage = modifyForDifficultyLevel(damage, psTarget->player != selectedPlayer);
 
-	for (impactSide = 0; impactSide != NUM_HIT_SIDES; ++impactSide)
-		armour = MAX(armour, psTarget->armour[impactSide][psStats->weaponClass]);
+	armour = MAX(armour, psTarget->armour[psStats->weaponClass]);
 
 	//debug(LOG_ATTACK, "objGuessFutureDamage(%d): body %d armour %d damage: %d", psObj->id, psObj->body, armour, damage);
 

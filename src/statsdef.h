@@ -298,20 +298,6 @@ enum WEAPON_EFFECT
 };
 
 /**
- * Sides used for droid impact
- */
-enum HIT_SIDE
-{
-	HIT_SIDE_FRONT,
-	HIT_SIDE_REAR,
-	HIT_SIDE_LEFT,
-	HIT_SIDE_RIGHT,
-	HIT_SIDE_TOP,
-	HIT_SIDE_BOTTOM,
-	NUM_HIT_SIDES,			/**  The number of enumerators in this enum. */
-};
-
-/**
  * Defines the left and right sides for propulsion IMDs
  */
 enum PROP_SIDE
@@ -503,7 +489,7 @@ struct BODY_STATS : public COMPONENT_STATS
 {
 	UBYTE		size;			///< How big the body is - affects how hit
 	UDWORD		weaponSlots;	///< The number of weapon slots on the body
-	UDWORD		armourValue[NUM_HIT_SIDES][WC_NUM_WEAPON_CLASSES];	///< A measure of how much protection the armour provides. Cross referenced with the weapon types.
+	UDWORD		armourValue[WC_NUM_WEAPON_CLASSES];	///< A measure of how much protection the armour provides. Cross referenced with the weapon types.
 
 	// A measure of how much energy the power plant outputs
 	UDWORD		powerOutput;	///< this is the engine output of the body

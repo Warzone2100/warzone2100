@@ -106,8 +106,7 @@ static void	proj_ImpactFunc( PROJECTILE *psObj );
 static void	proj_PostImpactFunc( PROJECTILE *psObj );
 static void	proj_checkBurnDamage( BASE_OBJECT *apsList, PROJECTILE *psProj);
 
-static int32_t objectDamage(BASE_OBJECT *psObj, UDWORD damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, HIT_SIDE impactSide);
-static HIT_SIDE getHitSide (PROJECTILE *psObj, BASE_OBJECT *psTarget);
+static int32_t objectDamage(BASE_OBJECT *psObj, UDWORD damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass);
 
 
 static inline void setProjectileDestination(PROJECTILE *psProj, BASE_OBJECT *psObj)
@@ -427,7 +426,7 @@ bool proj_SendProjectileAngled(WEAPON *psWeap, SIMPLE_OBJECT *psAttacker, int pl
 
 	// Must set ->psDest and ->expectedDamageCaused before first call to setProjectileDestination().
 	psProj->psDest = NULL;
-	psProj->expectedDamageCaused = objGuessFutureDamage(psStats, player, psTarget, HIT_SIDE_FRONT);  // Guessing front impact.
+	psProj->expectedDamageCaused = objGuessFutureDamage(psStats, player, psTarget);
 	setProjectileDestination(psProj, psTarget);  // Updates expected damage of psProj->psDest, using psProj->expectedDamageCaused.
 
 	/*
@@ -960,7 +959,6 @@ static void proj_ImpactFunc( PROJECTILE *psObj )
 	int32_t         relativeDamage;
 	Vector3i        position, scatter;
 	iIMDShape       *imd;
-	HIT_SIDE        impactSide = HIT_SIDE_FRONT;
 	BASE_OBJECT     *temp;
 
 	CHECK_PROJECTILE(psObj);
@@ -1134,15 +1132,8 @@ static void proj_ImpactFunc( PROJECTILE *psObj )
 			debug(LOG_NEVER, "Damage to object %d, player %d\n",
 			      psObj->psDest->id, psObj->psDest->player);
 
-			// If the target is a droid work out the side of it we hit
-			if (psObj->psDest->type == OBJ_DROID)
-			{
-				// For indirect weapons (e.g. artillery) just assume the side as HIT_SIDE_TOP
-				impactSide = proj_Direct(psStats) ? getHitSide(psObj, psObj->psDest) : HIT_SIDE_TOP;
-			}
-
 			// Damage the object
-			relativeDamage = objectDamage(psObj->psDest, damage, psStats->weaponClass,psStats->weaponSubClass, impactSide);
+			relativeDamage = objectDamage(psObj->psDest, damage, psStats->weaponClass,psStats->weaponSubClass);
 
 			proj_UpdateKills(psObj, relativeDamage);
 
@@ -1215,8 +1206,7 @@ static void proj_ImpactFunc( PROJECTILE *psObj )
 
 							//Watermelon:uses a slightly different check for angle,
 							// since fragment of a project is from the explosion spot not from the projectile start position
-							impactSide = getHitSide(psObj, (BASE_OBJECT *)psCurrD);
-							relativeDamage = droidDamage(psCurrD, damage, psStats->weaponClass, psStats->weaponSubClass, impactSide);
+							relativeDamage = droidDamage(psCurrD, damage, psStats->weaponClass, psStats->weaponSubClass);
 
 							turnOffMultiMsg(false);	// multiplay msgs back on.
 
@@ -1255,15 +1245,7 @@ static void proj_ImpactFunc( PROJECTILE *psObj )
 									}
 								}
 
-								//Watermelon:uses a slightly different check for angle,
-								// since fragment of a project is from the explosion spot not from the projectile start position
-								impactSide = getHitSide(psObj, (BASE_OBJECT *)psCurrS);
-
-								relativeDamage = structureDamage(psCurrS,
-								                                damage,
-								                                psStats->weaponClass,
-								                                psStats->weaponSubClass, impactSide);
-
+								relativeDamage = structureDamage(psCurrS, damage, psStats->weaponClass, psStats->weaponSubClass);
 								proj_UpdateKills(psObj, relativeDamage);
 							}
 						}
@@ -1294,17 +1276,12 @@ static void proj_ImpactFunc( PROJECTILE *psObj )
 						debug(LOG_NEVER, "Damage to object %d, player %d\n",
 								psCurrF->id, psCurrF->player);
 
-						// Watermelon:uses a slightly different check for angle,
-						// since fragment of a project is from the explosion spot not from the projectile start position
-						impactSide = getHitSide(psObj, (BASE_OBJECT *)psCurrF);
-
 						relativeDamage = featureDamage(psCurrF,
 						                              calcDamage(weaponRadDamage(psStats, psObj->player),
 						                                         psStats->weaponEffect,
 						                                         (BASE_OBJECT *)psCurrF),
 						                              psStats->weaponClass,
-						                              psStats->weaponSubClass, impactSide);
-
+						                              psStats->weaponSubClass);
 						proj_UpdateKills(psObj, relativeDamage);
 					}
 				}
@@ -1494,7 +1471,7 @@ static void proj_checkBurnDamage( BASE_OBJECT *apsList, PROJECTILE *psProj)
 							damageToDo, psCurr->id, psCurr->player);
 
 					//Watermelon:just assume the burn damage is from FRONT
-					relativeDamage = objectDamage(psCurr, damageToDo, psStats->weaponClass,psStats->weaponSubClass, HIT_SIDE_FRONT);
+					relativeDamage = objectDamage(psCurr, damageToDo, psStats->weaponClass,psStats->weaponSubClass);
 
 					psCurr->burnDamage += damageToDo;
 
@@ -1637,20 +1614,20 @@ UDWORD	calcDamage(UDWORD baseDamage, WEAPON_EFFECT weaponEffect, BASE_OBJECT *ps
  *    multiplied by -1, resulting in a negative number. Killed features do not
  *    result in negative numbers.
  */
-static int32_t objectDamage(BASE_OBJECT *psObj, UDWORD damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, HIT_SIDE impactSide)
+static int32_t objectDamage(BASE_OBJECT *psObj, UDWORD damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass)
 {
 	switch (psObj->type)
 	{
 		case OBJ_DROID:
-			return droidDamage((DROID *)psObj, damage, weaponClass,weaponSubClass, impactSide);
+			return droidDamage((DROID *)psObj, damage, weaponClass,weaponSubClass);
 			break;
 
 		case OBJ_STRUCTURE:
-			return structureDamage((STRUCTURE *)psObj, damage, weaponClass, weaponSubClass, impactSide);
+			return structureDamage((STRUCTURE *)psObj, damage, weaponClass, weaponSubClass);
 			break;
 
 		case OBJ_FEATURE:
-			return featureDamage((FEATURE *)psObj, damage, weaponClass, weaponSubClass, impactSide);
+			return featureDamage((FEATURE *)psObj, damage, weaponClass, weaponSubClass);
 			break;
 
 		case OBJ_PROJECTILE:
@@ -1664,57 +1641,7 @@ static int32_t objectDamage(BASE_OBJECT *psObj, UDWORD damage, WEAPON_CLASS weap
 		default:
 			ASSERT(!"unknown object type", "unknown object type %d, id=%d", psObj->type, psObj->id );
 	}
-
 	return 0;
-}
-
-/**
- * This function will calculate which side of the droid psTarget the projectile
- * psObj hit. Although it is possible to extract the target from psObj it is
- * only the `direct' target of the projectile. Since impact sides also apply for
- * any splash damage a projectile might do the exact target is needed.
- */
-static HIT_SIDE getHitSide(PROJECTILE *psObj, BASE_OBJECT *psTarget)
-{
-	int deltaX, deltaY;
-	int impactAngle;
-
-	// If we hit the top of the droid
-	if (psObj->dst.z - psObj->src.z > 300)
-	{
-		return HIT_SIDE_TOP;
-	}
-	// If the height difference between us and the target is > 50
-	else if (psObj->pos.z < (psTarget->pos.z - 50))
-	{
-		return HIT_SIDE_BOTTOM;
-	}
-	// We hit an actual `side'
-	else
-	{
-		deltaX = psObj->src.x - psTarget->pos.x;
-		deltaY = psObj->src.y - psTarget->pos.y;
-
-		/*
-		 * Work out the impact angle. It is easiest to understand if you
-		 * model the target droid as a circle, divided up into 360 pieces.
-		 */
-		impactAngle = (uint32_t)(psTarget->rot.direction - iAtan2(deltaX, deltaY));  // Cast wrapping intended.
-
-		// Use the impact angle to work out the side hit
-		// Right
-		if (impactAngle > DEG(45) && impactAngle < DEG(135))
-			return HIT_SIDE_RIGHT;
-		// Rear
-		else if (impactAngle <= DEG(225))
-			return HIT_SIDE_REAR;
-		// Left
-		else if (impactAngle < DEG(315))
-			return HIT_SIDE_LEFT;
-		// Front - default
-		else //if (impactAngle <= DEG(45) || impactAngle >= DEG(315))
-			return HIT_SIDE_FRONT;
-	}
 }
 
 /* Returns true if an object has just been hit by an electronic warfare weapon*/

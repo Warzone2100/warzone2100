@@ -161,7 +161,7 @@ bool droidInit(void)
  *
  * NOTE: This function will damage but _never_ destroy transports when in single player (campaign) mode
  */
-int32_t droidDamage(DROID *psDroid, uint32_t damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, HIT_SIDE impactSide)
+int32_t droidDamage(DROID *psDroid, uint32_t damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass)
 {
 	int32_t relativeDamage;
 
@@ -173,7 +173,7 @@ int32_t droidDamage(DROID *psDroid, uint32_t damage, WEAPON_CLASS weaponClass, W
 		damage *= 3;
 	}
 
-	relativeDamage = objDamage((BASE_OBJECT *)psDroid, damage, psDroid->originalBody, weaponClass, weaponSubClass, impactSide);
+	relativeDamage = objDamage((BASE_OBJECT *)psDroid, damage, psDroid->originalBody, weaponClass, weaponSubClass);
 
 	if (relativeDamage > 0)
 	{
@@ -869,7 +869,7 @@ void droidUpdate(DROID *psDroid)
 					psDroid->burnDamage += damageToDo;
 
 					//just assume the burn damage is from FRONT
-					droidDamage(psDroid, damageToDo, WC_HEAT, WSC_FLAME, HIT_SIDE_FRONT);
+					droidDamage(psDroid, damageToDo, WC_HEAT, WSC_FLAME);
 				}
 			}
 		}
@@ -2152,7 +2152,6 @@ DROID *reallyBuildDroid(DROID_TEMPLATE *pTemplate, Position pos, UDWORD player, 
 	DROID_GROUP		*psGrp;
 	UDWORD			inc;
 	SDWORD			i, experienceLoc;
-	HIT_SIDE		impact_side;
 
 	// Don't use this assertion in single player, since droids can finish building while on an away mission
 	ASSERT(!bMultiPlayer || worldOnMap(pos.x, pos.y), "the build locations are not on the map");
@@ -2247,27 +2246,10 @@ DROID *reallyBuildDroid(DROID_TEMPLATE *pTemplate, Position pos, UDWORD player, 
 	psDroid->body = calcTemplateBody(pTemplate, (UBYTE)player);  // Redundant? (Is set in droidSetBits, too.)
 	psDroid->originalBody = psDroid->body;  // Redundant? (Is set in droidSetBits, too.)
 
-	if (cyborgDroid(psDroid))
+	for (inc = 0; inc < WC_NUM_WEAPON_CLASSES; inc++)
 	{
-		for (inc = 0; inc < WC_NUM_WEAPON_CLASSES; inc++)
-		{
-			for (impact_side = (HIT_SIDE)0; impact_side < NUM_HIT_SIDES; impact_side = (HIT_SIDE)(impact_side + 1))
-			{
-				psDroid->armour[impact_side][inc] = bodyArmour(asBodyStats + pTemplate->
-				asParts[COMP_BODY], (UBYTE)player, CYBORG_BODY_UPGRADE, (WEAPON_CLASS)inc, impact_side);
-			}
-		}
-	}
-	else
-	{
-		for (inc = 0; inc < WC_NUM_WEAPON_CLASSES; inc++)
-		{
-			for (impact_side = (HIT_SIDE)0; impact_side < NUM_HIT_SIDES; impact_side = (HIT_SIDE)(impact_side + 1))
-			{
-				psDroid->armour[impact_side][inc] = bodyArmour(asBodyStats + pTemplate->
-					asParts[COMP_BODY], (UBYTE)player, DROID_BODY_UPGRADE, (WEAPON_CLASS)inc, impact_side);
-			}
-		}
+		psDroid->armour[inc] = bodyArmour(asBodyStats + pTemplate->asParts[COMP_BODY], player, 
+		                                  cyborgDroid(psDroid) ? CYBORG_BODY_UPGRADE : DROID_BODY_UPGRADE, (WEAPON_CLASS)inc);
 	}
 
 	//init the resistance to indicate no EW performed on this droid
@@ -4019,8 +4001,7 @@ DROID * giftSingleDroid(DROID *psD, UDWORD to)
 	DROID_TEMPLATE	sTemplate;
 	DROID		*psNewDroid, *psCurr;
 	STRUCTURE	*psStruct;
-	UDWORD		body, armourK[NUM_HIT_SIDES], armourH[NUM_HIT_SIDES];
-	HIT_SIDE	impact_side;
+	UDWORD		body, armourK, armourH;
 	int them = 0;
 
 	CHECK_DROID(psD);
@@ -4173,11 +4154,8 @@ DROID * giftSingleDroid(DROID *psD, UDWORD to)
 		x = psD->pos.x;
 		y = psD->pos.y;
 		body = psD->body;
-		for (impact_side = (HIT_SIDE)0;impact_side < NUM_HIT_SIDES; impact_side = (HIT_SIDE)(impact_side + 1))
-		{
-			armourK[impact_side] = psD->armour[impact_side][WC_KINETIC];
-			armourH[impact_side] = psD->armour[impact_side][WC_HEAT];
-		}
+		armourK = psD->armour[WC_KINETIC];
+		armourH = psD->armour[WC_HEAT];
 		numKills = psD->experience;
 		direction = psD->rot.direction;
 		// only play the sound if unit being taken over is selectedPlayer's but not going to the selectedPlayer
@@ -4195,11 +4173,8 @@ DROID * giftSingleDroid(DROID *psD, UDWORD to)
 		{
 			addDroid(psNewDroid, apsDroidLists);
 			psNewDroid->body = body;
-			for (impact_side = (HIT_SIDE)0;impact_side < NUM_HIT_SIDES; impact_side = (HIT_SIDE)(impact_side + 1))
-			{
-				psNewDroid->armour[impact_side][WC_KINETIC] = armourK[impact_side];
-				psNewDroid->armour[impact_side][WC_HEAT] = armourH[impact_side];
-			}
+			psNewDroid->armour[WC_KINETIC] = armourK;
+			psNewDroid->armour[WC_HEAT] = armourH;
 			psNewDroid->experience = numKills;
 			psNewDroid->rot.direction = direction;
 			if (!(psNewDroid->droidType == DROID_PERSON || cyborgDroid(psNewDroid) || psNewDroid->droidType == DROID_TRANSPORTER))
