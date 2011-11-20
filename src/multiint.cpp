@@ -286,6 +286,10 @@ void loadMultiScripts()
 	resForceBaseDir("multiplay/skirmish/");
 	for (int i = 0; i < game.maxPlayers; i++)
 	{
+		if (NetPlay.players[i].ai < 0 && i == selectedPlayer)
+		{
+			NetPlay.players[i].ai = 0;  // For autogames.
+		}
 		// The i == selectedPlayer hack is to enable autogames
 		if (bMultiPlayer && game.type == SKIRMISH && (!NetPlay.players[i].allocated || i == selectedPlayer)
 		    && NetPlay.players[i].ai >= 0 && myResponsibility(i))
