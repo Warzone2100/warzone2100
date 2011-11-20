@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-11-16 19:54+0100\n"
-"PO-Revision-Date: 2011-11-09 00:58+0200\n"
+"POT-Creation-Date: 2011-11-20 15:28+0100\n"
+"PO-Revision-Date: 2011-11-20 12:47+0200\n"
 "Last-Translator: Ayhan GÖRGÜLÜ <ayhangorgulu45@gmail.com>\n"
 "Language-Team: Turkey <warzone-dev@gna.org>\n"
 "Language: \n"
@@ -12127,9 +12127,9 @@ msgstr "Strateji Oyunu"
 #: src/loadsave.cpp:239
 #: src/multimenu.cpp:495
 #: src/multimenu.cpp:1367
-#: src/transporter.cpp:278
-#: src/transporter.cpp:359
-#: src/transporter.cpp:818
+#: src/transporter.cpp:277
+#: src/transporter.cpp:358
+#: src/transporter.cpp:817
 msgid "Close"
 msgstr "Kapat"
 
@@ -12427,20 +12427,20 @@ msgstr "Silahlar"
 msgid "Systems"
 msgstr "Sistemler"
 
-#: src/display3d.cpp:589
+#: src/display3d.cpp:616
 msgid "Player left"
 msgstr "Oyuncu Çıktı"
 
-#: src/display3d.cpp:593
+#: src/display3d.cpp:620
 msgid "Player dropped"
 msgstr "Oyuncu Düştü"
 
-#: src/display3d.cpp:597
+#: src/display3d.cpp:624
 #: src/multiint.cpp:2329
 msgid "Waiting for other players"
 msgstr "Diğer oyuncular bekleniyor"
 
-#: src/display3d.cpp:602
+#: src/display3d.cpp:629
 msgid "Out of sync"
 msgstr "Senkronize edilmemiş"
 
@@ -12463,81 +12463,81 @@ msgstr "%s - Müttefik - Hasar %d%% - Tecrübe %d, %s"
 msgid "Unit Lost!"
 msgstr "Birim Kaybı!"
 
-#: src/droid.cpp:1310
+#: src/droid.cpp:1317
 msgid "Structure Restored"
 msgstr "Bina Yenilendi"
 
-#: src/droid.cpp:2654
+#: src/droid.cpp:2661
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
 msgstr[0] "Grup %u Seçildi - %u Birim"
 msgstr[1] "Grup %u Seçildi - %u Birimler"
 
-#: src/droid.cpp:2667
+#: src/droid.cpp:2674
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
 msgstr[0] "%u Birim şu Gruba Atandı: %u "
 msgstr[1] "%u Birimler şu Gruba Atandı: %u "
 
-#: src/droid.cpp:2680
+#: src/droid.cpp:2687
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
 msgstr[0] "%u Numaralı Grup Merkezde - %u Birim"
 msgstr[1] "%u Numaralı Grup Merkezde - %u Birimler"
 
-#: src/droid.cpp:2684
+#: src/droid.cpp:2691
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] "Grup %u 'e - %u Birim atandı"
 msgstr[1] "Grup %u 'e - %u Birimler Atandı"
 
-#: src/droid.cpp:3011
+#: src/droid.cpp:3018
 msgid "Rookie"
 msgstr "Er"
 
-#: src/droid.cpp:3012
+#: src/droid.cpp:3019
 msgctxt "rank"
 msgid "Green"
 msgstr "Onbaşı"
 
-#: src/droid.cpp:3013
+#: src/droid.cpp:3020
 msgid "Trained"
 msgstr "Çavuş"
 
-#: src/droid.cpp:3014
+#: src/droid.cpp:3021
 msgid "Regular"
 msgstr "Teğmen"
 
-#: src/droid.cpp:3015
+#: src/droid.cpp:3022
 msgid "Professional"
 msgstr "Üsteğmen"
 
-#: src/droid.cpp:3016
+#: src/droid.cpp:3023
 msgid "Veteran"
 msgstr "Albay"
 
-#: src/droid.cpp:3017
+#: src/droid.cpp:3024
 msgid "Elite"
 msgstr "Korgeneral"
 
-#: src/droid.cpp:3018
+#: src/droid.cpp:3025
 msgid "Special"
 msgstr "Orgeneral"
 
-#: src/droid.cpp:3019
+#: src/droid.cpp:3026
 msgid "Hero"
 msgstr "Mareşal"
 
-#: src/droid.cpp:4041
+#: src/droid.cpp:4056
 #, c-format
 msgid "%s wanted to give you a %s but you have too many!"
 msgstr "%s Sana vermek istedi %s ama, Sende daha çok var!"
 
-#: src/droid.cpp:4045
+#: src/droid.cpp:4060
 #, c-format
 msgid "You wanted to give %s a %s but they have too many!"
 msgstr "Sen %s 'a %s vermek istedin ama, Onda  daha çok var!"
@@ -12620,8 +12620,8 @@ msgstr "TEK OYUNCU"
 
 #: src/frontend.cpp:321
 #: src/ingameop.cpp:494
-#: src/mission.cpp:2528
-#: src/mission.cpp:2629
+#: src/mission.cpp:2522
+#: src/mission.cpp:2623
 msgid "Load Saved Game"
 msgstr "Kayıtlı Oyun Yükle"
 
@@ -13101,8 +13101,8 @@ msgstr "Taktiksel UI (Hedef Kaynak Simgesi): Gizle"
 
 #: src/ingameop.cpp:275
 #: src/ingameop.cpp:498
-#: src/mission.cpp:2515
-#: src/mission.cpp:2632
+#: src/mission.cpp:2509
+#: src/mission.cpp:2626
 msgid "Save Game"
 msgstr "Oyunu Kaydet"
 
@@ -13130,9 +13130,8 @@ msgstr ""
 "Warzone , o olmadan oyunu yüklemeye çalışacak."
 
 #: src/intdisplay.cpp:208
-#, fuzzy
 msgid "Waiting for Power"
-msgstr "Diğer oyuncular bekleniyor"
+msgstr "Güç bekliyor"
 
 #: src/intdisplay.cpp:257
 msgid "Build Progress"
@@ -13143,9 +13142,8 @@ msgid "Construction Progress"
 msgstr "İnşaat Devam ediyor"
 
 #: src/intdisplay.cpp:296
-#, fuzzy
 msgid "Research Progress"
-msgstr "Araştırma Geliştirildi"
+msgstr "Araştırma İlerlemesi"
 
 #: src/intelmap.cpp:242
 #: src/keybind.cpp:1363
@@ -14041,37 +14039,37 @@ msgstr "Sürüş Moduna"
 msgid "Could not save game!"
 msgstr "Oyun Kaydedilemedi!"
 
-#: src/mission.cpp:2076
+#: src/mission.cpp:2070
 msgid "Load Transport"
 msgstr "Taşımaya Yükle"
 
-#: src/mission.cpp:2463
+#: src/mission.cpp:2457
 msgid "OBJECTIVE ACHIEVED by cheating!"
 msgstr "GÖREV BAŞARILI--hileci seni!"
 
-#: src/mission.cpp:2463
+#: src/mission.cpp:2457
 msgid "OBJECTIVE ACHIEVED"
 msgstr "GÖREV BAŞARILI"
 
-#: src/mission.cpp:2469
+#: src/mission.cpp:2463
 msgid "OBJECTIVE FAILED--and you cheated!"
 msgstr "GÖREV BAŞARISIZ--ve sen hile yaptın!"
 
-#: src/mission.cpp:2469
+#: src/mission.cpp:2463
 msgid "OBJECTIVE FAILED"
 msgstr "GÖREV BAŞARISIZ"
 
-#: src/mission.cpp:2494
-#: src/mission.cpp:2534
-#: src/mission.cpp:2646
+#: src/mission.cpp:2488
+#: src/mission.cpp:2528
+#: src/mission.cpp:2640
 msgid "Quit To Main Menu"
 msgstr "Ana Menüye Dön"
 
-#: src/mission.cpp:2502
+#: src/mission.cpp:2496
 msgid "Continue Game"
 msgstr "Oyuna Devam"
 
-#: src/mission.cpp:2597
+#: src/mission.cpp:2591
 msgid "GAME SAVED :"
 msgstr "OYUN KAYDEDİLDİ :"
 
@@ -14917,77 +14915,77 @@ msgstr "Hiç Algılayıcı birimi bulunamadı!"
 msgid "Unable to locate any Commanders!"
 msgstr "Hiç Komutan birimi bulunamadı!"
 
-#: src/structure.cpp:2629
+#: src/structure.cpp:2665
 msgid "Command Control Limit Reached - Production Halted"
 msgstr "Kontrol Limitine Ulaştın - Üretim Durduruldu"
 
 # nix Gruppe! -Kreuvf
-#: src/structure.cpp:5838
-#: src/structure.cpp:5863
+#: src/structure.cpp:5875
+#: src/structure.cpp:5900
 #, c-format
 msgid "%s - %u Unit assigned - Damage %3.0f%%"
 msgid_plural "%s - %u Units assigned - Damage %3.0f%%"
 msgstr[0] "%s - %u Birim atandı - Hasar %3.0f%%"
 msgstr[1] "%s - %u Birimler atandı - Hasar %3.0f%%"
 
-#: src/structure.cpp:5868
-#: src/structure.cpp:5936
-#: src/structure.cpp:5951
-#: src/structure.cpp:5965
+#: src/structure.cpp:5905
+#: src/structure.cpp:5973
+#: src/structure.cpp:5988
+#: src/structure.cpp:6002
 #, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - Hasar %3.0f%%"
 
-#: src/structure.cpp:5918
+#: src/structure.cpp:5955
 #, c-format
 msgid "%s - Connected %u of %u - Damage %3.0f%%"
 msgstr "%s - Bağlandı %u de %u - Hasar %3.0f%%"
 
-#: src/structure.cpp:6081
-#: src/structure.cpp:6126
+#: src/structure.cpp:6118
+#: src/structure.cpp:6163
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Elektronik Hasar Aldı"
 
 # Reward ist zwar nicht Beute, aber im Krieg erbeutet man eben Dinge -Kreuvf
-#: src/structure.cpp:6377
+#: src/structure.cpp:6414
 msgid "Electronic Reward - Visibility Report"
 msgstr "Elektronik Ödül - Görünebilirlik Raporu"
 
-#: src/structure.cpp:6417
+#: src/structure.cpp:6454
 msgid "Factory Reward - Propulsion"
 msgstr "Fabrika Ödülü - Yürütücü"
 
-#: src/structure.cpp:6441
+#: src/structure.cpp:6478
 msgid "Factory Reward - Body"
 msgstr "Fabrika Ödülü - Beden"
 
-#: src/structure.cpp:6465
+#: src/structure.cpp:6502
 msgid "Factory Reward - Weapon"
 msgstr "Fabrika Ödülü - Silah"
 
-#: src/structure.cpp:6474
+#: src/structure.cpp:6511
 msgid "Factory Reward - Nothing"
 msgstr "Fabrika Ödülü - Sıfır"
 
-#: src/structure.cpp:6502
+#: src/structure.cpp:6539
 msgid "Repair Facility Award - Repair"
 msgstr "Tamir Tesisi Ödülü - Tamir"
 
-#: src/structure.cpp:6509
+#: src/structure.cpp:6546
 msgid "Repair Facility Award - Nothing"
 msgstr "Tamir Tesisi Ödülü - Sıfır"
 
-#: src/transporter.cpp:396
-#: src/transporter.cpp:445
+#: src/transporter.cpp:395
+#: src/transporter.cpp:444
 msgid "Launch Transport"
 msgstr "Taşımayı Başlat"
 
-#: src/transporter.cpp:1421
+#: src/transporter.cpp:1398
 msgid "There is not enough room in the Transport!"
 msgstr "Taşıma Gemisinde yeterince yer yok!"
 
-#: src/transporter.cpp:1681
+#: src/transporter.cpp:1658
 msgid "Reinforcements landing"
 msgstr "Destek kuvvetler iniyor"
 
