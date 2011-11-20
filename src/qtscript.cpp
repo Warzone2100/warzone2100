@@ -377,7 +377,7 @@ bool loadPlayerScript(QString path, int player, int difficulty)
 
 bool loadGlobalScript(QString path)
 {
-	return loadPlayerScript(path, 0, 0);
+	return loadPlayerScript(path, selectedPlayer, 0);
 }
 
 bool saveScriptStates(const char *filename)
