@@ -45,7 +45,6 @@ bool combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 	WEAPON_STATS	*psStats;
 	UDWORD			firePause;
 	SDWORD			longRange;
-	DROID			*psDroid = NULL;
 	int				compIndex;
 
 	CHECK_OBJECT(psAttacker);
@@ -111,7 +110,7 @@ bool combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 
 	/* Check we can see the target */
 	if (psAttacker->type == OBJ_DROID && !isVtolDroid((DROID *)psAttacker)
-	    && (proj_Direct(psStats) || actionInsideMinRange(psDroid, psTarget, psStats)))
+	    && (proj_Direct(psStats) || actionInsideMinRange((DROID *)psAttacker, psTarget, psStats)))
 	{
 		if(!lineOfFire(psAttacker, psTarget, weapon_slot, true))
 		{
@@ -193,7 +192,7 @@ bool combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 	else if ((dist <= longRange && dist >= psStats->minRange)
 	         || (psAttacker->type == OBJ_DROID
 	             && !proj_Direct(psStats)
-	             && actionInsideMinRange(psDroid, psTarget, psStats)))
+	             && actionInsideMinRange((DROID *)psAttacker, psTarget, psStats)))
 	{
 		// get weapon chance to hit in the long range
 		baseHitChance = weaponLongHit(psStats,psAttacker->player);
