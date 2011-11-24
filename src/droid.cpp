@@ -2255,9 +2255,11 @@ DROID *reallyBuildDroid(DROID_TEMPLATE *pTemplate, Position pos, UDWORD player, 
 	//init the resistance to indicate no EW performed on this droid
 	psDroid->resistance = ACTION_START_TIME;
 
-	memset(psDroid->visible, 0, sizeof(psDroid->visible));
-	memset(psDroid->visible, 0, sizeof(psDroid->seenThisTick));
-	psDroid->visible[psDroid->player] = UBYTE_MAX;
+	for (unsigned vPlayer = 0; vPlayer < MAX_PLAYERS; ++vPlayer)
+	{
+		psDroid->visible[vPlayer] = hasSharedVision(vPlayer, player)? UINT8_MAX : 0;
+	}
+	memset(psDroid->seenThisTick, 0, sizeof(psDroid->seenThisTick));
 	psDroid->died = 0;
 	psDroid->inFire = 0;
 	psDroid->burnStart = 0;

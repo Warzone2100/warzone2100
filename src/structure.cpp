@@ -1647,11 +1647,13 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 		psBuilding->lastResistance = ACTION_START_TIME;
 
 		// Do the visibility stuff before setFunctionality - so placement of DP's can work
-		memset(psBuilding->visible, 0, sizeof(psBuilding->visible));
 		memset(psBuilding->seenThisTick, 0, sizeof(psBuilding->seenThisTick));
 
-		/* Structure is trivially visible to the builder (owner) */
-		psBuilding->visible[player] = UBYTE_MAX;
+		// Structure is visible to anyone with shared vision.
+		for (unsigned vPlayer = 0; vPlayer < MAX_PLAYERS; ++vPlayer)
+		{
+			psBuilding->visible[vPlayer] = hasSharedVision(vPlayer, player)? UINT8_MAX : 0;
+		}
 
 		// Reveal any tiles that can be seen by the structure
 		visTilesUpdate(psBuilding);
