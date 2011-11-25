@@ -60,7 +60,7 @@ void	avUpdateTiles( void )
 			}
 			if (psTile->level > maxLevel)
 			{
-				psTile->level = MAX(psTile->level - increment, 0);
+				psTile->level = MAX(psTile->level - increment, maxLevel);
 			}
 			else if (psTile->level < maxLevel)
 			{

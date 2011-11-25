@@ -89,7 +89,7 @@ struct DecalVertex
 /// The lightmap texture
 static GLuint lightmap_tex_num;
 /// When are we going to update the lightmap next?
-static unsigned int lightmapNextUpdate;
+static unsigned int lightmapLastUpdate;
 /// How big is the lightmap?
 static int lightmapWidth;
 static int lightmapHeight;
@@ -1015,7 +1015,7 @@ bool initTerrain(void)
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	
 	lightmap_tex_num = 0;
-	lightmapNextUpdate = 0;
+	lightmapLastUpdate = 0;
 	lightmapWidth = 1;
 	lightmapHeight = 1;
 	// determine the smallest power-of-two size we can use for the lightmap
@@ -1107,9 +1107,9 @@ void drawTerrain(void)
 	glEnable(GL_TEXTURE_2D);
 
 	// we limit the framerate of the lightmap, because updating a texture is an expensive operation
-	if (gameTime >= lightmapNextUpdate)
+	if (realTime - lightmapLastUpdate >= LIGHTMAP_REFRESH)
 	{
-		lightmapNextUpdate = gameTime + LIGHTMAP_REFRESH;
+		lightmapLastUpdate = realTime;
 
 		for (j = 0; j < mapHeight; ++j)
 		{
