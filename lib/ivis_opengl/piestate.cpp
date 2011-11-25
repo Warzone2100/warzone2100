@@ -370,12 +370,12 @@ void pie_ActivateShader(SHADER_MODE shaderMode, PIELIGHT teamcolour, int maskpag
 	if (maskpage != iV_TEX_INVALID)
 	{
 		glActiveTexture(GL_TEXTURE1);
-		pie_SetTexturePage(maskpage);
+		glBindTexture(GL_TEXTURE_2D, _TEX_PAGE[maskpage].id);
 	}
 	if (normalpage != iV_TEX_INVALID)
 	{
 		glActiveTexture(GL_TEXTURE2);
-		pie_SetTexturePage(normalpage);
+		glBindTexture(GL_TEXTURE_2D, _TEX_PAGE[normalpage].id);
 	}
 	glActiveTexture(GL_TEXTURE0);
 
