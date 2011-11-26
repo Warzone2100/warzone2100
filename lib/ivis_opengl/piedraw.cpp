@@ -138,6 +138,7 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELI
 {
 	iIMDPoly *pPolys;
 	bool light = true;
+	bool shaders = pie_GetShaderAvailability();
 
 	pie_SetAlphaTest(true);
 
@@ -171,7 +172,14 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELI
 		{
 			pie_SetDepthBufferStatus(DEPTH_CMP_LEQ_WRT_ON);
 			light = false;
-			pie_ActivateShader(SHADER_BUTTON, teamcolour, shape->tcmaskpage, shape->normalpage);
+			if (shaders)
+			{
+				pie_ActivateShader(SHADER_BUTTON, shape, teamcolour, colour);
+			}
+			else
+			{
+				pie_ActivateFallback(SHADER_BUTTON, shape, teamcolour, colour);
+			}
 		}
 		pie_SetRendMode(REND_OPAQUE);
 	}
@@ -189,7 +197,14 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELI
 		glMaterialfv(GL_FRONT, GL_SPECULAR, shape->material[LIGHT_SPECULAR]);
 		glMaterialf(GL_FRONT, GL_SHININESS, shape->shininess);
 		glMaterialfv(GL_FRONT, GL_EMISSION, shape->material[LIGHT_EMISSIVE]);
-		pie_ActivateShader(SHADER_COMPONENT, teamcolour, shape->tcmaskpage, shape->normalpage);
+		if (shaders)
+		{
+			pie_ActivateShader(SHADER_COMPONENT, shape, teamcolour, colour);
+		}
+		else
+		{
+			pie_ActivateFallback(SHADER_COMPONENT, shape, teamcolour, colour);
+		}
 	}
 
 	if (pieFlag & pie_HEIGHT_SCALED)	// construct
@@ -201,7 +216,7 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELI
 		glTranslatef(1.0f, (-shape->max.y * (pie_RAISE_SCALE - pieFlagData)) * (1.0f / pie_RAISE_SCALE), 1.0f);
 	}
 
-	glColor4ubv(colour.vector);	// Only need to set once for entire model
+	glColor4ubv(colour.vector);     // Only need to set once for entire model
 	pie_SetTexturePage(shape->texpage);
 
 	frame %= MAX(1, shape->numFrames);
@@ -232,7 +247,12 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELI
 		glNormal3fv((GLfloat*)&pPolys->normal);
 		for (n = 0; n < pPolys->npnts; n++)
 		{
-			glTexCoord2fv((GLfloat*)&pPolys->texCoord[frameidx * pPolys->npnts + n]);
+			GLfloat* texCoord = (GLfloat*)&pPolys->texCoord[frameidx * pPolys->npnts + n];
+			glTexCoord2fv(texCoord);
+			if (!shaders)
+			{
+				glMultiTexCoord2fv(GL_TEXTURE1, texCoord);
+			}
 			glVertex3fv((GLfloat*)&vertexCoords[n]);
 		}
 	}
@@ -240,7 +260,14 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELI
 
 	if (light || (pieFlag & pie_BUTTON))
 	{
-		pie_DeactivateShader();
+		if (shaders)
+		{
+			pie_DeactivateShader();
+		}
+		else
+		{
+			pie_DeactivateFallback();
+		}
 	}
 	pie_SetShaderEcmEffect(false);
 

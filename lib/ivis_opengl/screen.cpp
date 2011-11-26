@@ -123,9 +123,11 @@ bool screenInitialise()
 	screenWidth = MAX(screenWidth, 640);
 	screenHeight = MAX(screenHeight, 480);
 
-	/* Dump information about OpenGL 2.0+ implementation to the console and the dump file */
+	pie_SetShaderAvailability(GLEW_VERSION_2_0); // Simple check / close enough
+
 	if (GLEW_VERSION_2_0)
 	{
+		/* Dump information about OpenGL 2.0+ implementation to the console and the dump file */
 		GLint glMaxTIUs, glMaxTCs, glMaxTIUAs, glmaxSamples, glmaxSamplesbuf;
 
 		debug(LOG_3D, "  * OpenGL GLSL Version : %s", glGetString(GL_SHADING_LANGUAGE_VERSION));
@@ -145,9 +147,13 @@ bool screenInitialise()
 
 		pie_LoadShaders();
 	}
+	else if (GLEW_VERSION_1_4)
+	{
+		debug(LOG_POPUP, _("OpenGL 2.0 is not supported by your system. Some things may look wrong. Please upgrade your graphics driver/hardware, if possible."));
+	}
 	else
 	{
-		debug(LOG_FATAL, "OpenGL 2.0 is not supported by your system. The game require this. Please upgrade your graphics drivers, if possible.");
+		debug(LOG_FATAL, _("OpenGL 1.4 is not supported by your system. The game requires this. Please upgrade your graphics drivers/hardware, if possible."));
 		exit(1);
 	}
 
