@@ -813,7 +813,6 @@ bool mapLoad(char *filename, bool preview)
 	// FIXME: the map preview code loads the map without setting the tileset
 	if (!tileset)
 	{
-		debug(LOG_WARNING, "tileset not loaded, using arizona (map preview?)");
 		tileset = strdup("texpages/tertilesc1hw");
 	}
 	
