@@ -38,6 +38,9 @@
 
 
 #include <string.h>
+#include <vector>
+#include <algorithm>
+
 
 #define SHADOW_END_DISTANCE (8000*8000) // Keep in sync with lighting.c:FOG_END
 
@@ -277,57 +280,28 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELI
 	}
 }
 
-/// returns true if the edges are adjacent
-static bool compare_edge (EDGE *A, EDGE *B, const Vector3f *pVertices )
+static inline bool edgeLessThan(EDGE const &e1, EDGE const &e2)
 {
-	if(A->from == B->to)
-	{
-		if(A->to == B->from)
-		{
-			return true;
-		}
-		return pVertices[A->to] == pVertices[B->from];
-	}
+	if (e1.from != e2.from) return e1.from < e2.from;
+	return e1.to < e2.to;
+}
 
-	if (pVertices[A->from] != pVertices[B->to])
-	{
-		return false;
-	}
+static inline bool edgeEqual(EDGE const &e1, EDGE const &e2)
+{
+	return e1.from == e2.from && e1.to == e2.to;
+}
 
-	if(A->to == B->from)
-	{
-		return true;
-	}
-	return pVertices[A->to] == pVertices[B->from];
+static inline void flipEdge(EDGE &e)
+{
+	std::swap(e.from, e.to);
 }
 
 /// Add an edge to an edgelist
 /// Makes sure only silhouette edges are present
-static void addToEdgeList(int a, int b, EDGE *edgelist, unsigned int* edge_count, Vector3f *pVertices)
+static inline void addToEdgeList(int a, int b, std::vector<EDGE> &edgelist)
 {
 	EDGE newEdge = {a, b};
-	unsigned int i;
-	bool foundMatching = false;
-
-	for(i = 0; i < *edge_count; i++)
-	{
-		if(edgelist[i].from < 0)
-		{
-			// does not exist anymore
-			continue;
-		}
-		if(compare_edge(&newEdge, &edgelist[i], pVertices)) {
-			// remove the other too
-			edgelist[i].from = -1;
-			foundMatching = true;
-			break;
-		}
-	}
-	if(!foundMatching)
-	{
-		edgelist[*edge_count] = newEdge;
-		(*edge_count)++;
-	}
+	edgelist.push_back(newEdge);
 }
 
 /// scale the height according to the flags
@@ -351,15 +325,12 @@ static void pie_DrawShadow(iIMDShape *shape, int flag, int flag_data, Vector3f* 
 	unsigned int i, j, n;
 	Vector3f *pVertices;
 	iIMDPoly *pPolys;
-	unsigned int edge_count = 0;
-	static EDGE *edgelist = NULL;
-	static unsigned int edgelistsize = 256;
+	static std::vector<EDGE> edgelist;  // Static, to save allocations.
+	static std::vector<EDGE> edgelistFlipped;  // Static, to save allocations.
+	static std::vector<EDGE> edgelistFiltered;  // Static, to save allocations.
 	EDGE *drawlist = NULL;
 
-	if(!edgelist)
-	{
-		edgelist = (EDGE*)malloc(sizeof(EDGE)*edgelistsize);
-	}
+	unsigned edge_count;
 	pVertices = shape->points;
 	if( flag & pie_STATIC_SHADOW && shape->shadowEdgeList )
 	{
@@ -368,66 +339,47 @@ static void pie_DrawShadow(iIMDShape *shape, int flag, int flag_data, Vector3f* 
 	}
 	else
 	{
-
-		for (i = 0, pPolys = shape->polys; i < shape->npolys; ++i, ++pPolys) {
+		edgelist.clear();
+		for (i = 0, pPolys = shape->polys; i < shape->npolys; ++i, ++pPolys)
+		{
 			Vector3f p[3];
-			int current, first;
 			for(j = 0; j < 3; j++)
 			{
-				current = pPolys->pindex[j];
+				int current = pPolys->pindex[j];
 				p[j] = Vector3f(pVertices[current].x, scale_y(pVertices[current].y, flag, flag_data), pVertices[current].z);
 			}
 
 			Vector3f normal = crossProduct(p[2] - p[0], p[1] - p[0]);
 			if (normal * *light > 0)
 			{
-				first = pPolys->pindex[0];
-				for (n = 1; n < pPolys->npnts; n++) {
+				for (n = 1; n < pPolys->npnts; n++)
+				{
 					// link to the previous vertex
-					addToEdgeList(pPolys->pindex[n-1], pPolys->pindex[n], edgelist, &edge_count, pVertices);
-					// check if the edgelist is still large enough
-					if(edge_count >= edgelistsize-1)
-					{
-						// enlarge
-						EDGE* newstack;
-						edgelistsize *= 2;
-						newstack = (EDGE *)realloc(edgelist, sizeof(EDGE) * edgelistsize);
-						if (newstack == NULL)
-						{
-							debug(LOG_FATAL, "pie_DrawShadow: Out of memory!");
-							abort();
-							return;
-						}
-
-						edgelist = newstack;
-
-						debug(LOG_WARNING, "new edge list size: %u", edgelistsize);
-					}
+					addToEdgeList(pPolys->pindex[n-1], pPolys->pindex[n], edgelist);
 				}
 				// back to the first
-				addToEdgeList(pPolys->pindex[pPolys->npnts-1], first, edgelist, &edge_count, pVertices);
+				addToEdgeList(pPolys->pindex[pPolys->npnts-1], pPolys->pindex[0], edgelist);
 			}
 		}
+
+		// Remove duplicate pairs from the edge list. For example, in the list ((1 2), (2 6), (6 2), (3, 4)), remove (2 6) and (6 2).
+		edgelistFlipped = edgelist;
+		std::for_each(edgelistFlipped.begin(), edgelistFlipped.end(), flipEdge);
+		std::sort(edgelist.begin(), edgelist.end(), edgeLessThan);
+		std::sort(edgelistFlipped.begin(), edgelistFlipped.end(), edgeLessThan);
+		edgelistFiltered.resize(edgelist.size());
+		edgelistFiltered.erase(std::set_difference(edgelist.begin(), edgelist.end(), edgelistFlipped.begin(), edgelistFlipped.end(), edgelistFiltered.begin(), edgeLessThan), edgelistFiltered.end());
+
+		drawlist = &edgelistFiltered[0];
+		edge_count = edgelistFiltered.size();
 		//debug(LOG_WARNING, "we have %i edges", edge_count);
-		drawlist = edgelist;
 
 		if(flag & pie_STATIC_SHADOW)
 		{
-			// first compact the current edgelist
-			for(i = 0, j = 0; i < edge_count; i++)
-			{
-				if(edgelist[i].from < 0)
-				{
-					continue;
-				}
-				edgelist[j] = edgelist[i];
-				j++;
-			}
-			edge_count = j;
 			// then store it in the imd
 			shape->nShadowEdges = edge_count;
 			shape->shadowEdgeList = (EDGE *)realloc(shape->shadowEdgeList, sizeof(EDGE) * shape->nShadowEdges);
-			memcpy(shape->shadowEdgeList, edgelist, sizeof(EDGE) * shape->nShadowEdges);
+			std::copy(drawlist, drawlist + edge_count, shape->shadowEdgeList);
 		}
 	}
 
@@ -437,10 +389,6 @@ static void pie_DrawShadow(iIMDShape *shape, int flag, int flag_data, Vector3f* 
 	for(i=0;i<edge_count;i++)
 	{
 		int a = drawlist[i].from, b = drawlist[i].to;
-		if(a < 0)
-		{
-			continue;
-		}
 
 		glVertex3f(pVertices[b].x, scale_y(pVertices[b].y, flag, flag_data), pVertices[b].z);
 		glVertex3f(pVertices[b].x+light->x, scale_y(pVertices[b].y, flag, flag_data)+light->y, pVertices[b].z+light->z);
