@@ -287,7 +287,7 @@ static void dump_to_pie(FILE *ctl, FILE *fp, const char *input)
 		{
 			if (!posList[j].dupe)
 			{
-				fprintf(ctl, " \n\t%d %d %d", posList[j].x, posList[j].y, posList[j].z);
+				fprintf(ctl, "\n\t%d %d %d", posList[j].x, posList[j].y, posList[j].z);
 			}
 		}
 		
