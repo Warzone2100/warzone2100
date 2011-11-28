@@ -16,6 +16,10 @@ CONFIG += debug \
 	precompile_header
 TARGET = qwzm
 
+UI_DIR = built
+MOC_DIR = built
+OBJECTS_DIR = built
+
 # If your system uses different paths for QGLViewer, create a file named
 # "config" and override the two variables below (with "=").
 QGLVIEWER_INCL = /usr/include/QGLViewer
