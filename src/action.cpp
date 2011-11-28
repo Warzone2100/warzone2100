@@ -544,11 +544,7 @@ bool actionVisibleTarget(DROID *psDroid, BASE_OBJECT *psTarget, int weapon_slot)
 
 static void actionAddVtolAttackRun( DROID *psDroid )
 {
-	SDWORD		deltaX, deltaY, iA, iX, iY;
 	BASE_OBJECT	*psTarget;
-#if 0
-	SDWORD		iVx, iVy;
-#endif
 
 	CHECK_DROID(psDroid);
 
@@ -566,54 +562,21 @@ static void actionAddVtolAttackRun( DROID *psDroid )
 	}
 
 	/* get normal vector from droid to target */
-	deltaX = psTarget->pos.x - psDroid->pos.x;
-	deltaY = psTarget->pos.y - psDroid->pos.y;
+	Vector2i delta = removeZ(psTarget->pos - psDroid->pos);
 
 	/* get magnitude of normal vector (Pythagorean theorem) */
-	iA = iHypot(deltaX, deltaY);
-
-#if 0
-	/* get left perpendicular to normal vector:
-	 * swap normal vector elements and negate y:
-	 * scale to attack ellipse width
-	 */
-	iVx =  deltaY * VTOL_ATTACK_WIDTH / iA;
-	iVy = -deltaX * VTOL_ATTACK_WIDTH / iA;
-
-	/* add waypoint left perpendicular to target*/
-	iX = psTarget->pos.x + iVx;
-	iY = psTarget->pos.y + iVy;
-#endif
+	int dist = std::max(iHypot(delta), 1);
 
 	/* add waypoint behind target attack length away*/
-	if (iA != 0)
-	{
-		iX = psTarget->pos.x + (deltaX * VTOL_ATTACK_LENGTH / iA);
-		iY = psTarget->pos.y + (deltaY * VTOL_ATTACK_LENGTH / iA);
-	}
-	else
-	{
-		// We should only ever get here if both deltaX and deltaY
-		// are zero (look at the above pythagoeran theorem).
-		// This code is here to prevent a divide by zero error
-		//
-		// The next values are valid because if both deltas are zero
-		// then iA will be zero as well resulting in:
-		// (deltaXY * VTOL_ATTACK_LENGTH / iA) = (0 * VTOL_ATTACK_LENGTH / 0) = (0 / 0) = 0
-		iX = psTarget->pos.x;
-		iY = psTarget->pos.y;
-	}
+	Vector2i dest = removeZ(psTarget->pos) + delta * VTOL_ATTACK_LENGTH / dist;
 
-	if (iX <= 0
-	 || iY<=0
-	 || iX > world_coord(GetWidthOfMap())
-	 || iY > world_coord(GetHeightOfMap()))
+	if (!worldOnMap(dest))
 	{
 		debug( LOG_NEVER, "*** actionAddVtolAttackRun: run off map! ***" );
 	}
 	else
 	{
-		moveDroidToDirect( psDroid, iX, iY );
+		moveDroidToDirect(psDroid, dest.x, dest.y);
 	}
 }
 
@@ -1340,18 +1303,10 @@ void actionUpdateDroid(DROID *psDroid)
 				}
 			}
 		}
-/*		else
-		{
-			// lost the target
-			psDroid->action = DACTION_MOVETOATTACK;
-			moveDroidTo(psDroid, psDroid->psActionTarget->pos.x, psDroid->psActionTarget->pos.y);
-		}*/
-
-		/* check vtol attack runs */
-//		actionUpdateVtolAttack( psDroid );
 
 		/* circle around target if hovering and not cyborg */
-		if (DROID_STOPPED(psDroid))
+		Vector2i attackRunDelta = psDroid->pos - psDroid->sMove.destination;
+		if (DROID_STOPPED(psDroid) || attackRunDelta*attackRunDelta < TILE_UNITS*TILE_UNITS)
 		{
 			actionAddVtolAttackRun( psDroid );
 		}
