@@ -143,6 +143,8 @@ public:
 
 	/// Returns the .pie file data referenced by the cell. May return NULL without error if the cell is "0" and accept0AsNULL is true.
 	iIMDShape *imdShape(unsigned index, bool accept0AsNULL = false);
+	/// Returns the .pie files data referenced by the cell, separated by '@' characters.
+	std::vector<iIMDShape *> imdShapes(unsigned index);
 
 	/// Returns the STATS * in the given list with the same name as this cell. May return NULL without error if the cell is "0" and accept0AsNULL is true.
 	template <typename STATS>

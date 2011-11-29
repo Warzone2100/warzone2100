@@ -112,11 +112,6 @@
 //used to calculate the time  required for repairing
 #define VTOL_REPAIR_FACTOR          10
 
-//holds the IMD pointers for the modules - ONLY VALID for player0
-iIMDShape * factoryModuleIMDs[NUM_FACTORY_MODULES][NUM_FACMOD_TYPES];
-iIMDShape * researchModuleIMDs[NUM_RESEARCH_MODULES];
-iIMDShape * powerModuleIMDs[NUM_POWER_MODULES];
-
 //Value is stored for easy access to this structure stat
 UDWORD			factoryModuleStat;
 UDWORD			powerModuleStat;
@@ -261,6 +256,18 @@ bool IsStatExpansionModule(STRUCTURE_STATS const *psStats)
 	       psStats->type == REF_RESEARCH_MODULE;
 }
 
+static int numStructureModules(STRUCTURE const *psStruct)
+{
+	switch (psStruct->pStructureType->type)
+	{
+		case REF_POWER_GEN:     return psStruct->pFunctionality->powerGenerator.capacity;
+		case REF_VTOL_FACTORY:
+		case REF_FACTORY:       return psStruct->pFunctionality->factory.capacity;
+		case REF_RESEARCH:      return psStruct->pFunctionality->researchFacility.capacity;
+		default:                return 0;
+	}
+}
+
 bool structureIsBlueprint(STRUCTURE *psStructure)
 {
 	return (psStructure->status == SS_BLUEPRINT_VALID ||
@@ -277,17 +284,6 @@ bool isBlueprint(BASE_OBJECT *psObject)
 void structureInitVars(void)
 {
 	int i, j;
-
-	for(i=0; i<NUM_FACTORY_MODULES ; i++) {
-		factoryModuleIMDs[i][0] = NULL;
-		factoryModuleIMDs[i][1] = NULL;
-	}
-	for(i=0; i<NUM_RESEARCH_MODULES ; i++) {
-		researchModuleIMDs[i] = NULL;
-	}
-	for(i=0; i<NUM_POWER_MODULES ; i++) {
-		powerModuleIMDs[i] = NULL;
-	}
 
 	asStructureStats = NULL;
 	numStructureStats = 0;
@@ -418,82 +414,22 @@ static const StringToEnum<STRUCT_STRENGTH> map_STRUCT_STRENGTH[] =
 	{"BUNKER",      STRENGTH_BUNKER         },
 };
 
-static void initModulePIEs(std::string const &PIEName, unsigned i, STRUCTURE_TYPE type)
+static void initModuleStats(unsigned i, STRUCTURE_TYPE type)
 {
-	std::string GfxFile = PIEName;
-	char charNum[2];
-	UDWORD length, module = 0;
-
-	//need to work out the IMD's for the modules - HACK!
+	//need to work out the stats for the modules - HACK! - But less hacky than what was here before.
 	switch (type)
 	{
 		case REF_FACTORY_MODULE:
-			length = GfxFile.size() - 5;
-			for (module = 1; module < NUM_FACTORY_MODULES+1; module++)
-			{
-				sprintf(charNum,"%d",module);
-				GfxFile[length] = *charNum;
-				factoryModuleIMDs[module-1][0] = (iIMDShape *)resGetData("IMD", GfxFile.c_str());
-				if (factoryModuleIMDs[module-1][0] == NULL)
-				{
-					debug(LOG_ERROR, "Cannot find the PIE for factory module %d - %s", module, GfxFile.c_str());
-					return;
-				}
-			}
 			//store the stat for easy access later on
 			factoryModuleStat = i;
 			break;
-		case REF_VTOL_FACTORY:
-			length = GfxFile.size() - 5;
-			for (module = 1; module < NUM_FACTORY_MODULES+1; module++)
-			{
-				sprintf(charNum,"%d",module);
-				GfxFile[length] = *charNum;
-				factoryModuleIMDs[module-1][1] = (iIMDShape *)resGetData("IMD", GfxFile.c_str());
-				if (factoryModuleIMDs[module-1][1] == NULL)
-				{
-					debug(LOG_ERROR, "Cannot find the PIE for vtol factory module %d - %s", module, GfxFile.c_str());
-					return;
-				}
-			}
-			break;
-		// Setup the PIE's for the research modules.
+
 		case REF_RESEARCH_MODULE:
-			length = GfxFile.size() - 5;
-			GfxFile[length] = '4';
-
-			researchModuleIMDs[0] = (iIMDShape *)resGetData("IMD", GfxFile.c_str());
-			if (researchModuleIMDs[0] == NULL)
-			{
-				debug(LOG_ERROR, "Cannot find the PIE for research module %d - %s", module, GfxFile.c_str());
-				return;
-			}
-
-			researchModuleIMDs[1] = researchModuleIMDs[0];
-			researchModuleIMDs[2] = researchModuleIMDs[0];
-			researchModuleIMDs[3] = researchModuleIMDs[0];
-
 			//store the stat for easy access later on
 			researchModuleStat = i;
 			break;
 
-		// Setup the PIE's for the power modules.
 		case REF_POWER_MODULE:
-			length = GfxFile.size() - 5;
-
-			GfxFile[length] = '4';
-
-			powerModuleIMDs[0] = (iIMDShape *)resGetData("IMD", GfxFile.c_str());
-			if (powerModuleIMDs[0] == NULL)
-			{
-				debug(LOG_ERROR, "Cannot find the PIE for power module %d - %s", module, GfxFile.c_str());
-				return;
-			}
-
-			powerModuleIMDs[1] = powerModuleIMDs[0];
-			powerModuleIMDs[2] = powerModuleIMDs[0];
-			powerModuleIMDs[3] = powerModuleIMDs[0];
-
 			//store the stat for easy access later on
 			powerModuleStat = i;
 			break;
@@ -514,7 +450,7 @@ STRUCTURE_STATS::STRUCTURE_STATS(LineView line)
 	, bodyPoints(line.u32(11))
 	, powerToBuild(line.u32(13))
 	, resistance(line.u32(15))
-	, pIMD(line.imdShape(21))
+	, pIMD(line.imdShapes(21))
 	, pBaseIMD(line.imdShape(22, true))
 	, pECM(line.stats(18, asECMStats, numECMStats, true))
 	, pSensor(line.stats(19, asSensorStats, numSensorStats, true))
@@ -540,28 +476,12 @@ STRUCTURE_STATS::STRUCTURE_STATS(LineView line)
 /* load the Structure stats from the Access database */
 bool loadStructureStats(const char *pStructData, UDWORD bufferSize)
 {
-	UDWORD				module;
 	UDWORD				iID;
 
 	// Skip descriptive header
 	if (strncmp(pStructData,"Structure ",10)==0)
 	{
 		pStructData = strchr(pStructData,'\n') + 1;
-	}
-
-	//initialise the module IMD structs
-	for (module = 0; module < NUM_FACTORY_MODULES; module++)
-	{
-		factoryModuleIMDs[module][0] = NULL;
-		factoryModuleIMDs[module][1] = NULL;
-	}
-	for (module = 0; module < NUM_RESEARCH_MODULES; module++)
-	{
-		researchModuleIMDs[module] = NULL;
-	}
-	for (module = 0; module < NUM_POWER_MODULES; module++)
-	{
-		powerModuleIMDs[module] = NULL;
 	}
 
 	TableView table(pStructData, bufferSize);
@@ -580,7 +500,7 @@ bool loadStructureStats(const char *pStructData, UDWORD bufferSize)
 			return false;
 		}
 
-		initModulePIEs(line.s(21), i, asStructureStats[i].type);  // This function looks like a hack.
+		initModuleStats(i, asStructureStats[i].type);  // This function looks like a hack. But slightly less hacky than before.
 	}
 
 	/* get global dummy stat pointer - GJ */
@@ -1281,7 +1201,7 @@ static WallOrientation structChooseWallType(unsigned player, int mapX, int mapY)
 						{
 							STRUCTURE_STATS *psStats = ((WALL_FUNCTION *)psStruct->pStructureType->asFuncList[0])->pCornerStat;
 							psStruct->pStructureType = psStats;
-							psStruct->sDisplay.imd = psStats->pIMD;
+							psStruct->sDisplay.imd = psStats->pIMD[0];
 						}
 					}
 					else if (scanType == WALL_HORIZ)
@@ -1477,7 +1397,7 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 		Vector2i map = map_coord(Vector2i(x, y)) - size/2;
 
 		//set up the imd to use for the display
-		psBuilding->sDisplay.imd = pStructureType->pIMD;
+		psBuilding->sDisplay.imd = pStructureType->pIMD[0];
 
 		psBuilding->state = SAS_NORMAL;
 		psBuilding->lastStateTime = gameTime;
@@ -1728,6 +1648,8 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 			return NULL;
 		}
 
+		int capacity = 0;  // Dummy initialisation.
+
 		if (pStructureType->type == REF_FACTORY_MODULE)
 		{
 			if (psBuilding->pStructureType->type != REF_FACTORY &&
@@ -1753,42 +1675,8 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 
 				psBuilding->pFunctionality->factory.productionOutput += ((
 					PRODUCTION_FUNCTION*)pStructureType->asFuncList[0])->productionOutput;
-				//need to change which IMD is used for player 0
-				//Need to do a check its not Barbarian really!
 
-				if (   (bMultiPlayer && isHumanPlayer(psBuilding->player))
-					|| (bMultiPlayer && (game.type == SKIRMISH) && (psBuilding->player < game.maxPlayers))
-					|| !bMultiPlayer)
-				{
-					int capacity = psBuilding->pFunctionality->factory.capacity;
-
-					if (capacity < NUM_FACTORY_MODULES)
-					{
-						if (psBuilding->pStructureType->type == REF_FACTORY)
-						{
-							psBuilding->sDisplay.imd = factoryModuleIMDs[
-								capacity-1][0];
-						}
-						else
-						{
-							psBuilding->sDisplay.imd = factoryModuleIMDs[
-								capacity-1][1];
-						}
-					}
-					else
-					{
-						if (psBuilding->pStructureType->type == REF_FACTORY)
-						{
-							psBuilding->sDisplay.imd = factoryModuleIMDs[
-								NUM_FACTORY_MODULES-1][0];
-						}
-						else
-						{
-							psBuilding->sDisplay.imd = factoryModuleIMDs[
-								NUM_FACTORY_MODULES-1][1];
-						}
-					}
-				}
+				capacity = psBuilding->pFunctionality->factory.capacity;
 			}
 		}
 
@@ -1818,23 +1706,7 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 					holdResearch(psBuilding, ModeImmediate);
 				}
 
-				//need to change which IMD is used for player 0
-				//Need to do a check its not Barbarian really!
-				if (   (bMultiPlayer && isHumanPlayer(psBuilding->player))
-					|| (bMultiPlayer && (game.type == SKIRMISH) && (psBuilding->player < game.maxPlayers))
-					|| !bMultiPlayer)
-				{
-					int capacity = psBuilding->pFunctionality->researchFacility.capacity;
-
-					if (capacity < NUM_RESEARCH_MODULES)
-					{
-						psBuilding->sDisplay.imd = researchModuleIMDs[capacity-1];
-					}
-					else
-					{
-						psBuilding->sDisplay.imd = researchModuleIMDs[NUM_RESEARCH_MODULES-1];
-					}
-				}
+				capacity = psBuilding->pFunctionality->researchFacility.capacity;
 			}
 		}
 
@@ -1855,15 +1727,8 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 				psBuilding->pFunctionality->powerGenerator.capacity = NUM_POWER_MODULES;
 				bUpgraded = true;
 
-				//need to change which IMD is used for player 0
-				//Need to do a check its not Barbarian really!
+				capacity = psBuilding->pFunctionality->powerGenerator.capacity;
 
-				if (   (bMultiPlayer && isHumanPlayer(psBuilding->player))
-					|| (bMultiPlayer && (game.type == SKIRMISH) && (psBuilding->player < game.maxPlayers))
-					|| !bMultiPlayer)
-				{
-					psBuilding->sDisplay.imd = powerModuleIMDs[0];
-				}
 				//need to inform any res Extr associated that not digging until complete
 				releasePowerGen(psBuilding);
 				structurePowerUpgrade(psBuilding);
@@ -1871,6 +1736,9 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 		}
 		if (bUpgraded)
 		{
+			std::vector<iIMDShape *> &IMDs = psBuilding->pStructureType->pIMD;
+			psBuilding->sDisplay.imd = IMDs[std::min<int>(capacity, IMDs.size() - 1)];
+
 			//calculate the new body points of the owning structure
 			psBuilding->body = (uint64_t)structureBody(psBuilding) * bodyDiff / 65536;
 
@@ -1907,13 +1775,23 @@ STRUCTURE *buildBlueprint(STRUCTURE_STATS const *psStats, int32_t x, int32_t y, 
 	STRUCTURE *blueprint;
 
 	ASSERT_OR_RETURN(NULL, psStats != NULL, "No blueprint stats");
-	ASSERT_OR_RETURN(NULL, psStats->pIMD != NULL, "No blueprint model for %s", getStatName(psStats));
+	ASSERT_OR_RETURN(NULL, psStats->pIMD[0] != NULL, "No blueprint model for %s", getStatName(psStats));
+
+	int moduleNumber = 0;
+	if (IsStatExpansionModule(psStats))
+	{
+		STRUCTURE *baseStruct = castStructure(worldTile(x, y)->psObject);
+		if (baseStruct != NULL)
+		{
+			moduleNumber = numStructureModules(baseStruct) + 1;
+		}
+	}
 
 	blueprint = new STRUCTURE(0, selectedPlayer);
 	// construct the fake structure
 	blueprint->pStructureType = const_cast<STRUCTURE_STATS *>(psStats);  // Couldn't be bothered to fix const correctness everywhere.
 	blueprint->visible[selectedPlayer] = UBYTE_MAX;
-	blueprint->sDisplay.imd = psStats->pIMD;
+	blueprint->sDisplay.imd = psStats->pIMD[std::min<int>(moduleNumber, psStats->pIMD.size() - 1)];
 	blueprint->pos.x = x;
 	blueprint->pos.y = y;
 	blueprint->pos.z = map_Height(blueprint->pos.x, blueprint->pos.y) + world_coord(1)/10;
@@ -5404,7 +5282,7 @@ bool getLasSatExists(UDWORD player)
 /* calculate muzzle base location in 3d world */
 bool calcStructureMuzzleBaseLocation(STRUCTURE *psStructure, Vector3i *muzzle, int weapon_slot)
 {
-	iIMDShape *psShape = psStructure->pStructureType->pIMD;
+	iIMDShape *psShape = psStructure->pStructureType->pIMD[0];
 
 	CHECK_STRUCTURE(psStructure);
 
@@ -5438,7 +5316,7 @@ bool calcStructureMuzzleBaseLocation(STRUCTURE *psStructure, Vector3i *muzzle, i
 /* calculate muzzle tip location in 3d world */
 bool calcStructureMuzzleLocation(STRUCTURE *psStructure, Vector3i *muzzle, int weapon_slot)
 {
-	iIMDShape *psShape = psStructure->pStructureType->pIMD;
+	iIMDShape *psShape = psStructure->pStructureType->pIMD[0];
 
 	CHECK_STRUCTURE(psStructure);
 

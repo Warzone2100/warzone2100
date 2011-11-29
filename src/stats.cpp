@@ -320,6 +320,28 @@ iIMDShape *LineView::imdShape(unsigned int index, bool accept0AsNULL)
 	return result;
 }
 
+std::vector<iIMDShape *> LineView::imdShapes(unsigned int index)
+{
+	std::string const &str = s(index);
+	std::vector<iIMDShape *> result;
+	int begin = 0;
+	do
+	{
+		int end = str.find_first_of('@', begin);
+		if (end == std::string::npos)
+		{
+			end = str.size();
+		}
+		result.push_back((iIMDShape *)resGetData("IMD", str.substr(begin, end - begin).c_str()));
+		if (result.back() == NULL)
+		{
+			setError(index, "Expected PIE shape.");
+		}
+		begin = end + 1;
+	} while (begin != str.size() + 1);
+	return result;
+}
+
 static inline bool stringToEnumFindFunction(std::pair<char const *, unsigned> const &a, char const *b)
 {
 	return strcmp(a.first, b) < 0;

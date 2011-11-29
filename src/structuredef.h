@@ -123,7 +123,7 @@ struct STRUCTURE_STATS : public BASE_STATS
 	UDWORD		resistance;			/*The number used to determine whether a
 									  structure can resist an enemy takeover -
 									  0 = cannot be attacked electrically*/
-	iIMDShape	*pIMD;		/*The IMD to draw for this structure */
+	std::vector<iIMDShape *> pIMD;          // The IMDs to draw for this structure, for each possible number of modules.
 	iIMDShape	*pBaseIMD;	/*The base IMD to draw for this structure */
 	struct ECM_STATS	*pECM;		/*Which ECM is standard for the structure -
 									  if any*/

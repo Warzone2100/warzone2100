@@ -1794,7 +1794,7 @@ int establishTargetHeight(BASE_OBJECT const *psTarget)
 		case OBJ_STRUCTURE:
 		{
 			STRUCTURE_STATS * psStructureStats = ((STRUCTURE const *)psTarget)->pStructureType;
-			return psStructureStats->pIMD->max.y + psStructureStats->pIMD->min.y;
+			return psStructureStats->pIMD[0]->max.y + psStructureStats->pIMD[0]->min.y;
 		}
 		case OBJ_FEATURE:
 			// Just use imd ymax+ymin

@@ -86,7 +86,7 @@ void renderResearchToBuffer(RESEARCH *psResearch, UDWORD OriginX, UDWORD OriginY
 				/*HACK HACK HACK!
 				if its a 'tall thin (ie tower)' structure stat with something on
 				the top - offset the position to show the object on top*/
-				if (((STRUCTURE_STATS*)psResearch->psStat)->pIMD->nconnectors &&
+				if (((STRUCTURE_STATS*)psResearch->psStat)->pIMD[0]->nconnectors &&
 					getStructureStatHeight((STRUCTURE_STATS*)psResearch->psStat) > TOWER_HEIGHT)
 				{
 					Position.y -= 30;

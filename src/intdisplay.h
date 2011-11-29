@@ -237,7 +237,6 @@ DROID_TEMPLATE *FactoryGetTemplate(FACTORY *Factory);
 
 RESEARCH_FACILITY *StructureGetResearch(STRUCTURE *Structure);
 FACTORY *StructureGetFactory(STRUCTURE *Structure);
-iIMDShape *StructureGetIMD(STRUCTURE *Structure);
 
 //iIMDShape *TemplateGetIMD(DROID_TEMPLATE *DroidTemp,UDWORD Player);
 //UDWORD TemplateGetIMDIndex(DROID_TEMPLATE *Template,UDWORD Player);

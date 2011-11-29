@@ -717,7 +717,7 @@ void intDisplayStatusButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ
 					if(DroidIsBuilding(Droid)) {
 						Structure = DroidGetBuildStructure(Droid);
 						if(Structure) {
-							Object = Structure;	//(void*)StructureGetIMD(Structure);
+							Object = Structure;
 							IMDType = IMDTYPE_STRUCTURE;
 							RENDERBUTTON_INITIALISED(Buffer);
 						}
@@ -2698,12 +2698,6 @@ RESEARCH_FACILITY *StructureGetResearch(STRUCTURE *Structure)
 }
 
 
-iIMDShape *StructureGetIMD(STRUCTURE *Structure)
-{
-	return Structure->pStructureType->pIMD;
-}
-
-
 DROID_TEMPLATE *FactoryGetTemplate(FACTORY *Factory)
 {
 	if (Factory->psSubjectPending != NULL)
@@ -2730,7 +2724,7 @@ iIMDShape *StatGetStructureIMD(BASE_STATS *Stat,UDWORD Player)
 {
 	(void)Player;
 	//return buildingIMDs[aBuildingIMDs[Player][((STRUCTURE_STATS*)Stat)->type]];
-	return ((STRUCTURE_STATS*)Stat)->pIMD;
+	return ((STRUCTURE_STATS*)Stat)->pIMD[0];
 }
 
 bool StatIsTemplate(BASE_STATS *Stat)

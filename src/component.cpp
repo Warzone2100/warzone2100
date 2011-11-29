@@ -165,9 +165,9 @@ static UDWORD getStructureHeight(STRUCTURE *psStructure)
 
 UDWORD getStructureStatHeight(STRUCTURE_STATS *psStat)
 {
-	if (psStat->pIMD)
+	if (psStat->pIMD[0])
 	{
-		return (psStat->pIMD->max.y - psStat->pIMD->min.y);
+		return (psStat->pIMD[0]->max.y - psStat->pIMD[0]->min.y);
 	}
 
 	return 0;
@@ -197,7 +197,7 @@ void displayStructureButton(STRUCTURE *psStructure, Vector3i *rotation, Vector3i
 	/*HACK HACK HACK!
 	if its a 'tall thin (ie tower)' structure with something on the top - offset the
 	position to show the object on top*/
-	if (psStructure->pStructureType->pIMD->nconnectors && scale == SMALL_STRUCT_SCALE &&
+	if (psStructure->pStructureType->pIMD[0]->nconnectors && scale == SMALL_STRUCT_SCALE &&
 		getStructureHeight(psStructure) > TOWER_HEIGHT)
 	{
 		Position->y -= 20;
@@ -293,7 +293,7 @@ void displayStructureStatButton(STRUCTURE_STATS *Stats, Vector3i *Rotation, Vect
 	/*HACK HACK HACK!
 	if its a 'tall thin (ie tower)' structure stat with something on the top - offset the
 	position to show the object on top*/
-	if (Stats->pIMD->nconnectors && scale == SMALL_STRUCT_SCALE &&
+	if (Stats->pIMD[0]->nconnectors && scale == SMALL_STRUCT_SCALE &&
 	    getStructureStatHeight(Stats) > TOWER_HEIGHT)
 	{
 		Position->y -= 20;
@@ -309,10 +309,10 @@ void displayStructureStatButton(STRUCTURE_STATS *Stats, Vector3i *Rotation, Vect
 	{
 		pie_Draw3DShape(baseImd, 0, getPlayerColour(selectedPlayer), WZCOL_WHITE, pie_BUTTON, 0);
 	}
-	pie_Draw3DShape(Stats->pIMD, 0, getPlayerColour(selectedPlayer), WZCOL_WHITE, pie_BUTTON, 0);
+	pie_Draw3DShape(Stats->pIMD[0], 0, getPlayerColour(selectedPlayer), WZCOL_WHITE, pie_BUTTON, 0);
 
 	//and draw the turret
-	if(Stats->pIMD->nconnectors)
+	if(Stats->pIMD[0]->nconnectors)
 	{
 		if (Stats->numWeaps > 0)
 		{
@@ -327,7 +327,7 @@ void displayStructureStatButton(STRUCTURE_STATS *Stats, Vector3i *Rotation, Vect
 			weaponImd[0] = NULL;
 			mountImd[0] = NULL;
 		}
-		strImd = Stats->pIMD;
+		strImd = Stats->pIMD[0];
 		//get an imd to draw on the connector priority is weapon, ECM, sensor
 		//check for weapon
 		//can only have the STRUCT_MAXWEAPS

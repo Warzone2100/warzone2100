@@ -453,7 +453,7 @@ static bool cleanMap(UDWORD player)
 							((FACTORY*)psStruct->pFunctionality)->capacity = 0;
 							((FACTORY*)psStruct->pFunctionality)->productionOutput = (UBYTE)((PRODUCTION_FUNCTION*)psStruct->pStructureType->asFuncList[0])->productionOutput;
 
-							psStruct->sDisplay.imd	= psStruct->pStructureType->pIMD;
+							psStruct->sDisplay.imd = psStruct->pStructureType->pIMD[0];
 							psStruct->body			= (UWORD)(structureBody(psStruct));
 
 						}
@@ -474,7 +474,7 @@ static bool cleanMap(UDWORD player)
 						{	// downgrade research
 							((RESEARCH_FACILITY*)psStruct->pFunctionality)->capacity = 0;
 							((RESEARCH_FACILITY*)psStruct->pFunctionality)->researchPoints = ((RESEARCH_FUNCTION*)psStruct->pStructureType->asFuncList[0])->researchPoints;
-							psStruct->sDisplay.imd	= psStruct->pStructureType->pIMD;
+							psStruct->sDisplay.imd = psStruct->pStructureType->pIMD[0];
 							psStruct->body			= (UWORD)(structureBody(psStruct));
 						}
 						psStruct=psStruct->psNext;
@@ -486,7 +486,7 @@ static bool cleanMap(UDWORD player)
 						{	// downgrade powergen.
 							((POWER_GEN*)psStruct->pFunctionality)->capacity = 0;
 
-							psStruct->sDisplay.imd	= psStruct->pStructureType->pIMD;
+							psStruct->sDisplay.imd = psStruct->pStructureType->pIMD[0];
 							psStruct->body			= (UWORD)(structureBody(psStruct));
 						}
 						structurePowerUpgrade(psStruct);
