@@ -255,10 +255,6 @@ GAMECODE gameLoop(void)
 			//handles callbacks for positioning of DP's
 			process3DBuilding();
 
-			// Update the base movement stuff
-			// FIXME This function will be redundant with logical updates.
-			moveUpdateBaseSpeed();
-
 			// Update the visibility change stuff
 			visUpdateLevel();
 

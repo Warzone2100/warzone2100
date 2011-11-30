@@ -206,12 +206,6 @@ bool moveInitialise(void)
 	return true;
 }
 
-/** Update the base speed for all movement
- */
-void moveUpdateBaseSpeed(void)
-{
-}
-
 /** Set a target location in world coordinates for a droid to move to
  *  @return true if the routing was successful, if false then the calling code
  *          should not try to route here again for a while

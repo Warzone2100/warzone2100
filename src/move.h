@@ -30,9 +30,6 @@
 /* Initialise the movement system */
 extern bool moveInitialise(void);
 
-/* Update the base speed for all movement */
-extern void moveUpdateBaseSpeed(void);
-
 /* Set a target location for a droid to move to  - returns a bool based on if there is a path to the destination (true if there is a path)*/
 extern bool moveDroidTo(DROID *psDroid, UDWORD x, UDWORD y, FPATH_MOVETYPE moveType = FMT_MOVE);
 
