@@ -51,25 +51,8 @@ bool selfTest = false;
 uint32_t selectedPlayer = 0;  /**< Current player */
 uint32_t realSelectedPlayer = 0;
 
-
-/************************************************************************************
- *
- * Alex's frame rate stuff
- */
-
-/* Over how many seconds is the average required? */
-#ifdef _DEBUG
-# define	TIMESPAN	1
-#else
-# define	TIMESPAN	5
-#endif
-
-/* Initial filler value for the averages - arbitrary */
-#define  IN_A_FRAME 70
-
 /* Global variables for the frame rate stuff */
-static uint32_t FrameCounts[TIMESPAN] = { 0 };
-static uint32_t FrameIndex = 0;
+static int frameCount = 0;
 static uint64_t curFrames = 0; // Number of frames elapsed since start
 static uint64_t lastFrames = 0;
 static uint32_t curTicks = 0; // Number of ticks since execution started
@@ -78,49 +61,16 @@ static uint32_t lastTicks = 0;
 /* InitFrameStuff - needs to be called once before frame loop commences */
 static void InitFrameStuff( void )
 {
-	UDWORD i;
-
-	for (i=0; i<TIMESPAN; i++)
-	{
-		FrameCounts[i] = IN_A_FRAME;
-	}
-
-	FrameIndex = 0;
+	frameCount = 0.0;
 	curFrames = 0;
 	lastFrames = 0;
 	curTicks = 0;
 	lastTicks = 0;
 }
 
-/* MaintainFrameStuff - call this during completion of each frame loop */
-static void MaintainFrameStuff( void )
+int frameRate(void)
 {
-	curTicks = wzGetTicks();
-	curFrames++;
-
-	// Update the framerate only once per second
-	if ( curTicks >= lastTicks + 1000 )
-	{
-		// TODO Would have to be normalized to be correct for < 1 fps:
-		// FrameCounts[FrameIndex++] = 1000 * (curFrames - lastFrames) / (curTicks - lastTicks);
-		FrameCounts[FrameIndex++] = curFrames - lastFrames;
-		if ( FrameIndex >= TIMESPAN )
-		{
-			FrameIndex = 0;
-		}
-		lastTicks = curTicks;
-		lastFrames = curFrames;
-	}
-}
-
-UDWORD frameGetAverageRate(void)
-{
-	SDWORD averageFrames = 0, i = 0;
-	for ( i = 0; i < TIMESPAN; i++ )
-		averageFrames += FrameCounts[i];
-	averageFrames /= TIMESPAN;
-
-	return averageFrames;
+	return frameCount;
 }
 
 UDWORD	frameGetFrameNumber(void)
@@ -167,8 +117,16 @@ bool frameInitialise()
  */
 void frameUpdate(void)
 {
-	/* Update the frame rate stuff */
-	MaintainFrameStuff();
+	curTicks = wzGetTicks();
+	curFrames++;
+
+	// Update the framerate only once per second
+	if (curTicks >= lastTicks + 1000)
+	{
+		frameCount = curFrames - lastFrames;
+		lastTicks = curTicks;
+		lastFrames = curFrames;
+	}
 }
 
 

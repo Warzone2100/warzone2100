@@ -111,8 +111,8 @@ extern void frameUpdate(void);
 /** Returns the current frame we're on - used to establish whats on screen. */
 extern UDWORD frameGetFrameNumber(void);
 
-/** Return average framerate of the last seconds. */
-extern UDWORD frameGetAverageRate(void);
+/** Return framerate of the last second. */
+int frameRate();
 
 extern UDWORD HashString( const char *String );
 extern UDWORD HashStringIgnoreCase( const char *String );
