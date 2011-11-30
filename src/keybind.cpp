@@ -545,8 +545,8 @@ void kf_ToggleLevelName(void) // toggles level name
 /* Writes out the frame rate */
 void	kf_FrameRate( void )
 {
-	CONPRINTF(ConsoleString,(ConsoleString, _("FPS %d; PIEs %d; polys %d; Terr. polys %d; States %d"),
-	          frameRate(), loopPieCount, loopPolyCount, loopTileCount, loopStateChanges));
+	CONPRINTF(ConsoleString,(ConsoleString, _("FPS %d; PIEs %d; polys %d; States %d"),
+	          frameRate(), loopPieCount, loopPolyCount, loopStateChanges));
 	if (runningMultiplayer())
 	{
 			CONPRINTF(ConsoleString,(ConsoleString,

@@ -53,7 +53,6 @@ extern LOOP_MISSION_STATE		loopMissionState;
 extern SDWORD	nextMissionType;
 
 extern unsigned int loopPieCount;
-extern unsigned int loopTileCount;
 extern unsigned int loopPolyCount;
 extern unsigned int loopStateChanges;
 

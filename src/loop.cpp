@@ -99,7 +99,6 @@ static void fireWaitingCallbacks(void);
  * Global variables
  */
 unsigned int loopPieCount;
-unsigned int loopTileCount;
 unsigned int loopPolyCount;
 unsigned int loopStateChanges;
 
@@ -632,7 +631,7 @@ GAMECODE gameLoop(void)
 		pie_SetFogStatus(true);
 	}
 
-	pie_GetResetCounts(&loopPieCount, &loopTileCount, &loopPolyCount, &loopStateChanges);
+	pie_GetResetCounts(&loopPieCount, &loopPolyCount, &loopStateChanges);
 
 	if (fogStatus & FOG_BACKGROUND)
 	{

@@ -58,7 +58,6 @@ extern bool drawing_interface;
  */
 
 static unsigned int pieCount = 0;
-static unsigned int tileCount = 0;
 static unsigned int polyCount = 0;
 static bool shadows = false;
 static GLfloat lighting0[LIGHT_MAX][4] = {{0.0f, 0.0f, 0.0f, 1.0f},  {0.5f, 0.5f, 0.5f, 1.0f},  {0.8f, 0.8f, 0.8f, 1.0f},  {1.0f, 1.0f, 1.0f, 1.0f}};
@@ -728,15 +727,13 @@ void pie_DrawImage(const PIEIMAGE *image, const PIERECT *dest, PIELIGHT colour)
 	glEnd();
 }
 
-void pie_GetResetCounts(unsigned int* pPieCount, unsigned int* pTileCount, unsigned int* pPolyCount, unsigned int* pStateCount)
+void pie_GetResetCounts(unsigned int* pPieCount, unsigned int* pPolyCount, unsigned int* pStateCount)
 {
 	*pPieCount  = pieCount;
-	*pTileCount = tileCount;
 	*pPolyCount = polyCount;
 	*pStateCount = pieStateCount;
 
 	pieCount = 0;
-	tileCount = 0;
 	polyCount = 0;
 	pieStateCount = 0;
 	return;
