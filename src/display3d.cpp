@@ -955,7 +955,7 @@ static void drawTiles(iView *player)
 	theSun = getTheSun();
 	pie_BeginLighting(&theSun, getDrawShadows());
 
-	// update the fog of war... FIXME: Remove this
+	// update mouse picking info
 	for (i = -visibleTiles.y/2, idx=0; i <= visibleTiles.y/2; i++,++idx)
 	{
 		/* Go through the x's */
@@ -970,10 +970,7 @@ static void drawTiles(iView *player)
 
 			if (tileOnMap(playerXTile + j, playerZTile + i))
 			{
-				MAPTILE *psTile = mapTile(playerXTile + j, playerZTile + i);
-
 				pos.y = map_TileHeight(playerXTile + j, playerZTile + i);
-				setTileColour(playerXTile + j, playerZTile + i, pal_SetBrightness(psTile->level));
 			}
 			tileScreenInfo[idx][jdx].z = pie_RotateProject(&pos, &screen);
 			tileScreenInfo[idx][jdx].x = screen.x;

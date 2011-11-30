@@ -1025,7 +1025,7 @@ bool initTerrain(void)
 	debug(LOG_TERRAIN, "lightmap texture size is %ix%i", lightmapWidth, lightmapHeight);
 
 	// Prepare the lightmap pixmap and texture
-	lightmapPixmap = (GLubyte *)calloc(lightmapWidth * lightmapHeight, 3 * sizeof(GLubyte));
+	lightmapPixmap = (GLubyte *)calloc(lightmapWidth * lightmapHeight, sizeof(GLubyte));
 	if (lightmapPixmap == NULL)
 	{
 		debug(LOG_FATAL, "Out of memory!");
@@ -1036,13 +1036,12 @@ bool initTerrain(void)
 	glGenTextures(1, &lightmap_tex_num);
 	glBindTexture(GL_TEXTURE_2D, lightmap_tex_num);
 
-	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB8, lightmapWidth, lightmapHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, lightmapPixmap);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE, lightmapWidth, lightmapHeight, 0, GL_LUMINANCE, GL_UNSIGNED_BYTE, NULL);
 
 	terrainInitalised = true;
 
@@ -1115,11 +1114,7 @@ void drawTerrain(void)
 		{
 			for (i = 0; i < mapWidth; ++i)
 			{
-				const PIELIGHT colour = getTileColour(i, j);
-
-				lightmapPixmap[(i + j * lightmapWidth) * 3 + 0] = colour.byte.r;
-				lightmapPixmap[(i + j * lightmapWidth) * 3 + 1] = colour.byte.g;
-				lightmapPixmap[(i + j * lightmapWidth) * 3 + 2] = colour.byte.b;
+				lightmapPixmap[i + j * lightmapWidth] = mapTile(i, j)->level;
 
 				if (!pie_GetFogStatus())
 				{
@@ -1143,22 +1138,18 @@ void drawTerrain(void)
 					darken = (distToEdge)/2.0f;
 					if (darken <= 0)
 					{
-						lightmapPixmap[(i + j * lightmapWidth) * 3 + 0] = 0;
-						lightmapPixmap[(i + j * lightmapWidth) * 3 + 1] = 0;
-						lightmapPixmap[(i + j * lightmapWidth) * 3 + 2] = 0;
+						lightmapPixmap[i + j * lightmapWidth] = 0;
 					}
 					else if (darken < 1)
 					{
-						lightmapPixmap[(i + j * lightmapWidth) * 3 + 0] *= darken;
-						lightmapPixmap[(i + j * lightmapWidth) * 3 + 1] *= darken;
-						lightmapPixmap[(i + j * lightmapWidth) * 3 + 2] *= darken;
+						lightmapPixmap[i + j * lightmapWidth] *= darken;
 					}
 				}
 			}
 		}
 
 		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, lightmapWidth, lightmapHeight, GL_RGB, GL_UNSIGNED_BYTE, lightmapPixmap);
+		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, lightmapWidth, lightmapHeight, GL_LUMINANCE, GL_UNSIGNED_BYTE, lightmapPixmap);
 	}
 
 	///////////////////////////////////
