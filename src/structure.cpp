@@ -1474,9 +1474,6 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 		{
 			case REF_REARM_PAD:
 				break;  // Not blocking.
-			case REF_GATE:
-				auxStructureClosedGate(psBuilding);  // Don't block for the sake of allied pathfinding.
-				break;
 			default:
 				auxStructureBlocking(psBuilding);
 				break;
@@ -5653,6 +5650,10 @@ void buildingComplete(STRUCTURE *psBuilding)
 			break;
 		case REF_SAT_UPLINK:
 			revealAll(psBuilding->player);
+		case REF_GATE:
+			auxStructureNonblocking(psBuilding);  // Clear outdated flags.
+			auxStructureClosedGate(psBuilding);  // Don't block for the sake of allied pathfinding.
+			break;
 		default:
 			//do nothing
 			break;
