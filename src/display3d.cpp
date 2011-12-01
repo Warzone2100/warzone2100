@@ -1654,24 +1654,6 @@ void displayBlueprints(void)
 	// Actually render everything.
 	for (std::vector<Blueprint>::iterator blueprint = blueprints.begin(); blueprint != blueprints.end(); ++blueprint)
 	{
-		// Rotate wall if needed.
-		if (blueprint->stats->type == REF_WALL || blueprint->stats->type == REF_GATE)
-		{
-			WallOrientation orientation = structChooseWallTypeBlueprint(map_coord(blueprint->pos.x), map_coord(blueprint->pos.y));
-			switch (orientation)
-			{
-				case WALL_HORIZ:  blueprint->dir = DEG(0); break;
-				case WALL_VERT:   blueprint->dir = DEG(90); break;
-				case WALL_CORNER:
-					if (blueprint->stats->type != REF_GATE)
-					{
-						blueprint->stats = ((WALL_FUNCTION *)blueprint->stats->asFuncList[0])->pCornerStat;
-					}
-					break;
-				case WALL_NEUTRAL: break;
-			}
-		}
-
 		blueprint->renderBlueprint();
 	}
 }

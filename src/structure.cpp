@@ -1047,13 +1047,47 @@ bool structSetManufacture(STRUCTURE *psStruct, DROID_TEMPLATE *psTempl, QUEUE_MO
 *        John.
 */
 
+// Orientations are:
+//
+//  0   1   2   3   4   5   6   7   8   9   A   B   C   D   E   F
+//                  |   |   |   |                   |   |   |   |
+//  *  -*   *- -*-  *  -*   *- -*-  *  -*   *- -*-  *  -*   *- -*-
+//                                  |   |   |   |   |   |   |   |
+
+// IMDs are:
+//
+//  0   1   2   3
+//      |   |   |
+// -*- -*- -*- -*
+//      |
+
+// Orientations are:                   IMDs are:
+// 0 1 2 3 4 5 6 7 8 9 A B C D E F     0 1 2 3
+//   ╴ ╶ ─ ╵ ┘ └ ┴ ╷ ┐ ┌ ┬ │ ┤ ├ ┼     ─ ┼ ┴ ┘
+
+static uint16_t wallDir(WallOrientation orient)
+{
+	const uint16_t d0 = DEG(0), d1 = DEG(90), d2 = DEG(180), d3 = DEG(270);  // d1 = rotate ccw, d3 = rotate cw
+	//                    0   1   2   3   4   5   6   7   8   9   A   B   C   D   E   F
+	uint16_t dirs[16] = {d0, d0, d2, d0, d3, d0, d3, d0, d1, d1, d2, d2, d3, d1, d3, d0};
+	return dirs[orient];
+}
+
+static uint16_t wallType(WallOrientation orient)
+{
+	//               0  1  2  3  4  5  6  7  8  9  A  B  C  D  E  F
+	int types[16] = {0, 0, 0, 0, 0, 3, 3, 2, 0, 3, 3, 2, 0, 2, 2, 1};
+	return types[orient];
+}
+
 // look at where other walls are to decide what type of wall to build
 static WallOrientation structWallScan(bool aWallPresent[5][5], int x, int y)
 {
-	bool horiz = aWallPresent[x - 1][y] || aWallPresent[x + 1][y];
-	bool vert  = aWallPresent[x][y - 1] || aWallPresent[x][y + 1];
-	const WallOrientation orientations[2][2] = {{WALL_NEUTRAL, WALL_HORIZ}, {WALL_VERT, WALL_CORNER}};
-	return orientations[vert][horiz];
+	WallOrientation left  = aWallPresent[x - 1][y]? WallConnectLeft  : WallConnectNone;
+	WallOrientation right = aWallPresent[x + 1][y]? WallConnectRight : WallConnectNone;
+	WallOrientation up    = aWallPresent[x][y - 1]? WallConnectUp    : WallConnectNone;
+	WallOrientation down  = aWallPresent[x][y + 1]? WallConnectDown  : WallConnectNone;
+	return WallOrientation(left | right | up | down);
 }
 
 static bool isWallCombiningStructureType(STRUCTURE_STATS const *pStructureType)
@@ -1116,7 +1150,7 @@ static WallOrientation structWallScanTerrain(bool aWallPresent[5][5], int mapX, 
 {
 	WallOrientation orientation = structWallScan(aWallPresent, 2, 2);
 
-	if (orientation == WALL_NEUTRAL)
+	if (orientation == WallConnectNone)
 	{
 		// If neutral, try choosing horizontal or vertical based on terrain, but don't change to corner type.
 		aWallPresent[2][1] = wallBlockingTerrainJoin(mapX, mapY - 1);
@@ -1124,9 +1158,9 @@ static WallOrientation structWallScanTerrain(bool aWallPresent[5][5], int mapX, 
 		aWallPresent[1][2] = wallBlockingTerrainJoin(mapX - 1, mapY);
 		aWallPresent[3][2] = wallBlockingTerrainJoin(mapX + 1, mapY);
 		orientation = structWallScan(aWallPresent, 2, 2);
-		if (orientation == WALL_CORNER)
+		if ((orientation & (WallConnectLeft | WallConnectRight)) != 0 && (orientation & (WallConnectUp | WallConnectDown)) != 0)
 		{
-			orientation = WALL_NEUTRAL;
+			orientation = WallConnectNone;
 		}
 	}
 
@@ -1153,7 +1187,6 @@ static WallOrientation structChooseWallType(unsigned player, int mapX, int mapY)
 	bool		aWallPresent[5][5];
 	STRUCTURE	*psStruct;
 	STRUCTURE	*apsStructs[5][5];
-	SDWORD		neighbourType, scanType;
 
 	// scan around the location looking for walls
 	memset(aWallPresent, 0, sizeof(aWallPresent));
@@ -1171,49 +1204,21 @@ static WallOrientation structChooseWallType(unsigned player, int mapX, int mapY)
 			{
 				// figure out what type the wall currently is
 				psStruct = apsStructs[x][y];
-				if (psStruct->pStructureType->type == REF_WALL || psStruct->pStructureType->type == REF_GATE)
-				{
-					if (psStruct->rot.direction == DEG(90))
-					{
-						neighbourType = WALL_VERT;
-					}
-					else
-					{
-						neighbourType = WALL_HORIZ;
-					}
-				}
-				else
+				if (psStruct->pStructureType->type != REF_WALL && psStruct->pStructureType->type != REF_GATE)
 				{
 					// do not need to adjust anything apart from walls
 					continue;
 				}
 
 				// see what type the wall should be
-				scanType = structWallScan(aWallPresent, x,y);
+				WallOrientation scanType = structWallScan(aWallPresent, x,y);
 
-				if (neighbourType != scanType)
+				// Got to change the wall
+				if (scanType != WallConnectNone)
 				{
-					// Got to change the wall
-					if (scanType == WALL_CORNER)
-					{
-						// change to a corner
-						if (!psStruct->pStructureType->asFuncList.empty() && psStruct->pStructureType->asFuncList[0]->type == WALL_TYPE)
-						{
-							STRUCTURE_STATS *psStats = ((WALL_FUNCTION *)psStruct->pStructureType->asFuncList[0])->pCornerStat;
-							psStruct->pStructureType = psStats;
-							psStruct->sDisplay.imd = psStats->pIMD[0];
-						}
-					}
-					else if (scanType == WALL_HORIZ)
-					{
-						// change to a horizontal wall
-						psStruct->rot.direction = 0;
-					}
-					else if (scanType == WALL_VERT)
-					{
-						// change to a vertical wall
-						psStruct->rot.direction = DEG(90);
-					}
+					psStruct->pFunctionality->wall.type = wallType(scanType);
+					psStruct->rot.direction = wallDir(scanType);
+					psStruct->sDisplay.imd = psStruct->pStructureType->pIMD[std::min<unsigned>(psStruct->pFunctionality->wall.type, psStruct->pStructureType->pIMD.size() - 1)];
 				}
 			}
 		}
@@ -1323,7 +1328,7 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 
 	if (IsStatExpansionModule(pStructureType)==false)
 	{
-		SDWORD	wallType = 0, preScrollMinX = 0, preScrollMinY = 0, preScrollMaxX = 0, preScrollMaxY = 0;
+		SDWORD preScrollMinX = 0, preScrollMinY = 0, preScrollMaxX = 0, preScrollMaxY = 0;
 		UDWORD	max = pStructureType - asStructureStats;
 		int	i;
 
@@ -1364,16 +1369,10 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 			return NULL;
 		}
 
+		WallOrientation wallOrientation = WallConnectNone;
 		if (!FromSave && isWallCombiningStructureType(pStructureType))
 		{
-			wallType = structChooseWallType(player, map_coord(x), map_coord(y));  // This makes neighbouring walls match us, even if we're a hardpoint, not a wall.
-			if (wallType == WALL_CORNER && pStructureType->type == REF_WALL)
-			{
-				if (pStructureType->asFuncList[0]->type == WALL_TYPE)
-				{
-					pStructureType = ((WALL_FUNCTION *)pStructureType->asFuncList[0])->pCornerStat;
-				}
-			}
+			wallOrientation = structChooseWallType(player, map_coord(x), map_coord(y));  // This makes neighbouring walls match us, even if we're a hardpoint, not a wall.
 		}
 
 		// allocate memory for and initialize a structure object
@@ -1499,17 +1498,6 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 
 		alignStructure(psBuilding);
 
-		// rotate a wall if necessary
-		if (!FromSave && (pStructureType->type == REF_WALL || pStructureType->type == REF_GATE))
-		{
-			switch (wallType)
-			{
-				case WALL_HORIZ: psBuilding->rot.direction = DEG(0); break;
-				case WALL_VERT:  psBuilding->rot.direction = DEG(90); break;
-				default: break;
-			}
-		}
-
 		//set up the sensor stats
 		objSensorCache(psBuilding, psBuilding->pStructureType->pSensor);
 		objEcmCache(psBuilding, psBuilding->pStructureType->pECM);
@@ -1621,6 +1609,17 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 			scrollMaxX = preScrollMaxX;
 			scrollMaxY = preScrollMaxY;
 			// NOTE: resizeRadar() may be required here, since we change scroll limits?
+		}
+
+		// rotate a wall if necessary
+		if (!FromSave && (pStructureType->type == REF_WALL || pStructureType->type == REF_GATE))
+		{
+			psBuilding->pFunctionality->wall.type = wallType(wallOrientation);
+			if (wallOrientation != WallConnectNone)
+			{
+				psBuilding->rot.direction = wallDir(wallOrientation);
+				psBuilding->sDisplay.imd = psBuilding->pStructureType->pIMD[std::min<unsigned>(psBuilding->pFunctionality->wall.type, psBuilding->pStructureType->pIMD.size() - 1)];
+			}
 		}
 
 		psBuilding->body = (UWORD)structureBody(psBuilding);
@@ -1830,6 +1829,19 @@ STRUCTURE *buildBlueprint(STRUCTURE_STATS const *psStats, int32_t x, int32_t y, 
 	blueprint->prevTime = 42;
 
 	blueprint->status = state;
+
+	// Rotate wall if needed.
+	if (blueprint->pStructureType->type == REF_WALL || blueprint->pStructureType->type == REF_GATE)
+	{
+		WallOrientation scanType = structChooseWallTypeBlueprint(map_coord(blueprint->pos.x), map_coord(blueprint->pos.y));
+		unsigned type = wallType(scanType);
+		if (scanType != WallConnectNone)
+		{
+			blueprint->rot.direction = wallDir(scanType);
+			blueprint->sDisplay.imd = blueprint->pStructureType->pIMD[std::min<unsigned>(type, blueprint->pStructureType->pIMD.size() - 1)];
+		}
+	}
+
 	return blueprint;
 }
 
@@ -1847,6 +1859,8 @@ static bool setFunctionality(STRUCTURE	*psBuilding, STRUCTURE_TYPE functionType)
 		case REF_RESOURCE_EXTRACTOR:
 		case REF_REPAIR_FACILITY:
 		case REF_REARM_PAD:
+		case REF_WALL:
+		case REF_GATE:
 			// Allocate space for the buildings functionality
 			psBuilding->pFunctionality = (FUNCTIONALITY *)calloc(1, sizeof(*psBuilding->pFunctionality));
 			ASSERT_OR_RETURN(false, psBuilding != NULL, "Out of memory");

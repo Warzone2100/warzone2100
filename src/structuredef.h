@@ -231,6 +231,11 @@ struct REARM_PAD
 	UDWORD                          timeLastUpdated;        /* Time rearm was last updated */
 };
 
+struct WALL
+{
+	unsigned                        type;                   // Type of wall, 0 = ─, 1 = ┼, 2 = ┴, 3 = ┘.
+};
+
 union FUNCTIONALITY
 {
 	RESEARCH_FACILITY researchFacility;
@@ -239,6 +244,7 @@ union FUNCTIONALITY
 	POWER_GEN         powerGenerator;
 	REPAIR_FACILITY   repairFacility;
 	REARM_PAD         rearmPad;
+	WALL              wall;
 };
 
 //this structure is used whenever an instance of a building is required in game
@@ -354,10 +360,11 @@ typedef UPGRADE		REARM_UPGRADE;
 
 enum WallOrientation
 {
-	WALL_NEUTRAL,  ///< Arbitrary wall orientation
-	WALL_HORIZ,    ///< Wall like this: -
-	WALL_VERT,     ///< Wall like this: |
-	WALL_CORNER,   ///< Wall like this: +
+	WallConnectNone = 0,
+	WallConnectLeft = 1,
+	WallConnectRight = 2,
+	WallConnectUp = 4,
+	WallConnectDown = 8,
 };
 
 #endif // __INCLUDED_STRUCTUREDEF_H__

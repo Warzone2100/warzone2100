@@ -4778,6 +4778,11 @@ static bool loadSaveStructure2(const char *pFileName, STRUCTURE **ppList)
 			psReArmPad->timeStarted = ini.value("Rearm/timeStarted").toInt();
 			psReArmPad->timeLastUpdated = ini.value("Rearm/timeLastUpdated").toInt();
 			break;
+		case REF_WALL:
+		case REF_GATE:
+			psStructure->pFunctionality->wall.type = ini.value("Wall/type").toInt();
+			psStructure->sDisplay.imd = psStructure->pStructureType->pIMD[std::min<unsigned>(psStructure->pFunctionality->wall.type, psStructure->pStructureType->pIMD.size() - 1)];
+			break;
 		default:
 			break;
 		}
@@ -4973,6 +4978,10 @@ bool writeStructFile(const char *pFileName)
 						ini.setValue("Rearm/target/player", psReArmPad->psObj->player);
 						ini.setValue("Rearm/target/type", psReArmPad->psObj->type);
 					}
+				}
+				else if (psCurr->pStructureType->type == REF_WALL || psCurr->pStructureType->type == REF_GATE)
+				{
+					ini.setValue("Wall/type", psCurr->pFunctionality->wall.type);
 				}
 			}
 			ini.endGroup();
