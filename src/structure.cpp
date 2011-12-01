@@ -1734,7 +1734,7 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 		if (bUpgraded)
 		{
 			std::vector<iIMDShape *> &IMDs = psBuilding->pStructureType->pIMD;
-			psBuilding->sDisplay.imd = IMDs[std::min<int>(capacity, IMDs.size() - 1)];
+			psBuilding->sDisplay.imd = IMDs[std::min<int>(capacity*2, IMDs.size() - 1)];  // *2 because even-numbered IMDs are structures, odd-numbered IMDs are just the modules.
 
 			//calculate the new body points of the owning structure
 			psBuilding->body = (uint64_t)structureBody(psBuilding) * bodyDiff / 65536;
@@ -1775,12 +1775,20 @@ STRUCTURE *buildBlueprint(STRUCTURE_STATS const *psStats, int32_t x, int32_t y, 
 	ASSERT_OR_RETURN(NULL, psStats->pIMD[0] != NULL, "No blueprint model for %s", getStatName(psStats));
 
 	int moduleNumber = 0;
+	std::vector<iIMDShape *> const *pIMD = &psStats->pIMD;
 	if (IsStatExpansionModule(psStats))
 	{
 		STRUCTURE *baseStruct = castStructure(worldTile(x, y)->psObject);
 		if (baseStruct != NULL)
 		{
-			moduleNumber = numStructureModules(baseStruct) + 1;
+			moduleNumber = numStructureModules(baseStruct)*2 + 1;  // *2+1 because even-numbered IMDs are structures, odd-numbered IMDs are just the modules.
+			pIMD = &baseStruct->pStructureType->pIMD;
+			if (moduleNumber >= pIMD->size())
+			{
+				// Revert, since there's no module IMD we can use.
+				moduleNumber = 0;
+				pIMD = &psStats->pIMD;
+			}
 		}
 	}
 
@@ -1788,7 +1796,7 @@ STRUCTURE *buildBlueprint(STRUCTURE_STATS const *psStats, int32_t x, int32_t y, 
 	// construct the fake structure
 	blueprint->pStructureType = const_cast<STRUCTURE_STATS *>(psStats);  // Couldn't be bothered to fix const correctness everywhere.
 	blueprint->visible[selectedPlayer] = UBYTE_MAX;
-	blueprint->sDisplay.imd = psStats->pIMD[std::min<int>(moduleNumber, psStats->pIMD.size() - 1)];
+	blueprint->sDisplay.imd = (*pIMD)[std::min<int>(moduleNumber, pIMD->size() - 1)];
 	blueprint->pos.x = x;
 	blueprint->pos.y = y;
 	blueprint->pos.z = map_Height(blueprint->pos.x, blueprint->pos.y) + world_coord(1)/10;
