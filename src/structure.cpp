@@ -1775,6 +1775,9 @@ STRUCTURE *buildBlueprint(STRUCTURE_STATS const *psStats, int32_t x, int32_t y, 
 	ASSERT_OR_RETURN(NULL, psStats != NULL, "No blueprint stats");
 	ASSERT_OR_RETURN(NULL, psStats->pIMD[0] != NULL, "No blueprint model for %s", getStatName(psStats));
 
+	Vector3i pos(x, y, map_Height(x, y) + world_coord(1)/10);
+	Rotation rot((direction + 0x2000)&0xC000, 0, 0);  // Round direction to nearest 90°.
+
 	int moduleNumber = 0;
 	std::vector<iIMDShape *> const *pIMD = &psStats->pIMD;
 	if (IsStatExpansionModule(psStats))
@@ -1782,13 +1785,15 @@ STRUCTURE *buildBlueprint(STRUCTURE_STATS const *psStats, int32_t x, int32_t y, 
 		STRUCTURE *baseStruct = castStructure(worldTile(x, y)->psObject);
 		if (baseStruct != NULL)
 		{
-			moduleNumber = numStructureModules(baseStruct)*2 + 1;  // *2+1 because even-numbered IMDs are structures, odd-numbered IMDs are just the modules.
-			pIMD = &baseStruct->pStructureType->pIMD;
-			if (moduleNumber >= pIMD->size())
+			int baseModuleNumber = numStructureModules(baseStruct)*2 + 1;  // *2+1 because even-numbered IMDs are structures, odd-numbered IMDs are just the modules.
+			std::vector<iIMDShape *> const *basepIMD = &baseStruct->pStructureType->pIMD;
+			if (baseModuleNumber < basepIMD->size())
 			{
-				// Revert, since there's no module IMD we can use.
-				moduleNumber = 0;
-				pIMD = &psStats->pIMD;
+				// Draw the module.
+				moduleNumber = baseModuleNumber;
+				pIMD = basepIMD;
+				pos = baseStruct->pos;
+				rot = baseStruct->rot;
 			}
 		}
 	}
@@ -1798,12 +1803,8 @@ STRUCTURE *buildBlueprint(STRUCTURE_STATS const *psStats, int32_t x, int32_t y, 
 	blueprint->pStructureType = const_cast<STRUCTURE_STATS *>(psStats);  // Couldn't be bothered to fix const correctness everywhere.
 	blueprint->visible[selectedPlayer] = UBYTE_MAX;
 	blueprint->sDisplay.imd = (*pIMD)[std::min<int>(moduleNumber, pIMD->size() - 1)];
-	blueprint->pos.x = x;
-	blueprint->pos.y = y;
-	blueprint->pos.z = map_Height(blueprint->pos.x, blueprint->pos.y) + world_coord(1)/10;
-	blueprint->rot.direction = (direction + 0x2000)&0xC000;
-	blueprint->rot.pitch = 0;
-	blueprint->rot.roll = 0;
+	blueprint->pos = pos;
+	blueprint->rot = rot;
 	blueprint->selected = false;
 
 	blueprint->numWeaps = 0;
