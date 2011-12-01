@@ -2218,6 +2218,11 @@ void	renderStructure(STRUCTURE *psStructure)
 	//first check if partially built - ANOTHER HACK!
 	if (psStructure->status == SS_BEING_BUILT || psStructure->status == SS_BEING_DEMOLISHED)
 	{
+		if (psStructure->prebuiltImd != NULL)
+		{
+			// strImd is a module, so render the already-built part at full height.
+			pie_Draw3DShape(psStructure->prebuiltImd, 0, colour, buildingBrightness, pie_SHADOW, 0);
+		}
 		pie_Draw3DShape(strImd, 0, colour, buildingBrightness, pie_HEIGHT_SCALED | pie_SHADOW, structHeightScale(psStructure) * pie_RAISE_SCALE);
 	}
 	else

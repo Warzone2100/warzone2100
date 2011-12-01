@@ -1734,7 +1734,9 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 		if (bUpgraded)
 		{
 			std::vector<iIMDShape *> &IMDs = psBuilding->pStructureType->pIMD;
-			psBuilding->sDisplay.imd = IMDs[std::min<int>(capacity*2, IMDs.size() - 1)];  // *2 because even-numbered IMDs are structures, odd-numbered IMDs are just the modules.
+			int imdIndex = std::min<int>(capacity*2, IMDs.size() - 1) - 1;  // *2-1 because even-numbered IMDs are structures, odd-numbered IMDs are just the modules, and we want just the module since we cache the fully-built part of the building in psBuilding->prebuiltImd.
+			psBuilding->prebuiltImd = psBuilding->sDisplay.imd;
+			psBuilding->sDisplay.imd = IMDs[imdIndex];
 
 			//calculate the new body points of the owning structure
 			psBuilding->body = (uint64_t)structureBody(psBuilding) * bodyDiff / 65536;
@@ -3794,6 +3796,7 @@ STRUCTURE::STRUCTURE(uint32_t id, unsigned player)
 	, buildRate(1)  // Initialise to 1 instead of 0, to make sure we don't get destroyed first tick due to inactivity.
 	, lastBuildRate(0)
 	, psCurAnim(NULL)
+	, prebuiltImd(NULL)
 {}
 
 /* Release all resources associated with a structure */
@@ -5624,6 +5627,15 @@ void buildingComplete(STRUCTURE *psBuilding)
 	psBuilding->status = SS_BUILT;
 
 	visTilesUpdate(psBuilding);
+
+	if (psBuilding->prebuiltImd != NULL)
+	{
+		// We finished building a module, now use the combined IMD.
+		std::vector<iIMDShape *> &IMDs = psBuilding->pStructureType->pIMD;
+		int imdIndex = std::min<int>(numStructureModules(psBuilding)*2, IMDs.size() - 1);  // *2 because even-numbered IMDs are structures, odd-numbered IMDs are just the modules.
+		psBuilding->prebuiltImd = NULL;
+		psBuilding->sDisplay.imd = IMDs[imdIndex];
+	}
 
 	switch (psBuilding->pStructureType->type)
 	{

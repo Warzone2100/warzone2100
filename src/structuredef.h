@@ -280,6 +280,8 @@ struct STRUCTURE : public BASE_OBJECT
 
 	STRUCT_ANIM_STATES	state;
 	UDWORD			lastStateTime;
+
+	iIMDShape *         prebuiltImd;
 };
 
 #define LOTS_OF 0xFFFFFFFF  // highest number the limit can be set to
