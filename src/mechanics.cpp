@@ -226,7 +226,7 @@ void makeAllAvailable(void)
 			apStructTypeLists[i][comp] = AVAILABLE;
 		}
 		//make all research availble to be performed
-		for (comp = 0; comp < numResearch; comp++)
+		for (comp = 0; comp < asResearch.size(); comp++)
 		{
 			enableResearch(&asResearch[comp], i);
 		}

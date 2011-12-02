@@ -1562,35 +1562,36 @@ bool scrSkLocateEnemy(void)
 bool skTopicAvail(UWORD inc, UDWORD player)
 {
 	UDWORD				incPR, incS;
-	PLAYER_RESEARCH		*pPlayerRes = asPlayerResList[player];
 	bool				bPRFound, bStructFound;
 
 
 	//if the topic is possible and has not already been researched - add to list
-	if ((IsResearchPossible(&pPlayerRes[inc])))
+	if ((IsResearchPossible(&asPlayerResList[player][inc])))
 	{
-		if (!IsResearchCompleted(&pPlayerRes[inc]) && !IsResearchStartedPending(&pPlayerRes[inc]))
+		if (!IsResearchCompleted(&asPlayerResList[player][inc])
+		    && !IsResearchStartedPending(&asPlayerResList[player][inc]))
 		{
-		return true;
+			return true;
 		}
 	}
 
 	// make sure that the research is not completed  or started by another researchfac
-	if (!IsResearchCompleted(&pPlayerRes[inc]) && !IsResearchStartedPending(&pPlayerRes[inc]))
+	if (!IsResearchCompleted(&asPlayerResList[player][inc])
+	    && !IsResearchStartedPending(&asPlayerResList[player][inc]))
 	{
 		// Research is not completed  ... also  it has not been started by another researchfac
 
 		//if there aren't any PR's - go to next topic
-		if (!asResearch[inc].numPRRequired)
+		if (asResearch[inc].pPRList.empty())
 		{
 			return false;
 		}
 
 		//check for pre-requisites
 		bPRFound = true;
-		for (incPR = 0; incPR < asResearch[inc].numPRRequired; incPR++)
+		for (incPR = 0; incPR < asResearch[inc].pPRList.size(); incPR++)
 		{
-			if (IsResearchCompleted(&(pPlayerRes[asResearch[inc].pPRList[incPR]]))==0)
+			if (IsResearchCompleted(&asPlayerResList[player][asResearch[inc].pPRList[incPR]]) == 0)
 			{
 				//if haven't pre-requisite - quit checking rest
 				bPRFound = false;
@@ -1605,7 +1606,7 @@ bool skTopicAvail(UWORD inc, UDWORD player)
 
 		//check for structure effects
 		bStructFound = true;
-		for (incS = 0; incS < asResearch[inc].numStructures; incS++)
+		for (incS = 0; incS < asResearch[inc].pStructList.size(); incS++)
 		{
 			//if (!checkStructureStatus(asStructureStats + asResearch[inc].
 			//	pStructList[incS], playerID, SS_BUILT))
@@ -1650,7 +1651,7 @@ bool scrSkDoResearch(void)
 	}
 
 	// choose a topic to complete.
-	for(i=0; i < numResearch; i++)
+	for(i=0; i < asResearch.size(); i++)
 	{
 		if (skTopicAvail(i, player) && (!bMultiPlayer || !beingResearchedByAlly(i, player)))
 		{
@@ -1658,7 +1659,7 @@ bool scrSkDoResearch(void)
 		}
 	}
 
-	if(i != numResearch)
+	if (i != asResearch.size())
 	{
 		sendResearchStatus(psBuilding, i, player, true);			// inform others, I'm researching this.
 #if defined (DEBUG)
@@ -1772,7 +1773,7 @@ bool scrSkDifficultyModifier(void)
 			{
 				RESEARCH	*psResearch = (RESEARCH *)psResFacility->psSubject;
 
-				pPlayerRes = asPlayerResList[player] + (psResearch->ref - REF_RESEARCH_START);
+				pPlayerRes = &asPlayerResList[player][psResearch->ref - REF_RESEARCH_START];
 				pPlayerRes->currentPoints += (psResearch->researchPoints * 4 * game.skDiff[player]) / 100;
 				syncDebug("AI %d is cheating with research time.", player);
 			}

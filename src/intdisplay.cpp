@@ -289,7 +289,7 @@ void intUpdateProgressBar(WIDGET *psWidget, W_CONTEXT *psContext)
 			else if(StructureIsResearching(Structure))  // Is it researching.
 			{
 				Research = StructureGetResearch(Structure);
-				pPlayerRes = asPlayerResList[selectedPlayer] + (Research->psSubject - asResearch);
+				pPlayerRes = &asPlayerResList[selectedPlayer][Research->psSubject->index];
 				if (pPlayerRes->currentPoints != 0)
 				{
 					int researchRate = Research->timeStartHold == 0? Research->researchPoints : 0;
@@ -3344,7 +3344,8 @@ void intDisplayAllyBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGH
 					int powerNeeded = checkPowerRequest(psOtherStruct);
 					if (powerNeeded == -1)
 					{
-						int timeToResearch = (res->psSubject->researchPoints - asPlayerResList[player][res->psSubject - asResearch].currentPoints) / std::max(res->researchPoints, 1u);
+						int rindex = res->psSubject->index;
+						int timeToResearch = (res->psSubject->researchPoints - asPlayerResList[player][rindex].currentPoints) / std::max(res->researchPoints, 1u);
 						bestTimeToResearch = std::min(bestTimeToResearch, timeToResearch);
 					}
 					else

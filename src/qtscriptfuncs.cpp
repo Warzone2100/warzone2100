@@ -677,16 +677,15 @@ static QScriptValue js_completeResearch(QScriptContext *context, QScriptEngine *
 	}
 	RESEARCH *psResearch = getResearch(researchName.toUtf8().constData());
 	SCRIPT_ASSERT(context, psResearch, "No such research %s for player %d", researchName.toUtf8().constData(), player);
-	int researchIndex = psResearch - asResearch;
-	SCRIPT_ASSERT(context, researchIndex < numResearch, "Research index out of bounds");
+	SCRIPT_ASSERT(context, psResearch->index < asResearch.size(), "Research index out of bounds");
 	if (bMultiMessages && (gameTime > 2))
 	{
-		SendResearch(player, researchIndex, false);
+		SendResearch(player, psResearch->index, false);
 		// Wait for our message before doing anything.
 	}
 	else
 	{
-		researchResult(researchIndex, player, false, NULL, false);
+		researchResult(psResearch->index, player, false, NULL, false);
 	}
 	return QScriptValue();
 }

@@ -67,11 +67,10 @@ RID_MAXRID
 
 
 /* The store for the research stats */
-extern		RESEARCH				*asResearch;
-extern		UDWORD					numResearch;
+extern std::vector<RESEARCH> asResearch;
 
 //List of pointers to arrays of PLAYER_RESEARCH[numResearch] for each player
-extern PLAYER_RESEARCH*		asPlayerResList[MAX_PLAYERS];
+extern std::vector<PLAYER_RESEARCH> asPlayerResList[MAX_PLAYERS];
 
 //used for Callbacks to say which topic was last researched
 extern RESEARCH				*psCBLastResearch;

@@ -2089,10 +2089,10 @@ static void intRunPower(void)
 			psResearch = (RESEARCH *)ppResearchList[statID - IDSTAT_START];
 
 			// has research been not been canceled
-			if (IsResearchCancelled(&asPlayerResList[selectedPlayer][psResearch - asResearch])==0)
+			int rindex = psResearch->index;
+			if (IsResearchCancelled(&asPlayerResList[selectedPlayer][rindex]) == 0)
 			{
-				quantity = ((RESEARCH *)ppResearchList[statID -
-					IDSTAT_START])->researchPower;
+				quantity = ((RESEARCH *)ppResearchList[statID - IDSTAT_START])->researchPower;
 			}
 		}
 
@@ -2193,10 +2193,10 @@ static void intAddObjectStats(BASE_OBJECT *psObj, UDWORD id)
 	if (objMode == IOBJ_RESEARCH)
 	{
 		//set to value that won't be reached in fillResearchList
-		index = numResearch + 1;
+		index = asResearch.size() + 1;
 		if (psStats)
 		{
-			index = (RESEARCH *)psStats - asResearch;
+			index = ((RESEARCH *)psStats)->index;
 		}
 		//recalculate the list
 		numStatsListEntries = fillResearchList(pList,selectedPlayer, (UWORD)index, MAXRESEARCH);
@@ -2234,7 +2234,7 @@ static void intAddObjectStats(BASE_OBJECT *psObj, UDWORD id)
 		//fill up the list with topics
 		for (i=0; i < numStatsListEntries; i++)
 		{
-			ppResearchList[i] = asResearch + pSList[i];	  // note change from pList
+			ppResearchList[i] = &asResearch[pSList[i]];	  // note change from pList
 		}
 	}
 
@@ -5465,7 +5465,7 @@ static bool setResearchStats(BASE_OBJECT *psObj, BASE_STATS *psStats)
 	{
 		count = pResearch->ref - REF_RESEARCH_START;
 		//meant to still be in the list but greyed out
-		pPlayerRes = asPlayerResList[selectedPlayer] + count;
+		pPlayerRes = &asPlayerResList[selectedPlayer][count];
 
 		//set the subject up
 		psResFacilty->psSubject = pResearch;
@@ -6168,7 +6168,7 @@ void intCheckResearchButton(void)
 	if (resFree)
 	{
 		//set to value that won't be reached in fillResearchList
-		index = (UWORD)(numResearch + 1);
+		index = asResearch.size() + 1;
 		//calculate the list
 		count = fillResearchList(pList,selectedPlayer, index, MAXRESEARCH);
 		if (count)

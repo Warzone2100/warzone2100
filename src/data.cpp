@@ -537,7 +537,7 @@ static bool bufferRESCHLoad(const char *pBuffer, UDWORD size, void **ppData)
 	calcDataHash((uint8_t *)pBuffer, size, DATA_RESCH);
 
 	//check to see if already loaded
-	if (numResearch > 0)
+	if (asResearch.size() > 0)
 	{
 		//release previous data before loading in the new
 		dataRESCHRelease(NULL);

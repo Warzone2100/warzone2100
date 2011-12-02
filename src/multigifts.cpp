@@ -263,7 +263,6 @@ static void sendGiftDroids(uint8_t from, uint8_t to)
 // give technologies.
 static void giftResearch(uint8_t from, uint8_t to, bool send)
 {
-	PLAYER_RESEARCH	*pR, *pRto;
 	int		i;
 	uint32_t	dummy = 0;
 
@@ -284,17 +283,14 @@ static void giftResearch(uint8_t from, uint8_t to, bool send)
 		{
 			CONPRINTF(ConsoleString, (ConsoleString, _("%s Gives You Technology Documents"), getPlayerName(from)));
 		}
-		pR   = asPlayerResList[from];
-		pRto = asPlayerResList[to];
-
 		// For each topic
-		for (i = 0; i < numResearch; i++)
+		for (i = 0; i < asResearch.size(); i++)
 		{
 			// If they have it and we don't research it
-			if (IsResearchCompleted(&pR[i])
-			&& !IsResearchCompleted(&pRto[i]))
+			if (IsResearchCompleted(&asPlayerResList[from][i])
+			&& !IsResearchCompleted(&asPlayerResList[to][i]))
 			{
-				MakeResearchCompleted(&pRto[i]);
+				MakeResearchCompleted(&asPlayerResList[to][i]);
 				researchResult(i, to, false, NULL, true);
 			}
 		}
@@ -737,20 +733,15 @@ bool pickupArtefact(int toPlayer, int fromPlayer)
 {
 	if (fromPlayer < MAX_PLAYERS && bMultiPlayer)
 	{
-		PLAYER_RESEARCH *pR = asPlayerResList[toPlayer];
-		PLAYER_RESEARCH *pO = asPlayerResList[fromPlayer];
-		int topic;
-
-		for (topic = numResearch - 1; topic >= 0; topic--)
+		for (int topic = asResearch.size() - 1; topic >= 0; topic--)
 		{
-			if (IsResearchCompleted(&pO[topic])
-			 && !IsResearchPossible(&pR[topic]))
+			if (IsResearchCompleted(&asPlayerResList[fromPlayer][topic])
+			 && !IsResearchPossible(&asPlayerResList[toPlayer][topic]))
 			{
 				// Make sure the topic can be researched
-				if (asResearch[topic].researchPower
-				 && asResearch[topic].researchPoints)
+				if (asResearch[topic].researchPower && asResearch[topic].researchPoints)
 				{
-					MakeResearchPossible(&pR[topic]);
+					MakeResearchPossible(&asPlayerResList[toPlayer][topic]);
 					if (toPlayer == selectedPlayer)
 					{
 						CONPRINTF(ConsoleString,(ConsoleString,_("You Discover Blueprints For %s"), getName(asResearch[topic].pName)));

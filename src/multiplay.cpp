@@ -48,7 +48,7 @@
 #include "lib/sound/audio_id.h"
 #include "levels.h"
 #include "selection.h"
-
+#include "research.h"
 #include "init.h"
 #include "warcam.h"	// these 4 for fireworks
 #include "mission.h"
@@ -98,10 +98,6 @@ static SDWORD locy[MAX_MSG_STACK];
 static DROID *msgDroid[MAX_MSG_STACK];
 static SDWORD msgStackPos = -1;				//top element pointer
 
-// ////////////////////////////////////////////////////////////////////////////
-// Remote Prototypes
-extern RESEARCH*			asResearch;							//list of possible research items.
-extern PLAYER_RESEARCH*		asPlayerResList[MAX_PLAYERS];
 // ////////////////////////////////////////////////////////////////////////////
 // Local Prototypes
 
@@ -809,13 +805,13 @@ static bool recvResearch(NETQUEUE queue)
 
 	syncDebug("player%d, index%u", player, index);
 
-	if (player >= MAX_PLAYERS || index >= numResearch)
+	if (player >= MAX_PLAYERS || index >= asResearch.size())
 	{
 		debug(LOG_ERROR, "Bad GAME_RESEARCH received, player is %d, index is %u", (int)player, index);
 		return false;
 	}
 
-	pPlayerRes = asPlayerResList[player] + index;
+	pPlayerRes = &asPlayerResList[player][index];
 	syncDebug("research status = %d", pPlayerRes->ResearchStatus & RESBITS);
 
 	if (!IsResearchCompleted(pPlayerRes))
@@ -824,7 +820,7 @@ static bool recvResearch(NETQUEUE queue)
 		researchResult(index, player, false, NULL, true);
 
 		// Take off the power if available
-		pResearch = asResearch + index;
+		pResearch = &asResearch[index];
 		usePower(player, pResearch->researchPower);
 	}
 
@@ -835,7 +831,7 @@ static bool recvResearch(NETQUEUE queue)
 		{
 			if (alliances[i][player] == ALLIANCE_FORMED)
 			{
-				pPlayerRes = asPlayerResList[i] + index;
+				pPlayerRes = &asPlayerResList[i][index];
 
 				if (!IsResearchCompleted(pPlayerRes))
 				{
@@ -881,7 +877,7 @@ bool sendResearchStatus(STRUCTURE *psBuilding, uint32_t index, uint8_t player, b
 	NETend();
 
 	// Tell UI to remove from the list of available research.
-	MakeResearchStartedPending(asPlayerResList[player] + index);
+	MakeResearchStartedPending(&asPlayerResList[player][index]);
 
 	return true;
 }
@@ -905,13 +901,13 @@ bool recvResearchStatus(NETQUEUE queue)
 
 	syncDebug("player%d, bStart%d, structRef%u, index%u", player, bStart, structRef, index);
 
-	if (player >= MAX_PLAYERS || index >= numResearch)
+	if (player >= MAX_PLAYERS || index >= asResearch.size())
 	{
 		debug(LOG_ERROR, "Bad GAME_RESEARCHSTATUS received, player is %d, index is %u", (int)player, index);
 		return false;
 	}
 
-	pPlayerRes = asPlayerResList[player] + index;
+	pPlayerRes = &asPlayerResList[player][index];
 
 	// psBuilding may be null if finishing
 	if (bStart)							// Starting research
@@ -931,7 +927,7 @@ bool recvResearchStatus(NETQUEUE queue)
 			}
 
 			// Set the subject up
-			pResearch				= asResearch + index;
+			pResearch				= &asResearch[index];
 			psResFacilty->psSubject = pResearch;
 
 			// Start the research

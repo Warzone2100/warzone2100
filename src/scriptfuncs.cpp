@@ -4253,8 +4253,8 @@ bool scrCompleteResearch(void)
 		return false;
 	}
 
-	researchIndex = psResearch - asResearch;	//TODO: fix if needed
-	if (researchIndex > numResearch)
+	researchIndex = psResearch->index;
+	if (researchIndex > asResearch.size())
 	{
 		ASSERT( false, "scrCompleteResearch: invalid research index" );
 		return false;
@@ -7279,9 +7279,6 @@ bool scrNumResearchLeft(void)
 
 	UWORD				Stack[400];
 
-	PLAYER_RESEARCH		*pPlayerRes;
-
-
 	if (!stackPopParams(2, VAL_INT, &player, ST_RESEARCH, &psResearch ))
 	{
 		debug(LOG_ERROR,  "scrNumResearchLeft(): stack failed");
@@ -7294,10 +7291,8 @@ bool scrNumResearchLeft(void)
 		return false;
 	}
 
-	pPlayerRes = asPlayerResList[player];
-	index = psResearch - asResearch;	//TODO: fix if needed
-
-	if (index >= numResearch)
+	index = psResearch->index;
+	if (index >= asResearch.size())
 	{
 		ASSERT( false, "scrNumResearchLeft(): invalid research index" );
 		return false;
@@ -7307,15 +7302,15 @@ bool scrNumResearchLeft(void)
 	{
 		iResult = 1;
 	}
-	else if(IsResearchCompleted(&pPlayerRes[index]))
+	else if(IsResearchCompleted(&asPlayerResList[player][index]))
 	{
 		iResult = 0;
 	}
-	else if(IsResearchStarted(&pPlayerRes[index]))
+	else if(IsResearchStarted(&asPlayerResList[player][index]))
 	{
 		iResult = 1;
 	}
-	else if(IsResearchPossible(&pPlayerRes[index]) || IsResearchCancelled(&pPlayerRes[index]))
+	else if(IsResearchPossible(&asPlayerResList[player][index]) || IsResearchCancelled(&asPlayerResList[player][index]))
 	{
 		iResult = 1;
 	}
@@ -7332,7 +7327,7 @@ bool scrNumResearchLeft(void)
 		tempIndex = -1;
 		while(true)			//do
 		{
-			if(cur >= asResearch[index].numPRRequired)		//this one has no PRs or end of PRs reached
+			if (cur >= asResearch[index].pPRList.size())		//this one has no PRs or end of PRs reached
 			{
 				top = top - 2;
 				if(top < (-1))
@@ -7345,16 +7340,16 @@ bool scrNumResearchLeft(void)
 			}
 			else		//end of PRs not reached
 			{
-				iResult += asResearch[index].numPRRequired;		//add num of PRs this topic has
+				iResult += asResearch[index].pPRList.size();		//add num of PRs this topic has
 
 				tempIndex = asResearch[index].pPRList[cur];		//get cur node's index
 
 				//decide if has to check its PRs
-				if(!IsResearchCompleted(&pPlayerRes[tempIndex]) &&	//don't touch if completed already
+				if(!IsResearchCompleted(&asPlayerResList[player][tempIndex]) &&	//don't touch if completed already
 					!skTopicAvail(index,player) &&					//has no unresearched PRs left if available
 					!beingResearchedByAlly(index, player))			//will become available soon anyway
 				{
-					if(asResearch[tempIndex].numPRRequired > 0)	//node has any nodes itself
+					if(asResearch[tempIndex].pPRList.size() > 0)	//node has any nodes itself
 					{
 						Stack[top+1] = cur;								//so can go back to it further
 						Stack[top+2] = index;
@@ -7367,7 +7362,7 @@ bool scrNumResearchLeft(void)
 			}
 
 			cur++;				//try next node of the main node
-			if((cur >= asResearch[index].numPRRequired) && (top <= (-1)))	//nothing left
+			if((cur >= asResearch[index].pPRList.size()) && (top <= (-1)))	//nothing left
 			{
 				break;
 			}
@@ -7410,7 +7405,6 @@ bool scrResearchCompleted(void)
 	RESEARCH			*psResearch;
 	SDWORD				player;
 	UWORD				index;
-	PLAYER_RESEARCH		*pPlayerRes;
 
 	if (!stackPopParams(2,ST_RESEARCH, &psResearch, VAL_INT, &player ))
 	{
@@ -7424,16 +7418,14 @@ bool scrResearchCompleted(void)
 		return false;
 	}
 
-	pPlayerRes = asPlayerResList[player];
-	index = psResearch - asResearch;	//TODO: fix if needed
-
-	if (index >= numResearch)
+	index = psResearch->index;
+	if (index >= asResearch.size())
 	{
 		debug( LOG_ERROR, "scrResearchCompleted: invalid research index" );
 		return false;
 	}
 
-	if(IsResearchCompleted(&pPlayerRes[index]))
+	if(IsResearchCompleted(&asPlayerResList[player][index]))
 	{
 		scrFunctionResult.v.bval = true;
 		if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
@@ -7459,7 +7451,6 @@ bool scrResearchStarted(void)
 	RESEARCH			*psResearch;
 	SDWORD				player;
 	UWORD				index;
-	PLAYER_RESEARCH		*pPlayerRes;
 
 	if (!stackPopParams(2,ST_RESEARCH, &psResearch, VAL_INT, &player ))
 	{
@@ -7473,16 +7464,14 @@ bool scrResearchStarted(void)
 		return false;
 	}
 
-	pPlayerRes = asPlayerResList[player];
-	index = psResearch - asResearch;	//TODO: fix if needed
-
-	if (index >= numResearch)
+	index = psResearch->index;
+	if (index >= asResearch.size())
 	{
 		ASSERT( false, "scrResearchCompleted: invalid research index" );
 		return false;
 	}
 
-	if (IsResearchStartedPending(&pPlayerRes[index]))
+	if (IsResearchStartedPending(&asPlayerResList[player][index]))
 	{
 		scrFunctionResult.v.bval = true;
 		if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
@@ -9748,7 +9737,6 @@ bool scrPursueResearch(void)
 	UDWORD				index;
 	SWORD				top;
 	bool				found;
-	PLAYER_RESEARCH		*pPlayerRes;
 	STRUCTURE			*psBuilding;
 	RESEARCH_FACILITY	*psResFacilty;
 
@@ -9776,10 +9764,8 @@ bool scrPursueResearch(void)
 		return true;
 	}
 
-	pPlayerRes = asPlayerResList[player];
-	index = psResearch - asResearch;
-
-	if (index >= numResearch)
+	index = psResearch->index;
+	if (index >= asResearch.size())
 	{
 		ASSERT(false, "scrPursueResearch: invalid research index");
 		return false;
@@ -9791,17 +9777,17 @@ bool scrPursueResearch(void)
 	{
 		found = false;
 	}
-	else if (IsResearchCompleted(&pPlayerRes[index]))
+	else if (IsResearchCompleted(&asPlayerResList[player][index]))
 	{
 		found = false;
 		//DbgMsg("Research already completed: %d", index);
 	}
-	else if (IsResearchStartedPending(&pPlayerRes[index]))
+	else if (IsResearchStartedPending(&asPlayerResList[player][index]))
 	{
 		found = false;
 		//DbgMsg("Research already in progress, %d", index);
 	}
-	else if (IsResearchPossible(&pPlayerRes[index]) || IsResearchCancelled(&pPlayerRes[index]))
+	else if (IsResearchPossible(&asPlayerResList[player][index]) || IsResearchCancelled(&asPlayerResList[player][index]))
 	{
 		foundIndex = index;
 		found = true;
@@ -9822,12 +9808,10 @@ bool scrPursueResearch(void)
 		tempIndex = -1;
 		while(true)	//do
 		{
-			//DbgMsg("Going on with %d, numPR: %d, %s", index, asResearch[index].numPRRequired, asResearch[index].pName);
+			//DbgMsg("Going on with %d, numPR: %d, %s", index, asResearch[index].pPRList.size(), asResearch[index].pName);
 
-			if (cur >= asResearch[index].numPRRequired)		//node has nodes?
+			if (cur >= asResearch[index].pPRList.size())		//node has nodes?
 			{
-				//DbgMsg("cur >= numPRRequired : %d (%d >= %d)", index, cur, asResearch[index].numPRRequired);
-
 				top = top - 2;
 				if (top < (-1))
 				{
@@ -9850,13 +9834,12 @@ bool scrPursueResearch(void)
 					foundIndex = tempIndex;		//done
 					break;
 				}
-				else if (!IsResearchCompleted(&pPlayerRes[tempIndex]) && !IsResearchStartedPending(&pPlayerRes[tempIndex]))  //not avail and not busy with it, can check this PR's PR
+				else if (!IsResearchCompleted(&asPlayerResList[player][tempIndex])
+				         && !IsResearchStartedPending(&asPlayerResList[player][tempIndex]))  //not avail and not busy with it, can check this PR's PR
 				{
 					//DbgMsg("node not complete, not started: %d, (cur=%d), %s", tempIndex,cur, asResearch[tempIndex].pName);
-					if (asResearch[tempIndex].numPRRequired > 0)	//node has any nodes itself
+					if (!asResearch[tempIndex].pPRList.empty())	//node has any nodes itself
 					{
-						//DbgMsg("node has nodes, so selecting as main node: %d, %s", tempIndex, asResearch[tempIndex].pName);
-
 						Stack[top+1] = cur;								//so can go back to it further
 						Stack[top+2] = index;
 						top = top + 2;
@@ -9878,7 +9861,7 @@ bool scrPursueResearch(void)
 			}
 
 			cur++;				//try next node of the main node
-			if((cur >= asResearch[index].numPRRequired) && (top <= (-1)))	//nothing left
+			if((cur >= asResearch[index].pPRList.size()) && (top <= (-1)))	//nothing left
 			{
 				break;
 			}
@@ -9886,7 +9869,7 @@ bool scrPursueResearch(void)
 		} // while(true)
 	}
 
-	if (found && foundIndex < numResearch)
+	if (found && foundIndex < asResearch.size())
 	{
 		sendResearchStatus(psBuilding, foundIndex, player, true);	// inform others, I'm researching this.
 #if defined (DEBUG)

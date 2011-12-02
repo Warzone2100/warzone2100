@@ -4559,7 +4559,7 @@ bool loadSaveStructure(char *pFileData, UDWORD filesize)
 //return id of a research topic based on the name
 static UDWORD getResearchIdFromName(const char *pName)
 {
-	for (int inc = 0; inc < numResearch; inc++)
+	for (int inc = 0; inc < asResearch.size(); inc++)
 	{
 		if (!strcmp(asResearch[inc].pName, pName))
 		{
@@ -4740,7 +4740,7 @@ static bool loadSaveStructure2(const char *pFileName, STRUCTURE **ppList)
 				researchId = getResearchIdFromName(ini.value("Research/target").toString().toUtf8().constData());
 				if (researchId != NULL_ID)
 				{
-					psResearch->psSubject = asResearch + researchId;
+					psResearch->psSubject = &asResearch[researchId];
 					psResearch->timeStarted = ini.value("Research/timeStarted").toInt();
 					psResearch->timeStartHold = ini.value("Research/timeStartHold").toInt();
 				}
@@ -5700,9 +5700,9 @@ bool loadSaveResearch(const char *pFileName)
 		char name[MAX_SAVE_NAME_SIZE];
 		sstrcpy(name, ini.value("name").toString().toUtf8().constData());
 		int statInc;
-		for (statInc = 0; statInc < numResearch; statInc++)
+		for (statInc = 0; statInc < asResearch.size(); statInc++)
 		{
-			RESEARCH *psStats = asResearch + statInc;
+			RESEARCH *psStats = &asResearch[statInc];
 			//loop until find the same name
 			if (!strcmp(psStats->pName, name))
 
@@ -5758,8 +5758,8 @@ static bool writeResearchFile(char *pFileName)
 		debug(LOG_ERROR, "Could not open %s", pFileName);
 		return false;
 	}
-	RESEARCH *psStats = asResearch;
-	for (int i = 0; i < numResearch; i++, psStats++)
+	RESEARCH *psStats = &asResearch[0];
+	for (int i = 0; i < asResearch.size(); i++, psStats = &asResearch[i])
 	{
 		bool valid = false;
 		QStringList possibles, researched, points;
