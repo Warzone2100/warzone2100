@@ -3471,14 +3471,7 @@ char const *getDroidResourceName(char const *pName)
 	/* See if the name has a string resource associated with it by trying
 	 * to get the string resource.
 	 */
-	const char * const name = strresGetString(psStringRes, pName);
-
-	if (!name)
-	{
-		debug(LOG_ERROR, "Unable to find string resource for string with ID \"%s\"", pName);
-	}
-
-	return name;
+	return strresGetString(psStringRes, pName);
 }
 
 

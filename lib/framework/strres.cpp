@@ -92,14 +92,8 @@ bool strresStoreString(STR_RES *psRes, const char* pID, const char* pString)
 
 const char* strresGetString(const STR_RES* psRes, const char* ID)
 {
-	const char * string;
-
 	ASSERT(psRes != NULL, "Invalid string resource pointer");
-
-	string = treapFind(psRes->psIDTreap, ID);
-	ASSERT(string, "Could not find string for id \"%s\"", ID);
-
-	return string;
+	return treapFind(psRes->psIDTreap, ID);
 }
 
 /* Load a string resource file */
