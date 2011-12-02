@@ -1,3 +1,15 @@
+if A2X_AVAILABLE
+if WKHTMLTOPDF_AVAILABLE
+
+qsgpdf = quickstartguide.pdf
+
+else
+
+qsgpdf =
+
+endif
+endif
+
 nobase_dist_doc_DATA = \
 	images/artillery-far-away.jpg \
 	images/artillery-sensor.jpg \
@@ -61,7 +73,7 @@ if A2X_AVAILABLE
 
 nobase_dist_doc_DATA += \
 	quickstartguide.html \
-	quickstartguide.pdf
+	$(qsgpdf)
 
 dist_man6_MANS = \
 	warzone2100.6
@@ -79,7 +91,7 @@ quickstartguide.pdf: quickstartguide.html
 
 endif
 
-qsg: quickstartguide.html quickstartguide.pdf
+qsg: quickstartguide.html $(qsgpdf)
 
 manpage: warzone2100.6
 

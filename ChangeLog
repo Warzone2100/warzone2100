@@ -3,16 +3,21 @@ master_XXX
    * Change: Remove the rule that made droids fire and move slower when damaged, since it was confusing and led to less tactical play (commit:88815c3e8bdf6d8afc640d1e82da8eb21d9f17a2)
    * Change: Scrolling stops instantly when changing direction to make it more accurate (commit:943b4c345d5227d486c3be1e2e05b99762ffad07)
    * Change: Allow building gates on top of walls (commit:a7b2a5b45fa2634f225d9ae9c823fc62ef946f59)
+   * Change: Units spin on the spot when turning large angles (ticket:1691, commit:4b08dd0b0ca210b9ad08a192fb8267e35b94cd7f)
    * Fix: Try to improve pathfinding behaviour (commit:828fea7ba030b571eade620570a0938d8b0ca9b6)
+   * Fix: Don't pathfind through unfinished gates (commit:e0362c36399ad2429c8254b71152dc2eafef940a)
    * Fix: Make sure that the win/lose messages are shown for the players who actually won/lost (commit:bf6e450a30578bdaf5b31427c33ce8d37e1c4179)
    * Fix: Make sure units are linked to their commander when loading a game (ticket:2928, commit:47ac282bcd9904083c0e54414de8e9caeb662fda)
    * Fix: Allow unloading single droids from transporters again (ticket:2617, commit:2a4a8a68848be306fd9c0d06390d85a79ae697fd)
    * Fix: Do not report incomplete structures as damaged, unless they actually were (ticket:1911, commit:8d7df45d354f1030b3aaf91502cf2036237ca7f5)
    * Fix: Make trucks not stop building a wall when its type changes due to connecting with other walls (commit:0898e56847e583500d418feade5688b6d27eadd1)
    * Fix: Don't cancel an order queue when trying to build an unresearched module (ticket:2797, commit:a4ac61551c7d7ff8f92a599ef9f1df8028137ea2)
+   * Fix: Loading/saving of rearm functionality (commit:ae2896fcb18986ae29f4c1444136ad4dad60247c)
  * Graphics:
    * Change: Readd the team colour fallback for OpenGL 1.4+ (commit:2f816f5bf47ff2513fde638a012700180697b841)
+   * Change: When upgrading a building, only the added part is shown as blueprint and built (ticket:2954, commit:e02cb38ac02c2929823a08d1ce1419df8073b038, commit:84eb46fa53f172b5a7d6529485ce7a699f957cb8, commit:de1a96e2f2778067f9a2345362be470d7c56cc84, commit:af8088f61f8e6b0ba561ca830eae28d0d69cd72e, commit:999b559af342bdb0c393ff6c291fbb08f917b4d3, commit:1f194e78f3577f62aeb435677b5342179efa6812, commit:71a614caebf2d2c90d89ea8f83a0140ebc53e991)
    * Change: Align walls to visually block narrow passages (commit:233ee5e711469ab491c3eaac0a2a681b94207fcd)
+   * Change: Add L- and T-shaped walls (commit:aa8b290324e222987224e60954adb3357aed36f9, commit:1f194e78f3577f62aeb435677b5342179efa6812)
    * Fix: Walls correctly align to 2x2 fortresses, allied walls, and hardpoints (commit:cff886cc3630ffd8374d6cfea5fd77b0ffb60acb, commit:312b4a21c949a8296cf0eb798563f0fc071b4d7b)
    * Fix: Make wall blueprints show the actual walls that will be built (ticket:2581, commit:42f57b6116429c0a94c570fc6996429b5b666229)
    * Fix: Display an order arrow when queueing modules (ticket:2602, ticket:2732, commit:a6c307920bd721230b54c3cc92d0999d2eb99a1d)
@@ -23,6 +28,8 @@ master_XXX
    * Change: Animate changes in power, only for the UI (commit:53e042be1566ffa830f67ccd3031de41c88019e8)
    * Fix: Don't close the build menu unless all selected trucks are destroyed (commit:e2cec529296f66782c9f280e84be89d5996b711d)
    * Fix: Make sure new radar modes are always used (commit:7861f33505b7deedcbe13da507fa03e669b1752f)
+ * AIs:
+   * Change: Make sure Nexus and Semperfi land AIs research half-tracks early on (ticket:2953, commit:e15eaa349ff163d552b660a4d12f453997247073)
  * Maps:
    * Fix: Remove three surplus trucks from 4c-Pyramidal (ticket:2945, commit:54080cc5561a65c5cda0939b8a766c44475211f2)
  * Translations:
