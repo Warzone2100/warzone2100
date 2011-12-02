@@ -2483,7 +2483,7 @@ void	renderDeliveryPoint(FLAG_POSITION *psPosition, bool blueprint)
 	pie_TRANSLATE(dv.x,dv.y,dv.z);
 
 	//quick check for invalid data
-	ASSERT( psPosition->factoryType < NUM_FLAG_TYPES && psPosition->factoryInc < MAX_FACTORY, "Invalid assembly point" );
+	ASSERT_OR_RETURN(, psPosition->factoryType < NUM_FLAG_TYPES && psPosition->factoryInc < MAX_FACTORY_FLAG_IMDS, "Invalid assembly point");
 
 	if(!psPosition->selected && !blueprint)
 	{

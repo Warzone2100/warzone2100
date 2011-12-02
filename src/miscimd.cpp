@@ -138,7 +138,7 @@ iIMDShape	*getRandomDebrisImd( void )
 }
 // -------------------------------------------------------------------------------
 
-iIMDShape	*pAssemblyPointIMDs[NUM_FLAG_TYPES][MAX_FACTORY];
+iIMDShape	*pAssemblyPointIMDs[NUM_FLAG_TYPES][MAX_FACTORY_FLAG_IMDS];
 
 static bool initMiscImd(unsigned i, unsigned n, const char *nameFormat, unsigned flagType)
 {
@@ -156,17 +156,16 @@ static bool initMiscImd(unsigned i, unsigned n, const char *nameFormat, unsigned
 
 bool	initMiscImds( void )
 {
-	unsigned        i;
-
 	/* Do the new loading system */
 	multiLoadMiscImds();
 
 	/* Now load the multi array stuff */
-	for (i=0; i < MAX_FACTORY; i++)
+	for (unsigned i = 0; i < MAX_FACTORY_FLAG_IMDS; ++i)
 	{
 		unsigned n = i + 1;
 
-		STATIC_ASSERT(MAX_FACTORY <= 32);  // Need to add more assembly point graphics, if increasing MAX_FACTORY.
+		STATIC_ASSERT(MAX_FACTORY <= MAX_FACTORY_FLAG_IMDS);
+		STATIC_ASSERT(MAX_FACTORY_FLAG_IMDS <= 32);  // Need to add more assembly point graphics, if increasing MAX_FACTORY_FLAG_IMDS.
 		if (!initMiscImd(i, n, "minum%u.pie",  FACTORY_FLAG) ||
 		    !initMiscImd(i, n, "micnum%u.pie", CYBORG_FLAG) ||
 		    !initMiscImd(i, n, "mivnum%u.pie", VTOL_FLAG) ||

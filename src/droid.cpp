@@ -4281,6 +4281,11 @@ void deleteTemplateFromProduction(DROID_TEMPLATE *psTemplate, unsigned player, Q
 			{
 				FACTORY             *psFactory = &psStruct->pFunctionality->factory;
 
+				if (psFactory->psAssemblyPoint->factoryInc >= asProductionRun[psFactory->psAssemblyPoint->factoryType].size())
+				{
+					continue;  // No production run to check.
+				}
+
 				ProductionRun &productionRun = asProductionRun[psFactory->psAssemblyPoint->factoryType][psFactory->psAssemblyPoint->factoryInc];
 				for (unsigned inc = 0; inc < productionRun.size(); ++inc)
 				{

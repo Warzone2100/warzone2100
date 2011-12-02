@@ -46,10 +46,6 @@
 #include "visibility.h"
 #include "qtscript.h"
 
-#ifdef DEBUG
-static SDWORD factoryDeliveryPointCheck[MAX_PLAYERS][NUM_FLAG_TYPES][MAX_FACTORY];
-#endif
-
 // the initial value for the object ID
 #define OBJ_ID_INIT 20000
 
@@ -700,37 +696,33 @@ void freeAllFlagPositions(void)
 // check all flag positions for duplicate delivery points
 void checkFactoryFlags(void)
 {
-	FLAG_POSITION	*psFlag;
-	SDWORD			player, type, factory;
-
-	//clear the check array
-	for(player=0; player<MAX_PLAYERS; player++)
-	{
-		//for(type=0; type<NUM_FACTORY_TYPES; type++)
-        for(type=0; type<NUM_FLAG_TYPES; type++)
-		{
-			for(factory=0; factory<MAX_FACTORY; factory++)
-			{
-				factoryDeliveryPointCheck[player][type][factory] = 0;
-			}
-		}
-	}
+	static std::vector<unsigned> factoryDeliveryPointCheck[NUM_FLAG_TYPES];  // Static to save allocations.
 
 	//check the flags
-	for(player=0; player<MAX_PLAYERS; player++)
+	for (unsigned player = 0; player < MAX_PLAYERS; ++player)
 	{
-		psFlag = apsFlagPosLists[player];
+		//clear the check array
+		for (int type = 0; type < NUM_FLAG_TYPES; ++type)
+		{
+			factoryDeliveryPointCheck[type].clear();
+		}
+
+		FLAG_POSITION *psFlag = apsFlagPosLists[player];
 		while (psFlag)
 		{
 			if ((psFlag->type == POS_DELIVERY) &&//check this is attached to a unique factory
 				(psFlag->factoryType != REPAIR_FLAG))
 			{
-				type = psFlag->factoryType;
-				factory = psFlag->factoryInc;
-				ASSERT( factoryDeliveryPointCheck[player][type][factory] == 0,"DUPLICATE FACTORY DELIVERY POINT FOUND" );
-				factoryDeliveryPointCheck[player][type][factory] = 1;
+				unsigned type = psFlag->factoryType;
+				unsigned factory = psFlag->factoryInc;
+				factoryDeliveryPointCheck[type].push_back(factory);
 			}
 			psFlag = psFlag->psNext;
+		}
+		for (int type = 0; type < NUM_FLAG_TYPES; ++type)
+		{
+			std::sort(factoryDeliveryPointCheck[type].begin(), factoryDeliveryPointCheck[type].end());
+			ASSERT(std::unique(factoryDeliveryPointCheck[type].begin(), factoryDeliveryPointCheck[type].end()) == factoryDeliveryPointCheck[type].end(), "DUPLICATE FACTORY DELIVERY POINT FOUND");
 		}
 	}
 }

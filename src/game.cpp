@@ -4717,6 +4717,10 @@ static bool loadSaveStructure2(const char *pFileName, STRUCTURE **ppList)
 					currentProd.psTemplate = psTempl;
 					ASSERT(psTempl, "No template found for template ID %d for %s (%d)", tid, objInfo(psStructure), id);
 				}
+				if (psFactory->psAssemblyPoint->factoryInc >= asProductionRun[psFactory->psAssemblyPoint->factoryType].size())
+				{
+					asProductionRun[psFactory->psAssemblyPoint->factoryType].resize(psFactory->psAssemblyPoint->factoryInc + 1);
+				}
 				asProductionRun[psFactory->psAssemblyPoint->factoryType][psFactory->psAssemblyPoint->factoryInc].push_back(currentProd);
 			}
 			break;
@@ -4923,7 +4927,9 @@ bool writeStructFile(const char *pFileName)
 						ini.setValue("Factory/commander/player", psFactory->psCommander->player);
 					}
 					ini.setValue("Factory/secondaryOrder", psFactory->secondaryOrder);
-					ProductionRun &productionRun = asProductionRun[psFactory->psAssemblyPoint->factoryType][psFactory->psAssemblyPoint->factoryInc];
+					ProductionRun emptyRun;
+					bool haveRun = psFactory->psAssemblyPoint->factoryInc < asProductionRun[psFactory->psAssemblyPoint->factoryType].size();
+					ProductionRun const &productionRun = haveRun? asProductionRun[psFactory->psAssemblyPoint->factoryType][psFactory->psAssemblyPoint->factoryInc] : emptyRun;
 					ini.setValue("Factory/productionRuns", (int)productionRun.size());
 					for (int runNum = 0; runNum < productionRun.size(); runNum++)
 					{

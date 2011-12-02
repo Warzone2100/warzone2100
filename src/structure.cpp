@@ -138,14 +138,13 @@ REARM_UPGRADE		asReArmUpgrade[MAX_PLAYERS];
 STRUCTSTRENGTH_MODIFIER		asStructStrengthModifier[WE_NUMEFFECTS][NUM_STRUCT_STRENGTH];
 
 //specifies which numbers have been allocated for the assembly points for the factories
-// Is a bitmask, holding up to MAX_FACTORIES bits.
-uint32_t                factoryNumFlag[MAX_PLAYERS][NUM_FLAG_TYPES];
+static std::vector<bool>       factoryNumFlag[MAX_PLAYERS][NUM_FLAG_TYPES];
 
 // the number of different (types of) droids that can be put into a production run
 #define MAX_IN_RUN		9
 
 //the list of what to build - only for selectedPlayer
-ProductionRun asProductionRun[NUM_FACTORY_TYPES][MAX_FACTORY];
+std::vector<ProductionRun> asProductionRun[NUM_FACTORY_TYPES];
 
 //stores which player the production list has been set up for
 SBYTE               productionPlayer;
@@ -297,7 +296,7 @@ void structureInitVars(void)
 		asStructLimits[i] = NULL;
 		for (j = 0; j < NUM_FLAG_TYPES; j++)
 		{
-			factoryNumFlag[i][j] = 0;
+			factoryNumFlag[i][j].clear();
 		}
 	}
 	for (i = 0; i < MAX_PLAYERS; i++)
@@ -308,14 +307,11 @@ void structureInitVars(void)
 	}
 	//initialise the selectedPlayer's production run
 	for (unsigned type = 0; type < NUM_FACTORY_TYPES; ++type)
-		for (unsigned facNum = 0; facNum < MAX_FACTORY; ++facNum)
 	{
-		asProductionRun[type][facNum].clear();
+		asProductionRun[type].clear();
 	}
 	//set up at beginning of game which player will have a production list
 	productionPlayer = (SBYTE)selectedPlayer;
-
-	STATIC_ASSERT(MAX_FACTORY <= 8*sizeof(**factoryNumFlag));  // MAX_FACTORY too big for the 'factoryNumFlag' bitmask. (If changing 'factoryNumFlag', change 'mask' everywhere in this file, too.)
 }
 
 /*Initialise the production list and set up the production player*/
@@ -323,9 +319,8 @@ void changeProductionPlayer(UBYTE player)
 {
 	//clear the production run
 	for (unsigned type = 0; type < NUM_FACTORY_TYPES; ++type)
-		for (unsigned facNum = 0; facNum < MAX_FACTORY; ++facNum)
 	{
-		asProductionRun[type][facNum].clear();
+		asProductionRun[type].clear();
 	}
 	//set this player to have the production list
 	productionPlayer = player;
@@ -342,7 +337,7 @@ void initFactoryNumFlag(void)
 		//initialise the flag
 		for (j=0; j < NUM_FLAG_TYPES; j++)
 		{
-			factoryNumFlag[i][j] = (UBYTE)0;
+			factoryNumFlag[i][j].clear();
 		}
 	}
 }
@@ -351,7 +346,6 @@ void initFactoryNumFlag(void)
 void resetFactoryNumFlag(void)
 {
 	STRUCTURE*   psStruct;
-	uint32_t     mask = 0;
 	unsigned int i;
 
 	for(i = 0; i < MAX_PLAYERS; i++)
@@ -359,23 +353,19 @@ void resetFactoryNumFlag(void)
 		//look throu the list of structures to see which have been used
 		for (psStruct = apsStructLists[i]; psStruct != NULL; psStruct = psStruct->psNext)
 		{
-			if (psStruct->pStructureType->type == REF_FACTORY
-			 || psStruct->pStructureType->type == REF_CYBORG_FACTORY
-			 || psStruct->pStructureType->type == REF_VTOL_FACTORY)
+			FLAG_TYPE type;
+			switch (psStruct->pStructureType->type)
 			{
-				FACTORY* psFactory = &psStruct->pFunctionality->factory;
-				if (psFactory->psAssemblyPoint)
-				{
-					mask = (1 << psFactory->psAssemblyPoint->factoryInc);
-				}
+				case REF_FACTORY:        type = FACTORY_FLAG; break;
+				case REF_CYBORG_FACTORY: type = CYBORG_FLAG;  break;
+				case REF_VTOL_FACTORY:   type = VTOL_FLAG;    break;
+				default: continue;
 			}
-
-			if (psStruct->pStructureType->type == REF_FACTORY)
-					factoryNumFlag[i][FACTORY_FLAG] |= mask;
-			else if (psStruct->pStructureType->type == REF_CYBORG_FACTORY)
-					factoryNumFlag[i][CYBORG_FLAG] |= mask;
-			else if (psStruct->pStructureType->type == REF_VTOL_FACTORY)
-					factoryNumFlag[i][VTOL_FLAG] |= mask;
+			FACTORY *psFactory = &psStruct->pFunctionality->factory;
+			if (psFactory->psAssemblyPoint != NULL && psFactory->psAssemblyPoint->factoryInc < factoryNumFlag[i][type].size())
+			{
+				factoryNumFlag[i][type][psFactory->psAssemblyPoint->factoryInc] = true;
+			}
 		}
 	}
 }
@@ -4644,7 +4634,6 @@ static void removeStructFromMap(STRUCTURE *psStruct)
 bool removeStruct(STRUCTURE *psDel, bool bDestroy)
 {
 	bool		resourceFound = false;
-	uint32_t        mask;
 	FACTORY		*psFactory;
 	SDWORD		cluster;
 	FLAG_POSITION	*psAssemblyPoint=NULL;
@@ -4714,8 +4703,10 @@ bool removeStruct(STRUCTURE *psDel, bool bDestroy)
 
 	if (psAssemblyPoint != NULL)
 	{
-		mask = 1 << psAssemblyPoint->factoryInc;
-		factoryNumFlag[psDel->player][psAssemblyPoint->factoryType] ^= mask;
+		if (psAssemblyPoint->factoryInc < factoryNumFlag[psDel->player][psAssemblyPoint->factoryType].size())
+		{
+			factoryNumFlag[psDel->player][psAssemblyPoint->factoryType][psAssemblyPoint->factoryInc] = false;
+		}
 
 		//need to cancel the repositioning of the DP if selectedPlayer and currently moving
 		if (psDel->player == selectedPlayer)
@@ -5137,49 +5128,22 @@ void setAssemblyPoint(FLAG_POSITION *psAssemblyPoint, UDWORD x, UDWORD y,
 /*sets the factory Inc for the Assembly Point*/
 void setFlagPositionInc(FUNCTIONALITY* pFunctionality, UDWORD player, UBYTE factoryType)
 {
-	UBYTE			inc;
-	uint32_t                mask = 1;
 	FACTORY			*psFactory;
 	REPAIR_FACILITY *psRepair;
 
 	ASSERT_OR_RETURN( , player < MAX_PLAYERS, "invalid player number");
 	//find the first vacant slot
-	for (inc = 0; inc < MAX_FACTORY; inc++)
+	unsigned inc;
+	for (inc = 0; inc < factoryNumFlag[player][factoryType].size(); ++inc)
 	{
-		if ((factoryNumFlag[player][factoryType] & mask) != mask)
+		if (!factoryNumFlag[player][factoryType][inc])
 		{
-			break;
+			break;  // Found an unused number.
 		}
-		mask <<= 1;
 	}
-
-	if (inc >= MAX_FACTORY)
+	if (inc == factoryNumFlag[player][factoryType].size())
 	{
-		//this may happen now with electronic warfare
-#ifdef DEBUG
-		const char* pType;
-
-		switch (factoryType)
-		{
-			case FACTORY_FLAG:
-				pType = "Factory";
-				break;
-			case CYBORG_FLAG:
-				pType = "Cyborg Factory";
-				break;
-			case VTOL_FLAG:
-				pType = "VTOL Factory";
-				break;
-			case REPAIR_FLAG:
-				pType = "Repair Facility";
-				break;
-			default:
-				pType = "";
-				break;
-		}
-		ASSERT(!"building more factories than allowed", "Building more than %d %s for player %d", MAX_FACTORY, pType, player);
-#endif
-		inc = 1;
+		factoryNumFlag[player][factoryType].push_back(false);  // Make a new number.
 	}
 
 	if (factoryType == REPAIR_FLAG)
@@ -5193,7 +5157,7 @@ void setFlagPositionInc(FUNCTIONALITY* pFunctionality, UDWORD player, UBYTE fact
 		psFactory = &pFunctionality->factory;
 		psFactory->psAssemblyPoint->factoryInc = inc;
 		psFactory->psAssemblyPoint->factoryType = factoryType;
-		factoryNumFlag[player][factoryType] |= mask;
+		factoryNumFlag[player][factoryType][inc] = true;
 	}
 }
 
@@ -6612,7 +6576,10 @@ void cancelProduction(STRUCTURE *psBuilding, QUEUE_MODE mode)
 	if (psBuilding->player == productionPlayer)
 	{
 		//clear the production run for this factory
-		asProductionRun[psFactory->psAssemblyPoint->factoryType][psFactory->psAssemblyPoint->factoryInc].clear();
+		if (psFactory->psAssemblyPoint->factoryInc < asProductionRun[psFactory->psAssemblyPoint->factoryType].size())
+		{
+			asProductionRun[psFactory->psAssemblyPoint->factoryType][psFactory->psAssemblyPoint->factoryInc].clear();
+		}
 		psFactory->productionLoops = 0;
 
 		//tell the interface
@@ -6754,6 +6721,10 @@ DROID_TEMPLATE * factoryProdUpdate(STRUCTURE *psStructure, DROID_TEMPLATE *psTem
 	}
 
 	FACTORY *psFactory = &psStructure->pFunctionality->factory;
+	if (psFactory->psAssemblyPoint->factoryInc >= asProductionRun[psFactory->psAssemblyPoint->factoryType].size())
+	{
+		return NULL;  // Don't even have a production list.
+	}
 	ProductionRun &productionRun = asProductionRun[psFactory->psAssemblyPoint->factoryType][psFactory->psAssemblyPoint->factoryInc];
 
 	if (psTemplate != NULL)
@@ -6817,6 +6788,10 @@ void factoryProdAdjust(STRUCTURE *psStructure, DROID_TEMPLATE *psTemplate, bool 
 	ASSERT_OR_RETURN( , psTemplate != NULL, "NULL template");
 
 	FACTORY *psFactory = &psStructure->pFunctionality->factory;
+	if (psFactory->psAssemblyPoint->factoryInc >= asProductionRun[psFactory->psAssemblyPoint->factoryType].size())
+	{
+		asProductionRun[psFactory->psAssemblyPoint->factoryType].resize(psFactory->psAssemblyPoint->factoryInc + 1);  // Don't have a production list, create it.
+	}
 	ProductionRun &productionRun = asProductionRun[psFactory->psAssemblyPoint->factoryType][psFactory->psAssemblyPoint->factoryInc];
 
 	//see if the template is already in the list
@@ -6870,6 +6845,10 @@ ProductionRunEntry getProduction(STRUCTURE *psStructure, DROID_TEMPLATE *psTempl
 	}
 
 	FACTORY *psFactory = &psStructure->pFunctionality->factory;
+	if (psFactory->psAssemblyPoint->factoryInc >= asProductionRun[psFactory->psAssemblyPoint->factoryType].size())
+	{
+		return ProductionRunEntry();  // Don't have a production list.
+	}
 	ProductionRun &productionRun = asProductionRun[psFactory->psAssemblyPoint->factoryType][psFactory->psAssemblyPoint->factoryInc];
 
 	//see if the template is in the list
@@ -6895,11 +6874,10 @@ UBYTE checkProductionForCommand(UBYTE player)
 		//assumes Cyborg or VTOL droids are not Command types!
 		unsigned factoryType = FACTORY_FLAG;
 
-		uint32_t mask = 1;
-		for (unsigned factoryInc = 0; factoryInc < MAX_FACTORY; ++factoryInc)
+		for (unsigned factoryInc = 0; factoryInc < factoryNumFlag[player][factoryType].size(); ++factoryInc)
 		{
 			//check to see if there is a factory
-			if ((factoryNumFlag[player][factoryType] & mask) == mask)
+			if (factoryNumFlag[player][factoryType][factoryInc])
 			{
 				ProductionRun &productionRun = asProductionRun[factoryType][factoryInc];
 				for (unsigned inc = 0; inc < productionRun.size(); ++inc)
@@ -6910,7 +6888,6 @@ UBYTE checkProductionForCommand(UBYTE player)
 					}
 				}
 			}
-			mask <<= 1;
 		}
 	}
 	return quantity;
@@ -6921,20 +6898,17 @@ UBYTE checkProductionForCommand(UBYTE player)
 //
 UWORD countAssignableFactories(UBYTE player,UWORD factoryType)
 {
-	UWORD		factoryInc;
-	uint32_t        mask = 1;
 	UBYTE           quantity = 0;
 
 	ASSERT_OR_RETURN(0, player == selectedPlayer, "%s should only be called for selectedPlayer", __FUNCTION__);
 
-	for (factoryInc = 0; factoryInc < MAX_FACTORY; factoryInc++)
+	for (unsigned factoryInc = 0; factoryInc < factoryNumFlag[player][factoryType].size(); ++factoryInc)
 	{
 		//check to see if there is a factory
-		if ((factoryNumFlag[player][factoryType] & mask) == mask)
+		if (factoryNumFlag[player][factoryType][factoryInc])
 		{
 			quantity++;
 		}
-		mask <<= 1;
 	}
 
 	return quantity;
@@ -6947,7 +6921,7 @@ bool checkFactoryExists(UDWORD player, UDWORD factoryType, UDWORD inc)
 	ASSERT_OR_RETURN(false, player < MAX_PLAYERS, "Invalid player");
 	ASSERT_OR_RETURN(false, factoryType < NUM_FACTORY_TYPES, "Invalid factoryType");
 
-	return (factoryNumFlag[player][factoryType] & (1 << inc)) != 0;
+	return inc < factoryNumFlag[player][factoryType].size() && factoryNumFlag[player][factoryType][inc];
 }
 
 

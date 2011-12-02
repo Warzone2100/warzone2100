@@ -48,8 +48,8 @@ extern iIMDShape	*waterImd;
 extern iIMDShape	*droidDamageImd;
 extern iIMDShape	*smallSteamImd;
 extern iIMDShape	*plasmaImd;
-//extern iIMDShape	*pAssemblyPointIMDs[NUM_FACTORY_TYPES][MAX_FACTORY];
-extern iIMDShape	*pAssemblyPointIMDs[NUM_FLAG_TYPES][MAX_FACTORY];
+#define MAX_FACTORY_FLAG_IMDS 32
+extern iIMDShape	*pAssemblyPointIMDs[NUM_FLAG_TYPES][MAX_FACTORY_FLAG_IMDS];
 extern iIMDShape	*blipImd;
 extern iIMDShape	*shadowImd;
 extern iIMDShape	*transporterShadowImd;

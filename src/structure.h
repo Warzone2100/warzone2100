@@ -65,7 +65,7 @@ extern iIMDShape * factoryModuleIMDs[NUM_FACTORY_MODULES][NUM_FACMOD_TYPES];
 extern iIMDShape * researchModuleIMDs[NUM_RESEARCH_MODULES];
 extern iIMDShape * powerModuleIMDs[NUM_POWER_MODULES];
 
-extern ProductionRun asProductionRun[NUM_FACTORY_TYPES][MAX_FACTORY];
+extern std::vector<ProductionRun> asProductionRun[NUM_FACTORY_TYPES];
 
 //Value is stored for easy access to this structure stat
 extern UDWORD	factoryModuleStat;
