@@ -56,16 +56,17 @@ run
 	uplink			STRUCTURESTAT		"A0Sat-linkCentre"
 
 	//number of research topics for each research branch
-	techCount[0]	int					5
+	techCount[0]	int					6
 	
 	//how many res facilities to use when finished researching all specified research topics
 	maxIdleRes[0]	int					-1
 	
 	tech[0][0]		RESEARCHSTAT		"R-Wpn-MG3Mk1"			//HMG
-	tech[0][1]		RESEARCHSTAT		"R-Wpn-Rocket02-MRL"	//mini rocket artillery
-	tech[0][2]		RESEARCHSTAT		"R-Wpn-Rocket-ROF03"
-	tech[0][3]		RESEARCHSTAT		"R-Wpn-MG-Damage03"
-	tech[0][4]		RESEARCHSTAT		"R-Defense-Pillbox06"		//lancer bunker
+	tech[0][1]		RESEARCHSTAT		"R-Vehicle-Prop-Halftracks"	//half-tracks
+	tech[0][2]		RESEARCHSTAT		"R-Wpn-Rocket02-MRL"	//mini rocket artillery
+	tech[0][3]		RESEARCHSTAT		"R-Wpn-Rocket-ROF03"
+	tech[0][4]		RESEARCHSTAT		"R-Wpn-MG-Damage03"
+	tech[0][5]		RESEARCHSTAT		"R-Defense-Pillbox06"		//lancer bunker
 
 	//other tech: R-Vehicle-Prop-VTOL, R-Struc-VTOLPad, R-Struc-VTOLFactory
 	techCount[1]	int					27
