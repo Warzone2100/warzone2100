@@ -5429,6 +5429,7 @@ static bool pickStructLocation(DROID *psDroid, int index, int *pX, int *pY, int 
 	// check for wacky coords.
 	if (*pX < 0 || *pX > world_coord(mapWidth) || *pY < 0 || *pY > world_coord(mapHeight))
 	{
+		debug(LOG_ERROR, "Bad parameters");
 		goto endstructloc;
 	}
 
@@ -5497,6 +5498,10 @@ endstructloc:
 		*pX = world_coord(x) + (psStat->baseWidth * (TILE_UNITS / 2));
 		*pY = world_coord(y) + (psStat->baseBreadth * (TILE_UNITS / 2));
 	}
+	else
+	{
+		debug(LOG_SCRIPT, "Did not find valid positioning for %s", psStat->pName);
+	}
 	scrFunctionResult.v.bval = found;
 	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))		// success!
 	{
@@ -5512,8 +5517,7 @@ bool scrPickStructLocation(void)
 	SDWORD			index;
 	UDWORD			player;
 
-	if (!stackPopParams(4, ST_STRUCTURESTAT, &index, VAL_REF|VAL_INT, &pX ,
-        VAL_REF|VAL_INT, &pY, VAL_INT, &player))
+	if (!stackPopParams(4, ST_STRUCTURESTAT, &index, VAL_REF|VAL_INT, &pX, VAL_REF|VAL_INT, &pY, VAL_INT, &player))
 	{
 		return false;
 	}
