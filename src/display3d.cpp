@@ -2093,6 +2093,7 @@ void	renderStructure(STRUCTURE *psStructure)
 		renderWallSection(psStructure);
 		return;
 	}
+	// If the structure is not truly visible, but we know there is something there, we will instead draw a blip
 	if (psStructure->visible[selectedPlayer] < UBYTE_MAX && psStructure->visible[selectedPlayer] > 0 && !demoGetStatus())
 	{
 		dv.x = psStructure->pos.x - player.p.x;
