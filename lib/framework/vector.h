@@ -59,7 +59,6 @@ struct Vector3f
 	Vector3f() {}
 	Vector3f(float x, float y, float z) : x(x), y(y), z(z) {}
 	Vector3f(Vector3i const &v) : x(v.x), y(v.y), z(v.z) {}
-	Vector3f(Vector3f const &v) : x(v.x), y(v.y), z(v.z) {}
 	Vector3f(Vector2f const &xy, float z) : x(xy.x), y(xy.y), z(z) {}
 
 	float x, y, z;
