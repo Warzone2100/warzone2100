@@ -5419,7 +5419,7 @@ static bool structDoubleCheck(BASE_STATS *psStat,UDWORD xx,UDWORD yy, SDWORD max
 
 static bool pickStructLocation(DROID *psDroid, int index, int *pX, int *pY, int player, int maxBlockingTiles)
 {
-	STRUCTURE_STATS	*psStat;
+	STRUCTURE_STATS	*psStat = &asStructureStats[index];
 	UDWORD			numIterations = 30;
 	bool			found = false;
 	int startX, startY, incX, incY, x, y;
@@ -5433,7 +5433,6 @@ static bool pickStructLocation(DROID *psDroid, int index, int *pX, int *pY, int 
 		goto endstructloc;
 	}
 
-	psStat = &asStructureStats[index];			// get stat.
 	startX = map_coord(*pX);				// change to tile coords.
 	startY = map_coord(*pY);
 	x = startX;
