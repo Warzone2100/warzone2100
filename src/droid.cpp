@@ -4281,19 +4281,17 @@ void deleteTemplateFromProduction(DROID_TEMPLATE *psTemplate, unsigned player, Q
 			{
 				FACTORY             *psFactory = &psStruct->pFunctionality->factory;
 
-				if (psFactory->psAssemblyPoint->factoryInc >= asProductionRun[psFactory->psAssemblyPoint->factoryType].size())
+				if (psFactory->psAssemblyPoint->factoryInc < asProductionRun[psFactory->psAssemblyPoint->factoryType].size())
 				{
-					continue;  // No production run to check.
-				}
-
-				ProductionRun &productionRun = asProductionRun[psFactory->psAssemblyPoint->factoryType][psFactory->psAssemblyPoint->factoryInc];
-				for (unsigned inc = 0; inc < productionRun.size(); ++inc)
-				{
-					if (productionRun[inc].psTemplate->multiPlayerID == psTemplate->multiPlayerID && mode == ModeQueue)
+					ProductionRun &productionRun = asProductionRun[psFactory->psAssemblyPoint->factoryType][psFactory->psAssemblyPoint->factoryInc];
+					for (unsigned inc = 0; inc < productionRun.size(); ++inc)
 					{
-						//just need to erase this production run entry
-						productionRun.erase(productionRun.begin() + inc);
-						--inc;
+						if (productionRun[inc].psTemplate->multiPlayerID == psTemplate->multiPlayerID && mode == ModeQueue)
+						{
+							//just need to erase this production run entry
+							productionRun.erase(productionRun.begin() + inc);
+							--inc;
+						}
 					}
 				}
 
