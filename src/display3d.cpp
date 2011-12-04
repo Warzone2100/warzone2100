@@ -106,7 +106,7 @@ static bool	renderWallSection(STRUCTURE *psStructure);
 static void	drawDragBox(void);
 static void	calcFlagPosScreenCoords(SDWORD *pX, SDWORD *pY, SDWORD *pR);
 static void	displayTerrain(void);
-static iIMDShape	*flattenImd(iIMDShape *imd, UDWORD structX, UDWORD structY, UDWORD direction);
+static iIMDShape *flattenImd(iIMDShape *imd, UDWORD structX, UDWORD structY, UDWORD direction, bool allPoints = false);
 static void	drawTiles(iView *player);
 static void	display3DProjectiles(void);
 static void	drawDroidSelections(void);
@@ -2490,7 +2490,7 @@ void	renderDeliveryPoint(FLAG_POSITION *psPosition, bool blueprint)
 	{
 		temp = pAssemblyPointIMDs[psPosition->factoryType][psPosition->factoryInc]->points;
 		flattenImd(pAssemblyPointIMDs[psPosition->factoryType][psPosition->factoryInc],
-			psPosition->coords.x, psPosition->coords.y,0);
+			psPosition->coords.x, psPosition->coords.y, 0, true);
 	}
 
 	pie_MatScale(.5f); // they are all big now so make this one smaller too
@@ -3627,7 +3627,7 @@ static void renderSurroundings(void)
 }
 
 /// Flattens an imd to the landscape and handles 4 different rotations
-static iIMDShape	*flattenImd(iIMDShape *imd, UDWORD structX, UDWORD structY, UDWORD direction)
+static iIMDShape *flattenImd(iIMDShape *imd, UDWORD structX, UDWORD structY, UDWORD direction, bool allPoints)
 {
 	UDWORD i, centreHeight;
 
@@ -3651,7 +3651,7 @@ static iIMDShape	*flattenImd(iIMDShape *imd, UDWORD structX, UDWORD structY, UDW
 	case 0:
 		for(i = 0; i < (UDWORD)imd->npoints; i++)
 		{
-			if (abs(alteredPoints[i].x) >= 63 || abs(alteredPoints[i].z) >= 63)
+			if (abs(alteredPoints[i].x) >= 63 || abs(alteredPoints[i].z) >= 63 || allPoints)
 			{
 				UDWORD tempX = MIN(structX + alteredPoints[i].x, world_coord(mapWidth - 1));
 				UDWORD tempY = MAX(structY - alteredPoints[i].z, 0);
@@ -3664,7 +3664,7 @@ static iIMDShape	*flattenImd(iIMDShape *imd, UDWORD structX, UDWORD structY, UDW
 	case 90:
 		for(i=0; i<(UDWORD)imd->npoints; i++)
 		{
-			if (abs(alteredPoints[i].x) >= 63 || abs(alteredPoints[i].z) >= 63)
+			if (abs(alteredPoints[i].x) >= 63 || abs(alteredPoints[i].z) >= 63 || allPoints)
 			{
 				UDWORD tempX = MAX(structX - alteredPoints[i].z, 0);
 				UDWORD tempY = MAX(structY - alteredPoints[i].x, 0);
@@ -3677,7 +3677,7 @@ static iIMDShape	*flattenImd(iIMDShape *imd, UDWORD structX, UDWORD structY, UDW
 	case 180:
 		for(i=0; i<(UDWORD)imd->npoints; i++)
 		{
-			if (abs(alteredPoints[i].x) >= 63 || abs(alteredPoints[i].z) >= 63)
+			if (abs(alteredPoints[i].x) >= 63 || abs(alteredPoints[i].z) >= 63 || allPoints)
 			{
 				UDWORD tempX = MAX(structX - alteredPoints[i].x, 0);
 				UDWORD tempY = MIN(structY + alteredPoints[i].z, world_coord(mapHeight - 1));
@@ -3690,7 +3690,7 @@ static iIMDShape	*flattenImd(iIMDShape *imd, UDWORD structX, UDWORD structY, UDW
 	case 270:
 		for(i=0; i<(UDWORD)imd->npoints; i++)
 		{
-			if(abs(alteredPoints[i].x) >= 63 || abs(alteredPoints[i].z)>=63)
+			if(abs(alteredPoints[i].x) >= 63 || abs(alteredPoints[i].z) >= 63 || allPoints)
 			{
 				UDWORD tempX = MIN(structX + alteredPoints[i].z, world_coord(mapWidth - 1));
 				UDWORD tempY = MIN(structY + alteredPoints[i].x, world_coord(mapHeight - 1));
