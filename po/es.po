@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-12-03 18:54+0100\n"
+"POT-Creation-Date: 2011-12-04 22:55+0100\n"
 "PO-Revision-Date: 2011-10-17 12:13+0100\n"
 "Last-Translator: Saber Nyoki <nsa_server@hotmail.com>\n"
 "Language-Team: Spanish <warzone-dev@gna.org>\n"
@@ -12110,8 +12110,8 @@ msgstr "Juego de Estrategia"
 #: src/intelmap.cpp:531
 #: src/intorder.cpp:727
 #: src/loadsave.cpp:239
-#: src/multimenu.cpp:495
-#: src/multimenu.cpp:1367
+#: src/multimenu.cpp:496
+#: src/multimenu.cpp:1389
 #: src/transporter.cpp:277
 #: src/transporter.cpp:358
 #: src/transporter.cpp:817
@@ -12938,7 +12938,7 @@ msgstr "Construcción (F3)"
 
 #: src/hci.cpp:3423
 #: src/multiint.cpp:1613
-#: src/multimenu.cpp:765
+#: src/multimenu.cpp:787
 msgid "Power"
 msgstr "Energía"
 
@@ -14262,7 +14262,7 @@ msgid "Select Player Name"
 msgstr "Elejir Nombre del Jugador"
 
 #: src/multiint.cpp:1580
-#: src/multimenu.cpp:758
+#: src/multimenu.cpp:780
 msgid "Alliances"
 msgstr "Alianzas"
 
@@ -14440,41 +14440,41 @@ msgstr "¡El anfitrión ha expulsado a %s de la partida!"
 msgid "Host is Starting Game"
 msgstr "Anfitrión Comenzando Partida"
 
-#: src/multiint.cpp:3795
+#: src/multiint.cpp:3812
 msgid "Players"
 msgstr "Jugadores"
 
-#: src/multiint.cpp:3857
+#: src/multiint.cpp:3874
 #, c-format
 msgid "Click to take player slot %d"
 msgstr "Click para cambiar la posición del jugador %d"
 
-#: src/multiint.cpp:3866
-#: src/multiint.cpp:4059
+#: src/multiint.cpp:3883
+#: src/multiint.cpp:4076
 msgid "Open"
 msgstr "Abrir"
 
-#: src/multiint.cpp:3866
-#: src/multiint.cpp:4060
+#: src/multiint.cpp:3883
+#: src/multiint.cpp:4077
 msgid "Closed"
 msgstr "Cerrado"
 
-#: src/multiint.cpp:3917
+#: src/multiint.cpp:3934
 #, c-format
 msgid "Sending Map: %d%% "
 msgstr "Enviando Mapa: %d%%"
 
-#: src/multiint.cpp:3925
+#: src/multiint.cpp:3942
 #, c-format
 msgid "Map: %d%% downloaded"
 msgstr "Mapa: %d%% descargado"
 
-#: src/multiint.cpp:3951
+#: src/multiint.cpp:3968
 msgid "HOST"
 msgstr "ANFITRIÓN"
 
-#: src/multiint.cpp:3958
-#: src/multimenu.cpp:774
+#: src/multiint.cpp:3975
+#: src/multimenu.cpp:796
 msgid "Ping"
 msgstr "Ping"
 
@@ -14575,60 +14575,60 @@ msgstr "15 jugadores"
 msgid "16 players"
 msgstr "16 jugadores"
 
-#: src/multimenu.cpp:620
+#: src/multimenu.cpp:622
 msgid "Technology level 1"
 msgstr "Nivel Tecnológico 1"
 
-#: src/multimenu.cpp:628
+#: src/multimenu.cpp:630
 msgid "Technology level 2"
 msgstr "Nivel Tecnológico 2"
 
-#: src/multimenu.cpp:634
+#: src/multimenu.cpp:636
 msgid "Technology level 3"
 msgstr "Nivel Tecnológico 3"
 
-#: src/multimenu.cpp:640
+#: src/multimenu.cpp:642
 msgid "Any number of players"
 msgstr "Cualquier número de jugadores"
 
-#: src/multimenu.cpp:759
+#: src/multimenu.cpp:781
 msgid "Score"
 msgstr "Puntuación"
 
-#: src/multimenu.cpp:760
+#: src/multimenu.cpp:782
 msgid "Kills"
 msgstr "Muertes"
 
-#: src/multimenu.cpp:764
-#: src/multimenu.cpp:769
+#: src/multimenu.cpp:786
+#: src/multimenu.cpp:791
 msgid "Units"
 msgstr "Unidades"
 
-#: src/multimenu.cpp:778
+#: src/multimenu.cpp:800
 msgid "Structs"
 msgstr "Estructuras"
 
-#: src/multimenu.cpp:1140
+#: src/multimenu.cpp:1162
 msgid "Channel"
 msgstr "Canal"
 
-#: src/multimenu.cpp:1154
+#: src/multimenu.cpp:1176
 msgid "Toggle Alliance State"
 msgstr "Alternar Estado de la Alianza"
 
-#: src/multimenu.cpp:1173
+#: src/multimenu.cpp:1195
 msgid "Give Visibility Report"
 msgstr "Dar Informe de Visibilidad"
 
-#: src/multimenu.cpp:1179
+#: src/multimenu.cpp:1201
 msgid "Leak Technology Documents"
 msgstr "Fuga de Documentos Tecnológicos"
 
-#: src/multimenu.cpp:1186
+#: src/multimenu.cpp:1208
 msgid "Hand Over Selected Units"
 msgstr "Transferir las unidades seleccionadas"
 
-#: src/multimenu.cpp:1192
+#: src/multimenu.cpp:1214
 msgid "Give Power To Player"
 msgstr "Dar Energía al Jugador"
 
@@ -14854,12 +14854,12 @@ msgstr "Tiempo Jugado Total: %s"
 msgid "You cheated!"
 msgstr "¡Hiciste trampa!"
 
-#: src/scriptfuncs.cpp:9375
+#: src/scriptfuncs.cpp:9378
 #, c-format
 msgid "Beacon received from %s!"
 msgstr "¡Baliza recibida de %s!"
 
-#: src/scriptfuncs.cpp:9421
+#: src/scriptfuncs.cpp:9424
 #, c-format
 msgid "Beacon %d"
 msgstr "Baliza %d"

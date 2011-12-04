@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-12-03 18:54+0100\n"
+"POT-Creation-Date: 2011-12-04 22:55+0100\n"
 "PO-Revision-Date: 2009-05-11 00:21+0800\n"
 "Last-Translator: \n"
 "Language-Team: zh_TW\n"
@@ -12303,8 +12303,8 @@ msgstr "儲存遊戲"
 #: src/intelmap.cpp:531
 #: src/intorder.cpp:727
 #: src/loadsave.cpp:239
-#: src/multimenu.cpp:495
-#: src/multimenu.cpp:1367
+#: src/multimenu.cpp:496
+#: src/multimenu.cpp:1389
 #: src/transporter.cpp:277
 #: src/transporter.cpp:358
 #: src/transporter.cpp:817
@@ -13143,7 +13143,7 @@ msgstr "建造新的建築物 （F3）"
 
 #: src/hci.cpp:3423
 #: src/multiint.cpp:1613
-#: src/multimenu.cpp:765
+#: src/multimenu.cpp:787
 msgid "Power"
 msgstr "能源"
 
@@ -14514,7 +14514,7 @@ msgid "Select Player Name"
 msgstr "選擇玩家名稱"
 
 #: src/multiint.cpp:1580
-#: src/multimenu.cpp:758
+#: src/multimenu.cpp:780
 msgid "Alliances"
 msgstr "同盟"
 
@@ -14700,42 +14700,42 @@ msgstr "主玩家將 %s 踢出遊戲！"
 msgid "Host is Starting Game"
 msgstr "主玩家已開始遊戲"
 
-#: src/multiint.cpp:3795
+#: src/multiint.cpp:3812
 msgid "Players"
 msgstr "玩家"
 
-#: src/multiint.cpp:3857
+#: src/multiint.cpp:3874
 #, fuzzy, c-format
 msgid "Click to take player slot %d"
 msgstr "雷達顯示玩家顏色"
 
-#: src/multiint.cpp:3866
-#: src/multiint.cpp:4059
+#: src/multiint.cpp:3883
+#: src/multiint.cpp:4076
 msgid "Open"
 msgstr ""
 
-#: src/multiint.cpp:3866
-#: src/multiint.cpp:4060
+#: src/multiint.cpp:3883
+#: src/multiint.cpp:4077
 #, fuzzy
 msgid "Closed"
 msgstr "關閉"
 
-#: src/multiint.cpp:3917
+#: src/multiint.cpp:3934
 #, c-format
 msgid "Sending Map: %d%% "
 msgstr ""
 
-#: src/multiint.cpp:3925
+#: src/multiint.cpp:3942
 #, c-format
 msgid "Map: %d%% downloaded"
 msgstr ""
 
-#: src/multiint.cpp:3951
+#: src/multiint.cpp:3968
 msgid "HOST"
 msgstr ""
 
-#: src/multiint.cpp:3958
-#: src/multimenu.cpp:774
+#: src/multiint.cpp:3975
+#: src/multimenu.cpp:796
 msgid "Ping"
 msgstr "Ping"
 
@@ -14850,60 +14850,60 @@ msgstr "2 玩家"
 msgid "16 players"
 msgstr "2 玩家"
 
-#: src/multimenu.cpp:620
+#: src/multimenu.cpp:622
 msgid "Technology level 1"
 msgstr "第一階科技"
 
-#: src/multimenu.cpp:628
+#: src/multimenu.cpp:630
 msgid "Technology level 2"
 msgstr "第二階科技"
 
-#: src/multimenu.cpp:634
+#: src/multimenu.cpp:636
 msgid "Technology level 3"
 msgstr "第三階科技"
 
-#: src/multimenu.cpp:640
+#: src/multimenu.cpp:642
 msgid "Any number of players"
 msgstr "任何數量的玩家"
 
-#: src/multimenu.cpp:759
+#: src/multimenu.cpp:781
 msgid "Score"
 msgstr "分數"
 
-#: src/multimenu.cpp:760
+#: src/multimenu.cpp:782
 msgid "Kills"
 msgstr "殺敵數"
 
-#: src/multimenu.cpp:764
-#: src/multimenu.cpp:769
+#: src/multimenu.cpp:786
+#: src/multimenu.cpp:791
 msgid "Units"
 msgstr "單位"
 
-#: src/multimenu.cpp:778
+#: src/multimenu.cpp:800
 msgid "Structs"
 msgstr "建築"
 
-#: src/multimenu.cpp:1140
+#: src/multimenu.cpp:1162
 msgid "Channel"
 msgstr ""
 
-#: src/multimenu.cpp:1154
+#: src/multimenu.cpp:1176
 msgid "Toggle Alliance State"
 msgstr "開啟或關閉同盟狀態"
 
-#: src/multimenu.cpp:1173
+#: src/multimenu.cpp:1195
 msgid "Give Visibility Report"
 msgstr "提供可檢視的報告"
 
-#: src/multimenu.cpp:1179
+#: src/multimenu.cpp:1201
 msgid "Leak Technology Documents"
 msgstr "洩漏科技技術文件"
 
-#: src/multimenu.cpp:1186
+#: src/multimenu.cpp:1208
 msgid "Hand Over Selected Units"
 msgstr "交出選擇的單位"
 
-#: src/multimenu.cpp:1192
+#: src/multimenu.cpp:1214
 msgid "Give Power To Player"
 msgstr "提供玩家能源"
 
@@ -15130,12 +15130,12 @@ msgstr "全部遊戲時間 - %s"
 msgid "You cheated!"
 msgstr ""
 
-#: src/scriptfuncs.cpp:9375
+#: src/scriptfuncs.cpp:9378
 #, c-format
 msgid "Beacon received from %s!"
 msgstr "由 %s 獲得引導指標"
 
-#: src/scriptfuncs.cpp:9421
+#: src/scriptfuncs.cpp:9424
 #, c-format
 msgid "Beacon %d"
 msgstr "引導指標 %d"

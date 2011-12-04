@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-12-03 18:54+0100\n"
+"POT-Creation-Date: 2011-12-04 22:55+0100\n"
 "PO-Revision-Date: 2011-01-15 09:57+0300\n"
 "Last-Translator: \n"
 "Language-Team: Russian <>\n"
@@ -12115,8 +12115,8 @@ msgstr "Сохранить игру"
 #: src/intelmap.cpp:531
 #: src/intorder.cpp:727
 #: src/loadsave.cpp:239
-#: src/multimenu.cpp:495
-#: src/multimenu.cpp:1367
+#: src/multimenu.cpp:496
+#: src/multimenu.cpp:1389
 #: src/transporter.cpp:277
 #: src/transporter.cpp:358
 #: src/transporter.cpp:817
@@ -12953,7 +12953,7 @@ msgstr "Строить (F3)"
 
 #: src/hci.cpp:3423
 #: src/multiint.cpp:1613
-#: src/multimenu.cpp:765
+#: src/multimenu.cpp:787
 msgid "Power"
 msgstr "Энергия"
 
@@ -14281,7 +14281,7 @@ msgid "Select Player Name"
 msgstr "Выбор Имя Игрока"
 
 #: src/multiint.cpp:1580
-#: src/multimenu.cpp:758
+#: src/multimenu.cpp:780
 msgid "Alliances"
 msgstr "Союзники"
 
@@ -14465,42 +14465,42 @@ msgstr "Хост выкинул %s из игры!"
 msgid "Host is Starting Game"
 msgstr "Хост стартует"
 
-#: src/multiint.cpp:3795
+#: src/multiint.cpp:3812
 msgid "Players"
 msgstr "Игроки"
 
-#: src/multiint.cpp:3857
+#: src/multiint.cpp:3874
 #, fuzzy, c-format
 msgid "Click to take player slot %d"
 msgstr "Нажмите, чтобы изменить настройки игрока."
 
-#: src/multiint.cpp:3866
-#: src/multiint.cpp:4059
+#: src/multiint.cpp:3883
+#: src/multiint.cpp:4076
 msgid "Open"
 msgstr ""
 
-#: src/multiint.cpp:3866
-#: src/multiint.cpp:4060
+#: src/multiint.cpp:3883
+#: src/multiint.cpp:4077
 #, fuzzy
 msgid "Closed"
 msgstr "Закрыть"
 
-#: src/multiint.cpp:3917
+#: src/multiint.cpp:3934
 #, c-format
 msgid "Sending Map: %d%% "
 msgstr "Отправка карты: %d%%"
 
-#: src/multiint.cpp:3925
+#: src/multiint.cpp:3942
 #, c-format
 msgid "Map: %d%% downloaded"
 msgstr "карта: %d%% загружена"
 
-#: src/multiint.cpp:3951
+#: src/multiint.cpp:3968
 msgid "HOST"
 msgstr "ХОСТ"
 
-#: src/multiint.cpp:3958
-#: src/multimenu.cpp:774
+#: src/multiint.cpp:3975
+#: src/multimenu.cpp:796
 msgid "Ping"
 msgstr "Пинг"
 
@@ -14609,60 +14609,60 @@ msgstr "5 игрока"
 msgid "16 players"
 msgstr "6 игрока"
 
-#: src/multimenu.cpp:620
+#: src/multimenu.cpp:622
 msgid "Technology level 1"
 msgstr "Уровень технологий 1"
 
-#: src/multimenu.cpp:628
+#: src/multimenu.cpp:630
 msgid "Technology level 2"
 msgstr "Уровень технологий 2"
 
-#: src/multimenu.cpp:634
+#: src/multimenu.cpp:636
 msgid "Technology level 3"
 msgstr "Уровень технологий 3"
 
-#: src/multimenu.cpp:640
+#: src/multimenu.cpp:642
 msgid "Any number of players"
 msgstr "Любое число игроков"
 
-#: src/multimenu.cpp:759
+#: src/multimenu.cpp:781
 msgid "Score"
 msgstr "Счёт"
 
-#: src/multimenu.cpp:760
+#: src/multimenu.cpp:782
 msgid "Kills"
 msgstr "Убил"
 
-#: src/multimenu.cpp:764
-#: src/multimenu.cpp:769
+#: src/multimenu.cpp:786
+#: src/multimenu.cpp:791
 msgid "Units"
 msgstr "Юниты"
 
-#: src/multimenu.cpp:778
+#: src/multimenu.cpp:800
 msgid "Structs"
 msgstr "Потери сооружений"
 
-#: src/multimenu.cpp:1140
+#: src/multimenu.cpp:1162
 msgid "Channel"
 msgstr "Канал."
 
-#: src/multimenu.cpp:1154
+#: src/multimenu.cpp:1176
 msgid "Toggle Alliance State"
 msgstr "Предложить Союз"
 
-#: src/multimenu.cpp:1173
+#: src/multimenu.cpp:1195
 msgid "Give Visibility Report"
 msgstr "Передать Видимость"
 
-#: src/multimenu.cpp:1179
+#: src/multimenu.cpp:1201
 msgid "Leak Technology Documents"
 msgstr "Передать Технологии"
 
-#: src/multimenu.cpp:1186
+#: src/multimenu.cpp:1208
 msgid "Hand Over Selected Units"
 msgstr "Передать выбранных юнитов"
 
-#: src/multimenu.cpp:1192
+#: src/multimenu.cpp:1214
 msgid "Give Power To Player"
 msgstr "Передать энергию  игроку"
 
@@ -14888,12 +14888,12 @@ msgstr "Общее время игры: %s"
 msgid "You cheated!"
 msgstr "Ты читер!"
 
-#: src/scriptfuncs.cpp:9375
+#: src/scriptfuncs.cpp:9378
 #, c-format
 msgid "Beacon received from %s!"
 msgstr "Маяк получен от %s!"
 
-#: src/scriptfuncs.cpp:9421
+#: src/scriptfuncs.cpp:9424
 #, c-format
 msgid "Beacon %d"
 msgstr "Маяк %d"

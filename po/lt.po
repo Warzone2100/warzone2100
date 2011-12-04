@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-12-03 18:54+0100\n"
+"POT-Creation-Date: 2011-12-04 22:55+0100\n"
 "PO-Revision-Date: 2008-05-09 16:42+0000\n"
 "Last-Translator: Roman <rms200x@gmail.com>\n"
 "Language-Team: Lithuanian <lt@li.org>\n"
@@ -12112,8 +12112,8 @@ msgstr "Išsaugoti žaidimą"
 #: src/intelmap.cpp:531
 #: src/intorder.cpp:727
 #: src/loadsave.cpp:239
-#: src/multimenu.cpp:495
-#: src/multimenu.cpp:1367
+#: src/multimenu.cpp:496
+#: src/multimenu.cpp:1389
 #: src/transporter.cpp:277
 #: src/transporter.cpp:358
 #: src/transporter.cpp:817
@@ -12950,7 +12950,7 @@ msgstr "Pastatyti (F3)"
 
 #: src/hci.cpp:3423
 #: src/multiint.cpp:1613
-#: src/multimenu.cpp:765
+#: src/multimenu.cpp:787
 msgid "Power"
 msgstr "Energija"
 
@@ -14282,7 +14282,7 @@ msgid "Select Player Name"
 msgstr ""
 
 #: src/multiint.cpp:1580
-#: src/multimenu.cpp:758
+#: src/multimenu.cpp:780
 msgid "Alliances"
 msgstr ""
 
@@ -14464,42 +14464,42 @@ msgstr ""
 msgid "Host is Starting Game"
 msgstr ""
 
-#: src/multiint.cpp:3795
+#: src/multiint.cpp:3812
 msgid "Players"
 msgstr ""
 
-#: src/multiint.cpp:3857
+#: src/multiint.cpp:3874
 #, fuzzy, c-format
 msgid "Click to take player slot %d"
 msgstr "Žaidėjas"
 
-#: src/multiint.cpp:3866
-#: src/multiint.cpp:4059
+#: src/multiint.cpp:3883
+#: src/multiint.cpp:4076
 msgid "Open"
 msgstr ""
 
-#: src/multiint.cpp:3866
-#: src/multiint.cpp:4060
+#: src/multiint.cpp:3883
+#: src/multiint.cpp:4077
 #, fuzzy
 msgid "Closed"
 msgstr "Uždaryti"
 
-#: src/multiint.cpp:3917
+#: src/multiint.cpp:3934
 #, c-format
 msgid "Sending Map: %d%% "
 msgstr ""
 
-#: src/multiint.cpp:3925
+#: src/multiint.cpp:3942
 #, c-format
 msgid "Map: %d%% downloaded"
 msgstr ""
 
-#: src/multiint.cpp:3951
+#: src/multiint.cpp:3968
 msgid "HOST"
 msgstr ""
 
-#: src/multiint.cpp:3958
-#: src/multimenu.cpp:774
+#: src/multiint.cpp:3975
+#: src/multimenu.cpp:796
 msgid "Ping"
 msgstr ""
 
@@ -14613,62 +14613,62 @@ msgstr "Žaidėjas"
 msgid "16 players"
 msgstr "Žaidėjas"
 
-#: src/multimenu.cpp:620
+#: src/multimenu.cpp:622
 msgid "Technology level 1"
 msgstr ""
 
-#: src/multimenu.cpp:628
+#: src/multimenu.cpp:630
 msgid "Technology level 2"
 msgstr ""
 
-#: src/multimenu.cpp:634
+#: src/multimenu.cpp:636
 msgid "Technology level 3"
 msgstr ""
 
-#: src/multimenu.cpp:640
+#: src/multimenu.cpp:642
 msgid "Any number of players"
 msgstr ""
 
-#: src/multimenu.cpp:759
+#: src/multimenu.cpp:781
 msgid "Score"
 msgstr ""
 
-#: src/multimenu.cpp:760
+#: src/multimenu.cpp:782
 msgid "Kills"
 msgstr ""
 
-#: src/multimenu.cpp:764
-#: src/multimenu.cpp:769
+#: src/multimenu.cpp:786
+#: src/multimenu.cpp:791
 #, fuzzy
 msgid "Units"
 msgstr "Karinis vienetas"
 
-#: src/multimenu.cpp:778
+#: src/multimenu.cpp:800
 #, fuzzy
 msgid "Structs"
 msgstr "Statyti"
 
-#: src/multimenu.cpp:1140
+#: src/multimenu.cpp:1162
 msgid "Channel"
 msgstr ""
 
-#: src/multimenu.cpp:1154
+#: src/multimenu.cpp:1176
 msgid "Toggle Alliance State"
 msgstr ""
 
-#: src/multimenu.cpp:1173
+#: src/multimenu.cpp:1195
 msgid "Give Visibility Report"
 msgstr ""
 
-#: src/multimenu.cpp:1179
+#: src/multimenu.cpp:1201
 msgid "Leak Technology Documents"
 msgstr ""
 
-#: src/multimenu.cpp:1186
+#: src/multimenu.cpp:1208
 msgid "Hand Over Selected Units"
 msgstr ""
 
-#: src/multimenu.cpp:1192
+#: src/multimenu.cpp:1214
 msgid "Give Power To Player"
 msgstr ""
 
@@ -14894,12 +14894,12 @@ msgstr ""
 msgid "You cheated!"
 msgstr ""
 
-#: src/scriptfuncs.cpp:9375
+#: src/scriptfuncs.cpp:9378
 #, c-format
 msgid "Beacon received from %s!"
 msgstr ""
 
-#: src/scriptfuncs.cpp:9421
+#: src/scriptfuncs.cpp:9424
 #, c-format
 msgid "Beacon %d"
 msgstr ""
