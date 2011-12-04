@@ -1,4 +1,4 @@
-master_XXX
+master_20111204
  * General:
    * Change: Remove the rule that made droids fire and move slower when damaged, since it was confusing and led to less tactical play (commit:88815c3e8bdf6d8afc640d1e82da8eb21d9f17a2)
    * Change: Scrolling stops instantly when changing direction to make it more accurate (commit:943b4c345d5227d486c3be1e2e05b99762ffad07)
@@ -24,8 +24,10 @@ master_XXX
    * Fix: Show hardpoint blueprints even over walls (ticket:1173, commit:a0aaaa99a7f1ead7aa15bd886f9a777a9e1e659f)
    * Fix: Show queued module blueprints (commit:6a3eaf0e4d7f26fee354a792dc493eb2b2c95948)
    * Fix: Prevent ally blueprints from disappearing before the structure is visible (commit:db864047f71347f1776d549cc7e31b194a3a3cb5)
+   * Fix: Properly show delivery point numbers again (ticket:2497, commit:0d75a3b62984ee35b90872daa505a41377f57f35)
  * UI:
    * Change: Animate changes in power, only for the UI (commit:53e042be1566ffa830f67ccd3031de41c88019e8)
+   * Change: In multiplayer/skirmish setup, show map preview for the map the mouse is hovering over (commit:48eda8df503810d3fd24e807427bfb28aaac064e)
    * Fix: Don't close the build menu unless all selected trucks are destroyed (commit:e2cec529296f66782c9f280e84be89d5996b711d)
    * Fix: Make sure new radar modes are always used (commit:7861f33505b7deedcbe13da507fa03e669b1752f)
  * AIs:
