@@ -3740,6 +3740,8 @@ bool startMultiOptions(bool bReenter)
 		disableMultiButs();
 	}
 
+	loadMapPreview(false);
+
 	return true;
 }
 
