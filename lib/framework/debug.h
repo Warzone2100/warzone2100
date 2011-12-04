@@ -256,6 +256,9 @@ bool debug_enable_switch(const char *str);
 void _debug( code_part part, const char *function, const char *str, ...)
 		WZ_DECL_FORMAT(printf, 3, 4);
 
+#define debugBacktrace(part, ...) do { if (enabled_debug[part]) { _debug(part, __FUNCTION__, __VA_ARGS__); _debugBacktrace(part); }} while(0)
+void _debugBacktrace(code_part part);
+
 /** Global to keep track of which game object to trace. */
 extern UDWORD traceID;
 

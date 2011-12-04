@@ -33,6 +33,10 @@
 #include "lib/framework/wzapp_c.h"
 #include "lib/gamelib/gtime.h"
 
+#ifdef WZ_OS_LINUX
+#include <execinfo.h>  // Nonfatal runtime backtraces.
+#endif //WZ_OS_LINUX
+
 extern void NotifyUserOfError(char *);		// will throw up a notifier on error
 
 #define MAX_LEN_LOG_LINE 512
@@ -475,6 +479,23 @@ void _debug( code_part part, const char *function, const char *str, ... )
 
 	}
 	useInputBuffer1 = !useInputBuffer1; // Swap buffers
+}
+
+void _debugBacktrace(code_part part)
+{
+#ifdef WZ_OS_LINUX
+	void *btv[20];
+	unsigned num = backtrace(btv, sizeof(btv)/sizeof(*btv));
+	char **btc = backtrace_symbols(btv, num);
+	unsigned i;
+	for (i = 1; i + 2 < num; ++i)  // =1: Don't print "src/warzone2100(syncDebugBacktrace+0x16) [0x6312d1]". +2: Don't print last two lines of backtrace such as "/lib/libc.so.6(__libc_start_main+0xe6) [0x7f91e040ea26]", since the address varies (even with the same binary).
+	{
+		_debug(part, "BT", "%s", btc[i]);
+	}
+	free(btc);
+#else
+	// debugBacktrace not implemented.
+#endif
 }
 
 bool debugPartEnabled(code_part codePart)
