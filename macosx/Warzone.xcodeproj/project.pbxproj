@@ -699,13 +699,13 @@
 			isEditable = 1;
 			outputFiles = (
 				"${DERIVED_FILES_DIR}/${INPUT_FILE_BASE}.h",
-				"${DERIVED_FILES_DIR}/${INPUT_FILE_BASE}.cpp",
+				"${DERIVED_FILES_DIR}/${INPUT_FILE_BASE}.tab.cpp",
 			);
-			script = "bison -d --output-file=\"${DERIVED_FILES_DIR}/${INPUT_FILE_BASE}.cpp\" \"${INPUT_FILE_PATH}\" || exit 1\ncp \"${DERIVED_FILES_DIR}/${INPUT_FILE_BASE}.hpp\" \"${DERIVED_FILES_DIR}/${INPUT_FILE_BASE}.h\"\nexit ${?}";
+			script = "bison --output-file=\"${DERIVED_FILES_DIR}/${INPUT_FILE_BASE}.tab.cpp\" \"${INPUT_FILE_PATH}\" || exit 1\ncp \"${DERIVED_FILES_DIR}/${INPUT_FILE_BASE}.tab.hpp\" \"${DERIVED_FILES_DIR}/${INPUT_FILE_BASE}.h\"\nexit ${?}";
 		};
 		0246AA730BD3E47F004D1C70 /* PBXBuildRule */ = {
 			isa = PBXBuildRule;
-			compilerSpec = com.apple.compilers.proxy.script;
+			compilerSpec = com.apple.compilers.lex;
 			fileType = sourcecode.lex;
 			isEditable = 1;
 			outputFiles = (
@@ -723,7 +723,7 @@
 			outputFiles = (
 				"${DERIVED_FILES_DIR}/${INPUT_FILE_BASE}.moc.cpp",
 			);
-			script = "export PATH=/sw/lib/qt4-mac/bin:/sw/lib/qt4-x11/bin:/opt/local/bin:${PATH}\nmoc -o \"${DERIVED_FILES_DIR}/${INPUT_FILE_BASE}.moc.cpp\" \"${INPUT_FILE_PATH}\" || exit 1\nexit ${?}\n# Files w/ \"Q_OBJECT\"";
+			script = "export PATH=/sw/lib/qt4-mac/bin:/sw/lib/qt4-x11/bin:/opt/local/bin:${PATH}\nmoc -o \"${DERIVED_FILES_DIR}/${INPUT_FILE_BASE}.moc.cpp\" \"${INPUT_FILE_PATH}\" || exit 1\n# Files w/ \"Q_OBJECT\"";
 		};
 		433360D411A07A7E00380F5E /* PBXBuildRule */ = {
 			isa = PBXBuildRule;
@@ -734,7 +734,7 @@
 			outputFiles = (
 				"${DERIVED_FILES_DIR}/${INPUT_FILE_BASE}.moc.cpp",
 			);
-			script = "export PATH=/sw/lib/qt4-mac/bin:/sw/lib/qt4-x11/bin:/opt/local/bin:${PATH}\nmoc -o \"${DERIVED_FILES_DIR}/${INPUT_FILE_BASE}.moc.cpp\" \"${INPUT_FILE_PATH}\" || exit 1\nexit ${?}\n# Files w/ \"Q_OBJECT\"";
+			script = "export PATH=/sw/lib/qt4-mac/bin:/sw/lib/qt4-x11/bin:/opt/local/bin:${PATH}\nmoc -o \"${DERIVED_FILES_DIR}/${INPUT_FILE_BASE}.moc.cpp\" \"${INPUT_FILE_PATH}\" || exit 1# Files w/ \"Q_OBJECT\"";
 		};
 /* End PBXBuildRule section */
 
@@ -3818,19 +3818,19 @@
 				0246AA730BD3E47F004D1C70 /* PBXBuildRule */,
 			);
 			dependencies = (
-				43D1808B1336B74E001906EB /* PBXTargetDependency */,
-				022B313F0BD56915002E64E3 /* PBXTargetDependency */,
-				43AA707113C804580015B52B /* PBXTargetDependency */,
-				43502D83134764BF00A02A1F /* PBXTargetDependency */,
 				4318438A1363954200BA2BC5 /* PBXTargetDependency */,
+				43502D83134764BF00A02A1F /* PBXTargetDependency */,
 				0246A2FF0BD3CCF0004D1C70 /* PBXTargetDependency */,
-				0246A3010BD3CCF2004D1C70 /* PBXTargetDependency */,
 				0246A3030BD3CCF3004D1C70 /* PBXTargetDependency */,
-				0246A3050BD3CCF6004D1C70 /* PBXTargetDependency */,
+				0246A3010BD3CCF2004D1C70 /* PBXTargetDependency */,
 				0246A3070BD3CCF9004D1C70 /* PBXTargetDependency */,
+				0246A3050BD3CCF6004D1C70 /* PBXTargetDependency */,
+				022B313F0BD56915002E64E3 /* PBXTargetDependency */,
 				97AEAC550E8C261600A10721 /* PBXTargetDependency */,
 				43FA571310FF8EE90074E914 /* PBXTargetDependency */,
+				43AA707113C804580015B52B /* PBXTargetDependency */,
 				4366728313D211DE00FE85BA /* PBXTargetDependency */,
+				43D1808B1336B74E001906EB /* PBXTargetDependency */,
 			);
 			name = Warzone;
 			productName = Warzone;
