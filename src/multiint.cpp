@@ -3479,7 +3479,8 @@ void runMultiOptions(void)
 {
 	static UDWORD	lastrefresh = 0;
 	UDWORD			id, value, i;
-	char			sTemp[128];
+	char                    sTemp[128], oldGameMap[128];
+	int                     oldMaxPlayers;
 	PLAYERSTATS		playerStats;
 	W_CONTEXT		context;
 
@@ -3551,7 +3552,8 @@ void runMultiOptions(void)
 	if(multiRequestUp)
 	{
 		id = widgRunScreen(psRScreen);						// a requester box is up.
-		if( runMultiRequester(id,&id,(char*)&sTemp,&value))
+		bool isHoverPreview;
+		if (runMultiRequester(id, &id, (char *)&sTemp, &value, &isHoverPreview))
 		{
 			switch(id)
 			{
@@ -3570,17 +3572,30 @@ void runMultiOptions(void)
 				netPlayersUpdated = true;
 				break;
 			case MULTIOP_MAP:
+				sstrcpy(oldGameMap, game.map);
+				oldMaxPlayers = game.maxPlayers;
+
 				sstrcpy(game.map, sTemp);
-				game.maxPlayers =(UBYTE) value;
-				loadMapPreview(true);
+				game.maxPlayers = value;
+				loadMapPreview(!isHoverPreview);
+
+				if (isHoverPreview)
+				{
+					sstrcpy(game.map, oldGameMap);
+					game.maxPlayers = oldMaxPlayers;
+				}
 
 				widgSetString(psWScreen,MULTIOP_MAP,sTemp);
 				addGameOptions();
 				break;
 			default:
+				loadMapPreview(false);  // Restore the preview of the old map.
 				break;
 			}
-			addPlayerBox( !ingame.bHostSetup );
+			if (!isHoverPreview)
+			{
+				addPlayerBox( !ingame.bHostSetup );
+			}
 		}
 	}
 	else

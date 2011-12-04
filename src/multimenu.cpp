@@ -158,6 +158,7 @@ static char const * M_REQUEST_NP_TIPS[] = {   N_("2 players"), N_("3 players"), 
 #define R_BUT_H			30
 
 bool			multiRequestUp = false;				//multimenu is up.
+static unsigned         hoverPreviewId;
 static bool		giftsUp[MAX_PLAYERS] = {true};		//gift buttons for player are up.
 
 char		debugMenuEntry[DEBUGMENU_MAX_ENTRIES][MAX_STR_LENGTH];
@@ -604,6 +605,7 @@ void addMultiRequest(const char* searchDir, const char* fileExtension, UDWORD mo
 		}
 	}
 	multiRequestUp = true;
+	hoverPreviewId = 0;
 
 
 	// if it's map select then add the cam style buttons.
@@ -663,23 +665,43 @@ static void closeMultiRequester(void)
 	return;
 }
 
-bool runMultiRequester(UDWORD id,UDWORD *mode, char *chosen,UDWORD *chosenValue)
+bool runMultiRequester(UDWORD id, UDWORD *mode, char *chosen, UDWORD *chosenValue, bool *isHoverPreview)
 {
 	if( (id == M_REQUEST_CLOSE) || CancelPressed() )			// user hit close box || hit the cancel key
 	{
 		closeMultiRequester();
+		*mode = 0;
 		return true;
 	}
 
-	if( id>=M_REQUEST_BUT && id<=M_REQUEST_BUTM)		// chose a file.
+	bool hoverPreview = false;
+	if (id == 0 && context == MULTIOP_MAP)
+	{
+		id = widgGetMouseOver(psRScreen);
+		if (id == hoverPreviewId)
+		{
+			id = 0;  // Don't re-render preview.
+		}
+		hoverPreview = true;
+	}
+	if (id >= M_REQUEST_BUT && id <= M_REQUEST_BUTM)  // chose a file.
 	{
 		strcpy(chosen,((W_BUTTON *)widgGetFromID(psRScreen,id))->pText );
 
 		*chosenValue = ((W_BUTTON *)widgGetFromID(psRScreen,id))->UserData ;
-		closeMultiRequester();
 		*mode = context;
+		*isHoverPreview = hoverPreview;
+		hoverPreviewId = id;
+		if (!hoverPreview)
+		{
+			closeMultiRequester();
+		}
 
 		return true;
+	}
+	if (hoverPreview)
+	{
+		id = 0;
 	}
 
 	switch (id)
