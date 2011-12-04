@@ -4101,8 +4101,11 @@ static bool loadSaveDroid(const char *pFileName, DROID **ppsCurrentDroidLists)
 
 		/* Create the Droid */
 		turnOffMultiMsg(true);
-		psDroid = reallyBuildDroid(psTemplate, pos, player, onMission, rot);
+		Vector3i bogusPosition(TILE_UNITS, TILE_UNITS, 0);  // If droid is on a mission, calling with the real position might cause an assertion. Or something like that.
+		psDroid = reallyBuildDroid(psTemplate, bogusPosition, player, onMission, rot);
 		ASSERT_OR_RETURN(NULL, psDroid != NULL, "Failed to build unit %d", id);
+		psDroid->pos = pos;
+		psDroid->rot = rot;
 		turnOffMultiMsg(false);
 
 		// Copy the values across
@@ -4205,6 +4208,20 @@ static bool loadSaveDroid(const char *pFileName, DROID **ppsCurrentDroidLists)
 			psDroid->sMove.Status = MOVEINACTIVE;
 			fpathDroidRoute(psDroid, psDroid->sMove.destination.x, psDroid->sMove.destination.y, FMT_MOVE);
 			psDroid->sMove.Status = MOVEWAITROUTE;
+
+			// Droid might be on a mission, so finish pathfinding now, in case pointers swap and map size changes.
+			FPATH_RETVAL dr = fpathDroidRoute(psDroid, psDroid->sMove.destination.x, psDroid->sMove.destination.y, FMT_MOVE);
+			if (dr == FPR_OK)
+			{
+				psDroid->sMove.Status = MOVENAVIGATE;
+				psDroid->sMove.pathIndex = 0;
+			}
+			else // if (retVal == FPR_FAILED)
+			{
+				psDroid->sMove.Status = MOVEINACTIVE;
+				actionDroid(psDroid, DACTION_SULK);
+			}
+			ASSERT(dr != FPR_WAIT, " ");
 		}
 
 		// HACK!!
