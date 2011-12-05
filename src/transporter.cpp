@@ -722,6 +722,10 @@ bool intAddTransContentsForm(void)
 			psCurrTransporter; psDroid = psNext)
 		{
 			psNext = psDroid->psGrpNext;
+			if (psDroid->selected)
+			{
+				continue;  // Droid is queued to be ejected from the transport, so don't display it.
+			}
 			/* Set the tip and add the button */
 			sBFormInit.pTip = droidGetName(psDroid);
 			BufferID = GetStatBuffer();
@@ -1082,6 +1086,10 @@ static void _intProcessTransporter(UDWORD id)
 			DROID *psDroid;
 			for (psDroid = psCurrTransporter->psGroup->psList; psDroid != NULL && psDroid != psCurrTransporter; psDroid = psDroid->psGrpNext)
 			{
+				if (psDroid->selected)
+				{
+					continue;  // Already scheduled this droid for removal.
+				}
 				if (currID == id)
 				{
 					break;
@@ -1273,11 +1281,12 @@ void setCurrentTransporter(UDWORD id)
 /*removes a droid from the group associated with the transporter*/
 void transporterRemoveDroid(DROID *psTransport, DROID *psDroid, QUEUE_MODE mode)
 {
-	ASSERT(psTransport != NULL && psDroid != NULL, "Something NULL");
+	ASSERT_OR_RETURN(, psTransport != NULL && psDroid != NULL && psTransport != psDroid, "Something NULL or unloading transporter from itself");
 
 	if (bMultiMessages && mode == ModeQueue)
 	{
 		sendDroidDisembark(psTransport, psDroid);
+		psDroid->selected = true;  // Remove from interface.
 		return;
 	}
 
@@ -1414,6 +1423,7 @@ void transporterAddDroid(DROID *psTransporter, DROID *psDroidToAdd)
 	{
 		// adding to transporter unit's group list
 		psTransporter->psGroup->add(psDroidToAdd);
+		psDroidToAdd->selected = false;  // Display in transporter interface.
 		
 		if (bMultiMessages && !isInSync())
 		{
@@ -1434,8 +1444,8 @@ void transporterAddDroid(DROID *psTransporter, DROID *psDroidToAdd)
 		visRemoveVisibility((BASE_OBJECT *)psDroidToAdd);
 	}
 
-	//this is called by droidRemove
-	//intRefreshScreen();
+	// This is called by droidRemove. But we still need to refresh after adding to the transporter group.
+	intRefreshScreen();
 }
 
 /*check to see if the droid can fit on the Transporter - return true if fits*/

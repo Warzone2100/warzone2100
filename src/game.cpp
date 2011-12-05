@@ -4155,17 +4155,21 @@ static bool loadSaveDroid(const char *pFileName, DROID **ppsCurrentDroidLists)
 		}
 
 		psDroid->group = ini.value("group", UBYTE_MAX).toInt();
+		psDroid->selected = ini.value("selected", false).toBool();
 		int aigroup = ini.value("aigroup", -1).toInt();
 		if (aigroup >= 0)
 		{
 			DROID_GROUP *psGroup = grpFind(aigroup);
 			psGroup->add(psDroid);
+			if (psGroup->type == GT_TRANSPORTER)
+			{
+				psDroid->selected = false;  // Droid should be visible in the transporter interface.
+			}
 		}
 		else
 		{
 			psDroid->psGroup = NULL;
 		}
-		psDroid->selected = ini.value("selected", false).toBool();
 		psDroid->died = ini.value("died", 0).toInt();
 		psDroid->lastEmission = ini.value("lastEmission", 0).toInt();
 		memset(psDroid->visible, 0, sizeof(psDroid->visible));
