@@ -300,6 +300,21 @@ void sendStructureInfo(STRUCTURE *psStruct, STRUCTURE_INFO structureInfo_, DROID
 	NETend();
 }
 
+template<typename Functionality>
+static inline void popStatusPending(Functionality &functionality)
+{
+	if (functionality.pendingCount == 0)
+	{
+		++functionality.pendingCount;
+	}
+	if (--functionality.pendingCount == 0)
+	{
+		// Subject is now synchronised, remove pending.
+		functionality.psSubjectPending = NULL;
+		functionality.statusPending = FACTORY_NOTHING_PENDING;
+	}
+}
+
 void recvStructureInfo(NETQUEUE queue)
 {
 	uint8_t         player = 0;
@@ -341,16 +356,11 @@ void recvStructureInfo(NETQUEUE queue)
 
 	if (StructIsFactory(psStruct))
 	{
-		if (psStruct->pFunctionality->factory.pendingCount == 0)
-		{
-			++psStruct->pFunctionality->factory.pendingCount;
-		}
-		if (--psStruct->pFunctionality->factory.pendingCount == 0)
-		{
-			// Subject is now synchronised, remove pending.
-			psStruct->pFunctionality->factory.psSubjectPending = NULL;
-			psStruct->pFunctionality->factory.statusPending = FACTORY_NOTHING_PENDING;
-		}
+		popStatusPending(psStruct->pFunctionality->factory);
+	}
+	else if (psStruct->pStructureType->type == REF_RESEARCH)
+	{
+		popStatusPending(psStruct->pFunctionality->researchFacility);
 	}
 
 	syncDebugStructure(psStruct, '<');
@@ -358,7 +368,7 @@ void recvStructureInfo(NETQUEUE queue)
 	switch (structureInfo)
 	{
 		case STRUCTUREINFO_MANUFACTURE:       structSetManufacture(psStruct, psTempl, ModeImmediate); break;
-		case STRUCTUREINFO_CANCELPRODUCTION:  cancelProduction(psStruct, ModeImmediate);              break;
+		case STRUCTUREINFO_CANCELPRODUCTION:  cancelProduction(psStruct, ModeImmediate, false);       break;
 		case STRUCTUREINFO_HOLDPRODUCTION:    holdProduction(psStruct, ModeImmediate);                break;
 		case STRUCTUREINFO_RELEASEPRODUCTION: releaseProduction(psStruct, ModeImmediate);             break;
 		case STRUCTUREINFO_HOLDRESEARCH:      holdResearch(psStruct, ModeImmediate);                  break;

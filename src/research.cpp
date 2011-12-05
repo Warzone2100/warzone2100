@@ -1213,18 +1213,17 @@ void ResearchRelease(void)
 /*puts research facility on hold*/
 void holdResearch(STRUCTURE *psBuilding, QUEUE_MODE mode)
 {
-	RESEARCH_FACILITY		*psResFac;
-
 	ASSERT( psBuilding->pStructureType->type == REF_RESEARCH,
 		"holdResearch: structure not a research facility" );
+
+	RESEARCH_FACILITY *psResFac = &psBuilding->pFunctionality->researchFacility;
 
 	if (mode == ModeQueue)
 	{
 		sendStructureInfo(psBuilding, STRUCTUREINFO_HOLDRESEARCH, NULL);
+		setStatusPendingHold(*psResFac);
 		return;
 	}
-
-	psResFac = (RESEARCH_FACILITY *)psBuilding->pFunctionality;
 
 	if (psResFac->psSubject)
 	{
@@ -1243,18 +1242,17 @@ void holdResearch(STRUCTURE *psBuilding, QUEUE_MODE mode)
 /*release a research facility from hold*/
 void releaseResearch(STRUCTURE *psBuilding, QUEUE_MODE mode)
 {
-	RESEARCH_FACILITY		*psResFac;
-
 	ASSERT( psBuilding->pStructureType->type == REF_RESEARCH,
 		"releaseResearch: structure not a research facility" );
+
+	RESEARCH_FACILITY *psResFac = &psBuilding->pFunctionality->researchFacility;
 
 	if (mode == ModeQueue)
 	{
 		sendStructureInfo(psBuilding, STRUCTUREINFO_RELEASERESEARCH, NULL);
+		setStatusPendingRelease(*psResFac);
 		return;
 	}
-
-	psResFac = (RESEARCH_FACILITY *)psBuilding->pFunctionality;
 
 	if (psResFac->psSubject && psResFac->timeStartHold)
 	{
@@ -1299,11 +1297,10 @@ void cancelResearch(STRUCTURE *psBuilding, QUEUE_MODE mode)
 {
 	UDWORD              topicInc;
 	PLAYER_RESEARCH	    *pPlayerRes;
-	RESEARCH_FACILITY	*psResFac;
 
 	ASSERT(psBuilding->pStructureType->type == REF_RESEARCH, "Structure not a research facility");
 
-	psResFac = (RESEARCH_FACILITY *)psBuilding->pFunctionality;
+	RESEARCH_FACILITY *psResFac = &psBuilding->pFunctionality->researchFacility;
 	if( !(RESEARCH *)psResFac->psSubject)
 	{
 		debug(LOG_SYNC, "Invalid research topic");
@@ -1320,6 +1317,7 @@ void cancelResearch(STRUCTURE *psBuilding, QUEUE_MODE mode)
 			sendResearchStatus(NULL, topicInc, psBuilding->player, false);
 			// Immediately tell the UI that we can research this now. (But don't change the game state.)
 			MakeResearchCancelledPending(pPlayerRes);
+			setStatusPendingCancel(*psResFac);
 			return;  // Wait for our message before doing anything. (Whatever this function does...)
 		}
 

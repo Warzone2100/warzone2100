@@ -996,9 +996,7 @@ bool structSetManufacture(STRUCTURE *psStruct, DROID_TEMPLATE *psTempl, QUEUE_MO
 	if (mode == ModeQueue)
 	{
 		sendStructureInfo(psStruct, STRUCTUREINFO_MANUFACTURE, psTempl);
-		psStruct->pFunctionality->factory.psSubjectPending = psTempl;
-		psStruct->pFunctionality->factory.statusPending = FACTORY_START_PENDING;
-		++psFact->pendingCount;
+		setStatusPendingStart(*psFact, psTempl);
 
 		return true;  // Wait for our message before doing anything.
 	}
@@ -6567,13 +6565,13 @@ STRUCTURE	*findDeliveryFactory(FLAG_POSITION *psDelPoint)
 
 /*cancels the production run for the factory and returns any power that was
 accrued but not used*/
-void cancelProduction(STRUCTURE *psBuilding, QUEUE_MODE mode)
+void cancelProduction(STRUCTURE *psBuilding, QUEUE_MODE mode, bool mayClearProductionRun)
 {
 	ASSERT_OR_RETURN( , StructIsFactory(psBuilding), "structure not a factory");
 
 	FACTORY *psFactory = &psBuilding->pFunctionality->factory;
 
-	if (psBuilding->player == productionPlayer)
+	if (psBuilding->player == productionPlayer && mayClearProductionRun)
 	{
 		//clear the production run for this factory
 		if (psFactory->psAssemblyPoint->factoryInc < asProductionRun[psFactory->psAssemblyPoint->factoryType].size())
@@ -6589,10 +6587,7 @@ void cancelProduction(STRUCTURE *psBuilding, QUEUE_MODE mode)
 	if (mode == ModeQueue)
 	{
 		sendStructureInfo(psBuilding, STRUCTUREINFO_CANCELPRODUCTION, NULL);
-
-		psFactory->psSubjectPending = NULL;
-		psFactory->statusPending = FACTORY_CANCEL_PENDING;
-		++psFactory->pendingCount;
+		setStatusPendingCancel(*psFactory);
 
 		return;
 	}
@@ -6626,16 +6621,7 @@ void holdProduction(STRUCTURE *psBuilding, QUEUE_MODE mode)
 	if (mode == ModeQueue)
 	{
 		sendStructureInfo(psBuilding, STRUCTUREINFO_HOLDPRODUCTION, NULL);
-
-		if (psFactory->psSubjectPending == NULL)
-		{
-			psFactory->psSubjectPending = psFactory->psSubject;
-		}
-		else
-		{
-			psFactory->statusPending = FACTORY_HOLD_PENDING;
-		}
-		++psFactory->pendingCount;
+		setStatusPendingHold(*psFactory);
 
 		return;
 	}
@@ -6666,16 +6652,7 @@ void releaseProduction(STRUCTURE *psBuilding, QUEUE_MODE mode)
 	if (mode == ModeQueue)
 	{
 		sendStructureInfo(psBuilding, STRUCTUREINFO_RELEASEPRODUCTION, NULL);
-
-		if (psFactory->psSubjectPending == NULL && psFactory->statusPending != FACTORY_CANCEL_PENDING)
-		{
-			psFactory->psSubjectPending = psFactory->psSubject;
-		}
-		if (psFactory->psSubjectPending != NULL)
-		{
-			psFactory->statusPending = FACTORY_START_PENDING;
-		}
-		++psFactory->pendingCount;
+		setStatusPendingRelease(*psFactory);
 
 		return;
 	}

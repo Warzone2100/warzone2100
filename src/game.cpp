@@ -4702,8 +4702,7 @@ static bool loadSaveStructure2(const char *pFileName, STRUCTURE **ppList)
 			psFactory->timeStartHold = ini.value("Factory/timeStartHold", psFactory->timeStartHold).toInt();
 			psFactory->loopsPerformed = ini.value("Factory/loopsPerformed", psFactory->loopsPerformed).toInt();
 			psFactory->productionOutput = ini.value("Factory/productionOutput", psFactory->productionOutput).toInt();
-			psFactory->statusPending = (FACTORY_STATUS_PENDING)ini.value("Factory/statusPending", psFactory->statusPending).toInt();
-			psFactory->pendingCount = ini.value("Factory/pendingCount", psFactory->pendingCount).toInt();
+			// statusPending and pendingCount belong to the GUI, not the game state.
 			psFactory->secondaryOrder = ini.value("Factory/secondaryOrder", psFactory->secondaryOrder).toInt();
 			//adjust the module structures IMD
 			if (capacity)
@@ -4931,8 +4930,7 @@ bool writeStructFile(const char *pFileName)
 					ini.setValue("Factory/timeStartHold", psFactory->timeStartHold);
 					ini.setValue("Factory/loopsPerformed", psFactory->loopsPerformed);
 					ini.setValue("Factory/productionOutput", psFactory->productionOutput);
-					ini.setValue("Factory/statusPending", psFactory->statusPending); // FACTORY_STATUS_PENDING enum
-					ini.setValue("Factory/pendingCount", psFactory->pendingCount);
+					// statusPending and pendingCount belong to the GUI, not the game state.
 					ini.setValue("Factory/secondaryOrder", psFactory->secondaryOrder);
 
 					if (psFactory->psSubject != NULL) ini.setValue("Factory/template", psFactory->psSubject->multiPlayerID);

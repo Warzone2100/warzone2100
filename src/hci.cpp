@@ -5446,12 +5446,13 @@ static bool setResearchStats(BASE_OBJECT *psObj, BASE_STATS *psStats)
 		{
 			// Say that we want to do reseach [sic].
 			sendResearchStatus(psBuilding, pResearch->ref - REF_RESEARCH_START, selectedPlayer, true);
+			setStatusPendingStart(*psResFacilty, pResearch);  // Tell UI that we are going to research.
 		}
 		else
 		{
 			cancelResearch(psBuilding, ModeQueue);
+			setStatusPendingCancel(*psResFacilty);
 		}
-		psResFacilty->psSubjectPending = pResearch;  // Tell UI that we are going to research.
 		//stop the button from flashing once a topic has been chosen
 		stopReticuleButtonFlash(IDRET_RESEARCH);
 		return true;
@@ -5734,10 +5735,10 @@ static void intObjStatRMBPressed(UDWORD id)
 			else if (psStructure->pStructureType->type == REF_RESEARCH)
 			{
 				//check if active
-				if (((RESEARCH_FACILITY *)psStructure->pFunctionality)->psSubject)
+				if (structureIsResearchingPending(psStructure))
 				{
 					//if not curently on hold, set it
-					if (((RESEARCH_FACILITY *)psStructure->pFunctionality)->timeStartHold == 0)
+					if (!StructureIsOnHoldPending(psStructure))
 					{
 						holdResearch(psStructure, ModeQueue);
 					}

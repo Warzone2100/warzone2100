@@ -135,9 +135,6 @@ static SDWORD ButtonDrawYOffset;
 
 static void DeleteButtonData(void);
 
-static bool StructureIsResearching(STRUCTURE *Structure);
-static bool StructureIsResearchingPending(STRUCTURE *Structure);
-
 
 // Set audio IDs for form opening/closing anims.
 // Use -1 to dissable audio.
@@ -219,7 +216,6 @@ void intUpdateProgressBar(WIDGET *psWidget, W_CONTEXT *psContext)
 	STRUCTURE			*Structure;
 	FACTORY				*Manufacture;
 	RESEARCH_FACILITY	*Research;
-	PLAYER_RESEARCH		*pPlayerRes;
 	W_BARGRAPH			*BarGraph = (W_BARGRAPH*)psWidget;
 
 	psObj = (BASE_OBJECT*)BarGraph->pUserData;	// Get the object associated with this widget.
@@ -286,18 +282,25 @@ void intUpdateProgressBar(WIDGET *psWidget, W_CONTEXT *psContext)
 					formatPower(BarGraph, neededPower, powerToBuild);
 				}
 			}
-			else if(StructureIsResearching(Structure))  // Is it researching.
+			else if(structureIsResearchingPending(Structure))  // Is it researching.
 			{
 				Research = StructureGetResearch(Structure);
-				pPlayerRes = &asPlayerResList[selectedPlayer][Research->psSubject->index];
-				if (pPlayerRes->currentPoints != 0)
+				unsigned currentPoints = 0;
+				if (Research->psSubject != NULL)
+				{
+					currentPoints = asPlayerResList[selectedPlayer][Research->psSubject->index].currentPoints;
+				}
+				if (currentPoints != 0)
 				{
 					int researchRate = Research->timeStartHold == 0? Research->researchPoints : 0;
-					formatTime(BarGraph, pPlayerRes->currentPoints, Research->psSubject->researchPoints, researchRate, _("Research Progress"));
+					formatTime(BarGraph, currentPoints, Research->psSubject->researchPoints, researchRate, _("Research Progress"));
 				}
 				else
 				{
-					formatPower(BarGraph, checkPowerRequest(Structure), Research->psSubject->researchPower);
+					// Not yet started production.
+					int neededPower = checkPowerRequest(Structure);
+					int powerToBuild = Research->psSubject != NULL? Research->psSubject->researchPower : 0;
+					formatPower(BarGraph, neededPower, powerToBuild);
 				}
 			}
 
@@ -763,7 +766,7 @@ void intDisplayStatusButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ
 							break;
 
 						case REF_RESEARCH:
-							if (StructureIsResearchingPending(Structure))
+							if (structureIsResearchingPending(Structure))
 							{
 								iIMDShape *shape = (iIMDShape *)Object;
 								Stats = (BASE_STATS*)Buffer->Data2;
@@ -2634,6 +2637,16 @@ iIMDShape *DroidGetIMD(DROID *Droid)
 	return Droid->sDisplay.imd;
 }
 
+template<typename Functionality>
+static inline bool _structureIsManufacturingPending(Functionality const &functionality)
+{
+	if (functionality.statusPending != FACTORY_NOTHING_PENDING)
+	{
+		return functionality.statusPending == FACTORY_START_PENDING || functionality.statusPending == FACTORY_HOLD_PENDING;
+	}
+	return functionality.psSubject != NULL;
+}
+
 bool StructureIsManufacturingPending(STRUCTURE *structure)
 {
 	switch (structure->pStructureType->type)
@@ -2641,12 +2654,7 @@ bool StructureIsManufacturingPending(STRUCTURE *structure)
 		case REF_FACTORY:
 		case REF_CYBORG_FACTORY:
 		case REF_VTOL_FACTORY:
-			if (structure->pFunctionality->factory.statusPending != FACTORY_NOTHING_PENDING)
-			{
-				return structure->pFunctionality->factory.statusPending == FACTORY_START_PENDING ||
-				       structure->pFunctionality->factory.statusPending == FACTORY_HOLD_PENDING;
-			}
-			return structure->pFunctionality->factory.psSubject != NULL;
+			return _structureIsManufacturingPending(structure->pFunctionality->factory);
 		default:
 			return false;
 	}
@@ -2657,15 +2665,19 @@ FACTORY *StructureGetFactory(STRUCTURE *Structure)
 	return &Structure->pFunctionality->factory;
 }
 
-static bool StructureIsResearching(STRUCTURE *Structure)
+bool structureIsResearchingPending(STRUCTURE *structure)
 {
-	return Structure->pStructureType->type == REF_RESEARCH && Structure->pFunctionality->researchFacility.psSubject != NULL;
+	return structure->pStructureType->type == REF_RESEARCH && _structureIsManufacturingPending(structure->pFunctionality->researchFacility);
 }
 
-static bool StructureIsResearchingPending(STRUCTURE *Structure)
+template<typename Functionality>
+static inline bool structureIsOnHoldPending(Functionality const &functionality)
 {
-	return Structure->pStructureType->type == REF_RESEARCH && (Structure->pFunctionality->researchFacility.psSubject != NULL ||
-	                                                           Structure->pFunctionality->researchFacility.psSubjectPending != NULL);
+	if (functionality.statusPending != FACTORY_NOTHING_PENDING)
+	{
+		return functionality.statusPending == FACTORY_HOLD_PENDING;
+	}
+	return functionality.timeStartHold != 0;
 }
 
 bool StructureIsOnHoldPending(STRUCTURE *structure)
@@ -2675,17 +2687,9 @@ bool StructureIsOnHoldPending(STRUCTURE *structure)
 		case REF_FACTORY:
 		case REF_CYBORG_FACTORY:
 		case REF_VTOL_FACTORY:
-			if (structure->pFunctionality->factory.statusPending != FACTORY_NOTHING_PENDING)
-			{
-				return structure->pFunctionality->factory.statusPending == FACTORY_HOLD_PENDING;
-			}
-			return structure->pFunctionality->factory.timeStartHold != 0;
+			return structureIsOnHoldPending(structure->pFunctionality->factory);
 		case REF_RESEARCH:
-			if (structure->pFunctionality->researchFacility.psSubjectPending != NULL)
-			{
-				return false;
-			}
-			return structure->pFunctionality->researchFacility.timeStartHold != 0;
+			return structureIsOnHoldPending(structure->pFunctionality->researchFacility);
 		default:
 			ASSERT(false, "Huh?");
 			return false;

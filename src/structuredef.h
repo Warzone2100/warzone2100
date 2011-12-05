@@ -150,25 +150,27 @@ enum STRUCT_STATES
 	SS_BLUEPRINT_PLANNED_BY_ALLY,
 };
 
+enum StatusPending
+{
+	FACTORY_NOTHING_PENDING = 0,
+	FACTORY_START_PENDING,
+	FACTORY_HOLD_PENDING,
+	FACTORY_CANCEL_PENDING
+};
+
 struct RESEARCH;
 
 struct RESEARCH_FACILITY
 {
 	RESEARCH *      psSubject;                      // The subject the structure is working on.
 	RESEARCH *      psSubjectPending;               // The subject the structure is going to work on when the GAME_RESEARCHSTATUS message is received.
+	StatusPending   statusPending;                  ///< Pending = not yet synchronised.
+	unsigned        pendingCount;                   ///< Number of messages sent but not yet processed.
 	UDWORD		capacity;				/* Number of upgrade modules added*/
 	UDWORD		timeStarted;			/* The time the building started on the subject*/
 	UDWORD		researchPoints;			/* Research Points produced per research cycle*/
 	RESEARCH *      psBestTopic;                    // The topic with the most research points that was last performed
 	UDWORD		timeStartHold;		    /* The time the research facility was put on hold*/
-};
-
-enum FACTORY_STATUS_PENDING
-{
-	FACTORY_NOTHING_PENDING = 0,
-	FACTORY_START_PENDING,
-	FACTORY_HOLD_PENDING,
-	FACTORY_CANCEL_PENDING
 };
 
 struct DROID_TEMPLATE;
@@ -183,7 +185,7 @@ struct FACTORY
 											   Build Cycle*/
 	DROID_TEMPLATE *                psSubject;              ///< The subject the structure is working on.
 	DROID_TEMPLATE *                psSubjectPending;       ///< The subject the structure is going to working on. (Pending = not yet synchronised.)
-	FACTORY_STATUS_PENDING          statusPending;          ///< Pending = not yet synchronised.
+	StatusPending                   statusPending;          ///< Pending = not yet synchronised.
 	unsigned                        pendingCount;           ///< Number of messages sent but not yet processed.
 
 	UDWORD				timeStarted;		/* The time the building started on the subject*/

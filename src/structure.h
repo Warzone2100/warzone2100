@@ -317,7 +317,7 @@ extern void factoryLoopAdjust(STRUCTURE *psStruct, bool add);
 
 /*cancels the production run for the factory and returns any power that was
 accrued but not used*/
-extern void cancelProduction(STRUCTURE *psBuilding, QUEUE_MODE mode);
+void cancelProduction(STRUCTURE *psBuilding, QUEUE_MODE mode, bool mayClearProductionRun = true);
 
 /*set a factory's production run to hold*/
 extern void holdProduction(STRUCTURE *psBuilding, QUEUE_MODE mode);
@@ -453,6 +453,48 @@ static inline void _setStructureTarget(STRUCTURE *psBuilding, BASE_OBJECT *psNew
 	(void)line;
 	(void)func;
 #endif
+}
+
+// Functions for the GUI to know what's pending, before it's synchronised.
+template<typename Functionality, typename Subject>
+static inline void setStatusPendingStart(Functionality &functionality, Subject *subject)
+{
+	functionality.psSubjectPending = subject;
+	functionality.statusPending = FACTORY_START_PENDING;
+	++functionality.pendingCount;
+}
+
+template<typename Functionality>
+static inline void setStatusPendingCancel(Functionality &functionality)
+{
+	functionality.psSubjectPending = NULL;
+	functionality.statusPending = FACTORY_CANCEL_PENDING;
+	++functionality.pendingCount;
+}
+
+template<typename Functionality>
+static inline void setStatusPendingHold(Functionality &functionality)
+{
+	if (functionality.psSubjectPending == NULL)
+	{
+		functionality.psSubjectPending = functionality.psSubject;
+	}
+	functionality.statusPending = FACTORY_HOLD_PENDING;
+	++functionality.pendingCount;
+}
+
+template<typename Functionality>
+static inline void setStatusPendingRelease(Functionality &functionality)
+{
+	if (functionality.psSubjectPending == NULL && functionality.statusPending != FACTORY_CANCEL_PENDING)
+	{
+		functionality.psSubjectPending = functionality.psSubject;
+	}
+	if (functionality.psSubjectPending != NULL)
+	{
+		functionality.statusPending = FACTORY_START_PENDING;
+	}
+	++functionality.pendingCount;
 }
 
 void checkStructure(const STRUCTURE* psStructure, const char * const location_description, const char * function, const int recurse);
