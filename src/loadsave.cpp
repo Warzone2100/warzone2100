@@ -216,10 +216,11 @@ bool addLoadSave(LOADSAVE_MODE savemode, const char *title)
 	// Add Banner Label
 	W_LABINIT sLabInit;
 	sLabInit.formID = LOADSAVE_BANNER;
+	sLabInit.FontID = font_large;
 	sLabInit.id		= LOADSAVE_LABEL;
 	sLabInit.style	= WLAB_ALIGNCENTRE;
 	sLabInit.x		= 0;
-	sLabInit.y		= 3;
+	sLabInit.y		= 0;
 	sLabInit.width	= LOADSAVE_W-(2*LOADSAVE_HGAP);	//LOADSAVE_W;
 	sLabInit.height = LOADSAVE_BANNER_DEPTH;		//This looks right -Q
 	sLabInit.pText	= title;
@@ -229,7 +230,7 @@ bool addLoadSave(LOADSAVE_MODE savemode, const char *title)
 	W_BUTINIT sButInit;
 	sButInit.formID = LOADSAVE_BANNER;
 	sButInit.x = 8;
-	sButInit.y = 8;
+	sButInit.y = 10;
 	sButInit.width		= iV_GetImageWidth(IntImages,IMAGE_NRUTER);
 	sButInit.height		= iV_GetImageHeight(IntImages,IMAGE_NRUTER);
 	sButInit.UserData	= PACKDWORD_TRI(0,IMAGE_NRUTER , IMAGE_NRUTER);
