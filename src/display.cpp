@@ -2024,6 +2024,7 @@ static void dealWithLMBFeature(FEATURE* psFeature)
 					{
 						orderDroidStatsLocDir(psCurr, DORDER_BUILD, (BASE_STATS*) &asStructureStats[i], psFeature->pos.x, psFeature->pos.y, player.r.y, ModeQueue);
 					}
+					FeedbackOrderGiven();
 				}
 			}
 		}
