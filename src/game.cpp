@@ -3964,7 +3964,21 @@ static bool loadSaveDroidPointers(const QString &pFileName, DROID **ppsCurrentDr
 		int player = getPlayer(ini);
 		int id = ini.value("id").toInt();
 
-		for (psDroid = ppsCurrentDroidLists[player]; psDroid && psDroid->id != id; psDroid = psDroid->psNext) {}
+		for (psDroid = ppsCurrentDroidLists[player]; psDroid && psDroid->id != id; psDroid = psDroid->psNext)
+		{
+			if (psDroid->droidType == DROID_TRANSPORTER && psDroid->psGroup != NULL)  // Check for droids in the transporter.
+			{
+				for (DROID *psTrDroid = psDroid->psGroup->psList; psTrDroid != NULL; psTrDroid = psTrDroid->psGrpNext)
+				{
+					if (psTrDroid->id == id)
+					{
+						psDroid = psTrDroid;
+						goto foundDroid;
+					}
+				}
+			}
+		}
+		foundDroid:
 		if (!psDroid)
 		{
 			for (psDroid = mission.apsDroidLists[player]; psDroid && psDroid->id != id; psDroid = psDroid->psNext) {}
@@ -4052,9 +4066,27 @@ static bool loadSaveDroid(const char *pFileName, DROID **ppsCurrentDroidLists)
 		return false;
 	}
 	QStringList list = ini.childGroups();
+	// Sort list so transports are loaded first, since they must be loaded before the droids they contain.
+	std::vector<std::pair<int, QString> > sortedList;
 	for (int i = 0; i < list.size(); ++i)
 	{
 		ini.beginGroup(list[i]);
+		DROID_TYPE droidType = (DROID_TYPE)ini.value("droidType").toInt();
+		int priority = 0;
+		switch (droidType)
+		{
+			case DROID_TRANSPORTER: ++priority;
+			case DROID_COMMAND:     ++priority;
+			default:                break;
+		}
+		sortedList.push_back(std::make_pair(-priority, list[i]));
+		ini.endGroup();
+	}
+	std::sort(sortedList.begin(), sortedList.end());
+
+	for (unsigned i = 0; i < sortedList.size(); ++i)
+	{
+		ini.beginGroup(sortedList[i].second);
 		DROID *psDroid;
 		int player = getPlayer(ini);
 		int id = ini.value("id").toInt();
@@ -4236,7 +4268,7 @@ static bool loadSaveDroid(const char *pFileName, DROID **ppsCurrentDroidLists)
 			scriptSetStartPos(psDroid->player, psDroid->pos.x, psDroid->pos.y);	// set map start position, FIXME - save properly elsewhere!
 		}
 
-		if (psDroid->pos.x >= 0)	// do not add to list if on a transport, then the group list is used instead
+		if (psDroid->psGroup == NULL || psDroid->psGroup->type != GT_TRANSPORTER || psDroid->droidType == DROID_TRANSPORTER)  // do not add to list if on a transport, then the group list is used instead
 		{
 			addDroid(psDroid, ppsCurrentDroidLists);
 		}

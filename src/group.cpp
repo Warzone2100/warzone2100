@@ -120,6 +120,7 @@ void DROID_GROUP::add(DROID *psDroid)
 		if (psDroid->droidType == DROID_TRANSPORTER)
 		{
 			ASSERT_OR_RETURN(, (type == GT_NORMAL), "grpJoin: Cannot have two transporters in a group" );
+			ASSERT_OR_RETURN(, psList == NULL, "Adding transporter to non-empty list.");
 			type = GT_TRANSPORTER;
 			psDroid->psGrpNext = psList;
 			psList = psDroid;
