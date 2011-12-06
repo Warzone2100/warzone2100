@@ -4099,13 +4099,14 @@ static bool loadSaveDroid(const char *pFileName, DROID **ppsCurrentDroidLists)
 			psTemplate->powerPoints = calcTemplatePower(psTemplate);
 		}
 
+		// If droid is on a mission, calling with the saved position might cause an assertion. Or something like that.
+		pos.x = clip(pos.x, world_coord(1), world_coord(mapWidth - 1));
+		pos.y = clip(pos.y, world_coord(1), world_coord(mapHeight - 1));
+
 		/* Create the Droid */
 		turnOffMultiMsg(true);
-		Vector3i bogusPosition(TILE_UNITS, TILE_UNITS, 0);  // If droid is on a mission, calling with the real position might cause an assertion. Or something like that.
-		psDroid = reallyBuildDroid(psTemplate, bogusPosition, player, onMission, rot);
+		psDroid = reallyBuildDroid(psTemplate, pos, player, onMission, rot);
 		ASSERT_OR_RETURN(NULL, psDroid != NULL, "Failed to build unit %d", id);
-		psDroid->pos = pos;
-		psDroid->rot = rot;
 		turnOffMultiMsg(false);
 
 		// Copy the values across
