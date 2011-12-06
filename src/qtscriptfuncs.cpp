@@ -44,6 +44,12 @@
 #include "research.h"
 #include "multilimit.h"
 
+// hack, this is used from scriptfuncs.cpp -- and we don't want to include any stinkin' wzscript headers here!
+// TODO, move this stuff into a script common subsystem
+extern bool structDoubleCheck(BASE_STATS *psStat,UDWORD xx,UDWORD yy, SDWORD maxBlockingTiles);
+extern Vector2i positions[MAX_PLAYERS];
+extern std::vector<Vector2i> derricks;
+
 // ----------------------------------------------------------------------------------------
 // Utility functions -- not called directly from scripts
 
@@ -364,6 +370,102 @@ static QScriptValue js_debug(QScriptContext *context, QScriptEngine *engine)
 	return QScriptValue();
 }
 
+static QScriptValue js_pickStructLocation(QScriptContext *context, QScriptEngine *engine)
+{
+	QScriptValue droidVal = context->argument(0);
+	const int id = droidVal.property("id").toInt32();
+	const int player = droidVal.property("player").toInt32();
+	DROID *psDroid = IdToDroid(id, player);
+	QString statName = context->argument(1).toString();
+	int index = getStructStatFromName(statName.toUtf8().constData());
+	STRUCTURE_STATS	*psStat = &asStructureStats[index];
+	const int startX = context->argument(2).toInt32();
+	const int startY = context->argument(3).toInt32();
+	int numIterations = 30;
+	bool found = false;
+	int incX, incY, x, y;
+	int maxBlockingTiles = 0;
+
+	SCRIPT_ASSERT(context, psDroid, "No such droid id %d belonging to player %d", id, player);
+	SCRIPT_ASSERT(context, psStat, "No such stat found: %s", statName.toUtf8().constData());
+	SCRIPT_ASSERT(context, player < MAX_PLAYERS && player >= 0, "Invalid player number %d", player);
+	SCRIPT_ASSERT(context, startX >= 0 && startX < mapWidth && startY >= 0 && startY < mapHeight, "Bad position (%d, %d)", startX, startY);
+
+	if (context->argumentCount() > 4) // final optional argument
+	{
+		maxBlockingTiles = context->argument(4).toInt32();
+	}
+
+	x = startX;
+	y = startY;
+
+	// save a lot of typing... checks whether a position is valid
+	#define LOC_OK(_x, _y) (tileOnMap(_x, _y) && \
+				(!psDroid || fpathCheck(psDroid->pos, Vector3i(world_coord(_x), world_coord(_y), 0), PROPULSION_TYPE_WHEELED)) \
+				&& validLocation((BASE_STATS*)psStat, _x, _y, 0, player, false) && structDoubleCheck((BASE_STATS*)psStat, _x, _y, maxBlockingTiles))
+
+	// first try the original location
+	if (LOC_OK(startX, startY))
+	{
+		found = true;
+	}
+
+	// try some locations nearby
+	for (incX = 1, incY = 1; incX < numIterations && !found; incX++, incY++)
+	{
+		y = startY - incY;	// top
+		for (x = startX - incX; x < startX + incX; x++)
+		{
+			if (LOC_OK(x, y))
+			{
+				found = true;
+				goto endstructloc;
+			}
+		}
+		x = startX + incX;	// right
+		for (y = startY - incY; y < startY + incY; y++)
+		{
+			if (LOC_OK(x, y))
+			{
+				found = true;
+				goto endstructloc;
+			}
+		}
+		y = startY + incY;	// bottom
+		for (x = startX + incX; x > startX - incX; x--)
+		{
+			if (LOC_OK(x, y))
+			{
+				found = true;
+				goto endstructloc;
+			}
+		}
+		x = startX - incX;	// left
+		for (y = startY + incY; y > startY - incY; y--)
+		{
+			if (LOC_OK(x, y))
+			{
+				found = true;
+				goto endstructloc;
+			}
+		}
+	}
+
+endstructloc:
+	if (found)
+	{
+		QScriptValue retval = engine->newObject();
+		retval.setProperty("x", x, QScriptValue::ReadOnly);
+		retval.setProperty("y", y, QScriptValue::ReadOnly);
+		return retval;
+	}
+	else
+	{
+		debug(LOG_SCRIPT, "Did not find valid positioning for %s", psStat->pName);
+	}
+	return QScriptValue();
+}
+
 static QScriptValue js_structureIdle(QScriptContext *context, QScriptEngine *)
 {
 	QScriptValue structVal = context->argument(0);
@@ -495,6 +597,43 @@ static QScriptValue js_groupSize(QScriptContext *context, QScriptEngine *)
 	DROID_GROUP *psGroup = grpFind(groupId);
 	SCRIPT_ASSERT(context, psGroup, "Group %d not found", groupId);
 	return QScriptValue(psGroup->refCount);
+}
+
+static QScriptValue js_droidCanReach(QScriptContext *context, QScriptEngine *)
+{
+	QScriptValue droidVal = context->argument(0);
+	int id = droidVal.property("id").toInt32();
+	int player = droidVal.property("player").toInt32();
+	int x = context->argument(1).toInt32();
+	int y = context->argument(2).toInt32();
+	DROID *psDroid = IdToDroid(id, player);
+	SCRIPT_ASSERT(context, psDroid, "Droid id %d not found belonging to player %d", id, player);
+	const PROPULSION_STATS *psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
+	return QScriptValue(fpathCheck(psDroid->pos, Vector3i(world_coord(x), world_coord(y), 0), psPropStats->propulsionType));
+}
+
+static QScriptValue js_orderDroidStatsLoc(QScriptContext *context, QScriptEngine *)
+{
+	QScriptValue droidVal = context->argument(0);
+	int id = droidVal.property("id").toInt32();
+	int player = droidVal.property("player").toInt32();
+	DROID *psDroid = IdToDroid(id, player);
+	DROID_ORDER order = (DROID_ORDER)context->argument(1).toInt32();
+	QString statName = context->argument(2).toString();
+	int index = getStructStatFromName(statName.toUtf8().constData());
+	STRUCTURE_STATS	*psStats = &asStructureStats[index];
+	int x = context->argument(3).toInt32();
+	int y = context->argument(4).toInt32();
+
+	SCRIPT_ASSERT(context, order == DORDER_BUILD, "Invalid order");
+	SCRIPT_ASSERT(context, strcmp(psStats->pName, "A0ADemolishStructure") != 0, "Cannot build demolition");
+
+	// Don't allow scripts to order structure builds if players structure limit has been reached.
+	if (!IsPlayerStructureLimitReached(psDroid->player))
+	{
+		orderDroidStatsLocDir(psDroid, order, psStats, world_coord(x), world_coord(y), 0, ModeQueue);
+	}
+	return QScriptValue(true);
 }
 
 static QScriptValue js_orderDroidLoc(QScriptContext *context, QScriptEngine *)
@@ -852,6 +991,9 @@ bool registerFunctions(QScriptEngine *engine)
 	engine->globalObject().setProperty("orderDroidLoc", engine->newFunction(js_orderDroidLoc));
 	engine->globalObject().setProperty("playerPower", engine->newFunction(js_playerPower));
 	engine->globalObject().setProperty("isStructureAvailable", engine->newFunction(js_isStructureAvailable));
+	engine->globalObject().setProperty("pickStructLocation", engine->newFunction(js_pickStructLocation));
+	engine->globalObject().setProperty("droidCanReach", engine->newFunction(js_droidCanReach));
+	engine->globalObject().setProperty("orderDroidStatsLoc", engine->newFunction(js_orderDroidStatsLoc));
 
 	// Functions that operate on the current player only
 	engine->globalObject().setProperty("centreView", engine->newFunction(js_centreView));
@@ -877,6 +1019,12 @@ bool registerFunctions(QScriptEngine *engine)
 	engine->globalObject().setProperty("DORDER_MOVE", DORDER_MOVE, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("DORDER_SCOUT", DORDER_SCOUT, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("DORDER_BUILD", DORDER_BUILD, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("DORDER_HELPBUILD", DORDER_HELPBUILD, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("DORDER_LINEBUILD", DORDER_LINEBUILD, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("DORDER_REPAIR", DORDER_REPAIR, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("DORDER_RETREAT", DORDER_RETREAT, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("DORDER_PATROL", DORDER_PATROL, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("DORDER_BUILDMODULE", DORDER_BUILDMODULE, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("mapWidth", mapWidth, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("mapHeight", mapHeight, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("COMMAND", IDRET_COMMAND, QScriptValue::ReadOnly | QScriptValue::Undeletable);
@@ -896,6 +1044,29 @@ bool registerFunctions(QScriptEngine *engine)
 	engine->globalObject().setProperty("BEING_BUILT", SS_BEING_BUILT, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("BUILT", SS_BUILT, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("BEING_DEMOLISHED", SS_BEING_DEMOLISHED, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("DROID_CONSTRUCT", DROID_CONSTRUCT, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+
+	// Static map knowledge about start positions
+	QScriptValue startPositions = engine->newArray(game.maxPlayers);
+	for (int i = 0; i < game.maxPlayers; i++)
+	{
+		QScriptValue vector = engine->newObject();
+		vector.setProperty("x", map_coord(positions[i].x), QScriptValue::ReadOnly | QScriptValue::Undeletable);
+		vector.setProperty("y", map_coord(positions[i].y), QScriptValue::ReadOnly | QScriptValue::Undeletable);
+		startPositions.setProperty(i, vector, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+		qWarning("set start position of player %d to (%d, %d)", i, positions[i].x, positions[i].y);
+	}
+	QScriptValue derrickPositions = engine->newArray(derricks.size());
+	for (int i = 0; i < derricks.size(); i++)
+	{
+		QScriptValue vector = engine->newObject();
+		vector.setProperty("x", map_coord(derricks[i].x), QScriptValue::ReadOnly | QScriptValue::Undeletable);
+		vector.setProperty("y", map_coord(derricks[i].y), QScriptValue::ReadOnly | QScriptValue::Undeletable);
+		derrickPositions.setProperty(i, vector, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+		qWarning("set derrick position %d to (%d, %d)", i, derricks[i].x, derricks[i].y);
+	}
+	engine->globalObject().setProperty("startPositions", startPositions, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("derrickPositions", derrickPositions, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 
 	return true;
 }

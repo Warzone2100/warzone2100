@@ -110,7 +110,7 @@ static bool	structHasModule(STRUCTURE *psStruct);
 static DROID_TEMPLATE* scrCheckTemplateExists(SDWORD player, DROID_TEMPLATE *psTempl);
 
 /// Hold the previously assigned player
-static Vector2i positions[MAX_PLAYERS];
+Vector2i positions[MAX_PLAYERS];
 std::vector<Vector2i> derricks;
 
 void scriptSetStartPos(int position, int x, int y)
@@ -5341,7 +5341,7 @@ bool scrAddTemplate(void)
 // -----------------------------------------------------------------------------------------
 
 // additional structure check
-static bool structDoubleCheck(BASE_STATS *psStat,UDWORD xx,UDWORD yy, SDWORD maxBlockingTiles)
+bool structDoubleCheck(BASE_STATS *psStat,UDWORD xx,UDWORD yy, SDWORD maxBlockingTiles)
 {
 	UDWORD		x, y, xTL, yTL, xBR, yBR;
 	UBYTE		count = 0;
