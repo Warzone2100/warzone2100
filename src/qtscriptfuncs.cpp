@@ -61,6 +61,7 @@ QScriptValue convStructure(STRUCTURE *psStruct, QScriptEngine *engine)
 	QScriptValue value = convObj(psStruct, engine);
 	value.setProperty("status", (int)psStruct->status, QScriptValue::ReadOnly);
 	value.setProperty("type", (int)OBJ_STRUCTURE, QScriptValue::ReadOnly);
+	value.setProperty("stattype", (int)psStruct->pStructureType->type, QScriptValue::ReadOnly);
 	return value;
 }
 
@@ -312,6 +313,29 @@ static QScriptValue js_enumStruct(QScriptContext *context, QScriptEngine *engine
 	{
 		STRUCTURE *psStruct = matches.at(i);
 		result.setProperty(i, convStructure(psStruct, engine));
+	}
+	return result;
+}
+
+static QScriptValue js_enumFeature(QScriptContext *context, QScriptEngine *engine)
+{
+	QList<FEATURE *> matches;
+	int looking = context->argument(1).toInt32();
+	QString statsName = statsName = context->argument(1).toString();
+	SCRIPT_ASSERT(context, looking < MAX_PLAYERS && looking >= -1, "Looking player index out of range: %d", looking);
+	for (FEATURE *psFeat = apsFeatureLists[0]; psFeat; psFeat = psFeat->psNext)
+	{
+		if ((looking == -1 || psFeat->visible[looking])
+		    && (statsName.isEmpty() || statsName.compare(psFeat->psStats->pName) == 0))
+		{
+			matches.push_back(psFeat);
+		}
+	}
+	QScriptValue result = engine->newArray(matches.size());
+	for (int i = 0; i < matches.size(); i++)
+	{
+		FEATURE *psFeat = matches.at(i);
+		result.setProperty(i, convFeature(psFeat, engine));
 	}
 	return result;
 }
@@ -610,6 +634,29 @@ static QScriptValue js_droidCanReach(QScriptContext *context, QScriptEngine *)
 	SCRIPT_ASSERT(context, psDroid, "Droid id %d not found belonging to player %d", id, player);
 	const PROPULSION_STATS *psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
 	return QScriptValue(fpathCheck(psDroid->pos, Vector3i(world_coord(x), world_coord(y), 0), psPropStats->propulsionType));
+}
+
+// Give a Droid an order to an object
+// droid, order, object
+static QScriptValue js_orderDroidObj(QScriptContext *context, QScriptEngine *)
+{
+	QScriptValue droidVal = context->argument(0);
+	int id = droidVal.property("id").toInt32();
+	int player = droidVal.property("player").toInt32();
+	DROID *psDroid = IdToDroid(id, player);
+	SCRIPT_ASSERT(context, psDroid, "Droid id %d not found belonging to player %d", id, player);
+	DROID_ORDER order = (DROID_ORDER)context->argument(1).toInt32();
+	QScriptValue objVal = context->argument(2);
+	int oid = objVal.property("id").toInt32();
+	int oplayer = objVal.property("player").toInt32();
+	BASE_OBJECT *psObj = IdToPointer(oid, oplayer);
+	SCRIPT_ASSERT(context, psObj, "Object id %d not found belonging to player %d", oid, oplayer);
+	SCRIPT_ASSERT(context, order == DORDER_ATTACK || order == DORDER_HELPBUILD ||
+		      order == DORDER_DEMOLISH || order == DORDER_REPAIR ||
+		      order == DORDER_OBSERVE || order == DORDER_EMBARK ||
+		      order == DORDER_FIRESUPPORT || order == DORDER_DROIDREPAIR, "Invalid order");
+	orderDroidObj(psDroid, order, psObj, ModeQueue);
+	return true;
 }
 
 static QScriptValue js_orderDroidStatsLoc(QScriptContext *context, QScriptEngine *)
@@ -983,6 +1030,7 @@ bool registerFunctions(QScriptEngine *engine)
 	engine->globalObject().setProperty("enumStruct", engine->newFunction(js_enumStruct));
 	engine->globalObject().setProperty("enumDroid", engine->newFunction(js_enumDroid));
 	engine->globalObject().setProperty("enumGroup", engine->newFunction(js_enumGroup));
+	engine->globalObject().setProperty("enumFeature", engine->newFunction(js_enumFeature));
 	engine->globalObject().setProperty("distBetweenTwoPoints", engine->newFunction(js_distBetweenTwoPoints));
 	engine->globalObject().setProperty("newGroup", engine->newFunction(js_newGroup));
 	engine->globalObject().setProperty("groupAddArea", engine->newFunction(js_groupAddArea));
@@ -994,6 +1042,7 @@ bool registerFunctions(QScriptEngine *engine)
 	engine->globalObject().setProperty("pickStructLocation", engine->newFunction(js_pickStructLocation));
 	engine->globalObject().setProperty("droidCanReach", engine->newFunction(js_droidCanReach));
 	engine->globalObject().setProperty("orderDroidStatsLoc", engine->newFunction(js_orderDroidStatsLoc));
+	engine->globalObject().setProperty("orderDroidObj", engine->newFunction(js_orderDroidObj));
 
 	// Functions that operate on the current player only
 	engine->globalObject().setProperty("centreView", engine->newFunction(js_centreView));
@@ -1045,6 +1094,20 @@ bool registerFunctions(QScriptEngine *engine)
 	engine->globalObject().setProperty("BUILT", SS_BUILT, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("BEING_DEMOLISHED", SS_BEING_DEMOLISHED, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("DROID_CONSTRUCT", DROID_CONSTRUCT, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("REF_HQ", DROID_CONSTRUCT, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("REF_FACTORY", DROID_CONSTRUCT, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("REF_POWER_GEN", DROID_CONSTRUCT, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("REF_RESOURCE_EXTRACTOR", DROID_CONSTRUCT, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("REF_DEFENSE", DROID_CONSTRUCT, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("REF_WALL", DROID_CONSTRUCT, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("REF_RESEARCH", DROID_CONSTRUCT, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("REF_REPAIR_FACILITY", DROID_CONSTRUCT, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("REF_CYBORG_FACTORY", DROID_CONSTRUCT, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("REF_VTOL_FACTORY", DROID_CONSTRUCT, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("REF_REARM_PAD", DROID_CONSTRUCT, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("REF_SAT_UPLINK", DROID_CONSTRUCT, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("REF_GATE", DROID_CONSTRUCT, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("REF_COMMAND_CONTROL", DROID_CONSTRUCT, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 
 	// Static map knowledge about start positions
 	QScriptValue startPositions = engine->newArray(game.maxPlayers);
