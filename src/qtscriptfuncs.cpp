@@ -1117,7 +1117,6 @@ bool registerFunctions(QScriptEngine *engine)
 		vector.setProperty("x", map_coord(positions[i].x), QScriptValue::ReadOnly | QScriptValue::Undeletable);
 		vector.setProperty("y", map_coord(positions[i].y), QScriptValue::ReadOnly | QScriptValue::Undeletable);
 		startPositions.setProperty(i, vector, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-		qWarning("set start position of player %d to (%d, %d)", i, positions[i].x, positions[i].y);
 	}
 	QScriptValue derrickPositions = engine->newArray(derricks.size());
 	for (int i = 0; i < derricks.size(); i++)
@@ -1126,7 +1125,6 @@ bool registerFunctions(QScriptEngine *engine)
 		vector.setProperty("x", map_coord(derricks[i].x), QScriptValue::ReadOnly | QScriptValue::Undeletable);
 		vector.setProperty("y", map_coord(derricks[i].y), QScriptValue::ReadOnly | QScriptValue::Undeletable);
 		derrickPositions.setProperty(i, vector, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-		qWarning("set derrick position %d to (%d, %d)", i, derricks[i].x, derricks[i].y);
 	}
 	engine->globalObject().setProperty("startPositions", startPositions, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("derrickPositions", derrickPositions, QScriptValue::ReadOnly | QScriptValue::Undeletable);
