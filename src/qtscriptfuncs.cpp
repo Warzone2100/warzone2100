@@ -585,27 +585,6 @@ static QScriptValue js_groupAddDroid(QScriptContext *context, QScriptEngine *eng
 	return QScriptValue();
 }
 
-#if 0
-static QScriptValue js_getDerrick(QScriptContext *context, QScriptEngine *engine)
-{
-	BASE_OBJECT *psObj = NULL;
-	QScriptValue param = context->argument(0);
-	int i = param.toInt32();
-
-	if (i < (int)derricks.size())
-	{
-		const int x = derricks[i].x;
-		const int y = derricks[i].y;
-		MAPTILE *psTile = worldTile(x, y);
-		if (psTile)
-		{
-			psObj = psTile->psObject;
-		}
-	}
-	return convStructure(psObj, engine);
-}
-#endif
-
 static QScriptValue js_distBetweenTwoPoints(QScriptContext *context, QScriptEngine *engine)
 {
 	int x1 = context->argument(0).toNumber();
@@ -1022,7 +1001,6 @@ bool registerFunctions(QScriptEngine *engine)
 	engine->globalObject().setProperty("label", engine->newFunction(js_label));
 
 	// General functions -- geared for use in AI scripts
-	//engine->globalObject().setProperty("getDerrick", engine->newFunction(js_getDerrick));
 	engine->globalObject().setProperty("debug", engine->newFunction(js_debug));
 	engine->globalObject().setProperty("console", engine->newFunction(js_console));
 	engine->globalObject().setProperty("structureIdle", engine->newFunction(js_structureIdle));
