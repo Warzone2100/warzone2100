@@ -6853,8 +6853,8 @@ UBYTE checkProductionForCommand(UBYTE player)
 
 		for (unsigned factoryInc = 0; factoryInc < factoryNumFlag[player][factoryType].size(); ++factoryInc)
 		{
-			//check to see if there is a factory
-			if (factoryNumFlag[player][factoryType][factoryInc])
+			//check to see if there is a factory with a production run
+			if (factoryNumFlag[player][factoryType][factoryInc] && factoryInc < asProductionRun[factoryType].size())
 			{
 				ProductionRun &productionRun = asProductionRun[factoryType][factoryInc];
 				for (unsigned inc = 0; inc < productionRun.size(); ++inc)
