@@ -300,21 +300,6 @@ void sendStructureInfo(STRUCTURE *psStruct, STRUCTURE_INFO structureInfo_, DROID
 	NETend();
 }
 
-template<typename Functionality>
-static inline void popStatusPending(Functionality &functionality)
-{
-	if (functionality.pendingCount == 0)
-	{
-		++functionality.pendingCount;
-	}
-	if (--functionality.pendingCount == 0)
-	{
-		// Subject is now synchronised, remove pending.
-		functionality.psSubjectPending = NULL;
-		functionality.statusPending = FACTORY_NOTHING_PENDING;
-	}
-}
-
 void recvStructureInfo(NETQUEUE queue)
 {
 	uint8_t         player = 0;

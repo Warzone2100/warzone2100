@@ -497,6 +497,21 @@ static inline void setStatusPendingRelease(Functionality &functionality)
 	++functionality.pendingCount;
 }
 
+template<typename Functionality>
+static inline void popStatusPending(Functionality &functionality)
+{
+	if (functionality.pendingCount == 0)
+	{
+		++functionality.pendingCount;
+	}
+	if (--functionality.pendingCount == 0)
+	{
+		// Subject is now synchronised, remove pending.
+		functionality.psSubjectPending = NULL;
+		functionality.statusPending = FACTORY_NOTHING_PENDING;
+	}
+}
+
 void checkStructure(const STRUCTURE* psStructure, const char * const location_description, const char * function, const int recurse);
 
 #define CHECK_STRUCTURE(object) checkStructure((object), AT_MACRO, __FUNCTION__, max_check_object_recursion)

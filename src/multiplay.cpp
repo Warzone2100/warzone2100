@@ -919,7 +919,7 @@ bool recvResearchStatus(NETQUEUE queue)
 		{
 			psResFacilty = (RESEARCH_FACILITY *) psBuilding->pFunctionality;
 
-			psResFacilty->psSubjectPending = NULL;  // Research is no longer pending, as it's actually starting now.
+			popStatusPending(*psResFacilty);  // Research is no longer pending, as it's actually starting now.
 
 			if (psResFacilty->psSubject)
 			{
