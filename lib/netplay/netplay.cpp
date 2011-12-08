@@ -2593,11 +2593,12 @@ const char *messageTypeToString(unsigned messageType_)
 
 	switch (messageType)
 	{
-		// Search:  \s*([\w_]+).*
+		// Search:  ^\s*([\w_]+).*
 		// Replace: case \1:                             return "\1";
 		// Search:  (case ...............................) *(return "[\w_]+";)
 		// Replace: \t\t\1\2
 
+		// Net-related messages.
 		case NET_MIN_TYPE:                  return "NET_MIN_TYPE";
 		case NET_PING:                      return "NET_PING";
 		case NET_PLAYER_STATS:              return "NET_PLAYER_STATS";
@@ -2630,31 +2631,35 @@ const char *messageTypeToString(unsigned messageType_)
 		case NET_DEBUG_SYNC:                return "NET_DEBUG_SYNC";
 		case NET_MAX_TYPE:                  return "NET_MAX_TYPE";
 
+		// Game-state-related messages, must be processed by all clients at the same game time.
 		case GAME_MIN_TYPE:                 return "GAME_MIN_TYPE";
-		case GAME_DROID:                    return "GAME_DROID";
 		case GAME_DROIDINFO:                return "GAME_DROIDINFO";
+		case GAME_STRUCTUREINFO:            return "GAME_STRUCTUREINFO";
+		case GAME_RESEARCHSTATUS:           return "GAME_RESEARCHSTATUS";
 		case GAME_TEMPLATE:                 return "GAME_TEMPLATE";
 		case GAME_TEMPLATEDEST:             return "GAME_TEMPLATEDEST";
-		case GAME_FEATUREDEST:              return "GAME_FEATUREDEST";
-		case GAME_RESEARCH:                 return "GAME_RESEARCH";
-		case GAME_FEATURES:                 return "GAME_FEATURES";
 		case GAME_ALLIANCE:                 return "GAME_ALLIANCE";
 		case GAME_GIFT:                     return "GAME_GIFT";
 		case GAME_ARTIFACTS:                return "GAME_ARTIFACTS";
-		case GAME_RESEARCHSTATUS:           return "GAME_RESEARCHSTATUS";
-		case GAME_STRUCTUREINFO:            return "GAME_STRUCTUREINFO";
 		case GAME_LASSAT:                   return "GAME_LASSAT";
 		case GAME_GAME_TIME:                return "GAME_GAME_TIME";
 		case GAME_PLAYER_LEFT:              return "GAME_PLAYER_LEFT";
+		// The following messages (not including GAME_MAX_TYPE) are currently redundant, and should probably at some point not be
+		// sent, except (some of them) when using cheats in debug mode.
+		case GAME_DROID:                    return "GAME_DROID";
+		case GAME_BUILDFINISHED:            return "GAME_BUILDFINISHED";
+		case GAME_FEATURES:                 return "GAME_FEATURES";
 		case GAME_DROIDDEST:                return "GAME_DROIDDEST";
+		case GAME_STRUCTDEST:               return "GAME_STRUCTDEST";
+		case GAME_FEATUREDEST:              return "GAME_FEATUREDEST";
+		case GAME_RESEARCH:                 return "GAME_RESEARCH";
 		case GAME_CHECK_DROID:              return "GAME_CHECK_DROID";
 		case GAME_CHECK_STRUCT:             return "GAME_CHECK_STRUCT";
 		case GAME_CHECK_POWER:              return "GAME_CHECK_POWER";
-		case GAME_STRUCTDEST:               return "GAME_STRUCTDEST";
-		case GAME_BUILDFINISHED:            return "GAME_BUILDFINISHED";
 		case GAME_DEMOLISH:                 return "GAME_DEMOLISH";
 		case GAME_DROIDEMBARK:              return "GAME_DROIDEMBARK";
 		case GAME_DROIDDISEMBARK:           return "GAME_DROIDDISEMBARK";
+		// End of redundant messages.
 		case GAME_MAX_TYPE:                 return "GAME_MAX_TYPE";
 	}
 	return "(INVALID MESSAGE TYPE)";

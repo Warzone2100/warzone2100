@@ -60,6 +60,7 @@ enum CONNECTION_STATUS
 
 enum MESSAGE_TYPES
 {
+	// Net-related messages.
 	NET_MIN_TYPE = 33,              ///< Minimum-1 valid NET_ type, *MUST* be first.
 	NET_PING,                       ///< ping players.
 	NET_PLAYER_STATS,               ///< player stats
@@ -92,30 +93,31 @@ enum MESSAGE_TYPES
 	NET_DEBUG_SYNC,                 ///< Synch error messages, so people don't have to use pastebin.
 	NET_MAX_TYPE,                   ///< Maximum+1 valid NET_ type, *MUST* be last.
 
+	// Game-state-related messages, must be processed by all clients at the same game time.
 	GAME_MIN_TYPE = 111,            ///< Minimum-1 valid GAME_ type, *MUST* be first.
-	GAME_DROID,                     ///< a new droid
 	GAME_DROIDINFO,                 ///< update a droid order.
+	GAME_STRUCTUREINFO,             ///< Structure state.
+	GAME_RESEARCHSTATUS,            ///< research state.
 	GAME_TEMPLATE,                  ///< a new template
 	GAME_TEMPLATEDEST,              ///< remove template
-	GAME_FEATUREDEST,               ///< destroy a game feature.
-	GAME_RESEARCH,                  ///< Research has been completed.
-	GAME_FEATURES,                  ///< information regarding features.
 	GAME_ALLIANCE,                  ///< alliance data.
 	GAME_GIFT,                      ///< a luvly gift between players.
 	GAME_ARTIFACTS,                 ///< artifacts randomly placed.
-	GAME_RESEARCHSTATUS,            ///< research state.
-	GAME_STRUCTUREINFO,             ///< Structure state.
 	GAME_LASSAT,                    ///< lassat firing.
 	GAME_GAME_TIME,                 ///< Game time. Used for synchronising, so that all messages are executed at the same gameTime on all clients.
 	GAME_PLAYER_LEFT,               ///< Player has left or dropped.
 	// The following messages (not including GAME_MAX_TYPE) are currently redundant, and should probably at some point not be
 	// sent, except (some of them) when using cheats in debug mode.
+	GAME_DROID,                     ///< a new droid
+	GAME_BUILDFINISHED,             ///< a building is complete.
+	GAME_FEATURES,                  ///< information regarding features.
 	GAME_DROIDDEST,                 ///< issue a droid destruction, will be sent by all players at the same time, and have no effect, if synchronised.
+	GAME_STRUCTDEST,                ///< specify a strucutre to destroy, will be sent by all players at the same time, and have no effect, if synchronised.
+	GAME_FEATUREDEST,               ///< destroy a game feature.
+	GAME_RESEARCH,                  ///< Research has been completed.
 	GAME_CHECK_DROID,               ///< check & update bot position and damage.
 	GAME_CHECK_STRUCT,              ///< check & update struct damage.
 	GAME_CHECK_POWER,               ///< power levels for a player.
-	GAME_STRUCTDEST,                ///< specify a strucutre to destroy, will be sent by all players at the same time, and have no effect, if synchronised.
-	GAME_BUILDFINISHED,             ///< a building is complete.
 	GAME_DEMOLISH,                  ///< a demolish is complete.
 	GAME_DROIDEMBARK,               ///< droid embarked on a Transporter
 	GAME_DROIDDISEMBARK,            ///< droid disembarked from a Transporter
