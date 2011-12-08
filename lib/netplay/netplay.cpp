@@ -50,6 +50,7 @@
 #include "src/multiint.h"
 #include "src/multiplay.h"
 #include "src/warzoneconfig.h"
+#include "src/version.h"
 
 #ifdef WZ_OS_LINUX
 #include <execinfo.h>  // Nonfatal runtime backtraces.
@@ -146,15 +147,14 @@ char iptoconnect[PATH_MAX] = "\0"; // holds IP/hostname from command line
 unsigned NET_PlayerConnectionStatus[CONNECTIONSTATUS_NORMAL][MAX_PLAYERS];
 
 // ////////////////////////////////////////////////////////////////////////////
-#define VersionStringSize 80
 /************************************************************************************
- **  NOTE (!)  Change the VersionString when net code changes!!
+ **  NOTE (!)  Change the versionString when net code changes!!
  **            ie ("trunk", "2.1.3", "3.0", ...)
  ************************************************************************************
 **/
-char VersionString[VersionStringSize] = "master, netcode 5.0";
+static char const *versionString = "version_getVersionString()";
 static int NETCODE_VERSION_MAJOR = 5;
-static int NETCODE_VERSION_MINOR = 0;
+static int NETCODE_VERSION_MINOR = 1;
 
 // The Lobby Client - declared external in netplay.h
 Lobby::Client lobbyclient;
@@ -2050,9 +2050,15 @@ bool NEThostGame(const char* SessionName, const char* PlayerName,
 
 	modlist = getModList();
 
+	std::string fullVersionString = versionString;
+	if (fullVersionString == "version_getVersionString()")
+	{
+		fullVersionString = version_getVersionString();
+	}
+
 	// Register the game on the masterserver
 	if (lobbyclient.addGame(&motd, (uint32_t)gameserver_port, (uint32_t)NetPlay.maxPlayers,
-							SessionName, VersionString, NETCODE_VERSION_MAJOR, NETCODE_VERSION_MINOR,
+							SessionName, fullVersionString.c_str(), NETCODE_VERSION_MAJOR, NETCODE_VERSION_MINOR,
 							NetPlay.GamePassworded, modlist, game.map, PlayerName) != Lobby::LOBBY_NO_ERROR)
 	{
 		Lobby::LOBBY_ERROR* error = lobbyclient.getError();

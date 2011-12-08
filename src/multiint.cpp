@@ -132,7 +132,6 @@ static const unsigned gnImage[] = {IMAGE_GN_0, IMAGE_GN_1, IMAGE_GN_2, IMAGE_GN_
 // vars
 extern char	MultiCustomMapsPath[PATH_MAX];
 extern char	MultiPlayersPath[PATH_MAX];
-extern char VersionString[80];		// from netplay.c
 extern bool bSendingMap;			// used to indicate we are sending a map
 
 bool						bHosted			= false;				//we have set up a game
