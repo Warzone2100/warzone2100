@@ -2035,7 +2035,7 @@ static void NETregisterServer(int state)
 				{
 					debug(LOG_ERROR, "Cannot connect to masterserver \"%s:%d\": %s", masterserver_name, masterserver_port, strSockError(getSockErr()));
 					free(NetPlay.MOTD);
-					if (asprintf(&NetPlay.MOTD, _("Error connecting to the lobby server: %s. Make sure port %d can receive incoming connections. If you're using a router configure it to use UPnP, or to forward the port to your system."),
+					if (asprintf(&NetPlay.MOTD, _("Error connecting to the lobby server: %s.\nMake sure port %d can receive incoming connections.\nIf you're using a router configure it to use UPnP\n or to forward the port to your system."),
 					    strSockError(getSockErr()), masterserver_port) == -1)
 						NetPlay.MOTD = NULL;
 					server_not_there = true;
