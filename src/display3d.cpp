@@ -1617,7 +1617,7 @@ void displayBlueprints(void)
 				pos.coords.x = world_coord(sBuildDetails.x)+world_coord(1)/2;
 				pos.coords.y = world_coord(sBuildDetails.y)+world_coord(1)/2;
 				pos.coords.z = map_Height(pos.coords.x, pos.coords.y) + world_coord(1)/8;
-				pos.factoryType = FACTORY_FLAG;
+				pos.factoryType = REPAIR_FLAG;
 				pos.factoryInc = 0;
 				renderDeliveryPoint(&pos, true);
 			}
@@ -2486,7 +2486,7 @@ void	renderDeliveryPoint(FLAG_POSITION *psPosition, bool blueprint)
 	//quick check for invalid data
 	ASSERT_OR_RETURN(, psPosition->factoryType < NUM_FLAG_TYPES && psPosition->factoryInc < MAX_FACTORY_FLAG_IMDS, "Invalid assembly point");
 
-	if(!psPosition->selected && !blueprint)
+	if (!blueprint && !psPosition->selected)
 	{
 		temp = pAssemblyPointIMDs[psPosition->factoryType][psPosition->factoryInc]->points;
 		flattenImd(pAssemblyPointIMDs[psPosition->factoryType][psPosition->factoryInc],
@@ -2510,7 +2510,7 @@ void	renderDeliveryPoint(FLAG_POSITION *psPosition, bool blueprint)
 	pie_Draw3DShape(pAssemblyPointIMDs[psPosition->factoryType][psPosition->factoryInc], 0, 0, colour, pieFlag, pieFlagData);
 
 
-	if(!psPosition->selected && !blueprint)
+	if (!blueprint && !psPosition->selected)
 	{
 		pAssemblyPointIMDs[psPosition->factoryType][psPosition->factoryInc]->points = temp;
 	}
