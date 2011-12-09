@@ -6310,7 +6310,7 @@ bool plotStructurePreview16(char *backDropSprite, Vector2i playeridpos[])
 			ini.beginGroup(list[i]);
 			QString name = ini.value("name").toString();
 			Position pos = ini.vector3i("position");
-			playerid = ini.value("startpos").toInt();		// No conversion should be going on, this is the map makers position when player X should be.
+			playerid = ini.value("startpos", scavengerSlot()).toInt();  // No conversion should be going on, this is the map makers position when player X should be.
 
 			if (name.startsWith("A0CommandCentre"))
 			{
