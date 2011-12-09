@@ -569,6 +569,7 @@ void systemShutdown(void)
 	levShutDown();
 	widgShutDown();
 	fpathShutdown();
+	mapShutdown();
 	debug(LOG_MAIN, "shutting down everything else");
 	pal_ShutDown();		// currently unused stub
 	frameShutDown();	// close screen / SDL / resources / cursors / trig
