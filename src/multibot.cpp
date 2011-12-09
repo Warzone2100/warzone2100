@@ -557,11 +557,11 @@ DROID_ORDER_DATA infoToOrderData(QueuedDroidInfo const &info, BASE_STATS const *
 
 // ////////////////////////////////////////////////////////////////////////////
 // Droid update information
-bool sendDroidInfo(DROID *psDroid, DROID_ORDER order, uint32_t x, uint32_t y, const BASE_OBJECT *psObj, const BASE_STATS *psStats, uint32_t x2, uint32_t y2, uint16_t direction, bool add)
+void sendDroidInfo(DROID *psDroid, DROID_ORDER order, uint32_t x, uint32_t y, const BASE_OBJECT *psObj, const BASE_STATS *psStats, uint32_t x2, uint32_t y2, uint16_t direction, bool add)
 {
 	if (!myResponsibility(psDroid->player))
 	{
-		return true;
+		return;
 	}
 
 	QueuedDroidInfo info;
@@ -585,6 +585,10 @@ bool sendDroidInfo(DROID *psDroid, DROID_ORDER order, uint32_t x, uint32_t y, co
 	{
 		info.structRef = psStats->ref;
 		info.direction = direction;
+		if (!isConstructionDroid(psDroid))
+		{
+			return;  // No point ordering things to build if they can't build anything.
+		}
 	}
 	if (order == DORDER_LINEBUILD)
 	{
@@ -604,8 +608,6 @@ bool sendDroidInfo(DROID *psDroid, DROID_ORDER order, uint32_t x, uint32_t y, co
 		psDroid->listPendingBegin = psDroid->asOrderList.size();
 	}
 	orderDroidAddPending(psDroid, &sOrder);
-
-	return true;
 }
 
 // ////////////////////////////////////////////////////////////////////////////
