@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
 "POT-Creation-Date: 2011-12-03 18:54+0100\n"
-"PO-Revision-Date: 2011-10-02 17:21+0100\n"
+"PO-Revision-Date: 2011-12-10 18:21+0100\n"
 "Last-Translator: Steven 'Kreuvf' Koenig <translations@kreuvf.de>\n"
 "Language-Team: Deutsch <warzone-dev@gna.org>\n"
 "Language: \n"
@@ -12047,11 +12047,11 @@ msgstr "Systemsprache"
 
 #: lib/ivis_opengl/screen.cpp:152
 msgid "OpenGL 2.0 is not supported by your system. Some things may look wrong. Please upgrade your graphics driver/hardware, if possible."
-msgstr ""
+msgstr "OpenGL 2.0 wird von Ihrem System nicht unterstützt. Manche Dinge könnten falsch aussehen. Bitte aktualisieren Sie, falls möglich, Grafiktreiber oder -hardware."
 
 #: lib/ivis_opengl/screen.cpp:156
 msgid "OpenGL 1.4 is not supported by your system. The game requires this. Please upgrade your graphics drivers/hardware, if possible."
-msgstr ""
+msgstr "OpenGL 1.4 wird von Ihrem System nicht unterstützt. Das Spiel erfordert dies. Bitte aktualisieren Sie, falls möglich, Grafiktreiber oder -hardware."
 
 #: lib/netplay/netlobby.cpp:102
 msgid "Received invalid addGame data."
@@ -12093,7 +12093,7 @@ msgstr "Spiel ist nicht in der Lobby, bitte zuerst einloggen!"
 #: lib/netplay/netplay.cpp:2066
 #, c-format
 msgid "Error connecting to the lobby server: %s. Make sure port %d can receive incoming connections. If you're using a router configure it to use UPnP, or to forward the port to your system."
-msgstr "Fehler beim Verbinden zum Lobby-Server: %s. Stellen Sie sicher, dass Port %d eingehende Verbindungen empfangen kann. Wenn Sie einen Router benutzen, konfigurieren Sie diesen zur Nutzung von UPnP oder leiten Sie den Port zu Ihrem System weiter."
+msgstr "Fehler beim Verbinden zum Lobbyserver: %s. Stellen Sie sicher, dass Port %d eingehende Verbindungen empfangen kann. Wenn Sie einen Router benutzen, konfigurieren Sie diesen zur Nutzung von UPnP oder leiten Sie den Port zu Ihrem System weiter."
 
 #: po/custom/mac-infoplist.txt:1
 msgid ""
@@ -12295,11 +12295,11 @@ msgstr "Direkt zum Spielleiterschirm"
 
 #: src/clparse.cpp:266
 msgid "Enable texture compression"
-msgstr ""
+msgstr "Aktiviere Texturkompression"
 
 #: src/clparse.cpp:267
 msgid "Disable texture compression"
-msgstr ""
+msgstr "Deaktiviere Texturkompression"
 
 #: src/configuration.cpp:89
 msgid "My Game"
