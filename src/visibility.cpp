@@ -52,11 +52,8 @@
 #define GRAD_MUL	10000
 
 // rate to change visibility level
-static const float VIS_LEVEL_INC = 255 * 2;
-static const float VIS_LEVEL_DEC = 50;
-
-// fractional accumulator of how much to change visibility this frame
-static float			visLevelIncAcc, visLevelDecAcc;
+static const int VIS_LEVEL_INC = 255 * 2;
+static const int VIS_LEVEL_DEC = 50;
 
 // integer amount to change visiblility this turn
 static SDWORD			visLevelInc, visLevelDec;
@@ -73,8 +70,6 @@ static Vector2i *gWall = NULL;
 // initialise the visibility stuff
 bool visInitialise(void)
 {
-	visLevelIncAcc = 0;
-	visLevelDecAcc = 0;
 	visLevelInc = 0;
 	visLevelDec = 0;
 
@@ -84,12 +79,8 @@ bool visInitialise(void)
 // update the visibility change levels
 void visUpdateLevel(void)
 {
-	visLevelIncAcc += gameTimeAdjustedIncrement(VIS_LEVEL_INC);
-	visLevelInc = visLevelIncAcc;
-	visLevelIncAcc -= visLevelInc;
-	visLevelDecAcc += gameTimeAdjustedIncrement(VIS_LEVEL_DEC);
-	visLevelDec = visLevelDecAcc;
-	visLevelDecAcc -= visLevelDec;
+	visLevelInc = gameTimeAdjustedAverage(VIS_LEVEL_INC);
+	visLevelDec = gameTimeAdjustedAverage(VIS_LEVEL_DEC);
 }
 
 static inline void updateTileVis(MAPTILE *psTile)
