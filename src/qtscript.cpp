@@ -33,7 +33,6 @@
 #include <QtCore/QList>
 #include <QtCore/QString>
 #include <QtCore/QStringList>
-#include <QtCore/QSettings>
 
 #include "lib/framework/wzapp.h"
 #include "lib/framework/file.h"
@@ -383,10 +382,10 @@ bool loadGlobalScript(QString path)
 
 bool saveScriptStates(const char *filename)
 {
-	QSettings ini(QString("wz::") + filename, QSettings::IniFormat);
+	WzConfig ini(filename);
 	if (!ini.isWritable())
 	{
-		debug(LOG_ERROR, "Savegame file not writable");
+		debug(LOG_ERROR, "Savegame file not writable: %s", filename);
 		return false;
 	}
 	for (int i = 0; i < scripts.size(); ++i)
@@ -439,7 +438,7 @@ static QScriptEngine *findEngineForPlayer(int match)
 
 bool loadScriptStates(const char *filename)
 {
-	QSettings ini(QString("wz::") + filename, QSettings::IniFormat);
+	WzConfig ini(filename);
 	QStringList list = ini.childGroups();
 	debug(LOG_SAVE, "Loading script states for %d script contexts", scripts.size());
 	for (int i = 0; i < list.size(); ++i)
