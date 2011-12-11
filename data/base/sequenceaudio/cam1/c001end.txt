@@ -1,7 +1,7 @@
-20	20	0	60	_("Incoming Transmission")
+20	20	0.0	2.4	_("Incoming Transmission")
 
-20	20	70	250	_("Transmission from Beta Base")
-20	452	70	250	_("Mayday! Mayday!")
-0	0	70	250	_("Please assist!...")
+20	20	2.8	10.0	_("Transmission from Beta Base")
+20	452	2.8	10.0	_("Mayday! Mayday!")
+0	0	2.8	10.0	_("Please assist!...")
 
-20	20	730	844	_("Commander you are to assist Team Beta")
+20	20	29.2	33.76	_("Commander you are to assist Team Beta")

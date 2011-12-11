@@ -1,16 +1,16 @@
 //pos		frame	
 //x	y		start	end	Text	
 
-20	432		65	190	_("The Synaptic Link was developed by the Reed Corporation in conjunction with the US Military.")
+20	432	2.6	7.6	_("The Synaptic Link was developed by the Reed Corporation in conjunction with the US Military.")
 
-20	432		200	550	_("The synaptic link allows for almost instantaneous transfer of thought from human operators to vehicle control and guidance systems. The synaptic link is fitted into the base of the skull circling the spinal column.")
+20	432	8.0	22.0	_("The synaptic link allows for almost instantaneous transfer of thought from human operators to vehicle control and guidance systems. The synaptic link is fitted into the base of the skull circling the spinal column.")
 
-20	432		625	750	_("The link has a hi-speed data transfer port that plugs into any computer system.")
+20	432	25.0	30.0	_("The link has a hi-speed data transfer port that plugs into any computer system.")
 
-20	432		925	1200	_("More importantly the development of the synaptic link made the creation of cyborgs possible. Early attempts at power suits for individual soldiers failed as they proved to be slow and unresponsive.")
+20	432	37.0	48.0	_("More importantly the development of the synaptic link made the creation of cyborgs possible. Early attempts at power suits for individual soldiers failed as they proved to be slow and unresponsive.")
 
-20	432		1350	1700	_("The synaptic link allowed soldiers to be placed in power suits that they controlled as easily as their own bodies. Power suits allowed infantry to function effectively on the battlefields of the 21st Century.")
+20	432	54.0	68.0	_("The synaptic link allowed soldiers to be placed in power suits that they controlled as easily as their own bodies. Power suits allowed infantry to function effectively on the battlefields of the 21st Century.")
 
-20	432		1715	1925	_("Unfortunately, this technology has fallen into the hands of the New Paradigm. It is imperative that you research and develop synaptic link technologies.")
+20	432	68.6	77.0	_("Unfortunately, this technology has fallen into the hands of the New Paradigm. It is imperative that you research and develop synaptic link technologies.")
 
 

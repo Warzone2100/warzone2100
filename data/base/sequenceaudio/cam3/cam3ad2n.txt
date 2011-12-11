@@ -1,9 +1,9 @@
-20	432	75	165	_("Not long to go now, Commander. There's no where else for you to run to.")
+20	432	3.0	6.6	_("Not long to go now, Commander. There's no where else for you to run to.")
 
 
-20	432	210	325	_("However, if you vacate this facility, then I shall let you go free, as you are no longer a threat to me.")
+20	432	8.4	13.0	_("However, if you vacate this facility, then I shall let you go free, as you are no longer a threat to me.")
 
-20	432	350	425	_("You have five minutes to comply or else it's frying time!")
+20	432	14.0	17.0	_("You have five minutes to comply or else it's frying time!")
 
 
 

@@ -1,4 +1,4 @@
-20	432	10	100	_("We've got to make sure that it can't do it again.")
+20	432	0.4	4.0	_("We've got to make sure that it can't do it again.")
 
 
 

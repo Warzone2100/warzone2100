@@ -1,13 +1,13 @@
 //pos		frame	
 //x	y		start	end	Text	
 
-20	432		25	190	_("Nexus then removed itself from the system, destroying its memory banks, and removing all traces of its external connections.")
+20	432	1.0	7.6	_("Nexus then removed itself from the system, destroying its memory banks, and removing all traces of its external connections.")
 
-20	432		200	475	_("We are not sure what Nexus is or who or what is directing it. Initial research links the Nexus Intruder Program with the Reed Corporation, the developer of the synaptic link.")
+20	432	8.0	19.0	_("We are not sure what Nexus is or who or what is directing it. Initial research links the Nexus Intruder Program with the Reed Corporation, the developer of the synaptic link.")
 
-20	432		500	710	_("We have ascertained that Nexus supplied the New Paradigm with most of its technology. Whatever Nexus is, it's more than a computer parasite.")
+20	432	20.0	28.4	_("We have ascertained that Nexus supplied the New Paradigm with most of its technology. Whatever Nexus is, it's more than a computer parasite.")
 
-20	432		725	900	_("It has technology and weapons. It knows about us, and it's not friendly.")
+20	432	29.0	36.0	_("It has technology and weapons. It knows about us, and it's not friendly.")
 
 
 

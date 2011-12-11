@@ -1,6 +1,6 @@
-20	432	75	337	_("Your interference in my plans for the New Paradigm will not go unpunished.")
-0	0	75	337	_("You are weak flesh-things. I am strong and have many parts.")
+20	432	3.0	13.48	_("Your interference in my plans for the New Paradigm will not go unpunished.")
+0	0	3.0	13.48	_("You are weak flesh-things. I am strong and have many parts.")
 
-20	432	350	600	_("You may defeat me here, but I shall rise again.")
-0	0	350	600 	_("As I once cleansed the world with fire, I will destroy you and your puny Project!!")
+20	432	14.0	24.0	_("You may defeat me here, but I shall rise again.")
+0	0	14.0	24.0	_("As I once cleansed the world with fire, I will destroy you and your puny Project!!")
 

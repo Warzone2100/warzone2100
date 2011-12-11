@@ -1,8 +1,8 @@
 //pos		frame	
 //x	y		start	end	Text	
 
-20	432		150	375	_("You have done well.")
-0	0		150	375	_("Once we have analyzed and authenticated the technology, your reward  will follow.")
+20	432	6.0	15.0	_("You have done well.")
+0	0	6.0	15.0	_("Once we have analyzed and authenticated the technology, your reward  will follow.")
 
 
 

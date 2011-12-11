@@ -1,9 +1,9 @@
 //pos		frame	
 //x	y		start	end	Text	
 
-20	432		200	370	_("All attack groups commence attack on enemy.")
-0	0		200	370	_("They are in contravention of the New Paradigm.")
+20	432	8.0	14.8	_("All attack groups commence attack on enemy.")
+0	0	8.0	14.8	_("They are in contravention of the New Paradigm.")
 
-20	432		385	450	_("They must be eradicated.")
+20	432	15.4	18.0	_("They must be eradicated.")
 
 

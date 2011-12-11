@@ -1,4 +1,4 @@
-20	432	140	210	_("Time's up commander!!")
+20	432	5.6	8.4	_("Time's up commander!!")
 
 
 

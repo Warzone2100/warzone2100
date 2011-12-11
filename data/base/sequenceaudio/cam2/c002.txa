@@ -1,18 +1,18 @@
-270	400	0	100	_("CAMPAIGN TWO")
-265	420	0	100	_("EASTERN SECTOR")
+270	400	0.0	8.33333333333	_("CAMPAIGN TWO")
+265	420	0.0	8.33333333333	_("EASTERN SECTOR")
 
-20	20	105	285	_("Morning, September 1st, 2100")
-0	0	105	285	_("In-flight to Eastern Sector")
-0	0	105	285	_("Team Alpha approaches Beta Base")
+20	20	8.75	23.75	_("Morning, September 1st, 2100")
+0	0	8.75	23.75	_("In-flight to Eastern Sector")
+0	0	8.75	23.75	_("Team Alpha approaches Beta Base")
 
-20	20	320	912	_("BETA BASE MISSION: Eastern Sector")
-20	447	320	912	_("Upon arrival you are to assume command of the base.")
-0	0	320	912	_("You must defend and hold it at all costs.")
+20	20	26.6666666667	76.0	_("BETA BASE MISSION: Eastern Sector")
+20	447	26.6666666667	76.0	_("Upon arrival you are to assume command of the base.")
+0	0	26.6666666667	76.0	_("You must defend and hold it at all costs.")
 
-270	465	925	1125	_("THE COLLECTIVE")
+270	465	77.0833333333	93.75	_("THE COLLECTIVE")
 
-20	20	1730	1770	_("BETA BASE MISSION: Eastern Sector")
+20	20	144.166666667	147.5	_("BETA BASE MISSION: Eastern Sector")
 
-20	20	1800	2127	_("BETA BASE MISSION: Defend and Fortify")
-20	447	1800	2127	_("Be sure to fortify the perimeter and establish anti-aircraft defenses.")
-0	0	1800	2127	_("New technologies are available.")
+20	20	150.0	177.25	_("BETA BASE MISSION: Defend and Fortify")
+20	447	150.0	177.25	_("Be sure to fortify the perimeter and establish anti-aircraft defenses.")
+0	0	150.0	177.25	_("New technologies are available.")

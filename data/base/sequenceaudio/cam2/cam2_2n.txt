@@ -1,5 +1,5 @@
-20	432	225	425	_("Warriors of the Collective, I seek the location of NASDA Central.")
-0	0	225	425	_("It lies somewhere in your territory.")
+20	432	9.0	17.0	_("Warriors of the Collective, I seek the location of NASDA Central.")
+0	0	9.0	17.0	_("It lies somewhere in your territory.")
 
-20	432	450	635	_("Find it for me and I shall provide you with further weapons to aid you in your war against the Project.")
+20	432	18.0	25.4	_("Find it for me and I shall provide you with further weapons to aid you in your war against the Project.")
 

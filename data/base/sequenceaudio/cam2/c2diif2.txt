@@ -1,6 +1,6 @@
-20	432	40	200	_("Commander, a new launch has been detected.")
-0	0	40	200	_("It is likely to be targeted at your location.")
+20	432	1.6	8.0	_("Commander, a new launch has been detected.")
+0	0	1.6	8.0	_("It is likely to be targeted at your location.")
 
-20	432	220	385	_("You are to start the immediate evacuation of Beta Base to the safe haven.")
+20	432	8.8	15.4	_("You are to start the immediate evacuation of Beta Base to the safe haven.")
 
 

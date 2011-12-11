@@ -1,14 +1,14 @@
-20	432	75	220	_("Commander, you're proving to be more resilient than I thought.")
-0	0	75	220	_("Such a pity that you refused to join me earlier.")
+20	432	3.0	8.8	_("Commander, you're proving to be more resilient than I thought.")
+0	0	3.0	8.8	_("Such a pity that you refused to join me earlier.")
 
-20	432	225	300	_("But no matter, as you'll not be here much longer.")
+20	432	9.0	12.0	_("But no matter, as you'll not be here much longer.")
 
-20	432	325	425	_("After much searching and reprogramming, I've finally got all my systems back on-line.")
+20	432	13.0	17.0	_("After much searching and reprogramming, I've finally got all my systems back on-line.")
 
-20	432	450	700	_("Once I destroyed the world with nuclear fire to clear the way for my cybernetic future.")
-0	0	450	700	_("I now intend to further shape the world into my own image, by  surgically removing unwanted growths like yourself.")
+20	432	18.0	28.0	_("Once I destroyed the world with nuclear fire to clear the way for my cybernetic future.")
+0	0	18.0	28.0	_("I now intend to further shape the world into my own image, by  surgically removing unwanted growths like yourself.")
 
-20	432	725	850	_("My Laser Satellites are now powering up. I intend to test them on you first, Commander!")
+20	432	29.0	34.0	_("My Laser Satellites are now powering up. I intend to test them on you first, Commander!")
 
 
 

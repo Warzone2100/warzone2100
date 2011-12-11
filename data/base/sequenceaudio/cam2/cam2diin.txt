@@ -1,8 +1,8 @@
-20	432	240	380	_("Warriors of the Collective. You have performed well.")
-0	0	240	380	_("Your just reward is on its way.")
+20	432	9.6	15.2	_("Warriors of the Collective. You have performed well.")
+0	0	9.6	15.2	_("Your just reward is on its way.")
 
-20	432	390	525	_("The Project is fleeing its base and stealing your technology.")
-0	0	390	525	_("You must stop them!")
+20	432	15.6	21.0	_("The Project is fleeing its base and stealing your technology.")
+0	0	15.6	21.0	_("You must stop them!")
 
 
 

@@ -1,8 +1,8 @@
-20	432	25	290	_("Warriors of The Collective, more intruders are entering our territory.")
-0	0	25	290	_("They are not part of the machine.") 
+20	432	2.08333333333	24.1666666667	_("Warriors of The Collective, more intruders are entering our territory.")
+0	0	2.08333333333	24.1666666667	_("They are not part of the machine.") 
 
-20	432	300	625	_("Warriors of The Collective, attack and destroy kill all who resist the machine.")
-0	0	300	625	_("Attack! Erase their presence from this area!")
+20	432	25.0	52.0833333333	_("Warriors of The Collective, attack and destroy kill all who resist the machine.")
+0	0	25.0	52.0833333333	_("Attack! Erase their presence from this area!")
 
 
 

@@ -1,6 +1,6 @@
-20	432	20	150	_("Commander, we are under attack by NEXUS cyborgs and tanks. Please help as we....")
+20	432	0.8	6.0	_("Commander, we are under attack by NEXUS cyborgs and tanks. Please help as we....")
 
-20	432	225	360	_("...cannot hold out much longer.  Repeat, please help, we cannot hold out much longer....")
+20	432	9.0	14.4	_("...cannot hold out much longer.  Repeat, please help, we cannot hold out much longer....")
 
 
 

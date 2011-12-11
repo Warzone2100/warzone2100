@@ -1,9 +1,9 @@
-20	432	20	200	_("Analysis indicates that these systems were part of the control system for the NASDA satellites.")
-0	0	20	200	_("It's now certain that Nexus was responsible for The Collapse.")
+20	432	1.66666666667	16.6666666667	_("Analysis indicates that these systems were part of the control system for the NASDA satellites.")
+0	0	1.66666666667	16.6666666667	_("It's now certain that Nexus was responsible for The Collapse.")
 
-20	432	220	500	_("During the early stages of the Collapse, NASDA technicians switched off  the infected systems in order to isolate the spread of Nexus. This seems to have prevented the LasSats from firing during the counterstrikes.")
+20	432	18.3333333333	41.6666666667	_("During the early stages of the Collapse, NASDA technicians switched off  the infected systems in order to isolate the spread of Nexus. This seems to have prevented the LasSats from firing during the counterstrikes.")
 
-20	432	520	825	_("The ensuing nuclear-magnetic pulses wiped clean large amounts of NASDA's memory banks, shattering its core processor, and sent shockwaves blasting through Nexus.")
+20	432	43.3333333333	68.75	_("The ensuing nuclear-magnetic pulses wiped clean large amounts of NASDA's memory banks, shattering its core processor, and sent shockwaves blasting through Nexus.")
 
-20	432	875	1000	_("Nexus was fried as whole sections of its consciousness were obliterated in the counterstrikes.")
+20	432	72.9166666667	83.3333333333	_("Nexus was fried as whole sections of its consciousness were obliterated in the counterstrikes.")
 

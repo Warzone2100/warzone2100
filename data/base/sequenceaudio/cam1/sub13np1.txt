@@ -1,12 +1,12 @@
 //pos		frame	
 //x	y		start	end	Text	
 
-20	432		200	275	_("Warning!")
-0	0		200	275	_("You are entering a restricted area.")
+20	432	8.0	11.0	_("Warning!")
+0	0	8.0	11.0	_("You are entering a restricted area.")
 
-20	432		300	550	_("Return to your designated zone or be destroyed.")
-0	0		300	550	_("Repeat. Return to your designated zone or be destroyed.")
-0	0		300	550	_("Message Ends.")
+20	432	12.0	22.0	_("Return to your designated zone or be destroyed.")
+0	0	12.0	22.0	_("Repeat. Return to your designated zone or be destroyed.")
+0	0	12.0	22.0	_("Message Ends.")
 
 
 

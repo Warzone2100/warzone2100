@@ -1,7 +1,7 @@
 //pos		frame	
 //x	y		start	end	Text	
 
-20	432		210	380	_("NEXUS, the synaptic technology you required has been recovered and sent for collection.")
+20	432	8.4	15.2	_("NEXUS, the synaptic technology you required has been recovered and sent for collection.")
 
 
 

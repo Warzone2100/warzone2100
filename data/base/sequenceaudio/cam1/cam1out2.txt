@@ -1,10 +1,10 @@
-20	432	150	325	_("Open your systems to me.")
-0	0	150	325	_("Let me meld with your machines and cyborgs.")
+20	432	6.0	13.0	_("Open your systems to me.")
+0	0	6.0	13.0	_("Let me meld with your machines and cyborgs.")
 
-20	432	330	550	_("We will create the perfect nexus of man and machine.")
-0	0	330	550 	_("Together we can create a new world.")
+20	432	13.2	22.0	_("We will create the perfect nexus of man and machine.")
+0	0	13.2	22.0	_("Together we can create a new world.")
 
-20	432	575	675	_("I can give you power beyond your wildest dreams.")
+20	432	23.0	27.0	_("I can give you power beyond your wildest dreams.")
 
-20	432	700	925	_("Open your systems to me and you will be strong.")
-0	0	700	925	_("I can raise you as gods upon the blasted earth.")
+20	432	28.0	37.0	_("Open your systems to me and you will be strong.")
+0	0	28.0	37.0	_("I can raise you as gods upon the blasted earth.")
