@@ -202,8 +202,6 @@ bool multiPlayerLoop(void)
 	UDWORD		i;
 	UBYTE		joinCount;
 
-	sendCheck();						// send some checking info if possible
-
 		joinCount =0;
 		for(i=0;i<MAX_PLAYERS;i++)
 		{
