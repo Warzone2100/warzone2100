@@ -148,7 +148,6 @@ enum KEY_CODE
 
 /** Tell the input system that we have lost the focus. */
 extern void inputLoseFocus(void);
-#define inputLooseFocus inputLoseFocus  // TODO Fix horrible spelling.
 
 /** Converts the key code into an ascii string. */
 extern void keyScanToString(KEY_CODE code, char *ascii, UDWORD maxStringSize);

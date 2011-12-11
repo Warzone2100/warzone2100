@@ -25,8 +25,10 @@
 #ifndef _parse_h
 #define _parse_h
 
-#include "lib/framework/wzapp.h"
+#include "lib/framework/frame.h"
 #include <physfs.h>
+
+class WzConfig;
 
 #include "interpreter.h"
 

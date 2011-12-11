@@ -28,7 +28,6 @@
 #include <QtCore/QThread>
 #include <QtCore/QMutex>
 #include <QtCore/QSemaphore>
-#include <QtCore/QSettings>
 #include <physfs.h>
 
 #include "lib/qtgame/qtgame.h"
@@ -39,32 +38,6 @@
 #include "lib/framework/cursors.h"
 #include "lib/ivis_opengl/textdraw.h"
 #include "input.h"
-
-// QSettings is totally the wrong class to use for this, but it is so shiny!
-// The amount of hacks needed are escalating. So clearly Something Needs To Be Done.
-class WzConfigHack
-{
-public:
-	WzConfigHack(const QString &fileName)
-	{
-		if (PHYSFS_exists(fileName.toUtf8().constData())) return;
-		PHYSFS_file *fileHandle = PHYSFS_openWrite(fileName.toUtf8().constData());
-		if (!fileHandle) debug(LOG_ERROR, "%s could not be created: %s", fileName.toUtf8().constData(), PHYSFS_getLastError());
-		PHYSFS_close(fileHandle);
-	}
-};
-
-class WzConfig : private WzConfigHack, public QSettings
-{
-public:
-	WzConfig(const QString &name, QObject *parent = 0) : WzConfigHack(name), QSettings(QString("wz::") + name, QSettings::IniFormat, parent) {}
-	Vector3f vector3f(const QString &name);
-	void setVector3f(const QString &name, const Vector3f &v);
-	Vector3i vector3i(const QString &name);
-	void setVector3i(const QString &name, const Vector3i &v);
-	Vector2i vector2i(const QString &name);
-	void setVector2i(const QString &name, const Vector2i &v);
-};
 
 class WzMainWindow : public QtGameWidget
 {

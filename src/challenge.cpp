@@ -32,7 +32,10 @@
 #include <sys/types.h>
 #endif
 
-#include "lib/framework/wzapp.h"
+#include <QtCore/QTime>
+#include "lib/framework/frame.h"
+#include "lib/framework/input.h"
+#include "lib/framework/wzconfig.h"
 #include "lib/netplay/netplay.h"
 #include "lib/ivis_opengl/bitimage.h"
 #include "lib/ivis_opengl/pieblitfunc.h"
@@ -334,7 +337,7 @@ bool closeChallenges()
 	widgDelete(psRequestScreen, CHALLENGE_FORM);
 	widgReleaseScreen(psRequestScreen);
 	// need to "eat" up the return key so it don't pass back to game.
-	inputLooseFocus();
+	inputLoseFocus();
 	challengesUp = false;
 	return true;
 }

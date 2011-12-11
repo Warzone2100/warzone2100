@@ -26,6 +26,7 @@
 #include <string.h>
 
 #include "lib/framework/wzapp.h"
+#include "lib/framework/wzconfig.h"
 #include "lib/framework/endian_hack.h"
 #include "lib/framework/strres.h"
 #include "objects.h"

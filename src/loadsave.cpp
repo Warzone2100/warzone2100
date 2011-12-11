@@ -349,7 +349,7 @@ bool closeLoadSave(void)
 	}
 	widgReleaseScreen(psRequestScreen);
 	// need to "eat" up the return key so it don't pass back to game.
-	inputLooseFocus();
+	inputLoseFocus();
 	return true;
 }
 

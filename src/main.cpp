@@ -995,7 +995,7 @@ void mainLoop(void)
 	if (keyPressed(KEY_F10))
 	{
 		kf_ScreenDump();
-		inputLooseFocus();		// remove it from input stream
+		inputLoseFocus();		// remove it from input stream
 	}
 
 	if (NetPlay.bComms || focusState == FOCUS_IN || !war_GetPauseOnFocusLoss())

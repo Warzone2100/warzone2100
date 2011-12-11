@@ -27,6 +27,7 @@
 
 #include "lib/framework/frame.h"		// LEAVE THIS ALONE, it *must* be first for compiler specific fixes.
 #include "lib/framework/wzapp.h"
+#include "lib/framework/wzconfig.h"
 
 #include <time.h>
 
@@ -3606,7 +3607,7 @@ void runMultiOptions(void)
 			{
 				return;
 			}
-			inputLooseFocus();	// remove the mousepress from the input stream.
+			inputLoseFocus();	// remove the mousepress from the input stream.
 			hideTime = 0;
 		}
 
