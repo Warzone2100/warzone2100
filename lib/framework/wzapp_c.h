@@ -41,6 +41,7 @@ void wzFatalDialog(const char *text);	///< Throw up a modal warning dialog
 
 // Thread related
 WZ_THREAD *wzThreadCreate(int (*threadFunc)(void *), void *data);
+#define wzThreadJoinResult(x, y) do { *(y) = wzThreadJoin(x); } while (0)
 int wzThreadJoin(WZ_THREAD *thread);
 void wzThreadStart(WZ_THREAD *thread);
 bool wzIsThreadDone(WZ_THREAD *thread);

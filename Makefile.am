@@ -1,3 +1,9 @@
+if BACKEND_QT
+backend_subdir=lib/qtgame
+else
+backend_subdir=lib/sdl
+endif
+
 SUBDIRS = \
 	  win32 \
 	  3rdparty/miniupnpc \
@@ -10,7 +16,7 @@ SUBDIRS = \
 	  lib/sound \
 	  lib/netplay \
 	  lib/widget \
-	  lib/qtgame \
+	  $(backend_subdir) \
 	  tools/map \
 	  src \
 	  data \
