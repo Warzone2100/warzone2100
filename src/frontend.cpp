@@ -24,7 +24,7 @@
  * Alex Lee. Pumpkin Studios. Eidos PLC 98,
  */
 
-#include "lib/framework/wzapp.h"
+#include "lib/framework/wzapp_c.h"
 
 #if defined(WZ_OS_WIN)
 #  include <shellapi.h> /* For ShellExecute  */
@@ -798,7 +798,7 @@ static bool startVideoOptionsMenu(void)
 
 bool runVideoOptionsMenu(void)
 {
-	QList<QSize> modes = WzMainWindow::instance()->availableResolutions();
+	QList<QSize> modes = wzAvailableResolutions();
 	UDWORD id = widgRunScreen(psWScreen);
 	int level;
 
@@ -934,8 +934,8 @@ bool runVideoOptionsMenu(void)
 		case FRONTEND_VSYNC:
 		case FRONTEND_VSYNC_R:
 		{
-			WzMainWindow::instance()->setSwapInterval(!war_GetVsync());
-			war_SetVsync(WzMainWindow::instance()->swapInterval() > 0);
+			wzSetSwapInterval(!war_GetVsync());
+			war_SetVsync(wzGetSwapInterval());
 			if (war_GetVsync())
 			{
 				widgSetString(psWScreen, FRONTEND_VSYNC_R, _("On"));

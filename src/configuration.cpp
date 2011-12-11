@@ -24,12 +24,13 @@
  */
 
 #include <QtCore/QSettings>
-#include "lib/framework/wzapp.h"
+#include "lib/framework/wzapp_c.h"
 #include "lib/framework/wzconfig.h"
 #include "lib/framework/input.h"
 #include "lib/netplay/netplay.h"
 #include "lib/sound/mixer.h"
 #include "lib/ivis_opengl/screen.h"
+#include "lib/framework/opengl.h"
 
 #include "advvis.h"
 #include "ai.h"

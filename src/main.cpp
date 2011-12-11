@@ -22,7 +22,7 @@
  */
 
 // Get platform defines before checking for them!
-#include "lib/framework/wzapp.h"
+#include "lib/framework/wzapp_c.h"
 #include <QtCore/QTextCodec>
 #include <QtGui/QApplication>
 #include <QtGui/QMessageBox>
@@ -1067,7 +1067,7 @@ bool getUTF8CmdLine(int* const utfargc, const char*** const utfargv) // explicit
 
 int main(int argc, char *argv[])
 {
-	QApplication app(argc, argv);
+	wzMain(argc, argv);
 	int utfargc = argc;
 	const char** utfargv = (const char**)argv;
 
@@ -1255,55 +1255,12 @@ int main(int argc, char *argv[])
 		}
 	}
 
-	debug(LOG_MAIN, "Qt initialization");
-	QGL::setPreferredPaintEngine(QPaintEngine::OpenGL); // Workaround for incorrect text rendering on nany platforms.
-
-	// Setting up OpenGL
-	QGLFormat format;
-	format.setDoubleBuffer(true);
-	format.setAlpha(true);
-	int w = pie_GetVideoBufferWidth();
-	int h = pie_GetVideoBufferHeight();
-
-	if (war_getFSAA())
+	if (!wzMain2())
 	{
-		format.setSampleBuffers(true);
-		format.setSamples(war_getFSAA());
-	}
-	WzMainWindow mainwindow(QSize(w, h), format);
-	mainwindow.setMinimumResolution(QSize(800, 600));
-	if (!mainwindow.context()->isValid())
-	{
-		QMessageBox::critical(NULL, "Oops!", "Warzone2100 failed to create an OpenGL context. This probably means that your graphics drivers are out of date. Try updating them!");
 		return EXIT_FAILURE;
 	}
-
-	screenWidth = w;
-	screenHeight = h;
-	if (war_getFullscreen())
-	{
-		mainwindow.resize(w,h);
-		mainwindow.showFullScreen();
-		if(w>mainwindow.width()) {
-			w = mainwindow.width();
-		}
-		if(h>mainwindow.height()) {
-			h = mainwindow.height();
-		}
-		pie_SetVideoBufferWidth(w);
-		pie_SetVideoBufferHeight(h);
-	}
-	else
-	{
-		mainwindow.show();
-		mainwindow.setMinimumSize(w, h);
-		mainwindow.setMaximumSize(w, h);
-	}
-
-	mainwindow.setSwapInterval(war_GetVsync());
-	war_SetVsync(mainwindow.swapInterval() > 0);
-
-	mainwindow.setReadyToPaint();
+	int w = pie_GetVideoBufferWidth();
+	int h = pie_GetVideoBufferHeight();
 
 	char buf[256];
 	ssprintf(buf, "Video Mode %d x %d (%s)", w, h, war_getFullscreen() ? "fullscreen" : "window");
@@ -1369,8 +1326,7 @@ int main(int argc, char *argv[])
 	debug_MEMSTATS();
 #endif
 	debug(LOG_MAIN, "Entering main loop");
-	mainwindow.update(); // kick off painting, needed on macosx
-	app.exec();
+	wzMain3();
 	saveConfig();
 	systemShutdown();
 	debug(LOG_MAIN, "Completed shutting down Warzone 2100");

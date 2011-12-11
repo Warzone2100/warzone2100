@@ -4,7 +4,8 @@ AM_CXXFLAGS = $(WZ_CXXFLAGS) $(QT4_CFLAGS)
 AM_LFLAGS = $(FLEX_FLAGS)
 AM_YFLAGS = -d
 
-MOCHEADER = wzapp.h wzconfig.h
+MOCHEADER = \
+	wzconfig.h
 MOCEDFILES = $(MOCHEADER:%.h=%_moc.cpp)
 
 %_moc.cpp: %.h
@@ -23,7 +24,6 @@ EXTRA_DIST = \
 noinst_LIBRARIES = libframework.a
 noinst_HEADERS = \
 	$(MOCHEADER) \
-	wzapp_c.h \
 	crc.h \
 	cursors.h \
 	debug.h \
@@ -59,11 +59,9 @@ noinst_HEADERS = \
 	wzglobal.h
 
 nodist_libframework_a_SOURCES = \
-	wzapp_moc.cpp \
 	wzconfig_moc.cpp
 
 libframework_a_SOURCES = \
-	wzapp.cpp \
 	wzconfig.cpp \
 	resource_lexer.lpp \
 	resource_parser.ypp \

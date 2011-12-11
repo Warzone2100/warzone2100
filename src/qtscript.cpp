@@ -34,7 +34,7 @@
 #include <QtCore/QString>
 #include <QtCore/QStringList>
 
-#include "lib/framework/wzapp.h"
+#include "lib/framework/wzapp_c.h"
 #include "lib/framework/wzconfig.h"
 #include "lib/framework/file.h"
 #include "lib/gamelib/gtime.h"

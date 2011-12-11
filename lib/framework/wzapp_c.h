@@ -21,6 +21,10 @@
 #ifndef __INCLUDED_WZAPP_C_H__
 #define __INCLUDED_WZAPP_C_H__
 
+#include "frame.h"
+
+#include <QtCore/QSize>
+
 struct _wzThread;
 struct _wzMutex;
 struct _wzSemaphore;
@@ -29,6 +33,9 @@ typedef struct _wzThread WZ_THREAD;
 typedef struct _wzMutex WZ_MUTEX;
 typedef struct _wzSemaphore WZ_SEMAPHORE;
 
+void wzMain(int &argc, char **argv);
+bool wzMain2();
+void wzMain3();
 void wzQuit(void);              ///< Quit game
 void wzSetCursor(CURSOR index);
 void wzScreenFlip(void);	///< Swap the graphics buffers
@@ -38,6 +45,9 @@ void wzReleaseMouse(void);	///< Undo the wzGrabMouse operation
 bool wzActiveWindow(void);	///< Whether application currently has the mouse pointer over it
 int wzGetTicks(void);		///< Milliseconds since start of game
 void wzFatalDialog(const char *text);	///< Throw up a modal warning dialog
+QList<QSize> wzAvailableResolutions();  ///< Get list of available resolutions.
+void wzSetSwapInterval(bool swap);
+bool wzGetSwapInterval();
 
 // Thread related
 WZ_THREAD *wzThreadCreate(int (*threadFunc)(void *), void *data);

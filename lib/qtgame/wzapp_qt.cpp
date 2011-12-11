@@ -31,18 +31,18 @@
 
 // Get platform defines before checking for them.
 // Qt headers MUST come before platform specific stuff!
-#include "wzapp.h"
+#include "wzapp_qt.h"
 
 #if defined(WZ_CC_MSVC)
 #include "wzapp.h.moc"		// this is generated on the pre-build event.
 #endif
 
 #include "lib/exceptionhandler/dumpinfo.h"
-#include "file.h"
+#include "lib/framework/file.h"
 #include "lib/ivis_opengl/piestate.h"
 #include "lib/ivis_opengl/pieclip.h"
 #include "lib/ivis_opengl/screen.h"
-#include "wzapp_c.h"
+#include "lib/framework/wzapp_c.h"
 #include "src/main.h"
 #include "src/configuration.h"
 #include "lib/gamelib/gtime.h"

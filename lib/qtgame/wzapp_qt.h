@@ -30,14 +30,14 @@
 #include <QtCore/QSemaphore>
 #include <physfs.h>
 
-#include "lib/qtgame/qtgame.h"
+#include "qtgame.h"
 
 // Get platform defines before checking for them.
 // Qt headers MUST come before platform specific stuff!
 #include "lib/framework/frame.h"
 #include "lib/framework/cursors.h"
 #include "lib/ivis_opengl/textdraw.h"
-#include "input.h"
+#include "lib/framework/input.h"
 
 class WzMainWindow : public QtGameWidget
 {

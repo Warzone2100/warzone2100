@@ -26,7 +26,7 @@
  */
 
 #include "lib/framework/frame.h"		// LEAVE THIS ALONE, it *must* be first for compiler specific fixes.
-#include "lib/framework/wzapp.h"
+#include "lib/framework/wzapp_c.h"
 #include "lib/framework/wzconfig.h"
 
 #include <time.h>
