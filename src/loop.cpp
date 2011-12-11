@@ -671,25 +671,34 @@ static void gameStateUpdate()
 /* The main game loop */
 GAMECODE gameLoop(void)
 {
-	bool            gameTicked;                     // true iff we are doing a logical update.
 	static uint32_t lastFlushTime = 0;
 
-	// Receive NET_BLAH messages.
-	// Receive GAME_BLAH messages, and if it's time, process exactly as many GAME_BLAH messages as required to be able to tick the gameTime.
-	recvMessage();
-
-	// Update gameTime and graphicsTime, and corresponding deltas. Note that gameTime and graphicsTime pause, if we aren't getting our GAME_GAME_TIME messages.
-	gameTimeUpdate();
-	gameTicked = deltaGameTime != 0;
-
-	if (gameTicked)
+	bool didTick = false;
+	while (true)
 	{
+		// Receive NET_BLAH messages.
+		// Receive GAME_BLAH messages, and if it's time, process exactly as many GAME_BLAH messages as required to be able to tick the gameTime.
+		recvMessage();
+
+		// Update gameTime and graphicsTime, and corresponding deltas. Note that gameTime and graphicsTime pause, if we aren't getting our GAME_GAME_TIME messages.
+		gameTimeUpdate();
+
+		if (deltaGameTime == 0)
+		{
+			break;  // Not doing a game state update.
+		}
+		didTick = true;
+
 		ASSERT(!paused && !gameUpdatePaused() && !editPaused(), "Nonsensical pause values.");
 
+		syncDebug("Begin game state update, gameTime = %d", gameTime);
 		gameStateUpdate();
+		syncDebug("End game state update, gameTime = %d", gameTime);
+
+		ASSERT(deltaGraphicsTime == 0, "Shouldn't update graphics and game state at once.");
 	}
 
-	if (gameTicked || realTime - lastFlushTime < 400u)
+	if (didTick || realTime - lastFlushTime < 400u)
 	{
 		lastFlushTime = realTime;
 		NETflush();  // Make sure the game time tick message is really sent over the network, and that we aren't waiting too long to send data.
