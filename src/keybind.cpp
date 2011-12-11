@@ -2823,7 +2823,6 @@ void kf_BuildPrevPage()
 	temp = psTForm->majorT - 1;
 	if (temp < 0)
 	{
-		temp = 0 ;
 		audio_PlayTrack(ID_SOUND_BUILD_FAIL);
 		return;
 	}

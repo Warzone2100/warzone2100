@@ -1893,8 +1893,6 @@ static void renderSmokeEffect(const EFFECT *psEffect)
 // ----------------------------------------------------------------------------------------
 void	effectSetupFirework(EFFECT *psEffect)
 {
-	UDWORD	camExtra;
-
 	if(psEffect->type == FIREWORK_TYPE_LAUNCHER)
 	{
 	 	psEffect->velocity.x = 200 - rand()%400;
@@ -1902,11 +1900,6 @@ void	effectSetupFirework(EFFECT *psEffect)
 		psEffect->velocity.y = 400 + rand()%200;	//height
 		psEffect->lifeSpan = GAME_TICKS_PER_SEC * 3;
 		psEffect->radius = 80 + rand()%150;
-		camExtra = 0;
-		if(getCampaignNumber()!=1)
-		{
-			camExtra+=rand()%200;
-		}
 		psEffect->size = 300+rand()%300;	//height it goes off
 		psEffect->imd = getImdFromIndex(MI_FIREWORK); // not actually drawn
 	}
@@ -1938,9 +1931,7 @@ void	effectSetupFirework(EFFECT *psEffect)
 			break;
 		}
 	}
-
 	psEffect->frameDelay = (EXPLOSION_FRAME_DELAY*2);
-
 }
 
 void	effectSetupSmoke(EFFECT *psEffect)

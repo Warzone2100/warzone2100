@@ -2806,7 +2806,7 @@ bool calcDroidMuzzleLocation(DROID *psDroid, Vector3i *muzzle, int weapon_slot)
 
 		*muzzle = swapYZ(af*barrel);
 		muzzle->z = -muzzle->z;
-		debugLen += sprintf(debugStr + debugLen, ",muzzle=(%d,%d,%d)", muzzle->x, muzzle->y, muzzle->z);
+		sprintf(debugStr + debugLen, ",muzzle=(%d,%d,%d)", muzzle->x, muzzle->y, muzzle->z);
 
 		syncDebug("%s", debugStr);
 	}

@@ -314,9 +314,6 @@ void actionAlignTurret(BASE_OBJECT *psObj, int weapon_slot)
 	uint16_t        tRot;
 	uint16_t        tPitch;
 
-	//default turret rotation 0
-	tRot = 0;
-
 	//get the maximum rotation this frame
 	rotation = gameTimeAdjustedIncrement(DEG(ACTION_TURRET_ROTATION_RATE));
 

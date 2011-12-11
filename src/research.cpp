@@ -1842,11 +1842,10 @@ bool enableResearch(RESEARCH *psResearch, UDWORD player)
 'give' the results to the reward player*/
 void researchReward(UBYTE losingPlayer, UBYTE rewardPlayer)
 {
-	UDWORD				topicIndex, researchPoints, rewardID;
+	UDWORD topicIndex = 0, researchPoints = 0, rewardID = 0;
 	STRUCTURE			*psStruct;
 	RESEARCH_FACILITY	*psFacility;
 
-	topicIndex = researchPoints = rewardID = 0;
 	//look through the losing players structures to find a research facility
 	for (psStruct = apsStructLists[losingPlayer]; psStruct != NULL; psStruct =
 		psStruct->psNext)

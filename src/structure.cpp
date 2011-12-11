@@ -6643,11 +6643,9 @@ void holdProduction(STRUCTURE *psBuilding, QUEUE_MODE mode)
 /*release a factory's production run from hold*/
 void releaseProduction(STRUCTURE *psBuilding, QUEUE_MODE mode)
 {
-	FACTORY *psFactory = &psBuilding->pFunctionality->factory;
-
 	ASSERT_OR_RETURN( , StructIsFactory(psBuilding), "structure not a factory");
 
-	psFactory = &psBuilding->pFunctionality->factory;
+	FACTORY *psFactory = &psBuilding->pFunctionality->factory;
 
 	if (mode == ModeQueue)
 	{
@@ -7307,8 +7305,6 @@ STRUCTURE * giftSingleStructure(STRUCTURE *psStructure, UBYTE attackPlayer, bool
 		//certain structures give specific results - the rest swap sides!
 		if (!electronicReward(psStructure, attackPlayer))
 		{
-			originalPlayer = psStructure->player;
-
 			//tell the system the structure no longer exists
 			(void)removeStruct(psStructure, false);
 

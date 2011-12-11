@@ -352,17 +352,9 @@ static GAMECODE renderLoop()
 
 	pie_GetResetCounts(&loopPieCount, &loopPolyCount, &loopStateChanges);
 
-	if (fogStatus & FOG_BACKGROUND)
+	if ((fogStatus & FOG_BACKGROUND) && (loopMissionState == LMS_SAVECONTINUE))
 	{
-		if (loopMissionState == LMS_SAVECONTINUE)
-		{
-			pie_SetFogStatus(false);
-			clearMode = CLEAR_BLACK;
-		}
-	}
-	else
-	{
-		clearMode = CLEAR_BLACK;//force to black 3DFX
+		pie_SetFogStatus(false);
 	}
 
 	if (!quitting)
@@ -395,7 +387,6 @@ static GAMECODE renderLoop()
 			break;
 		case LMS_SAVECONTINUE:
 			// just wait for this to be changed when the new mission starts
-			clearMode = CLEAR_BLACK;
 			break;
 		case LMS_NEWLEVEL:
 			//nextMissionType = MISSION_NONE;
