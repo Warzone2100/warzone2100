@@ -27,7 +27,7 @@
 
 #include "lib/framework/frame.h"
 #include "lib/framework/utf.h"
-#include "lib/framework/wzapp_c.h"
+#include "lib/framework/wzapp.h"
 #include "widget.h"
 #include "widgint.h"
 #include "editbox.h"

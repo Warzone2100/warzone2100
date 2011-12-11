@@ -24,7 +24,7 @@
  * Alex Lee. Pumpkin Studios. Eidos PLC 98,
  */
 
-#include "lib/framework/wzapp_c.h"
+#include "lib/framework/wzapp.h"
 
 #if defined(WZ_OS_WIN)
 #  include <shellapi.h> /* For ShellExecute  */

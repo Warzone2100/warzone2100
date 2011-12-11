@@ -26,7 +26,7 @@
 #include <string.h>
 
 #include "lib/framework/frame.h"
-#include "lib/framework/wzapp_c.h"
+#include "lib/framework/wzapp.h"
 #include "lib/framework/strres.h"
 #include "lib/widget/widget.h"
 #include "lib/netplay/netplay.h"

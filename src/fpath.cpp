@@ -28,7 +28,7 @@
 #include "lib/framework/crc.h"
 #include "lib/netplay/netplay.h"
 
-#include "lib/framework/wzapp_c.h"
+#include "lib/framework/wzapp.h"
 
 #include "objects.h"
 #include "map.h"

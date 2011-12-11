@@ -22,7 +22,7 @@
  */
 
 // Get platform defines before checking for them!
-#include "lib/framework/wzapp_c.h"
+#include "lib/framework/wzapp.h"
 #include <QtCore/QTextCodec>
 #include <QtGui/QApplication>
 #include <QtGui/QMessageBox>
@@ -37,7 +37,6 @@
 #include "lib/framework/input.h"
 #include "lib/framework/frameint.h"
 #include "lib/framework/physfs_ext.h"
-#include "lib/framework/wzapp_c.h"
 #include "lib/exceptionhandler/exceptionhandler.h"
 #include "lib/exceptionhandler/dumpinfo.h"
 #include "lib/framework/wzfs.h"

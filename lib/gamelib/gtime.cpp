@@ -25,7 +25,7 @@
  */
 
 #include "lib/framework/frame.h"
-#include "lib/framework/wzapp_c.h"
+#include "lib/framework/wzapp.h"
 #include "gtime.h"
 #include "src/multiplay.h"
 #include "lib/netplay/netplay.h"

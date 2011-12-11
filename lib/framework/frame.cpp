@@ -28,7 +28,7 @@
  */
 #include "frame.h"
 #include "file.h"
-#include "wzapp_c.h"
+#include "wzapp.h"
 
 #include <physfs.h>
 

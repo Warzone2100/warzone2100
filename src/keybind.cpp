@@ -23,7 +23,7 @@
 #include "lib/framework/strres.h"
 #include "lib/framework/stdio_ext.h"
 #include "lib/framework/utf.h"
-#include "lib/framework/wzapp_c.h"
+#include "lib/framework/wzapp.h"
 #include "objects.h"
 #include "basedef.h"
 #include "map.h"

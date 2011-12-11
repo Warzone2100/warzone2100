@@ -54,7 +54,7 @@ noinst_HEADERS = \
 	endian_hack.h \
 	gettext.h \
 	macros.h \
-	wzapp_c.h \
+	wzapp.h \
 	wzfs.h \
 	wzglobal.h
 

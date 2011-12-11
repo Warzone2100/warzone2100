@@ -30,7 +30,7 @@
 #include <stdio.h>
 #include <time.h>
 #include "string_ext.h"
-#include "lib/framework/wzapp_c.h"
+#include "wzapp.h"
 #include "lib/gamelib/gtime.h"
 
 #ifdef WZ_OS_LINUX

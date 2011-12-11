@@ -22,7 +22,7 @@
  */
 
 #include "lib/framework/frame.h"
-#include "lib/framework/wzapp_c.h"
+#include "lib/framework/wzapp.h"
 #include "lib/framework/frameint.h"
 #include "widget.h"
 #include "widgint.h"

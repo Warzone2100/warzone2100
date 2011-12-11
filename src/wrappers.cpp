@@ -32,7 +32,7 @@
 #include "lib/ivis_opengl/screen.h"
 #include "lib/netplay/netplay.h"	// multiplayer
 #include "lib/sound/audio.h"
-#include "lib/framework/wzapp_c.h"
+#include "lib/framework/wzapp.h"
 
 #include "frontend.h"
 #include "keyedit.h"

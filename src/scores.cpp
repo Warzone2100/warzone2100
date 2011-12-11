@@ -27,7 +27,7 @@
 #include <string.h>
 
 // --------------------------------------------------------------------
-#include "lib/framework/wzapp_c.h"
+#include "lib/framework/wzapp.h"
 #include "lib/framework/wzconfig.h"
 #include "lib/framework/math_ext.h"
 #include "lib/framework/strres.h"

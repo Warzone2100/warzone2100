@@ -42,7 +42,7 @@
 #include "lib/ivis_opengl/piestate.h"
 #include "lib/ivis_opengl/pieclip.h"
 #include "lib/ivis_opengl/screen.h"
-#include "lib/framework/wzapp_c.h"
+#include "lib/framework/wzapp.h"
 #include "src/main.h"
 #include "src/configuration.h"
 #include "lib/gamelib/gtime.h"

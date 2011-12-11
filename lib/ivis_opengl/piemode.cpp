@@ -28,7 +28,7 @@
 
 #include "lib/framework/frame.h"
 #include "lib/framework/opengl.h"
-#include "lib/framework/wzapp_c.h"
+#include "lib/framework/wzapp.h"
 
 #include "lib/ivis_opengl/piedef.h"
 #include "lib/ivis_opengl/piestate.h"
