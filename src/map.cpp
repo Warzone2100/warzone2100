@@ -871,8 +871,7 @@ bool mapLoad(char *filename, bool preview)
 		}
 		if (!gwNewGateway(x0, y0, x1, y1))
 		{
-			debug(LOG_ERROR, "%s: Unable to add gateway", filename);
-			goto failure;
+			debug(LOG_ERROR, "%s: Unable to add gateway %d - dropping it", filename, i);
 		}
 	}
 	
