@@ -5614,6 +5614,7 @@ void buildingComplete(STRUCTURE *psBuilding)
 			break;
 		case REF_SAT_UPLINK:
 			revealAll(psBuilding->player);
+			break;
 		case REF_GATE:
 			auxStructureNonblocking(psBuilding);  // Clear outdated flags.
 			auxStructureClosedGate(psBuilding);  // Don't block for the sake of allied pathfinding.
