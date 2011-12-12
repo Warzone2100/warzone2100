@@ -64,6 +64,7 @@ DROID_GROUP::DROID_GROUP()
 	refCount = 0;
 	psList = NULL;
 	psCommander = NULL;
+	memset(&sRunData, 0, sizeof(sRunData));
 }
 
 // create a new group

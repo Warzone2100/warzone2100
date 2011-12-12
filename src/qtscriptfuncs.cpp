@@ -320,7 +320,7 @@ static QScriptValue js_enumStruct(QScriptContext *context, QScriptEngine *engine
 static QScriptValue js_enumFeature(QScriptContext *context, QScriptEngine *engine)
 {
 	QList<FEATURE *> matches;
-	int looking = context->argument(1).toInt32();
+	int looking = context->argument(0).toInt32();
 	QString statsName = statsName = context->argument(1).toString();
 	SCRIPT_ASSERT(context, looking < MAX_PLAYERS && looking >= -1, "Looking player index out of range: %d", looking);
 	for (FEATURE *psFeat = apsFeatureLists[0]; psFeat; psFeat = psFeat->psNext)
