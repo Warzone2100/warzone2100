@@ -4789,7 +4789,6 @@ static bool loadSaveStructure2(const char *pFileName, STRUCTURE **ppList)
 			}
 			//clear subject
 			psResearch->psSubject = NULL;
-			psResearch->timeStarted = 0;
 			psResearch->timeStartHold = 0;
 			//set the subject
 			if (ini.contains("Research/target"))
@@ -4798,7 +4797,6 @@ static bool loadSaveStructure2(const char *pFileName, STRUCTURE **ppList)
 				if (researchId != NULL_ID)
 				{
 					psResearch->psSubject = &asResearch[researchId];
-					psResearch->timeStarted = ini.value("Research/timeStarted").toInt();
 					psResearch->timeStartHold = ini.value("Research/timeStartHold").toInt();
 				}
 				else
@@ -4999,7 +4997,6 @@ bool writeStructFile(const char *pFileName)
 					if (((RESEARCH_FACILITY *)psCurr->pFunctionality)->psSubject)
 					{
 						ini.setValue("Research/target", ((RESEARCH_FACILITY *)psCurr->pFunctionality)->psSubject->pName);
-						ini.setValue("Research/timeStarted", ((RESEARCH_FACILITY *)psCurr->pFunctionality)->timeStarted);
 					}
 				}
 				else if (psCurr->pStructureType->type == REF_POWER_GEN)

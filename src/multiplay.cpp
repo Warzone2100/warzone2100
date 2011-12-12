@@ -930,7 +930,6 @@ bool recvResearchStatus(NETQUEUE queue)
 
 			// Start the research
 			MakeResearchStarted(pPlayerRes);
-			psResFacilty->timeStarted		= ACTION_START_TIME;
 			psResFacilty->timeStartHold		= 0;
 		}
 

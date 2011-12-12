@@ -1257,10 +1257,6 @@ void releaseResearch(STRUCTURE *psBuilding, QUEUE_MODE mode)
 	if (psResFac->psSubject && psResFac->timeStartHold)
 	{
 		//adjust the start time for the current subject
-		if (psResFac->timeStarted != ACTION_START_TIME)
-		{
-			psResFac->timeStarted += (gameTime - psResFac->timeStartHold);
-		}
 		psResFac->timeStartHold = 0;
 	}
 }
@@ -1322,16 +1318,13 @@ void cancelResearch(STRUCTURE *psBuilding, QUEUE_MODE mode)
 		}
 
 		//check if waiting to accrue power
-		if (psResFac->timeStarted == ACTION_START_TIME)
+		if (pPlayerRes->currentPoints == 0)
 		{
 			// Reset this topic as not having been researched
 			ResetResearchStatus(pPlayerRes);
 		}
 		else
 		{
-			/* store the points - need to keep this so can add points after the topic has been cancelled and restarted */
-			pPlayerRes->currentPoints += (psResFac->researchPoints * (gameTime - psResFac->timeStarted)) / GAME_TICKS_PER_SEC;
-
 			// Set the researched flag
 			MakeResearchCancelled(pPlayerRes);
 		}

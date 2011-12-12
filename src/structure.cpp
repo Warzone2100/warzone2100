@@ -3093,17 +3093,8 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 			{
 				pResearch = (RESEARCH *)pSubject;
 
-				if (psResFacility->timeStarted == ACTION_START_TIME)
-				{
-					//set the time started
-					psResFacility->timeStarted = gameTime;
-				}
-
-				ASSERT_OR_RETURN(, gameTime >= psResFacility->timeStarted, "research seems to have started in the future");
 				pointsToAdd = gameTimeAdjustedAverage(psResFacility->researchPoints);
 				pointsToAdd = MIN(pointsToAdd, pResearch->researchPoints - pPlayerRes->currentPoints);
-
-				psResFacility->timeStarted = gameTime;
 
 				if (pointsToAdd > 0 && pPlayerRes->currentPoints == 0)
 				{
@@ -7595,11 +7586,12 @@ void resetResistanceLag(STRUCTURE *psBuilding)
 				//if working on a topic
 				if (psResFacility->psSubject)
 				{
+					// What was this code intended to do?
 					//adjust the start time for the current subject
-					if (psResFacility->timeStarted != ACTION_START_TIME)
-					{
-						psResFacility->timeStarted += (gameTime - psBuilding->lastResistance);
-					}
+					//if (psResFacility->timeStarted != ACTION_START_TIME)
+					//{
+					//	psResFacility->timeStarted += (gameTime - psBuilding->lastResistance);
+					//}
 				}
 			}
 			case REF_FACTORY:
