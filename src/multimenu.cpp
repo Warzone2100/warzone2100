@@ -23,6 +23,7 @@
  *  Also the selection of disk files..
  */
 #include "lib/framework/frame.h"
+#include "lib/framework/wzapp_c.h"
 #include "lib/framework/strres.h"
 #include "lib/widget/button.h"
 #include "lib/widget/widget.h"
@@ -156,6 +157,8 @@ static char const * M_REQUEST_NP_TIPS[] = {   N_("2 players"), N_("3 players"), 
 
 #define	R_BUT_W			105//112
 #define R_BUT_H			30
+
+#define HOVER_PREVIEW_TIME 300
 
 bool			multiRequestUp = false;				//multimenu is up.
 static unsigned         hoverPreviewId;
@@ -667,6 +670,9 @@ static void closeMultiRequester(void)
 
 bool runMultiRequester(UDWORD id, UDWORD *mode, char *chosen, UDWORD *chosenValue, bool *isHoverPreview)
 {
+	static unsigned hoverId = 0;
+	static unsigned hoverStartTime = 0;
+
 	if( (id == M_REQUEST_CLOSE) || CancelPressed() )			// user hit close box || hit the cancel key
 	{
 		closeMultiRequester();
@@ -678,9 +684,14 @@ bool runMultiRequester(UDWORD id, UDWORD *mode, char *chosen, UDWORD *chosenValu
 	if (id == 0 && context == MULTIOP_MAP)
 	{
 		id = widgGetMouseOver(psRScreen);
-		if (id == hoverPreviewId)
+		if (id != hoverId)
 		{
-			id = 0;  // Don't re-render preview.
+			hoverId = id;
+			hoverStartTime = wzGetTicks() + HOVER_PREVIEW_TIME;
+		}
+		if (id == hoverPreviewId || hoverStartTime > wzGetTicks())
+		{
+			id = 0;  // Don't re-render preview nor render preview before HOVER_PREVIEW_TIME.
 		}
 		hoverPreview = true;
 	}
