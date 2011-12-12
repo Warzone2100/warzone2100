@@ -5,26 +5,26 @@ backend_subdir=lib/sdl
 endif
 
 SUBDIRS = \
-	  win32 \
-	  3rdparty/miniupnpc \
-	  lib/framework \
-	  lib/exceptionhandler \
-	  lib/script \
-	  lib/sequence \
-	  lib/ivis_opengl \
-	  lib/gamelib \
-	  lib/sound \
-	  lib/netplay \
-	  lib/widget \
-	  $(backend_subdir) \
-	  tools/map \
-	  src \
-	  data \
-	  po \
-	  doc \
-	  icons \
-	  pkg/nsis \
-	  tests
+	win32 \
+	3rdparty/miniupnpc \
+	lib/framework \
+	lib/exceptionhandler \
+	lib/script \
+	lib/sequence \
+	lib/ivis_opengl \
+	lib/gamelib \
+	lib/sound \
+	lib/netplay \
+	lib/widget \
+	$(backend_subdir) \
+	tools/map \
+	src \
+	data \
+	po \
+	doc \
+	icons \
+	pkg/nsis \
+	tests
 
 dist_doc_DATA = \
 	AUTHORS \
@@ -35,10 +35,6 @@ dist_doc_DATA = \
 
 ACLOCAL_AMFLAGS = -I m4
 
-# workaround for e.g. git, which doesn't include empty directories
-macosx/prebuilt:
-	$(MKDIR_P) macosx/prebuilt
-
 EXTRA_DIST= \
 	build_tools/autorevision.sh \
 	autogen.sh \
@@ -46,6 +42,7 @@ EXTRA_DIST= \
 	configure.ac \
 	pkg/dpkg \
 	macosx \
+	3rdparty/SDL/mac \
 	po/custom/mac-infoplist.txt \
 	po/custom/warzone2100.desktop.txt
 
