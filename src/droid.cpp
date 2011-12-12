@@ -416,9 +416,11 @@ void	removeDroidBase(DROID *psDel)
 		return;
 	}
 
+	syncDebugDroid(psDel, '#');
+
 	//ajl, inform others of destruction.
 	// Everyone else should be doing this at the same time, assuming it's in synch (so everyone sends a GAME_DROIDDEST message at once)...
-	if (bMultiMessages
+	if (!isInSync() && bMultiMessages
 	 && !(psDel->player != selectedPlayer && psDel->order == DORDER_RECYCLE))
 	{
 		ASSERT_OR_RETURN( , droidOnMap(psDel), "Asking other players to destroy droid driving off the map");
@@ -634,8 +636,9 @@ static void droidFlameFallCallback( ANIM_OBJECT * psObj )
 	ASSERT_OR_RETURN( , psDroid != NULL, "invalid Unit pointer");
 	psDroid->psCurAnim = NULL;
 
-	debug(LOG_DEATH, "droidFlameFallCallback: Droid %d destroyed", (int)psDroid->id);
-	destroyDroid( psDroid );
+	// This breaks synch, obviously. Animations are not synched, so changing game state as part of an animation is not completely ideal.
+	//debug(LOG_DEATH, "droidFlameFallCallback: Droid %d destroyed", (int)psDroid->id);
+	//destroyDroid( psDroid );
 }
 
 static void droidBurntCallback( ANIM_OBJECT * psObj )
@@ -666,6 +669,12 @@ void droidBurn(DROID *psDroid)
 	{
 		ASSERT(LOG_ERROR, "can't burn anything except babarians currently!");
 		return;
+	}
+
+	if (psDroid->order != DORDER_RUNBURN)
+	{
+		/* set droid running */
+		orderDroid(psDroid, DORDER_RUNBURN, ModeImmediate);
 	}
 
 	/* if already burning return else remove currently-attached anim if present */
@@ -700,9 +709,6 @@ void droidBurn(DROID *psDroid)
 	debug( LOG_NEVER, "baba burn" );
 	// NOTE: 3 types of screams are available ID_SOUND_BARB_SCREAM - ID_SOUND_BARB_SCREAM3
 	audio_PlayObjDynamicTrack( psDroid, ID_SOUND_BARB_SCREAM+(rand()%3), NULL );
-
-	/* set droid running */
-	orderDroid(psDroid, DORDER_RUNBURN, ModeImmediate);
 }
 
 void _syncDebugDroid(const char *function, DROID const *psDroid, char ch)
