@@ -1266,16 +1266,15 @@ void intDisplayPIEView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL
 	MESSAGE			*psMessage = (MESSAGE *)Form->pUserData;
 	UDWORD			x0,y0,x1,y1;
 	SWORD			image = -1;
-    RESEARCH        *psResearch;
+	RESEARCH        *psResearch;
 
-
-	//shouldn't have any proximity messages here...
-	if (psMessage->type == MSG_PROXIMITY)
+	// Should not have any proximity messages here...
+	if (!psMessage || psMessage->type == MSG_PROXIMITY)
 	{
 		return;
 	}
 
-	if (psMessage && psMessage->pViewData)
+	if (psMessage->pViewData)
 	{
 		x0 = xOffset+Form->x;
 		y0 = yOffset+Form->y;
@@ -1321,12 +1320,12 @@ void intDisplayFLICView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DEC
 	VIEW_RESEARCH	*psViewResearch;
 
 	//shouldn't have any proximity messages here...
-	if (psMessage->type == MSG_PROXIMITY)
+	if (!psMessage || psMessage->type == MSG_PROXIMITY)
 	{
 		return;
 	}
 
-	if (psMessage && psMessage->pViewData)
+	if (psMessage->pViewData)
 	{
 		OpenButtonRender((UWORD)(xOffset+Form->x), (UWORD)(yOffset+Form->y),
 			Form->width, Form->height);
@@ -1350,7 +1349,6 @@ void intDisplayFLICView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DEC
 		seq_RenderVideoToBuffer(psViewResearch->sequenceName, SEQUENCE_HOLD);
 		CloseButtonRender();
 	}
-
 }
 #endif
 

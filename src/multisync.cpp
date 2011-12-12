@@ -650,7 +650,7 @@ bool recvStructureCheck(NETQUEUE queue)
 					buildStructure(&asStructureStats[j], pS->pos.x, pS->pos.y, pS->player, false);
 
 					// Check it is finished
-					if (pS && pS->status != SS_BUILT)
+					if (pS->status != SS_BUILT)
 					{
 						pS->id = ref;
 						pS->status = SS_BUILT;
