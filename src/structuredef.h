@@ -212,11 +212,9 @@ class DROID_GROUP;
 
 struct REPAIR_FACILITY
 {
-	UDWORD                          power;                  /* Power used in repairing */
-	UDWORD                          timeStarted;            /* Time repair started on current object */
+	UDWORD                          power;                  // Repair rate. Nothing to do with power.
 	BASE_OBJECT                     *psObj;                 /* Object being repaired */
 	FLAG_POSITION                   *psDeliveryPoint;       /* Place for the repaired droids to assemble at */
-	UDWORD                          currentPtsAdded;        /* stores the amount of body points added to the unit that is being worked on */
 
 	// The group the droids to be repaired by this facility belong to
 	DROID_GROUP *                   psGroup;

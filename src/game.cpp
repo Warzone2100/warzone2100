@@ -4818,8 +4818,6 @@ static bool loadSaveStructure2(const char *pFileName, STRUCTURE **ppList)
 		case REF_REPAIR_FACILITY:
 			psRepair = ((REPAIR_FACILITY *)psStructure->pFunctionality);
 			psRepair->power = ((REPAIR_DROID_FUNCTION *) psStructure->pStructureType->asFuncList[0])->repairPoints;
-			psRepair->timeStarted = ini.value("Repair/timeStarted").toInt();
-			psRepair->currentPtsAdded = ini.value("Repair/currentPtsAdded").toInt();
 			if (ini.contains("Repair/deliveryPoint/pos"))
 			{
 				Position point = ini.vector3i("Repair/deliveryPoint/pos");
@@ -5006,8 +5004,6 @@ bool writeStructFile(const char *pFileName)
 				else if (psCurr->pStructureType->type == REF_REPAIR_FACILITY)
 				{
 					REPAIR_FACILITY *psRepair = ((REPAIR_FACILITY *)psCurr->pFunctionality);
-					ini.setValue("Repair/timeStarted", psRepair->timeStarted);
-					ini.setValue("Repair/currentPtsAdded", psRepair->currentPtsAdded);
 					if (psRepair->psObj)
 					{
 						ini.setValue("Repair/target/id", psRepair->psObj->id);

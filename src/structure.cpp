@@ -2565,7 +2565,6 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 	DROID				*psDroid;
 	BASE_OBJECT			*psChosenObjs[STRUCT_MAXWEAPS] = {NULL};
 	BASE_OBJECT			*psChosenObj = NULL;
-	SDWORD				iDt;
 	FACTORY				*psFactory;
 	REPAIR_FACILITY		*psRepairFac = NULL;
 	RESEARCH_FACILITY	*psResFacility;
@@ -2960,9 +2959,6 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 				/* reset repair started if we were previously repairing something else */
 				if (psRepairFac->psObj != psDroid)
 				{
-					psRepairFac->timeStarted = ACTION_START_TIME;
-					psRepairFac->currentPtsAdded = 0;
-
 					psRepairFac->psObj = psDroid;
 				}
 			}
@@ -3298,29 +3294,9 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 						}
 					}
 
-					if (psRepairFac->timeStarted == ACTION_START_TIME)
-					{
-						//set the time started
-						psRepairFac->timeStarted = gameTime;
-						//reset the points added
-						psRepairFac->currentPtsAdded = 0;
-					}
 					// FIXME: duplicate code, make repairing cost power again
 					/* do repairing */
-					iDt = gameTime - psRepairFac->timeStarted;
-					//- this was a bit exponential ...
-					pointsToAdd = (iDt * psRepairFac->power / GAME_TICKS_PER_SEC) -
-						psRepairFac->currentPtsAdded;
-
-					// do some repair
-					if (!pointsToAdd)
-					{
-						// We need to at least repair SOMETHING
-						pointsToAdd = 1;
-					}
-					// just add the points; these are integers, not floats
-					psDroid->body += pointsToAdd;
-					psRepairFac->currentPtsAdded += pointsToAdd;
+					psDroid->body += gameTimeAdjustedAverage(psRepairFac->power);
 				}
 
 				if (psDroid->body >= psDroid->originalBody)
