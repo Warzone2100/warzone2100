@@ -37,8 +37,7 @@ extern bool screenInitialise(void);
 extern void screenShutDown(void);
 
 /* The Current screen size and bit depth */
-extern UDWORD		screenWidth;
-extern UDWORD		screenHeight;
-extern UDWORD		screenDepth;
+extern unsigned screenWidth;
+extern unsigned screenHeight;
 
 #endif //_frameint_h
