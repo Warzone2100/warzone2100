@@ -22,8 +22,6 @@
  */
 
 #include <string.h>
-#include <QtGui/QApplication>
-#include <QtGui/QClipboard>
 
 #include "lib/framework/frame.h"
 #include "lib/framework/utf.h"
@@ -154,6 +152,7 @@ void W_EDITBOX::overwriteChar(QChar ch)
 	/* Update the insertion point */
 	++insPos;
 }
+
 
 /* Delete a character to the right of the position */
 void W_EDITBOX::delCharRight()
@@ -411,11 +410,7 @@ void W_EDITBOX::run(W_CONTEXT *psContext)
 				switch (key)
 				{
 					case KEY_V:
-						{
-							QClipboard *clipboard = QApplication::clipboard();
-							aText = clipboard->text(QClipboard::Selection);                           // try X11 specific buffer first
-							if (aText.isEmpty()) aText = clipboard->text(QClipboard::Clipboard);      // if not, try generic clipboard
-						}
+						aText = wzGetSelection();
 						insPos = aText.length();
 						/* Update the printable text */
 						fitStringEnd();

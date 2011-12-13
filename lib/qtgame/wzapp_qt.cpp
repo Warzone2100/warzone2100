@@ -28,6 +28,8 @@
 #include <QtGui/QMouseEvent>
 #include <QtGui/QMessageBox>
 #include <QtGui/QIcon>
+#include <QtGui/QApplication>
+#include <QtGui/QClipboard>
 
 // Get platform defines before checking for them.
 // Qt headers MUST come before platform specific stuff!
@@ -1153,6 +1155,15 @@ void iV_SetTextSize(float size)
 	WzMainWindow::instance()->setFontSize(size);
 }
 #endif
+
+QString wzGetSelection()
+{
+	QString aText;
+	QClipboard *clipboard = QApplication::clipboard();
+	aText = clipboard->text(QClipboard::Selection);                           // try X11 specific buffer first
+	if (aText.isEmpty()) aText = clipboard->text(QClipboard::Clipboard);      // if not, try generic clipboard
+	return aText;
+}
 
 void wzFatalDialog(const char *text)
 {

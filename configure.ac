@@ -147,16 +147,14 @@ esac
 AM_CONDITIONAL([MINGW32], test "x$host_os_mingw32" = "xyes")
 
 
-# Check for X11 (for qtgame)
-if test "x$backend" = "xqt"; then
-	if test "x$host_os_mingw32" != "xyes" ; then
-		X_LIBS=""
-		AC_PATH_X
-		if test x$no_x != "xyes"; then
-			X_LIBS="-lX11 -lXrandr ${X_LIBS}"
-		fi
-		AC_SUBST(X_LIBS)
+# Check for X11 (for qtgame and scrap)
+if test "x$host_os_mingw32" != "xyes" ; then
+	X_LIBS=""
+	AC_PATH_X
+	if test x$no_x != "xyes"; then
+		X_LIBS="-lX11 -lXrandr ${X_LIBS}"
 	fi
+	AC_SUBST(X_LIBS)
 fi
 
 # Set compilers to use when building for the build system in a cross compile build

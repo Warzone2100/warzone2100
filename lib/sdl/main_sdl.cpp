@@ -3,6 +3,9 @@
 #include <SDL.h>
 #include <SDL_thread.h>
 #include <SDL_timer.h>
+#include <QtCore/QSize>
+#include <QtCore/QString>
+#include "scrap.h"
 
 extern void mainLoop();
 
@@ -12,6 +15,46 @@ unsigned int screenHeight = 0;
 /**************************/
 /***     Misc support   ***/
 /**************************/
+
+#define WIDG_MAXSTR 80 // HACK, from widget.h
+
+/* Put a character into a text buffer overwriting any text under the cursor */
+QString wzGetSelection()
+{
+	QString retval;
+	static char* scrap = NULL;
+	int scraplen;
+
+	get_scrap(T('T','E','X','T'), &scraplen, &scrap);
+	if (scraplen > 0 && scraplen < WIDG_MAXSTR-2)
+	{
+		retval = QString::fromUtf8(scrap);
+	}
+	return retval;
+}
+
+void wzSetSwapInterval(bool swap)
+{
+	// TBD
+}
+
+bool wzGetSwapInterval()
+{
+	return false; // TBD
+}
+
+QList<QSize> wzAvailableResolutions()
+{
+	QList<QSize> list;
+	int count;
+	SDL_Rect **modes = SDL_ListModes(NULL, SDL_FULLSCREEN | SDL_HWSURFACE);
+	for (count = 0; modes[count]; count++)
+	{
+		QSize s(modes[count]->w, modes[count]->h);
+		list.push_back(s);
+	}
+	return list;
+}
 
 void wzSetCursor(CURSOR index)
 {

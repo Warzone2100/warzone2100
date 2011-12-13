@@ -56,6 +56,7 @@ void wzFatalDialog(const char *text);	///< Throw up a modal warning dialog
 QList<QSize> wzAvailableResolutions();  ///< Get list of available resolutions.
 void wzSetSwapInterval(bool swap);
 bool wzGetSwapInterval();
+QString wzGetSelection();
 
 // Thread related
 WZ_THREAD *wzThreadCreate(int (*threadFunc)(void *), void *data);
