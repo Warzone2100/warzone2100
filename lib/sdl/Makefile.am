@@ -6,5 +6,6 @@ noinst_LIBRARIES = libsdl.a
 noinst_HEADERS = \
 	scrap.h
 
-libframework_a_SOURCES = \
+libsdl_a_SOURCES = \
+	main_sdl.cpp \
 	scrap.cpp

@@ -1,5 +1,6 @@
 #include <QtCore/QCoreApplication>
 
+extern void mainLoop();
 
 void wzMain(int &argc, char **argv)
 {
