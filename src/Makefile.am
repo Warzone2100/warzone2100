@@ -281,6 +281,10 @@ if BACKEND_QT
 warzone2100_LIBS += $(top_builddir)/lib/qtgame/libqtgame.a
 endif
 
+if BACKEND_SDL
+warzone2100_LIBS += $(top_builddir)/lib/sdl/libsdl.a
+endif
+
 warzone2100_LDADD = $(warzone2100_LIBS) $(LTLIBINTL) $(SDL_LIBS) $(PHYSFS_LIBS) $(PNG_LIBS) $(OGGVORBIS_LIBS) \
 	$(THEORA_LIBS) $(OPENAL_LIBS) $(OPENGLC_LIBS) $(OPENGL_LIBS) $(QT4_LIBS) $(QJSON_LIBS) $(GLEW_LIBS) \
 	$(X_LIBS) $(X_EXTRA_LIBS) $(LDFLAGS)

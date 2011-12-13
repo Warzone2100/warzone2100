@@ -48,6 +48,8 @@ bool selfTest = false;
  *	Player globals
  */
 
+static bool mousewarp = false;
+
 uint32_t selectedPlayer = 0;  /**< Current player */
 uint32_t realSelectedPlayer = 0;
 
@@ -141,6 +143,16 @@ void frameShutDown(void)
 	// Shutdown the resource stuff
 	debug(LOG_NEVER, "No more resources!");
 	resShutDown();
+}
+
+void setMouseWarp(bool value)
+{
+	mousewarp = value;
+}
+
+bool getMouseWarp()
+{
+	return mousewarp;
 }
 
 PHYSFS_file* openLoadFile(const char* fileName, bool hard_fail)

@@ -25,13 +25,21 @@
 
 #include <QtCore/QSize>
 
+#ifdef BACKEND_QT
 struct _wzThread;
 struct _wzMutex;
 struct _wzSemaphore;
-
 typedef struct _wzThread WZ_THREAD;
 typedef struct _wzMutex WZ_MUTEX;
 typedef struct _wzSemaphore WZ_SEMAPHORE;
+#else
+struct SDL_Thread;
+struct SDL_mutex;
+struct SDL_semaphore;
+typedef SDL_Thread WZ_THREAD;
+typedef SDL_mutex WZ_MUTEX;
+typedef SDL_semaphore WZ_SEMAPHORE;
+#endif
 
 void wzMain(int &argc, char **argv);
 bool wzMain2();
@@ -51,10 +59,8 @@ bool wzGetSwapInterval();
 
 // Thread related
 WZ_THREAD *wzThreadCreate(int (*threadFunc)(void *), void *data);
-#define wzThreadJoinResult(x, y) do { *(y) = wzThreadJoin(x); } while (0)
 int wzThreadJoin(WZ_THREAD *thread);
 void wzThreadStart(WZ_THREAD *thread);
-bool wzIsThreadDone(WZ_THREAD *thread);
 void wzYieldCurrentThread(void);
 WZ_MUTEX *wzMutexCreate(void);
 void wzMutexDestroy(WZ_MUTEX *mutex);
@@ -64,6 +70,5 @@ WZ_SEMAPHORE *wzSemaphoreCreate(int startValue);
 void wzSemaphoreDestroy(WZ_SEMAPHORE *semaphore);
 void wzSemaphoreWait(WZ_SEMAPHORE *semaphore);
 void wzSemaphorePost(WZ_SEMAPHORE *semaphore);
-int wzSemaphoreAvailable(WZ_SEMAPHORE *semaphore);
 
 #endif

@@ -699,7 +699,7 @@ void NETaddRedirects(void)
 	debug(LOG_NET, "%s\n", __FUNCTION__);
 	if (!upnp_done)
 	{
-		wzThreadJoinResult(upnpdiscover, &upnp);
+		upnp = wzThreadJoin(upnpdiscover);
 		upnp_done = true;
 	}
 	if (upnp) {

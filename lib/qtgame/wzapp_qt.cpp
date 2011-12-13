@@ -48,8 +48,6 @@
 #include "lib/gamelib/gtime.h"
 #include <deque>
 
-static bool mousewarp = false;
-
 /* The possible states for keys */
 typedef enum _key_state
 {
@@ -786,16 +784,6 @@ Vector2i mouseReleasePos(MOUSE_KEY_CODE code)
 	return aMouseState[code].releasePos;
 }
 
-void setMouseWarp(bool value)
-{
-	mousewarp = value;
-}
-
-bool getMouseWarp()
-{
-	return mousewarp;
-}
-
 void setMousePos(uint16_t x, uint16_t y)
 {
 	if (mousewarp)
@@ -1025,11 +1013,6 @@ void wzThreadStart(WZ_THREAD *thread)
 	thread->start();
 }
 
-bool wzIsThreadDone(WZ_THREAD *thread)
-{
-	return thread->isFinished();
-}
-
 void wzYieldCurrentThread()
 {
 #if QT_VERSION >= 0x040500
@@ -1075,11 +1058,6 @@ void wzSemaphoreWait(WZ_SEMAPHORE *semaphore)
 void wzSemaphorePost(WZ_SEMAPHORE *semaphore)
 {
 	semaphore->release();
-}
-
-int wzSemaphoreAvailable(WZ_SEMAPHORE *semaphore)
-{
-	return semaphore->available();
 }
 
 /**************************/
