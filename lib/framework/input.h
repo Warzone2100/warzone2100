@@ -155,8 +155,8 @@ enum MOUSE_KEY_CODE
 	MOUSE_WDN,
 	MOUSE_BAD
 };
-#else
-#include <SDL.h>
+#else // BACKEND_QT
+#include <SDL/SDL.h>
 enum KEY_CODE
 {
 	KEY_ESC			=SDLK_ESCAPE,
@@ -274,7 +274,7 @@ enum MOUSE_KEY_CODE
 	MOUSE_WUP = SDL_BUTTON_WHEELUP,
 	MOUSE_WDN = SDL_BUTTON_WHEELDOWN
 };
-#endif
+#endif // BACKEND_QT
 
 /** Tell the input system that we have lost the focus. */
 extern void inputLoseFocus(void);
@@ -366,4 +366,4 @@ static inline bool specialOrderKeyDown()
 	return keyDown(KEY_LALT) || keyDown(KEY_RALT) || keyDown(KEY_LMETA) || keyDown(KEY_RMETA);
 }
 
-#endif
+#endif // _input_h

@@ -8,17 +8,17 @@
 // X11 polution
 #ifdef Status
 #undef Status
-#endif
+#endif // Status
 #ifdef CursorShape
 #undef CursorShape
-#endif
+#endif // CursorShape
 #ifdef Bool
 #undef Bool
-#endif
+#endif // Bool
 
 #ifndef GLX_SWAP_INTERVAL_EXT
 #define GLX_SWAP_INTERVAL_EXT 0x20F1
-#endif
+#endif // GLX_SWAP_INTERVAL_EXT
 
 #include <QtGui/QX11Info>
 #include <QtOpenGL/QGLWidget>
@@ -80,7 +80,7 @@ void setSwapInterval(QGLWidget const &glWidget, int * interval)
 	*interval = -1;
 }
 
-#elif defined(WZ_WS_WIN)
+#elif defined(WZ_WS_WIN) // WZ_WS_X11
 #include <QtOpenGL/QGLWidget>
 
 void setSwapInterval(QGLWidget const &glWidget, int * interval)
@@ -106,4 +106,4 @@ void setSwapInterval(QGLWidget const &glWidget, int * interval)
 		*interval = -1;
 	}
 }
-#endif
+#endif // WZ_WS_X11

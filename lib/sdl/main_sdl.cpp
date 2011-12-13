@@ -1,8 +1,8 @@
 #include <QtCore/QCoreApplication>
 #include "lib/framework/wzapp.h"
-#include <SDL.h>
-#include <SDL_thread.h>
-#include <SDL_timer.h>
+#include <SDL/SDL.h>
+#include <SDL/SDL_thread.h>
+#include <SDL/SDL_timer.h>
 #include <QtCore/QSize>
 #include <QtCore/QString>
 #include "scrap.h"

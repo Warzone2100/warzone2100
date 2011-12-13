@@ -392,6 +392,8 @@
 		43228C2611BAC02100C26C1C /* export.h in Headers */ = {isa = PBXBuildFile; fileRef = 43228C2311BAC02100C26C1C /* export.h */; };
 		43228C2711BAC02100C26C1C /* setlocale.c in Sources */ = {isa = PBXBuildFile; fileRef = 43228C2411BAC02100C26C1C /* setlocale.c */; };
 		43228C2811BAC02100C26C1C /* threadlib.c in Sources */ = {isa = PBXBuildFile; fileRef = 43228C2511BAC02100C26C1C /* threadlib.c */; };
+		432B9FD9149809220069E137 /* swapinterval.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 437FB24913CE5CA900E7EF5B /* swapinterval.cpp */; };
+		432B9FE9149809A90069E137 /* SDL.framework in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 436D24B0149642AD00BF74E3 /* SDL.framework */; };
 		432BE3D810D9C90B00A486AB /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 432BE3C110D9C79400A486AB /* InfoPlist.strings */; };
 		432BE3F810D9CD4000A486AB /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 432BE3EE10D9CB4D00A486AB /* InfoPlist.strings */; };
 		432BE40210D9CF6F00A486AB /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 432BE3FE10D9CF1300A486AB /* InfoPlist.strings */; };
@@ -511,7 +513,6 @@
 		4366729613D2122700FE85BA /* QuesoGLC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4366718213D1FD5600FE85BA /* QuesoGLC.framework */; };
 		436D248914963E8800BF74E3 /* main_qt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 436D248814963E8800BF74E3 /* main_qt.cpp */; };
 		436D249514963EF900BF74E3 /* wzapp_qt.h in Sources */ = {isa = PBXBuildFile; fileRef = 4333606E11A0731500380F5E /* wzapp_qt.h */; };
-		436D24B1149642AD00BF74E3 /* SDL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 436D24B0149642AD00BF74E3 /* SDL.framework */; };
 		4371B60F11D93FD1005A67AB /* pngpriv.h in Headers */ = {isa = PBXBuildFile; fileRef = 4371B60D11D93FD0005A67AB /* pngpriv.h */; };
 		437FB24D13CE5CA900E7EF5B /* swapinterval.mm in Sources */ = {isa = PBXBuildFile; fileRef = 437FB24B13CE5CA900E7EF5B /* swapinterval.mm */; };
 		438BDDF31129DC9A00998660 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 438BDDD71129DC9A00998660 /* InfoPlist.strings */; };
@@ -1082,6 +1083,7 @@
 				02581C820BD5AD1100957CBC /* Ogg.framework in Copy frameworks */,
 				02581C830BD5AD1100957CBC /* PhysFS.framework in Copy frameworks */,
 				02581C840BD5AD1100957CBC /* Png.framework in Copy frameworks */,
+				432B9FE9149809A90069E137 /* SDL.framework in Copy frameworks */,
 				02581C870BD5AD1100957CBC /* Vorbis.framework in Copy frameworks */,
 			);
 			name = "Copy frameworks";
@@ -1666,6 +1668,7 @@
 		43228C2311BAC02100C26C1C /* export.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = export.h; path = "external/gettext/gettext-runtime/intl/export.h"; sourceTree = "<group>"; };
 		43228C2411BAC02100C26C1C /* setlocale.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = setlocale.c; path = "external/gettext/gettext-runtime/intl/setlocale.c"; sourceTree = "<group>"; };
 		43228C2511BAC02100C26C1C /* threadlib.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = threadlib.c; path = "external/gettext/gettext-runtime/intl/threadlib.c"; sourceTree = "<group>"; };
+		432B9F611498028A0069E137 /* input.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = input.cpp; path = ../lib/sdl/input.cpp; sourceTree = SOURCE_ROOT; };
 		432BE3C210D9C79400A486AB /* English */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		432BE3C310D9C79400A486AB /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		432BE3EF10D9CB4D00A486AB /* English */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -1811,7 +1814,7 @@
 		436D248414963CF200BF74E3 /* scrap.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = scrap.cpp; path = ../lib/sdl/scrap.cpp; sourceTree = SOURCE_ROOT; };
 		436D248514963CF200BF74E3 /* scrap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = scrap.h; path = ../lib/sdl/scrap.h; sourceTree = SOURCE_ROOT; };
 		436D248814963E8800BF74E3 /* main_qt.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = main_qt.cpp; path = ../lib/qtgame/main_qt.cpp; sourceTree = SOURCE_ROOT; };
-		436D24B0149642AD00BF74E3 /* SDL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL.framework; path = external/SDL/SDL.framework; sourceTree = "<group>"; };
+		436D24B0149642AD00BF74E3 /* SDL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL.framework; path = external/SDL/SDL.framework; sourceTree = SOURCE_ROOT; };
 		436D24DE149642EB00BF74E3 /* SDLMain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SDLMain.h; path = ../3rdparty/SDL/mac/SDLMain.h; sourceTree = SOURCE_ROOT; };
 		436D24DF149642EB00BF74E3 /* SDLMain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SDLMain.m; path = ../3rdparty/SDL/mac/SDLMain.m; sourceTree = SOURCE_ROOT; };
 		4371B60D11D93FD0005A67AB /* pngpriv.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = pngpriv.h; path = external/libpng/pngpriv.h; sourceTree = "<group>"; };
@@ -2059,7 +2062,6 @@
 				4333612311A07FB900380F5E /* QtGui.framework in Frameworks */,
 				4333612511A07FBA00380F5E /* QtOpenGL.framework in Frameworks */,
 				43F30910136BAED700AFD307 /* QtNetwork.framework in Frameworks */,
-				436D24B1149642AD00BF74E3 /* SDL.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3287,6 +3289,7 @@
 		436D248214963CC900BF74E3 /* SDL */ = {
 			isa = PBXGroup;
 			children = (
+				432B9F611498028A0069E137 /* input.cpp */,
 				436D248314963CF200BF74E3 /* main_sdl.cpp */,
 				436D248414963CF200BF74E3 /* scrap.cpp */,
 				436D248514963CF200BF74E3 /* scrap.h */,
@@ -4934,6 +4937,7 @@
 				BFFD67691421661B00967210 /* macosx_screen_resolutions.cpp in Sources */,
 				434117221495024C003F06FF /* wzconfig.cpp in Sources */,
 				436D248914963E8800BF74E3 /* main_qt.cpp in Sources */,
+				432B9FD9149809220069E137 /* swapinterval.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
