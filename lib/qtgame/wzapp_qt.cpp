@@ -786,7 +786,7 @@ Vector2i mouseReleasePos(MOUSE_KEY_CODE code)
 
 void setMousePos(uint16_t x, uint16_t y)
 {
-	if (mousewarp)
+	if (getMouseWarp())
 	{
 		WzMainWindow::instance()->cursor().setPos(x, y);
 	}
