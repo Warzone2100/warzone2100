@@ -1328,6 +1328,7 @@ int main(int argc, char *argv[])
 	wzMain3();
 	saveConfig();
 	systemShutdown();
+	wzShutdown();
 	debug(LOG_MAIN, "Completed shutting down Warzone 2100");
 	return EXIT_SUCCESS;
 }

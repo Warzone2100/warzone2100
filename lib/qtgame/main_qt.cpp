@@ -79,6 +79,14 @@ void wzMain3()
 	app.exec();
 }
 
+void wzShutdown()
+{
+	delete mainWindowPtr;
+	mainWindowPtr = NULL;
+	delete appPtr;
+	appPtr = NULL;
+}
+
 QList<QSize> wzAvailableResolutions()
 {
 	return WzMainWindow::instance()->availableResolutions();

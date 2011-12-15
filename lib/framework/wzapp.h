@@ -45,6 +45,7 @@ void wzMain(int &argc, char **argv);
 bool wzMain2();
 void wzMain3();
 void wzQuit(void);              ///< Quit game
+void wzShutdown();
 void wzSetCursor(CURSOR index);
 void wzScreenFlip(void);	///< Swap the graphics buffers
 void wzShowMouse(bool visible); ///< Show the Mouse?

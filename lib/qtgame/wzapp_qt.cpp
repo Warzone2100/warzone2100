@@ -742,13 +742,13 @@ void wzShowMouse(bool visible)
 
 void wzSetCursor(CURSOR index)
 {
-    ASSERT(index < CURSOR_MAX, "Attempting to load non-existent cursor: %u", (unsigned int)index);
+	ASSERT(index < CURSOR_MAX, "Attempting to load non-existent cursor: %u", (unsigned int)index);
 
-    if (lastCursor != index)
-    {
-        WzMainWindow::instance()->setCursor(index);
-        lastCursor = index;
-    }
+	if (lastCursor != index)
+	{
+		WzMainWindow::instance()->setCursor(index);
+		lastCursor = index;
+	}
 }
 
 void wzGrabMouse()

@@ -11,6 +11,7 @@
 #include <QtCore/QString>
 #include "scrap.h"
 #include "wz2100icon.h"
+#include "cursors_sdl.h"
 
 extern void mainLoop();
 
@@ -18,6 +19,9 @@ unsigned                screenWidth = 0;   // Declared in frameint.h.
 unsigned                screenHeight = 0;  // Declared in frameint.h.
 static unsigned         screenDepth = 0;
 static SDL_Surface *    screen = NULL;
+
+QCoreApplication *appPtr;
+
 
 /* The possible states for keys */
 enum KEY_STATE
@@ -115,11 +119,6 @@ QList<QSize> wzAvailableResolutions()
 		list.push_back(s);
 	}
 	return list;
-}
-
-void wzSetCursor(CURSOR index)
-{
-	// TBD
 }
 
 void wzShowMouse(bool visible)
@@ -711,7 +710,7 @@ static void inputHandleMouseMotionEvent(SDL_MouseMotionEvent * motionEvent)
 
 void wzMain(int &argc, char **argv)
 {
-	QCoreApplication app(argc, argv);  // For Qt-script.
+	appPtr = new QCoreApplication(argc, argv);  // For Qt-script.
 }
 
 bool wzMain2()
@@ -740,7 +739,7 @@ bool wzMain2()
 	SDL_WM_SetCaption(PACKAGE_NAME, NULL);
 
 	/* initialise all cursors */
-	//initCursors();
+	sdlInitCursors();
 	//END **** Was in old frameInitialise. ****
 
 	// TODO Fall back to windowed mode, if fullscreen mode fails.
@@ -955,5 +954,14 @@ void wzMain3()
 			}
 		}
 		mainLoop();
+		inputNewFrame();
 	}
+}
+
+void wzShutdown()
+{
+	sdlFreeCursors();
+	SDL_Quit();
+	delete appPtr;
+	appPtr = NULL;
 }
