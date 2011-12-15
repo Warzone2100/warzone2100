@@ -23,8 +23,8 @@
 
 #include "lib/framework/frame.h"
 
-#include <SDL/SDL.h>
-#include <SDL/SDL_syswm.h>
+#include <SDL.h>
+#include <SDL_syswm.h>
 
 #include "scrap.h"
 

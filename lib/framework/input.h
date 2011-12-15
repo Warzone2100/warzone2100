@@ -156,7 +156,7 @@ enum MOUSE_KEY_CODE
 	MOUSE_BAD
 };
 #else // BACKEND_QT
-#include <SDL/SDL.h>
+#include <SDL.h>
 enum KEY_CODE
 {
 	KEY_ESC			=SDLK_ESCAPE,

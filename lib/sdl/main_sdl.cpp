@@ -6,9 +6,7 @@
 #include "lib/ivis_opengl/pieclip.h"
 #include "lib/gamelib/gtime.h"
 #include "src/warzoneconfig.h"
-#include <SDL/SDL.h>
-#include <SDL/SDL_thread.h>
-#include <SDL/SDL_timer.h>
+#include <SDL.h>
 #include <QtCore/QSize>
 #include <QtCore/QString>
 #include "scrap.h"
