@@ -1668,7 +1668,6 @@
 		43228C2311BAC02100C26C1C /* export.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = export.h; path = "external/gettext/gettext-runtime/intl/export.h"; sourceTree = "<group>"; };
 		43228C2411BAC02100C26C1C /* setlocale.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = setlocale.c; path = "external/gettext/gettext-runtime/intl/setlocale.c"; sourceTree = "<group>"; };
 		43228C2511BAC02100C26C1C /* threadlib.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = threadlib.c; path = "external/gettext/gettext-runtime/intl/threadlib.c"; sourceTree = "<group>"; };
-		432B9F611498028A0069E137 /* input.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = input.cpp; path = ../lib/sdl/input.cpp; sourceTree = SOURCE_ROOT; };
 		432BE3C210D9C79400A486AB /* English */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		432BE3C310D9C79400A486AB /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		432BE3EF10D9CB4D00A486AB /* English */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -3289,7 +3288,6 @@
 		436D248214963CC900BF74E3 /* SDL */ = {
 			isa = PBXGroup;
 			children = (
-				432B9F611498028A0069E137 /* input.cpp */,
 				436D248314963CF200BF74E3 /* main_sdl.cpp */,
 				436D248414963CF200BF74E3 /* scrap.cpp */,
 				436D248514963CF200BF74E3 /* scrap.h */,
