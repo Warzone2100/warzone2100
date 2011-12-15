@@ -650,6 +650,7 @@ void interfaceShutDown(void)
 	free(apsExtraSysList);
 	apsObjectList.clear();
 
+	psWScreen = NULL;
 	apsStructStatsList = NULL;
 	ppResearchList = NULL;
 	pList = NULL;

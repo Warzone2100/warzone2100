@@ -143,7 +143,10 @@ void wzScreenFlip()
 
 void wzQuit()
 {
-	// no-op
+	// Create a quit event to halt game loop.
+	SDL_Event quitEvent;
+	quitEvent.type = SDL_QUIT;
+	SDL_PushEvent(&quitEvent);
 }
 
 void wzGrabMouse()
