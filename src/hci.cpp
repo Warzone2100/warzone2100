@@ -1352,27 +1352,10 @@ static void intProcessEditStats(UDWORD id)
 	{
 		/* Clicked on a stat button - need to look for a location for it */
 		psPositionStats = ppsStatsList[id - IDSTAT_START];
-		/*if it is a structure - need to check there is enough power available
-		to build */
-		if (psPositionStats->ref >= REF_STRUCTURE_START &&
-		    psPositionStats->ref < REF_STRUCTURE_START + REF_RANGE)
-		{
-			if (!checkPower(selectedPlayer, ((STRUCTURE_STATS*)psPositionStats)->powerToBuild))
-			{
-				debug(LOG_INFO, "Ignoring power check, this is only used from the edit menu, isn't it?");
-				//return;
-			}
-		}
-		/*if it is a template - need to check there is enough power available
-		to build */
 		if (psPositionStats->ref >= REF_TEMPLATE_START &&
 		    psPositionStats->ref < REF_TEMPLATE_START + REF_RANGE)
 		{
-			if (!checkPower(selectedPlayer, ((DROID_TEMPLATE*)psPositionStats)->powerPoints))
-			{
-				debug(LOG_INFO, "Ignoring power check, this is only used from the edit menu, isn't it?");
-				//return;
-			}
+			// Placing a droid from the debug menu, set up the flag. (This would probably be safe to do, even if we're placing something else.)
 			debugMenuDroidDeliveryPoint.factoryType = REPAIR_FLAG;
 			debugMenuDroidDeliveryPoint.factoryInc = 0;
 			deliveryPointToMove = &debugMenuDroidDeliveryPoint;
