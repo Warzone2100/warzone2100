@@ -4834,18 +4834,6 @@ bool destroyStruct(STRUCTURE *psDel)
 		tileSetFire(psDel->pos.x, psDel->pos.y, burnDurationOther);
 	}
 
-	// Power generators give back their power when destroyed.
-	if (psDel->pStructureType->type == REF_POWER_GEN)
-	{
-		// Give some power back to the player, whether or not the power generator is visible.
-		addPower(psDel->player, structPowerToBuild(psDel));
-		// If it had a module attached, need to add the power for the base struct as well, whether or not the power generator is visible.
-		if (psDel->pFunctionality->powerGenerator.capacity)
-		{
-			addPower(psDel->player, psDel->pStructureType->powerToBuild);
-		}
-	}
-
 	resourceFound = removeStruct(psDel, true);
 
 	// Leave burn marks in the ground where building once stood
