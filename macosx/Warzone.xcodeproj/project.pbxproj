@@ -1629,6 +1629,9 @@
 		2244463B0E3EB7CB004D0F1F /* messagely.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = messagely.h; path = ../src/messagely.h; sourceTree = SOURCE_ROOT; };
 		22E244D40E65361800EC2B3E /* baseobject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = baseobject.cpp; path = ../src/baseobject.cpp; sourceTree = SOURCE_ROOT; };
 		22E244D50E65361800EC2B3E /* baseobject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = baseobject.h; path = ../src/baseobject.h; sourceTree = SOURCE_ROOT; };
+		4301EC49149A3DE90054BABB /* cursors_sdl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = cursors_sdl.cpp; path = ../lib/sdl/cursors_sdl.cpp; sourceTree = SOURCE_ROOT; };
+		4301EC4A149A3DE90054BABB /* cursors_sdl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = cursors_sdl.h; path = ../lib/sdl/cursors_sdl.h; sourceTree = SOURCE_ROOT; };
+		4301EC4B149A3DE90054BABB /* wz2100icon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = wz2100icon.h; path = ../lib/sdl/wz2100icon.h; sourceTree = SOURCE_ROOT; };
 		43025DFE1120A4CA006C49B1 /* Project-All.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Project-All.xcconfig"; path = "configs/Project-All.xcconfig"; sourceTree = "<group>"; };
 		43025DFF1120A4CA006C49B1 /* Warzone-All.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Warzone-All.xcconfig"; path = "configs/Warzone-All.xcconfig"; sourceTree = "<group>"; };
 		43025E001120A4CA006C49B1 /* Warzone-Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Warzone-Debug.xcconfig"; path = "configs/Warzone-Debug.xcconfig"; sourceTree = "<group>"; };
@@ -3288,6 +3291,9 @@
 		436D248214963CC900BF74E3 /* SDL */ = {
 			isa = PBXGroup;
 			children = (
+				4301EC49149A3DE90054BABB /* cursors_sdl.cpp */,
+				4301EC4A149A3DE90054BABB /* cursors_sdl.h */,
+				4301EC4B149A3DE90054BABB /* wz2100icon.h */,
 				436D248314963CF200BF74E3 /* main_sdl.cpp */,
 				436D248414963CF200BF74E3 /* scrap.cpp */,
 				436D248514963CF200BF74E3 /* scrap.h */,
