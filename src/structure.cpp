@@ -4154,38 +4154,6 @@ bool validLocation(BASE_STATS *psStats, unsigned x, unsigned y, uint16_t directi
 					}
 				}
 
-				// special droid/max-min test for repair facility
-				if ( valid && (psBuilding->type == REF_REPAIR_FACILITY))
-				{
-					getTileMaxMin(x, y, &max, &min);
-					if ((max - min) > MAX_INCLINE)
-					{
-						valid = false;
-					}
-					if (valid &&
-						!noDroid(x,y))
-					{
-						valid = false;
-					}
-				}
-
-				if (valid &&	// only do if necessary
-					(psBuilding->type != REF_REPAIR_FACILITY))
-				{
-					for (i = site.xTL; i <= site.xBR && valid; i++)
-					{
-						for (j = site.yTL; j <= site.yBR && valid; j++)
-						{
-							// This really needs to check to see if the droid that's in the way is the droid that wants to build
-							// in which case it should'nt invalidate the location.
-							if(noDroid(i,j) == false)
-							{
-								valid = false;
-							}
-						}
-					}
-				}
-
 				//walls/defensive structures can be built along any ground
 				if (valid &&	// only do if necessary
 					(!(psBuilding->type == REF_REPAIR_FACILITY ||

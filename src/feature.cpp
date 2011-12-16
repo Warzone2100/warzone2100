@@ -557,3 +557,11 @@ SDWORD getFeatureStatFromName( const char *pName )
 	}
 	return -1;
 }
+
+Vector2i getFeatureStatsSize(FEATURE_STATS const *pFeatureType)
+{
+	Vector2i size(pFeatureType->baseWidth, pFeatureType->baseBreadth);
+
+	// Feature has normal orientation (or upsidedown).
+	return size;
+}

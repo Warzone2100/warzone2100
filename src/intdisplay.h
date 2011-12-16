@@ -244,10 +244,10 @@ FACTORY *StructureGetFactory(STRUCTURE *Structure);
 
 //SDWORD ResearchGetImage(RESEARCH_FACILITY *Research);
 
-bool StatIsStructure(BASE_STATS *Stat);
+bool StatIsStructure(BASE_STATS const *Stat);
 iIMDShape *StatGetStructureIMD(BASE_STATS *Stat,UDWORD Player);
 bool StatIsTemplate(BASE_STATS *Stat);
-bool StatIsFeature(BASE_STATS *Stat);
+bool StatIsFeature(BASE_STATS const *Stat);
 
 SDWORD StatIsComponent(BASE_STATS *Stat);
 bool StatGetComponentIMD(BASE_STATS *Stat, SDWORD compID,iIMDShape **CompIMD,iIMDShape **MountIMD);

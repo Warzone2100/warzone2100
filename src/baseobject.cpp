@@ -27,6 +27,7 @@
 #include "projectile.h"
 #include "structure.h"
 #include "feature.h"
+#include "intdisplay.h"
 
 
 static inline uint16_t interpolateAngle(uint16_t v1, uint16_t v2, uint32_t t1, uint32_t t2, uint32_t t)
@@ -152,4 +153,17 @@ void _syncDebugObject(const char *function, SIMPLE_OBJECT const *psObject, char 
 			ASSERT_HELPER(!"invalid object type", "_syncDebugObject", function, "syncDebug: Invalid object type (type num %u)", (unsigned int)psObject->type);
 			break;
 	}
+}
+
+Vector2i getStatsSize(BASE_STATS const *pType, uint16_t direction)
+{
+	if (StatIsStructure(pType))
+	{
+		return getStructureStatsSize(static_cast<STRUCTURE_STATS const *>(pType), direction);
+	}
+	else if(StatIsFeature(pType))
+	{
+		return getFeatureStatsSize(static_cast<FEATURE_STATS const *>(pType));
+	}
+	return Vector2i(1, 1);
 }
