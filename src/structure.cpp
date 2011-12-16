@@ -4739,14 +4739,12 @@ bool destroyStruct(STRUCTURE *psDel)
 	/* Firstly, are we dealing with a wall section */
 	bMinor = psDel->pStructureType->type == REF_WALL || psDel->pStructureType->type == REF_WALLCORNER;
 
-//---------------------------------------
 	/* Only add if visible */
 	if(psDel->visible[selectedPlayer])
 	{
 		Vector3i pos;
 		int      i;
 
-//---------------------------------------  Do we add immediate explosions?
 		/* Set off some explosions, but not for walls */
 		/* First Explosions */
 		widthScatter = TILE_UNITS;
@@ -4765,7 +4763,6 @@ bool destroyStruct(STRUCTURE *psDel)
 		pos.z = psDel->pos.y;  // z = y [sic] intentional
 		pos.y = map_Height(pos.x, pos.z);
 
-//--------------------------------------- Do we add a fire?
 		// Set off a fire, provide dimensions for the fire
 		if(bMinor)
 		{
@@ -4795,7 +4792,6 @@ bool destroyStruct(STRUCTURE *psDel)
 			addEffect(&pos,EFFECT_FIRE,FIRE_TYPE_LOCALISED,false,NULL,0);
 		}
 
-//--------------------------------------- Do we add a destruction seq, and if so, which?
 		/* Power stations have their own desctruction sequence */
 		if(psDel->pStructureType->type == REF_POWER_GEN)
 		{
@@ -4813,18 +4809,15 @@ bool destroyStruct(STRUCTURE *psDel)
 			addEffect(&pos,EFFECT_DESTRUCTION,DESTRUCTION_TYPE_STRUCTURE,false,NULL,0);
 		}
 
-//--------------------------------------- Start an earthquake...!
 		/* shake the screen if we're near enough */
 		if(clipXY(pos.x,pos.z))
 		{
 			shakeStart();
 		}
 
-//--------------------------------------- And finally, add a boom sound!!!!
 		/* and add a sound effect */
 		audio_PlayStaticTrack( psDel->pos.x, psDel->pos.y, ID_SOUND_EXPLOSION );
 	}
-//---------------------------------------------------------------------------------------
 
 	// Actually set the tiles on fire - even if the effect is not visible.
 	if (bMinor)  // walls
@@ -4855,24 +4848,19 @@ bool destroyStruct(STRUCTURE *psDel)
 
 	resourceFound = removeStruct(psDel, true);
 
-	//once a struct is destroyed - it leaves a wrecked struct FEATURE in its place
-	// Wall's don't leave wrecked features
-	if(psDel->visible[selectedPlayer])
+	// Leave burn marks in the ground where building once stood
+	if (psDel->visible[selectedPlayer] && !resourceFound && !bMinor)
 	{
-		if (!resourceFound && !(psDel->pStructureType->type == REF_WALL) &&
-			!(psDel->pStructureType->type == REF_WALLCORNER))
+		const Vector2i size = getStructureSize(psDel);
+		const Vector2i map = map_coord(removeZ(psDel->pos)) - size / 2;
+		for (int width = 0; width < size.x; width++)
 		{
-			Vector2i size = getStructureSize(psDel);
-			Vector2i map = map_coord(removeZ(psDel->pos)) - size/2;
-			for (int width = 0; width < size.x; width++)
+			for (int breadth = 0; breadth < size.y; breadth++)
 			{
-				for (int breadth = 0; breadth < size.y; breadth++)
+				MAPTILE *psTile = mapTile(map.x + width, map.y + breadth);
+				if (TEST_TILE_VISIBLE(selectedPlayer, psTile))
 				{
-					MAPTILE *psTile = mapTile(map.x + width, map.y + breadth);
-					if(TEST_TILE_VISIBLE(selectedPlayer,psTile))
-					{
-						psTile->illumination /= 2;
-					}
+					psTile->illumination /= 2;
 				}
 			}
 		}
