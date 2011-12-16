@@ -61,7 +61,20 @@ QScriptValue convStructure(STRUCTURE *psStruct, QScriptEngine *engine)
 	QScriptValue value = convObj(psStruct, engine);
 	value.setProperty("status", (int)psStruct->status, QScriptValue::ReadOnly);
 	value.setProperty("type", (int)OBJ_STRUCTURE, QScriptValue::ReadOnly);
-	value.setProperty("stattype", (int)psStruct->pStructureType->type, QScriptValue::ReadOnly);
+	switch (psStruct->pStructureType->type) // don't bleed our source insanities into the scripting world
+	{
+	case REF_WALL:
+	case REF_WALLCORNER:
+	case REF_GATE:
+		value.setProperty("stattype", (int)REF_WALL, QScriptValue::ReadOnly);
+		break;
+	case REF_BLASTDOOR:
+		value.setProperty("stattype", (int)REF_DEFENSE, QScriptValue::ReadOnly);
+		break;
+	default:
+		value.setProperty("stattype", (int)psStruct->pStructureType->type, QScriptValue::ReadOnly);
+		break;
+	}
 	return value;
 }
 
@@ -498,6 +511,17 @@ static QScriptValue js_structureIdle(QScriptContext *context, QScriptEngine *)
 	STRUCTURE *psStruct = IdToStruct(id, player);
 	SCRIPT_ASSERT(context, psStruct, "No such structure id %d belonging to player %d", id, player);
 	return QScriptValue(structureIdle(psStruct));
+}
+
+static QScriptValue js_removeStruct(QScriptContext *context, QScriptEngine *)
+{
+	QScriptValue structVal = context->argument(0);
+	int id = structVal.property("id").toInt32();
+	int player = structVal.property("player").toInt32();
+	STRUCTURE *psStruct = IdToStruct(id, player);
+	SCRIPT_ASSERT(context, psStruct, "No such structure id %d belonging to player %d", id, player);
+	removeStruct(psStruct, true);
+	return QScriptValue();
 }
 
 // TODO, should cover scrShowConsoleText, scrAddConsoleText, scrTagConsoleText and scrConsole
@@ -1040,6 +1064,7 @@ bool registerFunctions(QScriptEngine *engine)
 	engine->globalObject().setProperty("makeComponentAvailable", engine->newFunction(js_makeComponentAvailable));
 	engine->globalObject().setProperty("enableComponent", engine->newFunction(js_enableComponent));
 	engine->globalObject().setProperty("allianceExistsBetween", engine->newFunction(js_allianceExistsBetween));
+	engine->globalObject().setProperty("removeStruct", engine->newFunction(js_removeStruct));
 
 	// Set some useful constants
 	engine->globalObject().setProperty("DORDER_ATTACK", DORDER_ATTACK, QScriptValue::ReadOnly | QScriptValue::Undeletable);
@@ -1072,20 +1097,37 @@ bool registerFunctions(QScriptEngine *engine)
 	engine->globalObject().setProperty("BUILT", SS_BUILT, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("BEING_DEMOLISHED", SS_BEING_DEMOLISHED, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("DROID_CONSTRUCT", DROID_CONSTRUCT, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("REF_HQ", DROID_CONSTRUCT, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("REF_FACTORY", DROID_CONSTRUCT, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("REF_POWER_GEN", DROID_CONSTRUCT, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("REF_RESOURCE_EXTRACTOR", DROID_CONSTRUCT, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("REF_DEFENSE", DROID_CONSTRUCT, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("REF_WALL", DROID_CONSTRUCT, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("REF_RESEARCH", DROID_CONSTRUCT, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("REF_REPAIR_FACILITY", DROID_CONSTRUCT, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("REF_CYBORG_FACTORY", DROID_CONSTRUCT, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("REF_VTOL_FACTORY", DROID_CONSTRUCT, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("REF_REARM_PAD", DROID_CONSTRUCT, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("REF_SAT_UPLINK", DROID_CONSTRUCT, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("REF_GATE", DROID_CONSTRUCT, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("REF_COMMAND_CONTROL", DROID_CONSTRUCT, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("HQ", REF_HQ, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("FACTORY", REF_FACTORY, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("POWER_GEN", REF_POWER_GEN, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("RESOURCE_EXTRACTOR", REF_RESOURCE_EXTRACTOR, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("DEFENSE", REF_DEFENSE, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("WALL", REF_WALL, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("RESEARCH", REF_RESEARCH, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("REPAIR_FACILITY", REF_REPAIR_FACILITY, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("CYBORG_FACTORY", REF_CYBORG_FACTORY, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("VTOL_FACTORY", REF_VTOL_FACTORY, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("REARM_PAD", REF_REARM_PAD, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("SAT_UPLINK", REF_SAT_UPLINK, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("GATE", REF_GATE, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("COMMAND_CONTROL", REF_COMMAND_CONTROL, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("EASY", DIFFICULTY_EASY, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("MEDIUM", DIFFICULTY_MEDIUM, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("HARD", DIFFICULTY_HARD, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("INSANE", DIFFICULTY_INSANE, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+
+	// Static knowledge about players
+	QScriptValue playerData = engine->newArray(game.maxPlayers);
+	for (int i = 0; i < game.maxPlayers; i++)
+	{
+		QScriptValue vector = engine->newObject();
+		vector.setProperty("difficulty", NetPlay.players[i].difficulty, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+		vector.setProperty("colour", NetPlay.players[i].colour, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+		vector.setProperty("position", NetPlay.players[i].position, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+		vector.setProperty("team", NetPlay.players[i].team, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+		playerData.setProperty(i, vector, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	}
+	engine->globalObject().setProperty("playerData", playerData, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 
 	// Static map knowledge about start positions
 	QScriptValue startPositions = engine->newArray(game.maxPlayers);
@@ -1104,8 +1146,8 @@ bool registerFunctions(QScriptEngine *engine)
 		vector.setProperty("y", map_coord(derricks[i].y), QScriptValue::ReadOnly | QScriptValue::Undeletable);
 		derrickPositions.setProperty(i, vector, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	}
-	engine->globalObject().setProperty("startPositions", startPositions, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("derrickPositions", derrickPositions, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("startPositions", startPositions, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 
 	return true;
 }
