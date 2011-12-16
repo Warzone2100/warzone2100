@@ -85,6 +85,8 @@
 
 static UDWORD		newMapWidth, newMapHeight;
 
+static FLAG_POSITION debugMenuDroidDeliveryPoint;
+
 #define RETXOFFSET (0)// Reticule button offset
 #define RETYOFFSET (0)
 #define NUMRETBUTS	7 // Number of reticule buttons.
@@ -1369,8 +1371,11 @@ static void intProcessEditStats(UDWORD id)
 			if (!checkPower(selectedPlayer, ((DROID_TEMPLATE*)psPositionStats)->powerPoints))
 			{
 				debug(LOG_INFO, "Ignoring power check, this is only used from the edit menu, isn't it?");
-				return;
+				//return;
 			}
+			debugMenuDroidDeliveryPoint.factoryType = REPAIR_FLAG;
+			debugMenuDroidDeliveryPoint.factoryInc = 0;
+			deliveryPointToMove = &debugMenuDroidDeliveryPoint;
 		}
 		intStartStructPosition(psPositionStats);
 		editPosMode = IED_POS;
