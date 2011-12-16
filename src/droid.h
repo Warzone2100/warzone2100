@@ -48,7 +48,7 @@
 extern DROID_TEMPLATE			*apsDroidTemplates[MAX_PLAYERS];
 extern DROID_TEMPLATE			*apsStaticTemplates;			// for AIs and scripts
 
-//used to stop structures being built too near the edge and droids being placed down - pickATile
+//used to stop structures being built too near the edge and droids being placed down
 #define TOO_NEAR_EDGE	3
 
 /* Define max number of allowed droids per droid type */
@@ -70,7 +70,6 @@ enum PICKTILE
 {
 	NO_FREE_TILE,
 	FREE_TILE,
-	HALF_FREE_TILE
 };
 
 // the structure that was last hit
@@ -248,9 +247,7 @@ extern void droidSetName(DROID *psDroid, const char *pName);
 // returns true when no droid on x,y square.
 extern bool	noDroid					(UDWORD x, UDWORD y);				// true if no droid at x,y
 // returns an x/y coord to place a droid
-extern bool pickATile				(UDWORD *x0,UDWORD *y0, UBYTE numIterations);
 extern PICKTILE pickHalfATile		(UDWORD *x, UDWORD *y, UBYTE numIterations);
-extern bool	pickATile2				(UDWORD *x, UDWORD *y, UDWORD numIterations);
 extern	bool	zonedPAT(UDWORD x, UDWORD y);
 extern	bool	pickATileGen(UDWORD *x, UDWORD *y, UBYTE numIterations,
 					 bool (*function)(UDWORD x, UDWORD y));

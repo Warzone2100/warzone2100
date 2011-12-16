@@ -1022,11 +1022,6 @@ void placeLimboDroids(void)
 		    }
 		    psDroid->pos.x = (UWORD)world_coord(droidX);
 		    psDroid->pos.y = (UWORD)world_coord(droidY);
-		    if (pickRes == HALF_FREE_TILE )
-		    {
-			    psDroid->pos.x += TILE_UNITS;
-			    psDroid->pos.y += TILE_UNITS;
-		    }
 		    ASSERT(worldOnMap(psDroid->pos.x,psDroid->pos.y), "limbo droid is not on the map");
 		    psDroid->pos.z = map_Height(psDroid->pos.x, psDroid->pos.y);
 		    updateDroidOrientation(psDroid);
@@ -1379,11 +1374,6 @@ static void processMission(void)
 			ASSERT(pickRes != NO_FREE_TILE, "processMission: Unable to find a free location" );
 			x = (UWORD)world_coord(droidX);
 			y = (UWORD)world_coord(droidY);
-			if (pickRes == HALF_FREE_TILE )
-			{
-				x += TILE_UNITS;
-				y += TILE_UNITS;
-			}
 			droidSetPosition(psDroid, x, y);
 			ASSERT(worldOnMap(psDroid->pos.x,psDroid->pos.y), "the droid is not on the map");
 			updateDroidOrientation(psDroid);
@@ -1745,11 +1735,6 @@ static void missionResetDroids(void)
 					int wx = world_coord(x);
 					int wy = world_coord(y);
 
-					if (pickRes == HALF_FREE_TILE )
-					{
-						wx += TILE_UNITS;
-						wy += TILE_UNITS;
-					}
 					droidSetPosition(psDroid, wx, wy);
 					placed = true;
 				}
@@ -1774,11 +1759,6 @@ static void missionResetDroids(void)
 							int wx = world_coord(x);
 							int wy = world_coord(y);
 
-							if (pickRes == HALF_FREE_TILE )
-							{
-								wx += TILE_UNITS;
-								wy += TILE_UNITS;
-							}
 							droidSetPosition(psDroid, wx, wy);
 							placed = true;
 						}

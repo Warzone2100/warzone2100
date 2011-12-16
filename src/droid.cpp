@@ -3160,46 +3160,17 @@ static bool oneDroidMax(UDWORD x, UDWORD y)
 // returns true if it's a sensible place to put that droid.
 static bool sensiblePlace(SDWORD x, SDWORD y, PROPULSION_TYPE propulsion)
 {
-	UDWORD count=0;
-
 	// not too near the edges.
 	if((x < TOO_NEAR_EDGE) || (x > (SDWORD)(mapWidth - TOO_NEAR_EDGE)))
 		return false;
 	if((y < TOO_NEAR_EDGE) || (y > (SDWORD)(mapHeight - TOO_NEAR_EDGE)))
 		return false;
 
-	// check no features there
-	if(TileHasFeature(mapTile(x,y)))
-	{
-		return false;
-	}
-
 	// not on a blocking tile.
 	if (fpathBlockingTile(x, y, propulsion))
 	{
 		return false;
 	}
-
-	// shouldn't next to more than one blocking tile, to avoid windy paths.
-	if (fpathBlockingTile(x - 1, y - 1, propulsion))
-		count++;
-	if (fpathBlockingTile(x, y - 1, propulsion))
-		count++;
-	if (fpathBlockingTile(x + 1, y - 1, propulsion))
-		count++;
-	if (fpathBlockingTile(x - 1, y, propulsion))
-		count++;
-	if (fpathBlockingTile(x + 1, y, propulsion))
-		count++;
-	if (fpathBlockingTile(x -1, y + 1, propulsion))
-		count++;
-	if (fpathBlockingTile(x, y + 1, propulsion))
-		count++;
-	if (fpathBlockingTile(x +1, y + 1, propulsion))
-		count++;
-
-	if(count > 1)
-		return false;
 
 	return true;
 }
@@ -3282,12 +3253,6 @@ bool	pickATileGenThreat(UDWORD *x, UDWORD *y, UBYTE numIterations, SDWORD threat
 	/* If we got this far, then we failed - passed in values will be unchanged */
 	return false;
 
-}
-
-/// find an empty tile accessible to a wheeled droid 
-bool	pickATile(UDWORD *x, UDWORD *y, UBYTE numIterations)
-{
-	return pickATileGen(x, y, numIterations, zonedPAT);
 }
 
 /// find a tile for a wheeled droid with only one other droid present
