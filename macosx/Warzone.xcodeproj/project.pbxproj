@@ -364,7 +364,6 @@
 		43119DC61353B002004C54BB /* pngdebug.h in Headers */ = {isa = PBXBuildFile; fileRef = 43119DC11353AFD7004C54BB /* pngdebug.h */; };
 		43119DC71353B005004C54BB /* pnglibconf.h in Headers */ = {isa = PBXBuildFile; fileRef = 43119DC31353AFD7004C54BB /* pnglibconf.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		43119DC81353B007004C54BB /* pngstruct.h in Headers */ = {isa = PBXBuildFile; fileRef = 43119DC41353AFD7004C54BB /* pngstruct.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4313231A13BE866B0023280C /* qtgame.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4313231713BE866B0023280C /* qtgame.cpp */; };
 		4318439B1363955300BA2BC5 /* MiniUPnPc.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4318434B1363942200BA2BC5 /* MiniUPnPc.framework */; };
 		431843B71363958E00BA2BC5 /* MiniUPnPc.framework in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 4318434B1363942200BA2BC5 /* MiniUPnPc.framework */; };
 		431843C8136395B000BA2BC5 /* bsdqueue.h in Headers */ = {isa = PBXBuildFile; fileRef = 43C18F7A114FF38B0028741B /* bsdqueue.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -392,8 +391,11 @@
 		43228C2611BAC02100C26C1C /* export.h in Headers */ = {isa = PBXBuildFile; fileRef = 43228C2311BAC02100C26C1C /* export.h */; };
 		43228C2711BAC02100C26C1C /* setlocale.c in Sources */ = {isa = PBXBuildFile; fileRef = 43228C2411BAC02100C26C1C /* setlocale.c */; };
 		43228C2811BAC02100C26C1C /* threadlib.c in Sources */ = {isa = PBXBuildFile; fileRef = 43228C2511BAC02100C26C1C /* threadlib.c */; };
-		432B9FD9149809220069E137 /* swapinterval.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 437FB24913CE5CA900E7EF5B /* swapinterval.cpp */; };
-		432B9FE9149809A90069E137 /* SDL.framework in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 436D24B0149642AD00BF74E3 /* SDL.framework */; };
+		432BA00114980A2B0069E137 /* SDLMain.m in Sources */ = {isa = PBXBuildFile; fileRef = 436D24DF149642EB00BF74E3 /* SDLMain.m */; };
+		432BA00314980A370069E137 /* main_sdl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 436D248314963CF200BF74E3 /* main_sdl.cpp */; };
+		432BA00414980A380069E137 /* scrap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 436D248414963CF200BF74E3 /* scrap.cpp */; };
+		432BA01C14980A740069E137 /* SDL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 436D24B0149642AD00BF74E3 /* SDL.framework */; };
+		432BA02E14980A8A0069E137 /* SDL.framework in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 436D24B0149642AD00BF74E3 /* SDL.framework */; };
 		432BE3D810D9C90B00A486AB /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 432BE3C110D9C79400A486AB /* InfoPlist.strings */; };
 		432BE3F810D9CD4000A486AB /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 432BE3EE10D9CB4D00A486AB /* InfoPlist.strings */; };
 		432BE40210D9CF6F00A486AB /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 432BE3FE10D9CF1300A486AB /* InfoPlist.strings */; };
@@ -420,16 +422,10 @@
 		4332994E13CB50C4005BE784 /* QtCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4333611E11A07FB900380F5E /* QtCore.framework */; };
 		433299CF13CB5516005BE784 /* parserrunnable.h in Sources */ = {isa = PBXBuildFile; fileRef = 4332992513CB4FC5005BE784 /* parserrunnable.h */; };
 		433299D013CB5516005BE784 /* serializerrunnable.h in Sources */ = {isa = PBXBuildFile; fileRef = 4332992E13CB4FC5005BE784 /* serializerrunnable.h */; };
-		4333607211A0731500380F5E /* wzapp_qt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4333606F11A0731500380F5E /* wzapp_qt.cpp */; };
 		4333612211A07FB900380F5E /* QtCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4333611E11A07FB900380F5E /* QtCore.framework */; };
-		4333612311A07FB900380F5E /* QtGui.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4333611F11A07FB900380F5E /* QtGui.framework */; };
-		4333612511A07FBA00380F5E /* QtOpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4333612111A07FB900380F5E /* QtOpenGL.framework */; };
 		4333661B11A07FFF00380F5E /* QtCore.framework in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 4333611E11A07FB900380F5E /* QtCore.framework */; };
-		4333661C11A07FFF00380F5E /* QtGui.framework in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 4333611F11A07FB900380F5E /* QtGui.framework */; };
-		4333661D11A07FFF00380F5E /* QtOpenGL.framework in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 4333612111A07FB900380F5E /* QtOpenGL.framework */; };
 		4336D8AA111DDF0F0012E8E4 /* random.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4336D8A8111DDF0F0012E8E4 /* random.cpp */; };
 		434117221495024C003F06FF /* wzconfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 434117201495024C003F06FF /* wzconfig.cpp */; };
-		4343651E149EA04800527137 /* template.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4343651C149EA04800527137 /* template.cpp */; };
 		43502D6D1347648300A02A1F /* GLExtensionWrangler.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43502D521347640700A02A1F /* GLExtensionWrangler.framework */; };
 		43502D77134764B000A02A1F /* GLExtensionWrangler.framework in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 43502D521347640700A02A1F /* GLExtensionWrangler.framework */; };
 		43502DC51347675300A02A1F /* glew.c in Sources */ = {isa = PBXBuildFile; fileRef = 43502DC21347675300A02A1F /* glew.c */; };
@@ -441,6 +437,7 @@
 		4355E13110D6028C00A19EE4 /* theora.h in Headers */ = {isa = PBXBuildFile; fileRef = 4355E12D10D6028C00A19EE4 /* theora.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4355E13210D6028C00A19EE4 /* theoradec.h in Headers */ = {isa = PBXBuildFile; fileRef = 4355E12E10D6028C00A19EE4 /* theoradec.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4355E13310D6028C00A19EE4 /* theoraenc.h in Headers */ = {isa = PBXBuildFile; fileRef = 4355E12F10D6028C00A19EE4 /* theoraenc.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		435D3B6A149AC4A000E24F69 /* cursors_sdl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4301EC49149A3DE90054BABB /* cursors_sdl.cpp */; };
 		436671C713D1FF5D00FE85BA /* glc.h in Headers */ = {isa = PBXBuildFile; fileRef = 436671C213D1FF5D00FE85BA /* glc.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		436671C813D1FF5D00FE85BA /* glew.h in Headers */ = {isa = PBXBuildFile; fileRef = 436671C313D1FF5D00FE85BA /* glew.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		436671C913D1FF5D00FE85BA /* glxew.h in Headers */ = {isa = PBXBuildFile; fileRef = 436671C413D1FF5D00FE85BA /* glxew.h */; settings = {ATTRIBUTES = (Private, ); }; };
@@ -486,12 +483,9 @@
 		4366722A13D20B5700FE85BA /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43B8FD34127CB13F006F5A13 /* OpenGL.framework */; };
 		4366727413D211AE00FE85BA /* QuesoGLC.framework in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 4366718213D1FD5600FE85BA /* QuesoGLC.framework */; };
 		4366729613D2122700FE85BA /* QuesoGLC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4366718213D1FD5600FE85BA /* QuesoGLC.framework */; };
-		436D248914963E8800BF74E3 /* main_qt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 436D248814963E8800BF74E3 /* main_qt.cpp */; };
-		436D249514963EF900BF74E3 /* wzapp_qt.h in Sources */ = {isa = PBXBuildFile; fileRef = 4333606E11A0731500380F5E /* wzapp_qt.h */; };
 		4371B60F11D93FD1005A67AB /* pngpriv.h in Headers */ = {isa = PBXBuildFile; fileRef = 4371B60D11D93FD0005A67AB /* pngpriv.h */; };
-		437FB24D13CE5CA900E7EF5B /* swapinterval.mm in Sources */ = {isa = PBXBuildFile; fileRef = 437FB24B13CE5CA900E7EF5B /* swapinterval.mm */; };
+		437487CF14AE41C100ABC9C7 /* template.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4343651C149EA04800527137 /* template.cpp */; };
 		438BDDF31129DC9A00998660 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 438BDDD71129DC9A00998660 /* InfoPlist.strings */; };
-		439D3AC5145C944000386BD0 /* qtgame.h in Sources */ = {isa = PBXBuildFile; fileRef = 4313231813BE866B0023280C /* qtgame.h */; };
 		43A6285B13A6C4A400C6B786 /* geometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43A6285913A6C4A400C6B786 /* geometry.cpp */; };
 		43A8417811028EDD00733CCB /* pointtree.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43A8417611028EDD00733CCB /* pointtree.cpp */; };
 		43AA704313C7FD510015B52B /* QJson.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43AA702A13C7FC640015B52B /* QJson.framework */; };
@@ -668,7 +662,6 @@
 		976AE8280EA0B59A00F2473F /* timer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 976AE8260EA0B59A00F2473F /* timer.cpp */; };
 		97AEAB780E8C1C5100A10721 /* Ogg.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02356E090BD3BCFE00E9A019 /* Ogg.framework */; };
 		97AEAB790E8C1C5100A10721 /* Vorbis.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02DDA7EE0BD3C03F0049AB60 /* Vorbis.framework */; };
-		BFFD67691421661B00967210 /* macosx_screen_resolutions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BFFD67671421661B00967210 /* macosx_screen_resolutions.cpp */; settings = {COMPILER_FLAGS = "-fno-tree-vectorize -fno-strict-aliasing"; }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXBuildRule section */
@@ -956,8 +949,6 @@
 				43AA704413C7FD570015B52B /* QJson.framework in Copy frameworks */,
 				4333661B11A07FFF00380F5E /* QtCore.framework in Copy frameworks */,
 				43F1D99A1343F1DE001478EC /* QtScript.framework in Copy frameworks */,
-				4333661C11A07FFF00380F5E /* QtGui.framework in Copy frameworks */,
-				4333661D11A07FFF00380F5E /* QtOpenGL.framework in Copy frameworks */,
 				43F30913136BAEE900AFD307 /* QtNetwork.framework in Copy frameworks */,
 				43502D77134764B000A02A1F /* GLExtensionWrangler.framework in Copy frameworks */,
 				431843B71363958E00BA2BC5 /* MiniUPnPc.framework in Copy frameworks */,
@@ -967,7 +958,7 @@
 				02581C820BD5AD1100957CBC /* Ogg.framework in Copy frameworks */,
 				02581C830BD5AD1100957CBC /* PhysFS.framework in Copy frameworks */,
 				02581C840BD5AD1100957CBC /* Png.framework in Copy frameworks */,
-				432B9FE9149809A90069E137 /* SDL.framework in Copy frameworks */,
+				432BA02E14980A8A0069E137 /* SDL.framework in Copy frameworks */,
 				02581C870BD5AD1100957CBC /* Vorbis.framework in Copy frameworks */,
 			);
 			name = "Copy frameworks";
@@ -1910,9 +1901,8 @@
 				43B8FD35127CB13F006F5A13 /* OpenGL.framework in Frameworks */,
 				4333612211A07FB900380F5E /* QtCore.framework in Frameworks */,
 				43F1D9801343F1C5001478EC /* QtScript.framework in Frameworks */,
-				4333612311A07FB900380F5E /* QtGui.framework in Frameworks */,
-				4333612511A07FBA00380F5E /* QtOpenGL.framework in Frameworks */,
 				43F30910136BAED700AFD307 /* QtNetwork.framework in Frameworks */,
+				432BA01C14980A740069E137 /* SDL.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4402,8 +4392,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				436D249514963EF900BF74E3 /* wzapp_qt.h in Sources */,
-				439D3AC5145C944000386BD0 /* qtgame.h in Sources */,
 				0246A0C20BD3CBD5004D1C70 /* debug.cpp in Sources */,
 				0246A0C40BD3CBD5004D1C70 /* frame.cpp in Sources */,
 				0246A0C50BD3CBD5004D1C70 /* frameresource.cpp in Sources */,
@@ -4584,7 +4572,6 @@
 				43C18FD1114FF38B0028741B /* netplay.cpp in Sources */,
 				43C18FD2114FF38B0028741B /* netsocket.cpp in Sources */,
 				43C18FD3114FF38B0028741B /* nettypes.cpp in Sources */,
-				4333607211A0731500380F5E /* wzapp_qt.cpp in Sources */,
 				43C2711E11DD308D009BC740 /* jpeg_encoder.cpp in Sources */,
 				43B8F285127C8F9D006F5A13 /* crc.cpp in Sources */,
 				43B8F288127C8FDD006F5A13 /* netqueue.cpp in Sources */,
@@ -4592,14 +4579,13 @@
 				43F1D9D21343F542001478EC /* qtscript.cpp in Sources */,
 				43F1D9D31343F542001478EC /* qtscriptfuncs.cpp in Sources */,
 				43A6285B13A6C4A400C6B786 /* geometry.cpp in Sources */,
-				4313231A13BE866B0023280C /* qtgame.cpp in Sources */,
 				43DD1BCE13662006003AA9EC /* netlobby.cpp in Sources */,
-				437FB24D13CE5CA900E7EF5B /* swapinterval.mm in Sources */,
-				BFFD67691421661B00967210 /* macosx_screen_resolutions.cpp in Sources */,
 				434117221495024C003F06FF /* wzconfig.cpp in Sources */,
-				436D248914963E8800BF74E3 /* main_qt.cpp in Sources */,
-				432B9FD9149809220069E137 /* swapinterval.cpp in Sources */,
-				4343651E149EA04800527137 /* template.cpp in Sources */,
+				432BA00114980A2B0069E137 /* SDLMain.m in Sources */,
+				432BA00314980A370069E137 /* main_sdl.cpp in Sources */,
+				432BA00414980A380069E137 /* scrap.cpp in Sources */,
+				435D3B6A149AC4A000E24F69 /* cursors_sdl.cpp in Sources */,
+				437487CF14AE41C100ABC9C7 /* template.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
