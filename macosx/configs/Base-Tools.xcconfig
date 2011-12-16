@@ -1,9 +1,0 @@
-// Global settings for all Framework configurations
-
-
-GCC_VERSION = com.apple.compilers.llvm.clang.1_0
-INSTALL_PATH = /usr/local/bin
-LD_RUNPATH_SEARCH_PATHS = @loader_path @loader_path/. @loader_path/Warzone.app/Contents/Frameworks /Applications/Warzone.app/Contents/Frameworks @loader_path/../../external/QT /sw/lib/qt4-mac/lib/ /sw/lib/qt4-x11/lib/
-ALWAYS_SEARCH_USER_PATHS = NO
-FRAMEWORK_SEARCH_PATHS = $(inherited) $(FRAMEWORK_SEARCH_PATHS_QUOTED_2) $(FRAMEWORK_SEARCH_PATHS_QUOTED_3)
-USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/.." "$(SRCROOT)/../tools/map"
