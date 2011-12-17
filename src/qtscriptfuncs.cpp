@@ -1015,6 +1015,22 @@ static QScriptValue js_isStructureAvailable(QScriptContext *context, QScriptEngi
 			    && asStructLimits[player][index].currentQuantity < asStructLimits[player][index].limit);
 }
 
+// FIXME - find a better way
+static QScriptValue js_hackNetOff(QScriptContext *, QScriptEngine *)
+{
+	bMultiPlayer = false;
+	bMultiMessages = false;
+	return QScriptValue();
+}
+
+// FIXME - find a better way
+static QScriptValue js_hackNetOn(QScriptContext *, QScriptEngine *)
+{
+	bMultiPlayer = true;
+	bMultiMessages = true;
+	return QScriptValue();
+}
+
 // ----------------------------------------------------------------------------------------
 // Register functions with scripting system
 
@@ -1023,6 +1039,10 @@ bool registerFunctions(QScriptEngine *engine)
 	// Register functions to the script engine here
 	engine->globalObject().setProperty("_", engine->newFunction(js_translate));
 	engine->globalObject().setProperty("label", engine->newFunction(js_label));
+
+	// horrible hacks follow -- do not rely on these being present!
+	engine->globalObject().setProperty("hackNetOff", engine->newFunction(js_hackNetOff));
+	engine->globalObject().setProperty("hackNetOn", engine->newFunction(js_hackNetOn));
 
 	// General functions -- geared for use in AI scripts
 	engine->globalObject().setProperty("debug", engine->newFunction(js_debug));
