@@ -10,15 +10,6 @@ var lastHitTime = 0;
 
 function eventGameInit()
 {
-	//set up the reticule buttons
-	addReticuleButton(COMMAND);
-	addReticuleButton(CANCEL);
-	addReticuleButton(BUILD);
-	addReticuleButton(MANUFACTURE);
-	addReticuleButton(RESEARCH);
-	addReticuleButton(INTELMAP);
-	addReticuleButton(DESIGN);
-
 	for (var playnum = 0; playnum < maxPlayers; playnum++)
 	{
 		enableStructure("A0CommandCentre", playnum);		// make structures available to build
@@ -100,6 +91,20 @@ function eventGameInit()
 			{
 				completeResearch(techlist[count], playnum);
 			}
+			// Keep only some structures for insane AI
+			hackNetOff();
+			var structs = enumStruct(playnum);
+			for (var i = 0; i < structs.length; i++)
+			{
+				var s = structs[i];
+				if (playerData[playnum].difficulty != INSANE
+				    || (s.stattype != WALL && s.stattype != DEFENSE && s.stattype != GATE
+				        && s.stattype != RESOURCE_EXTRACTOR))
+				{
+					removeStruct(s);
+				}
+			}
+			hackNetOn();
 		}
 		else if (baseType == CAMP_BASE)
 		{
@@ -108,6 +113,19 @@ function eventGameInit()
 			{
 				completeResearch(techlist[count], playnum);
 			}
+			// Keep only some structures
+			hackNetOff();
+			var structs = enumStruct(playnum);
+			for (var i = 0; i < structs.length; i++)
+			{
+				var s = structs[i];
+				if ((playerData[playnum].difficulty != INSANE && (s.stattype == WALL || s.stattype == DEFENSE))
+				    || s.stattype == GATE || s.stattype == CYBORG_FACTORY || s.stattype == COMMAND_CONTROL)
+				{
+					removeStruct(s);
+				}
+			}
+			hackNetOn();
 		}
 		else // CAMP_WALLS
 		{
