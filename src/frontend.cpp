@@ -1192,13 +1192,14 @@ bool runGameOptionsMenu(void)
 		setNextLanguage();
 		widgSetString(psWScreen, FRONTEND_LANGUAGE_R, getLanguageName());
 		/* Hack to reset current menu text, which looks fancy. */
-		widgSetString(psWScreen, FRONTEND_LANGUAGE, _("Language"));
-		widgSetString(psWScreen, FRONTEND_COLOUR,  _("Unit Colour"));
-		widgSetString(psWScreen, FRONTEND_DIFFICULTY, _("Difficulty"));
-		widgSetString(psWScreen, FRONTEND_SCROLLSPEED,_("Scroll Speed"));
 		widgSetString(psWScreen, FRONTEND_SIDETEXT, _("GAME OPTIONS"));
-		// FIXME: Changing the below return button tooltip does not work.
-		//widgSetString(psWScreen, FRONTEND_BOTFORM, P_("menu", "Return"));
+		widgSetTipText(widgGetFromID(psWScreen, FRONTEND_QUIT), P_("menu", "Return"));
+		widgSetString(psWScreen, FRONTEND_LANGUAGE, _("Language"));
+		widgSetString(psWScreen, FRONTEND_COLOUR, _("Unit Colour"));
+		widgSetString(psWScreen, FRONTEND_DIFFICULTY, _("Difficulty"));
+		widgSetString(psWScreen, FRONTEND_SCROLLSPEED, _("Scroll Speed"));
+		widgSetString(psWScreen, FRONTEND_RADAR, _("Radar"));
+		widgSetString(psWScreen, FRONTEND_RADAR_R, rotateRadar ? _("Rotating") : _("Fixed"));
 		switch( getDifficultyLevel() )
 		{
 		case DL_EASY:
