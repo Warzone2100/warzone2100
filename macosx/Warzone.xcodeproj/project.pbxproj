@@ -420,32 +420,6 @@
 		4332994E13CB50C4005BE784 /* QtCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4333611E11A07FB900380F5E /* QtCore.framework */; };
 		433299CF13CB5516005BE784 /* parserrunnable.h in Sources */ = {isa = PBXBuildFile; fileRef = 4332992513CB4FC5005BE784 /* parserrunnable.h */; };
 		433299D013CB5516005BE784 /* serializerrunnable.h in Sources */ = {isa = PBXBuildFile; fileRef = 4332992E13CB4FC5005BE784 /* serializerrunnable.h */; };
-		4332BC4613E36776004F0E5C /* PhysFS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02DDA8B10BD3C2F20049AB60 /* PhysFS.framework */; };
-		4332BC4713E36776004F0E5C /* Png.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02356DC20BD3BBFC00E9A019 /* Png.framework */; };
-		4332BC4C13E3690B004F0E5C /* map2png.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4332BBFF13E323EE004F0E5C /* map2png.cpp */; };
-		4332BC4E13E36918004F0E5C /* maplib.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4332BC0313E323EE004F0E5C /* maplib.cpp */; };
-		4332BC4F13E36939004F0E5C /* mapload.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4332BC0513E323EE004F0E5C /* mapload.cpp */; };
-		4332BC5013E36944004F0E5C /* pngsave.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4332BC0713E323EE004F0E5C /* pngsave.cpp */; };
-		4332BD0E13E3897D004F0E5C /* mapconv.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4332BC0113E323EE004F0E5C /* mapconv.cpp */; };
-		4332BD1013E38992004F0E5C /* mapload.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4332BC0513E323EE004F0E5C /* mapload.cpp */; };
-		4332BD1213E3899D004F0E5C /* maplib.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4332BC0313E323EE004F0E5C /* maplib.cpp */; };
-		4332BD1413E389AC004F0E5C /* pngsave.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4332BC0713E323EE004F0E5C /* pngsave.cpp */; };
-		4332BD2513E38B2C004F0E5C /* PhysFS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02DDA8B10BD3C2F20049AB60 /* PhysFS.framework */; };
-		4332BD2613E38B2C004F0E5C /* Png.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02356DC20BD3BBFC00E9A019 /* Png.framework */; };
-		4332BD5213E38D25004F0E5C /* PhysFS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02DDA8B10BD3C2F20049AB60 /* PhysFS.framework */; };
-		4332BD7313E38FA4004F0E5C /* mapinfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4332BC0213E323EE004F0E5C /* mapinfo.cpp */; };
-		4332BD7413E38FAF004F0E5C /* mapload.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4332BC0513E323EE004F0E5C /* mapload.cpp */; };
-		4332BD7513E38FB7004F0E5C /* maplib.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4332BC0313E323EE004F0E5C /* maplib.cpp */; };
-		4332BD8B13E38FCA004F0E5C /* mapload.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4332BC0513E323EE004F0E5C /* mapload.cpp */; };
-		4332BD8C13E38FCA004F0E5C /* maplib.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4332BC0313E323EE004F0E5C /* maplib.cpp */; };
-		4332BD8E13E38FCA004F0E5C /* PhysFS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02DDA8B10BD3C2F20049AB60 /* PhysFS.framework */; };
-		4332BDA313E38FDF004F0E5C /* map2lnd.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4332BBFE13E323ED004F0E5C /* map2lnd.cpp */; };
-		4332BDB613E39185004F0E5C /* mapload.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4332BC0513E323EE004F0E5C /* mapload.cpp */; };
-		4332BDB713E39185004F0E5C /* maplib.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4332BC0313E323EE004F0E5C /* maplib.cpp */; };
-		4332BDBA13E39185004F0E5C /* PhysFS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02DDA8B10BD3C2F20049AB60 /* PhysFS.framework */; };
-		4332BDCD13E3919A004F0E5C /* map2preview.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4332BC0013E323EE004F0E5C /* map2preview.cpp */; };
-		4332BDD013E392E4004F0E5C /* pngsave.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4332BC0713E323EE004F0E5C /* pngsave.cpp */; };
-		4332BDE313E39351004F0E5C /* Png.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02356DC20BD3BBFC00E9A019 /* Png.framework */; };
 		4333607211A0731500380F5E /* wzapp_qt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4333606F11A0731500380F5E /* wzapp_qt.cpp */; };
 		4333612211A07FB900380F5E /* QtCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4333611E11A07FB900380F5E /* QtCore.framework */; };
 		4333612311A07FB900380F5E /* QtGui.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4333611F11A07FB900380F5E /* QtGui.framework */; };
@@ -728,7 +702,7 @@
 			outputFiles = (
 				"${DERIVED_FILES_DIR}/${INPUT_FILE_BASE}.moc.cpp",
 			);
-			script = "export PATH=/sw/lib/qt4-mac/bin:/sw/lib/qt4-x11/bin:/opt/local/bin:${PATH}\nmoc -o \"${DERIVED_FILES_DIR}/${INPUT_FILE_BASE}.moc.cpp\" \"${INPUT_FILE_PATH}\" || exit 1\n# Files w/ \"Q_OBJECT\"";
+			script = "export PATH=/sw/lib/qt4-mac/bin:/sw/lib/qt4-x11/bin:/opt/local/bin:${PATH}\nmoc -o \"${DERIVED_FILES_DIR}/${INPUT_FILE_BASE}.moc.cpp\" \"${INPUT_FILE_PATH}\"\nexit ${?}\n# Files w/ \"Q_OBJECT\"";
 		};
 		433360D411A07A7E00380F5E /* PBXBuildRule */ = {
 			isa = PBXBuildRule;
@@ -739,7 +713,7 @@
 			outputFiles = (
 				"${DERIVED_FILES_DIR}/${INPUT_FILE_BASE}.moc.cpp",
 			);
-			script = "export PATH=/sw/lib/qt4-mac/bin:/sw/lib/qt4-x11/bin:/opt/local/bin:${PATH}\nmoc -o \"${DERIVED_FILES_DIR}/${INPUT_FILE_BASE}.moc.cpp\" \"${INPUT_FILE_PATH}\" || exit 1# Files w/ \"Q_OBJECT\"";
+			script = "export PATH=/sw/lib/qt4-mac/bin:/sw/lib/qt4-x11/bin:/opt/local/bin:${PATH}\nmoc -o \"${DERIVED_FILES_DIR}/${INPUT_FILE_BASE}.moc.cpp\" \"${INPUT_FILE_PATH}\"\nexit ${?}\n# Files w/ \"Q_OBJECT\"";
 		};
 /* End PBXBuildRule section */
 
@@ -827,76 +801,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = 43FA570C10FF8E9B0074E914;
 			remoteInfo = "Setup Prebuilt Components";
-		};
-		4332BC4113E36693004F0E5C /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 02356D660BD3BB2600E9A019 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 02356DC10BD3BBFC00E9A019;
-			remoteInfo = Png;
-		};
-		4332BC4313E36693004F0E5C /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 02356D660BD3BB2600E9A019 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 02DDA8B00BD3C2F20049AB60;
-			remoteInfo = PhysFS;
-		};
-		4332BD1A13E38AAE004F0E5C /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 02356D660BD3BB2600E9A019 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 43FA570C10FF8E9B0074E914;
-			remoteInfo = "Setup Prebuilt Components";
-		};
-		4332BD2013E38AF6004F0E5C /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 02356D660BD3BB2600E9A019 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 02356DC10BD3BBFC00E9A019;
-			remoteInfo = Png;
-		};
-		4332BD2213E38AF6004F0E5C /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 02356D660BD3BB2600E9A019 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 02DDA8B00BD3C2F20049AB60;
-			remoteInfo = PhysFS;
-		};
-		4332BD5013E38D1E004F0E5C /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 02356D660BD3BB2600E9A019 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 02DDA8B00BD3C2F20049AB60;
-			remoteInfo = PhysFS;
-		};
-		4332BD8813E38FCA004F0E5C /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 02356D660BD3BB2600E9A019 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 02DDA8B00BD3C2F20049AB60;
-			remoteInfo = PhysFS;
-		};
-		4332BDB413E39185004F0E5C /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 02356D660BD3BB2600E9A019 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 02DDA8B00BD3C2F20049AB60;
-			remoteInfo = PhysFS;
-		};
-		4332BDD713E39338004F0E5C /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 02356D660BD3BB2600E9A019 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 43FA570C10FF8E9B0074E914;
-			remoteInfo = "Setup Prebuilt Components";
-		};
-		4332BDD913E39338004F0E5C /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 02356D660BD3BB2600E9A019 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 02356DC10BD3BBFC00E9A019;
-			remoteInfo = Png;
 		};
 		43502D82134764BF00A02A1F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -1009,27 +913,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = 43D180771336B6BF001906EB;
 			remoteInfo = Autorevision;
-		};
-		43DAA1B713E3B919007FDA13 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 02356D660BD3BB2600E9A019 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 43FA570C10FF8E9B0074E914;
-			remoteInfo = "Setup Prebuilt Components";
-		};
-		43DAA1CE13E3BAB4007FDA13 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 02356D660BD3BB2600E9A019 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 43FA570C10FF8E9B0074E914;
-			remoteInfo = "Setup Prebuilt Components";
-		};
-		43DAA21E13E3BEBD007FDA13 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 02356D660BD3BB2600E9A019 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 43FA570C10FF8E9B0074E914;
-			remoteInfo = "Setup Prebuilt Components";
 		};
 		43FA571210FF8EE90074E914 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -1697,44 +1580,6 @@
 		4332992D13CB4FC5005BE784 /* serializerrunnable.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = serializerrunnable.cpp; path = "external/qjson-out/src/serializerrunnable.cpp"; sourceTree = "<group>"; };
 		4332992E13CB4FC5005BE784 /* serializerrunnable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = serializerrunnable.h; path = "external/qjson-out/src/serializerrunnable.h"; sourceTree = "<group>"; };
 		4332992F13CB4FC5005BE784 /* stack.hh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = stack.hh; path = "external/qjson-out/src/stack.hh"; sourceTree = "<group>"; };
-		4332BBFE13E323ED004F0E5C /* map2lnd.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = map2lnd.cpp; path = ../tools/map/map2lnd.cpp; sourceTree = SOURCE_ROOT; };
-		4332BBFF13E323EE004F0E5C /* map2png.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = map2png.cpp; path = ../tools/map/map2png.cpp; sourceTree = SOURCE_ROOT; };
-		4332BC0013E323EE004F0E5C /* map2preview.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = map2preview.cpp; path = ../tools/map/map2preview.cpp; sourceTree = SOURCE_ROOT; };
-		4332BC0113E323EE004F0E5C /* mapconv.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mapconv.cpp; path = ../tools/map/mapconv.cpp; sourceTree = SOURCE_ROOT; };
-		4332BC0213E323EE004F0E5C /* mapinfo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mapinfo.cpp; path = ../tools/map/mapinfo.cpp; sourceTree = SOURCE_ROOT; };
-		4332BC0313E323EE004F0E5C /* maplib.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = maplib.cpp; path = ../tools/map/maplib.cpp; sourceTree = SOURCE_ROOT; };
-		4332BC0413E323EE004F0E5C /* maplib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = maplib.h; path = ../tools/map/maplib.h; sourceTree = SOURCE_ROOT; };
-		4332BC0513E323EE004F0E5C /* mapload.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mapload.cpp; path = ../tools/map/mapload.cpp; sourceTree = SOURCE_ROOT; };
-		4332BC0613E323EE004F0E5C /* mapload.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mapload.h; path = ../tools/map/mapload.h; sourceTree = SOURCE_ROOT; };
-		4332BC0713E323EE004F0E5C /* pngsave.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = pngsave.cpp; path = ../tools/map/pngsave.cpp; sourceTree = SOURCE_ROOT; };
-		4332BC0813E323EE004F0E5C /* pngsave.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = pngsave.h; path = ../tools/map/pngsave.h; sourceTree = SOURCE_ROOT; };
-		4332BC0913E323EE004F0E5C /* vector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = vector.h; path = ../tools/map/vector.h; sourceTree = SOURCE_ROOT; };
-		4332BC2C13E3649A004F0E5C /* map2png */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = map2png; sourceTree = BUILT_PRODUCTS_DIR; };
-		4332BCDE13E38191004F0E5C /* mapconv */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = mapconv; sourceTree = BUILT_PRODUCTS_DIR; };
-		4332BCF113E385F9004F0E5C /* Base-Tools.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Base-Tools.xcconfig"; path = "configs/Base-Tools.xcconfig"; sourceTree = "<group>"; };
-		4332BCF213E385FA004F0E5C /* map2png-All.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "map2png-All.xcconfig"; path = "configs/map2png-All.xcconfig"; sourceTree = "<group>"; };
-		4332BCF313E385FA004F0E5C /* map2png-Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "map2png-Debug.xcconfig"; path = "configs/map2png-Debug.xcconfig"; sourceTree = "<group>"; };
-		4332BCF413E385FA004F0E5C /* map2png-Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "map2png-Release.xcconfig"; path = "configs/map2png-Release.xcconfig"; sourceTree = "<group>"; };
-		4332BCF513E385FA004F0E5C /* map2png-StaticAnalyzer.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "map2png-StaticAnalyzer.xcconfig"; path = "configs/map2png-StaticAnalyzer.xcconfig"; sourceTree = "<group>"; };
-		4332BD1613E38A61004F0E5C /* mapconv-All.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "mapconv-All.xcconfig"; path = "configs/mapconv-All.xcconfig"; sourceTree = "<group>"; };
-		4332BD1713E38A61004F0E5C /* mapconv-Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "mapconv-Debug.xcconfig"; path = "configs/mapconv-Debug.xcconfig"; sourceTree = "<group>"; };
-		4332BD1813E38A61004F0E5C /* mapconv-Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "mapconv-Release.xcconfig"; path = "configs/mapconv-Release.xcconfig"; sourceTree = "<group>"; };
-		4332BD1913E38A61004F0E5C /* mapconv-StaticAnalyzer.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "mapconv-StaticAnalyzer.xcconfig"; path = "configs/mapconv-StaticAnalyzer.xcconfig"; sourceTree = "<group>"; };
-		4332BD4A13E38C7A004F0E5C /* mapinfo */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = mapinfo; sourceTree = BUILT_PRODUCTS_DIR; };
-		4332BD5513E38DDA004F0E5C /* mapinfo-All.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "mapinfo-All.xcconfig"; path = "configs/mapinfo-All.xcconfig"; sourceTree = "<group>"; };
-		4332BD5613E38DDA004F0E5C /* mapinfo-Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "mapinfo-Debug.xcconfig"; path = "configs/mapinfo-Debug.xcconfig"; sourceTree = "<group>"; };
-		4332BD5713E38DDA004F0E5C /* mapinfo-Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "mapinfo-Release.xcconfig"; path = "configs/mapinfo-Release.xcconfig"; sourceTree = "<group>"; };
-		4332BD5813E38DDA004F0E5C /* mapinfo-StaticAnalyzer.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "mapinfo-StaticAnalyzer.xcconfig"; path = "configs/mapinfo-StaticAnalyzer.xcconfig"; sourceTree = "<group>"; };
-		4332BD9313E38FCA004F0E5C /* map2lnd */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = map2lnd; sourceTree = BUILT_PRODUCTS_DIR; };
-		4332BDAA13E390D1004F0E5C /* map2lnd-All.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "map2lnd-All.xcconfig"; path = "configs/map2lnd-All.xcconfig"; sourceTree = "<group>"; };
-		4332BDAB13E390D1004F0E5C /* map2lnd-Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "map2lnd-Debug.xcconfig"; path = "configs/map2lnd-Debug.xcconfig"; sourceTree = "<group>"; };
-		4332BDAC13E390D1004F0E5C /* map2lnd-Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "map2lnd-Release.xcconfig"; path = "configs/map2lnd-Release.xcconfig"; sourceTree = "<group>"; };
-		4332BDAD13E390D1004F0E5C /* map2lnd-StaticAnalyzer.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "map2lnd-StaticAnalyzer.xcconfig"; path = "configs/map2lnd-StaticAnalyzer.xcconfig"; sourceTree = "<group>"; };
-		4332BDBF13E39185004F0E5C /* map2preview */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = map2preview; sourceTree = BUILT_PRODUCTS_DIR; };
-		4332BDF413E3947E004F0E5C /* map2preview-All.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "map2preview-All.xcconfig"; path = "configs/map2preview-All.xcconfig"; sourceTree = "<group>"; };
-		4332BDF513E3947E004F0E5C /* map2preview-Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "map2preview-Debug.xcconfig"; path = "configs/map2preview-Debug.xcconfig"; sourceTree = "<group>"; };
-		4332BDF613E3947E004F0E5C /* map2preview-Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "map2preview-Release.xcconfig"; path = "configs/map2preview-Release.xcconfig"; sourceTree = "<group>"; };
-		4332BDF713E3947E004F0E5C /* map2preview-StaticAnalyzer.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "map2preview-StaticAnalyzer.xcconfig"; path = "configs/map2preview-StaticAnalyzer.xcconfig"; sourceTree = "<group>"; };
 		4333606E11A0731500380F5E /* wzapp_qt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = wzapp_qt.h; path = ../lib/qtgame/wzapp_qt.h; sourceTree = SOURCE_ROOT; };
 		4333606F11A0731500380F5E /* wzapp_qt.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = wzapp_qt.cpp; path = ../lib/qtgame/wzapp_qt.cpp; sourceTree = SOURCE_ROOT; };
 		4333607011A0731500380F5E /* wzapp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = wzapp.h; path = ../lib/framework/wzapp.h; sourceTree = SOURCE_ROOT; };
@@ -2114,49 +1959,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		4332BC2A13E3649A004F0E5C /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				4332BC4613E36776004F0E5C /* PhysFS.framework in Frameworks */,
-				4332BC4713E36776004F0E5C /* Png.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		4332BCDC13E38191004F0E5C /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				4332BD2513E38B2C004F0E5C /* PhysFS.framework in Frameworks */,
-				4332BD2613E38B2C004F0E5C /* Png.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		4332BD4813E38C7A004F0E5C /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				4332BD5213E38D25004F0E5C /* PhysFS.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		4332BD8D13E38FCA004F0E5C /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				4332BD8E13E38FCA004F0E5C /* PhysFS.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		4332BDB913E39185004F0E5C /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				4332BDBA13E39185004F0E5C /* PhysFS.framework in Frameworks */,
-				4332BDE313E39351004F0E5C /* Png.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		43502D501347640700A02A1F /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -2290,11 +2092,6 @@
 				4318434B1363942200BA2BC5 /* MiniUPnPc.framework */,
 				43AA702A13C7FC640015B52B /* QJson.framework */,
 				4366718213D1FD5600FE85BA /* QuesoGLC.framework */,
-				4332BC2C13E3649A004F0E5C /* map2png */,
-				4332BCDE13E38191004F0E5C /* mapconv */,
-				4332BD4A13E38C7A004F0E5C /* mapinfo */,
-				4332BD9313E38FCA004F0E5C /* map2lnd */,
-				4332BDBF13E39185004F0E5C /* map2preview */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -2318,7 +2115,6 @@
 			isa = PBXGroup;
 			children = (
 				43BE75E411124A18007DF934 /* lib */,
-				4332BBF913E32392004F0E5C /* Tools */,
 				0246A1970BD3CCC3004D1C70 /* Warzone */,
 			);
 			name = "Warzone sources";
@@ -2933,27 +2729,6 @@
 		43025DEC1120A4B6006C49B1 /* Configurations */ = {
 			isa = PBXGroup;
 			children = (
-				4332BDF413E3947E004F0E5C /* map2preview-All.xcconfig */,
-				4332BDF513E3947E004F0E5C /* map2preview-Debug.xcconfig */,
-				4332BDF613E3947E004F0E5C /* map2preview-Release.xcconfig */,
-				4332BDF713E3947E004F0E5C /* map2preview-StaticAnalyzer.xcconfig */,
-				4332BDAA13E390D1004F0E5C /* map2lnd-All.xcconfig */,
-				4332BDAB13E390D1004F0E5C /* map2lnd-Debug.xcconfig */,
-				4332BDAC13E390D1004F0E5C /* map2lnd-Release.xcconfig */,
-				4332BDAD13E390D1004F0E5C /* map2lnd-StaticAnalyzer.xcconfig */,
-				4332BD5513E38DDA004F0E5C /* mapinfo-All.xcconfig */,
-				4332BD5613E38DDA004F0E5C /* mapinfo-Debug.xcconfig */,
-				4332BD5713E38DDA004F0E5C /* mapinfo-Release.xcconfig */,
-				4332BD5813E38DDA004F0E5C /* mapinfo-StaticAnalyzer.xcconfig */,
-				4332BD1613E38A61004F0E5C /* mapconv-All.xcconfig */,
-				4332BD1713E38A61004F0E5C /* mapconv-Debug.xcconfig */,
-				4332BD1813E38A61004F0E5C /* mapconv-Release.xcconfig */,
-				4332BD1913E38A61004F0E5C /* mapconv-StaticAnalyzer.xcconfig */,
-				4332BCF113E385F9004F0E5C /* Base-Tools.xcconfig */,
-				4332BCF213E385FA004F0E5C /* map2png-All.xcconfig */,
-				4332BCF313E385FA004F0E5C /* map2png-Debug.xcconfig */,
-				4332BCF413E385FA004F0E5C /* map2png-Release.xcconfig */,
-				4332BCF513E385FA004F0E5C /* map2png-StaticAnalyzer.xcconfig */,
 				4366712C13D1FCC300FE85BA /* QuesoGLC-All.xcconfig */,
 				4366712D13D1FCC300FE85BA /* QuesoGLC-Debug.xcconfig */,
 				4366712E13D1FCC300FE85BA /* QuesoGLC-Release.xcconfig */,
@@ -3072,33 +2847,6 @@
 			);
 			name = vorbis;
 			path = Resources/vorbis;
-			sourceTree = "<group>";
-		};
-		4332BBF913E32392004F0E5C /* Tools */ = {
-			isa = PBXGroup;
-			children = (
-				4332BBFA13E323A1004F0E5C /* Map */,
-			);
-			name = Tools;
-			sourceTree = "<group>";
-		};
-		4332BBFA13E323A1004F0E5C /* Map */ = {
-			isa = PBXGroup;
-			children = (
-				4332BBFE13E323ED004F0E5C /* map2lnd.cpp */,
-				4332BBFF13E323EE004F0E5C /* map2png.cpp */,
-				4332BC0013E323EE004F0E5C /* map2preview.cpp */,
-				4332BC0113E323EE004F0E5C /* mapconv.cpp */,
-				4332BC0213E323EE004F0E5C /* mapinfo.cpp */,
-				4332BC0313E323EE004F0E5C /* maplib.cpp */,
-				4332BC0413E323EE004F0E5C /* maplib.h */,
-				4332BC0513E323EE004F0E5C /* mapload.cpp */,
-				4332BC0613E323EE004F0E5C /* mapload.h */,
-				4332BC0713E323EE004F0E5C /* pngsave.cpp */,
-				4332BC0813E323EE004F0E5C /* pngsave.h */,
-				4332BC0913E323EE004F0E5C /* vector.h */,
-			);
-			name = Map;
 			sourceTree = "<group>";
 		};
 		4333611D11A07FB900380F5E /* QT */ = {
@@ -4001,99 +3749,6 @@
 			productReference = 4318434B1363942200BA2BC5 /* MiniUPnPc.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		4332BC2B13E3649A004F0E5C /* map2png */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 4332BC3C13E364BA004F0E5C /* Build configuration list for PBXNativeTarget "map2png" */;
-			buildPhases = (
-				4332BC2913E3649A004F0E5C /* Sources */,
-				4332BC2A13E3649A004F0E5C /* Frameworks */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				4332BC4213E36693004F0E5C /* PBXTargetDependency */,
-				4332BC4413E36693004F0E5C /* PBXTargetDependency */,
-				43DAA1B813E3B919007FDA13 /* PBXTargetDependency */,
-			);
-			name = map2png;
-			productName = map2png;
-			productReference = 4332BC2C13E3649A004F0E5C /* map2png */;
-			productType = "com.apple.product-type.tool";
-		};
-		4332BCDD13E38191004F0E5C /* mapconv */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 4332BCEC13E3819C004F0E5C /* Build configuration list for PBXNativeTarget "mapconv" */;
-			buildPhases = (
-				4332BCDB13E38191004F0E5C /* Sources */,
-				4332BCDC13E38191004F0E5C /* Frameworks */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				4332BD1B13E38AAE004F0E5C /* PBXTargetDependency */,
-				4332BD2113E38AF6004F0E5C /* PBXTargetDependency */,
-				4332BD2313E38AF6004F0E5C /* PBXTargetDependency */,
-			);
-			name = mapconv;
-			productName = mapconv;
-			productReference = 4332BCDE13E38191004F0E5C /* mapconv */;
-			productType = "com.apple.product-type.tool";
-		};
-		4332BD4913E38C7A004F0E5C /* mapinfo */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 4332BD4F13E38C84004F0E5C /* Build configuration list for PBXNativeTarget "mapinfo" */;
-			buildPhases = (
-				4332BD4713E38C7A004F0E5C /* Sources */,
-				4332BD4813E38C7A004F0E5C /* Frameworks */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				4332BD5113E38D1E004F0E5C /* PBXTargetDependency */,
-				43DAA1CF13E3BAB4007FDA13 /* PBXTargetDependency */,
-			);
-			name = mapinfo;
-			productName = mapinfo;
-			productReference = 4332BD4A13E38C7A004F0E5C /* mapinfo */;
-			productType = "com.apple.product-type.tool";
-		};
-		4332BD8613E38FCA004F0E5C /* map2lnd */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 4332BD8F13E38FCA004F0E5C /* Build configuration list for PBXNativeTarget "map2lnd" */;
-			buildPhases = (
-				4332BD8913E38FCA004F0E5C /* Sources */,
-				4332BD8D13E38FCA004F0E5C /* Frameworks */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				4332BD8713E38FCA004F0E5C /* PBXTargetDependency */,
-				43DAA21F13E3BEBD007FDA13 /* PBXTargetDependency */,
-			);
-			name = map2lnd;
-			productName = mapinfo;
-			productReference = 4332BD9313E38FCA004F0E5C /* map2lnd */;
-			productType = "com.apple.product-type.tool";
-		};
-		4332BDB213E39185004F0E5C /* map2preview */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 4332BDBB13E39185004F0E5C /* Build configuration list for PBXNativeTarget "map2preview" */;
-			buildPhases = (
-				4332BDB513E39185004F0E5C /* Sources */,
-				4332BDB913E39185004F0E5C /* Frameworks */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				4332BDD813E39338004F0E5C /* PBXTargetDependency */,
-				4332BDB313E39185004F0E5C /* PBXTargetDependency */,
-				4332BDDA13E39338004F0E5C /* PBXTargetDependency */,
-			);
-			name = map2preview;
-			productName = mapinfo;
-			productReference = 4332BDBF13E39185004F0E5C /* map2preview */;
-			productType = "com.apple.product-type.tool";
-		};
 		43502D511347640700A02A1F /* GLExtensionWrangler */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 43502D571347640800A02A1F /* Build configuration list for PBXNativeTarget "GLExtensionWrangler" */;
@@ -4243,11 +3898,6 @@
 				43AA702913C7FC640015B52B /* QJson */,
 				4366718113D1FD5600FE85BA /* QuesoGLC */,
 				43F77C7710F0125E00E04615 /* Make DMGs for Release */,
-				4332BC2B13E3649A004F0E5C /* map2png */,
-				4332BCDD13E38191004F0E5C /* mapconv */,
-				4332BD4913E38C7A004F0E5C /* mapinfo */,
-				4332BD8613E38FCA004F0E5C /* map2lnd */,
-				4332BDB213E39185004F0E5C /* map2preview */,
 			);
 		};
 /* End PBXProject section */
@@ -4557,7 +4207,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "DirectorY=\"libpng-1.5.6\"\nOutDir=\"libpng\"\nFileName=\"libpng-1.5.6.tar.gz\"\nSourceDLP=\"http://downloads.sourceforge.net/project/libpng/libpng15/1.5.6/libpng-1.5.6.tar.gz\"\nMD5Sum=\"8b0c05ed12637ee1f060ddfbbf526ea3\"\n\nconfigs/FetchSource.sh \"${DirectorY}\" \"${OutDir}\" \"${FileName}\" \"${SourceDLP}\" \"${MD5Sum}\"\nexit ${?}\n";
+			shellScript = "DirectorY=\"libpng-1.5.7\"\nOutDir=\"libpng\"\nFileName=\"libpng-1.5.7.tar.gz\"\nSourceDLP=\"http://downloads.sourceforge.net/project/libpng/libpng15/1.5.7/libpng-1.5.7.tar.gz\"\nMD5Sum=\"944b56a84b65d94054cc73d7ff965de8\"\n\nconfigs/FetchSource.sh \"${DirectorY}\" \"${OutDir}\" \"${FileName}\" \"${SourceDLP}\" \"${MD5Sum}\"\nexit ${?}\n";
 		};
 		438B0C26137732A5008184FC /* Ogg - Fetch source */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -5065,59 +4715,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		4332BC2913E3649A004F0E5C /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				4332BC4C13E3690B004F0E5C /* map2png.cpp in Sources */,
-				4332BC4E13E36918004F0E5C /* maplib.cpp in Sources */,
-				4332BC4F13E36939004F0E5C /* mapload.cpp in Sources */,
-				4332BC5013E36944004F0E5C /* pngsave.cpp in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		4332BCDB13E38191004F0E5C /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				4332BD0E13E3897D004F0E5C /* mapconv.cpp in Sources */,
-				4332BD1013E38992004F0E5C /* mapload.cpp in Sources */,
-				4332BD1213E3899D004F0E5C /* maplib.cpp in Sources */,
-				4332BD1413E389AC004F0E5C /* pngsave.cpp in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		4332BD4713E38C7A004F0E5C /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				4332BD7313E38FA4004F0E5C /* mapinfo.cpp in Sources */,
-				4332BD7413E38FAF004F0E5C /* mapload.cpp in Sources */,
-				4332BD7513E38FB7004F0E5C /* maplib.cpp in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		4332BD8913E38FCA004F0E5C /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				4332BD8B13E38FCA004F0E5C /* mapload.cpp in Sources */,
-				4332BD8C13E38FCA004F0E5C /* maplib.cpp in Sources */,
-				4332BDA313E38FDF004F0E5C /* map2lnd.cpp in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		4332BDB513E39185004F0E5C /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				4332BDB613E39185004F0E5C /* mapload.cpp in Sources */,
-				4332BDB713E39185004F0E5C /* maplib.cpp in Sources */,
-				4332BDCD13E3919A004F0E5C /* map2preview.cpp in Sources */,
-				4332BDD013E392E4004F0E5C /* pngsave.cpp in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		43502D4F1347640700A02A1F /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -5278,56 +4875,6 @@
 			target = 43FA570C10FF8E9B0074E914 /* Setup Prebuilt Components */;
 			targetProxy = 4332991A13CB4F6F005BE784 /* PBXContainerItemProxy */;
 		};
-		4332BC4213E36693004F0E5C /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 02356DC10BD3BBFC00E9A019 /* Png */;
-			targetProxy = 4332BC4113E36693004F0E5C /* PBXContainerItemProxy */;
-		};
-		4332BC4413E36693004F0E5C /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 02DDA8B00BD3C2F20049AB60 /* PhysFS */;
-			targetProxy = 4332BC4313E36693004F0E5C /* PBXContainerItemProxy */;
-		};
-		4332BD1B13E38AAE004F0E5C /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 43FA570C10FF8E9B0074E914 /* Setup Prebuilt Components */;
-			targetProxy = 4332BD1A13E38AAE004F0E5C /* PBXContainerItemProxy */;
-		};
-		4332BD2113E38AF6004F0E5C /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 02356DC10BD3BBFC00E9A019 /* Png */;
-			targetProxy = 4332BD2013E38AF6004F0E5C /* PBXContainerItemProxy */;
-		};
-		4332BD2313E38AF6004F0E5C /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 02DDA8B00BD3C2F20049AB60 /* PhysFS */;
-			targetProxy = 4332BD2213E38AF6004F0E5C /* PBXContainerItemProxy */;
-		};
-		4332BD5113E38D1E004F0E5C /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 02DDA8B00BD3C2F20049AB60 /* PhysFS */;
-			targetProxy = 4332BD5013E38D1E004F0E5C /* PBXContainerItemProxy */;
-		};
-		4332BD8713E38FCA004F0E5C /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 02DDA8B00BD3C2F20049AB60 /* PhysFS */;
-			targetProxy = 4332BD8813E38FCA004F0E5C /* PBXContainerItemProxy */;
-		};
-		4332BDB313E39185004F0E5C /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 02DDA8B00BD3C2F20049AB60 /* PhysFS */;
-			targetProxy = 4332BDB413E39185004F0E5C /* PBXContainerItemProxy */;
-		};
-		4332BDD813E39338004F0E5C /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 43FA570C10FF8E9B0074E914 /* Setup Prebuilt Components */;
-			targetProxy = 4332BDD713E39338004F0E5C /* PBXContainerItemProxy */;
-		};
-		4332BDDA13E39338004F0E5C /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 02356DC10BD3BBFC00E9A019 /* Png */;
-			targetProxy = 4332BDD913E39338004F0E5C /* PBXContainerItemProxy */;
-		};
 		43502D83134764BF00A02A1F /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 43502D511347640700A02A1F /* GLExtensionWrangler */;
@@ -5407,21 +4954,6 @@
 			isa = PBXTargetDependency;
 			target = 43D180771336B6BF001906EB /* Autorevision */;
 			targetProxy = 43D1808A1336B74E001906EB /* PBXContainerItemProxy */;
-		};
-		43DAA1B813E3B919007FDA13 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 43FA570C10FF8E9B0074E914 /* Setup Prebuilt Components */;
-			targetProxy = 43DAA1B713E3B919007FDA13 /* PBXContainerItemProxy */;
-		};
-		43DAA1CF13E3BAB4007FDA13 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 43FA570C10FF8E9B0074E914 /* Setup Prebuilt Components */;
-			targetProxy = 43DAA1CE13E3BAB4007FDA13 /* PBXContainerItemProxy */;
-		};
-		43DAA21F13E3BEBD007FDA13 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 43FA570C10FF8E9B0074E914 /* Setup Prebuilt Components */;
-			targetProxy = 43DAA21E13E3BEBD007FDA13 /* PBXContainerItemProxy */;
 		};
 		43FA571310FF8EE90074E914 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -5636,111 +5168,6 @@
 		4318434F1363942500BA2BC5 /* Release */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 431843641363946800BA2BC5 /* MiniUPnPc-Release.xcconfig */;
-			buildSettings = {
-			};
-			name = Release;
-		};
-		4332BC3913E3649C004F0E5C /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 4332BCF313E385FA004F0E5C /* map2png-Debug.xcconfig */;
-			buildSettings = {
-			};
-			name = Debug;
-		};
-		4332BC3A13E3649C004F0E5C /* StaticAnalyzer */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 4332BCF513E385FA004F0E5C /* map2png-StaticAnalyzer.xcconfig */;
-			buildSettings = {
-			};
-			name = StaticAnalyzer;
-		};
-		4332BC3B13E3649C004F0E5C /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 4332BCF413E385FA004F0E5C /* map2png-Release.xcconfig */;
-			buildSettings = {
-			};
-			name = Release;
-		};
-		4332BCE613E38192004F0E5C /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 4332BD1713E38A61004F0E5C /* mapconv-Debug.xcconfig */;
-			buildSettings = {
-			};
-			name = Debug;
-		};
-		4332BCE713E38192004F0E5C /* StaticAnalyzer */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 4332BCF513E385FA004F0E5C /* map2png-StaticAnalyzer.xcconfig */;
-			buildSettings = {
-			};
-			name = StaticAnalyzer;
-		};
-		4332BCE813E38192004F0E5C /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 4332BD1813E38A61004F0E5C /* mapconv-Release.xcconfig */;
-			buildSettings = {
-			};
-			name = Release;
-		};
-		4332BD4C13E38C7B004F0E5C /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 4332BD5613E38DDA004F0E5C /* mapinfo-Debug.xcconfig */;
-			buildSettings = {
-			};
-			name = Debug;
-		};
-		4332BD4D13E38C7B004F0E5C /* StaticAnalyzer */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 4332BD5813E38DDA004F0E5C /* mapinfo-StaticAnalyzer.xcconfig */;
-			buildSettings = {
-			};
-			name = StaticAnalyzer;
-		};
-		4332BD4E13E38C7B004F0E5C /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 4332BD5713E38DDA004F0E5C /* mapinfo-Release.xcconfig */;
-			buildSettings = {
-			};
-			name = Release;
-		};
-		4332BD9013E38FCA004F0E5C /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 4332BDAB13E390D1004F0E5C /* map2lnd-Debug.xcconfig */;
-			buildSettings = {
-			};
-			name = Debug;
-		};
-		4332BD9113E38FCA004F0E5C /* StaticAnalyzer */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 4332BDAD13E390D1004F0E5C /* map2lnd-StaticAnalyzer.xcconfig */;
-			buildSettings = {
-			};
-			name = StaticAnalyzer;
-		};
-		4332BD9213E38FCA004F0E5C /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 4332BDAC13E390D1004F0E5C /* map2lnd-Release.xcconfig */;
-			buildSettings = {
-			};
-			name = Release;
-		};
-		4332BDBC13E39185004F0E5C /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 4332BDF513E3947E004F0E5C /* map2preview-Debug.xcconfig */;
-			buildSettings = {
-			};
-			name = Debug;
-		};
-		4332BDBD13E39185004F0E5C /* StaticAnalyzer */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 4332BDF713E3947E004F0E5C /* map2preview-StaticAnalyzer.xcconfig */;
-			buildSettings = {
-			};
-			name = StaticAnalyzer;
-		};
-		4332BDBE13E39185004F0E5C /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 4332BDF613E3947E004F0E5C /* map2preview-Release.xcconfig */;
 			buildSettings = {
 			};
 			name = Release;
@@ -6058,56 +5485,6 @@
 				4318434D1363942500BA2BC5 /* Debug */,
 				4318434E1363942500BA2BC5 /* StaticAnalyzer */,
 				4318434F1363942500BA2BC5 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Debug;
-		};
-		4332BC3C13E364BA004F0E5C /* Build configuration list for PBXNativeTarget "map2png" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				4332BC3913E3649C004F0E5C /* Debug */,
-				4332BC3A13E3649C004F0E5C /* StaticAnalyzer */,
-				4332BC3B13E3649C004F0E5C /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Debug;
-		};
-		4332BCEC13E3819C004F0E5C /* Build configuration list for PBXNativeTarget "mapconv" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				4332BCE613E38192004F0E5C /* Debug */,
-				4332BCE713E38192004F0E5C /* StaticAnalyzer */,
-				4332BCE813E38192004F0E5C /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Debug;
-		};
-		4332BD4F13E38C84004F0E5C /* Build configuration list for PBXNativeTarget "mapinfo" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				4332BD4C13E38C7B004F0E5C /* Debug */,
-				4332BD4D13E38C7B004F0E5C /* StaticAnalyzer */,
-				4332BD4E13E38C7B004F0E5C /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Debug;
-		};
-		4332BD8F13E38FCA004F0E5C /* Build configuration list for PBXNativeTarget "map2lnd" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				4332BD9013E38FCA004F0E5C /* Debug */,
-				4332BD9113E38FCA004F0E5C /* StaticAnalyzer */,
-				4332BD9213E38FCA004F0E5C /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Debug;
-		};
-		4332BDBB13E39185004F0E5C /* Build configuration list for PBXNativeTarget "map2preview" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				4332BDBC13E39185004F0E5C /* Debug */,
-				4332BDBD13E39185004F0E5C /* StaticAnalyzer */,
-				4332BDBE13E39185004F0E5C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
