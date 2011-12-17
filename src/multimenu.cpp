@@ -23,7 +23,7 @@
  *  Also the selection of disk files..
  */
 #include "lib/framework/frame.h"
-#include "lib/framework/wzapp_c.h"
+#include "lib/framework/wzapp.h"
 #include "lib/framework/strres.h"
 #include "lib/widget/button.h"
 #include "lib/widget/widget.h"
