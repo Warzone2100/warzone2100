@@ -730,7 +730,7 @@ static bool actionRemoveDroidsFromBuildPos(unsigned player, Vector2i pos, uint16
 		}
 
 		// TODO If the action code was less convoluted, it would be possible for the droid should drive away instead of just getting moved away.
-		Vector2i bestDest;
+		Vector2i bestDest(0, 0);  // Dummy initialisation.
 		unsigned bestDist = UINT32_MAX;
 		for (int y = -1; y <= size.y; ++y)
 			for (int x = -1; x <= size.x; x += y >= 0 && y < size.y? size.x + 1 : 1)
