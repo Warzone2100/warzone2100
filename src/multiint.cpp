@@ -1818,10 +1818,10 @@ static void addDifficultyChooser(int player)
 		sButInit.pTip = NULL;
 		switch (i)
 		{
-		case 0: sButInit.pTip = _("Less aggressive and starts with less units"); break;
+		case 0: sButInit.pTip = _("Less aggressive"); break;
 		case 1: sButInit.pTip = _("Plays nice"); break;
 		case 2: sButInit.pTip = _("No holds barred"); break;
-		case 3: sButInit.pTip = _("Starts with advantages and gets twice as much oil from derricks"); break;
+		case 3: sButInit.pTip = _("Starts with advantages"); break;
 		}
 		sButInit.pDisplay = displayDifficulty;
 		sButInit.UserData = i;
