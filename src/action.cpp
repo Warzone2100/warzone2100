@@ -717,7 +717,7 @@ static bool actionRemoveDroidsFromBuildPos(unsigned player, Vector2i pos, uint16
 		}
 
 		Vector2i delta = map_coord(removeZ(droid->pos)) - map;
-		if (delta.x < 0 || delta.x >= size.x || delta.y < 0 || delta.y >= size.y)
+		if (delta.x < 0 || delta.x >= size.x || delta.y < 0 || delta.y >= size.y || isFlying(droid))
 		{
 			continue;  // Droid not under new structure (just near it).
 		}
