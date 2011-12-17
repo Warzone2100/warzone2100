@@ -86,7 +86,7 @@
 #include "lib/netplay/netplay.h"
 #include "multigifts.h"
 #include "loop.h"
-
+#include "template.h"
 #include "scores.h"
 #include "gateway.h"
 

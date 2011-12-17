@@ -77,7 +77,7 @@
 #include "cmddroid.h"
 #include "scriptextern.h"
 #include "mission.h"
-
+#include "template.h"
 #include "multiplay.h"
 #include "multistat.h"
 

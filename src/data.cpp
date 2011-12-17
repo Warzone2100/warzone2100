@@ -48,6 +48,7 @@
 #include "research.h"
 #include "scriptvals.h"
 #include "stats.h"
+#include "template.h"
 #include "text.h"
 #include "texture.h"
 

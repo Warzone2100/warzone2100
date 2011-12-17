@@ -60,7 +60,7 @@
 #include "scripttabs.h"			//because of CALL_AI_MSG
 #include "scriptcb.h"			//for console callback
 #include "scriptfuncs.h"
-
+#include "template.h"
 #include "lib/netplay/netplay.h"								// the netplay library.
 #include "multiplay.h"								// warzone net stuff.
 #include "multijoin.h"								// player management stuff.

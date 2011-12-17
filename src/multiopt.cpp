@@ -53,7 +53,7 @@
 #include "multiint.h"
 #include "multirecv.h"
 #include "scriptfuncs.h"
-
+#include "template.h"
 #include "lib/framework/wzapp.h"
 
 

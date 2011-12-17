@@ -44,6 +44,7 @@
 #include "challenge.h"
 #include "research.h"
 #include "multilimit.h"
+#include "template.h"
 
 // hack, this is used from scriptfuncs.cpp -- and we don't want to include any stinkin' wzscript headers here!
 // TODO, move this stuff into a script common subsystem

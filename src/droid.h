@@ -44,10 +44,6 @@
 // Changing this breaks campaign saves!
 #define MAX_RECYCLED_DROIDS 450
 
-//storage
-extern DROID_TEMPLATE			*apsDroidTemplates[MAX_PLAYERS];
-extern DROID_TEMPLATE			*apsStaticTemplates;			// for AIs and scripts
-
 //used to stop structures being built too near the edge and droids being placed down
 #define TOO_NEAR_EDGE	3
 
@@ -83,11 +79,7 @@ extern bool droidInit(void);
 
 extern void removeDroidBase(DROID *psDel);
 
-extern bool loadDroidTemplates(const char *pDroidData, UDWORD bufferSize);
 extern bool loadDroidWeapons(const char *pWeaponData, UDWORD bufferSize);
-
-/*initialise the template build and power points */
-extern void initTemplatePoints(void);
 
 struct INITIAL_DROID_ORDERS
 {
@@ -131,9 +123,6 @@ extern UDWORD calcTemplateBuild(DROID_TEMPLATE *psTemplate);
 
 /* Calculate the power points required to build/maintain the droid */
 extern UDWORD	calcTemplatePower(DROID_TEMPLATE *psTemplate);
-
-// return whether a template is for an IDF droid
-bool templateIsIDF(DROID_TEMPLATE *psTemplate);
 
 // return whether a droid is IDF
 bool idfDroid(DROID *psDroid);
@@ -205,9 +194,6 @@ extern DROID_TYPE droidType(DROID *psDroid);
 /* Return the type of a droid from it's template */
 extern DROID_TYPE droidTemplateType(DROID_TEMPLATE *psTemplate);
 
-//fills the list with Templates that can be manufactured in the Factory - based on size
-void fillTemplateList(std::vector<DROID_TEMPLATE *> &pList, STRUCTURE *psFactory);
-
 extern void assignDroidsToGroup(UDWORD	playerNumber, UDWORD groupNumber);
 
 extern bool activateGroup(UDWORD playerNumber, UDWORD groupNumber);
@@ -219,16 +205,6 @@ extern bool activateGroupAndMove(UDWORD playerNumber, UDWORD groupNumber);
 bool calcDroidMuzzleLocation(DROID *psDroid, Vector3i *muzzle, int weapon_slot);
 /* calculate muzzle base location in 3d world added int weapon_slot to fix the always slot 0 hack*/
 bool calcDroidMuzzleBaseLocation(DROID *psDroid, Vector3i *muzzle, int weapon_slot);
-
-/* gets a template from its aName (when pName is unknown) */ 
-extern DROID_TEMPLATE	*GetHumanDroidTemplate(const char *aName);
-extern DROID_TEMPLATE	*GetAIDroidTemplate(const char *aName);
-/* gets a template from its name - relies on the name being unique */
-extern DROID_TEMPLATE * getTemplateFromUniqueName(const char *pName, unsigned int player);
-/* gets a template from its name - relies on the name being unique */
-extern DROID_TEMPLATE* getTemplateFromTranslatedNameNoPlayer(char const *pName);
-/*getTemplateFromMultiPlayerID gets template for unique ID  searching all lists */
-extern DROID_TEMPLATE* getTemplateFromMultiPlayerID(UDWORD multiPlayerID);
 
 // finds a droid for the player and sets it to be the current selected droid
 extern bool selectDroidByID(UDWORD id, UDWORD player);
@@ -275,10 +251,6 @@ extern bool buildModule(STRUCTURE *psStruct);
  - if so, helping to build the current one*/
 extern void setUpBuildModule(DROID *psDroid);
 
-/*return the name to display for the interface - we don't know if this is
-a string ID or something the user types in*/
-extern const char* getTemplateName(const DROID_TEMPLATE *psTemplate);
-
 /* Just returns true if the droid's present body points aren't as high as the original*/
 extern bool	droidIsDamaged(DROID *psDroid);
 
@@ -288,9 +260,7 @@ extern void	setSelectedGroup(UDWORD groupNumber);
 extern UDWORD	getSelectedCommander( void );
 extern void	setSelectedCommander(UDWORD commander);
 
-
 extern char const *getDroidResourceName(char const *pName);
-
 
 /*checks to see if an electronic warfare weapon is attached to the droid*/
 extern bool electronicDroid(DROID *psDroid);

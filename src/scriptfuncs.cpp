@@ -96,6 +96,7 @@
 #include "visibility.h"
 #include "design.h"
 #include "random.h"
+#include "template.h"
 
 static INTERP_VAL	scrFunctionResult;	//function return value to be pushed to stack
 

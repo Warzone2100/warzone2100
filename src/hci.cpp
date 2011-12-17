@@ -75,6 +75,7 @@
 #include "transporter.h"
 #include "warcam.h"
 #include "main.h"
+#include "template.h"
 #include "wrappers.h"
 #include "keybind.h"
 

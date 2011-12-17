@@ -90,6 +90,7 @@
 #include "scriptfuncs.h"
 #include "clparse.h"
 #include "research.h"
+#include "template.h"
 
 /*
 	KeyBind.c

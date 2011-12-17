@@ -85,6 +85,7 @@
 #include "scriptfuncs.h"
 #include "challenge.h"
 #include "combat.h"
+#include "template.h"
 
 #define MAX_SAVE_NAME_SIZE_V19	40
 #define MAX_SAVE_NAME_SIZE	60

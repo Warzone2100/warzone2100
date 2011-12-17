@@ -44,6 +44,7 @@
 #include "frend.h"		// frontend ids.
 #include "intimage.h"
 #include "multiplay.h"
+#include "template.h"
 
 //used to calc the research power
 #define RESEARCH_FACTOR		32

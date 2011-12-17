@@ -49,6 +49,7 @@
 #include "src/levels.h"
 #include "src/research.h"
 #include "src/text.h"
+#include "src/template.h"
 
 // The current script code
 static SCRIPT_CODE		*psCurrScript;
