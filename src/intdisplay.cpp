@@ -566,8 +566,8 @@ void intDisplayPowerBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DEC
 	lastRealTime = realTime;
 
 	ManPow = ManuPower / POWERBAR_SCALE;
-	Avail = displayPower / POWERBAR_SCALE;
-	realPower = displayPower - ManuPower;
+	Avail = (displayPower + 1e-8) / POWERBAR_SCALE;
+	realPower = (displayPower + 1e-8) - ManuPower;
 
 	BarWidth = BarGraph->width;
 	iV_SetFont(font_regular);
