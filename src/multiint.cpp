@@ -3023,7 +3023,7 @@ static void processMultiopWidgets(UDWORD id)
 		else
 		{
 			NETclose();
-			widgDelete(psWScreen, FRONTEND_BACKDROP);
+			pie_LoadBackDrop(SCREEN_RANDOMBDROP);
 			challengeActive = false;
 			bHosted = false;
 			ingame.localJoiningInProgress = false;
