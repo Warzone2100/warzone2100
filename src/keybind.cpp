@@ -2575,9 +2575,12 @@ float available_speed[] = {
 	5.f / 2.f,	// n
 	3.f / 1.f,	// n
 	10.f / 1.f,	// n
-	20.f / 1.f	// n
+	20.f / 1.f,     // n
+	30.f / 1.f,     // n
+	60.f / 1.f,     // n
+	100.f / 1.f,    // n
 };
-unsigned int nb_available_speeds = 12;
+unsigned int nb_available_speeds = ARRAY_SIZE(available_speed);
 
 void kf_SpeedUp( void )
 {
@@ -2820,7 +2823,6 @@ void kf_BuildPrevPage()
 	temp = psTForm->majorT - 1;
 	if (temp < 0)
 	{
-		temp = 0 ;
 		audio_PlayTrack(ID_SOUND_BUILD_FAIL);
 		return;
 	}

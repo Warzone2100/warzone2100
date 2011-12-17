@@ -1,6 +1,6 @@
-20	432	10	320	_("Warriors of the Collective, Nexus has given us the power of the machine so that we can destroy all that oppose us.")
+20	432	0.833333333333	26.6666666667	_("Warriors of the Collective, Nexus has given us the power of the machine so that we can destroy all that oppose us.")
 
-20	432	325	500	_("Nexus now asks us to crush the Project.")
-0	0	325	500	_("Cleanse and destroy!!")
+20	432	27.0833333333	41.6666666667	_("Nexus now asks us to crush the Project.")
+0	0	27.0833333333	41.6666666667	_("Cleanse and destroy!!")
 
 

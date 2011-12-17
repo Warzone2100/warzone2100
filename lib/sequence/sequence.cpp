@@ -1045,6 +1045,11 @@ int seq_GetFrameNumber()
 	return frames;
 }
 
+double seq_GetFrameTime()
+{
+	return videobuf_time;
+}
+
 // this controls the size of the video to display on screen
 void seq_SetDisplaySize(int sizeX, int sizeY, int posX, int posY)
 {

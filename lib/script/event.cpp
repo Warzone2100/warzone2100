@@ -980,10 +980,9 @@ void eventFireCallbackTrigger(TRIGGER_TYPE callback)
 // Run a trigger
 static bool eventFireTrigger(ACTIVE_TRIGGER *psTrigger)
 {
-	bool			fired;
+	bool fired = false;
 	INTERP_VAL		sResult;
 
-	fired = false;
 	psFiringTrigger = psTrigger;
 
 	// If this is a code trigger see if it fires

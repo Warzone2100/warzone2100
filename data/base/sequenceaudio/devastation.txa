@@ -1,18 +1,18 @@
 //pos		frame	
 //x	y		start	end	Text	
 
-20	20		0	550	_("Dusk, November 3rd, 2085")
-0	0		0	550	_("Earth, High Orbit")
-0	0		0	550	_("The Collapse")
+20	20	0.0	22.0	_("Dusk, November 3rd, 2085")
+0	0	0.0	22.0	_("Earth, High Orbit")
+0	0	0.0	22.0	_("The Collapse")
 
-20	20		975	1450	_("January 19th, 2086")
-0	0		975	1450	_("North America")
-0	0		975	1450	_("Nuclear Winter")
+20	20	39.0	58.0	_("January 19th, 2086")
+0	0	39.0	58.0	_("North America")
+0	0	39.0	58.0	_("Nuclear Winter")
 
-20	20		1500	2000	_("Midnight, April 10th, 2086")
-0	0		1500	2000	_("Rocky Mountains")
-0	0		1500	2000	_("Safety")
+20	20	60.0	80.0	_("Midnight, April 10th, 2086")
+0	0	60.0	80.0	_("Rocky Mountains")
+0	0	60.0	80.0	_("Safety")
 
-20	20		2300	4000	_("Dawn, April 4th, 2100")
-0	0		2300	4000	_("North America")
-0	0		2300	4000	_("A New Beginning")
+20	20	92.0	160.0	_("Dawn, April 4th, 2100")
+0	0	92.0	160.0	_("North America")
+0	0	92.0	160.0	_("A New Beginning")

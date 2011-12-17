@@ -202,8 +202,6 @@ bool multiPlayerLoop(void)
 	UDWORD		i;
 	UBYTE		joinCount;
 
-	sendCheck();						// send some checking info if possible
-
 		joinCount =0;
 		for(i=0;i<MAX_PLAYERS;i++)
 		{
@@ -932,7 +930,6 @@ bool recvResearchStatus(NETQUEUE queue)
 
 			// Start the research
 			MakeResearchStarted(pPlayerRes);
-			psResFacilty->timeStarted		= ACTION_START_TIME;
 			psResFacilty->timeStartHold		= 0;
 		}
 

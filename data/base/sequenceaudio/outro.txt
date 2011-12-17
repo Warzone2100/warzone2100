@@ -1,10 +1,10 @@
-20	432		500	610	_("After many long months of struggle, we defeated NEXUS.")
+20	432	41.6666666667	50.8333333333	_("After many long months of struggle, we defeated NEXUS.")
 
-20	432		620	710	_("The war started by Dr Reed was over.")
+20	432	51.6666666667	59.1666666667	_("The war started by Dr Reed was over.")
 
-20	432		720	810	_("We have recovered many of the technologies we sought.")
+20	432	60.0	67.5	_("We have recovered many of the technologies we sought.")
 
-20	432		820	930	_("It is now time to use them to rebuild the world.")
+20	432	68.3333333333	77.5	_("It is now time to use them to rebuild the world.")
 
-20	432		940	1100	_("Slowly, out of the ashes we will rise again...")
+20	432	78.3333333333	91.6666666667	_("Slowly, out of the ashes we will rise again...")
 

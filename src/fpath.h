@@ -41,12 +41,20 @@ enum FPATH_MOVETYPE
 
 struct PathBlockingMap;
 
+struct StructureTiles
+{
+	Vector2i map;           ///< Map coordinates of upper left corner of structure.
+	Vector2i size;          ///< Size (in map coordinates) of the structure.
+};
+
 struct PATHJOB
 {
 	PROPULSION_TYPE	propulsion;
 	DROID_TYPE	droidType;
 	int		destX, destY;
 	int		origX, origY;
+	StructureTiles  srcStructure;
+	StructureTiles  dstStructure;
 	UDWORD		droidID;
 	FPATH_MOVETYPE	moveType;
 	int		owner;		///< Player owner

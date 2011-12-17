@@ -569,7 +569,7 @@ void addMissionTimerInterface(void)
 adding the timer button*/
 void addTransporterTimerInterface(void)
 {
-	DROID	        *psDroid, *psTransporter;
+	DROID           *psTransporter = NULL;
 	bool            bAddInterface = false;
 	W_CLICKFORM     *psForm;
 
@@ -577,8 +577,7 @@ void addTransporterTimerInterface(void)
 	if (mission.ETA >= 0)
 	{
 		//check the player has at least one Transporter back at base
-		psDroid = psTransporter = NULL;
-		for (psDroid = mission.apsDroidLists[selectedPlayer]; psDroid !=
+		for (DROID *psDroid = mission.apsDroidLists[selectedPlayer]; psDroid !=
 			NULL; psDroid = psDroid->psNext)
 		{
 			if (psDroid->droidType == DROID_TRANSPORTER)
@@ -587,15 +586,15 @@ void addTransporterTimerInterface(void)
 				break;
 			}
 		}
-		if (psDroid)
+		if (psTransporter)
 		{
 			bAddInterface = true;
 
-	    		//check timer is not already on the screen
-		    	if (!widgGetFromID(psWScreen, IDTRANTIMER_BUTTON))
-    			{
-	    			intAddTransporterTimer();
-		    	}
+			//check timer is not already on the screen
+			if (!widgGetFromID(psWScreen, IDTRANTIMER_BUTTON))
+			{
+				intAddTransporterTimer();
+			}
 
 			//set the data for the transporter timer
 			widgSetUserData(psWScreen, IDTRANTIMER_DISPLAY, (void*)psTransporter);
@@ -1023,11 +1022,6 @@ void placeLimboDroids(void)
 		    }
 		    psDroid->pos.x = (UWORD)world_coord(droidX);
 		    psDroid->pos.y = (UWORD)world_coord(droidY);
-		    if (pickRes == HALF_FREE_TILE )
-		    {
-			    psDroid->pos.x += TILE_UNITS;
-			    psDroid->pos.y += TILE_UNITS;
-		    }
 		    ASSERT(worldOnMap(psDroid->pos.x,psDroid->pos.y), "limbo droid is not on the map");
 		    psDroid->pos.z = map_Height(psDroid->pos.x, psDroid->pos.y);
 		    updateDroidOrientation(psDroid);
@@ -1380,11 +1374,6 @@ static void processMission(void)
 			ASSERT(pickRes != NO_FREE_TILE, "processMission: Unable to find a free location" );
 			x = (UWORD)world_coord(droidX);
 			y = (UWORD)world_coord(droidY);
-			if (pickRes == HALF_FREE_TILE )
-			{
-				x += TILE_UNITS;
-				y += TILE_UNITS;
-			}
 			droidSetPosition(psDroid, x, y);
 			ASSERT(worldOnMap(psDroid->pos.x,psDroid->pos.y), "the droid is not on the map");
 			updateDroidOrientation(psDroid);
@@ -1677,17 +1666,12 @@ void missionDroidUpdate(DROID *psDroid)
 // Reset variables in Droids such as order and position
 static void missionResetDroids(void)
 {
-	UDWORD			player;
-	DROID			*psDroid, *psNext;
-
 	debug(LOG_SAVE, "called");
 
-	for (player = 0; player < MAX_PLAYERS; player++)
+	for (unsigned int player = 0; player < MAX_PLAYERS; player++)
 	{
-		for (psDroid = apsDroidLists[player]; psDroid != NULL; psDroid = psNext)
+		for (DROID *psDroid = apsDroidLists[player]; psDroid != NULL; psDroid = psDroid->psNext)
 		{
-			psNext = psDroid->psNext;
-
 			// Reset order - unless constructor droid that is mid-build
 			if ((psDroid->droidType == DROID_CONSTRUCT
 			     || psDroid->droidType == DROID_CYBORG_CONSTRUCT)
@@ -1709,11 +1693,9 @@ static void missionResetDroids(void)
 		}
 	}
 
-	for (psDroid = apsDroidLists[selectedPlayer]; psDroid != NULL; psDroid = psDroid->psNext)
+	for (DROID *psDroid = apsDroidLists[selectedPlayer]; psDroid != NULL; psDroid = psDroid->psNext)
 	{
 		bool	placed = false;
-
-		psNext = psDroid->psNext;
 
 		//for all droids that have never left home base
 		if (psDroid->pos.x == INVALID_XY && psDroid->pos.y == INVALID_XY)
@@ -1753,11 +1735,6 @@ static void missionResetDroids(void)
 					int wx = world_coord(x);
 					int wy = world_coord(y);
 
-					if (pickRes == HALF_FREE_TILE )
-					{
-						wx += TILE_UNITS;
-						wy += TILE_UNITS;
-					}
 					droidSetPosition(psDroid, wx, wy);
 					placed = true;
 				}
@@ -1782,11 +1759,6 @@ static void missionResetDroids(void)
 							int wx = world_coord(x);
 							int wy = world_coord(y);
 
-							if (pickRes == HALF_FREE_TILE )
-							{
-								wx += TILE_UNITS;
-								wy += TILE_UNITS;
-							}
 							droidSetPosition(psDroid, wx, wy);
 							placed = true;
 						}

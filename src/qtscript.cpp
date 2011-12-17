@@ -177,7 +177,8 @@ static QScriptValue js_queue(QScriptContext *context, QScriptEngine *engine)
 
 void scriptRemoveObject(const BASE_OBJECT *psObj)
 {
-	for (QHash<int, bindNode>::iterator i = bindings.find(psObj->id); i != bindings.end(); i++)
+	QHash<int, bindNode>::iterator i = bindings.find(psObj->id);
+	while (i != bindings.end() && i.key() == psObj->id)
 	{
 		int id = i.key();
 		bindNode node = i.value();
@@ -188,7 +189,7 @@ void scriptRemoveObject(const BASE_OBJECT *psObj)
 			args += convMax(psObj, node.engine);
 			callFunction(node.engine, node.funcName, args);
 		}
-		bindings.erase(i);
+		i = bindings.erase(i);
 	}
 }
 

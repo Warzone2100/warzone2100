@@ -1,11 +1,11 @@
 //pos		frame	
 //x	y		start	end	Text	
 
-20	432		0	100	_("Commander, we have recovered a command turret from the New Paradigm.")
+20	432	0.0	4.0	_("Commander, we have recovered a command turret from the New Paradigm.")
 
-20	432		125	375	_("This turret allows commanders to coordinate attacks between assigned units and to act as a delivery point for factories. Researching and using this technology has the highest priority.")
+20	432	5.0	15.0	_("This turret allows commanders to coordinate attacks between assigned units and to act as a delivery point for factories. Researching and using this technology has the highest priority.")
 
-20	432		425	475	_("Commander, we are receiving this transmission.")
+20	432	17.0	19.0	_("Commander, we are receiving this transmission.")
 
 
 

@@ -167,7 +167,6 @@ struct RESEARCH_FACILITY
 	StatusPending   statusPending;                  ///< Pending = not yet synchronised.
 	unsigned        pendingCount;                   ///< Number of messages sent but not yet processed.
 	UDWORD		capacity;				/* Number of upgrade modules added*/
-	UDWORD		timeStarted;			/* The time the building started on the subject*/
 	UDWORD		researchPoints;			/* Research Points produced per research cycle*/
 	RESEARCH *      psBestTopic;                    // The topic with the most research points that was last performed
 	UDWORD		timeStartHold;		    /* The time the research facility was put on hold*/
@@ -189,7 +188,6 @@ struct FACTORY
 	unsigned                        pendingCount;           ///< Number of messages sent but not yet processed.
 
 	UDWORD				timeStarted;		/* The time the building started on the subject*/
-	//UDWORD				timeToBuild;		/* Time taken to build one droid */
 	int                             buildPointsRemaining;   ///< Build points required to finish building the droid.
 	UDWORD				timeStartHold;		/* The time the factory was put on hold*/
 	FLAG_POSITION		*psAssemblyPoint;	/* Place for the new droids to assemble at */
@@ -214,11 +212,9 @@ class DROID_GROUP;
 
 struct REPAIR_FACILITY
 {
-	UDWORD                          power;                  /* Power used in repairing */
-	UDWORD                          timeStarted;            /* Time repair started on current object */
+	UDWORD                          power;                  // Repair rate. Nothing to do with power.
 	BASE_OBJECT                     *psObj;                 /* Object being repaired */
 	FLAG_POSITION                   *psDeliveryPoint;       /* Place for the repaired droids to assemble at */
-	UDWORD                          currentPtsAdded;        /* stores the amount of body points added to the unit that is being worked on */
 
 	// The group the droids to be repaired by this facility belong to
 	DROID_GROUP *                   psGroup;

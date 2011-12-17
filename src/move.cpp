@@ -1942,8 +1942,9 @@ moveCyborgLaunchAnimDone( ANIM_OBJECT *psObj )
 			"moveCyborgLaunchAnimDone: invalid cyborg pointer" );
 
 	/* raise cyborg a little bit so flying - terrible hack - GJ */
-	psDroid->pos.z++;
-	psDroid->sMove.iVertSpeed = CYBORG_VERTICAL_SPEED;
+	// Actually, worse than a terrible hack, since it would break synch...
+	//psDroid->pos.z++;
+	//psDroid->sMove.iVertSpeed = CYBORG_VERTICAL_SPEED;
 
 	psDroid->psCurAnim = NULL;
 }
@@ -1957,7 +1958,8 @@ moveCyborgTouchDownAnimDone( ANIM_OBJECT *psObj )
 			"moveCyborgTouchDownAnimDone: invalid cyborg pointer" );
 
 	psDroid->psCurAnim = NULL;
-	psDroid->pos.z = map_Height( psDroid->pos.x, psDroid->pos.y );
+	// See comment in moveCyborgLaunchAnimDone().
+	//psDroid->pos.z = map_Height( psDroid->pos.x, psDroid->pos.y );
 }
 
 

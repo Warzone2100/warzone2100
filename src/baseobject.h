@@ -41,4 +41,6 @@ void checkObject(const SIMPLE_OBJECT *psObject, const char *const location_descr
 #define syncDebugObject(psObject, ch) _syncDebugObject(__FUNCTION__, psObject, ch)
 void _syncDebugObject(const char *function, SIMPLE_OBJECT const *psObject, char ch);
 
+Vector2i getStatsSize(BASE_STATS const *pType, uint16_t direction);
+
 #endif // __INCLUDED_BASEOBJECT_H__

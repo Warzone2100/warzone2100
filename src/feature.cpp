@@ -260,6 +260,7 @@ FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,bool FromSave)
 		psFeature->rot.direction = 0;
 	}
 	psFeature->body = psStats->body;
+	psFeature->inFire = false;
 	objSensorCache((BASE_OBJECT *)psFeature, NULL);
 	objEcmCache((BASE_OBJECT *)psFeature, NULL);
 
@@ -555,4 +556,12 @@ SDWORD getFeatureStatFromName( const char *pName )
 		}
 	}
 	return -1;
+}
+
+Vector2i getFeatureStatsSize(FEATURE_STATS const *pFeatureType)
+{
+	Vector2i size(pFeatureType->baseWidth, pFeatureType->baseBreadth);
+
+	// Feature has normal orientation (or upsidedown).
+	return size;
 }

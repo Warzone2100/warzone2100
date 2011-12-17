@@ -233,13 +233,12 @@ static bool eventLoadContext(WzConfig &ini)
 				// into the variables data space.
 				if (!eventGetContextVal(psCCont, i, &psVal))
 				{
-					debug(LOG_FATAL, "Could not find variable in context");
+					debug(LOG_FATAL, "Could not find variable %d in context %d", i, context);
 					return false;
 				}
-
 				if (!loadFunc(psVal, ini))
 				{
-					debug(LOG_FATAL, "Ccould not get variable value");
+					debug(LOG_FATAL, "Could not get variable value context %d, variable %d", context, i);
 					return false;
 				}
 			}

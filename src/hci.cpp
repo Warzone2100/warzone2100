@@ -85,6 +85,8 @@
 
 static UDWORD		newMapWidth, newMapHeight;
 
+static FLAG_POSITION debugMenuDroidDeliveryPoint;
+
 #define RETXOFFSET (0)// Reticule button offset
 #define RETYOFFSET (0)
 #define NUMRETBUTS	7 // Number of reticule buttons.
@@ -1351,27 +1353,13 @@ static void intProcessEditStats(UDWORD id)
 	{
 		/* Clicked on a stat button - need to look for a location for it */
 		psPositionStats = ppsStatsList[id - IDSTAT_START];
-		/*if it is a structure - need to check there is enough power available
-		to build */
-		if (psPositionStats->ref >= REF_STRUCTURE_START &&
-		    psPositionStats->ref < REF_STRUCTURE_START + REF_RANGE)
-		{
-			if (!checkPower(selectedPlayer, ((STRUCTURE_STATS*)psPositionStats)->powerToBuild))
-			{
-				debug(LOG_INFO, "Ignoring power check, this is only used from the edit menu, isn't it?");
-				//return;
-			}
-		}
-		/*if it is a template - need to check there is enough power available
-		to build */
 		if (psPositionStats->ref >= REF_TEMPLATE_START &&
 		    psPositionStats->ref < REF_TEMPLATE_START + REF_RANGE)
 		{
-			if (!checkPower(selectedPlayer, ((DROID_TEMPLATE*)psPositionStats)->powerPoints))
-			{
-				debug(LOG_INFO, "Ignoring power check, this is only used from the edit menu, isn't it?");
-				return;
-			}
+			// Placing a droid from the debug menu, set up the flag. (This would probably be safe to do, even if we're placing something else.)
+			debugMenuDroidDeliveryPoint.factoryType = REPAIR_FLAG;
+			debugMenuDroidDeliveryPoint.factoryInc = 0;
+			deliveryPointToMove = &debugMenuDroidDeliveryPoint;
 		}
 		intStartStructPosition(psPositionStats);
 		editPosMode = IED_POS;
@@ -2052,7 +2040,6 @@ INT_RETVAL intRunWidgets(void)
 		debug( LOG_ERROR, "PlayerHasLost Or Won\n" );
 		intResetScreen(true);
 		retCode = INT_QUIT;
-		quitting = true;
 	}
 	return retCode;
 }
@@ -2974,11 +2961,10 @@ void intNewObj(BASE_OBJECT *psObj)
 // clean up when an object dies
 static void intObjectDied(UDWORD objID)
 {
-	RENDERED_BUTTON		*psBut;
 	UDWORD				statsID, gubbinsID;
 
 	// clear the object button
-	psBut = (RENDERED_BUTTON *)widgGetUserData(psWScreen, objID);
+	RENDERED_BUTTON *psBut = (RENDERED_BUTTON *)widgGetUserData(psWScreen, objID);
 	if (psBut)
 	{
 		psBut->Data = NULL;
@@ -2993,7 +2979,6 @@ static void intObjectDied(UDWORD objID)
 		// clear the stats button
 		statsID = IDOBJ_STATSTART + objID - IDOBJ_OBJSTART;
 		intSetStats(statsID, NULL);
-		psBut = (RENDERED_BUTTON *)widgGetUserData(psWScreen, statsID);
 		// and disable it
 		widgSetButtonState(psWScreen, statsID, WBUT_DISABLE);
 
@@ -3754,21 +3739,17 @@ static bool intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,b
 	DROID			*Droid;
 	STRUCTURE		*Structure;
 	bool			IsFactory;
-	bool			Animate = true;
 	int				compIndex;
 
 	// Is the form already up?
 	if(widgGetFromID(psWScreen,IDOBJ_FORM) != NULL) {
 		intRemoveObjectNoAnim();
-		Animate = false;
 	}
 	else
 	{
 		// reset the object position array
 		asJumpPos.clear();
 	}
-
-	Animate = false;
 
 	ClearObjectBuffers();
 	ClearTopicBuffers();
@@ -3877,14 +3858,7 @@ static bool intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,b
 	sFormInit.y = (SWORD)OBJ_BACKY;
 	sFormInit.width = OBJ_BACKWIDTH;
 	sFormInit.height = 	OBJ_BACKHEIGHT;
-	// If the window was closed then do open animation.
-	if(Animate) {
-		sFormInit.pDisplay = intOpenPlainForm;
-		sFormInit.disableChildren = true;
-	} else {
-		// otherwise just recreate it.
-		sFormInit.pDisplay = intDisplayPlainForm;
-	}
+	sFormInit.pDisplay = intDisplayPlainForm;
 	if (!widgAddForm(psWScreen, &sFormInit))
 	{
 		return false;
@@ -4768,7 +4742,6 @@ static bool intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 	UDWORD				i, butPerForm, statForm;
 	SDWORD				BufferID;
 	BASE_STATS			*Stat;
-	bool				Animate = true;
 	FACTORY				*psFactory;
 
 	int                             allyResearchIconCount = 0;
@@ -4778,7 +4751,6 @@ static bool intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 	// Is the form already up?
 	if(widgGetFromID(psWScreen,IDSTAT_FORM) != NULL) {
 		intRemoveStatsNoAnim();
-		Animate = false;
 	}
 
 	// is the order form already up ?
@@ -4786,8 +4758,6 @@ static bool intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 	{
 		intRemoveOrderNoAnim();
 	}
-
-	Animate = false;
 
 	if (psOwner != NULL)
 	{
@@ -4815,14 +4785,7 @@ static bool intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 	sFormInit.y = (SWORD)STAT_Y;
 	sFormInit.width = STAT_WIDTH;
 	sFormInit.height = 	STAT_HEIGHT;
-	// If the window was closed then do open animation.
-	if(Animate) {
-		sFormInit.pDisplay = intOpenPlainForm;
-		sFormInit.disableChildren = true;
-	} else {
-		// otherwise just recreate it.
-		sFormInit.pDisplay = intDisplayPlainForm;
-	}
+	sFormInit.pDisplay = intDisplayPlainForm;
 	if (!widgAddForm(psWScreen, &sFormInit))
 	{
 		debug(LOG_ERROR, "intAddStats: Failed to add form");
@@ -5475,7 +5438,6 @@ static bool setResearchStats(BASE_OBJECT *psObj, BASE_STATS *psStats)
 		sendResearchStatus(psBuilding,count,selectedPlayer,true);	// inform others, I'm researching this.
 
 		MakeResearchStarted(pPlayerRes);
-		psResFacilty->timeStarted = ACTION_START_TIME;
 		psResFacilty->timeStartHold = 0;
 		//stop the button from flashing once a topic has been chosen
 		stopReticuleButtonFlash(IDRET_RESEARCH);
@@ -5846,12 +5808,9 @@ void stopReticuleButtonFlash(UDWORD buttonID)
 	{
 		UBYTE DownTime = UNPACKDWORD_QUAD_C(psButton->UserData);
 		UBYTE Index = UNPACKDWORD_QUAD_D(psButton->UserData);
-		UBYTE flashing = UNPACKDWORD_QUAD_A(psButton->UserData);
-		UBYTE flashTime = UNPACKDWORD_QUAD_B(psButton->UserData);
-
 		// clear flashing byte
-		flashing = false;
-		flashTime = 0;
+		UBYTE flashing = false;
+		UBYTE flashTime = 0;
 		psButton->UserData = PACKDWORD_QUAD(flashTime,flashing,DownTime,Index);
 	}
 }
@@ -6271,7 +6230,6 @@ STRUCTURE* intGotoNextStructureType(UDWORD structType,bool JumpTo,bool CancelDri
 					}
 					psStruct->selected = true;
 					CurrentStruct = psStruct;
-					Found = true;
 					break;
 				}
 			}

@@ -36,5 +36,6 @@ extern int seq_GetFrameNumber(void);
 extern void seq_SetDisplaySize(int sizeX, int sizeY, int posX, int posY);
 extern void seq_setScanlineMode(SCANLINE_MODE mode);
 extern SCANLINE_MODE seq_getScanlineMode(void);
+double seq_GetFrameTime();
 
 #endif // __INCLUDED_LIB_SEQUENCE_SEQUENCE_H__

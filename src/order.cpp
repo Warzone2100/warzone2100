@@ -1103,8 +1103,7 @@ void orderUpdateDroid(DROID *psDroid)
 			psDroid->order = DORDER_NONE;
 			actionDroid(psDroid, DACTION_NONE);
 		}
-		else if (actionReachedBuildPos(psDroid, psDroid->psTarget->pos.x, psDroid->psTarget->pos.y,
-						((STRUCTURE *)psDroid->psTarget)->pStructureType))
+		else if (actionReachedBuildPos(psDroid, psDroid->psTarget->pos.x, psDroid->psTarget->pos.y, ((STRUCTURE *)psDroid->psTarget)->rot.direction, ((STRUCTURE *)psDroid->psTarget)->pStructureType))
 		{
 			recycleDroid(psDroid);
 		}

@@ -171,7 +171,6 @@ bool texLoad(const char *fileName)
 		abort(); // cannot recover; we could possibly generate a random palette?
 	}
 	i = 0; // tile
-	k = 0; // number of values read
 	j = 0; // place in buffer
 	do {
 		unsigned int r, g, b;

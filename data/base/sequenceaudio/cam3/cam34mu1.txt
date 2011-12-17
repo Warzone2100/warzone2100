@@ -1,6 +1,6 @@
-20	432	20	110	_("We are experiencing some interference from NEXUS.")
+20	432	0.8	4.4	_("We are experiencing some interference from NEXUS.")
 
-20	432	115	220	_("You must destroy his command centre before we lose control of key systems.")
+20	432	4.6	8.8	_("You must destroy his command centre before we lose control of key systems.")
 
 
 

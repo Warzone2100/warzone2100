@@ -777,9 +777,10 @@ bool scrValDefSave(INTERP_VAL *psVal, WzConfig &ini)
 		break;
 	case ST_RESEARCH:
 		psResearch = (RESEARCH *)psVal->v.oval;
-		if (psResearch)
+		if (psResearch && psResearch->pName[0] != '\0')
 		{
 			ini.setValue("data", QString(psResearch->pName));
+			ASSERT(psResearch == getResearch(psResearch->pName), "Research %s not found!", psResearch->pName);
 		}
 		break;
 	case ST_GROUP:
@@ -1005,10 +1006,11 @@ bool scrValDefLoad(INTERP_VAL *psVal, WzConfig &ini)
 		psVal->v.oval = NULL;
 		if (ini.contains("data"))
 		{
-			psVal->v.oval = (void*)getResearch(ini.value("data").toString().toAscii().constData());
-			if (psVal->v.oval == NULL)
+			QString research = ini.value("data").toString();
+			if (!research.isEmpty())
 			{
-				debug(LOG_FATAL, "Could not find research");
+				psVal->v.oval = (void*)getResearch(research.toUtf8().constData());
+				ASSERT_OR_RETURN(false, psVal->v.oval, "Could not find research %s", research.toUtf8().constData());
 			}
 		}
 		break;

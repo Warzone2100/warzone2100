@@ -1,6 +1,6 @@
-20	432	40	175	_("Commander we are detecting transmissions from this site that are reaching high orbit.")
+20	432	1.6	7.0	_("Commander we are detecting transmissions from this site that are reaching high orbit.")
 
-20	432	325	410	_("Nexus has now reconnected itself with the NASDA satellites.")
+20	432	13.0	16.4	_("Nexus has now reconnected itself with the NASDA satellites.")
 
-20	432	420	565	_("This poses a major threat to the Project and to our survival.") 
+20	432	16.8	22.6	_("This poses a major threat to the Project and to our survival.") 
 

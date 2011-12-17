@@ -1,13 +1,13 @@
-20	432	75	250	_("Well done Commander, you've prevented my last missile from launching.")
-0	0	75	250   	_("Such a shame. Your Project HQ would have made a wonderful target.")
+20	432	3.0	10.0	_("Well done Commander, you've prevented my last missile from launching.")
+0	0	3.0	10.0	_("Such a shame. Your Project HQ would have made a wonderful target.")
 
-20	432	275	320	_("But it's good of you to join me here.")
+20	432	11.0	12.8	_("But it's good of you to join me here.")
 
-20	432	325	425	_("Buried beneath this silo is a tactical nuclear warhead that is set to go off soon.")
+20	432	13.0	17.0	_("Buried beneath this silo is a tactical nuclear warhead that is set to go off soon.")
 
 
-20	432	475	550	_("As I cannot launch it, it'll just have to blow where it is.")
+20	432	19.0	22.0	_("As I cannot launch it, it'll just have to blow where it is.")
 
-20	432	560	650	_("Please note that all entrances to the underground complex have been sealed. Goodbye, Commander.")
+20	432	22.4	26.0	_("Please note that all entrances to the underground complex have been sealed. Goodbye, Commander.")
 
 

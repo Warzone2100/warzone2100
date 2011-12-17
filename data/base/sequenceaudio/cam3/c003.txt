@@ -1,7 +1,7 @@
-20	432	850	1025	_("Personnel at Gamma Base have confirmed that the nuclear missiles targeted at Alpha and Beta bases were launched from a silo in their sector.")
+20	432	70.8333333333	85.4166666667	_("Personnel at Gamma Base have confirmed that the nuclear missiles targeted at Alpha and Beta bases were launched from a silo in their sector.")
 
 
-20	432	1150	1250	_("Team Gamma is currently scouting the silo's location and monitoring NEXUS's activity.")
+20	432	95.8333333333	104.166666667	_("Team Gamma is currently scouting the silo's location and monitoring NEXUS's activity.")
 
 
-20	432	1275	1350	_("Commander, the success of the Project lies with you.")
+20	432	106.25	112.5	_("Commander, the success of the Project lies with you.")

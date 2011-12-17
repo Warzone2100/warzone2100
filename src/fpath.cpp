@@ -350,9 +350,31 @@ void fpathRemoveDroidData(int id)
 	wzMutexUnlock(fpathMutex);
 }
 
+static StructureTiles getTilesOfStructure(BASE_OBJECT *object)
+{
+	StructureTiles ret;
+	ret.size = Vector2i(-65535, -65535);  // Default to an invalid area.
+	ret.map = Vector2i(32767, 32767);
+
+	STRUCTURE *psStructure = castStructure(object);
+	FEATURE *psFeature = castFeature(object);
+
+	if (psStructure != NULL)
+	{
+		ret.size = getStructureSize(psStructure);
+		ret.map = map_coord(removeZ(psStructure->pos)) - ret.size/2;
+	}
+	else if (psFeature != NULL)
+	{
+		ret.size = Vector2i(psFeature->psStats->baseWidth, psFeature->psStats->baseBreadth);
+		ret.map = map_coord(removeZ(psFeature->pos)) - ret.size/2;
+	}
+
+	return ret;
+}
 
 static FPATH_RETVAL fpathRoute(MOVE_CONTROL *psMove, int id, int startX, int startY, int tX, int tY, PROPULSION_TYPE propulsionType, 
-                               DROID_TYPE droidType, FPATH_MOVETYPE moveType, int owner, bool acceptNearest)
+                               DROID_TYPE droidType, FPATH_MOVETYPE moveType, int owner, bool acceptNearest, BASE_OBJECT *srcStructure, BASE_OBJECT *dstStructure)
 {
 	objTrace(id, "called(*,id=%d,sx=%d,sy=%d,ex=%d,ey=%d,prop=%d,type=%d,move=%d,owner=%d)", id, startX, startY, tX, tY, (int)propulsionType, (int)droidType, (int)moveType, owner);
 
@@ -424,6 +446,8 @@ static FPATH_RETVAL fpathRoute(MOVE_CONTROL *psMove, int id, int startX, int sta
 	job.droidID = id;
 	job.destX = tX;
 	job.destY = tY;
+	job.srcStructure = getTilesOfStructure(srcStructure);
+	job.dstStructure = getTilesOfStructure(dstStructure);
 	job.droidType = droidType;
 	job.propulsion = propulsionType;
 	job.moveType = moveType;
@@ -472,10 +496,18 @@ FPATH_RETVAL fpathDroidRoute(DROID* psDroid, SDWORD tX, SDWORD tY, FPATH_MOVETYP
 	// Check whether the start and end points of the route are blocking tiles and find an alternative if they are.
 	Position startPos = psDroid->pos;
 	Position endPos = Position(tX, tY, 0);
+	BASE_OBJECT *srcStructure = worldTile(startPos)->psObject;
+	BASE_OBJECT *dstStructure = worldTile(endPos)->psObject;
 	if (psDroid->sMove.Status != MOVEWAITROUTE)
 	{
-		startPos = findNonblockingPosition(startPos, getPropulsionStats(psDroid)->propulsionType, psDroid->player, moveType);
-		endPos   = findNonblockingPosition(endPos,   getPropulsionStats(psDroid)->propulsionType, psDroid->player, moveType);
+		if (srcStructure == NULL)  // If there's a structure over the source, ignore it, otherwise pathfind from somewhere around the obstruction.
+		{
+			startPos = findNonblockingPosition(startPos, getPropulsionStats(psDroid)->propulsionType, psDroid->player, moveType);
+		}
+		if (dstStructure == NULL)  // If there's a structure over the destination, ignore it, otherwise pathfind from somewhere around the obstruction.
+		{
+			endPos   = findNonblockingPosition(endPos,   getPropulsionStats(psDroid)->propulsionType, psDroid->player, moveType);
+		}
 		objTrace(psDroid->id, "Want to go to (%d, %d) -> (%d, %d), going (%d, %d) -> (%d, %d)", map_coord(psDroid->pos.x), map_coord(psDroid->pos.y), map_coord(tX), map_coord(tY), map_coord(startPos.x), map_coord(startPos.y), map_coord(endPos.x), map_coord(endPos.y));
 	}
 	switch (psDroid->order)
@@ -492,7 +524,7 @@ FPATH_RETVAL fpathDroidRoute(DROID* psDroid, SDWORD tX, SDWORD tY, FPATH_MOVETYP
 		break;
 	}
 	return fpathRoute(&psDroid->sMove, psDroid->id, startPos.x, startPos.y, endPos.x, endPos.y, psPropStats->propulsionType, 
-	                  psDroid->droidType, moveType, psDroid->player, acceptNearest);
+	                  psDroid->droidType, moveType, psDroid->player, acceptNearest, srcStructure, dstStructure);
 }
 
 // Run only from path thread
@@ -595,7 +627,7 @@ static int fpathResultQueueLength(void)
 // Only used by fpathTest.
 static FPATH_RETVAL fpathSimpleRoute(MOVE_CONTROL *psMove, int id, int startX, int startY, int tX, int tY)
 {
-	return fpathRoute(psMove, id, startX, startY, tX, tY, PROPULSION_TYPE_WHEELED, DROID_WEAPON, FMT_BLOCK, 0, true);
+	return fpathRoute(psMove, id, startX, startY, tX, tY, PROPULSION_TYPE_WHEELED, DROID_WEAPON, FMT_BLOCK, 0, true, NULL, NULL);
 }
 
 void fpathTest(int x, int y, int x2, int y2)

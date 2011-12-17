@@ -2565,7 +2565,6 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 	DROID				*psDroid;
 	BASE_OBJECT			*psChosenObjs[STRUCT_MAXWEAPS] = {NULL};
 	BASE_OBJECT			*psChosenObj = NULL;
-	SDWORD				iDt;
 	FACTORY				*psFactory;
 	REPAIR_FACILITY		*psRepairFac = NULL;
 	RESEARCH_FACILITY	*psResFacility;
@@ -2960,9 +2959,6 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 				/* reset repair started if we were previously repairing something else */
 				if (psRepairFac->psObj != psDroid)
 				{
-					psRepairFac->timeStarted = ACTION_START_TIME;
-					psRepairFac->currentPtsAdded = 0;
-
 					psRepairFac->psObj = psDroid;
 				}
 			}
@@ -3093,17 +3089,8 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 			{
 				pResearch = (RESEARCH *)pSubject;
 
-				if (psResFacility->timeStarted == ACTION_START_TIME)
-				{
-					//set the time started
-					psResFacility->timeStarted = gameTime;
-				}
-
-				ASSERT_OR_RETURN(, gameTime >= psResFacility->timeStarted, "research seems to have started in the future");
 				pointsToAdd = gameTimeAdjustedAverage(psResFacility->researchPoints);
 				pointsToAdd = MIN(pointsToAdd, pResearch->researchPoints - pPlayerRes->currentPoints);
-
-				psResFacility->timeStarted = gameTime;
 
 				if (pointsToAdd > 0 && pPlayerRes->currentPoints == 0)
 				{
@@ -3307,29 +3294,9 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 						}
 					}
 
-					if (psRepairFac->timeStarted == ACTION_START_TIME)
-					{
-						//set the time started
-						psRepairFac->timeStarted = gameTime;
-						//reset the points added
-						psRepairFac->currentPtsAdded = 0;
-					}
 					// FIXME: duplicate code, make repairing cost power again
 					/* do repairing */
-					iDt = gameTime - psRepairFac->timeStarted;
-					//- this was a bit exponential ...
-					pointsToAdd = (iDt * psRepairFac->power / GAME_TICKS_PER_SEC) -
-						psRepairFac->currentPtsAdded;
-
-					// do some repair
-					if (!pointsToAdd)
-					{
-						// We need to at least repair SOMETHING
-						pointsToAdd = 1;
-					}
-					// just add the points; these are integers, not floats
-					psDroid->body += pointsToAdd;
-					psRepairFac->currentPtsAdded += pointsToAdd;
+					psDroid->body += gameTimeAdjustedAverage(psRepairFac->power);
 				}
 
 				if (psDroid->body >= psDroid->originalBody)
@@ -4772,14 +4739,12 @@ bool destroyStruct(STRUCTURE *psDel)
 	/* Firstly, are we dealing with a wall section */
 	bMinor = psDel->pStructureType->type == REF_WALL || psDel->pStructureType->type == REF_WALLCORNER;
 
-//---------------------------------------
 	/* Only add if visible */
 	if(psDel->visible[selectedPlayer])
 	{
 		Vector3i pos;
 		int      i;
 
-//---------------------------------------  Do we add immediate explosions?
 		/* Set off some explosions, but not for walls */
 		/* First Explosions */
 		widthScatter = TILE_UNITS;
@@ -4798,7 +4763,6 @@ bool destroyStruct(STRUCTURE *psDel)
 		pos.z = psDel->pos.y;  // z = y [sic] intentional
 		pos.y = map_Height(pos.x, pos.z);
 
-//--------------------------------------- Do we add a fire?
 		// Set off a fire, provide dimensions for the fire
 		if(bMinor)
 		{
@@ -4828,7 +4792,6 @@ bool destroyStruct(STRUCTURE *psDel)
 			addEffect(&pos,EFFECT_FIRE,FIRE_TYPE_LOCALISED,false,NULL,0);
 		}
 
-//--------------------------------------- Do we add a destruction seq, and if so, which?
 		/* Power stations have their own desctruction sequence */
 		if(psDel->pStructureType->type == REF_POWER_GEN)
 		{
@@ -4846,18 +4809,15 @@ bool destroyStruct(STRUCTURE *psDel)
 			addEffect(&pos,EFFECT_DESTRUCTION,DESTRUCTION_TYPE_STRUCTURE,false,NULL,0);
 		}
 
-//--------------------------------------- Start an earthquake...!
 		/* shake the screen if we're near enough */
 		if(clipXY(pos.x,pos.z))
 		{
 			shakeStart();
 		}
 
-//--------------------------------------- And finally, add a boom sound!!!!
 		/* and add a sound effect */
 		audio_PlayStaticTrack( psDel->pos.x, psDel->pos.y, ID_SOUND_EXPLOSION );
 	}
-//---------------------------------------------------------------------------------------
 
 	// Actually set the tiles on fire - even if the effect is not visible.
 	if (bMinor)  // walls
@@ -4874,38 +4834,21 @@ bool destroyStruct(STRUCTURE *psDel)
 		tileSetFire(psDel->pos.x, psDel->pos.y, burnDurationOther);
 	}
 
-	// Power generators give back their power when destroyed.
-	if (psDel->pStructureType->type == REF_POWER_GEN)
-	{
-		// Give some power back to the player, whether or not the power generator is visible.
-		addPower(psDel->player, structPowerToBuild(psDel));
-		// If it had a module attached, need to add the power for the base struct as well, whether or not the power generator is visible.
-		if (psDel->pFunctionality->powerGenerator.capacity)
-		{
-			addPower(psDel->player, psDel->pStructureType->powerToBuild);
-		}
-	}
-
 	resourceFound = removeStruct(psDel, true);
 
-	//once a struct is destroyed - it leaves a wrecked struct FEATURE in its place
-	// Wall's don't leave wrecked features
-	if(psDel->visible[selectedPlayer])
+	// Leave burn marks in the ground where building once stood
+	if (psDel->visible[selectedPlayer] && !resourceFound && !bMinor)
 	{
-		if (!resourceFound && !(psDel->pStructureType->type == REF_WALL) &&
-			!(psDel->pStructureType->type == REF_WALLCORNER))
+		const Vector2i size = getStructureSize(psDel);
+		const Vector2i map = map_coord(removeZ(psDel->pos)) - size / 2;
+		for (int width = 0; width < size.x; width++)
 		{
-			Vector2i size = getStructureSize(psDel);
-			Vector2i map = map_coord(removeZ(psDel->pos)) - size/2;
-			for (int width = 0; width < size.x; width++)
+			for (int breadth = 0; breadth < size.y; breadth++)
 			{
-				for (int breadth = 0; breadth < size.y; breadth++)
+				MAPTILE *psTile = mapTile(map.x + width, map.y + breadth);
+				if (TEST_TILE_VISIBLE(selectedPlayer, psTile))
 				{
-					MAPTILE *psTile = mapTile(map.x + width, map.y + breadth);
-					if(TEST_TILE_VISIBLE(selectedPlayer,psTile))
-					{
-						psTile->illumination /= 2;
-					}
+					psTile->illumination /= 2;
 				}
 			}
 		}
@@ -5647,6 +5590,7 @@ void buildingComplete(STRUCTURE *psBuilding)
 			break;
 		case REF_SAT_UPLINK:
 			revealAll(psBuilding->player);
+			break;
 		case REF_GATE:
 			auxStructureNonblocking(psBuilding);  // Clear outdated flags.
 			auxStructureClosedGate(psBuilding);  // Don't block for the sake of allied pathfinding.
@@ -6643,11 +6587,9 @@ void holdProduction(STRUCTURE *psBuilding, QUEUE_MODE mode)
 /*release a factory's production run from hold*/
 void releaseProduction(STRUCTURE *psBuilding, QUEUE_MODE mode)
 {
-	FACTORY *psFactory = &psBuilding->pFunctionality->factory;
-
 	ASSERT_OR_RETURN( , StructIsFactory(psBuilding), "structure not a factory");
 
-	psFactory = &psBuilding->pFunctionality->factory;
+	FACTORY *psFactory = &psBuilding->pFunctionality->factory;
 
 	if (mode == ModeQueue)
 	{
@@ -7307,8 +7249,6 @@ STRUCTURE * giftSingleStructure(STRUCTURE *psStructure, UBYTE attackPlayer, bool
 		//certain structures give specific results - the rest swap sides!
 		if (!electronicReward(psStructure, attackPlayer))
 		{
-			originalPlayer = psStructure->player;
-
 			//tell the system the structure no longer exists
 			(void)removeStruct(psStructure, false);
 
@@ -7599,11 +7539,12 @@ void resetResistanceLag(STRUCTURE *psBuilding)
 				//if working on a topic
 				if (psResFacility->psSubject)
 				{
+					// What was this code intended to do?
 					//adjust the start time for the current subject
-					if (psResFacility->timeStarted != ACTION_START_TIME)
-					{
-						psResFacility->timeStarted += (gameTime - psBuilding->lastResistance);
-					}
+					//if (psResFacility->timeStarted != ACTION_START_TIME)
+					//{
+					//	psResFacility->timeStarted += (gameTime - psBuilding->lastResistance);
+					//}
 				}
 			}
 			case REF_FACTORY:

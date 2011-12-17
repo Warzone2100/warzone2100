@@ -1595,15 +1595,8 @@ bool launchTransporter(DROID *psTransporter)
 have arrived - returns true when there*/
 bool updateTransporter(DROID *psTransporter)
 {
-	ASSERT( psTransporter != NULL,
-		"updateTransporter: Invalid droid pointer" );
-
-
-	if (psTransporter->droidType != DROID_TRANSPORTER)
-	{
-		ASSERT( false, "updateTransporter: Invalid droid type" );
-		return true;
-	}
+	ASSERT_OR_RETURN(true, psTransporter != NULL, "Invalid droid pointer");
+	ASSERT_OR_RETURN(true, psTransporter->droidType == DROID_TRANSPORTER, "Invalid droid type");
 
 	//if not moving to mission site, exit
 	if ( psTransporter->action != DACTION_TRANSPORTOUT &&

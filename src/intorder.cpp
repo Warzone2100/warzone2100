@@ -1161,7 +1161,6 @@ static bool intRefreshOrderButtons(void)
 {
 	SECONDARY_STATE State;
 	UWORD OrdIndex;
-	UWORD NumButs;
 	UDWORD	id;
 
 	for (unsigned j = 0; j < AvailableOrders.size() && j < MAX_DISPLAYABLE_ORDERS; ++j)
@@ -1171,25 +1170,8 @@ static bool intRefreshOrderButtons(void)
 		// Get current order state.
 		State = GetSecondaryStates(OrderButtons[OrdIndex].Order);
 
-		// Get number of buttons.
-		NumButs = OrderButtons[OrdIndex].NumButs;
 		// Set actual number of buttons.
-		OrderButtons[OrdIndex].AcNumButs = NumButs;
-
-		// Handle special case for factory -> command droid assignment buttons.
-		switch (OrderButtons[OrdIndex].Class) {
-			case ORDBUTCLASS_FACTORY:
-				NumButs = countAssignableFactories((UBYTE)selectedPlayer,FACTORY_FLAG);
-				break;
-			case ORDBUTCLASS_CYBORGFACTORY:
-				NumButs = countAssignableFactories((UBYTE)selectedPlayer,CYBORG_FLAG);
-				break;
-			case ORDBUTCLASS_VTOLFACTORY:
-				NumButs = countAssignableFactories((UBYTE)selectedPlayer,VTOL_FLAG);
-				break;
-			default:
-				break;
-		}
+		OrderButtons[OrdIndex].AcNumButs = OrderButtons[OrdIndex].NumButs;
 
 		id = OrderButtons[OrdIndex].ButBaseID;
 		for (unsigned i = 0; i < OrderButtons[OrdIndex].AcNumButs; ++i)

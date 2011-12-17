@@ -32,6 +32,10 @@
 
 #include <time.h>
 
+// Maximum seconds per frame.
+// If not reaching the goal, force graphics updates, even if we aren't doing enough game state updates to maintain game speed.
+#define MAXIMUM_SPF 1/4
+
 /* See header file for documentation */
 UDWORD gameTime = 0, deltaGameTime = 0, graphicsTime = 0, deltaGraphicsTime = 0, realTime = 0, deltaRealTime = 0;
 float graphicsTimeFraction = 0.0, realTimeFraction = 0.0;
@@ -188,10 +192,10 @@ void gameTimeUpdate()
 		{
 			unsigned player;
 
-			// Pause time, since we are waiting GAME_GAME_TIME from other players.
-			scaledCurrTime = graphicsTime;
+			// Pause time at current game time, since we are waiting GAME_GAME_TIME from other players.
+			scaledCurrTime = gameTime;
 			baseTime = currTime;
-			timeOffset = graphicsTime;
+			timeOffset = gameTime;
 
 			debug(LOG_SYNC, "Waiting for other players. gameTime = %u, player times are {%s}", gameTime, listToString("%u", ", ", gameQueueTime, gameQueueTime + game.maxPlayers).c_str());
 			mayUpdate = false;
@@ -212,10 +216,10 @@ void gameTimeUpdate()
 		// Adjust deltas.
 		if (scaledCurrTime >= gameTime && mayUpdate)
 		{
-			if (scaledCurrTime > gameTime + GAME_TICKS_PER_UPDATE)
+			if (scaledCurrTime > gameTime + GAME_TICKS_PER_SEC*MAXIMUM_SPF)
 			{
 				// Game isn't updating fast enough...
-				uint32_t slideBack = deltaGraphicsTime - GAME_TICKS_PER_UPDATE;
+				uint32_t slideBack = deltaGraphicsTime - GAME_TICKS_PER_SEC*MAXIMUM_SPF;
 				baseTime += slideBack / modifier;  // adjust the addition to base time
 				deltaGraphicsTime -= slideBack;
 			}
@@ -233,6 +237,11 @@ void gameTimeUpdate()
 		else
 		{
 			deltaGameTime = 0;
+		}
+
+		if (deltaGameTime != 0)
+		{
+			deltaGraphicsTime = 0;  // Don't update graphics until game state is updated.
 		}
 
 		// Store the game and graphics times

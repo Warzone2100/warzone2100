@@ -398,7 +398,7 @@ void loadMapPreview(bool hideInterface)
 
 	// load the map data
 	ptr = strrchr(aFileName, '/');
-	ASSERT(ptr, "this string was supposed to contain a /");
+	ASSERT_OR_RETURN(, ptr, "this string was supposed to contain a /");
 	strcpy(ptr, "/game.map");
 	if (!mapLoad(aFileName, true))
 	{

@@ -1513,6 +1513,7 @@ void FinishDeliveryPosition(UDWORD xPos,UDWORD yPos,void *UserData)
 
 	//deselect it
 	((FLAG_POSITION*)UserData)->selected = false;
+	deliveryPointToMove = NULL;
 
 	CancelDeliveryRepos();
 }
@@ -3103,6 +3104,7 @@ void clearSel(void)
 	{
 		psFlagPos->selected = false;
 	}
+	deliveryPointToMove = NULL;
 
 	setSelectedGroup(UBYTE_MAX);
 	setSelectedCommander(UBYTE_MAX);

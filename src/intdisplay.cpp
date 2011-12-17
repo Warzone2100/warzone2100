@@ -2712,13 +2712,13 @@ DROID_TEMPLATE *FactoryGetTemplate(FACTORY *Factory)
 	return (DROID_TEMPLATE *)Factory->psSubject;
 }
 
-bool StatIsStructure(BASE_STATS *Stat)
+bool StatIsStructure(BASE_STATS const *Stat)
 {
 	return (Stat->ref >= REF_STRUCTURE_START && Stat->ref <
 				REF_STRUCTURE_START + REF_RANGE);
 }
 
-bool StatIsFeature(BASE_STATS *Stat)
+bool StatIsFeature(BASE_STATS const *Stat)
 {
 	return (Stat->ref >= REF_FEATURE_START && Stat->ref <
 				REF_FEATURE_START + REF_RANGE);

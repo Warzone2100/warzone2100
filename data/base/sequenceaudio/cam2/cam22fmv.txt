@@ -1,28 +1,28 @@
-20	432	0	125	_("NASDA is the North American Strategic Defense Agency.")
+20	432	0.0	10.4166666667	_("NASDA is the North American Strategic Defense Agency.")
 
-20	432	150	435	_("NASDA was formed in 2076 to defend North America from conventional and nuclear attack. The construction of a satellite defense system began in 2081 and was completed in 2082.")
-
-
-20	432	450	590	_("In 2085 the NASDA satellites fired their nukes at Earth.")
-
-20	432	635	800	_("There were also ground-based sites. Many of these were destroyed in the nuclear counterstrikes, but there's bound to be some out there.")
-
-20	432	825	1000	_("The NASDA satellites also contained pulse-lasers designed to shoot down missiles approaching North America.")
-
-20	432	1030	1275	_("During the counterstrikes, these LasSats failed to fire. If brought into operation, these LasSats could inflict major damage on ground targets.")
-
-20	432	1300	1420	_("All nukes targeted at  North America found their targets.")
-
-20	447	1430	1700	_("We know that Nexus is searching for NASDA Central in the Eastern Sector. This was one of the land-based control centres for the satellites.")
-
-20	453	1710	1765	_("If the centre is found intact, NEXUS may gain control of the satellites.")
-
-20	432	1780	1850	_("Nexus claimed that it had already destroyed the world.") 
+20	432	12.5	36.25	_("NASDA was formed in 2076 to defend North America from conventional and nuclear attack. The construction of a satellite defense system began in 2081 and was completed in 2082.")
 
 
+20	432	37.5	49.1666666667	_("In 2085 the NASDA satellites fired their nukes at Earth.")
+
+20	432	52.9166666667	66.6666666667	_("There were also ground-based sites. Many of these were destroyed in the nuclear counterstrikes, but there's bound to be some out there.")
+
+20	432	68.75	83.3333333333	_("The NASDA satellites also contained pulse-lasers designed to shoot down missiles approaching North America.")
+
+20	432	85.8333333333	106.25	_("During the counterstrikes, these LasSats failed to fire. If brought into operation, these LasSats could inflict major damage on ground targets.")
+
+20	432	108.333333333	118.333333333	_("All nukes targeted at  North America found their targets.")
+
+20	447	119.166666667	141.666666667	_("We know that Nexus is searching for NASDA Central in the Eastern Sector. This was one of the land-based control centres for the satellites.")
+
+20	453	142.5	147.083333333	_("If the centre is found intact, NEXUS may gain control of the satellites.")
+
+20	432	148.333333333	154.166666667	_("Nexus claimed that it had already destroyed the world.") 
 
 
- 
+
+
+
 
 
 

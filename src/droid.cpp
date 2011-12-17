@@ -416,9 +416,11 @@ void	removeDroidBase(DROID *psDel)
 		return;
 	}
 
+	syncDebugDroid(psDel, '#');
+
 	//ajl, inform others of destruction.
 	// Everyone else should be doing this at the same time, assuming it's in synch (so everyone sends a GAME_DROIDDEST message at once)...
-	if (bMultiMessages
+	if (!isInSync() && bMultiMessages
 	 && !(psDel->player != selectedPlayer && psDel->order == DORDER_RECYCLE))
 	{
 		ASSERT_OR_RETURN( , droidOnMap(psDel), "Asking other players to destroy droid driving off the map");
@@ -634,8 +636,9 @@ static void droidFlameFallCallback( ANIM_OBJECT * psObj )
 	ASSERT_OR_RETURN( , psDroid != NULL, "invalid Unit pointer");
 	psDroid->psCurAnim = NULL;
 
-	debug(LOG_DEATH, "droidFlameFallCallback: Droid %d destroyed", (int)psDroid->id);
-	destroyDroid( psDroid );
+	// This breaks synch, obviously. Animations are not synched, so changing game state as part of an animation is not completely ideal.
+	//debug(LOG_DEATH, "droidFlameFallCallback: Droid %d destroyed", (int)psDroid->id);
+	//destroyDroid( psDroid );
 }
 
 static void droidBurntCallback( ANIM_OBJECT * psObj )
@@ -666,6 +669,12 @@ void droidBurn(DROID *psDroid)
 	{
 		ASSERT(LOG_ERROR, "can't burn anything except babarians currently!");
 		return;
+	}
+
+	if (psDroid->order != DORDER_RUNBURN)
+	{
+		/* set droid running */
+		orderDroid(psDroid, DORDER_RUNBURN, ModeImmediate);
 	}
 
 	/* if already burning return else remove currently-attached anim if present */
@@ -700,9 +709,6 @@ void droidBurn(DROID *psDroid)
 	debug( LOG_NEVER, "baba burn" );
 	// NOTE: 3 types of screams are available ID_SOUND_BARB_SCREAM - ID_SOUND_BARB_SCREAM3
 	audio_PlayObjDynamicTrack( psDroid, ID_SOUND_BARB_SCREAM+(rand()%3), NULL );
-
-	/* set droid running */
-	orderDroid(psDroid, DORDER_RUNBURN, ModeImmediate);
 }
 
 void _syncDebugDroid(const char *function, DROID const *psDroid, char ch)
@@ -2806,7 +2812,7 @@ bool calcDroidMuzzleLocation(DROID *psDroid, Vector3i *muzzle, int weapon_slot)
 
 		*muzzle = swapYZ(af*barrel);
 		muzzle->z = -muzzle->z;
-		debugLen += sprintf(debugStr + debugLen, ",muzzle=(%d,%d,%d)", muzzle->x, muzzle->y, muzzle->z);
+		sprintf(debugStr + debugLen, ",muzzle=(%d,%d,%d)", muzzle->x, muzzle->y, muzzle->z);
 
 		syncDebug("%s", debugStr);
 	}
@@ -3154,46 +3160,17 @@ static bool oneDroidMax(UDWORD x, UDWORD y)
 // returns true if it's a sensible place to put that droid.
 static bool sensiblePlace(SDWORD x, SDWORD y, PROPULSION_TYPE propulsion)
 {
-	UDWORD count=0;
-
 	// not too near the edges.
 	if((x < TOO_NEAR_EDGE) || (x > (SDWORD)(mapWidth - TOO_NEAR_EDGE)))
 		return false;
 	if((y < TOO_NEAR_EDGE) || (y > (SDWORD)(mapHeight - TOO_NEAR_EDGE)))
 		return false;
 
-	// check no features there
-	if(TileHasFeature(mapTile(x,y)))
-	{
-		return false;
-	}
-
 	// not on a blocking tile.
 	if (fpathBlockingTile(x, y, propulsion))
 	{
 		return false;
 	}
-
-	// shouldn't next to more than one blocking tile, to avoid windy paths.
-	if (fpathBlockingTile(x - 1, y - 1, propulsion))
-		count++;
-	if (fpathBlockingTile(x, y - 1, propulsion))
-		count++;
-	if (fpathBlockingTile(x + 1, y - 1, propulsion))
-		count++;
-	if (fpathBlockingTile(x - 1, y, propulsion))
-		count++;
-	if (fpathBlockingTile(x + 1, y, propulsion))
-		count++;
-	if (fpathBlockingTile(x -1, y + 1, propulsion))
-		count++;
-	if (fpathBlockingTile(x, y + 1, propulsion))
-		count++;
-	if (fpathBlockingTile(x +1, y + 1, propulsion))
-		count++;
-
-	if(count > 1)
-		return false;
 
 	return true;
 }
@@ -3276,12 +3253,6 @@ bool	pickATileGenThreat(UDWORD *x, UDWORD *y, UBYTE numIterations, SDWORD threat
 	/* If we got this far, then we failed - passed in values will be unchanged */
 	return false;
 
-}
-
-/// find an empty tile accessible to a wheeled droid 
-bool	pickATile(UDWORD *x, UDWORD *y, UBYTE numIterations)
-{
-	return pickATileGen(x, y, numIterations, zonedPAT);
 }
 
 /// find a tile for a wheeled droid with only one other droid present

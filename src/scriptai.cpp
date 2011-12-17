@@ -1169,7 +1169,6 @@ static BASE_OBJECT *scrTargetInArea(SDWORD tarPlayer, SDWORD visPlayer, SDWORD t
 {
 	BASE_OBJECT		*psTarget, *psCurr;
 	SDWORD			temp;
-	bool			bVisCheck;
 	UDWORD			tarMask;
 	TARGET_MASK		getTargetMask;
 	TARGET_PREF		targetPriority;
@@ -1194,17 +1193,6 @@ static BASE_OBJECT *scrTargetInArea(SDWORD tarPlayer, SDWORD visPlayer, SDWORD t
 		y2 = y1;
 		y1 = temp;
 	}
-
-	// see if a visibility check is required and for which player
-	if (visPlayer < 0 || visPlayer >= MAX_PLAYERS)
-	{
-		bVisCheck = false;
-	}
-	else
-	{
-		bVisCheck = true;
-	}
-		bVisCheck = false;
 
 	// see which target type to use
 	switch (tarType)
@@ -1231,8 +1219,7 @@ static BASE_OBJECT *scrTargetInArea(SDWORD tarPlayer, SDWORD visPlayer, SDWORD t
 	psTarget = NULL;
 	for(; psCurr; psCurr=psCurr->psNext)
 	{
-		if ((!bVisCheck || psCurr->visible[visPlayer]) &&
-			(cluster == 0 || psCurr->cluster == cluster) &&
+		if ((cluster == 0 || psCurr->cluster == cluster) &&
 			((SDWORD)psCurr->pos.x >= x1) &&
 			((SDWORD)psCurr->pos.x <= x2) &&
 			((SDWORD)psCurr->pos.y >= y1) &&

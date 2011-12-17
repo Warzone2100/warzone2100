@@ -90,7 +90,7 @@ bool actionInsideMinRange(DROID *psDroid, BASE_OBJECT *psObj, WEAPON_STATS *psWe
 bool actionVisibleTarget(DROID *psDroid, BASE_OBJECT *psTarget, int weapon_slot);
 
 /** Check whether a droid is in the neighboring tile to a build position. */
-bool actionReachedBuildPos(DROID *psDroid, SDWORD x, SDWORD y, BASE_STATS *psStats);
+bool actionReachedBuildPos(DROID const *psDroid, int x, int y, uint16_t direction, BASE_STATS const *psStats);
 
 /** Send the vtol droid back to the nearest rearming pad - if there is one, otherwise return to base. */
 void moveToRearm(DROID *psDroid);

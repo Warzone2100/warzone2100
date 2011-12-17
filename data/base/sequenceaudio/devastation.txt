@@ -1,22 +1,22 @@
-20	432		0	250	_("The NASDA system was developed to protect us. It was to be the ultimate nuclear deterrent. As it turned out, it was our executioner.")
+20	432	0.0	10.0	_("The NASDA system was developed to protect us. It was to be the ultimate nuclear deterrent. As it turned out, it was our executioner.")
 
-20	432		275	550	_("Reports said that NASDA developed a fault during a routine systems check. Don't believe it. Someone wanted it to take us out.")
+20	432	11.0	22.0	_("Reports said that NASDA developed a fault during a routine systems check. Don't believe it. Someone wanted it to take us out.")
 
-20	432		625	985	_("Those nukes were targeted on every major city around the world. NASDA was programmed to start the Collapse. When the counterstrikes launched, its laser defenses and anti-missile ground sites failed.") 
+20	432	25.0	39.4	_("Those nukes were targeted on every major city around the world. NASDA was programmed to start the Collapse. When the counterstrikes launched, its laser defenses and anti-missile ground sites failed.") 
 
-20	432		1010	1125	_("The world as we knew it ended...")
+20	432	40.4	45.0	_("The world as we knew it ended...")
 
-20	432		1150	1475	_("The Nuclear Winter hit hard. Disease and famine claimed most of us who had survived the nuclear strikes. Wars over cans of dog food took even more.")
+20	432	46.0	59.0	_("The Nuclear Winter hit hard. Disease and famine claimed most of us who had survived the nuclear strikes. Wars over cans of dog food took even more.")
 
-20	432		1500	1650	_("We'd fled Seattle early in '86. We'd heard that the Rocky Mountains were relatively rad-free.")
+20	432	60.0	66.0	_("We'd fled Seattle early in '86. We'd heard that the Rocky Mountains were relatively rad-free.")
 
-20	432		1675	1950	_("After fighting off bands of marauders we came across the base. Its personnel were dead. Killed by any one of a number of virulent diseases.")
+20	432	67.0	78.0	_("After fighting off bands of marauders we came across the base. Its personnel were dead. Killed by any one of a number of virulent diseases.")
 
-20	432		1975	2200	_("We cracked the doors, and cleared out the bodies inside.")
+20	432	79.0	88.0	_("We cracked the doors, and cleared out the bodies inside.")
 
-20	432		2225	2560	_("We knew that things would never be the same again, but we were determined to build a new world out of the ruins. We rebuilt the landing pads and brought the old systems back on-line.")
+20	432	89.0	102.4	_("We knew that things would never be the same again, but we were determined to build a new world out of the ruins. We rebuilt the landing pads and brought the old systems back on-line.")
 
-20	432		2600	2750	_("We were finally ready to begin the Project.")
+20	432	104.0	110.0	_("We were finally ready to begin the Project.")
 
 
 

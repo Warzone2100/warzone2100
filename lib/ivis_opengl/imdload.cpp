@@ -224,7 +224,6 @@ static bool ReadPoints( const char **ppFileData, iIMDShape *s )
 static bool _imd_load_points( const char **ppFileData, iIMDShape *s )
 {
 	Vector3f *p = NULL;
-	int32_t tempXMax, tempXMin, tempZMax, tempZMin;
 	int32_t xmax, ymax, zmax;
 	double dx, dy, dz, rad_sq, rad, old_to_p_sq, old_to_p, old_to_new;
 	double xspan, yspan, zspan, maxspan;
@@ -247,8 +246,8 @@ static bool _imd_load_points( const char **ppFileData, iIMDShape *s )
 		return false;
 	}
 
-	s->max.x = s->max.y = s->max.z = tempXMax = tempZMax = -FP12_MULTIPLIER;
-	s->min.x = s->min.y = s->min.z = tempXMin = tempZMin = FP12_MULTIPLIER;
+	s->max.x = s->max.y = s->max.z = -FP12_MULTIPLIER;
+	s->min.x = s->min.y = s->min.z = FP12_MULTIPLIER;
 
 	vxmax.x = vymax.y = vzmax.z = -FP12_MULTIPLIER;
 	vxmin.x = vymin.y = vzmin.z = FP12_MULTIPLIER;
@@ -263,18 +262,6 @@ static bool _imd_load_points( const char **ppFileData, iIMDShape *s )
 		if (p->x < s->min.x)
 		{
 			s->min.x = p->x;
-		}
-
-		/* Biggest x coord so far within our height window? */
-		if( p->x > tempXMax && p->y > DROID_VIS_LOWER && p->y < DROID_VIS_UPPER )
-		{
-			tempXMax = p->x;
-		}
-
-		/* Smallest x coord so far within our height window? */
-		if( p->x < tempXMin && p->y > DROID_VIS_LOWER && p->y < DROID_VIS_UPPER )
-		{
-			tempXMin = p->x;
 		}
 
 		if (p->y > s->max.y)
@@ -293,18 +280,6 @@ static bool _imd_load_points( const char **ppFileData, iIMDShape *s )
 		if (p->z < s->min.z)
 		{
 			s->min.z = p->z;
-		}
-
-		/* Biggest z coord so far within our height window? */
-		if( p->z > tempZMax && p->y > DROID_VIS_LOWER && p->y < DROID_VIS_UPPER )
-		{
-			tempZMax = p->z;
-		}
-
-		/* Smallest z coord so far within our height window? */
-		if( p->z < tempZMax && p->y > DROID_VIS_LOWER && p->y < DROID_VIS_UPPER )
-		{
-			tempZMin = p->z;
 		}
 
 		// for tight sphere calculations
@@ -394,7 +369,6 @@ static bool _imd_load_points( const char **ppFileData, iIMDShape *s )
 
 	if (zspan > maxspan)
 	{
-		maxspan = zspan;
 		dia1 = vzmin;
 		dia2 = vzmax;
 	}

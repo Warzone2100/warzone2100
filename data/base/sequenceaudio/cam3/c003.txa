@@ -1,17 +1,17 @@
-260	400	0	100	_("CAMPAIGN THREE")
-254	420	0	100	_("NORTHERN SECTOR")
+260	400	0.0	8.33333333333	_("CAMPAIGN THREE")
+254	420	0.0	8.33333333333	_("NORTHERN SECTOR")
 
-20	20	113	479	_("TRANSPORT MISSION: Northern Sector")
-20	447	113	479	_("Congratulations on your successful evacuation of Beta Base.")
-0	0	113	479	_("NEXUS has gained access to nuclear weapons and is determined to destroy the Project.")
+20	20	9.41666666667	39.9166666667	_("TRANSPORT MISSION: Northern Sector")
+20	447	9.41666666667	39.9166666667	_("Congratulations on your successful evacuation of Beta Base.")
+0	0	9.41666666667	39.9166666667	_("NEXUS has gained access to nuclear weapons and is determined to destroy the Project.")
 
-20	20	1000	1225	_("Dusk, December 3rd, 2100")
-0	0	1000	1225	_("In-flight to Northern Sector")
-0	0	1000	1225	_("The Final Encounter")
+20	20	83.3333333333	102.083333333	_("Dusk, December 3rd, 2100")
+0	0	83.3333333333	102.083333333	_("In-flight to Northern Sector")
+0	0	83.3333333333	102.083333333	_("The Final Encounter")
 
-20	20	1278	1338	_("Briefing Commences")
+20	20	106.5	111.5	_("Briefing Commences")
 
-20	20	1347	1768	_("TRANSPORT MISSION: Northern Sector")
-20	447	1347	1768	_("Once at the mountains secure an LZ. Then establish a forward base.")
-0	0	1347	1768	_("Team Gamma will contact you there.")
+20	20	112.25	147.333333333	_("TRANSPORT MISSION: Northern Sector")
+20	447	112.25	147.333333333	_("Once at the mountains secure an LZ. Then establish a forward base.")
+0	0	112.25	147.333333333	_("Team Gamma will contact you there.")
 

@@ -3391,22 +3391,14 @@ bool scrAnyStructButWallsLeft(void)
 	}
 
 	//check the players list for any structures
-	structuresLeft = true;
-	if (apsStructLists[player] == NULL)
+	structuresLeft = false;
+	for (psCurr = apsStructLists[player]; psCurr != NULL; psCurr = psCurr->psNext)
 	{
-		structuresLeft = false;
-	}
-	else
-	{
-		structuresLeft = false;
-		for (psCurr = apsStructLists[player]; psCurr != NULL; psCurr = psCurr->psNext)
-		{
-			if (psCurr->pStructureType->type != REF_WALL && psCurr->pStructureType->
+		if (psCurr->pStructureType->type != REF_WALL && psCurr->pStructureType->
 				type != REF_WALLCORNER)
-			{
-				structuresLeft = true;
-				break;
-			}
+		{
+			structuresLeft = true;
+			break;
 		}
 	}
 
@@ -7327,7 +7319,6 @@ bool scrNumResearchLeft(void)
 		top = -1;
 
 		cur = 0;				//start with first index's PR
-		tempIndex = -1;
 		while(true)			//do
 		{
 			if (cur >= asResearch[index].pPRList.size())		//this one has no PRs or end of PRs reached
@@ -9808,7 +9799,6 @@ bool scrPursueResearch(void)
 		top = -1;
 
 		cur = 0;				//start with first index's PR
-		tempIndex = -1;
 		while(true)	//do
 		{
 			//DbgMsg("Going on with %d, numPR: %d, %s", index, asResearch[index].pPRList.size(), asResearch[index].pName);
