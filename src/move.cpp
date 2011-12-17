@@ -1499,10 +1499,10 @@ static int moveCalcPerpSpeed(DROID *psDroid, uint16_t iDroidDir, SDWORD iSkidDec
 	int		perpSpeed;
 
 	adiff = angleDelta(iDroidDir - psDroid->sMove.moveDir);
-	perpSpeed = psDroid->sMove.speed * iSin(adiff) / 65536;
+	perpSpeed = iSinR(adiff, psDroid->sMove.speed);
 
 	// decelerate the perpendicular speed
-	perpSpeed = MAX(0, perpSpeed - iSkidDecel * EXTRA_PRECISION/GAME_UPDATES_PER_SEC);
+	perpSpeed = MAX(0, perpSpeed - gameTimeAdjustedAverage(iSkidDecel));
 
 	return perpSpeed;
 }
@@ -1550,7 +1550,7 @@ static int moveCalcNormalSpeed(DROID *psDroid, int fSpeed, uint16_t iDroidDir, S
 	if (normalSpeed < fSpeed)
 	{
 		// accelerate
-		normalSpeed += iAccel * EXTRA_PRECISION/GAME_UPDATES_PER_SEC;
+		normalSpeed += gameTimeAdjustedAverage(iAccel);
 		if (normalSpeed > fSpeed)
 		{
 			normalSpeed = fSpeed;
@@ -1559,7 +1559,7 @@ static int moveCalcNormalSpeed(DROID *psDroid, int fSpeed, uint16_t iDroidDir, S
 	else
 	{
 		// decelerate
-		normalSpeed -= iDecel * EXTRA_PRECISION/GAME_UPDATES_PER_SEC;
+		normalSpeed -= gameTimeAdjustedAverage(iDecel);
 		if (normalSpeed < fSpeed)
 		{
 			normalSpeed = fSpeed;
