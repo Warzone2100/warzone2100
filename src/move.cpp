@@ -172,6 +172,11 @@
 // How fast vtols 'skid'
 #define VTOL_SKID_DECEL			600
 
+/// Extra precision added to movement calculations.
+#define EXTRA_BITS                              8
+#define EXTRA_PRECISION                         (1 << EXTRA_BITS)
+
+
 static uint32_t oilTimer = 0;
 static unsigned drumCount = 0;
 
@@ -1614,10 +1619,8 @@ static void moveUpdateDroidPos(DROID *psDroid, int32_t dx, int32_t dy)
 		return;
 	}
 
-	newPos = droidGetPrecisePosition(psDroid);
-	newPos.x += dx;
-	newPos.y += dy;
-	droidSetPrecisePosition(psDroid, newPos);
+	psDroid->pos.x += gameTimeAdjustedAverage(dx*GAME_UPDATES_PER_SEC, EXTRA_PRECISION);
+	psDroid->pos.y += gameTimeAdjustedAverage(dy*GAME_UPDATES_PER_SEC, EXTRA_PRECISION);
 
 	/* impact if about to go off map else update coordinates */
 	if ( worldOnMap( psDroid->pos.x, psDroid->pos.y ) == false )

@@ -167,6 +167,11 @@ static inline int32_t gameTimeAdjustedAverage(int value)
 {
 	return quantiseFraction(value, GAME_TICKS_PER_SEC, gameTime + deltaGameTime, gameTime);
 }
+/// Returns the numerator/denominator times deltaGameTime, converted to seconds. The return value is rounded up or down, such that it is exactly right on average.
+static inline int32_t gameTimeAdjustedAverage(int numerator, int denominator)
+{
+	return quantiseFraction(numerator, GAME_TICKS_PER_SEC*denominator, gameTime + deltaGameTime, gameTime);
+}
 
 void sendPlayerGameTime(void);                            ///< Sends a GAME_GAME_TIME message with gameTime plus latency to our game queues.
 void recvPlayerGameTime(NETQUEUE queue);                  ///< Processes a GAME_GAME_TIME message.

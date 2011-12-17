@@ -66,24 +66,6 @@ extern bool moveCheckDroidMovingAndVisible( void *psObj );
 // set a vtol to be hovering in the air
 void moveMakeVtolHover( DROID *psDroid );
 
-/// Get high precision droid position
-static inline Position droidGetPrecisePosition(const DROID *psDroid)
-{
-	return Position(psDroid->pos.x * EXTRA_PRECISION + psDroid->sMove.eBitX, psDroid->pos.y * EXTRA_PRECISION + psDroid->sMove.eBitY, 0);
-}
-
-/// Set high precision droid position
-static inline void droidSetPrecisePosition(DROID *psDroid, Position newPos)
-{
-	// Store extra bits of precision
-	psDroid->sMove.eBitX = newPos.x & EXTRA_MASK;
-	psDroid->sMove.eBitY = newPos.y & EXTRA_MASK;
-
-	// Drop extra bits of precision. The &~EXTRA_MASK is needed in the case of negative coordinates. Note that signed right-shift of negative numbers is implementation defined, although at least GCC says it does an arithmetic right-shift, which is what's needed.
-	psDroid->pos.x = (newPos.x & ~EXTRA_MASK) / EXTRA_PRECISION;
-	psDroid->pos.y = (newPos.y & ~EXTRA_MASK) / EXTRA_PRECISION;
-}
-
 const char *moveDescription(MOVE_STATUS status);
 
 #endif // __INCLUDED_SRC_MOVE_H__

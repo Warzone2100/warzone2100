@@ -43,11 +43,6 @@ enum MOVE_STATUS
 	MOVESHUFFLE,
 };
 
-/// Extra precision added to movement calculations, stored in ebitX, ebitY.
-#define EXTRA_BITS                              8
-#define EXTRA_PRECISION                         (1 << EXTRA_BITS)
-#define EXTRA_MASK                              (EXTRA_PRECISION - 1)
-
 struct MOVE_CONTROL
 {
 	MOVE_STATUS	Status;					// Inactive, Navigating or moving point to point status
@@ -58,7 +53,6 @@ struct MOVE_CONTROL
 	Vector2i destination;                                   // World coordinates of movement destination
 	Vector2i src, target;
 	int	speed;						// Speed of motion
-	uint8_t  eBitX, eBitY;                                  // extra bits stored in a temporary bit bucket
 
 	uint16_t moveDir;					// direction of motion (not the direction the droid is facing)
 	uint16_t bumpDir;					// direction at last bump
