@@ -3024,10 +3024,10 @@ static void processMultiopWidgets(UDWORD id)
 		{
 			NETclose();
 			pie_LoadBackDrop(SCREEN_RANDOMBDROP);
-			challengeActive = false;
 			bHosted = false;
 			ingame.localJoiningInProgress = false;
-			changeTitleMode(TITLE);
+			changeTitleMode(SINGLE);
+			addChallenges();
 		}
 		break;
 	case MULTIOP_MAP_BUT:

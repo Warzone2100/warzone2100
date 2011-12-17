@@ -236,6 +236,7 @@ bool runTutorialMenu(void)
 // Single Player Menu
 static void startSinglePlayerMenu(void)
 {
+	challengeActive = false;
 	addBackdrop();
 	addTopForm();
 	addBottomForm();
