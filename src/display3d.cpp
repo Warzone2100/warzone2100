@@ -4248,7 +4248,7 @@ static void addConstructionLine(DROID *psDroid, STRUCTURE *psStructure)
 	each.y = psStructure->pos.z + realY;
 	each.z = psStructure->pos.y - point->z;
 
-	if(ONEINEIGHT)
+	if (rand()%250 < deltaGraphicsTime)
 	{
 		effectSetSize(30);
 		addEffect(&each,EFFECT_EXPLOSION,EXPLOSION_TYPE_SPECIFIED,true,getImdFromIndex(MI_PLASMA),0);
