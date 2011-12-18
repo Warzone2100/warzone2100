@@ -55,6 +55,7 @@ static SPECIAL_ABILITY	*asSpecialAbility;
 
 //used to hold the modifiers cross refd by weapon effect and propulsion type
 WEAPON_MODIFIER		asWeaponModifier[WE_NUMEFFECTS][PROPULSION_TYPE_NUM];
+WEAPON_MODIFIER		asWeaponModifierBody[WE_NUMEFFECTS][SIZE_NUM];
 
 //used to hold the current upgrade level per player per weapon subclass
 WEAPON_UPGRADE		asWeaponUpgrade[MAX_PLAYERS][WSC_NUM_WEAPON_SUBCLASSES];
@@ -621,7 +622,6 @@ bool loadWeaponStats(const char *pWeaponData, UDWORD bufferSize)
 		weaponEffect[0] = '\0';
 		facePlayer[0] = '\0';
 		faceInFlight[0] = '\0';
-
 
 		//read the data into the storage - the data is delimeted using comma's
 		sscanf(pWeaponData,"%255[^,'\r\n],%255[^,'\r\n],%d,%d,%d,%d,%d,%d,%255[^,'\r\n],\
@@ -2209,38 +2209,43 @@ bool loadWeaponModifiers(const char *pWeapModData, UDWORD bufferSize)
 		for (j=0; j < PROPULSION_TYPE_NUM; j++)
 		{
 			asWeaponModifier[i][j] = 100;
+			asWeaponModifierBody[i][j] = 100;
 		}
 	}
 
 	for (i=0; i < NumRecords; i++)
 	{
 		//read the data into the storage - the data is delimeted using comma's
-		sscanf(pWeapModData,"%255[^,'\r\n],%255[^,'\r\n],%d",
-			weaponEffectName, propulsionName, &modifier);
+		sscanf(pWeapModData,"%255[^,'\r\n],%255[^,'\r\n],%d", weaponEffectName, propulsionName, &modifier);
 
 		//get the weapon effect inc
 		if (!getWeaponEffect(weaponEffectName, &effectInc))
 		{
-			debug( LOG_FATAL, "loadWeaponModifiers: Invalid Weapon Effect - %s", weaponEffectName );
-			abort();
-			return false;
+			debug(LOG_FATAL, "Invalid Weapon Effect - %s", weaponEffectName);
+			continue;
+		}
+		if (modifier > UWORD_MAX)
+		{
+			debug(LOG_FATAL, "Modifier for effect %s, prop type %s is too large", weaponEffectName, propulsionName);
+			continue;
 		}
 		//get the propulsion inc
 		if (!getPropulsionType(propulsionName, &propInc))
 		{
-			debug( LOG_FATAL, "loadWeaponModifiers: Invalid Propulsion type - %s", propulsionName );
-			abort();
-			return false;
+			UBYTE body = 0;
+			// If not propulsion, must be body
+			if (!getBodySize(propulsionName, &body))
+			{
+				debug(LOG_FATAL, "Invalid Propulsion or Body type - %s", propulsionName);
+				continue;
+			}
+			asWeaponModifierBody[effectInc][body] = modifier;
 		}
-
-		if (modifier > UWORD_MAX)
+		else
 		{
-			debug( LOG_FATAL, "loadWeaponModifiers: modifier for effect %s, prop type %s is too large", weaponEffectName, propulsionName );
-			abort();
-			return false;
+			//store in the appropriate index
+			asWeaponModifier[effectInc][propInc] = (UWORD)modifier;
 		}
-		//store in the appropriate index
-		asWeaponModifier[effectInc][propInc] = (UWORD)modifier;
 
 		//increment the pointer to the start of the next record
 		pWeapModData = strchr(pWeapModData,'\n') + 1;

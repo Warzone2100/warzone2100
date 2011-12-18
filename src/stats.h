@@ -46,6 +46,7 @@ extern PROPULSION_TYPES		*asPropulsionTypes;
 
 //used to hold the modifiers cross refd by weapon effect and propulsion type
 extern WEAPON_MODIFIER		asWeaponModifier[WE_NUMEFFECTS][PROPULSION_TYPE_NUM];
+extern WEAPON_MODIFIER		asWeaponModifierBody[WE_NUMEFFECTS][SIZE_NUM];
 
 //used to hold the current upgrade level per player per weapon subclass
 extern WEAPON_UPGRADE		asWeaponUpgrade[MAX_PLAYERS][WSC_NUM_WEAPON_SUBCLASSES];

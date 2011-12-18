@@ -1570,14 +1570,13 @@ UDWORD	calcDamage(UDWORD baseDamage, WEAPON_EFFECT weaponEffect, BASE_OBJECT *ps
 
 	if (psTarget->type == OBJ_STRUCTURE)
 	{
-		damage = baseDamage * asStructStrengthModifier[weaponEffect][((
-			STRUCTURE *)psTarget)->pStructureType->strength] / 100;
+		damage = baseDamage * asStructStrengthModifier[weaponEffect][((STRUCTURE *)psTarget)->pStructureType->strength] / 100;
 	}
 	else if (psTarget->type == OBJ_DROID)
 	{
-		damage = baseDamage * asWeaponModifier[weaponEffect][(
-   			asPropulsionStats + ((DROID *)psTarget)->asBits[COMP_PROPULSION].
-			nStat)->propulsionType] / 100;
+		const int propulsion = (asPropulsionStats + ((DROID *)psTarget)->asBits[COMP_PROPULSION].nStat)->propulsionType;
+		const int body = (asBodyStats + ((DROID *)psTarget)->asBits[COMP_BODY].nStat)->size;
+		damage = baseDamage * (asWeaponModifier[weaponEffect][propulsion] + asWeaponModifierBody[weaponEffect][body]) / 100;
 	}
 	// Default value
 	else
@@ -1585,11 +1584,11 @@ UDWORD	calcDamage(UDWORD baseDamage, WEAPON_EFFECT weaponEffect, BASE_OBJECT *ps
 		damage = baseDamage;
 	}
 
-    // A little fail safe!
-    if (damage == 0 && baseDamage != 0)
-    {
-        damage = 1;
-    }
+	// A little fail safe!
+	if (damage == 0 && baseDamage != 0)
+	{
+		damage = 1;
+	}
 
 	return damage;
 }
