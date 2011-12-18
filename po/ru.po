@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-12-17 19:23+0100\n"
+"POT-Creation-Date: 2011-12-19 00:57+0100\n"
 "PO-Revision-Date: 2011-01-15 09:57+0300\n"
 "Last-Translator: \n"
 "Language-Team: Russian <>\n"
@@ -5736,7 +5736,7 @@ msgid "New Design"
 msgstr "Новый дизайн"
 
 #: data/base/messages/strings/names.txt:15
-#: src/design.cpp:1275
+#: src/design.cpp:1302
 msgid "Transport"
 msgstr "Транспорт"
 
@@ -12107,16 +12107,16 @@ msgid "Strategy Game"
 msgstr "Сохранить игру"
 
 #: src/challenge.cpp:222
-#: src/hci.cpp:916
-#: src/hci.cpp:3353
-#: src/hci.cpp:3476
-#: src/hci.cpp:3875
-#: src/hci.cpp:4884
+#: src/hci.cpp:917
+#: src/hci.cpp:3354
+#: src/hci.cpp:3477
+#: src/hci.cpp:3876
+#: src/hci.cpp:4885
 #: src/intelmap.cpp:531
 #: src/intorder.cpp:727
 #: src/loadsave.cpp:240
-#: src/multimenu.cpp:499
-#: src/multimenu.cpp:1400
+#: src/multimenu.cpp:498
+#: src/multimenu.cpp:1401
 #: src/transporter.cpp:277
 #: src/transporter.cpp:358
 #: src/transporter.cpp:821
@@ -12275,147 +12275,156 @@ msgstr "Игра"
 msgid "Player"
 msgstr "Игрок"
 
-#: src/design.cpp:443
-#: src/design.cpp:455
-#: src/design.cpp:3436
+#: src/design.cpp:450
+#: src/design.cpp:463
+#: src/design.cpp:3470
 msgid "New Vehicle"
 msgstr "Новая машина"
 
-#: src/design.cpp:500
+#: src/design.cpp:508
 msgid "Vehicle Body"
 msgstr "Корпус машины"
 
-#: src/design.cpp:520
+#: src/design.cpp:528
 msgid "Vehicle Propulsion"
 msgstr "Движитель машины"
 
-#: src/design.cpp:541
-#: src/design.cpp:564
-#: src/design.cpp:588
+#: src/design.cpp:549
+#: src/design.cpp:572
+#: src/design.cpp:596
 msgid "Vehicle Turret"
 msgstr "Башня машины"
 
-#: src/design.cpp:607
+#: src/design.cpp:615
 msgid "Delete Design"
 msgstr "Удалить проект"
 
-#: src/design.cpp:658
-#: src/design.cpp:705
+#: src/design.cpp:631
+#: src/design.cpp:4698
+msgid "Store Template"
+msgstr ""
+
+#: src/design.cpp:684
+#: src/design.cpp:731
 msgid "Kinetic Armour"
 msgstr "Кинетическая броня"
 
-#: src/design.cpp:667
-#: src/design.cpp:715
+#: src/design.cpp:693
+#: src/design.cpp:741
 msgid "Thermal Armour"
 msgstr "Термальная броня"
 
-#: src/design.cpp:683
-#: src/design.cpp:735
+#: src/design.cpp:709
+#: src/design.cpp:761
 msgid "Engine Output"
 msgstr "Мощность двигателя"
 
-#: src/design.cpp:691
-#: src/design.cpp:744
-#: src/design.cpp:1486
-#: src/design.cpp:1510
-#: src/design.cpp:1531
-#: src/design.cpp:1547
-#: src/design.cpp:1567
-#: src/design.cpp:1584
-#: src/design.cpp:1604
-#: src/design.cpp:1621
-#: src/design.cpp:1662
-#: src/design.cpp:1694
-#: src/design.cpp:1826
-#: src/design.cpp:1842
-#: src/design.cpp:1880
-#: src/design.cpp:1913
+#: src/design.cpp:717
+#: src/design.cpp:770
+#: src/design.cpp:1513
+#: src/design.cpp:1537
+#: src/design.cpp:1558
+#: src/design.cpp:1574
+#: src/design.cpp:1594
+#: src/design.cpp:1611
+#: src/design.cpp:1631
+#: src/design.cpp:1648
+#: src/design.cpp:1689
+#: src/design.cpp:1721
+#: src/design.cpp:1853
+#: src/design.cpp:1869
+#: src/design.cpp:1907
+#: src/design.cpp:1940
 msgid "Weight"
 msgstr "Масса"
 
-#: src/design.cpp:775
-#: src/design.cpp:793
+#: src/design.cpp:801
+#: src/design.cpp:819
 msgid "Total Power Required"
 msgstr "Всего требуется энергии"
 
-#: src/design.cpp:806
-#: src/design.cpp:825
+#: src/design.cpp:832
+#: src/design.cpp:851
 msgid "Total Body Points"
 msgstr "Общее бронирование корпуса"
 
-#: src/design.cpp:996
-#: src/design.cpp:1025
+#: src/design.cpp:1023
+#: src/design.cpp:1052
 msgid "Power Usage"
 msgstr "Использование энергии"
 
-#: src/design.cpp:1298
+#: src/design.cpp:1325
 msgid "Hydra "
 msgstr "Гидра"
 
-#: src/design.cpp:1466
-#: src/design.cpp:1494
+#: src/design.cpp:1493
+#: src/design.cpp:1521
 msgid "Sensor Range"
 msgstr "Дальность сенсора"
 
-#: src/design.cpp:1478
-#: src/design.cpp:1502
+#: src/design.cpp:1505
+#: src/design.cpp:1529
 msgid "Sensor Power"
 msgstr "Мощность сенсора"
 
-#: src/design.cpp:1523
-#: src/design.cpp:1539
+#: src/design.cpp:1550
+#: src/design.cpp:1566
 msgid "ECM Power"
 msgstr "ЕМ Мощность"
 
-#: src/design.cpp:1559
-#: src/design.cpp:1576
-#: src/design.cpp:1596
-#: src/design.cpp:1613
+#: src/design.cpp:1586
+#: src/design.cpp:1603
+#: src/design.cpp:1623
+#: src/design.cpp:1640
 msgid "Build Points"
 msgstr "Бронирование"
 
-#: src/design.cpp:1634
-#: src/design.cpp:1670
+#: src/design.cpp:1661
+#: src/design.cpp:1697
 msgid "Range"
 msgstr "Дальность"
 
-#: src/design.cpp:1646
-#: src/design.cpp:1678
+#: src/design.cpp:1673
+#: src/design.cpp:1705
 msgid "Damage"
 msgstr "Урон"
 
-#: src/design.cpp:1654
-#: src/design.cpp:1686
+#: src/design.cpp:1681
+#: src/design.cpp:1713
 msgid "Rate-of-Fire"
 msgstr "Скорострельность"
 
-#: src/design.cpp:1814
-#: src/design.cpp:1834
+#: src/design.cpp:1841
+#: src/design.cpp:1861
 msgid "Air Speed"
 msgstr "Скорость в воздухе"
 
-#: src/design.cpp:1852
-#: src/design.cpp:1889
+#: src/design.cpp:1879
+#: src/design.cpp:1916
 msgid "Road Speed"
 msgstr "Скорость по дороге"
 
-#: src/design.cpp:1862
-#: src/design.cpp:1897
+#: src/design.cpp:1889
+#: src/design.cpp:1924
 msgid "Off-Road Speed"
 msgstr "Скорость по бездорожью"
 
-#: src/design.cpp:1870
-#: src/design.cpp:1905
+#: src/design.cpp:1897
+#: src/design.cpp:1932
 msgid "Water Speed"
 msgstr "Скорость по воде"
 
-#: src/design.cpp:2031
+#: src/design.cpp:2058
 msgid "Weapons"
 msgstr "Вооружение"
 
-#: src/design.cpp:2051
+#: src/design.cpp:2078
 msgid "Systems"
 msgstr "Системы"
+
+#: src/design.cpp:4693
+msgid "Delete Template"
+msgstr ""
 
 #: src/display3d.cpp:616
 msgid "Player left"
@@ -12449,15 +12458,15 @@ msgstr "%s - повреждение %d%% - опыт %d, %s"
 msgid "%s - Allied - Damage %d%% - Experience %d, %s"
 msgstr "%s - союзник %d%% - опыт %d, %s"
 
-#: src/droid.cpp:212
+#: src/droid.cpp:203
 msgid "Unit Lost!"
 msgstr "Юнит потерян!"
 
-#: src/droid.cpp:1323
+#: src/droid.cpp:1314
 msgid "Structure Restored"
 msgstr "Постройка восстановлена"
 
-#: src/droid.cpp:2651
+#: src/droid.cpp:2339
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
@@ -12465,7 +12474,7 @@ msgstr[0] "Выбрана группа %u - %u юнит"
 msgstr[1] "Выбрана группа %u - %u юнита"
 msgstr[2] "Выбрана группа %u - %u юнитов"
 
-#: src/droid.cpp:2664
+#: src/droid.cpp:2352
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
@@ -12473,7 +12482,7 @@ msgstr[0] "%u юнит назначен группе %u"
 msgstr[1] "%u юнита назначено группе %u"
 msgstr[2] "%u юнитов назначено группе %u"
 
-#: src/droid.cpp:2677
+#: src/droid.cpp:2365
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
@@ -12481,7 +12490,7 @@ msgstr[0] "Фокус на группе %u - %u юнит"
 msgstr[1] "Фокус на группе %u - %u юнита"
 msgstr[2] "Фокус на группе %u - %u юнитов"
 
-#: src/droid.cpp:2681
+#: src/droid.cpp:2369
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
@@ -12489,49 +12498,49 @@ msgstr[0] "Соединить с группой %u - %u юнит"
 msgstr[1] "Соединить с группой %u - %u юнита"
 msgstr[2] "Соединить с группой %u - %u юнитов"
 
-#: src/droid.cpp:3008
+#: src/droid.cpp:2551
 msgid "Rookie"
 msgstr "Новобранец"
 
-#: src/droid.cpp:3009
+#: src/droid.cpp:2552
 msgctxt "rank"
 msgid "Green"
 msgstr "Молодой"
 
-#: src/droid.cpp:3010
+#: src/droid.cpp:2553
 msgid "Trained"
 msgstr "Тренированный"
 
-#: src/droid.cpp:3011
+#: src/droid.cpp:2554
 msgid "Regular"
 msgstr "Опытный"
 
-#: src/droid.cpp:3012
+#: src/droid.cpp:2555
 msgid "Professional"
 msgstr "Профессионал"
 
-#: src/droid.cpp:3013
+#: src/droid.cpp:2556
 msgid "Veteran"
 msgstr "Ветеран"
 
-#: src/droid.cpp:3014
+#: src/droid.cpp:2557
 msgid "Elite"
 msgstr "Элита"
 
-#: src/droid.cpp:3015
+#: src/droid.cpp:2558
 msgid "Special"
 msgstr "Специалист"
 
-#: src/droid.cpp:3016
+#: src/droid.cpp:2559
 msgid "Hero"
 msgstr "Герой"
 
-#: src/droid.cpp:4003
+#: src/droid.cpp:3539
 #, c-format
 msgid "%s wanted to give you a %s but you have too many!"
 msgstr "%s хочет дать вам %s но у вас их слишком много"
 
-#: src/droid.cpp:4007
+#: src/droid.cpp:3543
 #, c-format
 msgid "You wanted to give %s a %s but they have too many!"
 msgstr "Вы хотите дать %s %s но у их их слишком много"
@@ -12550,7 +12559,7 @@ msgid "Tutorial"
 msgstr "Обучение"
 
 #: src/frontend.cpp:110
-#: src/hci.cpp:3462
+#: src/hci.cpp:3463
 msgid "Options"
 msgstr "Параметры"
 
@@ -12580,499 +12589,503 @@ msgstr "ОБУЧЕНИЕ"
 
 #. TRANSLATORS: "Return", in this context, means "return to previous screen/menu"
 #: src/frontend.cpp:190
-#: src/frontend.cpp:249
-#: src/frontend.cpp:383
-#: src/frontend.cpp:520
-#: src/frontend.cpp:660
-#: src/frontend.cpp:794
-#: src/frontend.cpp:1029
-#: src/frontend.cpp:1175
+#: src/frontend.cpp:250
+#: src/frontend.cpp:384
+#: src/frontend.cpp:521
+#: src/frontend.cpp:661
+#: src/frontend.cpp:795
+#: src/frontend.cpp:1030
+#: src/frontend.cpp:1176
+#: src/frontend.cpp:1196
 msgctxt "menu"
 msgid "Return"
 msgstr "Назад"
 
-#: src/frontend.cpp:243
+#: src/frontend.cpp:244
 msgid "New Campaign"
 msgstr "Новая кампания"
 
-#: src/frontend.cpp:244
+#: src/frontend.cpp:245
 msgid "Start Skirmish Game"
 msgstr "Начать Сражение"
 
-#: src/frontend.cpp:245
+#: src/frontend.cpp:246
 msgid "Challenges"
 msgstr "Вызов на поединок"
 
-#: src/frontend.cpp:246
+#: src/frontend.cpp:247
 #: src/ingameop.cpp:273
 msgid "Load Game"
 msgstr "Загрузить игру"
 
-#: src/frontend.cpp:248
+#: src/frontend.cpp:249
 msgid "SINGLE PLAYER"
 msgstr "ОДИНОЧНАЯ ИГРА"
 
-#: src/frontend.cpp:321
+#: src/frontend.cpp:322
 #: src/ingameop.cpp:494
 #: src/mission.cpp:2494
 #: src/mission.cpp:2595
 msgid "Load Saved Game"
 msgstr "Загрузить Игру"
 
-#: src/frontend.cpp:376
+#: src/frontend.cpp:377
 #: src/multiint.cpp:1499
 msgid "OPTIONS"
 msgstr "ПАРАМЕТРЫ"
 
-#: src/frontend.cpp:377
+#: src/frontend.cpp:378
 msgid "Game Options"
 msgstr "Настройки игры"
 
-#: src/frontend.cpp:378
+#: src/frontend.cpp:379
 msgid "Graphics Options"
 msgstr "Настройки графики"
 
-#: src/frontend.cpp:379
+#: src/frontend.cpp:380
 msgid "Video Options"
 msgstr "Настройки видео"
 
-#: src/frontend.cpp:380
+#: src/frontend.cpp:381
 #: src/ingameop.cpp:268
 msgid "Audio Options"
 msgstr "Настройки звука"
 
-#: src/frontend.cpp:381
+#: src/frontend.cpp:382
 msgid "Mouse Options"
 msgstr "Настройки Мыши"
 
-#: src/frontend.cpp:382
+#: src/frontend.cpp:383
 msgid "Key Mappings"
 msgstr "Расскладка клавиатуры"
 
-#: src/frontend.cpp:442
+#: src/frontend.cpp:443
 msgid "Video Playback"
 msgstr "Воспроизведение видео"
 
-#: src/frontend.cpp:446
-#: src/frontend.cpp:594
+#: src/frontend.cpp:447
+#: src/frontend.cpp:595
 msgid "1X"
 msgstr "1Х"
 
-#: src/frontend.cpp:450
-#: src/frontend.cpp:584
+#: src/frontend.cpp:451
+#: src/frontend.cpp:585
 msgid "2X"
 msgstr "2X"
 
-#: src/frontend.cpp:454
-#: src/frontend.cpp:589
-#: src/frontend.cpp:734
-#: src/frontend.cpp:817
+#: src/frontend.cpp:455
+#: src/frontend.cpp:590
+#: src/frontend.cpp:735
+#: src/frontend.cpp:818
 msgid "Fullscreen"
 msgstr "Полный экран"
 
-#: src/frontend.cpp:463
+#: src/frontend.cpp:464
 msgid "Scanlines"
 msgstr ""
 
-#: src/frontend.cpp:467
-#: src/frontend.cpp:488
-#: src/frontend.cpp:496
-#: src/frontend.cpp:512
-#: src/frontend.cpp:538
-#: src/frontend.cpp:556
-#: src/frontend.cpp:574
-#: src/frontend.cpp:619
-#: src/frontend.cpp:759
-#: src/frontend.cpp:769
-#: src/frontend.cpp:841
-#: src/frontend.cpp:902
-#: src/frontend.cpp:945
-#: src/frontend.cpp:986
-#: src/frontend.cpp:998
-#: src/frontend.cpp:1010
-#: src/frontend.cpp:1045
-#: src/frontend.cpp:1058
-#: src/frontend.cpp:1072
+#: src/frontend.cpp:468
+#: src/frontend.cpp:489
+#: src/frontend.cpp:497
+#: src/frontend.cpp:513
+#: src/frontend.cpp:539
+#: src/frontend.cpp:557
+#: src/frontend.cpp:575
+#: src/frontend.cpp:620
+#: src/frontend.cpp:760
+#: src/frontend.cpp:770
+#: src/frontend.cpp:842
+#: src/frontend.cpp:903
+#: src/frontend.cpp:946
+#: src/frontend.cpp:987
+#: src/frontend.cpp:999
+#: src/frontend.cpp:1011
+#: src/frontend.cpp:1046
+#: src/frontend.cpp:1059
+#: src/frontend.cpp:1073
 msgid "Off"
 msgstr "Выкл."
 
-#: src/frontend.cpp:471
-#: src/frontend.cpp:609
+#: src/frontend.cpp:472
+#: src/frontend.cpp:610
 msgid "50%"
 msgstr ""
 
-#: src/frontend.cpp:475
-#: src/frontend.cpp:614
-#: src/multiplay.cpp:1920
+#: src/frontend.cpp:476
+#: src/frontend.cpp:615
+#: src/multiplay.cpp:1925
 msgid "Black"
 msgstr "Чёрный"
 
-#: src/frontend.cpp:481
+#: src/frontend.cpp:482
 msgid "Screen Shake"
 msgstr "Дрожание экрана"
 
-#: src/frontend.cpp:484
-#: src/frontend.cpp:500
-#: src/frontend.cpp:508
-#: src/frontend.cpp:543
-#: src/frontend.cpp:561
-#: src/frontend.cpp:570
-#: src/frontend.cpp:755
-#: src/frontend.cpp:907
-#: src/frontend.cpp:941
-#: src/frontend.cpp:982
-#: src/frontend.cpp:994
-#: src/frontend.cpp:1006
-#: src/frontend.cpp:1050
-#: src/frontend.cpp:1063
-#: src/frontend.cpp:1077
+#: src/frontend.cpp:485
+#: src/frontend.cpp:501
+#: src/frontend.cpp:509
+#: src/frontend.cpp:544
+#: src/frontend.cpp:562
+#: src/frontend.cpp:571
+#: src/frontend.cpp:756
+#: src/frontend.cpp:908
+#: src/frontend.cpp:942
+#: src/frontend.cpp:983
+#: src/frontend.cpp:995
+#: src/frontend.cpp:1007
+#: src/frontend.cpp:1051
+#: src/frontend.cpp:1064
+#: src/frontend.cpp:1078
 msgid "On"
 msgstr "Вкл."
 
-#: src/frontend.cpp:493
+#: src/frontend.cpp:494
 msgid "Subtitles"
 msgstr "Субтитры"
 
-#: src/frontend.cpp:505
+#: src/frontend.cpp:506
 msgid "Shadows"
 msgstr "Тени"
 
-#: src/frontend.cpp:516
+#: src/frontend.cpp:517
 msgid "GRAPHICS OPTIONS"
 msgstr "Настройки графики"
 
-#: src/frontend.cpp:648
+#: src/frontend.cpp:649
 #: src/ingameop.cpp:168
 msgid "Voice Volume"
 msgstr "Громкость голоса"
 
-#: src/frontend.cpp:652
+#: src/frontend.cpp:653
 #: src/ingameop.cpp:173
 msgid "FX Volume"
 msgstr "Громкость эффектов"
 
-#: src/frontend.cpp:656
+#: src/frontend.cpp:657
 #: src/ingameop.cpp:178
 msgid "Music Volume"
 msgstr "Громкость музыкы"
 
-#: src/frontend.cpp:663
+#: src/frontend.cpp:664
 msgid "AUDIO OPTIONS"
 msgstr "Настройки аудио"
 
-#: src/frontend.cpp:727
+#: src/frontend.cpp:728
 msgid "* Takes effect on game restart"
 msgstr "* Применится после перезагрузки игры"
 
-#: src/frontend.cpp:730
+#: src/frontend.cpp:731
 msgid "Graphics Mode*"
 msgstr "Графический режим*"
 
-#: src/frontend.cpp:738
-#: src/frontend.cpp:812
+#: src/frontend.cpp:739
+#: src/frontend.cpp:813
 msgid "Windowed"
 msgstr "В окне"
 
-#: src/frontend.cpp:742
+#: src/frontend.cpp:743
 msgid "Resolution*"
 msgstr "Разрешение*"
 
-#: src/frontend.cpp:747
+#: src/frontend.cpp:748
 msgid "Texture size"
 msgstr "Размер текстур"
 
-#: src/frontend.cpp:751
+#: src/frontend.cpp:752
 #, fuzzy
 msgid "Vertical sync"
 msgstr "Вертикальная синхронизация*"
 
-#: src/frontend.cpp:786
-#: src/frontend.cpp:847
+#: src/frontend.cpp:787
+#: src/frontend.cpp:848
 #, fuzzy
 msgid "Unsupported"
 msgstr "Транспортник"
 
-#: src/frontend.cpp:791
+#: src/frontend.cpp:792
 msgid "VIDEO OPTIONS"
 msgstr "Настройки видео"
 
-#: src/frontend.cpp:979
+#: src/frontend.cpp:980
 msgid "Reverse Rotation"
 msgstr "Инверсия мыши"
 
-#: src/frontend.cpp:990
+#: src/frontend.cpp:991
 msgid "Trap Cursor"
 msgstr "Захват курсора"
 
-#: src/frontend.cpp:1003
+#: src/frontend.cpp:1004
 msgid "Switch Mouse Buttons"
 msgstr "Настройки Мыши"
 
-#: src/frontend.cpp:1015
+#: src/frontend.cpp:1016
 msgid "Rotate Screen"
 msgstr "Повернуть  экран"
 
-#: src/frontend.cpp:1018
-#: src/frontend.cpp:1091
+#: src/frontend.cpp:1019
+#: src/frontend.cpp:1092
 #, fuzzy
 msgid "Middle Mouse"
 msgstr "Средняя кнопка"
 
-#: src/frontend.cpp:1022
-#: src/frontend.cpp:1086
+#: src/frontend.cpp:1023
+#: src/frontend.cpp:1087
 #, fuzzy
 msgid "Right Mouse"
 msgstr "Правая кнопка"
 
-#: src/frontend.cpp:1026
+#: src/frontend.cpp:1027
 msgid "MOUSE OPTIONS"
 msgstr "Настройки мыши"
 
-#: src/frontend.cpp:1126
-#: src/frontend.cpp:1196
+#: src/frontend.cpp:1127
+#: src/frontend.cpp:1199
 msgid "Difficulty"
 msgstr "Сложность"
 
-#: src/frontend.cpp:1130
-#: src/frontend.cpp:1204
-#: src/frontend.cpp:1241
+#: src/frontend.cpp:1131
+#: src/frontend.cpp:1206
+#: src/frontend.cpp:1243
 #: src/multiint.cpp:219
 msgid "Easy"
 msgstr "Легкая"
 
-#: src/frontend.cpp:1133
-#: src/frontend.cpp:1207
-#: src/frontend.cpp:1233
+#: src/frontend.cpp:1134
+#: src/frontend.cpp:1209
+#: src/frontend.cpp:1235
 msgid "Normal"
 msgstr "Нормальная"
 
-#: src/frontend.cpp:1137
-#: src/frontend.cpp:1210
-#: src/frontend.cpp:1237
+#: src/frontend.cpp:1138
+#: src/frontend.cpp:1212
+#: src/frontend.cpp:1239
 #: src/multiint.cpp:219
 msgid "Hard"
 msgstr "Тяжелая"
 
-#: src/frontend.cpp:1142
-#: src/frontend.cpp:1197
+#: src/frontend.cpp:1143
+#: src/frontend.cpp:1200
 msgid "Scroll Speed"
 msgstr "Скорость прокрутки"
 
-#: src/frontend.cpp:1156
-#: src/frontend.cpp:1194
+#: src/frontend.cpp:1157
+#: src/frontend.cpp:1197
 msgid "Language"
 msgstr "Язык"
 
-#: src/frontend.cpp:1168
-#: src/frontend.cpp:1195
+#: src/frontend.cpp:1169
+#: src/frontend.cpp:1198
 msgid "Unit Colour"
 msgstr "Цвет юнита"
 
-#: src/frontend.cpp:1171
+#: src/frontend.cpp:1172
+#: src/frontend.cpp:1201
 msgid "Radar"
 msgstr "Радар"
 
-#: src/frontend.cpp:1172
-#: src/frontend.cpp:1221
+#: src/frontend.cpp:1173
+#: src/frontend.cpp:1202
+#: src/frontend.cpp:1223
 msgid "Rotating"
 msgstr "Вращение"
 
-#: src/frontend.cpp:1172
-#: src/frontend.cpp:1221
+#: src/frontend.cpp:1173
+#: src/frontend.cpp:1202
+#: src/frontend.cpp:1223
 msgid "Fixed"
 msgstr "Починенный"
 
-#: src/frontend.cpp:1178
-#: src/frontend.cpp:1198
+#: src/frontend.cpp:1179
+#: src/frontend.cpp:1195
 msgid "GAME OPTIONS"
 msgstr "НАСТРОЙКИ ИГРЫ"
 
-#: src/frontend.cpp:1330
+#: src/frontend.cpp:1332
 #: src/multiint.cpp:2606
 msgid "Mod: "
 msgstr "Мод:"
 
-#: src/hci.cpp:1237
+#: src/hci.cpp:1238
 msgid "MAP SAVED!"
 msgstr "КАРТА СОХРАНЕНА!"
 
-#: src/hci.cpp:1559
-#: src/loop.cpp:268
-#: src/loop.cpp:284
+#: src/hci.cpp:1560
+#: src/loop.cpp:271
+#: src/loop.cpp:287
 #, fuzzy
 msgid "GAME SAVED: "
 msgstr "ИГРА СОХРАНЕНА:"
 
-#: src/hci.cpp:1946
+#: src/hci.cpp:1947
 msgid "Failed to create building"
 msgstr "Невозможно создать постройку"
 
-#: src/hci.cpp:1963
+#: src/hci.cpp:1964
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new structure: %s."
 msgstr "Игрок %u начитерил себе новую постройку: %s."
 
-#: src/hci.cpp:1978
+#: src/hci.cpp:1979
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new feature: %s."
 msgstr "Игрок %u начитерил себе новый особый элемент: %s."
 
-#: src/hci.cpp:2000
+#: src/hci.cpp:2001
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid: %s."
 msgstr "Игрок %u начитерил себе нового дроида: %s."
 
-#: src/hci.cpp:2011
+#: src/hci.cpp:2012
 #, fuzzy, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid."
 msgstr "Игрок %u начитерил себе нового дроида: %s."
 
-#: src/hci.cpp:3273
+#: src/hci.cpp:3274
 msgid "Commanders (F6)"
 msgstr "Командиры (F6)"
 
-#: src/hci.cpp:3286
+#: src/hci.cpp:3287
 msgid "Intelligence Display (F5)"
 msgstr "Дисплей разведки (F5)"
 
-#: src/hci.cpp:3299
+#: src/hci.cpp:3300
 msgid "Manufacture (F1)"
 msgstr "Производство (F1)"
 
-#: src/hci.cpp:3312
+#: src/hci.cpp:3313
 msgid "Design (F4)"
 msgstr "Дизайн (F4)"
 
-#: src/hci.cpp:3325
+#: src/hci.cpp:3326
 msgid "Research (F2)"
 msgstr "Исследования (F2)"
 
-#: src/hci.cpp:3338
+#: src/hci.cpp:3339
 msgid "Build (F3)"
 msgstr "Строить (F3)"
 
-#: src/hci.cpp:3409
+#: src/hci.cpp:3410
 #: src/multiint.cpp:1613
-#: src/multimenu.cpp:798
+#: src/multimenu.cpp:799
 msgid "Power"
 msgstr "Энергия"
 
-#: src/hci.cpp:3500
+#: src/hci.cpp:3501
 msgid "Map:"
 msgstr "Карта:"
 
-#: src/hci.cpp:3513
+#: src/hci.cpp:3514
 msgid "Load"
 msgstr "Загрузить "
 
-#: src/hci.cpp:3514
+#: src/hci.cpp:3515
 msgid "Load Map File"
 msgstr "Загрузить карту."
 
-#: src/hci.cpp:3521
+#: src/hci.cpp:3522
 msgid "Save"
 msgstr "Сохранить "
 
-#: src/hci.cpp:3522
+#: src/hci.cpp:3523
 msgid "Save Map File"
 msgstr "Сохранить карту."
 
-#: src/hci.cpp:3530
+#: src/hci.cpp:3531
 msgid "New"
 msgstr "Новый"
 
-#: src/hci.cpp:3531
+#: src/hci.cpp:3532
 msgid "New Blank Map"
 msgstr "Новая пустая карта."
 
-#: src/hci.cpp:3567
+#: src/hci.cpp:3568
 msgid "Tile"
 msgstr "Плитка"
 
-#: src/hci.cpp:3568
+#: src/hci.cpp:3569
 msgid "Place tiles on map"
 msgstr "Поместить эемент изображения на карту"
 
-#: src/hci.cpp:3577
+#: src/hci.cpp:3578
 msgid "Unit"
 msgstr "Юнит"
 
-#: src/hci.cpp:3578
+#: src/hci.cpp:3579
 msgid "Place Unit on map"
 msgstr "Поместить юнита на карту"
 
-#: src/hci.cpp:3586
+#: src/hci.cpp:3587
 msgid "Struct"
 msgstr "Постройки"
 
-#: src/hci.cpp:3587
+#: src/hci.cpp:3588
 msgid "Place Structures on map"
 msgstr "Расположить постройки на карте"
 
-#: src/hci.cpp:3595
+#: src/hci.cpp:3596
 msgid "Feat"
 msgstr "Разное"
 
-#: src/hci.cpp:3596
+#: src/hci.cpp:3597
 msgid "Place Features on map"
 msgstr "Поместить особый элемент на карту"
 
-#: src/hci.cpp:3606
+#: src/hci.cpp:3607
 msgid "Pause"
 msgstr "Пауза"
 
-#: src/hci.cpp:3607
+#: src/hci.cpp:3608
 msgid "Pause or unpause the game"
 msgstr "Пауза или продолжить игру"
 
-#: src/hci.cpp:3621
+#: src/hci.cpp:3622
 msgid "Align height of all map objects"
 msgstr "Выровнять высоту всех объектов на карте"
 
-#: src/hci.cpp:3631
+#: src/hci.cpp:3632
 msgid "Edit"
 msgstr "Редактировать"
 
-#: src/hci.cpp:3632
+#: src/hci.cpp:3633
 msgid "Start Edit Mode"
 msgstr "Включить режим редактирования"
 
-#: src/hci.cpp:3646
+#: src/hci.cpp:3647
 #: src/ingameop.cpp:113
 #: src/ingameop.cpp:257
 #: src/ingameop.cpp:261
 msgid "Quit"
 msgstr "Выход"
 
-#: src/hci.cpp:3647
+#: src/hci.cpp:3648
 msgid "Exit Game"
 msgstr "Выйти из игры"
 
-#: src/hci.cpp:3673
+#: src/hci.cpp:3674
 msgid "Current Player:"
 msgstr "Текущий игрок"
 
-#: src/hci.cpp:3952
+#: src/hci.cpp:3953
 msgid "Progress Bar"
 msgstr "Панель прогресса"
 
-#: src/hci.cpp:4809
+#: src/hci.cpp:4810
 msgid "Factory Delivery Point"
 msgstr "Точка прибытия с фабрики"
 
-#: src/hci.cpp:4827
+#: src/hci.cpp:4828
 msgid "Loop Production"
 msgstr "Повторное производство"
 
-#: src/hci.cpp:4907
+#: src/hci.cpp:4908
 msgid "Tab Scroll left"
 msgstr "Таб скрол налево"
 
-#: src/hci.cpp:4922
+#: src/hci.cpp:4923
 msgid "Tab Scroll right"
 msgstr "Таб скрол на право"
 
-#: src/hci.cpp:5151
+#: src/hci.cpp:5152
 #, fuzzy
 msgid "Ally progress"
 msgstr "прогресс постройки"
@@ -13116,7 +13129,7 @@ msgstr "Игра не может продолжаться без хоста."
 msgid "-->  QUIT  <--"
 msgstr "--> ВЫХОД <--"
 
-#: src/init.cpp:422
+#: src/init.cpp:423
 #, c-format
 msgid ""
 "The required mod could not be loaded: %s\n"
@@ -13146,7 +13159,7 @@ msgid "Research Progress"
 msgstr "исследование завершено"
 
 #: src/intelmap.cpp:242
-#: src/keybind.cpp:1363
+#: src/keybind.cpp:1365
 msgid "PAUSED"
 msgstr "ПАУЗА"
 
@@ -13273,265 +13286,263 @@ msgstr "Назначить производство ВВП"
 msgid "Circle"
 msgstr "Круг"
 
-#: src/keybind.cpp:135
+#: src/keybind.cpp:137
 msgid "Sorry, that cheat is disabled in multiplayer games."
 msgstr "Извините, в мультиплеере читы отключены."
 
-#: src/keybind.cpp:141
+#: src/keybind.cpp:143
 msgid "Warning! This cheat is buggy.  We recommend to NOT use it."
 msgstr "Внимание! Этот читкод может вызвать нестабильность игры. Рекомендуем не использовать его."
 
-#: src/keybind.cpp:240
+#: src/keybind.cpp:242
 msgid "Lets us see what you see!"
 msgstr "Позволь увидель нам то, что видишь ты!"
 
-#: src/keybind.cpp:242
+#: src/keybind.cpp:244
 msgid "Fine, weapon & sensor display is off!"
 msgstr "Отлично, сенсорный дисплей выключен!"
 
-#: src/keybind.cpp:415
-#: src/keybind.cpp:445
-#: src/keybind.cpp:462
-#: src/keybind.cpp:506
-#: src/keybind.cpp:615
-#: src/keybind.cpp:655
-#: src/keybind.cpp:761
-#: src/keybind.cpp:1251
-#: src/keybind.cpp:1310
-#: src/keybind.cpp:1417
-#: src/keybind.cpp:1546
-#: src/keybind.cpp:1904
-#: src/keybind.cpp:1945
+#: src/keybind.cpp:417
+#: src/keybind.cpp:447
+#: src/keybind.cpp:464
+#: src/keybind.cpp:508
+#: src/keybind.cpp:617
+#: src/keybind.cpp:657
+#: src/keybind.cpp:763
+#: src/keybind.cpp:1253
+#: src/keybind.cpp:1312
+#: src/keybind.cpp:1419
+#: src/keybind.cpp:1548
+#: src/keybind.cpp:1906
+#: src/keybind.cpp:1947
 #, c-format
 msgid "(Player %u) is using cheat :%s"
 msgstr "(Игрок %u) использует чит :%s"
 
-#: src/keybind.cpp:416
+#: src/keybind.cpp:418
 msgid "Hard as nails!!!"
 msgstr "Трудно как на гвоздях!!!"
 
-#: src/keybind.cpp:430
+#: src/keybind.cpp:432
 msgid "Takings thing easy!"
 msgstr "Собирать вещи легко!"
 
-#: src/keybind.cpp:446
+#: src/keybind.cpp:448
 msgid "1000 big ones!!!"
 msgstr "1000 больших!!!"
 
-#: src/keybind.cpp:463
+#: src/keybind.cpp:465
 msgid "Power overwhelming"
 msgstr "Неиссякаемая энергия"
 
-#: src/keybind.cpp:478
+#: src/keybind.cpp:480
 msgid "Back to normality!"
 msgstr "Вернуться в нормальное состояние!"
 
-#: src/keybind.cpp:491
+#: src/keybind.cpp:493
 msgid "Getting tricky!"
 msgstr "Хитро получаешь!"
 
-#: src/keybind.cpp:507
+#: src/keybind.cpp:509
 msgid "Twice as nice!"
 msgstr "Один хорошо - двое лучше!"
 
-#: src/keybind.cpp:518
+#: src/keybind.cpp:520
 msgid "FPS display is enabled."
 msgstr "Отображение FPS включено."
 
-#: src/keybind.cpp:522
+#: src/keybind.cpp:524
 msgid "FPS display is disabled."
 msgstr "Отображение FPS выключено."
 
-#: src/keybind.cpp:579
+#: src/keybind.cpp:581
 #, c-format
 msgid "(Player %u) is using a cheat :Num Droids: %d  Num Structures: %d  Num Features: %d"
 msgstr "(Игрок %u) использует чит. Число машин: %d, построек: %d, особых элементов: %d"
 
-#: src/keybind.cpp:616
+#: src/keybind.cpp:618
 msgid "Infinite power disabled"
 msgstr "Бесконечная энергия отключена"
 
-#: src/keybind.cpp:616
+#: src/keybind.cpp:618
 msgid "Infinite power enabled"
 msgstr "Бесконечная энергия включена"
 
-#: src/keybind.cpp:656
+#: src/keybind.cpp:658
 msgid "All items made available"
 msgstr "Доступно абсолютно все"
 
-#: src/keybind.cpp:762
+#: src/keybind.cpp:764
 msgid "Fog on"
 msgstr "Туман включен"
 
-#: src/keybind.cpp:762
+#: src/keybind.cpp:764
 msgid "Fog off"
 msgstr "Туман выключен"
 
-#: src/keybind.cpp:1173
+#: src/keybind.cpp:1175
 #, c-format
 msgid "Warning!  This cheat can cause dire problems later on! [%s]"
 msgstr "Внимание! Этот чит может привести к страшным проблемам! [%s]"
 
-#: src/keybind.cpp:1173
+#: src/keybind.cpp:1175
 msgid "Ending Mission."
 msgstr "Окончание миссии."
 
-#: src/keybind.cpp:1252
+#: src/keybind.cpp:1254
 msgid "CHEATS ARE NOW ENABLED!"
 msgstr "Читы активированы!"
 
-#: src/keybind.cpp:1252
+#: src/keybind.cpp:1254
 msgid "CHEATS ARE NOW DISABLED!"
 msgstr "Читы выключены!"
 
-#: src/keybind.cpp:1311
+#: src/keybind.cpp:1313
 msgid "God Mode ON"
 msgstr "Режим бога включен"
 
-#: src/keybind.cpp:1311
+#: src/keybind.cpp:1313
 msgid "God Mode OFF"
 msgstr "Режим бога выключен"
 
-#: src/keybind.cpp:1323
+#: src/keybind.cpp:1325
 msgid "View Aligned to North"
 msgstr "Вид выровнен по северу"
 
-#: src/keybind.cpp:1332
+#: src/keybind.cpp:1334
 #, c-format
 msgid "Trap cursor %s"
 msgstr "Захват курсора: %s"
 
-#: src/keybind.cpp:1418
+#: src/keybind.cpp:1420
 msgid "Researched EVERYTHING for you!"
 msgstr "Все исследования доступны!"
 
-#: src/keybind.cpp:1483
+#: src/keybind.cpp:1485
 #, c-format
 msgid "(Player %u) is using cheat :%s %s"
 msgstr "(Игрок %u) использует чит :%s %s"
 
-#: src/keybind.cpp:1483
+#: src/keybind.cpp:1485
 msgid "Researched"
 msgstr "Исследовано"
 
-#: src/keybind.cpp:1504
+#: src/keybind.cpp:1506
 msgid "Only displaying energy bars when selected"
 msgstr "Отображать панель прогресса только для выбранных единиц"
 
-#: src/keybind.cpp:1507
+#: src/keybind.cpp:1509
 msgid "Always displaying energy bars for units"
 msgstr "Всегда отображать панеот прогресса для юнитов"
 
-#: src/keybind.cpp:1510
+#: src/keybind.cpp:1512
 msgid "Always displaying energy bars for units and structures"
 msgstr "Всегда отображать панел прогресса для юнитов и построек"
 
-#: src/keybind.cpp:1532
+#: src/keybind.cpp:1534
 msgid "Demo mode off - Returning to normal game mode"
 msgstr "Демо-режим выключен - возвращение к нормальному режиму игры"
 
-#: src/keybind.cpp:1547
+#: src/keybind.cpp:1549
 msgid "Debug menu is Open"
 msgstr "Открыто меню отладки"
 
-#: src/keybind.cpp:1584
+#: src/keybind.cpp:1586
 msgid "Unable to locate any oil derricks!"
 msgstr "Невозможно найти ни одной нефтяной вышки"
 
-#: src/keybind.cpp:1806
+#: src/keybind.cpp:1808
 msgid "Oh, the weather outside is frightful... SNOW"
 msgstr "Ох! Погода снаружи ужасна... СНЕГ"
 
-#: src/keybind.cpp:1812
+#: src/keybind.cpp:1814
 msgid "Singing in the rain, I'm singing in the rain... RAIN"
 msgstr "Ну а дождь все льет и льет..."
 
-#: src/keybind.cpp:1818
+#: src/keybind.cpp:1820
 msgid "Forecast : Clear skies for all areas... NO WEATHER"
 msgstr "Прогноз на сегодня: осадков не ожидается!"
 
-#: src/keybind.cpp:1903
+#: src/keybind.cpp:1905
 msgid "Warning! This can have drastic consequences if used incorrectly in missions."
 msgstr "Внимание! При неправильном использовании в миссиях могут возникнуть серьезные последствия."
 
-#: src/keybind.cpp:1905
+#: src/keybind.cpp:1907
 msgid "All enemies destroyed by cheating!"
 msgstr "Враги уничтожены с помощью читов!"
 
-#: src/keybind.cpp:1946
+#: src/keybind.cpp:1948
 msgid "Destroying selected droids and structures!"
 msgstr "Уничтожаю выбранные постройки и машины!"
 
-#: src/keybind.cpp:2459
+#: src/keybind.cpp:2461
 msgid "Centered on player HQ, direction NORTH"
 msgstr "Фокус на штабе, вид на СЕВЕР"
 
-#: src/keybind.cpp:2471
+#: src/keybind.cpp:2473
 msgid "Unable to locate HQ!"
 msgstr "Невозможно найти штаб!"
 
-#: src/keybind.cpp:2478
+#: src/keybind.cpp:2480
 msgid "Formation speed limiting has been removed from the game due to bugs."
 msgstr "Ограничение скорости снято из-за багов."
 
-#: src/keybind.cpp:2527
+#: src/keybind.cpp:2529
 msgid "Vertical rotation direction: Normal"
 msgstr "Вращение по вертикали: нормально"
 
-#: src/keybind.cpp:2532
+#: src/keybind.cpp:2534
 msgid "Vertical rotation direction: Flipped"
 msgstr "Вращение по вертикали: инверсия"
 
-#: src/keybind.cpp:2541
+#: src/keybind.cpp:2543
 msgid "Screen shake when things die: Off"
 msgstr "Тряска экрана при взрыве: выкл"
 
-#: src/keybind.cpp:2546
+#: src/keybind.cpp:2548
 msgid "Screen shake when things die: On"
 msgstr "Тряска экрана при взрыве: вкл"
 
-#: src/keybind.cpp:2595
-#: src/keybind.cpp:2638
+#: src/keybind.cpp:2594
 msgid "Sorry, but game speed cannot be changed in multiplayer."
 msgstr "Извините, скорость игры не меняется в мультиплеере."
 
-#: src/keybind.cpp:2616
-#: src/keybind.cpp:2659
-#: src/keybind.cpp:2681
+#: src/keybind.cpp:2617
+#: src/keybind.cpp:2669
 msgid "Game Speed Reset"
 msgstr "Скорость Игры Сброшена"
 
-#: src/keybind.cpp:2620
-#, c-format
-msgid "Game Speed Increased to %3.1f"
+#: src/keybind.cpp:2621
+#, fuzzy, c-format
+msgid "Game Speed Increased to %s"
 msgstr "Скорость игры увеличена в %3.1f"
 
-#: src/keybind.cpp:2663
-#, c-format
-msgid "Game Speed Reduced to %3.1f"
+#: src/keybind.cpp:2625
+#, fuzzy, c-format
+msgid "Game Speed Reduced to %s"
 msgstr "Скорость игры уменьшена в %3.1f"
 
-#: src/keybind.cpp:2693
+#: src/keybind.cpp:2681
 msgid "Radar showing friend-foe colors"
 msgstr "Радар отображает цвета свой-чужой"
 
-#: src/keybind.cpp:2697
+#: src/keybind.cpp:2685
 msgid "Radar showing player colors"
 msgstr "Радар отображает цвета игрока"
 
-#: src/keybind.cpp:2712
+#: src/keybind.cpp:2700
 msgid "Radar showing only objects"
 msgstr "Радар отображает только объекты"
 
-#: src/keybind.cpp:2715
+#: src/keybind.cpp:2703
 msgid "Radar blending terrain and height"
 msgstr "Радар не различает ландшафт и рельеф"
 
-#: src/keybind.cpp:2718
+#: src/keybind.cpp:2706
 msgid "Radar showing terrain"
 msgstr "Радар отображает поверхность"
 
-#: src/keybind.cpp:2721
+#: src/keybind.cpp:2709
 msgid "Radar showing height"
 msgstr "Радар показывает рельеф"
 
@@ -14025,8 +14036,8 @@ msgstr "Трассировка цели игры."
 msgid "Toggle Driving Mode"
 msgstr "Переключение на режим вождения."
 
-#: src/loop.cpp:275
-#: src/loop.cpp:291
+#: src/loop.cpp:278
+#: src/loop.cpp:294
 msgid "Could not save game!"
 msgstr "Не удалось сохранить игру!"
 
@@ -14064,7 +14075,7 @@ msgstr "Продолжить игру"
 msgid "GAME SAVED :"
 msgstr "ИГРА СОХРАНЕНА:"
 
-#: src/move.cpp:2305
+#: src/move.cpp:2308
 #, c-format
 msgid "You found %u power in an oil drum."
 msgstr "Ты нашел %u энергии в бочке с горючим."
@@ -14281,7 +14292,7 @@ msgid "Select Player Name"
 msgstr "Выбор Имя Игрока"
 
 #: src/multiint.cpp:1580
-#: src/multimenu.cpp:791
+#: src/multimenu.cpp:792
 msgid "Alliances"
 msgstr "Союзники"
 
@@ -14501,7 +14512,7 @@ msgid "HOST"
 msgstr "ХОСТ"
 
 #: src/multiint.cpp:3975
-#: src/multimenu.cpp:807
+#: src/multimenu.cpp:808
 msgid "Ping"
 msgstr "Пинг"
 
@@ -14542,128 +14553,68 @@ msgstr "Применить настройки по умолчанию и вер�
 msgid "Limits reset to default values"
 msgstr "Ограничения сброшены к настройкам по умолчанию"
 
-#: src/multimenu.cpp:148
-msgid "2 players"
-msgstr "2 игрока"
-
-#: src/multimenu.cpp:148
-msgid "3 players"
-msgstr "3 игрока"
-
-#: src/multimenu.cpp:148
-msgid "4 players"
-msgstr "4 игрока"
-
-#: src/multimenu.cpp:148
-msgid "5 players"
-msgstr "5 игрока"
-
-#: src/multimenu.cpp:148
-msgid "6 players"
-msgstr "6 игрока"
-
-#: src/multimenu.cpp:148
-msgid "7 players"
-msgstr "7 игрока"
-
-#: src/multimenu.cpp:148
-msgid "8 players"
-msgstr "8 игроков"
-
-#: src/multimenu.cpp:148
-#, fuzzy
-msgid "9 players"
-msgstr "2 игрока"
-
-#: src/multimenu.cpp:148
-#, fuzzy
-msgid "10 players"
-msgstr "2 игрока"
-
-#: src/multimenu.cpp:148
-#, fuzzy
-msgid "11 players"
-msgstr "2 игрока"
-
-#: src/multimenu.cpp:148
-#, fuzzy
-msgid "12 players"
-msgstr "2 игрока"
-
-#: src/multimenu.cpp:148
-#, fuzzy
-msgid "13 players"
-msgstr "3 игрока"
-
-#: src/multimenu.cpp:148
-#, fuzzy
-msgid "14 players"
-msgstr "4 игрока"
-
-#: src/multimenu.cpp:148
-#, fuzzy
-msgid "15 players"
-msgstr "5 игрока"
-
-#: src/multimenu.cpp:148
-#, fuzzy
-msgid "16 players"
-msgstr "6 игрока"
-
-#: src/multimenu.cpp:625
+#: src/multimenu.cpp:624
 msgid "Technology level 1"
 msgstr "Уровень технологий 1"
 
-#: src/multimenu.cpp:633
+#: src/multimenu.cpp:632
 msgid "Technology level 2"
 msgstr "Уровень технологий 2"
 
-#: src/multimenu.cpp:639
+#: src/multimenu.cpp:638
 msgid "Technology level 3"
 msgstr "Уровень технологий 3"
 
-#: src/multimenu.cpp:645
+#: src/multimenu.cpp:644
 msgid "Any number of players"
 msgstr "Любое число игроков"
 
-#: src/multimenu.cpp:792
+#: src/multimenu.cpp:655
+#, fuzzy, c-format
+msgid "%d player"
+msgid_plural "%d players"
+msgstr[0] "2 игрока"
+msgstr[1] "2 игрока"
+msgstr[2] "2 игрока"
+
+#: src/multimenu.cpp:793
 msgid "Score"
 msgstr "Счёт"
 
-#: src/multimenu.cpp:793
+#: src/multimenu.cpp:794
 msgid "Kills"
 msgstr "Убил"
 
-#: src/multimenu.cpp:797
-#: src/multimenu.cpp:802
+#: src/multimenu.cpp:798
+#: src/multimenu.cpp:803
 msgid "Units"
 msgstr "Юниты"
 
-#: src/multimenu.cpp:811
+#: src/multimenu.cpp:812
 msgid "Structs"
 msgstr "Потери сооружений"
 
-#: src/multimenu.cpp:1173
+#: src/multimenu.cpp:1174
 msgid "Channel"
 msgstr "Канал."
 
-#: src/multimenu.cpp:1187
+#: src/multimenu.cpp:1188
 msgid "Toggle Alliance State"
 msgstr "Предложить Союз"
 
-#: src/multimenu.cpp:1206
+#: src/multimenu.cpp:1207
 msgid "Give Visibility Report"
 msgstr "Передать Видимость"
 
-#: src/multimenu.cpp:1212
+#: src/multimenu.cpp:1213
 msgid "Leak Technology Documents"
 msgstr "Передать Технологии"
 
-#: src/multimenu.cpp:1219
+#: src/multimenu.cpp:1220
 msgid "Hand Over Selected Units"
 msgstr "Передать выбранных юнитов"
 
-#: src/multimenu.cpp:1225
+#: src/multimenu.cpp:1226
 msgid "Give Power To Player"
 msgstr "Передать энергию  игроку"
 
@@ -14684,63 +14635,63 @@ msgstr "(приват"
 msgid "[invalid]"
 msgstr "[неверно]"
 
-#: src/multiplay.cpp:1917
+#: src/multiplay.cpp:1922
 msgid "Green"
 msgstr "Зелёный"
 
-#: src/multiplay.cpp:1918
+#: src/multiplay.cpp:1923
 msgid "Orange"
 msgstr "Оранжевый"
 
-#: src/multiplay.cpp:1919
+#: src/multiplay.cpp:1924
 msgid "Grey"
 msgstr "Серый"
 
-#: src/multiplay.cpp:1921
+#: src/multiplay.cpp:1926
 msgid "Red"
 msgstr "Красный"
 
-#: src/multiplay.cpp:1922
+#: src/multiplay.cpp:1927
 msgid "Blue"
 msgstr "Синий"
 
-#: src/multiplay.cpp:1923
+#: src/multiplay.cpp:1928
 msgid "Pink"
 msgstr "Розовый"
 
-#: src/multiplay.cpp:1924
+#: src/multiplay.cpp:1929
 msgid "Cyan"
 msgstr "Голубой"
 
-#: src/multiplay.cpp:1925
+#: src/multiplay.cpp:1930
 msgid "Yellow"
 msgstr ""
 
-#: src/multiplay.cpp:1926
+#: src/multiplay.cpp:1931
 msgid "Purple"
 msgstr ""
 
-#: src/multiplay.cpp:1927
+#: src/multiplay.cpp:1932
 msgid "White"
 msgstr ""
 
-#: src/multiplay.cpp:1928
+#: src/multiplay.cpp:1933
 msgid "Bright blue"
 msgstr ""
 
-#: src/multiplay.cpp:1929
+#: src/multiplay.cpp:1934
 msgid "Neon green"
 msgstr ""
 
-#: src/multiplay.cpp:1930
+#: src/multiplay.cpp:1935
 msgid "Infrared"
 msgstr ""
 
-#: src/multiplay.cpp:1931
+#: src/multiplay.cpp:1936
 msgid "Ultraviolet"
 msgstr ""
 
-#: src/multiplay.cpp:1932
+#: src/multiplay.cpp:1937
 msgid "Brown"
 msgstr ""
 
@@ -14748,26 +14699,26 @@ msgstr ""
 msgid "We can't do that! We must be a Cyborg unit to use a Cyborg Transport!"
 msgstr "Мы не киборги, чтобы использовать Транспорт киборгов."
 
-#: src/qtscriptfuncs.cpp:829
-#: src/scriptfuncs.cpp:3258
+#: src/qtscriptfuncs.cpp:830
+#: src/scriptfuncs.cpp:3259
 msgid "YOU ARE VICTORIOUS!"
 msgstr "ПОБЕДА!"
 
-#: src/qtscriptfuncs.cpp:834
-#: src/scriptfuncs.cpp:3262
+#: src/qtscriptfuncs.cpp:835
+#: src/scriptfuncs.cpp:3263
 msgid "YOU WERE DEFEATED!"
 msgstr "ВЫ ПРОИГРАЛИ!"
 
-#: src/research.cpp:1130
+#: src/research.cpp:1155
 #, c-format
 msgid "Research completed: %s"
 msgstr "Завершено исследование: %s"
 
-#: src/research.cpp:1135
+#: src/research.cpp:1160
 msgid "Research Completed"
 msgstr "Исследование закончено"
 
-#: src/research.cpp:1875
+#: src/research.cpp:1900
 msgid "Research Award"
 msgstr "Награда исследования"
 
@@ -14889,12 +14840,12 @@ msgstr "Общее время игры: %s"
 msgid "You cheated!"
 msgstr "Ты читер!"
 
-#: src/scriptfuncs.cpp:9369
+#: src/scriptfuncs.cpp:9370
 #, c-format
 msgid "Beacon received from %s!"
 msgstr "Маяк получен от %s!"
 
-#: src/scriptfuncs.cpp:9415
+#: src/scriptfuncs.cpp:9416
 #, c-format
 msgid "Beacon %d"
 msgstr "Маяк %d"
@@ -15017,6 +14968,56 @@ msgstr " - сборка %s"
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "Версия %s%s%s%s"
+
+#~ msgid "3 players"
+#~ msgstr "3 игрока"
+
+#~ msgid "4 players"
+#~ msgstr "4 игрока"
+
+#~ msgid "5 players"
+#~ msgstr "5 игрока"
+
+#~ msgid "6 players"
+#~ msgstr "6 игрока"
+
+#~ msgid "7 players"
+#~ msgstr "7 игрока"
+
+#~ msgid "8 players"
+#~ msgstr "8 игроков"
+
+#, fuzzy
+#~ msgid "9 players"
+#~ msgstr "2 игрока"
+
+#, fuzzy
+#~ msgid "10 players"
+#~ msgstr "2 игрока"
+
+#, fuzzy
+#~ msgid "11 players"
+#~ msgstr "2 игрока"
+
+#, fuzzy
+#~ msgid "12 players"
+#~ msgstr "2 игрока"
+
+#, fuzzy
+#~ msgid "13 players"
+#~ msgstr "3 игрока"
+
+#, fuzzy
+#~ msgid "14 players"
+#~ msgstr "4 игрока"
+
+#, fuzzy
+#~ msgid "15 players"
+#~ msgstr "5 игрока"
+
+#, fuzzy
+#~ msgid "16 players"
+#~ msgstr "6 игрока"
 
 #, fuzzy
 #~ msgid "FPS %d; PIEs %d; polys %d; States %d"

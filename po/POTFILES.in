@@ -312,6 +312,7 @@ src/selection.cpp
 src/seqdisp.cpp
 src/stats.cpp
 src/structure.cpp
+src/template.cpp
 src/terrain.cpp
 src/text.cpp
 src/texture.cpp
