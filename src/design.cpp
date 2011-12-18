@@ -624,14 +624,14 @@ static bool _intAddDesign( bool bShowCentreScreen )
 	sButInit.formID = IDDES_PARTFORM;
 	sButInit.id = IDDES_STOREBUTTON;
 	sButInit.style = WBUT_PLAIN;
-	sButInit.width = iV_GetImageWidth(IntImages, IMAGE_DES_BIN);
-	sButInit.height = iV_GetImageHeight(IntImages, IMAGE_DES_BIN);
+	sButInit.width = iV_GetImageWidth(IntImages, IMAGE_DES_SAVE);
+	sButInit.height = iV_GetImageHeight(IntImages, IMAGE_DES_SAVE);
 	sButInit.x = DES_PARTSEPARATIONX;
 	sButInit.y = DES_PARTFORMHEIGHT - 2*sButInit.height - 2*DES_PARTSEPARATIONY;
 	sButInit.pTip = _("Store Design");
 	sButInit.FontID = font_regular;
 	sButInit.pDisplay = intDisplayButtonHilight;
-	sButInit.UserData = PACKDWORD_TRI(0, IMAGE_DES_BINH, IMAGE_DES_BIN);
+	sButInit.UserData = PACKDWORD_TRI(0, IMAGE_DES_SAVEH, IMAGE_DES_SAVE);
 
 	if (!widgAddButton(psWScreen, &sButInit))
 	{
@@ -4689,11 +4689,11 @@ void updateStoreButton(bool isStored)
 
 	if (isStored)
 	{
-		imageset = PACKDWORD_TRI(0, IMAGE_DES_TURRETH, IMAGE_DES_TURRET);
+		imageset = PACKDWORD_TRI(0, IMAGE_DES_DELETEH, IMAGE_DES_DELETE);
 	}
 	else
 	{
-		imageset = PACKDWORD_TRI(0, IMAGE_DES_BINH, IMAGE_DES_BIN);
+		imageset = PACKDWORD_TRI(0, IMAGE_DES_SAVEH, IMAGE_DES_SAVE);
 	}
 
 	widgSetUserData2(psWScreen, IDDES_STOREBUTTON, imageset);
