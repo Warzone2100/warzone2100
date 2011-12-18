@@ -25,6 +25,7 @@
 #define _gtime_h
 
 struct NETQUEUE;
+struct Rational;
 
 /// The number of time units per second of the game clock.
 #define GAME_TICKS_PER_SEC 1000
@@ -96,10 +97,10 @@ extern void gameTimeReset(UDWORD time);
 void gameTimeResetMod(void);
 
 /** Set the time modifier. Used to speed up the game. */
-void gameTimeSetMod(float mod);
+void gameTimeSetMod(Rational mod);
 
 /** Get the current time modifier. */
-void gameTimeGetMod(float *pMod);
+Rational gameTimeGetMod();
 
 /**
  * Returns the game time, modulo the time period, scaled to 0..requiredRange.

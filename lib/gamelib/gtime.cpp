@@ -26,31 +26,27 @@
 
 #include "lib/framework/frame.h"
 #include "lib/framework/wzapp.h"
+#include "lib/framework/rational.h"
 #include "gtime.h"
 #include "src/multiplay.h"
 #include "lib/netplay/netplay.h"
 
+
 #include <time.h>
 
-// Maximum seconds per frame.
+// Maximum ticks per frame.
 // If not reaching the goal, force graphics updates, even if we aren't doing enough game state updates to maintain game speed.
-#define MAXIMUM_SPF 1/4
+#define MAXIMUM_TICKS_PER_FRAME (GAME_TICKS_PER_SEC / 4)
 
 /* See header file for documentation */
 UDWORD gameTime = 0, deltaGameTime = 0, graphicsTime = 0, deltaGraphicsTime = 0, realTime = 0, deltaRealTime = 0;
 float graphicsTimeFraction = 0.0, realTimeFraction = 0.0;
 
 /** The current clock modifier. Set to speed up the game. */
-static float modifier;
+static Rational modifier;
 
-/// The graphics time, the last time clock speed was set.
-static UDWORD	timeOffset;
-
-/// The real time, the last time the clock speed was set.
-static UDWORD	baseTime;
-
-/** When the game paused, so that gameTime can be adjusted when the game restarts. */
-static SDWORD	pauseStart;
+/// The real time, the last time graphicsTime updated.
+static uint32_t prevRealTime;
 
 /** 
   * Count how many times gameTimeStop has been called without a game time start. 
@@ -101,11 +97,12 @@ void gameTimeInit(void)
 	setGameTime(2);
 
 	// Setting real time.
-	realTime = baseTime;
+	realTime = wzGetTicks();
 	deltaRealTime = 0;
+	prevRealTime = realTime;
 	realTimeFraction = 0.f;
 
-	modifier = 1.0f;
+	modifier = 1;
 
 	stopCount = 0;
 
@@ -121,7 +118,7 @@ void gameTimeInit(void)
 	resetSyncDebug();
 }
 
-extern void setGameTime(uint32_t newGameTime)
+void setGameTime(uint32_t newGameTime)
 {
 	// Setting game time.
 	gameTime = newGameTime;
@@ -130,10 +127,8 @@ extern void setGameTime(uint32_t newGameTime)
 
 	// Setting graphics time to game time.
 	graphicsTime = gameTime;
-	deltaGraphicsTime = gameTime;
+	deltaGraphicsTime = 0;
 	graphicsTimeFraction = 0.f;
-	timeOffset = graphicsTime;
-	baseTime = wzGetTicks();
 
 	// Not setting real time.
 }
@@ -156,103 +151,83 @@ UDWORD getModularScaledRealTime(UDWORD timePeriod, UDWORD requiredRange)
 /* Call this each loop to update the game timer */
 void gameTimeUpdate()
 {
+	deltaGameTime = 0;
+	deltaGraphicsTime = 0;
+
 	uint32_t currTime = wzGetTicks();
 
-	if (currTime < baseTime)
+	if (currTime < prevRealTime)
 	{
 		// Warzone 2100, the first relativistic computer game!
 		// Exhibit A: Time travel
 		// force a rebase
-		debug(LOG_WARNING, "Time travel is occurring! Clock went back in time a bit from %d to %d!\n", baseTime, currTime);
-		baseTime = currTime;
-		timeOffset = graphicsTime;
+		debug(LOG_WARNING, "Time travel is occurring! Clock went back in time a bit from %d to %d!\n", prevRealTime, currTime);
+		prevRealTime = currTime;
 	}
 
 	// Do not update the game time if gameTimeStop has been called
-	if (stopCount == 0)
+	if (stopCount != 0)
 	{
-		bool mayUpdate = true;
+		return;
+	}
 
-		// Calculate the new game time
-		uint32_t scaledCurrTime = (currTime - baseTime)*modifier + timeOffset;
-		if (scaledCurrTime < graphicsTime)  // Make sure the clock doesn't step back at all.
+	// Make sure graphics updates fast enough.
+	prevRealTime = std::max(prevRealTime + MAXIMUM_TICKS_PER_FRAME, currTime) - MAXIMUM_TICKS_PER_FRAME;  // Written this way to avoid unsigned underflow.
+
+	// Calculate the new game time
+	int newDeltaGraphicsTime = quantiseFraction(modifier.n, modifier.d, currTime, prevRealTime);
+	ASSERT(newDeltaGraphicsTime >= 0, "Something very wrong.");
+
+	uint32_t newGraphicsTime = graphicsTime + newDeltaGraphicsTime;
+
+	if (updateWantedTime == 0 && newGraphicsTime >= gameTime)
+	{
+		updateWantedTime = currTime;  // This is the time that we wanted to tick.
+	}
+
+	if (newGraphicsTime > gameTime && !checkPlayerGameTime(NET_ALL_PLAYERS))
+	{
+		unsigned player;
+
+		// Pause time at current game time, since we are waiting GAME_GAME_TIME from other players.
+		newGraphicsTime = gameTime;
+		newDeltaGraphicsTime = newGraphicsTime - graphicsTime;
+
+		debug(LOG_SYNC, "Waiting for other players. gameTime = %u, player times are {%s}", gameTime, listToString("%u", ", ", gameQueueTime, gameQueueTime + game.maxPlayers).c_str());
+
+		for (player = 0; player < game.maxPlayers; ++player)
 		{
-			debug(LOG_WARNING, "Rescaled clock went back in time a bit from %d to %d!\n", graphicsTime, scaledCurrTime);
-			scaledCurrTime = graphicsTime;
-			baseTime = currTime;
-			timeOffset = graphicsTime;
-		}
-
-		if (updateWantedTime == 0 && scaledCurrTime >= gameTime)
-		{
-			updateWantedTime = currTime;  // This is the time that we wanted to tick.
-		}
-
-		if (scaledCurrTime >= gameTime && !checkPlayerGameTime(NET_ALL_PLAYERS))
-		{
-			unsigned player;
-
-			// Pause time at current game time, since we are waiting GAME_GAME_TIME from other players.
-			scaledCurrTime = gameTime;
-			baseTime = currTime;
-			timeOffset = gameTime;
-
-			debug(LOG_SYNC, "Waiting for other players. gameTime = %u, player times are {%s}", gameTime, listToString("%u", ", ", gameQueueTime, gameQueueTime + game.maxPlayers).c_str());
-			mayUpdate = false;
-
-			for (player = 0; player < game.maxPlayers; ++player)
+			if (!checkPlayerGameTime(player))
 			{
-				if (!checkPlayerGameTime(player))
-				{
-					NETsetPlayerConnectionStatus(CONNECTIONSTATUS_WAITING_FOR_PLAYER, player);
-					break;  // GAME_GAME_TIME is processed serially, so don't know if waiting for more players.
-				}
+				NETsetPlayerConnectionStatus(CONNECTIONSTATUS_WAITING_FOR_PLAYER, player);
+				break;  // GAME_GAME_TIME is processed serially, so don't know if waiting for more players.
 			}
 		}
+	}
 
-		// Calculate the time for this frame
-		deltaGraphicsTime = scaledCurrTime - graphicsTime;
+	// Adjust deltas.
+	if (newGraphicsTime > gameTime)
+	{
+		// Update the game time.
+		deltaGameTime = GAME_TICKS_PER_UPDATE;
+		gameTime += deltaGameTime;
 
-		// Adjust deltas.
-		if (scaledCurrTime >= gameTime && mayUpdate)
+		updateLatency();
+		if (crcError)
 		{
-			if (scaledCurrTime > gameTime + GAME_TICKS_PER_SEC*MAXIMUM_SPF)
-			{
-				// Game isn't updating fast enough...
-				uint32_t slideBack = deltaGraphicsTime - GAME_TICKS_PER_SEC*MAXIMUM_SPF;
-				baseTime += slideBack / modifier;  // adjust the addition to base time
-				deltaGraphicsTime -= slideBack;
-			}
-
-			deltaGameTime = GAME_TICKS_PER_UPDATE;
-
-			updateLatency();
-			if (crcError)
-			{
-				debug(LOG_ERROR, "Synch error, gameTimes were: {%s}", listToString("%10u", ", ", gameQueueCheckTime, gameQueueCheckTime + game.maxPlayers).c_str());
-				debug(LOG_ERROR, "Synch error, CRCs were:      {%s}", listToString("0x%08X", ", ", gameQueueCheckCrc, gameQueueCheckCrc + game.maxPlayers).c_str());
-				crcError = false;
-			}
+			debug(LOG_ERROR, "Synch error, gameTimes were: {%s}", listToString("%10u", ", ", gameQueueCheckTime, gameQueueCheckTime + game.maxPlayers).c_str());
+			debug(LOG_ERROR, "Synch error, CRCs were:      {%s}", listToString("0x%08X", ", ", gameQueueCheckCrc, gameQueueCheckCrc + game.maxPlayers).c_str());
+			crcError = false;
 		}
-		else
-		{
-			deltaGameTime = 0;
-		}
-
-		if (deltaGameTime != 0)
-		{
-			deltaGraphicsTime = 0;  // Don't update graphics until game state is updated.
-		}
-
-		// Store the game and graphics times
-		gameTime     += deltaGameTime;
-		graphicsTime += deltaGraphicsTime;
 	}
 	else
 	{
-		// The game is paused, so the change in time is zero.
-		deltaGameTime = 0;
-		deltaGraphicsTime = 0;
+		// Update the graphics time.
+		graphicsTime      = newGraphicsTime;
+		deltaGraphicsTime = newDeltaGraphicsTime;
+
+		// Update prevRealTime, since graphicsTime changed.
+		prevRealTime      = currTime;
 	}
 
 	// Pre-calculate fraction used in timeAdjustedIncrement
@@ -284,55 +259,44 @@ void realTimeUpdate(void)
 // reset the game time modifiers
 void gameTimeResetMod(void)
 {
-	timeOffset = graphicsTime;
-	baseTime = wzGetTicks();
+	prevRealTime = wzGetTicks();
 
-	modifier = 1.0f;
+	modifier = 1;
 }
 
 // set the time modifier
-void gameTimeSetMod(float mod)
+void gameTimeSetMod(Rational mod)
 {
 	gameTimeResetMod();
 	modifier = mod;
 }
 
 // get the current time modifier
-void gameTimeGetMod(float *pMod)
+Rational gameTimeGetMod()
 {
-	*pMod = modifier;
+	return modifier;
 }
 
 bool gameTimeIsStopped(void)
 {
-	return (stopCount != 0);
+	return stopCount != 0;
 }
 
 /* Call this to stop the game timer */
 void gameTimeStop(void)
 {
-	if (stopCount == 0)
-	{
-		pauseStart = wzGetTicks();
-		debug( LOG_NEVER, "Clock paused at %d\n", pauseStart);
-	}
 	stopCount += 1;
+
+	graphicsTimeFraction = 0.f;
 }
 
 /* Call this to restart the game timer after a call to gameTimeStop */
 void gameTimeStart(void)
 {
-	if (stopCount == 1)
-	{
-		// shift the base time to now
-		timeOffset = gameTime;
-		baseTime = wzGetTicks();
-	}
+	ASSERT(stopCount > 0, "Game started too many times.");
 
-	if (stopCount > 0)
-	{
-		stopCount --;
-	}
+	prevRealTime = wzGetTicks();
+	stopCount = std::min<int>(stopCount - 1, 0);
 }
 
 /* Call this to reset the game timer */
