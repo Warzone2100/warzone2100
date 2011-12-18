@@ -1402,6 +1402,10 @@ bool recvTemplate(NETQUEUE queue)
 		addTemplateBack(player, &t);  // Add to back of list, to avoid game state templates being in wrong order, which matters when saving games.
 		debug(LOG_SYNC, "Creating MP template %d (stored=%s)", (int)t.multiPlayerID, t.stored ? "yes" : "no");
 	}
+	if (!t.prefab && player == selectedPlayer)
+	{
+		storeTemplates();
+	}
 
 	return true;
 }

@@ -106,7 +106,11 @@ bool initTemplates()
 		design.prefab = false;		// not AI template
 		design.stored = true;
 		bool valid = intValidTemplate(&design, ini.value("name").toString().toUtf8().constData());
-		ASSERT_OR_RETURN(false, valid, "Invalid template %d", i);
+		if (!valid)
+		{
+			debug(LOG_ERROR, "Invalid template %d / %s from stored templates", i, list[i].toUtf8().constData());
+			continue;
+		}
 		addTemplateToList(&design, &apsDroidTemplates[selectedPlayer]);
 		localTemplates.push_back(design);
 		ini.endGroup();
@@ -131,11 +135,26 @@ bool storeTemplates()
 		ini.setValue("droidType", psCurr->droidType);
 		ini.setValue("body", (asBodyStats + psCurr->asParts[COMP_BODY])->pName);
 		ini.setValue("propulsion", (asPropulsionStats + psCurr->asParts[COMP_PROPULSION])->pName);
-		ini.setValue("brain", (asBrainStats + psCurr->asParts[COMP_BRAIN])->pName);
-		ini.setValue("repair", (asRepairStats + psCurr->asParts[COMP_REPAIRUNIT])->pName);
-		ini.setValue("ecm", (asECMStats + psCurr->asParts[COMP_ECM])->pName);
-		ini.setValue("sensor", (asSensorStats + psCurr->asParts[COMP_SENSOR])->pName);
-		ini.setValue("construct", (asConstructStats + psCurr->asParts[COMP_CONSTRUCT])->pName);
+		if (psCurr->asParts[COMP_BRAIN] != 0)
+		{
+			ini.setValue("brain", (asBrainStats + psCurr->asParts[COMP_BRAIN])->pName);
+		}
+		if ((asRepairStats + psCurr->asParts[COMP_REPAIRUNIT])->location == LOC_TURRET) // avoid auto-repair...
+		{
+			ini.setValue("repair", (asRepairStats + psCurr->asParts[COMP_REPAIRUNIT])->pName);
+		}
+		if ((asECMStats + psCurr->asParts[COMP_ECM])->location == LOC_TURRET)
+		{
+			ini.setValue("ecm", (asECMStats + psCurr->asParts[COMP_ECM])->pName);
+		}
+		if ((asSensorStats + psCurr->asParts[COMP_SENSOR])->location == LOC_TURRET)
+		{
+			ini.setValue("sensor", (asSensorStats + psCurr->asParts[COMP_SENSOR])->pName);
+		}
+		if (psCurr->asParts[COMP_CONSTRUCT] != 0)
+		{
+			ini.setValue("construct", (asConstructStats + psCurr->asParts[COMP_CONSTRUCT])->pName);
+		}
 		ini.setValue("weapons", psCurr->numWeaps);
 		for (int j = 0; j < psCurr->numWeaps; j++)
 		{

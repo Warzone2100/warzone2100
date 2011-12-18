@@ -100,6 +100,9 @@ bool researchInitVars(void)
 	for (int i = 0; i < MAX_PLAYERS; i++)
 	{
 		bSelfRepair[i] = false;
+		aDefaultSensor[i] = 0;
+		aDefaultECM[i] = 0;
+		aDefaultRepair[i] = 0;
 	}
 
 	return true;
