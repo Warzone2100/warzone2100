@@ -1349,6 +1349,7 @@ static void NETtemplate(DROID_TEMPLATE *pTempl)
 	NETuint32_t(&pTempl->powerPoints);
 	NETuint32_t(&pTempl->storeCount);
 	NETuint32_t(&pTempl->numWeaps);
+	NETbool(&pTempl->stored);	// other players don't need to know, but we need to keep the knowledge in the loop somehow...
 
 	for (int i = 0; i < DROID_MAXWEAPS; ++i)
 	{
@@ -1394,12 +1395,12 @@ bool recvTemplate(NETQUEUE queue)
 	{
 		t.psNext = psTempl->psNext;
 		*psTempl = t;
-		debug(LOG_SYNC, "Updating MP template %d", (int)t.multiPlayerID);
+		debug(LOG_SYNC, "Updating MP template %d (stored=%s)", (int)t.multiPlayerID, t.stored ? "yes" : "no");
 	}
 	else
 	{
 		addTemplateBack(player, &t);  // Add to back of list, to avoid game state templates being in wrong order, which matters when saving games.
-		debug(LOG_SYNC, "Creating MP template %d", (int)t.multiPlayerID);
+		debug(LOG_SYNC, "Creating MP template %d (stored=%s)", (int)t.multiPlayerID, t.stored ? "yes" : "no");
 	}
 
 	return true;

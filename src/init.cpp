@@ -95,6 +95,7 @@
 #include "terrain.h"
 #include "ingameop.h"
 #include "qtscript.h"
+#include "template.h"
 
 static void	initMiscVars(void);
 
@@ -1097,6 +1098,9 @@ bool stageThreeInitialise(void)
 	preProcessVisibility();
 	closeLoadingScreen();			// reset the loading screen.
 
+	// Load any stored templates; these need to be available ASAP
+	initTemplates();
+
 	if (!fpathInitialise())
 	{
 		return false;
@@ -1182,6 +1186,8 @@ bool stageThreeShutDown(void)
 	challengesUp = false;
 	challengeActive = false;
 	isInGamePopupUp = false;
+
+	shutdownTemplates();
 
 	// make sure any button tips are gone.
 	widgReset();

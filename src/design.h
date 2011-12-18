@@ -59,6 +59,8 @@
 #define IDDES_WEAPONS_A		5028		// The weapon TURRET_A button for the Component form (right)
 #define IDDES_WEAPONS_B		5029		// The weapon TURRET_B button for the Component form (right)
 
+#define IDDES_STOREBUTTON	5905		// Stored template button
+
 /* Design screen bar graph IDs */
 #define IDDES_BODYARMOUR_K	5100		// The body armour bar graph for kinetic weapons
 #define IDDES_BODYPOWER		5101		// The body power plant graph

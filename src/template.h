@@ -7,6 +7,9 @@
 extern DROID_TEMPLATE			*apsDroidTemplates[MAX_PLAYERS];
 extern DROID_TEMPLATE			*apsStaticTemplates;			// for AIs and scripts
 
+bool initTemplates();
+bool shutdownTemplates();
+
 /** Initialise the template build and power points */
 void initTemplatePoints(void);
 
@@ -19,17 +22,20 @@ bool templateIsIDF(DROID_TEMPLATE *psTemplate);
 void fillTemplateList(std::vector<DROID_TEMPLATE *> &pList, STRUCTURE *psFactory);
 
 /* gets a template from its aName (when pName is unknown) */
-extern DROID_TEMPLATE	*GetHumanDroidTemplate(const char *aName);
-extern DROID_TEMPLATE	*GetAIDroidTemplate(const char *aName);
+DROID_TEMPLATE *GetHumanDroidTemplate(const char *aName);
+DROID_TEMPLATE *GetAIDroidTemplate(const char *aName);
 /* gets a template from its name - relies on the name being unique */
-extern DROID_TEMPLATE * getTemplateFromUniqueName(const char *pName, unsigned int player);
+DROID_TEMPLATE *getTemplateFromUniqueName(const char *pName, unsigned int player);
 /* gets a template from its name - relies on the name being unique */
-extern DROID_TEMPLATE* getTemplateFromTranslatedNameNoPlayer(char const *pName);
+DROID_TEMPLATE *getTemplateFromTranslatedNameNoPlayer(char const *pName);
 /*getTemplateFromMultiPlayerID gets template for unique ID  searching all lists */
-extern DROID_TEMPLATE* getTemplateFromMultiPlayerID(UDWORD multiPlayerID);
+DROID_TEMPLATE *getTemplateFromMultiPlayerID(UDWORD multiPlayerID);
 
 /*return the name to display for the interface - we don't know if this is
 a string ID or something the user types in*/
-extern const char* getTemplateName(const DROID_TEMPLATE *psTemplate);
+const char* getTemplateName(const DROID_TEMPLATE *psTemplate);
+
+/// Have we researched the components of this template?
+bool researchedTemplate(DROID_TEMPLATE *psCurr, int player);
 
 #endif // TEMPLATE_H

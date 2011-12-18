@@ -26,6 +26,7 @@
 #include "template.h"
 
 #include "lib/framework/frame.h"
+#include "lib/framework/wzconfig.h"
 #include "lib/framework/math_ext.h"
 #include "lib/framework/strres.h"
 #include "lib/netplay/netplay.h"
@@ -56,6 +57,93 @@ static const StringToEnum<DROID_TYPE> map_DROID_TYPE[] =
 	{"ZNULLDROID",          DROID_ANY               },
 	{"DROID",               DROID_DEFAULT           },
 };
+
+bool researchedTemplate(DROID_TEMPLATE *psCurr, int player)
+{
+	if (apCompLists[player][COMP_BODY][psCurr->asParts[COMP_BODY]] != AVAILABLE
+	    || (psCurr->asParts[COMP_BRAIN] > 0 && apCompLists[player][COMP_BRAIN][psCurr->asParts[COMP_BRAIN]] != AVAILABLE)
+	    || apCompLists[player][COMP_PROPULSION][psCurr->asParts[COMP_PROPULSION]] != AVAILABLE
+	    || (psCurr->asParts[COMP_SENSOR] > 0 && apCompLists[player][COMP_SENSOR][psCurr->asParts[COMP_SENSOR]] != AVAILABLE)
+	    || (psCurr->asParts[COMP_ECM] > 0 && apCompLists[player][COMP_ECM][psCurr->asParts[COMP_ECM]] != AVAILABLE)
+	    || (psCurr->asParts[COMP_REPAIRUNIT] > 0 && apCompLists[player][COMP_REPAIRUNIT][psCurr->asParts[COMP_REPAIRUNIT]] != AVAILABLE)
+	    || (psCurr->asParts[COMP_CONSTRUCT] > 0 && apCompLists[player][COMP_CONSTRUCT][psCurr->asParts[COMP_CONSTRUCT]] != AVAILABLE)
+	    || (psCurr->numWeaps > 0 && apCompLists[player][COMP_WEAPON][psCurr->asWeaps[0]] != AVAILABLE)
+	    || (psCurr->numWeaps > 1 && apCompLists[player][COMP_WEAPON][psCurr->asWeaps[1]] != AVAILABLE))
+	{
+		return false;
+	}
+	return true;
+}
+
+bool initTemplates()
+{
+	WzConfig ini("templates.ini");
+	if (ini.status() != QSettings::NoError)
+	{
+		debug(LOG_ERROR, "Could not open templates.ini");
+		return false;
+	}
+	QStringList list = ini.childGroups();
+	for (int i = 0; i < list.size(); ++i)
+	{
+		ini.beginGroup(list[i]);
+		DROID_TEMPLATE design;
+		design.pName = NULL;
+		design.droidType = (DROID_TYPE)ini.value("droidType").toInt();
+		design.multiPlayerID = generateNewObjectId();
+		design.asParts[COMP_BODY] = getCompFromName(COMP_BODY, ini.value("body", QString("ZNULLBODY")).toString().toUtf8().constData());
+		design.asParts[COMP_BRAIN] = getCompFromName(COMP_BRAIN, ini.value("brain", QString("ZNULLBRAIN")).toString().toUtf8().constData());
+		design.asParts[COMP_PROPULSION] = getCompFromName(COMP_PROPULSION, ini.value("propulsion", QString("ZNULLPROP")).toString().toUtf8().constData());
+		design.asParts[COMP_REPAIRUNIT] = getCompFromName(COMP_REPAIRUNIT, ini.value("repair", QString("ZNULLREPAIR")).toString().toUtf8().constData());
+		design.asParts[COMP_ECM] = getCompFromName(COMP_ECM, ini.value("ecm", QString("ZNULLECM")).toString().toUtf8().constData());
+		design.asParts[COMP_SENSOR] = getCompFromName(COMP_SENSOR, ini.value("sensor", QString("ZNULLSENSOR")).toString().toUtf8().constData());
+		design.asParts[COMP_CONSTRUCT] = getCompFromName(COMP_CONSTRUCT, ini.value("construct", QString("ZNULLCONSTRUCT")).toString().toUtf8().constData());
+		design.asWeaps[0] = getCompFromName(COMP_WEAPON, ini.value("weapon/1", QString("ZNULLWEAPON")).toString().toUtf8().constData());
+		design.asWeaps[1] = getCompFromName(COMP_WEAPON, ini.value("weapon/2", QString("ZNULLWEAPON")).toString().toUtf8().constData());
+		design.asWeaps[2] = getCompFromName(COMP_WEAPON, ini.value("weapon/3", QString("ZNULLWEAPON")).toString().toUtf8().constData());
+		design.numWeaps = ini.value("weapons").toInt();
+		design.prefab = false;		// not AI template
+		design.stored = true;
+		bool valid = intValidTemplate(&design, ini.value("name").toString().toUtf8().constData());
+		ASSERT_OR_RETURN(false, valid, "Invalid template %d", i);
+		addTemplateToList(&design, &apsDroidTemplates[selectedPlayer]);
+		localTemplates.push_back(design);
+		ini.endGroup();
+	}
+	return true;
+}
+
+bool shutdownTemplates()
+{
+	// Write stored templates (back) to file
+	WzConfig ini("templates.ini");
+	if (ini.status() != QSettings::NoError)
+	{
+		debug(LOG_ERROR, "Could not open templates.ini");
+		return false;
+	}
+	for (DROID_TEMPLATE *psCurr = apsDroidTemplates[selectedPlayer]; psCurr != NULL; psCurr = psCurr->psNext)
+	{
+		if (!psCurr->stored) continue; // not stored
+		ini.beginGroup("template_" + QString::number(psCurr->multiPlayerID));
+		ini.setValue("name", psCurr->aName);
+		ini.setValue("droidType", psCurr->droidType);
+		ini.setValue("body", (asBodyStats + psCurr->asParts[COMP_BODY])->pName);
+		ini.setValue("propulsion", (asPropulsionStats + psCurr->asParts[COMP_PROPULSION])->pName);
+		ini.setValue("brain", (asBrainStats + psCurr->asParts[COMP_BRAIN])->pName);
+		ini.setValue("repair", (asRepairStats + psCurr->asParts[COMP_REPAIRUNIT])->pName);
+		ini.setValue("ecm", (asECMStats + psCurr->asParts[COMP_ECM])->pName);
+		ini.setValue("sensor", (asSensorStats + psCurr->asParts[COMP_SENSOR])->pName);
+		ini.setValue("construct", (asConstructStats + psCurr->asParts[COMP_CONSTRUCT])->pName);
+		ini.setValue("weapons", psCurr->numWeaps);
+		for (int j = 0; j < psCurr->numWeaps; j++)
+		{
+			ini.setValue("weapon/" + QString::number(j + 1), (asWeaponStats + psCurr->asWeaps[j])->pName);
+		}
+		ini.endGroup();
+	}
+	return true;
+}
 
 static void initTemplatePoints(DROID_TEMPLATE *pDroidDesign)
 {
@@ -98,6 +186,7 @@ DROID_TEMPLATE::DROID_TEMPLATE()  // This constructor replaces a memset in scrAs
 	, multiPlayerID(0)
 	, psNext(NULL)
 	, prefab(false)
+	, stored(false)
 {
 	aName[0] = '\0';
 	std::fill_n(asParts, DROID_MAXCOMP, 0);
@@ -117,6 +206,7 @@ DROID_TEMPLATE::DROID_TEMPLATE(LineView line)
 	, multiPlayerID(line.u32(1))
 	, psNext(NULL)
 	, prefab(false)
+	, stored(false)
 	// Ignored columns: 6 - but used later to decide whether the template is for human players.
 {
 	std::string name = line.s(0);
@@ -507,6 +597,7 @@ at any one time. Pass back the number available.
 */
 void fillTemplateList(std::vector<DROID_TEMPLATE *> &pList, STRUCTURE *psFactory)
 {
+	const int player = psFactory->player;
 	pList.clear();
 
 	DROID_TEMPLATE	*psCurr;
@@ -522,15 +613,14 @@ void fillTemplateList(std::vector<DROID_TEMPLATE *> &pList, STRUCTURE *psFactory
 			//can only have (MAX_CMDDROIDS) in the world at any one time
 			if (psCurr->droidType == DROID_COMMAND)
 			{
-				if (checkProductionForCommand(psFactory->player) +
-					checkCommandExist(psFactory->player) >= (MAX_CMDDROIDS))
+				if (checkProductionForCommand(player) + checkCommandExist(player) >= (MAX_CMDDROIDS))
 				{
 					continue;
 				}
 			}
 		}
 
-		if (!validTemplateForFactory(psCurr, psFactory))
+		if (!validTemplateForFactory(psCurr, psFactory) || !researchedTemplate(psCurr, player))
 		{
 			continue;
 		}
@@ -538,21 +628,6 @@ void fillTemplateList(std::vector<DROID_TEMPLATE *> &pList, STRUCTURE *psFactory
 		//check the factory can cope with this sized body
 		if (!((asBodyStats + psCurr->asParts[COMP_BODY])->size > iCapacity) )
 		{
-			//cyborg templates are available when the body has been research
-			//-same for Transporter in multiPlayer
-			if ( psCurr->droidType == DROID_CYBORG ||
-				 psCurr->droidType == DROID_CYBORG_SUPER ||
-				 psCurr->droidType == DROID_CYBORG_CONSTRUCT ||
-				 psCurr->droidType == DROID_CYBORG_REPAIR ||
-				 psCurr->droidType == DROID_TRANSPORTER)
-			{
-				if ( apCompLists[psFactory->player][COMP_BODY]
-					 [psCurr->asParts[COMP_BODY]] != AVAILABLE )
-				{
-					//ignore if not research yet
-					continue;
-				}
-			}
 			pList.push_back(psCurr);
 		}
 	}

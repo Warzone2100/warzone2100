@@ -362,6 +362,13 @@ static bool saveTemplate();
 
 static void desCreateDefaultTemplate( void );
 
+/**
+ * Updates the status of the stored template toggle button.
+ *
+ * @param isStored If the template is stored or not.
+ */
+static void updateStoreButton(bool isStored);
+
 /* The current name of the design */
 static char			aCurrName[WIDG_MAXSTR];
 
@@ -452,6 +459,7 @@ static bool _intAddDesign( bool bShowCentreScreen )
 	/* Initialise the current design */
 	sCurrDesign = sDefaultDesignTemplate;
 	sCurrDesign.pName = NULL;
+	sCurrDesign.stored = false;
 	sstrcpy(aCurrName, _("New Vehicle"));
 	sstrcpy(sCurrDesign.aName, aCurrName);
 
@@ -607,6 +615,24 @@ static bool _intAddDesign( bool bShowCentreScreen )
 	sButInit.pTip = _("Delete Design");
 	sButInit.pDisplay = intDisplayButtonHilight;
 	sButInit.UserData = PACKDWORD_TRI(0,IMAGE_DES_BINH, IMAGE_DES_BIN);
+	if (!widgAddButton(psWScreen, &sButInit))
+	{
+		return false;
+	}
+
+	// Add the store template button
+	sButInit.formID = IDDES_PARTFORM;
+	sButInit.id = IDDES_STOREBUTTON;
+	sButInit.style = WBUT_PLAIN;
+	sButInit.width = iV_GetImageWidth(IntImages, IMAGE_DES_BIN);
+	sButInit.height = iV_GetImageHeight(IntImages, IMAGE_DES_BIN);
+	sButInit.x = DES_PARTSEPARATIONX;
+	sButInit.y = DES_PARTFORMHEIGHT - 2*sButInit.height - 2*DES_PARTSEPARATIONY;
+	sButInit.pTip = _("Store Design");
+	sButInit.FontID = font_regular;
+	sButInit.pDisplay = intDisplayButtonHilight;
+	sButInit.UserData = PACKDWORD_TRI(0, IMAGE_DES_BINH, IMAGE_DES_BIN);
+
 	if (!widgAddButton(psWScreen, &sButInit))
 	{
 		return false;
@@ -866,7 +892,8 @@ void desSetupDesignTemplates(void)
 		    psTempl->droidType != DROID_CYBORG_SUPER       &&
 		    psTempl->droidType != DROID_CYBORG_CONSTRUCT   &&
 		    psTempl->droidType != DROID_CYBORG_REPAIR      &&
-		    psTempl->droidType != DROID_PERSON)
+		    psTempl->droidType != DROID_PERSON             &&
+		    researchedTemplate(psTempl, selectedPlayer))
 		{
 			apsTemplateList.push_back(psTempl);
 		}
@@ -3338,6 +3365,7 @@ static void desCreateDefaultTemplate( void )
 	/* set current design to default */
 	sCurrDesign = sDefaultDesignTemplate;
 	sCurrDesign.pName = NULL;
+	sCurrDesign.stored = false;
 
 	/* reset stats */
 	intSetDesignStats(&sCurrDesign);
@@ -3450,6 +3478,8 @@ void intProcessDesign(UDWORD id)
 			intSetButtonFlash( IDDES_PROPBUTTON,   true );
 			intSetButtonFlash( IDDES_WPABUTTON,   true );
 			intSetButtonFlash( IDDES_WPBBUTTON,   true );
+
+			widgHide(psWScreen, IDDES_STOREBUTTON);
 		}
 		else
 		{
@@ -3496,6 +3526,9 @@ void intProcessDesign(UDWORD id)
 				{
 					intSetButtonFlash( IDDES_WPBBUTTON,   true );
 				}
+
+				widgReveal(psWScreen, IDDES_STOREBUTTON);
+				updateStoreButton(sCurrDesign.stored);
 			}
 		}
 
@@ -4008,6 +4041,10 @@ void intProcessDesign(UDWORD id)
 			}
 			break;
 		}
+		case IDDES_STOREBUTTON:
+			sCurrDesign.stored = !sCurrDesign.stored;	// Invert the current status
+			saveTemplate();
+			break;
 		case IDDES_SYSTEMBUTTON:
 			// Add the correct component form
 			switch (droidTemplateType(&sCurrDesign))
@@ -4409,8 +4446,11 @@ static bool saveTemplate(void)
 {
 	if (!intValidTemplate(&sCurrDesign, aCurrName))
 	{
+		widgHide(psWScreen, IDDES_STOREBUTTON);
 		return false;
 	}
+	widgReveal(psWScreen, IDDES_STOREBUTTON);
+	updateStoreButton(sCurrDesign.stored);	// Change the buttons icon
 
 	/* if first (New Design) button selected find empty template
 	 * else find current button template
@@ -4436,6 +4476,7 @@ static bool saveTemplate(void)
 		psTempl = templateFromButtonId(droidTemplID);
 		if (psTempl == NULL)
 		{
+			debug(LOG_ERROR, "Template not found for button");
 			return false;
 		}
 
@@ -4636,3 +4677,18 @@ void reverseTemplateList(DROID_TEMPLATE **ppsList)
 	*ppsList = psPrev;
 }
 
+void updateStoreButton(bool isStored)
+{
+	UDWORD imageset;
+
+	if (isStored)
+	{
+		imageset = PACKDWORD_TRI(0, IMAGE_DES_TURRETH, IMAGE_DES_TURRET);
+	}
+	else
+	{
+		imageset = PACKDWORD_TRI(0, IMAGE_DES_BINH, IMAGE_DES_BIN);
+	}
+
+	widgSetUserData2(psWScreen, IDDES_STOREBUTTON, imageset);
+}

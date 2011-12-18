@@ -125,6 +125,7 @@ struct DROID_TEMPLATE : public BASE_STATS
 	UDWORD          multiPlayerID;              ///< multiplayer unique descriptor(cant use id's for templates). Used for save games as well now - AB 29/10/98
 	DROID_TEMPLATE* psNext;                     ///< Pointer to next template
 	bool		prefab;                     ///< Not player designed, not saved, never delete or change
+	bool		stored;                     ///< Stored template
 };
 
 struct PACKAGED_CHECK;
