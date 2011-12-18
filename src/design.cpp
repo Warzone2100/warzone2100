@@ -628,7 +628,7 @@ static bool _intAddDesign( bool bShowCentreScreen )
 	sButInit.height = iV_GetImageHeight(IntImages, IMAGE_DES_SAVE);
 	sButInit.x = DES_PARTSEPARATIONX;
 	sButInit.y = DES_PARTFORMHEIGHT - 2*sButInit.height - 2*DES_PARTSEPARATIONY;
-	sButInit.pTip = _("Store Design");
+	sButInit.pTip = _("Store Template");
 	sButInit.FontID = font_regular;
 	sButInit.pDisplay = intDisplayButtonHilight;
 	sButInit.UserData = PACKDWORD_TRI(0, IMAGE_DES_SAVEH, IMAGE_DES_SAVE);
@@ -4690,10 +4690,12 @@ void updateStoreButton(bool isStored)
 	if (isStored)
 	{
 		imageset = PACKDWORD_TRI(0, IMAGE_DES_DELETEH, IMAGE_DES_DELETE);
+		widgSetTipText(widgGetFromID(psWScreen, IDDES_STOREBUTTON), _("Delete Template"));
 	}
 	else
 	{
 		imageset = PACKDWORD_TRI(0, IMAGE_DES_SAVEH, IMAGE_DES_SAVE);
+		widgSetTipText(widgGetFromID(psWScreen, IDDES_STOREBUTTON), _("Store Template"));
 	}
 
 	widgSetUserData2(psWScreen, IDDES_STOREBUTTON, imageset);
