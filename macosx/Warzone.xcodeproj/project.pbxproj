@@ -429,6 +429,7 @@
 		4333661D11A07FFF00380F5E /* QtOpenGL.framework in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 4333612111A07FB900380F5E /* QtOpenGL.framework */; };
 		4336D8AA111DDF0F0012E8E4 /* random.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4336D8A8111DDF0F0012E8E4 /* random.cpp */; };
 		434117221495024C003F06FF /* wzconfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 434117201495024C003F06FF /* wzconfig.cpp */; };
+		4343651E149EA04800527137 /* template.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4343651C149EA04800527137 /* template.cpp */; };
 		43502D6D1347648300A02A1F /* GLExtensionWrangler.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43502D521347640700A02A1F /* GLExtensionWrangler.framework */; };
 		43502D77134764B000A02A1F /* GLExtensionWrangler.framework in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 43502D521347640700A02A1F /* GLExtensionWrangler.framework */; };
 		43502DC51347675300A02A1F /* glew.c in Sources */ = {isa = PBXBuildFile; fileRef = 43502DC21347675300A02A1F /* glew.c */; };
@@ -1591,6 +1592,9 @@
 		4336D8A9111DDF0F0012E8E4 /* random.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = random.h; path = ../src/random.h; sourceTree = SOURCE_ROOT; };
 		434117201495024C003F06FF /* wzconfig.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = wzconfig.cpp; path = ../lib/framework/wzconfig.cpp; sourceTree = SOURCE_ROOT; };
 		434117211495024C003F06FF /* wzconfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = wzconfig.h; path = ../lib/framework/wzconfig.h; sourceTree = SOURCE_ROOT; };
+		4343651C149EA04800527137 /* template.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = template.cpp; path = ../src/template.cpp; sourceTree = SOURCE_ROOT; };
+		4343651D149EA04800527137 /* template.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = template.h; path = ../src/template.h; sourceTree = SOURCE_ROOT; };
+		43436555149EA1F900527137 /* rational.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = rational.h; path = ../lib/framework/rational.h; sourceTree = SOURCE_ROOT; };
 		43502D30134763D700A02A1F /* Glew-All.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Glew-All.xcconfig"; path = "configs/Glew-All.xcconfig"; sourceTree = "<group>"; };
 		43502D31134763D700A02A1F /* Glew-Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Glew-Debug.xcconfig"; path = "configs/Glew-Debug.xcconfig"; sourceTree = "<group>"; };
 		43502D32134763D700A02A1F /* Glew-Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Glew-Release.xcconfig"; path = "configs/Glew-Release.xcconfig"; sourceTree = "<group>"; };
@@ -2123,6 +2127,7 @@
 		0246A0D00BD3CBE1004D1C70 /* Framework */ = {
 			isa = PBXGroup;
 			children = (
+				43436555149EA1F900527137 /* rational.h */,
 				434117201495024C003F06FF /* wzconfig.cpp */,
 				434117211495024C003F06FF /* wzconfig.h */,
 				43DF5A8912BEE01B00DD5A37 /* cocoa_wrapper.mm */,
@@ -2350,6 +2355,8 @@
 		0246A1970BD3CCC3004D1C70 /* Warzone */ = {
 			isa = PBXGroup;
 			children = (
+				4343651C149EA04800527137 /* template.cpp */,
+				4343651D149EA04800527137 /* template.h */,
 				0246A21D0BD3CCDB004D1C70 /* main.cpp */,
 				43F1D9CE1343F542001478EC /* qtscript.cpp */,
 				43F1D9CF1343F542001478EC /* qtscript.h */,
@@ -4592,6 +4599,7 @@
 				434117221495024C003F06FF /* wzconfig.cpp in Sources */,
 				436D248914963E8800BF74E3 /* main_qt.cpp in Sources */,
 				432B9FD9149809220069E137 /* swapinterval.cpp in Sources */,
+				4343651E149EA04800527137 /* template.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
