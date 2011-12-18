@@ -9,6 +9,7 @@ extern DROID_TEMPLATE			*apsStaticTemplates;			// for AIs and scripts
 
 bool initTemplates();
 bool shutdownTemplates();
+bool storeTemplates();
 
 /** Initialise the template build and power points */
 void initTemplatePoints(void);

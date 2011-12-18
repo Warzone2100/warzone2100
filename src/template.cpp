@@ -60,6 +60,7 @@ static const StringToEnum<DROID_TYPE> map_DROID_TYPE[] =
 
 bool researchedTemplate(DROID_TEMPLATE *psCurr, int player)
 {
+	// Note the ugly special case for commanders - their weapon is unavailable
 	if (apCompLists[player][COMP_BODY][psCurr->asParts[COMP_BODY]] != AVAILABLE
 	    || (psCurr->asParts[COMP_BRAIN] > 0 && apCompLists[player][COMP_BRAIN][psCurr->asParts[COMP_BRAIN]] != AVAILABLE)
 	    || apCompLists[player][COMP_PROPULSION][psCurr->asParts[COMP_PROPULSION]] != AVAILABLE
@@ -67,7 +68,7 @@ bool researchedTemplate(DROID_TEMPLATE *psCurr, int player)
 	    || (psCurr->asParts[COMP_ECM] > 0 && apCompLists[player][COMP_ECM][psCurr->asParts[COMP_ECM]] != AVAILABLE)
 	    || (psCurr->asParts[COMP_REPAIRUNIT] > 0 && apCompLists[player][COMP_REPAIRUNIT][psCurr->asParts[COMP_REPAIRUNIT]] != AVAILABLE)
 	    || (psCurr->asParts[COMP_CONSTRUCT] > 0 && apCompLists[player][COMP_CONSTRUCT][psCurr->asParts[COMP_CONSTRUCT]] != AVAILABLE)
-	    || (psCurr->numWeaps > 0 && apCompLists[player][COMP_WEAPON][psCurr->asWeaps[0]] != AVAILABLE)
+	    || (psCurr->asParts[COMP_BRAIN] == 0 && psCurr->numWeaps > 0 && apCompLists[player][COMP_WEAPON][psCurr->asWeaps[0]] != AVAILABLE)
 	    || (psCurr->numWeaps > 1 && apCompLists[player][COMP_WEAPON][psCurr->asWeaps[1]] != AVAILABLE))
 	{
 		return false;
@@ -80,7 +81,7 @@ bool initTemplates()
 	WzConfig ini("templates.ini");
 	if (ini.status() != QSettings::NoError)
 	{
-		debug(LOG_ERROR, "Could not open templates.ini");
+		debug(LOG_FATAL, "Could not open templates.ini");
 		return false;
 	}
 	QStringList list = ini.childGroups();
@@ -113,13 +114,13 @@ bool initTemplates()
 	return true;
 }
 
-bool shutdownTemplates()
+bool storeTemplates()
 {
 	// Write stored templates (back) to file
 	WzConfig ini("templates.ini");
-	if (ini.status() != QSettings::NoError)
+	if (ini.status() != QSettings::NoError || !ini.isWritable())
 	{
-		debug(LOG_ERROR, "Could not open templates.ini");
+		debug(LOG_FATAL, "Could not open templates.ini");
 		return false;
 	}
 	for (DROID_TEMPLATE *psCurr = apsDroidTemplates[selectedPlayer]; psCurr != NULL; psCurr = psCurr->psNext)
@@ -143,6 +144,11 @@ bool shutdownTemplates()
 		ini.endGroup();
 	}
 	return true;
+}
+
+bool shutdownTemplates()
+{
+	return storeTemplates();
 }
 
 static void initTemplatePoints(DROID_TEMPLATE *pDroidDesign)

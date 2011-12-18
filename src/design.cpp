@@ -4498,6 +4498,9 @@ static bool saveTemplate(void)
 	psTempl->multiPlayerID = generateNewObjectId();
 	sendTemplate(selectedPlayer, psTempl);
 
+	// store list to disk
+	storeTemplates();
+
 	return true;
 }
 
