@@ -301,7 +301,7 @@ static PACKAGED_CHECK packageCheck(const DROID *pD)
 		ASSERT(false, "Droid %u body is too high before synch, is %u, which is more than %u.", pc.droidID, pD->body, pD->originalBody);
 	}
 	pc.experience = pD->experience;
-	pc.pos = droidGetPrecisePosition(pD);
+	pc.pos = pD->pos;
 	pc.rot = pD->rot;
 	if (pD->order == DORDER_ATTACK)
 	{
@@ -334,7 +334,6 @@ bool recvDroidCheck(NETQUEUE queue)
 		{
 			DROID *         pD;
 			PACKAGED_CHECK  pc;
-			Position        precPos;
 
 			NETauto(&pc);
 
@@ -367,11 +366,9 @@ bool recvDroidCheck(NETQUEUE queue)
 #define MERGECOPYSYNC(x, y, z)  if (pc.y != pc2.y) { debug(LOG_SYNC, "Droid %u out of synch, changing "#x" from %"z" to %"z".", pc.droidID, x, pc.y);             x = pc.y; }
 #define MERGEDELTA(x, y, z) if (pc.y != pc2.y) { debug(LOG_SYNC, "Droid %u out of synch, changing "#x" from %"z" to %"z".", pc.droidID, x, x + pc.y - pc2.y); x += pc.y - pc2.y; }
 			// player not synched here...
-			precPos = droidGetPrecisePosition(pD);
-			MERGEDELTA(precPos.x, pos.x, "d");
-			MERGEDELTA(precPos.y, pos.y, "d");
-			MERGEDELTA(precPos.z, pos.z, "d");
-			droidSetPrecisePosition(pD, precPos);
+			MERGEDELTA(pD->pos.x, pos.x, "d");
+			MERGEDELTA(pD->pos.y, pos.y, "d");
+			MERGEDELTA(pD->pos.z, pos.z, "d");
 			MERGEDELTA(pD->rot.direction, rot.direction, "d");
 			MERGEDELTA(pD->rot.pitch, rot.pitch, "d");
 			MERGEDELTA(pD->rot.roll, rot.roll, "d");

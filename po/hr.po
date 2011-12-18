@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: WZ2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-12-03 18:54+0100\n"
+"POT-Creation-Date: 2011-12-17 19:23+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: metalwarrior95 <metalwarrioroften@gmail.com>\n"
 "Language-Team: \n"
@@ -12077,11 +12077,11 @@ msgstr ""
 msgid "Enter password here"
 msgstr "Upišite sišfru ovdje"
 
-#: lib/netplay/netplay.cpp:2061
+#: lib/netplay/netplay.cpp:2067
 msgid "Game not in the lobby, please login first!"
 msgstr ""
 
-#: lib/netplay/netplay.cpp:2066
+#: lib/netplay/netplay.cpp:2072
 #, c-format
 msgid "Error connecting to the lobby server: %s. Make sure port %d can receive incoming connections. If you're using a router configure it to use UPnP, or to forward the port to your system."
 msgstr ""
@@ -12130,20 +12130,20 @@ msgstr ""
 msgid "Strategy Game"
 msgstr "Spermi igru"
 
-#: src/challenge.cpp:219
-#: src/hci.cpp:913
-#: src/hci.cpp:3367
-#: src/hci.cpp:3490
-#: src/hci.cpp:3900
-#: src/hci.cpp:4920
+#: src/challenge.cpp:222
+#: src/hci.cpp:916
+#: src/hci.cpp:3353
+#: src/hci.cpp:3476
+#: src/hci.cpp:3875
+#: src/hci.cpp:4884
 #: src/intelmap.cpp:531
 #: src/intorder.cpp:727
-#: src/loadsave.cpp:239
-#: src/multimenu.cpp:495
-#: src/multimenu.cpp:1367
+#: src/loadsave.cpp:240
+#: src/multimenu.cpp:499
+#: src/multimenu.cpp:1400
 #: src/transporter.cpp:277
 #: src/transporter.cpp:358
-#: src/transporter.cpp:817
+#: src/transporter.cpp:821
 msgid "Close"
 msgstr "Zatvori"
 
@@ -12289,12 +12289,12 @@ msgstr ""
 msgid "Disable texture compression"
 msgstr ""
 
-#: src/configuration.cpp:89
+#: src/configuration.cpp:92
 #, fuzzy
 msgid "My Game"
 msgstr "Izaći iz Igre"
 
-#: src/configuration.cpp:90
+#: src/configuration.cpp:93
 #: src/multistat.cpp:124
 msgid "Player"
 msgstr "Igrač"
@@ -12458,17 +12458,17 @@ msgstr "Čekanje na ostale igrače"
 msgid "Out of sync"
 msgstr ""
 
-#: src/display.cpp:1654
+#: src/display.cpp:1655
 msgid "Cannot Build. Oil Resource Burning."
 msgstr "Nedopušteno Građenje. Izvor Nafte Gori!"
 
-#: src/display.cpp:1842
-#: src/display.cpp:2404
+#: src/display.cpp:1843
+#: src/display.cpp:2406
 #, c-format
 msgid "%s - Damage %d%% - Experience %.1f, %s"
 msgstr ""
 
-#: src/display.cpp:1858
+#: src/display.cpp:1859
 #, c-format
 msgid "%s - Allied - Damage %d%% - Experience %d, %s"
 msgstr ""
@@ -12477,81 +12477,81 @@ msgstr ""
 msgid "Unit Lost!"
 msgstr "Jedinica Izgubljena!"
 
-#: src/droid.cpp:1317
+#: src/droid.cpp:1323
 msgid "Structure Restored"
 msgstr "Građevina Restaurirana"
 
-#: src/droid.cpp:2645
+#: src/droid.cpp:2651
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/droid.cpp:2658
+#: src/droid.cpp:2664
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/droid.cpp:2671
+#: src/droid.cpp:2677
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/droid.cpp:2675
+#: src/droid.cpp:2681
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/droid.cpp:3002
+#: src/droid.cpp:3008
 msgid "Rookie"
 msgstr "Novak"
 
-#: src/droid.cpp:3003
+#: src/droid.cpp:3009
 msgctxt "rank"
 msgid "Green"
 msgstr ""
 
-#: src/droid.cpp:3004
+#: src/droid.cpp:3010
 msgid "Trained"
 msgstr "Treniran"
 
-#: src/droid.cpp:3005
+#: src/droid.cpp:3011
 msgid "Regular"
 msgstr "Normalan"
 
-#: src/droid.cpp:3006
+#: src/droid.cpp:3012
 msgid "Professional"
 msgstr "Profesionalac"
 
-#: src/droid.cpp:3007
+#: src/droid.cpp:3013
 msgid "Veteran"
 msgstr "Veteran"
 
-#: src/droid.cpp:3008
+#: src/droid.cpp:3014
 msgid "Elite"
 msgstr "Elita"
 
-#: src/droid.cpp:3009
+#: src/droid.cpp:3015
 msgid "Special"
 msgstr "Specijal"
 
-#: src/droid.cpp:3010
+#: src/droid.cpp:3016
 msgid "Hero"
 msgstr "Junak"
 
-#: src/droid.cpp:4032
+#: src/droid.cpp:4003
 #, c-format
 msgid "%s wanted to give you a %s but you have too many!"
 msgstr ""
 
-#: src/droid.cpp:4036
+#: src/droid.cpp:4007
 #, c-format
 msgid "You wanted to give %s a %s but they have too many!"
 msgstr ""
@@ -12570,7 +12570,7 @@ msgid "Tutorial"
 msgstr "Vježbe"
 
 #: src/frontend.cpp:110
-#: src/hci.cpp:3476
+#: src/hci.cpp:3462
 msgid "Options"
 msgstr "Opcije"
 
@@ -12634,8 +12634,8 @@ msgstr "JEDAN IGRAČ"
 
 #: src/frontend.cpp:321
 #: src/ingameop.cpp:494
-#: src/mission.cpp:2522
-#: src/mission.cpp:2623
+#: src/mission.cpp:2494
+#: src/mission.cpp:2595
 msgid "Load Saved Game"
 msgstr "Učitaj Sačuvanu Igru"
 
@@ -12723,7 +12723,7 @@ msgstr ""
 
 #: src/frontend.cpp:475
 #: src/frontend.cpp:614
-#: src/multiplay.cpp:1923
+#: src/multiplay.cpp:1920
 msgid "Black"
 msgstr "Crni"
 
@@ -12912,193 +12912,193 @@ msgstr "OPCIJE IGRE"
 msgid "Mod: "
 msgstr "Modifikacija:"
 
-#: src/hci.cpp:1234
+#: src/hci.cpp:1237
 msgid "MAP SAVED!"
 msgstr "KARTA SPREMLJENA!"
 
-#: src/hci.cpp:1570
-#: src/loop.cpp:547
-#: src/loop.cpp:563
+#: src/hci.cpp:1559
+#: src/loop.cpp:268
+#: src/loop.cpp:284
 #, fuzzy
 msgid "GAME SAVED: "
 msgstr "Igra spremljena:"
 
-#: src/hci.cpp:1957
+#: src/hci.cpp:1946
 msgid "Failed to create building"
 msgstr "Nije moguće napraviti građevinu"
 
-#: src/hci.cpp:1974
+#: src/hci.cpp:1963
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new structure: %s."
 msgstr "Igrač %u vara, postavio si je : %s"
 
-#: src/hci.cpp:1989
+#: src/hci.cpp:1978
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new feature: %s."
 msgstr "Igrač %u vara, postavio si je : %s"
 
-#: src/hci.cpp:2011
+#: src/hci.cpp:2000
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid: %s."
 msgstr "Igrač %u vara, postavio si je : %s"
 
-#: src/hci.cpp:2022
+#: src/hci.cpp:2011
 #, fuzzy, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid."
 msgstr "Igrač %u vara, postavio si je : %s"
 
-#: src/hci.cpp:3287
+#: src/hci.cpp:3273
 msgid "Commanders (F6)"
 msgstr "Kapetani (F6)"
 
-#: src/hci.cpp:3300
+#: src/hci.cpp:3286
 msgid "Intelligence Display (F5)"
 msgstr "Viječanje (F5)"
 
-#: src/hci.cpp:3313
+#: src/hci.cpp:3299
 msgid "Manufacture (F1)"
 msgstr "Proizvedi (F1)"
 
-#: src/hci.cpp:3326
+#: src/hci.cpp:3312
 msgid "Design (F4)"
 msgstr "Dizajniraj (F4)"
 
-#: src/hci.cpp:3339
+#: src/hci.cpp:3325
 msgid "Research (F2)"
 msgstr "Istražuj (F2)"
 
-#: src/hci.cpp:3352
+#: src/hci.cpp:3338
 msgid "Build (F3)"
 msgstr "Gradi (F3)"
 
-#: src/hci.cpp:3423
+#: src/hci.cpp:3409
 #: src/multiint.cpp:1613
-#: src/multimenu.cpp:765
+#: src/multimenu.cpp:798
 msgid "Power"
 msgstr "Resursi"
 
-#: src/hci.cpp:3514
+#: src/hci.cpp:3500
 msgid "Map:"
 msgstr ""
 
-#: src/hci.cpp:3527
+#: src/hci.cpp:3513
 #, fuzzy
 msgid "Load"
 msgstr "Učitaj Igru"
 
-#: src/hci.cpp:3528
+#: src/hci.cpp:3514
 #, fuzzy
 msgid "Load Map File"
 msgstr "Učitaj Igru"
 
-#: src/hci.cpp:3535
+#: src/hci.cpp:3521
 #, fuzzy
 msgid "Save"
 msgstr "Spermi igru"
 
-#: src/hci.cpp:3536
+#: src/hci.cpp:3522
 #, fuzzy
 msgid "Save Map File"
 msgstr "Spermi igru"
 
-#: src/hci.cpp:3544
+#: src/hci.cpp:3530
 msgid "New"
 msgstr ""
 
-#: src/hci.cpp:3545
+#: src/hci.cpp:3531
 msgid "New Blank Map"
 msgstr ""
 
-#: src/hci.cpp:3581
+#: src/hci.cpp:3567
 msgid "Tile"
 msgstr "Kvadratić"
 
-#: src/hci.cpp:3582
+#: src/hci.cpp:3568
 msgid "Place tiles on map"
 msgstr "Postavi teksture na kartu"
 
-#: src/hci.cpp:3591
+#: src/hci.cpp:3577
 msgid "Unit"
 msgstr "Jedinica"
 
-#: src/hci.cpp:3592
+#: src/hci.cpp:3578
 msgid "Place Unit on map"
 msgstr "Postavi jedinice na kartu"
 
-#: src/hci.cpp:3600
+#: src/hci.cpp:3586
 msgid "Struct"
 msgstr "Građevina"
 
-#: src/hci.cpp:3601
+#: src/hci.cpp:3587
 msgid "Place Structures on map"
 msgstr "Postavi građevine na kartu"
 
-#: src/hci.cpp:3609
+#: src/hci.cpp:3595
 msgid "Feat"
 msgstr "Pogodnosti"
 
-#: src/hci.cpp:3610
+#: src/hci.cpp:3596
 msgid "Place Features on map"
 msgstr "Postavi pogodnost na kartu"
 
-#: src/hci.cpp:3620
+#: src/hci.cpp:3606
 msgid "Pause"
 msgstr ""
 
-#: src/hci.cpp:3621
+#: src/hci.cpp:3607
 msgid "Pause or unpause the game"
 msgstr "Pauziraj igru"
 
-#: src/hci.cpp:3635
+#: src/hci.cpp:3621
 msgid "Align height of all map objects"
 msgstr "Podesi visinu svih objekata na karti"
 
-#: src/hci.cpp:3645
+#: src/hci.cpp:3631
 msgid "Edit"
 msgstr ""
 
-#: src/hci.cpp:3646
+#: src/hci.cpp:3632
 #, fuzzy
 msgid "Start Edit Mode"
 msgstr "Započni bez baza"
 
-#: src/hci.cpp:3660
+#: src/hci.cpp:3646
 #: src/ingameop.cpp:113
 #: src/ingameop.cpp:257
 #: src/ingameop.cpp:261
 msgid "Quit"
 msgstr "Izađi"
 
-#: src/hci.cpp:3661
+#: src/hci.cpp:3647
 msgid "Exit Game"
 msgstr "Izađi iz igre"
 
-#: src/hci.cpp:3687
+#: src/hci.cpp:3673
 #, fuzzy
 msgid "Current Player:"
 msgstr "Više Igrača"
 
-#: src/hci.cpp:3977
+#: src/hci.cpp:3952
 msgid "Progress Bar"
 msgstr "Procesna trakica"
 
-#: src/hci.cpp:4845
+#: src/hci.cpp:4809
 msgid "Factory Delivery Point"
 msgstr "Dostavna točka Tvornice"
 
-#: src/hci.cpp:4863
+#: src/hci.cpp:4827
 msgid "Loop Production"
 msgstr "Ponovi proizvodnju"
 
-#: src/hci.cpp:4943
+#: src/hci.cpp:4907
 msgid "Tab Scroll left"
 msgstr "Tablica zakreni lijevo"
 
-#: src/hci.cpp:4958
+#: src/hci.cpp:4922
 msgid "Tab Scroll right"
 msgstr "Tablica zakreni desno"
 
-#: src/hci.cpp:5187
+#: src/hci.cpp:5151
 #, fuzzy
 msgid "Ally progress"
 msgstr "Bodovi za Gradnju"
@@ -13125,8 +13125,8 @@ msgstr ""
 
 #: src/ingameop.cpp:275
 #: src/ingameop.cpp:498
-#: src/mission.cpp:2509
-#: src/mission.cpp:2626
+#: src/mission.cpp:2481
+#: src/mission.cpp:2598
 msgid "Save Game"
 msgstr "Spermi igru"
 
@@ -13150,17 +13150,17 @@ msgid ""
 "Warzone will try to load the game without it."
 msgstr ""
 
-#: src/intdisplay.cpp:208
+#: src/intdisplay.cpp:205
 #, fuzzy
 msgid "Waiting for Power"
 msgstr "Čekanje na ostale igrače"
 
-#: src/intdisplay.cpp:257
+#: src/intdisplay.cpp:253
 #, fuzzy
 msgid "Build Progress"
 msgstr "Bodovi za Gradnju"
 
-#: src/intdisplay.cpp:279
+#: src/intdisplay.cpp:275
 msgid "Construction Progress"
 msgstr "Proces gradnje"
 
@@ -13186,7 +13186,7 @@ msgstr "Ciljevi PROJEKTA"
 msgid "Current Objective"
 msgstr "Trenutni zadatak"
 
-#: src/intelmap.cpp:1506
+#: src/intelmap.cpp:1504
 msgid "New Intelligence Report"
 msgstr "Novo izvješče"
 
@@ -13515,48 +13515,48 @@ msgstr "Potres kada se objekti unište: NE"
 msgid "Screen shake when things die: On"
 msgstr "Potres kada se objekti unište: DA"
 
-#: src/keybind.cpp:2592
-#: src/keybind.cpp:2635
+#: src/keybind.cpp:2595
+#: src/keybind.cpp:2638
 msgid "Sorry, but game speed cannot be changed in multiplayer."
 msgstr "Brzina igre ne može biti promjenjena u internetskoj igri."
 
-#: src/keybind.cpp:2613
-#: src/keybind.cpp:2656
-#: src/keybind.cpp:2678
+#: src/keybind.cpp:2616
+#: src/keybind.cpp:2659
+#: src/keybind.cpp:2681
 msgid "Game Speed Reset"
 msgstr "Brzina igre resetirana"
 
-#: src/keybind.cpp:2617
+#: src/keybind.cpp:2620
 #, c-format
 msgid "Game Speed Increased to %3.1f"
 msgstr "Brzin povečana na %3.1f"
 
-#: src/keybind.cpp:2660
+#: src/keybind.cpp:2663
 #, c-format
 msgid "Game Speed Reduced to %3.1f"
 msgstr "Brzina smanjena na %3.1f"
 
-#: src/keybind.cpp:2690
+#: src/keybind.cpp:2693
 msgid "Radar showing friend-foe colors"
 msgstr "Karta prikazuje savezničke boje"
 
-#: src/keybind.cpp:2694
+#: src/keybind.cpp:2697
 msgid "Radar showing player colors"
 msgstr "Karta prikazuje boje igrača"
 
-#: src/keybind.cpp:2709
+#: src/keybind.cpp:2712
 msgid "Radar showing only objects"
 msgstr "Karta prikazuje samo objekte"
 
-#: src/keybind.cpp:2712
+#: src/keybind.cpp:2715
 msgid "Radar blending terrain and height"
 msgstr "Karta prikazuje visine i teren"
 
-#: src/keybind.cpp:2715
+#: src/keybind.cpp:2718
 msgid "Radar showing terrain"
 msgstr "Karta prikazuje teren"
 
-#: src/keybind.cpp:2718
+#: src/keybind.cpp:2721
 msgid "Radar showing height"
 msgstr "Karta prikazuje visine"
 
@@ -14067,46 +14067,46 @@ msgstr ""
 msgid "Toggle Driving Mode"
 msgstr "Pračenje"
 
-#: src/loop.cpp:554
-#: src/loop.cpp:570
+#: src/loop.cpp:275
+#: src/loop.cpp:291
 msgid "Could not save game!"
 msgstr "Igra se ne može spremiti"
 
-#: src/mission.cpp:2070
+#: src/mission.cpp:2042
 msgid "Load Transport"
 msgstr "Ukrcaj na transport"
 
-#: src/mission.cpp:2457
+#: src/mission.cpp:2429
 msgid "OBJECTIVE ACHIEVED by cheating!"
 msgstr "POBJEDIO SI!!! - jer si koristio sifre."
 
-#: src/mission.cpp:2457
+#: src/mission.cpp:2429
 msgid "OBJECTIVE ACHIEVED"
 msgstr "POBJEDIO SI!!!"
 
-#: src/mission.cpp:2463
+#: src/mission.cpp:2435
 msgid "OBJECTIVE FAILED--and you cheated!"
 msgstr "Koristio si šifre - ali si ipak IZGUBIO!!!"
 
-#: src/mission.cpp:2463
+#: src/mission.cpp:2435
 msgid "OBJECTIVE FAILED"
 msgstr "IZGUBIO SI!!!"
 
-#: src/mission.cpp:2488
-#: src/mission.cpp:2528
-#: src/mission.cpp:2640
+#: src/mission.cpp:2460
+#: src/mission.cpp:2500
+#: src/mission.cpp:2612
 msgid "Quit To Main Menu"
 msgstr "Izađi na glavni meni"
 
-#: src/mission.cpp:2496
+#: src/mission.cpp:2468
 msgid "Continue Game"
 msgstr "Nastavi igru"
 
-#: src/mission.cpp:2591
+#: src/mission.cpp:2563
 msgid "GAME SAVED :"
 msgstr "Igra spremljena:"
 
-#: src/move.cpp:2303
+#: src/move.cpp:2305
 #, c-format
 msgid "You found %u power in an oil drum."
 msgstr "Našao si %u resursa u bačvi."
@@ -14324,7 +14324,7 @@ msgid "Select Player Name"
 msgstr "Odaberi ime igrača"
 
 #: src/multiint.cpp:1580
-#: src/multimenu.cpp:758
+#: src/multimenu.cpp:791
 msgid "Alliances"
 msgstr "Savezi"
 
@@ -14393,7 +14393,7 @@ msgid "DIFFICULTY"
 msgstr ""
 
 #: src/multiint.cpp:1822
-msgid "Less aggressive and starts with less units"
+msgid "Less aggressive"
 msgstr ""
 
 #: src/multiint.cpp:1823
@@ -14406,8 +14406,9 @@ msgid "No holds barred"
 msgstr ""
 
 #: src/multiint.cpp:1825
-msgid "Starts with advantages and gets twice as much oil from derricks"
-msgstr ""
+#, fuzzy
+msgid "Starts with advantages"
+msgstr "Započni sa naprednim bazama"
 
 #: src/multiint.cpp:1853
 msgid "CHOOSE AI"
@@ -14509,42 +14510,42 @@ msgstr "Host je izbacio %s iz igre."
 msgid "Host is Starting Game"
 msgstr "Host započinje igru"
 
-#: src/multiint.cpp:3795
+#: src/multiint.cpp:3812
 msgid "Players"
 msgstr "Igrači"
 
-#: src/multiint.cpp:3857
+#: src/multiint.cpp:3874
 #, fuzzy, c-format
 msgid "Click to take player slot %d"
 msgstr "Karta prikazuje boje igrača"
 
-#: src/multiint.cpp:3866
-#: src/multiint.cpp:4059
+#: src/multiint.cpp:3883
+#: src/multiint.cpp:4076
 msgid "Open"
 msgstr ""
 
-#: src/multiint.cpp:3866
-#: src/multiint.cpp:4060
+#: src/multiint.cpp:3883
+#: src/multiint.cpp:4077
 #, fuzzy
 msgid "Closed"
 msgstr "Zatvori"
 
-#: src/multiint.cpp:3917
+#: src/multiint.cpp:3934
 #, c-format
 msgid "Sending Map: %d%% "
 msgstr "Slanje karte: %d%%"
 
-#: src/multiint.cpp:3925
+#: src/multiint.cpp:3942
 #, c-format
 msgid "Map: %d%% downloaded"
 msgstr "Karta: %d%% downloadana"
 
-#: src/multiint.cpp:3951
+#: src/multiint.cpp:3968
 msgid "HOST"
 msgstr "HOST"
 
-#: src/multiint.cpp:3958
-#: src/multimenu.cpp:774
+#: src/multiint.cpp:3975
+#: src/multimenu.cpp:807
 msgid "Ping"
 msgstr "Ping"
 
@@ -14585,209 +14586,209 @@ msgstr "Postavi zadane postavke"
 msgid "Limits reset to default values"
 msgstr "Limiti resetirani na zadane postavke"
 
-#: src/multimenu.cpp:147
+#: src/multimenu.cpp:148
 msgid "2 players"
 msgstr "2 igrača"
 
-#: src/multimenu.cpp:147
+#: src/multimenu.cpp:148
 #, fuzzy
 msgid "3 players"
 msgstr "2 igrača"
 
-#: src/multimenu.cpp:147
+#: src/multimenu.cpp:148
 msgid "4 players"
 msgstr "4 igrača"
 
-#: src/multimenu.cpp:147
+#: src/multimenu.cpp:148
 #, fuzzy
 msgid "5 players"
 msgstr "2 igrača"
 
-#: src/multimenu.cpp:147
+#: src/multimenu.cpp:148
 #, fuzzy
 msgid "6 players"
 msgstr "2 igrača"
 
-#: src/multimenu.cpp:147
+#: src/multimenu.cpp:148
 #, fuzzy
 msgid "7 players"
 msgstr "2 igrača"
 
-#: src/multimenu.cpp:147
+#: src/multimenu.cpp:148
 msgid "8 players"
 msgstr "8 igrača"
 
-#: src/multimenu.cpp:147
+#: src/multimenu.cpp:148
 #, fuzzy
 msgid "9 players"
 msgstr "2 igrača"
 
-#: src/multimenu.cpp:147
+#: src/multimenu.cpp:148
 #, fuzzy
 msgid "10 players"
 msgstr "2 igrača"
 
-#: src/multimenu.cpp:147
+#: src/multimenu.cpp:148
 #, fuzzy
 msgid "11 players"
 msgstr "2 igrača"
 
-#: src/multimenu.cpp:147
+#: src/multimenu.cpp:148
 #, fuzzy
 msgid "12 players"
 msgstr "2 igrača"
 
-#: src/multimenu.cpp:147
+#: src/multimenu.cpp:148
 #, fuzzy
 msgid "13 players"
 msgstr "2 igrača"
 
-#: src/multimenu.cpp:147
+#: src/multimenu.cpp:148
 #, fuzzy
 msgid "14 players"
 msgstr "4 igrača"
 
-#: src/multimenu.cpp:147
+#: src/multimenu.cpp:148
 #, fuzzy
 msgid "15 players"
 msgstr "2 igrača"
 
-#: src/multimenu.cpp:147
+#: src/multimenu.cpp:148
 #, fuzzy
 msgid "16 players"
 msgstr "2 igrača"
 
-#: src/multimenu.cpp:620
+#: src/multimenu.cpp:625
 msgid "Technology level 1"
 msgstr "Tehnološki razvoj razina 1"
 
-#: src/multimenu.cpp:628
+#: src/multimenu.cpp:633
 msgid "Technology level 2"
 msgstr "Tehnološki razvoj razina 2"
 
-#: src/multimenu.cpp:634
+#: src/multimenu.cpp:639
 msgid "Technology level 3"
 msgstr "Tehnološki razvoj razina 3"
 
-#: src/multimenu.cpp:640
+#: src/multimenu.cpp:645
 msgid "Any number of players"
 msgstr "Bilo koji broj igrača"
 
-#: src/multimenu.cpp:759
+#: src/multimenu.cpp:792
 msgid "Score"
 msgstr "Bodovi"
 
-#: src/multimenu.cpp:760
+#: src/multimenu.cpp:793
 msgid "Kills"
 msgstr "Uništenja"
 
-#: src/multimenu.cpp:764
-#: src/multimenu.cpp:769
+#: src/multimenu.cpp:797
+#: src/multimenu.cpp:802
 msgid "Units"
 msgstr "Jedinica"
 
-#: src/multimenu.cpp:778
+#: src/multimenu.cpp:811
 msgid "Structs"
 msgstr "Strukture"
 
-#: src/multimenu.cpp:1140
+#: src/multimenu.cpp:1173
 msgid "Channel"
 msgstr ""
 
-#: src/multimenu.cpp:1154
+#: src/multimenu.cpp:1187
 msgid "Toggle Alliance State"
 msgstr "Promjeni stanje(prijatelj/neprijatelj)"
 
-#: src/multimenu.cpp:1173
+#: src/multimenu.cpp:1206
 msgid "Give Visibility Report"
 msgstr "Šalji radarski izvještaj"
 
-#: src/multimenu.cpp:1179
+#: src/multimenu.cpp:1212
 msgid "Leak Technology Documents"
 msgstr "Šalji tehnološke podatke"
 
-#: src/multimenu.cpp:1186
+#: src/multimenu.cpp:1219
 msgid "Hand Over Selected Units"
 msgstr "Predaj jedinice"
 
-#: src/multimenu.cpp:1192
+#: src/multimenu.cpp:1225
 msgid "Give Power To Player"
 msgstr "Pošalji resurse igraču"
 
-#: src/multiplay.cpp:260
+#: src/multiplay.cpp:258
 #, c-format
 msgid "Kicking player %s, because they tried to bypass data integrity check!"
 msgstr "Izbacivanje igrača %s jer se podaci ne podudaraju"
 
-#: src/multiplay.cpp:1035
+#: src/multiplay.cpp:1032
 msgid "(allies"
 msgstr "(saveznika"
 
-#: src/multiplay.cpp:1043
+#: src/multiplay.cpp:1040
 msgid "(private to "
 msgstr "(samo za"
 
-#: src/multiplay.cpp:1056
+#: src/multiplay.cpp:1053
 msgid "[invalid]"
 msgstr "[nedostupno]"
 
-#: src/multiplay.cpp:1920
+#: src/multiplay.cpp:1917
 msgid "Green"
 msgstr "Zeleni"
 
-#: src/multiplay.cpp:1921
+#: src/multiplay.cpp:1918
 msgid "Orange"
 msgstr "Narančasti"
 
-#: src/multiplay.cpp:1922
+#: src/multiplay.cpp:1919
 msgid "Grey"
 msgstr "Sivi"
 
-#: src/multiplay.cpp:1924
+#: src/multiplay.cpp:1921
 msgid "Red"
 msgstr "Crveni"
 
-#: src/multiplay.cpp:1925
+#: src/multiplay.cpp:1922
 msgid "Blue"
 msgstr "Plavi"
 
-#: src/multiplay.cpp:1926
+#: src/multiplay.cpp:1923
 msgid "Pink"
 msgstr "Ljubičasta"
 
-#: src/multiplay.cpp:1927
+#: src/multiplay.cpp:1924
 msgid "Cyan"
 msgstr "Cijan"
 
-#: src/multiplay.cpp:1928
+#: src/multiplay.cpp:1925
 msgid "Yellow"
 msgstr ""
 
-#: src/multiplay.cpp:1929
+#: src/multiplay.cpp:1926
 msgid "Purple"
 msgstr ""
 
-#: src/multiplay.cpp:1930
+#: src/multiplay.cpp:1927
 msgid "White"
 msgstr ""
 
-#: src/multiplay.cpp:1931
+#: src/multiplay.cpp:1928
 msgid "Bright blue"
 msgstr ""
 
-#: src/multiplay.cpp:1932
+#: src/multiplay.cpp:1929
 msgid "Neon green"
 msgstr ""
 
-#: src/multiplay.cpp:1933
+#: src/multiplay.cpp:1930
 msgid "Infrared"
 msgstr ""
 
-#: src/multiplay.cpp:1934
+#: src/multiplay.cpp:1931
 msgid "Ultraviolet"
 msgstr ""
 
-#: src/multiplay.cpp:1935
+#: src/multiplay.cpp:1932
 msgid "Brown"
 msgstr ""
 
@@ -14795,12 +14796,12 @@ msgstr ""
 msgid "We can't do that! We must be a Cyborg unit to use a Cyborg Transport!"
 msgstr ""
 
-#: src/qtscriptfuncs.cpp:639
+#: src/qtscriptfuncs.cpp:829
 #: src/scriptfuncs.cpp:3258
 msgid "YOU ARE VICTORIOUS!"
 msgstr "POBJEDIO SI!!!"
 
-#: src/qtscriptfuncs.cpp:644
+#: src/qtscriptfuncs.cpp:834
 #: src/scriptfuncs.cpp:3262
 msgid "YOU WERE DEFEATED!"
 msgstr "IZGUBIO SI!!!"
@@ -14814,134 +14815,134 @@ msgstr "Istraživanje završeno: %s"
 msgid "Research Completed"
 msgstr "Istraživanje završeno"
 
-#: src/research.cpp:1885
+#: src/research.cpp:1875
 msgid "Research Award"
 msgstr "Nagrada hakiranog Istraživačkog centra"
 
-#: src/scores.cpp:98
+#: src/scores.cpp:99
 #, c-format
 msgid "Own Units: %u"
 msgstr "Tvojih jedinica: %u"
 
-#: src/scores.cpp:99
+#: src/scores.cpp:100
 #, c-format
 msgid "Enemy Units: %u"
 msgstr "Neprijateljskih jedinica: %u"
 
-#: src/scores.cpp:100
+#: src/scores.cpp:101
 #, c-format
 msgid "Own Structures: %u"
 msgstr "Tvojih građevina: %u"
 
-#: src/scores.cpp:101
+#: src/scores.cpp:102
 #, c-format
 msgid "Enemy Structures: %u"
 msgstr "Neprijateljskih građevina: %u"
 
-#: src/scores.cpp:102
+#: src/scores.cpp:103
 #, c-format
 msgid "Units Manufactured: %u"
 msgstr "Jedinica proizvedeno: %u"
 
-#: src/scores.cpp:103
+#: src/scores.cpp:104
 #, c-format
 msgid "Total Units: %u"
 msgstr "Ukupno jedinica: %u"
 
-#: src/scores.cpp:104
+#: src/scores.cpp:105
 #, c-format
 msgid "Structures Built: %u"
 msgstr "Građevina izgrađeno: %u"
 
-#: src/scores.cpp:105
+#: src/scores.cpp:106
 #, c-format
 msgid "Total Structures: %u"
 msgstr "Ukupno građevina: %u"
 
-#: src/scores.cpp:107
+#: src/scores.cpp:108
 #, c-format
 msgid "Rookie: %u"
 msgstr "Novak: %u"
 
-#: src/scores.cpp:108
+#: src/scores.cpp:109
 #, c-format
 msgctxt "rank"
 msgid "Green: %u"
 msgstr "Pripremnik: %u"
 
-#: src/scores.cpp:109
+#: src/scores.cpp:110
 #, c-format
 msgid "Trained: %u"
 msgstr "Treniran: %u"
 
-#: src/scores.cpp:110
+#: src/scores.cpp:111
 #, c-format
 msgid "Regular: %u"
 msgstr "Vojnik: %u"
 
-#: src/scores.cpp:111
+#: src/scores.cpp:112
 #, c-format
 msgid "Professional: %u"
 msgstr "Profesionalac: %u"
 
-#: src/scores.cpp:112
+#: src/scores.cpp:113
 #, c-format
 msgid "Veteran: %u"
 msgstr "Veteran: %u"
 
-#: src/scores.cpp:113
+#: src/scores.cpp:114
 #, c-format
 msgid "Elite: %u"
 msgstr "Elita: %u"
 
-#: src/scores.cpp:114
+#: src/scores.cpp:115
 #, c-format
 msgid "Special: %u"
 msgstr "Specijalci: %u"
 
-#: src/scores.cpp:115
+#: src/scores.cpp:116
 #, c-format
 msgid "Hero: %u"
 msgstr "Heroji: %u"
 
-#: src/scores.cpp:349
+#: src/scores.cpp:350
 msgid "Unit Losses"
 msgstr "Tvoje unštene jedinice"
 
-#: src/scores.cpp:350
+#: src/scores.cpp:351
 msgid "Structure Losses"
 msgstr "Tvoje uništene građevine"
 
-#: src/scores.cpp:351
+#: src/scores.cpp:352
 msgid "Force Information"
 msgstr "Informacije o vojsci"
 
-#: src/scores.cpp:431
+#: src/scores.cpp:432
 #, c-format
 msgid "ARTIFACTS RECOVERED: %d"
 msgstr "ARTIFAKATA PRONAĐENO: %d"
 
-#: src/scores.cpp:436
+#: src/scores.cpp:437
 #, c-format
 msgid "Mission Time - %s"
 msgstr "Trajanje misije  - %s"
 
-#: src/scores.cpp:441
+#: src/scores.cpp:442
 #, c-format
 msgid "Total Game Time - %s"
 msgstr "Trajanje igre - %s"
 
-#: src/scores.cpp:447
+#: src/scores.cpp:448
 #, c-format
 msgid "You cheated!"
 msgstr "Koristio si šifre!!!"
 
-#: src/scriptfuncs.cpp:9375
+#: src/scriptfuncs.cpp:9369
 #, c-format
 msgid "Beacon received from %s!"
 msgstr "%s je postavio zastavicu."
 
-#: src/scriptfuncs.cpp:9421
+#: src/scriptfuncs.cpp:9415
 #, c-format
 msgid "Beacon %d"
 msgstr "Zastavica %d"
@@ -14970,63 +14971,63 @@ msgstr "Nemaš ni jedan mobilni radar."
 msgid "Unable to locate any Commanders!"
 msgstr "Nemaš ni jednog kapetana."
 
-#: src/structure.cpp:2551
+#: src/structure.cpp:2549
 #, fuzzy
 msgid "Command Control Limit Reached - Production Halted"
 msgstr "Limit prijeđen - Proizvodnja prekinuta"
 
-#: src/structure.cpp:5749
-#: src/structure.cpp:5774
+#: src/structure.cpp:5691
+#: src/structure.cpp:5716
 #, fuzzy, c-format
 msgid "%s - %u Unit assigned - Damage %3.0f%%"
 msgid_plural "%s - %u Units assigned - Damage %3.0f%%"
 msgstr[0] "%s - %u jedinica dodjeljena"
 msgstr[1] "%s - %u jedinica dodjeljena"
 
-#: src/structure.cpp:5779
-#: src/structure.cpp:5847
-#: src/structure.cpp:5862
-#: src/structure.cpp:5876
+#: src/structure.cpp:5721
+#: src/structure.cpp:5789
+#: src/structure.cpp:5804
+#: src/structure.cpp:5818
 #, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - Oštečen %3.0f%%"
 
-#: src/structure.cpp:5829
+#: src/structure.cpp:5771
 #, fuzzy, c-format
 msgid "%s - Connected %u of %u - Damage %3.0f%%"
 msgstr "%s - Povezan s %u od %u"
 
-#: src/structure.cpp:5992
-#: src/structure.cpp:6037
+#: src/structure.cpp:5934
+#: src/structure.cpp:5979
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Hakirano"
 
-#: src/structure.cpp:6288
+#: src/structure.cpp:6230
 msgid "Electronic Reward - Visibility Report"
 msgstr "Nagrada hakirane građevine - Vizualno izvješče"
 
-#: src/structure.cpp:6328
+#: src/structure.cpp:6270
 msgid "Factory Reward - Propulsion"
 msgstr "Nagrada hakirane Tvornice - Vozni sustav"
 
-#: src/structure.cpp:6352
+#: src/structure.cpp:6294
 msgid "Factory Reward - Body"
 msgstr "Nagrada hakirane Tvornice - Trup"
 
-#: src/structure.cpp:6376
+#: src/structure.cpp:6318
 msgid "Factory Reward - Weapon"
 msgstr "Nagrada hakirane Tvornice - Oružje"
 
-#: src/structure.cpp:6385
+#: src/structure.cpp:6327
 msgid "Factory Reward - Nothing"
 msgstr "Nagrada hakirane Tvornice - Ništa"
 
-#: src/structure.cpp:6413
+#: src/structure.cpp:6355
 msgid "Repair Facility Award - Repair"
 msgstr "Nagrada hakiranog Servisa - Poravak"
 
-#: src/structure.cpp:6420
+#: src/structure.cpp:6362
 msgid "Repair Facility Award - Nothing"
 msgstr "Nagrada hakiranog Servisa - Ništa"
 
@@ -15035,11 +15036,11 @@ msgstr "Nagrada hakiranog Servisa - Ništa"
 msgid "Launch Transport"
 msgstr "Pošalji transport"
 
-#: src/transporter.cpp:1398
+#: src/transporter.cpp:1407
 msgid "There is not enough room in the Transport!"
 msgstr ""
 
-#: src/transporter.cpp:1658
+#: src/transporter.cpp:1661
 msgid "Reinforcements landing"
 msgstr "Pojačanja dolaze"
 

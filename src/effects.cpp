@@ -340,9 +340,9 @@ static EFFECT *Effect_malloc(void)
  * Return an effect into memory pool
  * \param self Effect to be freed
  */
-static void Effect_free(void *self)
+static void Effect_free(EFFECT *instance)
 {
-	EFFECT *instance = (EFFECT *)self;
+	instance->group = EFFECT_FREED;
 
 	/* Remove from activeList and fixup endings necessary */
 	if (instance->prev != NULL) {
@@ -599,8 +599,7 @@ void addEffect(const Vector3i *pos, EFFECT_GROUP group, EFFECT_TYPE type, bool s
 		case EFFECT_FIREWORK:
 			effectSetupFirework(psEffect);
 			break;
-		case EFFECT_STRUCTURE:
-		case EFFECT_DUST_BALL:
+		case EFFECT_FREED:
 			ASSERT( false,"Weirdy group type for an effect" );
 			break;
 	}
@@ -628,7 +627,7 @@ void processEffects(void)
 		updateEffect(it);
 
 		/* Is it on the grid */
-		if (clipXY(it->position.x, it->position.z))
+		if (it->group != EFFECT_FREED && clipXY(it->position.x, it->position.z))
 		{
 			/* Add it to the bucket */
 			bucketAddTypeToList(RENDER_EFFECT, it);
@@ -667,9 +666,6 @@ static void updateEffect(EFFECT *psEffect)
 		if(!gamePaused()) updatePolySmoke(psEffect);
 		return;
 
-	case EFFECT_STRUCTURE:
-		return;
-
 	case EFFECT_GRAVITON:
 		if(!gamePaused()) updateGraviton(psEffect);
 		return;
@@ -694,7 +690,7 @@ static void updateEffect(EFFECT *psEffect)
 		if(!gamePaused()) updateFirework(psEffect);
 		return;
 
-	case EFFECT_DUST_BALL: // Apparently not a valid effect...
+	case EFFECT_FREED:
 		break;
 	}
 
@@ -974,9 +970,9 @@ static void updateExplosion(EFFECT *psEffect)
 		}
 	}
 	/* Time to update the frame number on the explosion */
-	else if (graphicsTime - psEffect->lastFrame > psEffect->frameDelay)
+	else while (graphicsTime - psEffect->lastFrame > psEffect->frameDelay)
 	{
-		psEffect->lastFrame = graphicsTime;
+		psEffect->lastFrame += psEffect->frameDelay;
 		/* Are we on the last frame? */
 
 		if (++psEffect->frameNumber >= effectGetNumFrames(psEffect))
@@ -1032,10 +1028,10 @@ static void updatePolySmoke(EFFECT *psEffect)
 {
 
 	/* Time to update the frame number on the smoke sprite */
-	if(graphicsTime - psEffect->lastFrame > psEffect->frameDelay)
+	while (graphicsTime - psEffect->lastFrame > psEffect->frameDelay)
 	{
 		/* Store away last frame change time */
-		psEffect->lastFrame = graphicsTime;
+		psEffect->lastFrame += psEffect->frameDelay;
 
 		/* Are we on the last frame? */
 		if(++psEffect->frameNumber >= effectGetNumFrames(psEffect))
@@ -1575,9 +1571,6 @@ void renderEffect(const EFFECT *psEffect)
 		renderBloodEffect(psEffect);
 		return;
 
-	case EFFECT_STRUCTURE:
-		return;
-
 	case EFFECT_DESTRUCTION:
 		/*	There is no display func for a destruction effect -
 			it merely spawn other effects over time */
@@ -1596,7 +1589,7 @@ void renderEffect(const EFFECT *psEffect)
 		renderFirework(psEffect);
 		return;
 
-	case EFFECT_DUST_BALL: // Apparently not a valid effect...
+	case EFFECT_FREED:
 		break;
 	}
 

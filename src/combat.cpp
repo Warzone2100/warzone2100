@@ -277,7 +277,7 @@ bool combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 		int32_t flightTime;
 		if (proj_Direct(psStats) || dist <= psStats->minRange)
 		{
-			flightTime = dist / psStats->flightSpeed;
+			flightTime = dist * GAME_TICKS_PER_SEC / psStats->flightSpeed;
 		}
 		else
 		{
@@ -300,6 +300,10 @@ bool combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 		}
 
 		predict += Vector3i(iSinCosR(psDroid->sMove.moveDir, psDroid->sMove.speed*flightTime / GAME_TICKS_PER_SEC), 0);
+		if (!isFlying(psDroid))
+		{
+			predict.z = map_Height(removeZ(predict));  // Predict that the object will be on the ground.
+		}
 	}
 
 	/* Fire off the bullet to the miss location. The miss is only visible if the player owns the target. (Why? - Per) */

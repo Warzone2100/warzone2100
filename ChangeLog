@@ -1,3 +1,24 @@
+master_201xxxxx
+ * General:
+   * Change: Don't give back power when a power generator gets destroyed (commit:7b66301950aa566978c71fc04104ff18c297183a)
+   * Fix: Move units out of the way before building something (commit:9534b4c0bdef54164c8db941d50139048758676d)
+   * Fix: Loading of units in transporters (ticket:2889, ticket:2959, commit:93a6d7ba7489ae8a6c083c6276301dc13ca22824)
+   * Fix: Unload units closer to their transporter (commit:1646499fcbda8dc08e54df8fce7db233ffa40b84)
+   * Fix: Properly abort research after cancelling (ticket:2977, commit:4b355aa06011689440b21a7dccc7e409799c5ae8)
+   * Fix: Correct visibility on game start (ticket:2964, commit:2d4e1e1314ea390dc411ca371bc592e83633e8fb)
+   * Fix: Correct the remaining progress bar after research (ticket:2966, commit:4bf70ca7c55765d2709672c18ef613d2e4a11966)
+   * Fix: Don't crash when clicking fast on a transporter (commit:a35ff1e8fe911fca050ce0d9e7e19e7c511db501)
+ * Pathfinding:
+   * Fix: Ignore buildings on start or destination (ticket:2978, commit:0119eda53f11d2aa5d3e3ccc82203c6657812039)
+   * Fix: Don't pathfind through satellite uplinks (commit:1e2c71cccd8b8d04312d56ad19c022c801dabb0a)
+ * UI:
+   * Change: Add a short delay for the hover map preview (commit:85974cab80890ae668219ddc5354f80bc1a63185)
+   * Change: Make UI respond instantly when holding/cancelling production/research (commit:5c2cf9fa0634612b44b0922ab9b5e8d982c90317)
+   * Fix: Use correct colour for scavengers in the map preview (commit:b62e7d3358593f62d3e9a2bcc8ae928397821fd5)
+ * Translations:
+   * Update: Turkish (ticket:2963, commit:9ea22074d16106c17d717657e049863cdf8d1c09)
+   * Update: German (ticket:2967, commit:075e18828c5a8873fa4157e9c47958ddb1547870)
+
 master_20111204
  * General:
    * Change: Remove the rule that made droids fire and move slower when damaged, since it was confusing and led to less tactical play (commit:88815c3e8bdf6d8afc640d1e82da8eb21d9f17a2)

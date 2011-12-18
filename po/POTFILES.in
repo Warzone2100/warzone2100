@@ -17,6 +17,7 @@ data/base/multiplay/script/multilim.slo
 data/base/multiplay/script/scavfact.js
 data/base/multiplay/skirmish/nexus.slo
 data/base/multiplay/skirmish/rules.js
+data/base/multiplay/skirmish/semperfi.js
 data/base/multiplay/skirmish/semperfi.slo
 data/base/script/fastplay/fastdemo.slo
 data/base/script/fastplay/start.slo
@@ -152,7 +153,7 @@ lib/framework/strres.cpp
 lib/framework/treap.cpp
 lib/framework/trig.cpp
 lib/framework/utf.cpp
-lib/framework/wzapp.cpp
+lib/framework/wzconfig.cpp
 lib/gamelib/anim.cpp
 lib/gamelib/animobj.cpp
 lib/gamelib/gtime.cpp
@@ -182,14 +183,19 @@ lib/netplay/netqueue.cpp
 lib/netplay/netsocket.cpp
 lib/netplay/nettypes.cpp
 lib/qtgame/macosx_screen_resolutions.cpp
+lib/qtgame/main_qt.cpp
 lib/qtgame/qtgame.cpp
 lib/qtgame/swapinterval.cpp
+lib/qtgame/wzapp_qt.cpp
 lib/script/codeprint.cpp
 lib/script/event.cpp
 lib/script/eventsave.cpp
 lib/script/interpreter.cpp
 lib/script/script.cpp
 lib/script/stack.cpp
+lib/sdl/cursors_sdl.cpp
+lib/sdl/main_sdl.cpp
+lib/sdl/scrap.cpp
 lib/sequence/sequence.cpp
 lib/sequence/timer.cpp
 lib/sound/audio.cpp

@@ -24,22 +24,27 @@ EXTRA_DIST = \
 noinst_LIBRARIES = libframework.a
 noinst_HEADERS = \
 	$(MOCHEADER) \
+	config-macosx.h \
 	crc.h \
 	cursors.h \
 	debug.h \
+	endian_hack.h \
 	file.h \
 	fixedpoint.h \
 	frame.h \
 	frameint.h \
 	frameresource.h \
 	geometry.h \
+	gettext.h \
 	i18n.h \
 	input.h \
 	lexer_input.h \
 	listmacs.h \
+	macros.h \
 	math_ext.h \
 	opengl.h \
 	physfs_ext.h \
+	rational.h \
 	resly.h \
 	stdio_ext.h \
 	string_ext.h \
@@ -50,10 +55,6 @@ noinst_HEADERS = \
 	types.h \
 	utf.h \
 	vector.h \
-	config-macosx.h \
-	endian_hack.h \
-	gettext.h \
-	macros.h \
 	wzapp.h \
 	wzfs.h \
 	wzglobal.h
@@ -62,11 +63,6 @@ nodist_libframework_a_SOURCES = \
 	wzconfig_moc.cpp
 
 libframework_a_SOURCES = \
-	wzconfig.cpp \
-	resource_lexer.lpp \
-	resource_parser.ypp \
-	strres_lexer.lpp \
-	strres_parser.ypp \
 	crc.cpp \
 	debug.cpp \
 	frame.cpp \
@@ -74,9 +70,13 @@ libframework_a_SOURCES = \
 	geometry.cpp \
 	i18n.cpp \
 	lexer_input.cpp \
+	resource_lexer.lpp \
+	resource_parser.ypp \
 	stdio_ext.cpp \
 	strres.cpp \
+	strres_lexer.lpp \
+	strres_parser.ypp \
 	treap.cpp \
 	trig.cpp \
-	utf.cpp
-
+	utf.cpp \
+	wzconfig.cpp

@@ -713,11 +713,11 @@ void _syncDebugDroid(const char *function, DROID const *psDroid, char ch)
 		actTarLen += sprintf(actTar + actTarLen, "_%u", psDroid->psActionTarget[i]? psDroid->psActionTarget[i]->id : 0);
 	}
 
-	_syncDebug(function, "%c droid%d = p%d;pos(%d.%d,%d.%d,%d),rot(%d,%d,%d),ord%d(%d,%d)^%d,act%d%s,so%X,bp%d,sMove(st%d,spd%d,mdir%d,path%d/%d,src(%d,%d),tar(%d,%d),dst(%d,%d),bump(%d,%d,%d,%d,(%d,%d),%d)),exp%u, power = %"PRId64"", ch,
+	_syncDebug(function, "%c droid%d = p%d;pos(%d,%d,%d),rot(%d,%d,%d),ord%d(%d,%d)^%d,act%d%s,so%X,bp%d,sMove(st%d,spd%d,mdir%d,path%d/%d,src(%d,%d),tar(%d,%d),dst(%d,%d),bump(%d,%d,%d,%d,(%d,%d),%d)),exp%u, power = %"PRId64"", ch,
 	          psDroid->id,
 
 	          psDroid->player,
-	          psDroid->pos.x, psDroid->sMove.eBitX, psDroid->pos.y, psDroid->sMove.eBitY, psDroid->pos.z,
+	          psDroid->pos.x, psDroid->pos.y, psDroid->pos.z,
 	          psDroid->rot.direction, psDroid->rot.pitch, psDroid->rot.roll,
 	          psDroid->order, psDroid->orderX, psDroid->orderY, psDroid->listSize,
 	          psDroid->action, actTar,
@@ -1939,8 +1939,6 @@ DROID *reallyBuildDroid(DROID_TEMPLATE *pTemplate, Position pos, UDWORD player, 
 	psDroid->droidType = droidTemplateType(pTemplate);  // Is set again later to the same thing, in droidSetBits.
 	psDroid->pos = pos;
 	psDroid->rot = rot;
-	psDroid->sMove.eBitX = 0;
-	psDroid->sMove.eBitY = 0;
 
 	//don't worry if not on homebase cos not being drawn yet
 	if (!onMission)

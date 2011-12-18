@@ -172,6 +172,11 @@
 // How fast vtols 'skid'
 #define VTOL_SKID_DECEL			600
 
+/// Extra precision added to movement calculations.
+#define EXTRA_BITS                              8
+#define EXTRA_PRECISION                         (1 << EXTRA_BITS)
+
+
 static uint32_t oilTimer = 0;
 static unsigned drumCount = 0;
 
@@ -699,8 +704,8 @@ static void moveCheckSquished(DROID *psDroid, int32_t emx, int32_t emy)
 	int32_t		rad, radSq, objR, xdiff, ydiff, distSq;
 	BASE_OBJECT     *psObj;
 	const int32_t	droidR = moveObjRadius((BASE_OBJECT *)psDroid);
-	const int32_t   mx = emx / EXTRA_PRECISION;
-	const int32_t   my = emy / EXTRA_PRECISION;
+	const int32_t   mx = gameTimeAdjustedAverage(emx, EXTRA_PRECISION);
+	const int32_t   my = gameTimeAdjustedAverage(emy, EXTRA_PRECISION);
 
 	gridStartIterate(psDroid->pos.x, psDroid->pos.y, OBJ_MAXRADIUS);
 	for (psObj = gridIterate(); psObj != NULL; psObj = gridIterate())
@@ -802,8 +807,8 @@ static bool moveBlocked(DROID *psDroid)
 static void moveCalcSlideVector(DROID *psDroid, int32_t objX, int32_t objY, int32_t *pMx, int32_t *pMy)
 {
 	int32_t dirX, dirY, dirMagSq, dotRes;
-	const int32_t mx = *pMx / EXTRA_PRECISION;
-	const int32_t my = *pMy / EXTRA_PRECISION;
+	const int32_t mx = *pMx;
+	const int32_t my = *pMy;
 	// Calculate the vector to the obstruction
 	const int32_t obstX = psDroid->pos.x - objX;
 	const int32_t obstY = psDroid->pos.y - objY;
@@ -830,8 +835,8 @@ static void moveCalcSlideVector(DROID *psDroid, int32_t objX, int32_t objY, int3
 	dirMagSq = MAX(1, dirX * dirX + dirY * dirY);
 
 	// Calculate the component of the movement in the direction of the tangent vector
-	*pMx = (dirX * dotRes / dirMagSq) * EXTRA_PRECISION;
-	*pMy = (dirY * dotRes / dirMagSq) * EXTRA_PRECISION;
+	*pMx = (int64_t)dirX * dotRes / dirMagSq;
+	*pMy = (int64_t)dirY * dotRes / dirMagSq;
 }
 
 
@@ -863,8 +868,8 @@ static void moveCalcBlockingSlide(DROID *psDroid, int32_t *pmx, int32_t *pmy, ui
 	SDWORD	horizX,horizY, vertX,vertY;
 	uint16_t slideDir;
 	// calculate the new coords and see if they are on a different tile
-	const int32_t mx = *pmx / EXTRA_PRECISION;
-	const int32_t my = *pmy / EXTRA_PRECISION;
+	const int32_t mx = gameTimeAdjustedAverage(*pmx, EXTRA_PRECISION);
+	const int32_t my = gameTimeAdjustedAverage(*pmy, EXTRA_PRECISION);
 	const int32_t tx = map_coord(psDroid->pos.x);
 	const int32_t ty = map_coord(psDroid->pos.y);
 	const int32_t nx = psDroid->pos.x + mx;
@@ -1134,8 +1139,8 @@ static void moveCalcDroidSlide(DROID *psDroid, int *pmx, int *pmy)
 	{
 		bLegs = true;
 	}
-	spmx = *pmx / EXTRA_PRECISION;
-	spmy = *pmy / EXTRA_PRECISION;
+	spmx = gameTimeAdjustedAverage(*pmx, EXTRA_PRECISION);
+	spmy = gameTimeAdjustedAverage(*pmy, EXTRA_PRECISION);
 
 	droidR = moveObjRadius((BASE_OBJECT *)psDroid);
 	psObst = NULL;
@@ -1494,10 +1499,10 @@ static int moveCalcPerpSpeed(DROID *psDroid, uint16_t iDroidDir, SDWORD iSkidDec
 	int		perpSpeed;
 
 	adiff = angleDelta(iDroidDir - psDroid->sMove.moveDir);
-	perpSpeed = psDroid->sMove.speed * iSin(adiff) / 65536;
+	perpSpeed = iSinR(adiff, psDroid->sMove.speed);
 
 	// decelerate the perpendicular speed
-	perpSpeed = MAX(0, perpSpeed - iSkidDecel * EXTRA_PRECISION/GAME_UPDATES_PER_SEC);
+	perpSpeed = MAX(0, perpSpeed - gameTimeAdjustedAverage(iSkidDecel));
 
 	return perpSpeed;
 }
@@ -1545,7 +1550,7 @@ static int moveCalcNormalSpeed(DROID *psDroid, int fSpeed, uint16_t iDroidDir, S
 	if (normalSpeed < fSpeed)
 	{
 		// accelerate
-		normalSpeed += iAccel * EXTRA_PRECISION/GAME_UPDATES_PER_SEC;
+		normalSpeed += gameTimeAdjustedAverage(iAccel);
 		if (normalSpeed > fSpeed)
 		{
 			normalSpeed = fSpeed;
@@ -1554,7 +1559,7 @@ static int moveCalcNormalSpeed(DROID *psDroid, int fSpeed, uint16_t iDroidDir, S
 	else
 	{
 		// decelerate
-		normalSpeed -= iDecel * EXTRA_PRECISION/GAME_UPDATES_PER_SEC;
+		normalSpeed -= gameTimeAdjustedAverage(iDecel);
 		if (normalSpeed < fSpeed)
 		{
 			normalSpeed = fSpeed;
@@ -1566,7 +1571,7 @@ static int moveCalcNormalSpeed(DROID *psDroid, int fSpeed, uint16_t iDroidDir, S
 
 static void moveGetDroidPosDiffs(DROID *psDroid, int32_t *pDX, int32_t *pDY)
 {
-	int32_t move = psDroid->sMove.speed * EXTRA_PRECISION/GAME_UPDATES_PER_SEC;  // high precision
+	int32_t move = psDroid->sMove.speed * EXTRA_PRECISION;  // high precision
 
 	*pDX = iSinR(psDroid->sMove.moveDir, move);
 	*pDY = iCosR(psDroid->sMove.moveDir, move);
@@ -1614,10 +1619,8 @@ static void moveUpdateDroidPos(DROID *psDroid, int32_t dx, int32_t dy)
 		return;
 	}
 
-	newPos = droidGetPrecisePosition(psDroid);
-	newPos.x += dx;
-	newPos.y += dy;
-	droidSetPrecisePosition(psDroid, newPos);
+	psDroid->pos.x += gameTimeAdjustedAverage(dx, EXTRA_PRECISION);
+	psDroid->pos.y += gameTimeAdjustedAverage(dy, EXTRA_PRECISION);
 
 	/* impact if about to go off map else update coordinates */
 	if ( worldOnMap( psDroid->pos.x, psDroid->pos.y ) == false )

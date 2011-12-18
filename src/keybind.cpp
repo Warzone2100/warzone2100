@@ -24,6 +24,7 @@
 #include "lib/framework/stdio_ext.h"
 #include "lib/framework/utf.h"
 #include "lib/framework/wzapp.h"
+#include "lib/framework/rational.h"
 #include "objects.h"
 #include "basedef.h"
 #include "map.h"
@@ -2561,33 +2562,30 @@ void	kf_ToggleShadows( void )
 }
 // --------------------------------------------------------------------------
 
-float available_speed[] = {
+static const Rational available_speed[] = {
 // p = pumpkin allowed, n = new entries allowed in debug mode only.
 // Since some of these values can ruin a SP game, we disallow them in normal mode.
-	0.f,            // n
-	1.f / 8.f,	// n
-	1.f / 5.f,	// n
-	1.f / 3.f,	// p
-	3.f / 4.f,	// p
-	1.f / 1.f,	// p
-	5.f / 4.f,	// p
-	3.f / 2.f,	// p
-	2.f / 1.f,	// p (in debug mode only)
-	5.f / 2.f,	// n
-	3.f / 1.f,	// n
-	10.f / 1.f,	// n
-	20.f / 1.f,     // n
-	30.f / 1.f,     // n
-	60.f / 1.f,     // n
-	100.f / 1.f,    // n
+	Rational(0),     // n
+	Rational(1, 8),  // n
+	Rational(1, 5),  // n
+	Rational(1, 3),  // p
+	Rational(3, 4),  // p
+	Rational(1),     // p
+	Rational(5, 4),  // p
+	Rational(3, 2),  // p
+	Rational(2),     // p (in debug mode only)
+	Rational(5, 2),  // n
+	Rational(3),     // n
+	Rational(10),    // n
+	Rational(20),    // n
+	Rational(30),    // n
+	Rational(60),    // n
+	Rational(100),   // n
 };
-unsigned int nb_available_speeds = ARRAY_SIZE(available_speed);
+const unsigned nb_available_speeds = ARRAY_SIZE(available_speed);
 
-void kf_SpeedUp( void )
+static void tryChangeSpeed(Rational newMod, Rational oldMod)
 {
-	float           mod;
-	unsigned int    i;
-
 	// Bail out if we're running a _true_ multiplayer game or are playing a tutorial
 	if ((runningMultiplayer() && !getDebugMappingStatus()) || bInTutorial)
 	{
@@ -2598,75 +2596,64 @@ void kf_SpeedUp( void )
 		return;
 	}
 
-	// get the current modifier
-	gameTimeGetMod(&mod);
-
-	for (i = 1; i < nb_available_speeds; ++i)
+	// only in debug/cheat mode do we enable all time compression speeds.
+	if (!getDebugMappingStatus() && (newMod >= 2 || newMod <= 0))  // 2 = max officially allowed time compression
 	{
-		if (mod < available_speed[i])
-		{
-			mod = available_speed[i];
-			// only in debug/cheat mode do we enable all time compression speeds.
-			if (!getDebugMappingStatus())
-			{
-				if (mod >= 2.f / 1.f)		// max officialy allowed time compression
-					break;
-			}
-			if (mod == 1.f / 1.f)
-			{
-				CONPRINTF(ConsoleString,(ConsoleString,_("Game Speed Reset")));
-			}
-			else
-			{
-				CONPRINTF(ConsoleString,(ConsoleString,_("Game Speed Increased to %3.1f"), mod));
-			}
-			gameTimeSetMod(mod);
-			break;
-		}
+		return;
 	}
+
+	char modString[30];
+	if (newMod.d != 1)
+	{
+		ssprintf(modString, "%d/%d", newMod.n, newMod.d);
+	}
+	else
+	{
+		ssprintf(modString, "%d", newMod.n);
+	}
+
+	if (newMod == 1)
+	{
+		CONPRINTF(ConsoleString, (ConsoleString, _("Game Speed Reset")));
+	}
+	else if (newMod > oldMod)
+	{
+		CONPRINTF(ConsoleString, (ConsoleString, _("Game Speed Increased to %s"), modString));
+	}
+	else
+	{
+		CONPRINTF(ConsoleString, (ConsoleString, _("Game Speed Reduced to %s"), modString));
+	}
+	gameTimeSetMod(newMod);
+}
+
+void kf_SpeedUp( void )
+{
+	// get the current modifier
+	Rational mod = gameTimeGetMod();
+
+	Rational const *newMod = std::upper_bound(available_speed, available_speed + nb_available_speeds, mod);
+	if (newMod == available_speed + nb_available_speeds)
+	{
+		return;  // Already at maximum speed.
+	}
+
+	tryChangeSpeed(*newMod, mod);
 }
 
 void kf_SlowDown( void )
 {
-	float	mod;
-	int		i;
-
-	// Bail out if we're running a _true_ multiplayer game or are playing a tutorial
-	if ((runningMultiplayer() && !getDebugMappingStatus()) || bInTutorial)
-	{
-		if (!bInTutorial)
-		{
-			addConsoleMessage(_("Sorry, but game speed cannot be changed in multiplayer."), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
-		}
-		return;
-	}
-
 	// get the current modifier
-	gameTimeGetMod(&mod);
+	Rational mod = gameTimeGetMod();
 
-	for (i = nb_available_speeds - 2; i >= 0; --i)
+	Rational const *newMod = std::lower_bound(available_speed, available_speed + nb_available_speeds, mod);
+	if (newMod == available_speed)
 	{
-		if (mod > available_speed[i])
-		{
-			mod = available_speed[i];
-			// only in debug/cheat mode do we enable all time compression speeds.
-			if( !getDebugMappingStatus() )
-			{
-				if (mod < 1.f / 3.f)
-					break;
-			}
-			if (mod == 1.f / 1.f)
-			{
-				CONPRINTF(ConsoleString,(ConsoleString,_("Game Speed Reset")));
-			}
-			else
-			{
-				CONPRINTF(ConsoleString,(ConsoleString,_("Game Speed Reduced to %3.1f"),mod));
-			}
-			gameTimeSetMod(mod);
-			break;
-		}
+		return;  // Already at minimum speed.
 	}
+	--newMod;  // Point to lower speed instead of current speed.
+
+	tryChangeSpeed(*newMod, mod);
 }
 
 void kf_NormalSpeed( void )

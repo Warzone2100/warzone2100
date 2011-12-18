@@ -474,17 +474,14 @@ AC_CONFIG_FILES([Makefile
 		lib/gamelib/Makefile
 		lib/ivis_opengl/Makefile
 		lib/netplay/Makefile
+		lib/qtgame/Makefile
+		lib/sdl/Makefile
 		lib/script/Makefile
 		lib/sequence/Makefile
 		lib/sound/Makefile
 		lib/widget/Makefile
 		tools/map/Makefile
 		src/Makefile])
-if test "x$backend" = "xqt"; then
-	AC_CONFIG_FILES([lib/qtgame/Makefile])
-else
-	AC_CONFIG_FILES([lib/sdl/Makefile])
-fi
 AC_OUTPUT
 
 AS_IF([test "x$enable_debug" = "xyes"],[

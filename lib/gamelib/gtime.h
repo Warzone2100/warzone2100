@@ -25,6 +25,7 @@
 #define _gtime_h
 
 struct NETQUEUE;
+struct Rational;
 
 /// The number of time units per second of the game clock.
 #define GAME_TICKS_PER_SEC 1000
@@ -70,7 +71,7 @@ extern void setGameTime(uint32_t newGameTime);
  * The game time increases in GAME_UNITS_PER_TICK increments, and deltaGameTime is either 0 or GAME_UNITS_PER_TICK.
  * @returns true iff the game time ticked.
  */
-extern void gameTimeUpdate(void);
+void gameTimeUpdate(unsigned renderAverage, unsigned stateAverage);
 /// Call after updating the state, and before processing any net messages that use deltaGameTime. (Sets deltaGameTime = 0.)
 void gameTimeUpdateEnd(void);
 
@@ -96,10 +97,10 @@ extern void gameTimeReset(UDWORD time);
 void gameTimeResetMod(void);
 
 /** Set the time modifier. Used to speed up the game. */
-void gameTimeSetMod(float mod);
+void gameTimeSetMod(Rational mod);
 
 /** Get the current time modifier. */
-void gameTimeGetMod(float *pMod);
+Rational gameTimeGetMod();
 
 /**
  * Returns the game time, modulo the time period, scaled to 0..requiredRange.
@@ -166,6 +167,11 @@ static inline WZ_DECL_CONST int quantiseFraction(int numerator, int denominator,
 static inline int32_t gameTimeAdjustedAverage(int value)
 {
 	return quantiseFraction(value, GAME_TICKS_PER_SEC, gameTime + deltaGameTime, gameTime);
+}
+/// Returns the numerator/denominator times deltaGameTime, converted to seconds. The return value is rounded up or down, such that it is exactly right on average.
+static inline int32_t gameTimeAdjustedAverage(int numerator, int denominator)
+{
+	return quantiseFraction(numerator, GAME_TICKS_PER_SEC*denominator, gameTime + deltaGameTime, gameTime);
 }
 
 void sendPlayerGameTime(void);                            ///< Sends a GAME_GAME_TIME message with gameTime plus latency to our game queues.
