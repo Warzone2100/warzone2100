@@ -145,7 +145,6 @@ UDWORD	current_numplayers = 4;
 #define M_REQUEST_15P   (MULTIMENU+84)
 #define M_REQUEST_16P   (MULTIMENU+85)
 static const unsigned M_REQUEST_NP[] = {M_REQUEST_2P,    M_REQUEST_3P,    M_REQUEST_4P,    M_REQUEST_5P,    M_REQUEST_6P,    M_REQUEST_7P,    M_REQUEST_8P,    M_REQUEST_9P,    M_REQUEST_10P,    M_REQUEST_11P,    M_REQUEST_12P,    M_REQUEST_13P,    M_REQUEST_14P,    M_REQUEST_15P,    M_REQUEST_16P};
-static char const * M_REQUEST_NP_TIPS[] = {   N_("2 players"), N_("3 players"), N_("4 players"), N_("5 players"), N_("6 players"), N_("7 players"), N_("8 players"), N_("9 players"), N_("10 players"), N_("11 players"), N_("12 players"), N_("13 players"), N_("14 players"), N_("15 players"), N_("16 players")};
 
 #define M_REQUEST_BUT	(MULTIMENU+100)		// allow loads of buttons.
 #define M_REQUEST_BUTM	(MULTIMENU+1100)
@@ -646,13 +645,15 @@ void addMultiRequest(const char* searchDir, const char* fileExtension, UDWORD mo
 		sButInit.pDisplay	= displayNumPlayersBut;
 		widgAddButton(psRScreen, &sButInit);
 
-		STATIC_ASSERT(MAX_PLAYERS_IN_GUI <= ARRAY_SIZE(M_REQUEST_NP) + 1 && MAX_PLAYERS <= ARRAY_SIZE(M_REQUEST_NP_TIPS) + 1);
+		STATIC_ASSERT(MAX_PLAYERS_IN_GUI <= ARRAY_SIZE(M_REQUEST_NP) + 1);
 		for (unsigned numPlayers = 2; numPlayers <= MAX_PLAYERS_IN_GUI; ++numPlayers)
 		{
+			static char ttip[MAX_PLAYERS_IN_GUI][20];
 			sButInit.id             = M_REQUEST_NP[numPlayers - 2];
 			sButInit.y		+= 22;
 			sButInit.UserData	= numPlayers;
-			sButInit.pTip		= gettext(M_REQUEST_NP_TIPS[numPlayers - 2]);
+			ssprintf(ttip[numPlayers], ngettext("%d player", "%d players", numPlayers), numPlayers);
+			sButInit.pTip		= (const char *)&ttip[numPlayers];
 			widgAddButton(psRScreen, &sButInit);
 		}
 	}
