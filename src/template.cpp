@@ -60,6 +60,19 @@ static const StringToEnum<DROID_TYPE> map_DROID_TYPE[] =
 
 bool researchedTemplate(DROID_TEMPLATE *psCurr, int player)
 {
+	// super hack -- cyborgs and transports are special, only check their body
+	switch (psCurr->droidType)
+	{
+	case DROID_PERSON:
+	case DROID_CYBORG:
+	case DROID_CYBORG_SUPER:
+	case DROID_CYBORG_CONSTRUCT:
+	case DROID_CYBORG_REPAIR:
+	case DROID_TRANSPORTER:
+		return (apCompLists[player][COMP_BODY][psCurr->asParts[COMP_BODY]] == AVAILABLE);
+	default:
+		break; // now proceed to normal droids...
+	}
 	// Note the ugly special case for commanders - their weapon is unavailable
 	if (apCompLists[player][COMP_BODY][psCurr->asParts[COMP_BODY]] != AVAILABLE
 	    || (psCurr->asParts[COMP_BRAIN] > 0 && apCompLists[player][COMP_BRAIN][psCurr->asParts[COMP_BRAIN]] != AVAILABLE)
