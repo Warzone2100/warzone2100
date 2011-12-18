@@ -3303,6 +3303,12 @@ bool intValidTemplate(DROID_TEMPLATE *psTempl, const char *newName)
 		}
 	}
 
+	// Check number of weapon slots
+	if (psTempl->numWeaps > (asBodyStats + psTempl->asParts[COMP_BODY])->weaponSlots)
+	{
+		return false;
+	}
+
 	// Check no mixing of systems and weapons
 	if (psTempl->numWeaps != 0 &&
 	    (psTempl->asParts[COMP_SENSOR] ||
