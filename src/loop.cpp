@@ -93,6 +93,9 @@
 #include "objmem.h"
 #endif
 
+#include <numeric>
+
+
 static void fireWaitingCallbacks(void);
 
 /*
@@ -663,6 +666,10 @@ static void gameStateUpdate()
 GAMECODE gameLoop(void)
 {
 	static uint32_t lastFlushTime = 0;
+	static unsigned stateTimes[8];
+	static unsigned renderTimes[8];
+	static int stateTimeIndex = 0;
+	static int renderTimeIndex = 0;
 
 	bool didTick = false;
 	while (true)
@@ -671,8 +678,11 @@ GAMECODE gameLoop(void)
 		// Receive GAME_BLAH messages, and if it's time, process exactly as many GAME_BLAH messages as required to be able to tick the gameTime.
 		recvMessage();
 
+		unsigned renderAverage = std::accumulate(renderTimes, renderTimes + ARRAY_SIZE(renderTimes), 0) / ARRAY_SIZE(renderTimes);
+		unsigned stateAverage  = std::accumulate(stateTimes,  stateTimes  + ARRAY_SIZE(stateTimes),  0) / ARRAY_SIZE(stateTimes);
+
 		// Update gameTime and graphicsTime, and corresponding deltas. Note that gameTime and graphicsTime pause, if we aren't getting our GAME_GAME_TIME messages.
-		gameTimeUpdate();
+		gameTimeUpdate(renderAverage, stateAverage);
 
 		if (deltaGameTime == 0)
 		{
@@ -682,9 +692,14 @@ GAMECODE gameLoop(void)
 
 		ASSERT(!paused && !gameUpdatePaused() && !editPaused(), "Nonsensical pause values.");
 
+		unsigned before = wzGetTicks();
 		syncDebug("Begin game state update, gameTime = %d", gameTime);
 		gameStateUpdate();
 		syncDebug("End game state update, gameTime = %d", gameTime);
+		unsigned after = wzGetTicks();
+
+		stateTimes[stateTimeIndex] = after - before;
+		stateTimeIndex = (stateTimeIndex + 1)%ARRAY_SIZE(stateTimes);
 
 		ASSERT(deltaGraphicsTime == 0, "Shouldn't update graphics and game state at once.");
 	}
@@ -695,7 +710,14 @@ GAMECODE gameLoop(void)
 		NETflush();  // Make sure the game time tick message is really sent over the network, and that we aren't waiting too long to send data.
 	}
 
-	return renderLoop();
+	unsigned before = wzGetTicks();
+	GAMECODE renderReturn = renderLoop();
+	unsigned after = wzGetTicks();
+
+	renderTimes[renderTimeIndex] = after - before;
+	renderTimeIndex = (renderTimeIndex + 1)%ARRAY_SIZE(renderTimes);
+
+	return renderReturn;
 }
 
 /* The video playback loop */

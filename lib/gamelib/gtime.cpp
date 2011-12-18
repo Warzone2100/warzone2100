@@ -149,7 +149,7 @@ UDWORD getModularScaledRealTime(UDWORD timePeriod, UDWORD requiredRange)
 }
 
 /* Call this each loop to update the game timer */
-void gameTimeUpdate()
+void gameTimeUpdate(unsigned renderAverage, unsigned stateAverage)
 {
 	deltaGameTime = 0;
 	deltaGraphicsTime = 0;
@@ -171,8 +171,13 @@ void gameTimeUpdate()
 		return;
 	}
 
+	(void)stateAverage;  // Don't need to know the average state update time.
+	// A bit arbitrary formula, but if the average time to render a frame is high compared to the time to update the
+	// state, then update multiple times per frame. Otherwise, update at least once per frame.
+	unsigned maximumTicksPerFrame = renderAverage*2 + GAME_TICKS_PER_UPDATE*modifier.d/std::max<int>(modifier.n, 1) + 1;
+
 	// Make sure graphics updates fast enough.
-	prevRealTime = std::max(prevRealTime + MAXIMUM_TICKS_PER_FRAME, currTime) - MAXIMUM_TICKS_PER_FRAME;  // Written this way to avoid unsigned underflow.
+	prevRealTime = std::max(prevRealTime + maximumTicksPerFrame, currTime) - maximumTicksPerFrame;  // Written this way to avoid unsigned underflow.
 
 	// Calculate the new game time
 	int newDeltaGraphicsTime = quantiseFraction(modifier.n, modifier.d, currTime, prevRealTime);
