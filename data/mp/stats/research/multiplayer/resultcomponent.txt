@@ -1,3 +1,4 @@
+Research ID,Component ID,Type,Replaced Component,Replaced Type,unused
 R-Wpn-AAGun02,AAGun2Mk1,WEAPON,0,0,10
 R-Wpn-AALaser,AAGunLaser,WEAPON,0,0,10
 R-Sys-Autorepair-General,AutoRepair,REPAIR,ZNULLREPAIR,REPAIR,6

@@ -1,4 +1,4 @@
-Research ID,-,Left icon,Major tech,Right icon,IMD,-,MsgName,StructName,CompName,CompType,ResearchPoints,keyTopic,Prereqs,Function results,Structure prereqs,Redundant structures,Structure results,Redundant components,Component results
+Research ID,unused,Subgroup icon,Major tech,Main icon,IMD,IMD2,MsgName,StructName,CompName,CompType,ResearchPoints,keyTopic,unused,unused,unused,unused,unused,unused,unused
 R-Cyborg-Wpn-Thermite,Level Two,0,0,IMAGE_RES_CYBORGTECH,0,0,RES_CYW_TFL,0,Flame2,WEAPON,900,0,0,0,0,0,0,0,0
 R-Cyborg-Wpn-Grenade,Level Two,0,0,IMAGE_RES_CYBORGTECH,0,0,RES_CYW_GRN,0,Mortar1Mk1,WEAPON,900,0,0,0,0,0,0,0,0
 R-Cyborg-Sys-ComEng,Level One,0,0,IMAGE_RES_CYBORGTECH,0,0,RES_CYS_CEN,0,Spade1Mk1,CONSTRUCT,600,0,0,0,0,0,0,0,0

@@ -303,7 +303,7 @@ bool loadResearch(const char *pResearchData, UDWORD bufferSize)
 //Load the pre-requisites for a research list
 bool loadResearchPR(const char *pPRData, UDWORD bufferSize)
 {
-	const unsigned int NumToAlloc = numCR(pPRData, bufferSize);
+	unsigned NumToAlloc = numCR(pPRData, bufferSize);
 	char				ResearchName[MAX_STR_LENGTH], PRName[MAX_STR_LENGTH];
 
 	for (int i = 0; i < NumToAlloc; i++)
@@ -345,10 +345,17 @@ bool loadResearchPR(const char *pPRData, UDWORD bufferSize)
 //Load the artefacts for a research list
 bool loadResearchArtefacts(const char *pArteData, UDWORD bufferSize, UDWORD listNumber)
 {
-	const unsigned int NumToAlloc = numCR(pArteData, bufferSize);
+	unsigned NumToAlloc = numCR(pArteData, bufferSize);
 	char			ResearchName[MAX_STR_LENGTH], ArteName[MAX_STR_LENGTH], TypeName[MAX_STR_LENGTH];
 	COMPONENT_STATS		*pArtefact;
 	UDWORD				newType;
+
+	// Skip descriptive header
+	if (strncmp(pArteData, "Research ", 9) == 0)
+	{
+		pArteData = strchr(pArteData, '\n') + 1;
+		NumToAlloc--;
+	}
 
 	for (int i = 0; i < NumToAlloc; i++)
 	{
@@ -437,12 +444,19 @@ bool loadResearchArtefacts(const char *pArteData, UDWORD bufferSize, UDWORD list
 //Load the Structures for a research list
 bool loadResearchStructures(const char *pStructData, UDWORD bufferSize,UDWORD listNumber)
 {
-	const unsigned int NumToAlloc = numCR(pStructData, bufferSize);
+	unsigned NumToAlloc = numCR(pStructData, bufferSize);
 	unsigned int i = 0;
 	char				ResearchName[MAX_STR_LENGTH], StructureName[MAX_STR_LENGTH];
 	UWORD				incR, incS;
 	STRUCTURE_STATS		*pStructure = asStructureStats;
 	bool				recFound;
+
+	// Skip descriptive header
+	if (strncmp(pStructData, "Research ", 9) == 0)
+	{
+		pStructData = strchr(pStructData, '\n') + 1;
+		NumToAlloc--;
+	}
 
 	for (i = 0; i < NumToAlloc; i++)
 	{
@@ -513,12 +527,19 @@ bool loadResearchStructures(const char *pStructData, UDWORD bufferSize,UDWORD li
 //Load the pre-requisites for a research list
 bool loadResearchFunctions(const char *pFunctionData, UDWORD bufferSize)
 {
-	const unsigned int NumToAlloc = numCR(pFunctionData, bufferSize);
+	unsigned NumToAlloc = numCR(pFunctionData, bufferSize);
 	unsigned int i = 0;
 	char				ResearchName[MAX_STR_LENGTH], FunctionName[MAX_STR_LENGTH];
 	UDWORD				incR, incF;
 	FUNCTION			**pFunction = asFunctions;
 	bool				recFound;
+
+	// Skip descriptive header
+	if (strncmp(pFunctionData, "Research ", 9) == 0)
+	{
+		pFunctionData = strchr(pFunctionData, '\n') + 1;
+		NumToAlloc--;
+	}
 
 	for (i=0; i < NumToAlloc; i++)
 	{

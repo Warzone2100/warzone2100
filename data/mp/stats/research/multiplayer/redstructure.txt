@@ -1,3 +1,4 @@
+Research ID,Structure ID,unused
 R-Defense-AASite-QuadRotMg,AASite-QuadMg1,189
 R-Defense-Emplacement-HPVcannon,PillBox4,130
 R-Defense-GuardTower-ATMiss,GuardTower5,123

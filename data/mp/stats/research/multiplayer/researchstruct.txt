@@ -1,3 +1,4 @@
+Research ID,Structure ID,unused
 R-Defense-Tower01,A0CommandCentre,0
 R-Defense-Tower06,A0CommandCentre,0
 R-Defense-Pillbox01,A0CommandCentre,0

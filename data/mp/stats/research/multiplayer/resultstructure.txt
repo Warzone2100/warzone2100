@@ -1,3 +1,4 @@
+Research ID,Structure ID,unused,unused
 R-Defense-AA-Laser,P0-AASite-Laser,0,340
 R-Defense-AASite-QuadBof,AASite-QuadBof,0,188
 R-Defense-AASite-QuadMg1,AASite-QuadMg1,0,189
