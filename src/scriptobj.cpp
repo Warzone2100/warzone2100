@@ -777,7 +777,7 @@ bool scrValDefSave(INTERP_VAL *psVal, WzConfig &ini)
 		break;
 	case ST_RESEARCH:
 		psResearch = (RESEARCH *)psVal->v.oval;
-		if (psResearch && psResearch->pName[0] != '\0')
+		if (psResearch && psResearch->pName && psResearch->pName[0] != '\0')
 		{
 			ini.setValue("data", QString(psResearch->pName));
 			ASSERT(psResearch == getResearch(psResearch->pName), "Research %s not found!", psResearch->pName);

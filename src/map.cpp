@@ -1923,6 +1923,7 @@ void mapInit()
 	}
 
 	// Start thread
+	ASSERT(dangerSemaphore == NULL && dangerThread == NULL, "Map data not cleaned up before starting!");
 	if (game.type == SKIRMISH)
 	{
 		lastDangerPlayer = 0;
