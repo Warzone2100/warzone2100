@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
 "POT-Creation-Date: 2011-12-19 00:57+0100\n"
-"PO-Revision-Date: 2011-12-05 22:26+0200\n"
+"PO-Revision-Date: 2011-12-18 23:34+0200\n"
 "Last-Translator: Ayhan GÖRGÜLÜ <ayhangorgulu45@gmail.com>\n"
 "Language-Team: Turkey <warzone-dev@gna.org>\n"
 "Language: \n"
@@ -14372,7 +14372,7 @@ msgstr "ZORLUK"
 
 #: src/multiint.cpp:1822
 msgid "Less aggressive"
-msgstr ""
+msgstr "Daha az agresif"
 
 #: src/multiint.cpp:1823
 msgid "Plays nice"
@@ -14383,9 +14383,8 @@ msgid "No holds barred"
 msgstr "Hiçbir tutar engellenmedi"
 
 #: src/multiint.cpp:1825
-#, fuzzy
 msgid "Starts with advantages"
-msgstr "Gelişmiş üsler ile başla."
+msgstr "Avantajlar ile başlar"
 
 #: src/multiint.cpp:1853
 msgid "CHOOSE AI"
