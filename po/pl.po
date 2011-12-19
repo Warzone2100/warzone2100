@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
 "POT-Creation-Date: 2011-12-19 00:57+0100\n"
-"PO-Revision-Date: 2010-12-11 17:00+0100\n"
+"PO-Revision-Date: 2011-12-18 21:11+0100\n"
 "Last-Translator: Michał D. aka Emdek <emdeck@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
 "Language: pl\n"
@@ -1128,7 +1128,7 @@ msgstr "Stabilizowane pociski dużej mocy przebijające pancerz"
 #: data/base/messages/resmessages1.rmsg:578
 #: data/base/messages/resmessages3.rmsg:877
 msgid "Increases Cannon damage"
-msgstr "Zwiększa obrażenia dział"
+msgstr "Zwiększa obrażenia zadawane przez działa"
 
 #: data/base/messages/resmessages12.rmsg:239
 #: data/mp/messages/resmessages12.rmsg:239
@@ -1779,7 +1779,7 @@ msgstr "Wszystkie Stacje Badawcze ulepszone automatycznie"
 #: data/mp/messages/resmessages3.rmsg:472
 #: data/mp/messages/strings/resstrings.txt:427
 msgid "Increases Damage Resistance"
-msgstr "Zwieksza odporność na obrażenia"
+msgstr "Zwiększa odporność na obrażenia"
 
 #: data/base/messages/resmessages1.rmsg:369
 #: data/base/messages/strings/names.txt:805
@@ -2169,7 +2169,7 @@ msgstr "Żel propylenowy spala się w wyższych temperaturach"
 #: data/base/messages/strings/resstrings.txt:767
 #: data/mp/messages/strings/resstrings.txt:806
 msgid "Increases Flamer damage"
-msgstr "Zwiększa obrażenia od miotacza ognia"
+msgstr "Zwiększa obrażenia zadawane przez miotacz ognia"
 
 #: data/base/messages/resmessages1.rmsg:616
 #: data/mp/messages/resmessages1.rmsg:617
@@ -2270,7 +2270,7 @@ msgstr "Ulepszony kształt głowic rakietowych"
 #: data/base/messages/strings/resstrings.txt:945
 #: data/mp/messages/strings/resstrings.txt:990
 msgid "Increases Mini-Rocket damage"
-msgstr "Zwiększa obrażenia od minirakiet"
+msgstr "Zwiększa obrażenia zadawane przez minirakiety"
 
 #: data/base/messages/resmessages1.rmsg:733
 #: data/mp/messages/resmessages1.rmsg:734
@@ -2296,7 +2296,7 @@ msgstr "Wysoko wybuchowa głowica przeciwpancerna"
 #: data/base/messages/strings/resstrings.txt:967
 #: data/mp/messages/strings/resstrings.txt:1012
 msgid "Increases Rocket damage"
-msgstr "Zwiększa obrażenia od rakiet"
+msgstr "Zwiększa obrażenia zadawane przez rakiety"
 
 #: data/base/messages/resmessages23.rmsg:4
 #: data/base/messages/resmessages3.rmsg:56
@@ -3368,7 +3368,7 @@ msgstr "Pociski wybuchają w kontakcie z celem"
 #: data/base/messages/strings/resstrings.txt:671
 #: data/mp/messages/strings/resstrings.txt:706
 msgid "Increases AA Flak damage"
-msgstr "Zwiększa obrażenia od broni AA"
+msgstr "Zwiększa obrażenia zadawane przez broń AA"
 
 #: data/base/messages/resmessages2.rmsg:657
 #: data/base/messages/resmessages3.rmsg:826
@@ -4158,7 +4158,7 @@ msgstr "Ulepszenie w gęstości emisji lasera"
 
 #: data/base/messages/resmessages3.rmsg:981
 msgid "Increases Laser damage"
-msgstr "Zwiększa obrażenia od lasera"
+msgstr "Zwiększa obrażenia zadawane przez laser"
 
 #: data/base/messages/resmessages3.rmsg:993
 #: data/mp/messages/resmessages3.rmsg:993
@@ -4245,7 +4245,7 @@ msgstr "Mała głowica termonuklearna"
 
 #: data/base/messages/resmessages3.rmsg:1085
 msgid "Increases Missile damage"
-msgstr "Zwiększa obrażenia od rakiet"
+msgstr "Zwiększa obrażenia zadawane przez rakiety"
 
 #: data/base/messages/resmessages3.rmsg:1096
 #: data/base/messages/resmessages3.rmsg:1109
@@ -11367,19 +11367,16 @@ msgid "Mini-Rocket Array Cobra Half-tracks"
 msgstr "Kobra artyleria minirakiet na pół-gąsienicach"
 
 #: data/mp/messages/strings/names.txt:351
-#, fuzzy
 msgid "Jammer Tower"
-msgstr "Wieża strażnicza z miotaczem ognia"
+msgstr "Wieża strażnicza z antyradarem"
 
 #: data/mp/messages/strings/names.txt:352
-#, fuzzy
 msgid "Jammer Turret"
-msgstr "Scrambler"
+msgstr "Wieżyczka antyradaru"
 
 #: data/mp/messages/strings/names.txt:353
-#, fuzzy
 msgid "Electronic Countermeasures"
-msgstr "Laboratorium elektroniczne"
+msgstr "Elektroniczne środki zaradcze"
 
 #: data/mp/messages/strings/names.txt:363
 #: data/mp/messages/strings/names.txt:1703
@@ -12022,26 +12019,25 @@ msgstr "Język systemu"
 
 #: lib/ivis_opengl/screen.cpp:152
 msgid "OpenGL 2.0 is not supported by your system. Some things may look wrong. Please upgrade your graphics driver/hardware, if possible."
-msgstr ""
+msgstr "Twój system nie obsługuje OpenGL 2.0, niektóre rzeczy mogą wyglądać niewłaściwie. Zaktualizuj sterowniki / kartę graficzną, jeśli to możliwe."
 
 #: lib/ivis_opengl/screen.cpp:156
 msgid "OpenGL 1.4 is not supported by your system. The game requires this. Please upgrade your graphics drivers/hardware, if possible."
-msgstr ""
+msgstr "Twój system nie obsługuje OpenGL 1.4 wymaganego przez grę. Zaktualizuj sterowniki / kartę graficzną, jeśli to możliwe."
 
 #: lib/netplay/netlobby.cpp:102
 msgid "Received invalid addGame data."
-msgstr ""
+msgstr "Odebrano nieprawidłowe dane addGame."
 
 #: lib/netplay/netlobby.cpp:140
 #: lib/netplay/netlobby.cpp:163
 #: lib/netplay/netlobby.cpp:183
-#, fuzzy
 msgid "Create a game first!"
-msgstr "Śledź obiekt gry"
+msgstr "Najpierw utwórz grę!"
 
 #: lib/netplay/netlobby.cpp:426
 msgid "Received invalid login data."
-msgstr ""
+msgstr "Odebrano nieprawidłowe dane logowania."
 
 #: lib/netplay/netlobby.cpp:518
 #: lib/netplay/netlobby.cpp:531
@@ -12050,12 +12046,12 @@ msgstr ""
 #: lib/netplay/netlobby.cpp:569
 #: lib/netplay/netlobby.cpp:578
 msgid "Failed to communicate with the lobby."
-msgstr ""
+msgstr "Nie udało się połączyć z lobby."
 
 #: lib/netplay/netlobby.cpp:589
 #, c-format
 msgid "Got server error: %s"
-msgstr ""
+msgstr "Odebrano błąd serwera: %s"
 
 #: lib/netplay/netplay.cpp:184
 #: lib/netplay/netplay.cpp:744
@@ -12064,56 +12060,57 @@ msgstr "Wpisz hasło tutaj"
 
 #: lib/netplay/netplay.cpp:2067
 msgid "Game not in the lobby, please login first!"
-msgstr ""
+msgstr "Gra poza lobby, najpierw się zaloguj!"
 
 #: lib/netplay/netplay.cpp:2072
 #, c-format
 msgid "Error connecting to the lobby server: %s. Make sure port %d can receive incoming connections. If you're using a router configure it to use UPnP, or to forward the port to your system."
-msgstr ""
+msgstr "Wystąpił błąd podczas łączenia się z serwerem lobby: %s. Upewnij się, że port %d może odbierać połączenia przychodzące. Jeśli używasz rutera, to skonfiguruj go do używania UPnP lub przekieruj port do twojego systemu."
 
 #: po/custom/mac-infoplist.txt:1
 msgid ""
 "Copyright © 1999-2004 Eidos Interactive.\n"
 "Copyright © 2005-2010 The Warzone 2100 Project"
 msgstr ""
+"Copyright © 1999-2004 Eidos Interactive.\n"
+"Copyright © 2005-2010 The Warzone 2100 Project"
 
 #: po/custom/mac-infoplist.txt:2
 #: po/custom/warzone2100.desktop.txt:2
 msgid "Warzone 2100"
-msgstr ""
+msgstr "Warzone 2100"
 
 #: po/custom/mac-infoplist.txt:3
 msgid "Warzone 2100 Map / Mod File"
-msgstr ""
+msgstr "Plik mapy / modyfikacji Warzone 2100"
 
 #: po/custom/mac-infoplist.txt:4
 msgid "Warzone 2100 Campaign Mod File"
-msgstr ""
+msgstr "Plik modyfikacji kampanii Warzone 2100"
 
 #: po/custom/mac-infoplist.txt:5
 msgid "Warzone 2100 Multiplayer Mod File"
-msgstr ""
+msgstr "Plik modyfikacji gry wieloosobowej Warzone 2100"
 
 #: po/custom/mac-infoplist.txt:6
 msgid "Warzone 2100 Global Mod File"
-msgstr ""
+msgstr "Plik globalnej modyfikacji Warzone 2100"
 
 #: po/custom/mac-infoplist.txt:7
 msgid "Warzone"
-msgstr ""
+msgstr "Warzone"
 
 #: po/custom/mac-infoplist.txt:8
 msgid "Warzone 2100 Music Mod File"
-msgstr ""
+msgstr "Plik modyfikacji muzyki Warzone 2100"
 
 #: po/custom/warzone2100.desktop.txt:1
 msgid "Postnuclear realtime strategy"
-msgstr ""
+msgstr "Post nuklearna strategia czasu rzeczywistego"
 
 #: po/custom/warzone2100.desktop.txt:3
-#, fuzzy
 msgid "Strategy Game"
-msgstr "Zapisz grę"
+msgstr "Gra strategiczna"
 
 #: src/challenge.cpp:222
 #: src/hci.cpp:917
@@ -12268,16 +12265,15 @@ msgstr "Idź od razu na ekran hosta"
 
 #: src/clparse.cpp:266
 msgid "Enable texture compression"
-msgstr ""
+msgstr "Włącz kompresję tekstur"
 
 #: src/clparse.cpp:267
 msgid "Disable texture compression"
-msgstr ""
+msgstr "Wyłącz kompresję tekstur"
 
 #: src/configuration.cpp:92
-#, fuzzy
 msgid "My Game"
-msgstr "Wyjdź z gry"
+msgstr "Moja gra"
 
 #: src/configuration.cpp:93
 #: src/multistat.cpp:124
@@ -12450,7 +12446,7 @@ msgstr "Oczekiwanie na graczy"
 
 #: src/display3d.cpp:629
 msgid "Out of sync"
-msgstr ""
+msgstr "Brak synchronizacji"
 
 #: src/display.cpp:1655
 msgid "Cannot Build. Oil Resource Burning."
@@ -12458,9 +12454,9 @@ msgstr "Nie można budować. Płonie ropa."
 
 #: src/display.cpp:1843
 #: src/display.cpp:2406
-#, fuzzy, c-format
+#, c-format
 msgid "%s - Damage %d%% - Experience %.1f, %s"
-msgstr "%s - Obrażenia %d%% - Doświadczenie %d, %s"
+msgstr "%s - Obrażenia %d%% - Doświadczenie %.1f, %s"
 
 #: src/display.cpp:1859
 #, c-format
@@ -12587,7 +12583,7 @@ msgstr "MENU GŁÓWNE"
 
 #: src/frontend.cpp:116
 msgid "Visit our official site: http://wz2100.net"
-msgstr ""
+msgstr "Odwiedź naszą oficjalną stronę: http://wz2100.net"
 
 #: src/frontend.cpp:187
 msgid "Fast Play"
@@ -12692,7 +12688,7 @@ msgstr "Pełny ekran"
 
 #: src/frontend.cpp:464
 msgid "Scanlines"
-msgstr ""
+msgstr "Linie skanowania"
 
 #: src/frontend.cpp:468
 #: src/frontend.cpp:489
@@ -12719,7 +12715,7 @@ msgstr "Wyłącz"
 #: src/frontend.cpp:472
 #: src/frontend.cpp:610
 msgid "50%"
-msgstr ""
+msgstr "50%"
 
 #: src/frontend.cpp:476
 #: src/frontend.cpp:615
@@ -12802,15 +12798,13 @@ msgid "Texture size"
 msgstr "Rozmiar tekstury"
 
 #: src/frontend.cpp:752
-#, fuzzy
 msgid "Vertical sync"
-msgstr "Synchron. pionowa*"
+msgstr "Synchron. pionowa"
 
 #: src/frontend.cpp:787
 #: src/frontend.cpp:848
-#, fuzzy
 msgid "Unsupported"
-msgstr "Transportowiec"
+msgstr "Nieobsługiwane"
 
 #: src/frontend.cpp:792
 msgid "VIDEO OPTIONS"
@@ -12834,13 +12828,11 @@ msgstr "Obracanie ekranu"
 
 #: src/frontend.cpp:1019
 #: src/frontend.cpp:1092
-#, fuzzy
 msgid "Middle Mouse"
 msgstr "Środkowy przycisk"
 
 #: src/frontend.cpp:1023
 #: src/frontend.cpp:1087
-#, fuzzy
 msgid "Right Mouse"
 msgstr "Prawy przycisk"
 
@@ -12922,9 +12914,8 @@ msgstr "MAPA ZAPISANA!"
 #: src/hci.cpp:1560
 #: src/loop.cpp:271
 #: src/loop.cpp:287
-#, fuzzy
 msgid "GAME SAVED: "
-msgstr "GRA ZAPISANA :"
+msgstr "GRA ZAPISANA:"
 
 #: src/hci.cpp:1947
 msgid "Failed to create building"
@@ -12946,9 +12937,9 @@ msgid "Player %u is cheating (debug menu) him/herself a new droid: %s."
 msgstr "Gracz %u oszukuje (menu odpluskwiania) by zdobyć nową jednostkę: %s."
 
 #: src/hci.cpp:2012
-#, fuzzy, c-format
+#, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid."
-msgstr "Gracz %u oszukuje (menu odpluskwiania) by zdobyć nową jednostkę: %s."
+msgstr "Gracz %u oszukuje (menu odpluskwiania) by zdobyć nową jednostkę."
 
 #: src/hci.cpp:3274
 msgid "Commanders (F6)"
@@ -13096,9 +13087,8 @@ msgid "Tab Scroll right"
 msgstr "Przewiń zakładki w prawo"
 
 #: src/hci.cpp:5152
-#, fuzzy
 msgid "Ally progress"
-msgstr "Prędkość budowania"
+msgstr "Postępy sojuszników"
 
 #: src/ingameop.cpp:112
 #: src/ingameop.cpp:196
@@ -13113,12 +13103,12 @@ msgstr "OSTRZEŻENIE: jesteś hostem. Gdy wyjdziesz, gra zostaje zakończona dla
 #: src/ingameop.cpp:187
 #: src/ingameop.cpp:522
 msgid "Tactical UI (Target Origin Icon): Show"
-msgstr ""
+msgstr "UI taktyczne (ikona pochodzenia celu): Pokaż"
 
 #: src/ingameop.cpp:192
 #: src/ingameop.cpp:526
 msgid "Tactical UI (Target Origin Icon): Hide"
-msgstr ""
+msgstr "UI taktyczne (ikona pochodzenia celu): Ukryj"
 
 #: src/ingameop.cpp:275
 #: src/ingameop.cpp:498
@@ -13151,24 +13141,20 @@ msgstr ""
 "Warzone spróbuje załadować grę bez niego."
 
 #: src/intdisplay.cpp:205
-#, fuzzy
 msgid "Waiting for Power"
-msgstr "Oczekiwanie na graczy"
+msgstr "Oczekiwanie na energię"
 
 #: src/intdisplay.cpp:253
-#, fuzzy
 msgid "Build Progress"
-msgstr "Prędkość budowania"
+msgstr "Postępy budowania"
 
 #: src/intdisplay.cpp:275
-#, fuzzy
 msgid "Construction Progress"
-msgstr "Jednostka budująca"
+msgstr "Postępy konstruowania"
 
 #: src/intdisplay.cpp:296
-#, fuzzy
 msgid "Research Progress"
-msgstr "Badania ulepszone"
+msgstr "Postępy badania"
 
 #: src/intelmap.cpp:242
 #: src/keybind.cpp:1365
@@ -13614,7 +13600,7 @@ msgstr "Wykonaj zrzut ekranu"
 
 #: src/keymap.cpp:305
 msgid "Toggle Formation Speed Limiting"
-msgstr "Przełącz limit prędkości formacji"
+msgstr "Przełącz limit prędkości tworzenia"
 
 #: src/keymap.cpp:306
 msgid "View Location of Previous Message"
@@ -14143,13 +14129,12 @@ msgid "You Discover Blueprints For %s"
 msgstr "Odkrywasz plany: %s"
 
 #: src/multiint.cpp:219
-#, fuzzy
 msgid "Medium"
-msgstr "Prędkość: Średnia"
+msgstr "Średni"
 
 #: src/multiint.cpp:219
 msgid "Insane"
-msgstr ""
+msgstr "Szalony"
 
 #: src/multiint.cpp:616
 #: src/multilimit.cpp:190
@@ -14172,11 +14157,11 @@ msgstr "Brak dostępnych gier"
 
 #: src/multiint.cpp:839
 msgid "Authentication failed or not Authenticated"
-msgstr ""
+msgstr "Uwierzytelnianie nie powiodło się"
 
 #: src/multiint.cpp:842
 msgid "The lobby rejected you!"
-msgstr ""
+msgstr "Zostałeś odrzucony przez lobby!"
 
 #: src/multiint.cpp:845
 msgid "Game is full"
@@ -14219,17 +14204,16 @@ msgid "Host Game"
 msgstr "Utwórz grę"
 
 #: src/multiint.cpp:1150
-#, fuzzy
 msgid "Connect IP"
-msgstr "Błąd połączenia"
+msgstr "Połącz się z IP"
 
 #: src/multiint.cpp:1153
 msgid "Login"
-msgstr ""
+msgstr "Zaloguj się"
 
 #: src/multiint.cpp:1154
 msgid "Logout"
-msgstr ""
+msgstr "Wyloguj się"
 
 #: src/multiint.cpp:1158
 msgid "Refresh Games List"
@@ -14246,20 +14230,19 @@ msgstr "OK"
 
 #: src/multiint.cpp:1250
 msgid "LOBBY LOGIN"
-msgstr ""
+msgstr "LOGOWANIE DO LOBBY"
 
 #: src/multiint.cpp:1260
 msgid "Username:"
-msgstr ""
+msgstr "Nazwa użytkownika:"
 
 #: src/multiint.cpp:1283
-#, fuzzy
 msgid "Password:"
-msgstr "Wpisz hasło:"
+msgstr "Hasło:"
 
 #: src/multiint.cpp:1306
 msgid "Use your wz2100.net credentials here."
-msgstr ""
+msgstr "Użyj swoich danych użytkownika wz2100.net."
 
 #: src/multiint.cpp:1455
 msgid "Tanks disabled!!"
@@ -14370,37 +14353,35 @@ msgstr "Ustaw limit struktur"
 
 #: src/multiint.cpp:1808
 msgid "DIFFICULTY"
-msgstr ""
+msgstr "POZIOM TRUDNOŚCI"
 
 #: src/multiint.cpp:1822
 msgid "Less aggressive"
-msgstr ""
+msgstr "Mniej agresywna"
 
 #: src/multiint.cpp:1823
-#, fuzzy
 msgid "Plays nice"
-msgstr "Gracz"
+msgstr "Gra normalnie"
 
 #: src/multiint.cpp:1824
 msgid "No holds barred"
-msgstr ""
+msgstr "Wszystkie chwyty dozwolone"
 
 #: src/multiint.cpp:1825
-#, fuzzy
 msgid "Starts with advantages"
-msgstr "Rozpocznij z zaawansowanymi bazami"
+msgstr "Rozpoczyna z przewagami"
 
 #: src/multiint.cpp:1853
 msgid "CHOOSE AI"
-msgstr ""
+msgstr "WYBIERZ SI"
 
 #: src/multiint.cpp:1869
 msgid "Allow human players to join in this slot"
-msgstr ""
+msgstr "Zezwól innym graczom na użycie tego slotu"
 
 #: src/multiint.cpp:1877
 msgid "Leave this slot unused"
-msgstr ""
+msgstr "Pozostaw ten slot niewykorzystanym"
 
 #: src/multiint.cpp:2280
 msgid "Team"
@@ -14408,12 +14389,11 @@ msgstr "Drużyna"
 
 #: src/multiint.cpp:2321
 msgid "You cannot change difficulty in a challenge"
-msgstr ""
+msgstr "Nie możesz zmienić poziomu trudności w wyzwaniu"
 
 #: src/multiint.cpp:2321
-#, fuzzy
 msgid "Click to change difficulty"
-msgstr "Kliknij aby dostosować poziom sztucznej inteligencji"
+msgstr "Kliknij aby dostosować poziom trudności"
 
 #: src/multiint.cpp:2338
 msgid "Click when ready"
@@ -14428,32 +14408,28 @@ msgid "PLAYERS"
 msgstr "GRACZE"
 
 #: src/multiint.cpp:2421
-#, fuzzy
 msgid "Click to change to this slot"
-msgstr "Kliknij aby zmienić ustawienia gracza"
+msgstr "Kliknij aby zmienić na ten slot"
 
 #: src/multiint.cpp:2449
 msgid "Choose Team"
 msgstr "Wybierz drużynę"
 
 #: src/multiint.cpp:2479
-#, fuzzy
 msgid "Click to change player colour"
-msgstr "Kliknij aby zmienić ustawienia gracza"
+msgstr "Kliknij aby zmienić kolor gracza"
 
 #: src/multiint.cpp:2507
-#, fuzzy
 msgid "Click to change player position"
-msgstr "Kliknij aby zmienić ustawienia gracza"
+msgstr "Kliknij aby zmienić położenie gracza"
 
 #: src/multiint.cpp:2513
-#, fuzzy
 msgid "Click to change AI"
-msgstr "Kliknij aby zmienić ustawienia gracza"
+msgstr "Kliknij aby zmienić SI"
 
 #: src/multiint.cpp:2517
 msgid "You cannot change AI in a challenge"
-msgstr ""
+msgstr "Nie możesz zmienić SI w wyzwaniu"
 
 #: src/multiint.cpp:2579
 msgid "CHAT"
@@ -14494,20 +14470,19 @@ msgid "Players"
 msgstr "Gracze"
 
 #: src/multiint.cpp:3874
-#, fuzzy, c-format
+#, c-format
 msgid "Click to take player slot %d"
-msgstr "Kliknij aby zmienić ustawienia gracza"
+msgstr "Kliknij aby zmienić na slot gracza %d"
 
 #: src/multiint.cpp:3883
 #: src/multiint.cpp:4076
 msgid "Open"
-msgstr ""
+msgstr "Otwarty"
 
 #: src/multiint.cpp:3883
 #: src/multiint.cpp:4077
-#, fuzzy
 msgid "Closed"
-msgstr "Zamknij"
+msgstr "Zamknięty"
 
 #: src/multiint.cpp:3934
 #, c-format
@@ -14677,36 +14652,35 @@ msgstr "Turkusowy"
 
 #: src/multiplay.cpp:1930
 msgid "Yellow"
-msgstr ""
+msgstr "Zółty"
 
 #: src/multiplay.cpp:1931
 msgid "Purple"
-msgstr ""
+msgstr "Purpurowy"
 
 #: src/multiplay.cpp:1932
 msgid "White"
-msgstr ""
+msgstr "Biały"
 
 #: src/multiplay.cpp:1933
-#, fuzzy
 msgid "Bright blue"
-msgstr "Prawy przycisk"
+msgstr "Jasnoniebieski"
 
 #: src/multiplay.cpp:1934
 msgid "Neon green"
-msgstr ""
+msgstr "Neonowa zieleń"
 
 #: src/multiplay.cpp:1935
 msgid "Infrared"
-msgstr ""
+msgstr "Podczerwień"
 
 #: src/multiplay.cpp:1936
 msgid "Ultraviolet"
-msgstr ""
+msgstr "Ultrafiolet"
 
 #: src/multiplay.cpp:1937
 msgid "Brown"
-msgstr ""
+msgstr "Brązowy"
 
 #: src/order.cpp:827
 msgid "We can't do that! We must be a Cyborg unit to use a Cyborg Transport!"
@@ -14889,18 +14863,17 @@ msgid "Unable to locate any Commanders!"
 msgstr "Niemożna odnaleźć dowódców!"
 
 #: src/structure.cpp:2549
-#, fuzzy
 msgid "Command Control Limit Reached - Production Halted"
 msgstr "Limit kontrolny osiągnięty - produkcja wstrzymana"
 
 #: src/structure.cpp:5691
 #: src/structure.cpp:5716
-#, fuzzy, c-format
+#, c-format
 msgid "%s - %u Unit assigned - Damage %3.0f%%"
 msgid_plural "%s - %u Units assigned - Damage %3.0f%%"
-msgstr[0] "%s - %u Jednostka przydzielona"
-msgstr[1] "%s - %u Jednostki przydzielone"
-msgstr[2] "%s - %u Jednostek przydzielonych"
+msgstr[0] "%s - %u Jednostka przydzielona - Obrażenia %3.0f%%"
+msgstr[1] "%s - %u Jednostki przydzielone - Obrażenia %3.0f%%"
+msgstr[2] "%s - %u Jednostek przydzielonych - Obrażenia %3.0f%%"
 
 #: src/structure.cpp:5721
 #: src/structure.cpp:5789
@@ -14911,9 +14884,9 @@ msgid "%s - Damage %3.0f%%"
 msgstr "%s - Uszkodzenia %3.0f%%"
 
 #: src/structure.cpp:5771
-#, fuzzy, c-format
+#, c-format
 msgid "%s - Connected %u of %u - Damage %3.0f%%"
-msgstr "%s - Połączony %u z %u"
+msgstr "%s - Połączono %u z %u - Obrażenia %3.0f%%"
 
 #: src/structure.cpp:5934
 #: src/structure.cpp:5979
@@ -15001,260 +14974,26 @@ msgstr "Wersja %s%s%s%s"
 #~ msgid "8 players"
 #~ msgstr "8 graczy"
 
-#, fuzzy
 #~ msgid "9 players"
-#~ msgstr "2 graczy"
+#~ msgstr "9 graczy"
 
-#, fuzzy
 #~ msgid "10 players"
-#~ msgstr "2 graczy"
+#~ msgstr "10 graczy"
 
-#, fuzzy
 #~ msgid "11 players"
-#~ msgstr "2 graczy"
+#~ msgstr "11 graczy"
 
-#, fuzzy
 #~ msgid "12 players"
-#~ msgstr "2 graczy"
+#~ msgstr "12 graczy"
 
-#, fuzzy
 #~ msgid "13 players"
-#~ msgstr "3 graczy"
+#~ msgstr "13 graczy"
 
-#, fuzzy
 #~ msgid "14 players"
-#~ msgstr "4 graczy"
+#~ msgstr "14 graczy"
 
-#, fuzzy
 #~ msgid "15 players"
-#~ msgstr "5 graczy"
+#~ msgstr "15 graczy"
 
-#, fuzzy
 #~ msgid "16 players"
-#~ msgstr "6 graczy"
-
-#, fuzzy
-#~ msgid "FPS %d; PIEs %d; polys %d; States %d"
-#~ msgstr "FPS %d; FPS-Limit: %d; PIEs %d; polys %d; Terr. polys %d; States %d"
-
-#~ msgid "Power Accrued"
-#~ msgstr "Moc zwiększona"
-
-#~ msgid "Radar showing revealed terrain"
-#~ msgstr "Radar pokazuje ujawniony teren"
-
-#~ msgid "Fog"
-#~ msgstr "Mgła"
-
-#~ msgid "Mist"
-#~ msgstr "Mgiełka"
-
-#~ msgid "Fog Of War"
-#~ msgstr "Mgła wojny"
-
-#~ msgid "Distance Fog"
-#~ msgstr "Mgła dystansowa"
-
-#~ msgid "* May negatively affect performance"
-#~ msgstr "* Może zmniejszyć wydajność"
-
-#~ msgid "Could not resolve masterserver name (%s)!"
-#~ msgstr "Nie można rozwinąć nazwy głównego serwera (%s)!"
-
-#~ msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
-#~ msgstr "Nie można skomunikować się z serwerem lobby! Czy port %u TCP jest otwarty dla ruchu wychodzącego?"
-
-#~ msgid "MULTI PLAYER"
-#~ msgstr "WIELU GRACZY"
-
-#~ msgid "Join Game"
-#~ msgstr "Dołącz do gry"
-
-#~ msgid "CONNECTION"
-#~ msgstr "POŁĄCZENIE"
-
-#~ msgid "Lobby"
-#~ msgstr "Lobby"
-
-#~ msgid "IP"
-#~ msgstr "IP"
-
-#~ msgid "Searching"
-#~ msgstr "Wyszukiwanie"
-
-#~ msgid "Run in cheat mode"
-#~ msgstr "Uruchom w trybie kodów"
-
-#~ msgid "Colored Cursors*"
-#~ msgstr "Kolorowe kursory*"
-
-#, fuzzy
-#~ msgid "Congratulations your successful evacuation of Beta Base."
-#~ msgstr "Gratulujemy udanej ewakuacji Bazy Beta."
-
-#~ msgid "Player colour"
-#~ msgstr "Kolor gracza"
-
-#~ msgid "Truck ordered to build Oil Derrick"
-#~ msgstr "Rozkazano ciężarówce zbudować platformę wydobywczą"
-
-#, fuzzy
-#~ msgid "2 trucks ordered to build Oil Derrick"
-#~ msgstr "Rozkazano ciężarówce zbudować platformę wydobywczą"
-
-#, fuzzy
-#~ msgid "%d trucks ordered to build Oil Derrick"
-#~ msgstr "Rozkazano ciężarówce zbudować platformę wydobywczą"
-
-#~ msgid "Kick player"
-#~ msgstr "Wyrzuć gracza"
-
-#~ msgid " (modified and switched locally)"
-#~ msgstr " (zmodyfikowany i zamieniony lokalnie)"
-
-#~ msgid " (switched locally)"
-#~ msgstr " (zamieniony lokalnie)"
-
-#~ msgid "Infinite Production"
-#~ msgstr "Produkcja ciągła"
-
-#~ msgid "Player position"
-#~ msgstr "Położenie gracza"
-
-#~ msgid "Cobra Hover Heavy-Repair"
-#~ msgstr "Kobra poduszkowiec ciężka naprawiająca"
-
-#~ msgid "Viper HMG Wheels"
-#~ msgstr "Żmija z ciężkim karabinem na kołach"
-
-#~ msgid "TK Mantis Hover"
-#~ msgstr "Modliszka ciężarówka poduszkowiec"
-
-#~ msgid "Cobra HMG Tracks"
-#~ msgstr "Kobra z ciężkim karabinem na gąsienicach"
-
-#~ msgid "Cobra Hover HC"
-#~ msgstr "Kobra poduszkowiec z ciężkim działem"
-
-#~ msgid "Scorpion Lancer Tracks"
-#~ msgstr "Skorpion Lancer na gąsienicach"
-
-#~ msgid "Scorpion Heavy Cannon Tracks"
-#~ msgstr "Skorpion z ciężkim działem na gąsienicach"
-
-#~ msgid "Scorpion Lancer VTOL"
-#~ msgstr "Skorpion Lancer VTOL"
-
-#~ msgid "Scorpion BB VTOL"
-#~ msgstr "Skorpion Bunker Buster VTOL"
-
-#~ msgid "Viper Command Turret Tracks"
-#~ msgstr "Żmija dowodząca na gąsienicach"
-
-#~ msgid "Cobra Command Turret Tracks"
-#~ msgstr "Kobra dowodząca na gąsienicach"
-
-#~ msgid "Scorpion Command Turret Tracks"
-#~ msgstr "Skorpion dowodzący na gąsienicach"
-
-#~ msgid "Mantis Command Turret Tracks"
-#~ msgstr "Modliszka dowodząca na gąsienicach"
-
-#~ msgid "Cobra Lancer Tracks"
-#~ msgstr "Kobra Lancer na gąsienicach"
-
-#~ msgid "Mantis Heavy Cannon Tracks"
-#~ msgstr "Modliszka z ciężkim działem na gąsienicach"
-
-#~ msgid "Mantis Tank Killer Tracks"
-#~ msgstr "Modliszka Tank Killier na gąsienicach"
-
-#~ msgid "Mantis Scourge Tracks"
-#~ msgstr "Modliszka z rakietami Scourge na gąsienicach"
-
-#~ msgid "Scorpion Heavy Machinegun Tracks"
-#~ msgstr "Skorpion z ciężkim karabinem na gąsienicach"
-
-#~ msgid "Scorpion Repair Tracks"
-#~ msgstr "Skorpion naprawczy na gąsienicach"
-
-#~ msgid "Scorpion Heavy Repair Hover"
-#~ msgstr "Skorpion ciężki naprawczy poduszkowiec"
-
-#~ msgid "Cobra Hover Truck"
-#~ msgstr "Kobra ciężarówka poduszkowiec"
-
-#~ msgid "Scorpion Hover Truck"
-#~ msgstr "Skorpion ciężarówka poduszkowiec"
-
-#~ msgid "Mantis Hover Truck"
-#~ msgstr "Modliszka ciężarówka poduszkowiec"
-
-#~ msgid "Cobra Bunker Buster Tracks"
-#~ msgstr "Kobra Bunker Buster na gąsienicach"
-
-#~ msgid "Scorpion Bunker Buster Tracks"
-#~ msgstr "Skorpion Bunker Buster na gąsienicach"
-
-#~ msgid "Mantis Bunker Buster Tracks"
-#~ msgstr "Modliszka Bunker Buster na gąsienicach"
-
-#~ msgid "Viper Tracks Lancer"
-#~ msgstr "Żmija Lancer na gąsienicach"
-
-#~ msgid "Cobra Half-Tracks Mini-Pod"
-#~ msgstr "Kobra z minirakietami na pól-gąsienicach"
-
-#~ msgid "Cobra Tracks Mini-Pod"
-#~ msgstr "Kobra z minirakietami na gąsienicach"
-
-#~ msgid "Cobra Tracks Mini-Rocket Artillery"
-#~ msgstr "Kobra artyleria minirakiet na gąsienicach"
-
-#~ msgid "Cobra Inferno Half-track"
-#~ msgstr "Kobra Inferno na pół-gąsienicach"
-
-#~ msgid "Python HVC Hover"
-#~ msgstr "Pyton poduszkowiec z działem HPV"
-
-#~ msgid "Python Scourge Tracks"
-#~ msgstr "Pyton z rakietami Scourge na gąsienicach"
-
-#~ msgid "Python Gauss Cannon Tracks"
-#~ msgstr "Pyton z działem gaussa na gąsienicach"
-
-#~ msgid "Python Pulse Laser Tracks"
-#~ msgstr "Pyton ciężki laser na gąsienicach"
-
-#~ msgid "Tiger Pulse Laser Tracks"
-#~ msgstr "Tygrys z laserem pulsacyjnym na gąsienicach"
-
-#~ msgid "Tiger Heavy Laser Tracks"
-#~ msgstr "Tygrys ciężki laser na gąsienicach"
-
-#~ msgid "Wyvern Gauss Cannon Tracks"
-#~ msgstr "Wywerna z działem gaussa na gąsienicach"
-
-#~ msgid "Wyvern Pulse Laser Tracks"
-#~ msgstr "Wywerna z laserem pulsacyjnym na gąsienicach"
-
-#~ msgid "Wyvern Heavy Laser Tracks"
-#~ msgstr "Wywerna ciężki laser na gąsienicach"
-
-#~ msgid "Viper Machinegun Half-Track"
-#~ msgstr "Żmija karabin na pół-gąsienicach"
-
-#~ msgid "Viper Flamer Half-Track"
-#~ msgstr "Żmija miotacz na pół-gąsienicach"
-
-#~ msgid ": Unknown cheat code."
-#~ msgstr ": Nieznany kod oszustwa."
-
-#~ msgid "Player %u is cheating him/herself a new droid army of %s(s)."
-#~ msgstr "Gracz %u oszukuje by zdobyć armię jednostek %s."
-
-#~ msgid "You found %u power in an oil drum"
-#~ msgstr "Znalazłeś %u energii w beczce z ropą"
-
-#~ msgid "kicked %s : %s from the game, and added them to the banned list!"
-#~ msgstr "wyrzucono %s : %s z gry oraz dodano do listy zbanowanych!"
+#~ msgstr "16 graczy"
