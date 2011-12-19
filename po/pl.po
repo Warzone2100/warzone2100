@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-12-19 00:57+0100\n"
+"POT-Creation-Date: 2011-12-19 01:10+0100\n"
 "PO-Revision-Date: 2011-12-18 21:11+0100\n"
 "Last-Translator: Michał D. aka Emdek <emdeck@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
@@ -12068,9 +12068,10 @@ msgid "Error connecting to the lobby server: %s. Make sure port %d can receive i
 msgstr "Wystąpił błąd podczas łączenia się z serwerem lobby: %s. Upewnij się, że port %d może odbierać połączenia przychodzące. Jeśli używasz rutera, to skonfiguruj go do używania UPnP lub przekieruj port do twojego systemu."
 
 #: po/custom/mac-infoplist.txt:1
+#, fuzzy
 msgid ""
 "Copyright © 1999-2004 Eidos Interactive.\n"
-"Copyright © 2005-2010 The Warzone 2100 Project"
+"Copyright © 2005-2011 The Warzone 2100 Project"
 msgstr ""
 "Copyright © 1999-2004 Eidos Interactive.\n"
 "Copyright © 2005-2010 The Warzone 2100 Project"

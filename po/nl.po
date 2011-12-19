@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-12-19 00:57+0100\n"
+"POT-Creation-Date: 2011-12-19 01:10+0100\n"
 "PO-Revision-Date: 2011-10-09 18:24+0100\n"
 "Last-Translator: Chris <chris205@hotmail.com>\n"
 "Language-Team: Dutch <vertaling@vrijschrift.org>\n"
@@ -12054,7 +12054,7 @@ msgstr "Error met het verbinden van de lobby server: %s. Zorg dat de poort %d ka
 #: po/custom/mac-infoplist.txt:1
 msgid ""
 "Copyright © 1999-2004 Eidos Interactive.\n"
-"Copyright © 2005-2010 The Warzone 2100 Project"
+"Copyright © 2005-2011 The Warzone 2100 Project"
 msgstr ""
 
 #: po/custom/mac-infoplist.txt:2
