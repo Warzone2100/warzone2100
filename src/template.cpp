@@ -124,6 +124,34 @@ bool initTemplates()
 			debug(LOG_ERROR, "Invalid template %d / %s from stored templates", i, list[i].toUtf8().constData());
 			continue;
 		}
+		DROID_TEMPLATE *psDestTemplate = apsDroidTemplates[selectedPlayer];
+		while (psDestTemplate != NULL)
+		{
+			// Check if template is identical to a loaded template
+			if (psDestTemplate->droidType == design.droidType
+			    && strcmp(psDestTemplate->aName, design.aName) == 0
+			    && psDestTemplate->numWeaps == design.numWeaps
+			    && psDestTemplate->asWeaps[0] == design.asWeaps[0]
+			    && psDestTemplate->asWeaps[1] == design.asWeaps[1]
+			    && psDestTemplate->asWeaps[2] == design.asWeaps[2]
+			    && psDestTemplate->asParts[COMP_BODY] == design.asParts[COMP_BODY]
+			    && psDestTemplate->asParts[COMP_PROPULSION] == design.asParts[COMP_PROPULSION]
+			    && psDestTemplate->asParts[COMP_REPAIRUNIT] == design.asParts[COMP_REPAIRUNIT]
+			    && psDestTemplate->asParts[COMP_ECM] == design.asParts[COMP_ECM]
+			    && psDestTemplate->asParts[COMP_SENSOR] == design.asParts[COMP_SENSOR]
+			    && psDestTemplate->asParts[COMP_CONSTRUCT] == design.asParts[COMP_CONSTRUCT]
+			    && psDestTemplate->asParts[COMP_BRAIN] == design.asParts[COMP_BRAIN])
+			{
+				break;
+			}
+			psDestTemplate = psDestTemplate->psNext;
+		}
+		if (psDestTemplate)
+		{
+			psDestTemplate->stored = true; // assimilate it
+			ini.endGroup();
+			continue; // next!
+		}
 		addTemplateToList(&design, &apsDroidTemplates[selectedPlayer]);
 		localTemplates.push_back(design);
 		ini.endGroup();
