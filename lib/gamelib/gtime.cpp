@@ -301,7 +301,7 @@ void gameTimeStart(void)
 	ASSERT(stopCount > 0, "Game started too many times.");
 
 	prevRealTime = wzGetTicks();
-	stopCount = std::min<int>(stopCount - 1, 0);
+	stopCount = std::max<int>(stopCount - 1, 0);
 }
 
 /* Call this to reset the game timer */
