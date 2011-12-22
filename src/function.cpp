@@ -183,9 +183,7 @@ static bool loadProduction(const char *pData)
 
 	if (!getBodySize(bodySize, &psFunction->capacity))
 	{
-
 		ASSERT( false, "loadProduction: unknown body size for %s",psFunction->pName );
-
 		return false;
 	}
 

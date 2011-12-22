@@ -111,9 +111,8 @@ struct PRODUCTION_UPGRADE_FUNCTION : public FUNCTION
 /*To manufacture droids designed previously*/
 struct PRODUCTION_FUNCTION : public FUNCTION
 {
-	UBYTE                                   capacity;               // The max size of body the factory can produce
-	UWORD					productionOutput;	/*Droid Build Points Produced Per
-												  Build Cycle*/
+	BODY_SIZE capacity;      // The max size of body the factory can produce
+	UWORD productionOutput;	 // Droid Build Points Produced Per Build Cycle
 };
 
 /*To research topics available*/

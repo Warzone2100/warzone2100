@@ -490,7 +490,7 @@ struct BRAIN_STATS : public COMPONENT_STATS
 
 struct BODY_STATS : public COMPONENT_STATS
 {
-	UBYTE		size;			///< How big the body is - affects how hit
+	BODY_SIZE	size;			///< How big the body is - affects how hit
 	UDWORD		weaponSlots;	///< The number of weapon slots on the body
 	UDWORD		armourValue[WC_NUM_WEAPON_CLASSES];	///< A measure of how much protection the armour provides. Cross referenced with the weapon types.
 

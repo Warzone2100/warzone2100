@@ -277,7 +277,7 @@ extern char* allocateName(const char* name);
 extern const char* getName(const char *pNameID);
 /*sets the store to the body size based on the name passed in - returns false
 if doesn't compare with any*/
-extern bool getBodySize(const char *pSize, UBYTE *pStore);
+extern bool getBodySize(const char *pSize, BODY_SIZE *pStore);
 
 // Pass in a stat and get its name
 extern const char* getStatName(const void * pStat);

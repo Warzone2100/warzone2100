@@ -2232,7 +2232,7 @@ bool loadWeaponModifiers(const char *pWeapModData, UDWORD bufferSize)
 		//get the propulsion inc
 		if (!getPropulsionType(propulsionName, &propInc))
 		{
-			UBYTE body = 0;
+			BODY_SIZE body = SIZE_NUM;
 			// If not propulsion, must be body
 			if (!getBodySize(propulsionName, &body))
 			{
@@ -2840,7 +2840,7 @@ const char* getName(const char *pNameID)
 
 /*sets the store to the body size based on the name passed in - returns false
 if doesn't compare with any*/
-bool getBodySize(const char *pSize, UBYTE *pStore)
+bool getBodySize(const char *pSize, BODY_SIZE *pStore)
 {
 	if (!strcmp(pSize, "LIGHT"))
 	{
