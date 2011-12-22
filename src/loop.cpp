@@ -657,7 +657,6 @@ static void gameStateUpdate()
 		sendCheck();  // send some pointless checking info if we're doomed anyway
 	}
 
-
 	// Must end update, since we may or may not have ticked, and some message queue processing code may vary depending on whether it's in an update.
 	gameTimeUpdateEnd();
 }

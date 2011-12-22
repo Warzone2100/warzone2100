@@ -219,7 +219,7 @@ int32_t droidDamage(DROID *psDroid, uint32_t damage, WEAPON_CLASS weaponClass, W
 		// Otherwise use the default destruction animation
 		else
 		{
-			debug(LOG_DEATH, "Droid %d is toast", (int)psDroid->id);
+			debug(LOG_DEATH, "Droid %d (%p) is toast", (int)psDroid->id, psDroid);
 			// This should be sent even if multi messages are turned off, as the group message that was
 			// sent won't contain the destroyed droid
 			if (bMultiPlayer && !bMultiMessages)
