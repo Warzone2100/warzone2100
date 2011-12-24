@@ -546,37 +546,6 @@ static void fpathExecute(PATHJOB *psJob, PATHRESULT *psResult)
 	}
 }
 
-// Variables for the callback
-static bool		obstruction;
-
-/** The visibility ray callback
- */
-static bool fpathVisCallback(Vector3i pos, int32_t dist, void *data)
-{
-	DROID *psDroid = (DROID *)data;
-
-	if (fpathBlockingTile(map_coord(pos.x), map_coord(pos.y), getPropulsionStats(psDroid)->propulsionType))
-	{
-		// found an obstruction
-		obstruction = true;
-		return false;
-	}
-
-	return true;
-}
-
-bool fpathTileLOS(DROID *psDroid, Vector3i dest)
-{
-	Vector2i dir = removeZ(dest - psDroid->pos);
-
-	// Initialise the callback variables
-	obstruction = false;
-
-	rayCast(psDroid->pos, iAtan2(dir), iHypot(dir), fpathVisCallback, psDroid);
-
-	return !obstruction;
-}
-
 /** Find the length of the job queue. Function is thread-safe. */
 static int fpathJobQueueLength(void)
 {

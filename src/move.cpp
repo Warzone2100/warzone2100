@@ -536,12 +536,13 @@ struct BLOCKING_CALLBACK_DATA
 {
 	PROPULSION_TYPE propulsionType;
 	bool blocking;
+	Vector2i dst;
 };
 
-static bool moveBlockingTileCallback(Vector3i pos, int32_t dist, void *data_)
+static bool moveBlockingTileCallback(Vector2i pos, int32_t dist, void *data_)
 {
 	BLOCKING_CALLBACK_DATA *data = (BLOCKING_CALLBACK_DATA *)data_;
-	data->blocking |= fpathBlockingTile(map_coord(pos.x), map_coord(pos.y), data->propulsionType);
+	data->blocking |= pos != data->dst && fpathBlockingTile(map_coord(pos.x), map_coord(pos.y), data->propulsionType);
 	return !data->blocking;
 }
 
@@ -551,12 +552,12 @@ static int32_t moveDirectPathToWaypoint(DROID *psDroid, unsigned positionIndex)
 	Vector2i src = removeZ(psDroid->pos);
 	Vector2i dst = psDroid->sMove.asPath[positionIndex];
 	Vector2i delta = dst - src;
-	uint16_t dir = iAtan2(delta);
 	int32_t dist = iHypot(delta);
 	BLOCKING_CALLBACK_DATA data;
 	data.propulsionType = getPropulsionStats(psDroid)->propulsionType;
 	data.blocking = false;
-	rayCast(Vector3i(src, 0), dir, dist, &moveBlockingTileCallback, &data);
+	data.dst = dst;
+	rayCast(src, dst, &moveBlockingTileCallback, &data);
 	return data.blocking? -1 - dist : dist;
 }
 
@@ -788,8 +789,7 @@ static bool moveBlocked(DROID *psDroid)
 		objTrace(psDroid->id, "BLOCKED");
 		// if the unit cannot see the next way point - reroute it's got stuck
 		if ((bMultiPlayer || psDroid->player == selectedPlayer) &&
-		     psDroid->sMove.pathIndex != psDroid->sMove.numPoints &&
-		     !fpathTileLOS(psDroid, Vector3i(psDroid->sMove.destination, 0)))
+		     psDroid->sMove.pathIndex != psDroid->sMove.numPoints)
 		{
 			objTrace(psDroid->id, "Trying to reroute to (%d,%d)", psDroid->sMove.destination.x, psDroid->sMove.destination.y);
 			moveDroidTo(psDroid, psDroid->sMove.destination.x, psDroid->sMove.destination.y);

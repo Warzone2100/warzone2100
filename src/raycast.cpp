@@ -63,10 +63,8 @@ static bool tryStep(int32_t &tile, int32_t step, int32_t &cur, int32_t end, int3
 	return true;
 }
 
-void rayCast(Vector3i src, uint16_t direction, uint32_t length, RAY_CALLBACK callback, void *data)
+void rayCast(Vector2i src, Vector2i dst, RAY_CALLBACK callback, void *data)
 {
-	Vector3i dst = src + Vector3i(iSinCosR(direction, length), 0);
-
 	if (!callback(src, 0, data) || src == dst)  // Start at src.
 	{
 		return;  // Callback gave up after the first point, or there are no other points.
@@ -110,7 +108,7 @@ void rayCast(Vector3i src, uint16_t direction, uint32_t length, RAY_CALLBACK cal
 			// But make sure it's on the right tile, since it could be off-by-one if the line passes exactly through a grid intersection.
 			avg.x = std::min(std::max(avg.x, world_coord(selTile.x)), world_coord(selTile.x + 1) - 1);
 			avg.y = std::min(std::max(avg.y, world_coord(selTile.y)), world_coord(selTile.y + 1) - 1);
-			if (!worldOnMap(avg) || !callback(Vector3i(avg, src.z), iHypot(avg), data))
+			if (!worldOnMap(avg) || !callback(avg, iHypot(avg), data))
 			{
 				return;  // Callback doesn't want any more points, or we reached the edge of the map, so return.
 			}
@@ -129,7 +127,7 @@ void rayCast(Vector3i src, uint16_t direction, uint32_t length, RAY_CALLBACK cal
 
 //-----------------------------------------------------------------------------------
 /* Will return false when we've hit the edge of the grid */
-static bool getTileHeightCallback(Vector3i pos, int32_t dist, void *data)
+static bool getTileHeightCallback(Vector2i pos, int32_t dist, void *data)
 {
 	HeightCallbackHelp_t *help = (HeightCallbackHelp_t *)data;
 #ifdef TEST_RAY
@@ -194,7 +192,9 @@ void getBestPitchToEdgeOfGrid(UDWORD x, UDWORD y, uint16_t direction, uint16_t *
 {
 	HeightCallbackHelp_t help = {map_Height(x,y), 0};
 
-	rayCast(Vector3i(x, y, 0), direction, 5430, getTileHeightCallback, &help); // FIXME Magic value
+	Vector3i src(x, y, 0);
+	Vector3i delta(iSinCosR(direction, 5430), 0);
+	rayCast(src, src + delta, getTileHeightCallback, &help); // FIXME Magic value
 
 	*pitch = help.pitch;
 }

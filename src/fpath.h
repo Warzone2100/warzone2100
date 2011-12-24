@@ -110,10 +110,6 @@ extern void fpathSetDirectRoute(DROID* psDroid, SDWORD targetX, SDWORD targetY);
 /** Clean up path jobs and results for a droid. Function is thread-safe. */
 extern void fpathRemoveDroidData(int id);
 
-/** Check LOS (Line Of Sight) between two world positions.
- */
-extern bool fpathTileLOS(DROID *psDroid, Vector3i dest);
-
 /** Quick O(1) test of whether it is theoretically possible to go from origin to destination
  *  using the given propulsion type. orig and dest are in world coordinates. */
 bool fpathCheck(Position orig, Position dest, PROPULSION_TYPE propulsion);
