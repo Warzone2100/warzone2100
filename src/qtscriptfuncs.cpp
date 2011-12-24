@@ -438,10 +438,12 @@ static QScriptValue js_pickStructLocation(QScriptContext *context, QScriptEngine
 	x = startX;
 	y = startY;
 
+	Vector2i offset(psStat->baseWidth * (TILE_UNITS / 2), psStat->baseBreadth * (TILE_UNITS / 2));  // This presumably gets added to the chosen coordinates, somewhere, based on looking at what pickStructLocation does. No idea where it gets added, though, maybe inside the scripts?
+
 	// save a lot of typing... checks whether a position is valid
 	#define LOC_OK(_x, _y) (tileOnMap(_x, _y) && \
 				(!psDroid || fpathCheck(psDroid->pos, Vector3i(world_coord(_x), world_coord(_y), 0), PROPULSION_TYPE_WHEELED)) \
-				&& validLocation((BASE_STATS*)psStat, _x, _y, 0, player, false) && structDoubleCheck((BASE_STATS*)psStat, _x, _y, maxBlockingTiles))
+				&& validLocation(psStat, world_coord(Vector2i(_x, _y)) + offset, 0, player, false) && structDoubleCheck(psStat, _x, _y, maxBlockingTiles))
 
 	// first try the original location
 	if (LOC_OK(startX, startY))

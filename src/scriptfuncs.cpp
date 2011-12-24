@@ -5419,6 +5419,8 @@ static bool pickStructLocation(DROID *psDroid, int index, int *pX, int *pY, int 
 
 	ASSERT_OR_RETURN(false, player < MAX_PLAYERS && player >= 0, "Invalid player number %d", player);
 
+	Vector2i offset(psStat->baseWidth * (TILE_UNITS / 2), psStat->baseBreadth * (TILE_UNITS / 2));  // This gets added to the chosen coordinates, at the end of the function.
+
 	// check for wacky coords.
 	if (*pX < 0 || *pX > world_coord(mapWidth) || *pY < 0 || *pY > world_coord(mapHeight))
 	{
@@ -5433,8 +5435,8 @@ static bool pickStructLocation(DROID *psDroid, int index, int *pX, int *pY, int 
 
 	// save a lot of typing... checks whether a position is valid
 	#define LOC_OK(_x, _y) (tileOnMap(_x, _y) && \
-	                        (!psDroid || fpathCheck(psDroid->pos, Vector3i(world_coord(_x), world_coord(_y), 0), PROPULSION_TYPE_WHEELED)) \
-	                        && validLocation((BASE_STATS*)psStat, _x, _y, 0, player, false) && structDoubleCheck((BASE_STATS*)psStat, _x, _y, maxBlockingTiles))
+				(!psDroid || fpathCheck(psDroid->pos, Vector3i(world_coord(_x), world_coord(_y), 0), PROPULSION_TYPE_WHEELED)) \
+				&& validLocation(psStat, world_coord(Vector2i(_x, _y)) + offset, 0, player, false) && structDoubleCheck(psStat, _x, _y, maxBlockingTiles))
 
 	// first try the original location
 	if (LOC_OK(startX, startY))
@@ -5487,8 +5489,8 @@ endstructloc:
 	// back to world coords.
 	if (found)	// did it!
 	{
-		*pX = world_coord(x) + (psStat->baseWidth * (TILE_UNITS / 2));
-		*pY = world_coord(y) + (psStat->baseBreadth * (TILE_UNITS / 2));
+		*pX = world_coord(x) + offset.x;
+		*pY = world_coord(y) + offset.y;
 	}
 	else
 	{

@@ -1482,9 +1482,7 @@ void actionUpdateDroid(DROID *psDroid)
 			if (psDroid->order == DORDER_BUILD && psDroid->psTarget == NULL)
 			{
 				// Starting a new structure
-				// calculate the top left of the structure
-				const UDWORD tlx = psDroid->orderX - getStructureStatsWidth(psStructStats, dir) * TILE_UNITS/2;
-				const UDWORD tly = psDroid->orderY - getStructureStatsBreadth(psStructStats, dir) * TILE_UNITS/2;
+				const Vector2i pos(psDroid->orderX, psDroid->orderY);
 
 				//need to check if something has already started building here?
 				//unless its a module!
@@ -1531,11 +1529,7 @@ void actionUpdateDroid(DROID *psDroid)
 						cancelBuild(psDroid);
 					}
 				}
-				else if (!validLocation(psDroid->psTarStats,
-										map_coord(tlx),
-										map_coord(tly), dir,
-										psDroid->player,
-										false))
+				else if (!validLocation(psDroid->psTarStats, pos, dir, psDroid->player, false))
 				{
 					syncDebug("Reached build target: invalid");
 					objTrace(psDroid->id, "DACTION_MOVETOBUILD: !validLocation");
@@ -1789,10 +1783,6 @@ void actionUpdateDroid(DROID *psDroid)
 		//building a structure's foundation - flattening the ground for now
 		{
 			MAPTILE* const psTile = mapTile(map_coord(psDroid->orderX), map_coord(psDroid->orderY));
-			STRUCTURE_STATS* const psStructStats = (STRUCTURE_STATS*)psDroid->psTarStats;
-			uint16_t dir = psDroid->orderDirection;
-			const UDWORD tlx = psDroid->orderX - getStructureStatsWidth(psStructStats, dir) * TILE_UNITS/2;
-			const UDWORD tly = psDroid->orderY - getStructureStatsBreadth(psStructStats, dir) * TILE_UNITS/2;
 			if ((psDroid->psTarget == NULL) &&
 				(TileHasStructure(psTile) ||
 				TileHasFeature(psTile)))
@@ -1812,8 +1802,7 @@ void actionUpdateDroid(DROID *psDroid)
 					}
 				}
 				else if (!validLocation(psDroid->psTarStats,
-				                        map_coord(tlx),
-				                        map_coord(tly), dir,
+				                        Vector2i(psDroid->orderX, psDroid->orderY), psDroid->orderDirection,
 				                        psDroid->player,
 				                        false))
 				{

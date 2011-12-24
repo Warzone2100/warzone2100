@@ -1381,52 +1381,18 @@ bool mapObjIsAboveGround(const SIMPLE_OBJECT *psObj)
 
 /* returns the max and min height of a tile by looking at the four corners
    in tile coords */
-void getTileMaxMin(UDWORD x, UDWORD y, UDWORD *pMax, UDWORD *pMin)
+void getTileMaxMin(int x, int y, int *pMax, int *pMin)
 {
-	UDWORD	height, i, j;
-	int tileHeight = TILE_MIN_HEIGHT;
+	*pMin = INT32_MAX;
+	*pMax = INT32_MIN;
 
-	*pMin = TILE_MAX_HEIGHT;
-	*pMax = TILE_MIN_HEIGHT;
-
-	for (j=0; j < 2; j++)
+	for (int j = 0; j < 2; ++j)
+		for (int i = 0; i < 2; ++i)
 	{
-		for (i=0; i < 2; i++)
-		{
-			// it tileHeight is negative, that means we are in water, and will cause a underflow
-			// FIXME: When we add structures that *can* be on water, we need to handle this differently.
-			tileHeight = map_TileHeight(x+i, y+j);
-			if (tileHeight < 0)
-			{
-				// NOTE: should we assert here ?
-				height = TILE_MIN_HEIGHT;
-			}
-			else
-			{
-				height = tileHeight;
-			}
-			if (*pMin > height)
-			{
-				*pMin = height;
-			}
-			if (*pMax < height)
-			{
-				*pMax = height;
-			}
-		}
+		int height = map_TileHeight(x+i, y+j);
+		*pMin = std::min(*pMin, height);
+		*pMax = std::max(*pMax, height);
 	}
-}
-
-UDWORD GetWidthOfMap(void)
-{
-	return mapWidth;
-}
-
-
-
-UDWORD GetHeightOfMap(void)
-{
-	return mapHeight;
 }
 
 

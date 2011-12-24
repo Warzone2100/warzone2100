@@ -3962,24 +3962,29 @@ static STRUCTURE_PACKABILITY baseObjectPackability(BASE_OBJECT *psObject)
 	}
 }
 
-/* checks that the location is a valid one to build on and sets the outline colour
-x and y in tile-coords*/
-bool validLocation(BASE_STATS *psStats, unsigned x, unsigned y, uint16_t direction, unsigned player, bool bCheckBuildQueue)
+bool isBlueprintTooClose(STRUCTURE_STATS const *stats1, Vector2i pos1, uint16_t dir1, STRUCTURE_STATS const *stats2, Vector2i pos2, uint16_t dir2)
 {
-	STRUCTURE			*psStruct;
+	if (stats1 == stats2 && pos1 == pos2 && dir1 == dir2)
+	{
+		return false;  // Same blueprint, so ignore it.
+	}
+
+	bool packable = canPack(baseStructureTypePackability(stats1->type), baseStructureTypePackability(stats2->type));
+	int minDist = packable? 0 : 1;
+	StructureBounds b1 = getStructureBounds(stats1, pos1, dir1);
+	StructureBounds b2 = getStructureBounds(stats2, pos2, dir2);
+	Vector2i delta12 = b2.map - (b1.map + b1.size);
+	Vector2i delta21 = b1.map - (b2.map + b2.size);
+	int dist = std::max(std::max(delta12.x, delta21.x), std::max(delta12.y, delta21.y));
+	return dist < minDist;
+}
+
+bool validLocation(BASE_STATS *psStats, Vector2i pos, uint16_t direction, unsigned player, bool bCheckBuildQueue)
+{
 	STRUCTURE_STATS *       psBuilding = NULL;
 	DROID_TEMPLATE *        psTemplate = NULL;
-	bool				valid = true;
-	SDWORD				i, j;
-	UDWORD				min, max;
-	HIGHLIGHT			site;
-	FLAG_POSITION		*psCurrFlag;
 
-	//make sure we are not too near map edge and not going to go over it
-	if( !tileInsideBuildRange((SDWORD)x, (SDWORD)y) )
-	{
-		return false;
-	}
+	StructureBounds b = getStructureBounds(psStats, pos, direction);
 
 	if (psStats->ref >= REF_STRUCTURE_START && psStats->ref < REF_STRUCTURE_START + REF_RANGE)
 	{
@@ -3990,19 +3995,8 @@ bool validLocation(BASE_STATS *psStats, unsigned x, unsigned y, uint16_t directi
 		psTemplate = (DROID_TEMPLATE *)psStats;  // Is a template.
 	}
 
-	// initialise the buildsite structure
-	// gets rid of the nasty bug when the GLOBAL buildSite was
-	// used in here
-	// Now now...we can quite easily hack this a bit more...
 	if (psBuilding != NULL)
 	{
-		unsigned sWidth   = getStructureStatsWidth(psBuilding, direction);
-		unsigned sBreadth = getStructureStatsBreadth(psBuilding, direction);
-		site.xTL = (UWORD)x;
-		site.yTL = (UWORD)y;
-		site.xBR = (UWORD)(x + sWidth - 1);
-		site.yBR = (UWORD)(y + sBreadth - 1);
-
 		//if we're dragging the wall/defense we need to check along the current dragged size
 		if (wallDrag.status != DRAG_INACTIVE && bCheckBuildQueue
 			&& (psBuilding->type == REF_WALL || psBuilding->type == REF_DEFENSE || psBuilding->type == REF_REARM_PAD ||  psBuilding->type == REF_GATE)
@@ -4023,76 +4017,45 @@ bool validLocation(BASE_STATS *psStats, unsigned x, unsigned y, uint16_t directi
 				//build in y direction
 				wallDrag.x2 = wallDrag.x1;
 			}
-			site.xTL = std::min(wallDrag.x1, wallDrag.x2);
-			site.xBR = std::max(wallDrag.x1, wallDrag.x2);
-			site.yTL = std::min(wallDrag.y1, wallDrag.y2);
-			site.yBR = std::max(wallDrag.y1, wallDrag.y2);
+			b.map.x = std::min(wallDrag.x1, wallDrag.x2);
+			b.map.y = std::min(wallDrag.y1, wallDrag.y2);
+			b.size.x = std::max(wallDrag.x1, wallDrag.x2) + 1 - b.map.x;
+			b.size.y = std::max(wallDrag.y1, wallDrag.y2) + 1 - b.map.y;
 		}
 	}
-	else
-	{
-		// If the stat's not a structure then assume it's size is 1x1.
-		site.xTL = (UWORD)x;
-		site.yTL = (UWORD)y;
-		site.xBR = (UWORD)x;
-		site.yBR = (UWORD)y;
-	}
 
-	for (i = site.xTL; i <= site.xBR && valid; i++)
+	//make sure we are not too near map edge and not going to go over it
+	if (b.map.x < scrollMinX + TOO_NEAR_EDGE || b.map.x + b.size.x > scrollMaxX - TOO_NEAR_EDGE ||
+	    b.map.y < scrollMinY + TOO_NEAR_EDGE || b.map.y + b.size.y > scrollMaxY - TOO_NEAR_EDGE)
 	{
-		for (j = site.yTL; j <= site.yBR && valid; j++)
-		{
-			// Can't build outside of scroll limits.
-			if( ((SDWORD)i < scrollMinX+2) || ((SDWORD)i > scrollMaxX-5) ||
-				((SDWORD)j < scrollMinY+2) || ((SDWORD)j > scrollMaxY-5))
-			{
-				valid = false;
-				goto failed;
-			}
-
-			// check i or j off map.
-			if(i<=2 || j<=2 || i>=(SDWORD)mapWidth-2 || j>=(SDWORD)mapHeight-2)
-			{
-				valid = false;
-				goto failed;
-			}
-			//don't check tile is visible for placement of a delivery point
-			if (psBuilding != NULL)
-			{
-				//allow us to do so in debug mode!
-				if (!getDebugMappingStatus() && !bMultiPlayer)
-				{
-					// Can't build where we haven't been yet.
-					if(!TEST_TILE_VISIBLE(player,mapTile(i,j))) {
-						valid = false;
-						goto failed;
-					}
-				}
-			}
-		}
+		return false;
 	}
 
 	if (bCheckBuildQueue)
 	{
 		// cant place on top of a delivery point...
-		for (psCurrFlag = apsFlagPosLists[selectedPlayer]; psCurrFlag; psCurrFlag = psCurrFlag->psNext)
+		for (FLAG_POSITION const *psCurrFlag = apsFlagPosLists[selectedPlayer]; psCurrFlag; psCurrFlag = psCurrFlag->psNext)
 		{
 			ASSERT_OR_RETURN(false, psCurrFlag->coords.x != ~0, "flag has invalid position");
-			i = map_coord(psCurrFlag->coords.x);
-			j = map_coord(psCurrFlag->coords.y);
-
-			if (i >= site.xTL && i <= site.xBR &&
-				j >= site.yTL && j <= site.yBR)
+			Vector2i flagTile = map_coord(removeZ(psCurrFlag->coords));
+			if (flagTile.x >= b.map.x && flagTile.x < b.map.x + b.size.x && flagTile.y >= b.map.y && flagTile.y < b.map.y + b.size.y)
 			{
-				valid = false;
-				goto failed;
+				return false;
 			}
 		}
 	}
 
 	if (psBuilding != NULL)
 	{
-		MAPTILE	*psTile;
+		for (int j = 0; j < b.size.y; ++j)
+			for (int i = 0; i < b.size.x; ++i)
+		{
+			// Don't allow building structures (allow delivery points, though) outside visible area in single-player with debug mode off. (Why..?)
+			if (!bMultiPlayer && !getDebugMappingStatus() && !TEST_TILE_VISIBLE(player,mapTile(i,j)))
+			{
+				return false;
+			}
+		}
 
 		switch(psBuilding->type)
 		{
@@ -4119,249 +4082,164 @@ bool validLocation(BASE_STATS *psStats, unsigned x, unsigned y, uint16_t directi
 			case REF_REARM_PAD:
 			case REF_MISSILE_SILO:
 			case REF_SAT_UPLINK:
+			{
 				/*need to check each tile the structure will sit on is not water*/
-				for (i = site.xTL; i <= site.xBR && valid; i++)
+				for (int j = 0; j < b.size.y; ++j)
+					for (int i = 0; i < b.size.x; ++i)
 				{
-					for (j = site.yTL; j <= site.yBR && valid; j++)
+					MAPTILE const *psTile = mapTile(b.map.x + i, b.map.y + j);
+					if ((terrainType(psTile) == TER_WATER) ||
+						(terrainType(psTile) == TER_CLIFFFACE) )
 					{
-						psTile = mapTile(i,j);
-						if ((terrainType(psTile) == TER_WATER) ||
-							(terrainType(psTile) == TER_CLIFFFACE) )
-						{
-							valid = false;
-						}
+						return false;
 					}
 				}
-				//don't bother checking if already found a problem
-				if (valid)
+				//check not within landing zone
+				for (int j = 0; j < b.size.y; ++j)
+					for (int i = 0; i < b.size.x; ++i)
 				{
-					//check not within landing zone
-					for (i = site.xTL; i <= site.xBR && valid; i++)
+					if (withinLandingZone(b.map.x + i, b.map.y + j))
 					{
-						for (j = site.yTL; j <= site.yBR && valid; j++)
-						{
-							if (withinLandingZone(i, j))
-							{
-								valid = false;
-							}
-						}
+						return false;
 					}
 				}
 
 				//walls/defensive structures can be built along any ground
-				if (valid &&	// only do if necessary
-					(!(psBuilding->type == REF_REPAIR_FACILITY ||
-					psBuilding->type == REF_DEFENSE ||
-					psBuilding->type == REF_GATE ||
-					psBuilding->type == REF_WALL)))
+				if (!(psBuilding->type == REF_REPAIR_FACILITY ||
+				      psBuilding->type == REF_DEFENSE ||
+				      psBuilding->type == REF_GATE ||
+				      psBuilding->type == REF_WALL))
 				{
 					/*cannot build on ground that is too steep*/
-					min = 0;
-					max = 0;
-					for (i = site.xTL; i <= site.xBR && valid; i++)
+					for (int j = 0; j < b.size.y; ++j)
+						for (int i = 0; i < b.size.x; ++i)
 					{
-						for (j = site.yTL; j <= site.yBR && valid; j++)
+						int max, min;
+						getTileMaxMin(b.map.x + i, b.map.y + j, &max, &min);
+						if (max - min > MAX_INCLINE)
 						{
-							getTileMaxMin(i, j, &max, &min);
-							if ((max - min) > MAX_INCLINE)
-							{
-								valid = false;
-							}
+							return false;
 						}
 					}
 				}
 				//don't bother checking if already found a problem
-				if (valid)
+				STRUCTURE_PACKABILITY packThis = baseStructureTypePackability(psBuilding->type);
+
+				// skirmish AIs don't build nondefensives next to anything. (route hack)
+				if (packThis == PACKABILITY_NORMAL && bMultiPlayer && game.type == SKIRMISH && !isHumanPlayer(player))
 				{
-					STRUCTURE_PACKABILITY packThis = baseStructureTypePackability(psBuilding->type);
+					packThis = PACKABILITY_REPAIR;
+				}
 
-					// skirmish AIs don't build nondefensives next to anything. (route hack)
-					if (packThis == PACKABILITY_NORMAL && bMultiPlayer && game.type == SKIRMISH && !isHumanPlayer(player))
+				/* need to check there is one tile between buildings */
+				for (int j = -1; j < b.size.y + 1; ++j)
+					for (int i = -1; i < b.size.x + 1; ++i)
+				{
+					//skip the actual area the structure will cover
+					if (i < 0 || i >= b.size.x || j < 0 || j >= b.size.y)
 					{
-						packThis = PACKABILITY_REPAIR;
-					}
+						STRUCTURE_PACKABILITY packObj = baseObjectPackability(mapTile(b.map.x + i, b.map.y + j)->psObject);
 
-					/* need to check there is one tile between buildings */
-					for (j = site.yTL - 1; j <= site.yBR + 1 && valid; j++)
-					{
-						for (i = site.xTL - 1; i <= site.xBR + 1 && valid; i++)
+						if (!canPack(packThis, packObj))
 						{
-							//skip the actual area the structure will cover
-							if (i < site.xTL || i > site.xBR || j < site.yTL || j > site.yBR)
-							{
-								STRUCTURE_PACKABILITY packObj = baseObjectPackability(mapTile(i, j)->psObject);
-
-								valid = valid && canPack(packThis, packObj);
-							}
+							return false;
 						}
 					}
 				}
-				//don't bother checking if already found a problem
-				if (valid)
+				/*need to check each tile the structure will sit on*/
+				for (int j = 0; j < b.size.y; ++j)
+					for (int i = 0; i < b.size.x; ++i)
 				{
-					/*need to check each tile the structure will sit on*/
-					for (i = site.xTL; i <= site.xBR && valid; i++)
+					MAPTILE const *psTile = mapTile(b.map.x + i, b.map.y + j);
+					if (TileIsOccupied(psTile))
 					{
-						for (j = site.yTL; j <= site.yBR && valid; j++)
+						if (TileHasWall(psTile) && (psBuilding->type == REF_DEFENSE || psBuilding->type == REF_GATE || psBuilding->type == REF_WALL))
 						{
-							psTile = mapTile(i,j);
-							if (TileIsOccupied(psTile))
+							STRUCTURE const *psStruct = getTileStructure(b.map.x + i, b.map.y + j);
+							if (psStruct != NULL && psStruct->player != player)
 							{
-								if (TileHasWall(psTile) && (psBuilding->type == REF_DEFENSE || psBuilding->type == REF_GATE || psBuilding->type == REF_WALL))
-								{
-									psStruct = getTileStructure(i,j);
-									if (psStruct != NULL &&
-										psStruct->player != player)
-									{
-										valid = false;
-									}
-								}
-								else
-								{
-									valid = false;
-								}
+								return false;
 							}
+						}
+						else
+						{
+							return false;
 						}
 					}
 				}
 				break;
+			}
 			case REF_FACTORY_MODULE:
-				valid = false;
-				if(TileHasStructure(mapTile(x,y)))
+				if (TileHasStructure(worldTile(pos)))
 				{
-					psStruct = getTileStructure(x,y);
-					if(psStruct && (
-						psStruct->pStructureType->type == REF_FACTORY ||
-						psStruct->pStructureType->type == REF_VTOL_FACTORY) &&
-						psStruct->status == SS_BUILT)
-					{
-						valid = true;
-					}
-				}
-				break;
-			case REF_RESEARCH_MODULE:
-				valid = false;
-				//check that there is a research facility at the location
-				if(TileHasStructure(mapTile(x,y)))
-				{
-					psStruct = getTileStructure(x,y);
-					if(psStruct && psStruct->pStructureType->type == REF_RESEARCH &&
-						psStruct->status == SS_BUILT)
-					{
-						valid = true;
-					}
-				}
-
-				break;
-			case REF_POWER_MODULE:
-				valid = false;
-				if(TileHasStructure(mapTile(x,y)))
-				{
-					psStruct = getTileStructure(x,y);
-					if(psStruct && psStruct->pStructureType->type == REF_POWER_GEN &&
-						psStruct->status == SS_BUILT)
-					{
-						valid = true;
-					}
-				}
-				break;
-			case REF_RESOURCE_EXTRACTOR:
-				valid = false;
-				//check that there is a oil resource at the location
-				if(TileHasFeature(mapTile(x,y)))
-				{
-					FEATURE	*psFeat = getTileFeature(x, y);
-
-					if(psFeat && psFeat->psStats->subType == FEAT_OIL_RESOURCE)
-					{
-						valid = true;
-					}
-				}
-				break;
-		}
-		//if setting up a build queue need to check against future sites as well - AB 4/5/99
-		if (ctrlShiftDown() && player == selectedPlayer && bCheckBuildQueue)
-		{
-			//defense and missile silo's can be built next to anything so don't need to check
-			if (!(psBuilding->type == REF_DEFENSE || psBuilding->type == REF_MISSILE_SILO || psBuilding->type == REF_REARM_PAD))
-			{
-				for (DROID *psDroid = apsDroidLists[player]; psDroid; psDroid = psDroid->psNext)
-				{
-					//once its invalid stop checking
-					if (valid == false)
+					STRUCTURE const *psStruct = getTileStructure(map_coord(pos.x), map_coord(pos.y));
+					if (psStruct && (psStruct->pStructureType->type == REF_FACTORY ||
+					                 psStruct->pStructureType->type == REF_VTOL_FACTORY) &&
+					    psStruct->status == SS_BUILT)
 					{
 						break;
 					}
-					if (psDroid->droidType == DROID_CONSTRUCT ||
-						psDroid->droidType == DROID_CYBORG_CONSTRUCT)
+				}
+				return false;
+			case REF_RESEARCH_MODULE:
+				if (TileHasStructure(worldTile(pos)))
+				{
+					STRUCTURE const *psStruct = getTileStructure(map_coord(pos.x), map_coord(pos.y));
+					if (psStruct && psStruct->pStructureType->type == REF_RESEARCH &&
+					    psStruct->status == SS_BUILT)
 					{
-						//look thru' the list of orders to see if more building sites
-						for (unsigned order = psDroid->listPendingBegin; order < psDroid->asOrderList.size(); order++)
-						{
-							if (psDroid->asOrderList[order].order == DORDER_BUILD)
-							{
-								STRUCTURE_STATS *orderTarget = (STRUCTURE_STATS *)psDroid->asOrderList[order].psOrderTarget;
-
-								bool validCombi = false;
-								if (orderTarget->type == REF_DEFENSE ||
-								    orderTarget->type == REF_MISSILE_SILO)
-								{
-									validCombi = true;
-								}
-								//walls can be built next to walls and defence
-								if ((psBuilding->type == REF_WALL || psBuilding->type == REF_WALLCORNER)
-								    && (orderTarget->type == REF_WALL || orderTarget->type == REF_WALLCORNER))
-								{
-									validCombi = true;
-								}
-								//don't bother checking if valid combination of building types
-								if (!validCombi)
-								{
-									/*need to check there is one tile between buildings*/
-									//check if any corner is within the build site
-									STRUCTURE_STATS *target = (STRUCTURE_STATS *)psDroid->asOrderList[order].psOrderTarget;
-									uint16_t dir = psDroid->asOrderList[order].direction;
-									Vector2i size = getStructureStatsSize(target, dir);
-									int left = map_coord(psDroid->asOrderList[order].x) - size.x/2;
-									int right = left + size.x;
-									int up = map_coord(psDroid->asOrderList[order].y) - size.y/2;
-									int down = up + size.y;
-									if (((left > site.xTL-1 && left <= site.xBR+1) &&
-										(up > site.yTL-1 && up <= site.yBR+1)) ||
-										((right > site.xTL-1 && right <= site.xBR+1) &&
-										(up > site.yTL-1 && up <= site.yBR+1)) ||
-										((left > site.xTL-1 && left <= site.xBR+1) &&
-										(down > site.yTL-1 && down <= site.yBR+1)) ||
-										((right > site.xTL-1 && right <= site.xBR+1) &&
-										(down > site.yTL-1 && down <= site.yBR+1)))
-									{
-										valid = false;
-										break;
-									}
-								}
-							}
-						}
+						break;
 					}
 				}
-			}
+				return false;
+			case REF_POWER_MODULE:
+				if (TileHasStructure(worldTile(pos)))
+				{
+					STRUCTURE const *psStruct = getTileStructure(map_coord(pos.x), map_coord(pos.y));
+					if (psStruct && psStruct->pStructureType->type == REF_POWER_GEN &&
+					    psStruct->status == SS_BUILT)
+					{
+						break;
+					}
+				}
+				return false;
+			case REF_RESOURCE_EXTRACTOR:
+				if (TileHasFeature(worldTile(pos)))
+				{
+					FEATURE const *psFeat = getTileFeature(map_coord(pos.x), map_coord(pos.y));
+					if (psFeat && psFeat->psStats->subType == FEAT_OIL_RESOURCE)
+					{
+						break;
+					}
+				}
+				return false;
+		}
+		//if setting up a build queue need to check against future sites as well - AB 4/5/99
+		if (ctrlShiftDown() && player == selectedPlayer && bCheckBuildQueue &&
+		    anyBlueprintTooClose(psBuilding, pos, direction))
+		{
+			return false;
 		}
 	}
 	else if (psTemplate != NULL)
 	{
 		PROPULSION_STATS *psPropStats = asPropulsionStats + psTemplate->asParts[COMP_PROPULSION];
 
-		valid = !fpathBlockingTile(x, y, psPropStats->propulsionType);
+		if (fpathBlockingTile(b.map.x, b.map.y, psPropStats->propulsionType))
+		{
+			return false;
+		}
 	}
 	else
 	{
 		// not positioning a structure or droid, ie positioning a feature
-		valid = !fpathBlockingTile(x, y, PROPULSION_TYPE_WHEELED);
+		if (fpathBlockingTile(b.map.x, b.map.y, PROPULSION_TYPE_WHEELED))
+		{
+			return false;
+		}
 	}
 
-failed:  // Succeeded if got here without jumping.
-	// Only set the hilight colour if it's the selected player.
-
-	return valid;
+	return true;
 }
 
 /*
@@ -4991,7 +4869,7 @@ void findAssemblyPointPosition(UDWORD *pX, UDWORD *pY, UDWORD player)
 	passes = 0;
 
 	//if the value passed in is not a valid location - find one!
-	if (!validLocation(&sStats, *pX, *pY, 0, player, false))
+	if (!validLocation(&sStats, world_coord(Vector2i(*pX, *pY)), 0, player, false))
 	{
 		/* Keep going until we get a tile or we exceed distance */
 		while(passes < LOOK_FOR_EMPTY_TILE)
@@ -5005,7 +4883,7 @@ void findAssemblyPointPosition(UDWORD *pX, UDWORD *pY, UDWORD player)
 					if(i==startX || i==endX || j==startY || j==endY)
 					{
 						/* Good enough? */
-						if(validLocation(&sStats, i, j, 0, player, false))
+						if(validLocation(&sStats, world_coord(Vector2i(i, j)), 0, player, false))
 						{
 							/* Set exit conditions and get out NOW */
 							*pX = i;

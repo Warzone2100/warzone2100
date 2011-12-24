@@ -169,8 +169,6 @@ void	kill3DBuilding		( void )
 //
 bool process3DBuilding(void)
 {
-	UDWORD	bX,bY;
-
 	//if not trying to build ignore
 	if (buildState == BUILD3D_NONE)
   	{
@@ -182,13 +180,16 @@ bool process3DBuilding(void)
 		return true;
 	}
 
+	/* Need to update the building locations if we're building */
+	int bX = clip(mouseTileX, 2, mapWidth - 3);
+	int bY = clip(mouseTileY, 2, mapHeight - 3);
 
-	if (buildState != BUILD3D_FINISHED)// && buildState != BUILD3D_NONE)
+	if (buildState != BUILD3D_FINISHED)
 	{
-		bX = mouseTileX;
-		bY = mouseTileY;
+		Vector2i size = getStatsSize(sBuildDetails.psStats, player.r.y);
+		Vector2i offset = size * (TILE_UNITS / 2);  // This presumably gets added to the chosen coordinates, somewhere, based on looking at what pickStructLocation does. No idea where it gets added, though.
 
-		if (validLocation(sBuildDetails.psStats, bX, bY, player.r.y, selectedPlayer, true))
+		if (validLocation(sBuildDetails.psStats, world_coord(Vector2i(bX, bY)) + offset, player.r.y, selectedPlayer, true))
 		{
 			buildState = BUILD3D_VALID;
 		}
@@ -198,46 +199,8 @@ bool process3DBuilding(void)
 		}
 	}
 
-	/* Need to update the building locations if we're building */
-	bX = mouseTileX;
-	bY = mouseTileY;
-
-	if(mouseTileX<2)
-	{
-		bX = 2;
-	}
-	else
-	{
-		bX = mouseTileX;
-	}
-	if(mouseTileX > (SDWORD)(mapWidth-3))
-	{
-		bX = mapWidth-3;
-	}
-	else
-	{
-		bX = mouseTileX;
-	}
-
-	if(mouseTileY<2)
-	{
-		bY = 2;
-	}
-	else
-	{
-		bY = mouseTileY;
-	}
-	if(mouseTileY > (SDWORD)(mapHeight-3))
-	{
-		bY = mapHeight-3;
-	}
-	else
-	{
-		bY = mouseTileY;
-	}
-
-	sBuildDetails.x = buildSite.xTL = (UWORD)bX;
- 	sBuildDetails.y = buildSite.yTL = (UWORD)bY;
+	sBuildDetails.x = buildSite.xTL = bX;
+	sBuildDetails.y = buildSite.yTL = bY;
 	if (((player.r.y + 0x2000) & 0x4000) == 0)
 	{
 		buildSite.xBR = buildSite.xTL+sBuildDetails.width-1;

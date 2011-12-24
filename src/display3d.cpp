@@ -351,6 +351,19 @@ STRUCTURE_STATS const *getTileBlueprintStats(int mapX, int mapY)
 	return getTileBlueprint(mapX, mapY).stats;
 }
 
+bool anyBlueprintTooClose(STRUCTURE_STATS const *stats, Vector2i pos, uint16_t dir)
+{
+	for (std::vector<Blueprint>::const_iterator blueprint = blueprints.begin(); blueprint != blueprints.end(); ++blueprint)
+	{
+		if ((blueprint->state == SS_BLUEPRINT_PLANNED || blueprint->state == SS_BLUEPRINT_PLANNED_BY_ALLY)
+		    && isBlueprintTooClose(stats, pos, dir, blueprint->stats, blueprint->pos, blueprint->dir))
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
 static PIELIGHT structureBrightness(STRUCTURE *psStructure)
 {
 	PIELIGHT buildingBrightness;

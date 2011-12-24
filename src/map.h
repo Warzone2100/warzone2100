@@ -497,13 +497,6 @@ WZ_DECL_ALWAYS_INLINE static inline bool tileOnMap(Vector2i pos)
 	return tileOnMap(pos.x, pos.y);
 }
 
-/* Return true if a tile is not too near the map edge and not outside of the map */
-static inline bool tileInsideBuildRange(SDWORD x, SDWORD y)
-{
-	return (x >= TOO_NEAR_EDGE) && (x < ((SDWORD)mapWidth - TOO_NEAR_EDGE)) &&
-		(y >= TOO_NEAR_EDGE) && (y < ((SDWORD)mapHeight - TOO_NEAR_EDGE));
-}
-
 /* Return whether a world coordinate is on the map */
 WZ_DECL_ALWAYS_INLINE static inline bool worldOnMap(int x, int y)
 {
@@ -532,10 +525,8 @@ bool mapObjIsAboveGround(const SIMPLE_OBJECT *psObj);
 
 /* returns the max and min height of a tile by looking at the four corners
    in tile coords */
-extern void getTileMaxMin(UDWORD x, UDWORD y, UDWORD *pMax, UDWORD *pMin);
+void getTileMaxMin(int x, int y, int *pMax, int *pMin);
 
-UDWORD GetHeightOfMap(void);
-UDWORD GetWidthOfMap(void);
 extern bool readVisibilityData(const char* fileName);
 extern bool	writeVisibilityData(const char* fileName);
 
