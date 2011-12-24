@@ -452,7 +452,7 @@ ASR_RETVAL fpathAStarRoute(MOVE_CONTROL *psMove, PATHJOB *psJob)
 	path.clear();
 
 	PathCoord newP;
-	for (PathCoord p = endCoord; p != context.tileS; p = newP)
+	for (PathCoord p = endCoord; true; p = newP)
 	{
 		ASSERT_OR_RETURN(ASR_FAILED, tileOnMap(p.x, p.y), "Assigned XY coordinates (%d, %d) not on map!", (int)p.x, (int)p.y);
 		ASSERT_OR_RETURN(ASR_FAILED, path.size() < (unsigned)mapWidth*mapHeight, "Pathfinding got in a loop.");
@@ -461,17 +461,12 @@ ASR_RETVAL fpathAStarRoute(MOVE_CONTROL *psMove, PATHJOB *psJob)
 
 		PathExploredTile &tile = context.map[p.x + p.y*mapWidth];
 		newP = PathCoord(p.x - tile.dx, p.y - tile.dy);
-		if (p == newP)
+		if (p == context.tileS || p == newP)
 		{
-			break;  // We stopped moving, because we reached the closest reachable tile to context.tileS. Give up now.
+			break;  // We stopped moving, because we reached the destination or the closest reachable tile to context.tileS. Give up now.
 		}
 	}
-	if (path.empty())
-	{
-		// We are probably already in the destination tile. Go to the exact coordinates.
-		path.push_back(Vector2i(psJob->destX, psJob->destY));
-	}
-	else if (retval == ASR_OK)
+	if (retval == ASR_OK)
 	{
 		// Found exact path, so use exact coordinates for last point, no reason to lose precision
 		Vector2i v(psJob->destX, psJob->destY);
