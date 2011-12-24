@@ -59,6 +59,8 @@ int32_t featureDamage(FEATURE *psFeature, UDWORD damage, WEAPON_CLASS weaponClas
 extern void     featureInitVars(void);
 
 Vector2i getFeatureStatsSize(FEATURE_STATS const *pStructureType);
+StructureBounds getStructureBounds(FEATURE const *object);
+StructureBounds getStructureBounds(FEATURE_STATS const *stats, Vector2i pos);
 
 #define syncDebugFeature(psFeature, ch) _syncDebugFeature(__FUNCTION__, psFeature, ch)
 void _syncDebugFeature(const char *function, FEATURE const *psFeature, char ch);

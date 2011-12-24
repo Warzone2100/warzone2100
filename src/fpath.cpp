@@ -350,29 +350,6 @@ void fpathRemoveDroidData(int id)
 	wzMutexUnlock(fpathMutex);
 }
 
-static StructureTiles getTilesOfStructure(BASE_OBJECT *object)
-{
-	StructureTiles ret;
-	ret.size = Vector2i(-65535, -65535);  // Default to an invalid area.
-	ret.map = Vector2i(32767, 32767);
-
-	STRUCTURE *psStructure = castStructure(object);
-	FEATURE *psFeature = castFeature(object);
-
-	if (psStructure != NULL)
-	{
-		ret.size = getStructureSize(psStructure);
-		ret.map = map_coord(removeZ(psStructure->pos)) - ret.size/2;
-	}
-	else if (psFeature != NULL)
-	{
-		ret.size = Vector2i(psFeature->psStats->baseWidth, psFeature->psStats->baseBreadth);
-		ret.map = map_coord(removeZ(psFeature->pos)) - ret.size/2;
-	}
-
-	return ret;
-}
-
 static FPATH_RETVAL fpathRoute(MOVE_CONTROL *psMove, int id, int startX, int startY, int tX, int tY, PROPULSION_TYPE propulsionType, 
                                DROID_TYPE droidType, FPATH_MOVETYPE moveType, int owner, bool acceptNearest, BASE_OBJECT *srcStructure, BASE_OBJECT *dstStructure)
 {
@@ -446,8 +423,8 @@ static FPATH_RETVAL fpathRoute(MOVE_CONTROL *psMove, int id, int startX, int sta
 	job.droidID = id;
 	job.destX = tX;
 	job.destY = tY;
-	job.srcStructure = getTilesOfStructure(srcStructure);
-	job.dstStructure = getTilesOfStructure(dstStructure);
+	job.srcStructure = getStructureBounds(srcStructure);
+	job.dstStructure = getStructureBounds(dstStructure);
 	job.droidType = droidType;
 	job.propulsion = propulsionType;
 	job.moveType = moveType;

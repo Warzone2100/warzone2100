@@ -412,6 +412,8 @@ void cbNewDroid(STRUCTURE *psFactory, DROID *psDroid);
 
 WZ_DECL_PURE Vector2i getStructureSize(STRUCTURE const *psBuilding);
 WZ_DECL_PURE Vector2i getStructureStatsSize(STRUCTURE_STATS const *pStructureType, uint16_t direction);
+StructureBounds getStructureBounds(STRUCTURE const *object);
+StructureBounds getStructureBounds(STRUCTURE_STATS const *stats, Vector2i pos, uint16_t direction);
 
 static inline unsigned getStructureWidth(const STRUCTURE *psBuilding)   { return getStructureSize(psBuilding).x; }
 static inline unsigned getStructureBreadth(const STRUCTURE *psBuilding) { return getStructureSize(psBuilding).y; }

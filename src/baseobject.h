@@ -26,6 +26,16 @@
 
 #include "basedef.h"
 
+struct StructureBounds
+{
+	StructureBounds() {}
+	StructureBounds(Vector2i const &map, Vector2i const &size) : map(map), size(size) {}
+
+	Vector2i map;           ///< Map coordinates of upper left corner of structure.
+	Vector2i size;          ///< Size (in map coordinates) of the structure.
+};
+
+
 static const unsigned int max_check_object_recursion = 4;
 
 /// Get interpolated direction at time t.
@@ -42,5 +52,7 @@ void checkObject(const SIMPLE_OBJECT *psObject, const char *const location_descr
 void _syncDebugObject(const char *function, SIMPLE_OBJECT const *psObject, char ch);
 
 Vector2i getStatsSize(BASE_STATS const *pType, uint16_t direction);
+StructureBounds getStructureBounds(BASE_OBJECT const *object);
+StructureBounds getStructureBounds(BASE_STATS const *stats, Vector2i pos, uint16_t direction);
 
 #endif // __INCLUDED_BASEOBJECT_H__

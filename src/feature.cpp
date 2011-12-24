@@ -193,9 +193,6 @@ int32_t featureDamage(FEATURE *psFeature, UDWORD damage, WEAPON_CLASS weaponClas
 /* Create a feature on the map */
 FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,bool FromSave)
 {
-	UDWORD		mapX, mapY;
-	UDWORD		width,breadth, foundationMin,foundationMax, height;
-	UDWORD		startX,startY,max,min;
 	//try and create the Feature
 	FEATURE *psFeature = new FEATURE(generateSynchronisedObjectId(), psStats);
 
@@ -209,29 +206,6 @@ FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,bool FromSave)
 	psFeature->cluster = ~0;
 	//add the feature to the list - this enables it to be drawn whilst being built
 	addFeature(psFeature);
-
-	// get the terrain average height
-	startX = map_coord(x);
-	startY = map_coord(y);
-	foundationMin = TILE_MAX_HEIGHT;
-	foundationMax = TILE_MIN_HEIGHT;
-	for (breadth = 0; breadth < psStats->baseBreadth; breadth++)
-	{
-		for (width = 0; width < psStats->baseWidth; width++)
-		{
-			getTileMaxMin(startX + width, startY + breadth, &max, &min);
-			if (foundationMin > min)
-			{
-				foundationMin = min;
-			}
-			if (foundationMax < max)
-			{
-				foundationMax = max;
-			}
-		}
-	}
-	//return the average of max/min height
-	height = (foundationMin + foundationMax) / 2;
 
 	// snap the coords to a tile
 	if (!FromSave)
@@ -251,6 +225,23 @@ FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,bool FromSave)
 	psFeature->pos.x = x;
 	psFeature->pos.y = y;
 
+	StructureBounds b = getStructureBounds(psFeature);
+
+	// get the terrain average height
+	int foundationMin = INT32_MAX;
+	int foundationMax = INT32_MIN;
+	for (int breadth = 0; breadth <= b.size.y; ++breadth)
+	{
+		for (int width = 0; width <= b.size.x; ++width)
+		{
+			int h = map_TileHeight(b.map.x + width, b.map.y + breadth);
+			foundationMin = std::min(foundationMin, h);
+			foundationMax = std::max(foundationMax, h);
+		}
+	}
+	//return the average of max/min height
+	int height = (foundationMin + foundationMax) / 2;
+
 	if (psStats->subType == FEAT_TREE)
 	{
 		psFeature->rot.direction = gameRand(DEG_360);
@@ -261,8 +252,8 @@ FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,bool FromSave)
 	}
 	psFeature->body = psStats->body;
 	psFeature->inFire = false;
-	objSensorCache((BASE_OBJECT *)psFeature, NULL);
-	objEcmCache((BASE_OBJECT *)psFeature, NULL);
+	objSensorCache(psFeature, NULL);
+	objEcmCache(psFeature, NULL);
 
 	// it has never been drawn
 	psFeature->sDisplay.frameNumber = 0;
@@ -275,24 +266,20 @@ FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,bool FromSave)
 	memset(psFeature->seenThisTick, 0, sizeof(psFeature->seenThisTick));
 	memset(psFeature->visible, 0, sizeof(psFeature->visible));
 
-	//load into the map data
-	mapX = map_coord(x) - psStats->baseWidth/2;
-	mapY = map_coord(y) - psStats->baseBreadth/2;
-
 	// set up the imd for the feature
 	psFeature->sDisplay.imd = psStats->psImd;
 
 	ASSERT_OR_RETURN(NULL, psFeature->sDisplay.imd, "No IMD for feature");		// make sure we have an imd.
 
-	for (width = 0; width < psStats->baseWidth; width++)
+	for (int breadth = 0; breadth < b.size.y; ++breadth)
 	{
-		for (breadth = 0; breadth < psStats->baseBreadth; breadth++)
+		for (int width = 0; width < b.size.x; ++width)
 		{
-			MAPTILE *psTile = mapTile(mapX + width, mapY + breadth);
+			MAPTILE *psTile = mapTile(b.map.x + width, b.map.y + breadth);
 
 			//check not outside of map - for load save game
-			ASSERT_OR_RETURN(NULL, mapX + width < mapWidth, "x coord bigger than map width - %s, id = %d", getName(psFeature->psStats->pName), psFeature->id);
-			ASSERT_OR_RETURN(NULL, mapY + breadth < mapHeight, "y coord bigger than map height - %s, id = %d", getName(psFeature->psStats->pName), psFeature->id);
+			ASSERT_OR_RETURN(NULL, b.map.x + width < mapWidth, "x coord bigger than map width - %s, id = %d", getName(psFeature->psStats->pName), psFeature->id);
+			ASSERT_OR_RETURN(NULL, b.map.y + breadth < mapHeight, "y coord bigger than map height - %s, id = %d", getName(psFeature->psStats->pName), psFeature->id);
 
 			if (width != psStats->baseWidth && breadth != psStats->baseBreadth)
 			{
@@ -302,7 +289,7 @@ FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,bool FromSave)
 
 					debug(LOG_ERROR, "%s(%d) already placed at (%d+%d, %d+%d) when trying to place %s(%d) at (%d+%d, %d+%d) - removing it",
 					      getName(psBlock->psStats->pName), psBlock->id, map_coord(psBlock->pos.x), psBlock->psStats->baseWidth, map_coord(psBlock->pos.y),
-					      psBlock->psStats->baseBreadth, getName(psFeature->psStats->pName), psFeature->id, mapX, psStats->baseWidth, mapY, psStats->baseBreadth);
+					      psBlock->psStats->baseBreadth, getName(psFeature->psStats->pName), psFeature->id, b.map.x, b.size.x, b.map.y, b.size.y);
 
 					removeFeature(psBlock);
 				}
@@ -312,12 +299,12 @@ FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,bool FromSave)
 				// if it's a tall feature then flag it in the map.
 				if (psFeature->sDisplay.imd->max.y > TALLOBJECT_YMAX)
 				{
-					auxSetBlocking(mapX + width, mapY + breadth, AIR_BLOCKED);
+					auxSetBlocking(b.map.x + width, b.map.y + breadth, AIR_BLOCKED);
 				}
 
 				if (psStats->subType != FEAT_GEN_ARTE && psStats->subType != FEAT_OIL_DRUM)
 				{
-					auxSetBlocking(mapX + width, mapY + breadth, FEATURE_BLOCKED);
+					auxSetBlocking(b.map.x + width, b.map.y + breadth, FEATURE_BLOCKED);
 				}
 			}
 
@@ -327,7 +314,7 @@ FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,bool FromSave)
 			}
 		}
 	}
-	psFeature->pos.z = map_TileHeight(mapX,mapY);//jps 18july97
+	psFeature->pos.z = map_TileHeight(b.map.x, b.map.y);//jps 18july97
 
 	return psFeature;
 }
@@ -372,7 +359,6 @@ void featureUpdate(FEATURE *psFeat)
 // free up a feature with no visual effects
 bool removeFeature(FEATURE *psDel)
 {
-	int		mapX, mapY, width, breadth, player;
 	MESSAGE		*psMessage;
 	Vector3i	pos;
 
@@ -386,20 +372,19 @@ bool removeFeature(FEATURE *psDel)
 	}
 
 	//remove from the map data
-	mapX = map_coord(psDel->pos.x) - psDel->psStats->baseWidth/2;
-	mapY = map_coord(psDel->pos.y) - psDel->psStats->baseBreadth/2;
-	for (width = 0; width < psDel->psStats->baseWidth; width++)
+	StructureBounds b = getStructureBounds(psDel);
+	for (int breadth = 0; breadth < b.size.y; ++breadth)
 	{
-		for (breadth = 0; breadth < psDel->psStats->baseBreadth; breadth++)
+		for (int width = 0; width < b.size.x; ++width)
 		{
-			if (tileOnMap(mapX + width, mapY + breadth))
+			if (tileOnMap(b.map.x + width, b.map.y + breadth))
 			{
-				MAPTILE *psTile = mapTile(mapX + width, mapY + breadth);
+				MAPTILE *psTile = mapTile(b.map.x + width, b.map.y + breadth);
 	 
-				if (psTile->psObject == (BASE_OBJECT *)psDel)
+				if (psTile->psObject == psDel)
 				{
 					psTile->psObject = NULL;
-					auxClearBlocking(mapX + width, mapY + breadth, FEATURE_BLOCKED | AIR_BLOCKED);
+					auxClearBlocking(b.map.x + width, b.map.y + breadth, FEATURE_BLOCKED | AIR_BLOCKED);
 				}
 			}
 		}
@@ -420,7 +405,7 @@ bool removeFeature(FEATURE *psDel)
 
 	if (psDel->psStats->subType == FEAT_GEN_ARTE || psDel->psStats->subType == FEAT_OIL_RESOURCE)
 	{
-		for (player = 0; player < MAX_PLAYERS; player++)
+		for (unsigned player = 0; player < MAX_PLAYERS; ++player)
 		{
 			psMessage = findMessage((MSG_VIEWDATA *)psDel, MSG_PROXIMITY, player);
 			while (psMessage)
@@ -443,8 +428,6 @@ bool destroyFeature(FEATURE *psDel)
 	UDWORD			widthScatter,breadthScatter,heightScatter, i;
 	EFFECT_TYPE		explosionSize;
 	Vector3i pos;
-	UDWORD			width,breadth;
-	UDWORD			mapX,mapY;
 
 	ASSERT_OR_RETURN(false, psDel != NULL, "Invalid feature pointer");
 
@@ -510,13 +493,12 @@ bool destroyFeature(FEATURE *psDel)
 	{
 		// ----- Flip all the tiles under the skyscraper to a rubble tile
 		// smoke effect should disguise this happening
-		mapX = map_coord(psDel->pos.x) - psDel->psStats->baseWidth/2;
-		mapY = map_coord(psDel->pos.y) - psDel->psStats->baseBreadth/2;
-		for (width = 0; width < psDel->psStats->baseWidth; width++)
+		StructureBounds b = getStructureBounds(psDel);
+		for (int breadth = 0; breadth < b.size.y; ++breadth)
 		{
-			for (breadth = 0; breadth < psDel->psStats->baseBreadth; breadth++)
+			for (int width = 0; width < b.size.x; ++width)
 			{
-				MAPTILE *psTile = mapTile(mapX+width,mapY+breadth);
+				MAPTILE *psTile = mapTile(b.map.x + width, b.map.y + breadth);
 				// stops water texture chnaging for underwateer festures
 				if (terrainType(psTile) != TER_WATER)
 				{
@@ -529,7 +511,7 @@ bool destroyFeature(FEATURE *psDel)
 					{
 						/* This remains a blocking tile */
 						psTile->psObject = NULL;
-						auxClearBlocking(mapX + width, mapY + breadth, AIR_BLOCKED);  // Shouldn't remain blocking for air units, however.
+						auxClearBlocking(b.map.x + width, b.map.y + breadth, AIR_BLOCKED);  // Shouldn't remain blocking for air units, however.
 						psTile->texture = TileNumber_texture(psTile->texture) | BLOCKING_RUBBLE_TILE;
 					}
 				}
@@ -564,4 +546,20 @@ Vector2i getFeatureStatsSize(FEATURE_STATS const *pFeatureType)
 
 	// Feature has normal orientation (or upsidedown).
 	return size;
+}
+
+StructureBounds getStructureBounds(FEATURE const *object)
+{
+	Vector2i size = getFeatureStatsSize(object->psStats);
+	Vector2i map = map_coord(removeZ(object->pos)) - size/2;
+
+	return StructureBounds(map, size);
+}
+
+StructureBounds getStructureBounds(FEATURE_STATS const *stats, Vector2i pos)
+{
+	Vector2i size = getFeatureStatsSize(stats);
+	Vector2i map = map_coord(pos) - size/2;
+
+	return StructureBounds(map, size);
 }

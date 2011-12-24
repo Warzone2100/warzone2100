@@ -119,7 +119,7 @@ struct PathBlockingMap
 struct PathNonblockingArea
 {
 	PathNonblockingArea() {}
-	PathNonblockingArea(StructureTiles const &st) : x1(st.map.x), x2(st.map.x + st.size.x), y1(st.map.y), y2(st.map.y + st.size.y) {}
+	PathNonblockingArea(StructureBounds const &st) : x1(st.map.x), x2(st.map.x + st.size.x), y1(st.map.y), y2(st.map.y + st.size.y) {}
 	bool operator ==(PathNonblockingArea const &z) const { return x1 == z.x1 && x2 == z.x2 && y1 == z.y1 && y2 == z.y2; }
 	bool operator !=(PathNonblockingArea const &z) const { return !(*this == z); }
 	bool isNonblocking(int x, int y) const

@@ -191,58 +191,54 @@ Check to see if the stats is some kind of expansion module
 
 static void auxStructureNonblocking(STRUCTURE *psStructure)
 {
-	Vector2i size = getStructureSize(psStructure);
-	Vector2i map = map_coord(removeZ(psStructure->pos)) - size/2;
+	StructureBounds b = getStructureBounds(psStructure);
 
-	for (int i = 0; i < size.x; i++)
+	for (int i = 0; i < b.size.x; i++)
 	{
-		for (int j = 0; j < size.y; j++)
+		for (int j = 0; j < b.size.y; j++)
 		{
-			auxClearAll(map.x + i, map.y + j, AUXBITS_BLOCKING | AUXBITS_OUR_BUILDING | AUXBITS_NONPASSABLE);
+			auxClearAll(b.map.x + i, b.map.y + j, AUXBITS_BLOCKING | AUXBITS_OUR_BUILDING | AUXBITS_NONPASSABLE);
 		}
 	}
 }
 
 static void auxStructureBlocking(STRUCTURE *psStructure)
 {
-	Vector2i size = getStructureSize(psStructure);
-	Vector2i map = map_coord(removeZ(psStructure->pos)) - size/2;
+	StructureBounds b = getStructureBounds(psStructure);
 
-	for (int i = 0; i < size.x; i++)
+	for (int i = 0; i < b.size.x; i++)
 	{
-		for (int j = 0; j < size.y; j++)
+		for (int j = 0; j < b.size.y; j++)
 		{
-			auxSetAllied(map.x + i, map.y + j, psStructure->player, AUXBITS_OUR_BUILDING);
-			auxSetAll(map.x + i, map.y + j, AUXBITS_BLOCKING | AUXBITS_NONPASSABLE);
+			auxSetAllied(b.map.x + i, b.map.y + j, psStructure->player, AUXBITS_OUR_BUILDING);
+			auxSetAll(b.map.x + i, b.map.y + j, AUXBITS_BLOCKING | AUXBITS_NONPASSABLE);
 		}
 	}
 }
 
 static void auxStructureOpenGate(STRUCTURE *psStructure)
 {
-	Vector2i size = getStructureSize(psStructure);
-	Vector2i map = map_coord(removeZ(psStructure->pos)) - size/2;
+	StructureBounds b = getStructureBounds(psStructure);
 
-	for (int i = 0; i < size.x; i++)
+	for (int i = 0; i < b.size.x; i++)
 	{
-		for (int j = 0; j < size.y; j++)
+		for (int j = 0; j < b.size.y; j++)
 		{
-			auxClearAll(map.x + i, map.y + j, AUXBITS_BLOCKING);
+			auxClearAll(b.map.x + i, b.map.y + j, AUXBITS_BLOCKING);
 		}
 	}
 }
 
 static void auxStructureClosedGate(STRUCTURE *psStructure)
 {
-	Vector2i size = getStructureSize(psStructure);
-	Vector2i map = map_coord(removeZ(psStructure->pos)) - size/2;
+	StructureBounds b = getStructureBounds(psStructure);
 
-	for (int i = 0; i < size.x; i++)
+	for (int i = 0; i < b.size.x; i++)
 	{
-		for (int j = 0; j < size.y; j++)
+		for (int j = 0; j < b.size.y; j++)
 		{
-			auxSetEnemy(map.x + i, map.y + j, psStructure->player, AUXBITS_NONPASSABLE);
-			auxSetAll(map.x + i, map.y + j, AUXBITS_BLOCKING);
+			auxSetEnemy(b.map.x + i, b.map.y + j, psStructure->player, AUXBITS_NONPASSABLE);
+			auxSetAll(b.map.x + i, b.map.y + j, AUXBITS_BLOCKING);
 		}
 	}
 }
@@ -1222,8 +1218,7 @@ An actual foundation structure may end up being placed down
 The x and y passed in are the CENTRE of the structure*/
 static int foundationHeight(STRUCTURE *psStruct)
 {
-	Vector2i size = getStructureSize(psStruct);
-	Vector2i map = map_coord(removeZ(psStruct->pos)) - size/2;
+	StructureBounds b = getStructureBounds(psStruct);
 
 	//check the terrain is the correct type return -1 if not
 
@@ -1234,11 +1229,11 @@ static int foundationHeight(STRUCTURE *psStruct)
 	int foundationMin = TILE_MAX_HEIGHT;
 	int foundationMax = TILE_MIN_HEIGHT;
 
-	for (int breadth = 0; breadth <= size.y; breadth++)
+	for (int breadth = 0; breadth <= b.size.y; breadth++)
 	{
-		for (int width = 0; width <= size.x; width++)
+		for (int width = 0; width <= b.size.x; width++)
 		{
-			int height = map_TileHeight(map.x + width, map.y + breadth);
+			int height = map_TileHeight(b.map.x + width, b.map.y + breadth);
 			foundationMin = std::min(foundationMin, height);
 			foundationMax = std::max(foundationMax, height);
 		}
@@ -1250,22 +1245,21 @@ static int foundationHeight(STRUCTURE *psStruct)
 
 static void buildFlatten(STRUCTURE *pStructure, int h)
 {
-	Vector2i size = getStructureSize(pStructure);
-	Vector2i map = map_coord(removeZ(pStructure->pos)) - size/2;
+	StructureBounds b = getStructureBounds(pStructure);
 
-	for (int breadth = 0; breadth <= size.y; ++breadth)
+	for (int breadth = 0; breadth <= b.size.y; ++breadth)
 	{
-		for (int width = 0; width <= size.x; ++width)
+		for (int width = 0; width <= b.size.x; ++width)
 		{
 			if (pStructure->pStructureType->type != REF_WALL
 			    && pStructure->pStructureType->type != REF_WALLCORNER
 			    && pStructure->pStructureType->type != REF_GATE)
 			{
-				setTileHeight(map.x + width, map.y + breadth, h);
+				setTileHeight(b.map.x + width, b.map.y + breadth, h);
 				// We need to raise features on raised tiles to the new height
-				if (TileHasFeature(mapTile(map.x + width, map.y + breadth)))
+				if (TileHasFeature(mapTile(b.map.x + width, b.map.y + breadth)))
 				{
-					getTileFeature(map.x + width, map.y + breadth)->pos.z = h;
+					getTileFeature(b.map.x + width, b.map.y + breadth)->pos.z = h;
 				}
 			}
 		}
@@ -4575,20 +4569,17 @@ bool checkLength(UDWORD maxRange, UDWORD x, UDWORD y, UDWORD *pDroidX, UDWORD *p
 //remove a structure from the map
 static void removeStructFromMap(STRUCTURE *psStruct)
 {
-	UDWORD		i,j;
-
 	auxStructureNonblocking(psStruct);
 
 	/* set tiles drawing */
-	Vector2i size = getStructureSize(psStruct);
-	Vector2i map = map_coord(removeZ(psStruct->pos)) - size/2;
-	for (i = 0; i < size.x; i++)
+	StructureBounds b = getStructureBounds(psStruct);
+	for (int j = 0; j < b.size.y; ++j)
 	{
-		for (j = 0; j < size.y; j++)
+		for (int i = 0; i < b.size.x; ++i)
 		{
-			MAPTILE *psTile = mapTile(map.x + i, map.y + j);
+			MAPTILE *psTile = mapTile(b.map.x + i, b.map.y + j);
 			psTile->psObject = NULL;
-			auxClearBlocking(map.x + i, map.y + j, AIR_BLOCKED);
+			auxClearBlocking(b.map.x + i, b.map.y + j, AIR_BLOCKED);
 		}
 	}
 }
@@ -4839,13 +4830,12 @@ bool destroyStruct(STRUCTURE *psDel)
 	// Leave burn marks in the ground where building once stood
 	if (psDel->visible[selectedPlayer] && !resourceFound && !bMinor)
 	{
-		const Vector2i size = getStructureSize(psDel);
-		const Vector2i map = map_coord(removeZ(psDel->pos)) - size / 2;
-		for (int width = 0; width < size.x; width++)
+		StructureBounds b = getStructureBounds(psDel);
+		for (int breadth = 0; breadth < b.size.y; ++breadth)
 		{
-			for (int breadth = 0; breadth < size.y; breadth++)
+			for (int width = 0; width < b.size.x; ++width)
 			{
-				MAPTILE *psTile = mapTile(map.x + width, map.y + breadth);
+				MAPTILE *psTile = mapTile(b.map.x + width, b.map.y + breadth);
 				if (TEST_TILE_VISIBLE(selectedPlayer, psTile))
 				{
 					psTile->illumination /= 2;
@@ -7615,6 +7605,22 @@ Vector2i getStructureStatsSize(STRUCTURE_STATS const *pStructureType, uint16_t d
 
 	// Building has normal orientation (or upsidedown).
 	return size;
+}
+
+StructureBounds getStructureBounds(STRUCTURE const *object)
+{
+	Vector2i size = getStructureSize(object);
+	Vector2i map = map_coord(removeZ(object->pos)) - size/2;
+
+	return StructureBounds(map, size);
+}
+
+StructureBounds getStructureBounds(STRUCTURE_STATS const *stats, Vector2i pos, uint16_t direction)
+{
+	Vector2i size = getStructureStatsSize(stats, direction);
+	Vector2i map = map_coord(pos) - size/2;
+
+	return StructureBounds(map, size);
 }
 
 // Check that psVictimStruct is not referred to by any other object in the game

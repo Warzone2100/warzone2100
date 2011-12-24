@@ -681,15 +681,13 @@ bool actionReachedBuildPos(DROID const *psDroid, int x, int y, uint16_t dir, BAS
 	ASSERT_OR_RETURN(false, psStats != NULL && psDroid != NULL, "Bad stat or droid");
 	CHECK_DROID(psDroid);
 
-
-	Vector2i size = getStatsSize(psStats, dir);
-	Vector2i map = map_coord(Vector2i(x, y)) - size/2;
+	StructureBounds b = getStructureBounds(psStats, Vector2i(x, y), dir);
 
 	// do all calculations in half tile units so that
 	// the droid moves to within half a tile of the target
 	// NOT ANY MORE - JOHN
-	Vector2i delta = map_coord(removeZ(psDroid->pos)) - map;
-	return delta.x >= -1 && delta.x <= size.x && delta.y >= -1 && delta.y <= size.y;
+	Vector2i delta = map_coord(removeZ(psDroid->pos)) - b.map;
+	return delta.x >= -1 && delta.x <= b.size.x && delta.y >= -1 && delta.y <= b.size.y;
 }
 
 
@@ -700,11 +698,10 @@ static bool actionRemoveDroidsFromBuildPos(unsigned player, Vector2i pos, uint16
 
 	bool buildPosEmpty = true;
 
-	Vector2i size = getStatsSize(psStats, dir);
-	Vector2i map = map_coord(pos) - size/2;
+	StructureBounds b = getStructureBounds(psStats, pos, dir);
 
-	Vector2i structureCentre = world_coord(map) + world_coord(size)/2;
-	unsigned structureMaxRadius = iHypot(world_coord(size)/2) + 1;  // +1 since iHypot rounds down.
+	Vector2i structureCentre = world_coord(b.map) + world_coord(b.size)/2;
+	unsigned structureMaxRadius = iHypot(world_coord(b.size)/2) + 1;  // +1 since iHypot rounds down.
 
 	gridStartIterate(structureCentre.x, structureCentre.y, structureMaxRadius);
 	BASE_OBJECT *psObj;
@@ -716,8 +713,8 @@ static bool actionRemoveDroidsFromBuildPos(unsigned player, Vector2i pos, uint16
 			continue;  // Only looking for droids.
 		}
 
-		Vector2i delta = map_coord(removeZ(droid->pos)) - map;
-		if (delta.x < 0 || delta.x >= size.x || delta.y < 0 || delta.y >= size.y || isFlying(droid))
+		Vector2i delta = map_coord(removeZ(droid->pos)) - b.map;
+		if (delta.x < 0 || delta.x >= b.size.x || delta.y < 0 || delta.y >= b.size.y || isFlying(droid))
 		{
 			continue;  // Droid not under new structure (just near it).
 		}
@@ -732,10 +729,10 @@ static bool actionRemoveDroidsFromBuildPos(unsigned player, Vector2i pos, uint16
 		// TODO If the action code was less convoluted, it would be possible for the droid should drive away instead of just getting moved away.
 		Vector2i bestDest(0, 0);  // Dummy initialisation.
 		unsigned bestDist = UINT32_MAX;
-		for (int y = -1; y <= size.y; ++y)
-			for (int x = -1; x <= size.x; x += y >= 0 && y < size.y? size.x + 1 : 1)
+		for (int y = -1; y <= b.size.y; ++y)
+			for (int x = -1; x <= b.size.x; x += y >= 0 && y < b.size.y? b.size.x + 1 : 1)
 		{
-			Vector2i dest = world_coord(map + Vector2i(x, y)) + Vector2i(TILE_UNITS, TILE_UNITS)/2;
+			Vector2i dest = world_coord(b.map + Vector2i(x, y)) + Vector2i(TILE_UNITS, TILE_UNITS)/2;
 			unsigned dist = iHypot(removeZ(droid->pos) - dest);
 			if (dist < bestDist && !fpathBlockingTile(map_coord(dest.x), map_coord(dest.y), getPropulsionStats(droid)->propulsionType))
 			{
