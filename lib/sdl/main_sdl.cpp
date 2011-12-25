@@ -12,6 +12,7 @@
 #include "scrap.h"
 #include "wz2100icon.h"
 #include "cursors_sdl.h"
+#include <algorithm>
 
 extern void mainLoop();
 
@@ -229,13 +230,157 @@ void wzSemaphorePost(WZ_SEMAPHORE *semaphore)
 /***     Main support   ***/
 /**************************/
 
+std::pair<KEY_CODE, SDLKey> KEY_CODE_to_SDLKey[] =
+{
+	std::pair<KEY_CODE, SDLKey>(KEY_ESC, SDLK_ESCAPE),
+	std::pair<KEY_CODE, SDLKey>(KEY_1, SDLK_1),
+	std::pair<KEY_CODE, SDLKey>(KEY_2, SDLK_2),
+	std::pair<KEY_CODE, SDLKey>(KEY_3, SDLK_3),
+	std::pair<KEY_CODE, SDLKey>(KEY_4, SDLK_4),
+	std::pair<KEY_CODE, SDLKey>(KEY_5, SDLK_5),
+	std::pair<KEY_CODE, SDLKey>(KEY_6, SDLK_6),
+	std::pair<KEY_CODE, SDLKey>(KEY_7, SDLK_7),
+	std::pair<KEY_CODE, SDLKey>(KEY_8, SDLK_8),
+	std::pair<KEY_CODE, SDLKey>(KEY_9, SDLK_9),
+	std::pair<KEY_CODE, SDLKey>(KEY_0, SDLK_0),
+	std::pair<KEY_CODE, SDLKey>(KEY_MINUS, SDLK_MINUS),
+	std::pair<KEY_CODE, SDLKey>(KEY_EQUALS, SDLK_EQUALS),
+	std::pair<KEY_CODE, SDLKey>(KEY_BACKSPACE, SDLK_BACKSPACE),
+	std::pair<KEY_CODE, SDLKey>(KEY_TAB, SDLK_TAB),
+	std::pair<KEY_CODE, SDLKey>(KEY_Q, SDLK_q),
+	std::pair<KEY_CODE, SDLKey>(KEY_W, SDLK_w),
+	std::pair<KEY_CODE, SDLKey>(KEY_E, SDLK_e),
+	std::pair<KEY_CODE, SDLKey>(KEY_R, SDLK_r),
+	std::pair<KEY_CODE, SDLKey>(KEY_T, SDLK_t),
+	std::pair<KEY_CODE, SDLKey>(KEY_Y, SDLK_y),
+	std::pair<KEY_CODE, SDLKey>(KEY_U, SDLK_u),
+	std::pair<KEY_CODE, SDLKey>(KEY_I, SDLK_i),
+	std::pair<KEY_CODE, SDLKey>(KEY_O, SDLK_o),
+	std::pair<KEY_CODE, SDLKey>(KEY_P, SDLK_p),
+	std::pair<KEY_CODE, SDLKey>(KEY_LBRACE, SDLK_LEFTBRACKET),
+	std::pair<KEY_CODE, SDLKey>(KEY_RBRACE, SDLK_RIGHTBRACKET),
+	std::pair<KEY_CODE, SDLKey>(KEY_RETURN, SDLK_RETURN),
+	std::pair<KEY_CODE, SDLKey>(KEY_LCTRL, SDLK_LCTRL),
+	std::pair<KEY_CODE, SDLKey>(KEY_A, SDLK_a),
+	std::pair<KEY_CODE, SDLKey>(KEY_S, SDLK_s),
+	std::pair<KEY_CODE, SDLKey>(KEY_D, SDLK_d),
+	std::pair<KEY_CODE, SDLKey>(KEY_F, SDLK_f),
+	std::pair<KEY_CODE, SDLKey>(KEY_G, SDLK_g),
+	std::pair<KEY_CODE, SDLKey>(KEY_H, SDLK_h),
+	std::pair<KEY_CODE, SDLKey>(KEY_J, SDLK_j),
+	std::pair<KEY_CODE, SDLKey>(KEY_K, SDLK_k),
+	std::pair<KEY_CODE, SDLKey>(KEY_L, SDLK_l),
+	std::pair<KEY_CODE, SDLKey>(KEY_SEMICOLON, SDLK_SEMICOLON),
+	std::pair<KEY_CODE, SDLKey>(KEY_QUOTE, SDLK_QUOTE),
+	std::pair<KEY_CODE, SDLKey>(KEY_BACKQUOTE, SDLK_BACKQUOTE),
+	std::pair<KEY_CODE, SDLKey>(KEY_LSHIFT, SDLK_LSHIFT),
+	std::pair<KEY_CODE, SDLKey>(KEY_LMETA, SDLK_LMETA),
+	std::pair<KEY_CODE, SDLKey>(KEY_LSUPER, SDLK_LSUPER),
+	std::pair<KEY_CODE, SDLKey>(KEY_BACKSLASH, SDLK_BACKSLASH),
+	std::pair<KEY_CODE, SDLKey>(KEY_Z, SDLK_z),
+	std::pair<KEY_CODE, SDLKey>(KEY_X, SDLK_x),
+	std::pair<KEY_CODE, SDLKey>(KEY_C, SDLK_c),
+	std::pair<KEY_CODE, SDLKey>(KEY_V, SDLK_v),
+	std::pair<KEY_CODE, SDLKey>(KEY_B, SDLK_b),
+	std::pair<KEY_CODE, SDLKey>(KEY_N, SDLK_n),
+	std::pair<KEY_CODE, SDLKey>(KEY_M, SDLK_m),
+	std::pair<KEY_CODE, SDLKey>(KEY_COMMA, SDLK_COMMA),
+	std::pair<KEY_CODE, SDLKey>(KEY_FULLSTOP, SDLK_PERIOD),
+	std::pair<KEY_CODE, SDLKey>(KEY_FORWARDSLASH, SDLK_SLASH),
+	std::pair<KEY_CODE, SDLKey>(KEY_RSHIFT, SDLK_RSHIFT),
+	std::pair<KEY_CODE, SDLKey>(KEY_RMETA, SDLK_RMETA),
+	std::pair<KEY_CODE, SDLKey>(KEY_RSUPER, SDLK_RSUPER),
+	std::pair<KEY_CODE, SDLKey>(KEY_KP_STAR, SDLK_KP_MULTIPLY),
+	std::pair<KEY_CODE, SDLKey>(KEY_LALT, SDLK_LALT),
+	std::pair<KEY_CODE, SDLKey>(KEY_SPACE, SDLK_SPACE),
+	std::pair<KEY_CODE, SDLKey>(KEY_CAPSLOCK, SDLK_CAPSLOCK),
+	std::pair<KEY_CODE, SDLKey>(KEY_F1, SDLK_F1),
+	std::pair<KEY_CODE, SDLKey>(KEY_F2, SDLK_F2),
+	std::pair<KEY_CODE, SDLKey>(KEY_F3, SDLK_F3),
+	std::pair<KEY_CODE, SDLKey>(KEY_F4, SDLK_F4),
+	std::pair<KEY_CODE, SDLKey>(KEY_F5, SDLK_F5),
+	std::pair<KEY_CODE, SDLKey>(KEY_F6, SDLK_F6),
+	std::pair<KEY_CODE, SDLKey>(KEY_F7, SDLK_F7),
+	std::pair<KEY_CODE, SDLKey>(KEY_F8, SDLK_F8),
+	std::pair<KEY_CODE, SDLKey>(KEY_F9, SDLK_F9),
+	std::pair<KEY_CODE, SDLKey>(KEY_F10, SDLK_F10),
+	std::pair<KEY_CODE, SDLKey>(KEY_NUMLOCK, SDLK_NUMLOCK),
+	std::pair<KEY_CODE, SDLKey>(KEY_SCROLLLOCK, SDLK_SCROLLOCK),
+	std::pair<KEY_CODE, SDLKey>(KEY_KP_7, SDLK_KP7),
+	std::pair<KEY_CODE, SDLKey>(KEY_KP_8, SDLK_KP8),
+	std::pair<KEY_CODE, SDLKey>(KEY_KP_9, SDLK_KP9),
+	std::pair<KEY_CODE, SDLKey>(KEY_KP_MINUS, SDLK_KP_MINUS),
+	std::pair<KEY_CODE, SDLKey>(KEY_KP_4, SDLK_KP4),
+	std::pair<KEY_CODE, SDLKey>(KEY_KP_5, SDLK_KP5),
+	std::pair<KEY_CODE, SDLKey>(KEY_KP_6, SDLK_KP6),
+	std::pair<KEY_CODE, SDLKey>(KEY_KP_PLUS, SDLK_KP_PLUS),
+	std::pair<KEY_CODE, SDLKey>(KEY_KP_1, SDLK_KP1),
+	std::pair<KEY_CODE, SDLKey>(KEY_KP_2, SDLK_KP2),
+	std::pair<KEY_CODE, SDLKey>(KEY_KP_3, SDLK_KP3),
+	std::pair<KEY_CODE, SDLKey>(KEY_KP_0, SDLK_KP0),
+	std::pair<KEY_CODE, SDLKey>(KEY_KP_FULLSTOP, SDLK_KP_PERIOD),
+	std::pair<KEY_CODE, SDLKey>(KEY_F11, SDLK_F11),
+	std::pair<KEY_CODE, SDLKey>(KEY_F12, SDLK_F12),
+	std::pair<KEY_CODE, SDLKey>(KEY_RCTRL, SDLK_RCTRL),
+	std::pair<KEY_CODE, SDLKey>(KEY_KP_BACKSLASH, SDLK_KP_DIVIDE),
+	std::pair<KEY_CODE, SDLKey>(KEY_RALT, SDLK_RALT),
+	std::pair<KEY_CODE, SDLKey>(KEY_HOME, SDLK_HOME),
+	std::pair<KEY_CODE, SDLKey>(KEY_UPARROW, SDLK_UP),
+	std::pair<KEY_CODE, SDLKey>(KEY_PAGEUP, SDLK_PAGEUP),
+	std::pair<KEY_CODE, SDLKey>(KEY_LEFTARROW, SDLK_LEFT),
+	std::pair<KEY_CODE, SDLKey>(KEY_RIGHTARROW, SDLK_RIGHT),
+	std::pair<KEY_CODE, SDLKey>(KEY_END, SDLK_END),
+	std::pair<KEY_CODE, SDLKey>(KEY_DOWNARROW, SDLK_DOWN),
+	std::pair<KEY_CODE, SDLKey>(KEY_PAGEDOWN, SDLK_PAGEDOWN),
+	std::pair<KEY_CODE, SDLKey>(KEY_INSERT, SDLK_INSERT),
+	std::pair<KEY_CODE, SDLKey>(KEY_DELETE, SDLK_DELETE),
+	std::pair<KEY_CODE, SDLKey>(KEY_KPENTER, SDLK_KP_ENTER),
+	std::pair<KEY_CODE, SDLKey>(KEY_IGNORE, SDLKey(5190)),
+};
+
+std::pair<SDLKey, KEY_CODE> SDLKey_to_KEY_CODE[ARRAY_SIZE(KEY_CODE_to_SDLKey)];
+
+static inline std::pair<SDLKey, KEY_CODE> swapit(std::pair<KEY_CODE, SDLKey> x)
+{
+	return  std::pair<SDLKey, KEY_CODE>(x.second, x.first);
+}
+
+static inline void initKeycodes()
+{
+	std::transform(KEY_CODE_to_SDLKey, KEY_CODE_to_SDLKey + ARRAY_SIZE(KEY_CODE_to_SDLKey), SDLKey_to_KEY_CODE, swapit);
+	std::sort(KEY_CODE_to_SDLKey, KEY_CODE_to_SDLKey + ARRAY_SIZE(KEY_CODE_to_SDLKey));
+	std::sort(SDLKey_to_KEY_CODE, SDLKey_to_KEY_CODE + ARRAY_SIZE(SDLKey_to_KEY_CODE));
+
+	for (unsigned n = 0; n < ARRAY_SIZE(KEY_CODE_to_SDLKey); ++n)
+	{
+		if (KEY_CODE_to_SDLKey[n].first != KEY_CODE_to_SDLKey[n].second)
+		{
+			printf("Difference: %d, %d\n", KEY_CODE_to_SDLKey[n].first, KEY_CODE_to_SDLKey[n].second);
+		}
+	}
+}
+
 static inline KEY_CODE sdlKeyToKeyCode(SDLKey key)
 {
+	std::pair<SDLKey, KEY_CODE> k(key, KEY_CODE(0));
+	std::pair<SDLKey, KEY_CODE> const *found = std::lower_bound(SDLKey_to_KEY_CODE, SDLKey_to_KEY_CODE + ARRAY_SIZE(SDLKey_to_KEY_CODE), k);
+	if (found != SDLKey_to_KEY_CODE + ARRAY_SIZE(SDLKey_to_KEY_CODE) && found->first == key)
+	{
+		return found->second;
+	}
+
 	return (KEY_CODE)key;
 }
 
 static inline SDLKey keyCodeToSDLKey(KEY_CODE code)
 {
+	std::pair<KEY_CODE, SDLKey> k(code, SDLKey(0));
+	std::pair<KEY_CODE, SDLKey> const *found = std::lower_bound(KEY_CODE_to_SDLKey, KEY_CODE_to_SDLKey + ARRAY_SIZE(KEY_CODE_to_SDLKey), k);
+	if (found != KEY_CODE_to_SDLKey + ARRAY_SIZE(KEY_CODE_to_SDLKey) && found->first == code)
+	{
+		return found->second;
+	}
+
 	return (SDLKey)code;
 }
 
@@ -724,6 +869,8 @@ static void inputHandleMouseMotionEvent(SDL_MouseMotionEvent * motionEvent)
 
 void wzMain(int &argc, char **argv)
 {
+	initKeycodes();
+
 	appPtr = new QCoreApplication(argc, argv);  // For Qt-script.
 }
 
