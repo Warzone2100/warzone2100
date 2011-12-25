@@ -153,6 +153,7 @@ bool initTemplates()
 			continue; // next!
 		}
 		addTemplateToList(&design, &apsDroidTemplates[selectedPlayer]);
+		sendTemplate(selectedPlayer, &design);
 		localTemplates.push_back(design);
 		ini.endGroup();
 	}
