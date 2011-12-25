@@ -437,6 +437,7 @@ bool proj_SendProjectileAngled(WEAPON *psWeap, SIMPLE_OBJECT *psAttacker, int pl
 	{
 		PROJECTILE * psOldProjectile = (PROJECTILE*)psAttacker;
 		psProj->born = psOldProjectile->born;
+		psProj->src = psOldProjectile->src;
 
 		psProj->prevSpacetime.time = psOldProjectile->time;  // Have partially ticked already.
 		psProj->time = gameTime;
@@ -654,26 +655,19 @@ static void proj_InFlightFunc(PROJECTILE *psProj, bool bIndirect)
 	/* we want a delay between Las-Sats firing and actually hitting in multiPlayer
 	magic number but that's how long the audio countdown message lasts! */
 	const unsigned int LAS_SAT_DELAY = 4;
-	int timeSoFar;
-	int distancePercent; /* How far we are 0..100 */
-	int distanceExtensionFactor; /* Extended lifespan */
-	Vector3i move;
 	// Projectile is missile:
 	bool bMissile = false;
-	WEAPON_STATS *psStats;
-	Vector3i nextPos;
-	int32_t targetDistance, currentDistance;
-	BASE_OBJECT *psTempObj, *closestCollisionObject = NULL;
+	BASE_OBJECT *closestCollisionObject = NULL;
 	Spacetime closestCollisionSpacetime;
 	memset(&closestCollisionSpacetime, 0, sizeof(Spacetime));  // Squelch uninitialised warning.
 
 	CHECK_PROJECTILE(psProj);
 
-	timeSoFar = gameTime - psProj->born;
+	int timeSoFar = gameTime - psProj->born;
 
 	psProj->time = gameTime;
 
-	psStats = psProj->psWStats;
+	WEAPON_STATS *psStats = psProj->psWStats;
 	ASSERT_OR_RETURN( , psStats != NULL, "Invalid weapon stats pointer");
 
 	/* we want a delay between Las-Sats firing and actually hitting in multiPlayer
@@ -685,6 +679,7 @@ static void proj_InFlightFunc(PROJECTILE *psProj, bool bIndirect)
 	}
 
 	/* Calculate extended lifespan where appropriate */
+	int distanceExtensionFactor; /* Extended lifespan */
 	switch (psStats->weaponSubClass)
 	{
 		case WSC_MGUN:
@@ -724,81 +719,74 @@ static void proj_InFlightFunc(PROJECTILE *psProj, bool bIndirect)
 	}
 
 	/* Calculate movement vector: */
-	if (psStats->movementModel == MM_HOMINGDIRECT && psProj->psDest)
+	int32_t currentDistance;
+	switch (psStats->movementModel)
 	{
-		/* If it's homing and it has a target (not a miss)... */
-		/* Home at the center of the part that was visible when firing */
-		move = psProj->psDest->pos - psProj->src + Vector3i(0, 0, establishTargetHeight(psProj->psDest) - psProj->partVisible/2);
-	}
-	else
-	{
-		move = psProj->dst - psProj->src;
-		// LASSAT doesn't have a z
-		if(psStats->weaponSubClass == WSC_LAS_SAT)
+		case MM_DIRECT:           // Go in a straight line.
+		case MM_ERRATICDIRECT:    // Same as MM_DIRECT, used by bombs for unknown reason.
 		{
-			move.z = 0;
+			Vector3i delta = psProj->dst - psProj->src;
+			if (psStats->weaponSubClass == WSC_LAS_SAT)
+			{
+				// LASSAT doesn't have a z
+				delta.z = 0;
+			}
+			int targetDistance = std::max(iHypot(removeZ(delta)), 1);
+			currentDistance = timeSoFar * psStats->flightSpeed / GAME_TICKS_PER_SEC;
+			psProj->pos = psProj->src + delta * currentDistance/targetDistance;
+			break;
 		}
-		else if (bIndirect)
+		case MM_INDIRECT:         // Ballistic trajectory.
 		{
-			move.z = (psProj->vZ - (timeSoFar * ACC_GRAVITY / (GAME_TICKS_PER_SEC * 2))) * timeSoFar / GAME_TICKS_PER_SEC; // '2' because we reach our highest point in the mid of flight, when "vZ is 0".
+			Vector3i delta = psProj->dst - psProj->src;
+			delta.z = (psProj->vZ - (timeSoFar * ACC_GRAVITY / (GAME_TICKS_PER_SEC * 2))) * timeSoFar / GAME_TICKS_PER_SEC; // '2' because we reach our highest point in the mid of flight, when "vZ is 0".
+			int targetDistance = std::max(iHypot(removeZ(delta)), 1);
+			currentDistance = timeSoFar * psProj->vXY / GAME_TICKS_PER_SEC;
+			psProj->pos = psProj->src + delta * currentDistance/targetDistance;
+			psProj->pos.z = psProj->src.z + delta.z;  // Use raw z value.
+			psProj->rot.pitch = iAtan2(psProj->vZ - (timeSoFar * ACC_GRAVITY / GAME_TICKS_PER_SEC), psProj->vXY);
+			break;
 		}
-	}
-
-	targetDistance = iHypot(move.x, move.y);
-	if (!bIndirect)
-	{
-		currentDistance = timeSoFar * psStats->flightSpeed / GAME_TICKS_PER_SEC;
-	}
-	else
-	{
-		currentDistance = timeSoFar * psProj->vXY / GAME_TICKS_PER_SEC;
-	}
-
-	// Prevent div by zero:
-	if (targetDistance == 0)
-	{
-		targetDistance = 1;
-	}
-
-	distancePercent = PERCENT(currentDistance, targetDistance);
-
-	/* Calculate next position */
-	nextPos.x = psProj->src.x + move.x * currentDistance/targetDistance;
-	nextPos.y = psProj->src.y + move.y * currentDistance/targetDistance;
-	if (!bIndirect)
-	{
-		nextPos.z = psProj->src.z + move.z * currentDistance/targetDistance;
-	}
-	else
-	{
-		nextPos.z = psProj->src.z + move.z;
+		case MM_HOMINGDIRECT:     // Fly towards target, even if target moves.
+		{
+			Vector2i dst = psProj->dst;
+			if (psProj->psDest != NULL)
+			{
+				// If it's homing and has a target (not a miss)...
+				// Home at the centre of the part that was visible when firing.
+				psProj->dst = psProj->psDest->pos + Vector3i(0, 0, establishTargetHeight(psProj->psDest) - psProj->partVisible/2);
+			}
+			Vector3i delta = psProj->dst - psProj->src;
+			int targetDistance = std::max(iHypot(removeZ(delta)), 1);
+			currentDistance = timeSoFar * psStats->flightSpeed / GAME_TICKS_PER_SEC;
+			psProj->pos = psProj->src + delta * currentDistance/targetDistance;
+			break;
+		}
+		default:
+		case MM_SWEEP:            // Unused.
+		case MM_HOMINGINDIRECT:   // Unused.
+		case NUM_MOVEMENT_MODEL:  // Unused.
+			currentDistance = 1000000;
+			ASSERT(false, "Movement model not implemented.");
+			break;
 	}
 
 	/* impact if about to go off map else update coordinates */
-	if (!worldOnMap(nextPos.x, nextPos.y))
+	if (!worldOnMap(psProj->pos.x, psProj->pos.y))
 	{
 		psProj->state = PROJ_IMPACT;
-		psProj->dst.x = psProj->pos.x;
-		psProj->dst.y = psProj->pos.y;
+		psProj->dst.x = psProj->prevSpacetime.pos.x;
+		psProj->dst.y = psProj->prevSpacetime.pos.y;
 		setProjectileDestination(psProj, NULL);
 		debug(LOG_NEVER, "**** projectile(%i) off map - removed ****\n", psProj->id);
 		return;
-	}
-
-	/* Update position */
-	psProj->pos = nextPos;
-
-	if (bIndirect)
-	{
-		/* Update pitch */
-		psProj->rot.pitch = iAtan2(psProj->vZ - (timeSoFar * ACC_GRAVITY / GAME_TICKS_PER_SEC), psProj->vXY);
 	}
 
 	closestCollisionSpacetime.time = 0xFFFFFFFF;
 
 	/* Check nearby objects for possible collisions */
 	gridStartIterate(psProj->pos.x, psProj->pos.y, PROJ_NEIGHBOUR_RANGE);
-	for (psTempObj = gridIterate(); psTempObj != NULL; psTempObj = gridIterate())
+	for (BASE_OBJECT *psTempObj = gridIterate(); psTempObj != NULL; psTempObj = gridIterate())
 	{
 		CHECK_OBJECT(psTempObj);
 
@@ -878,8 +866,6 @@ static void proj_InFlightFunc(PROJECTILE *psProj, bool bIndirect)
 		if (closestCollisionObject->type == OBJ_DROID && psStats->penetrate)
 		{
 			WEAPON asWeap;
-			// Determine position to fire a missile at
-			Vector3i newDest = psProj->src + move * distanceExtensionFactor/100;
 			asWeap.nStat = psStats - asWeaponStats;
 
 			ASSERT(distanceExtensionFactor != 0, "Unitialized variable used! distanceExtensionFactor is not initialized.");
@@ -887,7 +873,7 @@ static void proj_InFlightFunc(PROJECTILE *psProj, bool bIndirect)
 			// Assume we damaged the chosen target
 			psProj->psDamaged.push_back(closestCollisionObject);
 
-			proj_SendProjectile(&asWeap, psProj, psProj->player, newDest, NULL, true, -1);
+			proj_SendProjectile(&asWeap, psProj, psProj->player, psProj->dst, NULL, true, -1);
 		}
 
 		psProj->state = PROJ_IMPACT;
@@ -897,7 +883,7 @@ static void proj_InFlightFunc(PROJECTILE *psProj, bool bIndirect)
 
 	ASSERT(distanceExtensionFactor != 0, "Unitialized variable used! distanceExtensionFactor is not initialized.");
 
-	if (distancePercent >= distanceExtensionFactor || /* We've traveled our maximum range */
+	if (currentDistance*100 >= psStats->longRange*distanceExtensionFactor || /* We've traveled our maximum range */
 		!mapObjIsAboveGround(psProj)) /* trying to travel through terrain */
 	{
 		/* Miss due to range or height */
@@ -919,14 +905,14 @@ static void proj_InFlightFunc(PROJECTILE *psProj, bool bIndirect)
 			{
 				case WSC_FLAME:
 					posFlip.z -= 8;  // Why?
-					effectGiveAuxVar(distancePercent);
+					effectGiveAuxVar(PERCENT(currentDistance, psStats->longRange));
 					addEffect(&posFlip, EFFECT_EXPLOSION, EXPLOSION_TYPE_FLAMETHROWER, false, NULL, 0);
 				break;
 				case WSC_COMMAND:
 				case WSC_ELECTRONIC:
 				case WSC_EMP:
 					posFlip.z -= 8;  // Why?
-					effectGiveAuxVar(distancePercent/2);
+					effectGiveAuxVar(PERCENT(currentDistance, psStats->longRange)/2);
 					addEffect(&posFlip, EFFECT_EXPLOSION, EXPLOSION_TYPE_LASER, false, NULL, 0);
 				break;
 				case WSC_ROCKET:
@@ -975,7 +961,7 @@ static void proj_ImpactFunc( PROJECTILE *psObj )
 		if (psStats->iAudioImpactID == NO_SOUND)
 		{
 			/* play richochet if MG */
-			if (psObj->psDest != NULL && psObj->psWStats->weaponSubClass == WSC_MGUN
+			if (psObj->psDest != NULL && psStats->weaponSubClass == WSC_MGUN
 			 && ONEINTHREE)
 			{
 				iAudioImpactID = ID_SOUND_RICOCHET_1 + (rand() % 3);
