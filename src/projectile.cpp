@@ -755,11 +755,26 @@ static void proj_InFlightFunc(PROJECTILE *psProj, bool bIndirect)
 				// If it's homing and has a target (not a miss)...
 				// Home at the centre of the part that was visible when firing.
 				psProj->dst = psProj->psDest->pos + Vector3i(0, 0, establishTargetHeight(psProj->psDest) - psProj->partVisible/2);
+				DROID *targetDroid = castDroid(psProj->psDest);
+				if (targetDroid != NULL)
+				{
+					// Do target prediction.
+					Vector3i delta = psProj->dst - psProj->pos;
+					int flightTime = iHypot(removeZ(delta)) * GAME_TICKS_PER_SEC / psStats->flightSpeed;
+					psProj->dst += Vector3i(iSinCosR(targetDroid->sMove.moveDir, targetDroid->sMove.speed*flightTime / GAME_TICKS_PER_SEC), 0);
+				}
 			}
-			Vector3i delta = psProj->dst - psProj->src;
+			Vector3i delta = psProj->dst - psProj->pos;
 			int targetDistance = std::max(iHypot(removeZ(delta)), 1);
+			if (psProj->psDest == NULL && targetDistance < 10000)
+			{
+				psProj->dst = psProj->pos + delta*10;  // Target missing, so just keep going in a straight line.
+			}
 			currentDistance = timeSoFar * psStats->flightSpeed / GAME_TICKS_PER_SEC;
-			psProj->pos = psProj->src + delta * currentDistance/targetDistance;
+			Vector3i step = gameTimeAdjustedAverage(delta * psStats->flightSpeed, targetDistance);
+			psProj->pos += step;
+			psProj->rot.direction = iAtan2(removeZ(delta));
+			psProj->rot.pitch = iAtan2(delta.z, targetDistance);
 			break;
 		}
 		default:

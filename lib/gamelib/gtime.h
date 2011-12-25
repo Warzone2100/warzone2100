@@ -24,6 +24,9 @@
 #ifndef _gtime_h
 #define _gtime_h
 
+#include "lib/framework/vector.h"
+
+
 struct NETQUEUE;
 struct Rational;
 
@@ -172,6 +175,13 @@ static inline int32_t gameTimeAdjustedAverage(int value)
 static inline int32_t gameTimeAdjustedAverage(int numerator, int denominator)
 {
 	return quantiseFraction(numerator, GAME_TICKS_PER_SEC*denominator, gameTime + deltaGameTime, gameTime);
+}
+/// Returns the numerator/denominator times deltaGameTime, converted to seconds. The return value is rounded up or down, such that it is exactly right on average.
+static inline Vector3i gameTimeAdjustedAverage(Vector3i numerator, int denominator)
+{
+	return Vector3i(quantiseFraction(numerator.x, GAME_TICKS_PER_SEC*denominator, gameTime + deltaGameTime, gameTime),
+	                quantiseFraction(numerator.y, GAME_TICKS_PER_SEC*denominator, gameTime + deltaGameTime, gameTime),
+	                quantiseFraction(numerator.z, GAME_TICKS_PER_SEC*denominator, gameTime + deltaGameTime, gameTime));
 }
 
 void sendPlayerGameTime(void);                            ///< Sends a GAME_GAME_TIME message with gameTime plus latency to our game queues.
