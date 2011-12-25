@@ -71,7 +71,7 @@ extern void setGameTime(uint32_t newGameTime);
  * The game time increases in GAME_UNITS_PER_TICK increments, and deltaGameTime is either 0 or GAME_UNITS_PER_TICK.
  * @returns true iff the game time ticked.
  */
-void gameTimeUpdate(unsigned renderAverage, unsigned stateAverage);
+void gameTimeUpdate(bool mayUpdate);
 /// Call after updating the state, and before processing any net messages that use deltaGameTime. (Sets deltaGameTime = 0.)
 void gameTimeUpdateEnd(void);
 

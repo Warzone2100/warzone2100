@@ -149,7 +149,7 @@ UDWORD getModularScaledRealTime(UDWORD timePeriod, UDWORD requiredRange)
 }
 
 /* Call this each loop to update the game timer */
-void gameTimeUpdate(unsigned renderAverage, unsigned stateAverage)
+void gameTimeUpdate(bool mayUpdate)
 {
 	deltaGameTime = 0;
 	deltaGraphicsTime = 0;
@@ -171,19 +171,17 @@ void gameTimeUpdate(unsigned renderAverage, unsigned stateAverage)
 		return;
 	}
 
-	(void)stateAverage;  // Don't need to know the average state update time.
-	// A bit arbitrary formula, but if the average time to render a frame is high compared to the time to update the
-	// state, then update multiple times per frame. Otherwise, update at least once per frame.
-	unsigned maximumTicksPerFrame = renderAverage*2 + GAME_TICKS_PER_UPDATE*modifier.d/std::max<int>(modifier.n, 1) + 1;
-
-	// Make sure graphics updates fast enough.
-	prevRealTime = std::max(prevRealTime + maximumTicksPerFrame, currTime) - maximumTicksPerFrame;  // Written this way to avoid unsigned underflow.
-
 	// Calculate the new game time
 	int newDeltaGraphicsTime = quantiseFraction(modifier.n, modifier.d, currTime, prevRealTime);
 	ASSERT(newDeltaGraphicsTime >= 0, "Something very wrong.");
 
 	uint32_t newGraphicsTime = graphicsTime + newDeltaGraphicsTime;
+
+	if (newGraphicsTime > gameTime && !mayUpdate)
+	{
+		newGraphicsTime = gameTime;
+		newDeltaGraphicsTime = newGraphicsTime - graphicsTime;
+	}
 
 	if (updateWantedTime == 0 && newGraphicsTime >= gameTime)
 	{
@@ -192,15 +190,13 @@ void gameTimeUpdate(unsigned renderAverage, unsigned stateAverage)
 
 	if (newGraphicsTime > gameTime && !checkPlayerGameTime(NET_ALL_PLAYERS))
 	{
-		unsigned player;
-
 		// Pause time at current game time, since we are waiting GAME_GAME_TIME from other players.
 		newGraphicsTime = gameTime;
 		newDeltaGraphicsTime = newGraphicsTime - graphicsTime;
 
 		debug(LOG_SYNC, "Waiting for other players. gameTime = %u, player times are {%s}", gameTime, listToString("%u", ", ", gameQueueTime, gameQueueTime + game.maxPlayers).c_str());
 
-		for (player = 0; player < game.maxPlayers; ++player)
+		for (unsigned player = 0; player < game.maxPlayers; ++player)
 		{
 			if (!checkPlayerGameTime(player))
 			{

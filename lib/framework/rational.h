@@ -64,6 +64,8 @@ struct Rational
 	Rational &operator -=(Rational const &b) { return *this = *this - b; }
 	Rational &operator *=(Rational const &b) { return *this = *this * b; }
 	Rational &operator /=(Rational const &b) { return *this = *this / b; }
+	int floor() const { return n >= 0? n/d : (n - (d - 1))/d; }
+	int ceil() const { return n >= 0? (n + (d - 1))/d : n/d; }
 
 	// If int16_t isn't big enough, the comparison operations might overflow.
 	int16_t n;

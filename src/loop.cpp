@@ -27,6 +27,7 @@
 #include "lib/framework/input.h"
 #include "lib/framework/strres.h"
 #include "lib/framework/wzapp.h"
+#include "lib/framework/rational.h"
 
 #include "lib/ivis_opengl/pieblitfunc.h"
 #include "lib/ivis_opengl/piestate.h" //ivis render code
@@ -665,10 +666,11 @@ static void gameStateUpdate()
 GAMECODE gameLoop(void)
 {
 	static uint32_t lastFlushTime = 0;
-	static unsigned stateTimes[8];
-	static unsigned renderTimes[8];
-	static int stateTimeIndex = 0;
-	static int renderTimeIndex = 0;
+
+	static int renderBudget = 0;  // Scaled time spent rendering minus scaled time spent updating.
+	static bool previousUpdateWasRender = false;
+	const Rational renderFraction(2, 5);  // Minimum fraction of time spent rendering.
+	const Rational updateFraction = Rational(1) - renderFraction;
 
 	bool didTick = false;
 	while (true)
@@ -677,11 +679,8 @@ GAMECODE gameLoop(void)
 		// Receive GAME_BLAH messages, and if it's time, process exactly as many GAME_BLAH messages as required to be able to tick the gameTime.
 		recvMessage();
 
-		unsigned renderAverage = std::accumulate(renderTimes, renderTimes + ARRAY_SIZE(renderTimes), 0) / ARRAY_SIZE(renderTimes);
-		unsigned stateAverage  = std::accumulate(stateTimes,  stateTimes  + ARRAY_SIZE(stateTimes),  0) / ARRAY_SIZE(stateTimes);
-
 		// Update gameTime and graphicsTime, and corresponding deltas. Note that gameTime and graphicsTime pause, if we aren't getting our GAME_GAME_TIME messages.
-		gameTimeUpdate(renderAverage, stateAverage);
+		gameTimeUpdate(renderBudget > 0 || previousUpdateWasRender);
 
 		if (deltaGameTime == 0)
 		{
@@ -697,8 +696,9 @@ GAMECODE gameLoop(void)
 		syncDebug("End game state update, gameTime = %d", gameTime);
 		unsigned after = wzGetTicks();
 
-		stateTimes[stateTimeIndex] = after - before;
-		stateTimeIndex = (stateTimeIndex + 1)%ARRAY_SIZE(stateTimes);
+		renderBudget -= (after - before) * renderFraction.n;
+		renderBudget = std::max(renderBudget, (-updateFraction*500).floor());
+		previousUpdateWasRender = false;
 
 		ASSERT(deltaGraphicsTime == 0, "Shouldn't update graphics and game state at once.");
 	}
@@ -713,8 +713,9 @@ GAMECODE gameLoop(void)
 	GAMECODE renderReturn = renderLoop();
 	unsigned after = wzGetTicks();
 
-	renderTimes[renderTimeIndex] = after - before;
-	renderTimeIndex = (renderTimeIndex + 1)%ARRAY_SIZE(renderTimes);
+	renderBudget += (after - before) * updateFraction.n;
+	renderBudget = std::min(renderBudget, (renderFraction*500).floor());
+	previousUpdateWasRender = true;
 
 	return renderReturn;
 }
