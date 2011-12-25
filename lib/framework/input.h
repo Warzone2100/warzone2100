@@ -146,15 +146,6 @@ enum KEY_CODE
 
 	KEY_IGNORE      = 5190
 };
-enum MOUSE_KEY_CODE
-{
-	MOUSE_LMB = 1,
-	MOUSE_MMB,
-	MOUSE_RMB,
-	MOUSE_WUP,
-	MOUSE_WDN,
-	MOUSE_BAD
-};
 #else // BACKEND_QT
 #include <SDL.h>
 enum KEY_CODE
@@ -266,15 +257,17 @@ enum KEY_CODE
 };
 /** The largest possible scan code. */
 #define KEY_MAXSCAN SDLK_LAST
+#endif // BACKEND_QT
 enum MOUSE_KEY_CODE
 {
-	MOUSE_LMB = SDL_BUTTON_LEFT,
-	MOUSE_MMB = SDL_BUTTON_MIDDLE,
-	MOUSE_RMB = SDL_BUTTON_RIGHT,
-	MOUSE_WUP = SDL_BUTTON_WHEELUP,
-	MOUSE_WDN = SDL_BUTTON_WHEELDOWN
+	MOUSE_LMB = 1,
+	MOUSE_MMB,
+	MOUSE_RMB,
+	MOUSE_WUP,
+	MOUSE_WDN,
+
+	MOUSE_BAD
 };
-#endif // BACKEND_QT
 
 /** Tell the input system that we have lost the focus. */
 extern void inputLoseFocus(void);

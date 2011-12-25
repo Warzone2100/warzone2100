@@ -62,7 +62,7 @@ static MOUSE_KEY_CODE dragKey;
 static SDWORD dragX, dragY;
 
 /* The current mouse button state */
-static INPUT_STATE aMouseState[6];
+static INPUT_STATE aMouseState[MOUSE_BAD];
 
 
 /* The size of the input buffer */
@@ -318,7 +318,7 @@ void inputInitialise(void)
 		aKeyState[i].state = KEY_UP;
 	}
 
-	for (i = 0; i < 6; i++)
+	for (i = 0; i < MOUSE_BAD; i++)
 	{
 		aMouseState[i].state = KEY_UP;
 	}
@@ -626,57 +626,68 @@ static void inputHandleMouseButtonEvent(SDL_MouseButtonEvent * buttonEvent)
 	mouseXPos = buttonEvent->x;
 	mouseYPos = buttonEvent->y;
 
+	MOUSE_KEY_CODE mouseKeyCode;
+	switch (buttonEvent->button)
+	{
+		default: return;  // Unknown button.
+		case SDL_BUTTON_LEFT: mouseKeyCode = MOUSE_LMB; break;
+		case SDL_BUTTON_MIDDLE: mouseKeyCode = MOUSE_MMB; break;
+		case SDL_BUTTON_RIGHT: mouseKeyCode = MOUSE_RMB; break;
+		case SDL_BUTTON_WHEELUP: mouseKeyCode = MOUSE_WUP; break;
+		case SDL_BUTTON_WHEELDOWN: mouseKeyCode = MOUSE_WDN; break;
+	}
+
 	switch (buttonEvent->type)
 	{
 		case SDL_MOUSEBUTTONDOWN:
-			aMouseState[buttonEvent->button].pressPos.x = mouseXPos;
-			aMouseState[buttonEvent->button].pressPos.y = mouseYPos;
-			if ( aMouseState[buttonEvent->button].state == KEY_UP
-				|| aMouseState[buttonEvent->button].state == KEY_RELEASED
-				|| aMouseState[buttonEvent->button].state == KEY_PRESSRELEASE )
+			aMouseState[mouseKeyCode].pressPos.x = mouseXPos;
+			aMouseState[mouseKeyCode].pressPos.y = mouseYPos;
+			if ( aMouseState[mouseKeyCode].state == KEY_UP
+				|| aMouseState[mouseKeyCode].state == KEY_RELEASED
+				|| aMouseState[mouseKeyCode].state == KEY_PRESSRELEASE )
 			{
 				if ( (buttonEvent->button != SDL_BUTTON_WHEELUP		//skip doubleclick check for wheel
 					&& buttonEvent->button != SDL_BUTTON_WHEELDOWN))
 				{
 					// whether double click or not
-					if ( realTime - aMouseState[buttonEvent->button].lastdown < DOUBLE_CLICK_INTERVAL )
+					if ( realTime - aMouseState[mouseKeyCode].lastdown < DOUBLE_CLICK_INTERVAL )
 					{
-						aMouseState[buttonEvent->button].state = KEY_DOUBLECLICK;
-						aMouseState[buttonEvent->button].lastdown = 0;
+						aMouseState[mouseKeyCode].state = KEY_DOUBLECLICK;
+						aMouseState[mouseKeyCode].lastdown = 0;
 					}
 					else
 					{
-						aMouseState[buttonEvent->button].state = KEY_PRESSED;
-						aMouseState[buttonEvent->button].lastdown = realTime;
+						aMouseState[mouseKeyCode].state = KEY_PRESSED;
+						aMouseState[mouseKeyCode].lastdown = realTime;
 					}
 
 				}
 				else	//mouse wheel up/down was used, so notify.
 				{
-					aMouseState[buttonEvent->button].state = KEY_PRESSED;
-					aMouseState[buttonEvent->button].lastdown = 0;
+					aMouseState[mouseKeyCode].state = KEY_PRESSED;
+					aMouseState[mouseKeyCode].lastdown = 0;
 				}
 
-				if (buttonEvent->button < 4) // Not the mousewheel
+				if (mouseKeyCode < 4) // Not the mousewheel
 				{
-					dragKey = (MOUSE_KEY_CODE)buttonEvent->button;
+					dragKey = mouseKeyCode;
 					dragX = mouseXPos;
 					dragY = mouseYPos;
 				}
 			}
 			break;
 		case SDL_MOUSEBUTTONUP:
-			aMouseState[buttonEvent->button].releasePos.x = mouseXPos;
-			aMouseState[buttonEvent->button].releasePos.y = mouseYPos;
-			if (aMouseState[buttonEvent->button].state == KEY_PRESSED)
+			aMouseState[mouseKeyCode].releasePos.x = mouseXPos;
+			aMouseState[mouseKeyCode].releasePos.y = mouseYPos;
+			if (aMouseState[mouseKeyCode].state == KEY_PRESSED)
 			{
-				aMouseState[buttonEvent->button].state = KEY_PRESSRELEASE;
+				aMouseState[mouseKeyCode].state = KEY_PRESSRELEASE;
 			}
-			else if ( aMouseState[buttonEvent->button].state == KEY_DOWN
-					|| aMouseState[buttonEvent->button].state == KEY_DRAG
-					|| aMouseState[buttonEvent->button].state == KEY_DOUBLECLICK)
+			else if ( aMouseState[mouseKeyCode].state == KEY_DOWN
+					|| aMouseState[mouseKeyCode].state == KEY_DRAG
+					|| aMouseState[mouseKeyCode].state == KEY_DOUBLECLICK)
 			{
-				aMouseState[buttonEvent->button].state = KEY_RELEASED;
+				aMouseState[mouseKeyCode].state = KEY_RELEASED;
 			}
 			break;
 		default:
