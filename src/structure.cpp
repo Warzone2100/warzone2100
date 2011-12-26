@@ -1226,8 +1226,8 @@ static int foundationHeight(STRUCTURE *psStruct)
 	//eg water - don't want it to 'flow' into the structure if this effect is coded!
 
 	//initialise the starting values so they get set in loop
-	int foundationMin = TILE_MAX_HEIGHT;
-	int foundationMax = TILE_MIN_HEIGHT;
+	int foundationMin = INT32_MAX;
+	int foundationMax = INT32_MIN;
 
 	for (int breadth = 0; breadth <= b.size.y; breadth++)
 	{
@@ -1757,8 +1757,15 @@ STRUCTURE *buildBlueprint(STRUCTURE_STATS const *psStats, int32_t x, int32_t y, 
 	ASSERT_OR_RETURN(NULL, psStats != NULL, "No blueprint stats");
 	ASSERT_OR_RETURN(NULL, psStats->pIMD[0] != NULL, "No blueprint model for %s", getStatName(psStats));
 
-	Vector3i pos(x, y, map_Height(x, y) + world_coord(1)/10);
+	Vector3i pos(x, y, INT32_MIN);
 	Rotation rot((direction + 0x2000)&0xC000, 0, 0);  // Round direction to nearest 90°.
+
+	StructureBounds b = getStructureBounds(psStats, Vector2i(x, y), direction);
+	for (int j = 0; j <= b.size.y; ++j)
+		for (int i = 0; i <= b.size.x; ++i)
+	{
+		pos.z = std::max(pos.z, map_TileHeight(b.map.x + i, b.map.y + j));
+	}
 
 	int moduleNumber = 0;
 	std::vector<iIMDShape *> const *pIMD = &psStats->pIMD;
