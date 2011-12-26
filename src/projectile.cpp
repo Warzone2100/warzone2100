@@ -65,6 +65,10 @@
 
 #define VTOL_HITBOX_MODIFICATOR 100
 
+#define HOMINGINDIRECT_HEIGHT_MIN 200
+#define HOMINGINDIRECT_HEIGHT_MAX 450
+
+
 struct INTERVAL
 {
 	int begin, end;  // Time 1 = 0, time 2 = 1024. Or begin >= end if empty.
@@ -748,24 +752,42 @@ static void proj_InFlightFunc(PROJECTILE *psProj, bool bIndirect)
 			break;
 		}
 		case MM_HOMINGDIRECT:     // Fly towards target, even if target moves.
+		case MM_HOMINGINDIRECT:   // Fly towards target, even if target moves. Avoid terrain.
 		{
-			Vector2i dst = psProj->dst;
 			if (psProj->psDest != NULL)
 			{
-				// If it's homing and has a target (not a miss)...
-				// Home at the centre of the part that was visible when firing.
-				psProj->dst = psProj->psDest->pos + Vector3i(0, 0, establishTargetHeight(psProj->psDest) - psProj->partVisible/2);
+				if (psStats->movementModel == MM_HOMINGDIRECT)
+				{
+					// If it's homing and has a target (not a miss)...
+					// Home at the centre of the part that was visible when firing.
+					psProj->dst = psProj->psDest->pos + Vector3i(0, 0, establishTargetHeight(psProj->psDest) - psProj->partVisible/2);
+				}
+				else
+				{
+					psProj->dst = psProj->psDest->pos + Vector3i(0, 0, establishTargetHeight(psProj->psDest)/2);
+				}
 				DROID *targetDroid = castDroid(psProj->psDest);
 				if (targetDroid != NULL)
 				{
 					// Do target prediction.
 					Vector3i delta = psProj->dst - psProj->pos;
 					int flightTime = iHypot(removeZ(delta)) * GAME_TICKS_PER_SEC / psStats->flightSpeed;
-					psProj->dst += Vector3i(iSinCosR(targetDroid->sMove.moveDir, targetDroid->sMove.speed*flightTime / GAME_TICKS_PER_SEC), 0);
+					psProj->dst += Vector3i(iSinCosR(targetDroid->sMove.moveDir, std::min<int>(targetDroid->sMove.speed, psStats->flightSpeed*3/4)*flightTime / GAME_TICKS_PER_SEC), 0);
+				}
+				psProj->dst.x = clip(psProj->dst.x, 0, world_coord(mapWidth) - 1);
+				psProj->dst.y = clip(psProj->dst.y, 0, world_coord(mapHeight) - 1);
+				if (psStats->movementModel == MM_HOMINGINDIRECT)
+				{
+					int horizontalTargetDistance = iHypot(removeZ(psProj->dst - psProj->pos));
+					int terrainHeight = std::max(map_Height(removeZ(psProj->pos)), map_Height(removeZ(psProj->pos) + iSinCosR(iAtan2(removeZ(psProj->dst - psProj->pos)), psStats->flightSpeed*2/GAME_UPDATES_PER_SEC)));
+					int desiredMinHeight = terrainHeight + std::min(horizontalTargetDistance/4, HOMINGINDIRECT_HEIGHT_MIN);
+					int desiredMaxHeight = std::max(psProj->dst.z, terrainHeight + HOMINGINDIRECT_HEIGHT_MAX);
+					int heightError = psProj->pos.z - clip(psProj->pos.z, desiredMinHeight, desiredMaxHeight);
+					psProj->dst.z -= horizontalTargetDistance*heightError*2/HOMINGINDIRECT_HEIGHT_MIN;
 				}
 			}
 			Vector3i delta = psProj->dst - psProj->pos;
-			int targetDistance = std::max(iHypot(removeZ(delta)), 1);
+			int targetDistance = std::max(iHypot(delta), 1);
 			if (psProj->psDest == NULL && targetDistance < 10000)
 			{
 				psProj->dst = psProj->pos + delta*10;  // Target missing, so just keep going in a straight line.
@@ -779,7 +801,6 @@ static void proj_InFlightFunc(PROJECTILE *psProj, bool bIndirect)
 		}
 		default:
 		case MM_SWEEP:            // Unused.
-		case MM_HOMINGINDIRECT:   // Unused.
 		case NUM_MOVEMENT_MODEL:  // Unused.
 			currentDistance = 1000000;
 			ASSERT(false, "Movement model not implemented.");
