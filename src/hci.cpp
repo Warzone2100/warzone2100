@@ -1905,8 +1905,31 @@ INT_RETVAL intRunWidgets(void)
 		else if (intMode == INT_EDITSTAT && editPosMode == IED_POS)
 		{
 			/* Directly positioning some type of object */
-			if (found3DBuilding(&structX, &structY))
+			unsigned structX1 = INT32_MAX;
+			unsigned structY1 = INT32_MAX;
+			structX2 = INT32_MAX - 1;
+			structY2 = INT32_MAX - 1;
+			if (found3DBuildLocTwo(&structX1, &structY1, &structX2, &structY2) || found3DBuilding(&structX1, &structY1))
 			{
+				if (structX2 == INT32_MAX - 1)
+				{
+					structX2 = structX1;
+					structY2 = structY1;
+				}
+				if (structX1 > structX2)
+				{
+					std::swap(structX1, structX2);
+				}
+				if (structY1 > structY2)
+				{
+					std::swap(structY1, structY2);
+				}
+			}
+			for (unsigned j = structY1; j <= structY2; ++j)
+				for (unsigned i = structX1; i <= structX2; ++i)
+			{
+				structX = i;
+				structY = j;
 				/* See what type of thing is being put down */
 				if (psPositionStats->ref >= REF_STRUCTURE_START &&
 					psPositionStats->ref < REF_STRUCTURE_START + REF_RANGE)
