@@ -542,9 +542,17 @@ bool triggerStructureAttacked(STRUCTURE *psVictim, BASE_OBJECT *psAttacker)
 
 bool triggerResearched(STRUCTURE *psStruct)
 {
-	QScriptEngine *engine = scripts.at(psStruct->player);
-	QScriptValueList args;
-	args += convStructure(psStruct, engine);
-	callFunction(engine, "eventResearched", args);
+	for (int i = 0; i < scripts.size(); ++i)
+	{
+		QScriptEngine *engine = scripts.at(i);
+		int player = engine->globalObject().property("me").toInt32();
+		if (player == psStruct->player)
+		{
+			QScriptEngine *engine = scripts.at(i);
+			QScriptValueList args;
+			args += convStructure(psStruct, engine);
+			callFunction(engine, "eventResearched", args);
+		}
+	}
 	return true;
 }

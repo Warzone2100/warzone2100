@@ -73,7 +73,6 @@ QScriptValue convResearch(RESEARCH *psResearch, QScriptEngine *engine, int playe
 		}
 	}
 	value.setProperty("started", started); // including whether an ally has started it
-	value.setProperty("available", researchAvailable(psResearch->index, player));
 	value.setProperty("name", psResearch->pName);
 	return value;
 }
@@ -334,9 +333,9 @@ static QScriptValue js_pursueResearch(QScriptContext *context, QScriptEngine *en
 	SCRIPT_ASSERT(context, psStruct->pStructureType->type == REF_RESEARCH, "Not a research lab: %s", objInfo(psStruct));
 	RESEARCH_FACILITY *psResLab = (RESEARCH_FACILITY *)psStruct->pFunctionality;
 	SCRIPT_ASSERT(context, psResLab->psSubject == NULL, "Research lab not ready");
-	SCRIPT_ASSERT(context, !(plrRes->ResearchStatus & RESEARCHED), "Research item already completed: %s", psResearch->pName);
 	if (IsResearchStartedPending(plrRes) || IsResearchCompleted(plrRes))
 	{
+		debug(LOG_SCRIPT, "Research already started or completed for player %d: %s", player, psResearch->pName);
 		return QScriptValue(false);
 	}
 	// Go down the requirements list for the desired tech
@@ -401,9 +400,10 @@ static QScriptValue js_enumResearch(QScriptContext *context, QScriptEngine *engi
 	int player = engine->globalObject().property("me").toInt32();
 	for (int i = 0; i < asResearch.size(); i++)
 	{
-		if (!IsResearchCompleted(&asPlayerResList[player][i]))
+		RESEARCH *psResearch = &asResearch[i];
+		if (!IsResearchCompleted(&asPlayerResList[player][i]) && researchAvailable(i, player))
 		{
-			reslist += &asResearch[i];
+			reslist += psResearch;
 		}
 	}
 	QScriptValue result = engine->newArray(reslist.size());

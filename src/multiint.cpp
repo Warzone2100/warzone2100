@@ -299,7 +299,8 @@ void loadMultiScripts()
 				resLoadFile("SCRIPT", aidata[NetPlay.players[i].ai].slo);
 				resLoadFile("SCRIPTVAL", aidata[NetPlay.players[i].ai].vlo);
 			}
-			if (aidata[NetPlay.players[i].ai].js[0] != '\0')
+			// autogames are to be implemented differently for qtscript, do not start for human players yet
+			if (!NetPlay.players[i].allocated && aidata[NetPlay.players[i].ai].js[0] != '\0')
 			{
 				loadPlayerScript(QString("multiplay/skirmish/") + aidata[NetPlay.players[i].ai].js, i, NetPlay.players[i].difficulty);
 			}

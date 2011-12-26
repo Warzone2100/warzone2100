@@ -115,8 +115,9 @@ function conDroids()
 
 function eventResearched(labparam)
 {
+	var anyfound = true; // assume success
 	var lablist;
-	if (labparam)
+	if (labparam) // check if called with parameter or not
 	{
 		lablist = [];
 		lablist[0] = labparam;
@@ -133,12 +134,20 @@ function eventResearched(labparam)
 			var found = pursueResearch(lab, "R-Struc-Research-Upgrade06");
 			if (!found)
 			{
-				// TBD - find random research
-				return;
+				// Find a random research item
+				var reslist = enumResearch();
+				if (reslist.length == 0)
+				{
+					// No research left, salvage res lab
+					debug("TBD - salvage research lab");
+				}
+				else
+				{
+					pursueResearch(lab, reslist[0].name); // doing first for now, TODO use random
+				}
 			}
 		}
 	}
-	// TBD - no research left, salvage res labs
 }
 
 function buildFundamentals()
