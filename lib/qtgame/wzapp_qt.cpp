@@ -86,7 +86,7 @@ static MOUSE_KEY_CODE dragKey;
 static SDWORD dragX, dragY;
 
 /** The current mouse button state */
-static INPUT_STATE aMouseState[6];
+static INPUT_STATE aMouseState[MOUSE_BAD];
 
 /** The size of the input buffer */
 #define INPUT_MAXSTR	512
@@ -103,6 +103,7 @@ static std::deque<InputKey> inputBuffer;
 
 static QColor fontColor;
 static uint16_t mouseXPos = 0, mouseYPos = 0;
+static bool mouseInWindow = false;
 static CURSOR lastCursor = CURSOR_ARROW;
 static bool crashing = false;
 
@@ -309,16 +310,9 @@ void WzMainWindow::setFontSize(float size)
 
 void WzMainWindow::mouseMoveEvent(QMouseEvent *event)
 {
-	if (event->x() < 0 || event->y() < 0 || event->x() >= width() || event->y() >= height())
-	{
-		mouseXPos = width()/2;  // Don't scroll when mouse is outside window.
-		mouseYPos = height()/2;
-	}
-	else
-	{
-		mouseXPos = event->x();
-		mouseYPos = event->y();
-	}
+	mouseXPos = clip(event->x(), 0, width() - 1);
+	mouseYPos = clip(event->y(), 0, height() - 1);
+	mouseInWindow = mouseXPos == event->x() && mouseYPos == event->y();
 
 	if (!mouseDown(MOUSE_MMB))
 	{
@@ -776,6 +770,11 @@ uint16_t mouseY()
 	return mouseYPos;
 }
 
+bool wzMouseInWindow()
+{
+	return mouseInWindow;
+}
+
 Vector2i mousePressPos(MOUSE_KEY_CODE code)
 {
 	return aMouseState[code].pressPos;
@@ -866,7 +865,7 @@ void inputInitialise(void)
 		aKeyState[i].state = KEY_UP;
 	}
 
-	for (i = 0; i < 6; i++)
+	for (i = 0; i < MOUSE_BAD; i++)
 	{
 		aMouseState[i].state = KEY_UP;
 	}
@@ -941,7 +940,7 @@ void inputNewFrame(void)
 	}
 
 	/* Do the mouse */
-	for (i = 0; i < 6; i++)
+	for (i = 0; i < MOUSE_BAD; i++)
 	{
 		if (aMouseState[i].state == KEY_PRESSED)
 		{
@@ -969,7 +968,7 @@ void inputLoseFocus()
 	{
 		aKeyState[i].state = KEY_UP;
 	}
-	for (i = 0; i < 6; i++)
+	for (i = 0; i < MOUSE_BAD; i++)
 	{
 		aMouseState[i].state = KEY_UP;
 	}

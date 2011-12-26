@@ -1148,7 +1148,7 @@ void scroll(void)
 		return;
 	}
 
-	if (mouseScroll)
+	if (mouseScroll && wzMouseInWindow())
 	{
 		// Scroll left or right
 		scrollDirLeftRight += (mouseX() > (pie_GetVideoBufferWidth() - BOUNDARY_X)) -
@@ -1174,6 +1174,7 @@ void scroll(void)
 	// Apparently there's stutter if using deltaRealTime, so we have our very own delta time here, just for us.
 	timeDiff = wzGetTicks() - scrollRefTime;
 	scrollRefTime += timeDiff;
+	timeDiff = std::min<unsigned>(timeDiff, 500);  // Since we're using our own time variable, which isn't updated when dragging a box, clamp the time here so releasing the box doesn't scroll to the edge of the map suddenly.
 
 	scrollStepLeftRight = 0;
 	scrollStepUpDown = 0;

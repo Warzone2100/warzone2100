@@ -180,6 +180,9 @@ extern uint16_t mouseX(void) WZ_DECL_PURE;
 /** Return the current Y position of the mouse. */
 extern uint16_t mouseY(void) WZ_DECL_PURE;
 
+/// Returns true iff the mouse is on the window.
+bool wzMouseInWindow();
+
 /// Return the position of the mouse where it was clicked last.
 Vector2i mousePressPos(MOUSE_KEY_CODE code) WZ_DECL_PURE;
 /// Return the position of the mouse where it was released last.

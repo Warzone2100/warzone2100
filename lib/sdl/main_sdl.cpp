@@ -52,6 +52,7 @@ static INPUT_STATE aKeyState[KEY_MAXSCAN];
 
 /* The current location of the mouse */
 static Uint16 mouseXPos, mouseYPos;
+static bool mouseInWindow = true;
 
 /* How far the mouse has to move to start a drag */
 #define DRAG_THRESHOLD	5
@@ -350,14 +351,6 @@ static inline void initKeycodes()
 	std::transform(KEY_CODE_to_SDLKey, KEY_CODE_to_SDLKey + ARRAY_SIZE(KEY_CODE_to_SDLKey), SDLKey_to_KEY_CODE, swapit);
 	std::sort(KEY_CODE_to_SDLKey, KEY_CODE_to_SDLKey + ARRAY_SIZE(KEY_CODE_to_SDLKey));
 	std::sort(SDLKey_to_KEY_CODE, SDLKey_to_KEY_CODE + ARRAY_SIZE(SDLKey_to_KEY_CODE));
-
-	for (unsigned n = 0; n < ARRAY_SIZE(KEY_CODE_to_SDLKey); ++n)
-	{
-		if (KEY_CODE_to_SDLKey[n].first != KEY_CODE_to_SDLKey[n].second)
-		{
-			printf("Difference: %d, %d\n", KEY_CODE_to_SDLKey[n].first, KEY_CODE_to_SDLKey[n].second);
-		}
-	}
 }
 
 static inline KEY_CODE sdlKeyToKeyCode(SDLKey key)
@@ -603,6 +596,11 @@ Uint16 mouseX(void)
 Uint16 mouseY(void)
 {
 	return mouseYPos;
+}
+
+bool wzMouseInWindow()
+{
+	return mouseInWindow;
 }
 
 Vector2i mousePressPos(MOUSE_KEY_CODE code)
@@ -1032,53 +1030,14 @@ bool wzMain2()
  */
 static void handleActiveEvent(SDL_ActiveEvent * activeEvent)
 {
-#if 0
-	// Ignore focus loss through SDL_APPMOUSEFOCUS, since it mostly happens accidentialy
-	// active.state is a bitflag! Mixed events (eg. APPACTIVE|APPMOUSEFOCUS) will thus not be ignored.
-	if ( activeEvent->state == SDL_APPMOUSEFOCUS )
+	switch (activeEvent->state)
 	{
-		setMouseScroll(activeEvent->gain);
-		return;
+		case SDL_APPMOUSEFOCUS:
+			mouseInWindow = activeEvent->gain;
+			break;
+		default:
+			break;
 	}
-	if ( activeEvent->gain == 1 )
-	{
-		debug( LOG_NEVER, "WM_SETFOCUS");
-		if (focusState != FOCUS_IN)
-		{
-			focusState = FOCUS_IN;
-
-			// Don't pause in multiplayer!
-			if (war_GetPauseOnFocusLoss() && !NetPlay.bComms)
-			{
-				gameTimeStart();
-				audio_ResumeAll();
-				cdAudio_Resume();
-			}
-			// enable scrolling
-			setScrollPause(false);
-			resetScroll();
-		}
-	}
-	else
-	{
-		debug( LOG_NEVER, "WM_KILLFOCUS");
-		if (focusState != FOCUS_OUT)
-		{
-			focusState = FOCUS_OUT;
-
-			// Don't pause in multiplayer!
-			if (war_GetPauseOnFocusLoss() && !NetPlay.bComms)
-			{
-				gameTimeStop();
-				audio_PauseAll();
-				cdAudio_Pause();
-			}
-			inputLooseFocus();
-			// stop scrolling
-			setScrollPause(true);
-		}
-	}
-#endif
 }
 
 // Actual mainloop
