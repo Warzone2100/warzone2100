@@ -4933,6 +4933,14 @@ bool writeStructFile(const char *pFileName)
 			for (int j = 0; j < psCurr->numWeaps; j++)
 			{
 				ini.setValue("parts/weapon/" + QString::number(j + 1), (asWeaponStats + psCurr->asWeaps[j].nStat)->pName);
+				if (psCurr->asWeaps[j].nStat > 0)
+				{
+					ini.setValue("ammo/" + QString::number(j), psCurr->asWeaps[j].ammo);
+					ini.setValue("lastFired/" + QString::number(j), psCurr->asWeaps[j].lastFired);
+					ini.setValue("recoilValue/" + QString::number(j), psCurr->asWeaps[j].recoilValue);
+					ini.setValue("shotsFired/" + QString::number(j), psCurr->asWeaps[j].shotsFired);
+					ini.setVector3i("rotation/" + QString::number(j), psCurr->asWeaps[j].rot);
+				}
 			}
 			for (int i = 0; i < psCurr->numWeaps; i++)
 			{
