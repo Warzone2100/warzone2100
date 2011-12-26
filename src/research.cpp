@@ -1839,8 +1839,7 @@ bool enableResearch(RESEARCH *psResearch, UDWORD player)
 		//set the research reticule button to flash if research facility is free
 		for (psStruct = apsStructLists[selectedPlayer]; psStruct != NULL; psStruct=psStruct->psNext)
 		{
-			if (psStruct->pStructureType->type == REF_RESEARCH &&
-                psStruct->status == SS_BUILT &&
+			if (psStruct->pStructureType->type == REF_RESEARCH && psStruct->status == SS_BUILT &&
 				((RESEARCH_FACILITY *)psStruct->pFunctionality)->psSubject == NULL)
 			{
 				resFree = true;

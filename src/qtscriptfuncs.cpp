@@ -58,6 +58,28 @@ extern std::vector<Vector2i> derricks;
 #define SCRIPT_ASSERT(context, expr, ...) \
 	do { bool _wzeval = (expr); if (!_wzeval) { debug(LOG_ERROR, __VA_ARGS__); context->throwError(QScriptContext::ReferenceError, QString(#expr) +  " failed in " + QString(__FUNCTION__) + " at line " + QString::number(__LINE__)); return QScriptValue(); } } while (0)
 
+QScriptValue convResearch(RESEARCH *psResearch, QScriptEngine *engine, int player)
+{
+	PLAYER_RESEARCH *psPlayerResearch = &asPlayerResList[player][psResearch->index];
+	QScriptValue value = engine->newObject();
+	value.setProperty("power", (int)psResearch->researchPower);
+	value.setProperty("points", (int)psResearch->researchPoints);
+	bool started = false;
+	for (int i = 0; i < game.maxPlayers; i++)
+	{
+		if (aiCheckAlliances(player, i) || player == i)
+		{
+			int bits = asPlayerResList[i][psResearch->index].ResearchStatus;
+			started = started || (bits & STARTED_RESEARCH) || (bits & STARTED_RESEARCH_PENDING);
+		}
+	}
+	value.setProperty("started", started); // including whether an ally has started it
+	value.setProperty("done", (bool)psPlayerResearch->ResearchStatus & RESEARCHED);
+	value.setProperty("possible", (bool)psPlayerResearch->possible);
+	value.setProperty("name", psResearch->pName);
+	return value;
+}
+
 QScriptValue convStructure(STRUCTURE *psStruct, QScriptEngine *engine)
 {
 	QScriptValue value = convObj(psStruct, engine);
@@ -106,6 +128,7 @@ QScriptValue convObj(BASE_OBJECT *psObj, QScriptEngine *engine)
 	value.setProperty("z", map_coord(psObj->pos.z), QScriptValue::ReadOnly);
 	value.setProperty("player", psObj->player, QScriptValue::ReadOnly);
 	value.setProperty("selected", psObj->selected, QScriptValue::ReadOnly);
+	value.setProperty("name", objInfo(psObj));
 	return value;
 }
 
@@ -297,6 +320,88 @@ static QScriptValue js_newGroup(QScriptContext *, QScriptEngine *)
 	DROID_GROUP *newGrp = grpCreate();
 	return QScriptValue(newGrp->id);
 }
+
+// TODO, allow passing in a research object instead of a string as second parameter
+static QScriptValue js_pursueResearch(QScriptContext *context, QScriptEngine *engine)
+{
+	QScriptValue structVal = context->argument(0);
+	int id = structVal.property("id").toInt32();
+	int player = structVal.property("player").toInt32();
+	STRUCTURE *psStruct = IdToStruct(id, player);
+	SCRIPT_ASSERT(context, psStruct, "No such structure id %d belonging to player %d", id, player);
+	QString resName = context->argument(1).toString();
+	RESEARCH *psResearch = getResearch(resName.toUtf8().constData());
+	SCRIPT_ASSERT(context, psResearch, "No such research: %s", resName.toUtf8().constData());
+	PLAYER_RESEARCH *plrRes = &asPlayerResList[player][psResearch->index];
+	SCRIPT_ASSERT(context, psStruct->pStructureType->type == REF_RESEARCH, "Not a research lab: %s", objInfo(psStruct));
+	RESEARCH_FACILITY *psResLab = (RESEARCH_FACILITY *)psStruct->pFunctionality;
+	SCRIPT_ASSERT(context, psResLab->psSubject == NULL, "Research lab not ready");
+	SCRIPT_ASSERT(context, !(plrRes->ResearchStatus & RESEARCHED), "Research item already completed: %s", psResearch->pName);
+	SCRIPT_ASSERT(context, !IsResearchStartedPending(plrRes), "Research item already being researched: %s (%d)",
+	              psResearch->pName, (int)plrRes->ResearchStatus);
+	// Go down the requirements list for the desired tech
+	QList<RESEARCH *> reslist;
+	RESEARCH *cur = psResearch;
+	while (cur)
+	{
+		PLAYER_RESEARCH *curPlr = &asPlayerResList[player][cur->index];
+		bool started = false;
+		for (int i = 0; i < game.maxPlayers; i++)
+		{
+			if (aiCheckAlliances(player, i) || i == player)
+			{
+				int bits = asPlayerResList[i][psResearch->index].ResearchStatus;
+				started = started || (bits & STARTED_RESEARCH) || (bits & STARTED_RESEARCH_PENDING);
+			}
+		}
+		if (curPlr->possible && !started) // found relevant item on the path?
+		{
+#if defined (DEBUG)
+			char sTemp[128];
+			sendResearchStatus(psStruct, cur->index, player, true);
+			sprintf(sTemp, "player:%d starts topic from script: %s", player, cur->pName);
+			NETlogEntry(sTemp, SYNC_FLAG, 0);
+#endif
+			return QScriptValue(true);
+		}
+		RESEARCH *prev = cur;
+		cur = NULL;
+		if (prev->pPRList.size())
+		{
+			cur = &asResearch[prev->pPRList[0]]; // get first pre-req
+		}
+		for (int i = 1; i < prev->pPRList.size(); i++)
+		{
+			// push any other pre-reqs on the stack
+			reslist += &asResearch[prev->pPRList[i]];
+		}
+		if (!cur && reslist.size())
+		{
+			cur = reslist.takeFirst(); // retrieve options from the stack
+		}
+	}
+	return QScriptValue(false); // none found
+}
+
+static QScriptValue js_getResearch(QScriptContext *context, QScriptEngine *engine)
+{
+	int player = engine->globalObject().property("me").toInt32();
+	QString resName = context->argument(0).toString();
+	RESEARCH *psResearch = getResearch(resName.toUtf8().constData());
+	SCRIPT_ASSERT(context, psResearch, "No such research: %s", resName.toUtf8().constData());
+	return convResearch(psResearch, engine, player);
+}
+
+static QScriptValue js_enumResearch(QScriptContext *context, QScriptEngine *engine)
+{
+	int player = engine->globalObject().property("me").toInt32();
+	QScriptValue result = engine->newArray(asResearch.size());
+	for (int i = 0; i < asResearch.size(); i++)
+	{
+		result.setProperty(i, convResearch(&asResearch[i], engine, player));
+	}
+	return result;
+}	
 
 static QScriptValue js_enumStruct(QScriptContext *context, QScriptEngine *engine)
 {
@@ -1057,6 +1162,9 @@ bool registerFunctions(QScriptEngine *engine)
 	engine->globalObject().setProperty("enumDroid", engine->newFunction(js_enumDroid));
 	engine->globalObject().setProperty("enumGroup", engine->newFunction(js_enumGroup));
 	engine->globalObject().setProperty("enumFeature", engine->newFunction(js_enumFeature));
+	engine->globalObject().setProperty("enumResearch", engine->newFunction(js_enumResearch));
+	engine->globalObject().setProperty("getResearch", engine->newFunction(js_getResearch));
+	engine->globalObject().setProperty("pursueResearch", engine->newFunction(js_pursueResearch));
 	engine->globalObject().setProperty("distBetweenTwoPoints", engine->newFunction(js_distBetweenTwoPoints));
 	engine->globalObject().setProperty("newGroup", engine->newFunction(js_newGroup));
 	engine->globalObject().setProperty("groupAddArea", engine->newFunction(js_groupAddArea));
