@@ -113,9 +113,32 @@ function conDroids()
 
 }
 
-function doResearch()
+function eventResearched(labparam)
 {
-
+	var lablist;
+	if (labparam)
+	{
+		lablist = [];
+		lablist[0] = labparam;
+	}
+	else
+	{
+		lablist = enumStruct(me, resLab);
+	}
+	for (i = 0; i < lablist.length; i++)
+	{
+		var lab = lablist[i];
+		if (lab.status == BUILT && structureIdle(lab))
+		{
+			var found = pursueResearch(lab, "R-Struc-Research-Upgrade06");
+			if (!found)
+			{
+				// TBD - find random research
+				return;
+			}
+		}
+	}
+	// TBD - no research left, salvage res labs
 }
 
 function buildFundamentals()
@@ -149,10 +172,10 @@ function eventStructureAttacked(hitStruct, attackerObj)
 function eventStartLevel()
 {
 	queue("conDroids");
-	queue("doResearch");
+	queue("eventResearched");
 	queue("buildFundamentals");
 	/*
-	if (numFactories() > 1 && isStructureAvailable(defStructs[0], me) && getDifficulty(me) > MEDIUM)
+	if (numFactories() > 1 && isStructureAvailable(defStructs[0], me) && playerData[me].difficulty > MEDIUM)
 	{
 		dbgPlr("TRUCK RUSH!");
 		next("truckRush");
