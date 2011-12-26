@@ -60,7 +60,6 @@ extern std::vector<Vector2i> derricks;
 
 QScriptValue convResearch(RESEARCH *psResearch, QScriptEngine *engine, int player)
 {
-	PLAYER_RESEARCH *psPlayerResearch = &asPlayerResList[player][psResearch->index];
 	QScriptValue value = engine->newObject();
 	value.setProperty("power", (int)psResearch->researchPower);
 	value.setProperty("points", (int)psResearch->researchPoints);
@@ -70,12 +69,11 @@ QScriptValue convResearch(RESEARCH *psResearch, QScriptEngine *engine, int playe
 		if (aiCheckAlliances(player, i) || player == i)
 		{
 			int bits = asPlayerResList[i][psResearch->index].ResearchStatus;
-			started = started || (bits & STARTED_RESEARCH) || (bits & STARTED_RESEARCH_PENDING);
+			started = started || (bits & STARTED_RESEARCH) || (bits & STARTED_RESEARCH_PENDING) || (bits & RESBITS_PENDING_ONLY);
 		}
 	}
 	value.setProperty("started", started); // including whether an ally has started it
-	value.setProperty("done", (bool)psPlayerResearch->ResearchStatus & RESEARCHED);
-	value.setProperty("possible", (bool)psPlayerResearch->possible);
+	value.setProperty("available", researchAvailable(psResearch->index, player));
 	value.setProperty("name", psResearch->pName);
 	return value;
 }
@@ -337,32 +335,37 @@ static QScriptValue js_pursueResearch(QScriptContext *context, QScriptEngine *en
 	RESEARCH_FACILITY *psResLab = (RESEARCH_FACILITY *)psStruct->pFunctionality;
 	SCRIPT_ASSERT(context, psResLab->psSubject == NULL, "Research lab not ready");
 	SCRIPT_ASSERT(context, !(plrRes->ResearchStatus & RESEARCHED), "Research item already completed: %s", psResearch->pName);
-	SCRIPT_ASSERT(context, !IsResearchStartedPending(plrRes), "Research item already being researched: %s (%d)",
-	              psResearch->pName, (int)plrRes->ResearchStatus);
+	if (IsResearchStartedPending(plrRes) || IsResearchCompleted(plrRes))
+	{
+		return QScriptValue(false);
+	}
 	// Go down the requirements list for the desired tech
 	QList<RESEARCH *> reslist;
 	RESEARCH *cur = psResearch;
 	while (cur)
 	{
-		PLAYER_RESEARCH *curPlr = &asPlayerResList[player][cur->index];
-		bool started = false;
-		for (int i = 0; i < game.maxPlayers; i++)
+		if (researchAvailable(cur->index, player))
 		{
-			if (aiCheckAlliances(player, i) || i == player)
+			bool started = false;
+			for (int i = 0; i < game.maxPlayers; i++)
 			{
-				int bits = asPlayerResList[i][psResearch->index].ResearchStatus;
-				started = started || (bits & STARTED_RESEARCH) || (bits & STARTED_RESEARCH_PENDING);
+				if (aiCheckAlliances(player, i) || i == player)
+				{
+					int bits = asPlayerResList[i][cur->index].ResearchStatus;
+					started = started || (bits & STARTED_RESEARCH) || (bits & STARTED_RESEARCH_PENDING)
+							|| (bits & RESBITS_PENDING_ONLY) || (bits & RESEARCHED);
+				}
 			}
-		}
-		if (curPlr->possible && !started) // found relevant item on the path?
-		{
+			if (!started) // found relevant item on the path?
+			{
 #if defined (DEBUG)
-			char sTemp[128];
-			sendResearchStatus(psStruct, cur->index, player, true);
-			sprintf(sTemp, "player:%d starts topic from script: %s", player, cur->pName);
-			NETlogEntry(sTemp, SYNC_FLAG, 0);
+				char sTemp[128];
+				sendResearchStatus(psStruct, cur->index, player, true);
+				sprintf(sTemp, "player:%d starts topic from script: %s", player, cur->pName);
+				NETlogEntry(sTemp, SYNC_FLAG, 0);
 #endif
-			return QScriptValue(true);
+				return QScriptValue(true);
+			}
 		}
 		RESEARCH *prev = cur;
 		cur = NULL;
@@ -394,11 +397,19 @@ static QScriptValue js_getResearch(QScriptContext *context, QScriptEngine *engin
 
 static QScriptValue js_enumResearch(QScriptContext *context, QScriptEngine *engine)
 {
+	QList<RESEARCH *> reslist;
 	int player = engine->globalObject().property("me").toInt32();
-	QScriptValue result = engine->newArray(asResearch.size());
 	for (int i = 0; i < asResearch.size(); i++)
 	{
-		result.setProperty(i, convResearch(&asResearch[i], engine, player));
+		if (!IsResearchCompleted(&asPlayerResList[player][i]))
+		{
+			reslist += &asResearch[i];
+		}
+	}
+	QScriptValue result = engine->newArray(reslist.size());
+	for (int i = 0; i < reslist.size(); i++)
+	{
+		result.setProperty(i, convResearch(reslist[i], engine, player));
 	}
 	return result;
 }	

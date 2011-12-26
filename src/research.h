@@ -149,4 +149,6 @@ void CancelAllResearch(UDWORD pl);
 
 extern bool researchInitVars(void);
 
+bool researchAvailable(int inc, int playerID);
+
 #endif // __INCLUDED_SRC_RESEARCH_H__

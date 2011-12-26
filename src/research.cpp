@@ -45,6 +45,7 @@
 #include "intimage.h"
 #include "multiplay.h"
 #include "template.h"
+#include "qtscript.h"
 
 //used to calc the research power
 #define RESEARCH_FACTOR		32
@@ -596,6 +597,81 @@ bool loadResearchFunctions(const char *pFunctionData, UDWORD bufferSize)
 	return true;
 }
 
+bool researchAvailable(int inc, int playerID)
+{
+	UDWORD				incPR, incS;
+	bool				bPRFound, bStructFound;
+
+	// if its a cancelled topic - add to list
+	if (IsResearchCancelledPending(&asPlayerResList[playerID][inc]))
+	{
+		return true;
+	}
+	// if the topic is possible and has not already been researched - add to list
+	if ((IsResearchPossible(&asPlayerResList[playerID][inc])))
+	{
+		if (!IsResearchCompleted(&asPlayerResList[playerID][inc])
+		    && !IsResearchStartedPending(&asPlayerResList[playerID][inc]))
+		{
+			return true;
+		}
+	}
+
+	// if single player mode and key topic, then ignore cos can't do it!
+	if (!bMultiPlayer && asResearch[inc].keyTopic)
+	{
+		return false;
+	}
+
+	// make sure that the research is not completed  or started by another researchfac
+	if (!IsResearchCompleted(&asPlayerResList[playerID][inc]) && !IsResearchStartedPending(&asPlayerResList[playerID][inc]))
+	{
+		// Research is not completed  ... also  it has not been started by another researchfac
+
+		// if there aren't any PR's - go to next topic
+		if (asResearch[inc].pPRList.empty())
+		{
+			return false;
+		}
+
+		// check for pre-requisites
+		bPRFound = true;
+		for (incPR = 0; incPR < asResearch[inc].pPRList.size(); incPR++)
+		{
+			if (IsResearchCompleted(&(asPlayerResList[playerID][asResearch[inc].pPRList[incPR]]))==0)
+			{
+				// if haven't pre-requisite - quit checking rest
+				bPRFound = false;
+				break;
+			}
+		}
+		if (!bPRFound)
+		{
+			// if haven't pre-requisites, skip the rest of the checks
+			return false;
+		}
+
+		// check for structure effects
+		bStructFound = true;
+		for (incS = 0; incS < asResearch[inc].pStructList.size(); incS++)
+		{
+			if (!checkSpecificStructExists(asResearch[inc].pStructList[incS], playerID))
+			{
+				//if not built, quit checking
+				bStructFound = false;
+				break;
+			}
+		}
+		if (!bStructFound)
+		{
+			// if haven't all structs built, skip to next topic
+			return false;
+		}
+		return true;
+	}
+	return false;
+}
+
 /*
 Function to check what can be researched for a particular player at any one
 instant.
@@ -615,87 +691,12 @@ There can only be 'limit' number of entries
 UWORD fillResearchList(UWORD *plist, UDWORD playerID, UWORD topic, UWORD limit)
 {
 	UWORD				inc, count=0;
-	UDWORD				incPR, incS;
-	bool				bPRFound, bStructFound;
 
 	for (inc=0; inc < asResearch.size(); inc++)
 	{
-		//if the inc matches the 'topic' - automatically add to the list
-		if (inc == topic)
+		// if the inc matches the 'topic' - automatically add to the list
+		if (inc == topic || researchAvailable(inc, playerID))
 		{
-			goto add_research;
-		}
-		//if its a cancelled topic - add to list
-		if (IsResearchCancelledPending(&asPlayerResList[playerID][inc]))
-		{
-			goto add_research;
-		}
-		//if the topic is possible and has not already been researched - add to list
-		if ((IsResearchPossible(&asPlayerResList[playerID][inc])))
-		{
-			if (!IsResearchCompleted(&asPlayerResList[playerID][inc])
-			    && !IsResearchStartedPending(&asPlayerResList[playerID][inc]))
-			{
-				goto add_research;
-			}
-		}
-
-		//if single player mode and key topic, then ignore cos can't do it!
-		if (!bMultiPlayer)
-
-		{
-			if (asResearch[inc].keyTopic)
-			{
-				continue;
-			}
-		}
-
-		// make sure that the research is not completed  or started by another researchfac
-		if (!IsResearchCompleted(&asPlayerResList[playerID][inc]) && !IsResearchStartedPending(&asPlayerResList[playerID][inc]))
-		{
-			// Research is not completed  ... also  it has not been started by another researchfac
-
-			//if there aren't any PR's - go to next topic
-			if (asResearch[inc].pPRList.empty())
-			{
-				continue;
-			}
-
-			//check for pre-requisites
-			bPRFound = true;
-			for (incPR = 0; incPR < asResearch[inc].pPRList.size(); incPR++)
-			{
-				if (IsResearchCompleted(&(asPlayerResList[playerID][asResearch[inc].pPRList[incPR]]))==0)
-				{
-					//if haven't pre-requisite - quit checking rest
-					bPRFound = false;
-					break;
-				}
-			}
-			if (!bPRFound)
-			{
-				//if haven't pre-requisites, skip the rest of the checks
-				continue;
-			}
-
-			//check for structure effects
-			bStructFound = true;
-			for (incS = 0; incS < asResearch[inc].pStructList.size(); incS++)
-			{
-				if (!checkSpecificStructExists(asResearch[inc].pStructList[incS], playerID))
-				{
-					//if not built, quit checking
-					bStructFound = false;
-					break;
-				}
-			}
-			if (!bStructFound)
-			{
-				//if haven't all structs built, skip to next topic
-				continue;
-			}
-
-add_research: //if passed all the tests - add it to the list
 			*plist++ = inc;
 			count++;
 			if (count == limit)
@@ -1174,6 +1175,8 @@ void researchResult(UDWORD researchIndex, UBYTE player, bool bDisplay, STRUCTURE
 		psCBLastResStructure = NULL;
 		CBResFacilityOwner = -1;
 		psCBLastResearch = NULL;
+
+		triggerResearched(psResearchFacility);
 	}
 
 #ifdef DEBUG
