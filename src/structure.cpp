@@ -4051,7 +4051,7 @@ bool validLocation(BASE_STATS *psStats, Vector2i pos, uint16_t direction, unsign
 			for (int i = 0; i < b.size.x; ++i)
 		{
 			// Don't allow building structures (allow delivery points, though) outside visible area in single-player with debug mode off. (Why..?)
-			if (!bMultiPlayer && !getDebugMappingStatus() && !TEST_TILE_VISIBLE(player,mapTile(i,j)))
+			if (!bMultiPlayer && !getDebugMappingStatus() && !TEST_TILE_VISIBLE(player, mapTile(b.map.x + i, b.map.y + j)))
 			{
 				return false;
 			}
