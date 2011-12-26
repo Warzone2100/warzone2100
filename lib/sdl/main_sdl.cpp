@@ -167,13 +167,13 @@ void wzReleaseMouse()
 
 WZ_THREAD *wzThreadCreate(int (*threadFunc)(void *), void *data)
 {
-	return SDL_CreateThread(threadFunc, data);
+	return (WZ_THREAD *)SDL_CreateThread(threadFunc, data);
 }
 
 int wzThreadJoin(WZ_THREAD *thread)
 {
 	int result;
-	SDL_WaitThread(thread, &result);
+	SDL_WaitThread((SDL_Thread *)thread, &result);
 	return result;
 }
 
@@ -189,42 +189,42 @@ void wzYieldCurrentThread()
 
 WZ_MUTEX *wzMutexCreate()
 {
-	return SDL_CreateMutex();
+	return (WZ_MUTEX *)SDL_CreateMutex();
 }
 
 void wzMutexDestroy(WZ_MUTEX *mutex)
 {
-	SDL_DestroyMutex(mutex);
+	SDL_DestroyMutex((SDL_mutex *)mutex);
 }
 
 void wzMutexLock(WZ_MUTEX *mutex)
 {
-	SDL_LockMutex(mutex);
+	SDL_LockMutex((SDL_mutex *)mutex);
 }
 
 void wzMutexUnlock(WZ_MUTEX *mutex)
 {
-	SDL_UnlockMutex(mutex);
+	SDL_UnlockMutex((SDL_mutex *)mutex);
 }
 
 WZ_SEMAPHORE *wzSemaphoreCreate(int startValue)
 {
-	return SDL_CreateSemaphore(startValue);
+	return (WZ_SEMAPHORE *)SDL_CreateSemaphore(startValue);
 }
 
 void wzSemaphoreDestroy(WZ_SEMAPHORE *semaphore)
 {
-	SDL_DestroySemaphore(semaphore);
+	SDL_DestroySemaphore((SDL_sem *)semaphore);
 }
 
 void wzSemaphoreWait(WZ_SEMAPHORE *semaphore)
 {
-	SDL_SemWait(semaphore);
+	SDL_SemWait((SDL_sem *)semaphore);
 }
 
 void wzSemaphorePost(WZ_SEMAPHORE *semaphore)
 {
-	SDL_SemPost(semaphore);
+	SDL_SemPost((SDL_sem *)semaphore);
 }
 
 /**************************/

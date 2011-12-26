@@ -25,21 +25,10 @@
 
 #include <QtCore/QSize>
 
-#ifdef BACKEND_QT
-struct _wzThread;
-struct _wzMutex;
-struct _wzSemaphore;
-typedef struct _wzThread WZ_THREAD;
-typedef struct _wzMutex WZ_MUTEX;
-typedef struct _wzSemaphore WZ_SEMAPHORE;
-#else
-struct SDL_Thread;
-struct SDL_mutex;
-struct SDL_semaphore;
-typedef SDL_Thread WZ_THREAD;
-typedef SDL_mutex WZ_MUTEX;
-typedef SDL_semaphore WZ_SEMAPHORE;
-#endif
+struct WZ_THREAD;
+struct WZ_MUTEX;
+struct WZ_SEMAPHORE;
+
 
 void wzMain(int &argc, char **argv);
 bool wzMain2();

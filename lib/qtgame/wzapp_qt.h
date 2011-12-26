@@ -84,9 +84,9 @@ public slots:
 	void close();
 };
 
-struct _wzThread : public QThread
+struct WZ_THREAD : public QThread
 {
-	_wzThread(int (*threadFunc_)(void *), void *data_) : threadFunc(threadFunc_), data(data_) {}
+	WZ_THREAD(int (*threadFunc_)(void *), void *data_) : threadFunc(threadFunc_), data(data_) {}
 	void run()
 	{
 		ret = (*threadFunc)(data);
@@ -97,13 +97,13 @@ struct _wzThread : public QThread
 };
 
 // This one couldn't be easier...
-struct _wzMutex : public QMutex
+struct WZ_MUTEX : public QMutex
 {
 };
 
-struct _wzSemaphore : public QSemaphore
+struct WZ_SEMAPHORE : public QSemaphore
 {
-	_wzSemaphore(int startValue = 0) : QSemaphore(startValue) {}
+	WZ_SEMAPHORE(int startValue = 0) : QSemaphore(startValue) {}
 };
 
 #endif
