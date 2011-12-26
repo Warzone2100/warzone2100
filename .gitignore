@@ -249,3 +249,7 @@ devpkg/*
 
 # profiler stuff
 win32/CodeAnalyst
+
+# Split img files
+data/base/images/frontend/
+data/base/images/intfac/
