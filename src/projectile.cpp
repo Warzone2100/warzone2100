@@ -492,15 +492,14 @@ bool proj_SendProjectileAngled(WEAPON *psWeap, SIMPLE_OBJECT *psAttacker, int pl
 	if (proj_Direct(psStats) || (!proj_Direct(psStats) && dist <= psStats->minRange))
 	{
 		psProj->rot.pitch = iAtan2(deltaPos.z, dist);
-		psProj->state = PROJ_INFLIGHTDIRECT;
 	}
 	else
 	{
 		/* indirect */
 		projCalcIndirectVelocities(dist, deltaPos.z, psStats->flightSpeed, &psProj->vXY, &psProj->vZ, min_angle);
 		psProj->rot.pitch = iAtan2(psProj->vZ, psProj->vXY);
-		psProj->state = PROJ_INFLIGHTINDIRECT;
 	}
+	psProj->state = PROJ_INFLIGHT;
 
 	// If droid or structure, set muzzle pitch.
 	if (psAttacker != NULL && weapon_slot >= 0)
@@ -654,7 +653,7 @@ static int32_t collisionXYZ(Vector3i v1, Vector3i v2, ObjectShape shape, int32_t
 	return -1;
 }
 
-static void proj_InFlightFunc(PROJECTILE *psProj, bool bIndirect)
+static void proj_InFlightFunc(PROJECTILE *psProj)
 {
 	/* we want a delay between Las-Sats firing and actually hitting in multiPlayer
 	magic number but that's how long the audio countdown message lasts! */
@@ -1085,7 +1084,7 @@ static void proj_ImpactFunc( PROJECTILE *psObj )
 		 && ((FEATURE *)psObj->psDest)->psStats->damageable == 0)
 		{
 			debug(LOG_NEVER, "proj_ImpactFunc: trying to damage non-damageable target,projectile removed");
-			psObj->died = gameTime;
+			psObj->state = PROJ_INACTIVE;
 			return;
 		}
 
@@ -1175,7 +1174,7 @@ static void proj_ImpactFunc( PROJECTILE *psObj )
 	// If the projectile does no splash damage and does not set fire to things
 	if ((psStats->radius == 0) && (psStats->incenTime == 0) )
 	{
-		psObj->died = gameTime;
+		psObj->state = PROJ_INACTIVE;
 		return;
 	}
 
@@ -1338,7 +1337,7 @@ static void proj_PostImpactFunc( PROJECTILE *psObj )
 	/* Time to finish postimpact effect? */
 	if (age > (SDWORD)psStats->radiusLife && age > (SDWORD)psStats->incenTime)
 	{
-		psObj->died = gameTime;
+		psObj->state = PROJ_INACTIVE;
 		return;
 	}
 
@@ -1393,20 +1392,26 @@ void PROJECTILE::update()
 
 	switch (psObj->state)
 	{
-		case PROJ_INFLIGHTDIRECT:
-			proj_InFlightFunc(psObj, false);
-			break;
-
-		case PROJ_INFLIGHTINDIRECT:
-			proj_InFlightFunc(psObj, true);
-			break;
-
+		case PROJ_INFLIGHT:
+			proj_InFlightFunc(psObj);
+			if (psObj->state != PROJ_IMPACT)
+			{
+				break;
+			}
+			// Continue.
 		case PROJ_IMPACT:
 			proj_ImpactFunc( psObj );
-			break;
-
+			if (psObj->state != PROJ_POSTIMPACT)
+			{
+				break;
+			}
+			// Continue.
 		case PROJ_POSTIMPACT:
 			proj_PostImpactFunc( psObj );
+			break;
+
+		case PROJ_INACTIVE:
+			psObj->died = psObj->time;
 			break;
 	}
 
@@ -1836,10 +1841,10 @@ void checkProjectile(const PROJECTILE* psProjectile, const char * const location
 	ASSERT_HELPER(psProjectile->psWStats != NULL, location_description, function, "CHECK_PROJECTILE");
 	ASSERT_HELPER(psProjectile->type == OBJ_PROJECTILE, location_description, function, "CHECK_PROJECTILE");
 	ASSERT_HELPER(psProjectile->player < MAX_PLAYERS, location_description, function, "CHECK_PROJECTILE: Out of bound owning player number (%u)", (unsigned int)psProjectile->player);
-	ASSERT_HELPER(psProjectile->state == PROJ_INFLIGHTDIRECT
-	    || psProjectile->state == PROJ_INFLIGHTINDIRECT
+	ASSERT_HELPER(psProjectile->state == PROJ_INFLIGHT
 	    || psProjectile->state == PROJ_IMPACT
-	    || psProjectile->state == PROJ_POSTIMPACT, location_description, function, "CHECK_PROJECTILE: invalid projectile state: %u", (unsigned int)psProjectile->state);
+	    || psProjectile->state == PROJ_POSTIMPACT
+	    || psProjectile->state == PROJ_INACTIVE, location_description, function, "CHECK_PROJECTILE: invalid projectile state: %u", (unsigned int)psProjectile->state);
 
 	if (psProjectile->psDest)
 		checkObject(psProjectile->psDest, location_description, function, recurse - 1);

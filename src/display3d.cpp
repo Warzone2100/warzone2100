@@ -1184,51 +1184,30 @@ static void display3DProjectiles( void )
 
 	while ( psObj != NULL )
 	{
-		switch(psObj->state)
+		// If source or destination is visible, and projectile has been spawned and has not impacted.
+		if (graphicsTime >= psObj->prevSpacetime.time && graphicsTime <= psObj->time && gfxVisible(psObj))
 		{
-		case PROJ_IMPACT:
-			if (graphicsTime > psObj->time)
+			/* Draw a bullet at psObj->pos.x for X coord
+			   psObj->pos.y for Z coord
+			   whatever for Y (height) coord - arcing ?
+			*/
+			/* these guys get drawn last */
+			if(psObj->psWStats->weaponSubClass == WSC_ROCKET ||
+			   psObj->psWStats->weaponSubClass == WSC_MISSILE ||
+			   psObj->psWStats->weaponSubClass == WSC_COMMAND ||
+			   psObj->psWStats->weaponSubClass == WSC_SLOWMISSILE ||
+			   psObj->psWStats->weaponSubClass == WSC_SLOWROCKET ||
+			   psObj->psWStats->weaponSubClass == WSC_ENERGY ||
+			   psObj->psWStats->weaponSubClass == WSC_EMP)
 			{
-				break;  // Projectile has impacted.
+				bucketAddTypeToList(RENDER_PROJECTILE, psObj);
 			}
-			// Projectile not quite impacted, so don't break.
-		case PROJ_INFLIGHTDIRECT:
-		case PROJ_INFLIGHTINDIRECT:
-			// if source or destination is visible
-			if(gfxVisible(psObj))
+			else
 			{
-				// Only display once projectile is supposed to have been spawned.
-				if (graphicsTime >= psObj->prevSpacetime.time)
-				{
-					/* Draw a bullet at psObj->pos.x for X coord
-										psObj->pos.y for Z coord
-										whatever for Y (height) coord - arcing ?
-					*/
-					/* these guys get drawn last */
-					if(psObj->psWStats->weaponSubClass == WSC_ROCKET ||
-						psObj->psWStats->weaponSubClass == WSC_MISSILE ||
-						psObj->psWStats->weaponSubClass == WSC_COMMAND ||
-						psObj->psWStats->weaponSubClass == WSC_SLOWMISSILE ||
-						psObj->psWStats->weaponSubClass == WSC_SLOWROCKET ||
-						psObj->psWStats->weaponSubClass == WSC_ENERGY ||
-						psObj->psWStats->weaponSubClass == WSC_EMP)
-					{
-						bucketAddTypeToList(RENDER_PROJECTILE, psObj);
-					}
-					else
-					{
-						renderProjectile(psObj);
-					}
-				}
+				renderProjectile(psObj);
 			}
-			break;
+		}
 
-		case PROJ_POSTIMPACT:
-			break;
-
-		default:
-			break;
-		}	/* end switch */
 		psObj = proj_GetNext();
 	}
 }	/* end of function display3DProjectiles */

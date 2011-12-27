@@ -25,16 +25,17 @@
 #define __INCLUDED_PROJECTILEDEF_H__
 
 #include "basedef.h"
+#include "lib/gamelib/gtime.h"
 
 #include <vector>
 
 
 enum PROJ_STATE
 {
-	PROJ_INFLIGHTDIRECT,
-	PROJ_INFLIGHTINDIRECT,
+	PROJ_INFLIGHT,
 	PROJ_IMPACT,
-	PROJ_POSTIMPACT
+	PROJ_POSTIMPACT,
+	PROJ_INACTIVE,
 };
 
 struct PROJECTILE : public SIMPLE_OBJECT
@@ -42,7 +43,7 @@ struct PROJECTILE : public SIMPLE_OBJECT
 	PROJECTILE(uint32_t id, unsigned player) : SIMPLE_OBJECT(OBJ_PROJECTILE, id, player) {}
 
 	void            update();
-	bool            deleteIfDead() { if (died == 0) return false; delete this; return true; }
+	bool            deleteIfDead() { if (died == 0 || died > gameTime - deltaGameTime) return false; delete this; return true; }
 
 
 	UBYTE           state;                  ///< current projectile state
