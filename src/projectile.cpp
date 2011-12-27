@@ -933,7 +933,6 @@ static void proj_InFlightFunc(PROJECTILE *psProj, bool bIndirect)
 	if (gfxVisible(psProj))
 	{
 		uint32_t effectTime;
-		// TODO Should probably give effectTime as an extra parameter to addEffect, or make an effectGiveAuxTime parameter, with yet another 'this is naughty' comment.
 		for (effectTime = ((psProj->prevSpacetime.time + 31) & ~31); effectTime < psProj->time; effectTime += 32)
 		{
 			Spacetime st = interpolateObjectSpacetime(psProj, effectTime);
@@ -943,28 +942,28 @@ static void proj_InFlightFunc(PROJECTILE *psProj, bool bIndirect)
 				case WSC_FLAME:
 					posFlip.z -= 8;  // Why?
 					effectGiveAuxVar(PERCENT(currentDistance, psStats->longRange));
-					addEffect(&posFlip, EFFECT_EXPLOSION, EXPLOSION_TYPE_FLAMETHROWER, false, NULL, 0);
+					addEffect(&posFlip, EFFECT_EXPLOSION, EXPLOSION_TYPE_FLAMETHROWER, false, NULL, 0, effectTime);
 				break;
 				case WSC_COMMAND:
 				case WSC_ELECTRONIC:
 				case WSC_EMP:
 					posFlip.z -= 8;  // Why?
 					effectGiveAuxVar(PERCENT(currentDistance, psStats->longRange)/2);
-					addEffect(&posFlip, EFFECT_EXPLOSION, EXPLOSION_TYPE_LASER, false, NULL, 0);
+					addEffect(&posFlip, EFFECT_EXPLOSION, EXPLOSION_TYPE_LASER, false, NULL, 0, effectTime);
 				break;
 				case WSC_ROCKET:
 				case WSC_MISSILE:
 				case WSC_SLOWROCKET:
 				case WSC_SLOWMISSILE:
 					posFlip.z += 8;  // Why?
-					addEffect(&posFlip, EFFECT_SMOKE, SMOKE_TYPE_TRAIL, false, NULL, 0);
+					addEffect(&posFlip, EFFECT_SMOKE, SMOKE_TYPE_TRAIL, false, NULL, 0, effectTime);
 				break;
 				default:
 					// Add smoke trail to indirect weapons, even if firing directly.
 					if (!proj_Direct(psStats))
 					{
 						posFlip.z += 4;  // Why?
-						addEffect(&posFlip, EFFECT_SMOKE, SMOKE_TYPE_TRAIL, false, NULL, 0);
+						addEffect(&posFlip, EFFECT_SMOKE, SMOKE_TYPE_TRAIL, false, NULL, 0, effectTime);
 					}
 					// Otherwise no effect.
 					break;
@@ -1018,7 +1017,7 @@ static void proj_ImpactFunc( PROJECTILE *psObj )
 			position.y = map_Height(position.x, position.z);
 			effectGiveAuxVar(psStats->incenRadius);
 			effectGiveAuxVarSec(psStats->incenTime);
-			addEffect(&position, EFFECT_FIRE, FIRE_TYPE_LOCALISED, false, NULL, 0);
+			addEffect(&position, EFFECT_FIRE, FIRE_TYPE_LOCALISED, false, NULL, 0, psObj->time);
 		}
 
 		// may want to add both a fire effect and the las sat effect
@@ -1027,7 +1026,7 @@ static void proj_ImpactFunc( PROJECTILE *psObj )
 			position.x = psObj->pos.x;
 			position.z = psObj->pos.y;  // z = y [sic] intentional
 			position.y = map_Height(position.x, position.z);
-			addEffect(&position, EFFECT_SAT_LASER, SAT_LASER_STANDARD, false, NULL, 0);
+			addEffect(&position, EFFECT_SAT_LASER, SAT_LASER_STANDARD, false, NULL, 0, psObj->time);
 			if (clipXY(psObj->pos.x, psObj->pos.y))
 			{
 				shakeStart();
@@ -1067,13 +1066,13 @@ static void proj_ImpactFunc( PROJECTILE *psObj )
 				imd = psStats->pTargetMissGraphic;
 			}
 
-			addMultiEffect(&position, &scatter, EFFECT_EXPLOSION, facing, true, imd, psStats->numExplosions, psStats->lightWorld, psStats->effectSize);
+			addMultiEffect(&position, &scatter, EFFECT_EXPLOSION, facing, true, imd, psStats->numExplosions, psStats->lightWorld, psStats->effectSize, psObj->time);
 
 			// If the target was a VTOL hit in the air add smoke
 			if ((psStats->surfaceToAir & SHOOT_IN_AIR)
 			 && !(psStats->surfaceToAir & SHOOT_ON_GROUND))
 			{
-				addMultiEffect(&position, &scatter, EFFECT_SMOKE, SMOKE_TYPE_DRIFTING, false, NULL, 3, 0, 0);
+				addMultiEffect(&position, &scatter, EFFECT_SMOKE, SMOKE_TYPE_DRIFTING, false, NULL, 3, 0, 0, psObj->time);
 			}
 		}
 	}
@@ -1101,7 +1100,7 @@ static void proj_ImpactFunc( PROJECTILE *psObj )
 			 && psStats->weaponSubClass == WSC_AAGUN)
 			{
 				imd = psStats->pTargetMissGraphic;
-				addMultiEffect(&position, &scatter, EFFECT_SMOKE, SMOKE_TYPE_DRIFTING, false, NULL, 3, 0, 0);
+				addMultiEffect(&position, &scatter, EFFECT_SMOKE, SMOKE_TYPE_DRIFTING, false, NULL, 3, 0, 0, psObj->time);
 			}
 			// Otherwise we just hit it plain and simple
 			else
@@ -1109,7 +1108,7 @@ static void proj_ImpactFunc( PROJECTILE *psObj )
 				imd = psStats->pTargetHitGraphic;
 			}
 
-			addMultiEffect(&position, &scatter, EFFECT_EXPLOSION, facing, true, imd, psStats->numExplosions, psStats->lightWorld, psStats->effectSize);
+			addMultiEffect(&position, &scatter, EFFECT_EXPLOSION, facing, true, imd, psStats->numExplosions, psStats->lightWorld, psStats->effectSize, psObj->time);
 		}
 
 		// Check for electronic warfare damage where we know the subclass and source

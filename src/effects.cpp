@@ -459,7 +459,7 @@ void	effectSetSize(UDWORD size)
 }
 
 void addMultiEffect(const Vector3i *basePos, Vector3i *scatter, EFFECT_GROUP group,
-					   EFFECT_TYPE type, bool specified, iIMDShape *imd, unsigned int number, bool lit, unsigned int size)
+                    EFFECT_TYPE type, bool specified, iIMDShape *imd, unsigned int number, bool lit, unsigned int size, unsigned effectTime)
 {
 	if (number == 0)
 	{
@@ -472,7 +472,7 @@ void addMultiEffect(const Vector3i *basePos, Vector3i *scatter, EFFECT_GROUP gro
 	/* If there's only one, make sure it's in the centre */
 	if (number == 1)
 	{
-		addEffect(basePos,group,type,specified,imd,lit);
+		addEffect(basePos, group, type, specified, imd, lit, effectTime);
 	}
 	else
 	{
@@ -489,7 +489,7 @@ void addMultiEffect(const Vector3i *basePos, Vector3i *scatter, EFFECT_GROUP gro
 			                                                  rand()%(scatter->y*2 + 1),
 			                                                  rand()%(scatter->z*2 + 1)
 			                                                 );
-			addEffect(&scatPos,group,type,specified,imd,lit);
+			addEffect(&scatPos, group, type, specified, imd, lit, effectTime);
 		}
 	}
 }
@@ -503,6 +503,11 @@ void	SetEffectForPlayer(uint8_t player)
 }
 
 void addEffect(const Vector3i *pos, EFFECT_GROUP group, EFFECT_TYPE type, bool specified, iIMDShape *imd, int lit)
+{
+	return addEffect(pos, group, type, specified, imd, lit, graphicsTime);
+}
+
+void addEffect(const Vector3i *pos, EFFECT_GROUP group, EFFECT_TYPE type, bool specified, iIMDShape *imd, int lit, unsigned effectTime)
 {
 	EFFECT *psEffect = NULL;
 
@@ -537,7 +542,7 @@ void addEffect(const Vector3i *pos, EFFECT_GROUP group, EFFECT_TYPE type, bool s
 	SetEffectForPlayer(0);	// reset it
 
 	/* Set when it entered the world */
-	psEffect->birthTime = psEffect->lastFrame = graphicsTime;
+	psEffect->birthTime = psEffect->lastFrame = effectTime;
 
 	if(group == EFFECT_GRAVITON && (type == GRAVITON_TYPE_GIBLET || type == GRAVITON_TYPE_EMITTING_DR))
 	{
@@ -623,14 +628,17 @@ void processEffects(void)
 	{
 		EFFECT *itNext = it->next; // If updateEffect deletes something, we would be screwed...
 
-		/* Run updates, effect may be deleted here */
-		updateEffect(it);
-
-		/* Is it on the grid */
-		if (it->group != EFFECT_FREED && clipXY(it->position.x, it->position.z))
+		if (it->birthTime <= graphicsTime)  // Don't process, if it doesn't exist yet.
 		{
-			/* Add it to the bucket */
-			bucketAddTypeToList(RENDER_EFFECT, it);
+			/* Run updates, effect may be deleted here */
+			updateEffect(it);
+
+			/* Is it on the grid */
+			if (it->group != EFFECT_FREED && clipXY(it->position.x, it->position.z))
+			{
+				/* Add it to the bucket */
+				bucketAddTypeToList(RENDER_EFFECT, it);
+			}
 		}
 
 		it = itNext;

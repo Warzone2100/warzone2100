@@ -387,7 +387,7 @@ void recycleDroid(DROID *psDroid)
 
 	vanishDroid(psDroid);
 
-	addEffect(&position,EFFECT_EXPLOSION,EXPLOSION_TYPE_DISCOVERY,false,NULL,false);
+	addEffect(&position, EFFECT_EXPLOSION, EXPLOSION_TYPE_DISCOVERY, false, NULL, false, gameTime - deltaGameTime);
 
 	CHECK_DROID(psDroid);
 }
@@ -541,7 +541,7 @@ static void removeDroidFX(DROID *psDel)
 		pos.x = psDel->pos.x;
 		pos.z = psDel->pos.y;
 		pos.y = psDel->pos.z;
-		addEffect(&pos,EFFECT_DESTRUCTION,DESTRUCTION_TYPE_DROID,false,NULL,0);
+		addEffect(&pos, EFFECT_DESTRUCTION, DESTRUCTION_TYPE_DROID, false, NULL, 0, gameTime - deltaGameTime);
 		audio_PlayStaticTrack( psDel->pos.x, psDel->pos.y, ID_SOUND_EXPLOSION );
 	}
 }
@@ -808,15 +808,16 @@ void droidUpdate(DROID *psDroid)
 
 			emissionInterval = CALC_DROID_SMOKE_INTERVAL(percentDamage);
 
-			if(gameTime > (psDroid->lastEmission + emissionInterval))
+			int effectTime = std::max(gameTime - deltaGameTime, psDroid->lastEmission + emissionInterval);
+			if (gameTime > effectTime)
 			{
    				dv.x = psDroid->pos.x + DROID_DAMAGE_SPREAD;
    				dv.z = psDroid->pos.y + DROID_DAMAGE_SPREAD;
 				dv.y = psDroid->pos.z;
 
 				dv.y += (psDroid->sDisplay.imd->max.y * 2);
-				addEffect(&dv,EFFECT_SMOKE,SMOKE_TYPE_DRIFTING_SMALL,false,NULL,0);
-				psDroid->lastEmission = gameTime;
+				addEffect(&dv, EFFECT_SMOKE, SMOKE_TYPE_DRIFTING_SMALL, false, NULL, 0, effectTime);
+				psDroid->lastEmission = effectTime;
 			}
 		}
 	}
@@ -1421,7 +1422,7 @@ bool droidUpdateDroidRepair(DROID *psRepairDroid)
 		iVecEffect.y = psDroidToRepair->pos.z + rand()%8;;
 		iVecEffect.z = psDroidToRepair->pos.y + DROID_REPAIR_SPREAD;
 		effectGiveAuxVar(90+rand()%20);
-		addEffect(&iVecEffect,EFFECT_EXPLOSION,EXPLOSION_TYPE_LASER,false,NULL,0);
+		addEffect(&iVecEffect, EFFECT_EXPLOSION, EXPLOSION_TYPE_LASER, false, NULL, 0, gameTime - deltaGameTime + rand()%deltaGameTime);
 		droidAddWeldSound( iVecEffect );
 	}
 

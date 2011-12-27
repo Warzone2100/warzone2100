@@ -395,7 +395,7 @@ bool removeFeature(FEATURE *psDel)
 		pos.x = psDel->pos.x;
 		pos.z = psDel->pos.y;
 		pos.y = map_Height(pos.x, pos.z) + 30;
-		addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_DISCOVERY,false,NULL,0);
+		addEffect(&pos, EFFECT_EXPLOSION, EXPLOSION_TYPE_DISCOVERY, false, NULL, 0, gameTime - deltaGameTime);
 		if (psDel->psStats->subType == FEAT_GEN_ARTE)
 		{
 			scoreUpdateVar(WD_ARTEFACTS_FOUND);
@@ -457,7 +457,7 @@ bool destroyFeature(FEATURE *psDel)
 			pos.x = psDel->pos.x + widthScatter - rand()%(2*widthScatter);
 			pos.z = psDel->pos.y + breadthScatter - rand()%(2*breadthScatter);
 			pos.y = psDel->pos.z + 32 + rand()%heightScatter;
-			addEffect(&pos,EFFECT_EXPLOSION,explosionSize,false,NULL,0);
+			addEffect(&pos, EFFECT_EXPLOSION, explosionSize, false, NULL, 0, gameTime - deltaGameTime);
 		}
 
 		if(psDel->psStats->subType == FEAT_SKYSCRAPER)
@@ -465,7 +465,7 @@ bool destroyFeature(FEATURE *psDel)
 			pos.x = psDel->pos.x;
 			pos.z = psDel->pos.y;
 			pos.y = psDel->pos.z;
-			addEffect(&pos,EFFECT_DESTRUCTION,DESTRUCTION_TYPE_SKYSCRAPER,true,psDel->sDisplay.imd,0);
+			addEffect(&pos, EFFECT_DESTRUCTION, DESTRUCTION_TYPE_SKYSCRAPER, true, psDel->sDisplay.imd, 0, gameTime - deltaGameTime);
 			initPerimeterSmoke(psDel->sDisplay.imd, pos);
 
 			shakeStart();
@@ -475,7 +475,7 @@ bool destroyFeature(FEATURE *psDel)
 		pos.x = psDel->pos.x;
 		pos.z = psDel->pos.y;
 		pos.y = map_Height(pos.x,pos.z);
-		addEffect(&pos,EFFECT_DESTRUCTION,DESTRUCTION_TYPE_FEATURE,false,NULL,0);
+		addEffect(&pos, EFFECT_DESTRUCTION, DESTRUCTION_TYPE_FEATURE, false, NULL, 0, gameTime - deltaGameTime);
 
 		//play sound
 		// ffs gj

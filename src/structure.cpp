@@ -2336,16 +2336,16 @@ static bool structPlaceDroid(STRUCTURE *psStructure, DROID_TEMPLATE *psTempl,
 			iVecEffect.x = psNewDroid->pos.x;
 			iVecEffect.y = map_Height( psNewDroid->pos.x, psNewDroid->pos.y ) + DROID_CONSTRUCTION_SMOKE_HEIGHT;
 			iVecEffect.z = psNewDroid->pos.y;
-			addEffect( &iVecEffect,EFFECT_CONSTRUCTION,CONSTRUCTION_TYPE_DRIFTING,false,NULL,0 );
+			addEffect(&iVecEffect, EFFECT_CONSTRUCTION, CONSTRUCTION_TYPE_DRIFTING, false, NULL, 0, gameTime - deltaGameTime);
 			iVecEffect.x = psNewDroid->pos.x - DROID_CONSTRUCTION_SMOKE_OFFSET;
 			iVecEffect.z = psNewDroid->pos.y - DROID_CONSTRUCTION_SMOKE_OFFSET;
-			addEffect( &iVecEffect,EFFECT_CONSTRUCTION,CONSTRUCTION_TYPE_DRIFTING,false,NULL,0 );
+			addEffect(&iVecEffect, EFFECT_CONSTRUCTION, CONSTRUCTION_TYPE_DRIFTING, false, NULL, 0, gameTime - deltaGameTime);
 			iVecEffect.z = psNewDroid->pos.y + DROID_CONSTRUCTION_SMOKE_OFFSET;
-			addEffect( &iVecEffect,EFFECT_CONSTRUCTION,CONSTRUCTION_TYPE_DRIFTING,false,NULL,0 );
+			addEffect(&iVecEffect, EFFECT_CONSTRUCTION, CONSTRUCTION_TYPE_DRIFTING, false, NULL, 0, gameTime - deltaGameTime);
 			iVecEffect.x = psNewDroid->pos.x + DROID_CONSTRUCTION_SMOKE_OFFSET;
-			addEffect( &iVecEffect,EFFECT_CONSTRUCTION,CONSTRUCTION_TYPE_DRIFTING,false,NULL,0 );
+			addEffect(&iVecEffect, EFFECT_CONSTRUCTION, CONSTRUCTION_TYPE_DRIFTING, false, NULL, 0, gameTime - deltaGameTime);
 			iVecEffect.z = psNewDroid->pos.y - DROID_CONSTRUCTION_SMOKE_OFFSET;
-			addEffect( &iVecEffect,EFFECT_CONSTRUCTION,CONSTRUCTION_TYPE_DRIFTING,false,NULL,0 );
+			addEffect(&iVecEffect, EFFECT_CONSTRUCTION, CONSTRUCTION_TYPE_DRIFTING, false, NULL, 0, gameTime - deltaGameTime);
 		}
 		/* add the droid to the list */
 		addDroid(psNewDroid, apsDroidLists);
@@ -3336,8 +3336,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 					iVecEffect.y = psDroid->pos.z + (10-rand()%20);
 					iVecEffect.z = psDroid->pos.y + (10-rand()%20);
 					effectSetSize(100);
-					addEffect( &iVecEffect,EFFECT_EXPLOSION,EXPLOSION_TYPE_SPECIFIED,
-								true,getImdFromIndex(MI_FLAME),0 );
+					addEffect(&iVecEffect, EFFECT_EXPLOSION, EXPLOSION_TYPE_SPECIFIED, true, getImdFromIndex(MI_FLAME), 0, gameTime - deltaGameTime);
 				}
 			}
 		}
@@ -3637,7 +3636,8 @@ void structureUpdate(STRUCTURE *psBuilding, bool mission)
 		if (damage > 0.)
 		{
 			emissionInterval = CalcStructureSmokeInterval(damage/65536.f);
-			if(gameTime > (psBuilding->lastEmission + emissionInterval))
+			unsigned effectTime = std::max(gameTime - deltaGameTime, psBuilding->lastEmission + emissionInterval);
+			if (gameTime > effectTime)
 			{
 				widthScatter   = getStructureWidth(psBuilding)   * TILE_UNITS/2/3;
 				breadthScatter = getStructureBreadth(psBuilding) * TILE_UNITS/2/3;
@@ -3645,8 +3645,8 @@ void structureUpdate(STRUCTURE *psBuilding, bool mission)
 				dv.z = psBuilding->pos.y + breadthScatter - rand()%(2*breadthScatter);
 				dv.y = psBuilding->pos.z;
 				dv.y += (psBuilding->sDisplay.imd->max.y * 3) / 4;
-				addEffect(&dv,EFFECT_SMOKE,SMOKE_TYPE_DRIFTING_HIGH,false,NULL,0);
-				psBuilding->lastEmission = gameTime;
+				addEffect(&dv, EFFECT_SMOKE, SMOKE_TYPE_DRIFTING_HIGH, false, NULL, 0, effectTime);
+				psBuilding->lastEmission = effectTime;
 			}
 		}
 	}
@@ -3734,8 +3734,7 @@ void structureUpdate(STRUCTURE *psBuilding, bool mission)
 				position.z = psBuilding->pos.y - point->z;
 
 				effectSetSize(30);
-				addEffect(&position, EFFECT_EXPLOSION, EXPLOSION_TYPE_SPECIFIED, true,
-					getImdFromIndex(MI_PLASMA), 0);
+				addEffect(&position, EFFECT_EXPLOSION, EXPLOSION_TYPE_SPECIFIED, true, getImdFromIndex(MI_PLASMA), 0, gameTime - deltaGameTime + rand()%deltaGameTime);
 			}
 
 			if (iPointsToAdd)
@@ -4626,7 +4625,7 @@ bool destroyStruct(STRUCTURE *psDel)
 			pos.x = psDel->pos.x + widthScatter - rand()%(2*widthScatter);
 			pos.z = psDel->pos.y + breadthScatter - rand()%(2*breadthScatter);
 			pos.y = psDel->pos.z + 32 + rand()%heightScatter;
-			addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_MEDIUM,false,NULL,0);
+			addEffect(&pos, EFFECT_EXPLOSION, EXPLOSION_TYPE_MEDIUM, false, NULL, 0, gameTime - deltaGameTime);
 		}
 
 		/* Get coordinates for everybody! */
@@ -4648,36 +4647,36 @@ bool destroyStruct(STRUCTURE *psDel)
 			/* Give a duration */
 			effectGiveAuxVarSec(burnDurationWall);
 			/* Normal fire - no smoke */
-			addEffect(&pos,EFFECT_FIRE,FIRE_TYPE_LOCALISED,false,NULL,0);
+			addEffect(&pos, EFFECT_FIRE, FIRE_TYPE_LOCALISED, false, NULL, 0, gameTime - deltaGameTime);
 		}
 		else if(psDel->pStructureType->type == REF_RESOURCE_EXTRACTOR) // oil resources
 		{
 			/* Oil resources burn AND puff out smoke AND for longer*/
 			effectGiveAuxVarSec(burnDurationOilWell);
-			addEffect(&pos,EFFECT_FIRE,FIRE_TYPE_SMOKY,false,NULL,0);
+			addEffect(&pos, EFFECT_FIRE, FIRE_TYPE_SMOKY, false, NULL, 0, gameTime - deltaGameTime);
 		}
 		else	// everything else
 		{
 			/* Give a duration */
 			effectGiveAuxVarSec(burnDurationOther);
-			addEffect(&pos,EFFECT_FIRE,FIRE_TYPE_LOCALISED,false,NULL,0);
+			addEffect(&pos, EFFECT_FIRE, FIRE_TYPE_LOCALISED, false, NULL, 0, gameTime - deltaGameTime);
 		}
 
 		/* Power stations have their own desctruction sequence */
 		if(psDel->pStructureType->type == REF_POWER_GEN)
 		{
-			addEffect(&pos,EFFECT_DESTRUCTION,DESTRUCTION_TYPE_POWER_STATION,false,NULL,0);
+			addEffect(&pos, EFFECT_DESTRUCTION, DESTRUCTION_TYPE_POWER_STATION, false, NULL, 0, gameTime - deltaGameTime);
 			pos.y += SHOCK_WAVE_HEIGHT;
-			addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_SHOCKWAVE,false,NULL,0);
+			addEffect(&pos, EFFECT_EXPLOSION, EXPLOSION_TYPE_SHOCKWAVE, false, NULL, 0, gameTime - deltaGameTime);
 		}
 		/* As do wall sections */
 		else if(bMinor)
 		{
-			addEffect(&pos,EFFECT_DESTRUCTION,DESTRUCTION_TYPE_WALL_SECTION,false,NULL,0);
+			addEffect(&pos, EFFECT_DESTRUCTION, DESTRUCTION_TYPE_WALL_SECTION, false, NULL, 0, gameTime - deltaGameTime);
 		}
 		else // and everything else goes here.....
 		{
-			addEffect(&pos,EFFECT_DESTRUCTION,DESTRUCTION_TYPE_STRUCTURE,false,NULL,0);
+			addEffect(&pos, EFFECT_DESTRUCTION, DESTRUCTION_TYPE_STRUCTURE, false, NULL, 0, gameTime - deltaGameTime);
 		}
 
 		/* shake the screen if we're near enough */
@@ -5862,7 +5861,7 @@ bool electronicDamage(BASE_OBJECT *psTarget, UDWORD damage, UBYTE attackPlayer)
 						pos.z = psDroid->pos.y + (30-rand()%60);
 						pos.y = psDroid->pos.z + (rand()%8);
 						effectGiveAuxVar(80);
-						addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_FLAMETHROWER,false,NULL,0);
+						addEffect(&pos, EFFECT_EXPLOSION, EXPLOSION_TYPE_FLAMETHROWER, false, NULL, 0, gameTime - deltaGameTime);
 					}
 				}
 
