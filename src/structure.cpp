@@ -170,7 +170,6 @@ static void factoryReward(UBYTE losingPlayer, UBYTE rewardPlayer);
 static void repairFacilityReward(UBYTE losingPlayer, UBYTE rewardPlayer);
 static void findAssemblyPointPosition(UDWORD *pX, UDWORD *pY, UDWORD player);
 static void removeStructFromMap(STRUCTURE *psStruct);
-static void	structUpdateRecoil( STRUCTURE *psStruct );
 static void resetResistanceLag(STRUCTURE *psBuilding);
 static int structureTotalReturn(STRUCTURE *psStruct);
 
@@ -1504,7 +1503,6 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 					}
 					psBuilding->asWeaps[weapon].nStat =	pStructureType->psWeapStat[weapon] - asWeaponStats;
 					psBuilding->asWeaps[weapon].ammo = (asWeaponStats + psBuilding->asWeaps[weapon].nStat)->numRounds;
-					psBuilding->asWeaps[weapon].recoilValue = 0;
 					psBuilding->numWeaps++;
 				}
 			}
@@ -1522,7 +1520,6 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 				}
 				psBuilding->asWeaps[0].nStat =	pStructureType->psWeapStat[0] - asWeaponStats;
 				psBuilding->asWeaps[0].ammo = (asWeaponStats + psBuilding->asWeaps[0].nStat)->numRounds;
-				psBuilding->asWeaps[0].recoilValue = 0;
 			}
 		}
 
@@ -1806,7 +1803,7 @@ STRUCTURE *buildBlueprint(STRUCTURE_STATS const *psStats, int32_t x, int32_t y, 
 	}
 	// things with sensors or ecm (or repair facilities) need these set, even if they have no official weapon
 	blueprint->numWeaps = 0;
-	blueprint->asWeaps[0].recoilValue = 0;
+	blueprint->asWeaps[0].lastFired = 0;
 	blueprint->asWeaps[0].rot.pitch = 0;
 	blueprint->asWeaps[0].rot.direction = 0;
 	blueprint->asWeaps[0].rot.roll = 0;
@@ -2624,8 +2621,6 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 			psStructure->asWeaps[0].rot.pitch = 0;
 		}
 	}
-
-	structUpdateRecoil(psStructure);
 
 	/* See if there is an enemy to attack */
 	if (psStructure->numWeaps > 0)
@@ -7291,47 +7286,6 @@ STRUCTURE * giftSingleStructure(STRUCTURE *psStructure, UBYTE attackPlayer, bool
 	}
 	powerCalculated = bPowerOn;
 	return psNewStruct;
-}
-
-
-/* Code to have the structure's weapon assembly rock back upon firing */
-void	structUpdateRecoil( STRUCTURE *psStruct )
-{
-	UDWORD	percent;
-	UDWORD	recoil;
-
-	/* Check it's actually got a weapon */
-	if(psStruct->asWeaps[0].nStat == 0)
-	{
-		return;
-	}
-
-	/* We have a weapon */
-	if(gameTime > (psStruct->asWeaps[0].lastFired + STR_RECOIL_TIME) )
-	{
-		/* Recoil effect is over */
-		psStruct->asWeaps[0].recoilValue = 0;
-		return;
-	}
-
-	/* Where should the assembly be? */
-	percent = PERCENT((gameTime-psStruct->asWeaps[0].lastFired),STR_RECOIL_TIME);
-
-	/* Outward journey */
-	if(percent >= 50)
-	{
-		recoil = (100 - percent)/5;
-	}
-	/* Return journey */
-	else
-	{
-		recoil = percent/5;
-	}
-
-	recoil = recoil * asWeaponStats[psStruct->asWeaps[0].nStat].recoilValue / 100;
-
-	/* Put it into the weapon data */
-	psStruct->asWeaps[0].recoilValue = recoil;
 }
 
 

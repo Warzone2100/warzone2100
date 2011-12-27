@@ -106,7 +106,6 @@ DROID	*psLastDroidHit;
 void	groupConsoleInformOfSelection( UDWORD groupNumber );
 void	groupConsoleInformOfCreation( UDWORD groupNumber );
 void	groupConsoleInformOfCentering( UDWORD groupNumber );
-void	droidUpdateRecoil( DROID *psDroid );
 
 void cancelBuild(DROID *psDroid)
 {
@@ -885,7 +884,6 @@ void droidUpdate(DROID *psDroid)
 		return;
 	}
 
-	droidUpdateRecoil(psDroid);
 	calcDroidIllumination(psDroid);
 
 	// Check the resistance level of the droid
@@ -1318,75 +1316,22 @@ bool droidUpdateRestore( DROID *psDroid )
 	}
 }
 
-/* Code to have the droid's weapon assembly rock back upon firing */
-void	droidUpdateRecoil( DROID *psDroid )
+// Declared in weapondef.h.
+int getRecoil(WEAPON const &weapon)
 {
-	UDWORD	percent;
-	UDWORD	recoil;
-	//added multiple weapon update
-	UBYTE	i = 0;
-	UBYTE	num_weapons = 0;
-
-	CHECK_DROID(psDroid);
-
-	if (psDroid->numWeaps > 1)
+	if (weapon.nStat != 0)
 	{
-		for(i = 0;i < psDroid->numWeaps;i++)
+		// We have a weapon.
+		if (graphicsTime >= weapon.lastFired && graphicsTime < weapon.lastFired + DEFAULT_RECOIL_TIME)
 		{
-			if (psDroid->asWeaps[i].nStat != 0)
-			{
-				num_weapons += (1 << (i+1));
-			}
+			int recoilTime = graphicsTime - weapon.lastFired;
+			int recoilAmount = DEFAULT_RECOIL_TIME/2 - abs(recoilTime - DEFAULT_RECOIL_TIME/2);
+			int maxRecoil = asWeaponStats[weapon.nStat].recoilValue;  // Max recoil is 1/10 of this value.
+			return maxRecoil * recoilAmount/(DEFAULT_RECOIL_TIME/2 * 10);
 		}
+		// Recoil effect is over.
 	}
-	else
-	{
-		if (psDroid->asWeaps[0].nStat == 0)
-		{
-			return;
-		}
-		num_weapons = 2;
-	}
-
-	for (i = 0; i < psDroid->numWeaps; i++)
-	{
-		if ( (num_weapons & (1 << (i+1))) )
-		{
-			/* Check it's actually got a weapon */
-			if(psDroid->asWeaps[i].nStat == 0)
-			{
-				continue;
-			}
-
-			/* We have a weapon */
-			if(gameTime > (psDroid->asWeaps[i].lastFired + DEFAULT_RECOIL_TIME) )
-			{
-				/* Recoil effect is over */
-				psDroid->asWeaps[i].recoilValue = 0;
-				continue;
-			}
-
-			/* Where should the assembly be? */
-			percent = PERCENT((gameTime-psDroid->asWeaps[i].lastFired),DEFAULT_RECOIL_TIME);
-
-			/* Outward journey */
-			if(percent >= 50)
-			{
-				recoil = (100 - percent)/5;
-			}
-			/* Return journey */
-			else
-			{
-				recoil = percent/5;
-			}
-
-			recoil = recoil * asWeaponStats[psDroid->asWeaps[i].nStat].recoilValue / 100;
-
-			/* Put it into the weapon data */
-			psDroid->asWeaps[i].recoilValue = recoil;
-		}
-	}
-	CHECK_DROID(psDroid);
+	return 0;
 }
 
 
@@ -2113,7 +2058,6 @@ void droidSetBits(DROID_TEMPLATE *pTemplate,DROID *psDroid)
 		// no weapon (could be a construction droid for example)
 		// this is also used to check if a droid has a weapon, so zero it
 		psDroid->asWeaps[inc].nStat = 0;
-		psDroid->asWeaps[inc].recoilValue = 0;
 		psDroid->asWeaps[inc].ammo = 0;
 		psDroid->asWeaps[inc].rot.direction = 0;
 		psDroid->asWeaps[inc].rot.pitch = 0;

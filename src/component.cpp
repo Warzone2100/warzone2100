@@ -715,8 +715,9 @@ static void displayCompObj(DROID *psDroid, bool bButton)
 
 							/* Get the mount graphic */
 							psShape = WEAPON_MOUNT_IMD(psDroid, i);
-							
-							pie_TRANSLATE(0,0,psDroid->asWeaps[i].recoilValue/3);
+
+							int recoilValue = getRecoil(psDroid->asWeaps[i]);
+							pie_TRANSLATE(0, 0, recoilValue / 3);
 
 							/* Draw it */
 							if(psShape)
@@ -724,7 +725,7 @@ static void displayCompObj(DROID *psDroid, bool bButton)
 								pie_Draw3DShape(psShape, 0, colour, brightness, pieFlag, iPieData);
 							}
 							
-							pie_TRANSLATE(0,0,psDroid->asWeaps[i].recoilValue);
+							pie_TRANSLATE(0, 0, recoilValue);
 
 							/* translate for weapon mount point */
 							if (psShape && psShape->nconnectors)

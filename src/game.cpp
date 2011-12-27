@@ -4176,7 +4176,6 @@ static bool loadSaveDroid(const char *pFileName, DROID **ppsCurrentDroidLists)
 			{
 				psDroid->asWeaps[j].ammo = ini.value("ammo/" + QString::number(j)).toInt();
 				psDroid->asWeaps[j].lastFired = ini.value("lastFired/" + QString::number(j)).toInt();
-				psDroid->asWeaps[j].recoilValue = ini.value("recoilValue/" + QString::number(j)).toInt();
 				psDroid->asWeaps[j].shotsFired = ini.value("shotsFired/" + QString::number(j)).toInt();
 				psDroid->asWeaps[j].rot = ini.vector3i("rotation/" + QString::number(j));
 			}
@@ -4299,7 +4298,6 @@ static bool writeDroid(WzConfig &ini, DROID *psCurr, bool onMission)
 		{
 			ini.setValue("ammo/" + QString::number(i), psCurr->asWeaps[i].ammo);
 			ini.setValue("lastFired/" + QString::number(i), psCurr->asWeaps[i].lastFired);
-			ini.setValue("recoilValue/" + QString::number(i), psCurr->asWeaps[i].recoilValue);
 			ini.setValue("shotsFired/" + QString::number(i), psCurr->asWeaps[i].shotsFired);
 			ini.setVector3i("rotation/" + QString::number(i), psCurr->asWeaps[i].rot);
 		}
@@ -4874,7 +4872,6 @@ static bool loadSaveStructure2(const char *pFileName, STRUCTURE **ppList)
 			{
 				psStructure->asWeaps[j].ammo = ini.value("ammo/" + QString::number(j)).toInt();
 				psStructure->asWeaps[j].lastFired = ini.value("lastFired/" + QString::number(j)).toInt();
-				psStructure->asWeaps[j].recoilValue = ini.value("recoilValue/" + QString::number(j)).toInt();
 				psStructure->asWeaps[j].shotsFired = ini.value("shotsFired/" + QString::number(j)).toInt();
 				psStructure->asWeaps[j].rot = ini.vector3i("rotation/" + QString::number(j));
 			}
@@ -4937,7 +4934,6 @@ bool writeStructFile(const char *pFileName)
 				{
 					ini.setValue("ammo/" + QString::number(j), psCurr->asWeaps[j].ammo);
 					ini.setValue("lastFired/" + QString::number(j), psCurr->asWeaps[j].lastFired);
-					ini.setValue("recoilValue/" + QString::number(j), psCurr->asWeaps[j].recoilValue);
 					ini.setValue("shotsFired/" + QString::number(j), psCurr->asWeaps[j].shotsFired);
 					ini.setVector3i("rotation/" + QString::number(j), psCurr->asWeaps[j].rot);
 				}

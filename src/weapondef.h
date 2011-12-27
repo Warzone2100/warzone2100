@@ -30,9 +30,11 @@ struct WEAPON
 	uint32_t        ammo;
 	uint32_t        lastFired;	///< The gametime when this weapon last fired
 	uint32_t        shotsFired;
-	uint32_t        recoilValue;
 	Rotation	rot;
 	Rotation	prevRot;
 };
+
+// Defined in droid.cpp.
+int getRecoil(WEAPON const &weapon);  ///< Returns how much the weapon assembly should currently be rocked back due to firing.
 
 #endif // __INCLUDED_WEAPONDEF_H__

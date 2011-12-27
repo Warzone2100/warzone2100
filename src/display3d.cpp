@@ -2264,11 +2264,12 @@ void	renderStructure(STRUCTURE *psStructure)
 				flashImd[0] = NULL;
 			}
 			// check for sensor (or repair center)
+			bool noRecoil = false;
 			if (weaponImd[0] == NULL && psStructure->pStructureType->pSensor != NULL)
 			{
 				weaponImd[0] =  psStructure->pStructureType->pSensor->pIMD;
 				/* No recoil for sensors */
-				psStructure->asWeaps[0].recoilValue = 0;
+				noRecoil = true;
 				mountImd[0]  =  psStructure->pStructureType->pSensor->pMountGraphic;
 				flashImd[0] = NULL;
 			}
@@ -2295,9 +2296,10 @@ void	renderStructure(STRUCTURE *psStructure)
 					pie_MatBegin();
 					pie_TRANSLATE(strImd->connectors[i].x, strImd->connectors[i].z, strImd->connectors[i].y);
 					pie_MatRotY(-rot.direction);
+					int recoilValue = noRecoil? 0 : getRecoil(psStructure->asWeaps[i]);
 					if (mountImd[i] != NULL)
 					{
-						pie_TRANSLATE(0, 0, psStructure->asWeaps[i].recoilValue / 3);
+						pie_TRANSLATE(0, 0, recoilValue / 3);
 
 						pie_Draw3DShape(mountImd[i], animFrame, colour, buildingBrightness, pieFlag, pieFlagData);
 						if(mountImd[i]->nconnectors)
@@ -2306,7 +2308,7 @@ void	renderStructure(STRUCTURE *psStructure)
 						}
 					}
 					pie_MatRotX(rot.pitch);
-					pie_TRANSLATE(0, 0, psStructure->asWeaps[i].recoilValue);
+					pie_TRANSLATE(0, 0, recoilValue);
 
 					pie_Draw3DShape(weaponImd[i], 0, colour, buildingBrightness, pieFlag, pieFlagData);
 					if (psStructure->status == SS_BUILT && psStructure->visible[selectedPlayer] > (UBYTE_MAX / 2))
