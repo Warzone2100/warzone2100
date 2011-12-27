@@ -2566,6 +2566,9 @@ static const Rational available_speed[] = {
 // p = pumpkin allowed, n = new entries allowed in debug mode only.
 // Since some of these values can ruin a SP game, we disallow them in normal mode.
 	Rational(0),     // n
+	Rational(1, 1000),// n
+	Rational(1, 100),// n
+	Rational(1, 40), // n
 	Rational(1, 8),  // n
 	Rational(1, 5),  // n
 	Rational(1, 3),  // p
