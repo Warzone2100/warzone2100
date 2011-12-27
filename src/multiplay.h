@@ -172,7 +172,7 @@ extern bool	multiPlayerLoop		(void);							// for loop.c
 
 extern bool recvMessage			(void);
 bool sendTemplate(uint32_t player, DROID_TEMPLATE *t);
-extern bool SendDestroyTemplate (DROID_TEMPLATE *t);
+extern bool SendDestroyTemplate(DROID_TEMPLATE *t, uint8_t player);
 extern bool SendResearch(uint8_t player, uint32_t index, bool trigger);
 extern bool SendDestroyFeature  (FEATURE *pF);					// send a destruct feature message.
 extern bool sendTextMessage		(const char *pStr,bool cast);		// send a text message

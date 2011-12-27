@@ -53,6 +53,8 @@ extern bool structDoubleCheck(BASE_STATS *psStat,UDWORD xx,UDWORD yy, SDWORD max
 extern Vector2i positions[MAX_PLAYERS];
 extern std::vector<Vector2i> derricks;
 
+extern std::list<DROID_TEMPLATE> localTemplates;       ///< Unsychnronised list, for UI use only.
+
 // ----------------------------------------------------------------------------------------
 // Utility functions -- not called directly from scripts
 
@@ -74,6 +76,7 @@ QScriptValue convResearch(RESEARCH *psResearch, QScriptEngine *engine, int playe
 		}
 	}
 	value.setProperty("started", started); // including whether an ally has started it
+	value.setProperty("done", IsResearchCompleted(&asPlayerResList[player][psResearch->index]));
 	value.setProperty("name", psResearch->pName);
 	return value;
 }
@@ -458,13 +461,16 @@ static QScriptValue js_getTemplate(QScriptContext *context, QScriptEngine *engin
 	DROID_TEMPLATE *psCurr;
 	for (psCurr = apsDroidTemplates[player]; psCurr != NULL; psCurr = psCurr->psNext)
 	{
-		if (templName.compare(psCurr->pName, Qt::CaseSensitive) == 0)
+		if (templName.compare(psCurr->aName, Qt::CaseSensitive) == 0)
 		{
 			break;
 		}
 	}
-	SCRIPT_ASSERT(context, psCurr, "No such template: %s", templName.toUtf8().constData());
-	return convTemplate(psCurr, engine);
+	if (psCurr)
+	{
+		return convTemplate(psCurr, engine);
+	}
+	return QScriptValue();
 }
 
 // newTemplate(name, body, propulsion, reserved, turrets...)
@@ -484,6 +490,7 @@ static QScriptValue js_newTemplate(QScriptContext *context, QScriptEngine *engin
 
 	// Turret gets complicated because we want to hide the hideous broken complexity of the template
 	// system from script writers
+	psTemplate->numWeaps = 0;
 	for (int i = 0; i < numTurrets; i++)
 	{
 		QString tName = context->argument(4 + i).toString();
@@ -491,6 +498,7 @@ static QScriptValue js_newTemplate(QScriptContext *context, QScriptEngine *engin
 		if ((j = getCompFromName(COMP_WEAPON, tName.toUtf8().constData())) >= 0)
 		{
 			psTemplate->asWeaps[i] = j; // It is a weapon
+			psTemplate->numWeaps++;
 		}
 		else if ((j = getCompFromName(COMP_CONSTRUCT, tName.toUtf8().constData())) >= 0)
 		{
@@ -518,20 +526,33 @@ static QScriptValue js_newTemplate(QScriptContext *context, QScriptEngine *engin
 			psTemplate->asParts[COMP_SENSOR] = j; // It is a sensor droid
 		}
 	}
-	psTemplate->numWeaps = numTurrets; // I think... TODO check
 	bool valid = intValidTemplate(psTemplate, templName.toUtf8().constData());
 	if (valid)
 	{
+		// Delete similar template from existing list before adding this one
+		for (int j = 0; j < apsTemplateList.size(); j++)
+		{
+			DROID_TEMPLATE *t = apsTemplateList[j];
+			if (strcmp(t->aName, psTemplate->aName) == 0)
+			{
+				debug(LOG_SCRIPT, "deleting %s for player %d", t->aName, player);
+				deleteTemplateFromProduction(t, player, ModeQueue); // duplicate? done below?
+				SendDestroyTemplate(t, player);
+				break;
+			}
+		}
 		// Add to list
+		debug(LOG_SCRIPT, "adding template %s for player %d", psTemplate->aName, player);
 		psTemplate->multiPlayerID = generateNewObjectId();
 		psTemplate->psNext = apsDroidTemplates[player];
 		apsDroidTemplates[player] = psTemplate;
-		if (bMultiMessages)
-		{
-			sendTemplate(player, psTemplate);
-		}
+		//if (player == selectedPlayer) { localTemplates.push_front(*psTemplate); }
+		sendTemplate(player, psTemplate);
 	}
-	delete psTemplate;
+	else
+	{
+		debug(LOG_ERROR, "Invalid template %s", templName.toUtf8().constData());
+	}
 	return QScriptValue(valid);
 }
 
@@ -802,7 +823,18 @@ static QScriptValue js_buildDroid(QScriptContext *context, QScriptEngine *)
 	QScriptValue templName = context->argument(0);
 	DROID_TEMPLATE *psTemplate = getTemplateFromTranslatedNameNoPlayer(templName.toString().toUtf8().constData());
 	STRUCTURE *psStruct = IdToStruct(id, player);
-
+	if (!psTemplate)
+	{
+		// Not a static template, check for dynamic one
+		for (DROID_TEMPLATE *t = apsDroidTemplates[player]; t; t = t->psNext)
+		{
+			if (strcmp(templName.toString().toUtf8().constData(), t->aName) == 0)
+			{
+				psTemplate = t;
+				break;
+			}
+		}
+	}
 	SCRIPT_ASSERT(context, psStruct != NULL, "No factory object found for id %d, player %d", id, player);
 	SCRIPT_ASSERT(context, psTemplate != NULL, "No template object found for %s sent to %s", templName.toString().toUtf8().constData(), objInfo(psStruct));
 	SCRIPT_ASSERT(context, (psStruct->pStructureType->type == REF_FACTORY || psStruct->pStructureType->type == REF_CYBORG_FACTORY

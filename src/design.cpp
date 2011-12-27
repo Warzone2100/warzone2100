@@ -3987,7 +3987,7 @@ void intProcessDesign(UDWORD id)
 			/* remove template if found */
 			if (psTempl != NULL)
 			{
-				SendDestroyTemplate(psTempl);
+				SendDestroyTemplate(psTempl, selectedPlayer);
 
 				//update player template list.
 				for (std::list<DROID_TEMPLATE>::iterator i = localTemplates.begin(); i != localTemplates.end(); ++i)
@@ -4488,7 +4488,7 @@ static bool saveTemplate(void)
 
 		// ANY change to the template affect the production - even if the template is changed and then changed back again!
 		deleteTemplateFromProduction(psTempl, selectedPlayer, ModeQueue);
-		SendDestroyTemplate(psTempl);
+		SendDestroyTemplate(psTempl, selectedPlayer);
 	}
 
 	/* Copy the template */

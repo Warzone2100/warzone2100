@@ -1414,10 +1414,8 @@ bool recvTemplate(NETQUEUE queue)
 // ////////////////////////////////////////////////////////////////////////////
 // inform others that you no longer have a template
 
-bool SendDestroyTemplate(DROID_TEMPLATE *t)
+bool SendDestroyTemplate(DROID_TEMPLATE *t, uint8_t player)
 {
-	uint8_t player = selectedPlayer;
-
 	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_TEMPLATEDEST);
 		NETuint8_t(&player);
 		NETuint32_t(&t->multiPlayerID);
