@@ -418,6 +418,7 @@ bool droidTemplateShutDown(void)
  * This checks the all the Human's apsDroidTemplates list.
  * This function is similar to getTemplateFromUniqueName() but we use aName,
  * and not pName, since we don't have that information, and we are checking all player's list.
+ * THIS FUNCTION WILL GO AWAY! Only used (badly) in "clone" cheat currently.
  * \param aName Template aName
  *
  */

@@ -32,6 +32,7 @@
 #include <QtCore/QStringList>
 
 #include "console.h"
+#include "design.h"
 #include "map.h"
 #include "mission.h"
 #include "group.h"
@@ -126,6 +127,31 @@ QScriptValue convObj(BASE_OBJECT *psObj, QScriptEngine *engine)
 	value.setProperty("player", psObj->player, QScriptValue::ReadOnly);
 	value.setProperty("selected", psObj->selected, QScriptValue::ReadOnly);
 	value.setProperty("name", objInfo(psObj));
+	return value;
+}
+
+QScriptValue convTemplate(DROID_TEMPLATE *psTempl, QScriptEngine *engine)
+{
+	QScriptValue value = engine->newObject();
+	ASSERT_OR_RETURN(value, psTempl, "No object for conversion");
+	value.setProperty("id", psTempl->multiPlayerID, QScriptValue::ReadOnly);
+	value.setProperty("name", psTempl->pName, QScriptValue::ReadOnly);
+	value.setProperty("points", psTempl->buildPoints, QScriptValue::ReadOnly);
+	value.setProperty("power", psTempl->powerPoints, QScriptValue::ReadOnly);
+	value.setProperty("droidType", psTempl->droidType, QScriptValue::ReadOnly);
+	value.setProperty("body", (asBodyStats + psTempl->asParts[COMP_BODY])->pName, QScriptValue::ReadOnly);
+	value.setProperty("propulsion", (asPropulsionStats + psTempl->asParts[COMP_PROPULSION])->pName, QScriptValue::ReadOnly);
+	value.setProperty("brain", (asBrainStats + psTempl->asParts[COMP_BRAIN])->pName, QScriptValue::ReadOnly);
+	value.setProperty("repair", (asRepairStats + psTempl->asParts[COMP_REPAIRUNIT])->pName, QScriptValue::ReadOnly);
+	value.setProperty("ecm", (asECMStats + psTempl->asParts[COMP_ECM])->pName, QScriptValue::ReadOnly);
+	value.setProperty("sensor", (asSensorStats + psTempl->asParts[COMP_SENSOR])->pName, QScriptValue::ReadOnly);
+	value.setProperty("construct", (asConstructStats + psTempl->asParts[COMP_CONSTRUCT])->pName, QScriptValue::ReadOnly);
+	QScriptValue weaponlist = engine->newArray(psTempl->numWeaps);
+	for (int j = 0; j < psTempl->numWeaps; j++)
+	{
+		weaponlist.setProperty(j, QScriptValue((asWeaponStats + psTempl->asWeaps[j])->pName), QScriptValue::ReadOnly);
+	}
+	value.setProperty("weapons", weaponlist);
 	return value;
 }
 
@@ -412,7 +438,102 @@ static QScriptValue js_enumResearch(QScriptContext *context, QScriptEngine *engi
 		result.setProperty(i, convResearch(reslist[i], engine, player));
 	}
 	return result;
-}	
+}
+
+static QScriptValue js_componentAvailable(QScriptContext *context, QScriptEngine *engine)
+{
+	int player = engine->globalObject().property("me").toInt32();
+	COMPONENT_TYPE comp = (COMPONENT_TYPE)context->argument(0).toInt32();
+	QString compName = context->argument(1).toString();
+	int result = getCompFromName(comp, compName.toUtf8().constData());
+	SCRIPT_ASSERT(context, result >= 0, "No such component: %s", compName.toUtf8().constData());
+	bool avail = apCompLists[player][comp][result] == AVAILABLE;
+	return QScriptValue(avail);
+}
+
+static QScriptValue js_getTemplate(QScriptContext *context, QScriptEngine *engine)
+{
+	int player = engine->globalObject().property("me").toInt32();
+	QString templName = context->argument(0).toString();
+	DROID_TEMPLATE *psCurr;
+	for (psCurr = apsDroidTemplates[player]; psCurr != NULL; psCurr = psCurr->psNext)
+	{
+		if (templName.compare(psCurr->pName, Qt::CaseSensitive) == 0)
+		{
+			break;
+		}
+	}
+	SCRIPT_ASSERT(context, psCurr, "No such template: %s", templName.toUtf8().constData());
+	return convTemplate(psCurr, engine);
+}
+
+// newTemplate(name, body, propulsion, reserved, turrets...)
+static QScriptValue js_newTemplate(QScriptContext *context, QScriptEngine *engine)
+{
+	int player = engine->globalObject().property("me").toInt32();
+	QString templName = context->argument(0).toString();
+	QString bodyName = context->argument(1).toString();
+	QString propName = context->argument(2).toString();
+	// QString otherName = context->argument(3).toString(); // reserved for future use
+	DROID_TEMPLATE *psTemplate = new DROID_TEMPLATE;
+	int numTurrets = context->argumentCount() - 4; // anything beyond first four components, are turrets
+
+	memset(psTemplate->asParts, 0, sizeof(psTemplate->asParts)); // reset to defaults
+	psTemplate->asParts[COMP_BODY] = getCompFromName(COMP_BODY, bodyName.toUtf8().constData());
+	psTemplate->asParts[COMP_PROPULSION] = getCompFromName(COMP_PROPULSION, propName.toUtf8().constData());
+
+	// Turret gets complicated because we want to hide the hideous broken complexity of the template
+	// system from script writers
+	for (int i = 0; i < numTurrets; i++)
+	{
+		QString tName = context->argument(4 + i).toString();
+		int j;
+		if ((j = getCompFromName(COMP_WEAPON, tName.toUtf8().constData())) >= 0)
+		{
+			psTemplate->asWeaps[i] = j; // It is a weapon
+		}
+		else if ((j = getCompFromName(COMP_CONSTRUCT, tName.toUtf8().constData())) >= 0)
+		{
+
+			psTemplate->asParts[COMP_CONSTRUCT] = j; // It is a construction turret
+		}
+		else if ((j = getCompFromName(COMP_BRAIN, tName.toUtf8().constData())) >= 0)
+		{
+
+			psTemplate->asParts[COMP_BRAIN] = j; // It is a commander
+		}
+		else if ((j = getCompFromName(COMP_REPAIRUNIT, tName.toUtf8().constData())) >= 0)
+		{
+
+			psTemplate->asParts[COMP_REPAIRUNIT] = j; // It is a repair droid
+		}
+		else if ((j = getCompFromName(COMP_ECM, tName.toUtf8().constData())) >= 0)
+		{
+
+			psTemplate->asParts[COMP_ECM] = j; // It is an ECM droid
+		}
+		else if ((j = getCompFromName(COMP_SENSOR, tName.toUtf8().constData())) >= 0)
+		{
+
+			psTemplate->asParts[COMP_SENSOR] = j; // It is a sensor droid
+		}
+	}
+	psTemplate->numWeaps = numTurrets; // I think... TODO check
+	bool valid = intValidTemplate(psTemplate, templName.toUtf8().constData());
+	if (valid)
+	{
+		// Add to list
+		psTemplate->multiPlayerID = generateNewObjectId();
+		psTemplate->psNext = apsDroidTemplates[player];
+		apsDroidTemplates[player] = psTemplate;
+		if (bMultiMessages)
+		{
+			sendTemplate(player, psTemplate);
+		}
+	}
+	delete psTemplate;
+	return QScriptValue(valid);
+}
 
 static QScriptValue js_enumStruct(QScriptContext *context, QScriptEngine *engine)
 {
@@ -1188,6 +1309,9 @@ bool registerFunctions(QScriptEngine *engine)
 	engine->globalObject().setProperty("droidCanReach", engine->newFunction(js_droidCanReach));
 	engine->globalObject().setProperty("orderDroidStatsLoc", engine->newFunction(js_orderDroidStatsLoc));
 	engine->globalObject().setProperty("orderDroidObj", engine->newFunction(js_orderDroidObj));
+	engine->globalObject().setProperty("getTemplate", engine->newFunction(js_getTemplate));
+	engine->globalObject().setProperty("newTemplate", engine->newFunction(js_newTemplate));
+	engine->globalObject().setProperty("componentAvailable", engine->newFunction(js_componentAvailable));
 
 	// Functions that operate on the current player only
 	engine->globalObject().setProperty("centreView", engine->newFunction(js_centreView));
