@@ -143,10 +143,19 @@ function eventResearched(labparam)
 				}
 				else
 				{
-					pursueResearch(lab, reslist[0].name); // doing first for now, TODO use random
+					var idx = Math.floor(Math.random() * reslist.length);
+					pursueResearch(lab, reslist[idx].name);
 				}
 			}
 		}
+	}
+	if (!newTemplate("Constructor", "Body1REC", "wheeled01", "", "Spade1Mk1"))
+	{
+		debug("Failed to design truck");
+	}
+	if (!newTemplate("Viper", "Body1REC", "wheeled01", "", "MG1Mk1"))
+	{
+		debug("Failed to design viper");
 	}
 }
 
@@ -170,11 +179,21 @@ function buildFundamentals()
 
 // --- game events
 
+function eventDroidBuilt(droid, struct)
+{
+	var templ = getTemplate("Viper");
+	if (templ && structureIdle(struct))
+	{
+		debug("building Viper");
+		buildDroid("Viper", struct);
+	}
+}
+
 function eventGameInit()
 {
 }
 
-function eventStructureAttacked(hitStruct, attackerObj)
+function eventStructureAttacked(struct, attacker)
 {
 }
 
