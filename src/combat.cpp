@@ -72,10 +72,13 @@ bool combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 		return false;
 	}
 
+	unsigned fireTime = gameTime - deltaGameTime;  // Can fire earliest at the start of the tick.
+
 	/*see if reload-able weapon and out of ammo*/
 	if (psStats->reloadTime && !psWeap->ammo)
 	{
-		if (gameTime - psWeap->lastFired < weaponReloadTime(psStats, psAttacker->player))
+		fireTime = std::max(fireTime, psWeap->lastFired + weaponReloadTime(psStats, psAttacker->player));
+		if (gameTime <= fireTime)
 		{
 			return false;
 		}
@@ -85,19 +88,12 @@ bool combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 
 	/* See when the weapon last fired to control it's rate of fire */
 	firePause = weaponFirePause(psStats, psAttacker->player);
+	firePause = std::max(firePause, 1u);  // Don't shoot infinitely many shots at once.
+	fireTime = std::max(fireTime, psWeap->lastFired + firePause);
 
-	if (gameTime - psWeap->lastFired <= firePause)
+	if (gameTime <= fireTime)
 	{
 		/* Too soon to fire again */
-		return false;
-	}
-
-	// add a random delay to the fire
-	// With logical updates, a good graphics gard no longer gives a better ROF.
-	// TODO Should still replace this with something saner, such as a ±1% random deviation in reload time.
-	int fireChance = gameTime - (psWeap->lastFired + firePause);
-	if (gameRand(RANDOM_PAUSE) > fireChance)
-	{
 		return false;
 	}
 
@@ -254,8 +250,13 @@ bool combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 
 	/* -------!!! From that point we are sure that we are firing !!!------- */
 
+	// Add a random delay to the next shot.
+	// TODO Add deltaFireTime to the time it takes to fire next. If just adding to psWeap->lastFired, it might put it in the future, causing assertions. And if not sometimes putting it in the future, the fire rate would be lower than advertised.
+	//int fireJitter = firePause/100;  // ±1% variation in fire rate.
+	//int deltaFireTime = gameRand(fireJitter*2 + 1) - fireJitter;
+
 	/* note when the weapon fired */
-	psWeap->lastFired = gameTime;
+	psWeap->lastFired = fireTime;
 
 	/* reduce ammo if salvo */
 	if (psStats->reloadTime)
@@ -336,7 +337,7 @@ bool combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 	CLIP(predict.x, 0, world_coord(mapWidth - 1));
 	CLIP(predict.y, 0, world_coord(mapHeight - 1));
 
-	proj_SendProjectileAngled(psWeap, psAttacker, psAttacker->player, predict, psTarget, bVisibleAnyway, weapon_slot, min_angle);
+	proj_SendProjectileAngled(psWeap, psAttacker, psAttacker->player, predict, psTarget, bVisibleAnyway, weapon_slot, min_angle, fireTime);
 	return true;
 }
 

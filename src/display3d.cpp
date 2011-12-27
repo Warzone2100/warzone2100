@@ -2103,7 +2103,7 @@ void	renderStructure(STRUCTURE *psStructure)
 		dv.y = psStructure->pos.z;
 		pie_MatBegin();
 		pie_TRANSLATE(dv.x,dv.y,dv.z);
-		int frame = gameTime / BLIP_ANIM_DURATION + psStructure->id % 8192; // de-sync the blip effect, but don't overflow the int
+		int frame = graphicsTime / BLIP_ANIM_DURATION + psStructure->id % 8192;  // de-sync the blip effect, but don't overflow the int
 		pie_Draw3DShape(getImdFromIndex(MI_BLIP), frame, 0, WZCOL_WHITE, pie_ADDITIVE, psStructure->visible[selectedPlayer] / 2);
 		pie_MatEnd();
 		return;
@@ -2162,7 +2162,7 @@ void	renderStructure(STRUCTURE *psStructure)
 	rotation = psStructure->rot.direction;
 	pie_MatRotY(-rotation);
 	if (!defensive
-	    && gameTime2-psStructure->timeLastHit < ELEC_DAMAGE_DURATION
+	    && graphicsTime - psStructure->timeLastHit < ELEC_DAMAGE_DURATION
 	    && psStructure->lastHitWeapon == WSC_ELECTRONIC )
 	{
 		bHitByElectronic = true;
@@ -2362,7 +2362,7 @@ void	renderStructure(STRUCTURE *psStructure)
 							if (flashImd[i]->numFrames == 0 || flashImd[i]->animInterval <= 0)
 							{
 								// no anim so display one frame for a fixed time
-								if (graphicsTime < (psStructure->asWeaps[i].lastFired + BASE_MUZZLE_FLASH_DURATION))
+								if (graphicsTime >= psStructure->asWeaps[i].lastFired && graphicsTime < psStructure->asWeaps[i].lastFired + BASE_MUZZLE_FLASH_DURATION)
 								{
 									pie_Draw3DShape(flashImd[i], 0, colour, buildingBrightness, pieFlag | pie_ADDITIVE, EFFECT_MUZZLE_ADDITIVE);
 								}
@@ -2416,7 +2416,7 @@ void	renderStructure(STRUCTURE *psStructure)
 								if (flashImd[i]->numFrames == 0 || flashImd[i]->animInterval <= 0)
 								{
 									// no anim so display one frame for a fixed time
-									if (graphicsTime < psStructure->asWeaps[i].lastFired + BASE_MUZZLE_FLASH_DURATION)
+									if (graphicsTime >= psStructure->asWeaps[i].lastFired && graphicsTime < psStructure->asWeaps[i].lastFired + BASE_MUZZLE_FLASH_DURATION)
 									{
 										pie_Draw3DShape(flashImd[i], 0, colour, buildingBrightness, 0, 0); //muzzle flash
 									}

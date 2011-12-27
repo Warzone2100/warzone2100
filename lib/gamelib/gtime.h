@@ -166,6 +166,13 @@ static inline WZ_DECL_CONST int quantiseFraction(int numerator, int denominator,
 	int64_t oldValue = (int64_t)oldTime * numerator/denominator;
 	return newValue - oldValue;
 }
+/// Returns numerator/denominator * (newTime - oldTime). Rounds up or down such that the average return value is right, if oldTime is always the previous newTime.
+static inline WZ_DECL_CONST Vector3i quantiseFraction(Vector3i numerator, int denominator, int newTime, int oldTime)
+{
+	return Vector3i(quantiseFraction(numerator.x, denominator, newTime, oldTime),
+	                quantiseFraction(numerator.y, denominator, newTime, oldTime),
+	                quantiseFraction(numerator.z, denominator, newTime, oldTime));
+}
 /// Returns the value times deltaGameTime, converted to seconds. The return value is rounded up or down, such that it is exactly right on average.
 static inline int32_t gameTimeAdjustedAverage(int value)
 {
@@ -179,9 +186,7 @@ static inline int32_t gameTimeAdjustedAverage(int numerator, int denominator)
 /// Returns the numerator/denominator times deltaGameTime, converted to seconds. The return value is rounded up or down, such that it is exactly right on average.
 static inline Vector3i gameTimeAdjustedAverage(Vector3i numerator, int denominator)
 {
-	return Vector3i(quantiseFraction(numerator.x, GAME_TICKS_PER_SEC*denominator, gameTime + deltaGameTime, gameTime),
-	                quantiseFraction(numerator.y, GAME_TICKS_PER_SEC*denominator, gameTime + deltaGameTime, gameTime),
-	                quantiseFraction(numerator.z, GAME_TICKS_PER_SEC*denominator, gameTime + deltaGameTime, gameTime));
+	return quantiseFraction(numerator, GAME_TICKS_PER_SEC*denominator, gameTime + deltaGameTime, gameTime);
 }
 
 void sendPlayerGameTime(void);                            ///< Sends a GAME_GAME_TIME message with gameTime plus latency to our game queues.

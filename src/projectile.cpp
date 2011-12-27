@@ -383,10 +383,10 @@ int32_t projCalcIndirectVelocities(const int32_t dx, const int32_t dz, int32_t v
 
 bool proj_SendProjectile(WEAPON *psWeap, SIMPLE_OBJECT *psAttacker, int player, Vector3i target, BASE_OBJECT *psTarget, bool bVisible, int weapon_slot)
 {
-	return proj_SendProjectileAngled(psWeap, psAttacker, player, target, psTarget, bVisible, weapon_slot, 0);
+	return proj_SendProjectileAngled(psWeap, psAttacker, player, target, psTarget, bVisible, weapon_slot, 0, gameTime - 1);
 }
 
-bool proj_SendProjectileAngled(WEAPON *psWeap, SIMPLE_OBJECT *psAttacker, int player, Vector3i target, BASE_OBJECT *psTarget, bool bVisible, int weapon_slot, int min_angle)
+bool proj_SendProjectileAngled(WEAPON *psWeap, SIMPLE_OBJECT *psAttacker, int player, Vector3i target, BASE_OBJECT *psTarget, bool bVisible, int weapon_slot, int min_angle, unsigned fireTime)
 {
 	WEAPON_STATS *psStats = &asWeaponStats[psWeap->nStat];
 
@@ -454,9 +454,9 @@ bool proj_SendProjectileAngled(WEAPON *psWeap, SIMPLE_OBJECT *psAttacker, int pl
 	}
 	else
 	{
-		psProj->born = gameTime;
+		psProj->born = fireTime;  // Born at the start of the tick.
 
-		psProj->prevSpacetime.time = gameTime - deltaGameTime;  // Haven't ticked yet.
+		psProj->prevSpacetime.time = fireTime;
 		psProj->time = psProj->prevSpacetime.time;
 
 		setProjectileSource(psProj, psAttacker);
@@ -670,6 +670,7 @@ static void proj_InFlightFunc(PROJECTILE *psProj, bool bIndirect)
 	int timeSoFar = gameTime - psProj->born;
 
 	psProj->time = gameTime;
+	int deltaProjectileTime = psProj->time - psProj->prevSpacetime.time;
 
 	WEAPON_STATS *psStats = psProj->psWStats;
 	ASSERT_OR_RETURN( , psStats != NULL, "Invalid weapon stats pointer");
@@ -779,7 +780,7 @@ static void proj_InFlightFunc(PROJECTILE *psProj, bool bIndirect)
 				if (psStats->movementModel == MM_HOMINGINDIRECT)
 				{
 					int horizontalTargetDistance = iHypot(removeZ(psProj->dst - psProj->pos));
-					int terrainHeight = std::max(map_Height(removeZ(psProj->pos)), map_Height(removeZ(psProj->pos) + iSinCosR(iAtan2(removeZ(psProj->dst - psProj->pos)), psStats->flightSpeed*2/GAME_UPDATES_PER_SEC)));
+					int terrainHeight = std::max(map_Height(removeZ(psProj->pos)), map_Height(removeZ(psProj->pos) + iSinCosR(iAtan2(removeZ(psProj->dst - psProj->pos)), psStats->flightSpeed*2*deltaProjectileTime/GAME_TICKS_PER_SEC)));
 					int desiredMinHeight = terrainHeight + std::min(horizontalTargetDistance/4, HOMINGINDIRECT_HEIGHT_MIN);
 					int desiredMaxHeight = std::max(psProj->dst.z, terrainHeight + HOMINGINDIRECT_HEIGHT_MAX);
 					int heightError = psProj->pos.z - clip(psProj->pos.z, desiredMinHeight, desiredMaxHeight);
@@ -793,7 +794,7 @@ static void proj_InFlightFunc(PROJECTILE *psProj, bool bIndirect)
 				psProj->dst = psProj->pos + delta*10;  // Target missing, so just keep going in a straight line.
 			}
 			currentDistance = timeSoFar * psStats->flightSpeed / GAME_TICKS_PER_SEC;
-			Vector3i step = gameTimeAdjustedAverage(delta * psStats->flightSpeed, targetDistance);
+			Vector3i step = quantiseFraction(delta * psStats->flightSpeed, GAME_TICKS_PER_SEC*targetDistance, psProj->time, psProj->prevSpacetime.time);
 			psProj->pos += step;
 			psProj->rot.direction = iAtan2(removeZ(delta));
 			psProj->rot.pitch = iAtan2(delta.z, targetDistance);

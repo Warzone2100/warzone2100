@@ -510,7 +510,7 @@ static void displayCompObj(DROID *psDroid, bool bButton)
 	UDWORD				colour;
 	UBYTE	i;
 
-	if( (gameTime-psDroid->timeLastHit < GAME_TICKS_PER_SEC/4 ) && psDroid->lastHitWeapon == WSC_ELECTRONIC && !gamePaused())
+	if (graphicsTime - psDroid->timeLastHit < GAME_TICKS_PER_SEC/4 && psDroid->lastHitWeapon == WSC_ELECTRONIC && !gamePaused())
 	{
 		colour = getPlayerColour(rand()%MAX_PLAYERS);
 	}
@@ -777,7 +777,7 @@ static void displayCompObj(DROID *psDroid, bool bButton)
 										if ((psShape->numFrames == 0) || (psShape->animInterval <= 0))										
 										{
 											//no anim so display one frame for a fixed time
-											if (gameTime < (psDroid->asWeaps[i].lastFired + BASE_MUZZLE_FLASH_DURATION))
+											if (graphicsTime >= psDroid->asWeaps[i].lastFired && graphicsTime < psDroid->asWeaps[i].lastFired + BASE_MUZZLE_FLASH_DURATION)
 											{
 												pie_Draw3DShape(psShape, 0, 0, brightness, pieFlag | pie_ADDITIVE, EFFECT_MUZZLE_ADDITIVE);
 											}
@@ -785,7 +785,7 @@ static void displayCompObj(DROID *psDroid, bool bButton)
 										else
 										{
 											// animated muzzle
-											frame = (gameTime - psDroid->asWeaps[i].lastFired) / psShape->animInterval;
+											frame = (graphicsTime - psDroid->asWeaps[i].lastFired) / psShape->animInterval;
 											if (frame < psShape->numFrames)
 											{
 												pie_Draw3DShape(psShape, frame, 0, brightness, pieFlag | pie_ADDITIVE, EFFECT_MUZZLE_ADDITIVE);
@@ -1019,13 +1019,12 @@ void displayComponentObject(DROID *psDroid)
 	pie_MatRotX(rotation.x);
 	pie_MatRotZ(rotation.z);
 
-	if( (gameTime-psDroid->timeLastHit < GAME_TICKS_PER_SEC) && psDroid->lastHitWeapon == WSC_ELECTRONIC)
+	if (graphicsTime - psDroid->timeLastHit < GAME_TICKS_PER_SEC && psDroid->lastHitWeapon == WSC_ELECTRONIC)
 	{
 		objectShimmy( (BASE_OBJECT*) psDroid );
 	}
 
-	if (psDroid->lastHitWeapon == WSC_EMP &&
-	    (gameTime - psDroid->timeLastHit < EMP_DISABLE_TIME))
+	if (psDroid->lastHitWeapon == WSC_EMP && graphicsTime - psDroid->timeLastHit < EMP_DISABLE_TIME)
 	{
 		Vector3i position;
 
@@ -1045,7 +1044,7 @@ void displayComponentObject(DROID *psDroid)
 	}
 	else
 	{
-		int frame = gameTime/BLIP_ANIM_DURATION + psDroid->id % 8192; // de-sync the blip effect, but don't overflow the int
+		int frame = graphicsTime/BLIP_ANIM_DURATION + psDroid->id % 8192; // de-sync the blip effect, but don't overflow the int
 		pie_Draw3DShape(getImdFromIndex(MI_BLIP), frame, 0, WZCOL_WHITE, pie_ADDITIVE, psDroid->visible[selectedPlayer] / 2);
 	}
 	pie_MatEnd();
