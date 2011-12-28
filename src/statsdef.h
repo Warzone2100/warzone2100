@@ -229,6 +229,17 @@ enum BODY_SIZE
 };
 
 /**
+ * SIZE used for specifying weapon size
+ */
+enum WEAPON_SIZE
+{
+	WEAPON_SIZE_LIGHT,
+	WEAPON_SIZE_HEAVY,
+	WEAPON_SIZE_ANY,
+	WEAPON_SIZE_NUM
+};
+
+/**
  * only using KINETIC and HEAT for now
  */
 enum WEAPON_CLASS
@@ -431,10 +442,11 @@ struct WEAPON_STATS : public COMPONENT_STATS
 	UDWORD			flightSpeed;			///< speed ammo travels at
 	FIREONMOVE		fireOnMove;				///< indicates whether the droid has to stop before firing
 	WEAPON_CLASS	weaponClass;			///< the class of weapon
-	WEAPON_SUBCLASS weaponSubClass;			///< the subclass to which the weapon	belongs
+	WEAPON_SUBCLASS weaponSubClass;			///< the subclass to which the weapon belongs
 	MOVEMENT_MODEL	movementModel;			///< which projectile model to use for the bullet
-	WEAPON_EFFECT	weaponEffect;			///< which type of warhead is associated with the	weapon
-	UDWORD			recoilValue;			///< used to compare with	weight to see if recoils or not
+	WEAPON_EFFECT	weaponEffect;			///< which type of warhead is associated with the weapon
+	WEAPON_SIZE		weaponSize;		///< eg light weapons can be put on light bodies or as sidearms
+	UDWORD			recoilValue;			///< used to compare with weight to see if recoils or not
 	UBYTE			rotate;					///< amount the weapon(turret) can rotate 0	= none
 	UBYTE			maxElevation;			///< max amount the	turret can be elevated up
 	SBYTE			minElevation;			///< min amount the	turret can be elevated down

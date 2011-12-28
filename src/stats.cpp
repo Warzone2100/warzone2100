@@ -604,6 +604,7 @@ bool loadWeaponStats(const char *pWeaponData, UDWORD bufferSize)
 
 	for (i=0; i < NumWeapons; i++)
 	{
+		int weaponsize = 0;
 		memset(psStats, 0, sizeof(WEAPON_STATS));
 
 		WeaponName[0] = '\0';
@@ -630,7 +631,7 @@ bool loadWeaponStats(const char *pWeaponData, UDWORD bufferSize)
 			%255[^,'\r\n],%255[^,'\r\n],%255[^,'\r\n],%255[^,'\r\n],%d,%d,%d,%255[^,'\r\n],%255[^,'\r\n],%d,%d,\
 			%255[^,'\r\n],%d,%d,%d,%d,%d",
 			WeaponName, dummy, &psStats->buildPower,&psStats->buildPoints,
-			&psStats->weight, &dummyVal, &dummyVal,
+			&psStats->weight, &weaponsize, &dummyVal,
 			&psStats->body, GfxFile, mountGfx, muzzleGfx, flightGfx,
 			hitGfx, missGfx, waterGfx, trailGfx, &psStats->shortRange,
 			&psStats->longRange,&psStats->shortHit, &psStats->longHit,
@@ -659,6 +660,14 @@ bool loadWeaponStats(const char *pWeaponData, UDWORD bufferSize)
 			psStats->flightSpeed=DEFAULT_FLIGHTSPEED;
 		}
 
+		if (weaponsize < 0) // neat hack to avoid breaking existing mods while introducing new functionality
+		{
+			psStats->weaponSize = (WEAPON_SIZE)abs(weaponsize + 1);
+		}
+		else
+		{
+			psStats->weaponSize = WEAPON_SIZE_ANY; // meaning no limitations
+		}
 
 		if (!allocateStatName((BASE_STATS *)psStats, WeaponName))
 		{

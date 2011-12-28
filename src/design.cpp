@@ -2118,8 +2118,9 @@ static bool intAddComponentButtons(COMPONENT_STATS *psStats, UDWORD size,
 	char				aButText[DES_COMPBUTMAXCHAR + 1];
 	SDWORD				BufferID;
 	PROPULSION_STATS	*psPropStats;
-	bool				bVTol, bWeapon, bVtolWeapon;
+	bool				bVTol, bWeapon;
 	UWORD               numTabs;
+	int bodysize = SIZE_NUM;
 
 	ClearObjectBuffers();
 
@@ -2175,6 +2176,10 @@ static bool intAddComponentButtons(COMPONENT_STATS *psStats, UDWORD size,
 				bVTol = true;
 			}
 		}
+		if (sCurrDesign.asParts[COMP_BODY])
+		{
+			bodysize = (asBodyStats + sCurrDesign.asParts[COMP_BODY])->size;
+		}
 	}
 
 	/* Add each button */
@@ -2192,28 +2197,20 @@ static bool intAddComponentButtons(COMPONENT_STATS *psStats, UDWORD size,
 		}
 
 		/* Skip unavailable entries and non-design ones*/
-		if (!(aAvailable[i] & AVAILABLE)
-				 || !psCurrStats->designable)
+		if (!(aAvailable[i] & AVAILABLE) || !psCurrStats->designable)
 		{
 			/* Update the stats pointer for the next button */
 			psCurrStats = (COMPONENT_STATS *)(((UBYTE *)psCurrStats) + size);
-
 			continue;
 		}
 
 		/*skip indirect weapons if VTOL propulsion or numVTOLattackRuns for the weapon is zero*/
 		if ( bWeapon )
 		{
-			if ( ((WEAPON_STATS *)psCurrStats)->vtolAttackRuns )
-			{
-				bVtolWeapon = true;
-			}
-			else
-			{
-				bVtolWeapon = false;
-			}
-
-			if ( (bVTol && !bVtolWeapon) || (!bVTol && bVtolWeapon) )
+			WEAPON_STATS *psWeapon = (WEAPON_STATS *)psCurrStats;
+			if ((psWeapon->vtolAttackRuns > 0) != bVTol
+			    || (psWeapon->weaponSize == WEAPON_SIZE_LIGHT && bodysize != SIZE_LIGHT)
+			    || (psWeapon->weaponSize == WEAPON_SIZE_HEAVY && bodysize == SIZE_LIGHT))
 			{
 				/* Update the stats pointer for the next button */
 				psCurrStats = (COMPONENT_STATS *)(((UBYTE *)psCurrStats) + size);
@@ -3265,6 +3262,7 @@ static void intSetPropulsionShadowStats(PROPULSION_STATS *psStats)
 bool intValidTemplate(DROID_TEMPLATE *psTempl, const char *newName)
 {
 	UDWORD i;
+	int bodysize = (asBodyStats + psTempl->asParts[COMP_BODY])->size;
 
 	// set the weapon for a command droid
 	if (psTempl->asParts[COMP_BRAIN] != 0)
@@ -3295,9 +3293,13 @@ bool intValidTemplate(DROID_TEMPLATE *psTempl, const char *newName)
 	}
 
 	/* Check the weapons */
-	for(i=0; i<psTempl->numWeaps; i++)
+	for (i = 0; i < psTempl->numWeaps; i++)
 	{
-		if (psTempl->asWeaps[i] == 0)
+		int weaponSize = (asWeaponStats + psTempl->asWeaps[i])->weaponSize;
+
+		if ((weaponSize == WEAPON_SIZE_LIGHT && bodysize != SIZE_LIGHT)
+		    || (weaponSize == WEAPON_SIZE_HEAVY && bodysize == SIZE_LIGHT)
+		    || psTempl->asWeaps[i] == 0)
 		{
 			return false;
 		}
