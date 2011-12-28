@@ -135,6 +135,12 @@ void NotifyUserOfError(char *msg);
 /********************  Variables  ********************/
 // Should be cleaned up properly and be put in structures.
 
+// Initialised at start of drawTiles().
+// In model coordinates where x is east, y is up and z is north, rather than world coordinates where x is east, y is south and z is up.
+// To get the real camera position, still need to add Vector3i(player.p.x, 0, player.p.z).
+static Vector3i actualCameraPosition;
+
+
 bool	bRender3DOnly;
 static bool	bRangeDisplay = false;
 static SDWORD	rangeCenterX,rangeCenterY,rangeRadius;
@@ -307,6 +313,16 @@ static std::vector<Blueprint> blueprints;
 static const int BLUEPRINT_OPACITY=120;
 
 /********************  Functions  ********************/
+
+static inline void rotateSomething(int &x, int &y, uint16_t angle)
+{
+	int64_t cra = iCos(angle), sra = iSin(angle);
+	int newX = (x*cra - y*sra)>>16;
+	int newY = (x*sra + y*cra)>>16;
+	x = newX;
+	y = newY;
+}
+
 
 void NotifyUserOfError(char *msg)
 {
@@ -950,19 +966,34 @@ static void drawTiles(iView *player)
 	/* Push identity matrix onto stack */
 	pie_MatBegin();
 
+	actualCameraPosition = Vector3i(0, 0, 0);
+
 	/* Set the camera position */
 	pie_TRANSLATE(0, 0, distance);
 
+	actualCameraPosition.z -= distance;
+
 	// Now, scale the world according to what resolution we're running in
 	pie_MatScale(pie_GetResScalingFactor() / 100.f);
+
+	actualCameraPosition.z /= pie_GetResScalingFactor() / 100.f;
 
 	/* Rotate for the player */
 	pie_MatRotZ(player->r.z);
 	pie_MatRotX(player->r.x);
 	pie_MatRotY(player->r.y);
 
+	rotateSomething(actualCameraPosition.x, actualCameraPosition.y, -player->r.z);
+	rotateSomething(actualCameraPosition.y, actualCameraPosition.z, -player->r.x);
+	rotateSomething(actualCameraPosition.z, actualCameraPosition.x, -player->r.y);
+
 	/* Translate */
 	pie_TRANSLATE(0, -player->p.y, 0);
+
+	actualCameraPosition.y -= -player->p.y;
+
+	// Not sure if should do this here or whenever using, since this transform seems to be done all over the place.
+	//actualCameraPosition -= Vector3i(-player->p.x, 0, player->p.z);
 
 	// this also detemines the length of the shadows
 	theSun = getTheSun();
@@ -1238,9 +1269,29 @@ void	renderProjectile(PROJECTILE *psCurr)
 	/*Need to draw the graphic depending on what the projectile is doing - hitting target,
 	missing target, in flight etc - JUST DO IN FLIGHT FOR NOW! */
 	pIMD = psStats->pInFlightGraphic;
+	//unsigned faceInFlight = psStats->faceInFlight;
 
 	if (clipXY(st.pos.x, st.pos.y))
+		for (; pIMD != NULL; pIMD = pIMD->next)
 	{
+		bool rollToCamera = false;
+		bool pitchToCamera = false;
+		bool additive = psStats->weaponSubClass == WSC_ROCKET || psStats->weaponSubClass == WSC_MISSILE || psStats->weaponSubClass == WSC_SLOWROCKET || psStats->weaponSubClass == WSC_SLOWMISSILE;
+
+		if (pIMD->nconnectors >= 2)
+		{
+			switch (pIMD->connectors[0].x)
+			{
+				case 1: rollToCamera = true; break;
+				case 2: rollToCamera = true; pitchToCamera = true; break;
+			}
+			switch (pIMD->connectors[0].y)
+			{
+				case 1: additive = false; break;
+				case 2: additive = true; break;
+			}
+		}
+
 		/* Get bullet's x coord */
 		dv.x = st.pos.x - player.p.x;
 
@@ -1251,20 +1302,51 @@ void	renderProjectile(PROJECTILE *psCurr)
 		dv.y = st.pos.z;
 		/* Set up the matrix */
 		pie_MatBegin();
+		Vector3i camera = actualCameraPosition;
 
 		/* Translate to the correct position */
 		pie_TRANSLATE(dv.x,dv.y,dv.z);
+		camera -= Vector3i(dv.x, dv.y, dv.z);
 
 		/* Rotate it to the direction it's facing */
 		imdRot2.y = st.rot.direction;
 		pie_MatRotY(-imdRot2.y);
+		rotateSomething(camera.z, camera.x, -(-imdRot2.y));
 
 		/* pitch it */
 		imdRot2.x = st.rot.pitch;
 		pie_MatRotX(imdRot2.x);
+		rotateSomething(camera.y, camera.z, -imdRot2.x);
 
-		if (psStats->weaponSubClass == WSC_ROCKET || psStats->weaponSubClass == WSC_MISSILE
-		    || psStats->weaponSubClass == WSC_SLOWROCKET || psStats->weaponSubClass == WSC_SLOWMISSILE)
+		if (pitchToCamera || rollToCamera)
+		{
+			// Centre on projectile (relevant for twin projectiles).
+			pie_TRANSLATE(pIMD->connectors[1].x, pIMD->connectors[1].y, pIMD->connectors[1].z);
+			camera -= Vector3i(pIMD->connectors[1].x, pIMD->connectors[1].y, pIMD->connectors[1].z);
+		}
+
+		if (pitchToCamera)
+		{
+			imdRot2.x = iAtan2(camera.z, camera.y);
+			pie_MatRotX(imdRot2.x);
+			rotateSomething(camera.y, camera.z, -imdRot2.x);
+		}
+
+		if (rollToCamera)
+		{
+			imdRot2.z = -iAtan2(camera.x, camera.y);
+			pie_MatRotZ(imdRot2.z);
+			rotateSomething(camera.x, camera.y, -imdRot2.z);
+		}
+
+		if (pitchToCamera || rollToCamera)
+		{
+			// Undo centre on projectile (relevant for twin projectiles).
+			pie_TRANSLATE(-pIMD->connectors[1].x, -pIMD->connectors[1].y, -pIMD->connectors[1].z);
+			camera -= Vector3i(-pIMD->connectors[1].x, -pIMD->connectors[1].y, -pIMD->connectors[1].z);
+		}
+
+		if (additive)
 		{
 			pie_Draw3DShape(pIMD, 0, 0, WZCOL_WHITE, pie_ADDITIVE, 164);
 		}
