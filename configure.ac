@@ -83,7 +83,7 @@ AC_PROG_VERSION_CHECK([pkg-config], [0.9])
 AC_MSG_CHECKING([for backend])
 AC_ARG_WITH([backend],
 	AS_HELP_STRING([--with-backend=sdl/qt], [Backend rendering code to use [sdl]]),
-	[ backend=${withval} ], [ backend="qt" ])
+	[ backend=${withval} ], [ backend="sdl" ])
 AM_CONDITIONAL([BACKEND_QT], test "$backend" = "qt")
 AM_CONDITIONAL([BACKEND_SDL], test "$backend" = "sdl")
 
