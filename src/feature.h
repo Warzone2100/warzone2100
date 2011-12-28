@@ -49,12 +49,12 @@ extern void featureUpdate(FEATURE *psFeat);
 extern bool removeFeature(FEATURE *psDel);
 
 /* Remove a Feature and free it's memory */
-extern bool destroyFeature(FEATURE *psDel);
+bool destroyFeature(FEATURE *psDel, unsigned impactTime);
 
 /* get a feature stat id from its name */
 extern SDWORD getFeatureStatFromName(const char *pName);
 
-int32_t featureDamage(FEATURE *psFeature, UDWORD damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass);
+int32_t featureDamage(FEATURE *psFeature, unsigned damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, unsigned impactTime);
 
 extern void     featureInitVars(void);
 

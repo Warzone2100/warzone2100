@@ -1389,22 +1389,22 @@ void	renderAnimComponent( const COMPONENT_OBJECT *psObj )
 /// Draw the buildings
 void displayStaticObjects( void )
 {
-	STRUCTURE	*psStructure;
-	UDWORD		clan;
-	UDWORD		test = 0;
 	ANIM_OBJECT	*psAnimObj;
 
 	// to solve the flickering edges of baseplates
 	pie_SetDepthOffset(-1.0f);
 
 	/* Go through all the players */
-	for (clan = 0; clan < MAX_PLAYERS; clan++)
+	for (unsigned player = 0; player <= MAX_PLAYERS; ++player)
 	{
+		BASE_OBJECT *list = player < MAX_PLAYERS? apsStructLists[player] : psDestroyedObj;
+
 		/* Now go all buildings for that player */
-		for(psStructure = apsStructLists[clan]; psStructure != NULL;
-			psStructure = psStructure->psNext)
+		for (; list != NULL; list = list->psNext)
+			if (list->type == OBJ_STRUCTURE && (list->died == 0 || list->died > graphicsTime))
 		{
-			test++;
+			STRUCTURE *psStructure = castStructure(list);
+
 			/* Worth rendering the structure? */
 			if(clipXY(psStructure->pos.x,psStructure->pos.y))
 			{
@@ -1659,22 +1659,24 @@ void displayDelivPoints(void)
 /// Draw the features
 void displayFeatures( void )
 {
-	FEATURE	*psFeature;
-	UDWORD		clan;
-
-		/* player can only be 0 for the features */
-		clan = 0;
+	// player can only be 0 for the features.
+	for (unsigned player = 0; player <= 1; ++player)
+	{
+		BASE_OBJECT *list = player < 1? apsFeatureLists[player] : psDestroyedObj;
 
 		/* Go through all the features */
-		for(psFeature = apsFeatureLists[clan]; psFeature != NULL;
-			psFeature = psFeature->psNext)
+		for (; list != NULL; list = list->psNext)
+			if (list->type == OBJ_FEATURE && (list->died == 0 || list->died > graphicsTime))
 		{
+			FEATURE *psFeature = castFeature(list);
+
 			/* Is the feature worth rendering? */
 			if(clipXY(psFeature->pos.x,psFeature->pos.y))
 			{
 				renderFeature(psFeature);
 			}
 		}
+	}
 }
 
 /// Draw the Proximity messages for the *SELECTED PLAYER ONLY*
@@ -1760,16 +1762,18 @@ static void displayAnimation( ANIM_OBJECT * psAnimObj, bool bHoldOnFirstFrame )
 /// Draw the droids
 void displayDynamicObjects( void )
 {
-	DROID		*psDroid;
 	ANIM_OBJECT	*psAnimObj;
-	UDWORD		clan;
 
 	/* Need to go through all the droid lists */
-	for(clan = 0; clan < MAX_PLAYERS; clan++)
+	for (unsigned player = 0; player <= MAX_PLAYERS; ++player)
 	{
-		for(psDroid = apsDroidLists[clan]; psDroid != NULL;
-			psDroid = psDroid->psNext)
+		BASE_OBJECT *list = player < MAX_PLAYERS? apsDroidLists[player] : psDestroyedObj;
+
+		for (; list != NULL; list = list->psNext)
+			if (list->type == OBJ_DROID && (list->died == 0 || list->died > graphicsTime))
 		{
+			DROID *psDroid = castDroid(list);
+
 			/* Find out whether the droid is worth rendering */
 				if(clipXY(psDroid->pos.x,psDroid->pos.y))
 				{

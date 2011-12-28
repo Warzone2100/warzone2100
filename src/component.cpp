@@ -1052,7 +1052,7 @@ void displayComponentObject(DROID *psDroid)
 }
 
 
-void destroyFXDroid(DROID	*psDroid)
+void destroyFXDroid(DROID *psDroid, unsigned impactTime)
 {
 	for (int i = 0; i < 5; ++i)
 	{
@@ -1114,7 +1114,7 @@ void destroyFXDroid(DROID	*psDroid)
 		}
 		// Tell the effect system that it needs to use this player's color for the next effect
 		SetEffectForPlayer(psDroid->player);
-		addEffect(&pos, EFFECT_GRAVITON, GRAVITON_TYPE_EMITTING_DR, true, psImd, getPlayerColour(psDroid->player), gameTime - deltaGameTime);
+		addEffect(&pos, EFFECT_GRAVITON, GRAVITON_TYPE_EMITTING_DR, true, psImd, getPlayerColour(psDroid->player), impactTime);
 	}
 }
 

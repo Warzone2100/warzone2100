@@ -804,7 +804,7 @@ bool recvDestroyDroid(NETQUEUE queue)
 	{
 		turnOffMultiMsg(true);
 		debug(LOG_DEATH, "Killing droid %d on request from player %d - huh?", psDroid->id, queue.index);
-		destroyDroid(psDroid);
+		destroyDroid(psDroid, gameTime);
 		turnOffMultiMsg(false);
 	}
 	else

@@ -110,7 +110,7 @@ static void	proj_ImpactFunc( PROJECTILE *psObj );
 static void	proj_PostImpactFunc( PROJECTILE *psObj );
 static void	proj_checkBurnDamage( BASE_OBJECT *apsList, PROJECTILE *psProj);
 
-static int32_t objectDamage(BASE_OBJECT *psObj, UDWORD damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass);
+static int32_t objectDamage(BASE_OBJECT *psObj, unsigned damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, unsigned impactTime);
 
 
 static inline void setProjectileDestination(PROJECTILE *psProj, BASE_OBJECT *psObj)
@@ -1147,7 +1147,7 @@ static void proj_ImpactFunc( PROJECTILE *psObj )
 			      psObj->psDest->id, psObj->psDest->player);
 
 			// Damage the object
-			relativeDamage = objectDamage(psObj->psDest, damage, psStats->weaponClass,psStats->weaponSubClass);
+			relativeDamage = objectDamage(psObj->psDest, damage, psStats->weaponClass, psStats->weaponSubClass, psObj->time);
 
 			proj_UpdateKills(psObj, relativeDamage);
 
@@ -1218,7 +1218,7 @@ static void proj_ImpactFunc( PROJECTILE *psObj )
 								turnOffMultiMsg(true);
 							}
 
-							relativeDamage = droidDamage(psCurrD, damage, psStats->weaponClass, psStats->weaponSubClass);
+							relativeDamage = droidDamage(psCurrD, damage, psStats->weaponClass, psStats->weaponSubClass, psObj->time);
 
 							turnOffMultiMsg(false);	// multiplay msgs back on.
 
@@ -1257,7 +1257,7 @@ static void proj_ImpactFunc( PROJECTILE *psObj )
 									}
 								}
 
-								relativeDamage = structureDamage(psCurrS, damage, psStats->weaponClass, psStats->weaponSubClass);
+								relativeDamage = structureDamage(psCurrS, damage, psStats->weaponClass, psStats->weaponSubClass, psObj->time);
 								proj_UpdateKills(psObj, relativeDamage);
 							}
 						}
@@ -1293,7 +1293,7 @@ static void proj_ImpactFunc( PROJECTILE *psObj )
 						                                         psStats->weaponEffect,
 						                                         (BASE_OBJECT *)psCurrF),
 						                              psStats->weaponClass,
-						                              psStats->weaponSubClass);
+						                              psStats->weaponSubClass, psObj->time);
 						proj_UpdateKills(psObj, relativeDamage);
 					}
 				}
@@ -1488,7 +1488,7 @@ static void proj_checkBurnDamage( BASE_OBJECT *apsList, PROJECTILE *psProj)
 					debug(LOG_NEVER, "Burn damage of %d to object %d, player %d\n",
 							damageToDo, psCurr->id, psCurr->player);
 
-					relativeDamage = objectDamage(psCurr, damageToDo, psStats->weaponClass,psStats->weaponSubClass);
+					relativeDamage = objectDamage(psCurr, damageToDo, psStats->weaponClass, psStats->weaponSubClass, gameTime - deltaGameTime/2);
 					psCurr->burnDamage += damageToDo;
 					proj_UpdateKills(psProj, relativeDamage);
 				}
@@ -1628,20 +1628,20 @@ UDWORD	calcDamage(UDWORD baseDamage, WEAPON_EFFECT weaponEffect, BASE_OBJECT *ps
  *    multiplied by -1, resulting in a negative number. Killed features do not
  *    result in negative numbers.
  */
-static int32_t objectDamage(BASE_OBJECT *psObj, UDWORD damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass)
+static int32_t objectDamage(BASE_OBJECT *psObj, unsigned damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, unsigned impactTime)
 {
 	switch (psObj->type)
 	{
 		case OBJ_DROID:
-			return droidDamage((DROID *)psObj, damage, weaponClass,weaponSubClass);
+			return droidDamage((DROID *)psObj, damage, weaponClass, weaponSubClass, impactTime);
 			break;
 
 		case OBJ_STRUCTURE:
-			return structureDamage((STRUCTURE *)psObj, damage, weaponClass, weaponSubClass);
+			return structureDamage((STRUCTURE *)psObj, damage, weaponClass, weaponSubClass, impactTime);
 			break;
 
 		case OBJ_FEATURE:
-			return featureDamage((FEATURE *)psObj, damage, weaponClass, weaponSubClass);
+			return featureDamage((FEATURE *)psObj, damage, weaponClass, weaponSubClass, impactTime);
 			break;
 
 		case OBJ_PROJECTILE:

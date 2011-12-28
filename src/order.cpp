@@ -943,7 +943,7 @@ void orderUpdateDroid(DROID *psDroid)
 		if (psDroid->actionStarted + RUN_BURN_TIME < gameTime)
 		{
 			debug(LOG_DEATH, "orderUpdateDroid: Droid %d burned to death", psDroid->id); // why is this an order?
-			destroyDroid( psDroid );
+			destroyDroid(psDroid, psDroid->actionStarted + RUN_BURN_TIME);
 		}
 		break;
 	case DORDER_RUN:

@@ -112,7 +112,7 @@ extern bool	structureStatsShutDown(void);
 
 int requestOpenGate(STRUCTURE *psStructure);
 
-int32_t structureDamage(STRUCTURE *psStructure, UDWORD damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass);
+int32_t structureDamage(STRUCTURE *psStructure, unsigned damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, unsigned impactTime);
 extern void structureBuild(STRUCTURE *psStructure, DROID *psDroid, int buildPoints, int buildRate = 1);
 extern void structureDemolish(STRUCTURE *psStructure, DROID *psDroid, int buildPoints);
 extern bool structureRepair(STRUCTURE *psStruct, DROID *psDroid, int buildPoints);
@@ -131,7 +131,7 @@ STRUCTURE *buildBlueprint(STRUCTURE_STATS const *psStats, int32_t x, int32_t y, 
 void structureUpdate(STRUCTURE *psBuilding, bool mission);
 
 /* Remove a structure and free it's memory */
-extern bool destroyStruct(STRUCTURE *psDel);
+bool destroyStruct(STRUCTURE *psDel, unsigned impactTime);
 
 // remove a structure from a game without any visible effects
 // bDestroy = true if the object is to be destroyed

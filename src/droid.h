@@ -128,7 +128,7 @@ extern UDWORD	calcTemplatePower(DROID_TEMPLATE *psTemplate);
 bool idfDroid(DROID *psDroid);
 
 /* Do damage to a droid */
-int32_t droidDamage(DROID *psDroid, uint32_t damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass);
+int32_t droidDamage(DROID *psDroid, unsigned damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, unsigned impactTime);
 
 /* The main update routine for all droids */
 extern void droidUpdate(DROID *psDroid);
@@ -173,7 +173,7 @@ extern bool droidUpdateRestore( DROID *psDroid );
 extern void recycleDroid(DROID *psDel);
 
 /* Remove a droid and free it's memory */
-extern void destroyDroid(DROID *psDel);
+void destroyDroid(DROID *psDel, unsigned impactTime);
 
 /* Same as destroy droid except no graphical effects */
 extern void	vanishDroid(DROID *psDel);

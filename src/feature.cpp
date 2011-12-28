@@ -165,7 +165,7 @@ void featureStatsShutDown(void)
  *  \param weaponClass,weaponSubClass the class and subclass of the weapon that deals the damage
  *  \return < 0 never, >= 0 always
  */
-int32_t featureDamage(FEATURE *psFeature, UDWORD damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass)
+int32_t featureDamage(FEATURE *psFeature, unsigned damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, unsigned impactTime)
 {
 	int32_t relativeDamage;
 
@@ -180,7 +180,7 @@ int32_t featureDamage(FEATURE *psFeature, UDWORD damage, WEAPON_CLASS weaponClas
 	if (relativeDamage < 0)
 	{
 		debug(LOG_ATTACK, "feature (id %d) DESTROYED", psFeature->id);
-		destroyFeature(psFeature);
+		destroyFeature(psFeature, impactTime);
 		return relativeDamage * -1;
 	}
 	else
@@ -365,10 +365,9 @@ bool removeFeature(FEATURE *psDel)
 	ASSERT_OR_RETURN(false, psDel != NULL, "Invalid feature pointer");
 	ASSERT_OR_RETURN(false, !psDel->died, "Feature already dead");
 
-	if(bMultiMessages && !ingame.localJoiningInProgress)
+	if (bMultiMessages && !ingame.localJoiningInProgress && !isInSync())
 	{
 		SendDestroyFeature(psDel);	// inform other players of destruction
-		return true;  // Wait for our message before really destroying the feature.
 	}
 
 	//remove from the map data
@@ -423,7 +422,7 @@ bool removeFeature(FEATURE *psDel)
 }
 
 /* Remove a Feature and free it's memory */
-bool destroyFeature(FEATURE *psDel)
+bool destroyFeature(FEATURE *psDel, unsigned impactTime)
 {
 	UDWORD			widthScatter,breadthScatter,heightScatter, i;
 	EFFECT_TYPE		explosionSize;
@@ -457,7 +456,7 @@ bool destroyFeature(FEATURE *psDel)
 			pos.x = psDel->pos.x + widthScatter - rand()%(2*widthScatter);
 			pos.z = psDel->pos.y + breadthScatter - rand()%(2*breadthScatter);
 			pos.y = psDel->pos.z + 32 + rand()%heightScatter;
-			addEffect(&pos, EFFECT_EXPLOSION, explosionSize, false, NULL, 0, gameTime - deltaGameTime);
+			addEffect(&pos, EFFECT_EXPLOSION, explosionSize, false, NULL, 0, impactTime);
 		}
 
 		if(psDel->psStats->subType == FEAT_SKYSCRAPER)
@@ -465,7 +464,7 @@ bool destroyFeature(FEATURE *psDel)
 			pos.x = psDel->pos.x;
 			pos.z = psDel->pos.y;
 			pos.y = psDel->pos.z;
-			addEffect(&pos, EFFECT_DESTRUCTION, DESTRUCTION_TYPE_SKYSCRAPER, true, psDel->sDisplay.imd, 0, gameTime - deltaGameTime);
+			addEffect(&pos, EFFECT_DESTRUCTION, DESTRUCTION_TYPE_SKYSCRAPER, true, psDel->sDisplay.imd, 0, impactTime);
 			initPerimeterSmoke(psDel->sDisplay.imd, pos);
 
 			shakeStart();
@@ -475,7 +474,7 @@ bool destroyFeature(FEATURE *psDel)
 		pos.x = psDel->pos.x;
 		pos.z = psDel->pos.y;
 		pos.y = map_Height(pos.x,pos.z);
-		addEffect(&pos, EFFECT_DESTRUCTION, DESTRUCTION_TYPE_FEATURE, false, NULL, 0, gameTime - deltaGameTime);
+		addEffect(&pos, EFFECT_DESTRUCTION, DESTRUCTION_TYPE_FEATURE, false, NULL, 0, impactTime);
 
 		//play sound
 		// ffs gj
@@ -520,6 +519,7 @@ bool destroyFeature(FEATURE *psDel)
 	}
 
 	removeFeature(psDel);
+	psDel->died = impactTime;
 	return true;
 }
 

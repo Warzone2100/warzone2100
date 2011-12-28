@@ -144,7 +144,7 @@ void clearPlayer(UDWORD player,bool quietly)
 		}
 		else				// show effects
 		{
-			destroyDroid(apsDroidLists[player]);
+			destroyDroid(apsDroidLists[player], gameTime);
 		}
 	}
 
@@ -161,7 +161,7 @@ void clearPlayer(UDWORD player,bool quietly)
 		}
 		else			// show effects
 		{
-			destroyStruct(psStruct);
+			destroyStruct(psStruct, gameTime);
 		}
 
 		psStruct = psNext;

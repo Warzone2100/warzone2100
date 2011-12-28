@@ -4844,7 +4844,7 @@ SDWORD		sX,sY;
 				{
 					if(bVisible)
 					{
-						destroyFeature(psFeature);
+						destroyFeature(psFeature, gameTime);
 					}
 					else
 					{

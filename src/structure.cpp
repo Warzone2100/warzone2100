@@ -720,7 +720,7 @@ void handleAbandonedStructures()
  * \param weaponSubClass the subclass of the weapon that deals the damage
  * \return < 0 when the dealt damage destroys the structure, > 0 when the structure survives
  */
-int32_t structureDamage(STRUCTURE *psStructure, UDWORD damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass)
+int32_t structureDamage(STRUCTURE *psStructure, unsigned damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, unsigned impactTime)
 {
 	int32_t relativeDamage;
 
@@ -735,7 +735,7 @@ int32_t structureDamage(STRUCTURE *psStructure, UDWORD damage, WEAPON_CLASS weap
 	if (relativeDamage < 0)
 	{
 		debug(LOG_ATTACK, "Structure (id %d) DESTROYED", psStructure->id);
-		destroyStruct(psStructure);
+		destroyStruct(psStructure, impactTime);
 	}
 	else
 	{
@@ -4588,7 +4588,7 @@ bool removeStruct(STRUCTURE *psDel, bool bDestroy)
 }
 
 /* Remove a structure */
-bool destroyStruct(STRUCTURE *psDel)
+bool destroyStruct(STRUCTURE *psDel, unsigned impactTime)
 {
 	UDWORD			widthScatter,breadthScatter,heightScatter;
 	bool			resourceFound = false;
@@ -4600,7 +4600,7 @@ bool destroyStruct(STRUCTURE *psDel)
 
 	CHECK_STRUCTURE(psDel);
 
-	if (bMultiMessages)
+	if (bMultiMessages && !isInSync())
 	{
 		// Every player should be sending this message at once, and ignoring it later.
 		SendDestroyStructure(psDel);
@@ -4625,7 +4625,7 @@ bool destroyStruct(STRUCTURE *psDel)
 			pos.x = psDel->pos.x + widthScatter - rand()%(2*widthScatter);
 			pos.z = psDel->pos.y + breadthScatter - rand()%(2*breadthScatter);
 			pos.y = psDel->pos.z + 32 + rand()%heightScatter;
-			addEffect(&pos, EFFECT_EXPLOSION, EXPLOSION_TYPE_MEDIUM, false, NULL, 0, gameTime - deltaGameTime);
+			addEffect(&pos, EFFECT_EXPLOSION, EXPLOSION_TYPE_MEDIUM, false, NULL, 0, impactTime);
 		}
 
 		/* Get coordinates for everybody! */
@@ -4647,36 +4647,36 @@ bool destroyStruct(STRUCTURE *psDel)
 			/* Give a duration */
 			effectGiveAuxVarSec(burnDurationWall);
 			/* Normal fire - no smoke */
-			addEffect(&pos, EFFECT_FIRE, FIRE_TYPE_LOCALISED, false, NULL, 0, gameTime - deltaGameTime);
+			addEffect(&pos, EFFECT_FIRE, FIRE_TYPE_LOCALISED, false, NULL, 0, impactTime);
 		}
 		else if(psDel->pStructureType->type == REF_RESOURCE_EXTRACTOR) // oil resources
 		{
 			/* Oil resources burn AND puff out smoke AND for longer*/
 			effectGiveAuxVarSec(burnDurationOilWell);
-			addEffect(&pos, EFFECT_FIRE, FIRE_TYPE_SMOKY, false, NULL, 0, gameTime - deltaGameTime);
+			addEffect(&pos, EFFECT_FIRE, FIRE_TYPE_SMOKY, false, NULL, 0, impactTime);
 		}
 		else	// everything else
 		{
 			/* Give a duration */
 			effectGiveAuxVarSec(burnDurationOther);
-			addEffect(&pos, EFFECT_FIRE, FIRE_TYPE_LOCALISED, false, NULL, 0, gameTime - deltaGameTime);
+			addEffect(&pos, EFFECT_FIRE, FIRE_TYPE_LOCALISED, false, NULL, 0, impactTime);
 		}
 
 		/* Power stations have their own desctruction sequence */
 		if(psDel->pStructureType->type == REF_POWER_GEN)
 		{
-			addEffect(&pos, EFFECT_DESTRUCTION, DESTRUCTION_TYPE_POWER_STATION, false, NULL, 0, gameTime - deltaGameTime);
+			addEffect(&pos, EFFECT_DESTRUCTION, DESTRUCTION_TYPE_POWER_STATION, false, NULL, 0, impactTime);
 			pos.y += SHOCK_WAVE_HEIGHT;
-			addEffect(&pos, EFFECT_EXPLOSION, EXPLOSION_TYPE_SHOCKWAVE, false, NULL, 0, gameTime - deltaGameTime);
+			addEffect(&pos, EFFECT_EXPLOSION, EXPLOSION_TYPE_SHOCKWAVE, false, NULL, 0, impactTime);
 		}
 		/* As do wall sections */
 		else if(bMinor)
 		{
-			addEffect(&pos, EFFECT_DESTRUCTION, DESTRUCTION_TYPE_WALL_SECTION, false, NULL, 0, gameTime - deltaGameTime);
+			addEffect(&pos, EFFECT_DESTRUCTION, DESTRUCTION_TYPE_WALL_SECTION, false, NULL, 0, impactTime);
 		}
 		else // and everything else goes here.....
 		{
-			addEffect(&pos, EFFECT_DESTRUCTION, DESTRUCTION_TYPE_STRUCTURE, false, NULL, 0, gameTime - deltaGameTime);
+			addEffect(&pos, EFFECT_DESTRUCTION, DESTRUCTION_TYPE_STRUCTURE, false, NULL, 0, impactTime);
 		}
 
 		/* shake the screen if we're near enough */
@@ -4705,6 +4705,7 @@ bool destroyStruct(STRUCTURE *psDel)
 	}
 
 	resourceFound = removeStruct(psDel, true);
+	psDel->died = impactTime;
 
 	// Leave burn marks in the ground where building once stood
 	if (psDel->visible[selectedPlayer] && !resourceFound && !bMinor)

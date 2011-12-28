@@ -151,7 +151,7 @@ bool droidInit(void)
  *
  * NOTE: This function will damage but _never_ destroy transports when in single player (campaign) mode
  */
-int32_t droidDamage(DROID *psDroid, uint32_t damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass)
+int32_t droidDamage(DROID *psDroid, unsigned damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, unsigned impactTime)
 {
 	int32_t relativeDamage;
 
@@ -224,12 +224,12 @@ int32_t droidDamage(DROID *psDroid, uint32_t damage, WEAPON_CLASS weaponClass, W
 			if (bMultiPlayer && !bMultiMessages)
 			{
 				bMultiMessages = true;
-				destroyDroid(psDroid);
+				destroyDroid(psDroid, impactTime);
 				bMultiMessages = false;
 			}
 			else
 			{
-				destroyDroid(psDroid);
+				destroyDroid(psDroid, impactTime);
 			}
 		}
 	}
@@ -509,7 +509,7 @@ void	removeDroidBase(DROID *psDel)
 	killDroid(psDel);
 }
 
-static void removeDroidFX(DROID *psDel)
+static void removeDroidFX(DROID *psDel, unsigned impactTime)
 {
 	Vector3i pos;
 
@@ -537,16 +537,16 @@ static void removeDroidFX(DROID *psDel)
 	}
 	else if (psDel->visible[selectedPlayer])
 	{
-		destroyFXDroid(psDel);
+		destroyFXDroid(psDel, impactTime);
 		pos.x = psDel->pos.x;
 		pos.z = psDel->pos.y;
 		pos.y = psDel->pos.z;
-		addEffect(&pos, EFFECT_DESTRUCTION, DESTRUCTION_TYPE_DROID, false, NULL, 0, gameTime - deltaGameTime);
+		addEffect(&pos, EFFECT_DESTRUCTION, DESTRUCTION_TYPE_DROID, false, NULL, 0, impactTime);
 		audio_PlayStaticTrack( psDel->pos.x, psDel->pos.y, ID_SOUND_EXPLOSION );
 	}
 }
 
-void destroyDroid(DROID *psDel)
+void destroyDroid(DROID *psDel, unsigned impactTime)
 {
 	if (psDel->lastHitWeapon == WSC_LAS_SAT)		// darken tile if lassat.
 	{
@@ -568,8 +568,9 @@ void destroyDroid(DROID *psDel)
 		}
 	}
 
-	removeDroidFX(psDel);
+	removeDroidFX(psDel, impactTime);
 	removeDroidBase(psDel);
+	psDel->died = impactTime;
 	return;
 }
 
@@ -865,8 +866,7 @@ void droidUpdate(DROID *psDroid)
 				{
 					psDroid->burnDamage += damageToDo;
 
-					//just assume the burn damage is from FRONT
-					droidDamage(psDroid, damageToDo, WC_HEAT, WSC_FLAME);
+					droidDamage(psDroid, damageToDo, WC_HEAT, WSC_FLAME, gameTime - deltaGameTime/2);
 				}
 			}
 		}

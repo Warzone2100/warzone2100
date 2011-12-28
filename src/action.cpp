@@ -1942,7 +1942,7 @@ void actionUpdateDroid(DROID *psDroid)
 			else
 			{
 				debug(LOG_DEATH, "Droid %d destructed", (int)psDroid->id);
-				destroyDroid(psDroid);
+				destroyDroid(psDroid, psDroid->actionStarted + ACTION_DESTRUCT_TIME);
 			}
 		}
 		break;

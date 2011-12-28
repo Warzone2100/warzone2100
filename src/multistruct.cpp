@@ -226,7 +226,7 @@ bool recvDestroyStructure(NETQUEUE queue)
 	{
 		turnOffMultiMsg(true);
 		// Remove the struct from remote players machine
-		destroyStruct(psStruct);
+		destroyStruct(psStruct, gameTime);
 		turnOffMultiMsg(false);
 		// NOTE: I do not think this should be here!
 		technologyGiveAway(psStruct);
