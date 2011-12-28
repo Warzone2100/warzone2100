@@ -162,6 +162,12 @@ static inline Vector2f const &operator +=(Vector2f &a, Vector2f const &b) { retu
 static inline Vector3i const &operator +=(Vector3i &a, Vector3i const &b) { return a = a + b; }
 static inline Vector3f const &operator +=(Vector3f &a, Vector3f const &b) { return a = a + b; }
 
+// vector -= vector
+static inline Vector2i const &operator -=(Vector2i &a, Vector2i const &b) { return a = a - b; }
+static inline Vector2f const &operator -=(Vector2f &a, Vector2f const &b) { return a = a - b; }
+static inline Vector3i const &operator -=(Vector3i &a, Vector3i const &b) { return a = a - b; }
+static inline Vector3f const &operator -=(Vector3f &a, Vector3f const &b) { return a = a - b; }
+
 
 /*!
  * Rotate v

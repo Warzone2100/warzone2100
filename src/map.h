@@ -515,6 +515,14 @@ WZ_DECL_ALWAYS_INLINE static inline bool worldOnMap(Vector2i pos)
 /* Intersect a line with the map and report tile intersection points */
 bool map_Intersect(int *Cx, int *Cy, int *Vx, int* Vy, int *Sx, int *Sy);
 
+/// Finds the smallest 0 ≤ t ≤ 1 such that the line segment given by src + t * (dst - src) intersects the terrain.
+/// An intersection is defined to be the part of the line segment which is strictly inside the terrain (so if the
+/// line segment is exactly parallel with the terrain and leaves it again, it does not count as an intersection).
+/// Returns UINT32_MAX if no such 0 ≤ t ≤ 1 exists, otherwise returns t*tMax, rounded down to the nearest integer.
+/// If src is strictly inside the terrain, the line segment is only considered to intersect if it exits and reenters
+/// the terrain.
+unsigned map_LineIntersect(Vector3i src, Vector3i dst, unsigned tMax);
+
 /// The max height of the terrain and water at the specified world coordinates
 extern int32_t map_Height(int x, int y);
 

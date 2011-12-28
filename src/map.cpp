@@ -1222,6 +1222,132 @@ bool map_Intersect(int* Cx, int* Cy, int* Vx, int* Vy, int* Sx, int* Sy)
 	return false;
 }
 
+// Rotate vector clockwise by quadrant*90° around (TILE_UNITS/2, TILE_UNITS/2). (Considering x to be to the right, and y down.)
+static Vector3i rotateWorldQuadrant(Vector3i v, int quadrant)
+{
+	switch (quadrant & 3)
+	{
+		default:  // Can't get here.
+		case 0: return v;                                                 break;  // 0°.
+		case 1: return Vector3i(TILE_UNITS - v.y,              v.x, v.z); break;  // 90° clockwise.
+		case 2: return Vector3i(TILE_UNITS - v.x, TILE_UNITS - v.y, v.z); break;  // 180°.
+		case 3: return Vector3i(             v.y, TILE_UNITS - v.x, v.z); break;  // 90° anticlockwise.
+	}
+}
+
+// Returns (0, 0) rotated clockwise quadrant*90° around (½, ½). (Considering x to be to the right, and y down.)
+static Vector2i quadrantCorner(int quadrant)
+{
+	int dx[4] = {0, 1, 1, 0};
+	int dy[4] = {0, 0, 1, 1};
+	return Vector2i(dx[quadrant & 3], dy[quadrant & 3]);
+}
+
+// Returns (0, -1) rotated clockwise quadrant*90° around (0, 0). (Considering x to be to the right, and y down.)
+static Vector2i quadrantDelta(int quadrant)
+{
+	int dx[4] = {0,  1, 0, -1};
+	int dy[4] = {-1, 0, 1,  0};
+	return Vector2i(dx[quadrant & 3], dy[quadrant & 3]);
+}
+
+
+static inline bool fracTest(int numerA, int denomA, int numerB, int denomB)
+{
+	return denomA > 0 && numerA >= 0 && (denomB <= 0 || numerB < 0 || (int64_t)numerA*denomB < (int64_t)numerB*denomA);
+}
+
+unsigned map_LineIntersect(Vector3i src, Vector3i dst, unsigned tMax)
+{
+	// Transform src and dst to a coordinate system such that the tile quadrant containing src has
+	// corners at (0, 0), (TILE_UNITS, 0), (TILE_UNITS/2, TILE_UNITS/2).
+	Vector2i tile = map_coord(removeZ(src));
+	src -= Vector3i(world_coord(tile), 0);
+	dst -= Vector3i(world_coord(tile), 0);
+	//            +0+
+	// quadrant = 3×1
+	//            +2+
+	int quadrant = ((src.x < src.y)*3) ^ (TILE_UNITS - src.x < src.y);
+	src = rotateWorldQuadrant(src, -quadrant);
+	dst = rotateWorldQuadrant(dst, -quadrant);
+	while (true)
+	{
+		int height[4];
+		for (int q = 0; q < 4; ++q)
+		{
+			Vector2i corner = tile + quadrantCorner(quadrant + q);
+			height[q] = map_TileHeightSurface(corner.x, corner.y);
+		}
+		Vector3i dif = dst - src;
+		//     We are considering the volume of a quadrant (the volume above a quarter of a map tile, which is
+		// a degenerate tetrahedron with a point at infinity). We have a line segment, and want to know where
+		// it exits the quadrant volume.
+		//     There are 5 possible cases. Cases 0-2, our line can exit one of the three sides of the quadrant
+		// volume (and pass into a neighbouring quadrant volume), or case 3, can exit through the bottom of the
+		// quadrant volume (which means intersecting the terrain), or case 4, the line segment can end (which
+		// means reaching the destination with no intersection.
+		//     Note that the height of the centre of the tile is the average of the corners, such that a tile
+		// consists of 4 flat triangles (which are not (in general) parallel to each other).
+		// +--0--+
+		//  \ 3 /
+		//   2 1
+		//    +
+		// Denominators are positive iff we are going in the direction of the line. First line crossed has the smallest fraction.
+		// numer/denom gives the intersection times for the 5 cases.
+		int numer[5], denom[5];
+		numer[0] = -(-src.y);
+		denom[0] =   -dif.y;
+		numer[1] = TILE_UNITS - (src.x + src.y);
+		denom[1] =               dif.x + dif.y;
+		numer[2] = -(-src.x + src.y);
+		denom[2] =   -dif.x + dif.y;
+		Vector3i normal(2*(height[1] - height[0]), height[2] + height[3] - height[0] - height[1], -2*TILE_UNITS);  // Normal pointing down, and not normalised.
+		numer[3] = height[0]*normal.z - src*normal;
+		denom[3] =                      dif*normal;
+		numer[4] = 1;
+		denom[4] = 1;
+		int firstIntersection = 0;
+		for (int test = 0; test < 5; ++test)
+		{
+			if (!fracTest(numer[firstIntersection], denom[firstIntersection], numer[test], denom[test]))
+			{
+				firstIntersection = test;
+			}
+		}
+		switch (firstIntersection)
+		{
+			case 0:  // Cross top line first (the tile boundary).
+				tile += quadrantDelta(quadrant);
+				quadrant += 2;
+				src = rotateWorldQuadrant(src, -2) + Vector3i(0, -TILE_UNITS, 0);
+				dst = rotateWorldQuadrant(dst, -2) + Vector3i(0, -TILE_UNITS, 0);
+
+				if (tile.x < 0 || tile.x >= mapWidth || tile.y < 0 || tile.y >= mapHeight)
+				{
+					// Intersect edge of map.
+					return (int64_t)tMax * numer[firstIntersection]/denom[firstIntersection];
+				}
+				break;
+			case 1:  // Cross bottom-right line first.
+				// Change to the new quadrant, and transform appropriately.
+				++quadrant;
+				src = rotateWorldQuadrant(src, -1);
+				dst = rotateWorldQuadrant(dst, -1);
+				break;
+			case 2:  // Cross bottom-left line first.
+				// Change to the new quadrant, and transform appropriately.
+				--quadrant;
+				src = rotateWorldQuadrant(src, 1);
+				dst = rotateWorldQuadrant(dst, 1);
+				break;
+			case 3:  // Intersect terrain!
+				return (int64_t)tMax * numer[firstIntersection]/denom[firstIntersection];
+			case 4:  // Line segment ends.
+				return UINT32_MAX;
+		}
+	}
+}
+
 /// The max height of the terrain and water at the specified world coordinates
 extern int32_t map_Height(int x, int y)
 {
@@ -1265,12 +1391,12 @@ extern int32_t map_Height(int x, int y)
 	center /= 4;
 
 	// we have:
-	//   y ->
-	// x 0,0  A  0,1
-	// |
-	// V D  center B
-	//
-	//   1,0  C  1,1
+	//   x ->
+	// y 0,0--D--1,0
+	// | |  \    / |
+	// V A  centre C
+	//   | /     \ |
+	//   0,1--B--1,1
 
 	// get heights for left and right corners and the distances
 	if (onTileY > onTileX)
@@ -1314,8 +1440,8 @@ extern int32_t map_Height(int x, int y)
 	ASSERT(towardsCenter <= TILE_UNITS/2, "towardsCenter is too high");
 
 	// now we have:
-	//         center
 	//    left   m    right
+	//         center
 
 	middle = (left + right)/2;
 	onBottom = left * (TILE_UNITS - towardsRight) + right * towardsRight;

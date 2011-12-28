@@ -715,9 +715,7 @@ static void proj_InFlightFunc(PROJECTILE *psProj)
 			break;
 		default:
 			// WSC_NUM_WEAPON_SUBCLASSES
-			/* Uninitialized "marker", this can be used as a
-			 * condition to assert on (i.e. it shouldn't occur).
-			 */
+			ASSERT(false, "Bad WSC_NUM_WEAPON_SUBCLASS.");
 			distanceExtensionFactor = 0;
 			break;
 	}
@@ -807,17 +805,6 @@ static void proj_InFlightFunc(PROJECTILE *psProj)
 			break;
 	}
 
-	/* impact if about to go off map else update coordinates */
-	if (!worldOnMap(psProj->pos.x, psProj->pos.y))
-	{
-		psProj->state = PROJ_IMPACT;
-		psProj->dst.x = psProj->prevSpacetime.pos.x;
-		psProj->dst.y = psProj->prevSpacetime.pos.y;
-		setProjectileDestination(psProj, NULL);
-		debug(LOG_NEVER, "**** projectile(%i) off map - removed ****\n", psProj->id);
-		return;
-	}
-
 	closestCollisionSpacetime.time = 0xFFFFFFFF;
 
 	/* Check nearby objects for possible collisions */
@@ -888,7 +875,19 @@ static void proj_InFlightFunc(PROJECTILE *psProj)
 		}
 	}
 
-	if (closestCollisionObject != NULL)
+	unsigned terrainIntersectTime = map_LineIntersect(psProj->prevSpacetime.pos, psProj->pos, psProj->time - psProj->prevSpacetime.time);
+	if (terrainIntersectTime != UINT32_MAX)
+	{
+		const uint32_t collisionTime = psProj->prevSpacetime.time + terrainIntersectTime;
+		if (collisionTime < closestCollisionSpacetime.time)
+		{
+			// We hit the terrain!
+			closestCollisionSpacetime = interpolateObjectSpacetime(psProj, collisionTime);
+			closestCollisionObject = NULL;
+		}
+	}
+
+	if (closestCollisionSpacetime.time != 0xFFFFFFFF)
 	{
 		// We hit!
 		setSpacetime(psProj, closestCollisionSpacetime);
@@ -898,13 +897,11 @@ static void proj_InFlightFunc(PROJECTILE *psProj)
 		}
 		setProjectileDestination(psProj, closestCollisionObject);  // We hit something.
 
-		/* Buildings cannot be penetrated and we need a penetrating weapon */
-		if (closestCollisionObject->type == OBJ_DROID && psStats->penetrate)
+		// Buildings and terrain cannot be penetrated and we need a penetrating weapon.
+		if (closestCollisionObject != NULL && closestCollisionObject->type == OBJ_DROID && psStats->penetrate)
 		{
 			WEAPON asWeap;
 			asWeap.nStat = psStats - asWeaponStats;
-
-			ASSERT(distanceExtensionFactor != 0, "Unitialized variable used! distanceExtensionFactor is not initialized.");
 
 			// Assume we damaged the chosen target
 			psProj->psDamaged.push_back(closestCollisionObject);
@@ -917,12 +914,8 @@ static void proj_InFlightFunc(PROJECTILE *psProj)
 		return;
 	}
 
-	ASSERT(distanceExtensionFactor != 0, "Unitialized variable used! distanceExtensionFactor is not initialized.");
-
-	if (currentDistance*100 >= psStats->longRange*distanceExtensionFactor || /* We've traveled our maximum range */
-		!mapObjIsAboveGround(psProj)) /* trying to travel through terrain */
+	if (currentDistance*100 >= psStats->longRange*distanceExtensionFactor)  // We've travelled our maximum range.
 	{
-		/* Miss due to range or height */
 		psProj->state = PROJ_IMPACT;
 		setProjectileDestination(psProj, NULL); /* miss registered if NULL target */
 		return;
