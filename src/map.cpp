@@ -92,14 +92,6 @@ struct GATEWAY_SAVE
 	UBYTE	x0,y0,x1,y1;
 };
 
-struct ZONEMAP_SAVEHEADER
-{
-	UWORD version;
-	UWORD numZones;
-	UWORD numEquivZones;
-	UWORD pad;
-};
-
 /* Sanity check definitions for the save struct file sizes */
 #define SAVE_HEADER_SIZE	16
 #define SAVE_TILE_SIZE		3
@@ -954,7 +946,6 @@ failure:
 /* Save the map data */
 bool mapSave(char **ppFileData, UDWORD *pFileSize)
 {
-	UDWORD	i;
 	MAP_SAVEHEADER	*psHeader = NULL;
 	MAP_SAVETILE	*psTileData = NULL;
 	MAPTILE	*psTile = NULL;
@@ -962,7 +953,6 @@ bool mapSave(char **ppFileData, UDWORD *pFileSize)
 	GATEWAY_SAVEHEADER *psGateHeader = NULL;
 	GATEWAY_SAVE *psGate = NULL;
 	SDWORD	numGateways = 0;
-	ZONEMAP_SAVEHEADER *psZoneHeader = NULL;
 
 	// find the number of non water gateways
 	for(psCurrGate = gwGetGateways(); psCurrGate; psCurrGate = psCurrGate->psNext)
@@ -974,8 +964,6 @@ bool mapSave(char **ppFileData, UDWORD *pFileSize)
 	*pFileSize = SAVE_HEADER_SIZE + mapWidth*mapHeight * SAVE_TILE_SIZE;
 	// Add on the size of the gateway data.
 	*pFileSize += sizeof(GATEWAY_SAVEHEADER) + sizeof(GATEWAY_SAVE)*numGateways;
-	// Add on the size of the zone data header. For backwards compatibility.
-	*pFileSize += sizeof(ZONEMAP_SAVEHEADER);
 
 	*ppFileData = (char*)malloc(*pFileSize);
 	if (*ppFileData == NULL)
@@ -1003,7 +991,7 @@ bool mapSave(char **ppFileData, UDWORD *pFileSize)
 	/* Put the map data into the buffer */
 	psTileData = (MAP_SAVETILE *)(*ppFileData + SAVE_HEADER_SIZE);
 	psTile = psMapTiles;
-	for(i=0; i<mapWidth*mapHeight; i++)
+	for (int i = 0; i < mapWidth*mapHeight; i++)
 	{
 		psTileData->texture = psTile->texture;
 		if (psTile->ground == waterGroundType)
@@ -1019,7 +1007,7 @@ bool mapSave(char **ppFileData, UDWORD *pFileSize)
 		endian_uword(&psTileData->texture);
 
 		psTileData = (MAP_SAVETILE *)((UBYTE *)psTileData + SAVE_TILE_SIZE);
-		psTile ++;
+		psTile++;
 	}
 
 	// Put the gateway header.
@@ -1033,7 +1021,6 @@ bool mapSave(char **ppFileData, UDWORD *pFileSize)
 
 	psGate = (GATEWAY_SAVE*)(psGateHeader+1);
 
-	i=0;
 	// Put the gateway data.
 	for(psCurrGate = gwGetGateways(); psCurrGate; psCurrGate = psCurrGate->psNext)
 	{
@@ -1041,21 +1028,10 @@ bool mapSave(char **ppFileData, UDWORD *pFileSize)
 		psGate->y0 = psCurrGate->y1;
 		psGate->x1 = psCurrGate->x2;
 		psGate->y1 = psCurrGate->y2;
+		ASSERT(psGate->x0 == psGate->x1 || psGate->y0 == psGate->y1, "Invalid gateway coordinates (%d, %d, %d, %d)",
+		       psGate->x0, psGate->y0, psGate->x1, psGate->y1);
 		psGate++;
-		i++;
 	}
-
-	// Put the zone header.
-	psZoneHeader = (ZONEMAP_SAVEHEADER*)psGate;
-	psZoneHeader->version = 3;
-	psZoneHeader->numZones = 0;
-	psZoneHeader->numEquivZones = 0;
-
-	/* ZONEMAP_SAVEHEADER */
-	endian_uword(&psZoneHeader->version);
-	endian_uword(&psZoneHeader->numZones);
-	endian_uword(&psZoneHeader->numEquivZones);
-	endian_uword(&psZoneHeader->pad);
 
 	return true;
 }
