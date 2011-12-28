@@ -368,12 +368,6 @@ bool screen_getMapPreview(void)
 	return mappreview;
 }
 
-/* Swap between windowed and full screen mode */
-void screenToggleMode(void)
-{
-	// TODO
-}
-
 // Screenshot code goes below this
 static const unsigned int channelsPerPixel = 3;
 

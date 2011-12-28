@@ -143,6 +143,12 @@ void wzScreenFlip()
 	SDL_GL_SwapBuffers();
 }
 
+void wzToggleFullscreen()
+{
+	war_setFullscreen(!war_getFullscreen());
+	SDL_WM_ToggleFullScreen(screen);
+}
+
 void wzQuit()
 {
 	// Create a quit event to halt game loop.

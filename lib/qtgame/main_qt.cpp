@@ -87,6 +87,10 @@ void wzShutdown()
 	appPtr = NULL;
 }
 
+void wzToggleFullscreen()
+{
+}
+
 QList<QSize> wzAvailableResolutions()
 {
 	return WzMainWindow::instance()->availableResolutions();

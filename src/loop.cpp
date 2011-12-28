@@ -363,11 +363,11 @@ static GAMECODE renderLoop()
 
 	if (!quitting)
 	{
-			/* Check for toggling display mode */
-			if ((keyDown(KEY_LALT) || keyDown(KEY_RALT)) && keyPressed(KEY_RETURN))
-			{
-				screenToggleMode();
-			}
+		/* Check for toggling display mode */
+		if ((keyDown(KEY_LALT) || keyDown(KEY_RALT)) && keyPressed(KEY_RETURN))
+		{
+			wzToggleFullscreen();
+		}
 	}
 
 	// deal with the mission state
@@ -412,7 +412,7 @@ static GAMECODE renderLoop()
 		/* Check for toggling display mode */
 		if ((keyDown(KEY_LALT) || keyDown(KEY_RALT)) && keyPressed(KEY_RETURN))
 		{
-			screenToggleMode();
+			wzToggleFullscreen();
 		}
 		return GAMECODE_QUITGAME;
 	}

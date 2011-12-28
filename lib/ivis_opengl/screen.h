@@ -54,9 +54,6 @@ extern void screen_Upload(const char *newBackDropBmp, bool preview);
 /* screendump */
 extern void screenDumpToDisk(const char* path);
 
-/* Toggle the display between full screen or windowed */
-extern void	screenToggleMode(void);
-
 extern int wz_texture_compression;
 
 extern void screenDoDumpToDiskIfRequired(void);

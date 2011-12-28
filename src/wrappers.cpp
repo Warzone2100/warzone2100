@@ -263,7 +263,7 @@ TITLECODE titleLoop(void)
 	if ((keyDown(KEY_LALT) || keyDown(KEY_RALT))
 	    /* Check for toggling display mode */
 	    && keyPressed(KEY_RETURN)) {
-		screenToggleMode();
+		wzToggleFullscreen();
 	}
 	return RetCode;
 }
