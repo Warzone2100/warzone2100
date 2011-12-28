@@ -29,7 +29,7 @@ function gitRepo {
 	VCS_SHORT_HASH="$(echo ${VCS_FULL_HASH} | cut -b 1-7)"
 	
 	# Current branch
-	VCS_URI="$(git symbolic-ref HEAD)"
+	VCS_URI=`git rev-parse --symbolic-full-name --verify $(git name-rev --name-only --no-undefined HEAD)`
 	
 	# Current tag (or uri if there is no tag)
 	VCS_TAG="$(git describe --exact-match --tags 2>/dev/null)"
