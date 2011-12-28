@@ -542,7 +542,7 @@ bool triggerStructureAttacked(STRUCTURE *psVictim, BASE_OBJECT *psAttacker)
 
 bool triggerResearched(STRUCTURE *psStruct)
 {
-	for (int i = 0; i < scripts.size(); ++i)
+	for (int i = 0; i < scripts.size() && psStruct; ++i)
 	{
 		QScriptEngine *engine = scripts.at(i);
 		int player = engine->globalObject().property("me").toInt32();
