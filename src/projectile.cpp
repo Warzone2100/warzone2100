@@ -489,7 +489,7 @@ bool proj_SendProjectileAngled(WEAPON *psWeap, SIMPLE_OBJECT *psAttacker, int pl
 	// Get target distance, horizontal distance only.
 	uint32_t dist = iHypot(removeZ(deltaPos));
 
-	if (proj_Direct(psStats) || (!proj_Direct(psStats) && dist <= psStats->minRange))
+	if (proj_Direct(psStats))
 	{
 		psProj->rot.pitch = iAtan2(deltaPos.z, dist);
 	}
