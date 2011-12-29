@@ -283,6 +283,11 @@ bool writeLabels(const char *filename)
 //
 // All script functions should be prefixed with "js_" then followed by same name as in script.
 
+//-- \subsection{label(key)}
+//-- Fetch something denoted by a label. Labels are areas, positions or game objects on 
+//-- the map defined using the map editor and stored together with the map. The only argument
+//-- is a text label. The function returns a composite object that has a type variable
+//-- defining what it is (in case this is unclear).
 static QScriptValue js_label(QScriptContext *context, QScriptEngine *engine)
 {
 	QString label = context->argument(0).toString();
@@ -347,7 +352,11 @@ static QScriptValue js_newGroup(QScriptContext *, QScriptEngine *)
 	return QScriptValue(newGrp->id);
 }
 
-// TODO, allow passing in a research object instead of a string as second parameter
+//-- \subsection{pursueResearch(lab, research)}
+//-- Start researching the first available technology on the way to the given technology.
+//-- First parameter is the structure to research in, which must be a research lab. The
+//-- second parameter is the technology to pursue, as a text string as defined in "research.txt".
+// TODO, allow passing in a research object or string array instead of a string as second parameter
 static QScriptValue js_pursueResearch(QScriptContext *context, QScriptEngine *engine)
 {
 	QScriptValue structVal = context->argument(0);
@@ -414,6 +423,10 @@ static QScriptValue js_pursueResearch(QScriptContext *context, QScriptEngine *en
 	return QScriptValue(false); // none found
 }
 
+//-- \subsection{getResearch(research)}
+//-- Fetch information about a given technology item, given by a string that matches
+//-- its definition in "research.txt". The resulting object is composed of the following
+//-- variables: power (int), points (int), started (bool), done (bool), and name (string).
 static QScriptValue js_getResearch(QScriptContext *context, QScriptEngine *engine)
 {
 	int player = engine->globalObject().property("me").toInt32();
@@ -423,6 +436,9 @@ static QScriptValue js_getResearch(QScriptContext *context, QScriptEngine *engin
 	return convResearch(psResearch, engine, player);
 }
 
+//-- \subsection{enumResearch()}
+//-- Returns an array of all research items that are currently and immediately available for research.
+//-- These items are composite objects, as returned by \emph{getResearch}.
 static QScriptValue js_enumResearch(QScriptContext *context, QScriptEngine *engine)
 {
 	QList<RESEARCH *> reslist;
@@ -443,6 +459,8 @@ static QScriptValue js_enumResearch(QScriptContext *context, QScriptEngine *engi
 	return result;
 }
 
+//-- \subsection{componentAvailable(component type, component name)}
+//-- Checks whether a given component is available to the current player.
 static QScriptValue js_componentAvailable(QScriptContext *context, QScriptEngine *engine)
 {
 	int player = engine->globalObject().property("me").toInt32();
@@ -454,6 +472,9 @@ static QScriptValue js_componentAvailable(QScriptContext *context, QScriptEngine
 	return QScriptValue(avail);
 }
 
+//-- \subsection{getTemplate(template name)}
+//-- Return a descriptive object for the given template. Returns null if template
+//-- does not exist.
 static QScriptValue js_getTemplate(QScriptContext *context, QScriptEngine *engine)
 {
 	int player = engine->globalObject().property("me").toInt32();
@@ -473,7 +494,9 @@ static QScriptValue js_getTemplate(QScriptContext *context, QScriptEngine *engin
 	return QScriptValue();
 }
 
-// newTemplate(name, body, propulsion, reserved, turrets...)
+//-- \subsection{newTemplate(name, body, propulsion, reserved, turrets...)}
+//-- Generate a new template with the given name, body, propulsion and turrets.
+//-- The reserved parameter should be passed an empty string for now.
 static QScriptValue js_newTemplate(QScriptContext *context, QScriptEngine *engine)
 {
 	int player = engine->globalObject().property("me").toInt32();
@@ -556,6 +579,12 @@ static QScriptValue js_newTemplate(QScriptContext *context, QScriptEngine *engin
 	return QScriptValue(valid);
 }
 
+//-- \subsection{enumStruct([player[, structure type[, looking player]]])}
+//-- Returns an array of structure objects. If no parameters given, it will
+//-- return all of the structures for the current player. The second parameter
+//-- is the name of the structure type, as defined in "structures.txt". The
+//-- third parameter can be used to filter by visibility, the default is not
+//-- to filter.
 static QScriptValue js_enumStruct(QScriptContext *context, QScriptEngine *engine)
 {
 	QList<STRUCTURE *> matches;
@@ -1366,18 +1395,26 @@ bool registerFunctions(QScriptEngine *engine)
 	engine->globalObject().setProperty("removeStruct", engine->newFunction(js_removeStruct));
 
 	// Set some useful constants
+	//__ \item[DORDER_ATTACK] Order a droid to attack something.
 	engine->globalObject().setProperty("DORDER_ATTACK", DORDER_ATTACK, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	//__ \item[DORDER_MOVE] Order a droid to move somewhere.
 	engine->globalObject().setProperty("DORDER_MOVE", DORDER_MOVE, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	//__ \item[DORDER_SCOUT] Order a droid to move somewhere and stop to attack anything on the way.
 	engine->globalObject().setProperty("DORDER_SCOUT", DORDER_SCOUT, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	//__ \item[DORDER_BUILD] Order a droid to build something.
 	engine->globalObject().setProperty("DORDER_BUILD", DORDER_BUILD, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	//__ \item[DORDER_HELPBUILD] Order a droid to help build something.
 	engine->globalObject().setProperty("DORDER_HELPBUILD", DORDER_HELPBUILD, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	//__ \item[DORDER_LINEBUILD] Order a droid to build something repeatedly in a line.
 	engine->globalObject().setProperty("DORDER_LINEBUILD", DORDER_LINEBUILD, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	//__ \item[DORDER_REPAIR] Order a droid to repair something.
 	engine->globalObject().setProperty("DORDER_REPAIR", DORDER_REPAIR, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	//__ \item[DORDER_RETREAT] Order a droid to retreat back to HQ.
 	engine->globalObject().setProperty("DORDER_RETREAT", DORDER_RETREAT, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	//__ \item[DORDER_PATROL] Order a droid to patrol.
 	engine->globalObject().setProperty("DORDER_PATROL", DORDER_PATROL, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	//__ \item[DORDER_BUILDMODULE] Order a droid to build a module.
 	engine->globalObject().setProperty("DORDER_BUILDMODULE", DORDER_BUILDMODULE, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("mapWidth", mapWidth, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("mapHeight", mapHeight, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("COMMAND", IDRET_COMMAND, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("OPTIONS", IDRET_COMMAND, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("BUILD", IDRET_BUILD, QScriptValue::ReadOnly | QScriptValue::Undeletable);
@@ -1416,6 +1453,8 @@ bool registerFunctions(QScriptEngine *engine)
 	engine->globalObject().setProperty("INSANE", DIFFICULTY_INSANE, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 
 	// Static knowledge about players
+	//== \item[playerData] An array of information about the players in a game. Each item in the array is an object
+	//== containing the following variables: difficulty (see \emph{difficulty} global constant), colour, position, and team.
 	QScriptValue playerData = engine->newArray(game.maxPlayers);
 	for (int i = 0; i < game.maxPlayers; i++)
 	{
@@ -1429,6 +1468,10 @@ bool registerFunctions(QScriptEngine *engine)
 	engine->globalObject().setProperty("playerData", playerData, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 
 	// Static map knowledge about start positions
+	//== \item[derrickPositions] An array of derrick starting positions on the current map. Each item in the array is an 
+	//== object containing the x and y variables for a derrick.
+	//== \item[startPositions] An array of player start positions on the current map. Each item in the array is an 
+	//== object containing the x and y variables for a player start position.
 	QScriptValue startPositions = engine->newArray(game.maxPlayers);
 	for (int i = 0; i < game.maxPlayers; i++)
 	{

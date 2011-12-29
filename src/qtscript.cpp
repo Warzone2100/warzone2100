@@ -39,6 +39,7 @@
 #include "lib/framework/file.h"
 #include "lib/gamelib/gtime.h"
 #include "multiplay.h"
+#include "map.h"
 
 #include "qtscriptfuncs.h"
 
@@ -110,6 +111,41 @@ static bool callFunction(QScriptEngine *engine, const QString &function, const Q
 	return true;
 }
 
+//-- \subsection{setTimer(function, milliseconds[, object])}
+//-- Set a function to run repeated at some given time interval. The function to run 
+//-- is the first parameter, and it \underline{must be quoted}, otherwise the function will
+//-- be inlined. The second parameter is the interval, in milliseconds. A third, optional
+//-- parameter can be a game object to pass to the timer function. If the game object
+//-- dies, the timer stops running. The minimum number of milliseconds is 100, but such
+//-- fast timers are strongly discouraged as they may deteriorate the game performance.
+//--
+//-- \begin{lstlisting}
+//--   function conDroids()
+//--   {
+//--      ... do stuff ...
+//--   }
+//--   // call conDroids every 4 seconds
+//--   setTimer("conDroids", 4000);
+//-- \end{lstlisting}
+static QScriptValue js_setTimer(QScriptContext *context, QScriptEngine *engine)
+{
+	QString funcName = context->argument(0).toString();
+	QScriptValue ms = context->argument(1);
+	int player = engine->globalObject().property("me").toInt32();
+	timerNode node(engine, funcName, player, ms.toInt32());
+	if (context->argumentCount() == 3)
+	{
+		QScriptValue obj = context->argument(2);
+		node.baseobj = obj.property("id").toInt32();
+	}
+	node.type = TIMER_REPEAT;
+	timers.push_back(node);
+	return QScriptValue();
+}
+
+//-- \subsection{removeTimer(function)}
+//-- Removes an existing timer. The first parameter is the function timer to remove,
+//-- and its name \underline{must be quoted}.
 static QScriptValue js_removeTimer(QScriptContext *context, QScriptEngine *engine)
 {
 	QString function = context->argument(0).toString();
@@ -132,29 +168,13 @@ static QScriptValue js_removeTimer(QScriptContext *context, QScriptEngine *engin
 	return QScriptValue();
 }
 
-/// Special scripting function that registers a timer event. Note: Functions must be passed
-/// quoted, otherwise they will be inlined! If a third parameter is passed, this must be an
-/// object, which is then passed to the timer. If the object is dead, the timer stops.
-static QScriptValue js_setTimer(QScriptContext *context, QScriptEngine *engine)
-{
-	QString funcName = context->argument(0).toString();
-	QScriptValue ms = context->argument(1);
-	int player = engine->globalObject().property("me").toInt32();
-	timerNode node(engine, funcName, player, ms.toInt32());
-	if (context->argumentCount() == 3)
-	{
-		QScriptValue obj = context->argument(2);
-		node.baseobj = obj.property("id").toInt32();
-	}
-	node.type = TIMER_REPEAT;
-	timers.push_back(node);
-	return QScriptValue();
-}
-
-/// Special scripting function that queues up a function to call once at a later time frame.
-/// Note: Functions must be passed quoted, otherwise they will be inlined! If a third
-/// parameter is passed, this must be an object, which is then passed to the timer. If
-/// the object is dead, the timer stops.
+//-- \subsection{queue(function[, object])}
+//-- Queues up a function to run at a later game frame. This is useful to prevent
+//-- stuttering during the game, which can happen if too much script processing is
+//-- done at once.  The function to run is the first parameter, and it 
+//-- \underline{must be quoted}, otherwise the function will be inlined. A second, optional
+//-- parameter can be a game object to pass to the queued function. If the game object
+//-- dies before the queued call runs, nothing happens.
 static QScriptValue js_queue(QScriptContext *context, QScriptEngine *engine)
 {
 	QString funcName = context->argument(0).toString();
@@ -193,10 +213,13 @@ void scriptRemoveObject(const BASE_OBJECT *psObj)
 	}
 }
 
-/// Special scripting function that binds a function call to an object. The function
-/// is called before the object is destroyed.
-/// Note: Functions must be passed quoted, otherwise they will be inlined! If a third
-/// parameter is passed, this must be a player, which may be used for filtering.
+//-- \subsection{bind(function, object[, player])}
+//-- Bind a function call to an object. The function is called before the 
+//-- object is destroyed. The function to run is the first parameter, and it 
+//-- \underline{must be quoted}, otherwise the function will be inlined. The
+//-- second argument is the object to bind to. A third, optional player parameter
+//-- may be passed, which may be used for filtering, depending on the object type.
+//-- \emph{NOTE: This function is under construction and is subject to total change!}
 static QScriptValue js_bind(QScriptContext *context, QScriptEngine *engine)
 {
 	bindNode node;
@@ -222,7 +245,9 @@ static QScriptValue js_bind(QScriptContext *context, QScriptEngine *engine)
 	return QScriptValue();
 }
 
-// Currently breaks the lint test, so use with care
+//-- \subsection{include(file)}
+//-- Includes another source code file at this point. This is experimental, and breaks the
+//-- lint tool, so use with care.
 static QScriptValue js_include(QScriptContext *context, QScriptEngine *engine)
 {
 	QString path = context->argument(0).toString();
@@ -357,16 +382,31 @@ bool loadPlayerScript(QString path, int player, int difficulty)
 	engine->globalObject().setProperty("bind", engine->newFunction(js_bind));
 
 	// Special global variables
+	//== \item[me] The player the script is currently running as.
 	engine->globalObject().setProperty("me", player, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	//== \item[selectedPlayer] The player ontrolled by the client on which the script runs.
 	engine->globalObject().setProperty("selectedPlayer", selectedPlayer, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	//== \item[gameTime] The current game time. Updated before every invokation of a script.
 	engine->globalObject().setProperty("gameTime", gameTime, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	//== \item[difficulty] The currently set campaign difficulty, or the current AI's difficulty setting. It will be one of
+	//== EASY, MEDIUM, HARD or INSANE.
 	engine->globalObject().setProperty("difficulty", difficulty, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	//== \item[mapName] The name of the current map.
 	engine->globalObject().setProperty("mapName", game.map, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	//== \item[baseType] The type of base that the game starts with. It will be one of CAMP_CLEAN, CAMP_BASE or CAMP_WALLS.
 	engine->globalObject().setProperty("baseType", game.base, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	//== \item[alliancesType] The type of alliances permitted in this game. It will be one of NO_ALLIANCES, ALLIANCES or ALLIANCES_TEAMS.
 	engine->globalObject().setProperty("alliancesType", game.alliance, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	//== \item[powerType] The power level set for this game.
 	engine->globalObject().setProperty("powerType", game.power, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	//== \item[maxPlayers] The number of active players in this game.
 	engine->globalObject().setProperty("maxPlayers", game.maxPlayers, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	//== \item[scavengers] Whether or not scavengers are activated in this game.
 	engine->globalObject().setProperty("scavengers", game.scavengers, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	//== \item[mapWidth] Width of map in tiles.
+	engine->globalObject().setProperty("mapWidth", mapWidth, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	//== \item[mapHeight] Height of map in tiles.
+	engine->globalObject().setProperty("mapHeight", mapHeight, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 
 	// Regular functions
 	registerFunctions(engine);
