@@ -121,8 +121,14 @@ function conDroids()
 	}
 }
 
-function eventResearched(labparam)
+function eventResearched(tech, labparam)
 {
+	var techlist = [
+		"R-Defense-Tower01",	// mg tower
+		"R-Struc-PowerModuleMk1",	// power module
+		"R-Struc-Factory-Module",	// factory module
+		"R-Struc-Research-Upgrade06",	// final research upgrade
+	];
 	var anyfound = true; // assume success
 	var lablist;
 	if (labparam) // check if called with parameter or not
@@ -139,7 +145,7 @@ function eventResearched(labparam)
 		var lab = lablist[i];
 		if (lab.status == BUILT && structureIdle(lab))
 		{
-			var found = pursueResearch(lab, "R-Struc-Research-Upgrade06");
+			var found = pursueResearch(lab, techlist);
 			if (!found)
 			{
 				// Find a random research item

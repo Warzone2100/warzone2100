@@ -393,7 +393,8 @@ static QScriptValue js_newGroup(QScriptContext *, QScriptEngine *)
 //-- Start researching the first available technology on the way to the given technology.
 //-- First parameter is the structure to research in, which must be a research lab. The
 //-- second parameter is the technology to pursue, as a text string as defined in "research.txt".
-// TODO, allow passing in a research object or string array instead of a string as second parameter
+//-- The second parameter may also be an array of such strings. The first technology that has
+//-- not yet been researched in that list will be pursued.
 static QScriptValue js_pursueResearch(QScriptContext *context, QScriptEngine *engine)
 {
 	QScriptValue structVal = context->argument(0);
@@ -401,18 +402,44 @@ static QScriptValue js_pursueResearch(QScriptContext *context, QScriptEngine *en
 	int player = structVal.property("player").toInt32();
 	STRUCTURE *psStruct = IdToStruct(id, player);
 	SCRIPT_ASSERT(context, psStruct, "No such structure id %d belonging to player %d", id, player);
-	QString resName = context->argument(1).toString();
-	RESEARCH *psResearch = getResearch(resName.toUtf8().constData());
-	SCRIPT_ASSERT(context, psResearch, "No such research: %s", resName.toUtf8().constData());
-	PLAYER_RESEARCH *plrRes = &asPlayerResList[player][psResearch->index];
+	QScriptValue list = context->argument(1);
+	RESEARCH *psResearch;
+	if (list.isArray())
+	{
+		int length = list.property("length").toInt32();
+		int k;
+		for (k = 0; k < length; k++)
+		{
+			QString resName = list.property(k).toString();
+			psResearch = getResearch(resName.toUtf8().constData());
+			SCRIPT_ASSERT(context, psResearch, "No such research: %s", resName.toUtf8().constData());
+			PLAYER_RESEARCH *plrRes = &asPlayerResList[player][psResearch->index];
+			if (!IsResearchStartedPending(plrRes) && !IsResearchCompleted(plrRes))
+			{
+				break; // use this one
+			}
+		}
+		if (k == length)
+		{
+			debug(LOG_SCRIPT, "Exhausted research list -- doing nothing");
+			return QScriptValue(false);
+		}
+	}
+	else
+	{
+		QString resName = list.toString();
+		psResearch = getResearch(resName.toUtf8().constData());
+		SCRIPT_ASSERT(context, psResearch, "No such research: %s", resName.toUtf8().constData());
+		PLAYER_RESEARCH *plrRes = &asPlayerResList[player][psResearch->index];
+		if (IsResearchStartedPending(plrRes) || IsResearchCompleted(plrRes))
+		{
+			debug(LOG_SCRIPT, "%s has already been researched!", resName.toUtf8().constData());
+			return QScriptValue(false);
+		}
+	}
 	SCRIPT_ASSERT(context, psStruct->pStructureType->type == REF_RESEARCH, "Not a research lab: %s", objInfo(psStruct));
 	RESEARCH_FACILITY *psResLab = (RESEARCH_FACILITY *)psStruct->pFunctionality;
 	SCRIPT_ASSERT(context, psResLab->psSubject == NULL, "Research lab not ready");
-	if (IsResearchStartedPending(plrRes) || IsResearchCompleted(plrRes))
-	{
-		debug(LOG_SCRIPT, "Research already started or completed for player %d: %s", player, psResearch->pName);
-		return QScriptValue(false);
-	}
 	// Go down the requirements list for the desired tech
 	QList<RESEARCH *> reslist;
 	RESEARCH *cur = psResearch;
@@ -462,8 +489,7 @@ static QScriptValue js_pursueResearch(QScriptContext *context, QScriptEngine *en
 
 //-- \subsection{getResearch(research)}
 //-- Fetch information about a given technology item, given by a string that matches
-//-- its definition in "research.txt". The resulting object is composed of the following
-//-- variables: power (int), points (int), started (bool), done (bool), and name (string).
+//-- its definition in "research.txt".
 static QScriptValue js_getResearch(QScriptContext *context, QScriptEngine *engine)
 {
 	int player = engine->globalObject().property("me").toInt32();
@@ -474,8 +500,7 @@ static QScriptValue js_getResearch(QScriptContext *context, QScriptEngine *engin
 }
 
 //-- \subsection{enumResearch()}
-//-- Returns an array of all research items that are currently and immediately available for research.
-//-- These items are composite objects, as returned by \emph{getResearch}.
+//-- Returns an array of all research objects that are currently and immediately available for research.
 static QScriptValue js_enumResearch(QScriptContext *context, QScriptEngine *engine)
 {
 	QList<RESEARCH *> reslist;
@@ -1023,7 +1048,6 @@ static QScriptValue js_orderDroidStatsLoc(QScriptContext *context, QScriptEngine
 
 //-- \subsection{orderDroidLoc(droid, order, x, y)}
 //-- Give a droid an order to do something at the given location.
-// TODO -- combine with orderDroid with optional parameters
 static QScriptValue js_orderDroidLoc(QScriptContext *context, QScriptEngine *)
 {
 	QScriptValue droidVal = context->argument(0);
@@ -1131,6 +1155,7 @@ static QScriptValue js_centreView(QScriptContext *context, QScriptEngine *engine
 }
 
 //-- \subsection{playSound(sound[, x, y, z])}
+//-- Play a sound, optionally at a location.
 static QScriptValue js_playSound(QScriptContext *context, QScriptEngine *engine)
 {
 	int player = engine->globalObject().property("me").toInt32();
@@ -1161,6 +1186,7 @@ static QScriptValue js_playSound(QScriptContext *context, QScriptEngine *engine)
 }
 
 //-- \subsection{gameOverMessage(won)}
+//-- End game in victory or defeat.
 static QScriptValue js_gameOverMessage(QScriptContext *context, QScriptEngine *engine)
 {
 	int player = engine->globalObject().property("me").toInt32();
@@ -1198,6 +1224,7 @@ static QScriptValue js_gameOverMessage(QScriptContext *context, QScriptEngine *e
 }
 
 //-- \subsection{completeResearch(research[, player])}
+//-- Finish a research for the given player.
 static QScriptValue js_completeResearch(QScriptContext *context, QScriptEngine *engine)
 {
 	QString researchName = context->argument(0).toString();
@@ -1226,6 +1253,7 @@ static QScriptValue js_completeResearch(QScriptContext *context, QScriptEngine *
 }
 
 //-- \subsection{enableResearch(research[, player])}
+//-- Enable a research for the given player, allowing it to be researched.
 static QScriptValue js_enableResearch(QScriptContext *context, QScriptEngine *engine)
 {
 	QString researchName = context->argument(0).toString();
@@ -1248,6 +1276,7 @@ static QScriptValue js_enableResearch(QScriptContext *context, QScriptEngine *en
 }
 
 //-- \subsection{setPower(power[, player])}
+//-- Set a player's power directly. (Do not use this in an AI script.)
 static QScriptValue js_setPower(QScriptContext *context, QScriptEngine *engine)
 {
 	int power = context->argument(0).toInt32();
