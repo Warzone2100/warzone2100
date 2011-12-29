@@ -358,6 +358,8 @@ static QScriptValue js_label(QScriptContext *context, QScriptEngine *engine)
 	return ret;
 }
 
+//-- \subsection{enumGroup(group)}
+//-- Return an array containing all the droid members of a given group.
 static QScriptValue js_enumGroup(QScriptContext *context, QScriptEngine *engine)
 {
 	int groupId = context->argument(0).toInt32();
@@ -379,6 +381,8 @@ static QScriptValue js_enumGroup(QScriptContext *context, QScriptEngine *engine)
 	return result;
 }
 
+//-- \subsection{newGroup()}
+//-- Allocate a new group.
 static QScriptValue js_newGroup(QScriptContext *, QScriptEngine *)
 {
 	DROID_GROUP *newGrp = grpCreate();
@@ -645,11 +649,15 @@ static QScriptValue js_enumStruct(QScriptContext *context, QScriptEngine *engine
 	return result;
 }
 
+//-- \subsection{enumFeature(player, name)}
+//-- Returns an array of all features seen by player of given name, as defined in "features.txt".
+//-- If player is -1, it will return all features irrespective of visibility to any player. If
+//-- name is empty, it will return any feature.
 static QScriptValue js_enumFeature(QScriptContext *context, QScriptEngine *engine)
 {
 	QList<FEATURE *> matches;
 	int looking = context->argument(0).toInt32();
-	QString statsName = statsName = context->argument(1).toString();
+	QString statsName = context->argument(1).toString();
 	SCRIPT_ASSERT(context, looking < MAX_PLAYERS && looking >= -1, "Looking player index out of range: %d", looking);
 	for (FEATURE *psFeat = apsFeatureLists[0]; psFeat; psFeat = psFeat->psNext)
 	{
@@ -668,6 +676,12 @@ static QScriptValue js_enumFeature(QScriptContext *context, QScriptEngine *engin
 	return result;
 }
 
+//-- \subsection{enumDroid([player[, droid type[, looking player]]])}
+//-- Returns an array of droid objects. If no parameters given, it will
+//-- return all of the droids for the current player. The second, optional parameter
+//-- is the name of the droid type, which can currently only be DROID_CONSTRUCT. The
+//-- third parameter can be used to filter by visibility - the default is not
+//-- to filter.
 static QScriptValue js_enumDroid(QScriptContext *context, QScriptEngine *engine)
 {
 	QList<DROID *> matches;
@@ -701,6 +715,8 @@ static QScriptValue js_enumDroid(QScriptContext *context, QScriptEngine *engine)
 	return result;
 }
 
+//-- \subsection{debug(string...)}
+//-- Output text to the command line.
 // is this really useful?
 static QScriptValue js_debug(QScriptContext *context, QScriptEngine *engine)
 {
@@ -722,6 +738,9 @@ static QScriptValue js_debug(QScriptContext *context, QScriptEngine *engine)
 	return QScriptValue();
 }
 
+//-- \subsection{pickStructLocation(droid, structure type, x, y)}
+//-- Pick a location for constructing a certain type of building near some given position.
+//-- Returns a position object containing "x" and "y" values, if successful.
 static QScriptValue js_pickStructLocation(QScriptContext *context, QScriptEngine *engine)
 {
 	QScriptValue droidVal = context->argument(0);
@@ -820,6 +839,8 @@ endstructloc:
 	return QScriptValue();
 }
 
+//-- \subsection{structureIdle(structure)}
+//-- Is given structure idle?
 static QScriptValue js_structureIdle(QScriptContext *context, QScriptEngine *)
 {
 	QScriptValue structVal = context->argument(0);
@@ -830,6 +851,8 @@ static QScriptValue js_structureIdle(QScriptContext *context, QScriptEngine *)
 	return QScriptValue(structureIdle(psStruct));
 }
 
+//-- \subsection{removeStruct(structure)}
+//-- Immediately remove the given structure from the map.
 static QScriptValue js_removeStruct(QScriptContext *context, QScriptEngine *)
 {
 	QScriptValue structVal = context->argument(0);
@@ -841,6 +864,8 @@ static QScriptValue js_removeStruct(QScriptContext *context, QScriptEngine *)
 	return QScriptValue();
 }
 
+//-- \subsection{console(strings...)}
+//-- Print text to the player console.
 // TODO, should cover scrShowConsoleText, scrAddConsoleText, scrTagConsoleText and scrConsole
 static QScriptValue js_console(QScriptContext *context, QScriptEngine *engine)
 {
@@ -869,6 +894,8 @@ static QScriptValue js_console(QScriptContext *context, QScriptEngine *engine)
 	return QScriptValue();
 }
 
+//-- \subsection{groupAddArea(group, x1, y1, x2, y2)}
+//-- Add any droids inside the given area to the given group.
 static QScriptValue js_groupAddArea(QScriptContext *context, QScriptEngine *engine)
 {
 	int groupId = context->argument(0).toInt32();
@@ -891,6 +918,8 @@ static QScriptValue js_groupAddArea(QScriptContext *context, QScriptEngine *engi
 	return QScriptValue();
 }
 
+//-- \subsection{groupAddDroid(group, droid)}
+//-- Add given droid to given group.
 static QScriptValue js_groupAddDroid(QScriptContext *context, QScriptEngine *engine)
 {
 	int groupId = context->argument(0).toInt32();
@@ -906,6 +935,8 @@ static QScriptValue js_groupAddDroid(QScriptContext *context, QScriptEngine *eng
 	return QScriptValue();
 }
 
+//-- \subsection{distBetweenTwoPoints(x1, y1, x2, y2)}
+//-- Return distance between two points.
 static QScriptValue js_distBetweenTwoPoints(QScriptContext *context, QScriptEngine *engine)
 {
 	int x1 = context->argument(0).toNumber();
@@ -915,6 +946,8 @@ static QScriptValue js_distBetweenTwoPoints(QScriptContext *context, QScriptEngi
 	return QScriptValue(iHypot(x1 - x2, y1 - y2));
 }
 
+//-- \subsection{groupSize(group)}
+//-- Return the number of droids currently in the given group.
 static QScriptValue js_groupSize(QScriptContext *context, QScriptEngine *)
 {
 	int groupId = context->argument(0).toInt32();
@@ -923,6 +956,9 @@ static QScriptValue js_groupSize(QScriptContext *context, QScriptEngine *)
 	return QScriptValue(psGroup->refCount);
 }
 
+//-- \subsection{droidCanReach(droid, x, y)}
+//-- Return whether or not the given droid could possibly drive to the given position. Does
+//-- not take player built blockades into account.
 static QScriptValue js_droidCanReach(QScriptContext *context, QScriptEngine *)
 {
 	QScriptValue droidVal = context->argument(0);
@@ -936,8 +972,8 @@ static QScriptValue js_droidCanReach(QScriptContext *context, QScriptEngine *)
 	return QScriptValue(fpathCheck(psDroid->pos, Vector3i(world_coord(x), world_coord(y), 0), psPropStats->propulsionType));
 }
 
-// Give a Droid an order to an object
-// droid, order, object
+//-- \subsection{orderDroidObj(droid, order, object)}
+//-- Give a droid an order to do something to something.
 static QScriptValue js_orderDroidObj(QScriptContext *context, QScriptEngine *)
 {
 	QScriptValue droidVal = context->argument(0);
@@ -959,6 +995,8 @@ static QScriptValue js_orderDroidObj(QScriptContext *context, QScriptEngine *)
 	return true;
 }
 
+//-- \subsection{orderDroidStatsLoc(droid, order, structure type, x, y)}
+//-- Give a droid an order to build someting at the given position.
 static QScriptValue js_orderDroidStatsLoc(QScriptContext *context, QScriptEngine *)
 {
 	QScriptValue droidVal = context->argument(0);
@@ -983,6 +1021,9 @@ static QScriptValue js_orderDroidStatsLoc(QScriptContext *context, QScriptEngine
 	return QScriptValue(true);
 }
 
+//-- \subsection{orderDroidLoc(droid, order, x, y)}
+//-- Give a droid an order to do something at the given location.
+// TODO -- combine with orderDroid with optional parameters
 static QScriptValue js_orderDroidLoc(QScriptContext *context, QScriptEngine *)
 {
 	QScriptValue droidVal = context->argument(0);
@@ -999,6 +1040,7 @@ static QScriptValue js_orderDroidLoc(QScriptContext *context, QScriptEngine *)
 	return QScriptValue();
 }
 
+//-- \subsection{setMissionTime(time)}
 static QScriptValue js_setMissionTime(QScriptContext *context, QScriptEngine *)
 {
 	int value = context->argument(0).toInt32() * 100;
@@ -1017,6 +1059,7 @@ static QScriptValue js_setMissionTime(QScriptContext *context, QScriptEngine *)
 	return QScriptValue();
 }
 
+//-- \subsection{setReinforcementTime(time)}
 static QScriptValue js_setReinforcementTime(QScriptContext *context, QScriptEngine *)
 {
 	int value = context->argument(0).toInt32() * 100;
@@ -1050,6 +1093,7 @@ static QScriptValue js_setReinforcementTime(QScriptContext *context, QScriptEngi
 	return QScriptValue();
 }
 
+//-- \subsection{setStructureLimits(structure type, limit)}
 static QScriptValue js_setStructureLimits(QScriptContext *context, QScriptEngine *engine)
 {
 	QString building = context->argument(0).toString();
@@ -1075,6 +1119,8 @@ static QScriptValue js_setStructureLimits(QScriptContext *context, QScriptEngine
 	return QScriptValue();
 }
 
+//-- \subsection{centreView(x, y)}
+//-- Center the player's camera at the given position.
 static QScriptValue js_centreView(QScriptContext *context, QScriptEngine *engine)
 {
 	int x = context->argument(0).toInt32();
@@ -1084,6 +1130,7 @@ static QScriptValue js_centreView(QScriptContext *context, QScriptEngine *engine
 	return QScriptValue();
 }
 
+//-- \subsection{playSound(sound[, x, y, z])}
 static QScriptValue js_playSound(QScriptContext *context, QScriptEngine *engine)
 {
 	int player = engine->globalObject().property("me").toInt32();
@@ -1113,6 +1160,7 @@ static QScriptValue js_playSound(QScriptContext *context, QScriptEngine *engine)
 	return QScriptValue();
 }
 
+//-- \subsection{gameOverMessage(won)}
 static QScriptValue js_gameOverMessage(QScriptContext *context, QScriptEngine *engine)
 {
 	int player = engine->globalObject().property("me").toInt32();
@@ -1149,6 +1197,7 @@ static QScriptValue js_gameOverMessage(QScriptContext *context, QScriptEngine *e
 	return QScriptValue();
 }
 
+//-- \subsection{completeResearch(research[, player])}
 static QScriptValue js_completeResearch(QScriptContext *context, QScriptEngine *engine)
 {
 	QString researchName = context->argument(0).toString();
@@ -1176,6 +1225,7 @@ static QScriptValue js_completeResearch(QScriptContext *context, QScriptEngine *
 	return QScriptValue();
 }
 
+//-- \subsection{enableResearch(research[, player])}
 static QScriptValue js_enableResearch(QScriptContext *context, QScriptEngine *engine)
 {
 	QString researchName = context->argument(0).toString();
@@ -1197,6 +1247,7 @@ static QScriptValue js_enableResearch(QScriptContext *context, QScriptEngine *en
 	return QScriptValue();
 }
 
+//-- \subsection{setPower(power[, player])}
 static QScriptValue js_setPower(QScriptContext *context, QScriptEngine *engine)
 {
 	int power = context->argument(0).toInt32();
@@ -1213,6 +1264,7 @@ static QScriptValue js_setPower(QScriptContext *context, QScriptEngine *engine)
 	return QScriptValue();
 }
 
+//-- \subsection{enableStructure(structure type)}
 static QScriptValue js_enableStructure(QScriptContext *context, QScriptEngine *engine)
 {
 	QString building = context->argument(0).toString();
@@ -1232,6 +1284,7 @@ static QScriptValue js_enableStructure(QScriptContext *context, QScriptEngine *e
 	return QScriptValue();
 }
 
+//-- \subsection{addReticuleButton(button type)}
 static QScriptValue js_addReticuleButton(QScriptContext *context, QScriptEngine *engine)
 {
 	int button = context->argument(0).toInt32();
@@ -1240,6 +1293,7 @@ static QScriptValue js_addReticuleButton(QScriptContext *context, QScriptEngine 
 	return QScriptValue();
 }
 
+//-- \subsection{applyLimitSet()}
 static QScriptValue js_applyLimitSet(QScriptContext *context, QScriptEngine *engine)
 {
 	Q_UNUSED(context);
@@ -1263,6 +1317,7 @@ static void setComponent(QString name, int player, int value)
 	apCompLists[player][type][compInc] = value;
 }
 
+//-- \subsection{enableComponent(component, player)}
 static QScriptValue js_enableComponent(QScriptContext *context, QScriptEngine *engine)
 {
 	QString componentName = context->argument(0).toString();
@@ -1273,6 +1328,7 @@ static QScriptValue js_enableComponent(QScriptContext *context, QScriptEngine *e
 	return QScriptValue();
 }
 
+//-- \subsection{makeComponentAvailable(component, player)}
 static QScriptValue js_makeComponentAvailable(QScriptContext *context, QScriptEngine *engine)
 {
 	QString componentName = context->argument(0).toString();
@@ -1283,6 +1339,7 @@ static QScriptValue js_makeComponentAvailable(QScriptContext *context, QScriptEn
 	return QScriptValue();
 }
 
+//-- \subsection{allianceExistsBetween(player, player)}
 static QScriptValue js_allianceExistsBetween(QScriptContext *context, QScriptEngine *engine)
 {
 	int player1 = context->argument(0).toInt32();
@@ -1292,17 +1349,22 @@ static QScriptValue js_allianceExistsBetween(QScriptContext *context, QScriptEng
 	return QScriptValue(alliances[player1][player2] == ALLIANCE_FORMED);
 }
 
+//-- \subsection{_(string)}
+//-- Mark string for translation.
 static QScriptValue js_translate(QScriptContext *context, QScriptEngine *engine)
 {
 	return QScriptValue(gettext(context->argument(0).toString().toUtf8().constData()));
 }
 
+//-- \subsection{playerPower(player)}
+//-- Return amount of power held by given player.
 static QScriptValue js_playerPower(QScriptContext *context, QScriptEngine *engine)
 {
 	int player = context->argument(0).toInt32();
 	return QScriptValue(getPower(player));
 }
 
+//-- \subsection{isStructureAvailable(structure type, player)}
 static QScriptValue js_isStructureAvailable(QScriptContext *context, QScriptEngine *engine)
 {
 	QString building = context->argument(0).toString();
@@ -1312,7 +1374,8 @@ static QScriptValue js_isStructureAvailable(QScriptContext *context, QScriptEngi
 			    && asStructLimits[player][index].currentQuantity < asStructLimits[player][index].limit);
 }
 
-// FIXME - find a better way
+//-- \subsection{hackNetOff()}
+//-- Turn off network transmissions. FIXME - find a better way.
 static QScriptValue js_hackNetOff(QScriptContext *, QScriptEngine *)
 {
 	bMultiPlayer = false;
@@ -1320,7 +1383,8 @@ static QScriptValue js_hackNetOff(QScriptContext *, QScriptEngine *)
 	return QScriptValue();
 }
 
-// FIXME - find a better way
+//-- \subsection{hackNetOn()}
+//-- FIXME - find a better way.
 static QScriptValue js_hackNetOn(QScriptContext *, QScriptEngine *)
 {
 	bMultiPlayer = true;
