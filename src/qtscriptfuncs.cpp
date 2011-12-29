@@ -403,7 +403,7 @@ static QScriptValue js_pursueResearch(QScriptContext *context, QScriptEngine *en
 	STRUCTURE *psStruct = IdToStruct(id, player);
 	SCRIPT_ASSERT(context, psStruct, "No such structure id %d belonging to player %d", id, player);
 	QScriptValue list = context->argument(1);
-	RESEARCH *psResearch;
+	RESEARCH *psResearch = NULL;  // Dummy initialisation.
 	if (list.isArray())
 	{
 		int length = list.property("length").toInt32();
