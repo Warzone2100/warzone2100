@@ -1720,6 +1720,7 @@ static void renderExplosionEffect(const EFFECT *psEffect)
 	if(TEST_FACING(psEffect))
 	{
 		/* Always face the viewer! */
+		// TODO This only faces towards the viewer, if the effect is in the middle of the screen... It draws the effect parallel with the screens near/far planes.
 		pie_MatRotY(-player.r.y);
 		pie_MatRotX(-player.r.x);
 	}
