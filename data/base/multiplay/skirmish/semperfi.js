@@ -110,7 +110,15 @@ function buildPowerGenerators()
 
 function conDroids()
 {
-
+	var faclist = enumStruct(me, factory);
+	for (var i = 0; i < faclist.length; i++)
+	{
+		var fact = faclist[i];
+		if (!buildDroid(fact, "Constructor", "Body1REC", "wheeled01", "", "Spade1Mk1"))
+		{
+			debug("Failed to construct new truck (2)");
+		}
+	}
 }
 
 function eventResearched(labparam)
@@ -149,14 +157,6 @@ function eventResearched(labparam)
 			}
 		}
 	}
-	if (!newTemplate("Constructor", "Body1REC", "wheeled01", "", "Spade1Mk1"))
-	{
-		debug("Failed to design truck");
-	}
-	if (!newTemplate("Viper", "Body1REC", "wheeled01", "", "MG1Mk1"))
-	{
-		debug("Failed to design viper");
-	}
 }
 
 function buildFundamentals()
@@ -181,11 +181,9 @@ function buildFundamentals()
 
 function eventDroidBuilt(droid, struct)
 {
-	var templ = getTemplate("Viper");
-	if (templ && structureIdle(struct))
+	if (!buildDroid(struct, "Constructor", "Body1REC", "wheeled01", "", "Spade1Mk1"))
 	{
-		debug("building Viper");
-		buildDroid("Viper", struct);
+		debug("Failed to construct new truck");
 	}
 }
 

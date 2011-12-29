@@ -53,8 +53,6 @@ extern bool structDoubleCheck(BASE_STATS *psStat,UDWORD xx,UDWORD yy, SDWORD max
 extern Vector2i positions[MAX_PLAYERS];
 extern std::vector<Vector2i> derricks;
 
-extern std::list<DROID_TEMPLATE> localTemplates;       ///< Unsychnronised list, for UI use only.
-
 // ----------------------------------------------------------------------------------------
 // Utility functions -- not called directly from scripts
 
@@ -188,31 +186,6 @@ QScriptValue convObj(BASE_OBJECT *psObj, QScriptEngine *engine)
 	value.setProperty("type", psObj->type, QScriptValue::ReadOnly);
 	value.setProperty("selected", psObj->selected, QScriptValue::ReadOnly);
 	value.setProperty("name", objInfo(psObj));
-	return value;
-}
-
-QScriptValue convTemplate(DROID_TEMPLATE *psTempl, QScriptEngine *engine)
-{
-	QScriptValue value = engine->newObject();
-	ASSERT_OR_RETURN(value, psTempl, "No object for conversion");
-	value.setProperty("id", psTempl->multiPlayerID, QScriptValue::ReadOnly);
-	value.setProperty("name", psTempl->pName, QScriptValue::ReadOnly);
-	value.setProperty("points", psTempl->buildPoints, QScriptValue::ReadOnly);
-	value.setProperty("power", psTempl->powerPoints, QScriptValue::ReadOnly);
-	value.setProperty("droidType", psTempl->droidType, QScriptValue::ReadOnly);
-	value.setProperty("body", (asBodyStats + psTempl->asParts[COMP_BODY])->pName, QScriptValue::ReadOnly);
-	value.setProperty("propulsion", (asPropulsionStats + psTempl->asParts[COMP_PROPULSION])->pName, QScriptValue::ReadOnly);
-	value.setProperty("brain", (asBrainStats + psTempl->asParts[COMP_BRAIN])->pName, QScriptValue::ReadOnly);
-	value.setProperty("repair", (asRepairStats + psTempl->asParts[COMP_REPAIRUNIT])->pName, QScriptValue::ReadOnly);
-	value.setProperty("ecm", (asECMStats + psTempl->asParts[COMP_ECM])->pName, QScriptValue::ReadOnly);
-	value.setProperty("sensor", (asSensorStats + psTempl->asParts[COMP_SENSOR])->pName, QScriptValue::ReadOnly);
-	value.setProperty("construct", (asConstructStats + psTempl->asParts[COMP_CONSTRUCT])->pName, QScriptValue::ReadOnly);
-	QScriptValue weaponlist = engine->newArray(psTempl->numWeaps);
-	for (int j = 0; j < psTempl->numWeaps; j++)
-	{
-		weaponlist.setProperty(j, QScriptValue((asWeaponStats + psTempl->asWeaps[j])->pName), QScriptValue::ReadOnly);
-	}
-	value.setProperty("weapons", weaponlist);
 	return value;
 }
 
@@ -532,40 +505,25 @@ static QScriptValue js_componentAvailable(QScriptContext *context, QScriptEngine
 	return QScriptValue(avail);
 }
 
-//-- \subsection{getTemplate(template name)}
-//-- Return a descriptive object for the given template. Returns null if template
-//-- does not exist.
-static QScriptValue js_getTemplate(QScriptContext *context, QScriptEngine *engine)
-{
-	int player = engine->globalObject().property("me").toInt32();
-	QString templName = context->argument(0).toString();
-	DROID_TEMPLATE *psCurr;
-	for (psCurr = apsDroidTemplates[player]; psCurr != NULL; psCurr = psCurr->psNext)
-	{
-		if (templName.compare(psCurr->aName, Qt::CaseSensitive) == 0)
-		{
-			break;
-		}
-	}
-	if (psCurr)
-	{
-		return convTemplate(psCurr, engine);
-	}
-	return QScriptValue();
-}
-
-//-- \subsection{newTemplate(name, body, propulsion, reserved, turrets...)}
-//-- Generate a new template with the given name, body, propulsion and turrets.
+//-- \subsection{buildDroid(factory, name, body, propulsion, reserved, turrets...)}
+//-- Start factory production of new droid with the given name, body, propulsion and turrets.
 //-- The reserved parameter should be passed an empty string for now.
-static QScriptValue js_newTemplate(QScriptContext *context, QScriptEngine *engine)
+// TODO -- this shall take arrays instead of strings for components
+static QScriptValue js_buildDroid(QScriptContext *context, QScriptEngine *engine)
 {
-	int player = engine->globalObject().property("me").toInt32();
-	QString templName = context->argument(0).toString();
-	QString bodyName = context->argument(1).toString();
-	QString propName = context->argument(2).toString();
-	// QString otherName = context->argument(3).toString(); // reserved for future use
+	QScriptValue structVal = context->argument(0);
+	int id = structVal.property("id").toInt32();
+	int player = structVal.property("player").toInt32();
+	STRUCTURE *psStruct = IdToStruct(id, player);
+	SCRIPT_ASSERT(context, psStruct, "No such structure id %d belonging to player %d", id, player);
+	SCRIPT_ASSERT(context, (psStruct->pStructureType->type == REF_FACTORY || psStruct->pStructureType->type == REF_CYBORG_FACTORY
+		       || psStruct->pStructureType->type == REF_VTOL_FACTORY), "Structure %s is not a factory", objInfo(psStruct));
+	QString templName = context->argument(1).toString();
+	QString bodyName = context->argument(2).toString();
+	QString propName = context->argument(3).toString();
+	// QString otherName = context->argument(4).toString(); // reserved for future use
 	DROID_TEMPLATE *psTemplate = new DROID_TEMPLATE;
-	int numTurrets = context->argumentCount() - 4; // anything beyond first four components, are turrets
+	int numTurrets = context->argumentCount() - 5; // anything beyond first five components, are turrets
 
 	memset(psTemplate->asParts, 0, sizeof(psTemplate->asParts)); // reset to defaults
 	psTemplate->asParts[COMP_BODY] = getCompFromName(COMP_BODY, bodyName.toUtf8().constData());
@@ -576,7 +534,7 @@ static QScriptValue js_newTemplate(QScriptContext *context, QScriptEngine *engin
 	psTemplate->numWeaps = 0;
 	for (int i = 0; i < numTurrets; i++)
 	{
-		QString tName = context->argument(4 + i).toString();
+		QString tName = context->argument(5 + i).toString();
 		int j;
 		if ((j = getCompFromName(COMP_WEAPON, tName.toUtf8().constData())) >= 0)
 		{
@@ -592,6 +550,7 @@ static QScriptValue js_newTemplate(QScriptContext *context, QScriptEngine *engin
 		{
 
 			psTemplate->asParts[COMP_BRAIN] = j; // It is a commander
+			psTemplate->numWeaps = 1;
 		}
 		else if ((j = getCompFromName(COMP_REPAIRUNIT, tName.toUtf8().constData())) >= 0)
 		{
@@ -609,9 +568,11 @@ static QScriptValue js_newTemplate(QScriptContext *context, QScriptEngine *engin
 			psTemplate->asParts[COMP_SENSOR] = j; // It is a sensor droid
 		}
 	}
-	bool valid = intValidTemplate(psTemplate, templName.toUtf8().constData());
+	bool valid = intValidTemplate(psTemplate, templName.toUtf8().constData(), true);
 	if (valid)
 	{
+		SCRIPT_ASSERT(context, validTemplateForFactory(psTemplate, psStruct), "Invalid template %s for factory %s",
+		              psTemplate->aName, psStruct->pStructureType->pName);
 		// Delete similar template from existing list before adding this one
 		for (int j = 0; j < apsTemplateList.size(); j++)
 		{
@@ -629,8 +590,13 @@ static QScriptValue js_newTemplate(QScriptContext *context, QScriptEngine *engin
 		psTemplate->multiPlayerID = generateNewObjectId();
 		psTemplate->psNext = apsDroidTemplates[player];
 		apsDroidTemplates[player] = psTemplate;
-		//if (player == selectedPlayer) { localTemplates.push_front(*psTemplate); }
 		sendTemplate(player, psTemplate);
+		if (!structSetManufacture(psStruct, psTemplate, ModeQueue))
+		{
+			debug(LOG_ERROR, "Could not produce template %s in %s", psTemplate->aName, objInfo(psStruct));
+			valid = false;
+		}
+		
 	}
 	else
 	{
@@ -901,37 +867,6 @@ static QScriptValue js_console(QScriptContext *context, QScriptEngine *engine)
 		//permitNewConsoleMessages(false);
 	}
 	return QScriptValue();
-}
-
-/* Build a droid template in the specified factory */
-static QScriptValue js_buildDroid(QScriptContext *context, QScriptEngine *)
-{
-	QScriptValue structVal = context->argument(1);
-	int id = structVal.property("id").toInt32();
-	int player = structVal.property("player").toInt32();
-	QScriptValue templName = context->argument(0);
-	DROID_TEMPLATE *psTemplate = getTemplateFromTranslatedNameNoPlayer(templName.toString().toUtf8().constData());
-	STRUCTURE *psStruct = IdToStruct(id, player);
-	if (!psTemplate)
-	{
-		// Not a static template, check for dynamic one
-		for (DROID_TEMPLATE *t = apsDroidTemplates[player]; t; t = t->psNext)
-		{
-			if (strcmp(templName.toString().toUtf8().constData(), t->aName) == 0)
-			{
-				psTemplate = t;
-				break;
-			}
-		}
-	}
-	SCRIPT_ASSERT(context, psStruct != NULL, "No factory object found for id %d, player %d", id, player);
-	SCRIPT_ASSERT(context, psTemplate != NULL, "No template object found for %s sent to %s", templName.toString().toUtf8().constData(), objInfo(psStruct));
-	SCRIPT_ASSERT(context, (psStruct->pStructureType->type == REF_FACTORY || psStruct->pStructureType->type == REF_CYBORG_FACTORY
-		       || psStruct->pStructureType->type == REF_VTOL_FACTORY), "Structure %s is not a factory", objInfo(psStruct));
-	SCRIPT_ASSERT(context, validTemplateForFactory(psTemplate, psStruct), "Invalid template - %s for factory - %s",
-			 psTemplate->aName, psStruct->pStructureType->pName);
-
-	return QScriptValue(structSetManufacture(psStruct, psTemplate, ModeQueue));
 }
 
 static QScriptValue js_groupAddArea(QScriptContext *context, QScriptEngine *engine)
@@ -1410,7 +1345,6 @@ bool registerFunctions(QScriptEngine *engine)
 	engine->globalObject().setProperty("debug", engine->newFunction(js_debug));
 	engine->globalObject().setProperty("console", engine->newFunction(js_console));
 	engine->globalObject().setProperty("structureIdle", engine->newFunction(js_structureIdle));
-	engine->globalObject().setProperty("buildDroid", engine->newFunction(js_buildDroid));
 	engine->globalObject().setProperty("enumStruct", engine->newFunction(js_enumStruct));
 	engine->globalObject().setProperty("enumDroid", engine->newFunction(js_enumDroid));
 	engine->globalObject().setProperty("enumGroup", engine->newFunction(js_enumGroup));
@@ -1430,8 +1364,7 @@ bool registerFunctions(QScriptEngine *engine)
 	engine->globalObject().setProperty("droidCanReach", engine->newFunction(js_droidCanReach));
 	engine->globalObject().setProperty("orderDroidStatsLoc", engine->newFunction(js_orderDroidStatsLoc));
 	engine->globalObject().setProperty("orderDroidObj", engine->newFunction(js_orderDroidObj));
-	engine->globalObject().setProperty("getTemplate", engine->newFunction(js_getTemplate));
-	engine->globalObject().setProperty("newTemplate", engine->newFunction(js_newTemplate));
+	engine->globalObject().setProperty("buildDroid", engine->newFunction(js_buildDroid));
 	engine->globalObject().setProperty("componentAvailable", engine->newFunction(js_componentAvailable));
 
 	// Functions that operate on the current player only

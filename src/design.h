@@ -55,7 +55,6 @@
 #define IDDES_COMMAND		5026		// The command button for the Component form
 
 #define	IDDES_PARTFORM		5027		// Part buttons form
-/* Watermelon:added define for TURRET_A,TURRET_B */
 #define IDDES_WEAPONS_A		5028		// The weapon TURRET_A button for the Component form (right)
 #define IDDES_WEAPONS_B		5029		// The weapon TURRET_B button for the Component form (right)
 
@@ -130,34 +129,16 @@
 #define	IDDES_SYSTEMBUTTON		5900		// System button
 #define	IDDES_BODYBUTTON		5901		// Body button
 #define	IDDES_PROPBUTTON		5902		// Propulsion button
-//Watermelon:added 'uid' for weaponA,weaponB
 #define IDDES_WPABUTTON			5903		// WeaponA button
 #define IDDES_WPBBUTTON			5904		// WeaponB button
 
 extern bool intAddDesign( bool bShowCentreScreen );
-/* Add the droid template buttons to a form */
-bool intAddTemplateButtons(UDWORD formID, UDWORD formWidth, UDWORD formHeight, UDWORD butWidth,
-                           UDWORD butHeight, UDWORD gap, DROID_TEMPLATE *psSelected);
-void intDisplayTemplateButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
-
 extern void intRemoveDesign(void);
 extern void intProcessDesign(UDWORD id);
 extern void intRunDesign(void);
 
-extern void intDisplayDesignForm(struct _widget *psWidget, UDWORD xOffset,
-									UDWORD yOffset, PIELIGHT *pColours);
-
-extern void SetDesignWidgetName(char *Name);
-
-/*sets which states need to be paused when the design screen is up*/
-extern void setDesignPauseState(void);
-/*resets the pause states */
-extern void resetDesignPauseState(void);
-
-extern void reverseTemplateList(DROID_TEMPLATE **ppsList);
-
 extern const char *GetDefaultTemplateName(DROID_TEMPLATE *psTemplate);
 
-extern bool intValidTemplate(DROID_TEMPLATE *psTempl, const char *newName);
+bool intValidTemplate(DROID_TEMPLATE *psTempl, const char *newName, bool complain = false);
 
 #endif // __INCLUDED_SRC_DESIGN_H__

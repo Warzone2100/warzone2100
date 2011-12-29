@@ -3,13 +3,6 @@
 // Various constants, declared here for convenience only
 const maxDroids = 25;		// max guys to handle.
 const factory = "A0BaBaFactory";
-const trike = "BarbarianTrike";
-const buggy = "BarbarianBuggy";
-const bloke = "BaBaPeople";
-const jeep = "BabaJeep";
-const firetruck	= "BabaFireTruck";
-const cannonbus = "BabaBusCan";
-const firebus = "BabaFireCan";
 
 // scav group
 var attackGroup;
@@ -20,7 +13,7 @@ function activateProduction(fac)
 	// Remind factory to produce
 	if (structureIdle(fac))
 	{
-		buildDroid(trike, fac);
+		buildDroid(fac, "Trike", "B4body-sml-trike01", "BaBaProp", "", "bTrikeMG");
 	}
 }
 
@@ -94,14 +87,14 @@ function eventDroidBuilt(droid, fac1)
 	if (fac1 && structureIdle(fac1) && groupSize(attackGroup) < maxDroids)
 	{
 		// We now have switch statements! And we can use the built-in Math library
-		switch (Math.random() * 10)
+		switch (Math.floor(Math.random() * 10))
 		{
-		case 0:	buildDroid(trike, fac1); break;
-		case 1: buildDroid(buggy, fac1); break;
-		case 2: buildDroid(jeep, fac1); break;
-		case 3: buildDroid(cannonbus, fac1); break;
-		case 4: buildDroid(firebus, fac1); break;
-		default: buildDroid(bloke, fac1); break;
+		case 0:	buildDroid(fac1, "Trike", "B4body-sml-trike01", "BaBaProp", "", "bTrikeMG"); break;
+		case 1: buildDroid(fac1, "Buggy", "B3body-sml-buggy01", "BaBaProp", "", "BuggyMG"); break;
+		case 2: buildDroid(fac1, "Jeep", "B2JeepBody", "BaBaProp", "", "BJeepMG"); break;
+		case 3: buildDroid(fac1, "Cannonbus", "BusBody", "BaBaProp", "", "BusCannon"); break;
+		case 4: buildDroid(fac1, "Firebus", "BusBody", "BaBaProp", "", "BabaFlame"); break;
+		default: buildDroid(fac1, "Bloke", "B1BaBaPerson01", "BaBaLegs", "", "BaBaMG"); break;
 		}
 	}
 }

@@ -275,8 +275,13 @@ extern W_SCREEN		*psWScreen;
 /* default droid design template */
 DROID_TEMPLATE sDefaultDesignTemplate;
 
-extern void intDisplayPlainForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
-static void desSetupDesignTemplates(void);
+static void desSetupDesignTemplates();
+static void intDisplayTemplateButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
+static void setDesignPauseState();
+static void resetDesignPauseState();
+static bool intAddTemplateButtons(UDWORD formID, UDWORD formWidth, UDWORD formHeight,
+                                  UDWORD butWidth, UDWORD butHeight, UDWORD gap, DROID_TEMPLATE *psSelected);
+static void intDisplayDesignForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours);
 
 /* Set the current mode of the design screen, and display the appropriate component lists */
 static void intSetDesignMode(DES_COMPMODE newCompMode);
@@ -335,10 +340,6 @@ static void intSetBodyShadowStats(BODY_STATS *psStats);
 static void intSetPropulsionStats(PROPULSION_STATS *psStats);
 /* Set the shadow bar graphs for the Propulsion stats */
 static void intSetPropulsionShadowStats(PROPULSION_STATS *psStats);
-/* Check whether a droid template is valid */
-bool intValidTemplate(DROID_TEMPLATE *psTempl, const char *newName);
-/* General display window for the design form */
-void intDisplayDesignForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 /* Sets the Design Power Bar for a given Template */
 static void intSetDesignPower(DROID_TEMPLATE *psTemplate);
 /* Sets the Power shadow Bar for the current Template with new stat*/
@@ -390,7 +391,6 @@ DROID_TEMPLATE			sCurrDesign;
 
 static void intDisplayStatForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 static void intDisplayViewForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
-void intDisplayTemplateButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 static void intDisplayComponentButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 
 extern bool bRender3DOnly;
@@ -986,9 +986,8 @@ static bool _intAddTemplateForm(DROID_TEMPLATE *psSelected)
 
 
 /* Add the droid template buttons to a form */
-bool intAddTemplateButtons(UDWORD formID, UDWORD formWidth, UDWORD formHeight,
-								  UDWORD butWidth, UDWORD butHeight, UDWORD gap,
-								  DROID_TEMPLATE *psSelected)
+static bool intAddTemplateButtons(UDWORD formID, UDWORD formWidth, UDWORD formHeight,
+                                  UDWORD butWidth, UDWORD butHeight, UDWORD gap, DROID_TEMPLATE *psSelected)
 {
 	DROID_TEMPLATE	*psTempl = NULL;
 	char			aButText[DES_COMPBUTMAXCHAR + 1];
@@ -3259,8 +3258,9 @@ static void intSetPropulsionShadowStats(PROPULSION_STATS *psStats)
 
 
 /* Check whether a droid template is valid */
-bool intValidTemplate(DROID_TEMPLATE *psTempl, const char *newName)
+bool intValidTemplate(DROID_TEMPLATE *psTempl, const char *newName, bool complain)
 {
+	code_part level = complain ? LOG_ERROR : LOG_NEVER;
 	UDWORD i;
 	int bodysize = (asBodyStats + psTempl->asParts[COMP_BODY])->size;
 
@@ -3274,10 +3274,12 @@ bool intValidTemplate(DROID_TEMPLATE *psTempl, const char *newName)
 	/* Check all the components have been set */
 	if (psTempl->asParts[COMP_BODY] == 0)
 	{
+		debug(level, "No body given for template");
 		return false;
 	}
 	else if (psTempl->asParts[COMP_PROPULSION] == 0)
 	{
+		debug(level, "No propulsion given for template");
 		return false;
 	}
 
@@ -3289,6 +3291,7 @@ bool intValidTemplate(DROID_TEMPLATE *psTempl, const char *newName)
 		psTempl->asParts[COMP_REPAIRUNIT] == 0 &&
 		psTempl->asParts[COMP_CONSTRUCT] == 0 )
 	{
+		debug(level, "No turret for template");
 		return false;
 	}
 
@@ -3301,6 +3304,7 @@ bool intValidTemplate(DROID_TEMPLATE *psTempl, const char *newName)
 		    || (weaponSize == WEAPON_SIZE_HEAVY && bodysize == SIZE_LIGHT)
 		    || psTempl->asWeaps[i] == 0)
 		{
+			debug(level, "No weapon given for weapon droid, or wrong weapon size");
 			return false;
 		}
 	}
@@ -3308,6 +3312,7 @@ bool intValidTemplate(DROID_TEMPLATE *psTempl, const char *newName)
 	// Check number of weapon slots
 	if (psTempl->numWeaps > (asBodyStats + psTempl->asParts[COMP_BODY])->weaponSlots)
 	{
+		debug(level, "Too many weapon turrets");
 		return false;
 	}
 
@@ -3318,11 +3323,12 @@ bool intValidTemplate(DROID_TEMPLATE *psTempl, const char *newName)
 	     (psTempl->asParts[COMP_REPAIRUNIT] && psTempl->asParts[COMP_REPAIRUNIT] != aDefaultRepair[selectedPlayer]) ||
 	     psTempl->asParts[COMP_CONSTRUCT]))
 	{
+		debug(level, "Cannot mix system and weapon turrets in a template!");
 		return false;
 	}
-	if (psTempl->numWeaps != 1 &&
-	    psTempl->asParts[COMP_BRAIN])
+	if (psTempl->numWeaps != 1 && psTempl->asParts[COMP_BRAIN])
 	{
+		debug(level, "Commander template needs 1 weapon turret");
 		return false;
 	}
 	
@@ -3331,6 +3337,7 @@ bool intValidTemplate(DROID_TEMPLATE *psTempl, const char *newName)
 	{
 		if (psTempl->numWeaps == 0)
 		{
+			debug(level, "VTOL with system turret, not possible");
 			return false;
 		}
 	}
@@ -4191,7 +4198,7 @@ void intProcessDesign(UDWORD id)
 		widgReveal( psWScreen, IDDES_STATSFORM );
 
 		/* switch automatically to next component type if initial design */
-		if ( !intValidTemplate( &sCurrDesign, aCurrName ) )
+		if (!intValidTemplate( &sCurrDesign, aCurrName))
 		{
 			/* show next component design screen */
 			switch ( desCompMode )
@@ -4433,7 +4440,7 @@ static void intDisplayComponentButton(WIDGET *psWidget, UDWORD xOffset, UDWORD y
 }
 
 /* General display window for the design form  SOLID BACKGROUND - NOT TRANSPARENT*/
-void intDisplayDesignForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
+static void intDisplayDesignForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
 {
 	W_TABFORM *Form = (W_TABFORM*)psWidget;
 	UDWORD x0,y0,x1,y1;
@@ -4583,7 +4590,7 @@ void runTemplateShadowStats(UDWORD id)
 }
 
 /*sets which states need to be paused when the design screen is up*/
-void setDesignPauseState(void)
+static void setDesignPauseState(void)
 {
 	if (!bMultiPlayer)
 	{
@@ -4597,7 +4604,7 @@ void setDesignPauseState(void)
 }
 
 /*resets the pause states */
-void resetDesignPauseState(void)
+static void resetDesignPauseState(void)
 {
 	if (!bMultiPlayer)
 	{
@@ -4661,28 +4668,6 @@ bool checkTemplateIsVtol(DROID_TEMPLATE *psTemplate)
 	{
 		return false;
 	}
-}
-
-/*goes thru' the list passed in reversing the order so the first entry becomes
-the last and the last entry becomes the first!*/
-void reverseTemplateList(DROID_TEMPLATE **ppsList)
-{
-	DROID_TEMPLATE     *psPrev, *psNext, *psCurrent, *psObjList;
-
-	//initialise the pointers
-	psObjList = *ppsList;
-	psPrev = psNext = NULL;
-	psCurrent = psObjList;
-
-	while(psCurrent != NULL)
-	{
-		psNext = psCurrent->psNext;
-		psCurrent->psNext = psPrev;
-		psPrev = psCurrent;
-		psCurrent = psNext;
-	}
-	//set the list passed in to point to the new top
-	*ppsList = psPrev;
 }
 
 void updateStoreButton(bool isStored)
