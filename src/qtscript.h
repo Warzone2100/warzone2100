@@ -24,6 +24,7 @@
 #include "basedef.h"
 #include "droiddef.h"
 #include "structuredef.h"
+#include "researchdef.h"
 
 enum SCRIPT_TRIGGER_TYPE
 {
@@ -70,7 +71,7 @@ bool triggerEvent(SCRIPT_TRIGGER_TYPE trigger);
 // For each trigger with function parameters, a function to trigger it here
 bool triggerEventDroidBuilt(DROID *psDroid, STRUCTURE *psFactory);
 bool triggerStructureAttacked(STRUCTURE *psVictim, BASE_OBJECT *psAttacker);
-bool triggerResearched(STRUCTURE *psStruct, int player);
+bool triggerResearched(RESEARCH *psResearch, STRUCTURE *psStruct, int player);
 
 // bool triggerEventReachedLocation(ORDER order, DROID *psDroid);
 // ...

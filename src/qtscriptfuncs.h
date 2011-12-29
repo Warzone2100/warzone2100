@@ -45,5 +45,6 @@ QScriptValue convStructure(STRUCTURE *psStruct, QScriptEngine *engine);
 QScriptValue convObj(BASE_OBJECT *psObj, QScriptEngine *engine);
 QScriptValue convFeature(FEATURE *psFeature, QScriptEngine *engine);
 QScriptValue convMax(BASE_OBJECT *psObj, QScriptEngine *engine);
+QScriptValue convResearch(RESEARCH *psResearch, QScriptEngine *engine, int player);
 
 #endif

@@ -521,6 +521,11 @@ bool loadScriptStates(const char *filename)
 // Events
 
 /// For generic, parameter-less triggers
+//__ \subsection{eventGameInit()}
+//__ An event that is run once as the game is initialized. Not all game may have been 
+//__ properly initialized by this time, so use this only to initialize script state.
+//__ \subsection{eventStartLevel()}
+//__ An event that is run once the game has started and all game data has been loaded.
 bool triggerEvent(SCRIPT_TRIGGER_TYPE trigger)
 {
 	for (int i = 0; i < scripts.size(); ++i)
@@ -540,6 +545,8 @@ bool triggerEvent(SCRIPT_TRIGGER_TYPE trigger)
 	return true;
 }
 
+//__ \subsection{eventDroidBuilt(droid, structure)}
+//__ An event that is run every time a factory produces a droid.
 bool triggerEventDroidBuilt(DROID *psDroid, STRUCTURE *psFactory)
 {
 	for (int i = 0; i < scripts.size(); ++i)
@@ -557,6 +564,9 @@ bool triggerEventDroidBuilt(DROID *psDroid, STRUCTURE *psFactory)
 	return true;
 }
 
+//__ \subsection{eventStructureAttacked(structure, attacker)}
+//__ An event that is run when a structure is attacked. The attacker parameter may be
+//__ either a structure or a droid.
 bool triggerStructureAttacked(STRUCTURE *psVictim, BASE_OBJECT *psAttacker)
 {
 	if (!psAttacker)
@@ -580,7 +590,10 @@ bool triggerStructureAttacked(STRUCTURE *psVictim, BASE_OBJECT *psAttacker)
 	return true;
 }
 
-bool triggerResearched(STRUCTURE *psStruct, int player)
+//__ \subsection{eventResearched(research, structure)}
+//__ An event that is run whenever a new research is available. The structure
+//__ parameter is defined only when the research comes from a research lab.
+bool triggerResearched(RESEARCH *psResearch, STRUCTURE *psStruct, int player)
 {
 	for (int i = 0; i < scripts.size() && psStruct; ++i)
 	{
@@ -590,6 +603,7 @@ bool triggerResearched(STRUCTURE *psStruct, int player)
 		{
 			QScriptEngine *engine = scripts.at(i);
 			QScriptValueList args;
+			args += convResearch(psResearch, engine, player);
 			if (psStruct)
 			{
 				args += convStructure(psStruct, engine);

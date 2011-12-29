@@ -10,18 +10,74 @@
 
 \section{Introduction}
 
+Warzone2100 contains a scripting language for implementing AIs, campaigns and some of the game
+rules. It uses JavaScript, so you should become familiar with this language before proceeding
+with this document. A number of very good guides to JavaScript exist on the Internet.
+
+The following hard-coded files exist for game rules that use this API:
+
+\begin{description}
+	\item[multiplay/skirmish/rules.js] Basic game rules - base setup, starting research, winning and losing.
+	\item[multiplay/script/scavfact.js] Scavenger AI. This script is active if scavengers are.
+\end{description}
+
+For ordinary AI scripts, these are controlled using '.ai' files that are present in the 'multiplayer/skirmish'
+directory. Here is an example of an '.ai' file that defines an AI implemented using this API:
+
+\begin{verbatim}
+	[AI]
+	name = "Semperfi JS"
+	js = semperfi.js
+\end{verbatim}
+
+It references a '.js' JavaScript file that needs to be in the same directory as the '.ai' file. The code in
+this file is accessed through specially named functions called 'events'. These are defined below. An event
+is expected to carry out some computation then return immediately. The game is on hold while an event is processed,
+so do not do too many things at once, or else the player will experience stuttering.
+
+All global variables are saved when the game is saved. However, do not try to keep JavaScript objects that are
+returned from API functions defined here around in the global scope. They are not meant to be used this way, and
+bad things may happen. If you need to keep static arrays around, it is better to keep them locally defined to a
+function, as they will then not be saved and loaded.
+
+One error that it is easy to make upon initially learning JavaScript and using this API, is to try to use
+the 'for (... in ...)' construct to iterate over an array of objects. This does not work! Instead, use code
+like the following:
+
+\begin{lstlisting}
+var droidlist = enumDroid(me, DROID_CONSTRUCT);
+for (var i = 0; i < droidlist.length; i++)
+{
+	var droid = droidlist[i];
+	...
+}
+\end{lstlisting}
+
+The above code gets a list of all your construction droids, and iterates over them one by one.
+
+The droid object that you receive here has multiple properties that can be accessed to learn more about it. 
+These propertie are read-only, and cannot be changed. In fact, objects that you get are just a copies of 
+game state, and do not give any access to changing the game state itself.
+
+Any value written in ALL_CAPS_WITH_UNDERSCORES are enums, special read-only constants defined by the
+game.
+
+\section{Common Objects}
+
+Some objects are described under the functions creating them. The following objects are produced by
+multiple functions and widely used throughout, so it is better to learn about them first.
+
+\input{objects}
+
+\section{Events}
+
+\input{events}
+
 \section{Globals}
 
 \flushleft
 \begin{description}
 \input{globals}
-\end{description}
-
-\section{Constants}
-
-\flushleft
-\begin{description}
-\input{constants}
 \end{description}
 
 \section{Functions}

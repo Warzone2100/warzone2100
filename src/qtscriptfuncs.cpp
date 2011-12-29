@@ -61,6 +61,15 @@ extern std::list<DROID_TEMPLATE> localTemplates;       ///< Unsychnronised list,
 #define SCRIPT_ASSERT(context, expr, ...) \
 	do { bool _wzeval = (expr); if (!_wzeval) { debug(LOG_ERROR, __VA_ARGS__); context->throwError(QScriptContext::ReferenceError, QString(#expr) +  " failed in " + QString(__FUNCTION__) + " at line " + QString::number(__LINE__)); return QScriptValue(); } } while (0)
 
+//;; \subsection{Research}
+//;; Describes a research item. The following properties are defined:
+//;; \begin{description}
+//;; \item[power] Number of power points needed for starting the research.
+//;; \item[points] Number of resarch points needed to complete the research.
+//;; \item[started] A boolean saying whether or not this research has been started by current player or any of its allies.
+//;; \item[done] A boolean saying whether or not this research has been completed.
+//;; \item[name] A string containing the canonical name of the research.
+//;; \end{description}
 QScriptValue convResearch(RESEARCH *psResearch, QScriptEngine *engine, int player)
 {
 	QScriptValue value = engine->newObject();
@@ -81,11 +90,19 @@ QScriptValue convResearch(RESEARCH *psResearch, QScriptEngine *engine, int playe
 	return value;
 }
 
+//;; \subsection{Structure}
+//;; Describes a structure (building). It inherits all the properties of the base object (see below).
+//;; In addition, the following properties are defined:
+//;; \begin{description}
+//;; \item[status] The completeness status of the structure. It will be one of BEING_BUILT, BUILT and BEING_DEMOLISHED.
+//;; \item[type] The type will always be STRUCTURE.
+//;; \item[stattype] The stattype defines the type of structure. It will be one of HQ, FACTORY, POWER_GEN, RESOURCE_EXTRACTOR,
+//;; DEFENSE, WALL, RESEARCH_LAB, REPAIR_FACILITY, CYBORG_FACTORY, VTOL_FACTORY, REARM_PAD, SAT_UPLINK, GATE and COMMAND_CONTROL.
+//;; \end{description}
 QScriptValue convStructure(STRUCTURE *psStruct, QScriptEngine *engine)
 {
 	QScriptValue value = convObj(psStruct, engine);
 	value.setProperty("status", (int)psStruct->status, QScriptValue::ReadOnly);
-	value.setProperty("type", (int)OBJ_STRUCTURE, QScriptValue::ReadOnly);
 	switch (psStruct->pStructureType->type) // don't bleed our source insanities into the scripting world
 	{
 	case REF_WALL:
@@ -103,22 +120,62 @@ QScriptValue convStructure(STRUCTURE *psStruct, QScriptEngine *engine)
 	return value;
 }
 
+//;; \subsection{Feature}
+//;; Describes a feature (game object not owned by any player). It inherits all the properties of the base object (see below).
+//;; In addition, the following properties are defined:
+//;; \begin{description}
+//;; \item[type] It will always be FEATURE.
+//;; \end{description}
 QScriptValue convFeature(FEATURE *psFeature, QScriptEngine *engine)
 {
 	QScriptValue value = convObj(psFeature, engine);
-	value.setProperty("type", (int)OBJ_FEATURE, QScriptValue::ReadOnly);
 	return value;
 }
 
+//;; \subsection{Droid}
+//;; Describes a droid. It inherits all the properties of the base object (see below).
+//;; In addition, the following properties are defined:
+//;; \begin{description}
+//;; \item[type] It will always be DROID.
+//;; \item[order] The current order of the droid. This is its plan. The following orders are defined:
+//;;  \begin{description}
+//;;   \item[DORDER_ATTACK] Order a droid to attack something.
+//;;   \item[DORDER_MOVE] Order a droid to move somewhere.
+//;;   \item[DORDER_SCOUT] Order a droid to move somewhere and stop to attack anything on the way.
+//;;   \item[DORDER_BUILD] Order a droid to build something.
+//;;   \item[DORDER_HELPBUILD] Order a droid to help build something.
+//;;   \item[DORDER_LINEBUILD] Order a droid to build something repeatedly in a line.
+//;;   \item[DORDER_REPAIR] Order a droid to repair something.
+//;;   \item[DORDER_RETREAT] Order a droid to retreat back to HQ.
+//;;   \item[DORDER_PATROL] Order a droid to patrol.
+//;;   \item[DORDER_BUILDMODULE] Order a droid to build a module.
+//;;  \end{description}
+//;; \item[action] The current action of the droid. This is how it intends to carry out its plan. The
+//;; C++ code may change the action frequently as it tries to carry out its order. You never want to set
+//;; the action directly, but it may be interesting to look at what it currently is.
+//;; \end{description}
 QScriptValue convDroid(DROID *psDroid, QScriptEngine *engine)
 {
 	QScriptValue value = convObj(psDroid, engine);
 	value.setProperty("action", (int)psDroid->action, QScriptValue::ReadOnly);
 	value.setProperty("order", (int)psDroid->order, QScriptValue::ReadOnly);
-	value.setProperty("type", (int)OBJ_DROID, QScriptValue::ReadOnly);
 	return value;
 }
 
+//;; \subsection{Base Object}
+//;; Describes a basic object. It will always be a droid, structure or feature, but sometimes
+//;; the difference does not matter, and you can treat any of them simply as a basic object.
+//;; The following properties are defined:
+//;; \begin{description}
+//;; \item[type] It will be one of DROID, STRUCTURE or FEATURE.
+//;; \item[id] The unique ID of this object.
+//;; \item[x] X position of the object in tiles.
+//;; \item[y] Y position of the object in tiles.
+//;; \item[z] Z (height) position of the object in tiles.
+//;; \item[player] The player owning this object.
+//;; \item[selected] A boolean saying whether 'selectedPlayer' has selected this object.
+//;; \item[name] A user-friendly name for this object.
+//;; \end{description}
 QScriptValue convObj(BASE_OBJECT *psObj, QScriptEngine *engine)
 {
 	QScriptValue value = engine->newObject();
@@ -128,6 +185,7 @@ QScriptValue convObj(BASE_OBJECT *psObj, QScriptEngine *engine)
 	value.setProperty("y", map_coord(psObj->pos.y), QScriptValue::ReadOnly);
 	value.setProperty("z", map_coord(psObj->pos.z), QScriptValue::ReadOnly);
 	value.setProperty("player", psObj->player, QScriptValue::ReadOnly);
+	value.setProperty("type", psObj->type, QScriptValue::ReadOnly);
 	value.setProperty("selected", psObj->selected, QScriptValue::ReadOnly);
 	value.setProperty("name", objInfo(psObj));
 	return value;
@@ -286,8 +344,10 @@ bool writeLabels(const char *filename)
 //-- \subsection{label(key)}
 //-- Fetch something denoted by a label. Labels are areas, positions or game objects on 
 //-- the map defined using the map editor and stored together with the map. The only argument
-//-- is a text label. The function returns a composite object that has a type variable
-//-- defining what it is (in case this is unclear).
+//-- is a text label. The function returns an object that has a type variable defining what it
+//-- is (in case this is unclear). This type will be one of DROID, STRUCTURE, FEATURE, AREA
+//-- and POSITION. The AREA has defined 'x', 'y', 'x2', and 'y2', while POSITION has only
+//-- defined 'x' and 'y'.
 static QScriptValue js_label(QScriptContext *context, QScriptEngine *engine)
 {
 	QString label = context->argument(0).toString();
@@ -1395,25 +1455,15 @@ bool registerFunctions(QScriptEngine *engine)
 	engine->globalObject().setProperty("removeStruct", engine->newFunction(js_removeStruct));
 
 	// Set some useful constants
-	//__ \item[DORDER_ATTACK] Order a droid to attack something.
 	engine->globalObject().setProperty("DORDER_ATTACK", DORDER_ATTACK, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	//__ \item[DORDER_MOVE] Order a droid to move somewhere.
 	engine->globalObject().setProperty("DORDER_MOVE", DORDER_MOVE, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	//__ \item[DORDER_SCOUT] Order a droid to move somewhere and stop to attack anything on the way.
 	engine->globalObject().setProperty("DORDER_SCOUT", DORDER_SCOUT, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	//__ \item[DORDER_BUILD] Order a droid to build something.
 	engine->globalObject().setProperty("DORDER_BUILD", DORDER_BUILD, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	//__ \item[DORDER_HELPBUILD] Order a droid to help build something.
 	engine->globalObject().setProperty("DORDER_HELPBUILD", DORDER_HELPBUILD, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	//__ \item[DORDER_LINEBUILD] Order a droid to build something repeatedly in a line.
 	engine->globalObject().setProperty("DORDER_LINEBUILD", DORDER_LINEBUILD, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	//__ \item[DORDER_REPAIR] Order a droid to repair something.
 	engine->globalObject().setProperty("DORDER_REPAIR", DORDER_REPAIR, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	//__ \item[DORDER_RETREAT] Order a droid to retreat back to HQ.
 	engine->globalObject().setProperty("DORDER_RETREAT", DORDER_RETREAT, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	//__ \item[DORDER_PATROL] Order a droid to patrol.
 	engine->globalObject().setProperty("DORDER_PATROL", DORDER_PATROL, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	//__ \item[DORDER_BUILDMODULE] Order a droid to build a module.
 	engine->globalObject().setProperty("DORDER_BUILDMODULE", DORDER_BUILDMODULE, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("COMMAND", IDRET_COMMAND, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("OPTIONS", IDRET_COMMAND, QScriptValue::ReadOnly | QScriptValue::Undeletable);
@@ -1439,7 +1489,7 @@ bool registerFunctions(QScriptEngine *engine)
 	engine->globalObject().setProperty("RESOURCE_EXTRACTOR", REF_RESOURCE_EXTRACTOR, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("DEFENSE", REF_DEFENSE, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("WALL", REF_WALL, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("RESEARCH", REF_RESEARCH, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("RESEARCH_LAB", REF_RESEARCH, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("REPAIR_FACILITY", REF_REPAIR_FACILITY, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("CYBORG_FACTORY", REF_CYBORG_FACTORY, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("VTOL_FACTORY", REF_VTOL_FACTORY, QScriptValue::ReadOnly | QScriptValue::Undeletable);
@@ -1451,6 +1501,11 @@ bool registerFunctions(QScriptEngine *engine)
 	engine->globalObject().setProperty("MEDIUM", DIFFICULTY_MEDIUM, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("HARD", DIFFICULTY_HARD, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("INSANE", DIFFICULTY_INSANE, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("STRUCTURE", OBJ_STRUCTURE, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("DROID", OBJ_DROID, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("FEATURE", OBJ_FEATURE, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("POSITION", POSITION, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("AREA", AREA, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 
 	// Static knowledge about players
 	//== \item[playerData] An array of information about the players in a game. Each item in the array is an object
