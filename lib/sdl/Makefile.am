@@ -5,7 +5,8 @@ AM_CXXFLAGS = $(WZ_CXXFLAGS)
 noinst_LIBRARIES = libsdl.a
 noinst_HEADERS = \
 	cursors_sdl.h \
-	scrap.h
+	scrap.h \
+	wz2100icon.h
 
 libsdl_a_SOURCES = \
 	cursors_sdl.cpp \
