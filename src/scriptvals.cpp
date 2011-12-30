@@ -147,7 +147,7 @@ static bool baseObjDead(INTERP_VAL *psVal)
 // Check all the base pointers to see if they have died
 void scrvUpdateBasePointers(void)
 {
-	basePointers.remove_if(baseObjDead);
+	std::for_each(basePointers.begin(), basePointers.end(), baseObjDead);
 }
 
 // create a group structure for a ST_GROUP variable
