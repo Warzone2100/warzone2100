@@ -1206,8 +1206,7 @@ static void proj_ImpactFunc( PROJECTILE *psObj )
 										weaponRadDamage(psStats, psObj->player),
 										psStats->weaponEffect, (BASE_OBJECT *)psCurrD);
 
-							debug(LOG_NEVER, "Damage to object %d, player %d\n",
-									psCurrD->id, psCurrD->player);
+							debug(LOG_ATTACK, "Damage to object %d, player %d : %u", psCurrD->id, psCurrD->player, damage);
 
 							if (bMultiPlayer)
 							{
@@ -1285,15 +1284,12 @@ static void proj_ImpactFunc( PROJECTILE *psObj )
 					unsigned dice = gameRand(100);
 					if (dice < weaponRadiusHit(psStats, psObj->player))
 					{
-						debug(LOG_NEVER, "Damage to object %d, player %d\n",
-								psCurrF->id, psCurrF->player);
+						debug(LOG_ATTACK, "Damage to object %d, player %d - in blast radius", psCurrF->id, psCurrF->player);
 
 						relativeDamage = featureDamage(psCurrF,
 						                              calcDamage(weaponRadDamage(psStats, psObj->player),
-						                                         psStats->weaponEffect,
-						                                         (BASE_OBJECT *)psCurrF),
-						                              psStats->weaponClass,
-						                              psStats->weaponSubClass, psObj->time);
+						                                         psStats->weaponEffect, (BASE_OBJECT *)psCurrF),
+						                              psStats->weaponClass, psStats->weaponSubClass, psObj->time);
 						proj_UpdateKills(psObj, relativeDamage);
 					}
 				}
@@ -1586,31 +1582,27 @@ static ObjectShape establishTargetShape(BASE_OBJECT *psTarget)
 structure strength*/
 UDWORD	calcDamage(UDWORD baseDamage, WEAPON_EFFECT weaponEffect, BASE_OBJECT *psTarget)
 {
-	UDWORD	damage;
+	UDWORD	damage = baseDamage * 100;
 
 	if (psTarget->type == OBJ_STRUCTURE)
 	{
-		damage = baseDamage * asStructStrengthModifier[weaponEffect][((STRUCTURE *)psTarget)->pStructureType->strength] / 100;
+		damage += baseDamage * (asStructStrengthModifier[weaponEffect][((STRUCTURE *)psTarget)->pStructureType->strength] - 100);
 	}
 	else if (psTarget->type == OBJ_DROID)
 	{
 		const int propulsion = (asPropulsionStats + ((DROID *)psTarget)->asBits[COMP_PROPULSION].nStat)->propulsionType;
 		const int body = (asBodyStats + ((DROID *)psTarget)->asBits[COMP_BODY].nStat)->size;
-		damage = baseDamage * (asWeaponModifier[weaponEffect][propulsion] + asWeaponModifierBody[weaponEffect][body]) / 100;
-	}
-	// Default value
-	else
-	{
-		damage = baseDamage;
+		damage += baseDamage * (asWeaponModifier[weaponEffect][propulsion] - 100);
+		damage += baseDamage * (asWeaponModifierBody[weaponEffect][body] - 100);
 	}
 
 	// A little fail safe!
 	if (damage == 0 && baseDamage != 0)
 	{
-		damage = 1;
+		return 1;
 	}
 
-	return damage;
+	return damage / 100;
 }
 
 /*
