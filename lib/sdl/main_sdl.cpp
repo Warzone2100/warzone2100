@@ -343,6 +343,7 @@ std::pair<KEY_CODE, SDLKey> KEY_CODE_to_SDLKey[] =
 	std::pair<KEY_CODE, SDLKey>(KEY_DELETE, SDLK_DELETE),
 	std::pair<KEY_CODE, SDLKey>(KEY_KPENTER, SDLK_KP_ENTER),
 	std::pair<KEY_CODE, SDLKey>(KEY_IGNORE, SDLKey(5190)),
+	std::pair<KEY_CODE, SDLKey>(KEY_MAXSCAN, SDLK_LAST),
 };
 
 std::pair<SDLKey, KEY_CODE> SDLKey_to_KEY_CODE[ARRAY_SIZE(KEY_CODE_to_SDLKey)];
@@ -409,7 +410,7 @@ static void inputAddBuffer(UDWORD key, utf_32_char unicode)
 
 void keyScanToString(KEY_CODE code, char *ascii, UDWORD maxStringSize)
 {
-	if(keyCodeToSDLKey(code) == KEY_MAXSCAN)
+	if(keyCodeToSDLKey(code) == SDLK_LAST)
 	{
 		strcpy(ascii,"???");
 		return;
@@ -442,7 +443,7 @@ void keyScanToString(KEY_CODE code, char *ascii, UDWORD maxStringSize)
 #endif
 		return;
 	}
-	ASSERT( keyCodeToSDLKey(code) < KEY_MAXSCAN, "Invalid key code: %d", code );
+	ASSERT(keyCodeToSDLKey(code) < SDLK_LAST, "Invalid key code: %d", code);
 	snprintf(ascii, maxStringSize, "%s", SDL_GetKeyName(keyCodeToSDLKey(code)));
 	if (ascii[0] >= 'a' && ascii[0] <= 'z' && ascii[1] != 0)
 	{
@@ -574,21 +575,21 @@ void inputLoseFocus(void)
 /* This returns true if the key is currently depressed */
 bool keyDown(KEY_CODE code)
 {
-	ASSERT( keyCodeToSDLKey(code) < KEY_MAXSCAN, "Invalid key code: %d", code );
+	ASSERT(keyCodeToSDLKey(code) < SDLK_LAST, "Invalid key code: %d", code);
 	return (aKeyState[code].state != KEY_UP);
 }
 
 /* This returns true if the key went from being up to being down this frame */
 bool keyPressed(KEY_CODE code)
 {
-	ASSERT( keyCodeToSDLKey(code) < KEY_MAXSCAN, "Invalid key code: %d", code );
+	ASSERT(keyCodeToSDLKey(code) < SDLK_LAST, "Invalid key code: %d", code);
 	return ((aKeyState[code].state == KEY_PRESSED) || (aKeyState[code].state == KEY_PRESSRELEASE));
 }
 
 /* This returns true if the key went from being down to being up this frame */
 bool keyReleased(KEY_CODE code)
 {
-	ASSERT( keyCodeToSDLKey(code) < KEY_MAXSCAN, "Invalid key code: %d", code );
+	ASSERT(keyCodeToSDLKey(code) < SDLK_LAST, "Invalid key code: %d", code);
 	return ((aKeyState[code].state == KEY_RELEASED) || (aKeyState[code].state == KEY_PRESSRELEASE));
 }
 
