@@ -89,11 +89,9 @@ AM_CONDITIONAL([BACKEND_SDL], test "$backend" = "sdl")
 
 # Check for Qt
 if test "$backend" = "qt"; then
-	AC_DEFINE([BACKEND_QT], 1, [Build Qt backend])
 	AC_MSG_RESULT([Qt])
 	PKG_CHECK_MODULES(QT4, QtCore QtGui QtOpenGL QtNetwork QtScript,,[:])
 else
-	AC_DEFINE([BACKEND_SDL], 1, [Build SDL backend])
 	AC_MSG_RESULT([SDL])
 	PKG_CHECK_MODULES(QT4, QtCore QtNetwork QtScript,,[:])
 fi
