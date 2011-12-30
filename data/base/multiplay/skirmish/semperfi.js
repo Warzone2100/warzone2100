@@ -136,6 +136,26 @@ function conDroids()
 	}
 }
 
+function buildFundamentals()
+{
+	var needPwGen = false;
+
+	// Do we need power generators?
+	//if ((playerPower(me) < HIGH_POWER * 2 or numFactories() > 1) and numUnusedDerricks() > 0)
+	if (numUnusedDerricks() > 0)
+	{
+		needPwGen = true;
+		dbgPlr("More power generators needed");
+	}
+	if (needPwGen)
+	{
+		queue("buildPowerGenerators");
+		return;
+	}
+}
+
+// --- game events
+
 function eventResearched(tech, labparam)
 {
 	var techlist = [
@@ -180,29 +200,24 @@ function eventResearched(tech, labparam)
 	}
 }
 
-function buildFundamentals()
+function eventStructureBuilt(struct, droid)
 {
-	var needPwGen = false;
-
-	// Do we need power generators?
-	//if ((playerPower(me) < HIGH_POWER * 2 or numFactories() > 1) and numUnusedDerricks() > 0)
-	if (numUnusedDerricks() > 0)
+	if (struct.stattype == RESEARCH_LAB)
 	{
-		needPwGen = true;
-		dbgPlr("More power generators needed");
+		eventResearched();
 	}
-	if (needPwGen)
+	else if (struct.stattype == FACTORY || struct.stattype == CYBORG_FACTORY || struct.stattype == VTOL_FACTORY)
 	{
-		queue("buildPowerGenerators");
-		return;
+		eventDroidBuilt(null, struct);
 	}
 }
 
-// --- game events
-
 function eventDroidBuilt(droid, struct)
 {
-	buildTruck(struct);
+	if (struct)
+	{
+		buildTruck(struct);
+	}
 }
 
 function eventGameInit()

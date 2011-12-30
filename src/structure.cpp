@@ -870,6 +870,7 @@ void structureBuild(STRUCTURE *psStruct, DROID *psDroid, int buildPoints, int bu
 
 			audio_StopObjTrack( psDroid, ID_SOUND_CONSTRUCTION_LOOP );
 		}
+		triggerEventStructBuilt(psStruct, psDroid);
 
 		/* Not needed, but left for backward compatibility */
 		structureCompletedCallback(psStruct->pStructureType);

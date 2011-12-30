@@ -72,6 +72,7 @@ bool triggerEvent(SCRIPT_TRIGGER_TYPE trigger);
 bool triggerEventDroidBuilt(DROID *psDroid, STRUCTURE *psFactory);
 bool triggerStructureAttacked(STRUCTURE *psVictim, BASE_OBJECT *psAttacker);
 bool triggerResearched(RESEARCH *psResearch, STRUCTURE *psStruct, int player);
+bool triggerEventStructBuilt(STRUCTURE *psStruct, DROID *psDroid);
 
 // bool triggerEventReachedLocation(ORDER order, DROID *psDroid);
 // ...

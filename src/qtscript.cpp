@@ -545,8 +545,9 @@ bool triggerEvent(SCRIPT_TRIGGER_TYPE trigger)
 	return true;
 }
 
-//__ \subsection{eventDroidBuilt(droid, structure)}
-//__ An event that is run every time a factory produces a droid.
+//__ \subsection{eventDroidBuilt(droid[, structure])}
+//__ An event that is run every time a droid is built. The structure parameter is set
+//__ if the droid was produced in a factory.
 bool triggerEventDroidBuilt(DROID *psDroid, STRUCTURE *psFactory)
 {
 	for (int i = 0; i < scripts.size(); ++i)
@@ -557,8 +558,34 @@ bool triggerEventDroidBuilt(DROID *psDroid, STRUCTURE *psFactory)
 		{
 			QScriptValueList args;
 			args += convDroid(psDroid, engine);
-			args += convStructure(psFactory, engine);
+			if (psFactory)
+			{
+				args += convStructure(psFactory, engine);
+			}
 			callFunction(engine, "eventDroidBuilt", args);
+		}
+	}
+	return true;
+}
+
+//__ \subsection{eventDroidBuilt(structure[, droid])}
+//__ An event that is run every time a structure is produced. The droid parameter is set
+//__ if the structure was built by a droid.
+bool triggerEventStructBuilt(STRUCTURE *psStruct, DROID *psDroid)
+{
+	for (int i = 0; i < scripts.size(); ++i)
+	{
+		QScriptEngine *engine = scripts.at(i);
+		int player = engine->globalObject().property("me").toInt32();
+		if (player == psDroid->player)
+		{
+			QScriptValueList args;
+			args += convStructure(psStruct, engine);
+			if (psDroid)
+			{
+				args += convDroid(psDroid, engine);
+			}
+			callFunction(engine, "eventStructureBuilt", args);
 		}
 	}
 	return true;
@@ -590,9 +617,9 @@ bool triggerStructureAttacked(STRUCTURE *psVictim, BASE_OBJECT *psAttacker)
 	return true;
 }
 
-//__ \subsection{eventResearched(research, structure)}
+//__ \subsection{eventResearched(research[, structure])}
 //__ An event that is run whenever a new research is available. The structure
-//__ parameter is defined only when the research comes from a research lab.
+//__ parameter is set if the research comes from a research lab.
 bool triggerResearched(RESEARCH *psResearch, STRUCTURE *psStruct, int player)
 {
 	for (int i = 0; i < scripts.size() && psStruct; ++i)
