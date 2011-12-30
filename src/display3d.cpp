@@ -2434,11 +2434,11 @@ void	renderStructure(STRUCTURE *psStructure)
 									pie_Draw3DShape(flashImd[i], 0, colour, buildingBrightness, pieFlag | pie_ADDITIVE, EFFECT_MUZZLE_ADDITIVE);
 								}
 							}
-							else
+							else if (graphicsTime >= psStructure->asWeaps[i].lastFired)
 							{
 								// animated muzzle
 								frame = (graphicsTime - psStructure->asWeaps[i].lastFired)/flashImd[i]->animInterval;
-								if (frame < flashImd[i]->numFrames && frame >= 0)
+								if (frame < flashImd[i]->numFrames)
 								{
 									pie_Draw3DShape(flashImd[i], frame, colour, buildingBrightness, pieFlag | pie_ADDITIVE, EFFECT_MUZZLE_ADDITIVE);
 								}

@@ -772,13 +772,13 @@ static void displayCompObj(DROID *psDroid, bool bButton)
 									//and draw the muzzle flash
 									psShape = MUZZLE_FLASH_PIE(psDroid, i);
 									
-									if (psShape)
+									if (psShape && graphicsTime >= psDroid->asWeaps[i].lastFired)
 									{
 										//assume no clan colours for muzzle effects
 										if ((psShape->numFrames == 0) || (psShape->animInterval <= 0))										
 										{
 											//no anim so display one frame for a fixed time
-											if (graphicsTime >= psDroid->asWeaps[i].lastFired && graphicsTime < psDroid->asWeaps[i].lastFired + BASE_MUZZLE_FLASH_DURATION)
+											if (graphicsTime < psDroid->asWeaps[i].lastFired + BASE_MUZZLE_FLASH_DURATION)
 											{
 												pie_Draw3DShape(psShape, 0, 0, brightness, pieFlag | pie_ADDITIVE, EFFECT_MUZZLE_ADDITIVE);
 											}
