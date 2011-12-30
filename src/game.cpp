@@ -1555,6 +1555,74 @@ static void sanityUpdate()
 	}
 }
 
+static void getIniBaseObject(WzConfig &ini, QString const &key, BASE_OBJECT *&object)
+{
+	object = NULL;
+	if (ini.contains(key + "/id"))
+	{
+		int tid = ini.value(key + "/id", -1).toInt();
+		int tplayer = ini.value(key + "/player", -1).toInt();
+		OBJECT_TYPE ttype = (OBJECT_TYPE)ini.value(key + "/type", 0).toInt();
+		ASSERT_OR_RETURN(, tid >= 0 && tplayer >= 0, "Bad ID");
+		object = getBaseObjFromData(tid, tplayer, ttype);
+		ASSERT(object != NULL, "Failed to find target");
+	}
+}
+
+static void getIniStructureStats(WzConfig &ini, QString const &key, STRUCTURE_STATS *&stats)
+{
+	stats = NULL;
+	if (ini.contains(key))
+	{
+		QString statName = ini.value(key).toString();
+		int tid = getStructStatFromName(statName.toUtf8().constData());
+		ASSERT_OR_RETURN(, tid >= 0, "Target stats not found %s", statName.toUtf8().constData());
+		stats = &asStructureStats[tid];
+	}
+}
+
+static void getIniDroidOrder(WzConfig &ini, QString const &key, DroidOrder &order)
+{
+	order.type = (DroidOrderType)ini.value(key + "/type", DORDER_NONE).toInt();
+	order.pos = ini.vector2i(key + "/pos");
+	order.pos2 = ini.vector2i(key + "/pos2");
+	order.direction = ini.value(key + "/direction").toInt();
+	getIniBaseObject(ini, key + "/obj", order.psObj);
+	getIniStructureStats(ini, key + "/stats", order.psStats);
+}
+
+static void setIniBaseObject(WzConfig &ini, QString const &key, BASE_OBJECT const *object)
+{
+	if (object != NULL && object->died <= 1)
+	{
+		ini.setValue(key + "/id", object->id);
+		ini.setValue(key + "/player", object->player);
+		ini.setValue(key + "/type", object->type);
+#ifdef DEBUG
+		//ini.setValue(key + "/debugfunc", QString::fromUtf8(psCurr->targetFunc));
+		//ini.setValue(key + "/debugline", psCurr->targetLine);
+#endif
+	}
+}
+
+static void setIniStructureStats(WzConfig &ini, QString const &key, STRUCTURE_STATS const *stats)
+{
+	if (stats != NULL)
+	{
+		ini.setValue(key, stats->pName);
+	}
+}
+
+static void setIniDroidOrder(WzConfig &ini, QString const &key, DroidOrder const &order)
+{
+	ini.setValue(key + "/type", order.type);
+	ini.setVector2i(key + "/pos", order.pos);
+	ini.setVector2i(key + "/pos2", order.pos2);
+	ini.setValue(key + "/direction", order.direction);
+	setIniBaseObject(ini, key + "/obj", order.psObj);
+	setIniStructureStats(ini, key + "/stats", order.psStats);
+}
+
 // -----------------------------------------------------------------------------------------
 // UserSaveGame ... this is true when you are loading a players save game
 bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool UserSaveGame)
@@ -2316,7 +2384,7 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 			if (!readFiresupportDesignators(aFileName))
 			{
 				debug( LOG_NEVER, "loadMissionExtras: readFiresupportDesignators(%s) failed\n", aFileName );
-				return false;
+				goto error;
 			}
 		}
 	}
@@ -3989,27 +4057,18 @@ static bool loadSaveDroidPointers(const QString &pFileName, DROID **ppsCurrentDr
 		}
 		ASSERT_OR_RETURN(false, psDroid, "Droid %d not found", id);
 
+		getIniDroidOrder(ini, "order", psDroid->order);
+		psDroid->listSize = clip(ini.value("orderList/size", 0).toInt(), 0, 10000);
+		psDroid->asOrderList.resize(psDroid->listSize);  // Must resize before setting any orders, and must set in-place, since pointers are updated later.
+		for (int i = 0; i < psDroid->listSize; ++i)
+		{
+			getIniDroidOrder(ini, "orderList/" + QString::number(i), psDroid->asOrderList[i]);
+		}
+		psDroid->listPendingBegin = 0;
 		for (int j = 0; j < DROID_MAXWEAPS; j++)
 		{
 			objTrace(psDroid->id, "weapon %d, nStat %d", j, psDroid->asWeaps[j].nStat);
-			if (ini.contains("actionTarget/" + QString::number(j) + "/id"))
-			{
-				int tid = ini.value("actionTarget/" + QString::number(j) + "/id", -1).toInt();
-				int tplayer = ini.value("actionTarget/" + QString::number(j) + "/player", -1).toInt();
-				OBJECT_TYPE ttype = (OBJECT_TYPE)ini.value("actionTarget/" + QString::number(j) + "/type", 0).toInt();
-				ASSERT(tid >= 0 && tplayer >= 0, "Bad ID");
-				setSaveDroidActionTarget(psDroid, getBaseObjFromData(tid, tplayer, ttype), j);
-				ASSERT(psDroid->psActionTarget[j], "Failed to find action target");
-			}
-		}
-		if (ini.contains("target/id"))
-		{
-			int tid = ini.value("target/id", -1).toInt();
-			int tplayer = ini.value("target/player", -1).toInt();
-			OBJECT_TYPE ttype = (OBJECT_TYPE)ini.value("target/type", 0).toInt();
-			ASSERT(tid >= 0 && tplayer >= 0, "Bad ID");
-			setSaveDroidTarget(psDroid, getBaseObjFromData(tid, tplayer, ttype));
-			ASSERT(psDroid->order.psObj, "Failed to find target");
+			getIniBaseObject(ini, "actionTarget/" + QString::number(j), psDroid->psActionTarget[j]);
 		}
 		if (ini.contains("baseStruct/id"))
 		{
@@ -4154,9 +4213,6 @@ static bool loadSaveDroid(const char *pFileName, DROID **ppsCurrentDroidLists)
 		psDroid->burnDamage = ini.value("burnDamage", 0).toInt();
 		psDroid->burnStart = ini.value("burnStart", 0).toInt();
 		psDroid->experience = ini.value("experience", 0).toInt();
-		psDroid->order.type = (DROID_ORDER)ini.value("order/type", DORDER_NONE).toInt();
-		psDroid->order.pos = ini.vector2i("order/pos");
-		psDroid->order.pos2 = ini.vector2i("order/pos2");
 		psDroid->timeLastHit = ini.value("timeLastHit", UDWORD_MAX).toInt();
 		psDroid->secondaryOrder = ini.value("secondaryOrder", DSS_NONE).toInt();
 		psDroid->action = (DROID_ACTION)ini.value("action", DACTION_NONE).toInt();
@@ -4175,13 +4231,6 @@ static bool loadSaveDroid(const char *pFileName, DROID **ppsCurrentDroidLists)
 				psDroid->asWeaps[j].shotsFired = ini.value("shotsFired/" + QString::number(j)).toInt();
 				psDroid->asWeaps[j].rot = ini.vector3i("rotation/" + QString::number(j));
 			}
-		}
-		if (ini.contains("targetStats"))
-		{
-			QString targetStat = ini.value("targetStats").toString();
-			int tid = getStructStatFromName(targetStat.toUtf8().constData());
-			psDroid->order.psStats = &asStructureStats[tid];
-			ASSERT(psDroid->order.psStats, "Target stats not found %s", targetStat.toUtf8().constData());
 		}
 
 		psDroid->group = ini.value("group", UBYTE_MAX).toInt();
@@ -4300,43 +4349,23 @@ static bool writeDroid(WzConfig &ini, DROID *psCurr, bool onMission)
 	}
 	for (int i = 0; i < DROID_MAXWEAPS; i++)
 	{
-		if (psCurr->psActionTarget[i] != NULL && psCurr->psActionTarget[i]->died <= 1)
-		{
-			ini.setValue("actionTarget/" + QString::number(i) + "/id", psCurr->psActionTarget[i]->id);
-			ini.setValue("actionTarget/" + QString::number(i) + "/player", psCurr->psActionTarget[i]->player);
-			ini.setValue("actionTarget/" + QString::number(i) + "/type", psCurr->psActionTarget[i]->type);
-#ifdef DEBUG
-			ini.setValue("actionTarget/" + QString::number(i) + "/debugfunc", psCurr->actionTargetFunc[i]);
-			ini.setValue("actionTarget/" + QString::number(i) + "/debugline", psCurr->actionTargetLine[i]);
-#endif
-		}
+		setIniBaseObject(ini, "actionTarget/" + QString::number(i), psCurr->psActionTarget[i]);
 	}
 	ini.setValue("born", psCurr->born);
 	if (psCurr->lastFrustratedTime > 0) ini.setValue("lastFrustratedTime", psCurr->lastFrustratedTime);
 	if (psCurr->experience > 0) ini.setValue("experience", psCurr->experience);
-	ini.setValue("order/type", psCurr->order.type);
-	ini.setVector2i("order/pos", Vector2i(psCurr->order.pos));
-	ini.setVector2i("order/pos2", Vector2i(psCurr->order.pos2));
-	if (psCurr->timeLastHit != UDWORD_MAX) ini.setValue("timeLastHit", psCurr->timeLastHit);
-	if (psCurr->order.psObj != NULL)
+	setIniDroidOrder(ini, "order", psCurr->order);
+	ini.setValue("orderList/size", psCurr->listSize);
+	for (int i = 0; i < psCurr->listSize; ++i)
 	{
-		ini.setValue("target/id", psCurr->order.psObj->id);
-		ini.setValue("target/player", psCurr->order.psObj->player);
-		ini.setValue("target/type", psCurr->order.psObj->type);
-#ifdef DEBUG
-		ini.setValue("target/debugfunc", QString::fromUtf8(psCurr->targetFunc));
-		ini.setValue("target/debugline", psCurr->targetLine);
-#endif
+		setIniDroidOrder(ini, "orderList/" + QString::number(i), psCurr->asOrderList[i]);
 	}
+	if (psCurr->timeLastHit != UDWORD_MAX) ini.setValue("timeLastHit", psCurr->timeLastHit);
 	ini.setValue("secondaryOrder", psCurr->secondaryOrder);
 	ini.setValue("action", psCurr->action);
 	ini.setVector2i("action/pos", psCurr->actionPos);
 	ini.setValue("actionStarted", psCurr->actionStarted);
 	ini.setValue("actionPoints", psCurr->actionPoints);
-	if (psCurr->order.psStats != NULL)
-	{
-		ini.setValue("targetStats", psCurr->order.psStats->pName);
-	}
 	if (psCurr->psBaseStruct != NULL)
 	{
 		ini.setValue("baseStruct/id", psCurr->psBaseStruct->id);
