@@ -10,7 +10,7 @@
 int realmain(int argc, char *argv[]);
 int main(int argc, char *argv[])
 {
-	realmain(argc, argv);
+	return realmain(argc, argv);
 }
 
 QApplication *appPtr;
