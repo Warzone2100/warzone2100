@@ -3092,7 +3092,7 @@ void missionDestroyObjects(void)
 				}
 			}
 		}
-		if (psDroid->psTarget && psDroid->psTarget->died)
+		if (psDroid->order.psObj && psDroid->order.psObj->died)
 		{
 			setDroidTarget(psDroid, NULL);
 		}

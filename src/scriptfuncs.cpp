@@ -9593,9 +9593,9 @@ SDWORD getNumRepairedBy(DROID *psDroidToCheck, SDWORD player)
 			continue;
 		}
 
-		if (psDroid->psTarget != NULL && psDroid->psTarget->type == OBJ_DROID)
+		if (psDroid->order.psObj != NULL && psDroid->order.psObj->type == OBJ_DROID)
 		{
-			if ((DROID *)psDroid->psTarget == psDroidToCheck)
+			if ((DROID *)psDroid->order.psObj == psDroidToCheck)
 			{
 				numRepaired++;
 			}

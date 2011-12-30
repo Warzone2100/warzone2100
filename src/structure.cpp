@@ -830,9 +830,8 @@ void structureBuild(STRUCTURE *psStruct, DROID *psDroid, int buildPoints, int bu
 		//only play the sound if selected player
 		if (psDroid &&
 		    psStruct->player == selectedPlayer
-		 && (psDroid->order != DORDER_LINEBUILD
-		  || (map_coord(psDroid->orderX) == map_coord(psDroid->orderX2)
-		   && map_coord(psDroid->orderY) == map_coord(psDroid->orderY2))))
+		 && (psDroid->order.type != DORDER_LINEBUILD
+		  || map_coord(psDroid->order.pos) == map_coord(psDroid->order.pos2)))
 		{
 			audio_QueueTrackPos( ID_SOUND_STRUCTURE_COMPLETED,
 					psStruct->pos.x, psStruct->pos.y, psStruct->pos.z );
@@ -848,18 +847,15 @@ void structureBuild(STRUCTURE *psStruct, DROID *psDroid, int buildPoints, int bu
 			// Clear all orders for helping hands. Needed for AI script which runs next frame.
 			for (psIter = apsDroidLists[psDroid->player]; psIter; psIter = psIter->psNext)
 			{
-				if ((psIter->order == DORDER_BUILD || psIter->order == DORDER_HELPBUILD || psIter->order == DORDER_LINEBUILD)
-				    && psIter->psTarget == psStruct
-				    && (psIter->order != DORDER_LINEBUILD || (map_coord(psIter->orderX) == map_coord(psIter->orderX2)
-				                                              && map_coord(psIter->orderY) == map_coord(psIter->orderY2))))
+				if ((psIter->order.type == DORDER_BUILD || psIter->order.type == DORDER_HELPBUILD || psIter->order.type == DORDER_LINEBUILD)
+				    && psIter->order.psObj == psStruct
+				    && (psIter->order.type != DORDER_LINEBUILD || map_coord(psIter->order.pos) == map_coord(psIter->order.pos2)))
 				{
-					objTrace(psIter->id, "Construction order %s complete (%d, %d -> %d, %d)", getDroidOrderName(psDroid->order),
-					         (int)psIter->orderX, (int)psIter->orderY, (int)psIter->orderX2, (int)psIter->orderY2);
+					objTrace(psIter->id, "Construction order %s complete (%d, %d -> %d, %d)", getDroidOrderName(psDroid->order.type),
+					         psIter->order.pos2.x, psIter->order.pos.y, psIter->order.pos2.x, psIter->order.pos2.y);
 					psIter->action = DACTION_NONE;
-					psIter->order = DORDER_NONE;
-					setDroidTarget(psIter, NULL);
+					psIter->order = DroidOrder(DORDER_NONE);
 					setDroidActionTarget(psIter, NULL, 0);
-					psIter->psTarStats = NULL;
 				}
 			}
 
@@ -2774,7 +2770,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 			// skip droids that are trying to get to other repair factories
 			if (psDroid != NULL
 				&& (!orderState(psDroid, DORDER_RTR)
-				|| psDroid->psTarget != psStructure))
+				|| psDroid->order.psObj != psStructure))
 			{
 				psDroid = (DROID *)psChosenObj;
 				xdiff = (SDWORD)psDroid->pos.x - (SDWORD)psStructure->pos.x;
@@ -2791,7 +2787,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 			// select next droid if none being repaired,
 			// or look for a better droid if not repairing one with repair orders
 			if (psChosenObj == NULL ||
-				(((DROID *)psChosenObj)->order != DORDER_RTR && ((DROID *)psChosenObj)->order != DORDER_RTR_SPECIFIED))
+				(((DROID *)psChosenObj)->order.type != DORDER_RTR && ((DROID *)psChosenObj)->order.type != DORDER_RTR_SPECIFIED))
 			{
 				//FIX ME: (doesn't look like we need this?)
 				ASSERT(psRepairFac->psGroup != NULL, "invalid repair facility group pointer");
@@ -2815,7 +2811,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 					// Take any droid with orders to Return to Repair (DORDER_RTR),
 					// or that have been ordered to this repair facility (DORDER_RTR_SPECIFIED),
 					// or any "lost" unit with one of those two orders.
-					if (((psDroid->order == DORDER_RTR || (psDroid->order == DORDER_RTR_SPECIFIED
+					if (((psDroid->order.type == DORDER_RTR || (psDroid->order.type == DORDER_RTR_SPECIFIED
 					      && (!psTarget || psTarget == psStructure)))
 					  && psDroid->action != DACTION_WAITFORREPAIR && psDroid->action != DACTION_MOVETOREPAIRPOINT
 					  && psDroid->action != DACTION_WAITDURINGREPAIR)
@@ -2923,11 +2919,11 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 				psDroid = (DROID *)psChosenObj;
 				if (psDroid)
 				{
-					if (psDroid->order == DORDER_RTR || psDroid->order == DORDER_RTR_SPECIFIED)
+					if (psDroid->order.type == DORDER_RTR || psDroid->order.type == DORDER_RTR_SPECIFIED)
 					{
 						// Hey, droid, it's your turn! Stop what you're doing and get ready to get repaired!
 						psDroid->action = DACTION_WAITFORREPAIR;
-						psDroid->psTarget = psStructure;
+						psDroid->order.psObj = psStructure;
 					}
 					objTrace(psStructure->id, "Chose to repair droid %d", (int)psDroid->id);
 					objTrace(psDroid->id, "Chosen to be repaired by repair structure %d", (int)psStructure->id);
@@ -3303,8 +3299,8 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 					/* set droid points to max */
 					psDroid->body = psDroid->originalBody;
 
-					if ((psDroid->order == DORDER_RTR || psDroid->order == DORDER_RTR_SPECIFIED)
-					  && psDroid->psTarget == psStructure)
+					if ((psDroid->order.type == DORDER_RTR || psDroid->order.type == DORDER_RTR_SPECIFIED)
+					  && psDroid->order.psObj == psStructure)
 					{
 						// if completely repaired reset order
 						secondarySetState(psDroid, DSO_RETURN_TO_LOC, DSS_NONE);
@@ -5511,8 +5507,8 @@ static unsigned int countAssignedDroids(const STRUCTURE* psStructure)
 	num = 0;
 	for (psCurr = apsDroidLists[selectedPlayer]; psCurr; psCurr = psCurr->psNext)
 	{
-		if (psCurr->psTarget
-		 && psCurr->psTarget->id == psStructure->id
+		if (psCurr->order.psObj
+		 && psCurr->order.psObj->id == psStructure->id
 		 && psCurr->player == psStructure->player)
 		{
 			const MOVEMENT_MODEL weapontype = asWeaponStats[psCurr->asWeaps[0].nStat].movementModel;
@@ -7139,7 +7135,7 @@ STRUCTURE * giftSingleStructure(STRUCTURE *psStructure, UBYTE attackPlayer, bool
 			//check through the 'attackPlayer' players list of droids to see if any are targetting it
 			for (psCurr = apsDroidLists[attackPlayer]; psCurr != NULL; psCurr = psCurr->psNext)
 			{
-				if (psCurr->psTarget == psStructure)
+				if (psCurr->order.psObj == psStructure)
 				{
 					orderDroid(psCurr, DORDER_STOP, ModeImmediate);
 					break;
@@ -7487,7 +7483,7 @@ bool structureCheckReferences(STRUCTURE *psVictimStruct)
 		}
 		for (psDroid = apsDroidLists[plr]; psDroid != NULL; psDroid = psDroid->psNext)
 		{
-			if ((STRUCTURE *)psDroid->psTarget == psVictimStruct)
+			if ((STRUCTURE *)psDroid->order.psObj == psVictimStruct)
 			{
 #ifdef DEBUG
 				ASSERT(!"Illegal reference to structure", "Illegal reference to structure from %s line %d",

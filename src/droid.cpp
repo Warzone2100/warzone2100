@@ -117,13 +117,13 @@ void cancelBuild(DROID *psDroid)
 	{
 		objTrace(psDroid->id, "Droid build order cancelled");
 		psDroid->action = DACTION_NONE;
-		psDroid->order = DORDER_NONE;
+		psDroid->order.type = DORDER_NONE;
 		setDroidTarget(psDroid, NULL);
 		setDroidActionTarget(psDroid, NULL, 0);
 
 		/* Notify scripts we just became idle */
 		psScrCBOrderDroid = psDroid;
-		psScrCBOrder = psDroid->order;
+		psScrCBOrder = psDroid->order.type;
 		eventFireCallbackTrigger((TRIGGER_TYPE)CALL_DROID_REACH_LOCATION);
 		psScrCBOrderDroid = NULL;
 		psScrCBOrder = DORDER_NONE;
@@ -266,7 +266,7 @@ bool droidCheckReferences(DROID *psVictimDroid)
 		{
 			unsigned int i;
 
-			ASSERT_OR_RETURN(false, (DROID *)psDroid->psTarget != psVictimDroid || psVictimDroid == psDroid, DROIDREF(psDroid->targetFunc, psDroid->targetLine));
+			ASSERT_OR_RETURN(false, psDroid->order.psObj != psVictimDroid || psVictimDroid == psDroid, DROIDREF(psDroid->targetFunc, psDroid->targetLine));
 			for (i = 0; i < psDroid->numWeaps; i++)
 			{
 				ASSERT_OR_RETURN(false, (DROID *)psDroid->psActionTarget[i] != psVictimDroid || psVictimDroid == psDroid, 
@@ -283,18 +283,19 @@ DROID::DROID(uint32_t id, unsigned player)
 	, droidType(DROID_ANY)
 	, psGroup(NULL)
 	, psGrpNext(NULL)
-	, order(DORDER_NONE)
-	, orderX(0), orderY(0)
-	, orderX2(0), orderY2(0)
-	, orderDirection(0)
-	, psTarget(NULL)
-	, psTarStats(NULL)
 	, secondaryOrder(DSS_ARANGE_DEFAULT | DSS_REPLEV_NEVER | DSS_ALEV_ALWAYS | DSS_HALT_GUARD)
 	, action(DACTION_NONE)
 	, actionPos(0, 0)
 	, psCurAnim(NULL)
 	, gameCheckDroid(NULL)
 {
+	order.type = DORDER_NONE;
+	order.pos = Vector2i(0, 0);
+	order.pos2 = Vector2i(0, 0);
+	order.direction = 0;
+	order.psObj = NULL;
+	order.psStats = NULL;
+
 	sMove.asPath = NULL;
 	sMove.Status = MOVEINACTIVE;
 }
@@ -411,7 +412,7 @@ void	removeDroidBase(DROID *psDel)
 	//ajl, inform others of destruction.
 	// Everyone else should be doing this at the same time, assuming it's in synch (so everyone sends a GAME_DROIDDEST message at once)...
 	if (!isInSync() && bMultiMessages
-	 && !(psDel->player != selectedPlayer && psDel->order == DORDER_RECYCLE))
+	 && !(psDel->player != selectedPlayer && psDel->order.type == DORDER_RECYCLE))
 	{
 		ASSERT_OR_RETURN( , droidOnMap(psDel), "Asking other players to destroy droid driving off the map");
 		SendDestroyDroid(psDel);
@@ -521,7 +522,7 @@ static void removeDroidFX(DROID *psDel, unsigned impactTime)
 		return;
 	}
 
-	if (psDel->droidType == DROID_PERSON && psDel->order != DORDER_RUNBURN)
+	if (psDel->droidType == DROID_PERSON && psDel->order.type != DORDER_RUNBURN)
 	{
 		/* blow person up into blood and guts */
 		compPersonToBits(psDel);
@@ -529,7 +530,7 @@ static void removeDroidFX(DROID *psDel, unsigned impactTime)
 
 	/* if baba and not running (on fire) then squish */
 	if (psDel->droidType == DROID_PERSON
-	 && psDel->order != DORDER_RUNBURN
+	 && psDel->order.type != DORDER_RUNBURN
 	 && psDel->visible[selectedPlayer])
 	{
 		// The babarian has been run over ...
@@ -662,7 +663,7 @@ void droidBurn(DROID *psDroid)
 		return;
 	}
 
-	if (psDroid->order != DORDER_RUNBURN)
+	if (psDroid->order.type != DORDER_RUNBURN)
 	{
 		/* set droid running */
 		orderDroid(psDroid, DORDER_RUNBURN, ModeImmediate);
@@ -719,7 +720,7 @@ void _syncDebugDroid(const char *function, DROID const *psDroid, char ch)
 	          psDroid->player,
 	          psDroid->pos.x, psDroid->pos.y, psDroid->pos.z,
 	          psDroid->rot.direction, psDroid->rot.pitch, psDroid->rot.roll,
-	          psDroid->order, psDroid->orderX, psDroid->orderY, psDroid->listSize,
+	          psDroid->order.type, psDroid->order.pos.x, psDroid->order.pos.y, psDroid->listSize,
 	          psDroid->action, actTar,
 	          psDroid->secondaryOrder,
 	          psDroid->body,
@@ -998,11 +999,11 @@ bool droidStartBuild(DROID *psDroid)
 	CHECK_DROID(psDroid);
 
 	/* See if we are starting a new structure */
-	if ((psDroid->psTarget == NULL) &&
-		(psDroid->order == DORDER_BUILD ||
-		 psDroid->order == DORDER_LINEBUILD))
+	if ((psDroid->order.psObj == NULL) &&
+		(psDroid->order.type == DORDER_BUILD ||
+		 psDroid->order.type == DORDER_LINEBUILD))
 	{
-		STRUCTURE_STATS *psStructStat = (STRUCTURE_STATS *)psDroid->psTarStats;
+		STRUCTURE_STATS *psStructStat = psDroid->order.psStats;
 		STRUCTURE_LIMITS *structLimit = &asStructLimits[psDroid->player][psStructStat - asStructureStats];
 
 		//need to check structLimits have not been exceeded
@@ -1013,14 +1014,14 @@ bool droidStartBuild(DROID *psDroid)
 			return false;
 		}
 		// Can't build on burning oil derricks.
-		if (psStructStat->type == REF_RESOURCE_EXTRACTOR && fireOnLocation(psDroid->orderX,psDroid->orderY))
+		if (psStructStat->type == REF_RESOURCE_EXTRACTOR && fireOnLocation(psDroid->order.pos.x,psDroid->order.pos.y))
 		{
 			intBuildFinished(psDroid);
 			cancelBuild(psDroid);
 			return false;
 		}
 		//ok to build
-		psStruct = buildStructureDir(psStructStat, psDroid->orderX,psDroid->orderY, psDroid->orderDirection, psDroid->player,false);
+		psStruct = buildStructureDir(psStructStat, psDroid->order.pos.x, psDroid->order.pos.y, psDroid->order.direction, psDroid->player,false);
 		if (!psStruct)
 		{
 			intBuildFinished(psDroid);
@@ -1032,7 +1033,7 @@ bool droidStartBuild(DROID *psDroid)
 	else
 	{
 		/* Check the structure is still there to build (joining a partially built struct) */
-		psStruct = (STRUCTURE *)psDroid->psTarget;
+		psStruct = (STRUCTURE *)psDroid->order.psObj;
 		if (!droidNextToStruct(psDroid, (BASE_OBJECT *)psStruct))
 		{
 			/* Nope - stop building */
@@ -1100,10 +1101,10 @@ bool droidUpdateBuild(DROID *psDroid)
 
 	CHECK_DROID(psDroid);
 	ASSERT_OR_RETURN(false, psDroid->action == DACTION_BUILD, "%s (order %s) has wrong action for construction: %s",
-	                 droidGetName(psDroid), getDroidOrderName(psDroid->order), getDroidActionName(psDroid->action));
-	ASSERT_OR_RETURN(false, psDroid->psTarget != NULL, "Trying to update a construction, but no target!");
+	                 droidGetName(psDroid), getDroidOrderName(psDroid->order.type), getDroidActionName(psDroid->action));
+	ASSERT_OR_RETURN(false, psDroid->order.psObj != NULL, "Trying to update a construction, but no target!");
 
-	psStruct = (STRUCTURE *)psDroid->psTarget;
+	psStruct = (STRUCTURE *)psDroid->order.psObj;
 	ASSERT_OR_RETURN(false, psStruct->type == OBJ_STRUCTURE, "target is not a structure" );
 	ASSERT_OR_RETURN(false, psDroid->asBits[COMP_CONSTRUCT].nStat < numConstructStats, "Invalid construct pointer for unit" );
 
@@ -1113,8 +1114,8 @@ bool droidUpdateBuild(DROID *psDroid)
 		// Update the interface
 		intBuildFinished(psDroid);
 		// Check if line order build is completed, or we are not carrying out a line order build
-		if ((map_coord(psDroid->orderX) == map_coord(psDroid->orderX2) && map_coord(psDroid->orderY) == map_coord(psDroid->orderY2))
-		    || psDroid->order != DORDER_LINEBUILD)
+		if ((map_coord(psDroid->order.pos) == map_coord(psDroid->order.pos2))
+		    || psDroid->order.type != DORDER_LINEBUILD)
 		{
 			cancelBuild(psDroid);
 		}
@@ -1165,7 +1166,7 @@ bool droidUpdateDemolishing( DROID *psDroid )
 	CHECK_DROID(psDroid);
 
 	ASSERT_OR_RETURN(false, psDroid->action == DACTION_DEMOLISH, "unit is not demolishing");
-	psStruct = (STRUCTURE *)psDroid->psTarget;
+	psStruct = (STRUCTURE *)psDroid->order.psObj;
 	ASSERT_OR_RETURN(false, psStruct->type == OBJ_STRUCTURE, "target is not a structure");
 
 	//constructPoints = (asConstructStats + psDroid->asBits[COMP_CONSTRUCT].nStat)->
@@ -1254,8 +1255,8 @@ bool droidStartRestore( DROID *psDroid )
 
 	CHECK_DROID(psDroid);
 
-	ASSERT_OR_RETURN(false, psDroid->order == DORDER_RESTORE, "unit is not restoring");
-	psStruct = (STRUCTURE *)psDroid->psTarget;
+	ASSERT_OR_RETURN(false, psDroid->order.type == DORDER_RESTORE, "unit is not restoring");
+	psStruct = (STRUCTURE *)psDroid->order.psObj;
 	ASSERT_OR_RETURN(false, psStruct->type == OBJ_STRUCTURE, "target is not a structure");
 
 	psDroid->actionStarted = gameTime;
@@ -1277,7 +1278,7 @@ bool droidUpdateRestore( DROID *psDroid )
 	CHECK_DROID(psDroid);
 
 	ASSERT_OR_RETURN(false, psDroid->action == DACTION_RESTORE, "unit is not restoring");
-	psStruct = (STRUCTURE *)psDroid->psTarget;
+	psStruct = (STRUCTURE *)psDroid->order.psObj;
 	ASSERT_OR_RETURN(false, psStruct->type == OBJ_STRUCTURE, "target is not a structure");
 	ASSERT_OR_RETURN(false, psStruct->pStructureType->resistance != 0, "invalid structure for EW");
 
@@ -2851,20 +2852,16 @@ bool buildModule(STRUCTURE *psStruct)
  - if so, helping to build the current one*/
 void setUpBuildModule(DROID *psDroid)
 {
-	UDWORD		tileX, tileY;
-	STRUCTURE	*psStruct;
-
-	tileX = map_coord(psDroid->orderX);
-	tileY = map_coord(psDroid->orderY);
+	Vector2i tile = map_coord(psDroid->order.pos);
 
 	//check not another Truck started
-	psStruct = getTileStructure(tileX,tileY);
+	STRUCTURE *psStruct = getTileStructure(tile.x, tile.y);
 	if (psStruct)
 	{	// if a droid is currently building, or building is in progress of being built/upgraded the droid's order should be DORDER_HELPBUILD
 		if (checkDroidsBuilding(psStruct) || !psStruct->status )
 		{
 			//set up the help build scenario
-			psDroid->order = DORDER_HELPBUILD;
+			psDroid->order.type = DORDER_HELPBUILD;
 			setDroidTarget(psDroid, (BASE_OBJECT *)psStruct);
 			if (droidStartBuild(psDroid))
 			{
@@ -2970,10 +2967,9 @@ bool droidUnderRepair(DROID *psDroid)
 		//look thru the list of players droids to see if any are repairing this droid
 		for (psCurr = apsDroidLists[psDroid->player]; psCurr != NULL; psCurr = psCurr->psNext)
 		{
-			//if (psCurr->droidType == DROID_REPAIR && psCurr->action ==
 			if ((psCurr->droidType == DROID_REPAIR || psCurr->droidType ==
 				DROID_CYBORG_REPAIR) && psCurr->action ==
-				DACTION_DROIDREPAIR && psCurr->psTarget == (BASE_OBJECT *)psDroid)
+				DACTION_DROIDREPAIR && psCurr->order.psObj == psDroid)
 			{
 				return true;
 			}
@@ -3177,8 +3173,8 @@ bool allVtolsRearmed(DROID *psDroid)
 	for (psCurr=apsDroidLists[psDroid->player]; psCurr; psCurr=psCurr->psNext)
 	{
 		if (vtolRearming(psCurr) &&
-			psCurr->order == psDroid->order &&
-			psCurr->psTarget == psDroid->psTarget)
+			psCurr->order.type == psDroid->order.type &&
+			psCurr->order.psObj == psDroid->order.psObj)
 		{
 			stillRearming = true;
 			break;
@@ -3552,7 +3548,7 @@ DROID * giftSingleDroid(DROID *psD, UDWORD to)
 
 			for (psCurr = apsDroidLists[them]; psCurr != NULL; psCurr = psCurr->psNext)
 			{
-				if (psCurr->psTarget == (BASE_OBJECT *)psD || psCurr->psActionTarget[0] == (BASE_OBJECT *)psD)
+				if (psCurr->order.psObj == psD || psCurr->psActionTarget[0] == psD)
 				{
 					orderDroid(psCurr, DORDER_STOP, ModeQueue);
 				}

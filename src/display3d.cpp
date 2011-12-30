@@ -1585,35 +1585,46 @@ static void drawLineBuild(STRUCTURE_STATS const *psStats, int left, int right, i
 	}
 }
 
-static void renderBuildOrder(int32_t order, void *statsOrStructure, int32_t x, int32_t y, int32_t x2, int32_t y2, uint16_t dir, STRUCT_STATES state)
+static void renderBuildOrder(DROID_ORDER_DATA const &order, STRUCT_STATES state)
 {
-	if (!statsOrStructure) return;
-
-	STRUCTURE_STATS const *stats = (STRUCTURE_STATS const *)statsOrStructure;
-	if (order == DORDER_BUILDMODULE)
+	STRUCTURE_STATS const *stats;
+	Vector2i pos = order.pos;
+	if (order.type == DORDER_BUILDMODULE)
 	{
-		STRUCTURE const *structure = (STRUCTURE const *)statsOrStructure;
+		STRUCTURE const *structure = castStructure(order.psObj);
+		if (structure == NULL)
+		{
+			return;
+		}
 		stats = getModuleStat(structure);
-		x = structure->pos.x;
-		y = structure->pos.y;
+		pos = removeZ(structure->pos);
+	}
+	else
+	{
+		stats = order.psStats;
+	}
+
+	if (stats == NULL)
+	{
+		return;
 	}
 
 	//draw the current build site if its a line of structures
-	if (order == DORDER_LINEBUILD)
+	if (order.type == DORDER_LINEBUILD)
 	{
 		int left, right, up, down;
 		// a wall (or something like that)
 
-		left = MIN(map_coord(x), map_coord(x2));
-		right = MAX(map_coord(x), map_coord(x2));
-		up = MIN(map_coord(y), map_coord(y2));
-		down = MAX(map_coord(y), map_coord(y2));
+		left = MIN(map_coord(pos.x), map_coord(order.pos2.x));
+		right = MAX(map_coord(pos.x), map_coord(order.pos2.x));
+		up = MIN(map_coord(pos.y), map_coord(order.pos2.y));
+		down = MAX(map_coord(pos.y), map_coord(order.pos2.y));
 
-		drawLineBuild(stats, left, right, up, down, dir, state);
+		drawLineBuild(stats, left, right, up, down, order.direction, state);
 	}
-	if ((order == DORDER_BUILD || order == DORDER_BUILDMODULE) && !tileHasIncompatibleStructure(mapTile(map_coord(x), map_coord(y)), stats))
+	if ((order.type == DORDER_BUILD || order.type == DORDER_BUILDMODULE) && !tileHasIncompatibleStructure(mapTile(map_coord(pos)), stats))
 	{
-		Blueprint blueprint(stats, Vector2i(x, y), dir, state);
+		Blueprint blueprint(stats, pos, order.direction, state);
 		blueprints.push_back(blueprint);
 	}
 }
@@ -1699,12 +1710,11 @@ void displayBlueprints(void)
 		{
 			if (psDroid->droidType == DROID_CONSTRUCT || psDroid->droidType == DROID_CYBORG_CONSTRUCT)
 			{
-				renderBuildOrder(psDroid->order, psDroid->psTarStats, psDroid->orderX, psDroid->orderY, psDroid->orderX2, psDroid->orderY2, psDroid->orderDirection, state);
+				renderBuildOrder(psDroid->order, state);
 				//now look thru' the list of orders to see if more building sites
 				for (int order = psDroid->listPendingBegin; order < (int)psDroid->asOrderList.size(); order++)
 				{
-					OrderListEntry const *o = &psDroid->asOrderList[order];
-					renderBuildOrder(o->order, o->psOrderTarget, o->x, o->y, o->x2, o->y2, o->direction, state);
+					renderBuildOrder(psDroid->asOrderList[order], state);
 				}
 			}
 		}
@@ -4270,11 +4280,11 @@ static	void	doConstructionLines( void )
 				{
 					if(psDroid->action == DACTION_BUILD)
 					{
-						if (psDroid->psTarget)
+						if (psDroid->order.psObj)
 						{
-							if (psDroid->psTarget->type == OBJ_STRUCTURE)
+							if (psDroid->order.psObj->type == OBJ_STRUCTURE)
 							{
-								addConstructionLine(psDroid, (STRUCTURE*)psDroid->psTarget);
+								addConstructionLine(psDroid, (STRUCTURE*)psDroid->order.psObj);
 							}
 						}
 					}

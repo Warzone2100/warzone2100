@@ -76,6 +76,7 @@ enum DROID_ORDER
 	DORDER_CIRCLE = 40,     /**< circles target location and engage. */
 	DORDER_TEMP_HOLD,       /**< hold position until given next order. */
 };
+typedef DROID_ORDER DroidOrderType;
 
 /** All the possible secondary orders for droids. */
 enum SECONDARY_ORDER
@@ -150,18 +151,28 @@ struct RUN_DATA
 	uint8_t     leadership; /**< basic value that will be used on calculations of the flee probability. */
 };
 
+struct STRUCTURE_STATS;
+
 /** Struct that stores data of an order.
  * This struct is needed to send orders that comes with information, such as position, target, etc.
  * This struct is used to issue orders to droids.
  */
 struct DROID_ORDER_DATA
 {
-	DROID_ORDER order;      /**< the actual order. */
-	UWORD       x,y;        /**< the order's position. */
-	UWORD       x2,y2;      /**< the order's second position, in case those exist. */
-	uint16_t    direction;  /**< the order's direction, in case it exist. */
-	BASE_OBJECT *psObj;     /**< the order's target, in case it exist. */
-	BASE_STATS  *psStats;   /**< order base stats. */
+	explicit DROID_ORDER_DATA(DroidOrderType type = DORDER_NONE) : type(type), pos(0, 0), pos2(0, 0), direction(0), psObj(NULL), psStats(NULL) {}
+	DROID_ORDER_DATA(DroidOrderType type, Vector2i pos) : type(type), pos(pos), pos2(0, 0), direction(0), psObj(NULL), psStats(NULL) {}
+	DROID_ORDER_DATA(DroidOrderType type, STRUCTURE_STATS *psStats, Vector2i pos, uint16_t direction) : type(type), pos(pos), pos2(0, 0), direction(direction), psObj(NULL), psStats(psStats) {}
+	DROID_ORDER_DATA(DroidOrderType type, STRUCTURE_STATS *psStats, Vector2i pos, Vector2i pos2, uint16_t direction) : type(type), pos(pos), pos2(pos2), direction(direction), psObj(NULL), psStats(psStats) {}
+	DROID_ORDER_DATA(DroidOrderType type, BASE_OBJECT *psObj) : type(type), pos(0, 0), pos2(0, 0), direction(0), psObj(psObj), psStats(NULL) {}
+
+	DroidOrderType   type;       /**< the actual order. */
+	Vector2i         pos;        /**< the order's position. */
+	Vector2i         pos2;       /**< the order's second position, in case those exist. */
+	uint16_t         direction;  /**< the order's direction, in case it exist. */
+	BASE_OBJECT *    psObj;      /**< the order's target, in case it exist. */
+	STRUCTURE_STATS *psStats;    /**< order structure stats. */
 };
+
+typedef DROID_ORDER_DATA DroidOrder;
 
 #endif // __INCLUDED_SRC_ORDERDEF_H__

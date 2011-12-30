@@ -1116,7 +1116,7 @@ static void proj_ImpactFunc( PROJECTILE *psObj )
 				switch (psObj->psSource->type)
 				{
 					case OBJ_DROID:
-						((DROID *) psObj->psSource)->order = DORDER_NONE;
+						((DROID *)psObj->psSource)->order.type = DORDER_NONE;
 						actionDroid((DROID *) (psObj->psSource), DACTION_NONE);
 						break;
 

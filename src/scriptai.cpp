@@ -245,7 +245,7 @@ bool scrIdleGroup(void)
 
 	for(psDroid = psGroup->psList;psDroid; psDroid = psDroid->psGrpNext)
 	{
-		if (psDroid->order == DORDER_NONE || (psDroid->order == DORDER_GUARD && psDroid->psTarget == NULL))
+		if (psDroid->order.type == DORDER_NONE || (psDroid->order.type == DORDER_GUARD && psDroid->order.psObj == NULL))
 		{
 			count++;
 		}
@@ -608,7 +608,6 @@ bool scrOrderDroidStatsLoc(void)
 	DROID			*psDroid;
 	DROID_ORDER		order;
 	SDWORD			x,y, statIndex;
-	BASE_STATS		*psStats;
 
 	if (!stackPopParams(5, ST_DROID, &psDroid, VAL_INT, &order, ST_STRUCTURESTAT, &statIndex,
 						   VAL_INT, &x, VAL_INT, &y))
@@ -623,7 +622,7 @@ bool scrOrderDroidStatsLoc(void)
 	}
 
 	ASSERT_OR_RETURN( false, statIndex < numStructureStats, "Invalid range referenced for numStructureStats, %d > %d", statIndex, numStructureStats);
-	psStats = (asStructureStats + statIndex);
+	STRUCTURE_STATS *psStats = asStructureStats + statIndex;
 
 	ASSERT_OR_RETURN( false, psDroid != NULL, "Invalid Unit pointer" );
 	ASSERT_OR_RETURN( false, psStats != NULL, "Invalid object pointer" );
@@ -1780,7 +1779,6 @@ static bool defenseLocation(bool variantB)
 	UDWORD		x,y,gX,gY,dist,player,nearestSoFar,count;
 	GATEWAY		*psGate,*psChosenGate;
 	DROID		*psDroid;
-	BASE_STATS	*psWStats;
 	UDWORD		x1,x2,x3,x4,y1,y2,y3,y4;
 	bool		noWater;
 	UDWORD      minCount;
@@ -1807,7 +1805,7 @@ static bool defenseLocation(bool variantB)
 	ASSERT_OR_RETURN( false, statIndex < numStructureStats, "Invalid range referenced for numStructureStats, %d > %d", statIndex, numStructureStats);
 
 	ASSERT_OR_RETURN( false, statIndex2 < numStructureStats, "Invalid range referenced for numStructureStats, %d > %d", statIndex2, numStructureStats);
-	psWStats = (asStructureStats + statIndex2);
+	STRUCTURE_STATS *psWStats = (asStructureStats + statIndex2);
 
     // check for wacky coords.
 	if(		*pX < 0

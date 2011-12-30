@@ -83,14 +83,7 @@ struct COMPONENT
 	UBYTE           nStat;          ///< Allowing a maximum of 255 stats per file
 };
 
-struct OrderListEntry
-{
-	DROID_ORDER     order;
-	UWORD           x, y, x2, y2;   ///< line build requires two sets of coords
-	uint16_t        direction;      ///< Needed to align structures with viewport.
-	void*           psOrderTarget;  ///< this needs to cope with objects and stats
-};
-typedef std::vector<OrderListEntry> OrderList;
+typedef std::vector<DROID_ORDER_DATA> OrderList;
 
 struct DROID_TEMPLATE : public BASE_STATS
 {
@@ -174,13 +167,8 @@ struct DROID : public BASE_OBJECT
 	unsigned        listPendingBegin;               ///< Index of first order which will not be erased by a pending order. After all messages are processed, the orders in the range [listPendingBegin; listPendingEnd - 1] will remain.
 
 	/* Order data */
-	DROID_ORDER     order;
-	UWORD           orderX, orderY;
-	UWORD           orderX2, orderY2;
-	uint16_t        orderDirection;
+	DROID_ORDER_DATA order;
 
-	BASE_OBJECT*    psTarget;                       ///< Order target
-	BASE_STATS*     psTarStats;                     ///< What to build etc
 #ifdef DEBUG
 	// these are to help tracking down dangling pointers
 	char            targetFunc[MAX_EVENT_NAME_LEN];

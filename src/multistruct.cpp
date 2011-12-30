@@ -184,10 +184,10 @@ bool recvDemolishFinished(NETQUEUE queue)
 		// Demolish it
 		// Should never get here, if in synch.
 		removeStruct(psStruct, true);
-		if (psDroid && psDroid->psTarStats)
+		if (psDroid && psDroid->order.psStats)
 		{
 			// Update droid if reqd
-			psDroid->psTarStats = NULL;
+			psDroid->order.psStats = NULL;
 		}
 	}
 

@@ -156,7 +156,7 @@ QScriptValue convDroid(DROID *psDroid, QScriptEngine *engine)
 {
 	QScriptValue value = convObj(psDroid, engine);
 	value.setProperty("action", (int)psDroid->action, QScriptValue::ReadOnly);
-	value.setProperty("order", (int)psDroid->order, QScriptValue::ReadOnly);
+	value.setProperty("order", (int)psDroid->order.type, QScriptValue::ReadOnly);
 	return value;
 }
 

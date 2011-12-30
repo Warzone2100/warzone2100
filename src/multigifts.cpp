@@ -444,18 +444,18 @@ void formAlliance(uint8_t p1, uint8_t p2, bool prop, bool allowAudio, bool allow
 	// Clear out any attacking orders
 	for (psDroid = apsDroidLists[p1]; psDroid; psDroid = psDroid->psNext)	// from -> to
 	{
-		if (psDroid->order == DORDER_ATTACK
-		 && psDroid->psTarget
-		 && psDroid->psTarget->player == p2)
+		if (psDroid->order.type == DORDER_ATTACK
+		 && psDroid->order.psObj
+		 && psDroid->order.psObj->player == p2)
 		{
 			orderDroid(psDroid, DORDER_STOP, ModeImmediate);
 		}
 	}
 	for (psDroid = apsDroidLists[p2]; psDroid; psDroid = psDroid->psNext)	// to -> from
 	{
-		if (psDroid->order == DORDER_ATTACK
-		 && psDroid->psTarget
- 		 && psDroid->psTarget->player == p1)
+		if (psDroid->order.type == DORDER_ATTACK
+		 && psDroid->order.psObj
+ 		 && psDroid->order.psObj->player == p1)
 		{
 			orderDroid(psDroid, DORDER_STOP, ModeImmediate);
 		}

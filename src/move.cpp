@@ -1736,7 +1736,7 @@ static void moveUpdatePersonModel(DROID *psDroid, SDWORD speed, uint16_t directi
 	if ( moveDroidStopped( psDroid, speed ) == true )
 	{
 		if ( psDroid->droidType == DROID_PERSON &&
-			 psDroid->order != DORDER_RUNBURN &&
+			 psDroid->order.type != DORDER_RUNBURN &&
 			 (psDroid->action == DACTION_ATTACK ||
 			  psDroid->action == DACTION_ROTATETOATTACK) )
 		{
@@ -1791,7 +1791,7 @@ static void moveUpdatePersonModel(DROID *psDroid, SDWORD speed, uint16_t directi
 
 	/* update anim if moving and not on fire */
 	if ( psDroid->droidType == DROID_PERSON && speed != 0 &&
-		 psDroid->order != DORDER_RUNBURN )
+		 psDroid->order.type != DORDER_RUNBURN )
 	{
 		/* remove previous anim */
 		if ( psDroid->psCurAnim != NULL &&
@@ -2157,7 +2157,7 @@ bool moveCheckDroidMovingAndVisible( void *psObj )
 
 	/* check for dead, not moving or invisible to player */
 	if ( psDroid->died || moveDroidStopped( psDroid, 0 ) ||
-		 (psDroid->droidType == DROID_TRANSPORTER && psDroid->order == DORDER_NONE) ||
+		 (psDroid->droidType == DROID_TRANSPORTER && psDroid->order.type == DORDER_NONE) ||
 		 !(psDroid->visible[selectedPlayer])                                )
 	{
 		psDroid->iAudioID = NO_SOUND;

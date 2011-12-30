@@ -459,7 +459,7 @@ static void driveMoveFollower(DROID *psDroid)
 			//psDroid->secondaryOrder&=~DSS_MOVEHOLD_SET;		// Remove secondary order ... this stops the droid from jumping back to GUARD mode ... see order.c #111 - tjc
 			secondarySetState(psDroid, DSO_HALTTYPE, DSS_HALT_GUARD);
 			// if the droid is currently guarding we need to change the order to a move
-			if (psDroid->order==DORDER_GUARD)
+			if (psDroid->order.type == DORDER_GUARD)
 			{
 				orderDroidLoc(psDroid, DORDER_MOVE, psDrivenDroid->pos.x, psDrivenDroid->pos.y, ModeQueue);
 			}
@@ -508,7 +508,7 @@ void driveUpdate(void)
 		if(psDrivenDroid != NULL) {
 			if(bMultiMessages && (driveBumpTime < gameTime))	// send latest info about driven droid.
 			{
-				sendDroidInfo(psDrivenDroid, DORDER_MOVE, psDrivenDroid->pos.x, psDrivenDroid->pos.y, NULL, NULL, 0, 0, 0, false);
+				sendDroidInfo(psDrivenDroid, DroidOrder(DORDER_MOVE, removeZ(psDrivenDroid->pos)), false);
 			}
 
 	//TO BE DONE:

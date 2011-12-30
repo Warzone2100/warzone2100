@@ -109,8 +109,8 @@ bool scrBaseObjGet(UDWORD index)
 			return false;
 		}
 		type = VAL_INT;
-		scrFunctionResult.v.ival = (SDWORD)((DROID *)psObj)->order;
-		if (scrFunctionResult.v.ival == DORDER_GUARD && ((DROID *)psObj)->psTarget == NULL)
+		scrFunctionResult.v.ival = ((DROID *)psObj)->order.type;
+		if (scrFunctionResult.v.ival == DORDER_GUARD && ((DROID *)psObj)->order.psObj == NULL)
 		{
 			scrFunctionResult.v.ival = DORDER_NONE;
 		}
@@ -154,7 +154,7 @@ bool scrBaseObjGet(UDWORD index)
 			return false;
 		}
 		type = VAL_INT;
-		scrFunctionResult.v.ival = (SDWORD)((DROID *)psObj)->orderX;
+		scrFunctionResult.v.ival = ((DROID *)psObj)->order.pos.x;
 		break;
 	case OBJID_ORDERY:
 		if (psObj->type != OBJ_DROID)
@@ -163,7 +163,7 @@ bool scrBaseObjGet(UDWORD index)
 			return false;
 		}
 		type = VAL_INT;
-		scrFunctionResult.v.ival = (SDWORD)((DROID *)psObj)->orderY;
+		scrFunctionResult.v.ival = ((DROID *)psObj)->order.pos.y;
 		break;
 	case OBJID_DROIDTYPE:
 		if (psObj->type != OBJ_DROID)
@@ -268,7 +268,7 @@ bool scrBaseObjGet(UDWORD index)
 		else if (psObj->type == OBJ_DROID)
 		{
 			type = (INTERP_TYPE)ST_STRUCTURESTAT;
-			scrFunctionResult.v.ival = (SDWORD)((STRUCTURE_STATS *)(((DROID *)psObj)->psTarStats) - asStructureStats);
+			scrFunctionResult.v.ival = ((DROID *)psObj)->order.psStats - asStructureStats;
 		}
 		else		//Nothing else supported
 		{
@@ -286,7 +286,7 @@ bool scrBaseObjGet(UDWORD index)
 		else if (psObj->type == OBJ_DROID)
 		{
 			type = (INTERP_TYPE)ST_BASEOBJECT;
-			scrFunctionResult.v.oval = ((DROID *)psObj)->psTarget;
+			scrFunctionResult.v.oval = ((DROID *)psObj)->order.psObj;
 		}
 		else		//Nothing else supported
 		{

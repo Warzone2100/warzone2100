@@ -104,6 +104,7 @@ static void NETenum(EnumT* enumPtr)
 
 void NETPosition(Position *vp);
 void NETRotation(Rotation *vp);
+void NETVector2i(Vector2i *vp);
 
 static inline void NETauto(int8_t *ip)    { NETint8_t(ip); }
 static inline void NETauto(uint8_t *ip)   { NETuint8_t(ip); }
@@ -116,6 +117,7 @@ static inline void NETauto(uint64_t *ip)  { NETuint64_t(ip); }
 static inline void NETauto(bool *bp)      { NETbool(bp); }
 static inline void NETauto(Position *vp)  { NETPosition(vp); }
 static inline void NETauto(Rotation *vp)  { NETRotation(vp); }
+static inline void NETauto(Vector2i *vp)  { NETVector2i(vp); }
 
 
 void NETnetMessage(NetMessage const **message);  ///< If decoding, must delete the NETMESSAGE.

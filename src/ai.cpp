@@ -186,7 +186,7 @@ static BASE_OBJECT *aiSearchSensorTargets(BASE_OBJECT *psObj, int weapon_slot, W
 			DROID		*psDroid = (DROID *)psSensor;
 
 			ASSERT_OR_RETURN(false, psDroid->droidType == DROID_SENSOR, "A non-sensor droid in a sensor list is non-sense");
-			psTemp = psDroid->psTarget;
+			psTemp = psDroid->order.psObj;
 			isCB = cbSensorDroid(psDroid);
 			isRD = objRadarDetector((BASE_OBJECT *)psDroid);
 		}
@@ -465,7 +465,7 @@ static SDWORD targetAttackWeight(BASE_OBJECT *psTarget, BASE_OBJECT *psAttacker,
 			for(weaponSlot = 0; weaponSlot < psGroupDroid->numWeaps; weaponSlot++)
 			{
 				//see if this droid is currently targeting current target
-				if(psGroupDroid->psTarget == psTarget ||
+				if(psGroupDroid->order.psObj == psTarget ||
 				   psGroupDroid->psActionTarget[weaponSlot] == psTarget)
 				{
 					//we prefer targets that are already targeted and hence will be destroyed faster
@@ -545,7 +545,7 @@ int aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot, i
 						if(friendlyDroid->numWeaps > 0)
 						{
 							// make sure this target wasn't assigned explicitly to this droid
-							if(friendlyDroid->order != DORDER_ATTACK)
+							if (friendlyDroid->order.type != DORDER_ATTACK)
 							{
 								targetInQuestion = tempTarget;  //consider this target
 							}
@@ -1058,7 +1058,7 @@ void aiUpdateDroid(DROID *psDroid)
 		updateTarget = true;
 	}
 	if ((orderState(psDroid, DORDER_OBSERVE) || orderState(psDroid, DORDER_ATTACKTARGET)) &&
-	    psDroid->psTarget && aiObjectIsProbablyDoomed(psDroid->psTarget))
+	    psDroid->order.psObj && aiObjectIsProbablyDoomed(psDroid->order.psObj))
 	{
 		lookForTarget = true;
 		updateTarget = false;
@@ -1066,7 +1066,7 @@ void aiUpdateDroid(DROID *psDroid)
 
 	/* Don't update target if we are sent to attack and reached
 		attack destination (attacking our target) */
-	if (orderState(psDroid, DORDER_ATTACK) && psDroid->psActionTarget[0] == psDroid->psTarget)
+	if (orderState(psDroid, DORDER_ATTACK) && psDroid->psActionTarget[0] == psDroid->order.psObj)
 	{
 		updateTarget = false;
 	}

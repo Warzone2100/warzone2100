@@ -293,7 +293,7 @@ static PACKAGED_CHECK packageCheck(const DROID *pD)
 
 	pc.player = pD->player;
 	pc.droidID = pD->id;
-	pc.order = pD->order;
+	pc.order = pD->order.type;
 	pc.secondaryOrder = pD->secondaryOrder;
 	pc.body = pD->body;
 	if (pD->body > pD->originalBody)
@@ -303,14 +303,14 @@ static PACKAGED_CHECK packageCheck(const DROID *pD)
 	pc.experience = pD->experience;
 	pc.pos = pD->pos;
 	pc.rot = pD->rot;
-	if (pD->order == DORDER_ATTACK)
+	if (pD->order.type == DORDER_ATTACK)
 	{
-		pc.targetID = pD->psTarget->id;
+		pc.targetID = pD->order.psObj->id;
 	}
-	else if (pD->order == DORDER_MOVE)
+	else if (pD->order.type == DORDER_MOVE)
 	{
-		pc.orderX = pD->orderX;
-		pc.orderY = pD->orderY;
+		pc.orderX = pD->order.pos.x;
+		pc.orderY = pD->order.pos.y;
 	}
 	return pc;
 }
@@ -422,7 +422,7 @@ bool recvDroidCheck(NETQUEUE queue)
 					{
 						DROID_ORDER_DATA sOrder;
 						memset(&sOrder, 0, sizeof(DROID_ORDER_DATA));
-						sOrder.order = (DROID_ORDER)pc.order;
+						sOrder.type = (DROID_ORDER)pc.order;
 
 						debug(LOG_SYNC, "Droid %u out of synch, changing order from %s to %s.", pc.droidID, getDroidOrderName((DROID_ORDER)pc2.order), getDroidOrderName((DROID_ORDER)pc.order));
 						turnOffMultiMsg(true);

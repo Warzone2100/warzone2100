@@ -1837,11 +1837,11 @@ INT_RETVAL intRunWidgets(void)
 						    && intNumSelectedDroids(DROID_CYBORG_CONSTRUCT) == 0
 						    && psObjSelected != NULL && isConstructionDroid(psObjSelected))
 						{
-							orderDroidStatsTwoLocDir((DROID *)psObjSelected, DORDER_LINEBUILD, psPositionStats, structX, structY, structX2, structY2, player.r.y, ModeQueue);
+							orderDroidStatsTwoLocDir((DROID *)psObjSelected, DORDER_LINEBUILD, (STRUCTURE_STATS *)psPositionStats, structX, structY, structX2, structY2, player.r.y, ModeQueue);
 						}
 						else
 						{
-							orderSelectedStatsTwoLocDir(selectedPlayer, DORDER_LINEBUILD, psPositionStats, structX, structY, structX2, structY2, player.r.y, ctrlShiftDown());
+							orderSelectedStatsTwoLocDir(selectedPlayer, DORDER_LINEBUILD, (STRUCTURE_STATS *)psPositionStats, structX, structY, structX2, structY2, player.r.y, ctrlShiftDown());
 						}
 					}
 				}
@@ -1882,11 +1882,11 @@ INT_RETVAL intRunWidgets(void)
 							    && intNumSelectedDroids(DROID_CYBORG_CONSTRUCT) == 0
 							    && psObjSelected != NULL)
 							{
-								orderDroidStatsLocDir((DROID *)psObjSelected, DORDER_BUILD, psPositionStats, structX, structY, player.r.y, ModeQueue);
+								orderDroidStatsLocDir((DROID *)psObjSelected, DORDER_BUILD, (STRUCTURE_STATS *)psPositionStats, structX, structY, player.r.y, ModeQueue);
 							}
 							else
 							{
-								orderSelectedStatsLocDir(selectedPlayer, DORDER_BUILD, psPositionStats, structX, structY, player.r.y, ctrlShiftDown());
+								orderSelectedStatsLocDir(selectedPlayer, DORDER_BUILD, (STRUCTURE_STATS *)psPositionStats, structX, structY, player.r.y, ctrlShiftDown());
 							}
 						}
 					}
@@ -3067,8 +3067,7 @@ void intBuildStarted(DROID *psDroid)
 			{
 				if (psCurr == psDroid)
 				{
-					intSetStats(droidID + IDOBJ_STATSTART, ((BASE_STATS *)(
-						(STRUCTURE *)psCurr->psTarget)->pStructureType));
+					intSetStats(droidID + IDOBJ_STATSTART, ((STRUCTURE *)psCurr->order.psObj)->pStructureType);
 					break;
 				}
 				droidID++;
@@ -5328,13 +5327,13 @@ static BASE_STATS *getConstructionStats(BASE_OBJECT *psObj)
 		return Stats;
 	}
 	else if ((Structure = orderStateObj(psDroid, DORDER_BUILD))
-	      && psDroid->order == DORDER_BUILD) // Is building
+	      && psDroid->order.type == DORDER_BUILD) // Is building
 	{
-		return psDroid->psTarStats;
+		return psDroid->order.psStats;
 	}
 	else if ((Structure = orderStateObj(psDroid, DORDER_HELPBUILD))
-	 && (psDroid->order == DORDER_HELPBUILD
-	  || psDroid->order == DORDER_LINEBUILD)) // Is helping
+	 && (psDroid->order.type == DORDER_HELPBUILD
+	  || psDroid->order.type == DORDER_LINEBUILD)) // Is helping
 	{
 		return (BASE_STATS*)((STRUCTURE*)Structure)->pStructureType;
 	}

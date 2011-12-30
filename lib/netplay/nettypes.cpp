@@ -235,6 +235,13 @@ static void queue(const Q &q, Rotation &v)
 	queue(q, v.roll);
 }
 
+template<class Q>
+static void queue(const Q &q, Vector2i &v)
+{
+	queue(q, v.x);
+	queue(q, v.y);
+}
+
 template<class Q, class T>
 static void queue(const Q &q, std::vector<T> &v)
 {
@@ -644,6 +651,11 @@ void NETPosition(Position *vp)
 }
 
 void NETRotation(Rotation *vp)
+{
+	queueAuto(*vp);
+}
+
+void NETVector2i(Vector2i *vp)
 {
 	queueAuto(*vp);
 }

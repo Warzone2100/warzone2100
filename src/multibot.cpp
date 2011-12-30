@@ -79,8 +79,8 @@ struct QueuedDroidInfo
 				}
 				else
 				{
-					if (x != z.x)                 return x < z.x ? -1 : 1;
-					if (y != z.y)                 return y < z.y ? -1 : 1;
+					if (pos.x != z.pos.x)                 return pos.x < z.pos.x ? -1 : 1;
+					if (pos.y != z.pos.y)                 return pos.y < z.pos.y ? -1 : 1;
 				}
 				if (order == DORDER_BUILD || order == DORDER_LINEBUILD)
 				{
@@ -89,8 +89,8 @@ struct QueuedDroidInfo
 				}
 				if (order == DORDER_LINEBUILD)
 				{
-					if (x2 != z.x2)               return x2 < z.x2 ? -1 : 1;
-					if (y2 != z.y2)               return y2 < z.y2 ? -1 : 1;
+					if (pos2.x != z.pos2.x)               return pos2.x < z.pos2.x ? -1 : 1;
+					if (pos2.y != z.pos2.y)               return pos2.y < z.pos2.y ? -1 : 1;
 				}
 				if (add != z.add)             return add < z.add ? -1 : 1;
 				break;
@@ -109,12 +109,11 @@ struct QueuedDroidInfo
 		DROID_ORDER order;
 		uint32_t    destId;     // if (subType == ObjOrder)
 		OBJECT_TYPE destType;   // if (subType == ObjOrder)
-		uint32_t    x;          // if (subType == LocOrder)
+		Vector2i    pos;        // if (subType == LocOrder)
 		uint32_t    y;          // if (subType == LocOrder)
 		uint32_t    structRef;  // if (order == DORDER_BUILD || order == DORDER_LINEBUILD)
 		uint16_t    direction;  // if (order == DORDER_BUILD || order == DORDER_LINEBUILD)
-		uint32_t    x2;         // if (order == DORDER_LINEBUILD)
-		uint32_t    y2;         // if (order == DORDER_LINEBUILD)
+		Vector2i    pos2;       // if (order == DORDER_LINEBUILD)
 		bool        add;
 	// subType == SecondaryOrder
 		SECONDARY_ORDER secOrder;
@@ -231,9 +230,9 @@ bool recvDroidEmbark(NETQUEUE queue)
 		bDroidRemoved = droidRemove(psDroid, apsDroidLists);
 
 		// Init the order for when disembark
-		psDroid->order = DORDER_NONE;
+		psDroid->order.type = DORDER_NONE;
 		setDroidTarget(psDroid, NULL);
-		psDroid->psTarStats = NULL;
+		psDroid->order.psStats = NULL;
 
 		if (bDroidRemoved)
 		{
@@ -479,8 +478,7 @@ static void NETQueuedDroidInfo(QueuedDroidInfo *info)
 			}
 			else
 			{
-				NETuint32_t(&info->x);
-				NETuint32_t(&info->y);
+				NETauto(&info->pos);
 			}
 			if (info->order == DORDER_BUILD || info->order == DORDER_LINEBUILD)
 			{
@@ -489,8 +487,7 @@ static void NETQueuedDroidInfo(QueuedDroidInfo *info)
 			}
 			if (info->order == DORDER_LINEBUILD)
 			{
-				NETuint32_t(&info->x2);
-				NETuint32_t(&info->y2);
+				NETauto(&info->pos2);
 			}
 			NETbool(&info->add);
 			break;
@@ -538,26 +535,22 @@ void sendQueuedDroidInfo()
 	queuedOrders.clear();
 }
 
-DROID_ORDER_DATA infoToOrderData(QueuedDroidInfo const &info, BASE_STATS const *psStats)
+DROID_ORDER_DATA infoToOrderData(QueuedDroidInfo const &info, STRUCTURE_STATS const *psStats)
 {
 	DROID_ORDER_DATA sOrder;
-
-	memset(&sOrder, 0x00, sizeof(sOrder));
-	sOrder.order = info.order;
-	sOrder.x = info.x;
-	sOrder.y = info.y;
-	sOrder.x2 = info.x2;
-	sOrder.y2 = info.y2;
+	sOrder.type = info.order;
+	sOrder.pos = info.pos;
+	sOrder.pos2 = info.pos2;
 	sOrder.direction = info.direction;
 	sOrder.psObj = processDroidTarget(info.destType, info.destId);
-	sOrder.psStats = const_cast<BASE_STATS *>(psStats);
+	sOrder.psStats = const_cast<STRUCTURE_STATS *>(psStats);
 
 	return sOrder;
 }
 
 // ////////////////////////////////////////////////////////////////////////////
 // Droid update information
-void sendDroidInfo(DROID *psDroid, DROID_ORDER order, uint32_t x, uint32_t y, const BASE_OBJECT *psObj, const BASE_STATS *psStats, uint32_t x2, uint32_t y2, uint16_t direction, bool add)
+void sendDroidInfo(DROID *psDroid, DroidOrder const &order, bool add)
 {
 	if (!myResponsibility(psDroid->player))
 	{
@@ -569,31 +562,29 @@ void sendDroidInfo(DROID *psDroid, DROID_ORDER order, uint32_t x, uint32_t y, co
 
 	info.player = psDroid->player;
 	info.droidId = psDroid->id;
-	info.subType = psObj != NULL? ObjOrder : LocOrder;
-	info.order = order;
+	info.subType = order.psObj != NULL? ObjOrder : LocOrder;
+	info.order = order.type;
 	if (info.subType == ObjOrder)
 	{
-		info.destId = psObj->id;
-		info.destType = psObj->type;
+		info.destId = order.psObj->id;
+		info.destType = order.psObj->type;
 	}
 	else
 	{
-		info.x = x;
-		info.y = y;
+		info.pos = order.pos;
 	}
-	if (order == DORDER_BUILD || order == DORDER_LINEBUILD)
+	if (order.type == DORDER_BUILD || order.type == DORDER_LINEBUILD)
 	{
-		info.structRef = psStats->ref;
-		info.direction = direction;
+		info.structRef = order.psStats->ref;
+		info.direction = order.direction;
 		if (!isConstructionDroid(psDroid))
 		{
 			return;  // No point ordering things to build if they can't build anything.
 		}
 	}
-	if (order == DORDER_LINEBUILD)
+	if (order.type == DORDER_LINEBUILD)
 	{
-		info.x2 = x2;
-		info.y2 = y2;
+		info.pos2 = order.pos2;
 	}
 
 	info.add = add;
@@ -602,7 +593,7 @@ void sendDroidInfo(DROID *psDroid, DROID_ORDER order, uint32_t x, uint32_t y, co
 	queuedOrders.push_back(info);
 
 	// Update pending orders, so the UI knows it happened.
-	DROID_ORDER_DATA sOrder = infoToOrderData(info, psStats);
+	DROID_ORDER_DATA sOrder = infoToOrderData(info, order.psStats);
 	if (!add)
 	{
 		psDroid->listPendingBegin = psDroid->asOrderList.size();
@@ -637,7 +628,7 @@ bool recvDroidInfo(NETQUEUE queue)
 		switch (info.subType)
 		{
 			case ObjOrder:       syncDebug("Order=%s,%d(%d)", getDroidOrderName(info.order), info.destId, info.destType); break;
-			case LocOrder:       syncDebug("Order=%s,(%d,%d)", getDroidOrderName(info.order), info.x, info.y); break;
+			case LocOrder:       syncDebug("Order=%s,(%d,%d)", getDroidOrderName(info.order), info.pos.x, info.pos.y); break;
 			case SecondaryOrder: syncDebug("SecondaryOrder=%d,%08X", (int)info.secOrder, (int)info.secState); break;
 		}
 

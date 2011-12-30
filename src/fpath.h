@@ -98,6 +98,8 @@ bool fpathBlockingTile(SDWORD x, SDWORD y, PROPULSION_TYPE propulsion);
 bool fpathDroidBlockingTile(DROID *psDroid, int x, int y, FPATH_MOVETYPE moveType);
 bool fpathBaseBlockingTile(SDWORD x, SDWORD y, PROPULSION_TYPE propulsion, int player, FPATH_MOVETYPE moveType);
 
+static inline bool fpathBlockingTile(Vector2i tile, PROPULSION_TYPE propulsion) { return fpathBlockingTile(tile.x, tile.y, propulsion); }
+
 /** Set a direct path to position.
  *
  *  Plan a path from @c psDroid's current position to given position without
