@@ -1176,7 +1176,7 @@ void researchResult(UDWORD researchIndex, UBYTE player, bool bDisplay, STRUCTURE
 		CBResFacilityOwner = -1;
 		psCBLastResearch = NULL;
 
-		triggerResearched(pResearch, psResearchFacility, player);
+		triggerEventResearched(pResearch, psResearchFacility, player);
 	}
 
 #ifdef DEBUG

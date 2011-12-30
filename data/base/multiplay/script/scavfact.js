@@ -117,16 +117,16 @@ function eventDroidBuilt(droid, fac1)
 }
 
 // watch for structures being attacked. Send the cavalry as required.
-function eventStructureAttacked(structure, attacker)
+function eventAttacked(victim, attacker)
 {
-	if ((gameTime - lastAttack) > 3000)
+	if (victim.type == STRUCTURE && (gameTime - lastAttack) > 3000)
 	{
 		lastAttack = gameTime;
 		var droidlist = enumGroup(attackGroup);
 		for (var i = 0; i < droidlist.length; i++)
 		{
 			var droid = droidlist[i];
-			if (distBetweenTwoPoints(structure.x, structure.y, attacker.x, attacker.y) < (24 * 128))
+			if (distBetweenTwoPoints(victim.x, victim.y, attacker.x, attacker.y) < (24 * 128))
 			{
 				orderDroidLoc(droid, DORDER_MOVE, attacker.x, attacker.y);
 			}

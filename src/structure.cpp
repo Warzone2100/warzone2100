@@ -2307,8 +2307,6 @@ static bool structPlaceDroid(STRUCTURE *psStructure, DROID_TEMPLATE *psTempl,
 			return false;
 		}
 
-		//set the droids order to that of the factory - AB 22/04/99
-		//psNewDroid->secondaryOrder = psStructure->pFunctionality->factory.secondaryOrder;
 		if (myResponsibility(psStructure->player))
 		{
 			uint32_t newState = psStructure->pFunctionality->factory.secondaryOrder;

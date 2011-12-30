@@ -224,7 +224,7 @@ function eventGameInit()
 {
 }
 
-function eventStructureAttacked(struct, attacker)
+function eventAttacked(victim, attacker)
 {
 }
 

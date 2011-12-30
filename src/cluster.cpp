@@ -561,6 +561,7 @@ void clustObjectAttacked(BASE_OBJECT *psObj)
 	{
 		psScrCBTarget = psObj;
 		eventFireCallbackTrigger((TRIGGER_TYPE)CALL_ATTACKED);
+		triggerEventAttacked(psObj, g_pProjLastAttacker);
 
 		switch (psObj->type)
 		{
@@ -572,7 +573,6 @@ void clustObjectAttacked(BASE_OBJECT *psObj)
 			case OBJ_STRUCTURE:
 				psLastStructHit = (STRUCTURE *)psObj;
 				eventFireCallbackTrigger((TRIGGER_TYPE)CALL_STRUCT_ATTACKED);
-				triggerStructureAttacked((STRUCTURE *)psObj, g_pProjLastAttacker);
 				psLastStructHit = NULL;
 				break;
 			default:

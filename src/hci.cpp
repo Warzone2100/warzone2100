@@ -78,6 +78,7 @@
 #include "template.h"
 #include "wrappers.h"
 #include "keybind.h"
+#include "qtscript.h"
 
 //#define DEBUG_SCROLLTABS 	//enable to see tab scroll button info for buttons
 
@@ -2027,6 +2028,8 @@ INT_RETVAL intRunWidgets(void)
 						psScrCBNewDroidFact = NULL;
 						eventFireCallbackTrigger((TRIGGER_TYPE)CALL_NEWDROID);	// notify scripts so it will get assigned jobs
 						psScrCBNewDroid = NULL;
+
+						triggerEventDroidBuilt(psDroid, NULL);
 					}
 					else
 					{

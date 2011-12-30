@@ -591,10 +591,10 @@ bool triggerEventStructBuilt(STRUCTURE *psStruct, DROID *psDroid)
 	return true;
 }
 
-//__ \subsection{eventStructureAttacked(structure, attacker)}
-//__ An event that is run when a structure is attacked. The attacker parameter may be
-//__ either a structure or a droid.
-bool triggerStructureAttacked(STRUCTURE *psVictim, BASE_OBJECT *psAttacker)
+//__ \subsection{eventAttacked(victim, attacker)}
+//__ An event that is run when an object belonging to the script's controlling player is
+//__ attacked. The attacker parameter may be either a structure or a droid.
+bool triggerEventAttacked(BASE_OBJECT *psVictim, BASE_OBJECT *psAttacker)
 {
 	if (!psAttacker)
 	{
@@ -609,9 +609,9 @@ bool triggerStructureAttacked(STRUCTURE *psVictim, BASE_OBJECT *psAttacker)
 		if (player == psVictim->player)
 		{
 			QScriptValueList args;
-			args += convStructure(psVictim, engine);
-			args += convObj(psAttacker, engine);
-			callFunction(engine, "eventStructureAttacked", args);
+			args += convMax(psVictim, engine);
+			args += convMax(psAttacker, engine);
+			callFunction(engine, "eventAttacked", args);
 		}
 	}
 	return true;
@@ -620,7 +620,7 @@ bool triggerStructureAttacked(STRUCTURE *psVictim, BASE_OBJECT *psAttacker)
 //__ \subsection{eventResearched(research[, structure])}
 //__ An event that is run whenever a new research is available. The structure
 //__ parameter is set if the research comes from a research lab.
-bool triggerResearched(RESEARCH *psResearch, STRUCTURE *psStruct, int player)
+bool triggerEventResearched(RESEARCH *psResearch, STRUCTURE *psStruct, int player)
 {
 	for (int i = 0; i < scripts.size() && psStruct; ++i)
 	{
