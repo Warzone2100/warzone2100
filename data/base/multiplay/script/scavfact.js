@@ -13,7 +13,7 @@ function activateProduction(fac)
 	// Remind factory to produce
 	if (structureIdle(fac))
 	{
-		buildDroid(fac, "Trike", "B4body-sml-trike01", "BaBaProp", "", "bTrikeMG");
+		buildDroid(fac, "Trike", "B4body-sml-trike01", "BaBaProp", "", DROID_WEAPON, "bTrikeMG");
 	}
 }
 
@@ -72,8 +72,25 @@ function scavtick()
 
 function eventGameInit()
 {
+	makeComponentAvailable("B4body-sml-trike01", me);
+	makeComponentAvailable("B3body-sml-buggy01", me);
+	makeComponentAvailable("B2JeepBody", me);
+	makeComponentAvailable("BusBody", me);
+	makeComponentAvailable("B1BaBaPerson01", me);
+	makeComponentAvailable("BaBaProp", me);
+	makeComponentAvailable("BaBaLegs", me);
+	makeComponentAvailable("bTrikeMG", me);
+	makeComponentAvailable("BuggyMG", me);
+	makeComponentAvailable("BJeepMG", me);
+	makeComponentAvailable("BusCannon", me);
+	makeComponentAvailable("BabaFlame", me);
+	makeComponentAvailable("BaBaMG", me);
 	attackGroup = newGroup();	// allocate a new group
 	groupAddArea(attackGroup, 0, 0, (mapWidth * 128), (mapHeight * 128));
+}
+
+function eventStartLevel()
+{
 	scavtick();
 	setTimer("scavtick", 15000);	// start a constant timer function
 }
@@ -89,12 +106,12 @@ function eventDroidBuilt(droid, fac1)
 		// We now have switch statements! And we can use the built-in Math library
 		switch (Math.floor(Math.random() * 10))
 		{
-		case 0:	buildDroid(fac1, "Trike", "B4body-sml-trike01", "BaBaProp", "", "bTrikeMG"); break;
-		case 1: buildDroid(fac1, "Buggy", "B3body-sml-buggy01", "BaBaProp", "", "BuggyMG"); break;
-		case 2: buildDroid(fac1, "Jeep", "B2JeepBody", "BaBaProp", "", "BJeepMG"); break;
-		case 3: buildDroid(fac1, "Cannonbus", "BusBody", "BaBaProp", "", "BusCannon"); break;
-		case 4: buildDroid(fac1, "Firebus", "BusBody", "BaBaProp", "", "BabaFlame"); break;
-		default: buildDroid(fac1, "Bloke", "B1BaBaPerson01", "BaBaLegs", "", "BaBaMG"); break;
+		case 0:	buildDroid(fac1, "Trike", "B4body-sml-trike01", "BaBaProp", "", DROID_WEAPON, "bTrikeMG"); break;
+		case 1: buildDroid(fac1, "Buggy", "B3body-sml-buggy01", "BaBaProp", "", DROID_WEAPON, "BuggyMG"); break;
+		case 2: buildDroid(fac1, "Jeep", "B2JeepBody", "BaBaProp", "", DROID_WEAPON, "BJeepMG"); break;
+		case 3: buildDroid(fac1, "Cannonbus", "BusBody", "BaBaProp", "", DROID_WEAPON, "BusCannon"); break;
+		case 4: buildDroid(fac1, "Firebus", "BusBody", "BaBaProp", "", DROID_WEAPON, "BabaFlame"); break;
+		default: buildDroid(fac1, "Bloke", "B1BaBaPerson01", "BaBaLegs", "", DROID_PERSON, "BaBaMG"); break;
 		}
 	}
 }

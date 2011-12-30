@@ -534,10 +534,41 @@ static QScriptValue js_componentAvailable(QScriptContext *context, QScriptEngine
 	return QScriptValue(avail);
 }
 
-//-- \subsection{buildDroid(factory, name, body, propulsion, reserved, turrets...)}
+static int get_first_available_component(int player, const QScriptValue &list, COMPONENT_TYPE type)
+{
+	if (list.isArray())
+	{
+		int length = list.property("length").toInt32();
+		int k;
+		for (k = 0; k < length; k++)
+		{
+			QString compName = list.property(k).toString();
+			int result = getCompFromName(type, compName.toUtf8().constData());
+			if (result < 0) debug(LOG_ERROR, "No such component: %s", compName.toUtf8().constData());
+			if (apCompLists[player][type][result] == AVAILABLE)
+			{
+				return result; // found one!
+			}
+		}
+	}
+	else if (list.isString())
+	{
+		int result = getCompFromName(type, list.toString().toUtf8().constData());
+		if (result < 0) debug(LOG_ERROR, "No such component: %s", list.toString().toUtf8().constData());
+		if (apCompLists[player][type][result] == AVAILABLE)
+		{
+			return result; // found it!
+		}
+	}
+	return -1; // no available component found in list
+}
+
+//-- \subsection{buildDroid(factory, name, body, propulsion, reserved, droid type, turrets...)}
 //-- Start factory production of new droid with the given name, body, propulsion and turrets.
-//-- The reserved parameter should be passed an empty string for now.
-// TODO -- this shall take arrays instead of strings for components
+//-- The reserved parameter should be passed an empty string for now. The components can be
+//-- passed as ordinary strings, or as a list of strings. If passed as a list, the first available
+//-- component in the list will be used. The droid type must be set to match the type of turret
+//-- passed in.
 static QScriptValue js_buildDroid(QScriptContext *context, QScriptEngine *engine)
 {
 	QScriptValue structVal = context->argument(0);
@@ -548,55 +579,78 @@ static QScriptValue js_buildDroid(QScriptContext *context, QScriptEngine *engine
 	SCRIPT_ASSERT(context, (psStruct->pStructureType->type == REF_FACTORY || psStruct->pStructureType->type == REF_CYBORG_FACTORY
 		       || psStruct->pStructureType->type == REF_VTOL_FACTORY), "Structure %s is not a factory", objInfo(psStruct));
 	QString templName = context->argument(1).toString();
-	QString bodyName = context->argument(2).toString();
-	QString propName = context->argument(3).toString();
-	// QString otherName = context->argument(4).toString(); // reserved for future use
 	DROID_TEMPLATE *psTemplate = new DROID_TEMPLATE;
-	int numTurrets = context->argumentCount() - 5; // anything beyond first five components, are turrets
+	DROID_TYPE droidType = (DROID_TYPE)context->argument(5).toInt32();
+	int numTurrets = context->argumentCount() - 6; // anything beyond first six parameters, are turrets
+	COMPONENT_TYPE compType = COMP_NUMCOMPONENTS;
 
 	memset(psTemplate->asParts, 0, sizeof(psTemplate->asParts)); // reset to defaults
-	psTemplate->asParts[COMP_BODY] = getCompFromName(COMP_BODY, bodyName.toUtf8().constData());
-	psTemplate->asParts[COMP_PROPULSION] = getCompFromName(COMP_PROPULSION, propName.toUtf8().constData());
+	memset(psTemplate->asWeaps, 0, sizeof(psTemplate->asWeaps));
+	int body = get_first_available_component(player, context->argument(2), COMP_BODY);
+	int prop = get_first_available_component(player, context->argument(3), COMP_PROPULSION);
+	if (body < 0 || prop < 0)
+	{
+		debug(LOG_SCRIPT, "Wanted to build %s at %s, but component type all unavailable", 
+		      templName.toUtf8().constData(), objInfo(psStruct));
+		return QScriptValue(false); // no component available
+	}
+	psTemplate->asParts[COMP_BODY] = body;
+	psTemplate->asParts[COMP_PROPULSION] = prop;
 
-	// Turret gets complicated because we want to hide the hideous broken complexity of the template
-	// system from script writers
 	psTemplate->numWeaps = 0;
 	for (int i = 0; i < numTurrets; i++)
 	{
-		QString tName = context->argument(5 + i).toString();
+		context->argument(6 + i).toString();
 		int j;
-		if ((j = getCompFromName(COMP_WEAPON, tName.toUtf8().constData())) >= 0)
+		switch (droidType)
 		{
-			psTemplate->asWeaps[i] = j; // It is a weapon
+		case DROID_PERSON:
+		case DROID_WEAPON:
+		case DROID_CYBORG:
+		case DROID_TRANSPORTER:
+		case DROID_DEFAULT:
+		case DROID_CYBORG_SUPER:
+			j = get_first_available_component(player, context->argument(6 + i), COMP_WEAPON);
+			if (j < 0)
+			{
+				debug(LOG_SCRIPT, "Wanted to build %s at %s, but no weapon unavailable", 
+				      templName.toUtf8().constData(), objInfo(psStruct));
+				return QScriptValue(false);
+			}
+			psTemplate->asWeaps[i] = j;
 			psTemplate->numWeaps++;
+			continue;
+		case DROID_CYBORG_CONSTRUCT:
+		case DROID_CONSTRUCT:
+			compType = COMP_CONSTRUCT;
+			break;
+		case DROID_COMMAND:
+			compType = COMP_BRAIN;
+			psTemplate->numWeaps = 1; // hack, necessary to pass intValidTemplate
+			break;
+		case DROID_REPAIR:
+		case DROID_CYBORG_REPAIR:
+			compType = COMP_REPAIRUNIT;
+			break;
+		case DROID_ECM:
+			compType = COMP_ECM;
+			break;
+		case DROID_SENSOR:
+			compType = COMP_SENSOR;
+			break;
+		case DROID_ANY:
+			break; // wtf
 		}
-		else if ((j = getCompFromName(COMP_CONSTRUCT, tName.toUtf8().constData())) >= 0)
+		j = get_first_available_component(player, context->argument(6 + i), compType);
+		if (j < 0)
 		{
-
-			psTemplate->asParts[COMP_CONSTRUCT] = j; // It is a construction turret
+			debug(LOG_SCRIPT, "Wanted to build %s at %s, but weapon unavailable", 
+			      templName.toUtf8().constData(), objInfo(psStruct));
+			return QScriptValue(false);
 		}
-		else if ((j = getCompFromName(COMP_BRAIN, tName.toUtf8().constData())) >= 0)
-		{
-
-			psTemplate->asParts[COMP_BRAIN] = j; // It is a commander
-			psTemplate->numWeaps = 1;
-		}
-		else if ((j = getCompFromName(COMP_REPAIRUNIT, tName.toUtf8().constData())) >= 0)
-		{
-
-			psTemplate->asParts[COMP_REPAIRUNIT] = j; // It is a repair droid
-		}
-		else if ((j = getCompFromName(COMP_ECM, tName.toUtf8().constData())) >= 0)
-		{
-
-			psTemplate->asParts[COMP_ECM] = j; // It is an ECM droid
-		}
-		else if ((j = getCompFromName(COMP_SENSOR, tName.toUtf8().constData())) >= 0)
-		{
-
-			psTemplate->asParts[COMP_SENSOR] = j; // It is a sensor droid
-		}
+		psTemplate->asParts[compType] = j;
 	}
+	psTemplate->droidType = droidType; // may be overwritten by the call below
 	bool valid = intValidTemplate(psTemplate, templName.toUtf8().constData(), true);
 	if (valid)
 	{
@@ -1509,6 +1563,18 @@ bool registerFunctions(QScriptEngine *engine)
 	engine->globalObject().setProperty("BUILT", SS_BUILT, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("BEING_DEMOLISHED", SS_BEING_DEMOLISHED, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("DROID_CONSTRUCT", DROID_CONSTRUCT, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("DROID_WEAPON", DROID_WEAPON, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("DROID_PERSON", DROID_PERSON, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("DROID_REPAIR", DROID_REPAIR, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("DROID_SENSOR", DROID_SENSOR, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("DROID_ECM", DROID_ECM, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("DROID_CYBORG", DROID_CYBORG, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("DROID_TRANSPORTER", DROID_TRANSPORTER, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("DROID_COMMAND", DROID_COMMAND, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("DROID_DEFAULT", DROID_DEFAULT, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("DROID_CYBORG_CONSTRUCT", DROID_CYBORG_CONSTRUCT, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("DROID_CYBORG_REPAIR", DROID_CYBORG_REPAIR, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("DROID_CYBORG_SUPER", DROID_CYBORG_SUPER, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("HQ", REF_HQ, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("FACTORY", REF_FACTORY, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("POWER_GEN", REF_POWER_GEN, QScriptValue::ReadOnly | QScriptValue::Undeletable);

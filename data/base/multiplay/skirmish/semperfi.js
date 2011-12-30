@@ -29,6 +29,25 @@ function dbgObj(obj, message)
 	}
 }
 
+function buildTruck(struct)
+{
+	var bodylist = [
+		"Body7ABT", // retribution
+		"Body6SUPP", // panther
+		"Body8MBT", // scorpion
+		"Body5REC", // cobra
+		"Body1REC", // viper
+	];
+	var proplist = [
+		"hover01", // hover
+		"wheeled01", // wheels
+	];
+	if (!buildDroid(struct, "Constructor", bodylist, proplist, "", DROID_CONSTRUCT, "Spade1Mk1"))
+	{
+		debug("Failed to construct new truck");
+	}
+}
+
 // If positive, there are oil derricks that unused due to lack of power generators.
 // If negative, we have too many power generator (usually not a problem in itself).
 function numUnusedDerricks()
@@ -113,11 +132,7 @@ function conDroids()
 	var faclist = enumStruct(me, factory);
 	for (var i = 0; i < faclist.length; i++)
 	{
-		var fact = faclist[i];
-		if (!buildDroid(fact, "Constructor", "Body1REC", "wheeled01", "", "Spade1Mk1"))
-		{
-			debug("Failed to construct new truck (2)");
-		}
+		buildTruck(faclist[i]);
 	}
 }
 
@@ -187,10 +202,7 @@ function buildFundamentals()
 
 function eventDroidBuilt(droid, struct)
 {
-	if (!buildDroid(struct, "Constructor", "Body1REC", "wheeled01", "", "Spade1Mk1"))
-	{
-		debug("Failed to construct new truck");
-	}
+	buildTruck(struct);
 }
 
 function eventGameInit()
