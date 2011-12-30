@@ -7,6 +7,12 @@
 #include "wzapp_qt.h"
 
 
+int realmain(int argc, char *argv[]);
+int main(int argc, char *argv[])
+{
+	realmain(argc, argv);
+}
+
 QApplication *appPtr;
 WzMainWindow *mainWindowPtr;
 

@@ -16,6 +16,12 @@
 
 extern void mainLoop();
 
+int realmain(int argc, char *argv[]);
+int main(int argc, char *argv[])
+{
+	realmain(argc, argv);
+}
+
 unsigned                screenWidth = 0;   // Declared in frameint.h.
 unsigned                screenHeight = 0;  // Declared in frameint.h.
 static unsigned         screenDepth = 0;

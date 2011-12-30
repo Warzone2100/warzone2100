@@ -1064,7 +1064,7 @@ bool getUTF8CmdLine(int* const utfargc, const char*** const utfargv) // explicit
 	return true;
 }
 
-int main(int argc, char *argv[])
+int realmain(int argc, char *argv[])
 {
 	wzMain(argc, argv);
 	int utfargc = argc;
