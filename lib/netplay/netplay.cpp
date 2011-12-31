@@ -2389,16 +2389,299 @@ bool NETcheckPlayerConnectionStatus(CONNECTION_STATUS status, unsigned player)
 	return realTime < NET_PlayerConnectionStatus[status][player];
 }
 
+struct SyncDebugEntry
+{
+	char const *function;
+};
+
+struct SyncDebugString : public SyncDebugEntry
+{
+	void set(uint32_t &crc, char const *f, char const *s)
+	{
+		function = f;
+		string = s;
+		crc = crcSum(crc, function, strlen(function) + 1);
+		crc = crcSum(crc, string,   strlen(string) + 1);
+	}
+	int snprint(char *buf, size_t bufSize)
+	{
+		return snprintf(buf, bufSize, "[%s] %s\n", function, string);
+	}
+
+	char const *string;
+};
+
+struct SyncDebugValueChange : public SyncDebugEntry
+{
+	void set(uint32_t &crc, char const *f, char const *vn, int nv, int i)
+	{
+		function = f;
+		variableName = vn;
+		newValue = nv;
+		id = i;
+		uint32_t valueBytes = htonl(newValue);
+		crc = crcSum(crc, function,     strlen(function) + 1);
+		crc = crcSum(crc, variableName, strlen(variableName) + 1);
+		crc = crcSum(crc, &valueBytes,  4);
+	}
+	int snprint(char *buf, size_t bufSize)
+	{
+		if (id != -1)
+		{
+			return snprintf(buf, bufSize, "[%s] %d %s = %d\n", function, id, variableName, newValue);
+		}
+		return snprintf(buf, bufSize, "[%s] %s = %d\n", function, variableName, newValue);
+	}
+
+	int         newValue;
+	int         id;
+	char const *variableName;
+};
+
+struct SyncDebugIntList : public SyncDebugEntry
+{
+	void set(uint32_t &crc, char const *f, char const *s, int *begin, size_t num)
+	{
+		function = f;
+		string = s;
+		ints = begin;
+		uint32_t valueBytes[40];
+		numInts = std::min(num, ARRAY_SIZE(valueBytes));
+		for (unsigned n = 0; n < numInts; ++n)
+		{
+			valueBytes[n] = htonl(ints[n]);
+		}
+		crc = crcSum(crc, valueBytes, 4*numInts);
+	}
+	int snprint(char *buf, size_t bufSize)
+	{
+		size_t index = 0;
+		if (index < bufSize)
+		{
+			index += snprintf(buf + index, bufSize - index, "[%s] ", function);
+		}
+		if (index < bufSize)
+		{
+			switch (numInts)
+			{
+				case  0: index += snprintf(buf + index, bufSize - index, string); break;
+				case  1: index += snprintf(buf + index, bufSize - index, string, ints[0]); break;
+				case  2: index += snprintf(buf + index, bufSize - index, string, ints[0], ints[1]); break;
+				case  3: index += snprintf(buf + index, bufSize - index, string, ints[0], ints[1], ints[2]); break;
+				case  4: index += snprintf(buf + index, bufSize - index, string, ints[0], ints[1], ints[2], ints[3]); break;
+				case  5: index += snprintf(buf + index, bufSize - index, string, ints[0], ints[1], ints[2], ints[3], ints[4]); break;
+				case  6: index += snprintf(buf + index, bufSize - index, string, ints[0], ints[1], ints[2], ints[3], ints[4], ints[5]); break;
+				case  7: index += snprintf(buf + index, bufSize - index, string, ints[0], ints[1], ints[2], ints[3], ints[4], ints[5], ints[6]); break;
+				case  8: index += snprintf(buf + index, bufSize - index, string, ints[0], ints[1], ints[2], ints[3], ints[4], ints[5], ints[6], ints[7]); break;
+				case  9: index += snprintf(buf + index, bufSize - index, string, ints[0], ints[1], ints[2], ints[3], ints[4], ints[5], ints[6], ints[7], ints[8]); break;
+				case 10: index += snprintf(buf + index, bufSize - index, string, ints[0], ints[1], ints[2], ints[3], ints[4], ints[5], ints[6], ints[7], ints[8], ints[9]); break;
+				case 11: index += snprintf(buf + index, bufSize - index, string, ints[0], ints[1], ints[2], ints[3], ints[4], ints[5], ints[6], ints[7], ints[8], ints[9], ints[10]); break;
+				case 12: index += snprintf(buf + index, bufSize - index, string, ints[0], ints[1], ints[2], ints[3], ints[4], ints[5], ints[6], ints[7], ints[8], ints[9], ints[10], ints[11]); break;
+				case 13: index += snprintf(buf + index, bufSize - index, string, ints[0], ints[1], ints[2], ints[3], ints[4], ints[5], ints[6], ints[7], ints[8], ints[9], ints[10], ints[11], ints[12]); break;
+				case 14: index += snprintf(buf + index, bufSize - index, string, ints[0], ints[1], ints[2], ints[3], ints[4], ints[5], ints[6], ints[7], ints[8], ints[9], ints[10], ints[11], ints[12], ints[13]); break;
+				case 15: index += snprintf(buf + index, bufSize - index, string, ints[0], ints[1], ints[2], ints[3], ints[4], ints[5], ints[6], ints[7], ints[8], ints[9], ints[10], ints[11], ints[12], ints[13], ints[14]); break;
+				case 16: index += snprintf(buf + index, bufSize - index, string, ints[0], ints[1], ints[2], ints[3], ints[4], ints[5], ints[6], ints[7], ints[8], ints[9], ints[10], ints[11], ints[12], ints[13], ints[14], ints[15]); break;
+				case 17: index += snprintf(buf + index, bufSize - index, string, ints[0], ints[1], ints[2], ints[3], ints[4], ints[5], ints[6], ints[7], ints[8], ints[9], ints[10], ints[11], ints[12], ints[13], ints[14], ints[15], ints[16]); break;
+				case 18: index += snprintf(buf + index, bufSize - index, string, ints[0], ints[1], ints[2], ints[3], ints[4], ints[5], ints[6], ints[7], ints[8], ints[9], ints[10], ints[11], ints[12], ints[13], ints[14], ints[15], ints[16], ints[17]); break;
+				case 19: index += snprintf(buf + index, bufSize - index, string, ints[0], ints[1], ints[2], ints[3], ints[4], ints[5], ints[6], ints[7], ints[8], ints[9], ints[10], ints[11], ints[12], ints[13], ints[14], ints[15], ints[16], ints[17], ints[18]); break;
+				case 20: index += snprintf(buf + index, bufSize - index, string, ints[0], ints[1], ints[2], ints[3], ints[4], ints[5], ints[6], ints[7], ints[8], ints[9], ints[10], ints[11], ints[12], ints[13], ints[14], ints[15], ints[16], ints[17], ints[18], ints[19]); break;
+				case 21: index += snprintf(buf + index, bufSize - index, string, ints[0], ints[1], ints[2], ints[3], ints[4], ints[5], ints[6], ints[7], ints[8], ints[9], ints[10], ints[11], ints[12], ints[13], ints[14], ints[15], ints[16], ints[17], ints[18], ints[19], ints[20]); break;
+				case 22: index += snprintf(buf + index, bufSize - index, string, ints[0], ints[1], ints[2], ints[3], ints[4], ints[5], ints[6], ints[7], ints[8], ints[9], ints[10], ints[11], ints[12], ints[13], ints[14], ints[15], ints[16], ints[17], ints[18], ints[19], ints[20], ints[21]); break;
+				case 23: index += snprintf(buf + index, bufSize - index, string, ints[0], ints[1], ints[2], ints[3], ints[4], ints[5], ints[6], ints[7], ints[8], ints[9], ints[10], ints[11], ints[12], ints[13], ints[14], ints[15], ints[16], ints[17], ints[18], ints[19], ints[20], ints[21], ints[22]); break;
+				case 24: index += snprintf(buf + index, bufSize - index, string, ints[0], ints[1], ints[2], ints[3], ints[4], ints[5], ints[6], ints[7], ints[8], ints[9], ints[10], ints[11], ints[12], ints[13], ints[14], ints[15], ints[16], ints[17], ints[18], ints[19], ints[20], ints[21], ints[22], ints[23]); break;
+				case 25: index += snprintf(buf + index, bufSize - index, string, ints[0], ints[1], ints[2], ints[3], ints[4], ints[5], ints[6], ints[7], ints[8], ints[9], ints[10], ints[11], ints[12], ints[13], ints[14], ints[15], ints[16], ints[17], ints[18], ints[19], ints[20], ints[21], ints[22], ints[23], ints[24]); break;
+				case 26: index += snprintf(buf + index, bufSize - index, string, ints[0], ints[1], ints[2], ints[3], ints[4], ints[5], ints[6], ints[7], ints[8], ints[9], ints[10], ints[11], ints[12], ints[13], ints[14], ints[15], ints[16], ints[17], ints[18], ints[19], ints[20], ints[21], ints[22], ints[23], ints[24], ints[25]); break;
+				case 27: index += snprintf(buf + index, bufSize - index, string, ints[0], ints[1], ints[2], ints[3], ints[4], ints[5], ints[6], ints[7], ints[8], ints[9], ints[10], ints[11], ints[12], ints[13], ints[14], ints[15], ints[16], ints[17], ints[18], ints[19], ints[20], ints[21], ints[22], ints[23], ints[24], ints[25], ints[26]); break;
+				case 28: index += snprintf(buf + index, bufSize - index, string, ints[0], ints[1], ints[2], ints[3], ints[4], ints[5], ints[6], ints[7], ints[8], ints[9], ints[10], ints[11], ints[12], ints[13], ints[14], ints[15], ints[16], ints[17], ints[18], ints[19], ints[20], ints[21], ints[22], ints[23], ints[24], ints[25], ints[26], ints[27]); break;
+				case 29: index += snprintf(buf + index, bufSize - index, string, ints[0], ints[1], ints[2], ints[3], ints[4], ints[5], ints[6], ints[7], ints[8], ints[9], ints[10], ints[11], ints[12], ints[13], ints[14], ints[15], ints[16], ints[17], ints[18], ints[19], ints[20], ints[21], ints[22], ints[23], ints[24], ints[25], ints[26], ints[27], ints[28]); break;
+				case 30: index += snprintf(buf + index, bufSize - index, string, ints[0], ints[1], ints[2], ints[3], ints[4], ints[5], ints[6], ints[7], ints[8], ints[9], ints[10], ints[11], ints[12], ints[13], ints[14], ints[15], ints[16], ints[17], ints[18], ints[19], ints[20], ints[21], ints[22], ints[23], ints[24], ints[25], ints[26], ints[27], ints[28], ints[29]); break;
+				case 31: index += snprintf(buf + index, bufSize - index, string, ints[0], ints[1], ints[2], ints[3], ints[4], ints[5], ints[6], ints[7], ints[8], ints[9], ints[10], ints[11], ints[12], ints[13], ints[14], ints[15], ints[16], ints[17], ints[18], ints[19], ints[20], ints[21], ints[22], ints[23], ints[24], ints[25], ints[26], ints[27], ints[28], ints[29], ints[30]); break;
+				case 32: index += snprintf(buf + index, bufSize - index, string, ints[0], ints[1], ints[2], ints[3], ints[4], ints[5], ints[6], ints[7], ints[8], ints[9], ints[10], ints[11], ints[12], ints[13], ints[14], ints[15], ints[16], ints[17], ints[18], ints[19], ints[20], ints[21], ints[22], ints[23], ints[24], ints[25], ints[26], ints[27], ints[28], ints[29], ints[30], ints[31]); break;
+				case 33: index += snprintf(buf + index, bufSize - index, string, ints[0], ints[1], ints[2], ints[3], ints[4], ints[5], ints[6], ints[7], ints[8], ints[9], ints[10], ints[11], ints[12], ints[13], ints[14], ints[15], ints[16], ints[17], ints[18], ints[19], ints[20], ints[21], ints[22], ints[23], ints[24], ints[25], ints[26], ints[27], ints[28], ints[29], ints[30], ints[31], ints[32]); break;
+				case 34: index += snprintf(buf + index, bufSize - index, string, ints[0], ints[1], ints[2], ints[3], ints[4], ints[5], ints[6], ints[7], ints[8], ints[9], ints[10], ints[11], ints[12], ints[13], ints[14], ints[15], ints[16], ints[17], ints[18], ints[19], ints[20], ints[21], ints[22], ints[23], ints[24], ints[25], ints[26], ints[27], ints[28], ints[29], ints[30], ints[31], ints[32], ints[33]); break;
+				case 35: index += snprintf(buf + index, bufSize - index, string, ints[0], ints[1], ints[2], ints[3], ints[4], ints[5], ints[6], ints[7], ints[8], ints[9], ints[10], ints[11], ints[12], ints[13], ints[14], ints[15], ints[16], ints[17], ints[18], ints[19], ints[20], ints[21], ints[22], ints[23], ints[24], ints[25], ints[26], ints[27], ints[28], ints[29], ints[30], ints[31], ints[32], ints[33], ints[34]); break;
+				case 36: index += snprintf(buf + index, bufSize - index, string, ints[0], ints[1], ints[2], ints[3], ints[4], ints[5], ints[6], ints[7], ints[8], ints[9], ints[10], ints[11], ints[12], ints[13], ints[14], ints[15], ints[16], ints[17], ints[18], ints[19], ints[20], ints[21], ints[22], ints[23], ints[24], ints[25], ints[26], ints[27], ints[28], ints[29], ints[30], ints[31], ints[32], ints[33], ints[34], ints[35]); break;
+				case 37: index += snprintf(buf + index, bufSize - index, string, ints[0], ints[1], ints[2], ints[3], ints[4], ints[5], ints[6], ints[7], ints[8], ints[9], ints[10], ints[11], ints[12], ints[13], ints[14], ints[15], ints[16], ints[17], ints[18], ints[19], ints[20], ints[21], ints[22], ints[23], ints[24], ints[25], ints[26], ints[27], ints[28], ints[29], ints[30], ints[31], ints[32], ints[33], ints[34], ints[35], ints[36]); break;
+				case 38: index += snprintf(buf + index, bufSize - index, string, ints[0], ints[1], ints[2], ints[3], ints[4], ints[5], ints[6], ints[7], ints[8], ints[9], ints[10], ints[11], ints[12], ints[13], ints[14], ints[15], ints[16], ints[17], ints[18], ints[19], ints[20], ints[21], ints[22], ints[23], ints[24], ints[25], ints[26], ints[27], ints[28], ints[29], ints[30], ints[31], ints[32], ints[33], ints[34], ints[35], ints[36], ints[37]); break;
+				case 39: index += snprintf(buf + index, bufSize - index, string, ints[0], ints[1], ints[2], ints[3], ints[4], ints[5], ints[6], ints[7], ints[8], ints[9], ints[10], ints[11], ints[12], ints[13], ints[14], ints[15], ints[16], ints[17], ints[18], ints[19], ints[20], ints[21], ints[22], ints[23], ints[24], ints[25], ints[26], ints[27], ints[28], ints[29], ints[30], ints[31], ints[32], ints[33], ints[34], ints[35], ints[36], ints[37], ints[38]); break;
+				case 40: index += snprintf(buf + index, bufSize - index, string, ints[0], ints[1], ints[2], ints[3], ints[4], ints[5], ints[6], ints[7], ints[8], ints[9], ints[10], ints[11], ints[12], ints[13], ints[14], ints[15], ints[16], ints[17], ints[18], ints[19], ints[20], ints[21], ints[22], ints[23], ints[24], ints[25], ints[26], ints[27], ints[28], ints[29], ints[30], ints[31], ints[32], ints[33], ints[34], ints[35], ints[36], ints[37], ints[38], ints[39]); break;
+				default: index += snprintf(buf + index, bufSize - index, "Too many ints in intlist."); break;
+			}
+		}
+		if (index < bufSize)
+		{
+			index += snprintf(buf + index, bufSize - index, "\n");
+		}
+		return index;
+	}
+
+	char const *string;
+	int *ints;
+	unsigned numInts;
+};
+
+/// O(1) allocator.
+template <typename T, int Size>
+struct SyncDebugAllocator
+{
+	void freeAll()
+	{
+		index = 0;
+	}
+	T *alloc(size_t num = 1)
+	{
+		if (index + num > Size)
+		{
+			return NULL;
+		}
+		T *ret = &mem[index];
+		index += num;
+		return ret;
+	}
+	bool contains(void const *t) const
+	{
+		return mem <= t && t < mem + Size;
+	}
+
+	T mem[Size];
+	size_t index;
+};
+
+struct SyncDebugLog
+{
+	SyncDebugLog() : time(0), crc(0x00000000) {}
+	void clear()
+	{
+		log.clear();
+		time = 0;
+		crc = 0x00000000;
+		//printf("Freeing %d strings, %d valueChanges, %d intLists, %d chars, %d ints\n", (int)strings.index, (int)valueChanges.index, (int)intLists.index, (int)chars.index, (int)ints.index);
+		strings.freeAll();
+		valueChanges.freeAll();
+		intLists.freeAll();
+		chars.freeAll();
+		ints.freeAll();
+	}
+	void string(char const *f, char const *s)
+	{
+		SyncDebugString *t = strings.alloc();
+		char *buf = chars.alloc(strlen(s) + 1);
+		if (t != NULL && buf != NULL)
+		{
+			strcpy(buf, s);
+			t->set(crc, f, buf);
+		}
+		else
+		{
+			t = NULL;
+			debug(LOG_WARNING, "Too small");
+		}
+		log.push_back(t);
+	}
+	void valueChange(char const *f, char const *vn, int nv, int i)
+	{
+		SyncDebugValueChange *t = valueChanges.alloc();
+		if (t != NULL)
+		{
+			t->set(crc, f, vn, nv, i);
+		}
+		else
+		{
+			debug(LOG_WARNING, "Too small");
+		}
+		log.push_back(t);
+	}
+	void intList(char const *f, char const *s, int *begin, size_t num)
+	{
+		SyncDebugIntList *t = intLists.alloc();
+		int *buf = ints.alloc(num);
+		if (t != NULL && buf != NULL)
+		{
+			std::copy(begin, begin + num, buf);
+			t->set(crc, f, s, buf, num);
+		}
+		else
+		{
+			t = NULL;
+			debug(LOG_WARNING, "Too small");
+		}
+		log.push_back(t);
+	}
+	int snprint(char *buf, size_t bufSize)
+	{
+		int index = 0;
+		for (size_t n = 0; n < log.size() && (size_t)index < bufSize; ++n)
+		{
+			SyncDebugEntry *entry = log[n];
+			if (entry == NULL)
+			{
+				index += snprintf(buf + index, bufSize - index, "Not enough entries. Some syncDebug missing.");
+			}
+			else if (strings.contains(entry))
+			{
+				index += static_cast<SyncDebugString *>(entry)->snprint(buf + index, bufSize - index);
+			}
+			else if (valueChanges.contains(entry))
+			{
+				index += static_cast<SyncDebugValueChange *>(entry)->snprint(buf + index, bufSize - index);
+			}
+			else if (intLists.contains(entry))
+			{
+				index += static_cast<SyncDebugIntList *>(entry)->snprint(buf + index, bufSize - index);
+			}
+			else
+			{
+				index += snprintf(buf + index, bufSize - index, "Huh?");
+			}
+		}
+		return index;
+	}
+	uint32_t getGameTime() const
+	{
+		return time;
+	}
+	uint32_t getCrc() const
+	{
+		return ~crc;  // Invert bits, since everyone else seems to do that with CRCs...
+	}
+	unsigned getNumEntries() const
+	{
+		return log.size();
+	}
+	void setGameTime(uint32_t newTime)
+	{
+		time = newTime;
+	}
+	void setCrc(uint32_t newCrc)
+	{
+		crc = ~newCrc;  // Invert bits, since everyone else seems to do that with CRCs...
+	}
+
+private:
+	std::vector<SyncDebugEntry *> log;
+	uint32_t time;
+	uint32_t crc;
+
+	SyncDebugAllocator<SyncDebugString, 20000> strings;
+	SyncDebugAllocator<SyncDebugValueChange, 20000> valueChanges;
+	SyncDebugAllocator<SyncDebugIntList, 20000> intLists;
+
+	SyncDebugAllocator<char, 2000000> chars;
+	SyncDebugAllocator<int, 200000> ints;
+
+private:
+	SyncDebugLog(SyncDebugLog const &)/* = delete*/;
+	SyncDebugLog &operator =(SyncDebugLog const &)/* = delete*/;
+};
+
 #define MAX_LEN_LOG_LINE 512  // From debug.c - no use printing something longer.
 #define MAX_SYNC_MESSAGES 20000
 #define MAX_SYNC_HISTORY 12
 
 static unsigned syncDebugNext = 0;
-static uint32_t syncDebugNum[MAX_SYNC_HISTORY];
-static uint32_t syncDebugGameTime[MAX_SYNC_HISTORY + 1];
-static char const *syncDebugFunctions[MAX_SYNC_HISTORY][MAX_SYNC_MESSAGES];
-static char *syncDebugStrings[MAX_SYNC_HISTORY][MAX_SYNC_MESSAGES];
-static uint32_t syncDebugCrcs[MAX_SYNC_HISTORY + 1];
+static SyncDebugLog syncDebugLog[MAX_SYNC_HISTORY];
+static uint32_t syncDebugExtraGameTime;
+static uint32_t syncDebugExtraCrc;
 
 void _syncDebug(const char *function, const char *str, ...)
 {
@@ -2413,14 +2696,16 @@ void _syncDebug(const char *function, const char *str, ...)
 	vssprintf(outputBuffer, str, ap);
 	va_end(ap);
 
-	if (syncDebugNum[syncDebugNext] < MAX_SYNC_MESSAGES)
-	{
-		syncDebugFunctions[syncDebugNext][syncDebugNum[syncDebugNext]] = function;  // Function names are link-time constants, no need to duplicate.
-		syncDebugStrings[syncDebugNext][syncDebugNum[syncDebugNext]] = strdup(outputBuffer);
-		syncDebugCrcs[syncDebugNext] = crcSum(syncDebugCrcs[syncDebugNext], function,     strlen(function)     + 1);
-		syncDebugCrcs[syncDebugNext] = crcSum(syncDebugCrcs[syncDebugNext], outputBuffer, strlen(outputBuffer) + 1);
-		++syncDebugNum[syncDebugNext];
-	}
+	syncDebugLog[syncDebugNext].string(function, outputBuffer);
+}
+
+void _syncDebugIntList(const char *function, const char *str, int *ints, size_t numInts)
+{
+#ifdef WZ_CC_MSVC
+	char const *f = function; while (*f != '\0') if (*f++ == ':') function = f;  // Strip "Class::" from "Class::myFunction".
+#endif
+
+	syncDebugLog[syncDebugNext].intList(function, str, ints, numInts);
 }
 
 void _syncDebugBacktrace(const char *function)
@@ -2429,7 +2714,7 @@ void _syncDebugBacktrace(const char *function)
 	char const *f = function; while (*f != '\0') if (*f++ == ':') function = f;  // Strip "Class::" from "Class::myFunction".
 #endif
 
-	uint32_t backupCrc = syncDebugCrcs[syncDebugNext];  // Ignore CRC changes from _syncDebug(), since identical backtraces can be printed differently.
+	uint32_t backupCrc = syncDebugLog[syncDebugNext].getCrc();  // Ignore CRC changes from _syncDebug(), since identical backtraces can be printed differently.
 
 #ifdef WZ_OS_LINUX
 	void *btv[20];
@@ -2446,47 +2731,33 @@ void _syncDebugBacktrace(const char *function)
 #endif
 
 	// Use CRC of something platform-independent, to avoid false positive desynchs.
-	syncDebugCrcs[syncDebugNext] = crcSum(backupCrc, function, strlen(function) + 1);
-}
-
-static void clearSyncDebugNext(void)
-{
-	unsigned i;
-
-	for (i = 0; i != syncDebugNum[syncDebugNext]; ++i)
-	{
-		free(syncDebugStrings[syncDebugNext][i]);
-		syncDebugFunctions[syncDebugNext][i] = NULL;  // Function names are link-time constants, and therefore shouldn't and can't be freed.
-		syncDebugStrings[syncDebugNext][i] = NULL;
-	}
-	syncDebugNum[syncDebugNext] = 0;
-	syncDebugGameTime[syncDebugNext] = 0;
-	syncDebugCrcs[syncDebugNext] = 0x00000000;
+	backupCrc = ~crcSum(~backupCrc, function, strlen(function) + 1);
+	syncDebugLog[syncDebugNext].setCrc(backupCrc);
 }
 
 void resetSyncDebug()
 {
-	for (syncDebugNext = 0; syncDebugNext < MAX_SYNC_HISTORY; ++syncDebugNext)
+	for (unsigned i = 0; i < MAX_SYNC_HISTORY; ++i)
 	{
-		clearSyncDebugNext();
+		syncDebugLog[i].clear();
 	}
 
-	syncDebugGameTime[MAX_SYNC_HISTORY] = 0;
-	syncDebugCrcs[MAX_SYNC_HISTORY] = 0x00000000;
+	syncDebugExtraGameTime = 0;
+	syncDebugExtraCrc = 0xFFFFFFFF;
 
 	syncDebugNext = 0;
 }
 
 uint32_t nextDebugSync(void)
 {
-	uint32_t ret = ~syncDebugCrcs[syncDebugNext];  // Invert bits, since everyone else seems to do that with CRCs...
+	uint32_t ret = syncDebugLog[syncDebugNext].getCrc();
 
 	// Save gameTime, so we know which CRC to compare with, later.
-	syncDebugGameTime[syncDebugNext] = gameTime;
+	syncDebugLog[syncDebugNext].setGameTime(gameTime);
 
 	// Go to next position, and free it ready for use.
 	syncDebugNext = (syncDebugNext + 1)%MAX_SYNC_HISTORY;
-	clearSyncDebugNext();
+	syncDebugLog[syncDebugNext].clear();
 
 	return ret;
 }
@@ -2534,22 +2805,20 @@ static void recvDebugSync(NETQUEUE queue)
 
 bool checkDebugSync(uint32_t checkGameTime, uint32_t checkCrc)
 {
-	unsigned index;
-	unsigned i;
 	static uint32_t numDumps = 0;
-	size_t bufSize = 0;
 
-	if (checkGameTime == syncDebugGameTime[syncDebugNext])  // Can't happen - and syncDebugGameTime[] == 0, until just before sending the CRC, anyway.
+	if (checkGameTime == syncDebugLog[syncDebugNext].getGameTime())  // Can't happen - and syncDebugGameTime[] == 0, until just before sending the CRC, anyway.
 	{
 		debug(LOG_ERROR, "Huh? We aren't done yet...");
 		return true;
 	}
 
-	for (index = 0; index < MAX_SYNC_HISTORY + 1; ++index)
+	unsigned logIndex;
+	for (logIndex = 0; logIndex < MAX_SYNC_HISTORY; ++logIndex)
 	{
-		if (syncDebugGameTime[index] == checkGameTime)
+		if (syncDebugLog[logIndex].getGameTime() == checkGameTime)
 		{
-			if (~syncDebugCrcs[index] == checkCrc)  // Invert bits, since everyone else seems to do that with CRCs...
+			if (syncDebugLog[logIndex].getCrc() == checkCrc)  // Invert bits, since everyone else seems to do that with CRCs...
 			{
 				return true;                    // Check passed. (So far... There might still be more players to compare CRCs with.)
 			}
@@ -2558,37 +2827,40 @@ bool checkDebugSync(uint32_t checkGameTime, uint32_t checkCrc)
 		}
 	}
 
-	if (index >= MAX_SYNC_HISTORY)
+	if (logIndex >= MAX_SYNC_HISTORY && syncDebugExtraGameTime == checkGameTime)
+	{
+		if (syncDebugExtraCrc == checkCrc)
+		{
+			return true;
+		}
+	}
+
+	if (logIndex >= MAX_SYNC_HISTORY)
 	{
 		return false;                                   // Couldn't check. May have dumped already, or MAX_SYNC_HISTORY isn't big enough compared to the maximum latency.
 	}
 
+	size_t bufIndex = 0;
 	// Dump our version, and also erase it, so we only dump it at most once.
-	debug(LOG_ERROR, "Inconsistent sync debug at gameTime %u. My version has %u lines, CRC = 0x%08X.", syncDebugGameTime[index], syncDebugNum[index], ~syncDebugCrcs[index] & 0xFFFFFFFF);
-	bufSize += snprintf((char *)debugSyncTmpBuf + bufSize, ARRAY_SIZE(debugSyncTmpBuf) - bufSize, "===== BEGIN gameTime=%u, %u lines, CRC 0x%08X =====\n", syncDebugGameTime[index], syncDebugNum[index], ~syncDebugCrcs[index] & 0xFFFFFFFF);
-	bufSize = MIN(bufSize, ARRAY_SIZE(debugSyncTmpBuf));  // snprintf will not overflow debugSyncTmpBuf, but returns as much as it would have printed if possible.
-	for (i = 0; i < syncDebugNum[index]; ++i)
-	{
-		bufSize += snprintf((char *)debugSyncTmpBuf + bufSize, ARRAY_SIZE(debugSyncTmpBuf) - bufSize, "[%s] %s\n", syncDebugFunctions[index][i], syncDebugStrings[index][i]);
-		bufSize = MIN(bufSize, ARRAY_SIZE(debugSyncTmpBuf));  // snprintf will not overflow debugSyncTmpBuf, but returns as much as it would have printed if possible.
-		free(syncDebugStrings[index][i]);
-	}
-	bufSize += snprintf((char *)debugSyncTmpBuf + bufSize, ARRAY_SIZE(debugSyncTmpBuf) - bufSize, "===== END gameTime=%u, %u lines, CRC 0x%08X =====\n", syncDebugGameTime[index], syncDebugNum[index], ~syncDebugCrcs[index] & 0xFFFFFFFF);
-	bufSize = MIN(bufSize, ARRAY_SIZE(debugSyncTmpBuf));  // snprintf will not overflow debugSyncTmpBuf, but returns as much as it would have printed if possible.
+	debug(LOG_ERROR, "Inconsistent sync debug at gameTime %u. My version has %u entries, CRC = 0x%08X.", syncDebugLog[logIndex].getGameTime(), syncDebugLog[logIndex].getNumEntries(), syncDebugLog[logIndex].getCrc());
+	bufIndex += snprintf((char *)debugSyncTmpBuf + bufIndex, ARRAY_SIZE(debugSyncTmpBuf) - bufIndex, "===== BEGIN gameTime=%u, %u entries, CRC 0x%08X =====\n", syncDebugLog[logIndex].getGameTime(), syncDebugLog[logIndex].getNumEntries(), syncDebugLog[logIndex].getCrc());
+	bufIndex = MIN(bufIndex, ARRAY_SIZE(debugSyncTmpBuf));  // snprintf will not overflow debugSyncTmpBuf, but returns as much as it would have printed if possible.
+	bufIndex += syncDebugLog[logIndex].snprint((char *)debugSyncTmpBuf + bufIndex, ARRAY_SIZE(debugSyncTmpBuf) - bufIndex);
+	bufIndex = MIN(bufIndex, ARRAY_SIZE(debugSyncTmpBuf));  // snprintf will not overflow debugSyncTmpBuf, but returns as much as it would have printed if possible.
+	bufIndex += snprintf((char *)debugSyncTmpBuf + bufIndex, ARRAY_SIZE(debugSyncTmpBuf) - bufIndex, "===== END gameTime=%u, %u entries, CRC 0x%08X =====\n", syncDebugLog[logIndex].getGameTime(), syncDebugLog[logIndex].getNumEntries(), syncDebugLog[logIndex].getCrc());
+	bufIndex = MIN(bufIndex, ARRAY_SIZE(debugSyncTmpBuf));  // snprintf will not overflow debugSyncTmpBuf, but returns as much as it would have printed if possible.
 	if (numDumps < 5)
 	{
 		++numDumps;
-		sendDebugSync(debugSyncTmpBuf, bufSize, syncDebugGameTime[index]);
+		sendDebugSync(debugSyncTmpBuf, bufIndex, syncDebugLog[logIndex].getGameTime());
 	}
 
 	// Backup correct CRC for checking against remaining players, even though we erased the logs (which were dumped already).
-	syncDebugGameTime[MAX_SYNC_HISTORY] = syncDebugGameTime[index];
-	syncDebugCrcs[MAX_SYNC_HISTORY]     = syncDebugCrcs[index];
+	syncDebugExtraGameTime = syncDebugLog[logIndex].getGameTime();
+	syncDebugExtraCrc      = syncDebugLog[logIndex].getCrc();
 
 	// Finish erasing our version.
-	syncDebugNum[index] = 0;
-	syncDebugGameTime[index] = 0;
-	syncDebugCrcs[index] = 0x00000000;
+	syncDebugLog[logIndex].clear();
 
 	return false;  // Ouch.
 }

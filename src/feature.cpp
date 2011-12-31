@@ -332,16 +332,19 @@ FEATURE::~FEATURE()
 
 void _syncDebugFeature(const char *function, FEATURE const *psFeature, char ch)
 {
-	_syncDebug(function, "%c feature%d = p%d;pos(%d,%d,%d),subtype%d,dam%d,bp%d", ch,
-	          psFeature->id,
+	int list[] =
+	{
+		ch,
 
-	          psFeature->player,
-	          psFeature->pos.x, psFeature->pos.y, psFeature->pos.z,
-	          psFeature->psStats->subType,
-	          psFeature->psStats->damageable,
-	          psFeature->body
+		psFeature->id,
 
-	          );
+		psFeature->player,
+		psFeature->pos.x, psFeature->pos.y, psFeature->pos.z,
+		psFeature->psStats->subType,
+		psFeature->psStats->damageable,
+		psFeature->body,
+	};
+	_syncDebugIntList(function, "%c feature%d = p%d;pos(%d,%d,%d),subtype%d,damageable%d,body%d", list, ARRAY_SIZE(list));
 }
 
 /* Update routine for features */

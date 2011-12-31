@@ -3483,7 +3483,7 @@ static float CalcStructureSmokeInterval(float damage)
 void _syncDebugStructure(const char *function, STRUCTURE const *psStruct, char ch)
 {
 	int ref = 0;
-	char const *refStr = "";
+	int refChr = ' ';
 
 	// Print what the structure is producing, too.
 	switch (psStruct->pStructureType->type)
@@ -3492,7 +3492,7 @@ void _syncDebugStructure(const char *function, STRUCTURE const *psStruct, char c
 			if (psStruct->pFunctionality->researchFacility.psSubject != NULL)
 			{
 				ref = psStruct->pFunctionality->researchFacility.psSubject->ref;
-				refStr = ",research";
+				refChr = 'r';
 			}
 			break;
 		case REF_FACTORY:
@@ -3501,24 +3501,27 @@ void _syncDebugStructure(const char *function, STRUCTURE const *psStruct, char c
 			if (psStruct->pFunctionality->factory.psSubject != NULL)
 			{
 				ref = psStruct->pFunctionality->factory.psSubject->multiPlayerID;
-				refStr = ",production";
+				refChr = 'p';
 			}
 			break;
 		default:
 			break;
 	}
 
-	_syncDebug(function, "%c structure%d = p%d;pos(%d,%d,%d),stat%d,type%d%s%.0d,bld%d,bp%d, power = %"PRId64"", ch,
-	          psStruct->id,
+	int list[] =
+	{
+		ch,
 
-	          psStruct->player,
-	          psStruct->pos.x, psStruct->pos.y, psStruct->pos.z,
-	          psStruct->status,
-	          psStruct->pStructureType->type, refStr, ref,
-	          psStruct->currentBuildPts,
-	          psStruct->body,
+		psStruct->id,
 
-	          getPrecisePower(psStruct->player));
+		psStruct->player,
+		psStruct->pos.x, psStruct->pos.y, psStruct->pos.z,
+		psStruct->status,
+		psStruct->pStructureType->type, refChr, ref,
+		psStruct->currentBuildPts,
+		psStruct->body,
+	};
+	_syncDebugIntList(function, "%c structure%d = p%d;pos(%d,%d,%d),status%d,type%d,%c%.0d,bld%d,body%d", list, ARRAY_SIZE(list));
 }
 
 int requestOpenGate(STRUCTURE *psStructure)

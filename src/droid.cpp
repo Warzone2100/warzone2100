@@ -705,33 +705,27 @@ void droidBurn(DROID *psDroid)
 
 void _syncDebugDroid(const char *function, DROID const *psDroid, char ch)
 {
-	char actTar[DROID_MAXWEAPS*15];
-	unsigned actTarLen = 0;
-	unsigned i;
-	actTar[0] = '\0';
-	for (i = 0; i < psDroid->numWeaps; ++i)
+	int list[] =
 	{
-		actTarLen += sprintf(actTar + actTarLen, "_%u", psDroid->psActionTarget[i]? psDroid->psActionTarget[i]->id : 0);
-	}
+		ch,
 
-	_syncDebug(function, "%c droid%d = p%d;pos(%d,%d,%d),rot(%d,%d,%d),ord%d(%d,%d)^%d,act%d%s,so%X,bp%d,sMove(st%d,spd%d,mdir%d,path%d/%d,src(%d,%d),tar(%d,%d),dst(%d,%d),bump(%d,%d,%d,%d,(%d,%d),%d)),exp%u, power = %"PRId64"", ch,
-	          psDroid->id,
+		psDroid->id,
 
-	          psDroid->player,
-	          psDroid->pos.x, psDroid->pos.y, psDroid->pos.z,
-	          psDroid->rot.direction, psDroid->rot.pitch, psDroid->rot.roll,
-	          psDroid->order.type, psDroid->order.pos.x, psDroid->order.pos.y, psDroid->listSize,
-	          psDroid->action, actTar,
-	          psDroid->secondaryOrder,
-	          psDroid->body,
-	          psDroid->sMove.Status,
-	          psDroid->sMove.speed, psDroid->sMove.moveDir,
-	          psDroid->sMove.pathIndex, psDroid->sMove.numPoints,
-	          psDroid->sMove.src.x, psDroid->sMove.src.y, psDroid->sMove.target.x, psDroid->sMove.target.y, psDroid->sMove.destination.x, psDroid->sMove.destination.y,
-	          psDroid->sMove.bumpDir, psDroid->sMove.bumpTime, psDroid->sMove.lastBump, psDroid->sMove.pauseTime, psDroid->sMove.bumpX, psDroid->sMove.bumpY, psDroid->sMove.shuffleStart,
-	          psDroid->experience,
-
-	          getPrecisePower(psDroid->player));
+		psDroid->player,
+		psDroid->pos.x, psDroid->pos.y, psDroid->pos.z,
+		psDroid->rot.direction, psDroid->rot.pitch, psDroid->rot.roll,
+		psDroid->order.type, psDroid->order.pos.x, psDroid->order.pos.y, psDroid->listSize,
+		psDroid->action,
+		psDroid->secondaryOrder,
+		psDroid->body,
+		psDroid->sMove.Status,
+		psDroid->sMove.speed, psDroid->sMove.moveDir,
+		psDroid->sMove.pathIndex, psDroid->sMove.numPoints,
+		psDroid->sMove.src.x, psDroid->sMove.src.y, psDroid->sMove.target.x, psDroid->sMove.target.y, psDroid->sMove.destination.x, psDroid->sMove.destination.y,
+		psDroid->sMove.bumpDir, psDroid->sMove.bumpTime, psDroid->sMove.lastBump, psDroid->sMove.pauseTime, psDroid->sMove.bumpX, psDroid->sMove.bumpY, psDroid->sMove.shuffleStart,
+		psDroid->experience,
+	};
+	_syncDebugIntList(function, "%c droid%d = p%d;pos(%d,%d,%d),rot(%d,%d,%d),order%d(%d,%d)^%d,action%d,secondaryOrder%X,body%d,sMove(status%d,speed%d,moveDir%d,path%d/%d,src(%d,%d),target(%d,%d),destination(%d,%d),bump(%d,%d,%d,%d,(%d,%d),%d)),exp%u", list, ARRAY_SIZE(list));
 }
 
 /* The main update routine for all droids */
