@@ -2290,6 +2290,7 @@ bool orderDroidList(DROID *psDroid)
 		case DORDER_DEMOLISH:
 		case DORDER_HELPBUILD:
 		case DORDER_BUILDMODULE:
+		case DORDER_RECOVER:
 			ASSERT(sOrder.psStats == NULL, "Extra %s parameters.", getDroidOrderName(sOrder.type));
 			sOrder.psStats = NULL;
 			break;

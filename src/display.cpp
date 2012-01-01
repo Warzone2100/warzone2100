@@ -2018,14 +2018,7 @@ static void dealWithLMBFeature(FEATURE* psFeature)
 						break;
 					}
 
-					if (ctrlShiftDown())
-					{
-						orderDroidStatsLocDirAdd(psCurr, DORDER_BUILD, &asStructureStats[i], psFeature->pos.x, psFeature->pos.y, player.r.y);
-					}
-					else
-					{
-						orderDroidStatsLocDir(psCurr, DORDER_BUILD, &asStructureStats[i], psFeature->pos.x, psFeature->pos.y, player.r.y, ModeQueue);
-					}
+					sendDroidInfo(psCurr, DroidOrder(DORDER_BUILD, &asStructureStats[i], removeZ(psFeature->pos), player.r.y), ctrlShiftDown());
 					FeedbackOrderGiven();
 				}
 			}
@@ -2044,12 +2037,7 @@ static void dealWithLMBFeature(FEATURE* psFeature)
 				/* If so then find the nearest unit! */
 				if (psNearestUnit)	// bloody well should be!!!
 				{
-					orderDroidObj(psNearestUnit, DORDER_RECOVER, (BASE_OBJECT *)psFeature, ModeQueue);
-					FeedbackOrderGiven();
-				}
-				else
-				{
-					orderSelectedObj(selectedPlayer, (BASE_OBJECT*)psFeature);
+					sendDroidInfo(psNearestUnit, DroidOrder(DORDER_RECOVER, psFeature), ctrlShiftDown());
 					FeedbackOrderGiven();
 				}
 				break;
