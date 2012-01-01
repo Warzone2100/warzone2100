@@ -14,6 +14,11 @@ const powModule = "A0PowMod1";
 const facModule = "A0FacMod1";
 const resModule = "A0ResearchModule1";
 
+// -- globals
+
+var attackGroup;
+var vtolGroup;
+
 // --- utility functions
 
 function dbgPlr(message)
@@ -29,6 +34,38 @@ function dbgObj(obj, message)
 	if (obj.selected)
 	{
 		console(message);
+	}
+}
+
+function buildAttacker(struct)
+{
+	// For now, only build long range stuff, easier to handle for an AI. Reusing bodies from
+	// the VTOLs -- reconsider this.
+	var bodylist = [
+		"Body7ABT", // retribution
+		"Body6SUPP", // panther
+		"Body8MBT", // scorpion
+		"Body5REC", // cobra
+		"Body1REC", // viper
+	];
+	var proplist = [
+		"HalfTrack", // half-track
+		"wheeled01", // wheels
+	];
+	var weaplist = [
+		"Missile-MdArt", // Seraph
+		"Missile-A-T", // Scourge
+		"Rocket-HvyA-T", // Tank-killer
+		"Rocket-LtA-T", // Lancer
+		"Rocket-MRL", // MRL
+		"Rocket-Pod", // mini-pod
+		"MG3Mk1", // heavy mg
+		"MG2Mk1", // twin mg
+		"MG1Mk1", // mg, initial weapon
+	];
+	if (!buildDroid(struct, "Ranged Attacker", bodylist, proplist, "", DROID_WEAPON, weaplist))
+	{
+		debug("Failed to construct new attacker");
 	}
 }
 
@@ -165,15 +202,6 @@ function buildPowerGenerators()
 	}
 }
 
-function conDroids()
-{
-	var faclist = enumStruct(me, factory);
-	for (var i = 0; i < faclist.length; i++)
-	{
-		buildTruck(faclist[i]);
-	}
-}
-
 function buildFundamentals()
 {
 	var needPwGen = false;
@@ -242,7 +270,9 @@ function eventStructureBuilt(struct, droid)
 {
 	if (struct.stattype == RESEARCH_LAB)
 	{
-		eventResearched();
+		// HACK -- we cannot call eventResearched directly from eventStartLevel for some
+		// reason, since then research messages are dropped on the floor... FIXME
+		queue("eventResearched");
 	}
 	else if (struct.stattype == FACTORY || struct.stattype == CYBORG_FACTORY || struct.stattype == VTOL_FACTORY)
 	{
@@ -263,7 +293,15 @@ function eventDroidBuilt(droid, struct)
 	{
 		if (struct.stattype == FACTORY)
 		{
-			buildTruck(struct);
+			var trucklist = enumDroid(me, DROID_CONSTRUCT);
+			if (trucklist.length < 6)
+			{
+				buildTruck(struct);
+			}
+			else
+			{
+				buildAttacker(struct);
+			}
 		}
 		else if (struct.stattype == CYBORG_FACTORY)
 		{
@@ -274,16 +312,52 @@ function eventDroidBuilt(droid, struct)
 			buildVTOL(struct);
 		}
 	}
+	if (droid)
+	{
+		if (isVTOL(droid))
+		{
+			groupAddDroid(vtolGroup, droid);
+		}
+		else if (droid.droidType == DROID_WEAPON || droid.droidType == DROID_CYBORG)
+		{
+			groupAddDroid(attackGroup, droid);
+
+			// HUUUGE hack here :) -- naive attack code nested up in here, 'cos i'm so lazy
+			var attackers = enumGroup(attackGroup);
+			if (attackers.length > 20)
+			{
+				// Attack!
+				for (var i = 0; i < maxPlayers; i++)
+				{
+					if (!allianceExistsBetween(me, i))
+					{
+						for (var j = 0; j < attackers.length; j++)
+						{
+							orderDroidLoc(attackers[i], DORDER_SCOUT, startPositions[i].x, startPositions[i].y);
+						}
+						var vtols = enumGroup(vtolGroup);
+						for (var j = 0; j < vtols.length; j++)
+						{
+							orderDroidLoc(vtols[i], DORDER_SCOUT, startPositions[i].x, startPositions[i].y);
+						}
+						return;
+					}
+				}
+			}
+		}
+	}
 }
 
 function eventGameInit()
 {
+	attackGroup = newGroup();
+	vtolGroup = newGroup();
 }
 
 function eventAttacked(victim, attacker)
 {
 	// TBD, for now -- SEND EVERYONE!!!
-	if (attacker)
+	if (attacker && victim && victim.type == STRUCTURE && attacker.player != me)
 	{
 		var i;
 		var defenders = enumDroid(me, DROID_WEAPON);

@@ -150,6 +150,7 @@ QScriptValue convFeature(FEATURE *psFeature, QScriptEngine *engine)
 //;; \item[action] The current action of the droid. This is how it intends to carry out its plan. The
 //;; C++ code may change the action frequently as it tries to carry out its order. You never want to set
 //;; the action directly, but it may be interesting to look at what it currently is.
+//;; \item[droidType] The droid's type.
 //;; \item[group] The group this droid is member of. This is a numerical ID. If not a member of any group,
 //;; this value is not set. Always check if set before use.
 //;; \end{description}
@@ -158,6 +159,7 @@ QScriptValue convDroid(DROID *psDroid, QScriptEngine *engine)
 	QScriptValue value = convObj(psDroid, engine);
 	value.setProperty("action", (int)psDroid->action, QScriptValue::ReadOnly);
 	value.setProperty("order", (int)psDroid->order.type, QScriptValue::ReadOnly);
+	value.setProperty("droidType", (int)psDroid->droidType, QScriptValue::ReadOnly);
 	if (psDroid->psGroup)
 	{
 		value.setProperty("group", (int)psDroid->psGroup->id, QScriptValue::ReadOnly);
@@ -464,12 +466,14 @@ static QScriptValue js_pursueResearch(QScriptContext *context, QScriptEngine *en
 			}
 			if (!started) // found relevant item on the path?
 			{
+				sendResearchStatus(psStruct, cur->index, player, true);
 #if defined (DEBUG)
 				char sTemp[128];
-				sendResearchStatus(psStruct, cur->index, player, true);
 				sprintf(sTemp, "player:%d starts topic from script: %s", player, cur->pName);
 				NETlogEntry(sTemp, SYNC_FLAG, 0);
 #endif
+				debug(LOG_SCRIPT, "Started research in %d's %s(%d) of %s", player, 
+				      objInfo(psStruct), psStruct->id, cur->pName);
 				return QScriptValue(true);
 			}
 		}
@@ -489,6 +493,7 @@ static QScriptValue js_pursueResearch(QScriptContext *context, QScriptEngine *en
 			cur = reslist.takeFirst(); // retrieve options from the stack
 		}
 	}
+	debug(LOG_SCRIPT, "No research topic found for %s(%d)", objInfo(psStruct), psStruct->id);
 	return QScriptValue(false); // none found
 }
 
@@ -1468,6 +1473,17 @@ static QScriptValue js_isStructureAvailable(QScriptContext *context, QScriptEngi
 			    && asStructLimits[player][index].currentQuantity < asStructLimits[player][index].limit);
 }
 
+//-- \subsection{isVTOL(droid)} Returns true if given droid is a VTOL (not including transports).
+static QScriptValue js_isVTOL(QScriptContext *context, QScriptEngine *engine)
+{
+	QScriptValue droidVal = context->argument(0);
+	int id = droidVal.property("id").toInt32();
+	int player = droidVal.property("player").toInt32();
+	DROID *psDroid = IdToDroid(id, player);
+	SCRIPT_ASSERT(context, psDroid, "No such droid id %d belonging to player %d", id, player);
+	return QScriptValue(isVtolDroid(psDroid));
+}
+
 //-- \subsection{hackNetOff()}
 //-- Turn off network transmissions. FIXME - find a better way.
 static QScriptValue js_hackNetOff(QScriptContext *, QScriptEngine *)
@@ -1524,6 +1540,7 @@ bool registerFunctions(QScriptEngine *engine)
 	engine->globalObject().setProperty("orderDroidObj", engine->newFunction(js_orderDroidObj));
 	engine->globalObject().setProperty("buildDroid", engine->newFunction(js_buildDroid));
 	engine->globalObject().setProperty("componentAvailable", engine->newFunction(js_componentAvailable));
+	engine->globalObject().setProperty("isVTOL", engine->newFunction(js_isVTOL));
 
 	// Functions that operate on the current player only
 	engine->globalObject().setProperty("centreView", engine->newFunction(js_centreView));
