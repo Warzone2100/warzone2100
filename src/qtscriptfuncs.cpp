@@ -146,17 +146,22 @@ QScriptValue convFeature(FEATURE *psFeature, QScriptEngine *engine)
 //;;   \item[DORDER_REPAIR] Order a droid to repair something.
 //;;   \item[DORDER_RETREAT] Order a droid to retreat back to HQ.
 //;;   \item[DORDER_PATROL] Order a droid to patrol.
-//;;   \item[DORDER_BUILDMODULE] Order a droid to build a module.
 //;;  \end{description}
 //;; \item[action] The current action of the droid. This is how it intends to carry out its plan. The
 //;; C++ code may change the action frequently as it tries to carry out its order. You never want to set
 //;; the action directly, but it may be interesting to look at what it currently is.
+//;; \item[group] The group this droid is member of. This is a numerical ID. If not a member of any group,
+//;; this value is not set. Always check if set before use.
 //;; \end{description}
 QScriptValue convDroid(DROID *psDroid, QScriptEngine *engine)
 {
 	QScriptValue value = convObj(psDroid, engine);
 	value.setProperty("action", (int)psDroid->action, QScriptValue::ReadOnly);
 	value.setProperty("order", (int)psDroid->order.type, QScriptValue::ReadOnly);
+	if (psDroid->psGroup)
+	{
+		value.setProperty("group", (int)psDroid->psGroup->id, QScriptValue::ReadOnly);
+	}
 	return value;
 }
 
@@ -185,7 +190,7 @@ QScriptValue convObj(BASE_OBJECT *psObj, QScriptEngine *engine)
 	value.setProperty("player", psObj->player, QScriptValue::ReadOnly);
 	value.setProperty("type", psObj->type, QScriptValue::ReadOnly);
 	value.setProperty("selected", psObj->selected, QScriptValue::ReadOnly);
-	value.setProperty("name", objInfo(psObj));
+	value.setProperty("name", objInfo(psObj), QScriptValue::ReadOnly);
 	return value;
 }
 
@@ -382,7 +387,7 @@ static QScriptValue js_enumGroup(QScriptContext *context, QScriptEngine *engine)
 }
 
 //-- \subsection{newGroup()}
-//-- Allocate a new group.
+//-- Allocate a new group. Returns its numerical ID.
 static QScriptValue js_newGroup(QScriptContext *, QScriptEngine *)
 {
 	DROID_GROUP *newGrp = grpCreate();
@@ -587,10 +592,16 @@ static QScriptValue js_buildDroid(QScriptContext *context, QScriptEngine *engine
 	memset(psTemplate->asParts, 0, sizeof(psTemplate->asParts)); // reset to defaults
 	memset(psTemplate->asWeaps, 0, sizeof(psTemplate->asWeaps));
 	int body = get_first_available_component(player, context->argument(2), COMP_BODY);
-	int prop = get_first_available_component(player, context->argument(3), COMP_PROPULSION);
-	if (body < 0 || prop < 0)
+	if (body < 0)
 	{
-		debug(LOG_SCRIPT, "Wanted to build %s at %s, but component type all unavailable", 
+		debug(LOG_SCRIPT, "Wanted to build %s at %s, but body type all unavailable",
+		      templName.toUtf8().constData(), objInfo(psStruct));
+		return QScriptValue(false); // no component available
+	}
+	int prop = get_first_available_component(player, context->argument(3), COMP_PROPULSION);
+	if (prop < 0)
+	{
+		debug(LOG_SCRIPT, "Wanted to build %s at %s, but propulsion type all unavailable",
 		      templName.toUtf8().constData(), objInfo(psStruct));
 		return QScriptValue(false); // no component available
 	}
@@ -1544,7 +1555,6 @@ bool registerFunctions(QScriptEngine *engine)
 	engine->globalObject().setProperty("DORDER_REPAIR", DORDER_REPAIR, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("DORDER_RETREAT", DORDER_RETREAT, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("DORDER_PATROL", DORDER_PATROL, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("DORDER_BUILDMODULE", DORDER_BUILDMODULE, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("COMMAND", IDRET_COMMAND, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("OPTIONS", IDRET_COMMAND, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("BUILD", IDRET_BUILD, QScriptValue::ReadOnly | QScriptValue::Undeletable);

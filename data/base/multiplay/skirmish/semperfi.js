@@ -10,6 +10,9 @@ const playerHQ = "A0CommandCentre";
 const vtolPad = "A0VtolPad";
 const vtolFactory = "A0VTolFactory1";
 const sensorTower = "Sys-SensoTower02";
+const powModule = "A0PowMod1";
+const facModule = "A0FacMod1";
+const resModule = "A0ResearchModule1";
 
 // --- utility functions
 
@@ -45,6 +48,41 @@ function buildTruck(struct)
 	if (!buildDroid(struct, "Constructor", bodylist, proplist, "", DROID_CONSTRUCT, "Spade1Mk1"))
 	{
 		debug("Failed to construct new truck");
+	}
+}
+
+function buildCyborg(struct)
+{
+	// Cyborg templates are special -- their bodies, legs and weapons are linked. We should fix this one day...
+	if (!buildDroid(struct, "Cyborg Thermite", "Cyb-Bod-Thermite", "CyborgLegs", "", DROID_CYBORG, "Cyb-Wpn-Thermite"))
+	{
+		if (!buildDroid(struct, "Cyborg Flamer", "CyborgFlamerGrd", "CyborgLegs", "", DROID_CYBORG, "CyborgFlamer01"))
+		{
+			if (!buildDroid(struct, "Cyborg MG", "CyborgChain1Ground", "CyborgLegs", "", DROID_CYBORG, "CyborgChaingun"))
+			{
+				debug("Failed to construct new cyborg");
+			}
+		}
+	}
+}
+
+function buildVTOL(struct)
+{
+	var bomblist = [
+		"Bomb3-VTOL-LtINC",	// phosphor bomb
+		"Bomb4-VTOL-HvyINC",	// thermite bomb
+		"Bomb5-VTOL-Plasmite",	// plasmite bomb
+	];
+	var bodylist = [
+		    "Body7ABT", // retribution
+		    "Body8MBT", // scorpion
+		    "Body5REC", // cobra
+		    "Body4ABT", // bug
+		    "Body1REC", // viper
+	];
+	if (!buildDroid(struct, "Bomber", bodylist, "V-Tol", "", DROID_WEAPON, bomblist))
+	{
+		debug("Failed to construct new VTOL");
 	}
 }
 
@@ -210,13 +248,31 @@ function eventStructureBuilt(struct, droid)
 	{
 		eventDroidBuilt(null, struct);
 	}
+	else if (struct.stattype == POWER_GEN && droid)
+	{
+		if (isStructureAvailable(powModule, me)) // Immediately upgrade it, if possible
+		{
+			orderDroidStatsLoc(droid, DORDER_BUILD, powModule, struct.x, struct.y);
+		}
+	}
 }
 
 function eventDroidBuilt(droid, struct)
 {
 	if (struct)
 	{
-		buildTruck(struct);
+		if (struct.stattype == FACTORY)
+		{
+			buildTruck(struct);
+		}
+		else if (struct.stattype == CYBORG_FACTORY)
+		{
+			buildCyborg(struct);
+		}
+		else if (struct.stattype == VTOL_FACTORY)
+		{
+			buildVTOL(struct);
+		}
 	}
 }
 
@@ -226,21 +282,43 @@ function eventGameInit()
 
 function eventAttacked(victim, attacker)
 {
+	// TBD, for now -- SEND EVERYONE!!!
+	if (attacker)
+	{
+		var i;
+		var defenders = enumDroid(me, DROID_WEAPON);
+		for (i = 0; i < defenders.length; i++)
+		{
+			orderDroidObj(defenders[i], DORDER_ATTACK, attacker);
+		}
+		var cyborgs = enumDroid(me, DROID_CYBORG);
+		for (i = 0; i < cyborgs.length; i++)
+		{
+			orderDroidObj(cyborgs[i], DORDER_ATTACK, attacker);
+		}
+	}
 }
 
 function eventStartLevel()
 {
-	queue("conDroids");
-	queue("eventResearched");
+	// Pretend like all buildings were just produced, to initiate productions
+	var structlist = enumStruct(me);
+	for (var i = 0; i < structlist.length; i++)
+	{
+		eventStructureBuilt(structlist[i]);
+	}
+
+	// Make missing buildings
 	queue("buildFundamentals");
+
 	/*
 	if (numFactories() > 1 && isStructureAvailable(defStructs[0], me) && playerData[me].difficulty > MEDIUM)
 	{
 		dbgPlr("TRUCK RUSH!");
-		next("truckRush");
+		queue("truckRush");
 	}
 	else
 	{
-		next("buildFundamentals");
+		queue("buildFundamentals");
 	}*/
 }
