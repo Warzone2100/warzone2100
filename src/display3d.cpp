@@ -282,7 +282,7 @@ struct Blueprint
 	bool operator ==(Blueprint const &b) const { return compare(b) == 0; }
 	STRUCTURE *buildBlueprint() const  ///< Must delete after use.
 	{
-		return ::buildBlueprint(stats, pos.x, pos.y, dir, state);
+		return ::buildBlueprint(stats, pos, dir, state);
 	}
 	void renderBlueprint() const
 	{

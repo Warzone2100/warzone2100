@@ -1027,6 +1027,15 @@ bool structSetManufacture(STRUCTURE *psStruct, DROID_TEMPLATE *psTempl, QUEUE_MO
 *        John.
 */
 
+enum WallOrientation
+{
+	WallConnectNone = 0,
+	WallConnectLeft = 1,
+	WallConnectRight = 2,
+	WallConnectUp = 4,
+	WallConnectDown = 8,
+};
+
 // Orientations are:
 //
 //  0   1   2   3   4   5   6   7   8   9   A   B   C   D   E   F
@@ -1091,12 +1100,12 @@ bool isBuildableOnWalls(STRUCTURE_TYPE type)
 	return type == REF_DEFENSE || type == REF_GATE;
 }
 
-static void structFindWalls(unsigned player, int mapX, int mapY, bool aWallPresent[5][5], STRUCTURE *apsStructs[5][5])
+static void structFindWalls(unsigned player, Vector2i map, bool aWallPresent[5][5], STRUCTURE *apsStructs[5][5])
 {
 	for (int y = -2; y <= 2; ++y)
 		for (int x = -2; x <= 2; ++x)
 	{
-		STRUCTURE *psStruct = castStructure(mapTile(mapX + x, mapY + y)->psObject);
+		STRUCTURE *psStruct = castStructure(mapTile(map.x + x, map.y + y)->psObject);
 		if (psStruct != NULL && isWallCombiningStructureType(psStruct->pStructureType) && aiCheckAlliances(player, psStruct->player))
 		{
 			aWallPresent[x + 2][y + 2] = true;
@@ -1107,12 +1116,12 @@ static void structFindWalls(unsigned player, int mapX, int mapY, bool aWallPrese
 	aWallPresent[2][2] = true;
 }
 
-static void structFindWallBlueprints(int mapX, int mapY, bool aWallPresent[5][5])
+static void structFindWallBlueprints(Vector2i map, bool aWallPresent[5][5])
 {
 	for (int y = -2; y <= 2; ++y)
 		for (int x = -2; x <= 2; ++x)
 	{
-		STRUCTURE_STATS const *stats = getTileBlueprintStats(mapX + x, mapY + y);
+		STRUCTURE_STATS const *stats = getTileBlueprintStats(map.x + x, map.y + y);
 		if (stats != NULL && isWallCombiningStructureType(stats))
 		{
 			aWallPresent[x + 2][y + 2] = true;
@@ -1120,23 +1129,23 @@ static void structFindWallBlueprints(int mapX, int mapY, bool aWallPresent[5][5]
 	}
 }
 
-static bool wallBlockingTerrainJoin(int mapX, int mapY)
+static bool wallBlockingTerrainJoin(Vector2i map)
 {
-	MAPTILE *psTile = mapTile(mapX, mapY);
+	MAPTILE *psTile = mapTile(map);
 	return terrainType(psTile) == TER_WATER || terrainType(psTile) == TER_CLIFFFACE || psTile->psObject != NULL;
 }
 
-static WallOrientation structWallScanTerrain(bool aWallPresent[5][5], int mapX, int mapY)
+static WallOrientation structWallScanTerrain(bool aWallPresent[5][5], Vector2i map)
 {
 	WallOrientation orientation = structWallScan(aWallPresent, 2, 2);
 
 	if (orientation == WallConnectNone)
 	{
 		// If neutral, try choosing horizontal or vertical based on terrain, but don't change to corner type.
-		aWallPresent[2][1] = wallBlockingTerrainJoin(mapX, mapY - 1);
-		aWallPresent[2][3] = wallBlockingTerrainJoin(mapX, mapY + 1);
-		aWallPresent[1][2] = wallBlockingTerrainJoin(mapX - 1, mapY);
-		aWallPresent[3][2] = wallBlockingTerrainJoin(mapX + 1, mapY);
+		aWallPresent[2][1] = wallBlockingTerrainJoin(map + Vector2i( 0, -1));
+		aWallPresent[2][3] = wallBlockingTerrainJoin(map + Vector2i( 0,  1));
+		aWallPresent[1][2] = wallBlockingTerrainJoin(map + Vector2i(-1,  0));
+		aWallPresent[3][2] = wallBlockingTerrainJoin(map + Vector2i( 1,  0));
 		orientation = structWallScan(aWallPresent, 2, 2);
 		if ((orientation & (WallConnectLeft | WallConnectRight)) != 0 && (orientation & (WallConnectUp | WallConnectDown)) != 0)
 		{
@@ -1147,22 +1156,22 @@ static WallOrientation structWallScanTerrain(bool aWallPresent[5][5], int mapX, 
 	return orientation;
 }
 
-WallOrientation structChooseWallTypeBlueprint(int mapX, int mapY)
+static WallOrientation structChooseWallTypeBlueprint(Vector2i map)
 {
 	bool            aWallPresent[5][5];
 	STRUCTURE *     apsStructs[5][5];
 
 	// scan around the location looking for walls
 	memset(aWallPresent, 0, sizeof(aWallPresent));
-	structFindWalls(selectedPlayer, mapX, mapY, aWallPresent, apsStructs);
-	structFindWallBlueprints(mapX, mapY, aWallPresent);
+	structFindWalls(selectedPlayer, map, aWallPresent, apsStructs);
+	structFindWallBlueprints(map, aWallPresent);
 
 	// finally return the type for this wall
-	return structWallScanTerrain(aWallPresent, mapX, mapY);
+	return structWallScanTerrain(aWallPresent, map);
 }
 
 // Choose a type of wall for a location - and update any neighbouring walls
-static WallOrientation structChooseWallType(unsigned player, int mapX, int mapY)
+static WallOrientation structChooseWallType(unsigned player, Vector2i map)
 {
 	bool		aWallPresent[5][5];
 	STRUCTURE	*psStruct;
@@ -1170,7 +1179,7 @@ static WallOrientation structChooseWallType(unsigned player, int mapX, int mapY)
 
 	// scan around the location looking for walls
 	memset(aWallPresent, 0, sizeof(aWallPresent));
-	structFindWalls(player, mapX, mapY, aWallPresent, apsStructs);
+	structFindWalls(player, map, aWallPresent, apsStructs);
 
 	// now make sure that all the walls around this one are OK
 	for (int x = 1; x <= 3; ++x)
@@ -1205,7 +1214,7 @@ static WallOrientation structChooseWallType(unsigned player, int mapX, int mapY)
 	}
 
 	// finally return the type for this wall
-	return structWallScanTerrain(aWallPresent, mapX, mapY);
+	return structWallScanTerrain(aWallPresent, map);
 }
 
 
@@ -1350,7 +1359,7 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 		WallOrientation wallOrientation = WallConnectNone;
 		if (!FromSave && isWallCombiningStructureType(pStructureType))
 		{
-			wallOrientation = structChooseWallType(player, map_coord(x), map_coord(y));  // This makes neighbouring walls match us, even if we're a hardpoint, not a wall.
+			wallOrientation = structChooseWallType(player, map_coord(Vector2i(x, y)));  // This makes neighbouring walls match us, even if we're a hardpoint, not a wall.
 		}
 
 		// allocate memory for and initialize a structure object
@@ -1744,17 +1753,17 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 	return psBuilding;
 }
 
-STRUCTURE *buildBlueprint(STRUCTURE_STATS const *psStats, int32_t x, int32_t y, uint16_t direction, STRUCT_STATES state)
+STRUCTURE *buildBlueprint(STRUCTURE_STATS const *psStats, Vector2i xy, uint16_t direction, STRUCT_STATES state)
 {
 	STRUCTURE *blueprint;
 
 	ASSERT_OR_RETURN(NULL, psStats != NULL, "No blueprint stats");
 	ASSERT_OR_RETURN(NULL, psStats->pIMD[0] != NULL, "No blueprint model for %s", getStatName(psStats));
 
-	Vector3i pos(x, y, INT32_MIN);
+	Vector3i pos(xy, INT32_MIN);
 	Rotation rot((direction + 0x2000)&0xC000, 0, 0);  // Round direction to nearest 90°.
 
-	StructureBounds b = getStructureBounds(psStats, Vector2i(x, y), direction);
+	StructureBounds b = getStructureBounds(psStats, xy, direction);
 	for (int j = 0; j <= b.size.y; ++j)
 		for (int i = 0; i <= b.size.x; ++i)
 	{
@@ -1765,7 +1774,7 @@ STRUCTURE *buildBlueprint(STRUCTURE_STATS const *psStats, int32_t x, int32_t y, 
 	std::vector<iIMDShape *> const *pIMD = &psStats->pIMD;
 	if (IsStatExpansionModule(psStats))
 	{
-		STRUCTURE *baseStruct = castStructure(worldTile(x, y)->psObject);
+		STRUCTURE *baseStruct = castStructure(worldTile(xy)->psObject);
 		if (baseStruct != NULL)
 		{
 			int baseModuleNumber = numStructureModules(baseStruct)*2 + 1;  // *2+1 because even-numbered IMDs are structures, odd-numbered IMDs are just the modules.
@@ -1817,7 +1826,7 @@ STRUCTURE *buildBlueprint(STRUCTURE_STATS const *psStats, int32_t x, int32_t y, 
 	// Rotate wall if needed.
 	if (blueprint->pStructureType->type == REF_WALL || blueprint->pStructureType->type == REF_GATE)
 	{
-		WallOrientation scanType = structChooseWallTypeBlueprint(map_coord(blueprint->pos.x), map_coord(blueprint->pos.y));
+		WallOrientation scanType = structChooseWallTypeBlueprint(map_coord(removeZ(blueprint->pos)));
 		unsigned type = wallType(scanType);
 		if (scanType != WallConnectNone)
 		{

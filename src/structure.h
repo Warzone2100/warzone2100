@@ -126,7 +126,7 @@ extern void createTestStructures(void);
 STRUCTURE *buildStructure(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y, UDWORD player, bool FromSave);
 STRUCTURE *buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y, uint16_t direction, UDWORD player, bool FromSave);
 /// Create a blueprint structure, with just enough information to render it
-STRUCTURE *buildBlueprint(STRUCTURE_STATS const *psStats, int32_t x, int32_t y, uint16_t direction, STRUCT_STATES state);
+STRUCTURE *buildBlueprint(STRUCTURE_STATS const *psStats, Vector2i xy, uint16_t direction, STRUCT_STATES state);
 /* The main update routine for all Structures */
 void structureUpdate(STRUCTURE *psBuilding, bool mission);
 
@@ -391,8 +391,6 @@ bool IsStatExpansionModule(STRUCTURE_STATS const *psStats);
 /// is this a blueprint and not a real structure?
 bool structureIsBlueprint(STRUCTURE *psStructure);
 bool isBlueprint(BASE_OBJECT *psObject);
-
-WallOrientation structChooseWallTypeBlueprint(int mapX, int mapY);  ///< Which orientation should a wall blueprint at this position have?
 
 /*checks that the structure stats have loaded up as expected - must be done after
 all StructureStats parts have been loaded*/

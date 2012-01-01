@@ -356,13 +356,4 @@ typedef UPGRADE		REPAIR_FACILITY_UPGRADE;
 typedef UPGRADE		POWER_UPGRADE;
 typedef UPGRADE		REARM_UPGRADE;
 
-enum WallOrientation
-{
-	WallConnectNone = 0,
-	WallConnectLeft = 1,
-	WallConnectRight = 2,
-	WallConnectUp = 4,
-	WallConnectDown = 8,
-};
-
 #endif // __INCLUDED_STRUCTUREDEF_H__
