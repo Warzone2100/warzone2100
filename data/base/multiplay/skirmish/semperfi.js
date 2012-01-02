@@ -42,6 +42,7 @@ function buildAttacker(struct)
 	// For now, only build long range stuff, easier to handle for an AI. Reusing bodies from
 	// the VTOLs -- reconsider this.
 	var bodylist = [
+		"Body14SUP", // dragon
 		"Body7ABT", // retribution
 		"Body6SUPP", // panther
 		"Body8MBT", // scorpion
@@ -63,7 +64,7 @@ function buildAttacker(struct)
 		"MG2Mk1", // twin mg
 		"MG1Mk1", // mg, initial weapon
 	];
-	if (!buildDroid(struct, "Ranged Attacker", bodylist, proplist, "", DROID_WEAPON, weaplist))
+	if (!buildDroid(struct, "Ranged Attacker", bodylist, proplist, "", DROID_WEAPON, weaplist, weaplist))
 	{
 		debug("Failed to construct new attacker");
 	}
@@ -220,6 +221,35 @@ function buildFundamentals()
 	}
 }
 
+function maintenance()
+{
+	// Salvage unusable buildings?
+	var reslist = enumResearch();
+	if (reslist.length == 0)
+	{
+		// No research left, salvage res lab
+		var lablist = enumStruct(me, resLab);
+		var builders = enumDroid(me, DROID_CONSTRUCT);
+		for (i = 0; i < lablist.length; i++)
+		{
+			var lab = lablist[i];
+			// TODO - find closest truck!
+			for (var j = 0; j < builders.length; j++)
+			{
+				var droid = builders[j];
+				if (droid.order != DORDER_DEMOLISH && droid.order != DORDER_BUILD
+				    && droid.order != DORDER_LINEBUILD && !droid.busy)
+				{
+					dbgObj(droid, "Ordered to salvage research lab");
+					orderDroidObj(droid, DORDER_DEMOLISH, lab);
+					droid.busy = true;
+					break;
+				}
+			}
+		}
+	}
+}
+
 // --- game events
 
 function eventResearched(tech, labparam)
@@ -249,17 +279,17 @@ function eventResearched(tech, labparam)
 			var found = pursueResearch(lab, techlist);
 			if (!found)
 			{
-				// Find a random research item
-				var reslist = enumResearch();
-				if (reslist.length == 0)
+				// Look for missile tech (and test string parameter)
+				found = pursueResearch(lab, "R-Wpn-Missile-Accuracy02");
+				if (!found)
 				{
-					// No research left, salvage res lab
-					debug("TBD - salvage research lab");
-				}
-				else
-				{
-					var idx = Math.floor(Math.random() * reslist.length);
-					pursueResearch(lab, reslist[idx].name);
+					// Find a random research item
+					var reslist = enumResearch();
+					if (reslist.length > 0)
+					{
+						var idx = Math.floor(Math.random() * reslist.length);
+						pursueResearch(lab, reslist[idx].name);
+					}
 				}
 			}
 		}
@@ -327,18 +357,21 @@ function eventDroidBuilt(droid, struct)
 			if (attackers.length > 20)
 			{
 				// Attack!
+				dbgPlr("ATTACK!!");
 				for (var i = 0; i < maxPlayers; i++)
 				{
 					if (!allianceExistsBetween(me, i))
 					{
 						for (var j = 0; j < attackers.length; j++)
 						{
-							orderDroidLoc(attackers[i], DORDER_SCOUT, startPositions[i].x, startPositions[i].y);
+							orderDroidLoc(attackers[j], DORDER_SCOUT, startPositions[i].x, startPositions[i].y);
+							dbgObj(attackers[j], "sent to attack");
 						}
 						var vtols = enumGroup(vtolGroup);
 						for (var j = 0; j < vtols.length; j++)
 						{
-							orderDroidLoc(vtols[i], DORDER_SCOUT, startPositions[i].x, startPositions[i].y);
+							orderDroidLoc(vtols[j], DORDER_SCOUT, startPositions[i].x, startPositions[i].y);
+							dbgObj(vtols[j], "sent to attack");
 						}
 						return;
 					}
@@ -359,6 +392,7 @@ function eventAttacked(victim, attacker)
 	// TBD, for now -- SEND EVERYONE!!!
 	if (attacker && victim && victim.type == STRUCTURE && attacker.player != me)
 	{
+		dbgPlr("Defend!");
 		var i;
 		var defenders = enumDroid(me, DROID_WEAPON);
 		for (i = 0; i < defenders.length; i++)
@@ -384,6 +418,9 @@ function eventStartLevel()
 
 	// Make missing buildings
 	queue("buildFundamentals");
+
+	// Maintenance calls - to fix quirks
+	setTimer("maintenance", 1000 * 60 * 2); // every 2 minutes, call it to check if anything left to do
 
 	/*
 	if (numFactories() > 1 && isStructureAvailable(defStructs[0], me) && playerData[me].difficulty > MEDIUM)

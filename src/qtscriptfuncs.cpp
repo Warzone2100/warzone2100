@@ -146,6 +146,7 @@ QScriptValue convFeature(FEATURE *psFeature, QScriptEngine *engine)
 //;;   \item[DORDER_REPAIR] Order a droid to repair something.
 //;;   \item[DORDER_RETREAT] Order a droid to retreat back to HQ.
 //;;   \item[DORDER_PATROL] Order a droid to patrol.
+//;;   \item[DORDER_DEMOLISH] Order a droid to demolish something.
 //;;  \end{description}
 //;; \item[action] The current action of the droid. This is how it intends to carry out its plan. The
 //;; C++ code may change the action frequently as it tries to carry out its order. You never want to set
@@ -544,8 +545,11 @@ static QScriptValue js_componentAvailable(QScriptContext *context, QScriptEngine
 	return QScriptValue(avail);
 }
 
-static int get_first_available_component(int player, const QScriptValue &list, COMPONENT_TYPE type)
+static int get_first_available_component(STRUCTURE *psFactory, const QScriptValue &list, COMPONENT_TYPE type)
 {
+	const int player = psFactory->player;
+	const int capacity = psFactory->pFunctionality->factory.capacity; // check body size
+
 	if (list.isArray())
 	{
 		int length = list.property("length").toInt32();
@@ -554,20 +558,28 @@ static int get_first_available_component(int player, const QScriptValue &list, C
 		{
 			QString compName = list.property(k).toString();
 			int result = getCompFromName(type, compName.toUtf8().constData());
-			if (result < 0) debug(LOG_ERROR, "No such component: %s", compName.toUtf8().constData());
-			if (apCompLists[player][type][result] == AVAILABLE)
+			if (result >= 0 && apCompLists[player][type][result] == AVAILABLE
+			    && (asBodyStats[result].size <= capacity || type != COMP_BODY))
 			{
 				return result; // found one!
+			}
+			if (result < 0)
+			{
+				debug(LOG_ERROR, "No such component: %s", compName.toUtf8().constData());
 			}
 		}
 	}
 	else if (list.isString())
 	{
 		int result = getCompFromName(type, list.toString().toUtf8().constData());
-		if (result < 0) debug(LOG_ERROR, "No such component: %s", list.toString().toUtf8().constData());
-		if (apCompLists[player][type][result] == AVAILABLE)
+		if (result >= 0 && apCompLists[player][type][result] == AVAILABLE
+		    && (asBodyStats[result].size <= capacity || type != COMP_BODY))
 		{
 			return result; // found it!
+		}
+		if (result < 0)
+		{
+			debug(LOG_ERROR, "No such component: %s", list.toString().toUtf8().constData());
 		}
 	}
 	return -1; // no available component found in list
@@ -596,14 +608,14 @@ static QScriptValue js_buildDroid(QScriptContext *context, QScriptEngine *engine
 
 	memset(psTemplate->asParts, 0, sizeof(psTemplate->asParts)); // reset to defaults
 	memset(psTemplate->asWeaps, 0, sizeof(psTemplate->asWeaps));
-	int body = get_first_available_component(player, context->argument(2), COMP_BODY);
+	int body = get_first_available_component(psStruct, context->argument(2), COMP_BODY);
 	if (body < 0)
 	{
 		debug(LOG_SCRIPT, "Wanted to build %s at %s, but body type all unavailable",
 		      templName.toUtf8().constData(), objInfo(psStruct));
 		return QScriptValue(false); // no component available
 	}
-	int prop = get_first_available_component(player, context->argument(3), COMP_PROPULSION);
+	int prop = get_first_available_component(psStruct, context->argument(3), COMP_PROPULSION);
 	if (prop < 0)
 	{
 		debug(LOG_SCRIPT, "Wanted to build %s at %s, but propulsion type all unavailable",
@@ -614,6 +626,7 @@ static QScriptValue js_buildDroid(QScriptContext *context, QScriptEngine *engine
 	psTemplate->asParts[COMP_PROPULSION] = prop;
 
 	psTemplate->numWeaps = 0;
+	numTurrets = MIN(numTurrets, asBodyStats[body].weaponSlots); // Restrict max no. turrets
 	for (int i = 0; i < numTurrets; i++)
 	{
 		context->argument(6 + i).toString();
@@ -626,7 +639,7 @@ static QScriptValue js_buildDroid(QScriptContext *context, QScriptEngine *engine
 		case DROID_TRANSPORTER:
 		case DROID_DEFAULT:
 		case DROID_CYBORG_SUPER:
-			j = get_first_available_component(player, context->argument(6 + i), COMP_WEAPON);
+			j = get_first_available_component(psStruct, context->argument(6 + i), COMP_WEAPON);
 			if (j < 0)
 			{
 				debug(LOG_SCRIPT, "Wanted to build %s at %s, but no weapon unavailable", 
@@ -657,7 +670,7 @@ static QScriptValue js_buildDroid(QScriptContext *context, QScriptEngine *engine
 		case DROID_ANY:
 			break; // wtf
 		}
-		j = get_first_available_component(player, context->argument(6 + i), compType);
+		j = get_first_available_component(psStruct, context->argument(6 + i), compType);
 		if (j < 0)
 		{
 			debug(LOG_SCRIPT, "Wanted to build %s at %s, but weapon unavailable", 
@@ -1572,6 +1585,7 @@ bool registerFunctions(QScriptEngine *engine)
 	engine->globalObject().setProperty("DORDER_REPAIR", DORDER_REPAIR, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("DORDER_RETREAT", DORDER_RETREAT, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("DORDER_PATROL", DORDER_PATROL, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("DORDER_DEMOLISH", DORDER_DEMOLISH, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("COMMAND", IDRET_COMMAND, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("OPTIONS", IDRET_COMMAND, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("BUILD", IDRET_BUILD, QScriptValue::ReadOnly | QScriptValue::Undeletable);
