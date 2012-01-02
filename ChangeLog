@@ -4,6 +4,7 @@ master_201xxxxx
    * Change: Don't give back power when a power generator gets destroyed (commit:7b66301950aa566978c71fc04104ff18c297183a)
    * Fix: Move units out of the way before building something (commit:9534b4c0bdef54164c8db941d50139048758676d)
    * Fix: Direct fire target prediction (commit:acd0587f829bfdde0dc7aa30dcab5fafe8875d9b)
+   * Fix: Homing projectiles (commit:e72787358112170b090efd341617ffe3743c973d, commit:35d3fec1469e9129e02461292c819251afac853d
    * Fix: Loading of units in transporters (ticket:2889, ticket:2959, commit:93a6d7ba7489ae8a6c083c6276301dc13ca22824)
    * Fix: Unload units closer to their transporter (commit:1646499fcbda8dc08e54df8fce7db233ffa40b84)
    * Fix: Properly abort research after cancelling (ticket:2977, commit:4b355aa06011689440b21a7dccc7e409799c5ae8)
@@ -12,10 +13,18 @@ master_201xxxxx
    * Fix: Don't allow placing blueprints next to each other (ticket:2999, commit:79d8d2251e07bba2c2dcb9ed2751841086663f89)
    * Fix: Don't crash when clicking fast on a transporter (commit:a35ff1e8fe911fca050ce0d9e7e19e7c511db501)
    * Fix: Reset components between games (commit:4e66209506342112987b9085358dd1835a31c7f3)
+   * Fix: Allow queuing of multiple modules (ticket:2997, commit:3dfc823394e39364f995efdee1af9f8fef688684)
+   * Fix: Queuing of oil barrels and artifacts (ticket:2725, commit:ade80e83c7e1b3eb9fc3da0207e908fb815885b0)
+ * Savegames:
+   * Fix: Structure reload status (ticket:1438, commit:c7015df7142ba28515830559337b476ca4af44ea)
+   * Fix: Droid order queues (ticket:2752, ticket:3016, commit:c5de04d339c5fd59e7e2afd5b4ff3feda51045c9
  * Pathfinding:
    * Fix: Ignore buildings on start or destination (ticket:2978, commit:0119eda53f11d2aa5d3e3ccc82203c6657812039)
    * Fix: Don't pathfind through satellite uplinks (commit:1e2c71cccd8b8d04312d56ad19c022c801dabb0a)
    * Fix: Actually use all waypoints (commit:1cc62d6d9d9d95354e10522c8618423565779b89, commit:ca0c37acfdbb4f495fb8ce4b52c6e0f32344bdd7)
+ * Graphics:
+   * Fix: Recoil animation matches the fired projectiles (commit:5e1f159d4bc3a1256db63cd6bacbcb18492fffd0)
+   * Fix: Projectile graphics (ticket:354, commit:c93bfb237dc5850764ac0b123ca4ffe0e4f99ebe, commit:82e00bf7747af4962a32b67e4215d40298bbf9b3, commit:11cd71892d86264e627a6f0050265ccf61981f44)
  * UI:
    * Change: Add a short delay for the hover map preview (commit:85974cab80890ae668219ddc5354f80bc1a63185)
    * Change: Make UI respond instantly when holding/cancelling production/research (commit:5c2cf9fa0634612b44b0922ab9b5e8d982c90317)
