@@ -1753,7 +1753,7 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 	return psBuilding;
 }
 
-STRUCTURE *buildBlueprint(STRUCTURE_STATS const *psStats, Vector2i xy, uint16_t direction, STRUCT_STATES state)
+STRUCTURE *buildBlueprint(STRUCTURE_STATS const *psStats, Vector2i xy, uint16_t direction, unsigned moduleIndex, STRUCT_STATES state)
 {
 	STRUCTURE *blueprint;
 
@@ -1777,9 +1777,13 @@ STRUCTURE *buildBlueprint(STRUCTURE_STATS const *psStats, Vector2i xy, uint16_t 
 		STRUCTURE *baseStruct = castStructure(worldTile(xy)->psObject);
 		if (baseStruct != NULL)
 		{
-			int baseModuleNumber = numStructureModules(baseStruct)*2 + 1;  // *2+1 because even-numbered IMDs are structures, odd-numbered IMDs are just the modules.
+			if (moduleIndex == 0)
+			{
+				moduleIndex = nextModuleToBuild(baseStruct, 0);
+			}
+			int baseModuleNumber = moduleIndex*2 - 1;  // *2-1 because even-numbered IMDs are structures, odd-numbered IMDs are just the modules.
 			std::vector<iIMDShape *> const *basepIMD = &baseStruct->pStructureType->pIMD;
-			if (baseModuleNumber < basepIMD->size())
+			if ((unsigned)baseModuleNumber < basepIMD->size())
 			{
 				// Draw the module.
 				moduleNumber = baseModuleNumber;

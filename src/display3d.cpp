@@ -263,10 +263,11 @@ static UDWORD	destTileX=0,destTileY=0;
 
 struct Blueprint
 {
-	Blueprint(STRUCTURE_STATS const *stats, Vector2i pos, uint16_t dir, STRUCT_STATES state)
+	Blueprint(STRUCTURE_STATS const *stats, Vector2i pos, uint16_t dir, uint32_t index, STRUCT_STATES state)
 		: stats(stats)
 		, pos(pos)
 		, dir(dir)
+		, index(index)
 		, state(state)
 	{}
 	int compare(Blueprint const &b) const
@@ -275,6 +276,7 @@ struct Blueprint
 		if (pos.x != b.pos.x) return pos.x < b.pos.x? -1 : 1;
 		if (pos.y != b.pos.y) return pos.y < b.pos.y? -1 : 1;
 		if (dir != b.dir) return dir < b.dir? -1 : 1;
+		if (index != b.index) return index < b.index? -1 : 1;
 		if (state != b.state) return state < b.state? -1 : 1;
 		return 0;
 	}
@@ -282,7 +284,7 @@ struct Blueprint
 	bool operator ==(Blueprint const &b) const { return compare(b) == 0; }
 	STRUCTURE *buildBlueprint() const  ///< Must delete after use.
 	{
-		return ::buildBlueprint(stats, pos, dir, state);
+		return ::buildBlueprint(stats, pos, dir, index, state);
 	}
 	void renderBlueprint() const
 	{
@@ -297,6 +299,7 @@ struct Blueprint
 	STRUCTURE_STATS const *stats;
 	Vector2i pos;
 	uint16_t dir;
+	uint32_t index;
 	STRUCT_STATES state;
 };
 
@@ -344,7 +347,7 @@ static Blueprint getTileBlueprint(int mapX, int mapY)
 		}
 	}
 
-	return Blueprint(NULL, Vector2i(), 0, SS_BEING_BUILT);
+	return Blueprint(NULL, Vector2i(), 0, 0, SS_BEING_BUILT);
 }
 
 STRUCTURE *getTileBlueprintStructure(int mapX, int mapY)
@@ -1540,14 +1543,14 @@ void displayStaticObjects( void )
 	pie_SetDepthOffset(0.0f);
 }
 
-static bool tileHasIncompatibleStructure(MAPTILE const *tile, STRUCTURE_STATS const *stats)
+static bool tileHasIncompatibleStructure(MAPTILE const *tile, STRUCTURE_STATS const *stats, int moduleIndex)
 {
 	STRUCTURE *psStruct = castStructure(tile->psObject);
 	if (psStruct == NULL)
 	{
 		return false;
 	}
-	if (psStruct->status == SS_BEING_BUILT)
+	if (psStruct->status == SS_BEING_BUILT && nextModuleToBuild(psStruct, -1) >= moduleIndex)
 	{
 		return true;
 	}
@@ -1574,18 +1577,18 @@ static void drawLineBuild(STRUCTURE_STATS const *psStats, int left, int right, i
 	{
 		for (int j = up; j <= down; ++j)
 		{
-			if (tileHasIncompatibleStructure(mapTile(i,j), psStats))
+			if (tileHasIncompatibleStructure(mapTile(i,j), psStats, 0))
 			{
 				continue; // construction has started
 			}
 			Vector2i pos(world_coord(i) + world_coord(1)/2, world_coord(j) + world_coord(1)/2);
-			Blueprint blueprint(psStats, pos, direction, state);
+			Blueprint blueprint(psStats, pos, direction, 0, state);
 			blueprints.push_back(blueprint);
 		}
 	}
 }
 
-static void renderBuildOrder(DROID_ORDER_DATA const &order, STRUCT_STATES state)
+static void renderBuildOrder(DroidOrder const &order, STRUCT_STATES state)
 {
 	STRUCTURE_STATS const *stats;
 	Vector2i pos = order.pos;
@@ -1622,9 +1625,9 @@ static void renderBuildOrder(DROID_ORDER_DATA const &order, STRUCT_STATES state)
 
 		drawLineBuild(stats, left, right, up, down, order.direction, state);
 	}
-	if ((order.type == DORDER_BUILD || order.type == DORDER_BUILDMODULE) && !tileHasIncompatibleStructure(mapTile(map_coord(pos)), stats))
+	if ((order.type == DORDER_BUILD || order.type == DORDER_BUILDMODULE) && !tileHasIncompatibleStructure(mapTile(map_coord(pos)), stats, order.index))
 	{
-		Blueprint blueprint(stats, pos, order.direction, state);
+		Blueprint blueprint(stats, pos, order.direction, order.index, state);
 		blueprints.push_back(blueprint);
 	}
 }
@@ -1679,7 +1682,7 @@ void displayBlueprints(void)
 				}
 				// a single building
 				Vector2i pos(world_coord(sBuildDetails.x)+world_coord(width)/2, world_coord(sBuildDetails.y)+world_coord(height)/2);
-				Blueprint blueprint((STRUCTURE_STATS *)sBuildDetails.psStats, pos, (player.r.y + 0x2000)&0xC000, state);
+				Blueprint blueprint((STRUCTURE_STATS *)sBuildDetails.psStats, pos, (player.r.y + 0x2000)&0xC000, 0, state);
 				blueprints.push_back(blueprint);
 			}
 		}

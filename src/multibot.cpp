@@ -92,6 +92,10 @@ struct QueuedDroidInfo
 					if (pos2.x != z.pos2.x)               return pos2.x < z.pos2.x ? -1 : 1;
 					if (pos2.y != z.pos2.y)               return pos2.y < z.pos2.y ? -1 : 1;
 				}
+				if (order == DORDER_BUILDMODULE)
+				{
+					if (index != z.index)                 return index < z.index ? -1 : 1;
+				}
 				if (add != z.add)             return add < z.add ? -1 : 1;
 				break;
 			case SecondaryOrder:
@@ -113,6 +117,7 @@ struct QueuedDroidInfo
 		uint32_t    y;          // if (subType == LocOrder)
 		uint32_t    structRef;  // if (order == DORDER_BUILD || order == DORDER_LINEBUILD)
 		uint16_t    direction;  // if (order == DORDER_BUILD || order == DORDER_LINEBUILD)
+		uint32_t    index;      // if (order == DORDER_BUILDMODULE)
 		Vector2i    pos2;       // if (order == DORDER_LINEBUILD)
 		bool        add;
 	// subType == SecondaryOrder
@@ -489,6 +494,10 @@ static void NETQueuedDroidInfo(QueuedDroidInfo *info)
 			{
 				NETauto(&info->pos2);
 			}
+			if (info->order == DORDER_BUILDMODULE)
+			{
+				NETauto(&info->index);
+			}
 			NETbool(&info->add);
 			break;
 		case SecondaryOrder:
@@ -542,6 +551,7 @@ DROID_ORDER_DATA infoToOrderData(QueuedDroidInfo const &info, STRUCTURE_STATS co
 	sOrder.pos = info.pos;
 	sOrder.pos2 = info.pos2;
 	sOrder.direction = info.direction;
+	sOrder.index = info.index;
 	sOrder.psObj = processDroidTarget(info.destType, info.destId);
 	sOrder.psStats = const_cast<STRUCTURE_STATS *>(psStats);
 
@@ -585,6 +595,10 @@ void sendDroidInfo(DROID *psDroid, DroidOrder const &order, bool add)
 	if (order.type == DORDER_LINEBUILD)
 	{
 		info.pos2 = order.pos2;
+	}
+	if (order.type == DORDER_BUILDMODULE)
+	{
+		info.index = order.index;
 	}
 
 	info.add = add;

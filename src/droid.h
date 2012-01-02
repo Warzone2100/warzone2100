@@ -243,9 +243,8 @@ extern bool checkDroidsBuilding(STRUCTURE *psStructure);
 demolishing the specified structure - returns true if finds one*/
 extern bool checkDroidsDemolishing(STRUCTURE *psStructure);
 
-/* checks the structure for type and capacity and orders the droid to build
-a module if it can - returns true if order is set */
-extern bool buildModule(STRUCTURE *psStruct);
+/// Returns the next module which can be built after lastOrderedModule, or returns 0 if not possible.
+int nextModuleToBuild(STRUCTURE const *psStruct, int lastOrderedModule);
 
 /*Deals with building a module - checking if any droid is currently doing this
  - if so, helping to build the current one*/

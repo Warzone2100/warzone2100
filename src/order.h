@@ -160,6 +160,6 @@ void orderClearTargetFromDroidList(DROID *psDroid, BASE_OBJECT *psTarget);
 extern DROID_ORDER chooseOrderLoc(DROID *psDroid, UDWORD x,UDWORD y, bool altOrder);
 
 /** \brief Chooses an order from an object. */
-extern DROID_ORDER chooseOrderObj(DROID *psDroid, BASE_OBJECT *psObj, bool altOrder);
+DroidOrder chooseOrderObj(DROID *psDroid, BASE_OBJECT *psObj, bool altOrder);
 
 #endif // __INCLUDED_SRC_ORDER_H__
