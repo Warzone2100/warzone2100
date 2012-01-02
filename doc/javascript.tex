@@ -84,5 +84,21 @@ multiple functions and widely used throughout, so it is better to learn about th
 
 \input{functions}
 
+\section{Gotchas / Bugs}
+
+\subsection{Object states}
+Most object states that are changed from the scripts are not in fact changed, but queued up to be synchronized
+among clients. This means that you cannot check the state later in the same script invokation and expect it to
+have changed. Instead, if for example you want to mark droids that have been ordered to do something, you can
+mark them by adding a custom property. Note that this property will not be remembered when it goes out of scope.
+
+\subsection{Early research}
+You cannot set research topics for research labs directly from eventStartLevel. Instead, queue up a function
+call to set it at some later frame.
+
+\subsection{Cyborg construction}
+Cyborg components are inter-linked, and cannot be passed in as lists as you can with ordinary droids, even
+though they might look that way.
+
 \end{document}
 
