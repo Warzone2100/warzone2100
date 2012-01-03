@@ -953,6 +953,8 @@ void actionUpdateDroid(DROID *psDroid)
 				eventFireCallbackTrigger((TRIGGER_TYPE)CALL_DROID_REACH_LOCATION);
 				psScrCBOrderDroid = NULL;
 				psScrCBOrder = DORDER_NONE;
+
+				triggerEventDroidIdle(psDroid);
 			}
 		}
 		//added multiple weapon check

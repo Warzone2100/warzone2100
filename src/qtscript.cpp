@@ -545,6 +545,23 @@ bool triggerEvent(SCRIPT_TRIGGER_TYPE trigger)
 	return true;
 }
 
+//__ \subsection{eventDroidIdle(droid)} A droid should be given new orders.
+bool triggerEventDroidIdle(DROID *psDroid)
+{
+	for (int i = 0; i < scripts.size(); ++i)
+	{
+		QScriptEngine *engine = scripts.at(i);
+		int player = engine->globalObject().property("me").toInt32();
+		if (player == psDroid->player)
+		{
+			QScriptValueList args;
+			args += convDroid(psDroid, engine);
+			callFunction(engine, "eventDroidIdle", args);
+		}
+	}
+	return true;
+}
+
 //__ \subsection{eventDroidBuilt(droid[, structure])}
 //__ An event that is run every time a droid is built. The structure parameter is set
 //__ if the droid was produced in a factory.

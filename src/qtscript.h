@@ -73,8 +73,6 @@ bool triggerEventDroidBuilt(DROID *psDroid, STRUCTURE *psFactory);
 bool triggerEventAttacked(BASE_OBJECT *psVictim, BASE_OBJECT *psAttacker);
 bool triggerEventResearched(RESEARCH *psResearch, STRUCTURE *psStruct, int player);
 bool triggerEventStructBuilt(STRUCTURE *psStruct, DROID *psDroid);
-
-// bool triggerEventReachedLocation(ORDER order, DROID *psDroid);
-// ...
+bool triggerEventDroidIdle(DROID *psDroid);
 
 #endif

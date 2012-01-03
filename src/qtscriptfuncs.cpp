@@ -1497,6 +1497,17 @@ static QScriptValue js_isVTOL(QScriptContext *context, QScriptEngine *engine)
 	return QScriptValue(isVtolDroid(psDroid));
 }
 
+//-- \subsection{safeDest(player, x, y)} Returns true if given player is safe from hostile fire at
+//-- the given location, to the best of that player's map knowledge.
+static QScriptValue js_safeDest(QScriptContext *context, QScriptEngine *engine)
+{
+	int player = context->argument(0).toInt32();
+	int x = context->argument(1).toInt32();
+	int y = context->argument(2).toInt32();
+	SCRIPT_ASSERT(context, tileOnMap(x, y), "Out of bounds coordinates(%d, %d)", x, y);
+	return QScriptValue(!(auxTile(x, y, player) & AUXBITS_DANGER));
+}
+
 //-- \subsection{hackNetOff()}
 //-- Turn off network transmissions. FIXME - find a better way.
 static QScriptValue js_hackNetOff(QScriptContext *, QScriptEngine *)
@@ -1554,6 +1565,7 @@ bool registerFunctions(QScriptEngine *engine)
 	engine->globalObject().setProperty("buildDroid", engine->newFunction(js_buildDroid));
 	engine->globalObject().setProperty("componentAvailable", engine->newFunction(js_componentAvailable));
 	engine->globalObject().setProperty("isVTOL", engine->newFunction(js_isVTOL));
+	engine->globalObject().setProperty("safeDest", engine->newFunction(js_safeDest));
 
 	// Functions that operate on the current player only
 	engine->globalObject().setProperty("centreView", engine->newFunction(js_centreView));

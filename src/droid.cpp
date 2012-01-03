@@ -83,6 +83,7 @@
 #include "combat.h"
 #include "scriptfuncs.h"			//for ThreatInRange()
 #include "template.h"
+#include "qtscript.h"
 
 #define DEFAULT_RECOIL_TIME	(GAME_TICKS_PER_SEC/4)
 #define	DROID_DAMAGE_SPREAD	(16 - rand()%32)
@@ -126,6 +127,8 @@ void cancelBuild(DROID *psDroid)
 		eventFireCallbackTrigger((TRIGGER_TYPE)CALL_DROID_REACH_LOCATION);
 		psScrCBOrderDroid = NULL;
 		psScrCBOrder = DORDER_NONE;
+
+		triggerEventDroidIdle(psDroid);
 	}
 }
 
