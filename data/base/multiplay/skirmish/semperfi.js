@@ -18,6 +18,7 @@ const resModule = "A0ResearchModule1";
 
 var attackGroup;
 var vtolGroup;
+var attackRun = 0;
 
 // --- utility functions
 
@@ -353,14 +354,23 @@ function eventDroidBuilt(droid, struct)
 			groupAddDroid(attackGroup, droid);
 
 			// HUUUGE hack here :) -- naive attack code nested up in here, 'cos i'm so lazy
+			// Only attack once every four minutes
 			var attackers = enumGroup(attackGroup);
-			if (attackers.length > 20)
+			if (attackers.length > 20 && gameTime > attackRun + 4 * 60 * 1000)
 			{
-				// Attack!
-				dbgPlr("ATTACK!!");
+				// Attack! Find a random enemy, since that is more fun.
+				var numEnemies = 0;
 				for (var i = 0; i < maxPlayers; i++)
 				{
 					if (!allianceExistsBetween(me, i))
+					{
+						numEnemies++; // count 'em, then kill 'em :)
+					}
+				}
+				var selectedEnemy = Math.round(Math.random() * (numEnemies - 1));
+				for (var i = 0; i < maxPlayers; i++)
+				{
+					if (!allianceExistsBetween(me, i) && selectedEnemy === 0)
 					{
 						for (var j = 0; j < attackers.length; j++)
 						{
@@ -373,8 +383,11 @@ function eventDroidBuilt(droid, struct)
 							orderDroidLoc(vtols[j], DORDER_SCOUT, startPositions[i].x, startPositions[i].y);
 							dbgObj(vtols[j], "sent to attack");
 						}
+						dbgPlr("ATTACKING player " + i);
+						attackRun = gameTime;
 						return;
 					}
+					selectedEnemy--; // not this enemy, but maybe next one?
 				}
 			}
 		}
@@ -415,6 +428,7 @@ function eventStartLevel()
 	{
 		eventStructureBuilt(structlist[i]);
 	}
+	attackRun = gameTime;
 
 	// Make missing buildings
 	queue("buildFundamentals");
