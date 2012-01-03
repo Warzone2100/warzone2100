@@ -52,7 +52,6 @@ R-Cyborg-Hvywpn-TK,Cyb-Hvybod-TK,BODY,0,0,2
 R-Wpn-Cannon1Mk1,CyborgCannonGrd,BODY,0,0,2
 R-Wpn-MG1Mk1,CyborgChain1Ground,BODY,0,0,2
 R-Wpn-Flamer01Mk1,CyborgFlamerGrd,BODY,0,0,2
-R-Cyborg-Legs01,CyborgLegs,PROPULSION,0,0,5
 R-Wpn-Rocket01-LtAT,CyborgRkt1Ground,BODY,0,0,2
 R-Wpn-MG4,CybRotMgGrd,BODY,0,BODY,2
 R-Wpn-EMPCannon,EMP-Cannon,WEAPON,0,0,10

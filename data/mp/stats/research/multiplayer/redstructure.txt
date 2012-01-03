@@ -9,7 +9,6 @@ R-Defense-HvyArtMissile,Emplacement-MortarPit02,282
 R-Defense-HvyFlamer,PillBox5,158
 R-Defense-HvyMor,Emplacement-MortarPit01,142
 R-Defense-MdArtMissile,Emplacement-MRL-pit,263
-R-Defense-Pillbox-RotMG,PillBox1,126
 R-Defense-PlasmiteFlamer,WallTower-Projector,184
 R-Defense-PlasmiteFlamer,Tower-Projector,183
 R-Defense-RotHow,Emplacement-Howitzer105,134

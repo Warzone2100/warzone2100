@@ -95,7 +95,7 @@ run
 	tech[1][11]		RESEARCHSTAT		"R-Vehicle-Body07"		//retribution body
 	tech[1][12]		RESEARCHSTAT		"R-Vehicle-Metals09"		//vtol armor
 	tech[1][13]		RESEARCHSTAT		"R-Struc-VTOLPad-Upgrade06"	//rearm
-	tech[1][14]		RESEARCHSTAT		"R-Struc-VTOLFactory-Upgrade06"	//production
+	tech[1][14]		RESEARCHSTAT		"R-Struc-Factory-Upgrade04"	//production
 	tech[1][15]		RESEARCHSTAT		"R-Struc-Power-Upgrade03a"	//power upgrade 03a
 	tech[1][16]		RESEARCHSTAT		"R-Sys-Autorepair-General"	//autorepair
 	tech[1][17]		RESEARCHSTAT		"R-Vehicle-Engine09"		//finally - speed

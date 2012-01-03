@@ -52,20 +52,18 @@ function eventGameInit()
 	}
 	applyLimitSet();	// set limit options
 
-	const numCleanTech = 5;	// do x for clean	
-	const numBaseTech = 20; // do x for base
+	const numCleanTech = 4;	// do x for clean	
+	const numBaseTech = 18; // do x for base
 	var techlist = new Array(
 		"R-Vehicle-Prop-Wheels",
 		"R-Sys-Spade1Mk1",
 		"R-Vehicle-Body01",
 		"R-Comp-SynapticLink",
-		"R-Cyborg-Legs01",
 		"R-Wpn-MG1Mk1",
 		"R-Defense-HardcreteWall",
 		"R-Vehicle-Prop-Wheels",
 		"R-Sys-Spade1Mk1",
 		"R-Struc-Factory-Cyborg",
-		"R-Cyborg-Wpn-MG",
 		"R-Defense-Pillbox01",
 		"R-Defense-Tower01",
 		"R-Vehicle-Body01",
@@ -82,8 +80,6 @@ function eventGameInit()
 		"R-Struc-RepairFacility",
 		"R-Sys-MobileRepairTurret01",
 		"R-Vehicle-Engine01",
-		"R-Cyborg-Wpn-Cannon",
-		"R-Cyborg-Wpn-Flamer",
 		"R-Wpn-MG3Mk1",
 		"R-Wpn-Cannon1Mk1",
 		"R-Wpn-Mortar01Lt",

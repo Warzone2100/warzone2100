@@ -280,7 +280,7 @@ function eventResearched(tech, labparam)
 			if (!found)
 			{
 				// Look for missile tech (and test string parameter)
-				found = pursueResearch(lab, "R-Wpn-Missile-Accuracy02");
+				found = pursueResearch(lab, "R-Wpn-MdArtMissile");
 				if (!found)
 				{
 					// Find a random research item
