@@ -1,4 +1,4 @@
-# English (United Kingdom) translation for warzone2100
+# Hungarian (Hungary) translation for warzone2100
 # Copyright (c) 2008 Warzone 2100 Resurrection Project
 # Copyright (c) 2008 Rosetta Contributors and Canonical Ltd 2008
 # This file is distributed under the same license as the warzone2100 package.
@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: Warzone 2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
 "POT-Creation-Date: 2012-01-04 19:08+0100\n"
-"PO-Revision-Date: 2011-06-22 22:41+0100\n"
-"Last-Translator: Molnár Gábor <b1afy7@gmail.com>\n"
+"PO-Revision-Date: 2011-12-30 22:58+0100\n"
+"Last-Translator: Mészáros Tamás <meszaros.tomi@hotmail.com>\n"
 "Language-Team: Magyar (Hungary) <meszaros.tomi@hotmail.com>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -1033,7 +1033,7 @@ msgstr "Aknavetők automatikusan fejlesztve"
 #: data/base/messages/resmessages12.rmsg:174
 #: data/mp/messages/resmessages12.rmsg:174
 msgid "Automatic loader replaces manual feed"
-msgstr ""
+msgstr "Automatikus betöltő helyettesíti a kéz betöltést"
 
 #: data/base/messages/resmessages12.rmsg:175
 #: data/base/messages/resmessages3.rmsg:1189
@@ -1576,7 +1576,7 @@ msgstr "Parancsnoki lövegtornyokhoz irányítja és gyűjti össze az informác
 #: data/base/messages/resmessages1.rmsg:267
 #: data/mp/messages/resmessages1.rmsg:267
 msgid "Controls up to five commanders"
-msgstr "Maximum 4 parancsnok irányítása"
+msgstr "5 feletti parancsnok irányítása"
 
 #: data/base/messages/resmessages1.rmsg:277
 #: data/base/messages/resmessages2.rmsg:342
@@ -1727,7 +1727,7 @@ msgstr "Kutatási modul rendelkezésre áll"
 #: data/base/messages/resmessages1.rmsg:343
 #: data/mp/messages/resmessages1.rmsg:344
 msgid "Research module expands research facilities"
-msgstr "A kutatási modul bővíti a kutató létesítményteket"
+msgstr "A kutatási modul bővíti a kutató létesítményeket"
 
 #: data/base/messages/resmessages1.rmsg:344
 #: data/base/messages/resmessages1.rmsg:357
@@ -2033,7 +2033,7 @@ msgstr "Megnövekedett kinetikus páncél és karosszéria értékek"
 #: data/mp/messages/resmessages1.rmsg:512
 #: data/mp/messages/resmessages1.rmsg:525
 msgid "New Propulsion Available"
-msgstr "Új Meghajtás érhető el"
+msgstr "Új meghajtás érhető el"
 
 #: data/base/messages/resmessages1.rmsg:486
 #: data/mp/messages/resmessages1.rmsg:487
@@ -2055,7 +2055,7 @@ msgstr "Kétéltű légpárnás hajtómű"
 #: data/mp/messages/resmessages1.rmsg:501
 #: data/mp/messages/resmessages1.rmsg:527
 msgid "Speed: Fast"
-msgstr "Sebesség: Gyors"
+msgstr "Sebesség: gyors"
 
 #: data/base/messages/resmessages1.rmsg:501
 #: data/base/messages/resmessages1.rmsg:527
@@ -2111,7 +2111,7 @@ msgstr "Páncélozott lánctalpas"
 #: data/base/messages/resmessages1.rmsg:513
 #: data/mp/messages/resmessages1.rmsg:514
 msgid "Speed: Slow"
-msgstr "Sebesség: Lassú"
+msgstr "Sebesség: lassú"
 
 #: data/base/messages/resmessages1.rmsg:525
 #: data/base/messages/strings/names.txt:976
@@ -3130,7 +3130,7 @@ msgstr "Kiváló páncélzat és karosszéria értékek Viper-hez"
 #: data/mp/messages/resmessages2.rmsg:474
 #: data/mp/messages/strings/resstrings.txt:564
 msgid "Slower than Viper"
-msgstr "Lassab mint a Viper"
+msgstr "Lassabb mint a Viper"
 
 #: data/base/messages/resmessages2.rmsg:475
 #: data/base/messages/strings/resstrings.txt:530
@@ -3160,7 +3160,7 @@ msgstr "Kiváló páncélzat és karosszéria értékek Cobra-hoz"
 #: data/mp/messages/resmessages2.rmsg:487
 #: data/mp/messages/strings/resstrings.txt:576
 msgid "Slower than Cobra"
-msgstr "Lassab mint a Cobra"
+msgstr "Lassabb mint a Cobra"
 
 #: data/base/messages/resmessages2.rmsg:488
 #: data/base/messages/strings/resstrings.txt:542
@@ -3637,7 +3637,7 @@ msgstr "Nagy hatóerejű, rogyókúpos repeszhatású robbanófej"
 #: data/base/messages/resmessages3.rmsg:18
 #: data/mp/messages/resmessages3.rmsg:18
 msgid "NEXUS Intruder Program analyzed"
-msgstr "NEXUS Behatoló program analizálva"
+msgstr "NEXUS behatoló program analizálva"
 
 #: data/base/messages/resmessages3.rmsg:19
 #: data/mp/messages/resmessages3.rmsg:19
@@ -4651,7 +4651,7 @@ msgstr "Vegyen egy felderítő egységet, hogy megvizsgálja ezeket a jeleket."
 
 #: data/base/messages/strings/cam1strings.txt:29
 msgid "Use your trucks to build defenses at your LZ."
-msgstr "Landolási ponton használd a munkagépet védművek kiépítésére"
+msgstr "Landolási ponton használd a munkagépet védművek kiépítésére LZ-nek."
 
 #: data/base/messages/strings/cam1strings.txt:31
 msgid "TRANSPORT MISSION: Enemy Transmissions Detected"
@@ -4745,7 +4745,7 @@ msgstr "Ez a mi lehetőségünk, elpusztítani az Új Paradigmát és lerombolni
 #: data/base/messages/strings/cam2strings.txt:108
 #: data/base/messages/strings/cam3strings.txt:156
 msgid " "
-msgstr ""
+msgstr " "
 
 #: data/base/messages/strings/cam1strings.txt:66
 msgid "Congratulations Commander."
@@ -4785,7 +4785,7 @@ msgstr "GAMMA CSAPAT FRISS INFORMÁCIÓK"
 
 #: data/base/messages/strings/cam1strings.txt:84
 msgid "Nothing to report."
-msgstr "Nincs mit jelentés."
+msgstr "Nincs jelentés."
 
 #: data/base/messages/strings/cam1strings.txt:85
 msgid "We've discovered no artifacts and encountered no hostiles."
@@ -4980,7 +4980,7 @@ msgstr "Dekódolás..."
 #: data/base/messages/strings/cam2strings.txt:18
 #: data/base/messages/strings/cam2strings.txt:22
 msgid "TRANSPORT MISSION: Transport Down"
-msgstr "SZÁLLÍTÁSI FELADAT: Szállítás meghiúsúlt"
+msgstr "SZÁLLÍTÁSI FELADAT: Szállítás meghiúsult"
 
 #: data/base/messages/strings/cam2strings.txt:19
 msgid "Our transport carrying units from team Alpha Base has been shot down."
@@ -5429,7 +5429,7 @@ msgstr "Az ellenséges erők ....... ezekről a koordinátákról."
 
 #: data/base/messages/strings/cam3strings.txt:80
 msgid "Defend the base and ........ the ......."
-msgstr "Véddje meg a bázist és  ........ a ....... "
+msgstr "Védje meg a bázist és  ........ a ....... "
 
 #: data/base/messages/strings/cam3strings.txt:81
 msgid "Search and destroy ...."
@@ -5456,7 +5456,6 @@ msgid "You have an opportunity to destroy NEXUS before they get there."
 msgstr "Lehetősége van elpusztítani NEXUS-t, mielött odaérne."
 
 #: data/base/messages/strings/cam3strings.txt:91
-#, fuzzy
 msgid "Take an attack force and ambush NEXUS task force at ....... the  ......."
 msgstr "Lesből támadjon a NEXUS különítményre a ....... a ......."
 
@@ -5498,7 +5497,7 @@ msgstr "Belépés új zónába."
 
 #: data/base/messages/strings/cam3strings.txt:113
 msgid "Incoming Transmission..."
-msgstr "Bejövő Üzenet..."
+msgstr "Bejövő üzenet..."
 
 #: data/base/messages/strings/cam3strings.txt:116
 msgid "Elements of Team Gamma have contacted us."
@@ -5696,7 +5695,7 @@ msgstr "Cél küldetés"
 
 #: data/base/messages/strings/genstrings.txt:15
 msgid "Pre-Collapse Research Center"
-msgstr "Összeomlás elötti kutató központ"
+msgstr "Összeomlás előtti kutató központ"
 
 #: data/base/messages/strings/genstrings.txt:17
 msgid "En-route To Mission Site"
@@ -5733,7 +5732,7 @@ msgstr "Nukleáris reaktor"
 #: data/base/messages/strings/names.txt:12
 #: data/mp/messages/strings/names.txt:12
 msgid "New Design"
-msgstr "Új modell"
+msgstr "Új model"
 
 #: data/base/messages/strings/names.txt:15
 #: src/design.cpp:1301
@@ -5943,7 +5942,7 @@ msgstr "Terepjáró"
 #: data/base/messages/strings/names.txt:201
 #: data/mp/messages/strings/names.txt:204
 msgid "Trike"
-msgstr ""
+msgstr "Trike"
 
 #: data/base/messages/strings/names.txt:202
 #: data/mp/messages/strings/names.txt:205
@@ -6044,63 +6043,63 @@ msgstr "Cyborg ágyú"
 #: data/base/messages/strings/names.txt:234
 #: data/mp/messages/strings/names.txt:237
 msgid "Viper"
-msgstr ""
+msgstr "Viper"
 
 #: data/base/messages/strings/names.txt:235
 #: data/mp/messages/strings/names.txt:238
 msgid "Leopard"
-msgstr ""
+msgstr "Leopard"
 
 #: data/base/messages/strings/names.txt:236
 #: data/mp/messages/strings/names.txt:239
 msgid "Retaliation"
-msgstr ""
+msgstr "Megtorlás"
 
 # bogár
 #: data/base/messages/strings/names.txt:237
 #: data/mp/messages/strings/names.txt:240
 msgid "Bug"
-msgstr ""
+msgstr "Bogár"
 
 #: data/base/messages/strings/names.txt:238
 #: data/mp/messages/strings/names.txt:241
 msgid "Cobra"
-msgstr ""
+msgstr "Cobra"
 
 #: data/base/messages/strings/names.txt:239
 #: data/mp/messages/strings/names.txt:242
 msgid "Panther"
-msgstr ""
+msgstr "Panther"
 
 #: data/base/messages/strings/names.txt:240
 #: data/mp/messages/strings/names.txt:243
 msgid "Retribution"
-msgstr ""
+msgstr "Megbüntető"
 
 #: data/base/messages/strings/names.txt:241
 #: data/mp/messages/strings/names.txt:244
 msgid "Scorpion"
-msgstr ""
+msgstr "Skorpió"
 
 #: data/base/messages/strings/names.txt:242
 #: data/mp/messages/strings/names.txt:245
 msgid "Tiger"
-msgstr ""
+msgstr "Tiger"
 
 #: data/base/messages/strings/names.txt:243
 #: data/mp/messages/strings/names.txt:246
 msgid "Vengeance"
-msgstr ""
+msgstr "Bosszú"
 
 #: data/base/messages/strings/names.txt:244
 #: data/mp/messages/strings/names.txt:247
 msgid "Python"
-msgstr ""
+msgstr "Python"
 
 #: data/base/messages/strings/names.txt:245
 #: data/mp/messages/strings/names.txt:248
 msgid "Mantis"
-msgstr ""
+msgstr "Mantis"
 
 #: data/base/messages/strings/names.txt:247
 #: data/mp/messages/strings/names.txt:250
@@ -6171,17 +6170,17 @@ msgstr "légpárna III"
 #: data/base/messages/strings/names.txt:324
 #: data/mp/messages/strings/names.txt:327
 msgid "VTOL"
-msgstr ""
+msgstr "VTOL"
 
 #: data/base/messages/strings/names.txt:325
 #: data/mp/messages/strings/names.txt:328
 msgid "VTOL II"
-msgstr ""
+msgstr "VTOL II"
 
 #: data/base/messages/strings/names.txt:326
 #: data/mp/messages/strings/names.txt:329
 msgid "VTOL III"
-msgstr ""
+msgstr "VTOL III"
 
 #: data/base/messages/strings/names.txt:327
 #: data/mp/messages/strings/names.txt:330
@@ -6252,7 +6251,7 @@ msgstr "Edzett acél érzékelő torony"
 #: data/mp/messages/strings/names.txt:366
 #: data/mp/messages/strings/names.txt:898
 msgid "Sensor Turret"
-msgstr "felderítő"
+msgstr "Érzékelő torony"
 
 #: data/base/messages/strings/names.txt:371
 #: data/base/messages/strings/names.txt:372
@@ -6312,7 +6311,7 @@ msgstr "Gyár"
 #: data/mp/messages/strings/names.txt:384
 #: data/mp/messages/strings/names.txt:802
 msgid "Factory Module"
-msgstr "Gyármodul"
+msgstr "Gyári modul"
 
 #: data/base/messages/strings/names.txt:387
 #: data/mp/messages/strings/names.txt:385
@@ -6723,7 +6722,7 @@ msgstr "Tarack"
 #: data/base/messages/strings/names.txt:485
 #: data/mp/messages/strings/names.txt:484
 msgid "Ground Shaker"
-msgstr ""
+msgstr "Ground Shaker"
 
 #: data/base/messages/strings/names.txt:486
 #: data/base/messages/strings/names.txt:722
@@ -6737,7 +6736,7 @@ msgstr "Ground Shaker állás"
 #: data/base/messages/strings/names.txt:487
 #: data/mp/messages/strings/names.txt:486
 msgid "Hellstorm"
-msgstr ""
+msgstr "Pokolivihar"
 
 #: data/base/messages/strings/names.txt:492
 #: data/base/messages/strings/names.txt:1083
@@ -6793,7 +6792,7 @@ msgstr "Angel rakéta"
 #: data/mp/messages/strings/names.txt:505
 #: data/mp/messages/strings/names.txt:1130
 msgid "Vindicator SAM"
-msgstr ""
+msgstr "Vindicator SAM"
 
 #: data/base/messages/strings/names.txt:507
 #: data/base/messages/strings/names.txt:1122
@@ -6807,7 +6806,7 @@ msgstr "Archangel rakéta"
 #: data/mp/messages/strings/names.txt:508
 #: data/mp/messages/strings/names.txt:1129
 msgid "Avenger SAM"
-msgstr ""
+msgstr "Avenger SAM"
 
 #: data/base/messages/strings/names.txt:511
 #: data/mp/messages/strings/names.txt:510
@@ -7879,7 +7878,7 @@ msgstr "NEXUS ellenálló áramkörök Mk3"
 #: data/base/messages/strings/names.txt:918
 #: data/mp/messages/strings/names.txt:929
 msgid "Sensor Lock"
-msgstr "Érzékelő célzár"
+msgstr "Érzékelő zár"
 
 #: data/base/messages/strings/names.txt:922
 #: data/mp/messages/strings/names.txt:933
@@ -9059,13 +9058,13 @@ msgstr "Bunker romboló"
 #: data/mp/messages/strings/names.txt:1452
 #: data/mp/messages/strings/names.txt:1518
 msgid "Flashlight Gunner"
-msgstr "Könnyűlézeres"
+msgstr "Könnyű lézeres"
 
 #: data/base/messages/strings/names.txt:1439
 #: data/mp/messages/strings/names.txt:1453
 #: data/mp/messages/strings/names.txt:1606
 msgid "Needle Gunner"
-msgstr "Nyíllövedékágyús"
+msgstr "Nyíllövedék ágyús"
 
 #: data/base/messages/strings/names.txt:1440
 #: data/mp/messages/strings/names.txt:1454
@@ -9144,7 +9143,7 @@ msgstr "Páncélozott talapzat lángvetővel"
 #: data/base/messages/strings/resstrings.txt:356
 #: data/mp/messages/strings/resstrings.txt:384
 msgid "Self-Replicating Cyborg Production"
-msgstr ""
+msgstr "Ön sokszorozó Cyborg termelés"
 
 #: data/base/messages/strings/resstrings.txt:374
 #: data/mp/messages/strings/resstrings.txt:402
@@ -9214,7 +9213,7 @@ msgstr "Vissza az LZ-re"
 #: data/base/script/text/cam2cx.slo:270
 #: data/base/script/text/genexp.slo:762
 msgid "Enemy Escaping"
-msgstr "menekül az ellenség"
+msgstr "Menekül az ellenség"
 
 #: data/base/script/text/cam2dx.slo:40
 #: data/base/script/text/cam3a-d1x.slo:99
@@ -9229,7 +9228,7 @@ msgstr "Célpont elfoglalva."
 
 #: data/base/script/text/cam3-2x.slo:118
 msgid "Reinforcements are now available"
-msgstr "Megerősítések most már elérhetők."
+msgstr "Megerősítések most már elérhetők"
 
 #: data/base/script/text/tutorial3.slo:274
 msgid "In this training session you'll learn how to build an effective base"
@@ -9255,7 +9254,7 @@ msgstr "A olajkút jelenleg nem termel. Építsen erőművet az olaj villamos en
 #: data/base/script/text/tutorial3.slo:573
 #: data/base/script/text/tutorial3.slo:869
 msgid "Left click the flashing BUILD icon"
-msgstr "Bal klikk a villogó ÉPÍTÉS ikonra."
+msgstr "Bal klikk a villogó ÉPÍTÉS ikonra"
 
 #: data/base/script/text/tutorial3.slo:384
 msgid "Now left click the power generator in the build menu on the left"
@@ -9419,7 +9418,7 @@ msgstr "NYUGATI SZEKTOR"
 
 #: data/base/sequenceaudio/cam1/c001.txa:4
 msgid "Dawn, July 4th, 2100"
-msgstr "2100 július 4, Dawn"
+msgstr "2100 július 4, pirkadat"
 
 #: data/base/sequenceaudio/cam1/c001.txa:5
 msgid "Project HQ"
@@ -9546,7 +9545,7 @@ msgstr "Amikor nem válaszoltunk, fenyegetővé vált."
 
 #: data/base/sequenceaudio/cam1/cam1out4.txt:1
 msgid "Your interference in my plans for the New Paradigm will not go unpunished."
-msgstr "Beavatkozásod az Új Paradigma terveibe, nem maradhat büntetlenül."
+msgstr "Beavatkozásod az Új Paradigma tervenkbe nem maradhat büntetlenül."
 
 #: data/base/sequenceaudio/cam1/cam1out4.txt:2
 msgid "You are weak flesh-things. I am strong and have many parts."
@@ -9619,7 +9618,7 @@ msgstr "Ismétlem. Térj vissza a kijelölt zónádba vagy megsemmisítelek."
 
 #: data/base/sequenceaudio/cam1/sub13np1.txt:9
 msgid "Message Ends."
-msgstr "Üzenet Vége."
+msgstr "Üzenet vége."
 
 #: data/base/sequenceaudio/cam1/sub13np2.txt:8
 msgid "You will be destroyed."
@@ -9634,7 +9633,6 @@ msgid "You have done well."
 msgstr "Jól szerepeltél."
 
 #: data/base/sequenceaudio/cam1/sub1_4bn.txt:5
-#, fuzzy
 msgid "Once we have analyzed and authenticated the technology, your reward  will follow."
 msgstr "Amint elemeztük, és ellenőriztük a technológiát a jutalmad nem marad el."
 
@@ -9672,7 +9670,7 @@ msgstr "KELETI SZEKTOR"
 
 #: data/base/sequenceaudio/cam2/c002.txa:4
 msgid "Morning, September 1st, 2100"
-msgstr "2100 Szeptember 1, Reggel"
+msgstr "2100 Szeptember 1, reggel"
 
 #: data/base/sequenceaudio/cam2/c002.txa:5
 msgid "In-flight to Eastern Sector"
@@ -9727,7 +9725,6 @@ msgid "During the counterstrikes, these LasSats failed to fire. If brought into 
 msgstr "Az ellencsapás alatt ezek a műholdak nem tüzeltek. Amennyiben sikerül működésre bírni őket, nagy kárt tudnak tenni a földi célpontokban."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:14
-#, fuzzy
 msgid "All nukes targeted at  North America found their targets."
 msgstr "Atomfegyverek célpontjai, Észak Amerikában vannak."
 
@@ -9769,10 +9766,9 @@ msgstr "A vizsgálatok arra engednek következtetni, hogy ezek a rendszerek a NA
 
 #: data/base/sequenceaudio/cam2/cam26afm.txt:2
 msgid "It's now certain that Nexus was responsible for The Collapse."
-msgstr "Most már bizonyos, hogy a NEXUS volt a felelős az összeomlásért"
+msgstr "Most már bizonyos, hogy a NEXUS volt a felelős az összeomlásért."
 
 #: data/base/sequenceaudio/cam2/cam26afm.txt:4
-#, fuzzy
 msgid "During the early stages of the Collapse, NASDA technicians switched off  the infected systems in order to isolate the spread of Nexus. This seems to have prevented the LasSats from firing during the counterstrikes."
 msgstr "Az összeomlás korai szakaszában, a NASDA technikusok lekapcsolták a fertőzött rendszereket, hogy izolálhassák a NEXUS terjedését. Úgy tűnik ez megakadályozta a lézerműholdakat az ellencsapásokban."
 
@@ -9894,7 +9890,7 @@ msgstr "ÉSZAKI SZEKTOR"
 
 #: data/base/sequenceaudio/cam3/c003.txa:8
 msgid "Dusk, December 3rd, 2100"
-msgstr "Homály, December 3, 2100"
+msgstr "2100 december 3, alkony"
 
 #: data/base/sequenceaudio/cam3/c003.txa:9
 msgid "In-flight to Northern Sector"
@@ -9973,7 +9969,6 @@ msgid "We were trying to reach your position, but have been ambushed."
 msgstr "Megpróbáltuk elérni a pozícióját, de lesből ránk támadtak."
 
 #: data/base/sequenceaudio/cam3/cam32alp.txt:7
-#, fuzzy
 msgid "We're holed up in  a valley at these coordinates."
 msgstr "Elrejtőztünk a völgyben, ezeken a koordinátákon."
 
@@ -10066,7 +10061,6 @@ msgid "Commander, we are under attack by NEXUS cyborgs and tanks. Please help as
 msgstr "Parancsnok, a NEXUS kiborgok és tankok támadása alatt állunk. Segítsen, mert mi..."
 
 #: data/base/sequenceaudio/cam3/cam3bg.txt:3
-#, fuzzy
 msgid "...cannot hold out much longer.  Repeat, please help, we cannot hold out much longer...."
 msgstr "...nem tudjuk már sokáig tartani magunkat. Ismétlem, segítsen, nem tudjuk már sokáig tartani magunkat...."
 
@@ -10119,7 +10113,6 @@ msgid "Once I destroyed the world with nuclear fire to clear the way for my cybe
 msgstr "A kibernetikai jövőmért, már egyszer felperzseltem nukleáris tűzzel a világot."
 
 #: data/base/sequenceaudio/cam3/cam3_cn.txt:9
-#, fuzzy
 msgid "I now intend to further shape the world into my own image, by  surgically removing unwanted growths like yourself."
 msgstr "Most tovább formálom a világot a saját képemre úgy, hogy kivágom a nemkívánatos daganatokat, mint ön."
 
@@ -10129,7 +10122,7 @@ msgstr "A lézerműholdaim most kapcsolódnak be. Először önön tesztelem ők
 
 #: data/base/sequenceaudio/devastation.txa:4
 msgid "Dusk, November 3rd, 2085"
-msgstr "Szürkület, November 3, 2085"
+msgstr "2085 november 3, alkony"
 
 #: data/base/sequenceaudio/devastation.txa:5
 msgid "Earth, High Orbit"
@@ -10141,7 +10134,7 @@ msgstr "Az összeomlás"
 
 #: data/base/sequenceaudio/devastation.txa:8
 msgid "January 19th, 2086"
-msgstr "Január 19, 2086"
+msgstr "2086 január 19"
 
 #: data/base/sequenceaudio/devastation.txa:9
 #: data/base/sequenceaudio/devastation.txa:17
@@ -10154,7 +10147,7 @@ msgstr "Nukleáris tél"
 
 #: data/base/sequenceaudio/devastation.txa:12
 msgid "Midnight, April 10th, 2086"
-msgstr "Éjfél, Április 10, 2086"
+msgstr "2086 április 10, éjfél"
 
 #: data/base/sequenceaudio/devastation.txa:13
 msgid "Rocky Mountains"
@@ -10166,7 +10159,7 @@ msgstr "Biztonságos"
 
 #: data/base/sequenceaudio/devastation.txa:16
 msgid "Dawn, April 4th, 2100"
-msgstr "Hajnal, Április 4, 2100"
+msgstr "2100 április 4, hajnal"
 
 #: data/base/sequenceaudio/devastation.txa:18
 msgid "A New Beginning"
@@ -10190,11 +10183,11 @@ msgstr "A világ ahogy mi ismertük, már vége..."
 
 #: data/base/sequenceaudio/devastation.txt:9
 msgid "The Nuclear Winter hit hard. Disease and famine claimed most of us who had survived the nuclear strikes. Wars over cans of dog food took even more."
-msgstr "A nukleáris tél kemény volt. Járványok és éhínség pusztított azok között, akik túlélték a nukleáris csapást. A mindennapi harcok a konzervekért és a kutyakajáért, további áldozatokat szedtek."
+msgstr "A nukleáris tél kemény volt. Járványok és éhínség pusztított azok között, akik túlélték a nukleáris csapást. A mindennapi harcok a konzervekért és a kutyaételért, további áldozatokat szedtek."
 
 #: data/base/sequenceaudio/devastation.txt:11
 msgid "We'd fled Seattle early in '86. We'd heard that the Rocky Mountains were relatively rad-free."
-msgstr "Elmenekültünk Seatle-ből a '86-os évek elején. Hallottuk, hogy a Sziklás hegység viszonylag sugárzásmentes."
+msgstr "Elmenekültünk Seatle-ből a 2086-os év elején. Hallottuk, hogy a Sziklás hegység viszonylag sugárzásmentes."
 
 #: data/base/sequenceaudio/devastation.txt:13
 msgid "After fighting off bands of marauders we came across the base. Its personnel were dead. Killed by any one of a number of virulent diseases."
@@ -11368,17 +11361,14 @@ msgid "Mini-Rocket Array Cobra Half-tracks"
 msgstr "Cobra féllánctalpas kisrakéta sor"
 
 #: data/mp/messages/strings/names.txt:351
-#, fuzzy
 msgid "Jammer Tower"
 msgstr "Lángvető torony"
 
 #: data/mp/messages/strings/names.txt:352
-#, fuzzy
 msgid "Jammer Turret"
 msgstr "Kódoló torony"
 
 #: data/mp/messages/strings/names.txt:353
-#, fuzzy
 msgid "Electronic Countermeasures"
 msgstr "Elektronikai laboratórium"
 
@@ -11890,7 +11880,7 @@ msgstr "Nehéz karosszéria - Wyvern"
 
 #: data/mp/messages/strings/names.txt:1771
 msgid "Wyvern"
-msgstr ""
+msgstr "Sárkány"
 
 #: data/mp/messages/strings/names.txt:1773
 msgid "Multi Turret Body - Dragon"
@@ -11898,7 +11888,7 @@ msgstr "Több lövegtornyos alváz - Dragon"
 
 #: data/mp/messages/strings/names.txt:1774
 msgid "Dragon"
-msgstr ""
+msgstr "Sárkány"
 
 #: data/mp/messages/strings/names.txt:1776
 msgid "Superhot Plasmite gel"
@@ -12020,26 +12010,25 @@ msgstr "Helyi rendszer"
 
 #: lib/ivis_opengl/screen.cpp:152
 msgid "OpenGL 2.0 is not supported by your system. Some things may look wrong. Please upgrade your graphics driver/hardware, if possible."
-msgstr ""
+msgstr "OpenGL 2.0-t nem támogatja a te rendszered. Néhány dolgot rossznak látok. Kérlek frissítsd fel a drivert vagy hardware videokártyád, ha ez lehetséges."
 
 #: lib/ivis_opengl/screen.cpp:156
 msgid "OpenGL 1.4 is not supported by your system. The game requires this. Please upgrade your graphics drivers/hardware, if possible."
-msgstr ""
+msgstr "OpenGL 1.4 nem támogatja a rendszerd. A játéknak szüksége van rá. Kérlek frissítsd fel a drivert vagy hardware videokártyád, ha ez lehetséges."
 
 #: lib/netplay/netlobby.cpp:102
 msgid "Received invalid addGame data."
-msgstr ""
+msgstr "Érvénytelen játék hozzáadás adat érkezett."
 
 #: lib/netplay/netlobby.cpp:140
 #: lib/netplay/netlobby.cpp:163
 #: lib/netplay/netlobby.cpp:183
-#, fuzzy
 msgid "Create a game first!"
 msgstr "Játékcél felkutatása"
 
 #: lib/netplay/netlobby.cpp:426
 msgid "Received invalid login data."
-msgstr ""
+msgstr "Érvénytelen bejelentkezési adat érkezett."
 
 #: lib/netplay/netlobby.cpp:518
 #: lib/netplay/netlobby.cpp:531
@@ -12048,12 +12037,12 @@ msgstr ""
 #: lib/netplay/netlobby.cpp:569
 #: lib/netplay/netlobby.cpp:578
 msgid "Failed to communicate with the lobby."
-msgstr ""
+msgstr "Hibás kommunikáció a lobbinál."
 
 #: lib/netplay/netlobby.cpp:589
 #, c-format
 msgid "Got server error: %s"
-msgstr ""
+msgstr "Szerver hiba: %s"
 
 #: lib/netplay/netplay.cpp:184
 #: lib/netplay/netplay.cpp:744
@@ -12062,57 +12051,57 @@ msgstr "Jelszó begépelés"
 
 #: lib/netplay/netplay.cpp:2067
 msgid "Game not in the lobby, please login first!"
-msgstr ""
+msgstr "Játékban ne legyen lobbi, kérlek jelentkezz be először!"
 
 #: lib/netplay/netplay.cpp:2072
 #, c-format
 msgid "Error connecting to the lobby server: %s. Make sure port %d can receive incoming connections. If you're using a router configure it to use UPnP, or to forward the port to your system."
-msgstr ""
+msgstr "Hibás kapcsolódás a lobbi szerverhez: %s. Készíts megfelelő portot %d ahová beérkezik a bejövő kapcsolat. Ha rutert konfigurálod haszlnáld UPnP, vagy további portokat a rendszeredhez."
 
 #: po/custom/mac-infoplist.txt:1
 msgid ""
 "Copyright © 1999-2004 Eidos Interactive.\n"
 "Copyright © 2005-2011 The Warzone 2100 Project"
 msgstr ""
+"Copyright © 1999-2004 Eidos Interactive.\n"
+"Copyright © 2005-2011 The Warzone 2100 Projekt"
 
 #: po/custom/mac-infoplist.txt:2
 #: po/custom/warzone2100.desktop.txt:2
 msgid "Warzone 2100"
-msgstr ""
+msgstr "Warzone 2100"
 
 #: po/custom/mac-infoplist.txt:3
 msgid "Warzone 2100 Map / Mod File"
-msgstr ""
+msgstr "Warzone 2100 Térkép / Mód fájl"
 
 #: po/custom/mac-infoplist.txt:4
 msgid "Warzone 2100 Campaign Mod File"
-msgstr ""
+msgstr "Warzone 2100 Küldetés Mód fájl"
 
 #: po/custom/mac-infoplist.txt:5
-#, fuzzy
 msgid "Warzone 2100 Multiplayer Mod File"
-msgstr "Start Multiplayer Audio"
+msgstr "Warzone 2100 Többjátékos Mód fájl"
 
 #: po/custom/mac-infoplist.txt:6
 msgid "Warzone 2100 Global Mod File"
-msgstr ""
+msgstr "Warzone 2100 Globális Mód fájl"
 
 #: po/custom/mac-infoplist.txt:7
 msgid "Warzone"
-msgstr ""
+msgstr "Warzone"
 
 #: po/custom/mac-infoplist.txt:8
 msgid "Warzone 2100 Music Mod File"
-msgstr ""
+msgstr "Warzone 2100 Zenei Mód fájl"
 
 #: po/custom/warzone2100.desktop.txt:1
 msgid "Postnuclear realtime strategy"
-msgstr ""
+msgstr "Nukleáris háború utáni valósidejű stratégiai játék"
 
 #: po/custom/warzone2100.desktop.txt:3
-#, fuzzy
 msgid "Strategy Game"
-msgstr "Játék Mentés"
+msgstr "Stratégiai játék"
 
 #: src/challenge.cpp:222
 #: src/hci.cpp:918
@@ -12203,7 +12192,7 @@ msgstr "Csak többjátékos mód engedélyezése"
 
 #: src/clparse.cpp:253
 msgid "Disable asserts"
-msgstr "Árnyákok tiltása"
+msgstr "Árnyékok tiltása"
 
 #: src/clparse.cpp:254
 msgid "Causes a crash to test the crash handler"
@@ -12267,16 +12256,15 @@ msgstr "közvetlenül a fogadó képernyőre"
 
 #: src/clparse.cpp:266
 msgid "Enable texture compression"
-msgstr ""
+msgstr "Szöveg tömörítés bekapcsolása"
 
 #: src/clparse.cpp:267
 msgid "Disable texture compression"
-msgstr ""
+msgstr "Szöveg tömörítés kikapcsolása"
 
 #: src/configuration.cpp:92
-#, fuzzy
 msgid "My Game"
-msgstr "Game"
+msgstr "Játékom"
 
 #: src/configuration.cpp:93
 #: src/multistat.cpp:124
@@ -12310,7 +12298,7 @@ msgstr "Terv Törlése"
 #: src/design.cpp:631
 #: src/design.cpp:4685
 msgid "Store Template"
-msgstr ""
+msgstr "Ideiglenes tároló"
 
 #: src/design.cpp:684
 #: src/design.cpp:731
@@ -12432,7 +12420,7 @@ msgstr "Rendszerek"
 
 #: src/design.cpp:4680
 msgid "Delete Template"
-msgstr ""
+msgstr "Ideiglenes törlés"
 
 #: src/display3d.cpp:645
 msgid "Player left"
@@ -12449,7 +12437,7 @@ msgstr "Várakozás további játékosra"
 
 #: src/display3d.cpp:658
 msgid "Out of sync"
-msgstr ""
+msgstr "Szinkronizációból kilépett"
 
 #: src/display.cpp:1656
 msgid "Cannot Build. Oil Resource Burning."
@@ -12457,9 +12445,9 @@ msgstr "Nem lehet építeni, amíg az olajmező lángol."
 
 #: src/display.cpp:1844
 #: src/display.cpp:2395
-#, fuzzy, c-format
+#, c-format
 msgid "%s - Damage %d%% - Experience %.1f, %s"
-msgstr "%s - Sérülés %d%% - Tapasztalat %d, %s"
+msgstr "%s - sérülés %d%% - tapasztalat %f, %s"
 
 #: src/display.cpp:1860
 #, c-format
@@ -12504,24 +12492,24 @@ msgstr[1] "Aligning with Group %u - %u Units"
 
 #: src/droid.cpp:2491
 msgid "Rookie"
-msgstr ""
+msgstr "Újonc"
 
 #: src/droid.cpp:2492
 msgctxt "rank"
 msgid "Green"
-msgstr "Zöld"
+msgstr "Zöldfülű"
 
 #: src/droid.cpp:2493
 msgid "Trained"
-msgstr ""
+msgstr "Edzett"
 
 #: src/droid.cpp:2494
 msgid "Regular"
-msgstr ""
+msgstr "Reguláris"
 
 #: src/droid.cpp:2495
 msgid "Professional"
-msgstr ""
+msgstr "Professzionális"
 
 #: src/droid.cpp:2496
 msgid "Veteran"
@@ -12533,7 +12521,7 @@ msgstr "Elit"
 
 #: src/droid.cpp:2498
 msgid "Special"
-msgstr ""
+msgstr "Speciális"
 
 #: src/droid.cpp:2499
 msgid "Hero"
@@ -12560,7 +12548,7 @@ msgstr "Többjátékos mód"
 #: src/frontend.cpp:109
 #: src/frontend.cpp:186
 msgid "Tutorial"
-msgstr ""
+msgstr "Gyakorlás"
 
 #: src/frontend.cpp:110
 #: src/hci.cpp:3488
@@ -12581,7 +12569,7 @@ msgstr "FŐ MENÜ"
 
 #: src/frontend.cpp:116
 msgid "Visit our official site: http://wz2100.net"
-msgstr ""
+msgstr "Látogass el a hivatalos oldalra: http://wz2100.net"
 
 #: src/frontend.cpp:187
 msgid "Fast Play"
@@ -12589,7 +12577,7 @@ msgstr "Gyors Játék"
 
 #: src/frontend.cpp:188
 msgid "TUTORIALS"
-msgstr ""
+msgstr "Gyakorlások"
 
 #. TRANSLATORS: "Return", in this context, means "return to previous screen/menu"
 #: src/frontend.cpp:190
@@ -12607,7 +12595,7 @@ msgstr "Vissza"
 
 #: src/frontend.cpp:244
 msgid "New Campaign"
-msgstr "Új Küldetés"
+msgstr "Új küldetés"
 
 #: src/frontend.cpp:245
 msgid "Start Skirmish Game"
@@ -12670,12 +12658,12 @@ msgstr "Video visszajátszás"
 #: src/frontend.cpp:447
 #: src/frontend.cpp:595
 msgid "1X"
-msgstr ""
+msgstr "1X"
 
 #: src/frontend.cpp:451
 #: src/frontend.cpp:585
 msgid "2X"
-msgstr ""
+msgstr "2X"
 
 #: src/frontend.cpp:455
 #: src/frontend.cpp:590
@@ -12686,7 +12674,7 @@ msgstr "Teljes képernyő"
 
 #: src/frontend.cpp:464
 msgid "Scanlines"
-msgstr ""
+msgstr "Kereső"
 
 #: src/frontend.cpp:468
 #: src/frontend.cpp:489
@@ -12713,7 +12701,7 @@ msgstr "Ki"
 #: src/frontend.cpp:472
 #: src/frontend.cpp:610
 msgid "50%"
-msgstr ""
+msgstr "50%"
 
 #: src/frontend.cpp:476
 #: src/frontend.cpp:615
@@ -12723,7 +12711,7 @@ msgstr "Fekete"
 
 #: src/frontend.cpp:482
 msgid "Screen Shake"
-msgstr "Képernyő Villódzás"
+msgstr "Képernyő villódzás"
 
 #: src/frontend.cpp:485
 #: src/frontend.cpp:501
@@ -12776,7 +12764,7 @@ msgstr "HANG BEÁLLÍTÁS"
 
 #: src/frontend.cpp:728
 msgid "* Takes effect on game restart"
-msgstr ""
+msgstr "* Játék újraindításakor effekteket bekapcsolja"
 
 #: src/frontend.cpp:731
 msgid "Graphics Mode*"
@@ -12796,15 +12784,13 @@ msgid "Texture size"
 msgstr "Szöveg méret"
 
 #: src/frontend.cpp:752
-#, fuzzy
 msgid "Vertical sync"
 msgstr "Vízszintes szinkronizáció"
 
 #: src/frontend.cpp:787
 #: src/frontend.cpp:848
-#, fuzzy
 msgid "Unsupported"
-msgstr "Transporter"
+msgstr "Nem támogatott"
 
 #: src/frontend.cpp:792
 msgid "VIDEO OPTIONS"
@@ -12816,7 +12802,7 @@ msgstr "Fordított forgatás"
 
 #: src/frontend.cpp:991
 msgid "Trap Cursor"
-msgstr ""
+msgstr "Kurzor rögzítés"
 
 # célpont megadása jobb gombról átkerül a balra
 #: src/frontend.cpp:1004
@@ -12825,19 +12811,17 @@ msgstr "Váltott egérparancs"
 
 #: src/frontend.cpp:1016
 msgid "Rotate Screen"
-msgstr "Balra forgatás"
+msgstr "Képernyő forgatás"
 
 #: src/frontend.cpp:1019
 #: src/frontend.cpp:1092
-#, fuzzy
 msgid "Middle Mouse"
-msgstr "Középső Gomb"
+msgstr "Középső egérgomb"
 
 #: src/frontend.cpp:1023
 #: src/frontend.cpp:1087
-#, fuzzy
 msgid "Right Mouse"
-msgstr "Jobb Gomb"
+msgstr "Jobb egérgomb"
 
 #: src/frontend.cpp:1027
 msgid "MOUSE OPTIONS"
@@ -12886,13 +12870,13 @@ msgstr "Egység Színek"
 #: src/frontend.cpp:1172
 #: src/frontend.cpp:1201
 msgid "Radar"
-msgstr ""
+msgstr "Radar"
 
 #: src/frontend.cpp:1173
 #: src/frontend.cpp:1202
 #: src/frontend.cpp:1223
 msgid "Rotating"
-msgstr "Jobbra forgatás"
+msgstr "Forgatás"
 
 #: src/frontend.cpp:1173
 #: src/frontend.cpp:1202
@@ -12917,9 +12901,8 @@ msgstr "JÁTÉK MENTVE!"
 #: src/hci.cpp:1561
 #: src/loop.cpp:272
 #: src/loop.cpp:288
-#, fuzzy
 msgid "GAME SAVED: "
-msgstr "JÁTÉK MENTVE"
+msgstr "JÁTÉK MENTVE:"
 
 #: src/hci.cpp:1971
 msgid "Failed to create building"
@@ -12941,9 +12924,9 @@ msgid "Player %u is cheating (debug menu) him/herself a new droid: %s."
 msgstr "%u csalt (hibakeresés menü), egy új droidja lett: %s."
 
 #: src/hci.cpp:2038
-#, fuzzy, c-format
+#, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid."
-msgstr "%u csalt (hibakeresés menü), egy új droidja lett: %s."
+msgstr "%u csalt (hibakeresés menü), egy új droidja lett."
 
 #: src/hci.cpp:3299
 msgid "Commanders (F6)"
@@ -12959,7 +12942,7 @@ msgstr "Gyártás (F1)"
 
 #: src/hci.cpp:3338
 msgid "Design (F4)"
-msgstr ""
+msgstr "Tervezés (F4)"
 
 #: src/hci.cpp:3351
 msgid "Research (F2)"
@@ -12973,7 +12956,7 @@ msgstr "Építés (F3)"
 #: src/multiint.cpp:1614
 #: src/multimenu.cpp:799
 msgid "Power"
-msgstr "Erő"
+msgstr "Energia"
 
 #: src/hci.cpp:3526
 msgid "Map:"
@@ -12989,11 +12972,11 @@ msgstr "Mentett játék betöltése"
 
 #: src/hci.cpp:3547
 msgid "Save"
-msgstr "Játék Mentés"
+msgstr "Mentés"
 
 #: src/hci.cpp:3548
 msgid "Save Map File"
-msgstr "Játék Mentés"
+msgstr "Térképfájl mentés"
 
 #: src/hci.cpp:3556
 msgid "New"
@@ -13001,11 +12984,11 @@ msgstr "Új"
 
 #: src/hci.cpp:3557
 msgid "New Blank Map"
-msgstr "Új Üres Térkép"
+msgstr "Új üres térkép"
 
 #: src/hci.cpp:3593
 msgid "Tile"
-msgstr "fájl"
+msgstr "Egymás mellé rak"
 
 #: src/hci.cpp:3594
 msgid "Place tiles on map"
@@ -13029,7 +13012,7 @@ msgstr "Építési korlátok meghatározása"
 
 #: src/hci.cpp:3621
 msgid "Feat"
-msgstr ""
+msgstr "Tett"
 
 #: src/hci.cpp:3622
 msgid "Place Features on map"
@@ -13072,33 +13055,33 @@ msgstr "Jelenlegi játék:"
 
 #: src/hci.cpp:3978
 msgid "Progress Bar"
-msgstr ""
+msgstr "Eszköztár sor"
 
 #: src/hci.cpp:4835
 msgid "Factory Delivery Point"
-msgstr ""
+msgstr "Gyár szállító pont"
 
 #: src/hci.cpp:4853
 msgid "Loop Production"
-msgstr ""
+msgstr "Külső értékesítés"
 
 #: src/hci.cpp:4933
 msgid "Tab Scroll left"
-msgstr ""
+msgstr "Tab görgetés balra"
 
 #: src/hci.cpp:4948
 msgid "Tab Scroll right"
-msgstr ""
+msgstr "Tab görgetés jobbra"
 
 #: src/hci.cpp:5177
 msgid "Ally progress"
-msgstr ""
+msgstr "Szövetséges állomány"
 
 #: src/ingameop.cpp:112
 #: src/ingameop.cpp:196
 #: src/ingameop.cpp:265
 msgid "Resume Game"
-msgstr ""
+msgstr "Vissza a játékba"
 
 #: src/ingameop.cpp:135
 msgid "WARNING: You're the host. If you quit, the game ends for everyone!"
@@ -13107,19 +13090,19 @@ msgstr "FIGYELEM! Te vagy a játékmester. Amennyiben te kilépsz a játék vég
 #: src/ingameop.cpp:187
 #: src/ingameop.cpp:522
 msgid "Tactical UI (Target Origin Icon): Show"
-msgstr ""
+msgstr "Taktikai UI (Cél ikon létrehozás): Mutat"
 
 #: src/ingameop.cpp:192
 #: src/ingameop.cpp:526
 msgid "Tactical UI (Target Origin Icon): Hide"
-msgstr ""
+msgstr "Taktikai UI (Cél ikon létrehozás): Elrejt"
 
 #: src/ingameop.cpp:275
 #: src/ingameop.cpp:498
 #: src/mission.cpp:2481
 #: src/mission.cpp:2598
 msgid "Save Game"
-msgstr "Játék Mentés"
+msgstr "Játék mentés"
 
 #: src/ingameop.cpp:339
 msgid "Host has quit the game!"
@@ -13130,7 +13113,6 @@ msgid "The game can't continue without the host."
 msgstr "A játék nem folytatható a játékmester nélkül."
 
 #: src/ingameop.cpp:351
-#, fuzzy
 msgid "-->  QUIT  <--"
 msgstr "--> KILÉPÉS <--"
 
@@ -13146,24 +13128,20 @@ msgstr ""
 "Warzone megpróbálja betölteni a játékot nélküle."
 
 #: src/intdisplay.cpp:205
-#, fuzzy
 msgid "Waiting for Power"
-msgstr "Várakozás további játékosra"
+msgstr "Energiára várakozás"
 
 #: src/intdisplay.cpp:253
-#, fuzzy
 msgid "Build Progress"
 msgstr "Építési pontok"
 
 #: src/intdisplay.cpp:275
-#, fuzzy
 msgid "Construction Progress"
-msgstr "Építő egység"
+msgstr "Építési egység"
 
 #: src/intdisplay.cpp:296
-#, fuzzy
 msgid "Research Progress"
-msgstr "Kutatás fejlesztve"
+msgstr "Kutatás fejlesztés"
 
 #: src/intelmap.cpp:242
 #: src/keybind.cpp:1365
@@ -13298,7 +13276,6 @@ msgid "Sorry, that cheat is disabled in multiplayer games."
 msgstr "Elnézést, a többjátékos játéknál a megtévesztés kikapcsolva."
 
 #: src/keybind.cpp:143
-#, fuzzy
 msgid "Warning! This cheat is buggy.  We recommend to NOT use it."
 msgstr "Figyelem! Ez a csalás hibákat tartalmaz. NEM ajánljuk használatra."
 
@@ -13364,7 +13341,7 @@ msgid "FPS display is disabled."
 msgstr "FPS kijelző kikapcsolva"
 
 #: src/keybind.cpp:581
-#, fuzzy, c-format
+#, c-format
 msgid "(Player %u) is using a cheat :Num Droids: %d  Num Structures: %d  Num Features: %d"
 msgstr "(%u játékos) csalást használt: Droidok száma: %d; Épületek száma: %d; Technológiák száma: %d"
 
@@ -13389,7 +13366,7 @@ msgid "Fog off"
 msgstr "Köd ki"
 
 #: src/keybind.cpp:1175
-#, fuzzy, c-format
+#, c-format
 msgid "Warning!  This cheat can cause dire problems later on! [%s]"
 msgstr "Figyelmeztetés! Ez a csalás később szörnyű problémákat tud okozni! [%s]"
 
@@ -13497,11 +13474,11 @@ msgstr "Hibák miatt el lett távolítva a hadrendi sebességkorlátozás."
 
 #: src/keybind.cpp:2529
 msgid "Vertical rotation direction: Normal"
-msgstr "Vízszintes forgatás iránya: Normál"
+msgstr "Vízszintes forgatás iránya: normál"
 
 #: src/keybind.cpp:2534
 msgid "Vertical rotation direction: Flipped"
-msgstr "Vízszintes forgatás iránya: Tükrözve"
+msgstr "Vízszintes forgatás iránya: tükrözve"
 
 #: src/keybind.cpp:2543
 msgid "Screen shake when things die: Off"
@@ -13518,17 +13495,17 @@ msgstr "Elnézést, de a játék sebessége nem változtatható többjátékos m
 #: src/keybind.cpp:2620
 #: src/keybind.cpp:2672
 msgid "Game Speed Reset"
-msgstr "Játék Sebesség Újraindítás"
+msgstr "Játék sebesség újraindítás"
 
 #: src/keybind.cpp:2624
-#, fuzzy, c-format
+#, c-format
 msgid "Game Speed Increased to %s"
-msgstr "Játék Sebesség Növekedett %3.1f nek"
+msgstr "Játék sebesség növekedett %s"
 
 #: src/keybind.cpp:2628
-#, fuzzy, c-format
+#, c-format
 msgid "Game Speed Reduced to %s"
-msgstr "Játék sebesség Csökkenő %3.1f nek"
+msgstr "Játék sebesség csökkent %s"
 
 #: src/keybind.cpp:2684
 msgid "Radar showing friend-foe colors"
@@ -13556,13 +13533,13 @@ msgstr "Radar mutatja a magasságot"
 
 #: src/keyedit.cpp:355
 msgid "KEY MAPPING"
-msgstr "Kulcsfontosságú Megfeleltetés"
+msgstr "Kulcsfontosságú megfeleltetés"
 
 #: src/keyedit.cpp:377
 #: src/multiint.cpp:1144
 #: src/multiint.cpp:1700
 msgid "Return To Previous Screen"
-msgstr "Vissza az Előző Képernyőre"
+msgstr "Vissza az előző képernyőre"
 
 #: src/keyedit.cpp:382
 msgid "Select Default"
@@ -13758,11 +13735,11 @@ msgstr "Játék opciók kijelzése"
 
 #: src/keymap.cpp:356
 msgid "Zoom Radar Out"
-msgstr "Radar Nézet Ki"
+msgstr "Radar nézet ki"
 
 #: src/keymap.cpp:357
 msgid "Zoom Radar In"
-msgstr "Radar Nézet"
+msgstr "Radar nézet be"
 
 #: src/keymap.cpp:358
 msgid "Zoom In"
@@ -14051,7 +14028,7 @@ msgstr "Nem lehet menteni a játékot!"
 
 #: src/mission.cpp:2042
 msgid "Load Transport"
-msgstr "Szállítás Betöltése"
+msgstr "Szállítás betöltése"
 
 #: src/mission.cpp:2429
 msgid "OBJECTIVE ACHIEVED by cheating!"
@@ -14073,15 +14050,15 @@ msgstr "A CÉL SIKERTELEN"
 #: src/mission.cpp:2500
 #: src/mission.cpp:2612
 msgid "Quit To Main Menu"
-msgstr "Kilépés a Saját Menübe"
+msgstr "Kilépés a saját menübe"
 
 #: src/mission.cpp:2468
 msgid "Continue Game"
-msgstr "Játék Folytatás"
+msgstr "Játék folytatás"
 
 #: src/mission.cpp:2563
 msgid "GAME SAVED :"
-msgstr "JÁTÉK MENTVE"
+msgstr "JÁTÉK MENTVE:"
 
 #: src/move.cpp:2308
 #, c-format
@@ -14139,13 +14116,12 @@ msgid "You Discover Blueprints For %s"
 msgstr "Felkutatott egy tervrajzot %s -nak"
 
 #: src/multiint.cpp:219
-#, fuzzy
 msgid "Medium"
-msgstr "Sebesség: Közepes"
+msgstr "Közepes"
 
 #: src/multiint.cpp:219
 msgid "Insane"
-msgstr ""
+msgstr "Örült"
 
 #: src/multiint.cpp:617
 #: src/multilimit.cpp:190
@@ -14168,11 +14144,11 @@ msgstr "Nincs rendelkezésre álló játék"
 
 #: src/multiint.cpp:840
 msgid "Authentication failed or not Authenticated"
-msgstr ""
+msgstr "Azonosítás hibás vagy nem azonosított"
 
 #: src/multiint.cpp:843
 msgid "The lobby rejected you!"
-msgstr ""
+msgstr "A lobbit elutasítom!"
 
 #: src/multiint.cpp:846
 msgid "Game is full"
@@ -14212,20 +14188,19 @@ msgstr "JÁTÉKOK"
 
 #: src/multiint.cpp:1148
 msgid "Host Game"
-msgstr "Játékmester játéka"
+msgstr "Host játék"
 
 #: src/multiint.cpp:1151
-#, fuzzy
 msgid "Connect IP"
-msgstr "Kapcsolódási hiba!"
+msgstr "Kapcsolódás IP!"
 
 #: src/multiint.cpp:1154
 msgid "Login"
-msgstr ""
+msgstr "Bejelentkezés"
 
 #: src/multiint.cpp:1155
 msgid "Logout"
-msgstr ""
+msgstr "Kijelentkezés"
 
 #: src/multiint.cpp:1159
 msgid "Refresh Games List"
@@ -14238,24 +14213,23 @@ msgstr "Jelszó megadása:"
 #: src/multiint.cpp:1197
 #: src/multiint.cpp:1314
 msgid "OK"
-msgstr ""
+msgstr "Rendben"
 
 #: src/multiint.cpp:1251
 msgid "LOBBY LOGIN"
-msgstr ""
+msgstr "Lobbi bejelentkezés"
 
 #: src/multiint.cpp:1261
 msgid "Username:"
-msgstr ""
+msgstr "Felhasználó név:"
 
 #: src/multiint.cpp:1284
-#, fuzzy
 msgid "Password:"
 msgstr "Jelszó megadása:"
 
 #: src/multiint.cpp:1307
 msgid "Use your wz2100.net credentials here."
-msgstr ""
+msgstr "Használd a wz2100.net igazolást itt."
 
 #: src/multiint.cpp:1456
 msgid "Tanks disabled!!"
@@ -14366,37 +14340,35 @@ msgstr "Épületek maximális számának beállítása"
 
 #: src/multiint.cpp:1809
 msgid "DIFFICULTY"
-msgstr ""
+msgstr "Nehézség"
 
 #: src/multiint.cpp:1823
 msgid "Less aggressive"
-msgstr ""
+msgstr "Agresszió nélkül"
 
 #: src/multiint.cpp:1824
-#, fuzzy
 msgid "Plays nice"
-msgstr "Játékos"
+msgstr "Kedvelt játékosok"
 
 #: src/multiint.cpp:1825
 msgid "No holds barred"
-msgstr ""
+msgstr "Nincs fedetlen hatalom"
 
 #: src/multiint.cpp:1826
-#, fuzzy
 msgid "Starts with advantages"
 msgstr "Kezdés fejlesztett bázissal"
 
 #: src/multiint.cpp:1854
 msgid "CHOOSE AI"
-msgstr ""
+msgstr "AI választás"
 
 #: src/multiint.cpp:1870
 msgid "Allow human players to join in this slot"
-msgstr ""
+msgstr "Emberi játékosok kapcsolódnak a nyomhoz"
 
 #: src/multiint.cpp:1878
 msgid "Leave this slot unused"
-msgstr ""
+msgstr "Elhagyom ezt a nem használt nyomot"
 
 #: src/multiint.cpp:2281
 msgid "Team"
@@ -14404,12 +14376,11 @@ msgstr "Csapat"
 
 #: src/multiint.cpp:2322
 msgid "You cannot change difficulty in a challenge"
-msgstr ""
+msgstr "Nem tudsz változtatni a nehézségen mozgásnál"
 
 #: src/multiint.cpp:2322
-#, fuzzy
 msgid "Click to change difficulty"
-msgstr "Kattintson az AI nehézség beállításához"
+msgstr "Kattintson a nehézség beállításához"
 
 #: src/multiint.cpp:2339
 msgid "Click when ready"
@@ -14424,32 +14395,28 @@ msgid "PLAYERS"
 msgstr "JÁTÉKOSOK"
 
 #: src/multiint.cpp:2422
-#, fuzzy
 msgid "Click to change to this slot"
-msgstr "Kattintson a játékos beállítás változtatásához"
+msgstr "Kattintson a játékosok betöltésének változtatásához"
 
 #: src/multiint.cpp:2450
 msgid "Choose Team"
 msgstr "Csapatválasztás"
 
 #: src/multiint.cpp:2480
-#, fuzzy
 msgid "Click to change player colour"
-msgstr "Kattintson a játékos beállítás változtatásához"
+msgstr "Kattintson a játékos színeinek változtatásához"
 
 #: src/multiint.cpp:2508
-#, fuzzy
 msgid "Click to change player position"
-msgstr "Kattintson a játékos beállítás változtatásához"
+msgstr "Kattintson a játékos poziciójának beállításához"
 
 #: src/multiint.cpp:2514
-#, fuzzy
 msgid "Click to change AI"
-msgstr "Kattintson a játékos beállítás változtatásához"
+msgstr "Kattintson a játékos AI beállítás változtatásához"
 
 #: src/multiint.cpp:2518
 msgid "You cannot change AI in a challenge"
-msgstr ""
+msgstr "Nem tudsz változtatni az AI-on mozgásnál"
 
 #: src/multiint.cpp:2580
 msgid "CHAT"
@@ -14490,20 +14457,19 @@ msgid "Players"
 msgstr "Játékosok száma"
 
 #: src/multiint.cpp:3875
-#, fuzzy, c-format
+#, c-format
 msgid "Click to take player slot %d"
-msgstr "Kattintson a játékos beállítás változtatásához"
+msgstr "Kattintson a játékosok betöltéséhez %d"
 
 #: src/multiint.cpp:3884
 #: src/multiint.cpp:4077
 msgid "Open"
-msgstr ""
+msgstr "Megnyitás"
 
 #: src/multiint.cpp:3884
 #: src/multiint.cpp:4078
-#, fuzzy
 msgid "Closed"
-msgstr "Bezár"
+msgstr "Bezárás"
 
 #: src/multiint.cpp:3935
 #, c-format
@@ -14522,7 +14488,7 @@ msgstr "GAZDAGÉP"
 #: src/multiint.cpp:3976
 #: src/multimenu.cpp:808
 msgid "Ping"
-msgstr ""
+msgstr "Pingelés"
 
 #: src/multijoin.cpp:100
 #: src/multijoin.cpp:101
@@ -14578,11 +14544,11 @@ msgid "Any number of players"
 msgstr "Nincs meghatározott játékos szám"
 
 #: src/multimenu.cpp:655
-#, fuzzy, c-format
+#, c-format
 msgid "%d player"
 msgid_plural "%d players"
-msgstr[0] "2 játékos"
-msgstr[1] "2 játékos"
+msgstr[0] "%d játékos"
+msgstr[1] "%d játékosok"
 
 #: src/multimenu.cpp:793
 msgid "Score"
@@ -14664,7 +14630,7 @@ msgstr "Kék"
 
 #: src/multiplay.cpp:1926
 msgid "Pink"
-msgstr "Magenta"
+msgstr "Rózsaszín"
 
 #: src/multiplay.cpp:1927
 msgid "Cyan"
@@ -14672,35 +14638,35 @@ msgstr "Cián"
 
 #: src/multiplay.cpp:1928
 msgid "Yellow"
-msgstr ""
+msgstr "Sárga"
 
 #: src/multiplay.cpp:1929
 msgid "Purple"
-msgstr ""
+msgstr "Lila"
 
 #: src/multiplay.cpp:1930
 msgid "White"
-msgstr ""
+msgstr "Fehér"
 
 #: src/multiplay.cpp:1931
 msgid "Bright blue"
-msgstr ""
+msgstr "Élénk kék"
 
 #: src/multiplay.cpp:1932
 msgid "Neon green"
-msgstr ""
+msgstr "Neon zöld"
 
 #: src/multiplay.cpp:1933
 msgid "Infrared"
-msgstr ""
+msgstr "Infravörös"
 
 #: src/multiplay.cpp:1934
 msgid "Ultraviolet"
-msgstr ""
+msgstr "Ultraviola"
 
 #: src/multiplay.cpp:1935
 msgid "Brown"
-msgstr ""
+msgstr "Barna"
 
 #: src/order.cpp:813
 msgid "We can't do that! We must be a Cyborg unit to use a Cyborg Transport!"
@@ -14727,7 +14693,7 @@ msgstr "Kutatás befejezett"
 
 #: src/research.cpp:1902
 msgid "Research Award"
-msgstr "Kutatós díj"
+msgstr "Kutatói díj"
 
 #: src/scores.cpp:99
 #, c-format
@@ -14772,13 +14738,13 @@ msgstr "Összes épület: %u"
 #: src/scores.cpp:108
 #, c-format
 msgid "Rookie: %u"
-msgstr "Zöldfülű: %u"
+msgstr "Újonc: %u"
 
 #: src/scores.cpp:109
 #, c-format
 msgctxt "rank"
 msgid "Green: %u"
-msgstr "Zöld: %u"
+msgstr "Zöldfülű: %u"
 
 #: src/scores.cpp:110
 #, c-format
@@ -14882,7 +14848,6 @@ msgid "Unable to locate any Commanders!"
 msgstr "Képtelen lokalizálni bármely parancsnokot!"
 
 #: src/structure.cpp:2551
-#, fuzzy
 msgid "Command Control Limit Reached - Production Halted"
 msgstr "Szabályozási értéket elérték - Termelés megállt"
 
@@ -14891,8 +14856,8 @@ msgstr "Szabályozási értéket elérték - Termelés megállt"
 #, fuzzy, c-format
 msgid "%s - %u Unit assigned - Damage %3.0f%%"
 msgid_plural "%s - %u Units assigned - Damage %3.0f%%"
-msgstr[0] "%s - %u Unit assigned"
-msgstr[1] "%s - %u Units assigned"
+msgstr[0] "%s - %u Egység felhatalmazás"
+msgstr[1] "%s - %u Egységek felhatalmazása"
 
 #: src/structure.cpp:5598
 #: src/structure.cpp:5666
@@ -14903,9 +14868,9 @@ msgid "%s - Damage %3.0f%%"
 msgstr "%s - Kár %3.0f%%"
 
 #: src/structure.cpp:5648
-#, fuzzy, c-format
+#, c-format
 msgid "%s - Connected %u of %u - Damage %3.0f%%"
-msgstr "%s - Kapcsolódott %u of %u"
+msgstr "%s - Kapcsolódott %u of %u- Kár %3.0f%%"
 
 #: src/structure.cpp:5811
 #: src/structure.cpp:5856
