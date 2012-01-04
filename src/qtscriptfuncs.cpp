@@ -545,6 +545,114 @@ static QScriptValue js_componentAvailable(QScriptContext *context, QScriptEngine
 	return QScriptValue(avail);
 }
 
+//-- \subsection{addDroid(player, x, y, name, body, propulsion, reserved, droid type, turrets...)}
+//-- Create and place a droid at the given x, y position as belonging to the given player, built with
+//-- the given components. Currently does not support placing droids in multiplayer, doing so will
+//-- cause a desync.
+static QScriptValue js_addDroid(QScriptContext *context, QScriptEngine *engine)
+{
+	int player = context->argument(0).toInt32();
+	int x = context->argument(1).toInt32();
+	int y = context->argument(2).toInt32();
+	QString templName = context->argument(3).toString();
+	DROID_TEMPLATE sTemplate, *psTemplate = &sTemplate;
+	DROID_TYPE droidType = (DROID_TYPE)context->argument(7).toInt32();
+	int numTurrets = context->argumentCount() - 8; // anything beyond first eight parameters, are turrets
+	COMPONENT_TYPE compType = COMP_NUMCOMPONENTS;
+	
+	memset(psTemplate->asParts, 0, sizeof(psTemplate->asParts)); // reset to defaults
+	memset(psTemplate->asWeaps, 0, sizeof(psTemplate->asWeaps));
+	int body = getCompFromName(COMP_BODY, context->argument(4).toString().toUtf8().constData());
+	int propulsion = getCompFromName(COMP_PROPULSION, context->argument(5).toString().toUtf8().constData());
+	if (body < 0)
+	{
+		debug(LOG_ERROR, "Wanted to build %s, but body type unavailable", templName.toUtf8().constData());
+		return QScriptValue(false); // no component available
+	}
+	if (propulsion < 0)
+	{
+		debug(LOG_ERROR, "Wanted to build %s, but propulsion type unavailable", templName.toUtf8().constData());
+		return QScriptValue(false); // no component available
+	}
+	psTemplate->asParts[COMP_BODY] = body;
+	psTemplate->asParts[COMP_PROPULSION] = propulsion;
+	psTemplate->numWeaps = 0;
+	for (int i = 0; i < numTurrets; i++)
+	{
+		context->argument(8 + i).toString();
+		int j;
+		switch (droidType)
+		{
+		case DROID_PERSON:
+		case DROID_WEAPON:
+		case DROID_CYBORG:
+		case DROID_TRANSPORTER:
+		case DROID_DEFAULT:
+		case DROID_CYBORG_SUPER:
+			j = getCompFromName(COMP_WEAPON, context->argument(8 + i).toString().toUtf8().constData());
+			if (j < 0)
+			{
+				debug(LOG_SCRIPT, "Wanted to build %s at (%d, %d), but no weapon unavailable", 
+				      templName.toUtf8().constData(), x, y);
+				return QScriptValue(false);
+			}
+			psTemplate->asWeaps[i] = j;
+			psTemplate->numWeaps++;
+			continue;
+		case DROID_CYBORG_CONSTRUCT:
+		case DROID_CONSTRUCT:
+			compType = COMP_CONSTRUCT;
+			break;
+		case DROID_COMMAND:
+			compType = COMP_BRAIN;
+			psTemplate->numWeaps = 1; // hack, necessary to pass intValidTemplate
+			break;
+		case DROID_REPAIR:
+		case DROID_CYBORG_REPAIR:
+			compType = COMP_REPAIRUNIT;
+			break;
+		case DROID_ECM:
+			compType = COMP_ECM;
+			break;
+		case DROID_SENSOR:
+			compType = COMP_SENSOR;
+			break;
+		case DROID_ANY:
+			break; // wtf
+		}
+		j = getCompFromName(compType, context->argument(8 + i).toString().toUtf8().constData());
+		if (j < 0)
+		{
+			debug(LOG_SCRIPT, "Wanted to build %s, but turret unavailable", templName.toUtf8().constData());
+			return QScriptValue(false);
+		}
+		psTemplate->asParts[compType] = j;
+	}
+	psTemplate->droidType = droidType; // may be overwritten by the call below
+	bool valid = intValidTemplate(psTemplate, templName.toUtf8().constData(), true);
+	if (valid)
+	{
+		bool oldMulti = bMultiMessages;
+		bMultiMessages = false; // ugh, fixme
+		DROID *psDroid = buildDroid(psTemplate, world_coord(x), world_coord(y), player, false, NULL);
+		if (psDroid)
+		{
+			addDroid(psDroid, apsDroidLists);
+			debug(LOG_LIFE, "Created droid %s by script for player %d: %u", objInfo(psDroid), player, psDroid->id);
+		}
+		else
+		{
+			debug(LOG_ERROR, "Invalid droid %s", templName.toUtf8().constData());
+		}
+		bMultiMessages = oldMulti; // ugh
+	}
+	else
+	{
+		debug(LOG_ERROR, "Invalid template %s", templName.toUtf8().constData());
+	}
+	return QScriptValue(valid);
+}
+
 static int get_first_available_component(STRUCTURE *psFactory, const QScriptValue &list, COMPONENT_TYPE type)
 {
 	const int player = psFactory->player;
@@ -591,6 +699,7 @@ static int get_first_available_component(STRUCTURE *psFactory, const QScriptValu
 //-- passed as ordinary strings, or as a list of strings. If passed as a list, the first available
 //-- component in the list will be used. The droid type must be set to match the type of turret
 //-- passed in.
+// TODO - fix memory leaks
 static QScriptValue js_buildDroid(QScriptContext *context, QScriptEngine *engine)
 {
 	QScriptValue structVal = context->argument(0);
@@ -673,7 +782,7 @@ static QScriptValue js_buildDroid(QScriptContext *context, QScriptEngine *engine
 		j = get_first_available_component(psStruct, context->argument(6 + i), compType);
 		if (j < 0)
 		{
-			debug(LOG_SCRIPT, "Wanted to build %s at %s, but weapon unavailable", 
+			debug(LOG_SCRIPT, "Wanted to build %s at %s, but turret unavailable", 
 			      templName.toUtf8().constData(), objInfo(psStruct));
 			return QScriptValue(false);
 		}
@@ -708,7 +817,6 @@ static QScriptValue js_buildDroid(QScriptContext *context, QScriptEngine *engine
 			debug(LOG_ERROR, "Could not produce template %s in %s", psTemplate->aName, objInfo(psStruct));
 			valid = false;
 		}
-		
 	}
 	else
 	{
@@ -1563,6 +1671,7 @@ bool registerFunctions(QScriptEngine *engine)
 	engine->globalObject().setProperty("orderDroidStatsLoc", engine->newFunction(js_orderDroidStatsLoc));
 	engine->globalObject().setProperty("orderDroidObj", engine->newFunction(js_orderDroidObj));
 	engine->globalObject().setProperty("buildDroid", engine->newFunction(js_buildDroid));
+	engine->globalObject().setProperty("addDroid", engine->newFunction(js_addDroid));
 	engine->globalObject().setProperty("componentAvailable", engine->newFunction(js_componentAvailable));
 	engine->globalObject().setProperty("isVTOL", engine->newFunction(js_isVTOL));
 	engine->globalObject().setProperty("safeDest", engine->newFunction(js_safeDest));
