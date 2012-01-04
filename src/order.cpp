@@ -214,9 +214,9 @@ BASE_OBJECT * checkForRepairRange(DROID *psDroid,DROID *psTarget)
 	{
 		//check for damage
 		if (droidIsDamaged(psCurr) && visibleObject(psDroid, psCurr, false)
-		    && droidSqDist(psDroid, psCurr) <
+		    && (unsigned)droidSqDist(psDroid, psCurr) <  // Cast to unsigned, since droidSqDist returns -1 if psCurr is unreachable, which should compare greater than the maximum range.
 		       // Hold position? Repair range, else repair max dist
-		       ((psDroid->order.type == DORDER_NONE && secondaryGetState(psDroid, DSO_HALTTYPE) == DSS_HALT_HOLD) ?
+		       unsigned((psDroid->order.type == DORDER_NONE && secondaryGetState(psDroid, DSO_HALTTYPE) == DSS_HALT_HOLD) ?
 		        REPAIR_RANGE : REPAIR_MAXDIST*REPAIR_MAXDIST) )
 		{
 			return psCurr;
@@ -257,9 +257,9 @@ BASE_OBJECT * checkForDamagedStruct(DROID *psDroid, STRUCTURE *psTarget)
 		//check for damage
 		if (psCurr->status == SS_BUILT && structIsDamaged(psCurr) && !checkDroidsDemolishing(psCurr) 
 		    && visibleObject(psDroid, psCurr, false)
-		    && droidSqDist(psDroid, psCurr) <
+		    && (unsigned)droidSqDist(psDroid, psCurr) <  // Cast to unsigned, since droidSqDist returns -1 if psCurr is unreachable, which should compare greater than the maximum range.
 		       // Hold position? Repair range, else repair max dist
-		       ((psDroid->order.type == DORDER_NONE && secondaryGetState(psDroid, DSO_HALTTYPE) == DSS_HALT_HOLD) ?
+		       (unsigned)((psDroid->order.type == DORDER_NONE && secondaryGetState(psDroid, DSO_HALTTYPE) == DSS_HALT_HOLD) ?
 		        REPAIR_RANGE : REPAIR_MAXDIST*REPAIR_MAXDIST) )
 		{
 			return psCurr;
