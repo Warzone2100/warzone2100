@@ -520,11 +520,9 @@ void clustObjectSeen(BASE_OBJECT *psObj, BASE_OBJECT *psViewer)
 	{
 		ASSERT(psObj->cluster != (UBYTE)~0, "object not in a cluster");
 		if ( (player != (SDWORD)psObj->player) &&
-			 psObj->visible[player] &&
+			 hasSharedVision(psViewer->player, player) &&
 			!(aClusterVisibility[psObj->cluster] & (1 << player)))
 		{
-//			DBPRINTF(("cluster %d (player %d) seen by player %d\n",
-//				clustGetClusterID(psObj), psObj->player, player));
 			aClusterVisibility[psObj->cluster] |= 1 << player;
 
 			psScrCBObjSeen = psObj;

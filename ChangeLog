@@ -1,4 +1,4 @@
-master_201xxxxx
+master_201xxxxx:
  * General:
    * Change: Stored templates. Automatically adds a unit design when all needed research is available (ticket:1946, commit:a6fa286dcf463d4c6d74e8a874e70f671f3d5018, commit:add866851b5a58e38004a9cb816a22aedc1e10d9, commit:95bdafdffb78826b217860356d7ee546654d67b4, commit:e3a981c4f8a92b054d9962ef0073d2f603e7655e, commit:4f1b79d3d95a8624cd151b016126f20559468ad7, commit:4edc0d77a67f4db3b230f9d3089ee14efc9ad4bd)
    * Change: Don't give back power when a power generator gets destroyed (commit:7b66301950aa566978c71fc04104ff18c297183a)
@@ -33,6 +33,7 @@ master_201xxxxx
    * Update: Turkish (ticket:2963, ticket:3001, commit:9ea22074d16106c17d717657e049863cdf8d1c09, commit:39040429f5c506f0e7c596f305203bd84239e09f)
    * Update: German (ticket:2967, commit:075e18828c5a8873fa4157e9c47958ddb1547870)
    * Update: Polish (ticket:1347, commit:89a282ba9bfe2c16701d270c082c8c0311c618bf)
+   * Update: Hungarian (ticket:3025, commit:dd7e742d1684d8e26b9f415080dc174ff6fcc247)
 
 master_20111204
  * General:

@@ -523,9 +523,7 @@ static bool scrCBObjectSeen(SDWORD callback)
 	}
 
 	*ppsObj = NULL;
-	if (((psScrCBObjViewer != NULL) &&
-		 (psScrCBObjViewer->player != player)) ||
-		!psScrCBObjSeen->visible[player])
+	if (psScrCBObjViewer != NULL &&  psScrCBObjViewer->player != player)
 	{
 		retval = false;
 	}
