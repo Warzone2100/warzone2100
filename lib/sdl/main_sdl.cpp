@@ -888,6 +888,14 @@ void wzMain(int &argc, char **argv)
 bool wzMain2()
 {
 	//BEGIN **** Was in old frameInitialise. ****
+
+	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) != 0)
+	{
+		debug( LOG_ERROR, "Error: Could not initialise SDL (%s).\n", SDL_GetError() );
+		return false;
+	}
+
+#if !defined(WZ_OS_MAC) // Don't replace our 512 dock icon with a 32 one
 #if SDL_BYTEORDER == SDL_BIG_ENDIAN
 	uint32_t rmask = 0xff000000;
 	uint32_t gmask = 0x00ff0000;
@@ -900,14 +908,9 @@ bool wzMain2()
 	uint32_t amask = 0xff000000;
 #endif
 
-	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) != 0)
-	{
-		debug( LOG_ERROR, "Error: Could not initialise SDL (%s).\n", SDL_GetError() );
-		return false;
-	}
-
 	SDL_WM_SetIcon(SDL_CreateRGBSurfaceFrom((void*)wz2100icon.pixel_data, wz2100icon.width, wz2100icon.height, wz2100icon.bytes_per_pixel * 8,
 	                                        wz2100icon.width * wz2100icon.bytes_per_pixel, rmask, gmask, bmask, amask), NULL);
+#endif
 	SDL_WM_SetCaption(PACKAGE_NAME, NULL);
 
 	/* initialise all cursors */
