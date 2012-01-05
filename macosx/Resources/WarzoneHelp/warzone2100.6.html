@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>warzone2100</title><link rel="stylesheet" type="text/css" href="docbook-xsl.css" /><meta name="generator" content="DocBook XSL Stylesheets V1.76.1" /></head><body><div xml:lang="en" class="refentry" title="warzone2100" lang="en"><a id="idp4447760"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>warzone2100 — 3D real time strategy game</p></div><div class="refsynopsisdiv" title="Synopsis"><a id="_synopsis"></a><h2>Synopsis</h2><p><span class="strong"><strong>warzone2100</strong></span> [<span class="emphasis"><em>OPTIONS</em></span>]</p></div><div class="refsect1" title="DESCIPTION"><a id="_desciption"></a><h2>DESCIPTION</h2><p>This manual page documents briefly the warzone2100 command.</p><p>Warzone 2100 is a 3D science fiction real time strategy game.</p></div><div class="refsect1" title="OPTIONS"><a id="_options"></a><h2>OPTIONS</h2><p>Note: In contrast to older versions option parameters need a <span class="emphasis"><em>=</em></span>, space doesn’t
+work anymore.</p><div class="variablelist"><dl><dt><span class="term">
+<span class="strong"><strong>--cheat</strong></span>
+</span></dt><dd>
+      Run in cheat mode.
+</dd><dt><span class="term">
+<span class="strong"><strong>--datadir</strong></span>=<span class="emphasis"><em>DIR</em></span>
+</span></dt><dd>
+      Set default datadir to <span class="emphasis"><em>DIR</em></span>.
+</dd><dt><span class="term">
+<span class="strong"><strong>--debug</strong></span>=<span class="emphasis"><em>FLAG</em></span>
+</span></dt><dd>
+      Show debug for <span class="emphasis"><em>FLAG</em></span>, use this several times for several flags. Useful
+      flags include <span class="emphasis"><em>wz</em></span>, <span class="emphasis"><em>3d</em></span>, <span class="emphasis"><em>sound</em></span>, <span class="emphasis"><em>video</em></span>. <span class="emphasis"><em>all</em></span> gives all of that and
+      much more.
+</dd><dt><span class="term">
+<span class="strong"><strong>--debugfile</strong></span>=<span class="emphasis"><em>FILE</em></span>
+</span></dt><dd>
+      Log debug output in <span class="emphasis"><em>FILE</em></span>.
+</dd><dt><span class="term">
+<span class="strong"><strong>--fullscreen</strong></span>
+</span></dt><dd>
+      Play in fullscreen mode.
+</dd><dt><span class="term">
+<span class="strong"><strong>--help</strong></span>
+</span></dt><dd>
+      Show help and exit.
+</dd><dt><span class="term">
+<span class="strong"><strong>--mod</strong></span>=<span class="emphasis"><em>MOD</em></span>
+</span></dt><dd>
+      Enable global mod <span class="emphasis"><em>MOD</em></span>.
+</dd><dt><span class="term">
+<span class="strong"><strong>--mod_ca</strong></span>=<span class="emphasis"><em>MOD</em></span>
+</span></dt><dd>
+      Enable campaign only mod <span class="emphasis"><em>MOD</em></span>.
+</dd><dt><span class="term">
+<span class="strong"><strong>--mod_mp</strong></span>=<span class="emphasis"><em>MOD</em></span>
+</span></dt><dd>
+      Enable multiplay only mod <span class="emphasis"><em>MOD</em></span>.
+</dd><dt><span class="term">
+<span class="strong"><strong>--savegame</strong></span>=<span class="emphasis"><em>NAME</em></span>
+</span></dt><dd>
+      Load a saved game <span class="emphasis"><em>NAME</em></span> (needs to include the .gam extension).
+</dd><dt><span class="term">
+<span class="strong"><strong>--window</strong></span>
+</span></dt><dd>
+      Play in windowed mode.
+</dd><dt><span class="term">
+<span class="strong"><strong>--version</strong></span>
+</span></dt><dd>
+      Output version info and exit.
+</dd><dt><span class="term">
+<span class="strong"><strong>--resolution</strong></span>=<span class="emphasis"><em>WIDTHxHEIGHT</em></span>
+</span></dt><dd>
+      Run  at <span class="emphasis"><em>WIDTH</em></span> times <span class="emphasis"><em>HEIGHT</em></span> screen resolution. This needs to be a
+      resolution supported by your X server.
+</dd><dt><span class="term">
+<span class="strong"><strong>--(no)shadows</strong></span>
+</span></dt><dd>
+      Toggle the shadows.
+</dd><dt><span class="term">
+<span class="strong"><strong>--(no)sound</strong></span>
+</span></dt><dd>
+      Toggle the sound.
+</dd><dt><span class="term">
+<span class="strong"><strong>--(no)texturecompression</strong></span>
+</span></dt><dd>
+      Toggle texture compression (default on). At least on systems where Mesa’s
+      libtxc-dxtn handles texture compression, loading is slower with it enabled.
+      In-game FPS are also higher though.
+</dd></dl></div><p>The fullscreen/window, resolution,  sound,  and  shadows  settings  are
+stored,  so  they  only  need to be specified once, or when you want to
+change them.</p></div><div class="refsect1" title="EXAMPLES"><a id="_examples"></a><h2>EXAMPLES</h2><div class="variablelist"><dl><dt><span class="term">
+<span class="emphasis"><em>warzone2100 --fullscreen --resolution=800x600</em></span>
+</span></dt><dd>
+      Run in full screen at 800x600 screen resolution.
+</dd><dt><span class="term">
+<span class="emphasis"><em>warzone2100 --window --resolution=800x600</em></span>
+</span></dt><dd>
+      Run in a window at 800x600 screen resolution.
+</dd><dt><span class="term">
+<span class="emphasis"><em>warzone2100</em></span>
+</span></dt><dd>
+      Run the game, with the last used resolution, fullscreen/window, sound and
+      shadow settings.
+</dd></dl></div></div><div class="refsect1" title="AUTHORS"><a id="_authors"></a><h2>AUTHORS</h2><p>See the copyright file included in the package.</p><p>This manual page was originally written by Linas Zvirblis  &lt;<a class="ulink" href="mailto:0x0007@gmail.com" target="_top">0x0007@gmail.com</a>&gt;
+for the Debian project, and modified by the Warzone project.</p></div></div></body></html>

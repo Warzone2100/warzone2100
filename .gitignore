@@ -91,6 +91,10 @@ win32/__BUILD_CONFIG.USER
 /doc/quickstartguide.html
 /doc/quickstartguide.pdf
 /doc/warzone2100.6
+/doc/events.tex
+/doc/functions.tex
+/doc/globals.tex
+/doc/objects.tex
 
 # Generated executables:
 /build_tools/autorevision/autorevision

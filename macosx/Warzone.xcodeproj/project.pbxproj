@@ -7,6 +7,18 @@
 	objects = {
 
 /* Begin PBXAggregateTarget section */
+		435AE73F14B5566700B01C85 /* Generate Docs */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 435AE74614B5566D00B01C85 /* Build configuration list for PBXAggregateTarget "Generate Docs" */;
+			buildPhases = (
+				435AE73E14B5566700B01C85 /* Doc Build */,
+				435AE76714B55AE000B01C85 /* Doc Index */,
+			);
+			dependencies = (
+			);
+			name = "Generate Docs";
+			productName = "Generate Docs";
+		};
 		438B0C05137730FE008184FC /* Fetch Third Party Sources */ = {
 			isa = PBXAggregateTarget;
 			buildConfigurationList = 438B0C0E13773146008184FC /* Build configuration list for PBXAggregateTarget "Fetch Third Party Sources" */;
@@ -437,6 +449,7 @@
 		4355E13110D6028C00A19EE4 /* theora.h in Headers */ = {isa = PBXBuildFile; fileRef = 4355E12D10D6028C00A19EE4 /* theora.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4355E13210D6028C00A19EE4 /* theoradec.h in Headers */ = {isa = PBXBuildFile; fileRef = 4355E12E10D6028C00A19EE4 /* theoradec.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4355E13310D6028C00A19EE4 /* theoraenc.h in Headers */ = {isa = PBXBuildFile; fileRef = 4355E12F10D6028C00A19EE4 /* theoraenc.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		435AE7B014B55C3400B01C85 /* WarzoneHelp in Resources */ = {isa = PBXBuildFile; fileRef = 435AE76A14B55C3400B01C85 /* WarzoneHelp */; };
 		435D3B6A149AC4A000E24F69 /* cursors_sdl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4301EC49149A3DE90054BABB /* cursors_sdl.cpp */; };
 		436671C713D1FF5D00FE85BA /* glc.h in Headers */ = {isa = PBXBuildFile; fileRef = 436671C213D1FF5D00FE85BA /* glc.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		436671C813D1FF5D00FE85BA /* glew.h in Headers */ = {isa = PBXBuildFile; fileRef = 436671C313D1FF5D00FE85BA /* glew.h */; settings = {ATTRIBUTES = (Private, ); }; };
@@ -1603,6 +1616,7 @@
 		4355E12D10D6028C00A19EE4 /* theora.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = theora.h; path = external/libtheora/include/theora/theora.h; sourceTree = "<group>"; };
 		4355E12E10D6028C00A19EE4 /* theoradec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = theoradec.h; path = external/libtheora/include/theora/theoradec.h; sourceTree = "<group>"; };
 		4355E12F10D6028C00A19EE4 /* theoraenc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = theoraenc.h; path = external/libtheora/include/theora/theoraenc.h; sourceTree = "<group>"; };
+		435AE76A14B55C3400B01C85 /* WarzoneHelp */ = {isa = PBXFileReference; lastKnownFileType = folder; name = WarzoneHelp; path = Resources/WarzoneHelp; sourceTree = "<group>"; };
 		4366712C13D1FCC300FE85BA /* QuesoGLC-All.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "QuesoGLC-All.xcconfig"; path = "configs/QuesoGLC-All.xcconfig"; sourceTree = "<group>"; };
 		4366712D13D1FCC300FE85BA /* QuesoGLC-Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "QuesoGLC-Debug.xcconfig"; path = "configs/QuesoGLC-Debug.xcconfig"; sourceTree = "<group>"; };
 		4366712E13D1FCC300FE85BA /* QuesoGLC-Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "QuesoGLC-Release.xcconfig"; path = "configs/QuesoGLC-Release.xcconfig"; sourceTree = "<group>"; };
@@ -2100,6 +2114,7 @@
 				0246A05C0BD3C975004D1C70 /* Warzone.icns */,
 				02356D780BD3BB3500E9A019 /* Warzone-Info.plist */,
 				43B8FF3C127CD949006F5A13 /* Fonts */,
+				435AE76A14B55C3400B01C85 /* WarzoneHelp */,
 				43025C2B111FB072006C49B1 /* wzlocal */,
 			);
 			name = Resources;
@@ -3895,6 +3910,7 @@
 				43AA702913C7FC640015B52B /* QJson */,
 				4366718113D1FD5600FE85BA /* QuesoGLC */,
 				43F77C7710F0125E00E04615 /* Make DMGs for Release */,
+				435AE73F14B5566700B01C85 /* Generate Docs */,
 			);
 		};
 /* End PBXProject section */
@@ -3913,6 +3929,7 @@
 			files = (
 				0246A05D0BD3C975004D1C70 /* Warzone.icns in Resources */,
 				438BDDF31129DC9A00998660 /* InfoPlist.strings in Resources */,
+				435AE7B014B55C3400B01C85 /* WarzoneHelp in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4107,6 +4124,34 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "DirectorY=\"gettext-0.17.mpkg_\"\nOutDir=\"gettext-0.17.mpkg\"\nFileName=\"gettext-0.17.mpkg.tar.gz\"\nBuiltDLP=\"http://downloads.sourceforge.net/project/warzone2100/build-tools/mac/gettext-0.17.mpkg.tar.gz\"\nMD5Sum=\"ba7984918fe0b36e2e7c786693e005f2\"\n\n# Checks\nexport PATH=$PATH:/sw/bin:/opt/local/bin\nif type -aP msgfmt; then\n    echo \"msgfmt exists, skipping\"\n    exit 0\nelif [ -x \"/opt/local/bin/port\" ]; then\n  echo \"warning: Please run the following command in the terminal: 'sudo port install gettext'.\" >&2\n  open -b com.apple.Terminal\n  exit 1\nelif [ -d \"${SRCROOT}/external/${OutDir}\" ]; then\n    touch build/notrans.dis\n    echo \"warning: Gettext support has been disabled because we could not find a binary.\" >&2\n    exit 0\nelif [ ! `sw_vers -productVersion | sed -e 's:^...\\(.\\)..$:\\1:'` -ge \"6\" ]; then\n    touch build/notrans.dis\n    echo \"warning: Gettext support has been disabled because we could not find a binary.\" >&2\n    exit 0\nfi\n\nconfigs/FetchPrebuilt.sh \"${DirectorY}\" \"${OutDir}\" \"${FileName}\" \"${BuiltDLP}\" \"${MD5Sum}\"\nFetchExitStatus=$?\n\n# Install\nif [ ! \"${FetchExitStatus}\" = \"0\" ]; then\n    exit \"${FetchExitStatus}\"\nelif [ -d \"${SRCROOT}/external/${OutDir}\" ]; then\n    echo \" Please install the gettext package before continuing.\" >&2\n    open \"${SRCROOT}/external/${OutDir}\"\n    exit 1\nfi";
+		};
+		435AE73E14B5566700B01C85 /* Doc Build */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Doc Build";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "export PATH=$PATH:/sw/bin:/opt/local/bin\n\n# Config\nmWarzoneHelp=\"macosx/Resources/WarzoneHelp\"\n\ncd \"${SRCROOT}/..\"\n\n# asciidoc based docs\nif type -aP a2x; then\n\t# quickstartguide\n\ta2x -f chunked -D \"${mWarzoneHelp}\" doc/quickstartguide.asciidoc\n\tcp -af ${mWarzoneHelp}/quickstartguide.chunked/* ${mWarzoneHelp}\n\trm -fr ${mWarzoneHelp}/quickstartguide.chunked\n\n\t# man page\n\ta2x -f xhtml -d manpage -D \"${mWarzoneHelp}\" doc/warzone2100.6.asciidoc\nelse\n\techo \"error: no suitable a2x (asciidoc) in path\"\n\texit 1\nfi\n\n# LaTeX based docs\nif type -aP pdflatex; then\n\t# javascript doc\n\tgrep src/qtscript.cpp -e '//==' | sed 's://==::' > doc/globals.tex\n\tgrep src/qtscript.cpp -e '//__' | sed 's://__::' > doc/events.tex\n\tgrep src/qtscript.cpp -e '//--' | sed 's://--::' > doc/functions.tex\n\tgrep src/qtscriptfuncs.cpp -e '//--' | sed 's://--::' >> doc/functions.tex\n\tgrep src/qtscriptfuncs.cpp -e '//;;' | sed 's://;;::' > doc/objects.tex\n\tcd doc/\n\tpdflatex javascript.tex\n\tcd ..\n\tcp -af doc/javascript.pdf ${mWarzoneHelp}\nelse\n\techo \"error: no suitable pdflatex (tetex) in path\"\n\texit 1\nfi\n\nexit 0\n";
+		};
+		435AE76714B55AE000B01C85 /* Doc Index */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Doc Index";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "rm -f Resources/WarzoneHelp/WarzoneHelp.helpindex\nhiutil -Caf Resources/WarzoneHelp.helpindex Resources/WarzoneHelp\ncp -af Resources/WarzoneHelp.helpindex Resources/WarzoneHelp/\nrm -f Resources/WarzoneHelp.helpindex\nexit 0\n";
 		};
 		4366712213D1F83200FE85BA /* QuesoGLC - Fetch source */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -4327,6 +4372,7 @@
 			);
 			name = Patch;
 			outputPaths = (
+				external/libvorbis/vorbis.diff,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -5187,6 +5233,27 @@
 			};
 			name = Release;
 		};
+		435AE74014B5566800B01C85 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "Generate Docs";
+			};
+			name = Debug;
+		};
+		435AE74114B5566800B01C85 /* StaticAnalyzer */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "Generate Docs";
+			};
+			name = StaticAnalyzer;
+		};
+		435AE74214B5566800B01C85 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "Generate Docs";
+			};
+			name = Release;
+		};
 		4366718413D1FD5700FE85BA /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 4366712D13D1FCC300FE85BA /* QuesoGLC-Debug.xcconfig */;
@@ -5489,6 +5556,16 @@
 				43502D541347640800A02A1F /* Debug */,
 				43502D551347640800A02A1F /* StaticAnalyzer */,
 				43502D561347640800A02A1F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		435AE74614B5566D00B01C85 /* Build configuration list for PBXAggregateTarget "Generate Docs" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				435AE74014B5566800B01C85 /* Debug */,
+				435AE74114B5566800B01C85 /* StaticAnalyzer */,
+				435AE74214B5566800B01C85 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
