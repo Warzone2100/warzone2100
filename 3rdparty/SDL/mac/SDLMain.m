@@ -123,47 +123,61 @@ static NSString *getApplicationName(void)
 
 #else
 
+static void setupWindowMenu(void);
+
 static void setApplicationMenu(void)
 {
     /* warning: this code is very odd */
-    NSMenu *appleMenu;
+    NSMenu *appMenu;
+    NSMenu *helpMenu;
     NSMenuItem *menuItem;
     NSString *title;
     NSString *appName;
     
     appName = getApplicationName();
-    appleMenu = [[NSMenu alloc] initWithTitle:@""];
+    appMenu = [[NSMenu alloc] initWithTitle:@""];
     
     /* Add menu items */
     title = [@"About " stringByAppendingString:appName];
-    [appleMenu addItemWithTitle:title action:@selector(orderFrontStandardAboutPanel:) keyEquivalent:@""];
+    [appMenu addItemWithTitle:title action:@selector(orderFrontStandardAboutPanel:) keyEquivalent:@""];
 
-    [appleMenu addItem:[NSMenuItem separatorItem]];
+    [appMenu addItem:[NSMenuItem separatorItem]];
 
     title = [@"Hide " stringByAppendingString:appName];
-    [appleMenu addItemWithTitle:title action:@selector(hide:) keyEquivalent:@"h"];
+    [appMenu addItemWithTitle:title action:@selector(hide:) keyEquivalent:@"h"];
 
-    menuItem = (NSMenuItem *)[appleMenu addItemWithTitle:@"Hide Others" action:@selector(hideOtherApplications:) keyEquivalent:@"h"];
+    menuItem = [appMenu addItemWithTitle:@"Hide Others" action:@selector(hideOtherApplications:) keyEquivalent:@"h"];
     [menuItem setKeyEquivalentModifierMask:(NSAlternateKeyMask|NSCommandKeyMask)];
 
-    [appleMenu addItemWithTitle:@"Show All" action:@selector(unhideAllApplications:) keyEquivalent:@""];
+    [appMenu addItemWithTitle:@"Show All" action:@selector(unhideAllApplications:) keyEquivalent:@""];
 
-    [appleMenu addItem:[NSMenuItem separatorItem]];
+    [appMenu addItem:[NSMenuItem separatorItem]];
 
     title = [@"Quit " stringByAppendingString:appName];
-    [appleMenu addItemWithTitle:title action:@selector(terminate:) keyEquivalent:@"q"];
+    [appMenu addItemWithTitle:title action:@selector(terminate:) keyEquivalent:@"q"];
 
     
     /* Put menu into the menubar */
     menuItem = [[NSMenuItem alloc] initWithTitle:@"" action:nil keyEquivalent:@""];
-    [menuItem setSubmenu:appleMenu];
+    [menuItem setSubmenu:appMenu];
     [[NSApp mainMenu] addItem:menuItem];
 
     /* Tell the application object that this is now the application menu */
-    [NSApp setAppleMenu:appleMenu];
+    [NSApp setAppleMenu:appMenu];
+
+    setupWindowMenu();
+
+    helpMenu = [[NSMenu alloc] initWithTitle:@"Help"];
+    title = [appName stringByAppendingString:@" Help"];
+    menuItem = [helpMenu addItemWithTitle:title action:@selector(showHelp:) keyEquivalent:@"?"];
+    [menuItem setKeyEquivalentModifierMask:NSCommandKeyMask];
+    menuItem = [[NSMenuItem alloc] initWithTitle:@"Help" action:nil keyEquivalent:@""];
+    [menuItem setSubmenu:helpMenu];
+    [[NSApp mainMenu] addItem:menuItem];
 
     /* Finally give up our references to the objects */
-    [appleMenu release];
+    [appMenu release];
+    [helpMenu release];
     [menuItem release];
 }
 
@@ -217,7 +231,6 @@ static void CustomApplicationMain (int argc, char **argv)
     /* Set up the menubar */
     [NSApp setMainMenu:[[NSMenu alloc] init]];
     setApplicationMenu();
-    setupWindowMenu();
 
     /* Create SDLMain and make it the app delegate */
     sdlMain = [[SDLMain alloc] init];

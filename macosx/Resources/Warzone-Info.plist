@@ -42,6 +42,10 @@
 	<string>Copyright © 1999-2004 Eidos Interactive, Copyright © 2005-2011 The Warzone 2100 Project</string>
 	<key>CFBundleGetInfoString</key>
 	<string>VCS_TAG [VCS_SHORT_HASH], Copyright © 1999-2004 Eidos Interactive, Copyright © 2005-2011 The Warzone 2100 Project</string>
+	<key>CFBundleHelpBookFolder</key>
+	<string>WarzoneHelp</string>
+	<key>CFBundleHelpBookName</key>
+	<string>net.wz2100.Warzone.help</string>
 	<key>LSMinimumSystemVersion</key>
 	<string>${MACOSX_DEPLOYMENT_TARGET}.0</string>
 	<key>LSRequiresNativeExecution</key>
