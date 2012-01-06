@@ -1,4 +1,4 @@
-master_201xxxxx:
+master_2012010x:
  * General:
    * Change: Stored templates. Automatically adds a unit design when all needed research is available (ticket:1946, commit:a6fa286dcf463d4c6d74e8a874e70f671f3d5018, commit:add866851b5a58e38004a9cb816a22aedc1e10d9, commit:95bdafdffb78826b217860356d7ee546654d67b4, commit:e3a981c4f8a92b054d9962ef0073d2f603e7655e, commit:4f1b79d3d95a8624cd151b016126f20559468ad7, commit:4edc0d77a67f4db3b230f9d3089ee14efc9ad4bd)
    * Change: Don't give back power when a power generator gets destroyed (commit:7b66301950aa566978c71fc04104ff18c297183a)
@@ -15,6 +15,8 @@ master_201xxxxx:
    * Fix: Reset components between games (commit:4e66209506342112987b9085358dd1835a31c7f3)
    * Fix: Allow queuing of multiple modules (ticket:2997, commit:3dfc823394e39364f995efdee1af9f8fef688684)
    * Fix: Queuing of oil barrels and artifacts (ticket:2725, commit:ade80e83c7e1b3eb9fc3da0207e908fb815885b0)
+ * Campaign:
+   * Fix: Allow taking control of allied team in mission Gamma 4 again (ticket:1855, commit:a4a10cf6ec99393d3cc7b941bcb51e8a17e8af55)
  * Savegames:
    * Fix: Structure reload status (ticket:1438, commit:c7015df7142ba28515830559337b476ca4af44ea)
    * Fix: Droid order queues (ticket:2752, ticket:3016, commit:c5de04d339c5fd59e7e2afd5b4ff3feda51045c9
@@ -22,6 +24,7 @@ master_201xxxxx:
    * Fix: Ignore buildings on start or destination (ticket:2978, commit:0119eda53f11d2aa5d3e3ccc82203c6657812039)
    * Fix: Don't pathfind through satellite uplinks (commit:1e2c71cccd8b8d04312d56ad19c022c801dabb0a)
    * Fix: Actually use all waypoints (commit:1cc62d6d9d9d95354e10522c8618423565779b89, commit:ca0c37acfdbb4f495fb8ce4b52c6e0f32344bdd7)
+   * Fix: Don't cross entire map to reach unreachable objects (commit:9e6b7c31cbfbd2bc9a2169fac5b9b9d3b5ece75c)
  * Graphics:
    * Fix: Recoil animation matches the fired projectiles (commit:5e1f159d4bc3a1256db63cd6bacbcb18492fffd0)
    * Fix: Projectile graphics (ticket:354, commit:c93bfb237dc5850764ac0b123ca4ffe0e4f99ebe, commit:82e00bf7747af4962a32b67e4215d40298bbf9b3, commit:11cd71892d86264e627a6f0050265ccf61981f44)
@@ -33,7 +36,8 @@ master_201xxxxx:
    * Update: Turkish (ticket:2963, ticket:3001, commit:9ea22074d16106c17d717657e049863cdf8d1c09, commit:39040429f5c506f0e7c596f305203bd84239e09f)
    * Update: German (ticket:2967, commit:075e18828c5a8873fa4157e9c47958ddb1547870)
    * Update: Polish (ticket:1347, commit:89a282ba9bfe2c16701d270c082c8c0311c618bf)
-   * Update: Hungarian (ticket:3025, commit:dd7e742d1684d8e26b9f415080dc174ff6fcc247)
+   * Update: Spanish (ticket:3021, commit:3e982b66c85fd9f96d954c6b3e9f8c950eb4e0c5)
+   * Update: Hungarian (ticket:3025, commit:1d77a69ae825c58d6c566625a01089cecfa08e37)
 
 master_20111204
  * General:
