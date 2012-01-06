@@ -471,7 +471,7 @@ void pie_Draw3DShape(iIMDShape *shape, int frame, int team, PIELIGHT colour, int
 	}
 	else
 	{
-		if (pieFlag & (pie_ADDITIVE | pie_TRANSLUCENT))
+		if (pieFlag & (pie_ADDITIVE | pie_TRANSLUCENT) && !(pieFlag & pie_FORCE_IMMEDIATE))
 		{
 			if (tshapes_size <= nb_tshapes)
 			{
