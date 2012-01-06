@@ -142,11 +142,11 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELI
 	bool light = true;
 	bool shaders = pie_GetShaderAvailability();
 
-	pie_SetAlphaTest(true);
+	pie_SetAlphaTest((pieFlag & pie_PREMULTIPLIED) == 0);
 
 	/* Set fog status */
 	if (!(pieFlag & pie_FORCE_FOG) && 
-		(pieFlag & pie_ADDITIVE || pieFlag & pie_TRANSLUCENT || pieFlag & pie_BUTTON))
+		(pieFlag & pie_ADDITIVE || pieFlag & pie_TRANSLUCENT || pieFlag & pie_BUTTON || pieFlag & pie_PREMULTIPLIED))
 	{
 		pie_SetFogStatus(false);
 	}
@@ -166,6 +166,11 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELI
 	{
 		pie_SetRendMode(REND_ALPHA);
 		colour.byte.a = (UBYTE)pieFlagData;
+		light = false;
+	}
+	else if (pieFlag & pie_PREMULTIPLIED)
+	{
+		pie_SetRendMode(REND_PREMULTIPLIED);
 		light = false;
 	}
 	else
@@ -471,7 +476,7 @@ void pie_Draw3DShape(iIMDShape *shape, int frame, int team, PIELIGHT colour, int
 	}
 	else
 	{
-		if (pieFlag & (pie_ADDITIVE | pie_TRANSLUCENT) && !(pieFlag & pie_FORCE_IMMEDIATE))
+		if (pieFlag & (pie_ADDITIVE | pie_TRANSLUCENT | pie_PREMULTIPLIED) && !(pieFlag & pie_FORCE_IMMEDIATE))
 		{
 			if (tshapes_size <= nb_tshapes)
 			{

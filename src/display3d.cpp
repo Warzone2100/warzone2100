@@ -1279,6 +1279,7 @@ void	renderProjectile(PROJECTILE *psCurr)
 	{
 		bool rollToCamera = false;
 		bool pitchToCamera = false;
+		bool premultiplied = false;
 		bool additive = psStats->weaponSubClass == WSC_ROCKET || psStats->weaponSubClass == WSC_MISSILE || psStats->weaponSubClass == WSC_SLOWROCKET || psStats->weaponSubClass == WSC_SLOWMISSILE;
 
 		if (pIMD->nconnectors >= 2)
@@ -1292,6 +1293,7 @@ void	renderProjectile(PROJECTILE *psCurr)
 			{
 				case 1: additive = false; break;
 				case 2: additive = true; break;
+				case 3: additive = false; premultiplied = true; break;
 			}
 		}
 
@@ -1349,7 +1351,11 @@ void	renderProjectile(PROJECTILE *psCurr)
 			camera -= Vector3i(-pIMD->connectors[1].x, -pIMD->connectors[1].y, -pIMD->connectors[1].z);
 		}
 
-		if (additive)
+		if (premultiplied)
+		{
+			pie_Draw3DShape(pIMD, 0, 0, WZCOL_WHITE, pie_PREMULTIPLIED, 0);
+		}
+		else if (additive)
 		{
 			pie_Draw3DShape(pIMD, 0, 0, WZCOL_WHITE, pie_ADDITIVE, 164);
 		}

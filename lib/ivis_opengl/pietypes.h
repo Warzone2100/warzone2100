@@ -56,6 +56,7 @@
 #define pie_BUTTON              0x40
 #define pie_SHADOW              0x80
 #define pie_STATIC_SHADOW       0x100
+#define pie_PREMULTIPLIED       0x200
 #define pie_FORCE_IMMEDIATE     0x400
 
 #define pie_RAISE_SCALE			256
@@ -74,7 +75,8 @@ enum REND_MODE
 	REND_ALPHA,
 	REND_ADDITIVE,
 	REND_OPAQUE,
-	REND_MULTIPLICATIVE
+	REND_MULTIPLICATIVE,
+	REND_PREMULTIPLIED,
 };
 
 enum DEPTH_MODE

@@ -1745,7 +1745,20 @@ static void renderExplosionEffect(const EFFECT *psEffect)
 		pie_MatScale(psEffect->size / 100.f);
 	}
 
-	if(psEffect->type == EXPLOSION_TYPE_PLASMA)
+	bool premultiplied = false;
+	if (psEffect->imd->nconnectors >= 1)
+	{
+		switch (psEffect->imd->connectors[0].y)
+		{
+			case 3: premultiplied = true; break;
+		}
+	}
+
+	if (premultiplied)
+	{
+		pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, brightness, pie_PREMULTIPLIED, 0);
+	}
+	else if (psEffect->type == EXPLOSION_TYPE_PLASMA)
 	{
 		pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, brightness, pie_ADDITIVE, EFFECT_PLASMA_ADDITIVE);
 	}
