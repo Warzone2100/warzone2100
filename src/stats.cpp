@@ -2218,6 +2218,9 @@ bool loadWeaponModifiers(const char *pWeapModData, UDWORD bufferSize)
 		for (j=0; j < PROPULSION_TYPE_NUM; j++)
 		{
 			asWeaponModifier[i][j] = 100;
+		}
+		for (j = 0; j < SIZE_NUM; j++)
+		{
 			asWeaponModifierBody[i][j] = 100;
 		}
 	}
