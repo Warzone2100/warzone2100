@@ -1,20 +1,28 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug_QT_STLport_x32|Win32">
+      <Configuration>Debug_QT_STLport_x32</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug_SDL_STLport_x32|Win32">
+      <Configuration>Debug_SDL_STLport_x32</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
+    <ProjectConfiguration Include="Release_QT_STLport_x32|Win32">
+      <Configuration>Release_QT_STLport_x32</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release_SDL_STLport_x32|Win32">
+      <Configuration>Release_SDL_STLport_x32</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
     <ProjectConfiguration Include="Release|Win32">
       <Configuration>Release</Configuration>
-      <Platform>Win32</Platform>
-    </ProjectConfiguration>
-    <ProjectConfiguration Include="STLport-Debug|Win32">
-      <Configuration>STLport-Debug</Configuration>
-      <Platform>Win32</Platform>
-    </ProjectConfiguration>
-    <ProjectConfiguration Include="STLport-Release|Win32">
-      <Configuration>STLport-Release</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
   </ItemGroup>
@@ -30,7 +38,13 @@
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <BisonParserAfterTargets>CustomBuild</BisonParserAfterTargets>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='STLport-Release|Win32'" Label="Configuration">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_SDL_STLport_x32|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <BisonParserAfterTargets>CustomBuild</BisonParserAfterTargets>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_QT_STLport_x32|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -41,7 +55,12 @@
     <CharacterSet>Unicode</CharacterSet>
     <BisonParserAfterTargets>CustomBuild</BisonParserAfterTargets>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='STLport-Debug|Win32'" Label="Configuration">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_SDL_STLport_x32|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <BisonParserAfterTargets>CustomBuild</BisonParserAfterTargets>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_QT_STLport_x32|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
     <BisonParserAfterTargets>CustomBuild</BisonParserAfterTargets>
@@ -53,50 +72,73 @@
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='STLport-Release|Win32'" Label="PropertySheets">
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release_SDL_STLport_x32|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release_QT_STLport_x32|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='STLport-Debug|Win32'" Label="PropertySheets">
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug_SDL_STLport_x32|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug_QT_STLport_x32|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
     <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)$(Configuration)\</OutDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='STLport-Debug|Win32'">$(SolutionDir)$(Configuration)\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug_SDL_STLport_x32|Win32'">$(SolutionDir)$(Configuration)\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug_QT_STLport_x32|Win32'">$(SolutionDir)$(Configuration)\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(Configuration)\</IntDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='STLport-Debug|Win32'">$(Configuration)\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug_SDL_STLport_x32|Win32'">$(Configuration)\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug_QT_STLport_x32|Win32'">$(Configuration)\</IntDir>
     <CustomBuildAfterTargets Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     </CustomBuildAfterTargets>
-    <CustomBuildAfterTargets Condition="'$(Configuration)|$(Platform)'=='STLport-Debug|Win32'" />
+    <CustomBuildAfterTargets Condition="'$(Configuration)|$(Platform)'=='Debug_SDL_STLport_x32|Win32'" />
+    <CustomBuildAfterTargets Condition="'$(Configuration)|$(Platform)'=='Debug_QT_STLport_x32|Win32'" />
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</LinkIncremental>
-    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='STLport-Debug|Win32'">true</LinkIncremental>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug_SDL_STLport_x32|Win32'">true</LinkIncremental>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug_QT_STLport_x32|Win32'">true</LinkIncremental>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)$(Configuration)\</OutDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='STLport-Release|Win32'">$(SolutionDir)$(Configuration)\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release_SDL_STLport_x32|Win32'">$(SolutionDir)$(Configuration)\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release_QT_STLport_x32|Win32'">$(SolutionDir)$(Configuration)\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(Configuration)\</IntDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='STLport-Release|Win32'">$(Configuration)\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release_SDL_STLport_x32|Win32'">$(Configuration)\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release_QT_STLport_x32|Win32'">$(Configuration)\</IntDir>
     <CustomBuildAfterTargets Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">_BisonParser</CustomBuildAfterTargets>
-    <CustomBuildAfterTargets Condition="'$(Configuration)|$(Platform)'=='STLport-Release|Win32'">_BisonParser</CustomBuildAfterTargets>
+    <CustomBuildAfterTargets Condition="'$(Configuration)|$(Platform)'=='Release_SDL_STLport_x32|Win32'">_BisonParser</CustomBuildAfterTargets>
+    <CustomBuildAfterTargets Condition="'$(Configuration)|$(Platform)'=='Release_QT_STLport_x32|Win32'">_BisonParser</CustomBuildAfterTargets>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
-    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='STLport-Release|Win32'">false</LinkIncremental>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release_SDL_STLport_x32|Win32'">false</LinkIncremental>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release_QT_STLport_x32|Win32'">false</LinkIncremental>
     <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\devpkg\libsx86;$(Qtdir)\lib;$(LibraryPath)</LibraryPath>
-    <LibraryPath Condition="'$(Configuration)|$(Platform)'=='STLport-Debug|Win32'">..\devpkg\stlport5.2.1\lib;..\devpkg\libsx86;$(Qtdir)\lib;$(LibraryPath)</LibraryPath>
+    <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Debug_SDL_STLport_x32|Win32'">..\devpkg\libsx86;$(Qtdir)\lib;$(LibraryPath)</LibraryPath>
+    <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Debug_QT_STLport_x32|Win32'">..\devpkg\libsx86;$(Qtdir)\lib;$(LibraryPath)</LibraryPath>
     <IncludePath Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\devpkg\include;$(Qtdir)\include;$(IncludePath)</IncludePath>
-    <IncludePath Condition="'$(Configuration)|$(Platform)'=='STLport-Debug|Win32'">..\devpkg\stlport5.2.1\stlport;..\devpkg\include;$(Qtdir)\include;..\3rdparty;$(IncludePath)</IncludePath>
+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='Debug_SDL_STLport_x32|Win32'">..\devpkg\stlport5.2.1\stlport;..\devpkg\include;$(Qtdir)\include;$(IncludePath)</IncludePath>
+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='Debug_QT_STLport_x32|Win32'">..\devpkg\stlport5.2.1\stlport;..\devpkg\include;$(Qtdir)\include;$(IncludePath)</IncludePath>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectName)-Dbg</TargetName>
-    <TargetName Condition="'$(Configuration)|$(Platform)'=='STLport-Debug|Win32'">$(ProjectName)-Dbg</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug_SDL_STLport_x32|Win32'">$(ProjectName)-Dbg</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug_QT_STLport_x32|Win32'">$(ProjectName)-Dbg</TargetName>
     <BisonParserBeforeTargets Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Midl</BisonParserBeforeTargets>
-    <BisonParserBeforeTargets Condition="'$(Configuration)|$(Platform)'=='STLport-Debug|Win32'">Midl</BisonParserBeforeTargets>
+    <BisonParserBeforeTargets Condition="'$(Configuration)|$(Platform)'=='Debug_SDL_STLport_x32|Win32'">Midl</BisonParserBeforeTargets>
+    <BisonParserBeforeTargets Condition="'$(Configuration)|$(Platform)'=='Debug_QT_STLport_x32|Win32'">Midl</BisonParserBeforeTargets>
     <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\lib\ivis_opengl;..\devpkg\include;$(Qtdir)\include;$(IncludePath)</IncludePath>
-    <IncludePath Condition="'$(Configuration)|$(Platform)'=='STLport-Release|Win32'">..\devpkg\stlport5.2.1\stlport;..\lib\ivis_opengl;..\devpkg\include;$(Qtdir)\include;$(IncludePath)</IncludePath>
+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release_SDL_STLport_x32|Win32'">..\lib\ivis_opengl;..\devpkg\stlport5.2.1\stlport;..\devpkg\include;$(Qtdir)\include;$(IncludePath)</IncludePath>
+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release_QT_STLport_x32|Win32'">..\lib\ivis_opengl;..\devpkg\stlport5.2.1\stlport;..\devpkg\include;$(Qtdir)\include;$(IncludePath)</IncludePath>
     <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\devpkg\libsx86;$(Qtdir)\lib;$(LibraryPath)</LibraryPath>
-    <LibraryPath Condition="'$(Configuration)|$(Platform)'=='STLport-Release|Win32'">..\devpkg\libsx86;$(Qtdir)\lib;$(LibraryPath)</LibraryPath>
+    <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Release_SDL_STLport_x32|Win32'">..\devpkg\libsx86;$(Qtdir)\lib;$(LibraryPath)</LibraryPath>
+    <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Release_QT_STLport_x32|Win32'">..\devpkg\libsx86;$(Qtdir)\lib;$(LibraryPath)</LibraryPath>
     <ExtensionsToDeleteOnClean Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">*.lex.cpp;*.tab.cpp;*.tab.hpp;$(ExtensionsToDeleteOnClean)</ExtensionsToDeleteOnClean>
-    <BisonParserBeforeTargets Condition="'$(Configuration)|$(Platform)'=='STLport-Release|Win32'">Midl</BisonParserBeforeTargets>
+    <ExtensionsToDeleteOnClean Condition="'$(Configuration)|$(Platform)'=='Debug_SDL_STLport_x32|Win32'">*.lex.cpp;*.tab.cpp;*.tab.hpp;$(ExtensionsToDeleteOnClean)</ExtensionsToDeleteOnClean>
+    <ExtensionsToDeleteOnClean Condition="'$(Configuration)|$(Platform)'=='Debug_QT_STLport_x32|Win32'">*.lex.cpp;*.tab.cpp;*.tab.hpp;$(ExtensionsToDeleteOnClean)</ExtensionsToDeleteOnClean>
     <BisonParserBeforeTargets Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Midl</BisonParserBeforeTargets>
+    <BisonParserBeforeTargets Condition="'$(Configuration)|$(Platform)'=='Release_SDL_STLport_x32|Win32'">Midl</BisonParserBeforeTargets>
+    <BisonParserBeforeTargets Condition="'$(Configuration)|$(Platform)'=='Release_QT_STLport_x32|Win32'">Midl</BisonParserBeforeTargets>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <PreBuildEvent>
@@ -116,7 +158,7 @@
     </FlexGenerator>
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(SolutionDir)\..;$(SolutionDir)\..\devpkg\include;$(SolutionDir)\..\devpkg\include\SDL;$(SolutionDir)\..\lib\ivis_opengl;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\..;..\devpkg\stlport5.2.1\stlport;$(SolutionDir)\..\devpkg\include;$(SolutionDir)\..\devpkg\include\SDL;$(SolutionDir)\..\lib\ivis_opengl;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;_HAS_ITERATOR_DEBUGGING=0;_SECURE_SCL=0;LOCALEDIR="";YY_NO_UNISTD_H;YY_STATIC;NOMINMAX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -129,7 +171,7 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>libogg_static.lib;libvorbis_static.lib;libvorbisfile_static.lib;OpenAL32.lib;glc32.lib;OpenGL32.lib;GLU32.lib;shfolder.lib;winmm.lib;Iphlpapi.lib;ws2_32.lib;dbghelp.lib;physfs.lib;glew.lib;libtheora_static.lib;libpng15.lib;QtGui4.lib;QtOpenGL4.lib;QtCore4.lib;QtMain.lib;QtScript4.lib;QtScriptTools4.lib;QtNetwork4.lib;qjson.lib;zlibstat.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libogg_static.lib;libvorbis_static.lib;libvorbisfile_static.lib;OpenAL32.lib;glc32.lib;OpenGL32.lib;GLU32.lib;shfolder.lib;winmm.lib;Iphlpapi.lib;ws2_32.lib;dbghelp.lib;physfs.lib;glew.lib;libtheora_static.lib;libpng15.lib;SDLmain.lib;SDL.lib;QtCore4.lib;QtScript4.lib;QtScriptTools4.lib;QtNetwork4.lib;qjson.lib;zlibstat.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(ProjectName)-Dbg.exe</OutputFile>
       <AdditionalLibraryDirectories>$(SolutionDir)\..\devpkg\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>MSVCRT.lib;libcmt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
@@ -149,7 +191,7 @@
       <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
     </ProjectReference>
   </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='STLport-Debug|Win32'">
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug_SDL_STLport_x32|Win32'">
     <PreBuildEvent>
       <Message>Generating the autorevison.h file...</Message>
       <Command>call $(ProjectDir)..\build_tools\autorevision.bat $(ProjectDir)</Command>
@@ -167,8 +209,8 @@
     </FlexGenerator>
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(SolutionDir)\..;$(SolutionDir)\..\devpkg\include;$(SolutionDir)\..\devpkg\include\SDL;$(SolutionDir)\..\lib\ivis_opengl;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;_HAS_ITERATOR_DEBUGGING=0;_SECURE_SCL=0;LOCALEDIR="";YY_NO_UNISTD_H;YY_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SolutionDir)\..;..\devpkg\stlport5.2.1\stlport;$(SolutionDir)\..\devpkg\include;$(SolutionDir)\..\devpkg\include\SDL;$(SolutionDir)\..\lib\ivis_opengl;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;_HAS_ITERATOR_DEBUGGING=0;_SECURE_SCL=0;LOCALEDIR="";YY_NO_UNISTD_H;YY_STATIC;NOMINMAX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -180,7 +222,58 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>libogg_static.lib;libvorbis_static.lib;libvorbisfile_static.lib;OpenAL32.lib;glc32.lib;OpenGL32.lib;GLU32.lib;shfolder.lib;winmm.lib;Iphlpapi.lib;ws2_32.lib;dbghelp.lib;physfs.lib;glew.lib;libtheora_static.lib;libpng15.lib;QtGui4.lib;QtOpenGL4.lib;QtCore4.lib;QtMain.lib;QtScript4.lib;QtScriptTools4.lib;QtNetwork4.lib;qjson.lib;zlibstat.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libogg_static.lib;libvorbis_static.lib;libvorbisfile_static.lib;OpenAL32.lib;glc32.lib;OpenGL32.lib;GLU32.lib;shfolder.lib;winmm.lib;Iphlpapi.lib;ws2_32.lib;dbghelp.lib;physfs.lib;glew.lib;libtheora_static.lib;libpng15.lib;SDLmain.lib;SDL.lib;QtCore4.lib;QtScript4.lib;QtScriptTools4.lib;QtNetwork4.lib;qjson.lib;zlibstat.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(OutDir)$(ProjectName)-Dbg.exe</OutputFile>
+      <AdditionalLibraryDirectories>$(SolutionDir)\..\devpkg\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <IgnoreSpecificDefaultLibraries>MSVCRT.lib;libcmt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <TargetMachine>MachineX86</TargetMachine>
+      <GenerateMapFile>false</GenerateMapFile>
+      <MapFileName>
+      </MapFileName>
+      <ShowProgress>NotSet</ShowProgress>
+    </Link>
+    <PostBuildEvent>
+      <Message>***  Copying $(TargetPath) to $(SolutionDir)..\data\$(TargetFileName)  ***</Message>
+      <Command>copy /Y /B $(TargetPath) $(ProjectDir)..\data\</Command>
+    </PostBuildEvent>
+    <ProjectReference>
+      <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug_QT_STLport_x32|Win32'">
+    <PreBuildEvent>
+      <Message>Generating the autorevison.h file...</Message>
+      <Command>call $(ProjectDir)..\build_tools\autorevision.bat $(ProjectDir)</Command>
+    </PreBuildEvent>
+    <BisonParser>
+      <Defines>true</Defines>
+      <NoGenLineDirectives>false</NoGenLineDirectives>
+      <OutputFile>%(Filename).cpp</OutputFile>
+      <RenameExternalSymbols>%(Filename)</RenameExternalSymbols>
+    </BisonParser>
+    <FlexGenerator>
+      <OutputFile>%(Filename).cpp</OutputFile>
+      <TraceMode>false</TraceMode>
+      <ScannerPrefix>%(Filename)</ScannerPrefix>
+    </FlexGenerator>
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>$(SolutionDir)\..;..\devpkg\stlport5.2.1\stlport;$(SolutionDir)\..\devpkg\include;$(SolutionDir)\..\devpkg\include\SDL;$(SolutionDir)\..\lib\ivis_opengl;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;_HAS_ITERATOR_DEBUGGING=0;_SECURE_SCL=0;LOCALEDIR="";YY_NO_UNISTD_H;YY_STATIC;NOMINMAX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level4</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>libogg_static.lib;libvorbis_static.lib;libvorbisfile_static.lib;OpenAL32.lib;glc32.lib;OpenGL32.lib;GLU32.lib;shfolder.lib;winmm.lib;Iphlpapi.lib;ws2_32.lib;dbghelp.lib;physfs.lib;glew.lib;libtheora_static.lib;libpng15.lib;QtGui4.lib;QtOpenGL4.lib;QtMain.lib;QtCore4.lib;QtScript4.lib;QtScriptTools4.lib;QtNetwork4.lib;qjson.lib;zlibstat.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(ProjectName)-Dbg.exe</OutputFile>
       <AdditionalLibraryDirectories>$(SolutionDir)\..\devpkg\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>MSVCRT.lib;libcmt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
@@ -222,9 +315,9 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>libogg_static.lib;libvorbis_static.lib;libvorbisfile_static.lib;OpenAL32.lib;glc32.lib;OpenGL32.lib;GLU32.lib;shfolder.lib;winmm.lib;Iphlpapi.lib;ws2_32.lib;dbghelp.lib;physfs.lib;glew.lib;libtheora_static.lib;libpng15.lib;QtGui4.lib;QtOpenGL4.lib;QtCore4.lib;QtMain.lib;QtScript4.lib;QtScriptTools4.lib;QtNetwork4.lib;qjson.lib;zlibstat.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libogg_static.lib;libvorbis_static.lib;libvorbisfile_static.lib;OpenAL32.lib;glc32.lib;OpenGL32.lib;GLU32.lib;shfolder.lib;winmm.lib;Iphlpapi.lib;ws2_32.lib;dbghelp.lib;physfs.lib;glew.lib;libtheora_static.lib;libpng15.lib;SDLmain.lib;SDL.lib;QtCore4.lib;QtScript4.lib;QtScriptTools4.lib;QtNetwork4.lib;qjson.lib;zlibstat.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)\..\devpkg\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <IgnoreSpecificDefaultLibraries>libcmt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <IgnoreSpecificDefaultLibraries>libcmt.lib;MSVCRTD.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
@@ -236,7 +329,7 @@
       <Command>copy /Y /B $(TargetPath) $(ProjectDir)..\data\</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='STLport-Release|Win32'">
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release_SDL_STLport_x32|Win32'">
     <PreBuildEvent>
       <Message>Generating the autorevison.h file...</Message>
       <Command>call $(ProjectDir)..\build_tools\autorevision.bat $(ProjectDir)</Command>
@@ -256,14 +349,47 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
-      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
-      <AdditionalOptions>/GA %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>libogg_static.lib;libvorbis_static.lib;libvorbisfile_static.lib;OpenAL32.lib;glc32.lib;OpenGL32.lib;GLU32.lib;shfolder.lib;winmm.lib;ws2_32.lib;dbghelp.lib;Iphlpapi.lib;physfs.lib;glew.lib;libtheora_static.lib;libpng15.lib;QtGui4.lib;QtOpenGL4.lib;QtCore4.lib;QtMain.lib;QtScript4.lib;QtScriptTools4.lib;QtNetwork4.lib;qjson.lib;zlibstat.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libogg_static.lib;libvorbis_static.lib;libvorbisfile_static.lib;OpenAL32.lib;glc32.lib;OpenGL32.lib;GLU32.lib;shfolder.lib;winmm.lib;Iphlpapi.lib;ws2_32.lib;dbghelp.lib;physfs.lib;glew.lib;libtheora_static.lib;libpng15.lib;SDLmain.lib;SDL.lib;QtCore4.lib;QtScript4.lib;QtScriptTools4.lib;QtNetwork4.lib;qjson.lib;zlibstat.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)\..\devpkg\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <IgnoreSpecificDefaultLibraries>libcmt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <IgnoreSpecificDefaultLibraries>libcmt.lib;MSVCRTD.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+    <PostBuildEvent>
+      <Message>***  Copying $(TargetPath) to $(SolutionDir)..\data\$(TargetFileName)  ***</Message>
+      <Command>copy /Y /B $(TargetPath) $(ProjectDir)..\data\</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release_QT_STLport_x32|Win32'">
+    <PreBuildEvent>
+      <Message>Generating the autorevison.h file...</Message>
+      <Command>call $(ProjectDir)..\build_tools\autorevision.bat $(ProjectDir)</Command>
+    </PreBuildEvent>
+    <BisonParser>
+      <Defines>true</Defines>
+      <OutputFile>%(Filename).cpp</OutputFile>
+    </BisonParser>
+    <FlexGenerator>
+      <OutputFile>%(Filename).cpp</OutputFile>
+    </FlexGenerator>
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(SolutionDir)\..;$(SolutionDir)\..\lib\sqlite3;$(SolutionDir)\..\devpkg\include;$(SolutionDir)\..\devpkg\include\SDL;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;YY_NO_UNISTD_H;VERSION="TRUNK";PACKAGE="warzone2100";LOCALEDIR="";YY_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>libogg_static.lib;libvorbis_static.lib;libvorbisfile_static.lib;OpenAL32.lib;glc32.lib;OpenGL32.lib;GLU32.lib;shfolder.lib;winmm.lib;Iphlpapi.lib;ws2_32.lib;dbghelp.lib;physfs.lib;glew.lib;libtheora_static.lib;libpng15.lib;QtGui4.lib;QtOpenGL4.lib;QtMain.lib;QtCore4.lib;QtScript4.lib;QtScriptTools4.lib;QtNetwork4.lib;qjson.lib;zlibstat.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)\..\devpkg\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <IgnoreSpecificDefaultLibraries>libcmt.lib;MSVCRTD.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
@@ -377,6 +503,7 @@
     <ClCompile Include="seqdisp.cpp" />
     <ClCompile Include="stats.cpp" />
     <ClCompile Include="structure.cpp" />
+    <ClCompile Include="template.cpp" />
     <ClCompile Include="terrain.cpp" />
     <ClCompile Include="text.cpp" />
     <ClCompile Include="texture.cpp" />
@@ -544,6 +671,9 @@
     <ProjectReference Include="..\lib\script\script.vcxproj">
       <Project>{2d0b0f06-3ca2-46c7-908d-5c7098645021}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\lib\sdl\SDL.vcxproj">
+      <Project>{6d2e13fd-fd25-4bdc-a898-8a2e1f1e1336}</Project>
     </ProjectReference>
     <ProjectReference Include="..\lib\sequence\sequence.vcxproj">
       <Project>{30f5fc4a-31f5-42f5-9581-45309559382f}</Project>

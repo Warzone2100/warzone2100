@@ -17,6 +17,12 @@
     <ClCompile Include="swapinterval.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="wzapp_qt.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="main_qt.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="qtgame.h">

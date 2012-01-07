@@ -26,10 +26,6 @@
 // Qt headers MUST come before platform specific stuff!
 #include "wzconfig.h"
 
-#if defined(WZ_CC_MSVC)
-#include "wzconfig.h.moc"		// this is generated on the pre-build event.
-#endif
-
 void WzConfig::setVector3f(const QString &name, const Vector3f &v)
 {
 	QStringList l;

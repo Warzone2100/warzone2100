@@ -47,9 +47,6 @@
     <ClCompile Include="utf.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="wzapp.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="geometry.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -63,6 +60,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="strres_parser.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="wzconfig.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -151,12 +151,6 @@
     <ClInclude Include="wzapp.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="wzapp.moc.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="wzapp_c.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="wzfs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -167,6 +161,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="strres_parser.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="wzconfig.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
