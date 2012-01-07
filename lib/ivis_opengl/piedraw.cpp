@@ -110,7 +110,7 @@ void pie_EndLighting(void)
  * Avoids recalculating vertex projections for every poly
  ***************************************************************************/
 
-struct shadowcasting_shape_t
+struct ShadowcastingShape
 {
 	float		matrix[16];
 	iIMDShape*	shape;
@@ -119,7 +119,7 @@ struct shadowcasting_shape_t
 	Vector3f	light;
 };
 
-struct transluscent_shape_t
+struct TranslucentShape
 {
 	float		matrix[16];
 	iIMDShape*	shape;
@@ -129,12 +129,8 @@ struct transluscent_shape_t
 	int		flag_data;
 };
 
-static shadowcasting_shape_t* scshapes = NULL;
-static unsigned int scshapes_size = 0;
-static unsigned int nb_scshapes = 0;
-static transluscent_shape_t* tshapes = NULL;
-static unsigned int tshapes_size = 0;
-static unsigned int nb_tshapes = 0;
+static std::vector<ShadowcastingShape> scshapes;
+static std::vector<TranslucentShape> tshapes;
 
 static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELIGHT teamcolour, int pieFlag, int pieFlagData)
 {
@@ -447,10 +443,8 @@ void pie_SetUp(void)
 
 void pie_CleanUp( void )
 {
-	free( tshapes );
-	free( scshapes );
-	tshapes = NULL;
-	scshapes = NULL;
+	tshapes.clear();
+	scshapes.clear();
 }
 
 void pie_Draw3DShape(iIMDShape *shape, int frame, int team, PIELIGHT colour, int pieFlag, int pieFlagData)
@@ -478,29 +472,14 @@ void pie_Draw3DShape(iIMDShape *shape, int frame, int team, PIELIGHT colour, int
 	{
 		if (pieFlag & (pie_ADDITIVE | pie_TRANSLUCENT | pie_PREMULTIPLIED) && !(pieFlag & pie_FORCE_IMMEDIATE))
 		{
-			if (tshapes_size <= nb_tshapes)
-			{
-				if (tshapes_size == 0)
-				{
-					tshapes_size = 64;
-					tshapes = (transluscent_shape_t*)malloc(tshapes_size*sizeof(transluscent_shape_t));
-					memset( tshapes, 0, tshapes_size*sizeof(transluscent_shape_t) );
-				}
-				else
-				{
-					const unsigned int old_size = tshapes_size;
-					tshapes_size <<= 1;
-					tshapes = (transluscent_shape_t*)realloc(tshapes, tshapes_size*sizeof(transluscent_shape_t));
-					memset( &tshapes[old_size], 0, (tshapes_size-old_size)*sizeof(transluscent_shape_t) );
-				}
-			}
-			glGetFloatv(GL_MODELVIEW_MATRIX, tshapes[nb_tshapes].matrix);
-			tshapes[nb_tshapes].shape = shape;
-			tshapes[nb_tshapes].frame = frame;
-			tshapes[nb_tshapes].colour = colour;
-			tshapes[nb_tshapes].flag = pieFlag;
-			tshapes[nb_tshapes].flag_data = pieFlagData;
-			nb_tshapes++;
+			TranslucentShape tshape;
+			glGetFloatv(GL_MODELVIEW_MATRIX, tshape.matrix);
+			tshape.shape = shape;
+			tshape.frame = frame;
+			tshape.colour = colour;
+			tshape.flag = pieFlag;
+			tshape.flag_data = pieFlagData;
+			tshapes.push_back(tshape);
 		}
 		else
 		{
@@ -509,46 +488,30 @@ void pie_Draw3DShape(iIMDShape *shape, int frame, int team, PIELIGHT colour, int
 				float distance;
 
 				// draw a shadow
-				if (scshapes_size <= nb_scshapes)
-				{
-					if (scshapes_size == 0)
-					{
-						scshapes_size = 64;
-						scshapes = (shadowcasting_shape_t*)malloc(scshapes_size*sizeof(shadowcasting_shape_t));
-						memset( scshapes, 0, scshapes_size*sizeof(shadowcasting_shape_t) );
-					}
-					else
-					{
-						const unsigned int old_size = scshapes_size;
-						scshapes_size <<= 1;
-						scshapes = (shadowcasting_shape_t*)realloc(scshapes, scshapes_size*sizeof(shadowcasting_shape_t));
-						memset( &scshapes[old_size], 0, (scshapes_size-old_size)*sizeof(shadowcasting_shape_t) );
-					}
-				}
-
-				glGetFloatv(GL_MODELVIEW_MATRIX, scshapes[nb_scshapes].matrix);
-				distance = scshapes[nb_scshapes].matrix[12] * scshapes[nb_scshapes].matrix[12];
-				distance += scshapes[nb_scshapes].matrix[13] * scshapes[nb_scshapes].matrix[13];
-				distance += scshapes[nb_scshapes].matrix[14] * scshapes[nb_scshapes].matrix[14];
+				ShadowcastingShape scshape;
+				glGetFloatv(GL_MODELVIEW_MATRIX, scshape.matrix);
+				distance = scshape.matrix[12] * scshape.matrix[12];
+				distance += scshape.matrix[13] * scshape.matrix[13];
+				distance += scshape.matrix[14] * scshape.matrix[14];
 
 				// if object is too far in the fog don't generate a shadow.
 				if (distance < SHADOW_END_DISTANCE)
 				{
 					float invmat[9], pos_light0[4];
 
-					inverse_matrix( scshapes[nb_scshapes].matrix, invmat );
+					inverse_matrix( scshape.matrix, invmat );
 
 					// Calculate the light position relative to the object
 					glGetLightfv(GL_LIGHT0, GL_POSITION, pos_light0);
-					scshapes[nb_scshapes].light.x = invmat[0] * pos_light0[0] + invmat[3] * pos_light0[1] + invmat[6] * pos_light0[2];
-					scshapes[nb_scshapes].light.y = invmat[1] * pos_light0[0] + invmat[4] * pos_light0[1] + invmat[7] * pos_light0[2];
-					scshapes[nb_scshapes].light.z = invmat[2] * pos_light0[0] + invmat[5] * pos_light0[1] + invmat[8] * pos_light0[2];
+					scshape.light.x = invmat[0] * pos_light0[0] + invmat[3] * pos_light0[1] + invmat[6] * pos_light0[2];
+					scshape.light.y = invmat[1] * pos_light0[0] + invmat[4] * pos_light0[1] + invmat[7] * pos_light0[2];
+					scshape.light.z = invmat[2] * pos_light0[0] + invmat[5] * pos_light0[1] + invmat[8] * pos_light0[2];
 
-					scshapes[nb_scshapes].shape = shape;
-					scshapes[nb_scshapes].flag = pieFlag;
-					scshapes[nb_scshapes].flag_data = pieFlagData;
+					scshape.shape = shape;
+					scshape.flag = pieFlag;
+					scshape.flag_data = pieFlagData;
 
-					nb_scshapes++;
+					scshapes.push_back(scshape);
 				}
 			}
 
@@ -559,9 +522,7 @@ void pie_Draw3DShape(iIMDShape *shape, int frame, int team, PIELIGHT colour, int
 
 static void pie_ShadowDrawLoop(void)
 {
-	unsigned int i = 0;
-
-	for (i = 0; i < nb_scshapes; i++)
+	for (unsigned i = 0; i < scshapes.size(); i++)
 	{
 		glLoadMatrixf(scshapes[i].matrix);
 		pie_DrawShadow(scshapes[i].shape, scshapes[i].flag, scshapes[i].flag_data, &scshapes[i].light);
@@ -665,15 +626,13 @@ static void pie_DrawShadows(void)
 
 	glPopMatrix();
 
-	nb_scshapes = 0;
+	scshapes.clear();
 }
 
 static void pie_DrawRemainingTransShapes(void)
 {
-	unsigned int i = 0;
-
 	glPushMatrix();
-	for (i = 0; i < nb_tshapes; ++i)
+	for (unsigned i = 0; i < tshapes.size(); ++i)
 	{
 		glLoadMatrixf(tshapes[i].matrix);
 		pie_Draw3DShape2(tshapes[i].shape, tshapes[i].frame, tshapes[i].colour, tshapes[i].colour,
@@ -681,7 +640,7 @@ static void pie_DrawRemainingTransShapes(void)
 	}
 	glPopMatrix();
 
-	nb_tshapes = 0;
+	tshapes.clear();
 }
 
 void pie_RemainingPasses(void)
