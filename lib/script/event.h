@@ -143,4 +143,6 @@ extern void eventTimeReset(UDWORD initTime);
 extern const char *eventGetEventID(SCRIPT_CODE *psCode, SDWORD event);
 extern const char *eventGetTriggerID(SCRIPT_CODE *psCode, SDWORD trigger);
 
+bool scriptOperatorEquals(INTERP_VAL const &v1, INTERP_VAL const &v2);  // Defined in src/scriptfuncs.cpp.
+
 #endif

@@ -644,7 +644,13 @@ bool stackBinaryOp(OPCODE opcode)
 			psV1->v.bval = psV1->v.fval == psV2->v.fval;
 		}else if(psV1->type == VAL_STRING && psV2->type == VAL_STRING){
 			psV1->v.bval = (strcasecmp(psV1->v.sval,psV2->v.sval) == 0);	/* case-insensitive */
-		}else{
+		}
+		else if (scriptTypeIsPointer(psV1->type))
+		{
+			psV1->v.bval = scriptOperatorEquals(*psV1, *psV2);
+		}
+		else
+		{
 			psV1->v.bval = psV1->v.ival == psV2->v.ival;
 		}
 		psV1->type = VAL_BOOL;
@@ -654,7 +660,13 @@ bool stackBinaryOp(OPCODE opcode)
 			psV1->v.bval = psV1->v.fval != psV2->v.fval;
 		}else if(psV1->type == VAL_STRING && psV2->type == VAL_STRING){
 			psV1->v.bval = (strcasecmp(psV1->v.sval,psV2->v.sval) != 0);	/* case-insensitive */
-		}else{
+		}
+		else if (scriptTypeIsPointer(psV1->type))
+		{
+			psV1->v.bval = !scriptOperatorEquals(*psV1, *psV2);
+		}
+		else
+		{
 			psV1->v.bval = psV1->v.ival != psV2->v.ival;
 		}
 

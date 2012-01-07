@@ -114,6 +114,16 @@ static DROID_TEMPLATE* scrCheckTemplateExists(SDWORD player, DROID_TEMPLATE *psT
 Vector2i positions[MAX_PLAYERS];
 std::vector<Vector2i> derricks;
 
+bool scriptOperatorEquals(INTERP_VAL const &v1, INTERP_VAL const &v2)
+{
+	ASSERT_OR_RETURN(false, scriptTypeIsPointer(v1.type) && scriptTypeIsPointer(v2.type), "Bad types.");
+	if (v1.type == ST_RESEARCH && v1.type == ST_RESEARCH)
+	{
+		return ((RESEARCH *)v1.v.oval)->ref == ((RESEARCH *)v2.v.oval)->ref;
+	}
+	return v1.v.oval == v2.v.oval;
+}
+
 void scriptSetStartPos(int position, int x, int y)
 {
 	positions[position].x = x;
