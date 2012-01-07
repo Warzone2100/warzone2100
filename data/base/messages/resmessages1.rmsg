@@ -1,649 +1,649 @@
 [RES_C_CT1]
 
 text = \
-		_("New Systems Turret Available for Design"),\
-		_("New battlefield computer system"),\
-		_("Commander leads groups acts as factory delivery point"),\
-		_("Body Points: High"),\
-	
-	imdName = "MICAPSUL.pie"
-	sequenceName = "res_com.ogg"
+_("New Systems Turret Available for Design"),\
+_("New battlefield computer system"),\
+_("Commander leads groups acts as factory delivery point"),\
+_("Body Points: High"),\
+
+imdName = "MICAPSUL.pie"
+sequenceName = "res_com.ogg"
 
 [RES_C_SL1]
 
 text = \
-		_("Computer Technology Breakthrough"),\
-		_("Synaptic Link allows humans to interface directly with computers"),\
-		_("Cyborgs can now be researched"),\
-		_("New research options available"),\
-	
-	imdName = "MICAPSUL.pie"
-	sequenceName = "res_com.ogg"
+_("Computer Technology Breakthrough"),\
+_("Synaptic Link allows humans to interface directly with computers"),\
+_("Cyborgs can now be researched"),\
+_("New research options available"),\
+
+imdName = "MICAPSUL.pie"
+sequenceName = "res_com.ogg"
 
 [RES_CYMET1]
 
 text = \
-		_("Cyborg Materials Improved"),\
-		_("Layered composite alloys and energy-absorbing fibres"),\
-		_("Increases Kinetic Armor and Body Points"),\
-		_("All Cyborgs upgraded automatically"),\
-	
-	imdName = "MICAPSUL.pie"
-	sequenceName = "res_droid.ogg"
+_("Cyborg Materials Improved"),\
+_("Layered composite alloys and energy-absorbing fibres"),\
+_("Increases Kinetic Armor and Body Points"),\
+_("All Cyborgs upgraded automatically"),\
+
+imdName = "MICAPSUL.pie"
+sequenceName = "res_droid.ogg"
 
 [RES_CYW_MG1]
 
 text = \
-		_("New Cyborg Available"),\
-		_("Armed with Cyborg Machinegun"),\
-		_("Body Points: Medium"),\
-		_("Requires Cyborg factory to produce"),\
-	
-	imdName = "MICAPSUL.pie"
-	sequenceName = "res_droid.ogg"
+_("New Cyborg Available"),\
+_("Armed with Cyborg Machinegun"),\
+_("Body Points: Medium"),\
+_("Requires Cyborg factory to produce"),\
+
+imdName = "MICAPSUL.pie"
+sequenceName = "res_droid.ogg"
 
 [RES_CYW_CN1]
 
 text = \
-		_("New Cyborg Available"),\
-		_("Armed with Cyborg Cannon"),\
-		_("Body Points: Medium"),\
-		_("Requires Cyborg factory to produce"),\
-	
-	imdName = "MICAPSUL.pie"
-	sequenceName = "res_droid.ogg"
+_("New Cyborg Available"),\
+_("Armed with Cyborg Cannon"),\
+_("Body Points: Medium"),\
+_("Requires Cyborg factory to produce"),\
+
+imdName = "MICAPSUL.pie"
+sequenceName = "res_droid.ogg"
 
 [RES_CYW_FL1]
 
 text = \
-		_("New Cyborg Available"),\
-		_("Armed with Cyborg Flamer"),\
-		_("Body Points: Medium"),\
-		_("Requires Cyborg factory to produce"),\
-	
-	imdName = "MICAPSUL.pie"
-	sequenceName = "res_droid.ogg"
+_("New Cyborg Available"),\
+_("Armed with Cyborg Flamer"),\
+_("Body Points: Medium"),\
+_("Requires Cyborg factory to produce"),\
+
+imdName = "MICAPSUL.pie"
+sequenceName = "res_droid.ogg"
 
 [RES_CYW_RK1]
 
 text = \
-		_("New Cyborg Available"),\
-		_("Armed with Lance Anti-Tank rocket"),\
-		_("Body Points: Medium"),\
-		_("Requires Cyborg factory to produce"),\
-	
-	imdName = "MICAPSUL.pie"
-	sequenceName = "res_droid.ogg"
+_("New Cyborg Available"),\
+_("Armed with Lance Anti-Tank rocket"),\
+_("Body Points: Medium"),\
+_("Requires Cyborg factory to produce"),\
+
+imdName = "MICAPSUL.pie"
+sequenceName = "res_droid.ogg"
 
 [RES_DF_WU1]
 
 text = \
-		_("Defenses Improved"),\
-		_("Improved Titanium-reinforced concrete"),\
-		_("Increases Armour and Body Points"),\
-		_("All defenses and walls upgraded automatically"),\
-	
-	imdName = "MICAPSUL.pie"
-	sequenceName = "res_struttech.ogg"
+_("Defenses Improved"),\
+_("Improved Titanium-reinforced concrete"),\
+_("Increases Armour and Body Points"),\
+_("All defenses and walls upgraded automatically"),\
+
+imdName = "MICAPSUL.pie"
+sequenceName = "res_struttech.ogg"
 
 [RES_TOWER1]
 
 text = \
-		_("New Defensive Structure Available"),\
-		_("Steel tower with machinegun"),\
-		_("Automatically targets enemies within sensor range"),\
-		_("Defensive Strength: Low"),\
-	
-	imdName = "MICAPSUL.pie"
-	sequenceName = "res_struttech.ogg"
+_("New Defensive Structure Available"),\
+_("Steel tower with machinegun"),\
+_("Automatically targets enemies within sensor range"),\
+_("Defensive Strength: Low"),\
+
+imdName = "MICAPSUL.pie"
+sequenceName = "res_struttech.ogg"
 
 [RES_EMP_PODTOW]
 
 text = \
-		_("New Defensive Structure Available"),\
-		_("Armored guard tower with Mini-Pod Rocket"),\
-		_("Automatically targets enemies within sensor range"),\
-		_("Defensive Strength: Medium"),\
-	
-	imdName = "MICAPSUL.pie"
-	sequenceName = "res_struttech.ogg"
+_("New Defensive Structure Available"),\
+_("Armored guard tower with Mini-Pod Rocket"),\
+_("Automatically targets enemies within sensor range"),\
+_("Defensive Strength: Medium"),\
+
+imdName = "MICAPSUL.pie"
+sequenceName = "res_struttech.ogg"
 
 [RES_DF_P1]
 
 text = \
-		_("New Defensive Structure Available"),\
-		_("Armored bunker with Machinegun"),\
-		_("Automatically targets enemies within sensor range"),\
-		_("Defensive Strength: High"),\
-	
-	imdName = "MICAPSUL.pie"
-	sequenceName = "res_struttech.ogg"
+_("New Defensive Structure Available"),\
+_("Armored bunker with Machinegun"),\
+_("Automatically targets enemies within sensor range"),\
+_("Defensive Strength: High"),\
+
+imdName = "MICAPSUL.pie"
+sequenceName = "res_struttech.ogg"
 
 [RES_PB_ATR]
 
 text = \
-		_("New Defensive Structure Available"),\
-		_("Armored bunker with Lancer AT rocket"),\
-		_("Automatically targets enemies within sensor range"),\
-		_("Defensive Strength: High"),\
-	
-	imdName = "MICAPSUL.pie"
-	sequenceName = "res_struttech.ogg"
+_("New Defensive Structure Available"),\
+_("Armored bunker with Lancer AT rocket"),\
+_("Automatically targets enemies within sensor range"),\
+_("Defensive Strength: High"),\
+
+imdName = "MICAPSUL.pie"
+sequenceName = "res_struttech.ogg"
 
 [RES_PB_FL]
 
 text = \
-		_("New Defensive Structure Available"),\
-		_("Armored bunker with Flamer"),\
-		_("Automatically targets enemies within sensor range"),\
-		_("Defensive Strength: High"),\
-	
-	imdName = "MICAPSUL.pie"
-	sequenceName = "res_struttech.ogg"
+_("New Defensive Structure Available"),\
+_("Armored bunker with Flamer"),\
+_("Automatically targets enemies within sensor range"),\
+_("Defensive Strength: High"),\
+
+imdName = "MICAPSUL.pie"
+sequenceName = "res_struttech.ogg"
 
 [RES_PB_LC]
 
 text = \
-		_("New Defensive Structure Available"),\
-		_("Armored bunker with Light Cannon"),\
-		_("Automatically targets enemies within sensor range"),\
-		_("Defensive Strength: High"),\
-	
-	imdName = "MICAPSUL.pie"
-	sequenceName = "res_struttech.ogg"
+_("New Defensive Structure Available"),\
+_("Armored bunker with Light Cannon"),\
+_("Automatically targets enemies within sensor range"),\
+_("Defensive Strength: High"),\
+
+imdName = "MICAPSUL.pie"
+sequenceName = "res_struttech.ogg"
 
 [RES_WT2_LC]
 
 text = \
-		_("New Defensive Structure Available"),\
-		_("Armored hardpoint with Light Cannon"),\
-		_("Automatically targets enemies within sensor range"),\
-		_("Defensive Strength: High"),\
-	
-	imdName = "MICAPSUL.pie"
-	sequenceName = "res_struttech.ogg"
+_("New Defensive Structure Available"),\
+_("Armored hardpoint with Light Cannon"),\
+_("Automatically targets enemies within sensor range"),\
+_("Defensive Strength: High"),\
+
+imdName = "MICAPSUL.pie"
+sequenceName = "res_struttech.ogg"
 
 [RES_WT3_MC]
 
 text = \
-		_("New Defensive Structure Available"),\
-		_("Armored hardpoint with Medium Cannon"),\
-		_("Automatically targets enemies within sensor range"),\
-		_("Defensive Strength: High"),\
-	
-	imdName = "MICAPSUL.pie"
-	sequenceName = "res_struttech.ogg"
+_("New Defensive Structure Available"),\
+_("Armored hardpoint with Medium Cannon"),\
+_("Automatically targets enemies within sensor range"),\
+_("Defensive Strength: High"),\
+
+imdName = "MICAPSUL.pie"
+sequenceName = "res_struttech.ogg"
 
 [RES_WT4_HC]
 
 text = \
-		_("New Defensive Structure Available"),\
-		_("Armored hardpoint with Heavy Cannon"),\
-		_("Automatically targets enemies within sensor range"),\
-		_("Defensive Strength: High"),\
-	
-	imdName = "MICAPSUL.pie"
-	sequenceName = "res_struttech.ogg"
+_("New Defensive Structure Available"),\
+_("Armored hardpoint with Heavy Cannon"),\
+_("Automatically targets enemies within sensor range"),\
+_("Defensive Strength: High"),\
+
+imdName = "MICAPSUL.pie"
+sequenceName = "res_struttech.ogg"
 
 [RES_TTRAP1]
 
 text = \
-		_("New Defensive Structure Available"),\
-		_("Reinforced concrete tank traps"),\
-		_("Prevents enemy movement"),\
-		_("Defensive Strength: Medium"),\
-	
-	imdName = "MICAPSUL.pie"
-	sequenceName = "res_struttech.ogg"
+_("New Defensive Structure Available"),\
+_("Reinforced concrete tank traps"),\
+_("Prevents enemy movement"),\
+_("Defensive Strength: Medium"),\
+
+imdName = "MICAPSUL.pie"
+sequenceName = "res_struttech.ogg"
 
 [RES_REPAI1]
 
 text = \
-		_("New Base Structure Available"),\
-		_("New Repair Facility Repairs Damaged Units"),\
-		_("Use the Command Console to send units back for repair"),\
-		_("Or select the Repair Facility as a unit's target"),\
-	
-	imdName = "MICAPSUL.pie"
-	sequenceName = "res_struttech.ogg"
+_("New Base Structure Available"),\
+_("New Repair Facility Repairs Damaged Units"),\
+_("Use the Command Console to send units back for repair"),\
+_("Or select the Repair Facility as a unit's target"),\
+
+imdName = "MICAPSUL.pie"
+sequenceName = "res_struttech.ogg"
 
 [RES_ST_RFU1]
 
 text = \
-		_("Repair Facility Improved"),\
-		_("New automated repair techniques"),\
-		_("Increases Repair Speed"),\
-		_("All repair facilities upgraded automatically"),\
-	
-	imdName = "MICAPSUL.pie"
-	sequenceName = "res_struttech.ogg"
+_("Repair Facility Improved"),\
+_("New automated repair techniques"),\
+_("Increases Repair Speed"),\
+_("All repair facilities upgraded automatically"),\
+
+imdName = "MICAPSUL.pie"
+sequenceName = "res_struttech.ogg"
 
 [RES_ST_CR1]
 
 text = \
-		_("New Base Structure Available"),\
-		_("Enables command turret research"),\
-		_("Directs and collates information for command turrets"),\
-		_("Controls up to five commanders"),\
-	
-	imdName = "MICAPSUL.pie"
-	sequenceName = "res_struttech.ogg"
+_("New Base Structure Available"),\
+_("Enables command turret research"),\
+_("Directs and collates information for command turrets"),\
+_("Controls up to five commanders"),\
+
+imdName = "MICAPSUL.pie"
+sequenceName = "res_struttech.ogg"
 
 [RES_ST_FCY01]
 
 text = \
-		_("Cyborg Production Improved"),\
-		_("Automated Cyborg Production"),\
-		_("Increases Cyborg factory output"),\
-		_("All Cyborg factories upgraded automatically"),\
-	
-	imdName = "MICAPSUL.pie"
-	sequenceName = "res_struttech.ogg"
+_("Cyborg Production Improved"),\
+_("Automated Cyborg Production"),\
+_("Increases Cyborg factory output"),\
+_("All Cyborg factories upgraded automatically"),\
+
+imdName = "MICAPSUL.pie"
+sequenceName = "res_struttech.ogg"
 
 [RES_ST_FCY1]
 
 text = \
-		_("New Base Structure Available"),\
-		_("Cyborg Factory"),\
-		_("Produces Cyborgs"),\
-		_("Research makes additional Cyborgs available"),\
-	
-	imdName = "MICAPSUL.pie"
-	sequenceName = "res_struttech.ogg"
+_("New Base Structure Available"),\
+_("Cyborg Factory"),\
+_("Produces Cyborgs"),\
+_("Research makes additional Cyborgs available"),\
+
+imdName = "MICAPSUL.pie"
+sequenceName = "res_struttech.ogg"
 
 [RES_ST_FM1]
 
 text = \
-		_("Production Improved"),\
-		_("Factory module enables medium and large bodies"),\
-		_("Increases factory output"),\
-		_("Use a truck to add modules to a factory"),\
-	
-	imdName = "MICAPSUL.pie"
-	sequenceName = "res_struttech.ogg"
+_("Production Improved"),\
+_("Factory module enables medium and large bodies"),\
+_("Increases factory output"),\
+_("Use a truck to add modules to a factory"),\
+
+imdName = "MICAPSUL.pie"
+sequenceName = "res_struttech.ogg"
 
 [RES_ST_FU1]
 
 text = \
-		_("Vehicle Production Improved"),\
-		_("Automated Factory Production"),\
-		_("Increases factory output"),\
-		_("All vehicle factories upgraded automatically"),\
-	
-	imdName = "MICAPSUL.pie"
-	sequenceName = "res_struttech.ogg"
+_("Vehicle Production Improved"),\
+_("Automated Factory Production"),\
+_("Increases factory output"),\
+_("All vehicle factories upgraded automatically"),\
+
+imdName = "MICAPSUL.pie"
+sequenceName = "res_struttech.ogg"
 
 [RES_POWMD1]
 
 text = \
-		_("Power Module Available"),\
-		_("Improved Power Generator Performance"),\
-		_("Burns oil more efficiently"),\
-		_("Use a truck to add the module to a power generator"),\
-	
-	imdName = "MICAPSUL.pie"
-	sequenceName = "res_pow.ogg"
+_("Power Module Available"),\
+_("Improved Power Generator Performance"),\
+_("Burns oil more efficiently"),\
+_("Use a truck to add the module to a power generator"),\
+
+imdName = "MICAPSUL.pie"
+sequenceName = "res_pow.ogg"
 
 [RES_ST_RM1]
 
 text = \
-		_("Research Module Available"),\
-		_("Research module expands research facilities"),\
-		_("Increases research speed"),\
-		_("Use a truck to add the module to a research facility"),\
-	
-	imdName = "MICAPSUL.pie"
-	sequenceName = "res_struttech.ogg"
+_("Research Module Available"),\
+_("Research module expands research facilities"),\
+_("Increases research speed"),\
+_("Use a truck to add the module to a research facility"),\
+
+imdName = "MICAPSUL.pie"
+sequenceName = "res_struttech.ogg"
 
 [RES_ST_RU1]
 
 text = \
-		_("Research Improved"),\
-		_("Synaptic link data analysis"),\
-		_("Increases research speed"),\
-		_("All research facilities upgraded automatically"),\
-	
-	imdName = "MICAPSUL.pie"
-	sequenceName = "res_struttech.ogg"
+_("Research Improved"),\
+_("Synaptic link data analysis"),\
+_("Increases research speed"),\
+_("All research facilities upgraded automatically"),\
+
+imdName = "MICAPSUL.pie"
+sequenceName = "res_struttech.ogg"
 
 [RES_ST_MAT1]
 
 text = \
-		_("Increases Damage Resistance"),\
-		_("Reinforced Base Structure Materials"),\
-		_("Increases Armor and Body Points"),\
-		_("All base structures upgraded automatically"),\
-	
-	imdName = "MICAPSUL.pie"
-	sequenceName = "res_struttech.ogg"
+_("Increases Damage Resistance"),\
+_("Reinforced Base Structure Materials"),\
+_("Increases Armor and Body Points"),\
+_("All base structures upgraded automatically"),\
+
+imdName = "MICAPSUL.pie"
+sequenceName = "res_struttech.ogg"
 
 [RES_V_B01]
 
 text = \
-		_("Project Light Body"),\
-		_("Light body vulnerable to heavy weapons"),\
-		_("Good scout vehicle"),\
-		_("Low power cost and low production times"),\
-	
-	imdName = "MICAPSUL.pie"
-	sequenceName = "res_droid.ogg"
+_("Project Light Body"),\
+_("Light body vulnerable to heavy weapons"),\
+_("Good scout vehicle"),\
+_("Low power cost and low production times"),\
+
+imdName = "MICAPSUL.pie"
+sequenceName = "res_droid.ogg"
 
 [RES_V_B04]
 
 text = \
-		_("New Paradigm Light Body"),\
-		_("Inferior armor and body points to Viper"),\
-		_("Faster than Viper"),\
-		_("Power cost and production time similar to Viper"),\
-	
-	imdName = "MICAPSUL.pie"
-	sequenceName = "res_droid.ogg"
+_("New Paradigm Light Body"),\
+_("Inferior armor and body points to Viper"),\
+_("Faster than Viper"),\
+_("Power cost and production time similar to Viper"),\
+
+imdName = "MICAPSUL.pie"
+sequenceName = "res_droid.ogg"
 
 [RES_V_B05]
 
 text = \
-		_("Project Medium Body"),\
-		_("Medium body increases armor and body points"),\
-		_("Good medium tank and support vehicle"),\
-		_("Average power costs and production times"),\
-	
-	imdName = "MICAPSUL.pie"
-	sequenceName = "res_droid.ogg"
+_("Project Medium Body"),\
+_("Medium body increases armor and body points"),\
+_("Good medium tank and support vehicle"),\
+_("Average power costs and production times"),\
+
+imdName = "MICAPSUL.pie"
+sequenceName = "res_droid.ogg"
 
 [RES_V_B08]
 
 text = \
-		_("New Paradigm Medium body"),\
-		_("Inferior armor and body points to Cobra"),\
-		_("Faster than Cobra"),\
-		_("Power cost and production time similar to Cobra"),\
-	
-	imdName = "MICAPSUL.pie"
-	sequenceName = "res_droid.ogg"
+_("New Paradigm Medium body"),\
+_("Inferior armor and body points to Cobra"),\
+_("Faster than Cobra"),\
+_("Power cost and production time similar to Cobra"),\
+
+imdName = "MICAPSUL.pie"
+sequenceName = "res_droid.ogg"
 
 [RES_V_B11]
 
 text = \
-		_("Project Heavy Body"),\
-		_("Heavy body increases armor and body points"),\
-		_("Good main battle tank and heavy artillery platform"),\
-		_("Very high power costs and very slow to produce"),\
-	
-	imdName = "MICAPSUL.pie"
-	sequenceName = "res_droid.ogg"
+_("Project Heavy Body"),\
+_("Heavy body increases armor and body points"),\
+_("Good main battle tank and heavy artillery platform"),\
+_("Very high power costs and very slow to produce"),\
+
+imdName = "MICAPSUL.pie"
+sequenceName = "res_droid.ogg"
 
 [RES_V_B12]
 
 text = \
-		_("New Paradigm Heavy Body"),\
-		_("Less armor and body points than Python"),\
-		_("Faster than Python"),\
-		_("Power cost and production time the same as Python"),\
-	
-	imdName = "MICAPSUL.pie"
-	sequenceName = "res_droid.ogg"
+_("New Paradigm Heavy Body"),\
+_("Less armor and body points than Python"),\
+_("Faster than Python"),\
+_("Power cost and production time the same as Python"),\
+
+imdName = "MICAPSUL.pie"
+sequenceName = "res_droid.ogg"
 
 [RES_V_EN1]
 
 text = \
-		_("Vehicle Engine Upgrade"),\
-		_("Fuel Injection Engine"),\
-		_("Improves vehicle speed"),\
-		_("All vehicles upgraded automatically"),\
-	
-	imdName = "MICAPSUL.pie"
-	sequenceName = "res_droid.ogg"
+_("Vehicle Engine Upgrade"),\
+_("Fuel Injection Engine"),\
+_("Improves vehicle speed"),\
+_("All vehicles upgraded automatically"),\
+
+imdName = "MICAPSUL.pie"
+sequenceName = "res_droid.ogg"
 
 [RES_V_MET1]
 
 text = \
-		_("Vehicle Bodies Improved"),\
-		_("Layered composite alloys and energy-absorbing fibres"),\
-		_("Increases kinetic armor and body points"),\
-		_("All vehicles upgraded automatically"),\
-	
-	imdName = "MICAPSUL.pie"
-	sequenceName = "res_droid.ogg"
+_("Vehicle Bodies Improved"),\
+_("Layered composite alloys and energy-absorbing fibres"),\
+_("Increases kinetic armor and body points"),\
+_("All vehicles upgraded automatically"),\
+
+imdName = "MICAPSUL.pie"
+sequenceName = "res_droid.ogg"
 
 [RES_HALFT1]
 
 text = \
-		_("New Propulsion Available"),\
-		_("Armored Half-tracks"),\
-		_("Speed: Medium"),\
-		_("Body Points: Medium"),\
-	
-	imdName = "MICAPSUL.pie"
-	sequenceName = "res_droid.ogg"
+_("New Propulsion Available"),\
+_("Armored Half-tracks"),\
+_("Speed: Medium"),\
+_("Body Points: Medium"),\
+
+imdName = "MICAPSUL.pie"
+sequenceName = "res_droid.ogg"
 
 [RES_V_P_H1]
 
 text = \
-		_("New Propulsion Available"),\
-		_("Amphibious hover propulsion"),\
-		_("Speed: Fast"),\
-		_("Body Points: Low"),\
-	
-	imdName = "MICAPSUL.pie"
-	sequenceName = "res_droid.ogg"
+_("New Propulsion Available"),\
+_("Amphibious hover propulsion"),\
+_("Speed: Fast"),\
+_("Body Points: Low"),\
+
+imdName = "MICAPSUL.pie"
+sequenceName = "res_droid.ogg"
 
 [RES_TRACK1]
 
 text = \
-		_("New Propulsion Available"),\
-		_("Armored Tracks"),\
-		_("Speed: Slow"),\
-		_("Body Points: High"),\
-	
-	imdName = "MICAPSUL.pie"
-	sequenceName = "res_droid.ogg"
+_("New Propulsion Available"),\
+_("Armored Tracks"),\
+_("Speed: Slow"),\
+_("Body Points: High"),\
+
+imdName = "MICAPSUL.pie"
+sequenceName = "res_droid.ogg"
 
 [RES_V_P_W1]
 
 text = \
-		_("New Propulsion Available"),\
-		_("Wheeled Propulsion"),\
-		_("Speed: Fast"),\
-		_("Body Points: Low"),\
-	
-	imdName = "MICAPSUL.pie"
-	sequenceName = "res_droid.ogg"
+_("New Propulsion Available"),\
+_("Wheeled Propulsion"),\
+_("Speed: Fast"),\
+_("Body Points: Low"),\
+
+imdName = "MICAPSUL.pie"
+sequenceName = "res_droid.ogg"
 
 [RES_CN1MK1]
 
 text = \
-		_("New Weapon Turret Available"),\
-		_("Light Cannon firing 40mm rounds"),\
-		_("Best Targets: Vehicles"),\
-		_("Body Points: Medium"),\
-	
-	imdName = "MICAPSUL.pie"
-	sequenceName = "res_weapons.ogg"
+_("New Weapon Turret Available"),\
+_("Light Cannon firing 40mm rounds"),\
+_("Best Targets: Vehicles"),\
+_("Body Points: Medium"),\
+
+imdName = "MICAPSUL.pie"
+sequenceName = "res_weapons.ogg"
 
 [RES_CN2MK1]
 
 text = \
-		_("New Weapon Turret Available"),\
-		_("Medium Cannon firing 76mm rounds"),\
-		_("Best Targets: Vehicles"),\
-		_("Body Points: Medium"),\
-	
-	imdName = "MICAPSUL.pie"
-	sequenceName = "res_weapons.ogg"
+_("New Weapon Turret Available"),\
+_("Medium Cannon firing 76mm rounds"),\
+_("Best Targets: Vehicles"),\
+_("Body Points: Medium"),\
+
+imdName = "MICAPSUL.pie"
+sequenceName = "res_weapons.ogg"
 
 [RES_CN3MK1]
 
 text = \
-		_("New Weapon Turret Available"),\
-		_("Heavy Cannon firing 120 mm rounds"),\
-		_("Best Targets: Vehicles"),\
-		_("Body Points: High"),\
-	
-	imdName = "MICAPSUL.pie"
-	sequenceName = "res_weapons.ogg"
+_("New Weapon Turret Available"),\
+_("Heavy Cannon firing 120 mm rounds"),\
+_("Best Targets: Vehicles"),\
+_("Body Points: High"),\
+
+imdName = "MICAPSUL.pie"
+sequenceName = "res_weapons.ogg"
 
 [RES_W_CN_D1]
 
 text = \
-		_("Cannon Upgrade"),\
-		_("High Explosive Anti-Tank Cannon Shells"),\
-		_("Increases Cannon damage"),\
-		_("All cannons upgraded automatically"),\
-	
-	imdName = "MICAPSUL.PIE"
-	sequenceName = "res_weapons.ogg"
+_("Cannon Upgrade"),\
+_("High Explosive Anti-Tank Cannon Shells"),\
+_("Increases Cannon damage"),\
+_("All cannons upgraded automatically"),\
+
+imdName = "MICAPSUL.PIE"
+sequenceName = "res_weapons.ogg"
 
 [RES_FLAME1]
 
 text = \
-		_("New Weapon Turret Available"),\
-		_("Flame-thrower firing Propylene Oxide gel"),\
-		_("Best Targets: Bunkers, wheeled and hover vehicles"),\
-		_("Body Points: Very low"),\
-	
-	imdName = "MICAPSUL.pie"
-	sequenceName = "res_weapons.ogg"
+_("New Weapon Turret Available"),\
+_("Flame-thrower firing Propylene Oxide gel"),\
+_("Best Targets: Bunkers, wheeled and hover vehicles"),\
+_("Body Points: Very low"),\
+
+imdName = "MICAPSUL.pie"
+sequenceName = "res_weapons.ogg"
 
 [RES_W_FL_D1]
 
 text = \
-		_("Flamer Upgrade"),\
-		_("Propylene Oxide gel treated to burn at higher temperatures"),\
-		_("Increases Flamer damage"),\
-		_("All flamers upgraded automatically"),\
-	
-	imdName = "MICAPSUL.PIE"
-	sequenceName = "res_weapons.ogg"
+_("Flamer Upgrade"),\
+_("Propylene Oxide gel treated to burn at higher temperatures"),\
+_("Increases Flamer damage"),\
+_("All flamers upgraded automatically"),\
+
+imdName = "MICAPSUL.PIE"
+sequenceName = "res_weapons.ogg"
 
 [RES_MG1MK1]
 
 text = \
-		_("New Weapon Turret Available"),\
-		_("7.62mm machinegun"),\
-		_("Best Targets: Infantry, base structures, wheeled vehicles"),\
-		_("Body Points: Low"),\
-	
-	imdName = "MICAPSUL.pie"
-	sequenceName = "res_weapons.ogg"
+_("New Weapon Turret Available"),\
+_("7.62mm machinegun"),\
+_("Best Targets: Infantry, base structures, wheeled vehicles"),\
+_("Body Points: Low"),\
+
+imdName = "MICAPSUL.pie"
+sequenceName = "res_weapons.ogg"
 
 [RES_MG2MK1]
 
 text = \
-		_("New Weapon Turret Available"),\
-		_("Twin 7.62mm machineguns"),\
-		_("Best Targets: Infantry, base structures, wheeled vehicles"),\
-		_("Body Points: Low"),\
-	
-	imdName = "MICAPSUL.pie"
-	sequenceName = "res_weapons.ogg"
+_("New Weapon Turret Available"),\
+_("Twin 7.62mm machineguns"),\
+_("Best Targets: Infantry, base structures, wheeled vehicles"),\
+_("Body Points: Low"),\
+
+imdName = "MICAPSUL.pie"
+sequenceName = "res_weapons.ogg"
 
 [RES_W_MG_D1]
 
 text = \
-		_("Machinegun Upgrade"),\
-		_("Hardened case machinegun bullets"),\
-		_("Increases Machinegun damage"),\
-		_("All machineguns upgraded automatically"),\
-	
-	imdName = "MICAPSUL.PIE"
-	sequenceName = "res_weapons.ogg"
+_("Machinegun Upgrade"),\
+_("Hardened case machinegun bullets"),\
+_("Increases Machinegun damage"),\
+_("All machineguns upgraded automatically"),\
+
+imdName = "MICAPSUL.PIE"
+sequenceName = "res_weapons.ogg"
 
 [RES_W_MG_D2]
 
 text = \
-		_("Machinegun Upgrade"),\
-		_("Armor-Piercing Discard Sabot Bullets"),\
-		_("Increases Machinegun damage"),\
-		_("All machineguns upgraded automatically"),\
-	
-	imdName = "MICAPSUL.PIE"
-	sequenceName = "res_weapons.ogg"
+_("Machinegun Upgrade"),\
+_("Armor-Piercing Discard Sabot Bullets"),\
+_("Increases Machinegun damage"),\
+_("All machineguns upgraded automatically"),\
+
+imdName = "MICAPSUL.PIE"
+sequenceName = "res_weapons.ogg"
 
 [RES_MORTA1]
 
 text = \
-		_("New Indirect Fire Weapon Available"),\
-		_("May be targeted directly or assigned to a sensor turret or tower"),\
-		_("Best Targets: Base structures, infantry, wheeled vehicles"),\
-		_("Body Points: Very Low"),\
-	
-	imdName = "MICAPSUL.pie"
-	sequenceName = "res_weapons.ogg"
+_("New Indirect Fire Weapon Available"),\
+_("May be targeted directly or assigned to a sensor turret or tower"),\
+_("Best Targets: Base structures, infantry, wheeled vehicles"),\
+_("Body Points: Very Low"),\
+
+imdName = "MICAPSUL.pie"
+sequenceName = "res_weapons.ogg"
 
 [RES_W_M_D1]
 
 text = \
-		_("Mortar Upgrade"),\
-		_("Improved high explosive shells"),\
-		_("Increases Mortar damage"),\
-		_("All mortars upgraded automatically"),\
-	
-	imdName = "MICAPSUL.PIE"
-	sequenceName = "res_weapons.ogg"
+_("Mortar Upgrade"),\
+_("Improved high explosive shells"),\
+_("Increases Mortar damage"),\
+_("All mortars upgraded automatically"),\
+
+imdName = "MICAPSUL.PIE"
+sequenceName = "res_weapons.ogg"
 
 [RES_W_RK_MP1]
 
 text = \
-		_("New Rocket Available"),\
-		_("Fast firing light anti-vehicle rockets"),\
-		_("Best Targets: Wheeled and hover vehicles"),\
-		_("Body Points: Very Low"),\
-	
-	imdName = "MICAPSUL.PIE"
-	sequenceName = "res_weapons.ogg"
+_("New Rocket Available"),\
+_("Fast firing light anti-vehicle rockets"),\
+_("Best Targets: Wheeled and hover vehicles"),\
+_("Body Points: Very Low"),\
+
+imdName = "MICAPSUL.PIE"
+sequenceName = "res_weapons.ogg"
 
 [RES_W_RK_AC1]
 
 text = \
-		_("Mini-Rocket Upgrade"),\
-		_("Fin-stabilization improves flight trajectory"),\
-		_("Increases Mini-Rocket accuracy"),\
-		_("All mini-rockets upgraded automatically"),\
-	
-	imdName = "MICAPSUL.PIE"
-	sequenceName = "res_weapons.ogg"
+_("Mini-Rocket Upgrade"),\
+_("Fin-stabilization improves flight trajectory"),\
+_("Increases Mini-Rocket accuracy"),\
+_("All mini-rockets upgraded automatically"),\
+
+imdName = "MICAPSUL.PIE"
+sequenceName = "res_weapons.ogg"
 
 [RES_W_RK_D1]
 
 text = \
-		_("Mini-Rocket Upgrade"),\
-		_("Improved shaped charge warhead"),\
-		_("Increases Mini-Rocket damage"),\
-		_("All mini-rockets upgraded automatically"),\
-	
-	imdName = "MICAPSUL.PIE"
-	sequenceName = "res_weapons.ogg"
+_("Mini-Rocket Upgrade"),\
+_("Improved shaped charge warhead"),\
+_("Increases Mini-Rocket damage"),\
+_("All mini-rockets upgraded automatically"),\
+
+imdName = "MICAPSUL.PIE"
+sequenceName = "res_weapons.ogg"
 
 [RES_W_RK_ROF1]
 
 text = \
-		_("Mini-Rocket Upgrade"),\
-		_("Automated reload system"),\
-		_("Increases Mini-Rockets ROF"),\
-		_("All mini-rockets upgraded automatically"),\
-	
-	imdName = "MICAPSUL.PIE"
-	sequenceName = "res_weapons.ogg"
+_("Mini-Rocket Upgrade"),\
+_("Automated reload system"),\
+_("Increases Mini-Rockets ROF"),\
+_("All mini-rockets upgraded automatically"),\
+
+imdName = "MICAPSUL.PIE"
+sequenceName = "res_weapons.ogg"
 
 [RES_W_SRK_AC1]
 
 text = \
-		_("Rocket Upgrade"),\
-		_("Tracks and directs in-flight rocket to target"),\
-		_("Increases Rocket accuracy"),\
-		_("All rockets upgraded automatically"),\
-	
-	imdName = "MICAPSUL.PIE"
-	sequenceName = "res_weapons.ogg"
+_("Rocket Upgrade"),\
+_("Tracks and directs in-flight rocket to target"),\
+_("Increases Rocket accuracy"),\
+_("All rockets upgraded automatically"),\
+
+imdName = "MICAPSUL.PIE"
+sequenceName = "res_weapons.ogg"
 
 [RES_W_SRK_D1]
 
 text = \
-		_("Rocket Upgrade"),\
-		_("High Explosive Anti-Tank warhead"),\
-		_("Increases Rocket damage"),\
-		_("All rockets upgraded automatically"),\
-	
-	imdName = "MICAPSUL.PIE"
-	sequenceName = "res_weapons.ogg"
+_("Rocket Upgrade"),\
+_("High Explosive Anti-Tank warhead"),\
+_("Increases Rocket damage"),\
+_("All rockets upgraded automatically"),\
+
+imdName = "MICAPSUL.PIE"
+sequenceName = "res_weapons.ogg"
 
