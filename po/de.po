@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
 "POT-Creation-Date: 2012-01-07 14:37+0100\n"
-"PO-Revision-Date: 2011-12-10 18:21+0100\n"
+"PO-Revision-Date: 2012-01-07 14:58+0100\n"
 "Last-Translator: Steven 'Kreuvf' Koenig <translations@kreuvf.de>\n"
 "Language-Team: Deutsch <warzone-dev@gna.org>\n"
 "Language: \n"
@@ -10319,13 +10319,12 @@ msgid "Error connecting to the lobby server: %s. Make sure port %d can receive i
 msgstr "Fehler beim Verbinden zum Lobbyserver: %s. Stellen Sie sicher, dass Port %d eingehende Verbindungen empfangen kann. Wenn Sie einen Router benutzen, konfigurieren Sie diesen zur Nutzung von UPnP oder leiten Sie den Port zu Ihrem System weiter."
 
 #: po/custom/mac-infoplist.txt:1
-#, fuzzy
 msgid ""
 "Copyright © 1999-2004 Eidos Interactive.\n"
 "Copyright © 2005-2011 The Warzone 2100 Project"
 msgstr ""
 "Copyright © 1999-2004 Eidos Interactive.\n"
-"Copyright © 2005-2010 The Warzone 2100 Project"
+"Copyright © 2005-2011 The Warzone 2100 Project"
 
 #: po/custom/mac-infoplist.txt:2
 #: po/custom/warzone2100.desktop.txt:2
@@ -10561,7 +10560,7 @@ msgstr "Entwurf löschen"
 #: src/design.cpp:631
 #: src/design.cpp:4685
 msgid "Store Template"
-msgstr ""
+msgstr "Vorlage speichern"
 
 #: src/design.cpp:684
 #: src/design.cpp:731
@@ -10683,7 +10682,7 @@ msgstr "Systeme"
 
 #: src/design.cpp:4680
 msgid "Delete Template"
-msgstr ""
+msgstr "Vorlage löschen"
 
 #: src/display3d.cpp:648
 msgid "Player left"
@@ -11392,9 +11391,8 @@ msgstr ""
 "Warzone wird versuchen das Spiel ohne sie zu laden."
 
 #: src/intdisplay.cpp:205
-#, fuzzy
 msgid "Waiting for Power"
-msgstr "Warte auf andere Spieler"
+msgstr "Warte auf Energie"
 
 #: src/intdisplay.cpp:253
 msgid "Build Progress"
@@ -11405,9 +11403,8 @@ msgid "Construction Progress"
 msgstr "Fortschrittsbalken"
 
 #: src/intdisplay.cpp:296
-#, fuzzy
 msgid "Research Progress"
-msgstr "Forschung verbessert"
+msgstr "Forschungsfortschritt"
 
 #: src/intelmap.cpp:242
 #: src/keybind.cpp:1365
@@ -11768,14 +11765,14 @@ msgid "Game Speed Reset"
 msgstr "Spielgeschwindigkeit zurückgesetzt"
 
 #: src/keybind.cpp:2624
-#, fuzzy, c-format
+#, c-format
 msgid "Game Speed Increased to %s"
-msgstr "Spielgeschwindigkeit auf %3.1f erhöht"
+msgstr "Spielgeschwindigkeit auf %s erhöht"
 
 #: src/keybind.cpp:2628
-#, fuzzy, c-format
+#, c-format
 msgid "Game Speed Reduced to %s"
-msgstr "Spielgeschwindigkeit auf %3.1f gesenkt"
+msgstr "Spielgeschwindigkeit auf %s gesenkt"
 
 #: src/keybind.cpp:2684
 msgid "Radar showing friend-foe colors"
@@ -12615,7 +12612,7 @@ msgstr "Schwierigkeitsgrad"
 
 #: src/multiint.cpp:1823
 msgid "Less aggressive"
-msgstr ""
+msgstr "Weniger aggressiv"
 
 #: src/multiint.cpp:1824
 msgid "Plays nice"
@@ -12626,9 +12623,8 @@ msgid "No holds barred"
 msgstr "Alles ist erlaubt"
 
 #: src/multiint.cpp:1826
-#, fuzzy
 msgid "Starts with advantages"
-msgstr "Mit fortschrittlichen Basen starten"
+msgstr "Mit Vorteilen starten"
 
 #: src/multiint.cpp:1854
 msgid "CHOOSE AI"
@@ -12817,11 +12813,11 @@ msgid "Any number of players"
 msgstr "Beliebige Spielerzahl"
 
 #: src/multimenu.cpp:655
-#, fuzzy, c-format
+#, c-format
 msgid "%d player"
 msgid_plural "%d players"
-msgstr[0] "2 Spieler"
-msgstr[1] "2 Spieler"
+msgstr[0] "%d Spieler"
+msgstr[1] "%d Spieler"
 
 #: src/multimenu.cpp:793
 msgid "Score"
