@@ -254,6 +254,7 @@ data/etc/*
 data/fonts/
 devpkg/*
 *.opensdf
+*.aps
 *.sdf
 *.ipch
 *.tlog
@@ -261,6 +262,8 @@ devpkg/*
 *.cache*
 *manifest.*
 *.exp
+warzone*.*build
+*.lnk
 
 # profiler stuff
 win32/CodeAnalyst
