@@ -739,7 +739,19 @@ VIEWDATA* loadResearchViewData(const char* fileName)
 /* Get the view data identified by the name */
 VIEWDATA *getViewData(const char *pName)
 {
-	return apsViewData.value(pName);
+	VIEWDATA *ptr = apsViewData.value(pName);
+	if (!ptr) // dump for debugging
+	{
+		QMap<QString, VIEWDATA *>::iterator iter = apsViewData.begin();
+		while (iter != apsViewData.constEnd())
+		{
+			VIEWDATA *psViewData = iter.value();
+			debug(LOG_ERROR, "\t%s", psViewData->pName);
+			++iter;
+		}
+	}
+	ASSERT(ptr, "Message %s not found, those known listed above", pName);
+	return ptr;
 }
 
 /* Release the message heaps */

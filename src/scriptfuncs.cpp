@@ -9413,21 +9413,14 @@ VIEWDATA *CreateBeaconViewData(SDWORD sender, UDWORD LocX, UDWORD LocY)
 	char				name[MAXSTRLEN];
 
 	//allocate message space
-	psViewData = (VIEWDATA *)malloc(sizeof(VIEWDATA));
-	if (psViewData == NULL)
-	{
-		ASSERT(false, "prepairHelpViewData() - Unable to allocate memory for viewdata");
-		return NULL;
-	}
-
-	memset(psViewData, 0, sizeof(VIEWDATA));
+	psViewData = new VIEWDATA;
 
 	//store name
 	sprintf(name, _("Beacon %d"), sender);
  	psViewData->pName = name;
 
 	//store text message, hardcoded for now
-	psViewData->textMsg.push_back(getPlayerName(sender));
+	psViewData->textMsg.push_back(QString::fromUtf8(getPlayerName(sender)));
 
 	//store message type
 	psViewData->type = VIEW_BEACON;
