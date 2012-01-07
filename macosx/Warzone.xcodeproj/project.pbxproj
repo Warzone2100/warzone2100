@@ -369,8 +369,6 @@
 		02DDA8D00BD3C3600049AB60 /* posix.c in Sources */ = {isa = PBXBuildFile; fileRef = 02DDA8CE0BD3C3600049AB60 /* posix.c */; };
 		02DDA8D10BD3C3600049AB60 /* unix.c in Sources */ = {isa = PBXBuildFile; fileRef = 02DDA8CF0BD3C3600049AB60 /* unix.c */; };
 		02DDA8D40BD3C3820049AB60 /* Zlib.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02356D830BD3BB4100E9A019 /* Zlib.framework */; };
-		2244463C0E3EB7CB004D0F1F /* message_lexer.lpp in Sources */ = {isa = PBXBuildFile; fileRef = 224446390E3EB7CB004D0F1F /* message_lexer.lpp */; };
-		2244463D0E3EB7CB004D0F1F /* message_parser.ypp in Sources */ = {isa = PBXBuildFile; fileRef = 2244463A0E3EB7CB004D0F1F /* message_parser.ypp */; };
 		22E244D70E65361800EC2B3E /* baseobject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 22E244D40E65361800EC2B3E /* baseobject.cpp */; };
 		43119DC51353AFE7004C54BB /* pnginfo.h in Headers */ = {isa = PBXBuildFile; fileRef = 43119DC21353AFD7004C54BB /* pnginfo.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		43119DC61353B002004C54BB /* pngdebug.h in Headers */ = {isa = PBXBuildFile; fileRef = 43119DC11353AFD7004C54BB /* pngdebug.h */; };
@@ -1512,9 +1510,6 @@
 		02DDA8CE0BD3C3600049AB60 /* posix.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = posix.c; path = external/physfs/platform/posix.c; sourceTree = "<group>"; };
 		02DDA8CF0BD3C3600049AB60 /* unix.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = unix.c; path = external/physfs/platform/unix.c; sourceTree = "<group>"; };
 		2234C29F0E2BE18200E7704C /* positiondef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = positiondef.h; path = ../src/positiondef.h; sourceTree = SOURCE_ROOT; };
-		224446390E3EB7CB004D0F1F /* message_lexer.lpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.lex; name = message_lexer.lpp; path = ../src/message_lexer.lpp; sourceTree = SOURCE_ROOT; };
-		2244463A0E3EB7CB004D0F1F /* message_parser.ypp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.yacc; name = message_parser.ypp; path = ../src/message_parser.ypp; sourceTree = SOURCE_ROOT; };
-		2244463B0E3EB7CB004D0F1F /* messagely.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = messagely.h; path = ../src/messagely.h; sourceTree = SOURCE_ROOT; };
 		22E244D40E65361800EC2B3E /* baseobject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = baseobject.cpp; path = ../src/baseobject.cpp; sourceTree = SOURCE_ROOT; };
 		22E244D50E65361800EC2B3E /* baseobject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = baseobject.h; path = ../src/baseobject.h; sourceTree = SOURCE_ROOT; };
 		4301EC49149A3DE90054BABB /* cursors_sdl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = cursors_sdl.cpp; path = ../lib/sdl/cursors_sdl.cpp; sourceTree = SOURCE_ROOT; };
@@ -2496,9 +2491,6 @@
 				0246A2210BD3CCDB004D1C70 /* mapdisplay.h */,
 				0246A2220BD3CCDB004D1C70 /* mapgrid.cpp */,
 				0246A2230BD3CCDB004D1C70 /* mapgrid.h */,
-				2244463A0E3EB7CB004D0F1F /* message_parser.ypp */,
-				224446390E3EB7CB004D0F1F /* message_lexer.lpp */,
-				2244463B0E3EB7CB004D0F1F /* messagely.h */,
 				0246A2240BD3CCDB004D1C70 /* mechanics.cpp */,
 				0246A2250BD3CCDB004D1C70 /* mechanics.h */,
 				0246A2260BD3CCDB004D1C70 /* message.cpp */,
@@ -4599,8 +4591,6 @@
 				02BBB2090DA874F6002D438B /* exceptionhandler.cpp in Sources */,
 				9742E5730DF9975E000A5D41 /* lexer_input.cpp in Sources */,
 				9742E5770DF9979C000A5D41 /* parsetest.cpp in Sources */,
-				2244463D0E3EB7CB004D0F1F /* message_parser.ypp in Sources */,
-				2244463C0E3EB7CB004D0F1F /* message_lexer.lpp in Sources */,
 				22E244D70E65361800EC2B3E /* baseobject.cpp in Sources */,
 				024480240C5E4BEE00E1A641 /* utf.cpp in Sources */,
 				976AE8280EA0B59A00F2473F /* timer.cpp in Sources */,
