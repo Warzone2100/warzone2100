@@ -68,7 +68,7 @@ VIEWDATA* loadViewData(const char *pViewMsgData, UDWORD bufferSize);
 VIEWDATA* loadResearchViewData(const char* fileName);
 
 /** Get the view data that contains the text message pointer passed in. */
-VIEWDATA* getViewData(const char *pTextMsg);
+VIEWDATA *getViewData(const char *pTextMsg);
 
 /** Release the viewdata memory. */
 void viewDataShutDown(VIEWDATA *psViewData);

@@ -24,6 +24,7 @@
  *
  */
 
+#include <QMap>
 #include "lib/framework/frame.h"
 #include "lib/framework/wzconfig.h"
 #include "lib/framework/frameresource.h"
@@ -36,15 +37,7 @@
 #include "stats.h"
 #include "text.h"
 
-struct VIEWDATA_LIST
-{
-	VIEWDATA *psViewData;  // array of data
-	UBYTE numViewData;     // number in array
-	VIEWDATA_LIST *psNext; // next array of data
-};
-
-//array of pointers for the view data
-static VIEWDATA_LIST *apsViewData;
+static QMap<QString, VIEWDATA *> apsViewData;
 
 /* The id number for the next message allocated
  * Each message will have a unique id number irrespective of type
@@ -79,12 +72,6 @@ static inline MESSAGE* createMessage(MESSAGE_TYPE msgType, UDWORD player)
 
 	// Allocate memory for the message, and on failure return a NULL pointer
 	newMsg = (MESSAGE *)malloc(sizeof(MESSAGE));
-	ASSERT(newMsg, "Out of memory");
-	if (newMsg == NULL)
-	{
-		return NULL;
-	}
-
 	newMsg->type = msgType;
 	newMsg->dataType = MSG_DATA_DEFAULT;
 	newMsg->id = (msgID << 3) | selectedPlayer;
@@ -290,11 +277,6 @@ static void addProximityDisplay(MESSAGE *psMessage, bool proxPos, UDWORD player)
 
 	//create the proximity display
 	psToAdd = (PROXIMITY_DISPLAY*)malloc(sizeof(PROXIMITY_DISPLAY));
-	if (psToAdd == NULL)
-	{
-		ASSERT(false, "out of memory");
-		return;
-	}
 
 	if (proxPos)
 	{
@@ -451,30 +433,10 @@ bool initMessage(void)
 	return true;
 }
 
-static bool addToViewDataList(VIEWDATA* psViewData, unsigned int numData)
-{
-	VIEWDATA_LIST		*psAdd = (VIEWDATA_LIST*)malloc(sizeof(VIEWDATA_LIST));
-
-	if (psAdd == NULL)
-	{
-		ASSERT(false, "out of memory");
-		return false;
-	}
-
-	psAdd->psViewData = psViewData;
-	psAdd->numViewData = numData;
-	//add to top of list
-	psAdd->psNext = apsViewData;
-	apsViewData = psAdd;
-
-	return true;
-}
-
 /*load the view data for the messages from the file */
 VIEWDATA *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 {
 	UDWORD				i, dataInc, seqInc, dummy, numData, count, count2;
-	VIEWDATA			*psViewData, *pData;
 	VIEW_RESEARCH		*psViewRes;
 	VIEW_REPLAY			*psViewReplay;
 	char				name[MAX_STR_LENGTH], imdName[MAX_STR_LENGTH],
@@ -492,17 +454,9 @@ VIEWDATA *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 		return NULL;
 	}
 
-	//allocate space for the data
-	psViewData = new VIEWDATA[numData];
-
-	//add to array list
-	addToViewDataList(psViewData, (UBYTE)numData);
-
-	//save so can pass the value back
-	pData = psViewData;
-
 	for (i=0; i < numData; i++)
 	{
+		VIEWDATA *psViewData = new VIEWDATA;
 		UDWORD numText;
 		int readint;
 
@@ -519,16 +473,12 @@ VIEWDATA *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 		if (numText > MAX_DATA)
 		{
 			ASSERT(false, "too many text strings");
+			delete psViewData;
 			return NULL;
 		}
 
 		//allocate storage for the name
 		psViewData->pName = strdup(name);
-		if (psViewData->pName == NULL)
-		{
-			ASSERT(false, "Out of memory");
-			return NULL;
-		}
 		debug(LOG_MSG, "Loaded %s", psViewData->pName);
 
 		//read in the data for the text strings
@@ -554,11 +504,6 @@ VIEWDATA *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 		{
 		case VIEW_RES:
 			psViewData->pData = (VIEW_RESEARCH *) malloc(sizeof(VIEW_RESEARCH));
-			if (psViewData->pData == NULL)
-			{
-				ASSERT(false, "Unable to allocate memory");
-				return NULL;
-			}
 			imdName[0] = '\0';
 			imdName2[0] = '\0';
 			string[0] = '\0';
@@ -571,6 +516,7 @@ VIEWDATA *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 			if (psViewRes->pIMD == NULL)
 			{
 				ASSERT(false, "Cannot find the PIE for message %s", name);
+				delete psViewData;
 				return NULL;
 			}
 			if (strcmp(imdName2, "0"))
@@ -579,6 +525,7 @@ VIEWDATA *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 				if (psViewRes->pIMD2 == NULL)
 				{
 					ASSERT(false, "Cannot find the 2nd PIE for message %s", name);
+					delete psViewData;
 					return NULL;
 				}
 			}
@@ -592,11 +539,6 @@ VIEWDATA *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 			{
 				//allocate space
 				psViewRes->pAudio = strdup(audioName);
-				if (psViewRes->pAudio == NULL)
-				{
-					ASSERT(false, "loadViewData - Out of memory");
-					return NULL;
-				}
 			}
 			else
 			{
@@ -608,11 +550,6 @@ VIEWDATA *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 			// This is now also used for the stream playing on the PSX
 			// NOTE: on the psx the last entry (audioID) is used as the number of frames in the stream
 			psViewData->pData = (VIEW_REPLAY *) malloc(sizeof(VIEW_REPLAY));
-			if (psViewData->pData == NULL)
-			{
-				ASSERT(false, "Unable to allocate memory");
-				return NULL;
-			}
 			psViewReplay = (VIEW_REPLAY *)psViewData->pData;
 
 			//read in number of sequences for this message
@@ -623,6 +560,7 @@ VIEWDATA *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 			if (count > MAX_DATA)
 			{
 				ASSERT(false, "too many sequence for %s", psViewData->pName);
+				delete psViewData;
 				return NULL;
 			}
 
@@ -645,6 +583,7 @@ VIEWDATA *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 					if (count > MAX_DATA)
 					{
 						ASSERT(false, "too many strings for %s", psViewData->pName);
+						delete psViewData;
 						return NULL;
 					}
 					//set the flag to default
@@ -658,6 +597,7 @@ VIEWDATA *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 					if (count > MAX_DATA)
 					{
 						ASSERT(false, "invalid video playback flag %s", psViewData->pName);
+						delete psViewData;
 						return NULL;
 					}
 					psViewReplay->pSeqList[dataInc].flag = (UBYTE)count;
@@ -665,6 +605,7 @@ VIEWDATA *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 					if (count2 > MAX_DATA)
 					{
 						ASSERT(false, "too many text strings for seq for %s", psViewData->pName);
+						delete psViewData;
 						return NULL;
 					}
 					numText = count2;
@@ -692,11 +633,6 @@ VIEWDATA *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 				{
 					//allocate space
 					psViewReplay->pSeqList[dataInc].pAudio = strdup(audioName);
-					if (psViewReplay->pSeqList[dataInc].pAudio == NULL)
-					{
-						ASSERT(LOG_ERROR, "loadViewData - Out of memory");
-						return NULL;
-					}
 				}
 				else
 				{
@@ -708,12 +644,6 @@ VIEWDATA *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 
 		case VIEW_PROX:
 			psViewData->pData = (VIEW_PROXIMITY *) malloc(sizeof(VIEW_PROXIMITY));
-			if (psViewData->pData == NULL)
-			{
-				ASSERT(false, "Unable to allocate memory");
-				return NULL;
-			}
-			else
 			{
 				int tmp;
 
@@ -781,11 +711,11 @@ VIEWDATA *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 		}
 		//increment the pointer to the start of the next record
 		pViewMsgData = strchr(pViewMsgData,'\n') + 1;
-		//increment the list to the start of the next storage block
-		psViewData++;
+
+		apsViewData.insert(psViewData->pName, psViewData);
 	}
 
-	return pData;
+	return (VIEWDATA *)0x01; // fake pointer so that cleanup function will be called
 }
 
 VIEWDATA* loadResearchViewData(const char* fileName)
@@ -795,10 +725,9 @@ VIEWDATA* loadResearchViewData(const char* fileName)
 	ASSERT_OR_RETURN(NULL, ini.status() == QSettings::NoError, "%s not loaded", fileName);
 
 	QStringList list = ini.childGroups();
-	VIEWDATA *psViewData = new VIEWDATA[list.size()];
 	for (int i = 0; i < list.size(); ++i)
 	{
-		VIEWDATA *v = &psViewData[i];
+		VIEWDATA *v = new VIEWDATA;
 		VIEW_RESEARCH *r = (VIEW_RESEARCH *)malloc(sizeof(*r));
 
 		v->pData = NULL;
@@ -834,50 +763,21 @@ VIEWDATA* loadResearchViewData(const char* fileName)
 		}
 
 		ini.endGroup();
+		apsViewData.insert(v->pName, v);
 	}
-	addToViewDataList(psViewData, list.size());
-	return psViewData;
+	return (VIEWDATA *)0x01; // fake pointer so that cleanup function will be called
 }
 
-/*get the view data identified by the name */
-VIEWDATA * getViewData(const char *pName)
+/* Get the view data identified by the name */
+VIEWDATA *getViewData(const char *pName)
 {
-	VIEWDATA_LIST *psList = NULL;
-	unsigned int i = 0;
-
-	ASSERT_OR_RETURN(NULL, pName[0] != '\0', "Trying to find empty message name");
-
-	for (psList = apsViewData; psList != NULL; psList = psList->psNext)
-	{
-		for (i = 0; i < psList->numViewData; i++)
-		{
-			//compare the strings
-			if (!strcmp(psList->psViewData[i].pName, pName))
-			{
-				return &psList->psViewData[i];
-			}
-		}
-	}
-
-	// Dump mismatched candidates
-	debug(LOG_ERROR, "No match for view data, dumping whole list:");
-	for (psList = apsViewData; psList != NULL; psList = psList->psNext)
-	{
-		for (i = 0; i < psList->numViewData; i++)
-		{
-			debug(LOG_ERROR, "%s != %s", psList->psViewData[i].pName, pName);
-		}
-	}
-
-	ASSERT(false, "Unable to find viewdata for message %s", pName);
-	return NULL;
+	return apsViewData.value(pName);
 }
 
 /* Release the message heaps */
 bool messageShutdown(void)
 {
 	freeMessages();
-
 	return true;
 }
 
@@ -900,68 +800,49 @@ static void checkMessages(MSG_VIEWDATA *psViewData)
 	}
 }
 
-/* Release the viewdata memory */
-void viewDataShutDown(VIEWDATA *psViewData)
+/* Release the viewdata memory -- input parameter ignored */
+void viewDataShutDown(VIEWDATA *psViewDataUnused)
 {
-	VIEWDATA_LIST	*psList, **psPrev;
-
-	for (psList = apsViewData, psPrev = &apsViewData; psList != NULL; psPrev = &psList->psNext, psList = psList->psNext)
+	QMap<QString, VIEWDATA *>::iterator iter = apsViewData.begin();
+	while (iter != apsViewData.constEnd())
 	{
-		unsigned int i;
+		VIEWDATA *psViewData = iter.value();
 
-		// Skip non-matching etnries
-		if (psList->psViewData != psViewData)
+		// check for any messages using this viewdata
+		checkMessages((MSG_VIEWDATA *)psViewData);
+
+		free(psViewData->pName);
+
+		// free the space allocated for multiple sequences
+		if (psViewData->type == VIEW_RPL)
 		{
-			continue;
-		}
-
-		for (i = 0; i < psList->numViewData; ++i)
-		{
-			psViewData = &psList->psViewData[i];
-
-			//check for any messages using this viewdata
-			checkMessages((MSG_VIEWDATA *)psViewData);
-
-			free(psViewData->pName);
-
-			//free the space allocated for multiple sequences
-			if (psViewData->type == VIEW_RPL)
+			VIEW_REPLAY* const psViewReplay = (VIEW_REPLAY *)psViewData->pData;
+			if (psViewReplay->numSeq)
 			{
-				VIEW_REPLAY* const psViewReplay = (VIEW_REPLAY *)psViewData->pData;
-				if (psViewReplay->numSeq)
+				unsigned int seqInc;
+				for (seqInc = 0; seqInc < psViewReplay->numSeq; ++seqInc)
 				{
-					unsigned int seqInc;
-					for (seqInc = 0; seqInc < psViewReplay->numSeq; ++seqInc)
+					if (psViewReplay->pSeqList[seqInc].pAudio)
 					{
-						if (psViewReplay->pSeqList[seqInc].pAudio)
-						{
-							free(psViewReplay->pSeqList[seqInc].pAudio);
-						}
+						free(psViewReplay->pSeqList[seqInc].pAudio);
 					}
-					delete[] psViewReplay->pSeqList;
 				}
+				delete[] psViewReplay->pSeqList;
 			}
-			else if (psViewData->type == VIEW_RES)
-			{
-				VIEW_RESEARCH* const psViewRes = (VIEW_RESEARCH *)psViewData->pData;
-				if (psViewRes->pAudio)
-				{
-					free(psViewRes->pAudio);
-				}
-			}
-			free(psViewData->pData);
 		}
-		delete[] psList->psViewData;
-
-		// remove viewData list from the list
-		*psPrev = psList->psNext;
-		free(psList);
-
-		/* Although we're a O(n) algorithm, lets not go for fullblown
-		 * O(n) behaviour if not required.
-		 */
-		break;
+		else if (psViewData->type == VIEW_RES)
+		{
+			VIEW_RESEARCH* const psViewRes = (VIEW_RESEARCH *)psViewData->pData;
+			if (psViewRes->pAudio)
+			{
+				free(psViewRes->pAudio);
+			}
+		}
+		free(psViewData->pData);
+		delete psViewData;
+		++iter;
 	}
+	apsViewData.clear();
 }
 
 /* Looks through the players list of messages to find one with the same viewData
@@ -1029,26 +910,3 @@ void displayProximityMessage(PROXIMITY_DISPLAY *psProxDisp)
 	//set the read flag
 	psProxDisp->psMessage->read = true;
 }
-
-// NOTE: Unused! PROXIMITY_DISPLAY * getProximityDisplay(MESSAGE *psMessage)
-PROXIMITY_DISPLAY * getProximityDisplay(MESSAGE *psMessage)
-{
-	PROXIMITY_DISPLAY	*psCurr;
-
-	if (apsProxDisp[psMessage->player]->psMessage == psMessage)
-	{
-		return apsProxDisp[psMessage->player];
-	}
-	else
-	{
-		for(psCurr = apsProxDisp[psMessage->player]; psCurr != NULL; psCurr = psCurr->psNext)
-		{
-			if (psCurr->psMessage == psMessage)
-			{
-				return psCurr;
-			}
-		}
-	}
-	return NULL;
-}
-

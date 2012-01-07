@@ -52,7 +52,7 @@ struct RESEARCH : public BASE_STATS
 	std::vector<UWORD>	pStructureResults;	///< List of Structures that are possible after this research
 	std::vector<COMPONENT_STATS *> pArtefactResults; ///< List of Artefacts that are possible after this research
 	std::vector<COMPONENT_STATS *> pReplacedArtefacts; ///< List of artefacts that are replaced by the above result
-	struct VIEWDATA *       pViewData;               // data used to display a message in the Intelligence Screen
+	const struct VIEWDATA *pViewData;               // data used to display a message in the Intelligence Screen
 	UWORD			iconID;				/* the ID from 'Framer' for which graphic to draw in interface*/
 	BASE_STATS      *psStat;   /* A stat used to define which graphic is drawn instead of the two fields below */
 	iIMDShape		*pIMD;		/* the IMD to draw for this research topic */
