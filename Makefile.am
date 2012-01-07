@@ -7,6 +7,7 @@ endif
 SUBDIRS = \
 	win32 \
 	3rdparty/miniupnpc \
+	3rdparty/quesoglc \
 	lib/framework \
 	lib/exceptionhandler \
 	lib/script \

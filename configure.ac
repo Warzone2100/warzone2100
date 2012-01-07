@@ -429,8 +429,20 @@ AC_CHECK_LIB(GLU, main,
 		[${OPENGL_LIBS} -lm]), [${OPENGL_LIBS} -lm])
 AC_SUBST([OPENGL_LIBS], [${OPENGL_LIBS}])
 
-# Look for OpenGLC
-PKG_CHECK_MODULES([OPENGLC], [quesoglc >= 0.7.2])
+# OpenGLC stuff
+ACX_PTHREAD
+CC="$PTHREAD_CC"
+AX_TLS
+
+PKG_CHECK_MODULES([FRIBIDI], [fribidi])
+PKG_CHECK_MODULES([FREETYPE], [freetype2])
+AC_CHECK_LIB(freetype, FTC_Manager_New,
+             AC_DEFINE([HAVE_FT_CACHE], [1],
+                       [Define if FreeType supports the caching routines]))
+PKG_CHECK_MODULES([FONTCONFIG], [fontconfig])
+
+OPENGLC_LIBS="${FRIBIDI_LIBS} ${FREETYPE_LIBS} ${FONTCONFIG_LIBS} ${PTHREAD_LIBS} ${OPENGL_LIBS} ${GLEW_LIBS}"
+AC_SUBST([OPENGLC_LIBS], [${OPENGLC_LIBS}])
 
 # When (cross-)compiling for Windows (MinGW) we need to link in BFD for the Dr.
 # MinGW derived exception handler.
@@ -467,6 +479,7 @@ AC_CONFIG_FILES([Makefile
 		win32/Makefile
 		tests/Makefile
 		3rdparty/miniupnpc/Makefile
+		3rdparty/quesoglc/Makefile
 		lib/framework/Makefile
 		lib/exceptionhandler/Makefile
 		lib/gamelib/Makefile
