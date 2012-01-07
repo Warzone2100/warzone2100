@@ -15,6 +15,8 @@
 #include <algorithm>
 
 extern void mainLoop();
+// used in crash reports & version info
+const char *BACKEND="SDL";
 
 int realmain(int argc, char *argv[]);
 int main(int argc, char *argv[])

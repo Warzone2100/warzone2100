@@ -27,6 +27,8 @@
 
 #include "src/autorevision.h"
 
+extern const char *BACKEND;
+
 // Two-step process to put quotes around anything, including preprocessor definitions.
 #define EXPAND(token) #token
 #define QUOTE(token) EXPAND(token)
@@ -152,7 +154,7 @@ const char* version_getFormattedVersionString()
 		// Construct the version string
 		// TRANSLATORS: This string looks as follows when expanded.
 		// "Version <version name/number> <working copy state><BUILD DATE><BUILD TYPE>"
-		snprintf(versionString, MAX_STR_LENGTH, _("Version %s%s%s%s"), version_getVersionString(), wc_state, build_date, build_type);
+		snprintf(versionString, MAX_STR_LENGTH, _("Version %s-%s%s%s%s"), BACKEND, version_getVersionString(), wc_state, build_date, build_type);
 	}
 
 	return versionString;

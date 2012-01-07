@@ -6,6 +6,8 @@
 #include "lib/framework/frameint.h"
 #include "wzapp_qt.h"
 
+// used in crash reports & version info
+const char *BACKEND="Qt";
 
 int realmain(int argc, char *argv[]);
 int main(int argc, char *argv[])
