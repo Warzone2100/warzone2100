@@ -459,8 +459,6 @@
     <ClCompile Include="mapgrid.cpp" />
     <ClCompile Include="mechanics.cpp" />
     <ClCompile Include="message.cpp" />
-    <ClCompile Include="message_lexer.cpp" />
-    <ClCompile Include="message_parser.cpp" />
     <ClCompile Include="miscimd.cpp" />
     <ClCompile Include="mission.cpp" />
     <ClCompile Include="move.cpp" />
@@ -585,7 +583,6 @@
     <ClInclude Include="message.h" />
     <ClInclude Include="message_parser.hpp" />
     <ClInclude Include="messagedef.h" />
-    <ClInclude Include="messagely.h" />
     <ClInclude Include="miscimd.h" />
     <ClInclude Include="mission.h" />
     <ClInclude Include="missiondef.h" />
@@ -695,12 +692,6 @@
     <FlexGenerator Include="level_lexer.lpp">
       <FileType>Document</FileType>
     </FlexGenerator>
-    <FlexGenerator Include="message_lexer.lpp">
-      <FileType>Document</FileType>
-    </FlexGenerator>
-    <BisonParser Include="message_parser.ypp">
-      <FileType>Document</FileType>
-    </BisonParser>
     <FlexGenerator Include="scriptvals_lexer.lpp">
       <FileType>Document</FileType>
     </FlexGenerator>

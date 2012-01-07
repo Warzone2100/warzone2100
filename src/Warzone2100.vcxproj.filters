@@ -342,12 +342,6 @@
     <ClCompile Include="scriptvals_lexer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="message_parser.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="message_lexer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="level_lexer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -560,9 +554,6 @@
     <ClInclude Include="messagedef.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="messagely.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="miscimd.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -750,17 +741,11 @@
     <FlexGenerator Include="level_lexer.lpp">
       <Filter>FlexBison</Filter>
     </FlexGenerator>
-    <FlexGenerator Include="message_lexer.lpp">
-      <Filter>FlexBison</Filter>
-    </FlexGenerator>
     <FlexGenerator Include="scriptvals_lexer.lpp">
       <Filter>FlexBison</Filter>
     </FlexGenerator>
   </ItemGroup>
   <ItemGroup>
-    <BisonParser Include="message_parser.ypp">
-      <Filter>FlexBison</Filter>
-    </BisonParser>
     <BisonParser Include="scriptvals_parser.ypp">
       <Filter>FlexBison</Filter>
     </BisonParser>
