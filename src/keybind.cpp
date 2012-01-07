@@ -2756,15 +2756,7 @@ void	kf_AddHelpBlip( void )
 		worldY = mouseTileY*TILE_UNITS+TILE_UNITS/2;
 	}
 
-	//if chat message is empty, just send player name
-	//if(!strcmp(sCurrentConsoleText, ""))
-	//{
-		sstrcpy(tempStr, getPlayerName(selectedPlayer));		//temporary solution
-	//}
-	//else
-	//{
-	//	sstrcpy(tempStr, sCurrentConsoleText);
-	//}
+	sstrcpy(tempStr, getPlayerName(selectedPlayer));		//temporary solution
 
 	/* add beacon for the sender */
 	sstrcpy(beaconMsg[selectedPlayer], tempStr);

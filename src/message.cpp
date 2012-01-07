@@ -715,6 +715,7 @@ const char *loadResearchViewData(const char* fileName)
 			v->textMsg[j].remove(0, 2); // initial _(
 			v->textMsg[j].remove(v->textMsg[j].length() - 1, 1); // final )
 		}
+		if (v->textMsg[v->textMsg.size() - 1].isEmpty()) v->textMsg.removeAt(v->textMsg.size() - 1);
 		v->type = VIEW_RES;
 		v->pData = r;
 		if (ini.contains("imdName"))
