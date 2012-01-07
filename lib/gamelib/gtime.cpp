@@ -294,6 +294,8 @@ void gameTimeStop(void)
 /* Call this to restart the game timer after a call to gameTimeStop */
 void gameTimeStart(void)
 {
+//	ASSERT(stopCount > 0, "Game started too many times.");
+
 	prevRealTime = wzGetTicks();
 	stopCount = std::max<int>(stopCount - 1, 0);
 }

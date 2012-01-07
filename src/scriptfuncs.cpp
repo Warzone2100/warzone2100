@@ -9422,17 +9422,12 @@ VIEWDATA *CreateBeaconViewData(SDWORD sender, UDWORD LocX, UDWORD LocY)
 
 	memset(psViewData, 0, sizeof(VIEWDATA));
 
-	psViewData->numText = 1;
-
 	//store name
 	sprintf(name, _("Beacon %d"), sender);
  	psViewData->pName = name;
 
-	//allocate space for text strings
-	psViewData->ppTextMsg = (const char **) malloc(sizeof(char *));
-
 	//store text message, hardcoded for now
-	psViewData->ppTextMsg[0] = strdup(getPlayerName(sender));
+	psViewData->textMsg.push_back(getPlayerName(sender));
 
 	//store message type
 	psViewData->type = VIEW_BEACON;

@@ -13,7 +13,6 @@ autorevision.h:
 
 BUILT_SOURCES = \
 	autorevision.h \
-	message_parser.h \
 	scriptvals_parser.h
 
 CLEANFILES = $(BUILT_SOURCES)
@@ -91,7 +90,6 @@ noinst_HEADERS = \
 	mechanics.h \
 	messagedef.h \
 	message.h \
-	messagely.h \
 	miscimd.h \
 	missiondef.h \
 	mission.h \
@@ -211,8 +209,6 @@ warzone2100_SOURCES = \
 	mapgrid.cpp \
 	mechanics.cpp \
 	message.cpp \
-	message_lexer.lpp \
-	message_parser.ypp \
 	miscimd.cpp \
 	mission.cpp \
 	move.cpp \

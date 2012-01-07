@@ -24,6 +24,7 @@
 #ifndef __INCLUDED_MESSAGEDEF_H__
 #define __INCLUDED_MESSAGEDEF_H__
 
+#include <QtCore/QStringList>
 #include "lib/ivis_opengl/pietypes.h"
 #include "lib/ivis_opengl/ivisdef.h"
 #include "positiondef.h"
@@ -50,6 +51,7 @@ enum VIEW_TYPE
 	VIEW_RPLX,			// full screen view sequence - flic.	extended format
 
 	VIEW_BEACON,			// Beacon message
+	VIEW_SIZE
 };
 
 enum PROX_TYPE
@@ -75,9 +77,7 @@ struct SEQ_DISPLAY
 	char		sequenceName[MAX_STR_LENGTH];
 
 	UBYTE		flag;			//flag data to control video playback 1 = loop till audio finish
-	UBYTE		numText;		//the number of textmessages associated with
-								//this sequence
-	const char**    ppTextMsg;	//Pointer to text messages - if any
+	QStringList     textMsg;	//Text messages - if any
 	char		*pAudio;		/*name of audio track to play (for this seq)*/
 };
 
@@ -104,8 +104,7 @@ struct VIEWDATA
 {
 	char		*pName;		//name ID of the message - used for loading in and identifying
 	VIEW_TYPE	type;		//the type of view
-	UBYTE		numText;	//the number of textmessages associated with this data
-	const char**    ppTextMsg;	//Pointer to text messages - if any
+	QStringList     textMsg;        //Text messages, if any
 	void*		pData;		/*the data required to view - either a
 							  VIEW_RESEARCH, VIEW_PROXIMITY or VIEW_REPLAY*/
 };

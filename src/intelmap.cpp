@@ -739,11 +739,11 @@ static bool intDisplaySeqTextViewPage(VIEW_REPLAY *psViewReplay,
 	for (sequence = *cur_seq, i = *cur_seqpage; sequence < psViewReplay->numSeq; sequence++)
 	{
 		SEQ_DISPLAY *psSeqDisplay = &psViewReplay->pSeqList[sequence];
-		for (; i < psSeqDisplay->numText; i++)
+		for (; i < psSeqDisplay->textMsg.size(); i++)
 		{
 			if (render)
 			{
-				cur_y = iV_DrawFormattedText(psSeqDisplay->ppTextMsg[i],
+				cur_y = iV_DrawFormattedText(psSeqDisplay->textMsg[i].toAscii().constData(),
 					    x0 + TEXT_XINDENT,
 					    cur_y, width, false);
 			}
@@ -1385,7 +1385,7 @@ void intDisplayTEXTView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DEC
 
 		iV_SetTextColour(WZCOL_TEXT_BRIGHT);
 		//add each message
-		for (i = 0; i < ((VIEWDATA *)psMessage->pViewData)->numText; i++)
+		for (i = 0; i < ((VIEWDATA *)psMessage->pViewData)->textMsg.size(); i++)
 		{
 			//check haven't run out of room first!
 			if (i * linePitch > Form->height)
@@ -1394,7 +1394,7 @@ void intDisplayTEXTView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DEC
 				return;
 			}
 			//need to check the string will fit!
-			iV_DrawText(_(((VIEWDATA *)psMessage->pViewData)->ppTextMsg[i]), x0 + TEXT_XINDENT,
+			iV_DrawText(_(((VIEWDATA *)psMessage->pViewData)->textMsg[i].toAscii().constData()), x0 + TEXT_XINDENT,
 				(ty + TEXT_YINDENT*3) + (i * linePitch));
 		}
 	}
@@ -1406,25 +1406,23 @@ void addVideoText(SEQ_DISPLAY *psSeqDisplay, UDWORD sequence)
 {
 	UDWORD	i, x, y;
 
-	if (psSeqDisplay->numText > 0)
+	if (psSeqDisplay->textMsg.size() > 0)
 	{
-		debug( LOG_NEVER, "avt seq=%d [%s]\n", sequence, psSeqDisplay->ppTextMsg[0] );
 		//add each message, first at the top
 		// FIXME We should perhaps get font size, and use that to calculate offset(s) ?
 		x = VIDEO_TEXT_TOP_X;
 		y = VIDEO_TEXT_TOP_Y;
 
-
-		seq_AddTextForVideo(psSeqDisplay->ppTextMsg[0], x, y, TEXT_START_FRAME, TEXT_END_FRAME, SEQ_TEXT_POSITION); //startframe endFrame
+		seq_AddTextForVideo(psSeqDisplay->textMsg[0].toAscii().constData(), x, y, TEXT_START_FRAME, TEXT_END_FRAME, SEQ_TEXT_POSITION); //startframe endFrame
 
 		//add each message, the rest at the bottom
 		x = VIDEO_TEXT_BOTTOM_X;
 		// calculate the real bottom... NOTE, game assumes all videos to be 640x480
 		y = (double)pie_GetVideoBufferHeight() / 480. * (double)VIDEO_TEXT_BOTTOM_Y;
 		i = 1;
-		while (i < psSeqDisplay->numText)
+		while (i < psSeqDisplay->textMsg.size())
 		{
-			seq_AddTextForVideo(psSeqDisplay->ppTextMsg[i], x, y, TEXT_START_FRAME, TEXT_END_FRAME, SEQ_TEXT_POSITION); //startframe endFrame
+			seq_AddTextForVideo(psSeqDisplay->textMsg[i].toAscii().constData(), x, y, TEXT_START_FRAME, TEXT_END_FRAME, SEQ_TEXT_POSITION); //startframe endFrame
 			//initialise after the first setting
 			x = y = 0;
 			i++;

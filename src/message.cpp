@@ -25,6 +25,7 @@
  */
 
 #include "lib/framework/frame.h"
+#include "lib/framework/wzconfig.h"
 #include "lib/framework/frameresource.h"
 #include "lib/framework/strres.h"
 #include "lib/sound/audio.h"
@@ -32,7 +33,6 @@
 
 #include "console.h"
 #include "hci.h"
-#include "messagely.h"
 #include "stats.h"
 #include "text.h"
 
@@ -486,12 +486,7 @@ VIEWDATA *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 	}
 
 	//allocate space for the data
-	psViewData = (VIEWDATA *)malloc(numData * sizeof(VIEWDATA));
-	if (psViewData == NULL)
-	{
-		ASSERT(false, "Unable to allocate memory for viewdata");
-		return NULL;
-	}
+	psViewData = new VIEWDATA[numData];
 
 	//add to array list
 	addToViewDataList(psViewData, (UBYTE)numData);
@@ -504,8 +499,9 @@ VIEWDATA *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 		UDWORD numText;
 		int readint;
 
-		memset(psViewData, 0, sizeof(VIEWDATA));
-
+		psViewData->pData = NULL;
+		psViewData->pName = NULL;
+		psViewData->type = VIEW_SIZE;
 		name[0] = '\0';
 
 		//read the data into the storage - the data is delimeted using comma's
@@ -518,7 +514,6 @@ VIEWDATA *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 			ASSERT(false, "too many text strings");
 			return NULL;
 		}
-		psViewData->numText=(UBYTE)numText;
 
 		//allocate storage for the name
 		psViewData->pName = strdup(name);
@@ -529,26 +524,18 @@ VIEWDATA *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 		}
 		debug(LOG_MSG, "Loaded %s", psViewData->pName);
 
-		//allocate space for text strings
-		if (psViewData->numText)
-		{
-			psViewData->ppTextMsg = (char const **)malloc(psViewData->numText * sizeof(char *));
-		}
-
 		//read in the data for the text strings
-		for (dataInc = 0; dataInc < psViewData->numText; dataInc++)
+		for (dataInc = 0; dataInc < numText; dataInc++)
 		{
 			name[0] = '\0';
 			sscanf(pViewMsgData,",%255[^,'\r\n]%n",name,&cnt);
 			pViewMsgData += cnt;
 
 			// Get the string from the ID string
-			psViewData->ppTextMsg[dataInc] = strresGetString(psStringRes, name);
-			if (!psViewData->ppTextMsg[dataInc])
-			{
-				ASSERT(!"Cannot find string resource", "Cannot find the view data string with id \"%s\"", name);
-				return NULL;
-			}
+			const char *str = strresGetString(psStringRes, name);
+			ASSERT(str, "Cannot find the view data string with id \"%s\"", name);
+			QString qstr = QString::fromUtf8(str);
+			psViewData->textMsg.push_back(qstr);
 		}
 
 		sscanf(pViewMsgData, ",%d%n", &readint, &cnt);
@@ -635,12 +622,13 @@ VIEWDATA *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 			psViewReplay->numSeq = (UBYTE)count;
 
 			//allocate space for the sequences
-			psViewReplay->pSeqList = (SEQ_DISPLAY*) malloc(psViewReplay->numSeq *
-				sizeof(SEQ_DISPLAY));
+			psViewReplay->pSeqList = new SEQ_DISPLAY[psViewReplay->numSeq];
 
 			//read in the data for the sequences
 			for (dataInc = 0; dataInc < psViewReplay->numSeq; dataInc++)
 			{
+				int numText = 0;
+
 				name[0] = '\0';
 				//load extradat for extended type only
 				if (psViewData->type == VIEW_RPL)
@@ -652,9 +640,9 @@ VIEWDATA *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 						ASSERT(false, "too many strings for %s", psViewData->pName);
 						return NULL;
 					}
-					psViewReplay->pSeqList[dataInc].numText = (UBYTE)count;
 					//set the flag to default
 					psViewReplay->pSeqList[dataInc].flag = 0;
+					numText = count;
 				}
 				else //extended type
 				{
@@ -672,32 +660,22 @@ VIEWDATA *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 						ASSERT(false, "too many text strings for seq for %s", psViewData->pName);
 						return NULL;
 					}
-					psViewReplay->pSeqList[dataInc].numText = (UBYTE)count2;
+					numText = count2;
 				}
 				strcpy(psViewReplay->pSeqList[dataInc].sequenceName,name);
 
 				//get the text strings for this sequence - if any
-				//allocate space for text strings
-				if (psViewReplay->pSeqList[dataInc].numText)
-				{
-					psViewReplay->pSeqList[dataInc].ppTextMsg = (const char **) malloc(
-						psViewReplay->pSeqList[dataInc].numText * sizeof(char *));
-				}
-				//read in the data for the text strings
-				for (seqInc = 0; seqInc < psViewReplay->pSeqList[dataInc].numText;
-					seqInc++)
+				for (seqInc = 0; seqInc < numText; seqInc++)
 				{
 					name[0] = '\0';
 					sscanf(pViewMsgData,",%255[^,'\r\n]%n", name,&cnt);
 					pViewMsgData += cnt;
 
 					// Get the string from the ID string
-					psViewReplay->pSeqList[dataInc].ppTextMsg[seqInc] = strresGetString(psStringRes, name);
-					if (!psViewReplay->pSeqList[dataInc].ppTextMsg[seqInc])
-					{
-						ASSERT(!"Cannot find string resource", "Cannot find the view data string with id \"%s\"", name);
-						return NULL;
-					}
+					const char *str = strresGetString(psStringRes, name);
+					ASSERT(str, "Cannot find the view data string with id \"%s\"", name);
+					QString qstr = QString::fromUtf8(str);
+					psViewReplay->pSeqList[dataInc].textMsg.push_back(qstr);
 				}
 				//get the audio text string
 				sscanf(pViewMsgData,",%255[^,'\r\n],%d%n", audioName, &dummy, &cnt);
@@ -805,26 +783,53 @@ VIEWDATA *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 
 VIEWDATA* loadResearchViewData(const char* fileName)
 {
-	bool retval;
-	lexerinput_t input;
-	VIEWDATA* psViewData;
+	ASSERT_OR_RETURN(NULL, PHYSFS_exists(fileName), "%s not found", fileName);
+	WzConfig ini(fileName);
+	ASSERT_OR_RETURN(NULL, ini.status() == QSettings::NoError, "%s not loaded", fileName);
 
-	input.type = LEXINPUT_PHYSFS;
-	input.input.physfsfile = PHYSFS_openRead(fileName);
-	debug(LOG_WZ, "Reading...[directory: %s] %s", PHYSFS_getRealDir(fileName), fileName);
-	if (!input.input.physfsfile)
+	QStringList list = ini.childGroups();
+	VIEWDATA *psViewData = new VIEWDATA[list.size()];
+	for (int i = 0; i < list.size(); ++i)
 	{
-		debug(LOG_ERROR, "PHYSFS_openRead(\"%s\") failed with error: %s\n", fileName, PHYSFS_getLastError());
-		return NULL;
+		VIEWDATA *v = &psViewData[i];
+		VIEW_RESEARCH *r = (VIEW_RESEARCH *)malloc(sizeof(*r));
+
+		v->pData = NULL;
+		v->pName = strdup(list[i].toUtf8().constData());
+		memset(r, 0, sizeof(*r));
+
+		ini.beginGroup(list[i]);
+
+		v->textMsg = ini.value("text").toStringList();
+		for (int j = 0; j < v->textMsg.size(); j++)
+		{
+			v->textMsg[j].remove('\t');
+			v->textMsg[j].remove(0, 2); // initial _(
+			v->textMsg[j].remove(v->textMsg[j].length() - 1, 1); // final )
+		}
+		v->type = VIEW_RES;
+		v->pData = r;
+		if (ini.contains("imdName"))
+		{
+			r->pIMD = (iIMDShape *) resGetData("IMD", ini.value("imdName").toString().toUtf8().constData());
+		}
+		if (ini.contains("imdName2"))
+		{
+			r->pIMD2 = (iIMDShape *) resGetData("IMD", ini.value("imdName2").toString().toUtf8().constData());
+		}
+		if (ini.contains("sequenceName"))
+		{
+			sstrcpy(r->sequenceName, ini.value("sequenceName").toString().toUtf8().constData());
+		}
+		if (ini.contains("audioName"))
+		{
+			r->pAudio = strdup(ini.value("audioName").toString().toUtf8().constData());
+		}
+
+		ini.endGroup();
 	}
-
-	message_set_extra(&input);
-	retval = (message_parse(&psViewData) == 0);
-
-	message_lex_destroy();
-	PHYSFS_close(input.input.physfsfile);
-
-	return retval ? psViewData : NULL;
+	addToViewDataList(psViewData, list.size());
+	return psViewData;
 }
 
 /*get the view data identified by the name */
@@ -912,12 +917,6 @@ void viewDataShutDown(VIEWDATA *psViewData)
 
 			free(psViewData->pName);
 
-			//free the space allocated for the text messages
-			if (psViewData->numText)
-			{
-				free(psViewData->ppTextMsg);
-			}
-
 			//free the space allocated for multiple sequences
 			if (psViewData->type == VIEW_RPL)
 			{
@@ -927,17 +926,12 @@ void viewDataShutDown(VIEWDATA *psViewData)
 					unsigned int seqInc;
 					for (seqInc = 0; seqInc < psViewReplay->numSeq; ++seqInc)
 					{
-						//free the space allocated for the text messages
-						if (psViewReplay->pSeqList[seqInc].numText)
-						{
-							free(psViewReplay->pSeqList[seqInc].ppTextMsg);
-						}
 						if (psViewReplay->pSeqList[seqInc].pAudio)
 						{
 							free(psViewReplay->pSeqList[seqInc].pAudio);
 						}
 					}
-					free(psViewReplay->pSeqList);
+					delete[] psViewReplay->pSeqList;
 				}
 			}
 			else if (psViewData->type == VIEW_RES)
@@ -950,7 +944,7 @@ void viewDataShutDown(VIEWDATA *psViewData)
 			}
 			free(psViewData->pData);
 		}
-		free(psList->psViewData);
+		delete[] psList->psViewData;
 
 		// remove viewData list from the list
 		*psPrev = psList->psNext;
@@ -993,12 +987,9 @@ void displayProximityMessage(PROXIMITY_DISPLAY *psProxDisp)
 		VIEW_PROXIMITY	*psViewProx = (VIEW_PROXIMITY *)psViewData->pData;
 
 		//display text - if any
-		if (psViewData->ppTextMsg)
+		if (psViewData->textMsg.size() > 0 && psViewData->type != VIEW_BEACON)
 		{
-			if (psViewData->type != VIEW_BEACON)
-			{
-				addConsoleMessage(psViewData->ppTextMsg[0], DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
-			}
+			addConsoleMessage(psViewData->textMsg[0].toAscii().constData(), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 		}
 
 		//play message - if any
