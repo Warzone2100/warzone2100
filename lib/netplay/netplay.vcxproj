@@ -203,7 +203,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\3rdparty\miniupnpc\connecthostport.c" />
-    <ClCompile Include="netlobby.cpp" />
+    <ClCompile Include="netjoin_stub.cpp" />
     <ClCompile Include="netlog.cpp" />
     <ClCompile Include="netplay.cpp" />
     <ClCompile Include="netqueue.cpp" />
@@ -247,7 +247,6 @@
     <ClInclude Include="..\..\3rdparty\miniupnpc\upnpcommands.h" />
     <ClInclude Include="..\..\3rdparty\miniupnpc\upnperrors.h" />
     <ClInclude Include="..\..\3rdparty\miniupnpc\upnpreplyparse.h" />
-    <ClInclude Include="netlobby.h" />
     <ClInclude Include="netlog.h" />
     <ClInclude Include="netplay.h" />
     <ClInclude Include="netqueue.h" />

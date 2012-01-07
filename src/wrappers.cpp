@@ -161,11 +161,17 @@ TITLECODE titleLoop(void)
 	switch(titleMode) // run relevant title screen code.
 	{
 		// MULTIPLAYER screens
+		case PROTOCOL:
+			runConnectionScreen(); // multiplayer connection screen.
+			break;
 		case MULTIOPTION:
 			runMultiOptions();
 			break;
-		case MULTI:
+		case GAMEFIND:
 			runGameFind();
+			break;
+		case MULTI:
+			runMultiPlayerMenu();
 			break;
 		case MULTILIMIT:
 			runLimitScreen();

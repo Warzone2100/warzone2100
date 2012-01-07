@@ -1156,6 +1156,8 @@ int realmain(int argc, char *argv[])
 
 	loadConfig();
 
+	NETinit(true);
+
 	// parse the command line
 	if (!ParseCommandLine(utfargc, utfargv))
 	{
@@ -1167,10 +1169,6 @@ int realmain(int argc, char *argv[])
 
 	// Find out where to find the data
 	scanDataDirs();
-
-	// This needs to be done after "scanDataDirs"
-	// for the root cert from cacert.
-	NETinit(true);
 
 	// Must be run before OpenGL driver is properly initialized due to
 	// strange conflicts - Per

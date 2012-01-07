@@ -1,6 +1,0 @@
-// QJson settings for Release configuration
-
-#include "QJson-All.xcconfig"
-
-
-GCC_ENABLE_FIX_AND_CONTINUE = NO

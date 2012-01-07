@@ -416,9 +416,9 @@ void setupNewPlayer(UDWORD player)
 
 // While not the perfect place for this, it has to do when a HOST joins (hosts) game
 // unfortunatly, we don't get the message until after the setup is done.
-void showMOTD(const char* motd)
+void ShowMOTD(void)
 {
 	// when HOST joins the game, show server MOTD message first
 	addConsoleMessage(_("System message:"), DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
-	addConsoleMessage(motd, DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
+	addConsoleMessage(NetPlay.MOTD, DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
 }

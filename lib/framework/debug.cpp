@@ -91,7 +91,6 @@ static const char *code_part_names[] = {
 	"input",
 	"popup",
 	"console",
-	"lobby",
 	"last"
 };
 

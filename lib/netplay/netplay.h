@@ -27,7 +27,6 @@
 #define _netplay_h
 
 #include "nettypes.h"
-#include "netlobby.h"
 #include <physfs.h>
 
 // Lobby Connection errors
@@ -43,9 +42,7 @@ enum LOBBY_ERROR_TYPES
 	ERROR_WRONGPASSWORD,
 	ERROR_HOSTDROPPED,
 	ERROR_WRONGDATA,
-	ERROR_UNKNOWNFILEISSUE,
-	ERROR_AUTHENTICATION,
-	ERROR_LOBBY_REJECTED
+	ERROR_UNKNOWNFILEISSUE
 };
 
 enum CONNECTION_STATUS
@@ -131,14 +128,60 @@ enum MESSAGE_TYPES
 // @NOTE / FIXME: We need a way to detect what should happen if the msg buffer exceeds this.
 #define MaxMsgSize		16384		// max size of a message in bytes.
 #define	StringSize		64			// size of strings used.
+#define MaxGames		18			// max number of concurrently playable games to allow.
 #define extra_string_size	159		// extra 199 char for future use
 #define map_string_size		40
 #define	hostname_string_size	40
 #define modlist_string_size	255		// For a concatenated list of mods
 #define password_string_size 64		// longer passwords slow down the join code
 
+#define SESSION_JOINDISABLED	1
+
 #define MAX_CONNECTED_PLAYERS   MAX_PLAYERS
 #define MAX_TMP_SOCKETS         16
+
+struct SESSIONDESC  //Available game storage... JUST FOR REFERENCE!
+{
+	int32_t dwSize;
+	int32_t dwFlags;
+	char host[40];	// host's ip address (can fit a full IPv4 and IPv6 address + terminating NUL)
+	int32_t dwMaxPlayers;
+	int32_t dwCurrentPlayers;
+	int32_t dwUserFlags[4];
+};
+
+/**
+ * @note when changing this structure, NETsendGAMESTRUCT, NETrecvGAMESTRUCT and
+ *       the lobby server should be changed accordingly.
+ */
+struct GAMESTRUCT
+{
+	/* Version of this structure and thus the binary lobby protocol.
+	 * @NOTE: <em>MUST</em> be the first item of this struct.
+	 */
+	uint32_t	GAMESTRUCT_VERSION;
+
+	char		name[StringSize];
+	SESSIONDESC	desc;
+	// END of old GAMESTRUCT format
+	// NOTE: do NOT save the following items in game.c--it will break savegames.
+	char		secondaryHosts[2][40];
+	char		extra[extra_string_size];		// extra string (future use)
+	char		mapname[map_string_size];		// map server is hosting
+	char		hostname[hostname_string_size];	// ...
+	char		versionstring[StringSize];		// 
+	char		modlist[modlist_string_size];	// ???
+	uint32_t	game_version_major;				// 
+	uint32_t	game_version_minor;				// 
+	uint32_t	privateGame;					// if true, it is a private game
+	uint32_t	pureGame;						// NO mods allowed if true
+	uint32_t	Mods;							// number of concatenated mods?
+	// Game ID, used on the lobby server to link games with multiple address families to eachother
+	uint32_t	gameId;
+	uint32_t	future2;						// for future use
+	uint32_t	future3;						// for future use
+	uint32_t	future4;						// for future use
+};
 
 // ////////////////////////////////////////////////////////////////////////
 // Message information. ie. the packets sent between machines.
@@ -222,8 +265,8 @@ struct PLAYER
 // all the luvly Netplay info....
 struct NETPLAY
 {
+	GAMESTRUCT	games[MaxGames];	///< The collection of games
 	PLAYER		players[MAX_PLAYERS];	///< The array of players.
-	uint32_t	maxPlayers;				///< Maximum number of players.
 	uint32_t	playercount;		///< Number of players in game.
 	uint32_t	hostPlayer;		///< Index of host in player array
 	uint32_t	bComms;			///< Actually do the comms?
@@ -233,6 +276,9 @@ struct NETPLAY
 	PHYSFS_file	*pMapFileHandle;
 	char gamePassword[password_string_size];		//
 	bool GamePassworded;				// if we have a password or not.
+	bool ShowedMOTD;					// only want to show this once
+	char MOTDbuffer[255];				// buffer for MOTD
+	char* MOTD;
 };
 
 struct PLAYER_IP
@@ -251,8 +297,6 @@ extern PLAYER_IP	*IPlist;
 extern bool netPlayersUpdated;
 extern int mapDownloadProgress;
 extern char iptoconnect[PATH_MAX]; // holds IP/hostname from command line
-
-extern Lobby::Client lobbyclient;
 
 // ////////////////////////////////////////////////////////////////////////
 // functions available to you.
@@ -287,8 +331,8 @@ extern SDWORD	NETgetGameFlags(UDWORD flag);			// return one of the four flags(dw
 extern int32_t	NETgetGameFlagsUnjoined(unsigned int gameid, unsigned int flag);	// return one of the four flags(dword) about the game.
 extern bool	NETsetGameFlags(UDWORD flag, SDWORD value);	// set game flag(1-4) to value.
 extern bool	NEThaltJoining(void);				// stop new players joining this game
-extern bool	NETfindGame(const int maxGames);		// find games being played(uses GAME_GUID);
-extern bool	NETjoinGame(const char* host, uint32_t port, const char* playername);			// join game given with playername
+extern bool	NETfindGame(void);		// find games being played(uses GAME_GUID);
+extern bool	NETjoinGame(const char* host, uint32_t port, const char* playername); // join game given with playername
 extern bool	NEThostGame(const char* SessionName, const char* PlayerName,// host a game
 			    SDWORD one, SDWORD two, SDWORD three, SDWORD four, UDWORD plyrs);
 extern bool	NETchangePlayerName(UDWORD player, char *newName);// change a players name.
@@ -296,6 +340,10 @@ void            NETfixDuplicatePlayerNames(void);  // Change a player's name aut
 
 #include "netlog.h"
 
+extern void NETsetMasterserverName(const char* hostname);
+extern const char* NETgetMasterserverName(void);
+extern void NETsetMasterserverPort(unsigned int port);
+extern unsigned int NETgetMasterserverPort(void);
 extern void NETsetGameserverPort(unsigned int port);
 extern unsigned int NETgetGameserverPort(void);
 

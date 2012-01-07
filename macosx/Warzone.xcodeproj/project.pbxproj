@@ -12,7 +12,6 @@
 			buildConfigurationList = 438B0C0E13773146008184FC /* Build configuration list for PBXAggregateTarget "Fetch Third Party Sources" */;
 			buildPhases = (
 				438B0C14137731C3008184FC /* GLExtensionWrangler - Fetch source */,
-				43329A2013CB5692005BE784 /* QJson - Fetch source */,
 				438B0C191377320A008184FC /* Zlib - Fetch source */,
 				438B0C26137732A5008184FC /* Ogg - Fetch source */,
 				438B0C1E13773258008184FC /* Png - Fetch source */,
@@ -398,29 +397,6 @@
 		432BE3D810D9C90B00A486AB /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 432BE3C110D9C79400A486AB /* InfoPlist.strings */; };
 		432BE3F810D9CD4000A486AB /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 432BE3EE10D9CB4D00A486AB /* InfoPlist.strings */; };
 		432BE40210D9CF6F00A486AB /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 432BE3FE10D9CF1300A486AB /* InfoPlist.strings */; };
-		4332993013CB4FC5005BE784 /* json_parser.cc in Sources */ = {isa = PBXBuildFile; fileRef = 4332991C13CB4FC5005BE784 /* json_parser.cc */; };
-		4332993113CB4FC5005BE784 /* json_parser.hh in Headers */ = {isa = PBXBuildFile; fileRef = 4332991D13CB4FC5005BE784 /* json_parser.hh */; };
-		4332993213CB4FC5005BE784 /* json_scanner.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4332991E13CB4FC5005BE784 /* json_scanner.cpp */; };
-		4332993313CB4FC5005BE784 /* json_scanner.h in Headers */ = {isa = PBXBuildFile; fileRef = 4332991F13CB4FC5005BE784 /* json_scanner.h */; settings = {ATTRIBUTES = (); }; };
-		4332993413CB4FC5005BE784 /* location.hh in Headers */ = {isa = PBXBuildFile; fileRef = 4332992013CB4FC5005BE784 /* location.hh */; };
-		4332993513CB4FC5005BE784 /* parser_p.h in Headers */ = {isa = PBXBuildFile; fileRef = 4332992113CB4FC5005BE784 /* parser_p.h */; settings = {ATTRIBUTES = (); }; };
-		4332993613CB4FC5005BE784 /* parser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4332992213CB4FC5005BE784 /* parser.cpp */; };
-		4332993713CB4FC5005BE784 /* parser.h in Headers */ = {isa = PBXBuildFile; fileRef = 4332992313CB4FC5005BE784 /* parser.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4332993813CB4FC5005BE784 /* parserrunnable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4332992413CB4FC5005BE784 /* parserrunnable.cpp */; };
-		4332993913CB4FC5005BE784 /* parserrunnable.h in Headers */ = {isa = PBXBuildFile; fileRef = 4332992513CB4FC5005BE784 /* parserrunnable.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4332993A13CB4FC5005BE784 /* position.hh in Headers */ = {isa = PBXBuildFile; fileRef = 4332992613CB4FC5005BE784 /* position.hh */; };
-		4332993B13CB4FC5005BE784 /* qjson_debug.h in Headers */ = {isa = PBXBuildFile; fileRef = 4332992713CB4FC5005BE784 /* qjson_debug.h */; settings = {ATTRIBUTES = (); }; };
-		4332993C13CB4FC5005BE784 /* qjson_export.h in Headers */ = {isa = PBXBuildFile; fileRef = 4332992813CB4FC5005BE784 /* qjson_export.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4332993D13CB4FC5005BE784 /* qobjecthelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4332992913CB4FC5005BE784 /* qobjecthelper.cpp */; };
-		4332993E13CB4FC5005BE784 /* qobjecthelper.h in Headers */ = {isa = PBXBuildFile; fileRef = 4332992A13CB4FC5005BE784 /* qobjecthelper.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4332993F13CB4FC5005BE784 /* serializer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4332992B13CB4FC5005BE784 /* serializer.cpp */; };
-		4332994013CB4FC5005BE784 /* serializer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4332992C13CB4FC5005BE784 /* serializer.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4332994113CB4FC5005BE784 /* serializerrunnable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4332992D13CB4FC5005BE784 /* serializerrunnable.cpp */; };
-		4332994213CB4FC5005BE784 /* serializerrunnable.h in Headers */ = {isa = PBXBuildFile; fileRef = 4332992E13CB4FC5005BE784 /* serializerrunnable.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4332994313CB4FC5005BE784 /* stack.hh in Headers */ = {isa = PBXBuildFile; fileRef = 4332992F13CB4FC5005BE784 /* stack.hh */; };
-		4332994E13CB50C4005BE784 /* QtCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4333611E11A07FB900380F5E /* QtCore.framework */; };
-		433299CF13CB5516005BE784 /* parserrunnable.h in Sources */ = {isa = PBXBuildFile; fileRef = 4332992513CB4FC5005BE784 /* parserrunnable.h */; };
-		433299D013CB5516005BE784 /* serializerrunnable.h in Sources */ = {isa = PBXBuildFile; fileRef = 4332992E13CB4FC5005BE784 /* serializerrunnable.h */; };
 		4333612211A07FB900380F5E /* QtCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4333611E11A07FB900380F5E /* QtCore.framework */; };
 		4333661B11A07FFF00380F5E /* QtCore.framework in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 4333611E11A07FB900380F5E /* QtCore.framework */; };
 		4336D8AA111DDF0F0012E8E4 /* random.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4336D8A8111DDF0F0012E8E4 /* random.cpp */; };
@@ -488,8 +464,12 @@
 		438BDDF31129DC9A00998660 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 438BDDD71129DC9A00998660 /* InfoPlist.strings */; };
 		43A6285B13A6C4A400C6B786 /* geometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43A6285913A6C4A400C6B786 /* geometry.cpp */; };
 		43A8417811028EDD00733CCB /* pointtree.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43A8417611028EDD00733CCB /* pointtree.cpp */; };
-		43AA704313C7FD510015B52B /* QJson.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43AA702A13C7FC640015B52B /* QJson.framework */; };
-		43AA704413C7FD570015B52B /* QJson.framework in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 43AA702A13C7FC640015B52B /* QJson.framework */; };
+		43AA704313C7FD510015B52B /* Bson.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43AA702A13C7FC640015B52B /* Bson.framework */; };
+		43AA704413C7FD570015B52B /* Bson.framework in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 43AA702A13C7FC640015B52B /* Bson.framework */; };
+		43AA705513C801CF0015B52B /* bson.c in Sources */ = {isa = PBXBuildFile; fileRef = 43DD1BC613661FD5003AA9EC /* bson.c */; };
+		43AA705613C801D10015B52B /* bson.h in Headers */ = {isa = PBXBuildFile; fileRef = 43DD1BC713661FD5003AA9EC /* bson.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		43AA705713C801D20015B52B /* numbers.c in Sources */ = {isa = PBXBuildFile; fileRef = 43DD1BC813661FD5003AA9EC /* numbers.c */; };
+		43AA705813C801D30015B52B /* platform_hacks.h in Headers */ = {isa = PBXBuildFile; fileRef = 43DD1BC913661FD5003AA9EC /* platform_hacks.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		43B8F285127C8F9D006F5A13 /* crc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43B8F282127C8F9D006F5A13 /* crc.cpp */; };
 		43B8F288127C8FDD006F5A13 /* netqueue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43B8F286127C8FDD006F5A13 /* netqueue.cpp */; };
 		43B8FC9A127CB06C006F5A13 /* Zlib.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02356D830BD3BB4100E9A019 /* Zlib.framework */; };
@@ -781,20 +761,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = 4318434A1363942200BA2BC5;
 			remoteInfo = MiniUPnPc;
-		};
-		4332991813CB4F41005BE784 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 02356D660BD3BB2600E9A019 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 438B0C05137730FE008184FC;
-			remoteInfo = "Fetch Third Party Sources";
-		};
-		4332991A13CB4F6F005BE784 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 02356D660BD3BB2600E9A019 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 43FA570C10FF8E9B0074E914;
-			remoteInfo = "Setup Prebuilt Components";
 		};
 		43502D82134764BF00A02A1F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -1549,26 +1515,6 @@
 		432BE3F010D9CB4D00A486AB /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		432BE3FF10D9CF1300A486AB /* English */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		432BE40010D9CF1300A486AB /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		4332991C13CB4FC5005BE784 /* json_parser.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = json_parser.cc; path = "external/qjson-out/src/json_parser.cc"; sourceTree = "<group>"; };
-		4332991D13CB4FC5005BE784 /* json_parser.hh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = json_parser.hh; path = "external/qjson-out/src/json_parser.hh"; sourceTree = "<group>"; };
-		4332991E13CB4FC5005BE784 /* json_scanner.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = json_scanner.cpp; path = "external/qjson-out/src/json_scanner.cpp"; sourceTree = "<group>"; };
-		4332991F13CB4FC5005BE784 /* json_scanner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = json_scanner.h; path = "external/qjson-out/src/json_scanner.h"; sourceTree = "<group>"; };
-		4332992013CB4FC5005BE784 /* location.hh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = location.hh; path = "external/qjson-out/src/location.hh"; sourceTree = "<group>"; };
-		4332992113CB4FC5005BE784 /* parser_p.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = parser_p.h; path = "external/qjson-out/src/parser_p.h"; sourceTree = "<group>"; };
-		4332992213CB4FC5005BE784 /* parser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = parser.cpp; path = "external/qjson-out/src/parser.cpp"; sourceTree = "<group>"; };
-		4332992313CB4FC5005BE784 /* parser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = parser.h; path = "external/qjson-out/src/parser.h"; sourceTree = "<group>"; };
-		4332992413CB4FC5005BE784 /* parserrunnable.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = parserrunnable.cpp; path = "external/qjson-out/src/parserrunnable.cpp"; sourceTree = "<group>"; };
-		4332992513CB4FC5005BE784 /* parserrunnable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = parserrunnable.h; path = "external/qjson-out/src/parserrunnable.h"; sourceTree = "<group>"; };
-		4332992613CB4FC5005BE784 /* position.hh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = position.hh; path = "external/qjson-out/src/position.hh"; sourceTree = "<group>"; };
-		4332992713CB4FC5005BE784 /* qjson_debug.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = qjson_debug.h; path = "external/qjson-out/src/qjson_debug.h"; sourceTree = "<group>"; };
-		4332992813CB4FC5005BE784 /* qjson_export.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = qjson_export.h; path = "external/qjson-out/src/qjson_export.h"; sourceTree = "<group>"; };
-		4332992913CB4FC5005BE784 /* qobjecthelper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = qobjecthelper.cpp; path = "external/qjson-out/src/qobjecthelper.cpp"; sourceTree = "<group>"; };
-		4332992A13CB4FC5005BE784 /* qobjecthelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = qobjecthelper.h; path = "external/qjson-out/src/qobjecthelper.h"; sourceTree = "<group>"; };
-		4332992B13CB4FC5005BE784 /* serializer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = serializer.cpp; path = "external/qjson-out/src/serializer.cpp"; sourceTree = "<group>"; };
-		4332992C13CB4FC5005BE784 /* serializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = serializer.h; path = "external/qjson-out/src/serializer.h"; sourceTree = "<group>"; };
-		4332992D13CB4FC5005BE784 /* serializerrunnable.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = serializerrunnable.cpp; path = "external/qjson-out/src/serializerrunnable.cpp"; sourceTree = "<group>"; };
-		4332992E13CB4FC5005BE784 /* serializerrunnable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = serializerrunnable.h; path = "external/qjson-out/src/serializerrunnable.h"; sourceTree = "<group>"; };
-		4332992F13CB4FC5005BE784 /* stack.hh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = stack.hh; path = "external/qjson-out/src/stack.hh"; sourceTree = "<group>"; };
 		4333606E11A0731500380F5E /* wzapp_qt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = wzapp_qt.h; path = ../lib/qtgame/wzapp_qt.h; sourceTree = SOURCE_ROOT; };
 		4333606F11A0731500380F5E /* wzapp_qt.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = wzapp_qt.cpp; path = ../lib/qtgame/wzapp_qt.cpp; sourceTree = SOURCE_ROOT; };
 		4333607011A0731500380F5E /* wzapp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = wzapp.h; path = ../lib/framework/wzapp.h; sourceTree = SOURCE_ROOT; };
@@ -1691,10 +1637,10 @@
 		43A6285A13A6C4A400C6B786 /* geometry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = geometry.h; path = ../lib/framework/geometry.h; sourceTree = SOURCE_ROOT; };
 		43A8417611028EDD00733CCB /* pointtree.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = pointtree.cpp; path = ../src/pointtree.cpp; sourceTree = SOURCE_ROOT; };
 		43A8417711028EDD00733CCB /* pointtree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = pointtree.h; path = ../src/pointtree.h; sourceTree = SOURCE_ROOT; };
-		43AA702A13C7FC640015B52B /* QJson.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = QJson.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		43AA705F13C803DB0015B52B /* QJson-All.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "QJson-All.xcconfig"; path = "configs/QJson-All.xcconfig"; sourceTree = "<group>"; };
-		43AA706013C803DB0015B52B /* QJson-Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "QJson-Debug.xcconfig"; path = "configs/QJson-Debug.xcconfig"; sourceTree = "<group>"; };
-		43AA706113C803DB0015B52B /* QJson-Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "QJson-Release.xcconfig"; path = "configs/QJson-Release.xcconfig"; sourceTree = "<group>"; };
+		43AA702A13C7FC640015B52B /* Bson.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Bson.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		43AA705F13C803DB0015B52B /* Bson-All.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Bson-All.xcconfig"; path = "configs/Bson-All.xcconfig"; sourceTree = "<group>"; };
+		43AA706013C803DB0015B52B /* Bson-Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Bson-Debug.xcconfig"; path = "configs/Bson-Debug.xcconfig"; sourceTree = "<group>"; };
+		43AA706113C803DB0015B52B /* Bson-Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Bson-Release.xcconfig"; path = "configs/Bson-Release.xcconfig"; sourceTree = "<group>"; };
 		43B8F282127C8F9D006F5A13 /* crc.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = crc.cpp; path = ../lib/framework/crc.cpp; sourceTree = SOURCE_ROOT; };
 		43B8F283127C8F9D006F5A13 /* crc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = crc.h; path = ../lib/framework/crc.h; sourceTree = SOURCE_ROOT; };
 		43B8F284127C8F9D006F5A13 /* opengl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = opengl.h; path = ../lib/framework/opengl.h; sourceTree = SOURCE_ROOT; };
@@ -1765,6 +1711,10 @@
 		43D338561364F5A8005F6725 /* connecthostport.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = connecthostport.c; sourceTree = "<group>"; };
 		43D338571364F5A8005F6725 /* connecthostport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = connecthostport.h; sourceTree = "<group>"; };
 		43D6167F12048D2D004B9630 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		43DD1BC613661FD5003AA9EC /* bson.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = bson.c; path = ../3rdparty/bson/bson.c; sourceTree = SOURCE_ROOT; };
+		43DD1BC713661FD5003AA9EC /* bson.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = bson.h; path = ../3rdparty/bson/bson.h; sourceTree = SOURCE_ROOT; };
+		43DD1BC813661FD5003AA9EC /* numbers.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = numbers.c; path = ../3rdparty/bson/numbers.c; sourceTree = SOURCE_ROOT; };
+		43DD1BC913661FD5003AA9EC /* platform_hacks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = platform_hacks.h; path = ../3rdparty/bson/platform_hacks.h; sourceTree = SOURCE_ROOT; };
 		43DD1BCC13662006003AA9EC /* netlobby.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = netlobby.cpp; path = ../lib/netplay/netlobby.cpp; sourceTree = SOURCE_ROOT; };
 		43DD1BCD13662006003AA9EC /* netlobby.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = netlobby.h; path = ../lib/netplay/netlobby.h; sourceTree = SOURCE_ROOT; };
 		43DF5A8812BEE01B00DD5A37 /* cocoa_wrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = cocoa_wrapper.h; path = ../lib/framework/cocoa_wrapper.h; sourceTree = SOURCE_ROOT; };
@@ -1891,7 +1841,7 @@
 				43502D6D1347648300A02A1F /* GLExtensionWrangler.framework in Frameworks */,
 				43B8FD10127CB0BE006F5A13 /* Gettext.framework in Frameworks */,
 				4318439B1363955300BA2BC5 /* MiniUPnPc.framework in Frameworks */,
-				43AA704313C7FD510015B52B /* QJson.framework in Frameworks */,
+				43AA704313C7FD510015B52B /* Bson.framework in Frameworks */,
 				4366729613D2122700FE85BA /* QuesoGLC.framework in Frameworks */,
 				43B8FD2E127CB13F006F5A13 /* Carbon.framework in Frameworks */,
 				43B8FD2F127CB13F006F5A13 /* Cocoa.framework in Frameworks */,
@@ -1977,7 +1927,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4332994E13CB50C4005BE784 /* QtCore.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2082,7 +2031,7 @@
 				97AEAB330E8C1B5200A10721 /* Theora.framework */,
 				43502D521347640700A02A1F /* GLExtensionWrangler.framework */,
 				4318434B1363942200BA2BC5 /* MiniUPnPc.framework */,
-				43AA702A13C7FC640015B52B /* QJson.framework */,
+				43AA702A13C7FC640015B52B /* Bson.framework */,
 				4366718213D1FD5600FE85BA /* QuesoGLC.framework */,
 			);
 			name = Products;
@@ -2778,7 +2727,7 @@
 				02DDA8620BD3C1BB0049AB60 /* Vorbis sources */,
 				02DDA8DE0BD3C3930049AB60 /* PhysFS sources */,
 				9730E8000E8CEB3B009C9481 /* Theora sources */,
-				43DD1BC213661F84003AA9EC /* QJson sources */,
+				43DD1BC213661F84003AA9EC /* Mongo-C-Driver sources */,
 				4366712B13D1FC8600FE85BA /* QuesoGLC sources */,
 			);
 			name = "Third Party";
@@ -3242,31 +3191,15 @@
 			name = coupled;
 			sourceTree = "<group>";
 		};
-		43DD1BC213661F84003AA9EC /* QJson sources */ = {
+		43DD1BC213661F84003AA9EC /* Mongo-C-Driver sources */ = {
 			isa = PBXGroup;
 			children = (
-				4332991C13CB4FC5005BE784 /* json_parser.cc */,
-				4332991D13CB4FC5005BE784 /* json_parser.hh */,
-				4332991E13CB4FC5005BE784 /* json_scanner.cpp */,
-				4332991F13CB4FC5005BE784 /* json_scanner.h */,
-				4332992013CB4FC5005BE784 /* location.hh */,
-				4332992113CB4FC5005BE784 /* parser_p.h */,
-				4332992213CB4FC5005BE784 /* parser.cpp */,
-				4332992313CB4FC5005BE784 /* parser.h */,
-				4332992413CB4FC5005BE784 /* parserrunnable.cpp */,
-				4332992513CB4FC5005BE784 /* parserrunnable.h */,
-				4332992613CB4FC5005BE784 /* position.hh */,
-				4332992713CB4FC5005BE784 /* qjson_debug.h */,
-				4332992813CB4FC5005BE784 /* qjson_export.h */,
-				4332992913CB4FC5005BE784 /* qobjecthelper.cpp */,
-				4332992A13CB4FC5005BE784 /* qobjecthelper.h */,
-				4332992B13CB4FC5005BE784 /* serializer.cpp */,
-				4332992C13CB4FC5005BE784 /* serializer.h */,
-				4332992D13CB4FC5005BE784 /* serializerrunnable.cpp */,
-				4332992E13CB4FC5005BE784 /* serializerrunnable.h */,
-				4332992F13CB4FC5005BE784 /* stack.hh */,
+				43DD1BC613661FD5003AA9EC /* bson.c */,
+				43DD1BC713661FD5003AA9EC /* bson.h */,
+				43DD1BC813661FD5003AA9EC /* numbers.c */,
+				43DD1BC913661FD5003AA9EC /* platform_hacks.h */,
 			);
-			name = "QJson sources";
+			name = "Mongo-C-Driver sources";
 			sourceTree = "<group>";
 		};
 		43F3008010D344B000707B6E /* x86 */ = {
@@ -3517,19 +3450,8 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4332993113CB4FC5005BE784 /* json_parser.hh in Headers */,
-				4332993313CB4FC5005BE784 /* json_scanner.h in Headers */,
-				4332993413CB4FC5005BE784 /* location.hh in Headers */,
-				4332993513CB4FC5005BE784 /* parser_p.h in Headers */,
-				4332993713CB4FC5005BE784 /* parser.h in Headers */,
-				4332993913CB4FC5005BE784 /* parserrunnable.h in Headers */,
-				4332993A13CB4FC5005BE784 /* position.hh in Headers */,
-				4332993B13CB4FC5005BE784 /* qjson_debug.h in Headers */,
-				4332993C13CB4FC5005BE784 /* qjson_export.h in Headers */,
-				4332993E13CB4FC5005BE784 /* qobjecthelper.h in Headers */,
-				4332994013CB4FC5005BE784 /* serializer.h in Headers */,
-				4332994213CB4FC5005BE784 /* serializerrunnable.h in Headers */,
-				4332994313CB4FC5005BE784 /* stack.hh in Headers */,
+				43AA705613C801D10015B52B /* bson.h in Headers */,
+				43AA705813C801D30015B52B /* platform_hacks.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3785,7 +3707,7 @@
 		};
 		43AA702913C7FC640015B52B /* QJson */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 43AA702F13C7FC660015B52B /* Build configuration list for PBXNativeTarget "QJson" */;
+			buildConfigurationList = 43AA702F13C7FC660015B52B /* Build configuration list for PBXNativeTarget "Bson" */;
 			buildPhases = (
 				43AA702513C7FC640015B52B /* Headers */,
 				43AA702613C7FC640015B52B /* Resources */,
@@ -3793,15 +3715,12 @@
 				43AA702813C7FC640015B52B /* Frameworks */,
 			);
 			buildRules = (
-				433299A213CB5388005BE784 /* PBXBuildRule */,
 			);
 			dependencies = (
-				4332991913CB4F41005BE784 /* PBXTargetDependency */,
-				4332991B13CB4F6F005BE784 /* PBXTargetDependency */,
 			);
-			name = QJson;
+			name = Bson;
 			productName = Bson;
-			productReference = 43AA702A13C7FC640015B52B /* QJson.framework */;
+			productReference = 43AA702A13C7FC640015B52B /* Bson.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		97AEAAEA0E8C1B5200A10721 /* Theora */ = {
@@ -4062,20 +3981,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "cd ${SRCROOT}/external/libpng\n\nscripts/pnglibconf.mak\nexit ${?}\n";
-		};
-		43329A2013CB5692005BE784 /* QJson - Fetch source */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "QJson - Fetch source";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "DirectorY=\"qjson\"\nOutDir=\"qjson-out\"\nFileName=\"qjson-0.7.1.tar.bz2\"\nSourceDLP=\"http://downloads.sourceforge.net/project/qjson/qjson/0.7.1/qjson-0.7.1.tar.bz2\"\nMD5Sum=\"5a833ad606c164ed8aa69f0873366ace\"\n\nconfigs/FetchSource.sh \"${DirectorY}\" \"${OutDir}\" \"${FileName}\" \"${SourceDLP}\" \"${MD5Sum}\"\nexit ${?}\n";
 		};
 		433360A711A0796D00380F5E /* Qt */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -4763,15 +4668,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				433299CF13CB5516005BE784 /* parserrunnable.h in Sources */,
-				433299D013CB5516005BE784 /* serializerrunnable.h in Sources */,
-				4332993013CB4FC5005BE784 /* json_parser.cc in Sources */,
-				4332993213CB4FC5005BE784 /* json_scanner.cpp in Sources */,
-				4332993613CB4FC5005BE784 /* parser.cpp in Sources */,
-				4332993813CB4FC5005BE784 /* parserrunnable.cpp in Sources */,
-				4332993D13CB4FC5005BE784 /* qobjecthelper.cpp in Sources */,
-				4332993F13CB4FC5005BE784 /* serializer.cpp in Sources */,
-				4332994113CB4FC5005BE784 /* serializerrunnable.cpp in Sources */,
+				43AA705513C801CF0015B52B /* bson.c in Sources */,
+				43AA705713C801D20015B52B /* numbers.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4869,16 +4767,6 @@
 			target = 4318434A1363942200BA2BC5 /* MiniUPnPc */;
 			targetProxy = 431843891363954200BA2BC5 /* PBXContainerItemProxy */;
 		};
-		4332991913CB4F41005BE784 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 438B0C05137730FE008184FC /* Fetch Third Party Sources */;
-			targetProxy = 4332991813CB4F41005BE784 /* PBXContainerItemProxy */;
-		};
-		4332991B13CB4F6F005BE784 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 43FA570C10FF8E9B0074E914 /* Setup Prebuilt Components */;
-			targetProxy = 4332991A13CB4F6F005BE784 /* PBXContainerItemProxy */;
-		};
 		43502D83134764BF00A02A1F /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 43502D511347640700A02A1F /* GLExtensionWrangler */;
@@ -4941,7 +4829,7 @@
 		};
 		43AA707113C804580015B52B /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 43AA702913C7FC640015B52B /* QJson */;
+			target = 43AA702913C7FC640015B52B /* Bson */;
 			targetProxy = 43AA707013C804580015B52B /* PBXContainerItemProxy */;
 		};
 		43AE78FD10F0F4F500FED5D3 /* PBXTargetDependency */ = {
@@ -5318,21 +5206,21 @@
 		};
 		43AA702C13C7FC650015B52B /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 43AA706013C803DB0015B52B /* QJson-Debug.xcconfig */;
+			baseConfigurationReference = 43AA706013C803DB0015B52B /* Bson-Debug.xcconfig */;
 			buildSettings = {
 			};
 			name = Debug;
 		};
 		43AA702D13C7FC650015B52B /* StaticAnalyzer */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 43AA706013C803DB0015B52B /* QJson-Debug.xcconfig */;
+			baseConfigurationReference = 43AA706013C803DB0015B52B /* Bson-Debug.xcconfig */;
 			buildSettings = {
 			};
 			name = StaticAnalyzer;
 		};
 		43AA702E13C7FC650015B52B /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 43AA706113C803DB0015B52B /* QJson-Release.xcconfig */;
+			baseConfigurationReference = 43AA706113C803DB0015B52B /* Bson-Release.xcconfig */;
 			buildSettings = {
 			};
 			name = Release;
@@ -5523,7 +5411,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
-		43AA702F13C7FC660015B52B /* Build configuration list for PBXNativeTarget "QJson" */ = {
+		43AA702F13C7FC660015B52B /* Build configuration list for PBXNativeTarget "Bson" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				43AA702C13C7FC650015B52B /* Debug */,

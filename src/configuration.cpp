@@ -49,6 +49,7 @@
 // ////////////////////////////////////////////////////////////////////////////
 
 #define DEFAULTSCROLL	1000
+#define MASTERSERVERPORT	9990
 #define GAMESERVERPORT		2100
 
 static const char *fileName = "config";
@@ -80,9 +81,11 @@ bool loadConfig()
 	setMiddleClickRotate(ini.value("MiddleClickRotate", false).toBool());
 	rotateRadar = ini.value("rotateRadar", true).toBool();
 	war_SetPauseOnFocusLoss(ini.value("PauseOnFocusLoss", false).toBool());
+	NETsetMasterserverName(ini.value("masterserver_name", "lobby.wz2100.net").toString().toUtf8().constData());
 	iV_font(ini.value("fontname", "DejaVu Sans").toString().toUtf8().constData(),
 		ini.value("fontface", "Book").toString().toUtf8().constData(),
 		ini.value("fontfacebold", "Bold").toString().toUtf8().constData());
+	NETsetMasterserverPort(ini.value("masterserver_port", MASTERSERVERPORT).toInt());
 	NETsetGameserverPort(ini.value("gameserver_port", GAMESERVERPORT).toInt());
 	war_SetFMVmode((FMV_MODE)ini.value("FMVmode", FMV_FULLSCREEN).toInt());
 	war_setScanlineMode((SCANLINE_MODE)ini.value("scanlines", SCANLINES_OFF).toInt());
@@ -134,31 +137,6 @@ bool loadConfig()
 	war_SetHeight(height);
 
 	if (ini.contains("bpp")) pie_SetVideoBufferDepth(ini.value("bpp").toInt());
-
-	/**
-	 * Lobby
-	 */
-	lobbyclient.setHost(ini.value("lobby_host", "lobby.wz2100.net").toString());
-	if ((lobbyclient.getHost() == "lobby.wz2100.net" || lobbyclient.getHost() == "localhost")
-		&& ini.contains("lobby_ssl")
-		&& ini.value("lobby_ssl", true).toBool() == true)
-	{
-		lobbyclient.useSSL(true);
-		lobbyclient.setPort(ini.value("lobby_port", 9994).toInt());
-		lobbyclient.setUser(ini.value("lobby_user", "").toString());
-		lobbyclient.setToken(ini.value("lobby_token", "").toString());
-	}
-	else if (ini.value("lobby_ssl", true).toBool() == true)
-	{
-		lobbyclient.useSSL(true);
-		lobbyclient.setPort(ini.value("lobby_port", 9994).toInt());
-	}
-	else
-	{
-		lobbyclient.useSSL(false);
-		lobbyclient.setPort(ini.value("lobby_port", 9990).toInt());
-	}
-
 	return true;
 }
 
@@ -211,6 +189,8 @@ bool saveConfig()
 	ini.setValue("UPnP", (SDWORD)NetPlay.isUPNP);
 	ini.setValue("rotateRadar", rotateRadar);
 	ini.setValue("PauseOnFocusLoss", war_GetPauseOnFocusLoss());
+	ini.setValue("masterserver_name", NETgetMasterserverName());
+	ini.setValue("masterserver_port", NETgetMasterserverPort());
 	ini.setValue("gameserver_port", NETgetGameserverPort());
 	if (!bMultiPlayer)
 	{
@@ -232,16 +212,6 @@ bool saveConfig()
 		}
 		ini.setValue("playerName", (char*)sPlayer);		// player name
 	}
-
-	/**
-	 * Lobby
-	 */
-	ini.setValue("lobby_host", lobbyclient.getHost());
-	ini.setValue("lobby_ssl", lobbyclient.useSSL());
-	ini.setValue("lobby_port", lobbyclient.getPort());
-	ini.setValue("lobby_user", lobbyclient.getUser());
-	ini.setValue("lobby_token", lobbyclient.getToken());
-
 	ini.sync();
 	return true;
 }

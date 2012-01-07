@@ -10,7 +10,6 @@ endif
 
 noinst_LIBRARIES = libnetplay.a
 noinst_HEADERS = \
-	netlobby.h \
 	netlog.h \
 	netplay.h \
 	netqueue.h \
@@ -18,9 +17,9 @@ noinst_HEADERS = \
 	nettypes.h
 
 libnetplay_a_SOURCES = \
-	netsocket.cpp \
-	netlobby.cpp \
+	netjoin_stub.cpp \
 	netlog.cpp \
 	netplay.cpp \
 	netqueue.cpp \
+	netsocket.cpp \
 	nettypes.cpp

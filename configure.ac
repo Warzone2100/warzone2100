@@ -250,14 +250,6 @@ AS_IF([test "x$enable_sound" != "xyes"],[
 	AC_DEFINE([WZ_NOSOUND], [], [Causes sound to be disabled])
 ])
 
-# Disables SSL for the Lobby
-AC_ARG_ENABLE([ssl],
-    AS_HELP_STRING([--disable-ssl], [Disable SSL [no]]),
-    [ enable_ssl="${enableval}" ], [ enable_ssl="yes" ])
-AS_IF([test "x$enable_ssl" != "xyes"],[
-	AC_DEFINE([NO_SSL], [], [Causes SSL to be disabled])
-])
-
 # -O0 turns off all optimizations; this is necessary for accurate debugging
 # -Wno-unused-label is necessary because flex produces unused labels that we cannot fix
 # Add later for stricter checking: -Wextra -Wmissing-declarations -Wstrict-prototypes
@@ -393,8 +385,6 @@ AS_IF([test "x$enable_sound" = "xyes"],[
 
 PKG_CHECK_MODULES([GLEW], [glew >= 1.5.2])
 
-PKG_CHECK_MODULES([QJSON], [QJson >= 0.7.1])
-
 # Checks for libraries:
 
 # check for nearbyint()
@@ -414,6 +404,7 @@ AC_CHECK_LIB(physfs, PHYSFS_mount, AC_SUBST([PHYSFS_LIBS], [-lphysfs]), AC_MSG_E
 if test "x$host_os_mingw32" != "xyes" ; then
 	AC_CHECK_HEADER(X11/extensions/Xrandr.h, , AC_MSG_ERROR([Xrandr header not found.]))
 fi
+
 
 # Look for OpenGL
 AC_CHECK_LIB(GL, main,

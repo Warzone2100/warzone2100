@@ -26,24 +26,27 @@
 // determines which option screen to use. when in GS_TITLE_SCREEN mode.
 enum tMode
 {
-	TITLE,					///< intro mode
-	SINGLE,					///< single player menu
-	MULTI,					///< multiplayer menu
-	OPTIONS,				///< options menu
-	GAME,					///<
-	TUTORIAL,				///< tutorial/fastplay
-	CREDITS,				///< credits
-	MULTIOPTION,			///< Host Screen
-	MULTILIMIT,				///< MULTIPLAYER, Limit the multistuff.
-	STARTGAME,				///< Fire up the game
-	SHOWINTRO,				///< reshow the intro
-	QUIT,					///< leaving game
-	LOADSAVEGAME,			///< loading a save game
-	KEYMAP,					///< keymap editor
-	GRAPHICS_OPTIONS,       ///< graphics options menu
-	AUDIO_OPTIONS,          ///< audio options menu
-	VIDEO_OPTIONS,          ///< video options menu
-	MOUSE_OPTIONS,          ///< mouse options menu
+	TITLE,			// 0 intro mode
+	SINGLE,			// 1 single player menu
+	MULTI,			// 2 multiplayer menu
+	OPTIONS,		// 3 options menu
+	GAME,			// 4
+	TUTORIAL,		// 5  tutorial/fastplay
+	CREDITS,		// 6  credits
+	PROTOCOL,		// 7  MULTIPLAYER, select proto
+	MULTIOPTION,	// 8 MULTIPLAYER, select game options
+	FORCESELECT,	// 9 MULTIPLAYER, Force design screen
+	GAMEFIND,		// 10 MULTIPLAYER, gamefinder.
+	MULTILIMIT,		// 11 MULTIPLAYER, Limit the multistuff.
+	STARTGAME,		// 12 Fire up the game
+	SHOWINTRO,		// 13 reshow the intro
+	QUIT,			// 14 leaving game
+	LOADSAVEGAME,	// 15 loading a save game
+	KEYMAP,			// 16 keymap editor
+	GRAPHICS_OPTIONS,       // 17 graphics options menu
+	AUDIO_OPTIONS,          // 18 audio options menu
+	VIDEO_OPTIONS,          // 19 video options menu
+	MOUSE_OPTIONS,          // 20 mouse options menu
 };
 
 extern tMode titleMode;					// the global case
@@ -59,6 +62,7 @@ extern bool	bLimiterLoaded;
 void changeTitleMode(tMode mode);
 bool runTitleMenu(void);
 bool runSinglePlayerMenu(void);
+bool runMultiPlayerMenu(void);
 bool runGameOptionsMenu(void);
 bool runOptionsMenu(void);
 bool runGraphicsOptionsMenu(void);
@@ -158,7 +162,6 @@ enum
 	FRONTEND_LOADCAM2,					// loading via --GAME CAM_2A
 	FRONTEND_LOADCAM3,					// loading via --GAME CAM_3A
 	FRONTEND_PASSWORDFORM,
-	FRONTEND_LOGINFORM,
 	FRONTEND_HYPERLINK,
 	// begin menu
 	FRONTEND_SINGLEPLAYER	= 20100,	// title screen
@@ -172,7 +175,9 @@ enum
 	FRONTEND_LOADGAME,
 	FRONTEND_SKIRMISH,
 	FRONTEND_CHALLENGES,
-	FE_P0				= 20300,		// player 0 buton
+	FRONTEND_HOST			= 20300,	//multiplayer menu options
+	FRONTEND_JOIN,
+	FE_P0,								// player 0 buton
 	FE_P1,								// player 1 buton
 	FE_P2,								// player 2 buton
 	FE_P3,								// player 3 buton
@@ -236,7 +241,7 @@ enum
 	FRONTEND_MMROTATE_R,
 
 	FRONTEND_KEYMAP			= 26000,	// Keymap menu
-	FRONTEND_LOBBYERROR 	= 31666	// Shows an lobby error
+	FRONTEND_NOGAMESAVAILABLE = 31666	// Used when no games are available in lobby
 
 };
 

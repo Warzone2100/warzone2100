@@ -35,7 +35,7 @@ extern void clearPlayer					(UDWORD player, bool quietly);// wipe a player off t
 //extern bool ProcessDroidOrders			(void);
 //extern UDWORD							arenaPlayersReceived;
 
-extern void showMOTD(const char* motd);
+extern void ShowMOTD(void);
 extern bool recvDataCheck(NETQUEUE queue);
 extern bool sendDataCheck(void);
 
