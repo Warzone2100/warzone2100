@@ -248,7 +248,7 @@ void *hashTable_FindElement(HASHTABLE *psTable, intptr_t iKey1, intptr_t iKey2)
 	/* remove node from hash table and return to heap */
 	if ( psNode == NULL )
 	{
-		return false;
+		return NULL;
 	}
 	else
 	{
