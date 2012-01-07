@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2012-01-04 19:08+0100\n"
+"POT-Creation-Date: 2012-01-07 14:37+0100\n"
 "PO-Revision-Date: 2011-10-06 11:22+0200\n"
 "Last-Translator: Adrian Mos <adimosh@live.com>\n"
 "Language-Team: Romanian <ro@li.org>\n"
@@ -119,67 +119,6 @@ msgstr "Cercetare de arme completă"
 #: data/base/messages/strings/resstrings.txt:301
 #: data/base/messages/strings/resstrings.txt:307
 #: data/base/messages/strings/resstrings.txt:323
-#: data/mp/messages/resmessages12.rmsg:4
-#: data/mp/messages/resmessages12.rmsg:17
-#: data/mp/messages/resmessages12.rmsg:30
-#: data/mp/messages/resmessages12.rmsg:43
-#: data/mp/messages/resmessages1.rmsg:108
-#: data/mp/messages/resmessages1.rmsg:121
-#: data/mp/messages/resmessages1.rmsg:134
-#: data/mp/messages/resmessages1.rmsg:147
-#: data/mp/messages/resmessages1.rmsg:160
-#: data/mp/messages/resmessages1.rmsg:173
-#: data/mp/messages/resmessages1.rmsg:186
-#: data/mp/messages/resmessages1.rmsg:199
-#: data/mp/messages/resmessages1.rmsg:212
-#: data/mp/messages/resmessages1.rmsg:225
-#: data/mp/messages/resmessages23.rmsg:17
-#: data/mp/messages/resmessages2.rmsg:69
-#: data/mp/messages/resmessages2.rmsg:82
-#: data/mp/messages/resmessages2.rmsg:95
-#: data/mp/messages/resmessages2.rmsg:108
-#: data/mp/messages/resmessages2.rmsg:121
-#: data/mp/messages/resmessages2.rmsg:134
-#: data/mp/messages/resmessages2.rmsg:147
-#: data/mp/messages/resmessages2.rmsg:160
-#: data/mp/messages/resmessages2.rmsg:173
-#: data/mp/messages/resmessages2.rmsg:186
-#: data/mp/messages/resmessages2.rmsg:199
-#: data/mp/messages/resmessages2.rmsg:212
-#: data/mp/messages/resmessages2.rmsg:225
-#: data/mp/messages/resmessages2.rmsg:238
-#: data/mp/messages/resmessages2.rmsg:251
-#: data/mp/messages/resmessages2.rmsg:264
-#: data/mp/messages/resmessages2.rmsg:277
-#: data/mp/messages/resmessages2.rmsg:290
-#: data/mp/messages/resmessages2.rmsg:303
-#: data/mp/messages/resmessages2.rmsg:316
-#: data/mp/messages/resmessages3.rmsg:238
-#: data/mp/messages/resmessages3.rmsg:251
-#: data/mp/messages/resmessages3.rmsg:264
-#: data/mp/messages/resmessages3.rmsg:277
-#: data/mp/messages/resmessages3.rmsg:290
-#: data/mp/messages/resmessages3.rmsg:303
-#: data/mp/messages/resmessages3.rmsg:316
-#: data/mp/messages/resmessages3.rmsg:329
-#: data/mp/messages/resmessages3.rmsg:342
-#: data/mp/messages/resmessages3.rmsg:355
-#: data/mp/messages/resmessages3.rmsg:368
-#: data/mp/messages/resmessages3.rmsg:381
-#: data/mp/messages/resmessages3.rmsg:394
-#: data/mp/messages/resmessages3.rmsg:407
-#: data/mp/messages/resmessagesall.rmsg:253
-#: data/mp/messages/resmessagesall.rmsg:266
-#: data/mp/messages/resmessagesall.rmsg:279
-#: data/mp/messages/resmessagesall.rmsg:552
-#: data/mp/messages/resmessagesall.rmsg:578
-#: data/mp/messages/resmessagesall.rmsg:591
-#: data/mp/messages/resmessagesall.rmsg:604
-#: data/mp/messages/resmessagesall.rmsg:656
-#: data/mp/messages/resmessagesall.rmsg:669
-#: data/mp/messages/resmessagesall.rmsg:682
-#: data/mp/messages/resmessagesall.rmsg:695
-#: data/mp/messages/resmessagesall.rmsg:825
 #: data/mp/messages/strings/resstrings.txt:133
 #: data/mp/messages/strings/resstrings.txt:139
 #: data/mp/messages/strings/resstrings.txt:145
@@ -210,7 +149,6 @@ msgid "New Defensive Structure Available"
 msgstr "O nouă clădire defensivă disponibilă"
 
 #: data/base/messages/resmessages12.rmsg:5
-#: data/mp/messages/resmessages12.rmsg:5
 msgid "Armored Mortar battery pit"
 msgstr "Baterie ranforsată de mortiere"
 
@@ -232,20 +170,6 @@ msgstr "Baterie ranforsată de mortiere"
 #: data/base/messages/strings/resstrings.txt:175
 #: data/base/messages/strings/resstrings.txt:181
 #: data/base/messages/strings/resstrings.txt:187
-#: data/mp/messages/resmessages12.rmsg:6
-#: data/mp/messages/resmessages12.rmsg:19
-#: data/mp/messages/resmessages2.rmsg:123
-#: data/mp/messages/resmessages2.rmsg:136
-#: data/mp/messages/resmessages2.rmsg:149
-#: data/mp/messages/resmessages2.rmsg:162
-#: data/mp/messages/resmessages2.rmsg:175
-#: data/mp/messages/resmessages2.rmsg:188
-#: data/mp/messages/resmessages2.rmsg:201
-#: data/mp/messages/resmessages3.rmsg:266
-#: data/mp/messages/resmessages3.rmsg:279
-#: data/mp/messages/resmessagesall.rmsg:255
-#: data/mp/messages/resmessagesall.rmsg:268
-#: data/mp/messages/resmessagesall.rmsg:827
 #: data/mp/messages/strings/resstrings.txt:163
 #: data/mp/messages/strings/resstrings.txt:177
 #: data/mp/messages/strings/resstrings.txt:183
@@ -297,41 +221,6 @@ msgstr "Asociat automat celui mai apropiat senzor"
 #: data/base/messages/strings/resstrings.txt:236
 #: data/base/messages/strings/resstrings.txt:242
 #: data/base/messages/strings/resstrings.txt:248
-#: data/mp/messages/resmessages12.rmsg:7
-#: data/mp/messages/resmessages12.rmsg:20
-#: data/mp/messages/resmessages1.rmsg:124
-#: data/mp/messages/resmessages1.rmsg:150
-#: data/mp/messages/resmessages1.rmsg:228
-#: data/mp/messages/resmessages2.rmsg:72
-#: data/mp/messages/resmessages2.rmsg:85
-#: data/mp/messages/resmessages2.rmsg:98
-#: data/mp/messages/resmessages2.rmsg:111
-#: data/mp/messages/resmessages2.rmsg:124
-#: data/mp/messages/resmessages2.rmsg:137
-#: data/mp/messages/resmessages2.rmsg:150
-#: data/mp/messages/resmessages2.rmsg:163
-#: data/mp/messages/resmessages2.rmsg:176
-#: data/mp/messages/resmessages2.rmsg:189
-#: data/mp/messages/resmessages2.rmsg:202
-#: data/mp/messages/resmessages2.rmsg:215
-#: data/mp/messages/resmessages2.rmsg:241
-#: data/mp/messages/resmessages2.rmsg:267
-#: data/mp/messages/resmessages3.rmsg:241
-#: data/mp/messages/resmessages3.rmsg:254
-#: data/mp/messages/resmessages3.rmsg:267
-#: data/mp/messages/resmessages3.rmsg:280
-#: data/mp/messages/resmessages3.rmsg:306
-#: data/mp/messages/resmessages3.rmsg:345
-#: data/mp/messages/resmessagesall.rmsg:7
-#: data/mp/messages/resmessagesall.rmsg:256
-#: data/mp/messages/resmessagesall.rmsg:269
-#: data/mp/messages/resmessagesall.rmsg:282
-#: data/mp/messages/resmessagesall.rmsg:555
-#: data/mp/messages/resmessagesall.rmsg:581
-#: data/mp/messages/resmessagesall.rmsg:594
-#: data/mp/messages/resmessagesall.rmsg:607
-#: data/mp/messages/resmessagesall.rmsg:711
-#: data/mp/messages/resmessagesall.rmsg:828
 #: data/mp/messages/strings/resstrings.txt:136
 #: data/mp/messages/strings/resstrings.txt:142
 #: data/mp/messages/strings/resstrings.txt:148
@@ -353,12 +242,10 @@ msgid "Defensive Strength: Medium"
 msgstr "Forță defensivă: medie"
 
 #: data/base/messages/resmessages12.rmsg:18
-#: data/mp/messages/resmessages12.rmsg:18
 msgid "Mini-rocket armored strongpoint"
 msgstr "Montură ranforsată cu mini-rachete"
 
 #: data/base/messages/resmessages12.rmsg:31
-#: data/mp/messages/resmessages12.rmsg:31
 msgid "Armored hardpoint with Heavy Machinegun"
 msgstr "Bloc ranforsat cu mitralieră grea"
 
@@ -393,30 +280,6 @@ msgstr "Bloc ranforsat cu mitralieră grea"
 #: data/base/messages/strings/resstrings.txt:295
 #: data/base/messages/strings/resstrings.txt:303
 #: data/base/messages/strings/resstrings.txt:309
-#: data/mp/messages/resmessages12.rmsg:32
-#: data/mp/messages/resmessages12.rmsg:45
-#: data/mp/messages/resmessages1.rmsg:110
-#: data/mp/messages/resmessages1.rmsg:123
-#: data/mp/messages/resmessages1.rmsg:136
-#: data/mp/messages/resmessages1.rmsg:149
-#: data/mp/messages/resmessages1.rmsg:162
-#: data/mp/messages/resmessages1.rmsg:175
-#: data/mp/messages/resmessages1.rmsg:188
-#: data/mp/messages/resmessages1.rmsg:201
-#: data/mp/messages/resmessages1.rmsg:214
-#: data/mp/messages/resmessages23.rmsg:19
-#: data/mp/messages/resmessages2.rmsg:279
-#: data/mp/messages/resmessages2.rmsg:292
-#: data/mp/messages/resmessages2.rmsg:305
-#: data/mp/messages/resmessages2.rmsg:318
-#: data/mp/messages/resmessages3.rmsg:344
-#: data/mp/messages/resmessages3.rmsg:357
-#: data/mp/messages/resmessages3.rmsg:370
-#: data/mp/messages/resmessages3.rmsg:383
-#: data/mp/messages/resmessages3.rmsg:396
-#: data/mp/messages/resmessages3.rmsg:409
-#: data/mp/messages/resmessagesall.rmsg:554
-#: data/mp/messages/resmessagesall.rmsg:606
 #: data/mp/messages/strings/resstrings.txt:263
 #: data/mp/messages/strings/resstrings.txt:269
 #: data/mp/messages/strings/resstrings.txt:275
@@ -463,29 +326,6 @@ msgstr "Țintește automat inamicii din raza senzorului"
 #: data/base/messages/strings/resstrings.txt:304
 #: data/base/messages/strings/resstrings.txt:310
 #: data/base/messages/strings/resstrings.txt:326
-#: data/mp/messages/resmessages12.rmsg:33
-#: data/mp/messages/resmessages12.rmsg:46
-#: data/mp/messages/resmessages1.rmsg:137
-#: data/mp/messages/resmessages1.rmsg:163
-#: data/mp/messages/resmessages1.rmsg:176
-#: data/mp/messages/resmessages1.rmsg:189
-#: data/mp/messages/resmessages1.rmsg:202
-#: data/mp/messages/resmessages1.rmsg:215
-#: data/mp/messages/resmessages23.rmsg:20
-#: data/mp/messages/resmessages2.rmsg:228
-#: data/mp/messages/resmessages2.rmsg:254
-#: data/mp/messages/resmessages2.rmsg:280
-#: data/mp/messages/resmessages2.rmsg:293
-#: data/mp/messages/resmessages2.rmsg:306
-#: data/mp/messages/resmessages2.rmsg:319
-#: data/mp/messages/resmessages3.rmsg:293
-#: data/mp/messages/resmessages3.rmsg:319
-#: data/mp/messages/resmessages3.rmsg:332
-#: data/mp/messages/resmessages3.rmsg:358
-#: data/mp/messages/resmessages3.rmsg:371
-#: data/mp/messages/resmessages3.rmsg:384
-#: data/mp/messages/resmessages3.rmsg:397
-#: data/mp/messages/resmessages3.rmsg:410
 #: data/mp/messages/strings/resstrings.txt:224
 #: data/mp/messages/strings/resstrings.txt:248
 #: data/mp/messages/strings/resstrings.txt:290
@@ -499,23 +339,17 @@ msgid "Defensive Strength: High"
 msgstr "Forța defensivă: Mare"
 
 #: data/base/messages/resmessages12.rmsg:44
-#: data/mp/messages/resmessages12.rmsg:44
 msgid "Armored hardpoint with Lancer AT missile"
 msgstr "Bloc ranforsat cu lansator de rachete"
 
 #: data/base/messages/resmessages12.rmsg:56
 #: data/base/messages/resmessages23.rmsg:43
 #: data/base/messages/resmessages3.rmsg:511
-#: data/mp/messages/resmessages12.rmsg:56
-#: data/mp/messages/resmessages23.rmsg:43
-#: data/mp/messages/resmessages3.rmsg:511
 msgid "Research Breakthrough Improves Construction Rates"
 msgstr "Descoperirea îmbunătățește ritmul de construcție"
 
 #: data/base/messages/resmessages12.rmsg:57
 #: data/base/messages/resmessages23.rmsg:44
-#: data/mp/messages/resmessages12.rmsg:57
-#: data/mp/messages/resmessages23.rmsg:44
 msgid "Improved Engineering Techniques"
 msgstr "Tehnici îmbunătățite de inginerie"
 
@@ -528,52 +362,37 @@ msgstr "Mărește viteza de construcție"
 #: data/base/messages/resmessages12.rmsg:59
 #: data/base/messages/resmessages23.rmsg:46
 #: data/base/messages/resmessages3.rmsg:514
-#: data/mp/messages/resmessages12.rmsg:59
-#: data/mp/messages/resmessages23.rmsg:46
-#: data/mp/messages/resmessages3.rmsg:514
 msgid "All trucks upgraded automatically"
 msgstr "Toate constructoarele îmbunătățite instantaneu"
 
 #: data/base/messages/resmessages12.rmsg:69
 #: data/base/messages/resmessages1.rmsg:4
-#: data/mp/messages/resmessages12.rmsg:69
-#: data/mp/messages/resmessages1.rmsg:4
 msgid "New Systems Turret Available for Design"
 msgstr "Nouă turelă de sisteme disponibilă pentru scheme"
 
 #: data/base/messages/resmessages12.rmsg:70
-#: data/mp/messages/resmessages12.rmsg:70
 msgid "Counter-battery turret detects enemy indirect fire batteries"
 msgstr "Turelă anti-baterie detectează bateriile de foc indirect inamice"
 
 #: data/base/messages/resmessages12.rmsg:71
 #: data/base/messages/resmessagesall.rmsg:97
-#: data/mp/messages/resmessages12.rmsg:71
-#: data/mp/messages/resmessagesall.rmsg:123
 msgid "Orders assigned indirect fire units to fire at the enemy batteries"
 msgstr "Ordonează unităților de artilerie să deschidă focuol asupra bateriilor inamice"
 
 #: data/base/messages/resmessages12.rmsg:72
 #: data/base/messages/resmessagesall.rmsg:98
-#: data/mp/messages/resmessages12.rmsg:72
-#: data/mp/messages/resmessagesall.rmsg:124
 msgid "Counter-battery fire continues until enemy battery is suppressed"
 msgstr "Focul anti-baterie continuă până când bateria inamică e eliminată"
 
 #: data/base/messages/resmessages12.rmsg:82
 #: data/base/messages/resmessages23.rmsg:56
 #: data/base/messages/resmessages3.rmsg:524
-#: data/mp/messages/resmessages12.rmsg:82
-#: data/mp/messages/resmessages23.rmsg:56
-#: data/mp/messages/resmessages3.rmsg:524
 msgid "CB Sensor Improved"
 msgstr "Senzor AB îmbunătățit"
 
 #: data/base/messages/resmessages12.rmsg:83
 #: data/base/messages/resmessages2.rmsg:447
 #: data/base/messages/strings/resstrings.txt:486
-#: data/mp/messages/resmessages12.rmsg:83
-#: data/mp/messages/resmessages2.rmsg:447
 #: data/mp/messages/strings/resstrings.txt:516
 msgid "New fire detection systems"
 msgstr "Nou sistem de detecție a tragerilor"
@@ -581,18 +400,12 @@ msgstr "Nou sistem de detecție a tragerilor"
 #: data/base/messages/resmessages12.rmsg:84
 #: data/base/messages/resmessages23.rmsg:58
 #: data/base/messages/resmessages3.rmsg:526
-#: data/mp/messages/resmessages12.rmsg:84
-#: data/mp/messages/resmessages23.rmsg:58
-#: data/mp/messages/resmessages3.rmsg:526
 msgid "Extends CB Range"
 msgstr "Mărește raza AB"
 
 #: data/base/messages/resmessages12.rmsg:85
 #: data/base/messages/resmessages23.rmsg:59
 #: data/base/messages/resmessages3.rmsg:527
-#: data/mp/messages/resmessages12.rmsg:85
-#: data/mp/messages/resmessages23.rmsg:59
-#: data/mp/messages/resmessages3.rmsg:527
 msgid "All CB sensors upgraded automatically"
 msgstr "Toți senzorii AB îmbunătățiți instantaneu"
 
@@ -603,18 +416,10 @@ msgstr "Toți senzorii AB îmbunătățiți instantaneu"
 #: data/base/messages/resmessages3.rmsg:875
 #: data/base/messages/resmessages3.rmsg:888
 #: data/base/messages/resmessagesall.rmsg:173
-#: data/mp/messages/resmessages12.rmsg:95
-#: data/mp/messages/resmessages12.rmsg:212
-#: data/mp/messages/resmessages12.rmsg:225
-#: data/mp/messages/resmessages1.rmsg:577
-#: data/mp/messages/resmessages3.rmsg:875
-#: data/mp/messages/resmessages3.rmsg:888
-#: data/mp/messages/resmessagesall.rmsg:212
 msgid "Cannon Upgrade"
 msgstr "Îmbunătățire a tunurilor"
 
 #: data/base/messages/resmessages12.rmsg:96
-#: data/mp/messages/resmessages12.rmsg:96
 msgid "Determines range to target"
 msgstr "Determină distanța până la țintă"
 
@@ -630,13 +435,6 @@ msgstr "Mărește precizia tunurilor"
 #: data/base/messages/resmessages3.rmsg:878
 #: data/base/messages/resmessages3.rmsg:891
 #: data/base/messages/resmessagesall.rmsg:176
-#: data/mp/messages/resmessages12.rmsg:98
-#: data/mp/messages/resmessages12.rmsg:215
-#: data/mp/messages/resmessages12.rmsg:228
-#: data/mp/messages/resmessages1.rmsg:580
-#: data/mp/messages/resmessages3.rmsg:878
-#: data/mp/messages/resmessages3.rmsg:891
-#: data/mp/messages/resmessagesall.rmsg:215
 msgid "All cannons upgraded automatically"
 msgstr "Toate tunurile îmbunătățite automat"
 
@@ -644,10 +442,6 @@ msgstr "Toate tunurile îmbunătățite automat"
 #: data/base/messages/resmessages1.rmsg:602
 #: data/base/messages/resmessages2.rmsg:784
 #: data/base/messages/strings/resstrings.txt:765
-#: data/mp/messages/resmessages12.rmsg:108
-#: data/mp/messages/resmessages1.rmsg:603
-#: data/mp/messages/resmessages2.rmsg:784
-#: data/mp/messages/resmessagesall.rmsg:786
 #: data/mp/messages/strings/resstrings.txt:804
 msgid "Flamer Upgrade"
 msgstr "Îmbunătățire a aruncătorului de flăcări"
@@ -656,9 +450,6 @@ msgstr "Îmbunătățire a aruncătorului de flăcări"
 #: data/base/messages/resmessages12.rmsg:213
 #: data/base/messages/resmessages2.rmsg:863
 #: data/base/messages/strings/resstrings.txt:810
-#: data/mp/messages/resmessages12.rmsg:109
-#: data/mp/messages/resmessages12.rmsg:213
-#: data/mp/messages/resmessages2.rmsg:863
 #: data/mp/messages/strings/resstrings.txt:851
 msgid "Automatic loading mechanism replaces manual loader"
 msgstr "Mecanism automat înlocuiește încărcarea manuală"
@@ -671,10 +462,6 @@ msgstr "Mărește rata de foc a aruncătorului"
 #: data/base/messages/resmessages1.rmsg:605
 #: data/base/messages/resmessages2.rmsg:787
 #: data/base/messages/strings/resstrings.txt:768
-#: data/mp/messages/resmessages12.rmsg:111
-#: data/mp/messages/resmessages1.rmsg:606
-#: data/mp/messages/resmessages2.rmsg:787
-#: data/mp/messages/resmessagesall.rmsg:789
 #: data/mp/messages/strings/resstrings.txt:807
 msgid "All flamers upgraded automatically"
 msgstr "Toate aruncătoarele îmbunătățite instantaneu"
@@ -693,22 +480,6 @@ msgstr "Toate aruncătoarele îmbunătățite instantaneu"
 #: data/base/messages/strings/resstrings.txt:729
 #: data/base/messages/strings/resstrings.txt:735
 #: data/base/messages/strings/resstrings.txt:757
-#: data/mp/messages/resmessages12.rmsg:121
-#: data/mp/messages/resmessages1.rmsg:538
-#: data/mp/messages/resmessages1.rmsg:551
-#: data/mp/messages/resmessages1.rmsg:564
-#: data/mp/messages/resmessages1.rmsg:590
-#: data/mp/messages/resmessages1.rmsg:616
-#: data/mp/messages/resmessages1.rmsg:629
-#: data/mp/messages/resmessages23.rmsg:212
-#: data/mp/messages/resmessages2.rmsg:745
-#: data/mp/messages/resmessages2.rmsg:758
-#: data/mp/messages/resmessages2.rmsg:771
-#: data/mp/messages/resmessagesall.rmsg:383
-#: data/mp/messages/resmessagesall.rmsg:500
-#: data/mp/messages/resmessagesall.rmsg:565
-#: data/mp/messages/resmessagesall.rmsg:708
-#: data/mp/messages/resmessagesall.rmsg:890
 #: data/mp/messages/strings/resstrings.txt:764
 #: data/mp/messages/strings/resstrings.txt:770
 #: data/mp/messages/strings/resstrings.txt:796
@@ -716,7 +487,6 @@ msgid "New Weapon Turret Available"
 msgstr "Nouă turelă disponibilă"
 
 #: data/base/messages/resmessages12.rmsg:122
-#: data/mp/messages/resmessages12.rmsg:122
 msgid ".50-calibre heavy machinegun"
 msgstr "Mitralieră grea de calibrul .50"
 
@@ -724,12 +494,6 @@ msgstr "Mitralieră grea de calibrul .50"
 #: data/base/messages/resmessages1.rmsg:617
 #: data/base/messages/resmessages1.rmsg:630
 #: data/base/messages/resmessages23.rmsg:214
-#: data/mp/messages/resmessages12.rmsg:123
-#: data/mp/messages/resmessages1.rmsg:618
-#: data/mp/messages/resmessages1.rmsg:631
-#: data/mp/messages/resmessages23.rmsg:214
-#: data/mp/messages/resmessagesall.rmsg:892
-#: data/mp/messages/resmessagesall.rmsg:905
 msgid "Best Targets: Infantry, base structures, wheeled vehicles"
 msgstr "Ținte ideale: Infanterie, clădiri, unități cu roți"
 
@@ -772,55 +536,6 @@ msgstr "Ținte ideale: Infanterie, clădiri, unități cu roți"
 #: data/base/messages/strings/resstrings.txt:656
 #: data/base/messages/strings/resstrings.txt:688
 #: data/base/messages/strings/resstrings.txt:694
-#: data/mp/messages/resmessages12.rmsg:124
-#: data/mp/messages/resmessages1.rmsg:45
-#: data/mp/messages/resmessages1.rmsg:58
-#: data/mp/messages/resmessages1.rmsg:71
-#: data/mp/messages/resmessages1.rmsg:84
-#: data/mp/messages/resmessages1.rmsg:489
-#: data/mp/messages/resmessages1.rmsg:541
-#: data/mp/messages/resmessages1.rmsg:554
-#: data/mp/messages/resmessages2.rmsg:32
-#: data/mp/messages/resmessages2.rmsg:45
-#: data/mp/messages/resmessages2.rmsg:592
-#: data/mp/messages/resmessages2.rmsg:605
-#: data/mp/messages/resmessages2.rmsg:618
-#: data/mp/messages/resmessages2.rmsg:631
-#: data/mp/messages/resmessages2.rmsg:683
-#: data/mp/messages/resmessages2.rmsg:696
-#: data/mp/messages/resmessages3.rmsg:97
-#: data/mp/messages/resmessages3.rmsg:110
-#: data/mp/messages/resmessages3.rmsg:123
-#: data/mp/messages/resmessages3.rmsg:136
-#: data/mp/messages/resmessages3.rmsg:149
-#: data/mp/messages/resmessages3.rmsg:162
-#: data/mp/messages/resmessages3.rmsg:175
-#: data/mp/messages/resmessages3.rmsg:188
-#: data/mp/messages/resmessages3.rmsg:201
-#: data/mp/messages/resmessages3.rmsg:943
-#: data/mp/messages/resmessages3.rmsg:956
-#: data/mp/messages/resmessages3.rmsg:1203
-#: data/mp/messages/resmessages3.rmsg:1216
-#: data/mp/messages/resmessagesall.rmsg:227
-#: data/mp/messages/resmessagesall.rmsg:241
-#: data/mp/messages/resmessagesall.rmsg:294
-#: data/mp/messages/resmessagesall.rmsg:307
-#: data/mp/messages/resmessagesall.rmsg:320
-#: data/mp/messages/resmessagesall.rmsg:333
-#: data/mp/messages/resmessagesall.rmsg:437
-#: data/mp/messages/resmessagesall.rmsg:450
-#: data/mp/messages/resmessagesall.rmsg:463
-#: data/mp/messages/resmessagesall.rmsg:476
-#: data/mp/messages/resmessagesall.rmsg:490
-#: data/mp/messages/resmessagesall.rmsg:568
-#: data/mp/messages/resmessagesall.rmsg:619
-#: data/mp/messages/resmessagesall.rmsg:632
-#: data/mp/messages/resmessagesall.rmsg:645
-#: data/mp/messages/resmessagesall.rmsg:763
-#: data/mp/messages/resmessagesall.rmsg:776
-#: data/mp/messages/resmessagesall.rmsg:841
-#: data/mp/messages/resmessagesall.rmsg:867
-#: data/mp/messages/resmessagesall.rmsg:880
 #: data/mp/messages/strings/resstrings.txt:55
 #: data/mp/messages/strings/resstrings.txt:87
 #: data/mp/messages/strings/resstrings.txt:99
@@ -844,21 +559,12 @@ msgstr "Rezistență a șasiului: Medie"
 #: data/base/messages/resmessages3.rmsg:1018
 #: data/base/messages/strings/resstrings.txt:845
 #: data/base/messages/strings/resstrings.txt:857
-#: data/mp/messages/resmessages12.rmsg:134
-#: data/mp/messages/resmessages1.rmsg:642
-#: data/mp/messages/resmessages1.rmsg:655
-#: data/mp/messages/resmessages23.rmsg:173
-#: data/mp/messages/resmessages2.rmsg:875
-#: data/mp/messages/resmessages2.rmsg:888
-#: data/mp/messages/resmessages3.rmsg:1005
-#: data/mp/messages/resmessages3.rmsg:1018
 #: data/mp/messages/strings/resstrings.txt:888
 #: data/mp/messages/strings/resstrings.txt:900
 msgid "Machinegun Upgrade"
 msgstr "Îmbunătățire a mitralierei"
 
 #: data/base/messages/resmessages12.rmsg:135
-#: data/mp/messages/resmessages12.rmsg:135
 msgid "Chaingun mechanism replaces belt-feed"
 msgstr "Mecanism automatizat înlocuiește banda de cartușe"
 
@@ -880,14 +586,6 @@ msgstr "Mărește rata de foc a mitralierei"
 #: data/base/messages/resmessages3.rmsg:1021
 #: data/base/messages/strings/resstrings.txt:848
 #: data/base/messages/strings/resstrings.txt:860
-#: data/mp/messages/resmessages12.rmsg:137
-#: data/mp/messages/resmessages1.rmsg:645
-#: data/mp/messages/resmessages1.rmsg:658
-#: data/mp/messages/resmessages23.rmsg:176
-#: data/mp/messages/resmessages2.rmsg:878
-#: data/mp/messages/resmessages2.rmsg:891
-#: data/mp/messages/resmessages3.rmsg:1008
-#: data/mp/messages/resmessages3.rmsg:1021
 #: data/mp/messages/strings/resstrings.txt:891
 #: data/mp/messages/strings/resstrings.txt:903
 msgid "All machineguns upgraded automatically"
@@ -904,15 +602,6 @@ msgstr "Toate mitralierele îmbunătățite instantaneu."
 #: data/base/messages/strings/resstrings.txt:779
 #: data/base/messages/strings/resstrings.txt:787
 #: data/base/messages/strings/resstrings.txt:891
-#: data/mp/messages/resmessages12.rmsg:147
-#: data/mp/messages/resmessages1.rmsg:668
-#: data/mp/messages/resmessages23.rmsg:199
-#: data/mp/messages/resmessages2.rmsg:797
-#: data/mp/messages/resmessages2.rmsg:810
-#: data/mp/messages/resmessages2.rmsg:823
-#: data/mp/messages/resmessages2.rmsg:901
-#: data/mp/messages/resmessagesall.rmsg:344
-#: data/mp/messages/resmessagesall.rmsg:357
 #: data/mp/messages/strings/resstrings.txt:812
 #: data/mp/messages/strings/resstrings.txt:820
 #: data/mp/messages/strings/resstrings.txt:828
@@ -923,8 +612,6 @@ msgstr "Nouă Armă pentru Țintire Indirectă Disponibilă"
 #: data/base/messages/resmessages12.rmsg:148
 #: data/base/messages/resmessages2.rmsg:902
 #: data/base/messages/strings/resstrings.txt:892
-#: data/mp/messages/resmessages12.rmsg:148
-#: data/mp/messages/resmessages2.rmsg:902
 #: data/mp/messages/strings/resstrings.txt:935
 msgid "May be assigned to a sensor"
 msgstr "Poate fi asociat unui senzor"
@@ -933,10 +620,6 @@ msgstr "Poate fi asociat unui senzor"
 #: data/base/messages/resmessages1.rmsg:669
 #: data/base/messages/resmessages2.rmsg:903
 #: data/base/messages/strings/resstrings.txt:893
-#: data/mp/messages/resmessages12.rmsg:149
-#: data/mp/messages/resmessages1.rmsg:670
-#: data/mp/messages/resmessages2.rmsg:903
-#: data/mp/messages/resmessagesall.rmsg:359
 #: data/mp/messages/strings/resstrings.txt:936
 msgid "Best Targets: Base structures, infantry, wheeled vehicles"
 msgstr "Ținte Ideale: Clădiri, infanterie, unități cu roți"
@@ -957,22 +640,6 @@ msgstr "Ținte Ideale: Clădiri, infanterie, unități cu roți"
 #: data/base/messages/resmessagesall.rmsg:150
 #: data/base/messages/resmessagesall.rmsg:163
 #: data/base/messages/strings/resstrings.txt:894
-#: data/mp/messages/resmessages12.rmsg:150
-#: data/mp/messages/resmessages12.rmsg:189
-#: data/mp/messages/resmessages12.rmsg:254
-#: data/mp/messages/resmessages12.rmsg:267
-#: data/mp/messages/resmessages1.rmsg:671
-#: data/mp/messages/resmessages1.rmsg:697
-#: data/mp/messages/resmessages2.rmsg:904
-#: data/mp/messages/resmessages3.rmsg:1034
-#: data/mp/messages/resmessages3.rmsg:1047
-#: data/mp/messages/resmessages3.rmsg:1099
-#: data/mp/messages/resmessages3.rmsg:1112
-#: data/mp/messages/resmessages3.rmsg:1125
-#: data/mp/messages/resmessages3.rmsg:1138
-#: data/mp/messages/resmessagesall.rmsg:189
-#: data/mp/messages/resmessagesall.rmsg:202
-#: data/mp/messages/resmessagesall.rmsg:360
 #: data/mp/messages/strings/resstrings.txt:937
 msgid "Body Points: Very Low"
 msgstr "Rezistență a șasiului: Foarte slabă"
@@ -985,19 +652,11 @@ msgstr "Rezistență a șasiului: Foarte slabă"
 #: data/base/messages/resmessages3.rmsg:1174
 #: data/base/messages/resmessages3.rmsg:1187
 #: data/base/messages/strings/resstrings.txt:905
-#: data/mp/messages/resmessages12.rmsg:160
-#: data/mp/messages/resmessages12.rmsg:173
-#: data/mp/messages/resmessages1.rmsg:681
-#: data/mp/messages/resmessages23.rmsg:186
-#: data/mp/messages/resmessages2.rmsg:914
-#: data/mp/messages/resmessages3.rmsg:1174
-#: data/mp/messages/resmessages3.rmsg:1187
 #: data/mp/messages/strings/resstrings.txt:950
 msgid "Mortar Upgrade"
 msgstr "Îmbunătățire a mortierelor"
 
 #: data/base/messages/resmessages12.rmsg:161
-#: data/mp/messages/resmessages12.rmsg:161
 msgid "Targeting systems compensate for distance and weather conditions"
 msgstr "Sisteme de țintire compensează distanța și condițiile meteo"
 
@@ -1015,19 +674,11 @@ msgstr "Mărește precizia mortierelor"
 #: data/base/messages/resmessages3.rmsg:1177
 #: data/base/messages/resmessages3.rmsg:1190
 #: data/base/messages/strings/resstrings.txt:908
-#: data/mp/messages/resmessages12.rmsg:163
-#: data/mp/messages/resmessages12.rmsg:176
-#: data/mp/messages/resmessages1.rmsg:684
-#: data/mp/messages/resmessages23.rmsg:189
-#: data/mp/messages/resmessages2.rmsg:917
-#: data/mp/messages/resmessages3.rmsg:1177
-#: data/mp/messages/resmessages3.rmsg:1190
 #: data/mp/messages/strings/resstrings.txt:953
 msgid "All mortars upgraded automatically"
 msgstr "Toate mortierele îmbunătățite instantaneu"
 
 #: data/base/messages/resmessages12.rmsg:174
-#: data/mp/messages/resmessages12.rmsg:174
 msgid "Automatic loader replaces manual feed"
 msgstr "Încărcătorul automat înlocuiește încărcarea manuală"
 
@@ -1042,22 +693,14 @@ msgstr "Mărește rata de foc a mortierelor"
 #: data/base/messages/resmessages1.rmsg:693
 #: data/base/messages/resmessagesall.rmsg:147
 #: data/base/messages/resmessagesall.rmsg:160
-#: data/mp/messages/resmessages12.rmsg:186
-#: data/mp/messages/resmessages12.rmsg:251
-#: data/mp/messages/resmessages12.rmsg:264
-#: data/mp/messages/resmessages1.rmsg:694
-#: data/mp/messages/resmessagesall.rmsg:186
-#: data/mp/messages/resmessagesall.rmsg:199
 msgid "New Rocket Available"
 msgstr "Nouă rachetă disponibilă"
 
 #: data/base/messages/resmessages12.rmsg:187
-#: data/mp/messages/resmessages12.rmsg:187
 msgid "Rocket artillery; can be assigned to a sensor"
 msgstr "Artilerie cu rachete; poate fi atașată unui senzor"
 
 #: data/base/messages/resmessages12.rmsg:188
-#: data/mp/messages/resmessages12.rmsg:188
 msgid "Best Targets: Vehicles and Emplacements"
 msgstr "Ținta ideală: Vehicule și clădiri defensive"
 
@@ -1068,22 +711,11 @@ msgstr "Ținta ideală: Vehicule și clădiri defensive"
 #: data/base/messages/resmessages2.rmsg:940
 #: data/base/messages/resmessagesall.rmsg:134
 #: data/base/messages/strings/resstrings.txt:965
-#: data/mp/messages/resmessages12.rmsg:199
-#: data/mp/messages/resmessages12.rmsg:238
-#: data/mp/messages/resmessages1.rmsg:707
-#: data/mp/messages/resmessages1.rmsg:720
-#: data/mp/messages/resmessages1.rmsg:733
-#: data/mp/messages/resmessages1.rmsg:746
-#: data/mp/messages/resmessages1.rmsg:759
-#: data/mp/messages/resmessages2.rmsg:927
-#: data/mp/messages/resmessages2.rmsg:940
-#: data/mp/messages/resmessagesall.rmsg:173
 #: data/mp/messages/strings/resstrings.txt:1010
 msgid "Rocket Upgrade"
 msgstr "Îmbunătățire la rachete"
 
 #: data/base/messages/resmessages12.rmsg:200
-#: data/mp/messages/resmessages12.rmsg:200
 msgid "Autoloader increases reload rate"
 msgstr "Autoîncărcătorul micșorează timpul de încărcare"
 
@@ -1098,16 +730,6 @@ msgstr "Morește rata de foc a rachetelor"
 #: data/base/messages/resmessages2.rmsg:943
 #: data/base/messages/resmessagesall.rmsg:137
 #: data/base/messages/strings/resstrings.txt:968
-#: data/mp/messages/resmessages12.rmsg:202
-#: data/mp/messages/resmessages12.rmsg:241
-#: data/mp/messages/resmessages1.rmsg:710
-#: data/mp/messages/resmessages1.rmsg:723
-#: data/mp/messages/resmessages1.rmsg:736
-#: data/mp/messages/resmessages1.rmsg:749
-#: data/mp/messages/resmessages1.rmsg:762
-#: data/mp/messages/resmessages2.rmsg:930
-#: data/mp/messages/resmessages2.rmsg:943
-#: data/mp/messages/resmessagesall.rmsg:176
 #: data/mp/messages/strings/resstrings.txt:1013
 msgid "All rockets upgraded automatically"
 msgstr "Toate rachetele îmbunătățite automat"
@@ -1118,7 +740,6 @@ msgid "Increases Cannon ROF"
 msgstr "Mărește rata de foc a tunurilor"
 
 #: data/base/messages/resmessages12.rmsg:226
-#: data/mp/messages/resmessages12.rmsg:226
 msgid "Armor-Piercing Fin-Stabilized Discarding Sabot"
 msgstr ""
 
@@ -1129,7 +750,6 @@ msgid "Increases Cannon damage"
 msgstr "Mărește puterea tunurilor"
 
 #: data/base/messages/resmessages12.rmsg:239
-#: data/mp/messages/resmessages12.rmsg:239
 msgid "Rocket tracks the laser designator to the target"
 msgstr "Racheta urmărește marcajul laser până la destinație"
 
@@ -1140,7 +760,6 @@ msgid "Increases Rocket accuracy"
 msgstr "Mărește precizia rachetelor"
 
 #: data/base/messages/resmessages12.rmsg:252
-#: data/mp/messages/resmessages12.rmsg:252
 msgid "Heavy anti-tank rocket"
 msgstr "Rachetă grea anti-tanc"
 
@@ -1157,42 +776,24 @@ msgstr "Rachetă grea anti-tanc"
 #: data/base/messages/resmessagesall.rmsg:149
 #: data/base/messages/strings/resstrings.txt:731
 #: data/base/messages/strings/resstrings.txt:737
-#: data/mp/messages/resmessages12.rmsg:253
-#: data/mp/messages/resmessages1.rmsg:540
-#: data/mp/messages/resmessages2.rmsg:760
-#: data/mp/messages/resmessages3.rmsg:1033
-#: data/mp/messages/resmessages3.rmsg:1202
-#: data/mp/messages/resmessages3.rmsg:1215
-#: data/mp/messages/resmessages3.rmsg:1228
-#: data/mp/messages/resmessagesall.rmsg:188
-#: data/mp/messages/resmessagesall.rmsg:502
-#: data/mp/messages/resmessagesall.rmsg:567
-#: data/mp/messages/resmessagesall.rmsg:931
 #: data/mp/messages/strings/resstrings.txt:766
 #: data/mp/messages/strings/resstrings.txt:772
 msgid "Best Targets: Vehicles"
 msgstr "Ținta ideală: Vehicule"
 
 #: data/base/messages/resmessages12.rmsg:265
-#: data/mp/messages/resmessages12.rmsg:265
 msgid "Fires salvoes of mini-rockets"
 msgstr "Lansează salve de mini-rachete"
 
 #: data/base/messages/resmessages12.rmsg:266
-#: data/mp/messages/resmessages12.rmsg:266
 msgid "Best Targets: Base structures"
 msgstr "Ținta ideală: Clădiri"
 
 #: data/base/messages/resmessages1.rmsg:5
-#: data/mp/messages/resmessages1.rmsg:5
 msgid "New battlefield computer system"
 msgstr "Nou computer pentru câmpul de luptă"
 
 #: data/base/messages/resmessages1.rmsg:6
-#: data/mp/messages/resmessages1.rmsg:6
-#: data/mp/messages/resmessagesall.rmsg:944
-#: data/mp/messages/resmessagesall.rmsg:957
-#: data/mp/messages/resmessagesall.rmsg:970
 msgid "Commander leads groups acts as factory delivery point"
 msgstr "Comandantul conduce batalioane, primește întăriri de la fabrici"
 
@@ -1202,15 +803,6 @@ msgstr "Comandantul conduce batalioane, primește întăriri de la fabrici"
 #: data/base/messages/resmessages2.rmsg:761
 #: data/base/messages/resmessages3.rmsg:1229
 #: data/base/messages/strings/resstrings.txt:738
-#: data/mp/messages/resmessages1.rmsg:7
-#: data/mp/messages/resmessages1.rmsg:515
-#: data/mp/messages/resmessages1.rmsg:567
-#: data/mp/messages/resmessages2.rmsg:761
-#: data/mp/messages/resmessages3.rmsg:1229
-#: data/mp/messages/resmessagesall.rmsg:503
-#: data/mp/messages/resmessagesall.rmsg:945
-#: data/mp/messages/resmessagesall.rmsg:958
-#: data/mp/messages/resmessagesall.rmsg:971
 #: data/mp/messages/strings/resstrings.txt:773
 msgid "Body Points: High"
 msgstr "Rezistență a șasiului: Mare"
@@ -1218,24 +810,18 @@ msgstr "Rezistență a șasiului: Mare"
 #: data/base/messages/resmessages1.rmsg:17
 #: data/base/messages/resmessages3.rmsg:17
 #: data/base/messages/resmessages3.rmsg:30
-#: data/mp/messages/resmessages1.rmsg:17
-#: data/mp/messages/resmessages3.rmsg:17
-#: data/mp/messages/resmessages3.rmsg:30
 msgid "Computer Technology Breakthrough"
 msgstr "Descoperire în tehnologia calculatoarelor"
 
 #: data/base/messages/resmessages1.rmsg:18
-#: data/mp/messages/resmessages1.rmsg:18
 msgid "Synaptic Link allows humans to interface directly with computers"
 msgstr "Legătura sinaptică permite oamenilor să comunice direct cu calculatoarele"
 
 #: data/base/messages/resmessages1.rmsg:19
-#: data/mp/messages/resmessages1.rmsg:19
 msgid "Cyborgs can now be researched"
 msgstr "Cyborgii pot fi acum cercetață"
 
 #: data/base/messages/resmessages1.rmsg:20
-#: data/mp/messages/resmessages1.rmsg:20
 msgid "New research options available"
 msgstr "Noi opțiuni de cercetare disponibile"
 
@@ -1244,18 +830,12 @@ msgstr "Noi opțiuni de cercetare disponibile"
 #: data/base/messages/resmessages3.rmsg:69
 #: data/base/messages/resmessages3.rmsg:82
 #: data/base/messages/strings/resstrings.txt:31
-#: data/mp/messages/resmessages1.rmsg:30
-#: data/mp/messages/resmessages2.rmsg:17
-#: data/mp/messages/resmessages3.rmsg:69
-#: data/mp/messages/resmessages3.rmsg:82
 #: data/mp/messages/strings/resstrings.txt:35
 msgid "Cyborg Materials Improved"
 msgstr "Materialele pentru cyborgi îmbunătățite"
 
 #: data/base/messages/resmessages1.rmsg:31
 #: data/base/messages/resmessages1.rmsg:473
-#: data/mp/messages/resmessages1.rmsg:31
-#: data/mp/messages/resmessages1.rmsg:474
 msgid "Layered composite alloys and energy-absorbing fibres"
 msgstr "Aliaje compozite stratificate și fibre absorbante de energie"
 
@@ -1278,14 +858,6 @@ msgstr "Îmbunătățește armura cinetică și rezistența la avarie"
 #: data/base/messages/resmessages3.rmsg:85
 #: data/base/messages/strings/resstrings.txt:34
 #: data/base/messages/strings/resstrings.txt:44
-#: data/mp/messages/resmessages1.rmsg:33
-#: data/mp/messages/resmessages23.rmsg:7
-#: data/mp/messages/resmessages2.rmsg:7
-#: data/mp/messages/resmessages2.rmsg:20
-#: data/mp/messages/resmessages3.rmsg:7
-#: data/mp/messages/resmessages3.rmsg:59
-#: data/mp/messages/resmessages3.rmsg:72
-#: data/mp/messages/resmessages3.rmsg:85
 #: data/mp/messages/strings/resstrings.txt:38
 #: data/mp/messages/strings/resstrings.txt:48
 msgid "All Cyborgs upgraded automatically"
@@ -1303,34 +875,12 @@ msgstr "Toți cyborgii îmbunătățiți instantaneu"
 #: data/base/messages/resmessages3.rmsg:134
 #: data/base/messages/strings/resstrings.txt:49
 #: data/base/messages/strings/resstrings.txt:65
-#: data/mp/messages/resmessages1.rmsg:43
-#: data/mp/messages/resmessages1.rmsg:56
-#: data/mp/messages/resmessages1.rmsg:69
-#: data/mp/messages/resmessages1.rmsg:82
-#: data/mp/messages/resmessages2.rmsg:30
-#: data/mp/messages/resmessages2.rmsg:43
-#: data/mp/messages/resmessages3.rmsg:95
-#: data/mp/messages/resmessages3.rmsg:108
-#: data/mp/messages/resmessages3.rmsg:121
-#: data/mp/messages/resmessages3.rmsg:134
-#: data/mp/messages/resmessagesall.rmsg:292
-#: data/mp/messages/resmessagesall.rmsg:305
-#: data/mp/messages/resmessagesall.rmsg:318
-#: data/mp/messages/resmessagesall.rmsg:331
-#: data/mp/messages/resmessagesall.rmsg:435
-#: data/mp/messages/resmessagesall.rmsg:448
-#: data/mp/messages/resmessagesall.rmsg:461
-#: data/mp/messages/resmessagesall.rmsg:474
-#: data/mp/messages/resmessagesall.rmsg:617
-#: data/mp/messages/resmessagesall.rmsg:630
-#: data/mp/messages/resmessagesall.rmsg:643
 #: data/mp/messages/strings/resstrings.txt:53
 #: data/mp/messages/strings/resstrings.txt:85
 msgid "New Cyborg Available"
 msgstr "Nou cyborg disponibil"
 
 #: data/base/messages/resmessages1.rmsg:44
-#: data/mp/messages/resmessages1.rmsg:44
 msgid "Armed with Cyborg Machinegun"
 msgstr "Înarmat cu mitralieră pentru cyborgi"
 
@@ -1352,31 +902,6 @@ msgstr "Înarmat cu mitralieră pentru cyborgi"
 #: data/base/messages/strings/resstrings.txt:68
 #: data/base/messages/strings/resstrings.txt:80
 #: data/base/messages/strings/resstrings.txt:86
-#: data/mp/messages/resmessages1.rmsg:46
-#: data/mp/messages/resmessages1.rmsg:59
-#: data/mp/messages/resmessages1.rmsg:72
-#: data/mp/messages/resmessages1.rmsg:85
-#: data/mp/messages/resmessages2.rmsg:33
-#: data/mp/messages/resmessages2.rmsg:46
-#: data/mp/messages/resmessages3.rmsg:98
-#: data/mp/messages/resmessages3.rmsg:111
-#: data/mp/messages/resmessages3.rmsg:124
-#: data/mp/messages/resmessages3.rmsg:137
-#: data/mp/messages/resmessages3.rmsg:150
-#: data/mp/messages/resmessages3.rmsg:163
-#: data/mp/messages/resmessages3.rmsg:176
-#: data/mp/messages/resmessages3.rmsg:189
-#: data/mp/messages/resmessagesall.rmsg:295
-#: data/mp/messages/resmessagesall.rmsg:308
-#: data/mp/messages/resmessagesall.rmsg:321
-#: data/mp/messages/resmessagesall.rmsg:334
-#: data/mp/messages/resmessagesall.rmsg:438
-#: data/mp/messages/resmessagesall.rmsg:451
-#: data/mp/messages/resmessagesall.rmsg:464
-#: data/mp/messages/resmessagesall.rmsg:477
-#: data/mp/messages/resmessagesall.rmsg:620
-#: data/mp/messages/resmessagesall.rmsg:633
-#: data/mp/messages/resmessagesall.rmsg:646
 #: data/mp/messages/strings/resstrings.txt:56
 #: data/mp/messages/strings/resstrings.txt:88
 #: data/mp/messages/strings/resstrings.txt:100
@@ -1385,17 +910,14 @@ msgid "Requires Cyborg factory to produce"
 msgstr "Necesită fabrică de cyborgi pentru a fi produs"
 
 #: data/base/messages/resmessages1.rmsg:57
-#: data/mp/messages/resmessages1.rmsg:57
 msgid "Armed with Cyborg Cannon"
 msgstr "Înarmat cu tun pentru cyborgi"
 
 #: data/base/messages/resmessages1.rmsg:70
-#: data/mp/messages/resmessages1.rmsg:70
 msgid "Armed with Cyborg Flamer"
 msgstr "Înarmat cu aruncător de flăcări pentru cyborgi"
 
 #: data/base/messages/resmessages1.rmsg:83
-#: data/mp/messages/resmessages1.rmsg:83
 msgid "Armed with Lance Anti-Tank rocket"
 msgstr "Înarmat cu lansator de rachete anti-tanc"
 
@@ -1404,16 +926,11 @@ msgstr "Înarmat cu lansator de rachete anti-tanc"
 #: data/base/messages/resmessages3.rmsg:212
 #: data/base/messages/resmessages3.rmsg:225
 #: data/base/messages/strings/resstrings.txt:103
-#: data/mp/messages/resmessages1.rmsg:95
-#: data/mp/messages/resmessages2.rmsg:56
-#: data/mp/messages/resmessages3.rmsg:212
-#: data/mp/messages/resmessages3.rmsg:225
 #: data/mp/messages/strings/resstrings.txt:123
 msgid "Defenses Improved"
 msgstr "Apărarea îmbunătățită"
 
 #: data/base/messages/resmessages1.rmsg:96
-#: data/mp/messages/resmessages1.rmsg:96
 msgid "Improved Titanium-reinforced concrete"
 msgstr "Beton îmbunătățit, ranforsat cu titan"
 
@@ -1426,21 +943,15 @@ msgstr "Sporește armura și rezistența la avarii"
 #: data/base/messages/resmessages3.rmsg:215
 #: data/base/messages/resmessages3.rmsg:228
 #: data/base/messages/strings/resstrings.txt:106
-#: data/mp/messages/resmessages1.rmsg:98
-#: data/mp/messages/resmessages2.rmsg:59
-#: data/mp/messages/resmessages3.rmsg:215
-#: data/mp/messages/resmessages3.rmsg:228
 #: data/mp/messages/strings/resstrings.txt:126
 msgid "All defenses and walls upgraded automatically"
 msgstr "Toate zidurile și clădirile defensive îmbunătățite automat"
 
 #: data/base/messages/resmessages1.rmsg:109
-#: data/mp/messages/resmessages1.rmsg:109
 msgid "Steel tower with machinegun"
 msgstr "Turn din oțel cu mitralieră"
 
 #: data/base/messages/resmessages1.rmsg:111
-#: data/mp/messages/resmessages1.rmsg:111
 msgid "Defensive Strength: Low"
 msgstr "Forță defensivă: Mică"
 
@@ -1449,7 +960,6 @@ msgid "Armored guard tower with Mini-Pod Rocket"
 msgstr "Turn ranforsat cu mini-rachete"
 
 #: data/base/messages/resmessages1.rmsg:135
-#: data/mp/messages/resmessages1.rmsg:135
 msgid "Armored bunker with Machinegun"
 msgstr "Buncăr ranforsat cu mitralieră"
 
@@ -1458,40 +968,33 @@ msgid "Armored bunker with Lancer AT rocket"
 msgstr "Buncăr ranforsat cu lansator de rachete AT"
 
 #: data/base/messages/resmessages1.rmsg:161
-#: data/mp/messages/resmessages1.rmsg:161
 msgid "Armored bunker with Flamer"
 msgstr "Buncăr ranforsat cu aruncător de flăcări"
 
 #: data/base/messages/resmessages1.rmsg:174
-#: data/mp/messages/resmessages1.rmsg:174
 msgid "Armored bunker with Light Cannon"
 msgstr "Buncăr ranforsat cu tun ușor"
 
 #: data/base/messages/resmessages1.rmsg:187
-#: data/mp/messages/resmessages1.rmsg:187
 msgid "Armored hardpoint with Light Cannon"
 msgstr "Bloc ranforsat cu tun ușor"
 
 #: data/base/messages/resmessages1.rmsg:200
-#: data/mp/messages/resmessages1.rmsg:200
 msgid "Armored hardpoint with Medium Cannon"
 msgstr "Bloc ranforsat cu tun mediu"
 
 #: data/base/messages/resmessages1.rmsg:213
-#: data/mp/messages/resmessages1.rmsg:213
 msgid "Armored hardpoint with Heavy Cannon"
 msgstr "Bloc ranforsat cu tun greu"
 
 #: data/base/messages/resmessages1.rmsg:226
 #: data/base/messages/strings/resstrings.txt:324
-#: data/mp/messages/resmessages1.rmsg:226
 #: data/mp/messages/strings/resstrings.txt:352
 msgid "Reinforced concrete tank traps"
 msgstr "Capcane ranforsate de tancuri"
 
 #: data/base/messages/resmessages1.rmsg:227
 #: data/base/messages/strings/resstrings.txt:325
-#: data/mp/messages/resmessages1.rmsg:227
 #: data/mp/messages/strings/resstrings.txt:353
 msgid "Prevents enemy movement"
 msgstr "Oprește mișcarea inamicilor"
@@ -1501,26 +1004,18 @@ msgstr "Oprește mișcarea inamicilor"
 #: data/base/messages/resmessages1.rmsg:290
 #: data/base/messages/resmessagesall.rmsg:17
 #: data/base/messages/resmessagesall.rmsg:30
-#: data/mp/messages/resmessages1.rmsg:238
-#: data/mp/messages/resmessages1.rmsg:264
-#: data/mp/messages/resmessages1.rmsg:290
-#: data/mp/messages/resmessagesall.rmsg:17
-#: data/mp/messages/resmessagesall.rmsg:30
 msgid "New Base Structure Available"
 msgstr "Nouă clădire disponibilă"
 
 #: data/base/messages/resmessages1.rmsg:239
-#: data/mp/messages/resmessages1.rmsg:239
 msgid "New Repair Facility Repairs Damaged Units"
 msgstr "Noua stație de reparații repară unitățile avariate"
 
 #: data/base/messages/resmessages1.rmsg:240
-#: data/mp/messages/resmessages1.rmsg:240
 msgid "Use the Command Console to send units back for repair"
 msgstr "Folosește consola de comandă pentru a trimite unități înapoi la reparații"
 
 #: data/base/messages/resmessages1.rmsg:241
-#: data/mp/messages/resmessages1.rmsg:241
 msgid "Or select the Repair Facility as a unit's target"
 msgstr "Sau selectează stația de reparații ca destinație pentru unitate"
 
@@ -1528,15 +1023,11 @@ msgstr "Sau selectează stația de reparații ca destinație pentru unitate"
 #: data/base/messages/resmessages2.rmsg:329
 #: data/base/messages/resmessages3.rmsg:420
 #: data/base/messages/strings/resstrings.txt:333
-#: data/mp/messages/resmessages1.rmsg:251
-#: data/mp/messages/resmessages2.rmsg:329
-#: data/mp/messages/resmessages3.rmsg:420
 #: data/mp/messages/strings/resstrings.txt:361
 msgid "Repair Facility Improved"
 msgstr "Stația de reparații îmbunătățită"
 
 #: data/base/messages/resmessages1.rmsg:252
-#: data/mp/messages/resmessages1.rmsg:252
 msgid "New automated repair techniques"
 msgstr "Noi tehnici de reparație automatizată"
 
@@ -1552,25 +1043,19 @@ msgstr "Mărește viteza de reparație"
 #: data/base/messages/resmessages2.rmsg:332
 #: data/base/messages/resmessages3.rmsg:423
 #: data/base/messages/strings/resstrings.txt:336
-#: data/mp/messages/resmessages1.rmsg:254
-#: data/mp/messages/resmessages2.rmsg:332
-#: data/mp/messages/resmessages3.rmsg:423
 #: data/mp/messages/strings/resstrings.txt:364
 msgid "All repair facilities upgraded automatically"
 msgstr "Toate stațiile de reparații îmbunătățite instantaneu"
 
 #: data/base/messages/resmessages1.rmsg:265
-#: data/mp/messages/resmessages1.rmsg:265
 msgid "Enables command turret research"
 msgstr "Permite cercetarea turelei de comandă"
 
 #: data/base/messages/resmessages1.rmsg:266
-#: data/mp/messages/resmessages1.rmsg:266
 msgid "Directs and collates information for command turrets"
 msgstr "Direcționează și organizează informații pentru Comandanți"
 
 #: data/base/messages/resmessages1.rmsg:267
-#: data/mp/messages/resmessages1.rmsg:267
 msgid "Controls up to five commanders"
 msgstr "Controlează până la cinci comandanți"
 
@@ -1578,9 +1063,6 @@ msgstr "Controlează până la cinci comandanți"
 #: data/base/messages/resmessages2.rmsg:342
 #: data/base/messages/strings/resstrings.txt:347
 #: data/base/messages/strings/resstrings.txt:355
-#: data/mp/messages/resmessages1.rmsg:277
-#: data/mp/messages/resmessages2.rmsg:342
-#: data/mp/messages/resmessagesall.rmsg:812
 #: data/mp/messages/strings/resstrings.txt:375
 #: data/mp/messages/strings/resstrings.txt:383
 msgid "Cyborg Production Improved"
@@ -1588,7 +1070,6 @@ msgstr "Producția cyborgilor îmbunătățită"
 
 #: data/base/messages/resmessages1.rmsg:278
 #: data/base/messages/strings/names.txt:783
-#: data/mp/messages/resmessages1.rmsg:278
 msgid "Automated Cyborg Production"
 msgstr "Producție automatizată a cyborgilor"
 
@@ -1596,9 +1077,6 @@ msgstr "Producție automatizată a cyborgilor"
 #: data/base/messages/resmessages2.rmsg:344
 #: data/base/messages/strings/resstrings.txt:349
 #: data/base/messages/strings/resstrings.txt:357
-#: data/mp/messages/resmessages1.rmsg:279
-#: data/mp/messages/resmessages2.rmsg:344
-#: data/mp/messages/resmessagesall.rmsg:814
 #: data/mp/messages/strings/resstrings.txt:377
 #: data/mp/messages/strings/resstrings.txt:385
 msgid "Increases Cyborg factory output"
@@ -1608,9 +1086,6 @@ msgstr "Mărește productivitatea fabricii de cyborgi"
 #: data/base/messages/resmessages2.rmsg:345
 #: data/base/messages/strings/resstrings.txt:350
 #: data/base/messages/strings/resstrings.txt:358
-#: data/mp/messages/resmessages1.rmsg:280
-#: data/mp/messages/resmessages2.rmsg:345
-#: data/mp/messages/resmessagesall.rmsg:815
 #: data/mp/messages/strings/resstrings.txt:378
 #: data/mp/messages/strings/resstrings.txt:386
 msgid "All Cyborg factories upgraded automatically"
@@ -1619,19 +1094,16 @@ msgstr "Toate fabricile de cyborgi îmbunătățite instantaneu"
 #: data/base/messages/resmessages1.rmsg:291
 #: data/base/messages/strings/names.txt:399
 #: data/base/messages/strings/names.txt:782
-#: data/mp/messages/resmessages1.rmsg:291
 #: data/mp/messages/strings/names.txt:398
 #: data/mp/messages/strings/names.txt:791
 msgid "Cyborg Factory"
 msgstr "Fabrică de cyborgi"
 
 #: data/base/messages/resmessages1.rmsg:292
-#: data/mp/messages/resmessages1.rmsg:292
 msgid "Produces Cyborgs"
 msgstr "Produce cyborgi"
 
 #: data/base/messages/resmessages1.rmsg:293
-#: data/mp/messages/resmessages1.rmsg:293
 msgid "Research makes additional Cyborgs available"
 msgstr "Cercetarea oferă mai multe opțiuni pentru cyborgi"
 
@@ -1639,17 +1111,11 @@ msgstr "Cercetarea oferă mai multe opțiuni pentru cyborgi"
 #: data/base/messages/resmessages2.rmsg:394
 #: data/base/messages/resmessages3.rmsg:485
 #: data/base/messages/strings/resstrings.txt:411
-#: data/mp/messages/resmessages1.rmsg:303
-#: data/mp/messages/resmessages2.rmsg:355
-#: data/mp/messages/resmessages2.rmsg:394
-#: data/mp/messages/resmessages3.rmsg:485
-#: data/mp/messages/resmessagesall.rmsg:799
 #: data/mp/messages/strings/resstrings.txt:439
 msgid "Production Improved"
 msgstr "Productivitatea îmbunătățită"
 
 #: data/base/messages/resmessages1.rmsg:304
-#: data/mp/messages/resmessages1.rmsg:304
 msgid "Factory module enables medium and large bodies"
 msgstr "Modulele pentru fabrică permit construirea de șasiuri medii și mari"
 
@@ -1661,7 +1127,6 @@ msgid "Increases factory output"
 msgstr "Mărește rata de producție a fabricii"
 
 #: data/base/messages/resmessages1.rmsg:306
-#: data/mp/messages/resmessages1.rmsg:307
 msgid "Use a truck to add modules to a factory"
 msgstr "Folosește un constructor pentru a adăuga module unei fabrici"
 
@@ -1669,7 +1134,6 @@ msgstr "Folosește un constructor pentru a adăuga module unei fabrici"
 #: data/base/messages/resmessages2.rmsg:355
 #: data/base/messages/strings/resstrings.txt:365
 #: data/base/messages/strings/resstrings.txt:373
-#: data/mp/messages/resmessages1.rmsg:317
 #: data/mp/messages/strings/resstrings.txt:393
 #: data/mp/messages/strings/resstrings.txt:401
 msgid "Vehicle Production Improved"
@@ -1677,7 +1141,6 @@ msgstr "Producția de vehicule îmbunătățită"
 
 #: data/base/messages/resmessages1.rmsg:317
 #: data/base/messages/strings/names.txt:794
-#: data/mp/messages/resmessages1.rmsg:318
 msgid "Automated Factory Production"
 msgstr "Producție automatizată a vehiculelor"
 
@@ -1685,43 +1148,34 @@ msgstr "Producție automatizată a vehiculelor"
 #: data/base/messages/resmessages2.rmsg:358
 #: data/base/messages/strings/resstrings.txt:368
 #: data/base/messages/strings/resstrings.txt:376
-#: data/mp/messages/resmessages1.rmsg:320
 #: data/mp/messages/strings/resstrings.txt:396
 #: data/mp/messages/strings/resstrings.txt:404
 msgid "All vehicle factories upgraded automatically"
 msgstr "Toate fabricile de vehicule îmbunătățite automat"
 
 #: data/base/messages/resmessages1.rmsg:329
-#: data/mp/messages/resmessages1.rmsg:330
 msgid "Power Module Available"
 msgstr "Modul pentru centrala electrică disponibil"
 
 #: data/base/messages/resmessages1.rmsg:330
 #: data/base/messages/resmessages23.rmsg:30
 #: data/base/messages/resmessages3.rmsg:433
-#: data/mp/messages/resmessages1.rmsg:331
-#: data/mp/messages/resmessages23.rmsg:30
-#: data/mp/messages/resmessages3.rmsg:433
 msgid "Improved Power Generator Performance"
 msgstr "Îmbunătățește performanța generatoarelor electrice"
 
 #: data/base/messages/resmessages1.rmsg:331
-#: data/mp/messages/resmessages1.rmsg:332
 msgid "Burns oil more efficiently"
 msgstr "Combustibilul este consumat mai eficient"
 
 #: data/base/messages/resmessages1.rmsg:332
-#: data/mp/messages/resmessages1.rmsg:333
 msgid "Use a truck to add the module to a power generator"
 msgstr "Folosește un constructor pentru a adăuga module unei centrale electrice"
 
 #: data/base/messages/resmessages1.rmsg:342
-#: data/mp/messages/resmessages1.rmsg:343
 msgid "Research Module Available"
 msgstr "Modul de cercetare disponibil"
 
 #: data/base/messages/resmessages1.rmsg:343
-#: data/mp/messages/resmessages1.rmsg:344
 msgid "Research module expands research facilities"
 msgstr "Modulul de cercetare extinde centrele de cercetare"
 
@@ -1735,7 +1189,6 @@ msgid "Increases research speed"
 msgstr "Mărește viteza de cercetare"
 
 #: data/base/messages/resmessages1.rmsg:345
-#: data/mp/messages/resmessages1.rmsg:346
 msgid "Use a truck to add the module to a research facility"
 msgstr "Folosește un constructor pentru a adăuga modulul unui centru de cercetare"
 
@@ -1743,15 +1196,11 @@ msgstr "Folosește un constructor pentru a adăuga modulul unui centru de cercet
 #: data/base/messages/resmessages2.rmsg:368
 #: data/base/messages/resmessages3.rmsg:446
 #: data/base/messages/strings/resstrings.txt:389
-#: data/mp/messages/resmessages1.rmsg:356
-#: data/mp/messages/resmessages2.rmsg:368
-#: data/mp/messages/resmessages3.rmsg:446
 #: data/mp/messages/strings/resstrings.txt:417
 msgid "Research Improved"
 msgstr "Cercetarea îmbunătățită"
 
 #: data/base/messages/resmessages1.rmsg:356
-#: data/mp/messages/resmessages1.rmsg:357
 msgid "Synaptic link data analysis"
 msgstr "Analiza datelor prin legătură sinaptică"
 
@@ -1759,9 +1208,6 @@ msgstr "Analiza datelor prin legătură sinaptică"
 #: data/base/messages/resmessages2.rmsg:371
 #: data/base/messages/resmessages3.rmsg:449
 #: data/base/messages/strings/resstrings.txt:392
-#: data/mp/messages/resmessages1.rmsg:359
-#: data/mp/messages/resmessages2.rmsg:371
-#: data/mp/messages/resmessages3.rmsg:449
 #: data/mp/messages/strings/resstrings.txt:420
 msgid "All research facilities upgraded automatically"
 msgstr "Toate centrele de cercetare îmbunătățite instantaneu"
@@ -1771,17 +1217,12 @@ msgstr "Toate centrele de cercetare îmbunătățite instantaneu"
 #: data/base/messages/resmessages3.rmsg:459
 #: data/base/messages/resmessages3.rmsg:472
 #: data/base/messages/strings/resstrings.txt:399
-#: data/mp/messages/resmessages1.rmsg:369
-#: data/mp/messages/resmessages2.rmsg:381
-#: data/mp/messages/resmessages3.rmsg:459
-#: data/mp/messages/resmessages3.rmsg:472
 #: data/mp/messages/strings/resstrings.txt:427
 msgid "Increases Damage Resistance"
 msgstr "Mărește rezistența la avarii"
 
 #: data/base/messages/resmessages1.rmsg:369
 #: data/base/messages/strings/names.txt:805
-#: data/mp/messages/resmessages1.rmsg:370
 #: data/mp/messages/strings/names.txt:814
 msgid "Reinforced Base Structure Materials"
 msgstr "Materiale ranforsate de construcție"
@@ -1805,137 +1246,106 @@ msgstr "Mărește calitatea ranforsării și rezistența șasiurilor"
 #: data/base/messages/resmessages3.rmsg:462
 #: data/base/messages/resmessages3.rmsg:475
 #: data/base/messages/strings/resstrings.txt:402
-#: data/mp/messages/resmessages1.rmsg:372
-#: data/mp/messages/resmessages2.rmsg:384
-#: data/mp/messages/resmessages3.rmsg:462
-#: data/mp/messages/resmessages3.rmsg:475
 #: data/mp/messages/strings/resstrings.txt:430
 msgid "All base structures upgraded automatically"
 msgstr "Toate clădirile îmbunătățite instantaneu"
 
 #: data/base/messages/resmessages1.rmsg:381
-#: data/mp/messages/resmessages1.rmsg:382
 msgid "Project Light Body"
 msgstr "Șasiu ușor al Proiectului"
 
 #: data/base/messages/resmessages1.rmsg:382
-#: data/mp/messages/resmessages1.rmsg:383
 msgid "Light body vulnerable to heavy weapons"
 msgstr "Șasiu ușor vulnerabil la armele grele"
 
 #: data/base/messages/resmessages1.rmsg:383
-#: data/mp/messages/resmessages1.rmsg:384
 msgid "Good scout vehicle"
 msgstr "Bun vehicul pentru spionaj"
 
 #: data/base/messages/resmessages1.rmsg:384
-#: data/mp/messages/resmessages1.rmsg:385
 msgid "Low power cost and low production times"
 msgstr "Costuri de energie și timpi de construcție reduși"
 
 #: data/base/messages/resmessages1.rmsg:394
-#: data/mp/messages/resmessages1.rmsg:395
 msgid "New Paradigm Light Body"
 msgstr "Șasiu ușor al Noii Paradigme"
 
 #: data/base/messages/resmessages1.rmsg:395
-#: data/mp/messages/resmessages1.rmsg:396
 msgid "Inferior armor and body points to Viper"
 msgstr "Mai slab ranforsat și rezistent decât Vipera"
 
 #: data/base/messages/resmessages1.rmsg:396
 #: data/base/messages/resmessages3.rmsg:630
-#: data/mp/messages/resmessages1.rmsg:397
-#: data/mp/messages/resmessages3.rmsg:630
 msgid "Faster than Viper"
 msgstr "Mai rapid decât Vipera"
 
 #: data/base/messages/resmessages1.rmsg:397
-#: data/mp/messages/resmessages1.rmsg:398
 msgid "Power cost and production time similar to Viper"
 msgstr "Costul de energie și timpul de producție similare cu ale Viperei"
 
 #: data/base/messages/resmessages1.rmsg:407
-#: data/mp/messages/resmessages1.rmsg:408
 msgid "Project Medium Body"
 msgstr "Corp mijlociu al Proiectului"
 
 #: data/base/messages/resmessages1.rmsg:408
-#: data/mp/messages/resmessages1.rmsg:409
 msgid "Medium body increases armor and body points"
 msgstr "Șasiul mediu mărește rezistența la avarie și armura"
 
 #: data/base/messages/resmessages1.rmsg:409
-#: data/mp/messages/resmessages1.rmsg:410
 msgid "Good medium tank and support vehicle"
 msgstr "Tanc mediu și vehicul de suport bun"
 
 #: data/base/messages/resmessages1.rmsg:410
-#: data/mp/messages/resmessages1.rmsg:411
 msgid "Average power costs and production times"
 msgstr "Costuri și timpi de producție medii"
 
 #: data/base/messages/resmessages1.rmsg:420
-#: data/mp/messages/resmessages1.rmsg:421
 msgid "New Paradigm Medium body"
 msgstr "Șasiu mediu al Noii Paradigme"
 
 #: data/base/messages/resmessages1.rmsg:421
-#: data/mp/messages/resmessages1.rmsg:422
 msgid "Inferior armor and body points to Cobra"
 msgstr "Mai slab la armură și rezistență decât Cobra"
 
 #: data/base/messages/resmessages1.rmsg:422
 #: data/base/messages/resmessages3.rmsg:643
-#: data/mp/messages/resmessages1.rmsg:423
-#: data/mp/messages/resmessages3.rmsg:643
 msgid "Faster than Cobra"
 msgstr "Mai rapid decât Cobra"
 
 #: data/base/messages/resmessages1.rmsg:423
-#: data/mp/messages/resmessages1.rmsg:424
 msgid "Power cost and production time similar to Cobra"
 msgstr "Costuri energetice și timp de producție similare cu ale Cobrei"
 
 #: data/base/messages/resmessages1.rmsg:433
-#: data/mp/messages/resmessages1.rmsg:434
 msgid "Project Heavy Body"
 msgstr "Șasiu greu al Proiectului"
 
 #: data/base/messages/resmessages1.rmsg:434
-#: data/mp/messages/resmessages1.rmsg:435
 msgid "Heavy body increases armor and body points"
 msgstr "Șasiul greu mărește armura și rezistența la avarie"
 
 #: data/base/messages/resmessages1.rmsg:435
-#: data/mp/messages/resmessages1.rmsg:436
 msgid "Good main battle tank and heavy artillery platform"
 msgstr "Tanc de luptă bun și platformă pentru artilerie grea"
 
 #: data/base/messages/resmessages1.rmsg:436
-#: data/mp/messages/resmessages1.rmsg:437
 msgid "Very high power costs and very slow to produce"
 msgstr "Costuri și timpi de producție foarte mari"
 
 #: data/base/messages/resmessages1.rmsg:446
-#: data/mp/messages/resmessages1.rmsg:447
 msgid "New Paradigm Heavy Body"
 msgstr "Șasiu greu al Noii Paradigme"
 
 #: data/base/messages/resmessages1.rmsg:447
-#: data/mp/messages/resmessages1.rmsg:448
 msgid "Less armor and body points than Python"
 msgstr "Mai puțin ranforsat și rezistent decât Pitonul"
 
 #: data/base/messages/resmessages1.rmsg:448
 #: data/base/messages/resmessages3.rmsg:656
-#: data/mp/messages/resmessages1.rmsg:449
-#: data/mp/messages/resmessages3.rmsg:656
 msgid "Faster than Python"
 msgstr "Mai rapid decât Pitonul"
 
 #: data/base/messages/resmessages1.rmsg:449
-#: data/mp/messages/resmessages1.rmsg:450
 msgid "Power cost and production time the same as Python"
 msgstr "Cost de energie și timp de producție identic cu al Pitonului"
 
@@ -1944,17 +1354,12 @@ msgstr "Cost de energie și timp de producție identic cu al Pitonului"
 #: data/base/messages/resmessages3.rmsg:667
 #: data/base/messages/resmessages3.rmsg:680
 #: data/base/messages/strings/resstrings.txt:559
-#: data/mp/messages/resmessages1.rmsg:460
-#: data/mp/messages/resmessages2.rmsg:498
-#: data/mp/messages/resmessages3.rmsg:667
-#: data/mp/messages/resmessages3.rmsg:680
 #: data/mp/messages/strings/resstrings.txt:594
 msgid "Vehicle Engine Upgrade"
 msgstr "Îmbunătățire la motoarele vehiculelor"
 
 #: data/base/messages/resmessages1.rmsg:460
 #: data/base/messages/strings/names.txt:942
-#: data/mp/messages/resmessages1.rmsg:461
 #: data/mp/messages/strings/names.txt:953
 msgid "Fuel Injection Engine"
 msgstr "Motor cu injecție"
@@ -1981,17 +1386,6 @@ msgstr "Mărește viteza vehiculelor"
 #: data/base/messages/strings/resstrings.txt:562
 #: data/base/messages/strings/resstrings.txt:574
 #: data/base/messages/strings/resstrings.txt:584
-#: data/mp/messages/resmessages1.rmsg:463
-#: data/mp/messages/resmessages1.rmsg:476
-#: data/mp/messages/resmessages2.rmsg:501
-#: data/mp/messages/resmessages2.rmsg:514
-#: data/mp/messages/resmessages2.rmsg:527
-#: data/mp/messages/resmessages3.rmsg:670
-#: data/mp/messages/resmessages3.rmsg:683
-#: data/mp/messages/resmessages3.rmsg:696
-#: data/mp/messages/resmessages3.rmsg:709
-#: data/mp/messages/resmessages3.rmsg:722
-#: data/mp/messages/resmessagesall.rmsg:854
 #: data/mp/messages/strings/resstrings.txt:597
 #: data/mp/messages/strings/resstrings.txt:609
 #: data/mp/messages/strings/resstrings.txt:619
@@ -2003,10 +1397,6 @@ msgstr "Toate vehiculele îmbunătățite automat"
 #: data/base/messages/resmessages3.rmsg:693
 #: data/base/messages/resmessages3.rmsg:706
 #: data/base/messages/strings/resstrings.txt:571
-#: data/mp/messages/resmessages1.rmsg:473
-#: data/mp/messages/resmessages2.rmsg:511
-#: data/mp/messages/resmessages3.rmsg:693
-#: data/mp/messages/resmessages3.rmsg:706
 #: data/mp/messages/strings/resstrings.txt:606
 msgid "Vehicle Bodies Improved"
 msgstr "Șasiurile vehiculelor îmbunătățite"
@@ -2024,32 +1414,23 @@ msgstr "Sporește armura cinetică și rezistența la avarii"
 #: data/base/messages/resmessages1.rmsg:498
 #: data/base/messages/resmessages1.rmsg:511
 #: data/base/messages/resmessages1.rmsg:524
-#: data/mp/messages/resmessages1.rmsg:486
-#: data/mp/messages/resmessages1.rmsg:499
-#: data/mp/messages/resmessages1.rmsg:512
-#: data/mp/messages/resmessages1.rmsg:525
 msgid "New Propulsion Available"
 msgstr "Nou sistem de propulsie disponibil"
 
 #: data/base/messages/resmessages1.rmsg:486
-#: data/mp/messages/resmessages1.rmsg:487
 msgid "Armored Half-tracks"
 msgstr "Semi-Șenile Ranforsate"
 
 #: data/base/messages/resmessages1.rmsg:487
-#: data/mp/messages/resmessages1.rmsg:488
 msgid "Speed: Medium"
 msgstr "Viteză: Medie"
 
 #: data/base/messages/resmessages1.rmsg:499
-#: data/mp/messages/resmessages1.rmsg:500
 msgid "Amphibious hover propulsion"
 msgstr "Propulsie amfibie pe pernă de aer"
 
 #: data/base/messages/resmessages1.rmsg:500
 #: data/base/messages/resmessages1.rmsg:526
-#: data/mp/messages/resmessages1.rmsg:501
-#: data/mp/messages/resmessages1.rmsg:527
 msgid "Speed: Fast"
 msgstr "Viteză: Rapidă"
 
@@ -2073,23 +1454,6 @@ msgstr "Viteză: Rapidă"
 #: data/base/messages/strings/resstrings.txt:776
 #: data/base/messages/strings/resstrings.txt:782
 #: data/base/messages/strings/resstrings.txt:790
-#: data/mp/messages/resmessages1.rmsg:502
-#: data/mp/messages/resmessages1.rmsg:528
-#: data/mp/messages/resmessages1.rmsg:619
-#: data/mp/messages/resmessages1.rmsg:632
-#: data/mp/messages/resmessages23.rmsg:150
-#: data/mp/messages/resmessages23.rmsg:202
-#: data/mp/messages/resmessages2.rmsg:709
-#: data/mp/messages/resmessages2.rmsg:722
-#: data/mp/messages/resmessages2.rmsg:774
-#: data/mp/messages/resmessages2.rmsg:800
-#: data/mp/messages/resmessages2.rmsg:813
-#: data/mp/messages/resmessages2.rmsg:826
-#: data/mp/messages/resmessages3.rmsg:852
-#: data/mp/messages/resmessagesall.rmsg:163
-#: data/mp/messages/resmessagesall.rmsg:347
-#: data/mp/messages/resmessagesall.rmsg:919
-#: data/mp/messages/resmessagesall.rmsg:932
 #: data/mp/messages/strings/resstrings.txt:735
 #: data/mp/messages/strings/resstrings.txt:741
 #: data/mp/messages/strings/resstrings.txt:799
@@ -2100,65 +1464,51 @@ msgid "Body Points: Low"
 msgstr "Rezistență șasiu: Mică"
 
 #: data/base/messages/resmessages1.rmsg:512
-#: data/mp/messages/resmessages1.rmsg:513
 msgid "Armored Tracks"
 msgstr "Șenile ranforsate"
 
 #: data/base/messages/resmessages1.rmsg:513
-#: data/mp/messages/resmessages1.rmsg:514
 msgid "Speed: Slow"
 msgstr "Viteză: Lentă"
 
 #: data/base/messages/resmessages1.rmsg:525
 #: data/base/messages/strings/names.txt:976
-#: data/mp/messages/resmessages1.rmsg:526
 #: data/mp/messages/strings/names.txt:987
 msgid "Wheeled Propulsion"
 msgstr "Propulsie pe roți"
 
 #: data/base/messages/resmessages1.rmsg:538
-#: data/mp/messages/resmessages1.rmsg:539
 msgid "Light Cannon firing 40mm rounds"
 msgstr "Tun ușor cu muniție de 40mm"
 
 #: data/base/messages/resmessages1.rmsg:551
-#: data/mp/messages/resmessages1.rmsg:552
 msgid "Medium Cannon firing 76mm rounds"
 msgstr "Tun mediu cu muniție de 76mm"
 
 #: data/base/messages/resmessages1.rmsg:564
-#: data/mp/messages/resmessages1.rmsg:565
 msgid "Heavy Cannon firing 120 mm rounds"
 msgstr "Tun greu cu muniție de 120mm"
 
 #: data/base/messages/resmessages1.rmsg:577
-#: data/mp/messages/resmessages1.rmsg:578
 msgid "High Explosive Anti-Tank Cannon Shells"
 msgstr "Muniție de tun super-explozivă, anti-tanc"
 
 #: data/base/messages/resmessages1.rmsg:590
-#: data/mp/messages/resmessages1.rmsg:591
 msgid "Flame-thrower firing Propylene Oxide gel"
 msgstr "Aruncător de flăcări folosind gel oxi-propilenă"
 
 #: data/base/messages/resmessages1.rmsg:591
 #: data/base/messages/resmessages2.rmsg:773
 #: data/base/messages/strings/resstrings.txt:759
-#: data/mp/messages/resmessages1.rmsg:592
-#: data/mp/messages/resmessages2.rmsg:773
-#: data/mp/messages/resmessagesall.rmsg:385
 #: data/mp/messages/strings/resstrings.txt:798
 msgid "Best Targets: Bunkers, wheeled and hover vehicles"
 msgstr "Ținta ideală: Buncăre, unități cu roți și pe pernă de aer"
 
 #: data/base/messages/resmessages1.rmsg:592
-#: data/mp/messages/resmessages1.rmsg:593
-#: data/mp/messages/resmessagesall.rmsg:386
 msgid "Body Points: Very low"
 msgstr "Rezistență șasiu: Foarte Mică"
 
 #: data/base/messages/resmessages1.rmsg:603
-#: data/mp/messages/resmessages1.rmsg:604
 msgid "Propylene Oxide gel treated to burn at higher temperatures"
 msgstr "Gel oxi-propilenă tratat pentru a arde la temperaturi mari"
 
@@ -2170,17 +1520,14 @@ msgid "Increases Flamer damage"
 msgstr "Mărește puterea aruncătoarelor de flăcări"
 
 #: data/base/messages/resmessages1.rmsg:616
-#: data/mp/messages/resmessages1.rmsg:617
 msgid "7.62mm machinegun"
 msgstr "Mitralieră de 7.62mm"
 
 #: data/base/messages/resmessages1.rmsg:629
-#: data/mp/messages/resmessages1.rmsg:630
 msgid "Twin 7.62mm machineguns"
 msgstr "Mitralieră dublă de 7.62mm"
 
 #: data/base/messages/resmessages1.rmsg:642
-#: data/mp/messages/resmessages1.rmsg:643
 msgid "Hardened case machinegun bullets"
 msgstr "Muniție de mitralieră cu jachetă dură"
 
@@ -2195,18 +1542,14 @@ msgid "Increases Machinegun damage"
 msgstr "Mărește puterea mitralierelor"
 
 #: data/base/messages/resmessages1.rmsg:655
-#: data/mp/messages/resmessages1.rmsg:656
 msgid "Armor-Piercing Discard Sabot Bullets"
 msgstr ""
 
 #: data/base/messages/resmessages1.rmsg:668
-#: data/mp/messages/resmessages1.rmsg:669
-#: data/mp/messages/resmessagesall.rmsg:358
 msgid "May be targeted directly or assigned to a sensor turret or tower"
 msgstr "Îi poate fi dată o țintă sau poate fi atașat de un senzor"
 
 #: data/base/messages/resmessages1.rmsg:681
-#: data/mp/messages/resmessages1.rmsg:682
 msgid "Improved high explosive shells"
 msgstr "Proiectile puternic explozive îmbunătățite"
 
@@ -2218,12 +1561,10 @@ msgid "Increases Mortar damage"
 msgstr "Mărește puterea mortierelor"
 
 #: data/base/messages/resmessages1.rmsg:694
-#: data/mp/messages/resmessages1.rmsg:695
 msgid "Fast firing light anti-vehicle rockets"
 msgstr "Rachete ușoare și rapide anti-vehicule"
 
 #: data/base/messages/resmessages1.rmsg:695
-#: data/mp/messages/resmessages1.rmsg:696
 msgid "Best Targets: Wheeled and hover vehicles"
 msgstr "Ținta ideală: Vehicule cu roți sau pe pernă de aer"
 
@@ -2239,7 +1580,6 @@ msgid "Mini-Rocket Upgrade"
 msgstr "Îmbunătățire la mini-rachete"
 
 #: data/base/messages/resmessages1.rmsg:707
-#: data/mp/messages/resmessages1.rmsg:708
 msgid "Fin-stabilization improves flight trajectory"
 msgstr "Stabilizarea prin eleroane îmbunătățește traiectoria de zbor"
 
@@ -2259,7 +1599,6 @@ msgid "All mini-rockets upgraded automatically"
 msgstr "Toate mini-rachetele îmbunătățite instantaneu"
 
 #: data/base/messages/resmessages1.rmsg:720
-#: data/mp/messages/resmessages1.rmsg:721
 msgid "Improved shaped charge warhead"
 msgstr "Focos îmbunătățit cu explozibil direcționat"
 
@@ -2271,7 +1610,6 @@ msgid "Increases Mini-Rocket damage"
 msgstr "Sporește puterea mini-rachetelor"
 
 #: data/base/messages/resmessages1.rmsg:733
-#: data/mp/messages/resmessages1.rmsg:734
 msgid "Automated reload system"
 msgstr "Sistem de reîncărcare automat"
 
@@ -2280,12 +1618,10 @@ msgid "Increases Mini-Rockets ROF"
 msgstr "Mărește rata de foc a mini-rachetelor"
 
 #: data/base/messages/resmessages1.rmsg:746
-#: data/mp/messages/resmessages1.rmsg:747
 msgid "Tracks and directs in-flight rocket to target"
 msgstr "Urmărește și direcționează racheta spre țintă"
 
 #: data/base/messages/resmessages1.rmsg:759
-#: data/mp/messages/resmessages1.rmsg:760
 msgid "High Explosive Anti-Tank warhead"
 msgstr "Rachetă anti-tanc puternic explozivă"
 
@@ -2298,8 +1634,6 @@ msgstr "Mărește puterea rachetelor"
 
 #: data/base/messages/resmessages23.rmsg:4
 #: data/base/messages/resmessages3.rmsg:56
-#: data/mp/messages/resmessages23.rmsg:4
-#: data/mp/messages/resmessages3.rmsg:56
 msgid "Cyborg Propulsion Improved"
 msgstr "Propulsia cyborgilor îmbunătățită"
 
@@ -2317,16 +1651,6 @@ msgstr "Propulsia cyborgilor îmbunătățită"
 #: data/base/messages/strings/resstrings.txt:602
 #: data/base/messages/strings/resstrings.txt:612
 #: data/base/messages/strings/resstrings.txt:622
-#: data/mp/messages/resmessages23.rmsg:5
-#: data/mp/messages/resmessages2.rmsg:538
-#: data/mp/messages/resmessages2.rmsg:551
-#: data/mp/messages/resmessages2.rmsg:564
-#: data/mp/messages/resmessages2.rmsg:577
-#: data/mp/messages/resmessages3.rmsg:57
-#: data/mp/messages/resmessages3.rmsg:733
-#: data/mp/messages/resmessages3.rmsg:746
-#: data/mp/messages/resmessages3.rmsg:759
-#: data/mp/messages/resmessages3.rmsg:772
 #: data/mp/messages/strings/resstrings.txt:627
 #: data/mp/messages/strings/resstrings.txt:637
 #: data/mp/messages/strings/resstrings.txt:647
@@ -2348,16 +1672,6 @@ msgstr "Nouă construcție ranforsată"
 #: data/base/messages/strings/resstrings.txt:603
 #: data/base/messages/strings/resstrings.txt:613
 #: data/base/messages/strings/resstrings.txt:623
-#: data/mp/messages/resmessages23.rmsg:6
-#: data/mp/messages/resmessages2.rmsg:539
-#: data/mp/messages/resmessages2.rmsg:552
-#: data/mp/messages/resmessages2.rmsg:565
-#: data/mp/messages/resmessages2.rmsg:578
-#: data/mp/messages/resmessages3.rmsg:58
-#: data/mp/messages/resmessages3.rmsg:734
-#: data/mp/messages/resmessages3.rmsg:747
-#: data/mp/messages/resmessages3.rmsg:760
-#: data/mp/messages/resmessages3.rmsg:773
 #: data/mp/messages/strings/resstrings.txt:628
 #: data/mp/messages/strings/resstrings.txt:638
 #: data/mp/messages/strings/resstrings.txt:648
@@ -2366,7 +1680,6 @@ msgid "Increases Body Points"
 msgstr "Mărește rezistența șasiurilor"
 
 #: data/base/messages/resmessages23.rmsg:18
-#: data/mp/messages/resmessages23.rmsg:18
 msgid "Armored hardpoint with Hyper-Velocity Cannon"
 msgstr "Bloc ranforsat cu tun cu hiper-velocitate"
 
@@ -2376,23 +1689,17 @@ msgid "New Power Generation Technology"
 msgstr "Nouă tehnologie de generare de electricitate"
 
 #: data/base/messages/resmessages23.rmsg:32
-#: data/mp/messages/resmessages23.rmsg:31
 msgid "Gas turbine boosts power output"
 msgstr "Turbina de gaz mărește puterea generatoarelor"
 
 #: data/base/messages/resmessages23.rmsg:33
 #: data/base/messages/resmessages3.rmsg:436
-#: data/mp/messages/resmessages23.rmsg:33
-#: data/mp/messages/resmessages3.rmsg:436
 msgid "All power generators upgraded automatically"
 msgstr "Toate generatoarele îmbunătățite instantaneu"
 
 #: data/base/messages/resmessages23.rmsg:57
 #: data/base/messages/resmessages23.rmsg:83
 #: data/base/messages/resmessages3.rmsg:525
-#: data/mp/messages/resmessages23.rmsg:57
-#: data/mp/messages/resmessages23.rmsg:83
-#: data/mp/messages/resmessages3.rmsg:525
 msgid "Improved fire detection systems"
 msgstr "Sisteme de detecție a focului îmbunătățite"
 
@@ -2400,24 +1707,16 @@ msgstr "Sisteme de detecție a focului îmbunătățite"
 #: data/base/messages/resmessages23.rmsg:95
 #: data/base/messages/resmessagesall.rmsg:69
 #: data/base/messages/resmessagesall.rmsg:95
-#: data/mp/messages/resmessages23.rmsg:69
-#: data/mp/messages/resmessages23.rmsg:95
-#: data/mp/messages/resmessagesall.rmsg:69
-#: data/mp/messages/resmessagesall.rmsg:121
-#: data/mp/messages/resmessagesall.rmsg:134
 msgid "New Systems Tower Available"
 msgstr "Nou turn de sisteme disponibil"
 
 #: data/base/messages/resmessages23.rmsg:70
-#: data/mp/messages/resmessages23.rmsg:70
 msgid "VTOL CB Tower detects enemy indirect fire batteries"
 msgstr "Turnul DAV-AB detectează bateriile de artilerie inamice"
 
 #: data/base/messages/resmessages23.rmsg:71
 #: data/base/messages/resmessages2.rmsg:435
 #: data/base/messages/strings/resstrings.txt:481
-#: data/mp/messages/resmessages23.rmsg:71
-#: data/mp/messages/resmessages2.rmsg:435
 #: data/mp/messages/strings/resstrings.txt:511
 msgid "Orders assigned VTOLs to attack the enemy batteries"
 msgstr ""
@@ -2425,8 +1724,6 @@ msgstr ""
 #: data/base/messages/resmessages23.rmsg:72
 #: data/base/messages/resmessages2.rmsg:436
 #: data/base/messages/strings/resstrings.txt:482
-#: data/mp/messages/resmessages23.rmsg:72
-#: data/mp/messages/resmessages2.rmsg:436
 #: data/mp/messages/strings/resstrings.txt:512
 msgid "VTOLs attack until enemy battery is suppressed"
 msgstr "DAV-urile atacă până când bateria inamică e suprimată"
@@ -2435,9 +1732,6 @@ msgstr "DAV-urile atacă până când bateria inamică e suprimată"
 #: data/base/messages/resmessages2.rmsg:446
 #: data/base/messages/resmessages3.rmsg:537
 #: data/base/messages/strings/resstrings.txt:485
-#: data/mp/messages/resmessages23.rmsg:82
-#: data/mp/messages/resmessages2.rmsg:446
-#: data/mp/messages/resmessages3.rmsg:537
 #: data/mp/messages/strings/resstrings.txt:515
 msgid "VTOL CB Improved"
 msgstr "DAV-AB îmbunătățit"
@@ -2446,9 +1740,6 @@ msgstr "DAV-AB îmbunătățit"
 #: data/base/messages/resmessages2.rmsg:448
 #: data/base/messages/resmessages3.rmsg:539
 #: data/base/messages/strings/resstrings.txt:487
-#: data/mp/messages/resmessages23.rmsg:84
-#: data/mp/messages/resmessages2.rmsg:448
-#: data/mp/messages/resmessages3.rmsg:539
 #: data/mp/messages/strings/resstrings.txt:517
 msgid "Extends VTOL CB Range"
 msgstr "Mărește raza DAV-AB"
@@ -2457,25 +1748,19 @@ msgstr "Mărește raza DAV-AB"
 #: data/base/messages/resmessages2.rmsg:449
 #: data/base/messages/resmessages3.rmsg:540
 #: data/base/messages/strings/resstrings.txt:488
-#: data/mp/messages/resmessages23.rmsg:85
-#: data/mp/messages/resmessages2.rmsg:449
-#: data/mp/messages/resmessages3.rmsg:540
 #: data/mp/messages/strings/resstrings.txt:518
 msgid "All VTOL CB sensors upgraded automatically"
 msgstr "Toți senzorii DAV-AB îmbunătățiți instantaneu"
 
 #: data/base/messages/resmessages23.rmsg:96
-#: data/mp/messages/resmessages23.rmsg:96
 msgid "VTOL Strike Tower detects approaching enemies"
 msgstr ""
 
 #: data/base/messages/resmessages23.rmsg:97
-#: data/mp/messages/resmessages23.rmsg:97
 msgid "Assigned VTOLs attack the enemy units"
 msgstr "DAV-urile asociate atacă unitățile inamice"
 
 #: data/base/messages/resmessages23.rmsg:98
-#: data/mp/messages/resmessages23.rmsg:98
 msgid "Strike mission continues until enemy destroyed or they retreat"
 msgstr "Misiunea de atac continuă până când inamicul e distrus sau în retragere"
 
@@ -2485,29 +1770,20 @@ msgstr "Misiunea de atac continuă până când inamicul e distrus sau în retra
 #: data/base/messages/resmessagesall.rmsg:43
 #: data/base/messages/strings/resstrings.txt:443
 #: data/base/messages/strings/resstrings.txt:479
-#: data/mp/messages/resmessages23.rmsg:108
-#: data/mp/messages/resmessages2.rmsg:433
-#: data/mp/messages/resmessages3.rmsg:563
-#: data/mp/messages/resmessagesall.rmsg:43
-#: data/mp/messages/resmessagesall.rmsg:370
-#: data/mp/messages/resmessagesall.rmsg:396
 #: data/mp/messages/strings/resstrings.txt:471
 #: data/mp/messages/strings/resstrings.txt:509
 msgid "New Systems Turret Available"
 msgstr "Nouă turelă funcțională disponibilă"
 
 #: data/base/messages/resmessages23.rmsg:109
-#: data/mp/messages/resmessages23.rmsg:109
 msgid "VTOL Strike turret used to spot targets"
 msgstr ""
 
 #: data/base/messages/resmessages23.rmsg:110
-#: data/mp/messages/resmessages23.rmsg:110
 msgid "Assigned VTOLs attack the designated targets"
 msgstr ""
 
 #: data/base/messages/resmessages23.rmsg:111
-#: data/mp/messages/resmessages23.rmsg:111
 msgid "Select new targets to continue the VTOL strikes"
 msgstr ""
 
@@ -2515,15 +1791,11 @@ msgstr ""
 #: data/base/messages/resmessages2.rmsg:459
 #: data/base/messages/resmessages3.rmsg:550
 #: data/base/messages/strings/resstrings.txt:499
-#: data/mp/messages/resmessages23.rmsg:121
-#: data/mp/messages/resmessages2.rmsg:459
-#: data/mp/messages/resmessages3.rmsg:550
 #: data/mp/messages/strings/resstrings.txt:529
 msgid "VTOL Strike Improved"
 msgstr "Puterea DAV mărită"
 
 #: data/base/messages/resmessages23.rmsg:122
-#: data/mp/messages/resmessages23.rmsg:122
 msgid "Improved target recognition systems"
 msgstr "Sisteme îmbunătățite de recunoaștere a țintei"
 
@@ -2531,9 +1803,6 @@ msgstr "Sisteme îmbunătățite de recunoaștere a țintei"
 #: data/base/messages/resmessages2.rmsg:461
 #: data/base/messages/resmessages3.rmsg:552
 #: data/base/messages/strings/resstrings.txt:501
-#: data/mp/messages/resmessages23.rmsg:123
-#: data/mp/messages/resmessages2.rmsg:461
-#: data/mp/messages/resmessages3.rmsg:552
 #: data/mp/messages/strings/resstrings.txt:531
 msgid "Extends VTOL Strike Range"
 msgstr "Extinde raza de acțiune a DAV-urilor"
@@ -2542,9 +1811,6 @@ msgstr "Extinde raza de acțiune a DAV-urilor"
 #: data/base/messages/resmessages2.rmsg:462
 #: data/base/messages/resmessages3.rmsg:553
 #: data/base/messages/strings/resstrings.txt:502
-#: data/mp/messages/resmessages23.rmsg:124
-#: data/mp/messages/resmessages2.rmsg:462
-#: data/mp/messages/resmessages3.rmsg:553
 #: data/mp/messages/strings/resstrings.txt:532
 msgid "All VTOL Strike sensors upgraded automatically"
 msgstr "Toți senzorii de atac DAV îmbunătățiți automat"
@@ -2556,11 +1822,6 @@ msgstr "Toți senzorii de atac DAV îmbunătățiți automat"
 #: data/base/messages/resmessages3.rmsg:836
 #: data/base/messages/strings/resstrings.txt:659
 #: data/base/messages/strings/resstrings.txt:677
-#: data/mp/messages/resmessages23.rmsg:134
-#: data/mp/messages/resmessages2.rmsg:641
-#: data/mp/messages/resmessages2.rmsg:667
-#: data/mp/messages/resmessages3.rmsg:810
-#: data/mp/messages/resmessages3.rmsg:836
 #: data/mp/messages/strings/resstrings.txt:694
 #: data/mp/messages/strings/resstrings.txt:712
 msgid "AA Upgrade"
@@ -2569,8 +1830,6 @@ msgstr "Îmbunătățire AA"
 #: data/base/messages/resmessages23.rmsg:135
 #: data/base/messages/resmessages2.rmsg:837
 #: data/base/messages/strings/resstrings.txt:794
-#: data/mp/messages/resmessages23.rmsg:135
-#: data/mp/messages/resmessages2.rmsg:837
 #: data/mp/messages/strings/resstrings.txt:835
 msgid "Self-guided rocket powered shells"
 msgstr ""
@@ -2590,11 +1849,6 @@ msgstr "Mărește precizia armelor AA"
 #: data/base/messages/resmessages3.rmsg:839
 #: data/base/messages/strings/resstrings.txt:662
 #: data/base/messages/strings/resstrings.txt:680
-#: data/mp/messages/resmessages23.rmsg:137
-#: data/mp/messages/resmessages2.rmsg:644
-#: data/mp/messages/resmessages2.rmsg:670
-#: data/mp/messages/resmessages3.rmsg:813
-#: data/mp/messages/resmessages3.rmsg:839
 #: data/mp/messages/strings/resstrings.txt:697
 #: data/mp/messages/strings/resstrings.txt:715
 msgid "All AA weapons upgraded automatically"
@@ -2606,23 +1860,16 @@ msgstr "Toate armele AA îmbunătățite instantaneu"
 #: data/base/messages/resmessages3.rmsg:849
 #: data/base/messages/strings/resstrings.txt:697
 #: data/base/messages/strings/resstrings.txt:703
-#: data/mp/messages/resmessages23.rmsg:147
-#: data/mp/messages/resmessages2.rmsg:706
-#: data/mp/messages/resmessages2.rmsg:719
-#: data/mp/messages/resmessages3.rmsg:849
-#: data/mp/messages/resmessagesall.rmsg:916
 #: data/mp/messages/strings/resstrings.txt:732
 #: data/mp/messages/strings/resstrings.txt:738
 msgid "New Bomb Bay Available"
 msgstr "Nouă încărcătură de bombe disponibilă"
 
 #: data/base/messages/resmessages23.rmsg:148
-#: data/mp/messages/resmessages23.rmsg:148
 msgid "Drops incendiary bombs"
 msgstr "Lansează bombe incendiare"
 
 #: data/base/messages/resmessages23.rmsg:149
-#: data/mp/messages/resmessages23.rmsg:149
 msgid "Best Targets: Bunkers and Hardpoints"
 msgstr "Ținta ideală: buncăre și blocuri"
 
@@ -2650,25 +1897,19 @@ msgstr "Mărește precizia bombelor"
 #: data/base/messages/resmessages2.rmsg:735
 #: data/base/messages/resmessages3.rmsg:865
 #: data/base/messages/strings/resstrings.txt:716
-#: data/mp/messages/resmessages23.rmsg:163
-#: data/mp/messages/resmessages2.rmsg:735
-#: data/mp/messages/resmessages3.rmsg:865
 #: data/mp/messages/strings/resstrings.txt:751
 msgid "All bomb bays upgraded automatically"
 msgstr "Toate încărcăturile de bombe îmbunătățite instantaneu"
 
 #: data/base/messages/resmessages23.rmsg:174
-#: data/mp/messages/resmessages23.rmsg:174
 msgid "Robotic advances make new chaingun upgrade available"
 msgstr ""
 
 #: data/base/messages/resmessages23.rmsg:187
-#: data/mp/messages/resmessages23.rmsg:187
 msgid "Shells detect and home to thermal heat signatures"
 msgstr ""
 
 #: data/base/messages/resmessages23.rmsg:200
-#: data/mp/messages/resmessages23.rmsg:200
 msgid "105mm multi-barrel Howitzer may be assigned to a sensor"
 msgstr "Howitzer-ul cu țevi multiple de 105mm poate fi atribuit unui senzor"
 
@@ -2677,32 +1918,22 @@ msgstr "Howitzer-ul cu țevi multiple de 105mm poate fi atribuit unui senzor"
 #: data/base/messages/resmessages2.rmsg:812
 #: data/base/messages/strings/resstrings.txt:775
 #: data/base/messages/strings/resstrings.txt:781
-#: data/mp/messages/resmessages23.rmsg:201
-#: data/mp/messages/resmessages2.rmsg:799
-#: data/mp/messages/resmessages2.rmsg:812
-#: data/mp/messages/resmessagesall.rmsg:346
 #: data/mp/messages/strings/resstrings.txt:814
 #: data/mp/messages/strings/resstrings.txt:822
 msgid "Best Targets: Base Structures, infantry, wheeled vehicles"
 msgstr "Ținta ideală: Clădiri, infanterie, vehicule cu roți"
 
 #: data/base/messages/resmessages23.rmsg:213
-#: data/mp/messages/resmessages23.rmsg:213
 msgid "Multi-barrel, rapid-fire machinegun"
 msgstr "Mitralieră cu țevi multiple și rată mare de foc"
 
 #: data/base/messages/resmessages23.rmsg:215
-#: data/mp/messages/resmessages23.rmsg:215
-#: data/mp/messages/resmessagesall.rmsg:893
-#: data/mp/messages/resmessagesall.rmsg:906
 msgid "Replaces all machineguns"
 msgstr "Înlocuiește toate mitralierele"
 
 #: data/base/messages/resmessages2.rmsg:4
 #: data/base/messages/resmessages3.rmsg:4
 #: data/base/messages/strings/resstrings.txt:41
-#: data/mp/messages/resmessages2.rmsg:4
-#: data/mp/messages/resmessages3.rmsg:4
 #: data/mp/messages/strings/resstrings.txt:45
 msgid "Cyborg Thermal Armor Improved"
 msgstr "Armura termală a cyborgilor îmbunătățită"
@@ -2710,8 +1941,6 @@ msgstr "Armura termală a cyborgilor îmbunătățită"
 #: data/base/messages/resmessages2.rmsg:5
 #: data/base/messages/resmessages3.rmsg:5
 #: data/base/messages/strings/resstrings.txt:42
-#: data/mp/messages/resmessages2.rmsg:5
-#: data/mp/messages/resmessages3.rmsg:5
 #: data/mp/messages/strings/resstrings.txt:46
 msgid "Heat resistant armored layers"
 msgstr ""
@@ -2727,8 +1956,6 @@ msgstr "Armura termală îmbunătățită"
 #: data/base/messages/resmessages2.rmsg:512
 #: data/base/messages/strings/resstrings.txt:32
 #: data/base/messages/strings/resstrings.txt:572
-#: data/mp/messages/resmessages2.rmsg:18
-#: data/mp/messages/resmessages2.rmsg:512
 #: data/mp/messages/strings/resstrings.txt:36
 #: data/mp/messages/strings/resstrings.txt:607
 msgid "Layered dense composite alloys and energy-absorbing fibres"
@@ -2737,7 +1964,6 @@ msgstr ""
 #: data/base/messages/resmessages2.rmsg:31
 #: data/base/messages/strings/resstrings.txt:50
 #: data/base/messages/strings/resstrings.txt:84
-#: data/mp/messages/resmessages2.rmsg:31
 #: data/mp/messages/strings/resstrings.txt:54
 #: data/mp/messages/strings/resstrings.txt:104
 msgid "Armed with Bunker Buster rocket"
@@ -2745,21 +1971,18 @@ msgstr "Înarmat cu rachetă Bunker Buster"
 
 #: data/base/messages/resmessages2.rmsg:44
 #: data/base/messages/strings/resstrings.txt:66
-#: data/mp/messages/resmessages2.rmsg:44
 #: data/mp/messages/strings/resstrings.txt:86
 msgid "Armed with Cyborg Assault Gun"
 msgstr "Înarmat cu Mitralieră de Asalt pentru Cyborgi"
 
 #: data/base/messages/resmessages2.rmsg:57
 #: data/base/messages/strings/resstrings.txt:104
-#: data/mp/messages/resmessages2.rmsg:57
 #: data/mp/messages/strings/resstrings.txt:124
 msgid "High-tensile concrete reinforced with boron"
 msgstr ""
 
 #: data/base/messages/resmessages2.rmsg:70
 #: data/base/messages/strings/resstrings.txt:120
-#: data/mp/messages/resmessages2.rmsg:70
 #: data/mp/messages/strings/resstrings.txt:140
 msgid "AA Site with Cyclone Flak Turret"
 msgstr ""
@@ -2772,11 +1995,6 @@ msgstr ""
 #: data/base/messages/strings/resstrings.txt:115
 #: data/base/messages/strings/resstrings.txt:121
 #: data/base/messages/strings/resstrings.txt:133
-#: data/mp/messages/resmessages2.rmsg:71
-#: data/mp/messages/resmessages2.rmsg:97
-#: data/mp/messages/resmessages2.rmsg:110
-#: data/mp/messages/resmessages3.rmsg:240
-#: data/mp/messages/resmessages3.rmsg:253
 #: data/mp/messages/strings/resstrings.txt:135
 #: data/mp/messages/strings/resstrings.txt:141
 #: data/mp/messages/strings/resstrings.txt:153
@@ -2785,63 +2003,54 @@ msgstr "Țintește automat DAV-uri"
 
 #: data/base/messages/resmessages2.rmsg:83
 #: data/base/messages/strings/resstrings.txt:126
-#: data/mp/messages/resmessages2.rmsg:83
 #: data/mp/messages/strings/resstrings.txt:146
 msgid "AA Site with Hurricane Gun Turret"
 msgstr ""
 
 #: data/base/messages/resmessages2.rmsg:84
 #: data/base/messages/strings/resstrings.txt:127
-#: data/mp/messages/resmessages2.rmsg:84
 #: data/mp/messages/strings/resstrings.txt:147
 msgid "Automatically targets VTOL"
 msgstr "Țintește automat DAV"
 
 #: data/base/messages/resmessages2.rmsg:96
 #: data/base/messages/strings/resstrings.txt:132
-#: data/mp/messages/resmessages2.rmsg:96
 #: data/mp/messages/strings/resstrings.txt:152
 msgid "AA Site with Whirlwind Gun Turret"
 msgstr ""
 
 #: data/base/messages/resmessages2.rmsg:109
 #: data/base/messages/strings/resstrings.txt:114
-#: data/mp/messages/resmessages2.rmsg:109
 #: data/mp/messages/strings/resstrings.txt:134
 msgid "AA Site with Tornado Flak Turret"
 msgstr ""
 
 #: data/base/messages/resmessages2.rmsg:122
 #: data/base/messages/strings/resstrings.txt:142
-#: data/mp/messages/resmessages2.rmsg:122
 #: data/mp/messages/strings/resstrings.txt:162
 msgid "Indirect fire rocket battery"
 msgstr "Baterie de rachete cu foc indirect"
 
 #: data/base/messages/resmessages2.rmsg:135
 #: data/base/messages/strings/resstrings.txt:154
-#: data/mp/messages/resmessages2.rmsg:135
 #: data/mp/messages/strings/resstrings.txt:176
 msgid "Armored Bombard battery pit"
 msgstr ""
 
 #: data/base/messages/resmessages2.rmsg:148
 #: data/base/messages/strings/resstrings.txt:168
-#: data/mp/messages/resmessages2.rmsg:148
 #: data/mp/messages/strings/resstrings.txt:190
 msgid "Armored howitzer emplacement"
 msgstr ""
 
 #: data/base/messages/resmessages2.rmsg:161
 #: data/base/messages/strings/resstrings.txt:174
-#: data/mp/messages/resmessages2.rmsg:161
 #: data/mp/messages/strings/resstrings.txt:196
 msgid "Armored Ground Shaker howitzer emplacement"
 msgstr ""
 
 #: data/base/messages/resmessages2.rmsg:174
 #: data/base/messages/strings/resstrings.txt:160
-#: data/mp/messages/resmessages2.rmsg:174
 #: data/mp/messages/strings/resstrings.txt:182
 msgid "Armored Pepperpot mortar battery pit"
 msgstr ""
@@ -2850,8 +2059,6 @@ msgstr ""
 #: data/base/messages/resmessages2.rmsg:200
 #: data/base/messages/strings/resstrings.txt:180
 #: data/base/messages/strings/resstrings.txt:186
-#: data/mp/messages/resmessages2.rmsg:187
-#: data/mp/messages/resmessages2.rmsg:200
 #: data/mp/messages/strings/resstrings.txt:204
 #: data/mp/messages/strings/resstrings.txt:210
 msgid "Armored Hellstorm howitzer emplacement"
@@ -2859,7 +2066,6 @@ msgstr ""
 
 #: data/base/messages/resmessages2.rmsg:213
 #: data/base/messages/strings/resstrings.txt:192
-#: data/mp/messages/resmessages2.rmsg:213
 #: data/mp/messages/strings/resstrings.txt:216
 msgid "Armored strongpoint with Tank Killer rocket"
 msgstr "Montură ranforsată cu rachete Tank Killer"
@@ -2878,17 +2084,6 @@ msgstr "Montură ranforsată cu rachete Tank Killer"
 #: data/base/messages/strings/resstrings.txt:205
 #: data/base/messages/strings/resstrings.txt:219
 #: data/base/messages/strings/resstrings.txt:225
-#: data/mp/messages/resmessages2.rmsg:214
-#: data/mp/messages/resmessages2.rmsg:227
-#: data/mp/messages/resmessages2.rmsg:240
-#: data/mp/messages/resmessages2.rmsg:253
-#: data/mp/messages/resmessages2.rmsg:266
-#: data/mp/messages/resmessages3.rmsg:292
-#: data/mp/messages/resmessages3.rmsg:305
-#: data/mp/messages/resmessages3.rmsg:318
-#: data/mp/messages/resmessages3.rmsg:331
-#: data/mp/messages/resmessagesall.rmsg:281
-#: data/mp/messages/resmessagesall.rmsg:593
 #: data/mp/messages/strings/resstrings.txt:217
 #: data/mp/messages/strings/resstrings.txt:223
 #: data/mp/messages/strings/resstrings.txt:229
@@ -2899,63 +2094,54 @@ msgstr "Țintește automat inamicii din rază"
 
 #: data/base/messages/resmessages2.rmsg:226
 #: data/base/messages/strings/resstrings.txt:198
-#: data/mp/messages/resmessages2.rmsg:226
 #: data/mp/messages/strings/resstrings.txt:222
 msgid "Armored strongpoint with Hyper-Velocity Cannon"
 msgstr "Montură ranforsată cu tun cu hiper-velocitate"
 
 #: data/base/messages/resmessages2.rmsg:239
 #: data/base/messages/strings/resstrings.txt:204
-#: data/mp/messages/resmessages2.rmsg:239
 #: data/mp/messages/strings/resstrings.txt:228
 msgid "Armored strongpoint with Inferno Flamer"
 msgstr "Montură ranforsată cu aruncător de flăcări Infern"
 
 #: data/base/messages/resmessages2.rmsg:252
 #: data/base/messages/strings/resstrings.txt:218
-#: data/mp/messages/resmessages2.rmsg:252
 #: data/mp/messages/strings/resstrings.txt:246
 msgid "Armored strongpoint with Assault Cannon"
 msgstr "Montură ranforsată cu tun de asalt"
 
 #: data/base/messages/resmessages2.rmsg:265
 #: data/base/messages/strings/resstrings.txt:224
-#: data/mp/messages/resmessages2.rmsg:265
 #: data/mp/messages/strings/resstrings.txt:252
 msgid "Reinforced tower with Assault Gun"
 msgstr "Turn ranforsat cu mitralieră de asalt"
 
 #: data/base/messages/resmessages2.rmsg:278
 #: data/base/messages/strings/resstrings.txt:288
-#: data/mp/messages/resmessages2.rmsg:278
 #: data/mp/messages/strings/resstrings.txt:316
 msgid "Armored hardpoint with Assault Gun"
 msgstr "Bloc ranforsat cu mitralieră de asalt"
 
 #: data/base/messages/resmessages2.rmsg:291
 #: data/base/messages/strings/resstrings.txt:294
-#: data/mp/messages/resmessages2.rmsg:291
 #: data/mp/messages/strings/resstrings.txt:322
 msgid "Armored hardpoint with Assault Cannon"
 msgstr "Bloc ranforsat cu tun de asalt"
 
 #: data/base/messages/resmessages2.rmsg:304
 #: data/base/messages/strings/resstrings.txt:302
-#: data/mp/messages/resmessages2.rmsg:304
 #: data/mp/messages/strings/resstrings.txt:330
 msgid "Armored hardpoint with Inferno flamer"
 msgstr "Bloc ranforsat cu aruncător de flăcări Infern"
 
 #: data/base/messages/resmessages2.rmsg:317
 #: data/base/messages/strings/resstrings.txt:308
-#: data/mp/messages/resmessages2.rmsg:317
 #: data/mp/messages/strings/resstrings.txt:336
 msgid "Armored hardpoint with Tank Killer AT missile"
 msgstr "Bloc ranforsat cu lansator de rachete Tank Killer"
 
 #: data/base/messages/resmessages2.rmsg:330
 #: data/base/messages/strings/resstrings.txt:334
-#: data/mp/messages/resmessages2.rmsg:330
 #: data/mp/messages/strings/resstrings.txt:362
 msgid "New robotic repair techniques"
 msgstr "Noi tehnici de reparație robotică"
@@ -2963,14 +2149,12 @@ msgstr "Noi tehnici de reparație robotică"
 #: data/base/messages/resmessages2.rmsg:343
 #: data/base/messages/strings/names.txt:786
 #: data/base/messages/strings/resstrings.txt:348
-#: data/mp/messages/resmessages2.rmsg:343
 #: data/mp/messages/strings/resstrings.txt:376
 msgid "Robotic Cyborg Production"
 msgstr "Producție robotică de cyborgi"
 
 #: data/base/messages/resmessages2.rmsg:356
 #: data/base/messages/strings/resstrings.txt:366
-#: data/mp/messages/resmessages2.rmsg:356
 #: data/mp/messages/strings/resstrings.txt:394
 msgid "New Robotic Techniques improve factory production"
 msgstr ""
@@ -2984,7 +2168,6 @@ msgstr "Mărește productivitatea fabricilor"
 #: data/base/messages/resmessages2.rmsg:369
 #: data/base/messages/strings/names.txt:835
 #: data/base/messages/strings/resstrings.txt:390
-#: data/mp/messages/resmessages2.rmsg:369
 #: data/mp/messages/strings/names.txt:844
 #: data/mp/messages/strings/resstrings.txt:418
 msgid "Dedicated Synaptic Link Data Analysis"
@@ -2993,7 +2176,6 @@ msgstr "Analiza datelor prin legătura sinaptică dedicată"
 #: data/base/messages/resmessages2.rmsg:382
 #: data/base/messages/strings/names.txt:808
 #: data/base/messages/strings/resstrings.txt:400
-#: data/mp/messages/resmessages2.rmsg:382
 #: data/mp/messages/strings/names.txt:817
 #: data/mp/messages/strings/resstrings.txt:428
 msgid "Hardened Base Structure Materials"
@@ -3002,7 +2184,6 @@ msgstr "Materiale de construcții întărite"
 #: data/base/messages/resmessages2.rmsg:395
 #: data/base/messages/strings/names.txt:851
 #: data/base/messages/strings/resstrings.txt:412
-#: data/mp/messages/resmessages2.rmsg:395
 #: data/mp/messages/strings/resstrings.txt:440
 msgid "Robotic VTOL Production"
 msgstr "Producție robotică a DAV-urilor"
@@ -3010,8 +2191,6 @@ msgstr "Producție robotică a DAV-urilor"
 #: data/base/messages/resmessages2.rmsg:396
 #: data/base/messages/resmessages3.rmsg:487
 #: data/base/messages/strings/resstrings.txt:413
-#: data/mp/messages/resmessages2.rmsg:396
-#: data/mp/messages/resmessages3.rmsg:487
 #: data/mp/messages/strings/resstrings.txt:441
 msgid "Increases VTOL factory output"
 msgstr "Mărește productivitatea fabricilor DAV"
@@ -3019,8 +2198,6 @@ msgstr "Mărește productivitatea fabricilor DAV"
 #: data/base/messages/resmessages2.rmsg:397
 #: data/base/messages/resmessages3.rmsg:488
 #: data/base/messages/strings/resstrings.txt:414
-#: data/mp/messages/resmessages2.rmsg:397
-#: data/mp/messages/resmessages3.rmsg:488
 #: data/mp/messages/strings/resstrings.txt:442
 msgid "All VTOL factories upgraded automatically"
 msgstr "Toate fabricile DAV îmbunătățite automat"
@@ -3028,8 +2205,6 @@ msgstr "Toate fabricile DAV îmbunătățite automat"
 #: data/base/messages/resmessages2.rmsg:407
 #: data/base/messages/resmessages3.rmsg:498
 #: data/base/messages/strings/resstrings.txt:421
-#: data/mp/messages/resmessages2.rmsg:407
-#: data/mp/messages/resmessages3.rmsg:498
 #: data/mp/messages/strings/resstrings.txt:449
 msgid "VTOL Rearming Times Reduced"
 msgstr "Timpii reînarmăreii DAV-urilor reduși"
@@ -3037,7 +2212,6 @@ msgstr "Timpii reînarmăreii DAV-urilor reduși"
 #: data/base/messages/resmessages2.rmsg:408
 #: data/base/messages/strings/names.txt:843
 #: data/base/messages/strings/resstrings.txt:422
-#: data/mp/messages/resmessages2.rmsg:408
 #: data/mp/messages/strings/names.txt:852
 #: data/mp/messages/strings/resstrings.txt:450
 msgid "Automated VTOL Rearming"
@@ -3053,29 +2227,24 @@ msgstr "Reduce timpul de reînarmare"
 #: data/base/messages/resmessages2.rmsg:410
 #: data/base/messages/resmessages3.rmsg:501
 #: data/base/messages/strings/resstrings.txt:424
-#: data/mp/messages/resmessages2.rmsg:410
-#: data/mp/messages/resmessages3.rmsg:501
 #: data/mp/messages/strings/resstrings.txt:452
 msgid "All rearming pads upgraded automatically"
 msgstr "Toate stațiile de reînarmare îmbunătățite instantaneu"
 
 #: data/base/messages/resmessages2.rmsg:420
 #: data/base/messages/strings/resstrings.txt:459
-#: data/mp/messages/resmessages2.rmsg:420
 #: data/mp/messages/strings/resstrings.txt:489
 msgid "Improved Sensor Tower Available"
 msgstr "Turn cu senzor îmbunătățit disponibil"
 
 #: data/base/messages/resmessages2.rmsg:421
 #: data/base/messages/strings/resstrings.txt:460
-#: data/mp/messages/resmessages2.rmsg:421
 #: data/mp/messages/strings/resstrings.txt:490
 msgid "New construction techniques improve tower"
 msgstr "Noi tehnici de construcție îmbunătățesc turnurile"
 
 #: data/base/messages/resmessages2.rmsg:422
 #: data/base/messages/strings/resstrings.txt:461
-#: data/mp/messages/resmessages2.rmsg:422
 #: data/mp/messages/strings/resstrings.txt:491
 msgid "Replaces existing sensor tower"
 msgstr "Înlocuiește actualul turn cu senzor"
@@ -3084,30 +2253,24 @@ msgstr "Înlocuiește actualul turn cu senzor"
 #: data/base/messages/resmessagesall.rmsg:59
 #: data/base/messages/resmessagesall.rmsg:72
 #: data/base/messages/strings/resstrings.txt:462
-#: data/mp/messages/resmessages2.rmsg:423
-#: data/mp/messages/resmessagesall.rmsg:59
-#: data/mp/messages/resmessagesall.rmsg:72
 #: data/mp/messages/strings/resstrings.txt:492
 msgid "May be assigned as spotter for indirect fire weapons"
 msgstr "Poate fi asociat ca detector pentru armele cu foc indirect"
 
 #: data/base/messages/resmessages2.rmsg:434
 #: data/base/messages/strings/resstrings.txt:480
-#: data/mp/messages/resmessages2.rmsg:434
 #: data/mp/messages/strings/resstrings.txt:510
 msgid "VTOL CB turret detects enemy indirect fire batteries"
 msgstr "Turela DAV-AB detectează bateriile de foc indirect inamice"
 
 #: data/base/messages/resmessages2.rmsg:460
 #: data/base/messages/strings/resstrings.txt:500
-#: data/mp/messages/resmessages2.rmsg:460
 #: data/mp/messages/strings/resstrings.txt:530
 msgid "New target recognition systems"
 msgstr "Noi sisteme de recunoaștere a țintei"
 
 #: data/base/messages/resmessages2.rmsg:472
 #: data/base/messages/strings/resstrings.txt:527
-#: data/mp/messages/resmessages2.rmsg:472
 #: data/mp/messages/strings/resstrings.txt:562
 msgid "Collective Light Body"
 msgstr "Șasiu ușor al Colectivului"
@@ -3115,29 +2278,24 @@ msgstr "Șasiu ușor al Colectivului"
 #: data/base/messages/resmessages2.rmsg:473
 #: data/base/messages/resmessages3.rmsg:629
 #: data/base/messages/strings/resstrings.txt:528
-#: data/mp/messages/resmessages2.rmsg:473
-#: data/mp/messages/resmessages3.rmsg:629
 #: data/mp/messages/strings/resstrings.txt:563
 msgid "Superior armor and body points to Viper"
 msgstr "Armură și rezistență la avarii superioare Viperei"
 
 #: data/base/messages/resmessages2.rmsg:474
 #: data/base/messages/strings/resstrings.txt:529
-#: data/mp/messages/resmessages2.rmsg:474
 #: data/mp/messages/strings/resstrings.txt:564
 msgid "Slower than Viper"
 msgstr "Mai lent decât Vipera"
 
 #: data/base/messages/resmessages2.rmsg:475
 #: data/base/messages/strings/resstrings.txt:530
-#: data/mp/messages/resmessages2.rmsg:475
 #: data/mp/messages/strings/resstrings.txt:565
 msgid "High power costs and slower to produce than Viper"
 msgstr "Costuri și timpi de producție mai mari decât ai Viperei"
 
 #: data/base/messages/resmessages2.rmsg:485
 #: data/base/messages/strings/resstrings.txt:539
-#: data/mp/messages/resmessages2.rmsg:485
 #: data/mp/messages/strings/resstrings.txt:574
 msgid "Collective Medium Body"
 msgstr "Șasiu mediu al Colectivului"
@@ -3145,22 +2303,18 @@ msgstr "Șasiu mediu al Colectivului"
 #: data/base/messages/resmessages2.rmsg:486
 #: data/base/messages/resmessages3.rmsg:642
 #: data/base/messages/strings/resstrings.txt:540
-#: data/mp/messages/resmessages2.rmsg:486
-#: data/mp/messages/resmessages3.rmsg:642
 #: data/mp/messages/strings/resstrings.txt:575
 msgid "Superior armor and body points to Cobra"
 msgstr "Armură și rezistență la avarii superioare Cobrei"
 
 #: data/base/messages/resmessages2.rmsg:487
 #: data/base/messages/strings/resstrings.txt:541
-#: data/mp/messages/resmessages2.rmsg:487
 #: data/mp/messages/strings/resstrings.txt:576
 msgid "Slower than Cobra"
 msgstr "Mai lent decât Cobra"
 
 #: data/base/messages/resmessages2.rmsg:488
 #: data/base/messages/strings/resstrings.txt:542
-#: data/mp/messages/resmessages2.rmsg:488
 #: data/mp/messages/strings/resstrings.txt:577
 msgid "High power costs and slower to produce than Cobra"
 msgstr "Costuri și timpi de producție mai mari decât ai Cobrei"
@@ -3168,7 +2322,6 @@ msgstr "Costuri și timpi de producție mai mari decât ai Cobrei"
 #: data/base/messages/resmessages2.rmsg:499
 #: data/base/messages/strings/names.txt:945
 #: data/base/messages/strings/resstrings.txt:560
-#: data/mp/messages/resmessages2.rmsg:499
 #: data/mp/messages/strings/names.txt:956
 #: data/mp/messages/strings/resstrings.txt:595
 msgid "Turbo-Charged Engine"
@@ -3177,9 +2330,6 @@ msgstr "Motor cu alimentare turbo"
 #: data/base/messages/resmessages2.rmsg:524
 #: data/base/messages/resmessages3.rmsg:719
 #: data/base/messages/strings/resstrings.txt:581
-#: data/mp/messages/resmessages2.rmsg:524
-#: data/mp/messages/resmessages3.rmsg:719
-#: data/mp/messages/resmessagesall.rmsg:851
 #: data/mp/messages/strings/resstrings.txt:616
 msgid "Vehicle Thermal Armor Improved"
 msgstr "Armura termală a vehiculelor îmbunătățită"
@@ -3187,9 +2337,6 @@ msgstr "Armura termală a vehiculelor îmbunătățită"
 #: data/base/messages/resmessages2.rmsg:525
 #: data/base/messages/resmessages3.rmsg:720
 #: data/base/messages/strings/resstrings.txt:582
-#: data/mp/messages/resmessages2.rmsg:525
-#: data/mp/messages/resmessages3.rmsg:720
-#: data/mp/messages/resmessagesall.rmsg:852
 #: data/mp/messages/strings/resstrings.txt:617
 msgid "Heat-resistant armored layers"
 msgstr "Straturi de armură rezistente la temperatură"
@@ -3215,16 +2362,6 @@ msgstr "Armura termală îmbunătățită"
 #: data/base/messages/strings/resstrings.txt:601
 #: data/base/messages/strings/resstrings.txt:611
 #: data/base/messages/strings/resstrings.txt:621
-#: data/mp/messages/resmessages2.rmsg:537
-#: data/mp/messages/resmessages2.rmsg:550
-#: data/mp/messages/resmessages2.rmsg:563
-#: data/mp/messages/resmessages2.rmsg:576
-#: data/mp/messages/resmessages3.rmsg:732
-#: data/mp/messages/resmessages3.rmsg:745
-#: data/mp/messages/resmessages3.rmsg:758
-#: data/mp/messages/resmessages3.rmsg:771
-#: data/mp/messages/resmessages3.rmsg:784
-#: data/mp/messages/resmessages3.rmsg:797
 #: data/mp/messages/strings/resstrings.txt:626
 #: data/mp/messages/strings/resstrings.txt:636
 #: data/mp/messages/strings/resstrings.txt:646
@@ -3235,8 +2372,6 @@ msgstr "Propulsia vehiculelor îmbunătățită"
 #: data/base/messages/resmessages2.rmsg:540
 #: data/base/messages/resmessages3.rmsg:735
 #: data/base/messages/strings/resstrings.txt:594
-#: data/mp/messages/resmessages2.rmsg:540
-#: data/mp/messages/resmessages3.rmsg:735
 #: data/mp/messages/strings/resstrings.txt:629
 msgid "All half-tracks upgraded automatically"
 msgstr "Toate semi-șenilele îmbunătățite instantaneu"
@@ -3244,8 +2379,6 @@ msgstr "Toate semi-șenilele îmbunătățite instantaneu"
 #: data/base/messages/resmessages2.rmsg:553
 #: data/base/messages/resmessages3.rmsg:748
 #: data/base/messages/strings/resstrings.txt:604
-#: data/mp/messages/resmessages2.rmsg:553
-#: data/mp/messages/resmessages3.rmsg:748
 #: data/mp/messages/strings/resstrings.txt:639
 msgid "All hovers upgraded automatically"
 msgstr "Toate pernele de aer îmbunătățite instantaneu"
@@ -3253,8 +2386,6 @@ msgstr "Toate pernele de aer îmbunătățite instantaneu"
 #: data/base/messages/resmessages2.rmsg:566
 #: data/base/messages/resmessages3.rmsg:761
 #: data/base/messages/strings/resstrings.txt:614
-#: data/mp/messages/resmessages2.rmsg:566
-#: data/mp/messages/resmessages3.rmsg:761
 #: data/mp/messages/strings/resstrings.txt:649
 msgid "All tracks upgraded automatically"
 msgstr "Toate șenilele îmbunătățite instantaneu"
@@ -3262,8 +2393,6 @@ msgstr "Toate șenilele îmbunătățite instantaneu"
 #: data/base/messages/resmessages2.rmsg:579
 #: data/base/messages/resmessages3.rmsg:774
 #: data/base/messages/strings/resstrings.txt:624
-#: data/mp/messages/resmessages2.rmsg:579
-#: data/mp/messages/resmessages3.rmsg:774
 #: data/mp/messages/strings/resstrings.txt:659
 msgid "All wheels upgraded automatically"
 msgstr "Toate roțile îmbunătățite instantaneu"
@@ -3276,10 +2405,6 @@ msgstr "Toate roțile îmbunătățite instantaneu"
 #: data/base/messages/strings/resstrings.txt:641
 #: data/base/messages/strings/resstrings.txt:647
 #: data/base/messages/strings/resstrings.txt:653
-#: data/mp/messages/resmessages2.rmsg:589
-#: data/mp/messages/resmessages2.rmsg:602
-#: data/mp/messages/resmessages2.rmsg:615
-#: data/mp/messages/resmessages2.rmsg:628
 #: data/mp/messages/strings/resstrings.txt:670
 #: data/mp/messages/strings/resstrings.txt:676
 #: data/mp/messages/strings/resstrings.txt:682
@@ -3289,7 +2414,6 @@ msgstr "Nouă turelă AA disponibilă"
 
 #: data/base/messages/resmessages2.rmsg:590
 #: data/base/messages/strings/resstrings.txt:636
-#: data/mp/messages/resmessages2.rmsg:590
 #: data/mp/messages/strings/resstrings.txt:671
 msgid "Twin 80mm flak weapon"
 msgstr ""
@@ -3302,13 +2426,6 @@ msgstr ""
 #: data/base/messages/strings/resstrings.txt:643
 #: data/base/messages/strings/resstrings.txt:649
 #: data/base/messages/strings/resstrings.txt:655
-#: data/mp/messages/resmessages2.rmsg:591
-#: data/mp/messages/resmessages2.rmsg:604
-#: data/mp/messages/resmessages2.rmsg:617
-#: data/mp/messages/resmessages2.rmsg:630
-#: data/mp/messages/resmessagesall.rmsg:775
-#: data/mp/messages/resmessagesall.rmsg:840
-#: data/mp/messages/resmessagesall.rmsg:879
 #: data/mp/messages/strings/resstrings.txt:672
 #: data/mp/messages/strings/resstrings.txt:678
 #: data/mp/messages/strings/resstrings.txt:684
@@ -3318,29 +2435,24 @@ msgstr "Doar ținte aeriene"
 
 #: data/base/messages/resmessages2.rmsg:603
 #: data/base/messages/strings/resstrings.txt:642
-#: data/mp/messages/resmessages2.rmsg:603
 #: data/mp/messages/strings/resstrings.txt:677
 msgid "Quad 80mm flak weapon"
 msgstr ""
 
 #: data/base/messages/resmessages2.rmsg:616
 #: data/base/messages/strings/resstrings.txt:648
-#: data/mp/messages/resmessages2.rmsg:616
 #: data/mp/messages/strings/resstrings.txt:683
 msgid "30mm Anti-Aircraft machinegun"
 msgstr "Mitralieră anti-aeriană de 30mm"
 
 #: data/base/messages/resmessages2.rmsg:629
 #: data/base/messages/strings/resstrings.txt:654
-#: data/mp/messages/resmessages2.rmsg:629
-#: data/mp/messages/resmessagesall.rmsg:774
 #: data/mp/messages/strings/resstrings.txt:689
 msgid "Quad 30mm Anti-Aircraft machinegun"
 msgstr "Mitralieră anti-aerianp de 30mm quadruplă"
 
 #: data/base/messages/resmessages2.rmsg:642
 #: data/base/messages/strings/resstrings.txt:660
-#: data/mp/messages/resmessages2.rmsg:642
 #: data/mp/messages/strings/resstrings.txt:695
 msgid "Detects and locks-on to VTOL engine emissions"
 msgstr "Detectează și urmărește emisiile motoarelor DAV"
@@ -3348,15 +2460,12 @@ msgstr "Detectează și urmărește emisiile motoarelor DAV"
 #: data/base/messages/resmessages2.rmsg:654
 #: data/base/messages/resmessages3.rmsg:823
 #: data/base/messages/strings/resstrings.txt:669
-#: data/mp/messages/resmessages2.rmsg:654
-#: data/mp/messages/resmessages3.rmsg:823
 #: data/mp/messages/strings/resstrings.txt:704
 msgid "AA Flak Upgrade"
 msgstr ""
 
 #: data/base/messages/resmessages2.rmsg:655
 #: data/base/messages/strings/resstrings.txt:670
-#: data/mp/messages/resmessages2.rmsg:655
 #: data/mp/messages/strings/resstrings.txt:705
 msgid "High Explosive Flak shards"
 msgstr ""
@@ -3371,15 +2480,12 @@ msgstr ""
 #: data/base/messages/resmessages2.rmsg:657
 #: data/base/messages/resmessages3.rmsg:826
 #: data/base/messages/strings/resstrings.txt:672
-#: data/mp/messages/resmessages2.rmsg:657
-#: data/mp/messages/resmessages3.rmsg:826
 #: data/mp/messages/strings/resstrings.txt:707
 msgid "All AA flak weapons upgraded automatically"
 msgstr ""
 
 #: data/base/messages/resmessages2.rmsg:668
 #: data/base/messages/strings/resstrings.txt:678
-#: data/mp/messages/resmessages2.rmsg:668
 #: data/mp/messages/strings/resstrings.txt:713
 msgid "Recoil loaded AA ammunition hopper"
 msgstr ""
@@ -3395,8 +2501,6 @@ msgstr "Mărește rata de foc AA"
 #: data/base/messages/resmessages2.rmsg:693
 #: data/base/messages/strings/resstrings.txt:685
 #: data/base/messages/strings/resstrings.txt:691
-#: data/mp/messages/resmessages2.rmsg:680
-#: data/mp/messages/resmessages2.rmsg:693
 #: data/mp/messages/strings/resstrings.txt:720
 #: data/mp/messages/strings/resstrings.txt:726
 msgid "New Proximity Bomb Turret Available"
@@ -3404,7 +2508,6 @@ msgstr ""
 
 #: data/base/messages/resmessages2.rmsg:681
 #: data/base/messages/strings/resstrings.txt:686
-#: data/mp/messages/resmessages2.rmsg:681
 #: data/mp/messages/strings/resstrings.txt:721
 msgid "Bomb turret explodes in proximity to enemy"
 msgstr ""
@@ -3413,8 +2516,6 @@ msgstr ""
 #: data/base/messages/resmessages2.rmsg:695
 #: data/base/messages/strings/resstrings.txt:687
 #: data/base/messages/strings/resstrings.txt:693
-#: data/mp/messages/resmessages2.rmsg:682
-#: data/mp/messages/resmessages2.rmsg:695
 #: data/mp/messages/strings/resstrings.txt:722
 #: data/mp/messages/strings/resstrings.txt:728
 msgid "Best Targets: Base Structures and Defenses"
@@ -3422,35 +2523,30 @@ msgstr ""
 
 #: data/base/messages/resmessages2.rmsg:694
 #: data/base/messages/strings/resstrings.txt:692
-#: data/mp/messages/resmessages2.rmsg:694
 #: data/mp/messages/strings/resstrings.txt:727
 msgid "Superbomb turret explodes in proximity to enemy"
 msgstr ""
 
 #: data/base/messages/resmessages2.rmsg:707
 #: data/base/messages/strings/resstrings.txt:698
-#: data/mp/messages/resmessages2.rmsg:707
 #: data/mp/messages/strings/resstrings.txt:733
 msgid "Drops High Explosive Cluster bombs"
 msgstr ""
 
 #: data/base/messages/resmessages2.rmsg:708
 #: data/base/messages/strings/resstrings.txt:699
-#: data/mp/messages/resmessages2.rmsg:708
 #: data/mp/messages/strings/resstrings.txt:734
 msgid "Best Targets: Base Structures"
 msgstr "Ținta ideală: Clădiri"
 
 #: data/base/messages/resmessages2.rmsg:720
 #: data/base/messages/strings/resstrings.txt:704
-#: data/mp/messages/resmessages2.rmsg:720
 #: data/mp/messages/strings/resstrings.txt:739
 msgid "Drops High Explosive Armor Piercing bombs"
 msgstr ""
 
 #: data/base/messages/resmessages2.rmsg:721
 #: data/base/messages/strings/resstrings.txt:705
-#: data/mp/messages/resmessages2.rmsg:721
 #: data/mp/messages/strings/resstrings.txt:740
 msgid "Best Targets: Defenses"
 msgstr "Ținta ideală: Clădirile defensive"
@@ -3463,64 +2559,54 @@ msgstr "Urmărește emisiile termice"
 
 #: data/base/messages/resmessages2.rmsg:746
 #: data/base/messages/strings/resstrings.txt:730
-#: data/mp/messages/resmessages2.rmsg:746
 #: data/mp/messages/strings/resstrings.txt:765
 msgid "Hyper-velocity automatic-cannon firing 88mm rounds"
 msgstr ""
 
 #: data/base/messages/resmessages2.rmsg:748
 #: data/base/messages/strings/resstrings.txt:732
-#: data/mp/messages/resmessages2.rmsg:748
 #: data/mp/messages/strings/resstrings.txt:767
 msgid "Replaces Medium Cannon"
 msgstr "Înlocuiește tunul mediu"
 
 #: data/base/messages/resmessages2.rmsg:759
 #: data/base/messages/strings/resstrings.txt:736
-#: data/mp/messages/resmessages2.rmsg:759
 #: data/mp/messages/strings/resstrings.txt:771
 msgid "76mm hyper-velocity quad-barrel automatic-cannon"
 msgstr "Tun cu hiper-velocitate automat de 76mm cu 4 țevi"
 
 #: data/base/messages/resmessages2.rmsg:772
 #: data/base/messages/strings/resstrings.txt:758
-#: data/mp/messages/resmessages2.rmsg:772
 #: data/mp/messages/strings/resstrings.txt:797
 msgid "Heavy Flame-thrower firing Propylene Oxide gel"
 msgstr ""
 
 #: data/base/messages/resmessages2.rmsg:785
 #: data/base/messages/strings/resstrings.txt:766
-#: data/mp/messages/resmessages2.rmsg:785
-#: data/mp/messages/resmessagesall.rmsg:787
 #: data/mp/messages/strings/resstrings.txt:805
 msgid "Propylene Oxide treated to burn at superhot temperatures"
 msgstr ""
 
 #: data/base/messages/resmessages2.rmsg:798
 #: data/base/messages/strings/resstrings.txt:774
-#: data/mp/messages/resmessages2.rmsg:798
 #: data/mp/messages/strings/resstrings.txt:813
 msgid "105mm Howitzer may be assigned to a sensor"
 msgstr "Howitzer-ul de 105mm poate fi asociat unui senzor"
 
 #: data/base/messages/resmessages2.rmsg:811
 #: data/base/messages/strings/resstrings.txt:780
-#: data/mp/messages/resmessages2.rmsg:811
 #: data/mp/messages/strings/resstrings.txt:821
 msgid "155mm Howitzer may be assigned to a sensor"
 msgstr "Howitzer-ul de 155mm poate fi asociat unui senzor"
 
 #: data/base/messages/resmessages2.rmsg:824
 #: data/base/messages/strings/resstrings.txt:788
-#: data/mp/messages/resmessages2.rmsg:824
 #: data/mp/messages/strings/resstrings.txt:829
 msgid "105m Howitzer firing incendiaries, may be assigned to a sensor"
 msgstr ""
 
 #: data/base/messages/resmessages2.rmsg:825
 #: data/base/messages/strings/resstrings.txt:789
-#: data/mp/messages/resmessages2.rmsg:825
 #: data/mp/messages/strings/resstrings.txt:830
 msgid "Best Targets: Base Structures, bunkers"
 msgstr "Ținta ideală: Clădiri, Buncăre"
@@ -3534,12 +2620,6 @@ msgstr "Ținta ideală: Clădiri, Buncăre"
 #: data/base/messages/strings/resstrings.txt:793
 #: data/base/messages/strings/resstrings.txt:801
 #: data/base/messages/strings/resstrings.txt:809
-#: data/mp/messages/resmessages2.rmsg:836
-#: data/mp/messages/resmessages2.rmsg:849
-#: data/mp/messages/resmessages2.rmsg:862
-#: data/mp/messages/resmessages3.rmsg:901
-#: data/mp/messages/resmessages3.rmsg:914
-#: data/mp/messages/resmessages3.rmsg:927
 #: data/mp/messages/strings/resstrings.txt:834
 #: data/mp/messages/strings/resstrings.txt:842
 #: data/mp/messages/strings/resstrings.txt:850
@@ -3562,12 +2642,6 @@ msgstr "Mărește precizia howitzer-elor"
 #: data/base/messages/strings/resstrings.txt:796
 #: data/base/messages/strings/resstrings.txt:804
 #: data/base/messages/strings/resstrings.txt:812
-#: data/mp/messages/resmessages2.rmsg:839
-#: data/mp/messages/resmessages2.rmsg:852
-#: data/mp/messages/resmessages2.rmsg:865
-#: data/mp/messages/resmessages3.rmsg:904
-#: data/mp/messages/resmessages3.rmsg:917
-#: data/mp/messages/resmessages3.rmsg:930
 #: data/mp/messages/strings/resstrings.txt:837
 #: data/mp/messages/strings/resstrings.txt:845
 #: data/mp/messages/strings/resstrings.txt:853
@@ -3576,8 +2650,6 @@ msgstr "Toate howitzer-ele îmbunătățite instantaneu"
 
 #: data/base/messages/resmessages2.rmsg:850
 #: data/base/messages/strings/resstrings.txt:802
-#: data/mp/messages/resmessages2.rmsg:733
-#: data/mp/messages/resmessages2.rmsg:850
 #: data/mp/messages/strings/resstrings.txt:843
 msgid "High Explosive shells"
 msgstr "Muniție super-explozivă"
@@ -3598,21 +2670,18 @@ msgstr "Mărește rata de foc a howitzer-elor"
 
 #: data/base/messages/resmessages2.rmsg:876
 #: data/base/messages/strings/resstrings.txt:846
-#: data/mp/messages/resmessages2.rmsg:876
 #: data/mp/messages/strings/resstrings.txt:889
 msgid "Tungsten-tipped armor-piercing bullets"
 msgstr "Gloanțe cu vârf de tungsten penetratoare de armură"
 
 #: data/base/messages/resmessages2.rmsg:889
 #: data/base/messages/strings/resstrings.txt:858
-#: data/mp/messages/resmessages2.rmsg:889
 #: data/mp/messages/strings/resstrings.txt:901
 msgid "Improved chaingun mechanism"
 msgstr ""
 
 #: data/base/messages/resmessages2.rmsg:915
 #: data/base/messages/strings/resstrings.txt:906
-#: data/mp/messages/resmessages2.rmsg:915
 #: data/mp/messages/strings/resstrings.txt:951
 msgid "High Explosive Armor-Piercing Shells"
 msgstr ""
@@ -3625,95 +2694,74 @@ msgstr ""
 
 #: data/base/messages/resmessages2.rmsg:941
 #: data/base/messages/strings/resstrings.txt:966
-#: data/mp/messages/resmessages2.rmsg:941
 #: data/mp/messages/strings/resstrings.txt:1011
 msgid "High Explosive Squash Head warhead"
 msgstr ""
 
 #: data/base/messages/resmessages3.rmsg:18
-#: data/mp/messages/resmessages3.rmsg:18
 msgid "NEXUS Intruder Program analyzed"
 msgstr ""
 
 #: data/base/messages/resmessages3.rmsg:19
-#: data/mp/messages/resmessages3.rmsg:19
 msgid "Intruder parasite isolated"
 msgstr "Intrusul parazit izolat"
 
 #: data/base/messages/resmessages3.rmsg:20
 #: data/base/messages/resmessages3.rmsg:33
-#: data/mp/messages/resmessages3.rmsg:20
-#: data/mp/messages/resmessages3.rmsg:33
 msgid "Reduced chance of NEXUS take-over"
 msgstr ""
 
 #: data/base/messages/resmessages3.rmsg:31
-#: data/mp/messages/resmessages3.rmsg:31
 msgid "Improved NEXUS resistance circuitry"
 msgstr "Circuite de rezistență NEXUS îmbunătățite"
 
 #: data/base/messages/resmessages3.rmsg:32
-#: data/mp/messages/resmessages3.rmsg:32
 msgid "Computer systems can now be 'ring-fenced' from NEXUS"
 msgstr "Sistemele de calcul pot fi „îngrădite” față de NEXUS"
 
 #: data/base/messages/resmessages3.rmsg:43
-#: data/mp/messages/resmessages3.rmsg:43
 msgid "New Cyborg Research Available"
 msgstr ""
 
 #: data/base/messages/resmessages3.rmsg:44
-#: data/mp/messages/resmessages3.rmsg:44
 msgid "Aerodynamic Jump Pack"
 msgstr ""
 
 #: data/base/messages/resmessages3.rmsg:45
-#: data/mp/messages/resmessages3.rmsg:45
 msgid "Gives Cyborg limited flight abilities"
 msgstr ""
 
 #: data/base/messages/resmessages3.rmsg:46
-#: data/mp/messages/resmessages3.rmsg:46
 msgid "Jump Cyborgs can now be researched"
 msgstr ""
 
 #: data/base/messages/resmessages3.rmsg:70
 #: data/base/messages/resmessages3.rmsg:694
-#: data/mp/messages/resmessages3.rmsg:70
-#: data/mp/messages/resmessages3.rmsg:694
 msgid "Superdense composite alloys and energy-absorbing fibres"
 msgstr ""
 
 #: data/base/messages/resmessages3.rmsg:83
 #: data/base/messages/resmessages3.rmsg:707
-#: data/mp/messages/resmessages3.rmsg:83
-#: data/mp/messages/resmessages3.rmsg:707
 msgid "Laminated alloys bonded with energy-deflecting optic bundles"
 msgstr ""
 
 #: data/base/messages/resmessages3.rmsg:96
 #: data/base/messages/strings/resstrings.txt:78
-#: data/mp/messages/resmessages3.rmsg:96
 #: data/mp/messages/strings/resstrings.txt:98
 msgid "Armed with Revenger Surface-to-Air missile"
 msgstr ""
 
 #: data/base/messages/resmessages3.rmsg:109
 #: data/base/messages/resmessages3.rmsg:174
-#: data/mp/messages/resmessages3.rmsg:109
-#: data/mp/messages/resmessages3.rmsg:174
 msgid "Armed with Needle Gun"
 msgstr ""
 
 #: data/base/messages/resmessages3.rmsg:122
 #: data/base/messages/resmessages3.rmsg:187
-#: data/mp/messages/resmessages3.rmsg:122
-#: data/mp/messages/resmessages3.rmsg:187
 msgid "Armed with Scourge anti-tank missile"
 msgstr "Înarmat cu rachetă anti-tanc Scourge"
 
 #: data/base/messages/resmessages3.rmsg:135
-#: data/mp/messages/resmessages3.rmsg:135
 msgid "Armed with flashlight laser"
 msgstr "Înarmat cu laser Lanternă"
 
@@ -3724,68 +2772,52 @@ msgstr "Înarmat cu laser Lanternă"
 #: data/base/messages/resmessages3.rmsg:199
 #: data/base/messages/strings/resstrings.txt:77
 #: data/base/messages/strings/resstrings.txt:83
-#: data/mp/messages/resmessages3.rmsg:147
-#: data/mp/messages/resmessages3.rmsg:160
-#: data/mp/messages/resmessages3.rmsg:173
-#: data/mp/messages/resmessages3.rmsg:186
-#: data/mp/messages/resmessages3.rmsg:199
 #: data/mp/messages/strings/resstrings.txt:97
 #: data/mp/messages/strings/resstrings.txt:103
 msgid "New Jump Cyborg Available"
 msgstr ""
 
 #: data/base/messages/resmessages3.rmsg:148
-#: data/mp/messages/resmessages3.rmsg:148
 msgid "Armed with Lancer anti-tank missile"
 msgstr "Înarmat cu rachetă anti-tanc Lancer"
 
 #: data/base/messages/resmessages3.rmsg:161
-#: data/mp/messages/resmessages3.rmsg:161
 msgid "Armed with Cyborg assault gun"
 msgstr ""
 
 #: data/base/messages/resmessages3.rmsg:200
-#: data/mp/messages/resmessages3.rmsg:200
 msgid "Armed with Flashlight Laser"
 msgstr "Înarmat cu laser Flashlight"
 
 #: data/base/messages/resmessages3.rmsg:202
-#: data/mp/messages/resmessages3.rmsg:202
 msgid "Requires cyborg factory to produce"
 msgstr "Necesită fabrică de cyborgi pentru producție"
 
 #: data/base/messages/resmessages3.rmsg:213
-#: data/mp/messages/resmessages3.rmsg:213
 msgid "High tensile concrete-plastic composite"
 msgstr ""
 
 #: data/base/messages/resmessages3.rmsg:226
-#: data/mp/messages/resmessages3.rmsg:226
 msgid "Bonded metallic laminates formed into walls and defenses"
 msgstr ""
 
 #: data/base/messages/resmessages3.rmsg:239
-#: data/mp/messages/resmessages3.rmsg:239
 msgid "SAM site with Avenger missiles"
 msgstr "Amplasament RSA cu rachete Avenger"
 
 #: data/base/messages/resmessages3.rmsg:252
-#: data/mp/messages/resmessages3.rmsg:252
 msgid "SAM site with Vindicator missiles"
 msgstr "Amplasament RSA cu rachete Vindicator"
 
 #: data/base/messages/resmessages3.rmsg:265
-#: data/mp/messages/resmessages3.rmsg:265
 msgid "Artillery battery firing Firestorm Missiles"
 msgstr ""
 
 #: data/base/messages/resmessages3.rmsg:278
-#: data/mp/messages/resmessages3.rmsg:278
 msgid "Artillery battery firing Novastorm Missiles"
 msgstr ""
 
 #: data/base/messages/resmessages3.rmsg:291
-#: data/mp/messages/resmessages3.rmsg:291
 msgid "Armored strongpoint with Flashlight laser"
 msgstr "Montură ranforsată cu laser Lanternă"
 
@@ -3794,116 +2826,93 @@ msgid "Armored strongpoint with Pulse Laser"
 msgstr "Montură ranforsată cu laser pulsatoriu"
 
 #: data/base/messages/resmessages3.rmsg:317
-#: data/mp/messages/resmessages3.rmsg:317
 msgid "Armored strongpoint with Rail Gun"
 msgstr ""
 
 #: data/base/messages/resmessages3.rmsg:330
-#: data/mp/messages/resmessages3.rmsg:330
 msgid "Armored strongpoint with Gauss Cannon"
 msgstr ""
 
 #: data/base/messages/resmessages3.rmsg:343
-#: data/mp/messages/resmessages3.rmsg:343
 msgid "Armored guard tower with Scourge Missile"
 msgstr "Turn ranforsat cu rachete Năpastă"
 
 #: data/base/messages/resmessages3.rmsg:356
-#: data/mp/messages/resmessages3.rmsg:356
 msgid "Armored guard tower with Needle Gun"
 msgstr ""
 
 #: data/base/messages/resmessages3.rmsg:369
-#: data/mp/messages/resmessages3.rmsg:369
 msgid "Armored hardpoint with Scourge AT Missile"
 msgstr "Bloc ranforsat cu rachete Năpastă"
 
 #: data/base/messages/resmessages3.rmsg:382
-#: data/mp/messages/resmessages3.rmsg:382
 msgid "Armored hardpoint with Flashlight laser"
 msgstr "Bloc ranforsat cu laser Lanternă"
 
 #: data/base/messages/resmessages3.rmsg:395
-#: data/mp/messages/resmessages3.rmsg:395
 msgid "Armored hardpoint with Rail Gun"
 msgstr ""
 
 #: data/base/messages/resmessages3.rmsg:408
-#: data/mp/messages/resmessages3.rmsg:408
 msgid "Armored hardpoint with Gauss Cannon"
 msgstr ""
 
 #: data/base/messages/resmessages3.rmsg:421
-#: data/mp/messages/resmessages3.rmsg:421
 msgid "Advanced repair techniques"
 msgstr "Tehnici de reparație avansate"
 
 #: data/base/messages/resmessages3.rmsg:435
-#: data/mp/messages/resmessages3.rmsg:434
 msgid "Vapor Turbine boosts power output"
 msgstr ""
 
 #: data/base/messages/resmessages3.rmsg:447
 #: data/base/messages/strings/names.txt:838
-#: data/mp/messages/resmessages3.rmsg:447
 #: data/mp/messages/strings/names.txt:847
 msgid "Neural Synapse Research Brain"
 msgstr "Creier de cercetare în sinapse neuronale"
 
 #: data/base/messages/resmessages3.rmsg:460
 #: data/base/messages/strings/names.txt:811
-#: data/mp/messages/resmessages3.rmsg:460
 #: data/mp/messages/strings/names.txt:820
 msgid "Advanced Base Structure Materials"
 msgstr "Materiale de construcție avansate"
 
 #: data/base/messages/resmessages3.rmsg:473
-#: data/mp/messages/resmessages3.rmsg:473
 msgid "High Density Base Structure Materials"
 msgstr "Materiale de construcție de densitate mare"
 
 #: data/base/messages/resmessages3.rmsg:486
 #: data/base/messages/strings/names.txt:854
-#: data/mp/messages/resmessages3.rmsg:486
 msgid "Advanced VTOL Production"
 msgstr "Producție DAV avansată"
 
 #: data/base/messages/resmessages3.rmsg:499
 #: data/base/messages/strings/names.txt:846
-#: data/mp/messages/resmessages3.rmsg:499
 #: data/mp/messages/strings/names.txt:855
 msgid "Robotic VTOL Rearming"
 msgstr "Reînarmare DAV robotică"
 
 #: data/base/messages/resmessages3.rmsg:512
-#: data/mp/messages/resmessages3.rmsg:512
 msgid "Advanced Engineering Techniques"
 msgstr "Tehnici de inginerie avansate"
 
 #: data/base/messages/resmessages3.rmsg:538
-#: data/mp/messages/resmessages3.rmsg:538
 msgid "Advanced fire detection systems"
 msgstr "Sisteme de detectare a focului avansate"
 
 #: data/base/messages/resmessages3.rmsg:551
-#: data/mp/messages/resmessages3.rmsg:551
 msgid "Advanced target recognition systems"
 msgstr "Sisteme de recunoaștere a țintei avansate"
 
 #: data/base/messages/resmessages3.rmsg:564
-#: data/mp/messages/resmessages3.rmsg:564
-#: data/mp/messages/resmessagesall.rmsg:397
 msgid "Synaptic Link Scrambler technology"
 msgstr ""
 
 #: data/base/messages/resmessages3.rmsg:565
-#: data/mp/messages/resmessages3.rmsg:565
-#: data/mp/messages/resmessagesall.rmsg:398
 msgid "Electronically attacks and disrupts enemy structures"
 msgstr ""
 
 #: data/base/messages/resmessages3.rmsg:566
-#: data/mp/messages/resmessages3.rmsg:566
 msgid "Steals technology from enemies"
 msgstr "Fură tehnologie de la inamici"
 
@@ -3911,11 +2920,6 @@ msgstr "Fură tehnologie de la inamici"
 #: data/base/messages/resmessages3.rmsg:589
 #: data/base/messages/resmessages3.rmsg:602
 #: data/base/messages/resmessages3.rmsg:615
-#: data/mp/messages/resmessages3.rmsg:576
-#: data/mp/messages/resmessages3.rmsg:589
-#: data/mp/messages/resmessages3.rmsg:602
-#: data/mp/messages/resmessages3.rmsg:615
-#: data/mp/messages/resmessagesall.rmsg:422
 msgid "New Repair Technology Discovered"
 msgstr "Nouă tehnologie de reparații descoperită"
 
@@ -3923,149 +2927,108 @@ msgstr "Nouă tehnologie de reparații descoperită"
 #: data/base/messages/resmessages3.rmsg:590
 #: data/base/messages/resmessages3.rmsg:603
 #: data/base/messages/resmessages3.rmsg:616
-#: data/mp/messages/resmessages3.rmsg:577
-#: data/mp/messages/resmessages3.rmsg:590
-#: data/mp/messages/resmessages3.rmsg:603
-#: data/mp/messages/resmessages3.rmsg:616
-#: data/mp/messages/resmessagesall.rmsg:410
-#: data/mp/messages/resmessagesall.rmsg:423
 msgid "Synaptic Link technology breakthrough"
 msgstr ""
 
 #: data/base/messages/resmessages3.rmsg:578
 #: data/base/messages/resmessages3.rmsg:617
-#: data/mp/messages/resmessages3.rmsg:578
-#: data/mp/messages/resmessages3.rmsg:617
-#: data/mp/messages/resmessagesall.rmsg:424
 msgid "On-board diagnostic and repair systems"
 msgstr "Sistem integrat de diagnosticare și reparații"
 
 #: data/base/messages/resmessages3.rmsg:579
-#: data/mp/messages/resmessages3.rmsg:579
 msgid "Enables self-repair in all Cyborgs"
 msgstr "Permite auto-reparația pe toți cyborgii"
 
 #: data/base/messages/resmessages3.rmsg:591
 #: data/base/messages/resmessages3.rmsg:604
-#: data/mp/messages/resmessages3.rmsg:591
-#: data/mp/messages/resmessages3.rmsg:604
 msgid "Built-in diagnostic and repair systems"
 msgstr "Sistem integrat de diagnosticare și reparații"
 
 #: data/base/messages/resmessages3.rmsg:592
-#: data/mp/messages/resmessages3.rmsg:592
 msgid "Enables self-repair in all base structures"
 msgstr "Permite auto-reparația în toate clădirile"
 
 #: data/base/messages/resmessages3.rmsg:605
-#: data/mp/messages/resmessages3.rmsg:605
 msgid "Enables self-repair in all defenses"
 msgstr "Permite auto-reparația în toate clădirile defensive"
 
 #: data/base/messages/resmessages3.rmsg:618
-#: data/mp/messages/resmessages3.rmsg:618
 msgid "Enables self-repair in all vehicles"
 msgstr "Permite auto-reparația în toate vehiculele"
 
 #: data/base/messages/resmessages3.rmsg:628
-#: data/mp/messages/resmessages3.rmsg:628
 msgid "NEXUS Light Body"
 msgstr "Șasiu uțor NEXUS"
 
 #: data/base/messages/resmessages3.rmsg:631
-#: data/mp/messages/resmessages3.rmsg:631
 msgid "Expensive to produce"
 msgstr "Scump de produs"
 
 #: data/base/messages/resmessages3.rmsg:641
-#: data/mp/messages/resmessages3.rmsg:641
 msgid "NEXUS Medium Body"
 msgstr "Șasiu mediu NEXUS"
 
 #: data/base/messages/resmessages3.rmsg:644
-#: data/mp/messages/resmessages3.rmsg:644
 msgid "Expensive and slow to produce"
 msgstr "Scump și lent de produs"
 
 #: data/base/messages/resmessages3.rmsg:654
-#: data/mp/messages/resmessages3.rmsg:654
 msgid "NEXUS Heavy Body"
 msgstr "Șasiu greu NEXUS"
 
 #: data/base/messages/resmessages3.rmsg:655
 #: data/base/messages/resmessagesall.rmsg:109
-#: data/mp/messages/resmessages3.rmsg:655
-#: data/mp/messages/resmessagesall.rmsg:148
 msgid "More armor and body points than Python"
 msgstr "Mai ranforsat și rezistent decât Pitonul"
 
 #: data/base/messages/resmessages3.rmsg:657
-#: data/mp/messages/resmessages3.rmsg:657
-#: data/mp/messages/resmessagesall.rmsg:737
-#: data/mp/messages/resmessagesall.rmsg:750
 msgid "Very expensive to produce"
 msgstr "Foarte scump de produs"
 
 #: data/base/messages/resmessages3.rmsg:668
 #: data/base/messages/strings/names.txt:948
-#: data/mp/messages/resmessages3.rmsg:668
 #: data/mp/messages/strings/names.txt:959
 msgid "Gas Turbine Engine"
 msgstr "Motor cu turbină de gaz"
 
 #: data/base/messages/resmessages3.rmsg:681
-#: data/mp/messages/resmessages3.rmsg:681
 msgid "Ionizing Turbine Engine"
 msgstr "Motor cu turbină ionică"
 
 #: data/base/messages/resmessages3.rmsg:785
 #: data/base/messages/resmessages3.rmsg:798
-#: data/mp/messages/resmessages3.rmsg:785
-#: data/mp/messages/resmessages3.rmsg:798
 msgid "New power efficient propulsion"
 msgstr "Nou sistem de propulsie energetic-eficient"
 
 #: data/base/messages/resmessages3.rmsg:786
 #: data/base/messages/resmessages3.rmsg:799
-#: data/mp/messages/resmessages3.rmsg:786
-#: data/mp/messages/resmessages3.rmsg:799
 msgid "Body Points and Speed Increased"
 msgstr ""
 
 #: data/base/messages/resmessages3.rmsg:787
 #: data/base/messages/resmessages3.rmsg:800
-#: data/mp/messages/resmessages3.rmsg:787
-#: data/mp/messages/resmessages3.rmsg:800
 msgid "All VTOLs upgraded automatically"
 msgstr "Toate DAV-urile îmbunătățite automat"
 
 #: data/base/messages/resmessages3.rmsg:811
-#: data/mp/messages/resmessages3.rmsg:811
 msgid "Computer plots and guides shell to target's position"
 msgstr ""
 
 #: data/base/messages/resmessages3.rmsg:824
-#: data/mp/messages/resmessages3.rmsg:824
 msgid "High Explosive Armor Piercing Flak"
 msgstr ""
 
 #: data/base/messages/resmessages3.rmsg:837
-#: data/mp/messages/resmessages3.rmsg:837
 msgid "Chainfeed loader eradicates jams and improves performance"
 msgstr ""
 
 #: data/base/messages/resmessages3.rmsg:850
-#: data/mp/messages/resmessages3.rmsg:850
 msgid "Drops high intensity thermite bombs"
 msgstr ""
 
 #: data/base/messages/resmessages3.rmsg:851
 #: data/base/messages/resmessages3.rmsg:1046
 #: data/base/messages/resmessagesall.rmsg:162
-#: data/mp/messages/resmessages3.rmsg:851
-#: data/mp/messages/resmessages3.rmsg:1046
-#: data/mp/messages/resmessagesall.rmsg:201
-#: data/mp/messages/resmessagesall.rmsg:918
 msgid "Best Targets: Bunkers and hardpoints"
 msgstr ""
 
@@ -4074,65 +3037,48 @@ msgid "Bombs lock on and guide themselves to the target"
 msgstr ""
 
 #: data/base/messages/resmessages3.rmsg:876
-#: data/mp/messages/resmessages3.rmsg:876
 msgid "High-Velocity Armor-Piercing Fin-Stabilised Discarding Sabot"
 msgstr ""
 
 #: data/base/messages/resmessages3.rmsg:889
 #: data/base/messages/resmessages3.rmsg:928
 #: data/base/messages/resmessages3.rmsg:1188
-#: data/mp/messages/resmessages3.rmsg:889
-#: data/mp/messages/resmessages3.rmsg:928
-#: data/mp/messages/resmessages3.rmsg:1188
 msgid "Robotic loading system feeds rounds into breech"
 msgstr ""
 
 #: data/base/messages/resmessages3.rmsg:902
-#: data/mp/messages/resmessages3.rmsg:902
 msgid "Computer guided shells"
 msgstr ""
 
 #: data/base/messages/resmessages3.rmsg:915
-#: data/mp/messages/resmessages3.rmsg:915
 msgid "High Explosive Armor Piercing Shells"
 msgstr ""
 
 #: data/base/messages/resmessages3.rmsg:940
 #: data/base/messages/resmessages3.rmsg:953
-#: data/mp/messages/resmessages3.rmsg:940
-#: data/mp/messages/resmessages3.rmsg:953
-#: data/mp/messages/resmessagesall.rmsg:487
 msgid "New Laser Weapon Available"
 msgstr "Mouă armă cu laser disponibilă"
 
 #: data/base/messages/resmessages3.rmsg:941
-#: data/mp/messages/resmessages3.rmsg:941
 msgid "Generates and concentrates bursts of laser energy"
 msgstr "Genrează și concentrează pulsații de energie laser"
 
 #: data/base/messages/resmessages3.rmsg:942
 #: data/base/messages/resmessages3.rmsg:955
-#: data/mp/messages/resmessages3.rmsg:942
-#: data/mp/messages/resmessages3.rmsg:955
 msgid "Best Targets: Cyborgs"
 msgstr "Ținta ideală: Cyborgi"
 
 #: data/base/messages/resmessages3.rmsg:954
-#: data/mp/messages/resmessages3.rmsg:954
 msgid "Fires pulses of laser light"
 msgstr "Lansează pulsații de lumină laser"
 
 #: data/base/messages/resmessages3.rmsg:966
 #: data/base/messages/resmessages3.rmsg:979
 #: data/base/messages/resmessages3.rmsg:992
-#: data/mp/messages/resmessages3.rmsg:966
-#: data/mp/messages/resmessages3.rmsg:979
-#: data/mp/messages/resmessages3.rmsg:992
 msgid "Laser Upgrade"
 msgstr "Îmbunătățire a laserelor"
 
 #: data/base/messages/resmessages3.rmsg:967
-#: data/mp/messages/resmessages3.rmsg:967
 msgid "Improvement in laser optics reduces light dispersal"
 msgstr ""
 
@@ -4143,14 +3089,10 @@ msgstr "Mărește precizia laserelor"
 #: data/base/messages/resmessages3.rmsg:969
 #: data/base/messages/resmessages3.rmsg:982
 #: data/base/messages/resmessages3.rmsg:995
-#: data/mp/messages/resmessages3.rmsg:969
-#: data/mp/messages/resmessages3.rmsg:982
-#: data/mp/messages/resmessages3.rmsg:995
 msgid "All lasers upgraded automatically"
 msgstr "Toate laserele îmbunătățite instantaneu"
 
 #: data/base/messages/resmessages3.rmsg:980
-#: data/mp/messages/resmessages3.rmsg:980
 msgid "Improvement in laser emission density"
 msgstr ""
 
@@ -4159,7 +3101,6 @@ msgid "Increases Laser damage"
 msgstr "Mărește puterea laserelor"
 
 #: data/base/messages/resmessages3.rmsg:993
-#: data/mp/messages/resmessages3.rmsg:993
 msgid "Improved Energizer reduces laser recharge time"
 msgstr "Încărcător îmbunătățit reduce timpii de reîncărcare a laserelor"
 
@@ -4168,29 +3109,23 @@ msgid "Increases Laser ROF"
 msgstr "Mărește rata de foc a laserelor"
 
 #: data/base/messages/resmessages3.rmsg:1006
-#: data/mp/messages/resmessages3.rmsg:1006
 msgid "Depleted uranium kinetic energy bullets"
 msgstr ""
 
 #: data/base/messages/resmessages3.rmsg:1019
-#: data/mp/messages/resmessages3.rmsg:1019
 msgid "Collapsing Plutonium kinetic energy bullets"
 msgstr ""
 
 #: data/base/messages/resmessages3.rmsg:1031
 #: data/base/messages/resmessages3.rmsg:1044
-#: data/mp/messages/resmessages3.rmsg:1031
-#: data/mp/messages/resmessages3.rmsg:1044
 msgid "New Missile Turret Available"
 msgstr "Nouă turelă cu rachete disponibilă"
 
 #: data/base/messages/resmessages3.rmsg:1032
-#: data/mp/messages/resmessages3.rmsg:1032
 msgid "Anti-tank missile"
 msgstr "Rachetă anti-tanc"
 
 #: data/base/messages/resmessages3.rmsg:1045
-#: data/mp/messages/resmessages3.rmsg:1045
 msgid "Bunker buster missile"
 msgstr "Rachetă Bunker Buster"
 
@@ -4199,16 +3134,10 @@ msgstr "Rachetă Bunker Buster"
 #: data/base/messages/resmessages3.rmsg:1083
 #: data/base/messages/resmessages3.rmsg:1148
 #: data/base/messages/resmessages3.rmsg:1161
-#: data/mp/messages/resmessages3.rmsg:1057
-#: data/mp/messages/resmessages3.rmsg:1070
-#: data/mp/messages/resmessages3.rmsg:1083
-#: data/mp/messages/resmessages3.rmsg:1148
-#: data/mp/messages/resmessages3.rmsg:1161
 msgid "Missile Upgrade"
 msgstr "Îmbunătățire la rachete"
 
 #: data/base/messages/resmessages3.rmsg:1058
-#: data/mp/messages/resmessages3.rmsg:1058
 msgid "On-board computer predicts target movement"
 msgstr "Computer-ul de bord prezice mișcarea țintei"
 
@@ -4222,22 +3151,14 @@ msgstr "Mărește precizia rachetelor"
 #: data/base/messages/resmessages3.rmsg:1086
 #: data/base/messages/resmessages3.rmsg:1151
 #: data/base/messages/resmessages3.rmsg:1164
-#: data/mp/messages/resmessages3.rmsg:1060
-#: data/mp/messages/resmessages3.rmsg:1073
-#: data/mp/messages/resmessages3.rmsg:1086
-#: data/mp/messages/resmessages3.rmsg:1151
-#: data/mp/messages/resmessages3.rmsg:1164
 msgid "All missiles upgraded automatically"
 msgstr "Toate lansatoarele de rachete îmbunătățite automat"
 
 #: data/base/messages/resmessages3.rmsg:1071
-#: data/mp/messages/resmessages3.rmsg:1071
 msgid "Missile actively seeks and homes on targets"
 msgstr ""
 
 #: data/base/messages/resmessages3.rmsg:1084
-#: data/mp/messages/resmessages3.rmsg:863
-#: data/mp/messages/resmessages3.rmsg:1084
 msgid "Low yield thermonuclear warhead"
 msgstr ""
 
@@ -4247,58 +3168,41 @@ msgstr "Mărește puterea rachetelor"
 
 #: data/base/messages/resmessages3.rmsg:1096
 #: data/base/messages/resmessages3.rmsg:1109
-#: data/mp/messages/resmessages3.rmsg:1096
-#: data/mp/messages/resmessages3.rmsg:1109
 msgid "New SAM Turret Available"
 msgstr "Nouă turelă RSA disponibilă"
 
 #: data/base/messages/resmessages3.rmsg:1097
-#: data/mp/messages/resmessages3.rmsg:1097
-#: data/mp/messages/resmessagesall.rmsg:865
 msgid "Surface-to-air missile"
 msgstr "Rachetă sol-aer"
 
 #: data/base/messages/resmessages3.rmsg:1098
 #: data/base/messages/resmessages3.rmsg:1111
-#: data/mp/messages/resmessages3.rmsg:1098
-#: data/mp/messages/resmessages3.rmsg:1111
-#: data/mp/messages/resmessagesall.rmsg:762
-#: data/mp/messages/resmessagesall.rmsg:866
 msgid "Best Targets: Aerial targets only"
 msgstr "Ținta ideală: Doar ținte aeriene"
 
 #: data/base/messages/resmessages3.rmsg:1110
-#: data/mp/messages/resmessages3.rmsg:1110
-#: data/mp/messages/resmessagesall.rmsg:761
 msgid "Heavy surface-to-air missile"
 msgstr "Rachetă sol-aer grea"
 
 #: data/base/messages/resmessages3.rmsg:1122
 #: data/base/messages/resmessages3.rmsg:1135
-#: data/mp/messages/resmessages3.rmsg:1122
-#: data/mp/messages/resmessages3.rmsg:1135
 msgid "New Artillery Missile Turret Available"
 msgstr "Nouă turelă de artilerie cu rachete disponibilă"
 
 #: data/base/messages/resmessages3.rmsg:1123
-#: data/mp/messages/resmessages3.rmsg:1123
 msgid "High explosive artillery missile"
 msgstr "Rachetă de croazieră super-explozivă"
 
 #: data/base/messages/resmessages3.rmsg:1124
 #: data/base/messages/resmessages3.rmsg:1137
-#: data/mp/messages/resmessages3.rmsg:1124
-#: data/mp/messages/resmessages3.rmsg:1137
 msgid "Best Targets: Base structures and cyborgs"
 msgstr "Ținta ideală: Clădiri și cyborgi"
 
 #: data/base/messages/resmessages3.rmsg:1136
-#: data/mp/messages/resmessages3.rmsg:1136
 msgid "High explosive heavy artillery missile"
 msgstr "Rachetă de artilerie grea super-explozivă"
 
 #: data/base/messages/resmessages3.rmsg:1149
-#: data/mp/messages/resmessages3.rmsg:1149
 msgid "Missiles detect and lock-on to targets while loading"
 msgstr "Rachetele detectează și blochează ținta cât timp se încarcă"
 
@@ -4308,50 +3212,38 @@ msgid "Increases Missile ROF"
 msgstr "Mărește rata de foc a rachetelor"
 
 #: data/base/messages/resmessages3.rmsg:1162
-#: data/mp/messages/resmessages3.rmsg:1162
 msgid "Racked missile dispensers allow for fast reloading"
 msgstr ""
 
 #: data/base/messages/resmessages3.rmsg:1175
-#: data/mp/messages/resmessages3.rmsg:1175
 msgid "Self-guided rocket-powered shells"
 msgstr ""
 
 #: data/base/messages/resmessages3.rmsg:1200
 #: data/base/messages/resmessages3.rmsg:1213
 #: data/base/messages/resmessages3.rmsg:1226
-#: data/mp/messages/resmessages3.rmsg:1200
-#: data/mp/messages/resmessages3.rmsg:1213
-#: data/mp/messages/resmessages3.rmsg:1226
 msgid "New Rail Gun Available"
 msgstr ""
 
 #: data/base/messages/resmessages3.rmsg:1201
-#: data/mp/messages/resmessages3.rmsg:1201
 msgid "Rapid fire rail gun firing needle darts"
 msgstr ""
 
 #: data/base/messages/resmessages3.rmsg:1214
-#: data/mp/messages/resmessages3.rmsg:1214
 msgid "Rail gun firing armor-piercing darts"
 msgstr ""
 
 #: data/base/messages/resmessages3.rmsg:1227
-#: data/mp/messages/resmessages3.rmsg:1227
 msgid "Heavy rail gun firing large kinetic energy darts"
 msgstr ""
 
 #: data/base/messages/resmessages3.rmsg:1239
 #: data/base/messages/resmessages3.rmsg:1252
 #: data/base/messages/resmessages3.rmsg:1265
-#: data/mp/messages/resmessages3.rmsg:1239
-#: data/mp/messages/resmessages3.rmsg:1252
-#: data/mp/messages/resmessages3.rmsg:1265
 msgid "Rail Gun Upgrade"
 msgstr ""
 
 #: data/base/messages/resmessages3.rmsg:1240
-#: data/mp/messages/resmessages3.rmsg:1240
 msgid "Computer predicts and compensates for target's movement"
 msgstr "Computer-ul prezice mișcarea țintei și compensează"
 
@@ -4362,14 +3254,10 @@ msgstr ""
 #: data/base/messages/resmessages3.rmsg:1242
 #: data/base/messages/resmessages3.rmsg:1255
 #: data/base/messages/resmessages3.rmsg:1268
-#: data/mp/messages/resmessages3.rmsg:1242
-#: data/mp/messages/resmessages3.rmsg:1255
-#: data/mp/messages/resmessages3.rmsg:1268
 msgid "All rail guns upgraded automatically"
 msgstr ""
 
 #: data/base/messages/resmessages3.rmsg:1253
-#: data/mp/messages/resmessages3.rmsg:1253
 msgid "Improved armor-piercing dart"
 msgstr ""
 
@@ -4378,7 +3266,6 @@ msgid "Increases Rail Gun damage"
 msgstr ""
 
 #: data/base/messages/resmessages3.rmsg:1266
-#: data/mp/messages/resmessages3.rmsg:1266
 msgid "Increased gauss output speeds up reload time"
 msgstr ""
 
@@ -4387,110 +3274,82 @@ msgid "Increases Rail Gun ROF"
 msgstr ""
 
 #: data/base/messages/resmessagesall.rmsg:4
-#: data/mp/messages/resmessagesall.rmsg:4
 msgid "New Construction Options Available"
 msgstr "Noi opțiuni de construcție disponibile"
 
 #: data/base/messages/resmessagesall.rmsg:5
-#: data/mp/messages/resmessagesall.rmsg:5
 msgid "Titanium-reinforced concrete"
 msgstr "Beton ranforsat cu titan"
 
 #: data/base/messages/resmessagesall.rmsg:6
-#: data/mp/messages/resmessagesall.rmsg:6
 msgid "Enables Hardcrete walls"
 msgstr "Permite ziduri de beton"
 
 #: data/base/messages/resmessagesall.rmsg:18
-#: data/mp/messages/resmessagesall.rmsg:18
 msgid "VTOL factory enables VTOL production"
 msgstr "Fabrica DAV permite construcția DAV-urilor"
 
 #: data/base/messages/resmessagesall.rmsg:19
-#: data/mp/messages/resmessagesall.rmsg:19
 msgid "VTOL rearming pads required to keep VTOLs flying"
 msgstr "Stațiile de reînarmare DAV sunt necesare pentru a menține DAV-urile în zbor"
 
 #: data/base/messages/resmessagesall.rmsg:20
-#: data/mp/messages/resmessagesall.rmsg:20
 msgid "May be upgraded using factory modules"
 msgstr "Poate fi îmbunătăpțită folosindu-se module de fabrică"
 
 #: data/base/messages/resmessagesall.rmsg:31
-#: data/mp/messages/resmessagesall.rmsg:31
 msgid "Refuels, rearms and repairs VTOLs"
 msgstr "Reîncarcă, repară și re-alimentează DAV-uri"
 
 #: data/base/messages/resmessagesall.rmsg:32
-#: data/mp/messages/resmessagesall.rmsg:32
 msgid "Assign a VTOL by selecting the rearming pad as its target"
 msgstr "Asociază un DAV prin selectarea stației ca țintă a acestuia"
 
 #: data/base/messages/resmessagesall.rmsg:33
-#: data/mp/messages/resmessagesall.rmsg:33
 msgid "The VTOL returns to the selected pad for rearming"
 msgstr "DAV-ul se întoarce la stația selectată pentru reînarmare"
 
 #: data/base/messages/resmessagesall.rmsg:44
-#: data/mp/messages/resmessagesall.rmsg:44
 msgid "Battlefield repair unit"
 msgstr "Unitate de reparație pe câmpul de luptă"
 
 #: data/base/messages/resmessagesall.rmsg:45
 #: data/base/messages/strings/resstrings.txt:445
-#: data/mp/messages/resmessagesall.rmsg:45
-#: data/mp/messages/resmessagesall.rmsg:372
 #: data/mp/messages/strings/resstrings.txt:473
 msgid "Automatically Repairs Damaged Units"
 msgstr "Repară automat unitățile avariate"
 
 #: data/base/messages/resmessagesall.rmsg:46
 #: data/base/messages/strings/resstrings.txt:446
-#: data/mp/messages/resmessagesall.rmsg:46
-#: data/mp/messages/resmessagesall.rmsg:373
 #: data/mp/messages/strings/resstrings.txt:474
 msgid "Or damaged units may be selected as target"
 msgstr "Sau pot fi selectate unități avariate ca țintă"
 
 #: data/base/messages/resmessagesall.rmsg:56
-#: data/mp/messages/resmessagesall.rmsg:56
 msgid "New Systems Turret Available For Design"
 msgstr "O nouă turelă de sisteme este disponibilă pentru scheme"
 
 #: data/base/messages/resmessagesall.rmsg:57
-#: data/mp/messages/resmessagesall.rmsg:57
-#: data/mp/messages/resmessagesall.rmsg:529
-#: data/mp/messages/resmessagesall.rmsg:724
 msgid "Improved sensor range"
 msgstr "Raza senzorilor mărită"
 
 #: data/base/messages/resmessagesall.rmsg:58
-#: data/mp/messages/resmessagesall.rmsg:58
 msgid "Makes excellent scout vehicle"
 msgstr "Constituie un excelent vehicul de explorare"
 
 #: data/base/messages/resmessagesall.rmsg:70
-#: data/mp/messages/resmessagesall.rmsg:70
 msgid "Extended sensor range"
 msgstr "Rază mărită a senzorilor"
 
 #: data/base/messages/resmessagesall.rmsg:71
-#: data/mp/messages/resmessagesall.rmsg:71
-#: data/mp/messages/resmessagesall.rmsg:515
-#: data/mp/messages/resmessagesall.rmsg:528
-#: data/mp/messages/resmessagesall.rmsg:723
 msgid "Keeps map areas under constant surveillance"
 msgstr "Menține porțiuni ale hărții sub monitorizare constantă"
 
 #: data/base/messages/resmessagesall.rmsg:82
-#: data/mp/messages/resmessagesall.rmsg:82
-#: data/mp/messages/resmessagesall.rmsg:95
-#: data/mp/messages/resmessagesall.rmsg:108
 msgid "Sensors Improved"
 msgstr "Senzorii îmbunătățiți"
 
 #: data/base/messages/resmessagesall.rmsg:83
-#: data/mp/messages/resmessagesall.rmsg:83
 msgid "New Thermal Emissions detection"
 msgstr ""
 
@@ -4499,64 +3358,50 @@ msgid "Extends Sensor Range"
 msgstr "Extinde raza senzorilor"
 
 #: data/base/messages/resmessagesall.rmsg:85
-#: data/mp/messages/resmessagesall.rmsg:85
-#: data/mp/messages/resmessagesall.rmsg:98
-#: data/mp/messages/resmessagesall.rmsg:111
 msgid "All sensors upgraded automatically"
 msgstr "Toți senzorii îmbunătățiți automat"
 
 #: data/base/messages/resmessagesall.rmsg:96
-#: data/mp/messages/resmessagesall.rmsg:122
 msgid "Counter-battery tower detects enemy indirect fire batteries"
 msgstr ""
 
 #: data/base/messages/resmessagesall.rmsg:108
-#: data/mp/messages/resmessagesall.rmsg:147
 msgid "Collective Heavy Body"
 msgstr "Șasiu greu al Colectivului"
 
 #: data/base/messages/resmessagesall.rmsg:110
-#: data/mp/messages/resmessagesall.rmsg:149
 msgid "Slower than Python"
 msgstr "Mai lent decât Pitonul"
 
 #: data/base/messages/resmessagesall.rmsg:111
-#: data/mp/messages/resmessagesall.rmsg:150
 msgid "High power costs and slow to produce"
 msgstr "Costuri și timp de producție mari"
 
 #: data/base/messages/resmessagesall.rmsg:121
-#: data/mp/messages/resmessagesall.rmsg:160
 msgid "New Propulsion Available for Design"
 msgstr "Nou sistem de propulsie disponibil pentru scheme"
 
 #: data/base/messages/resmessagesall.rmsg:122
-#: data/mp/messages/resmessagesall.rmsg:161
 msgid "Vertical Take Off and Landing Propulsion"
 msgstr "Propulsie cu Decloare și Aterizare Verticală"
 
 #: data/base/messages/resmessagesall.rmsg:123
-#: data/mp/messages/resmessagesall.rmsg:162
 msgid "Speed: VTOL"
 msgstr "Viteză: DAV"
 
 #: data/base/messages/resmessagesall.rmsg:135
-#: data/mp/messages/resmessagesall.rmsg:174
 msgid "Rocket detects and locks on to engine emissions"
 msgstr ""
 
 #: data/base/messages/resmessagesall.rmsg:148
-#: data/mp/messages/resmessagesall.rmsg:187
 msgid "Anti-tank rocket"
 msgstr "Rachetă anti-tanc"
 
 #: data/base/messages/resmessagesall.rmsg:161
-#: data/mp/messages/resmessagesall.rmsg:200
 msgid "High explosive shaped charge missile"
 msgstr ""
 
 #: data/base/messages/resmessagesall.rmsg:174
-#: data/mp/messages/resmessagesall.rmsg:213
 msgid "Laser designator paints and guides rounds to the target"
 msgstr ""
 
@@ -7473,7 +6318,6 @@ msgid "Robotic Cyborg Production Mk3"
 msgstr "Producție robotică de cyborgi Mk3"
 
 #: data/base/messages/strings/names.txt:789
-#: data/mp/messages/resmessagesall.rmsg:813
 msgid "Advanced Cyborg Production"
 msgstr "Producție avansată de cyborgi"
 
@@ -7506,7 +6350,6 @@ msgid "Robotic Factory Production Mk3"
 msgstr "Producție robotică a vehiculelor Mk3"
 
 #: data/base/messages/strings/names.txt:800
-#: data/mp/messages/resmessagesall.rmsg:800
 msgid "Advanced Factory Production"
 msgstr "Producție avansată a vehiculelor"
 
@@ -9147,7 +7990,6 @@ msgid "Self-Replicating Factory Production"
 msgstr "Producție de fabrică în auto-replicare"
 
 #: data/base/messages/strings/resstrings.txt:444
-#: data/mp/messages/resmessagesall.rmsg:371
 #: data/mp/messages/strings/resstrings.txt:472
 msgid "Heavy repair unit"
 msgstr "Unitate de reparații grea"
@@ -10711,624 +9553,6 @@ msgstr "Transportor"
 msgid "Super Transport Body"
 msgstr "Șasiu de transportor"
 
-#: data/mp/messages/resmessages12.rmsg:58
-msgid "Construction speed +10%"
-msgstr "Viteza de construcție +10%"
-
-#: data/mp/messages/resmessages12.rmsg:97
-#: data/mp/messages/resmessagesall.rmsg:214
-msgid "Cannon accuracy +10%"
-msgstr "Precizia tunurilor +10%"
-
-#: data/mp/messages/resmessages12.rmsg:110
-msgid "Flamer reload time -15%"
-msgstr "Timpul de reîncărcare a aruncătoarelor de flăcări -15%"
-
-#: data/mp/messages/resmessages12.rmsg:136
-#: data/mp/messages/resmessages23.rmsg:175
-#: data/mp/messages/resmessages2.rmsg:890
-msgid "Machinegun reload time -15%"
-msgstr "Timpul de reîncărcare a mitralierelor +15%"
-
-#: data/mp/messages/resmessages12.rmsg:162
-#: data/mp/messages/resmessages23.rmsg:188
-#: data/mp/messages/resmessages3.rmsg:1176
-msgid "Mortar accuracy +10%"
-msgstr "Precizia mortarelor +10%"
-
-#: data/mp/messages/resmessages12.rmsg:175
-#: data/mp/messages/resmessages3.rmsg:1189
-msgid "Mortar reload time -10%"
-msgstr "Timpii de reîncărcare a mortarelor -10%"
-
-#: data/mp/messages/resmessages12.rmsg:201
-#: data/mp/messages/resmessages1.rmsg:735
-msgid "Rocket reload time -15%"
-msgstr "Timpii de reîncărcare a rachetelor -15%"
-
-#: data/mp/messages/resmessages12.rmsg:214
-#: data/mp/messages/resmessages3.rmsg:890
-msgid "Cannon reload time -10%"
-msgstr "Timpii de reîncărcare a tunurilor -10%"
-
-#: data/mp/messages/resmessages12.rmsg:227
-#: data/mp/messages/resmessages1.rmsg:579
-#: data/mp/messages/resmessages3.rmsg:877
-msgid "Cannon damage +25%"
-msgstr "Puterea tunurilor +25%"
-
-#: data/mp/messages/resmessages12.rmsg:240
-#: data/mp/messages/resmessages1.rmsg:709
-#: data/mp/messages/resmessages1.rmsg:748
-#: data/mp/messages/resmessagesall.rmsg:175
-msgid "Rocket accuracy +10%"
-msgstr "Precizia rachetelor +10%"
-
-#: data/mp/messages/resmessages1.rmsg:32
-#: data/mp/messages/resmessages3.rmsg:71
-#: data/mp/messages/resmessages3.rmsg:84
-msgid "Kinetic Armor +35%, Body Points +35%"
-msgstr ""
-
-#: data/mp/messages/resmessages1.rmsg:97
-msgid "Armour +35%, Body Points +30%"
-msgstr ""
-
-#: data/mp/messages/resmessages1.rmsg:122
-msgid "Armored guard tower with Mini-Rocket Pod"
-msgstr "Turn ranforsat cu mini-rachete"
-
-#: data/mp/messages/resmessages1.rmsg:148
-msgid "Armored guard tower with Lancer AT rocket"
-msgstr "Turn ranforsat cu lansator de rachete"
-
-#: data/mp/messages/resmessages1.rmsg:253
-#: data/mp/messages/resmessages2.rmsg:331
-#: data/mp/messages/resmessages3.rmsg:422
-msgid "Repair Speed +100%"
-msgstr "viteză de reparații +100%"
-
-#: data/mp/messages/resmessages1.rmsg:306
-#, no-c-format
-msgid "Factory output speed +100% per module"
-msgstr "Viteza de producție în fabrici +100% pentru fiecare modul"
-
-#: data/mp/messages/resmessages1.rmsg:319
-#: data/mp/messages/resmessagesall.rmsg:801
-msgid "Factory output speed +60%"
-msgstr "Viteza de producție în fabrici +60%"
-
-#: data/mp/messages/resmessages1.rmsg:345
-msgid "Research speed +85%"
-msgstr "Viteza de cercetare +85%"
-
-#: data/mp/messages/resmessages1.rmsg:358
-#: data/mp/messages/resmessages2.rmsg:370
-#: data/mp/messages/resmessages3.rmsg:448
-msgid "Research speed +30%"
-msgstr "Viteză de cercetare +30%"
-
-#: data/mp/messages/resmessages1.rmsg:371
-#: data/mp/messages/resmessages2.rmsg:58
-#: data/mp/messages/resmessages2.rmsg:383
-#: data/mp/messages/resmessages3.rmsg:214
-#: data/mp/messages/resmessages3.rmsg:227
-#: data/mp/messages/resmessages3.rmsg:461
-#: data/mp/messages/resmessages3.rmsg:474
-msgid "Armor +35%, Body Points +30%"
-msgstr ""
-
-#: data/mp/messages/resmessages1.rmsg:462
-#: data/mp/messages/resmessages2.rmsg:500
-#: data/mp/messages/resmessages3.rmsg:669
-#: data/mp/messages/resmessages3.rmsg:682
-msgid "Vehicle speed +5%"
-msgstr "Viteza vehiculelor +5%"
-
-#: data/mp/messages/resmessages1.rmsg:475
-#: data/mp/messages/resmessages2.rmsg:513
-#: data/mp/messages/resmessages3.rmsg:695
-#: data/mp/messages/resmessages3.rmsg:708
-msgid "Kinetic armor +30%, body points +30%"
-msgstr "Armură cinetică +30%, rezistență la avarii +30%"
-
-#: data/mp/messages/resmessages1.rmsg:553
-#: data/mp/messages/resmessages1.rmsg:566
-#: data/mp/messages/resmessages2.rmsg:747
-msgid "Best Targets: Vehicles, Hardpoints"
-msgstr "Ținta ideală: vehicule, blocuri"
-
-#: data/mp/messages/resmessages1.rmsg:605
-#: data/mp/messages/resmessages2.rmsg:786
-#: data/mp/messages/resmessagesall.rmsg:788
-msgid "Flamer damage +25%"
-msgstr "Puterea aruncătoarelor de flăcări +25%"
-
-#: data/mp/messages/resmessages1.rmsg:644
-#: data/mp/messages/resmessages1.rmsg:657
-#: data/mp/messages/resmessages2.rmsg:877
-#: data/mp/messages/resmessages3.rmsg:1007
-#: data/mp/messages/resmessages3.rmsg:1020
-msgid "Machinegun damage +25%"
-msgstr "Puterea mitralierelor +25%"
-
-#: data/mp/messages/resmessages1.rmsg:683
-#: data/mp/messages/resmessages2.rmsg:916
-msgid "Mortar damage +25%"
-msgstr "Puterea mortierelor +25%"
-
-#: data/mp/messages/resmessages1.rmsg:722
-#: data/mp/messages/resmessages1.rmsg:761
-#: data/mp/messages/resmessages2.rmsg:929
-#: data/mp/messages/resmessages2.rmsg:942
-msgid "Rocket damage +25%"
-msgstr "Puterea rachetelor +25%"
-
-#: data/mp/messages/resmessages23.rmsg:32
-msgid "Power output +25%"
-msgstr ""
-
-#: data/mp/messages/resmessages23.rmsg:45
-#: data/mp/messages/resmessages3.rmsg:513
-msgid "Construction speed +20%"
-msgstr "Viteza de construcție +20%"
-
-#: data/mp/messages/resmessages23.rmsg:136
-#: data/mp/messages/resmessages2.rmsg:643
-#: data/mp/messages/resmessages3.rmsg:812
-msgid "AA accuracy +10%"
-msgstr "Precizia AA +10%"
-
-#: data/mp/messages/resmessages23.rmsg:160
-#: data/mp/messages/resmessages2.rmsg:732
-#: data/mp/messages/resmessages3.rmsg:862
-msgid "Bomb Upgrade"
-msgstr "Îmbunătățire a bombelor"
-
-#: data/mp/messages/resmessages23.rmsg:161
-msgid "Improved trinitramine explosive formula"
-msgstr ""
-
-#: data/mp/messages/resmessages23.rmsg:162
-#: data/mp/messages/resmessages2.rmsg:734
-#: data/mp/messages/resmessages3.rmsg:864
-msgid "Bomb damage +25%"
-msgstr ""
-
-#: data/mp/messages/resmessages2.rmsg:6
-msgid "Thermal Armor +45%"
-msgstr ""
-
-#: data/mp/messages/resmessages2.rmsg:19
-msgid "Kinetic Armor +35%, and Body Points +35%"
-msgstr ""
-
-#: data/mp/messages/resmessages2.rmsg:357
-msgid "Factory production rate +60%"
-msgstr ""
-
-#: data/mp/messages/resmessages2.rmsg:358
-#: data/mp/messages/resmessagesall.rmsg:802
-msgid "All factories upgraded automatically"
-msgstr ""
-
-#: data/mp/messages/resmessages2.rmsg:409
-#: data/mp/messages/resmessages3.rmsg:500
-msgid "Rearming speed +30%"
-msgstr ""
-
-#: data/mp/messages/resmessages2.rmsg:526
-msgid "Thermal armor +40%"
-msgstr ""
-
-#: data/mp/messages/resmessages2.rmsg:656
-#: data/mp/messages/resmessages3.rmsg:825
-msgid "AA Flak damage +25%"
-msgstr ""
-
-#: data/mp/messages/resmessages2.rmsg:669
-#: data/mp/messages/resmessages3.rmsg:838
-msgid "AA reload time -15%"
-msgstr ""
-
-#: data/mp/messages/resmessages2.rmsg:838
-#: data/mp/messages/resmessages3.rmsg:903
-msgid "Howitzer accuracy +10%"
-msgstr "Precizie howitzer +10%"
-
-#: data/mp/messages/resmessages2.rmsg:851
-#: data/mp/messages/resmessages3.rmsg:916
-msgid "Howitzer damage +25%"
-msgstr "Putere howitzer +25%"
-
-#: data/mp/messages/resmessages2.rmsg:864
-#: data/mp/messages/resmessages3.rmsg:929
-msgid "Howitzer reload time -10%"
-msgstr "Timp de încărcare howitzer -10%"
-
-#: data/mp/messages/resmessages2.rmsg:928
-msgid "High Explosive Anti-Tank warheads"
-msgstr ""
-
-#: data/mp/messages/resmessages3.rmsg:6
-msgid "Thermal Armor +35%"
-msgstr "Armură termală +35%"
-
-#: data/mp/messages/resmessages3.rmsg:304
-msgid "Armored guard tower with Pulse Laser"
-msgstr ""
-
-#: data/mp/messages/resmessages3.rmsg:435
-msgid "Power output +30%"
-msgstr "Generare de energie +30%"
-
-#: data/mp/messages/resmessages3.rmsg:721
-#: data/mp/messages/resmessagesall.rmsg:853
-msgid "Thermal Armor +40%"
-msgstr "Armură termală +40%"
-
-#: data/mp/messages/resmessages3.rmsg:968
-msgid "Laser accuracy +10%"
-msgstr "Precizie laser +10%"
-
-#: data/mp/messages/resmessages3.rmsg:981
-msgid "Laser damage +25%"
-msgstr "Putere laser +25%"
-
-#: data/mp/messages/resmessages3.rmsg:994
-msgid "Laser reload time -15%"
-msgstr "Timp de încărcare laser -15%"
-
-#: data/mp/messages/resmessages3.rmsg:1059
-#: data/mp/messages/resmessages3.rmsg:1072
-msgid "Missile accuracy +10%"
-msgstr "Precizia rachetelor +10%"
-
-#: data/mp/messages/resmessages3.rmsg:1085
-msgid "Missile damage +25%"
-msgstr "Puterea rachetelor +25%"
-
-#: data/mp/messages/resmessages3.rmsg:1150
-#: data/mp/messages/resmessages3.rmsg:1163
-msgid "Missile reload time -15%"
-msgstr "Timp de încărcare rachete -15%"
-
-#: data/mp/messages/resmessages3.rmsg:1241
-msgid "Rail Gun accuracy +10%"
-msgstr ""
-
-#: data/mp/messages/resmessages3.rmsg:1254
-msgid "Rail Gun damage +25%"
-msgstr ""
-
-#: data/mp/messages/resmessages3.rmsg:1267
-msgid "Rail Gun reload time -15%"
-msgstr ""
-
-#: data/mp/messages/resmessagesall.rmsg:84
-msgid "Sensor Range +25%"
-msgstr "Rază senzori +25%"
-
-#: data/mp/messages/resmessagesall.rmsg:96
-msgid "Improved Thermal Emissions detection"
-msgstr ""
-
-#: data/mp/messages/resmessagesall.rmsg:97
-msgid "Sensor Range +15%"
-msgstr "Rază senzori +15%"
-
-#: data/mp/messages/resmessagesall.rmsg:109
-msgid "Advanced Thermal Emissions detection"
-msgstr ""
-
-#: data/mp/messages/resmessagesall.rmsg:110
-msgid "Sensor Range +10%"
-msgstr "Rază senzori +10%"
-
-#: data/mp/messages/resmessagesall.rmsg:135
-msgid "Radar detector tower detects enemy sensors"
-msgstr ""
-
-#: data/mp/messages/resmessagesall.rmsg:136
-msgid "Orders assigned indirect fire units to fire at the enemy sensors"
-msgstr ""
-
-#: data/mp/messages/resmessagesall.rmsg:137
-msgid "Counter-battery fire continues until enemy sensor is suppressed"
-msgstr ""
-
-#: data/mp/messages/resmessagesall.rmsg:225
-msgid "Cyborg Transport Available"
-msgstr "Transportor pentru cyborgi disponibil"
-
-#: data/mp/messages/resmessagesall.rmsg:226
-#: data/mp/messages/resmessagesall.rmsg:240
-msgid "Armed with Machinegun"
-msgstr "Înarmat cu mitralieră"
-
-#: data/mp/messages/resmessagesall.rmsg:228
-#: data/mp/messages/resmessagesall.rmsg:242
-msgid "Requires heavy VTOL factory to produce"
-msgstr "Necesită fabrică DAV mare pentru a fi produs"
-
-#: data/mp/messages/resmessagesall.rmsg:239
-#, fuzzy
-msgid "Super Transport Available"
-msgstr "Transportor pentru cyborgi disponibil"
-
-#: data/mp/messages/resmessagesall.rmsg:254
-msgid "Incendiary howitzer emplacement"
-msgstr "Amplasament cu obuzier incendiar"
-
-#: data/mp/messages/resmessagesall.rmsg:267
-msgid "Armored Incendiary Mortar battery pit"
-msgstr ""
-
-#: data/mp/messages/resmessagesall.rmsg:280
-msgid "Armored strongpoint with Plasmite Flamer"
-msgstr ""
-
-#: data/mp/messages/resmessagesall.rmsg:293
-msgid "Armed with Cyborg Thermite Flamer"
-msgstr ""
-
-#: data/mp/messages/resmessagesall.rmsg:306
-msgid "Armed with grenades"
-msgstr "Înarmat cu grenade"
-
-#: data/mp/messages/resmessagesall.rmsg:319
-msgid "Combat engineer with construction ability"
-msgstr "Inginer de luptă cu abilitatea de a construi"
-
-#: data/mp/messages/resmessagesall.rmsg:332
-msgid "Mechanic with repair ability"
-msgstr "Mecanic cu abilitatea de a repara"
-
-#: data/mp/messages/resmessagesall.rmsg:345
-msgid "Incendiary Howitzer may be assigned to a sensor"
-msgstr "Howitzer-ul incendiar poate fi atribuit unui senzor"
-
-#: data/mp/messages/resmessagesall.rmsg:384
-msgid "Plasmite Flame-thrower"
-msgstr "Aruncător de flăcări cu plasmit"
-
-#: data/mp/messages/resmessagesall.rmsg:399
-msgid "Steals technology from structures and takes control of weapons"
-msgstr ""
-
-#: data/mp/messages/resmessagesall.rmsg:409
-msgid "New Electronic Technology Discovered"
-msgstr ""
-
-#: data/mp/messages/resmessagesall.rmsg:411
-msgid "On-board resistance circuit systems"
-msgstr ""
-
-#: data/mp/messages/resmessagesall.rmsg:412
-msgid "Enables resistance to Nexus Link technology"
-msgstr ""
-
-#: data/mp/messages/resmessagesall.rmsg:425
-msgid "Enables self-repair"
-msgstr "Permite reparațiile automate"
-
-#: data/mp/messages/resmessagesall.rmsg:436
-msgid "Armed with medium cannon"
-msgstr "Înarmat cu tun mediu"
-
-#: data/mp/messages/resmessagesall.rmsg:449
-#: data/mp/messages/resmessagesall.rmsg:462
-msgid "Armed with hyper velocity cannon"
-msgstr ""
-
-#: data/mp/messages/resmessagesall.rmsg:475
-msgid "Armed with tank killer rockets"
-msgstr ""
-
-#: data/mp/messages/resmessagesall.rmsg:488
-msgid "Fires heavy pulses of laser light"
-msgstr ""
-
-#: data/mp/messages/resmessagesall.rmsg:489
-msgid "Best Targets: Heavy cyborgs"
-msgstr "Ținta ideală: Cyborgi grei"
-
-#: data/mp/messages/resmessagesall.rmsg:501
-msgid "76mm twin-barrel automatic-cannon"
-msgstr "Tun automat de 76mm cu țeavă dublă"
-
-#: data/mp/messages/resmessagesall.rmsg:513
-#: data/mp/messages/resmessagesall.rmsg:526
-msgid "New Systems Structure Available"
-msgstr "Nouă clădire cu sisteme disponibilă"
-
-#: data/mp/messages/resmessagesall.rmsg:514
-msgid "Complete battlefield visibility"
-msgstr "Vizibilitate totală a câmpului de luptă"
-
-#: data/mp/messages/resmessagesall.rmsg:516
-msgid "Does not offer sensor targeting"
-msgstr "Nu oferă sistem de senzor pentru țintire"
-
-#: data/mp/messages/resmessagesall.rmsg:527
-#: data/mp/messages/resmessagesall.rmsg:722
-msgid "Combines standard, counter battery and VTOL sensors"
-msgstr ""
-
-#: data/mp/messages/resmessagesall.rmsg:539
-msgid "New Advanced Weapon Available"
-msgstr ""
-
-#: data/mp/messages/resmessagesall.rmsg:540
-msgid "Very slow recharge time"
-msgstr ""
-
-#: data/mp/messages/resmessagesall.rmsg:541
-msgid "Immense damage infliction capability"
-msgstr ""
-
-#: data/mp/messages/resmessagesall.rmsg:542
-msgid "Narrow area of effect"
-msgstr "Aria de efect restrânsă"
-
-#: data/mp/messages/resmessagesall.rmsg:553
-msgid "Armored guard tower with Nexus Link"
-msgstr ""
-
-#: data/mp/messages/resmessagesall.rmsg:566
-#: data/mp/messages/resmessagesall.rmsg:579
-msgid "Plasma Cannon firing plasma"
-msgstr ""
-
-#: data/mp/messages/resmessagesall.rmsg:580
-#: data/mp/messages/resmessagesall.rmsg:658
-#: data/mp/messages/resmessagesall.rmsg:671
-#: data/mp/messages/resmessagesall.rmsg:684
-#: data/mp/messages/resmessagesall.rmsg:697
-#: data/mp/messages/resmessagesall.rmsg:710
-msgid "Best Targets : Vehicles"
-msgstr "Țintă ideală: Vehicule"
-
-#: data/mp/messages/resmessagesall.rmsg:592
-msgid "Armored strongpoint with Heavy Laser"
-msgstr ""
-
-#: data/mp/messages/resmessagesall.rmsg:605
-msgid "Armored guard tower with EMP Cannon"
-msgstr ""
-
-#: data/mp/messages/resmessagesall.rmsg:618
-msgid "Armed with Cyborg Pulse Laser"
-msgstr ""
-
-#: data/mp/messages/resmessagesall.rmsg:631
-msgid "Armed with Cyborg Rail Gun"
-msgstr ""
-
-#: data/mp/messages/resmessagesall.rmsg:644
-msgid "Armed with Cyborg Scourge Missile Launcher"
-msgstr ""
-
-#: data/mp/messages/resmessagesall.rmsg:657
-msgid "Uses advanced mass driver railgun technology"
-msgstr ""
-
-#: data/mp/messages/resmessagesall.rmsg:659
-#: data/mp/messages/resmessagesall.rmsg:672
-#: data/mp/messages/resmessagesall.rmsg:685
-#: data/mp/messages/resmessagesall.rmsg:698
-msgid "Defensive Strength : High"
-msgstr ""
-
-#: data/mp/messages/resmessagesall.rmsg:670
-msgid "Uses advanced cannon technology"
-msgstr ""
-
-#: data/mp/messages/resmessagesall.rmsg:683
-msgid "Uses advanced rocket gun technology"
-msgstr ""
-
-#: data/mp/messages/resmessagesall.rmsg:696
-msgid "Uses advanced missile gun technology"
-msgstr ""
-
-#: data/mp/messages/resmessagesall.rmsg:709
-msgid "Powerful Electronic magnetic pulse weapon"
-msgstr ""
-
-#: data/mp/messages/resmessagesall.rmsg:721
-msgid "New System Available"
-msgstr "Sisteme noi disponibile"
-
-#: data/mp/messages/resmessagesall.rmsg:734
-msgid "Medium Super Heavy Body"
-msgstr "Șasiu mediu, super-greu"
-
-#: data/mp/messages/resmessagesall.rmsg:735
-msgid "More armor and body points than Vengeance"
-msgstr "Mai mare reșistență și armură decât Răzbunarea"
-
-#: data/mp/messages/resmessagesall.rmsg:736
-msgid "Slow moving Body"
-msgstr "Șasiu lent"
-
-#: data/mp/messages/resmessagesall.rmsg:747
-msgid "Large Super Heavy Body"
-msgstr "Șasiu mare, super-greu"
-
-#: data/mp/messages/resmessagesall.rmsg:748
-msgid "Maximum armor and body points"
-msgstr "Armură și rezistență la averii maxime"
-
-#: data/mp/messages/resmessagesall.rmsg:749
-msgid "Very slow moving Body"
-msgstr "Șasiu foarte lent"
-
-#: data/mp/messages/resmessagesall.rmsg:760
-msgid "Hardpoint Vindicator SAM Site Available"
-msgstr ""
-
-#: data/mp/messages/resmessagesall.rmsg:773
-msgid "Hardpoint Whirlwind AA Gun Available"
-msgstr ""
-
-#: data/mp/messages/resmessagesall.rmsg:826
-msgid "Armored EMP Mortar battery pit"
-msgstr ""
-
-#: data/mp/messages/resmessagesall.rmsg:838
-msgid "Laser AA Gun Available"
-msgstr ""
-
-#: data/mp/messages/resmessagesall.rmsg:839
-msgid "Twin Medium Anti-Aircraft Laser"
-msgstr "Laser anti-aerian mediu dublu"
-
-#: data/mp/messages/resmessagesall.rmsg:864
-msgid "Hardpoint Avenger SAM Site Available"
-msgstr ""
-
-#: data/mp/messages/resmessagesall.rmsg:877
-msgid "Hardpoint Cyclone AA Gun Available"
-msgstr ""
-
-#: data/mp/messages/resmessagesall.rmsg:878
-msgid "Quad 80mm Anti-Aircraft machinegun"
-msgstr ""
-
-#: data/mp/messages/resmessagesall.rmsg:891
-#: data/mp/messages/resmessagesall.rmsg:904
-msgid "Twin Multi-barrel, rapid-fire machinegun"
-msgstr ""
-
-#: data/mp/messages/resmessagesall.rmsg:903
-msgid "Hardpoint Twin Assault Gun Available"
-msgstr ""
-
-#: data/mp/messages/resmessagesall.rmsg:917
-msgid "Drops high intensity Plasmite bombs"
-msgstr ""
-
-#: data/mp/messages/resmessagesall.rmsg:929
-msgid "New VTOL Missile Launcher"
-msgstr ""
-
-#: data/mp/messages/resmessagesall.rmsg:930
-msgid "Fires Electronic Magnetic Pulse Missiles"
-msgstr ""
-
-#: data/mp/messages/resmessagesall.rmsg:942
-#: data/mp/messages/resmessagesall.rmsg:955
-#: data/mp/messages/resmessagesall.rmsg:968
-msgid "Stronger Commander Turret Available for Design"
-msgstr ""
-
-#: data/mp/messages/resmessagesall.rmsg:943
-#: data/mp/messages/resmessagesall.rmsg:956
-#: data/mp/messages/resmessagesall.rmsg:969
-msgid "Upgraded battlefield computer system"
-msgstr ""
-
 #: data/mp/messages/strings/names.txt:15
 #: data/mp/messages/strings/names.txt:673
 msgid "Cyborg Transport"
@@ -12105,10 +10329,10 @@ msgstr "Începe găzduirea jocului"
 
 #: src/challenge.cpp:222
 #: src/hci.cpp:918
-#: src/hci.cpp:3379
-#: src/hci.cpp:3502
-#: src/hci.cpp:3901
-#: src/hci.cpp:4910
+#: src/hci.cpp:3372
+#: src/hci.cpp:3495
+#: src/hci.cpp:3894
+#: src/hci.cpp:4903
 #: src/intelmap.cpp:531
 #: src/intorder.cpp:727
 #: src/loadsave.cpp:240
@@ -12423,20 +10647,20 @@ msgstr "Sisteme"
 msgid "Delete Template"
 msgstr ""
 
-#: src/display3d.cpp:645
+#: src/display3d.cpp:648
 msgid "Player left"
 msgstr "Jucătorul a ieșit"
 
-#: src/display3d.cpp:649
+#: src/display3d.cpp:652
 msgid "Player dropped"
 msgstr "Jucătorul s-a deconectat"
 
-#: src/display3d.cpp:653
+#: src/display3d.cpp:656
 #: src/multiint.cpp:2334
 msgid "Waiting for other players"
 msgstr "Așteptare pentru alți jucători"
 
-#: src/display3d.cpp:658
+#: src/display3d.cpp:661
 msgid "Out of sync"
 msgstr ""
 
@@ -12455,85 +10679,85 @@ msgstr "%s - Avarii %d%% - Experiență %.1f, %s"
 msgid "%s - Allied - Damage %d%% - Experience %d, %s"
 msgstr "%s - Aliat - Avarii %d%% - Experiență %d, %s"
 
-#: src/droid.cpp:202
+#: src/droid.cpp:204
 msgid "Unit Lost!"
 msgstr "Unitate pierdută!"
 
-#: src/droid.cpp:1308
+#: src/droid.cpp:1310
 msgid "Structure Restored"
 msgstr "Clădire reconstruită"
 
-#: src/droid.cpp:2279
+#: src/droid.cpp:2281
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/droid.cpp:2292
+#: src/droid.cpp:2294
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/droid.cpp:2305
+#: src/droid.cpp:2307
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/droid.cpp:2309
+#: src/droid.cpp:2311
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/droid.cpp:2491
+#: src/droid.cpp:2493
 msgid "Rookie"
 msgstr "Recrut"
 
-#: src/droid.cpp:2492
+#: src/droid.cpp:2494
 msgctxt "rank"
 msgid "Green"
 msgstr "Soldat"
 
-#: src/droid.cpp:2493
+#: src/droid.cpp:2495
 msgid "Trained"
 msgstr "Antrenat"
 
-#: src/droid.cpp:2494
+#: src/droid.cpp:2496
 msgid "Regular"
 msgstr "Armată regulată"
 
-#: src/droid.cpp:2495
+#: src/droid.cpp:2497
 msgid "Professional"
 msgstr "Profesionist"
 
-#: src/droid.cpp:2496
+#: src/droid.cpp:2498
 msgid "Veteran"
 msgstr "Veteran"
 
-#: src/droid.cpp:2497
+#: src/droid.cpp:2499
 msgid "Elite"
 msgstr "Elită"
 
-#: src/droid.cpp:2498
+#: src/droid.cpp:2500
 msgid "Special"
 msgstr "Special"
 
-#: src/droid.cpp:2499
+#: src/droid.cpp:2501
 msgid "Hero"
 msgstr "Erou"
 
-#: src/droid.cpp:3474
+#: src/droid.cpp:3461
 #, c-format
 msgid "%s wanted to give you a %s but you have too many!"
 msgstr ""
 
-#: src/droid.cpp:3478
+#: src/droid.cpp:3465
 #, c-format
 msgid "You wanted to give %s a %s but they have too many!"
 msgstr ""
@@ -12552,7 +10776,7 @@ msgid "Tutorial"
 msgstr "Tutorial"
 
 #: src/frontend.cpp:110
-#: src/hci.cpp:3488
+#: src/hci.cpp:3481
 msgid "Options"
 msgstr "Opțiuni"
 
@@ -12898,187 +11122,187 @@ msgstr "OPȚIUNI DE JOC"
 msgid "Mod: "
 msgstr "Modificare:"
 
-#: src/hci.cpp:1239
+#: src/hci.cpp:1232
 msgid "MAP SAVED!"
 msgstr "HARTĂ SALVATĂ!"
 
-#: src/hci.cpp:1561
+#: src/hci.cpp:1554
 #: src/loop.cpp:272
 #: src/loop.cpp:288
 #, fuzzy
 msgid "GAME SAVED: "
 msgstr "JOC SALVAT :"
 
-#: src/hci.cpp:1971
+#: src/hci.cpp:1964
 msgid "Failed to create building"
 msgstr ""
 
-#: src/hci.cpp:1988
+#: src/hci.cpp:1981
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new structure: %s."
 msgstr ""
 
-#: src/hci.cpp:2003
+#: src/hci.cpp:1996
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new feature: %s."
 msgstr ""
 
-#: src/hci.cpp:2025
+#: src/hci.cpp:2018
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid: %s."
 msgstr ""
 
-#: src/hci.cpp:2038
+#: src/hci.cpp:2031
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid."
 msgstr ""
 
-#: src/hci.cpp:3299
+#: src/hci.cpp:3292
 msgid "Commanders (F6)"
 msgstr "Comandanți (F6)"
 
-#: src/hci.cpp:3312
+#: src/hci.cpp:3305
 msgid "Intelligence Display (F5)"
 msgstr "Informații (F5)"
 
-#: src/hci.cpp:3325
+#: src/hci.cpp:3318
 msgid "Manufacture (F1)"
 msgstr "Producție (F1)"
 
-#: src/hci.cpp:3338
+#: src/hci.cpp:3331
 msgid "Design (F4)"
 msgstr "Scheme (F4)"
 
-#: src/hci.cpp:3351
+#: src/hci.cpp:3344
 msgid "Research (F2)"
 msgstr "Cercetare (F2)"
 
-#: src/hci.cpp:3364
+#: src/hci.cpp:3357
 msgid "Build (F3)"
 msgstr "Construcție (F3)"
 
-#: src/hci.cpp:3435
+#: src/hci.cpp:3428
 #: src/multiint.cpp:1614
 #: src/multimenu.cpp:799
 msgid "Power"
 msgstr "Energie"
 
-#: src/hci.cpp:3526
+#: src/hci.cpp:3519
 msgid "Map:"
 msgstr "Hartă:"
 
-#: src/hci.cpp:3539
+#: src/hci.cpp:3532
 msgid "Load"
 msgstr "Încarcă"
 
-#: src/hci.cpp:3540
+#: src/hci.cpp:3533
 msgid "Load Map File"
 msgstr "Încarcă fișierul hărții"
 
-#: src/hci.cpp:3547
+#: src/hci.cpp:3540
 msgid "Save"
 msgstr "Salvează"
 
-#: src/hci.cpp:3548
+#: src/hci.cpp:3541
 msgid "Save Map File"
 msgstr "Salvează fișierul hărții"
 
-#: src/hci.cpp:3556
+#: src/hci.cpp:3549
 msgid "New"
 msgstr "Nou"
 
-#: src/hci.cpp:3557
+#: src/hci.cpp:3550
 msgid "New Blank Map"
 msgstr "Nouă hartă goală"
 
-#: src/hci.cpp:3593
+#: src/hci.cpp:3586
 msgid "Tile"
 msgstr "Titlu"
 
-#: src/hci.cpp:3594
+#: src/hci.cpp:3587
 msgid "Place tiles on map"
 msgstr ""
 
-#: src/hci.cpp:3603
+#: src/hci.cpp:3596
 msgid "Unit"
 msgstr ""
 
-#: src/hci.cpp:3604
+#: src/hci.cpp:3597
 msgid "Place Unit on map"
 msgstr ""
 
-#: src/hci.cpp:3612
+#: src/hci.cpp:3605
 msgid "Struct"
 msgstr ""
 
-#: src/hci.cpp:3613
+#: src/hci.cpp:3606
 msgid "Place Structures on map"
 msgstr ""
 
-#: src/hci.cpp:3621
+#: src/hci.cpp:3614
 msgid "Feat"
 msgstr ""
 
-#: src/hci.cpp:3622
+#: src/hci.cpp:3615
 msgid "Place Features on map"
 msgstr ""
 
-#: src/hci.cpp:3632
+#: src/hci.cpp:3625
 msgid "Pause"
 msgstr "Pauză"
 
-#: src/hci.cpp:3633
+#: src/hci.cpp:3626
 msgid "Pause or unpause the game"
 msgstr "Pauză sau Continuare a Jocului"
 
-#: src/hci.cpp:3647
+#: src/hci.cpp:3640
 msgid "Align height of all map objects"
 msgstr ""
 
-#: src/hci.cpp:3657
+#: src/hci.cpp:3650
 msgid "Edit"
 msgstr ""
 
-#: src/hci.cpp:3658
+#: src/hci.cpp:3651
 msgid "Start Edit Mode"
 msgstr ""
 
-#: src/hci.cpp:3672
+#: src/hci.cpp:3665
 #: src/ingameop.cpp:113
 #: src/ingameop.cpp:257
 #: src/ingameop.cpp:261
 msgid "Quit"
 msgstr "Ieșire"
 
-#: src/hci.cpp:3673
+#: src/hci.cpp:3666
 msgid "Exit Game"
 msgstr "Ieșire din joc"
 
-#: src/hci.cpp:3699
+#: src/hci.cpp:3692
 msgid "Current Player:"
 msgstr "Jucătorul Curent:"
 
-#: src/hci.cpp:3978
+#: src/hci.cpp:3971
 msgid "Progress Bar"
 msgstr ""
 
-#: src/hci.cpp:4835
+#: src/hci.cpp:4828
 msgid "Factory Delivery Point"
 msgstr ""
 
-#: src/hci.cpp:4853
+#: src/hci.cpp:4846
 msgid "Loop Production"
 msgstr ""
 
-#: src/hci.cpp:4933
+#: src/hci.cpp:4926
 msgid "Tab Scroll left"
 msgstr ""
 
-#: src/hci.cpp:4948
+#: src/hci.cpp:4941
 msgid "Tab Scroll right"
 msgstr ""
 
-#: src/hci.cpp:5177
+#: src/hci.cpp:5170
 msgid "Ally progress"
 msgstr ""
 
@@ -14688,16 +12912,16 @@ msgstr ""
 msgid "Brown"
 msgstr ""
 
-#: src/order.cpp:813
+#: src/order.cpp:803
 msgid "We can't do that! We must be a Cyborg unit to use a Cyborg Transport!"
 msgstr ""
 
-#: src/qtscriptfuncs.cpp:1264
+#: src/qtscriptfuncs.cpp:1390
 #: src/scriptfuncs.cpp:3259
 msgid "YOU ARE VICTORIOUS!"
 msgstr "AI OBȚINUT VICTORIA!"
 
-#: src/qtscriptfuncs.cpp:1269
+#: src/qtscriptfuncs.cpp:1395
 #: src/scriptfuncs.cpp:3263
 msgid "YOU WERE DEFEATED!"
 msgstr "AI FOST ÎNFRÂNT!"
@@ -14868,13 +13092,13 @@ msgstr "Imposibil de localizat Senzori!"
 msgid "Unable to locate any Commanders!"
 msgstr "Imposibil de localizat Comandanți!"
 
-#: src/structure.cpp:2551
+#: src/structure.cpp:2555
 #, fuzzy
 msgid "Command Control Limit Reached - Production Halted"
 msgstr "Limita de control atinsă - Producția oprită"
 
-#: src/structure.cpp:5568
-#: src/structure.cpp:5593
+#: src/structure.cpp:5572
+#: src/structure.cpp:5597
 #, c-format
 msgid "%s - %u Unit assigned - Damage %3.0f%%"
 msgid_plural "%s - %u Units assigned - Damage %3.0f%%"
@@ -14882,50 +13106,50 @@ msgstr[0] "%s - %u Unități asociate - Avarii %3.0f%%"
 msgstr[1] "%s - %u Unități asociate - Avarii %3.0f%%"
 msgstr[2] "%s - %u Unități asociate - Avarii %3.0f%%"
 
-#: src/structure.cpp:5598
-#: src/structure.cpp:5666
-#: src/structure.cpp:5681
-#: src/structure.cpp:5695
+#: src/structure.cpp:5602
+#: src/structure.cpp:5670
+#: src/structure.cpp:5685
+#: src/structure.cpp:5699
 #, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - Avarii %3.0f%%"
 
-#: src/structure.cpp:5648
+#: src/structure.cpp:5652
 #, c-format
 msgid "%s - Connected %u of %u - Damage %3.0f%%"
 msgstr "%s - Connectate %u din %u - Avarii %3.0f%%"
 
-#: src/structure.cpp:5811
-#: src/structure.cpp:5856
+#: src/structure.cpp:5815
+#: src/structure.cpp:5860
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Avariat electronic"
 
-#: src/structure.cpp:6107
+#: src/structure.cpp:6111
 msgid "Electronic Reward - Visibility Report"
 msgstr "Răsplată Electronică - Raport de Vizibilitate"
 
-#: src/structure.cpp:6147
+#: src/structure.cpp:6151
 msgid "Factory Reward - Propulsion"
 msgstr "Răsplată de Fabrică - Propulsie"
 
-#: src/structure.cpp:6171
+#: src/structure.cpp:6175
 msgid "Factory Reward - Body"
 msgstr "Răsplată de Fabrică - Șasiu"
 
-#: src/structure.cpp:6195
+#: src/structure.cpp:6199
 msgid "Factory Reward - Weapon"
 msgstr "Răsplată de Fabrică - Armă"
 
-#: src/structure.cpp:6204
+#: src/structure.cpp:6208
 msgid "Factory Reward - Nothing"
 msgstr "Răsplată de Fabrică - Nimic"
 
-#: src/structure.cpp:6232
+#: src/structure.cpp:6236
 msgid "Repair Facility Award - Repair"
 msgstr "Răsplată de Reparații - Reparație"
 
-#: src/structure.cpp:6239
+#: src/structure.cpp:6243
 msgid "Repair Facility Award - Nothing"
 msgstr "Răsplată de Reparații - Nimic"
 
@@ -14961,6 +13185,214 @@ msgstr " - Compilare %s"
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "Versiunea %s%s%s%s"
+
+#~ msgid "Construction speed +10%"
+#~ msgstr "Viteza de construcție +10%"
+
+#~ msgid "Cannon accuracy +10%"
+#~ msgstr "Precizia tunurilor +10%"
+
+#~ msgid "Flamer reload time -15%"
+#~ msgstr "Timpul de reîncărcare a aruncătoarelor de flăcări -15%"
+
+#~ msgid "Machinegun reload time -15%"
+#~ msgstr "Timpul de reîncărcare a mitralierelor +15%"
+
+#~ msgid "Mortar accuracy +10%"
+#~ msgstr "Precizia mortarelor +10%"
+
+#~ msgid "Mortar reload time -10%"
+#~ msgstr "Timpii de reîncărcare a mortarelor -10%"
+
+#~ msgid "Rocket reload time -15%"
+#~ msgstr "Timpii de reîncărcare a rachetelor -15%"
+
+#~ msgid "Cannon reload time -10%"
+#~ msgstr "Timpii de reîncărcare a tunurilor -10%"
+
+#~ msgid "Cannon damage +25%"
+#~ msgstr "Puterea tunurilor +25%"
+
+#~ msgid "Rocket accuracy +10%"
+#~ msgstr "Precizia rachetelor +10%"
+
+#~ msgid "Armored guard tower with Mini-Rocket Pod"
+#~ msgstr "Turn ranforsat cu mini-rachete"
+
+#~ msgid "Armored guard tower with Lancer AT rocket"
+#~ msgstr "Turn ranforsat cu lansator de rachete"
+
+#~ msgid "Repair Speed +100%"
+#~ msgstr "viteză de reparații +100%"
+
+#~ msgid "Factory output speed +100% per module"
+#~ msgstr "Viteza de producție în fabrici +100% pentru fiecare modul"
+
+#~ msgid "Factory output speed +60%"
+#~ msgstr "Viteza de producție în fabrici +60%"
+
+#~ msgid "Research speed +85%"
+#~ msgstr "Viteza de cercetare +85%"
+
+#~ msgid "Research speed +30%"
+#~ msgstr "Viteză de cercetare +30%"
+
+#~ msgid "Vehicle speed +5%"
+#~ msgstr "Viteza vehiculelor +5%"
+
+#~ msgid "Kinetic armor +30%, body points +30%"
+#~ msgstr "Armură cinetică +30%, rezistență la avarii +30%"
+
+#~ msgid "Best Targets: Vehicles, Hardpoints"
+#~ msgstr "Ținta ideală: vehicule, blocuri"
+
+#~ msgid "Flamer damage +25%"
+#~ msgstr "Puterea aruncătoarelor de flăcări +25%"
+
+#~ msgid "Machinegun damage +25%"
+#~ msgstr "Puterea mitralierelor +25%"
+
+#~ msgid "Mortar damage +25%"
+#~ msgstr "Puterea mortierelor +25%"
+
+#~ msgid "Rocket damage +25%"
+#~ msgstr "Puterea rachetelor +25%"
+
+#~ msgid "Construction speed +20%"
+#~ msgstr "Viteza de construcție +20%"
+
+#~ msgid "AA accuracy +10%"
+#~ msgstr "Precizia AA +10%"
+
+#~ msgid "Bomb Upgrade"
+#~ msgstr "Îmbunătățire a bombelor"
+
+#~ msgid "Howitzer accuracy +10%"
+#~ msgstr "Precizie howitzer +10%"
+
+#~ msgid "Howitzer damage +25%"
+#~ msgstr "Putere howitzer +25%"
+
+#~ msgid "Howitzer reload time -10%"
+#~ msgstr "Timp de încărcare howitzer -10%"
+
+#~ msgid "Thermal Armor +35%"
+#~ msgstr "Armură termală +35%"
+
+#~ msgid "Power output +30%"
+#~ msgstr "Generare de energie +30%"
+
+#~ msgid "Thermal Armor +40%"
+#~ msgstr "Armură termală +40%"
+
+#~ msgid "Laser accuracy +10%"
+#~ msgstr "Precizie laser +10%"
+
+#~ msgid "Laser damage +25%"
+#~ msgstr "Putere laser +25%"
+
+#~ msgid "Laser reload time -15%"
+#~ msgstr "Timp de încărcare laser -15%"
+
+#~ msgid "Missile accuracy +10%"
+#~ msgstr "Precizia rachetelor +10%"
+
+#~ msgid "Missile damage +25%"
+#~ msgstr "Puterea rachetelor +25%"
+
+#~ msgid "Missile reload time -15%"
+#~ msgstr "Timp de încărcare rachete -15%"
+
+#~ msgid "Sensor Range +25%"
+#~ msgstr "Rază senzori +25%"
+
+#~ msgid "Sensor Range +15%"
+#~ msgstr "Rază senzori +15%"
+
+#~ msgid "Sensor Range +10%"
+#~ msgstr "Rază senzori +10%"
+
+#~ msgid "Cyborg Transport Available"
+#~ msgstr "Transportor pentru cyborgi disponibil"
+
+#~ msgid "Armed with Machinegun"
+#~ msgstr "Înarmat cu mitralieră"
+
+#~ msgid "Requires heavy VTOL factory to produce"
+#~ msgstr "Necesită fabrică DAV mare pentru a fi produs"
+
+#, fuzzy
+#~ msgid "Super Transport Available"
+#~ msgstr "Transportor pentru cyborgi disponibil"
+
+#~ msgid "Incendiary howitzer emplacement"
+#~ msgstr "Amplasament cu obuzier incendiar"
+
+#~ msgid "Armed with grenades"
+#~ msgstr "Înarmat cu grenade"
+
+#~ msgid "Combat engineer with construction ability"
+#~ msgstr "Inginer de luptă cu abilitatea de a construi"
+
+#~ msgid "Mechanic with repair ability"
+#~ msgstr "Mecanic cu abilitatea de a repara"
+
+#~ msgid "Incendiary Howitzer may be assigned to a sensor"
+#~ msgstr "Howitzer-ul incendiar poate fi atribuit unui senzor"
+
+#~ msgid "Plasmite Flame-thrower"
+#~ msgstr "Aruncător de flăcări cu plasmit"
+
+#~ msgid "Enables self-repair"
+#~ msgstr "Permite reparațiile automate"
+
+#~ msgid "Armed with medium cannon"
+#~ msgstr "Înarmat cu tun mediu"
+
+#~ msgid "Best Targets: Heavy cyborgs"
+#~ msgstr "Ținta ideală: Cyborgi grei"
+
+#~ msgid "76mm twin-barrel automatic-cannon"
+#~ msgstr "Tun automat de 76mm cu țeavă dublă"
+
+#~ msgid "New Systems Structure Available"
+#~ msgstr "Nouă clădire cu sisteme disponibilă"
+
+#~ msgid "Complete battlefield visibility"
+#~ msgstr "Vizibilitate totală a câmpului de luptă"
+
+#~ msgid "Does not offer sensor targeting"
+#~ msgstr "Nu oferă sistem de senzor pentru țintire"
+
+#~ msgid "Narrow area of effect"
+#~ msgstr "Aria de efect restrânsă"
+
+#~ msgid "Best Targets : Vehicles"
+#~ msgstr "Țintă ideală: Vehicule"
+
+#~ msgid "New System Available"
+#~ msgstr "Sisteme noi disponibile"
+
+#~ msgid "Medium Super Heavy Body"
+#~ msgstr "Șasiu mediu, super-greu"
+
+#~ msgid "More armor and body points than Vengeance"
+#~ msgstr "Mai mare reșistență și armură decât Răzbunarea"
+
+#~ msgid "Slow moving Body"
+#~ msgstr "Șasiu lent"
+
+#~ msgid "Large Super Heavy Body"
+#~ msgstr "Șasiu mare, super-greu"
+
+#~ msgid "Maximum armor and body points"
+#~ msgstr "Armură și rezistență la averii maxime"
+
+#~ msgid "Very slow moving Body"
+#~ msgstr "Șasiu foarte lent"
+
+#~ msgid "Twin Medium Anti-Aircraft Laser"
+#~ msgstr "Laser anti-aerian mediu dublu"
 
 #, fuzzy
 #~ msgid "3 players"

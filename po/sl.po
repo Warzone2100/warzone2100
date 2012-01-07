@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2012-01-04 19:08+0100\n"
+"POT-Creation-Date: 2012-01-07 14:37+0100\n"
 "PO-Revision-Date: 2009-06-10 14:43+0100\n"
 "Last-Translator: Tomaž Povšin <tomaz.povsin@gmail.com>\n"
 "Language-Team: Slovenian <sl@li.org>\n"
@@ -118,67 +118,6 @@ msgstr "Raziskava orožja dokončana"
 #: data/base/messages/strings/resstrings.txt:301
 #: data/base/messages/strings/resstrings.txt:307
 #: data/base/messages/strings/resstrings.txt:323
-#: data/mp/messages/resmessages12.rmsg:4
-#: data/mp/messages/resmessages12.rmsg:17
-#: data/mp/messages/resmessages12.rmsg:30
-#: data/mp/messages/resmessages12.rmsg:43
-#: data/mp/messages/resmessages1.rmsg:108
-#: data/mp/messages/resmessages1.rmsg:121
-#: data/mp/messages/resmessages1.rmsg:134
-#: data/mp/messages/resmessages1.rmsg:147
-#: data/mp/messages/resmessages1.rmsg:160
-#: data/mp/messages/resmessages1.rmsg:173
-#: data/mp/messages/resmessages1.rmsg:186
-#: data/mp/messages/resmessages1.rmsg:199
-#: data/mp/messages/resmessages1.rmsg:212
-#: data/mp/messages/resmessages1.rmsg:225
-#: data/mp/messages/resmessages23.rmsg:17
-#: data/mp/messages/resmessages2.rmsg:69
-#: data/mp/messages/resmessages2.rmsg:82
-#: data/mp/messages/resmessages2.rmsg:95
-#: data/mp/messages/resmessages2.rmsg:108
-#: data/mp/messages/resmessages2.rmsg:121
-#: data/mp/messages/resmessages2.rmsg:134
-#: data/mp/messages/resmessages2.rmsg:147
-#: data/mp/messages/resmessages2.rmsg:160
-#: data/mp/messages/resmessages2.rmsg:173
-#: data/mp/messages/resmessages2.rmsg:186
-#: data/mp/messages/resmessages2.rmsg:199
-#: data/mp/messages/resmessages2.rmsg:212
-#: data/mp/messages/resmessages2.rmsg:225
-#: data/mp/messages/resmessages2.rmsg:238
-#: data/mp/messages/resmessages2.rmsg:251
-#: data/mp/messages/resmessages2.rmsg:264
-#: data/mp/messages/resmessages2.rmsg:277
-#: data/mp/messages/resmessages2.rmsg:290
-#: data/mp/messages/resmessages2.rmsg:303
-#: data/mp/messages/resmessages2.rmsg:316
-#: data/mp/messages/resmessages3.rmsg:238
-#: data/mp/messages/resmessages3.rmsg:251
-#: data/mp/messages/resmessages3.rmsg:264
-#: data/mp/messages/resmessages3.rmsg:277
-#: data/mp/messages/resmessages3.rmsg:290
-#: data/mp/messages/resmessages3.rmsg:303
-#: data/mp/messages/resmessages3.rmsg:316
-#: data/mp/messages/resmessages3.rmsg:329
-#: data/mp/messages/resmessages3.rmsg:342
-#: data/mp/messages/resmessages3.rmsg:355
-#: data/mp/messages/resmessages3.rmsg:368
-#: data/mp/messages/resmessages3.rmsg:381
-#: data/mp/messages/resmessages3.rmsg:394
-#: data/mp/messages/resmessages3.rmsg:407
-#: data/mp/messages/resmessagesall.rmsg:253
-#: data/mp/messages/resmessagesall.rmsg:266
-#: data/mp/messages/resmessagesall.rmsg:279
-#: data/mp/messages/resmessagesall.rmsg:552
-#: data/mp/messages/resmessagesall.rmsg:578
-#: data/mp/messages/resmessagesall.rmsg:591
-#: data/mp/messages/resmessagesall.rmsg:604
-#: data/mp/messages/resmessagesall.rmsg:656
-#: data/mp/messages/resmessagesall.rmsg:669
-#: data/mp/messages/resmessagesall.rmsg:682
-#: data/mp/messages/resmessagesall.rmsg:695
-#: data/mp/messages/resmessagesall.rmsg:825
 #: data/mp/messages/strings/resstrings.txt:133
 #: data/mp/messages/strings/resstrings.txt:139
 #: data/mp/messages/strings/resstrings.txt:145
@@ -209,7 +148,6 @@ msgid "New Defensive Structure Available"
 msgstr "Nove obrambne zgradbe na voljo"
 
 #: data/base/messages/resmessages12.rmsg:5
-#: data/mp/messages/resmessages12.rmsg:5
 msgid "Armored Mortar battery pit"
 msgstr "Oklepni vkop z možnarsko topniško edinico"
 
@@ -231,20 +169,6 @@ msgstr "Oklepni vkop z možnarsko topniško edinico"
 #: data/base/messages/strings/resstrings.txt:175
 #: data/base/messages/strings/resstrings.txt:181
 #: data/base/messages/strings/resstrings.txt:187
-#: data/mp/messages/resmessages12.rmsg:6
-#: data/mp/messages/resmessages12.rmsg:19
-#: data/mp/messages/resmessages2.rmsg:123
-#: data/mp/messages/resmessages2.rmsg:136
-#: data/mp/messages/resmessages2.rmsg:149
-#: data/mp/messages/resmessages2.rmsg:162
-#: data/mp/messages/resmessages2.rmsg:175
-#: data/mp/messages/resmessages2.rmsg:188
-#: data/mp/messages/resmessages2.rmsg:201
-#: data/mp/messages/resmessages3.rmsg:266
-#: data/mp/messages/resmessages3.rmsg:279
-#: data/mp/messages/resmessagesall.rmsg:255
-#: data/mp/messages/resmessagesall.rmsg:268
-#: data/mp/messages/resmessagesall.rmsg:827
 #: data/mp/messages/strings/resstrings.txt:163
 #: data/mp/messages/strings/resstrings.txt:177
 #: data/mp/messages/strings/resstrings.txt:183
@@ -296,41 +220,6 @@ msgstr "Samodejno dodeljen najbližjemu senzorju ali CB stolpu"
 #: data/base/messages/strings/resstrings.txt:236
 #: data/base/messages/strings/resstrings.txt:242
 #: data/base/messages/strings/resstrings.txt:248
-#: data/mp/messages/resmessages12.rmsg:7
-#: data/mp/messages/resmessages12.rmsg:20
-#: data/mp/messages/resmessages1.rmsg:124
-#: data/mp/messages/resmessages1.rmsg:150
-#: data/mp/messages/resmessages1.rmsg:228
-#: data/mp/messages/resmessages2.rmsg:72
-#: data/mp/messages/resmessages2.rmsg:85
-#: data/mp/messages/resmessages2.rmsg:98
-#: data/mp/messages/resmessages2.rmsg:111
-#: data/mp/messages/resmessages2.rmsg:124
-#: data/mp/messages/resmessages2.rmsg:137
-#: data/mp/messages/resmessages2.rmsg:150
-#: data/mp/messages/resmessages2.rmsg:163
-#: data/mp/messages/resmessages2.rmsg:176
-#: data/mp/messages/resmessages2.rmsg:189
-#: data/mp/messages/resmessages2.rmsg:202
-#: data/mp/messages/resmessages2.rmsg:215
-#: data/mp/messages/resmessages2.rmsg:241
-#: data/mp/messages/resmessages2.rmsg:267
-#: data/mp/messages/resmessages3.rmsg:241
-#: data/mp/messages/resmessages3.rmsg:254
-#: data/mp/messages/resmessages3.rmsg:267
-#: data/mp/messages/resmessages3.rmsg:280
-#: data/mp/messages/resmessages3.rmsg:306
-#: data/mp/messages/resmessages3.rmsg:345
-#: data/mp/messages/resmessagesall.rmsg:7
-#: data/mp/messages/resmessagesall.rmsg:256
-#: data/mp/messages/resmessagesall.rmsg:269
-#: data/mp/messages/resmessagesall.rmsg:282
-#: data/mp/messages/resmessagesall.rmsg:555
-#: data/mp/messages/resmessagesall.rmsg:581
-#: data/mp/messages/resmessagesall.rmsg:594
-#: data/mp/messages/resmessagesall.rmsg:607
-#: data/mp/messages/resmessagesall.rmsg:711
-#: data/mp/messages/resmessagesall.rmsg:828
 #: data/mp/messages/strings/resstrings.txt:136
 #: data/mp/messages/strings/resstrings.txt:142
 #: data/mp/messages/strings/resstrings.txt:148
@@ -352,12 +241,10 @@ msgid "Defensive Strength: Medium"
 msgstr "Obrambna moč: srednje velika"
 
 #: data/base/messages/resmessages12.rmsg:18
-#: data/mp/messages/resmessages12.rmsg:18
 msgid "Mini-rocket armored strongpoint"
 msgstr "Oklepna močna točka z mini-raketo"
 
 #: data/base/messages/resmessages12.rmsg:31
-#: data/mp/messages/resmessages12.rmsg:31
 msgid "Armored hardpoint with Heavy Machinegun"
 msgstr "Oklepna trda točka s težko strojnico"
 
@@ -392,30 +279,6 @@ msgstr "Oklepna trda točka s težko strojnico"
 #: data/base/messages/strings/resstrings.txt:295
 #: data/base/messages/strings/resstrings.txt:303
 #: data/base/messages/strings/resstrings.txt:309
-#: data/mp/messages/resmessages12.rmsg:32
-#: data/mp/messages/resmessages12.rmsg:45
-#: data/mp/messages/resmessages1.rmsg:110
-#: data/mp/messages/resmessages1.rmsg:123
-#: data/mp/messages/resmessages1.rmsg:136
-#: data/mp/messages/resmessages1.rmsg:149
-#: data/mp/messages/resmessages1.rmsg:162
-#: data/mp/messages/resmessages1.rmsg:175
-#: data/mp/messages/resmessages1.rmsg:188
-#: data/mp/messages/resmessages1.rmsg:201
-#: data/mp/messages/resmessages1.rmsg:214
-#: data/mp/messages/resmessages23.rmsg:19
-#: data/mp/messages/resmessages2.rmsg:279
-#: data/mp/messages/resmessages2.rmsg:292
-#: data/mp/messages/resmessages2.rmsg:305
-#: data/mp/messages/resmessages2.rmsg:318
-#: data/mp/messages/resmessages3.rmsg:344
-#: data/mp/messages/resmessages3.rmsg:357
-#: data/mp/messages/resmessages3.rmsg:370
-#: data/mp/messages/resmessages3.rmsg:383
-#: data/mp/messages/resmessages3.rmsg:396
-#: data/mp/messages/resmessages3.rmsg:409
-#: data/mp/messages/resmessagesall.rmsg:554
-#: data/mp/messages/resmessagesall.rmsg:606
 #: data/mp/messages/strings/resstrings.txt:263
 #: data/mp/messages/strings/resstrings.txt:269
 #: data/mp/messages/strings/resstrings.txt:275
@@ -462,29 +325,6 @@ msgstr "Samodejno cilja sovražnike znotraj dometa senzorja"
 #: data/base/messages/strings/resstrings.txt:304
 #: data/base/messages/strings/resstrings.txt:310
 #: data/base/messages/strings/resstrings.txt:326
-#: data/mp/messages/resmessages12.rmsg:33
-#: data/mp/messages/resmessages12.rmsg:46
-#: data/mp/messages/resmessages1.rmsg:137
-#: data/mp/messages/resmessages1.rmsg:163
-#: data/mp/messages/resmessages1.rmsg:176
-#: data/mp/messages/resmessages1.rmsg:189
-#: data/mp/messages/resmessages1.rmsg:202
-#: data/mp/messages/resmessages1.rmsg:215
-#: data/mp/messages/resmessages23.rmsg:20
-#: data/mp/messages/resmessages2.rmsg:228
-#: data/mp/messages/resmessages2.rmsg:254
-#: data/mp/messages/resmessages2.rmsg:280
-#: data/mp/messages/resmessages2.rmsg:293
-#: data/mp/messages/resmessages2.rmsg:306
-#: data/mp/messages/resmessages2.rmsg:319
-#: data/mp/messages/resmessages3.rmsg:293
-#: data/mp/messages/resmessages3.rmsg:319
-#: data/mp/messages/resmessages3.rmsg:332
-#: data/mp/messages/resmessages3.rmsg:358
-#: data/mp/messages/resmessages3.rmsg:371
-#: data/mp/messages/resmessages3.rmsg:384
-#: data/mp/messages/resmessages3.rmsg:397
-#: data/mp/messages/resmessages3.rmsg:410
 #: data/mp/messages/strings/resstrings.txt:224
 #: data/mp/messages/strings/resstrings.txt:248
 #: data/mp/messages/strings/resstrings.txt:290
@@ -498,23 +338,17 @@ msgid "Defensive Strength: High"
 msgstr "Obrambna moč: visoka"
 
 #: data/base/messages/resmessages12.rmsg:44
-#: data/mp/messages/resmessages12.rmsg:44
 msgid "Armored hardpoint with Lancer AT missile"
 msgstr "Oklepna trda točka s PT izstrelkom suličar"
 
 #: data/base/messages/resmessages12.rmsg:56
 #: data/base/messages/resmessages23.rmsg:43
 #: data/base/messages/resmessages3.rmsg:511
-#: data/mp/messages/resmessages12.rmsg:56
-#: data/mp/messages/resmessages23.rmsg:43
-#: data/mp/messages/resmessages3.rmsg:511
 msgid "Research Breakthrough Improves Construction Rates"
 msgstr "Raziskovalni preboj izboljša brzine gradnje"
 
 #: data/base/messages/resmessages12.rmsg:57
 #: data/base/messages/resmessages23.rmsg:44
-#: data/mp/messages/resmessages12.rmsg:57
-#: data/mp/messages/resmessages23.rmsg:44
 msgid "Improved Engineering Techniques"
 msgstr "Izboljšane strojegradne tehnike"
 
@@ -527,52 +361,37 @@ msgstr "Poveča hitrost gradnje"
 #: data/base/messages/resmessages12.rmsg:59
 #: data/base/messages/resmessages23.rmsg:46
 #: data/base/messages/resmessages3.rmsg:514
-#: data/mp/messages/resmessages12.rmsg:59
-#: data/mp/messages/resmessages23.rmsg:46
-#: data/mp/messages/resmessages3.rmsg:514
 msgid "All trucks upgraded automatically"
 msgstr "Vsi tovornjaki nadgrajeni samodejno"
 
 #: data/base/messages/resmessages12.rmsg:69
 #: data/base/messages/resmessages1.rmsg:4
-#: data/mp/messages/resmessages12.rmsg:69
-#: data/mp/messages/resmessages1.rmsg:4
 msgid "New Systems Turret Available for Design"
 msgstr "Nova sistemska kupola na voljo za načrt"
 
 #: data/base/messages/resmessages12.rmsg:70
-#: data/mp/messages/resmessages12.rmsg:70
 msgid "Counter-battery turret detects enemy indirect fire batteries"
 msgstr "Protitopniška kupola zazna sovražne topniške edinice z nedirektnim streljanjem"
 
 #: data/base/messages/resmessages12.rmsg:71
 #: data/base/messages/resmessagesall.rmsg:97
-#: data/mp/messages/resmessages12.rmsg:71
-#: data/mp/messages/resmessagesall.rmsg:123
 msgid "Orders assigned indirect fire units to fire at the enemy batteries"
 msgstr "Ukazuje dodeljenim enotam z nedirektnim streljanjem, naj streljajo na sovražne topniške edinice"
 
 #: data/base/messages/resmessages12.rmsg:72
 #: data/base/messages/resmessagesall.rmsg:98
-#: data/mp/messages/resmessages12.rmsg:72
-#: data/mp/messages/resmessagesall.rmsg:124
 msgid "Counter-battery fire continues until enemy battery is suppressed"
 msgstr "Protitopniški ogenj se nadaljuje, dokler ni sovražna topniška edinica zatrta"
 
 #: data/base/messages/resmessages12.rmsg:82
 #: data/base/messages/resmessages23.rmsg:56
 #: data/base/messages/resmessages3.rmsg:524
-#: data/mp/messages/resmessages12.rmsg:82
-#: data/mp/messages/resmessages23.rmsg:56
-#: data/mp/messages/resmessages3.rmsg:524
 msgid "CB Sensor Improved"
 msgstr "CB Senzor izboljšan"
 
 #: data/base/messages/resmessages12.rmsg:83
 #: data/base/messages/resmessages2.rmsg:447
 #: data/base/messages/strings/resstrings.txt:486
-#: data/mp/messages/resmessages12.rmsg:83
-#: data/mp/messages/resmessages2.rmsg:447
 #: data/mp/messages/strings/resstrings.txt:516
 msgid "New fire detection systems"
 msgstr "Novi sistemi zaznave streljanja"
@@ -580,18 +399,12 @@ msgstr "Novi sistemi zaznave streljanja"
 #: data/base/messages/resmessages12.rmsg:84
 #: data/base/messages/resmessages23.rmsg:58
 #: data/base/messages/resmessages3.rmsg:526
-#: data/mp/messages/resmessages12.rmsg:84
-#: data/mp/messages/resmessages23.rmsg:58
-#: data/mp/messages/resmessages3.rmsg:526
 msgid "Extends CB Range"
 msgstr "Razširi domet CB"
 
 #: data/base/messages/resmessages12.rmsg:85
 #: data/base/messages/resmessages23.rmsg:59
 #: data/base/messages/resmessages3.rmsg:527
-#: data/mp/messages/resmessages12.rmsg:85
-#: data/mp/messages/resmessages23.rmsg:59
-#: data/mp/messages/resmessages3.rmsg:527
 msgid "All CB sensors upgraded automatically"
 msgstr "Vsi CB senzorji nadgrajeni samodejno"
 
@@ -602,18 +415,10 @@ msgstr "Vsi CB senzorji nadgrajeni samodejno"
 #: data/base/messages/resmessages3.rmsg:875
 #: data/base/messages/resmessages3.rmsg:888
 #: data/base/messages/resmessagesall.rmsg:173
-#: data/mp/messages/resmessages12.rmsg:95
-#: data/mp/messages/resmessages12.rmsg:212
-#: data/mp/messages/resmessages12.rmsg:225
-#: data/mp/messages/resmessages1.rmsg:577
-#: data/mp/messages/resmessages3.rmsg:875
-#: data/mp/messages/resmessages3.rmsg:888
-#: data/mp/messages/resmessagesall.rmsg:212
 msgid "Cannon Upgrade"
 msgstr "Nadgradnja topa"
 
 #: data/base/messages/resmessages12.rmsg:96
-#: data/mp/messages/resmessages12.rmsg:96
 msgid "Determines range to target"
 msgstr "Določi razdaljo do tarče"
 
@@ -629,13 +434,6 @@ msgstr "Poveča natančnost topa"
 #: data/base/messages/resmessages3.rmsg:878
 #: data/base/messages/resmessages3.rmsg:891
 #: data/base/messages/resmessagesall.rmsg:176
-#: data/mp/messages/resmessages12.rmsg:98
-#: data/mp/messages/resmessages12.rmsg:215
-#: data/mp/messages/resmessages12.rmsg:228
-#: data/mp/messages/resmessages1.rmsg:580
-#: data/mp/messages/resmessages3.rmsg:878
-#: data/mp/messages/resmessages3.rmsg:891
-#: data/mp/messages/resmessagesall.rmsg:215
 msgid "All cannons upgraded automatically"
 msgstr "Vsi topovi nadgrajeni samodejno"
 
@@ -643,10 +441,6 @@ msgstr "Vsi topovi nadgrajeni samodejno"
 #: data/base/messages/resmessages1.rmsg:602
 #: data/base/messages/resmessages2.rmsg:784
 #: data/base/messages/strings/resstrings.txt:765
-#: data/mp/messages/resmessages12.rmsg:108
-#: data/mp/messages/resmessages1.rmsg:603
-#: data/mp/messages/resmessages2.rmsg:784
-#: data/mp/messages/resmessagesall.rmsg:786
 #: data/mp/messages/strings/resstrings.txt:804
 msgid "Flamer Upgrade"
 msgstr "Nadgradnja plamenometalca"
@@ -655,9 +449,6 @@ msgstr "Nadgradnja plamenometalca"
 #: data/base/messages/resmessages12.rmsg:213
 #: data/base/messages/resmessages2.rmsg:863
 #: data/base/messages/strings/resstrings.txt:810
-#: data/mp/messages/resmessages12.rmsg:109
-#: data/mp/messages/resmessages12.rmsg:213
-#: data/mp/messages/resmessages2.rmsg:863
 #: data/mp/messages/strings/resstrings.txt:851
 msgid "Automatic loading mechanism replaces manual loader"
 msgstr "Samodejni nabijalni mehanizem nadomesti ročni nabijalnik"
@@ -670,10 +461,6 @@ msgstr "Poveča HS plamenometalca"
 #: data/base/messages/resmessages1.rmsg:605
 #: data/base/messages/resmessages2.rmsg:787
 #: data/base/messages/strings/resstrings.txt:768
-#: data/mp/messages/resmessages12.rmsg:111
-#: data/mp/messages/resmessages1.rmsg:606
-#: data/mp/messages/resmessages2.rmsg:787
-#: data/mp/messages/resmessagesall.rmsg:789
 #: data/mp/messages/strings/resstrings.txt:807
 msgid "All flamers upgraded automatically"
 msgstr "Vsi plamenometalci nadgrajeni samodejno"
@@ -692,22 +479,6 @@ msgstr "Vsi plamenometalci nadgrajeni samodejno"
 #: data/base/messages/strings/resstrings.txt:729
 #: data/base/messages/strings/resstrings.txt:735
 #: data/base/messages/strings/resstrings.txt:757
-#: data/mp/messages/resmessages12.rmsg:121
-#: data/mp/messages/resmessages1.rmsg:538
-#: data/mp/messages/resmessages1.rmsg:551
-#: data/mp/messages/resmessages1.rmsg:564
-#: data/mp/messages/resmessages1.rmsg:590
-#: data/mp/messages/resmessages1.rmsg:616
-#: data/mp/messages/resmessages1.rmsg:629
-#: data/mp/messages/resmessages23.rmsg:212
-#: data/mp/messages/resmessages2.rmsg:745
-#: data/mp/messages/resmessages2.rmsg:758
-#: data/mp/messages/resmessages2.rmsg:771
-#: data/mp/messages/resmessagesall.rmsg:383
-#: data/mp/messages/resmessagesall.rmsg:500
-#: data/mp/messages/resmessagesall.rmsg:565
-#: data/mp/messages/resmessagesall.rmsg:708
-#: data/mp/messages/resmessagesall.rmsg:890
 #: data/mp/messages/strings/resstrings.txt:764
 #: data/mp/messages/strings/resstrings.txt:770
 #: data/mp/messages/strings/resstrings.txt:796
@@ -715,7 +486,6 @@ msgid "New Weapon Turret Available"
 msgstr "Nova orožna kupola na voljo"
 
 #: data/base/messages/resmessages12.rmsg:122
-#: data/mp/messages/resmessages12.rmsg:122
 msgid ".50-calibre heavy machinegun"
 msgstr ".50-kaliberska težka strojnica"
 
@@ -723,12 +493,6 @@ msgstr ".50-kaliberska težka strojnica"
 #: data/base/messages/resmessages1.rmsg:617
 #: data/base/messages/resmessages1.rmsg:630
 #: data/base/messages/resmessages23.rmsg:214
-#: data/mp/messages/resmessages12.rmsg:123
-#: data/mp/messages/resmessages1.rmsg:618
-#: data/mp/messages/resmessages1.rmsg:631
-#: data/mp/messages/resmessages23.rmsg:214
-#: data/mp/messages/resmessagesall.rmsg:892
-#: data/mp/messages/resmessagesall.rmsg:905
 msgid "Best Targets: Infantry, base structures, wheeled vehicles"
 msgstr "Najboljše tarče: pešadija, bazne zgradbe, vozila s kolesi"
 
@@ -771,55 +535,6 @@ msgstr "Najboljše tarče: pešadija, bazne zgradbe, vozila s kolesi"
 #: data/base/messages/strings/resstrings.txt:656
 #: data/base/messages/strings/resstrings.txt:688
 #: data/base/messages/strings/resstrings.txt:694
-#: data/mp/messages/resmessages12.rmsg:124
-#: data/mp/messages/resmessages1.rmsg:45
-#: data/mp/messages/resmessages1.rmsg:58
-#: data/mp/messages/resmessages1.rmsg:71
-#: data/mp/messages/resmessages1.rmsg:84
-#: data/mp/messages/resmessages1.rmsg:489
-#: data/mp/messages/resmessages1.rmsg:541
-#: data/mp/messages/resmessages1.rmsg:554
-#: data/mp/messages/resmessages2.rmsg:32
-#: data/mp/messages/resmessages2.rmsg:45
-#: data/mp/messages/resmessages2.rmsg:592
-#: data/mp/messages/resmessages2.rmsg:605
-#: data/mp/messages/resmessages2.rmsg:618
-#: data/mp/messages/resmessages2.rmsg:631
-#: data/mp/messages/resmessages2.rmsg:683
-#: data/mp/messages/resmessages2.rmsg:696
-#: data/mp/messages/resmessages3.rmsg:97
-#: data/mp/messages/resmessages3.rmsg:110
-#: data/mp/messages/resmessages3.rmsg:123
-#: data/mp/messages/resmessages3.rmsg:136
-#: data/mp/messages/resmessages3.rmsg:149
-#: data/mp/messages/resmessages3.rmsg:162
-#: data/mp/messages/resmessages3.rmsg:175
-#: data/mp/messages/resmessages3.rmsg:188
-#: data/mp/messages/resmessages3.rmsg:201
-#: data/mp/messages/resmessages3.rmsg:943
-#: data/mp/messages/resmessages3.rmsg:956
-#: data/mp/messages/resmessages3.rmsg:1203
-#: data/mp/messages/resmessages3.rmsg:1216
-#: data/mp/messages/resmessagesall.rmsg:227
-#: data/mp/messages/resmessagesall.rmsg:241
-#: data/mp/messages/resmessagesall.rmsg:294
-#: data/mp/messages/resmessagesall.rmsg:307
-#: data/mp/messages/resmessagesall.rmsg:320
-#: data/mp/messages/resmessagesall.rmsg:333
-#: data/mp/messages/resmessagesall.rmsg:437
-#: data/mp/messages/resmessagesall.rmsg:450
-#: data/mp/messages/resmessagesall.rmsg:463
-#: data/mp/messages/resmessagesall.rmsg:476
-#: data/mp/messages/resmessagesall.rmsg:490
-#: data/mp/messages/resmessagesall.rmsg:568
-#: data/mp/messages/resmessagesall.rmsg:619
-#: data/mp/messages/resmessagesall.rmsg:632
-#: data/mp/messages/resmessagesall.rmsg:645
-#: data/mp/messages/resmessagesall.rmsg:763
-#: data/mp/messages/resmessagesall.rmsg:776
-#: data/mp/messages/resmessagesall.rmsg:841
-#: data/mp/messages/resmessagesall.rmsg:867
-#: data/mp/messages/resmessagesall.rmsg:880
 #: data/mp/messages/strings/resstrings.txt:55
 #: data/mp/messages/strings/resstrings.txt:87
 #: data/mp/messages/strings/resstrings.txt:99
@@ -843,21 +558,12 @@ msgstr "Telesne točke: srednje velike"
 #: data/base/messages/resmessages3.rmsg:1018
 #: data/base/messages/strings/resstrings.txt:845
 #: data/base/messages/strings/resstrings.txt:857
-#: data/mp/messages/resmessages12.rmsg:134
-#: data/mp/messages/resmessages1.rmsg:642
-#: data/mp/messages/resmessages1.rmsg:655
-#: data/mp/messages/resmessages23.rmsg:173
-#: data/mp/messages/resmessages2.rmsg:875
-#: data/mp/messages/resmessages2.rmsg:888
-#: data/mp/messages/resmessages3.rmsg:1005
-#: data/mp/messages/resmessages3.rmsg:1018
 #: data/mp/messages/strings/resstrings.txt:888
 #: data/mp/messages/strings/resstrings.txt:900
 msgid "Machinegun Upgrade"
 msgstr "Nadgradnja strojnice"
 
 #: data/base/messages/resmessages12.rmsg:135
-#: data/mp/messages/resmessages12.rmsg:135
 msgid "Chaingun mechanism replaces belt-feed"
 msgstr "Mehanizem verižne puške nadomesti jermensko polnjenje"
 
@@ -879,14 +585,6 @@ msgstr "Poveča HS strojnice"
 #: data/base/messages/resmessages3.rmsg:1021
 #: data/base/messages/strings/resstrings.txt:848
 #: data/base/messages/strings/resstrings.txt:860
-#: data/mp/messages/resmessages12.rmsg:137
-#: data/mp/messages/resmessages1.rmsg:645
-#: data/mp/messages/resmessages1.rmsg:658
-#: data/mp/messages/resmessages23.rmsg:176
-#: data/mp/messages/resmessages2.rmsg:878
-#: data/mp/messages/resmessages2.rmsg:891
-#: data/mp/messages/resmessages3.rmsg:1008
-#: data/mp/messages/resmessages3.rmsg:1021
 #: data/mp/messages/strings/resstrings.txt:891
 #: data/mp/messages/strings/resstrings.txt:903
 msgid "All machineguns upgraded automatically"
@@ -903,15 +601,6 @@ msgstr "Vse strojnice nadgrajene samodejno"
 #: data/base/messages/strings/resstrings.txt:779
 #: data/base/messages/strings/resstrings.txt:787
 #: data/base/messages/strings/resstrings.txt:891
-#: data/mp/messages/resmessages12.rmsg:147
-#: data/mp/messages/resmessages1.rmsg:668
-#: data/mp/messages/resmessages23.rmsg:199
-#: data/mp/messages/resmessages2.rmsg:797
-#: data/mp/messages/resmessages2.rmsg:810
-#: data/mp/messages/resmessages2.rmsg:823
-#: data/mp/messages/resmessages2.rmsg:901
-#: data/mp/messages/resmessagesall.rmsg:344
-#: data/mp/messages/resmessagesall.rmsg:357
 #: data/mp/messages/strings/resstrings.txt:812
 #: data/mp/messages/strings/resstrings.txt:820
 #: data/mp/messages/strings/resstrings.txt:828
@@ -922,8 +611,6 @@ msgstr "Novo orožje z nedirektnim streljanjem na voljo"
 #: data/base/messages/resmessages12.rmsg:148
 #: data/base/messages/resmessages2.rmsg:902
 #: data/base/messages/strings/resstrings.txt:892
-#: data/mp/messages/resmessages12.rmsg:148
-#: data/mp/messages/resmessages2.rmsg:902
 #: data/mp/messages/strings/resstrings.txt:935
 msgid "May be assigned to a sensor"
 msgstr "Se lahko dodeli senzorju"
@@ -932,10 +619,6 @@ msgstr "Se lahko dodeli senzorju"
 #: data/base/messages/resmessages1.rmsg:669
 #: data/base/messages/resmessages2.rmsg:903
 #: data/base/messages/strings/resstrings.txt:893
-#: data/mp/messages/resmessages12.rmsg:149
-#: data/mp/messages/resmessages1.rmsg:670
-#: data/mp/messages/resmessages2.rmsg:903
-#: data/mp/messages/resmessagesall.rmsg:359
 #: data/mp/messages/strings/resstrings.txt:936
 msgid "Best Targets: Base structures, infantry, wheeled vehicles"
 msgstr "Najboljše tarče: bazne zgradbe, pešadija, vozila s kolesi"
@@ -956,22 +639,6 @@ msgstr "Najboljše tarče: bazne zgradbe, pešadija, vozila s kolesi"
 #: data/base/messages/resmessagesall.rmsg:150
 #: data/base/messages/resmessagesall.rmsg:163
 #: data/base/messages/strings/resstrings.txt:894
-#: data/mp/messages/resmessages12.rmsg:150
-#: data/mp/messages/resmessages12.rmsg:189
-#: data/mp/messages/resmessages12.rmsg:254
-#: data/mp/messages/resmessages12.rmsg:267
-#: data/mp/messages/resmessages1.rmsg:671
-#: data/mp/messages/resmessages1.rmsg:697
-#: data/mp/messages/resmessages2.rmsg:904
-#: data/mp/messages/resmessages3.rmsg:1034
-#: data/mp/messages/resmessages3.rmsg:1047
-#: data/mp/messages/resmessages3.rmsg:1099
-#: data/mp/messages/resmessages3.rmsg:1112
-#: data/mp/messages/resmessages3.rmsg:1125
-#: data/mp/messages/resmessages3.rmsg:1138
-#: data/mp/messages/resmessagesall.rmsg:189
-#: data/mp/messages/resmessagesall.rmsg:202
-#: data/mp/messages/resmessagesall.rmsg:360
 #: data/mp/messages/strings/resstrings.txt:937
 msgid "Body Points: Very Low"
 msgstr "Telesne točke: zelo nizke"
@@ -984,19 +651,11 @@ msgstr "Telesne točke: zelo nizke"
 #: data/base/messages/resmessages3.rmsg:1174
 #: data/base/messages/resmessages3.rmsg:1187
 #: data/base/messages/strings/resstrings.txt:905
-#: data/mp/messages/resmessages12.rmsg:160
-#: data/mp/messages/resmessages12.rmsg:173
-#: data/mp/messages/resmessages1.rmsg:681
-#: data/mp/messages/resmessages23.rmsg:186
-#: data/mp/messages/resmessages2.rmsg:914
-#: data/mp/messages/resmessages3.rmsg:1174
-#: data/mp/messages/resmessages3.rmsg:1187
 #: data/mp/messages/strings/resstrings.txt:950
 msgid "Mortar Upgrade"
 msgstr "Nadgradnja možnarja"
 
 #: data/base/messages/resmessages12.rmsg:161
-#: data/mp/messages/resmessages12.rmsg:161
 msgid "Targeting systems compensate for distance and weather conditions"
 msgstr "Ciljni sistemi nadomeščajo za oddaljenost in vremenske razmere"
 
@@ -1014,19 +673,11 @@ msgstr "Poveča natančnost možnarja"
 #: data/base/messages/resmessages3.rmsg:1177
 #: data/base/messages/resmessages3.rmsg:1190
 #: data/base/messages/strings/resstrings.txt:908
-#: data/mp/messages/resmessages12.rmsg:163
-#: data/mp/messages/resmessages12.rmsg:176
-#: data/mp/messages/resmessages1.rmsg:684
-#: data/mp/messages/resmessages23.rmsg:189
-#: data/mp/messages/resmessages2.rmsg:917
-#: data/mp/messages/resmessages3.rmsg:1177
-#: data/mp/messages/resmessages3.rmsg:1190
 #: data/mp/messages/strings/resstrings.txt:953
 msgid "All mortars upgraded automatically"
 msgstr "Vsi možnarji nadgrajeni samodejno"
 
 #: data/base/messages/resmessages12.rmsg:174
-#: data/mp/messages/resmessages12.rmsg:174
 msgid "Automatic loader replaces manual feed"
 msgstr "Samodejni nabijalnik nadomesti ročno polnjenje"
 
@@ -1041,22 +692,14 @@ msgstr "Poveča HS možnarja"
 #: data/base/messages/resmessages1.rmsg:693
 #: data/base/messages/resmessagesall.rmsg:147
 #: data/base/messages/resmessagesall.rmsg:160
-#: data/mp/messages/resmessages12.rmsg:186
-#: data/mp/messages/resmessages12.rmsg:251
-#: data/mp/messages/resmessages12.rmsg:264
-#: data/mp/messages/resmessages1.rmsg:694
-#: data/mp/messages/resmessagesall.rmsg:186
-#: data/mp/messages/resmessagesall.rmsg:199
 msgid "New Rocket Available"
 msgstr "Nova raketa na voljo"
 
 #: data/base/messages/resmessages12.rmsg:187
-#: data/mp/messages/resmessages12.rmsg:187
 msgid "Rocket artillery; can be assigned to a sensor"
 msgstr "Raketno topništvo; se lahko dodeli senzorju"
 
 #: data/base/messages/resmessages12.rmsg:188
-#: data/mp/messages/resmessages12.rmsg:188
 msgid "Best Targets: Vehicles and Emplacements"
 msgstr "Najboljše tarče: vozila in ploščadi"
 
@@ -1067,22 +710,11 @@ msgstr "Najboljše tarče: vozila in ploščadi"
 #: data/base/messages/resmessages2.rmsg:940
 #: data/base/messages/resmessagesall.rmsg:134
 #: data/base/messages/strings/resstrings.txt:965
-#: data/mp/messages/resmessages12.rmsg:199
-#: data/mp/messages/resmessages12.rmsg:238
-#: data/mp/messages/resmessages1.rmsg:707
-#: data/mp/messages/resmessages1.rmsg:720
-#: data/mp/messages/resmessages1.rmsg:733
-#: data/mp/messages/resmessages1.rmsg:746
-#: data/mp/messages/resmessages1.rmsg:759
-#: data/mp/messages/resmessages2.rmsg:927
-#: data/mp/messages/resmessages2.rmsg:940
-#: data/mp/messages/resmessagesall.rmsg:173
 #: data/mp/messages/strings/resstrings.txt:1010
 msgid "Rocket Upgrade"
 msgstr "Nadgradnja rakete"
 
 #: data/base/messages/resmessages12.rmsg:200
-#: data/mp/messages/resmessages12.rmsg:200
 msgid "Autoloader increases reload rate"
 msgstr "Samonabijalnik poveča brzino ponovnega naboja"
 
@@ -1097,16 +729,6 @@ msgstr "Poveča HS rakete"
 #: data/base/messages/resmessages2.rmsg:943
 #: data/base/messages/resmessagesall.rmsg:137
 #: data/base/messages/strings/resstrings.txt:968
-#: data/mp/messages/resmessages12.rmsg:202
-#: data/mp/messages/resmessages12.rmsg:241
-#: data/mp/messages/resmessages1.rmsg:710
-#: data/mp/messages/resmessages1.rmsg:723
-#: data/mp/messages/resmessages1.rmsg:736
-#: data/mp/messages/resmessages1.rmsg:749
-#: data/mp/messages/resmessages1.rmsg:762
-#: data/mp/messages/resmessages2.rmsg:930
-#: data/mp/messages/resmessages2.rmsg:943
-#: data/mp/messages/resmessagesall.rmsg:176
 #: data/mp/messages/strings/resstrings.txt:1013
 msgid "All rockets upgraded automatically"
 msgstr "Vse rakete nadgrajene samodejno"
@@ -1117,7 +739,6 @@ msgid "Increases Cannon ROF"
 msgstr "Poveča HS topa"
 
 #: data/base/messages/resmessages12.rmsg:226
-#: data/mp/messages/resmessages12.rmsg:226
 msgid "Armor-Piercing Fin-Stabilized Discarding Sabot"
 msgstr "Oklepno-prebojna krilno-uravnotežena odpadljiva obloga"
 
@@ -1128,7 +749,6 @@ msgid "Increases Cannon damage"
 msgstr "Poveča škodo topa"
 
 #: data/base/messages/resmessages12.rmsg:239
-#: data/mp/messages/resmessages12.rmsg:239
 msgid "Rocket tracks the laser designator to the target"
 msgstr "Raketa sledi laserskemu označevalcu do tarče"
 
@@ -1139,7 +759,6 @@ msgid "Increases Rocket accuracy"
 msgstr "Poveča natančnost raket"
 
 #: data/base/messages/resmessages12.rmsg:252
-#: data/mp/messages/resmessages12.rmsg:252
 msgid "Heavy anti-tank rocket"
 msgstr "Težka protitankovska raketa"
 
@@ -1156,42 +775,24 @@ msgstr "Težka protitankovska raketa"
 #: data/base/messages/resmessagesall.rmsg:149
 #: data/base/messages/strings/resstrings.txt:731
 #: data/base/messages/strings/resstrings.txt:737
-#: data/mp/messages/resmessages12.rmsg:253
-#: data/mp/messages/resmessages1.rmsg:540
-#: data/mp/messages/resmessages2.rmsg:760
-#: data/mp/messages/resmessages3.rmsg:1033
-#: data/mp/messages/resmessages3.rmsg:1202
-#: data/mp/messages/resmessages3.rmsg:1215
-#: data/mp/messages/resmessages3.rmsg:1228
-#: data/mp/messages/resmessagesall.rmsg:188
-#: data/mp/messages/resmessagesall.rmsg:502
-#: data/mp/messages/resmessagesall.rmsg:567
-#: data/mp/messages/resmessagesall.rmsg:931
 #: data/mp/messages/strings/resstrings.txt:766
 #: data/mp/messages/strings/resstrings.txt:772
 msgid "Best Targets: Vehicles"
 msgstr "Najboljše tarče: vozila"
 
 #: data/base/messages/resmessages12.rmsg:265
-#: data/mp/messages/resmessages12.rmsg:265
 msgid "Fires salvoes of mini-rockets"
 msgstr "Strelja salve mini-raket"
 
 #: data/base/messages/resmessages12.rmsg:266
-#: data/mp/messages/resmessages12.rmsg:266
 msgid "Best Targets: Base structures"
 msgstr "Najboljše tarče: bazne zgradbe"
 
 #: data/base/messages/resmessages1.rmsg:5
-#: data/mp/messages/resmessages1.rmsg:5
 msgid "New battlefield computer system"
 msgstr "Nov bojiščni računalniški sistem"
 
 #: data/base/messages/resmessages1.rmsg:6
-#: data/mp/messages/resmessages1.rmsg:6
-#: data/mp/messages/resmessagesall.rmsg:944
-#: data/mp/messages/resmessagesall.rmsg:957
-#: data/mp/messages/resmessagesall.rmsg:970
 msgid "Commander leads groups acts as factory delivery point"
 msgstr "Poveljnik vodi skupino, deluje kot dostavna točka tovarne"
 
@@ -1201,15 +802,6 @@ msgstr "Poveljnik vodi skupino, deluje kot dostavna točka tovarne"
 #: data/base/messages/resmessages2.rmsg:761
 #: data/base/messages/resmessages3.rmsg:1229
 #: data/base/messages/strings/resstrings.txt:738
-#: data/mp/messages/resmessages1.rmsg:7
-#: data/mp/messages/resmessages1.rmsg:515
-#: data/mp/messages/resmessages1.rmsg:567
-#: data/mp/messages/resmessages2.rmsg:761
-#: data/mp/messages/resmessages3.rmsg:1229
-#: data/mp/messages/resmessagesall.rmsg:503
-#: data/mp/messages/resmessagesall.rmsg:945
-#: data/mp/messages/resmessagesall.rmsg:958
-#: data/mp/messages/resmessagesall.rmsg:971
 #: data/mp/messages/strings/resstrings.txt:773
 msgid "Body Points: High"
 msgstr "Telesne točke: Visoke"
@@ -1217,24 +809,18 @@ msgstr "Telesne točke: Visoke"
 #: data/base/messages/resmessages1.rmsg:17
 #: data/base/messages/resmessages3.rmsg:17
 #: data/base/messages/resmessages3.rmsg:30
-#: data/mp/messages/resmessages1.rmsg:17
-#: data/mp/messages/resmessages3.rmsg:17
-#: data/mp/messages/resmessages3.rmsg:30
 msgid "Computer Technology Breakthrough"
 msgstr "Preboj računalniške tehnologije"
 
 #: data/base/messages/resmessages1.rmsg:18
-#: data/mp/messages/resmessages1.rmsg:18
 msgid "Synaptic Link allows humans to interface directly with computers"
 msgstr "Sinaptična povezava omogoča ljudem direktno povezavo z računalniki"
 
 #: data/base/messages/resmessages1.rmsg:19
-#: data/mp/messages/resmessages1.rmsg:19
 msgid "Cyborgs can now be researched"
 msgstr "Sedaj je možna raziskava kiborgov"
 
 #: data/base/messages/resmessages1.rmsg:20
-#: data/mp/messages/resmessages1.rmsg:20
 msgid "New research options available"
 msgstr "Nove raziskovalne možnosti na voljo"
 
@@ -1243,18 +829,12 @@ msgstr "Nove raziskovalne možnosti na voljo"
 #: data/base/messages/resmessages3.rmsg:69
 #: data/base/messages/resmessages3.rmsg:82
 #: data/base/messages/strings/resstrings.txt:31
-#: data/mp/messages/resmessages1.rmsg:30
-#: data/mp/messages/resmessages2.rmsg:17
-#: data/mp/messages/resmessages3.rmsg:69
-#: data/mp/messages/resmessages3.rmsg:82
 #: data/mp/messages/strings/resstrings.txt:35
 msgid "Cyborg Materials Improved"
 msgstr "Snovi kiborgov izboljšane"
 
 #: data/base/messages/resmessages1.rmsg:31
 #: data/base/messages/resmessages1.rmsg:473
-#: data/mp/messages/resmessages1.rmsg:31
-#: data/mp/messages/resmessages1.rmsg:474
 msgid "Layered composite alloys and energy-absorbing fibres"
 msgstr "Slojne sestavljene zlitine in energijo vsrkajoča vlakna"
 
@@ -1277,14 +857,6 @@ msgstr "Poveča kinetični oklep in telesne točke"
 #: data/base/messages/resmessages3.rmsg:85
 #: data/base/messages/strings/resstrings.txt:34
 #: data/base/messages/strings/resstrings.txt:44
-#: data/mp/messages/resmessages1.rmsg:33
-#: data/mp/messages/resmessages23.rmsg:7
-#: data/mp/messages/resmessages2.rmsg:7
-#: data/mp/messages/resmessages2.rmsg:20
-#: data/mp/messages/resmessages3.rmsg:7
-#: data/mp/messages/resmessages3.rmsg:59
-#: data/mp/messages/resmessages3.rmsg:72
-#: data/mp/messages/resmessages3.rmsg:85
 #: data/mp/messages/strings/resstrings.txt:38
 #: data/mp/messages/strings/resstrings.txt:48
 msgid "All Cyborgs upgraded automatically"
@@ -1302,34 +874,12 @@ msgstr "Vsi kiborgi nadgrajeni samodejno"
 #: data/base/messages/resmessages3.rmsg:134
 #: data/base/messages/strings/resstrings.txt:49
 #: data/base/messages/strings/resstrings.txt:65
-#: data/mp/messages/resmessages1.rmsg:43
-#: data/mp/messages/resmessages1.rmsg:56
-#: data/mp/messages/resmessages1.rmsg:69
-#: data/mp/messages/resmessages1.rmsg:82
-#: data/mp/messages/resmessages2.rmsg:30
-#: data/mp/messages/resmessages2.rmsg:43
-#: data/mp/messages/resmessages3.rmsg:95
-#: data/mp/messages/resmessages3.rmsg:108
-#: data/mp/messages/resmessages3.rmsg:121
-#: data/mp/messages/resmessages3.rmsg:134
-#: data/mp/messages/resmessagesall.rmsg:292
-#: data/mp/messages/resmessagesall.rmsg:305
-#: data/mp/messages/resmessagesall.rmsg:318
-#: data/mp/messages/resmessagesall.rmsg:331
-#: data/mp/messages/resmessagesall.rmsg:435
-#: data/mp/messages/resmessagesall.rmsg:448
-#: data/mp/messages/resmessagesall.rmsg:461
-#: data/mp/messages/resmessagesall.rmsg:474
-#: data/mp/messages/resmessagesall.rmsg:617
-#: data/mp/messages/resmessagesall.rmsg:630
-#: data/mp/messages/resmessagesall.rmsg:643
 #: data/mp/messages/strings/resstrings.txt:53
 #: data/mp/messages/strings/resstrings.txt:85
 msgid "New Cyborg Available"
 msgstr "Nov kiborg na voljo"
 
 #: data/base/messages/resmessages1.rmsg:44
-#: data/mp/messages/resmessages1.rmsg:44
 msgid "Armed with Cyborg Machinegun"
 msgstr "Oborožen s kiborgovo strojnico"
 
@@ -1351,31 +901,6 @@ msgstr "Oborožen s kiborgovo strojnico"
 #: data/base/messages/strings/resstrings.txt:68
 #: data/base/messages/strings/resstrings.txt:80
 #: data/base/messages/strings/resstrings.txt:86
-#: data/mp/messages/resmessages1.rmsg:46
-#: data/mp/messages/resmessages1.rmsg:59
-#: data/mp/messages/resmessages1.rmsg:72
-#: data/mp/messages/resmessages1.rmsg:85
-#: data/mp/messages/resmessages2.rmsg:33
-#: data/mp/messages/resmessages2.rmsg:46
-#: data/mp/messages/resmessages3.rmsg:98
-#: data/mp/messages/resmessages3.rmsg:111
-#: data/mp/messages/resmessages3.rmsg:124
-#: data/mp/messages/resmessages3.rmsg:137
-#: data/mp/messages/resmessages3.rmsg:150
-#: data/mp/messages/resmessages3.rmsg:163
-#: data/mp/messages/resmessages3.rmsg:176
-#: data/mp/messages/resmessages3.rmsg:189
-#: data/mp/messages/resmessagesall.rmsg:295
-#: data/mp/messages/resmessagesall.rmsg:308
-#: data/mp/messages/resmessagesall.rmsg:321
-#: data/mp/messages/resmessagesall.rmsg:334
-#: data/mp/messages/resmessagesall.rmsg:438
-#: data/mp/messages/resmessagesall.rmsg:451
-#: data/mp/messages/resmessagesall.rmsg:464
-#: data/mp/messages/resmessagesall.rmsg:477
-#: data/mp/messages/resmessagesall.rmsg:620
-#: data/mp/messages/resmessagesall.rmsg:633
-#: data/mp/messages/resmessagesall.rmsg:646
 #: data/mp/messages/strings/resstrings.txt:56
 #: data/mp/messages/strings/resstrings.txt:88
 #: data/mp/messages/strings/resstrings.txt:100
@@ -1384,17 +909,14 @@ msgid "Requires Cyborg factory to produce"
 msgstr "Potrebuje tovarno kiborgov za izdelavo"
 
 #: data/base/messages/resmessages1.rmsg:57
-#: data/mp/messages/resmessages1.rmsg:57
 msgid "Armed with Cyborg Cannon"
 msgstr "Oborožen s kiborgovim topom"
 
 #: data/base/messages/resmessages1.rmsg:70
-#: data/mp/messages/resmessages1.rmsg:70
 msgid "Armed with Cyborg Flamer"
 msgstr "Oborožen s kiborgovim plamenometalcem"
 
 #: data/base/messages/resmessages1.rmsg:83
-#: data/mp/messages/resmessages1.rmsg:83
 msgid "Armed with Lance Anti-Tank rocket"
 msgstr "Oborožen s protitankovsko raketo sulica"
 
@@ -1403,16 +925,11 @@ msgstr "Oborožen s protitankovsko raketo sulica"
 #: data/base/messages/resmessages3.rmsg:212
 #: data/base/messages/resmessages3.rmsg:225
 #: data/base/messages/strings/resstrings.txt:103
-#: data/mp/messages/resmessages1.rmsg:95
-#: data/mp/messages/resmessages2.rmsg:56
-#: data/mp/messages/resmessages3.rmsg:212
-#: data/mp/messages/resmessages3.rmsg:225
 #: data/mp/messages/strings/resstrings.txt:123
 msgid "Defenses Improved"
 msgstr "Obrambe izboljšane"
 
 #: data/base/messages/resmessages1.rmsg:96
-#: data/mp/messages/resmessages1.rmsg:96
 msgid "Improved Titanium-reinforced concrete"
 msgstr "Izboljšan titansko okrepljen beton"
 
@@ -1425,21 +942,15 @@ msgstr "Poveča oklep in telesne točke"
 #: data/base/messages/resmessages3.rmsg:215
 #: data/base/messages/resmessages3.rmsg:228
 #: data/base/messages/strings/resstrings.txt:106
-#: data/mp/messages/resmessages1.rmsg:98
-#: data/mp/messages/resmessages2.rmsg:59
-#: data/mp/messages/resmessages3.rmsg:215
-#: data/mp/messages/resmessages3.rmsg:228
 #: data/mp/messages/strings/resstrings.txt:126
 msgid "All defenses and walls upgraded automatically"
 msgstr "Vse obrambe in zidovi nadgrajeni samodejno"
 
 #: data/base/messages/resmessages1.rmsg:109
-#: data/mp/messages/resmessages1.rmsg:109
 msgid "Steel tower with machinegun"
 msgstr "Jekleni stolp s strojnico"
 
 #: data/base/messages/resmessages1.rmsg:111
-#: data/mp/messages/resmessages1.rmsg:111
 msgid "Defensive Strength: Low"
 msgstr "Obrambna moč: nizka"
 
@@ -1448,7 +959,6 @@ msgid "Armored guard tower with Mini-Pod Rocket"
 msgstr "Oklepni stražni stolp z mini-metalno raketo"
 
 #: data/base/messages/resmessages1.rmsg:135
-#: data/mp/messages/resmessages1.rmsg:135
 msgid "Armored bunker with Machinegun"
 msgstr "Oklepni bunker s strojnico"
 
@@ -1457,40 +967,33 @@ msgid "Armored bunker with Lancer AT rocket"
 msgstr "Oklepni bunker s PT raketo suličar"
 
 #: data/base/messages/resmessages1.rmsg:161
-#: data/mp/messages/resmessages1.rmsg:161
 msgid "Armored bunker with Flamer"
 msgstr "Oklepni bunker s plamenometalcem"
 
 #: data/base/messages/resmessages1.rmsg:174
-#: data/mp/messages/resmessages1.rmsg:174
 msgid "Armored bunker with Light Cannon"
 msgstr "Oklepni bunker z lahkim topom"
 
 #: data/base/messages/resmessages1.rmsg:187
-#: data/mp/messages/resmessages1.rmsg:187
 msgid "Armored hardpoint with Light Cannon"
 msgstr "Oklepna trda točka z lahkim topom"
 
 #: data/base/messages/resmessages1.rmsg:200
-#: data/mp/messages/resmessages1.rmsg:200
 msgid "Armored hardpoint with Medium Cannon"
 msgstr "Oklepna trda točka s srednje težkim topom"
 
 #: data/base/messages/resmessages1.rmsg:213
-#: data/mp/messages/resmessages1.rmsg:213
 msgid "Armored hardpoint with Heavy Cannon"
 msgstr "Oklepna trda točka s težkim topom"
 
 #: data/base/messages/resmessages1.rmsg:226
 #: data/base/messages/strings/resstrings.txt:324
-#: data/mp/messages/resmessages1.rmsg:226
 #: data/mp/messages/strings/resstrings.txt:352
 msgid "Reinforced concrete tank traps"
 msgstr "Okrepljene betonske pasti za tanke"
 
 #: data/base/messages/resmessages1.rmsg:227
 #: data/base/messages/strings/resstrings.txt:325
-#: data/mp/messages/resmessages1.rmsg:227
 #: data/mp/messages/strings/resstrings.txt:353
 msgid "Prevents enemy movement"
 msgstr "Preprečuje sovražno gibanje"
@@ -1500,26 +1003,18 @@ msgstr "Preprečuje sovražno gibanje"
 #: data/base/messages/resmessages1.rmsg:290
 #: data/base/messages/resmessagesall.rmsg:17
 #: data/base/messages/resmessagesall.rmsg:30
-#: data/mp/messages/resmessages1.rmsg:238
-#: data/mp/messages/resmessages1.rmsg:264
-#: data/mp/messages/resmessages1.rmsg:290
-#: data/mp/messages/resmessagesall.rmsg:17
-#: data/mp/messages/resmessagesall.rmsg:30
 msgid "New Base Structure Available"
 msgstr "Nova bazna zgradba na voljo"
 
 #: data/base/messages/resmessages1.rmsg:239
-#: data/mp/messages/resmessages1.rmsg:239
 msgid "New Repair Facility Repairs Damaged Units"
 msgstr "Nova stavba za popravila popravlja poškodovane enote"
 
 #: data/base/messages/resmessages1.rmsg:240
-#: data/mp/messages/resmessages1.rmsg:240
 msgid "Use the Command Console to send units back for repair"
 msgstr "Uporabite poveljniško konzolo za pošiljanje enot nazaj na popravilo"
 
 #: data/base/messages/resmessages1.rmsg:241
-#: data/mp/messages/resmessages1.rmsg:241
 msgid "Or select the Repair Facility as a unit's target"
 msgstr "Ali izberite stavbo za popravila kot tarčo enote"
 
@@ -1527,15 +1022,11 @@ msgstr "Ali izberite stavbo za popravila kot tarčo enote"
 #: data/base/messages/resmessages2.rmsg:329
 #: data/base/messages/resmessages3.rmsg:420
 #: data/base/messages/strings/resstrings.txt:333
-#: data/mp/messages/resmessages1.rmsg:251
-#: data/mp/messages/resmessages2.rmsg:329
-#: data/mp/messages/resmessages3.rmsg:420
 #: data/mp/messages/strings/resstrings.txt:361
 msgid "Repair Facility Improved"
 msgstr "Stavba za popravila izboljšana"
 
 #: data/base/messages/resmessages1.rmsg:252
-#: data/mp/messages/resmessages1.rmsg:252
 msgid "New automated repair techniques"
 msgstr "Nove tehnike samodejnih popravil"
 
@@ -1551,25 +1042,19 @@ msgstr "Poveča hitrost popravil"
 #: data/base/messages/resmessages2.rmsg:332
 #: data/base/messages/resmessages3.rmsg:423
 #: data/base/messages/strings/resstrings.txt:336
-#: data/mp/messages/resmessages1.rmsg:254
-#: data/mp/messages/resmessages2.rmsg:332
-#: data/mp/messages/resmessages3.rmsg:423
 #: data/mp/messages/strings/resstrings.txt:364
 msgid "All repair facilities upgraded automatically"
 msgstr "Vse stavbe za popravila nadgrajene samodejno"
 
 #: data/base/messages/resmessages1.rmsg:265
-#: data/mp/messages/resmessages1.rmsg:265
 msgid "Enables command turret research"
 msgstr "Omogoči raziskavo poveljniške kupole"
 
 #: data/base/messages/resmessages1.rmsg:266
-#: data/mp/messages/resmessages1.rmsg:266
 msgid "Directs and collates information for command turrets"
 msgstr "Usmerja in preglejuje podatke iz poveljniških kupol"
 
 #: data/base/messages/resmessages1.rmsg:267
-#: data/mp/messages/resmessages1.rmsg:267
 msgid "Controls up to five commanders"
 msgstr "Nadzoruje do pet poveljnikov"
 
@@ -1577,9 +1062,6 @@ msgstr "Nadzoruje do pet poveljnikov"
 #: data/base/messages/resmessages2.rmsg:342
 #: data/base/messages/strings/resstrings.txt:347
 #: data/base/messages/strings/resstrings.txt:355
-#: data/mp/messages/resmessages1.rmsg:277
-#: data/mp/messages/resmessages2.rmsg:342
-#: data/mp/messages/resmessagesall.rmsg:812
 #: data/mp/messages/strings/resstrings.txt:375
 #: data/mp/messages/strings/resstrings.txt:383
 msgid "Cyborg Production Improved"
@@ -1587,7 +1069,6 @@ msgstr "Izdelava kiborgov izboljšana"
 
 #: data/base/messages/resmessages1.rmsg:278
 #: data/base/messages/strings/names.txt:783
-#: data/mp/messages/resmessages1.rmsg:278
 msgid "Automated Cyborg Production"
 msgstr "Samodejna izdelava kiborgov"
 
@@ -1595,9 +1076,6 @@ msgstr "Samodejna izdelava kiborgov"
 #: data/base/messages/resmessages2.rmsg:344
 #: data/base/messages/strings/resstrings.txt:349
 #: data/base/messages/strings/resstrings.txt:357
-#: data/mp/messages/resmessages1.rmsg:279
-#: data/mp/messages/resmessages2.rmsg:344
-#: data/mp/messages/resmessagesall.rmsg:814
 #: data/mp/messages/strings/resstrings.txt:377
 #: data/mp/messages/strings/resstrings.txt:385
 msgid "Increases Cyborg factory output"
@@ -1607,9 +1085,6 @@ msgstr "Poveča proizvodnjo tovarne kiborgov"
 #: data/base/messages/resmessages2.rmsg:345
 #: data/base/messages/strings/resstrings.txt:350
 #: data/base/messages/strings/resstrings.txt:358
-#: data/mp/messages/resmessages1.rmsg:280
-#: data/mp/messages/resmessages2.rmsg:345
-#: data/mp/messages/resmessagesall.rmsg:815
 #: data/mp/messages/strings/resstrings.txt:378
 #: data/mp/messages/strings/resstrings.txt:386
 msgid "All Cyborg factories upgraded automatically"
@@ -1618,19 +1093,16 @@ msgstr "Vse tovarne kiborgov nadgrajene samodejno"
 #: data/base/messages/resmessages1.rmsg:291
 #: data/base/messages/strings/names.txt:399
 #: data/base/messages/strings/names.txt:782
-#: data/mp/messages/resmessages1.rmsg:291
 #: data/mp/messages/strings/names.txt:398
 #: data/mp/messages/strings/names.txt:791
 msgid "Cyborg Factory"
 msgstr "Tovarna kiborgov"
 
 #: data/base/messages/resmessages1.rmsg:292
-#: data/mp/messages/resmessages1.rmsg:292
 msgid "Produces Cyborgs"
 msgstr "Izdeluje kiborge"
 
 #: data/base/messages/resmessages1.rmsg:293
-#: data/mp/messages/resmessages1.rmsg:293
 msgid "Research makes additional Cyborgs available"
 msgstr "Raziskava omogoči dodatne kiborge"
 
@@ -1638,17 +1110,11 @@ msgstr "Raziskava omogoči dodatne kiborge"
 #: data/base/messages/resmessages2.rmsg:394
 #: data/base/messages/resmessages3.rmsg:485
 #: data/base/messages/strings/resstrings.txt:411
-#: data/mp/messages/resmessages1.rmsg:303
-#: data/mp/messages/resmessages2.rmsg:355
-#: data/mp/messages/resmessages2.rmsg:394
-#: data/mp/messages/resmessages3.rmsg:485
-#: data/mp/messages/resmessagesall.rmsg:799
 #: data/mp/messages/strings/resstrings.txt:439
 msgid "Production Improved"
 msgstr "Izdelava izboljšana"
 
 #: data/base/messages/resmessages1.rmsg:304
-#: data/mp/messages/resmessages1.rmsg:304
 msgid "Factory module enables medium and large bodies"
 msgstr "Tovarniška gradbena enota omogoči srednje velika in velika telesa"
 
@@ -1660,7 +1126,6 @@ msgid "Increases factory output"
 msgstr "Poveča tovarniško proizvodnjo"
 
 #: data/base/messages/resmessages1.rmsg:306
-#: data/mp/messages/resmessages1.rmsg:307
 msgid "Use a truck to add modules to a factory"
 msgstr "Uporabite tovornjak za dodajanje gradbenih enot tovarni"
 
@@ -1668,7 +1133,6 @@ msgstr "Uporabite tovornjak za dodajanje gradbenih enot tovarni"
 #: data/base/messages/resmessages2.rmsg:355
 #: data/base/messages/strings/resstrings.txt:365
 #: data/base/messages/strings/resstrings.txt:373
-#: data/mp/messages/resmessages1.rmsg:317
 #: data/mp/messages/strings/resstrings.txt:393
 #: data/mp/messages/strings/resstrings.txt:401
 msgid "Vehicle Production Improved"
@@ -1676,7 +1140,6 @@ msgstr "Izdelava vozil izboljšana"
 
 #: data/base/messages/resmessages1.rmsg:317
 #: data/base/messages/strings/names.txt:794
-#: data/mp/messages/resmessages1.rmsg:318
 msgid "Automated Factory Production"
 msgstr "Samodejna tovarniška izdelava"
 
@@ -1684,43 +1147,34 @@ msgstr "Samodejna tovarniška izdelava"
 #: data/base/messages/resmessages2.rmsg:358
 #: data/base/messages/strings/resstrings.txt:368
 #: data/base/messages/strings/resstrings.txt:376
-#: data/mp/messages/resmessages1.rmsg:320
 #: data/mp/messages/strings/resstrings.txt:396
 #: data/mp/messages/strings/resstrings.txt:404
 msgid "All vehicle factories upgraded automatically"
 msgstr "Vse tovarne vozil nadgrajene samodejno"
 
 #: data/base/messages/resmessages1.rmsg:329
-#: data/mp/messages/resmessages1.rmsg:330
 msgid "Power Module Available"
 msgstr "Gradbena enota moči na voljo"
 
 #: data/base/messages/resmessages1.rmsg:330
 #: data/base/messages/resmessages23.rmsg:30
 #: data/base/messages/resmessages3.rmsg:433
-#: data/mp/messages/resmessages1.rmsg:331
-#: data/mp/messages/resmessages23.rmsg:30
-#: data/mp/messages/resmessages3.rmsg:433
 msgid "Improved Power Generator Performance"
 msgstr "Izboljšano delovanje generatorja moči"
 
 #: data/base/messages/resmessages1.rmsg:331
-#: data/mp/messages/resmessages1.rmsg:332
 msgid "Burns oil more efficiently"
 msgstr "Bolj učinkovito sežiga nafto"
 
 #: data/base/messages/resmessages1.rmsg:332
-#: data/mp/messages/resmessages1.rmsg:333
 msgid "Use a truck to add the module to a power generator"
 msgstr "Uporabite tovornjak za dodajanje gradbene enote generatorju moči"
 
 #: data/base/messages/resmessages1.rmsg:342
-#: data/mp/messages/resmessages1.rmsg:343
 msgid "Research Module Available"
 msgstr "Raziskovalna gradbena enota na voljo"
 
 #: data/base/messages/resmessages1.rmsg:343
-#: data/mp/messages/resmessages1.rmsg:344
 msgid "Research module expands research facilities"
 msgstr "Raziskovalna gradbena enota razširi raziskovalne stavbe"
 
@@ -1734,7 +1188,6 @@ msgid "Increases research speed"
 msgstr "Poveča hitrost raziskav"
 
 #: data/base/messages/resmessages1.rmsg:345
-#: data/mp/messages/resmessages1.rmsg:346
 msgid "Use a truck to add the module to a research facility"
 msgstr "Uporabite tovornjak za dodajanje gradbene enote raziskovalni stavbi"
 
@@ -1742,15 +1195,11 @@ msgstr "Uporabite tovornjak za dodajanje gradbene enote raziskovalni stavbi"
 #: data/base/messages/resmessages2.rmsg:368
 #: data/base/messages/resmessages3.rmsg:446
 #: data/base/messages/strings/resstrings.txt:389
-#: data/mp/messages/resmessages1.rmsg:356
-#: data/mp/messages/resmessages2.rmsg:368
-#: data/mp/messages/resmessages3.rmsg:446
 #: data/mp/messages/strings/resstrings.txt:417
 msgid "Research Improved"
 msgstr "Raziskovanje izboljšano"
 
 #: data/base/messages/resmessages1.rmsg:356
-#: data/mp/messages/resmessages1.rmsg:357
 msgid "Synaptic link data analysis"
 msgstr "Sinaptično povezana analiza podatkov"
 
@@ -1758,9 +1207,6 @@ msgstr "Sinaptično povezana analiza podatkov"
 #: data/base/messages/resmessages2.rmsg:371
 #: data/base/messages/resmessages3.rmsg:449
 #: data/base/messages/strings/resstrings.txt:392
-#: data/mp/messages/resmessages1.rmsg:359
-#: data/mp/messages/resmessages2.rmsg:371
-#: data/mp/messages/resmessages3.rmsg:449
 #: data/mp/messages/strings/resstrings.txt:420
 msgid "All research facilities upgraded automatically"
 msgstr "Vse raziskovalne stavbe nadgrajene samodejno"
@@ -1770,17 +1216,12 @@ msgstr "Vse raziskovalne stavbe nadgrajene samodejno"
 #: data/base/messages/resmessages3.rmsg:459
 #: data/base/messages/resmessages3.rmsg:472
 #: data/base/messages/strings/resstrings.txt:399
-#: data/mp/messages/resmessages1.rmsg:369
-#: data/mp/messages/resmessages2.rmsg:381
-#: data/mp/messages/resmessages3.rmsg:459
-#: data/mp/messages/resmessages3.rmsg:472
 #: data/mp/messages/strings/resstrings.txt:427
 msgid "Increases Damage Resistance"
 msgstr "Poveča odpornost na poškodbe"
 
 #: data/base/messages/resmessages1.rmsg:369
 #: data/base/messages/strings/names.txt:805
-#: data/mp/messages/resmessages1.rmsg:370
 #: data/mp/messages/strings/names.txt:814
 msgid "Reinforced Base Structure Materials"
 msgstr "Okrepljene snovi baznih zgradb"
@@ -1804,137 +1245,106 @@ msgstr "Poveča oklep in telesne točke"
 #: data/base/messages/resmessages3.rmsg:462
 #: data/base/messages/resmessages3.rmsg:475
 #: data/base/messages/strings/resstrings.txt:402
-#: data/mp/messages/resmessages1.rmsg:372
-#: data/mp/messages/resmessages2.rmsg:384
-#: data/mp/messages/resmessages3.rmsg:462
-#: data/mp/messages/resmessages3.rmsg:475
 #: data/mp/messages/strings/resstrings.txt:430
 msgid "All base structures upgraded automatically"
 msgstr "Vse bazne zgradbe nadgrajene samodejno"
 
 #: data/base/messages/resmessages1.rmsg:381
-#: data/mp/messages/resmessages1.rmsg:382
 msgid "Project Light Body"
 msgstr "Lahko telo Projekta"
 
 #: data/base/messages/resmessages1.rmsg:382
-#: data/mp/messages/resmessages1.rmsg:383
 msgid "Light body vulnerable to heavy weapons"
 msgstr "Lahko telo ranljivo proti težkim orožjem"
 
 #: data/base/messages/resmessages1.rmsg:383
-#: data/mp/messages/resmessages1.rmsg:384
 msgid "Good scout vehicle"
 msgstr "Dobro izvidniško vozilo"
 
 #: data/base/messages/resmessages1.rmsg:384
-#: data/mp/messages/resmessages1.rmsg:385
 msgid "Low power cost and low production times"
 msgstr "Nizka poraba moči in nizki časi izdelave"
 
 #: data/base/messages/resmessages1.rmsg:394
-#: data/mp/messages/resmessages1.rmsg:395
 msgid "New Paradigm Light Body"
 msgstr "Lahko telo Nove paradigme"
 
 #: data/base/messages/resmessages1.rmsg:395
-#: data/mp/messages/resmessages1.rmsg:396
 msgid "Inferior armor and body points to Viper"
 msgstr "Slabši oklep ter telesne točke kot pri gadu"
 
 #: data/base/messages/resmessages1.rmsg:396
 #: data/base/messages/resmessages3.rmsg:630
-#: data/mp/messages/resmessages1.rmsg:397
-#: data/mp/messages/resmessages3.rmsg:630
 msgid "Faster than Viper"
 msgstr "Hitrejše kot gad"
 
 #: data/base/messages/resmessages1.rmsg:397
-#: data/mp/messages/resmessages1.rmsg:398
 msgid "Power cost and production time similar to Viper"
 msgstr "Poraba moči ter čas izdelave podobna kot pri gadu"
 
 #: data/base/messages/resmessages1.rmsg:407
-#: data/mp/messages/resmessages1.rmsg:408
 msgid "Project Medium Body"
 msgstr "Srednje težko telo Projekta"
 
 #: data/base/messages/resmessages1.rmsg:408
-#: data/mp/messages/resmessages1.rmsg:409
 msgid "Medium body increases armor and body points"
 msgstr "Srednje težko telo poveča oklep in telesne točke"
 
 #: data/base/messages/resmessages1.rmsg:409
-#: data/mp/messages/resmessages1.rmsg:410
 msgid "Good medium tank and support vehicle"
 msgstr "Dober srednje težek tank in podporno vozilo"
 
 #: data/base/messages/resmessages1.rmsg:410
-#: data/mp/messages/resmessages1.rmsg:411
 msgid "Average power costs and production times"
 msgstr "Povprečne porabe moči in časi izdelave"
 
 #: data/base/messages/resmessages1.rmsg:420
-#: data/mp/messages/resmessages1.rmsg:421
 msgid "New Paradigm Medium body"
 msgstr "Srednje težko telo Nove paradigme"
 
 #: data/base/messages/resmessages1.rmsg:421
-#: data/mp/messages/resmessages1.rmsg:422
 msgid "Inferior armor and body points to Cobra"
 msgstr "Slabši oklep ter telesne točke kot pri naočarki"
 
 #: data/base/messages/resmessages1.rmsg:422
 #: data/base/messages/resmessages3.rmsg:643
-#: data/mp/messages/resmessages1.rmsg:423
-#: data/mp/messages/resmessages3.rmsg:643
 msgid "Faster than Cobra"
 msgstr "Hitrejše kot naočarka"
 
 #: data/base/messages/resmessages1.rmsg:423
-#: data/mp/messages/resmessages1.rmsg:424
 msgid "Power cost and production time similar to Cobra"
 msgstr "Poraba moči ter čas izdelave podobna kot pri naočarki"
 
 #: data/base/messages/resmessages1.rmsg:433
-#: data/mp/messages/resmessages1.rmsg:434
 msgid "Project Heavy Body"
 msgstr "Težko telo Projekta"
 
 #: data/base/messages/resmessages1.rmsg:434
-#: data/mp/messages/resmessages1.rmsg:435
 msgid "Heavy body increases armor and body points"
 msgstr "Težko telo poveča oklep in telesne točke"
 
 #: data/base/messages/resmessages1.rmsg:435
-#: data/mp/messages/resmessages1.rmsg:436
 msgid "Good main battle tank and heavy artillery platform"
 msgstr "Dober glavni bojni tank in ploščad za težko topništvo"
 
 #: data/base/messages/resmessages1.rmsg:436
-#: data/mp/messages/resmessages1.rmsg:437
 msgid "Very high power costs and very slow to produce"
 msgstr "Zelo visoka poraba moči in zelo počasna izdelava"
 
 #: data/base/messages/resmessages1.rmsg:446
-#: data/mp/messages/resmessages1.rmsg:447
 msgid "New Paradigm Heavy Body"
 msgstr "Težko telo Nove paradigme"
 
 #: data/base/messages/resmessages1.rmsg:447
-#: data/mp/messages/resmessages1.rmsg:448
 msgid "Less armor and body points than Python"
 msgstr "Manj oklepa in telesnih točk kot pri pitonu"
 
 #: data/base/messages/resmessages1.rmsg:448
 #: data/base/messages/resmessages3.rmsg:656
-#: data/mp/messages/resmessages1.rmsg:449
-#: data/mp/messages/resmessages3.rmsg:656
 msgid "Faster than Python"
 msgstr "Hitrejše kot piton"
 
 #: data/base/messages/resmessages1.rmsg:449
-#: data/mp/messages/resmessages1.rmsg:450
 msgid "Power cost and production time the same as Python"
 msgstr "Poraba moči ter čas izdelave enaka kot pri pitonu"
 
@@ -1943,17 +1353,12 @@ msgstr "Poraba moči ter čas izdelave enaka kot pri pitonu"
 #: data/base/messages/resmessages3.rmsg:667
 #: data/base/messages/resmessages3.rmsg:680
 #: data/base/messages/strings/resstrings.txt:559
-#: data/mp/messages/resmessages1.rmsg:460
-#: data/mp/messages/resmessages2.rmsg:498
-#: data/mp/messages/resmessages3.rmsg:667
-#: data/mp/messages/resmessages3.rmsg:680
 #: data/mp/messages/strings/resstrings.txt:594
 msgid "Vehicle Engine Upgrade"
 msgstr "Nadgradnja motorja vozila"
 
 #: data/base/messages/resmessages1.rmsg:460
 #: data/base/messages/strings/names.txt:942
-#: data/mp/messages/resmessages1.rmsg:461
 #: data/mp/messages/strings/names.txt:953
 msgid "Fuel Injection Engine"
 msgstr "Motor z vbrizgom goriva"
@@ -1980,17 +1385,6 @@ msgstr "Izboljša hitrost vozila"
 #: data/base/messages/strings/resstrings.txt:562
 #: data/base/messages/strings/resstrings.txt:574
 #: data/base/messages/strings/resstrings.txt:584
-#: data/mp/messages/resmessages1.rmsg:463
-#: data/mp/messages/resmessages1.rmsg:476
-#: data/mp/messages/resmessages2.rmsg:501
-#: data/mp/messages/resmessages2.rmsg:514
-#: data/mp/messages/resmessages2.rmsg:527
-#: data/mp/messages/resmessages3.rmsg:670
-#: data/mp/messages/resmessages3.rmsg:683
-#: data/mp/messages/resmessages3.rmsg:696
-#: data/mp/messages/resmessages3.rmsg:709
-#: data/mp/messages/resmessages3.rmsg:722
-#: data/mp/messages/resmessagesall.rmsg:854
 #: data/mp/messages/strings/resstrings.txt:597
 #: data/mp/messages/strings/resstrings.txt:609
 #: data/mp/messages/strings/resstrings.txt:619
@@ -2002,10 +1396,6 @@ msgstr "Vsa vozila nadgrajena samodejno"
 #: data/base/messages/resmessages3.rmsg:693
 #: data/base/messages/resmessages3.rmsg:706
 #: data/base/messages/strings/resstrings.txt:571
-#: data/mp/messages/resmessages1.rmsg:473
-#: data/mp/messages/resmessages2.rmsg:511
-#: data/mp/messages/resmessages3.rmsg:693
-#: data/mp/messages/resmessages3.rmsg:706
 #: data/mp/messages/strings/resstrings.txt:606
 msgid "Vehicle Bodies Improved"
 msgstr "Izboljšana telesa vozil"
@@ -2023,32 +1413,23 @@ msgstr "Poveča kinetični oklep in telesne točke"
 #: data/base/messages/resmessages1.rmsg:498
 #: data/base/messages/resmessages1.rmsg:511
 #: data/base/messages/resmessages1.rmsg:524
-#: data/mp/messages/resmessages1.rmsg:486
-#: data/mp/messages/resmessages1.rmsg:499
-#: data/mp/messages/resmessages1.rmsg:512
-#: data/mp/messages/resmessages1.rmsg:525
 msgid "New Propulsion Available"
 msgstr "Nov pogon na voljo"
 
 #: data/base/messages/resmessages1.rmsg:486
-#: data/mp/messages/resmessages1.rmsg:487
 msgid "Armored Half-tracks"
 msgstr "Oklepne polgosenice"
 
 #: data/base/messages/resmessages1.rmsg:487
-#: data/mp/messages/resmessages1.rmsg:488
 msgid "Speed: Medium"
 msgstr "Hitrost: srednje hitra"
 
 #: data/base/messages/resmessages1.rmsg:499
-#: data/mp/messages/resmessages1.rmsg:500
 msgid "Amphibious hover propulsion"
 msgstr "Amfibijski zračni pogon"
 
 #: data/base/messages/resmessages1.rmsg:500
 #: data/base/messages/resmessages1.rmsg:526
-#: data/mp/messages/resmessages1.rmsg:501
-#: data/mp/messages/resmessages1.rmsg:527
 msgid "Speed: Fast"
 msgstr "Hitrost: hitra"
 
@@ -2072,23 +1453,6 @@ msgstr "Hitrost: hitra"
 #: data/base/messages/strings/resstrings.txt:776
 #: data/base/messages/strings/resstrings.txt:782
 #: data/base/messages/strings/resstrings.txt:790
-#: data/mp/messages/resmessages1.rmsg:502
-#: data/mp/messages/resmessages1.rmsg:528
-#: data/mp/messages/resmessages1.rmsg:619
-#: data/mp/messages/resmessages1.rmsg:632
-#: data/mp/messages/resmessages23.rmsg:150
-#: data/mp/messages/resmessages23.rmsg:202
-#: data/mp/messages/resmessages2.rmsg:709
-#: data/mp/messages/resmessages2.rmsg:722
-#: data/mp/messages/resmessages2.rmsg:774
-#: data/mp/messages/resmessages2.rmsg:800
-#: data/mp/messages/resmessages2.rmsg:813
-#: data/mp/messages/resmessages2.rmsg:826
-#: data/mp/messages/resmessages3.rmsg:852
-#: data/mp/messages/resmessagesall.rmsg:163
-#: data/mp/messages/resmessagesall.rmsg:347
-#: data/mp/messages/resmessagesall.rmsg:919
-#: data/mp/messages/resmessagesall.rmsg:932
 #: data/mp/messages/strings/resstrings.txt:735
 #: data/mp/messages/strings/resstrings.txt:741
 #: data/mp/messages/strings/resstrings.txt:799
@@ -2099,65 +1463,51 @@ msgid "Body Points: Low"
 msgstr "Telesne točke: nizke"
 
 #: data/base/messages/resmessages1.rmsg:512
-#: data/mp/messages/resmessages1.rmsg:513
 msgid "Armored Tracks"
 msgstr "Oklepne gosenice"
 
 #: data/base/messages/resmessages1.rmsg:513
-#: data/mp/messages/resmessages1.rmsg:514
 msgid "Speed: Slow"
 msgstr "Hitrost: počasna"
 
 #: data/base/messages/resmessages1.rmsg:525
 #: data/base/messages/strings/names.txt:976
-#: data/mp/messages/resmessages1.rmsg:526
 #: data/mp/messages/strings/names.txt:987
 msgid "Wheeled Propulsion"
 msgstr "Kolesni pogon"
 
 #: data/base/messages/resmessages1.rmsg:538
-#: data/mp/messages/resmessages1.rmsg:539
 msgid "Light Cannon firing 40mm rounds"
 msgstr "Lahki top strelja 40mm naboje"
 
 #: data/base/messages/resmessages1.rmsg:551
-#: data/mp/messages/resmessages1.rmsg:552
 msgid "Medium Cannon firing 76mm rounds"
 msgstr "Srednje težki top strelja 76mm naboje"
 
 #: data/base/messages/resmessages1.rmsg:564
-#: data/mp/messages/resmessages1.rmsg:565
 msgid "Heavy Cannon firing 120 mm rounds"
 msgstr "Težki top strelja 120 mm naboje"
 
 #: data/base/messages/resmessages1.rmsg:577
-#: data/mp/messages/resmessages1.rmsg:578
 msgid "High Explosive Anti-Tank Cannon Shells"
 msgstr "Visokoeksplozivne protitankovske topovske granate"
 
 #: data/base/messages/resmessages1.rmsg:590
-#: data/mp/messages/resmessages1.rmsg:591
 msgid "Flame-thrower firing Propylene Oxide gel"
 msgstr "Metalec plamenov strelja propilenski oksidni gel"
 
 #: data/base/messages/resmessages1.rmsg:591
 #: data/base/messages/resmessages2.rmsg:773
 #: data/base/messages/strings/resstrings.txt:759
-#: data/mp/messages/resmessages1.rmsg:592
-#: data/mp/messages/resmessages2.rmsg:773
-#: data/mp/messages/resmessagesall.rmsg:385
 #: data/mp/messages/strings/resstrings.txt:798
 msgid "Best Targets: Bunkers, wheeled and hover vehicles"
 msgstr "Najboljše tarče: bunkerji, vozila s kolesi in zračnimi blazinami"
 
 #: data/base/messages/resmessages1.rmsg:592
-#: data/mp/messages/resmessages1.rmsg:593
-#: data/mp/messages/resmessagesall.rmsg:386
 msgid "Body Points: Very low"
 msgstr "Telesne točke: zelo nizke"
 
 #: data/base/messages/resmessages1.rmsg:603
-#: data/mp/messages/resmessages1.rmsg:604
 msgid "Propylene Oxide gel treated to burn at higher temperatures"
 msgstr "Propilenski oksidni gel obdelan za gorenje pri višjih temperaturah"
 
@@ -2169,17 +1519,14 @@ msgid "Increases Flamer damage"
 msgstr "Poveča škodo plamenometalca"
 
 #: data/base/messages/resmessages1.rmsg:616
-#: data/mp/messages/resmessages1.rmsg:617
 msgid "7.62mm machinegun"
 msgstr "7.62mm strojnica"
 
 #: data/base/messages/resmessages1.rmsg:629
-#: data/mp/messages/resmessages1.rmsg:630
 msgid "Twin 7.62mm machineguns"
 msgstr "Dvojni 7.62mm strojnici"
 
 #: data/base/messages/resmessages1.rmsg:642
-#: data/mp/messages/resmessages1.rmsg:643
 msgid "Hardened case machinegun bullets"
 msgstr "Strojnični naboji z utrjenim ohišjem"
 
@@ -2194,18 +1541,14 @@ msgid "Increases Machinegun damage"
 msgstr "Poveča škodo strojnice"
 
 #: data/base/messages/resmessages1.rmsg:655
-#: data/mp/messages/resmessages1.rmsg:656
 msgid "Armor-Piercing Discard Sabot Bullets"
 msgstr "Oklepno-prebojni naboji z odpadljivo oblogo"
 
 #: data/base/messages/resmessages1.rmsg:668
-#: data/mp/messages/resmessages1.rmsg:669
-#: data/mp/messages/resmessagesall.rmsg:358
 msgid "May be targeted directly or assigned to a sensor turret or tower"
 msgstr "Lahko cilja neposredno ali se dodeli senzorski kupoli ali stolpu"
 
 #: data/base/messages/resmessages1.rmsg:681
-#: data/mp/messages/resmessages1.rmsg:682
 msgid "Improved high explosive shells"
 msgstr "Izboljšane visokoeksplozivne granate"
 
@@ -2217,12 +1560,10 @@ msgid "Increases Mortar damage"
 msgstr "Poveča škodo možnarja"
 
 #: data/base/messages/resmessages1.rmsg:694
-#: data/mp/messages/resmessages1.rmsg:695
 msgid "Fast firing light anti-vehicle rockets"
 msgstr "Hitro streljajoče lahke proti-vozilne rakete"
 
 #: data/base/messages/resmessages1.rmsg:695
-#: data/mp/messages/resmessages1.rmsg:696
 msgid "Best Targets: Wheeled and hover vehicles"
 msgstr "Najboljše tarče: vozila s kolesi in zračnimi blazinami"
 
@@ -2238,7 +1579,6 @@ msgid "Mini-Rocket Upgrade"
 msgstr "Nadgradnja mini-rakete"
 
 #: data/base/messages/resmessages1.rmsg:707
-#: data/mp/messages/resmessages1.rmsg:708
 msgid "Fin-stabilization improves flight trajectory"
 msgstr "Krilno uravnoteženje izboljša pot letenja"
 
@@ -2258,7 +1598,6 @@ msgid "All mini-rockets upgraded automatically"
 msgstr "Vse mini-rakete nadgrajene samodejno"
 
 #: data/base/messages/resmessages1.rmsg:720
-#: data/mp/messages/resmessages1.rmsg:721
 msgid "Improved shaped charge warhead"
 msgstr "Izboljšana bojna glava z oblikovanim polnilom"
 
@@ -2270,7 +1609,6 @@ msgid "Increases Mini-Rocket damage"
 msgstr "Poveča škodo mini-raket"
 
 #: data/base/messages/resmessages1.rmsg:733
-#: data/mp/messages/resmessages1.rmsg:734
 msgid "Automated reload system"
 msgstr "Samodejni sistem ponovnega naboja"
 
@@ -2279,12 +1617,10 @@ msgid "Increases Mini-Rockets ROF"
 msgstr "Poveča HS mini-raket"
 
 #: data/base/messages/resmessages1.rmsg:746
-#: data/mp/messages/resmessages1.rmsg:747
 msgid "Tracks and directs in-flight rocket to target"
 msgstr "Spremlja in usmerja letečo raketo do tarče"
 
 #: data/base/messages/resmessages1.rmsg:759
-#: data/mp/messages/resmessages1.rmsg:760
 msgid "High Explosive Anti-Tank warhead"
 msgstr "Visokoeksplozivna protitankovska bojna glava"
 
@@ -2297,8 +1633,6 @@ msgstr "Poveča škodo rakete"
 
 #: data/base/messages/resmessages23.rmsg:4
 #: data/base/messages/resmessages3.rmsg:56
-#: data/mp/messages/resmessages23.rmsg:4
-#: data/mp/messages/resmessages3.rmsg:56
 msgid "Cyborg Propulsion Improved"
 msgstr "Pogon kiborgov izboljšan"
 
@@ -2316,16 +1650,6 @@ msgstr "Pogon kiborgov izboljšan"
 #: data/base/messages/strings/resstrings.txt:602
 #: data/base/messages/strings/resstrings.txt:612
 #: data/base/messages/strings/resstrings.txt:622
-#: data/mp/messages/resmessages23.rmsg:5
-#: data/mp/messages/resmessages2.rmsg:538
-#: data/mp/messages/resmessages2.rmsg:551
-#: data/mp/messages/resmessages2.rmsg:564
-#: data/mp/messages/resmessages2.rmsg:577
-#: data/mp/messages/resmessages3.rmsg:57
-#: data/mp/messages/resmessages3.rmsg:733
-#: data/mp/messages/resmessages3.rmsg:746
-#: data/mp/messages/resmessages3.rmsg:759
-#: data/mp/messages/resmessages3.rmsg:772
 #: data/mp/messages/strings/resstrings.txt:627
 #: data/mp/messages/strings/resstrings.txt:637
 #: data/mp/messages/strings/resstrings.txt:647
@@ -2347,16 +1671,6 @@ msgstr "Nova oklepna zgradba"
 #: data/base/messages/strings/resstrings.txt:603
 #: data/base/messages/strings/resstrings.txt:613
 #: data/base/messages/strings/resstrings.txt:623
-#: data/mp/messages/resmessages23.rmsg:6
-#: data/mp/messages/resmessages2.rmsg:539
-#: data/mp/messages/resmessages2.rmsg:552
-#: data/mp/messages/resmessages2.rmsg:565
-#: data/mp/messages/resmessages2.rmsg:578
-#: data/mp/messages/resmessages3.rmsg:58
-#: data/mp/messages/resmessages3.rmsg:734
-#: data/mp/messages/resmessages3.rmsg:747
-#: data/mp/messages/resmessages3.rmsg:760
-#: data/mp/messages/resmessages3.rmsg:773
 #: data/mp/messages/strings/resstrings.txt:628
 #: data/mp/messages/strings/resstrings.txt:638
 #: data/mp/messages/strings/resstrings.txt:648
@@ -2365,7 +1679,6 @@ msgid "Increases Body Points"
 msgstr "Poveča telesne točke"
 
 #: data/base/messages/resmessages23.rmsg:18
-#: data/mp/messages/resmessages23.rmsg:18
 msgid "Armored hardpoint with Hyper-Velocity Cannon"
 msgstr "Oklepna trda točka s hiper-hitrostnim topom"
 
@@ -2375,23 +1688,17 @@ msgid "New Power Generation Technology"
 msgstr "Nova tehnologija proizvodnje moči"
 
 #: data/base/messages/resmessages23.rmsg:32
-#: data/mp/messages/resmessages23.rmsg:31
 msgid "Gas turbine boosts power output"
 msgstr "Plinska turbina poviša proizvodnjo moči"
 
 #: data/base/messages/resmessages23.rmsg:33
 #: data/base/messages/resmessages3.rmsg:436
-#: data/mp/messages/resmessages23.rmsg:33
-#: data/mp/messages/resmessages3.rmsg:436
 msgid "All power generators upgraded automatically"
 msgstr "Vsi generatorji moči nadgrajeni samodejno"
 
 #: data/base/messages/resmessages23.rmsg:57
 #: data/base/messages/resmessages23.rmsg:83
 #: data/base/messages/resmessages3.rmsg:525
-#: data/mp/messages/resmessages23.rmsg:57
-#: data/mp/messages/resmessages23.rmsg:83
-#: data/mp/messages/resmessages3.rmsg:525
 msgid "Improved fire detection systems"
 msgstr "Izboljšani sistemi zaznave streljanja"
 
@@ -2399,24 +1706,16 @@ msgstr "Izboljšani sistemi zaznave streljanja"
 #: data/base/messages/resmessages23.rmsg:95
 #: data/base/messages/resmessagesall.rmsg:69
 #: data/base/messages/resmessagesall.rmsg:95
-#: data/mp/messages/resmessages23.rmsg:69
-#: data/mp/messages/resmessages23.rmsg:95
-#: data/mp/messages/resmessagesall.rmsg:69
-#: data/mp/messages/resmessagesall.rmsg:121
-#: data/mp/messages/resmessagesall.rmsg:134
 msgid "New Systems Tower Available"
 msgstr "Nov sistemski stolp na voljo"
 
 #: data/base/messages/resmessages23.rmsg:70
-#: data/mp/messages/resmessages23.rmsg:70
 msgid "VTOL CB Tower detects enemy indirect fire batteries"
 msgstr "NVP CB stolp zazna sovražne topniške edinice z nedirektnim streljanjem"
 
 #: data/base/messages/resmessages23.rmsg:71
 #: data/base/messages/resmessages2.rmsg:435
 #: data/base/messages/strings/resstrings.txt:481
-#: data/mp/messages/resmessages23.rmsg:71
-#: data/mp/messages/resmessages2.rmsg:435
 #: data/mp/messages/strings/resstrings.txt:511
 msgid "Orders assigned VTOLs to attack the enemy batteries"
 msgstr "Ukaže dodeljenim NVP-jem napad na sovražne topniške edinice"
@@ -2424,8 +1723,6 @@ msgstr "Ukaže dodeljenim NVP-jem napad na sovražne topniške edinice"
 #: data/base/messages/resmessages23.rmsg:72
 #: data/base/messages/resmessages2.rmsg:436
 #: data/base/messages/strings/resstrings.txt:482
-#: data/mp/messages/resmessages23.rmsg:72
-#: data/mp/messages/resmessages2.rmsg:436
 #: data/mp/messages/strings/resstrings.txt:512
 msgid "VTOLs attack until enemy battery is suppressed"
 msgstr "NVP-ji napadajo, dokler sovražna topniška edinica ni zatrta"
@@ -2434,9 +1731,6 @@ msgstr "NVP-ji napadajo, dokler sovražna topniška edinica ni zatrta"
 #: data/base/messages/resmessages2.rmsg:446
 #: data/base/messages/resmessages3.rmsg:537
 #: data/base/messages/strings/resstrings.txt:485
-#: data/mp/messages/resmessages23.rmsg:82
-#: data/mp/messages/resmessages2.rmsg:446
-#: data/mp/messages/resmessages3.rmsg:537
 #: data/mp/messages/strings/resstrings.txt:515
 msgid "VTOL CB Improved"
 msgstr "Izboljšan NVP CB"
@@ -2445,9 +1739,6 @@ msgstr "Izboljšan NVP CB"
 #: data/base/messages/resmessages2.rmsg:448
 #: data/base/messages/resmessages3.rmsg:539
 #: data/base/messages/strings/resstrings.txt:487
-#: data/mp/messages/resmessages23.rmsg:84
-#: data/mp/messages/resmessages2.rmsg:448
-#: data/mp/messages/resmessages3.rmsg:539
 #: data/mp/messages/strings/resstrings.txt:517
 msgid "Extends VTOL CB Range"
 msgstr "Razširi domet NVP CB"
@@ -2456,25 +1747,19 @@ msgstr "Razširi domet NVP CB"
 #: data/base/messages/resmessages2.rmsg:449
 #: data/base/messages/resmessages3.rmsg:540
 #: data/base/messages/strings/resstrings.txt:488
-#: data/mp/messages/resmessages23.rmsg:85
-#: data/mp/messages/resmessages2.rmsg:449
-#: data/mp/messages/resmessages3.rmsg:540
 #: data/mp/messages/strings/resstrings.txt:518
 msgid "All VTOL CB sensors upgraded automatically"
 msgstr "Vsi NVP CB senzorji nadgrajeni samodejno"
 
 #: data/base/messages/resmessages23.rmsg:96
-#: data/mp/messages/resmessages23.rmsg:96
 msgid "VTOL Strike Tower detects approaching enemies"
 msgstr "Stolp za napad z NVP zazna približujoče se sovražnike"
 
 #: data/base/messages/resmessages23.rmsg:97
-#: data/mp/messages/resmessages23.rmsg:97
 msgid "Assigned VTOLs attack the enemy units"
 msgstr "Dodeljeni NVP-ji napadajo sovražne enote"
 
 #: data/base/messages/resmessages23.rmsg:98
-#: data/mp/messages/resmessages23.rmsg:98
 msgid "Strike mission continues until enemy destroyed or they retreat"
 msgstr "Bojna misija se nadaljuje dokler niso sovražniki uničeni ali se umaknejo"
 
@@ -2484,29 +1769,20 @@ msgstr "Bojna misija se nadaljuje dokler niso sovražniki uničeni ali se umakne
 #: data/base/messages/resmessagesall.rmsg:43
 #: data/base/messages/strings/resstrings.txt:443
 #: data/base/messages/strings/resstrings.txt:479
-#: data/mp/messages/resmessages23.rmsg:108
-#: data/mp/messages/resmessages2.rmsg:433
-#: data/mp/messages/resmessages3.rmsg:563
-#: data/mp/messages/resmessagesall.rmsg:43
-#: data/mp/messages/resmessagesall.rmsg:370
-#: data/mp/messages/resmessagesall.rmsg:396
 #: data/mp/messages/strings/resstrings.txt:471
 #: data/mp/messages/strings/resstrings.txt:509
 msgid "New Systems Turret Available"
 msgstr "Nova sistemska kupola na voljo"
 
 #: data/base/messages/resmessages23.rmsg:109
-#: data/mp/messages/resmessages23.rmsg:109
 msgid "VTOL Strike turret used to spot targets"
 msgstr "Kupola za NVP napad se uporablja za točno lokalizacijo tarč"
 
 #: data/base/messages/resmessages23.rmsg:110
-#: data/mp/messages/resmessages23.rmsg:110
 msgid "Assigned VTOLs attack the designated targets"
 msgstr "Dodeljeni NVP-ji napadajo določene enote"
 
 #: data/base/messages/resmessages23.rmsg:111
-#: data/mp/messages/resmessages23.rmsg:111
 msgid "Select new targets to continue the VTOL strikes"
 msgstr "Izberite nove tarče za nadaljne napade z NVP"
 
@@ -2514,15 +1790,11 @@ msgstr "Izberite nove tarče za nadaljne napade z NVP"
 #: data/base/messages/resmessages2.rmsg:459
 #: data/base/messages/resmessages3.rmsg:550
 #: data/base/messages/strings/resstrings.txt:499
-#: data/mp/messages/resmessages23.rmsg:121
-#: data/mp/messages/resmessages2.rmsg:459
-#: data/mp/messages/resmessages3.rmsg:550
 #: data/mp/messages/strings/resstrings.txt:529
 msgid "VTOL Strike Improved"
 msgstr "NVP napad izboljšan"
 
 #: data/base/messages/resmessages23.rmsg:122
-#: data/mp/messages/resmessages23.rmsg:122
 msgid "Improved target recognition systems"
 msgstr "Izboljšani sistemi prepoznavanja tarče"
 
@@ -2530,9 +1802,6 @@ msgstr "Izboljšani sistemi prepoznavanja tarče"
 #: data/base/messages/resmessages2.rmsg:461
 #: data/base/messages/resmessages3.rmsg:552
 #: data/base/messages/strings/resstrings.txt:501
-#: data/mp/messages/resmessages23.rmsg:123
-#: data/mp/messages/resmessages2.rmsg:461
-#: data/mp/messages/resmessages3.rmsg:552
 #: data/mp/messages/strings/resstrings.txt:531
 msgid "Extends VTOL Strike Range"
 msgstr "Razširi domet NVP napada"
@@ -2541,9 +1810,6 @@ msgstr "Razširi domet NVP napada"
 #: data/base/messages/resmessages2.rmsg:462
 #: data/base/messages/resmessages3.rmsg:553
 #: data/base/messages/strings/resstrings.txt:502
-#: data/mp/messages/resmessages23.rmsg:124
-#: data/mp/messages/resmessages2.rmsg:462
-#: data/mp/messages/resmessages3.rmsg:553
 #: data/mp/messages/strings/resstrings.txt:532
 msgid "All VTOL Strike sensors upgraded automatically"
 msgstr "Vsi senzorji za NVP napad nadgrajeni samodejno"
@@ -2555,11 +1821,6 @@ msgstr "Vsi senzorji za NVP napad nadgrajeni samodejno"
 #: data/base/messages/resmessages3.rmsg:836
 #: data/base/messages/strings/resstrings.txt:659
 #: data/base/messages/strings/resstrings.txt:677
-#: data/mp/messages/resmessages23.rmsg:134
-#: data/mp/messages/resmessages2.rmsg:641
-#: data/mp/messages/resmessages2.rmsg:667
-#: data/mp/messages/resmessages3.rmsg:810
-#: data/mp/messages/resmessages3.rmsg:836
 #: data/mp/messages/strings/resstrings.txt:694
 #: data/mp/messages/strings/resstrings.txt:712
 msgid "AA Upgrade"
@@ -2568,8 +1829,6 @@ msgstr "PZ nadgradnja"
 #: data/base/messages/resmessages23.rmsg:135
 #: data/base/messages/resmessages2.rmsg:837
 #: data/base/messages/strings/resstrings.txt:794
-#: data/mp/messages/resmessages23.rmsg:135
-#: data/mp/messages/resmessages2.rmsg:837
 #: data/mp/messages/strings/resstrings.txt:835
 msgid "Self-guided rocket powered shells"
 msgstr "Samovodljive granate z raketnim pogonom"
@@ -2589,11 +1848,6 @@ msgstr "Poveča PZ natančnost"
 #: data/base/messages/resmessages3.rmsg:839
 #: data/base/messages/strings/resstrings.txt:662
 #: data/base/messages/strings/resstrings.txt:680
-#: data/mp/messages/resmessages23.rmsg:137
-#: data/mp/messages/resmessages2.rmsg:644
-#: data/mp/messages/resmessages2.rmsg:670
-#: data/mp/messages/resmessages3.rmsg:813
-#: data/mp/messages/resmessages3.rmsg:839
 #: data/mp/messages/strings/resstrings.txt:697
 #: data/mp/messages/strings/resstrings.txt:715
 msgid "All AA weapons upgraded automatically"
@@ -2605,23 +1859,16 @@ msgstr "Vsa PZ orožja nadgrajena samodejno"
 #: data/base/messages/resmessages3.rmsg:849
 #: data/base/messages/strings/resstrings.txt:697
 #: data/base/messages/strings/resstrings.txt:703
-#: data/mp/messages/resmessages23.rmsg:147
-#: data/mp/messages/resmessages2.rmsg:706
-#: data/mp/messages/resmessages2.rmsg:719
-#: data/mp/messages/resmessages3.rmsg:849
-#: data/mp/messages/resmessagesall.rmsg:916
 #: data/mp/messages/strings/resstrings.txt:732
 #: data/mp/messages/strings/resstrings.txt:738
 msgid "New Bomb Bay Available"
 msgstr "Nov oddelek za bombe na voljo"
 
 #: data/base/messages/resmessages23.rmsg:148
-#: data/mp/messages/resmessages23.rmsg:148
 msgid "Drops incendiary bombs"
 msgstr "Spušča zažigalne bombe"
 
 #: data/base/messages/resmessages23.rmsg:149
-#: data/mp/messages/resmessages23.rmsg:149
 msgid "Best Targets: Bunkers and Hardpoints"
 msgstr "Najboljše tarče: bunkerji in trde točke"
 
@@ -2649,25 +1896,19 @@ msgstr "Poveča natančnost bombardiranja"
 #: data/base/messages/resmessages2.rmsg:735
 #: data/base/messages/resmessages3.rmsg:865
 #: data/base/messages/strings/resstrings.txt:716
-#: data/mp/messages/resmessages23.rmsg:163
-#: data/mp/messages/resmessages2.rmsg:735
-#: data/mp/messages/resmessages3.rmsg:865
 #: data/mp/messages/strings/resstrings.txt:751
 msgid "All bomb bays upgraded automatically"
 msgstr "Vsi oddelki za bombe nadgrajeni samodejno"
 
 #: data/base/messages/resmessages23.rmsg:174
-#: data/mp/messages/resmessages23.rmsg:174
 msgid "Robotic advances make new chaingun upgrade available"
 msgstr "Robotski napredki dajejo na voljo novo nadgradnjo verižne puške"
 
 #: data/base/messages/resmessages23.rmsg:187
-#: data/mp/messages/resmessages23.rmsg:187
 msgid "Shells detect and home to thermal heat signatures"
 msgstr "Granate zaznajo in se usmerijo k toplotnim vročinskim zapisom"
 
 #: data/base/messages/resmessages23.rmsg:200
-#: data/mp/messages/resmessages23.rmsg:200
 msgid "105mm multi-barrel Howitzer may be assigned to a sensor"
 msgstr "105mm mnogocevna havbica se lahko dodeli senzorju"
 
@@ -2676,32 +1917,22 @@ msgstr "105mm mnogocevna havbica se lahko dodeli senzorju"
 #: data/base/messages/resmessages2.rmsg:812
 #: data/base/messages/strings/resstrings.txt:775
 #: data/base/messages/strings/resstrings.txt:781
-#: data/mp/messages/resmessages23.rmsg:201
-#: data/mp/messages/resmessages2.rmsg:799
-#: data/mp/messages/resmessages2.rmsg:812
-#: data/mp/messages/resmessagesall.rmsg:346
 #: data/mp/messages/strings/resstrings.txt:814
 #: data/mp/messages/strings/resstrings.txt:822
 msgid "Best Targets: Base Structures, infantry, wheeled vehicles"
 msgstr "Najboljše tarče: bazne zgradbe, pehota, kolesna vozila"
 
 #: data/base/messages/resmessages23.rmsg:213
-#: data/mp/messages/resmessages23.rmsg:213
 msgid "Multi-barrel, rapid-fire machinegun"
 msgstr "Mnogocevna brzostrelna strojnica"
 
 #: data/base/messages/resmessages23.rmsg:215
-#: data/mp/messages/resmessages23.rmsg:215
-#: data/mp/messages/resmessagesall.rmsg:893
-#: data/mp/messages/resmessagesall.rmsg:906
 msgid "Replaces all machineguns"
 msgstr "Nadomesti vse strojnice"
 
 #: data/base/messages/resmessages2.rmsg:4
 #: data/base/messages/resmessages3.rmsg:4
 #: data/base/messages/strings/resstrings.txt:41
-#: data/mp/messages/resmessages2.rmsg:4
-#: data/mp/messages/resmessages3.rmsg:4
 #: data/mp/messages/strings/resstrings.txt:45
 msgid "Cyborg Thermal Armor Improved"
 msgstr "Toplotni oklep za kiborge izboljšan"
@@ -2709,8 +1940,6 @@ msgstr "Toplotni oklep za kiborge izboljšan"
 #: data/base/messages/resmessages2.rmsg:5
 #: data/base/messages/resmessages3.rmsg:5
 #: data/base/messages/strings/resstrings.txt:42
-#: data/mp/messages/resmessages2.rmsg:5
-#: data/mp/messages/resmessages3.rmsg:5
 #: data/mp/messages/strings/resstrings.txt:46
 msgid "Heat resistant armored layers"
 msgstr "Vročinsko odporne oklepne plasti"
@@ -2726,8 +1955,6 @@ msgstr "Toplotni oklep povečan"
 #: data/base/messages/resmessages2.rmsg:512
 #: data/base/messages/strings/resstrings.txt:32
 #: data/base/messages/strings/resstrings.txt:572
-#: data/mp/messages/resmessages2.rmsg:18
-#: data/mp/messages/resmessages2.rmsg:512
 #: data/mp/messages/strings/resstrings.txt:36
 #: data/mp/messages/strings/resstrings.txt:607
 msgid "Layered dense composite alloys and energy-absorbing fibres"
@@ -2736,7 +1963,6 @@ msgstr "Slojne goste sestavljene zlitine in energijo vsrkajoča vlakna"
 #: data/base/messages/resmessages2.rmsg:31
 #: data/base/messages/strings/resstrings.txt:50
 #: data/base/messages/strings/resstrings.txt:84
-#: data/mp/messages/resmessages2.rmsg:31
 #: data/mp/messages/strings/resstrings.txt:54
 #: data/mp/messages/strings/resstrings.txt:104
 msgid "Armed with Bunker Buster rocket"
@@ -2744,21 +1970,18 @@ msgstr "Oborožen z raketo za uničevanje bunkerjev"
 
 #: data/base/messages/resmessages2.rmsg:44
 #: data/base/messages/strings/resstrings.txt:66
-#: data/mp/messages/resmessages2.rmsg:44
 #: data/mp/messages/strings/resstrings.txt:86
 msgid "Armed with Cyborg Assault Gun"
 msgstr "Oborožen s kiborgovo jurišno puško"
 
 #: data/base/messages/resmessages2.rmsg:57
 #: data/base/messages/strings/resstrings.txt:104
-#: data/mp/messages/resmessages2.rmsg:57
 #: data/mp/messages/strings/resstrings.txt:124
 msgid "High-tensile concrete reinforced with boron"
 msgstr "Visokoraztezen beton okrepljen z boronom"
 
 #: data/base/messages/resmessages2.rmsg:70
 #: data/base/messages/strings/resstrings.txt:120
-#: data/mp/messages/resmessages2.rmsg:70
 #: data/mp/messages/strings/resstrings.txt:140
 msgid "AA Site with Cyclone Flak Turret"
 msgstr "PZ položaj s kupolo s flak ciklonom"
@@ -2771,11 +1994,6 @@ msgstr "PZ položaj s kupolo s flak ciklonom"
 #: data/base/messages/strings/resstrings.txt:115
 #: data/base/messages/strings/resstrings.txt:121
 #: data/base/messages/strings/resstrings.txt:133
-#: data/mp/messages/resmessages2.rmsg:71
-#: data/mp/messages/resmessages2.rmsg:97
-#: data/mp/messages/resmessages2.rmsg:110
-#: data/mp/messages/resmessages3.rmsg:240
-#: data/mp/messages/resmessages3.rmsg:253
 #: data/mp/messages/strings/resstrings.txt:135
 #: data/mp/messages/strings/resstrings.txt:141
 #: data/mp/messages/strings/resstrings.txt:153
@@ -2784,63 +2002,54 @@ msgstr "Samodejno cilja NVP-je"
 
 #: data/base/messages/resmessages2.rmsg:83
 #: data/base/messages/strings/resstrings.txt:126
-#: data/mp/messages/resmessages2.rmsg:83
 #: data/mp/messages/strings/resstrings.txt:146
 msgid "AA Site with Hurricane Gun Turret"
 msgstr "PZ položaj s kupolo s puško hurikan"
 
 #: data/base/messages/resmessages2.rmsg:84
 #: data/base/messages/strings/resstrings.txt:127
-#: data/mp/messages/resmessages2.rmsg:84
 #: data/mp/messages/strings/resstrings.txt:147
 msgid "Automatically targets VTOL"
 msgstr "Samodejno cilja NVP"
 
 #: data/base/messages/resmessages2.rmsg:96
 #: data/base/messages/strings/resstrings.txt:132
-#: data/mp/messages/resmessages2.rmsg:96
 #: data/mp/messages/strings/resstrings.txt:152
 msgid "AA Site with Whirlwind Gun Turret"
 msgstr "PZ položaj s kupolo s puško zračni vrtinec"
 
 #: data/base/messages/resmessages2.rmsg:109
 #: data/base/messages/strings/resstrings.txt:114
-#: data/mp/messages/resmessages2.rmsg:109
 #: data/mp/messages/strings/resstrings.txt:134
 msgid "AA Site with Tornado Flak Turret"
 msgstr "PZ položaj s kupolo s flak tornadom"
 
 #: data/base/messages/resmessages2.rmsg:122
 #: data/base/messages/strings/resstrings.txt:142
-#: data/mp/messages/resmessages2.rmsg:122
 #: data/mp/messages/strings/resstrings.txt:162
 msgid "Indirect fire rocket battery"
 msgstr "Raketna topniška edinica z nedirektnim streljanjem"
 
 #: data/base/messages/resmessages2.rmsg:135
 #: data/base/messages/strings/resstrings.txt:154
-#: data/mp/messages/resmessages2.rmsg:135
 #: data/mp/messages/strings/resstrings.txt:176
 msgid "Armored Bombard battery pit"
 msgstr "Oklepni vkop z bombardirno topniško edinico"
 
 #: data/base/messages/resmessages2.rmsg:148
 #: data/base/messages/strings/resstrings.txt:168
-#: data/mp/messages/resmessages2.rmsg:148
 #: data/mp/messages/strings/resstrings.txt:190
 msgid "Armored howitzer emplacement"
 msgstr "Oklepna ploščad s havbico"
 
 #: data/base/messages/resmessages2.rmsg:161
 #: data/base/messages/strings/resstrings.txt:174
-#: data/mp/messages/resmessages2.rmsg:161
 #: data/mp/messages/strings/resstrings.txt:196
 msgid "Armored Ground Shaker howitzer emplacement"
 msgstr "Oklepna ploščad s havbico stresalec zemlje"
 
 #: data/base/messages/resmessages2.rmsg:174
 #: data/base/messages/strings/resstrings.txt:160
-#: data/mp/messages/resmessages2.rmsg:174
 #: data/mp/messages/strings/resstrings.txt:182
 msgid "Armored Pepperpot mortar battery pit"
 msgstr "Oklepni vkop z možnarsko topniško edinico poprnica"
@@ -2849,8 +2058,6 @@ msgstr "Oklepni vkop z možnarsko topniško edinico poprnica"
 #: data/base/messages/resmessages2.rmsg:200
 #: data/base/messages/strings/resstrings.txt:180
 #: data/base/messages/strings/resstrings.txt:186
-#: data/mp/messages/resmessages2.rmsg:187
-#: data/mp/messages/resmessages2.rmsg:200
 #: data/mp/messages/strings/resstrings.txt:204
 #: data/mp/messages/strings/resstrings.txt:210
 msgid "Armored Hellstorm howitzer emplacement"
@@ -2858,7 +2065,6 @@ msgstr "Oklepna ploščad s havbico peklenski vihar"
 
 #: data/base/messages/resmessages2.rmsg:213
 #: data/base/messages/strings/resstrings.txt:192
-#: data/mp/messages/resmessages2.rmsg:213
 #: data/mp/messages/strings/resstrings.txt:216
 msgid "Armored strongpoint with Tank Killer rocket"
 msgstr "Oklepna močna točka z raketo morilec tankov"
@@ -2877,17 +2083,6 @@ msgstr "Oklepna močna točka z raketo morilec tankov"
 #: data/base/messages/strings/resstrings.txt:205
 #: data/base/messages/strings/resstrings.txt:219
 #: data/base/messages/strings/resstrings.txt:225
-#: data/mp/messages/resmessages2.rmsg:214
-#: data/mp/messages/resmessages2.rmsg:227
-#: data/mp/messages/resmessages2.rmsg:240
-#: data/mp/messages/resmessages2.rmsg:253
-#: data/mp/messages/resmessages2.rmsg:266
-#: data/mp/messages/resmessages3.rmsg:292
-#: data/mp/messages/resmessages3.rmsg:305
-#: data/mp/messages/resmessages3.rmsg:318
-#: data/mp/messages/resmessages3.rmsg:331
-#: data/mp/messages/resmessagesall.rmsg:281
-#: data/mp/messages/resmessagesall.rmsg:593
 #: data/mp/messages/strings/resstrings.txt:217
 #: data/mp/messages/strings/resstrings.txt:223
 #: data/mp/messages/strings/resstrings.txt:229
@@ -2898,63 +2093,54 @@ msgstr "Samodejno cilja sovražnike v dometu"
 
 #: data/base/messages/resmessages2.rmsg:226
 #: data/base/messages/strings/resstrings.txt:198
-#: data/mp/messages/resmessages2.rmsg:226
 #: data/mp/messages/strings/resstrings.txt:222
 msgid "Armored strongpoint with Hyper-Velocity Cannon"
 msgstr "Oklepna močna točka s hiper-hitrostnim topom"
 
 #: data/base/messages/resmessages2.rmsg:239
 #: data/base/messages/strings/resstrings.txt:204
-#: data/mp/messages/resmessages2.rmsg:239
 #: data/mp/messages/strings/resstrings.txt:228
 msgid "Armored strongpoint with Inferno Flamer"
 msgstr "Oklepna močna točka s plamenometalcem pekel"
 
 #: data/base/messages/resmessages2.rmsg:252
 #: data/base/messages/strings/resstrings.txt:218
-#: data/mp/messages/resmessages2.rmsg:252
 #: data/mp/messages/strings/resstrings.txt:246
 msgid "Armored strongpoint with Assault Cannon"
 msgstr "Oklepna močna točka z jurišnim topom"
 
 #: data/base/messages/resmessages2.rmsg:265
 #: data/base/messages/strings/resstrings.txt:224
-#: data/mp/messages/resmessages2.rmsg:265
 #: data/mp/messages/strings/resstrings.txt:252
 msgid "Reinforced tower with Assault Gun"
 msgstr "Okrepljen stolp z jurišno puško"
 
 #: data/base/messages/resmessages2.rmsg:278
 #: data/base/messages/strings/resstrings.txt:288
-#: data/mp/messages/resmessages2.rmsg:278
 #: data/mp/messages/strings/resstrings.txt:316
 msgid "Armored hardpoint with Assault Gun"
 msgstr "Oklepna trda točka z jurišno puško"
 
 #: data/base/messages/resmessages2.rmsg:291
 #: data/base/messages/strings/resstrings.txt:294
-#: data/mp/messages/resmessages2.rmsg:291
 #: data/mp/messages/strings/resstrings.txt:322
 msgid "Armored hardpoint with Assault Cannon"
 msgstr "Oklepna trda točka z jurišnim topom"
 
 #: data/base/messages/resmessages2.rmsg:304
 #: data/base/messages/strings/resstrings.txt:302
-#: data/mp/messages/resmessages2.rmsg:304
 #: data/mp/messages/strings/resstrings.txt:330
 msgid "Armored hardpoint with Inferno flamer"
 msgstr "Oklepna trda točka s plamenometalcem pekel"
 
 #: data/base/messages/resmessages2.rmsg:317
 #: data/base/messages/strings/resstrings.txt:308
-#: data/mp/messages/resmessages2.rmsg:317
 #: data/mp/messages/strings/resstrings.txt:336
 msgid "Armored hardpoint with Tank Killer AT missile"
 msgstr "Oklepna trda točka s PT izstrelkom morilec tankov"
 
 #: data/base/messages/resmessages2.rmsg:330
 #: data/base/messages/strings/resstrings.txt:334
-#: data/mp/messages/resmessages2.rmsg:330
 #: data/mp/messages/strings/resstrings.txt:362
 msgid "New robotic repair techniques"
 msgstr "Nove robotske tehnike popravil"
@@ -2962,14 +2148,12 @@ msgstr "Nove robotske tehnike popravil"
 #: data/base/messages/resmessages2.rmsg:343
 #: data/base/messages/strings/names.txt:786
 #: data/base/messages/strings/resstrings.txt:348
-#: data/mp/messages/resmessages2.rmsg:343
 #: data/mp/messages/strings/resstrings.txt:376
 msgid "Robotic Cyborg Production"
 msgstr "Robotska izdelava kiborgov"
 
 #: data/base/messages/resmessages2.rmsg:356
 #: data/base/messages/strings/resstrings.txt:366
-#: data/mp/messages/resmessages2.rmsg:356
 #: data/mp/messages/strings/resstrings.txt:394
 msgid "New Robotic Techniques improve factory production"
 msgstr "Nove robotske tehnike izboljšajo tovarniško izdelavo"
@@ -2983,7 +2167,6 @@ msgstr "Poveča brzino tovarniške izdelave"
 #: data/base/messages/resmessages2.rmsg:369
 #: data/base/messages/strings/names.txt:835
 #: data/base/messages/strings/resstrings.txt:390
-#: data/mp/messages/resmessages2.rmsg:369
 #: data/mp/messages/strings/names.txt:844
 #: data/mp/messages/strings/resstrings.txt:418
 msgid "Dedicated Synaptic Link Data Analysis"
@@ -2992,7 +2175,6 @@ msgstr "Namenska sinaptično povezana analiza podatkov"
 #: data/base/messages/resmessages2.rmsg:382
 #: data/base/messages/strings/names.txt:808
 #: data/base/messages/strings/resstrings.txt:400
-#: data/mp/messages/resmessages2.rmsg:382
 #: data/mp/messages/strings/names.txt:817
 #: data/mp/messages/strings/resstrings.txt:428
 msgid "Hardened Base Structure Materials"
@@ -3001,7 +2183,6 @@ msgstr "Utrjene snovi baznih zgradb"
 #: data/base/messages/resmessages2.rmsg:395
 #: data/base/messages/strings/names.txt:851
 #: data/base/messages/strings/resstrings.txt:412
-#: data/mp/messages/resmessages2.rmsg:395
 #: data/mp/messages/strings/resstrings.txt:440
 msgid "Robotic VTOL Production"
 msgstr "Robotska izdelava NVP"
@@ -3009,8 +2190,6 @@ msgstr "Robotska izdelava NVP"
 #: data/base/messages/resmessages2.rmsg:396
 #: data/base/messages/resmessages3.rmsg:487
 #: data/base/messages/strings/resstrings.txt:413
-#: data/mp/messages/resmessages2.rmsg:396
-#: data/mp/messages/resmessages3.rmsg:487
 #: data/mp/messages/strings/resstrings.txt:441
 msgid "Increases VTOL factory output"
 msgstr "Poveča proizvodnjo tovarne NVP"
@@ -3018,8 +2197,6 @@ msgstr "Poveča proizvodnjo tovarne NVP"
 #: data/base/messages/resmessages2.rmsg:397
 #: data/base/messages/resmessages3.rmsg:488
 #: data/base/messages/strings/resstrings.txt:414
-#: data/mp/messages/resmessages2.rmsg:397
-#: data/mp/messages/resmessages3.rmsg:488
 #: data/mp/messages/strings/resstrings.txt:442
 msgid "All VTOL factories upgraded automatically"
 msgstr "Vse tovarne NVP nadgrajene samodejno"
@@ -3027,8 +2204,6 @@ msgstr "Vse tovarne NVP nadgrajene samodejno"
 #: data/base/messages/resmessages2.rmsg:407
 #: data/base/messages/resmessages3.rmsg:498
 #: data/base/messages/strings/resstrings.txt:421
-#: data/mp/messages/resmessages2.rmsg:407
-#: data/mp/messages/resmessages3.rmsg:498
 #: data/mp/messages/strings/resstrings.txt:449
 msgid "VTOL Rearming Times Reduced"
 msgstr "Časi ponovne oborožitve NVP zmanjšani"
@@ -3036,7 +2211,6 @@ msgstr "Časi ponovne oborožitve NVP zmanjšani"
 #: data/base/messages/resmessages2.rmsg:408
 #: data/base/messages/strings/names.txt:843
 #: data/base/messages/strings/resstrings.txt:422
-#: data/mp/messages/resmessages2.rmsg:408
 #: data/mp/messages/strings/names.txt:852
 #: data/mp/messages/strings/resstrings.txt:450
 msgid "Automated VTOL Rearming"
@@ -3052,29 +2226,24 @@ msgstr "Zmanjša čas ponovne oborožitve"
 #: data/base/messages/resmessages2.rmsg:410
 #: data/base/messages/resmessages3.rmsg:501
 #: data/base/messages/strings/resstrings.txt:424
-#: data/mp/messages/resmessages2.rmsg:410
-#: data/mp/messages/resmessages3.rmsg:501
 #: data/mp/messages/strings/resstrings.txt:452
 msgid "All rearming pads upgraded automatically"
 msgstr "Vse podloge za ponovno oborožitev nadgrajene samodejno"
 
 #: data/base/messages/resmessages2.rmsg:420
 #: data/base/messages/strings/resstrings.txt:459
-#: data/mp/messages/resmessages2.rmsg:420
 #: data/mp/messages/strings/resstrings.txt:489
 msgid "Improved Sensor Tower Available"
 msgstr "Izboljšan senzorski stolp na voljo"
 
 #: data/base/messages/resmessages2.rmsg:421
 #: data/base/messages/strings/resstrings.txt:460
-#: data/mp/messages/resmessages2.rmsg:421
 #: data/mp/messages/strings/resstrings.txt:490
 msgid "New construction techniques improve tower"
 msgstr "Nove gradbene tehnike izboljšajo stolp"
 
 #: data/base/messages/resmessages2.rmsg:422
 #: data/base/messages/strings/resstrings.txt:461
-#: data/mp/messages/resmessages2.rmsg:422
 #: data/mp/messages/strings/resstrings.txt:491
 msgid "Replaces existing sensor tower"
 msgstr "Nadomesti obstoječi senzorski stolp"
@@ -3083,30 +2252,24 @@ msgstr "Nadomesti obstoječi senzorski stolp"
 #: data/base/messages/resmessagesall.rmsg:59
 #: data/base/messages/resmessagesall.rmsg:72
 #: data/base/messages/strings/resstrings.txt:462
-#: data/mp/messages/resmessages2.rmsg:423
-#: data/mp/messages/resmessagesall.rmsg:59
-#: data/mp/messages/resmessagesall.rmsg:72
 #: data/mp/messages/strings/resstrings.txt:492
 msgid "May be assigned as spotter for indirect fire weapons"
 msgstr "Se lahko dodeli kot točni lokalizator za orožja z nedirektnim streljanjem"
 
 #: data/base/messages/resmessages2.rmsg:434
 #: data/base/messages/strings/resstrings.txt:480
-#: data/mp/messages/resmessages2.rmsg:434
 #: data/mp/messages/strings/resstrings.txt:510
 msgid "VTOL CB turret detects enemy indirect fire batteries"
 msgstr "NVP CB kupola zazna sovražne topniške edinice z nedirektnim streljanjem"
 
 #: data/base/messages/resmessages2.rmsg:460
 #: data/base/messages/strings/resstrings.txt:500
-#: data/mp/messages/resmessages2.rmsg:460
 #: data/mp/messages/strings/resstrings.txt:530
 msgid "New target recognition systems"
 msgstr "Novi sistemi prepoznavanja tarče"
 
 #: data/base/messages/resmessages2.rmsg:472
 #: data/base/messages/strings/resstrings.txt:527
-#: data/mp/messages/resmessages2.rmsg:472
 #: data/mp/messages/strings/resstrings.txt:562
 msgid "Collective Light Body"
 msgstr "Lahko telo Kolektiva"
@@ -3114,29 +2277,24 @@ msgstr "Lahko telo Kolektiva"
 #: data/base/messages/resmessages2.rmsg:473
 #: data/base/messages/resmessages3.rmsg:629
 #: data/base/messages/strings/resstrings.txt:528
-#: data/mp/messages/resmessages2.rmsg:473
-#: data/mp/messages/resmessages3.rmsg:629
 #: data/mp/messages/strings/resstrings.txt:563
 msgid "Superior armor and body points to Viper"
 msgstr "Boljši oklep in telesne točke proti gadu"
 
 #: data/base/messages/resmessages2.rmsg:474
 #: data/base/messages/strings/resstrings.txt:529
-#: data/mp/messages/resmessages2.rmsg:474
 #: data/mp/messages/strings/resstrings.txt:564
 msgid "Slower than Viper"
 msgstr "Počasnejše kot gad"
 
 #: data/base/messages/resmessages2.rmsg:475
 #: data/base/messages/strings/resstrings.txt:530
-#: data/mp/messages/resmessages2.rmsg:475
 #: data/mp/messages/strings/resstrings.txt:565
 msgid "High power costs and slower to produce than Viper"
 msgstr "Visoke porabe moči in počasnejša izdelava kot pri gadu"
 
 #: data/base/messages/resmessages2.rmsg:485
 #: data/base/messages/strings/resstrings.txt:539
-#: data/mp/messages/resmessages2.rmsg:485
 #: data/mp/messages/strings/resstrings.txt:574
 msgid "Collective Medium Body"
 msgstr "Srednje težko telo Kolektiva"
@@ -3144,22 +2302,18 @@ msgstr "Srednje težko telo Kolektiva"
 #: data/base/messages/resmessages2.rmsg:486
 #: data/base/messages/resmessages3.rmsg:642
 #: data/base/messages/strings/resstrings.txt:540
-#: data/mp/messages/resmessages2.rmsg:486
-#: data/mp/messages/resmessages3.rmsg:642
 #: data/mp/messages/strings/resstrings.txt:575
 msgid "Superior armor and body points to Cobra"
 msgstr "Boljši oklep in telesne točke kot pri naočarki"
 
 #: data/base/messages/resmessages2.rmsg:487
 #: data/base/messages/strings/resstrings.txt:541
-#: data/mp/messages/resmessages2.rmsg:487
 #: data/mp/messages/strings/resstrings.txt:576
 msgid "Slower than Cobra"
 msgstr "Počasnejše kot naočarka"
 
 #: data/base/messages/resmessages2.rmsg:488
 #: data/base/messages/strings/resstrings.txt:542
-#: data/mp/messages/resmessages2.rmsg:488
 #: data/mp/messages/strings/resstrings.txt:577
 msgid "High power costs and slower to produce than Cobra"
 msgstr "Visoke porabe moči in počasnejša izdelava kot pri naočarki"
@@ -3167,7 +2321,6 @@ msgstr "Visoke porabe moči in počasnejša izdelava kot pri naočarki"
 #: data/base/messages/resmessages2.rmsg:499
 #: data/base/messages/strings/names.txt:945
 #: data/base/messages/strings/resstrings.txt:560
-#: data/mp/messages/resmessages2.rmsg:499
 #: data/mp/messages/strings/names.txt:956
 #: data/mp/messages/strings/resstrings.txt:595
 msgid "Turbo-Charged Engine"
@@ -3176,9 +2329,6 @@ msgstr "Turbo polnjen motor"
 #: data/base/messages/resmessages2.rmsg:524
 #: data/base/messages/resmessages3.rmsg:719
 #: data/base/messages/strings/resstrings.txt:581
-#: data/mp/messages/resmessages2.rmsg:524
-#: data/mp/messages/resmessages3.rmsg:719
-#: data/mp/messages/resmessagesall.rmsg:851
 #: data/mp/messages/strings/resstrings.txt:616
 msgid "Vehicle Thermal Armor Improved"
 msgstr "Toplotni oklep vozil izboljšan"
@@ -3186,9 +2336,6 @@ msgstr "Toplotni oklep vozil izboljšan"
 #: data/base/messages/resmessages2.rmsg:525
 #: data/base/messages/resmessages3.rmsg:720
 #: data/base/messages/strings/resstrings.txt:582
-#: data/mp/messages/resmessages2.rmsg:525
-#: data/mp/messages/resmessages3.rmsg:720
-#: data/mp/messages/resmessagesall.rmsg:852
 #: data/mp/messages/strings/resstrings.txt:617
 msgid "Heat-resistant armored layers"
 msgstr "Vročinsko odporne oklepne plasti"
@@ -3214,16 +2361,6 @@ msgstr "Poveča toplotni oklep"
 #: data/base/messages/strings/resstrings.txt:601
 #: data/base/messages/strings/resstrings.txt:611
 #: data/base/messages/strings/resstrings.txt:621
-#: data/mp/messages/resmessages2.rmsg:537
-#: data/mp/messages/resmessages2.rmsg:550
-#: data/mp/messages/resmessages2.rmsg:563
-#: data/mp/messages/resmessages2.rmsg:576
-#: data/mp/messages/resmessages3.rmsg:732
-#: data/mp/messages/resmessages3.rmsg:745
-#: data/mp/messages/resmessages3.rmsg:758
-#: data/mp/messages/resmessages3.rmsg:771
-#: data/mp/messages/resmessages3.rmsg:784
-#: data/mp/messages/resmessages3.rmsg:797
 #: data/mp/messages/strings/resstrings.txt:626
 #: data/mp/messages/strings/resstrings.txt:636
 #: data/mp/messages/strings/resstrings.txt:646
@@ -3234,8 +2371,6 @@ msgstr "Pogon vozil izboljšan"
 #: data/base/messages/resmessages2.rmsg:540
 #: data/base/messages/resmessages3.rmsg:735
 #: data/base/messages/strings/resstrings.txt:594
-#: data/mp/messages/resmessages2.rmsg:540
-#: data/mp/messages/resmessages3.rmsg:735
 #: data/mp/messages/strings/resstrings.txt:629
 msgid "All half-tracks upgraded automatically"
 msgstr "Vse polgosenice nadgrajene samodejno"
@@ -3243,8 +2378,6 @@ msgstr "Vse polgosenice nadgrajene samodejno"
 #: data/base/messages/resmessages2.rmsg:553
 #: data/base/messages/resmessages3.rmsg:748
 #: data/base/messages/strings/resstrings.txt:604
-#: data/mp/messages/resmessages2.rmsg:553
-#: data/mp/messages/resmessages3.rmsg:748
 #: data/mp/messages/strings/resstrings.txt:639
 msgid "All hovers upgraded automatically"
 msgstr "Vse zračne blazine nadgrajene samodejno"
@@ -3252,8 +2385,6 @@ msgstr "Vse zračne blazine nadgrajene samodejno"
 #: data/base/messages/resmessages2.rmsg:566
 #: data/base/messages/resmessages3.rmsg:761
 #: data/base/messages/strings/resstrings.txt:614
-#: data/mp/messages/resmessages2.rmsg:566
-#: data/mp/messages/resmessages3.rmsg:761
 #: data/mp/messages/strings/resstrings.txt:649
 msgid "All tracks upgraded automatically"
 msgstr "Vse gosenice nadgrajene samodejno"
@@ -3261,8 +2392,6 @@ msgstr "Vse gosenice nadgrajene samodejno"
 #: data/base/messages/resmessages2.rmsg:579
 #: data/base/messages/resmessages3.rmsg:774
 #: data/base/messages/strings/resstrings.txt:624
-#: data/mp/messages/resmessages2.rmsg:579
-#: data/mp/messages/resmessages3.rmsg:774
 #: data/mp/messages/strings/resstrings.txt:659
 msgid "All wheels upgraded automatically"
 msgstr "Vsa kolesa nadgrajena samodejno"
@@ -3275,10 +2404,6 @@ msgstr "Vsa kolesa nadgrajena samodejno"
 #: data/base/messages/strings/resstrings.txt:641
 #: data/base/messages/strings/resstrings.txt:647
 #: data/base/messages/strings/resstrings.txt:653
-#: data/mp/messages/resmessages2.rmsg:589
-#: data/mp/messages/resmessages2.rmsg:602
-#: data/mp/messages/resmessages2.rmsg:615
-#: data/mp/messages/resmessages2.rmsg:628
 #: data/mp/messages/strings/resstrings.txt:670
 #: data/mp/messages/strings/resstrings.txt:676
 #: data/mp/messages/strings/resstrings.txt:682
@@ -3288,7 +2413,6 @@ msgstr "Nov PZ stolp na voljo"
 
 #: data/base/messages/resmessages2.rmsg:590
 #: data/base/messages/strings/resstrings.txt:636
-#: data/mp/messages/resmessages2.rmsg:590
 #: data/mp/messages/strings/resstrings.txt:671
 msgid "Twin 80mm flak weapon"
 msgstr "Dvojno 80mm flak orožje"
@@ -3301,13 +2425,6 @@ msgstr "Dvojno 80mm flak orožje"
 #: data/base/messages/strings/resstrings.txt:643
 #: data/base/messages/strings/resstrings.txt:649
 #: data/base/messages/strings/resstrings.txt:655
-#: data/mp/messages/resmessages2.rmsg:591
-#: data/mp/messages/resmessages2.rmsg:604
-#: data/mp/messages/resmessages2.rmsg:617
-#: data/mp/messages/resmessages2.rmsg:630
-#: data/mp/messages/resmessagesall.rmsg:775
-#: data/mp/messages/resmessagesall.rmsg:840
-#: data/mp/messages/resmessagesall.rmsg:879
 #: data/mp/messages/strings/resstrings.txt:672
 #: data/mp/messages/strings/resstrings.txt:678
 #: data/mp/messages/strings/resstrings.txt:684
@@ -3317,29 +2434,24 @@ msgstr "Samo zračne tarče"
 
 #: data/base/messages/resmessages2.rmsg:603
 #: data/base/messages/strings/resstrings.txt:642
-#: data/mp/messages/resmessages2.rmsg:603
 #: data/mp/messages/strings/resstrings.txt:677
 msgid "Quad 80mm flak weapon"
 msgstr "Štirikratno 80mm flak orožje"
 
 #: data/base/messages/resmessages2.rmsg:616
 #: data/base/messages/strings/resstrings.txt:648
-#: data/mp/messages/resmessages2.rmsg:616
 #: data/mp/messages/strings/resstrings.txt:683
 msgid "30mm Anti-Aircraft machinegun"
 msgstr "30mm protizračna strojnica"
 
 #: data/base/messages/resmessages2.rmsg:629
 #: data/base/messages/strings/resstrings.txt:654
-#: data/mp/messages/resmessages2.rmsg:629
-#: data/mp/messages/resmessagesall.rmsg:774
 #: data/mp/messages/strings/resstrings.txt:689
 msgid "Quad 30mm Anti-Aircraft machinegun"
 msgstr "Štirikratna 30mm protizračna strojnica"
 
 #: data/base/messages/resmessages2.rmsg:642
 #: data/base/messages/strings/resstrings.txt:660
-#: data/mp/messages/resmessages2.rmsg:642
 #: data/mp/messages/strings/resstrings.txt:695
 msgid "Detects and locks-on to VTOL engine emissions"
 msgstr "Zazna in se zaklene na žarčenja NVP motorja"
@@ -3347,15 +2459,12 @@ msgstr "Zazna in se zaklene na žarčenja NVP motorja"
 #: data/base/messages/resmessages2.rmsg:654
 #: data/base/messages/resmessages3.rmsg:823
 #: data/base/messages/strings/resstrings.txt:669
-#: data/mp/messages/resmessages2.rmsg:654
-#: data/mp/messages/resmessages3.rmsg:823
 #: data/mp/messages/strings/resstrings.txt:704
 msgid "AA Flak Upgrade"
 msgstr "Nadgradnja PZ flak"
 
 #: data/base/messages/resmessages2.rmsg:655
 #: data/base/messages/strings/resstrings.txt:670
-#: data/mp/messages/resmessages2.rmsg:655
 #: data/mp/messages/strings/resstrings.txt:705
 msgid "High Explosive Flak shards"
 msgstr "Visokoeksplozivni flak drobci"
@@ -3370,15 +2479,12 @@ msgstr "Poveča PZ flak škodo"
 #: data/base/messages/resmessages2.rmsg:657
 #: data/base/messages/resmessages3.rmsg:826
 #: data/base/messages/strings/resstrings.txt:672
-#: data/mp/messages/resmessages2.rmsg:657
-#: data/mp/messages/resmessages3.rmsg:826
 #: data/mp/messages/strings/resstrings.txt:707
 msgid "All AA flak weapons upgraded automatically"
 msgstr "Vsa PZ flak orožja nadgrajena samodejno"
 
 #: data/base/messages/resmessages2.rmsg:668
 #: data/base/messages/strings/resstrings.txt:678
-#: data/mp/messages/resmessages2.rmsg:668
 #: data/mp/messages/strings/resstrings.txt:713
 msgid "Recoil loaded AA ammunition hopper"
 msgstr "Odbojno nabijalni skakač za PZ strelivo"
@@ -3394,8 +2500,6 @@ msgstr "Poveča PZ HS"
 #: data/base/messages/resmessages2.rmsg:693
 #: data/base/messages/strings/resstrings.txt:685
 #: data/base/messages/strings/resstrings.txt:691
-#: data/mp/messages/resmessages2.rmsg:680
-#: data/mp/messages/resmessages2.rmsg:693
 #: data/mp/messages/strings/resstrings.txt:720
 #: data/mp/messages/strings/resstrings.txt:726
 msgid "New Proximity Bomb Turret Available"
@@ -3403,7 +2507,6 @@ msgstr "Nova kupola z bližinsko bombo na voljo"
 
 #: data/base/messages/resmessages2.rmsg:681
 #: data/base/messages/strings/resstrings.txt:686
-#: data/mp/messages/resmessages2.rmsg:681
 #: data/mp/messages/strings/resstrings.txt:721
 msgid "Bomb turret explodes in proximity to enemy"
 msgstr "Bombno kupolo raznese v bližini sovražnika"
@@ -3412,8 +2515,6 @@ msgstr "Bombno kupolo raznese v bližini sovražnika"
 #: data/base/messages/resmessages2.rmsg:695
 #: data/base/messages/strings/resstrings.txt:687
 #: data/base/messages/strings/resstrings.txt:693
-#: data/mp/messages/resmessages2.rmsg:682
-#: data/mp/messages/resmessages2.rmsg:695
 #: data/mp/messages/strings/resstrings.txt:722
 #: data/mp/messages/strings/resstrings.txt:728
 msgid "Best Targets: Base Structures and Defenses"
@@ -3421,35 +2522,30 @@ msgstr "Najboljše tarče: bazne zgradbe in obrambe"
 
 #: data/base/messages/resmessages2.rmsg:694
 #: data/base/messages/strings/resstrings.txt:692
-#: data/mp/messages/resmessages2.rmsg:694
 #: data/mp/messages/strings/resstrings.txt:727
 msgid "Superbomb turret explodes in proximity to enemy"
 msgstr "Superbombno kupolo raznese v bližini sovražnika"
 
 #: data/base/messages/resmessages2.rmsg:707
 #: data/base/messages/strings/resstrings.txt:698
-#: data/mp/messages/resmessages2.rmsg:707
 #: data/mp/messages/strings/resstrings.txt:733
 msgid "Drops High Explosive Cluster bombs"
 msgstr "Spušča visokoeksplozivne kasetne bombe"
 
 #: data/base/messages/resmessages2.rmsg:708
 #: data/base/messages/strings/resstrings.txt:699
-#: data/mp/messages/resmessages2.rmsg:708
 #: data/mp/messages/strings/resstrings.txt:734
 msgid "Best Targets: Base Structures"
 msgstr "Najboljše tarče: bazne zgradbe"
 
 #: data/base/messages/resmessages2.rmsg:720
 #: data/base/messages/strings/resstrings.txt:704
-#: data/mp/messages/resmessages2.rmsg:720
 #: data/mp/messages/strings/resstrings.txt:739
 msgid "Drops High Explosive Armor Piercing bombs"
 msgstr "Spušča visokoeksplozivne oklepnoprebojne bombe"
 
 #: data/base/messages/resmessages2.rmsg:721
 #: data/base/messages/strings/resstrings.txt:705
-#: data/mp/messages/resmessages2.rmsg:721
 #: data/mp/messages/strings/resstrings.txt:740
 msgid "Best Targets: Defenses"
 msgstr "Najboljše tarče: obrambe"
@@ -3462,64 +2558,54 @@ msgstr "Se zaklene na toplotna žarčenja"
 
 #: data/base/messages/resmessages2.rmsg:746
 #: data/base/messages/strings/resstrings.txt:730
-#: data/mp/messages/resmessages2.rmsg:746
 #: data/mp/messages/strings/resstrings.txt:765
 msgid "Hyper-velocity automatic-cannon firing 88mm rounds"
 msgstr "Hiper-hitrostni samodejni top strelja 88mm naboje"
 
 #: data/base/messages/resmessages2.rmsg:748
 #: data/base/messages/strings/resstrings.txt:732
-#: data/mp/messages/resmessages2.rmsg:748
 #: data/mp/messages/strings/resstrings.txt:767
 msgid "Replaces Medium Cannon"
 msgstr "Nadomesti srednje težki top"
 
 #: data/base/messages/resmessages2.rmsg:759
 #: data/base/messages/strings/resstrings.txt:736
-#: data/mp/messages/resmessages2.rmsg:759
 #: data/mp/messages/strings/resstrings.txt:771
 msgid "76mm hyper-velocity quad-barrel automatic-cannon"
 msgstr "76mm hiper-hitrostni štiricevni samodejni top"
 
 #: data/base/messages/resmessages2.rmsg:772
 #: data/base/messages/strings/resstrings.txt:758
-#: data/mp/messages/resmessages2.rmsg:772
 #: data/mp/messages/strings/resstrings.txt:797
 msgid "Heavy Flame-thrower firing Propylene Oxide gel"
 msgstr "Težki metalec plamenov strelja propilenski oksidni gel"
 
 #: data/base/messages/resmessages2.rmsg:785
 #: data/base/messages/strings/resstrings.txt:766
-#: data/mp/messages/resmessages2.rmsg:785
-#: data/mp/messages/resmessagesall.rmsg:787
 #: data/mp/messages/strings/resstrings.txt:805
 msgid "Propylene Oxide treated to burn at superhot temperatures"
 msgstr "Propilenski oksid obdelan za gorenje pri supervročih temperaturah"
 
 #: data/base/messages/resmessages2.rmsg:798
 #: data/base/messages/strings/resstrings.txt:774
-#: data/mp/messages/resmessages2.rmsg:798
 #: data/mp/messages/strings/resstrings.txt:813
 msgid "105mm Howitzer may be assigned to a sensor"
 msgstr "105mm havbica se lahko dodeli senzorju"
 
 #: data/base/messages/resmessages2.rmsg:811
 #: data/base/messages/strings/resstrings.txt:780
-#: data/mp/messages/resmessages2.rmsg:811
 #: data/mp/messages/strings/resstrings.txt:821
 msgid "155mm Howitzer may be assigned to a sensor"
 msgstr "155mm havbica se lahko dodeli senzorju"
 
 #: data/base/messages/resmessages2.rmsg:824
 #: data/base/messages/strings/resstrings.txt:788
-#: data/mp/messages/resmessages2.rmsg:824
 #: data/mp/messages/strings/resstrings.txt:829
 msgid "105m Howitzer firing incendiaries, may be assigned to a sensor"
 msgstr "105m havbica strelja zažigalce, se lahko dodeli senzorju"
 
 #: data/base/messages/resmessages2.rmsg:825
 #: data/base/messages/strings/resstrings.txt:789
-#: data/mp/messages/resmessages2.rmsg:825
 #: data/mp/messages/strings/resstrings.txt:830
 msgid "Best Targets: Base Structures, bunkers"
 msgstr "Najboljše tarče: bazne zgradbe, bunkerji"
@@ -3533,12 +2619,6 @@ msgstr "Najboljše tarče: bazne zgradbe, bunkerji"
 #: data/base/messages/strings/resstrings.txt:793
 #: data/base/messages/strings/resstrings.txt:801
 #: data/base/messages/strings/resstrings.txt:809
-#: data/mp/messages/resmessages2.rmsg:836
-#: data/mp/messages/resmessages2.rmsg:849
-#: data/mp/messages/resmessages2.rmsg:862
-#: data/mp/messages/resmessages3.rmsg:901
-#: data/mp/messages/resmessages3.rmsg:914
-#: data/mp/messages/resmessages3.rmsg:927
 #: data/mp/messages/strings/resstrings.txt:834
 #: data/mp/messages/strings/resstrings.txt:842
 #: data/mp/messages/strings/resstrings.txt:850
@@ -3561,12 +2641,6 @@ msgstr "Poveča natančnost havbice"
 #: data/base/messages/strings/resstrings.txt:796
 #: data/base/messages/strings/resstrings.txt:804
 #: data/base/messages/strings/resstrings.txt:812
-#: data/mp/messages/resmessages2.rmsg:839
-#: data/mp/messages/resmessages2.rmsg:852
-#: data/mp/messages/resmessages2.rmsg:865
-#: data/mp/messages/resmessages3.rmsg:904
-#: data/mp/messages/resmessages3.rmsg:917
-#: data/mp/messages/resmessages3.rmsg:930
 #: data/mp/messages/strings/resstrings.txt:837
 #: data/mp/messages/strings/resstrings.txt:845
 #: data/mp/messages/strings/resstrings.txt:853
@@ -3575,8 +2649,6 @@ msgstr "Vse havbice nadgrajene samodejno"
 
 #: data/base/messages/resmessages2.rmsg:850
 #: data/base/messages/strings/resstrings.txt:802
-#: data/mp/messages/resmessages2.rmsg:733
-#: data/mp/messages/resmessages2.rmsg:850
 #: data/mp/messages/strings/resstrings.txt:843
 msgid "High Explosive shells"
 msgstr "Visokoeksplozivne granate"
@@ -3597,21 +2669,18 @@ msgstr "Poveča HS havbice"
 
 #: data/base/messages/resmessages2.rmsg:876
 #: data/base/messages/strings/resstrings.txt:846
-#: data/mp/messages/resmessages2.rmsg:876
 #: data/mp/messages/strings/resstrings.txt:889
 msgid "Tungsten-tipped armor-piercing bullets"
 msgstr "Oklepno-prebojni naboji s konico iz volframa"
 
 #: data/base/messages/resmessages2.rmsg:889
 #: data/base/messages/strings/resstrings.txt:858
-#: data/mp/messages/resmessages2.rmsg:889
 #: data/mp/messages/strings/resstrings.txt:901
 msgid "Improved chaingun mechanism"
 msgstr "Izboljšan mehanizem verižne puške"
 
 #: data/base/messages/resmessages2.rmsg:915
 #: data/base/messages/strings/resstrings.txt:906
-#: data/mp/messages/resmessages2.rmsg:915
 #: data/mp/messages/strings/resstrings.txt:951
 msgid "High Explosive Armor-Piercing Shells"
 msgstr "Visokoeksplozivne oklepno-prebojne granate"
@@ -3624,95 +2693,74 @@ msgstr "Visokoeksplozivne oklepno-prebojne bojne glave"
 
 #: data/base/messages/resmessages2.rmsg:941
 #: data/base/messages/strings/resstrings.txt:966
-#: data/mp/messages/resmessages2.rmsg:941
 #: data/mp/messages/strings/resstrings.txt:1011
 msgid "High Explosive Squash Head warhead"
 msgstr "Visokoeksplozivna bojna glava z zmečkljivo glavo"
 
 #: data/base/messages/resmessages3.rmsg:18
-#: data/mp/messages/resmessages3.rmsg:18
 msgid "NEXUS Intruder Program analyzed"
 msgstr "NEXUS-ov vdorni program analiziran"
 
 #: data/base/messages/resmessages3.rmsg:19
-#: data/mp/messages/resmessages3.rmsg:19
 msgid "Intruder parasite isolated"
 msgstr "Vdorni parazit osamljen"
 
 #: data/base/messages/resmessages3.rmsg:20
 #: data/base/messages/resmessages3.rmsg:33
-#: data/mp/messages/resmessages3.rmsg:20
-#: data/mp/messages/resmessages3.rmsg:33
 msgid "Reduced chance of NEXUS take-over"
 msgstr "Zmanjša verjetnost NEXUS-ovega prevzema"
 
 #: data/base/messages/resmessages3.rmsg:31
-#: data/mp/messages/resmessages3.rmsg:31
 msgid "Improved NEXUS resistance circuitry"
 msgstr "Izboljšano NEXUS-ovo odporno tokokrožje"
 
 #: data/base/messages/resmessages3.rmsg:32
-#: data/mp/messages/resmessages3.rmsg:32
 msgid "Computer systems can now be 'ring-fenced' from NEXUS"
 msgstr "Računalniške sisteme je sedaj mogoče 'krožno ograditi' pred NEXUS-om"
 
 #: data/base/messages/resmessages3.rmsg:43
-#: data/mp/messages/resmessages3.rmsg:43
 msgid "New Cyborg Research Available"
 msgstr "Nova raziskava kiborgov na voljo"
 
 #: data/base/messages/resmessages3.rmsg:44
-#: data/mp/messages/resmessages3.rmsg:44
 msgid "Aerodynamic Jump Pack"
 msgstr "Aerodinamični skakalni nahrbtnik"
 
 #: data/base/messages/resmessages3.rmsg:45
-#: data/mp/messages/resmessages3.rmsg:45
 msgid "Gives Cyborg limited flight abilities"
 msgstr "Da kiborgom omejene letalne sposobnosti"
 
 #: data/base/messages/resmessages3.rmsg:46
-#: data/mp/messages/resmessages3.rmsg:46
 msgid "Jump Cyborgs can now be researched"
 msgstr "Sedaj je možna raziskava skakalnih kiborgov"
 
 #: data/base/messages/resmessages3.rmsg:70
 #: data/base/messages/resmessages3.rmsg:694
-#: data/mp/messages/resmessages3.rmsg:70
-#: data/mp/messages/resmessages3.rmsg:694
 msgid "Superdense composite alloys and energy-absorbing fibres"
 msgstr "Supergoste sestavljene zlitine in energijo vsrkajoča vlakna"
 
 #: data/base/messages/resmessages3.rmsg:83
 #: data/base/messages/resmessages3.rmsg:707
-#: data/mp/messages/resmessages3.rmsg:83
-#: data/mp/messages/resmessages3.rmsg:707
 msgid "Laminated alloys bonded with energy-deflecting optic bundles"
 msgstr "Ploščičaste zlitine vezane z energijo odbijajočimi optičnimi zavitki"
 
 #: data/base/messages/resmessages3.rmsg:96
 #: data/base/messages/strings/resstrings.txt:78
-#: data/mp/messages/resmessages3.rmsg:96
 #: data/mp/messages/strings/resstrings.txt:98
 msgid "Armed with Revenger Surface-to-Air missile"
 msgstr "Oborožen z zemlja-zrak izstrelkom maščevalec"
 
 #: data/base/messages/resmessages3.rmsg:109
 #: data/base/messages/resmessages3.rmsg:174
-#: data/mp/messages/resmessages3.rmsg:109
-#: data/mp/messages/resmessages3.rmsg:174
 msgid "Armed with Needle Gun"
 msgstr "Oborožen z iglično puško"
 
 #: data/base/messages/resmessages3.rmsg:122
 #: data/base/messages/resmessages3.rmsg:187
-#: data/mp/messages/resmessages3.rmsg:122
-#: data/mp/messages/resmessages3.rmsg:187
 msgid "Armed with Scourge anti-tank missile"
 msgstr "Oborožen s protitankovskim izstrelkom bič"
 
 #: data/base/messages/resmessages3.rmsg:135
-#: data/mp/messages/resmessages3.rmsg:135
 msgid "Armed with flashlight laser"
 msgstr "Oborožen s svetilnim laserjem"
 
@@ -3723,68 +2771,52 @@ msgstr "Oborožen s svetilnim laserjem"
 #: data/base/messages/resmessages3.rmsg:199
 #: data/base/messages/strings/resstrings.txt:77
 #: data/base/messages/strings/resstrings.txt:83
-#: data/mp/messages/resmessages3.rmsg:147
-#: data/mp/messages/resmessages3.rmsg:160
-#: data/mp/messages/resmessages3.rmsg:173
-#: data/mp/messages/resmessages3.rmsg:186
-#: data/mp/messages/resmessages3.rmsg:199
 #: data/mp/messages/strings/resstrings.txt:97
 #: data/mp/messages/strings/resstrings.txt:103
 msgid "New Jump Cyborg Available"
 msgstr "Nov skakalni kiborg na voljo"
 
 #: data/base/messages/resmessages3.rmsg:148
-#: data/mp/messages/resmessages3.rmsg:148
 msgid "Armed with Lancer anti-tank missile"
 msgstr "Oborožen s protitankovskim izstrelkom suličar"
 
 #: data/base/messages/resmessages3.rmsg:161
-#: data/mp/messages/resmessages3.rmsg:161
 msgid "Armed with Cyborg assault gun"
 msgstr "Oborožen s kiborgovo jurišno puško"
 
 #: data/base/messages/resmessages3.rmsg:200
-#: data/mp/messages/resmessages3.rmsg:200
 msgid "Armed with Flashlight Laser"
 msgstr "Oborožen s svetilnim laserjem"
 
 #: data/base/messages/resmessages3.rmsg:202
-#: data/mp/messages/resmessages3.rmsg:202
 msgid "Requires cyborg factory to produce"
 msgstr "Potrebuje tovarno kiborgov za izdelavo"
 
 #: data/base/messages/resmessages3.rmsg:213
-#: data/mp/messages/resmessages3.rmsg:213
 msgid "High tensile concrete-plastic composite"
 msgstr "Visokoraztezna betonsko-plastična sestavina"
 
 #: data/base/messages/resmessages3.rmsg:226
-#: data/mp/messages/resmessages3.rmsg:226
 msgid "Bonded metallic laminates formed into walls and defenses"
 msgstr "Vezane kovinske ploščice vdelane v zidove in obrambe"
 
 #: data/base/messages/resmessages3.rmsg:239
-#: data/mp/messages/resmessages3.rmsg:239
 msgid "SAM site with Avenger missiles"
 msgstr "Položaj RZZ z izstrelki maščevalec"
 
 #: data/base/messages/resmessages3.rmsg:252
-#: data/mp/messages/resmessages3.rmsg:252
 msgid "SAM site with Vindicator missiles"
 msgstr "Položaj RZZ z izstrelki zaščitnik"
 
 #: data/base/messages/resmessages3.rmsg:265
-#: data/mp/messages/resmessages3.rmsg:265
 msgid "Artillery battery firing Firestorm Missiles"
 msgstr "Topniška edinica strelja izstrelke ognjeni vihar"
 
 #: data/base/messages/resmessages3.rmsg:278
-#: data/mp/messages/resmessages3.rmsg:278
 msgid "Artillery battery firing Novastorm Missiles"
 msgstr "Topniška edinica strelja izstrelke nova vihar"
 
 #: data/base/messages/resmessages3.rmsg:291
-#: data/mp/messages/resmessages3.rmsg:291
 msgid "Armored strongpoint with Flashlight laser"
 msgstr "Oklepna močna točka s svetilnim laserjem"
 
@@ -3793,116 +2825,93 @@ msgid "Armored strongpoint with Pulse Laser"
 msgstr "Oklepna močna točka s sunkovnim laserjem"
 
 #: data/base/messages/resmessages3.rmsg:317
-#: data/mp/messages/resmessages3.rmsg:317
 msgid "Armored strongpoint with Rail Gun"
 msgstr "Oklepna močna točka s tirno puško"
 
 #: data/base/messages/resmessages3.rmsg:330
-#: data/mp/messages/resmessages3.rmsg:330
 msgid "Armored strongpoint with Gauss Cannon"
 msgstr "Oklepna močna točka z gavs topom"
 
 #: data/base/messages/resmessages3.rmsg:343
-#: data/mp/messages/resmessages3.rmsg:343
 msgid "Armored guard tower with Scourge Missile"
 msgstr "Oklepni stražni stolp z izstrelkom bič"
 
 #: data/base/messages/resmessages3.rmsg:356
-#: data/mp/messages/resmessages3.rmsg:356
 msgid "Armored guard tower with Needle Gun"
 msgstr "Oklepni stražni stolp z iglično puško"
 
 #: data/base/messages/resmessages3.rmsg:369
-#: data/mp/messages/resmessages3.rmsg:369
 msgid "Armored hardpoint with Scourge AT Missile"
 msgstr "Oklepna trda točka s PT izstrelkom bič"
 
 #: data/base/messages/resmessages3.rmsg:382
-#: data/mp/messages/resmessages3.rmsg:382
 msgid "Armored hardpoint with Flashlight laser"
 msgstr "Oklepna trda točka s svetilnim laserjem"
 
 #: data/base/messages/resmessages3.rmsg:395
-#: data/mp/messages/resmessages3.rmsg:395
 msgid "Armored hardpoint with Rail Gun"
 msgstr "Oklepna trda točka s tirno puško"
 
 #: data/base/messages/resmessages3.rmsg:408
-#: data/mp/messages/resmessages3.rmsg:408
 msgid "Armored hardpoint with Gauss Cannon"
 msgstr "Oklepna trda točka z gavs topom"
 
 #: data/base/messages/resmessages3.rmsg:421
-#: data/mp/messages/resmessages3.rmsg:421
 msgid "Advanced repair techniques"
 msgstr "Napredne tehnike popravil"
 
 #: data/base/messages/resmessages3.rmsg:435
-#: data/mp/messages/resmessages3.rmsg:434
 msgid "Vapor Turbine boosts power output"
 msgstr "Parna turbina poviša proizvodnjo moči"
 
 #: data/base/messages/resmessages3.rmsg:447
 #: data/base/messages/strings/names.txt:838
-#: data/mp/messages/resmessages3.rmsg:447
 #: data/mp/messages/strings/names.txt:847
 msgid "Neural Synapse Research Brain"
 msgstr "Raziskovalni možgani z živčnimi sinapsami"
 
 #: data/base/messages/resmessages3.rmsg:460
 #: data/base/messages/strings/names.txt:811
-#: data/mp/messages/resmessages3.rmsg:460
 #: data/mp/messages/strings/names.txt:820
 msgid "Advanced Base Structure Materials"
 msgstr "Napredne snovi baznih zgradb"
 
 #: data/base/messages/resmessages3.rmsg:473
-#: data/mp/messages/resmessages3.rmsg:473
 msgid "High Density Base Structure Materials"
 msgstr "Snovi baznih zgradb z visoko gostoto"
 
 #: data/base/messages/resmessages3.rmsg:486
 #: data/base/messages/strings/names.txt:854
-#: data/mp/messages/resmessages3.rmsg:486
 msgid "Advanced VTOL Production"
 msgstr "Napredna izdelava NVP"
 
 #: data/base/messages/resmessages3.rmsg:499
 #: data/base/messages/strings/names.txt:846
-#: data/mp/messages/resmessages3.rmsg:499
 #: data/mp/messages/strings/names.txt:855
 msgid "Robotic VTOL Rearming"
 msgstr "Robotska ponovna oborožitev NVP"
 
 #: data/base/messages/resmessages3.rmsg:512
-#: data/mp/messages/resmessages3.rmsg:512
 msgid "Advanced Engineering Techniques"
 msgstr "Napredne strojegradne tehnike"
 
 #: data/base/messages/resmessages3.rmsg:538
-#: data/mp/messages/resmessages3.rmsg:538
 msgid "Advanced fire detection systems"
 msgstr "Napredni sistemi zaznave streljanja"
 
 #: data/base/messages/resmessages3.rmsg:551
-#: data/mp/messages/resmessages3.rmsg:551
 msgid "Advanced target recognition systems"
 msgstr "Napredni sistemi prepoznavanja tarče"
 
 #: data/base/messages/resmessages3.rmsg:564
-#: data/mp/messages/resmessages3.rmsg:564
-#: data/mp/messages/resmessagesall.rmsg:397
 msgid "Synaptic Link Scrambler technology"
 msgstr "Tehnologija motilne sinaptične povezave"
 
 #: data/base/messages/resmessages3.rmsg:565
-#: data/mp/messages/resmessages3.rmsg:565
-#: data/mp/messages/resmessagesall.rmsg:398
 msgid "Electronically attacks and disrupts enemy structures"
 msgstr "Elektronsko napade in prekine sovražne zgradbe"
 
 #: data/base/messages/resmessages3.rmsg:566
-#: data/mp/messages/resmessages3.rmsg:566
 msgid "Steals technology from enemies"
 msgstr "Krade sovražnikovo tehnologijo"
 
@@ -3910,11 +2919,6 @@ msgstr "Krade sovražnikovo tehnologijo"
 #: data/base/messages/resmessages3.rmsg:589
 #: data/base/messages/resmessages3.rmsg:602
 #: data/base/messages/resmessages3.rmsg:615
-#: data/mp/messages/resmessages3.rmsg:576
-#: data/mp/messages/resmessages3.rmsg:589
-#: data/mp/messages/resmessages3.rmsg:602
-#: data/mp/messages/resmessages3.rmsg:615
-#: data/mp/messages/resmessagesall.rmsg:422
 msgid "New Repair Technology Discovered"
 msgstr "Odkrita nova tehnologija popravil"
 
@@ -3922,149 +2926,108 @@ msgstr "Odkrita nova tehnologija popravil"
 #: data/base/messages/resmessages3.rmsg:590
 #: data/base/messages/resmessages3.rmsg:603
 #: data/base/messages/resmessages3.rmsg:616
-#: data/mp/messages/resmessages3.rmsg:577
-#: data/mp/messages/resmessages3.rmsg:590
-#: data/mp/messages/resmessages3.rmsg:603
-#: data/mp/messages/resmessages3.rmsg:616
-#: data/mp/messages/resmessagesall.rmsg:410
-#: data/mp/messages/resmessagesall.rmsg:423
 msgid "Synaptic Link technology breakthrough"
 msgstr "Preboj v tehnologiji sinaptične povezave"
 
 #: data/base/messages/resmessages3.rmsg:578
 #: data/base/messages/resmessages3.rmsg:617
-#: data/mp/messages/resmessages3.rmsg:578
-#: data/mp/messages/resmessages3.rmsg:617
-#: data/mp/messages/resmessagesall.rmsg:424
 msgid "On-board diagnostic and repair systems"
 msgstr "Krovni diagnostični in popravilni sistemi"
 
 #: data/base/messages/resmessages3.rmsg:579
-#: data/mp/messages/resmessages3.rmsg:579
 msgid "Enables self-repair in all Cyborgs"
 msgstr "Omogoči samopopravilo v vseh kiborgih"
 
 #: data/base/messages/resmessages3.rmsg:591
 #: data/base/messages/resmessages3.rmsg:604
-#: data/mp/messages/resmessages3.rmsg:591
-#: data/mp/messages/resmessages3.rmsg:604
 msgid "Built-in diagnostic and repair systems"
 msgstr "Vgrajeni diagnostični in popravilni sistemi"
 
 #: data/base/messages/resmessages3.rmsg:592
-#: data/mp/messages/resmessages3.rmsg:592
 msgid "Enables self-repair in all base structures"
 msgstr "Omogoči samopopravilo v vseh baznih zgradbah"
 
 #: data/base/messages/resmessages3.rmsg:605
-#: data/mp/messages/resmessages3.rmsg:605
 msgid "Enables self-repair in all defenses"
 msgstr "Omogoči samopopravilo v vseh obrambah"
 
 #: data/base/messages/resmessages3.rmsg:618
-#: data/mp/messages/resmessages3.rmsg:618
 msgid "Enables self-repair in all vehicles"
 msgstr "Omogoči samopopravilo v vseh vozilih"
 
 #: data/base/messages/resmessages3.rmsg:628
-#: data/mp/messages/resmessages3.rmsg:628
 msgid "NEXUS Light Body"
 msgstr "Lahko telo NEXUS-a"
 
 #: data/base/messages/resmessages3.rmsg:631
-#: data/mp/messages/resmessages3.rmsg:631
 msgid "Expensive to produce"
 msgstr "Draga izdelava"
 
 #: data/base/messages/resmessages3.rmsg:641
-#: data/mp/messages/resmessages3.rmsg:641
 msgid "NEXUS Medium Body"
 msgstr "Srednje težko telo NEXUS-a"
 
 #: data/base/messages/resmessages3.rmsg:644
-#: data/mp/messages/resmessages3.rmsg:644
 msgid "Expensive and slow to produce"
 msgstr "Draga in počasna izdelava"
 
 #: data/base/messages/resmessages3.rmsg:654
-#: data/mp/messages/resmessages3.rmsg:654
 msgid "NEXUS Heavy Body"
 msgstr "Težko telo NEXUS-a"
 
 #: data/base/messages/resmessages3.rmsg:655
 #: data/base/messages/resmessagesall.rmsg:109
-#: data/mp/messages/resmessages3.rmsg:655
-#: data/mp/messages/resmessagesall.rmsg:148
 msgid "More armor and body points than Python"
 msgstr "Več oklepa in telesnih točk kot pri pitonu"
 
 #: data/base/messages/resmessages3.rmsg:657
-#: data/mp/messages/resmessages3.rmsg:657
-#: data/mp/messages/resmessagesall.rmsg:737
-#: data/mp/messages/resmessagesall.rmsg:750
 msgid "Very expensive to produce"
 msgstr "Zelo draga izdelava"
 
 #: data/base/messages/resmessages3.rmsg:668
 #: data/base/messages/strings/names.txt:948
-#: data/mp/messages/resmessages3.rmsg:668
 #: data/mp/messages/strings/names.txt:959
 msgid "Gas Turbine Engine"
 msgstr "Motor s plinsko turbino"
 
 #: data/base/messages/resmessages3.rmsg:681
-#: data/mp/messages/resmessages3.rmsg:681
 msgid "Ionizing Turbine Engine"
 msgstr "Motor z ionizirajočo plinsko turbino"
 
 #: data/base/messages/resmessages3.rmsg:785
 #: data/base/messages/resmessages3.rmsg:798
-#: data/mp/messages/resmessages3.rmsg:785
-#: data/mp/messages/resmessages3.rmsg:798
 msgid "New power efficient propulsion"
 msgstr "Nov pogon z učinkovito porabo moči"
 
 #: data/base/messages/resmessages3.rmsg:786
 #: data/base/messages/resmessages3.rmsg:799
-#: data/mp/messages/resmessages3.rmsg:786
-#: data/mp/messages/resmessages3.rmsg:799
 msgid "Body Points and Speed Increased"
 msgstr "Povečane telesne točke in hitrost"
 
 #: data/base/messages/resmessages3.rmsg:787
 #: data/base/messages/resmessages3.rmsg:800
-#: data/mp/messages/resmessages3.rmsg:787
-#: data/mp/messages/resmessages3.rmsg:800
 msgid "All VTOLs upgraded automatically"
 msgstr "Vsi NVP-ji nadgrajeni samodejno"
 
 #: data/base/messages/resmessages3.rmsg:811
-#: data/mp/messages/resmessages3.rmsg:811
 msgid "Computer plots and guides shell to target's position"
 msgstr "Računalnik načrtuje in vodi granate na tarčin položaj"
 
 #: data/base/messages/resmessages3.rmsg:824
-#: data/mp/messages/resmessages3.rmsg:824
 msgid "High Explosive Armor Piercing Flak"
 msgstr "Visokoeksplozivni oklepnoprebojni flak"
 
 #: data/base/messages/resmessages3.rmsg:837
-#: data/mp/messages/resmessages3.rmsg:837
 msgid "Chainfeed loader eradicates jams and improves performance"
 msgstr "Verižnopolnilni nabijalec izniči zastoje in izboljša delovanje"
 
 #: data/base/messages/resmessages3.rmsg:850
-#: data/mp/messages/resmessages3.rmsg:850
 msgid "Drops high intensity thermite bombs"
 msgstr "Spušča visokointenzivne termitne bombe"
 
 #: data/base/messages/resmessages3.rmsg:851
 #: data/base/messages/resmessages3.rmsg:1046
 #: data/base/messages/resmessagesall.rmsg:162
-#: data/mp/messages/resmessages3.rmsg:851
-#: data/mp/messages/resmessages3.rmsg:1046
-#: data/mp/messages/resmessagesall.rmsg:201
-#: data/mp/messages/resmessagesall.rmsg:918
 msgid "Best Targets: Bunkers and hardpoints"
 msgstr "Najboljše tarče: bunkerji in trde točke"
 
@@ -4073,65 +3036,48 @@ msgid "Bombs lock on and guide themselves to the target"
 msgstr "Bombe se zaklenejo na tarčo ter se same vodijo do nje"
 
 #: data/base/messages/resmessages3.rmsg:876
-#: data/mp/messages/resmessages3.rmsg:876
 msgid "High-Velocity Armor-Piercing Fin-Stabilised Discarding Sabot"
 msgstr "Visoko-hitrostna oklepno-prebojna krilno-uravnotežena odpadljiva obloga"
 
 #: data/base/messages/resmessages3.rmsg:889
 #: data/base/messages/resmessages3.rmsg:928
 #: data/base/messages/resmessages3.rmsg:1188
-#: data/mp/messages/resmessages3.rmsg:889
-#: data/mp/messages/resmessages3.rmsg:928
-#: data/mp/messages/resmessages3.rmsg:1188
 msgid "Robotic loading system feeds rounds into breech"
 msgstr "Robotski nabijalni sistem polni naboje v ležišče"
 
 #: data/base/messages/resmessages3.rmsg:902
-#: data/mp/messages/resmessages3.rmsg:902
 msgid "Computer guided shells"
 msgstr "Računalniško vodene granate"
 
 #: data/base/messages/resmessages3.rmsg:915
-#: data/mp/messages/resmessages3.rmsg:915
 msgid "High Explosive Armor Piercing Shells"
 msgstr "Visokoeksplozivne oklepnoprebojne granate"
 
 #: data/base/messages/resmessages3.rmsg:940
 #: data/base/messages/resmessages3.rmsg:953
-#: data/mp/messages/resmessages3.rmsg:940
-#: data/mp/messages/resmessages3.rmsg:953
-#: data/mp/messages/resmessagesall.rmsg:487
 msgid "New Laser Weapon Available"
 msgstr "Novo lasersko orožje na voljo"
 
 #: data/base/messages/resmessages3.rmsg:941
-#: data/mp/messages/resmessages3.rmsg:941
 msgid "Generates and concentrates bursts of laser energy"
 msgstr "Proizvaja in osredotoča izbruhe laserske energije"
 
 #: data/base/messages/resmessages3.rmsg:942
 #: data/base/messages/resmessages3.rmsg:955
-#: data/mp/messages/resmessages3.rmsg:942
-#: data/mp/messages/resmessages3.rmsg:955
 msgid "Best Targets: Cyborgs"
 msgstr "Najboljše tarče: kiborgi"
 
 #: data/base/messages/resmessages3.rmsg:954
-#: data/mp/messages/resmessages3.rmsg:954
 msgid "Fires pulses of laser light"
 msgstr "Strelja sunke laserske svetlobe"
 
 #: data/base/messages/resmessages3.rmsg:966
 #: data/base/messages/resmessages3.rmsg:979
 #: data/base/messages/resmessages3.rmsg:992
-#: data/mp/messages/resmessages3.rmsg:966
-#: data/mp/messages/resmessages3.rmsg:979
-#: data/mp/messages/resmessages3.rmsg:992
 msgid "Laser Upgrade"
 msgstr "Nadgradnja laserja"
 
 #: data/base/messages/resmessages3.rmsg:967
-#: data/mp/messages/resmessages3.rmsg:967
 msgid "Improvement in laser optics reduces light dispersal"
 msgstr "Izboljšanje v laserski optiki zmanjša razpršitev svetlobe"
 
@@ -4142,14 +3088,10 @@ msgstr "Poveča lasersko natančnost"
 #: data/base/messages/resmessages3.rmsg:969
 #: data/base/messages/resmessages3.rmsg:982
 #: data/base/messages/resmessages3.rmsg:995
-#: data/mp/messages/resmessages3.rmsg:969
-#: data/mp/messages/resmessages3.rmsg:982
-#: data/mp/messages/resmessages3.rmsg:995
 msgid "All lasers upgraded automatically"
 msgstr "Vsi laserji nadgrajeni samodejno"
 
 #: data/base/messages/resmessages3.rmsg:980
-#: data/mp/messages/resmessages3.rmsg:980
 msgid "Improvement in laser emission density"
 msgstr "Izboljšanje v gostoti laserskega žarčenja"
 
@@ -4158,7 +3100,6 @@ msgid "Increases Laser damage"
 msgstr "Poveča škodo laserja"
 
 #: data/base/messages/resmessages3.rmsg:993
-#: data/mp/messages/resmessages3.rmsg:993
 msgid "Improved Energizer reduces laser recharge time"
 msgstr "Izboljšan spodbujevalnik zmanjša čas ponovnega polnjenja laserja"
 
@@ -4167,29 +3108,23 @@ msgid "Increases Laser ROF"
 msgstr "Poveča HS laserja"
 
 #: data/base/messages/resmessages3.rmsg:1006
-#: data/mp/messages/resmessages3.rmsg:1006
 msgid "Depleted uranium kinetic energy bullets"
 msgstr "Kinetično energijski naboji z osiromašenim uranom"
 
 #: data/base/messages/resmessages3.rmsg:1019
-#: data/mp/messages/resmessages3.rmsg:1019
 msgid "Collapsing Plutonium kinetic energy bullets"
 msgstr "Kinetično energijski naboji z razpadajočim plutonijem"
 
 #: data/base/messages/resmessages3.rmsg:1031
 #: data/base/messages/resmessages3.rmsg:1044
-#: data/mp/messages/resmessages3.rmsg:1031
-#: data/mp/messages/resmessages3.rmsg:1044
 msgid "New Missile Turret Available"
 msgstr "Nov stolp z izstrelki na voljo"
 
 #: data/base/messages/resmessages3.rmsg:1032
-#: data/mp/messages/resmessages3.rmsg:1032
 msgid "Anti-tank missile"
 msgstr "Protitankovski izstrelek"
 
 #: data/base/messages/resmessages3.rmsg:1045
-#: data/mp/messages/resmessages3.rmsg:1045
 msgid "Bunker buster missile"
 msgstr "Izstrelek za uničevanje bunkerjev"
 
@@ -4198,16 +3133,10 @@ msgstr "Izstrelek za uničevanje bunkerjev"
 #: data/base/messages/resmessages3.rmsg:1083
 #: data/base/messages/resmessages3.rmsg:1148
 #: data/base/messages/resmessages3.rmsg:1161
-#: data/mp/messages/resmessages3.rmsg:1057
-#: data/mp/messages/resmessages3.rmsg:1070
-#: data/mp/messages/resmessages3.rmsg:1083
-#: data/mp/messages/resmessages3.rmsg:1148
-#: data/mp/messages/resmessages3.rmsg:1161
 msgid "Missile Upgrade"
 msgstr "Nadgradnja izstrelka"
 
 #: data/base/messages/resmessages3.rmsg:1058
-#: data/mp/messages/resmessages3.rmsg:1058
 msgid "On-board computer predicts target movement"
 msgstr "Krovni računalnik predvideva gibanje tarče"
 
@@ -4221,22 +3150,14 @@ msgstr "Izboljša natančnost izstrelkov"
 #: data/base/messages/resmessages3.rmsg:1086
 #: data/base/messages/resmessages3.rmsg:1151
 #: data/base/messages/resmessages3.rmsg:1164
-#: data/mp/messages/resmessages3.rmsg:1060
-#: data/mp/messages/resmessages3.rmsg:1073
-#: data/mp/messages/resmessages3.rmsg:1086
-#: data/mp/messages/resmessages3.rmsg:1151
-#: data/mp/messages/resmessages3.rmsg:1164
 msgid "All missiles upgraded automatically"
 msgstr "Vsi izstrelki nadgrajeni samodejno"
 
 #: data/base/messages/resmessages3.rmsg:1071
-#: data/mp/messages/resmessages3.rmsg:1071
 msgid "Missile actively seeks and homes on targets"
 msgstr "Izstrelek dejavno išče in se usmerja k tarči"
 
 #: data/base/messages/resmessages3.rmsg:1084
-#: data/mp/messages/resmessages3.rmsg:863
-#: data/mp/messages/resmessages3.rmsg:1084
 msgid "Low yield thermonuclear warhead"
 msgstr "Nizko donosna toplotnojedrska bojna glava"
 
@@ -4246,58 +3167,41 @@ msgstr "Poveča škodo izstrelkov"
 
 #: data/base/messages/resmessages3.rmsg:1096
 #: data/base/messages/resmessages3.rmsg:1109
-#: data/mp/messages/resmessages3.rmsg:1096
-#: data/mp/messages/resmessages3.rmsg:1109
 msgid "New SAM Turret Available"
 msgstr "Nova RZZ kupola na voljo"
 
 #: data/base/messages/resmessages3.rmsg:1097
-#: data/mp/messages/resmessages3.rmsg:1097
-#: data/mp/messages/resmessagesall.rmsg:865
 msgid "Surface-to-air missile"
 msgstr "Izstrelek zemlja-zrak"
 
 #: data/base/messages/resmessages3.rmsg:1098
 #: data/base/messages/resmessages3.rmsg:1111
-#: data/mp/messages/resmessages3.rmsg:1098
-#: data/mp/messages/resmessages3.rmsg:1111
-#: data/mp/messages/resmessagesall.rmsg:762
-#: data/mp/messages/resmessagesall.rmsg:866
 msgid "Best Targets: Aerial targets only"
 msgstr "Najboljše tarče: samo zračne tarče"
 
 #: data/base/messages/resmessages3.rmsg:1110
-#: data/mp/messages/resmessages3.rmsg:1110
-#: data/mp/messages/resmessagesall.rmsg:761
 msgid "Heavy surface-to-air missile"
 msgstr "Težki izstrelek zemlja-zrak"
 
 #: data/base/messages/resmessages3.rmsg:1122
 #: data/base/messages/resmessages3.rmsg:1135
-#: data/mp/messages/resmessages3.rmsg:1122
-#: data/mp/messages/resmessages3.rmsg:1135
 msgid "New Artillery Missile Turret Available"
 msgstr "Nova kupola s topniškim izstrelkom na voljo"
 
 #: data/base/messages/resmessages3.rmsg:1123
-#: data/mp/messages/resmessages3.rmsg:1123
 msgid "High explosive artillery missile"
 msgstr "Visokoeksplozivni topniški izstrelek"
 
 #: data/base/messages/resmessages3.rmsg:1124
 #: data/base/messages/resmessages3.rmsg:1137
-#: data/mp/messages/resmessages3.rmsg:1124
-#: data/mp/messages/resmessages3.rmsg:1137
 msgid "Best Targets: Base structures and cyborgs"
 msgstr "Najboljše tarče: bazne zgradbe in kiborgi"
 
 #: data/base/messages/resmessages3.rmsg:1136
-#: data/mp/messages/resmessages3.rmsg:1136
 msgid "High explosive heavy artillery missile"
 msgstr "Visokoeksplozivni težki topniški izstrelek"
 
 #: data/base/messages/resmessages3.rmsg:1149
-#: data/mp/messages/resmessages3.rmsg:1149
 msgid "Missiles detect and lock-on to targets while loading"
 msgstr "Izstrelki zaznajo ter se zaklenejo na tarče med nabijanjem"
 
@@ -4307,50 +3211,38 @@ msgid "Increases Missile ROF"
 msgstr "Poveča HS izstrelka"
 
 #: data/base/messages/resmessages3.rmsg:1162
-#: data/mp/messages/resmessages3.rmsg:1162
 msgid "Racked missile dispensers allow for fast reloading"
 msgstr "Grabljasti razdeljevalci izstrelkov dovoljujejo hitro nabijanje"
 
 #: data/base/messages/resmessages3.rmsg:1175
-#: data/mp/messages/resmessages3.rmsg:1175
 msgid "Self-guided rocket-powered shells"
 msgstr "Samovodljive granate z raketnim pogonom"
 
 #: data/base/messages/resmessages3.rmsg:1200
 #: data/base/messages/resmessages3.rmsg:1213
 #: data/base/messages/resmessages3.rmsg:1226
-#: data/mp/messages/resmessages3.rmsg:1200
-#: data/mp/messages/resmessages3.rmsg:1213
-#: data/mp/messages/resmessages3.rmsg:1226
 msgid "New Rail Gun Available"
 msgstr "Nova tirna puška na voljo"
 
 #: data/base/messages/resmessages3.rmsg:1201
-#: data/mp/messages/resmessages3.rmsg:1201
 msgid "Rapid fire rail gun firing needle darts"
 msgstr "Brzostrelna tirna puška strelja iglična žela"
 
 #: data/base/messages/resmessages3.rmsg:1214
-#: data/mp/messages/resmessages3.rmsg:1214
 msgid "Rail gun firing armor-piercing darts"
 msgstr "Tirna puška strelja oklepno-prebojna žela"
 
 #: data/base/messages/resmessages3.rmsg:1227
-#: data/mp/messages/resmessages3.rmsg:1227
 msgid "Heavy rail gun firing large kinetic energy darts"
 msgstr "Težka tirna puška strelja velika kinetično energijska žela"
 
 #: data/base/messages/resmessages3.rmsg:1239
 #: data/base/messages/resmessages3.rmsg:1252
 #: data/base/messages/resmessages3.rmsg:1265
-#: data/mp/messages/resmessages3.rmsg:1239
-#: data/mp/messages/resmessages3.rmsg:1252
-#: data/mp/messages/resmessages3.rmsg:1265
 msgid "Rail Gun Upgrade"
 msgstr "Nadgradnja tirne puške"
 
 #: data/base/messages/resmessages3.rmsg:1240
-#: data/mp/messages/resmessages3.rmsg:1240
 msgid "Computer predicts and compensates for target's movement"
 msgstr "Računalnik predvidi in nadomešča za premikanje tarče"
 
@@ -4361,14 +3253,10 @@ msgstr "Poveča natančnost tirne puške"
 #: data/base/messages/resmessages3.rmsg:1242
 #: data/base/messages/resmessages3.rmsg:1255
 #: data/base/messages/resmessages3.rmsg:1268
-#: data/mp/messages/resmessages3.rmsg:1242
-#: data/mp/messages/resmessages3.rmsg:1255
-#: data/mp/messages/resmessages3.rmsg:1268
 msgid "All rail guns upgraded automatically"
 msgstr "Vse tirne puške nadgrajene samodejno"
 
 #: data/base/messages/resmessages3.rmsg:1253
-#: data/mp/messages/resmessages3.rmsg:1253
 msgid "Improved armor-piercing dart"
 msgstr "Izboljšano oklepno-prebojno želo"
 
@@ -4377,7 +3265,6 @@ msgid "Increases Rail Gun damage"
 msgstr "Poveča škodo tirne puške"
 
 #: data/base/messages/resmessages3.rmsg:1266
-#: data/mp/messages/resmessages3.rmsg:1266
 msgid "Increased gauss output speeds up reload time"
 msgstr "Povečana proizvodnja gavsa pohitri čas ponovnega naboja"
 
@@ -4386,110 +3273,82 @@ msgid "Increases Rail Gun ROF"
 msgstr "Poveča HS tirne puške"
 
 #: data/base/messages/resmessagesall.rmsg:4
-#: data/mp/messages/resmessagesall.rmsg:4
 msgid "New Construction Options Available"
 msgstr "Nove gradbene možnosti na voljo"
 
 #: data/base/messages/resmessagesall.rmsg:5
-#: data/mp/messages/resmessagesall.rmsg:5
 msgid "Titanium-reinforced concrete"
 msgstr "Titansko okrepljen beton"
 
 #: data/base/messages/resmessagesall.rmsg:6
-#: data/mp/messages/resmessagesall.rmsg:6
 msgid "Enables Hardcrete walls"
 msgstr "Omogoči trdobetonske zidove"
 
 #: data/base/messages/resmessagesall.rmsg:18
-#: data/mp/messages/resmessagesall.rmsg:18
 msgid "VTOL factory enables VTOL production"
 msgstr "Tovarna NVP omogoči izdelavo NVP"
 
 #: data/base/messages/resmessagesall.rmsg:19
-#: data/mp/messages/resmessagesall.rmsg:19
 msgid "VTOL rearming pads required to keep VTOLs flying"
 msgstr "Podloge za ponovno oborožitev NVP potrebne za ohranitev letanja NVP-jev"
 
 #: data/base/messages/resmessagesall.rmsg:20
-#: data/mp/messages/resmessagesall.rmsg:20
 msgid "May be upgraded using factory modules"
 msgstr "Se lahko nadgradi z uporabo tovarniških gradbenih enot"
 
 #: data/base/messages/resmessagesall.rmsg:31
-#: data/mp/messages/resmessagesall.rmsg:31
 msgid "Refuels, rearms and repairs VTOLs"
 msgstr "Napolni z gorivom, ponovno oboroži in popravi NVP-je"
 
 #: data/base/messages/resmessagesall.rmsg:32
-#: data/mp/messages/resmessagesall.rmsg:32
 msgid "Assign a VTOL by selecting the rearming pad as its target"
 msgstr "Dodelite NVP z izbiro podloge za ponovno oborožitev kot njegovo tarčo"
 
 #: data/base/messages/resmessagesall.rmsg:33
-#: data/mp/messages/resmessagesall.rmsg:33
 msgid "The VTOL returns to the selected pad for rearming"
 msgstr "NVP se vrne na izbrano podlogo za ponovno oborožitev"
 
 #: data/base/messages/resmessagesall.rmsg:44
-#: data/mp/messages/resmessagesall.rmsg:44
 msgid "Battlefield repair unit"
 msgstr "Bojiščna enota za popravila"
 
 #: data/base/messages/resmessagesall.rmsg:45
 #: data/base/messages/strings/resstrings.txt:445
-#: data/mp/messages/resmessagesall.rmsg:45
-#: data/mp/messages/resmessagesall.rmsg:372
 #: data/mp/messages/strings/resstrings.txt:473
 msgid "Automatically Repairs Damaged Units"
 msgstr "Samodejno popravlja poškodovane enote"
 
 #: data/base/messages/resmessagesall.rmsg:46
 #: data/base/messages/strings/resstrings.txt:446
-#: data/mp/messages/resmessagesall.rmsg:46
-#: data/mp/messages/resmessagesall.rmsg:373
 #: data/mp/messages/strings/resstrings.txt:474
 msgid "Or damaged units may be selected as target"
 msgstr "Ali pa se lahko poškodovane enote izberejo kot tarča"
 
 #: data/base/messages/resmessagesall.rmsg:56
-#: data/mp/messages/resmessagesall.rmsg:56
 msgid "New Systems Turret Available For Design"
 msgstr "Nova sistemska kupola na voljo za načrt"
 
 #: data/base/messages/resmessagesall.rmsg:57
-#: data/mp/messages/resmessagesall.rmsg:57
-#: data/mp/messages/resmessagesall.rmsg:529
-#: data/mp/messages/resmessagesall.rmsg:724
 msgid "Improved sensor range"
 msgstr "Izboljšan domet senzorja"
 
 #: data/base/messages/resmessagesall.rmsg:58
-#: data/mp/messages/resmessagesall.rmsg:58
 msgid "Makes excellent scout vehicle"
 msgstr "Naredi odlično izvidniško vozilo"
 
 #: data/base/messages/resmessagesall.rmsg:70
-#: data/mp/messages/resmessagesall.rmsg:70
 msgid "Extended sensor range"
 msgstr "Razširjen domet senzorja"
 
 #: data/base/messages/resmessagesall.rmsg:71
-#: data/mp/messages/resmessagesall.rmsg:71
-#: data/mp/messages/resmessagesall.rmsg:515
-#: data/mp/messages/resmessagesall.rmsg:528
-#: data/mp/messages/resmessagesall.rmsg:723
 msgid "Keeps map areas under constant surveillance"
 msgstr "Obdrži območja mape pod stalnim nadzorom"
 
 #: data/base/messages/resmessagesall.rmsg:82
-#: data/mp/messages/resmessagesall.rmsg:82
-#: data/mp/messages/resmessagesall.rmsg:95
-#: data/mp/messages/resmessagesall.rmsg:108
 msgid "Sensors Improved"
 msgstr "Senzorji izboljšani"
 
 #: data/base/messages/resmessagesall.rmsg:83
-#: data/mp/messages/resmessagesall.rmsg:83
 msgid "New Thermal Emissions detection"
 msgstr "Nova zaznava toplotnih žarčenj"
 
@@ -4498,64 +3357,50 @@ msgid "Extends Sensor Range"
 msgstr "Razširi domet senzorja"
 
 #: data/base/messages/resmessagesall.rmsg:85
-#: data/mp/messages/resmessagesall.rmsg:85
-#: data/mp/messages/resmessagesall.rmsg:98
-#: data/mp/messages/resmessagesall.rmsg:111
 msgid "All sensors upgraded automatically"
 msgstr "Vsi senzorji nadgrajeni samodejno"
 
 #: data/base/messages/resmessagesall.rmsg:96
-#: data/mp/messages/resmessagesall.rmsg:122
 msgid "Counter-battery tower detects enemy indirect fire batteries"
 msgstr "Protitopniški stolp zazna sovražne topniške edinice z nedirektnim streljanjem"
 
 #: data/base/messages/resmessagesall.rmsg:108
-#: data/mp/messages/resmessagesall.rmsg:147
 msgid "Collective Heavy Body"
 msgstr "Težko telo Kolektiva"
 
 #: data/base/messages/resmessagesall.rmsg:110
-#: data/mp/messages/resmessagesall.rmsg:149
 msgid "Slower than Python"
 msgstr "Počasnejše kot piton"
 
 #: data/base/messages/resmessagesall.rmsg:111
-#: data/mp/messages/resmessagesall.rmsg:150
 msgid "High power costs and slow to produce"
 msgstr "Visoke porabe moči ter počasna izdelava"
 
 #: data/base/messages/resmessagesall.rmsg:121
-#: data/mp/messages/resmessagesall.rmsg:160
 msgid "New Propulsion Available for Design"
 msgstr "Nov pogon na voljo za načrt"
 
 #: data/base/messages/resmessagesall.rmsg:122
-#: data/mp/messages/resmessagesall.rmsg:161
 msgid "Vertical Take Off and Landing Propulsion"
 msgstr "Pogon navpičnega vzletanja in pristajanja"
 
 #: data/base/messages/resmessagesall.rmsg:123
-#: data/mp/messages/resmessagesall.rmsg:162
 msgid "Speed: VTOL"
 msgstr "Hitrost: NVP"
 
 #: data/base/messages/resmessagesall.rmsg:135
-#: data/mp/messages/resmessagesall.rmsg:174
 msgid "Rocket detects and locks on to engine emissions"
 msgstr "Raketa zazna in se zaklene na žarčenja motorja"
 
 #: data/base/messages/resmessagesall.rmsg:148
-#: data/mp/messages/resmessagesall.rmsg:187
 msgid "Anti-tank rocket"
 msgstr "Protitankovska raketa"
 
 #: data/base/messages/resmessagesall.rmsg:161
-#: data/mp/messages/resmessagesall.rmsg:200
 msgid "High explosive shaped charge missile"
 msgstr "Visokoeksplozivni izstrelek z oblikovanim polnilom"
 
 #: data/base/messages/resmessagesall.rmsg:174
-#: data/mp/messages/resmessagesall.rmsg:213
 msgid "Laser designator paints and guides rounds to the target"
 msgstr "Laserski označevalec obarva ter vodi naboje do tarče"
 
@@ -7472,7 +6317,6 @@ msgid "Robotic Cyborg Production Mk3"
 msgstr "Robotska izdelava kiborgov tip 3"
 
 #: data/base/messages/strings/names.txt:789
-#: data/mp/messages/resmessagesall.rmsg:813
 msgid "Advanced Cyborg Production"
 msgstr "Napredna izdelava kiborgov"
 
@@ -7505,7 +6349,6 @@ msgid "Robotic Factory Production Mk3"
 msgstr "Robotska tovarniška izdelava tip 3"
 
 #: data/base/messages/strings/names.txt:800
-#: data/mp/messages/resmessagesall.rmsg:800
 msgid "Advanced Factory Production"
 msgstr "Napredna tovarniška izdelava"
 
@@ -9146,7 +7989,6 @@ msgid "Self-Replicating Factory Production"
 msgstr "Samoreprodukcijska tovarniška izdelava"
 
 #: data/base/messages/strings/resstrings.txt:444
-#: data/mp/messages/resmessagesall.rmsg:371
 #: data/mp/messages/strings/resstrings.txt:472
 msgid "Heavy repair unit"
 msgstr "Enota za težka popravila"
@@ -10768,682 +9610,6 @@ msgstr "Prevoz"
 msgid "Super Transport Body"
 msgstr "Prevozno telo"
 
-#: data/mp/messages/resmessages12.rmsg:58
-#, fuzzy
-msgid "Construction speed +10%"
-msgstr "Poveča hitrost gradnje"
-
-#: data/mp/messages/resmessages12.rmsg:97
-#: data/mp/messages/resmessagesall.rmsg:214
-#, fuzzy
-msgid "Cannon accuracy +10%"
-msgstr "Poveča natančnost topa"
-
-#: data/mp/messages/resmessages12.rmsg:110
-#, fuzzy
-msgid "Flamer reload time -15%"
-msgstr "Samonabijalnik plamenometalca"
-
-#: data/mp/messages/resmessages12.rmsg:136
-#: data/mp/messages/resmessages23.rmsg:175
-#: data/mp/messages/resmessages2.rmsg:890
-#, fuzzy
-msgid "Machinegun reload time -15%"
-msgstr "Nadgradnja strojnice"
-
-#: data/mp/messages/resmessages12.rmsg:162
-#: data/mp/messages/resmessages23.rmsg:188
-#: data/mp/messages/resmessages3.rmsg:1176
-#, fuzzy
-msgid "Mortar accuracy +10%"
-msgstr "Poveča natančnost možnarja"
-
-#: data/mp/messages/resmessages12.rmsg:175
-#: data/mp/messages/resmessages3.rmsg:1189
-#, fuzzy
-msgid "Mortar reload time -10%"
-msgstr "Samonabijalnik možnarja"
-
-#: data/mp/messages/resmessages12.rmsg:201
-#: data/mp/messages/resmessages1.rmsg:735
-#, fuzzy
-msgid "Rocket reload time -15%"
-msgstr "Samonabijalnik rakete"
-
-#: data/mp/messages/resmessages12.rmsg:214
-#: data/mp/messages/resmessages3.rmsg:890
-#, fuzzy
-msgid "Cannon reload time -10%"
-msgstr "Samonabijalnik topa"
-
-#: data/mp/messages/resmessages12.rmsg:227
-#: data/mp/messages/resmessages1.rmsg:579
-#: data/mp/messages/resmessages3.rmsg:877
-#, fuzzy
-msgid "Cannon damage +25%"
-msgstr "Poveča škodo topa"
-
-#: data/mp/messages/resmessages12.rmsg:240
-#: data/mp/messages/resmessages1.rmsg:709
-#: data/mp/messages/resmessages1.rmsg:748
-#: data/mp/messages/resmessagesall.rmsg:175
-#, fuzzy
-msgid "Rocket accuracy +10%"
-msgstr "Poveča natančnost raket"
-
-#: data/mp/messages/resmessages1.rmsg:32
-#: data/mp/messages/resmessages3.rmsg:71
-#: data/mp/messages/resmessages3.rmsg:84
-#, fuzzy
-msgid "Kinetic Armor +35%, Body Points +35%"
-msgstr "Poveča kinetični oklep in telesne točke"
-
-#: data/mp/messages/resmessages1.rmsg:97
-#, fuzzy
-msgid "Armour +35%, Body Points +30%"
-msgstr "Poveča oklep in telesne točke"
-
-#: data/mp/messages/resmessages1.rmsg:122
-#, fuzzy
-msgid "Armored guard tower with Mini-Rocket Pod"
-msgstr "Oklepni stražni stolp z mini-metalno raketo"
-
-#: data/mp/messages/resmessages1.rmsg:148
-#, fuzzy
-msgid "Armored guard tower with Lancer AT rocket"
-msgstr "Oklepni stražni stolp s PT raketo suličar"
-
-#: data/mp/messages/resmessages1.rmsg:253
-#: data/mp/messages/resmessages2.rmsg:331
-#: data/mp/messages/resmessages3.rmsg:422
-#, fuzzy
-msgid "Repair Speed +100%"
-msgstr "Poveča hitrost popravil"
-
-#: data/mp/messages/resmessages1.rmsg:306
-#, no-c-format
-msgid "Factory output speed +100% per module"
-msgstr ""
-
-#: data/mp/messages/resmessages1.rmsg:319
-#: data/mp/messages/resmessagesall.rmsg:801
-msgid "Factory output speed +60%"
-msgstr ""
-
-#: data/mp/messages/resmessages1.rmsg:345
-#, fuzzy
-msgid "Research speed +85%"
-msgstr "Raziskava dokončana: %s"
-
-#: data/mp/messages/resmessages1.rmsg:358
-#: data/mp/messages/resmessages2.rmsg:370
-#: data/mp/messages/resmessages3.rmsg:448
-#, fuzzy
-msgid "Research speed +30%"
-msgstr "Raziskava dokončana: %s"
-
-#: data/mp/messages/resmessages1.rmsg:371
-#: data/mp/messages/resmessages2.rmsg:58
-#: data/mp/messages/resmessages2.rmsg:383
-#: data/mp/messages/resmessages3.rmsg:214
-#: data/mp/messages/resmessages3.rmsg:227
-#: data/mp/messages/resmessages3.rmsg:461
-#: data/mp/messages/resmessages3.rmsg:474
-#, fuzzy
-msgid "Armor +35%, Body Points +30%"
-msgstr "Poveča oklep in telesne točke"
-
-#: data/mp/messages/resmessages1.rmsg:462
-#: data/mp/messages/resmessages2.rmsg:500
-#: data/mp/messages/resmessages3.rmsg:669
-#: data/mp/messages/resmessages3.rmsg:682
-#, fuzzy
-msgid "Vehicle speed +5%"
-msgstr "Telo vozila"
-
-#: data/mp/messages/resmessages1.rmsg:475
-#: data/mp/messages/resmessages2.rmsg:513
-#: data/mp/messages/resmessages3.rmsg:695
-#: data/mp/messages/resmessages3.rmsg:708
-#, fuzzy
-msgid "Kinetic armor +30%, body points +30%"
-msgstr "Poveča kinetični oklep in telesne točke"
-
-#: data/mp/messages/resmessages1.rmsg:553
-#: data/mp/messages/resmessages1.rmsg:566
-#: data/mp/messages/resmessages2.rmsg:747
-#, fuzzy
-msgid "Best Targets: Vehicles, Hardpoints"
-msgstr "Najboljše tarče: vozila in ploščadi"
-
-#: data/mp/messages/resmessages1.rmsg:605
-#: data/mp/messages/resmessages2.rmsg:786
-#: data/mp/messages/resmessagesall.rmsg:788
-#, fuzzy
-msgid "Flamer damage +25%"
-msgstr "Poveča škodo plamenometalca"
-
-#: data/mp/messages/resmessages1.rmsg:644
-#: data/mp/messages/resmessages1.rmsg:657
-#: data/mp/messages/resmessages2.rmsg:877
-#: data/mp/messages/resmessages3.rmsg:1007
-#: data/mp/messages/resmessages3.rmsg:1020
-#, fuzzy
-msgid "Machinegun damage +25%"
-msgstr "Poveča škodo strojnice"
-
-#: data/mp/messages/resmessages1.rmsg:683
-#: data/mp/messages/resmessages2.rmsg:916
-#, fuzzy
-msgid "Mortar damage +25%"
-msgstr "Poveča škodo možnarja"
-
-#: data/mp/messages/resmessages1.rmsg:722
-#: data/mp/messages/resmessages1.rmsg:761
-#: data/mp/messages/resmessages2.rmsg:929
-#: data/mp/messages/resmessages2.rmsg:942
-#, fuzzy
-msgid "Rocket damage +25%"
-msgstr "Poveča škodo rakete"
-
-#: data/mp/messages/resmessages23.rmsg:32
-msgid "Power output +25%"
-msgstr ""
-
-#: data/mp/messages/resmessages23.rmsg:45
-#: data/mp/messages/resmessages3.rmsg:513
-#, fuzzy
-msgid "Construction speed +20%"
-msgstr "Poveča hitrost gradnje"
-
-#: data/mp/messages/resmessages23.rmsg:136
-#: data/mp/messages/resmessages2.rmsg:643
-#: data/mp/messages/resmessages3.rmsg:812
-msgid "AA accuracy +10%"
-msgstr ""
-
-#: data/mp/messages/resmessages23.rmsg:160
-#: data/mp/messages/resmessages2.rmsg:732
-#: data/mp/messages/resmessages3.rmsg:862
-#, fuzzy
-msgid "Bomb Upgrade"
-msgstr "Nadgradnja bombnega vida"
-
-#: data/mp/messages/resmessages23.rmsg:161
-#, fuzzy
-msgid "Improved trinitramine explosive formula"
-msgstr "Izboljšane visokoeksplozivne granate"
-
-#: data/mp/messages/resmessages23.rmsg:162
-#: data/mp/messages/resmessages2.rmsg:734
-#: data/mp/messages/resmessages3.rmsg:864
-msgid "Bomb damage +25%"
-msgstr ""
-
-#: data/mp/messages/resmessages2.rmsg:6
-#, fuzzy
-msgid "Thermal Armor +45%"
-msgstr "Toplotni oklep"
-
-#: data/mp/messages/resmessages2.rmsg:19
-#, fuzzy
-msgid "Kinetic Armor +35%, and Body Points +35%"
-msgstr "Poveča kinetični oklep in telesne točke"
-
-#: data/mp/messages/resmessages2.rmsg:357
-#, fuzzy
-msgid "Factory production rate +60%"
-msgstr "Poveča brzino tovarniške izdelave"
-
-#: data/mp/messages/resmessages2.rmsg:358
-#: data/mp/messages/resmessagesall.rmsg:802
-#, fuzzy
-msgid "All factories upgraded automatically"
-msgstr "Vse tovarne NVP nadgrajene samodejno"
-
-#: data/mp/messages/resmessages2.rmsg:409
-#: data/mp/messages/resmessages3.rmsg:500
-msgid "Rearming speed +30%"
-msgstr ""
-
-#: data/mp/messages/resmessages2.rmsg:526
-#, fuzzy
-msgid "Thermal armor +40%"
-msgstr "Toplotni oklep"
-
-#: data/mp/messages/resmessages2.rmsg:656
-#: data/mp/messages/resmessages3.rmsg:825
-#, fuzzy
-msgid "AA Flak damage +25%"
-msgstr "Poveča PZ flak škodo"
-
-#: data/mp/messages/resmessages2.rmsg:669
-#: data/mp/messages/resmessages3.rmsg:838
-msgid "AA reload time -15%"
-msgstr ""
-
-#: data/mp/messages/resmessages2.rmsg:838
-#: data/mp/messages/resmessages3.rmsg:903
-#, fuzzy
-msgid "Howitzer accuracy +10%"
-msgstr "Poveča natančnost havbice"
-
-#: data/mp/messages/resmessages2.rmsg:851
-#: data/mp/messages/resmessages3.rmsg:916
-#, fuzzy
-msgid "Howitzer damage +25%"
-msgstr "Poveča škodo havbice"
-
-#: data/mp/messages/resmessages2.rmsg:864
-#: data/mp/messages/resmessages3.rmsg:929
-#, fuzzy
-msgid "Howitzer reload time -10%"
-msgstr "Samonabijalnik havbice"
-
-#: data/mp/messages/resmessages2.rmsg:928
-#, fuzzy
-msgid "High Explosive Anti-Tank warheads"
-msgstr "Visokoeksplozivna protitankovska bojna glava"
-
-#: data/mp/messages/resmessages3.rmsg:6
-#, fuzzy
-msgid "Thermal Armor +35%"
-msgstr "Toplotni oklep tip 3"
-
-#: data/mp/messages/resmessages3.rmsg:304
-#, fuzzy
-msgid "Armored guard tower with Pulse Laser"
-msgstr "Oklepni stražni stolp s plamenometalcem"
-
-#: data/mp/messages/resmessages3.rmsg:435
-msgid "Power output +30%"
-msgstr ""
-
-#: data/mp/messages/resmessages3.rmsg:721
-#: data/mp/messages/resmessagesall.rmsg:853
-#, fuzzy
-msgid "Thermal Armor +40%"
-msgstr "Toplotni oklep"
-
-#: data/mp/messages/resmessages3.rmsg:968
-#, fuzzy
-msgid "Laser accuracy +10%"
-msgstr "Poveča lasersko natančnost"
-
-#: data/mp/messages/resmessages3.rmsg:981
-#, fuzzy
-msgid "Laser damage +25%"
-msgstr "Poveča škodo laserja"
-
-#: data/mp/messages/resmessages3.rmsg:994
-msgid "Laser reload time -15%"
-msgstr ""
-
-#: data/mp/messages/resmessages3.rmsg:1059
-#: data/mp/messages/resmessages3.rmsg:1072
-#, fuzzy
-msgid "Missile accuracy +10%"
-msgstr "Izboljša natančnost izstrelkov"
-
-#: data/mp/messages/resmessages3.rmsg:1085
-#, fuzzy
-msgid "Missile damage +25%"
-msgstr "Poveča škodo izstrelkov"
-
-#: data/mp/messages/resmessages3.rmsg:1150
-#: data/mp/messages/resmessages3.rmsg:1163
-#, fuzzy
-msgid "Missile reload time -15%"
-msgstr "Čas misije - %s"
-
-#: data/mp/messages/resmessages3.rmsg:1241
-#, fuzzy
-msgid "Rail Gun accuracy +10%"
-msgstr "Poveča natančnost tirne puške"
-
-#: data/mp/messages/resmessages3.rmsg:1254
-#, fuzzy
-msgid "Rail Gun damage +25%"
-msgstr "Poveča škodo tirne puške"
-
-#: data/mp/messages/resmessages3.rmsg:1267
-#, fuzzy
-msgid "Rail Gun reload time -15%"
-msgstr "Nadgradnja tirne puške"
-
-#: data/mp/messages/resmessagesall.rmsg:84
-#, fuzzy
-msgid "Sensor Range +25%"
-msgstr "Domet senzorja"
-
-#: data/mp/messages/resmessagesall.rmsg:96
-#, fuzzy
-msgid "Improved Thermal Emissions detection"
-msgstr "Nova zaznava toplotnih žarčenj"
-
-#: data/mp/messages/resmessagesall.rmsg:97
-#, fuzzy
-msgid "Sensor Range +15%"
-msgstr "Domet senzorja"
-
-#: data/mp/messages/resmessagesall.rmsg:109
-#, fuzzy
-msgid "Advanced Thermal Emissions detection"
-msgstr "Nova zaznava toplotnih žarčenj"
-
-#: data/mp/messages/resmessagesall.rmsg:110
-#, fuzzy
-msgid "Sensor Range +10%"
-msgstr "Domet senzorja"
-
-#: data/mp/messages/resmessagesall.rmsg:135
-msgid "Radar detector tower detects enemy sensors"
-msgstr ""
-
-#: data/mp/messages/resmessagesall.rmsg:136
-#, fuzzy
-msgid "Orders assigned indirect fire units to fire at the enemy sensors"
-msgstr "Ukazuje dodeljenim enotam z nedirektnim streljanjem, naj streljajo na sovražne topniške edinice"
-
-#: data/mp/messages/resmessagesall.rmsg:137
-#, fuzzy
-msgid "Counter-battery fire continues until enemy sensor is suppressed"
-msgstr "Protitopniški ogenj se nadaljuje, dokler ni sovražna topniška edinica zatrta"
-
-#: data/mp/messages/resmessagesall.rmsg:225
-msgid "Cyborg Transport Available"
-msgstr "Prevoz kiborgov na voljo"
-
-#: data/mp/messages/resmessagesall.rmsg:226
-#: data/mp/messages/resmessagesall.rmsg:240
-msgid "Armed with Machinegun"
-msgstr "Oborožen s strojnico"
-
-#: data/mp/messages/resmessagesall.rmsg:228
-#: data/mp/messages/resmessagesall.rmsg:242
-msgid "Requires heavy VTOL factory to produce"
-msgstr "Potrebuje težko tovarno NVP za izdelavo"
-
-#: data/mp/messages/resmessagesall.rmsg:239
-#, fuzzy
-msgid "Super Transport Available"
-msgstr "Prevoz kiborgov na voljo"
-
-#: data/mp/messages/resmessagesall.rmsg:254
-msgid "Incendiary howitzer emplacement"
-msgstr "Ploščad z zažigalno havbico"
-
-#: data/mp/messages/resmessagesall.rmsg:267
-msgid "Armored Incendiary Mortar battery pit"
-msgstr "Oklepni vkop z zažigalno možnarsko topniško edinico"
-
-#: data/mp/messages/resmessagesall.rmsg:280
-msgid "Armored strongpoint with Plasmite Flamer"
-msgstr "Oklepna močna točka s plazmitnim plamenometalcem"
-
-#: data/mp/messages/resmessagesall.rmsg:293
-msgid "Armed with Cyborg Thermite Flamer"
-msgstr "Oborožen s kiborgovim termitnim plamenometalcem"
-
-#: data/mp/messages/resmessagesall.rmsg:306
-msgid "Armed with grenades"
-msgstr "Oborožen z granatami"
-
-#: data/mp/messages/resmessagesall.rmsg:319
-msgid "Combat engineer with construction ability"
-msgstr "Bojni strojegradnik s sposobnostjo gradnje"
-
-#: data/mp/messages/resmessagesall.rmsg:332
-msgid "Mechanic with repair ability"
-msgstr "Mehanik s sposobnostjo popravil"
-
-#: data/mp/messages/resmessagesall.rmsg:345
-msgid "Incendiary Howitzer may be assigned to a sensor"
-msgstr "Zažigalna havbica se lahko dodeli senzorju"
-
-#: data/mp/messages/resmessagesall.rmsg:384
-msgid "Plasmite Flame-thrower"
-msgstr "Plazmitni metalec plamenov"
-
-#: data/mp/messages/resmessagesall.rmsg:399
-msgid "Steals technology from structures and takes control of weapons"
-msgstr "Krade tehnologijo iz zgradb in prevzame nadzor nad orožji"
-
-#: data/mp/messages/resmessagesall.rmsg:409
-msgid "New Electronic Technology Discovered"
-msgstr "Nova elektronska tehnologija odkrita"
-
-#: data/mp/messages/resmessagesall.rmsg:411
-msgid "On-board resistance circuit systems"
-msgstr "Krovni sistemi upornega tokokroga"
-
-#: data/mp/messages/resmessagesall.rmsg:412
-msgid "Enables resistance to Nexus Link technology"
-msgstr "Omogoči odpornost na tehnologijo Nexus-ove povezave"
-
-#: data/mp/messages/resmessagesall.rmsg:425
-msgid "Enables self-repair"
-msgstr "Omogoči samopopravilo"
-
-#: data/mp/messages/resmessagesall.rmsg:436
-msgid "Armed with medium cannon"
-msgstr "Oborožen s srednje težkim topom"
-
-#: data/mp/messages/resmessagesall.rmsg:449
-#: data/mp/messages/resmessagesall.rmsg:462
-msgid "Armed with hyper velocity cannon"
-msgstr "Oborožen s hiper-hitrostnim topom"
-
-#: data/mp/messages/resmessagesall.rmsg:475
-msgid "Armed with tank killer rockets"
-msgstr "Oborožen z raketami morilec tankov"
-
-#: data/mp/messages/resmessagesall.rmsg:488
-msgid "Fires heavy pulses of laser light"
-msgstr "Strelja težke sunke laserske svetlobe"
-
-#: data/mp/messages/resmessagesall.rmsg:489
-msgid "Best Targets: Heavy cyborgs"
-msgstr "Najboljše tarče: težki kiborgi"
-
-#: data/mp/messages/resmessagesall.rmsg:501
-msgid "76mm twin-barrel automatic-cannon"
-msgstr "76mm dvocevni samodejni top"
-
-#: data/mp/messages/resmessagesall.rmsg:513
-#: data/mp/messages/resmessagesall.rmsg:526
-msgid "New Systems Structure Available"
-msgstr "Nova sistemska zgradba na voljo"
-
-#: data/mp/messages/resmessagesall.rmsg:514
-msgid "Complete battlefield visibility"
-msgstr "Popolna vidljivost bojišča"
-
-#: data/mp/messages/resmessagesall.rmsg:516
-msgid "Does not offer sensor targeting"
-msgstr ""
-
-#: data/mp/messages/resmessagesall.rmsg:527
-#: data/mp/messages/resmessagesall.rmsg:722
-msgid "Combines standard, counter battery and VTOL sensors"
-msgstr "Združi navadne, protitopniške in NVP senzorje"
-
-#: data/mp/messages/resmessagesall.rmsg:539
-msgid "New Advanced Weapon Available"
-msgstr "Novo napredno orožje na voljo"
-
-#: data/mp/messages/resmessagesall.rmsg:540
-msgid "Very slow recharge time"
-msgstr "Zelo počasno ponovno polnjenje"
-
-#: data/mp/messages/resmessagesall.rmsg:541
-msgid "Immense damage infliction capability"
-msgstr "Sposobnost zadajanja ogromne škode"
-
-#: data/mp/messages/resmessagesall.rmsg:542
-#, fuzzy
-msgid "Narrow area of effect"
-msgstr "Ozko območje vpliva"
-
-#: data/mp/messages/resmessagesall.rmsg:553
-msgid "Armored guard tower with Nexus Link"
-msgstr "Oklepni stražni stolp z Nexus-ovo povezavo"
-
-#: data/mp/messages/resmessagesall.rmsg:566
-#: data/mp/messages/resmessagesall.rmsg:579
-msgid "Plasma Cannon firing plasma"
-msgstr "Plazma top strelja plazmo"
-
-#: data/mp/messages/resmessagesall.rmsg:580
-#: data/mp/messages/resmessagesall.rmsg:658
-#: data/mp/messages/resmessagesall.rmsg:671
-#: data/mp/messages/resmessagesall.rmsg:684
-#: data/mp/messages/resmessagesall.rmsg:697
-#: data/mp/messages/resmessagesall.rmsg:710
-msgid "Best Targets : Vehicles"
-msgstr "Najboljše tarče: vozila"
-
-#: data/mp/messages/resmessagesall.rmsg:592
-msgid "Armored strongpoint with Heavy Laser"
-msgstr "Oklepna močna točka s težkim laserjem"
-
-#: data/mp/messages/resmessagesall.rmsg:605
-msgid "Armored guard tower with EMP Cannon"
-msgstr "Oklepni stražni stolp z EMS topom"
-
-#: data/mp/messages/resmessagesall.rmsg:618
-msgid "Armed with Cyborg Pulse Laser"
-msgstr "Oborožen s kiborgovim sunkovnim laserjem"
-
-#: data/mp/messages/resmessagesall.rmsg:631
-msgid "Armed with Cyborg Rail Gun"
-msgstr "Oborožen s kiborgovo tirno puško"
-
-#: data/mp/messages/resmessagesall.rmsg:644
-msgid "Armed with Cyborg Scourge Missile Launcher"
-msgstr "Oborožen s kiborgovim izstreljevalcem izstrelka bič"
-
-#: data/mp/messages/resmessagesall.rmsg:657
-msgid "Uses advanced mass driver railgun technology"
-msgstr "Uporablja napredno tehnologijo množičnega poganjača tirnih pušk"
-
-#: data/mp/messages/resmessagesall.rmsg:659
-#: data/mp/messages/resmessagesall.rmsg:672
-#: data/mp/messages/resmessagesall.rmsg:685
-#: data/mp/messages/resmessagesall.rmsg:698
-msgid "Defensive Strength : High"
-msgstr "Obrambna moč: visoka"
-
-#: data/mp/messages/resmessagesall.rmsg:670
-msgid "Uses advanced cannon technology"
-msgstr "Uporablja napredno topovsko tehnologijo"
-
-#: data/mp/messages/resmessagesall.rmsg:683
-msgid "Uses advanced rocket gun technology"
-msgstr "Uporablja napredno tehnologijo raketnih pušk"
-
-#: data/mp/messages/resmessagesall.rmsg:696
-msgid "Uses advanced missile gun technology"
-msgstr "Uporablja napredno tehnologijo izstrelnih pušk"
-
-#: data/mp/messages/resmessagesall.rmsg:709
-msgid "Powerful Electronic magnetic pulse weapon"
-msgstr "Močno elektronsko magnetno sunkovno orožje"
-
-#: data/mp/messages/resmessagesall.rmsg:721
-msgid "New System Available"
-msgstr "Nov sistem na voljo"
-
-#: data/mp/messages/resmessagesall.rmsg:734
-msgid "Medium Super Heavy Body"
-msgstr "Srednje veliko super težko telo"
-
-#: data/mp/messages/resmessagesall.rmsg:735
-#, fuzzy
-msgid "More armor and body points than Vengeance"
-msgstr "Več oklepa in telesnih točk kot pri maščevanju"
-
-#: data/mp/messages/resmessagesall.rmsg:736
-msgid "Slow moving Body"
-msgstr "Počasi premikajoče se telo"
-
-#: data/mp/messages/resmessagesall.rmsg:747
-msgid "Large Super Heavy Body"
-msgstr "Veliko super težko telo"
-
-#: data/mp/messages/resmessagesall.rmsg:748
-msgid "Maximum armor and body points"
-msgstr "Maksimalni oklep in telesne točke"
-
-#: data/mp/messages/resmessagesall.rmsg:749
-msgid "Very slow moving Body"
-msgstr "Zelo počasi premikajoče se telo"
-
-#: data/mp/messages/resmessagesall.rmsg:760
-msgid "Hardpoint Vindicator SAM Site Available"
-msgstr "Položaj trda točka z RZZ zaščitnik na voljo"
-
-#: data/mp/messages/resmessagesall.rmsg:773
-msgid "Hardpoint Whirlwind AA Gun Available"
-msgstr "Trda točka s PZ puško zračni vrtinec na voljo"
-
-#: data/mp/messages/resmessagesall.rmsg:826
-msgid "Armored EMP Mortar battery pit"
-msgstr "Oklepni vkop z EMS možnarsko topniško edinico"
-
-#: data/mp/messages/resmessagesall.rmsg:838
-msgid "Laser AA Gun Available"
-msgstr "Laserska PZ puška na voljo"
-
-#: data/mp/messages/resmessagesall.rmsg:839
-msgid "Twin Medium Anti-Aircraft Laser"
-msgstr "Dvojni srednje težki protizračni laser"
-
-#: data/mp/messages/resmessagesall.rmsg:864
-msgid "Hardpoint Avenger SAM Site Available"
-msgstr "Položaj trda točka z RZZ maščevalec na voljo"
-
-#: data/mp/messages/resmessagesall.rmsg:877
-msgid "Hardpoint Cyclone AA Gun Available"
-msgstr "Trda točka s PZ puško ciklon na voljo"
-
-#: data/mp/messages/resmessagesall.rmsg:878
-msgid "Quad 80mm Anti-Aircraft machinegun"
-msgstr "Štirikratna 80mm protizračna strojnica"
-
-#: data/mp/messages/resmessagesall.rmsg:891
-#: data/mp/messages/resmessagesall.rmsg:904
-msgid "Twin Multi-barrel, rapid-fire machinegun"
-msgstr "Dvojna mnogocevna brzostrelna strojnica"
-
-#: data/mp/messages/resmessagesall.rmsg:903
-msgid "Hardpoint Twin Assault Gun Available"
-msgstr "Trda točka z dvojno jurišno puško na voljo"
-
-#: data/mp/messages/resmessagesall.rmsg:917
-msgid "Drops high intensity Plasmite bombs"
-msgstr "Spušča visokointenzivne plazmitne bombe"
-
-#: data/mp/messages/resmessagesall.rmsg:929
-msgid "New VTOL Missile Launcher"
-msgstr "Nov NVP izstreljevalec izstrelkov"
-
-#: data/mp/messages/resmessagesall.rmsg:930
-msgid "Fires Electronic Magnetic Pulse Missiles"
-msgstr "Strelja elektronsko magnetno sunkovne izstrelke"
-
-#: data/mp/messages/resmessagesall.rmsg:942
-#: data/mp/messages/resmessagesall.rmsg:955
-#: data/mp/messages/resmessagesall.rmsg:968
-msgid "Stronger Commander Turret Available for Design"
-msgstr "Močnejša poveljniška kupola na voljo za načrt"
-
-#: data/mp/messages/resmessagesall.rmsg:943
-#: data/mp/messages/resmessagesall.rmsg:956
-#: data/mp/messages/resmessagesall.rmsg:969
-msgid "Upgraded battlefield computer system"
-msgstr "Nadgrajen bojiščni računalniški sistem"
-
 #: data/mp/messages/strings/names.txt:15
 #: data/mp/messages/strings/names.txt:673
 msgid "Cyborg Transport"
@@ -12252,10 +10418,10 @@ msgstr "Shrani igro"
 
 #: src/challenge.cpp:222
 #: src/hci.cpp:918
-#: src/hci.cpp:3379
-#: src/hci.cpp:3502
-#: src/hci.cpp:3901
-#: src/hci.cpp:4910
+#: src/hci.cpp:3372
+#: src/hci.cpp:3495
+#: src/hci.cpp:3894
+#: src/hci.cpp:4903
 #: src/intelmap.cpp:531
 #: src/intorder.cpp:727
 #: src/loadsave.cpp:240
@@ -12570,20 +10736,20 @@ msgstr "Sistemi"
 msgid "Delete Template"
 msgstr ""
 
-#: src/display3d.cpp:645
+#: src/display3d.cpp:648
 msgid "Player left"
 msgstr "Igralec odšel"
 
-#: src/display3d.cpp:649
+#: src/display3d.cpp:652
 msgid "Player dropped"
 msgstr "Igralec izpadel"
 
-#: src/display3d.cpp:653
+#: src/display3d.cpp:656
 #: src/multiint.cpp:2334
 msgid "Waiting for other players"
 msgstr "Čakanje ostalih igralcev"
 
-#: src/display3d.cpp:658
+#: src/display3d.cpp:661
 msgid "Out of sync"
 msgstr ""
 
@@ -12602,15 +10768,15 @@ msgstr "%s - Poškodbe %d%% - Izkušenj %d %s"
 msgid "%s - Allied - Damage %d%% - Experience %d, %s"
 msgstr "%s - Poškodbe %d%% - Izkušenj %d %s"
 
-#: src/droid.cpp:202
+#: src/droid.cpp:204
 msgid "Unit Lost!"
 msgstr "Enota izgubljena!"
 
-#: src/droid.cpp:1308
+#: src/droid.cpp:1310
 msgid "Structure Restored"
 msgstr "Zgradba obnovljena"
 
-#: src/droid.cpp:2279
+#: src/droid.cpp:2281
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
@@ -12619,7 +10785,7 @@ msgstr[1] "Skupina %u izbrana - %u enota"
 msgstr[2] "Skupina %u izbrana - %u enoti"
 msgstr[3] "Skupina %u izbrana - %u enote"
 
-#: src/droid.cpp:2292
+#: src/droid.cpp:2294
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
@@ -12628,7 +10794,7 @@ msgstr[1] "%u enota dodeljena skupini %u"
 msgstr[2] "%u enoti dodeljeni skupini %u"
 msgstr[3] "%u enote dodeljene skupini %u"
 
-#: src/droid.cpp:2305
+#: src/droid.cpp:2307
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
@@ -12637,7 +10803,7 @@ msgstr[1] "Centriran na skupino %u - %u enota"
 msgstr[2] "Centriran na skupino %u - %u enoti"
 msgstr[3] "Centriran na skupino %u - %u enote"
 
-#: src/droid.cpp:2309
+#: src/droid.cpp:2311
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
@@ -12646,49 +10812,49 @@ msgstr[1] "Poravnava s skupino %u - %u enota"
 msgstr[2] "Poravnava s skupino %u - %u enoti"
 msgstr[3] "Poravnava s skupino %u - %u enote"
 
-#: src/droid.cpp:2491
+#: src/droid.cpp:2493
 msgid "Rookie"
 msgstr "Novinec"
 
-#: src/droid.cpp:2492
+#: src/droid.cpp:2494
 msgctxt "rank"
 msgid "Green"
 msgstr "Zelen"
 
-#: src/droid.cpp:2493
+#: src/droid.cpp:2495
 msgid "Trained"
 msgstr "Izurjen"
 
-#: src/droid.cpp:2494
+#: src/droid.cpp:2496
 msgid "Regular"
 msgstr "Navaden"
 
-#: src/droid.cpp:2495
+#: src/droid.cpp:2497
 msgid "Professional"
 msgstr "Poklicni"
 
-#: src/droid.cpp:2496
+#: src/droid.cpp:2498
 msgid "Veteran"
 msgstr "Veteran"
 
-#: src/droid.cpp:2497
+#: src/droid.cpp:2499
 msgid "Elite"
 msgstr "Elita"
 
-#: src/droid.cpp:2498
+#: src/droid.cpp:2500
 msgid "Special"
 msgstr "Poseben"
 
-#: src/droid.cpp:2499
+#: src/droid.cpp:2501
 msgid "Hero"
 msgstr "Junak"
 
-#: src/droid.cpp:3474
+#: src/droid.cpp:3461
 #, c-format
 msgid "%s wanted to give you a %s but you have too many!"
 msgstr ""
 
-#: src/droid.cpp:3478
+#: src/droid.cpp:3465
 #, c-format
 msgid "You wanted to give %s a %s but they have too many!"
 msgstr ""
@@ -12707,7 +10873,7 @@ msgid "Tutorial"
 msgstr "Učna vaja"
 
 #: src/frontend.cpp:110
-#: src/hci.cpp:3488
+#: src/hci.cpp:3481
 msgid "Options"
 msgstr "Možnosti"
 
@@ -13060,193 +11226,193 @@ msgstr "MOŽNOSTI IGRE"
 msgid "Mod: "
 msgstr ""
 
-#: src/hci.cpp:1239
+#: src/hci.cpp:1232
 msgid "MAP SAVED!"
 msgstr "MAPA SHRANJENA!"
 
-#: src/hci.cpp:1561
+#: src/hci.cpp:1554
 #: src/loop.cpp:272
 #: src/loop.cpp:288
 #, fuzzy
 msgid "GAME SAVED: "
 msgstr "IGRA SHRANJENA:"
 
-#: src/hci.cpp:1971
+#: src/hci.cpp:1964
 msgid "Failed to create building"
 msgstr "Ni uspelo zgraditi stavbe"
 
-#: src/hci.cpp:1988
+#: src/hci.cpp:1981
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new structure: %s."
 msgstr "Igralec/ka %u si je prigoljufal/a (razhroščevalni meni) novo zgradbo: %s."
 
-#: src/hci.cpp:2003
+#: src/hci.cpp:1996
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new feature: %s."
 msgstr "Igralec/ka %u si je prigoljufal/a (razhroščevalni meni) novo odliko: %s."
 
-#: src/hci.cpp:2025
+#: src/hci.cpp:2018
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid: %s."
 msgstr "Igralec/ka %u si je prigoljufal/a (razhroščevalni meni) novega droida: %s."
 
-#: src/hci.cpp:2038
+#: src/hci.cpp:2031
 #, fuzzy, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid."
 msgstr "Igralec/ka %u si je prigoljufal/a (razhroščevalni meni) novega droida: %s."
 
-#: src/hci.cpp:3299
+#: src/hci.cpp:3292
 msgid "Commanders (F6)"
 msgstr "Poveljniki (F6)"
 
-#: src/hci.cpp:3312
+#: src/hci.cpp:3305
 msgid "Intelligence Display (F5)"
 msgstr "Obveščevalni zaslon (F5)"
 
-#: src/hci.cpp:3325
+#: src/hci.cpp:3318
 msgid "Manufacture (F1)"
 msgstr "Izdelava (F1)"
 
-#: src/hci.cpp:3338
+#: src/hci.cpp:3331
 msgid "Design (F4)"
 msgstr "Načrtovanje (F4)"
 
-#: src/hci.cpp:3351
+#: src/hci.cpp:3344
 msgid "Research (F2)"
 msgstr "Raziskave (F2)"
 
-#: src/hci.cpp:3364
+#: src/hci.cpp:3357
 msgid "Build (F3)"
 msgstr "Gradnja (F3)"
 
-#: src/hci.cpp:3435
+#: src/hci.cpp:3428
 #: src/multiint.cpp:1614
 #: src/multimenu.cpp:799
 msgid "Power"
 msgstr "Moč"
 
-#: src/hci.cpp:3526
+#: src/hci.cpp:3519
 msgid "Map:"
 msgstr ""
 
-#: src/hci.cpp:3539
+#: src/hci.cpp:3532
 #, fuzzy
 msgid "Load"
 msgstr "Naloži igro"
 
-#: src/hci.cpp:3540
+#: src/hci.cpp:3533
 #, fuzzy
 msgid "Load Map File"
 msgstr "Naloži igro"
 
-#: src/hci.cpp:3547
+#: src/hci.cpp:3540
 #, fuzzy
 msgid "Save"
 msgstr "Shrani igro"
 
-#: src/hci.cpp:3548
+#: src/hci.cpp:3541
 #, fuzzy
 msgid "Save Map File"
 msgstr "Shrani igro"
 
-#: src/hci.cpp:3556
+#: src/hci.cpp:3549
 msgid "New"
 msgstr ""
 
-#: src/hci.cpp:3557
+#: src/hci.cpp:3550
 msgid "New Blank Map"
 msgstr ""
 
-#: src/hci.cpp:3593
+#: src/hci.cpp:3586
 msgid "Tile"
 msgstr "Plošča"
 
-#: src/hci.cpp:3594
+#: src/hci.cpp:3587
 msgid "Place tiles on map"
 msgstr "Položi plošče na mapo"
 
-#: src/hci.cpp:3603
+#: src/hci.cpp:3596
 msgid "Unit"
 msgstr "Enota"
 
-#: src/hci.cpp:3604
+#: src/hci.cpp:3597
 msgid "Place Unit on map"
 msgstr "Položi enote na mapo"
 
-#: src/hci.cpp:3612
+#: src/hci.cpp:3605
 msgid "Struct"
 msgstr "Zgradba"
 
-#: src/hci.cpp:3613
+#: src/hci.cpp:3606
 msgid "Place Structures on map"
 msgstr "Položi zgradbe na mapo"
 
-#: src/hci.cpp:3621
+#: src/hci.cpp:3614
 msgid "Feat"
 msgstr "Odlika"
 
-#: src/hci.cpp:3622
+#: src/hci.cpp:3615
 msgid "Place Features on map"
 msgstr "Položi odlike na mapo"
 
-#: src/hci.cpp:3632
+#: src/hci.cpp:3625
 msgid "Pause"
 msgstr ""
 
-#: src/hci.cpp:3633
+#: src/hci.cpp:3626
 msgid "Pause or unpause the game"
 msgstr "Ustavi ali nadaljuj igro"
 
-#: src/hci.cpp:3647
+#: src/hci.cpp:3640
 msgid "Align height of all map objects"
 msgstr "Uskladi višino vseh predmetov na mapi"
 
-#: src/hci.cpp:3657
+#: src/hci.cpp:3650
 msgid "Edit"
 msgstr ""
 
-#: src/hci.cpp:3658
+#: src/hci.cpp:3651
 #, fuzzy
 msgid "Start Edit Mode"
 msgstr "Začnite brez baz"
 
-#: src/hci.cpp:3672
+#: src/hci.cpp:3665
 #: src/ingameop.cpp:113
 #: src/ingameop.cpp:257
 #: src/ingameop.cpp:261
 msgid "Quit"
 msgstr "Končaj"
 
-#: src/hci.cpp:3673
+#: src/hci.cpp:3666
 msgid "Exit Game"
 msgstr "Zapusti igro"
 
-#: src/hci.cpp:3699
+#: src/hci.cpp:3692
 #, fuzzy
 msgid "Current Player:"
 msgstr "Več igralcev"
 
-#: src/hci.cpp:3978
+#: src/hci.cpp:3971
 msgid "Progress Bar"
 msgstr "Črta napredka"
 
-#: src/hci.cpp:4835
+#: src/hci.cpp:4828
 msgid "Factory Delivery Point"
 msgstr "Dostavna točka tovarne"
 
-#: src/hci.cpp:4853
+#: src/hci.cpp:4846
 msgid "Loop Production"
 msgstr "Ponavljaj izdelavo"
 
-#: src/hci.cpp:4933
+#: src/hci.cpp:4926
 msgid "Tab Scroll left"
 msgstr "Tab premakni levo"
 
-#: src/hci.cpp:4948
+#: src/hci.cpp:4941
 msgid "Tab Scroll right"
 msgstr "Tab premakni desno"
 
-#: src/hci.cpp:5177
+#: src/hci.cpp:5170
 #, fuzzy
 msgid "Ally progress"
 msgstr "Potek gradnje"
@@ -14887,16 +13053,16 @@ msgstr ""
 msgid "Brown"
 msgstr ""
 
-#: src/order.cpp:813
+#: src/order.cpp:803
 msgid "We can't do that! We must be a Cyborg unit to use a Cyborg Transport!"
 msgstr ""
 
-#: src/qtscriptfuncs.cpp:1264
+#: src/qtscriptfuncs.cpp:1390
 #: src/scriptfuncs.cpp:3259
 msgid "YOU ARE VICTORIOUS!"
 msgstr "ZMAGALI STE!"
 
-#: src/qtscriptfuncs.cpp:1269
+#: src/qtscriptfuncs.cpp:1395
 #: src/scriptfuncs.cpp:3263
 msgid "YOU WERE DEFEATED!"
 msgstr "BILI STE PREMAGANI!"
@@ -15068,12 +13234,12 @@ msgstr "Ni mogoče najti nobenih senzorskih enot!"
 msgid "Unable to locate any Commanders!"
 msgstr "Ni mogoče najti nobenih poveljnikov!"
 
-#: src/structure.cpp:2551
+#: src/structure.cpp:2555
 msgid "Command Control Limit Reached - Production Halted"
 msgstr "Meja poveljniškega nadzora dosežena - izdelava ustavljena"
 
-#: src/structure.cpp:5568
-#: src/structure.cpp:5593
+#: src/structure.cpp:5572
+#: src/structure.cpp:5597
 #, fuzzy, c-format
 msgid "%s - %u Unit assigned - Damage %3.0f%%"
 msgid_plural "%s - %u Units assigned - Damage %3.0f%%"
@@ -15082,50 +13248,50 @@ msgstr[1] "%s - %u enota dodeljena"
 msgstr[2] "%s - %u enoti dodeljeni"
 msgstr[3] "%s - %u enote dodeljene"
 
-#: src/structure.cpp:5598
-#: src/structure.cpp:5666
-#: src/structure.cpp:5681
-#: src/structure.cpp:5695
+#: src/structure.cpp:5602
+#: src/structure.cpp:5670
+#: src/structure.cpp:5685
+#: src/structure.cpp:5699
 #, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - Poškodbe %3.0f%%"
 
-#: src/structure.cpp:5648
+#: src/structure.cpp:5652
 #, fuzzy, c-format
 msgid "%s - Connected %u of %u - Damage %3.0f%%"
 msgstr "%s - povezane %u od %u"
 
-#: src/structure.cpp:5811
-#: src/structure.cpp:5856
+#: src/structure.cpp:5815
+#: src/structure.cpp:5860
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - elektronsko poškodovan"
 
-#: src/structure.cpp:6107
+#: src/structure.cpp:6111
 msgid "Electronic Reward - Visibility Report"
 msgstr "Elektronska nagrada - poročilo o vidljivosti"
 
-#: src/structure.cpp:6147
+#: src/structure.cpp:6151
 msgid "Factory Reward - Propulsion"
 msgstr "Nagrada tovarne - pogon"
 
-#: src/structure.cpp:6171
+#: src/structure.cpp:6175
 msgid "Factory Reward - Body"
 msgstr "Nagrada tovarne - telo"
 
-#: src/structure.cpp:6195
+#: src/structure.cpp:6199
 msgid "Factory Reward - Weapon"
 msgstr "Nagrada tovarne - orožje"
 
-#: src/structure.cpp:6204
+#: src/structure.cpp:6208
 msgid "Factory Reward - Nothing"
 msgstr "Nagrada tovarne - nič"
 
-#: src/structure.cpp:6232
+#: src/structure.cpp:6236
 msgid "Repair Facility Award - Repair"
 msgstr "Nagrada stavbe za popravila - popravilo"
 
-#: src/structure.cpp:6239
+#: src/structure.cpp:6243
 msgid "Repair Facility Award - Nothing"
 msgstr "Nagrada stavbe za popravila - nič"
 
@@ -15161,6 +13327,434 @@ msgstr "- Zgrajen %s"
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "Verzija %s%s%s%s"
+
+#, fuzzy
+#~ msgid "Construction speed +10%"
+#~ msgstr "Poveča hitrost gradnje"
+
+#, fuzzy
+#~ msgid "Cannon accuracy +10%"
+#~ msgstr "Poveča natančnost topa"
+
+#, fuzzy
+#~ msgid "Flamer reload time -15%"
+#~ msgstr "Samonabijalnik plamenometalca"
+
+#, fuzzy
+#~ msgid "Machinegun reload time -15%"
+#~ msgstr "Nadgradnja strojnice"
+
+#, fuzzy
+#~ msgid "Mortar accuracy +10%"
+#~ msgstr "Poveča natančnost možnarja"
+
+#, fuzzy
+#~ msgid "Mortar reload time -10%"
+#~ msgstr "Samonabijalnik možnarja"
+
+#, fuzzy
+#~ msgid "Rocket reload time -15%"
+#~ msgstr "Samonabijalnik rakete"
+
+#, fuzzy
+#~ msgid "Cannon reload time -10%"
+#~ msgstr "Samonabijalnik topa"
+
+#, fuzzy
+#~ msgid "Cannon damage +25%"
+#~ msgstr "Poveča škodo topa"
+
+#, fuzzy
+#~ msgid "Rocket accuracy +10%"
+#~ msgstr "Poveča natančnost raket"
+
+#, fuzzy
+#~ msgid "Kinetic Armor +35%, Body Points +35%"
+#~ msgstr "Poveča kinetični oklep in telesne točke"
+
+#, fuzzy
+#~ msgid "Armour +35%, Body Points +30%"
+#~ msgstr "Poveča oklep in telesne točke"
+
+#, fuzzy
+#~ msgid "Armored guard tower with Mini-Rocket Pod"
+#~ msgstr "Oklepni stražni stolp z mini-metalno raketo"
+
+#, fuzzy
+#~ msgid "Armored guard tower with Lancer AT rocket"
+#~ msgstr "Oklepni stražni stolp s PT raketo suličar"
+
+#, fuzzy
+#~ msgid "Repair Speed +100%"
+#~ msgstr "Poveča hitrost popravil"
+
+#, fuzzy
+#~ msgid "Research speed +85%"
+#~ msgstr "Raziskava dokončana: %s"
+
+#, fuzzy
+#~ msgid "Research speed +30%"
+#~ msgstr "Raziskava dokončana: %s"
+
+#, fuzzy
+#~ msgid "Armor +35%, Body Points +30%"
+#~ msgstr "Poveča oklep in telesne točke"
+
+#, fuzzy
+#~ msgid "Vehicle speed +5%"
+#~ msgstr "Telo vozila"
+
+#, fuzzy
+#~ msgid "Kinetic armor +30%, body points +30%"
+#~ msgstr "Poveča kinetični oklep in telesne točke"
+
+#, fuzzy
+#~ msgid "Best Targets: Vehicles, Hardpoints"
+#~ msgstr "Najboljše tarče: vozila in ploščadi"
+
+#, fuzzy
+#~ msgid "Flamer damage +25%"
+#~ msgstr "Poveča škodo plamenometalca"
+
+#, fuzzy
+#~ msgid "Machinegun damage +25%"
+#~ msgstr "Poveča škodo strojnice"
+
+#, fuzzy
+#~ msgid "Mortar damage +25%"
+#~ msgstr "Poveča škodo možnarja"
+
+#, fuzzy
+#~ msgid "Rocket damage +25%"
+#~ msgstr "Poveča škodo rakete"
+
+#, fuzzy
+#~ msgid "Construction speed +20%"
+#~ msgstr "Poveča hitrost gradnje"
+
+#, fuzzy
+#~ msgid "Bomb Upgrade"
+#~ msgstr "Nadgradnja bombnega vida"
+
+#, fuzzy
+#~ msgid "Improved trinitramine explosive formula"
+#~ msgstr "Izboljšane visokoeksplozivne granate"
+
+#, fuzzy
+#~ msgid "Thermal Armor +45%"
+#~ msgstr "Toplotni oklep"
+
+#, fuzzy
+#~ msgid "Kinetic Armor +35%, and Body Points +35%"
+#~ msgstr "Poveča kinetični oklep in telesne točke"
+
+#, fuzzy
+#~ msgid "Factory production rate +60%"
+#~ msgstr "Poveča brzino tovarniške izdelave"
+
+#, fuzzy
+#~ msgid "All factories upgraded automatically"
+#~ msgstr "Vse tovarne NVP nadgrajene samodejno"
+
+#, fuzzy
+#~ msgid "Thermal armor +40%"
+#~ msgstr "Toplotni oklep"
+
+#, fuzzy
+#~ msgid "AA Flak damage +25%"
+#~ msgstr "Poveča PZ flak škodo"
+
+#, fuzzy
+#~ msgid "Howitzer accuracy +10%"
+#~ msgstr "Poveča natančnost havbice"
+
+#, fuzzy
+#~ msgid "Howitzer damage +25%"
+#~ msgstr "Poveča škodo havbice"
+
+#, fuzzy
+#~ msgid "Howitzer reload time -10%"
+#~ msgstr "Samonabijalnik havbice"
+
+#, fuzzy
+#~ msgid "High Explosive Anti-Tank warheads"
+#~ msgstr "Visokoeksplozivna protitankovska bojna glava"
+
+#, fuzzy
+#~ msgid "Thermal Armor +35%"
+#~ msgstr "Toplotni oklep tip 3"
+
+#, fuzzy
+#~ msgid "Armored guard tower with Pulse Laser"
+#~ msgstr "Oklepni stražni stolp s plamenometalcem"
+
+#, fuzzy
+#~ msgid "Thermal Armor +40%"
+#~ msgstr "Toplotni oklep"
+
+#, fuzzy
+#~ msgid "Laser accuracy +10%"
+#~ msgstr "Poveča lasersko natančnost"
+
+#, fuzzy
+#~ msgid "Laser damage +25%"
+#~ msgstr "Poveča škodo laserja"
+
+#, fuzzy
+#~ msgid "Missile accuracy +10%"
+#~ msgstr "Izboljša natančnost izstrelkov"
+
+#, fuzzy
+#~ msgid "Missile damage +25%"
+#~ msgstr "Poveča škodo izstrelkov"
+
+#, fuzzy
+#~ msgid "Missile reload time -15%"
+#~ msgstr "Čas misije - %s"
+
+#, fuzzy
+#~ msgid "Rail Gun accuracy +10%"
+#~ msgstr "Poveča natančnost tirne puške"
+
+#, fuzzy
+#~ msgid "Rail Gun damage +25%"
+#~ msgstr "Poveča škodo tirne puške"
+
+#, fuzzy
+#~ msgid "Rail Gun reload time -15%"
+#~ msgstr "Nadgradnja tirne puške"
+
+#, fuzzy
+#~ msgid "Sensor Range +25%"
+#~ msgstr "Domet senzorja"
+
+#, fuzzy
+#~ msgid "Improved Thermal Emissions detection"
+#~ msgstr "Nova zaznava toplotnih žarčenj"
+
+#, fuzzy
+#~ msgid "Sensor Range +15%"
+#~ msgstr "Domet senzorja"
+
+#, fuzzy
+#~ msgid "Advanced Thermal Emissions detection"
+#~ msgstr "Nova zaznava toplotnih žarčenj"
+
+#, fuzzy
+#~ msgid "Sensor Range +10%"
+#~ msgstr "Domet senzorja"
+
+#, fuzzy
+#~ msgid "Orders assigned indirect fire units to fire at the enemy sensors"
+#~ msgstr "Ukazuje dodeljenim enotam z nedirektnim streljanjem, naj streljajo na sovražne topniške edinice"
+
+#, fuzzy
+#~ msgid "Counter-battery fire continues until enemy sensor is suppressed"
+#~ msgstr "Protitopniški ogenj se nadaljuje, dokler ni sovražna topniška edinica zatrta"
+
+#~ msgid "Cyborg Transport Available"
+#~ msgstr "Prevoz kiborgov na voljo"
+
+#~ msgid "Armed with Machinegun"
+#~ msgstr "Oborožen s strojnico"
+
+#~ msgid "Requires heavy VTOL factory to produce"
+#~ msgstr "Potrebuje težko tovarno NVP za izdelavo"
+
+#, fuzzy
+#~ msgid "Super Transport Available"
+#~ msgstr "Prevoz kiborgov na voljo"
+
+#~ msgid "Incendiary howitzer emplacement"
+#~ msgstr "Ploščad z zažigalno havbico"
+
+#~ msgid "Armored Incendiary Mortar battery pit"
+#~ msgstr "Oklepni vkop z zažigalno možnarsko topniško edinico"
+
+#~ msgid "Armored strongpoint with Plasmite Flamer"
+#~ msgstr "Oklepna močna točka s plazmitnim plamenometalcem"
+
+#~ msgid "Armed with Cyborg Thermite Flamer"
+#~ msgstr "Oborožen s kiborgovim termitnim plamenometalcem"
+
+#~ msgid "Armed with grenades"
+#~ msgstr "Oborožen z granatami"
+
+#~ msgid "Combat engineer with construction ability"
+#~ msgstr "Bojni strojegradnik s sposobnostjo gradnje"
+
+#~ msgid "Mechanic with repair ability"
+#~ msgstr "Mehanik s sposobnostjo popravil"
+
+#~ msgid "Incendiary Howitzer may be assigned to a sensor"
+#~ msgstr "Zažigalna havbica se lahko dodeli senzorju"
+
+#~ msgid "Plasmite Flame-thrower"
+#~ msgstr "Plazmitni metalec plamenov"
+
+#~ msgid "Steals technology from structures and takes control of weapons"
+#~ msgstr "Krade tehnologijo iz zgradb in prevzame nadzor nad orožji"
+
+#~ msgid "New Electronic Technology Discovered"
+#~ msgstr "Nova elektronska tehnologija odkrita"
+
+#~ msgid "On-board resistance circuit systems"
+#~ msgstr "Krovni sistemi upornega tokokroga"
+
+#~ msgid "Enables resistance to Nexus Link technology"
+#~ msgstr "Omogoči odpornost na tehnologijo Nexus-ove povezave"
+
+#~ msgid "Enables self-repair"
+#~ msgstr "Omogoči samopopravilo"
+
+#~ msgid "Armed with medium cannon"
+#~ msgstr "Oborožen s srednje težkim topom"
+
+#~ msgid "Armed with hyper velocity cannon"
+#~ msgstr "Oborožen s hiper-hitrostnim topom"
+
+#~ msgid "Armed with tank killer rockets"
+#~ msgstr "Oborožen z raketami morilec tankov"
+
+#~ msgid "Fires heavy pulses of laser light"
+#~ msgstr "Strelja težke sunke laserske svetlobe"
+
+#~ msgid "Best Targets: Heavy cyborgs"
+#~ msgstr "Najboljše tarče: težki kiborgi"
+
+#~ msgid "76mm twin-barrel automatic-cannon"
+#~ msgstr "76mm dvocevni samodejni top"
+
+#~ msgid "New Systems Structure Available"
+#~ msgstr "Nova sistemska zgradba na voljo"
+
+#~ msgid "Complete battlefield visibility"
+#~ msgstr "Popolna vidljivost bojišča"
+
+#~ msgid "Combines standard, counter battery and VTOL sensors"
+#~ msgstr "Združi navadne, protitopniške in NVP senzorje"
+
+#~ msgid "New Advanced Weapon Available"
+#~ msgstr "Novo napredno orožje na voljo"
+
+#~ msgid "Very slow recharge time"
+#~ msgstr "Zelo počasno ponovno polnjenje"
+
+#~ msgid "Immense damage infliction capability"
+#~ msgstr "Sposobnost zadajanja ogromne škode"
+
+#, fuzzy
+#~ msgid "Narrow area of effect"
+#~ msgstr "Ozko območje vpliva"
+
+#~ msgid "Armored guard tower with Nexus Link"
+#~ msgstr "Oklepni stražni stolp z Nexus-ovo povezavo"
+
+#~ msgid "Plasma Cannon firing plasma"
+#~ msgstr "Plazma top strelja plazmo"
+
+#~ msgid "Best Targets : Vehicles"
+#~ msgstr "Najboljše tarče: vozila"
+
+#~ msgid "Armored strongpoint with Heavy Laser"
+#~ msgstr "Oklepna močna točka s težkim laserjem"
+
+#~ msgid "Armored guard tower with EMP Cannon"
+#~ msgstr "Oklepni stražni stolp z EMS topom"
+
+#~ msgid "Armed with Cyborg Pulse Laser"
+#~ msgstr "Oborožen s kiborgovim sunkovnim laserjem"
+
+#~ msgid "Armed with Cyborg Rail Gun"
+#~ msgstr "Oborožen s kiborgovo tirno puško"
+
+#~ msgid "Armed with Cyborg Scourge Missile Launcher"
+#~ msgstr "Oborožen s kiborgovim izstreljevalcem izstrelka bič"
+
+#~ msgid "Uses advanced mass driver railgun technology"
+#~ msgstr "Uporablja napredno tehnologijo množičnega poganjača tirnih pušk"
+
+#~ msgid "Defensive Strength : High"
+#~ msgstr "Obrambna moč: visoka"
+
+#~ msgid "Uses advanced cannon technology"
+#~ msgstr "Uporablja napredno topovsko tehnologijo"
+
+#~ msgid "Uses advanced rocket gun technology"
+#~ msgstr "Uporablja napredno tehnologijo raketnih pušk"
+
+#~ msgid "Uses advanced missile gun technology"
+#~ msgstr "Uporablja napredno tehnologijo izstrelnih pušk"
+
+#~ msgid "Powerful Electronic magnetic pulse weapon"
+#~ msgstr "Močno elektronsko magnetno sunkovno orožje"
+
+#~ msgid "New System Available"
+#~ msgstr "Nov sistem na voljo"
+
+#~ msgid "Medium Super Heavy Body"
+#~ msgstr "Srednje veliko super težko telo"
+
+#, fuzzy
+#~ msgid "More armor and body points than Vengeance"
+#~ msgstr "Več oklepa in telesnih točk kot pri maščevanju"
+
+#~ msgid "Slow moving Body"
+#~ msgstr "Počasi premikajoče se telo"
+
+#~ msgid "Large Super Heavy Body"
+#~ msgstr "Veliko super težko telo"
+
+#~ msgid "Maximum armor and body points"
+#~ msgstr "Maksimalni oklep in telesne točke"
+
+#~ msgid "Very slow moving Body"
+#~ msgstr "Zelo počasi premikajoče se telo"
+
+#~ msgid "Hardpoint Vindicator SAM Site Available"
+#~ msgstr "Položaj trda točka z RZZ zaščitnik na voljo"
+
+#~ msgid "Hardpoint Whirlwind AA Gun Available"
+#~ msgstr "Trda točka s PZ puško zračni vrtinec na voljo"
+
+#~ msgid "Armored EMP Mortar battery pit"
+#~ msgstr "Oklepni vkop z EMS možnarsko topniško edinico"
+
+#~ msgid "Laser AA Gun Available"
+#~ msgstr "Laserska PZ puška na voljo"
+
+#~ msgid "Twin Medium Anti-Aircraft Laser"
+#~ msgstr "Dvojni srednje težki protizračni laser"
+
+#~ msgid "Hardpoint Avenger SAM Site Available"
+#~ msgstr "Položaj trda točka z RZZ maščevalec na voljo"
+
+#~ msgid "Hardpoint Cyclone AA Gun Available"
+#~ msgstr "Trda točka s PZ puško ciklon na voljo"
+
+#~ msgid "Quad 80mm Anti-Aircraft machinegun"
+#~ msgstr "Štirikratna 80mm protizračna strojnica"
+
+#~ msgid "Twin Multi-barrel, rapid-fire machinegun"
+#~ msgstr "Dvojna mnogocevna brzostrelna strojnica"
+
+#~ msgid "Hardpoint Twin Assault Gun Available"
+#~ msgstr "Trda točka z dvojno jurišno puško na voljo"
+
+#~ msgid "Drops high intensity Plasmite bombs"
+#~ msgstr "Spušča visokointenzivne plazmitne bombe"
+
+#~ msgid "New VTOL Missile Launcher"
+#~ msgstr "Nov NVP izstreljevalec izstrelkov"
+
+#~ msgid "Fires Electronic Magnetic Pulse Missiles"
+#~ msgstr "Strelja elektronsko magnetno sunkovne izstrelke"
+
+#~ msgid "Stronger Commander Turret Available for Design"
+#~ msgstr "Močnejša poveljniška kupola na voljo za načrt"
+
+#~ msgid "Upgraded battlefield computer system"
+#~ msgstr "Nadgrajen bojiščni računalniški sistem"
 
 #, fuzzy
 #~ msgid "3 players"
