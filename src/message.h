@@ -63,15 +63,14 @@ void freeMessages(void);
 void releaseAllProxDisp(void);
 
 /** Load the view data for the messages from the file exported from the world editor. */
-VIEWDATA* loadViewData(const char *pViewMsgData, UDWORD bufferSize);
-
-VIEWDATA* loadResearchViewData(const char* fileName);
+const char *loadViewData(const char *pViewMsgData, UDWORD bufferSize);
+const char *loadResearchViewData(const char* fileName);
 
 /** Get the view data that contains the text message pointer passed in. */
 VIEWDATA *getViewData(const char *pTextMsg);
 
 /** Release the viewdata memory. */
-void viewDataShutDown(VIEWDATA *psViewData);
+void viewDataShutDown(const char *fileName);
 
 /** Looks through the players list of messages to find one with the same viewData
   * pointer and which is the same type of message - used in scriptFuncs. */

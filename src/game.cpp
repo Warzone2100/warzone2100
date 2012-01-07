@@ -4033,6 +4033,7 @@ static bool loadSaveDroidPointers(const QString &pFileName, DROID **ppsCurrentDr
 		DROID *psDroid;
 		int player = getPlayer(ini);
 		int id = ini.value("id").toInt();
+		ASSERT(id >= 0, "Negative droid ID in %s", pFileName.toUtf8().constData());
 
 		for (psDroid = ppsCurrentDroidLists[player]; psDroid && psDroid->id != id; psDroid = psDroid->psNext)
 		{

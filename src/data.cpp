@@ -666,37 +666,37 @@ static bool bufferRFUNCLoad(const char *pBuffer, UDWORD size, void **ppData)
 /* Load the message viewdata */
 static bool bufferSMSGLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
-	VIEWDATA	*pViewData;
+	const char *ptr;
 
-	pViewData = loadViewData(pBuffer, size);
-	if (!pViewData)
+	ptr = loadViewData(pBuffer, size);
+	if (!ptr)
 	{
 		return false;
 	}
 
 	// set the pointer so the release function gets called with it
-	*ppData = (void *)pViewData;
+	*ppData = (void *)ptr;
 	return true;
 }
 
 /* Load research message viewdata */
 static bool dataResearchMsgLoad(const char* fileName, void** ppData)
 {
-	VIEWDATA* pViewData = loadResearchViewData(fileName);
-	if (!pViewData)
+	const char *ptr = loadResearchViewData(fileName);
+	if (!ptr)
 	{
 		return false;
 	}
 
 	// set the pointer so the release function gets called with it
-	*ppData = pViewData;
+	*ppData = (void *)ptr;
 	return true;
 }
 
 // release the message viewdata
 static void dataSMSGRelease(void *pData)
 {
-	viewDataShutDown((VIEWDATA *)pData);
+	viewDataShutDown((const char *)pData);
 }
 
 /* Load an imd */

@@ -434,7 +434,7 @@ bool initMessage(void)
 }
 
 /*load the view data for the messages from the file */
-VIEWDATA *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
+const char *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 {
 	UDWORD				i, dataInc, seqInc, dummy, numData, count, count2;
 	VIEW_RESEARCH		*psViewRes;
@@ -446,6 +446,7 @@ VIEWDATA *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 	SDWORD				LocX,LocY,LocZ, audioID;
 	PROX_TYPE	proxType;
 	int cnt;
+	const char *filename = strdup(GetLastResourceFilename());
 
 	numData = numCR(pViewMsgData, bufferSize);
 	for (i=0; i < numData; i++)
@@ -457,6 +458,7 @@ VIEWDATA *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 		psViewData->pData = NULL;
 		psViewData->pName = NULL;
 		psViewData->type = VIEW_SIZE;
+		psViewData->fileName = filename;
 		name[0] = '\0';
 
 		//read the data into the storage - the data is delimeted using comma's
@@ -683,15 +685,16 @@ VIEWDATA *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 		apsViewData.insert(psViewData->pName, psViewData);
 	}
 
-	return (VIEWDATA *)0x01; // fake pointer so that cleanup function will be called
+	return filename; // so that cleanup function will be called for correct data
 }
 
-VIEWDATA* loadResearchViewData(const char* fileName)
+const char *loadResearchViewData(const char* fileName)
 {
 	ASSERT_OR_RETURN(NULL, PHYSFS_exists(fileName), "%s not found", fileName);
 	WzConfig ini(fileName);
 	ASSERT_OR_RETURN(NULL, ini.status() == QSettings::NoError, "%s not loaded", fileName);
 
+	const char *filedup = strdup(fileName);
 	QStringList list = ini.childGroups();
 	for (int i = 0; i < list.size(); ++i)
 	{
@@ -700,6 +703,7 @@ VIEWDATA* loadResearchViewData(const char* fileName)
 
 		v->pData = NULL;
 		v->pName = strdup(list[i].toUtf8().constData());
+		v->fileName = filedup;
 		memset(r, 0, sizeof(*r));
 
 		ini.beginGroup(list[i]);
@@ -733,7 +737,7 @@ VIEWDATA* loadResearchViewData(const char* fileName)
 		ini.endGroup();
 		apsViewData.insert(v->pName, v);
 	}
-	return (VIEWDATA *)0x01; // fake pointer so that cleanup function will be called
+	return filedup; // so that cleanup function will be called on rigth data
 }
 
 /* Get the view data identified by the name */
@@ -758,6 +762,7 @@ VIEWDATA *getViewData(const char *pName)
 bool messageShutdown(void)
 {
 	freeMessages();
+	apsViewData.clear();
 	return true;
 }
 
@@ -780,13 +785,23 @@ static void checkMessages(MSG_VIEWDATA *psViewData)
 	}
 }
 
-/* Release the viewdata memory -- input parameter ignored */
-void viewDataShutDown(VIEWDATA *psViewDataUnused)
+/* Release the viewdata memory */
+void viewDataShutDown(const char *fileName)
 {
+	debug(LOG_MSG, "calling shutdown for %s", fileName);
 	QMap<QString, VIEWDATA *>::iterator iter = apsViewData.begin();
+	char *filedup = NULL;
 	while (iter != apsViewData.constEnd())
 	{
 		VIEWDATA *psViewData = iter.value();
+
+		if (strcmp(psViewData->fileName, fileName) != 0)
+		{
+			++iter;
+			continue; // do not delete this now
+		}
+
+		filedup = (char *)psViewData->fileName;
 
 		// check for any messages using this viewdata
 		checkMessages((MSG_VIEWDATA *)psViewData);
@@ -820,9 +835,9 @@ void viewDataShutDown(VIEWDATA *psViewDataUnused)
 		}
 		free(psViewData->pData);
 		delete psViewData;
-		++iter;
+		iter = apsViewData.erase(iter);
 	}
-	apsViewData.clear();
+	free(filedup);
 }
 
 /* Looks through the players list of messages to find one with the same viewData

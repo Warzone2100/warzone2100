@@ -107,6 +107,7 @@ struct VIEWDATA
 	QStringList     textMsg;        //Text messages, if any
 	void*		pData;		/*the data required to view - either a
 							  VIEW_RESEARCH, VIEW_PROXIMITY or VIEW_REPLAY*/
+	const char      *fileName;      //file it came from, for piecemeal destruction (pretty lame reason)
 };
 
 typedef void* MSG_VIEWDATA;
