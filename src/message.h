@@ -62,8 +62,6 @@ void freeMessages(void);
 /** Removes all the proximity displays. */
 void releaseAllProxDisp(void);
 
-bool addToViewDataList(VIEWDATA* psViewData, unsigned int numData);
-
 /** Load the view data for the messages from the file exported from the world editor. */
 VIEWDATA* loadViewData(const char *pViewMsgData, UDWORD bufferSize);
 

@@ -36,8 +36,15 @@
 #include "stats.h"
 #include "text.h"
 
+struct VIEWDATA_LIST
+{
+	VIEWDATA *psViewData;  // array of data
+	UBYTE numViewData;     // number in array
+	VIEWDATA_LIST *psNext; // next array of data
+};
+
 //array of pointers for the view data
-static VIEWDATA_LIST		*apsViewData;
+static VIEWDATA_LIST *apsViewData;
 
 /* The id number for the next message allocated
  * Each message will have a unique id number irrespective of type
@@ -444,7 +451,7 @@ bool initMessage(void)
 	return true;
 }
 
-bool addToViewDataList(VIEWDATA* psViewData, unsigned int numData)
+static bool addToViewDataList(VIEWDATA* psViewData, unsigned int numData)
 {
 	VIEWDATA_LIST		*psAdd = (VIEWDATA_LIST*)malloc(sizeof(VIEWDATA_LIST));
 

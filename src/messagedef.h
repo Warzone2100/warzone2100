@@ -141,11 +141,4 @@ struct PROXIMITY_DISPLAY : public OBJECT_POSITION
 	PROXIMITY_DISPLAY *     psNext;                         //pointer to the next in the list
 };
 
-struct VIEWDATA_LIST
-{
-	VIEWDATA				*psViewData;	//array of data
-	UBYTE					numViewData;	//number in array
-	VIEWDATA_LIST *         psNext;                         //next array of data
-};
-
 #endif // __INCLUDED_MESSAGEDEF_H__
