@@ -448,12 +448,6 @@ VIEWDATA *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 	int cnt;
 
 	numData = numCR(pViewMsgData, bufferSize);
-	if (numData > UBYTE_MAX)
-	{
-		ASSERT(false, "Didn't expect 256 viewData messages!");
-		return NULL;
-	}
-
 	for (i=0; i < numData; i++)
 	{
 		VIEWDATA *psViewData = new VIEWDATA;
@@ -470,12 +464,7 @@ VIEWDATA *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 		pViewMsgData += cnt;
 
 		//check not loading up too many text strings
-		if (numText > MAX_DATA)
-		{
-			ASSERT(false, "too many text strings");
-			delete psViewData;
-			return NULL;
-		}
+		ASSERT(numText <= MAX_DATA, "Too many text strings for %s", name);
 
 		//allocate storage for the name
 		psViewData->pName = strdup(name);
@@ -553,16 +542,10 @@ VIEWDATA *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 			psViewReplay = (VIEW_REPLAY *)psViewData->pData;
 
 			//read in number of sequences for this message
-			//sscanf(pViewMsgData, "%d", &psViewReplay->numSeq);
 			sscanf(pViewMsgData, ",%d%n", &count,&cnt);
 			pViewMsgData += cnt;
 
-			if (count > MAX_DATA)
-			{
-				ASSERT(false, "too many sequence for %s", psViewData->pName);
-				delete psViewData;
-				return NULL;
-			}
+			ASSERT(count <= MAX_DATA, "Too many text strings for %s", psViewData->pName);
 
 			psViewReplay->numSeq = (UBYTE)count;
 
@@ -580,12 +563,7 @@ VIEWDATA *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 				{
 					sscanf(pViewMsgData, ",%255[^,'\r\n],%d%n", name, &count,&cnt);
 					pViewMsgData += cnt;
-					if (count > MAX_DATA)
-					{
-						ASSERT(false, "too many strings for %s", psViewData->pName);
-						delete psViewData;
-						return NULL;
-					}
+					ASSERT(count <= MAX_DATA, "Too many text strings for %s", psViewData->pName);
 					//set the flag to default
 					psViewReplay->pSeqList[dataInc].flag = 0;
 					numText = count;
@@ -594,20 +572,10 @@ VIEWDATA *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 				{
 					sscanf(pViewMsgData, ",%255[^,'\r\n],%d,%d%n", name, &count,	&count2,&cnt);
 					pViewMsgData += cnt;
-					if (count > MAX_DATA)
-					{
-						ASSERT(false, "invalid video playback flag %s", psViewData->pName);
-						delete psViewData;
-						return NULL;
-					}
+					ASSERT(count <= MAX_DATA, "Invalid flag for %s", psViewData->pName);
 					psViewReplay->pSeqList[dataInc].flag = (UBYTE)count;
 					//check not loading up too many text strings
-					if (count2 > MAX_DATA)
-					{
-						ASSERT(false, "too many text strings for seq for %s", psViewData->pName);
-						delete psViewData;
-						return NULL;
-					}
+					ASSERT(count2 <= MAX_DATA, "Too many text strings for %s", psViewData->pName);
 					numText = count2;
 				}
 				strcpy(psViewReplay->pSeqList[dataInc].sequenceName,name);

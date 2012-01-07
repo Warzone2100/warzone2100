@@ -73,9 +73,6 @@ VIEWDATA *getViewData(const char *pTextMsg);
 /** Release the viewdata memory. */
 void viewDataShutDown(VIEWDATA *psViewData);
 
-// Unused
-PROXIMITY_DISPLAY * getProximityDisplay(MESSAGE *psMessage);
-
 /** Looks through the players list of messages to find one with the same viewData
   * pointer and which is the same type of message - used in scriptFuncs. */
 MESSAGE* findMessage(MSG_VIEWDATA *pViewdata, MESSAGE_TYPE type, UDWORD player);
