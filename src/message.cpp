@@ -749,7 +749,7 @@ VIEWDATA *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 				if ( (audioID = audio_GetIDFromStr( audioName )) == NO_SOUND )
 				{
 					ASSERT(false, "couldn't get ID %d for weapon sound %s", audioID, audioName);
-					return false;
+					return NULL;
 				}
 
 				if ((audioID < 0
@@ -757,7 +757,7 @@ VIEWDATA *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 				 && audioID != NO_SOUND)
 				{
 					ASSERT(false, "Invalid Weapon Sound ID - %d for weapon %s", audioID, audioName);
-					return false;
+					return NULL;
 				}
 			}
 

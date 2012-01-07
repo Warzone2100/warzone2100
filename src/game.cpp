@@ -5984,24 +5984,9 @@ bool loadSaveMessage(const char *pFileName, SWORD levelType)
 		}
 		else
 		{
-			// Only load Campaign/Mission if a mid-mission save game
-			if (type == MSG_CAMPAIGN || type == MSG_MISSION)
+			// Only load Campaign/Mission messages if a mid-mission save game; always load research messages
+			if (type == MSG_RESEARCH || gameType == GTYPE_SAVE_MIDMISSION)
 			{
-				if (gameType == GTYPE_SAVE_MIDMISSION)
-				{
-					// Research message // Campaign message // Mission Report messages
-					MESSAGE *psMessage = addMessage(type, false, player);
-					ASSERT(psMessage, "Could not create message %d", id);
-					if (psMessage)
-					{
-						psMessage->pViewData = (MSG_VIEWDATA *)getViewData(ini.value("name").toString().toUtf8().constData());
-						ASSERT(psMessage->pViewData, "Failed to find view data for message %d", id);
-					}
-				}
-			}
-			else
-			{
-				// Research message
 				MESSAGE *psMessage = addMessage(type, false, player);
 				ASSERT(psMessage, "Could not create message %d", id);
 				if (psMessage)
