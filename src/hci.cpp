@@ -1149,11 +1149,6 @@ void intResetScreen(bool NoAnim)
 			eventFireCallbackTrigger((TRIGGER_TYPE)CALL_DESIGN_QUIT);
 		}
 
-		if(!bMultiPlayer)
-		{
-			gameTimeStart();
-		}
-
 		break;
 
 	case INT_INTELMAP:
@@ -1169,9 +1164,7 @@ void intResetScreen(bool NoAnim)
 
 		if(!bMultiPlayer)
 		{
-
 			gameTimeStart();
-
 		}
 
 		break;

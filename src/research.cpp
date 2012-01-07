@@ -1696,7 +1696,7 @@ COMPONENT_STATS * getComponentDetails(char *pName, char *pCompName)
 			//COMP_UNKNOWN should be an error
 			debug( LOG_ERROR, "Unknown artefact type  - %s", pName );
 			abort();
-			return false;
+			return NULL;
 		}
 	}
 
