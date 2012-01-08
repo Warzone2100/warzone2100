@@ -4220,7 +4220,7 @@ static bool loadSaveDroid(const char *pFileName, DROID **ppsCurrentDroidLists)
 		psDroid->actionPos = ini.vector2i("action/pos");
 		psDroid->actionStarted = ini.value("actionStarted", 0).toInt();
 		psDroid->actionPoints = ini.value("actionPoints", 0).toInt();
-		psDroid->resistance = ini.value("resistance", droidResistance(psDroid)).toInt();
+		psDroid->resistance = ini.value("resistance", 0).toInt(); // zero resistance == no electronic damage
 
 		// copy the droid's weapon stats
 		for (int j = 0; j < psDroid->numWeaps; j++)
@@ -4393,7 +4393,7 @@ static bool writeDroid(WzConfig &ini, DROID *psCurr, bool onMission)
 		ini.setValue("commander", psCurr->psGroup->psCommander->id);
 	}
 	if (psCurr->died > 0) ini.setValue("died", psCurr->died);
-	if (psCurr->resistance) ini.setValue("resistance", psCurr->resistance);
+	if (psCurr->resistance > 0) ini.setValue("resistance", psCurr->resistance);
 	if (psCurr->inFire > 0) ini.setValue("inFire", psCurr->inFire);
 	if (psCurr->burnStart > 0) ini.setValue("burnStart", psCurr->burnStart);
 	if (psCurr->burnDamage > 0) ini.setValue("burnDamage", psCurr->burnDamage);
@@ -4947,7 +4947,7 @@ bool writeStructFile(const char *pFileName)
 				if (psCurr->visible[i]) ini.setValue("visible/" + QString::number(i), psCurr->visible[i]);
 			}
 			if (psCurr->died > 0) ini.setValue("died", psCurr->died);
-			if (psCurr->resistance) ini.setValue("resistance", psCurr->resistance);
+			if (psCurr->resistance > 0) ini.setValue("resistance", psCurr->resistance);
 			if (psCurr->inFire > 0) ini.setValue("inFire", psCurr->inFire);
 			if (psCurr->burnStart > 0) ini.setValue("burnStart", psCurr->burnStart);
 			if (psCurr->burnDamage > 0) ini.setValue("burnDamage", psCurr->burnDamage);
