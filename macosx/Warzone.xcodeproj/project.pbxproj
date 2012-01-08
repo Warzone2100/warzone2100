@@ -7,18 +7,6 @@
 	objects = {
 
 /* Begin PBXAggregateTarget section */
-		435AE73F14B5566700B01C85 /* Generate Docs */ = {
-			isa = PBXAggregateTarget;
-			buildConfigurationList = 435AE74614B5566D00B01C85 /* Build configuration list for PBXAggregateTarget "Generate Docs" */;
-			buildPhases = (
-				435AE73E14B5566700B01C85 /* Doc Build */,
-				435AE76714B55AE000B01C85 /* Doc Index */,
-			);
-			dependencies = (
-			);
-			name = "Generate Docs";
-			productName = "Generate Docs";
-		};
 		438B0C05137730FE008184FC /* Fetch Third Party Sources */ = {
 			isa = PBXAggregateTarget;
 			buildConfigurationList = 438B0C0E13773146008184FC /* Build configuration list for PBXAggregateTarget "Fetch Third Party Sources" */;
@@ -70,6 +58,7 @@
 				433360B311A079F700380F5E /* Moc */,
 				43B8FF2D127CD57D006F5A13 /* Fonts */,
 				436D24A4149641D200BF74E3 /* SDL */,
+				4311544C14BA01F900332251 /* Docs */,
 				43CEADC3141D6E810001637B /* fontconfig */,
 				43CEADC6141D6EEE0001637B /* freetype */,
 				433360A711A0796D00380F5E /* Qt */,
@@ -1611,7 +1600,7 @@
 		4355E12D10D6028C00A19EE4 /* theora.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = theora.h; path = external/libtheora/include/theora/theora.h; sourceTree = "<group>"; };
 		4355E12E10D6028C00A19EE4 /* theoradec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = theoradec.h; path = external/libtheora/include/theora/theoradec.h; sourceTree = "<group>"; };
 		4355E12F10D6028C00A19EE4 /* theoraenc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = theoraenc.h; path = external/libtheora/include/theora/theoraenc.h; sourceTree = "<group>"; };
-		435AE76A14B55C3400B01C85 /* WarzoneHelp */ = {isa = PBXFileReference; lastKnownFileType = folder; name = WarzoneHelp; path = Resources/WarzoneHelp; sourceTree = "<group>"; };
+		435AE76A14B55C3400B01C85 /* WarzoneHelp */ = {isa = PBXFileReference; lastKnownFileType = folder; name = WarzoneHelp; path = external/WarzoneHelp; sourceTree = SOURCE_ROOT; };
 		4366712C13D1FCC300FE85BA /* QuesoGLC-All.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "QuesoGLC-All.xcconfig"; path = "configs/QuesoGLC-All.xcconfig"; sourceTree = "<group>"; };
 		4366712D13D1FCC300FE85BA /* QuesoGLC-Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "QuesoGLC-Debug.xcconfig"; path = "configs/QuesoGLC-Debug.xcconfig"; sourceTree = "<group>"; };
 		4366712E13D1FCC300FE85BA /* QuesoGLC-Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "QuesoGLC-Release.xcconfig"; path = "configs/QuesoGLC-Release.xcconfig"; sourceTree = "<group>"; };
@@ -3902,7 +3891,6 @@
 				43AA702913C7FC640015B52B /* QJson */,
 				4366718113D1FD5600FE85BA /* QuesoGLC */,
 				43F77C7710F0125E00E04615 /* Make DMGs for Release */,
-				435AE73F14B5566700B01C85 /* Generate Docs */,
 			);
 		};
 /* End PBXProject section */
@@ -4047,6 +4035,20 @@
 			shellPath = /bin/sh;
 			shellScript = "# Config\nexport PATH=$PATH:/sw/bin:/opt/local/bin\npodir=\"../po\"\ndisfile=\"configs/LangDis\"\naresdir=\"build/${CONFIGURATION}/Warzone.app/Contents/Resources/\"\nbresdir=\"locale/\"\nmessdir=\"LC_MESSAGES/\"\nmonme=\"warzone2100.mo\"\npolist=`ls -1 ${podir} | sed -n 's:\\.po$:&:p' | sed -e 's:\\.po::'`\ndislist=`cat ${disfile} | sed -n 's:^<::p'`\n\n# 1st san check\necho \"Checking for msgfmt...\"\nif [ -f build/notrans.dis ]; then\n    rm build/notrans.dis\n    echo \"warning: Gettext support has been disabled for this build because we could not find a binary.\" >&2\n    exit 0\nelif ! type -aP msgfmt; then\n    echo \"error: Fatal inability to properly translate messages.\" >&2\n    exit 1\nfi\n\n# Get the path\nmsgfmtpth=`type -P msgfmt`\n\n# 2nd san check\necho \"Checking for sanity...\"\nif ! $msgfmtpth --version; then\n    echo \"error: Fatal failure of san check.\" >&2\n    exit 1\nfi\n\n# Disable selected langs\nfor dislang in ${dislist}; do\n    echo \"Cleaning up for ${dislang} ...\"\n    rm -rfv \"${aresdir}${dislang}.lproj\"\ndone\n\n# Make .mo\nfor lang in ${polist}; do\n    if [ -d \"${aresdir}${lang}.lproj\" ]; then\n        echo \"Setting up for ${lang} ...\"\n        mkdir -p \"${aresdir}${bresdir}${lang}/${messdir}\"\n        $msgfmtpth -v -o \"${aresdir}${bresdir}${lang}/${messdir}${monme}\" \"${podir}/${lang}.po\"\n    fi\ndone\n\nexit 0";
 		};
+		4311544C14BA01F900332251 /* Docs */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = Docs;
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "DirectorY=\"WarzoneHelp.1326041464.6759\"\nOutDir=\"WarzoneHelp\"\nFileName=\"WarzoneHelp.tgz\"\nBuiltDLP=\"http://downloads.sourceforge.net/project/warzone2100/build-tools/mac/WarzoneHelp.tgz\"\nMD5Sum=\"509a52b23eb63e9789d4a95117566058\"\n\nconfigs/FetchPrebuilt.sh \"${DirectorY}\" \"${OutDir}\" \"${FileName}\" \"${BuiltDLP}\" \"${MD5Sum}\"\nexit ${?}\n";
+		};
 		43119DCC1353B08F004C54BB /* Generate headers */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -4116,34 +4118,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "DirectorY=\"gettext-0.17.mpkg_\"\nOutDir=\"gettext-0.17.mpkg\"\nFileName=\"gettext-0.17.mpkg.tar.gz\"\nBuiltDLP=\"http://downloads.sourceforge.net/project/warzone2100/build-tools/mac/gettext-0.17.mpkg.tar.gz\"\nMD5Sum=\"ba7984918fe0b36e2e7c786693e005f2\"\n\n# Checks\nexport PATH=$PATH:/sw/bin:/opt/local/bin\nif type -aP msgfmt; then\n    echo \"msgfmt exists, skipping\"\n    exit 0\nelif [ -x \"/opt/local/bin/port\" ]; then\n  echo \"warning: Please run the following command in the terminal: 'sudo port install gettext'.\" >&2\n  open -b com.apple.Terminal\n  exit 1\nelif [ -d \"${SRCROOT}/external/${OutDir}\" ]; then\n    touch build/notrans.dis\n    echo \"warning: Gettext support has been disabled because we could not find a binary.\" >&2\n    exit 0\nelif [ ! `sw_vers -productVersion | sed -e 's:^...\\(.\\)..$:\\1:'` -ge \"6\" ]; then\n    touch build/notrans.dis\n    echo \"warning: Gettext support has been disabled because we could not find a binary.\" >&2\n    exit 0\nfi\n\nconfigs/FetchPrebuilt.sh \"${DirectorY}\" \"${OutDir}\" \"${FileName}\" \"${BuiltDLP}\" \"${MD5Sum}\"\nFetchExitStatus=$?\n\n# Install\nif [ ! \"${FetchExitStatus}\" = \"0\" ]; then\n    exit \"${FetchExitStatus}\"\nelif [ -d \"${SRCROOT}/external/${OutDir}\" ]; then\n    echo \" Please install the gettext package before continuing.\" >&2\n    open \"${SRCROOT}/external/${OutDir}\"\n    exit 1\nfi";
-		};
-		435AE73E14B5566700B01C85 /* Doc Build */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Doc Build";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "export PATH=$PATH:/sw/bin:/opt/local/bin:/usr/local/bin\n\n# Config\nmWarzoneHelp=\"macosx/Resources/WarzoneHelp/Contents/Resources\"\nmWarzoneHelpLproj=\"${mWarzoneHelp}/en.lproj\"\n\ncd \"${SRCROOT}/..\"\n\n# asciidoc based docs\nif type -aP a2x; then\n\t# quickstartguide\n    mkdir -p \"${mWarzoneHelpLproj}\"\n\ta2x -f chunked -D \"${mWarzoneHelpLproj}\" doc/quickstartguide.asciidoc\n\tcp -af ${mWarzoneHelpLproj}/quickstartguide.chunked/* ${mWarzoneHelpLproj}\n\trm -fr ${mWarzoneHelpLproj}/quickstartguide.chunked\n\n\t# man page\n\ta2x -f xhtml -d manpage -D \"${mWarzoneHelpLproj}\" doc/warzone2100.6.asciidoc\n\t\n\t# Cleanup\n    cp -af \"${mWarzoneHelpLproj}/docbook-xsl.css\" \"${mWarzoneHelpLproj}/images\" ${mWarzoneHelp}\n    rm -fr \"${mWarzoneHelpLproj}/docbook-xsl.css\" \"${mWarzoneHelpLproj}/images\"\n    sed -i '' -e 's:href=\"\\([a-z\\-]*\\).css:href=\"../\\1.css:g' ${mWarzoneHelpLproj}/*.html\n    sed -i '' -e 's:src=\"images/:src=\"../images/:g' ${mWarzoneHelpLproj}/*.html\nelse\n\techo \"error: no suitable a2x (asciidoc) in path\"\n\texit 1\nfi\n\n# LaTeX based docs\nif type -aP pdflatex; then\n\t# javascript doc\n\tgrep src/qtscript.cpp -e '//==' | sed 's://==::' > doc/globals.tex\n\tgrep src/qtscript.cpp -e '//__' | sed 's://__::' > doc/events.tex\n\tgrep src/qtscript.cpp -e '//--' | sed 's://--::' > doc/functions.tex\n\tgrep src/qtscriptfuncs.cpp -e '//--' | sed 's://--::' >> doc/functions.tex\n\tgrep src/qtscriptfuncs.cpp -e '//;;' | sed 's://;;::' > doc/objects.tex\n\tcd doc/\n\tpdflatex javascript.tex\n\tcd ..\n\tcp -af doc/javascript.pdf ${mWarzoneHelpLproj}\nelse\n\techo \"error: no suitable pdflatex (tetex) in path\"\n\texit 1\nfi\n\nexit 0\n";
-		};
-		435AE76714B55AE000B01C85 /* Doc Index */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Doc Index";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "base=\"Resources/WarzoneHelp/Contents/Resources/en.lproj\"\nrm -f \"${base}/WarzoneHelp.helpindex\"\nhiutil -Caf \"${base}.helpindex\" \"${base}\"\ncp -af \"${base}.helpindex\" \"${base}/WarzoneHelp.helpindex\"\nrm -f \"${base}.helpindex\"\nexit 0\n";
 		};
 		4366712213D1F83200FE85BA /* QuesoGLC - Fetch source */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -5223,27 +5197,6 @@
 			};
 			name = Release;
 		};
-		435AE74014B5566800B01C85 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				PRODUCT_NAME = "Generate Docs";
-			};
-			name = Debug;
-		};
-		435AE74114B5566800B01C85 /* StaticAnalyzer */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				PRODUCT_NAME = "Generate Docs";
-			};
-			name = StaticAnalyzer;
-		};
-		435AE74214B5566800B01C85 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				PRODUCT_NAME = "Generate Docs";
-			};
-			name = Release;
-		};
 		4366718413D1FD5700FE85BA /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 4366712D13D1FCC300FE85BA /* QuesoGLC-Debug.xcconfig */;
@@ -5546,16 +5499,6 @@
 				43502D541347640800A02A1F /* Debug */,
 				43502D551347640800A02A1F /* StaticAnalyzer */,
 				43502D561347640800A02A1F /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Debug;
-		};
-		435AE74614B5566D00B01C85 /* Build configuration list for PBXAggregateTarget "Generate Docs" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				435AE74014B5566800B01C85 /* Debug */,
-				435AE74114B5566800B01C85 /* StaticAnalyzer */,
-				435AE74214B5566800B01C85 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
