@@ -3416,6 +3416,7 @@ bool gameLoadV(PHYSFS_file* fileHandle, unsigned int version)
 		debug(LOG_ERROR, "Skirmish savegames of version %u are not supported in this release.", version);
 		return false;
 	}
+	game.type = saveGameData.sGame.type;
 	/* Test mod list */
 	if (version >= VERSION_38)
 	{
