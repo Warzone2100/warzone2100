@@ -24,7 +24,7 @@
  *
  */
 
-#include <QMap>
+#include <QtCore/QMap>
 #include "lib/framework/frame.h"
 #include "lib/framework/wzconfig.h"
 #include "lib/framework/frameresource.h"
