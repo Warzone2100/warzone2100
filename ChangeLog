@@ -12,14 +12,17 @@ master_2012010x:
    * Fix: Correct the remaining progress bar after research (ticket:2966, commit:4bf70ca7c55765d2709672c18ef613d2e4a11966)
    * Fix: Don't allow placing blueprints next to each other (ticket:2999, commit:79d8d2251e07bba2c2dcb9ed2751841086663f89)
    * Fix: Don't crash when clicking fast on a transporter (commit:a35ff1e8fe911fca050ce0d9e7e19e7c511db501)
+   * Fix: Don't crash when placing beacons (commit:3462f7b5cd02959f05661f48c9f20ca10947a29d)
    * Fix: Reset components between games (commit:4e66209506342112987b9085358dd1835a31c7f3)
    * Fix: Allow queuing of multiple modules (ticket:2997, commit:3dfc823394e39364f995efdee1af9f8fef688684)
    * Fix: Queuing of oil barrels and artifacts (ticket:2725, commit:ade80e83c7e1b3eb9fc3da0207e908fb815885b0)
  * Campaign:
    * Fix: Allow taking control of allied team in mission Gamma 4 again (ticket:1855, commit:a4a10cf6ec99393d3cc7b941bcb51e8a17e8af55)
+   * Fix: Recognize recovered artifact in mission Gamma 5 (ticket:3027, commit:8cca01dfe281fbaf2676efedc461f41cbd436528)
+   * Fix: Make mission Gamma 6 work (commit:555cb0dfa79bb4c4ccf0c4649d52ee09067ad59f)
  * Savegames:
    * Fix: Structure reload status (ticket:1438, commit:c7015df7142ba28515830559337b476ca4af44ea)
-   * Fix: Droid order queues (ticket:2752, ticket:3016, commit:c5de04d339c5fd59e7e2afd5b4ff3feda51045c9
+   * Fix: Droid order queues (ticket:2752, ticket:3016, commit:c5de04d339c5fd59e7e2afd5b4ff3feda51045c9)
  * Pathfinding:
    * Fix: Ignore buildings on start or destination (ticket:2978, commit:0119eda53f11d2aa5d3e3ccc82203c6657812039)
    * Fix: Don't pathfind through satellite uplinks (commit:1e2c71cccd8b8d04312d56ad19c022c801dabb0a)
@@ -34,7 +37,7 @@ master_2012010x:
    * Fix: Use correct colour for scavengers in the map preview (commit:b62e7d3358593f62d3e9a2bcc8ae928397821fd5)
  * Translations:
    * Update: Turkish (ticket:2963, ticket:3001, commit:9ea22074d16106c17d717657e049863cdf8d1c09, commit:39040429f5c506f0e7c596f305203bd84239e09f)
-   * Update: German (ticket:2967, commit:075e18828c5a8873fa4157e9c47958ddb1547870)
+   * Update: German (ticket:2967, ticket:3035, commit:075e18828c5a8873fa4157e9c47958ddb1547870, commit:c4200b9cd5f7202c2d585818ae6108d7a1ef3b81)
    * Update: Polish (ticket:1347, commit:89a282ba9bfe2c16701d270c082c8c0311c618bf)
    * Update: Spanish (ticket:3021, commit:3e982b66c85fd9f96d954c6b3e9f8c950eb4e0c5)
    * Update: Hungarian (ticket:3025, commit:1d77a69ae825c58d6c566625a01089cecfa08e37)
