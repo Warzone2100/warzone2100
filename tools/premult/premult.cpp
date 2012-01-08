@@ -118,9 +118,6 @@ int main(int argc, char **argv)
 			Pix b(blend.pixel(x, y));
 			Pix p;
 
-			b.a = 1 - ((1 - b.a) + (b.r+b.g+b.b)*b.a/3);
-			b.r = b.g = b.b = 0;
-
 			p.a = b.a;
 			p.r = a.r*(1 - b.a) + b.r*b.a;
 			p.g = a.g*(1 - b.a) + b.g*b.a;
