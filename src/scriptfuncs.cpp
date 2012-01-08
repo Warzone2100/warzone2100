@@ -117,7 +117,7 @@ std::vector<Vector2i> derricks;
 bool scriptOperatorEquals(INTERP_VAL const &v1, INTERP_VAL const &v2)
 {
 	ASSERT_OR_RETURN(false, scriptTypeIsPointer(v1.type) && scriptTypeIsPointer(v2.type), "Bad types.");
-	if (v1.type == ST_RESEARCH && v1.type == ST_RESEARCH)
+	if (v1.type == (INTERP_TYPE)ST_RESEARCH && v1.type == (INTERP_TYPE)ST_RESEARCH)
 	{
 		return ((RESEARCH *)v1.v.oval)->ref == ((RESEARCH *)v2.v.oval)->ref;
 	}
