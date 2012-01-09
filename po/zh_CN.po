@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2012-01-07 14:37+0100\n"
+"POT-Creation-Date: 2012-01-09 01:42+0100\n"
 "PO-Revision-Date: 2011-08-28 11:34+0800\n"
 "Last-Translator: Tunghsu\n"
 "Language-Team: Chinese Simplified <kde-i18n-doc@kde.org>\n"
@@ -24,79 +24,79 @@ msgstr ""
 "X-Poedit-Country: CHINA\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: data/base/messages/messages.rmsg:4
+#: data/base/messages/messages.rmsg:2
 msgid "Structure Research Completed"
 msgstr "建筑科技研发完成"
 
-#: data/base/messages/messages.rmsg:14
+#: data/base/messages/messages.rmsg:8
 msgid "Power Research Completed"
 msgstr "能源科技研发完成"
 
-#: data/base/messages/messages.rmsg:24
+#: data/base/messages/messages.rmsg:14
 msgid "Computer Research Completed"
 msgstr "电脑科技研发完成"
 
-#: data/base/messages/messages.rmsg:34
+#: data/base/messages/messages.rmsg:20
 msgid "Unit Research Completed"
 msgstr "单位科技研发完成"
 
-#: data/base/messages/messages.rmsg:44
+#: data/base/messages/messages.rmsg:26
 msgid "Systems Research Completed"
 msgstr "系统科技研发完成"
 
-#: data/base/messages/messages.rmsg:54
+#: data/base/messages/messages.rmsg:32
 msgid "Weapon Research Completed"
 msgstr "武器科技研发完成"
 
 #: data/base/messages/resmessages12.rmsg:4
-#: data/base/messages/resmessages12.rmsg:17
-#: data/base/messages/resmessages12.rmsg:30
-#: data/base/messages/resmessages12.rmsg:43
-#: data/base/messages/resmessages1.rmsg:108
-#: data/base/messages/resmessages1.rmsg:121
-#: data/base/messages/resmessages1.rmsg:134
+#: data/base/messages/resmessages12.rmsg:15
+#: data/base/messages/resmessages12.rmsg:26
+#: data/base/messages/resmessages12.rmsg:37
+#: data/base/messages/resmessages1.rmsg:92
+#: data/base/messages/resmessages1.rmsg:103
+#: data/base/messages/resmessages1.rmsg:114
+#: data/base/messages/resmessages1.rmsg:125
+#: data/base/messages/resmessages1.rmsg:136
 #: data/base/messages/resmessages1.rmsg:147
-#: data/base/messages/resmessages1.rmsg:160
-#: data/base/messages/resmessages1.rmsg:173
-#: data/base/messages/resmessages1.rmsg:186
-#: data/base/messages/resmessages1.rmsg:199
-#: data/base/messages/resmessages1.rmsg:212
-#: data/base/messages/resmessages1.rmsg:225
-#: data/base/messages/resmessages23.rmsg:17
-#: data/base/messages/resmessages2.rmsg:69
-#: data/base/messages/resmessages2.rmsg:82
-#: data/base/messages/resmessages2.rmsg:95
-#: data/base/messages/resmessages2.rmsg:108
-#: data/base/messages/resmessages2.rmsg:121
-#: data/base/messages/resmessages2.rmsg:134
+#: data/base/messages/resmessages1.rmsg:158
+#: data/base/messages/resmessages1.rmsg:169
+#: data/base/messages/resmessages1.rmsg:180
+#: data/base/messages/resmessages1.rmsg:191
+#: data/base/messages/resmessages23.rmsg:15
+#: data/base/messages/resmessages2.rmsg:59
+#: data/base/messages/resmessages2.rmsg:70
+#: data/base/messages/resmessages2.rmsg:81
+#: data/base/messages/resmessages2.rmsg:92
+#: data/base/messages/resmessages2.rmsg:103
+#: data/base/messages/resmessages2.rmsg:114
+#: data/base/messages/resmessages2.rmsg:125
+#: data/base/messages/resmessages2.rmsg:136
 #: data/base/messages/resmessages2.rmsg:147
-#: data/base/messages/resmessages2.rmsg:160
-#: data/base/messages/resmessages2.rmsg:173
-#: data/base/messages/resmessages2.rmsg:186
-#: data/base/messages/resmessages2.rmsg:199
-#: data/base/messages/resmessages2.rmsg:212
-#: data/base/messages/resmessages2.rmsg:225
-#: data/base/messages/resmessages2.rmsg:238
-#: data/base/messages/resmessages2.rmsg:251
-#: data/base/messages/resmessages2.rmsg:264
-#: data/base/messages/resmessages2.rmsg:277
-#: data/base/messages/resmessages2.rmsg:290
-#: data/base/messages/resmessages2.rmsg:303
-#: data/base/messages/resmessages2.rmsg:316
-#: data/base/messages/resmessages3.rmsg:238
-#: data/base/messages/resmessages3.rmsg:251
-#: data/base/messages/resmessages3.rmsg:264
-#: data/base/messages/resmessages3.rmsg:277
+#: data/base/messages/resmessages2.rmsg:158
+#: data/base/messages/resmessages2.rmsg:169
+#: data/base/messages/resmessages2.rmsg:180
+#: data/base/messages/resmessages2.rmsg:191
+#: data/base/messages/resmessages2.rmsg:202
+#: data/base/messages/resmessages2.rmsg:213
+#: data/base/messages/resmessages2.rmsg:224
+#: data/base/messages/resmessages2.rmsg:235
+#: data/base/messages/resmessages2.rmsg:246
+#: data/base/messages/resmessages2.rmsg:257
+#: data/base/messages/resmessages2.rmsg:268
+#: data/base/messages/resmessages3.rmsg:202
+#: data/base/messages/resmessages3.rmsg:213
+#: data/base/messages/resmessages3.rmsg:224
+#: data/base/messages/resmessages3.rmsg:235
+#: data/base/messages/resmessages3.rmsg:246
+#: data/base/messages/resmessages3.rmsg:257
+#: data/base/messages/resmessages3.rmsg:268
+#: data/base/messages/resmessages3.rmsg:279
 #: data/base/messages/resmessages3.rmsg:290
-#: data/base/messages/resmessages3.rmsg:303
-#: data/base/messages/resmessages3.rmsg:316
-#: data/base/messages/resmessages3.rmsg:329
-#: data/base/messages/resmessages3.rmsg:342
-#: data/base/messages/resmessages3.rmsg:355
-#: data/base/messages/resmessages3.rmsg:368
-#: data/base/messages/resmessages3.rmsg:381
-#: data/base/messages/resmessages3.rmsg:394
-#: data/base/messages/resmessages3.rmsg:407
+#: data/base/messages/resmessages3.rmsg:301
+#: data/base/messages/resmessages3.rmsg:312
+#: data/base/messages/resmessages3.rmsg:323
+#: data/base/messages/resmessages3.rmsg:334
+#: data/base/messages/resmessages3.rmsg:345
 #: data/base/messages/strings/resstrings.txt:113
 #: data/base/messages/strings/resstrings.txt:119
 #: data/base/messages/strings/resstrings.txt:125
@@ -157,16 +157,16 @@ msgid "Armored Mortar battery pit"
 msgstr "装备有迫击炮之阵地"
 
 #: data/base/messages/resmessages12.rmsg:6
-#: data/base/messages/resmessages12.rmsg:19
-#: data/base/messages/resmessages2.rmsg:123
-#: data/base/messages/resmessages2.rmsg:136
+#: data/base/messages/resmessages12.rmsg:17
+#: data/base/messages/resmessages2.rmsg:105
+#: data/base/messages/resmessages2.rmsg:116
+#: data/base/messages/resmessages2.rmsg:127
+#: data/base/messages/resmessages2.rmsg:138
 #: data/base/messages/resmessages2.rmsg:149
-#: data/base/messages/resmessages2.rmsg:162
-#: data/base/messages/resmessages2.rmsg:175
-#: data/base/messages/resmessages2.rmsg:188
-#: data/base/messages/resmessages2.rmsg:201
-#: data/base/messages/resmessages3.rmsg:266
-#: data/base/messages/resmessages3.rmsg:279
+#: data/base/messages/resmessages2.rmsg:160
+#: data/base/messages/resmessages2.rmsg:171
+#: data/base/messages/resmessages3.rmsg:226
+#: data/base/messages/resmessages3.rmsg:237
 #: data/base/messages/strings/resstrings.txt:143
 #: data/base/messages/strings/resstrings.txt:155
 #: data/base/messages/strings/resstrings.txt:161
@@ -185,28 +185,28 @@ msgid "Assigned automatically to nearest sensor or CB tower"
 msgstr "自动指派给最近的雷达或反炮兵雷达"
 
 #: data/base/messages/resmessages12.rmsg:7
-#: data/base/messages/resmessages12.rmsg:20
-#: data/base/messages/resmessages1.rmsg:124
-#: data/base/messages/resmessages1.rmsg:228
-#: data/base/messages/resmessages2.rmsg:72
-#: data/base/messages/resmessages2.rmsg:85
-#: data/base/messages/resmessages2.rmsg:98
-#: data/base/messages/resmessages2.rmsg:111
-#: data/base/messages/resmessages2.rmsg:124
-#: data/base/messages/resmessages2.rmsg:137
+#: data/base/messages/resmessages12.rmsg:18
+#: data/base/messages/resmessages1.rmsg:106
+#: data/base/messages/resmessages1.rmsg:194
+#: data/base/messages/resmessages2.rmsg:62
+#: data/base/messages/resmessages2.rmsg:73
+#: data/base/messages/resmessages2.rmsg:84
+#: data/base/messages/resmessages2.rmsg:95
+#: data/base/messages/resmessages2.rmsg:106
+#: data/base/messages/resmessages2.rmsg:117
+#: data/base/messages/resmessages2.rmsg:128
+#: data/base/messages/resmessages2.rmsg:139
 #: data/base/messages/resmessages2.rmsg:150
-#: data/base/messages/resmessages2.rmsg:163
-#: data/base/messages/resmessages2.rmsg:176
-#: data/base/messages/resmessages2.rmsg:189
-#: data/base/messages/resmessages2.rmsg:202
-#: data/base/messages/resmessages2.rmsg:215
-#: data/base/messages/resmessages2.rmsg:241
-#: data/base/messages/resmessages2.rmsg:267
-#: data/base/messages/resmessages3.rmsg:241
-#: data/base/messages/resmessages3.rmsg:254
-#: data/base/messages/resmessages3.rmsg:267
-#: data/base/messages/resmessages3.rmsg:280
-#: data/base/messages/resmessages3.rmsg:345
+#: data/base/messages/resmessages2.rmsg:161
+#: data/base/messages/resmessages2.rmsg:172
+#: data/base/messages/resmessages2.rmsg:183
+#: data/base/messages/resmessages2.rmsg:205
+#: data/base/messages/resmessages2.rmsg:227
+#: data/base/messages/resmessages3.rmsg:205
+#: data/base/messages/resmessages3.rmsg:216
+#: data/base/messages/resmessages3.rmsg:227
+#: data/base/messages/resmessages3.rmsg:238
+#: data/base/messages/resmessages3.rmsg:293
 #: data/base/messages/resmessagesall.rmsg:7
 #: data/base/messages/strings/resstrings.txt:116
 #: data/base/messages/strings/resstrings.txt:122
@@ -245,36 +245,36 @@ msgstr "自动指派给最近的雷达或反炮兵雷达"
 msgid "Defensive Strength: Medium"
 msgstr "防御力：中"
 
-#: data/base/messages/resmessages12.rmsg:18
+#: data/base/messages/resmessages12.rmsg:16
 msgid "Mini-rocket armored strongpoint"
 msgstr "装备有迷你火箭炮之据点"
 
-#: data/base/messages/resmessages12.rmsg:31
+#: data/base/messages/resmessages12.rmsg:27
 msgid "Armored hardpoint with Heavy Machinegun"
 msgstr "装备有重机枪之要塞"
 
-#: data/base/messages/resmessages12.rmsg:32
-#: data/base/messages/resmessages12.rmsg:45
-#: data/base/messages/resmessages1.rmsg:110
-#: data/base/messages/resmessages1.rmsg:123
-#: data/base/messages/resmessages1.rmsg:136
+#: data/base/messages/resmessages12.rmsg:28
+#: data/base/messages/resmessages12.rmsg:39
+#: data/base/messages/resmessages1.rmsg:94
+#: data/base/messages/resmessages1.rmsg:105
+#: data/base/messages/resmessages1.rmsg:116
+#: data/base/messages/resmessages1.rmsg:127
+#: data/base/messages/resmessages1.rmsg:138
 #: data/base/messages/resmessages1.rmsg:149
-#: data/base/messages/resmessages1.rmsg:162
-#: data/base/messages/resmessages1.rmsg:175
-#: data/base/messages/resmessages1.rmsg:188
-#: data/base/messages/resmessages1.rmsg:201
-#: data/base/messages/resmessages1.rmsg:214
-#: data/base/messages/resmessages23.rmsg:19
-#: data/base/messages/resmessages2.rmsg:279
-#: data/base/messages/resmessages2.rmsg:292
-#: data/base/messages/resmessages2.rmsg:305
-#: data/base/messages/resmessages2.rmsg:318
-#: data/base/messages/resmessages3.rmsg:344
-#: data/base/messages/resmessages3.rmsg:357
-#: data/base/messages/resmessages3.rmsg:370
-#: data/base/messages/resmessages3.rmsg:383
-#: data/base/messages/resmessages3.rmsg:396
-#: data/base/messages/resmessages3.rmsg:409
+#: data/base/messages/resmessages1.rmsg:160
+#: data/base/messages/resmessages1.rmsg:171
+#: data/base/messages/resmessages1.rmsg:182
+#: data/base/messages/resmessages23.rmsg:17
+#: data/base/messages/resmessages2.rmsg:237
+#: data/base/messages/resmessages2.rmsg:248
+#: data/base/messages/resmessages2.rmsg:259
+#: data/base/messages/resmessages2.rmsg:270
+#: data/base/messages/resmessages3.rmsg:292
+#: data/base/messages/resmessages3.rmsg:303
+#: data/base/messages/resmessages3.rmsg:314
+#: data/base/messages/resmessages3.rmsg:325
+#: data/base/messages/resmessages3.rmsg:336
+#: data/base/messages/resmessages3.rmsg:347
 #: data/base/messages/strings/resstrings.txt:235
 #: data/base/messages/strings/resstrings.txt:241
 #: data/base/messages/strings/resstrings.txt:247
@@ -296,31 +296,31 @@ msgstr "装备有重机枪之要塞"
 msgid "Automatically targets enemies within sensor range"
 msgstr "自动攻击雷达范围内所有敌人"
 
-#: data/base/messages/resmessages12.rmsg:33
-#: data/base/messages/resmessages12.rmsg:46
-#: data/base/messages/resmessages1.rmsg:137
+#: data/base/messages/resmessages12.rmsg:29
+#: data/base/messages/resmessages12.rmsg:40
+#: data/base/messages/resmessages1.rmsg:117
+#: data/base/messages/resmessages1.rmsg:128
+#: data/base/messages/resmessages1.rmsg:139
 #: data/base/messages/resmessages1.rmsg:150
-#: data/base/messages/resmessages1.rmsg:163
-#: data/base/messages/resmessages1.rmsg:176
-#: data/base/messages/resmessages1.rmsg:189
-#: data/base/messages/resmessages1.rmsg:202
-#: data/base/messages/resmessages1.rmsg:215
-#: data/base/messages/resmessages23.rmsg:20
-#: data/base/messages/resmessages2.rmsg:228
-#: data/base/messages/resmessages2.rmsg:254
-#: data/base/messages/resmessages2.rmsg:280
-#: data/base/messages/resmessages2.rmsg:293
-#: data/base/messages/resmessages2.rmsg:306
-#: data/base/messages/resmessages2.rmsg:319
-#: data/base/messages/resmessages3.rmsg:293
-#: data/base/messages/resmessages3.rmsg:306
-#: data/base/messages/resmessages3.rmsg:319
-#: data/base/messages/resmessages3.rmsg:332
-#: data/base/messages/resmessages3.rmsg:358
-#: data/base/messages/resmessages3.rmsg:371
-#: data/base/messages/resmessages3.rmsg:384
-#: data/base/messages/resmessages3.rmsg:397
-#: data/base/messages/resmessages3.rmsg:410
+#: data/base/messages/resmessages1.rmsg:161
+#: data/base/messages/resmessages1.rmsg:172
+#: data/base/messages/resmessages1.rmsg:183
+#: data/base/messages/resmessages23.rmsg:18
+#: data/base/messages/resmessages2.rmsg:194
+#: data/base/messages/resmessages2.rmsg:216
+#: data/base/messages/resmessages2.rmsg:238
+#: data/base/messages/resmessages2.rmsg:249
+#: data/base/messages/resmessages2.rmsg:260
+#: data/base/messages/resmessages2.rmsg:271
+#: data/base/messages/resmessages3.rmsg:249
+#: data/base/messages/resmessages3.rmsg:260
+#: data/base/messages/resmessages3.rmsg:271
+#: data/base/messages/resmessages3.rmsg:282
+#: data/base/messages/resmessages3.rmsg:304
+#: data/base/messages/resmessages3.rmsg:315
+#: data/base/messages/resmessages3.rmsg:326
+#: data/base/messages/resmessages3.rmsg:337
+#: data/base/messages/resmessages3.rmsg:348
 #: data/base/messages/strings/resstrings.txt:200
 #: data/base/messages/strings/resstrings.txt:220
 #: data/base/messages/strings/resstrings.txt:262
@@ -342,146 +342,146 @@ msgstr "自动攻击雷达范围内所有敌人"
 msgid "Defensive Strength: High"
 msgstr "防御力：高"
 
-#: data/base/messages/resmessages12.rmsg:44
+#: data/base/messages/resmessages12.rmsg:38
 msgid "Armored hardpoint with Lancer AT missile"
 msgstr "装备有枪骑兵火箭之要塞"
 
-#: data/base/messages/resmessages12.rmsg:56
-#: data/base/messages/resmessages23.rmsg:43
-#: data/base/messages/resmessages3.rmsg:511
+#: data/base/messages/resmessages12.rmsg:48
+#: data/base/messages/resmessages23.rmsg:37
+#: data/base/messages/resmessages3.rmsg:433
 msgid "Research Breakthrough Improves Construction Rates"
 msgstr "研究的突破改善了建筑的速度"
 
-#: data/base/messages/resmessages12.rmsg:57
-#: data/base/messages/resmessages23.rmsg:44
+#: data/base/messages/resmessages12.rmsg:49
+#: data/base/messages/resmessages23.rmsg:38
 msgid "Improved Engineering Techniques"
 msgstr "改善工程科技"
 
-#: data/base/messages/resmessages12.rmsg:58
-#: data/base/messages/resmessages23.rmsg:45
-#: data/base/messages/resmessages3.rmsg:513
+#: data/base/messages/resmessages12.rmsg:50
+#: data/base/messages/resmessages23.rmsg:39
+#: data/base/messages/resmessages3.rmsg:435
 msgid "Increases construction speed"
 msgstr "增加建筑速度"
 
-#: data/base/messages/resmessages12.rmsg:59
-#: data/base/messages/resmessages23.rmsg:46
-#: data/base/messages/resmessages3.rmsg:514
+#: data/base/messages/resmessages12.rmsg:51
+#: data/base/messages/resmessages23.rmsg:40
+#: data/base/messages/resmessages3.rmsg:436
 #, fuzzy
 msgid "All trucks upgraded automatically"
 msgstr "自动升级所有火箭系武器"
 
-#: data/base/messages/resmessages12.rmsg:69
+#: data/base/messages/resmessages12.rmsg:59
 #: data/base/messages/resmessages1.rmsg:4
 msgid "New Systems Turret Available for Design"
 msgstr "可搭载新的系统装备"
 
-#: data/base/messages/resmessages12.rmsg:70
+#: data/base/messages/resmessages12.rmsg:60
 msgid "Counter-battery turret detects enemy indirect fire batteries"
 msgstr "反炮兵雷达可以侦测到敌军的非直射型炮兵攻击"
 
-#: data/base/messages/resmessages12.rmsg:71
-#: data/base/messages/resmessagesall.rmsg:97
+#: data/base/messages/resmessages12.rmsg:61
+#: data/base/messages/resmessagesall.rmsg:83
 msgid "Orders assigned indirect fire units to fire at the enemy batteries"
 msgstr "命令指定的非直射武装部队攻击敌军的炮兵部队"
 
-#: data/base/messages/resmessages12.rmsg:72
-#: data/base/messages/resmessagesall.rmsg:98
+#: data/base/messages/resmessages12.rmsg:62
+#: data/base/messages/resmessagesall.rmsg:84
 msgid "Counter-battery fire continues until enemy battery is suppressed"
 msgstr "直到敌军的炮火被压制住为止"
 
-#: data/base/messages/resmessages12.rmsg:82
-#: data/base/messages/resmessages23.rmsg:56
-#: data/base/messages/resmessages3.rmsg:524
+#: data/base/messages/resmessages12.rmsg:70
+#: data/base/messages/resmessages23.rmsg:48
+#: data/base/messages/resmessages3.rmsg:444
 msgid "CB Sensor Improved"
 msgstr "改善反炮兵雷达"
 
-#: data/base/messages/resmessages12.rmsg:83
-#: data/base/messages/resmessages2.rmsg:447
+#: data/base/messages/resmessages12.rmsg:71
+#: data/base/messages/resmessages2.rmsg:379
 #: data/base/messages/strings/resstrings.txt:486
 #: data/mp/messages/strings/resstrings.txt:516
 msgid "New fire detection systems"
 msgstr "新的火焰侦测系统"
 
-#: data/base/messages/resmessages12.rmsg:84
-#: data/base/messages/resmessages23.rmsg:58
-#: data/base/messages/resmessages3.rmsg:526
+#: data/base/messages/resmessages12.rmsg:72
+#: data/base/messages/resmessages23.rmsg:50
+#: data/base/messages/resmessages3.rmsg:446
 msgid "Extends CB Range"
 msgstr "延伸反炮兵雷达测距离"
 
-#: data/base/messages/resmessages12.rmsg:85
-#: data/base/messages/resmessages23.rmsg:59
-#: data/base/messages/resmessages3.rmsg:527
+#: data/base/messages/resmessages12.rmsg:73
+#: data/base/messages/resmessages23.rmsg:51
+#: data/base/messages/resmessages3.rmsg:447
 msgid "All CB sensors upgraded automatically"
 msgstr "所有反炮兵雷达自动升级"
 
-#: data/base/messages/resmessages12.rmsg:95
-#: data/base/messages/resmessages12.rmsg:212
-#: data/base/messages/resmessages12.rmsg:225
-#: data/base/messages/resmessages1.rmsg:576
-#: data/base/messages/resmessages3.rmsg:875
-#: data/base/messages/resmessages3.rmsg:888
-#: data/base/messages/resmessagesall.rmsg:173
+#: data/base/messages/resmessages12.rmsg:81
+#: data/base/messages/resmessages12.rmsg:180
+#: data/base/messages/resmessages12.rmsg:191
+#: data/base/messages/resmessages1.rmsg:488
+#: data/base/messages/resmessages3.rmsg:741
+#: data/base/messages/resmessages3.rmsg:752
+#: data/base/messages/resmessagesall.rmsg:147
 msgid "Cannon Upgrade"
 msgstr "加农炮武器升级"
 
-#: data/base/messages/resmessages12.rmsg:96
+#: data/base/messages/resmessages12.rmsg:82
 msgid "Determines range to target"
 msgstr "侦测至目标的射程"
 
-#: data/base/messages/resmessages12.rmsg:97
-#: data/base/messages/resmessagesall.rmsg:175
+#: data/base/messages/resmessages12.rmsg:83
+#: data/base/messages/resmessagesall.rmsg:149
 msgid "Increases Cannon accuracy"
 msgstr "增加加农炮系武器准确率"
 
-#: data/base/messages/resmessages12.rmsg:98
-#: data/base/messages/resmessages12.rmsg:215
-#: data/base/messages/resmessages12.rmsg:228
-#: data/base/messages/resmessages1.rmsg:579
-#: data/base/messages/resmessages3.rmsg:878
-#: data/base/messages/resmessages3.rmsg:891
-#: data/base/messages/resmessagesall.rmsg:176
+#: data/base/messages/resmessages12.rmsg:84
+#: data/base/messages/resmessages12.rmsg:183
+#: data/base/messages/resmessages12.rmsg:194
+#: data/base/messages/resmessages1.rmsg:491
+#: data/base/messages/resmessages3.rmsg:744
+#: data/base/messages/resmessages3.rmsg:755
+#: data/base/messages/resmessagesall.rmsg:150
 msgid "All cannons upgraded automatically"
 msgstr "自动升级所有加农炮系武器"
 
-#: data/base/messages/resmessages12.rmsg:108
-#: data/base/messages/resmessages1.rmsg:602
-#: data/base/messages/resmessages2.rmsg:784
+#: data/base/messages/resmessages12.rmsg:92
+#: data/base/messages/resmessages1.rmsg:510
+#: data/base/messages/resmessages2.rmsg:664
 #: data/base/messages/strings/resstrings.txt:765
 #: data/mp/messages/strings/resstrings.txt:804
 msgid "Flamer Upgrade"
 msgstr "火焰喷射升级"
 
-#: data/base/messages/resmessages12.rmsg:109
-#: data/base/messages/resmessages12.rmsg:213
-#: data/base/messages/resmessages2.rmsg:863
+#: data/base/messages/resmessages12.rmsg:93
+#: data/base/messages/resmessages12.rmsg:181
+#: data/base/messages/resmessages2.rmsg:731
 #: data/base/messages/strings/resstrings.txt:810
 #: data/mp/messages/strings/resstrings.txt:851
 msgid "Automatic loading mechanism replaces manual loader"
 msgstr "自动化装载机构取代人工装载弹药"
 
-#: data/base/messages/resmessages12.rmsg:110
+#: data/base/messages/resmessages12.rmsg:94
 msgid "Increases Flamer ROF"
 msgstr "增加火焰喷射射速"
 
-#: data/base/messages/resmessages12.rmsg:111
-#: data/base/messages/resmessages1.rmsg:605
-#: data/base/messages/resmessages2.rmsg:787
+#: data/base/messages/resmessages12.rmsg:95
+#: data/base/messages/resmessages1.rmsg:513
+#: data/base/messages/resmessages2.rmsg:667
 #: data/base/messages/strings/resstrings.txt:768
 #: data/mp/messages/strings/resstrings.txt:807
 msgid "All flamers upgraded automatically"
 msgstr "自动升级所有火焰喷射系武器"
 
-#: data/base/messages/resmessages12.rmsg:121
-#: data/base/messages/resmessages1.rmsg:537
-#: data/base/messages/resmessages1.rmsg:550
-#: data/base/messages/resmessages1.rmsg:563
-#: data/base/messages/resmessages1.rmsg:589
-#: data/base/messages/resmessages1.rmsg:615
-#: data/base/messages/resmessages1.rmsg:628
-#: data/base/messages/resmessages23.rmsg:212
-#: data/base/messages/resmessages2.rmsg:745
-#: data/base/messages/resmessages2.rmsg:758
-#: data/base/messages/resmessages2.rmsg:771
+#: data/base/messages/resmessages12.rmsg:103
+#: data/base/messages/resmessages1.rmsg:455
+#: data/base/messages/resmessages1.rmsg:466
+#: data/base/messages/resmessages1.rmsg:477
+#: data/base/messages/resmessages1.rmsg:499
+#: data/base/messages/resmessages1.rmsg:521
+#: data/base/messages/resmessages1.rmsg:532
+#: data/base/messages/resmessages23.rmsg:180
+#: data/base/messages/resmessages2.rmsg:631
+#: data/base/messages/resmessages2.rmsg:642
+#: data/base/messages/resmessages2.rmsg:653
 #: data/base/messages/strings/resstrings.txt:729
 #: data/base/messages/strings/resstrings.txt:735
 #: data/base/messages/strings/resstrings.txt:757
@@ -491,46 +491,46 @@ msgstr "自动升级所有火焰喷射系武器"
 msgid "New Weapon Turret Available"
 msgstr "可搭载新的武器装备"
 
-#: data/base/messages/resmessages12.rmsg:122
+#: data/base/messages/resmessages12.rmsg:104
 msgid ".50-calibre heavy machinegun"
 msgstr "口径0.5英寸、重型机枪"
 
-#: data/base/messages/resmessages12.rmsg:123
-#: data/base/messages/resmessages1.rmsg:617
-#: data/base/messages/resmessages1.rmsg:630
-#: data/base/messages/resmessages23.rmsg:214
+#: data/base/messages/resmessages12.rmsg:105
+#: data/base/messages/resmessages1.rmsg:523
+#: data/base/messages/resmessages1.rmsg:534
+#: data/base/messages/resmessages23.rmsg:182
 msgid "Best Targets: Infantry, base structures, wheeled vehicles"
 msgstr "最佳目标：步兵、基本建筑物与轮式坦克"
 
-#: data/base/messages/resmessages12.rmsg:124
-#: data/base/messages/resmessages1.rmsg:45
-#: data/base/messages/resmessages1.rmsg:58
-#: data/base/messages/resmessages1.rmsg:71
-#: data/base/messages/resmessages1.rmsg:84
-#: data/base/messages/resmessages1.rmsg:488
-#: data/base/messages/resmessages1.rmsg:540
-#: data/base/messages/resmessages1.rmsg:553
-#: data/base/messages/resmessages2.rmsg:32
-#: data/base/messages/resmessages2.rmsg:45
-#: data/base/messages/resmessages2.rmsg:592
-#: data/base/messages/resmessages2.rmsg:605
-#: data/base/messages/resmessages2.rmsg:618
-#: data/base/messages/resmessages2.rmsg:631
-#: data/base/messages/resmessages2.rmsg:683
-#: data/base/messages/resmessages2.rmsg:696
-#: data/base/messages/resmessages3.rmsg:97
-#: data/base/messages/resmessages3.rmsg:110
-#: data/base/messages/resmessages3.rmsg:123
-#: data/base/messages/resmessages3.rmsg:136
+#: data/base/messages/resmessages12.rmsg:106
+#: data/base/messages/resmessages1.rmsg:39
+#: data/base/messages/resmessages1.rmsg:50
+#: data/base/messages/resmessages1.rmsg:61
+#: data/base/messages/resmessages1.rmsg:72
+#: data/base/messages/resmessages1.rmsg:414
+#: data/base/messages/resmessages1.rmsg:458
+#: data/base/messages/resmessages1.rmsg:469
+#: data/base/messages/resmessages2.rmsg:28
+#: data/base/messages/resmessages2.rmsg:39
+#: data/base/messages/resmessages2.rmsg:502
+#: data/base/messages/resmessages2.rmsg:513
+#: data/base/messages/resmessages2.rmsg:524
+#: data/base/messages/resmessages2.rmsg:535
+#: data/base/messages/resmessages2.rmsg:579
+#: data/base/messages/resmessages2.rmsg:590
+#: data/base/messages/resmessages3.rmsg:83
+#: data/base/messages/resmessages3.rmsg:94
+#: data/base/messages/resmessages3.rmsg:105
+#: data/base/messages/resmessages3.rmsg:116
+#: data/base/messages/resmessages3.rmsg:127
+#: data/base/messages/resmessages3.rmsg:138
 #: data/base/messages/resmessages3.rmsg:149
-#: data/base/messages/resmessages3.rmsg:162
-#: data/base/messages/resmessages3.rmsg:175
-#: data/base/messages/resmessages3.rmsg:188
-#: data/base/messages/resmessages3.rmsg:201
-#: data/base/messages/resmessages3.rmsg:943
-#: data/base/messages/resmessages3.rmsg:956
-#: data/base/messages/resmessages3.rmsg:1203
-#: data/base/messages/resmessages3.rmsg:1216
+#: data/base/messages/resmessages3.rmsg:160
+#: data/base/messages/resmessages3.rmsg:171
+#: data/base/messages/resmessages3.rmsg:799
+#: data/base/messages/resmessages3.rmsg:810
+#: data/base/messages/resmessages3.rmsg:1019
+#: data/base/messages/resmessages3.rmsg:1030
 #: data/base/messages/strings/resstrings.txt:51
 #: data/base/messages/strings/resstrings.txt:67
 #: data/base/messages/strings/resstrings.txt:79
@@ -554,14 +554,14 @@ msgstr "最佳目标：步兵、基本建筑物与轮式坦克"
 msgid "Body Points: Medium"
 msgstr "HP：中"
 
-#: data/base/messages/resmessages12.rmsg:134
-#: data/base/messages/resmessages1.rmsg:641
-#: data/base/messages/resmessages1.rmsg:654
-#: data/base/messages/resmessages23.rmsg:173
-#: data/base/messages/resmessages2.rmsg:875
-#: data/base/messages/resmessages2.rmsg:888
-#: data/base/messages/resmessages3.rmsg:1005
-#: data/base/messages/resmessages3.rmsg:1018
+#: data/base/messages/resmessages12.rmsg:114
+#: data/base/messages/resmessages1.rmsg:543
+#: data/base/messages/resmessages1.rmsg:554
+#: data/base/messages/resmessages23.rmsg:147
+#: data/base/messages/resmessages2.rmsg:741
+#: data/base/messages/resmessages2.rmsg:752
+#: data/base/messages/resmessages3.rmsg:851
+#: data/base/messages/resmessages3.rmsg:862
 #: data/base/messages/strings/resstrings.txt:845
 #: data/base/messages/strings/resstrings.txt:857
 #: data/mp/messages/strings/resstrings.txt:888
@@ -569,26 +569,26 @@ msgstr "HP：中"
 msgid "Machinegun Upgrade"
 msgstr "机枪系武器升级"
 
-#: data/base/messages/resmessages12.rmsg:135
+#: data/base/messages/resmessages12.rmsg:115
 msgid "Chaingun mechanism replaces belt-feed"
 msgstr "链枪机构取代旧有的传送"
 
-#: data/base/messages/resmessages12.rmsg:136
-#: data/base/messages/resmessages23.rmsg:175
-#: data/base/messages/resmessages2.rmsg:890
+#: data/base/messages/resmessages12.rmsg:116
+#: data/base/messages/resmessages23.rmsg:149
+#: data/base/messages/resmessages2.rmsg:754
 #: data/base/messages/strings/resstrings.txt:859
 #: data/mp/messages/strings/resstrings.txt:902
 msgid "Increases Machinegun ROF"
 msgstr "增加机枪系武器射速"
 
-#: data/base/messages/resmessages12.rmsg:137
-#: data/base/messages/resmessages1.rmsg:644
-#: data/base/messages/resmessages1.rmsg:657
-#: data/base/messages/resmessages23.rmsg:176
-#: data/base/messages/resmessages2.rmsg:878
-#: data/base/messages/resmessages2.rmsg:891
-#: data/base/messages/resmessages3.rmsg:1008
-#: data/base/messages/resmessages3.rmsg:1021
+#: data/base/messages/resmessages12.rmsg:117
+#: data/base/messages/resmessages1.rmsg:546
+#: data/base/messages/resmessages1.rmsg:557
+#: data/base/messages/resmessages23.rmsg:150
+#: data/base/messages/resmessages2.rmsg:744
+#: data/base/messages/resmessages2.rmsg:755
+#: data/base/messages/resmessages3.rmsg:854
+#: data/base/messages/resmessages3.rmsg:865
 #: data/base/messages/strings/resstrings.txt:848
 #: data/base/messages/strings/resstrings.txt:860
 #: data/mp/messages/strings/resstrings.txt:891
@@ -596,13 +596,13 @@ msgstr "增加机枪系武器射速"
 msgid "All machineguns upgraded automatically"
 msgstr "自动升级所有机枪系武器"
 
-#: data/base/messages/resmessages12.rmsg:147
-#: data/base/messages/resmessages1.rmsg:667
-#: data/base/messages/resmessages23.rmsg:199
-#: data/base/messages/resmessages2.rmsg:797
-#: data/base/messages/resmessages2.rmsg:810
-#: data/base/messages/resmessages2.rmsg:823
-#: data/base/messages/resmessages2.rmsg:901
+#: data/base/messages/resmessages12.rmsg:125
+#: data/base/messages/resmessages1.rmsg:565
+#: data/base/messages/resmessages23.rmsg:169
+#: data/base/messages/resmessages2.rmsg:675
+#: data/base/messages/resmessages2.rmsg:686
+#: data/base/messages/resmessages2.rmsg:697
+#: data/base/messages/resmessages2.rmsg:763
 #: data/base/messages/strings/resstrings.txt:773
 #: data/base/messages/strings/resstrings.txt:779
 #: data/base/messages/strings/resstrings.txt:787
@@ -614,171 +614,171 @@ msgstr "自动升级所有机枪系武器"
 msgid "New Indirect Fire Weapon Available"
 msgstr "可使用新的非直射型武器"
 
-#: data/base/messages/resmessages12.rmsg:148
-#: data/base/messages/resmessages2.rmsg:902
+#: data/base/messages/resmessages12.rmsg:126
+#: data/base/messages/resmessages2.rmsg:764
 #: data/base/messages/strings/resstrings.txt:892
 #: data/mp/messages/strings/resstrings.txt:935
 msgid "May be assigned to a sensor"
 msgstr "可指派给雷达导引"
 
-#: data/base/messages/resmessages12.rmsg:149
-#: data/base/messages/resmessages1.rmsg:669
-#: data/base/messages/resmessages2.rmsg:903
+#: data/base/messages/resmessages12.rmsg:127
+#: data/base/messages/resmessages1.rmsg:567
+#: data/base/messages/resmessages2.rmsg:765
 #: data/base/messages/strings/resstrings.txt:893
 #: data/mp/messages/strings/resstrings.txt:936
 msgid "Best Targets: Base structures, infantry, wheeled vehicles"
 msgstr "最佳目标：基本建筑物、步兵及轮式坦克"
 
-#: data/base/messages/resmessages12.rmsg:150
-#: data/base/messages/resmessages12.rmsg:189
-#: data/base/messages/resmessages12.rmsg:254
-#: data/base/messages/resmessages12.rmsg:267
-#: data/base/messages/resmessages1.rmsg:670
-#: data/base/messages/resmessages1.rmsg:696
-#: data/base/messages/resmessages2.rmsg:904
-#: data/base/messages/resmessages3.rmsg:1034
-#: data/base/messages/resmessages3.rmsg:1047
-#: data/base/messages/resmessages3.rmsg:1099
-#: data/base/messages/resmessages3.rmsg:1112
-#: data/base/messages/resmessages3.rmsg:1125
-#: data/base/messages/resmessages3.rmsg:1138
-#: data/base/messages/resmessagesall.rmsg:150
-#: data/base/messages/resmessagesall.rmsg:163
+#: data/base/messages/resmessages12.rmsg:128
+#: data/base/messages/resmessages12.rmsg:161
+#: data/base/messages/resmessages12.rmsg:216
+#: data/base/messages/resmessages12.rmsg:227
+#: data/base/messages/resmessages1.rmsg:568
+#: data/base/messages/resmessages1.rmsg:590
+#: data/base/messages/resmessages2.rmsg:766
+#: data/base/messages/resmessages3.rmsg:876
+#: data/base/messages/resmessages3.rmsg:887
+#: data/base/messages/resmessages3.rmsg:931
+#: data/base/messages/resmessages3.rmsg:942
+#: data/base/messages/resmessages3.rmsg:953
+#: data/base/messages/resmessages3.rmsg:964
+#: data/base/messages/resmessagesall.rmsg:128
+#: data/base/messages/resmessagesall.rmsg:139
 #: data/base/messages/strings/resstrings.txt:894
 #: data/mp/messages/strings/resstrings.txt:937
 msgid "Body Points: Very Low"
 msgstr "HP：非常低"
 
-#: data/base/messages/resmessages12.rmsg:160
-#: data/base/messages/resmessages12.rmsg:173
-#: data/base/messages/resmessages1.rmsg:680
-#: data/base/messages/resmessages23.rmsg:186
-#: data/base/messages/resmessages2.rmsg:914
-#: data/base/messages/resmessages3.rmsg:1174
-#: data/base/messages/resmessages3.rmsg:1187
+#: data/base/messages/resmessages12.rmsg:136
+#: data/base/messages/resmessages12.rmsg:147
+#: data/base/messages/resmessages1.rmsg:576
+#: data/base/messages/resmessages23.rmsg:158
+#: data/base/messages/resmessages2.rmsg:774
+#: data/base/messages/resmessages3.rmsg:994
+#: data/base/messages/resmessages3.rmsg:1005
 #: data/base/messages/strings/resstrings.txt:905
 #: data/mp/messages/strings/resstrings.txt:950
 msgid "Mortar Upgrade"
 msgstr "迫击炮升级"
 
-#: data/base/messages/resmessages12.rmsg:161
+#: data/base/messages/resmessages12.rmsg:137
 msgid "Targeting systems compensate for distance and weather conditions"
 msgstr "目标锁定系统会自动运算目标的距离并补偿天气所造成的误差"
 
-#: data/base/messages/resmessages12.rmsg:162
-#: data/base/messages/resmessages23.rmsg:188
-#: data/base/messages/resmessages3.rmsg:1176
+#: data/base/messages/resmessages12.rmsg:138
+#: data/base/messages/resmessages23.rmsg:160
+#: data/base/messages/resmessages3.rmsg:996
 msgid "Increases Mortar accuracy"
 msgstr "增加迫击炮准确率"
 
-#: data/base/messages/resmessages12.rmsg:163
-#: data/base/messages/resmessages12.rmsg:176
-#: data/base/messages/resmessages1.rmsg:683
-#: data/base/messages/resmessages23.rmsg:189
-#: data/base/messages/resmessages2.rmsg:917
-#: data/base/messages/resmessages3.rmsg:1177
-#: data/base/messages/resmessages3.rmsg:1190
+#: data/base/messages/resmessages12.rmsg:139
+#: data/base/messages/resmessages12.rmsg:150
+#: data/base/messages/resmessages1.rmsg:579
+#: data/base/messages/resmessages23.rmsg:161
+#: data/base/messages/resmessages2.rmsg:777
+#: data/base/messages/resmessages3.rmsg:997
+#: data/base/messages/resmessages3.rmsg:1008
 #: data/base/messages/strings/resstrings.txt:908
 #: data/mp/messages/strings/resstrings.txt:953
 msgid "All mortars upgraded automatically"
 msgstr "自动升级所有迫击炮系武器"
 
-#: data/base/messages/resmessages12.rmsg:174
+#: data/base/messages/resmessages12.rmsg:148
 msgid "Automatic loader replaces manual feed"
 msgstr "自动化装载机构取代人工装载弹药"
 
-#: data/base/messages/resmessages12.rmsg:175
-#: data/base/messages/resmessages3.rmsg:1189
+#: data/base/messages/resmessages12.rmsg:149
+#: data/base/messages/resmessages3.rmsg:1007
 msgid "Increases Mortar ROF"
 msgstr "增加迫击炮射速"
 
-#: data/base/messages/resmessages12.rmsg:186
-#: data/base/messages/resmessages12.rmsg:251
-#: data/base/messages/resmessages12.rmsg:264
-#: data/base/messages/resmessages1.rmsg:693
-#: data/base/messages/resmessagesall.rmsg:147
-#: data/base/messages/resmessagesall.rmsg:160
+#: data/base/messages/resmessages12.rmsg:158
+#: data/base/messages/resmessages12.rmsg:213
+#: data/base/messages/resmessages12.rmsg:224
+#: data/base/messages/resmessages1.rmsg:587
+#: data/base/messages/resmessagesall.rmsg:125
+#: data/base/messages/resmessagesall.rmsg:136
 msgid "New Rocket Available"
 msgstr "可搭载新的火箭系武器"
 
-#: data/base/messages/resmessages12.rmsg:187
+#: data/base/messages/resmessages12.rmsg:159
 msgid "Rocket artillery; can be assigned to a sensor"
 msgstr "火箭炮部队，可指派给雷达导引"
 
-#: data/base/messages/resmessages12.rmsg:188
+#: data/base/messages/resmessages12.rmsg:160
 msgid "Best Targets: Vehicles and Emplacements"
 msgstr "最佳目标：坦克与炮台"
 
-#: data/base/messages/resmessages12.rmsg:199
-#: data/base/messages/resmessages12.rmsg:238
-#: data/base/messages/resmessages1.rmsg:745
-#: data/base/messages/resmessages1.rmsg:758
-#: data/base/messages/resmessages2.rmsg:940
-#: data/base/messages/resmessagesall.rmsg:134
+#: data/base/messages/resmessages12.rmsg:169
+#: data/base/messages/resmessages12.rmsg:202
+#: data/base/messages/resmessages1.rmsg:631
+#: data/base/messages/resmessages1.rmsg:642
+#: data/base/messages/resmessages2.rmsg:796
+#: data/base/messages/resmessagesall.rmsg:114
 #: data/base/messages/strings/resstrings.txt:965
 #: data/mp/messages/strings/resstrings.txt:1010
 msgid "Rocket Upgrade"
 msgstr "火箭系武器升级"
 
-#: data/base/messages/resmessages12.rmsg:200
+#: data/base/messages/resmessages12.rmsg:170
 msgid "Autoloader increases reload rate"
 msgstr "自动装载系统增加武器重新装载弹药的速率"
 
-#: data/base/messages/resmessages12.rmsg:201
+#: data/base/messages/resmessages12.rmsg:171
 msgid "Increases Rocket ROF"
 msgstr "增加火箭系武器射速"
 
-#: data/base/messages/resmessages12.rmsg:202
-#: data/base/messages/resmessages12.rmsg:241
-#: data/base/messages/resmessages1.rmsg:748
-#: data/base/messages/resmessages1.rmsg:761
-#: data/base/messages/resmessages2.rmsg:943
-#: data/base/messages/resmessagesall.rmsg:137
+#: data/base/messages/resmessages12.rmsg:172
+#: data/base/messages/resmessages12.rmsg:205
+#: data/base/messages/resmessages1.rmsg:634
+#: data/base/messages/resmessages1.rmsg:645
+#: data/base/messages/resmessages2.rmsg:799
+#: data/base/messages/resmessagesall.rmsg:117
 #: data/base/messages/strings/resstrings.txt:968
 #: data/mp/messages/strings/resstrings.txt:1013
 msgid "All rockets upgraded automatically"
 msgstr "自动升级所有火箭系武器"
 
-#: data/base/messages/resmessages12.rmsg:214
-#: data/base/messages/resmessages3.rmsg:890
+#: data/base/messages/resmessages12.rmsg:182
+#: data/base/messages/resmessages3.rmsg:754
 msgid "Increases Cannon ROF"
 msgstr "增加加农炮系武器攻速"
 
-#: data/base/messages/resmessages12.rmsg:226
+#: data/base/messages/resmessages12.rmsg:192
 msgid "Armor-Piercing Fin-Stabilized Discarding Sabot"
 msgstr "尾翼稳定脱壳穿甲弹(APFDS)"
 
-#: data/base/messages/resmessages12.rmsg:227
-#: data/base/messages/resmessages1.rmsg:578
-#: data/base/messages/resmessages3.rmsg:877
+#: data/base/messages/resmessages12.rmsg:193
+#: data/base/messages/resmessages1.rmsg:490
+#: data/base/messages/resmessages3.rmsg:743
 msgid "Increases Cannon damage"
 msgstr "增加加农炮系武器伤害"
 
-#: data/base/messages/resmessages12.rmsg:239
+#: data/base/messages/resmessages12.rmsg:203
 msgid "Rocket tracks the laser designator to the target"
 msgstr "火箭会跟随激光指向器的轨迹攻击目标"
 
-#: data/base/messages/resmessages12.rmsg:240
-#: data/base/messages/resmessages1.rmsg:747
-#: data/base/messages/resmessagesall.rmsg:136
+#: data/base/messages/resmessages12.rmsg:204
+#: data/base/messages/resmessages1.rmsg:633
+#: data/base/messages/resmessagesall.rmsg:116
 msgid "Increases Rocket accuracy"
 msgstr "增加火箭系武器准确率"
 
-#: data/base/messages/resmessages12.rmsg:252
+#: data/base/messages/resmessages12.rmsg:214
 msgid "Heavy anti-tank rocket"
 msgstr "重型反坦克火箭"
 
-#: data/base/messages/resmessages12.rmsg:253
-#: data/base/messages/resmessages1.rmsg:539
-#: data/base/messages/resmessages1.rmsg:552
-#: data/base/messages/resmessages1.rmsg:565
-#: data/base/messages/resmessages2.rmsg:747
-#: data/base/messages/resmessages2.rmsg:760
-#: data/base/messages/resmessages3.rmsg:1033
-#: data/base/messages/resmessages3.rmsg:1202
-#: data/base/messages/resmessages3.rmsg:1215
-#: data/base/messages/resmessages3.rmsg:1228
-#: data/base/messages/resmessagesall.rmsg:149
+#: data/base/messages/resmessages12.rmsg:215
+#: data/base/messages/resmessages1.rmsg:457
+#: data/base/messages/resmessages1.rmsg:468
+#: data/base/messages/resmessages1.rmsg:479
+#: data/base/messages/resmessages2.rmsg:633
+#: data/base/messages/resmessages2.rmsg:644
+#: data/base/messages/resmessages3.rmsg:875
+#: data/base/messages/resmessages3.rmsg:1018
+#: data/base/messages/resmessages3.rmsg:1029
+#: data/base/messages/resmessages3.rmsg:1040
+#: data/base/messages/resmessagesall.rmsg:127
 #: data/base/messages/strings/resstrings.txt:731
 #: data/base/messages/strings/resstrings.txt:737
 #: data/mp/messages/strings/resstrings.txt:766
@@ -786,11 +786,11 @@ msgstr "重型反坦克火箭"
 msgid "Best Targets: Vehicles"
 msgstr "最佳目标：坦克"
 
-#: data/base/messages/resmessages12.rmsg:265
+#: data/base/messages/resmessages12.rmsg:225
 msgid "Fires salvoes of mini-rockets"
 msgstr "发射多管齐射式的迷你火箭"
 
-#: data/base/messages/resmessages12.rmsg:266
+#: data/base/messages/resmessages12.rmsg:226
 msgid "Best Targets: Base structures"
 msgstr "最佳目标：基本建筑物"
 
@@ -803,64 +803,64 @@ msgid "Commander leads groups acts as factory delivery point"
 msgstr "指挥官车可以统领部队攻击目标，回到修理工厂修理完成会自动归队"
 
 #: data/base/messages/resmessages1.rmsg:7
-#: data/base/messages/resmessages1.rmsg:514
-#: data/base/messages/resmessages1.rmsg:566
-#: data/base/messages/resmessages2.rmsg:761
-#: data/base/messages/resmessages3.rmsg:1229
+#: data/base/messages/resmessages1.rmsg:436
+#: data/base/messages/resmessages1.rmsg:480
+#: data/base/messages/resmessages2.rmsg:645
+#: data/base/messages/resmessages3.rmsg:1041
 #: data/base/messages/strings/resstrings.txt:738
 #: data/mp/messages/strings/resstrings.txt:773
 msgid "Body Points: High"
 msgstr "HP：高"
 
-#: data/base/messages/resmessages1.rmsg:17
-#: data/base/messages/resmessages3.rmsg:17
-#: data/base/messages/resmessages3.rmsg:30
+#: data/base/messages/resmessages1.rmsg:15
+#: data/base/messages/resmessages3.rmsg:15
+#: data/base/messages/resmessages3.rmsg:26
 msgid "Computer Technology Breakthrough"
 msgstr "电脑系统科技上有所突破"
 
-#: data/base/messages/resmessages1.rmsg:18
+#: data/base/messages/resmessages1.rmsg:16
 msgid "Synaptic Link allows humans to interface directly with computers"
 msgstr "突触科技让人类可以与电脑接触，进而控制"
 
-#: data/base/messages/resmessages1.rmsg:19
+#: data/base/messages/resmessages1.rmsg:17
 msgid "Cyborgs can now be researched"
 msgstr "可研发生化人步兵"
 
-#: data/base/messages/resmessages1.rmsg:20
+#: data/base/messages/resmessages1.rmsg:18
 msgid "New research options available"
 msgstr "可研发新的科技"
 
-#: data/base/messages/resmessages1.rmsg:30
-#: data/base/messages/resmessages2.rmsg:17
-#: data/base/messages/resmessages3.rmsg:69
-#: data/base/messages/resmessages3.rmsg:82
+#: data/base/messages/resmessages1.rmsg:26
+#: data/base/messages/resmessages2.rmsg:15
+#: data/base/messages/resmessages3.rmsg:59
+#: data/base/messages/resmessages3.rmsg:70
 #: data/base/messages/strings/resstrings.txt:31
 #: data/mp/messages/strings/resstrings.txt:35
 msgid "Cyborg Materials Improved"
 msgstr "改善生化人装甲材料"
 
-#: data/base/messages/resmessages1.rmsg:31
-#: data/base/messages/resmessages1.rmsg:473
+#: data/base/messages/resmessages1.rmsg:27
+#: data/base/messages/resmessages1.rmsg:401
 msgid "Layered composite alloys and energy-absorbing fibres"
 msgstr "层状复合合金和能量吸收纤维"
 
-#: data/base/messages/resmessages1.rmsg:32
-#: data/base/messages/resmessages2.rmsg:19
-#: data/base/messages/resmessages3.rmsg:71
-#: data/base/messages/resmessages3.rmsg:84
+#: data/base/messages/resmessages1.rmsg:28
+#: data/base/messages/resmessages2.rmsg:17
+#: data/base/messages/resmessages3.rmsg:61
+#: data/base/messages/resmessages3.rmsg:72
 #: data/base/messages/strings/resstrings.txt:33
 #: data/mp/messages/strings/resstrings.txt:37
 msgid "Increases Kinetic Armor and Body Points"
 msgstr "增加热能防御及HP"
 
-#: data/base/messages/resmessages1.rmsg:33
+#: data/base/messages/resmessages1.rmsg:29
 #: data/base/messages/resmessages23.rmsg:7
 #: data/base/messages/resmessages2.rmsg:7
-#: data/base/messages/resmessages2.rmsg:20
+#: data/base/messages/resmessages2.rmsg:18
 #: data/base/messages/resmessages3.rmsg:7
-#: data/base/messages/resmessages3.rmsg:59
-#: data/base/messages/resmessages3.rmsg:72
-#: data/base/messages/resmessages3.rmsg:85
+#: data/base/messages/resmessages3.rmsg:51
+#: data/base/messages/resmessages3.rmsg:62
+#: data/base/messages/resmessages3.rmsg:73
 #: data/base/messages/strings/resstrings.txt:34
 #: data/base/messages/strings/resstrings.txt:44
 #: data/mp/messages/strings/resstrings.txt:38
@@ -868,16 +868,16 @@ msgstr "增加热能防御及HP"
 msgid "All Cyborgs upgraded automatically"
 msgstr "自动升级所有生化人步兵"
 
-#: data/base/messages/resmessages1.rmsg:43
-#: data/base/messages/resmessages1.rmsg:56
-#: data/base/messages/resmessages1.rmsg:69
-#: data/base/messages/resmessages1.rmsg:82
-#: data/base/messages/resmessages2.rmsg:30
-#: data/base/messages/resmessages2.rmsg:43
-#: data/base/messages/resmessages3.rmsg:95
-#: data/base/messages/resmessages3.rmsg:108
-#: data/base/messages/resmessages3.rmsg:121
-#: data/base/messages/resmessages3.rmsg:134
+#: data/base/messages/resmessages1.rmsg:37
+#: data/base/messages/resmessages1.rmsg:48
+#: data/base/messages/resmessages1.rmsg:59
+#: data/base/messages/resmessages1.rmsg:70
+#: data/base/messages/resmessages2.rmsg:26
+#: data/base/messages/resmessages2.rmsg:37
+#: data/base/messages/resmessages3.rmsg:81
+#: data/base/messages/resmessages3.rmsg:92
+#: data/base/messages/resmessages3.rmsg:103
+#: data/base/messages/resmessages3.rmsg:114
 #: data/base/messages/strings/resstrings.txt:49
 #: data/base/messages/strings/resstrings.txt:65
 #: data/mp/messages/strings/resstrings.txt:53
@@ -885,24 +885,24 @@ msgstr "自动升级所有生化人步兵"
 msgid "New Cyborg Available"
 msgstr "可生产新的生化人步兵"
 
-#: data/base/messages/resmessages1.rmsg:44
+#: data/base/messages/resmessages1.rmsg:38
 msgid "Armed with Cyborg Machinegun"
 msgstr "装备有机枪之生化人步兵"
 
-#: data/base/messages/resmessages1.rmsg:46
-#: data/base/messages/resmessages1.rmsg:59
-#: data/base/messages/resmessages1.rmsg:72
-#: data/base/messages/resmessages1.rmsg:85
-#: data/base/messages/resmessages2.rmsg:33
-#: data/base/messages/resmessages2.rmsg:46
-#: data/base/messages/resmessages3.rmsg:98
-#: data/base/messages/resmessages3.rmsg:111
-#: data/base/messages/resmessages3.rmsg:124
-#: data/base/messages/resmessages3.rmsg:137
+#: data/base/messages/resmessages1.rmsg:40
+#: data/base/messages/resmessages1.rmsg:51
+#: data/base/messages/resmessages1.rmsg:62
+#: data/base/messages/resmessages1.rmsg:73
+#: data/base/messages/resmessages2.rmsg:29
+#: data/base/messages/resmessages2.rmsg:40
+#: data/base/messages/resmessages3.rmsg:84
+#: data/base/messages/resmessages3.rmsg:95
+#: data/base/messages/resmessages3.rmsg:106
+#: data/base/messages/resmessages3.rmsg:117
+#: data/base/messages/resmessages3.rmsg:128
+#: data/base/messages/resmessages3.rmsg:139
 #: data/base/messages/resmessages3.rmsg:150
-#: data/base/messages/resmessages3.rmsg:163
-#: data/base/messages/resmessages3.rmsg:176
-#: data/base/messages/resmessages3.rmsg:189
+#: data/base/messages/resmessages3.rmsg:161
 #: data/base/messages/strings/resstrings.txt:52
 #: data/base/messages/strings/resstrings.txt:68
 #: data/base/messages/strings/resstrings.txt:80
@@ -914,160 +914,160 @@ msgstr "装备有机枪之生化人步兵"
 msgid "Requires Cyborg factory to produce"
 msgstr "需要生化人工厂才能生产"
 
-#: data/base/messages/resmessages1.rmsg:57
+#: data/base/messages/resmessages1.rmsg:49
 msgid "Armed with Cyborg Cannon"
 msgstr "装备有加农炮之生化人步兵"
 
-#: data/base/messages/resmessages1.rmsg:70
+#: data/base/messages/resmessages1.rmsg:60
 msgid "Armed with Cyborg Flamer"
 msgstr "装备有火焰喷射之生化人步兵"
 
-#: data/base/messages/resmessages1.rmsg:83
+#: data/base/messages/resmessages1.rmsg:71
 msgid "Armed with Lance Anti-Tank rocket"
 msgstr "装备有枪骑兵火箭之生化人步兵"
 
-#: data/base/messages/resmessages1.rmsg:95
-#: data/base/messages/resmessages2.rmsg:56
-#: data/base/messages/resmessages3.rmsg:212
-#: data/base/messages/resmessages3.rmsg:225
+#: data/base/messages/resmessages1.rmsg:81
+#: data/base/messages/resmessages2.rmsg:48
+#: data/base/messages/resmessages3.rmsg:180
+#: data/base/messages/resmessages3.rmsg:191
 #: data/base/messages/strings/resstrings.txt:103
 #: data/mp/messages/strings/resstrings.txt:123
 msgid "Defenses Improved"
 msgstr "改善防御能力"
 
-#: data/base/messages/resmessages1.rmsg:96
+#: data/base/messages/resmessages1.rmsg:82
 msgid "Improved Titanium-reinforced concrete"
 msgstr "改良后的钛钢筋强化混凝土墙"
 
-#: data/base/messages/resmessages1.rmsg:97
+#: data/base/messages/resmessages1.rmsg:83
 msgid "Increases Armour and Body Points"
 msgstr "增加物理防御及HP"
 
-#: data/base/messages/resmessages1.rmsg:98
-#: data/base/messages/resmessages2.rmsg:59
-#: data/base/messages/resmessages3.rmsg:215
-#: data/base/messages/resmessages3.rmsg:228
+#: data/base/messages/resmessages1.rmsg:84
+#: data/base/messages/resmessages2.rmsg:51
+#: data/base/messages/resmessages3.rmsg:183
+#: data/base/messages/resmessages3.rmsg:194
 #: data/base/messages/strings/resstrings.txt:106
 #: data/mp/messages/strings/resstrings.txt:126
 msgid "All defenses and walls upgraded automatically"
 msgstr "自动升级所有防御工事"
 
-#: data/base/messages/resmessages1.rmsg:109
+#: data/base/messages/resmessages1.rmsg:93
 msgid "Steel tower with machinegun"
 msgstr "装备有机枪的钢塔"
 
-#: data/base/messages/resmessages1.rmsg:111
+#: data/base/messages/resmessages1.rmsg:95
 msgid "Defensive Strength: Low"
 msgstr "防御力：低"
 
-#: data/base/messages/resmessages1.rmsg:122
+#: data/base/messages/resmessages1.rmsg:104
 msgid "Armored guard tower with Mini-Pod Rocket"
 msgstr "装备有迷你火箭的防卫塔"
 
-#: data/base/messages/resmessages1.rmsg:135
+#: data/base/messages/resmessages1.rmsg:115
 msgid "Armored bunker with Machinegun"
 msgstr "装备有机枪之碉堡"
 
-#: data/base/messages/resmessages1.rmsg:148
+#: data/base/messages/resmessages1.rmsg:126
 msgid "Armored bunker with Lancer AT rocket"
 msgstr "装备有反坦克火箭（枪骑兵）之碉堡"
 
-#: data/base/messages/resmessages1.rmsg:161
+#: data/base/messages/resmessages1.rmsg:137
 msgid "Armored bunker with Flamer"
 msgstr "装备有火焰喷射之碉堡"
 
-#: data/base/messages/resmessages1.rmsg:174
+#: data/base/messages/resmessages1.rmsg:148
 msgid "Armored bunker with Light Cannon"
 msgstr "装备有轻型加农炮之碉堡"
 
-#: data/base/messages/resmessages1.rmsg:187
+#: data/base/messages/resmessages1.rmsg:159
 msgid "Armored hardpoint with Light Cannon"
 msgstr "装备有轻型加农炮之要塞"
 
-#: data/base/messages/resmessages1.rmsg:200
+#: data/base/messages/resmessages1.rmsg:170
 msgid "Armored hardpoint with Medium Cannon"
 msgstr "装备有中型加农炮之要塞"
 
-#: data/base/messages/resmessages1.rmsg:213
+#: data/base/messages/resmessages1.rmsg:181
 msgid "Armored hardpoint with Heavy Cannon"
 msgstr "装备有重型加农炮之要塞"
 
-#: data/base/messages/resmessages1.rmsg:226
+#: data/base/messages/resmessages1.rmsg:192
 #: data/base/messages/strings/resstrings.txt:324
 #: data/mp/messages/strings/resstrings.txt:352
 msgid "Reinforced concrete tank traps"
 msgstr "强化混凝土筑成的坦克陷阱"
 
-#: data/base/messages/resmessages1.rmsg:227
+#: data/base/messages/resmessages1.rmsg:193
 #: data/base/messages/strings/resstrings.txt:325
 #: data/mp/messages/strings/resstrings.txt:353
 msgid "Prevents enemy movement"
 msgstr "阻止敌军的移动"
 
-#: data/base/messages/resmessages1.rmsg:238
-#: data/base/messages/resmessages1.rmsg:264
-#: data/base/messages/resmessages1.rmsg:290
-#: data/base/messages/resmessagesall.rmsg:17
-#: data/base/messages/resmessagesall.rmsg:30
+#: data/base/messages/resmessages1.rmsg:202
+#: data/base/messages/resmessages1.rmsg:224
+#: data/base/messages/resmessages1.rmsg:246
+#: data/base/messages/resmessagesall.rmsg:15
+#: data/base/messages/resmessagesall.rmsg:26
 msgid "New Base Structure Available"
 msgstr "可建造新的基本建筑"
 
-#: data/base/messages/resmessages1.rmsg:239
+#: data/base/messages/resmessages1.rmsg:203
 msgid "New Repair Facility Repairs Damaged Units"
 msgstr "修理在战斗中受损的单位"
 
-#: data/base/messages/resmessages1.rmsg:240
+#: data/base/messages/resmessages1.rmsg:204
 msgid "Use the Command Console to send units back for repair"
 msgstr "利用战斗单位的控制介面命令受损的单位前往修理厂进行维修"
 
-#: data/base/messages/resmessages1.rmsg:241
+#: data/base/messages/resmessages1.rmsg:205
 msgid "Or select the Repair Facility as a unit's target"
 msgstr "或是选择修理厂当作单位的目标"
 
-#: data/base/messages/resmessages1.rmsg:251
-#: data/base/messages/resmessages2.rmsg:329
-#: data/base/messages/resmessages3.rmsg:420
+#: data/base/messages/resmessages1.rmsg:213
+#: data/base/messages/resmessages2.rmsg:279
+#: data/base/messages/resmessages3.rmsg:356
 #: data/base/messages/strings/resstrings.txt:333
 #: data/mp/messages/strings/resstrings.txt:361
 msgid "Repair Facility Improved"
 msgstr "改善修理工厂"
 
-#: data/base/messages/resmessages1.rmsg:252
+#: data/base/messages/resmessages1.rmsg:214
 msgid "New automated repair techniques"
 msgstr "新的自动化维修技术"
 
-#: data/base/messages/resmessages1.rmsg:253
-#: data/base/messages/resmessages2.rmsg:331
-#: data/base/messages/resmessages3.rmsg:422
+#: data/base/messages/resmessages1.rmsg:215
+#: data/base/messages/resmessages2.rmsg:281
+#: data/base/messages/resmessages3.rmsg:358
 #: data/base/messages/strings/resstrings.txt:335
 #: data/mp/messages/strings/resstrings.txt:363
 #, fuzzy
 msgid "Increases Repair Speed"
 msgstr "增加修理速度"
 
-#: data/base/messages/resmessages1.rmsg:254
-#: data/base/messages/resmessages2.rmsg:332
-#: data/base/messages/resmessages3.rmsg:423
+#: data/base/messages/resmessages1.rmsg:216
+#: data/base/messages/resmessages2.rmsg:282
+#: data/base/messages/resmessages3.rmsg:359
 #: data/base/messages/strings/resstrings.txt:336
 #: data/mp/messages/strings/resstrings.txt:364
 msgid "All repair facilities upgraded automatically"
 msgstr "自动升级所有修理工厂"
 
-#: data/base/messages/resmessages1.rmsg:265
+#: data/base/messages/resmessages1.rmsg:225
 msgid "Enables command turret research"
 msgstr "可开始研发指挥官系统"
 
-#: data/base/messages/resmessages1.rmsg:266
+#: data/base/messages/resmessages1.rmsg:226
 #, fuzzy
 msgid "Directs and collates information for command turrets"
 msgstr "指挥统整指挥官车"
 
-#: data/base/messages/resmessages1.rmsg:267
+#: data/base/messages/resmessages1.rmsg:227
 msgid "Controls up to five commanders"
 msgstr "最多可控制五辆指挥官车"
 
-#: data/base/messages/resmessages1.rmsg:277
-#: data/base/messages/resmessages2.rmsg:342
+#: data/base/messages/resmessages1.rmsg:235
+#: data/base/messages/resmessages2.rmsg:290
 #: data/base/messages/strings/resstrings.txt:347
 #: data/base/messages/strings/resstrings.txt:355
 #: data/mp/messages/strings/resstrings.txt:375
@@ -1075,13 +1075,13 @@ msgstr "最多可控制五辆指挥官车"
 msgid "Cyborg Production Improved"
 msgstr "改善生化人生产速度"
 
-#: data/base/messages/resmessages1.rmsg:278
+#: data/base/messages/resmessages1.rmsg:236
 #: data/base/messages/strings/names.txt:783
 msgid "Automated Cyborg Production"
 msgstr "初级自动化生化人生产"
 
-#: data/base/messages/resmessages1.rmsg:279
-#: data/base/messages/resmessages2.rmsg:344
+#: data/base/messages/resmessages1.rmsg:237
+#: data/base/messages/resmessages2.rmsg:292
 #: data/base/messages/strings/resstrings.txt:349
 #: data/base/messages/strings/resstrings.txt:357
 #: data/mp/messages/strings/resstrings.txt:377
@@ -1089,8 +1089,8 @@ msgstr "初级自动化生化人生产"
 msgid "Increases Cyborg factory output"
 msgstr "增加生化人工厂产能"
 
-#: data/base/messages/resmessages1.rmsg:280
-#: data/base/messages/resmessages2.rmsg:345
+#: data/base/messages/resmessages1.rmsg:238
+#: data/base/messages/resmessages2.rmsg:293
 #: data/base/messages/strings/resstrings.txt:350
 #: data/base/messages/strings/resstrings.txt:358
 #: data/mp/messages/strings/resstrings.txt:378
@@ -1098,7 +1098,7 @@ msgstr "增加生化人工厂产能"
 msgid "All Cyborg factories upgraded automatically"
 msgstr "所有生化人工厂自动升级"
 
-#: data/base/messages/resmessages1.rmsg:291
+#: data/base/messages/resmessages1.rmsg:247
 #: data/base/messages/strings/names.txt:399
 #: data/base/messages/strings/names.txt:782
 #: data/mp/messages/strings/names.txt:398
@@ -1106,39 +1106,39 @@ msgstr "所有生化人工厂自动升级"
 msgid "Cyborg Factory"
 msgstr "生化人步兵工厂"
 
-#: data/base/messages/resmessages1.rmsg:292
+#: data/base/messages/resmessages1.rmsg:248
 msgid "Produces Cyborgs"
 msgstr "生产生化人步兵"
 
-#: data/base/messages/resmessages1.rmsg:293
+#: data/base/messages/resmessages1.rmsg:249
 msgid "Research makes additional Cyborgs available"
 msgstr "持续研发科技可以生产更多种类的生化人步兵"
 
-#: data/base/messages/resmessages1.rmsg:303
-#: data/base/messages/resmessages2.rmsg:394
-#: data/base/messages/resmessages3.rmsg:485
+#: data/base/messages/resmessages1.rmsg:257
+#: data/base/messages/resmessages2.rmsg:334
+#: data/base/messages/resmessages3.rmsg:411
 #: data/base/messages/strings/resstrings.txt:411
 #: data/mp/messages/strings/resstrings.txt:439
 msgid "Production Improved"
 msgstr "改善生产能力"
 
-#: data/base/messages/resmessages1.rmsg:304
+#: data/base/messages/resmessages1.rmsg:258
 msgid "Factory module enables medium and large bodies"
 msgstr "工厂模组让工厂得以生产中量级及更大的车身"
 
-#: data/base/messages/resmessages1.rmsg:305
-#: data/base/messages/resmessages1.rmsg:318
+#: data/base/messages/resmessages1.rmsg:259
+#: data/base/messages/resmessages1.rmsg:270
 #: data/base/messages/strings/resstrings.txt:375
 #: data/mp/messages/strings/resstrings.txt:403
 msgid "Increases factory output"
 msgstr "增加工厂产能"
 
-#: data/base/messages/resmessages1.rmsg:306
+#: data/base/messages/resmessages1.rmsg:260
 msgid "Use a truck to add modules to a factory"
 msgstr "利用工程车将此模组加装在工厂中"
 
-#: data/base/messages/resmessages1.rmsg:316
-#: data/base/messages/resmessages2.rmsg:355
+#: data/base/messages/resmessages1.rmsg:268
+#: data/base/messages/resmessages2.rmsg:301
 #: data/base/messages/strings/resstrings.txt:365
 #: data/base/messages/strings/resstrings.txt:373
 #: data/mp/messages/strings/resstrings.txt:393
@@ -1146,13 +1146,13 @@ msgstr "利用工程车将此模组加装在工厂中"
 msgid "Vehicle Production Improved"
 msgstr "改善车辆生产效能"
 
-#: data/base/messages/resmessages1.rmsg:317
+#: data/base/messages/resmessages1.rmsg:269
 #: data/base/messages/strings/names.txt:794
 msgid "Automated Factory Production"
 msgstr "初级自动化生产工厂"
 
-#: data/base/messages/resmessages1.rmsg:319
-#: data/base/messages/resmessages2.rmsg:358
+#: data/base/messages/resmessages1.rmsg:271
+#: data/base/messages/resmessages2.rmsg:304
 #: data/base/messages/strings/resstrings.txt:368
 #: data/base/messages/strings/resstrings.txt:376
 #: data/mp/messages/strings/resstrings.txt:396
@@ -1160,87 +1160,87 @@ msgstr "初级自动化生产工厂"
 msgid "All vehicle factories upgraded automatically"
 msgstr "自动升级所有车辆工厂"
 
-#: data/base/messages/resmessages1.rmsg:329
+#: data/base/messages/resmessages1.rmsg:279
 msgid "Power Module Available"
 msgstr "可使用能源模组"
 
-#: data/base/messages/resmessages1.rmsg:330
-#: data/base/messages/resmessages23.rmsg:30
-#: data/base/messages/resmessages3.rmsg:433
+#: data/base/messages/resmessages1.rmsg:280
+#: data/base/messages/resmessages23.rmsg:26
+#: data/base/messages/resmessages3.rmsg:367
 msgid "Improved Power Generator Performance"
 msgstr "改善发电厂效能"
 
-#: data/base/messages/resmessages1.rmsg:331
+#: data/base/messages/resmessages1.rmsg:281
 msgid "Burns oil more efficiently"
 msgstr "更有效率的燃烧石油"
 
-#: data/base/messages/resmessages1.rmsg:332
+#: data/base/messages/resmessages1.rmsg:282
 msgid "Use a truck to add the module to a power generator"
 msgstr "利用工程车将此模组加装在发电厂中"
 
-#: data/base/messages/resmessages1.rmsg:342
+#: data/base/messages/resmessages1.rmsg:290
 msgid "Research Module Available"
 msgstr "可使用研发模组"
 
-#: data/base/messages/resmessages1.rmsg:343
+#: data/base/messages/resmessages1.rmsg:291
 msgid "Research module expands research facilities"
 msgstr "研发模组用以扩展研发中心"
 
-#: data/base/messages/resmessages1.rmsg:344
-#: data/base/messages/resmessages1.rmsg:357
-#: data/base/messages/resmessages2.rmsg:370
-#: data/base/messages/resmessages3.rmsg:448
+#: data/base/messages/resmessages1.rmsg:292
+#: data/base/messages/resmessages1.rmsg:303
+#: data/base/messages/resmessages2.rmsg:314
+#: data/base/messages/resmessages3.rmsg:380
 #: data/base/messages/strings/resstrings.txt:391
 #: data/mp/messages/strings/resstrings.txt:419
 msgid "Increases research speed"
 msgstr "增加研发速度"
 
-#: data/base/messages/resmessages1.rmsg:345
+#: data/base/messages/resmessages1.rmsg:293
 msgid "Use a truck to add the module to a research facility"
 msgstr "利用工程车将此模组加装在工厂中"
 
-#: data/base/messages/resmessages1.rmsg:355
-#: data/base/messages/resmessages2.rmsg:368
-#: data/base/messages/resmessages3.rmsg:446
+#: data/base/messages/resmessages1.rmsg:301
+#: data/base/messages/resmessages2.rmsg:312
+#: data/base/messages/resmessages3.rmsg:378
 #: data/base/messages/strings/resstrings.txt:389
 #: data/mp/messages/strings/resstrings.txt:417
 msgid "Research Improved"
 msgstr "改善研发科技能力"
 
-#: data/base/messages/resmessages1.rmsg:356
+#: data/base/messages/resmessages1.rmsg:302
 msgid "Synaptic link data analysis"
 msgstr "突触连结资料分析"
 
-#: data/base/messages/resmessages1.rmsg:358
-#: data/base/messages/resmessages2.rmsg:371
-#: data/base/messages/resmessages3.rmsg:449
+#: data/base/messages/resmessages1.rmsg:304
+#: data/base/messages/resmessages2.rmsg:315
+#: data/base/messages/resmessages3.rmsg:381
 #: data/base/messages/strings/resstrings.txt:392
 #: data/mp/messages/strings/resstrings.txt:420
 msgid "All research facilities upgraded automatically"
 msgstr "自动升级所有研发中心"
 
-#: data/base/messages/resmessages1.rmsg:368
-#: data/base/messages/resmessages2.rmsg:381
-#: data/base/messages/resmessages3.rmsg:459
-#: data/base/messages/resmessages3.rmsg:472
+#: data/base/messages/resmessages1.rmsg:312
+#: data/base/messages/resmessages2.rmsg:323
+#: data/base/messages/resmessages3.rmsg:389
+#: data/base/messages/resmessages3.rmsg:400
 #: data/base/messages/strings/resstrings.txt:399
 #: data/mp/messages/strings/resstrings.txt:427
 msgid "Increases Damage Resistance"
 msgstr "增加攻击抵抗能力"
 
-#: data/base/messages/resmessages1.rmsg:369
+#: data/base/messages/resmessages1.rmsg:313
 #: data/base/messages/strings/names.txt:805
 #: data/mp/messages/strings/names.txt:814
 msgid "Reinforced Base Structure Materials"
 msgstr "初级强化建材一型"
 
-#: data/base/messages/resmessages1.rmsg:370
-#: data/base/messages/resmessages2.rmsg:58
-#: data/base/messages/resmessages2.rmsg:383
-#: data/base/messages/resmessages3.rmsg:214
-#: data/base/messages/resmessages3.rmsg:227
-#: data/base/messages/resmessages3.rmsg:461
-#: data/base/messages/resmessages3.rmsg:474
+#: data/base/messages/resmessages1.rmsg:314
+#: data/base/messages/resmessages2.rmsg:50
+#: data/base/messages/resmessages2.rmsg:325
+#: data/base/messages/resmessages3.rmsg:182
+#: data/base/messages/resmessages3.rmsg:193
+#: data/base/messages/resmessages3.rmsg:391
+#: data/base/messages/resmessages3.rmsg:402
 #: data/base/messages/strings/resstrings.txt:105
 #: data/base/messages/strings/resstrings.txt:401
 #: data/mp/messages/strings/resstrings.txt:125
@@ -1248,148 +1248,148 @@ msgstr "初级强化建材一型"
 msgid "Increases Armor and Body Points"
 msgstr "增加防御力及HP"
 
-#: data/base/messages/resmessages1.rmsg:371
-#: data/base/messages/resmessages2.rmsg:384
-#: data/base/messages/resmessages3.rmsg:462
-#: data/base/messages/resmessages3.rmsg:475
+#: data/base/messages/resmessages1.rmsg:315
+#: data/base/messages/resmessages2.rmsg:326
+#: data/base/messages/resmessages3.rmsg:392
+#: data/base/messages/resmessages3.rmsg:403
 #: data/base/messages/strings/resstrings.txt:402
 #: data/mp/messages/strings/resstrings.txt:430
 msgid "All base structures upgraded automatically"
 msgstr "自动升级所有基本建筑物"
 
-#: data/base/messages/resmessages1.rmsg:381
+#: data/base/messages/resmessages1.rmsg:323
 msgid "Project Light Body"
 msgstr "Project的轻量级车身"
 
-#: data/base/messages/resmessages1.rmsg:382
+#: data/base/messages/resmessages1.rmsg:324
 msgid "Light body vulnerable to heavy weapons"
 msgstr "轻量型车身，容易遭受重型武器攻击"
 
-#: data/base/messages/resmessages1.rmsg:383
+#: data/base/messages/resmessages1.rmsg:325
 msgid "Good scout vehicle"
 msgstr "优秀的侦查车辆"
 
-#: data/base/messages/resmessages1.rmsg:384
+#: data/base/messages/resmessages1.rmsg:326
 msgid "Low power cost and low production times"
 msgstr "较低的资源需求及较短的生产时间"
 
-#: data/base/messages/resmessages1.rmsg:394
+#: data/base/messages/resmessages1.rmsg:334
 msgid "New Paradigm Light Body"
 msgstr "New Paradigm的轻量级车身"
 
-#: data/base/messages/resmessages1.rmsg:395
+#: data/base/messages/resmessages1.rmsg:335
 msgid "Inferior armor and body points to Viper"
 msgstr "防御能力及HP较响尾蛇差"
 
-#: data/base/messages/resmessages1.rmsg:396
-#: data/base/messages/resmessages3.rmsg:630
+#: data/base/messages/resmessages1.rmsg:336
+#: data/base/messages/resmessages3.rmsg:534
 msgid "Faster than Viper"
 msgstr "移动速度比响尾蛇快"
 
-#: data/base/messages/resmessages1.rmsg:397
+#: data/base/messages/resmessages1.rmsg:337
 msgid "Power cost and production time similar to Viper"
 msgstr "所需能源及生产时间接近于响尾蛇"
 
-#: data/base/messages/resmessages1.rmsg:407
+#: data/base/messages/resmessages1.rmsg:345
 msgid "Project Medium Body"
 msgstr "Project的中量级车身"
 
-#: data/base/messages/resmessages1.rmsg:408
+#: data/base/messages/resmessages1.rmsg:346
 msgid "Medium body increases armor and body points"
 msgstr "中量级的车身增加了防御能力及HP"
 
-#: data/base/messages/resmessages1.rmsg:409
+#: data/base/messages/resmessages1.rmsg:347
 msgid "Good medium tank and support vehicle"
 msgstr "良好的中量级坦克车身"
 
-#: data/base/messages/resmessages1.rmsg:410
+#: data/base/messages/resmessages1.rmsg:348
 msgid "Average power costs and production times"
 msgstr "平均的制造需求能源及时间"
 
-#: data/base/messages/resmessages1.rmsg:420
+#: data/base/messages/resmessages1.rmsg:356
 msgid "New Paradigm Medium body"
 msgstr "New Paradigm的中量级车身"
 
-#: data/base/messages/resmessages1.rmsg:421
+#: data/base/messages/resmessages1.rmsg:357
 msgid "Inferior armor and body points to Cobra"
 msgstr "比眼镜蛇较差的防御力及HP"
 
-#: data/base/messages/resmessages1.rmsg:422
-#: data/base/messages/resmessages3.rmsg:643
+#: data/base/messages/resmessages1.rmsg:358
+#: data/base/messages/resmessages3.rmsg:545
 msgid "Faster than Cobra"
 msgstr "移动速度比眼镜蛇快"
 
-#: data/base/messages/resmessages1.rmsg:423
+#: data/base/messages/resmessages1.rmsg:359
 msgid "Power cost and production time similar to Cobra"
 msgstr "需要的资源及生产时间相当于眼镜蛇"
 
-#: data/base/messages/resmessages1.rmsg:433
+#: data/base/messages/resmessages1.rmsg:367
 msgid "Project Heavy Body"
 msgstr "Project的重量级车身"
 
-#: data/base/messages/resmessages1.rmsg:434
+#: data/base/messages/resmessages1.rmsg:368
 msgid "Heavy body increases armor and body points"
 msgstr "重量级的车身增加了防御能力及HP"
 
-#: data/base/messages/resmessages1.rmsg:435
+#: data/base/messages/resmessages1.rmsg:369
 msgid "Good main battle tank and heavy artillery platform"
 msgstr "是主要且好用的重型武力搭载平台"
 
-#: data/base/messages/resmessages1.rmsg:436
+#: data/base/messages/resmessages1.rmsg:370
 msgid "Very high power costs and very slow to produce"
 msgstr "需要非常高的资源，生产速度非常缓慢"
 
-#: data/base/messages/resmessages1.rmsg:446
+#: data/base/messages/resmessages1.rmsg:378
 msgid "New Paradigm Heavy Body"
 msgstr "New Paradigm的重量级车身"
 
-#: data/base/messages/resmessages1.rmsg:447
+#: data/base/messages/resmessages1.rmsg:379
 msgid "Less armor and body points than Python"
 msgstr "防御力及HP比蟒蛇低"
 
-#: data/base/messages/resmessages1.rmsg:448
-#: data/base/messages/resmessages3.rmsg:656
+#: data/base/messages/resmessages1.rmsg:380
+#: data/base/messages/resmessages3.rmsg:556
 msgid "Faster than Python"
 msgstr "移动速度比蟒蛇快"
 
-#: data/base/messages/resmessages1.rmsg:449
+#: data/base/messages/resmessages1.rmsg:381
 msgid "Power cost and production time the same as Python"
 msgstr "制造成本及所需时间与蟒蛇相同"
 
-#: data/base/messages/resmessages1.rmsg:459
-#: data/base/messages/resmessages2.rmsg:498
-#: data/base/messages/resmessages3.rmsg:667
-#: data/base/messages/resmessages3.rmsg:680
+#: data/base/messages/resmessages1.rmsg:389
+#: data/base/messages/resmessages2.rmsg:422
+#: data/base/messages/resmessages3.rmsg:565
+#: data/base/messages/resmessages3.rmsg:576
 #: data/base/messages/strings/resstrings.txt:559
 #: data/mp/messages/strings/resstrings.txt:594
 msgid "Vehicle Engine Upgrade"
 msgstr "车辆引擎升级"
 
-#: data/base/messages/resmessages1.rmsg:460
+#: data/base/messages/resmessages1.rmsg:390
 #: data/base/messages/strings/names.txt:942
 #: data/mp/messages/strings/names.txt:953
 msgid "Fuel Injection Engine"
 msgstr "燃油喷射引擎一型"
 
-#: data/base/messages/resmessages1.rmsg:461
-#: data/base/messages/resmessages2.rmsg:500
-#: data/base/messages/resmessages3.rmsg:669
-#: data/base/messages/resmessages3.rmsg:682
+#: data/base/messages/resmessages1.rmsg:391
+#: data/base/messages/resmessages2.rmsg:424
+#: data/base/messages/resmessages3.rmsg:567
+#: data/base/messages/resmessages3.rmsg:578
 #: data/base/messages/strings/resstrings.txt:561
 #: data/mp/messages/strings/resstrings.txt:596
 msgid "Improves vehicle speed"
 msgstr "增加车辆移动速度"
 
-#: data/base/messages/resmessages1.rmsg:462
-#: data/base/messages/resmessages1.rmsg:475
-#: data/base/messages/resmessages2.rmsg:501
-#: data/base/messages/resmessages2.rmsg:514
-#: data/base/messages/resmessages2.rmsg:527
-#: data/base/messages/resmessages3.rmsg:670
-#: data/base/messages/resmessages3.rmsg:683
-#: data/base/messages/resmessages3.rmsg:696
-#: data/base/messages/resmessages3.rmsg:709
-#: data/base/messages/resmessages3.rmsg:722
+#: data/base/messages/resmessages1.rmsg:392
+#: data/base/messages/resmessages1.rmsg:403
+#: data/base/messages/resmessages2.rmsg:425
+#: data/base/messages/resmessages2.rmsg:436
+#: data/base/messages/resmessages2.rmsg:447
+#: data/base/messages/resmessages3.rmsg:568
+#: data/base/messages/resmessages3.rmsg:579
+#: data/base/messages/resmessages3.rmsg:590
+#: data/base/messages/resmessages3.rmsg:601
+#: data/base/messages/resmessages3.rmsg:612
 #: data/base/messages/strings/resstrings.txt:562
 #: data/base/messages/strings/resstrings.txt:574
 #: data/base/messages/strings/resstrings.txt:584
@@ -1399,64 +1399,64 @@ msgstr "增加车辆移动速度"
 msgid "All vehicles upgraded automatically"
 msgstr "所有车辆自动升级"
 
-#: data/base/messages/resmessages1.rmsg:472
-#: data/base/messages/resmessages2.rmsg:511
-#: data/base/messages/resmessages3.rmsg:693
-#: data/base/messages/resmessages3.rmsg:706
+#: data/base/messages/resmessages1.rmsg:400
+#: data/base/messages/resmessages2.rmsg:433
+#: data/base/messages/resmessages3.rmsg:587
+#: data/base/messages/resmessages3.rmsg:598
 #: data/base/messages/strings/resstrings.txt:571
 #: data/mp/messages/strings/resstrings.txt:606
 msgid "Vehicle Bodies Improved"
 msgstr "改善车身"
 
-#: data/base/messages/resmessages1.rmsg:474
-#: data/base/messages/resmessages2.rmsg:513
-#: data/base/messages/resmessages3.rmsg:695
-#: data/base/messages/resmessages3.rmsg:708
+#: data/base/messages/resmessages1.rmsg:402
+#: data/base/messages/resmessages2.rmsg:435
+#: data/base/messages/resmessages3.rmsg:589
+#: data/base/messages/resmessages3.rmsg:600
 #: data/base/messages/strings/resstrings.txt:573
 #: data/mp/messages/strings/resstrings.txt:608
 msgid "Increases kinetic armor and body points"
 msgstr "增加物理防御及HP"
 
-#: data/base/messages/resmessages1.rmsg:485
-#: data/base/messages/resmessages1.rmsg:498
-#: data/base/messages/resmessages1.rmsg:511
-#: data/base/messages/resmessages1.rmsg:524
+#: data/base/messages/resmessages1.rmsg:411
+#: data/base/messages/resmessages1.rmsg:422
+#: data/base/messages/resmessages1.rmsg:433
+#: data/base/messages/resmessages1.rmsg:444
 msgid "New Propulsion Available"
 msgstr "可搭载新的推进动力"
 
-#: data/base/messages/resmessages1.rmsg:486
+#: data/base/messages/resmessages1.rmsg:412
 msgid "Armored Half-tracks"
 msgstr "装备半履带推进系统"
 
-#: data/base/messages/resmessages1.rmsg:487
+#: data/base/messages/resmessages1.rmsg:413
 #, fuzzy
 msgid "Speed: Medium"
 msgstr "移动速度：中"
 
-#: data/base/messages/resmessages1.rmsg:499
+#: data/base/messages/resmessages1.rmsg:423
 msgid "Amphibious hover propulsion"
 msgstr "水陆两用气垫推进动力"
 
-#: data/base/messages/resmessages1.rmsg:500
-#: data/base/messages/resmessages1.rmsg:526
+#: data/base/messages/resmessages1.rmsg:424
+#: data/base/messages/resmessages1.rmsg:446
 #, fuzzy
 msgid "Speed: Fast"
 msgstr "移动速度：快"
 
-#: data/base/messages/resmessages1.rmsg:501
-#: data/base/messages/resmessages1.rmsg:527
-#: data/base/messages/resmessages1.rmsg:618
-#: data/base/messages/resmessages1.rmsg:631
-#: data/base/messages/resmessages23.rmsg:150
-#: data/base/messages/resmessages23.rmsg:202
-#: data/base/messages/resmessages2.rmsg:709
-#: data/base/messages/resmessages2.rmsg:722
-#: data/base/messages/resmessages2.rmsg:774
-#: data/base/messages/resmessages2.rmsg:800
-#: data/base/messages/resmessages2.rmsg:813
-#: data/base/messages/resmessages2.rmsg:826
-#: data/base/messages/resmessages3.rmsg:852
-#: data/base/messages/resmessagesall.rmsg:124
+#: data/base/messages/resmessages1.rmsg:425
+#: data/base/messages/resmessages1.rmsg:447
+#: data/base/messages/resmessages1.rmsg:524
+#: data/base/messages/resmessages1.rmsg:535
+#: data/base/messages/resmessages23.rmsg:128
+#: data/base/messages/resmessages23.rmsg:172
+#: data/base/messages/resmessages2.rmsg:601
+#: data/base/messages/resmessages2.rmsg:612
+#: data/base/messages/resmessages2.rmsg:656
+#: data/base/messages/resmessages2.rmsg:678
+#: data/base/messages/resmessages2.rmsg:689
+#: data/base/messages/resmessages2.rmsg:700
+#: data/base/messages/resmessages3.rmsg:722
+#: data/base/messages/resmessagesall.rmsg:106
 #: data/base/messages/strings/resstrings.txt:700
 #: data/base/messages/strings/resstrings.txt:706
 #: data/base/messages/strings/resstrings.txt:760
@@ -1472,116 +1472,116 @@ msgstr "移动速度：快"
 msgid "Body Points: Low"
 msgstr "HP：低"
 
-#: data/base/messages/resmessages1.rmsg:512
+#: data/base/messages/resmessages1.rmsg:434
 msgid "Armored Tracks"
 msgstr "装备履带推进系统"
 
-#: data/base/messages/resmessages1.rmsg:513
+#: data/base/messages/resmessages1.rmsg:435
 #, fuzzy
 msgid "Speed: Slow"
 msgstr "移动速度：慢"
 
-#: data/base/messages/resmessages1.rmsg:525
+#: data/base/messages/resmessages1.rmsg:445
 #: data/base/messages/strings/names.txt:976
 #: data/mp/messages/strings/names.txt:987
 msgid "Wheeled Propulsion"
 msgstr "推进动力：轮"
 
-#: data/base/messages/resmessages1.rmsg:538
+#: data/base/messages/resmessages1.rmsg:456
 msgid "Light Cannon firing 40mm rounds"
 msgstr "轻型加农炮，装载40mm弹药"
 
-#: data/base/messages/resmessages1.rmsg:551
+#: data/base/messages/resmessages1.rmsg:467
 msgid "Medium Cannon firing 76mm rounds"
 msgstr "中型加农炮，装载76mm弹药"
 
-#: data/base/messages/resmessages1.rmsg:564
+#: data/base/messages/resmessages1.rmsg:478
 msgid "Heavy Cannon firing 120 mm rounds"
 msgstr "重型加农炮，装载120mm弹药"
 
-#: data/base/messages/resmessages1.rmsg:577
+#: data/base/messages/resmessages1.rmsg:489
 msgid "High Explosive Anti-Tank Cannon Shells"
 msgstr "高爆性反坦克加农炮弹（HEAT）"
 
-#: data/base/messages/resmessages1.rmsg:590
+#: data/base/messages/resmessages1.rmsg:500
 msgid "Flame-thrower firing Propylene Oxide gel"
 msgstr "可以发射环氧丙烷凝胶的火焰塔"
 
-#: data/base/messages/resmessages1.rmsg:591
-#: data/base/messages/resmessages2.rmsg:773
+#: data/base/messages/resmessages1.rmsg:501
+#: data/base/messages/resmessages2.rmsg:655
 #: data/base/messages/strings/resstrings.txt:759
 #: data/mp/messages/strings/resstrings.txt:798
 msgid "Best Targets: Bunkers, wheeled and hover vehicles"
 msgstr "最佳目标：碉堡、轮式坦克以及气垫船"
 
-#: data/base/messages/resmessages1.rmsg:592
+#: data/base/messages/resmessages1.rmsg:502
 msgid "Body Points: Very low"
 msgstr "HP：非常低"
 
-#: data/base/messages/resmessages1.rmsg:603
+#: data/base/messages/resmessages1.rmsg:511
 msgid "Propylene Oxide gel treated to burn at higher temperatures"
 msgstr "环氧丙烷凝胶可在更高的温度下燃烧"
 
-#: data/base/messages/resmessages1.rmsg:604
-#: data/base/messages/resmessages2.rmsg:786
+#: data/base/messages/resmessages1.rmsg:512
+#: data/base/messages/resmessages2.rmsg:666
 #: data/base/messages/strings/resstrings.txt:767
 #: data/mp/messages/strings/resstrings.txt:806
 msgid "Increases Flamer damage"
 msgstr "增加火焰喷射伤害"
 
-#: data/base/messages/resmessages1.rmsg:616
+#: data/base/messages/resmessages1.rmsg:522
 msgid "7.62mm machinegun"
 msgstr "口径 7.62mm 机枪"
 
-#: data/base/messages/resmessages1.rmsg:629
+#: data/base/messages/resmessages1.rmsg:533
 msgid "Twin 7.62mm machineguns"
 msgstr "口径 7.62mm 双管机枪"
 
-#: data/base/messages/resmessages1.rmsg:642
+#: data/base/messages/resmessages1.rmsg:544
 msgid "Hardened case machinegun bullets"
 msgstr "强化外壳的机枪子弹"
 
-#: data/base/messages/resmessages1.rmsg:643
-#: data/base/messages/resmessages1.rmsg:656
-#: data/base/messages/resmessages2.rmsg:877
-#: data/base/messages/resmessages3.rmsg:1007
-#: data/base/messages/resmessages3.rmsg:1020
+#: data/base/messages/resmessages1.rmsg:545
+#: data/base/messages/resmessages1.rmsg:556
+#: data/base/messages/resmessages2.rmsg:743
+#: data/base/messages/resmessages3.rmsg:853
+#: data/base/messages/resmessages3.rmsg:864
 #: data/base/messages/strings/resstrings.txt:847
 #: data/mp/messages/strings/resstrings.txt:890
 msgid "Increases Machinegun damage"
 msgstr "增加机枪系武器攻击力"
 
-#: data/base/messages/resmessages1.rmsg:655
+#: data/base/messages/resmessages1.rmsg:555
 msgid "Armor-Piercing Discard Sabot Bullets"
 msgstr "穿甲脱壳弹（APDSB）"
 
-#: data/base/messages/resmessages1.rmsg:668
+#: data/base/messages/resmessages1.rmsg:566
 msgid "May be targeted directly or assigned to a sensor turret or tower"
 msgstr "可直接攻击目标或指派给雷达锁定目标"
 
-#: data/base/messages/resmessages1.rmsg:681
+#: data/base/messages/resmessages1.rmsg:577
 msgid "Improved high explosive shells"
 msgstr "改善高爆性弹头"
 
-#: data/base/messages/resmessages1.rmsg:682
-#: data/base/messages/resmessages2.rmsg:916
+#: data/base/messages/resmessages1.rmsg:578
+#: data/base/messages/resmessages2.rmsg:776
 #: data/base/messages/strings/resstrings.txt:907
 #: data/mp/messages/strings/resstrings.txt:952
 msgid "Increases Mortar damage"
 msgstr "增加迫击炮攻击力"
 
-#: data/base/messages/resmessages1.rmsg:694
+#: data/base/messages/resmessages1.rmsg:588
 msgid "Fast firing light anti-vehicle rockets"
 msgstr "能够快速射击的轻型反车辆火箭"
 
-#: data/base/messages/resmessages1.rmsg:695
+#: data/base/messages/resmessages1.rmsg:589
 msgid "Best Targets: Wheeled and hover vehicles"
 msgstr "最佳目标：轮式坦克与气垫船"
 
-#: data/base/messages/resmessages1.rmsg:706
-#: data/base/messages/resmessages1.rmsg:719
-#: data/base/messages/resmessages1.rmsg:732
-#: data/base/messages/resmessages2.rmsg:927
+#: data/base/messages/resmessages1.rmsg:598
+#: data/base/messages/resmessages1.rmsg:609
+#: data/base/messages/resmessages1.rmsg:620
+#: data/base/messages/resmessages2.rmsg:785
 #: data/base/messages/strings/resstrings.txt:943
 #: data/base/messages/strings/resstrings.txt:951
 #: data/mp/messages/strings/resstrings.txt:988
@@ -1589,18 +1589,18 @@ msgstr "最佳目标：轮式坦克与气垫船"
 msgid "Mini-Rocket Upgrade"
 msgstr "迷你火箭升级"
 
-#: data/base/messages/resmessages1.rmsg:707
+#: data/base/messages/resmessages1.rmsg:599
 msgid "Fin-stabilization improves flight trajectory"
 msgstr "尾翼稳定装置改善了飞行的轨迹"
 
-#: data/base/messages/resmessages1.rmsg:708
+#: data/base/messages/resmessages1.rmsg:600
 msgid "Increases Mini-Rocket accuracy"
 msgstr "增加迷你火箭准确率"
 
-#: data/base/messages/resmessages1.rmsg:709
-#: data/base/messages/resmessages1.rmsg:722
-#: data/base/messages/resmessages1.rmsg:735
-#: data/base/messages/resmessages2.rmsg:930
+#: data/base/messages/resmessages1.rmsg:601
+#: data/base/messages/resmessages1.rmsg:612
+#: data/base/messages/resmessages1.rmsg:623
+#: data/base/messages/resmessages2.rmsg:788
 #: data/base/messages/strings/resstrings.txt:946
 #: data/base/messages/strings/resstrings.txt:954
 #: data/mp/messages/strings/resstrings.txt:991
@@ -1608,55 +1608,55 @@ msgstr "增加迷你火箭准确率"
 msgid "All mini-rockets upgraded automatically"
 msgstr "自动升级所有迷你火箭系武器"
 
-#: data/base/messages/resmessages1.rmsg:720
+#: data/base/messages/resmessages1.rmsg:610
 msgid "Improved shaped charge warhead"
 msgstr "改善弹头外型及装填效能"
 
-#: data/base/messages/resmessages1.rmsg:721
-#: data/base/messages/resmessages2.rmsg:929
+#: data/base/messages/resmessages1.rmsg:611
+#: data/base/messages/resmessages2.rmsg:787
 #: data/base/messages/strings/resstrings.txt:945
 #: data/mp/messages/strings/resstrings.txt:990
 msgid "Increases Mini-Rocket damage"
 msgstr "增加迷你火箭攻击力"
 
-#: data/base/messages/resmessages1.rmsg:733
+#: data/base/messages/resmessages1.rmsg:621
 msgid "Automated reload system"
 msgstr "弹药自动装填系统"
 
-#: data/base/messages/resmessages1.rmsg:734
+#: data/base/messages/resmessages1.rmsg:622
 msgid "Increases Mini-Rockets ROF"
 msgstr "增加迷你火箭射速"
 
-#: data/base/messages/resmessages1.rmsg:746
+#: data/base/messages/resmessages1.rmsg:632
 msgid "Tracks and directs in-flight rocket to target"
 msgstr "导引飞行中的火箭指向目标"
 
-#: data/base/messages/resmessages1.rmsg:759
+#: data/base/messages/resmessages1.rmsg:643
 msgid "High Explosive Anti-Tank warhead"
 msgstr "高爆性反坦克弹头"
 
-#: data/base/messages/resmessages1.rmsg:760
-#: data/base/messages/resmessages2.rmsg:942
+#: data/base/messages/resmessages1.rmsg:644
+#: data/base/messages/resmessages2.rmsg:798
 #: data/base/messages/strings/resstrings.txt:967
 #: data/mp/messages/strings/resstrings.txt:1012
 msgid "Increases Rocket damage"
 msgstr "增加火箭系武器攻击力"
 
 #: data/base/messages/resmessages23.rmsg:4
-#: data/base/messages/resmessages3.rmsg:56
+#: data/base/messages/resmessages3.rmsg:48
 msgid "Cyborg Propulsion Improved"
 msgstr "改善生化人推进动力"
 
 #: data/base/messages/resmessages23.rmsg:5
-#: data/base/messages/resmessages2.rmsg:538
-#: data/base/messages/resmessages2.rmsg:551
-#: data/base/messages/resmessages2.rmsg:564
-#: data/base/messages/resmessages2.rmsg:577
-#: data/base/messages/resmessages3.rmsg:57
-#: data/base/messages/resmessages3.rmsg:733
-#: data/base/messages/resmessages3.rmsg:746
-#: data/base/messages/resmessages3.rmsg:759
-#: data/base/messages/resmessages3.rmsg:772
+#: data/base/messages/resmessages2.rmsg:456
+#: data/base/messages/resmessages2.rmsg:467
+#: data/base/messages/resmessages2.rmsg:478
+#: data/base/messages/resmessages2.rmsg:489
+#: data/base/messages/resmessages3.rmsg:49
+#: data/base/messages/resmessages3.rmsg:621
+#: data/base/messages/resmessages3.rmsg:632
+#: data/base/messages/resmessages3.rmsg:643
+#: data/base/messages/resmessages3.rmsg:654
 #: data/base/messages/strings/resstrings.txt:592
 #: data/base/messages/strings/resstrings.txt:602
 #: data/base/messages/strings/resstrings.txt:612
@@ -1669,15 +1669,15 @@ msgid "New armored construction"
 msgstr "新的武装建筑物"
 
 #: data/base/messages/resmessages23.rmsg:6
-#: data/base/messages/resmessages2.rmsg:539
-#: data/base/messages/resmessages2.rmsg:552
-#: data/base/messages/resmessages2.rmsg:565
-#: data/base/messages/resmessages2.rmsg:578
-#: data/base/messages/resmessages3.rmsg:58
-#: data/base/messages/resmessages3.rmsg:734
-#: data/base/messages/resmessages3.rmsg:747
-#: data/base/messages/resmessages3.rmsg:760
-#: data/base/messages/resmessages3.rmsg:773
+#: data/base/messages/resmessages2.rmsg:457
+#: data/base/messages/resmessages2.rmsg:468
+#: data/base/messages/resmessages2.rmsg:479
+#: data/base/messages/resmessages2.rmsg:490
+#: data/base/messages/resmessages3.rmsg:50
+#: data/base/messages/resmessages3.rmsg:622
+#: data/base/messages/resmessages3.rmsg:633
+#: data/base/messages/resmessages3.rmsg:644
+#: data/base/messages/resmessages3.rmsg:655
 #: data/base/messages/strings/resstrings.txt:593
 #: data/base/messages/strings/resstrings.txt:603
 #: data/base/messages/strings/resstrings.txt:613
@@ -1689,95 +1689,95 @@ msgstr "新的武装建筑物"
 msgid "Increases Body Points"
 msgstr "增加HP"
 
-#: data/base/messages/resmessages23.rmsg:18
+#: data/base/messages/resmessages23.rmsg:16
 msgid "Armored hardpoint with Hyper-Velocity Cannon"
 msgstr "装备有高速加农炮之要塞"
 
-#: data/base/messages/resmessages23.rmsg:31
-#: data/base/messages/resmessages3.rmsg:434
+#: data/base/messages/resmessages23.rmsg:27
+#: data/base/messages/resmessages3.rmsg:368
 msgid "New Power Generation Technology"
 msgstr "新的发电科技"
 
-#: data/base/messages/resmessages23.rmsg:32
+#: data/base/messages/resmessages23.rmsg:28
 msgid "Gas turbine boosts power output"
 msgstr "燃气涡轮增进能量的输出"
 
-#: data/base/messages/resmessages23.rmsg:33
-#: data/base/messages/resmessages3.rmsg:436
+#: data/base/messages/resmessages23.rmsg:29
+#: data/base/messages/resmessages3.rmsg:370
 msgid "All power generators upgraded automatically"
 msgstr "自动升级所有的发电厂"
 
-#: data/base/messages/resmessages23.rmsg:57
-#: data/base/messages/resmessages23.rmsg:83
-#: data/base/messages/resmessages3.rmsg:525
+#: data/base/messages/resmessages23.rmsg:49
+#: data/base/messages/resmessages23.rmsg:71
+#: data/base/messages/resmessages3.rmsg:445
 msgid "Improved fire detection systems"
 msgstr "改善的火焰侦测系统"
 
-#: data/base/messages/resmessages23.rmsg:69
-#: data/base/messages/resmessages23.rmsg:95
-#: data/base/messages/resmessagesall.rmsg:69
-#: data/base/messages/resmessagesall.rmsg:95
+#: data/base/messages/resmessages23.rmsg:59
+#: data/base/messages/resmessages23.rmsg:81
+#: data/base/messages/resmessagesall.rmsg:59
+#: data/base/messages/resmessagesall.rmsg:81
 msgid "New Systems Tower Available"
 msgstr "可建造新的系统防御工事"
 
-#: data/base/messages/resmessages23.rmsg:70
+#: data/base/messages/resmessages23.rmsg:60
 msgid "VTOL CB Tower detects enemy indirect fire batteries"
 msgstr "VTOL 反炮兵雷达可侦测敌军的非直射型火炮"
 
-#: data/base/messages/resmessages23.rmsg:71
-#: data/base/messages/resmessages2.rmsg:435
+#: data/base/messages/resmessages23.rmsg:61
+#: data/base/messages/resmessages2.rmsg:369
 #: data/base/messages/strings/resstrings.txt:481
 #: data/mp/messages/strings/resstrings.txt:511
 msgid "Orders assigned VTOLs to attack the enemy batteries"
 msgstr "并命令指定的VTOL 攻击敌军炮兵"
 
-#: data/base/messages/resmessages23.rmsg:72
-#: data/base/messages/resmessages2.rmsg:436
+#: data/base/messages/resmessages23.rmsg:62
+#: data/base/messages/resmessages2.rmsg:370
 #: data/base/messages/strings/resstrings.txt:482
 #: data/mp/messages/strings/resstrings.txt:512
 msgid "VTOLs attack until enemy battery is suppressed"
 msgstr "直到敌军的炮兵部队被压制为止"
 
-#: data/base/messages/resmessages23.rmsg:82
-#: data/base/messages/resmessages2.rmsg:446
-#: data/base/messages/resmessages3.rmsg:537
+#: data/base/messages/resmessages23.rmsg:70
+#: data/base/messages/resmessages2.rmsg:378
+#: data/base/messages/resmessages3.rmsg:455
 #: data/base/messages/strings/resstrings.txt:485
 #: data/mp/messages/strings/resstrings.txt:515
 msgid "VTOL CB Improved"
 msgstr "改善VTOL 反炮兵雷达"
 
-#: data/base/messages/resmessages23.rmsg:84
-#: data/base/messages/resmessages2.rmsg:448
-#: data/base/messages/resmessages3.rmsg:539
+#: data/base/messages/resmessages23.rmsg:72
+#: data/base/messages/resmessages2.rmsg:380
+#: data/base/messages/resmessages3.rmsg:457
 #: data/base/messages/strings/resstrings.txt:487
 #: data/mp/messages/strings/resstrings.txt:517
 msgid "Extends VTOL CB Range"
 msgstr "扩展VTOL 反炮兵雷达侦测距离"
 
-#: data/base/messages/resmessages23.rmsg:85
-#: data/base/messages/resmessages2.rmsg:449
-#: data/base/messages/resmessages3.rmsg:540
+#: data/base/messages/resmessages23.rmsg:73
+#: data/base/messages/resmessages2.rmsg:381
+#: data/base/messages/resmessages3.rmsg:458
 #: data/base/messages/strings/resstrings.txt:488
 #: data/mp/messages/strings/resstrings.txt:518
 msgid "All VTOL CB sensors upgraded automatically"
 msgstr "所有VTOL 反炮兵雷达自动升级"
 
-#: data/base/messages/resmessages23.rmsg:96
+#: data/base/messages/resmessages23.rmsg:82
 msgid "VTOL Strike Tower detects approaching enemies"
 msgstr "VTOL 攻击雷达可侦测接近的敌军"
 
-#: data/base/messages/resmessages23.rmsg:97
+#: data/base/messages/resmessages23.rmsg:83
 msgid "Assigned VTOLs attack the enemy units"
 msgstr "被指定的VTOL 会自动升空攻击敌军"
 
-#: data/base/messages/resmessages23.rmsg:98
+#: data/base/messages/resmessages23.rmsg:84
 msgid "Strike mission continues until enemy destroyed or they retreat"
 msgstr "攻击任务会持续至敌军被消灭或撤退为止"
 
-#: data/base/messages/resmessages23.rmsg:108
-#: data/base/messages/resmessages2.rmsg:433
-#: data/base/messages/resmessages3.rmsg:563
-#: data/base/messages/resmessagesall.rmsg:43
+#: data/base/messages/resmessages23.rmsg:92
+#: data/base/messages/resmessages2.rmsg:367
+#: data/base/messages/resmessages3.rmsg:477
+#: data/base/messages/resmessagesall.rmsg:37
 #: data/base/messages/strings/resstrings.txt:443
 #: data/base/messages/strings/resstrings.txt:479
 #: data/mp/messages/strings/resstrings.txt:471
@@ -1785,51 +1785,51 @@ msgstr "攻击任务会持续至敌军被消灭或撤退为止"
 msgid "New Systems Turret Available"
 msgstr "可搭载新的系统装备"
 
-#: data/base/messages/resmessages23.rmsg:109
+#: data/base/messages/resmessages23.rmsg:93
 msgid "VTOL Strike turret used to spot targets"
 msgstr "VTOL 攻击雷达用以侦查目标位置"
 
-#: data/base/messages/resmessages23.rmsg:110
+#: data/base/messages/resmessages23.rmsg:94
 msgid "Assigned VTOLs attack the designated targets"
 msgstr "被指定的VTOL 会主动攻击锁定的目标"
 
-#: data/base/messages/resmessages23.rmsg:111
+#: data/base/messages/resmessages23.rmsg:95
 msgid "Select new targets to continue the VTOL strikes"
 msgstr "当攻击结束，选择另一个目标让VTOL 持续攻击"
 
-#: data/base/messages/resmessages23.rmsg:121
-#: data/base/messages/resmessages2.rmsg:459
-#: data/base/messages/resmessages3.rmsg:550
+#: data/base/messages/resmessages23.rmsg:103
+#: data/base/messages/resmessages2.rmsg:389
+#: data/base/messages/resmessages3.rmsg:466
 #: data/base/messages/strings/resstrings.txt:499
 #: data/mp/messages/strings/resstrings.txt:529
 msgid "VTOL Strike Improved"
 msgstr "改善VTOL 攻击雷达"
 
-#: data/base/messages/resmessages23.rmsg:122
+#: data/base/messages/resmessages23.rmsg:104
 msgid "Improved target recognition systems"
 msgstr "改善的目标辨识系统"
 
-#: data/base/messages/resmessages23.rmsg:123
-#: data/base/messages/resmessages2.rmsg:461
-#: data/base/messages/resmessages3.rmsg:552
+#: data/base/messages/resmessages23.rmsg:105
+#: data/base/messages/resmessages2.rmsg:391
+#: data/base/messages/resmessages3.rmsg:468
 #: data/base/messages/strings/resstrings.txt:501
 #: data/mp/messages/strings/resstrings.txt:531
 msgid "Extends VTOL Strike Range"
 msgstr "增加VTO​​L 的攻击距离"
 
-#: data/base/messages/resmessages23.rmsg:124
-#: data/base/messages/resmessages2.rmsg:462
-#: data/base/messages/resmessages3.rmsg:553
+#: data/base/messages/resmessages23.rmsg:106
+#: data/base/messages/resmessages2.rmsg:392
+#: data/base/messages/resmessages3.rmsg:469
 #: data/base/messages/strings/resstrings.txt:502
 #: data/mp/messages/strings/resstrings.txt:532
 msgid "All VTOL Strike sensors upgraded automatically"
 msgstr "所有VTOL 攻击雷达自动升级"
 
-#: data/base/messages/resmessages23.rmsg:134
-#: data/base/messages/resmessages2.rmsg:641
-#: data/base/messages/resmessages2.rmsg:667
-#: data/base/messages/resmessages3.rmsg:810
-#: data/base/messages/resmessages3.rmsg:836
+#: data/base/messages/resmessages23.rmsg:114
+#: data/base/messages/resmessages2.rmsg:543
+#: data/base/messages/resmessages2.rmsg:565
+#: data/base/messages/resmessages3.rmsg:686
+#: data/base/messages/resmessages3.rmsg:708
 #: data/base/messages/strings/resstrings.txt:659
 #: data/base/messages/strings/resstrings.txt:677
 #: data/mp/messages/strings/resstrings.txt:694
@@ -1837,26 +1837,26 @@ msgstr "所有VTOL 攻击雷达自动升级"
 msgid "AA Upgrade"
 msgstr "防空武器升级"
 
-#: data/base/messages/resmessages23.rmsg:135
-#: data/base/messages/resmessages2.rmsg:837
+#: data/base/messages/resmessages23.rmsg:115
+#: data/base/messages/resmessages2.rmsg:709
 #: data/base/messages/strings/resstrings.txt:794
 #: data/mp/messages/strings/resstrings.txt:835
 msgid "Self-guided rocket powered shells"
 msgstr "利用自动导向火箭所推动的弹壳"
 
-#: data/base/messages/resmessages23.rmsg:136
-#: data/base/messages/resmessages2.rmsg:643
-#: data/base/messages/resmessages3.rmsg:812
+#: data/base/messages/resmessages23.rmsg:116
+#: data/base/messages/resmessages2.rmsg:545
+#: data/base/messages/resmessages3.rmsg:688
 #: data/base/messages/strings/resstrings.txt:661
 #: data/mp/messages/strings/resstrings.txt:696
 msgid "Increases AA accuracy"
 msgstr "增加防空武器准确率"
 
-#: data/base/messages/resmessages23.rmsg:137
-#: data/base/messages/resmessages2.rmsg:644
-#: data/base/messages/resmessages2.rmsg:670
-#: data/base/messages/resmessages3.rmsg:813
-#: data/base/messages/resmessages3.rmsg:839
+#: data/base/messages/resmessages23.rmsg:117
+#: data/base/messages/resmessages2.rmsg:546
+#: data/base/messages/resmessages2.rmsg:568
+#: data/base/messages/resmessages3.rmsg:689
+#: data/base/messages/resmessages3.rmsg:711
 #: data/base/messages/strings/resstrings.txt:662
 #: data/base/messages/strings/resstrings.txt:680
 #: data/mp/messages/strings/resstrings.txt:697
@@ -1864,10 +1864,10 @@ msgstr "增加防空武器准确率"
 msgid "All AA weapons upgraded automatically"
 msgstr "自动升级所有防空武器"
 
-#: data/base/messages/resmessages23.rmsg:147
-#: data/base/messages/resmessages2.rmsg:706
-#: data/base/messages/resmessages2.rmsg:719
-#: data/base/messages/resmessages3.rmsg:849
+#: data/base/messages/resmessages23.rmsg:125
+#: data/base/messages/resmessages2.rmsg:598
+#: data/base/messages/resmessages2.rmsg:609
+#: data/base/messages/resmessages3.rmsg:719
 #: data/base/messages/strings/resstrings.txt:697
 #: data/base/messages/strings/resstrings.txt:703
 #: data/mp/messages/strings/resstrings.txt:732
@@ -1875,57 +1875,57 @@ msgstr "自动升级所有防空武器"
 msgid "New Bomb Bay Available"
 msgstr "可使用新的炸弹舱"
 
-#: data/base/messages/resmessages23.rmsg:148
+#: data/base/messages/resmessages23.rmsg:126
 msgid "Drops incendiary bombs"
 msgstr "投掷燃烧炸弹"
 
-#: data/base/messages/resmessages23.rmsg:149
+#: data/base/messages/resmessages23.rmsg:127
 msgid "Best Targets: Bunkers and Hardpoints"
 msgstr "最佳目标：碉堡与要塞"
 
-#: data/base/messages/resmessages23.rmsg:160
-#: data/base/messages/resmessages2.rmsg:732
-#: data/base/messages/resmessages3.rmsg:862
+#: data/base/messages/resmessages23.rmsg:136
+#: data/base/messages/resmessages2.rmsg:620
+#: data/base/messages/resmessages3.rmsg:730
 #: data/base/messages/strings/resstrings.txt:713
 #: data/mp/messages/strings/resstrings.txt:748
 msgid "Bombsight Upgrade"
 msgstr "投弹瞄准器升级"
 
-#: data/base/messages/resmessages23.rmsg:161
+#: data/base/messages/resmessages23.rmsg:137
 msgid "Laser designator paints and guides bombs to the target"
 msgstr "激光指向器提供武器导引指向目标功能"
 
-#: data/base/messages/resmessages23.rmsg:162
-#: data/base/messages/resmessages2.rmsg:734
-#: data/base/messages/resmessages3.rmsg:864
+#: data/base/messages/resmessages23.rmsg:138
+#: data/base/messages/resmessages2.rmsg:622
+#: data/base/messages/resmessages3.rmsg:732
 #: data/base/messages/strings/resstrings.txt:715
 #: data/mp/messages/strings/resstrings.txt:750
 msgid "Increases Bombing accuracy"
 msgstr "增加投弹准确率"
 
-#: data/base/messages/resmessages23.rmsg:163
-#: data/base/messages/resmessages2.rmsg:735
-#: data/base/messages/resmessages3.rmsg:865
+#: data/base/messages/resmessages23.rmsg:139
+#: data/base/messages/resmessages2.rmsg:623
+#: data/base/messages/resmessages3.rmsg:733
 #: data/base/messages/strings/resstrings.txt:716
 #: data/mp/messages/strings/resstrings.txt:751
 msgid "All bomb bays upgraded automatically"
 msgstr "自动升级所有炸弹舱"
 
-#: data/base/messages/resmessages23.rmsg:174
+#: data/base/messages/resmessages23.rmsg:148
 msgid "Robotic advances make new chaingun upgrade available"
 msgstr "自动化系统让链枪升级至新的阶段"
 
-#: data/base/messages/resmessages23.rmsg:187
+#: data/base/messages/resmessages23.rmsg:159
 msgid "Shells detect and home to thermal heat signatures"
 msgstr "炮弹会侦测并自动导向散发热源的目标"
 
-#: data/base/messages/resmessages23.rmsg:200
+#: data/base/messages/resmessages23.rmsg:170
 msgid "105mm multi-barrel Howitzer may be assigned to a sensor"
 msgstr "口径105mm、多管榴弹炮、可指派给雷达导引"
 
-#: data/base/messages/resmessages23.rmsg:201
-#: data/base/messages/resmessages2.rmsg:799
-#: data/base/messages/resmessages2.rmsg:812
+#: data/base/messages/resmessages23.rmsg:171
+#: data/base/messages/resmessages2.rmsg:677
+#: data/base/messages/resmessages2.rmsg:688
 #: data/base/messages/strings/resstrings.txt:775
 #: data/base/messages/strings/resstrings.txt:781
 #: data/mp/messages/strings/resstrings.txt:814
@@ -1933,11 +1933,11 @@ msgstr "口径105mm、多管榴弹炮、可指派给雷达导引"
 msgid "Best Targets: Base Structures, infantry, wheeled vehicles"
 msgstr "最佳目标：碉堡与要塞"
 
-#: data/base/messages/resmessages23.rmsg:213
+#: data/base/messages/resmessages23.rmsg:181
 msgid "Multi-barrel, rapid-fire machinegun"
 msgstr "多管高速发射的机枪"
 
-#: data/base/messages/resmessages23.rmsg:215
+#: data/base/messages/resmessages23.rmsg:183
 msgid "Replaces all machineguns"
 msgstr "取代所有机枪武器"
 
@@ -1962,8 +1962,8 @@ msgstr "阻热装甲层"
 msgid "Thermal Armor increased"
 msgstr "增加热能防御能力"
 
-#: data/base/messages/resmessages2.rmsg:18
-#: data/base/messages/resmessages2.rmsg:512
+#: data/base/messages/resmessages2.rmsg:16
+#: data/base/messages/resmessages2.rmsg:434
 #: data/base/messages/strings/resstrings.txt:32
 #: data/base/messages/strings/resstrings.txt:572
 #: data/mp/messages/strings/resstrings.txt:36
@@ -1971,7 +1971,7 @@ msgstr "增加热能防御能力"
 msgid "Layered dense composite alloys and energy-absorbing fibres"
 msgstr "层状紧密复合合金和能量吸收纤维"
 
-#: data/base/messages/resmessages2.rmsg:31
+#: data/base/messages/resmessages2.rmsg:27
 #: data/base/messages/strings/resstrings.txt:50
 #: data/base/messages/strings/resstrings.txt:84
 #: data/mp/messages/strings/resstrings.txt:54
@@ -1979,29 +1979,29 @@ msgstr "层状紧密复合合金和能量吸收纤维"
 msgid "Armed with Bunker Buster rocket"
 msgstr "装备有碉堡终结者之生化人步兵"
 
-#: data/base/messages/resmessages2.rmsg:44
+#: data/base/messages/resmessages2.rmsg:38
 #: data/base/messages/strings/resstrings.txt:66
 #: data/mp/messages/strings/resstrings.txt:86
 msgid "Armed with Cyborg Assault Gun"
 msgstr "装备有突击枪之生化人步兵"
 
-#: data/base/messages/resmessages2.rmsg:57
+#: data/base/messages/resmessages2.rmsg:49
 #: data/base/messages/strings/resstrings.txt:104
 #: data/mp/messages/strings/resstrings.txt:124
 msgid "High-tensile concrete reinforced with boron"
 msgstr "以硼强化过的高张力混凝土墙"
 
-#: data/base/messages/resmessages2.rmsg:70
+#: data/base/messages/resmessages2.rmsg:60
 #: data/base/messages/strings/resstrings.txt:120
 #: data/mp/messages/strings/resstrings.txt:140
 msgid "AA Site with Cyclone Flak Turret"
 msgstr "装备有暴风级高射炮的炮塔"
 
-#: data/base/messages/resmessages2.rmsg:71
-#: data/base/messages/resmessages2.rmsg:97
-#: data/base/messages/resmessages2.rmsg:110
-#: data/base/messages/resmessages3.rmsg:240
-#: data/base/messages/resmessages3.rmsg:253
+#: data/base/messages/resmessages2.rmsg:61
+#: data/base/messages/resmessages2.rmsg:83
+#: data/base/messages/resmessages2.rmsg:94
+#: data/base/messages/resmessages3.rmsg:204
+#: data/base/messages/resmessages3.rmsg:215
 #: data/base/messages/strings/resstrings.txt:115
 #: data/base/messages/strings/resstrings.txt:121
 #: data/base/messages/strings/resstrings.txt:133
@@ -2011,62 +2011,62 @@ msgstr "装备有暴风级高射炮的炮塔"
 msgid "Automatically targets VTOLs"
 msgstr "自动锁定VTOL"
 
-#: data/base/messages/resmessages2.rmsg:83
+#: data/base/messages/resmessages2.rmsg:71
 #: data/base/messages/strings/resstrings.txt:126
 #: data/mp/messages/strings/resstrings.txt:146
 msgid "AA Site with Hurricane Gun Turret"
 msgstr "装备有飓风级高射炮的炮塔"
 
-#: data/base/messages/resmessages2.rmsg:84
+#: data/base/messages/resmessages2.rmsg:72
 #: data/base/messages/strings/resstrings.txt:127
 #: data/mp/messages/strings/resstrings.txt:147
 msgid "Automatically targets VTOL"
 msgstr "自动锁定VTOL"
 
-#: data/base/messages/resmessages2.rmsg:96
+#: data/base/messages/resmessages2.rmsg:82
 #: data/base/messages/strings/resstrings.txt:132
 #: data/mp/messages/strings/resstrings.txt:152
 msgid "AA Site with Whirlwind Gun Turret"
 msgstr "装备有旋风级高射炮的炮塔"
 
-#: data/base/messages/resmessages2.rmsg:109
+#: data/base/messages/resmessages2.rmsg:93
 #: data/base/messages/strings/resstrings.txt:114
 #: data/mp/messages/strings/resstrings.txt:134
 msgid "AA Site with Tornado Flak Turret"
 msgstr "装备有龙卷风级高射炮的炮塔"
 
-#: data/base/messages/resmessages2.rmsg:122
+#: data/base/messages/resmessages2.rmsg:104
 #: data/base/messages/strings/resstrings.txt:142
 #: data/mp/messages/strings/resstrings.txt:162
 msgid "Indirect fire rocket battery"
 msgstr "非直射型火箭炮"
 
-#: data/base/messages/resmessages2.rmsg:135
+#: data/base/messages/resmessages2.rmsg:115
 #: data/base/messages/strings/resstrings.txt:154
 #: data/mp/messages/strings/resstrings.txt:176
 msgid "Armored Bombard battery pit"
 msgstr "装备有重装迫击炮之阵地"
 
-#: data/base/messages/resmessages2.rmsg:148
+#: data/base/messages/resmessages2.rmsg:126
 #: data/base/messages/strings/resstrings.txt:168
 #: data/mp/messages/strings/resstrings.txt:190
 msgid "Armored howitzer emplacement"
 msgstr "装备有榴弹炮之炮台"
 
-#: data/base/messages/resmessages2.rmsg:161
+#: data/base/messages/resmessages2.rmsg:137
 #: data/base/messages/strings/resstrings.txt:174
 #: data/mp/messages/strings/resstrings.txt:196
 msgid "Armored Ground Shaker howitzer emplacement"
 msgstr "装备有憾地者级榴弹炮之炮台"
 
-#: data/base/messages/resmessages2.rmsg:174
+#: data/base/messages/resmessages2.rmsg:148
 #: data/base/messages/strings/resstrings.txt:160
 #: data/mp/messages/strings/resstrings.txt:182
 msgid "Armored Pepperpot mortar battery pit"
 msgstr "装备有旋转迫击炮之阵地"
 
-#: data/base/messages/resmessages2.rmsg:187
-#: data/base/messages/resmessages2.rmsg:200
+#: data/base/messages/resmessages2.rmsg:159
+#: data/base/messages/resmessages2.rmsg:170
 #: data/base/messages/strings/resstrings.txt:180
 #: data/base/messages/strings/resstrings.txt:186
 #: data/mp/messages/strings/resstrings.txt:204
@@ -2074,21 +2074,21 @@ msgstr "装备有旋转迫击炮之阵地"
 msgid "Armored Hellstorm howitzer emplacement"
 msgstr "装备有地狱风暴级榴弹炮之炮台"
 
-#: data/base/messages/resmessages2.rmsg:213
+#: data/base/messages/resmessages2.rmsg:181
 #: data/base/messages/strings/resstrings.txt:192
 #: data/mp/messages/strings/resstrings.txt:216
 msgid "Armored strongpoint with Tank Killer rocket"
 msgstr "装备有火箭（坦克杀手）之据点"
 
-#: data/base/messages/resmessages2.rmsg:214
-#: data/base/messages/resmessages2.rmsg:227
-#: data/base/messages/resmessages2.rmsg:240
-#: data/base/messages/resmessages2.rmsg:253
-#: data/base/messages/resmessages2.rmsg:266
-#: data/base/messages/resmessages3.rmsg:292
-#: data/base/messages/resmessages3.rmsg:305
-#: data/base/messages/resmessages3.rmsg:318
-#: data/base/messages/resmessages3.rmsg:331
+#: data/base/messages/resmessages2.rmsg:182
+#: data/base/messages/resmessages2.rmsg:193
+#: data/base/messages/resmessages2.rmsg:204
+#: data/base/messages/resmessages2.rmsg:215
+#: data/base/messages/resmessages2.rmsg:226
+#: data/base/messages/resmessages3.rmsg:248
+#: data/base/messages/resmessages3.rmsg:259
+#: data/base/messages/resmessages3.rmsg:270
+#: data/base/messages/resmessages3.rmsg:281
 #: data/base/messages/strings/resstrings.txt:193
 #: data/base/messages/strings/resstrings.txt:199
 #: data/base/messages/strings/resstrings.txt:205
@@ -2102,80 +2102,80 @@ msgstr "装备有火箭（坦克杀手）之据点"
 msgid "Automatically targets enemies in range"
 msgstr "自动攻击范围内所有敌人"
 
-#: data/base/messages/resmessages2.rmsg:226
+#: data/base/messages/resmessages2.rmsg:192
 #: data/base/messages/strings/resstrings.txt:198
 #: data/mp/messages/strings/resstrings.txt:222
 msgid "Armored strongpoint with Hyper-Velocity Cannon"
 msgstr "装备有高速加农炮之据点"
 
-#: data/base/messages/resmessages2.rmsg:239
+#: data/base/messages/resmessages2.rmsg:203
 #: data/base/messages/strings/resstrings.txt:204
 #: data/mp/messages/strings/resstrings.txt:228
 msgid "Armored strongpoint with Inferno Flamer"
 msgstr "装备有火焰喷射（地狱火）之据点"
 
-#: data/base/messages/resmessages2.rmsg:252
+#: data/base/messages/resmessages2.rmsg:214
 #: data/base/messages/strings/resstrings.txt:218
 #: data/mp/messages/strings/resstrings.txt:246
 msgid "Armored strongpoint with Assault Cannon"
 msgstr "装备有突击加农炮之据点"
 
-#: data/base/messages/resmessages2.rmsg:265
+#: data/base/messages/resmessages2.rmsg:225
 #: data/base/messages/strings/resstrings.txt:224
 #: data/mp/messages/strings/resstrings.txt:252
 msgid "Reinforced tower with Assault Gun"
 msgstr "装备有突击枪的防卫塔"
 
-#: data/base/messages/resmessages2.rmsg:278
+#: data/base/messages/resmessages2.rmsg:236
 #: data/base/messages/strings/resstrings.txt:288
 #: data/mp/messages/strings/resstrings.txt:316
 msgid "Armored hardpoint with Assault Gun"
 msgstr "装备有突击枪之要塞"
 
-#: data/base/messages/resmessages2.rmsg:291
+#: data/base/messages/resmessages2.rmsg:247
 #: data/base/messages/strings/resstrings.txt:294
 #: data/mp/messages/strings/resstrings.txt:322
 msgid "Armored hardpoint with Assault Cannon"
 msgstr "装备有突击加农炮之要塞"
 
-#: data/base/messages/resmessages2.rmsg:304
+#: data/base/messages/resmessages2.rmsg:258
 #: data/base/messages/strings/resstrings.txt:302
 #: data/mp/messages/strings/resstrings.txt:330
 msgid "Armored hardpoint with Inferno flamer"
 msgstr "装备有火焰喷射（地狱火）之要塞"
 
-#: data/base/messages/resmessages2.rmsg:317
+#: data/base/messages/resmessages2.rmsg:269
 #: data/base/messages/strings/resstrings.txt:308
 #: data/mp/messages/strings/resstrings.txt:336
 msgid "Armored hardpoint with Tank Killer AT missile"
 msgstr "装备有反坦克导弹（坦克杀手）之要塞"
 
-#: data/base/messages/resmessages2.rmsg:330
+#: data/base/messages/resmessages2.rmsg:280
 #: data/base/messages/strings/resstrings.txt:334
 #: data/mp/messages/strings/resstrings.txt:362
 msgid "New robotic repair techniques"
 msgstr "新的机器人修理科技"
 
-#: data/base/messages/resmessages2.rmsg:343
+#: data/base/messages/resmessages2.rmsg:291
 #: data/base/messages/strings/names.txt:786
 #: data/base/messages/strings/resstrings.txt:348
 #: data/mp/messages/strings/resstrings.txt:376
 msgid "Robotic Cyborg Production"
 msgstr "中级自动化生化人生产"
 
-#: data/base/messages/resmessages2.rmsg:356
+#: data/base/messages/resmessages2.rmsg:302
 #: data/base/messages/strings/resstrings.txt:366
 #: data/mp/messages/strings/resstrings.txt:394
 msgid "New Robotic Techniques improve factory production"
 msgstr "新的机械人科技改善了工厂产能"
 
-#: data/base/messages/resmessages2.rmsg:357
+#: data/base/messages/resmessages2.rmsg:303
 #: data/base/messages/strings/resstrings.txt:367
 #: data/mp/messages/strings/resstrings.txt:395
 msgid "Increases factory production rate"
 msgstr "工厂生产速率增加"
 
-#: data/base/messages/resmessages2.rmsg:369
+#: data/base/messages/resmessages2.rmsg:313
 #: data/base/messages/strings/names.txt:835
 #: data/base/messages/strings/resstrings.txt:390
 #: data/mp/messages/strings/names.txt:844
@@ -2183,7 +2183,7 @@ msgstr "工厂生产速率增加"
 msgid "Dedicated Synaptic Link Data Analysis"
 msgstr "专注突触连结资料分析一型"
 
-#: data/base/messages/resmessages2.rmsg:382
+#: data/base/messages/resmessages2.rmsg:324
 #: data/base/messages/strings/names.txt:808
 #: data/base/messages/strings/resstrings.txt:400
 #: data/mp/messages/strings/names.txt:817
@@ -2191,35 +2191,35 @@ msgstr "专注突触连结资料分析一型"
 msgid "Hardened Base Structure Materials"
 msgstr "中级强化建材一型"
 
-#: data/base/messages/resmessages2.rmsg:395
+#: data/base/messages/resmessages2.rmsg:335
 #: data/base/messages/strings/names.txt:851
 #: data/base/messages/strings/resstrings.txt:412
 #: data/mp/messages/strings/resstrings.txt:440
 msgid "Robotic VTOL Production"
 msgstr "中级自动化VTOL生产"
 
-#: data/base/messages/resmessages2.rmsg:396
-#: data/base/messages/resmessages3.rmsg:487
+#: data/base/messages/resmessages2.rmsg:336
+#: data/base/messages/resmessages3.rmsg:413
 #: data/base/messages/strings/resstrings.txt:413
 #: data/mp/messages/strings/resstrings.txt:441
 msgid "Increases VTOL factory output"
 msgstr "增加VTO​​L工厂产能"
 
-#: data/base/messages/resmessages2.rmsg:397
-#: data/base/messages/resmessages3.rmsg:488
+#: data/base/messages/resmessages2.rmsg:337
+#: data/base/messages/resmessages3.rmsg:414
 #: data/base/messages/strings/resstrings.txt:414
 #: data/mp/messages/strings/resstrings.txt:442
 msgid "All VTOL factories upgraded automatically"
 msgstr "自动升级所有VTOL工厂"
 
-#: data/base/messages/resmessages2.rmsg:407
-#: data/base/messages/resmessages3.rmsg:498
+#: data/base/messages/resmessages2.rmsg:345
+#: data/base/messages/resmessages3.rmsg:422
 #: data/base/messages/strings/resstrings.txt:421
 #: data/mp/messages/strings/resstrings.txt:449
 msgid "VTOL Rearming Times Reduced"
 msgstr "VTOL补给时间缩短"
 
-#: data/base/messages/resmessages2.rmsg:408
+#: data/base/messages/resmessages2.rmsg:346
 #: data/base/messages/strings/names.txt:843
 #: data/base/messages/strings/resstrings.txt:422
 #: data/mp/messages/strings/names.txt:852
@@ -2227,109 +2227,109 @@ msgstr "VTOL补给时间缩短"
 msgid "Automated VTOL Rearming"
 msgstr "初级自动化VTOL补给一型"
 
-#: data/base/messages/resmessages2.rmsg:409
-#: data/base/messages/resmessages3.rmsg:500
+#: data/base/messages/resmessages2.rmsg:347
+#: data/base/messages/resmessages3.rmsg:424
 #: data/base/messages/strings/resstrings.txt:423
 #: data/mp/messages/strings/resstrings.txt:451
 msgid "Reduces rearming time"
 msgstr "减少重新装载弹药时间"
 
-#: data/base/messages/resmessages2.rmsg:410
-#: data/base/messages/resmessages3.rmsg:501
+#: data/base/messages/resmessages2.rmsg:348
+#: data/base/messages/resmessages3.rmsg:425
 #: data/base/messages/strings/resstrings.txt:424
 #: data/mp/messages/strings/resstrings.txt:452
 msgid "All rearming pads upgraded automatically"
 msgstr "自动升级所有VTOL补给点"
 
-#: data/base/messages/resmessages2.rmsg:420
+#: data/base/messages/resmessages2.rmsg:356
 #: data/base/messages/strings/resstrings.txt:459
 #: data/mp/messages/strings/resstrings.txt:489
 msgid "Improved Sensor Tower Available"
 msgstr "可建筑改良后的雷达塔"
 
-#: data/base/messages/resmessages2.rmsg:421
+#: data/base/messages/resmessages2.rmsg:357
 #: data/base/messages/strings/resstrings.txt:460
 #: data/mp/messages/strings/resstrings.txt:490
 msgid "New construction techniques improve tower"
 msgstr "新的建筑技术改善了现有雷达塔"
 
-#: data/base/messages/resmessages2.rmsg:422
+#: data/base/messages/resmessages2.rmsg:358
 #: data/base/messages/strings/resstrings.txt:461
 #: data/mp/messages/strings/resstrings.txt:491
 msgid "Replaces existing sensor tower"
 msgstr "取代现有的雷达塔"
 
-#: data/base/messages/resmessages2.rmsg:423
-#: data/base/messages/resmessagesall.rmsg:59
-#: data/base/messages/resmessagesall.rmsg:72
+#: data/base/messages/resmessages2.rmsg:359
+#: data/base/messages/resmessagesall.rmsg:51
+#: data/base/messages/resmessagesall.rmsg:62
 #: data/base/messages/strings/resstrings.txt:462
 #: data/mp/messages/strings/resstrings.txt:492
 msgid "May be assigned as spotter for indirect fire weapons"
 msgstr "可以当作非直射型武器的导引"
 
-#: data/base/messages/resmessages2.rmsg:434
+#: data/base/messages/resmessages2.rmsg:368
 #: data/base/messages/strings/resstrings.txt:480
 #: data/mp/messages/strings/resstrings.txt:510
 msgid "VTOL CB turret detects enemy indirect fire batteries"
 msgstr "VTOL反炮兵雷达可侦测敌军的非直射型火炮"
 
-#: data/base/messages/resmessages2.rmsg:460
+#: data/base/messages/resmessages2.rmsg:390
 #: data/base/messages/strings/resstrings.txt:500
 #: data/mp/messages/strings/resstrings.txt:530
 msgid "New target recognition systems"
 msgstr "新的目标辨识系统"
 
-#: data/base/messages/resmessages2.rmsg:472
+#: data/base/messages/resmessages2.rmsg:400
 #: data/base/messages/strings/resstrings.txt:527
 #: data/mp/messages/strings/resstrings.txt:562
 msgid "Collective Light Body"
 msgstr "Collective的轻量级车身"
 
-#: data/base/messages/resmessages2.rmsg:473
-#: data/base/messages/resmessages3.rmsg:629
+#: data/base/messages/resmessages2.rmsg:401
+#: data/base/messages/resmessages3.rmsg:533
 #: data/base/messages/strings/resstrings.txt:528
 #: data/mp/messages/strings/resstrings.txt:563
 msgid "Superior armor and body points to Viper"
 msgstr "比响尾蛇更强的防御力及HP"
 
-#: data/base/messages/resmessages2.rmsg:474
+#: data/base/messages/resmessages2.rmsg:402
 #: data/base/messages/strings/resstrings.txt:529
 #: data/mp/messages/strings/resstrings.txt:564
 msgid "Slower than Viper"
 msgstr "移动速度比毒虫慢"
 
-#: data/base/messages/resmessages2.rmsg:475
+#: data/base/messages/resmessages2.rmsg:403
 #: data/base/messages/strings/resstrings.txt:530
 #: data/mp/messages/strings/resstrings.txt:565
 msgid "High power costs and slower to produce than Viper"
 msgstr "较高的资源需求及比响尾蛇慢的生产时间"
 
-#: data/base/messages/resmessages2.rmsg:485
+#: data/base/messages/resmessages2.rmsg:411
 #: data/base/messages/strings/resstrings.txt:539
 #: data/mp/messages/strings/resstrings.txt:574
 msgid "Collective Medium Body"
 msgstr "Collective的中量级车身"
 
-#: data/base/messages/resmessages2.rmsg:486
-#: data/base/messages/resmessages3.rmsg:642
+#: data/base/messages/resmessages2.rmsg:412
+#: data/base/messages/resmessages3.rmsg:544
 #: data/base/messages/strings/resstrings.txt:540
 #: data/mp/messages/strings/resstrings.txt:575
 msgid "Superior armor and body points to Cobra"
 msgstr "比眼镜蛇更强的防御力及HP"
 
-#: data/base/messages/resmessages2.rmsg:487
+#: data/base/messages/resmessages2.rmsg:413
 #: data/base/messages/strings/resstrings.txt:541
 #: data/mp/messages/strings/resstrings.txt:576
 msgid "Slower than Cobra"
 msgstr "移动速度比眼镜蛇慢"
 
-#: data/base/messages/resmessages2.rmsg:488
+#: data/base/messages/resmessages2.rmsg:414
 #: data/base/messages/strings/resstrings.txt:542
 #: data/mp/messages/strings/resstrings.txt:577
 msgid "High power costs and slower to produce than Cobra"
 msgstr "需要的资源及生产时间比眼镜蛇多"
 
-#: data/base/messages/resmessages2.rmsg:499
+#: data/base/messages/resmessages2.rmsg:423
 #: data/base/messages/strings/names.txt:945
 #: data/base/messages/strings/resstrings.txt:560
 #: data/mp/messages/strings/names.txt:956
@@ -2337,37 +2337,37 @@ msgstr "需要的资源及生产时间比眼镜蛇多"
 msgid "Turbo-Charged Engine"
 msgstr "涡轮增压引擎一型"
 
-#: data/base/messages/resmessages2.rmsg:524
-#: data/base/messages/resmessages3.rmsg:719
+#: data/base/messages/resmessages2.rmsg:444
+#: data/base/messages/resmessages3.rmsg:609
 #: data/base/messages/strings/resstrings.txt:581
 #: data/mp/messages/strings/resstrings.txt:616
 msgid "Vehicle Thermal Armor Improved"
 msgstr "改善车辆热能防御"
 
-#: data/base/messages/resmessages2.rmsg:525
-#: data/base/messages/resmessages3.rmsg:720
+#: data/base/messages/resmessages2.rmsg:445
+#: data/base/messages/resmessages3.rmsg:610
 #: data/base/messages/strings/resstrings.txt:582
 #: data/mp/messages/strings/resstrings.txt:617
 msgid "Heat-resistant armored layers"
 msgstr "阻热装甲层"
 
-#: data/base/messages/resmessages2.rmsg:526
-#: data/base/messages/resmessages3.rmsg:721
+#: data/base/messages/resmessages2.rmsg:446
+#: data/base/messages/resmessages3.rmsg:611
 #: data/base/messages/strings/resstrings.txt:583
 #: data/mp/messages/strings/resstrings.txt:618
 msgid "Increases Thermal Armor"
 msgstr "热能防御能力增加"
 
-#: data/base/messages/resmessages2.rmsg:537
-#: data/base/messages/resmessages2.rmsg:550
-#: data/base/messages/resmessages2.rmsg:563
-#: data/base/messages/resmessages2.rmsg:576
-#: data/base/messages/resmessages3.rmsg:732
-#: data/base/messages/resmessages3.rmsg:745
-#: data/base/messages/resmessages3.rmsg:758
-#: data/base/messages/resmessages3.rmsg:771
-#: data/base/messages/resmessages3.rmsg:784
-#: data/base/messages/resmessages3.rmsg:797
+#: data/base/messages/resmessages2.rmsg:455
+#: data/base/messages/resmessages2.rmsg:466
+#: data/base/messages/resmessages2.rmsg:477
+#: data/base/messages/resmessages2.rmsg:488
+#: data/base/messages/resmessages3.rmsg:620
+#: data/base/messages/resmessages3.rmsg:631
+#: data/base/messages/resmessages3.rmsg:642
+#: data/base/messages/resmessages3.rmsg:653
+#: data/base/messages/resmessages3.rmsg:664
+#: data/base/messages/resmessages3.rmsg:675
 #: data/base/messages/strings/resstrings.txt:591
 #: data/base/messages/strings/resstrings.txt:601
 #: data/base/messages/strings/resstrings.txt:611
@@ -2379,39 +2379,39 @@ msgstr "热能防御能力增加"
 msgid "Vehicle Propulsion Improved"
 msgstr "改善车辆推进动力"
 
-#: data/base/messages/resmessages2.rmsg:540
-#: data/base/messages/resmessages3.rmsg:735
+#: data/base/messages/resmessages2.rmsg:458
+#: data/base/messages/resmessages3.rmsg:623
 #: data/base/messages/strings/resstrings.txt:594
 #: data/mp/messages/strings/resstrings.txt:629
 msgid "All half-tracks upgraded automatically"
 msgstr "自动升级所有半履带式坦克"
 
-#: data/base/messages/resmessages2.rmsg:553
-#: data/base/messages/resmessages3.rmsg:748
+#: data/base/messages/resmessages2.rmsg:469
+#: data/base/messages/resmessages3.rmsg:634
 #: data/base/messages/strings/resstrings.txt:604
 #: data/mp/messages/strings/resstrings.txt:639
 msgid "All hovers upgraded automatically"
 msgstr "自动升级所有气垫船"
 
-#: data/base/messages/resmessages2.rmsg:566
-#: data/base/messages/resmessages3.rmsg:761
+#: data/base/messages/resmessages2.rmsg:480
+#: data/base/messages/resmessages3.rmsg:645
 #: data/base/messages/strings/resstrings.txt:614
 #: data/mp/messages/strings/resstrings.txt:649
 #, fuzzy
 msgid "All tracks upgraded automatically"
 msgstr "自动升级所有半履带式坦克"
 
-#: data/base/messages/resmessages2.rmsg:579
-#: data/base/messages/resmessages3.rmsg:774
+#: data/base/messages/resmessages2.rmsg:491
+#: data/base/messages/resmessages3.rmsg:656
 #: data/base/messages/strings/resstrings.txt:624
 #: data/mp/messages/strings/resstrings.txt:659
 msgid "All wheels upgraded automatically"
 msgstr "自动升级所有轮式坦克"
 
-#: data/base/messages/resmessages2.rmsg:589
-#: data/base/messages/resmessages2.rmsg:602
-#: data/base/messages/resmessages2.rmsg:615
-#: data/base/messages/resmessages2.rmsg:628
+#: data/base/messages/resmessages2.rmsg:499
+#: data/base/messages/resmessages2.rmsg:510
+#: data/base/messages/resmessages2.rmsg:521
+#: data/base/messages/resmessages2.rmsg:532
 #: data/base/messages/strings/resstrings.txt:635
 #: data/base/messages/strings/resstrings.txt:641
 #: data/base/messages/strings/resstrings.txt:647
@@ -2423,16 +2423,16 @@ msgstr "自动升级所有轮式坦克"
 msgid "New AA Turret Available"
 msgstr "可装备新的防空武器"
 
-#: data/base/messages/resmessages2.rmsg:590
+#: data/base/messages/resmessages2.rmsg:500
 #: data/base/messages/strings/resstrings.txt:636
 #: data/mp/messages/strings/resstrings.txt:671
 msgid "Twin 80mm flak weapon"
 msgstr "双管、口径80mm、防空火炮武器"
 
-#: data/base/messages/resmessages2.rmsg:591
-#: data/base/messages/resmessages2.rmsg:604
-#: data/base/messages/resmessages2.rmsg:617
-#: data/base/messages/resmessages2.rmsg:630
+#: data/base/messages/resmessages2.rmsg:501
+#: data/base/messages/resmessages2.rmsg:512
+#: data/base/messages/resmessages2.rmsg:523
+#: data/base/messages/resmessages2.rmsg:534
 #: data/base/messages/strings/resstrings.txt:637
 #: data/base/messages/strings/resstrings.txt:643
 #: data/base/messages/strings/resstrings.txt:649
@@ -2444,72 +2444,72 @@ msgstr "双管、口径80mm、防空火炮武器"
 msgid "Aerial targets only"
 msgstr "仅限空中目标"
 
-#: data/base/messages/resmessages2.rmsg:603
+#: data/base/messages/resmessages2.rmsg:511
 #: data/base/messages/strings/resstrings.txt:642
 #: data/mp/messages/strings/resstrings.txt:677
 msgid "Quad 80mm flak weapon"
 msgstr "四管、口径80mm、防空火炮武器"
 
-#: data/base/messages/resmessages2.rmsg:616
+#: data/base/messages/resmessages2.rmsg:522
 #: data/base/messages/strings/resstrings.txt:648
 #: data/mp/messages/strings/resstrings.txt:683
 msgid "30mm Anti-Aircraft machinegun"
 msgstr "口径30mm、防空机枪"
 
-#: data/base/messages/resmessages2.rmsg:629
+#: data/base/messages/resmessages2.rmsg:533
 #: data/base/messages/strings/resstrings.txt:654
 #: data/mp/messages/strings/resstrings.txt:689
 msgid "Quad 30mm Anti-Aircraft machinegun"
 msgstr "四管、口径30mm、防空机枪"
 
-#: data/base/messages/resmessages2.rmsg:642
+#: data/base/messages/resmessages2.rmsg:544
 #: data/base/messages/strings/resstrings.txt:660
 #: data/mp/messages/strings/resstrings.txt:695
 msgid "Detects and locks-on to VTOL engine emissions"
 msgstr "侦测与锁定VTOL引擎热源"
 
-#: data/base/messages/resmessages2.rmsg:654
-#: data/base/messages/resmessages3.rmsg:823
+#: data/base/messages/resmessages2.rmsg:554
+#: data/base/messages/resmessages3.rmsg:697
 #: data/base/messages/strings/resstrings.txt:669
 #: data/mp/messages/strings/resstrings.txt:704
 msgid "AA Flak Upgrade"
 msgstr "防空高射炮升级"
 
-#: data/base/messages/resmessages2.rmsg:655
+#: data/base/messages/resmessages2.rmsg:555
 #: data/base/messages/strings/resstrings.txt:670
 #: data/mp/messages/strings/resstrings.txt:705
 msgid "High Explosive Flak shards"
 msgstr "高爆性防空炮弹壳"
 
-#: data/base/messages/resmessages2.rmsg:656
-#: data/base/messages/resmessages3.rmsg:825
+#: data/base/messages/resmessages2.rmsg:556
+#: data/base/messages/resmessages3.rmsg:699
 #: data/base/messages/strings/resstrings.txt:671
 #: data/mp/messages/strings/resstrings.txt:706
 msgid "Increases AA Flak damage"
 msgstr "增加防空高射炮攻击力"
 
-#: data/base/messages/resmessages2.rmsg:657
-#: data/base/messages/resmessages3.rmsg:826
+#: data/base/messages/resmessages2.rmsg:557
+#: data/base/messages/resmessages3.rmsg:700
 #: data/base/messages/strings/resstrings.txt:672
 #: data/mp/messages/strings/resstrings.txt:707
 msgid "All AA flak weapons upgraded automatically"
 msgstr "自动升级所有防空武器"
 
-#: data/base/messages/resmessages2.rmsg:668
+#: data/base/messages/resmessages2.rmsg:566
 #: data/base/messages/strings/resstrings.txt:678
 #: data/mp/messages/strings/resstrings.txt:713
 msgid "Recoil loaded AA ammunition hopper"
 msgstr "回弹加载式防空火炮弹药送料斗"
 
-#: data/base/messages/resmessages2.rmsg:669
-#: data/base/messages/resmessages3.rmsg:838
+#: data/base/messages/resmessages2.rmsg:567
+#: data/base/messages/resmessages3.rmsg:710
 #: data/base/messages/strings/resstrings.txt:679
 #: data/mp/messages/strings/resstrings.txt:714
 msgid "Increases AA ROF"
 msgstr "增加防空武器射速"
 
-#: data/base/messages/resmessages2.rmsg:680
-#: data/base/messages/resmessages2.rmsg:693
+#: data/base/messages/resmessages2.rmsg:576
+#: data/base/messages/resmessages2.rmsg:587
 #: data/base/messages/strings/resstrings.txt:685
 #: data/base/messages/strings/resstrings.txt:691
 #: data/mp/messages/strings/resstrings.txt:720
@@ -2517,14 +2517,14 @@ msgstr "增加防空武器射速"
 msgid "New Proximity Bomb Turret Available"
 msgstr "可搭载新的距离炸弹"
 
-#: data/base/messages/resmessages2.rmsg:681
+#: data/base/messages/resmessages2.rmsg:577
 #: data/base/messages/strings/resstrings.txt:686
 #: data/mp/messages/strings/resstrings.txt:721
 msgid "Bomb turret explodes in proximity to enemy"
 msgstr "当敌军接近时炸弹自动爆炸"
 
-#: data/base/messages/resmessages2.rmsg:682
-#: data/base/messages/resmessages2.rmsg:695
+#: data/base/messages/resmessages2.rmsg:578
+#: data/base/messages/resmessages2.rmsg:589
 #: data/base/messages/strings/resstrings.txt:687
 #: data/base/messages/strings/resstrings.txt:693
 #: data/mp/messages/strings/resstrings.txt:722
@@ -2532,103 +2532,103 @@ msgstr "当敌军接近时炸弹自动爆炸"
 msgid "Best Targets: Base Structures and Defenses"
 msgstr "最佳目标：基本建筑物与防御工事"
 
-#: data/base/messages/resmessages2.rmsg:694
+#: data/base/messages/resmessages2.rmsg:588
 #: data/base/messages/strings/resstrings.txt:692
 #: data/mp/messages/strings/resstrings.txt:727
 msgid "Superbomb turret explodes in proximity to enemy"
 msgstr "当敌军接近时超级炸弹自动爆炸"
 
-#: data/base/messages/resmessages2.rmsg:707
+#: data/base/messages/resmessages2.rmsg:599
 #: data/base/messages/strings/resstrings.txt:698
 #: data/mp/messages/strings/resstrings.txt:733
 msgid "Drops High Explosive Cluster bombs"
 msgstr "投掷高爆性集束炸弹"
 
-#: data/base/messages/resmessages2.rmsg:708
+#: data/base/messages/resmessages2.rmsg:600
 #: data/base/messages/strings/resstrings.txt:699
 #: data/mp/messages/strings/resstrings.txt:734
 msgid "Best Targets: Base Structures"
 msgstr "最佳目标：基本建筑物"
 
-#: data/base/messages/resmessages2.rmsg:720
+#: data/base/messages/resmessages2.rmsg:610
 #: data/base/messages/strings/resstrings.txt:704
 #: data/mp/messages/strings/resstrings.txt:739
 msgid "Drops High Explosive Armor Piercing bombs"
 msgstr "投掷高爆性穿甲炸弹"
 
-#: data/base/messages/resmessages2.rmsg:721
+#: data/base/messages/resmessages2.rmsg:611
 #: data/base/messages/strings/resstrings.txt:705
 #: data/mp/messages/strings/resstrings.txt:740
 msgid "Best Targets: Defenses"
 msgstr "最佳目标：防御工事"
 
-#: data/base/messages/resmessages2.rmsg:733
+#: data/base/messages/resmessages2.rmsg:621
 #: data/base/messages/strings/resstrings.txt:714
 #: data/mp/messages/strings/resstrings.txt:749
 msgid "Locks on to thermal emissions"
 msgstr "自动锁定热散射源"
 
-#: data/base/messages/resmessages2.rmsg:746
+#: data/base/messages/resmessages2.rmsg:632
 #: data/base/messages/strings/resstrings.txt:730
 #: data/mp/messages/strings/resstrings.txt:765
 msgid "Hyper-velocity automatic-cannon firing 88mm rounds"
 msgstr "高速自动加农炮，装载88mm弹药"
 
-#: data/base/messages/resmessages2.rmsg:748
+#: data/base/messages/resmessages2.rmsg:634
 #: data/base/messages/strings/resstrings.txt:732
 #: data/mp/messages/strings/resstrings.txt:767
 msgid "Replaces Medium Cannon"
 msgstr "取代中型加农炮"
 
-#: data/base/messages/resmessages2.rmsg:759
+#: data/base/messages/resmessages2.rmsg:643
 #: data/base/messages/strings/resstrings.txt:736
 #: data/mp/messages/strings/resstrings.txt:771
 msgid "76mm hyper-velocity quad-barrel automatic-cannon"
 msgstr "高速四管自动加农炮，口径76mm"
 
-#: data/base/messages/resmessages2.rmsg:772
+#: data/base/messages/resmessages2.rmsg:654
 #: data/base/messages/strings/resstrings.txt:758
 #: data/mp/messages/strings/resstrings.txt:797
 msgid "Heavy Flame-thrower firing Propylene Oxide gel"
 msgstr "可以发射环氧丙烷凝胶的高温火焰塔"
 
-#: data/base/messages/resmessages2.rmsg:785
+#: data/base/messages/resmessages2.rmsg:665
 #: data/base/messages/strings/resstrings.txt:766
 #: data/mp/messages/strings/resstrings.txt:805
 msgid "Propylene Oxide treated to burn at superhot temperatures"
 msgstr "环氧丙烷凝胶可在超高的温度下燃烧"
 
-#: data/base/messages/resmessages2.rmsg:798
+#: data/base/messages/resmessages2.rmsg:676
 #: data/base/messages/strings/resstrings.txt:774
 #: data/mp/messages/strings/resstrings.txt:813
 msgid "105mm Howitzer may be assigned to a sensor"
 msgstr "口径105mm榴弹炮，可指派给雷达导引"
 
-#: data/base/messages/resmessages2.rmsg:811
+#: data/base/messages/resmessages2.rmsg:687
 #: data/base/messages/strings/resstrings.txt:780
 #: data/mp/messages/strings/resstrings.txt:821
 msgid "155mm Howitzer may be assigned to a sensor"
 msgstr "口径155mm榴弹炮，可指派给雷达导引"
 
-#: data/base/messages/resmessages2.rmsg:824
+#: data/base/messages/resmessages2.rmsg:698
 #: data/base/messages/strings/resstrings.txt:788
 #: data/mp/messages/strings/resstrings.txt:829
 #, fuzzy
 msgid "105m Howitzer firing incendiaries, may be assigned to a sensor"
 msgstr "口径105mm燃烧榴弹炮，可指派给雷达导引"
 
-#: data/base/messages/resmessages2.rmsg:825
+#: data/base/messages/resmessages2.rmsg:699
 #: data/base/messages/strings/resstrings.txt:789
 #: data/mp/messages/strings/resstrings.txt:830
 msgid "Best Targets: Base Structures, bunkers"
 msgstr "最佳目标：基本建筑物与碉堡"
 
-#: data/base/messages/resmessages2.rmsg:836
-#: data/base/messages/resmessages2.rmsg:849
-#: data/base/messages/resmessages2.rmsg:862
-#: data/base/messages/resmessages3.rmsg:901
-#: data/base/messages/resmessages3.rmsg:914
-#: data/base/messages/resmessages3.rmsg:927
+#: data/base/messages/resmessages2.rmsg:708
+#: data/base/messages/resmessages2.rmsg:719
+#: data/base/messages/resmessages2.rmsg:730
+#: data/base/messages/resmessages3.rmsg:763
+#: data/base/messages/resmessages3.rmsg:774
+#: data/base/messages/resmessages3.rmsg:785
 #: data/base/messages/strings/resstrings.txt:793
 #: data/base/messages/strings/resstrings.txt:801
 #: data/base/messages/strings/resstrings.txt:809
@@ -2638,19 +2638,19 @@ msgstr "最佳目标：基本建筑物与碉堡"
 msgid "Howitzer Upgrade"
 msgstr "榴弹炮升级"
 
-#: data/base/messages/resmessages2.rmsg:838
-#: data/base/messages/resmessages3.rmsg:903
+#: data/base/messages/resmessages2.rmsg:710
+#: data/base/messages/resmessages3.rmsg:765
 #: data/base/messages/strings/resstrings.txt:795
 #: data/mp/messages/strings/resstrings.txt:836
 msgid "Increases Howitzer accuracy"
 msgstr "增加榴弹炮系武器准确率"
 
-#: data/base/messages/resmessages2.rmsg:839
-#: data/base/messages/resmessages2.rmsg:852
-#: data/base/messages/resmessages2.rmsg:865
-#: data/base/messages/resmessages3.rmsg:904
-#: data/base/messages/resmessages3.rmsg:917
-#: data/base/messages/resmessages3.rmsg:930
+#: data/base/messages/resmessages2.rmsg:711
+#: data/base/messages/resmessages2.rmsg:722
+#: data/base/messages/resmessages2.rmsg:733
+#: data/base/messages/resmessages3.rmsg:766
+#: data/base/messages/resmessages3.rmsg:777
+#: data/base/messages/resmessages3.rmsg:788
 #: data/base/messages/strings/resstrings.txt:796
 #: data/base/messages/strings/resstrings.txt:804
 #: data/base/messages/strings/resstrings.txt:812
@@ -2660,128 +2660,128 @@ msgstr "增加榴弹炮系武器准确率"
 msgid "All howitzers upgraded automatically"
 msgstr "自动升级所有榴弹炮系武器"
 
-#: data/base/messages/resmessages2.rmsg:850
+#: data/base/messages/resmessages2.rmsg:720
 #: data/base/messages/strings/resstrings.txt:802
 #: data/mp/messages/strings/resstrings.txt:843
 msgid "High Explosive shells"
 msgstr "高爆性弹壳"
 
-#: data/base/messages/resmessages2.rmsg:851
-#: data/base/messages/resmessages3.rmsg:916
+#: data/base/messages/resmessages2.rmsg:721
+#: data/base/messages/resmessages3.rmsg:776
 #: data/base/messages/strings/resstrings.txt:803
 #: data/mp/messages/strings/resstrings.txt:844
 msgid "Increases Howitzer damage"
 msgstr "增加榴弹炮攻击力"
 
-#: data/base/messages/resmessages2.rmsg:864
-#: data/base/messages/resmessages3.rmsg:929
+#: data/base/messages/resmessages2.rmsg:732
+#: data/base/messages/resmessages3.rmsg:787
 #: data/base/messages/strings/resstrings.txt:811
 #: data/mp/messages/strings/resstrings.txt:852
 msgid "Increases Howitzer ROF"
 msgstr "增加榴弹炮系武器攻速"
 
-#: data/base/messages/resmessages2.rmsg:876
+#: data/base/messages/resmessages2.rmsg:742
 #: data/base/messages/strings/resstrings.txt:846
 #: data/mp/messages/strings/resstrings.txt:889
 msgid "Tungsten-tipped armor-piercing bullets"
 msgstr "尖端钨化穿甲子弹"
 
-#: data/base/messages/resmessages2.rmsg:889
+#: data/base/messages/resmessages2.rmsg:753
 #: data/base/messages/strings/resstrings.txt:858
 #: data/mp/messages/strings/resstrings.txt:901
 msgid "Improved chaingun mechanism"
 msgstr "改善链枪机构"
 
-#: data/base/messages/resmessages2.rmsg:915
+#: data/base/messages/resmessages2.rmsg:775
 #: data/base/messages/strings/resstrings.txt:906
 #: data/mp/messages/strings/resstrings.txt:951
 msgid "High Explosive Armor-Piercing Shells"
 msgstr "高爆性穿甲弹壳（HEAP Shells）"
 
-#: data/base/messages/resmessages2.rmsg:928
+#: data/base/messages/resmessages2.rmsg:786
 #: data/base/messages/strings/resstrings.txt:944
 #: data/mp/messages/strings/resstrings.txt:989
 msgid "High Explosive Armor-Piercing warheads"
 msgstr "高爆性穿甲弹头（HEAP warheads）"
 
-#: data/base/messages/resmessages2.rmsg:941
+#: data/base/messages/resmessages2.rmsg:797
 #: data/base/messages/strings/resstrings.txt:966
 #: data/mp/messages/strings/resstrings.txt:1011
 msgid "High Explosive Squash Head warhead"
 msgstr "高爆性压缩弹头（HESH）"
 
-#: data/base/messages/resmessages3.rmsg:18
+#: data/base/messages/resmessages3.rmsg:16
 msgid "NEXUS Intruder Program analyzed"
 msgstr "NEXUS 入侵程式分析完毕"
 
-#: data/base/messages/resmessages3.rmsg:19
+#: data/base/messages/resmessages3.rmsg:17
 msgid "Intruder parasite isolated"
 msgstr "隔绝入侵的寄生系统"
 
-#: data/base/messages/resmessages3.rmsg:20
-#: data/base/messages/resmessages3.rmsg:33
+#: data/base/messages/resmessages3.rmsg:18
+#: data/base/messages/resmessages3.rmsg:29
 msgid "Reduced chance of NEXUS take-over"
 msgstr "降低自身单位被NEXUS 夺取的机会"
 
-#: data/base/messages/resmessages3.rmsg:31
+#: data/base/messages/resmessages3.rmsg:27
 msgid "Improved NEXUS resistance circuitry"
 msgstr "改善防御NEXUS 入侵我方系统的能力"
 
-#: data/base/messages/resmessages3.rmsg:32
+#: data/base/messages/resmessages3.rmsg:28
 msgid "Computer systems can now be 'ring-fenced' from NEXUS"
 msgstr "电脑系统已建立起防火墙抵抗来自NEXUS的入侵"
 
-#: data/base/messages/resmessages3.rmsg:43
+#: data/base/messages/resmessages3.rmsg:37
 msgid "New Cyborg Research Available"
 msgstr "可研发新的生化人科技"
 
-#: data/base/messages/resmessages3.rmsg:44
+#: data/base/messages/resmessages3.rmsg:38
 msgid "Aerodynamic Jump Pack"
 msgstr "空气动力跳跃背包"
 
-#: data/base/messages/resmessages3.rmsg:45
+#: data/base/messages/resmessages3.rmsg:39
 msgid "Gives Cyborg limited flight abilities"
 msgstr "给予生化人步兵有限的飞行能力"
 
-#: data/base/messages/resmessages3.rmsg:46
+#: data/base/messages/resmessages3.rmsg:40
 msgid "Jump Cyborgs can now be researched"
 msgstr "可研发跳跃生化人步兵"
 
-#: data/base/messages/resmessages3.rmsg:70
-#: data/base/messages/resmessages3.rmsg:694
+#: data/base/messages/resmessages3.rmsg:60
+#: data/base/messages/resmessages3.rmsg:588
 msgid "Superdense composite alloys and energy-absorbing fibres"
 msgstr "超紧密复合合金和能量吸收纤维"
 
-#: data/base/messages/resmessages3.rmsg:83
-#: data/base/messages/resmessages3.rmsg:707
+#: data/base/messages/resmessages3.rmsg:71
+#: data/base/messages/resmessages3.rmsg:599
 msgid "Laminated alloys bonded with energy-deflecting optic bundles"
 msgstr "结合层状合金与能量反射光纤"
 
-#: data/base/messages/resmessages3.rmsg:96
+#: data/base/messages/resmessages3.rmsg:82
 #: data/base/messages/strings/resstrings.txt:78
 #: data/mp/messages/strings/resstrings.txt:98
 msgid "Armed with Revenger Surface-to-Air missile"
 msgstr "装备有报复者地对空导弹之生化人步兵"
 
-#: data/base/messages/resmessages3.rmsg:109
-#: data/base/messages/resmessages3.rmsg:174
+#: data/base/messages/resmessages3.rmsg:93
+#: data/base/messages/resmessages3.rmsg:148
 msgid "Armed with Needle Gun"
 msgstr "装备有针刺炮之生化人步兵"
 
-#: data/base/messages/resmessages3.rmsg:122
-#: data/base/messages/resmessages3.rmsg:187
+#: data/base/messages/resmessages3.rmsg:104
+#: data/base/messages/resmessages3.rmsg:159
 msgid "Armed with Scourge anti-tank missile"
 msgstr "装备有天谴导弹之生化人步兵"
 
-#: data/base/messages/resmessages3.rmsg:135
+#: data/base/messages/resmessages3.rmsg:115
 msgid "Armed with flashlight laser"
 msgstr "装备有激光激光之生化人步兵"
 
+#: data/base/messages/resmessages3.rmsg:125
+#: data/base/messages/resmessages3.rmsg:136
 #: data/base/messages/resmessages3.rmsg:147
-#: data/base/messages/resmessages3.rmsg:160
-#: data/base/messages/resmessages3.rmsg:173
-#: data/base/messages/resmessages3.rmsg:186
-#: data/base/messages/resmessages3.rmsg:199
+#: data/base/messages/resmessages3.rmsg:158
+#: data/base/messages/resmessages3.rmsg:169
 #: data/base/messages/strings/resstrings.txt:77
 #: data/base/messages/strings/resstrings.txt:83
 #: data/mp/messages/strings/resstrings.txt:97
@@ -2789,500 +2789,500 @@ msgstr "装备有激光激光之生化人步兵"
 msgid "New Jump Cyborg Available"
 msgstr "可生产跳跃新的生化人步兵"
 
-#: data/base/messages/resmessages3.rmsg:148
+#: data/base/messages/resmessages3.rmsg:126
 msgid "Armed with Lancer anti-tank missile"
 msgstr "装备有枪骑兵反坦克导弹之生化人步兵"
 
-#: data/base/messages/resmessages3.rmsg:161
+#: data/base/messages/resmessages3.rmsg:137
 msgid "Armed with Cyborg assault gun"
 msgstr "装备有突击枪之生化人步兵"
 
-#: data/base/messages/resmessages3.rmsg:200
+#: data/base/messages/resmessages3.rmsg:170
 msgid "Armed with Flashlight Laser"
 msgstr "装备有激光激光之生化人步兵"
 
-#: data/base/messages/resmessages3.rmsg:202
+#: data/base/messages/resmessages3.rmsg:172
 msgid "Requires cyborg factory to produce"
 msgstr "需要生化人步兵工厂来生产"
 
-#: data/base/messages/resmessages3.rmsg:213
+#: data/base/messages/resmessages3.rmsg:181
 msgid "High tensile concrete-plastic composite"
 msgstr "高张力混凝土与黏土复合墙"
 
-#: data/base/messages/resmessages3.rmsg:226
+#: data/base/messages/resmessages3.rmsg:192
 msgid "Bonded metallic laminates formed into walls and defenses"
 msgstr "在防御工事建筑材料内加入层状金属"
 
-#: data/base/messages/resmessages3.rmsg:239
+#: data/base/messages/resmessages3.rmsg:203
 msgid "SAM site with Avenger missiles"
 msgstr "装备有复仇者级地对空导弹之炮台"
 
-#: data/base/messages/resmessages3.rmsg:252
+#: data/base/messages/resmessages3.rmsg:214
 msgid "SAM site with Vindicator missiles"
 msgstr "装备有拥护者级地对空导弹之炮台"
 
-#: data/base/messages/resmessages3.rmsg:265
+#: data/base/messages/resmessages3.rmsg:225
 msgid "Artillery battery firing Firestorm Missiles"
 msgstr "发射火焰风暴导弹"
 
-#: data/base/messages/resmessages3.rmsg:278
+#: data/base/messages/resmessages3.rmsg:236
 msgid "Artillery battery firing Novastorm Missiles"
 msgstr "可发射新星风暴（Novastorm）导弹"
 
-#: data/base/messages/resmessages3.rmsg:291
+#: data/base/messages/resmessages3.rmsg:247
 msgid "Armored strongpoint with Flashlight laser"
 msgstr "装备有激光激光之据点"
 
-#: data/base/messages/resmessages3.rmsg:304
+#: data/base/messages/resmessages3.rmsg:258
 msgid "Armored strongpoint with Pulse Laser"
 msgstr "装备有脉冲激光之据点"
 
-#: data/base/messages/resmessages3.rmsg:317
+#: data/base/messages/resmessages3.rmsg:269
 msgid "Armored strongpoint with Rail Gun"
 msgstr "装备有轨道炮之据点"
 
-#: data/base/messages/resmessages3.rmsg:330
+#: data/base/messages/resmessages3.rmsg:280
 msgid "Armored strongpoint with Gauss Cannon"
 msgstr "装备有高斯加农炮之据点"
 
-#: data/base/messages/resmessages3.rmsg:343
+#: data/base/messages/resmessages3.rmsg:291
 msgid "Armored guard tower with Scourge Missile"
 msgstr "装备有天谴导弹的防卫塔"
 
-#: data/base/messages/resmessages3.rmsg:356
+#: data/base/messages/resmessages3.rmsg:302
 msgid "Armored guard tower with Needle Gun"
 msgstr "装备有针刺炮的防卫塔"
 
-#: data/base/messages/resmessages3.rmsg:369
+#: data/base/messages/resmessages3.rmsg:313
 msgid "Armored hardpoint with Scourge AT Missile"
 msgstr "装备有天谴导弹之要塞"
 
-#: data/base/messages/resmessages3.rmsg:382
+#: data/base/messages/resmessages3.rmsg:324
 msgid "Armored hardpoint with Flashlight laser"
 msgstr "装备有激光激光之要塞"
 
-#: data/base/messages/resmessages3.rmsg:395
+#: data/base/messages/resmessages3.rmsg:335
 msgid "Armored hardpoint with Rail Gun"
 msgstr "装备有轨道炮之要塞"
 
-#: data/base/messages/resmessages3.rmsg:408
+#: data/base/messages/resmessages3.rmsg:346
 msgid "Armored hardpoint with Gauss Cannon"
 msgstr "装备有高斯加农炮之要塞"
 
-#: data/base/messages/resmessages3.rmsg:421
+#: data/base/messages/resmessages3.rmsg:357
 msgid "Advanced repair techniques"
 msgstr "高级修理科技"
 
-#: data/base/messages/resmessages3.rmsg:435
+#: data/base/messages/resmessages3.rmsg:369
 msgid "Vapor Turbine boosts power output"
 msgstr "蒸气涡轮增加能源输出效率"
 
-#: data/base/messages/resmessages3.rmsg:447
+#: data/base/messages/resmessages3.rmsg:379
 #: data/base/messages/strings/names.txt:838
 #: data/mp/messages/strings/names.txt:847
 msgid "Neural Synapse Research Brain"
 msgstr "神经突触智慧研究一型"
 
-#: data/base/messages/resmessages3.rmsg:460
+#: data/base/messages/resmessages3.rmsg:390
 #: data/base/messages/strings/names.txt:811
 #: data/mp/messages/strings/names.txt:820
 msgid "Advanced Base Structure Materials"
 msgstr "高级强化建材一型"
 
-#: data/base/messages/resmessages3.rmsg:473
+#: data/base/messages/resmessages3.rmsg:401
 msgid "High Density Base Structure Materials"
 msgstr "高密度基础建筑材料"
 
-#: data/base/messages/resmessages3.rmsg:486
+#: data/base/messages/resmessages3.rmsg:412
 #: data/base/messages/strings/names.txt:854
 msgid "Advanced VTOL Production"
 msgstr "高级自动化VTOL 生产"
 
-#: data/base/messages/resmessages3.rmsg:499
+#: data/base/messages/resmessages3.rmsg:423
 #: data/base/messages/strings/names.txt:846
 #: data/mp/messages/strings/names.txt:855
 msgid "Robotic VTOL Rearming"
 msgstr "中级自动化VTOL补给一型"
 
-#: data/base/messages/resmessages3.rmsg:512
+#: data/base/messages/resmessages3.rmsg:434
 msgid "Advanced Engineering Techniques"
 msgstr "高级工程技术"
 
-#: data/base/messages/resmessages3.rmsg:538
+#: data/base/messages/resmessages3.rmsg:456
 msgid "Advanced fire detection systems"
 msgstr "高级火焰侦测系统"
 
-#: data/base/messages/resmessages3.rmsg:551
+#: data/base/messages/resmessages3.rmsg:467
 msgid "Advanced target recognition systems"
 msgstr "高级目标确认系统"
 
-#: data/base/messages/resmessages3.rmsg:564
+#: data/base/messages/resmessages3.rmsg:478
 msgid "Synaptic Link Scrambler technology"
 msgstr "突触连结扰频科技"
 
-#: data/base/messages/resmessages3.rmsg:565
+#: data/base/messages/resmessages3.rmsg:479
 msgid "Electronically attacks and disrupts enemy structures"
 msgstr "对敌方建筑进行电子攻击及干扰"
 
-#: data/base/messages/resmessages3.rmsg:566
+#: data/base/messages/resmessages3.rmsg:480
 msgid "Steals technology from enemies"
 msgstr "从敌军处窃取科技"
 
-#: data/base/messages/resmessages3.rmsg:576
-#: data/base/messages/resmessages3.rmsg:589
-#: data/base/messages/resmessages3.rmsg:602
-#: data/base/messages/resmessages3.rmsg:615
+#: data/base/messages/resmessages3.rmsg:488
+#: data/base/messages/resmessages3.rmsg:499
+#: data/base/messages/resmessages3.rmsg:510
+#: data/base/messages/resmessages3.rmsg:521
 msgid "New Repair Technology Discovered"
 msgstr "发现新的修理技术"
 
-#: data/base/messages/resmessages3.rmsg:577
-#: data/base/messages/resmessages3.rmsg:590
-#: data/base/messages/resmessages3.rmsg:603
-#: data/base/messages/resmessages3.rmsg:616
+#: data/base/messages/resmessages3.rmsg:489
+#: data/base/messages/resmessages3.rmsg:500
+#: data/base/messages/resmessages3.rmsg:511
+#: data/base/messages/resmessages3.rmsg:522
 msgid "Synaptic Link technology breakthrough"
 msgstr "突触连结科技的突破"
 
-#: data/base/messages/resmessages3.rmsg:578
-#: data/base/messages/resmessages3.rmsg:617
+#: data/base/messages/resmessages3.rmsg:490
+#: data/base/messages/resmessages3.rmsg:523
 msgid "On-board diagnostic and repair systems"
 msgstr "装载诊断及修理系统"
 
-#: data/base/messages/resmessages3.rmsg:579
+#: data/base/messages/resmessages3.rmsg:491
 msgid "Enables self-repair in all Cyborgs"
 msgstr "给予所有生化人步兵自我修复能力"
 
-#: data/base/messages/resmessages3.rmsg:591
-#: data/base/messages/resmessages3.rmsg:604
+#: data/base/messages/resmessages3.rmsg:501
+#: data/base/messages/resmessages3.rmsg:512
 msgid "Built-in diagnostic and repair systems"
 msgstr "内建诊断及修理系统"
 
-#: data/base/messages/resmessages3.rmsg:592
+#: data/base/messages/resmessages3.rmsg:502
 msgid "Enables self-repair in all base structures"
 msgstr "给予所有基础建筑物自我修复能力"
 
-#: data/base/messages/resmessages3.rmsg:605
+#: data/base/messages/resmessages3.rmsg:513
 msgid "Enables self-repair in all defenses"
 msgstr "给予所有防御工事自我修复能力"
 
-#: data/base/messages/resmessages3.rmsg:618
+#: data/base/messages/resmessages3.rmsg:524
 msgid "Enables self-repair in all vehicles"
 msgstr "给予所有车辆自我修复能力"
 
-#: data/base/messages/resmessages3.rmsg:628
+#: data/base/messages/resmessages3.rmsg:532
 msgid "NEXUS Light Body"
 msgstr "NEXUS的轻量级车身"
 
-#: data/base/messages/resmessages3.rmsg:631
+#: data/base/messages/resmessages3.rmsg:535
 msgid "Expensive to produce"
 msgstr "生产需耗费较多资源"
 
-#: data/base/messages/resmessages3.rmsg:641
+#: data/base/messages/resmessages3.rmsg:543
 msgid "NEXUS Medium Body"
 msgstr "NEXUS的中量级车身"
 
-#: data/base/messages/resmessages3.rmsg:644
+#: data/base/messages/resmessages3.rmsg:546
 msgid "Expensive and slow to produce"
 msgstr "昂贵且生产时间慢"
 
-#: data/base/messages/resmessages3.rmsg:654
+#: data/base/messages/resmessages3.rmsg:554
 msgid "NEXUS Heavy Body"
 msgstr "NEXUS的重量级车身"
 
-#: data/base/messages/resmessages3.rmsg:655
-#: data/base/messages/resmessagesall.rmsg:109
+#: data/base/messages/resmessages3.rmsg:555
+#: data/base/messages/resmessagesall.rmsg:93
 msgid "More armor and body points than Python"
 msgstr "比蟒蛇强的防御力及HP"
 
-#: data/base/messages/resmessages3.rmsg:657
+#: data/base/messages/resmessages3.rmsg:557
 msgid "Very expensive to produce"
 msgstr "非常贵..."
 
-#: data/base/messages/resmessages3.rmsg:668
+#: data/base/messages/resmessages3.rmsg:566
 #: data/base/messages/strings/names.txt:948
 #: data/mp/messages/strings/names.txt:959
 msgid "Gas Turbine Engine"
 msgstr "燃气涡轮增压引擎一型"
 
-#: data/base/messages/resmessages3.rmsg:681
+#: data/base/messages/resmessages3.rmsg:577
 msgid "Ionizing Turbine Engine"
 msgstr "离子化涡轮引擎"
 
-#: data/base/messages/resmessages3.rmsg:785
-#: data/base/messages/resmessages3.rmsg:798
+#: data/base/messages/resmessages3.rmsg:665
+#: data/base/messages/resmessages3.rmsg:676
 msgid "New power efficient propulsion"
 msgstr "新的高效能推进动力"
 
-#: data/base/messages/resmessages3.rmsg:786
-#: data/base/messages/resmessages3.rmsg:799
+#: data/base/messages/resmessages3.rmsg:666
+#: data/base/messages/resmessages3.rmsg:677
 #, fuzzy
 msgid "Body Points and Speed Increased"
 msgstr "HP及移动速度增加"
 
-#: data/base/messages/resmessages3.rmsg:787
-#: data/base/messages/resmessages3.rmsg:800
+#: data/base/messages/resmessages3.rmsg:667
+#: data/base/messages/resmessages3.rmsg:678
 msgid "All VTOLs upgraded automatically"
 msgstr "自动升级所有VTOL"
 
-#: data/base/messages/resmessages3.rmsg:811
+#: data/base/messages/resmessages3.rmsg:687
 msgid "Computer plots and guides shell to target's position"
 msgstr "电脑自动找出并导引弹壳至目标的位置"
 
-#: data/base/messages/resmessages3.rmsg:824
+#: data/base/messages/resmessages3.rmsg:698
 msgid "High Explosive Armor Piercing Flak"
 msgstr "高爆性穿甲防空炮弹（HEAP Flak）"
 
-#: data/base/messages/resmessages3.rmsg:837
+#: data/base/messages/resmessages3.rmsg:709
 msgid "Chainfeed loader eradicates jams and improves performance"
 msgstr "连锁装填系统避免卡弹的发生并改善装载弹药之效能"
 
-#: data/base/messages/resmessages3.rmsg:850
+#: data/base/messages/resmessages3.rmsg:720
 msgid "Drops high intensity thermite bombs"
 msgstr "投掷高强度铝热反应炸弹"
 
-#: data/base/messages/resmessages3.rmsg:851
-#: data/base/messages/resmessages3.rmsg:1046
-#: data/base/messages/resmessagesall.rmsg:162
+#: data/base/messages/resmessages3.rmsg:721
+#: data/base/messages/resmessages3.rmsg:886
+#: data/base/messages/resmessagesall.rmsg:138
 msgid "Best Targets: Bunkers and hardpoints"
 msgstr "最佳目标：碉堡与要塞"
 
-#: data/base/messages/resmessages3.rmsg:863
+#: data/base/messages/resmessages3.rmsg:731
 msgid "Bombs lock on and guide themselves to the target"
 msgstr "炸弹会自动导引并锁定目标"
 
-#: data/base/messages/resmessages3.rmsg:876
+#: data/base/messages/resmessages3.rmsg:742
 msgid "High-Velocity Armor-Piercing Fin-Stabilised Discarding Sabot"
 msgstr "高速尾翼稳定脱壳穿甲弹(HVAPFSDS)"
 
-#: data/base/messages/resmessages3.rmsg:889
-#: data/base/messages/resmessages3.rmsg:928
-#: data/base/messages/resmessages3.rmsg:1188
+#: data/base/messages/resmessages3.rmsg:753
+#: data/base/messages/resmessages3.rmsg:786
+#: data/base/messages/resmessages3.rmsg:1006
 msgid "Robotic loading system feeds rounds into breech"
 msgstr "自动装载弹药系统将弹药自动上膛"
 
-#: data/base/messages/resmessages3.rmsg:902
+#: data/base/messages/resmessages3.rmsg:764
 msgid "Computer guided shells"
 msgstr "电脑自动导引炮弹"
 
-#: data/base/messages/resmessages3.rmsg:915
+#: data/base/messages/resmessages3.rmsg:775
 msgid "High Explosive Armor Piercing Shells"
 msgstr "高爆性穿甲弹壳（HEAP Shells）"
 
-#: data/base/messages/resmessages3.rmsg:940
-#: data/base/messages/resmessages3.rmsg:953
+#: data/base/messages/resmessages3.rmsg:796
+#: data/base/messages/resmessages3.rmsg:807
 msgid "New Laser Weapon Available"
 msgstr "可搭载新的激光武器"
 
-#: data/base/messages/resmessages3.rmsg:941
+#: data/base/messages/resmessages3.rmsg:797
 msgid "Generates and concentrates bursts of laser energy"
 msgstr "产生并集中激光的能量"
 
-#: data/base/messages/resmessages3.rmsg:942
-#: data/base/messages/resmessages3.rmsg:955
+#: data/base/messages/resmessages3.rmsg:798
+#: data/base/messages/resmessages3.rmsg:809
 msgid "Best Targets: Cyborgs"
 msgstr "最佳目标：生化人步兵"
 
-#: data/base/messages/resmessages3.rmsg:954
+#: data/base/messages/resmessages3.rmsg:808
 msgid "Fires pulses of laser light"
 msgstr "发射脉冲激光"
 
-#: data/base/messages/resmessages3.rmsg:966
-#: data/base/messages/resmessages3.rmsg:979
-#: data/base/messages/resmessages3.rmsg:992
+#: data/base/messages/resmessages3.rmsg:818
+#: data/base/messages/resmessages3.rmsg:829
+#: data/base/messages/resmessages3.rmsg:840
 msgid "Laser Upgrade"
 msgstr "激光升级"
 
-#: data/base/messages/resmessages3.rmsg:967
+#: data/base/messages/resmessages3.rmsg:819
 msgid "Improvement in laser optics reduces light dispersal"
 msgstr "改善激光系统的光学结构使之不易发散"
 
-#: data/base/messages/resmessages3.rmsg:968
+#: data/base/messages/resmessages3.rmsg:820
 msgid "Increases Laser accuracy"
 msgstr "增加激光系武器准确率"
 
-#: data/base/messages/resmessages3.rmsg:969
-#: data/base/messages/resmessages3.rmsg:982
-#: data/base/messages/resmessages3.rmsg:995
+#: data/base/messages/resmessages3.rmsg:821
+#: data/base/messages/resmessages3.rmsg:832
+#: data/base/messages/resmessages3.rmsg:843
 msgid "All lasers upgraded automatically"
 msgstr "自动升级所有激光系武器"
 
-#: data/base/messages/resmessages3.rmsg:980
+#: data/base/messages/resmessages3.rmsg:830
 msgid "Improvement in laser emission density"
 msgstr "改善激光系统的发射极之密度"
 
-#: data/base/messages/resmessages3.rmsg:981
+#: data/base/messages/resmessages3.rmsg:831
 msgid "Increases Laser damage"
 msgstr "增加激光攻击力"
 
-#: data/base/messages/resmessages3.rmsg:993
+#: data/base/messages/resmessages3.rmsg:841
 msgid "Improved Energizer reduces laser recharge time"
 msgstr "改善激光系统的能量系统减少重新充填的时间"
 
-#: data/base/messages/resmessages3.rmsg:994
+#: data/base/messages/resmessages3.rmsg:842
 msgid "Increases Laser ROF"
 msgstr "增加激光系武器射速"
 
-#: data/base/messages/resmessages3.rmsg:1006
+#: data/base/messages/resmessages3.rmsg:852
 msgid "Depleted uranium kinetic energy bullets"
 msgstr "以贫化铀当作推进动力的子弹"
 
-#: data/base/messages/resmessages3.rmsg:1019
+#: data/base/messages/resmessages3.rmsg:863
 msgid "Collapsing Plutonium kinetic energy bullets"
 msgstr "裂解钸动力子弹"
 
-#: data/base/messages/resmessages3.rmsg:1031
-#: data/base/messages/resmessages3.rmsg:1044
+#: data/base/messages/resmessages3.rmsg:873
+#: data/base/messages/resmessages3.rmsg:884
 msgid "New Missile Turret Available"
 msgstr "可搭载新的导弹武器系统"
 
-#: data/base/messages/resmessages3.rmsg:1032
+#: data/base/messages/resmessages3.rmsg:874
 msgid "Anti-tank missile"
 msgstr "反坦克导弹"
 
-#: data/base/messages/resmessages3.rmsg:1045
+#: data/base/messages/resmessages3.rmsg:885
 msgid "Bunker buster missile"
 msgstr "碉堡终结者"
 
-#: data/base/messages/resmessages3.rmsg:1057
-#: data/base/messages/resmessages3.rmsg:1070
-#: data/base/messages/resmessages3.rmsg:1083
-#: data/base/messages/resmessages3.rmsg:1148
-#: data/base/messages/resmessages3.rmsg:1161
+#: data/base/messages/resmessages3.rmsg:895
+#: data/base/messages/resmessages3.rmsg:906
+#: data/base/messages/resmessages3.rmsg:917
+#: data/base/messages/resmessages3.rmsg:972
+#: data/base/messages/resmessages3.rmsg:983
 msgid "Missile Upgrade"
 msgstr "导弹升级"
 
-#: data/base/messages/resmessages3.rmsg:1058
+#: data/base/messages/resmessages3.rmsg:896
 msgid "On-board computer predicts target movement"
 msgstr "搭载可预测目标移动路径之电脑系统"
 
-#: data/base/messages/resmessages3.rmsg:1059
-#: data/base/messages/resmessages3.rmsg:1072
+#: data/base/messages/resmessages3.rmsg:897
+#: data/base/messages/resmessages3.rmsg:908
 msgid "Increases Missile accuracy"
 msgstr "增加导弹准确率"
 
-#: data/base/messages/resmessages3.rmsg:1060
-#: data/base/messages/resmessages3.rmsg:1073
-#: data/base/messages/resmessages3.rmsg:1086
-#: data/base/messages/resmessages3.rmsg:1151
-#: data/base/messages/resmessages3.rmsg:1164
+#: data/base/messages/resmessages3.rmsg:898
+#: data/base/messages/resmessages3.rmsg:909
+#: data/base/messages/resmessages3.rmsg:920
+#: data/base/messages/resmessages3.rmsg:975
+#: data/base/messages/resmessages3.rmsg:986
 msgid "All missiles upgraded automatically"
 msgstr "自动升级所有导弹系武器"
 
-#: data/base/messages/resmessages3.rmsg:1071
+#: data/base/messages/resmessages3.rmsg:907
 msgid "Missile actively seeks and homes on targets"
 msgstr "导弹主动搜索并导向目标"
 
-#: data/base/messages/resmessages3.rmsg:1084
+#: data/base/messages/resmessages3.rmsg:918
 msgid "Low yield thermonuclear warhead"
 msgstr "低效益之热核反应弹头"
 
-#: data/base/messages/resmessages3.rmsg:1085
+#: data/base/messages/resmessages3.rmsg:919
 msgid "Increases Missile damage"
 msgstr "增加导弹攻击力"
 
-#: data/base/messages/resmessages3.rmsg:1096
-#: data/base/messages/resmessages3.rmsg:1109
+#: data/base/messages/resmessages3.rmsg:928
+#: data/base/messages/resmessages3.rmsg:939
 msgid "New SAM Turret Available"
 msgstr "可搭载新的武器装备：地对空导弹"
 
-#: data/base/messages/resmessages3.rmsg:1097
+#: data/base/messages/resmessages3.rmsg:929
 msgid "Surface-to-air missile"
 msgstr "地对空导弹（Surface-to-air missile）"
 
-#: data/base/messages/resmessages3.rmsg:1098
-#: data/base/messages/resmessages3.rmsg:1111
+#: data/base/messages/resmessages3.rmsg:930
+#: data/base/messages/resmessages3.rmsg:941
 msgid "Best Targets: Aerial targets only"
 msgstr "最佳目标：仅限于空中部队"
 
-#: data/base/messages/resmessages3.rmsg:1110
+#: data/base/messages/resmessages3.rmsg:940
 msgid "Heavy surface-to-air missile"
 msgstr "重型地对空导弹"
 
-#: data/base/messages/resmessages3.rmsg:1122
-#: data/base/messages/resmessages3.rmsg:1135
+#: data/base/messages/resmessages3.rmsg:950
+#: data/base/messages/resmessages3.rmsg:961
 msgid "New Artillery Missile Turret Available"
 msgstr "可搭载新的炮兵导弹武器系统"
 
-#: data/base/messages/resmessages3.rmsg:1123
+#: data/base/messages/resmessages3.rmsg:951
 msgid "High explosive artillery missile"
 msgstr "高爆性的炮兵导弹"
 
-#: data/base/messages/resmessages3.rmsg:1124
-#: data/base/messages/resmessages3.rmsg:1137
+#: data/base/messages/resmessages3.rmsg:952
+#: data/base/messages/resmessages3.rmsg:963
 msgid "Best Targets: Base structures and cyborgs"
 msgstr "最佳目标：基本建筑物与生化人步兵"
 
-#: data/base/messages/resmessages3.rmsg:1136
+#: data/base/messages/resmessages3.rmsg:962
 msgid "High explosive heavy artillery missile"
 msgstr "高爆性的重型炮兵导弹"
 
-#: data/base/messages/resmessages3.rmsg:1149
+#: data/base/messages/resmessages3.rmsg:973
 msgid "Missiles detect and lock-on to targets while loading"
 msgstr "当装载导弹时即自动侦测并锁定目标"
 
-#: data/base/messages/resmessages3.rmsg:1150
-#: data/base/messages/resmessages3.rmsg:1163
+#: data/base/messages/resmessages3.rmsg:974
+#: data/base/messages/resmessages3.rmsg:985
 msgid "Increases Missile ROF"
 msgstr "增加导弹射速"
 
-#: data/base/messages/resmessages3.rmsg:1162
+#: data/base/messages/resmessages3.rmsg:984
 msgid "Racked missile dispensers allow for fast reloading"
 msgstr "导弹自动分配器提供了高速的弹药重装载"
 
-#: data/base/messages/resmessages3.rmsg:1175
+#: data/base/messages/resmessages3.rmsg:995
 msgid "Self-guided rocket-powered shells"
 msgstr "利用自动导向火箭所推动的弹壳"
 
-#: data/base/messages/resmessages3.rmsg:1200
-#: data/base/messages/resmessages3.rmsg:1213
-#: data/base/messages/resmessages3.rmsg:1226
+#: data/base/messages/resmessages3.rmsg:1016
+#: data/base/messages/resmessages3.rmsg:1027
+#: data/base/messages/resmessages3.rmsg:1038
 msgid "New Rail Gun Available"
 msgstr "可搭载新的武器系统：轨道炮"
 
-#: data/base/messages/resmessages3.rmsg:1201
+#: data/base/messages/resmessages3.rmsg:1017
 msgid "Rapid fire rail gun firing needle darts"
 msgstr "快速击发的轨道炮"
 
-#: data/base/messages/resmessages3.rmsg:1214
+#: data/base/messages/resmessages3.rmsg:1028
 msgid "Rail gun firing armor-piercing darts"
 msgstr "可发射穿甲型炮弹的轨道炮"
 
-#: data/base/messages/resmessages3.rmsg:1227
+#: data/base/messages/resmessages3.rmsg:1039
 msgid "Heavy rail gun firing large kinetic energy darts"
 msgstr "可发射具高动能炮弹的重型轨道炮"
 
-#: data/base/messages/resmessages3.rmsg:1239
-#: data/base/messages/resmessages3.rmsg:1252
-#: data/base/messages/resmessages3.rmsg:1265
+#: data/base/messages/resmessages3.rmsg:1049
+#: data/base/messages/resmessages3.rmsg:1060
+#: data/base/messages/resmessages3.rmsg:1071
 msgid "Rail Gun Upgrade"
 msgstr "轨道炮系武器升级"
 
-#: data/base/messages/resmessages3.rmsg:1240
+#: data/base/messages/resmessages3.rmsg:1050
 msgid "Computer predicts and compensates for target's movement"
 msgstr "电脑自动预测并计算补偿目标位置的移动"
 
-#: data/base/messages/resmessages3.rmsg:1241
+#: data/base/messages/resmessages3.rmsg:1051
 msgid "Increases Rail Gun accuracy"
 msgstr "增加轨道炮系武器准确率"
 
-#: data/base/messages/resmessages3.rmsg:1242
-#: data/base/messages/resmessages3.rmsg:1255
-#: data/base/messages/resmessages3.rmsg:1268
+#: data/base/messages/resmessages3.rmsg:1052
+#: data/base/messages/resmessages3.rmsg:1063
+#: data/base/messages/resmessages3.rmsg:1074
 msgid "All rail guns upgraded automatically"
 msgstr "自动升级所有轨道炮系武器"
 
-#: data/base/messages/resmessages3.rmsg:1253
+#: data/base/messages/resmessages3.rmsg:1061
 msgid "Improved armor-piercing dart"
 msgstr "改进的穿甲弹头"
 
-#: data/base/messages/resmessages3.rmsg:1254
+#: data/base/messages/resmessages3.rmsg:1062
 msgid "Increases Rail Gun damage"
 msgstr "增加轨道炮系武器攻击力"
 
-#: data/base/messages/resmessages3.rmsg:1266
+#: data/base/messages/resmessages3.rmsg:1072
 msgid "Increased gauss output speeds up reload time"
 msgstr "增加轨道炮输出能量并加快充填时间"
 
-#: data/base/messages/resmessages3.rmsg:1267
+#: data/base/messages/resmessages3.rmsg:1073
 msgid "Increases Rail Gun ROF"
 msgstr "增加轨道炮系武器射速"
 
@@ -3298,124 +3298,124 @@ msgstr "钛钢筋强化混凝土打造"
 msgid "Enables Hardcrete walls"
 msgstr "允许建造钛钢筋墙"
 
-#: data/base/messages/resmessagesall.rmsg:18
+#: data/base/messages/resmessagesall.rmsg:16
 msgid "VTOL factory enables VTOL production"
 msgstr "VTOL工厂提供VTOL的生产"
 
-#: data/base/messages/resmessagesall.rmsg:19
+#: data/base/messages/resmessagesall.rmsg:17
 msgid "VTOL rearming pads required to keep VTOLs flying"
 msgstr "要使VTOL拥有持续攻击的能力，需建造VTOL补给点"
 
-#: data/base/messages/resmessagesall.rmsg:20
+#: data/base/messages/resmessagesall.rmsg:18
 msgid "May be upgraded using factory modules"
 msgstr "工厂模组可以使之升级"
 
-#: data/base/messages/resmessagesall.rmsg:31
+#: data/base/messages/resmessagesall.rmsg:27
 msgid "Refuels, rearms and repairs VTOLs"
 msgstr "重新加油、补充弹药及修理VTOL"
 
-#: data/base/messages/resmessagesall.rmsg:32
+#: data/base/messages/resmessagesall.rmsg:28
 msgid "Assign a VTOL by selecting the rearming pad as its target"
 msgstr "指派一个补给点当作VTOL的目标"
 
-#: data/base/messages/resmessagesall.rmsg:33
+#: data/base/messages/resmessagesall.rmsg:29
 msgid "The VTOL returns to the selected pad for rearming"
 msgstr "VTOL会回到指定的补给点进行补给及维修"
 
-#: data/base/messages/resmessagesall.rmsg:44
+#: data/base/messages/resmessagesall.rmsg:38
 msgid "Battlefield repair unit"
 msgstr "战场修理单位"
 
-#: data/base/messages/resmessagesall.rmsg:45
+#: data/base/messages/resmessagesall.rmsg:39
 #: data/base/messages/strings/resstrings.txt:445
 #: data/mp/messages/strings/resstrings.txt:473
 msgid "Automatically Repairs Damaged Units"
 msgstr "自动修理受损的单位"
 
-#: data/base/messages/resmessagesall.rmsg:46
+#: data/base/messages/resmessagesall.rmsg:40
 #: data/base/messages/strings/resstrings.txt:446
 #: data/mp/messages/strings/resstrings.txt:474
 msgid "Or damaged units may be selected as target"
 msgstr "受损的单位可以被指定为其目标"
 
-#: data/base/messages/resmessagesall.rmsg:56
+#: data/base/messages/resmessagesall.rmsg:48
 msgid "New Systems Turret Available For Design"
 msgstr "可在设计选单中使用新的系统装备"
 
-#: data/base/messages/resmessagesall.rmsg:57
+#: data/base/messages/resmessagesall.rmsg:49
 msgid "Improved sensor range"
 msgstr "改善雷达侦测距离"
 
-#: data/base/messages/resmessagesall.rmsg:58
+#: data/base/messages/resmessagesall.rmsg:50
 msgid "Makes excellent scout vehicle"
 msgstr "可以生产杰出的侦查车辆"
 
-#: data/base/messages/resmessagesall.rmsg:70
+#: data/base/messages/resmessagesall.rmsg:60
 msgid "Extended sensor range"
 msgstr "延伸雷达侦测距离"
 
-#: data/base/messages/resmessagesall.rmsg:71
+#: data/base/messages/resmessagesall.rmsg:61
 msgid "Keeps map areas under constant surveillance"
 msgstr "不断监控地图上的区域"
 
-#: data/base/messages/resmessagesall.rmsg:82
+#: data/base/messages/resmessagesall.rmsg:70
 msgid "Sensors Improved"
 msgstr "改善雷达"
 
-#: data/base/messages/resmessagesall.rmsg:83
+#: data/base/messages/resmessagesall.rmsg:71
 msgid "New Thermal Emissions detection"
 msgstr "可侦测热能放射"
 
-#: data/base/messages/resmessagesall.rmsg:84
+#: data/base/messages/resmessagesall.rmsg:72
 msgid "Extends Sensor Range"
 msgstr "扩展雷达侦测距离"
 
-#: data/base/messages/resmessagesall.rmsg:85
+#: data/base/messages/resmessagesall.rmsg:73
 msgid "All sensors upgraded automatically"
 msgstr "所有雷达自动升级"
 
-#: data/base/messages/resmessagesall.rmsg:96
+#: data/base/messages/resmessagesall.rmsg:82
 msgid "Counter-battery tower detects enemy indirect fire batteries"
 msgstr "反炮兵雷达可以侦测到敌军的非直射型炮兵攻击"
 
-#: data/base/messages/resmessagesall.rmsg:108
+#: data/base/messages/resmessagesall.rmsg:92
 msgid "Collective Heavy Body"
 msgstr "Collective的重量级车身"
 
-#: data/base/messages/resmessagesall.rmsg:110
+#: data/base/messages/resmessagesall.rmsg:94
 msgid "Slower than Python"
 msgstr "移动速度比蟒蛇慢"
 
-#: data/base/messages/resmessagesall.rmsg:111
+#: data/base/messages/resmessagesall.rmsg:95
 msgid "High power costs and slow to produce"
 msgstr "需要较多的制造资源及缓慢的生产时间"
 
-#: data/base/messages/resmessagesall.rmsg:121
+#: data/base/messages/resmessagesall.rmsg:103
 msgid "New Propulsion Available for Design"
 msgstr "可在设计选单中选用新的推进动力"
 
-#: data/base/messages/resmessagesall.rmsg:122
+#: data/base/messages/resmessagesall.rmsg:104
 msgid "Vertical Take Off and Landing Propulsion"
 msgstr "垂直起飞及降落推进动力"
 
-#: data/base/messages/resmessagesall.rmsg:123
+#: data/base/messages/resmessagesall.rmsg:105
 #, fuzzy
 msgid "Speed: VTOL"
 msgstr "移动速度：飞行（VTOL）"
 
-#: data/base/messages/resmessagesall.rmsg:135
+#: data/base/messages/resmessagesall.rmsg:115
 msgid "Rocket detects and locks on to engine emissions"
 msgstr "火箭会自动侦测与锁定引擎发出的热源"
 
-#: data/base/messages/resmessagesall.rmsg:148
+#: data/base/messages/resmessagesall.rmsg:126
 msgid "Anti-tank rocket"
 msgstr "反坦克火箭"
 
-#: data/base/messages/resmessagesall.rmsg:161
+#: data/base/messages/resmessagesall.rmsg:137
 msgid "High explosive shaped charge missile"
 msgstr "高爆性锥形装填导弹"
 
-#: data/base/messages/resmessagesall.rmsg:174
+#: data/base/messages/resmessagesall.rmsg:148
 msgid "Laser designator paints and guides rounds to the target"
 msgstr "激光指向器提供武器导引指向目标功能"
 
@@ -10388,45 +10388,17 @@ msgstr ""
 msgid "OpenGL 1.4 is not supported by your system. The game requires this. Please upgrade your graphics drivers/hardware, if possible."
 msgstr ""
 
-#: lib/netplay/netlobby.cpp:102
-msgid "Received invalid addGame data."
-msgstr ""
-
-#: lib/netplay/netlobby.cpp:140
-#: lib/netplay/netlobby.cpp:163
-#: lib/netplay/netlobby.cpp:183
-#, fuzzy
-msgid "Create a game first!"
-msgstr "跟踪一个游戏中的物体"
-
-#: lib/netplay/netlobby.cpp:426
-msgid "Received invalid login data."
-msgstr ""
-
-#: lib/netplay/netlobby.cpp:518
-#: lib/netplay/netlobby.cpp:531
-#: lib/netplay/netlobby.cpp:542
-#: lib/netplay/netlobby.cpp:560
-#: lib/netplay/netlobby.cpp:569
-#: lib/netplay/netlobby.cpp:578
-msgid "Failed to communicate with the lobby."
-msgstr ""
-
-#: lib/netplay/netlobby.cpp:589
-#, c-format
-msgid "Got server error: %s"
-msgstr ""
-
-#: lib/netplay/netplay.cpp:184
-#: lib/netplay/netplay.cpp:744
+#: lib/netplay/netplay.cpp:187
+#: lib/netplay/netplay.cpp:1022
 msgid "Enter password here"
 msgstr "在这里输入密码"
 
-#: lib/netplay/netplay.cpp:2067
-msgid "Game not in the lobby, please login first!"
-msgstr ""
+#: lib/netplay/netplay.cpp:2016
+#, fuzzy, c-format
+msgid "Could not resolve masterserver name (%s)!"
+msgstr "不能解析游戏主机名"
 
-#: lib/netplay/netplay.cpp:2072
+#: lib/netplay/netplay.cpp:2038
 #, c-format
 msgid "Error connecting to the lobby server: %s. Make sure port %d can receive incoming connections. If you're using a router configure it to use UPnP, or to forward the port to your system."
 msgstr "连接Lobby服务器时发生错误：%s.确定%d端口可以接收 数据。如果你在使用路由器请将它设置为UPnP，或转发这个端口到你的系统"
@@ -10635,12 +10607,12 @@ msgstr ""
 msgid "Disable texture compression"
 msgstr ""
 
-#: src/configuration.cpp:92
+#: src/configuration.cpp:95
 #, fuzzy
 msgid "My Game"
 msgstr "游戏"
 
-#: src/configuration.cpp:93
+#: src/configuration.cpp:96
 #: src/multistat.cpp:124
 msgid "Player"
 msgstr "玩家"
@@ -10811,7 +10783,7 @@ msgid "Player dropped"
 msgstr "玩家"
 
 #: src/display3d.cpp:656
-#: src/multiint.cpp:2334
+#: src/multiint.cpp:2146
 msgid "Waiting for other players"
 msgstr "等待其他玩家"
 
@@ -10958,13 +10930,14 @@ msgstr "教学模式"
 #. TRANSLATORS: "Return", in this context, means "return to previous screen/menu"
 #: src/frontend.cpp:190
 #: src/frontend.cpp:250
-#: src/frontend.cpp:384
-#: src/frontend.cpp:521
-#: src/frontend.cpp:661
-#: src/frontend.cpp:795
-#: src/frontend.cpp:1030
-#: src/frontend.cpp:1176
-#: src/frontend.cpp:1196
+#: src/frontend.cpp:381
+#: src/frontend.cpp:448
+#: src/frontend.cpp:585
+#: src/frontend.cpp:725
+#: src/frontend.cpp:859
+#: src/frontend.cpp:1094
+#: src/frontend.cpp:1240
+#: src/frontend.cpp:1260
 msgctxt "menu"
 msgid "Return"
 msgstr "返回"
@@ -10998,288 +10971,300 @@ msgstr "单人游戏"
 msgid "Load Saved Game"
 msgstr "载入已储存的游戏"
 
-#: src/frontend.cpp:377
-#: src/multiint.cpp:1500
+#: src/frontend.cpp:376
+msgid "MULTI PLAYER"
+msgstr "多人游戏"
+
+#: src/frontend.cpp:378
+msgid "Host Game"
+msgstr "开启游戏"
+
+#: src/frontend.cpp:379
+msgid "Join Game"
+msgstr "加入游戏"
+
+#: src/frontend.cpp:441
+#: src/multiint.cpp:1324
 msgid "OPTIONS"
 msgstr "选项"
 
-#: src/frontend.cpp:378
+#: src/frontend.cpp:442
 msgid "Game Options"
 msgstr "游戏选项"
 
-#: src/frontend.cpp:379
+#: src/frontend.cpp:443
 msgid "Graphics Options"
 msgstr "图形选项"
 
-#: src/frontend.cpp:380
+#: src/frontend.cpp:444
 msgid "Video Options"
 msgstr "显示选项"
 
-#: src/frontend.cpp:381
+#: src/frontend.cpp:445
 #: src/ingameop.cpp:268
 msgid "Audio Options"
 msgstr "音效选项"
 
-#: src/frontend.cpp:382
+#: src/frontend.cpp:446
 msgid "Mouse Options"
 msgstr "滑鼠选项"
 
-#: src/frontend.cpp:383
+#: src/frontend.cpp:447
 msgid "Key Mappings"
 msgstr "键盘配置"
 
-#: src/frontend.cpp:443
+#: src/frontend.cpp:507
 msgid "Video Playback"
 msgstr "播放影片"
 
-#: src/frontend.cpp:447
-#: src/frontend.cpp:595
+#: src/frontend.cpp:511
+#: src/frontend.cpp:659
 msgid "1X"
 msgstr "1倍大小"
 
-#: src/frontend.cpp:451
-#: src/frontend.cpp:585
+#: src/frontend.cpp:515
+#: src/frontend.cpp:649
 msgid "2X"
 msgstr "2倍大小"
 
-#: src/frontend.cpp:455
-#: src/frontend.cpp:590
-#: src/frontend.cpp:735
-#: src/frontend.cpp:818
+#: src/frontend.cpp:519
+#: src/frontend.cpp:654
+#: src/frontend.cpp:799
+#: src/frontend.cpp:882
 msgid "Fullscreen"
 msgstr "全萤幕"
 
-#: src/frontend.cpp:464
+#: src/frontend.cpp:528
 msgid "Scanlines"
 msgstr "扫描线"
 
-#: src/frontend.cpp:468
-#: src/frontend.cpp:489
-#: src/frontend.cpp:497
-#: src/frontend.cpp:513
-#: src/frontend.cpp:539
-#: src/frontend.cpp:557
-#: src/frontend.cpp:575
-#: src/frontend.cpp:620
-#: src/frontend.cpp:760
-#: src/frontend.cpp:770
-#: src/frontend.cpp:842
-#: src/frontend.cpp:903
-#: src/frontend.cpp:946
-#: src/frontend.cpp:987
-#: src/frontend.cpp:999
-#: src/frontend.cpp:1011
-#: src/frontend.cpp:1046
-#: src/frontend.cpp:1059
-#: src/frontend.cpp:1073
+#: src/frontend.cpp:532
+#: src/frontend.cpp:553
+#: src/frontend.cpp:561
+#: src/frontend.cpp:577
+#: src/frontend.cpp:603
+#: src/frontend.cpp:621
+#: src/frontend.cpp:639
+#: src/frontend.cpp:684
+#: src/frontend.cpp:824
+#: src/frontend.cpp:834
+#: src/frontend.cpp:906
+#: src/frontend.cpp:967
+#: src/frontend.cpp:1010
+#: src/frontend.cpp:1051
+#: src/frontend.cpp:1063
+#: src/frontend.cpp:1075
+#: src/frontend.cpp:1110
+#: src/frontend.cpp:1123
+#: src/frontend.cpp:1137
 msgid "Off"
 msgstr "关闭"
 
-#: src/frontend.cpp:472
-#: src/frontend.cpp:610
+#: src/frontend.cpp:536
+#: src/frontend.cpp:674
 msgid "50%"
 msgstr "50%"
 
-#: src/frontend.cpp:476
-#: src/frontend.cpp:615
+#: src/frontend.cpp:540
+#: src/frontend.cpp:679
 #: src/multiplay.cpp:1923
 msgid "Black"
 msgstr "黑色"
 
-#: src/frontend.cpp:482
+#: src/frontend.cpp:546
 msgid "Screen Shake"
 msgstr "震动萤幕"
 
-#: src/frontend.cpp:485
-#: src/frontend.cpp:501
-#: src/frontend.cpp:509
-#: src/frontend.cpp:544
-#: src/frontend.cpp:562
-#: src/frontend.cpp:571
-#: src/frontend.cpp:756
-#: src/frontend.cpp:908
-#: src/frontend.cpp:942
-#: src/frontend.cpp:983
-#: src/frontend.cpp:995
-#: src/frontend.cpp:1007
-#: src/frontend.cpp:1051
-#: src/frontend.cpp:1064
-#: src/frontend.cpp:1078
+#: src/frontend.cpp:549
+#: src/frontend.cpp:565
+#: src/frontend.cpp:573
+#: src/frontend.cpp:608
+#: src/frontend.cpp:626
+#: src/frontend.cpp:635
+#: src/frontend.cpp:820
+#: src/frontend.cpp:972
+#: src/frontend.cpp:1006
+#: src/frontend.cpp:1047
+#: src/frontend.cpp:1059
+#: src/frontend.cpp:1071
+#: src/frontend.cpp:1115
+#: src/frontend.cpp:1128
+#: src/frontend.cpp:1142
 msgid "On"
 msgstr "开启"
 
-#: src/frontend.cpp:494
+#: src/frontend.cpp:558
 msgid "Subtitles"
 msgstr "字幕"
 
-#: src/frontend.cpp:506
+#: src/frontend.cpp:570
 msgid "Shadows"
 msgstr "影子"
 
-#: src/frontend.cpp:517
+#: src/frontend.cpp:581
 #, fuzzy
 msgid "GRAPHICS OPTIONS"
 msgstr "游戏选项"
 
-#: src/frontend.cpp:649
+#: src/frontend.cpp:713
 #: src/ingameop.cpp:168
 msgid "Voice Volume"
 msgstr "语音音量"
 
-#: src/frontend.cpp:653
+#: src/frontend.cpp:717
 #: src/ingameop.cpp:173
 msgid "FX Volume"
 msgstr "音效音量"
 
-#: src/frontend.cpp:657
+#: src/frontend.cpp:721
 #: src/ingameop.cpp:178
 msgid "Music Volume"
 msgstr "背景音乐音量"
 
-#: src/frontend.cpp:664
+#: src/frontend.cpp:728
 #, fuzzy
 msgid "AUDIO OPTIONS"
 msgstr "游戏选项"
 
-#: src/frontend.cpp:728
+#: src/frontend.cpp:792
 msgid "* Takes effect on game restart"
 msgstr "*重启游戏后生效"
 
-#: src/frontend.cpp:731
+#: src/frontend.cpp:795
 msgid "Graphics Mode*"
 msgstr "图形模式*"
 
-#: src/frontend.cpp:739
-#: src/frontend.cpp:813
+#: src/frontend.cpp:803
+#: src/frontend.cpp:877
 msgid "Windowed"
 msgstr "视窗模式"
 
-#: src/frontend.cpp:743
+#: src/frontend.cpp:807
 msgid "Resolution*"
 msgstr "解析度*"
 
-#: src/frontend.cpp:748
+#: src/frontend.cpp:812
 msgid "Texture size"
 msgstr "贴图精细度"
 
-#: src/frontend.cpp:752
+#: src/frontend.cpp:816
 #, fuzzy
 msgid "Vertical sync"
 msgstr "垂直同步*"
 
-#: src/frontend.cpp:787
-#: src/frontend.cpp:848
+#: src/frontend.cpp:851
+#: src/frontend.cpp:912
 #, fuzzy
 msgid "Unsupported"
 msgstr "运输机"
 
-#: src/frontend.cpp:792
+#: src/frontend.cpp:856
 #, fuzzy
 msgid "VIDEO OPTIONS"
 msgstr "游戏选项"
 
-#: src/frontend.cpp:980
+#: src/frontend.cpp:1044
 #, fuzzy
 msgid "Reverse Rotation"
 msgstr "反向滑鼠"
 
-#: src/frontend.cpp:991
+#: src/frontend.cpp:1055
 msgid "Trap Cursor"
 msgstr "捕捉滑鼠"
 
-#: src/frontend.cpp:1004
+#: src/frontend.cpp:1068
 #, fuzzy
 msgid "Switch Mouse Buttons"
 msgstr "鼠标选项"
 
-#: src/frontend.cpp:1016
+#: src/frontend.cpp:1080
 #, fuzzy
 msgid "Rotate Screen"
 msgstr "向左旋转"
 
-#: src/frontend.cpp:1019
-#: src/frontend.cpp:1092
+#: src/frontend.cpp:1083
+#: src/frontend.cpp:1156
 #, fuzzy
 msgid "Middle Mouse"
 msgstr "鼠标中键"
 
-#: src/frontend.cpp:1023
 #: src/frontend.cpp:1087
+#: src/frontend.cpp:1151
 #, fuzzy
 msgid "Right Mouse"
 msgstr "鼠标右键"
 
-#: src/frontend.cpp:1027
+#: src/frontend.cpp:1091
 #, fuzzy
 msgid "MOUSE OPTIONS"
 msgstr "游戏选项"
 
-#: src/frontend.cpp:1127
-#: src/frontend.cpp:1199
+#: src/frontend.cpp:1191
+#: src/frontend.cpp:1263
 msgid "Difficulty"
 msgstr "难度"
 
-#: src/frontend.cpp:1131
-#: src/frontend.cpp:1206
-#: src/frontend.cpp:1243
-#: src/multiint.cpp:219
+#: src/frontend.cpp:1195
+#: src/frontend.cpp:1270
+#: src/frontend.cpp:1307
+#: src/multiint.cpp:211
 msgid "Easy"
 msgstr "容易"
 
-#: src/frontend.cpp:1134
-#: src/frontend.cpp:1209
-#: src/frontend.cpp:1235
+#: src/frontend.cpp:1198
+#: src/frontend.cpp:1273
+#: src/frontend.cpp:1299
 msgid "Normal"
 msgstr "普通"
 
-#: src/frontend.cpp:1138
-#: src/frontend.cpp:1212
-#: src/frontend.cpp:1239
-#: src/multiint.cpp:219
+#: src/frontend.cpp:1202
+#: src/frontend.cpp:1276
+#: src/frontend.cpp:1303
+#: src/multiint.cpp:211
 msgid "Hard"
 msgstr "困难"
 
-#: src/frontend.cpp:1143
-#: src/frontend.cpp:1200
+#: src/frontend.cpp:1207
+#: src/frontend.cpp:1264
 #, fuzzy
 msgid "Scroll Speed"
 msgstr "卷动速度"
 
-#: src/frontend.cpp:1157
-#: src/frontend.cpp:1197
+#: src/frontend.cpp:1221
+#: src/frontend.cpp:1261
 msgid "Language"
 msgstr "语言"
 
-#: src/frontend.cpp:1169
-#: src/frontend.cpp:1198
+#: src/frontend.cpp:1233
+#: src/frontend.cpp:1262
 msgid "Unit Colour"
 msgstr "单位颜色"
 
-#: src/frontend.cpp:1172
-#: src/frontend.cpp:1201
+#: src/frontend.cpp:1236
+#: src/frontend.cpp:1265
 msgid "Radar"
 msgstr "雷达"
 
-#: src/frontend.cpp:1173
-#: src/frontend.cpp:1202
-#: src/frontend.cpp:1223
+#: src/frontend.cpp:1237
+#: src/frontend.cpp:1266
+#: src/frontend.cpp:1287
 #, fuzzy
 msgid "Rotating"
 msgstr "向右旋转"
 
-#: src/frontend.cpp:1173
-#: src/frontend.cpp:1202
-#: src/frontend.cpp:1223
+#: src/frontend.cpp:1237
+#: src/frontend.cpp:1266
+#: src/frontend.cpp:1287
 msgid "Fixed"
 msgstr "已修复"
 
-#: src/frontend.cpp:1179
-#: src/frontend.cpp:1195
+#: src/frontend.cpp:1243
+#: src/frontend.cpp:1259
 msgid "GAME OPTIONS"
 msgstr "游戏选项"
 
-#: src/frontend.cpp:1332
-#: src/multiint.cpp:2607
+#: src/frontend.cpp:1396
+#: src/multiint.cpp:2419
 msgid "Mod: "
 msgstr "Mod："
 
@@ -11344,7 +11329,7 @@ msgid "Build (F3)"
 msgstr "建造新的建筑物 （F3）"
 
 #: src/hci.cpp:3428
-#: src/multiint.cpp:1614
+#: src/multiint.cpp:1426
 #: src/multimenu.cpp:799
 msgid "Power"
 msgstr "能源"
@@ -11560,7 +11545,7 @@ msgstr "计画目标"
 msgid "Current Objective"
 msgstr "目前目标"
 
-#: src/intelmap.cpp:1504
+#: src/intelmap.cpp:1502
 msgid "New Intelligence Report"
 msgstr "新的智能情报"
 
@@ -11944,8 +11929,9 @@ msgid "KEY MAPPING"
 msgstr "键盘配置"
 
 #: src/keyedit.cpp:377
-#: src/multiint.cpp:1144
-#: src/multiint.cpp:1700
+#: src/multiint.cpp:671
+#: src/multiint.cpp:1120
+#: src/multiint.cpp:1512
 msgid "Return To Previous Screen"
 msgstr "回到前一个画面"
 
@@ -12550,398 +12536,370 @@ msgstr "%s 与 %s 结盟"
 msgid "You Discover Blueprints For %s"
 msgstr "你发现一个用作于 %s 的蓝图"
 
-#: src/multiint.cpp:219
+#: src/multiint.cpp:211
 #, fuzzy
 msgid "Medium"
 msgstr "中型加农炮"
 
-#: src/multiint.cpp:219
+#: src/multiint.cpp:211
 msgid "Insane"
 msgstr ""
 
-#: src/multiint.cpp:617
+#: src/multiint.cpp:609
 #: src/multilimit.cpp:190
 msgid "Accept Settings"
 msgstr "接受设定"
 
-#: src/multiint.cpp:619
-#: src/multiint.cpp:1199
-#: src/multiint.cpp:1312
+#: src/multiint.cpp:611
+#: src/multiint.cpp:1165
 #, fuzzy
 msgid "Cancel"
 msgstr "枪骑兵火箭"
 
-#: src/multiint.cpp:630
+#: src/multiint.cpp:622
 msgid "IP Address or Machine Name"
 msgstr "IP 位置或电脑名称"
 
-#: src/multiint.cpp:837
+#: src/multiint.cpp:668
+msgid "CONNECTION"
+msgstr "连接"
+
+#: src/multiint.cpp:673
+msgid "Lobby"
+msgstr "游戏大厅"
+
+#: src/multiint.cpp:674
+msgid "IP"
+msgstr "IP"
+
+#: src/multiint.cpp:924
 #, fuzzy
 msgid "No games are available"
 msgstr "可使用新的科技"
 
-#: src/multiint.cpp:840
-msgid "Authentication failed or not Authenticated"
-msgstr ""
-
-#: src/multiint.cpp:843
-msgid "The lobby rejected you!"
-msgstr ""
-
-#: src/multiint.cpp:846
+#: src/multiint.cpp:927
 msgid "Game is full"
 msgstr "游戏人数已满"
 
-#: src/multiint.cpp:850
+#: src/multiint.cpp:931
 msgid "You were kicked!"
 msgstr "你被踢了！"
 
-#: src/multiint.cpp:853
+#: src/multiint.cpp:934
 msgid "Wrong Game Version!"
 msgstr "错误的游戏版本"
 
-#: src/multiint.cpp:856
+#: src/multiint.cpp:937
 msgid "You have an incompatible mod."
 msgstr "你有一个不兼容的mod"
 
-#: src/multiint.cpp:860
+#: src/multiint.cpp:941
 msgid "Host couldn't send file?"
 msgstr "主玩家不能发送文件？"
 
-#: src/multiint.cpp:864
+#: src/multiint.cpp:945
 msgid "Incorrect Password!"
 msgstr "不正确的密码！"
 
-#: src/multiint.cpp:867
+#: src/multiint.cpp:948
 msgid "Host has dropped connection!"
 msgstr "主玩家掉线了！"
 
-#: src/multiint.cpp:871
+#: src/multiint.cpp:952
 msgid "Connection Error"
 msgstr "连接错误"
 
-#: src/multiint.cpp:1141
+#: src/multiint.cpp:1060
+msgid "Searching"
+msgstr "搜寻"
+
+#: src/multiint.cpp:1117
 msgid "GAMES"
 msgstr "游戏"
 
-#: src/multiint.cpp:1148
-msgid "Host Game"
-msgstr "开启游戏"
-
-#: src/multiint.cpp:1151
-#, fuzzy
-msgid "Connect IP"
-msgstr "连接错误"
-
-#: src/multiint.cpp:1154
-msgid "Login"
-msgstr ""
-
-#: src/multiint.cpp:1155
-msgid "Logout"
-msgstr ""
-
-#: src/multiint.cpp:1159
+#: src/multiint.cpp:1125
 msgid "Refresh Games List"
 msgstr "重新整理游戏清单"
 
-#: src/multiint.cpp:1179
+#: src/multiint.cpp:1145
 #, fuzzy
 msgid "Enter Password:"
 msgstr "按一下看地图"
 
-#: src/multiint.cpp:1197
-#: src/multiint.cpp:1314
+#: src/multiint.cpp:1163
 msgid "OK"
 msgstr "确定"
 
-#: src/multiint.cpp:1251
-msgid "LOBBY LOGIN"
-msgstr ""
-
-#: src/multiint.cpp:1261
-msgid "Username:"
-msgstr ""
-
-#: src/multiint.cpp:1284
-#, fuzzy
-msgid "Password:"
-msgstr "按一下看地图"
-
-#: src/multiint.cpp:1307
-msgid "Use your wz2100.net credentials here."
-msgstr ""
-
-#: src/multiint.cpp:1456
+#: src/multiint.cpp:1280
 msgid "Tanks disabled!!"
 msgstr "坦克被禁用"
 
-#: src/multiint.cpp:1457
+#: src/multiint.cpp:1281
 #, fuzzy
 msgid "Cyborgs disabled."
 msgstr "可生产新的生化人步兵"
 
-#: src/multiint.cpp:1458
+#: src/multiint.cpp:1282
 msgid "VTOLs disabled."
 msgstr "VTOL被禁用"
 
-#: src/multiint.cpp:1505
-#: src/multiint.cpp:1512
+#: src/multiint.cpp:1329
+#: src/multiint.cpp:1336
 msgid "Select Game Name"
 msgstr "选择游戏名称"
 
-#: src/multiint.cpp:1505
+#: src/multiint.cpp:1329
 #, fuzzy
 msgid "One-Player Skirmish"
 msgstr "单人战役模式"
 
-#: src/multiint.cpp:1515
+#: src/multiint.cpp:1339
 msgid "Select Map"
 msgstr "选择地图"
 
-#: src/multiint.cpp:1523
+#: src/multiint.cpp:1347
 #, fuzzy
 msgid "Click to set Password"
 msgstr "按一下看地图"
 
-#: src/multiint.cpp:1533
-#: src/multiint.cpp:1534
+#: src/multiint.cpp:1357
+#: src/multiint.cpp:1358
 #, fuzzy
 msgid "Scavengers"
 msgstr "拾荒者"
 
-#: src/multiint.cpp:1536
+#: src/multiint.cpp:1360
 #, fuzzy
 msgid "No Scavengers"
 msgstr "拾荒者"
 
-#: src/multiint.cpp:1571
+#: src/multiint.cpp:1390
 msgid "Select Player Name"
 msgstr "选择玩家名称"
 
-#: src/multiint.cpp:1581
+#: src/multiint.cpp:1393
 #: src/multimenu.cpp:792
 msgid "Alliances"
 msgstr "同盟"
 
-#: src/multiint.cpp:1584
+#: src/multiint.cpp:1396
 msgid "No Alliances"
 msgstr "不允许同盟"
 
-#: src/multiint.cpp:1586
+#: src/multiint.cpp:1398
 msgid "Allow Alliances"
 msgstr "允许同盟"
 
-#: src/multiint.cpp:1590
+#: src/multiint.cpp:1402
 msgid "Locked Teams"
 msgstr "锁定同盟模式"
 
-#: src/multiint.cpp:1616
+#: src/multiint.cpp:1428
 msgid "Low Power Levels"
 msgstr "生产能源速度：慢"
 
-#: src/multiint.cpp:1618
+#: src/multiint.cpp:1430
 msgid "Medium Power Levels"
 msgstr "生产能源速度：中"
 
-#: src/multiint.cpp:1620
+#: src/multiint.cpp:1432
 msgid "High Power Levels"
 msgstr "生产能源速度：快"
 
-#: src/multiint.cpp:1652
+#: src/multiint.cpp:1464
 msgid "Base"
 msgstr "基地"
 
-#: src/multiint.cpp:1654
+#: src/multiint.cpp:1466
 msgid "Start with No Bases"
 msgstr "开始时无基地"
 
-#: src/multiint.cpp:1656
+#: src/multiint.cpp:1468
 msgid "Start with Bases"
 msgstr "开始时有基地"
 
-#: src/multiint.cpp:1658
+#: src/multiint.cpp:1470
 msgid "Start with Advanced Bases"
 msgstr "开始时具规模基地"
 
-#: src/multiint.cpp:1690
+#: src/multiint.cpp:1502
 msgid "Map Preview"
 msgstr "预览地图"
 
-#: src/multiint.cpp:1692
+#: src/multiint.cpp:1504
 msgid "Click to see Map"
 msgstr "按一下看地图"
 
-#: src/multiint.cpp:1706
+#: src/multiint.cpp:1518
 msgid "Start Hosting Game"
 msgstr "开始游戏"
 
-#: src/multiint.cpp:1714
+#: src/multiint.cpp:1526
 #, fuzzy
 msgid "Show Structure Limits"
 msgstr "设定建筑物数量限制"
 
-#: src/multiint.cpp:1714
+#: src/multiint.cpp:1526
 msgid "Set Structure Limits"
 msgstr "设定建筑物数量限制"
 
-#: src/multiint.cpp:1809
+#: src/multiint.cpp:1621
 msgid "DIFFICULTY"
 msgstr ""
 
-#: src/multiint.cpp:1823
+#: src/multiint.cpp:1635
 msgid "Less aggressive"
 msgstr ""
 
-#: src/multiint.cpp:1824
+#: src/multiint.cpp:1636
 #, fuzzy
 msgid "Plays nice"
 msgstr "玩家"
 
-#: src/multiint.cpp:1825
+#: src/multiint.cpp:1637
 msgid "No holds barred"
 msgstr ""
 
-#: src/multiint.cpp:1826
+#: src/multiint.cpp:1638
 #, fuzzy
 msgid "Starts with advantages"
 msgstr "开始时具规模基地"
 
-#: src/multiint.cpp:1854
+#: src/multiint.cpp:1666
 msgid "CHOOSE AI"
 msgstr ""
 
-#: src/multiint.cpp:1870
+#: src/multiint.cpp:1682
 msgid "Allow human players to join in this slot"
 msgstr ""
 
-#: src/multiint.cpp:1878
+#: src/multiint.cpp:1690
 msgid "Leave this slot unused"
 msgstr ""
 
-#: src/multiint.cpp:2281
+#: src/multiint.cpp:2093
 msgid "Team"
 msgstr "队伍"
 
-#: src/multiint.cpp:2322
+#: src/multiint.cpp:2134
 msgid "You cannot change difficulty in a challenge"
 msgstr ""
 
-#: src/multiint.cpp:2322
+#: src/multiint.cpp:2134
 #, fuzzy
 msgid "Click to change difficulty"
 msgstr "点击这里更改AI难度"
 
-#: src/multiint.cpp:2339
+#: src/multiint.cpp:2151
 msgid "Click when ready"
 msgstr "按一下开始"
 
-#: src/multiint.cpp:2343
+#: src/multiint.cpp:2155
 msgid "READY?"
 msgstr "准备好了吗？"
 
-#: src/multiint.cpp:2387
+#: src/multiint.cpp:2199
 msgid "PLAYERS"
 msgstr "玩家"
 
-#: src/multiint.cpp:2422
+#: src/multiint.cpp:2234
 #, fuzzy
 msgid "Click to change to this slot"
 msgstr "点击这里更改玩家设置"
 
-#: src/multiint.cpp:2450
+#: src/multiint.cpp:2262
 #, fuzzy
 msgid "Choose Team"
 msgstr "锁定同盟模式"
 
-#: src/multiint.cpp:2480
+#: src/multiint.cpp:2292
 #, fuzzy
 msgid "Click to change player colour"
 msgstr "点击这里更改玩家设置"
 
-#: src/multiint.cpp:2508
+#: src/multiint.cpp:2320
 #, fuzzy
 msgid "Click to change player position"
 msgstr "点击这里更改玩家设置"
 
-#: src/multiint.cpp:2514
+#: src/multiint.cpp:2326
 #, fuzzy
 msgid "Click to change AI"
 msgstr "点击这里更改玩家设置"
 
-#: src/multiint.cpp:2518
+#: src/multiint.cpp:2330
 msgid "You cannot change AI in a challenge"
 msgstr ""
 
-#: src/multiint.cpp:2580
+#: src/multiint.cpp:2392
 msgid "CHAT"
 msgstr "聊天"
 
-#: src/multiint.cpp:2612
+#: src/multiint.cpp:2424
 msgid "All players need to have the same mods to join your game."
 msgstr "所有玩家需要使用相同的mod以便进入游戏"
 
-#: src/multiint.cpp:2767
+#: src/multiint.cpp:2579
 #, fuzzy, c-format
 msgid "*** password [%s] is now required! ***"
 msgstr "*** 需要密码 ***"
 
-#: src/multiint.cpp:2775
+#: src/multiint.cpp:2587
 msgid "*** password is NOT required! ***"
 msgstr "*** 不需要密码 ***"
 
-#: src/multiint.cpp:2990
+#: src/multiint.cpp:2802
 msgid "Sorry! Failed to host the game."
 msgstr "对不起！本机无法作为游戏主要服务器"
 
-#: src/multiint.cpp:3111
+#: src/multiint.cpp:2923
 msgid "'Locked Teams' mode enabled"
 msgstr "锁定同盟模式"
 
-#: src/multiint.cpp:3192
+#: src/multiint.cpp:3004
 #, c-format
 msgid "The host has kicked %s from the game!"
 msgstr "主玩家将 %s 踢出游戏！"
 
-#: src/multiint.cpp:3258
+#: src/multiint.cpp:3070
 msgid "Host is Starting Game"
 msgstr "主玩家已开始游戏"
 
-#: src/multiint.cpp:3813
+#: src/multiint.cpp:3638
 msgid "Players"
 msgstr "玩家"
 
-#: src/multiint.cpp:3875
+#: src/multiint.cpp:3716
 #, fuzzy, c-format
 msgid "Click to take player slot %d"
 msgstr "点击这里更改玩家设置"
 
-#: src/multiint.cpp:3884
-#: src/multiint.cpp:4077
+#: src/multiint.cpp:3725
+#: src/multiint.cpp:3918
 msgid "Open"
 msgstr ""
 
-#: src/multiint.cpp:3884
-#: src/multiint.cpp:4078
+#: src/multiint.cpp:3725
+#: src/multiint.cpp:3919
 #, fuzzy
 msgid "Closed"
 msgstr "关闭"
 
-#: src/multiint.cpp:3935
+#: src/multiint.cpp:3776
 #, c-format
 msgid "Sending Map: %d%% "
 msgstr "发送地图：%d%%"
 
-#: src/multiint.cpp:3943
+#: src/multiint.cpp:3784
 #, c-format
 msgid "Map: %d%% downloaded"
 msgstr "地图：%d%%下载完成"
 
-#: src/multiint.cpp:3969
+#: src/multiint.cpp:3810
 msgid "HOST"
 msgstr "主玩家"
 
-#: src/multiint.cpp:3976
+#: src/multiint.cpp:3817
 #: src/multimenu.cpp:808
 msgid "Ping"
 msgstr "Ping"
@@ -13132,12 +13090,12 @@ msgid "We can't do that! We must be a Cyborg unit to use a Cyborg Transport!"
 msgstr ""
 
 #: src/qtscriptfuncs.cpp:1390
-#: src/scriptfuncs.cpp:3259
+#: src/scriptfuncs.cpp:3269
 msgid "YOU ARE VICTORIOUS!"
 msgstr "你获胜了！"
 
 #: src/qtscriptfuncs.cpp:1395
-#: src/scriptfuncs.cpp:3263
+#: src/scriptfuncs.cpp:3273
 msgid "YOU WERE DEFEATED!"
 msgstr "你被打败了！"
 
@@ -13272,12 +13230,12 @@ msgstr "全部游戏时间 - %s"
 msgid "You cheated!"
 msgstr "你作弊了"
 
-#: src/scriptfuncs.cpp:9372
+#: src/scriptfuncs.cpp:9382
 #, c-format
 msgid "Beacon received from %s!"
 msgstr "由 %s 获得引导指标"
 
-#: src/scriptfuncs.cpp:9418
+#: src/scriptfuncs.cpp:9419
 #, c-format
 msgid "Beacon %d"
 msgstr "引导指标 %d"
@@ -13377,25 +13335,37 @@ msgstr ""
 msgid "Reinforcements landing"
 msgstr "援军已降落"
 
-#: src/version.cpp:129
+#: src/version.cpp:131
 msgid " (modified locally)"
 msgstr " (modified locally)"
 
-#: src/version.cpp:136
+#: src/version.cpp:138
 msgid " - DEBUG"
 msgstr " - DEBUG"
 
-#: src/version.cpp:145
+#: src/version.cpp:147
 #, c-format
 msgid " - Built %s"
 msgstr " - Built %s"
 
 #. TRANSLATORS: This string looks as follows when expanded.
 #. "Version <version name/number> <working copy state><BUILD DATE><BUILD TYPE>"
-#: src/version.cpp:155
-#, c-format
-msgid "Version %s%s%s%s"
+#: src/version.cpp:157
+#, fuzzy, c-format
+msgid "Version %s-%s%s%s%s"
 msgstr "版本 %s%s%s%s"
+
+#, fuzzy
+#~ msgid "Create a game first!"
+#~ msgstr "跟踪一个游戏中的物体"
+
+#, fuzzy
+#~ msgid "Connect IP"
+#~ msgstr "连接错误"
+
+#, fuzzy
+#~ msgid "Password:"
+#~ msgstr "按一下看地图"
 
 #, fuzzy
 #~ msgid "Construction speed +10%"
@@ -14080,9 +14050,6 @@ msgstr "版本 %s%s%s%s"
 #~ msgid "Disconnected from lobby server. Failed to register game."
 #~ msgstr "注册游戏失败，从Lobby服务器断开连接"
 
-#~ msgid "Could not resolve masterserver name (%s)!"
-#~ msgstr "不能解析游戏主机名"
-
 #~ msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
 #~ msgstr "不能与Lobby服务器建立连接。请检查TCP端口是否开放。"
 
@@ -14092,12 +14059,6 @@ msgstr "版本 %s%s%s%s"
 
 #~ msgid "Run in cheat mode"
 #~ msgstr "以作弊模式运行"
-
-#~ msgid "MULTI PLAYER"
-#~ msgstr "多人游戏"
-
-#~ msgid "Join Game"
-#~ msgstr "加入游戏"
 
 #~ msgid "Colored Cursors*"
 #~ msgstr "彩色指针"
@@ -14112,18 +14073,6 @@ msgstr "版本 %s%s%s%s"
 
 #~ msgid "You found %u power in an oil drum"
 #~ msgstr "你在钻油井发现了 %u 电力"
-
-#~ msgid "CONNECTION"
-#~ msgstr "连接"
-
-#~ msgid "Lobby"
-#~ msgstr "游戏大厅"
-
-#~ msgid "IP"
-#~ msgstr "IP"
-
-#~ msgid "Searching"
-#~ msgstr "搜寻"
 
 #, fuzzy
 #~ msgid "Player colour"
