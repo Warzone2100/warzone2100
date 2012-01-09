@@ -2,8 +2,6 @@ AM_CPPFLAGS = $(FREETYPE_CFLAGS) $(FRIBIDI_CFLAGS) $(FONTCONFIG_CFLAGS) $(WZ_CPP
 AM_CFLAGS =
 AM_CXXFLAGS =
 
-AUTOMAKE_OPTIONS = subdir-objects
-
 WZ_CPPFLAGS += -I`pwd`
 WZ_CFLAGS += -I`pwd`
 WZ_CXXFLAGS += -I`pwd`
@@ -33,18 +31,15 @@ libquesoglc_a_SOURCES = \
 	measure.c \
 	misc.c \
 	oarray.c \
+	ocharmap.c \
+	ocontext.c \
 	ofacedesc.c \
 	ofont.c \
 	oglyph.c \
+	omaster.c \
 	render.c \
 	scalable.c \
 	texture.c \
 	transform.c \
 	unicode.c
 
-
-if MINGW32
-libquesoglc_a_SOURCES += win32/ocharmap.c win32/ocontext.c win32/omaster.c
-else
-libquesoglc_a_SOURCES += ocharmap.c ocontext.c omaster.c
-endif
