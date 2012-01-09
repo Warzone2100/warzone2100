@@ -44,7 +44,7 @@ libquesoglc_a_SOURCES = \
 
 
 if MINGW32
-libquesoglc_a_SOURCES += win32-ocharmap.c win32-ocontext.c win32-omaster.c
+libquesoglc_a_SOURCES += win32/ocharmap.c win32/ocontext.c win32/omaster.c
 else
 libquesoglc_a_SOURCES += ocharmap.c ocontext.c omaster.c
 endif
