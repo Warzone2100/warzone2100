@@ -4,7 +4,7 @@ master_20120109:
    * Change: Don't give back power when a power generator gets destroyed (commit:7b66301950aa566978c71fc04104ff18c297183a)
    * Fix: Move units out of the way before building something (commit:9534b4c0bdef54164c8db941d50139048758676d)
    * Fix: Direct fire target prediction (commit:acd0587f829bfdde0dc7aa30dcab5fafe8875d9b)
-   * Fix: Homing projectiles (commit:e72787358112170b090efd341617ffe3743c973d, commit:35d3fec1469e9129e02461292c819251afac853d
+   * Fix: Homing projectiles (commit:e72787358112170b090efd341617ffe3743c973d, commit:35d3fec1469e9129e02461292c819251afac853d)
    * Fix: Loading of units in transporters (ticket:2889, ticket:2959, commit:93a6d7ba7489ae8a6c083c6276301dc13ca22824)
    * Fix: Unload units closer to their transporter (commit:1646499fcbda8dc08e54df8fce7db233ffa40b84)
    * Fix: Properly abort research after cancelling (ticket:2977, commit:4b355aa06011689440b21a7dccc7e409799c5ae8)
