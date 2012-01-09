@@ -46,6 +46,10 @@
 #include "research.h"
 #include "multilimit.h"
 #include "template.h"
+#include "lighting.h"
+#include "radar.h"
+#include "frontend.h"
+#include "loop.h"
 
 // hack, this is used from scriptfuncs.cpp -- and we don't want to include any stinkin' wzscript headers here!
 // TODO, move this stuff into a script common subsystem
@@ -1616,6 +1620,78 @@ static QScriptValue js_safeDest(QScriptContext *context, QScriptEngine *engine)
 	return QScriptValue(!(auxTile(x, y, player) & AUXBITS_DANGER));
 }
 
+//-- \subsection{addStructure(structure type, player, x, y)}
+//-- Create a structure on the given position. Returns true on success.
+static QScriptValue js_addStructure(QScriptContext *context, QScriptEngine *)
+{
+	QString building = context->argument(0).toString();
+	int index = getStructStatFromName(building.toUtf8().constData());
+	int player = context->argument(1).toInt32();
+	int x = context->argument(2).toInt32();
+	int y = context->argument(3).toInt32();
+	STRUCTURE_STATS *psStat = &asStructureStats[index];
+	STRUCTURE *psStruct = buildStructure(psStat, x, y, player, false);
+	if (psStruct)
+	{
+		psStruct->status = SS_BUILT;
+		buildingComplete(psStruct);
+	}
+	return QScriptValue(psStruct != NULL);
+}
+
+//-- \subsection{setScrollParams(x1, y1, x2, y2)}
+//-- Limit the scrollable area of the map to the given rectangle.
+static QScriptValue js_setScrollParams(QScriptContext *context, QScriptEngine *)
+{
+	const int minX = context->argument(0).toInt32();
+	const int minY = context->argument(1).toInt32();
+	const int maxX = context->argument(2).toInt32();
+	const int maxY = context->argument(3).toInt32();
+
+	SCRIPT_ASSERT(context, minX >= 0, "Minimum scroll x value %d is less than zero - ", minX);
+	SCRIPT_ASSERT(context, minY >= 0, "Minimum scroll y value %d is less than zero - ", minY);
+	SCRIPT_ASSERT(context, maxX <= mapWidth, "Maximum scroll x value %d is greater than mapWidth %d", maxX, (int)mapWidth);
+	SCRIPT_ASSERT(context, maxY <= mapHeight, "Maximum scroll y value %d is greater than mapHeight %d", maxY, (int)mapHeight);
+
+	const int prevMinX = scrollMinX;
+	const int prevMinY = scrollMinY;
+	const int prevMaxX = scrollMaxX;
+	const int prevMaxY = scrollMaxY;
+
+	scrollMinX = minX;
+	scrollMaxX = maxX;
+	scrollMinY = minY;
+	scrollMaxY = maxY;
+
+	// When the scroll limits change midgame - need to redo the lighting
+	initLighting(prevMinX < scrollMinX ? prevMinX : scrollMinX,
+				 prevMinY < scrollMinY ? prevMinY : scrollMinY,
+				 prevMaxX < scrollMaxX ? prevMaxX : scrollMaxX,
+				 prevMaxY < scrollMaxY ? prevMaxY : scrollMaxY);
+
+	// need to reset radar to take into account of new size
+	resizeRadar();
+	return QScriptValue();
+}
+
+//-- \subsection{loadLevel(level name)}
+//-- Load the level with the given name.
+static QScriptValue js_loadLevel(QScriptContext *context, QScriptEngine *)
+{
+	QString level = context->argument(0).toString();
+
+	sstrcpy(aLevelName, level.toUtf8().constData());
+
+	// Find the level dataset
+	LEVEL_DATASET *psNewLevel = levFindDataSet(level.toUtf8().constData());
+	SCRIPT_ASSERT(context, psNewLevel, "Could not find level data for %s", level.toUtf8().constData());
+
+	// Get the mission rolling...
+	nextMissionType = psNewLevel->type;
+	loopMissionState = LMS_CLEAROBJECTS;
+	return QScriptValue();
+}
+
 //-- \subsection{hackNetOff()}
 //-- Turn off network transmissions. FIXME - find a better way.
 static QScriptValue js_hackNetOff(QScriptContext *, QScriptEngine *)
@@ -1695,6 +1771,9 @@ bool registerFunctions(QScriptEngine *engine)
 	engine->globalObject().setProperty("enableComponent", engine->newFunction(js_enableComponent));
 	engine->globalObject().setProperty("allianceExistsBetween", engine->newFunction(js_allianceExistsBetween));
 	engine->globalObject().setProperty("removeStruct", engine->newFunction(js_removeStruct));
+	engine->globalObject().setProperty("setScrollParams", engine->newFunction(js_setScrollParams));
+	engine->globalObject().setProperty("addStructure", engine->newFunction(js_addStructure));
+	engine->globalObject().setProperty("loadLevel", engine->newFunction(js_loadLevel));
 
 	// Set some useful constants
 	engine->globalObject().setProperty("DORDER_ATTACK", DORDER_ATTACK, QScriptValue::ReadOnly | QScriptValue::Undeletable);
