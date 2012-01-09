@@ -129,7 +129,10 @@ WzMainWindow::WzMainWindow(QSize resolution, const QGLFormat &format, QWidget *p
 	setAutoBufferSwap(false);
 	setMouseTracking(true);
 
+	// Mac apps typically don't have window icons unless document-based.
+#if !defined(WZ_OS_MAC)
 	setWindowIcon(QIcon(QPixmap::fromImage(QImage("wz::images/warzone2100.png", "PNG"))));
+#endif
 	setWindowTitle(PACKAGE_NAME);
 
 	QImageReader buffer("wz::images/intfac5.png", "PNG");
