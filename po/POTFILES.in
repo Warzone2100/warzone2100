@@ -170,7 +170,7 @@ lib/ivis_opengl/rendmode.cpp
 lib/ivis_opengl/screen.cpp
 lib/ivis_opengl/tex.cpp
 lib/ivis_opengl/textdraw.cpp
-lib/netplay/netlobby.cpp
+lib/netplay/netjoin_stub.cpp
 lib/netplay/netlog.cpp
 lib/netplay/netplay.cpp
 lib/netplay/netqueue.cpp
