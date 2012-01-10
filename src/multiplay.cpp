@@ -967,6 +967,7 @@ bool recvResearchStatus(NETQUEUE queue)
 		if (psBuilding)
 		{
 			cancelResearch(psBuilding, ModeImmediate);
+			popStatusPending(*(RESEARCH_FACILITY *)psBuilding->pFunctionality);  // Research cancellation is no longer pending, as it's actually cancelling now.
 		}
 	}
 
