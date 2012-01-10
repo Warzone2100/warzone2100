@@ -317,16 +317,13 @@ void WzMainWindow::mouseMoveEvent(QMouseEvent *event)
 	mouseYPos = clip(event->y(), 0, height() - 1);
 	mouseInWindow = mouseXPos == event->x() && mouseYPos == event->y();
 
-	if (!mouseDown(MOUSE_MMB))
+	/* now see if a drag has started */
+	if ((aMouseState[dragKey].state == KEY_PRESSED ||
+	     aMouseState[dragKey].state == KEY_DOWN)
+	    && (abs(dragX - mouseXPos) > DRAG_THRESHOLD ||
+	        abs(dragY - mouseYPos) > DRAG_THRESHOLD))
 	{
-		/* now see if a drag has started */
-		if ((aMouseState[dragKey].state == KEY_PRESSED ||
-			 aMouseState[dragKey].state == KEY_DOWN)
-			&& (ABSDIF(dragX, mouseXPos) > DRAG_THRESHOLD ||
-				ABSDIF(dragY, mouseYPos) > DRAG_THRESHOLD))
-		{
-			aMouseState[dragKey].state = KEY_DRAG;
-		}
+		aMouseState[dragKey].state = KEY_DRAG;
 	}
 }
 
@@ -408,7 +405,7 @@ void WzMainWindow::mousePressEvent(QMouseEvent *event)
 			aMouseState[idx].lastdown = 0;
 		}
 
-		if (idx == MOUSE_LMB || idx == MOUSE_RMB)  // Not the mousewheel. I'm running around in the mouse wheel, but not getting anywhere. Squeak!
+		if (idx == MOUSE_LMB || idx == MOUSE_RMB || idx == MOUSE_MMB)
 		{
 			dragKey = idx;
 			dragX = mouseX();
