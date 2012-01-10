@@ -4057,7 +4057,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/bash;
-			shellScript = "export PATH=/sw/lib/qt4-mac/bin:/sw/lib/qt4-x11/bin:/opt/local/bin:${PATH}\necho \"Checking for moc...\"\nif ! type -aP moc; then\n    echo \"error: Fatal inability to properly moc the code. (Insure you have installed Qt or risk more mocing.)\" >&2\n    open ./README.BUILD.txt\n    exit 1\nelif [[ `moc -v 2>&1 | sed -e 's:.*Qt \\(4\\.6\\)\\..)$:\\1:'` < \"4.6\" ]]; then\n    echo \"error: Moc is not properly installed\" >&2\n    exit 1\nfi\nmoc -v\nexit 0";
+			shellScript = "export PATH=/sw/lib/qt4-mac/bin:/sw/lib/qt4-x11/bin:/opt/local/bin:${PATH}\nif [ \"${BACKEND}\" = \"BACKEND_QT\" ]; then\n    echo \"Checking for moc...\"\n    if ! type -aP moc; then\n        echo \"error: Fatal inability to properly moc the code. (Insure you have installed Qt or risk more mocing.)\" >&2\n        open ./README.BUILD.txt\n        exit 1\n    elif [[ `moc -v 2>&1 | sed -e 's:.*Qt \\(4\\.6\\)\\..)$:\\1:'` < \"4.6\" ]]; then\n        echo \"error: Moc is not properly installed\" >&2\n        exit 1\n    fi\nmoc -v\nelse\n    echo \"Moc is currently only needed when using the Qt backend.\"\nfi\nexit 0\n";
 		};
 		4345290E1130F84E002AD731 /* msgfmt */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -4358,20 +4358,27 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0246A0C20BD3CBD5004D1C70 /* debug.cpp in Sources */,
-				0246A0C40BD3CBD5004D1C70 /* frame.cpp in Sources */,
-				0246A0C50BD3CBD5004D1C70 /* frameresource.cpp in Sources */,
 				0246A0C90BD3CBD5004D1C70 /* resource_parser.ypp in Sources */,
 				0246A0C80BD3CBD5004D1C70 /* resource_lexer.lpp in Sources */,
 				0246A0CC0BD3CBD5004D1C70 /* strres_parser.ypp in Sources */,
 				0246A0CB0BD3CBD5004D1C70 /* strres_lexer.lpp in Sources */,
+				0246A0E60BD3CC0B004D1C70 /* audp_parser.ypp in Sources */,
+				0246A0E50BD3CC0B004D1C70 /* audp_lexer.lpp in Sources */,
+				0246A14E0BD3CC71004D1C70 /* chat_parser.ypp in Sources */,
+				0246A14D0BD3CC71004D1C70 /* chat_lexer.lpp in Sources */,
+				0246A1540BD3CC71004D1C70 /* script_parser.ypp in Sources */,
+				0246A1530BD3CC71004D1C70 /* script_lexer.lpp in Sources */,
+				0246A2C40BD3CCDC004D1C70 /* level_lexer.lpp in Sources */,
+				0246A2F00BD3CCDC004D1C70 /* scriptvals_parser.ypp in Sources */,
+				0246A2EF0BD3CCDC004D1C70 /* scriptvals_lexer.lpp in Sources */,
+				0246A0C20BD3CBD5004D1C70 /* debug.cpp in Sources */,
+				0246A0C40BD3CBD5004D1C70 /* frame.cpp in Sources */,
+				0246A0C50BD3CBD5004D1C70 /* frameresource.cpp in Sources */,
 				0246A0CD0BD3CBD5004D1C70 /* strres.cpp in Sources */,
 				0246A0CE0BD3CBD5004D1C70 /* treap.cpp in Sources */,
 				0246A0CF0BD3CBD5004D1C70 /* trig.cpp in Sources */,
 				0246A0E30BD3CC0B004D1C70 /* anim.cpp in Sources */,
 				0246A0E40BD3CC0B004D1C70 /* animobj.cpp in Sources */,
-				0246A0E60BD3CC0B004D1C70 /* audp_parser.ypp in Sources */,
-				0246A0E50BD3CC0B004D1C70 /* audp_lexer.lpp in Sources */,
 				0246A0E70BD3CC0B004D1C70 /* gtime.cpp in Sources */,
 				0246A1030BD3CC29004D1C70 /* bitimage.cpp in Sources */,
 				0246A1040BD3CC29004D1C70 /* imd.cpp in Sources */,
@@ -4389,12 +4396,8 @@
 				0246A1280BD3CC43004D1C70 /* screen.cpp in Sources */,
 				0246A1290BD3CC43004D1C70 /* tex.cpp in Sources */,
 				0246A12A0BD3CC43004D1C70 /* textdraw.cpp in Sources */,
-				0246A14E0BD3CC71004D1C70 /* chat_parser.ypp in Sources */,
-				0246A14D0BD3CC71004D1C70 /* chat_lexer.lpp in Sources */,
 				0246A14F0BD3CC71004D1C70 /* codeprint.cpp in Sources */,
 				0246A1500BD3CC71004D1C70 /* event.cpp in Sources */,
-				0246A1540BD3CC71004D1C70 /* script_parser.ypp in Sources */,
-				0246A1530BD3CC71004D1C70 /* script_lexer.lpp in Sources */,
 				0246A1550BD3CC71004D1C70 /* script.cpp in Sources */,
 				0246A1560BD3CC71004D1C70 /* stack.cpp in Sources */,
 				0246A1730BD3CCA6004D1C70 /* audio_id.cpp in Sources */,
@@ -4455,7 +4458,6 @@
 				0246A2C10BD3CCDC004D1C70 /* keybind.cpp in Sources */,
 				0246A2C20BD3CCDC004D1C70 /* keyedit.cpp in Sources */,
 				0246A2C30BD3CCDC004D1C70 /* keymap.cpp in Sources */,
-				0246A2C40BD3CCDC004D1C70 /* level_lexer.lpp in Sources */,
 				0246A2C50BD3CCDC004D1C70 /* levels.cpp in Sources */,
 				0246A2C60BD3CCDC004D1C70 /* lighting.cpp in Sources */,
 				0246A2C70BD3CCDC004D1C70 /* loadsave.cpp in Sources */,
@@ -4496,8 +4498,6 @@
 				0246A2EC0BD3CCDC004D1C70 /* scriptfuncs.cpp in Sources */,
 				0246A2ED0BD3CCDC004D1C70 /* scriptobj.cpp in Sources */,
 				0246A2EE0BD3CCDC004D1C70 /* scripttabs.cpp in Sources */,
-				0246A2F00BD3CCDC004D1C70 /* scriptvals_parser.ypp in Sources */,
-				0246A2EF0BD3CCDC004D1C70 /* scriptvals_lexer.lpp in Sources */,
 				0246A2F10BD3CCDC004D1C70 /* scriptvals.cpp in Sources */,
 				0246A2F20BD3CCDC004D1C70 /* selection.cpp in Sources */,
 				0246A2F30BD3CCDC004D1C70 /* seqdisp.cpp in Sources */,

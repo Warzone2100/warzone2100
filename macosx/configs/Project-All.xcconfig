@@ -29,3 +29,5 @@ LIBRARY_SEARCH_PATHS_QUOTED_3 = "$(SRCROOT)/external/QT"
 
 HEADER_SEARCH_PATHS_QUOTED_1 = "$(SRCROOT)/external/glew/include/**"
 HEADER_SEARCH_PATHS_QUOTED_2 = "$(SRCROOT)/../3rdparty/SDL/mac/include"
+
+BACKEND = BACKEND_SDL // May also be BACKEND_QT but requires additional changes to the project file to switch
