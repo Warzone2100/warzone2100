@@ -711,21 +711,21 @@ void _syncDebugDroid(const char *function, DROID const *psDroid, char ch)
 	{
 		ch,
 
-		psDroid->id,
+		(int)psDroid->id,
 
 		psDroid->player,
 		psDroid->pos.x, psDroid->pos.y, psDroid->pos.z,
 		psDroid->rot.direction, psDroid->rot.pitch, psDroid->rot.roll,
-		psDroid->order.type, psDroid->order.pos.x, psDroid->order.pos.y, psDroid->listSize,
-		psDroid->action,
-		psDroid->secondaryOrder,
-		psDroid->body,
-		psDroid->sMove.Status,
+		(int)psDroid->order.type, psDroid->order.pos.x, psDroid->order.pos.y, psDroid->listSize,
+		(int)psDroid->action,
+		(int)psDroid->secondaryOrder,
+		(int)psDroid->body,
+		(int)psDroid->sMove.Status,
 		psDroid->sMove.speed, psDroid->sMove.moveDir,
 		psDroid->sMove.pathIndex, psDroid->sMove.numPoints,
 		psDroid->sMove.src.x, psDroid->sMove.src.y, psDroid->sMove.target.x, psDroid->sMove.target.y, psDroid->sMove.destination.x, psDroid->sMove.destination.y,
-		psDroid->sMove.bumpDir, psDroid->sMove.bumpTime, psDroid->sMove.lastBump, psDroid->sMove.pauseTime, psDroid->sMove.bumpX, psDroid->sMove.bumpY, psDroid->sMove.shuffleStart,
-		psDroid->experience,
+		psDroid->sMove.bumpDir, (int)psDroid->sMove.bumpTime, psDroid->sMove.lastBump, psDroid->sMove.pauseTime, psDroid->sMove.bumpX, psDroid->sMove.bumpY, (int)psDroid->sMove.shuffleStart,
+		(int)psDroid->experience,
 	};
 	_syncDebugIntList(function, "%c droid%d = p%d;pos(%d,%d,%d),rot(%d,%d,%d),order%d(%d,%d)^%d,action%d,secondaryOrder%X,body%d,sMove(status%d,speed%d,moveDir%d,path%d/%d,src(%d,%d),target(%d,%d),destination(%d,%d),bump(%d,%d,%d,%d,(%d,%d),%d)),exp%u", list, ARRAY_SIZE(list));
 }

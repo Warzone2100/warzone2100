@@ -336,13 +336,13 @@ void _syncDebugFeature(const char *function, FEATURE const *psFeature, char ch)
 	{
 		ch,
 
-		psFeature->id,
+		(int)psFeature->id,
 
 		psFeature->player,
 		psFeature->pos.x, psFeature->pos.y, psFeature->pos.z,
-		psFeature->psStats->subType,
+		(int)psFeature->psStats->subType,
 		psFeature->psStats->damageable,
-		psFeature->body,
+		(int)psFeature->body,
 	};
 	_syncDebugIntList(function, "%c feature%d = p%d;pos(%d,%d,%d),subtype%d,damageable%d,body%d", list, ARRAY_SIZE(list));
 }

@@ -324,8 +324,8 @@ void _syncDebugProjectile(const char *function, PROJECTILE const *psProj, char c
 		psProj->pos.x, psProj->pos.y, psProj->pos.z,
 		psProj->rot.direction, psProj->rot.pitch, psProj->rot.roll,
 		psProj->state,
-		psProj->expectedDamageCaused,
-		psProj->psDamaged.size(),
+		(int)psProj->expectedDamageCaused,
+		(int)psProj->psDamaged.size(),
 	};
 	_syncDebugIntList(function, "%c projectile = p%d;pos(%d,%d,%d),rot(%d,%d,%d),state%d,expectedDamageCaused%d,numberDamaged%u", list, ARRAY_SIZE(list));
 }

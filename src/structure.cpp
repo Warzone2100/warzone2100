@@ -3525,14 +3525,14 @@ void _syncDebugStructure(const char *function, STRUCTURE const *psStruct, char c
 	{
 		ch,
 
-		psStruct->id,
+		(int)psStruct->id,
 
 		psStruct->player,
 		psStruct->pos.x, psStruct->pos.y, psStruct->pos.z,
-		psStruct->status,
-		psStruct->pStructureType->type, refChr, ref,
+		(int)psStruct->status,
+		(int)psStruct->pStructureType->type, refChr, ref,
 		psStruct->currentBuildPts,
-		psStruct->body,
+		(int)psStruct->body,
 	};
 	_syncDebugIntList(function, "%c structure%d = p%d;pos(%d,%d,%d),status%d,type%d,%c%.0d,bld%d,body%d", list, ARRAY_SIZE(list));
 }
