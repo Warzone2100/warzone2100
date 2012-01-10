@@ -1556,27 +1556,10 @@ static void addGameOptions()
 // ////////////////////////////////////////////////////////////////////////////
 // Colour functions
 
-static bool safeToUseColour(UDWORD player,UDWORD col)
+static bool safeToUseColour(unsigned player, unsigned otherPlayer)
 {
-	UDWORD i;
-
-	// if already using it, or we're the host
-	if( col == getPlayerColour(player) || NetPlay.isHost )
-	{
-		return true;						// already using it.
-	}
-
-	// player wants to be colour. check no other player to see if it is using that colour.....
-	for(i=0;i<MAX_PLAYERS;i++)
-	{
-		// if no human (except us) is using it
-		if( (i!=player) && isHumanPlayer(i) && (getPlayerColour(i) == col) )
-		{
-			return false;
-		}
-	}
-
-	return true;
+	// Player wants to take the colour from otherPlayer. May not take from a human otherPlayer, unless we're the host.
+	return player == otherPlayer || NetPlay.isHost || !isHumanPlayer(otherPlayer);
 }
 
 static void initChooser(int player)
