@@ -12,7 +12,6 @@ BASELIST = \
 	palette.txt \
 	anims \
 	audio \
-	challenges \
 	components \
 	effects \
 	features \
@@ -20,7 +19,6 @@ BASELIST = \
 	images \
 	messages \
 	misc \
-	multiplay \
 	script \
 	sequenceaudio \
 	shaders\
@@ -33,6 +31,7 @@ BASELIST = \
 PATCHLIST = \
 	addon.lev \
 	anims \
+	challenges \
 	components \
 	effects \
 	messages \
