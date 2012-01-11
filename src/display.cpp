@@ -1143,6 +1143,8 @@ void scroll(void)
 	float scaled_max_scroll_speed = scroll_zoom_factor * MAX_SCROLL_SPEED;
 	float scaled_accel;
 
+	static float xDiffFrac = 0, yDiffFrac = 0;
+
 	if(InGameOpUp || bDisplayMultiJoiningStatus || isInGamePopupUp)		// cant scroll when menu up. or when over radar
 	{
 		return;
@@ -1169,6 +1171,11 @@ void scroll(void)
 	CLIP(scrollDirLeftRight, -1, 1);
 	CLIP(scrollDirUpDown,    -1, 1);
 
+	if (scrollDirLeftRight != 0 || scrollDirUpDown != 0)
+	{
+		setWarCamActive(false);  // Don't let this thing override the user trying to scroll.
+	}
+
 	scaled_accel = scroll_zoom_factor * scroll_speed_accel;
 
 	// Apparently there's stutter if using deltaRealTime, so we have our very own delta time here, just for us.
@@ -1182,9 +1189,15 @@ void scroll(void)
 	calcScroll(&scrollStepUpDown,    &scrollSpeedUpDown,    scaled_accel, 2*scaled_accel, scrollDirUpDown    * scaled_max_scroll_speed, (float)timeDiff / GAME_TICKS_PER_SEC);
 
 	/* Get x component of movement */
-	xDif = iCosR(-player.r.y, scrollStepLeftRight) + iSinR(-player.r.y, scrollStepUpDown);
+	xDiffFrac += cos(-player.r.y*(M_PI/32768))*scrollStepLeftRight + sin(-player.r.y*(M_PI/32768))*scrollStepUpDown;
 	/* Get y component of movement */
-	yDif = iSinR(-player.r.y, scrollStepLeftRight) - iCosR(-player.r.y, scrollStepUpDown);
+	yDiffFrac += sin(-player.r.y*(M_PI/32768))*scrollStepLeftRight - cos(-player.r.y*(M_PI/32768))*scrollStepUpDown;
+
+	xDif = (int)xDiffFrac;
+	yDif = (int)yDiffFrac;
+
+	xDiffFrac -= xDif;
+	yDiffFrac -= yDif;
 
 	/* Adjust player's position by these components */
 	player.p.x += xDif;

@@ -223,7 +223,7 @@ static GAMECODE renderLoop()
 			/* Process all the console messages */
 			updateConsoleMessages();
 		}
-		if (!scrollPaused() && !getWarCamStatus() && dragBox3D.status != DRAG_DRAGGING && intMode != INT_INGAMEOP )
+		if (!scrollPaused() && dragBox3D.status != DRAG_DRAGGING && intMode != INT_INGAMEOP )
 		{
 			scroll();
 		}
