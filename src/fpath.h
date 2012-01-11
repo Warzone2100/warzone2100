@@ -47,7 +47,6 @@ struct PATHJOB
 	DROID_TYPE	droidType;
 	int		destX, destY;
 	int		origX, origY;
-	StructureBounds srcStructure;
 	StructureBounds dstStructure;
 	UDWORD		droidID;
 	FPATH_MOVETYPE	moveType;

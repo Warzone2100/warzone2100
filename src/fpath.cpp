@@ -351,7 +351,7 @@ void fpathRemoveDroidData(int id)
 }
 
 static FPATH_RETVAL fpathRoute(MOVE_CONTROL *psMove, int id, int startX, int startY, int tX, int tY, PROPULSION_TYPE propulsionType, 
-                               DROID_TYPE droidType, FPATH_MOVETYPE moveType, int owner, bool acceptNearest, BASE_OBJECT *srcStructure, BASE_OBJECT *dstStructure)
+                               DROID_TYPE droidType, FPATH_MOVETYPE moveType, int owner, bool acceptNearest, BASE_OBJECT *dstStructure)
 {
 	objTrace(id, "called(*,id=%d,sx=%d,sy=%d,ex=%d,ey=%d,prop=%d,type=%d,move=%d,owner=%d)", id, startX, startY, tX, tY, (int)propulsionType, (int)droidType, (int)moveType, owner);
 
@@ -423,7 +423,6 @@ static FPATH_RETVAL fpathRoute(MOVE_CONTROL *psMove, int id, int startX, int sta
 	job.droidID = id;
 	job.destX = tX;
 	job.destY = tY;
-	job.srcStructure = getStructureBounds(srcStructure);
 	job.dstStructure = getStructureBounds(dstStructure);
 	job.droidType = droidType;
 	job.propulsion = propulsionType;
@@ -473,14 +472,10 @@ FPATH_RETVAL fpathDroidRoute(DROID* psDroid, SDWORD tX, SDWORD tY, FPATH_MOVETYP
 	// Check whether the start and end points of the route are blocking tiles and find an alternative if they are.
 	Position startPos = psDroid->pos;
 	Position endPos = Position(tX, tY, 0);
-	BASE_OBJECT *srcStructure = worldTile(startPos)->psObject;
 	BASE_OBJECT *dstStructure = worldTile(endPos)->psObject;
 	if (psDroid->sMove.Status != MOVEWAITROUTE)
 	{
-		if (srcStructure == NULL)  // If there's a structure over the source, ignore it, otherwise pathfind from somewhere around the obstruction.
-		{
-			startPos = findNonblockingPosition(startPos, getPropulsionStats(psDroid)->propulsionType, psDroid->player, moveType);
-		}
+		startPos = findNonblockingPosition(startPos, getPropulsionStats(psDroid)->propulsionType, psDroid->player, moveType);
 		if (dstStructure == NULL)  // If there's a structure over the destination, ignore it, otherwise pathfind from somewhere around the obstruction.
 		{
 			endPos   = findNonblockingPosition(endPos,   getPropulsionStats(psDroid)->propulsionType, psDroid->player, moveType);
@@ -501,7 +496,7 @@ FPATH_RETVAL fpathDroidRoute(DROID* psDroid, SDWORD tX, SDWORD tY, FPATH_MOVETYP
 		break;
 	}
 	return fpathRoute(&psDroid->sMove, psDroid->id, startPos.x, startPos.y, endPos.x, endPos.y, psPropStats->propulsionType, 
-	                  psDroid->droidType, moveType, psDroid->player, acceptNearest, srcStructure, dstStructure);
+	                  psDroid->droidType, moveType, psDroid->player, acceptNearest, dstStructure);
 }
 
 // Run only from path thread
@@ -573,7 +568,7 @@ static int fpathResultQueueLength(void)
 // Only used by fpathTest.
 static FPATH_RETVAL fpathSimpleRoute(MOVE_CONTROL *psMove, int id, int startX, int startY, int tX, int tY)
 {
-	return fpathRoute(psMove, id, startX, startY, tX, tY, PROPULSION_TYPE_WHEELED, DROID_WEAPON, FMT_BLOCK, 0, true, NULL, NULL);
+	return fpathRoute(psMove, id, startX, startY, tX, tY, PROPULSION_TYPE_WHEELED, DROID_WEAPON, FMT_BLOCK, 0, true, NULL);
 }
 
 void fpathTest(int x, int y, int x2, int y2)

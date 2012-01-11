@@ -136,7 +136,7 @@ struct PathfindContext
 	PathfindContext() : myGameTime(0), iteration(0), blockingMap(NULL) {}
 	bool isBlocked(int x, int y) const
 	{
-		if (srcIgnore.isNonblocking(x, y) || dstIgnore.isNonblocking(x, y))
+		if (dstIgnore.isNonblocking(x, y))
 		{
 			return false;  // The path is actually blocked here by a structure, but ignore it since it's where we want to go (or where we came from).
 		}
@@ -147,16 +147,15 @@ struct PathfindContext
 	{
 		return !blockingMap->dangerMap.empty() && blockingMap->dangerMap[x + y*mapWidth];
 	}
-	bool matches(PathBlockingMap const *blockingMap_, PathCoord tileS_, PathNonblockingArea srcIgnore_, PathNonblockingArea dstIgnore_) const
+	bool matches(PathBlockingMap const *blockingMap_, PathCoord tileS_, PathNonblockingArea dstIgnore_) const
 	{
 		// Must check myGameTime == blockingMap_->type.gameTime, otherwise blockingMap could be a deleted pointer which coincidentally compares equal to the valid pointer blockingMap_.
-		return myGameTime == blockingMap_->type.gameTime && blockingMap == blockingMap_ && tileS == tileS_ && srcIgnore == srcIgnore_ && dstIgnore == dstIgnore_;
+		return myGameTime == blockingMap_->type.gameTime && blockingMap == blockingMap_ && tileS == tileS_ && dstIgnore == dstIgnore_;
 	}
-	void assign(PathBlockingMap const *blockingMap_, PathCoord tileS_, PathNonblockingArea srcIgnore_, PathNonblockingArea dstIgnore_)
+	void assign(PathBlockingMap const *blockingMap_, PathCoord tileS_, PathNonblockingArea dstIgnore_)
 	{
 		blockingMap = blockingMap_;
 		tileS = tileS_;
-		srcIgnore = srcIgnore_;
 		dstIgnore = dstIgnore_;
 		myGameTime = blockingMap->type.gameTime;
 		nodes.clear();
@@ -184,7 +183,6 @@ struct PathfindContext
 	std::vector<PathNode> nodes;        ///< Edge of explored region of the map.
 	std::vector<PathExploredTile> map;  ///< Map, with paths leading back to tileS.
 	PathBlockingMap const *blockingMap; ///< Map of blocking tiles for the type of object which needs a path.
-	PathNonblockingArea srcIgnore;      ///< Area of structure at source which should be considered nonblocking.
 	PathNonblockingArea dstIgnore;      ///< Area of structure at destination which should be considered nonblocking.
 };
 
@@ -366,9 +364,9 @@ static PathCoord fpathAStarExplore(PathfindContext &context, PathCoord tileF)
 	return nearestCoord;
 }
 
-static void fpathInitContext(PathfindContext &context, PathBlockingMap const *blockingMap, PathCoord tileS, PathCoord tileRealS, PathCoord tileF, PathNonblockingArea srcIgnore, PathNonblockingArea dstIgnore)
+static void fpathInitContext(PathfindContext &context, PathBlockingMap const *blockingMap, PathCoord tileS, PathCoord tileRealS, PathCoord tileF, PathNonblockingArea dstIgnore)
 {
-	context.assign(blockingMap, tileS, srcIgnore, dstIgnore);
+	context.assign(blockingMap, tileS, dstIgnore);
 
 	// Add the start point to the open list
 	fpathNewNode(context, tileF, tileRealS, 0, tileRealS);
@@ -383,7 +381,6 @@ ASR_RETVAL fpathAStarRoute(MOVE_CONTROL *psMove, PATHJOB *psJob)
 
 	const PathCoord tileOrig(map_coord(psJob->origX), map_coord(psJob->origY));
 	const PathCoord tileDest(map_coord(psJob->destX), map_coord(psJob->destY));
-	const PathNonblockingArea srcIgnore(psJob->srcStructure);
 	const PathNonblockingArea dstIgnore(psJob->dstStructure);
 
 	PathCoord endCoord;  // Either nearest coord (mustReverse = true) or orig (mustReverse = false).
@@ -391,7 +388,7 @@ ASR_RETVAL fpathAStarRoute(MOVE_CONTROL *psMove, PATHJOB *psJob)
 	std::list<PathfindContext>::iterator contextIterator = fpathContexts.begin();
 	for (contextIterator = fpathContexts.begin(); contextIterator != fpathContexts.end(); ++contextIterator)
 	{
-		if (!contextIterator->matches(psJob->blockingMap, tileDest, srcIgnore, dstIgnore))
+		if (!contextIterator->matches(psJob->blockingMap, tileDest, dstIgnore))
 		{
 			// This context is not for the same droid type and same destination.
 			continue;
@@ -434,7 +431,7 @@ ASR_RETVAL fpathAStarRoute(MOVE_CONTROL *psMove, PATHJOB *psJob)
 
 		// Init a new context, overwriting the oldest one if we are caching too many.
 		// We will be searching from orig to dest, since we don't know where the nearest reachable tile to dest is.
-		fpathInitContext(*contextIterator, psJob->blockingMap, tileOrig, tileOrig, tileDest, srcIgnore, dstIgnore);
+		fpathInitContext(*contextIterator, psJob->blockingMap, tileOrig, tileOrig, tileDest, dstIgnore);
 		endCoord = fpathAStarExplore(*contextIterator, tileDest);
 		contextIterator->nearestCoord = endCoord;
 	}
@@ -511,7 +508,7 @@ ASR_RETVAL fpathAStarRoute(MOVE_CONTROL *psMove, PATHJOB *psJob)
 		if (!context.isBlocked(tileOrig.x, tileOrig.y))  // If blocked, searching from tileDest to tileOrig wouldn't find the tileOrig tile.
 		{
 			// Next time, search starting from nearest reachable tile to the destination.
-			fpathInitContext(context, psJob->blockingMap, tileDest, context.nearestCoord, tileOrig, srcIgnore, dstIgnore);
+			fpathInitContext(context, psJob->blockingMap, tileDest, context.nearestCoord, tileOrig, dstIgnore);
 		}
 	}
 	else
