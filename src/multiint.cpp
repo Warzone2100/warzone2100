@@ -152,7 +152,7 @@ static UDWORD hideTime=0;
 static bool EnablePasswordPrompt = false;	// if we need the password prompt
 LOBBY_ERROR_TYPES LobbyError = ERROR_NOERROR;
 static bool allowChangePosition = true;
-static char tooltipbuffer[256] ={'\0'};
+static char tooltipbuffer[MaxGames][256] ={'\0'};
 /// end of globals.
 // ////////////////////////////////////////////////////////////////////////////
 // Function protos
@@ -188,6 +188,7 @@ static void showPasswordForm(void);
 // Game option functions
 static	void	addGameOptions();
 static	void	addChatBox			(void);
+static void		addConsoleBox(void);
 static	void	disableMultiButs	(void);
 static	void	processMultiopWidgets(UDWORD);
 static	void	SendFireUp			(void);
@@ -813,7 +814,7 @@ bool joinGame(const char* host, uint32_t port)
 
 		// Shows the lobby error.
 		addGames();
-
+		addConsoleBox();
 		return false;
 	}
 	ingame.localJoiningInProgress	= true;
@@ -844,6 +845,7 @@ static void addGames(void)
 			gcount++;
 		}
 	}
+
 	W_BUTINIT sButInit;
 	sButInit.formID = FRONTEND_BOTFORM;
 	sButInit.width = GAMES_GAMEWIDTH;
@@ -860,7 +862,7 @@ static void addGames(void)
 		gcount = 0;
 	}
 	// in case they refresh, and a game becomes available.
-	widgDelete(psWScreen,FRONTEND_NOGAMESAVAILABLE);
+	widgDelete(psWScreen, FRONTEND_NOGAMESAVAILABLE);
 
 	// only have to do this if we have any games available.
 	if (!getLobbyError() && gcount)
@@ -872,27 +874,11 @@ static void addGames(void)
 			{
 
 				sButInit.id = GAMES_GAMESTART+i;
+				sButInit.x = 20;
+				sButInit.y = (UWORD)(45+((5+GAMES_GAMEHEIGHT)*i) );
 
-				if (gcount < 9)							// only center column needed.
-				{
-					sButInit.x = 165;
-					sButInit.y = (UWORD)(30+((5+GAMES_GAMEHEIGHT)*i) );
-				}
-				else
-				{
-					if (i<9)		//column 1
-					{
-						sButInit.x = 50;
-						sButInit.y = (UWORD)(30+((5+GAMES_GAMEHEIGHT)*i) );
-					}
-					else		//column 2
-					{
-						sButInit.x = 60+GAMES_GAMEWIDTH;
-						sButInit.y = (UWORD)(30+((5+GAMES_GAMEHEIGHT)*(i-9) ) );
-					}
-				}
 				// display the correct tooltip message.
-				if (!NETisCorrectVersion(NetPlay.games[i].game_version_minor, NetPlay.games[i].game_version_major))
+				if (!NETisCorrectVersion(NetPlay.games[i].game_version_major, NetPlay.games[i].game_version_minor))
 				{
 					sButInit.pTip = wrongVersionTip;
 				}
@@ -902,8 +888,20 @@ static void addGames(void)
 				}
 				else
 				{
-					ssprintf(tooltipbuffer, "Map:%s, Game:%s, Hosted by %s ", NetPlay.games[i].mapname, NetPlay.games[i].name, NetPlay.games[i].hostname);
-					sButInit.pTip = tooltipbuffer;
+					if (NetPlay.games[i].limits)
+					{
+						ssprintf(tooltipbuffer[i], _("Hosted by %s, Game Status: %s%s%s%s!"), NetPlay.games[i].hostname,
+								 NetPlay.games[i].privateGame ? _("[Password required]") : "",
+								 NetPlay.games[i].limits & NO_TANKS ? _("[No Tanks]") : "",
+								 NetPlay.games[i].limits & NO_BORGS ? _(" [No Cyborgs]") : "",
+								 NetPlay.games[i].limits & NO_VTOLS ? _(" [No VTOLs]") : ""
+								);
+					}
+					else
+					{
+						ssprintf(tooltipbuffer[i], "Hosted by %s", NetPlay.games[i].hostname);
+					}
+					sButInit.pTip = tooltipbuffer[i];
 				}
 				sButInit.UserData = i;
 
@@ -987,7 +985,7 @@ void runGameFind(void )
 {
 	UDWORD id;
 	static UDWORD lastupdate=0;
-	static char game_password[64];		// check if StringSize is available
+	static char game_password[StringSize];
 
 	if (lastupdate > gameTime) lastupdate = 0;
 	if (gameTime-lastupdate > 6000 && !EnablePasswordPrompt)
@@ -998,6 +996,7 @@ void runGameFind(void )
 			NETfindGame();						// find games synchronously
 		}
 		addGames();									//redraw list
+		addConsoleBox();
 	}
 
 	id = widgRunScreen(psWScreen);						// Run the current set of widgets
@@ -1011,7 +1010,8 @@ void runGameFind(void )
 	{
 		ingame.localOptionsReceived = true;
 		NETfindGame();								// find games synchronously
-		addGames();										//redraw list.
+		addGames();									//redraw list.
+		addConsoleBox();
 	}
 	if (id == CON_PASSWORD)
 	{
@@ -1021,31 +1021,25 @@ void runGameFind(void )
 
 	// below is when they hit a game box to connect to--ideally this would be where
 	// we would want a modal password entry box.
-	if (id >= GAMES_GAMESTART && id<=GAMES_GAMEEND)
+	if (id >= GAMES_GAMESTART && id <= GAMES_GAMEEND)
 	{
-		gameNumber = id-GAMES_GAMESTART;
+		gameNumber = id - GAMES_GAMESTART;
 
-		if (!(NetPlay.games[gameNumber].desc.dwFlags & SESSION_JOINDISABLED)) // if still joinable
+		if (NetPlay.games[gameNumber].privateGame)
 		{
-			if (NetPlay.games[gameNumber].privateGame)
-			{
-				showPasswordForm();
-			}
-			else
-			{
-				ingame.localOptionsReceived = false;			// note we are awaiting options
-				sstrcpy(game.name, NetPlay.games[gameNumber].name);		// store name
-
-				joinGame(NetPlay.games[gameNumber].desc.host, 0);
-			}
+			showPasswordForm();
 		}
-
+		else
+		{
+			ingame.localOptionsReceived = false;					// note, we are awaiting options
+			sstrcpy(game.name, NetPlay.games[gameNumber].name);		// store name
+			joinGame(NetPlay.games[gameNumber].desc.host, 0);
+		}
 	}
 	else if (id == CON_PASSWORDYES)
 	{
-		ingame.localOptionsReceived = false;			// note we are awaiting options
+		ingame.localOptionsReceived = false;					// note, we are awaiting options
 		sstrcpy(game.name, NetPlay.games[gameNumber].name);		// store name
-
 		joinGame(NetPlay.games[gameNumber].desc.host, 0);
 	}
 	else if (id == CON_PASSWORDNO)
@@ -1064,6 +1058,18 @@ void runGameFind(void )
 	{
 		changeTitleMode(PROTOCOL);
 	}
+
+	// console box handling
+	iV_SetFont(font_small);
+	if(widgGetFromID(psWScreen, MULTIOP_CONSOLEBOX))
+	{
+		while(getNumberConsoleMessages() > getConsoleLineInfo())
+		{
+			removeTopConsoleMessage();
+		}
+		updateConsoleMessages();
+	}
+	displayConsoleMessages();
 }
 
 // Used to draw the password box for the lobby screen
@@ -1108,7 +1114,7 @@ void startGameFind(void)
 	sFormInit.x = MULTIOP_OPTIONSX;
 	sFormInit.y = MULTIOP_OPTIONSY;
 	sFormInit.width = MULTIOP_CHATBOXW;
-	sFormInit.height = 460;
+	sFormInit.height = 415;	// FIXME: Add box at bottom for server messages
 	sFormInit.pDisplay = intOpenPlainForm;
 	sFormInit.disableChildren = true;
 
@@ -1130,6 +1136,8 @@ void startGameFind(void)
 
 	NETfindGame();
 	addGames();	// now add games.
+	addConsoleBox();
+	displayConsoleMessages();
 
 	// Password stuff. Hidden by default.
 
@@ -1205,6 +1213,7 @@ static void hidePasswordForm(void)
 		widgReveal(psWScreen, MULTIOP_REFRESH);
 	}
 	addGames();
+	addConsoleBox();
 }
 
 static void showPasswordForm(void)
@@ -2411,6 +2420,45 @@ static void addChatBox(void)
 	return;
 }
 
+static void addConsoleBox(void)
+{
+	if(widgGetFromID(psWScreen, FRONTEND_TOPFORM))
+	{
+		widgDelete(psWScreen, FRONTEND_TOPFORM);
+	}
+
+	if(widgGetFromID(psWScreen, MULTIOP_CONSOLEBOX))
+	{
+		return;
+	}
+
+	W_FORMINIT sFormInit;
+
+	sFormInit.formID = FRONTEND_BACKDROP;							// add the form
+	sFormInit.id = MULTIOP_CONSOLEBOX;
+	sFormInit.x = MULTIOP_CONSOLEBOXX;
+	sFormInit.y = MULTIOP_CONSOLEBOXY;
+	sFormInit.style = WFORM_PLAIN;
+	sFormInit.width = MULTIOP_CONSOLEBOXW;
+	sFormInit.height = MULTIOP_CONSOLEBOXH;
+	sFormInit.disableChildren = true;								// wait till open!
+	sFormInit.pDisplay = intOpenPlainForm;
+	bool a = widgAddForm(psWScreen, &sFormInit);
+
+	flushConsoleMessages();											// add the chatbox.
+	initConsoleMessages();
+	enableConsoleDisplay(true);
+	setConsoleBackdropStatus(false);
+	setDefaultConsoleJust(LEFT_JUSTIFY);
+	setConsoleSizePos(MULTIOP_CONSOLEBOXX + 4 + D_W, MULTIOP_CONSOLEBOXY + 14 + D_H, MULTIOP_CONSOLEBOXW - 4);
+	setConsolePermanence(true, true);
+	setConsoleLineInfo(4);											// use x lines on chat window
+
+	addConsoleMessage(_("Connecting to the lobby server..."), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+	displayConsoleMessages();
+	return;
+}
+
 // ////////////////////////////////////////////////////////////////////////////
 static void disableMultiButs(void)
 {
@@ -3575,99 +3623,116 @@ void displayChatEdit(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT 
 // ////////////////////////////////////////////////////////////////////////////
 void displayRemoteGame(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
 {
-	UDWORD x = xOffset+psWidget->x;
-	UDWORD y = yOffset+psWidget->y;
-	UDWORD	i = psWidget->UserData;
-	char tmp[80], gamename[StringSize];
-	unsigned int ping;
+	UDWORD x = xOffset + psWidget->x;
+	UDWORD y = yOffset + psWidget->y;
+	UDWORD	gameID = psWidget->UserData;
+	char tmp[80], name[StringSize];
 
-	if (LobbyError != ERROR_NOERROR)
+	if ( (LobbyError != ERROR_NOERROR) && (bMultiPlayer && !NetPlay.bComms))
 	{
+		addConsoleMessage(_("Can't connect to lobby server!"), DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
 		return;
 	}
 
-	// Draw blue boxes.
-	drawBlueBox(x,y,psWidget->width,psWidget->height);
-	drawBlueBox(x,y,94,psWidget->height);
-	drawBlueBox(x,y,55,psWidget->height);
+	// Draw blue boxes for games (buttons) & headers
+	drawBlueBox(x, y, psWidget->width, psWidget->height);
+	drawBlueBox(x, y, GAMES_STATUS_START - 4 ,psWidget->height);
+	drawBlueBox(x, y, GAMES_PLAYERS_START - 4 ,psWidget->height);
+	drawBlueBox(x, y, GAMES_MAPNAME_START - 4, psWidget->height);
 
 	//draw game info
-	iV_SetFont(font_regular);													// font
+	iV_SetFont(font_regular);
 
-	// get game info.
-	// TODO: Check whether this code is used at all in skirmish games, if not, remove it.
-	if ((NetPlay.games[i].desc.dwFlags & SESSION_JOINDISABLED)
-		|| strcmp(NetPlay.games[i].modlist,getModList()) != 0
-		|| (bMultiPlayer
-			&& !NetPlay.bComms
-			&& NETgetGameFlagsUnjoined(gameNumber,1) == SKIRMISH                                  // the LAST bug...
-			&& NetPlay.games[gameNumber].desc.dwCurrentPlayers >= NetPlay.games[gameNumber].desc.dwMaxPlayers - 1))
+	// As long as they got room, and mods are the same then we proccess the button(s) 
+	if ((NetPlay.games[gameID].desc.dwCurrentPlayers == NetPlay.games[gameID].desc.dwMaxPlayers)
+		|| strcmp(NetPlay.games[gameID].modlist, getModList()) != 0 )
 	{
-		iV_SetTextColour(WZCOL_TEXT_MEDIUM);
-		// FIXME: We should really use another way to indicate that the game is full than our current big fat cross.
-		// need some sort of closed thing here!
-		iV_DrawImage(FrontImages,IMAGE_NOJOIN,x+18,y+11);
+		// FIXME: We should really use another way to indicate that the game is full other than our current big fat X.
+		// If game is full or wrong mod loaded
+		iV_SetTextColour(WZCOL_TEXT_DARK);
+		iV_DrawImage(FrontImages, IMAGE_NO, x + GAMES_STATUS_START, y + 3);
+		iV_DrawImage(FrontImages, IMAGE_LAMP_RED, x - 14, y + 8);
+		widgSetButtonState(psWScreen, psWidget->id, WBUT_DISABLE);
 	}
-	else if (!NETisCorrectVersion(NetPlay.games[i].game_version_minor, NetPlay.games[i].game_version_major))
+	else if (NETisCorrectVersion(NetPlay.games[gameID].game_version_major, NetPlay.games[gameID].game_version_minor))
 	{
-		if (NetPlay.games[gameNumber].desc.dwCurrentPlayers >= NetPlay.games[gameNumber].desc.dwMaxPlayers)
+
+		iV_SetTextColour(WZCOL_FORM_TEXT);
+		ssprintf(tmp, "%d/%d", NetPlay.games[gameID].desc.dwCurrentPlayers, NetPlay.games[gameID].desc.dwMaxPlayers);
+		iV_DrawText(tmp, x + GAMES_PLAYERS_START + 4 , y + 18);
+
+		//draw type overlay.
+		if (NetPlay.games[gameID].privateGame)	// check to see if it is a private game
 		{
-			iV_SetTextColour(WZCOL_TEXT_MEDIUM);
+			iV_DrawImage(FrontImages, IMAGE_LOCKED_NOBG, x + GAMES_STATUS_START, y + 3);
+			iV_DrawImage(FrontImages, IMAGE_LAMP_AMBER, x - 14, y + 8);
 		}
 		else
-		{
-			iV_SetTextColour(WZCOL_FORM_TEXT);
+		{	// "Normal" game, not private.
+			iV_DrawImage(FrontImages, IMAGE_SKIRMISH_OVER, x + GAMES_STATUS_START, y + 3);
+			iV_DrawImage(FrontImages, IMAGE_LAMP_GREEN, x - 14, y + 8);
 		}
-		iV_DrawText(_("Players"), x + 5, y + 18);
-		ssprintf(tmp, "%d/%d", NetPlay.games[i].desc.dwCurrentPlayers, NetPlay.games[i].desc.dwMaxPlayers);
-		iV_DrawText(tmp, x + 17, y + 33);
+
+		// see what host limits are... then draw them.
+		if (NetPlay.games[gameID].limits)
+		{
+			if(NetPlay.games[gameID].limits & NO_TANKS)
+				iV_DrawImage(FrontImages, IMAGE_NO_TANK, x + GAMES_STATUS_START + 37, y + 2);
+			if(NetPlay.games[gameID].limits & NO_BORGS)
+				iV_DrawImage(FrontImages, IMAGE_NO_CYBORG, x + GAMES_STATUS_START + (37 * 2), y + 2);
+			if(NetPlay.games[gameID].limits & NO_VTOLS)
+				iV_DrawImage(FrontImages, IMAGE_NO_VTOL, x + GAMES_STATUS_START + (37 * 3) , y + 2);
+		}	
 	}
 	else
 	{	//don't allow people to join games frome a different version of the game.
-		iV_SetTextColour(WZCOL_TEXT_MEDIUM);
-		// FIXME: Need a Wrong version icon!
-		iV_DrawImage(FrontImages,IMAGE_NOJOIN,x+18,y+11);
+		// FIXME: Need a 'Wrong version' icon
+		iV_SetTextColour(WZCOL_TEXT_DARK);
+		iV_DrawImage(FrontImages, IMAGE_NOJOIN, x + GAMES_STATUS_START + 42, y + 6 );
+		iV_DrawImage(FrontImages, IMAGE_LAMP_RED, x - 14, y + 8);
+		widgSetButtonState(psWScreen, psWidget->id, WBUT_DISABLE);
 	}
 
-	//draw type overlay.
-	if( NETgetGameFlagsUnjoined(i,1) == CAMPAIGN)
+	//draw game name, chop when we get a too long name
+	sstrcpy(name, NetPlay.games[gameID].name);
+	while (iV_GetTextWidth(name) > (psWidget->width-110) )
 	{
-		iV_DrawImage(FrontImages, IMAGE_ARENA_OVER, x + 59, y + 3);
+		name[strlen(name)-1]='\0';
 	}
-	else if (NetPlay.games[i].privateGame)	// check to see if it is a private game
-	{
-		iV_DrawImage(FrontImages, IMAGE_LOCKED_NOBG, x+62, y+3);	// lock icon
-	}
-	else
-	{
-		iV_DrawImage(FrontImages, IMAGE_SKIRMISH_OVER, x+62, y+3);	// SKIRMISH
-	}
+	iV_DrawText(name, x + GAMES_GAMENAME_START, y + 12);
 
-	// ping rating
-	ping = NETgetGameFlagsUnjoined(i, 2);
-	if (ping < PING_MED)
+	// draw map name, chop when we get a too long name
+	sstrcpy(name, NetPlay.games[gameID].mapname);
+	while (iV_GetTextWidth(name) > (psWidget->width-110) )
 	{
-		iV_DrawImage(FrontImages,IMAGE_LAMP_GREEN,x+70,y+26);
+		name[strlen(name)-1]='\0';
 	}
-	else if (ping >= PING_MED && ping < PING_HI)
-	{
-		iV_DrawImage(FrontImages,IMAGE_LAMP_AMBER,x+70,y+26);
-	}
-	else
-	{
-		iV_DrawImage(FrontImages,IMAGE_LAMP_RED,x+70,y+26);
-	}
+	iV_DrawText(name, x + GAMES_MAPNAME_START, y + 12);	// map name
 
-	//draw game name
-	sstrcpy(gamename, NetPlay.games[i].name);
-	while(iV_GetTextWidth(gamename) > (psWidget->width-110) )
-	{
-		gamename[strlen(gamename)-1]='\0';
-	}
-	iV_DrawText(gamename, x + 100, y + 18);	// name
+	iV_SetFont(font_small);
+	// draw mod name (if any)
+	strlen(NetPlay.games[gameID].modlist) ? sprintf(name, _("Mods: %s"), NetPlay.games[gameID].modlist) : sstrcpy(name, _("Mods: None!"));
+	iV_DrawText(name, x + GAMES_MODNAME_START, y + 24 );
 
-	iV_SetFont(font_small);											// font
-	iV_DrawText(NetPlay.games[i].versionstring, x + 100, y + 32);	// version
+	// draw version string
+	sprintf(name, _("Version: %s"), NetPlay.games[gameID].versionstring);
+	iV_DrawText(name, x + GAMES_GAMENAME_START + 6, y + 24 );
+
+	// crappy hack to only draw this once for the header.  TODO fix GUI
+	if (gameID == 0)
+	{
+	 iV_SetTextColour(WZCOL_YELLOW);
+	 // make the 'header' for the table...
+	 drawBlueBox(x , y - 12 , GAMES_GAMEWIDTH, 12);
+	 ssprintf(tmp, "Game Name");
+	 iV_DrawText(tmp, x - 2 + GAMES_GAMENAME_START + 48, y - 3);
+	 ssprintf(tmp, "Map Name");
+	 iV_DrawText(tmp, x - 2 + GAMES_MAPNAME_START + 48, y - 3);
+	 ssprintf(tmp, "Players");
+	 iV_DrawText(tmp, x - 2 + GAMES_PLAYERS_START, y - 3);
+	 ssprintf(tmp, "Status");
+	 iV_DrawText(tmp, x - 2 + GAMES_STATUS_START + 48, y - 3);
+	}
 }
 
 void displayTeamChooser(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)

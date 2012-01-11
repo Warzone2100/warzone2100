@@ -119,6 +119,13 @@ extern UBYTE				bDisplayMultiJoiningStatus;	// draw load progress?
 
 #define MAX_BYTESPERSEC			14336
 
+// Bitmask for client lobby
+
+#define NO_VTOLS  1
+#define NO_TANKS 2
+#define NO_BORGS 4
+
+
 #define ANYPLAYER				99
 
 #define CAMPAIGN				12

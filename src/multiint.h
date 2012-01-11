@@ -115,8 +115,15 @@ void loadMapPreview(bool hideInterface);
 
 #define GAMES_GAMESTART		10201
 #define GAMES_GAMEEND		GAMES_GAMESTART+20
-#define GAMES_GAMEWIDTH		225
-#define GAMES_GAMEHEIGHT	40
+#define GAMES_GAMEWIDTH		540
+#define GAMES_GAMEHEIGHT	28
+// We can have a max of 4 icons for status, current icon size if 36x25.
+#define GAMES_STATUS_START 393
+#define GAMES_GAMENAME_START 2
+#define GAMES_VERSION_START 2 + 6		// indent a bit
+#define GAMES_MAPNAME_START 173
+#define GAMES_MODNAME_START 173 + 6		// indent a bit
+#define GAMES_PLAYERS_START 360
 
 // ////////////////////////////////////////////////////////////////
 // GAME OPTIONS SCREEN
@@ -235,6 +242,12 @@ void loadMapPreview(bool hideInterface);
 #define MULTIOP_CHATBOXY		350
 #define MULTIOP_CHATBOXW		((MULTIOP_PLAYERSX+MULTIOP_PLAYERSW) - MULTIOP_OPTIONSX)
 #define MULTIOP_CHATBOXH		115
+
+#define MULTIOP_CONSOLEBOX		0x1A001		// TODO: these should be enums!
+#define MULTIOP_CONSOLEBOXX		MULTIOP_OPTIONSX
+#define MULTIOP_CONSOLEBOXY		432
+#define MULTIOP_CONSOLEBOXW		((MULTIOP_PLAYERSX + MULTIOP_PLAYERSW) - MULTIOP_OPTIONSX)
+#define MULTIOP_CONSOLEBOXH		48
 
 #define MULTIOP_CHATEDIT		10279
 #define MULTIOP_CHATEDITX		4

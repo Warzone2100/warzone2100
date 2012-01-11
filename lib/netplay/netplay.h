@@ -128,7 +128,7 @@ enum MESSAGE_TYPES
 // @NOTE / FIXME: We need a way to detect what should happen if the msg buffer exceeds this.
 #define MaxMsgSize		16384		// max size of a message in bytes.
 #define	StringSize		64			// size of strings used.
-#define MaxGames		18			// max number of concurrently playable games to allow.
+#define MaxGames		11			// max number of concurrently playable games to allow.
 #define extra_string_size	159		// extra 199 char for future use
 #define map_string_size		40
 #define	hostname_string_size	40
@@ -178,7 +178,7 @@ struct GAMESTRUCT
 	uint32_t	Mods;							// number of concatenated mods?
 	// Game ID, used on the lobby server to link games with multiple address families to eachother
 	uint32_t	gameId;
-	uint32_t	future2;						// for future use
+	uint32_t	limits;							// holds limits bitmask (NO_VTOL|NO_TANKS|NO_BORGS)
 	uint32_t	future3;						// for future use
 	uint32_t	future4;						// for future use
 };

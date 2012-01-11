@@ -29,6 +29,7 @@
 #include "lib/framework/crc.h"
 #include "lib/framework/file.h"
 #include "lib/gamelib/gtime.h"
+#include "src/console.h"
 #include "src/component.h"		// FIXME: we need to handle this better
 #include "src/modding.h"		// FIXME: we need to handle this better
 #include <time.h>			// for stats
@@ -159,7 +160,7 @@ unsigned NET_PlayerConnectionStatus[CONNECTIONSTATUS_NORMAL][MAX_PLAYERS];
 **/
 static char const *versionString = "version_getVersionString()";
 static int NETCODE_VERSION_MAJOR = 6;
-static int NETCODE_VERSION_MINOR = 1;
+static int NETCODE_VERSION_MINOR = 2;
 
 bool NETisCorrectVersion(uint32_t game_version_major, uint32_t game_version_minor)
 {
@@ -700,7 +701,7 @@ static bool NETsendGAMESTRUCT(Socket* sock, const GAMESTRUCT* ourgamestruct)
 	buffer += sizeof(uint32_t);
 
 	// Copy 32bit large big endian numbers
-	*(uint32_t*)buffer = htonl(ourgamestruct->future2);
+	*(uint32_t*)buffer = htonl(ourgamestruct->limits);
 	buffer += sizeof(uint32_t);
 
 	// Copy 32bit large big endian numbers
@@ -856,7 +857,7 @@ static bool NETrecvGAMESTRUCT(GAMESTRUCT* ourgamestruct)
 	buffer += sizeof(uint32_t);
 	ourgamestruct->gameId = ntohl(*(uint32_t*)buffer);
 	buffer += sizeof(uint32_t);
-	ourgamestruct->future2 = ntohl(*(uint32_t*)buffer);
+	ourgamestruct->limits = ntohl(*(uint32_t*)buffer);
 	buffer += sizeof(uint32_t);
 	ourgamestruct->future3 = ntohl(*(uint32_t*)buffer);
 	buffer += sizeof(uint32_t);
@@ -2498,7 +2499,7 @@ bool NEThostGame(const char* SessionName, const char* PlayerName,
 	gamestruct.pureGame = 0;									// NO mods allowed if true
 	gamestruct.Mods = 0;										// number of concatenated mods?
 	gamestruct.gameId  = 0;
-	gamestruct.future2 = 0xBAD02;								// for future use
+	gamestruct.limits = 0x0;									// used for limits
 	gamestruct.future3 = 0xBAD03;								// for future use
 	gamestruct.future4 = 0xBAD04;								// for future use
 
@@ -2658,6 +2659,14 @@ bool NETfindGame(void)
 		++gamecount;
 	}
 
+	if (readLobbyResponse(tcp_socket, NET_TIMEOUT_DELAY) == SOCKET_ERROR)
+	{
+		socketClose(tcp_socket);
+		tcp_socket = NULL;
+		addConsoleMessage(_("Failed to get a lobby response!"), DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
+		return true;		// while there was a problem, this isn't fatal for the function
+	}
+	addConsoleMessage(NetPlay.MOTD, DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 	return true;
 }
 
