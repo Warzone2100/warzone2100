@@ -4330,9 +4330,9 @@ static bool loadSaveDroid(const char *pFileName, DROID **ppsCurrentDroidLists)
 /*
 Writes the linked list of droids for each player to a file
 */
-static bool writeDroid(WzConfig &ini, DROID *psCurr, bool onMission)
+static bool writeDroid(WzConfig &ini, DROID *psCurr, bool onMission, int &counter)
 {
-	ini.beginGroup("droid_" + QString::number(psCurr->id));
+	ini.beginGroup("droid_" + QString("%1").arg(counter++, 10, 10, QLatin1Char('0')));  // Zero padded so that alphabetical sort works.
 	ini.setValue("id", psCurr->id);
 	setPlayer(ini, psCurr->player);
 	ini.setValue("name", psCurr->aName);
@@ -4447,19 +4447,20 @@ static bool writeDroidFile(const char *pFileName, DROID **ppsCurrentDroidLists)
 		debug(LOG_ERROR, "Could not open %s", pFileName);
 		return false;
 	}
+	int counter = 0;
 	bool onMission = (ppsCurrentDroidLists[0] == mission.apsDroidLists[0]);
 	for (int player = 0; player < MAX_PLAYERS; player++)
 	{
 		for (DROID *psCurr = ppsCurrentDroidLists[player]; psCurr != NULL; psCurr = psCurr->psNext)
 		{
-			writeDroid(ini, psCurr, onMission);
+			writeDroid(ini, psCurr, onMission, counter);
 			if (psCurr->droidType == DROID_TRANSPORTER)	// if transporter save any droids in the grp
 			{
 				for (DROID *psTrans = psCurr->psGroup->psList; psTrans != NULL; psTrans = psTrans->psGrpNext)
 				{
 					if (psTrans != psCurr)
 					{
-						writeDroid(ini, psTrans, onMission);
+						writeDroid(ini, psTrans, onMission, counter);
 					}
 				}
 				//always save transporter droids that are in the mission list with an invalid value
@@ -4929,11 +4930,12 @@ bool writeStructFile(const char *pFileName)
 		debug(LOG_ERROR, "Could not open %s", pFileName);
 		return false;
 	}
+	int counter = 0;
 	for (int player = 0; player < MAX_PLAYERS; player++)
 	{
 		for (STRUCTURE *psCurr = apsStructLists[player]; psCurr != NULL; psCurr = psCurr->psNext)
 		{
-			ini.beginGroup("structure_" + QString::number(psCurr->id));
+			ini.beginGroup("structure_" + QString("%1").arg(counter++, 10, 10, QLatin1Char('0')));  // Zero padded so that alphabetical sort works.
 			ini.setValue("id", psCurr->id);
 			setPlayer(ini, psCurr->player);
 			ini.setValue("name", psCurr->pStructureType->pName);
@@ -5355,9 +5357,10 @@ bool writeFeatureFile(const char *pFileName)
 		debug(LOG_ERROR, "Could not open %s", pFileName);
 		return false;
 	}
+	int counter = 0;
 	for(FEATURE *psCurr = apsFeatureLists[0]; psCurr != NULL; psCurr = psCurr->psNext)
 	{
-		ini.beginGroup("feature_" + QString::number(psCurr->id));
+		ini.beginGroup("feature_" + QString("%1").arg(counter++, 10, 10, QLatin1Char('0')));  // Zero padded so that alphabetical sort works.
 		ini.setValue("id", psCurr->id);
 		ini.setValue("name", psCurr->psStats->pName);
 		ini.setVector3i("position", psCurr->pos);
