@@ -45,8 +45,8 @@ bool wzActiveWindow(void);	///< Whether application currently has the mouse poin
 int wzGetTicks(void);		///< Milliseconds since start of game
 void wzFatalDialog(const char *text);	///< Throw up a modal warning dialog
 QList<QSize> wzAvailableResolutions();  ///< Get list of available resolutions.
-void wzSetSwapInterval(bool swap);
-bool wzGetSwapInterval();
+void wzSetSwapInterval(int swap);
+int wzGetSwapInterval();
 QString wzGetSelection();
 
 // Thread related

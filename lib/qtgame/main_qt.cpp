@@ -104,12 +104,12 @@ QList<QSize> wzAvailableResolutions()
 	return WzMainWindow::instance()->availableResolutions();
 }
 
-void wzSetSwapInterval(bool swap)
+void wzSetSwapInterval(int swap)
 {
 	WzMainWindow::instance()->setSwapInterval(swap);
 }
 
-bool wzGetSwapInterval()
+int wzGetSwapInterval()
 {
-	return WzMainWindow::instance()->swapInterval() > 0;
+	return WzMainWindow::instance()->swapInterval();
 }
