@@ -976,6 +976,11 @@ void intRunOrder(void)
 	// Remove any NULL pointers from SelectedDroids.
 	SelectedDroids.erase(std::remove(SelectedDroids.begin(), SelectedDroids.end(), (DROID *)NULL), SelectedDroids.end());
 
+	if (psSelectedFactory != NULL && psSelectedFactory->died)
+	{
+		psSelectedFactory = NULL;
+	}
+
 	// If all dead then remove the screen.
 	// If droids no longer selected then remove screen.
 	if (SelectedDroids.empty())
