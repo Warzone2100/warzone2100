@@ -1517,6 +1517,16 @@ static QScriptValue js_addReticuleButton(QScriptContext *context, QScriptEngine 
 	return QScriptValue();
 }
 
+//-- \subsection{removeReticuleButton(button type)}
+static QScriptValue js_removeReticuleButton(QScriptContext *context, QScriptEngine *engine)
+{
+	int button = context->argument(0).toInt32();
+	SCRIPT_ASSERT(context, button != IDRET_OPTIONS, "Invalid button");
+	// if (bInTutorial && bReset) intResetScreen(true);
+	widgHide(psWScreen, button);
+	return QScriptValue();
+}
+
 //-- \subsection{applyLimitSet()}
 static QScriptValue js_applyLimitSet(QScriptContext *context, QScriptEngine *engine)
 {
@@ -1766,6 +1776,7 @@ bool registerFunctions(QScriptEngine *engine)
 	engine->globalObject().setProperty("enableResearch", engine->newFunction(js_enableResearch));
 	engine->globalObject().setProperty("setPower", engine->newFunction(js_setPower));
 	engine->globalObject().setProperty("addReticuleButton", engine->newFunction(js_addReticuleButton));
+	engine->globalObject().setProperty("removeReticuleButton", engine->newFunction(js_removeReticuleButton));
 	engine->globalObject().setProperty("enableStructure", engine->newFunction(js_enableStructure));
 	engine->globalObject().setProperty("makeComponentAvailable", engine->newFunction(js_makeComponentAvailable));
 	engine->globalObject().setProperty("enableComponent", engine->newFunction(js_enableComponent));
