@@ -152,7 +152,7 @@ static UDWORD hideTime=0;
 static bool EnablePasswordPrompt = false;	// if we need the password prompt
 LOBBY_ERROR_TYPES LobbyError = ERROR_NOERROR;
 static bool allowChangePosition = true;
-static char tooltipbuffer[MaxGames][256] ={'\0'};
+static char tooltipbuffer[MaxGames][256] = {{'\0'}};
 /// end of globals.
 // ////////////////////////////////////////////////////////////////////////////
 // Function protos
@@ -2443,7 +2443,7 @@ static void addConsoleBox(void)
 	sFormInit.height = MULTIOP_CONSOLEBOXH;
 	sFormInit.disableChildren = true;								// wait till open!
 	sFormInit.pDisplay = intOpenPlainForm;
-	bool a = widgAddForm(psWScreen, &sFormInit);
+	widgAddForm(psWScreen, &sFormInit);
 
 	flushConsoleMessages();											// add the chatbox.
 	initConsoleMessages();
