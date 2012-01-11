@@ -51,7 +51,7 @@ CollectiveCWall,CORNER WALL,Level All,HARD,1,1,1,Concrete,125,2,12,500,10,25,1,0
 CollectiveWall,WALL,Level Two,HARD,1,1,1,Concrete,125,2,12,500,10,25,1,0,255,0,ZNULLECM,ZNULLSENSOR,0,BLWALL2.pie,0,1,0
 CoolingTower,DEFENSE,Level All,SOFT,1,1,1,Concrete,500,2,20,700,30,50,30,0,255,10,ZNULLECM,ZNULLSENSOR,0,micool.PIE,0,0,0
 Emplacement-HeavyLaser,DEFENSE,Level Three,HARD,0,1,1,Concrete,400,1,10,400,10,500,10,150,255,1,ZNULLECM,DefaultSensor1Mk1,1,BLHARDPT.PIE,0,0,1
-Emplacement-Howitzer-Incenediary,DEFENSE,Level Two-Three,HARD,0,1,1,Concrete,550,1,10,400,10,325,10,150,255,1,ZNULLECM,DefaultSensor1Mk1,1,Blhowmnt.PIE,0,1,1
+Emplacement-Howitzer-Incenediary,DEFENSE,Level Two-Three,HARD,0,1,1,Concrete,429,1,10,512,10,254,255,150,255,1,ZNULLECM,DefaultSensor1Mk1,1,Blhowmnt.PIE,0,1,1
 Emplacement-Howitzer105,DEFENSE,Level Two-Three,HARD,0,1,1,Concrete,550,1,10,400,10,325,10,150,255,1,ZNULLECM,DefaultSensor1Mk1,1,Blhowmnt.PIE,0,1,1
 Emplacement-Howitzer150,DEFENSE,Level Two-Three,HARD,0,1,1,Concrete,600,1,10,400,10,425,10,150,255,1,ZNULLECM,DefaultSensor1Mk1,1,Blhowmnt.PIE,0,0,1
 Emplacement-HPVcannon,DEFENSE,Level Two-Three,HARD,0,1,1,Concrete,400,1,10,400,10,200,10,150,255,1,ZNULLECM,DefaultSensor1Mk1,1,Blhowmnt.PIE,0,0,1
@@ -59,7 +59,7 @@ Emplacement-HvART-pit,DEFENSE,Level Two-Three,HARD,0,1,1,Concrete,675,1,10,400,1
 Emplacement-HvyATrocket,DEFENSE,Level All,HARD,0,1,1,Concrete,500,1,10,400,10,275,10,150,255,1,ZNULLECM,DefaultSensor1Mk1,1,Blhowmnt.PIE,0,0,1
 Emplacement-MdART-pit,DEFENSE,Level All,HARD,0,1,1,Concrete,600,1,10,400,10,450,10,150,255,1,ZNULLECM,DefaultSensor1Mk1,1,BLHARDPT.PIE,0,0,1
 Emplacement-MortarEMP,DEFENSE,Level Three,MEDIUM,0,1,1,Concrete,450,1,10,300,10,150,10,150,255,1,ZNULLECM,DefaultSensor1Mk1,1,BLMRTPIT.PIE,0,0,1
-Emplacement-MortarPit-Incenediary,DEFENSE,Level Three,MEDIUM,0,1,1,Concrete,425,1,10,300,10,135,10,150,255,1,ZNULLECM,DefaultSensor1Mk1,1,BLMRTPIT.PIE,0,0,1
+Emplacement-MortarPit-Incenediary,DEFENSE,Level Three,MEDIUM,0,1,1,Concrete,350,1,10,365,10,111,255,150,255,1,ZNULLECM,DefaultSensor1Mk1,1,BLMRTPIT.PIE,0,0,1
 Emplacement-MortarPit01,DEFENSE,Level One-Two,MEDIUM,0,1,1,Concrete,400,1,10,300,10,125,10,150,255,1,ZNULLECM,DefaultSensor1Mk1,1,BLMRTPIT.PIE,0,0,1
 Emplacement-MortarPit02,DEFENSE,Level All,MEDIUM,0,1,1,Concrete,450,1,10,300,10,150,10,150,255,1,ZNULLECM,DefaultSensor1Mk1,1,BLMRTPIT.PIE,0,0,1
 Emplacement-MRL-pit,DEFENSE,Level All,HARD,0,1,1,Concrete,400,1,10,400,10,125,10,150,255,1,ZNULLECM,DefaultSensor1Mk1,1,BLHARDPT.PIE,0,0,1
