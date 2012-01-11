@@ -990,7 +990,7 @@ static QScriptValue js_pickStructLocation(QScriptContext *context, QScriptEngine
 	x = startX;
 	y = startY;
 
-	Vector2i offset(psStat->baseWidth * (TILE_UNITS / 2), psStat->baseBreadth * (TILE_UNITS / 2));  // This presumably gets added to the chosen coordinates, somewhere, based on looking at what pickStructLocation does. No idea where it gets added, though, maybe inside the scripts?
+	Vector2i offset(psStat->baseWidth * (TILE_UNITS / 2), psStat->baseBreadth * (TILE_UNITS / 2));
 
 	// save a lot of typing... checks whether a position is valid
 	#define LOC_OK(_x, _y) (tileOnMap(_x, _y) && \
@@ -1048,8 +1048,8 @@ endstructloc:
 	if (found)
 	{
 		QScriptValue retval = engine->newObject();
-		retval.setProperty("x", x, QScriptValue::ReadOnly);
-		retval.setProperty("y", y, QScriptValue::ReadOnly);
+		retval.setProperty("x", x + map_coord(offset.x), QScriptValue::ReadOnly);
+		retval.setProperty("y", y + map_coord(offset.y), QScriptValue::ReadOnly);
 		return retval;
 	}
 	else
