@@ -2348,27 +2348,15 @@ void orderCheckList(DROID *psDroid)
 {
 	for (unsigned i = 0; i < psDroid->asOrderList.size(); ++i)
 	{
-		DROID_ORDER order = psDroid->asOrderList[i].type;
-		//if order requires an object
-		if (order == DORDER_ATTACK ||
-		    order == DORDER_REPAIR ||
-		    order == DORDER_OBSERVE ||
-		    order == DORDER_DROIDREPAIR ||
-		    order == DORDER_FIRESUPPORT ||
-		    order == DORDER_DEMOLISH ||
-		    order == DORDER_HELPBUILD ||
-		    order == DORDER_BUILDMODULE)
+		BASE_OBJECT *psTarget = psDroid->asOrderList[i].psObj;
+		if (psTarget != NULL && psTarget->died)
 		{
-			BASE_OBJECT *psTarget = psDroid->asOrderList[i].psObj;
-			if (psTarget != NULL && psTarget->died)
+			if (i < psDroid->listSize)
 			{
-				if (i < psDroid->listSize)
-				{
-					syncDebug("droid%d list erase dead droid%d", psDroid->id, psTarget->id);
-				}
-				orderDroidListEraseRange(psDroid, i, i + 1);
-				--i;  // If this underflows, the ++i will overflow it back.
+				syncDebug("droid%d list erase dead droid%d", psDroid->id, psTarget->id);
 			}
+			orderDroidListEraseRange(psDroid, i, i + 1);
+			--i;  // If this underflows, the ++i will overflow it back.
 		}
 	}
 }
