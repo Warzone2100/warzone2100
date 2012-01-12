@@ -60,9 +60,6 @@ extern std::vector<Vector2i> derricks;
 // ----------------------------------------------------------------------------------------
 // Utility functions -- not called directly from scripts
 
-#define SCRIPT_ASSERT(context, expr, ...) \
-	do { bool _wzeval = (expr); if (!_wzeval) { debug(LOG_ERROR, __VA_ARGS__); context->throwError(QScriptContext::ReferenceError, QString(#expr) +  " failed in " + QString(__FUNCTION__) + " at line " + QString::number(__LINE__)); return QScriptValue(); } } while (0)
-
 //;; \subsection{Research}
 //;; Describes a research item. The following properties are defined:
 //;; \begin{description}
@@ -100,6 +97,8 @@ QScriptValue convResearch(RESEARCH *psResearch, QScriptEngine *engine, int playe
 //;; \item[type] The type will always be STRUCTURE.
 //;; \item[stattype] The stattype defines the type of structure. It will be one of HQ, FACTORY, POWER_GEN, RESOURCE_EXTRACTOR,
 //;; DEFENSE, WALL, RESEARCH_LAB, REPAIR_FACILITY, CYBORG_FACTORY, VTOL_FACTORY, REARM_PAD, SAT_UPLINK, GATE and COMMAND_CONTROL.
+//;; \item[modules] If the stattype is set to one of the factories, POWER_GEN or RESEARCH_LAB, then this property is set to the
+//;; number of module upgrades it has.
 //;; \end{description}
 QScriptValue convStructure(STRUCTURE *psStruct, QScriptEngine *engine)
 {
@@ -118,6 +117,20 @@ QScriptValue convStructure(STRUCTURE *psStruct, QScriptEngine *engine)
 	default:
 		value.setProperty("stattype", (int)psStruct->pStructureType->type, QScriptValue::ReadOnly);
 		break;
+	}
+	if (psStruct->pStructureType->type == REF_FACTORY || psStruct->pStructureType->type == REF_CYBORG_FACTORY
+	    || psStruct->pStructureType->type == REF_VTOL_FACTORY)
+	{
+		FACTORY *psFactory = (FACTORY *)psStruct->pFunctionality;
+		value.setProperty("modules", psFactory->capacity, QScriptValue::ReadOnly);
+	}
+	else if (psStruct->pStructureType->type == REF_RESEARCH)
+	{
+		value.setProperty("modules", ((RESEARCH_FACILITY *)psStruct->pFunctionality)->capacity, QScriptValue::ReadOnly);
+	}
+	else if (psStruct->pStructureType->type == REF_POWER_GEN)
+	{
+		value.setProperty("modules", ((POWER_GEN *)psStruct->pFunctionality)->capacity);
 	}
 	return value;
 }
@@ -155,16 +168,40 @@ QScriptValue convFeature(FEATURE *psFeature, QScriptEngine *engine)
 //;; \item[action] The current action of the droid. This is how it intends to carry out its plan. The
 //;; C++ code may change the action frequently as it tries to carry out its order. You never want to set
 //;; the action directly, but it may be interesting to look at what it currently is.
-//;; \item[droidType] The droid's type.
+//;; \item[droidType] The droid's type. The following types are defined:
+//;;  \begin{description}
+//;;   \item[DROID_CONSTRUCT] Trucks and cyborg constructors.
+//;;   \item[DROID_WEAPON] Droids with weapon turrets, except cyborgs.
+//;;   \item[DROID_PERSON] Non-cyborg two-legged units, like scavengers.
+//;;   \item[DROID_REPAIR] Units with repair turret, including repair cyborgs.
+//;;   \item[DROID_SENSOR] Units with sensor turret.
+//;;   \item[DROID_ECM] Unit with ECM jammer turret.
+//;;   \item[DROID_CYBORG] Cyborgs with weapons.
+//;;   \item[DROID_TRANSPORTER] Transporters.
+//;;   \item[DROID_COMMAND] Commanders.
+//;;  \end{description}
 //;; \item[group] The group this droid is member of. This is a numerical ID. If not a member of any group,
 //;; this value is not set. Always check if set before use.
 //;; \end{description}
 QScriptValue convDroid(DROID *psDroid, QScriptEngine *engine)
 {
+	DROID_TYPE type = psDroid->droidType;
 	QScriptValue value = convObj(psDroid, engine);
 	value.setProperty("action", (int)psDroid->action, QScriptValue::ReadOnly);
 	value.setProperty("order", (int)psDroid->order.type, QScriptValue::ReadOnly);
-	value.setProperty("droidType", (int)psDroid->droidType, QScriptValue::ReadOnly);
+	switch (psDroid->droidType) // hide some engine craziness
+	{
+	case DROID_CYBORG_CONSTRUCT:
+		type = DROID_CONSTRUCT; break;
+	case DROID_DEFAULT:
+	case DROID_CYBORG_SUPER:
+		type = DROID_WEAPON; break;
+	case DROID_CYBORG_REPAIR:
+		type = DROID_REPAIR; break;
+	default:
+		break;
+	}
+	value.setProperty("droidType", (int)type, QScriptValue::ReadOnly);
 	if (psDroid->psGroup)
 	{
 		value.setProperty("group", (int)psDroid->psGroup->id, QScriptValue::ReadOnly);
@@ -899,9 +936,8 @@ static QScriptValue js_enumFeature(QScriptContext *context, QScriptEngine *engin
 //-- \subsection{enumDroid([player[, droid type[, looking player]]])}
 //-- Returns an array of droid objects. If no parameters given, it will
 //-- return all of the droids for the current player. The second, optional parameter
-//-- is the name of the droid type, which can currently only be DROID_CONSTRUCT. The
-//-- third parameter can be used to filter by visibility - the default is not
-//-- to filter.
+//-- is the name of the droid type. The third parameter can be used to filter by
+//-- visibility - the default is not to filter.
 static QScriptValue js_enumDroid(QScriptContext *context, QScriptEngine *engine)
 {
 	QList<DROID *> matches;
@@ -1608,7 +1644,8 @@ static QScriptValue js_isStructureAvailable(QScriptContext *context, QScriptEngi
 			    && asStructLimits[player][index].currentQuantity < asStructLimits[player][index].limit);
 }
 
-//-- \subsection{isVTOL(droid)} Returns true if given droid is a VTOL (not including transports).
+//-- \subsection{isVTOL(droid)}
+//-- Returns true if given droid is a VTOL (not including transports).
 static QScriptValue js_isVTOL(QScriptContext *context, QScriptEngine *engine)
 {
 	QScriptValue droidVal = context->argument(0);
@@ -1823,10 +1860,6 @@ bool registerFunctions(QScriptEngine *engine)
 	engine->globalObject().setProperty("DROID_CYBORG", DROID_CYBORG, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("DROID_TRANSPORTER", DROID_TRANSPORTER, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("DROID_COMMAND", DROID_COMMAND, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("DROID_DEFAULT", DROID_DEFAULT, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("DROID_CYBORG_CONSTRUCT", DROID_CYBORG_CONSTRUCT, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("DROID_CYBORG_REPAIR", DROID_CYBORG_REPAIR, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("DROID_CYBORG_SUPER", DROID_CYBORG_SUPER, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("HQ", REF_HQ, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("FACTORY", REF_FACTORY, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("POWER_GEN", REF_POWER_GEN, QScriptValue::ReadOnly | QScriptValue::Undeletable);

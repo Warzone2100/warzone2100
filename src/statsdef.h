@@ -484,7 +484,6 @@ struct CONSTRUCT_STATS : public COMPONENT_STATS
 
 struct BRAIN_STATS : public COMPONENT_STATS
 {
-	UDWORD			progCap;		///< Program capacity
 	WEAPON_STATS	*psWeaponStat;	///< weapon stats associated with this brain - for Command Droids
 };
 

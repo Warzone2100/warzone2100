@@ -1136,7 +1136,7 @@ bool loadBrainStats(const char *pBrainData, UDWORD bufferSize)
 		sscanf(pBrainData,"%255[^,'\r\n],%255[^,'\r\n],%d,%d,%d,%d,%d,%255[^,'\r\n],%d",
 			BrainName, dummy, &psStats->buildPower,&psStats->buildPoints,
 			&psStats->weight, &dummyVal, &dummyVal,
-			weaponName, &psStats->progCap);
+			weaponName, &dummyVal);
 
 		if (!allocateStatName((BASE_STATS *)psStats, BrainName))
 		{

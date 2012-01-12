@@ -129,6 +129,7 @@ static bool callFunction(QScriptEngine *engine, const QString &function, const Q
 //-- \end{lstlisting}
 static QScriptValue js_setTimer(QScriptContext *context, QScriptEngine *engine)
 {
+	SCRIPT_ASSERT(context, context->argument(0).isString(), "Timer functions must be quoted");
 	QString funcName = context->argument(0).toString();
 	QScriptValue ms = context->argument(1);
 	int player = engine->globalObject().property("me").toInt32();
@@ -148,6 +149,7 @@ static QScriptValue js_setTimer(QScriptContext *context, QScriptEngine *engine)
 //-- and its name \underline{must be quoted}.
 static QScriptValue js_removeTimer(QScriptContext *context, QScriptEngine *engine)
 {
+	SCRIPT_ASSERT(context, context->argument(0).isString(), "Timer functions must be quoted");
 	QString function = context->argument(0).toString();
 	int i, size = timers.size();
 	for (i = 0; i < size; ++i)
@@ -177,6 +179,7 @@ static QScriptValue js_removeTimer(QScriptContext *context, QScriptEngine *engin
 //-- dies before the queued call runs, nothing happens.
 static QScriptValue js_queue(QScriptContext *context, QScriptEngine *engine)
 {
+	SCRIPT_ASSERT(context, context->argument(0).isString(), "Queued functions must be quoted");
 	QString funcName = context->argument(0).toString();
 	int ms = 0;
 	if (context->argumentCount() > 1)
@@ -222,6 +225,7 @@ void scriptRemoveObject(const BASE_OBJECT *psObj)
 //-- \emph{NOTE: This function is under construction and is subject to total change!}
 static QScriptValue js_bind(QScriptContext *context, QScriptEngine *engine)
 {
+	SCRIPT_ASSERT(context, context->argument(0).isString(), "Bound functions must be quoted");
 	bindNode node;
 	QScriptValue objv = context->argument(1);
 	node.type = objv.property("type").toInt32();
