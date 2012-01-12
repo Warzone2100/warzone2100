@@ -158,7 +158,7 @@ unsigned NET_PlayerConnectionStatus[CONNECTIONSTATUS_NORMAL][MAX_PLAYERS];
  **            ie ("trunk", "2.1.3", "3.0", ...)
  ************************************************************************************
 **/
-static char const *versionString = "version_getVersionString()";
+static char const *versionString = version_getVersionString();
 static int NETCODE_VERSION_MAJOR = 6;
 static int NETCODE_VERSION_MINOR = 2;
 
@@ -2491,10 +2491,6 @@ bool NEThostGame(const char* SessionName, const char* PlayerName,
 	sstrcpy(gamestruct.mapname, game.map);					// map we are hosting
 	sstrcpy(gamestruct.hostname, PlayerName);
 	sstrcpy(gamestruct.versionstring, versionString);		// version (string)
-	if (strcmp(gamestruct.versionstring, "version_getVersionString()") == 0)
-	{
-		sstrcpy(gamestruct.versionstring, version_getVersionString());
-	}
 	sstrcpy(gamestruct.modlist, getModList());				// List of mods
 	gamestruct.GAMESTRUCT_VERSION = 3;						// version of this structure
 	gamestruct.game_version_major = NETCODE_VERSION_MAJOR;	// Netcode Major version

@@ -75,7 +75,7 @@ echo "${A}Bumping version strings to ${FULLVERSTR} and netcode version to ${DATE
 sed -i 's/\(AC_INIT(\[Warzone 2100\],\[\)'"${BASE}"'\(\],\[http:\/\/wz2100.net\/\],\[warzone2100\])\)/\1'"${FULLVERSTR}"'\2/;
         s/\(\[ enable_debug=${enableval} \], \[ enable_debug=\)yes\( \])\)/\1no\2/
        ' "${GITROOT}"configure.ac
-sed -i 's/\(static char const \*versionString = "\).*\(";\)/\1'"${FULLVERSTR}"'\2/;
+sed -i 's/\(static char const \*versionString = \).*\(;\)/\1"'"${FULLVERSTR}"'"\2/;
         s/\(static int NETCODE_VERSION_MINOR = \)[0-9]*\(;\)/\1'"${DATENUM}"'\2/
        ' "${GITROOT}"lib/netplay/netplay.c*
 sed -i 's/\(VALUE "FileVersion", "\)'"${BASE}"'\("\)/\1'"${FULLVERSTR}"'\2/;
