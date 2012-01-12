@@ -1054,7 +1054,7 @@ bool initTerrain(void)
 /// free all memory and opengl buffers used by the terrain renderer
 void shutdownTerrain(void)
 {
-	int x,y;
+	ASSERT_OR_RETURN( ,sectors, "trying to shutdown terrain when it didn't need it!");
 	glDeleteBuffers(1, &geometryVBO);
 	glDeleteBuffers(1, &geometryIndexVBO);
 	glDeleteBuffers(1, &waterVBO);
@@ -1063,9 +1063,9 @@ void shutdownTerrain(void)
 	glDeleteBuffers(1, &textureIndexVBO);
 	glDeleteBuffers(1, &decalVBO);
 	
-	for (x = 0; x < xSectors; x++)
+	for (int x = 0; x < xSectors; x++)
 	{
-		for (y = 0; y < ySectors; y++)
+		for (int y = 0; y < ySectors; y++)
 		{
 			free(sectors[x*ySectors + y].textureOffset);
 			free(sectors[x*ySectors + y].textureSize);
