@@ -1251,9 +1251,9 @@ static QScriptValue js_orderDroidObj(QScriptContext *context, QScriptEngine *)
 	return true;
 }
 
-//-- \subsection{orderDroidStatsLoc(droid, order, structure type, x, y)}
-//-- Give a droid an order to build someting at the given position.
-static QScriptValue js_orderDroidStatsLoc(QScriptContext *context, QScriptEngine *)
+//-- \subsection{orderDroidBuild(droid, order, structure type, x, y)}
+//-- Give a droid an order to build someting at the given position. Returns true if allowed.
+static QScriptValue js_orderDroidBuild(QScriptContext *context, QScriptEngine *)
 {
 	QScriptValue droidVal = context->argument(0);
 	int id = droidVal.property("id").toInt32();
@@ -1273,6 +1273,7 @@ static QScriptValue js_orderDroidStatsLoc(QScriptContext *context, QScriptEngine
 	if (!IsPlayerStructureLimitReached(psDroid->player))
 	{
 		orderDroidStatsLocDir(psDroid, order, psStats, world_coord(x), world_coord(y), 0, ModeQueue);
+		return QScriptValue(false);
 	}
 	return QScriptValue(true);
 }
@@ -1791,7 +1792,8 @@ bool registerFunctions(QScriptEngine *engine)
 	engine->globalObject().setProperty("isStructureAvailable", engine->newFunction(js_isStructureAvailable));
 	engine->globalObject().setProperty("pickStructLocation", engine->newFunction(js_pickStructLocation));
 	engine->globalObject().setProperty("droidCanReach", engine->newFunction(js_droidCanReach));
-	engine->globalObject().setProperty("orderDroidStatsLoc", engine->newFunction(js_orderDroidStatsLoc));
+	engine->globalObject().setProperty("orderDroidStatsLoc", engine->newFunction(js_orderDroidBuild)); // deprecated
+	engine->globalObject().setProperty("orderDroidBuild", engine->newFunction(js_orderDroidBuild));
 	engine->globalObject().setProperty("orderDroidObj", engine->newFunction(js_orderDroidObj));
 	engine->globalObject().setProperty("buildDroid", engine->newFunction(js_buildDroid));
 	engine->globalObject().setProperty("addDroid", engine->newFunction(js_addDroid));

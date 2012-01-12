@@ -179,7 +179,7 @@ function grabTrucksAndBuild(range, bstats, maxBlockingTiles)
 		if (result)
 		{
 			dbgObj(mydroid, "Construction work");
-			orderDroidStatsLoc(mydroid, DORDER_BUILD, bstats, result.x, result.y);
+			orderDroidBuild(mydroid, DORDER_BUILD, bstats, result.x, result.y);
 			found = true;
 		}
 		else
@@ -313,7 +313,7 @@ function eventStructureBuilt(struct, droid)
 	{
 		if (isStructureAvailable(powModule, me)) // Immediately upgrade it, if possible
 		{
-			orderDroidStatsLoc(droid, DORDER_BUILD, powModule, struct.x, struct.y);
+			orderDroidBuild(droid, DORDER_BUILD, powModule, struct.x, struct.y);
 		}
 	}
 }
