@@ -181,6 +181,7 @@ QScriptValue convFeature(FEATURE *psFeature, QScriptEngine *engine)
 //;;   \item[DROID_COMMAND] Commanders.
 //;;  \end{description}
 //;; \item[group] The group this droid is member of. This is a numerical ID. If not a member of any group,
+//;; \item[experience] Amount of experience this droid has, based on damage it has dealt to enemies.
 //;; this value is not set. Always check if set before use.
 //;; \end{description}
 QScriptValue convDroid(DROID *psDroid, QScriptEngine *engine)
@@ -202,6 +203,7 @@ QScriptValue convDroid(DROID *psDroid, QScriptEngine *engine)
 		break;
 	}
 	value.setProperty("droidType", (int)type, QScriptValue::ReadOnly);
+	value.setProperty("experience", (double)psDroid->experience / 65536.0, QScriptValue::ReadOnly);
 	if (psDroid->psGroup)
 	{
 		value.setProperty("group", (int)psDroid->psGroup->id, QScriptValue::ReadOnly);
@@ -1657,6 +1659,31 @@ static QScriptValue js_isVTOL(QScriptContext *context, QScriptEngine *engine)
 	return QScriptValue(isVtolDroid(psDroid));
 }
 
+//-- \subsection{droidFromId(id)}
+//-- Function to make porting from the old scripting system easier. Do not use for new code.
+//-- Instead, use labels.
+static QScriptValue js_droidFromId(QScriptContext *context, QScriptEngine *engine)
+{
+	QScriptValue droidVal = context->argument(0);
+	int id = droidVal.property("id").toInt32();
+	DROID *psDroid = (DROID *)getBaseObjFromId(id);
+	SCRIPT_ASSERT(context, psDroid, "No such droid id %d", id);
+	return QScriptValue(convDroid(psDroid, engine));
+}
+
+//-- \subsection{setDroidExperience(droid, experience)}
+//-- Set the amount of experience a droid has. Experience is read using floating point precision.
+static QScriptValue js_setDroidExperience(QScriptContext *context, QScriptEngine *engine)
+{
+	QScriptValue droidVal = context->argument(0);
+	int id = droidVal.property("id").toInt32();
+	int player = droidVal.property("player").toInt32();
+	DROID *psDroid = IdToDroid(id, player);
+	SCRIPT_ASSERT(context, psDroid, "No such droid id %d belonging to player %d", id, player);
+	psDroid->experience = context->argument(1).toNumber() * 65536;
+	return QScriptValue();
+}
+
 //-- \subsection{safeDest(player, x, y)} Returns true if given player is safe from hostile fire at
 //-- the given location, to the best of that player's map knowledge.
 static QScriptValue js_safeDest(QScriptContext *context, QScriptEngine *engine)
@@ -1770,6 +1797,7 @@ bool registerFunctions(QScriptEngine *engine)
 	// horrible hacks follow -- do not rely on these being present!
 	engine->globalObject().setProperty("hackNetOff", engine->newFunction(js_hackNetOff));
 	engine->globalObject().setProperty("hackNetOn", engine->newFunction(js_hackNetOn));
+	engine->globalObject().setProperty("droidFromId", engine->newFunction(js_droidFromId));
 
 	// General functions -- geared for use in AI scripts
 	engine->globalObject().setProperty("debug", engine->newFunction(js_debug));
@@ -1824,6 +1852,7 @@ bool registerFunctions(QScriptEngine *engine)
 	engine->globalObject().setProperty("setScrollParams", engine->newFunction(js_setScrollParams));
 	engine->globalObject().setProperty("addStructure", engine->newFunction(js_addStructure));
 	engine->globalObject().setProperty("loadLevel", engine->newFunction(js_loadLevel));
+	engine->globalObject().setProperty("setDroidExperience", engine->newFunction(js_setDroidExperience));
 
 	// Set some useful constants
 	engine->globalObject().setProperty("DORDER_ATTACK", DORDER_ATTACK, QScriptValue::ReadOnly | QScriptValue::Undeletable);
