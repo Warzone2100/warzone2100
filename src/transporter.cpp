@@ -59,6 +59,7 @@
 #include "mapgrid.h"
 #include "visibility.h"
 #include "multiplay.h"
+#include "qtscript.h"
 
 //#define IDTRANS_FORM			9000	//The Transporter base form
 #define IDTRANS_TABFORM			9001	//The Transporter tabbed form
@@ -1710,6 +1711,7 @@ void processLaunchTransporter(void)
 				(void*)psCurrTransporter);
 
 			eventFireCallbackTrigger((TRIGGER_TYPE)CALL_LAUNCH_TRANSPORTER);
+			triggerEvent(TRIGGER_LAUNCH_TRANSPORTER);
 		}
 	}
 }

@@ -78,6 +78,7 @@
 #include "texture.h"
 #include "warzoneconfig.h"
 #include "combat.h"
+#include "qtscript.h"
 
 #define		IDMISSIONRES_TXT		11004
 #define		IDMISSIONRES_LOAD		11005
@@ -2268,6 +2269,7 @@ void intUpdateTransporterTimer(WIDGET *psWidget, W_CONTEXT *psContext)
 				    {
 					    missionFlyTransportersIn( selectedPlayer, false );
 					    eventFireCallbackTrigger( (TRIGGER_TYPE)CALL_TRANSPORTER_REINFORCE );
+					triggerEvent(TRIGGER_REINFORCEMENTS_ARRIVED);
 				    }
 			    }
             }
@@ -3010,6 +3012,7 @@ void missionTimerUpdate(void)
 		    {
 			    //the script can call the end game cos have failed!
 			    eventFireCallbackTrigger((TRIGGER_TYPE)CALL_MISSION_TIME);
+				triggerEvent(TRIGGER_MISSION_TIMEOUT);
 		    }
 	    }
     }

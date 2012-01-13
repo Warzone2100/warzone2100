@@ -532,6 +532,12 @@ bool loadScriptStates(const char *filename)
 //__ properly initialized by this time, so use this only to initialize script state.
 //__ \subsection{eventStartLevel()}
 //__ An event that is run once the game has started and all game data has been loaded.
+//__ \subsection{eventLaunchTransporter()}
+//__ An event that is run when the transporter has been ordered to fly off in a mission.
+//__ \subsection{eventReinforcementsArrived()}
+//__ An event that is run when the transporter has arrived with reinforcements in a mission.
+//__ \subsection{eventMissionTimeout()}
+//__ An event that is run when the mission timer has run out.
 bool triggerEvent(SCRIPT_TRIGGER_TYPE trigger)
 {
 	for (int i = 0; i < scripts.size(); ++i)
@@ -545,6 +551,15 @@ bool triggerEvent(SCRIPT_TRIGGER_TYPE trigger)
 			break;
 		case TRIGGER_START_LEVEL:
 			callFunction(engine, "eventStartLevel", QScriptValueList());
+			break;
+		case TRIGGER_LAUNCH_TRANSPORTER:
+			callFunction(engine, "eventLaunchTransporter", QScriptValueList());
+			break;
+		case TRIGGER_REINFORCEMENTS_ARRIVED:
+			callFunction(engine, "eventReinforcementsArrived", QScriptValueList());
+			break;
+		case TRIGGER_MISSION_TIMEOUT:
+			callFunction(engine, "eventMissionTimeout", QScriptValueList());
 			break;
 		}
 	}
