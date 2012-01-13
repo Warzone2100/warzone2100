@@ -257,7 +257,7 @@ int getNextAIAssignment(const char *name)
 
 void loadMultiScripts()
 {
-	// TODO: Only load AI scripts (not vals) once.
+	bool defaultRules = true;
 
 	// Reset assigned counter
 	std::vector<AIDATA>::iterator it;
@@ -266,10 +266,30 @@ void loadMultiScripts()
 		(*it).assigned = 0;
 	}
 
+	// Load extra script for challenges
+	if (challengeActive)
+	{
+		WzConfig challenge(sRequestResult);
+		challenge.beginGroup("scripts");
+		if (challenge.contains("extra"))
+		{
+			loadGlobalScript("challenges/" + challenge.value("extra").toString());
+		}
+		if (challenge.contains("rules"))
+		{
+			loadGlobalScript("challenges/" + challenge.value("rules").toString());
+			defaultRules = false;
+		}
+		challenge.endGroup();
+	}
+
 	// Load multiplayer rules
 	resForceBaseDir("messages/");
 	resLoadFile("SMSG", "multiplay.txt");
-	loadGlobalScript("multiplay/skirmish/rules.js");
+	if (defaultRules)
+	{
+		loadGlobalScript("multiplay/skirmish/rules.js");
+	}
 
 	// Backup data hashes, since AI and scavenger scripts aren't run on all clients.
 	uint32_t oldHash1 = DataHash[DATA_SCRIPT];

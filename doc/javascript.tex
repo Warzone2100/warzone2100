@@ -17,7 +17,7 @@ with this document. A number of very good guides to JavaScript exist on the Inte
 The following hard-coded files exist for game rules that use this API:
 
 \begin{description}
-	\item[multiplay/skirmish/rules.js] Basic game rules - base setup, starting research, winning and losing.
+	\item[multiplay/skirmish/rules.js] Default game rules - base setup, starting research, winning and losing.
 	\item[multiplay/script/scavfact.js] Scavenger AI. This script is active if scavengers are.
 \end{description}
 
@@ -30,10 +30,16 @@ directory. Here is an example of an '.ai' file that defines an AI implemented us
 	js = semperfi.js
 \end{verbatim}
 
-It references a '.js' JavaScript file that needs to be in the same directory as the '.ai' file. The code in
-this file is accessed through specially named functions called 'events'. These are defined below. An event
-is expected to carry out some computation then return immediately. The game is on hold while an event is processed,
-so do not do too many things at once, or else the player will experience stuttering.
+It references a '.js' JavaScript file that needs to be in the same directory as the '.ai' file. 
+
+Challenges may load scripts as well, if a [scripts] section is present in the challenge file, and has the keys 
+"extra" or "rules". The "extra" key sets up an additional script to be run during the challenge. The "rules"
+key sets up an alternative rules file, which means that the "rules.js" mentioned above is \emph{not} run. In
+this case, you must implement your own rules for winning and losing, among other things.
+
+The code in a javascript file is accessed through specially named functions called 'events'. These are defined below. 
+An event is expected to carry out some computation then return immediately. The game is on hold while an event is 
+processed, so do not do too many things at once, or else the player will experience stuttering.
 
 All global variables are saved when the game is saved. However, do not try to keep JavaScript objects that are
 returned from API functions defined here around in the global scope. They are not meant to be used this way, and
@@ -75,7 +81,6 @@ multiple functions and widely used throughout, so it is better to learn about th
 
 \section{Globals}
 
-\flushleft
 \begin{description}
 \input{globals}
 \end{description}
@@ -85,6 +90,18 @@ multiple functions and widely used throughout, so it is better to learn about th
 \input{functions}
 
 \section{Gotchas / Bugs}
+
+\subsection{Global objects}
+You must never put game objects, like droids or structures, on global. You only get a snapshot of their state,
+the state is not updated, and they are not removed when they die. Trying to store them globally then using them 
+later will fail.
+
+All variables stored on global (in global scope) are stored when the game is saved, and restored when it is 
+loaded. However, this may not work properly for complex objects. Basic arrays and basic types are supported,
+but it is generally not recommended to put objects on global, even though simple ones may work.
+
+Const definitions are not stored in savegames, and are therefore recommended over variables to hold information 
+that does not change.
 
 \subsection{Object states}
 Most object states that are changed from the scripts are not in fact changed, but queued up to be synchronized
