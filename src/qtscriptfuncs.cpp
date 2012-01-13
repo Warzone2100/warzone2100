@@ -1324,7 +1324,8 @@ static QScriptValue js_setMissionTime(QScriptContext *context, QScriptEngine *)
 	return QScriptValue();
 }
 
-//-- \subsection{setReinforcementTime(time)}
+//-- \subsection{setReinforcementTime(time)} Set time for reinforcements to arrive. If time is
+//-- negative, the reinforcement GUI is removed and the timer stopped.
 static QScriptValue js_setReinforcementTime(QScriptContext *context, QScriptEngine *)
 {
 	int value = context->argument(0).toInt32() * 100;
@@ -1534,7 +1535,9 @@ static QScriptValue js_setPower(QScriptContext *context, QScriptEngine *engine)
 	return QScriptValue();
 }
 
-//-- \subsection{enableStructure(structure type)}
+//-- \subsection{enableStructure(structure type[, player])}
+//-- The given structure type is made available to the given player. It will appear in the
+//-- player's build list.
 static QScriptValue js_enableStructure(QScriptContext *context, QScriptEngine *engine)
 {
 	QString building = context->argument(0).toString();
@@ -1598,6 +1601,7 @@ static void setComponent(QString name, int player, int value)
 }
 
 //-- \subsection{enableComponent(component, player)}
+//-- The given component is made available for research for the given player.
 static QScriptValue js_enableComponent(QScriptContext *context, QScriptEngine *engine)
 {
 	QString componentName = context->argument(0).toString();
@@ -1609,6 +1613,8 @@ static QScriptValue js_enableComponent(QScriptContext *context, QScriptEngine *e
 }
 
 //-- \subsection{makeComponentAvailable(component, player)}
+//-- The given component is made available to the given player. This means the player can
+//-- actually build designs with it.
 static QScriptValue js_makeComponentAvailable(QScriptContext *context, QScriptEngine *engine)
 {
 	QString componentName = context->argument(0).toString();
@@ -1620,6 +1626,7 @@ static QScriptValue js_makeComponentAvailable(QScriptContext *context, QScriptEn
 }
 
 //-- \subsection{allianceExistsBetween(player, player)}
+//-- Returns true if an alliance exists between the two players, or they are the same player.
 static QScriptValue js_allianceExistsBetween(QScriptContext *context, QScriptEngine *engine)
 {
 	int player1 = context->argument(0).toInt32();
