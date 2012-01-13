@@ -249,7 +249,7 @@ bool addConsoleMessage(const char *Text, CONSOLE_TEXT_JUSTIFICATION jusType, SDW
 		// isn't working the way it should, so right now, we just throw a warning (only in debug mode) that the text it too long.
 		if (textLength > 72)
 		{
-			debug(LOG_WARNING, "This line is too long, and will be split in the display routines! Line is:[%s]", lines.c_str());
+			debug(LOG_NEVER, "This line is too long, and will be split in the display routines! Line is:[%s]", lines.c_str());
 		}
 
 		ASSERT( textLength < MAX_CONSOLE_STRING_LENGTH, "Attempt to add a message to the console that exceeds MAX_CONSOLE_STRING_LENGTH" );
