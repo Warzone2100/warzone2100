@@ -386,6 +386,8 @@ bool loadPlayerScript(QString path, int player, int difficulty)
 	engine->globalObject().setProperty("bind", engine->newFunction(js_bind));
 
 	// Special global variables
+	//== \item[version] Current version of the game. Do not make too many assumption about this value.
+	engine->globalObject().setProperty("version", PACKAGE_VERSION, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	//== \item[me] The player the script is currently running as.
 	engine->globalObject().setProperty("me", player, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	//== \item[selectedPlayer] The player ontrolled by the client on which the script runs.

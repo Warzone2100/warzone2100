@@ -104,6 +104,7 @@ QScriptValue convStructure(STRUCTURE *psStruct, QScriptEngine *engine)
 {
 	QScriptValue value = convObj(psStruct, engine);
 	value.setProperty("status", (int)psStruct->status, QScriptValue::ReadOnly);
+	value.setProperty("health", 100 * structureBody(psStruct) / psStruct->body, QScriptValue::ReadOnly);
 	switch (psStruct->pStructureType->type) // don't bleed our source insanities into the scripting world
 	{
 	case REF_WALL:
@@ -144,6 +145,7 @@ QScriptValue convStructure(STRUCTURE *psStruct, QScriptEngine *engine)
 QScriptValue convFeature(FEATURE *psFeature, QScriptEngine *engine)
 {
 	QScriptValue value = convObj(psFeature, engine);
+	value.setProperty("health", 100 * psFeature->psStats->body / psFeature->body, QScriptValue::ReadOnly);
 	return value;
 }
 
@@ -204,6 +206,7 @@ QScriptValue convDroid(DROID *psDroid, QScriptEngine *engine)
 	}
 	value.setProperty("droidType", (int)type, QScriptValue::ReadOnly);
 	value.setProperty("experience", (double)psDroid->experience / 65536.0, QScriptValue::ReadOnly);
+	value.setProperty("health", 100 * psDroid->originalBody / psDroid->body, QScriptValue::ReadOnly);
 	if (psDroid->psGroup)
 	{
 		value.setProperty("group", (int)psDroid->psGroup->id, QScriptValue::ReadOnly);
@@ -224,6 +227,9 @@ QScriptValue convDroid(DROID *psDroid, QScriptEngine *engine)
 //;; \item[player] The player owning this object.
 //;; \item[selected] A boolean saying whether 'selectedPlayer' has selected this object.
 //;; \item[name] A user-friendly name for this object.
+//;; \item[health] Percentage that this object is damaged (where 100% means not damaged at all).
+//;; \item[armour] Amount of armour points that protect against kinetic weapons.
+//;; \item[thermal] Amount of thermal protection that protect against heat based weapons.
 //;; \end{description}
 QScriptValue convObj(BASE_OBJECT *psObj, QScriptEngine *engine)
 {
@@ -234,6 +240,8 @@ QScriptValue convObj(BASE_OBJECT *psObj, QScriptEngine *engine)
 	value.setProperty("y", map_coord(psObj->pos.y), QScriptValue::ReadOnly);
 	value.setProperty("z", map_coord(psObj->pos.z), QScriptValue::ReadOnly);
 	value.setProperty("player", psObj->player, QScriptValue::ReadOnly);
+	value.setProperty("armour", psObj->armour[WC_KINETIC], QScriptValue::ReadOnly);
+	value.setProperty("thermal", psObj->armour[WC_HEAT], QScriptValue::ReadOnly);
 	value.setProperty("type", psObj->type, QScriptValue::ReadOnly);
 	value.setProperty("selected", psObj->selected, QScriptValue::ReadOnly);
 	value.setProperty("name", objInfo(psObj), QScriptValue::ReadOnly);
@@ -975,7 +983,6 @@ static QScriptValue js_enumDroid(QScriptContext *context, QScriptEngine *engine)
 
 //-- \subsection{debug(string...)}
 //-- Output text to the command line.
-// is this really useful?
 static QScriptValue js_debug(QScriptContext *context, QScriptEngine *engine)
 {
 	QString result;
@@ -1298,7 +1305,7 @@ static QScriptValue js_orderDroidLoc(QScriptContext *context, QScriptEngine *)
 	return QScriptValue();
 }
 
-//-- \subsection{setMissionTime(time)}
+//-- \subsection{setMissionTime(time)} Set mission countdown.
 static QScriptValue js_setMissionTime(QScriptContext *context, QScriptEngine *)
 {
 	int value = context->argument(0).toInt32() * 100;
@@ -1351,7 +1358,7 @@ static QScriptValue js_setReinforcementTime(QScriptContext *context, QScriptEngi
 	return QScriptValue();
 }
 
-//-- \subsection{setStructureLimits(structure type, limit)}
+//-- \subsection{setStructureLimits(structure type, limit[, player])} Set build limits for a structure.
 static QScriptValue js_setStructureLimits(QScriptContext *context, QScriptEngine *engine)
 {
 	QString building = context->argument(0).toString();
@@ -1547,7 +1554,7 @@ static QScriptValue js_enableStructure(QScriptContext *context, QScriptEngine *e
 	return QScriptValue();
 }
 
-//-- \subsection{addReticuleButton(button type)}
+//-- \subsection{addReticuleButton(button type)} Add reticule button. FIXME: This currently only works in tutorial.
 static QScriptValue js_addReticuleButton(QScriptContext *context, QScriptEngine *engine)
 {
 	int button = context->argument(0).toInt32();
@@ -1556,7 +1563,7 @@ static QScriptValue js_addReticuleButton(QScriptContext *context, QScriptEngine 
 	return QScriptValue();
 }
 
-//-- \subsection{removeReticuleButton(button type)}
+//-- \subsection{removeReticuleButton(button type)} Remove reticule button. FIXME: This currently only works in tutorial.
 static QScriptValue js_removeReticuleButton(QScriptContext *context, QScriptEngine *engine)
 {
 	int button = context->argument(0).toInt32();
@@ -1566,7 +1573,7 @@ static QScriptValue js_removeReticuleButton(QScriptContext *context, QScriptEngi
 	return QScriptValue();
 }
 
-//-- \subsection{applyLimitSet()}
+//-- \subsection{applyLimitSet()} Mix user set limits with script set limits and defaults.
 static QScriptValue js_applyLimitSet(QScriptContext *context, QScriptEngine *engine)
 {
 	Q_UNUSED(context);
@@ -1777,7 +1784,7 @@ static QScriptValue js_hackNetOff(QScriptContext *, QScriptEngine *)
 }
 
 //-- \subsection{hackNetOn()}
-//-- FIXME - find a better way.
+//-- Turn on network transmissions. FIXME - find a better way.
 static QScriptValue js_hackNetOn(QScriptContext *, QScriptEngine *)
 {
 	bMultiPlayer = true;
