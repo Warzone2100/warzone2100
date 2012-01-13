@@ -50,6 +50,7 @@
 #include "radar.h"
 #include "frontend.h"
 #include "loop.h"
+#include "scriptextern.h"
 
 // hack, this is used from scriptfuncs.cpp -- and we don't want to include any stinkin' wzscript headers here!
 // TODO, move this stuff into a script common subsystem
@@ -1557,6 +1558,12 @@ static QScriptValue js_enableStructure(QScriptContext *context, QScriptEngine *e
 	return QScriptValue();
 }
 
+static QScriptValue js_setTutorialMode(QScriptContext *context, QScriptEngine *engine)
+{
+	bInTutorial = context->argument(0).toBool();
+	return QScriptValue();
+}
+
 //-- \subsection{addReticuleButton(button type)} Add reticule button. FIXME: This currently only works in tutorial.
 static QScriptValue js_addReticuleButton(QScriptContext *context, QScriptEngine *engine)
 {
@@ -1856,6 +1863,7 @@ bool registerFunctions(QScriptEngine *engine)
 	engine->globalObject().setProperty("completeResearch", engine->newFunction(js_completeResearch));
 	engine->globalObject().setProperty("enableResearch", engine->newFunction(js_enableResearch));
 	engine->globalObject().setProperty("setPower", engine->newFunction(js_setPower));
+	engine->globalObject().setProperty("setTutorialMode", engine->newFunction(js_setTutorialMode));
 	engine->globalObject().setProperty("addReticuleButton", engine->newFunction(js_addReticuleButton));
 	engine->globalObject().setProperty("removeReticuleButton", engine->newFunction(js_removeReticuleButton));
 	engine->globalObject().setProperty("enableStructure", engine->newFunction(js_enableStructure));
