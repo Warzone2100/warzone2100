@@ -307,6 +307,18 @@ void loadMultiScripts()
 		if (bMultiPlayer && game.type == SKIRMISH && (!NetPlay.players[i].allocated || i == selectedPlayer)
 		    && NetPlay.players[i].ai >= 0 && myResponsibility(i))
 		{
+			if (challengeActive) // challenge file may override
+			{
+				WzConfig challenge(sRequestResult); // so inefficient, but no other way
+				challenge.beginGroup("player_" + QString::number(i + 1));
+				if (challenge.contains("ai"))
+				{
+					loadPlayerScript("multiplay/skirmish/" + challenge.value("ai").toString(), i, NetPlay.players[i].difficulty);
+					challenge.endGroup();
+					continue;
+				}
+				challenge.endGroup();
+			}
 			if (aidata[NetPlay.players[i].ai].slo[0] != '\0')
 			{
 				resLoadFile("SCRIPT", aidata[NetPlay.players[i].ai].slo);
@@ -1355,7 +1367,9 @@ static void addGameOptions()
 	// game name box
 	if (!NetPlay.bComms)
 	{
-		addMultiEditBox(MULTIOP_OPTIONS, MULTIOP_GNAME, MCOL0, MROW2, _("Select Game Name"), _("One-Player Skirmish"), IMAGE_EDIT_GAME, IMAGE_EDIT_GAME_HI, MULTIOP_GNAME_ICON);
+		addMultiEditBox(MULTIOP_OPTIONS, MULTIOP_GNAME, MCOL0, MROW2, _("Select Game Name"), 
+		                challengeActive ? game.name : _("One-Player Skirmish"), IMAGE_EDIT_GAME, 
+		                IMAGE_EDIT_GAME_HI, MULTIOP_GNAME_ICON);
 		// disable for one-player skirmish
 		widgSetButtonState(psWScreen, MULTIOP_GNAME, WEDBS_DISABLE);
 		widgSetButtonState(psWScreen, MULTIOP_GNAME_ICON, WBUT_DISABLE);
@@ -2327,20 +2341,13 @@ void addPlayerBox(bool players)
 				sButInit.width = MULTIOP_PLAYERWIDTH - MULTIOP_TEAMSWIDTH - MULTIOP_READY_WIDTH - MULTIOP_COLOUR_WIDTH;
 				sButInit.height = MULTIOP_PLAYERHEIGHT;
 				sButInit.pTip = NULL;
-				if ((selectedPlayer == i || NetPlay.isHost) && NetPlay.players[i].allocated)
+				if ((selectedPlayer == i || NetPlay.isHost) && NetPlay.players[i].allocated && allowChangePosition)
 				{
 					sButInit.pTip = _("Click to change player position");
 				}
-				else if (!NetPlay.players[i].allocated && NetPlay.isHost)
+				else if (!NetPlay.players[i].allocated && NetPlay.isHost && !challengeActive)
 				{
-					if (!challengeActive)
-					{
-						sButInit.pTip = _("Click to change AI");
-					}
-					else
-					{
-						sButInit.pTip = _("You cannot change AI in a challenge");
-					}
+					sButInit.pTip = _("Click to change AI");
 				}
 				sButInit.pDisplay = displayPlayer;
 				sButInit.UserData = i;
@@ -3004,7 +3011,10 @@ static void processMultiopWidgets(UDWORD id)
 
 	// clicked on a player
 	STATIC_ASSERT(MULTIOP_PLAYER_START + MAX_PLAYERS - 1 <= MULTIOP_PLAYER_END);
-	if (id >= MULTIOP_PLAYER_START && id <= MULTIOP_PLAYER_START + MAX_PLAYERS - 1 && (id - MULTIOP_PLAYER_START == selectedPlayer || NetPlay.isHost || (positionChooserUp >= 0 && !isHumanPlayer(id - MULTIOP_PLAYER_START))))
+	if (id >= MULTIOP_PLAYER_START && id <= MULTIOP_PLAYER_START + MAX_PLAYERS - 1
+	    && allowChangePosition
+	    && (id - MULTIOP_PLAYER_START == selectedPlayer || NetPlay.isHost
+	        || (positionChooserUp >= 0 && !isHumanPlayer(id - MULTIOP_PLAYER_START))))
 	{
 		int player = id - MULTIOP_PLAYER_START;
 		if ((player == selectedPlayer || (NetPlay.players[player].allocated && NetPlay.isHost))
@@ -3576,13 +3586,17 @@ bool startMultiOptions(bool bReenter)
 			mapDownloadProgress = 100;
 			game.power = challenge.value("Power", game.power).toInt();
 			game.base = challenge.value("Bases", game.base + 1).toInt() - 1;		// count from 1 like the humans do
+			sstrcpy(game.name, challenge.value("name").toString().toUtf8().constData());
 			allowChangePosition = challenge.value("AllowPositionChange", false).toBool();
 			challenge.endGroup();
 
 			for (int i = 0; i < MAX_PLAYERS; i++)
 			{
 				challenge.beginGroup("player_" + QString::number(i + 1));
-				NetPlay.players[i].team = challenge.value("team", NetPlay.players[i].team + 1).toInt() - 1;
+				if (challenge.contains("team"))
+				{
+					NetPlay.players[i].team = challenge.value("team").toInt() - 1;
+				}
 				if (challenge.contains("position"))
 				{
 					changePosition(i, challenge.value("position", NetPlay.players[i].position).toInt());
@@ -3598,6 +3612,7 @@ bool startMultiOptions(bool bReenter)
 						}
 					}
 				}
+				challenge.endGroup();
 			}
 
 			ingame.localOptionsReceived = true;
