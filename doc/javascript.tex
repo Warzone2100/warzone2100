@@ -35,7 +35,26 @@ It references a '.js' JavaScript file that needs to be in the same directory as 
 Challenges may load scripts as well, if a [scripts] section is present in the challenge file, and has the keys 
 "extra" or "rules". The "extra" key sets up an additional script to be run during the challenge. The "rules"
 key sets up an alternative rules file, which means that the "rules.js" mentioned above is \emph{not} run. In
-this case, you must implement your own rules for winning and losing, among other things.
+this case, you must implement your own rules for winning and losing, among other things. Here is an example
+of such a scripts section:
+
+\begin{verbatim}
+	[scripts]
+	rules = towerdefense.js
+\end{verbatim}
+
+You can also specify which AI scripts are to be run for each player. These are read from the "multiplay/skirmish"
+directory. If you do not want an AI script to be loaded for a player (for example, if you want this player to be
+controlled from one of your challenge scripts), then you can give it the special value "null". Here is an example
+if a challenge player definition with its AI specified:
+
+\begin{verbatim}
+	[player_2]
+	team = 1
+	difficulty = "Medium"
+	position = 4
+	ai = semperfi.js
+\end{verbatim}
 
 The code in a javascript file is accessed through specially named functions called 'events'. These are defined below. 
 An event is expected to carry out some computation then return immediately. The game is on hold while an event is 
