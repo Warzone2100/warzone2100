@@ -313,8 +313,13 @@ void loadMultiScripts()
 				challenge.beginGroup("player_" + QString::number(i + 1));
 				if (challenge.contains("ai"))
 				{
-					loadPlayerScript("multiplay/skirmish/" + challenge.value("ai").toString(), i, NetPlay.players[i].difficulty);
+					QString val = challenge.value("ai").toString();
 					challenge.endGroup();
+					if (val.compare("null") == 0)
+					{
+						continue; // no AI
+					}
+					loadPlayerScript("multiplay/skirmish/" + val, i, NetPlay.players[i].difficulty);
 					continue;
 				}
 				challenge.endGroup();
