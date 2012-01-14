@@ -1408,6 +1408,8 @@ static QScriptValue js_playSound(QScriptContext *context, QScriptEngine *engine)
 	}
 	QString sound = context->argument(0).toString();
 	int soundID = audio_GetTrackID(sound.toUtf8().constData());
+	if (soundID == SAMPLE_NOT_FOUND)
+		soundID = audio_SetTrackVals(sound.toUtf8().constData(), false, 100, 1800);
 	if (context->argumentCount() > 1)
 	{
 		int x = world_coord(context->argument(1).toInt32());
