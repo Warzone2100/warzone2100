@@ -2898,19 +2898,19 @@ void NETsetPlayerConnectionStatus(CONNECTION_STATUS status, unsigned player)
 	const int timeouts[] = {GAME_TICKS_PER_SEC*10, GAME_TICKS_PER_SEC*10, GAME_TICKS_PER_SEC, GAME_TICKS_PER_SEC/6};
 	ASSERT(ARRAY_SIZE(timeouts) == CONNECTIONSTATUS_NORMAL, "Connection status timeout array too small.");
 
-	if (status == CONNECTIONSTATUS_NORMAL)
-	{
-		for (n = 0; n < CONNECTIONSTATUS_NORMAL; ++n)
-		{
-			NET_PlayerConnectionStatus[n][player] = 0;
-		}
-		return;
-	}
 	if (player == NET_ALL_PLAYERS)
 	{
 		for (n = 0; n < MAX_PLAYERS; ++n)
 		{
 			NETsetPlayerConnectionStatus(status, n);
+		}
+		return;
+	}
+	if (status == CONNECTIONSTATUS_NORMAL)
+	{
+		for (n = 0; n < CONNECTIONSTATUS_NORMAL; ++n)
+		{
+			NET_PlayerConnectionStatus[n][player] = 0;
 		}
 		return;
 	}
@@ -3234,7 +3234,6 @@ private:
 };
 
 #define MAX_LEN_LOG_LINE 512  // From debug.c - no use printing something longer.
-#define MAX_SYNC_MESSAGES 20000
 #define MAX_SYNC_HISTORY 12
 
 static unsigned syncDebugNext = 0;
