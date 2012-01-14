@@ -155,8 +155,6 @@ static	STRUCTURE_STATS	*g_psStatDestroyStruct = NULL;
 // the structure that was last hit
 STRUCTURE	*psLastStructHit;
 
-//flag for drawing radar
-static		UBYTE	hqExists[MAX_PLAYERS];
 //flag for drawing all sat uplink sees
 static		UBYTE	satUplinkExists[MAX_PLAYERS];
 //flag for when the player has one built - either completely or partially
@@ -296,7 +294,6 @@ void structureInitVars(void)
 	}
 	for (i = 0; i < MAX_PLAYERS; i++)
 	{
-		hqExists[i] = false;
 		satUplinkExists[i] = false;
 		lasSatExists[i] = false;
 	}
@@ -1951,7 +1948,6 @@ static bool setFunctionality(STRUCTURE	*psBuilding, STRUCTURE_TYPE functionType)
 		case REF_HQ:
 		{
 			// If an HQ has just been built make sure the radar is displayed!
-			radarOnScreen = true;
 			break;
 		}
 		case REF_REPAIR_FACILITY:
@@ -5035,20 +5031,6 @@ STRUCTURE_STATS * structGetDemolishStat( void )
 {
 	ASSERT_OR_RETURN(NULL, g_psStatDestroyStruct != NULL , "Demolish stat not initialised");
 	return g_psStatDestroyStruct;
-}
-
-
-/*sets the flag to indicate a HQ Exists - so draw Radar*/
-void setHQExists(bool state, UDWORD player)
-{
-	hqExists[player] = (UBYTE)state;
-}
-
-
-/*returns the status of the flag*/
-bool getHQExists(UDWORD player)
-{
-	return hqExists[player];
 }
 
 

@@ -1567,6 +1567,13 @@ static QScriptValue js_setTutorialMode(QScriptContext *context, QScriptEngine *e
 	return QScriptValue();
 }
 
+//-- \subsection{setMiniMap(bool)} Turns visible minimap on or off in the GUI.
+static QScriptValue js_setMiniMap(QScriptContext *context, QScriptEngine *engine)
+{
+	radarPermitted = context->argument(0).toBool();
+	return QScriptValue();
+}
+
 //-- \subsection{addReticuleButton(button type)} Add reticule button. FIXME: This currently only works in tutorial.
 static QScriptValue js_addReticuleButton(QScriptContext *context, QScriptEngine *engine)
 {
@@ -1867,6 +1874,7 @@ bool registerFunctions(QScriptEngine *engine)
 	engine->globalObject().setProperty("enableResearch", engine->newFunction(js_enableResearch));
 	engine->globalObject().setProperty("setPower", engine->newFunction(js_setPower));
 	engine->globalObject().setProperty("setTutorialMode", engine->newFunction(js_setTutorialMode));
+	engine->globalObject().setProperty("setMiniMap", engine->newFunction(js_setMiniMap));
 	engine->globalObject().setProperty("addReticuleButton", engine->newFunction(js_addReticuleButton));
 	engine->globalObject().setProperty("removeReticuleButton", engine->newFunction(js_removeReticuleButton));
 	engine->globalObject().setProperty("enableStructure", engine->newFunction(js_enableStructure));

@@ -1116,16 +1116,6 @@ bool stageThreeInitialise(void)
 		intRemoveMissionResultNoAnim();
 	}
 
-	// determine if to use radar
-	for(psStr = apsStructLists[selectedPlayer];psStr;psStr=psStr->psNext){
-		if(psStr->pStructureType->type == REF_HQ)
-		{
-			radarOnScreen = true;
-			setHQExists(true,selectedPlayer);
-			break;
-		}
-	}
-
 	// Re-inititialise some static variables.
 
 	driveInitVars(false);
@@ -1280,6 +1270,7 @@ static void	initMiscVars(void)
 	godMode = false;
 
 	radarOnScreen = true;
+	radarPermitted = true;
 	enableConsoleDisplay(true);
 
 	setSelectedGroup(UBYTE_MAX);

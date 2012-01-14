@@ -678,3 +678,23 @@ bool triggerEventResearched(RESEARCH *psResearch, STRUCTURE *psStruct, int playe
 	}
 	return true;
 }
+
+//__ \subsection{eventDestroyed(object)}
+//__ An event that is run whenever an object is destroyed for the owning player.
+//__ Careful passing the parameter object around, since it is about to vanish!
+bool triggerEventDestroyed(BASE_OBJECT *psVictim)
+{
+	for (int i = 0; i < scripts.size() && psVictim; ++i)
+	{
+		QScriptEngine *engine = scripts.at(i);
+		int me = engine->globalObject().property("me").toInt32();
+		if (me == psVictim->player)
+		{
+			QScriptEngine *engine = scripts.at(i);
+			QScriptValueList args;
+			args += convMax(psVictim, engine);
+			callFunction(engine, "eventDestroyed", args);
+		}
+	}
+	return true;
+}

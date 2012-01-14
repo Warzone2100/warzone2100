@@ -123,6 +123,10 @@ function eventGameInit()
 					removeStruct(s);
 				}
 			}
+			if (playnum == selectedPlayer && playerData[playnum].difficulty != INSANE)
+			{
+				setMiniMap(false); // hide minimap since no HQ
+			}
 		}
 		else if (baseType == CAMP_BASE)
 		{
@@ -235,5 +239,21 @@ function eventStructureAttacked(hitStruct, attackerObj)
 		{
 			playSound("pcv337.ogg");
 		}
+	}
+}
+
+function eventStructureBuilt(struct)
+{
+	if (struct.player == selectedPlayer && struct.type == STRUCTURE && struct.stattype == HQ)
+	{
+		setMiniMap(true); // hide minimap if HQ is destroyed
+	}
+}
+
+function eventDestroyed(victim)
+{
+	if (victim.player == selectedPlayer && victim.type == STRUCTURE && victim.stattype == HQ)
+	{
+		setMiniMap(false); // hide minimap if HQ is destroyed
 	}
 }

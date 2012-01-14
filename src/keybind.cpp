@@ -589,7 +589,6 @@ void kf_ShowNumObjects( void )
 void	kf_ToggleRadar( void )
 {
 		radarOnScreen = !radarOnScreen;
-//		addConsoleMessage("Radar display toggled",DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 }
 
 // --------------------------------------------------------------------------
@@ -2735,7 +2734,7 @@ void	kf_AddHelpBlip( void )
 	/* check if clicked on radar */
 	x = mouseX();
 	y = mouseY();
-	if(radarOnScreen && getHQExists(selectedPlayer))
+	if (radarOnScreen && radarPermitted)
 	{
 		if(CoordInRadar(x,y))
 		{

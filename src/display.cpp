@@ -382,7 +382,7 @@ void ProcessRadarInput(void)
 
 	/* Only allow jump-to-area-of-map if radar is on-screen */
 	mouseOverRadar = false;
-	if(radarOnScreen &&  getHQExists(selectedPlayer))
+	if (radarOnScreen && radarPermitted)
 	{
 		if(CoordInRadar(x,y))
 		{
@@ -480,7 +480,7 @@ void processInput(void)
 		dragBox3D.status = DRAG_RELEASED;	// disengage the dragging since it stops menu input
 	}
 
-	if(radarOnScreen && getHQExists(selectedPlayer) && CoordInRadar(mouseX(), mouseY()))
+	if (radarOnScreen && radarPermitted && CoordInRadar(mouseX(), mouseY()))
 	{
 		mOverRadar = true;
 	}
@@ -570,18 +570,7 @@ void processInput(void)
 
 static bool OverRadarAndNotDragging(void)
 {
-	bool OverRadar = mouseOverRadar;
-
-	if(getHQExists(selectedPlayer)==false)
-	{
-		return(false);
-	}
-
-	if( (dragBox3D.status == DRAG_DRAGGING) || (wallDrag.status == DRAG_DRAGGING) ) {
-		OverRadar = false;
-	}
-
-	return OverRadar;
+	return mouseOverRadar && dragBox3D.status != DRAG_DRAGGING && radarPermitted && wallDrag.status != DRAG_DRAGGING;
 }
 
 

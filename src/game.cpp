@@ -215,7 +215,7 @@ struct TILETYPE_SAVEHEADER : public GAME_SAVEHEADER
 struct SAVE_POWER
 {
 	uint32_t    currentPower;
-	uint32_t    extractedPower; // UNUSED
+	uint32_t    extractedPower; // used for hacks
 };
 
 static bool serializeSavePowerData(PHYSFS_file* fileHandle, const SAVE_POWER* serializePower)
@@ -3668,6 +3668,7 @@ bool gameLoadV(PHYSFS_file* fileHandle, unsigned int version)
 			}
 		}
 	}
+	radarPermitted = (bool)powerSaved[0].extractedPower; // nice hack, eh? don't want to break savegames now...
 
 	return true;
 }
@@ -3745,8 +3746,8 @@ static bool writeGameFile(const char* fileName, SDWORD saveType)
 	for (i = 0; i < MAX_PLAYERS; ++i)
 	{
 		saveGame.power[i].currentPower = getPower(i);
-		saveGame.power[i].extractedPower = 0; // UNUSED
 	}
+	saveGame.power[0].extractedPower = radarPermitted; // hideous hack, don't want to break savegames now...
 
 	//camera position
 	disp3d_getView(&(saveGame.currentPlayerPos));

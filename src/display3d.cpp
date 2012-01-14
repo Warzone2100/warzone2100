@@ -176,6 +176,7 @@ Vector2i mousePos(0, 0);
 
 /// Do we want the radar to be rendered
 bool	radarOnScreen=false;
+bool	radarPermitted = true;
 
 /// Show unit/building gun/sensor range
 bool rangeOnScreen = false;  // For now, most likely will change later!  -Q 5-10-05   A very nice effect - Per
@@ -678,8 +679,6 @@ static void setupConnectionStatusForm(void)
 /// Render the 3D world
 void draw3DScene( void )
 {
-	bool bPlayerHasHQ = false;
-
 	// the world centre - used for decaying lighting etc
 	gridCentreX = player.p.x;
 	gridCentreZ = player.p.z;
@@ -718,9 +717,7 @@ void draw3DScene( void )
 
 	drawStructureSelections();
 
-	bPlayerHasHQ = getHQExists(selectedPlayer);
-
-	if (radarOnScreen && bPlayerHasHQ)
+	if (radarOnScreen && radarPermitted)
 	{
 		pie_SetDepthBufferStatus(DEPTH_CMP_ALWAYS_WRT_ON);
 		pie_SetFogStatus(false);

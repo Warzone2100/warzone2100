@@ -177,12 +177,9 @@ static GAMECODE renderLoop()
 		//don't process the object lists if paused or about to quit to the front end
 		if (!gameUpdatePaused() && intRetVal != INT_QUIT)
 		{
-			if( dragBox3D.status != DRAG_DRAGGING
-				&& wallDrag.status != DRAG_DRAGGING
-				&& ( intRetVal == INT_INTERCEPT
-					|| ( radarOnScreen
-						 && CoordInRadar(mouseX(), mouseY())
-						 && getHQExists(selectedPlayer) ) ) )
+			if (dragBox3D.status != DRAG_DRAGGING && wallDrag.status != DRAG_DRAGGING
+			    && (intRetVal == INT_INTERCEPT
+			        || (radarOnScreen && CoordInRadar(mouseX(), mouseY()) && radarPermitted)))
 			{
 				// Using software cursors (when on) for these menus due to a bug in SDL's SDL_ShowCursor()
 				wzSetCursor(CURSOR_DEFAULT);
@@ -488,7 +485,6 @@ static void gameStateUpdate()
 		updatePlayerPower(i);
 
 		//set the flag for each player
-		setHQExists(false, i);
 		setSatUplinkExists(false, i);
 
 		numCommandDroids[i] = 0;
@@ -597,12 +593,6 @@ static void gameStateUpdate()
 			/* Copy the next pointer - not 100% sure if the structure could get destroyed but this covers us anyway */
 			psNBuilding = psCBuilding->psNext;
 			structureUpdate(psCBuilding, false);
-			//set animation flag
-			if (psCBuilding->pStructureType->type == REF_HQ &&
-				psCBuilding->status == SS_BUILT)
-			{
-				setHQExists(true, i);
-			}
 			if (psCBuilding->pStructureType->type == REF_SAT_UPLINK &&
 				psCBuilding->status == SS_BUILT)
 			{
@@ -620,11 +610,6 @@ static void gameStateUpdate()
 			/* Copy the next pointer - not 100% sure if the structure could get destroyed but this covers us anyway. It shouldn't do since its not even on the map!*/
 			psNBuilding = psCBuilding->psNext;
 			structureUpdate(psCBuilding, true); // update for mission
-			if (psCBuilding->pStructureType->type == REF_HQ &&
-				psCBuilding->status == SS_BUILT)
-			{
-				setHQExists(true, i);
-			}
 			if (psCBuilding->pStructureType->type == REF_SAT_UPLINK &&
 				psCBuilding->status == SS_BUILT)
 			{

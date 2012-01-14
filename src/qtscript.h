@@ -77,5 +77,6 @@ bool triggerEventAttacked(BASE_OBJECT *psVictim, BASE_OBJECT *psAttacker);
 bool triggerEventResearched(RESEARCH *psResearch, STRUCTURE *psStruct, int player);
 bool triggerEventStructBuilt(STRUCTURE *psStruct, DROID *psDroid);
 bool triggerEventDroidIdle(DROID *psDroid);
+bool triggerEventDestroyed(BASE_OBJECT *psVictim);
 
 #endif

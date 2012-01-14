@@ -214,10 +214,6 @@ static inline bool isLasSat(STRUCTURE_STATS *pStructureType)
 	        && pStructureType->psWeapStat[0]->weaponSubClass == WSC_LAS_SAT);
 }
 
-/*sets the flag to indicate a HQ Exists - so draw Radar*/
-extern void setHQExists(bool state, UDWORD player);
-/*returns the status of the flag*/
-extern bool getHQExists(UDWORD player);
 /*sets the flag to indicate a SatUplink Exists - so draw everything!*/
 extern void setSatUplinkExists(bool state, UDWORD player);
 /*returns the status of the flag*/

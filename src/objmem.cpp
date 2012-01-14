@@ -183,6 +183,7 @@ void objmemUpdate(void)
 				break;
 			}
 			psCBObjDestroyed = NULL;
+			triggerEventDestroyed(psCurr);
 
 			psPrev = psCurr;
 		}
