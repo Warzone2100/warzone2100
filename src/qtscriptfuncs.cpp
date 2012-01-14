@@ -1690,16 +1690,16 @@ static QScriptValue js_isVTOL(QScriptContext *context, QScriptEngine *engine)
 	return QScriptValue(isVtolDroid(psDroid));
 }
 
-//-- \subsection{droidFromId(id)}
+//-- \subsection{objFromId(id)}
 //-- Function to make porting from the old scripting system easier. Do not use for new code.
 //-- Instead, use labels.
-static QScriptValue js_droidFromId(QScriptContext *context, QScriptEngine *engine)
+static QScriptValue js_objFromId(QScriptContext *context, QScriptEngine *engine)
 {
 	QScriptValue droidVal = context->argument(0);
 	int id = droidVal.property("id").toInt32();
-	DROID *psDroid = (DROID *)getBaseObjFromId(id);
-	SCRIPT_ASSERT(context, psDroid, "No such droid id %d", id);
-	return QScriptValue(convDroid(psDroid, engine));
+	BASE_OBJECT *psObj = getBaseObjFromId(id);
+	SCRIPT_ASSERT(context, psObj, "No such object id %d", id);
+	return QScriptValue(convMax(psObj, engine));
 }
 
 //-- \subsection{setDroidExperience(droid, experience)}
@@ -1828,7 +1828,7 @@ bool registerFunctions(QScriptEngine *engine)
 	// horrible hacks follow -- do not rely on these being present!
 	engine->globalObject().setProperty("hackNetOff", engine->newFunction(js_hackNetOff));
 	engine->globalObject().setProperty("hackNetOn", engine->newFunction(js_hackNetOn));
-	engine->globalObject().setProperty("droidFromId", engine->newFunction(js_droidFromId));
+	engine->globalObject().setProperty("objFromId", engine->newFunction(js_objFromId));
 
 	// General functions -- geared for use in AI scripts
 	engine->globalObject().setProperty("debug", engine->newFunction(js_debug));
