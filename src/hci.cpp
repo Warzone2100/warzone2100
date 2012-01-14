@@ -6044,7 +6044,7 @@ void intCheckReticuleButtons(void)
 	ReticuleEnabled[RETBUT_FACTORY].Enabled = editMode;
 	ReticuleEnabled[RETBUT_RESEARCH].Enabled = false;
 	ReticuleEnabled[RETBUT_BUILD].Enabled = editMode;
-	ReticuleEnabled[RETBUT_DESIGN].Enabled = editMode;
+	ReticuleEnabled[RETBUT_DESIGN].Enabled = true;
 	ReticuleEnabled[RETBUT_INTELMAP].Enabled = true;
 	ReticuleEnabled[RETBUT_COMMAND].Enabled = false;
 
@@ -6067,9 +6067,6 @@ void intCheckReticuleButtons(void)
 					{
 						ReticuleEnabled[RETBUT_FACTORY].Enabled = true;
 					}
-					break;
-				case REF_HQ:
-					ReticuleEnabled[RETBUT_DESIGN].Enabled = true;
 					break;
 				default:
 					break;
