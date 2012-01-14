@@ -5,10 +5,6 @@ run
 //ALWAYS MAKE THIS THE SAME AS THE INDEX OF THE LAST ENTRY IN THE camTech[] array
 numCamTech		int 	115
 
-initialPowerCl	int     1000
-initialPowerBa	int     2000
-initialPowerDe	int     3000
-
 camTech	[0]	RESEARCHSTAT	"R-Comp-CommandTurret01"
 camTech	[1]	RESEARCHSTAT	"R-Comp-SynapticLink"
 camTech	[2]	RESEARCHSTAT	"R-Cyborg-Legs01"

@@ -20,8 +20,6 @@ function eventGameInit()
 		enableStructure("A0ResearchFacility", playnum);
 
 		// We need to enable these in order for scripts to be able to generate their templates.
-		// Cyborg legs is a research that is never researched. The rest are not even present in 
-		// the research system. They should be there as results, along with the bodies.
 		makeComponentAvailable("CyborgLegs", playnum);
 		makeComponentAvailable("Cyb-Wpn-Atmiss", playnum);
 		makeComponentAvailable("CyborgCannon", playnum);

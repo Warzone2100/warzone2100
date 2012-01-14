@@ -4249,11 +4249,11 @@ bool scrCompleteResearch(void)
 		return false;
 	}
 
-
-	if(psResearch == NULL)
+	if (psResearch == NULL)
 	{
-		ASSERT( false, "scrCompleteResearch: no such research topic" );
-		return false;
+		// hack to make T2 and T3 work even though the research lists 
+		// are polluted with tons of non-existent techs :(
+		return true;
 	}
 
 	researchIndex = psResearch->index;

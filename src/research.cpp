@@ -1726,12 +1726,7 @@ RESEARCH *getResearch(const char *pName)
 			return &asResearch[inc];
 		}
 	}
-
-	for (inc = 0; inc < asResearch.size(); inc++)
-	{
-		debug(LOG_ERROR, "  Research %d: %s", inc, asResearch[inc].pName);
-	}
-	debug(LOG_ERROR, "Unknown research - %s", pName);
+	debug(LOG_WARNING, "Unknown research - %s", pName);
 	return NULL;
 }
 
