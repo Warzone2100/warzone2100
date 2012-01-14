@@ -105,7 +105,7 @@ QScriptValue convStructure(STRUCTURE *psStruct, QScriptEngine *engine)
 {
 	QScriptValue value = convObj(psStruct, engine);
 	value.setProperty("status", (int)psStruct->status, QScriptValue::ReadOnly);
-	value.setProperty("health", 100 * structureBody(psStruct) / psStruct->body, QScriptValue::ReadOnly);
+	value.setProperty("health", 100 * structureBody(psStruct) / MAX(1, psStruct->body), QScriptValue::ReadOnly);
 	switch (psStruct->pStructureType->type) // don't bleed our source insanities into the scripting world
 	{
 	case REF_WALL:
@@ -146,7 +146,7 @@ QScriptValue convStructure(STRUCTURE *psStruct, QScriptEngine *engine)
 QScriptValue convFeature(FEATURE *psFeature, QScriptEngine *engine)
 {
 	QScriptValue value = convObj(psFeature, engine);
-	value.setProperty("health", 100 * psFeature->psStats->body / psFeature->body, QScriptValue::ReadOnly);
+	value.setProperty("health", 100 * psFeature->psStats->body / MAX(1, psFeature->body), QScriptValue::ReadOnly);
 	return value;
 }
 
@@ -207,7 +207,7 @@ QScriptValue convDroid(DROID *psDroid, QScriptEngine *engine)
 	}
 	value.setProperty("droidType", (int)type, QScriptValue::ReadOnly);
 	value.setProperty("experience", (double)psDroid->experience / 65536.0, QScriptValue::ReadOnly);
-	value.setProperty("health", 100 * psDroid->originalBody / psDroid->body, QScriptValue::ReadOnly);
+	value.setProperty("health", 100 * psDroid->originalBody / MAX(1, psDroid->body), QScriptValue::ReadOnly);
 	if (psDroid->psGroup)
 	{
 		value.setProperty("group", (int)psDroid->psGroup->id, QScriptValue::ReadOnly);
