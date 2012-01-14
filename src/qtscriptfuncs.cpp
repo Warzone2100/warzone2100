@@ -1560,6 +1560,7 @@ static QScriptValue js_enableStructure(QScriptContext *context, QScriptEngine *e
 	return QScriptValue();
 }
 
+//-- \subsection{setTutorialMode(bool)} Sets a number of restrictions appropriate for tutorial if set to true.
 static QScriptValue js_setTutorialMode(QScriptContext *context, QScriptEngine *engine)
 {
 	bInTutorial = context->argument(0).toBool();
