@@ -223,6 +223,9 @@ struct AIDATA
 };
 static std::vector<AIDATA> aidata;
 
+/// Player name overrides
+static char nameOverrides[MAX_PLAYERS][MAX_LEN_AI_NAME];
+
 const char *getAIName(int player)
 {
 	if (NetPlay.players[player].ai >= 0)
@@ -3568,6 +3571,7 @@ bool startMultiOptions(bool bReenter)
 
 		loadMultiStats((char*)sPlayer,&nullStats);
 
+		memset(nameOverrides, 0, sizeof(nameOverrides));
 		if (challengeActive)
 		{
 			WzConfig challenge(sRequestResult);
@@ -3601,6 +3605,14 @@ bool startMultiOptions(bool bReenter)
 				if (challenge.contains("team"))
 				{
 					NetPlay.players[i].team = challenge.value("team").toInt() - 1;
+				}
+				else // team is a required key!
+				{
+					NetPlay.players[i].ai = AI_CLOSED;
+				}
+				if (challenge.contains("name"))
+				{
+					sstrcpy(nameOverrides[i], challenge.value("name").toString().toUtf8().constData());
 				}
 				if (challenge.contains("position"))
 				{
@@ -4005,7 +4017,7 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *p
 		{
 		case AI_OPEN: sstrcpy(aitext, _("Open")); break;
 		case AI_CLOSED: sstrcpy(aitext, _("Closed")); break;
-		default: sstrcpy(aitext, aidata[NetPlay.players[j].ai].name); break;
+		default: sstrcpy(aitext, nameOverrides[j][0] == '\0' ? aidata[NetPlay.players[j].ai].name : nameOverrides[j]); break;
 		}
 		iV_DrawText(aitext, x + nameX, y + 22);
 	}
