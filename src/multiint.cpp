@@ -322,7 +322,7 @@ void loadMultiScripts()
 					{
 						continue; // no AI
 					}
-					loadPlayerScript("multiplay/skirmish/" + val, i, NetPlay.players[i].difficulty);
+					loadPlayerScript(val, i, NetPlay.players[i].difficulty);
 					continue;
 				}
 				challenge.endGroup();
