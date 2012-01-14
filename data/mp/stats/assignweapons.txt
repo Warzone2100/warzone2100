@@ -204,7 +204,7 @@ SK-Veng-Track-PulseLsr,Laser2PULSEMk1,NULL,NULL,6
 SK-Veng-Track-Scourge,Missile-A-T,NULL,NULL,6
 SuperTank,Superweapon,NULL,NULL,6
 SuperTank2,Superweapon2,NULL,NULL,6
-Transporter,MG3-TRANS,NULL,NULL,5
+Transporter,MG3-VTOL,NULL,NULL,5
 ViperBBWheels,Rocket-BB,NULL,NULL,6
 ViperFlameWheels,Flame1Mk1,NULL,NULL,4
 ViperHMGHalftrack,MG3Mk1,NULL,NULL,6
