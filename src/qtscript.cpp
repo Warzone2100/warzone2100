@@ -170,11 +170,13 @@ static QScriptValue js_removeTimer(QScriptContext *context, QScriptEngine *engin
 	return QScriptValue();
 }
 
-//-- \subsection{queue(function[, object])}
+//-- \subsection{queue(function[, milliseconds[, object]])}
 //-- Queues up a function to run at a later game frame. This is useful to prevent
 //-- stuttering during the game, which can happen if too much script processing is
 //-- done at once.  The function to run is the first parameter, and it 
-//-- \underline{must be quoted}, otherwise the function will be inlined. A second, optional
+//-- \underline{must be quoted}, otherwise the function will be inlined.
+//-- The second parameter is the delay in milliseconds, if it is omitted or 0,
+//-- the function will be run at a later frame.  A third optional
 //-- parameter can be a game object to pass to the queued function. If the game object
 //-- dies before the queued call runs, nothing happens.
 static QScriptValue js_queue(QScriptContext *context, QScriptEngine *engine)
