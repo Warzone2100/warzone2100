@@ -2955,19 +2955,18 @@ struct SyncDebugEntry
 
 struct SyncDebugString : public SyncDebugEntry
 {
-	void set(uint32_t &crc, char const *f, char const *s)
+	void set(uint32_t &crc, char const *f, char const *string)
 	{
 		function = f;
-		string = s;
 		crc = crcSum(crc, function, strlen(function) + 1);
 		crc = crcSum(crc, string,   strlen(string) + 1);
 	}
-	int snprint(char *buf, size_t bufSize)
+	int snprint(char *buf, size_t bufSize, char const *&string) const
 	{
-		return snprintf(buf, bufSize, "[%s] %s\n", function, string);
+		int ret = snprintf(buf, bufSize, "[%s] %s\n", function, string);
+		string += strlen(string) + 1;
+		return ret;
 	}
-
-	char const *string;
 };
 
 struct SyncDebugValueChange : public SyncDebugEntry
@@ -2983,7 +2982,7 @@ struct SyncDebugValueChange : public SyncDebugEntry
 		crc = crcSum(crc, variableName, strlen(variableName) + 1);
 		crc = crcSum(crc, &valueBytes,  4);
 	}
-	int snprint(char *buf, size_t bufSize)
+	int snprint(char *buf, size_t bufSize) const
 	{
 		if (id != -1)
 		{
@@ -2999,11 +2998,10 @@ struct SyncDebugValueChange : public SyncDebugEntry
 
 struct SyncDebugIntList : public SyncDebugEntry
 {
-	void set(uint32_t &crc, char const *f, char const *s, int *begin, size_t num)
+	void set(uint32_t &crc, char const *f, char const *s, int const *ints, size_t num)
 	{
 		function = f;
 		string = s;
-		ints = begin;
 		uint32_t valueBytes[40];
 		numInts = std::min(num, ARRAY_SIZE(valueBytes));
 		for (unsigned n = 0; n < numInts; ++n)
@@ -3012,7 +3010,7 @@ struct SyncDebugIntList : public SyncDebugEntry
 		}
 		crc = crcSum(crc, valueBytes, 4*numInts);
 	}
-	int snprint(char *buf, size_t bufSize)
+	int snprint(char *buf, size_t bufSize, int const *&ints) const
 	{
 		size_t index = 0;
 		if (index < bufSize)
@@ -3071,39 +3069,12 @@ struct SyncDebugIntList : public SyncDebugEntry
 		{
 			index += snprintf(buf + index, bufSize - index, "\n");
 		}
+		ints += numInts;
 		return index;
 	}
 
 	char const *string;
-	int *ints;
 	unsigned numInts;
-};
-
-/// O(1) allocator.
-template <typename T, int Size>
-struct SyncDebugAllocator
-{
-	void freeAll()
-	{
-		index = 0;
-	}
-	T *alloc(size_t num = 1)
-	{
-		if (index + num > Size)
-		{
-			return NULL;
-		}
-		T *ret = &mem[index];
-		index += num;
-		return ret;
-	}
-	bool contains(void const *t) const
-	{
-		return mem <= t && t < mem + Size;
-	}
-
-	T mem[Size];
-	size_t index;
 };
 
 struct SyncDebugLog
@@ -3114,83 +3085,68 @@ struct SyncDebugLog
 		log.clear();
 		time = 0;
 		crc = 0x00000000;
-		//printf("Freeing %d strings, %d valueChanges, %d intLists, %d chars, %d ints\n", (int)strings.index, (int)valueChanges.index, (int)intLists.index, (int)chars.index, (int)ints.index);
-		strings.freeAll();
-		valueChanges.freeAll();
-		intLists.freeAll();
-		chars.freeAll();
-		ints.freeAll();
+		//printf("Freeing %d strings, %d valueChanges, %d intLists, %d chars, %d ints\n", (int)strings.size(), (int)valueChanges.size(), (int)intLists.size(), (int)chars.size(), (int)ints.size());
+		strings.clear();
+		valueChanges.clear();
+		intLists.clear();
+		chars.clear();
+		ints.clear();
 	}
 	void string(char const *f, char const *s)
 	{
-		SyncDebugString *t = strings.alloc();
-		char *buf = chars.alloc(strlen(s) + 1);
-		if (t != NULL && buf != NULL)
-		{
-			strcpy(buf, s);
-			t->set(crc, f, buf);
-		}
-		else
-		{
-			t = NULL;
-			debug(LOG_WARNING, "Too small");
-		}
-		log.push_back(t);
+		size_t offset = chars.size();
+		chars.resize(chars.size() + strlen(s) + 1);
+		char *buf = &chars[offset];
+		strcpy(buf, s);
+
+		strings.resize(strings.size() + 1);
+		strings.back().set(crc, f, buf);
+
+		log.push_back('s');
 	}
 	void valueChange(char const *f, char const *vn, int nv, int i)
 	{
-		SyncDebugValueChange *t = valueChanges.alloc();
-		if (t != NULL)
-		{
-			t->set(crc, f, vn, nv, i);
-		}
-		else
-		{
-			debug(LOG_WARNING, "Too small");
-		}
-		log.push_back(t);
+		valueChanges.resize(valueChanges.size() + 1);
+		valueChanges.back().set(crc, f, vn, nv, i);
+		log.push_back('v');
 	}
 	void intList(char const *f, char const *s, int *begin, size_t num)
 	{
-		SyncDebugIntList *t = intLists.alloc();
-		int *buf = ints.alloc(num);
-		if (t != NULL && buf != NULL)
-		{
-			std::copy(begin, begin + num, buf);
-			t->set(crc, f, s, buf, num);
-		}
-		else
-		{
-			t = NULL;
-			debug(LOG_WARNING, "Too small");
-		}
-		log.push_back(t);
+		size_t offset = ints.size();
+		ints.resize(ints.size() + num);
+		int *buf = &ints[offset];
+		std::copy(begin, begin + num, buf);
+
+		intLists.resize(intLists.size() + 1);
+		intLists.back().set(crc, f, s, buf, num);
+		log.push_back('i');
 	}
 	int snprint(char *buf, size_t bufSize)
 	{
+		SyncDebugString const *stringPtr = strings.empty()? NULL : &strings[0];  // .empty() check, since &strings[0] is undefined if strings is empty(), even if it's likely to work, anyway.
+		SyncDebugValueChange const *valueChangePtr = valueChanges.empty()? NULL : &valueChanges[0];
+		SyncDebugIntList const *intListPtr = intLists.empty()? NULL : &intLists[0];
+		char const *charPtr = chars.empty()? NULL : &chars[0];
+		int const *intPtr = ints.empty()? NULL : &ints[0];
+
 		int index = 0;
 		for (size_t n = 0; n < log.size() && (size_t)index < bufSize; ++n)
 		{
-			SyncDebugEntry *entry = log[n];
-			if (entry == NULL)
+			char type = log[n];
+			switch (type)
 			{
-				index += snprintf(buf + index, bufSize - index, "Not enough entries. Some syncDebug missing.");
-			}
-			else if (strings.contains(entry))
-			{
-				index += static_cast<SyncDebugString *>(entry)->snprint(buf + index, bufSize - index);
-			}
-			else if (valueChanges.contains(entry))
-			{
-				index += static_cast<SyncDebugValueChange *>(entry)->snprint(buf + index, bufSize - index);
-			}
-			else if (intLists.contains(entry))
-			{
-				index += static_cast<SyncDebugIntList *>(entry)->snprint(buf + index, bufSize - index);
-			}
-			else
-			{
-				index += snprintf(buf + index, bufSize - index, "Huh?");
+				case 's':
+					index += stringPtr++->snprint(buf + index, bufSize - index, charPtr);
+					break;
+				case 'v':
+					index += valueChangePtr++->snprint(buf + index, bufSize - index);
+					break;
+				case 'i':
+					index += intListPtr++->snprint(buf + index, bufSize - index, intPtr);
+					break;
+				default:
+					abort();
+					break;
 			}
 		}
 		return index;
@@ -3217,16 +3173,16 @@ struct SyncDebugLog
 	}
 
 private:
-	std::vector<SyncDebugEntry *> log;
+	std::vector<char> log;
 	uint32_t time;
 	uint32_t crc;
 
-	SyncDebugAllocator<SyncDebugString, 20000> strings;
-	SyncDebugAllocator<SyncDebugValueChange, 20000> valueChanges;
-	SyncDebugAllocator<SyncDebugIntList, 20000> intLists;
+	std::vector<SyncDebugString> strings;
+	std::vector<SyncDebugValueChange> valueChanges;
+	std::vector<SyncDebugIntList> intLists;
 
-	SyncDebugAllocator<char, 2000000> chars;
-	SyncDebugAllocator<int, 200000> ints;
+	std::vector<char> chars;
+	std::vector<int> ints;
 
 private:
 	SyncDebugLog(SyncDebugLog const &)/* = delete*/;
