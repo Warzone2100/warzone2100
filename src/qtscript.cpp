@@ -615,7 +615,7 @@ bool triggerEventStructBuilt(STRUCTURE *psStruct, DROID *psDroid)
 	{
 		QScriptEngine *engine = scripts.at(i);
 		int player = engine->globalObject().property("me").toInt32();
-		if (player == psDroid->player)
+		if (player == psStruct->player)
 		{
 			QScriptValueList args;
 			args += convStructure(psStruct, engine);

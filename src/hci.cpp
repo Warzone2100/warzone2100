@@ -1982,6 +1982,7 @@ INT_RETVAL intRunWidgets(void)
 						          selectedPlayer, psStructure->pStructureType->pName);
 						sendTextMessage(msg, true);
 						Cheated = true;
+						triggerEventStructBuilt(psStructure, NULL);
 					}
 				}
 				else if (psPositionStats->ref >= REF_FEATURE_START && psPositionStats->ref < REF_FEATURE_START + REF_RANGE)
