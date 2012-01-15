@@ -305,19 +305,6 @@ static bool bufferSPROPSNDLoad(const char *pBuffer, UDWORD size, void **ppData)
 	return true;
 }
 
-/* Load the SSPECABIL stats */
-static bool bufferSSPECABILLoad(const char *pBuffer, UDWORD size, void **ppData)
-{
-	if (!loadSpecialAbility(pBuffer, size))
-	{
-		return false;
-	}
-
-	//not interested in this value
-	*ppData = NULL;
-	return true;
-}
-
 /* Load the STERRTABLE stats */
 static bool bufferSTERRTABLELoad(const char *pBuffer, UDWORD size, void **ppData)
 {
@@ -1112,7 +1099,6 @@ static const RES_TYPE_MIN_BUF BufferResourceTypes[] =
 	{"SPROPTYPES", bufferSPROPTYPESLoad, NULL},
 	{"SPROPSND", bufferSPROPSNDLoad, NULL},
 	{"STERRTABLE", bufferSTERRTABLELoad, NULL},
-	{"SSPECABIL", bufferSSPECABILLoad, NULL},
 	{"SBPIMD", bufferSBPIMDLoad, NULL},
 	{"SWEAPSND", bufferSWEAPSNDLoad, NULL},
 	{"SWEAPMOD", bufferSWEAPMODLoad, NULL},

@@ -184,9 +184,6 @@ extern bool loadPropulsionSounds(const char *pSoundData, UDWORD bufferSize);
 /*Load the Terrain Table from the file exported from Access*/
 extern bool loadTerrainTable(const char *pTerrainTableData, UDWORD bufferSize);
 
-/*Load the Special Ability stats from the file exported from Access*/
-extern bool loadSpecialAbility(const char *pSAbilityData, UDWORD bufferSize);
-
 /* load the IMDs to use for each body-propulsion combination */
 extern bool loadBodyPropulsionIMDs(const char *pData, UDWORD bufferSize);
 
@@ -255,7 +252,6 @@ extern void statsDealloc(COMPONENT_STATS* pStats, UDWORD listSize,
 extern void deallocPropulsionTypes(void);
 extern void deallocTerrainTypes(void);
 extern void deallocTerrainTable(void);
-extern void deallocSpecialAbility(void);
 
 extern void storeSpeedFactor(UDWORD terrainType, UDWORD propulsionType, UDWORD speedFactor);
 extern UDWORD getSpeedFactor(UDWORD terrainType, UDWORD propulsionType);

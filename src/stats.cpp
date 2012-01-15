@@ -51,7 +51,6 @@ WEAPON_STATS		*asWeaponStats;
 CONSTRUCT_STATS		*asConstructStats;
 PROPULSION_TYPES	*asPropulsionTypes;
 static TERRAIN_TABLE	*asTerrainTable;
-static SPECIAL_ABILITY	*asSpecialAbility;
 
 //used to hold the modifiers cross refd by weapon effect and propulsion type
 WEAPON_MODIFIER		asWeaponModifier[WE_NUMEFFECTS][PROPULSION_TYPE_NUM];
@@ -74,7 +73,6 @@ UDWORD		numECMStats;
 UDWORD		numRepairStats;
 UDWORD		numWeaponStats;
 UDWORD		numConstructStats;
-static UDWORD	numSpecialAbility;
 
 //the max values of the stats used in the design screen
 static UDWORD	maxComponentWeight;
@@ -411,7 +409,6 @@ void statsInitVars(void)
 	numRepairStats = 0;
 	numWeaponStats = 0;
 	numConstructStats = 0;
-	numSpecialAbility = 0;
 
 	//initialise the upgrade structures
 	memset(asWeaponUpgrade, 0, sizeof(asWeaponUpgrade));
@@ -476,7 +473,6 @@ bool statsShutDown(void)
 	STATS_DEALLOC(asConstructStats, numConstructStats, CONSTRUCT_STATS);
 	deallocPropulsionTypes();
 	deallocTerrainTable();
-	deallocSpecialAbility();
 
 	return true;
 }
@@ -1939,62 +1935,6 @@ bool loadTerrainTable(const char *pTerrainTableData, UDWORD bufferSize)
 	return true;
 }
 
-/*Load the Special Ability stats from the file exported from Access*/
-bool loadSpecialAbility(const char *pSAbilityData, UDWORD bufferSize)
-{
-	const unsigned int NumTypes = numCR(pSAbilityData, bufferSize);
-	SPECIAL_ABILITY *pSAbility;
-	unsigned int i, accessID;
-	char SAbilityName[MAX_STR_LENGTH];
-
-	//allocate storage for the stats
-	asSpecialAbility = (SPECIAL_ABILITY *)malloc(sizeof(SPECIAL_ABILITY)*NumTypes);
-
-	if (asSpecialAbility == NULL)
-	{
-		debug( LOG_FATAL, "SpecialAbility - Out of memory" );
-		abort();
-		return false;
-	}
-
-	numSpecialAbility = NumTypes;
-
-	memset(asSpecialAbility, 0, (sizeof(SPECIAL_ABILITY)*NumTypes));
-
-	//copy the start location
-	pSAbility = asSpecialAbility;
-
-	for (i=0; i < NumTypes; i++)
-	{
-		//read the data into the storage - the data is delimeted using comma's
-		sscanf(pSAbilityData,"%255[^,'\r\n],%d", SAbilityName, &accessID);
-		//check that the data is ordered in the way it will be stored
-		if (accessID != i)
-		{
-			debug( LOG_FATAL, "The Special Ability sequence is invalid" );
-			abort();
-			return false;
-		}
-		//allocate storage for the name
-		asSpecialAbility->pName = (char *)malloc((strlen(SAbilityName))+1);
-		if (asSpecialAbility->pName == NULL)
-		{
-			debug( LOG_FATAL, "Special Ability Name - Out of memory" );
-			abort();
-			return false;
-		}
-		strcpy(asSpecialAbility->pName,SAbilityName);
-
-		//increment the pointer to the start of the next record
-		pSAbilityData = strchr(pSAbilityData,'\n') + 1;
-		asSpecialAbility++;
-	}
-
-	//reset the pointer to the start of the special ability stats
-	asSpecialAbility = pSAbility;
-	return true;
-}
-
 /* load the IMDs to use for each body-propulsion combination */
 bool loadBodyPropulsionIMDs(const char *pData, UDWORD bufferSize)
 {
@@ -2542,20 +2482,6 @@ void deallocTerrainTable(void)
 {
 	free(asTerrainTable);
 	asTerrainTable = NULL;
-}
-
-//dealloc the storage assigned for the Special Ability stats
-void deallocSpecialAbility(void)
-{
-	UBYTE inc;
-	SPECIAL_ABILITY* pList = asSpecialAbility;
-
-	for (inc=0; inc < numSpecialAbility; inc++, pList++)
-	{
-		free(pList->pName);
-	}
-	free(asSpecialAbility);
-	asSpecialAbility = NULL;
 }
 
 //store the speed Factor in the terrain table

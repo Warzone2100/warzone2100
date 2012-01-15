@@ -531,11 +531,6 @@ struct TERRAIN_TABLE
 	UDWORD	speedFactor;	///< factor to multiply the speed by depending on the method of propulsion and the terrain type - to be divided by 100 before use
 };
 
-struct SPECIAL_ABILITY
-{
-	char	*pName;			///< Text name of the component
-};
-
 typedef UWORD	WEAPON_MODIFIER;
 
 /* weapon stats which can be upgraded by research*/

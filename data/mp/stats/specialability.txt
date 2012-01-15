@@ -1,3 +1,0 @@
-AbilityOne,0
-AbilityTwo,1
-AbilityThree,2
