@@ -265,7 +265,7 @@ int wzGetSwapInterval()
 	return 0;
 }
 
-#else
+#elif !defined(WZ_OS_MAC)
 
 void wzSetSwapInterval(int)
 {

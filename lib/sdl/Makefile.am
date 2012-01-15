@@ -12,3 +12,6 @@ libsdl_a_SOURCES = \
 	cursors_sdl.cpp \
 	main_sdl.cpp \
 	scrap.cpp
+
+EXTRA_DIST= \
+	swapinterval.mm

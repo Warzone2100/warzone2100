@@ -420,6 +420,7 @@
 		4366729613D2122700FE85BA /* QuesoGLC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4366718213D1FD5600FE85BA /* QuesoGLC.framework */; };
 		4371B60F11D93FD1005A67AB /* pngpriv.h in Headers */ = {isa = PBXBuildFile; fileRef = 4371B60D11D93FD0005A67AB /* pngpriv.h */; };
 		437487CF14AE41C100ABC9C7 /* template.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4343651C149EA04800527137 /* template.cpp */; };
+		437DABE714C3345B00DB5F94 /* swapinterval.mm in Sources */ = {isa = PBXBuildFile; fileRef = 437DABE614C3345B00DB5F94 /* swapinterval.mm */; };
 		438BDDF31129DC9A00998660 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 438BDDD71129DC9A00998660 /* InfoPlist.strings */; };
 		43A6285B13A6C4A400C6B786 /* geometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43A6285913A6C4A400C6B786 /* geometry.cpp */; };
 		43A8417811028EDD00733CCB /* pointtree.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43A8417611028EDD00733CCB /* pointtree.cpp */; };
@@ -1584,6 +1585,7 @@
 		436D24DE149642EB00BF74E3 /* SDLMain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SDLMain.h; path = ../3rdparty/SDL/mac/SDLMain.h; sourceTree = SOURCE_ROOT; };
 		436D24DF149642EB00BF74E3 /* SDLMain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SDLMain.m; path = ../3rdparty/SDL/mac/SDLMain.m; sourceTree = SOURCE_ROOT; };
 		4371B60D11D93FD0005A67AB /* pngpriv.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = pngpriv.h; path = external/libpng/pngpriv.h; sourceTree = SOURCE_ROOT; };
+		437DABE614C3345B00DB5F94 /* swapinterval.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = swapinterval.mm; path = ../lib/sdl/swapinterval.mm; sourceTree = SOURCE_ROOT; };
 		437FB24913CE5CA900E7EF5B /* swapinterval.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = swapinterval.cpp; path = ../lib/qtgame/swapinterval.cpp; sourceTree = SOURCE_ROOT; };
 		437FB24A13CE5CA900E7EF5B /* swapinterval.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = swapinterval.h; path = ../lib/qtgame/swapinterval.h; sourceTree = SOURCE_ROOT; };
 		437FB24B13CE5CA900E7EF5B /* swapinterval.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = swapinterval.mm; path = ../lib/qtgame/swapinterval.mm; sourceTree = SOURCE_ROOT; };
@@ -2996,6 +2998,7 @@
 		436D248214963CC900BF74E3 /* SDL */ = {
 			isa = PBXGroup;
 			children = (
+				437DABE614C3345B00DB5F94 /* swapinterval.mm */,
 				4301EC49149A3DE90054BABB /* cursors_sdl.cpp */,
 				4301EC4A149A3DE90054BABB /* cursors_sdl.h */,
 				4301EC4B149A3DE90054BABB /* wz2100icon.h */,
@@ -4550,6 +4553,7 @@
 				435D3B6A149AC4A000E24F69 /* cursors_sdl.cpp in Sources */,
 				437487CF14AE41C100ABC9C7 /* template.cpp in Sources */,
 				43CCE06514BA636900B21363 /* netjoin_stub.cpp in Sources */,
+				437DABE714C3345B00DB5F94 /* swapinterval.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
