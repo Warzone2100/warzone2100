@@ -7095,6 +7095,7 @@ STRUCTURE * giftSingleStructure(STRUCTURE *psStructure, UBYTE attackPlayer, bool
 	UWORD               direction;
 
 	CHECK_STRUCTURE(psStructure);
+	visRemoveVisibility(psStructure);
 
 	//this is not the case for EW in multiPlayer mode
 	if (!bMultiPlayer)
@@ -7166,6 +7167,7 @@ STRUCTURE * giftSingleStructure(STRUCTURE *psStructure, UBYTE attackPlayer, bool
 			if (psStructure->status == SS_BUILT)
 			{
 				buildingComplete(psStructure);
+				triggerEventStructBuilt(psStructure, NULL);
 			}
 			//since the structure isn't being rebuilt, the visibility code needs to be adjusted
 			//make sure this structure is visible to selectedPlayer
@@ -7250,6 +7252,7 @@ STRUCTURE * giftSingleStructure(STRUCTURE *psStructure, UBYTE attackPlayer, bool
 		{
 			psNewStruct->status = SS_BUILT;
 			buildingComplete(psNewStruct);
+			triggerEventStructBuilt(psStructure, NULL);
 		}
 
 		if (!bMultiPlayer)
