@@ -47,6 +47,7 @@
 #include "lib/sound/audio_id.h"
 #include "lib/sound/audio.h"
 #include "research.h"
+#include "qtscript.h"
 
 // ////////////////////////////////////////////////////////////////////////////
 // structures
@@ -89,7 +90,8 @@ bool recvBuildFinished(NETQUEUE queue)
 	psStruct = IdToStruct(structId,ANYPLAYER);
 
 	if (psStruct)
-	{												// make it complete.
+	{
+		// make it complete.
 		psStruct->currentBuildPts = psStruct->pStructureType->buildPoints+1;
 
 		if (psStruct->status != SS_BUILT)
@@ -137,6 +139,7 @@ bool recvBuildFinished(NETQUEUE queue)
 #if defined (DEBUG)
 		NETlogEntry("had to plonk down a building", SYNC_FLAG, player);
 #endif
+		triggerEventStructBuilt(psStruct, NULL);
 	}
 	else
 	{

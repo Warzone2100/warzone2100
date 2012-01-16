@@ -1951,25 +1951,13 @@ INT_RETVAL intRunWidgets(void)
 					}
 					else
 					{
-						//psStructure = buildStructure(psBuilding, structX, structY,
-						//                             selectedPlayer, false);
 						psStructure = &tmp;
 						tmp.id = generateNewObjectId();
 						tmp.pStructureType = (STRUCTURE_STATS *)psPositionStats;
 						tmp.pos.x = structX;
 						tmp.pos.y = structY;
 						tmp.pos.z = map_Height(structX, structY) + world_coord(1)/10;
-						if (!psStructure)
-						{
-							addConsoleMessage(_("Failed to create building"), LEFT_JUSTIFY, SYSTEM_MESSAGE);
-						}
-					}
-					if (psStructure)
-					{
 						const char* msg;
-
-						psStructure->status = SS_BUILT;
-						//buildingComplete(psStructure);
 
 						// In multiplayer games be sure to send a message to the
 						// other players, telling them a new structure has been
@@ -1982,7 +1970,6 @@ INT_RETVAL intRunWidgets(void)
 						          selectedPlayer, psStructure->pStructureType->pName);
 						sendTextMessage(msg, true);
 						Cheated = true;
-						triggerEventStructBuilt(psStructure, NULL);
 					}
 				}
 				else if (psPositionStats->ref >= REF_FEATURE_START && psPositionStats->ref < REF_FEATURE_START + REF_RANGE)
