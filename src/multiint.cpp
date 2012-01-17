@@ -2894,6 +2894,7 @@ static void processMultiopWidgets(UDWORD id)
 		break;
 
 	case CON_CANCEL:
+		pie_LoadBackDrop(SCREEN_RANDOMBDROP);
 		if (!challengeActive)
 		{
 			NETGameLocked(false);		// reset status on a cancel
@@ -2902,7 +2903,6 @@ static void processMultiopWidgets(UDWORD id)
 		else
 		{
 			NETclose();
-			pie_LoadBackDrop(SCREEN_RANDOMBDROP);
 			bHosted = false;
 			ingame.localJoiningInProgress = false;
 			changeTitleMode(SINGLE);
