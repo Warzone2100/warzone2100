@@ -46,6 +46,8 @@ extern DROID_TEMPLATE	sDefaultDesignTemplate;
 DROID_TEMPLATE		*apsDroidTemplates[MAX_PLAYERS];
 DROID_TEMPLATE		*apsStaticTemplates;	// for AIs and scripts
 
+bool allowDesign = true;
+
 static const StringToEnum<DROID_TYPE> map_DROID_TYPE[] =
 {
 	{"PERSON",              DROID_PERSON            },
@@ -152,6 +154,7 @@ bool initTemplates()
 			ini.endGroup();
 			continue; // next!
 		}
+		design.enabled = allowDesign;
 		addTemplateToList(&design, &apsDroidTemplates[selectedPlayer]);
 		sendTemplate(selectedPlayer, &design);
 		localTemplates.push_back(design);
@@ -274,6 +277,7 @@ DROID_TEMPLATE::DROID_TEMPLATE(LineView line)
 	, psNext(NULL)
 	, prefab(false)
 	, stored(false)
+	, enabled(true)
 	// Ignored columns: 6 - but used later to decide whether the template is for human players.
 {
 	std::string name = line.s(0);
@@ -688,7 +692,7 @@ void fillTemplateList(std::vector<DROID_TEMPLATE *> &pList, STRUCTURE *psFactory
 			}
 		}
 
-		if (!validTemplateForFactory(psCurr, psFactory) || !researchedTemplate(psCurr, player))
+		if (!psCurr->enabled || !validTemplateForFactory(psCurr, psFactory) || !researchedTemplate(psCurr, player))
 		{
 			continue;
 		}

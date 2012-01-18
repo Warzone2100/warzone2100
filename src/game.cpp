@@ -3669,6 +3669,7 @@ bool gameLoadV(PHYSFS_file* fileHandle, unsigned int version)
 		}
 	}
 	radarPermitted = (bool)powerSaved[0].extractedPower; // nice hack, eh? don't want to break savegames now...
+	allowDesign = (bool)powerSaved[1].extractedPower; // nice hack, eh? don't want to break savegames now...
 
 	return true;
 }
@@ -3748,6 +3749,7 @@ static bool writeGameFile(const char* fileName, SDWORD saveType)
 		saveGame.power[i].currentPower = getPower(i);
 	}
 	saveGame.power[0].extractedPower = radarPermitted; // hideous hack, don't want to break savegames now...
+	saveGame.power[1].extractedPower = allowDesign; // hideous hack, don't want to break savegames now...
 
 	//camera position
 	disp3d_getView(&(saveGame.currentPlayerPos));

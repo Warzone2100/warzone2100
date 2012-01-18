@@ -1580,6 +1580,27 @@ static QScriptValue js_setMiniMap(QScriptContext *context, QScriptEngine *engine
 	return QScriptValue();
 }
 
+//-- \subsection{setDesign(bool)} Whether to allow player to design stuff.
+static QScriptValue js_setDesign(QScriptContext *context, QScriptEngine *engine)
+{
+	DROID_TEMPLATE *psCurr;
+	allowDesign = context->argument(0).toBool();
+	// Switch on or off future templates
+	// FIXME: This dual data structure for templates is just plain insane.
+	for (psCurr = apsDroidTemplates[selectedPlayer]; psCurr != NULL; psCurr = psCurr->psNext)
+	{
+		bool researched = researchedTemplate(psCurr, selectedPlayer);
+		psCurr->enabled = (researched || allowDesign);
+	}
+	for (std::list<DROID_TEMPLATE>::iterator i = localTemplates.begin(); i != localTemplates.end(); ++i)
+	{
+		psCurr = &*i;
+		bool researched = researchedTemplate(psCurr, selectedPlayer);
+		psCurr->enabled = (researched || allowDesign);
+	}
+	return QScriptValue();
+}
+
 //-- \subsection{addReticuleButton(button type)} Add reticule button. FIXME: This currently only works in tutorial.
 static QScriptValue js_addReticuleButton(QScriptContext *context, QScriptEngine *engine)
 {
@@ -1880,6 +1901,7 @@ bool registerFunctions(QScriptEngine *engine)
 	engine->globalObject().setProperty("enableResearch", engine->newFunction(js_enableResearch));
 	engine->globalObject().setProperty("setPower", engine->newFunction(js_setPower));
 	engine->globalObject().setProperty("setTutorialMode", engine->newFunction(js_setTutorialMode));
+	engine->globalObject().setProperty("setDesign", engine->newFunction(js_setDesign));
 	engine->globalObject().setProperty("setMiniMap", engine->newFunction(js_setMiniMap));
 	engine->globalObject().setProperty("addReticuleButton", engine->newFunction(js_addReticuleButton));
 	engine->globalObject().setProperty("removeReticuleButton", engine->newFunction(js_removeReticuleButton));

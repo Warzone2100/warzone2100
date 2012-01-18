@@ -119,6 +119,7 @@ struct DROID_TEMPLATE : public BASE_STATS
 	DROID_TEMPLATE* psNext;                     ///< Pointer to next template
 	bool		prefab;                     ///< Not player designed, not saved, never delete or change
 	bool		stored;                     ///< Stored template
+	bool		enabled;                    ///< Has been enabled
 };
 
 struct PACKAGED_CHECK;

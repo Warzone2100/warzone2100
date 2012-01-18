@@ -6032,7 +6032,7 @@ void intCheckReticuleButtons(void)
 	ReticuleEnabled[RETBUT_FACTORY].Enabled = editMode;
 	ReticuleEnabled[RETBUT_RESEARCH].Enabled = false;
 	ReticuleEnabled[RETBUT_BUILD].Enabled = editMode;
-	ReticuleEnabled[RETBUT_DESIGN].Enabled = true;
+	ReticuleEnabled[RETBUT_DESIGN].Enabled = allowDesign;
 	ReticuleEnabled[RETBUT_INTELMAP].Enabled = true;
 	ReticuleEnabled[RETBUT_COMMAND].Enabled = false;
 

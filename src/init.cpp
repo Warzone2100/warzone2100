@@ -1271,6 +1271,7 @@ static void	initMiscVars(void)
 
 	radarOnScreen = true;
 	radarPermitted = true;
+	allowDesign = true;
 	enableConsoleDisplay(true);
 
 	setSelectedGroup(UBYTE_MAX);

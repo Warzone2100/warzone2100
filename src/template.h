@@ -7,6 +7,8 @@
 extern DROID_TEMPLATE			*apsDroidTemplates[MAX_PLAYERS];
 extern DROID_TEMPLATE			*apsStaticTemplates;			// for AIs and scripts
 
+extern bool allowDesign;
+
 bool initTemplates();
 bool shutdownTemplates();
 bool storeTemplates();
