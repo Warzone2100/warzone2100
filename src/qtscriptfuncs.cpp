@@ -184,8 +184,9 @@ QScriptValue convFeature(FEATURE *psFeature, QScriptEngine *engine)
 //;;   \item[DROID_COMMAND] Commanders.
 //;;  \end{description}
 //;; \item[group] The group this droid is member of. This is a numerical ID. If not a member of any group,
-//;; \item[experience] Amount of experience this droid has, based on damage it has dealt to enemies.
 //;; this value is not set. Always check if set before use.
+//;; \item[armed] The percentage of weapon capability that is fully armed. Only defined on VTOLs.
+//;; \item[experience] Amount of experience this droid has, based on damage it has dealt to enemies.
 //;; \end{description}
 QScriptValue convDroid(DROID *psDroid, QScriptEngine *engine)
 {
@@ -207,7 +208,12 @@ QScriptValue convDroid(DROID *psDroid, QScriptEngine *engine)
 	}
 	value.setProperty("droidType", (int)type, QScriptValue::ReadOnly);
 	value.setProperty("experience", (double)psDroid->experience / 65536.0, QScriptValue::ReadOnly);
-	value.setProperty("health", 100 * psDroid->originalBody / MAX(1, psDroid->body), QScriptValue::ReadOnly);
+	value.setProperty("health", 100.0 / (double)psDroid->originalBody * (double)psDroid->body, QScriptValue::ReadOnly);
+	if (isVtolDroid(psDroid))
+	{
+		value.setProperty("armed", 100.0 / (double)asWeaponStats[psDroid->asWeaps[0].nStat].numRounds
+		                  * (double)psDroid->asWeaps[0].ammo);
+	}
 	if (psDroid->psGroup)
 	{
 		value.setProperty("group", (int)psDroid->psGroup->id, QScriptValue::ReadOnly);

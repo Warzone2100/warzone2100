@@ -380,8 +380,11 @@ function eventDroidBuilt(droid, struct)
 						var vtols = enumGroup(vtolGroup);
 						for (var j = 0; j < vtols.length; j++)
 						{
-							orderDroidLoc(vtols[j], DORDER_SCOUT, startPositions[i].x, startPositions[i].y);
-							dbgObj(vtols[j], "sent to attack");
+							if (vtols[j].armed == 100) // only if fully armed
+							{
+								orderDroidLoc(vtols[j], DORDER_SCOUT, startPositions[i].x, startPositions[i].y);
+								dbgObj(vtols[j], "sent to attack");
+							}
 						}
 						dbgPlr("ATTACKING player " + i);
 						attackRun = gameTime;
@@ -392,6 +395,11 @@ function eventDroidBuilt(droid, struct)
 			}
 		}
 	}
+}
+
+function eventDroidIdle(droid)
+{
+	// TBD
 }
 
 function eventGameInit()

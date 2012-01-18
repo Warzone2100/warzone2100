@@ -3463,6 +3463,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 					psDroid->action = DACTION_NONE;
 					psReArmPad->psObj = NULL;
 					auxStructureNonblocking(psStructure);
+					triggerEventDroidIdle(psDroid);
 				}
 			}
 		}
