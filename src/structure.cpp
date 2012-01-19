@@ -1612,6 +1612,11 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 
 		clustNewStruct(psBuilding);
 		asStructLimits[player][max].currentQuantity++;
+
+		if (isLasSat(psBuilding->pStructureType))
+		{
+			psBuilding->asWeaps[0].ammo = 1; // ready to trigger the fire button
+		}
 	}
 	else //its an upgrade
 	{
@@ -2624,6 +2629,15 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 			psStructure->asWeaps[0].rot.direction = (uint16_t)((uint64_t)gameTime * 65536 / 3000);  // Cast wrapping intended.
 			psStructure->asWeaps[0].rot.pitch = 0;
 		}
+	}
+
+	/* Check lassat */
+	if (isLasSat(psStructure->pStructureType)
+	    && gameTime - psStructure->asWeaps[0].lastFired > weaponFirePause(&asWeaponStats[psStructure->asWeaps[0].nStat], psStructure->player)
+	    && psStructure->asWeaps[0].ammo > 0)
+	{
+		triggerEventStructureReady(psStructure);
+		psStructure->asWeaps[0].ammo = 0; // do not fire more than once
 	}
 
 	/* See if there is an enemy to attack */

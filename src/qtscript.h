@@ -78,5 +78,6 @@ bool triggerEventResearched(RESEARCH *psResearch, STRUCTURE *psStruct, int playe
 bool triggerEventStructBuilt(STRUCTURE *psStruct, DROID *psDroid);
 bool triggerEventDroidIdle(DROID *psDroid);
 bool triggerEventDestroyed(BASE_OBJECT *psVictim);
+bool triggerEventStructureReady(STRUCTURE *psStruct);
 
 #endif

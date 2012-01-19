@@ -608,7 +608,7 @@ bool triggerEventDroidBuilt(DROID *psDroid, STRUCTURE *psFactory)
 	return true;
 }
 
-//__ \subsection{eventDroidBuilt(structure[, droid])}
+//__ \subsection{eventStructureBuilt(structure[, droid])}
 //__ An event that is run every time a structure is produced. The droid parameter is set
 //__ if the structure was built by a droid.
 bool triggerEventStructBuilt(STRUCTURE *psStruct, DROID *psDroid)
@@ -626,6 +626,26 @@ bool triggerEventStructBuilt(STRUCTURE *psStruct, DROID *psDroid)
 				args += convDroid(psDroid, engine);
 			}
 			callFunction(engine, "eventStructureBuilt", args);
+		}
+	}
+	return true;
+}
+
+//__ \subsection{eventStructureReady(structure)}
+//__ An event that is run every time a structure is ready to perform some
+//__ special ability. It will only fire once, so if the time is not right,
+//__ register your own timer to keep checking.
+bool triggerEventStructureReady(STRUCTURE *psStruct)
+{
+	for (int i = 0; i < scripts.size(); ++i)
+	{
+		QScriptEngine *engine = scripts.at(i);
+		int player = engine->globalObject().property("me").toInt32();
+		if (player == psStruct->player)
+		{
+			QScriptValueList args;
+			args += convStructure(psStruct, engine);
+			callFunction(engine, "eventStructureReady", args);
 		}
 	}
 	return true;

@@ -455,6 +455,26 @@ static QScriptValue js_newGroup(QScriptContext *, QScriptEngine *)
 	return QScriptValue(newGrp->id);
 }
 
+//-- \subsection{activateStructure(structure, [target[, ability]])}
+//-- Activate a special ability on a structure. Currently only works on the lassat.
+//-- The lassat needs a target.
+static QScriptValue js_activateStructure(QScriptContext *context, QScriptEngine *)
+{
+	QScriptValue structVal = context->argument(0);
+	int id = structVal.property("id").toInt32();
+	int player = structVal.property("player").toInt32();
+	STRUCTURE *psStruct = IdToStruct(id, player);
+	SCRIPT_ASSERT(context, psStruct, "No such structure id %d belonging to player %d", id, player);
+	// ... and then do nothing with psStruct yet
+	QScriptValue objVal = context->argument(1);
+	int oid = objVal.property("id").toInt32();
+	int oplayer = objVal.property("player").toInt32();
+	BASE_OBJECT *psObj = IdToPointer(oid, oplayer);
+	SCRIPT_ASSERT(context, psObj, "No such object id %d belonging to player %d", oid, oplayer);
+	orderStructureObj(player, psObj);
+	return QScriptValue(true);
+}
+
 //-- \subsection{pursueResearch(lab, research)}
 //-- Start researching the first available technology on the way to the given technology.
 //-- First parameter is the structure to research in, which must be a research lab. The
@@ -1886,6 +1906,7 @@ bool registerFunctions(QScriptEngine *engine)
 	engine->globalObject().setProperty("componentAvailable", engine->newFunction(js_componentAvailable));
 	engine->globalObject().setProperty("isVTOL", engine->newFunction(js_isVTOL));
 	engine->globalObject().setProperty("safeDest", engine->newFunction(js_safeDest));
+	engine->globalObject().setProperty("activateStructure", engine->newFunction(js_activateStructure));
 
 	// Functions that operate on the current player only
 	engine->globalObject().setProperty("centreView", engine->newFunction(js_centreView));

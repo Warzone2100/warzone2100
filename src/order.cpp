@@ -4000,6 +4000,7 @@ void orderStructureObj(UDWORD player, BASE_OBJECT *psObj)
 				proj_SendProjectile(&psStruct->asWeaps[0], NULL, player, psObj->pos, psObj, true, 0);
 				//set up last fires time
 				psStruct->asWeaps[0].lastFired =  gameTime;
+				psStruct->asWeaps[0].ammo = 1; // see SendLasSat()
 
 				//play 5 second countdown message
 				audio_QueueTrackPos(ID_SOUND_LAS_SAT_COUNTDOWN, psObj->pos.x, psObj->pos.y, psObj->pos.z);

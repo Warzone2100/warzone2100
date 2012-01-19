@@ -402,6 +402,12 @@ function eventDroidIdle(droid)
 	// TBD
 }
 
+function eventStructureReady(struct)
+{
+	// TBD
+	//activateStructure(struct, target);
+}
+
 function eventGameInit()
 {
 	attackGroup = newGroup();
