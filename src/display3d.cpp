@@ -795,7 +795,6 @@ void draw3DScene( void )
 
 	if (getWidgetsStatus() && !gamePaused())
 	{
-#ifdef DEBUG
 		char buildInfo[255];
 		if (showLevelName)
 		{
@@ -803,7 +802,6 @@ void draw3DScene( void )
 		}
 		getAsciiTime(buildInfo,gameTime);
 		iV_DrawText( buildInfo, RET_X + 134, 434 + E_H );
-#endif
 		if (getDebugMappingStatus() && !demoGetStatus())
 		{
 			iV_DrawText( "DEBUG ", RET_X + 134, 448 + E_H );
