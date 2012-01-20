@@ -528,6 +528,7 @@ void clustObjectSeen(BASE_OBJECT *psObj, BASE_OBJECT *psViewer)
 			psScrCBObjSeen = psObj;
 			psScrCBObjViewer = psViewer;
 			eventFireCallbackTrigger((TRIGGER_TYPE)CALL_OBJ_SEEN);
+			triggerEventSeen(psViewer, psObj);
 
 			switch (psObj->type)
 			{

@@ -720,3 +720,25 @@ bool triggerEventDestroyed(BASE_OBJECT *psVictim)
 	}
 	return true;
 }
+
+//__ \subsection{eventObjectSeen(viewer, seen)}
+//__ An event that is run whenever an object goes from not seen to seen.
+//__ First parameter is game object doing the seeing, the next the game
+//__ object being seen.
+bool triggerEventSeen(BASE_OBJECT *psViewer, BASE_OBJECT *psSeen)
+{
+	for (int i = 0; i < scripts.size() && psSeen && psViewer; ++i)
+	{
+		QScriptEngine *engine = scripts.at(i);
+		int me = engine->globalObject().property("me").toInt32();
+		if (me == psViewer->player)
+		{
+			QScriptEngine *engine = scripts.at(i);
+			QScriptValueList args;
+			args += convMax(psViewer, engine);
+			args += convMax(psSeen, engine);
+			callFunction(engine, "eventObjectSeen", args);
+		}
+	}
+	return true;
+}

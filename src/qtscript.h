@@ -79,5 +79,6 @@ bool triggerEventStructBuilt(STRUCTURE *psStruct, DROID *psDroid);
 bool triggerEventDroidIdle(DROID *psDroid);
 bool triggerEventDestroyed(BASE_OBJECT *psVictim);
 bool triggerEventStructureReady(STRUCTURE *psStruct);
+bool triggerEventSeen(BASE_OBJECT *psViewer, BASE_OBJECT *psSeen);
 
 #endif
