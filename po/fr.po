@@ -24,12 +24,12 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2008-07-19 19:37+0000\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Launchpad (build Unknown)\n"
+"X-Launchpad-Export-Date: 2008-07-19 19:37+0000\n"
+"X-Poedit-Basepath: ..\n"
 "X-Poedit-Language: French\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-Poedit-Basepath: ..\n"
-"X-Generator: Launchpad (build Unknown)\n"
 
 #: data/base/messages/messages.rmsg:2
 msgid "Structure Research Completed"
@@ -3597,7 +3597,7 @@ msgstr "Voilà notre chance de renverser le Nouveau Paradigme et de détruire le
 #: data/base/messages/strings/cam2strings.txt:108
 #: data/base/messages/strings/cam3strings.txt:156
 msgid " "
-msgstr " "
+msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:66
 msgid "Congratulations Commander."
@@ -4795,7 +4795,7 @@ msgstr "Pillard"
 #: data/base/messages/strings/names.txt:200
 #: data/mp/messages/strings/names.txt:203
 msgid "Jeep"
-msgstr "Jeep"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:201
 #: data/mp/messages/strings/names.txt:204
@@ -4922,7 +4922,7 @@ msgstr "Guêpe"
 #: data/base/messages/strings/names.txt:238
 #: data/mp/messages/strings/names.txt:241
 msgid "Cobra"
-msgstr "Cobra"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:239
 #: data/mp/messages/strings/names.txt:242
@@ -4937,7 +4937,7 @@ msgstr "Châtiment"
 #: data/base/messages/strings/names.txt:241
 #: data/mp/messages/strings/names.txt:244
 msgid "Scorpion"
-msgstr "Scorpion"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:242
 #: data/mp/messages/strings/names.txt:245
@@ -4947,12 +4947,12 @@ msgstr "Tigre"
 #: data/base/messages/strings/names.txt:243
 #: data/mp/messages/strings/names.txt:246
 msgid "Vengeance"
-msgstr "Vengeance"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:244
 #: data/mp/messages/strings/names.txt:247
 msgid "Python"
-msgstr "Python"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:245
 #: data/mp/messages/strings/names.txt:248
@@ -5028,17 +5028,17 @@ msgstr "Aéroglisseur III"
 #: data/base/messages/strings/names.txt:324
 #: data/mp/messages/strings/names.txt:327
 msgid "VTOL"
-msgstr "VTOL"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:325
 #: data/mp/messages/strings/names.txt:328
 msgid "VTOL II"
-msgstr "VTOL II"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:326
 #: data/mp/messages/strings/names.txt:329
 msgid "VTOL III"
-msgstr "VTOL III"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:327
 #: data/mp/messages/strings/names.txt:330
@@ -5569,7 +5569,7 @@ msgstr "Canon d'assaut"
 #: data/base/messages/strings/names.txt:481
 #: data/mp/messages/strings/names.txt:480
 msgid "Inferno"
-msgstr "Inferno"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:483
 #: data/base/messages/strings/names.txt:1061
@@ -5581,7 +5581,7 @@ msgstr "Obusier"
 #: data/base/messages/strings/names.txt:485
 #: data/mp/messages/strings/names.txt:484
 msgid "Ground Shaker"
-msgstr "Ground Shaker"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:486
 #: data/base/messages/strings/names.txt:722
@@ -5595,7 +5595,7 @@ msgstr "Emplacement à Ground Shaker"
 #: data/base/messages/strings/names.txt:487
 #: data/mp/messages/strings/names.txt:486
 msgid "Hellstorm"
-msgstr "Hellstorm"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:492
 #: data/base/messages/strings/names.txt:1083
@@ -5854,12 +5854,12 @@ msgstr "Canon à rail moyen VTOL"
 #: data/base/messages/strings/names.txt:572
 #: data/mp/messages/strings/names.txt:572
 msgid "Proximity Bomb Turret"
-msgstr "Proximity Bomb Turret"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:573
 #: data/mp/messages/strings/names.txt:573
 msgid "Proximity Superbomb Turret"
-msgstr "Proximity Superbomb Turret"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:575
 msgid "VTOL Cluster Bombs Bay"
@@ -5930,7 +5930,7 @@ msgstr "CAM1 DÉFENSES"
 #: data/base/messages/strings/names.txt:629
 #: data/mp/messages/strings/names.txt:629
 msgid "CAM1 STRUCTURES"
-msgstr "CAM1 STRUCTURES"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:630
 #: data/mp/messages/strings/names.txt:630
@@ -5945,7 +5945,7 @@ msgstr "CAM2 VÉHICULES"
 #: data/base/messages/strings/names.txt:632
 #: data/mp/messages/strings/names.txt:632
 msgid "CAM2 CYBORGS"
-msgstr "CAM2 CYBORGS"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:633
 #: data/mp/messages/strings/names.txt:633
@@ -5965,7 +5965,7 @@ msgstr "CAM2 DÉFENSES"
 #: data/base/messages/strings/names.txt:636
 #: data/mp/messages/strings/names.txt:636
 msgid "CAM2 STRUCTURES"
-msgstr "CAM2 STRUCTURES"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:638
 #: data/mp/messages/strings/names.txt:638
@@ -6737,7 +6737,7 @@ msgstr "Circuits résistifs au NEXUS Mk3"
 #: data/base/messages/strings/names.txt:918
 #: data/mp/messages/strings/names.txt:929
 msgid "Sensor Lock"
-msgstr "Sensor Lock"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:922
 #: data/mp/messages/strings/names.txt:933
@@ -7312,7 +7312,7 @@ msgstr "Chargeur rapide"
 #: data/base/messages/strings/names.txt:1082
 #: data/mp/messages/strings/names.txt:1093
 msgid "Laser - Flashlight"
-msgstr "Laser - Flashlight"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:1085
 #: data/mp/messages/strings/names.txt:1096
@@ -8263,7 +8263,7 @@ msgstr "Réception d'un message de la Division Beta."
 
 #: data/base/sequenceaudio/cam1/c001end.txt:4
 msgid "Mayday! Mayday!"
-msgstr "Mayday! Mayday!"
+msgstr ""
 
 #: data/base/sequenceaudio/cam1/c001end.txt:5
 msgid "Please assist!..."
@@ -9973,7 +9973,7 @@ msgstr "Lance-plasma"
 
 #: data/mp/messages/strings/names.txt:1617
 msgid "Grenadier"
-msgstr "Grenadier"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:1624
 msgid "Combat Engineer"
@@ -10216,7 +10216,7 @@ msgstr "Châssis super lourd - Dragon"
 
 #: data/mp/messages/strings/names.txt:1774
 msgid "Dragon"
-msgstr "Dragon"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:1776
 msgid "Superhot Plasmite gel"
@@ -10668,7 +10668,7 @@ msgstr "Consomation d'énergie"
 
 #: src/design.cpp:1324
 msgid "Hydra "
-msgstr "Hydra "
+msgstr ""
 
 #: src/design.cpp:1492
 #: src/design.cpp:1520
@@ -10870,7 +10870,7 @@ msgstr "Tutoriel"
 #: src/frontend.cpp:110
 #: src/hci.cpp:3469
 msgid "Options"
-msgstr "Options"
+msgstr ""
 
 #: src/frontend.cpp:111
 msgid "View Intro"
@@ -10958,7 +10958,7 @@ msgstr ""
 #: src/frontend.cpp:444
 #: src/multiint.cpp:1373
 msgid "OPTIONS"
-msgstr "OPTIONS"
+msgstr ""
 
 #: src/frontend.cpp:445
 msgid "Game Options"
@@ -10992,12 +10992,12 @@ msgstr "Affichage des vidéos"
 #: src/frontend.cpp:514
 #: src/frontend.cpp:662
 msgid "1X"
-msgstr "1X"
+msgstr ""
 
 #: src/frontend.cpp:518
 #: src/frontend.cpp:652
 msgid "2X"
-msgstr "2X"
+msgstr ""
 
 #: src/frontend.cpp:522
 #: src/frontend.cpp:657
@@ -11008,7 +11008,7 @@ msgstr "Plein écran"
 
 #: src/frontend.cpp:531
 msgid "Scanlines"
-msgstr "Scanlines"
+msgstr ""
 
 #: src/frontend.cpp:535
 #: src/frontend.cpp:556
@@ -11035,7 +11035,7 @@ msgstr "Désactivé"
 #: src/frontend.cpp:539
 #: src/frontend.cpp:677
 msgid "50%"
-msgstr "50%"
+msgstr ""
 
 #: src/frontend.cpp:543
 #: src/frontend.cpp:682
@@ -11184,7 +11184,7 @@ msgstr "Facile"
 #: src/frontend.cpp:1276
 #: src/frontend.cpp:1302
 msgid "Normal"
-msgstr "Normal"
+msgstr ""
 
 #: src/frontend.cpp:1205
 #: src/frontend.cpp:1279
@@ -11363,7 +11363,7 @@ msgstr "Placer les éléments sur la carte"
 
 #: src/hci.cpp:3613
 msgid "Pause"
-msgstr "Pause"
+msgstr ""
 
 #: src/hci.cpp:3614
 msgid "Pause or unpause the game"
@@ -11665,7 +11665,7 @@ msgstr "Prend-le cool !"
 
 #: src/keybind.cpp:448
 msgid "1000 big ones!!!"
-msgstr "1000 big ones!!!"
+msgstr ""
 
 #: src/keybind.cpp:465
 msgid "Power overwhelming"
@@ -12301,9 +12301,8 @@ msgid "Select next Cyborg Factory"
 msgstr "Sélectionner l'usine à Cyborgs suivante"
 
 #: src/keymap.cpp:436
-#, fuzzy
 msgid "Toggle Debug Mappings"
-msgstr "Toggle Debug Mappings"
+msgstr ""
 
 #: src/keymap.cpp:437
 msgid "Toggle display of droid path"
@@ -12351,7 +12350,7 @@ msgstr "Déclencher une météo"
 
 #: src/keymap.cpp:447
 msgid "Flip terrain triangle"
-msgstr "Flip terrain triangle"
+msgstr ""
 
 #: src/keymap.cpp:448
 #, fuzzy
@@ -12384,13 +12383,12 @@ msgid "Complete current research"
 msgstr "Termine la recherche courante"
 
 #: src/keymap.cpp:456
-#, fuzzy
 msgid "Toggle watch window"
-msgstr "Toggle watch window"
+msgstr ""
 
 #: src/keymap.cpp:457
 msgid "Trace a game object"
-msgstr "Trace a game object"
+msgstr ""
 
 #: src/keymap.cpp:458
 #, fuzzy
@@ -12521,11 +12519,11 @@ msgstr "CONNEXION"
 
 #: src/multiint.cpp:714
 msgid "Lobby"
-msgstr "Lobby"
+msgstr ""
 
 #: src/multiint.cpp:715
 msgid "IP"
-msgstr "IP"
+msgstr ""
 
 #: src/multiint.cpp:933
 #, c-format
@@ -12604,7 +12602,7 @@ msgstr "Entrez le mot de passe :"
 
 #: src/multiint.cpp:1211
 msgid "OK"
-msgstr "OK"
+msgstr ""
 
 #: src/multiint.cpp:1329
 msgid "Tanks disabled!!"
@@ -12654,7 +12652,7 @@ msgstr "Choisir le nom du joueur"
 #: src/multiint.cpp:1444
 #: src/multimenu.cpp:792
 msgid "Alliances"
-msgstr "Alliances"
+msgstr ""
 
 #: src/multiint.cpp:1447
 msgid "No Alliances"
@@ -12682,7 +12680,7 @@ msgstr "Niveau d'énergie initiale élevé"
 
 #: src/multiint.cpp:1515
 msgid "Base"
-msgstr "Base"
+msgstr ""
 
 #: src/multiint.cpp:1517
 msgid "Start with No Bases"
@@ -12803,7 +12801,7 @@ msgstr "Cliquez pour modifier l'intelligence artificielle"
 
 #: src/multiint.cpp:2419
 msgid "CHAT"
-msgstr "CHAT"
+msgstr ""
 
 #: src/multiint.cpp:2451
 msgid "All players need to have the same mods to join your game."
@@ -12890,7 +12888,7 @@ msgstr "HOTE"
 #: src/multiint.cpp:3917
 #: src/multimenu.cpp:808
 msgid "Ping"
-msgstr "Ping"
+msgstr ""
 
 #: src/multijoin.cpp:100
 #: src/multijoin.cpp:101
@@ -13016,7 +13014,7 @@ msgstr "Vert"
 
 #: src/multiplay.cpp:1922
 msgid "Orange"
-msgstr "Orange"
+msgstr ""
 
 #: src/multiplay.cpp:1923
 msgid "Grey"
@@ -13036,7 +13034,7 @@ msgstr "Rose"
 
 #: src/multiplay.cpp:1928
 msgid "Cyan"
-msgstr "Cyan"
+msgstr ""
 
 #: src/multiplay.cpp:1929
 msgid "Yellow"
@@ -13193,7 +13191,7 @@ msgstr "Bâtiments perdus :"
 
 #: src/scores.cpp:352
 msgid "Force Information"
-msgstr "Force Information"
+msgstr ""
 
 #: src/scores.cpp:432
 #, c-format
@@ -13328,7 +13326,7 @@ msgstr " (modifié localement)"
 
 #: src/version.cpp:138
 msgid " - DEBUG"
-msgstr " - DEBUG"
+msgstr ""
 
 #: src/version.cpp:147
 #, c-format
@@ -13378,7 +13376,6 @@ msgstr "Version %s%s%s%s"
 #~ msgid "Scorpion Command Turret Tracks"
 #~ msgstr "Tourelle de commandement Scorpion chenilles"
 
-#, fuzzy
 #~ msgid "Mantis Command Turret Tracks"
 #~ msgstr "Tourelle de commandement Mante chenilles"
 
@@ -13505,7 +13502,6 @@ msgstr "Version %s%s%s%s"
 #~ msgid "Armour +35%, Body Points +30%"
 #~ msgstr "Blindage : +35% ; Résistance : +30%"
 
-#, fuzzy
 #~ msgid "Armored guard tower with Mini-Rocket Pod"
 #~ msgstr "Tour renforcée à PMR"
 
@@ -13536,7 +13532,6 @@ msgstr "Version %s%s%s%s"
 #~ msgid "Kinetic armor +30%, body points +30%"
 #~ msgstr "Blindage cinétique : +30% ; Résistance ; +30%"
 
-#, fuzzy
 #~ msgid "Best Targets: Vehicles, Hardpoints"
 #~ msgstr "Efficace contre : véhicules et ponts défensifs"
 
@@ -13564,7 +13559,6 @@ msgstr "Version %s%s%s%s"
 #~ msgid "Bomb Upgrade"
 #~ msgstr "Mise à jour pour bombes"
 
-#, fuzzy
 #~ msgid "Improved trinitramine explosive formula"
 #~ msgstr "Obus améliorés au TNT"
 
@@ -13580,7 +13574,6 @@ msgstr "Version %s%s%s%s"
 #~ msgid "Factory production rate +60%"
 #~ msgstr "Vitesse de production des usines : +60%"
 
-#, fuzzy
 #~ msgid "All factories upgraded automatically"
 #~ msgstr "Mise à jour automatique de toutes les usines de VTOLs"
 
@@ -13605,7 +13598,6 @@ msgstr "Version %s%s%s%s"
 #~ msgid "Howitzer reload time -10%"
 #~ msgstr "Temps de rechargement des obusiers : -10%"
 
-#, fuzzy
 #~ msgid "High Explosive Anti-Tank warheads"
 #~ msgstr "Ogives HEAT"
 
@@ -13651,14 +13643,12 @@ msgstr "Version %s%s%s%s"
 #~ msgid "Sensor Range +25%"
 #~ msgstr "Portée des radars : +25%"
 
-#, fuzzy
 #~ msgid "Improved Thermal Emissions detection"
 #~ msgstr "Nouvelle technologie de détection d'émissions thermiques"
 
 #~ msgid "Sensor Range +15%"
 #~ msgstr "Portée des radars : +15%"
 
-#, fuzzy
 #~ msgid "Advanced Thermal Emissions detection"
 #~ msgstr "Technologie avancée de détection d'émissions thermiques"
 
@@ -13668,11 +13658,9 @@ msgstr "Version %s%s%s%s"
 #~ msgid "Radar detector tower detects enemy sensors"
 #~ msgstr "Tour radar à détectant les radars ennemis"
 
-#, fuzzy
 #~ msgid "Orders assigned indirect fire units to fire at the enemy sensors"
 #~ msgstr "Ordonne aux unités d'artillerie associées de tirer sur les radars ennemis"
 
-#, fuzzy
 #~ msgid "Counter-battery fire continues until enemy sensor is suppressed"
 #~ msgstr "Tir de riposte continu, jusqu'à l'élimination du radar ennemi"
 
@@ -13766,7 +13754,6 @@ msgstr "Version %s%s%s%s"
 #~ msgid "Immense damage infliction capability"
 #~ msgstr "Capacité offensive impressionante"
 
-#, fuzzy
 #~ msgid "Narrow area of effect"
 #~ msgstr "Effet sur une zone étroite"
 
@@ -13818,7 +13805,6 @@ msgstr "Version %s%s%s%s"
 #~ msgid "Medium Super Heavy Body"
 #~ msgstr "Châssis super lourd"
 
-#, fuzzy
 #~ msgid "More armor and body points than Vengeance"
 #~ msgstr "Plus de blindage et de résistance que la Vengeance"
 
@@ -13909,21 +13895,15 @@ msgstr "Version %s%s%s%s"
 #~ msgid "Failed to create building"
 #~ msgstr "Échec de la création du bâtiment"
 
-#, fuzzy
 #~ msgid "Infinite Production"
 #~ msgstr "Production en boucle"
 
 #~ msgid "Power Accrued"
 #~ msgstr "Puissance accrue"
 
-#, fuzzy
 #~ msgid "Player %u is cheating him/herself a new droid army of %s(s)."
 #~ msgstr "Le joueur %u triche (Il se sert du menu debug pour se faire une nouvelle armée de %s (s).)"
 
-#~ msgid "FPS %d; FPS-Limit: %d; PIEs %d; polys %d; Terr. polys %d; States %d"
-#~ msgstr "FPS %d; FPS-Limit: %d; PIEs %d; polys %d; Terr. polys %d; States %d"
-
-#, fuzzy
 #~ msgid "Radar showing revealed terrain"
 #~ msgstr "Mini-map montrant seulement le terrain exploré"
 
@@ -13960,70 +13940,54 @@ msgstr "Version %s%s%s%s"
 #~ msgid " (switched locally)"
 #~ msgstr " (changé localement)"
 
-#, fuzzy
 #~ msgid "Congratulations your successful evacuation of Beta Base."
 #~ msgstr "Félicitation pour votre réussite de l'évacuation de la base Beta."
 
 #~ msgid "Truck ordered to build Oil Derrick"
 #~ msgstr "Construction d'un puits de pétrole"
 
-#, fuzzy
 #~ msgid "Super Transport Available"
 #~ msgstr "Super-transporteur disponible"
 
-#, fuzzy
 #~ msgid "2 trucks ordered to build Oil Derrick"
 #~ msgstr "Deux véhicules de construction ont reçu l'ordre de construire un puits de pétrole"
 
-#, fuzzy
 #~ msgid "%d trucks ordered to build Oil Derrick"
 #~ msgstr "%d véhicules de construction ont reçu l'ordre de construire un puits de pétrole"
 
-#, fuzzy
 #~ msgid "3 players"
 #~ msgstr "3 joueurs"
 
-#, fuzzy
 #~ msgid "5 players"
 #~ msgstr "5 joueurs"
 
-#, fuzzy
 #~ msgid "6 players"
 #~ msgstr "6 joueurs"
 
-#, fuzzy
 #~ msgid "7 players"
 #~ msgstr "7 joueurs"
 
-#, fuzzy
 #~ msgid "9 players"
 #~ msgstr "9 joueurs"
 
-#, fuzzy
 #~ msgid "10 players"
 #~ msgstr "10 joueurs"
 
-#, fuzzy
 #~ msgid "11 players"
 #~ msgstr "11 joueurs"
 
-#, fuzzy
 #~ msgid "12 players"
 #~ msgstr "12 joueurs"
 
-#, fuzzy
 #~ msgid "13 players"
 #~ msgstr "13 joueurs"
 
-#, fuzzy
 #~ msgid "14 players"
 #~ msgstr "14 joueurs"
 
-#, fuzzy
 #~ msgid "15 players"
 #~ msgstr "15 joueurs"
 
-#, fuzzy
 #~ msgid "16 players"
 #~ msgstr "16 joueurs"
 
@@ -14042,7 +14006,6 @@ msgstr "Version %s%s%s%s"
 #~ msgid "Cyclone AA Site"
 #~ msgstr "Site de DCA Cyclone"
 
-#, fuzzy
 #~ msgid "Gate"
 #~ msgstr "Porte"
 
@@ -14058,7 +14021,6 @@ msgstr "Version %s%s%s%s"
 #~ msgid "Robotic Manufacturing Mk3"
 #~ msgstr "Production robotisée Mk3"
 
-#, fuzzy
 #~ msgid "Advanced Manufacturing Mk2"
 #~ msgstr "Production de véhicules avancée Mk2"
 
@@ -14071,15 +14033,12 @@ msgstr "Version %s%s%s%s"
 #~ msgid "Robotic Repair Facility Mk2"
 #~ msgstr "Atelier de réparations robotisées Mk2"
 
-#, fuzzy
 #~ msgid "HESH Mini-Rockets"
 #~ msgstr "Mini-roquettes HESH"
 
-#, fuzzy
 #~ msgid "HESH Mini-Rockets Mk2"
 #~ msgstr "Mini-roquettes HESH Mk2"
 
-#, fuzzy
 #~ msgid "HESH Mini-Rockets Mk3"
 #~ msgstr "Mini-roquettes HESH Mk3"
 
@@ -14118,12 +14077,6 @@ msgstr "Version %s%s%s%s"
 
 #~ msgid "Z NULL PROP"
 #~ msgstr "Z NUL PROP"
-
-#~ msgid "BaBaProp"
-#~ msgstr "BaBaProp"
-
-#~ msgid "BaBaLegs"
-#~ msgstr "BaBaLegs"
 
 #~ msgid "Z NULL REPAIR"
 #~ msgstr "Z NUL RÉPARATION"
@@ -14188,7 +14141,6 @@ msgstr "Version %s%s%s%s"
 #~ msgid "Brazilian Portuguese"
 #~ msgstr "Portugais Brésilien "
 
-#, fuzzy
 #~ msgid "Portuguese"
 #~ msgstr "Portugais"
 
@@ -14209,9 +14161,6 @@ msgstr "Version %s%s%s%s"
 
 #~ msgid "Traditional Chinese"
 #~ msgstr "Chinois Traditionnel"
-
-#~ msgid "Latin"
-#~ msgstr "Latin"
 
 #~ msgid "(Player %u) has detected the borg 'legs' bug! Please enter legs in your console and upload the files to us!"
 #~ msgstr "(Player %u) has detected the borg 'legs' bug! Please enter legs in your console and upload the files to us !"
