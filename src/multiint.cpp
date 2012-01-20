@@ -3626,6 +3626,7 @@ bool startMultiOptions(bool bReenter)
 						if (strcasecmp(difficultyList[j], value.toAscii().constData()) == 0)
 						{
 							game.skDiff[i] = difficultyValue[j];
+							NetPlay.players[i].difficulty = j;
 						}
 					}
 				}
