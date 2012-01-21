@@ -2090,7 +2090,7 @@ int allPlayersOnSameTeam(int except)
 	// Count actual players
 	for (i = 0; i < game.maxPlayers; i++)
 	{
-		filledSlots += (NetPlay.players[i].ai >= 0) ? 1 : 0;
+		filledSlots += (NetPlay.players[i].allocated || NetPlay.players[i].ai >= 0) ? 1 : 0;
 	}
 	// tally up the team counts
 	for (i = 0; i < game.maxPlayers; i++)
