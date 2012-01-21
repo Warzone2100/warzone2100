@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: Warzone 2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
 "POT-Creation-Date: 2012-01-21 17:36+0100\n"
-"PO-Revision-Date: 2011-12-30 22:58+0100\n"
+"PO-Revision-Date: 2012-01-04 14:25+0100\n"
 "Last-Translator: Mészáros Tamás <meszaros.tomi@hotmail.com>\n"
 "Language-Team: Magyar (Hungary) <meszaros.tomi@hotmail.com>\n"
 "Language: \n"
@@ -9025,7 +9025,7 @@ msgstr "A világ ahogy mi ismertük, már vége..."
 
 #: data/base/sequenceaudio/devastation.txt:9
 msgid "The Nuclear Winter hit hard. Disease and famine claimed most of us who had survived the nuclear strikes. Wars over cans of dog food took even more."
-msgstr "A nukleáris tél kemény volt. Járványok és éhínség pusztított azok között, akik túlélték a nukleáris csapást. A mindennapi harcok a konzervekért és a kutyaételért, további áldozatokat szedtek."
+msgstr "A nukleáris tél kemény volt. Járványok és éhínség pusztított azok között, akik túlélték a nukleáris csapást. A háború végén harcok folytak a konzervért és a kutyaeledelért, ami további áldozatokat szedett."
 
 #: data/base/sequenceaudio/devastation.txt:11
 msgid "We'd fled Seattle early in '86. We'd heard that the Rocky Mountains were relatively rad-free."
@@ -13169,63 +13169,6 @@ msgstr " - Épített %s"
 msgid "Version %s-%s%s%s%s"
 msgstr "Verzió %s%s%s%s"
 
-#~ msgid "Activate self-test"
-#~ msgstr "Önellenőrzés aktiválása"
-
-#~ msgid "Failed to create building"
-#~ msgstr "Az épület létrehozása meghiúsult"
-
-#~ msgid "You cannot change AI in a challenge"
-#~ msgstr "Nem tudsz változtatni az AI-on mozgásnál"
-
-#~ msgid "Players"
-#~ msgstr "Játékosok száma"
-
-#~ msgid "Received invalid addGame data."
-#~ msgstr "Érvénytelen játék hozzáadás adat érkezett."
-
-#~ msgid "Create a game first!"
-#~ msgstr "Játékcél felkutatása"
-
-#~ msgid "Received invalid login data."
-#~ msgstr "Érvénytelen bejelentkezési adat érkezett."
-
-#~ msgid "Failed to communicate with the lobby."
-#~ msgstr "Hibás kommunikáció a lobbinál."
-
-#~ msgid "Got server error: %s"
-#~ msgstr "Szerver hiba: %s"
-
-#~ msgid "Game not in the lobby, please login first!"
-#~ msgstr "Játékban ne legyen lobbi, kérlek jelentkezz be először!"
-
-#~ msgid "Authentication failed or not Authenticated"
-#~ msgstr "Azonosítás hibás vagy nem azonosított"
-
-#~ msgid "The lobby rejected you!"
-#~ msgstr "A lobbit elutasítom!"
-
-#~ msgid "Connect IP"
-#~ msgstr "Kapcsolódás IP!"
-
-#~ msgid "Login"
-#~ msgstr "Bejelentkezés"
-
-#~ msgid "Logout"
-#~ msgstr "Kijelentkezés"
-
-#~ msgid "LOBBY LOGIN"
-#~ msgstr "Lobbi bejelentkezés"
-
-#~ msgid "Username:"
-#~ msgstr "Felhasználó név:"
-
-#~ msgid "Password:"
-#~ msgstr "Jelszó megadása:"
-
-#~ msgid "Use your wz2100.net credentials here."
-#~ msgstr "Használd a wz2100.net igazolást itt."
-
 #~ msgid "Construction speed +10%"
 #~ msgstr "Építési sebesség +10%"
 
@@ -13627,6 +13570,63 @@ msgstr "Verzió %s%s%s%s"
 
 #~ msgid "Upgraded battlefield computer system"
 #~ msgstr "Feljavított harctéri számítógép rendszer"
+
+#~ msgid "Received invalid addGame data."
+#~ msgstr "Érvénytelen játék hozzáadás adat érkezett."
+
+#~ msgid "Create a game first!"
+#~ msgstr "Játékcél felkutatása"
+
+#~ msgid "Received invalid login data."
+#~ msgstr "Érvénytelen bejelentkezési adat érkezett."
+
+#~ msgid "Failed to communicate with the lobby."
+#~ msgstr "Hibás kommunikáció a lobbinál."
+
+#~ msgid "Got server error: %s"
+#~ msgstr "Szerver hiba: %s"
+
+#~ msgid "Game not in the lobby, please login first!"
+#~ msgstr "Játékban ne legyen lobbi, kérlek jelentkezz be először!"
+
+#~ msgid "Activate self-test"
+#~ msgstr "Önellenőrzés aktiválása"
+
+#~ msgid "Failed to create building"
+#~ msgstr "Az épület létrehozása meghiúsult"
+
+#~ msgid "Authentication failed or not Authenticated"
+#~ msgstr "Azonosítás hibás vagy nem azonosított"
+
+#~ msgid "The lobby rejected you!"
+#~ msgstr "A lobbit elutasítom!"
+
+#~ msgid "Connect IP"
+#~ msgstr "Kapcsolódás IP!"
+
+#~ msgid "Login"
+#~ msgstr "Bejelentkezés"
+
+#~ msgid "Logout"
+#~ msgstr "Kijelentkezés"
+
+#~ msgid "LOBBY LOGIN"
+#~ msgstr "Lobbi bejelentkezés"
+
+#~ msgid "Username:"
+#~ msgstr "Felhasználó név:"
+
+#~ msgid "Password:"
+#~ msgstr "Jelszó megadása:"
+
+#~ msgid "Use your wz2100.net credentials here."
+#~ msgstr "Használd a wz2100.net igazolást itt."
+
+#~ msgid "You cannot change AI in a challenge"
+#~ msgstr "Nem tudsz változtatni az AI-on mozgásnál"
+
+#~ msgid "Players"
+#~ msgstr "Játékosok száma"
 
 #~ msgid "3 players"
 #~ msgstr "3 játékos"
