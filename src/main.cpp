@@ -95,14 +95,14 @@ enum FOCUS_STATE
 };
 
 #if defined(WZ_OS_WIN)
-# define WZ_WRITEDIR "Warzone 2100 master"
+# define WZ_WRITEDIR "Warzone 2100 3.1"
 #elif defined(WZ_OS_MAC)
 # include <CoreServices/CoreServices.h>
 # include <unistd.h>
 # include "cocoa_wrapper.h"
-# define WZ_WRITEDIR "Warzone 2100 master"
+# define WZ_WRITEDIR "Warzone 2100 3.1"
 #else
-# define WZ_WRITEDIR ".warzone2100-master"
+# define WZ_WRITEDIR ".warzone2100-3.1"
 #endif
 
 bool customDebugfile = false;		// Default false: user has NOT specified where to store the stdout/err file.
