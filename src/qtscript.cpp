@@ -542,6 +542,8 @@ bool loadScriptStates(const char *filename)
 //__ An event that is run when the transporter has arrived with reinforcements in a mission.
 //__ \subsection{eventMissionTimeout()}
 //__ An event that is run when the mission timer has run out.
+//__ \subsection{eventVideoDone()}
+//__ An event that is run when a video show stopped playing.
 bool triggerEvent(SCRIPT_TRIGGER_TYPE trigger)
 {
 	for (int i = 0; i < scripts.size(); ++i)
@@ -564,6 +566,9 @@ bool triggerEvent(SCRIPT_TRIGGER_TYPE trigger)
 			break;
 		case TRIGGER_MISSION_TIMEOUT:
 			callFunction(engine, "eventMissionTimeout", QScriptValueList());
+			break;
+		case TRIGGER_VIDEO_QUIT:
+			callFunction(engine, "eventVideoDone", QScriptValueList());
 			break;
 		}
 	}

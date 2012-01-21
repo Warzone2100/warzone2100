@@ -738,6 +738,7 @@ void videoLoop(void)
 			if (!getScriptWinLoseVideo())
 			{
 				eventFireCallbackTrigger((TRIGGER_TYPE)CALL_VIDEO_QUIT);
+				triggerEvent(TRIGGER_VIDEO_QUIT);
 			}
 			else
 			{

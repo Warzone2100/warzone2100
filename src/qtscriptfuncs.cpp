@@ -1792,6 +1792,38 @@ static QScriptValue js_addStructure(QScriptContext *context, QScriptEngine *)
 	return QScriptValue(psStruct != NULL);
 }
 
+//-- \subsection{setNoGoArea(x1, y1, x2, y2, player)}
+//-- Creates an area on the map on which nothing can be built. If player is zero,
+//-- then landing lights are placed. If player is -1, then a limbo landing zone
+//-- is created and limbo droids placed.
+// FIXME: missing a way to call initNoGoAreas(); check if we can call this in
+// every level start instead of through scripts
+static QScriptValue js_setNoGoArea(QScriptContext *context, QScriptEngine *)
+{
+	const int x1 = context->argument(0).toInt32();
+	const int y1 = context->argument(1).toInt32();
+	const int x2 = context->argument(2).toInt32();
+	const int y2 = context->argument(3).toInt32();
+	const int player = context->argument(4).toInt32();
+
+	SCRIPT_ASSERT(context, x1 >= 0, "Minimum scroll x value %d is less than zero - ", x1);
+	SCRIPT_ASSERT(context, y1 >= 0, "Minimum scroll y value %d is less than zero - ", y1);
+	SCRIPT_ASSERT(context, x2 <= mapWidth, "Maximum scroll x value %d is greater than mapWidth %d", x2, (int)mapWidth);
+	SCRIPT_ASSERT(context, y2 <= mapHeight, "Maximum scroll y value %d is greater than mapHeight %d", y2, (int)mapHeight);
+	SCRIPT_ASSERT(context, player < game.maxPlayers && player >= -1, "Bad player value %d", player);
+	
+	if (player == -1)
+	{
+		setNoGoArea(x1, y1, x2, y2, LIMBO_LANDING);
+		placeLimboDroids();	// this calls the Droids from the Limbo list onto the map
+	}
+	else
+	{
+		setNoGoArea(x1, y1, x2, y2, player);
+	}
+	return QScriptValue();
+}
+
 //-- \subsection{setScrollParams(x1, y1, x2, y2)}
 //-- Limit the scrollable area of the map to the given rectangle.
 static QScriptValue js_setScrollParams(QScriptContext *context, QScriptEngine *)
@@ -1935,6 +1967,7 @@ bool registerFunctions(QScriptEngine *engine)
 	engine->globalObject().setProperty("addStructure", engine->newFunction(js_addStructure));
 	engine->globalObject().setProperty("loadLevel", engine->newFunction(js_loadLevel));
 	engine->globalObject().setProperty("setDroidExperience", engine->newFunction(js_setDroidExperience));
+	engine->globalObject().setProperty("setNoGoArea", engine->newFunction(js_setNoGoArea));
 
 	// Set some useful constants
 	engine->globalObject().setProperty("DORDER_ATTACK", DORDER_ATTACK, QScriptValue::ReadOnly | QScriptValue::Undeletable);
