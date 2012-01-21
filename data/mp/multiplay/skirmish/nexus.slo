@@ -4010,13 +4010,16 @@ function void rebuildStructures()
 				_x = rebuildStructX[_count];
 				_y = rebuildStructY[_count];
 
-				_truck = closestIdleTruck(_x, _y);
-
-				if(_truck != NULLOBJECT)
+				if (isStructureAvailable(_stat, me))
 				{
-					if(numBuildSameBuilding(_stat, _x, _y) == 0)	//make sure no one is building already
+					_truck = closestIdleTruck(_x, _y);
+
+					if (_truck != NULLOBJECT)
 					{
-						buildOnExactLocation(_truck, _x, _y, _stat);
+						if (numBuildSameBuilding(_stat, _x, _y) == 0)	//make sure no one is building already
+						{
+							buildOnExactLocation(_truck, _x, _y, _stat);
+						}
 					}
 				}
 			}
