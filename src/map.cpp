@@ -36,7 +36,6 @@
 #include "hci.h"
 #include "projectile.h"
 #include "display3d.h"
-#include "lighting.h"
 #include "game.h"
 #include "texture.h"
 #include "advvis.h"

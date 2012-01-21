@@ -48,7 +48,6 @@
 #include "lib/sound/audio_id.h"
 #include "radar.h"
 #include "miscimd.h"
-#include "lighting.h"
 #include "lib/framework/math_ext.h"
 #include "console.h"
 #include "order.h"

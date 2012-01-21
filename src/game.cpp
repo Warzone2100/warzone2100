@@ -65,7 +65,6 @@
 #include "scores.h"
 #include "anim_id.h"
 #include "design.h"
-#include "lighting.h"
 #include "component.h"
 #include "radar.h"
 #include "cmddroid.h"

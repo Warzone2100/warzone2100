@@ -2,4 +2,4 @@
 name = "Semperfi"
 vlo = semperfi.vlo
 slo = semperfi.slo
-#js = semperfi.js
+tip = "Experimental AI"

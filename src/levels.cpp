@@ -38,7 +38,6 @@
 #include "mission.h"
 #include "levelint.h"
 #include "game.h"
-#include "lighting.h"
 #include "lib/ivis_opengl/piestate.h"
 #include "data.h"
 #include "lib/ivis_opengl/ivi.h"

@@ -52,13 +52,10 @@ extern void setTheSun(Vector3f newSun);
 extern Vector3f getTheSun(void);
 
 extern void	processLight(LIGHT *psLight);
-//extern void	initLighting( void );
 extern void initLighting(UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y2);
 extern void	lightValueForTile(UDWORD tileX, UDWORD tileY);
 extern void	doBuildingLights( void );
 extern void UpdateFogDistance(float distance);
 extern void	calcDroidIllumination(DROID *psDroid);
-//darkens down the tiles that are outside the scroll limits
-extern void setScrollLimitLighting(void);
 
 #endif // __INCLUDED_SRC_LIGHTNING_H__
