@@ -1,3 +1,17 @@
+3.1-beta1:
+ * General:
+   * Fix: T2/T3 games (ticket:3044, commit:c907d5ab1c554e2fe402ca46bb9d1f9ab96a5360)
+ * UI:
+   * Change: Redesign lobby screen, shows disabled tanks/cyborgs/vtols (commit:617e4c01e1a82e4058a38b0973b8eb9a68807d7b)
+   * Fix: Prevent players from choosing already used colours (ticket:3043, commit:7656d2f84b2db85b373fc0678a5997a8b2c19d37)
+   * Fix: Make aborted research disappear from its research facility (ticket:3046, commit:03833edf3fc5c5f726f507d5352635fba9c7e475)
+ * Challenges:
+   * Fix: Team selection, position lock, allow AI selection (commit:10faa4c77d0b8729e46066744f81f518eca9d4c4)
+ * Translations:
+   * Update: French (commit:3c45fde1438a39936097d024a7c6eef6a0b28785)
+   * Update: Turkish (ticket:3052, commit:311ae3b1cfe5c99cec2552f68e366eaeeea9de75)
+   * Update: Hungarian (ticket:3031, commit:fadffc05569db5ab1b4323b7aa88067ec56b0464)
+
 master_20120109:
  * General:
    * Change: Stored templates. Automatically adds a unit design when all needed research is available (ticket:1946, commit:a6fa286dcf463d4c6d74e8a874e70f671f3d5018, commit:add866851b5a58e38004a9cb816a22aedc1e10d9, commit:95bdafdffb78826b217860356d7ee546654d67b4, commit:e3a981c4f8a92b054d9962ef0073d2f603e7655e, commit:4f1b79d3d95a8624cd151b016126f20559468ad7, commit:4edc0d77a67f4db3b230f9d3089ee14efc9ad4bd)
