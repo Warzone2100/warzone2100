@@ -372,7 +372,7 @@ void sendPlayerGameTime()
 
 	for (player = 0; player < game.maxPlayers; ++player)
 	{
-		if (!myResponsibility(player) && whosResponsible(player) != realSelectedPlayer)
+		if (!myResponsibility(player))
 		{
 			continue;
 		}

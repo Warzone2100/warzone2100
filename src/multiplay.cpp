@@ -477,7 +477,7 @@ int whosResponsible(int player)
 //returns true if selected player is responsible for 'player'
 bool myResponsibility(int player)
 {
-	return whosResponsible(player) == selectedPlayer;
+	return (whosResponsible(player) == selectedPlayer || whosResponsible(player) == realSelectedPlayer);
 }
 
 //returns true if 'player' is responsible for 'playerinquestion'
