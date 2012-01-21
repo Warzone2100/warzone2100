@@ -110,7 +110,6 @@ noinst_HEADERS = \
 	oprint.h \
 	orderdef.h \
 	order.h \
-	parsetest.h \
 	pointtree.h \
 	positiondef.h \
 	power.h \
@@ -227,7 +226,6 @@ warzone2100_SOURCES = \
 	objmem.cpp \
 	oprint.cpp \
 	order.cpp \
-	parsetest.cpp \
 	pointtree.cpp \
 	power.cpp \
 	projectile.cpp \

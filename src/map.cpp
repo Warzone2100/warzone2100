@@ -1627,50 +1627,6 @@ bool readVisibilityData(const char* fileName)
 	return true;
 }
 
-static void astarTest(const char *name, int x1, int y1, int x2, int y2)
-{
-	int		i;
-	MOVE_CONTROL	route;
-	int		x = world_coord(x1);
-	int		y = world_coord(y1);
-	int		endx = world_coord(x2);
-	int		endy = world_coord(y2);
-	clock_t		stop;
-	clock_t		start = clock();
-	bool		retval;
-
-	scriptInit();
-	retval = levLoadData(name, NULL, GTYPE_SCENARIO_START);
-	ASSERT(retval, "Could not load %s", name);
-	route.asPath = NULL;
-	for (i = 0; i < 100; i++)
-	{
-		route.numPoints = 0;
-		free(route.asPath);
-		route.asPath = NULL;
-	}
-	stop = clock();
-	fprintf(stdout, "\t\tA* timing %s: %.02f (%d nodes)\n", name,
-	        (double)(stop - start) / (double)CLOCKS_PER_SEC, route.numPoints);
-	start = clock();
-	fpathTest(x, y, endx, endy);
-	stop = clock();
-	fprintf(stdout, "\t\tfPath timing %s: %.02f (%d nodes)\n", name,
-	        (double)(stop - start) / (double)CLOCKS_PER_SEC, route.numPoints);
-	retval = levReleaseAll();
-	assert(retval);
-}
-
-void mapTest()
-{
-	fprintf(stdout, "\tMap self-test...\n");
-
-	astarTest("Sk-BeggarsKanyon-T1", 16, 5, 119, 182);
-	astarTest("Sk-MizaMaze-T3", 5, 5, 108, 112);
-
-	fprintf(stdout, "\tMap self-test: PASSED\n");
-}
-
 // Convert a direction into an offset.
 // dir 0 => x = 0, y = -1
 #define NUM_DIR		8

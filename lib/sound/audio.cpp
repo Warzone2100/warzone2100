@@ -1190,25 +1190,3 @@ void audio_RemoveObj(SIMPLE_OBJECT const *psObj)
 	if (count)
 		debug(LOG_MEMORY, "audio_RemoveObj: ***Warning! psOBJ %p was found %u times in the list of playing audio samples", psObj, count);
 }
-
-static bool dummyCB(WZ_DECL_UNUSED void* dummy)
-{
-	return true;
-}
-
-void audioTest()
-{
-	int i;
-
-	for (i = 0; i < 10; i++)
-	{
-		// On non-debug builds prevent warnings about defining but not using dummyCB
-		dummyCB(NULL);
-
-		assert(audio_Shutdown());
-		assert(audio_Init(dummyCB, true));
-		assert(!audio_Disabled());
-		audio_Update();
-	}
-	fprintf(stdout, "\tAudio self-test: PASSED\n");
-}

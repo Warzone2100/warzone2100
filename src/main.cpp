@@ -76,7 +76,6 @@
 #include "wrappers.h"
 #include "version.h"
 #include "map.h"
-#include "parsetest.h"
 #include "keybind.h"
 #include <time.h>
 
@@ -1174,17 +1173,6 @@ int realmain(int argc, char *argv[])
 	// Find out where to find the data
 	scanDataDirs();
 
-	// Must be run before OpenGL driver is properly initialized due to
-	// strange conflicts - Per
-	if (selfTest)
-	{
-		memset(enabled_debug, 0, sizeof(*enabled_debug) * LOG_LAST);
-		fprintf(stdout, "Carrying out self-test:\n");
-		playListTest();
-		audioTest();
-		soundTest();
-	}
-
 	// Now we check the mods to see if they exist or not (specified on the command line)
 	// They are all capped at 100 mods max(see clparse.c)
 	// FIX ME: I know this is a bit hackish, but better than nothing for now?
@@ -1291,16 +1279,6 @@ int realmain(int argc, char *argv[])
 
 	//set all the pause states to false
 	setAllPauseStates(false);
-
-	/* Runtime unit testing */
-	if (selfTest)
-	{
-		parseTest();
-		levTest();
-		mapTest();
-		fprintf(stdout, "All tests PASSED!\n");
-		exit(0);
-	}
 
 	// Copy this info to be used by the crash handler for the dump file
 	ssprintf(buf,"Using Backend: %s", BACKEND);

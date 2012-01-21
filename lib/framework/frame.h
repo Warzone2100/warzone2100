@@ -81,8 +81,6 @@ enum QUEUE_MODE
  */
 extern bool frameInitialise(void);
 
-extern bool selfTest;
-
 /** Shut down the framework library.
  * This clears up all the Direct Draw stuff and ensures
  * that Windows gets restored properly after Full screen mode.

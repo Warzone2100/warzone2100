@@ -1387,11 +1387,6 @@ bool scrAddReticuleButton(void)
 		return false;
 	}
 
-	if (selfTest)
-	{
-		return true;	// hack to prevent crashing in self-test
-	}
-
 	//set the appropriate flag to 'draw' the button
 	switch (val)
 	{
@@ -1438,11 +1433,6 @@ bool scrRemoveReticuleButton(void)
 	if (!stackPopParams(2, VAL_INT, &val,VAL_BOOL, &bReset))
 	{
 		return false;
-	}
-
-	if (selfTest)
-	{
-		return true;
 	}
 
 	if(bInTutorial)
@@ -1529,7 +1519,7 @@ bool scrAddMessage(void)
 			}
 		}
 
-		if (playImmediate && !selfTest)
+		if (playImmediate)
 		{
 			displayImmediateMessage(psMessage);
 			stopReticuleButtonFlash(IDRET_INTEL_MAP);

@@ -41,8 +41,6 @@
 
 /* Linux specific stuff */
 
-bool selfTest = false;
-
 /************************************************************************************
  *
  *	Player globals

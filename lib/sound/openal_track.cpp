@@ -1503,15 +1503,3 @@ void sound_SetEffectsVolume(float volume)
 	}
 #endif
 }
-
-void soundTest()
-{
-	int i;
-
-	for (i = 0; i < 25; i++)
-	{
-		assert(sound_InitLibrary());
-		sound_ShutdownLibrary();
-	}
-	fprintf(stdout, "\tSound self-test: PASSED\n");
-}
