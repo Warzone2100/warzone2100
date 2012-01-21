@@ -17,7 +17,6 @@
 				438B0C26137732A5008184FC /* Ogg - Fetch source */,
 				438B0C1E13773258008184FC /* Png - Fetch source */,
 				438B0C32137733B4008184FC /* PhysFS - Fetch source */,
-				4366712213D1F83200FE85BA /* QuesoGLC - Fetch source */,
 				438B0C2B1377336E008184FC /* Vorbis - Fetch source */,
 				438B0C3A137733F8008184FC /* Theora - Fetch source */,
 				438B0C101377317F008184FC /* Gettext - Fetch source */,
@@ -4041,7 +4040,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "DirectorY=\"QT_\"\nOutDir=\"QT\"\nFileName=\"QT.tar.gz\"\nBuiltDLP=\"http://downloads.sourceforge.net/project/warzone2100/build-tools/mac/QT.tar.gz\"\nMD5Sum=\"8bd5dd347b391ab4a29105f144c64b4d\"\n\nconfigs/FetchPrebuilt.sh \"${DirectorY}\" \"${OutDir}\" \"${FileName}\" \"${BuiltDLP}\" \"${MD5Sum}\"\nexit ${?}\n\n# tar -czf QT.tar.gz --exclude '.DS_Store' QT_";
+			shellScript = "DirectorY=\"QT-4.7.4\"\nOutDir=\"QT\"\nFileName=\"QT-4.7.4.tgz\"\nBuiltDLP=\"http://downloads.sourceforge.net/project/warzone2100/build-tools/mac/QT-4.7.4.tgz\"\nMD5Sum=\"74e410b376e1c19b0990f637f646f26e\"\n\nconfigs/FetchPrebuilt.sh \"${DirectorY}\" \"${OutDir}\" \"${FileName}\" \"${BuiltDLP}\" \"${MD5Sum}\"\nexit ${?}\n\n# tar -czf QT-4.7.4.tgz --exclude '.DS_Store' QT-4.7.4\n";
 		};
 		433360B311A079F700380F5E /* Moc */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -4071,20 +4070,6 @@
 			shellPath = /bin/sh;
 			shellScript = "DirectorY=\"gettext-0.17.mpkg_\"\nOutDir=\"gettext-0.17.mpkg\"\nFileName=\"gettext-0.17.mpkg.tar.gz\"\nBuiltDLP=\"http://downloads.sourceforge.net/project/warzone2100/build-tools/mac/gettext-0.17.mpkg.tar.gz\"\nMD5Sum=\"ba7984918fe0b36e2e7c786693e005f2\"\n\n# Checks\nexport PATH=$PATH:/sw/bin:/opt/local/bin\nif type -aP msgfmt; then\n    echo \"msgfmt exists, skipping\"\n    exit 0\nelif [ -x \"/opt/local/bin/port\" ]; then\n  echo \"warning: Please run the following command in the terminal: 'sudo port install gettext'.\" >&2\n  open -b com.apple.Terminal\n  exit 1\nelif [ -d \"${SRCROOT}/external/${OutDir}\" ]; then\n    touch build/notrans.dis\n    echo \"warning: Gettext support has been disabled because we could not find a binary.\" >&2\n    exit 0\nelif [ ! `sw_vers -productVersion | sed -e 's:^...\\(.\\)..$:\\1:'` -ge \"6\" ]; then\n    touch build/notrans.dis\n    echo \"warning: Gettext support has been disabled because we could not find a binary.\" >&2\n    exit 0\nfi\n\nconfigs/FetchPrebuilt.sh \"${DirectorY}\" \"${OutDir}\" \"${FileName}\" \"${BuiltDLP}\" \"${MD5Sum}\"\nFetchExitStatus=$?\n\n# Install\nif [ ! \"${FetchExitStatus}\" = \"0\" ]; then\n    exit \"${FetchExitStatus}\"\nelif [ -d \"${SRCROOT}/external/${OutDir}\" ]; then\n    echo \" Please install the gettext package before continuing.\" >&2\n    open \"${SRCROOT}/external/${OutDir}\"\n    exit 1\nfi";
 		};
-		4366712213D1F83200FE85BA /* QuesoGLC - Fetch source */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "QuesoGLC - Fetch source";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "DirectorY=\"quesoglc-0.7-r921\"\nOutDir=\"quesoglc\"\nFileName=\"quesoglc-0.7-r921.tar.gz\"\nSourceDLP=\"http://downloads.sourceforge.net/project/warzone2100/build-tools/mac/quesoglc-0.7-r921.tar.gz\"\nMD5Sum=\"ee73eebd23292dfb17365ff19eb15a0e\"\n\nconfigs/FetchSource.sh \"${DirectorY}\" \"${OutDir}\" \"${FileName}\" \"${SourceDLP}\" \"${MD5Sum}\"\nexit ${?}\n\n# tar -czf quesoglc-0.7-r921.tgz --exclude '.svn' --exclude '.DS_Store' quesoglc-0.7-r921\n";
-		};
 		436D24A4149641D200BF74E3 /* SDL */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -4097,7 +4082,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "DirectorY=\"SDL_\"\nOutDir=\"SDL\"\nFileName=\"SDL.tar.gz\"\nBuiltDLP=\"http://downloads.sourceforge.net/project/warzone2100/build-tools/mac/SDL.tar.gz\"\nMD5Sum=\"200bf42ff5118a57b26114248cc6b9fe\"\n\nconfigs/FetchPrebuilt.sh \"${DirectorY}\" \"${OutDir}\" \"${FileName}\" \"${BuiltDLP}\" \"${MD5Sum}\"\nexit ${?}\n";
+			shellScript = "DirectorY=\"SDL-1.2.15\"\nOutDir=\"SDL\"\nFileName=\"SDL-1.2.15.tgz\"\nBuiltDLP=\"http://downloads.sourceforge.net/project/warzone2100/build-tools/mac/SDL-1.2.15.tgz\"\nMD5Sum=\"11191d1d17befc3a2ddc9065effacfac\"\n\nconfigs/FetchPrebuilt.sh \"${DirectorY}\" \"${OutDir}\" \"${FileName}\" \"${BuiltDLP}\" \"${MD5Sum}\"\nexit ${?}\n\n# tar -czf SDL-1.2.15.tgz --exclude '.DS_Store' SDL-1.2.15\n";
 		};
 		438B0C101377317F008184FC /* Gettext - Fetch source */ = {
 			isa = PBXShellScriptBuildPhase;

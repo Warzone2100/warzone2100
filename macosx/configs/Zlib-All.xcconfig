@@ -4,6 +4,7 @@
 
 
 PRODUCT_NAME = Zlib
+FRAMEWORK_SEARCH_PATHS = $(inherited) $(FRAMEWORK_SEARCH_PATHS_QUOTED_2)
 
 GCC_PREPROCESSOR_DEFINITIONS =  $(inherited) HAVE_UNISTD_H
 WARNING_CFLAGS = -Wno-unused-value // Silence warnings that are not ours
