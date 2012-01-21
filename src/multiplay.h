@@ -257,6 +257,4 @@ extern	bool multiplayPlayersReady	(bool bNotifyStatus);
 extern	void startMultiplayerGame	(void);
 extern	void resetReadyStatus		(bool bSendOptions);
 
-extern	bool bPlayerReadyGUI[MAX_PLAYERS];
-
 #endif // __INCLUDED_SRC_MULTIPLAY_H__

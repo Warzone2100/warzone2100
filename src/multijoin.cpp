@@ -301,7 +301,6 @@ bool MultiPlayerJoin(UDWORD playerIndex)
 		// setup data for this player, then broadcast it to the other players.
 		setupNewPlayer(playerIndex);						// setup all the guff for that player.
 		sendOptions();
-		bPlayerReadyGUI[playerIndex] = false;
 
 		// if skirmish and game full, then kick...
 		if (NetPlay.playercount > game.maxPlayers)

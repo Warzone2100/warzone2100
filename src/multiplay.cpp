@@ -82,7 +82,6 @@ MULTIPLAYERINGAME			ingame;
 
 char						beaconReceiveMsg[MAX_PLAYERS][MAX_CONSOLE_STRING_LENGTH];	//beacon msg for each player
 char								playerName[MAX_PLAYERS][MAX_STR_LENGTH];	//Array to store all player names (humans and AIs)
-bool						bPlayerReadyGUI[MAX_PLAYERS] = {false};
 
 /////////////////////////////////////
 /* multiplayer message stack stuff */
@@ -1950,13 +1949,6 @@ const char* getPlayerColourName(int player)
 /* Reset ready status for all players */
 void resetReadyStatus(bool bSendOptions)
 {
-	unsigned int player;
-
-	for(player = 0; player < MAX_PLAYERS; player++)
-	{
-		bPlayerReadyGUI[player] = false;
-	}
-
 	// notify all clients if needed
 	if(bSendOptions)
 	{
