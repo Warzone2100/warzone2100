@@ -1308,7 +1308,7 @@ static QScriptValue js_orderDroidBuild(QScriptContext *context, QScriptEngine *)
 	// Don't allow scripts to order structure builds if players structure limit has been reached.
 	if (!IsPlayerStructureLimitReached(psDroid->player))
 	{
-		orderDroidStatsLocDir(psDroid, order, psStats, world_coord(x), world_coord(y), 0, ModeQueue);
+		orderDroidStatsLocDir(psDroid, order, psStats, world_coord(x) + TILE_UNITS / 2, world_coord(y) + TILE_UNITS / 2, 0, ModeQueue);
 		return QScriptValue(false);
 	}
 	return QScriptValue(true);
