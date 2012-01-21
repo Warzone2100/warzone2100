@@ -648,7 +648,6 @@
 		43F30913136BAEE900AFD307 /* QtNetwork.framework in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 4333612011A07FB900380F5E /* QtNetwork.framework */; };
 		647D9C571039289A006D37CF /* challenge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 647D9C551039289A006D37CF /* challenge.cpp */; };
 		9742E5730DF9975E000A5D41 /* lexer_input.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9742E5710DF9975E000A5D41 /* lexer_input.cpp */; };
-		9742E5770DF9979C000A5D41 /* parsetest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9742E5750DF9979C000A5D41 /* parsetest.cpp */; };
 		974964240F5ABBBB00A38899 /* hashtable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 974964220F5ABBBB00A38899 /* hashtable.cpp */; };
 		9749642C0F5ABBE100A38899 /* stdio_ext.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 974964280F5ABBE100A38899 /* stdio_ext.cpp */; };
 		974964330F5ABC3F00A38899 /* eventsave.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9749642F0F5ABC3F00A38899 /* eventsave.cpp */; };
@@ -1829,8 +1828,6 @@
 		647D9C561039289A006D37CF /* challenge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = challenge.h; path = ../src/challenge.h; sourceTree = SOURCE_ROOT; };
 		9742E5710DF9975E000A5D41 /* lexer_input.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = lexer_input.cpp; path = ../lib/framework/lexer_input.cpp; sourceTree = SOURCE_ROOT; };
 		9742E5720DF9975E000A5D41 /* lexer_input.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = lexer_input.h; path = ../lib/framework/lexer_input.h; sourceTree = SOURCE_ROOT; };
-		9742E5750DF9979C000A5D41 /* parsetest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = parsetest.cpp; path = ../src/parsetest.cpp; sourceTree = SOURCE_ROOT; };
-		9742E5760DF9979C000A5D41 /* parsetest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = parsetest.h; path = ../src/parsetest.h; sourceTree = SOURCE_ROOT; };
 		9749641E0F5ABB9E00A38899 /* stringdef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = stringdef.h; path = ../src/stringdef.h; sourceTree = SOURCE_ROOT; };
 		974964220F5ABBBB00A38899 /* hashtable.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = hashtable.cpp; path = ../lib/gamelib/hashtable.cpp; sourceTree = SOURCE_ROOT; };
 		974964230F5ABBBB00A38899 /* hashtable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = hashtable.h; path = ../lib/gamelib/hashtable.h; sourceTree = SOURCE_ROOT; };
@@ -2124,8 +2121,6 @@
 				974964290F5ABBE100A38899 /* stdio_ext.h */,
 				9749642A0F5ABBE100A38899 /* string_ext.h */,
 				9749642B0F5ABBE100A38899 /* vector.h */,
-				9742E5750DF9979C000A5D41 /* parsetest.cpp */,
-				9742E5760DF9979C000A5D41 /* parsetest.h */,
 				9742E5710DF9975E000A5D41 /* lexer_input.cpp */,
 				9742E5720DF9975E000A5D41 /* lexer_input.h */,
 				02AAD13F0D9ED28C00248B0F /* file.h */,
@@ -4521,7 +4516,6 @@
 				02AAD1440D9ED28C00248B0F /* i18n.cpp in Sources */,
 				02BBB2090DA874F6002D438B /* exceptionhandler.cpp in Sources */,
 				9742E5730DF9975E000A5D41 /* lexer_input.cpp in Sources */,
-				9742E5770DF9979C000A5D41 /* parsetest.cpp in Sources */,
 				22E244D70E65361800EC2B3E /* baseobject.cpp in Sources */,
 				024480240C5E4BEE00E1A641 /* utf.cpp in Sources */,
 				976AE8280EA0B59A00F2473F /* timer.cpp in Sources */,
