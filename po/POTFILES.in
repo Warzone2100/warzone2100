@@ -284,7 +284,6 @@ src/objects.cpp
 src/objmem.cpp
 src/oprint.cpp
 src/order.cpp
-src/parsetest.cpp
 src/pointtree.cpp
 src/power.cpp
 src/projectile.cpp
