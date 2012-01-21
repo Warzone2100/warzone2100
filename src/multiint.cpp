@@ -2081,7 +2081,33 @@ bool recvPositionRequest(NETQUEUE queue)
 	return changePosition(player, position);
 }
 
-#define ANYENTRY 0xFF		// used to allow any team slot to be used.
+// if so, return that team; if not, return -1
+int allPlayersOnSameTeam(int except)
+{
+	int inSlot[MAX_PLAYERS] = {0};
+
+	int i, disallow = -1, filledSlots = 0;
+	// Count actual players
+	for (i = 0; i < game.maxPlayers; i++)
+	{
+		filledSlots += (NetPlay.players[i].ai >= 0) ? 1 : 0;
+	}
+	// tally up the team counts
+	for (i = 0; i < game.maxPlayers; i++)
+	{
+		if (i != except)
+		{
+			inSlot[NetPlay.players[i].team]++;
+			if (inSlot[NetPlay.players[i].team] >= filledSlots - (except >= 0) ? 1 : 0)
+			{
+				// Make sure all players can't be on same team.
+				disallow = NetPlay.players[i].team;
+			}
+		}
+	}
+	return disallow;
+}
+
 /*
  * Opens a menu for a player to choose a team
  * 'player' is a player id of the player who will get a new team assigned
@@ -2089,8 +2115,7 @@ bool recvPositionRequest(NETQUEUE queue)
 static void addTeamChooser(UDWORD player)
 {
 	UDWORD i;
-	int disallow = ANYENTRY;
-	SDWORD inSlot[MAX_PLAYERS] = {0};
+	int disallow = allPlayersOnSameTeam(player);
 
 	debug(LOG_NET, "Opened team chooser for %d, current team: %d", player, NetPlay.players[player].team);
 
@@ -2098,20 +2123,6 @@ static void addTeamChooser(UDWORD player)
 
 	// add form.
 	addBlueForm(MULTIOP_PLAYERS, MULTIOP_TEAMCHOOSER_FORM, "", 7, playerBoxHeight(player), MULTIOP_ROW_WIDTH, MULTIOP_TEAMSHEIGHT);
-
-	// tally up the team counts
-	for (i=0; i< game.maxPlayers ; i++)
-	{
-		if (i != player)
-		{
-			inSlot[NetPlay.players[i].team]++;
-			if (inSlot[NetPlay.players[i].team] >= game.maxPlayers - 1)
-			{
-				// Make sure all players can't be on same team.
-				disallow = NetPlay.players[i].team;
-			}
-		}
-	}
 
 	int teamW = iV_GetImageWidth(FrontImages, IMAGE_TEAM0);
 	int teamH = iV_GetImageHeight(FrontImages, IMAGE_TEAM0);
@@ -2152,6 +2163,8 @@ static void closeTeamChooser(void)
 
 static void drawReadyButton(UDWORD player)
 {
+	int disallow = allPlayersOnSameTeam(-1);
+
 	// delete 'ready' botton form
 	widgDelete(psWScreen, MULTIOP_READY_FORM_ID + player);
 
@@ -2171,6 +2184,11 @@ static void drawReadyButton(UDWORD player)
 	else if (!NetPlay.players[player].allocated)
 	{
 		return;	// closed or open
+	}
+
+	if (disallow != -1)
+	{
+		return;
 	}
 
 	// draw 'ready' button
