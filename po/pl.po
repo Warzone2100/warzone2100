@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2012-01-20 19:25+0100\n"
+"POT-Creation-Date: 2012-01-21 17:36+0100\n"
 "PO-Revision-Date: 2011-12-18 21:11+0100\n"
 "Last-Translator: Michał D. aka Emdek <emdeck@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
@@ -10336,145 +10336,141 @@ msgstr "Gra strategiczna"
 msgid "Close"
 msgstr "Zamknij"
 
-#: src/clparse.cpp:242
+#: src/clparse.cpp:241
 msgid "Set configuration directory"
 msgstr "Ustaw katalog z konfiguracją"
 
-#: src/clparse.cpp:242
+#: src/clparse.cpp:241
 msgid "configuration directory"
 msgstr "katalog z konfiguracją"
 
-#: src/clparse.cpp:243
+#: src/clparse.cpp:242
 msgid "Set default data directory"
 msgstr "Ustaw domyślny katalog danych"
 
-#: src/clparse.cpp:243
+#: src/clparse.cpp:242
 msgid "data directory"
 msgstr "katalog danych"
 
-#: src/clparse.cpp:244
+#: src/clparse.cpp:243
 msgid "Show debug for given level"
 msgstr "Pokaż odpluskwianie dla danego poziomu"
 
-#: src/clparse.cpp:244
+#: src/clparse.cpp:243
 msgid "debug level"
 msgstr "poziom odpluskwiania"
 
-#: src/clparse.cpp:245
+#: src/clparse.cpp:244
 msgid "Log debug output to file"
 msgstr "Loguj odpluskwianie do pliku"
 
-#: src/clparse.cpp:245
+#: src/clparse.cpp:244
 msgid "file"
 msgstr "plik"
 
-#: src/clparse.cpp:246
+#: src/clparse.cpp:245
 msgid "Flush all debug output written to stderr"
 msgstr "Wyślij dane odpluskwiania do stderr"
 
-#: src/clparse.cpp:247
+#: src/clparse.cpp:246
 msgid "Play in fullscreen mode"
 msgstr "Graj na pełnym ekranie"
 
-#: src/clparse.cpp:248
+#: src/clparse.cpp:247
 msgid "Load a specific game"
 msgstr "Wczytaj specyficzną grę"
 
-#: src/clparse.cpp:248
+#: src/clparse.cpp:247
 msgid "game-name"
 msgstr "gra-nazwa"
 
-#: src/clparse.cpp:249
+#: src/clparse.cpp:248
 msgid "Show this help message and exit"
 msgstr "Pokaż ten ekran pomocy i wyjdź"
 
-#: src/clparse.cpp:250
+#: src/clparse.cpp:249
 msgid "Enable a global mod"
 msgstr "Włącz mod globalny"
 
+#: src/clparse.cpp:249
 #: src/clparse.cpp:250
 #: src/clparse.cpp:251
-#: src/clparse.cpp:252
 msgid "mod"
 msgstr "mod"
 
-#: src/clparse.cpp:251
+#: src/clparse.cpp:250
 msgid "Enable a campaign only mod"
 msgstr "Włącz mod do kampanii"
 
-#: src/clparse.cpp:252
+#: src/clparse.cpp:251
 msgid "Enable a multiplay only mod"
 msgstr "Włącz mod do multi"
 
-#: src/clparse.cpp:253
+#: src/clparse.cpp:252
 msgid "Disable asserts"
 msgstr "Wyłącz asercje"
 
-#: src/clparse.cpp:254
+#: src/clparse.cpp:253
 msgid "Causes a crash to test the crash handler"
 msgstr "Powoduje awarię w celu sprawdzenia obsługi awarii"
 
-#: src/clparse.cpp:255
+#: src/clparse.cpp:254
 msgid "Load a saved game"
 msgstr "Wczytaj zapisaną grę"
 
-#: src/clparse.cpp:255
+#: src/clparse.cpp:254
 msgid "savegame"
 msgstr "zapisana gra"
 
-#: src/clparse.cpp:256
+#: src/clparse.cpp:255
 msgid "Play in windowed mode"
 msgstr "Graj w oknie"
 
-#: src/clparse.cpp:257
+#: src/clparse.cpp:256
 msgid "Show version information and exit"
 msgstr "Wyświetl informację o wersji i wyjdź"
 
-#: src/clparse.cpp:258
+#: src/clparse.cpp:257
 msgid "Set the resolution to use"
 msgstr "Ustaw rozdzielczość"
 
-#: src/clparse.cpp:258
+#: src/clparse.cpp:257
 msgid "WIDTHxHEIGHT"
 msgstr "SZEROKOŚĆxWYSOKOŚĆ"
 
-#: src/clparse.cpp:259
+#: src/clparse.cpp:258
 msgid "Enable shadows"
 msgstr "Włącz cienie"
 
-#: src/clparse.cpp:260
+#: src/clparse.cpp:259
 msgid "Disable shadows"
 msgstr "Wyłącz cienie"
 
-#: src/clparse.cpp:261
+#: src/clparse.cpp:260
 msgid "Enable sound"
 msgstr "Włącz dźwięk"
 
-#: src/clparse.cpp:262
+#: src/clparse.cpp:261
 msgid "Disable sound"
 msgstr "Wyłącz dźwięk"
 
-#: src/clparse.cpp:263
-msgid "Activate self-test"
-msgstr "Aktywuj autotest"
-
-#: src/clparse.cpp:264
+#: src/clparse.cpp:262
 msgid "connect directly to IP/hostname"
 msgstr "połącz od razu przez IP/nazwę hosta"
 
-#: src/clparse.cpp:264
+#: src/clparse.cpp:262
 msgid "host"
 msgstr "host"
 
-#: src/clparse.cpp:265
+#: src/clparse.cpp:263
 msgid "go directly to host screen"
 msgstr "Idź od razu na ekran hosta"
 
-#: src/clparse.cpp:266
+#: src/clparse.cpp:264
 msgid "Enable texture compression"
 msgstr "Włącz kompresję tekstur"
 
-#: src/clparse.cpp:267
+#: src/clparse.cpp:265
 msgid "Disable texture compression"
 msgstr "Wyłącz kompresję tekstur"
 
@@ -10647,7 +10643,7 @@ msgid "Player dropped"
 msgstr "Gracz odrzucony"
 
 #: src/display3d.cpp:657
-#: src/multiint.cpp:2180
+#: src/multiint.cpp:2198
 msgid "Waiting for other players"
 msgstr "Oczekiwanie na graczy"
 
@@ -10655,17 +10651,17 @@ msgstr "Oczekiwanie na graczy"
 msgid "Out of sync"
 msgstr "Brak synchronizacji"
 
-#: src/display.cpp:1658
+#: src/display.cpp:1657
 msgid "Cannot Build. Oil Resource Burning."
 msgstr "Nie można budować. Płonie ropa."
 
-#: src/display.cpp:1846
-#: src/display.cpp:2397
+#: src/display.cpp:1845
+#: src/display.cpp:2396
 #, c-format
 msgid "%s - Damage %d%% - Experience %.1f, %s"
 msgstr "%s - Obrażenia %d%% - Doświadczenie %.1f, %s"
 
-#: src/display.cpp:1862
+#: src/display.cpp:1861
 #, c-format
 msgid "%s - Allied - Damage %d%% - Experience %d, %s"
 msgstr "%s - Sojusznik - Obrażenia %d%% - Doświadczenie %d, %s"
@@ -10945,7 +10941,7 @@ msgstr "50%"
 
 #: src/frontend.cpp:543
 #: src/frontend.cpp:682
-#: src/multiplay.cpp:1924
+#: src/multiplay.cpp:1923
 msgid "Black"
 msgstr "Czarny"
 
@@ -11129,7 +11125,7 @@ msgid "GAME OPTIONS"
 msgstr "USTAWIENIA GRY"
 
 #: src/frontend.cpp:1399
-#: src/multiint.cpp:2446
+#: src/multiint.cpp:2464
 msgid "Mod: "
 msgstr "Mod: "
 
@@ -12604,136 +12600,136 @@ msgstr "Zezwól innym graczom na użycie tego slotu"
 msgid "Leave this slot unused"
 msgstr "Pozostaw ten slot niewykorzystanym"
 
-#: src/multiint.cpp:2127
+#: src/multiint.cpp:2138
 msgid "Team"
 msgstr "Drużyna"
 
-#: src/multiint.cpp:2168
+#: src/multiint.cpp:2181
 msgid "You cannot change difficulty in a challenge"
 msgstr "Nie możesz zmienić poziomu trudności w wyzwaniu"
 
-#: src/multiint.cpp:2168
+#: src/multiint.cpp:2181
 msgid "Click to change difficulty"
 msgstr "Kliknij aby dostosować poziom trudności"
 
-#: src/multiint.cpp:2185
+#: src/multiint.cpp:2203
 msgid "Click when ready"
 msgstr "Kliknij kiedy jesteś gotowy"
 
-#: src/multiint.cpp:2189
+#: src/multiint.cpp:2207
 msgid "READY?"
 msgstr "GOTOWY?"
 
-#: src/multiint.cpp:2233
+#: src/multiint.cpp:2251
 msgid "PLAYERS"
 msgstr "GRACZE"
 
-#: src/multiint.cpp:2268
+#: src/multiint.cpp:2286
 msgid "Click to change to this slot"
 msgstr "Kliknij aby zmienić na ten slot"
 
-#: src/multiint.cpp:2296
+#: src/multiint.cpp:2314
 msgid "Choose Team"
 msgstr "Wybierz drużynę"
 
-#: src/multiint.cpp:2326
+#: src/multiint.cpp:2344
 msgid "Click to change player colour"
 msgstr "Kliknij aby zmienić kolor gracza"
 
-#: src/multiint.cpp:2354
+#: src/multiint.cpp:2372
 msgid "Click to change player position"
 msgstr "Kliknij aby zmienić położenie gracza"
 
-#: src/multiint.cpp:2358
+#: src/multiint.cpp:2376
 msgid "Click to change AI"
 msgstr "Kliknij aby zmienić SI"
 
-#: src/multiint.cpp:2419
+#: src/multiint.cpp:2437
 msgid "CHAT"
 msgstr "CHAT"
 
-#: src/multiint.cpp:2451
+#: src/multiint.cpp:2469
 msgid "All players need to have the same mods to join your game."
 msgstr "Wszyscy gracze muszą mieć takie same mody aby przyłączyć się do twojej gry."
 
-#: src/multiint.cpp:2492
+#: src/multiint.cpp:2510
 msgid "Connecting to the lobby server..."
 msgstr ""
 
-#: src/multiint.cpp:2645
+#: src/multiint.cpp:2663
 #, c-format
 msgid "*** password [%s] is now required! ***"
 msgstr "*** hasło [%s] jest teraz wymagane! ***"
 
-#: src/multiint.cpp:2653
+#: src/multiint.cpp:2671
 msgid "*** password is NOT required! ***"
 msgstr "*** hasło jest teraz niewymagane! ***"
 
-#: src/multiint.cpp:2868
+#: src/multiint.cpp:2886
 msgid "Sorry! Failed to host the game."
 msgstr "Przepraszamy! Nie udało się utworzyć serwera gry."
 
-#: src/multiint.cpp:2989
+#: src/multiint.cpp:3007
 msgid "'Locked Teams' mode enabled"
 msgstr "Włączono 'zablokowane drużyny'"
 
-#: src/multiint.cpp:3073
+#: src/multiint.cpp:3091
 #, c-format
 msgid "The host has kicked %s from the game!"
 msgstr "Host wyrzucił %s z gry!"
 
-#: src/multiint.cpp:3139
+#: src/multiint.cpp:3157
 msgid "Host is Starting Game"
 msgstr "Host rozpoczyna grę"
 
-#: src/multiint.cpp:3685
+#: src/multiint.cpp:3704
 msgid "Can't connect to lobby server!"
 msgstr ""
 
-#: src/multiint.cpp:3766
+#: src/multiint.cpp:3785
 #, c-format
 msgid "Mods: %s"
 msgstr ""
 
-#: src/multiint.cpp:3766
+#: src/multiint.cpp:3785
 msgid "Mods: None!"
 msgstr ""
 
-#: src/multiint.cpp:3770
+#: src/multiint.cpp:3789
 #, fuzzy, c-format
 msgid "Version: %s"
 msgstr "Wersja %s%s%s%s"
 
-#: src/multiint.cpp:3816
+#: src/multiint.cpp:3835
 #, c-format
 msgid "Click to take player slot %d"
 msgstr "Kliknij aby zmienić na slot gracza %d"
 
-#: src/multiint.cpp:3825
-#: src/multiint.cpp:4018
+#: src/multiint.cpp:3844
+#: src/multiint.cpp:4037
 msgid "Open"
 msgstr "Otwarty"
 
-#: src/multiint.cpp:3825
-#: src/multiint.cpp:4019
+#: src/multiint.cpp:3844
+#: src/multiint.cpp:4038
 msgid "Closed"
 msgstr "Zamknięty"
 
-#: src/multiint.cpp:3876
+#: src/multiint.cpp:3895
 #, c-format
 msgid "Sending Map: %d%% "
 msgstr "Przesyłanie mapy: %d%%"
 
-#: src/multiint.cpp:3884
+#: src/multiint.cpp:3903
 #, c-format
 msgid "Map: %d%% downloaded"
 msgstr "Mapa: %d%% pobrane"
 
-#: src/multiint.cpp:3910
+#: src/multiint.cpp:3929
 msgid "HOST"
 msgstr "HOST"
 
-#: src/multiint.cpp:3917
+#: src/multiint.cpp:3936
 #: src/multimenu.cpp:808
 msgid "Ping"
 msgstr "Ping"
@@ -12753,17 +12749,17 @@ msgstr "%s opuścił grę"
 msgid "File transfer has been aborted for %d."
 msgstr "Transfer pliku został anulowany dla %d."
 
-#: src/multijoin.cpp:373
+#: src/multijoin.cpp:372
 #, c-format
 msgid "%s (%u) has an incompatible mod, and has been kicked."
 msgstr "%s (%u) ma niekompatybilny mod i został wyrzucony."
 
-#: src/multijoin.cpp:412
+#: src/multijoin.cpp:411
 #, c-format
 msgid "%s is Joining the Game"
 msgstr "%s dołącza do gry"
 
-#: src/multijoin.cpp:422
+#: src/multijoin.cpp:421
 msgid "System message:"
 msgstr "Wiadomość systemowa:"
 
@@ -12840,80 +12836,80 @@ msgstr "Przesuń nad zaznaczonymi jednostkami"
 msgid "Give Power To Player"
 msgstr "Przesyła energię graczowi"
 
-#: src/multiplay.cpp:258
+#: src/multiplay.cpp:257
 #, c-format
 msgid "Kicking player %s, because they tried to bypass data integrity check!"
 msgstr "Gracz %s wyrzucony z powodu próby pominięcia sprawdzenia integralności danych!"
 
-#: src/multiplay.cpp:1033
+#: src/multiplay.cpp:1032
 msgid "(allies"
 msgstr "(sojusznicy"
 
-#: src/multiplay.cpp:1041
+#: src/multiplay.cpp:1040
 msgid "(private to "
 msgstr "(prywatny dla"
 
-#: src/multiplay.cpp:1054
+#: src/multiplay.cpp:1053
 msgid "[invalid]"
 msgstr "[nieprawidłowy]"
 
-#: src/multiplay.cpp:1921
+#: src/multiplay.cpp:1920
 msgid "Green"
 msgstr "Zielony"
 
-#: src/multiplay.cpp:1922
+#: src/multiplay.cpp:1921
 msgid "Orange"
 msgstr "Pomarańczowy"
 
-#: src/multiplay.cpp:1923
+#: src/multiplay.cpp:1922
 msgid "Grey"
 msgstr "Szary"
 
-#: src/multiplay.cpp:1925
+#: src/multiplay.cpp:1924
 msgid "Red"
 msgstr "Czerwony"
 
-#: src/multiplay.cpp:1926
+#: src/multiplay.cpp:1925
 msgid "Blue"
 msgstr "Niebieski"
 
-#: src/multiplay.cpp:1927
+#: src/multiplay.cpp:1926
 msgid "Pink"
 msgstr "Różowy"
 
-#: src/multiplay.cpp:1928
+#: src/multiplay.cpp:1927
 msgid "Cyan"
 msgstr "Turkusowy"
 
-#: src/multiplay.cpp:1929
+#: src/multiplay.cpp:1928
 msgid "Yellow"
 msgstr "Zółty"
 
-#: src/multiplay.cpp:1930
+#: src/multiplay.cpp:1929
 msgid "Purple"
 msgstr "Purpurowy"
 
-#: src/multiplay.cpp:1931
+#: src/multiplay.cpp:1930
 msgid "White"
 msgstr "Biały"
 
-#: src/multiplay.cpp:1932
+#: src/multiplay.cpp:1931
 msgid "Bright blue"
 msgstr "Jasnoniebieski"
 
-#: src/multiplay.cpp:1933
+#: src/multiplay.cpp:1932
 msgid "Neon green"
 msgstr "Neonowa zieleń"
 
-#: src/multiplay.cpp:1934
+#: src/multiplay.cpp:1933
 msgid "Infrared"
 msgstr "Podczerwień"
 
-#: src/multiplay.cpp:1935
+#: src/multiplay.cpp:1934
 msgid "Ultraviolet"
 msgstr "Ultrafiolet"
 
-#: src/multiplay.cpp:1936
+#: src/multiplay.cpp:1935
 msgid "Brown"
 msgstr "Brązowy"
 
@@ -12922,12 +12918,12 @@ msgid "We can't do that! We must be a Cyborg unit to use a Cyborg Transport!"
 msgstr "Nie możemy tego zrobić! Tylko cyborgi mogą korzystać Transportowca cyborgów!"
 
 #: src/qtscriptfuncs.cpp:1470
-#: src/scriptfuncs.cpp:3269
+#: src/scriptfuncs.cpp:3259
 msgid "YOU ARE VICTORIOUS!"
 msgstr "ZWYCIĘŻYŁEŚ!"
 
 #: src/qtscriptfuncs.cpp:1475
-#: src/scriptfuncs.cpp:3273
+#: src/scriptfuncs.cpp:3263
 msgid "YOU WERE DEFEATED!"
 msgstr "ZOSTAŁEŚ POKONANY!"
 
@@ -13062,12 +13058,12 @@ msgstr "Całkowity czas gry - %s"
 msgid "You cheated!"
 msgstr "Oszukiwałeś!"
 
-#: src/scriptfuncs.cpp:9382
+#: src/scriptfuncs.cpp:9372
 #, c-format
 msgid "Beacon received from %s!"
 msgstr "Sygnał otrzymany od %s!"
 
-#: src/scriptfuncs.cpp:9419
+#: src/scriptfuncs.cpp:9409
 #, c-format
 msgid "Beacon %d"
 msgstr "Sygnał %d"
@@ -13190,6 +13186,9 @@ msgstr " - Zbudowana %s"
 #, fuzzy, c-format
 msgid "Version %s-%s%s%s%s"
 msgstr "Wersja %s%s%s%s"
+
+#~ msgid "Activate self-test"
+#~ msgstr "Aktywuj autotest"
 
 #~ msgid "Failed to create building"
 #~ msgstr "Nie udało się utworzyć budynku"

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2012-01-20 19:25+0100\n"
+"POT-Creation-Date: 2012-01-21 17:36+0100\n"
 "PO-Revision-Date: 2011-08-28 11:34+0800\n"
 "Last-Translator: Tunghsu\n"
 "Language-Team: Chinese Simplified <kde-i18n-doc@kde.org>\n"
@@ -10473,145 +10473,141 @@ msgstr "储存游戏"
 msgid "Close"
 msgstr "关闭"
 
-#: src/clparse.cpp:242
+#: src/clparse.cpp:241
 msgid "Set configuration directory"
 msgstr "设定设定资料夹"
 
-#: src/clparse.cpp:242
+#: src/clparse.cpp:241
 msgid "configuration directory"
 msgstr "设定资料夹"
 
-#: src/clparse.cpp:243
+#: src/clparse.cpp:242
 msgid "Set default data directory"
 msgstr "设定预设资料夹"
 
-#: src/clparse.cpp:243
+#: src/clparse.cpp:242
 msgid "data directory"
 msgstr "资料夹"
 
-#: src/clparse.cpp:244
+#: src/clparse.cpp:243
 msgid "Show debug for given level"
 msgstr "Show debug for given level"
 
-#: src/clparse.cpp:244
+#: src/clparse.cpp:243
 msgid "debug level"
 msgstr "debug level"
 
-#: src/clparse.cpp:245
+#: src/clparse.cpp:244
 msgid "Log debug output to file"
 msgstr "将除错讯息输出至档案"
 
-#: src/clparse.cpp:245
+#: src/clparse.cpp:244
 msgid "file"
 msgstr "档案"
 
-#: src/clparse.cpp:246
+#: src/clparse.cpp:245
 msgid "Flush all debug output written to stderr"
 msgstr "Flush all debug output written to stderr"
 
-#: src/clparse.cpp:247
+#: src/clparse.cpp:246
 msgid "Play in fullscreen mode"
 msgstr "以全萤幕模式运行"
 
-#: src/clparse.cpp:248
+#: src/clparse.cpp:247
 msgid "Load a specific game"
 msgstr "载入特定游戏"
 
-#: src/clparse.cpp:248
+#: src/clparse.cpp:247
 msgid "game-name"
 msgstr "选择游戏名称"
 
-#: src/clparse.cpp:249
+#: src/clparse.cpp:248
 msgid "Show this help message and exit"
 msgstr "显示帮助讯息及离开"
 
-#: src/clparse.cpp:250
+#: src/clparse.cpp:249
 msgid "Enable a global mod"
 msgstr "开启global mod"
 
+#: src/clparse.cpp:249
 #: src/clparse.cpp:250
 #: src/clparse.cpp:251
-#: src/clparse.cpp:252
 msgid "mod"
 msgstr "mod"
 
-#: src/clparse.cpp:251
+#: src/clparse.cpp:250
 msgid "Enable a campaign only mod"
 msgstr "开启战役模式"
 
-#: src/clparse.cpp:252
+#: src/clparse.cpp:251
 msgid "Enable a multiplay only mod"
 msgstr "开启多人模式"
 
-#: src/clparse.cpp:253
+#: src/clparse.cpp:252
 msgid "Disable asserts"
 msgstr "停用宣告"
 
-#: src/clparse.cpp:254
+#: src/clparse.cpp:253
 msgid "Causes a crash to test the crash handler"
 msgstr ""
 
-#: src/clparse.cpp:255
+#: src/clparse.cpp:254
 msgid "Load a saved game"
 msgstr "载入已储存的游戏"
 
-#: src/clparse.cpp:255
+#: src/clparse.cpp:254
 msgid "savegame"
 msgstr "储存游戏"
 
-#: src/clparse.cpp:256
+#: src/clparse.cpp:255
 msgid "Play in windowed mode"
 msgstr "以视窗模式运行"
 
-#: src/clparse.cpp:257
+#: src/clparse.cpp:256
 msgid "Show version information and exit"
 msgstr "显示版本资讯及离开"
 
-#: src/clparse.cpp:258
+#: src/clparse.cpp:257
 msgid "Set the resolution to use"
 msgstr "设定解析度"
 
-#: src/clparse.cpp:258
+#: src/clparse.cpp:257
 msgid "WIDTHxHEIGHT"
 msgstr "宽 x 高"
 
-#: src/clparse.cpp:259
+#: src/clparse.cpp:258
 msgid "Enable shadows"
 msgstr "开启影子"
 
-#: src/clparse.cpp:260
+#: src/clparse.cpp:259
 msgid "Disable shadows"
 msgstr "关闭影子"
 
-#: src/clparse.cpp:261
+#: src/clparse.cpp:260
 msgid "Enable sound"
 msgstr "开启声音"
 
-#: src/clparse.cpp:262
+#: src/clparse.cpp:261
 msgid "Disable sound"
 msgstr "关闭声音"
 
-#: src/clparse.cpp:263
-msgid "Activate self-test"
-msgstr "启动自我测试（self-test）"
-
-#: src/clparse.cpp:264
+#: src/clparse.cpp:262
 msgid "connect directly to IP/hostname"
 msgstr "直接连结到IP/hostname"
 
-#: src/clparse.cpp:264
+#: src/clparse.cpp:262
 msgid "host"
 msgstr "host"
 
-#: src/clparse.cpp:265
+#: src/clparse.cpp:263
 msgid "go directly to host screen"
 msgstr "go directly to host screen"
 
-#: src/clparse.cpp:266
+#: src/clparse.cpp:264
 msgid "Enable texture compression"
 msgstr ""
 
-#: src/clparse.cpp:267
+#: src/clparse.cpp:265
 msgid "Disable texture compression"
 msgstr ""
 
@@ -10791,7 +10787,7 @@ msgid "Player dropped"
 msgstr "玩家"
 
 #: src/display3d.cpp:657
-#: src/multiint.cpp:2180
+#: src/multiint.cpp:2198
 msgid "Waiting for other players"
 msgstr "等待其他玩家"
 
@@ -10799,17 +10795,17 @@ msgstr "等待其他玩家"
 msgid "Out of sync"
 msgstr ""
 
-#: src/display.cpp:1658
+#: src/display.cpp:1657
 msgid "Cannot Build. Oil Resource Burning."
 msgstr "油田燃烧中，无法建筑钻油井"
 
-#: src/display.cpp:1846
-#: src/display.cpp:2397
+#: src/display.cpp:1845
+#: src/display.cpp:2396
 #, c-format
 msgid "%s - Damage %d%% - Experience %.1f, %s"
 msgstr "%s - 损伤 %d%% - 经验值 %.1f, %s"
 
-#: src/display.cpp:1862
+#: src/display.cpp:1861
 #, fuzzy, c-format
 msgid "%s - Allied - Damage %d%% - Experience %d, %s"
 msgstr "%s - 损伤 %d%% - 经验值 %d, %s"
@@ -11079,7 +11075,7 @@ msgstr "50%"
 
 #: src/frontend.cpp:543
 #: src/frontend.cpp:682
-#: src/multiplay.cpp:1924
+#: src/multiplay.cpp:1923
 msgid "Black"
 msgstr "黑色"
 
@@ -11276,7 +11272,7 @@ msgid "GAME OPTIONS"
 msgstr "游戏选项"
 
 #: src/frontend.cpp:1399
-#: src/multiint.cpp:2446
+#: src/multiint.cpp:2464
 msgid "Mod: "
 msgstr "Mod："
 
@@ -12808,143 +12804,143 @@ msgstr ""
 msgid "Leave this slot unused"
 msgstr ""
 
-#: src/multiint.cpp:2127
+#: src/multiint.cpp:2138
 msgid "Team"
 msgstr "队伍"
 
-#: src/multiint.cpp:2168
+#: src/multiint.cpp:2181
 msgid "You cannot change difficulty in a challenge"
 msgstr ""
 
-#: src/multiint.cpp:2168
+#: src/multiint.cpp:2181
 #, fuzzy
 msgid "Click to change difficulty"
 msgstr "点击这里更改AI难度"
 
-#: src/multiint.cpp:2185
+#: src/multiint.cpp:2203
 msgid "Click when ready"
 msgstr "按一下开始"
 
-#: src/multiint.cpp:2189
+#: src/multiint.cpp:2207
 msgid "READY?"
 msgstr "准备好了吗？"
 
-#: src/multiint.cpp:2233
+#: src/multiint.cpp:2251
 msgid "PLAYERS"
 msgstr "玩家"
 
-#: src/multiint.cpp:2268
+#: src/multiint.cpp:2286
 #, fuzzy
 msgid "Click to change to this slot"
 msgstr "点击这里更改玩家设置"
 
-#: src/multiint.cpp:2296
+#: src/multiint.cpp:2314
 #, fuzzy
 msgid "Choose Team"
 msgstr "锁定同盟模式"
 
-#: src/multiint.cpp:2326
+#: src/multiint.cpp:2344
 #, fuzzy
 msgid "Click to change player colour"
 msgstr "点击这里更改玩家设置"
 
-#: src/multiint.cpp:2354
+#: src/multiint.cpp:2372
 #, fuzzy
 msgid "Click to change player position"
 msgstr "点击这里更改玩家设置"
 
-#: src/multiint.cpp:2358
+#: src/multiint.cpp:2376
 #, fuzzy
 msgid "Click to change AI"
 msgstr "点击这里更改玩家设置"
 
-#: src/multiint.cpp:2419
+#: src/multiint.cpp:2437
 msgid "CHAT"
 msgstr "聊天"
 
-#: src/multiint.cpp:2451
+#: src/multiint.cpp:2469
 msgid "All players need to have the same mods to join your game."
 msgstr "所有玩家需要使用相同的mod以便进入游戏"
 
-#: src/multiint.cpp:2492
+#: src/multiint.cpp:2510
 msgid "Connecting to the lobby server..."
 msgstr ""
 
-#: src/multiint.cpp:2645
+#: src/multiint.cpp:2663
 #, fuzzy, c-format
 msgid "*** password [%s] is now required! ***"
 msgstr "*** 需要密码 ***"
 
-#: src/multiint.cpp:2653
+#: src/multiint.cpp:2671
 msgid "*** password is NOT required! ***"
 msgstr "*** 不需要密码 ***"
 
-#: src/multiint.cpp:2868
+#: src/multiint.cpp:2886
 msgid "Sorry! Failed to host the game."
 msgstr "对不起！本机无法作为游戏主要服务器"
 
-#: src/multiint.cpp:2989
+#: src/multiint.cpp:3007
 msgid "'Locked Teams' mode enabled"
 msgstr "锁定同盟模式"
 
-#: src/multiint.cpp:3073
+#: src/multiint.cpp:3091
 #, c-format
 msgid "The host has kicked %s from the game!"
 msgstr "主玩家将 %s 踢出游戏！"
 
-#: src/multiint.cpp:3139
+#: src/multiint.cpp:3157
 msgid "Host is Starting Game"
 msgstr "主玩家已开始游戏"
 
-#: src/multiint.cpp:3685
+#: src/multiint.cpp:3704
 msgid "Can't connect to lobby server!"
 msgstr ""
 
-#: src/multiint.cpp:3766
+#: src/multiint.cpp:3785
 #, c-format
 msgid "Mods: %s"
 msgstr ""
 
-#: src/multiint.cpp:3766
+#: src/multiint.cpp:3785
 msgid "Mods: None!"
 msgstr ""
 
-#: src/multiint.cpp:3770
+#: src/multiint.cpp:3789
 #, fuzzy, c-format
 msgid "Version: %s"
 msgstr "版本 %s%s%s%s"
 
-#: src/multiint.cpp:3816
+#: src/multiint.cpp:3835
 #, fuzzy, c-format
 msgid "Click to take player slot %d"
 msgstr "点击这里更改玩家设置"
 
-#: src/multiint.cpp:3825
-#: src/multiint.cpp:4018
+#: src/multiint.cpp:3844
+#: src/multiint.cpp:4037
 msgid "Open"
 msgstr ""
 
-#: src/multiint.cpp:3825
-#: src/multiint.cpp:4019
+#: src/multiint.cpp:3844
+#: src/multiint.cpp:4038
 #, fuzzy
 msgid "Closed"
 msgstr "关闭"
 
-#: src/multiint.cpp:3876
+#: src/multiint.cpp:3895
 #, c-format
 msgid "Sending Map: %d%% "
 msgstr "发送地图：%d%%"
 
-#: src/multiint.cpp:3884
+#: src/multiint.cpp:3903
 #, c-format
 msgid "Map: %d%% downloaded"
 msgstr "地图：%d%%下载完成"
 
-#: src/multiint.cpp:3910
+#: src/multiint.cpp:3929
 msgid "HOST"
 msgstr "主玩家"
 
-#: src/multiint.cpp:3917
+#: src/multiint.cpp:3936
 #: src/multimenu.cpp:808
 msgid "Ping"
 msgstr "Ping"
@@ -12964,17 +12960,17 @@ msgstr "%s 已离开游戏"
 msgid "File transfer has been aborted for %d."
 msgstr "由于%d，文件传输中断"
 
-#: src/multijoin.cpp:373
+#: src/multijoin.cpp:372
 #, c-format
 msgid "%s (%u) has an incompatible mod, and has been kicked."
 msgstr "%s(%u)有一个不兼容的mod，已经被踢出"
 
-#: src/multijoin.cpp:412
+#: src/multijoin.cpp:411
 #, c-format
 msgid "%s is Joining the Game"
 msgstr "%s 加入游戏"
 
-#: src/multijoin.cpp:422
+#: src/multijoin.cpp:421
 #, fuzzy
 msgid "System message:"
 msgstr "系统语系"
@@ -13052,81 +13048,81 @@ msgstr "交出选择的单位"
 msgid "Give Power To Player"
 msgstr "提供玩家能源"
 
-#: src/multiplay.cpp:258
+#: src/multiplay.cpp:257
 #, c-format
 msgid "Kicking player %s, because they tried to bypass data integrity check!"
 msgstr "踢出玩家 %s，因为他们试图绕过数据完整性检查！"
 
-#: src/multiplay.cpp:1033
+#: src/multiplay.cpp:1032
 #, fuzzy
 msgid "(allies"
 msgstr "同盟"
 
-#: src/multiplay.cpp:1041
+#: src/multiplay.cpp:1040
 msgid "(private to "
 msgstr "私密"
 
-#: src/multiplay.cpp:1054
+#: src/multiplay.cpp:1053
 msgid "[invalid]"
 msgstr "[无效]"
 
-#: src/multiplay.cpp:1921
+#: src/multiplay.cpp:1920
 msgid "Green"
 msgstr "绿色"
 
-#: src/multiplay.cpp:1922
+#: src/multiplay.cpp:1921
 msgid "Orange"
 msgstr "橙色"
 
-#: src/multiplay.cpp:1923
+#: src/multiplay.cpp:1922
 msgid "Grey"
 msgstr "灰色"
 
-#: src/multiplay.cpp:1925
+#: src/multiplay.cpp:1924
 msgid "Red"
 msgstr "红色"
 
-#: src/multiplay.cpp:1926
+#: src/multiplay.cpp:1925
 msgid "Blue"
 msgstr "蓝色"
 
-#: src/multiplay.cpp:1927
+#: src/multiplay.cpp:1926
 msgid "Pink"
 msgstr "粉红色"
 
-#: src/multiplay.cpp:1928
+#: src/multiplay.cpp:1927
 msgid "Cyan"
 msgstr "青绿色"
 
-#: src/multiplay.cpp:1929
+#: src/multiplay.cpp:1928
 msgid "Yellow"
 msgstr ""
 
-#: src/multiplay.cpp:1930
+#: src/multiplay.cpp:1929
 msgid "Purple"
 msgstr ""
 
-#: src/multiplay.cpp:1931
+#: src/multiplay.cpp:1930
 msgid "White"
 msgstr ""
 
-#: src/multiplay.cpp:1932
+#: src/multiplay.cpp:1931
 msgid "Bright blue"
 msgstr ""
 
-#: src/multiplay.cpp:1933
+#: src/multiplay.cpp:1932
 msgid "Neon green"
 msgstr ""
 
-#: src/multiplay.cpp:1934
+#: src/multiplay.cpp:1933
 msgid "Infrared"
 msgstr ""
 
-#: src/multiplay.cpp:1935
+#: src/multiplay.cpp:1934
 msgid "Ultraviolet"
 msgstr ""
 
-#: src/multiplay.cpp:1936
+#: src/multiplay.cpp:1935
 msgid "Brown"
 msgstr ""
 
@@ -13135,12 +13131,12 @@ msgid "We can't do that! We must be a Cyborg unit to use a Cyborg Transport!"
 msgstr ""
 
 #: src/qtscriptfuncs.cpp:1470
-#: src/scriptfuncs.cpp:3269
+#: src/scriptfuncs.cpp:3259
 msgid "YOU ARE VICTORIOUS!"
 msgstr "你获胜了！"
 
 #: src/qtscriptfuncs.cpp:1475
-#: src/scriptfuncs.cpp:3273
+#: src/scriptfuncs.cpp:3263
 msgid "YOU WERE DEFEATED!"
 msgstr "你被打败了！"
 
@@ -13275,12 +13271,12 @@ msgstr "全部游戏时间 - %s"
 msgid "You cheated!"
 msgstr "你作弊了"
 
-#: src/scriptfuncs.cpp:9382
+#: src/scriptfuncs.cpp:9372
 #, c-format
 msgid "Beacon received from %s!"
 msgstr "由 %s 获得引导指标"
 
-#: src/scriptfuncs.cpp:9419
+#: src/scriptfuncs.cpp:9409
 #, c-format
 msgid "Beacon %d"
 msgstr "引导指标 %d"
@@ -13399,6 +13395,9 @@ msgstr " - Built %s"
 #, fuzzy, c-format
 msgid "Version %s-%s%s%s%s"
 msgstr "版本 %s%s%s%s"
+
+#~ msgid "Activate self-test"
+#~ msgstr "启动自我测试（self-test）"
 
 #~ msgid "Failed to create building"
 #~ msgstr "建筑物建造失败"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Warzone 2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2012-01-20 19:25+0100\n"
+"POT-Creation-Date: 2012-01-21 17:36+0100\n"
 "PO-Revision-Date: 2011-12-30 22:58+0100\n"
 "Last-Translator: Mészáros Tamás <meszaros.tomi@hotmail.com>\n"
 "Language-Team: Magyar (Hungary) <meszaros.tomi@hotmail.com>\n"
@@ -10326,145 +10326,141 @@ msgstr "Stratégiai játék"
 msgid "Close"
 msgstr "Bezár"
 
-#: src/clparse.cpp:242
+#: src/clparse.cpp:241
 msgid "Set configuration directory"
 msgstr "Konfigurációs könyvtár beállítása"
 
-#: src/clparse.cpp:242
+#: src/clparse.cpp:241
 msgid "configuration directory"
 msgstr "konfigurációs könyvtár"
 
-#: src/clparse.cpp:243
+#: src/clparse.cpp:242
 msgid "Set default data directory"
 msgstr "Alapértelmezett könyvtár beállítása"
 
-#: src/clparse.cpp:243
+#: src/clparse.cpp:242
 msgid "data directory"
 msgstr "adat könyvtár"
 
-#: src/clparse.cpp:244
+#: src/clparse.cpp:243
 msgid "Show debug for given level"
 msgstr "Hibakeresés megjelenítése az adott szinten"
 
-#: src/clparse.cpp:244
+#: src/clparse.cpp:243
 msgid "debug level"
 msgstr "hibakeresési szint"
 
-#: src/clparse.cpp:245
+#: src/clparse.cpp:244
 msgid "Log debug output to file"
 msgstr "Hiba naplózása fájlba"
 
-#: src/clparse.cpp:245
+#: src/clparse.cpp:244
 msgid "file"
 msgstr "fájl"
 
-#: src/clparse.cpp:246
+#: src/clparse.cpp:245
 msgid "Flush all debug output written to stderr"
 msgstr "Ömlesztve az összes hiba naplózásra került a stderr -be"
 
-#: src/clparse.cpp:247
+#: src/clparse.cpp:246
 msgid "Play in fullscreen mode"
 msgstr "Lejátszás teljesképernyős módba"
 
-#: src/clparse.cpp:248
+#: src/clparse.cpp:247
 msgid "Load a specific game"
 msgstr "Adott játék betöltése"
 
-#: src/clparse.cpp:248
+#: src/clparse.cpp:247
 msgid "game-name"
 msgstr "játék-név"
 
-#: src/clparse.cpp:249
+#: src/clparse.cpp:248
 msgid "Show this help message and exit"
 msgstr "Megmutatja ezt az üzenetet és kilép"
 
-#: src/clparse.cpp:250
+#: src/clparse.cpp:249
 msgid "Enable a global mod"
 msgstr "Engedélyezi a a teljes eljárást"
 
+#: src/clparse.cpp:249
 #: src/clparse.cpp:250
 #: src/clparse.cpp:251
-#: src/clparse.cpp:252
 msgid "mod"
 msgstr "mód"
 
-#: src/clparse.cpp:251
+#: src/clparse.cpp:250
 msgid "Enable a campaign only mod"
 msgstr "Csak a küldetéssorozat engedélyezése"
 
-#: src/clparse.cpp:252
+#: src/clparse.cpp:251
 msgid "Enable a multiplay only mod"
 msgstr "Csak többjátékos mód engedélyezése"
 
-#: src/clparse.cpp:253
+#: src/clparse.cpp:252
 msgid "Disable asserts"
 msgstr "Árnyékok tiltása"
 
-#: src/clparse.cpp:254
+#: src/clparse.cpp:253
 msgid "Causes a crash to test the crash handler"
 msgstr "Összeomláshoz vezetett az összeomlás kezelő tesztje"
 
-#: src/clparse.cpp:255
+#: src/clparse.cpp:254
 msgid "Load a saved game"
 msgstr "Egy mentett játék betöltése"
 
-#: src/clparse.cpp:255
+#: src/clparse.cpp:254
 msgid "savegame"
 msgstr "játék mentés"
 
-#: src/clparse.cpp:256
+#: src/clparse.cpp:255
 msgid "Play in windowed mode"
 msgstr "Lejátszás ablakos módba"
 
-#: src/clparse.cpp:257
+#: src/clparse.cpp:256
 msgid "Show version information and exit"
 msgstr "Mutatja a verzió információt és kilép"
 
-#: src/clparse.cpp:258
+#: src/clparse.cpp:257
 msgid "Set the resolution to use"
 msgstr "A használandó felbontás beállítása"
 
-#: src/clparse.cpp:258
+#: src/clparse.cpp:257
 msgid "WIDTHxHEIGHT"
 msgstr "SZÉLESSÉGxMAGASSÁG"
 
-#: src/clparse.cpp:259
+#: src/clparse.cpp:258
 msgid "Enable shadows"
 msgstr "Árnyékok bekapcsolása"
 
-#: src/clparse.cpp:260
+#: src/clparse.cpp:259
 msgid "Disable shadows"
 msgstr "Árnyékok kikapcsolása"
 
-#: src/clparse.cpp:261
+#: src/clparse.cpp:260
 msgid "Enable sound"
 msgstr "Hang bekapcsolás"
 
-#: src/clparse.cpp:262
+#: src/clparse.cpp:261
 msgid "Disable sound"
 msgstr "Hang kikapcsolása"
 
-#: src/clparse.cpp:263
-msgid "Activate self-test"
-msgstr "Önellenőrzés aktiválása"
-
-#: src/clparse.cpp:264
+#: src/clparse.cpp:262
 msgid "connect directly to IP/hostname"
 msgstr "Kapcsolódás közvetlenül a(z) IP/gazdagép"
 
-#: src/clparse.cpp:264
+#: src/clparse.cpp:262
 msgid "host"
 msgstr "játékmester"
 
-#: src/clparse.cpp:265
+#: src/clparse.cpp:263
 msgid "go directly to host screen"
 msgstr "közvetlenül a fogadó képernyőre"
 
-#: src/clparse.cpp:266
+#: src/clparse.cpp:264
 msgid "Enable texture compression"
 msgstr "Szöveg tömörítés bekapcsolása"
 
-#: src/clparse.cpp:267
+#: src/clparse.cpp:265
 msgid "Disable texture compression"
 msgstr "Szöveg tömörítés kikapcsolása"
 
@@ -10637,7 +10633,7 @@ msgid "Player dropped"
 msgstr "Játékos kiszállt"
 
 #: src/display3d.cpp:657
-#: src/multiint.cpp:2180
+#: src/multiint.cpp:2198
 msgid "Waiting for other players"
 msgstr "Várakozás további játékosra"
 
@@ -10645,17 +10641,17 @@ msgstr "Várakozás további játékosra"
 msgid "Out of sync"
 msgstr "Szinkronizációból kilépett"
 
-#: src/display.cpp:1658
+#: src/display.cpp:1657
 msgid "Cannot Build. Oil Resource Burning."
 msgstr "Nem lehet építeni, amíg az olajmező lángol."
 
-#: src/display.cpp:1846
-#: src/display.cpp:2397
+#: src/display.cpp:1845
+#: src/display.cpp:2396
 #, c-format
 msgid "%s - Damage %d%% - Experience %.1f, %s"
 msgstr "%s - sérülés %d%% - tapasztalat %f, %s"
 
-#: src/display.cpp:1862
+#: src/display.cpp:1861
 #, c-format
 msgid "%s - Allied - Damage %d%% - Experience %d, %s"
 msgstr "%s - szövetséges - kár %d%% - tapasztalat %d, %s"
@@ -10929,7 +10925,7 @@ msgstr "50%"
 
 #: src/frontend.cpp:543
 #: src/frontend.cpp:682
-#: src/multiplay.cpp:1924
+#: src/multiplay.cpp:1923
 msgid "Black"
 msgstr "Fekete"
 
@@ -11114,7 +11110,7 @@ msgid "GAME OPTIONS"
 msgstr "JÁTÉK OPCIÓK"
 
 #: src/frontend.cpp:1399
-#: src/multiint.cpp:2446
+#: src/multiint.cpp:2464
 msgid "Mod: "
 msgstr "Mód:"
 
@@ -12588,136 +12584,136 @@ msgstr "Emberi játékosok kapcsolódnak a nyomhoz"
 msgid "Leave this slot unused"
 msgstr "Elhagyom ezt a nem használt nyomot"
 
-#: src/multiint.cpp:2127
+#: src/multiint.cpp:2138
 msgid "Team"
 msgstr "Csapat"
 
-#: src/multiint.cpp:2168
+#: src/multiint.cpp:2181
 msgid "You cannot change difficulty in a challenge"
 msgstr "Nem tudsz változtatni a nehézségen mozgásnál"
 
-#: src/multiint.cpp:2168
+#: src/multiint.cpp:2181
 msgid "Click to change difficulty"
 msgstr "Kattintson a nehézség beállításához"
 
-#: src/multiint.cpp:2185
+#: src/multiint.cpp:2203
 msgid "Click when ready"
 msgstr "Kattintson, ha kész"
 
-#: src/multiint.cpp:2189
+#: src/multiint.cpp:2207
 msgid "READY?"
 msgstr "KÉSZ?"
 
-#: src/multiint.cpp:2233
+#: src/multiint.cpp:2251
 msgid "PLAYERS"
 msgstr "JÁTÉKOSOK"
 
-#: src/multiint.cpp:2268
+#: src/multiint.cpp:2286
 msgid "Click to change to this slot"
 msgstr "Kattintson a játékosok betöltésének változtatásához"
 
-#: src/multiint.cpp:2296
+#: src/multiint.cpp:2314
 msgid "Choose Team"
 msgstr "Csapatválasztás"
 
-#: src/multiint.cpp:2326
+#: src/multiint.cpp:2344
 msgid "Click to change player colour"
 msgstr "Kattintson a játékos színeinek változtatásához"
 
-#: src/multiint.cpp:2354
+#: src/multiint.cpp:2372
 msgid "Click to change player position"
 msgstr "Kattintson a játékos poziciójának beállításához"
 
-#: src/multiint.cpp:2358
+#: src/multiint.cpp:2376
 msgid "Click to change AI"
 msgstr "Kattintson a játékos AI beállítás változtatásához"
 
-#: src/multiint.cpp:2419
+#: src/multiint.cpp:2437
 msgid "CHAT"
 msgstr "CSEVEGÉS"
 
-#: src/multiint.cpp:2451
+#: src/multiint.cpp:2469
 msgid "All players need to have the same mods to join your game."
 msgstr "Minden játékosnak ugyanazokkal a mod-okkal kell rendelkeznie, hogy csatlakozhassanak a játékához."
 
-#: src/multiint.cpp:2492
+#: src/multiint.cpp:2510
 msgid "Connecting to the lobby server..."
 msgstr ""
 
-#: src/multiint.cpp:2645
+#: src/multiint.cpp:2663
 #, c-format
 msgid "*** password [%s] is now required! ***"
 msgstr "*** jelszót [%s] kötelező! ***"
 
-#: src/multiint.cpp:2653
+#: src/multiint.cpp:2671
 msgid "*** password is NOT required! ***"
 msgstr " *** jelszót nem kötelező! ***"
 
-#: src/multiint.cpp:2868
+#: src/multiint.cpp:2886
 msgid "Sorry! Failed to host the game."
 msgstr "Elnézést! Nem sikerült a játékot létrehoznod."
 
-#: src/multiint.cpp:2989
+#: src/multiint.cpp:3007
 msgid "'Locked Teams' mode enabled"
 msgstr "'Fix csapatok' mód engedélyezve"
 
-#: src/multiint.cpp:3073
+#: src/multiint.cpp:3091
 #, c-format
 msgid "The host has kicked %s from the game!"
 msgstr "A játékmester kirúgta %s a játékból!"
 
-#: src/multiint.cpp:3139
+#: src/multiint.cpp:3157
 msgid "Host is Starting Game"
 msgstr "A játékmester elindította a játékot"
 
-#: src/multiint.cpp:3685
+#: src/multiint.cpp:3704
 msgid "Can't connect to lobby server!"
 msgstr ""
 
-#: src/multiint.cpp:3766
+#: src/multiint.cpp:3785
 #, c-format
 msgid "Mods: %s"
 msgstr ""
 
-#: src/multiint.cpp:3766
+#: src/multiint.cpp:3785
 msgid "Mods: None!"
 msgstr ""
 
-#: src/multiint.cpp:3770
+#: src/multiint.cpp:3789
 #, fuzzy, c-format
 msgid "Version: %s"
 msgstr "Verzió %s%s%s%s"
 
-#: src/multiint.cpp:3816
+#: src/multiint.cpp:3835
 #, c-format
 msgid "Click to take player slot %d"
 msgstr "Kattintson a játékosok betöltéséhez %d"
 
-#: src/multiint.cpp:3825
-#: src/multiint.cpp:4018
+#: src/multiint.cpp:3844
+#: src/multiint.cpp:4037
 msgid "Open"
 msgstr "Megnyitás"
 
-#: src/multiint.cpp:3825
-#: src/multiint.cpp:4019
+#: src/multiint.cpp:3844
+#: src/multiint.cpp:4038
 msgid "Closed"
 msgstr "Bezárás"
 
-#: src/multiint.cpp:3876
+#: src/multiint.cpp:3895
 #, c-format
 msgid "Sending Map: %d%% "
 msgstr "Térkép küldés: %d%%"
 
-#: src/multiint.cpp:3884
+#: src/multiint.cpp:3903
 #, c-format
 msgid "Map: %d%% downloaded"
 msgstr "Térkép: %d%% letöltött"
 
-#: src/multiint.cpp:3910
+#: src/multiint.cpp:3929
 msgid "HOST"
 msgstr "GAZDAGÉP"
 
-#: src/multiint.cpp:3917
+#: src/multiint.cpp:3936
 #: src/multimenu.cpp:808
 msgid "Ping"
 msgstr "Pingelés"
@@ -12737,17 +12733,17 @@ msgstr "%s elhagyta a játékot"
 msgid "File transfer has been aborted for %d."
 msgstr "Fájl átvitel megszakítva: %d"
 
-#: src/multijoin.cpp:373
+#: src/multijoin.cpp:372
 #, c-format
 msgid "%s (%u) has an incompatible mod, and has been kicked."
 msgstr "%s (%u) nem kompatibilis mód-ja van, ezért ki lett rúgva a játékból."
 
-#: src/multijoin.cpp:412
+#: src/multijoin.cpp:411
 #, c-format
 msgid "%s is Joining the Game"
 msgstr "%s csatlakozott a játékhoz"
 
-#: src/multijoin.cpp:422
+#: src/multijoin.cpp:421
 msgid "System message:"
 msgstr "Rendszer üzenet:"
 
@@ -12823,80 +12819,80 @@ msgstr "Adja a kijelölt egységeket"
 msgid "Give Power To Player"
 msgstr "Energiát ad a játékosnak"
 
-#: src/multiplay.cpp:258
+#: src/multiplay.cpp:257
 #, c-format
 msgid "Kicking player %s, because they tried to bypass data integrity check!"
 msgstr "%s ki lett rúgva, mert megpróbálta kikerülni az adatok ellenőrzését."
 
-#: src/multiplay.cpp:1033
+#: src/multiplay.cpp:1032
 msgid "(allies"
 msgstr "(szövetség"
 
-#: src/multiplay.cpp:1041
+#: src/multiplay.cpp:1040
 msgid "(private to "
 msgstr "(magán a"
 
-#: src/multiplay.cpp:1054
+#: src/multiplay.cpp:1053
 msgid "[invalid]"
 msgstr "[érvénytelen]"
 
-#: src/multiplay.cpp:1921
+#: src/multiplay.cpp:1920
 msgid "Green"
 msgstr "Zöld"
 
-#: src/multiplay.cpp:1922
+#: src/multiplay.cpp:1921
 msgid "Orange"
 msgstr "Narancs"
 
-#: src/multiplay.cpp:1923
+#: src/multiplay.cpp:1922
 msgid "Grey"
 msgstr "Szürke"
 
-#: src/multiplay.cpp:1925
+#: src/multiplay.cpp:1924
 msgid "Red"
 msgstr "Vörös"
 
-#: src/multiplay.cpp:1926
+#: src/multiplay.cpp:1925
 msgid "Blue"
 msgstr "Kék"
 
-#: src/multiplay.cpp:1927
+#: src/multiplay.cpp:1926
 msgid "Pink"
 msgstr "Rózsaszín"
 
-#: src/multiplay.cpp:1928
+#: src/multiplay.cpp:1927
 msgid "Cyan"
 msgstr "Cián"
 
-#: src/multiplay.cpp:1929
+#: src/multiplay.cpp:1928
 msgid "Yellow"
 msgstr "Sárga"
 
-#: src/multiplay.cpp:1930
+#: src/multiplay.cpp:1929
 msgid "Purple"
 msgstr "Lila"
 
-#: src/multiplay.cpp:1931
+#: src/multiplay.cpp:1930
 msgid "White"
 msgstr "Fehér"
 
-#: src/multiplay.cpp:1932
+#: src/multiplay.cpp:1931
 msgid "Bright blue"
 msgstr "Élénk kék"
 
-#: src/multiplay.cpp:1933
+#: src/multiplay.cpp:1932
 msgid "Neon green"
 msgstr "Neon zöld"
 
-#: src/multiplay.cpp:1934
+#: src/multiplay.cpp:1933
 msgid "Infrared"
 msgstr "Infravörös"
 
-#: src/multiplay.cpp:1935
+#: src/multiplay.cpp:1934
 msgid "Ultraviolet"
 msgstr "Ultraviola"
 
-#: src/multiplay.cpp:1936
+#: src/multiplay.cpp:1935
 msgid "Brown"
 msgstr "Barna"
 
@@ -12905,12 +12901,12 @@ msgid "We can't do that! We must be a Cyborg unit to use a Cyborg Transport!"
 msgstr "Ez nem lehetséges! Cyborg egységnek kell lennünk, hogy használhassuk a Cyborg szállítást!"
 
 #: src/qtscriptfuncs.cpp:1470
-#: src/scriptfuncs.cpp:3269
+#: src/scriptfuncs.cpp:3259
 msgid "YOU ARE VICTORIOUS!"
 msgstr "GYŐZTÉL!"
 
 #: src/qtscriptfuncs.cpp:1475
-#: src/scriptfuncs.cpp:3273
+#: src/scriptfuncs.cpp:3263
 msgid "YOU WERE DEFEATED!"
 msgstr "VERESÉGET SZENVEDETT!"
 
@@ -13045,12 +13041,12 @@ msgstr "Teljes játék idő - %s"
 msgid "You cheated!"
 msgstr "Csaltál!"
 
-#: src/scriptfuncs.cpp:9382
+#: src/scriptfuncs.cpp:9372
 #, c-format
 msgid "Beacon received from %s!"
 msgstr "Jeladó érkezett %s csapatától!"
 
-#: src/scriptfuncs.cpp:9419
+#: src/scriptfuncs.cpp:9409
 #, c-format
 msgid "Beacon %d"
 msgstr "%d jeladó"
@@ -13172,6 +13168,9 @@ msgstr " - Épített %s"
 #, fuzzy, c-format
 msgid "Version %s-%s%s%s%s"
 msgstr "Verzió %s%s%s%s"
+
+#~ msgid "Activate self-test"
+#~ msgstr "Önellenőrzés aktiválása"
 
 #~ msgid "Failed to create building"
 #~ msgstr "Az épület létrehozása meghiúsult"
