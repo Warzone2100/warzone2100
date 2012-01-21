@@ -204,22 +204,144 @@ function buildPowerGenerators()
 	}
 }
 
+function checkLocalJobs(truck, structlist)
+{
+	if (!structlist)
+	{
+		structlist = enumStruct(me);
+	}
+	// Find closest unfinished structure
+	var bestStruct;
+	var bestDist = 99999;
+	for (var i = 0; i < structlist.length; i++)
+	{
+		var struct = structlist[i];
+		if (struct.status != BUILT)
+		{
+			var dist = distBetweenTwoPoints(truck.x, truck.y, struct.x, struct.y);
+			if (dist < 50 && (dist < bestDist || struct.stattype == POWER_GEN))
+			{
+				bestDist = dist;
+				bestStruct = struct;
+			}
+		}
+	}
+	if (bestStruct)
+	{
+		orderDroidObj(truck, DORDER_HELPBUILD, bestStruct);
+		dbgObj(truck, "Go help construction");
+		return true;
+	}
+	return false;
+}
+
+function sortByDistToBase(obj1, obj2)
+{
+	var dist1 = distBetweenTwoPoints(startPositions[me].x, startPositions[me].y, obj1.x, obj1.y);
+	var dist2 = distBetweenTwoPoints(startPositions[me].x, startPositions[me].y, obj2.x, obj2.y);
+	return (dist1 - dist2);
+}
+
 function buildFundamentals()
 {
 	var needPwGen = false;
+	var factlist = enumStruct(me, factory);
+	var droids = enumDroid(me, DROID_CONSTRUCT);
 
 	// Do we need power generators?
-	//if ((playerPower(me) < HIGH_POWER * 2 or numFactories() > 1) and numUnusedDerricks() > 0)
-	if (numUnusedDerricks() > 0)
+	if (playerPower(me) < 1000 && numUnusedDerricks() > 0)
 	{
 		needPwGen = true;
 		dbgPlr("More power generators needed");
 	}
-	if (needPwGen)
+	if (!needPwGen && playerPower(me) < 500) // check for more income
 	{
-		queue("buildPowerGenerators");
+		var oils = enumFeature(-1, oilRes);
+		if (oils.length > 0)
+		{
+			oils.sort(sortByDistToBase); // grab closer oils first
+			for (var i = 0; i < oils.length; i++)
+			{
+				var bestDroid = null;
+				var bestDist = 99999;
+				for (var j = 0; j < droids.length; j++)
+				{
+					var dist = distBetweenTwoPoints(droids[j].x, droids[j].y, oils[i].x, oils[i].y);
+					if (droidCanReach(droids[j], oils[i].x, oils[i].y)
+					    && safeDest(me, oils[i].x, oils[i].y)
+					    && droids[j].order != DORDER_BUILD  // but can snatch from HELPBUILD
+					    && droids[j].order != DORDER_LINEBUILD
+					    && bestDist > dist
+					    && !droids[j].busy)
+					{
+						bestDroid = droids[j];
+						bestDist = dist;
+					}
+				}
+				if (bestDroid)
+				{
+					bestDroid.busy = true;
+					orderDroidStatsLoc(bestDroid, DORDER_BUILD, derrick, oils[i].x, oils[i].y);
+				}
+			}
+		}
+		return; // do not build anything else
+	}
+	// Help build unfinished buildings
+	var structlist = enumStruct(me);
+	for (var j = 0; j < droids.length; j++)
+	{
+		checkLocalJobs(droids[j], structlist);
+	}
+	// If we need power generators, try to queue up production of them with any idle trucks
+	if (needPwGen && isStructureAvailable(powGen, me) && grabTrucksAndBuild(20, powGen, 1))
+	{
+		return; // exit early
+	}
+	queue("buildFundamentals2"); // go on to the next level
+}
+
+function buildFundamentals2()
+{
+	// Need factories? FIXME, check real limits
+	var factlist = enumStruct(me, factory);
+	var reslist = enumStruct(me, resLab);
+	var hqlist = enumStruct(me, playerHQ);
+	// Build as many research labs as factories
+	if (reslist.length < factlist.length && grabTrucksAndBuild(20, resLab, 1))
+	{
 		return;
 	}
+	// Build as many factories as we can afford
+	if ((factlist.length < 2 || (factlist.length < 4 && playerPower(me) > factlist.length * 1000))
+	    && grabTrucksAndBuild(20, factory, 1))
+	{
+		return; // done here
+	}
+	// Build HQ if missing
+	if (hqlist.length == 0 && grabTrucksAndBuild(20, playerHQ, 1))
+	{
+		return;
+	}
+	// Build cyborg factory if we don't have one
+	if (isStructureAvailable(cybFactory, me))
+	{
+		var cyblist = enumStruct(me, cybFactory);
+		if (cyblist.length == 0 && playerPower(me) > 250 && grabTrucksAndBuild(20, cybFactory, 1))
+		{
+			return;
+		}
+	}
+	// Build VTOL factory if we don't have one
+	if (isStructureAvailable(me, vtolFactory))
+	{
+		var vfaclist = enumStruct(me, vtolFactory);
+		if (vfaclist.length == 0 && playerPower(me) > 500 && grabTrucksAndBuild(20, vtolFactory, 1))
+		{
+			return;
+		}
+	}
+	// queue("buildDefenses");
 }
 
 function maintenance()
@@ -249,6 +371,10 @@ function maintenance()
 			}
 		}
 	}
+	// Check for idle trucks
+	queue("buildFundamentals");
+	// Check for idle labs
+	queue("eventResearched");
 }
 
 // --- game events
@@ -313,9 +439,20 @@ function eventStructureBuilt(struct, droid)
 	{
 		if (isStructureAvailable(powModule, me)) // Immediately upgrade it, if possible
 		{
-			orderDroidBuild(droid, DORDER_BUILD, powModule, struct.x, struct.y);
+			var builders = enumDroid(me, DROID_CONSTRUCT);
+			for (i = 0; i < builders.length; i++)
+			{
+				mydroid = builders[i];
+				var currDist = distBetweenTwoPoints(struct.x, struct.y, mydroid.x, mydroid.y);
+				if (conCanHelp(mydroid, struct.x, struct.y) && currDist < 20)
+				{
+					orderDroidBuild(droid, DORDER_BUILD, powModule, struct.x, struct.y);
+				}
+				return;
+			}
 		}
 	}
+	queue("buildFundamentals"); // see if we should build something else
 }
 
 function eventDroidBuilt(droid, struct)
@@ -394,6 +531,13 @@ function eventDroidBuilt(droid, struct)
 				}
 			}
 		}
+		else if (droid.droidType == DROID_CONSTRUCT)
+		{
+			if (!checkLocalJobs(droid))
+			{
+				queue("checkLocalJobs");
+			}
+		}
 	}
 }
 
@@ -460,4 +604,15 @@ function eventStartLevel()
 	{
 		queue("buildFundamentals");
 	}*/
+}
+
+function eventDroidIdle(droid)
+{
+	if (droid.droidType == DROID_CONSTRUCT)
+	{
+		if (!checkLocalJobs(droid))
+		{
+			queue("buildFundamentals"); // build something
+		}
+	}
 }

@@ -179,6 +179,8 @@ static QScriptValue js_removeTimer(QScriptContext *context, QScriptEngine *engin
 //-- the function will be run at a later frame.  A third optional
 //-- parameter can be a game object to pass to the queued function. If the game object
 //-- dies before the queued call runs, nothing happens.
+// TODO, check if an identical call is already queued up - and in this case, 
+// do not add anything.
 static QScriptValue js_queue(QScriptContext *context, QScriptEngine *engine)
 {
 	SCRIPT_ASSERT(context, context->argument(0).isString(), "Queued functions must be quoted");
