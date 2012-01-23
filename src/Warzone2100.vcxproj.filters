@@ -240,9 +240,6 @@
     <ClCompile Include="order.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="parsetest.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="pointtree.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -612,9 +609,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="orderdef.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="parsetest.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="pointtree.h">

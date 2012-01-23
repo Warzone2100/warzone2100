@@ -477,7 +477,6 @@
     <ClCompile Include="objmem.cpp" />
     <ClCompile Include="oprint.cpp" />
     <ClCompile Include="order.cpp" />
-    <ClCompile Include="parsetest.cpp" />
     <ClCompile Include="pointtree.cpp" />
     <ClCompile Include="power.cpp" />
     <ClCompile Include="projectile.cpp" />
@@ -603,7 +602,6 @@
     <ClInclude Include="oprint.h" />
     <ClInclude Include="order.h" />
     <ClInclude Include="orderdef.h" />
-    <ClInclude Include="parsetest.h" />
     <ClInclude Include="pointtree.h" />
     <ClInclude Include="positiondef.h" />
     <ClInclude Include="power.h" />
