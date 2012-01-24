@@ -254,6 +254,6 @@ function eventDestroyed(victim)
 	if (victim.player == selectedPlayer && victim.type == STRUCTURE && victim.stattype == HQ)
 	{
 		setMiniMap(false); // hide minimap if HQ is destroyed
-		//setDesign(false); // and disallow design
+		setDesign(false); // and disallow design
 	}
 }
