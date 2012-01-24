@@ -98,8 +98,9 @@ QScriptValue convResearch(RESEARCH *psResearch, QScriptEngine *engine, int playe
 //;; \begin{description}
 //;; \item[status] The completeness status of the structure. It will be one of BEING_BUILT, BUILT and BEING_DEMOLISHED.
 //;; \item[type] The type will always be STRUCTURE.
-//;; \item[stattype] The stattype defines the type of structure. It will be one of HQ, FACTORY, POWER_GEN, RESOURCE_EXTRACTOR, LASSAT,
-//;; DEFENSE, WALL, RESEARCH_LAB, REPAIR_FACILITY, CYBORG_FACTORY, VTOL_FACTORY, REARM_PAD, SAT_UPLINK, GATE and COMMAND_CONTROL.
+//;; \item[stattype] The stattype defines the type of structure. It will be one of HQ, FACTORY, POWER_GEN, RESOURCE_EXTRACTOR, 
+//;; LASSAT (3.2+ only), DEFENSE, WALL, RESEARCH_LAB, REPAIR_FACILITY, CYBORG_FACTORY, VTOL_FACTORY, REARM_PAD, SAT_UPLINK, GATE
+//;; and COMMAND_CONTROL.
 //;; \item[modules] If the stattype is set to one of the factories, POWER_GEN or RESEARCH_LAB, then this property is set to the
 //;; number of module upgrades it has.
 //;; \end{description}
@@ -175,8 +176,8 @@ QScriptValue convFeature(FEATURE *psFeature, QScriptEngine *engine)
 //;;   \item[DORDER_RETREAT] Order a droid to retreat back to HQ.
 //;;   \item[DORDER_PATROL] Order a droid to patrol.
 //;;   \item[DORDER_DEMOLISH] Order a droid to demolish something.
-//;;   \item[DORDER_EMBARK] Order a droid to embark on a transport.
-//;;   \item[DORDER_DISEMBARK] Order a transport to disembark its units at the given position.
+//;;   \item[DORDER_EMBARK] Order a droid to embark on a transport (3.2+ only).
+//;;   \item[DORDER_DISEMBARK] Order a transport to disembark its units at the given position (3.2+ only).
 //;;  \end{description}
 //;; \item[action] The current action of the droid. This is how it intends to carry out its plan. The
 //;; C++ code may change the action frequently as it tries to carry out its order. You never want to set
