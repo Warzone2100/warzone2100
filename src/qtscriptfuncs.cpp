@@ -52,6 +52,8 @@
 #include "loop.h"
 #include "scriptextern.h"
 
+#define FAKE_REF_LASSAT 999
+
 // hack, this is used from scriptfuncs.cpp -- and we don't want to include any stinkin' wzscript headers here!
 // TODO, move this stuff into a script common subsystem
 extern bool structDoubleCheck(BASE_STATS *psStat,UDWORD xx,UDWORD yy, SDWORD maxBlockingTiles);
@@ -96,7 +98,7 @@ QScriptValue convResearch(RESEARCH *psResearch, QScriptEngine *engine, int playe
 //;; \begin{description}
 //;; \item[status] The completeness status of the structure. It will be one of BEING_BUILT, BUILT and BEING_DEMOLISHED.
 //;; \item[type] The type will always be STRUCTURE.
-//;; \item[stattype] The stattype defines the type of structure. It will be one of HQ, FACTORY, POWER_GEN, RESOURCE_EXTRACTOR,
+//;; \item[stattype] The stattype defines the type of structure. It will be one of HQ, FACTORY, POWER_GEN, RESOURCE_EXTRACTOR, LASSAT,
 //;; DEFENSE, WALL, RESEARCH_LAB, REPAIR_FACILITY, CYBORG_FACTORY, VTOL_FACTORY, REARM_PAD, SAT_UPLINK, GATE and COMMAND_CONTROL.
 //;; \item[modules] If the stattype is set to one of the factories, POWER_GEN or RESEARCH_LAB, then this property is set to the
 //;; number of module upgrades it has.
@@ -116,6 +118,12 @@ QScriptValue convStructure(STRUCTURE *psStruct, QScriptEngine *engine)
 	case REF_BLASTDOOR:
 		value.setProperty("stattype", (int)REF_DEFENSE, QScriptValue::ReadOnly);
 		break;
+	case REF_DEFENSE:
+		if (isLasSat(psStruct->pStructureType))
+		{
+			value.setProperty("stattype", (int)FAKE_REF_LASSAT, QScriptValue::ReadOnly);
+			break;
+		}
 	default:
 		value.setProperty("stattype", (int)psStruct->pStructureType->type, QScriptValue::ReadOnly);
 		break;
@@ -167,6 +175,8 @@ QScriptValue convFeature(FEATURE *psFeature, QScriptEngine *engine)
 //;;   \item[DORDER_RETREAT] Order a droid to retreat back to HQ.
 //;;   \item[DORDER_PATROL] Order a droid to patrol.
 //;;   \item[DORDER_DEMOLISH] Order a droid to demolish something.
+//;;   \item[DORDER_EMBARK] Order a droid to embark on a transport.
+//;;   \item[DORDER_DISEMBARK] Order a transport to disembark its units at the given position.
 //;;  \end{description}
 //;; \item[action] The current action of the droid. This is how it intends to carry out its plan. The
 //;; C++ code may change the action frequently as it tries to carry out its order. You never want to set
@@ -1325,6 +1335,7 @@ static QScriptValue js_orderDroidLoc(QScriptContext *context, QScriptEngine *)
 	int x = context->argument(2).toInt32();
 	int y = context->argument(3).toInt32();
 	DROID_ORDER order = (DROID_ORDER)orderVal.toInt32();
+	SCRIPT_ASSERT(context, validOrderForLoc(order), "Invalid location based order: %s", getDroidOrderName(order));
 	DROID *psDroid = IdToDroid(id, player);
 	SCRIPT_ASSERT(context, psDroid, "Droid id %d not found belonging to player %d", id, player);
 	SCRIPT_ASSERT(context, tileOnMap(x, y), "Outside map bounds (%d, %d)", x, y);
@@ -1980,6 +1991,8 @@ bool registerFunctions(QScriptEngine *engine)
 	engine->globalObject().setProperty("DORDER_RETREAT", DORDER_RETREAT, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("DORDER_PATROL", DORDER_PATROL, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("DORDER_DEMOLISH", DORDER_DEMOLISH, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("DORDER_EMBARK", DORDER_EMBARK, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("DORDER_DISEMBARK", DORDER_DISEMBARK, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("COMMAND", IDRET_COMMAND, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("OPTIONS", IDRET_COMMAND, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("BUILD", IDRET_BUILD, QScriptValue::ReadOnly | QScriptValue::Undeletable);
@@ -2011,6 +2024,7 @@ bool registerFunctions(QScriptEngine *engine)
 	engine->globalObject().setProperty("POWER_GEN", REF_POWER_GEN, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("RESOURCE_EXTRACTOR", REF_RESOURCE_EXTRACTOR, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("DEFENSE", REF_DEFENSE, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("LASSAT", FAKE_REF_LASSAT, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("WALL", REF_WALL, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("RESEARCH_LAB", REF_RESEARCH, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("REPAIR_FACILITY", REF_REPAIR_FACILITY, QScriptValue::ReadOnly | QScriptValue::Undeletable);
