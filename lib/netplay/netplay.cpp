@@ -160,7 +160,7 @@ unsigned NET_PlayerConnectionStatus[CONNECTIONSTATUS_NORMAL][MAX_PLAYERS];
 **/
 static char const *versionString = version_getVersionString();
 static int NETCODE_VERSION_MAJOR = 6;
-static int NETCODE_VERSION_MINOR = 2;
+static int NETCODE_VERSION_MINOR = 3;
 
 bool NETisCorrectVersion(uint32_t game_version_major, uint32_t game_version_minor)
 {
@@ -2109,11 +2109,12 @@ static void NETregisterServer(int state)
 static void NETallowJoining(void)
 {
 	unsigned int i;
-	char buffer[sizeof(int32_t) * 2];
+	char buffer[6] = {'\0'};
 	char* p_buffer;
 	int32_t result;
 	bool connectFailed = true;
 	int32_t major, minor;
+	ssize_t recv_result = 0;
 
 	if (allow_joining == false) return;
 	ASSERT(NetPlay.isHost, "Cannot receive joins if not host!");
@@ -2163,9 +2164,12 @@ static void NETallowJoining(void)
 		SocketSet_AddSocket(tmp_socket_set, tmp_socket[i]);
 
 		p_buffer = buffer;
+		// We check for socket activity (connection), and then we check if we got data, since it is possible to have a connection
+		// and have no data waiting.
 		if (checkSockets(tmp_socket_set, NET_TIMEOUT_DELAY) > 0
 		    && socketReadReady(tmp_socket[i])
-		    && readNoInt(tmp_socket[i], p_buffer, 5) != SOCKET_ERROR)
+		    && (recv_result = readNoInt(tmp_socket[i], p_buffer, 5))
+			&& recv_result != SOCKET_ERROR)
 		{
 			// A 2.3.7 client sends a "list" command first,
 			// we just close the socket so he sees a "Connection Error".
@@ -2215,10 +2219,16 @@ static void NETallowJoining(void)
 				}
 			}
 		}
+		else
+		{
+			debug(LOG_NET, "Failed to process joining, socket not ready or no data, recv_result is :%ld", recv_result);
+			connectFailed = true;
+		}
 
 		// Remove a failed connection.
 		if (connectFailed)
 		{
+			debug(LOG_NET, "freeing temp socket %p (%d)", tmp_socket[i], __LINE__);
 			SocketSet_DelSocket(tmp_socket_set, tmp_socket[i]);
 			socketClose(tmp_socket[i]);
 			tmp_socket[i] = NULL;
