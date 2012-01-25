@@ -1,12 +1,13 @@
 3.1-beta1:
- * General:
-   * Fix: T2/T3 games (ticket:3044, commit:c907d5ab1c554e2fe402ca46bb9d1f9ab96a5360)
  * UI:
    * Change: Redesign lobby screen, shows disabled tanks/cyborgs/vtols (commit:617e4c01e1a82e4058a38b0973b8eb9a68807d7b)
    * Fix: Prevent players from choosing already used colours (ticket:3043, commit:7656d2f84b2db85b373fc0678a5997a8b2c19d37)
    * Fix: Make aborted research disappear from its research facility (ticket:3046, commit:03833edf3fc5c5f726f507d5352635fba9c7e475)
+ * Multiplayer:
+   * Fix: T2/T3 games (ticket:3044, commit:c907d5ab1c554e2fe402ca46bb9d1f9ab96a5360)
+   * Fix: Don't allow games without opponents (ticket:3049, commit:4d921267d0a40f6870806cd68c0091c557be3318)
  * Challenges:
-   * Fix: Team selection, position lock, allow AI selection (commit:10faa4c77d0b8729e46066744f81f518eca9d4c4)
+   * Fix: Team selection, position lock, allow AI selection (commit:10faa4c77d0b8729e46066744f81f518eca9d4c4, commit:291ca23ccca79d7c6a8691bd39411d6f3ae43d8d)
  * Translations:
    * Update: French (commit:3c45fde1438a39936097d024a7c6eef6a0b28785)
    * Update: Turkish (ticket:3052, commit:311ae3b1cfe5c99cec2552f68e366eaeeea9de75)
