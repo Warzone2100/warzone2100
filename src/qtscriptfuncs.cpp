@@ -151,11 +151,13 @@ QScriptValue convStructure(STRUCTURE *psStruct, QScriptEngine *engine)
 //;; In addition, the following properties are defined:
 //;; \begin{description}
 //;; \item[type] It will always be FEATURE.
+//;; \item[damageable] Can this feature be damaged? (3.2+ only)
 //;; \end{description}
 QScriptValue convFeature(FEATURE *psFeature, QScriptEngine *engine)
 {
 	QScriptValue value = convObj(psFeature, engine);
 	value.setProperty("health", 100 * psFeature->psStats->body / MAX(1, psFeature->body), QScriptValue::ReadOnly);
+	value.setProperty("damageable", psFeature->psStats->damageable, QScriptValue::ReadOnly);
 	return value;
 }
 
@@ -1290,10 +1292,7 @@ static QScriptValue js_orderDroidObj(QScriptContext *context, QScriptEngine *)
 	int oplayer = objVal.property("player").toInt32();
 	BASE_OBJECT *psObj = IdToPointer(oid, oplayer);
 	SCRIPT_ASSERT(context, psObj, "Object id %d not found belonging to player %d", oid, oplayer);
-	SCRIPT_ASSERT(context, order == DORDER_ATTACK || order == DORDER_HELPBUILD ||
-		      order == DORDER_DEMOLISH || order == DORDER_REPAIR ||
-		      order == DORDER_OBSERVE || order == DORDER_EMBARK ||
-		      order == DORDER_FIRESUPPORT || order == DORDER_DROIDREPAIR, "Invalid order");
+	SCRIPT_ASSERT(context, validOrderForObj(order), "Invalid order: %s", getDroidOrderName(order));
 	orderDroidObj(psDroid, order, psObj, ModeQueue);
 	return true;
 }

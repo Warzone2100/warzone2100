@@ -3426,7 +3426,7 @@ DROID * giftSingleDroid(DROID *psD, UDWORD to)
 	DROID		*psNewDroid, *psCurr;
 	STRUCTURE	*psStruct;
 	UDWORD		body, armourK, armourH;
-	int them = 0;
+	int them = 0, from = psD->player;
 
 	CHECK_DROID(psD);
 
@@ -3558,6 +3558,7 @@ DROID * giftSingleDroid(DROID *psD, UDWORD to)
 		psScrCBDroidTaken = psD;
 		eventFireCallbackTrigger((TRIGGER_TYPE)CALL_UNITTAKEOVER);
 		psScrCBDroidTaken = NULL;
+		triggerEventObjectTransfer(psD, from);
 
 		return NULL;
 	}

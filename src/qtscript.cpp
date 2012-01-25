@@ -749,3 +749,26 @@ bool triggerEventSeen(BASE_OBJECT *psViewer, BASE_OBJECT *psSeen)
 	}
 	return true;
 }
+
+//__ \subsection{eventObjectTransfer(object, from)}
+//__ An event that is run whenever an object is transferred between players,
+//__ for example due to a Nexus Link weapon. The event is called after the
+//__ object has been transferred, so the target player is in object.player.
+//__ The event is called for both players. (3.2+ only)
+bool triggerEventObjectTransfer(BASE_OBJECT *psObj, int from)
+{
+	for (int i = 0; i < scripts.size() && psObj; ++i)
+	{
+		QScriptEngine *engine = scripts.at(i);
+		int me = engine->globalObject().property("me").toInt32();
+		if (me == psObj->player || me == from)
+		{
+			QScriptEngine *engine = scripts.at(i);
+			QScriptValueList args;
+			args += convMax(psObj, engine);
+			args += QScriptValue(from);
+			callFunction(engine, "eventObjectTransfer", args);
+		}
+	}
+	return true;
+}
