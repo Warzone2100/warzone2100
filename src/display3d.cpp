@@ -4310,7 +4310,6 @@ static	void	doConstructionLines( void )
 			}
 		}
 	}
-	pie_SetDepthBufferStatus(DEPTH_CMP_LEQ_WRT_ON);
 }
 
 /// Draw the construction or demolish lines for one droid

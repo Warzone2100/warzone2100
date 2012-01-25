@@ -340,6 +340,7 @@ void screen_Upload(const char *newBackDropBmp, bool preview)
 			iV_DrawText(text, x, y);
 		}
 	}
+	pie_SetDepthBufferStatus(DEPTH_CMP_LEQ_WRT_ON);
 }
 
 void screen_enableMapPreview(char *name, int width, int height, Vector2i *playerpositions)
