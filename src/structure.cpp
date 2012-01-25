@@ -7182,11 +7182,11 @@ STRUCTURE * giftSingleStructure(STRUCTURE *psStructure, UBYTE attackPlayer, bool
 			if (psStructure->status == SS_BUILT)
 			{
 				buildingComplete(psStructure);
-				triggerEventStructBuilt(psStructure, NULL);
 			}
 			//since the structure isn't being rebuilt, the visibility code needs to be adjusted
 			//make sure this structure is visible to selectedPlayer
 			psStructure->visible[attackPlayer] = UINT8_MAX;
+			triggerEventObjectTransfer(psStructure, attackPlayer);
 		}
 		return NULL;
 	}

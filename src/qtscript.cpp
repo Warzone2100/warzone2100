@@ -594,7 +594,8 @@ bool triggerEventDroidIdle(DROID *psDroid)
 
 //__ \subsection{eventDroidBuilt(droid[, structure])}
 //__ An event that is run every time a droid is built. The structure parameter is set
-//__ if the droid was produced in a factory.
+//__ if the droid was produced in a factory. It is not triggered for droid theft or
+//__ gift (check \emph{eventObjectTransfer} for that).
 bool triggerEventDroidBuilt(DROID *psDroid, STRUCTURE *psFactory)
 {
 	for (int i = 0; i < scripts.size(); ++i)
@@ -617,7 +618,8 @@ bool triggerEventDroidBuilt(DROID *psDroid, STRUCTURE *psFactory)
 
 //__ \subsection{eventStructureBuilt(structure[, droid])}
 //__ An event that is run every time a structure is produced. The droid parameter is set
-//__ if the structure was built by a droid.
+//__ if the structure was built by a droid. It is not triggered for building theft
+//__ (check \emph{eventObjectTransfer} for that).
 bool triggerEventStructBuilt(STRUCTURE *psStruct, DROID *psDroid)
 {
 	for (int i = 0; i < scripts.size(); ++i)
