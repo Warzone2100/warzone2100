@@ -147,18 +147,6 @@ static GAMECODE renderLoop()
 		intAddInGamePopup();
 	}
 
-	int clearMode = 0;
-	if(getDrawShadows())
-	{
-		clearMode |= CLEAR_SHADOW;
-	}
-	if (loopMissionState == LMS_SAVECONTINUE)
-	{
-		pie_SetFogStatus(false);
-		clearMode = CLEAR_BLACK;
-	}
-	pie_ScreenFlip(clearMode);//gameloopflip
-
 	HandleClosingWindows();	// Needs to be done outside the pause case.
 
 	audio_Update();
@@ -402,10 +390,20 @@ static GAMECODE renderLoop()
 			break;
 	}
 
-	if (quitting)
+	int clearMode = 0;
+	if(getDrawShadows())
+	{
+		clearMode |= CLEAR_SHADOW;
+	}
+	if (quitting || loopMissionState == LMS_SAVECONTINUE)
 	{
 		pie_SetFogStatus(false);
-		pie_ScreenFlip(CLEAR_BLACK);//gameloopflip
+		clearMode = CLEAR_BLACK;
+	}
+	pie_ScreenFlip(clearMode);//gameloopflip
+
+	if (quitting)
+	{
 		/* Check for toggling display mode */
 		if ((keyDown(KEY_LALT) || keyDown(KEY_RALT)) && keyPressed(KEY_RETURN))
 		{

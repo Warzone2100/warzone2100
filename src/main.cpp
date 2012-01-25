@@ -750,13 +750,13 @@ static void startTitleLoop(void)
 {
 	SetGameMode(GS_TITLE_SCREEN);
 
-	screen_RestartBackDrop();
+	initLoadingScreen(true);
 	if (!frontendInitialise("wrf/frontend.wrf"))
 	{
 		debug( LOG_FATAL, "Shutting down after failure" );
 		exit(EXIT_FAILURE);
 	}
-	frontendInitVars();
+	closeLoadingScreen();
 }
 
 
@@ -844,6 +844,7 @@ static void stopGameLoop(void)
 				debug(LOG_ERROR, "levReleaseAll failed!");
 			}
 		}
+		closeLoadingScreen();
 		reloadMPConfig();
 	}
 
@@ -951,6 +952,7 @@ static void runTitleLoop(void)
 		case TITLECODE_SAVEGAMELOAD:
 			{
 				debug(LOG_MAIN, "TITLECODE_SAVEGAMELOAD");
+				initLoadingScreen(true);
 				// Restart into gameloop and load a savegame, ONLY on a good savegame load!
 				stopTitleLoop();
 				if (!initSaveGameLoad())
@@ -960,13 +962,15 @@ static void runTitleLoop(void)
 					startTitleLoop();
 					changeTitleMode(TITLE);
 				}
-
+				closeLoadingScreen();
 			break;
 			}
 		case TITLECODE_STARTGAME:
 			debug(LOG_MAIN, "TITLECODE_STARTGAME");
+			initLoadingScreen(true);
 			stopTitleLoop();
 			startGameLoop(); // Restart into gameloop
+			closeLoadingScreen();
 			break;
 		case TITLECODE_SHOWINTRO:
 			debug(LOG_MAIN, "TITLECODE_SHOWINTRO");

@@ -521,7 +521,6 @@ bool systemInitialise(void)
 	iV_TextInit();
 
 	iV_Reset();								// Reset the IV library.
-	initLoadingScreen(true);
 
 	readAIs();
 
@@ -542,7 +541,6 @@ void systemShutdown(void)
 	}
 
 	shutdownEffectsSystem();
-	closeLoadingScreen();
 	keyClearMappings();
 
 	// free up all the load functions (all the data should already have been freed)
@@ -1096,7 +1094,6 @@ bool stageThreeInitialise(void)
 	}
 
 	preProcessVisibility();
-	closeLoadingScreen();			// reset the loading screen.
 
 	// Load any stored templates; these need to be available ASAP
 	initTemplates();

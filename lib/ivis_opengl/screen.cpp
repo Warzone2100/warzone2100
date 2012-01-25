@@ -48,7 +48,7 @@ int wz_texture_compression = 0;
 static bool		bBackDrop = false;
 static char		screendump_filename[PATH_MAX];
 static bool		screendump_required = false;
-static GLuint		backDropTexture = ~0;
+static GLuint		backDropTexture = 0;
 
 static int preview_width = 0, preview_height = 0;
 static Vector2i player_pos[MAX_PLAYERS];
@@ -190,7 +190,7 @@ void screen_SetBackDropFromFile(const char* filename)
 	{
 		if (iV_loadImage_PNG( filename, &image ) )
 		{
-			if (~backDropTexture == 0)
+			if (backDropTexture == 0)
 				glGenTextures(1, &backDropTexture);
 
 			glBindTexture(GL_TEXTURE_2D, backDropTexture);
@@ -270,8 +270,7 @@ void screen_Upload(const char *newBackDropBmp, bool preview)
 		processed = true;
 	}
 
-	glDisable(GL_DEPTH_TEST);
-	glDepthMask(GL_FALSE);
+	pie_SetDepthBufferStatus(DEPTH_CMP_ALWAYS_WRT_OFF);
 
 	// Make sure the current texture page is reloaded after we are finished
 	// Otherwise WZ will think it is still loaded and not load it again

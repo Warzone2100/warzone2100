@@ -112,7 +112,6 @@ static void setupLoadingScreen(void)
 bool frontendInitVars(void)
 {
 	firstcall = true;
-	setupLoadingScreen();
 
 	return true;
 }
@@ -237,7 +236,6 @@ TITLECODE titleLoop(void)
 
 		case STARTGAME:
 		case LOADSAVEGAME:
-			initLoadingScreen(true);//render active
   			if (titleMode == LOADSAVEGAME)
 			{
 				RetCode = TITLECODE_SAVEGAMELOAD;
@@ -319,26 +317,27 @@ void loadingScreenCallback(void)
 // fill buffers with the static screen
 void initLoadingScreen( bool drawbdrop )
 {
+	setupLoadingScreen();
 	wzShowMouse(false);
-	if (!drawbdrop)	// fill buffers
-	{
-		//just init the load bar with the current screen
-		// setup the callback....
-		pie_SetFogStatus(false);
-		pie_ScreenFlip(CLEAR_BLACK);
-		resSetLoadCallback(loadingScreenCallback);
-		return;
-	}
-
 	pie_SetFogStatus(false);
-	pie_ScreenFlip(CLEAR_BLACK);//init loading
 
 	// setup the callback....
 	resSetLoadCallback(loadingScreenCallback);
 
-	// NOTE: When this is called, we stop the backdrop, but since the screen
-	// is double buffered, we only have the backdrop on 1 buffer, and not the other.
-	//screen_StopBackDrop();
+	if (drawbdrop)
+	{
+		if (!screen_GetBackDrop())
+		{
+			pie_LoadBackDrop(SCREEN_RANDOMBDROP);
+		}
+		screen_RestartBackDrop();
+	}
+	else
+	{
+		screen_StopBackDrop();
+	}
+
+	pie_ScreenFlip(CLEAR_BLACK);//init loading
 }
 
 
@@ -380,6 +379,7 @@ void closeLoadingScreen(void)
 		stars = NULL;
 	}
 	resSetLoadCallback(NULL);
+	pie_ScreenFlip(CLEAR_BLACK);
 }
 
 
