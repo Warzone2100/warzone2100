@@ -337,7 +337,9 @@ void initLoadingScreen( bool drawbdrop )
 		screen_StopBackDrop();
 	}
 
-	pie_ScreenFlip(CLEAR_BLACK);//init loading
+	// Start with two cleared buffers as the hacky loading screen code re-uses old buffers to create its effect.
+	pie_ScreenFlip(CLEAR_BLACK);
+	pie_ScreenFlip(CLEAR_BLACK);
 }
 
 
