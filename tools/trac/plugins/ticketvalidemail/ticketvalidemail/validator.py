@@ -1,7 +1,7 @@
 # vim: set et sts=4 sw=4 encoding=utf8:
 # -*- coding: utf-8 -*-
 
-import address
+import rfc822
 from email.utils import parseaddr
 import re
 from trac.core import *
@@ -24,7 +24,7 @@ class TicketValidEmail(Component):
 
     def validate_ticket(self, req, ticket):
         """Validate a ticket after it's been populated from user input.
-        
+
         Must return a list of `(field, message)` tuples, one for each problem
         detected. `field` can be `None` to indicate an overall problem with the
         ticket. Therefore, a return value of `[]` means everything is OK."""
@@ -32,7 +32,7 @@ class TicketValidEmail(Component):
         mail = parseaddr(ticket['reporter'])[1]
         if self.reject_emails_re.match(mail.lower()):
             return [('reporter', '"%s" isn\'t acceptable as e-mail address' % (mail))]
-        elif req.authname and req.authname != 'anonymous' or address.valid(ticket['reporter']):
+        elif req.authname and req.authname != 'anonymous' or rfc822.valid(ticket['reporter']):
             return []
         else:
             return [(None, 'Either use a valid reporter address or log in.'),

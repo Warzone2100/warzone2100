@@ -4,7 +4,7 @@
 #                          - original Perl version
 # Copyright (C) 2010       Giel van Schijndel
 #                          - Python conversion
-# 
+#
 # Permission is hereby granted, free of charge, to any person obtaining a copy of
 # this software and associated documentation files (the "Software"), to deal in
 # the Software without restriction, including without limitation the rights to
@@ -12,14 +12,14 @@
 # of the Software, and to permit persons to whom the Software is furnished to do
 # so, subject to the following conditions: The above copyright notice and this
 # permission notice shall be included in all copies or substantial portions of
-# the Software.  
-# 
+# the Software.
+#
 # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 # IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 # FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 # AUTHOR BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
 # ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-# WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.  
+# WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 import re
 
@@ -37,7 +37,7 @@ def make_rfc822re():
     """
 #   Basic lexical tokens are specials, domain_literal, quoted_string, atom, and
 #   comment.  We must allow for lwsp (or comments) after each of these.
-#   This regexp will only work on addresses which have had comments stripped 
+#   This regexp will only work on addresses which have had comments stripped
 #   and replaced with lwsp.
 
     specials = '()<>@,;:\\\\".\\[\\]'
@@ -48,7 +48,7 @@ def make_rfc822re():
 
     quoted_string = "\"(?:[^\\\"\\r\\\\]|\\\\.|" + lwsp + ")*\"" + lwsp + "*"
 
-#   Use zero-width assertion to spot the limit of an atom.  A simple 
+#   Use zero-width assertion to spot the limit of an atom.  A simple
 #   $lwsp* causes the regexp engine to hang occasionally.
     atom = "[^" + specials + " " + controls + "]+(?:" + lwsp + "+|\\Z|(?=[\\[\"" + specials + "]))"
     word = "(?:" + atom + "|" + quoted_string + ")"
@@ -172,7 +172,7 @@ if __name__ == "__main__":
                 r"""phrase: abigail@example.com abigail@example.com ;""",
                 u"""invalid£char@example.com""",
     ]
-    
+
     lists = [
         ('abc@foo.com, abc@blort.foo', ['abc@foo.com', 'abc@blort.foo']),
         ('abc@foo.com, abcblort.foo', None),
