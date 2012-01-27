@@ -2663,6 +2663,9 @@ bool NETfindGame(void)
 		{
 			debug(LOG_NET, "only %u game(s) received", (unsigned int)gamecount);
 			// If we fail, success depends on the amount of games that we've read already
+			SocketSet_DelSocket(socket_set, tcp_socket);		// mark it invalid
+			socketClose(tcp_socket);
+			tcp_socket = NULL;
 			return gamecount;
 		}
 
@@ -2681,6 +2684,9 @@ bool NETfindGame(void)
 		addConsoleMessage(_("Failed to get a lobby response!"), DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
 		return true;		// while there was a problem, this isn't fatal for the function
 	}
+	SocketSet_DelSocket(socket_set, tcp_socket);		// mark it invalid (we are done with it)
+	socketClose(tcp_socket);
+	tcp_socket = NULL;
 	addConsoleMessage(NetPlay.MOTD, DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 	return true;
 }
