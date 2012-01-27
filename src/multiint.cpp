@@ -2505,7 +2505,7 @@ static void addConsoleBox(void)
 	setDefaultConsoleJust(LEFT_JUSTIFY);
 	setConsoleSizePos(MULTIOP_CONSOLEBOXX + 4 + D_W, MULTIOP_CONSOLEBOXY + 14 + D_H, MULTIOP_CONSOLEBOXW - 4);
 	setConsolePermanence(true, true);
-	setConsoleLineInfo(4);											// use x lines on chat window
+	setConsoleLineInfo(3);											// use x lines on chat window
 
 	addConsoleMessage(_("Connecting to the lobby server..."), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 	displayConsoleMessages();
@@ -3766,7 +3766,8 @@ void displayRemoteGame(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGH
 
 	//draw game name, chop when we get a too long name
 	sstrcpy(name, NetPlay.games[gameID].name);
-	while (iV_GetTextWidth(name) > (psWidget->width-110) )
+	// box size in pixels
+	while (iV_GetTextWidth(name) > (GAMES_MAPNAME_START - GAMES_GAMENAME_START- 4) )
 	{
 		name[strlen(name)-1]='\0';
 	}
@@ -3774,7 +3775,8 @@ void displayRemoteGame(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGH
 
 	// draw map name, chop when we get a too long name
 	sstrcpy(name, NetPlay.games[gameID].mapname);
-	while (iV_GetTextWidth(name) > (psWidget->width-110) )
+	// box size in pixels
+	while (iV_GetTextWidth(name) > (GAMES_PLAYERS_START - GAMES_MAPNAME_START - 4) )
 	{
 		name[strlen(name)-1]='\0';
 	}
@@ -3782,11 +3784,33 @@ void displayRemoteGame(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGH
 
 	iV_SetFont(font_small);
 	// draw mod name (if any)
-	strlen(NetPlay.games[gameID].modlist) ? sprintf(name, _("Mods: %s"), NetPlay.games[gameID].modlist) : sstrcpy(name, _("Mods: None!"));
+	if (strlen(NetPlay.games[gameID].modlist))
+	{
+		// FIXME: we really don't have enough space to list all mods
+		char tmp[300];
+		sprintf(tmp, _("Mods: %s"), NetPlay.games[gameID].modlist);
+		tmp[StringSize] = '\0';
+		sstrcpy(name, tmp);
+
+	}
+	else
+	{
+		sstrcpy(name, _("Mods: None!"));
+	}
+	// box size in pixels
+	while (iV_GetTextWidth(name) > (GAMES_PLAYERS_START - GAMES_MAPNAME_START - 8) )
+	{
+		name[strlen(name)-1]='\0';
+	}
 	iV_DrawText(name, x + GAMES_MODNAME_START, y + 24 );
 
 	// draw version string
 	sprintf(name, _("Version: %s"), NetPlay.games[gameID].versionstring);
+	// box size in pixels
+	while (iV_GetTextWidth(name) > (GAMES_MAPNAME_START - 6 - GAMES_GAMENAME_START - 4) )
+	{
+		name[strlen(name)-1]='\0';
+	}
 	iV_DrawText(name, x + GAMES_GAMENAME_START + 6, y + 24 );
 
 	// crappy hack to only draw this once for the header.  TODO fix GUI
