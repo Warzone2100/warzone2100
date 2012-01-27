@@ -2221,7 +2221,7 @@ static void NETallowJoining(void)
 		}
 		else
 		{
-			debug(LOG_NET, "Failed to process joining, socket not ready or no data, recv_result is :%ld", recv_result);
+			debug(LOG_NET, "Failed to process joining, socket not ready or no data, recv_result is :%d", (int)recv_result);
 			connectFailed = true;
 		}
 
