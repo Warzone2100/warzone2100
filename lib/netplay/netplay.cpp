@@ -61,6 +61,11 @@
 char masterserver_name[255] = {'\0'};
 static unsigned int masterserver_port = 0, gameserver_port = 0;
 
+#define WZ_SERVER_DISCONNECT 0
+#define WZ_SERVER_CONNECT    1
+#define WZ_SERVER_LAUNCH     2
+#define WZ_SERVER_UPDATE     3
+
 #define NET_TIMEOUT_DELAY	2500		// we wait this amount of time for socket activity
 #define NET_READ_TIMEOUT	0
 /*
@@ -396,7 +401,7 @@ static void NET_DestroyPlayer(unsigned int index)
 		{
 			// Update player count in the lobby by disconnecting
 			// and reconnecting
-			NETregisterServer(2);
+			NETregisterServer(WZ_SERVER_UPDATE);
 		}
 	}
 	NET_InitPlayer(index, false);  // reinitialize
@@ -1994,7 +1999,7 @@ static void NETregisterServer(int state)
 		switch(state)
 		{
 			// Update player counts
-			case 2:
+			case WZ_SERVER_UPDATE:
 			{
 				if (!NETsendGAMESTRUCT(rs_socket, &gamestruct))
 				{
@@ -2005,7 +2010,7 @@ static void NETregisterServer(int state)
 			break;
 
 			// Register a game with the lobby
-			case 1:
+			case WZ_SERVER_CONNECT:
 			{
 				uint32_t gameId = 0;
 				SocketAddress *const hosts = resolveHost(masterserver_name, masterserver_port);
@@ -2080,12 +2085,12 @@ static void NETregisterServer(int state)
 				}
 
 				// Preserves another register
-				registered=state;
+				registered = state;
 			}
 			break;
 
 			// Unregister the game (close the socket)
-			case 0:
+			case WZ_SERVER_DISCONNECT:
 			{
 				if (rs_socket != NULL)
 				{
@@ -2096,7 +2101,7 @@ static void NETregisterServer(int state)
 				}
 
 				// Preserves another unregister
-				registered=state;
+				registered = state;
 			}
 			break;
 		}
@@ -2119,7 +2124,7 @@ static void NETallowJoining(void)
 	if (allow_joining == false) return;
 	ASSERT(NetPlay.isHost, "Cannot receive joins if not host!");
 
-	NETregisterServer(1);
+	NETregisterServer(WZ_SERVER_CONNECT);
 
 	// This is here since we need to get the status, before we can show the info.
 	// FIXME: find better location to stick this?
@@ -2408,7 +2413,7 @@ static void NETallowJoining(void)
 					NETfixDuplicatePlayerNames();
 
 					// Send the updated GAMESTRUCT to the masterserver
-					NETregisterServer(2);
+					NETregisterServer(WZ_SERVER_UPDATE);
 
 
 					// reset flags for new players
@@ -2530,7 +2535,7 @@ bool NEThostGame(const char* SessionName, const char* PlayerName,
 
 	allow_joining = true;
 
-	NETregisterServer(0);
+	NETregisterServer(WZ_SERVER_DISCONNECT);
 
 	debug(LOG_NET, "Hosting a server. We are player %d.", selectedPlayer);
 
@@ -2545,7 +2550,7 @@ bool NEThaltJoining(void)
 
 	allow_joining = false;
 	// disconnect from the master server
-	NETregisterServer(0);
+	NETregisterServer(WZ_SERVER_DISCONNECT);
 	return true;
 }
 
