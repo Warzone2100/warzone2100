@@ -717,7 +717,7 @@ void handleAbandonedStructures()
  * \param weaponSubClass the subclass of the weapon that deals the damage
  * \return < 0 when the dealt damage destroys the structure, > 0 when the structure survives
  */
-int32_t structureDamage(STRUCTURE *psStructure, unsigned damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, unsigned impactTime)
+int32_t structureDamage(STRUCTURE *psStructure, unsigned damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, unsigned impactTime, bool isDamagePerSecond)
 {
 	int32_t relativeDamage;
 
@@ -726,7 +726,7 @@ int32_t structureDamage(STRUCTURE *psStructure, unsigned damage, WEAPON_CLASS we
 	debug(LOG_ATTACK, "structure id %d, body %d, armour %d, damage: %d",
 		  psStructure->id, psStructure->body, psStructure->armour[weaponClass], damage);
 
-	relativeDamage = objDamage(psStructure, damage, structureBody(psStructure), weaponClass, weaponSubClass);
+	relativeDamage = objDamage(psStructure, damage, structureBody(psStructure), weaponClass, weaponSubClass, isDamagePerSecond);
 
 	// If the shell did sufficient damage to destroy the structure
 	if (relativeDamage < 0)
@@ -1473,7 +1473,6 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 			psBuilding->targetOrigin[i] = ORIGIN_UNKNOWN;
 		}
 
-		psBuilding->inFire = 0;
 		psBuilding->burnStart = 0;
 		psBuilding->burnDamage = 0;
 
@@ -3679,16 +3678,12 @@ void structureUpdate(STRUCTURE *psBuilding, bool mission)
 	}
 
 	/* Update the fire damage data */
-	if (psBuilding->inFire & IN_FIRE)
+	if (psBuilding->burnStart != 0 && psBuilding->burnStart != gameTime - deltaGameTime)  // -deltaGameTime, since projectiles are updated after structures.
 	{
-		/* Still in a fire, reset the fire flag to see if we get out this turn */
-		psBuilding->inFire = 0;
-	}
-	else
-	{
-		/* The fire flag has not been set so we must be out of the fire */
+		// The burnStart has been set, but is not from the previous tick, so we must be out of the fire.
+		psBuilding->burnDamage = 0;  // Reset burn damage done this tick.
+		// Finished burning.
 		psBuilding->burnStart = 0;
-		psBuilding->burnDamage = 0;
 	}
 
 	//check the resistance level of the structure

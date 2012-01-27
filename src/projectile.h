@@ -38,8 +38,6 @@ extern	BASE_OBJECT	*g_pProjLastAttacker;	///< The last unit that did damage - us
 #define PROJ_MAX_PITCH  45
 #define PROJ_ULTIMATE_PITCH  80
 
-#define IN_FIRE		0x01	///< Whether an object is in a fire.
-#define BURNING		0x02	///< Whether an object has just left the fire, but is still burning.
 #define BURN_TIME	10000	///< How long an object burns for after leaving a fire.
 #define BURN_DAMAGE	15	///< How much damaga a second an object takes when it is burning.
 #define ACC_GRAVITY	1000	///< Downward force against projectiles.

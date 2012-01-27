@@ -53,6 +53,7 @@ struct PATHRESULT
 	UDWORD		droidID;	///< Unique droid ID.
 	MOVE_CONTROL	sMove;		///< New movement values for the droid.
 	FPATH_RETVAL	retval;		///< Result value from path-finding.
+	Vector2i        originalDest;   ///< Used to check if the pathfinding job is to the right destination.
 };
 
 
@@ -96,6 +97,7 @@ static int fpathThreadFunc(void *)
 		result.droidID = job.droidID;
 		memset(&result.sMove, 0, sizeof(result.sMove));
 		result.retval = FPR_FAILED;
+		result.originalDest = Vector2i(job.destX, job.destY);
 
 		fpathExecute(&job, &result);
 
@@ -390,6 +392,7 @@ static FPATH_RETVAL fpathRoute(MOVE_CONTROL *psMove, int id, int startX, int sta
 			// Copy over select fields - preserve others
 			psMove->destination = psResult->sMove.destination;
 			psMove->numPoints = psResult->sMove.numPoints;
+			bool correctDestination = tX == psResult->originalDest.x && tY == psResult->originalDest.y;
 			psMove->pathIndex = 0;
 			psMove->Status = MOVENAVIGATE;
 			free(psMove->asPath);
@@ -406,6 +409,11 @@ static FPATH_RETVAL fpathRoute(MOVE_CONTROL *psMove, int id, int startX, int sta
 			objTrace(id, "Got a path to (%d, %d)! Length=%d Retval=%d", psMove->destination.x, psMove->destination.y, psMove->numPoints, (int)retval);
 			syncDebug("fpathRoute(..., %d, %d, %d, %d, %d, %d, %d, %d, %d) = %d, path[%d] = %08X->(%d, %d)", id, startX, startY, tX, tY, propulsionType, droidType, moveType, owner, retval, psMove->numPoints, ~crcSumVector2i(0, psMove->asPath, psMove->numPoints), psMove->destination.x, psMove->destination.y);
 
+			if (!correctDestination)
+			{
+				goto queuePathfinding;  // Seems we got the result of an old pathfinding job for this droid, so need to pathfind again.
+			}
+
 			return retval;
 		}
 
@@ -415,6 +423,7 @@ static FPATH_RETVAL fpathRoute(MOVE_CONTROL *psMove, int id, int startX, int sta
 		wzMutexUnlock(fpathMutex);
 		wzSemaphoreWait(waitingForResultSemaphore);  // keep waiting
 	}
+queuePathfinding:
 
 	// We were not waiting for a result, and found no trivial path, so create new job and start waiting
 	PATHJOB job;
@@ -473,15 +482,12 @@ FPATH_RETVAL fpathDroidRoute(DROID* psDroid, SDWORD tX, SDWORD tY, FPATH_MOVETYP
 	Position startPos = psDroid->pos;
 	Position endPos = Position(tX, tY, 0);
 	BASE_OBJECT *dstStructure = worldTile(endPos)->psObject;
-	if (psDroid->sMove.Status != MOVEWAITROUTE)
+	startPos = findNonblockingPosition(startPos, getPropulsionStats(psDroid)->propulsionType, psDroid->player, moveType);
+	if (dstStructure == NULL)  // If there's a structure over the destination, ignore it, otherwise pathfind from somewhere around the obstruction.
 	{
-		startPos = findNonblockingPosition(startPos, getPropulsionStats(psDroid)->propulsionType, psDroid->player, moveType);
-		if (dstStructure == NULL)  // If there's a structure over the destination, ignore it, otherwise pathfind from somewhere around the obstruction.
-		{
-			endPos   = findNonblockingPosition(endPos,   getPropulsionStats(psDroid)->propulsionType, psDroid->player, moveType);
-		}
-		objTrace(psDroid->id, "Want to go to (%d, %d) -> (%d, %d), going (%d, %d) -> (%d, %d)", map_coord(psDroid->pos.x), map_coord(psDroid->pos.y), map_coord(tX), map_coord(tY), map_coord(startPos.x), map_coord(startPos.y), map_coord(endPos.x), map_coord(endPos.y));
+		endPos   = findNonblockingPosition(endPos,   getPropulsionStats(psDroid)->propulsionType, psDroid->player, moveType);
 	}
+	objTrace(psDroid->id, "Want to go to (%d, %d) -> (%d, %d), going (%d, %d) -> (%d, %d)", map_coord(psDroid->pos.x), map_coord(psDroid->pos.y), map_coord(tX), map_coord(tY), map_coord(startPos.x), map_coord(startPos.y), map_coord(endPos.x), map_coord(endPos.y));
 	switch (psDroid->order.type)
 	{
 	case DORDER_BUILD:

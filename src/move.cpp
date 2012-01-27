@@ -2644,7 +2644,7 @@ void moveUpdateDroid(DROID *psDroid)
 		objTrace(psDroid->id, "MOVETURNTOTARGET complete");
 	}
 
-	if( (psDroid->inFire && psDroid->droidType != DROID_PERSON) && psDroid->visible[selectedPlayer])
+	if (psDroid->burnStart != 0 && psDroid->droidType != DROID_PERSON && psDroid->visible[selectedPlayer])
 	{
 		pos.x = psDroid->pos.x + (18-rand()%36);
 		pos.z = psDroid->pos.y + (18-rand()%36);
