@@ -108,7 +108,7 @@ struct ObjectShape
 static ObjectShape establishTargetShape(BASE_OBJECT *psTarget);
 static void	proj_ImpactFunc( PROJECTILE *psObj );
 static void	proj_PostImpactFunc( PROJECTILE *psObj );
-static void	proj_checkBurnDamage( BASE_OBJECT *apsList, PROJECTILE *psProj);
+static void proj_checkBurnDamage(PROJECTILE *psProj);
 
 static int32_t objectDamage(BASE_OBJECT *psObj, unsigned damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, unsigned impactTime);
 
@@ -919,7 +919,7 @@ static void proj_InFlightFunc(PROJECTILE *psProj)
 		return;
 	}
 
-	if (currentDistance*100 >= psStats->longRange*distanceExtensionFactor)  // We've travelled our maximum range.
+	if (currentDistance*100u >= psStats->longRange*distanceExtensionFactor)  // We've travelled our maximum range.
 	{
 		psProj->state = PROJ_IMPACT;
 		setProjectileDestination(psProj, NULL); /* miss registered if NULL target */
@@ -974,7 +974,7 @@ static void proj_InFlightFunc(PROJECTILE *psProj)
 static void proj_ImpactFunc( PROJECTILE *psObj )
 {
 	WEAPON_STATS    *psStats;
-	SDWORD          i, iAudioImpactID;
+	SDWORD          iAudioImpactID;
 	int32_t         relativeDamage;
 	Vector3i        position, scatter;
 	iIMDShape       *imd;
@@ -1178,127 +1178,64 @@ static void proj_ImpactFunc( PROJECTILE *psObj )
 
 	if (psStats->radius != 0)
 	{
-		FEATURE *psCurrF, *psNextF;
-
 		/* An area effect bullet */
 		psObj->state = PROJ_POSTIMPACT;
 
 		/* Note when it exploded for the explosion effect */
 		psObj->born = gameTime;
 
-		for (i = 0; i < MAX_PLAYERS; i++)
+		gridStartIterate(psObj->pos.x, psObj->pos.y, psStats->radius);
+		for (BASE_OBJECT *psCurr = gridIterate(); psCurr != NULL; psCurr = gridIterate())
 		{
-			DROID *psCurrD, *psNextD;
-
-			for (psCurrD = apsDroidLists[i]; psCurrD; psCurrD = psNextD)
+			if (psCurr == psObj->psDest)
 			{
-				/* have to store the next pointer as psCurrD could be destroyed */
-				psNextD = psCurrD->psNext;
-
-				/* see if psCurrD is hit (don't hit main target twice) */
-				if ((BASE_OBJECT *)psCurrD != psObj->psDest)
-				{
-					bool bTargetInAir = (asPropulsionTypes[asPropulsionStats[psCurrD->asBits[COMP_PROPULSION].nStat].propulsionType].travel == AIR && ((DROID *)psCurrD)->sMove.Status != MOVEINACTIVE);
-
-					// Check whether we can hit it and it is in hit radius
-					if ((((psStats->surfaceToAir & SHOOT_IN_AIR) && bTargetInAir) || ((psStats->surfaceToAir & SHOOT_ON_GROUND) && !bTargetInAir))
-					    && Vector3i_InSphere(psCurrD->pos, psObj->pos, psStats->radius))
-					{
-						unsigned dice = gameRand(100);
-						if (dice < weaponRadiusHit(psStats, psObj->player))
-						{
-							unsigned int damage = calcDamage(
-										weaponRadDamage(psStats, psObj->player),
-										psStats->weaponEffect, (BASE_OBJECT *)psCurrD);
-
-							debug(LOG_ATTACK, "Damage to object %d, player %d : %u", psCurrD->id, psCurrD->player, damage);
-
-							if (bMultiPlayer)
-							{
-								if (psObj->psSource)
-								{
-									updateMultiStatsDamage(psObj->psSource->player, psCurrD->player, damage);
-								}
-								turnOffMultiMsg(true);
-							}
-
-							relativeDamage = droidDamage(psCurrD, damage, psStats->weaponClass, psStats->weaponSubClass, psObj->time);
-
-							turnOffMultiMsg(false);	// multiplay msgs back on.
-
-							proj_UpdateKills(psObj, relativeDamage);
-						}
-					}
-				}
+				continue;  // Don't hit main target twice.
 			}
 
-			// FIXME Check whether we hit above maximum structure height, to skip unnecessary calculations!
-			if (psStats->surfaceToAir & SHOOT_ON_GROUND)
+			bool bTargetInAir = false;
+			bool useSphere = false;
+			bool damageable = true;
+			switch (psCurr->type)
 			{
-				STRUCTURE *psCurrS, *psNextS;
-
-				for (psCurrS = apsStructLists[i]; psCurrS; psCurrS = psNextS)
-				{
-					/* have to store the next pointer as psCurrD could be destroyed */
-					psNextS = psCurrS->psNext;
-
-					/* see if psCurrS is hit (don't hit main target twice) */
-					if ((BASE_OBJECT *)psCurrS != psObj->psDest)
-					{
-						// Check whether it is in hit radius
-						if (Vector3i_InCircle(psCurrS->pos, psObj->pos, psStats->radius))
-						{
-							unsigned dice = gameRand(100);
-							if (dice < weaponRadiusHit(psStats, psObj->player))
-							{
-								unsigned int damage = calcDamage(weaponRadDamage(psStats, psObj->player), psStats->weaponEffect, (BASE_OBJECT *)psCurrS);
-
-								if (bMultiPlayer)
-								{
-									if (psObj->psSource)
-									{
-										updateMultiStatsDamage(psObj->psSource->player,	psCurrS->player,damage);
-									}
-								}
-
-								relativeDamage = structureDamage(psCurrS, damage, psStats->weaponClass, psStats->weaponSubClass, psObj->time);
-								proj_UpdateKills(psObj, relativeDamage);
-							}
-						}
-					}
-				}
+				case OBJ_DROID:
+					bTargetInAir = asPropulsionTypes[asPropulsionStats[((DROID *)psCurr)->asBits[COMP_PROPULSION].nStat].propulsionType].travel == AIR && ((DROID *)psCurr)->sMove.Status != MOVEINACTIVE;
+					useSphere = true;
+					break;
+				case OBJ_STRUCTURE:
+					break;
+				case OBJ_FEATURE:
+					damageable = ((FEATURE *)psCurr)->psStats->damageable;
+					break;
+				default: ASSERT(false, "Bad type."); continue;
 			}
-		}
 
-		for (psCurrF = apsFeatureLists[0]; psCurrF; psCurrF = psNextF)
-		{
-			/* have to store the next pointer as psCurrD could be destroyed */
-			psNextF = psCurrF->psNext;
-
-			//ignore features that are not damageable
-			if(!psCurrF->psStats->damageable)
+			if (!damageable)
 			{
-				continue;
+				continue;  // Ignore features that are not damageable.
 			}
-			/* see if psCurrS is hit (don't hit main target twice) */
-			if ((BASE_OBJECT *)psCurrF != psObj->psDest)
+			unsigned targetInFlag = bTargetInAir? SHOOT_IN_AIR : SHOOT_ON_GROUND;
+			if ((psStats->surfaceToAir & targetInFlag) == 0)
 			{
-				// Check whether it is in hit radius
-				if (Vector3i_InCircle(psCurrF->pos, psObj->pos, psStats->radius))
-				{
-					unsigned dice = gameRand(100);
-					if (dice < weaponRadiusHit(psStats, psObj->player))
-					{
-						debug(LOG_ATTACK, "Damage to object %d, player %d - in blast radius", psCurrF->id, psCurrF->player);
-
-						relativeDamage = featureDamage(psCurrF,
-						                              calcDamage(weaponRadDamage(psStats, psObj->player),
-						                                         psStats->weaponEffect, (BASE_OBJECT *)psCurrF),
-						                              psStats->weaponClass, psStats->weaponSubClass, psObj->time);
-						proj_UpdateKills(psObj, relativeDamage);
-					}
-				}
+				continue;  // Target in air, and can't shoot at air, or target on ground, and can't shoot at ground.
 			}
+			if (useSphere && !Vector3i_InSphere(psCurr->pos, psObj->pos, psStats->radius))
+			{
+				continue;  // Target out of range.
+			}
+			unsigned hitProbability = weaponRadiusHit(psStats, psObj->player);
+			if (hitProbability < 100u && hitProbability <= gameRand(100))  // Avoid unneeded gameRand(100) calls when probability is 100%.
+			{
+				continue;  // Target was lucky, and the tank or structure somehow managed to dodge the explosion.
+			}
+			// The psCurr will get damaged, at this point.
+			unsigned damage = calcDamage(weaponRadDamage(psStats, psObj->player), psStats->weaponEffect, psCurr);
+			debug(LOG_ATTACK, "Damage to object %d, player %d : %u", psCurr->id, psCurr->player, damage);
+			if (bMultiPlayer && psObj->psSource != NULL && psCurr->type != OBJ_FEATURE)
+			{
+				updateMultiStatsDamage(psObj->psSource->player, psCurr->player, damage);
+			}
+			int relativeDamage = objectDamage(psCurr, damage, psStats->weaponClass, psStats->weaponSubClass, psObj->time);
+			proj_UpdateKills(psObj, relativeDamage);
 		}
 	}
 
@@ -1317,16 +1254,13 @@ static void proj_ImpactFunc( PROJECTILE *psObj )
 
 static void proj_PostImpactFunc( PROJECTILE *psObj )
 {
-	WEAPON_STATS	*psStats;
-	SDWORD			i, age;
-
 	CHECK_PROJECTILE(psObj);
 
-	psStats = psObj->psWStats;
+	WEAPON_STATS *psStats = psObj->psWStats;
 	ASSERT( psStats != NULL,
 		"proj_PostImpactFunc: Invalid weapon stats pointer" );
 
-	age = (SDWORD)gameTime - (SDWORD)psObj->born;
+	int age = gameTime - psObj->born;
 
 	/* Time to finish postimpact effect? */
 	if (age > (SDWORD)psStats->radiusLife && age > (SDWORD)psStats->incenTime)
@@ -1339,15 +1273,7 @@ static void proj_PostImpactFunc( PROJECTILE *psObj )
 	if (psStats->incenTime > 0)
 	{
 		/* See if anything is in the fire and burn it */
-		for (i=0; i<MAX_PLAYERS; i++)
-		{
-			/* Don't damage your own droids - unrealistic, but better */
-			if(i!=psObj->player)
-			{
-				proj_checkBurnDamage((BASE_OBJECT*)apsDroidLists[i], psObj);
-				proj_checkBurnDamage((BASE_OBJECT*)apsStructLists[i], psObj);
-			}
-		}
+		proj_checkBurnDamage(psObj);
 	}
 }
 
@@ -1428,75 +1354,60 @@ void proj_UpdateAll()
 
 /***************************************************************************/
 
-static void proj_checkBurnDamage( BASE_OBJECT *apsList, PROJECTILE *psProj)
+static void proj_checkBurnDamage(PROJECTILE *psProj)
 {
-	BASE_OBJECT		*psCurr, *psNext;
-	SDWORD			xDiff,yDiff;
-	WEAPON_STATS	*psStats;
-	UDWORD			radSquared;
-	UDWORD			damageSoFar;
-	SDWORD			damageToDo;
-
 	CHECK_PROJECTILE(psProj);
 
 	// note the attacker if any
 	g_pProjLastAttacker = psProj->psSource;
 
-	psStats = psProj->psWStats;
-	radSquared = psStats->incenRadius * psStats->incenRadius;
+	WEAPON_STATS *psStats = psProj->psWStats;
 
-	for (psCurr = apsList; psCurr; psCurr = psNext)
+	gridStartIterate(psProj->pos.x, psProj->pos.y, psStats->incenRadius);
+	for (BASE_OBJECT *psCurr = gridIterate(); psCurr != NULL; psCurr = gridIterate())
 	{
-		/* have to store the next pointer as psCurr could be destroyed */
-		psNext = psCurr->psNext;
-
-		if ((psCurr->type == OBJ_DROID) &&
-			isVtolDroid((DROID*)psCurr) &&
-			((DROID *)psCurr)->sMove.Status != MOVEINACTIVE)
+		if (aiCheckAlliances(psProj->player, psCurr->player))
 		{
-			// can't set flying vtols on fire
-			continue;
+			continue;  // Don't damage your own droids, nor ally droids - unrealistic, but better.
 		}
 
-		/* Within the bounding box, now check the radius */
-		xDiff = psCurr->pos.x - psProj->pos.x;
-		yDiff = psCurr->pos.y - psProj->pos.y;
-		if ((uint32_t)(xDiff*xDiff + yDiff*yDiff) <= radSquared)
+		if (psCurr->type == OBJ_DROID &&
+		    isVtolDroid((DROID*)psCurr) &&
+		    ((DROID *)psCurr)->sMove.Status != MOVEINACTIVE)
 		{
-			/* The object is in the fire */
-			psCurr->inFire |= IN_FIRE;
+			continue;  // Can't set flying vtols on fire.
+		}
 
-			if ( (psCurr->burnStart == 0) ||
-				 (psCurr->inFire & BURNING) )
-			{
-				/* This is the first turn the object is in the fire */
-				psCurr->burnStart = gameTime;
-				psCurr->burnDamage = 0;
-			}
-			else
-			{
-				/* Calculate how much damage should have
-				   been done up till now */
-				damageSoFar = (gameTime - psCurr->burnStart)
-							  //* psStats->incenDamage
-							  * weaponIncenDamage(psStats,psProj->player)
-							  / GAME_TICKS_PER_SEC;
-				damageToDo = (SDWORD)damageSoFar
-							 - (SDWORD)psCurr->burnDamage;
-				if (damageToDo > 0)
-				{
-					int32_t relativeDamage;
-					debug(LOG_NEVER, "Burn damage of %d to object %d, player %d\n",
-							damageToDo, psCurr->id, psCurr->player);
+		if (psCurr->type == OBJ_FEATURE && !((FEATURE *)psCurr)->psStats->damageable)
+		{
+			continue;  // Can't destroy oil wells.
+		}
 
-					relativeDamage = objectDamage(psCurr, damageToDo, psStats->weaponClass, psStats->weaponSubClass, gameTime - deltaGameTime/2);
-					psCurr->burnDamage += damageToDo;
-					proj_UpdateKills(psProj, relativeDamage);
-				}
-				/* The damage could be negative if the object
-				   is being burn't by another fire
-				   with a higher burn damage */
+		/* The object is in the fire */
+		psCurr->inFire |= IN_FIRE;
+
+		if (psCurr->burnStart == 0 || (psCurr->inFire & BURNING) != 0)
+		{
+			/* This is the first turn the object is in the fire */
+			psCurr->burnStart = gameTime;
+			psCurr->burnDamage = 0;
+		}
+		else
+		{
+			// Calculate how much damage should have been done up till now.
+			unsigned damageSoFar = (gameTime - psCurr->burnStart) * weaponIncenDamage(psStats,psProj->player) / GAME_TICKS_PER_SEC;
+			int damageToDo = damageSoFar - psCurr->burnDamage;
+			if (damageToDo > 0)
+			{
+				int32_t relativeDamage;
+				debug(LOG_NEVER, "Burn damage of %d to object %d, player %d\n",
+						damageToDo, psCurr->id, psCurr->player);
+
+				relativeDamage = objectDamage(psCurr, damageToDo, psStats->weaponClass, psStats->weaponSubClass, gameTime - deltaGameTime/2);
+				psCurr->burnDamage += damageToDo;
+				proj_UpdateKills(psProj, relativeDamage);
 			}
+			// The damage could be negative if the object is being burnt by another fire with a higher burn damage.
 		}
 	}
 }
