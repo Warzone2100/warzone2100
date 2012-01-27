@@ -492,7 +492,7 @@ void orderUpdateDroid(DROID *psDroid)
 			{
 				// Don't stray too far from the patrol path - only attack if we're near it
 				// A fun algorithm to detect if we're near the path
-				Vector2i delta = psDroid->order.pos - psDroid->order.pos;
+				Vector2i delta = psDroid->order.pos - psDroid->order.pos2;
 				if (delta == Vector2i(0, 0))
 				{
 					tooFarFromPath = false;
@@ -1445,6 +1445,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		break;
 	case DORDER_PATROL:
 		psDroid->order = *psOrder;
+		psDroid->order.pos2 = removeZ(psDroid->pos);
 		actionDroid(psDroid, DACTION_MOVE, psOrder->pos.x, psOrder->pos.y);
 		break;
 	case DORDER_RECOVER:
