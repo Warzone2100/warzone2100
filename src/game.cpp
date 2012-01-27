@@ -4213,7 +4213,6 @@ static bool loadSaveDroid(const char *pFileName, DROID **ppsCurrentDroidLists)
 		}
 		ASSERT(id != 0, "Droid ID should never be zero here");
 		psDroid->body = healthValue(ini, psDroid->originalBody);
-		psDroid->inFire = ini.value("inFire", 0).toInt();
 		psDroid->burnDamage = ini.value("burnDamage", 0).toInt();
 		psDroid->burnStart = ini.value("burnStart", 0).toInt();
 		psDroid->experience = ini.value("experience", 0).toInt();
@@ -4397,7 +4396,6 @@ static bool writeDroid(WzConfig &ini, DROID *psCurr, bool onMission, int &counte
 	}
 	if (psCurr->died > 0) ini.setValue("died", psCurr->died);
 	if (psCurr->resistance > 0) ini.setValue("resistance", psCurr->resistance);
-	if (psCurr->inFire > 0) ini.setValue("inFire", psCurr->inFire);
 	if (psCurr->burnStart > 0) ini.setValue("burnStart", psCurr->burnStart);
 	if (psCurr->burnDamage > 0) ini.setValue("burnDamage", psCurr->burnDamage);
 	ini.setValue("droidType", psCurr->droidType);
@@ -4611,7 +4609,6 @@ bool loadSaveStructure(char *pFileData, UDWORD filesize)
 		// The original code here didn't work and so the scriptwriters worked round it by using the module ID - so making it work now will screw up
 		// the scripts -so in ALL CASES overwrite the ID!
 		psStructure->id = psSaveStructure->id > 0 ? psSaveStructure->id : 0xFEDBCA98; // hack to remove struct id zero
-		psStructure->inFire = psSaveStructure->inFire;
 		psStructure->burnDamage = psSaveStructure->burnDamage;
 		burnTime = psSaveStructure->burnStart;
 		psStructure->burnStart = burnTime;
@@ -4737,7 +4734,6 @@ static bool loadSaveStructure2(const char *pFileName, STRUCTURE **ppList)
 		{
 			psStructure->id = id;	// force correct ID
 		}
-		psStructure->inFire = ini.value("inFire", 0).toInt();
 		psStructure->burnDamage = ini.value("burnDamage", 0).toInt();
 		psStructure->burnStart = ini.value("burnStart", 0).toInt();
 		memset(psStructure->visible, 0, sizeof(psStructure->visible));
@@ -4953,7 +4949,6 @@ bool writeStructFile(const char *pFileName)
 			}
 			if (psCurr->died > 0) ini.setValue("died", psCurr->died);
 			if (psCurr->resistance > 0) ini.setValue("resistance", psCurr->resistance);
-			if (psCurr->inFire > 0) ini.setValue("inFire", psCurr->inFire);
 			if (psCurr->burnStart > 0) ini.setValue("burnStart", psCurr->burnStart);
 			if (psCurr->burnDamage > 0) ini.setValue("burnDamage", psCurr->burnDamage);
 			if (psCurr->status != SS_BUILT) ini.setValue("status", psCurr->status);
@@ -5260,7 +5255,6 @@ bool loadSaveFeature(char *pFileData, UDWORD filesize)
 		//restore values
 		pFeature->id = psSaveFeature->id;
 		pFeature->rot.direction = DEG(psSaveFeature->direction);
-		pFeature->inFire = psSaveFeature->inFire;
 		pFeature->burnDamage = psSaveFeature->burnDamage;
 		if (psHeader->version >= VERSION_14)
 		{
@@ -5331,7 +5325,6 @@ bool loadSaveFeature2(const char *pFileName)
 		//restore values
 		pFeature->id = ini.value("id").toInt();
 		pFeature->rot = ini.vector3i("rotation");
-		pFeature->inFire = ini.value("inFire", 0).toInt();
 		pFeature->burnDamage = ini.value("burnDamage", 0).toInt();
 		pFeature->burnStart = ini.value("burnStart", 0).toInt();
 		pFeature->born = ini.value("born", 2).toInt();
@@ -5367,12 +5360,8 @@ bool writeFeatureFile(const char *pFileName)
 		ini.setValue("name", psCurr->psStats->pName);
 		ini.setVector3i("position", psCurr->pos);
 		ini.setVector3i("rotation", psCurr->rot);
-		if (psCurr->inFire)
-		{
-			ini.setValue("inFire", psCurr->inFire);
-			ini.setValue("burnDamage", psCurr->burnDamage);
-			ini.setValue("burnStart", psCurr->burnStart);
-		}
+		ini.setValue("burnDamage", psCurr->burnDamage);
+		ini.setValue("burnStart", psCurr->burnStart);
 		ini.setValue("health", psCurr->body);
 		ini.setValue("born", psCurr->born);
 		if (psCurr->selected) ini.setValue("selected", psCurr->selected);

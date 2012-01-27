@@ -153,7 +153,7 @@ bool droidInit(void)
  *
  * NOTE: This function will damage but _never_ destroy transports when in single player (campaign) mode
  */
-int32_t droidDamage(DROID *psDroid, unsigned damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, unsigned impactTime)
+int32_t droidDamage(DROID *psDroid, unsigned damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, unsigned impactTime, bool isDamagePerSecond)
 {
 	int32_t relativeDamage;
 
@@ -165,7 +165,7 @@ int32_t droidDamage(DROID *psDroid, unsigned damage, WEAPON_CLASS weaponClass, W
 		damage *= 3;
 	}
 
-	relativeDamage = objDamage((BASE_OBJECT *)psDroid, damage, psDroid->originalBody, weaponClass, weaponSubClass);
+	relativeDamage = objDamage(psDroid, damage, psDroid->originalBody, weaponClass, weaponSubClass, isDamagePerSecond);
 
 	if (relativeDamage > 0)
 	{
@@ -736,7 +736,6 @@ void droidUpdate(DROID *psDroid)
 	Vector3i        dv;
 	UDWORD          percentDamage, emissionInterval;
 	BASE_OBJECT     *psBeingTargetted = NULL;
-	SDWORD          damageToDo;
 	unsigned        i;
 
 	CHECK_DROID(psDroid);
@@ -836,43 +835,19 @@ void droidUpdate(DROID *psDroid)
 	// -----------------
 
 	/* Update the fire damage data */
-	if (psDroid->inFire & IN_FIRE)
+	if (psDroid->burnStart != 0 && psDroid->burnStart != gameTime - deltaGameTime)  // -deltaGameTime, since projectiles are updated after droids.
 	{
-		/* Still in a fire, reset the fire flag to see if we get out this turn */
-		psDroid->inFire = 0;
-	}
-	else
-	{
-		/* The fire flag has not been set so we must be out of the fire */
-		if (psDroid->inFire & BURNING)
+		// The burnStart has been set, but is not from the previous tick, so we must be out of the fire.
+		psDroid->burnDamage = 0;  // Reset burn damage done this tick.
+		if (psDroid->burnStart + BURN_TIME < gameTime)
 		{
-			if (psDroid->burnStart + BURN_TIME < gameTime)
-			{
-				// stop burning
-				psDroid->inFire = 0;
-				psDroid->burnStart = 0;
-				psDroid->burnDamage = 0;
-			}
-			else
-			{
-				// do burn damage
-				damageToDo = BURN_DAMAGE * ((SDWORD)gameTime - (SDWORD)psDroid->burnStart) /
-								GAME_TICKS_PER_SEC;
-				damageToDo -= (SDWORD)psDroid->burnDamage;
-				if (damageToDo > 0)
-				{
-					psDroid->burnDamage += damageToDo;
-
-					droidDamage(psDroid, damageToDo, WC_HEAT, WSC_FLAME, gameTime - deltaGameTime/2);
-				}
-			}
+			// Finished burning.
+			psDroid->burnStart = 0;
 		}
-		else if (psDroid->burnStart != 0)
+		else
 		{
-			// just left the fire
-			psDroid->inFire |= BURNING;
-			psDroid->burnStart = gameTime;
-			psDroid->burnDamage = 0;
+			// do burn damage
+			droidDamage(psDroid, BURN_DAMAGE, WC_HEAT, WSC_FLAME, gameTime - deltaGameTime/2, true);
 		}
 	}
 
@@ -1968,7 +1943,6 @@ DROID *reallyBuildDroid(DROID_TEMPLATE *pTemplate, Position pos, UDWORD player, 
 	}
 	memset(psDroid->seenThisTick, 0, sizeof(psDroid->seenThisTick));
 	psDroid->died = 0;
-	psDroid->inFire = 0;
 	psDroid->burnStart = 0;
 	psDroid->burnDamage = 0;
 	psDroid->sDisplay.screenX = OFF_SCREEN;

@@ -110,7 +110,7 @@ static void	proj_ImpactFunc( PROJECTILE *psObj );
 static void	proj_PostImpactFunc( PROJECTILE *psObj );
 static void proj_checkBurnDamage(PROJECTILE *psProj);
 
-static int32_t objectDamage(BASE_OBJECT *psObj, unsigned damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, unsigned impactTime);
+static int32_t objectDamage(BASE_OBJECT *psObj, unsigned damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, unsigned impactTime, bool isDamagePerSecond);
 
 
 static inline void setProjectileDestination(PROJECTILE *psProj, BASE_OBJECT *psObj)
@@ -1152,7 +1152,7 @@ static void proj_ImpactFunc( PROJECTILE *psObj )
 			      psObj->psDest->id, psObj->psDest->player);
 
 			// Damage the object
-			relativeDamage = objectDamage(psObj->psDest, damage, psStats->weaponClass, psStats->weaponSubClass, psObj->time);
+			relativeDamage = objectDamage(psObj->psDest, damage, psStats->weaponClass, psStats->weaponSubClass, psObj->time, false);
 
 			proj_UpdateKills(psObj, relativeDamage);
 
@@ -1234,7 +1234,7 @@ static void proj_ImpactFunc( PROJECTILE *psObj )
 			{
 				updateMultiStatsDamage(psObj->psSource->player, psCurr->player, damage);
 			}
-			int relativeDamage = objectDamage(psCurr, damage, psStats->weaponClass, psStats->weaponSubClass, psObj->time);
+			int relativeDamage = objectDamage(psCurr, damage, psStats->weaponClass, psStats->weaponSubClass, psObj->time, false);
 			proj_UpdateKills(psObj, relativeDamage);
 		}
 	}
@@ -1383,32 +1383,16 @@ static void proj_checkBurnDamage(PROJECTILE *psProj)
 			continue;  // Can't destroy oil wells.
 		}
 
-		/* The object is in the fire */
-		psCurr->inFire |= IN_FIRE;
-
-		if (psCurr->burnStart == 0 || (psCurr->inFire & BURNING) != 0)
+		if (psCurr->burnStart != gameTime)
 		{
-			/* This is the first turn the object is in the fire */
 			psCurr->burnStart = gameTime;
-			psCurr->burnDamage = 0;
+			psCurr->burnDamage = 0;  // Reset burn damage done this tick.
 		}
-		else
-		{
-			// Calculate how much damage should have been done up till now.
-			unsigned damageSoFar = (gameTime - psCurr->burnStart) * weaponIncenDamage(psStats,psProj->player) / GAME_TICKS_PER_SEC;
-			int damageToDo = damageSoFar - psCurr->burnDamage;
-			if (damageToDo > 0)
-			{
-				int32_t relativeDamage;
-				debug(LOG_NEVER, "Burn damage of %d to object %d, player %d\n",
-						damageToDo, psCurr->id, psCurr->player);
+		unsigned damageRate = weaponIncenDamage(psStats,psProj->player);
+		debug(LOG_NEVER, "Burn damage of %d per second to object %d, player %d\n", damageRate, psCurr->id, psCurr->player);
 
-				relativeDamage = objectDamage(psCurr, damageToDo, psStats->weaponClass, psStats->weaponSubClass, gameTime - deltaGameTime/2);
-				psCurr->burnDamage += damageToDo;
-				proj_UpdateKills(psProj, relativeDamage);
-			}
-			// The damage could be negative if the object is being burnt by another fire with a higher burn damage.
-		}
+		int relativeDamage = objectDamage(psCurr, damageRate, psStats->weaponClass, psStats->weaponSubClass, gameTime - deltaGameTime/2, true);
+		proj_UpdateKills(psProj, relativeDamage);
 	}
 }
 
@@ -1536,20 +1520,20 @@ UDWORD	calcDamage(UDWORD baseDamage, WEAPON_EFFECT weaponEffect, BASE_OBJECT *ps
  *    multiplied by -1, resulting in a negative number. Killed features do not
  *    result in negative numbers.
  */
-static int32_t objectDamage(BASE_OBJECT *psObj, unsigned damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, unsigned impactTime)
+static int32_t objectDamage(BASE_OBJECT *psObj, unsigned damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, unsigned impactTime, bool isDamagePerSecond)
 {
 	switch (psObj->type)
 	{
 		case OBJ_DROID:
-			return droidDamage((DROID *)psObj, damage, weaponClass, weaponSubClass, impactTime);
+			return droidDamage((DROID *)psObj, damage, weaponClass, weaponSubClass, impactTime, isDamagePerSecond);
 			break;
 
 		case OBJ_STRUCTURE:
-			return structureDamage((STRUCTURE *)psObj, damage, weaponClass, weaponSubClass, impactTime);
+			return structureDamage((STRUCTURE *)psObj, damage, weaponClass, weaponSubClass, impactTime, isDamagePerSecond);
 			break;
 
 		case OBJ_FEATURE:
-			return featureDamage((FEATURE *)psObj, damage, weaponClass, weaponSubClass, impactTime);
+			return featureDamage((FEATURE *)psObj, damage, weaponClass, weaponSubClass, impactTime, isDamagePerSecond);
 			break;
 
 		case OBJ_PROJECTILE:

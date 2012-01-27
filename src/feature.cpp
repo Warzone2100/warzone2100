@@ -165,7 +165,7 @@ void featureStatsShutDown(void)
  *  \param weaponClass,weaponSubClass the class and subclass of the weapon that deals the damage
  *  \return < 0 never, >= 0 always
  */
-int32_t featureDamage(FEATURE *psFeature, unsigned damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, unsigned impactTime)
+int32_t featureDamage(FEATURE *psFeature, unsigned damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, unsigned impactTime, bool isDamagePerSecond)
 {
 	int32_t relativeDamage;
 
@@ -174,7 +174,7 @@ int32_t featureDamage(FEATURE *psFeature, unsigned damage, WEAPON_CLASS weaponCl
 	debug(LOG_ATTACK, "feature (id %d): body %d armour %d damage: %d",
 	      psFeature->id, psFeature->body, psFeature->armour[weaponClass], damage);
 
-	relativeDamage = objDamage((BASE_OBJECT *)psFeature, damage, psFeature->psStats->body, weaponClass, weaponSubClass);
+	relativeDamage = objDamage(psFeature, damage, psFeature->psStats->body, weaponClass, weaponSubClass, isDamagePerSecond);
 
 	// If the shell did sufficient damage to destroy the feature
 	if (relativeDamage < 0)
@@ -251,7 +251,8 @@ FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,bool FromSave)
 		psFeature->rot.direction = 0;
 	}
 	psFeature->body = psStats->body;
-	psFeature->inFire = false;
+	psFeature->burnStart = 0;
+	psFeature->burnDamage = 0;
 	objSensorCache(psFeature, NULL);
 	objEcmCache(psFeature, NULL);
 
@@ -354,6 +355,15 @@ void featureUpdate(FEATURE *psFeat)
 
 	// update the visibility for the feature
 	processVisibilityLevel((BASE_OBJECT *)psFeat);
+
+	/* Update the fire damage data */
+	if (psFeat->burnStart != 0 && psFeat->burnStart != gameTime - deltaGameTime)  // -deltaGameTime, since projectiles are updated after features.
+	{
+		// The burnStart has been set, but is not from the previous tick, so we must be out of the fire.
+		psFeat->burnDamage = 0;  // Reset burn damage done this tick.
+		// Finished burning.
+		psFeat->burnStart = 0;
+	}
 
 	syncDebugFeature(psFeat, '>');
 }

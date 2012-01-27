@@ -420,7 +420,7 @@ void counterBatteryFire(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget)
  * \param weaponSubClass the subclass of the weapon that deals the damage
  * \return < 0 when the dealt damage destroys the object, > 0 when the object survives
  */
-int32_t objDamage(BASE_OBJECT *psObj, UDWORD damage, UDWORD originalhp, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass)
+int32_t objDamage(BASE_OBJECT *psObj, unsigned damage, unsigned originalhp, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, bool isDamagePerSecond)
 {
 	int	actualDamage, armour, level = 1;
 
@@ -476,8 +476,19 @@ int32_t objDamage(BASE_OBJECT *psObj, UDWORD damage, UDWORD originalhp, WEAPON_C
 	// And at least MIN_WEAPON_DAMAGE points
 	actualDamage = MAX(actualDamage, MIN_WEAPON_DAMAGE);
 
+	if (isDamagePerSecond)
+	{
+		int deltaDamageRate = actualDamage - psObj->burnDamage;
+		if (deltaDamageRate <= 0)
+		{
+			return 0;  // Did this much damage already, this tick, so don't do more.
+		}
+		actualDamage = gameTimeAdjustedAverage(deltaDamageRate);
+		psObj->burnDamage += deltaDamageRate;
+	}
+
 	objTrace(psObj->id, "objDamage: Penetrated %d", actualDamage);
-	syncDebug("damage%u dam%u,o%u,wc%d.%d,ar%d,lev%d,aDam%d", psObj->id, damage, originalhp, weaponClass, weaponSubClass, armour, level, actualDamage);
+	syncDebug("damage%u dam%u,o%u,wc%d.%d,ar%d,lev%d,aDam%d,isDps%d", psObj->id, damage, originalhp, weaponClass, weaponSubClass, armour, level, actualDamage, isDamagePerSecond);
 
 	// for some odd reason, we have 0 hitpoints.
 	if (!originalhp)
