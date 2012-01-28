@@ -756,7 +756,7 @@ bool triggerEventSeen(BASE_OBJECT *psViewer, BASE_OBJECT *psSeen)
 //__ An event that is run whenever an object is transferred between players,
 //__ for example due to a Nexus Link weapon. The event is called after the
 //__ object has been transferred, so the target player is in object.player.
-//__ The event is called for both players. (3.2+ only)
+//__ The event is called for both players.
 bool triggerEventObjectTransfer(BASE_OBJECT *psObj, int from)
 {
 	for (int i = 0; i < scripts.size() && psObj; ++i)
