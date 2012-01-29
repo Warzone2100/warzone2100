@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2012-01-29 18:12+0100\n"
-"PO-Revision-Date: 2011-12-18 21:11+0100\n"
+"POT-Creation-Date: 2012-01-29 19:56+0100\n"
+"PO-Revision-Date: 2012-01-29 19:51+0100\n"
 "Last-Translator: Michał D. aka Emdek <emdeck@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
 "Language: pl\n"
@@ -10256,31 +10256,34 @@ msgid "Enter password here"
 msgstr "Wpisz hasło tutaj"
 
 #: lib/netplay/netplay.cpp:2017
-#, fuzzy, c-format
+#, c-format
 msgid "Could not resolve masterserver name (%s)!"
-msgstr "Niemożna zapisać gry!"
+msgstr "Nie można rozwinąć nazwy serwera głównego (%s)!"
 
 #: lib/netplay/netplay.cpp:2039
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error connecting to the lobby server: %s.\n"
 "Make sure port %d can receive incoming connections.\n"
 "If you're using a router configure it to use UPnP\n"
 " or to forward the port to your system."
-msgstr "Wystąpił błąd podczas łączenia się z serwerem lobby: %s. Upewnij się, że port %d może odbierać połączenia przychodzące. Jeśli używasz rutera, to skonfiguruj go do używania UPnP lub przekieruj port do twojego systemu."
+msgstr ""
+"Wystąpił błąd podczas łączenia się z serwerem lobby: %s.\n"
+"Upewnij się, że port %d może odbierać połączenia przychodzące.\n"
+"Jeśli używasz rutera, to skonfiguruj go do używania UPnP\n"
+"lub przekieruj port do twojego systemu."
 
 #: lib/netplay/netplay.cpp:2679
 msgid "Failed to get a lobby response!"
-msgstr ""
+msgstr "Brak odpowiedzi z serwera lobby!"
 
 #: po/custom/mac-infoplist.txt:1
-#, fuzzy
 msgid ""
 "Copyright © 1999-2004 Eidos Interactive.\n"
 "Copyright © 2005-2011 The Warzone 2100 Project"
 msgstr ""
 "Copyright © 1999-2004 Eidos Interactive.\n"
-"Copyright © 2005-2010 The Warzone 2100 Project"
+"Copyright © 2005-2011 The Warzone 2100 Project"
 
 #: po/custom/mac-infoplist.txt:2
 #: po/custom/warzone2100.desktop.txt:2
@@ -10510,7 +10513,7 @@ msgstr "Usuń projekt"
 #: src/design.cpp:631
 #: src/design.cpp:4685
 msgid "Store Template"
-msgstr ""
+msgstr "Zapisz szablon"
 
 #: src/design.cpp:684
 #: src/design.cpp:731
@@ -10632,7 +10635,7 @@ msgstr "Systemy"
 
 #: src/design.cpp:4680
 msgid "Delete Template"
-msgstr ""
+msgstr "Usuń szablon"
 
 #: src/display3d.cpp:649
 msgid "Player left"
@@ -10840,22 +10843,20 @@ msgid "Load Saved Game"
 msgstr "Załaduj zapisany stan gry"
 
 #: src/frontend.cpp:376
-#, fuzzy
 msgid "MULTI PLAYER"
-msgstr "JEDEN GRACZ"
+msgstr "WIELU GRACZY"
 
 #: src/frontend.cpp:378
 msgid "Host Game"
 msgstr "Utwórz grę"
 
 #: src/frontend.cpp:379
-#, fuzzy
 msgid "Join Game"
-msgstr "Kontynuuj grę"
+msgstr "Dołącz do gry"
 
 #: src/frontend.cpp:384
 msgid "TCP PORT 2100 MUST BE OPENED IN YOUR FIREWALL / ROUTER TO HOST GAMES!"
-msgstr ""
+msgstr "PORT TCP 2100 MUSI BYĆ OTWARTY W TWOIM FIREWALLU / RUTERZE ABY MÓC HOSTOWAĆ GRY!"
 
 #: src/frontend.cpp:444
 #: src/multiint.cpp:1385
@@ -11729,14 +11730,14 @@ msgid "Game Speed Reset"
 msgstr "Przywróć normalną prędkość gry"
 
 #: src/keybind.cpp:2623
-#, fuzzy, c-format
+#, c-format
 msgid "Game Speed Increased to %s"
-msgstr "Prędkość gry zwiększona do %3.1f"
+msgstr "Prędkość gry zwiększona do %s"
 
 #: src/keybind.cpp:2627
-#, fuzzy, c-format
+#, c-format
 msgid "Game Speed Reduced to %s"
-msgstr "Prędkość gry zmniejszona do %3.1f"
+msgstr "Prędkość gry zmniejszona do %s"
 
 #: src/keybind.cpp:2683
 msgid "Radar showing friend-foe colors"
@@ -12371,43 +12372,41 @@ msgstr "Adres IP lub nazwa komputera"
 
 #: src/multiint.cpp:709
 msgid "CONNECTION"
-msgstr ""
+msgstr "POŁĄCZENIE"
 
 #: src/multiint.cpp:714
 msgid "Lobby"
-msgstr ""
+msgstr "Lobby"
 
 #: src/multiint.cpp:715
 msgid "IP"
-msgstr ""
+msgstr "IP"
 
 #: src/multiint.cpp:934
-#, fuzzy
 msgid "[Password required]"
-msgstr "*** hasło jest teraz niewymagane! ***"
+msgstr "[Wymagane hasło]"
 
 #: src/multiint.cpp:938
 msgid "[No Tanks]"
-msgstr ""
+msgstr "[Bez czołgów]"
 
 #: src/multiint.cpp:942
-#, fuzzy
 msgid "[No Cyborgs]"
-msgstr "Produkuje cyborgi"
+msgstr "[Bez cyborgów]"
 
 #: src/multiint.cpp:946
 msgid "[No VTOLs]"
-msgstr ""
+msgstr "[Bez VTOLi]"
 
 #: src/multiint.cpp:950
 #, c-format
 msgid "Hosted by %s"
-msgstr ""
+msgstr "Hostowana przez %s"
 
 #: src/multiint.cpp:954
 #, c-format
 msgid "Hosted by %s —%s"
-msgstr ""
+msgstr "Hostowana przez %s —%s"
 
 #: src/multiint.cpp:974
 msgid "No games are available"
@@ -12446,9 +12445,8 @@ msgid "Connection Error"
 msgstr "Błąd połączenia"
 
 #: src/multiint.cpp:1106
-#, fuzzy
 msgid "Searching"
-msgstr "Karabin maszynowy"
+msgstr "Szukam"
 
 #: src/multiint.cpp:1175
 msgid "GAMES"
@@ -12659,7 +12657,7 @@ msgstr "Wszyscy gracze muszą mieć takie same mody aby przyłączyć się do tw
 
 #: src/multiint.cpp:2522
 msgid "Connecting to the lobby server..."
-msgstr ""
+msgstr "Łączenie z serwerem lobby..."
 
 #: src/multiint.cpp:2675
 #, c-format
@@ -12689,21 +12687,21 @@ msgstr "Host rozpoczyna grę"
 
 #: src/multiint.cpp:3716
 msgid "Can't connect to lobby server!"
-msgstr ""
+msgstr "Nie można połączyć się z serwerem lobby!"
 
 #: src/multiint.cpp:3803
 #, c-format
 msgid "Mods: %s"
-msgstr ""
+msgstr "Mody: %s"
 
 #: src/multiint.cpp:3810
 msgid "Mods: None!"
-msgstr ""
+msgstr "Mody: brak!"
 
 #: src/multiint.cpp:3820
-#, fuzzy, c-format
+#, c-format
 msgid "Version: %s"
-msgstr "Wersja %s%s%s%s"
+msgstr "Wersja %s"
 
 #: src/multiint.cpp:3871
 #, c-format
@@ -12793,12 +12791,12 @@ msgid "Any number of players"
 msgstr "Dowolna liczba graczy"
 
 #: src/multimenu.cpp:655
-#, fuzzy, c-format
+#, c-format
 msgid "%d player"
 msgid_plural "%d players"
-msgstr[0] "2 graczy"
-msgstr[1] "2 graczy"
-msgstr[2] "2 graczy"
+msgstr[0] "%d gracz"
+msgstr[1] "%d graczy"
+msgstr[2] "%d graczy"
 
 #: src/multimenu.cpp:793
 msgid "Score"
@@ -13188,9 +13186,9 @@ msgstr " - Zbudowana %s"
 #. TRANSLATORS: This string looks as follows when expanded.
 #. "Version <version name/number> <working copy state><BUILD DATE><BUILD TYPE>"
 #: src/version.cpp:157
-#, fuzzy, c-format
+#, c-format
 msgid "Version %s-%s%s%s%s"
-msgstr "Wersja %s%s%s%s"
+msgstr "Wersja %s-%s%s%s%s"
 
 #~ msgid "Activate self-test"
 #~ msgstr "Aktywuj autotest"
@@ -13198,17 +13196,8 @@ msgstr "Wersja %s%s%s%s"
 #~ msgid "Failed to create building"
 #~ msgstr "Nie udało się utworzyć budynku"
 
-#~ msgid "You cannot change AI in a challenge"
-#~ msgstr "Nie możesz zmienić SI w wyzwaniu"
-
-#~ msgid "Players"
-#~ msgstr "Gracze"
-
 #~ msgid "Received invalid addGame data."
 #~ msgstr "Odebrano nieprawidłowe dane addGame."
-
-#~ msgid "Create a game first!"
-#~ msgstr "Najpierw utwórz grę!"
 
 #~ msgid "Received invalid login data."
 #~ msgstr "Odebrano nieprawidłowe dane logowania."
@@ -13228,9 +13217,6 @@ msgstr "Wersja %s%s%s%s"
 #~ msgid "The lobby rejected you!"
 #~ msgstr "Zostałeś odrzucony przez lobby!"
 
-#~ msgid "Connect IP"
-#~ msgstr "Połącz się z IP"
-
 #~ msgid "Login"
 #~ msgstr "Zaloguj się"
 
@@ -13243,56 +13229,8 @@ msgstr "Wersja %s%s%s%s"
 #~ msgid "Username:"
 #~ msgstr "Nazwa użytkownika:"
 
-#~ msgid "Password:"
-#~ msgstr "Hasło:"
-
 #~ msgid "Use your wz2100.net credentials here."
 #~ msgstr "Użyj swoich danych użytkownika wz2100.net."
-
-#~ msgid "Construction speed +10%"
-#~ msgstr "Prędkość budowania +10%"
-
-#~ msgid "Cannon accuracy +10%"
-#~ msgstr "Celność działa +10%"
-
-#~ msgid "Flamer reload time -15%"
-#~ msgstr "Czas przeładowania miotacza -15%"
-
-#~ msgid "Machinegun reload time -15%"
-#~ msgstr "Czas przeładowania karabinu -15%"
-
-#~ msgid "Mortar accuracy +10%"
-#~ msgstr "Celność moździerza +10%"
-
-#~ msgid "Mortar reload time -10%"
-#~ msgstr "Czas przeładowania moździerza -10%"
-
-#~ msgid "Rocket reload time -15%"
-#~ msgstr "Czas przeładowania rakiet -15%"
-
-#~ msgid "Cannon reload time -10%"
-#~ msgstr "Czas przeładowania działa -10%"
-
-#~ msgid "Cannon damage +25%"
-#~ msgstr "Obrażenia zadawane przez działa +25%"
-
-#~ msgid "Rocket accuracy +10%"
-#~ msgstr "Celność rakiet +10%"
-
-#~ msgid "Kinetic Armor +35%, Body Points +35%"
-#~ msgstr "Pancerz kinetyczny +35%, punkty zdrowia +35%"
-
-#~ msgid "Armour +35%, Body Points +30%"
-#~ msgstr "Pancerz +35%, punkty zdrowia +30%"
-
-#~ msgid "Armored guard tower with Mini-Rocket Pod"
-#~ msgstr "Wzmocniona wieża strażnicza uzbrojona w minirakiety"
-
-#~ msgid "Armored guard tower with Lancer AT rocket"
-#~ msgstr "Wzmocniona wieża strażnicza z rakietami Lancer AT"
-
-#~ msgid "Repair Speed +100%"
-#~ msgstr "Szybkość napraw +100%"
 
 #~ msgid "Factory output speed +100% per module"
 #~ msgstr "Wydajność produkcji fabryki +100% dla każdego modułu"
@@ -13300,227 +13238,35 @@ msgstr "Wersja %s%s%s%s"
 #~ msgid "Factory output speed +60%"
 #~ msgstr "Wydajność produkcji fabryki +60%"
 
-#~ msgid "Research speed +85%"
-#~ msgstr "Szybkość badań +85%"
-
-#~ msgid "Research speed +30%"
-#~ msgstr "Szybkość badań +30%"
-
-#~ msgid "Armor +35%, Body Points +30%"
-#~ msgstr "Pancerz +35%, punkty zdrowia + 30%"
-
-#~ msgid "Vehicle speed +5%"
-#~ msgstr "Prędkość pojazdów +5%"
-
-#~ msgid "Kinetic armor +30%, body points +30%"
-#~ msgstr "Pancerz kinetyczny +30%, punkty zdrowia +30%"
-
-#~ msgid "Best Targets: Vehicles, Hardpoints"
-#~ msgstr "Najlepsze cele: Pojazdy i Umocnienia"
-
-#~ msgid "Flamer damage +25%"
-#~ msgstr "Obrażenia zadawane przez miotacz ognia +25%"
-
-#~ msgid "Machinegun damage +25%"
-#~ msgstr "Obrażenia zadawane przez karabin +25%"
-
-#~ msgid "Mortar damage +25%"
-#~ msgstr "Obrażenia zadawane przez moździerz +25%"
-
-#~ msgid "Rocket damage +25%"
-#~ msgstr "Obrażenia zadawane przez rakiety +25%"
-
 #~ msgid "Power output +25%"
 #~ msgstr "Wydajność produkcji energii +25%"
-
-#~ msgid "Construction speed +20%"
-#~ msgstr "Szybkość budowania +20%"
 
 #~ msgid "AA accuracy +10%"
 #~ msgstr "Celność AA +10%"
 
-#~ msgid "Bomb Upgrade"
-#~ msgstr "Ulepszenie bomb"
-
-#~ msgid "Improved trinitramine explosive formula"
-#~ msgstr "Ulepszona formuła ładunków wybuchowych"
-
 #~ msgid "Bomb damage +25%"
 #~ msgstr "Obrażenia zadawane przez bomby +25%"
-
-#~ msgid "Thermal Armor +45%"
-#~ msgstr "Pancerz termiczny +45%"
-
-#~ msgid "Kinetic Armor +35%, and Body Points +35%"
-#~ msgstr "Pancerz kinetyczny +35%, punkty zdrowia +35%"
-
-#~ msgid "Factory production rate +60%"
-#~ msgstr "Szybkość produkcji +60%"
-
-#~ msgid "All factories upgraded automatically"
-#~ msgstr "Wszystkie fabryki ulepszone automatycznie"
 
 #~ msgid "Rearming speed +30%"
 #~ msgstr "Szybkość przeładowywania +30%"
 
-#~ msgid "Thermal armor +40%"
-#~ msgstr "Pancerz termiczny +40%"
-
-#~ msgid "AA Flak damage +25%"
-#~ msgstr "Obrażenia zadawane przez broń AA +25%"
-
 #~ msgid "AA reload time -15%"
 #~ msgstr "Szybkość przeładowania AA -15%"
-
-#~ msgid "Howitzer accuracy +10%"
-#~ msgstr "Celność haubicy +10%"
-
-#~ msgid "Howitzer damage +25%"
-#~ msgstr "Obrażenia zadawane przez haubicę +25%"
-
-#~ msgid "Howitzer reload time -10%"
-#~ msgstr "Czas przeładowania haubicy -10%"
-
-#~ msgid "High Explosive Anti-Tank warheads"
-#~ msgstr "Wysoko wybuchowa głowica przeciwpancerna"
-
-#~ msgid "Thermal Armor +35%"
-#~ msgstr "Pancerz termiczny +35%"
-
-#~ msgid "Armored guard tower with Pulse Laser"
-#~ msgstr "Wieża strażnicza uzbrojona w laser pulsacyjny"
 
 #~ msgid "Power output +30%"
 #~ msgstr "Wydajność produkcji energii +30%"
 
-#~ msgid "Thermal Armor +40%"
-#~ msgstr "Pancerz termiczny +40%"
-
-#~ msgid "Laser accuracy +10%"
-#~ msgstr "Celność lasera +10%"
-
-#~ msgid "Laser damage +25%"
-#~ msgstr "Obrażenia zadawane przez laser +25%"
-
 #~ msgid "Laser reload time -15%"
 #~ msgstr "Czas przeładowania lasera -15%"
-
-#~ msgid "Missile accuracy +10%"
-#~ msgstr "Celność pocisków +25%"
-
-#~ msgid "Missile damage +25%"
-#~ msgstr "Obrażenia zadawane przez pociski +25%"
-
-#~ msgid "Missile reload time -15%"
-#~ msgstr "Czas przeładowania pocisków -15%"
-
-#~ msgid "Rail Gun accuracy +10%"
-#~ msgstr "Celność Railguna +10%"
-
-#~ msgid "Rail Gun damage +25%"
-#~ msgstr "Obrażenia zadawane przez Railgun +25%"
-
-#~ msgid "Rail Gun reload time -15%"
-#~ msgstr "Czas przeładowania Railguna -15%"
-
-#~ msgid "Sensor Range +25%"
-#~ msgstr "Zasięg radaru +25%"
-
-#~ msgid "Improved Thermal Emissions detection"
-#~ msgstr "Ulepszone wykrywanie emisji termicznych"
-
-#~ msgid "Sensor Range +15%"
-#~ msgstr "Zasięg radaru +15%"
-
-#~ msgid "Advanced Thermal Emissions detection"
-#~ msgstr "Zaawansowane wykrywanie emisji termicznych"
-
-#~ msgid "Sensor Range +10%"
-#~ msgstr "Zasięg radaru +10%"
 
 #~ msgid "Radar detector tower detects enemy sensors"
 #~ msgstr "Wykrywacz radarów wykrywa radary wroga"
 
-#~ msgid "Orders assigned indirect fire units to fire at the enemy sensors"
-#~ msgstr "Rozkazuje twojej artylerii atak na radary wroga"
-
-#~ msgid "Counter-battery fire continues until enemy sensor is suppressed"
-#~ msgstr "CB kontynuuje ostrzał dopóki radar wroga nie zostanie zniszczony"
-
-#~ msgid "Cyborg Transport Available"
-#~ msgstr "Dostępny Transportowiec dla cyborgów"
-
-#~ msgid "Armed with Machinegun"
-#~ msgstr "Uzbrojony w karabin maszynowy"
-
-#~ msgid "Requires heavy VTOL factory to produce"
-#~ msgstr "Wymaga Fabryk ciężkich VTOL do produkcji"
-
-#~ msgid "Super Transport Available"
-#~ msgstr "Dostępny Super Transportowiec"
-
-#~ msgid "Incendiary howitzer emplacement"
-#~ msgstr "Stanowisko ognistej haubicy"
-
-#~ msgid "Armored Incendiary Mortar battery pit"
-#~ msgstr "Umocnienie z ognistym moździeżem"
-
-#~ msgid "Armored strongpoint with Plasmite Flamer"
-#~ msgstr "Umocnienie z miotaczem plazmowym"
-
-#~ msgid "Armed with Cyborg Thermite Flamer"
-#~ msgstr "Uzbrojony w termitowy miotacz ognia"
-
-#~ msgid "Armed with grenades"
-#~ msgstr "Uzbrojony w granatnik"
-
 #~ msgid "Combat engineer with construction ability"
 #~ msgstr "Cyborg inżynier z umiejętnością budowania"
 
-#~ msgid "Mechanic with repair ability"
-#~ msgstr "Mechanik z umiejętnością naprawy"
-
-#~ msgid "Incendiary Howitzer may be assigned to a sensor"
-#~ msgstr "Ognista haubica może być przypisana do radaru"
-
-#~ msgid "Plasmite Flame-thrower"
-#~ msgstr "Plazmowy miotacz ognia"
-
-#~ msgid "Steals technology from structures and takes control of weapons"
-#~ msgstr "Kradnie technologię z struktur i przejmuje kontrolę nad uzbrojeniem"
-
-#~ msgid "New Electronic Technology Discovered"
-#~ msgstr "Nowa technologia elektroniczna wynaleziona"
-
-#~ msgid "On-board resistance circuit systems"
-#~ msgstr "Pokładowy system obronny"
-
 #~ msgid "Enables resistance to Nexus Link technology"
 #~ msgstr "Umożliwia obronę przed techologią Nexus"
-
-#~ msgid "Enables self-repair"
-#~ msgstr "Umożliwia samonaprawę"
-
-#~ msgid "Armed with medium cannon"
-#~ msgstr "Uzbrojony w średnie działo"
-
-#~ msgid "Armed with hyper velocity cannon"
-#~ msgstr "Uzbrojony w działo HPV"
-
-#~ msgid "Armed with tank killer rockets"
-#~ msgstr "Uzbrojony w rakiety Tank Killer"
-
-#~ msgid "Fires heavy pulses of laser light"
-#~ msgstr "Strzela ciężkimi impulsami światła laserowego"
-
-#~ msgid "Best Targets: Heavy cyborgs"
-#~ msgstr "Najlepsze cele: Ciężkie cyborgi"
-
-#~ msgid "76mm twin-barrel automatic-cannon"
-#~ msgstr "Automatyczne dwulufowe działo 76mm"
-
-#~ msgid "New Systems Structure Available"
-#~ msgstr "Nowa specjalna struktura dostępna"
 
 #~ msgid "Complete battlefield visibility"
 #~ msgstr "Kompletny widok na pole bitwy"
@@ -13531,9 +13277,6 @@ msgstr "Wersja %s%s%s%s"
 #~ msgid "Combines standard, counter battery and VTOL sensors"
 #~ msgstr "Łączy standardowe radary CB i VTOL"
 
-#~ msgid "New Advanced Weapon Available"
-#~ msgstr "Nowa zaawansowana broń dostępna"
-
 #~ msgid "Very slow recharge time"
 #~ msgstr "Bardzo powolne przeładowanie"
 
@@ -13543,35 +13286,8 @@ msgstr "Wersja %s%s%s%s"
 #~ msgid "Narrow area of effect"
 #~ msgstr "Wąski zasięg działania"
 
-#~ msgid "Armored guard tower with Nexus Link"
-#~ msgstr "Umocniona wieża strażnicza uzbrojona w NEXUS Link"
-
-#~ msgid "Plasma Cannon firing plasma"
-#~ msgstr "Działo plazmowe strzela plazmą"
-
-#~ msgid "Best Targets : Vehicles"
-#~ msgstr "Najlepsze cele: Pojazdy"
-
-#~ msgid "Armored strongpoint with Heavy Laser"
-#~ msgstr "Umocnienie uzbrojone w ciężki laser"
-
-#~ msgid "Armored guard tower with EMP Cannon"
-#~ msgstr "Umocniona wieża strażnicza z działem EMP"
-
-#~ msgid "Armed with Cyborg Pulse Laser"
-#~ msgstr "Uzbrojony w laser pulsacyjny"
-
-#~ msgid "Armed with Cyborg Rail Gun"
-#~ msgstr "Uzbrojony w Railgun"
-
-#~ msgid "Armed with Cyborg Scourge Missile Launcher"
-#~ msgstr "Uzbrojony w wyrzutnię rakiet Scourge"
-
 #~ msgid "Uses advanced mass driver railgun technology"
 #~ msgstr "Używa zaawansowanej technologii Railguna"
-
-#~ msgid "Defensive Strength : High"
-#~ msgstr "Siła obrony: Wysoka"
 
 #~ msgid "Uses advanced cannon technology"
 #~ msgstr "Używa zaawansowanej technologii działa"
@@ -13585,110 +13301,14 @@ msgstr "Wersja %s%s%s%s"
 #~ msgid "Powerful Electronic magnetic pulse weapon"
 #~ msgstr "Potężna broń elektromagnetyczna"
 
-#~ msgid "New System Available"
-#~ msgstr "Nowy system dostępny"
-
-#~ msgid "Medium Super Heavy Body"
-#~ msgstr "Średni super-ciężki kadłub "
-
-#~ msgid "More armor and body points than Vengeance"
-#~ msgstr "Więcej pancerza i punktów zdrowia niż Zemsty"
-
 #~ msgid "Slow moving Body"
 #~ msgstr "Powolny kadłub"
-
-#~ msgid "Large Super Heavy Body"
-#~ msgstr "Duży super-ciężki kadłub"
-
-#~ msgid "Maximum armor and body points"
-#~ msgstr "Maksimum punktów zdrowia i punktów pancerza"
 
 #~ msgid "Very slow moving Body"
 #~ msgstr "Bardzo niska prędkość"
 
-#~ msgid "Hardpoint Vindicator SAM Site Available"
-#~ msgstr "Umocnienie z rakietami ziemia-powietrze Obrońca dostępne"
-
 #~ msgid "Hardpoint Whirlwind AA Gun Available"
 #~ msgstr "Umocnienie z działkiem AA Whirlwind dostępne"
 
-#~ msgid "Armored EMP Mortar battery pit"
-#~ msgstr "Umocnione stanowisko moździeża EMP"
-
-#~ msgid "Laser AA Gun Available"
-#~ msgstr "Przeciwlotnicze działo laserowe dostępne"
-
-#~ msgid "Twin Medium Anti-Aircraft Laser"
-#~ msgstr "Podwójny średni laser przeciwlotniczy"
-
-#~ msgid "Hardpoint Avenger SAM Site Available"
-#~ msgstr "Umocnienie z rakietami ziemia-powietrze Mściciel dostępne"
-
-#~ msgid "Hardpoint Cyclone AA Gun Available"
-#~ msgstr "Umocnienie z karabinem AA Cyklon dostępne"
-
-#~ msgid "Quad 80mm Anti-Aircraft machinegun"
-#~ msgstr "Poczwórny karabin przeciwlotniczy 80mm"
-
-#~ msgid "Twin Multi-barrel, rapid-fire machinegun"
-#~ msgstr "Podwójny, wielolufowy szybkostrzelny karabin"
-
-#~ msgid "Hardpoint Twin Assault Gun Available"
-#~ msgstr "Umocnienie z podwójnym karabinem sztur. dostępne"
-
-#~ msgid "Drops high intensity Plasmite bombs"
-#~ msgstr "Zrzuca wysokiej mocy bomby plazmowe"
-
-#~ msgid "New VTOL Missile Launcher"
-#~ msgstr "Nowa wyrzutnia pocisków dla VTOL"
-
 #~ msgid "Fires Electronic Magnetic Pulse Missiles"
 #~ msgstr "Strzela pociskami z magnetycznym impulsem"
-
-#~ msgid "Stronger Commander Turret Available for Design"
-#~ msgstr "Mocniejsza wieżyczka dowodzenia dostępna"
-
-#~ msgid "Upgraded battlefield computer system"
-#~ msgstr "Ulepszony komputer pola bitwy"
-
-#~ msgid "3 players"
-#~ msgstr "3 graczy"
-
-#~ msgid "4 players"
-#~ msgstr "4 graczy"
-
-#~ msgid "5 players"
-#~ msgstr "5 graczy"
-
-#~ msgid "6 players"
-#~ msgstr "6 graczy"
-
-#~ msgid "7 players"
-#~ msgstr "7 graczy"
-
-#~ msgid "8 players"
-#~ msgstr "8 graczy"
-
-#~ msgid "9 players"
-#~ msgstr "9 graczy"
-
-#~ msgid "10 players"
-#~ msgstr "10 graczy"
-
-#~ msgid "11 players"
-#~ msgstr "11 graczy"
-
-#~ msgid "12 players"
-#~ msgstr "12 graczy"
-
-#~ msgid "13 players"
-#~ msgstr "13 graczy"
-
-#~ msgid "14 players"
-#~ msgstr "14 graczy"
-
-#~ msgid "15 players"
-#~ msgstr "15 graczy"
-
-#~ msgid "16 players"
-#~ msgstr "16 graczy"
