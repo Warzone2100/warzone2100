@@ -4012,7 +4012,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "DirectorY=\"WarzoneHelp-3fda3de\"\nOutDir=\"WarzoneHelp\"\nFileName=\"WarzoneHelp-3fda3de.tgz\"\nBuiltDLP=\"http://downloads.sourceforge.net/project/warzone2100/build-tools/mac/WarzoneHelp-3fda3de.tgz\"\nMD5Sum=\"d5affe84156990e9e7c45066bf8ef5c2\"\n\nconfigs/FetchPrebuilt.sh \"${DirectorY}\" \"${OutDir}\" \"${FileName}\" \"${BuiltDLP}\" \"${MD5Sum}\"\nexit ${?}\n";
+			shellScript = "DirectorY=\"WarzoneHelp-8d40cbe\"\nOutDir=\"WarzoneHelp\"\nFileName=\"WarzoneHelp-8d40cbe.tgz\"\nBuiltDLP=\"http://downloads.sourceforge.net/project/warzone2100/build-tools/mac/WarzoneHelp-8d40cbe.tgz\"\nMD5Sum=\"b5f5622d51fe8c2c364469192b483816\"\n\nconfigs/FetchPrebuilt.sh \"${DirectorY}\" \"${OutDir}\" \"${FileName}\" \"${BuiltDLP}\" \"${MD5Sum}\"\nexit ${?}\n";
 		};
 		43119DCC1353B08F004C54BB /* Generate headers */ = {
 			isa = PBXShellScriptBuildPhase;
