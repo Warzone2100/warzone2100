@@ -1187,6 +1187,11 @@ static void proj_ImpactFunc( PROJECTILE *psObj )
 		gridStartIterate(psObj->pos.x, psObj->pos.y, psStats->radius);
 		for (BASE_OBJECT *psCurr = gridIterate(); psCurr != NULL; psCurr = gridIterate())
 		{
+			if (psCurr->died)
+			{
+				continue;  // Do not damage dead objects further.
+			}
+
 			if (psCurr == psObj->psDest)
 			{
 				continue;  // Don't hit main target twice.
@@ -1366,6 +1371,11 @@ static void proj_checkBurnDamage(PROJECTILE *psProj)
 	gridStartIterate(psProj->pos.x, psProj->pos.y, psStats->incenRadius);
 	for (BASE_OBJECT *psCurr = gridIterate(); psCurr != NULL; psCurr = gridIterate())
 	{
+		if (psCurr->died)
+		{
+			continue;  // Do not damage dead objects further.
+		}
+
 		if (aiCheckAlliances(psProj->player, psCurr->player))
 		{
 			continue;  // Don't damage your own droids, nor ally droids - unrealistic, but better.
