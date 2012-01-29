@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2012-01-21 17:36+0100\n"
+"POT-Creation-Date: 2012-01-29 18:12+0100\n"
 "PO-Revision-Date: 2012-01-10 22:06+0200\n"
 "Last-Translator: Ayhan GÖRGÜLÜ <ayhangorgulu45@gmail.com>\n"
 "Language-Team: Turkey <warzone-dev@gna.org>\n"
@@ -10262,7 +10262,7 @@ msgstr "OpenGL 2.0 sisteminiz tarafından desteklenmiyor. Bazı şeyler yanlış
 msgid "OpenGL 1.4 is not supported by your system. The game requires this. Please upgrade your graphics drivers/hardware, if possible."
 msgstr "OpenGL 1.4 sisteminiz tarafından desteklenmiyor. Oyun buna gereksinim duyar. Lütfen grafik sürücünüzü/donanımınızı yükseltin, mümkünse."
 
-#: lib/netplay/netplay.cpp:188
+#: lib/netplay/netplay.cpp:193
 #: lib/netplay/netplay.cpp:1023
 msgid "Enter password here"
 msgstr "Parolayı buraya gir"
@@ -10281,7 +10281,7 @@ msgid ""
 " or to forward the port to your system."
 msgstr "Bekleme odası sunucusuna bağlanırken hata: %s. Port %d un gelen mesajlara erişebilir olduğuna emin olun .Eğer bir yönlendirici kullanıyorsanız, onu UPnP veya sisteminizin ileri port'unu kullanabilir hale getirin."
 
-#: lib/netplay/netplay.cpp:2666
+#: lib/netplay/netplay.cpp:2679
 msgid "Failed to get a lobby response!"
 msgstr ""
 
@@ -10655,7 +10655,7 @@ msgid "Player dropped"
 msgstr "Oyuncu Düştü"
 
 #: src/display3d.cpp:657
-#: src/multiint.cpp:2198
+#: src/multiint.cpp:2210
 msgid "Waiting for other players"
 msgstr "Diğer oyuncular bekleniyor"
 
@@ -10682,81 +10682,81 @@ msgstr "%s - Müttefik - Hasar %d%% - Tecrübe %d, %s"
 msgid "Unit Lost!"
 msgstr "Birim Kaybı!"
 
-#: src/droid.cpp:1310
+#: src/droid.cpp:1287
 msgid "Structure Restored"
 msgstr "Bina Yenilendi"
 
-#: src/droid.cpp:2281
+#: src/droid.cpp:2257
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
 msgstr[0] "Grup %u Seçildi - %u Birim"
 msgstr[1] "Grup %u Seçildi - %u Birimler"
 
-#: src/droid.cpp:2294
+#: src/droid.cpp:2270
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
 msgstr[0] "%u Birim şu Gruba Atandı: %u "
 msgstr[1] "%u Birimler şu Gruba Atandı: %u "
 
-#: src/droid.cpp:2307
+#: src/droid.cpp:2283
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
 msgstr[0] "%u Numaralı Grup Merkezde - %u Birim"
 msgstr[1] "%u Numaralı Grup Merkezde - %u Birimler"
 
-#: src/droid.cpp:2311
+#: src/droid.cpp:2287
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] "Grup %u 'e - %u Birim atandı"
 msgstr[1] "Grup %u 'e - %u Birimler Atandı"
 
-#: src/droid.cpp:2493
+#: src/droid.cpp:2469
 msgid "Rookie"
 msgstr "Er"
 
-#: src/droid.cpp:2494
+#: src/droid.cpp:2470
 msgctxt "rank"
 msgid "Green"
 msgstr "Onbaşı"
 
-#: src/droid.cpp:2495
+#: src/droid.cpp:2471
 msgid "Trained"
 msgstr "Çavuş"
 
-#: src/droid.cpp:2496
+#: src/droid.cpp:2472
 msgid "Regular"
 msgstr "Teğmen"
 
-#: src/droid.cpp:2497
+#: src/droid.cpp:2473
 msgid "Professional"
 msgstr "Üsteğmen"
 
-#: src/droid.cpp:2498
+#: src/droid.cpp:2474
 msgid "Veteran"
 msgstr "Albay"
 
-#: src/droid.cpp:2499
+#: src/droid.cpp:2475
 msgid "Elite"
 msgstr "Korgeneral"
 
-#: src/droid.cpp:2500
+#: src/droid.cpp:2476
 msgid "Special"
 msgstr "Orgeneral"
 
-#: src/droid.cpp:2501
+#: src/droid.cpp:2477
 msgid "Hero"
 msgstr "Mareşal"
 
-#: src/droid.cpp:3461
+#: src/droid.cpp:3435
 #, c-format
 msgid "%s wanted to give you a %s but you have too many!"
 msgstr "%s Sana vermek istedi %s ama, Sende daha çok var!"
 
-#: src/droid.cpp:3465
+#: src/droid.cpp:3439
 #, c-format
 msgid "You wanted to give %s a %s but they have too many!"
 msgstr "Sen %s 'a %s vermek istedin ama, Onda  daha çok var!"
@@ -10863,7 +10863,7 @@ msgid "TCP PORT 2100 MUST BE OPENED IN YOUR FIREWALL / ROUTER TO HOST GAMES!"
 msgstr ""
 
 #: src/frontend.cpp:444
-#: src/multiint.cpp:1373
+#: src/multiint.cpp:1385
 msgid "OPTIONS"
 msgstr "AYARLAR"
 
@@ -11130,7 +11130,7 @@ msgid "GAME OPTIONS"
 msgstr "OYUN AYARLARI"
 
 #: src/frontend.cpp:1399
-#: src/multiint.cpp:2464
+#: src/multiint.cpp:2476
 msgid "Mod: "
 msgstr "Mod: "
 
@@ -11139,8 +11139,8 @@ msgid "MAP SAVED!"
 msgstr "HARİTAN KAYDEDİLDİ!"
 
 #: src/hci.cpp:1554
-#: src/loop.cpp:269
-#: src/loop.cpp:285
+#: src/loop.cpp:257
+#: src/loop.cpp:273
 msgid "GAME SAVED: "
 msgstr "OYUN KAYDEDİLDİ :"
 
@@ -11190,7 +11190,7 @@ msgid "Build (F3)"
 msgstr "İnşa (F3)"
 
 #: src/hci.cpp:3416
-#: src/multiint.cpp:1477
+#: src/multiint.cpp:1489
 #: src/multimenu.cpp:799
 msgid "Power"
 msgstr "Güç"
@@ -11779,8 +11779,8 @@ msgstr "KLAVYE KISAYOLLARI"
 
 #: src/keyedit.cpp:377
 #: src/multiint.cpp:712
-#: src/multiint.cpp:1166
-#: src/multiint.cpp:1563
+#: src/multiint.cpp:1178
+#: src/multiint.cpp:1575
 msgid "Return To Previous Screen"
 msgstr "Bir Önceki Ekrana Dön"
 
@@ -12264,8 +12264,8 @@ msgstr "Bir oyun objesini izle"
 msgid "Toggle Driving Mode"
 msgstr "Sürüş Moduna"
 
-#: src/loop.cpp:276
-#: src/loop.cpp:292
+#: src/loop.cpp:264
+#: src/loop.cpp:280
 msgid "Could not save game!"
 msgstr "Oyun Kaydedilemedi!"
 
@@ -12372,7 +12372,7 @@ msgid "Accept Settings"
 msgstr "Ayarları Kabul et"
 
 #: src/multiint.cpp:652
-#: src/multiint.cpp:1213
+#: src/multiint.cpp:1225
 msgid "Cancel"
 msgstr "İptal"
 
@@ -12392,356 +12392,361 @@ msgstr "Bekleme Odası"
 msgid "IP"
 msgstr "IP"
 
-#: src/multiint.cpp:933
-#, c-format
-msgid "Hosted by %s, Game Status: %s%s%s%s!"
-msgstr ""
-
 #: src/multiint.cpp:934
 #, fuzzy
 msgid "[Password required]"
 msgstr "*** Şifreye gerek yok! ***"
 
-#: src/multiint.cpp:935
+#: src/multiint.cpp:938
 msgid "[No Tanks]"
 msgstr ""
 
-#: src/multiint.cpp:936
+#: src/multiint.cpp:942
 #, fuzzy
-msgid " [No Cyborgs]"
+msgid "[No Cyborgs]"
 msgstr "Cyborgları Üretir"
 
-#: src/multiint.cpp:937
-msgid " [No VTOLs]"
+#: src/multiint.cpp:946
+msgid "[No VTOLs]"
 msgstr ""
 
-#: src/multiint.cpp:962
+#: src/multiint.cpp:950
+#, c-format
+msgid "Hosted by %s"
+msgstr ""
+
+#: src/multiint.cpp:954
+#, c-format
+msgid "Hosted by %s —%s"
+msgstr ""
+
+#: src/multiint.cpp:974
 msgid "No games are available"
 msgstr "Geçerli oyun yok"
 
-#: src/multiint.cpp:965
+#: src/multiint.cpp:977
 msgid "Game is full"
 msgstr "Oyun Dolu"
 
-#: src/multiint.cpp:969
+#: src/multiint.cpp:981
 msgid "You were kicked!"
 msgstr "Oyundan Atıldın!"
 
-#: src/multiint.cpp:972
+#: src/multiint.cpp:984
 msgid "Wrong Game Version!"
 msgstr "Yanlış Oyun Sürümü!"
 
-#: src/multiint.cpp:975
+#: src/multiint.cpp:987
 msgid "You have an incompatible mod."
 msgstr "Uyumsuz bir mod."
 
-#: src/multiint.cpp:979
+#: src/multiint.cpp:991
 msgid "Host couldn't send file?"
 msgstr "Kurucu dosya gönderebilir mi?"
 
-#: src/multiint.cpp:983
+#: src/multiint.cpp:995
 msgid "Incorrect Password!"
 msgstr "Geçersiz Şifre!"
 
-#: src/multiint.cpp:986
+#: src/multiint.cpp:998
 msgid "Host has dropped connection!"
 msgstr "Kurucu Bağlantıyı Kesti"
 
-#: src/multiint.cpp:990
+#: src/multiint.cpp:1002
 msgid "Connection Error"
 msgstr "Bağlantı Hatası"
 
-#: src/multiint.cpp:1094
+#: src/multiint.cpp:1106
 msgid "Searching"
 msgstr "Araştırılıyor..."
 
-#: src/multiint.cpp:1163
+#: src/multiint.cpp:1175
 msgid "GAMES"
 msgstr "OYUNLAR"
 
-#: src/multiint.cpp:1171
+#: src/multiint.cpp:1183
 msgid "Refresh Games List"
 msgstr "Oyun Listesini Yenile"
 
-#: src/multiint.cpp:1193
+#: src/multiint.cpp:1205
 msgid "Enter Password:"
 msgstr "Şifreyi gir:"
 
-#: src/multiint.cpp:1211
+#: src/multiint.cpp:1223
 msgid "OK"
 msgstr "TAMAM"
 
-#: src/multiint.cpp:1329
+#: src/multiint.cpp:1341
 msgid "Tanks disabled!!"
 msgstr "Tanklar Devre Dışı!!"
 
-#: src/multiint.cpp:1330
+#: src/multiint.cpp:1342
 msgid "Cyborgs disabled."
 msgstr "Cyborg'lar Devre Dışı"
 
-#: src/multiint.cpp:1331
+#: src/multiint.cpp:1343
 msgid "VTOLs disabled."
 msgstr "DİvK 'lar Devre Dışı"
 
-#: src/multiint.cpp:1378
-#: src/multiint.cpp:1387
+#: src/multiint.cpp:1390
+#: src/multiint.cpp:1399
 msgid "Select Game Name"
 msgstr "Oyun İsmi Seç"
 
-#: src/multiint.cpp:1379
+#: src/multiint.cpp:1391
 msgid "One-Player Skirmish"
 msgstr "Tek Kişilik Çatışma"
 
-#: src/multiint.cpp:1390
+#: src/multiint.cpp:1402
 msgid "Select Map"
 msgstr "Harita Seç"
 
-#: src/multiint.cpp:1398
+#: src/multiint.cpp:1410
 msgid "Click to set Password"
 msgstr "Parolayı kurmak için tıkla"
 
-#: src/multiint.cpp:1408
-#: src/multiint.cpp:1409
+#: src/multiint.cpp:1420
+#: src/multiint.cpp:1421
 msgid "Scavengers"
 msgstr "Çöpçüler var"
 
-#: src/multiint.cpp:1411
+#: src/multiint.cpp:1423
 msgid "No Scavengers"
 msgstr "Çöpçüler yok"
 
-#: src/multiint.cpp:1441
+#: src/multiint.cpp:1453
 msgid "Select Player Name"
 msgstr "Oyuncu İsmi Seç"
 
-#: src/multiint.cpp:1444
+#: src/multiint.cpp:1456
 #: src/multimenu.cpp:792
 msgid "Alliances"
 msgstr "Müttefiklikler"
 
-#: src/multiint.cpp:1447
+#: src/multiint.cpp:1459
 msgid "No Alliances"
 msgstr "Müttefiklik yok"
 
-#: src/multiint.cpp:1449
+#: src/multiint.cpp:1461
 msgid "Allow Alliances"
 msgstr "Müttefiklikleri Göster"
 
 # festgelegt ungleich fest -Kreuvf
-#: src/multiint.cpp:1453
+#: src/multiint.cpp:1465
 msgid "Locked Teams"
 msgstr "Takım Kilidi"
 
-#: src/multiint.cpp:1479
+#: src/multiint.cpp:1491
 msgid "Low Power Levels"
 msgstr "Düşük güç seviyesi"
 
-#: src/multiint.cpp:1481
+#: src/multiint.cpp:1493
 msgid "Medium Power Levels"
 msgstr "Orta güç seviyesi"
 
-#: src/multiint.cpp:1483
+#: src/multiint.cpp:1495
 msgid "High Power Levels"
 msgstr "Yüksek güç seviyesi"
 
-#: src/multiint.cpp:1515
+#: src/multiint.cpp:1527
 msgid "Base"
 msgstr "Üs"
 
-#: src/multiint.cpp:1517
+#: src/multiint.cpp:1529
 msgid "Start with No Bases"
 msgstr "Üs olmadan başla."
 
-#: src/multiint.cpp:1519
+#: src/multiint.cpp:1531
 msgid "Start with Bases"
 msgstr "Üsler ile başla."
 
-#: src/multiint.cpp:1521
+#: src/multiint.cpp:1533
 msgid "Start with Advanced Bases"
 msgstr "Gelişmiş üsler ile başla."
 
-#: src/multiint.cpp:1553
+#: src/multiint.cpp:1565
 msgid "Map Preview"
 msgstr "Haritayı Gör"
 
-#: src/multiint.cpp:1555
+#: src/multiint.cpp:1567
 msgid "Click to see Map"
 msgstr "Haritayı görmek için tıkla"
 
-#: src/multiint.cpp:1569
+#: src/multiint.cpp:1581
 msgid "Start Hosting Game"
 msgstr "Oyunu kurulumunu başlat"
 
-#: src/multiint.cpp:1577
+#: src/multiint.cpp:1589
 msgid "Show Structure Limits"
 msgstr "Bina limitlerini göster"
 
-#: src/multiint.cpp:1577
+#: src/multiint.cpp:1589
 msgid "Set Structure Limits"
 msgstr "Bina limitlerini ayarla"
 
-#: src/multiint.cpp:1655
+#: src/multiint.cpp:1667
 msgid "DIFFICULTY"
 msgstr "ZORLUK"
 
-#: src/multiint.cpp:1669
+#: src/multiint.cpp:1681
 msgid "Less aggressive"
 msgstr "Daha az agresif"
 
-#: src/multiint.cpp:1670
+#: src/multiint.cpp:1682
 msgid "Plays nice"
 msgstr "Güzel çalış"
 
-#: src/multiint.cpp:1671
+#: src/multiint.cpp:1683
 msgid "No holds barred"
 msgstr "Hiçbir tutar engellenmedi"
 
-#: src/multiint.cpp:1672
+#: src/multiint.cpp:1684
 msgid "Starts with advantages"
 msgstr "Avantajlar ile başlar"
 
-#: src/multiint.cpp:1700
+#: src/multiint.cpp:1712
 msgid "CHOOSE AI"
 msgstr "Y.Z SEÇ"
 
-#: src/multiint.cpp:1716
+#: src/multiint.cpp:1728
 msgid "Allow human players to join in this slot"
 msgstr "İnsan oyuncuların bu slota girmesi için izin ver"
 
-#: src/multiint.cpp:1724
+#: src/multiint.cpp:1736
 msgid "Leave this slot unused"
 msgstr "Bu slotu kullanılmaz olarak belirle"
 
-#: src/multiint.cpp:2138
+#: src/multiint.cpp:2150
 msgid "Team"
 msgstr "Takım"
 
-#: src/multiint.cpp:2181
+#: src/multiint.cpp:2193
 msgid "You cannot change difficulty in a challenge"
 msgstr "Mücadele modunda zorluğu değiştiremezsin"
 
-#: src/multiint.cpp:2181
+#: src/multiint.cpp:2193
 msgid "Click to change difficulty"
 msgstr "Zorluğu değiştirmek için tıkla"
 
-#: src/multiint.cpp:2203
+#: src/multiint.cpp:2215
 msgid "Click when ready"
 msgstr "Hazırsan tıkla"
 
-#: src/multiint.cpp:2207
+#: src/multiint.cpp:2219
 msgid "READY?"
 msgstr "HAZIR?"
 
-#: src/multiint.cpp:2251
+#: src/multiint.cpp:2263
 msgid "PLAYERS"
 msgstr "OYUNCULAR"
 
-#: src/multiint.cpp:2286
+#: src/multiint.cpp:2298
 msgid "Click to change to this slot"
 msgstr "Bu slotu değiştirmek için tıkla"
 
-#: src/multiint.cpp:2314
+#: src/multiint.cpp:2326
 msgid "Choose Team"
 msgstr "Takım seç"
 
-#: src/multiint.cpp:2344
+#: src/multiint.cpp:2356
 msgid "Click to change player colour"
 msgstr "Oyuncu renklerini değiştirmek için tıkla"
 
-#: src/multiint.cpp:2372
+#: src/multiint.cpp:2384
 msgid "Click to change player position"
 msgstr "Oyun pozisyonunu ayarlarını değiştirmek için tıkla"
 
-#: src/multiint.cpp:2376
+#: src/multiint.cpp:2388
 msgid "Click to change AI"
 msgstr "Yapay zekayı ayarlamak için tıkla"
 
-#: src/multiint.cpp:2437
+#: src/multiint.cpp:2449
 msgid "CHAT"
 msgstr "SOHBET"
 
-#: src/multiint.cpp:2469
+#: src/multiint.cpp:2481
 msgid "All players need to have the same mods to join your game."
 msgstr "Tüm oyuncular oyununa girebilmek için aynı moda ihtiyaç duyar."
 
-#: src/multiint.cpp:2510
+#: src/multiint.cpp:2522
 msgid "Connecting to the lobby server..."
 msgstr ""
 
-#: src/multiint.cpp:2663
+#: src/multiint.cpp:2675
 #, c-format
 msgid "*** password [%s] is now required! ***"
 msgstr "*** Şifre [%s] şimdi isteniyor ! ***"
 
-#: src/multiint.cpp:2671
+#: src/multiint.cpp:2683
 msgid "*** password is NOT required! ***"
 msgstr "*** Şifreye gerek yok! ***"
 
-#: src/multiint.cpp:2886
+#: src/multiint.cpp:2898
 msgid "Sorry! Failed to host the game."
 msgstr "Üzgünüm! Oyun kurulurken bir hata oldu."
 
 # festgelegt ungleich fest -Kreuvf
-#: src/multiint.cpp:3007
+#: src/multiint.cpp:3019
 msgid "'Locked Teams' mode enabled"
 msgstr "\"Takım Kilidi\"-Modu Aktif"
 
-#: src/multiint.cpp:3091
+#: src/multiint.cpp:3103
 #, c-format
 msgid "The host has kicked %s from the game!"
 msgstr "Kurucu %s isimli oyuncuyu oyundan attı!"
 
-#: src/multiint.cpp:3157
+#: src/multiint.cpp:3169
 msgid "Host is Starting Game"
 msgstr "Kurucu oyunu başlatıyor"
 
-#: src/multiint.cpp:3704
+#: src/multiint.cpp:3716
 msgid "Can't connect to lobby server!"
 msgstr ""
 
-#: src/multiint.cpp:3785
+#: src/multiint.cpp:3803
 #, c-format
 msgid "Mods: %s"
 msgstr ""
 
-#: src/multiint.cpp:3785
+#: src/multiint.cpp:3810
 msgid "Mods: None!"
 msgstr ""
 
-#: src/multiint.cpp:3789
+#: src/multiint.cpp:3820
 #, fuzzy, c-format
 msgid "Version: %s"
 msgstr "Sürüm %s-%s%s%s%s"
 
-#: src/multiint.cpp:3835
+#: src/multiint.cpp:3871
 #, c-format
 msgid "Click to take player slot %d"
 msgstr "Oyuncu slotu %d almak için tıkla "
 
-#: src/multiint.cpp:3844
-#: src/multiint.cpp:4037
+#: src/multiint.cpp:3880
+#: src/multiint.cpp:4073
 msgid "Open"
 msgstr "Aç"
 
-#: src/multiint.cpp:3844
-#: src/multiint.cpp:4038
+#: src/multiint.cpp:3880
+#: src/multiint.cpp:4074
 msgid "Closed"
 msgstr "Kapandı"
 
-#: src/multiint.cpp:3895
+#: src/multiint.cpp:3931
 #, c-format
 msgid "Sending Map: %d%% "
 msgstr "Harita Gönderiliyor: %d%%"
 
-#: src/multiint.cpp:3903
+#: src/multiint.cpp:3939
 #, c-format
 msgid "Map: %d%% downloaded"
 msgstr "Harita: %d%% indirildi"
 
-#: src/multiint.cpp:3929
+#: src/multiint.cpp:3965
 msgid "HOST"
 msgstr "KURUCU"
 
-#: src/multiint.cpp:3936
+#: src/multiint.cpp:3972
 #: src/multimenu.cpp:808
 msgid "Ping"
 msgstr "Ping"
@@ -12928,12 +12933,12 @@ msgstr "Kahverengi"
 msgid "We can't do that! We must be a Cyborg unit to use a Cyborg Transport!"
 msgstr "Bunu Yapamıyoruz! Biz Cyborg Taşıma Gemisi'ni kullanmak için bir Cyborg birimine sahip olmalıyız!"
 
-#: src/qtscriptfuncs.cpp:1470
+#: src/qtscriptfuncs.cpp:1481
 #: src/scriptfuncs.cpp:3259
 msgid "YOU ARE VICTORIOUS!"
 msgstr "KAZANDIN!"
 
-#: src/qtscriptfuncs.cpp:1475
+#: src/qtscriptfuncs.cpp:1486
 #: src/scriptfuncs.cpp:3263
 msgid "YOU WERE DEFEATED!"
 msgstr "YENİLDİN!"
@@ -13103,64 +13108,64 @@ msgstr "Hiç Algılayıcı birimi bulunamadı!"
 msgid "Unable to locate any Commanders!"
 msgstr "Hiç Komutan birimi bulunamadı!"
 
-#: src/structure.cpp:2556
+#: src/structure.cpp:2555
 msgid "Command Control Limit Reached - Production Halted"
 msgstr "Kontrol Limitine Ulaştın - Üretim Durduruldu"
 
 # nix Gruppe! -Kreuvf
-#: src/structure.cpp:5569
-#: src/structure.cpp:5594
+#: src/structure.cpp:5564
+#: src/structure.cpp:5589
 #, c-format
 msgid "%s - %u Unit assigned - Damage %3.0f%%"
 msgid_plural "%s - %u Units assigned - Damage %3.0f%%"
 msgstr[0] "%s - %u Birim atandı - Hasar %3.0f%%"
 msgstr[1] "%s - %u Birimler atandı - Hasar %3.0f%%"
 
-#: src/structure.cpp:5599
-#: src/structure.cpp:5667
-#: src/structure.cpp:5682
-#: src/structure.cpp:5696
+#: src/structure.cpp:5594
+#: src/structure.cpp:5662
+#: src/structure.cpp:5677
+#: src/structure.cpp:5691
 #, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - Hasar %3.0f%%"
 
-#: src/structure.cpp:5649
+#: src/structure.cpp:5644
 #, c-format
 msgid "%s - Connected %u of %u - Damage %3.0f%%"
 msgstr "%s - Bağlandı %u de %u - Hasar %3.0f%%"
 
-#: src/structure.cpp:5812
-#: src/structure.cpp:5857
+#: src/structure.cpp:5807
+#: src/structure.cpp:5852
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Elektronik Hasar Aldı"
 
 # Reward ist zwar nicht Beute, aber im Krieg erbeutet man eben Dinge -Kreuvf
-#: src/structure.cpp:6108
+#: src/structure.cpp:6103
 msgid "Electronic Reward - Visibility Report"
 msgstr "Elektronik Ödül - Görünebilirlik Raporu"
 
-#: src/structure.cpp:6148
+#: src/structure.cpp:6143
 msgid "Factory Reward - Propulsion"
 msgstr "Fabrika Ödülü - Yürütücü"
 
-#: src/structure.cpp:6172
+#: src/structure.cpp:6167
 msgid "Factory Reward - Body"
 msgstr "Fabrika Ödülü - Beden"
 
-#: src/structure.cpp:6196
+#: src/structure.cpp:6191
 msgid "Factory Reward - Weapon"
 msgstr "Fabrika Ödülü - Silah"
 
-#: src/structure.cpp:6205
+#: src/structure.cpp:6200
 msgid "Factory Reward - Nothing"
 msgstr "Fabrika Ödülü - Sıfır"
 
-#: src/structure.cpp:6233
+#: src/structure.cpp:6228
 msgid "Repair Facility Award - Repair"
 msgstr "Tamir Tesisi Ödülü - Tamir"
 
-#: src/structure.cpp:6240
+#: src/structure.cpp:6235
 msgid "Repair Facility Award - Nothing"
 msgstr "Tamir Tesisi Ödülü - Sıfır"
 
