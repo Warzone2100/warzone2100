@@ -1,6 +1,6 @@
 #!/bin/bash
 
-BASE="master"
+BASE="3"
 
 DATENUM="`date +%Y%m%d`"
 
