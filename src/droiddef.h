@@ -182,6 +182,8 @@ struct DROID : public BASE_OBJECT
 
 	// secondary order data
 	UDWORD          secondaryOrder;
+	uint32_t        secondaryOrderPending;          ///< What the secondary order will be, after synchronisation.
+	int             secondaryOrderPendingCount;     ///< Number of pending secondary order changes.
 
 	/* Action data */
 	DROID_ACTION    action;

@@ -112,7 +112,7 @@ void orderSelectedStatsTwoLocDir(UDWORD player, DROID_ORDER order, STRUCTURE_STA
 extern bool secondarySupported(DROID *psDroid, SECONDARY_ORDER sec);
 
 /** \brief Gets the state of a secondary order, return false if unsupported. */
-extern SECONDARY_STATE secondaryGetState(DROID *psDroid, SECONDARY_ORDER sec);
+SECONDARY_STATE secondaryGetState(DROID *psDroid, SECONDARY_ORDER sec, QUEUE_MODE mode = ModeImmediate);
 
 /** \brief Sets the state of a secondary order, return false if failed. */
 extern bool secondarySetState(DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STATE State, QUEUE_MODE mode = ModeQueue);
