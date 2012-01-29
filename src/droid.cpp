@@ -286,6 +286,8 @@ DROID::DROID(uint32_t id, unsigned player)
 	, psGroup(NULL)
 	, psGrpNext(NULL)
 	, secondaryOrder(DSS_ARANGE_DEFAULT | DSS_REPLEV_NEVER | DSS_ALEV_ALWAYS | DSS_HALT_GUARD)
+	, secondaryOrderPending(DSS_ARANGE_DEFAULT | DSS_REPLEV_NEVER | DSS_ALEV_ALWAYS | DSS_HALT_GUARD)
+	, secondaryOrderPendingCount(0)
 	, action(DACTION_NONE)
 	, actionPos(0, 0)
 	, psCurAnim(NULL)
@@ -3359,9 +3361,7 @@ bool cbSensorDroid(DROID *psDroid)
 	if (asSensorStats[psDroid->asBits[COMP_SENSOR].nStat].type ==
 		VTOL_CB_SENSOR ||
 		asSensorStats[psDroid->asBits[COMP_SENSOR].nStat].type ==
-		INDIRECT_CB_SENSOR ||
-		asSensorStats[psDroid->asBits[COMP_SENSOR].nStat].type ==
-		SUPER_SENSOR)
+		INDIRECT_CB_SENSOR)
 	{
 		return true;
 	}

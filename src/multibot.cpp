@@ -446,6 +446,7 @@ bool recvDroid(NETQUEUE queue)
 		if (haveInitialOrders)
 		{
 			psDroid->secondaryOrder = initialOrders.secondaryOrder;
+			psDroid->secondaryOrderPending = psDroid->secondaryOrder;
 			orderDroidLoc(psDroid, DORDER_MOVE, initialOrders.moveToX, initialOrders.moveToY, ModeImmediate);
 			cbNewDroid(IdToStruct(initialOrders.factoryId, ANYPLAYER), psDroid);
 		}

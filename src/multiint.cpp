@@ -928,18 +928,30 @@ static void addGames(void)
 				}
 				else
 				{
-					if (NetPlay.games[i].limits)
+					std::string flags;
+					if (NetPlay.games[i].privateGame)
 					{
-						ssprintf(tooltipbuffer[i], _("Hosted by %s, Game Status: %s%s%s%s!"), NetPlay.games[i].hostname,
-								 NetPlay.games[i].privateGame ? _("[Password required]") : "",
-								 NetPlay.games[i].limits & NO_TANKS ? _("[No Tanks]") : "",
-								 NetPlay.games[i].limits & NO_BORGS ? _(" [No Cyborgs]") : "",
-								 NetPlay.games[i].limits & NO_VTOLS ? _(" [No VTOLs]") : ""
-								);
+						flags += " "; flags += _("[Password required]");
+					}
+					if (NetPlay.games[i].limits & NO_TANKS)
+					{
+						flags += " "; flags += _("[No Tanks]");
+					}
+					if (NetPlay.games[i].limits & NO_BORGS)
+					{
+						flags += " "; flags += _("[No Cyborgs]");
+					}
+					if (NetPlay.games[i].limits & NO_VTOLS)
+					{
+						flags += " "; flags += _("[No VTOLs]");
+					}
+					if (flags.empty())
+					{
+						ssprintf(tooltipbuffer[i], _("Hosted by %s"), NetPlay.games[i].hostname);
 					}
 					else
 					{
-						ssprintf(tooltipbuffer[i], "Hosted by %s", NetPlay.games[i].hostname);
+						ssprintf(tooltipbuffer[i], _("Hosted by %s —%s"), NetPlay.games[i].hostname, flags.c_str());
 					}
 					sButInit.pTip = tooltipbuffer[i];
 				}

@@ -438,6 +438,7 @@ bool recvDroidCheck(NETQUEUE queue)
 			MERGECOPYSYNC(pD->secondaryOrder, secondaryOrder, "u");  // The old code set this after changing orders, so doing that in case.
 #undef MERGECOPYSYNC
 #undef MERGEDELTA
+			pD->secondaryOrderPending = pD->secondaryOrder;  // These droid checks are useless. TODO Completely remove recvDroidCheck and related code, since it's useless for synch, anyway?
 
 			syncDebugDroid(pD, '>');
 

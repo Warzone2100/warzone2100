@@ -558,7 +558,7 @@ static SECONDARY_STATE GetSecondaryStates(SECONDARY_ORDER sec)
 	{
 		for (unsigned i = 0; i < SelectedDroids.size(); ++i)
 		{
-			currState = secondaryGetState(SelectedDroids[i], sec);
+			currState = secondaryGetState(SelectedDroids[i], sec, ModeQueue);
 			if (bFirst)
 			{
 				state = currState;
