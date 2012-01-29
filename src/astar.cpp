@@ -237,9 +237,14 @@ static inline PathNode fpathTakeNode(std::vector<PathNode> &nodes)
  */
 static inline unsigned WZ_DECL_CONST fpathEstimate(PathCoord s, PathCoord f)
 {
-	// Cost of moving horizontal/vertical = 70, cost of moving diagonal = 99, 99/70 = 1.41428571... ≈ √2 = 1.41421356...
+	// Cost of moving horizontal/vertical = 70*2, cost of moving diagonal = 99*2, 99/70 = 1.41428571... ≈ √2 = 1.41421356...
 	unsigned xDelta = abs(s.x - f.x), yDelta = abs(s.y - f.y);
-	return std::min(xDelta, yDelta)*(99 - 70) + std::max(xDelta, yDelta)*70;
+	return std::min(xDelta, yDelta)*(198 - 140) + std::max(xDelta, yDelta)*140;
+}
+static inline unsigned WZ_DECL_CONST fpathGoodEstimate(PathCoord s, PathCoord f)
+{
+	// Cost of moving horizontal/vertical = 70*2, cost of moving diagonal = 99*2, 99/70 = 1.41428571... ≈ √2 = 1.41421356...
+	return iHypot((s.x - f.x)*140, (s.y - f.y)*140);
 }
 
 /** Generate a new node
@@ -253,18 +258,60 @@ static inline void fpathNewNode(PathfindContext &context, PathCoord dest, PathCo
 	unsigned costFactor = context.isDangerous(pos.x, pos.y) ? 5 : 1;
 	node.p = pos;
 	node.dist = prevDist + fpathEstimate(prevPos, pos)*costFactor;
-	node.est = node.dist + fpathEstimate(pos, dest);
+	node.est = node.dist + fpathGoodEstimate(pos, dest);
+
+	Vector2i delta = Vector2i(pos.x - prevPos.x, pos.y - prevPos.y)*64;
+	bool isDiagonal = delta.x && delta.y;
 
 	PathExploredTile &expl = context.map[pos.x + pos.y*mapWidth];
-	if (expl.iteration == context.iteration && (expl.visited || expl.dist <= node.dist))
+	if (expl.iteration == context.iteration)
 	{
-		return;  // Already visited this tile. Do nothing.
+		if (expl.visited)
+		{
+			return;  // Already visited this tile. Do nothing.
+		}
+		Vector2i deltaA = delta;
+		Vector2i deltaB = Vector2i(expl.dx, expl.dy);
+		Vector2i deltaDelta = deltaA - deltaB;  // Vector pointing from current considered source tile leading to pos, to the previously considered source tile leading to pos.
+		if (abs(deltaDelta.x) + abs(deltaDelta.y) == 64)
+		{
+			// prevPos is tile A or B, and pos is tile P. We were previously called with prevPos being tile B or A, and pos tile P.
+			// We want to find the distance to tile P, taking into account that the actual shortest path involves coming from somewhere between tile A and tile B.
+			// +---+---+
+			// |   | P |
+			// +---+---+
+			// | A | B |
+			// +---+---+
+			unsigned distA = node.dist - (isDiagonal? 198 : 140)*costFactor;  // If isDiagonal, node is A and expl is B.
+			unsigned distB = expl.dist - (isDiagonal? 140 : 198)*costFactor;
+			if (!isDiagonal)
+			{
+				std::swap(distA, distB);
+				std::swap(deltaA, deltaB);
+			}
+			int gradientX = int(distB - distA)/costFactor;
+			if (gradientX > 0 && gradientX <= 98)  // 98 = floor(140/√2), so gradientX <= 98 is needed so that gradientX < gradientY.
+			{
+				// The distance gradient is now known to be somewhere between the direction from A to P and the direction from B to P.
+				static const uint8_t gradYLookup[99] = {140, 140, 140, 140, 140, 140, 140, 140, 140, 140, 140, 140, 139, 139, 139, 139, 139, 139, 139, 139, 139, 138, 138, 138, 138, 138, 138, 137, 137, 137, 137, 137, 136, 136, 136, 136, 135, 135, 135, 134, 134, 134, 134, 133, 133, 133, 132, 132, 132, 131, 131, 130, 130, 130, 129, 129, 128, 128, 127, 127, 126, 126, 126, 125, 125, 124, 123, 123, 122, 122, 121, 121, 120, 119, 119, 118, 118, 117, 116, 116, 115, 114, 113, 113, 112, 111, 110, 110, 109, 108, 107, 106, 106, 105, 104, 103, 102, 101, 100};
+				int gradientY = gradYLookup[gradientX];  // = sqrt(140² -  gradientX²), rounded to nearest integer
+				//int gradientY = iSqrt(70*70 - gradientX*gradientX);  // TODO Faster to use a (small, 50 entries) lookup table?
+				unsigned distP = gradientY*costFactor + distB;
+				node.est -= node.dist - distP;
+				node.dist = distP;
+				delta = (deltaA*gradientX + deltaB*(gradientY - gradientX))/gradientY;
+			}
+		}
+		if (expl.dist <= node.dist)
+		{
+			return;  // A different path to this tile is shorter.
+		}
 	}
 
 	// Remember where we have been, and remember the way back.
 	expl.iteration = context.iteration;
-	expl.dx = pos.x - prevPos.x;
-	expl.dy = pos.y - prevPos.y;
+	expl.dx = delta.x;
+	expl.dy = delta.y;
 	expl.dist = node.dist;
 	expl.visited = false;
 
@@ -278,7 +325,7 @@ static void fpathAStarReestimate(PathfindContext &context, PathCoord tileF)
 {
 	for (std::vector<PathNode>::iterator node = context.nodes.begin(); node != context.nodes.end(); ++node)
 	{
-		node->est = node->dist + fpathEstimate(node->p, tileF);
+		node->est = node->dist + fpathGoodEstimate(node->p, tileF);
 	}
 
 	// Changing the estimates breaks the heap ordering. Fix the heap ordering.
@@ -448,17 +495,17 @@ ASR_RETVAL fpathAStarRoute(MOVE_CONTROL *psMove, PATHJOB *psJob)
 	static std::vector<Vector2i> path;  // Declared static to save allocations.
 	path.clear();
 
-	PathCoord newP;
-	for (PathCoord p = endCoord; true; p = newP)
+	Vector2i newP;
+	for (Vector2i p(world_coord(endCoord.x) + TILE_UNITS/2, world_coord(endCoord.y) + TILE_UNITS/2); true; p = newP)
 	{
-		ASSERT_OR_RETURN(ASR_FAILED, tileOnMap(p.x, p.y), "Assigned XY coordinates (%d, %d) not on map!", (int)p.x, (int)p.y);
+		ASSERT_OR_RETURN(ASR_FAILED, worldOnMap(p.x, p.y), "Assigned XY coordinates (%d, %d) not on map!", (int)p.x, (int)p.y);
 		ASSERT_OR_RETURN(ASR_FAILED, path.size() < (unsigned)mapWidth*mapHeight, "Pathfinding got in a loop.");
 
-		path.push_back(Vector2i(world_coord(p.x) + TILE_UNITS / 2, world_coord(p.y) + TILE_UNITS / 2));
+		path.push_back(p);
 
-		PathExploredTile &tile = context.map[p.x + p.y*mapWidth];
-		newP = PathCoord(p.x - tile.dx, p.y - tile.dy);
-		if (p == context.tileS || p == newP)
+		PathExploredTile &tile = context.map[map_coord(p.x) + map_coord(p.y)*mapWidth];
+		newP = p - Vector2i(tile.dx, tile.dy)*(TILE_UNITS/64);
+		if (map_coord(p) == Vector2i(context.tileS.x, context.tileS.y) || p == newP)
 		{
 			break;  // We stopped moving, because we reached the destination or the closest reachable tile to context.tileS. Give up now.
 		}
