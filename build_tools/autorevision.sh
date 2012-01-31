@@ -41,46 +41,9 @@ function gitRepo {
 	VCS_DATE="$(git log -1 --pretty=format:%ci)"
 }
 
-# For hg repos
-function hgRepo {
-	cd "$(hg root)"
-	
-	# Is the working copy clean?
-	hg sum | grep -q 'commit: (clean)'
-	WC_MODIFIED="${?}"
-	
-	# Enumeration of changesets
-	VCS_NUM="$(hg id -n)"
-	
-	# The full revision hash
-	VCS_FULL_HASH="$(hg log -r ${VCS_NUM} -l 1 --template '{node}\n')"
-	
-	# The short hash
-	VCS_SHORT_HASH="$(hg id -i)"
-	
-	# Current bookmark (bookmarks are roughly equivalent to git's branches) or branch if no bookmark
-	VCS_URI="$(hg id -B | cut -d ' ' -f 1)"
-	# Fall back to the branch if there are no bookmarks
-	if [ -z "${VCS_URI}" ]; then
-		VCS_URI="$(hg id -b)"
-	fi
-	
-	# Current tag (or uri if there is no tag)
-	if [ "$(hg log -r ${VCS_NUM} -l 1 --template '{latesttagdistance}\n')" = "0" ]; then
-		VCS_TAG="`hg id -t | sed -e 's:qtip::' -e 's:tip::' -e 's:qbase::' -e 's:qparent::' -e "s:$(hg --color never qtop 2>/dev/null)::" | cut -d ' ' -f 1`"
-	else
-		VCS_TAG="${VCS_URI}"
-	fi
-	
-	# Date of the curent commit
-	VCS_DATE="$(hg log -r ${VCS_NUM} -l 1 --template '{date|isodatesec}\n')"
-}
-
 
 if [[ ! -z "$(git rev-parse HEAD 2>/dev/null)" ]]; then
 	gitRepo
-elif [[ ! -z "$(hg id 2>/dev/null)" ]]; then
-	hgRepo
 else
 	echo "error: No repo detected."
 	exit 1
