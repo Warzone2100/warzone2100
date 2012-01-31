@@ -165,7 +165,7 @@ unsigned NET_PlayerConnectionStatus[CONNECTIONSTATUS_NORMAL][MAX_PLAYERS];
 **/
 static char const *versionString = version_getVersionString();
 static int NETCODE_VERSION_MAJOR = 6;
-static int NETCODE_VERSION_MINOR = 3;
+static int NETCODE_VERSION_MINOR = 4;
 
 bool NETisCorrectVersion(uint32_t game_version_major, uint32_t game_version_minor)
 {
@@ -2109,7 +2109,7 @@ static void NETregisterServer(int state)
 static void NETallowJoining(void)
 {
 	unsigned int i;
-	char buffer[6] = {'\0'};
+	char buffer[10] = {'\0'};
 	char* p_buffer;
 	int32_t result;
 	bool connectFailed = true;
@@ -2168,54 +2168,44 @@ static void NETallowJoining(void)
 		// and have no data waiting.
 		if (checkSockets(tmp_socket_set, NET_TIMEOUT_DELAY) > 0
 		    && socketReadReady(tmp_socket[i])
-		    && (recv_result = readNoInt(tmp_socket[i], p_buffer, 5))
+		    && (recv_result = readNoInt(tmp_socket[i], p_buffer, 8))
 			&& recv_result != SOCKET_ERROR)
 		{
 			// A 2.3.7 client sends a "list" command first,
 			// we just close the socket so he sees a "Connection Error".
 			if (strcmp(buffer, "list") == 0)
 			{
-				debug(LOG_ERROR, "An old client tried to connect, closing the socket.");
+				debug(LOG_INFO, "An old client tried to connect, closing the socket.");
+				connectFailed = true;
 			}
 			else
 			{
 				// New clients send NETCODE_VERSION_MAJOR and NETCODE_VERSION_MINOR
 				// Check these numbers with our own.
 
-				// Read another 3 bytes into the buffer
-				p_buffer += 5;
+				memcpy(&major, p_buffer, sizeof(int32_t));
+				major = ntohl(major);
+				p_buffer += sizeof(int32_t);
+				memcpy(&minor, p_buffer, sizeof(int32_t));
+				minor = ntohl(minor);
 
-				if (readNoInt(tmp_socket[i], p_buffer, 3) != SOCKET_ERROR)
+				if (NETisCorrectVersion(major, minor))
 				{
-					p_buffer = buffer;
-					memcpy(&major, p_buffer, sizeof(int32_t));
-					major = ntohl(major);
-					p_buffer += sizeof(uint32_t);
-					memcpy(&minor, p_buffer, sizeof(int32_t));
-					minor = ntohl(minor);
+					result = htonl(ERROR_NOERROR);
+					memcpy(&buffer, &result, sizeof(result));
+					writeAll(tmp_socket[i], &buffer, sizeof(result));
+					socketBeginCompression(tmp_socket[i]);
 
-					if (NETisCorrectVersion(major, minor))
-					{
-						result = htonl(ERROR_NOERROR);
-						memcpy(&buffer, &result, sizeof(result));
-						writeAll(tmp_socket[i], &buffer, sizeof(result));
-						socketBeginCompression(tmp_socket[i]);
-
-						// Connection is successful.
-						connectFailed = false;
-					}
-					else
-					{
-						// Commented out as each masterserver check creates an error.
-						debug(LOG_ERROR, "Received an invalid version \"%d.%d\".", major, minor);
-						result = htonl(ERROR_WRONGVERSION);
-						memcpy(&buffer, &result, sizeof(result));
-						writeAll(tmp_socket[i], &buffer, sizeof(result));
-					}
+					// Connection is successful.
+					connectFailed = false;
 				}
 				else
 				{
-					debug(LOG_NET, "Socket error while reading clients version.");
+					// Commented out as each masterserver check creates an error.
+					debug(LOG_ERROR, "Received an invalid version \"%d.%d\".", major, minor);
+					result = htonl(ERROR_WRONGVERSION);
+					memcpy(&buffer, &result, sizeof(result));
+					writeAll(tmp_socket[i], &buffer, sizeof(result));
 				}
 			}
 		}

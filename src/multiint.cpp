@@ -2602,14 +2602,8 @@ static void stopJoining(void)
 				NetPlay.isHost = false;
 			}
 
-			if(NetPlay.bComms)	// not even connected.
-			{
-				changeTitleMode(GAMEFIND);
-			}
-			else
-			{
-				changeTitleMode(MULTI);
-			}
+			changeTitleMode(MULTI);
+
 			selectedPlayer = 0;
 			realSelectedPlayer = 0;
 			return;
