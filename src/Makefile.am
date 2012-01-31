@@ -4,8 +4,6 @@ AM_CXXFLAGS = $(WZ_CXXFLAGS) $(QT4_CFLAGS)
 AM_LFLAGS = $(FLEX_FLAGS)
 AM_YFLAGS = -d
 
-version.o: autorevision.h
-
 .PHONY: autorevision.h
 
 autorevision.h:
