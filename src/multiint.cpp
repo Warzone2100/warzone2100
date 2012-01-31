@@ -95,6 +95,7 @@
 
 #include "init.h"
 #include "levels.h"
+#include "wrappers.h"
 
 #define MAP_PREVIEW_DISPLAY_TIME 2500	// number of milliseconds to show map in preview
 
@@ -3114,7 +3115,7 @@ void startMultiplayerGame(void)
 	bMultiPlayer = true;
 	bMultiMessages = true;
 	NETsetPlayerConnectionStatus(CONNECTIONSTATUS_NORMAL, NET_ALL_PLAYERS);  // reset disconnect conditions
-
+	initLoadingScreen(true);
 	if (NetPlay.isHost)
 	{
 		// This sets the limits to whatever the defaults are for the limiter screen

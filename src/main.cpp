@@ -878,6 +878,7 @@ static bool initSaveGameLoad(void)
 	}
 
 	screen_StopBackDrop();
+	closeLoadingScreen();
 
 	// Trap the cursor if cursor snapping is enabled
 	if (war_GetTrapCursor())
