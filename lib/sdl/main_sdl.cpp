@@ -1201,6 +1201,8 @@ bool wzMain2()
 
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	//END **** Was in old screenInitialise. ****
+
+	init_scrap();
 	return true;
 }
 
