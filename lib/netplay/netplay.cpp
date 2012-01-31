@@ -365,7 +365,8 @@ static signed int NET_CreatePlayer(const char* name)
 {
 	signed int index;
 
-	for (index = 0; index < MAX_CONNECTED_PLAYERS; index++)
+	// only look for spots up to the max players allowed on the map
+	for (index = 0; index < gamestruct.desc.dwMaxPlayers; index++)
 	{
 		if (NetPlay.players[index].allocated == false && NetPlay.players[index].ai == AI_OPEN)
 		{
