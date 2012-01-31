@@ -1203,7 +1203,8 @@ void ExchndlSetup(const char *packageVersion)
 	// NOTE: CSIDL_PERSONAL =  C:\Users\user name\Documents
 	if ( SUCCEEDED( SHGetFolderPathW( NULL, CSIDL_PERSONAL, NULL, SHGFP_TYPE_CURRENT, miniDumpPath ) ))
 	{
-		PathAppendW( miniDumpPath, L"Warzone 2100 master\\logs" );
+		PathAppendW( miniDumpPath, WZ_WRITEDIR);
+		PathAppendW( miniDumpPath, L"\\logs" );
 
 		if( !PathFileExistsW( miniDumpPath ) )
 		{

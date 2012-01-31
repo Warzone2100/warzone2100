@@ -98,14 +98,6 @@ enum FOCUS_STATE
 	FOCUS_IN,		// Window has got the focus
 };
 
-#if defined(WZ_OS_WIN)
-# define WZ_WRITEDIR "Warzone 2100 master"
-#elif defined(WZ_OS_MAC)
-# define WZ_WRITEDIR "Warzone 2100 master"
-#else
-# define WZ_WRITEDIR ".warzone2100-master"
-#endif
-
 bool customDebugfile = false;		// Default false: user has NOT specified where to store the stdout/err file.
 
 char datadir[PATH_MAX] = ""; // Global that src/clparse.c:ParseCommandLine can write to, so it can override the default datadir on runtime. Needs to be empty on startup for ParseCommandLine to work!
