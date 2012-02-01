@@ -4124,7 +4124,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "DirectorY=\"zlib-1.2.5\"\nOutDir=\"zlib\"\nFileName=\"zlib-1.2.5.tar.gz\"\nSourceDLP=\"http://zlib.net/zlib-1.2.5.tar.gz\"\nMD5Sum=\"c735eab2d659a96e5a594c9e8541ad63\"\n\nconfigs/FetchSource.sh \"${DirectorY}\" \"${OutDir}\" \"${FileName}\" \"${SourceDLP}\" \"${MD5Sum}\"\nexit ${?}\n";
+			shellScript = "DirectorY=\"zlib-1.2.6\"\nOutDir=\"zlib\"\nFileName=\"zlib-1.2.6.tar.gz\"\nSourceDLP=\"http://zlib.net/zlib-1.2.6.tar.gz\"\nMD5Sum=\"618e944d7c7cd6521551e30b32322f4a\"\n\nconfigs/FetchSource.sh \"${DirectorY}\" \"${OutDir}\" \"${FileName}\" \"${SourceDLP}\" \"${MD5Sum}\"\nexit ${?}";
 		};
 		438B0C1E13773258008184FC /* Png - Fetch source */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -4138,7 +4138,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "DirectorY=\"libpng-1.5.7\"\nOutDir=\"libpng\"\nFileName=\"libpng-1.5.7.tar.gz\"\nSourceDLP=\"http://downloads.sourceforge.net/project/libpng/libpng15/1.5.7/libpng-1.5.7.tar.gz\"\nMD5Sum=\"944b56a84b65d94054cc73d7ff965de8\"\n\nconfigs/FetchSource.sh \"${DirectorY}\" \"${OutDir}\" \"${FileName}\" \"${SourceDLP}\" \"${MD5Sum}\"\nexit ${?}\n";
+			shellScript = "DirectorY=\"libpng-1.5.8\"\nOutDir=\"libpng\"\nFileName=\"libpng-1.5.8.tar.gz\"\nSourceDLP=\"http://downloads.sourceforge.net/project/libpng/libpng15/1.5.8/libpng-1.5.8.tar.gz\"\nMD5Sum=\"dc2b84a1c077531ceb5bf9d79ad889a4\"\n\nconfigs/FetchSource.sh \"${DirectorY}\" \"${OutDir}\" \"${FileName}\" \"${SourceDLP}\" \"${MD5Sum}\"\nexit ${?}\n";
 		};
 		438B0C26137732A5008184FC /* Ogg - Fetch source */ = {
 			isa = PBXShellScriptBuildPhase;
