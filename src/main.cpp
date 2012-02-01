@@ -32,10 +32,6 @@
 #  include <shellapi.h> /* CommandLineToArgvW */
 #elif defined(WZ_OS_UNIX)
 #  include <errno.h>
-#elif defined(WZ_OS_MAC)
-# include <CoreServices/CoreServices.h>
-# include <unistd.h>
-# include "cocoa_wrapper.h"
 #endif // WZ_OS_WIN
 
 #include "lib/framework/input.h"
@@ -82,6 +78,12 @@
 #include "map.h"
 #include "keybind.h"
 #include <time.h>
+
+#if defined(WZ_OS_MAC)
+# include <CoreServices/CoreServices.h>
+# include <unistd.h>
+# include "cocoa_wrapper.h"
+#endif // WZ_OS_MAC
 
 /* Always use fallbacks on Windows */
 #if defined(WZ_OS_WIN)
