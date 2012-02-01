@@ -46,6 +46,9 @@
 #include "trig.h"
 #include "cursors.h"
 
+#define REALCONCAT(x, y) x ## y
+#define CONCAT(x, y) REALCONCAT(x, y)
+
 extern uint32_t selectedPlayer;      ///< The player number corresponding to this client.
 extern uint32_t realSelectedPlayer;  ///< The player number corresponding to this client (same as selectedPlayer, unless changing players in the debug menu).
 #define MAX_PLAYERS         11                 ///< Maximum number of players in the game.
