@@ -34,13 +34,13 @@ elif [ -d "prebuilt/${DirectorY}" ]; then
     exit 1
 elif [[ -d "external/${OutDir}" ]] && [[ ! -f "prebuilt/${FileName}" ]]; then
     # Clean up when updating versions
-    echo "error: Cached file is outdated or incomplete, removing" >&2
+    echo "warning: Cached file is outdated or incomplete, removing" >&2
     rm -fR "prebuilt/${DirectorY}" "external/${OutDir}" "${BUILT_PRODUCTS_DIR}/${FULL_PRODUCT_NAME}" "${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}" "${TARGET_TEMP_DIR}"
 elif [[ -d "external/${OutDir}" ]] && [[ -f "prebuilt/${FileName}" ]]; then
     # Check to make sure we have the right file
     MD5SumLoc=`md5 -q "prebuilt/${FileName}"`
     if [ "${MD5SumLoc}" != "${MD5Sum}" ]; then
-        echo "error: Cached file is outdated or incorrect, removing" >&2
+        echo "warning: Cached file is outdated or incorrect, removing" >&2
         rm -fR "prebuilt/${FileName}" "prebuilt/${DirectorY}" "external/${OutDir}" "${BUILT_PRODUCTS_DIR}/${FULL_PRODUCT_NAME}" "${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}" "${TARGET_TEMP_DIR}"
     else
         # Do not do more work then we have to
