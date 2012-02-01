@@ -82,7 +82,7 @@ if [[ -d .git ]] && [[ ! -z "$(git rev-parse HEAD 2>/dev/null)" ]]; then
 elif [[ -d .hg ]] && [[ ! -z "$(hg root 2>/dev/null)" ]]; then
 	hgRepo
 else
-	echo "No repo detected."
+	echo "error: No repo detected."
 	exit 1
 fi
 
