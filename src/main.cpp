@@ -32,6 +32,10 @@
 #  include <shellapi.h> /* CommandLineToArgvW */
 #elif defined(WZ_OS_UNIX)
 #  include <errno.h>
+#elif defined(WZ_OS_MAC)
+# include <CoreServices/CoreServices.h>
+# include <unistd.h>
+# include "cocoa_wrapper.h"
 #endif // WZ_OS_WIN
 
 #include "lib/framework/input.h"
@@ -93,17 +97,6 @@ enum FOCUS_STATE
 	FOCUS_OUT,		// Window does not have the focus
 	FOCUS_IN,		// Window has got the focus
 };
-
-#if defined(WZ_OS_WIN)
-# define WZ_WRITEDIR "Warzone 2100 master"
-#elif defined(WZ_OS_MAC)
-# include <CoreServices/CoreServices.h>
-# include <unistd.h>
-# include "cocoa_wrapper.h"
-# define WZ_WRITEDIR "Warzone 2100 master"
-#else
-# define WZ_WRITEDIR ".warzone2100-master"
-#endif
 
 bool customDebugfile = false;		// Default false: user has NOT specified where to store the stdout/err file.
 

@@ -3,6 +3,7 @@
    * Change: Incendiary damage doesn't affect allies, affect features (commit:4657de6ee74b3e6c2906b421dec658be10ed2560)
    * Fix: Incendiary armour works properly again (ticket:3078, commit:666ea1050e92c50d89b932c841a9a95914d5945d)
    * Fix: Patrol order (commit:f2104c18362570d83700a9852204c452d032113d)
+   * Fix: Make pathfinding find straighter paths on average (commit:bd38bfd28d5b76a390f863a8699c8feb9ac685cd)
  * UI:
    * Change: Redesign lobby screen, shows disabled tanks/cyborgs/vtols (commit:617e4c01e1a82e4058a38b0973b8eb9a68807d7b)
    * Fix: Prevent players from choosing already used colours (ticket:3043, commit:7656d2f84b2db85b373fc0678a5997a8b2c19d37)
