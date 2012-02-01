@@ -9,6 +9,7 @@
 #include "SDLMain.h"
 #include <sys/param.h> /* for MAXPATHLEN */
 #include <unistd.h>
+#include <Carbon/Carbon.h>
 
 /* For some reaon, Apple removed setAppleMenu from the headers in 10.4,
  but the method still is there and works. To avoid warnings, we declare
@@ -123,6 +124,22 @@ static NSString *getApplicationName(void)
 
 #else
 
+void openHelpPage(NSString *pagePath, NSString *anchorName)
+{
+	NSString *helpBookName = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleHelpBookName"];
+    AHGotoPage((CFStringRef)helpBookName, (CFStringRef)pagePath, (CFStringRef)anchorName);
+}
+
+- (void)openManPage
+{
+	openHelpPage(@"warzone2100.6.html", nil);
+}
+
+- (void)openScriptingDocs
+{
+	openHelpPage(@"javascript.pdf", nil);
+}
+
 static void setupWindowMenu(void);
 
 static void setApplicationMenu(void)
@@ -171,6 +188,8 @@ static void setApplicationMenu(void)
     title = [appName stringByAppendingString:@" Help"];
     menuItem = [helpMenu addItemWithTitle:title action:@selector(showHelp:) keyEquivalent:@"?"];
     [menuItem setKeyEquivalentModifierMask:NSCommandKeyMask];
+	[helpMenu addItemWithTitle:@"Man Page" action:@selector(openManPage) keyEquivalent:@""];
+	[helpMenu addItemWithTitle:@"Scripting Documentation" action:@selector(openScriptingDocs) keyEquivalent:@""];
     menuItem = [[NSMenuItem alloc] initWithTitle:@"Help" action:nil keyEquivalent:@""];
     [menuItem setSubmenu:helpMenu];
     [[NSApp mainMenu] addItem:menuItem];
