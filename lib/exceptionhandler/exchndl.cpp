@@ -40,6 +40,8 @@
 #define HAVE_BFD	1
 #endif
 
+#define WSTRING(x) CONCAT(L, x)
+
 // Declare the static variables
 static wchar_t szLogFileName[MAX_PATH] = L"";
 static LPTOP_LEVEL_EXCEPTION_FILTER prevExceptionFilter = NULL;
@@ -1203,7 +1205,8 @@ void ExchndlSetup(const char *packageVersion)
 	// NOTE: CSIDL_PERSONAL =  C:\Users\user name\Documents
 	if ( SUCCEEDED( SHGetFolderPathW( NULL, CSIDL_PERSONAL, NULL, SHGFP_TYPE_CURRENT, miniDumpPath ) ))
 	{
-		PathAppendW( miniDumpPath, L"Warzone 2100 master\\logs" );
+		PathAppendW( miniDumpPath, WSTRING(WZ_WRITEDIR));
+		PathAppendW( miniDumpPath, L"\\logs" );
 
 		if( !PathFileExistsW( miniDumpPath ) )
 		{

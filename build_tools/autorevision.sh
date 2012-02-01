@@ -77,12 +77,12 @@ function hgRepo {
 }
 
 
-if [[ ! -z "$(git rev-parse HEAD 2>/dev/null)" ]]; then
+if [[ -d .git ]] && [[ ! -z "$(git rev-parse HEAD 2>/dev/null)" ]]; then
 	gitRepo
-elif [[ ! -z "$(hg id 2>/dev/null)" ]]; then
+elif [[ -d .hg ]] && [[ ! -z "$(hg root 2>/dev/null)" ]]; then
 	hgRepo
 else
-	echo "error: No repo detected."
+	echo "No repo detected."
 	exit 1
 fi
 

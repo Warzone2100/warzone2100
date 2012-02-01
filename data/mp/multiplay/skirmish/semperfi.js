@@ -535,7 +535,7 @@ function eventDroidBuilt(droid, struct)
 		{
 			if (!checkLocalJobs(droid))
 			{
-				queue("checkLocalJobs");
+				queue("buildFundamentals");
 			}
 		}
 	}

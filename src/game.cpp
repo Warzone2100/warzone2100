@@ -5407,7 +5407,7 @@ bool loadSaveTemplate(const char *pFileName)
 		psTemplate->asWeaps[1] = getCompFromName(COMP_WEAPON, ini.value("weapon/2", QString("ZNULLWEAPON")).toString().toUtf8().constData());
 		psTemplate->asWeaps[2] = getCompFromName(COMP_WEAPON, ini.value("weapon/3", QString("ZNULLWEAPON")).toString().toUtf8().constData());
 		psTemplate->numWeaps = ini.value("weapons").toInt();
-
+		psTemplate->enabled = ini.value("enabled").toBool();
 		psTemplate->prefab = false;		// not AI template
 
 		//calculate the total build points
@@ -5476,6 +5476,7 @@ bool writeTemplateFile(const char *pFileName)
 			ini.setValue("sensor", (asSensorStats + psCurr->asParts[COMP_SENSOR])->pName);
 			ini.setValue("construct", (asConstructStats + psCurr->asParts[COMP_CONSTRUCT])->pName);
 			ini.setValue("weapons", psCurr->numWeaps);
+			ini.setValue("enabled", psCurr->enabled);
 			for (int j = 0; j < psCurr->numWeaps; j++)
 			{
 				ini.setValue("weapon/" + QString::number(j + 1), (asWeaponStats + psCurr->asWeaps[j])->pName);

@@ -1212,6 +1212,9 @@ static QScriptValue js_groupAddArea(QScriptContext *context, QScriptEngine *engi
 	DROID_GROUP *psGroup = grpFind(groupId);
 
 	SCRIPT_ASSERT(context, psGroup, "Invalid group index %d", groupId);
+	SCRIPT_ASSERT(context, !psGroup->psList || psGroup->psList->player == player, 
+	              "Group %d belongs to player %d, not player %d", 
+	              groupId, psGroup->psList->player, player);
 	for (DROID *psDroid = apsDroidLists[player]; psGroup && psDroid; psDroid = psDroid->psNext)
 	{
 		if (psDroid->pos.x >= x1 && psDroid->pos.x <= x2 && psDroid->pos.y >= y1 && psDroid->pos.y <= y2
@@ -1233,9 +1236,11 @@ static QScriptValue js_groupAddDroid(QScriptContext *context, QScriptEngine *eng
 	int droidId = droidVal.property("id").toInt32();
 	int droidPlayer = droidVal.property("player").toInt32();
 	DROID *psDroid = IdToDroid(droidId, droidPlayer);
-
 	SCRIPT_ASSERT(context, psGroup, "Invalid group index %d", groupId);
 	SCRIPT_ASSERT(context, psDroid, "Invalid droid index %d", droidId);
+	SCRIPT_ASSERT(context, !psGroup->psList || psGroup->psList->player == psDroid->player, 
+	              "Group %d belongs to player %d, not player %d, cannot add %s", 
+	              groupId, psGroup->psList->player, psDroid->player, objInfo(psDroid));
 	psGroup->add(psDroid);
 	return QScriptValue();
 }
