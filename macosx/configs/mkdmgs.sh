@@ -10,7 +10,7 @@ sequencemd5="9a1ee8e8e054a0ad5ef5efb63e361bcc"
 sequencelo="http://downloads.sourceforge.net/project/warzone2100/warzone2100/Videos/standard-quality-en/sequences.wz"
 sequencelonme="sequences-lo.wz"
 sequencelomd5="ab2bbc28cef2a3f2ea3c186e18158acd"
-relbuild="build/${CONFIGURATION}/"
+relbuild="${CONFIGURATION_BUILD_DIR}/"
 dmgout="build/dmgout"
 coident="${SRCROOT}/configs/codeident"
 
@@ -105,7 +105,7 @@ fi
 cd ../../
 echo "Copying the app cleanly."
 rm -r -f $dmgout/Warzone.app
-if ! tar -c --exclude '*.svg' --exclude 'Makefile*' --exclude 'makefile*' --exclude '.DS_Store' -C build/${CONFIGURATION} Warzone.app | tar -xC $dmgout; then
+if ! tar -c --exclude '*.svg' --exclude 'Makefile*' --exclude 'makefile*' --exclude '.DS_Store' -C "${CONFIGURATION_BUILD_DIR}" Warzone.app | tar -xC $dmgout; then
 	echo "error: Unable to copy the app" >&2
 	exit 1
 fi
