@@ -3980,7 +3980,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "DirectorY=\"WarzoneHelp-3fda3de\"\nOutDir=\"WarzoneHelp\"\nFileName=\"WarzoneHelp-3fda3de.tgz\"\nBuiltDLP=\"http://downloads.sourceforge.net/project/warzone2100/build-tools/mac/WarzoneHelp-3fda3de.tgz\"\nMD5Sum=\"d5affe84156990e9e7c45066bf8ef5c2\"\n\nconfigs/FetchPrebuilt.sh \"${DirectorY}\" \"${OutDir}\" \"${FileName}\" \"${BuiltDLP}\" \"${MD5Sum}\"\nexit ${?}\n";
+			shellScript = ". configs/fetchscripts/SetupPrebuiltComponents-Docs.sh";
 		};
 		43119DCC1353B08F004C54BB /* Generate headers */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -4008,7 +4008,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "DirectorY=\"QT-4.7.4\"\nOutDir=\"QT\"\nFileName=\"QT-4.7.4.tgz\"\nBuiltDLP=\"http://downloads.sourceforge.net/project/warzone2100/build-tools/mac/QT-4.7.4.tgz\"\nMD5Sum=\"74e410b376e1c19b0990f637f646f26e\"\n\nconfigs/FetchPrebuilt.sh \"${DirectorY}\" \"${OutDir}\" \"${FileName}\" \"${BuiltDLP}\" \"${MD5Sum}\"\nexit ${?}\n\n# tar -czf QT-4.7.4.tgz --exclude '.DS_Store' QT-4.7.4\n";
+			shellScript = ". configs/fetchscripts/SetupPrebuiltComponents-QT.sh";
 		};
 		433360B311A079F700380F5E /* Moc */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -4022,7 +4022,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/bash;
-			shellScript = "export PATH=/sw/lib/qt4-mac/bin:/sw/lib/qt4-x11/bin:/opt/local/bin:${PATH}\nif [ \"${BACKEND}\" = \"BACKEND_QT\" ]; then\n    echo \"Checking for moc...\"\n    if ! type -aP moc; then\n        echo \"error: Fatal inability to properly moc the code. (Insure you have installed Qt or risk more mocing.)\" >&2\n        open ./README.BUILD.txt\n        exit 1\n    elif [[ `moc -v 2>&1 | sed -e 's:.*Qt \\(4\\.6\\)\\..)$:\\1:'` < \"4.6\" ]]; then\n        echo \"error: Moc is not properly installed\" >&2\n        exit 1\n    fi\nmoc -v\nelse\n    echo \"Moc is currently only needed when using the Qt backend.\"\nfi\nexit 0\n";
+			shellScript = "export PATH=/sw/lib/qt4-mac/bin:/sw/lib/qt4-x11/bin:/opt/local/bin:${PATH}\nif [ \"${BACKEND}\" = \"BACKEND_QT\" ]; then\n    echo \"Checking for moc...\"\n    if ! type -aP moc; then\n        echo \"error: Fatal inability to properly moc the code. (Insure you have installed Qt or risk more mocing.)\" >&2\n        open ./README.BUILD.txt\n        exit 1\n    elif [[ `moc -v 2>&1 | sed -e 's:.*Qt \\(4\\.6\\)\\..)$:\\1:'` < \"4.6\" ]]; then\n        echo \"error: Moc is not properly installed\" >&2\n        exit 1\n    fi\nmoc -v\nelse\n    echo \"note: Moc is currently only needed when using the Qt backend.\"\nfi\nexit 0\n";
 		};
 		4345290E1130F84E002AD731 /* msgfmt */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -4036,7 +4036,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "DirectorY=\"gettext-0.17.mpkg_\"\nOutDir=\"gettext-0.17.mpkg\"\nFileName=\"gettext-0.17.mpkg.tar.gz\"\nBuiltDLP=\"http://downloads.sourceforge.net/project/warzone2100/build-tools/mac/gettext-0.17.mpkg.tar.gz\"\nMD5Sum=\"ba7984918fe0b36e2e7c786693e005f2\"\n\n# Checks\nexport PATH=$PATH:/sw/bin:/opt/local/bin\nif type -aP msgfmt; then\n    echo \"msgfmt exists, skipping\"\n    exit 0\nelif [ -x \"/opt/local/bin/port\" ]; then\n  echo \"warning: Please run the following command in the terminal: 'sudo port install gettext'.\" >&2\n  open -b com.apple.Terminal\n  exit 1\nelif [ -d \"${SRCROOT}/external/${OutDir}\" ]; then\n    touch build/notrans.dis\n    echo \"warning: Gettext support has been disabled because we could not find a binary.\" >&2\n    exit 0\nelif [ ! `sw_vers -productVersion | sed -e 's:^...\\(.\\)..$:\\1:'` -ge \"6\" ]; then\n    touch build/notrans.dis\n    echo \"warning: Gettext support has been disabled because we could not find a binary.\" >&2\n    exit 0\nfi\n\nconfigs/FetchPrebuilt.sh \"${DirectorY}\" \"${OutDir}\" \"${FileName}\" \"${BuiltDLP}\" \"${MD5Sum}\"\nFetchExitStatus=$?\n\n# Install\nif [ ! \"${FetchExitStatus}\" = \"0\" ]; then\n    exit \"${FetchExitStatus}\"\nelif [ -d \"${SRCROOT}/external/${OutDir}\" ]; then\n    echo \" Please install the gettext package before continuing.\" >&2\n    open \"${SRCROOT}/external/${OutDir}\"\n    exit 1\nfi";
+			shellScript = ". configs/fetchscripts/SetupPrebuiltComponents-msgfmt.sh";
 		};
 		436D24A4149641D200BF74E3 /* SDL */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -4050,7 +4050,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "DirectorY=\"SDL-1.2.15\"\nOutDir=\"SDL\"\nFileName=\"SDL-1.2.15.tgz\"\nBuiltDLP=\"http://downloads.sourceforge.net/project/warzone2100/build-tools/mac/SDL-1.2.15.tgz\"\nMD5Sum=\"11191d1d17befc3a2ddc9065effacfac\"\n\nconfigs/FetchPrebuilt.sh \"${DirectorY}\" \"${OutDir}\" \"${FileName}\" \"${BuiltDLP}\" \"${MD5Sum}\"\nexit ${?}\n\n# tar -czf SDL-1.2.15.tgz --exclude '.DS_Store' SDL-1.2.15\n";
+			shellScript = ". configs/fetchscripts/SetupPrebuiltComponents-SDL.sh";
 		};
 		438B0C101377317F008184FC /* Gettext - Fetch source */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -4064,7 +4064,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "DirectorY=\"gettext-0.18.1\"\nOutDir=\"gettext\"\nFileName=\"gettext-0.18.1.tar.gz\"\nSourceDLP=\"http://ftp.gnu.org/pub/gnu/gettext/gettext-0.18.1.tar.gz\"\nMD5Sum=\"2ae04f960d5fa03774636ddef19ebdbf\"\n\nconfigs/FetchSource.sh \"${DirectorY}\" \"${OutDir}\" \"${FileName}\" \"${SourceDLP}\" \"${MD5Sum}\"\nexit ${?}";
+			shellScript = ". configs/fetchscripts/Gettext-FetchSource.sh";
 		};
 		438B0C14137731C3008184FC /* GLExtensionWrangler - Fetch source */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -4078,7 +4078,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "DirectorY=\"glew-1.7.0\"\nOutDir=\"glew\"\nFileName=\"glew-1.7.0.tgz\"\nSourceDLP=\"http://downloads.sourceforge.net/project/glew/glew/1.7.0/glew-1.7.0.tgz\"\nMD5Sum=\"fb7a8bb79187ac98a90b57f0f27a3e84\"\n\nconfigs/FetchSource.sh \"${DirectorY}\" \"${OutDir}\" \"${FileName}\" \"${SourceDLP}\" \"${MD5Sum}\"\nexit ${?}\n";
+			shellScript = ". configs/fetchscripts/GLExtensionWrangler-FetchSource.sh";
 		};
 		438B0C191377320A008184FC /* Zlib - Fetch source */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -4092,7 +4092,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "DirectorY=\"zlib-1.2.6\"\nOutDir=\"zlib\"\nFileName=\"zlib-1.2.6.tar.gz\"\nSourceDLP=\"http://zlib.net/zlib-1.2.6.tar.gz\"\nMD5Sum=\"618e944d7c7cd6521551e30b32322f4a\"\n\nconfigs/FetchSource.sh \"${DirectorY}\" \"${OutDir}\" \"${FileName}\" \"${SourceDLP}\" \"${MD5Sum}\"\nexit ${?}";
+			shellScript = ". configs/fetchscripts/Zlib-FetchSource.sh";
 		};
 		438B0C1E13773258008184FC /* Png - Fetch source */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -4106,7 +4106,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "DirectorY=\"libpng-1.5.8\"\nOutDir=\"libpng\"\nFileName=\"libpng-1.5.8.tar.gz\"\nSourceDLP=\"http://downloads.sourceforge.net/project/libpng/libpng15/1.5.8/libpng-1.5.8.tar.gz\"\nMD5Sum=\"dc2b84a1c077531ceb5bf9d79ad889a4\"\n\nconfigs/FetchSource.sh \"${DirectorY}\" \"${OutDir}\" \"${FileName}\" \"${SourceDLP}\" \"${MD5Sum}\"\nexit ${?}\n";
+			shellScript = ". configs/fetchscripts/Png-FetchSource.sh";
 		};
 		438B0C26137732A5008184FC /* Ogg - Fetch source */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -4120,7 +4120,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "OutDir=\"libogg\"\nDirectorY=\"${OutDir}-1.3.0\"\nFileName=\"${DirectorY}.tar.gz\"\nSourceDLP=\"http://downloads.xiph.org/releases/ogg/${FileName}\"\nMD5Sum=\"0a7eb40b86ac050db3a789ab65fe21c2\"\n\nconfigs/FetchSource.sh \"${DirectorY}\" \"${OutDir}\" \"${FileName}\" \"${SourceDLP}\" \"${MD5Sum}\"\nexit ${?}\n";
+			shellScript = ". configs/fetchscripts/Ogg-FetchSource.sh";
 		};
 		438B0C2B1377336E008184FC /* Vorbis - Fetch source */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -4134,7 +4134,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "DirectorY=\"libvorbis-1.3.2\"\nOutDir=\"libvorbis\"\nFileName=\"libvorbis-1.3.2.tar.gz\"\nSourceDLP=\"http://downloads.xiph.org/releases/vorbis/libvorbis-1.3.2.tar.gz\"\nMD5Sum=\"c870b9bd5858a0ecb5275c14486d9554\"\n\nconfigs/FetchSource.sh \"${DirectorY}\" \"${OutDir}\" \"${FileName}\" \"${SourceDLP}\" \"${MD5Sum}\"\nexit ${?}";
+			shellScript = ". configs/fetchscripts/Vorbis-FetchSource.sh";
 		};
 		438B0C32137733B4008184FC /* PhysFS - Fetch source */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -4148,7 +4148,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "DirectorY=\"physfs-2.0.2\"\nOutDir=\"physfs\"\nFileName=\"physfs-2.0.2.tar.gz\"\nSourceDLP=\"http://icculus.org/physfs/downloads/physfs-2.0.2.tar.gz\"\nMD5Sum=\"4e8927c3d30279b03e2592106eb9184a\"\n\nconfigs/FetchSource.sh \"${DirectorY}\" \"${OutDir}\" \"${FileName}\" \"${SourceDLP}\" \"${MD5Sum}\"\nexit ${?}\n";
+			shellScript = ". configs/fetchscripts/PhysFS-FetchSource.sh";
 		};
 		438B0C3A137733F8008184FC /* Theora - Fetch source */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -4162,7 +4162,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "DirectorY=\"libtheora-1.1.1\"\nOutDir=\"libtheora\"\nFileName=\"libtheora-1.1.1.tar.gz\"\nSourceDLP=\"http://downloads.xiph.org/releases/theora/libtheora-1.1.1.tar.gz\"\nMD5Sum=\"bb4dc37f0dc97db98333e7160bfbb52b\"\n\nconfigs/FetchSource.sh \"${DirectorY}\" \"${OutDir}\" \"${FileName}\" \"${SourceDLP}\" \"${MD5Sum}\"\nexit ${?}";
+			shellScript = ". configs/fetchscripts/Theora-FetchSource.sh";
 		};
 		43B8FF2D127CD57D006F5A13 /* Fonts */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -4176,7 +4176,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "DirectorY=\"fonts_\"\nOutDir=\"fonts\"\nFileName=\"fonts.tar.gz\"\nBuiltDLP=\"http://downloads.sourceforge.net/project/warzone2100/build-tools/mac/fonts.tar.gz\"\nMD5Sum=\"1b8805b36f6f1ba71026d6b5ece1ed52\"\n\nconfigs/FetchPrebuilt.sh \"${DirectorY}\" \"${OutDir}\" \"${FileName}\" \"${BuiltDLP}\" \"${MD5Sum}\"\nexit ${?}\n\n# tar -czf fonts.tar.gz --exclude '.DS_Store' fonts_";
+			shellScript = ". configs/fetchscripts/SetupPrebuiltComponents-Fonts.sh";
 		};
 		43CCDDE514BA559200B21363 /* Fribidi - Fetch source */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -4190,7 +4190,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "DirectorY=\"fribidi-0.10.9\"\nOutDir=\"fribidi\"\nFileName=\"fribidi-0.10.9.tar.gz\"\nSourceDLP=\"http://fribidi.org/download/fribidi-0.10.9.tar.gz\"\nMD5Sum=\"647aee89079b056269ff0918dc1c6d28\"\n\nconfigs/FetchSource.sh \"${DirectorY}\" \"${OutDir}\" \"${FileName}\" \"${SourceDLP}\" \"${MD5Sum}\"\nexit ${?}\n";
+			shellScript = ". configs/fetchscripts/Fribidi-FetchSource.sh";
 		};
 		43CEADC3141D6E810001637B /* fontconfig */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -4204,7 +4204,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "DirectorY=\"usr\"\nOutDir=\"usr-fontconfig\"\nFileName=\"fontconfig-2.8.0-darwin9-bin3.tar.gz\"\nBuiltDLP=\"http://r.research.att.com/libs/fontconfig-2.8.0-darwin9-bin3.tar.gz\"\nMD5Sum=\"5d53bd02deb019ac972481afef05562c\"\n\nconfigs/FetchPrebuilt.sh \"${DirectorY}\" \"${OutDir}\" \"${FileName}\" \"${BuiltDLP}\" \"${MD5Sum}\"\nexit ${?}\n";
+			shellScript = ". configs/fetchscripts/SetupPrebuiltComponents-fontconfig.sh";
 		};
 		43CEADC6141D6EEE0001637B /* freetype */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -4218,7 +4218,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "DirectorY=\"usr\"\nOutDir=\"usr-freetype\"\nFileName=\"freetype-2.4.4-darwin9-bin4.tar.gz\"\nBuiltDLP=\"http://r.research.att.com/libs/freetype-2.4.4-darwin9-bin4.tar.gz\"\nMD5Sum=\"1c782dbe8176d987666cdc0e73194862\"\n\nconfigs/FetchPrebuilt.sh \"${DirectorY}\" \"${OutDir}\" \"${FileName}\" \"${BuiltDLP}\" \"${MD5Sum}\"\nexit ${?}\n";
+			shellScript = ". configs/fetchscripts/SetupPrebuiltComponents-freetype.sh";
 		};
 		43D180761336B6BF001906EB /* Run autorevision */ = {
 			isa = PBXShellScriptBuildPhase;
