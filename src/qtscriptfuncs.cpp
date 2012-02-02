@@ -437,6 +437,34 @@ static QScriptValue js_label(QScriptContext *context, QScriptEngine *engine)
 	return ret;
 }
 
+//-- \subsection{enumBlips(player)}
+//-- Return an array containing all the non-transient radar blips that the given player 
+//-- can see. This includes sensors revealed by radar detectors, as well as ECM jammers.
+//-- It does not include units going out of view. (3.2+ only)
+static QScriptValue js_enumBlips(QScriptContext *context, QScriptEngine *engine)
+{
+	QList<Position> matches;
+	int player = context->argument(0).toInt32();
+	SCRIPT_ASSERT(context, player >= 0 && player < game.maxPlayers, "Invalid player index %d", player);
+	for (BASE_OBJECT *psSensor = apsSensorList[0]; psSensor; psSensor = psSensor->psNextFunc)
+	{
+		if (psSensor->visible[player] > 0 && psSensor->visible[player] < UBYTE_MAX)
+		{
+			matches.push_back(psSensor->pos);
+		}
+	}
+	QScriptValue result = engine->newArray(matches.size());
+	for (int i = 0; i < matches.size(); i++)
+	{
+		Position p = matches.at(i);
+		QScriptValue v = engine->newObject();
+		v.setProperty("x", map_coord(p.x), QScriptValue::ReadOnly);
+		v.setProperty("y", map_coord(p.y), QScriptValue::ReadOnly);
+		result.setProperty(i, v);
+	}
+	return result;
+}
+
 //-- \subsection{enumGroup(group)}
 //-- Return an array containing all the droid members of a given group.
 static QScriptValue js_enumGroup(QScriptContext *context, QScriptEngine *engine)
@@ -1933,6 +1961,7 @@ bool registerFunctions(QScriptEngine *engine)
 	engine->globalObject().setProperty("enumDroid", engine->newFunction(js_enumDroid));
 	engine->globalObject().setProperty("enumGroup", engine->newFunction(js_enumGroup));
 	engine->globalObject().setProperty("enumFeature", engine->newFunction(js_enumFeature));
+	engine->globalObject().setProperty("enumBlips", engine->newFunction(js_enumBlips));
 	engine->globalObject().setProperty("enumResearch", engine->newFunction(js_enumResearch));
 	engine->globalObject().setProperty("getResearch", engine->newFunction(js_getResearch));
 	engine->globalObject().setProperty("pursueResearch", engine->newFunction(js_pursueResearch));
