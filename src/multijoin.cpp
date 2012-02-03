@@ -425,7 +425,6 @@ bool recvDataCheck(NETQUEUE queue)
 void setupNewPlayer(UDWORD player)
 {
 	UDWORD i;
-	char buf[255];
 
 	ingame.PingTimes[player] = 0;					// Reset ping time
 	ingame.JoiningInProgress[player] = true;			// Note that player is now joining
@@ -441,8 +440,12 @@ void setupNewPlayer(UDWORD player)
 
 	setMultiStats(player, getMultiStats(player), true);  // get the players score
 
-	ssprintf(buf, _("%s is Joining the Game"), getPlayerName(player));
-	addConsoleMessage(buf, DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+	if (selectedPlayer != player)
+	{
+		char buf[255];
+		ssprintf(buf, _("%s is joining the game"), getPlayerName(player));
+		addConsoleMessage(buf, DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+	}
 }
 
 
