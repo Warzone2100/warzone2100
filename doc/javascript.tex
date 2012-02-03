@@ -121,7 +121,8 @@ later will fail.
 
 All variables stored on global (in global scope) are stored when the game is saved, and restored when it is 
 loaded. However, this may not work properly for complex objects. Basic arrays and basic types are supported,
-but it is generally not recommended to put objects on global, even though simple ones may work.
+but it is generally not recommended to put objects on global, even though simple ones may work. Since the game
+can't be saved while a function is running, you don't need to worry about local variables.
 
 Const definitions are not stored in savegames, and are therefore recommended over variables to hold information 
 that does not change.
