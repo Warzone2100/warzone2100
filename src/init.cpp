@@ -1148,11 +1148,6 @@ bool stageThreeInitialise(void)
 		}
 	}
 
-	if (bMultiPlayer)
-	{
-		loadMultiScripts();
-	}
-
 	// ffs JS   (and its a global!)
 	if (getLevelLoadType() != GTYPE_SAVE_MIDMISSION)
 	{

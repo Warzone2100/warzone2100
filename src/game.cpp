@@ -6213,10 +6213,6 @@ bool loadScriptState(char *pFileName)
 	// The below belongs to the new javascript stuff
 	strcpy(jsFilename, pFileName);
 	strcat(jsFilename, "/scriptstate.ini");
-	if (bMultiPlayer)
-	{
-		loadMultiScripts();
-	}
 	loadScriptStates(jsFilename);
 
 	// change the file extension

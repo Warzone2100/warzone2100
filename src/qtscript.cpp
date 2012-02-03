@@ -424,6 +424,7 @@ bool loadPlayerScript(QString path, int player, int difficulty)
 	// Register script
 	scripts.push_back(engine);
 
+	debug(LOG_SAVE, "Created script engine %d for player %d from %s", scripts.size() - 1, player, path.toUtf8().constData());
 	return true;
 }
 

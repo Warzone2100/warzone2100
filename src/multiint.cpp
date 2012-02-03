@@ -273,6 +273,7 @@ void loadMultiScripts()
 	// Load extra script for challenges
 	if (challengeActive)
 	{
+		debug(LOG_SAVE, "Loading challenge scripts");
 		WzConfig challenge(sRequestResult);
 		challenge.beginGroup("scripts");
 		if (challenge.contains("extra"))
@@ -292,6 +293,7 @@ void loadMultiScripts()
 	resLoadFile("SMSG", "multiplay.txt");
 	if (defaultRules)
 	{
+		debug(LOG_SAVE, "Loading default rules");
 		loadGlobalScript("multiplay/skirmish/rules.js");
 	}
 
@@ -330,12 +332,14 @@ void loadMultiScripts()
 			}
 			if (aidata[NetPlay.players[i].ai].slo[0] != '\0')
 			{
+				debug(LOG_SAVE, "Loading wzscript AI for player %d", i);
 				resLoadFile("SCRIPT", aidata[NetPlay.players[i].ai].slo);
 				resLoadFile("SCRIPTVAL", aidata[NetPlay.players[i].ai].vlo);
 			}
 			// autogames are to be implemented differently for qtscript, do not start for human players yet
 			if (!NetPlay.players[i].allocated && aidata[NetPlay.players[i].ai].js[0] != '\0')
 			{
+				debug(LOG_SAVE, "Loading javascript AI for player %d", i);
 				loadPlayerScript(QString("multiplay/skirmish/") + aidata[NetPlay.players[i].ai].js, i, NetPlay.players[i].difficulty);
 			}
 		}
@@ -344,6 +348,7 @@ void loadMultiScripts()
 	// Load scavengers
 	if (game.scavengers && myResponsibility(scavengerPlayer()))
 	{
+		debug(LOG_SAVE, "Loading scavenger AI for player %d", scavengerPlayer());
 		loadPlayerScript("multiplay/script/scavfact.js", scavengerPlayer(), DIFFICULTY_EASY);
 	}
 
