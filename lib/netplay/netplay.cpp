@@ -87,7 +87,7 @@ static void NETallowJoining(void);
 static void recvDebugSync(NETQUEUE queue);
 static bool onBanList(const char *ip);
 static void addToBanList(const char *ip, const char *name);
-
+static void NETfixPlayerCount(void);
 /*
  * Network globals, these are part of the new network API
  */
@@ -1655,6 +1655,7 @@ bool NETrecvNet(NETQUEUE *queue, uint8_t *type)
 
 	if (NetPlay.isHost)
 	{
+		NETfixPlayerCount();
 		NETallowJoining();
 	}
 
@@ -2104,7 +2105,28 @@ static void NETregisterServer(int state)
 	}
 }
 
+// ////////////////////////////////////////////////////////////////////////
+//  Check player "slots" & update player count if needed.
+void NETfixPlayerCount(void)
+{
+	int playercount = 0;
 
+	for (int index = 0; index < gamestruct.desc.dwMaxPlayers; index++)
+	{
+		if ((NetPlay.players[index].allocated == false && NetPlay.players[index].ai != AI_OPEN) || NetPlay.players[index].allocated)
+		{
+			playercount++;
+		}
+	}
+
+	if (allow_joining && NetPlay.isHost && NetPlay.playercount != playercount)
+	{
+		debug(LOG_NET,"Updating player count from %d to %d", (int)NetPlay.playercount, playercount);
+		gamestruct.desc.dwCurrentPlayers = NetPlay.playercount = playercount;
+		NETregisterServer(WZ_SERVER_UPDATE);
+	}
+
+}
 // ////////////////////////////////////////////////////////////////////////
 // Host a game with a given name and player name. & 4 user game flags
 static void NETallowJoining(void)
@@ -2172,8 +2194,7 @@ static void NETallowJoining(void)
 		    && (recv_result = readNoInt(tmp_socket[i], p_buffer, 8))
 			&& recv_result != SOCKET_ERROR)
 		{
-			// A 2.3.7 client sends a "list" command first,
-			// we just close the socket so he sees a "Connection Error".
+			// A 2.3.7 client sends a "list" command first, just drop the connection.
 			if (strcmp(buffer, "list") == 0)
 			{
 				debug(LOG_INFO, "An old client tried to connect, closing the socket.");
@@ -2207,6 +2228,17 @@ static void NETallowJoining(void)
 					result = htonl(ERROR_WRONGVERSION);
 					memcpy(&buffer, &result, sizeof(result));
 					writeAll(tmp_socket[i], &buffer, sizeof(result));
+				}
+				if ((int)NetPlay.playercount == gamestruct.desc.dwMaxPlayers)
+				{
+					// early player count test, in case they happen to get in before updates.
+					// Tell the player that we are full.
+					uint8_t rejected = ERROR_FULL;
+					NETbeginEncode(NETnetTmpQueue(i), NET_REJECTED);
+						NETuint8_t(&rejected);
+					NETend();
+					NETflush();
+					connectFailed = true;
 				}
 			}
 		}
