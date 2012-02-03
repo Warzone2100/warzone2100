@@ -115,7 +115,7 @@ static bool callFunction(QScriptEngine *engine, const QString &function, const Q
 //-- Set a function to run repeated at some given time interval. The function to run 
 //-- is the first parameter, and it \underline{must be quoted}, otherwise the function will
 //-- be inlined. The second parameter is the interval, in milliseconds. A third, optional
-//-- parameter can be a game object to pass to the timer function. If the game object
+//-- parameter can be a \emph{game object} to pass to the timer function. If the \emph{game object}
 //-- dies, the timer stops running. The minimum number of milliseconds is 100, but such
 //-- fast timers are strongly discouraged as they may deteriorate the game performance.
 //--
@@ -177,7 +177,7 @@ static QScriptValue js_removeTimer(QScriptContext *context, QScriptEngine *engin
 //-- \underline{must be quoted}, otherwise the function will be inlined.
 //-- The second parameter is the delay in milliseconds, if it is omitted or 0,
 //-- the function will be run at a later frame.  A third optional
-//-- parameter can be a game object to pass to the queued function. If the game object
+//-- parameter can be a \emph{game object} to pass to the queued function. If the \emph{game object}
 //-- dies before the queued call runs, nothing happens.
 // TODO, check if an identical call is already queued up - and in this case, 
 // do not add anything.
@@ -739,7 +739,7 @@ bool triggerEventDestroyed(BASE_OBJECT *psVictim)
 
 //__ \subsection{eventObjectSeen(viewer, seen)}
 //__ An event that is run whenever an object goes from not seen to seen.
-//__ First parameter is game object doing the seeing, the next the game
+//__ First parameter is \emph{game object} doing the seeing, the next the game
 //__ object being seen.
 bool triggerEventSeen(BASE_OBJECT *psViewer, BASE_OBJECT *psSeen)
 {

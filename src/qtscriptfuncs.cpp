@@ -147,7 +147,7 @@ QScriptValue convStructure(STRUCTURE *psStruct, QScriptEngine *engine)
 }
 
 //;; \subsection{Feature}
-//;; Describes a feature (game object not owned by any player). It inherits all the properties of the base object (see below).
+//;; Describes a feature (a \emph{game object} not owned by any player). It inherits all the properties of the base object (see below).
 //;; In addition, the following properties are defined:
 //;; \begin{description}
 //;; \item[type] It will always be FEATURE.
@@ -394,7 +394,7 @@ bool writeLabels(const char *filename)
 // All script functions should be prefixed with "js_" then followed by same name as in script.
 
 //-- \subsection{label(key)}
-//-- Fetch something denoted by a label. Labels are areas, positions or game objects on 
+//-- Fetch something denoted by a label. A label refers to an area, a position or a \emph{game object} on 
 //-- the map defined using the map editor and stored together with the map. The only argument
 //-- is a text label. The function returns an object that has a type variable defining what it
 //-- is (in case this is unclear). This type will be one of DROID, STRUCTURE, FEATURE, AREA
