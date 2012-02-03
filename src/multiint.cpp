@@ -1252,11 +1252,11 @@ static void hidePasswordForm(void)
 {
 	EnablePasswordPrompt = false;
 
-	widgHide(psWScreen, FRONTEND_PASSWORDFORM);
-	widgHide(psWScreen, CON_PASSWORD_LABEL);
-	widgHide(psWScreen, CON_PASSWORD);
-	widgHide(psWScreen, CON_PASSWORDYES);
-	widgHide(psWScreen, CON_PASSWORDNO);
+	if (widgGetFromID(psWScreen, FRONTEND_PASSWORDFORM)) widgHide(psWScreen, FRONTEND_PASSWORDFORM);
+	if (widgGetFromID(psWScreen, CON_PASSWORD_LABEL)) widgHide(psWScreen, CON_PASSWORD_LABEL);
+	if (widgGetFromID(psWScreen, CON_PASSWORD)) widgHide(psWScreen, CON_PASSWORD);
+	if (widgGetFromID(psWScreen, CON_PASSWORDYES))widgHide(psWScreen, CON_PASSWORDYES);
+	if (widgGetFromID(psWScreen, CON_PASSWORDNO)) 	widgHide(psWScreen, CON_PASSWORDNO);
 
 	widgReveal(psWScreen, FRONTEND_SIDETEXT);
 	widgReveal(psWScreen, FRONTEND_BOTFORM);
