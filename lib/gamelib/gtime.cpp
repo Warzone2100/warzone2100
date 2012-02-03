@@ -106,9 +106,9 @@ void gameTimeInit(void)
 
 	stopCount = 0;
 
-	chosenLatency = GAME_TICKS_PER_UPDATE;
-	discreteChosenLatency = GAME_TICKS_PER_UPDATE;
-	wantedLatency = GAME_TICKS_PER_UPDATE;
+	chosenLatency = GAME_TICKS_PER_UPDATE*2;
+	discreteChosenLatency = GAME_TICKS_PER_UPDATE*2;
+	wantedLatency = GAME_TICKS_PER_UPDATE*2;
 	for (player = 0; player != MAX_PLAYERS; ++player)
 	{
 		wantedLatencies[player] = 0;
@@ -345,8 +345,8 @@ static void updateLatency()
 			maxWantedLatency = MAX(maxWantedLatency, wantedLatencies[player]);  // Maximum, since the host experiences lower latency than everyone else.
 		}
 	}
-	// Adjust the agreed latency. (Can maximum decrease by 15ms or increase by 30ms per update.
-	chosenLatency = chosenLatency + clip(maxWantedLatency - chosenLatency, -15, 30);
+	// Adjust the agreed latency. (Can maximum decrease by 5ms or increase by 30ms per update.
+	chosenLatency = chosenLatency + clip(maxWantedLatency - chosenLatency, -5, 60);
 	// Round the chosen latency to an integer number of updates, up to 10.
 	discreteChosenLatency = clip((chosenLatency + GAME_TICKS_PER_UPDATE/2)/GAME_TICKS_PER_UPDATE*GAME_TICKS_PER_UPDATE, GAME_TICKS_PER_UPDATE, GAME_TICKS_PER_UPDATE*GAME_UPDATES_PER_SEC);
 	if (prevDiscreteChosenLatency != discreteChosenLatency)
