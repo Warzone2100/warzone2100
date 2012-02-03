@@ -97,15 +97,48 @@ bool intDisplayMultiJoiningStatus(UBYTE joinCount)
 	RenderWindowFrame(FRAME_NORMAL, x, y ,w, h);		// draw a wee blu box.
 
 	// display how far done..
+	iV_SetFont(font_regular);
 	iV_DrawText(_("Players Still Joining"),
 					x+(w/2)-(iV_GetTextWidth(_("Players Still Joining"))/2),
 					y+(h/2)-8 );
-	if (!NetPlay.playercount)
+	unsigned playerCount = 0;  // Calculate what NetPlay.playercount should be, which is apparently only non-zero for the host.
+	for (unsigned player = 0; player < game.maxPlayers; ++player)
+	{
+		if (isHumanPlayer(player))
+		{
+			++playerCount;
+		}
+	}
+	if (!playerCount)
 	{
 		return true;
 	}
-	sprintf(sTmp,"%d%%", PERCENT((NetPlay.playercount-joinCount),NetPlay.playercount) );
+	iV_SetFont(font_large);
+	sprintf(sTmp, "%d%%", PERCENT(playerCount - joinCount, playerCount));
 	iV_DrawText(sTmp ,x + (w / 2) - 10, y + (h / 2) + 10);
+
+	iV_SetFont(font_small);
+	int yStep = iV_GetTextLineSize();
+	int yPos = RET_Y - yStep*game.maxPlayers;
+
+	static const std::string statusStrings[3] = {"☐ ", "☑ ", "☒ "};
+
+	for (unsigned player = 0; player < game.maxPlayers; ++player)
+	{
+		int status = -1;
+		if (isHumanPlayer(player))
+		{
+			status = ingame.JoiningInProgress[player]? 0 : 1;  // Human player, still joining or joined.
+		}
+		else if (NetPlay.players[player].ai >= 0)
+		{
+			status = 2;  // AI player (automatically joined).
+		}
+		if (status >= 0)
+		{
+			iV_DrawText((statusStrings[status] + getPlayerName(player)).c_str(), x + 5, yPos + yStep*NetPlay.players[player].position);
+		}
+	}
 
 	return true;
 }

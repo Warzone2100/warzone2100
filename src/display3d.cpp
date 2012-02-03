@@ -432,13 +432,15 @@ static PIELIGHT structureBrightness(STRUCTURE *psStructure)
 /// Display the multiplayer chat box
 static void displayMultiChat(void)
 {
+	iV_SetFont(font_regular);
+
 	UDWORD	pixelLength;
 	UDWORD	pixelHeight;
 
 	pixelLength = iV_GetTextWidth(sTextToSend);
 	pixelHeight = iV_GetTextLineSize();
 
-	if((gameTime2 % 500) < 250)
+	if((realTime % 500) < 250)
 	{
 		// implement blinking cursor in multiplayer chat
 		pie_BoxFill(RET_X + pixelLength + 3, 474 + E_H - (pixelHeight/4), RET_X + pixelLength + 10, 473 + E_H, WZCOL_CURSOR);
@@ -733,10 +735,7 @@ void draw3DScene( void )
 	{
 		/* Ensure that any text messages are displayed at bottom of screen */
 		pie_SetFogStatus(false);
-		if (getWidgetsStatus())
-		{
-			displayConsoleMessages();
-		}
+		displayConsoleMessages();
 	}
 
 	pie_SetDepthBufferStatus(DEPTH_CMP_ALWAYS_WRT_OFF);
@@ -761,6 +760,7 @@ void draw3DScene( void )
 	}
 	if (showSAMPLES)		//Displays the number of sound samples we currently have
 	{
+		iV_SetFont(font_regular);
 		unsigned int width, height;
 		const char *Qbuf, *Lbuf, *Abuf;
 
@@ -776,6 +776,7 @@ void draw3DScene( void )
 	}
 	if (showFPS)
 	{
+		iV_SetFont(font_regular);
 		unsigned int width, height;
 		const char* fps;
 		sasprintf((char**)&fps, "FPS: %d", frameRate());
@@ -786,6 +787,7 @@ void draw3DScene( void )
 	}
 	if (showORDERS)
 	{
+		iV_SetFont(font_regular);
 		unsigned int height;
 		height = iV_GetTextHeight(DROIDDOING);
 		iV_DrawText(DROIDDOING, 0, pie_GetVideoBufferHeight()- height);
