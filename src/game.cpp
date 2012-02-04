@@ -3626,11 +3626,13 @@ bool gameLoadV(PHYSFS_file* fileHandle, unsigned int version)
 		if (saveGameVersion >= VERSION_33)
 		{
 			PLAYERSTATS		playerStats;
+			bool scav = game.scavengers; // loaded earlier, keep it over struct copy below
 
 			bMultiPlayer	= saveGameData.multiPlayer;
 			bMultiMessages	= bMultiPlayer;
 			productionPlayer = selectedPlayer;
-			game			= saveGameData.sGame;
+			game			= saveGameData.sGame;  // why do this again????
+			game.scavengers = scav;
 			cmdDroidMultiExpBoost(true);
 			NetPlay.bComms = (saveGameData.sNetPlay).bComms;
 			if(bMultiPlayer)
