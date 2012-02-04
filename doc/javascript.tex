@@ -119,6 +119,12 @@ of object as input parameter instead.
 
 \section{Gotchas / Bugs}
 
+\subsection{Case sensitivity}
+Due to a bug that is not so easy to fix in the short term, variables defined in global must be case insensitive.
+Otherwise, they may collide on savegame loading. This is only for variables defined in your script. There is no
+need to maintain case insensitivity in regards to variables defined in global by the game itself, such as 'FACTORY'
+(you can safely define your own 'factory' variable) -- the only exception to this is 'me'.
+
 \subsection{Global objects}
 You must never put a \emph{game object}, such as a droid or a structure, on global. You only get a snapshot of their state,
 the state is not updated, and they are not removed when they die. Trying to store them globally then using them 
