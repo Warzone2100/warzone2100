@@ -440,7 +440,7 @@ static QScriptValue js_label(QScriptContext *context, QScriptEngine *engine)
 //-- \subsection{enumBlips(player)}
 //-- Return an array containing all the non-transient radar blips that the given player 
 //-- can see. This includes sensors revealed by radar detectors, as well as ECM jammers.
-//-- It does not include units going out of view. (3.2+ only)
+//-- It does not include units going out of view.
 static QScriptValue js_enumBlips(QScriptContext *context, QScriptEngine *engine)
 {
 	QList<Position> matches;
