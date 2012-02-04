@@ -1,3 +1,20 @@
+2012-02-05: Version 3.1-beta2
+ * General:
+   * Fix: Show unit designs in factories after loading a game (ticket:3094, commit:6f7e523bc18d9c508c104c3917712400b1c53b4f)
+   * Fix: Don't crash when trying to paste text (ticket:3091, commit:de3a4112d9acd4490f511869a48567bc038946fc)
+ * Savegames:
+   * Fix: Properly load AIs (commit:58160f69c5a5208b6683997b82e87686b4a15a9a)
+   * Fix: Properly load scavengers (commit:d11b13c422b1b1364410a64778ef0fcd8d3644e9, commit:2417ba4f4b5ec495f52aff72c249ea9e6b821784)
+ * UI:
+   * Fix: Show loading indicator when loading the game (ticket:3104, commit:7859582f13e1f777eaa4e0658fae1629b5b4b923)
+ * Multiplayer:
+   * Fix: Actually consider AIs and closed slots when checking if players can still join (ticket:3089, commit:7f7390cb7e1085a5c22cbb55440e679eb9d6506f, commit:32a7fe731c983adcc02284c7b7f30d2b220ff6fb)
+   * Fix: Make the latency guesser less optimistic, should reduce freezes (commit:8ab7ba79bc9fb000f91ac16545e09ea5a97d05cb)
+   * Fix: Don't lock people out of other games after getting kicked from one (commit:415f6fe590133114f3a68ee783f16b2456ff9187)
+   * Fix: While loading the game, show the chat console and player status (commit:fc708d67870dfb6eb218209d776bf7c82be8db02)
+ * Campaign:
+   * Fix: Only allow minimap and unit design when an HQ exists (commit:4a71db9e9b9f5884324943350776a7099b478250, commit:78dee1c706577217542752a1455118e107c16aa0, commit:1d123dffac5deb5bd9fefea79adfaa4ed84d4321)
+
 2012-01-29: Version 3.1-beta1
  * General:
    * Change: Incendiary damage doesn't affect allies, affect features (commit:4657de6ee74b3e6c2906b421dec658be10ed2560)
