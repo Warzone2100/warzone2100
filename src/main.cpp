@@ -815,8 +815,8 @@ static void startGameLoop(void)
 	if (game.type == SKIRMISH)
 	{
 		eventFireCallbackTrigger((TRIGGER_TYPE)CALL_START_NEXT_LEVEL);
-		triggerEvent(TRIGGER_START_LEVEL);
 	}
+	triggerEvent(TRIGGER_START_LEVEL);
 	screen_disableMapPreview();
 }
 
@@ -878,6 +878,7 @@ static bool initSaveGameLoad(void)
 	}
 
 	screen_StopBackDrop();
+	closeLoadingScreen();
 
 	// Trap the cursor if cursor snapping is enabled
 	if (war_GetTrapCursor())

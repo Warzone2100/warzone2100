@@ -2836,7 +2836,7 @@ static bool gameLoad(const char* fileName)
 		// Failure to open the file is a failure to load the specified savegame
 		return true;
 	}
-
+	initLoadingScreen(true);
 	debug(LOG_WZ, "gameLoad");
 
 	// Read the header from the file

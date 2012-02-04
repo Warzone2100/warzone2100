@@ -246,17 +246,938 @@ master_20110519
 master_20110320qt and before:
  * Stuff. Lots of stuff.
 
-0000-00-00: SVN
+2011-10-23: Version 2.3.9
  * General:
-   * Fix: Tells user if mod entered on the command line / shorcut is enabled, or is invalid. Output is to stdout or stderr (r7586)
+   * Change: Show damage on all buildings (ticket:2634, commit: eabe72073c5e594f7849cd53460b25ae95b3371e)
+   * Change: Use Ctrl-V instead of Tab to paste in edit boxes (ticket:2830, commit:d2f4b5a162151d3dac14e45931e727b181c9ef22)
+   * Change: Mouse wheel scrolling in research and build menus (ticket:2110, commit:6a41d3f59f962800b2e0e3eba7e696f48dc46b36)
+   * Fix: Make units follow their orders better (ticket:2391, commit:2c31de52476f81f6ef368a38483c912c08c69c22)
+   * Fix: Make sure files in sequences.wz override included ones, so localized videos are always used (ticket:2728, commit:4830009833b8b89c9dde0080fe862505246c6b8a)
+   * Fix: Maps can never override game data (ticket:2825, commit:1838d20c1db487f3e03a5cf8e0f4f3a668b20a5c)
+   * Fix: Make mod savegames work properly (ticket:2735, ticket:2825, commit:5886695119364b59f94aa81c3db8d0952dcf59b9)
+   * Fix: Prevent VTOLs from getting stuck on buildings (ticket:2534, commit:d1c93494dee2f1b929776edadc3bad1f7d364491, commit:419ae406336d006c8042e820e9cdec47ecb9d8ff)
+ * UI:
+   * Fix: Properly update player colours in the map preview (commit:c52d627b85ac038fdcc6203bc5f4499b8c4a6c2c)
+ * Multiplayer:
+   * Change: Some AI improvements from master (commit:2e13cb5420fa65554535f9c9dea7026fa992b21c, commit:07542186d48dbf0069ec503e845f4f9986438ad3)
+ * Translations:
+   * Update: Dutch (ticket:2723, commit:4545d492f2c0a47edc69e88540d3f1f389bb7154, commit:ae0143c47b959d9b10a0f16a1631d8ab2e5cd2f6)
+   * Update: Turkish (ticket:2727, ticket:2794, ticket:2831, ticket:2840, commit:09ac275217921068ef15e09fadf9be73c00f31f7, commit:bbda88a5ff8aaf7b548c1bc4e9caa7bd60bc4708, commit:a406df2af1c80256dcba47d26537a840d558679e, commit:fcec0a3062972edbeeebc6a10e90b661cab0b88a)
+   * Update: German (ticket:2729, commit:205120cc0e70bd892cc220c36ee10fb3b724c9ce)
+   * Update: Hungarian (ticket:2738, ticket:2747, ticket:2754, ticket:2782, ticket:2865, commit:03c83546afbdfa63ac25d813391394e7d82cddb9, commit:994e8f9022bdd7d6ffebe721c5c85bd4808ab90e, commit:7bb82c66d56c179e486ce3f0df2c1b097d4793ef, commit:7189dcf2a4885b09b35c749d74cf3820a3d51b23, commit:67686dd337997ba18cd0e607dc0125f4fa79f2a2)
+   * Update: Spanish (ticket:2788, commit:d721bb662cae4a91e3bcdf629393c595fa39ab89)
+   * Update: Brazilian (ticket:2786, commit:29e8872533efdcb5b3a642e9f83d7df7e1a309cf)
+   * Update: Simplified Chinese (ticket:2858, ticket:2869, commit:989e65c43e370a2298bcf5224b356db3f9747a35, commit:64067a5b668584067151db44d8e15f68961b3625, commit:81da3ed3071330985efe96538b4f0bd068ec32f6)
+   * Update: Danish (commit:4e6dfcf01d4521b1aa5b34150a626e2dc746887f)
+   * Update: Romanian (ticket:2906, commit:54635f94b834a1eaef210957c2b3c92fcc3b459a, commit:22a632936d46283aa96996c558547bbec5f6dde8)
+
+2011-05-17: Version 2.3.8
+ * General:
+   * New: Two new 2 player maps - Vision and Roughness (commit:697afb16d5244f9715952f8762b1011c6d75101e, commit:ebfc46b679a1f74df0e63313e4d3e05db55a23ad)
+   * Change: Increase recycled experience storage in memory (commit:703665b4b7df1282eee29a7064961bc66152a847)
+   * Change: Set a window icon (ticket:2465, commit:ac792c67d4bb66618ae7ff712844c4eebb70a496)
+   * Change: Allow projectiles to go through terrain again (ticket:2386, commit:d13ede6bf2d2248866c4ecc62594555db9f9de0d)
+   * Change: Limited support for map-mods. Only load the map file actually used when starting a game. (ticket:2610, commit:65d968cdfccecc6c60e0215ab34dbf3d56f19a80)
+   * Change: Show the minimap larger on small maps if the vertical resolution is higher than 480 (commit:5731d0e12c0d58dd42601e5befff3e30804bd1fe, commit:c201b5948b0af9a16b8676620e7cb64553d4c112)
+   * Change: Show experience with one decimal place (ticket:2641, commit:fb5d9645e85de49365e47382dfce9fec7fd3fb31)
+   * Change: Allow video resolutions up to 1024x1024 (ticket:2682, commit:1f4690572be0792a3450f7afce36b3a6b9f8e093, commit:7019d7eb515f974deb544135d661087bc2ce2db5)
+   * Change: Add an option to show videos with black or 50% dimmed scanlines (ticket:2095, commit:96984700f5f0182ad66b7425eace33e7f62c0177, commit:549c476672a9133d9400eec7b7fefbdd7da35cfe, commit:8895d58d282524b9636bcbf58f0753edc244dbd9)
+   * Change: Use a resolution-dependent font size for video subtitles (commit:9597d741a0104aa9b7c57745ab9f9d9ca0892218)
+   * Change: Show power generator effects for all players (commit:adeacf66a1954a87fcfc2d950a7b890e20bf6d5d)
+   * Fix: Prevent savegame corruption (ticket:2100, commit:a974722e397b7072fb59d0114e2a4ef9f8d509d8, ticket:2625, commit:cc156a668fb5291e38eab33ff77138a05e29fa28, ticket:2627, commit:fc0f87807eeadaeeafb1386b2525a81f0a550fde)
+   * Fix: Prevent saved experience from being truncated (ticket:2641, commit:4b197ba312a5c08efdab1fb4c2ccd2bf1c077c1d)
+   * Fix: Prevent building on burning oil (ticket:1100, commit:2745ac27f84301c05b678892d798a93fd4e7f813)
+ * Multiplayer balance (ticket:2687, commit:71eac1c4a332be3af4ab8c9bc4cafd65dabe7f13):
+   * HP increased:
+     * Leopard 85 → 107
+     * Panther 145 → 193
+     * Tiger 225 → 284
+   * Range increased:
+     * Minipod 3-8 → 4-9
+     * MRA 3-8.5 → 4-9
+   * Pepperpot:
+     * Damage increased 50 → 60 (splash 30 → 40)
+     * Reload time decreased 2.0 → 1.8
+   * Heavy Laser (normal and VTOL):
+     * Price decreased 600 → 400
+     * Build points decreased 1000 → 600
+     * HP increased 200 → 300
+   * Twin Assault Cannon:
+     * Damage decreased 55 → 50 (splash 45 → 40)
+   * Plasmite Bomb:
+     * Weight increased 12000 → 15000
+   * VTOL Sunburst AA:
+     * Damage increased 100 → 120
+     * Splash damage removed
+   * Lowered prerequisites:
+     * Thermal Armor from Dense Composite Alloys to Composite Alloys Mk3
+     * High Intensity Thermal Armor from Superdense Composite Alloys to Dense Composite Alloys Mk3
+ * Mods:
+   * Fix: 1.10 Balance (commit:9943ff3a4b67b0f64a9e2ee163c8ccac711be72e)
+   * Fix: NTW bodies (ticket:2177, commit:a8fb8bec834c9d550fe43bada610bf5440d6b960)
+ * Translations:
+   * New: Catalan (ticket:2616, commit:9c6b0b8131636c2d1bf2b610114f0fd08291bc42)
+   * New: Hungarian (commit:5266c78b544593fb9497892ba9e632c1ddcda763, commit:b7cc16c72b4d4aaa3f2a3b23b69a9a5896b1fa43)
+   * Update: French (commit:cdd283ce60c5cdb573106981a35080f2fff0d7db)
+   * Update: Portuguese and Brazilian (ticket:2489, commit:0ade7219d614505839bd201c3f4cb8a50c9857e2)
+   * Update: German (ticket:2679, commit:7bfeb3e01c571c077b388e017ec86bfd58b97a6a)
+   * Update: Dutch (ticket:2720, commit:7bd5df883557e9f2b2aaa55a93d46a2ec4f9a81a, commit:6896384f8271aaa577d69e61a18437bd1399e648)
+
+2011-01-21: Version 2.3.7
+ * General:
+   * Fix: Make construction, production and research independent of framerate and number of parallel tasks (commit:b4e33f24a2dca11fe5c28683f43ccea4fe95e811)
+   * Fix: Changing droid settings now works, even if selecting more than 100 droids (commit:9bab7867c8d383ab7278c6fe617aa79eb721a7ad)
+   * Fix: Reset construction speed upgrades between games (commit:9a28d849f9d73fcadfd20f3f64ec8044f81fcc2e)
+   * Fix: Don't gain experience by shooting your own buildings/units (commit:61adc3712a5e5f8d6bd94010f23706c2dbd31c49)
+   * Fix: Don't truncate usernames at the first unicode character (commit:da4a6ea4ccc3e8f1f90234a468735d067cbd8390)
+   * Fix: Correct delivery point placement for cyborg factories and repair facilities (commit:b25bc87b3a10a90741d3fc54d80e598d11782a8d)
+ * Multiplayer:
+   * Change: Retire the current AI top model template with heavy laser in favour of two new ones. First is armed with seraph missiles, the second with both seraph missiles and gauss cannon on a dragon body (commit:4c0b8a68af17b1a211ac7d5557f71602d4486c4a)
+   * Fix: Prevent clients from getting confused when trying to leave the game setup screen by pressing the Escape key (commit:9cacfc52a413512a4cc888ffe3089fd8429521af)
+ * MP Balance (commit:5b863da6955648129e6b571f0c63573a34d2aa65):
+   * Mg damage to cyborgs up 10%, to tracks down 10%, and to bunkers down 5%
+   * Cannon damage to buildings and hardpoints up 10% and to bunkers up 25%
+ * UI:
+   * Change: Show a savegame's timestamp tooltip in the current locale (ticket:2303, commit:ec1bbcbbafc292e37052ed919a2a50f416c2bbd1)
+   * Change: Show distances and speeds in terms of tiles (commit:e192e8a75832a4db0dff8370f486828d4f79a15e)
+   * Fix: Improve UI responsiveness under low framerates (commit:89d8b599d592a64b0e0472225c2bcc4deb94e172)
+   * Fix: Prevent some key presses from being ignored (commit:942c2f1fe3e05088d84f9c17d92ff16f9a69a15a)
+   * Fix: Don't show health bars over empty terrain, when set to always display energy bars (ticket:912, commit:61a79c761a3872079ddc66d24793a495416b5309)
+ * Translations:
+   * Updated: Italian (ticket:2367, ticket:2408, commit:182f6ba3d21207e3bada248f7e2988e3aaaa2dc8, commit:90658df7e14908829ecc3c1222b6784bd8cced43)
+   * Updated: Turkish (ticket:2376, ticket:2418, commit:5d93fb0728927772c25298f98491f4eae49ff3d7, commit:77f651b5baee8ad8fba97817066666a5c58977ef, ticket:2443, commit:e36b4abac53c6d3c32dc855fb9af6048717fa90c)
+   * Updated: Brazilian (ticket:2387, commit:8500268900bf06e8f09da9c3299a59e0cef402ef)
+   * Updated: Polish (ticket:1347, commit:d46cf8f620f3acd91dfced411e67e539d2e26384)
+   * Updated: Spanish (ticket:2442, commit:10626ae3635a2db7b19e3c34a3fd841cbea21aca)
+   * Updated: Russian (commit:4accc26eca11c79edddc5b2ffa8e44dfdd96e111)
+
+2010-11-29: Version 2.3.6
+ * General:
+   * Fix: Prevent memory corruption in the scripting code (ticket:1656, commit:ddfaeca6776aac765674bb0c2a5c58ecc63a978f)
+   * Fix: Don't crash in the unit design screen when using unicode strings (ticket:2209, commit:209e12b665d23cce1cf286435ace08b86250517b)
+   * Fix: Don't ignore armor (ticket:2273, commit:0f3bfba7345b6739167c66c7e33a57b5257952ee)
+   * Fix: Do not activate a radar detector before it has been completely built (ticket:2202, commit:bf058bbf2005cf8b95f1fca3bc704be4739514d9)
+   * Fix: Clear a droid's order queue when it gets new orders (commit:5e1a50db8dd1bcd626dd8c74b53f603258e1b158)
+   * Fix: Make rearming pads actually repair units (ticket:2234, ticket:2313, commit:81b29af81b6af95db9f1a094f12c5412b9c54b77)
+   * Fix: Projectiles going through terrain due to bad terrain height calculations, terrain shading (commit:08f9fa58789d20c64ed8eaa0e9076b08d4cf8947)
+   * Fix: Prevent possible crash with multi-turret units (commit:8d3cbb04888dc8216c5f516bb022089c725b5e58)
+ * Multiplayer:
+   * Fix: Make power generator output in multiplayer not depend on the game difficulty setting (commit:67524762633e2bae0570e8674e3ca34af184d1e9)
+   * Fix: Make sure not to give to many trucks to another player (commit:0a9b3b44a7fbdd7d017b8d4287a951531d573a04)
+   * Fix: Don't crash when players click the "ready" button too often (ticket:2346, commit:b665e9d8cf1edd3ad5274bb40af32911c9719fb2)
+ * NTW mod:
+   * Fix: Graphics (ticket:1748, commit:e0ced0e4fb024e0bf2b6b7de1a826b5bfbfffe9f)
+ * Translations:
+   * New: Turkish (ticket:2261, ticket:2316, commit:cc728d8f068e45c0ed198ca9553a946156a5a8fa, commit:1aad6e751ee657e795bd1a56924153a7a5c1e040)
+   * Updated: French, Polish, Romanian, Spanish (commit:b2ac76f1706b535476e00cd75f0ebdcb4d16bea0)
+   * Updated: Italian (ticket:2199, commit:39a85bb03eda8c50228405beaa6bbd886183f182)
+   * Updated: German (commit:c16bf5807aa54a077878e130ca639c17e8a5154a)
+   * Updated: Korean (ticket:2098, commit:134f0c962c05eadd0a5a15245bbd7874145c38db)
+   * Updated: Polish (ticket:1347, commit:1c2df4859990f5bd6bac12f2fa7c74515f9d03a6)
+
+2010-09-24: Version 2.3.5
+ * General:
+   * Fix: Fix edit boxes so they correctly calculate the string's pixel borders. (r11668)
+   * Change: On LOG_ERROR, notify people in-game via the console and a sound effect that there was a error. (r11702)
+ * Multiplayer:
+   * Fix: Don't allow a player to acquire more construction vehicles than the max amount allowed. (r11674, ticket:2175)
+   * Change: Spawning of oil drums to be host side, and also add a timer between spawn periods. (r11692, ticket:2174)
+   * Add: Add new icons for "No tanks", "No cyborgs" and "No VTOLs" (r11710)
+ * Translations:
+   * Update: Korean (r11673, ticket:2098)
+ * Mods:
+   * Fix: Fixed the sound problem with - old 1.10 balance (r11703, ticket:2176)
+
+2010-09-12: Version 2.3.5_RC4
+ * General:
+   * Fix: Possible crash when designing units (r11630, ticket:2150)
+ * Multiplayer:
+   * Change: Display no-tank, no-cyborg or no-VTOL icons if the relevant factories are disabled via limits (r11633)
+   * Fix: Make sure new players are shown immediately (r11650, ticket:2136)
+   * Fix: Lobby tooltip display (r11647, ticket:2157)
+   * Balance fixes: ticket:2147, ticket:2158
+   * Update Rebalance 0.8.3: (r11635)
+     * Weaken Flak Cannon and Sunburst a lot more. I'm pretty sure this change makes them too weak, but when introducing new weapons it's better to make them too weak than too strong.
+     * Increase HP of a bunch of VTOL weapons
+     * Slightly buff Hurricane/Whirlwind
+ * Translations:
+   * Update: Polish (r11624, r11646, ticket:1347), Korean (r11625, ticket:2098), German (r11627, r11644), Brazilian (r11656, ticket:2163)
+
+2010-09-04: Version 2.3.5_RC3
+ * Multiplayer:
+   * Fix: Client side messages for when people leave / drop  (r11601, ticket:2144)
+   * Change: When people are kicked, don't lock them out of all games. (r11605)
+   * Change: Don't allow Hosts to kick AIs if they are in a skirmish game, unless they are in cheat mode. (r11596, ticket:2139)
+ * Balance (r11600, r11603, r11607):
+   * Decrease ground-to-air damage modifier of minipod, lancer/TK/scourge cyborgs/VTOLs, Sunburst, and Flak Cannon from 100% to 80%.
+   * Add air-to-air versions of Sunburst and Flak Cannon
+   * Increase research/manufacture/build price of Sunburst and Flak Cannon by a lot, to offset the fact that you don't have to upgrade them separately
+
+2010-09-04: Version 2.3.5_RC2
+ * Multiplayer:
+   * Fix: Player Lobby is updated when it should be updated. (r11586, ticket:2136)
+   * Fix: Tech-tree should be fixed (r11588, ticket:2134)
+ * Balance (r11570):
+   * Removed Cyclone turret
+   * Added: AA Flak Cannon (and Emplacement and Hardpoint)
+     * Flak Cannon is a medium-reload splash weapon
+     * Prerequisites: HPV
+   * Added: Sunburst AA Rocket Array (and Site)
+     * Sunburst is a slow-reload salvo weapon
+     * Prerequisites: Lancer
+   * Lancer damage toned down a bit
+   * Heavy Laser damage increased a bit
+
+2010-09-02: Version 2.3.5RC
+ * General:
+   * Change: Show a placeholder video of where to get the videos when they were not installed (r11566, ticket:2052)
+   * Change: Don't allow sensor/weapon range display in MP games (r11501)
+   * Change: Change default video display to 2x (r11576)
+   * Fix: Disable dragging when in-game menu/popup is up (r11565, ticket:2086)
+ * Multiplayer:
+   * Change: Add in-game kick via the 'scoreboard' - hold LMB+RMB over the channel icon of the player you want to kick (r11490)
+   * Change: Only clear player name when needed (r11495)
+   * Change: Show score as '(cheated)' instead of 0 when people have cheated (r11558)
+   * Change: Don't display scoreboard widgets when players are dead (r11504)
+   * Change: Allow "@" in chat now (r11545)
+   * Change: Add numeric ping values in the hosting screen for the host (r11559)
+   * Change: Show map / game name / hosted by in the tooltip for the lobby (r11546, ticket:2121)
+   * Fix: Make sure players can't impersonate others (r11449)
+   * Fix: Try to make the password box more idiot proof (r11492)
+   * Fix: Host will not pass on bogus messages
+   * Fix: Non-host players now get info about the research in progress by allied AIs (r11556, ticket:1478)
+ * Graphics:
+   * Update: New detailed weapons textures - new version of page-17-droid-weapons.png (r11534, ticket:2115)
+ * Multiplayer balance (r11560, r11569):
+   * VTOL balance has been shaken up a bit:
+     * Removed: Cyclone turret
+     * Added: AA Flak Cannon (and Emplacement and Hardpoint)
+       * Flak Cannon is a medium-reload splash weapon
+       * Prerequisites: Hyper Velocity Cannon
+     * Added: Sunburst AA Rocket Array (and Site)
+       * Sunburst is a slow-reload salvo weapon
+       * Prerequisites: Lancer
+   * Machinegun is now less overpowered in the early-game:
+     * HMG now requires APDSB Mk2 instead of TMG
+     * APDSB Mk2 now requires TMG instead of APDSB Mk1
+     * Flamer now requires Engineering instead of FIE+MG
+   * The "mini-rocket" and "rocket" subclasses have been merged:
+     * Mini-rockets and rockets are now affected by the same upgrades
+     * The merged subclass has 9 damage upgrades (+25% each), 3 accuracy upgrades (+10% each), and 3 ROF upgrades (-15% reload time each)
+     * Lancer, TK, BB, Cyborg Lancer, and Super TK Cyborg have their damage adjusted so that their fully upgraded damage remains the same
+     * These changes should mainly help make MRA more viable
+   * Slight buff to Heavy Laser, Avenger, and Vindicator damage
+   * Require HQ for every weapon structure, not just MG Tower
+ * Mods:
+   * Fix: Nexus Total War Ai Slider Bug, and update image for name change (r11508)
+ * Translations:
+   * Fix: More strings (r11539, r11549)
+   * Updated: German (r11441, r11541, r11551), Korean (r11498, r11544, r11555)
+
+2010-08-11: Version 2.3.4
+ * General:
+   * Fix: Really fix burn damage calculations (r11393, ticket:2045)
+ * Multiplayer:
+   * Change: Show less netcode errors/warnings (r11356)
+   * Fix: Possible crash (r11409, ticket:2033)
+ * DyDo-AI:
+   * dydo-scav updated to 1.2.1 (r11374)
+   * Update to 2.2.3, improved efficiency of research for the Gunners and Cannons research path, minor fixes (r11375, r11377, r11388, ticket:1945)
+   * New challenges (r11373, r11376, r11436, ticket:2073)
+ * Translations:
+   * Change: Don't save translated descriptions in the keymap (r11408, ticket:2049)
+   * Fix: Actually install the Korean translation on Windows (r11434, ticket:2074)
+   * New: Slovak (r11421, ticket:2036, r11434)
+   * Updated: Brazilian (r11364, ticket:2043), Korean (r11396, ticket:2055, r11420, ticket:2068, r11435, ticket:2075)
+
+2010-08-01: Version 2.3.3
+ * General:
+   * Fix: Prevent out of bounds access of player stat arrays that would corrupt random memory (r11322, ticket:2029)
+   * Fix: Burn damage calculations (r11303, ticket:2019)
+   * Fix: Prevent a division by zero (r11308, ticket:2008)
+ * UI:
+   * Revert: Don't show "Sk-" and "-T1" in the map chooser (r11327)
+ * Translations:
+   * New: Korean (r11349)
+   * Updated: Polish (r11348)
+
+2010-07-25: Version 2.3.2
+ * General:
+   * Change: Save settings when closing the window, not only when quitting with the menu (r11128)
+   * Change: Save screenshots as PNG and JPG (r11131, r11201)
+   * Change: Use the desktop resolution by default instead of 640x480 (r10981, ticket:1912)
+   * Change: Make sure to use at least 640x480 (r11250)
+   * Change: Add descriptions for the included Challenges (r11181, ticket:1986)
+   * Change: Show burning oil wells burning on the radar instead of pulsing (r11263)
+   * Change: Show cliffs (impassable tiles) on the radar (r11264)
+   * Change: Add an option to select fixed or rotating radar (r11286)
+   * Change: Make the fixed radar have a constant distance from the border (r10972)
+   * Change: Make the fixed radar unblurred at full zoom steps (r11130, ticket:1923)
+   * Fix: Don't crash when hitting features with 0 hitpoints (r11186, r11280, ticket:1711)
+   * Fix: Make fire damage independent of frame rate, fixes armor calculations (r11015)
+   * Fix: Initialize the radar and video textures to black (r10987)
+   * Fix: Correctly clean up destroyed features (r10994, ticket:1885)
+   * Fix: Correct unit destinations (r11193, ticket:1988)
+   * Fix: Unit count in debug mode (r11030)
+   * Fix: Don't play overlapping sounds in the intelligence window (r11147, ticket:60)
+   * Fix: Make the Debian packaging scripts work again (r11266)
+ * UI:
+   * Change: Add an option to rotate with the middle mouse button, or left and right together (r11224, ticket:2003)
+   * Change: Don't show "Sk-" and "-T1" in the map chooser (r11112, r11202, r11206, ticket:1971, ticket:1990, ticket:1993)
+   * Change: Draw the hints in the option menus smaller at the top (r11129, ticket:1953)
+   * Fix: Fix broken text alignment in Mac OS X (r11231, ticket:1994)
+   * Fix: Make sure all menus return to the previous one, and that escape works in all of them (r11011, r11014)
+   * Fix: Correctly align the map chooser close button (r11132)
+   * Fix: Transporter ETA image (r11271, ticket:2001)
+   * Fix: Show complete game name in the lobby tooltip (r11276)
+ * Multiplayer:
+   * Change: Update sync timings (r11016)
+   * Fix: Don't crash when trying to join a full game (r11051, ticket:1869)
+   * Fix: Prevent a possible crash when a player drops (r11273)
+   * Fix: Make sure everyone sees quitting players (r11111, ticket:1020)
+   * Fix: Make player position and color changes atomic, to prevent inconsistencies (r11272)
+   * Fix: Receiving the game list from the lobby server (r11257, r11265)
+   * Fix: Endian issues, byte and packet counts in the net logs (r11065, ticket:1936)
+ * Maps:
+   * Change: 2c-Startup rebalanced, files replaced with the files from 2c-startup2 (r11145)
+   * Change: New four player map Pyramidal by Mysteryem (r11190)
+   * Fix: Add a missing cliff tile on 8c-Wheel (r11145, ticket:1935)
+ * Translations:
+   * Updated: Croatian (r11162), German (r11220, r11281, r11288)
+
+2010-06-13: Version 2.3.1
+ * General:
+   * Change: Add the Playstation music track (r10905)
+   * Change: Put date and time in screenshot file names (r10951)
+   * Fix: If setting the chosen fullscreen video mode fails, retry in windowed mode (r10683)
+   * Fix: Power calculations (r10770, r10772, r10794, r10885)
+   * Fix: Crash when loading saved games with different mods than currently loaded (r10531, r10723)
+ * UI:
+   * Change: Draw subtitles with shadows (r10681)
+   * Change: Add "scout" and "disembark" cursors (r10723)
+   * Change: Improved AI slider (r10725)
+   * Change: Fast build queueing by holding down shift (r10795)
+   * Change: Improved map preview (r10901, r10944, r10947, r10962)
+   * Change: Show backdrops with correct aspect ratio, cut off the part that doesn't fit the screen (r10945, r10948)
+   * Change: Show videos with correct aspect ratio, with black borders (r10946)
+   * Change: Show an optional description for challenges (r10950)
+   * Fix: Subtitles menu option works again (r10682)
+   * Fix: Make double-click interval game-speed independent (r10736)
+   * Fix: Display "build" cursor while building (r10764)
+ * Multiplayer:
+   * Fix: New improved scav script that operates scavengers individually, helps when they are station in multiple scav bases (r10717)
+ * DyDo AI (r10773, r10774, r10775, r10776, r10786):
+   * Update to 2.1.4: Improved initial building sequence and speed, improved the way trucks are moved between groups (r10786)
+   * Challenges use maps included in the game
+ * NTW (r10762, r10800, r10872):
+   * More range for for twin assault cannon, less mg damage against all buildings, a slower tank and cyborg production at start (r10861)
+ * 1.10 balance:
+   * Less hit points for artillery, they are all on 25-35% now (r10879)
+   * remove the lancer rof upgrades to keep the old balance (r10953)
+ * Translations:
+   * Fix: Make subtitles translateable (r10685, r10686)
+   * Change: Disable translations below 50% (r10919)
+   * Updated: Ukrainian (r10696), German (r10711, r10733), French (r10738, r10768), Spanish (r10742), Italian (r10777), Brazilian (r10785, r10887, r10949), Estonian (r10792), Polish (r10864, r10881), Croatian (r10915), Russian (r10942, r10957)
+
+2010-04-24: Version 2.3.0
+ * General:
+   * Fix: Make sure the <config directory> is populated before any write calls are made (r10666)
+ * Translations:
+   * Updated: Brazilian Portuguese (r10644), Italian (r10650), Ukrainian (r10696)
+
+2010-04-17: Version 2.3 RC 1a
+ * General:
+   * Change: Supress system dialogs when in full screen mode (r10605, ticket:1776)
+   * Fix: Actually use saved experience for new droids (r10604, ticket:251)
+   * Fix: Various build fixes (r10558, r10561, r10563, r10586, r10595, r10606)
+ * Multiplayer:
+   * Fix: When using a passworded game, prevent connection to anyone but the host, until verified. (r10572, ticket:1611
+ * Mods:
+   * Change: DyDo AI updated to version 2.1.1
+ * Translations:
+   * Updated: Spanish (r10598), German (r10599), Croatian (r10588), Polish (r10577)
+
+2010-04-10: Version 2.3 beta 13
+ * General:
+   * Change: Crash report and log files now will reside in a UAC friendly directory for windows (r10532, ticket:1759)
+   * Change: All platforms will have stderr routed to <configdir>/logs/WZlog*.txt (r10532, ticket:1759)
+   * Change: Use system dialogs for reporting errors on Mac (r10474)
+   * Change: Change most references to plural "mods" to singular "mod", to discourage using multiple mods (r10498)
+   * Fix: Oil features were not being added back to the game when oil derricks were destroyed (r10489, ticket:1726)
+ * Multiplayer:
+   * Change: Ban IP addresses when kicking people from games (r10465)
+   * Fix: Crash during game hosting (ticket:1745, r10480)
+   * Fix: Missing cyborg legs in games with 8 human players (r10527, ticket:1740)
+ * Campaign:
+   * Fix: Crash when cleaning up memory usage between missions (r10476)
+ * Mods:
+   * Change: DyDo AI updated to version 2.1, and includes its own challenges
+ * Balance: (r10537)
+   * Remove Cobra prereq from Inferno
+   * Increase Plasma Cannon range to 10 and damage to 500
+   * Plasma Cannon and Archie can no longer fire while moving
+   * Increase HPV weight
+   * Decrease Assault Cannon/Twin Assault Cannon weight
+   * Increase Lancer/TK damage by 10
+   * Increase Bombard damage by 10
+   * Heavy Laser damage and reload time increased (overall slight buff)
+   * Heavy Cannon and Medium Cannon range increased 0.5
+   * Cyborgs sped up a bit
+
+2010-03-29: Version 2.3 beta 12
+ * General:
+   * Change: Double-clicking trucks will now select them for consistency (r10391, ticket:1472)
+   * Change: let users toggle level name via 'showlevelname' console command (r10366)
+   * Change: Template loading code changes for backward compatibility with older mods (r10418, ticket:1686, r10425)
+   * Fix: Multiple zooming of radar fixes / changes (r10346)
+   * Fix: Stop landing VTOLs even if they are below the map height (r10051)
+   * Fix: Fix adding more body points than possible when repairing (r10040)
+   * Fix: Memory leaks and crash fixes (r10246, r10247, r10248, r10249, r10251)
+   * Fix: When failing to load a message, remove it from the message queue to avoid a crash later (r10392, ticket:1660)
+ * UI:
+   * Change: Improved loading bars (r10102)
+ * Campaign:
+   * Fix: Fix Tank Killer angle bug in campaign (r10212)
+   * Fix: Make sure that for campaign, we always set the is human flag correctly on savegame load (r10081, ticket:1628)
+ * Multiplayer:
+   * Change: AI script fixes for trucks grabbed on duty, distance limits, power limit for factories, placement checks (r10293, r10323, ticket:1626)
+   * Fix: Make sure all templates get all weapons. This hopefully fixes the cyborg leg issue (r10352, ticket:1687)
+   * Fix: On new player joining, init the struct before setting flags (r10331, ticket:1688)
+   * Fix: Make use of new AI script function pickDroidStructLocation (see below) to fix AI not building a power generator (r10323, ticket:1626)
+   * Fix: When droids are taken over, don't send droid count, since droid count isn't read, making the message unparsable (r10038, ticket:894)
+   * Fix: Use isFlying instead of isVtolDroid for checking AA targets, AA can now also shoot down transports (r10319)
+   * Fix: Only let host set player position/colour, send new players info about unallocated slots too. (r10218)
+   * Fix: Fix droid frustration so that droids do not start the game frustrated, make sure that scavs never fire at features (r10085)
+   * Fix: Fix the game getting completely messed up if anyone changes position or colour, and then someone leaves (r10069)
+   * Fix: Update Dydo-ai to 2.0.8 (r10214)
+   * Fix: Update NTW (r10354, r10356, r10357, r10359)
+ * Scripts:
+   * Added: Add new AI script function that gives position to build a structure while checking that a given droid can build it (r10323)
+ * Translations:
+   * Fix: Translations now work on the mac (r10316, ticket:927)
+   * Updated: German (r10123, r10126, r10291), Italian (r10242), Polish (r10268, r10373, r10445), Spanish (r10305, r10422, r10444), Estonian (r10423)
+
+2010-02-26: Version 2.3 beta 11a
+ * General:
+   * Change: Display time and level name in release builds now (r9860)
+   * Change: add 'logs' directory in config dir to store all netplay logs. (r9779, ticket:1564)
+   * Change: Use -fstack-protector if available (r9940)
+   * Fix: NSIS updates (r9764, r9907, r10017)
+   * Fix: Only drop artifacts on a fully built factory (r9795, r9787, ticket:1574)
+   * Fix: Multiple cross build system fixes (r9870-r9878, r9899, r10020)
+   * Fix: Do not update the orientation of flying droids with respect to the ground. (r10022)
+ * UI:
+   * New: Add MessageBox support on systems that have Motif (r9814, ticket:1569)
+ * Gameplay:
+   * Change: Commanders now work the same way in skirmish and campaign (r9941, ticket:1612)
+   * Fix: Power generator output should now always be correct (r9891, r9894, ticket:1469)
+   * Fix: Trucks could instantly repair structures (r9776)
+ * Campaign:
+   * Fix: Commanders could have more than the maximum number of units assigned (r9941)
+ * Skirmish:
+   * Fix: Add back missing cyborg mechanic, thermite and grenadier (r9750, ticket:1607)
+   * Fix: Stop AI from building VTOL factory before it is researched (r9713)
+   * Fix: Stop giving a massive power bonus to autogame AI players (r9720)
+ * Balance: (r9946)
+   * Oil derricks are no longer limited (r9698)
+   * Cannons and rails have their original 1.10 HP levels restored.
+   * Heavy Cannon was moved later-game
+   * Assault Cannon, Twin Assault Cannon, and Hyper Velocity Cannon were moved earlier-game (and rebalanced accordingly)
+   * Assault Cannon, Twin Assault Cannon, were made lighter
+   * Hyper Velocity Cannon can now hit air units, penetrate units, and is lighter, but reloads more slowly and has less HP. It no longer replaces Medium Cannon
+   * Plasma Cannon has been made into a cannon (prereqs: HPV + Inferno + Dedicated Synaptic Link Data Analysis Mk3), and has been rebalanced accordingly.
+   * Cannons, rails, mortars, and howitzers have their splash damage increased.
+   * Ripples and Archies have been nerfed.
+   * Lancer has had its damage slightly nerfed. A full lancer rebalance is planned for later.
+   * Analogous changes have been done to the corresponding cyborgs and VTOL weapons, as well.
+ * Multiplayer:
+   * Change: Display map transfer progress, for the host, for each player (r9838)
+   * Fix: When player drops, do not remove their oil resources (r9768, ticket:1558)
+   * Fix: Fix kicking when host would change limits while hosting a game (r9824, ticket:1577)
+   * Fix: When a player drops, abort the map transfer (r9838)
+   * Fix: Fix game going out of sync when some Alt key combinations were used (r9840, ticket:1474)
+   * Fix: Remove disabled players from the map when scavengers are turned on (r9724)
+   * Fix: When player aborts file transfers, close the old filehandle. (r9923)
+   * Fix: When player is forced to drop, don't strand them in the lobby. (r9924)
+   * Fix: Try to fix all SIGPIPE and SIGBUS issues on linux (r9915-r9918, r9954, r9985, ticket:1136)
+   * Fix: Some droids were not showing up as destroyed on all players' screens (r9944)
+   * Fix: Add a 1s delay between sending a quit message, and closing the socket (r9984)
+   * Fix: On player join, send stats from other players to them (r9993)
+   * Fix: On player quit, close things down and cleanup correctly (r10004)
+   * Fix: On host quit in buffer fill routine, then exit out into lobby with correct error message. (r10003)
+ * Mods:
+   * New: DyDo-AI added to bundled mods (r9901)
+   * Fix: Update NTW to work with new template system and other various fixes (r9773, r9910)
+   * Removed: Aivolution removed from bundled mods (r9752)
+ * Translations:
+   * Fix: Make more strings translatable (r9758)
+   * Updated: Spanish (r9759, r9828), Brazilian (r9829), Ukrainian (r9830), German (r9831, r9931), Croatian (r9883), Polish (r9933)
+
+2010-02-07: Version 2.3 beta 10
+ * General:
+   * Change: Add mod list to crash report file (r9651)
+   * Fix: Various warnings and asserts (r9494, r9500)
+   * Fix: Redundant components being still available if researched after being made redundant (ticket:1462, r9492)
+   * Fix: Now also oil derricks are darkened by true fog of war and pulse when selected (r9543)
+   * Fix: Clear teams when loading from in-game menu (r9541)
+   * Fix: Unbuilt structures and walls should not confer visibility (r9537, ticket:1483)
+   * Fix: Sensor in range check bug (r9531)
+   * Fix: Sound related crash on exit (r9528, ticket:1444)
+   * Fix: Structures popping in and out of true fog of war darkness (r9502)
+   * Fix: Only play detection samples when that person found the power resource / artifact (r9596, r9643, ticket:1496 )
+ * Multiplayer:
+   * Change: Add sync counters to help diagnose when we can't sync anymore due to the packet size exceeding our limits. This is in netplay-xxxx_yyyy.log in your config directory! (r9584)
+   * Change: "netplay.log" to now be "netplay-xxxx_yyyyyy.log" where xxxx = month&day and yyyyyy = hour&min&sec (r9645)
+   * Fix: When player drops, make sure to destroy everything they had (r9644, ticket:1020)
+   * Fix: Fix kicking issues when players tried to play a game when they came from a previous game (r9603)
+   * Fix: Network synchronization updates was broken for most orders (r9681, ticket:1505, ticket:1516)
+   * Fix: Remove disabled players from skirmish games with scavengers turned on (r9724)
+   * Fix: Re-initialize player data when a player is removed (r9963)
+   * Fix: Fix assert if socket set not allocated but socket needs to be deleted. (r9967)
+ * Skirmish:
+   * Fix: The Wide Spectrum Sensor no longer works as a Counterbattery sensor as this allowed cheating (r9560)
+   * Fix: Workaround for bug that made AI stop research sometimes fixed (r9534)
+   * Fix: Some AI unit templates had multiple turrets, but shouldn't have (r9605, ticket:1510)
+   * Fix: Scoreboard should be more accurate (r9587, ticket:1500)
+   * Fix: Scavenger AI is now active again (r9692, ticket:1550)
+ * Graphics:
+   * Change: Clear frame buffer on start and exit (r9634)
+   * Fix: Use correct coordinates for menu, radar, selection box (r9555)
+ * Translations:
+   * Fix a string for translating (r9511)
+   * Updated: Spanish (r9512, r9558), Estonian (r9513, r9613), Russian (r9552), Ukrainian (r9601), Croatian (r9653)
+
+2010-01-24: Version 2.3 beta 9
+ * General:
+   * Fix: Formation speed limiting should be off (r9372)
+   * Fix: Saving games would often crash, and proximity blips not display (r9382, ticket:1443)
+   * Fix: AIs would use host's truck templates (r9426)
+   * Fix: Miscellaneous bugs and crashes (r9354, r9412, r9425, r9434, r9450, r9479)
+ * UI:
+   * Change: Add key mapping to trap/untrap cursor, alt-t by default (r9481)
+   * Change: Stop scrolling when the mouse leaves the window (r9428, r9438, r9449)
+   * Change: Increase the scroll area from 16 to 22 pixels (r9443)
+   * Fix: No longer possible to start a game with everyone on the same team (r9457)
+   * Fix: Speeding up the game sped up some of the GUI (r9462)
+ * Multiplayer:
+   * Change: Players will no longer appear in games for a split second if they have the wrong password (r9425)
+   * Fix: Players would sometimes be kicked out after one minute, even if they had the same data (r9378)
+ * Gameplay:
+   * Fix: Shift+click on radar now queues orders as well (r9361)
+   * Fix: Projectiles that hit wrong target now do damage to the wrong target (r9430)
+ * Graphics:
+   * Fix: Build progress bar is in the right place now (r9374)
+   * Fix: Some water tiles looked weird in 8c-Manhattan (r9418)
+   * Fix: Factory had visible seams in some places (r9404)
+ * Skirmish:
+   * Change: AI is now more efficient at research (r9384)
+   * Change: Research messages are now more specific: "Machinegun damage +25%" instead of "upgrades machinegun damage" (r9393)
+   * Fix: Some numbers were unnecessarily specific: 99% instead of 100%, 999 instead of 1000 (r9394)
+   * Fix: Flamer Autoloader Mk2 doesn't prerequire Flamer Autoloader (r9394)
+ * Translations:
+   * Fix: Spanish locale didn't work on Linux (r9371)
+   * Updated: Spanish (r9366, r9369, r9410, r9421, r9470)
+   * Updated: Polish (r9471)
+   * New: Croatian (r9476)
+
+2010-01-19: Version 2.3 beta 8
+ * General:
+   * New: Mod files in mods/autoload/ are now autoloaded - note that this is NOT the previous autoload location (r9290, ticket:1415)
+   * Fix: Crash when switching between players in ctrl+o cheat menu (r9283)
+   * Fix: Better projectile collision detection (r9288)
+   * Fix: Remove all fog of war darkening when satellite uplink built (r9216)
+   * Fix: Faster game loading when vsync enabled (r9167, r9163)
+   * Fix: Widget ID corruption leading to disappearing reticule and other GUI bugs (r9325)
+   * Fix: Miscellaneous crashes and asserts (r9153, ticket:1219, r9192, r9152, ticket: 1402, r9248, r9181, r9174)
+ * Graphics:
+   * Change: Darken features and buildings that you cannot see due to fog of war (r9322, r9343)
+   * Fix: Only lift fog of war for what you can see (r9199, r9204, r9216)
+ * UI:
+   * Change: "HOST" appears below host (r9340)
+   * Change: Laser satellite firing and structure under attack now generate a radar blip (r9313, r9292, ticket:1134)
+   * Change: Allow keyboard shortcuts to use the Cmd key as a modifier (r9307)
+   * Fix: The hide interface keyboard shortcut (Tab, by default) now hides the minimap and console, as well (r9273)
+   * Fix: Non-ascii characters now work, instead of appearing to clear all text (r9287, ticket:1330)
+   * Fix: Radar blips should no longer disappear with some zoom levels (r9197)
+   * Fix: Make build progress bars look nicer by adding a gradient (r9157)
+   * Fix: Design form sometimes displayed incorrect component (r9255)
+   * Fix: Make keyboard shortcuts look nicer: "Ctrl + F11" instead of "lctrl - f11" (r9307)
+ * Balance: (r9339)
+   * Pulse Laser range decreased to 14
+   * Heavy Laser range increased to 16 (and damage toned down to match)
+   * Prices of Pulse Laser Tower, Pulse Laser Hardpoint, Pulse Laser Emplacement, Lancer Hardpoint increased to match weapon changes
+   * Scourge Missile range decreased to 14
+   * Seraph Missile Array range increased to 15
+   * Short-range accuracy of Mini-Pod, Lancer, Tank Killer, and Scourge Missile decreased - long range-accuracy remains unchanged
+   * Lancer price increased to 150
+   * Lancer no longer prerequires Mini-Rocket Array
+   * Mini-Rocket Array damage increased
+   * Splash radius of mortars, howitzers, cannons, and rails increased
+   * Damage of cannons and rails against cyborgs and tanks increased
+   * Damage of artillery against tracked tanks decreased
+   * Damage of artillery against hover tanks increased
+ * Gameplay:
+   * Change: Ctrl + Alt + mouse wheel to change game speed (r9178)
+   * Change: Formation speed limiter has been removed due to bugs and sync issues (r9331,  ticket:1177, ticket:1167)
+   * Fix: Templates created with the design screen started at 1 power/HP instead of 0 (r9159)
+   * Fix: Changing speed no longer gives a "cheating" warning (r9177)
+   * Fix: Bugs with game speed changing abruptly should be fixed (r9280, r9251)
+   * Fix: Rounding errors in power code (r9172)
+   * Fix: Tank Killer didn't fire sometimes (r9339)
+   * Fix: Some structures should be obsoleted by others (r9339)
+ * Challenges:
+   * Fix: Restore challenge timer when loading a challenge savegame (r9207)
+ * Campaign:
+   * Change: Save an "Autosave" game when a mission is finished (r9145)
+   * Fix: Transports in campaign could be controlled sometimes (ticket:1418, r9297)
+ * Skirmish:
+   * Change: Rename Dragon from "Super Heavy Body" to "Multi Turret Body" (r9194)
+   * Fix: Allow the AI to know where the game's starting resources are (r9203, r9202)
+ * Translations:
+   * Fix: Actually include Ukrainian translation in the Windows installer (r9329)
+   * Updated: German (r9228)
+
+2010-01-10: Version 2.3 beta 7
+ * General:
+   * Change: No longer always show all oil derricks in skirmish since it was leaking too much information about where the enemy expands (ticket:1087, r9060)
+   * Fix: Some challenges placed players on the wrong positions (r9057)
+   * Fix: Tutorial could not be finished (r9034, ticket:1361)
+   * Fix: Tutorial / Fast Play works again (r9029)
+   * Fix: Fog of War now shown in all radar modes (r9059)
+   * Fix: Messages sent to allies no longer appear twice (r9055)
+   * Fix: Audio queue not being cleared properly (r9107, ticket:1391)
+   * Fix: Incendiary weapon fire could appear in the wrong place (r9126)
+   * Fix: Various bugs and crashes (r9069, r9063, r9053, r9042, r9048, r9095, r9098, r9108, ticket:1383, r9113, ticket:1334, r9129)
+ * Gameplay:
+   * Change: Sensor tanks now target automatically. (r9105, ticket:1392)
+   * Change: Power now limited to 100000 (r9073)
+   * Fix: Transporters didn't fly to delivery point (r9066)
+ * Multiplayer:
+   * Change: Allow host to choose teams for any player (r9094)
+   * Change: Revert outgoing traffic shaping again (r9134)
+   * Fix: Do not allow kicks to be ignored (r9064, ticket:1375)
+   * Fix: Revert new sync code to fix sync issues (r9043, r9044)
+   * Fix: Make sure beacons are only seen by those who should (r9083, ticket:1250)
+ * Translations:
+   * New: Ukrainian (r9040)
+   * Updated: German (r9072), Estonian (r9079)
+
+2010-01-06: Version 2.3 beta 6
+ * General:
+   * Change: "--cheat" command line option no longer necessary for cheat codes. (r8976)
+   * Change: New codes "cheat on" and "debug" for turning on debug mode, and "cheat off" for turning it off, in case Shift+Backspace isn't working. (r8976)
+   * Change: Do soft fading of fog of war. (r9008)
+   * Fix: Crash when calling in reinforcements in campaign. (r8966)
+   * Fix: "make dist" now includes autorevision.conf in the tarball, so the version is displayed correctly when compiling from source. (r8957)
+ * UI:
+   * Change: Game lobby is now bigger. (r8936)
+   * Change: Password is asked in a separate dialog, instead of below lobby. (r8936)
+   * Change: Do not display the two Warzone logo backdrops. (r8934)
+   * Change: Add a shadow to the sideways text to make it more readable. (r8931)
+   * Fix: Crash when trying to join a game via IP. (r8999)
+   * Fix: Players list didn't appear when exiting from limits screen. (r8962)
+   * Fix: Change all missile upgrades to use Scourge icon, since the Avenger icons were somewhat confusing. (r8959)
+   * Fix: Always save changed droid templates. (r9014)
+ * Multiplayer:
+   * Fix: Host can change position and color of other players, really this time. (r8991)
+   * Fix: Players will not automatically quit and disconnect after losing a multiplayer game. (r8969)
+   * Fix: Give an error message when joining a multiplayer game is unsuccessful, instead of crashing or causing others to crash. (r8937)
+   * Fix: Sync improvements. (r8975)
+   * Change: Readd outgoing traffic shaping. (r9006)
+   * Change: Remove excessive log messages. (r9005)
+   * Change: Don't forward port 9990, we only need 2100. (r9012)
+   * Change: Do UPnP device detection only when going to the "Host Game" menu. (r9013)
+ * Translations:
+   * Updated: Estonian (r9001), Polish (r9002), German (r9003)
+
+2010-01-02: Version 2.3 beta 5
+ * General:
+   * Change: Show sensor visibility coverage on terrain and minimap (ticket:1289, r8918)
+   * Change: Add more key shortcuts (ticket:806)
+   * Change: Screenshots now get saved in "screenshots", not "screendumps" (r8818)
+   * Change: Deselect campaign transport when trying to give it orders instead of just doing nothing (r8856)
+   * Change: Revert broadcasting picking up oil drums, per forum consensus (r8888)
+   * Change: Add support for an optional descriptive header for stats files (r8897)
+   * Fix: Tally up construction borgs/trucks in SP games as well (r8726, ticket:966)
+   * Fix: Trucks can't guard things, super cyborgs can (r8808)
+   * Fix: Don't deselect a retreating unit if it's the only unit selected (r8815)
+   * Fix: Can order more than one transport at one time in multiplayer (r8854)
+   * Fix: Make VTOLs finish patrolling/scouting before returning to rearm (r8863)
+   * Fix: Rearming pads now actually rearm at the speed they're intended to, rearming upgrades affect rearming pad repair speed (r8864)
+   * Fix: Auto-repair was sometimes instantaneous (r8898)
+   * Fix: Assorted bugfixes (r8793, r8807, r8843, r8846, r8849, r8860)
+   * Fix: Various Xcode project fixes (r8798, r8800, r8820, r8852, r8859, r8915)
+   * Fix: Update win32 cross-build scripts (r8851, r8903, r8906, r8908, r8910)
+ * UI:
+   * Change: Add small text, use for ready button (r8795)
+   * Change: Show version number of games in the lobby (r8795)
+   * Change: Updated images (r8803)
+   * Fix: Commanders now display the correct amount of power/health in the design screen (r8877)
+   * Fix: Design screen issues with two weapons and indication of active component (r8881)
+   * Fix: Correctly calculate secondary weapon shadow power/HP, allow changing primary weapon without removing secondary weapons (r8883)
+ * Multiplayer:
+   * New: Add the laser satellite to the limits screen (r8729, ticket:1227)
+   * New: Add a host has dropped dialog when the host drops (r8717)
+   * New: Add a host only dialog that warns them they are about to kill the game if they quit (r8717)
+   * Change: Fix the hash routines to use network byte order (r8762)
+   * Change: Host can change position and color of other players (r8805)
+   * Fix: Enforce default limits if host did not enter limits in the limits screen (r8713)
+ * AI:
+   * Change: No base builds faster by droids cooperating on more buildings; remove AI cheating of 1500 free power on full base games (r8847)
+ * Balance:
+   * Update cyborg lasers to match changes to regular lasers
+   * Change cyborg transport research icon to cyborg transport
+   * Change Lancer's prereqs from HEAP Mini-Rockets to HE Mini-Rockets Mk3
+   * Allow only Dragon to have multi-turret; decrease its HP by 50 (r8895)
+ * Translations:
+   * Updated: Brazilian (r8699), Finnish (r8913), German (r8761, r8916)
+
+2009-12-13: Version 2.3 beta 4
+ * General:
+   * New: For windows people only, show a popup window for errors. (r8652)
+   * New: Add config variable 'UPnP' to enable/disable UPnP detection / routines.  1=on, 0=off, default is ON. (r8651)
+   * Change: Don't add UPnP redirects in singe player skirmish (r8649)
+   * Fix: Loading savegames would sometimes make you the wrong player - this breaks all skirmish savegames - campaign savegames are fine (r8626)
+   * Fix: Fixed endianness issues - PowerPC Macs can now play with others (r8593)
+   * Fix: Hardware-accelerated cursors work correctly in Mac OS X (r8611)
+   * Fix: Some crashes (r8596, r8636, r8677)
+ * Multiplayer:
+   * New: ".message" sends message to allies (r8640)
+   * Change: "5message" appears as "(private to Blue) message" instead of "(private) 5message" (r8640)
+   * Fix: "5message" now sends message to player in position 5 instead of ID 5 (r8640)
+   * Fix: Game setup screen updates now happen instantly, instead of every 2 seconds (r8603)
+   * Fix: AI difficulty slider can now be dragged continuously (r8601)
+   * Fix: Map download progress doesn't clear chat screen anymore (r8603)
+   * Fix: Map transfers should no longer crash. r8667
+ * Gameplay:
+   * New: Multiplayer alliances menu now appears in Intelligence screen (r8638)
+   * Change: Show proximity blips again for oil resources, but they do not blink on map (r8587)
+   * Fix: Multiplayer alliances menu sorted by position again (r8638)
+   * Fix: Bug that caused transporter not to disembark when auto-repairing and allow order to be queued (r8624)
+   * Fix: Don't allow players to control the transport in single-player campaign. (r8666, r8670)
+ * Scripting:
+   * New: Function droidCanReach() allows checking if droid destinations are possible (r8644)
+ * AI:
+   * Change: AI will set all its droids to 'do or die' and no longer build repair centers (r8681)
+   * Fix: Make AIs go for closest oil first (ticket:1166, r8632)
+ * Graphics:
+   * Change: New wall models for the player in campaign and in multiplay (r8665)
+ * Translations:
+   * Updated: French (r8614), Italian (r8661), German (r8662)
+
+2009-11-29: Version 2.3 beta 3
+ * General:
+   * Change: Windows installer updated, and allows user to choose video to download (r8561, ticket:1111)
+   * Fix: Make Warzone work correctly in Mac OS X again. (r8469, r8481)
+   * Fix: Some crashes. (r8478, r8498, ticket:1099)
+ * Gameplay:
+   * Fix: Friendly fire wasn't working correctly. (r8496)
+   * Fix: REALLY REALLY make sure AIs can't build on burning oil resources. (r8493)
+ * Multiplayer:
+   * Change: Put UPnP device detection into a background thread. (r8563)
+   * Change: Multiplayer game setup screen changes including sort by position and show info for AIs (r8559)
+   * Fix: Games with exactly 5 players no longer have template issues. (r8500)
+   * Fix: Map transfers improved. (r8533, ticket:1104)
+   * Fix: When host drops a game, broadcast a dropped message. (r8538)
+   * Fix: Player count in lobby. (r8538)
+ * Campaign:
+   * Fix: Transport works correctly in campaign now. (r8540)
+ * Graphics:
+   * Change: Backport building blueprints from trunk. (r8562)
+   * Change: Make use of the new scavenger icons (ticket:1093, r8488)
+
+2009-11-21: Version 2.3 beta 2
+ * General:
+   * Change: Allow either the normal return/enter key or the numpad enter key to terminate strings. (r8425, ticket:1055)
+   * Change: Alt+click now works in Mac OS X. (r8432, ticket:1084)
+   * Change: New and improved HP bars! Now 2 pixels high! (r8428)
+   * Change: New game mode - challenges. See who can complete a fixed game setup the quickest! (ticket:778)
+   * Fix: Assorted bug fixes (r8399, 8400)
+ * Gameplay:
+   * Change: You can now repair/rearm/upgrade/guard allied units and structures. (r8432, ticket:1084)
+   * Change: Cursors should now more accurately represent what happens when you click there. (r8432, ticket:1084)
+   * Change: Cyborg transports can be unloaded with Alt+click. (r8421, ticket:1084)
+   * Change: VTOLs will scout with Alt+click. (r8432, ticket:1084)
+   * Change: Repair turrets are more reliable now, and don't fidget before repairing. (r8421, ticket:1084)
+   * Change: You can damage your own units/structures with Alt+click again. Allies are still immune. (r8432, ticket:1084)
+   * Change: Cyborg transports should fly at a lower height now - so they shouldn't take so long to descend. (r8430)
+ * Multiplayer:
+   * Change: Add UPnP support to automatically forward the needed ports on supported routers (r8445, r8446, r8447, r8449, ticket:1073)
+   * Change: In skirmish always show position of and do not show proximity messages for oil wells (r8444, ticket:1087)
+   * Fix: Set AI colors (r8409, ticket:1070)
+   * Fix: Enable/disable AIs (r8409, ticket:1065)
+   * Fix: Send team position (r8409, ticket:1075)
+   * Fix: Add missing wrf files for limiter screen. (r8408)
+   * Fix: All multiplayer games are shown again. (r8467)
+ * Graphics:
+   * Fix: Corrected cyborg transport model (r8404)
+   * Fix: Correct menu captions (r8414)
+ * Translations:
+   * Updated: German (r8452), Dutch (r8412)
+ * Mods:
+   * NTW: Cannons and Cyborgs balance update (r8395)
+
+2009-11-14: Version 2.3 beta 1
+ * General:
+   * Change: Try to display dialog box when a internal game error causes game to crash on Windows (r8307)
+   * Change: Switched fontconfig question from scary pop-up message to NLS sub-feature (r8359, ticket:1034).
+   * Change: Add new debug flag of "input" used for debug messages for input issues (keyboard/mouse)  (r8376)
+   * Change: Add modifier to the keymap editor to show which keys are set to the numpad (r8376)
+   * Change: Warzone 2100 -2.3 is the new (default) config direcotry (r8387)
+   * Change: NTW Research Balance Update, Cannons, Missiles & Rockets (r8385)
+   * Fix: Use Enable GLC_AUTO_FONT to enable it to fallback to different fonts if the default font doesn't contain the needed font. (r8365)
+   * Fix: Reduce the time it takes to rebuild font cache on Vista and Windows 7 (ticket:1013, r8322)
+   * Fix: Collection of smaller bugfixes (ticket:997, ticket:1018, ticket:1021, ticket:1006)
+   * Fix: make distcheck should now work after initial make (to generate yacc/lex files) (r8360)
+ * Multiplayer:
+   * Change: Drop SDL_NET in favor of using BSD sockets (same as trunk code) (r8342, ticket:1038)
+   * Change: Try to mitigate turnOffMultiMsg() via setting isMPDirtyBit when needed. (r8369)
+   * Change: Max unit count is down from 300 to 150 to mitigate bandwidth issues. (r8369)
+   * Change: Sync code is now run when isMPDirtyBit is set or 315ms has expired for droids / 630ms for power / 450 ms for structures (r8383)
+   * Change: Ping (in game, not lobby!) & score is now sent more frequently (r8369)
+   * Change: MAX_BYTESPERSEC bump up to 7K from ~3.3K to mitigate when we can sync. (r8369)
+   * Change: When we have reached MAX_BYTESPERSEC limit, inform of this event in the logs **FOR THIS BETA ONLY** (r8369)
+   * Change: Only tally up outgoing bytes instead of both incoming and outgoing bytes when checking for max packet size. (8386)
+
+2009-10-11: Version 2.2.4
+ * General:
+   * Fix: Indirect fire weapons can no longer use sensors to fire at targets the sensor cannot see. (r8177)
+   * Fix: Improved error handling in some cases - try to avoid crashing (ticket:962)
+   * Fix: Bug in map renderer that would cause non-power of two maps to display wrongly. (r8208)
+   * Fix: Added support for ATI-specific two-sided stencil extension. Will decrease CPU usage on ATI cards. (r8185)
+   * Fix: Correctly handle savegame names (ticket:981, r8227, r8246)
+ * Campaign:
+   * Fix: Improve anti-air and make it more like the original by making AA shots homing like in skirmish (r8258, ticket:206)
+ * Multiplayer:
+   * Change: Data integrity check is added.  This will break network connectivity with 2.2.3. (r8205, ticket:961)
+ * Balancing - skirmish (r8262):
+   * Most projectiles 1.5x faster to reduce sync problems
+   * Mini-Rocket Artillery renamed Mini-Rocket Array
+   * MRL Emplacement renamed Mini-Rocket Battery
+   * Angel Missile renamed Seraph Missile Array
+   * Angel Missile Battery renamed Short-Range Missile Battery
+   * Hurricane splash increased 10 -> 30
+   * Cyclone splash increased 40 -> 60
+   * Whirlwind splash increased 30 -> 50
+   * Avenger and Vindicator damage increased 320 -> 350, accuracy increased 60%-70% -> 70%-80%
+   * Stormbringer damage increased 140 -> 180
+   * All lasers now have 80%-80% accuracy
+   * Plasmite Bomb weight increased 8000 -> 12000
+   * Mini-pod can hit air targets
+   * Decrease Pulse Laser and Heavy Laser ROF, increase corresponding damage
+   * Decrease VTOL MG damage, increase VTOL MG shots-per-rearm
+   * Artillery to hover multiplier decreased from 110% to 100%
+   * Artillery to tracks multiplier decreased from 65% to 50%
+   * Artillery to half-tracks multiplier decreased from 80% to 70%
+   * Artillery to wheels multiplier decreased from 95% to 90%
+   * Anti-tank to hover multiplier decreased from 100% to 90%
+   * AP to hard multiplier increased from 45% to 50%
+   * Seraph Missile Array range increased from 5-11 to 5-14
+   * Command Center must be built before MG tower can be researched
+   * Truck HP decreased 50 -> 25
+   * Truck weight increased 600 -> 800
+   * Inferno bunker research price 150 -> 125
+   * Plasmite bunker research price 150 -> 125
+   * Plasma Cannon radius increased from 1 to 3.5 and range from 5.5 to 6
+
+2009-09-13: Version 2.2.3
+ * General:
+   * Fix: When ownership of a building changes while we are building it, tell our droids to stop building it. (ticket:895, r8125)
+   * Fix: Correct orientation of sound output in 3D (ticket:220, r8103)
+   * Fix: Some sounds were missing for super cyborgs (ticket:919, r8110, r8111)
+   * Fix: Use all three baba scream sounds again (ticket:830, r8102)
+   * Fix: Do not sometimes crash due to integer underflow when picking up artifacts (ticket:373, r8084)
+   * Fix: Some building issues on BSD (ticket:817, ticket:823, r8116, r8133, r8138, r8139)
+ * Multiplayer:
+   * Change: Add tileset dependent map preview colours (r8064)
+   * Fix: Crash if map preview during map download (r8079, ticket:756)
+   * Fix: Stop ability to bypass unit limits by hiding droids in transports (ticket:921, r8105)
+   * Fix: Cyborg transport being invincible while in the air (ticket:892, r8104)
+ * Campaign:
+   * Fix: Assert failure on effect cleanup when entering third campaign (ticket:836, r8045)
+   * Fix: Infinite loop when transporting a sensor droid to offworld campaign map (ticket:852, ticket:853, r8062)
+ * Graphics:
+   * Change: New skybox for urban maps, this one is licensed CC0, not CC-by 2.0 (ticket:922)
+ * Video:
+   * Fix: Do not lower volume to zero when multiple videos queued up (ticket:670, r8106)
+ * Translations:
+   * Fix: Make some more strings translateable (r8121, r8129, ticket:906, ticket:907)
+   * Fix: Updated German translation (r8092, r8131)
+ * Scripting:
+   * Change: Added dummy version of function droidCanReach() that always returns true for backward compatibility (r8077)
+   * Fix: Do not crash in non-debug mode when calling allianceExists() with bad player ID (r8075)
+
+
+2009-08-23: Version 2.2.2
+ * General:
+   * Change: Add the ability of allied players to share sensors (ticket:636, r7900)
+   * Change: Stop rotation when "Continue" is pressed after winning a multiplayer/skirmish game (r7887)
+   * Change: Show when a game was saved in a tooltip on the loading screen. (r7864, ticket:682)
+   * Fix: Cannot display more than one game from lobby. Also fix a lobby display issue. (r7839, ticket:691)
+   * Fix: Various checks and workarounds to make game run more stable (r7836, r7894, r7889, r7883, r7881, r7851, r7847, r7842, r7822, r7910 / ticket:759)
+   * Fix: Crash due to path length overflow (r7916, ticket:738, ticket:765)
+   * Fix: Bug that caused some keyboard shortcuts to be unusable in multiplayer since they were considered cheats (r7856)
+   * Fix: Verify that our "target" is still around before doing fire support with it. (r7910, ticket:759)
+   * Fix: Fix crash length overflow by capping path lengths to max 255 nodes. (r7916, ticket:738)
+   * Fix: Fix a typo, we wanted to display "???" when ping is >=2000 (r7922)
+   * Fix: Fix camera bug in warcam code. Patch by i-NoD (r7924, ticket:757)
+   * Fix: General order/action code cleanup (r7926)
+   * Fix: Fix segfault when trying to read target of droid with no target in aiUpdateStructure (r7928)
+   * Fix: Use _NSIG in the exceptionhandler if available for *BSD compatibility. (r7972, ticket:818)
+   * Fix: Add correct linker flags for openbsd to configure. (r7974, ticket:819)
+   * Fix: Disable locales without translation. (r7969, ticket:813)
+   * Fix: NTW updated to 1.8.7 (r7998 - r8009)
+   * Fix: When babas are burning, we always play the scream now. (r8025, ticket:830)
+   * Fix: Make sure we have a valid color choice for our SP game, when we are coming from a MP game. (r8032)
+ * Translations:
+   * Fix: Commit Portuguese translation. (r7943, ticket:783)
+   * Fix: Updated Russian translation (r8036, ticket:834)
+   * Fix: Updated translations (r7880, r7877, r7875, r7871, r7868, r7863, r7861)
+ * Graphics:
+   * Fix: Increase video buffer size from 4K to 256K.  This fixes playback of videos with a bitrate larger than ~2000kbps. (r7981)
+   * Change: Add a north pointer for the rotating radar.  (r8013, ticket:769)
+ * Sound:
+   * Fix: Fixes the removal of unused (sound) sources. (r8012, r8026, ticket:770)
+
+2009-06-21: Version 2.2.1
+ * General:
+   * Change: No longer require space between rearm pads, allow dragging pad production with mouse, and droids may drive over inactive rearm pads (r7701, ticket:569)
+   * Change: Allow droids to grab artifacts and oil drums from up to 1 tile away (r7779)
+   * Change: Bump up MAX_RESEARCH to 500 from 450. (r7774, ticket:599)
+   * Change: Add more information to the crash dump file (r7740, 7745)
+   * Change: When host drops from the lobby, abort the game. (r7787 ticket:583)
+   * Fix: Various crashes related to failing orders (r7699)
+   * Fix: Show translations for finished research display (r7730)
+   * Fix: Mac users can read in .wz files (r7754)
+   * Fix: Experience speed adjustment happens after max speed limit; fix bug with speed calculation. (r7761)
+   * Fix: Numerous issues with NTW mod (r7676-7677, r7713-7716)
+   * Fix: Fix to *never* control the transport in SP games (really this time!) (r7776, ticket:568)
+   * Fix: Make sure we take xOffset into account, we don't always start at 0 for the FMV text. (r7780, ticket:625)
+   * Fix: Make sure either parameter isn't below the minimum screen res. that we support. (r7786)
+   * Fix: Make sure we take xOffset into account, we don't always start at 0 for the FMV text. (r7780, ticket:625)
+   * Fix: Clear the keyboard/mouse input on lost focus correctly. (r7797, ticket:515)
+ * AI:
+   * Fix: Resolve AI droid traffic jams by clearing orders and make jammed droids stop going for repair (r7700, ticket:597)
+ * Campaign:
+   * Fix: Flashing box around mission timer was too small, resulting in a graphics glitch. (r7672, ticket:596)
+ * Translations:
+   * Fix: Italian and Slovakian translations updated (r7769, ticket:621, r7772, ticket:615)
+ * Build system:
+   * Fix: Various build system issues (r7669, r7664, r7663, r7661, r7655, r7642, r7640)
+ * Graphics:
+   * Fix: No more ugly texture seams (r7718, r7724, r7757)
+
+2009-05-31: Version 2.2.0
+ * General:
+   * Fix: Tells user if mod entered on the command line / shortcut is enabled, or is invalid. Output is to stdout or stderr. (r7586)
    * Fix: Launching the game from installer now works (r7568, ticket:364)
-   * Fix: Angel missile no longer obsoletes long-range artillery, Ripple Rockets no longer autoupgrades to Archie, and Mortar Fast Loader requires Mortar Rapid Loader Mk3 (r7559, ticket:533, ticket:292, ticket:398)
+   * Fix: Angel missile no longer obsoletes long-range artillery, Ripple Rockets no longer autoupgrades to Archie, and Mortar Fast Loader requires Mortar Rapid Loader Mk3 (r7559, ticket:533, 292, 398)
    * New: Add a new translation:  zh_TW.po  by chtsau (r7561, ticket:239)
    * Change: Allow up to 36 savegame 'slots' (r7535)
    * Change: add 'mod/music' directory to be use for custom music. (r7557)
    * Fix: set the volume of the FMV based on the user's preferences (r7489, ticket:526)
-   * Fix: Check if the unit has weapons, before trying to see what weapons they have (r7488, ticket:523)
-   * Change: remove 'autoload' handling  (r7474)
+   * Fix: Check if the unit has weapons, before trying to see what weapons they have. (r7488, ticket:523)
+   * Change: remove 'autoload' handling.  (r7474)
    * Fix: Fix windows crash dump output (r7473)
    * Fix: Fix handling of limbo & expand missions (r7454)
    * Change: Let players save games with Num-Enter as well as Return - should make it easier on international keyboards (r7412)
@@ -264,18 +1185,20 @@ master_20110320qt and before:
    * Fix: We now return the truncated string, instead of returning NULL if the string is too long. (r7426, ticket:493)
    * Fix: pl.po file by Makary (r7423, ticket:241)
    * New: Slovenian translation sl.po file by ThomasCarstein (r7422, ticket:392)
-   * Fix: pt_BR.po update by Tucalipe (r7421m ticket:350)
+   * Fix: pt_BR.po update by Tucalipe (r7421, ticket:350)
    * Fix: Clear out old effects (prevents burning lasting between missions) (r7416)
-   * Fix: Don't allow the transporter to be controlled in SP games  (r7414)
+   * Fix: Don't allow the transporter to be controlled in SP games. (r7414)
    * Fix: Remember player number and tech level for map selection screen (r7400)
  * Gameplay:
-   * Fix: Make AI ignore hostile structures for path-finding when armed (r7579)
+   * Fix: Make AI ignore hostile structures for path-finding when armed. (r7579)
+   * Fix: Allow Fog mode to be set based on user preferences for campaign games. (r7597, ticket:561)
+   * Fix: Don't allow 2x the experience points in a campaign game, when this is reserved for MP games. (r7598, ticket:562)
  * Graphics:
-   * Fix: Fix issue with radar / mini-map (r7458, ticket:333)
-   * Fix: Fix issue with radar / mini-map drawing objects outside its scope (r7441)
-   * Change: Better map previews (patch by Florian Schanda, color scheme by Zarel) (r7434)
+   * Fix: Fix issue with radar / mini-map. (r7458, ticket:333)
+   * Fix: Fix issue with radar / mini-map drawing objects outside its scope. (r7441)
+   * Change: Better map previews (patch by Florian Schanda, color scheme by Zarel). (r7434)
  * Network:
-   * Change: Increase timeout delay to 2500ms for dial-up modem users (r7556, ticket:543)
+   * Change: Increase timeout delay to 2500ms for dial-up modem users. (r7556, ticket:543)
 
 2009-05-10: Version 2.2_rc1
  * General:
