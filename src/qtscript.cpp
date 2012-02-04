@@ -372,16 +372,6 @@ bool loadPlayerScript(QString path, int player, int difficulty)
 	QScriptSyntaxCheckResult syntax = QScriptEngine::checkSyntax(source);
 	ASSERT_OR_RETURN(false, syntax.state() == QScriptSyntaxCheckResult::Valid, "Syntax error in %s line %d: %s", 
 	                 path.toAscii().constData(), syntax.errorLineNumber(), syntax.errorMessage().toAscii().constData());
-	// Remember internal, reserved names
-	QScriptValueIterator it(engine->globalObject());
-	while (it.hasNext())
-	{
-		it.next();
-		internalNamespace.insert(it.name(), 1);
-	}
-	QScriptValue result = engine->evaluate(source, path);
-	ASSERT_OR_RETURN(false, !engine->hasUncaughtException(), "Uncaught exception at line %d, file %s: %s", 
-	                 engine->uncaughtExceptionLineNumber(), path.toAscii().constData(), result.toString().toAscii().constData());
 	// Special functions
 	engine->globalObject().setProperty("setTimer", engine->newFunction(js_setTimer));
 	engine->globalObject().setProperty("queue", engine->newFunction(js_queue));
@@ -392,8 +382,6 @@ bool loadPlayerScript(QString path, int player, int difficulty)
 	// Special global variables
 	//== \item[version] Current version of the game. Do not make too many assumption about this value.
 	engine->globalObject().setProperty("version", PACKAGE_VERSION, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	//== \item[me] The player the script is currently running as.
-	engine->globalObject().setProperty("me", player, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	//== \item[selectedPlayer] The player ontrolled by the client on which the script runs.
 	engine->globalObject().setProperty("selectedPlayer", selectedPlayer, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	//== \item[gameTime] The current game time. Updated before every invokation of a script.
@@ -420,6 +408,20 @@ bool loadPlayerScript(QString path, int player, int difficulty)
 
 	// Regular functions
 	registerFunctions(engine);
+
+	// Remember internal, reserved names
+	QScriptValueIterator it(engine->globalObject());
+	while (it.hasNext())
+	{
+		it.next();
+		internalNamespace.insert(it.name(), 1);
+	}
+	// We need to always save the 'me' special variable.
+	//== \item[me] The player the script is currently running as.
+	engine->globalObject().setProperty("me", player, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	QScriptValue result = engine->evaluate(source, path);
+	ASSERT_OR_RETURN(false, !engine->hasUncaughtException(), "Uncaught exception at line %d, file %s: %s", 
+	                 engine->uncaughtExceptionLineNumber(), path.toAscii().constData(), result.toString().toAscii().constData());
 
 	// Register script
 	scripts.push_back(engine);
