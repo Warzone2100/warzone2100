@@ -349,6 +349,7 @@ void requestAlliance(uint8_t from, uint8_t to, bool prop, bool allowAudio)
 		return;  // Wait for our message.
 	}
 
+	syncDebug("Request alliance %d %d", from, to);
 	alliances[from][to] = ALLIANCE_REQUESTED;	// We've asked
 	alliances[to][from] = ALLIANCE_INVITATION;	// They've been invited
 
@@ -397,6 +398,7 @@ void breakAlliance(uint8_t p1, uint8_t p2, bool prop, bool allowAudio)
 		}
 	}
 
+	syncDebug("Break alliance %d %d", p1, p2);
 	alliances[p1][p2] = ALLIANCE_BROKEN;
 	alliances[p2][p1] = ALLIANCE_BROKEN;
 	alliancebits[p1] &= ~(1 << p2);
@@ -421,6 +423,7 @@ void formAlliance(uint8_t p1, uint8_t p2, bool prop, bool allowAudio, bool allow
 		CONPRINTF(ConsoleString,(ConsoleString,_("%s Forms An Alliance With %s"),tm1,getPlayerName(p2)));
 	}
 
+	syncDebug("Form alliance %d %d", p1, p2);
 	alliances[p1][p2] = ALLIANCE_FORMED;
 	alliances[p2][p1] = ALLIANCE_FORMED;
 	if (game.alliance == ALLIANCES_TEAMS)	// this is for shared vision only
@@ -491,19 +494,13 @@ bool recvAlliance(NETQUEUE queue, bool allowAudio)
 		case ALLIANCE_NULL:
 			break;
 		case ALLIANCE_REQUESTED:
-			turnOffMultiMsg(true);
 			requestAlliance(from, to, false, allowAudio);
-			turnOffMultiMsg(false);
 			break;
 		case ALLIANCE_FORMED:
-			turnOffMultiMsg(true);
 			formAlliance(from, to, false, allowAudio, true);
-			turnOffMultiMsg(false);
 			break;
 		case ALLIANCE_BROKEN:
-			turnOffMultiMsg(true);
 			breakAlliance(from, to, false, allowAudio);
-			turnOffMultiMsg(false);
 			break;
 		default:
 			debug(LOG_ERROR, "Unknown alliance state recvd.");

@@ -295,7 +295,6 @@ static inline void fpathNewNode(PathfindContext &context, PathCoord dest, PathCo
 				// The distance gradient is now known to be somewhere between the direction from A to P and the direction from B to P.
 				static const uint8_t gradYLookup[99] = {140, 140, 140, 140, 140, 140, 140, 140, 140, 140, 140, 140, 139, 139, 139, 139, 139, 139, 139, 139, 139, 138, 138, 138, 138, 138, 138, 137, 137, 137, 137, 137, 136, 136, 136, 136, 135, 135, 135, 134, 134, 134, 134, 133, 133, 133, 132, 132, 132, 131, 131, 130, 130, 130, 129, 129, 128, 128, 127, 127, 126, 126, 126, 125, 125, 124, 123, 123, 122, 122, 121, 121, 120, 119, 119, 118, 118, 117, 116, 116, 115, 114, 113, 113, 112, 111, 110, 110, 109, 108, 107, 106, 106, 105, 104, 103, 102, 101, 100};
 				int gradientY = gradYLookup[gradientX];  // = sqrt(140² -  gradientX²), rounded to nearest integer
-				//int gradientY = iSqrt(70*70 - gradientX*gradientX);  // TODO Faster to use a (small, 50 entries) lookup table?
 				unsigned distP = gradientY*costFactor + distB;
 				node.est -= node.dist - distP;
 				node.dist = distP;
@@ -619,7 +618,7 @@ void fpathSetBlockingMap(PATHJOB *psJob)
 				for (int x = 0; x < mapWidth; ++x)
 			{
 				dangerMap[x + y*mapWidth] = auxTile(x, y, type.owner) & AUXBITS_THREAT;
-				checksumDangerMap ^= map[x + y*mapWidth]*(factor = 3*factor + 1);
+				checksumDangerMap ^= dangerMap[x + y*mapWidth]*(factor = 3*factor + 1);
 			}
 		}
 		syncDebug("blockingMap(%d,%d,%d,%d) = %08X %08X", gameTime, psJob->propulsion, psJob->owner, psJob->moveType, checksumMap, checksumDangerMap);

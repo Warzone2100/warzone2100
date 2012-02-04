@@ -115,7 +115,7 @@ static bool callFunction(QScriptEngine *engine, const QString &function, const Q
 //-- Set a function to run repeated at some given time interval. The function to run 
 //-- is the first parameter, and it \underline{must be quoted}, otherwise the function will
 //-- be inlined. The second parameter is the interval, in milliseconds. A third, optional
-//-- parameter can be a game object to pass to the timer function. If the game object
+//-- parameter can be a \emph{game object} to pass to the timer function. If the \emph{game object}
 //-- dies, the timer stops running. The minimum number of milliseconds is 100, but such
 //-- fast timers are strongly discouraged as they may deteriorate the game performance.
 //--
@@ -177,7 +177,7 @@ static QScriptValue js_removeTimer(QScriptContext *context, QScriptEngine *engin
 //-- \underline{must be quoted}, otherwise the function will be inlined.
 //-- The second parameter is the delay in milliseconds, if it is omitted or 0,
 //-- the function will be run at a later frame.  A third optional
-//-- parameter can be a game object to pass to the queued function. If the game object
+//-- parameter can be a \emph{game object} to pass to the queued function. If the \emph{game object}
 //-- dies before the queued call runs, nothing happens.
 // TODO, check if an identical call is already queued up - and in this case, 
 // do not add anything.
@@ -372,16 +372,6 @@ bool loadPlayerScript(QString path, int player, int difficulty)
 	QScriptSyntaxCheckResult syntax = QScriptEngine::checkSyntax(source);
 	ASSERT_OR_RETURN(false, syntax.state() == QScriptSyntaxCheckResult::Valid, "Syntax error in %s line %d: %s", 
 	                 path.toAscii().constData(), syntax.errorLineNumber(), syntax.errorMessage().toAscii().constData());
-	// Remember internal, reserved names
-	QScriptValueIterator it(engine->globalObject());
-	while (it.hasNext())
-	{
-		it.next();
-		internalNamespace.insert(it.name(), 1);
-	}
-	QScriptValue result = engine->evaluate(source, path);
-	ASSERT_OR_RETURN(false, !engine->hasUncaughtException(), "Uncaught exception at line %d, file %s: %s", 
-	                 engine->uncaughtExceptionLineNumber(), path.toAscii().constData(), result.toString().toAscii().constData());
 	// Special functions
 	engine->globalObject().setProperty("setTimer", engine->newFunction(js_setTimer));
 	engine->globalObject().setProperty("queue", engine->newFunction(js_queue));
@@ -392,8 +382,6 @@ bool loadPlayerScript(QString path, int player, int difficulty)
 	// Special global variables
 	//== \item[version] Current version of the game. Do not make too many assumption about this value.
 	engine->globalObject().setProperty("version", PACKAGE_VERSION, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	//== \item[me] The player the script is currently running as.
-	engine->globalObject().setProperty("me", player, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	//== \item[selectedPlayer] The player ontrolled by the client on which the script runs.
 	engine->globalObject().setProperty("selectedPlayer", selectedPlayer, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	//== \item[gameTime] The current game time. Updated before every invokation of a script.
@@ -421,9 +409,24 @@ bool loadPlayerScript(QString path, int player, int difficulty)
 	// Regular functions
 	registerFunctions(engine);
 
+	// Remember internal, reserved names
+	QScriptValueIterator it(engine->globalObject());
+	while (it.hasNext())
+	{
+		it.next();
+		internalNamespace.insert(it.name(), 1);
+	}
+	// We need to always save the 'me' special variable.
+	//== \item[me] The player the script is currently running as.
+	engine->globalObject().setProperty("me", player, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	QScriptValue result = engine->evaluate(source, path);
+	ASSERT_OR_RETURN(false, !engine->hasUncaughtException(), "Uncaught exception at line %d, file %s: %s", 
+	                 engine->uncaughtExceptionLineNumber(), path.toAscii().constData(), result.toString().toAscii().constData());
+
 	// Register script
 	scripts.push_back(engine);
 
+	debug(LOG_SAVE, "Created script engine %d for player %d from %s", scripts.size() - 1, player, path.toUtf8().constData());
 	return true;
 }
 
@@ -738,7 +741,7 @@ bool triggerEventDestroyed(BASE_OBJECT *psVictim)
 
 //__ \subsection{eventObjectSeen(viewer, seen)}
 //__ An event that is run whenever an object goes from not seen to seen.
-//__ First parameter is game object doing the seeing, the next the game
+//__ First parameter is \emph{game object} doing the seeing, the next the game
 //__ object being seen.
 bool triggerEventSeen(BASE_OBJECT *psViewer, BASE_OBJECT *psSeen)
 {

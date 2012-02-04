@@ -147,7 +147,7 @@ QScriptValue convStructure(STRUCTURE *psStruct, QScriptEngine *engine)
 }
 
 //;; \subsection{Feature}
-//;; Describes a feature (game object not owned by any player). It inherits all the properties of the base object (see below).
+//;; Describes a feature (a \emph{game object} not owned by any player). It inherits all the properties of the base object (see below).
 //;; In addition, the following properties are defined:
 //;; \begin{description}
 //;; \item[type] It will always be FEATURE.
@@ -394,7 +394,7 @@ bool writeLabels(const char *filename)
 // All script functions should be prefixed with "js_" then followed by same name as in script.
 
 //-- \subsection{label(key)}
-//-- Fetch something denoted by a label. Labels are areas, positions or game objects on 
+//-- Fetch something denoted by a label. A label refers to an area, a position or a \emph{game object} on 
 //-- the map defined using the map editor and stored together with the map. The only argument
 //-- is a text label. The function returns an object that has a type variable defining what it
 //-- is (in case this is unclear). This type will be one of DROID, STRUCTURE, FEATURE, AREA
@@ -435,6 +435,34 @@ static QScriptValue js_label(QScriptContext *context, QScriptEngine *engine)
 	}
 	else debug(LOG_ERROR, "label %s not found!", label.toUtf8().constData());
 	return ret;
+}
+
+//-- \subsection{enumBlips(player)}
+//-- Return an array containing all the non-transient radar blips that the given player 
+//-- can see. This includes sensors revealed by radar detectors, as well as ECM jammers.
+//-- It does not include units going out of view.
+static QScriptValue js_enumBlips(QScriptContext *context, QScriptEngine *engine)
+{
+	QList<Position> matches;
+	int player = context->argument(0).toInt32();
+	SCRIPT_ASSERT(context, player >= 0 && player < game.maxPlayers, "Invalid player index %d", player);
+	for (BASE_OBJECT *psSensor = apsSensorList[0]; psSensor; psSensor = psSensor->psNextFunc)
+	{
+		if (psSensor->visible[player] > 0 && psSensor->visible[player] < UBYTE_MAX)
+		{
+			matches.push_back(psSensor->pos);
+		}
+	}
+	QScriptValue result = engine->newArray(matches.size());
+	for (int i = 0; i < matches.size(); i++)
+	{
+		Position p = matches.at(i);
+		QScriptValue v = engine->newObject();
+		v.setProperty("x", map_coord(p.x), QScriptValue::ReadOnly);
+		v.setProperty("y", map_coord(p.y), QScriptValue::ReadOnly);
+		result.setProperty(i, v);
+	}
+	return result;
 }
 
 //-- \subsection{enumGroup(group)}
@@ -1933,6 +1961,7 @@ bool registerFunctions(QScriptEngine *engine)
 	engine->globalObject().setProperty("enumDroid", engine->newFunction(js_enumDroid));
 	engine->globalObject().setProperty("enumGroup", engine->newFunction(js_enumGroup));
 	engine->globalObject().setProperty("enumFeature", engine->newFunction(js_enumFeature));
+	engine->globalObject().setProperty("enumBlips", engine->newFunction(js_enumBlips));
 	engine->globalObject().setProperty("enumResearch", engine->newFunction(js_enumResearch));
 	engine->globalObject().setProperty("getResearch", engine->newFunction(js_getResearch));
 	engine->globalObject().setProperty("pursueResearch", engine->newFunction(js_pursueResearch));

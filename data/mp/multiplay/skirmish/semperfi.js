@@ -457,6 +457,8 @@ function eventStructureBuilt(struct, droid)
 
 function eventDroidBuilt(droid, struct)
 {
+	var sensorlist = enumBlips(me);
+
 	if (struct)
 	{
 		if (struct.stattype == FACTORY)

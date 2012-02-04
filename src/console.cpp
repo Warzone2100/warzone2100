@@ -611,6 +611,8 @@ void	displayConsoleMessages( void )
 		return;
 	}
 
+	iV_SetFont(font_regular);
+
 	/* Get the travel to the next line */
 	linePitch = iV_GetTextLineSize();
 

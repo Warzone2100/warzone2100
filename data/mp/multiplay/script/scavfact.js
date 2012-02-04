@@ -2,7 +2,6 @@
 
 // Various constants, declared here for convenience only
 const maxDroids = 25;		// max guys to handle.
-const factory = "A0BaBaFactory";
 
 // scav group
 var attackGroup;
@@ -21,7 +20,7 @@ function activateProduction(fac)
 function scavtick()
 {
 	// enum functions now return a list of results
-	var factorylist = enumStruct(me, factory);
+	var factorylist = enumStruct(me, "A0BaBaFactory");
 
 	// one way of dealing with lists is running a function on each member of the list
 	if (factorylist)
