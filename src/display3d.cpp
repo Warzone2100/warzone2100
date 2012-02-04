@@ -175,7 +175,7 @@ SDWORD mouseTileX, mouseTileY;
 Vector2i mousePos(0, 0);
 
 /// Do we want the radar to be rendered
-bool	radarOnScreen=false;
+bool radarOnScreen = true;
 bool	radarPermitted = true;
 
 /// Show unit/building gun/sensor range

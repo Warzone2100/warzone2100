@@ -95,6 +95,7 @@
 
 #include "init.h"
 #include "levels.h"
+#include "wrappers.h"
 
 #define MAP_PREVIEW_DISPLAY_TIME 2500	// number of milliseconds to show map in preview
 
@@ -1251,11 +1252,11 @@ static void hidePasswordForm(void)
 {
 	EnablePasswordPrompt = false;
 
-	widgHide(psWScreen, FRONTEND_PASSWORDFORM);
-	widgHide(psWScreen, CON_PASSWORD_LABEL);
-	widgHide(psWScreen, CON_PASSWORD);
-	widgHide(psWScreen, CON_PASSWORDYES);
-	widgHide(psWScreen, CON_PASSWORDNO);
+	if (widgGetFromID(psWScreen, FRONTEND_PASSWORDFORM)) widgHide(psWScreen, FRONTEND_PASSWORDFORM);
+	if (widgGetFromID(psWScreen, CON_PASSWORD_LABEL)) widgHide(psWScreen, CON_PASSWORD_LABEL);
+	if (widgGetFromID(psWScreen, CON_PASSWORD)) widgHide(psWScreen, CON_PASSWORD);
+	if (widgGetFromID(psWScreen, CON_PASSWORDYES))widgHide(psWScreen, CON_PASSWORDYES);
+	if (widgGetFromID(psWScreen, CON_PASSWORDNO)) 	widgHide(psWScreen, CON_PASSWORDNO);
 
 	widgReveal(psWScreen, FRONTEND_SIDETEXT);
 	widgReveal(psWScreen, FRONTEND_BOTFORM);
@@ -2602,14 +2603,8 @@ static void stopJoining(void)
 				NetPlay.isHost = false;
 			}
 
-			if(NetPlay.bComms)	// not even connected.
-			{
-				changeTitleMode(GAMEFIND);
-			}
-			else
-			{
-				changeTitleMode(MULTI);
-			}
+			changeTitleMode(MULTI);
+
 			selectedPlayer = 0;
 			realSelectedPlayer = 0;
 			return;
@@ -3120,7 +3115,7 @@ void startMultiplayerGame(void)
 	bMultiPlayer = true;
 	bMultiMessages = true;
 	NETsetPlayerConnectionStatus(CONNECTIONSTATUS_NORMAL, NET_ALL_PLAYERS);  // reset disconnect conditions
-
+	initLoadingScreen(true);
 	if (NetPlay.isHost)
 	{
 		// This sets the limits to whatever the defaults are for the limiter screen
