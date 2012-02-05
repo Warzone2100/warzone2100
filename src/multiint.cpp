@@ -2099,31 +2099,23 @@ bool recvPositionRequest(NETQUEUE queue)
 	return changePosition(player, position);
 }
 
-// if so, return that team; if not, return -1
+// If so, return that team; if not, return -1; if there are no players, return team MAX_PLAYERS.
 int allPlayersOnSameTeam(int except)
 {
-	int inSlot[MAX_PLAYERS] = {0};
-
-	int i, disallow = -1, filledSlots = 0;
-	// Count actual players
-	for (i = 0; i < game.maxPlayers; i++)
+	int minTeam = MAX_PLAYERS, maxTeam = 0;
+	for (int i = 0; i < game.maxPlayers; ++i)
 	{
-		filledSlots += (NetPlay.players[i].allocated || NetPlay.players[i].ai >= 0) ? 1 : 0;
-	}
-	// tally up the team counts
-	for (i = 0; i < game.maxPlayers; i++)
-	{
-		if (i != except)
+		if (i != except && (NetPlay.players[i].allocated || NetPlay.players[i].ai >= 0))
 		{
-			inSlot[NetPlay.players[i].team]++;
-			if (inSlot[NetPlay.players[i].team] >= filledSlots - (except >= 0) ? 1 : 0)
-			{
-				// Make sure all players can't be on same team.
-				disallow = NetPlay.players[i].team;
-			}
+			minTeam = std::min(minTeam, NetPlay.players[i].team);
+			maxTeam = std::max(maxTeam, NetPlay.players[i].team);
 		}
 	}
-	return disallow;
+	if (minTeam == MAX_PLAYERS || minTeam == maxTeam)
+	{
+		return minTeam;  // Players all on same team.
+	}
+	return -1;  // Players not all on same team.
 }
 
 /*
