@@ -1,0 +1,5 @@
+If this does not work out of the box for you add the following to your config file:
+
+[merge "ours"]
+	name = Always use ours
+	driver = touch %A
