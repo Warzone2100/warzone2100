@@ -1279,19 +1279,27 @@ void	renderProjectile(PROJECTILE *psCurr)
 		bool premultiplied = false;
 		bool additive = psStats->weaponSubClass == WSC_ROCKET || psStats->weaponSubClass == WSC_MISSILE || psStats->weaponSubClass == WSC_SLOWROCKET || psStats->weaponSubClass == WSC_SLOWMISSILE;
 
-		if (pIMD->nconnectors >= 2)
+		if (pIMD->flags & iV_IMD_ROLL_TO_CAMERA)
 		{
-			switch (pIMD->connectors[0].x)
-			{
-				case 1: rollToCamera = true; break;
-				case 2: rollToCamera = true; pitchToCamera = true; break;
-			}
-			switch (pIMD->connectors[0].y)
-			{
-				case 1: additive = false; break;
-				case 2: additive = true; break;
-				case 3: additive = false; premultiplied = true; break;
-			}
+			rollToCamera = true;
+		}
+		if (pIMD->flags & iV_IMD_PITCH_TO_CAMERA)
+		{
+			rollToCamera = true;
+			pitchToCamera = true;
+		}
+		if (pIMD->flags & iV_IMD_NO_ADDITIVE)
+		{
+			additive = false;
+		}
+		if (pIMD->flags & iV_IMD_ADDITIVE)
+		{
+			additive = true;
+		}
+		if (pIMD->flags & iV_IMD_PREMULTIPLIED)
+		{
+			additive = false;
+			premultiplied = true;
 		}
 
 		/* Get bullet's x coord */
@@ -1323,8 +1331,8 @@ void	renderProjectile(PROJECTILE *psCurr)
 		if (pitchToCamera || rollToCamera)
 		{
 			// Centre on projectile (relevant for twin projectiles).
-			pie_TRANSLATE(pIMD->connectors[1].x, pIMD->connectors[1].y, pIMD->connectors[1].z);
-			camera -= Vector3i(pIMD->connectors[1].x, pIMD->connectors[1].y, pIMD->connectors[1].z);
+			pie_TRANSLATE(pIMD->connectors[0].x, pIMD->connectors[0].y, pIMD->connectors[0].z);
+			camera -= Vector3i(pIMD->connectors[0].x, pIMD->connectors[0].y, pIMD->connectors[0].z);
 		}
 
 		if (pitchToCamera)
@@ -1344,8 +1352,8 @@ void	renderProjectile(PROJECTILE *psCurr)
 		if (pitchToCamera || rollToCamera)
 		{
 			// Undo centre on projectile (relevant for twin projectiles).
-			pie_TRANSLATE(-pIMD->connectors[1].x, -pIMD->connectors[1].y, -pIMD->connectors[1].z);
-			camera -= Vector3i(-pIMD->connectors[1].x, -pIMD->connectors[1].y, -pIMD->connectors[1].z);
+			pie_TRANSLATE(-pIMD->connectors[0].x, -pIMD->connectors[0].y, -pIMD->connectors[0].z);
+			camera -= Vector3i(-pIMD->connectors[0].x, -pIMD->connectors[0].y, -pIMD->connectors[0].z);
 		}
 
 		if (premultiplied)

@@ -1746,12 +1746,9 @@ static void renderExplosionEffect(const EFFECT *psEffect)
 	}
 
 	bool premultiplied = false;
-	if (psEffect->imd->nconnectors >= 1)
+	if (psEffect->imd->flags & iV_IMD_PREMULTIPLIED)
 	{
-		switch (psEffect->imd->connectors[0].y)
-		{
-			case 3: premultiplied = true; break;
-		}
+		premultiplied = true;
 	}
 
 	if (premultiplied)
