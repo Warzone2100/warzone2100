@@ -2209,18 +2209,14 @@ static void drawReadyButton(UDWORD player)
 		return;
 	}
 
-	// draw 'ready' button
-	if (NetPlay.players[player].ready)
-	{
-		addMultiBut(psWScreen, MULTIOP_READY_FORM_ID + player, MULTIOP_READY_START + player, 3, 8, MULTIOP_READY_WIDTH, MULTIOP_READY_HEIGHT,
-		            _("Waiting for other players"), IMAGE_CHECK_ON, IMAGE_CHECK_ON, IMAGE_CHECK_ON_HI);
-	}
-	else
-	{
-		addMultiBut(psWScreen, MULTIOP_READY_FORM_ID + player, MULTIOP_READY_START + player, 3, 8, MULTIOP_READY_WIDTH, MULTIOP_READY_HEIGHT,
-		            _("Click when ready"), IMAGE_CHECK_OFF, IMAGE_CHECK_OFF, IMAGE_CHECK_OFF_HI);
-	}
+	bool isMe = player == selectedPlayer;
+	bool isReady = NetPlay.players[player].ready;
+	char const *const toolTips[2][2] = {{_("Waiting for player"), _("Player is ready")}, {_("Click when ready"), _("Waiting for other players")}};
+	unsigned images[2][2] = {{IMAGE_CHECK_OFF, IMAGE_CHECK_ON}, {IMAGE_CHECK_OFF_HI, IMAGE_CHECK_ON_HI}};
 
+	// draw 'ready' button
+	addMultiBut(psWScreen, MULTIOP_READY_FORM_ID + player, MULTIOP_READY_START + player, 3, 8, MULTIOP_READY_WIDTH, MULTIOP_READY_HEIGHT,
+	            toolTips[isMe][isReady], images[0][isReady], images[0][isReady], images[isMe][isReady]);
 	addText(MULTIOP_READY_START+MAX_PLAYERS+player, 0,10,
 	        _("READY?"), MULTIOP_READY_FORM_ID + player);
 }
