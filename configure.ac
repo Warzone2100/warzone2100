@@ -380,7 +380,8 @@ PKG_CHECK_MODULES([THEORA], [theora >= 1.0])
 
 AS_IF([test "x$enable_sound" = "xyes"],[
 	PKG_CHECK_MODULES([OPENAL], [openal >= 0.0.8])
-	PKG_CHECK_MODULES([OGGVORBIS], [vorbisfile >= 1.1])
+	PKG_CHECK_MODULES([VORBIS], [vorbis >= 1.1])
+	PKG_CHECK_MODULES([VORBISFILE], [vorbisfile >= 1.1])
 ])
 
 PKG_CHECK_MODULES([GLEW], [glew >= 1.5.2])
