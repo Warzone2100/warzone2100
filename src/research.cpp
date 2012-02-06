@@ -1338,7 +1338,7 @@ void cancelResearch(STRUCTURE *psBuilding, QUEUE_MODE mode)
 		if (mode == ModeQueue)
 		{
 			// Tell others that we want to stop researching something.
-			sendResearchStatus(NULL, topicInc, psBuilding->player, false);
+			sendResearchStatus(psBuilding, topicInc, psBuilding->player, false);
 			// Immediately tell the UI that we can research this now. (But don't change the game state.)
 			MakeResearchCancelledPending(pPlayerRes);
 			setStatusPendingCancel(*psResFac);

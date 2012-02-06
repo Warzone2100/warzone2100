@@ -2591,6 +2591,7 @@ static void intProcessStats(UDWORD id)
 					{
 						if (psObjSelected->type == OBJ_STRUCTURE )
 						{
+							// TODO This call seems to be redundant, since cancelResearch is called from objSetStatsFunc==setResearchStats.
 							cancelResearch((STRUCTURE *)psObjSelected, ModeQueue);
 						}
 					}
@@ -5422,7 +5423,6 @@ static bool setResearchStats(BASE_OBJECT *psObj, BASE_STATS *psStats)
 		else
 		{
 			cancelResearch(psBuilding, ModeQueue);
-			setStatusPendingCancel(*psResFacilty);
 		}
 		//stop the button from flashing once a topic has been chosen
 		stopReticuleButtonFlash(IDRET_RESEARCH);
