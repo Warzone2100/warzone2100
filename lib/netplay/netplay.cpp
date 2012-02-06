@@ -1698,7 +1698,7 @@ bool NETrecvNet(NETQUEUE *queue, uint8_t *type)
 			{
 				// Send message type specifically for dropped / disconnects
 				NETplayerDropped(current);
-				NetPlay.players[current].kick = true;           // they are going to get kicked.
+				connected_bsocket[current] = NULL;		// clear their socket
 			}
 		}
 	}

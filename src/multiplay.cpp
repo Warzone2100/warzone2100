@@ -660,7 +660,10 @@ bool recvMessage(void)
 
 			debug(LOG_INFO,"** player %u has dropped!", player_id);
 
-			MultiPlayerLeave(player_id);		// get rid of their stuff
+			if (NetPlay.players[player_id].allocated)
+				{
+					MultiPlayerLeave(player_id);		// get rid of their stuff
+				}
 			NETsetPlayerConnectionStatus(CONNECTIONSTATUS_PLAYER_DROPPED, player_id);
 			break;
 		}
