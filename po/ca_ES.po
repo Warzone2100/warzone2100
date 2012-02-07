@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100-master_20110320qt\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2012-01-29 18:12+0100\n"
+"POT-Creation-Date: 2012-02-07 18:40+0100\n"
 "PO-Revision-Date: 2011-04-03 19:45+0200\n"
 "Last-Translator: Àngel Mompó <mecatxis@gmail.com>\n"
 "Language-Team:   <ca@dodds.net>\n"
@@ -10235,16 +10235,16 @@ msgid "OpenGL 1.4 is not supported by your system. The game requires this. Pleas
 msgstr ""
 
 #: lib/netplay/netplay.cpp:193
-#: lib/netplay/netplay.cpp:1023
+#: lib/netplay/netplay.cpp:1024
 msgid "Enter password here"
 msgstr "Fiqueu la contrasenya aquí"
 
-#: lib/netplay/netplay.cpp:2017
+#: lib/netplay/netplay.cpp:2019
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr "No s'ha pogut resoldre el nom del servidor mestre (%s)!"
 
-#: lib/netplay/netplay.cpp:2039
+#: lib/netplay/netplay.cpp:2041
 #, c-format
 msgid ""
 "Error connecting to the lobby server: %s.\n"
@@ -10253,7 +10253,7 @@ msgid ""
 " or to forward the port to your system."
 msgstr ""
 
-#: lib/netplay/netplay.cpp:2679
+#: lib/netplay/netplay.cpp:2702
 msgid "Failed to get a lobby response!"
 msgstr ""
 
@@ -10303,10 +10303,10 @@ msgstr "Desa la partida"
 
 #: src/challenge.cpp:222
 #: src/hci.cpp:918
-#: src/hci.cpp:3360
-#: src/hci.cpp:3483
-#: src/hci.cpp:3882
-#: src/hci.cpp:4891
+#: src/hci.cpp:3361
+#: src/hci.cpp:3484
+#: src/hci.cpp:3883
+#: src/hci.cpp:4892
 #: src/intelmap.cpp:531
 #: src/intorder.cpp:727
 #: src/loadsave.cpp:240
@@ -10617,20 +10617,20 @@ msgstr "Sistemes"
 msgid "Delete Template"
 msgstr ""
 
-#: src/display3d.cpp:649
+#: src/display3d.cpp:651
 msgid "Player left"
 msgstr "Ha marxat un jugador"
 
-#: src/display3d.cpp:653
+#: src/display3d.cpp:655
 msgid "Player dropped"
 msgstr "Ha caigut un jugador"
 
-#: src/display3d.cpp:657
-#: src/multiint.cpp:2210
+#: src/display3d.cpp:659
+#: src/multiint.cpp:2206
 msgid "Waiting for other players"
 msgstr "S'està esperant els altres jugadors"
 
-#: src/display3d.cpp:662
+#: src/display3d.cpp:664
 msgid "Out of sync"
 msgstr "S'ha perdut el sincronisme"
 
@@ -10746,7 +10746,7 @@ msgid "Tutorial"
 msgstr "Aprenentatge"
 
 #: src/frontend.cpp:110
-#: src/hci.cpp:3469
+#: src/hci.cpp:3470
 msgid "Options"
 msgstr "Opcions"
 
@@ -10834,7 +10834,7 @@ msgid "TCP PORT 2100 MUST BE OPENED IN YOUR FIREWALL / ROUTER TO HOST GAMES!"
 msgstr ""
 
 #: src/frontend.cpp:444
-#: src/multiint.cpp:1385
+#: src/multiint.cpp:1391
 msgid "OPTIONS"
 msgstr "OPCIONS"
 
@@ -10917,7 +10917,7 @@ msgstr ""
 
 #: src/frontend.cpp:543
 #: src/frontend.cpp:682
-#: src/multiplay.cpp:1923
+#: src/multiplay.cpp:1926
 msgid "Black"
 msgstr "Negre"
 
@@ -11048,7 +11048,7 @@ msgstr "Dificultat"
 #: src/frontend.cpp:1198
 #: src/frontend.cpp:1273
 #: src/frontend.cpp:1310
-#: src/multiint.cpp:212
+#: src/multiint.cpp:213
 msgid "Easy"
 msgstr "Fàcil"
 
@@ -11061,7 +11061,7 @@ msgstr "Normal"
 #: src/frontend.cpp:1205
 #: src/frontend.cpp:1279
 #: src/frontend.cpp:1306
-#: src/multiint.cpp:212
+#: src/multiint.cpp:213
 msgid "Hard"
 msgstr "Difícil"
 
@@ -11103,7 +11103,7 @@ msgid "GAME OPTIONS"
 msgstr "OPCIONS DE JOC"
 
 #: src/frontend.cpp:1399
-#: src/multiint.cpp:2476
+#: src/multiint.cpp:2470
 msgid "Mod: "
 msgstr "Mod:"
 
@@ -11137,152 +11137,152 @@ msgstr "El jugador %u està fent trampes (mode depuració) amb un nou ciborg: %s
 msgid "Player %u is cheating (debug menu) him/herself a new droid."
 msgstr "El jugador %u està fent trampes (mode depuració) amb un nou ciborg."
 
-#: src/hci.cpp:3280
+#: src/hci.cpp:3281
 msgid "Commanders (F6)"
 msgstr "Comandants (F6)"
 
-#: src/hci.cpp:3293
+#: src/hci.cpp:3294
 msgid "Intelligence Display (F5)"
 msgstr "Pantalla d'intel·ligència (F5)"
 
-#: src/hci.cpp:3306
+#: src/hci.cpp:3307
 msgid "Manufacture (F1)"
 msgstr "Fabricació (F1)"
 
-#: src/hci.cpp:3319
+#: src/hci.cpp:3320
 msgid "Design (F4)"
 msgstr "Disseny (F4)"
 
-#: src/hci.cpp:3332
+#: src/hci.cpp:3333
 msgid "Research (F2)"
 msgstr "Recerca (F2)"
 
-#: src/hci.cpp:3345
+#: src/hci.cpp:3346
 msgid "Build (F3)"
 msgstr "Construcció (F3)"
 
-#: src/hci.cpp:3416
-#: src/multiint.cpp:1489
+#: src/hci.cpp:3417
+#: src/multiint.cpp:1495
 #: src/multimenu.cpp:799
 msgid "Power"
 msgstr "Energia"
 
-#: src/hci.cpp:3507
+#: src/hci.cpp:3508
 msgid "Map:"
 msgstr "Mapa:"
 
-#: src/hci.cpp:3520
+#: src/hci.cpp:3521
 msgid "Load"
 msgstr "Carrega"
 
-#: src/hci.cpp:3521
+#: src/hci.cpp:3522
 msgid "Load Map File"
 msgstr "Carrega un fitxer de mapa"
 
-#: src/hci.cpp:3528
+#: src/hci.cpp:3529
 msgid "Save"
 msgstr "Desa"
 
-#: src/hci.cpp:3529
+#: src/hci.cpp:3530
 msgid "Save Map File"
 msgstr "Desa un fitxer de mapa"
 
-#: src/hci.cpp:3537
+#: src/hci.cpp:3538
 msgid "New"
 msgstr "Nou"
 
-#: src/hci.cpp:3538
+#: src/hci.cpp:3539
 msgid "New Blank Map"
 msgstr "Nou mapa buit"
 
-#: src/hci.cpp:3574
+#: src/hci.cpp:3575
 msgid "Tile"
 msgstr "Rajola"
 
-#: src/hci.cpp:3575
+#: src/hci.cpp:3576
 msgid "Place tiles on map"
 msgstr "Posa rajoles al mapa"
 
-#: src/hci.cpp:3584
+#: src/hci.cpp:3585
 msgid "Unit"
 msgstr "Unitat"
 
-#: src/hci.cpp:3585
+#: src/hci.cpp:3586
 msgid "Place Unit on map"
 msgstr "Posa unitats al mapa"
 
-#: src/hci.cpp:3593
+#: src/hci.cpp:3594
 msgid "Struct"
 msgstr "Estructura"
 
-#: src/hci.cpp:3594
+#: src/hci.cpp:3595
 msgid "Place Structures on map"
 msgstr "Posa estructures al mapa"
 
-#: src/hci.cpp:3602
+#: src/hci.cpp:3603
 msgid "Feat"
 msgstr "Funció"
 
-#: src/hci.cpp:3603
+#: src/hci.cpp:3604
 msgid "Place Features on map"
 msgstr "Posa una nova funció al mapa"
 
-#: src/hci.cpp:3613
+#: src/hci.cpp:3614
 msgid "Pause"
 msgstr "Pausa"
 
-#: src/hci.cpp:3614
+#: src/hci.cpp:3615
 msgid "Pause or unpause the game"
 msgstr "Posa o treu la pausa de la partida"
 
-#: src/hci.cpp:3628
+#: src/hci.cpp:3629
 msgid "Align height of all map objects"
 msgstr "Alinea l'alçada de tots els objectes del mapa"
 
-#: src/hci.cpp:3638
+#: src/hci.cpp:3639
 msgid "Edit"
 msgstr "Edita"
 
-#: src/hci.cpp:3639
+#: src/hci.cpp:3640
 msgid "Start Edit Mode"
 msgstr "Inicia el mode d'edició"
 
-#: src/hci.cpp:3653
+#: src/hci.cpp:3654
 #: src/ingameop.cpp:113
 #: src/ingameop.cpp:257
 #: src/ingameop.cpp:261
 msgid "Quit"
 msgstr "Surt"
 
-#: src/hci.cpp:3654
+#: src/hci.cpp:3655
 msgid "Exit Game"
 msgstr "Surt de la partida"
 
-#: src/hci.cpp:3680
+#: src/hci.cpp:3681
 msgid "Current Player:"
 msgstr "Jugador actual:"
 
-#: src/hci.cpp:3959
+#: src/hci.cpp:3960
 msgid "Progress Bar"
 msgstr "Barra de progrés"
 
-#: src/hci.cpp:4816
+#: src/hci.cpp:4817
 msgid "Factory Delivery Point"
 msgstr "Punt de lliurament de la fàbrica"
 
-#: src/hci.cpp:4834
+#: src/hci.cpp:4835
 msgid "Loop Production"
 msgstr "Producció en bucle"
 
-#: src/hci.cpp:4914
+#: src/hci.cpp:4915
 msgid "Tab Scroll left"
 msgstr "Desplaça la pestanya a l'esquerra"
 
-#: src/hci.cpp:4929
+#: src/hci.cpp:4930
 msgid "Tab Scroll right"
 msgstr "Desplaça la pestanya a la dreta"
 
-#: src/hci.cpp:5158
+#: src/hci.cpp:5159
 msgid "Ally progress"
 msgstr "Progrés aliat"
 
@@ -11747,9 +11747,9 @@ msgid "KEY MAPPING"
 msgstr "MAPATGE DE TECLES"
 
 #: src/keyedit.cpp:377
-#: src/multiint.cpp:712
-#: src/multiint.cpp:1178
-#: src/multiint.cpp:1575
+#: src/multiint.cpp:718
+#: src/multiint.cpp:1184
+#: src/multiint.cpp:1581
 msgid "Return To Previous Screen"
 msgstr "Torna a la pantalla anterior"
 
@@ -12302,452 +12302,463 @@ msgstr "%s us entrega documents sobre tecnologia"
 msgid "%s Gives You %u Power"
 msgstr "%s us dona %u punts d'energia"
 
-#: src/multigifts.cpp:362
+#: src/multigifts.cpp:363
 #, c-format
 msgid "%s Requests An Alliance With You"
 msgstr "%s us demana si us voleu aliar amb ell"
 
-#: src/multigifts.cpp:371
+#: src/multigifts.cpp:372
 #, c-format
 msgid "You Invite %s To Form An Alliance"
 msgstr "Heu convidat a %s a formar una aliança"
 
-#: src/multigifts.cpp:392
+#: src/multigifts.cpp:393
 #, c-format
 msgid "%s Breaks The Alliance With %s"
 msgstr "%s ha trencat l'aliança amb %s"
 
-#: src/multigifts.cpp:421
+#: src/multigifts.cpp:423
 #, c-format
 msgid "%s Forms An Alliance With %s"
 msgstr "%s S'ha aliat amb %s"
 
-#: src/multigifts.cpp:747
+#: src/multigifts.cpp:744
 #, c-format
 msgid "You Discover Blueprints For %s"
 msgstr "Heu descobert traces de %s"
 
-#: src/multiint.cpp:212
+#: src/multiint.cpp:213
 #, fuzzy
 msgid "Medium"
 msgstr "Velocitat: Mitjana"
 
-#: src/multiint.cpp:212
+#: src/multiint.cpp:213
 msgid "Insane"
 msgstr ""
 
-#: src/multiint.cpp:650
+#: src/multiint.cpp:656
 #: src/multilimit.cpp:190
 msgid "Accept Settings"
 msgstr "Accepta la configuració"
 
-#: src/multiint.cpp:652
-#: src/multiint.cpp:1225
+#: src/multiint.cpp:658
+#: src/multiint.cpp:1231
 msgid "Cancel"
 msgstr "Cancela"
 
-#: src/multiint.cpp:663
+#: src/multiint.cpp:669
 msgid "IP Address or Machine Name"
 msgstr "Adreça IP o nom de la màquina"
 
-#: src/multiint.cpp:709
+#: src/multiint.cpp:715
 msgid "CONNECTION"
 msgstr "CONNEXIÓ"
 
-#: src/multiint.cpp:714
+#: src/multiint.cpp:720
 msgid "Lobby"
 msgstr "Sala"
 
-#: src/multiint.cpp:715
+#: src/multiint.cpp:721
 msgid "IP"
 msgstr "IP"
 
-#: src/multiint.cpp:934
+#: src/multiint.cpp:940
 #, fuzzy
 msgid "[Password required]"
 msgstr "*** ara NO cal contrassenya! ***"
 
-#: src/multiint.cpp:938
+#: src/multiint.cpp:944
 msgid "[No Tanks]"
 msgstr ""
 
-#: src/multiint.cpp:942
+#: src/multiint.cpp:948
 #, fuzzy
 msgid "[No Cyborgs]"
 msgstr "Fabrica ciborgs"
 
-#: src/multiint.cpp:946
+#: src/multiint.cpp:952
 msgid "[No VTOLs]"
 msgstr ""
 
-#: src/multiint.cpp:950
+#: src/multiint.cpp:956
 #, c-format
 msgid "Hosted by %s"
 msgstr ""
 
-#: src/multiint.cpp:954
+#: src/multiint.cpp:960
 #, c-format
 msgid "Hosted by %s —%s"
 msgstr ""
 
-#: src/multiint.cpp:974
+#: src/multiint.cpp:980
 msgid "No games are available"
 msgstr "No hi ha partides disponibles"
 
-#: src/multiint.cpp:977
+#: src/multiint.cpp:983
 msgid "Game is full"
 msgstr "La partida està plena"
 
-#: src/multiint.cpp:981
+#: src/multiint.cpp:987
 msgid "You were kicked!"
 msgstr "Us han fet fora!"
 
-#: src/multiint.cpp:984
+#: src/multiint.cpp:990
 msgid "Wrong Game Version!"
 msgstr "Versió del joc equivocada!"
 
-#: src/multiint.cpp:987
+#: src/multiint.cpp:993
 msgid "You have an incompatible mod."
 msgstr "Teniu un modificador incompatible"
 
-#: src/multiint.cpp:991
+#: src/multiint.cpp:997
 msgid "Host couldn't send file?"
 msgstr "L'amfitrió no us ha pogut enviar el fitxer?"
 
-#: src/multiint.cpp:995
+#: src/multiint.cpp:1001
 msgid "Incorrect Password!"
 msgstr "Contrasenya incorrecta!"
 
-#: src/multiint.cpp:998
+#: src/multiint.cpp:1004
 msgid "Host has dropped connection!"
 msgstr "S'ha perdut la connexió amb l'amfitrió!"
 
-#: src/multiint.cpp:1002
+#: src/multiint.cpp:1008
 msgid "Connection Error"
 msgstr "Error de connexió"
 
-#: src/multiint.cpp:1106
+#: src/multiint.cpp:1112
 msgid "Searching"
 msgstr "Buscant"
 
-#: src/multiint.cpp:1175
+#: src/multiint.cpp:1181
 msgid "GAMES"
 msgstr "JOCS"
 
-#: src/multiint.cpp:1183
+#: src/multiint.cpp:1189
 msgid "Refresh Games List"
 msgstr "Refresca la llista de partides"
 
-#: src/multiint.cpp:1205
+#: src/multiint.cpp:1211
 msgid "Enter Password:"
 msgstr "Introdueix la contrasenya:"
 
-#: src/multiint.cpp:1223
+#: src/multiint.cpp:1229
 msgid "OK"
 msgstr "D'ACORD"
 
-#: src/multiint.cpp:1341
+#: src/multiint.cpp:1347
 msgid "Tanks disabled!!"
 msgstr "Tancs deshabilitats!!"
 
-#: src/multiint.cpp:1342
+#: src/multiint.cpp:1348
 msgid "Cyborgs disabled."
 msgstr "Ciborgs deshabilitats"
 
-#: src/multiint.cpp:1343
+#: src/multiint.cpp:1349
 msgid "VTOLs disabled."
 msgstr "Convertiplans deshabilitats."
 
-#: src/multiint.cpp:1390
-#: src/multiint.cpp:1399
+#: src/multiint.cpp:1396
+#: src/multiint.cpp:1405
 msgid "Select Game Name"
 msgstr "Selecciona el nom de la partida"
 
-#: src/multiint.cpp:1391
+#: src/multiint.cpp:1397
 msgid "One-Player Skirmish"
 msgstr "Batussa d'un jugador"
 
-#: src/multiint.cpp:1402
+#: src/multiint.cpp:1408
 msgid "Select Map"
 msgstr "Selecciona el mapa"
 
-#: src/multiint.cpp:1410
+#: src/multiint.cpp:1416
 msgid "Click to set Password"
 msgstr "Clica per posar una contrasenya"
 
-#: src/multiint.cpp:1420
-#: src/multiint.cpp:1421
+#: src/multiint.cpp:1426
+#: src/multiint.cpp:1427
 msgid "Scavengers"
 msgstr "Carronyaires"
 
-#: src/multiint.cpp:1423
+#: src/multiint.cpp:1429
 msgid "No Scavengers"
 msgstr "Sense carronyaires"
 
-#: src/multiint.cpp:1453
+#: src/multiint.cpp:1459
 msgid "Select Player Name"
 msgstr "Selecciona el nom del jugador"
 
-#: src/multiint.cpp:1456
+#: src/multiint.cpp:1462
 #: src/multimenu.cpp:792
 msgid "Alliances"
 msgstr "Aliances"
 
-#: src/multiint.cpp:1459
+#: src/multiint.cpp:1465
 msgid "No Alliances"
 msgstr "Sense aliances"
 
-#: src/multiint.cpp:1461
+#: src/multiint.cpp:1467
 msgid "Allow Alliances"
 msgstr "Permet aliances"
 
-#: src/multiint.cpp:1465
+#: src/multiint.cpp:1471
 msgid "Locked Teams"
 msgstr "Equips tancats"
 
-#: src/multiint.cpp:1491
+#: src/multiint.cpp:1497
 msgid "Low Power Levels"
 msgstr "Nivell baix d'energia"
 
-#: src/multiint.cpp:1493
+#: src/multiint.cpp:1499
 msgid "Medium Power Levels"
 msgstr "Nivell mig d'energia"
 
-#: src/multiint.cpp:1495
+#: src/multiint.cpp:1501
 msgid "High Power Levels"
 msgstr "Nivell alt d'energia"
 
-#: src/multiint.cpp:1527
+#: src/multiint.cpp:1533
 msgid "Base"
 msgstr "Base"
 
-#: src/multiint.cpp:1529
+#: src/multiint.cpp:1535
 msgid "Start with No Bases"
 msgstr "Comença sense bases"
 
-#: src/multiint.cpp:1531
+#: src/multiint.cpp:1537
 msgid "Start with Bases"
 msgstr "Comença amb bases"
 
-#: src/multiint.cpp:1533
+#: src/multiint.cpp:1539
 msgid "Start with Advanced Bases"
 msgstr "Comença amb bases avançades"
 
-#: src/multiint.cpp:1565
+#: src/multiint.cpp:1571
 msgid "Map Preview"
 msgstr "Mostra el mapa"
 
-#: src/multiint.cpp:1567
+#: src/multiint.cpp:1573
 msgid "Click to see Map"
 msgstr "Feu clic per veure el mapa"
 
-#: src/multiint.cpp:1581
+#: src/multiint.cpp:1587
 msgid "Start Hosting Game"
 msgstr "Comença a hostatjar la partida"
 
-#: src/multiint.cpp:1589
+#: src/multiint.cpp:1595
 msgid "Show Structure Limits"
 msgstr "Mostra els límits d'estructures"
 
-#: src/multiint.cpp:1589
+#: src/multiint.cpp:1595
 msgid "Set Structure Limits"
 msgstr "Configura els límits d'estructures"
 
-#: src/multiint.cpp:1667
+#: src/multiint.cpp:1673
 msgid "DIFFICULTY"
 msgstr "DIFICULTAT"
 
-#: src/multiint.cpp:1681
+#: src/multiint.cpp:1687
 msgid "Less aggressive"
 msgstr ""
 
-#: src/multiint.cpp:1682
+#: src/multiint.cpp:1688
 msgid "Plays nice"
 msgstr "Juga bé"
 
-#: src/multiint.cpp:1683
+#: src/multiint.cpp:1689
 msgid "No holds barred"
 msgstr "Sense limitacions"
 
-#: src/multiint.cpp:1684
+#: src/multiint.cpp:1690
 #, fuzzy
 msgid "Starts with advantages"
 msgstr "Comença amb bases avançades"
 
-#: src/multiint.cpp:1712
+#: src/multiint.cpp:1718
 msgid "CHOOSE AI"
 msgstr "ESCULL IA"
 
-#: src/multiint.cpp:1728
+#: src/multiint.cpp:1734
 msgid "Allow human players to join in this slot"
 msgstr "Permet a jugadors humans unir-se en aquest espai"
 
-#: src/multiint.cpp:1736
+#: src/multiint.cpp:1742
 msgid "Leave this slot unused"
 msgstr "Deixa buit aquest espai"
 
-#: src/multiint.cpp:2150
+#: src/multiint.cpp:2148
 msgid "Team"
 msgstr "Equip"
 
-#: src/multiint.cpp:2193
+#: src/multiint.cpp:2191
 msgid "You cannot change difficulty in a challenge"
 msgstr "No podeu canviar la dificultat en un desafiament"
 
-#: src/multiint.cpp:2193
+#: src/multiint.cpp:2191
 msgid "Click to change difficulty"
 msgstr "Feu clic per canviar la dificultat"
 
-#: src/multiint.cpp:2215
+#: src/multiint.cpp:2206
+#, fuzzy
+msgid "Waiting for player"
+msgstr "S'està esperant els altres jugadors"
+
+#: src/multiint.cpp:2206
+#, fuzzy
+msgid "Player is ready"
+msgstr "Ha caigut un jugador"
+
+#: src/multiint.cpp:2206
 msgid "Click when ready"
 msgstr "Feu clic quan estigueu preparat"
 
-#: src/multiint.cpp:2219
+#: src/multiint.cpp:2213
 msgid "READY?"
 msgstr "PREPARAT?"
 
-#: src/multiint.cpp:2263
+#: src/multiint.cpp:2257
 msgid "PLAYERS"
 msgstr "JUGADORS"
 
-#: src/multiint.cpp:2298
+#: src/multiint.cpp:2292
 msgid "Click to change to this slot"
 msgstr "Feu clic per canviar aquest espai"
 
-#: src/multiint.cpp:2326
+#: src/multiint.cpp:2320
 msgid "Choose Team"
 msgstr "Escolliu equip"
 
-#: src/multiint.cpp:2356
+#: src/multiint.cpp:2350
 msgid "Click to change player colour"
 msgstr "Feu clic per canviar el color del jugador"
 
-#: src/multiint.cpp:2384
+#: src/multiint.cpp:2378
 msgid "Click to change player position"
 msgstr "Feu clic per canviar la posició del jugador"
 
-#: src/multiint.cpp:2388
+#: src/multiint.cpp:2382
 msgid "Click to change AI"
 msgstr "Feu clic per canviar la IA"
 
-#: src/multiint.cpp:2449
+#: src/multiint.cpp:2443
 msgid "CHAT"
 msgstr "XAT"
 
-#: src/multiint.cpp:2481
+#: src/multiint.cpp:2475
 msgid "All players need to have the same mods to join your game."
 msgstr "Tots els jugadors han de tenir els mateixos modificadors per unir-se a la partida."
 
-#: src/multiint.cpp:2522
+#: src/multiint.cpp:2516
 msgid "Connecting to the lobby server..."
 msgstr ""
 
-#: src/multiint.cpp:2675
+#: src/multiint.cpp:2663
 #, c-format
 msgid "*** password [%s] is now required! ***"
 msgstr "*** ara cal la contrassenya [%s] ***"
 
-#: src/multiint.cpp:2683
+#: src/multiint.cpp:2671
 msgid "*** password is NOT required! ***"
 msgstr "*** ara NO cal contrassenya! ***"
 
-#: src/multiint.cpp:2898
+#: src/multiint.cpp:2886
 msgid "Sorry! Failed to host the game."
 msgstr "Ho lamento! No s'ha pogut crear la partida."
 
-#: src/multiint.cpp:3019
+#: src/multiint.cpp:3007
 msgid "'Locked Teams' mode enabled"
 msgstr "S'ha habilitat el mode «equips tancats»"
 
-#: src/multiint.cpp:3103
+#: src/multiint.cpp:3091
 #, c-format
 msgid "The host has kicked %s from the game!"
 msgstr "L'amfitrió ha fet fora %s de la partida!"
 
-#: src/multiint.cpp:3169
+#: src/multiint.cpp:3157
 msgid "Host is Starting Game"
 msgstr "L'amfitrió està iniciant la partida"
 
-#: src/multiint.cpp:3716
+#: src/multiint.cpp:3704
 msgid "Can't connect to lobby server!"
 msgstr ""
 
-#: src/multiint.cpp:3803
+#: src/multiint.cpp:3791
 #, c-format
 msgid "Mods: %s"
 msgstr ""
 
-#: src/multiint.cpp:3810
+#: src/multiint.cpp:3798
 msgid "Mods: None!"
 msgstr ""
 
-#: src/multiint.cpp:3820
+#: src/multiint.cpp:3808
 #, fuzzy, c-format
 msgid "Version: %s"
 msgstr "Versió %s%s%s%s"
 
-#: src/multiint.cpp:3871
+#: src/multiint.cpp:3859
 #, fuzzy, c-format
 msgid "Click to take player slot %d"
 msgstr "Feu clic per canviar el color del jugador"
 
-#: src/multiint.cpp:3880
-#: src/multiint.cpp:4073
+#: src/multiint.cpp:3868
+#: src/multiint.cpp:4061
 msgid "Open"
 msgstr ""
 
-#: src/multiint.cpp:3880
-#: src/multiint.cpp:4074
+#: src/multiint.cpp:3868
+#: src/multiint.cpp:4062
 #, fuzzy
 msgid "Closed"
 msgstr "Tanca"
 
-#: src/multiint.cpp:3931
+#: src/multiint.cpp:3919
 #, c-format
 msgid "Sending Map: %d%% "
 msgstr "S'està enviant el mapa: %d%%"
 
-#: src/multiint.cpp:3939
+#: src/multiint.cpp:3927
 #, c-format
 msgid "Map: %d%% downloaded"
 msgstr "Mapa: %d%% descarregat"
 
-#: src/multiint.cpp:3965
+#: src/multiint.cpp:3953
 msgid "HOST"
 msgstr "AMFITRIÓ"
 
-#: src/multiint.cpp:3972
+#: src/multiint.cpp:3960
 #: src/multimenu.cpp:808
 msgid "Ping"
 msgstr "Ping"
 
-#: src/multijoin.cpp:100
 #: src/multijoin.cpp:101
+#: src/multijoin.cpp:102
 msgid "Players Still Joining"
 msgstr "Els jugadors encara s'estan unint"
 
-#: src/multijoin.cpp:236
+#: src/multijoin.cpp:269
 #, c-format
 msgid "%s has Left the Game"
 msgstr "%s ha deixat la partida"
 
-#: src/multijoin.cpp:254
+#: src/multijoin.cpp:287
 #, c-format
 msgid "File transfer has been aborted for %d."
 msgstr "%d ha avortat la transferència de fitxers "
 
-#: src/multijoin.cpp:372
+#: src/multijoin.cpp:405
 #, c-format
 msgid "%s (%u) has an incompatible mod, and has been kicked."
 msgstr "%s (%u) té un modificador incompatible i ha estat expulsat."
 
-#: src/multijoin.cpp:411
-#, c-format
-msgid "%s is Joining the Game"
+#: src/multijoin.cpp:446
+#, fuzzy, c-format
+msgid "%s is joining the game"
 msgstr "%s s'està unint a la partida"
 
-#: src/multijoin.cpp:421
-msgid "System message:"
+#: src/multijoin.cpp:457
+#, fuzzy
+msgid "Server message:"
 msgstr "missatge del sistema:"
 
 #: src/multilimit.cpp:183
@@ -12827,75 +12838,75 @@ msgstr "Dona energia al jugador"
 msgid "Kicking player %s, because they tried to bypass data integrity check!"
 msgstr "S'expulsa al jugador %s per que s'ha saltat la comprovació de la integritat de dades!"
 
-#: src/multiplay.cpp:1032
+#: src/multiplay.cpp:1035
 msgid "(allies"
 msgstr "(aliats"
 
-#: src/multiplay.cpp:1040
+#: src/multiplay.cpp:1043
 msgid "(private to "
 msgstr "(privat a "
 
-#: src/multiplay.cpp:1053
+#: src/multiplay.cpp:1056
 msgid "[invalid]"
 msgstr "[no és vàlid]"
 
-#: src/multiplay.cpp:1920
+#: src/multiplay.cpp:1923
 msgid "Green"
 msgstr "Verd"
 
-#: src/multiplay.cpp:1921
+#: src/multiplay.cpp:1924
 msgid "Orange"
 msgstr "Taronja"
 
-#: src/multiplay.cpp:1922
+#: src/multiplay.cpp:1925
 msgid "Grey"
 msgstr "Gris"
 
-#: src/multiplay.cpp:1924
+#: src/multiplay.cpp:1927
 msgid "Red"
 msgstr "Vermell"
 
-#: src/multiplay.cpp:1925
+#: src/multiplay.cpp:1928
 msgid "Blue"
 msgstr "Blau"
 
-#: src/multiplay.cpp:1926
+#: src/multiplay.cpp:1929
 msgid "Pink"
 msgstr "Rosa"
 
-#: src/multiplay.cpp:1927
+#: src/multiplay.cpp:1930
 msgid "Cyan"
 msgstr "Cian"
 
-#: src/multiplay.cpp:1928
+#: src/multiplay.cpp:1931
 msgid "Yellow"
 msgstr "Groc"
 
-#: src/multiplay.cpp:1929
+#: src/multiplay.cpp:1932
 msgid "Purple"
 msgstr "Porpra"
 
-#: src/multiplay.cpp:1930
+#: src/multiplay.cpp:1933
 msgid "White"
 msgstr "Blanc"
 
-#: src/multiplay.cpp:1931
+#: src/multiplay.cpp:1934
 msgid "Bright blue"
 msgstr "Blau cel"
 
-#: src/multiplay.cpp:1932
+#: src/multiplay.cpp:1935
 msgid "Neon green"
 msgstr "Verd fluorescent"
 
-#: src/multiplay.cpp:1933
+#: src/multiplay.cpp:1936
 msgid "Infrared"
 msgstr "Infraroig"
 
-#: src/multiplay.cpp:1934
+#: src/multiplay.cpp:1937
 msgid "Ultraviolet"
 msgstr "Ultravioleta"
 
-#: src/multiplay.cpp:1935
+#: src/multiplay.cpp:1938
 msgid "Brown"
 msgstr "Marró"
 
@@ -12903,12 +12914,12 @@ msgstr "Marró"
 msgid "We can't do that! We must be a Cyborg unit to use a Cyborg Transport!"
 msgstr "No ho podem fer! Hem de ser una unitat ciborg per utilitzar un transport ciborg!"
 
-#: src/qtscriptfuncs.cpp:1481
+#: src/qtscriptfuncs.cpp:1514
 #: src/scriptfuncs.cpp:3259
 msgid "YOU ARE VICTORIOUS!"
 msgstr "HEU GUANYAT!"
 
-#: src/qtscriptfuncs.cpp:1486
+#: src/qtscriptfuncs.cpp:1519
 #: src/scriptfuncs.cpp:3263
 msgid "YOU WERE DEFEATED!"
 msgstr "HEU ESTAT DERROTAT!"
