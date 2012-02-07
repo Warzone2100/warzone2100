@@ -60,6 +60,9 @@ extern bool structDoubleCheck(BASE_STATS *psStat,UDWORD xx,UDWORD yy, SDWORD max
 extern Vector2i positions[MAX_PLAYERS];
 extern std::vector<Vector2i> derricks;
 
+#define SCRIPT_ASSERT_PLAYER(_context, _player) \
+	SCRIPT_ASSERT(_context, _player >= 0 && _player < MAX_PLAYERS, "Invalid player index %d", _player);
+
 // ----------------------------------------------------------------------------------------
 // Utility functions -- not called directly from scripts
 
@@ -445,7 +448,7 @@ static QScriptValue js_enumBlips(QScriptContext *context, QScriptEngine *engine)
 {
 	QList<Position> matches;
 	int player = context->argument(0).toInt32();
-	SCRIPT_ASSERT(context, player >= 0 && player < game.maxPlayers, "Invalid player index %d", player);
+	SCRIPT_ASSERT_PLAYER(context, player);
 	for (BASE_OBJECT *psSensor = apsSensorList[0]; psSensor; psSensor = psSensor->psNextFunc)
 	{
 		if (psSensor->visible[player] > 0 && psSensor->visible[player] < UBYTE_MAX)
@@ -671,6 +674,7 @@ static QScriptValue js_componentAvailable(QScriptContext *context, QScriptEngine
 static QScriptValue js_addDroid(QScriptContext *context, QScriptEngine *engine)
 {
 	int player = context->argument(0).toInt32();
+	SCRIPT_ASSERT_PLAYER(context, player);
 	int x = context->argument(1).toInt32();
 	int y = context->argument(2).toInt32();
 	QString templName = context->argument(3).toString();
@@ -981,7 +985,7 @@ static QScriptValue js_enumStruct(QScriptContext *context, QScriptEngine *engine
 	case 0: player = engine->globalObject().property("me").toInt32();
 	}
 
-	SCRIPT_ASSERT(context, player < MAX_PLAYERS && player >= 0, "Target player index out of range: %d", player);
+	SCRIPT_ASSERT_PLAYER(context, player);
 	SCRIPT_ASSERT(context, looking < MAX_PLAYERS && looking >= -1, "Looking player index out of range: %d", looking);
 	for (STRUCTURE *psStruct = apsStructLists[player]; psStruct; psStruct = psStruct->psNext)
 	{
@@ -1047,7 +1051,7 @@ static QScriptValue js_enumDroid(QScriptContext *context, QScriptEngine *engine)
 	case 0: player = engine->globalObject().property("me").toInt32();
 	}
 
-	SCRIPT_ASSERT(context, player < MAX_PLAYERS && player >= 0, "Target player index out of range: %d", player);
+	SCRIPT_ASSERT_PLAYER(context, player);
 	SCRIPT_ASSERT(context, looking < MAX_PLAYERS && looking >= -1, "Looking player index out of range: %d", looking);
 	for (DROID *psDroid = apsDroidLists[player]; psDroid; psDroid = psDroid->psNext)
 	{
@@ -1108,7 +1112,7 @@ static QScriptValue js_pickStructLocation(QScriptContext *context, QScriptEngine
 
 	SCRIPT_ASSERT(context, psDroid, "No such droid id %d belonging to player %d", id, player);
 	SCRIPT_ASSERT(context, psStat, "No such stat found: %s", statName.toUtf8().constData());
-	SCRIPT_ASSERT(context, player < MAX_PLAYERS && player >= 0, "Invalid player number %d", player);
+	SCRIPT_ASSERT_PLAYER(context, player);
 	SCRIPT_ASSERT(context, startX >= 0 && startX < mapWidth && startY >= 0 && startY < mapHeight, "Bad position (%d, %d)", startX, startY);
 
 	if (context->argumentCount() > 4) // final optional argument
@@ -1461,7 +1465,7 @@ static QScriptValue js_setStructureLimits(QScriptContext *context, QScriptEngine
 	{
 		player = engine->globalObject().property("me").toInt32();
 	}
-	SCRIPT_ASSERT(context, player < MAX_PLAYERS && player >= 0, "Invalid player number");
+	SCRIPT_ASSERT_PLAYER(context, player);
 	SCRIPT_ASSERT(context, limit < LOTS_OF && limit >= 0, "Invalid limit");
 	SCRIPT_ASSERT(context, structInc < numStructureStats && structInc >= 0, "Invalid structure");
 
@@ -1615,6 +1619,7 @@ static QScriptValue js_setPower(QScriptContext *context, QScriptEngine *engine)
 	if (context->argumentCount() > 1)
 	{
 		player = context->argument(1).toInt32();
+		SCRIPT_ASSERT_PLAYER(context, player);
 	}
 	else
 	{
@@ -1635,6 +1640,7 @@ static QScriptValue js_enableStructure(QScriptContext *context, QScriptEngine *e
 	if (context->argumentCount() > 1)
 	{
 		player = context->argument(1).toInt32();
+		SCRIPT_ASSERT_PLAYER(context, player);
 	}
 	else
 	{
@@ -1731,7 +1737,7 @@ static QScriptValue js_enableComponent(QScriptContext *context, QScriptEngine *e
 	QString componentName = context->argument(0).toString();
 	int player = context->argument(1).toInt32();
 
-	SCRIPT_ASSERT(context, player < MAX_PLAYERS && player >= 0, "Invalid player");
+	SCRIPT_ASSERT_PLAYER(context, player);
 	setComponent(componentName, player, FOUND);
 	return QScriptValue();
 }
@@ -1744,7 +1750,7 @@ static QScriptValue js_makeComponentAvailable(QScriptContext *context, QScriptEn
 	QString componentName = context->argument(0).toString();
 	int player = context->argument(1).toInt32();
 
-	SCRIPT_ASSERT(context, player < MAX_PLAYERS && player >= 0, "Invalid player");
+	SCRIPT_ASSERT_PLAYER(context, player);
 	setComponent(componentName, player, AVAILABLE);
 	return QScriptValue();
 }
@@ -1772,6 +1778,7 @@ static QScriptValue js_translate(QScriptContext *context, QScriptEngine *engine)
 static QScriptValue js_playerPower(QScriptContext *context, QScriptEngine *engine)
 {
 	int player = context->argument(0).toInt32();
+	SCRIPT_ASSERT_PLAYER(context, player);
 	return QScriptValue(getPower(player));
 }
 
@@ -1827,6 +1834,7 @@ static QScriptValue js_setDroidExperience(QScriptContext *context, QScriptEngine
 static QScriptValue js_safeDest(QScriptContext *context, QScriptEngine *engine)
 {
 	int player = context->argument(0).toInt32();
+	SCRIPT_ASSERT_PLAYER(context, player);
 	int x = context->argument(1).toInt32();
 	int y = context->argument(2).toInt32();
 	SCRIPT_ASSERT(context, tileOnMap(x, y), "Out of bounds coordinates(%d, %d)", x, y);
@@ -1840,6 +1848,7 @@ static QScriptValue js_addStructure(QScriptContext *context, QScriptEngine *)
 	QString building = context->argument(0).toString();
 	int index = getStructStatFromName(building.toUtf8().constData());
 	int player = context->argument(1).toInt32();
+	SCRIPT_ASSERT_PLAYER(context, player);
 	int x = context->argument(2).toInt32();
 	int y = context->argument(3).toInt32();
 	STRUCTURE_STATS *psStat = &asStructureStats[index];
@@ -1870,7 +1879,7 @@ static QScriptValue js_setNoGoArea(QScriptContext *context, QScriptEngine *)
 	SCRIPT_ASSERT(context, y1 >= 0, "Minimum scroll y value %d is less than zero - ", y1);
 	SCRIPT_ASSERT(context, x2 <= mapWidth, "Maximum scroll x value %d is greater than mapWidth %d", x2, (int)mapWidth);
 	SCRIPT_ASSERT(context, y2 <= mapHeight, "Maximum scroll y value %d is greater than mapHeight %d", y2, (int)mapHeight);
-	SCRIPT_ASSERT(context, player < game.maxPlayers && player >= -1, "Bad player value %d", player);
+	SCRIPT_ASSERT(context, player < MAX_PLAYERS && player >= -1, "Bad player value %d", player);
 	
 	if (player == -1)
 	{
