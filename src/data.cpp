@@ -142,17 +142,12 @@ void dataClearSaveFlag(void)
 }
 
 /* Load the body stats */
-static bool bufferSBODYLoad(const char *pBuffer, UDWORD size, void **ppData)
+static bool bufferSBODYLoad(const char* fileName, void** ppData)
 {
-	calcDataHash((uint8_t *)pBuffer, size, DATA_SBODY);
-
-	if (!loadBodyStats(pBuffer, size)
-	 || !allocComponentList(COMP_BODY, numBodyStats))
+	if (!loadBodyStats(fileName) || !allocComponentList(COMP_BODY, numBodyStats))
 	{
 		return false;
 	}
-
-	// set a dummy value so the release function gets called
 	*ppData = (void *)1;
 	return true;
 }
@@ -1089,7 +1084,6 @@ struct RES_TYPE_MIN_BUF
 static const RES_TYPE_MIN_BUF BufferResourceTypes[] =
 {
 	{"SWEAPON", bufferSWEAPONLoad, NULL},
-	{"SBODY", bufferSBODYLoad, dataReleaseStats},
 	{"SBRAIN", bufferSBRAINLoad, NULL},
 	{"SPROP", bufferSPROPLoad, NULL},
 	{"SSENSOR", bufferSSENSORLoad, NULL},
@@ -1132,6 +1126,7 @@ struct RES_TYPE_MIN_FILE
 static const RES_TYPE_MIN_FILE FileResourceTypes[] =
 {
 	{"WAV", dataAudioLoad, (RES_FREE)sound_ReleaseTrack},
+	{"SBODY", bufferSBODYLoad, dataReleaseStats},
 	{"AUDIOCFG", dataAudioCfgLoad, NULL},
 	{"ANI", dataAnimLoad, dataAnimRelease},
 	{"ANIMCFG", dataAnimCfgLoad, NULL},

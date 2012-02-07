@@ -29,6 +29,7 @@
 #include "lib/framework/frame.h"
 #include "lib/framework/strres.h"
 #include "lib/framework/frameresource.h"
+#include "lib/framework/wzconfig.h"
 #include "lib/gamelib/gtime.h"
 #include "objects.h"
 #include "stats.h"
@@ -993,102 +994,49 @@ bool loadWeaponStats(const char *pWeaponData, UDWORD bufferSize)
 }
 
 /*Load the Body stats from the file exported from Access*/
-bool loadBodyStats(const char *pBodyData, UDWORD bufferSize)
+bool loadBodyStats(const char *pFileName)
 {
 	BODY_STATS sStats, * const psStats = &sStats;
-	unsigned int NumBody = numCR(pBodyData, bufferSize);
-	unsigned int i, designable;
-	char BodyName[MAX_STR_LENGTH], size[MAX_STR_LENGTH],
-		GfxFile[MAX_STR_LENGTH], dummy[MAX_STR_LENGTH],
-		flameIMD[MAX_STR_LENGTH];
-	UDWORD dummyVal;
-
-	// Skip descriptive header
-	if (strncmp(pBodyData,"Body ",5)==0)
+	WzConfig ini(pFileName);
+	if (ini.status() != QSettings::NoError)
 	{
-		pBodyData = strchr(pBodyData,'\n') + 1;
-		NumBody--;
+		debug(LOG_ERROR, "Could not open %s", pFileName);
 	}
-
-	if (!statsAllocBody(NumBody))
+	QStringList list = ini.childGroups();
+	statsAllocBody(list.size());
+	for (int i = 0; i < list.size(); ++i)
 	{
-		return false;
-	}
-
-	for (i = 0; i < NumBody; i++)
-	{
+		ini.beginGroup(list[i]);
 		memset(psStats, 0, sizeof(BODY_STATS));
-
-		BodyName[0] = '\0';
-		size[0] = '\0';
-		GfxFile[0] = '\0';
-		flameIMD[0] = '\0';
-
-		//Watermelon:added 10 %d to store FRONT,REAR,LEFT,RIGHT,TOP,BOTTOM armour values
-		//read the data into the storage - the data is delimeted using comma's
-		//this is now just filler
-		sscanf(pBodyData,"%255[^,'\r\n],%255[^,'\r\n],%255[^,'\r\n],%d,%d,%d,%d,%255[^,'\r\n],\
-			%d,%d,%d, \
-			%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%255[^,'\r\n],%d",
-			BodyName, dummy, size, &psStats->buildPower,&psStats->buildPoints,
-			&psStats->weight, &psStats->body, GfxFile, &dummyVal,
-			&psStats->weaponSlots, &psStats->powerOutput,
-			(int*)&psStats->armourValue[WC_KINETIC], (int*)&psStats->armourValue[WC_HEAT],
-			&dummyVal, &dummyVal, &dummyVal, &dummyVal, &dummyVal, &dummyVal, &dummyVal, &dummyVal, &dummyVal, &dummyVal,
-			flameIMD, &designable);
-
-		//allocate storage for the name
-		if (!allocateStatName((BASE_STATS *)psStats, BodyName))
-		{
-			return false;
-		}
-
+		psStats->pName = strdup(list[i].toUtf8().constData());
+		psStats->weight = ini.value("weight", 0).toInt();
+		psStats->buildPower = ini.value("buildPower", 0).toInt();
+		psStats->buildPoints = ini.value("buildPoints", 0).toInt();
+		psStats->body = ini.value("hitpoints").toInt();
+		psStats->weaponSlots = ini.value("weaponSlots").toInt();
+		psStats->powerOutput = ini.value("powerOutput").toInt();
+		psStats->armourValue[WC_KINETIC] = ini.value("armourKinetic").toInt();
+		psStats->armourValue[WC_HEAT] = ini.value("armourHeat").toInt();
+		psStats->designable = ini.value("designable").toBool();
 		psStats->ref = REF_BODY_START + i;
-
-		if (!getBodySize(size, &psStats->size))
+		if (!getBodySize(ini.value("size").toString().toUtf8().constData(), &psStats->size))
 		{
-			ASSERT( false, "loadBodyStats: unknown body size for %s",
-				getStatName(psStats) );
+			ASSERT(false, "Unknown body size for %s", getStatName(psStats));
 			return false;
 		}
-
-		//set design flag
-		psStats->designable = (designable != 0);
-
-		//get the IMD for the component
-		if (strcmp(GfxFile, "0"))
+		if (ini.contains("model"))
 		{
-			psStats->pIMD = (iIMDShape *) resGetData("IMD", GfxFile);
-			if (psStats->pIMD == NULL)
-			{
-				debug( LOG_FATAL, "Cannot find the body PIE for record %s", getStatName(psStats) );
-				abort();
-				return false;
-			}
+			psStats->pIMD = (iIMDShape *)resGetData("IMD", ini.value("model").toString().toUtf8().constData());
+			ASSERT_OR_RETURN(false, psStats->pIMD, "Cannot find the body PIE for record %s", getStatName(psStats));
 		}
-		else
+		if (ini.contains("flameModel"))
 		{
-			psStats->pIMD = NULL;
+			psStats->pFlameIMD = (iIMDShape *)resGetData("IMD", ini.value("flameModel").toString().toUtf8().constData());
+			ASSERT_OR_RETURN(false, psStats->pIMD, "Cannot find the flame PIE for record %s", getStatName(psStats));
 		}
+		ini.endGroup();
 
-		//get the flame graphic
-		if (strcmp(flameIMD, "0"))
-		{
-			psStats->pFlameIMD = (iIMDShape *) resGetData("IMD", flameIMD);
-			if (psStats->pFlameIMD == NULL)
-			{
-				debug( LOG_FATAL, "Cannot find the flame PIE for record %s", getStatName(psStats) );
-				abort();
-				return false;
-			}
-		}
-		else
-		{
-			psStats->pFlameIMD = NULL;
-		}
-
-		//save the stats
-		statsSetBody(psStats, i);
+		statsSetBody(psStats, i);	//save the stats
 
 		//set the max stat values for the design screen
 		if (psStats->designable)
@@ -1099,11 +1047,7 @@ bool loadBodyStats(const char *pBodyData, UDWORD bufferSize)
 			setMaxBodyPoints(psStats->body);
 			setMaxComponentWeight(psStats->weight);
 		}
-
-		//increment the pointer to the start of the next record
-		pBodyData = strchr(pBodyData,'\n') + 1;
 	}
-
 	return true;
 }
 
