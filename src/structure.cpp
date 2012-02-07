@@ -759,6 +759,13 @@ int32_t getStructureDamage(const STRUCTURE *psStructure)
 /// Also can deconstruct (demolish) a building if passed negative buildpoints
 void structureBuild(STRUCTURE *psStruct, DROID *psDroid, int buildPoints, int buildRate)
 {
+	bool checkResearchButton = psStruct->status == SS_BUILT;  // We probably just started demolishing, if this is true.
+	int prevResearchState = 0;
+	if (checkResearchButton)
+	{
+		prevResearchState = intGetResearchState();
+	}
+
 	if (psDroid && !aiCheckAlliances(psStruct->player,psDroid->player))
 	{
 		// Enemy structure
@@ -810,8 +817,6 @@ void structureBuild(STRUCTURE *psStruct, DROID *psDroid, int buildPoints, int bu
 	//check if structure is built
 	if (buildPoints > 0 && psStruct->currentBuildPts >= (SDWORD)psStruct->pStructureType->buildPoints)
 	{
-		psStruct->currentBuildPts = (SWORD)psStruct->pStructureType->buildPoints;
-		psStruct->status = SS_BUILT;
 		buildingComplete(psStruct);
 
 		if (psDroid)
@@ -875,6 +880,11 @@ void structureBuild(STRUCTURE *psStruct, DROID *psDroid, int buildPoints, int bu
 	if (buildPoints < 0 && psStruct->currentBuildPts == 0)
 	{
 		removeStruct(psStruct, true);
+	}
+
+	if (checkResearchButton)
+	{
+		intNotifyResearchButton(prevResearchState);
 	}
 }
 
@@ -1630,6 +1640,8 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 			return NULL;
 		}
 
+		int prevResearchState = intGetResearchState();
+
 		int capacity = 0;  // Dummy initialisation.
 
 		if (pStructureType->type == REF_FACTORY_MODULE)
@@ -1736,6 +1748,7 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 				intRefreshScreen();
 			}
 		}
+		intNotifyResearchButton(prevResearchState);
 	}
 	if(pStructureType->type!=REF_WALL && pStructureType->type!=REF_WALLCORNER)
 	{
@@ -3123,6 +3136,8 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 				//check if Research is complete
 				if (pPlayerRes->currentPoints >= pResearch->researchPoints)
 				{
+					int prevState = intGetResearchState();
+
 					if(bMultiMessages)
 					{
 						if (myResponsibility(psStructure->player) && !isInSync())
@@ -3147,8 +3162,6 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 					psResFacility->psSubject = NULL;
 					intResearchFinished(psStructure);
 					researchResult(researchIndex, psStructure->player, true, psStructure, true);
-					//check if this result has enabled another topic
-					intCheckResearchButton();
 
 					// Update allies research accordingly
 					if (game.type == SKIRMISH)
@@ -3165,6 +3178,8 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 							}
 						}
 					}
+					//check if this result has enabled another topic
+					intNotifyResearchButton(prevState);
 				}
 			}
 			else
@@ -4492,6 +4507,8 @@ bool removeStruct(STRUCTURE *psDel, bool bDestroy)
 
 	ASSERT_OR_RETURN(false, psDel != NULL, "Invalid structure pointer");
 
+	int prevResearchState = intGetResearchState();
+
 	if (bDestroy)
 	{
 		removeStructFromMap(psDel);
@@ -4600,6 +4617,8 @@ bool removeStruct(STRUCTURE *psDel, bool bDestroy)
 	}
 
 	delPowerRequest(psDel);
+
+	intNotifyResearchButton(prevResearchState);
 
 	return resourceFound;
 }
@@ -5416,6 +5435,12 @@ void buildingComplete(STRUCTURE *psBuilding)
 {
 	CHECK_STRUCTURE(psBuilding);
 
+	int prevState = 0;
+	if (psBuilding->pStructureType->type == REF_RESEARCH)
+	{
+		prevState = intGetResearchState();
+	}
+
 	psBuilding->currentBuildPts = (SWORD)psBuilding->pStructureType->buildPoints;
 	psBuilding->status = SS_BUILT;
 
@@ -5451,9 +5476,9 @@ void buildingComplete(STRUCTURE *psBuilding)
 
 			break;
 		case REF_RESEARCH:
-			intCheckResearchButton();
 			//this deals with research facilities that are upgraded whilst mid-research
 			releaseResearch(psBuilding, ModeImmediate);
+			intNotifyResearchButton(prevState);
 			break;
 		case REF_FACTORY:
 		case REF_CYBORG_FACTORY:
@@ -7115,6 +7140,8 @@ STRUCTURE * giftSingleStructure(STRUCTURE *psStructure, UBYTE attackPlayer, bool
 		ASSERT_OR_RETURN(NULL, bFromScript || selectedPlayer != 0 || attackPlayer != selectedPlayer, "EW attack by selectedPlayer on a structure");
 	}
 
+	int prevState = intGetResearchState();
+
 	//don't want the hassle in multiplayer either
 	//and now we do! - AB 13/05/99
 
@@ -7183,6 +7210,7 @@ STRUCTURE * giftSingleStructure(STRUCTURE *psStructure, UBYTE attackPlayer, bool
 			psStructure->visible[attackPlayer] = UINT8_MAX;
 			triggerEventObjectTransfer(psStructure, attackPlayer);
 		}
+		intNotifyResearchButton(prevState);
 		return NULL;
 	}
 
@@ -7291,6 +7319,7 @@ STRUCTURE * giftSingleStructure(STRUCTURE *psStructure, UBYTE attackPlayer, bool
 		}
 	}
 	powerCalculated = bPowerOn;
+	intNotifyResearchButton(prevState);
 	return psNewStruct;
 }
 

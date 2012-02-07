@@ -6111,18 +6111,14 @@ void intCheckReticuleButtons(void)
 
 /*Checks to see if there are any research topics to do and flashes the button -
 only if research facility is free*/
-void intCheckResearchButton(void)
+int intGetResearchState()
 {
-	UWORD index, count;
-	STRUCTURE	*psStruct;
-	bool		resFree = false;
-
-	for (psStruct = interfaceStructList(); psStruct != NULL; psStruct =
-		psStruct->psNext)
+	bool resFree = false;
+	for (STRUCTURE *psStruct = interfaceStructList(); psStruct != NULL; psStruct = psStruct->psNext)
 	{
 		if (psStruct->pStructureType->type == REF_RESEARCH &&
 		    psStruct->status == SS_BUILT &&
-		    getResearchStats((BASE_OBJECT *)psStruct) == NULL)
+		    getResearchStats(psStruct) == NULL)
 		{
 			resFree = true;
 			break;
@@ -6130,20 +6126,43 @@ void intCheckResearchButton(void)
 
 	}
 
+	int count = 0;
 	if (resFree)
 	{
 		//set to value that won't be reached in fillResearchList
-		index = asResearch.size() + 1;
+		int index = asResearch.size() + 1;
 		//calculate the list
-		count = fillResearchList(pList,selectedPlayer, index, MAXRESEARCH);
-		if (count)
+		int preCount = fillResearchList(pList, selectedPlayer, index, MAXRESEARCH);
+		count = preCount;
+		for (int n = 0; n < preCount; ++n)
 		{
-			//set the research reticule button to flash
-			flashReticuleButton(IDRET_RESEARCH);
+			for (int player = 0; player < MAX_PLAYERS; ++player)
+			{
+				if (aiCheckAlliances(player, selectedPlayer) && IsResearchStarted(&asPlayerResList[player][pList[n]]))
+				{
+					--count;  // An ally is already researching this topic, so don't flash the button because of it.
+					break;
+				}
+			}
 		}
 	}
+
+	return count;
 }
 
+void intNotifyResearchButton(int prevState)
+{
+	int newState = intGetResearchState();
+	if (newState > prevState)
+	{
+		// Set the research reticule button to flash.
+		flashReticuleButton(IDRET_RESEARCH);
+	}
+	else if (newState == 0 && prevState > 0)
+	{
+		stopReticuleButtonFlash(IDRET_RESEARCH);
+	}
+}
 
 // see if a reticule button is enabled
 bool intCheckReticuleButEnabled(UDWORD id)

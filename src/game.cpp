@@ -2456,7 +2456,7 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 	//cancel first
 	stopReticuleButtonFlash(IDRET_RESEARCH);
 	//then see if needs to be set
-	intCheckResearchButton();
+	intNotifyResearchButton(0);
 
 	//set up the mission countdown flag
 	setMissionCountDown();
