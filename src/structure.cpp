@@ -5723,14 +5723,17 @@ void printStructureInfo(STRUCTURE *psStructure)
 
 /*Checks the template type against the factory type - returns false
 if not a good combination!*/
-bool validTemplateForFactory(DROID_TEMPLATE *psTemplate, STRUCTURE *psFactory)
+bool validTemplateForFactory(DROID_TEMPLATE *psTemplate, STRUCTURE *psFactory, bool complain)
 {
+	enum code_part level = complain ? LOG_ERROR : LOG_NEVER;
+
 	//not in multiPlayer! - AB 26/5/99
 	if (!bMultiPlayer)
 	{
 		//ignore Transporter Droids
 		if (psTemplate->droidType == DROID_TRANSPORTER)
 		{
+			debug(level, "Cannot build transporter in campaign.");
 			return false;
 		}
 	}
@@ -5743,6 +5746,7 @@ bool validTemplateForFactory(DROID_TEMPLATE *psTemplate, STRUCTURE *psFactory)
 	{
 		if (psFactory->pStructureType->type != REF_CYBORG_FACTORY)
 		{
+			debug(level, "Cannot build cyborg except in cyborg factory, not in %s.", objInfo(psFactory));
 			return false;
 		}
 	}
@@ -5752,6 +5756,7 @@ bool validTemplateForFactory(DROID_TEMPLATE *psTemplate, STRUCTURE *psFactory)
 	{
 		if (psFactory->pStructureType->type != REF_VTOL_FACTORY)
 		{
+			debug(level, "Cannot build vtol except in vtol factory, not in %s.", objInfo(psFactory));
 			return false;
 		}
 	}
@@ -5759,12 +5764,13 @@ bool validTemplateForFactory(DROID_TEMPLATE *psTemplate, STRUCTURE *psFactory)
 	//check if cyborg factory
 	if (psFactory->pStructureType->type == REF_CYBORG_FACTORY)
 	{
-		//if (psTemplate->droidType != DROID_CYBORG)
 		if (!(psTemplate->droidType == DROID_CYBORG ||
 			psTemplate->droidType == DROID_CYBORG_SUPER ||
 			psTemplate->droidType == DROID_CYBORG_CONSTRUCT ||
 			psTemplate->droidType == DROID_CYBORG_REPAIR))
 		{
+			debug(level, "Can only build cyborg in cyborg factory, not droidType %d in %s.",
+			      psTemplate->droidType, objInfo(psFactory));
 			return false;
 		}
 	}
@@ -5774,6 +5780,7 @@ bool validTemplateForFactory(DROID_TEMPLATE *psTemplate, STRUCTURE *psFactory)
 		if (!psTemplate->asParts[COMP_PROPULSION] ||
 		    ((asPropulsionStats + psTemplate->asParts[COMP_PROPULSION])->propulsionType != PROPULSION_TYPE_LIFT))
 		{
+			debug(level, "Can only build vtol in vtol factory, not in %s.", objInfo(psFactory));
 			return false;
 		}
 	}

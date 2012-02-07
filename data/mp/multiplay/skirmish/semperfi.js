@@ -65,7 +65,7 @@ function buildAttacker(struct)
 		"MG2Mk1", // twin mg
 		"MG1Mk1", // mg, initial weapon
 	];
-	if (!buildDroid(struct, "Ranged Attacker", bodylist, proplist, "", DROID_WEAPON, weaplist, weaplist))
+	if (!buildDroid(struct, "Ranged Attacker", bodylist, proplist, null, null, weaplist, weaplist))
 	{
 		debug("Failed to construct new attacker");
 	}
@@ -84,7 +84,7 @@ function buildTruck(struct)
 		"hover01", // hover
 		"wheeled01", // wheels
 	];
-	if (!buildDroid(struct, "Constructor", bodylist, proplist, "", DROID_CONSTRUCT, "Spade1Mk1"))
+	if (!buildDroid(struct, "Constructor", bodylist, proplist, null, null, "Spade1Mk1"))
 	{
 		debug("Failed to construct new truck");
 	}
@@ -93,11 +93,11 @@ function buildTruck(struct)
 function buildCyborg(struct)
 {
 	// Cyborg templates are special -- their bodies, legs and weapons are linked. We should fix this one day...
-	if (!buildDroid(struct, "Cyborg Thermite", "Cyb-Bod-Thermite", "CyborgLegs", "", DROID_CYBORG, "Cyb-Wpn-Thermite"))
+	if (!buildDroid(struct, "Cyborg Thermite", "Cyb-Bod-Thermite", "CyborgLegs", null, null, "Cyb-Wpn-Thermite"))
 	{
-		if (!buildDroid(struct, "Cyborg Flamer", "CyborgFlamerGrd", "CyborgLegs", "", DROID_CYBORG, "CyborgFlamer01"))
+		if (!buildDroid(struct, "Cyborg Flamer", "CyborgFlamerGrd", "CyborgLegs", null, null, "CyborgFlamer01"))
 		{
-			if (!buildDroid(struct, "Cyborg MG", "CyborgChain1Ground", "CyborgLegs", "", DROID_CYBORG, "CyborgChaingun"))
+			if (!buildDroid(struct, "Cyborg MG", "CyborgChain1Ground", "CyborgLegs", null, null, "CyborgChaingun"))
 			{
 				debug("Failed to construct new cyborg");
 			}
@@ -119,7 +119,7 @@ function buildVTOL(struct)
 		    "Body4ABT", // bug
 		    "Body1REC", // viper
 	];
-	if (!buildDroid(struct, "Bomber", bodylist, "V-Tol", "", DROID_WEAPON, bomblist))
+	if (!buildDroid(struct, "Bomber", bodylist, "V-Tol", null, null, bomblist))
 	{
 		debug("Failed to construct new VTOL");
 	}
@@ -459,7 +459,7 @@ function eventDroidBuilt(droid, struct)
 {
 	var sensorlist = enumBlips(me);
 
-	if (struct)
+	if (struct && structureIdle(struct))
 	{
 		if (struct.stattype == FACTORY)
 		{

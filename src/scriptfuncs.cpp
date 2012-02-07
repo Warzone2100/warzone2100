@@ -1586,7 +1586,7 @@ bool scrBuildDroid(void)
 	                         psFactory->pStructureType->type == REF_CYBORG_FACTORY ||
 	                         psFactory->pStructureType->type == REF_VTOL_FACTORY),
 	                 "Structure is not a factory");
-	ASSERT_OR_RETURN(false, validTemplateForFactory(psTemplate, psFactory), "Invalid template - %s for factory - %s",
+	ASSERT_OR_RETURN(false, validTemplateForFactory(psTemplate, psFactory, true), "Invalid template - %s for factory - %s",
 	                 psTemplate->aName, psFactory->pStructureType->pName);
 
 	if (productionRun != 1)

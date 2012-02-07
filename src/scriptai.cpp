@@ -1395,7 +1395,7 @@ bool scrSkCanBuildTemplate(void)
 	}
 
 	// is factory big enough?
-	if(!validTemplateForFactory(psTempl, psStructure) )
+	if (!validTemplateForFactory(psTempl, psStructure, false))
 	{
 		goto failTempl;
 	}

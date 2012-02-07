@@ -1018,6 +1018,32 @@ bool loadBodyStats(const char *pFileName)
 		psStats->armourValue[WC_KINETIC] = ini.value("armourKinetic").toInt();
 		psStats->armourValue[WC_HEAT] = ini.value("armourHeat").toInt();
 		psStats->designable = ini.value("designable").toBool();
+		QString dtype = ini.value("droidType", "DROID").toString();
+		psStats->droidTypeOverride = DROID_DEFAULT;
+		if (dtype.compare("PERSON") == 0)
+		{
+			psStats->droidTypeOverride = DROID_PERSON;
+		}
+		else if (dtype.compare("TRANSPORTER") == 0)
+		{
+			psStats->droidTypeOverride = DROID_TRANSPORTER;
+		}
+		else if (dtype.compare("CYBORG") == 0)
+		{
+			psStats->droidTypeOverride = DROID_CYBORG;
+		}
+		else if (dtype.compare("CYBORG_SUPER") == 0)
+		{
+			psStats->droidTypeOverride = DROID_CYBORG_SUPER;
+		}
+		else if (dtype.compare("CYBORG_CONSTRUCT") == 0)
+		{
+			psStats->droidTypeOverride = DROID_CYBORG_CONSTRUCT;
+		}
+		else if (dtype.compare("CYBORG_REPAIR") == 0)
+		{
+			psStats->droidTypeOverride = DROID_CYBORG_REPAIR;
+		}
 		psStats->ref = REF_BODY_START + i;
 		if (!getBodySize(ini.value("size").toString().toUtf8().constData(), &psStats->size))
 		{

@@ -786,7 +786,7 @@ static int get_first_available_component(STRUCTURE *psFactory, const QScriptValu
 			QString compName = list.property(k).toString();
 			int result = getCompFromName(type, compName.toUtf8().constData());
 			if (result >= 0 && apCompLists[player][type][result] == AVAILABLE
-			    && (asBodyStats[result].size <= capacity || type != COMP_BODY))
+			    && (type != COMP_BODY || asBodyStats[result].size <= capacity))
 			{
 				return result; // found one!
 			}
@@ -800,7 +800,7 @@ static int get_first_available_component(STRUCTURE *psFactory, const QScriptValu
 	{
 		int result = getCompFromName(type, list.toString().toUtf8().constData());
 		if (result >= 0 && apCompLists[player][type][result] == AVAILABLE
-		    && (asBodyStats[result].size <= capacity || type != COMP_BODY))
+		    && (type != COMP_BODY || asBodyStats[result].size <= capacity))
 		{
 			return result; // found it!
 		}
@@ -812,15 +812,16 @@ static int get_first_available_component(STRUCTURE *psFactory, const QScriptValu
 	return -1; // no available component found in list
 }
 
-//-- \subsection{buildDroid(factory, name, body, propulsion, reserved, droid type, turrets...)}
+//-- \subsection{buildDroid(factory, name, body, propulsion, reserved, reserved, turrets...)}
 //-- Start factory production of new droid with the given name, body, propulsion and turrets.
-//-- The reserved parameter should be passed an empty string for now. The components can be
+//-- The reserved parameter should be passed \emph{null} for now. The components can be
 //-- passed as ordinary strings, or as a list of strings. If passed as a list, the first available
-//-- component in the list will be used. The droid type must be set to match the type of turret
-//-- passed in.
+//-- component in the list will be used. The second reserved parameter used to be a droid type.
+//-- It is now unused and should be passed \emph{null}.
 // TODO - fix memory leaks
 static QScriptValue js_buildDroid(QScriptContext *context, QScriptEngine *engine)
 {
+	const int firstTurret = 6; // index position of first turret parameter
 	QScriptValue structVal = context->argument(0);
 	int id = structVal.property("id").toInt32();
 	int player = structVal.property("player").toInt32();
@@ -830,9 +831,8 @@ static QScriptValue js_buildDroid(QScriptContext *context, QScriptEngine *engine
 		       || psStruct->pStructureType->type == REF_VTOL_FACTORY), "Structure %s is not a factory", objInfo(psStruct));
 	QString templName = context->argument(1).toString();
 	DROID_TEMPLATE *psTemplate = new DROID_TEMPLATE;
-	DROID_TYPE droidType = (DROID_TYPE)context->argument(5).toInt32();
-	int numTurrets = context->argumentCount() - 6; // anything beyond first six parameters, are turrets
-	COMPONENT_TYPE compType = COMP_NUMCOMPONENTS;
+	int numTurrets = context->argumentCount() - firstTurret; // anything beyond first six parameters, are turrets
+	int result;
 
 	memset(psTemplate->asParts, 0, sizeof(psTemplate->asParts)); // reset to defaults
 	memset(psTemplate->asWeaps, 0, sizeof(psTemplate->asWeaps));
@@ -855,63 +855,79 @@ static QScriptValue js_buildDroid(QScriptContext *context, QScriptEngine *engine
 
 	psTemplate->numWeaps = 0;
 	numTurrets = MIN(numTurrets, asBodyStats[body].weaponSlots); // Restrict max no. turrets
-	for (int i = 0; i < numTurrets; i++)
+	if (asBodyStats[body].droidTypeOverride != DROID_ANY)
 	{
-		context->argument(6 + i).toString();
-		int j;
-		switch (droidType)
+		psTemplate->droidType = asBodyStats[body].droidTypeOverride; // set droidType based on body
+	}
+	// Find first turret component type (assume every component in list is same type)
+	QString compName;
+	if (context->argument(firstTurret).isArray())
+	{
+		compName = context->argument(firstTurret).property(0).toString();
+	}
+	else // must be string
+	{
+		compName = context->argument(firstTurret).toString();
+	}
+	if ((result = getCompFromName(COMP_WEAPON, compName.toUtf8().constData())) >= 0)
+	{
+		for (int i = 0; i < numTurrets; i++) // may be multi-weapon
 		{
-		case DROID_PERSON:
-		case DROID_WEAPON:
-		case DROID_CYBORG:
-		case DROID_TRANSPORTER:
-		case DROID_DEFAULT:
-		case DROID_CYBORG_SUPER:
-			j = get_first_available_component(psStruct, context->argument(6 + i), COMP_WEAPON);
-			if (j < 0)
+			result = get_first_available_component(psStruct, context->argument(firstTurret + i), COMP_WEAPON);
+			if (result < 0)
 			{
 				debug(LOG_SCRIPT, "Wanted to build %s at %s, but no weapon unavailable", 
 				      templName.toUtf8().constData(), objInfo(psStruct));
 				return QScriptValue(false);
 			}
-			psTemplate->asWeaps[i] = j;
+			psTemplate->asWeaps[i] = result;
 			psTemplate->numWeaps++;
-			continue;
-		case DROID_CYBORG_CONSTRUCT:
-		case DROID_CONSTRUCT:
+		}
+	}
+	else
+	{
+		COMPONENT_TYPE compType = COMP_NUMCOMPONENTS;
+
+		if ((result = getCompFromName(COMP_CONSTRUCT, compName.toUtf8().constData())) >= 0)
+		{
 			compType = COMP_CONSTRUCT;
-			break;
-		case DROID_COMMAND:
+		}
+		else if ((result = getCompFromName(COMP_BRAIN, compName.toUtf8().constData())) >= 0)
+		{
 			compType = COMP_BRAIN;
 			psTemplate->numWeaps = 1; // hack, necessary to pass intValidTemplate
-			break;
-		case DROID_REPAIR:
-		case DROID_CYBORG_REPAIR:
-			compType = COMP_REPAIRUNIT;
-			break;
-		case DROID_ECM:
-			compType = COMP_ECM;
-			break;
-		case DROID_SENSOR:
-			compType = COMP_SENSOR;
-			break;
-		case DROID_ANY:
-			break; // wtf
 		}
-		j = get_first_available_component(psStruct, context->argument(6 + i), compType);
-		if (j < 0)
+		else if ((result = getCompFromName(COMP_REPAIRUNIT, compName.toUtf8().constData())) >= 0)
 		{
-			debug(LOG_SCRIPT, "Wanted to build %s at %s, but turret unavailable", 
+			compType = COMP_REPAIRUNIT;
+		}
+		else if ((result = getCompFromName(COMP_ECM, compName.toUtf8().constData())) >= 0)
+		{
+			compType = COMP_ECM;
+		}
+		else if ((result = getCompFromName(COMP_SENSOR, compName.toUtf8().constData())) >= 0)
+		{
+			compType = COMP_SENSOR;
+		}
+		else
+		{
+			debug(LOG_ERROR, "No known component type found for %s", compName.toUtf8().constData());
+			return QScriptValue(false);
+		}
+		result = get_first_available_component(psStruct, context->argument(firstTurret), compType);
+		if (result < 0)
+		{
+			debug(LOG_SCRIPT, "Wanted to build %s at %s, but turret unavailable",
 			      templName.toUtf8().constData(), objInfo(psStruct));
 			return QScriptValue(false);
 		}
-		psTemplate->asParts[compType] = j;
+		psTemplate->asParts[compType] = result;
 	}
-	psTemplate->droidType = droidType; // may be overwritten by the call below
 	bool valid = intValidTemplate(psTemplate, templName.toUtf8().constData(), true);
 	if (valid)
 	{
-		SCRIPT_ASSERT(context, validTemplateForFactory(psTemplate, psStruct), "Invalid template %s for factory %s",
+		SCRIPT_ASSERT(context, validTemplateForFactory(psTemplate, psStruct, true),
+		              "Invalid template %s for factory %s",
 		              psTemplate->aName, psStruct->pStructureType->pName);
 		// Delete similar template from existing list before adding this one
 		for (int j = 0; j < apsTemplateList.size(); j++)

@@ -691,7 +691,8 @@ void fillTemplateList(std::vector<DROID_TEMPLATE *> &pList, STRUCTURE *psFactory
 				}
 			}
 
-			if (!psCurr->enabled || !validTemplateForFactory(psCurr, psFactory) || !researchedTemplate(psCurr, player))
+			if (!psCurr->enabled || !validTemplateForFactory(psCurr, psFactory, false)
+			    || !researchedTemplate(psCurr, player))
 			{
 				continue;
 			}

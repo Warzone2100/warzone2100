@@ -29,6 +29,27 @@
 #include <vector>
 #include <algorithm>
 
+/* The different types of droid */
+// NOTE, if you add to, or change this list then you'll need
+// to update the DroidSelectionWeights lookup table in Display.c
+enum DROID_TYPE
+{
+	DROID_WEAPON,           ///< Weapon droid
+	DROID_SENSOR,           ///< Sensor droid
+	DROID_ECM,              ///< ECM droid
+	DROID_CONSTRUCT,        ///< Constructor droid
+	DROID_PERSON,           ///< person
+	DROID_CYBORG,           ///< cyborg-type thang
+	DROID_TRANSPORTER,      ///< guess what this is!
+	DROID_COMMAND,          ///< Command droid
+	DROID_REPAIR,           ///< Repair droid
+	DROID_DEFAULT,          ///< Default droid
+	DROID_CYBORG_CONSTRUCT, ///< cyborg constructor droid - new for update 28/5/99
+	DROID_CYBORG_REPAIR,    ///< cyborg repair droid - new for update 28/5/99
+	DROID_CYBORG_SUPER,     ///< cyborg repair droid - new for update 7/6/99
+	DROID_ANY,              ///< Any droid. Used as a parameter for various stuff.
+};
+
 static inline bool stringToEnumSortFunction(std::pair<char const *, unsigned> const &a, std::pair<char const *, unsigned> const &b) { return strcmp(a.first, b.first) < 0; }
 template <typename STATS>
 static inline STATS *findStatsByName(std::string const &name, STATS *asStats, unsigned numStats)
@@ -504,6 +525,7 @@ struct BODY_STATS : public COMPONENT_STATS
 	BODY_SIZE	size;			///< How big the body is - affects how hit
 	UDWORD		weaponSlots;	///< The number of weapon slots on the body
 	UDWORD		armourValue[WC_NUM_WEAPON_CLASSES];	///< A measure of how much protection the armour provides. Cross referenced with the weapon types.
+	DROID_TYPE	droidTypeOverride; // if not DROID_ANY, sets droid type
 
 	// A measure of how much energy the power plant outputs
 	UDWORD		powerOutput;	///< this is the engine output of the body
