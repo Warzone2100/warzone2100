@@ -907,6 +907,12 @@ bool recvResearchStatus(NETQUEUE queue)
 		return false;
 	}
 
+	int prevResearchState = 0;
+	if (aiCheckAlliances(selectedPlayer, player))
+	{
+		prevResearchState = intGetResearchState();
+	}
+
 	pPlayerRes = &asPlayerResList[player][index];
 
 	// psBuilding may be null if finishing
@@ -973,9 +979,10 @@ bool recvResearchStatus(NETQUEUE queue)
 		}
 	}
 
-	if (alliances[selectedPlayer][player] == ALLIANCE_FORMED)
+	if (aiCheckAlliances(selectedPlayer, player))
 	{
 		intAlliedResearchChanged();
+		intNotifyResearchButton(prevResearchState);
 	}
 
 	return true;

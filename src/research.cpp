@@ -1338,7 +1338,7 @@ void cancelResearch(STRUCTURE *psBuilding, QUEUE_MODE mode)
 		if (mode == ModeQueue)
 		{
 			// Tell others that we want to stop researching something.
-			sendResearchStatus(NULL, topicInc, psBuilding->player, false);
+			sendResearchStatus(psBuilding, topicInc, psBuilding->player, false);
 			// Immediately tell the UI that we can research this now. (But don't change the game state.)
 			MakeResearchCancelledPending(pPlayerRes);
 			setStatusPendingCancel(*psResFac);
@@ -1819,8 +1819,6 @@ the research list next time the Research Facilty is selected */
 bool enableResearch(RESEARCH *psResearch, UDWORD player)
 {
 	UDWORD				inc;
-	STRUCTURE			*psStruct;
-	bool				resFree = false;
 
 	inc = psResearch->index;
 	if (inc > asResearch.size())
@@ -1829,25 +1827,15 @@ bool enableResearch(RESEARCH *psResearch, UDWORD player)
 		return false;
 	}
 
+	int prevState = intGetResearchState();
+
 	//found, so set the flag
 	MakeResearchPossible(&asPlayerResList[player][inc]);
 
-	if(player == selectedPlayer)
+	if (player == selectedPlayer)
 	{
 		//set the research reticule button to flash if research facility is free
-		for (psStruct = apsStructLists[selectedPlayer]; psStruct != NULL; psStruct=psStruct->psNext)
-		{
-			if (psStruct->pStructureType->type == REF_RESEARCH && psStruct->status == SS_BUILT &&
-				((RESEARCH_FACILITY *)psStruct->pFunctionality)->psSubject == NULL)
-			{
-				resFree = true;
-				break;
-			}
-		}
-		if (resFree)
-		{
-			flashReticuleButton(IDRET_RESEARCH);
-		}
+		intNotifyResearchButton(prevState);
 	}
 
 	return true;

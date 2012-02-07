@@ -7,6 +7,11 @@
    * Fix: Properly load scavengers (commit:d11b13c422b1b1364410a64778ef0fcd8d3644e9, commit:2417ba4f4b5ec495f52aff72c249ea9e6b821784)
  * UI:
    * Fix: Show loading indicator when loading the game (ticket:3104, commit:7859582f13e1f777eaa4e0658fae1629b5b4b923)
+   * Fix: Make aborted research disappear from its research facility again (ticket:3130, commit:ae59186a07a026ae6dfb4acc78c657f7ca10d279)
+   * Fix: Show obsolete droids in production, to allow cancelling building them (commit:24d0d1b64c115a82ea52cd06e8dd7322c7d8beea)
+   * Fix: Properly enable Teams and Ready buttons (commit:108b5ef10a889ae2d3fe74267d3eba646d1ef4d9)
+   * Fix: Only flash the research button when there is something to research and a free research facility to do so (ticket:1835, commit:8d925946763711fb7c345b7ba34f1f24b72a8ec1)
+   * Fix: Only highlight the player's own ready button on hovering (commit:51b92cd05ff9d536089085132d9d7d42f5c3dade)
  * Multiplayer:
    * Fix: Actually consider AIs and closed slots when checking if players can still join (ticket:3089, commit:7f7390cb7e1085a5c22cbb55440e679eb9d6506f, commit:32a7fe731c983adcc02284c7b7f30d2b220ff6fb)
    * Fix: Make the latency guesser less optimistic, should reduce freezes (commit:8ab7ba79bc9fb000f91ac16545e09ea5a97d05cb)

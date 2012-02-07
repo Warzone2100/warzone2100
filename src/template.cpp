@@ -679,7 +679,7 @@ void fillTemplateList(std::vector<DROID_TEMPLATE *> &pList, STRUCTURE *psFactory
 	for (std::list<DROID_TEMPLATE>::iterator i = localTemplates.begin(); i != localTemplates.end(); ++i)
 	{
 		psCurr = &*i;
-		//must add Command Droid if currently in production
+		// Must add droids if currently in production.
 		if (!getProduction(psFactory, psCurr).quantity)
 		{
 			//can only have (MAX_CMDDROIDS) in the world at any one time
@@ -690,11 +690,11 @@ void fillTemplateList(std::vector<DROID_TEMPLATE *> &pList, STRUCTURE *psFactory
 					continue;
 				}
 			}
-		}
 
-		if (!psCurr->enabled || !validTemplateForFactory(psCurr, psFactory) || !researchedTemplate(psCurr, player))
-		{
-			continue;
+			if (!psCurr->enabled || !validTemplateForFactory(psCurr, psFactory) || !researchedTemplate(psCurr, player))
+			{
+				continue;
+			}
 		}
 
 		//check the factory can cope with this sized body

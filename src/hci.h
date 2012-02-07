@@ -414,8 +414,11 @@ STRUCTURE *intFindAStructure(void);
 STRUCTURE* intGotoNextStructureType(UDWORD structType,bool JumpTo,bool CancelDrive);
 DROID *intGotoNextDroidType(DROID *CurrDroid,UDWORD droidType,bool AllowGroup);
 
-/*Checks to see if there are any research topics to do and flashes the button*/
-extern void intCheckResearchButton(void);
+/// Returns the number of researches that selectedPlayer is not already researching, or 0 if there are no free laboratories.
+int intGetResearchState();
+/// Flashes the button if the research button should flash, and more researches are available to research than before.
+/// Stops the button from flashing, if the research button shouldn't flash, and prevState is non-zero.
+void intNotifyResearchButton(int prevState);
 
 // see if a reticule button is enabled
 extern bool intCheckReticuleButEnabled(UDWORD id);
