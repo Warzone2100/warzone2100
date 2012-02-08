@@ -101,6 +101,7 @@ QScriptValue convResearch(RESEARCH *psResearch, QScriptEngine *engine, int playe
 //;; \begin{description}
 //;; \item[status] The completeness status of the structure. It will be one of BEING_BUILT, BUILT and BEING_DEMOLISHED.
 //;; \item[type] The type will always be STRUCTURE.
+//;; \item[cost] What it would cost to build this structure. (3.2+ only)
 //;; \item[stattype] The stattype defines the type of structure. It will be one of HQ, FACTORY, POWER_GEN, RESOURCE_EXTRACTOR, 
 //;; LASSAT, DEFENSE, WALL, RESEARCH_LAB, REPAIR_FACILITY, CYBORG_FACTORY, VTOL_FACTORY, REARM_PAD, SAT_UPLINK, GATE
 //;; and COMMAND_CONTROL.
@@ -112,6 +113,7 @@ QScriptValue convStructure(STRUCTURE *psStruct, QScriptEngine *engine)
 	QScriptValue value = convObj(psStruct, engine);
 	value.setProperty("status", (int)psStruct->status, QScriptValue::ReadOnly);
 	value.setProperty("health", 100 * structureBody(psStruct) / MAX(1, psStruct->body), QScriptValue::ReadOnly);
+	value.setProperty("cost", psStruct->pStructureType->powerToBuild, QScriptValue::ReadOnly);
 	switch (psStruct->pStructureType->type) // don't bleed our source insanities into the scripting world
 	{
 	case REF_WALL:
@@ -203,6 +205,7 @@ QScriptValue convFeature(FEATURE *psFeature, QScriptEngine *engine)
 //;; this value is not set. Always check if set before use.
 //;; \item[armed] The percentage of weapon capability that is fully armed. Only defined on VTOLs.
 //;; \item[experience] Amount of experience this droid has, based on damage it has dealt to enemies.
+//;; \item[cost] What it would cost to build the droid. (3.2+ only)
 //;; \end{description}
 QScriptValue convDroid(DROID *psDroid, QScriptEngine *engine)
 {
@@ -210,6 +213,7 @@ QScriptValue convDroid(DROID *psDroid, QScriptEngine *engine)
 	QScriptValue value = convObj(psDroid, engine);
 	value.setProperty("action", (int)psDroid->action, QScriptValue::ReadOnly);
 	value.setProperty("order", (int)psDroid->order.type, QScriptValue::ReadOnly);
+	value.setProperty("cost", calcDroidPower(psDroid), QScriptValue::ReadOnly);
 	switch (psDroid->droidType) // hide some engine craziness
 	{
 	case DROID_CYBORG_CONSTRUCT:
@@ -821,7 +825,8 @@ static int get_first_available_component(STRUCTURE *psFactory, const QScriptValu
 //-- The reserved parameter should be passed \emph{null} for now. The components can be
 //-- passed as ordinary strings, or as a list of strings. If passed as a list, the first available
 //-- component in the list will be used. The second reserved parameter used to be a droid type.
-//-- It is now unused and should be passed \emph{null}.
+//-- It is now unused and in 3.2+ should be passed \emph{null}, while in 3.1 it should be the
+//-- droid type to be built.
 // TODO - fix memory leaks
 static QScriptValue js_buildDroid(QScriptContext *context, QScriptEngine *engine)
 {

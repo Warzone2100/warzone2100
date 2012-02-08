@@ -1787,7 +1787,6 @@ UDWORD	calcDroidPower(DROID *psDroid)
 	//get the component power
 	power = (asBodyStats + psDroid->asBits[COMP_BODY].nStat)->buildPower +
 	(asBrainStats + psDroid->asBits[COMP_BRAIN].nStat)->buildPower +
-	//(asPropulsionStats + psDroid->asBits[COMP_PROPULSION])->buildPower +
 	(asSensorStats + psDroid->asBits[COMP_SENSOR].nStat)->buildPower +
 	(asECMStats + psDroid->asBits[COMP_ECM].nStat)->buildPower +
 	(asRepairStats + psDroid->asBits[COMP_REPAIRUNIT].nStat)->buildPower +
@@ -1802,7 +1801,6 @@ UDWORD	calcDroidPower(DROID *psDroid)
 	{
 		if (psDroid->asWeaps[i].nStat > 0)
 		{
-			//power += (asWeaponStats + psDroid->asWeaps[i].nStat)->buildPower;
 			power += (asWeaponStats + psDroid->asWeaps[i].nStat)->buildPower;
 		}
 	}
