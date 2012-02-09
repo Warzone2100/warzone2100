@@ -107,10 +107,35 @@ QScriptValue convResearch(RESEARCH *psResearch, QScriptEngine *engine, int playe
 //;; and COMMAND_CONTROL.
 //;; \item[modules] If the stattype is set to one of the factories, POWER_GEN or RESEARCH_LAB, then this property is set to the
 //;; number of module upgrades it has.
+//;; \item[canHitAir] True if the structure has anti-air capabilities. (3.2+ only)
+//;; \item[canHitSurface] True if the structure has anti-ground capabilities. (3.2+ only)
+//;; \item[isSensor] True if the structure has sensor ability. (3.2+ only)
+//;; \item[isCB] True if the structure has counter-battery ability. (3.2+ only)
+//;; \item[isRadarDetector] True if the structure has radar detector ability. (3.2+ only)
+//;; \item[range] Maximum range of its weapons. (3.2+ only)
 //;; \end{description}
 QScriptValue convStructure(STRUCTURE *psStruct, QScriptEngine *engine)
 {
+	bool aa = false;
+	bool ga = false;
+	int range = -1;
+	for (int i = 0; i < psStruct->numWeaps; i++)
+	{
+		if (psStruct->asWeaps[i].nStat)
+		{
+			WEAPON_STATS *psWeap = &asWeaponStats[psStruct->asWeaps[i].nStat];
+			aa = aa || psWeap->surfaceToAir & SHOOT_IN_AIR;
+			ga = ga || psWeap->surfaceToAir & SHOOT_ON_GROUND;
+			range = MAX(psWeap->longRange, range);
+		}
+	}
 	QScriptValue value = convObj(psStruct, engine);
+	value.setProperty("isCB", structCBSensor(psStruct), QScriptValue::ReadOnly);
+	value.setProperty("isSensor", structStandardSensor(psStruct), QScriptValue::ReadOnly);
+	value.setProperty("canHitAir", aa, QScriptValue::ReadOnly);
+	value.setProperty("canHitGround", ga, QScriptValue::ReadOnly);
+	value.setProperty("isRadarDetector", objRadarDetector(psStruct), QScriptValue::ReadOnly);
+	value.setProperty("range", range, QScriptValue::ReadOnly);
 	value.setProperty("status", (int)psStruct->status, QScriptValue::ReadOnly);
 	value.setProperty("health", 100 * structureBody(psStruct) / MAX(1, psStruct->body), QScriptValue::ReadOnly);
 	value.setProperty("cost", psStruct->pStructureType->powerToBuild, QScriptValue::ReadOnly);
@@ -206,12 +231,32 @@ QScriptValue convFeature(FEATURE *psFeature, QScriptEngine *engine)
 //;; \item[armed] The percentage of weapon capability that is fully armed. Only defined on VTOLs.
 //;; \item[experience] Amount of experience this droid has, based on damage it has dealt to enemies.
 //;; \item[cost] What it would cost to build the droid. (3.2+ only)
+//;; \item[isVTOL] True if the droid is VTOL. (3.2+ only)
+//;; \item[isAA] True if the droid has anti-air capabilities. (3.2+ only)
+//;; \item[isSensor] True if the droid has sensor ability. (3.2+ only)
+//;; \item[isCB] True if the droid has counter-battery ability. (3.2+ only)
+//;; \item[isRadarDetector] True if the droid has radar detector ability. (3.2+ only)
+//;; \item[range] Maximum range of its weapons. (3.2+ only)
 //;; \end{description}
 QScriptValue convDroid(DROID *psDroid, QScriptEngine *engine)
 {
+	bool aa = false;
+	bool ga = false;
+	int range = -1;
+	for (int i = 0; i < psDroid->numWeaps; i++)
+	{
+		if (psDroid->asWeaps[i].nStat)
+		{
+			WEAPON_STATS *psWeap = &asWeaponStats[psDroid->asWeaps[i].nStat];
+			aa = aa || psWeap->surfaceToAir & SHOOT_IN_AIR;
+			ga = ga || psWeap->surfaceToAir & SHOOT_ON_GROUND;
+			range = MAX(psWeap->longRange, range);
+		}
+	}
 	DROID_TYPE type = psDroid->droidType;
 	QScriptValue value = convObj(psDroid, engine);
 	value.setProperty("action", (int)psDroid->action, QScriptValue::ReadOnly);
+	value.setProperty("range", range, QScriptValue::ReadOnly);
 	value.setProperty("order", (int)psDroid->order.type, QScriptValue::ReadOnly);
 	value.setProperty("cost", calcDroidPower(psDroid), QScriptValue::ReadOnly);
 	switch (psDroid->droidType) // hide some engine craziness
@@ -226,6 +271,12 @@ QScriptValue convDroid(DROID *psDroid, QScriptEngine *engine)
 	default:
 		break;
 	}
+	value.setProperty("isRadarDetector", objRadarDetector(psDroid), QScriptValue::ReadOnly);
+	value.setProperty("isCB", cbSensorDroid(psDroid), QScriptValue::ReadOnly);
+	value.setProperty("isSensor", standardSensorDroid(psDroid), QScriptValue::ReadOnly);
+	value.setProperty("canHitAir", aa, QScriptValue::ReadOnly);
+	value.setProperty("canHitGround", ga, QScriptValue::ReadOnly);
+	value.setProperty("isVTOL", isVtolDroid(psDroid), QScriptValue::ReadOnly);
 	value.setProperty("droidType", (int)type, QScriptValue::ReadOnly);
 	value.setProperty("experience", (double)psDroid->experience / 65536.0, QScriptValue::ReadOnly);
 	value.setProperty("health", 100.0 / (double)psDroid->originalBody * (double)psDroid->body, QScriptValue::ReadOnly);
