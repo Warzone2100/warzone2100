@@ -23,33 +23,31 @@
 
 enum SELECTION_CLASS
 {
-DS_ALL_UNITS,
-DS_BY_TYPE
+	DS_ALL_UNITS,
+	DS_BY_TYPE
 };
 
 enum SELECTIONTYPE
 {
-DST_UNUSED,
-DST_VTOL,
-DST_HOVER,
-DST_WHEELED,
-DST_TRACKED,
-DST_HALF_TRACKED,
-DST_ALL_COMBAT,
-DST_ALL_DAMAGED,
-DST_ALL_SAME
+	DST_UNUSED,
+	DST_VTOL,
+	DST_HOVER,
+	DST_WHEELED,
+	DST_TRACKED,
+	DST_HALF_TRACKED,
+	DST_ALL_COMBAT,
+	DST_ALL_DAMAGED,
+	DST_ALL_SAME
 };
 
 // EXTERNALLY REFERENCED FUNCTIONS
-extern UDWORD	selDroidSelection( UDWORD	player, SELECTION_CLASS droidClass,
-						  SELECTIONTYPE droidType, bool bOnScreen );
-extern UDWORD	selDroidDeselect		( UDWORD player );
-extern UDWORD	selNumSelected			( UDWORD player );
-extern void	selNextRepairUnit			( void );
-extern void selNextUnassignedUnit		( void );
-extern void	selNextSpecifiedBuilding	( UDWORD structType );
-extern	void	selNextSpecifiedUnit	(UDWORD unitType);
+unsigned int selDroidSelection(unsigned int player, SELECTION_CLASS droidClass, SELECTIONTYPE droidType, bool bOnScreen);
+unsigned int selDroidDeselect(unsigned int player);
+unsigned int selNumSelected(unsigned int player);
+void selNextUnassignedUnit();
+void selNextSpecifiedBuilding(STRUCTURE_TYPE structType);
+void selNextSpecifiedUnit(DROID_TYPE unitType);
 // select the n'th command droid
-extern void selCommander(SDWORD n);
+void selCommander(int n);
 
 #endif // __INCLUDED_SRC_SELECTION_H__
