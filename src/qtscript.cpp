@@ -73,6 +73,8 @@ struct bindNode
 	QScriptEngine *engine;
 };
 
+#define MAX_MS 50
+
 /// Bind functions to primary object functions.
 static QHash<int, bindNode> bindings;
 
@@ -98,8 +100,13 @@ static bool callFunction(QScriptEngine *engine, const QString &function, const Q
 		debug(LOG_WARNING, "function (%s) not defined?", function.toUtf8().constData());
 		return false;
 	}
-
+	int ticks = wzGetTicks();
 	QScriptValue result = value.call(QScriptValue(), args);
+	ticks = wzGetTicks() - ticks;
+	if (ticks > MAX_MS)
+	{
+		debug(LOG_SCRIPT, "%s took %d ms at time %d", function.toAscii().constData(), ticks, wzGetTicks());
+	}
 	if (engine->hasUncaughtException())
 	{
 		int line = engine->uncaughtExceptionLineNumber();
