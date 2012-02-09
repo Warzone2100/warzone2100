@@ -1666,6 +1666,7 @@ static QScriptValue js_setDesign(QScriptContext *context, QScriptEngine *engine)
 }
 
 //-- \subsection{addReticuleButton(button type)} Add reticule button. FIXME: This currently only works in tutorial.
+//-- Valid parameters for this and \emph{removeReticuleButton}: MANUFACTURE, RESEARCH, BUILD, DESIGN, INTELMAP, COMMAND, CANCEL.
 static QScriptValue js_addReticuleButton(QScriptContext *context, QScriptEngine *engine)
 {
 	int button = context->argument(0).toInt32();
