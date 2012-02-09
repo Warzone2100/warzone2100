@@ -133,7 +133,16 @@ extern void	kf_SelectAllHovers( void );
 extern void	kf_SelectAllWheeled( void );
 extern void	kf_SelectAllTracked( void );
 extern void	kf_SelectAllHalfTracked( void );
+void kf_SelectAllCyborgs();
+void kf_SelectAllEngineers();
+void kf_SelectAllMechanics();
+void kf_SelectAllTransporters();
+void kf_SelectAllRepairTanks();
+void kf_SelectAllSensorUnits();
+void kf_SelectAllTrucks();
 extern void	kf_SelectAllCombatUnits( void );
+void kf_SelectAllLandCombatUnits();
+void kf_SelectAllCombatCyborgs();
 extern void	kf_SelectAllSameType( void );
 
 extern void	kf_SetDroidRangeShort( void );

@@ -101,6 +101,32 @@ static unsigned int selSelectAllSameProp(unsigned int player, PROPULSION_TYPE pr
 }
 
 // ---------------------------------------------------------------------
+// Selects all units owned by the player of a certain droid type.
+// On Screen toggle.
+static unsigned int selSelectAllSameDroid(unsigned int player, DROID_TYPE droidType, bool bOnScreen)
+{
+	int count = 0;
+	selDroidDeselect(player);
+
+	/* Go thru' them all */
+	for (DROID *psDroid = apsDroidLists[player]; psDroid; psDroid = psDroid->psNext)
+	{
+		/* Is on screen important */
+		if (!bOnScreen || droidOnScreen(psDroid, 0))
+		{
+			/* Same as the droid type asked for*/
+			if (psDroid->droidType == droidType)
+			{
+				SelectDroid(psDroid);
+				count++;
+			}
+		}
+	}
+
+	return count;
+}
+
+// ---------------------------------------------------------------------
 // Selects all units owned by the player that have a weapon. On screen
 // toggle.
 static unsigned int selSelectAllCombat(unsigned int player, bool bOnScreen)
@@ -130,6 +156,72 @@ static unsigned int selSelectAllCombat(unsigned int player, bool bOnScreen)
 	return count;
 }
 
+// ---------------------------------------------------------------------
+// Selects all land-based units (Including Hover units) owned by the player that have a weapon. On screen
+// toggle.
+static unsigned int selSelectAllCombatLand(unsigned int player, bool bOnScreen)
+{
+	int count = 0;
+	selDroidDeselect(player);
+
+	for (DROID *psDroid = apsDroidLists[player]; psDroid; psDroid = psDroid->psNext)
+	{
+		/* Does it have a weapon? */
+		if (psDroid->asWeaps[0].nStat > 0)
+		{
+			/* Is on screen relevant? */
+			if (!bOnScreen || droidOnScreen(psDroid, 0))
+			{
+				/* Get the propulsion type */
+				PROPULSION_STATS *psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
+				ASSERT(psPropStats != NULL, "invalid propulsion stats pointer");
+				if (psPropStats->propulsionType == PROPULSION_TYPE_WHEELED ||
+				    psPropStats->propulsionType == PROPULSION_TYPE_HALF_TRACKED ||
+				    psPropStats->propulsionType == PROPULSION_TYPE_TRACKED ||
+				    psPropStats->propulsionType == PROPULSION_TYPE_HOVER ||
+				    psPropStats->propulsionType == PROPULSION_TYPE_LEGGED)
+				{
+					SelectDroid(psDroid);
+					count++;
+				}
+			}
+		}
+	}
+
+	return count;
+}
+
+// ---------------------------------------------------------------------
+// Selects all Cyborgs owned by the player that have a weapon. On screen
+// toggle.
+static unsigned int selSelectAllCombatCyborg(unsigned int player, bool bOnScreen)
+{
+	int count = 0;
+	selDroidDeselect(player);
+
+	for (DROID *psDroid = apsDroidLists[player]; psDroid; psDroid = psDroid->psNext)
+	{
+		/* Does it have a weapon? */
+		if (psDroid->asWeaps[0].nStat > 0)
+		{
+			/* Is on screen relevant? */
+			if (!bOnScreen || droidOnScreen(psDroid, 0))
+			{
+				/* Get the propulsion type */
+				PROPULSION_STATS *psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
+				ASSERT(psPropStats != NULL, "invalid propulsion stats pointer");
+				/* Check if cyborg */
+				if (psPropStats->propulsionType == PROPULSION_TYPE_LEGGED)
+				{
+					SelectDroid(psDroid);
+					count++;
+				}
+			}
+		}
+	}
+
+	return count;
+}
 // ---------------------------------------------------------------------
 // Selects all damaged units - on screen toggle.
 static unsigned int selSelectAllDamaged(unsigned int player, bool bOnScreen)
@@ -559,8 +651,35 @@ unsigned int selDroidSelection(unsigned int player, SELECTION_CLASS droidClass, 
 				case DST_HALF_TRACKED:
 					retVal = selSelectAllSameProp(player, PROPULSION_TYPE_HALF_TRACKED, bOnScreen);
 					break;
+				case DST_CYBORG:
+					retVal = selSelectAllSameProp(player, PROPULSION_TYPE_LEGGED, bOnScreen);
+					break;
+				case DST_ENGINEER:
+					retVal = selSelectAllSameDroid(player, DROID_CYBORG_CONSTRUCT, bOnScreen);
+					break;
+				case DST_MECHANIC:
+					retVal = selSelectAllSameDroid(player, DROID_CYBORG_REPAIR, bOnScreen);
+					break;
+				case DST_TRANSPORTER:
+					retVal = selSelectAllSameDroid(player, DROID_TRANSPORTER, bOnScreen);
+					break;
+				case DST_REPAIR_TANK:
+					retVal = selSelectAllSameDroid(player, DROID_REPAIR, bOnScreen);
+					break;
+				case DST_SENSOR:
+					retVal = selSelectAllSameDroid(player, DROID_SENSOR, bOnScreen);
+					break;
+				case DST_TRUCK:
+					retVal = selSelectAllSameDroid(player, DROID_CONSTRUCT, bOnScreen);
+					break;
 				case DST_ALL_COMBAT:
 					retVal = selSelectAllCombat(player, bOnScreen);
+					break;
+				case DST_ALL_COMBAT_LAND:
+					retVal = selSelectAllCombatLand(player, bOnScreen);
+					break;
+				case DST_ALL_COMBAT_CYBORG:
+					retVal = selSelectAllCombatCyborg(player, bOnScreen);
 					break;
 				case DST_ALL_DAMAGED:
 					retVal = selSelectAllDamaged(player, bOnScreen);
