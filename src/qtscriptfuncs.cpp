@@ -92,7 +92,7 @@ QScriptValue convResearch(RESEARCH *psResearch, QScriptEngine *engine, int playe
 	return value;
 }
 
-//;; \subsection{Structure}
+//;; \subsection{Structure\label{objects:structure}}
 //;; Describes a structure (building). It inherits all the properties of the base object (see below).
 //;; In addition, the following properties are defined:
 //;; \begin{description}
@@ -947,7 +947,8 @@ static QScriptValue js_buildDroid(QScriptContext *context, QScriptEngine *engine
 //-- \subsection{enumStruct([player[, structure type[, looking player]]])}
 //-- Returns an array of structure objects. If no parameters given, it will
 //-- return all of the structures for the current player. The second parameter
-//-- is the name of the structure type, as defined in "structures.txt". The
+//-- can be either a string with the name of the structure type as defined in
+//-- "structures.txt", or a stattype as defined in \ref{objects:structure}. The
 //-- third parameter can be used to filter by visibility, the default is not
 //-- to filter.
 static QScriptValue js_enumStruct(QScriptContext *context, QScriptEngine *engine)
@@ -955,12 +956,22 @@ static QScriptValue js_enumStruct(QScriptContext *context, QScriptEngine *engine
 	QList<STRUCTURE *> matches;
 	int player = -1, looking = -1;
 	QString statsName;
+	QScriptValue val;
+	STRUCTURE_TYPE type = NUM_DIFF_BUILDINGS;
 
 	switch (context->argumentCount())
 	{
 	default:
 	case 3: looking = context->argument(2).toInt32(); // fall-through
-	case 2: statsName = context->argument(1).toString(); // fall-through
+	case 2: val = context->argument(1);
+		if (val.isNumber())
+		{
+			type = (STRUCTURE_TYPE)val.toInt32();
+		}
+		else
+		{
+			statsName = val.toString();
+		} // fall-through
 	case 1: player = context->argument(0).toInt32(); break;
 	case 0: player = engine->globalObject().property("me").toInt32();
 	}
@@ -970,6 +981,59 @@ static QScriptValue js_enumStruct(QScriptContext *context, QScriptEngine *engine
 	for (STRUCTURE *psStruct = apsStructLists[player]; psStruct; psStruct = psStruct->psNext)
 	{
 		if ((looking == -1 || psStruct->visible[looking])
+		    && (type == NUM_DIFF_BUILDINGS || type == psStruct->pStructureType->type)
+		    && (statsName.isEmpty() || statsName.compare(psStruct->pStructureType->pName) == 0))
+		{
+			matches.push_back(psStruct);
+		}
+	}
+	QScriptValue result = engine->newArray(matches.size());
+	for (int i = 0; i < matches.size(); i++)
+	{
+		STRUCTURE *psStruct = matches.at(i);
+		result.setProperty(i, convStructure(psStruct, engine));
+	}
+	return result;
+}
+
+//-- \subsection{enumStructOffWorld([player[, structure type[, looking player]]])}
+//-- Returns an array of structure objects in your base when on an off-world mission, NULL otherwise.
+//-- If no parameters given, it will return all of the structures for the current player.
+//-- The second parameter can be either a string with the name of the structure type as defined
+//-- in "structures.txt", or a stattype as defined in \ref{objects:structure}.
+//-- The third parameter can be used to filter by visibility, the default is not
+//-- to filter.
+static QScriptValue js_enumStructOffWorld(QScriptContext *context, QScriptEngine *engine)
+{
+	QList<STRUCTURE *> matches;
+	int player = -1, looking = -1;
+	QString statsName;
+	QScriptValue val;
+	STRUCTURE_TYPE type = NUM_DIFF_BUILDINGS;
+
+	switch (context->argumentCount())
+	{
+	default:
+	case 3: looking = context->argument(2).toInt32(); // fall-through
+	case 2: val = context->argument(1);
+		if (val.isNumber())
+		{
+			type = (STRUCTURE_TYPE)val.toInt32();
+		}
+		else
+		{
+			statsName = val.toString();
+		} // fall-through
+	case 1: player = context->argument(0).toInt32(); break;
+	case 0: player = engine->globalObject().property("me").toInt32();
+	}
+
+	SCRIPT_ASSERT(context, player < MAX_PLAYERS && player >= 0, "Target player index out of range: %d", player);
+	SCRIPT_ASSERT(context, looking < MAX_PLAYERS && looking >= -1, "Looking player index out of range: %d", looking);
+	for (STRUCTURE *psStruct = mission.apsStructLists[player]; psStruct; psStruct = psStruct->psNext)
+	{
+		if ((looking == -1 || psStruct->visible[looking])
+		    && (type == NUM_DIFF_BUILDINGS || type == psStruct->pStructureType->type)
 		    && (statsName.isEmpty() || statsName.compare(psStruct->pStructureType->pName) == 0))
 		{
 			matches.push_back(psStruct);
@@ -1666,6 +1730,7 @@ static QScriptValue js_setDesign(QScriptContext *context, QScriptEngine *engine)
 }
 
 //-- \subsection{addReticuleButton(button type)} Add reticule button. FIXME: This currently only works in tutorial.
+//-- Valid parameters for this and \emph{removeReticuleButton}: MANUFACTURE, RESEARCH, BUILD, DESIGN, INTELMAP, COMMAND, CANCEL.
 static QScriptValue js_addReticuleButton(QScriptContext *context, QScriptEngine *engine)
 {
 	int button = context->argument(0).toInt32();
@@ -1958,6 +2023,7 @@ bool registerFunctions(QScriptEngine *engine)
 	engine->globalObject().setProperty("console", engine->newFunction(js_console));
 	engine->globalObject().setProperty("structureIdle", engine->newFunction(js_structureIdle));
 	engine->globalObject().setProperty("enumStruct", engine->newFunction(js_enumStruct));
+	engine->globalObject().setProperty("enumStructOffWorld", engine->newFunction(js_enumStructOffWorld));
 	engine->globalObject().setProperty("enumDroid", engine->newFunction(js_enumDroid));
 	engine->globalObject().setProperty("enumGroup", engine->newFunction(js_enumGroup));
 	engine->globalObject().setProperty("enumFeature", engine->newFunction(js_enumFeature));
@@ -2028,7 +2094,6 @@ bool registerFunctions(QScriptEngine *engine)
 	engine->globalObject().setProperty("DORDER_EMBARK", DORDER_EMBARK, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("DORDER_DISEMBARK", DORDER_DISEMBARK, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("COMMAND", IDRET_COMMAND, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("OPTIONS", IDRET_COMMAND, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("BUILD", IDRET_BUILD, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("MANUFACTURE", IDRET_MANUFACTURE, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("RESEARCH", IDRET_RESEARCH, QScriptValue::ReadOnly | QScriptValue::Undeletable);

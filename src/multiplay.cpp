@@ -1042,7 +1042,7 @@ bool sendTextMessage(const char *pStr, bool all)
 				sstrcpy(display, _("(allies"));
 			}
 		}
-		for (; curStr[0] >= '0' && curStr[0] <= '7'; curStr++)		// for each 0..7 numeric char encountered
+		for (; curStr[0] >= '0' && curStr[0] <= '9'; ++curStr)  // for each 0..9 numeric char encountered
 		{
 			i = posTable[curStr[0]-'0'];
 			if (normal)

@@ -2235,6 +2235,48 @@ void	kf_SelectAllHalfTracked( void )
 }
 
 // --------------------------------------------------------------------------
+void kf_SelectAllCyborgs()
+{
+	selDroidSelection(selectedPlayer, DS_BY_TYPE, DST_CYBORG, false);
+}
+
+// --------------------------------------------------------------------------
+void kf_SelectAllEngineers()
+{
+	selDroidSelection(selectedPlayer, DS_BY_TYPE, DST_ENGINEER, false);
+}
+
+// --------------------------------------------------------------------------
+void kf_SelectAllMechanics()
+{
+	selDroidSelection(selectedPlayer, DS_BY_TYPE, DST_MECHANIC, false);
+}
+
+// --------------------------------------------------------------------------
+void kf_SelectAllTransporters()
+{
+	selDroidSelection(selectedPlayer, DS_BY_TYPE, DST_TRANSPORTER, false);
+}
+
+// --------------------------------------------------------------------------
+void kf_SelectAllRepairTanks()
+{
+	selDroidSelection(selectedPlayer, DS_BY_TYPE, DST_REPAIR_TANK, false);
+}
+
+// --------------------------------------------------------------------------
+void kf_SelectAllSensorUnits()
+{
+	selDroidSelection(selectedPlayer, DS_BY_TYPE, DST_SENSOR, false);
+}
+
+// --------------------------------------------------------------------------
+void kf_SelectAllTrucks()
+{
+	selDroidSelection(selectedPlayer, DS_BY_TYPE, DST_TRUCK, false);
+}
+
+// --------------------------------------------------------------------------
 void	kf_SelectAllDamaged( void )
 {
 	selDroidSelection(selectedPlayer,DS_BY_TYPE,DST_ALL_DAMAGED,false);
@@ -2244,6 +2286,18 @@ void	kf_SelectAllDamaged( void )
 void	kf_SelectAllCombatUnits( void )
 {
 	selDroidSelection(selectedPlayer,DS_BY_TYPE,DST_ALL_COMBAT,false);
+}
+
+// --------------------------------------------------------------------------
+void kf_SelectAllLandCombatUnits()
+{
+	selDroidSelection(selectedPlayer, DS_BY_TYPE, DST_ALL_COMBAT_LAND, false);
+}
+
+// --------------------------------------------------------------------------
+void kf_SelectAllCombatCyborgs()
+{
+	selDroidSelection(selectedPlayer, DS_BY_TYPE, DST_ALL_COMBAT_CYBORG, false);
 }
 
 // --------------------------------------------------------------------------

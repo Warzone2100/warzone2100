@@ -30,8 +30,15 @@
 //*************************************************************************
 
 // PIE model flags
-#define iV_IMD_NOSTRETCH     0x00001000
-#define iV_IMD_TCMASK        0x00010000
+// premultiplied implies additive
+#define iV_IMD_NO_ADDITIVE     0x00000001
+#define iV_IMD_ADDITIVE        0x00000002
+#define iV_IMD_PREMULTIPLIED   0x00000004
+// pitch to camera implies roll to camera
+#define iV_IMD_ROLL_TO_CAMERA  0x00000010
+#define iV_IMD_PITCH_TO_CAMERA 0x00000020
+#define iV_IMD_NOSTRETCH       0x00001000
+#define iV_IMD_TCMASK          0x00010000
 
 // polygon flags	b0..b7: col, b24..b31: anim index
 

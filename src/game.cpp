@@ -4104,14 +4104,14 @@ static bool loadSaveDroidPointers(const QString &pFileName, DROID **ppsCurrentDr
 static int healthValue(QSettings &ini, int defaultValue)
 {
 	QString health = ini.value("health").toString();
-	if (health.isEmpty())
+	if (health.isEmpty() || defaultValue == 0)
 	{
 		return defaultValue;
 	}
 	else if (health.contains('%'))
 	{
 		int perc = health.remove('%').toInt();
-		return defaultValue * perc / 100;
+		return MAX(defaultValue * perc / 100, 1); //hp not supposed to be 0
 	}
 	else
 	{

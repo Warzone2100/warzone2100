@@ -251,6 +251,7 @@ int getNextAIAssignment(const char *name)
 			if (match == 0)
 			{
 				aidata[ai].assigned++;
+				debug(LOG_SAVE, "wzscript assigned to player %d", i);
 				return i;	// found right player
 			}
 			match--;		// find next of this type
@@ -326,6 +327,7 @@ void loadMultiScripts()
 						continue; // no AI
 					}
 					loadPlayerScript(val, i, NetPlay.players[i].difficulty);
+					NetPlay.players[i].ai = AI_CUSTOM;
 					continue;
 				}
 				challenge.endGroup();

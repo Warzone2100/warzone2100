@@ -1,4 +1,8 @@
 2012-02-08: Version 3.1-beta2
+ * Javascript:
+   * Fix: Make sure we run Nexus AI on the correct players when some players use javascript-based AIs (ticket:3137)
+
+2012-02-08: Version 3.1-beta2
  * General:
    * Fix: Show unit designs in factories after loading a game (ticket:3094, commit:6f7e523bc18d9c508c104c3917712400b1c53b4f)
    * Fix: Don't crash when trying to paste text (ticket:3091, commit:de3a4112d9acd4490f511869a48567bc038946fc)

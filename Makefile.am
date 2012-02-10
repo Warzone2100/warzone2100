@@ -51,11 +51,27 @@ EXTRA_DIST= \
 dist-hook:
 	rm -rf `find $(distdir) -type d -name .svn`
 
-javascript-doc:
+javascript-doc-base:
 	grep $(top_srcdir)/src/qtscript.cpp -e '//==' | sed 's/\/\/==//' > doc/globals.tex
 	grep $(top_srcdir)/src/qtscript.cpp -e '//__' | sed 's/\/\/__//' > doc/events.tex
 	grep $(top_srcdir)/src/qtscript.cpp -e '//--' | sed 's/\/\/--//' > doc/functions.tex
 	grep $(top_srcdir)/src/qtscriptfuncs.cpp -e '//--' | sed 's/\/\/--//' >> doc/functions.tex
 	grep $(top_srcdir)/src/qtscriptfuncs.cpp -e '//;;' | sed 's/\/\/;;//' > doc/objects.tex
 	cp $(top_srcdir)/doc/javascript.tex doc/
+
+javascript-doc: javascript-doc-base
+if PDFLATEX
 	(cd doc ; pdflatex javascript.tex)
+else
+	echo "You need pdflatex installed!"
+endif
+
+javascript-doc-html: javascript-doc-base
+if HEVEA
+	(cd doc; hevea javascript.tex)
+if HACHA
+	(cd doc; hacha -o javascript-index.html javascript.html)
+endif
+else
+	echo "You need hevea installed!"
+endif

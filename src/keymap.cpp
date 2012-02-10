@@ -254,6 +254,15 @@ _keymapsave keyMapSaveTable[] =
 	kf_SetDroidGoToTransport,
 	kf_SetDroidMoveGuard,
 	kf_toggleTrapCursor,
+	kf_SelectAllCyborgs,
+	kf_SelectAllCombatCyborgs,
+	kf_SelectAllEngineers,
+	kf_SelectAllLandCombatUnits,
+	kf_SelectAllMechanics,
+	kf_SelectAllTransporters,
+	kf_SelectAllRepairTanks,
+	kf_SelectAllSensorUnits,
+	kf_SelectAllTrucks,
 	NULL		// last function!
 };
 
@@ -413,6 +422,7 @@ void	keyInitMappings( bool bForceDefaults )
 	//                                **********************************
 	//								In game mappings - COMBO (CTRL + LETTER) presses.
 	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LCTRL, KEY_A, KEYMAP_PRESSED, kf_SelectAllCombatUnits,   N_("Select all Combat Units"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LCTRL, KEY_C, KEYMAP_PRESSED, kf_SelectAllCyborgs,       N_("Select all Cyborgs"));
 	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LCTRL, KEY_D, KEYMAP_PRESSED, kf_SelectAllDamaged,       N_("Select all Heavily Damaged Units"));
 	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LCTRL, KEY_F, KEYMAP_PRESSED, kf_SelectAllHalfTracked,   N_("Select all Half-tracks"));
 	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LCTRL, KEY_H, KEYMAP_PRESSED, kf_SelectAllHovers,        N_("Select all Hovers"));
@@ -424,6 +434,17 @@ void	keyInitMappings( bool bForceDefaults )
 	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LCTRL, KEY_W, KEYMAP_PRESSED, kf_SelectAllWheeled,       N_("Select all Wheels"));
 	keyAddMapping(KEYMAP__DEBUG,     KEY_LCTRL, KEY_Y, KEYMAP_PRESSED, kf_FrameRate,              N_("Show frame rate"));
 	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LCTRL, KEY_Z, KEYMAP_PRESSED, kf_SelectAllSameType,      N_("Select all Similar Units"));
+	//                                **********************************
+	//                                **********************************
+	//                                                              In game mappings - COMBO (SHIFT + LETTER) presses.
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LSHIFT, KEY_C, KEYMAP_PRESSED, kf_SelectAllCombatCyborgs,   N_("Select all Combat Cyborgs"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LSHIFT, KEY_E, KEYMAP_PRESSED, kf_SelectAllEngineers,       N_("Select all Engineers"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LSHIFT, KEY_G, KEYMAP_PRESSED, kf_SelectAllLandCombatUnits, N_("Select all Land Combat Units"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LSHIFT, KEY_M, KEYMAP_PRESSED, kf_SelectAllMechanics,       N_("Select all Mechanics"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LSHIFT, KEY_P, KEYMAP_PRESSED, kf_SelectAllTransporters,    N_("Select all Transporters"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LSHIFT, KEY_R, KEYMAP_PRESSED, kf_SelectAllRepairTanks,     N_("Select all Repair Tanks"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LSHIFT, KEY_S, KEYMAP_PRESSED, kf_SelectAllSensorUnits,     N_("Select all Sensor Units"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LSHIFT, KEY_T, KEYMAP_PRESSED, kf_SelectAllTrucks,          N_("Select all Trucks"));
 	//                                **********************************
 	//                                **********************************
 	//									SELECT PLAYERS - DEBUG ONLY
