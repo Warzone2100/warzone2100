@@ -3758,7 +3758,7 @@ void intProcessDesign(UDWORD id)
 			sCurrDesign.asParts[COMP_PROPULSION] = ((PROPULSION_STATS *)apsComponentList[id - IDDES_COMPSTART]) - asPropulsionStats;
 
 			/* Set the new stats on the display */
-			intSetPropulsionStats((PROPULSION_STATS *)apsComponentList[id - IDDES_COMPSTART]);
+			intSetPropulsionForm((PROPULSION_STATS *)apsComponentList[id - IDDES_COMPSTART]);
 
 			// Check that the weapon (if any) is valid for this propulsion
 			if (!intCheckValidWeaponForProp())
