@@ -8,10 +8,15 @@ function eventStartLevel()
 	setMiniMap(false);
 	setDesign(false);
 
-	var structlist = enumStruct(me);
+	var structlist = enumStruct(me, HQ);
 	for (var i = 0; i < structlist.length; i++)
 	{
 		// Simulate build events to enable minimap/unit design when an HQ exists
+		eventStructureBuilt(structlist[i]);
+	}
+	structlist = enumStructOffWorld(me, HQ);
+	for (var i = 0; i < structlist.length; i++)
+	{
 		eventStructureBuilt(structlist[i]);
 	}
 }
