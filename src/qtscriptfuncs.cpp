@@ -92,7 +92,7 @@ QScriptValue convResearch(RESEARCH *psResearch, QScriptEngine *engine, int playe
 	return value;
 }
 
-//;; \subsection{Structure}
+//;; \subsection{Structure\label{objects:structure}}
 //;; Describes a structure (building). It inherits all the properties of the base object (see below).
 //;; In addition, the following properties are defined:
 //;; \begin{description}
@@ -947,7 +947,8 @@ static QScriptValue js_buildDroid(QScriptContext *context, QScriptEngine *engine
 //-- \subsection{enumStruct([player[, structure type[, looking player]]])}
 //-- Returns an array of structure objects. If no parameters given, it will
 //-- return all of the structures for the current player. The second parameter
-//-- is the name of the structure type, as defined in "structures.txt". The
+//-- can be either a string with the name of the structure type as defined in
+//-- "structures.txt", or a stattype as defined in \ref{objects:structure}. The
 //-- third parameter can be used to filter by visibility, the default is not
 //-- to filter.
 static QScriptValue js_enumStruct(QScriptContext *context, QScriptEngine *engine)
@@ -955,12 +956,22 @@ static QScriptValue js_enumStruct(QScriptContext *context, QScriptEngine *engine
 	QList<STRUCTURE *> matches;
 	int player = -1, looking = -1;
 	QString statsName;
+	QScriptValue val;
+	STRUCTURE_TYPE type = NUM_DIFF_BUILDINGS;
 
 	switch (context->argumentCount())
 	{
 	default:
 	case 3: looking = context->argument(2).toInt32(); // fall-through
-	case 2: statsName = context->argument(1).toString(); // fall-through
+	case 2: val = context->argument(1);
+		if (val.isNumber())
+		{
+			type = (STRUCTURE_TYPE)val.toInt32();
+		}
+		else
+		{
+			statsName = val.toString();
+		} // fall-through
 	case 1: player = context->argument(0).toInt32(); break;
 	case 0: player = engine->globalObject().property("me").toInt32();
 	}
@@ -970,6 +981,7 @@ static QScriptValue js_enumStruct(QScriptContext *context, QScriptEngine *engine
 	for (STRUCTURE *psStruct = apsStructLists[player]; psStruct; psStruct = psStruct->psNext)
 	{
 		if ((looking == -1 || psStruct->visible[looking])
+		    && (type == NUM_DIFF_BUILDINGS || type == psStruct->pStructureType->type)
 		    && (statsName.isEmpty() || statsName.compare(psStruct->pStructureType->pName) == 0))
 		{
 			matches.push_back(psStruct);
