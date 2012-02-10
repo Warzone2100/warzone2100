@@ -24,11 +24,11 @@ The following hard-coded files exist for game rules that use this API:
 For ordinary AI scripts, these are controlled using '.ai' files that are present in the 'multiplayer/skirmish'
 directory. Here is an example of an '.ai' file that defines an AI implemented using this API:
 
-\begin{verbatim}
+\begin{lstlisting}
 	[AI]
 	name = "Semperfi JS"
 	js = semperfi.js
-\end{verbatim}
+\end{lstlisting}
 
 It references a '.js' JavaScript file that needs to be in the same directory as the '.ai' file. 
 
@@ -71,10 +71,10 @@ key sets up an alternative rules file, which means that the "rules.js" mentioned
 this case, you must implement your own rules for winning and losing, among other things. Here is an example
 of such a scripts section:
 
-\begin{verbatim}
+\begin{lstlisting}
 	[scripts]
 	rules = towerdefense.js
-\end{verbatim}
+\end{lstlisting}
 
 You can also specify which AI scripts are to be run for each player. These must be given a path to the script,
 since you may sometimes want them from the AI directory ("multiplay/skirmish/") and sometimes from the challenge
@@ -82,14 +82,14 @@ directory ("challenges/"). If you do not want an AI script to be loaded for a pl
 this player to be controlled from one of your challenge scripts), then you can give it the special value "null". 
 Here is an example if a challenge player definition with its AI specified:
 
-\begin{verbatim}
+\begin{lstlisting}
 	[player_2]
 	name = "Enemy"
 	team = 1
 	difficulty = "Medium"
 	position = 4
 	ai = multiplay/skirmish/semperfi.js
-\end{verbatim}
+\end{lstlisting}
 
 \section{Common Objects}
 
