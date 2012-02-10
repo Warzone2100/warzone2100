@@ -784,11 +784,12 @@ iIMDShape *iV_ProcessIMD( const char **ppFileData, const char *FileDataEnd )
 
 		ASSERT_OR_RETURN(NULL, texpage >= 0, "%s could not load tex page %s", pFileName, texfile);
 
-		// assign tex page to levels
+		// assign tex pages and flags to all levels
 		for (psShape = shape; psShape != NULL; psShape = psShape->next)
 		{
 			psShape->texpage = texpage;
 			psShape->normalpage = normalpage;
+			psShape->flags = imd_flags;
 		}
 
 		// check if model should use team colour mask
@@ -805,7 +806,6 @@ iIMDShape *iV_ProcessIMD( const char **ppFileData, const char *FileDataEnd )
 			// Propagate settings through levels
 			for (psShape = shape; psShape != NULL; psShape = psShape->next)
 			{
-				psShape->flags |= iV_IMD_TCMASK;
 				psShape->tcmaskpage = texpage_mask;
 			}
 		}
