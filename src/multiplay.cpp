@@ -241,6 +241,10 @@ bool multiPlayerLoop(void)
 					sendDataCheck();
 				}
 			}
+			if (NetPlay.bComms)
+			{
+				sendPing();
+			}
 			// Only have to do this on a true MP game
 			if (NetPlay.isHost && !ingame.isAllPlayersDataOK && NetPlay.bComms)
 			{
