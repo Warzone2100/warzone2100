@@ -91,8 +91,8 @@
 //how many buttons can be put on the system component form
 #define DES_BUTSPERFORM  8
 
-#define MAX_DESIGN_COMPONENTS 40	// Max number of stats the design screen can cope with.
-#define MAX_SYSTEM_COMPONENTS 32	// can only fit 8 buttons on a system component form
+#define MAX_DESIGN_COMPONENTS 40		// Max number of stats the design screen can cope with.
+#define MAX_SYSTEM_COMPONENTS 128
 
 
 /***************************************************************************************/
@@ -153,6 +153,7 @@ char StringBuffer[STRING_BUFFER_SIZE];
 /* Design screen positions */
 #define DESIGN_Y				(59 + D_H)	//the top left y value for all forms on the design screen
 
+#define DES_NUMMAJORTABS	8
 #define DES_TABTHICKNESS	0
 #define DES_MAJORSIZE		40
 #define DES_MINORSIZE		11
@@ -1983,7 +1984,6 @@ static UDWORD intNumAvailable(UBYTE *aAvailable, UDWORD numEntries,
 	return numButtons;
 }
 
-
 /* Add the component tab form to the design screen */
 static bool intAddComponentForm(UDWORD numButtons)
 {
@@ -2006,6 +2006,43 @@ static bool intAddComponentForm(UDWORD numButtons)
 		return false;
 	}
 
+	/* Calculate how many buttons will go on a form */
+	//================== adds L/R Scroll buttons ===================================
+	W_BUTINIT sButInit;
+	if (numForms(numButtons, butPerForm) > DES_NUMMAJORTABS)
+	{
+		// Add the left tab scroll button
+		sButInit = W_BUTINIT();
+		sButInit.formID = IDDES_RIGHTBASE;
+		sButInit.id = IDDES_TABSCRL_LEFT;
+		sButInit.x = STAT_TABFORMX + 4;
+		sButInit.y = 40;
+		sButInit.width = TABSCRL_WIDTH;
+		sButInit.height = TABSCRL_HEIGHT;
+		sButInit.pTip = _("Tab Scroll left");
+		sButInit.pDisplay = intDisplayImageHilight;
+		sButInit.UserData = PACKDWORD_TRI(0, IMAGE_LFTTABD, IMAGE_LFTTAB);
+		if (!widgAddButton(psWScreen, &sButInit))
+		{
+			return false;
+		}
+		// Add the right tab scroll button
+		sButInit = W_BUTINIT();
+		sButInit.formID = IDDES_RIGHTBASE;
+		sButInit.id = IDDES_TABSCRL_RIGHT;
+		sButInit.x = STAT_WIDTH - 14;
+		sButInit.y = 40;
+		sButInit.width = TABSCRL_WIDTH;
+		sButInit.height = TABSCRL_HEIGHT;
+		sButInit.pTip = _("Tab Scroll right");
+		sButInit.pDisplay = intDisplayImageHilight;
+		sButInit.UserData = PACKDWORD_TRI(0, IMAGE_RGTTABD, IMAGE_RGTTAB);
+		if (!widgAddButton(psWScreen, &sButInit))
+		{
+			return false;
+		}
+	}
+
 	//now a single form
 	sFormInit = W_FORMINIT();
 	sFormInit.formID = IDDES_RIGHTBASE;
@@ -2025,10 +2062,16 @@ static bool intAddComponentForm(UDWORD numButtons)
 	sFormInit.tabMajorThickness = DES_TAB_HEIGHT;
 	sFormInit.pUserData = &StandardTab;
 	sFormInit.pTabDisplay = intDisplayTab;
+	sFormInit.maxTabsShown = DES_NUMMAJORTABS;
 	if (sFormInit.numMajor > MAX_TAB_STD_SHOWN)
-	{	// StandardTab can't have more than 4 tabs.  Being extra safe here, since
-		// we do NOT use scrolltabs & not smallTab icons either (which allow max 8)
-		sFormInit.numMajor = MAX_TAB_STD_SHOWN;
+	{
+		sFormInit.pUserData = &SmallTab;
+		sFormInit.majorSize /= 2;
+		if (sFormInit.numMajor > MAX_TAB_SMALL_SHOWN)
+		{
+			sFormInit.majorOffset = OBJ_TABOFFSET + 7;
+			sFormInit.TabMultiplier = 1;
+		}
 	}
 	for (i=0; i< sFormInit.numMajor; i++)
 	{
@@ -2190,8 +2233,6 @@ static bool intAddComponentButtons(COMPONENT_STATS *psStats, UDWORD size,
 		/* If we are out of space in the list - stop */
 		if (numComponent >= maxComponents)
 		{
-			//ASSERT( false,
-			//	"intAddComponentButtons: Too many components for the list" );
 			break;
 		}
 
@@ -3399,6 +3440,8 @@ void intRemoveDesign(void)
 	widgDelete(psWScreen, IDDES_NAMEBOX);
 	widgDelete(psWScreen, IDDES_TEMPLFORM);
 	widgDelete(psWScreen, IDDES_TEMPLBASE);
+	widgDelete(psWScreen, IDDES_TABSCRL_LEFT);
+	widgDelete(psWScreen, IDDES_TABSCRL_RIGHT);
 	widgDelete(psWScreen, IDDES_COMPFORM);
 	widgDelete(psWScreen, IDDES_RIGHTBASE);
 
@@ -3574,6 +3617,8 @@ void intProcessDesign(UDWORD id)
 		droidTemplID = id;
 
 		/* Update the component form */
+		widgDelete(psWScreen, IDDES_TABSCRL_LEFT);
+		widgDelete(psWScreen, IDDES_TABSCRL_RIGHT);
 		widgDelete(psWScreen, IDDES_COMPFORM);
 		widgDelete(psWScreen, IDDES_RIGHTBASE);
 		/* reset button states */
@@ -4043,6 +4088,8 @@ void intProcessDesign(UDWORD id)
 				intSetBodyPoints(&sCurrDesign);
 
 				/* show correct body component highlight */
+				widgDelete(psWScreen, IDDES_TABSCRL_LEFT);
+				widgDelete(psWScreen, IDDES_TABSCRL_RIGHT);
 				widgDelete(psWScreen, IDDES_COMPFORM);
 				widgDelete(psWScreen, IDDES_RIGHTBASE);
 				/* reset button states */
@@ -4150,6 +4197,49 @@ void intProcessDesign(UDWORD id)
 			widgReveal( psWScreen, IDDES_PROPFORM );
 
 			break;
+		case IDDES_TABSCRL_LEFT:
+			/* left scroll button */
+			{
+				W_TABFORM	*psTForm;
+				int temp;
+				psTForm = (W_TABFORM *)widgGetFromID(psWScreen, IDDES_COMPFORM);
+				psTForm->TabMultiplier -=1;
+				if (psTForm->TabMultiplier < 1 )
+				{
+					psTForm->TabMultiplier = 1;
+				}
+				temp = psTForm->majorT;
+				temp -= DES_NUMMAJORTABS;
+				if ( temp < 0)
+				{
+					psTForm->majorT = 0;
+				}
+				else
+				{
+					psTForm->majorT = temp;
+				}
+				break;
+			}
+		case IDDES_TABSCRL_RIGHT:
+			/* right scroll button */
+			{
+				W_TABFORM	*psTForm;
+				UWORD numTabs;
+				psTForm = (W_TABFORM *)widgGetFromID(psWScreen, IDDES_COMPFORM);
+				numTabs = psTForm->numMajor;
+				numTabs = ((numTabs / DES_NUMMAJORTABS) + 1);
+				psTForm->TabMultiplier += 1;
+				if (psTForm->TabMultiplier > numTabs)
+				{
+					psTForm->TabMultiplier -= 1;
+				}
+				psTForm->majorT += DES_NUMMAJORTABS;
+				if (psTForm->majorT >= psTForm->numMajor)
+				{
+					psTForm->majorT = psTForm->numMajor - 1;
+				}
+				break;
+			}
 		}
 	}
 
