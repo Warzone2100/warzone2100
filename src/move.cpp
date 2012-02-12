@@ -1478,8 +1478,7 @@ static void moveUpdateDroidDirection(DROID *psDroid, SDWORD *pSpeed, uint16_t di
 
 	int diff = angleDelta(direction - *pDroidDir);
 	// Turn while moving - slow down speed depending on target angle so that we can turn faster
-	int maxSpeed = std::max<int>(psDroid->baseSpeed * (iSpinAngle - abs(diff)) / iSpinAngle, 0);
-	*pSpeed = std::min(*pSpeed, maxSpeed);
+	*pSpeed = std::max<int>(*pSpeed * (iSpinAngle - abs(diff)) / iSpinAngle, 0);
 
 	// iTurnSpeed is turn speed at max velocity, increase turn speed up to iSpinSpeed when slowing down
 	int turnSpeed = std::min<int>(iTurnSpeed + int64_t(iSpinSpeed - iTurnSpeed) * abs(diff) / iSpinAngle, iSpinSpeed);
