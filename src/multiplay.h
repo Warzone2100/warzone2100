@@ -82,22 +82,6 @@ enum STRUCTURE_INFO
 	STRUCTUREINFO_RELEASERESEARCH
 };
 
-struct PACKAGED_CHECK
-{
-	uint32_t gameTime;  ///< Game time that this synch check was made. Not touched by NETauto().
-	uint8_t player;
-	uint32_t droidID;
-	int32_t order;
-	uint32_t secondaryOrder;
-	uint32_t body;
-	uint32_t experience;
-	Position pos;
-	Rotation rot;
-	uint32_t targetID;  ///< Defined iff order == DORDER_ATTACK.
-	uint16_t orderX;    ///< Defined iff order == DORDER_MOVE.
-	uint16_t orderY;    ///< Defined iff order == DORDER_MOVE.
-};
-
 // ////////////////////////////////////////////////////////////////////////////
 // Game Options and stats.
 extern MULTIPLAYERGAME		game;						// the game description.
@@ -203,14 +187,12 @@ void sendStructureInfo                  (STRUCTURE *psStruct, STRUCTURE_INFO str
 // droids . multibot
 extern bool SendDroid                   (const DROID_TEMPLATE* pTemplate, uint32_t x, uint32_t y, uint8_t player, uint32_t id, const INITIAL_DROID_ORDERS *initialOrders);
 extern bool SendDestroyDroid	(const DROID* psDroid);
-extern bool SendDemolishFinished(STRUCTURE *psS,DROID *psD);
 void sendQueuedDroidInfo(void);  ///< Actually sends the droid orders which were queued by SendDroidInfo.
 void sendDroidInfo(DROID *psDroid, DroidOrder const &order, bool add);
 extern bool SendCmdGroup		(DROID_GROUP *psGroup, UWORD x, UWORD y, BASE_OBJECT *psObj);
 
 
 extern bool sendDroidSecondary	(const DROID* psDroid, SECONDARY_ORDER sec, SECONDARY_STATE state);
-extern bool sendDroidEmbark     (const DROID* psDroid, const DROID* psTransporter);
 bool sendDroidDisembark(DROID const *psTransporter, DROID const *psDroid);
 
 // Startup. mulitopt
@@ -228,11 +210,9 @@ extern bool addTemplateToList(DROID_TEMPLATE *psNew, DROID_TEMPLATE **ppList);
 void addTemplateBack(unsigned player, DROID_TEMPLATE *psNew);
 
 // syncing.
-void sendCheck();  //send/recv  check info
 extern bool sendScoreCheck		(void);							//score check only(frontend)
 extern bool sendPing			(void);							// allow game to request pings.
 
-extern bool ForceDroidSync(const DROID *droidToSend);
 // multijoin
 extern bool sendResearchStatus  (STRUCTURE *psBuilding, UDWORD index, UBYTE player, bool bStart);
 

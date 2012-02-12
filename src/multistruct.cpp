@@ -152,53 +152,6 @@ bool recvBuildFinished(NETQUEUE queue)
 
 
 // ////////////////////////////////////////////////////////////////////////////
-// demolish message.
-bool SendDemolishFinished(STRUCTURE *psStruct, DROID *psDroid)
-{
-	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_DEMOLISH);
-
-		// Send what is being demolish and who is doing it
-		NETuint32_t(&psStruct->id);
-		NETuint32_t(&psDroid->id);
-
-	return NETend();
-}
-
-bool recvDemolishFinished(NETQUEUE queue)
-{
-	STRUCTURE	*psStruct;
-	DROID		*psDroid;
-	uint32_t	structID, droidID;
-
-	NETbeginDecode(queue, GAME_DEMOLISH);
-		NETuint32_t(&structID);
-		NETuint32_t(&droidID);
-	NETend();
-
-	psStruct = IdToStruct(structID, ANYPLAYER);
-	psDroid = IdToDroid(droidID, ANYPLAYER);
-	if (!psDroid)
-	{
-		debug(LOG_ERROR, "recvDemolishFinished: Packet with bad droid ID received. Discarding!");
-		return false;
-	}
-	if (psStruct)
-	{
-		// Demolish it
-		// Should never get here, if in synch.
-		removeStruct(psStruct, true);
-		if (psDroid && psDroid->order.psStats)
-		{
-			// Update droid if reqd
-			psDroid->order.psStats = NULL;
-		}
-	}
-
-	return true;
-}
-
-
-// ////////////////////////////////////////////////////////////////////////////
 // Inform others that a structure has been destroyed
 bool SendDestroyStructure(STRUCTURE *s)
 {

@@ -122,7 +122,6 @@ struct DROID_TEMPLATE : public BASE_STATS
 	bool		enabled;                    ///< Has been enabled
 };
 
-struct PACKAGED_CHECK;
 class DROID_GROUP;
 struct STRUCTURE;
 
@@ -205,9 +204,6 @@ struct DROID : public BASE_OBJECT
 	/* anim data */
 	ANIM_OBJECT     *psCurAnim;
 	SDWORD          iAudioID;
-
-	// Synch checking
-	PACKAGED_CHECK *gameCheckDroid;                 ///< Last PACKAGED_CHECK, for synchronisation use only (see multisync.c). TODO Make synch perfect, so that this isn't needed at all.
 };
 
 #endif // __INCLUDED_DROIDDEF_H__

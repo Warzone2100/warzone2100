@@ -73,7 +73,6 @@ static CHEAT_ENTRY cheatCodes[] =
 	{"showlevelname", kf_ToggleLevelName}, // shows the current level name on screen
 	{"logical", kf_ToggleLogical}, //logical game updates separated from graphics updates.
 	{"pause", kf_TogglePauseMode}, // Pause the game.
-	{"sync me", kf_ForceSync},
 	{"power info", kf_PowerInfo},
 	{"reload me", kf_Reload},	// reload selected weapons immediately
 	{"desync me", kf_ForceDesync},

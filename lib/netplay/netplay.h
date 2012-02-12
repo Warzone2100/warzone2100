@@ -112,11 +112,6 @@ enum MESSAGE_TYPES
 	GAME_STRUCTDEST,                ///< specify a strucutre to destroy, will be sent by all players at the same time, and have no effect, if synchronised.
 	GAME_FEATUREDEST,               ///< destroy a game feature.
 	GAME_RESEARCH,                  ///< Research has been completed.
-	GAME_CHECK_DROID,               ///< check & update bot position and damage.
-	GAME_CHECK_STRUCT,              ///< check & update struct damage.
-	GAME_CHECK_POWER,               ///< power levels for a player.
-	GAME_DEMOLISH,                  ///< a demolish is complete.
-	GAME_DROIDEMBARK,               ///< droid embarked on a Transporter
 	GAME_DROIDDISEMBARK,            ///< droid disembarked from a Transporter
 	// End of redundant messages.
 	GAME_MAX_TYPE                   ///< Maximum+1 valid GAME_ type, *MUST* be last.
@@ -191,16 +186,6 @@ struct GAMESTRUCT
 // the following structure is going to be used to track if we sync or not
 struct SYNC_COUNTER
 {
-	uint64_t	sentDroidCheck;
-	uint64_t	unsentDroidCheck;
-	uint64_t	sentStructureCheck;
-	uint64_t	unsentStructureCheck;
-	uint64_t	sentPowerCheck;
-	uint64_t	unsentPowerCheck;
-	uint64_t	sentScoreCheck;
-	uint64_t	unsentScoreCheck;
-	uint64_t	sentPing;
-	uint64_t	unsentPing;
 	uint16_t	kicks;
 	uint16_t	joins;
 	uint16_t	left;

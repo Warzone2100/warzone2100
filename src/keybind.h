@@ -259,7 +259,6 @@ extern void	kf_ToggleWatchWindow( void );
 
 bool runningMultiplayer(void);
 
-void	kf_ForceSync( void );
 void    kf_ForceDesync(void);
 void	kf_PowerInfo( void );
 void	kf_BuildNextPage( void );

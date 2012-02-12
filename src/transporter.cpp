@@ -1425,12 +1425,6 @@ void transporterAddDroid(DROID *psTransporter, DROID *psDroidToAdd)
 		// adding to transporter unit's group list
 		psTransporter->psGroup->add(psDroidToAdd);
 		psDroidToAdd->selected = false;  // Display in transporter interface.
-		
-		if (bMultiMessages && !isInSync())
-		{
-			//inform all other players to update their local lists
-			sendDroidEmbark(psDroidToAdd,psTransporter);
-		}
 	}
 	else
 	{

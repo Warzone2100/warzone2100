@@ -582,15 +582,6 @@ bool recvMessage(void)
 			case GAME_DROIDDEST:					// droid destroy
 				recvDestroyDroid(queue);
 				break;
-			case GAME_CHECK_DROID:				// droid damage and position checks
-				recvDroidCheck(queue);
-				break;
-			case GAME_CHECK_STRUCT:				// structure damage checks.
-				recvStructureCheck(queue);
-				break;
-			case GAME_CHECK_POWER:				// Power level syncing.
-				recvPowerCheck(queue);
-				break;
 			case NET_TEXTMSG:					// simple text message
 				recvTextMessage(queue);
 				break;
@@ -608,9 +599,6 @@ bool recvMessage(void)
 				break;
 			case GAME_STRUCTDEST:				// structure destroy
 				recvDestroyStructure(queue);
-				break;
-			case GAME_DROIDEMBARK:
-				recvDroidEmbark(queue);              //droid has embarked on a Transporter
 				break;
 			case GAME_DROIDDISEMBARK:
 				recvDroidDisEmbark(queue);           //droid has disembarked from a Transporter
@@ -642,9 +630,6 @@ bool recvMessage(void)
 			break;
 		case NET_PING:						// diagnostic ping msg.
 			recvPing(queue);
-			break;
-		case GAME_DEMOLISH:					// structure demolished.
-			recvDemolishFinished(queue);
 			break;
 		case GAME_RESEARCH:					// some research has been done.
 			recvResearch(queue);

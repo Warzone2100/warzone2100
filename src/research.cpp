@@ -723,11 +723,6 @@ void researchResult(UDWORD researchIndex, UBYTE player, bool bDisplay, STRUCTURE
 
 	ASSERT_OR_RETURN( , researchIndex < asResearch.size(), "Invalid research index %u", researchIndex);
 
-	if (!isInSync())
-	{
-		sendResearchStatus(NULL, researchIndex, player, false);
-	}
-
 	MakeResearchCompleted(&asPlayerResList[player][researchIndex]);
 
 	//check for structures to be made available

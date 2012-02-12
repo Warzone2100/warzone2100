@@ -378,11 +378,6 @@ bool removeFeature(FEATURE *psDel)
 	ASSERT_OR_RETURN(false, psDel != NULL, "Invalid feature pointer");
 	ASSERT_OR_RETURN(false, !psDel->died, "Feature already dead");
 
-	if (bMultiMessages && !ingame.localJoiningInProgress && !isInSync())
-	{
-		SendDestroyFeature(psDel);	// inform other players of destruction
-	}
-
 	//remove from the map data
 	StructureBounds b = getStructureBounds(psDel);
 	for (int breadth = 0; breadth < b.size.y; ++breadth)

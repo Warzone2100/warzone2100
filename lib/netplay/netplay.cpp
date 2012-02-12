@@ -3484,11 +3484,6 @@ const char *messageTypeToString(unsigned messageType_)
 		case GAME_STRUCTDEST:               return "GAME_STRUCTDEST";
 		case GAME_FEATUREDEST:              return "GAME_FEATUREDEST";
 		case GAME_RESEARCH:                 return "GAME_RESEARCH";
-		case GAME_CHECK_DROID:              return "GAME_CHECK_DROID";
-		case GAME_CHECK_STRUCT:             return "GAME_CHECK_STRUCT";
-		case GAME_CHECK_POWER:              return "GAME_CHECK_POWER";
-		case GAME_DEMOLISH:                 return "GAME_DEMOLISH";
-		case GAME_DROIDEMBARK:              return "GAME_DROIDEMBARK";
 		case GAME_DROIDDISEMBARK:           return "GAME_DROIDDISEMBARK";
 		// End of redundant messages.
 		case GAME_MAX_TYPE:                 return "GAME_MAX_TYPE";

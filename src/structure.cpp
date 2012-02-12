@@ -824,11 +824,6 @@ void structureBuild(STRUCTURE *psStruct, DROID *psDroid, int buildPoints, int bu
 			intBuildFinished(psDroid);
 		}
 
-		if (!isInSync() && bMultiMessages && myResponsibility(psStruct->player))
-		{
-			SendBuildFinished(psStruct);
-		}
-
 		//only play the sound if selected player
 		if (psDroid &&
 		    psStruct->player == selectedPlayer
@@ -3138,15 +3133,6 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 				{
 					int prevState = intGetResearchState();
 
-					if(bMultiMessages)
-					{
-						if (myResponsibility(psStructure->player) && !isInSync())
-						{
-							// This message should have no effect if in synch.
-							SendResearch(psStructure->player, researchIndex, true);
-						}
-					}
-
 					//store the last topic researched - if its the best
 					if (psResFacility->psBestTopic == NULL)
 					{
@@ -4635,12 +4621,6 @@ bool destroyStruct(STRUCTURE *psDel, unsigned impactTime)
 	const unsigned          burnDurationOther   = 10000;
 
 	CHECK_STRUCTURE(psDel);
-
-	if (bMultiMessages && !isInSync())
-	{
-		// Every player should be sending this message at once, and ignoring it later.
-		SendDestroyStructure(psDel);
-	}
 
 	/* Firstly, are we dealing with a wall section */
 	bMinor = psDel->pStructureType->type == REF_WALL || psDel->pStructureType->type == REF_WALLCORNER;

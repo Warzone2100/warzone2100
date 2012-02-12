@@ -164,21 +164,6 @@ void	kf_ToggleRadarJump( void )
 
 // --------------------------------------------------------------------------
 
-void	kf_ForceSync( void )
-{
-	DROID		*psCDroid, *psNDroid;
-
-	for(psCDroid = apsDroidLists[selectedPlayer]; psCDroid; psCDroid = psNDroid)
-	{
-		psNDroid = psCDroid->psNext;
-		if (psCDroid->selected)
-		{
-			ForceDroidSync(psCDroid);
-		}
-	}
-	
-}
-
 void kf_ForceDesync(void)
 {
 	syncDebug("Oh no!!! I went out of sync!!!");
