@@ -144,7 +144,7 @@
 #define STAT_SLDHEIGHT		12	//4	// Slider height.
 
 // Power bar position.
-#define POW_X			OBJ_BACKX
+#define POW_X			OBJ_BACKX + 12
 #define POW_Y			(OBJ_BACKY + OBJ_BACKHEIGHT + 6)
 #define POW_BARWIDTH	308
 
