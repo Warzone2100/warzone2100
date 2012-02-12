@@ -1214,29 +1214,7 @@ void	kf_TogglePowerBar( void )
 /* Toggles whether we process debug key mappings */
 void	kf_ToggleDebugMappings( void )
 {
-	const char* cmsg;
-
-#ifndef DEBUG
-	// Prevent cheating in multiplayer when not compiled in debug mode by
-	// bailing out if we're running a _true_ multiplayer game
-	if (runningMultiplayer())
-	{
-		noMPCheatMsg();
-		return;
-	}
-#endif
-
-	if (getDebugMappingStatus())
-	{
-		processDebugMappings(false);
-	}
-	else
-	{
-		processDebugMappings(true);
-	}
-	sasprintf((char**)&cmsg, _("(Player %u) is using cheat :%s"), selectedPlayer,
-		 getDebugMappingStatus() ? _("CHEATS ARE NOW ENABLED!") : _("CHEATS ARE NOW DISABLED!"));
-	sendTextMessage(cmsg, true);
+	sendProcessDebugMappings(!getWantedDebugMappingStatus(selectedPlayer));
 }
 // --------------------------------------------------------------------------
 

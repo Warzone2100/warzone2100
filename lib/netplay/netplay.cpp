@@ -3475,8 +3475,8 @@ const char *messageTypeToString(unsigned messageType_)
 		case GAME_LASSAT:                   return "GAME_LASSAT";
 		case GAME_GAME_TIME:                return "GAME_GAME_TIME";
 		case GAME_PLAYER_LEFT:              return "GAME_PLAYER_LEFT";
-		// The following messages (not including GAME_MAX_TYPE) are currently redundant, and should probably at some point not be
-		// sent, except (some of them) when using cheats in debug mode.
+		// The following messages are used for debug mode.
+		case GAME_DEBUG_MODE:               return "GAME_DEBUG_MODE";
 		case GAME_DROID:                    return "GAME_DROID";
 		case GAME_BUILDFINISHED:            return "GAME_BUILDFINISHED";
 		case GAME_FEATURES:                 return "GAME_FEATURES";

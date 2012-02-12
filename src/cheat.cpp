@@ -25,10 +25,12 @@
 
 #include "lib/framework/frame.h"
 #include "lib/exceptionhandler/dumpinfo.h"
+#include "lib/netplay/netplay.h"
 
 #include "cheat.h"
 #include "keybind.h"
 #include "keymap.h"
+#include "multiplay.h"
 
 struct CHEAT_ENTRY
 {
@@ -133,4 +135,43 @@ bool attemptCheatCode(const char* cheat_name)
 	}
 
 	return false;
+}
+
+void sendProcessDebugMappings(bool val)
+{
+	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_DEBUG_MODE);
+		NETbool(&val);
+	NETend();
+}
+
+void recvProcessDebugMappings(NETQUEUE queue)
+{
+	bool val = false;
+	NETbeginDecode(queue, GAME_DEBUG_MODE);
+		NETbool(&val);
+	NETend();
+
+	bool oldDebugMode = getDebugMappingStatus();
+	processDebugMappings(queue.index, val);
+	bool newDebugMode = getDebugMappingStatus();
+
+	char const *cmsg;
+	if (val)
+	{
+		sasprintf((char**)&cmsg, _("%s wants to enable debug mode. Enabled: %s, Disabled: %s."), getPlayerName(queue.index), getWantedDebugMappingStatuses(true).c_str(), getWantedDebugMappingStatuses(false).c_str());
+	}
+	else
+	{
+		sasprintf((char**)&cmsg, _("%s wants to disable debug mode. Enabled: %s, Disabled: %s."), getPlayerName(queue.index), getWantedDebugMappingStatuses(true).c_str(), getWantedDebugMappingStatuses(false).c_str());
+	}
+	addConsoleMessage(cmsg, DEFAULT_JUSTIFY,  SYSTEM_MESSAGE);
+
+	if (!oldDebugMode && newDebugMode)
+	{
+		addConsoleMessage(_("Debug mode now enabled!"), DEFAULT_JUSTIFY,  SYSTEM_MESSAGE);
+	}
+	else if (oldDebugMode && !newDebugMode)
+	{
+		addConsoleMessage(_("Debug mode now disabled!"), DEFAULT_JUSTIFY,  SYSTEM_MESSAGE);
+	}
 }

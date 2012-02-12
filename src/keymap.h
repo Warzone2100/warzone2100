@@ -74,8 +74,10 @@ extern void keyStatusAllInactive	( void );
 extern void keyAllMappingsInactive(void);
 extern void	keyAllMappingsActive	( void );
 extern void	keySetMappingStatus		( KEY_MAPPING *psMapping, bool state );
-extern void	processDebugMappings	( bool val );
-extern bool	getDebugMappingStatus	( void );
+void processDebugMappings(unsigned player, bool val);
+bool getDebugMappingStatus();
+bool getWantedDebugMappingStatus(unsigned player);
+std::string getWantedDebugMappingStatuses(bool val);
 extern	bool	keyReAssignMappingName(char *pName, KEY_CODE newMetaCode, KEY_CODE newSubCode);
 
 extern	bool	keyReAssignMapping( KEY_CODE origMetaCode, KEY_CODE origSubCode,

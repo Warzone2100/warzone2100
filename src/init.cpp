@@ -1267,5 +1267,8 @@ static void	initMiscVars(void)
 	enableConsoleDisplay(true);
 
 	setSelectedGroup(UBYTE_MAX);
-	processDebugMappings(false);
+	for (unsigned n = 0; n < MAX_PLAYERS; ++n)
+	{
+		processDebugMappings(n, false);
+	}
 }

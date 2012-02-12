@@ -27,6 +27,7 @@
 #ifndef __INCLUDED_SRC_MULTIRECV_H__
 #define __INCLUDED_SRC_MULTIRECV_H__
 
+bool recvProcessDebugMappings(NETQUEUE queue);
 extern bool recvDroid               (NETQUEUE queue);
 extern bool recvDroidInfo           (NETQUEUE queue);
 extern bool recvDestroyDroid        (NETQUEUE queue);

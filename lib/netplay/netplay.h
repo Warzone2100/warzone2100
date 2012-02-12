@@ -103,8 +103,8 @@ enum MESSAGE_TYPES
 	GAME_LASSAT,                    ///< lassat firing.
 	GAME_GAME_TIME,                 ///< Game time. Used for synchronising, so that all messages are executed at the same gameTime on all clients.
 	GAME_PLAYER_LEFT,               ///< Player has left or dropped.
-	// The following messages (not including GAME_MAX_TYPE) are currently redundant, and should probably at some point not be
-	// sent, except (some of them) when using cheats in debug mode.
+	// The following messages are used for debug mode.
+	GAME_DEBUG_MODE,                ///< Request enable/disable debug mode.
 	GAME_DROID,                     ///< a new droid
 	GAME_BUILDFINISHED,             ///< a building is complete.
 	GAME_FEATURES,                  ///< information regarding features.
@@ -113,7 +113,7 @@ enum MESSAGE_TYPES
 	GAME_FEATUREDEST,               ///< destroy a game feature.
 	GAME_RESEARCH,                  ///< Research has been completed.
 	GAME_DROIDDISEMBARK,            ///< droid disembarked from a Transporter
-	// End of redundant messages.
+	// End of debug messages.
 	GAME_MAX_TYPE                   ///< Maximum+1 valid GAME_ type, *MUST* be last.
 };
 //#define SYNC_FLAG (NUM_GAME_PACKETS * NUM_GAME_PACKETS)	//special flag used for logging.

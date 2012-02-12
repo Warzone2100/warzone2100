@@ -609,6 +609,9 @@ bool recvMessage(void)
 			case GAME_LASSAT:
 				recvLasSat(queue);
 				break;
+			case GAME_DEBUG_MODE:
+				recvProcessDebugMappings(queue);
+				break;
 			default:
 				processedMessage1 = false;
 				break;

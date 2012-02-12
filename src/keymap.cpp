@@ -32,6 +32,7 @@
 #include "lib/framework/frame.h"
 #include "lib/framework/input.h"
 #include "lib/framework/strres.h"
+#include "lib/netplay/netplay.h"
 #include "lib/gamelib/gtime.h"
 #include "keymap.h"
 #include "console.h"
@@ -76,7 +77,8 @@ SDWORD	spin;
 static	KEYMAP_MARKER	qwertyKeyMappings[NUM_QWERTY_KEYS];
 
 
-static	bool			bDoingDebugMappings = false;
+static bool bDoingDebugMappings = false;
+static bool bWantDebugMappings[MAX_PLAYERS] = {false};
 // ----------------------------------------------------------------------------------
 
 // ----------------------------------------------------------------------------------
@@ -279,7 +281,10 @@ void	keyInitMappings( bool bForceDefaults )
 	keyMappings = NULL;
 	numActiveMappings = 0;
 	bKeyProcessing = true;
-	processDebugMappings(false);
+	for (unsigned n = 0; n < MAX_PLAYERS; ++n)
+	{
+		processDebugMappings(n, false);
+	}
 
 
 	for(i=0; i<NUM_QWERTY_KEYS; i++)
@@ -1039,16 +1044,40 @@ UDWORD	entry;
 
 // ----------------------------------------------------------------------------------
 /* Defines whether we process debug key mapping stuff */
-void	processDebugMappings( bool val )
+void processDebugMappings(unsigned player, bool val)
 {
-	bDoingDebugMappings = val;
+	bWantDebugMappings[player] = val;
+	bDoingDebugMappings = true;
+	for (unsigned n = 0; n < MAX_PLAYERS; ++n)
+	{
+		bDoingDebugMappings = bDoingDebugMappings && (bWantDebugMappings[n] || !NetPlay.players[n].allocated);
+	}
 }
 
 // ----------------------------------------------------------------------------------
 /* Returns present status of debug mapping processing */
-bool	getDebugMappingStatus( void )
+bool getDebugMappingStatus()
 {
-	return(bDoingDebugMappings);
+	return bDoingDebugMappings;
+}
+bool getWantedDebugMappingStatus(unsigned player)
+{
+	return bWantDebugMappings[player];
+}
+std::string getWantedDebugMappingStatuses(bool val)
+{
+	char ret[MAX_PLAYERS + 1];
+	char *p = ret;
+	for (unsigned n = 0; n < MAX_PLAYERS; ++n)
+	{
+		if (NetPlay.players[n].allocated && bWantDebugMappings[n] == val)
+		{
+			*p++ = '0' + NetPlay.players[n].position;
+		}
+	}
+	std::sort(ret, p);
+	*p++ = '\0';
+	return ret;
 }
 // ----------------------------------------------------------------------------------
 bool	keyReAssignMapping( KEY_CODE origMetaCode, KEY_CODE origSubCode,

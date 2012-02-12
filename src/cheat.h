@@ -23,4 +23,6 @@
 
 bool attemptCheatCode(const char* cheat_name);
 
+void sendProcessDebugMappings(bool val);
+
 #endif // __INCLUDED_SRC_CHEAT_H__
