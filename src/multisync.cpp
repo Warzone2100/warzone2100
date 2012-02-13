@@ -31,27 +31,13 @@
 
 #include "lib/framework/frame.h"
 #include "lib/framework/input.h"
-#include "lib/framework/strres.h"
-
-#include "stats.h"
 #include "lib/gamelib/gtime.h"
-#include "map.h"
-#include "objects.h"
-#include "display.h"								// for checking if droid in view.
-#include "order.h"
-#include "action.h"
-#include "hci.h"									// for byte packing funcs.
-#include "display3ddef.h"							// tile size constants.
-#include "console.h"
-#include "geometry.h"								// for gettilestructure
-#include "mapgrid.h"								// for move droids directly.
 #include "lib/netplay/netplay.h"
 #include "multiplay.h"
 #include "frontend.h"								// for titlemode
 #include "multistat.h"
-#include "power.h"									// for power checks
 #include "multirecv.h"
-#include "random.h"
+
 
 // ////////////////////////////////////////////////////////////////////////////
 // function definitions
