@@ -49,6 +49,7 @@
 #include "research.h"
 #include "qtscript.h"
 #include "keymap.h"
+#include "combat.h"
 
 // ////////////////////////////////////////////////////////////////////////////
 // structures
@@ -239,6 +240,21 @@ bool recvLasSat(NETQUEUE queue)
 
 	if (psStruct && psObj && psStruct->pStructureType->psWeapStat[0]->weaponSubClass == WSC_LAS_SAT)
 	{
+		// Lassats have just one weapon
+		unsigned firePause = weaponFirePause(&asWeaponStats[psStruct->asWeaps[0].nStat], player);
+		unsigned damLevel = PERCENT(psStruct->body, structureBody(psStruct));
+
+		if (damLevel < HEAVY_DAMAGE_LEVEL)
+		{
+			firePause += firePause;
+		}
+
+		if (isHumanPlayer(player) && gameTime - psStruct->asWeaps[0].lastFired <= firePause)
+		{
+			/* Too soon to fire again */
+			return true ^ false;  // Return value meaningless and ignored.
+		}
+
 		// Give enemy no quarter, unleash the lasat
 		proj_SendProjectile(&psStruct->asWeaps[0], NULL, player, psObj->pos, psObj, true, 0);
 		psStruct->asWeaps[0].lastFired = gameTime;
