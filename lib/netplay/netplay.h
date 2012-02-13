@@ -103,16 +103,16 @@ enum MESSAGE_TYPES
 	GAME_LASSAT,                    ///< lassat firing.
 	GAME_GAME_TIME,                 ///< Game time. Used for synchronising, so that all messages are executed at the same gameTime on all clients.
 	GAME_PLAYER_LEFT,               ///< Player has left or dropped.
+	GAME_DROIDDISEMBARK,            ///< droid disembarked from a Transporter
 	// The following messages are used for debug mode.
 	GAME_DEBUG_MODE,                ///< Request enable/disable debug mode.
-	GAME_DROID,                     ///< a new droid
-	GAME_BUILDFINISHED,             ///< a building is complete.
-	GAME_FEATURES,                  ///< information regarding features.
-	GAME_DROIDDEST,                 ///< issue a droid destruction, will be sent by all players at the same time, and have no effect, if synchronised.
-	GAME_STRUCTDEST,                ///< specify a strucutre to destroy, will be sent by all players at the same time, and have no effect, if synchronised.
-	GAME_FEATUREDEST,               ///< destroy a game feature.
-	GAME_RESEARCH,                  ///< Research has been completed.
-	GAME_DROIDDISEMBARK,            ///< droid disembarked from a Transporter
+	GAME_DEBUG_ADD_DROID,           ///< Add droid.
+	GAME_DEBUG_ADD_STRUCTURE,       ///< Add structure.
+	GAME_DEBUG_ADD_FEATURE,         ///< Add feature.
+	GAME_DEBUG_REMOVE_DROID,        ///< Remove droid.
+	GAME_DEBUG_REMOVE_STRUCTURE,    ///< Remove structure.
+	GAME_DEBUG_REMOVE_FEATURE,      ///< Remove feature.
+	GAME_DEBUG_FINISH_RESEARCH,     ///< Research has been completed.
 	// End of debug messages.
 	GAME_MAX_TYPE                   ///< Maximum+1 valid GAME_ type, *MUST* be last.
 };

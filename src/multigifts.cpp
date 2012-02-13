@@ -54,6 +54,7 @@
 #include "multimenu.h"			// for multimenu
 #include "multistat.h"
 #include "random.h"
+#include "keymap.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 // prototypes
@@ -559,7 +560,7 @@ void  technologyGiveAway(const STRUCTURE *pS)
  */
 void sendMultiPlayerFeature(FEATURE_TYPE subType, uint32_t x, uint32_t y, uint32_t id)
 {
-	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_FEATURES);
+	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_DEBUG_ADD_FEATURE);
 	{
 		NETenum(&subType);
 		NETuint32_t(&x);
@@ -575,7 +576,7 @@ void recvMultiPlayerFeature(NETQUEUE queue)
 	uint32_t     x, y, id;
 	unsigned int i;
 
-	NETbeginDecode(queue, GAME_FEATURES);
+	NETbeginDecode(queue, GAME_DEBUG_ADD_FEATURE);
 	{
 		NETenum(&subType);
 		NETuint32_t(&x);
@@ -583,6 +584,12 @@ void recvMultiPlayerFeature(NETQUEUE queue)
 		NETuint32_t(&id);
 	}
 	NETend();
+
+	if (!getDebugMappingStatus())
+	{
+		debug(LOG_WARNING, "Failed to add feature for player %u.", NetPlay.players[queue.index].position);
+		return;
+	}
 
 	// Find the feature stats list that contains the feature type we want to build
 	for (i = 0; i < numFeatureStats; ++i)

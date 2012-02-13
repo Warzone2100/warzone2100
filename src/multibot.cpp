@@ -27,6 +27,7 @@
 
 #include "droid.h"						// for droid sending and ordering.
 #include "droiddef.h"
+#include "keymap.h"
 #include "stats.h"
 #include "move.h"						// for ordering droids
 #include "objmem.h"
@@ -167,7 +168,7 @@ bool sendDroidSecondary(const DROID* psDroid, SECONDARY_ORDER sec, SECONDARY_STA
 
 /** Broadcast that droid is being unloaded from a transporter
  *
- *  \sa sendDroidEmbark(),recvDroidEmbark(),recvDroidDisEmbark()
+ *  \sa recvDroidDisEmbark()
  */
 bool sendDroidDisembark(DROID const *psTransporter, DROID const *psDroid)
 {
@@ -189,7 +190,7 @@ bool sendDroidDisembark(DROID const *psTransporter, DROID const *psDroid)
 
 /** Receive info about a droid that is being unloaded from a transporter
  *
- *  \sa sendDroidEmbark(),recvDroidEmbark(),sendDroidDisEmbark()
+ *  \sa sendDroidDisEmbark()
  */
 bool recvDroidDisEmbark(NETQUEUE queue)
 {
@@ -271,7 +272,7 @@ bool SendDroid(const DROID_TEMPLATE* pTemplate, uint32_t x, uint32_t y, uint8_t 
 	}
 
 	debug(LOG_SYNC, "Droid sent with id of %u", id);
-	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_DROID);
+	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_DEBUG_ADD_DROID);
 	{
 		Position pos(x, y, 0);
 		uint32_t templateID = pTemplate->multiPlayerID;
@@ -308,7 +309,7 @@ bool recvDroid(NETQUEUE queue)
 	bool haveInitialOrders;
 	INITIAL_DROID_ORDERS initialOrders;
 
-	NETbeginDecode(queue, GAME_DROID);
+	NETbeginDecode(queue, GAME_DEBUG_ADD_DROID);
 	{
 		NETuint8_t(&player);
 		NETuint32_t(&id);
@@ -327,7 +328,13 @@ bool recvDroid(NETQUEUE queue)
 	}
 	NETend();
 
-	ASSERT( player < MAX_PLAYERS, "invalid player %u", player);
+	if (!getDebugMappingStatus())
+	{
+		debug(LOG_WARNING, "Failed to add droid for player %u.", NetPlay.players[queue.index].position);
+		return false;
+	}
+
+	ASSERT_OR_RETURN(false, player < MAX_PLAYERS, "invalid player %u", player);
 
 	debug(LOG_LIFE, "<=== getting Droid from %u id of %u ",player,id);
 	if ((pos.x == 0 && pos.y == 0) || pos.x > world_coord(mapWidth) || pos.y > world_coord(mapHeight))
@@ -683,7 +690,7 @@ bool SendDestroyDroid(const DROID* psDroid)
 		return true;
 	}
 
-	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_DROIDDEST);
+	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_DEBUG_REMOVE_DROID);
 	{
 		uint32_t id = psDroid->id;
 
@@ -700,7 +707,7 @@ bool recvDestroyDroid(NETQUEUE queue)
 {
 	DROID* psDroid;
 
-	NETbeginDecode(queue, GAME_DROIDDEST);
+	NETbeginDecode(queue, GAME_DEBUG_REMOVE_DROID);
 	{
 		uint32_t id;
 
@@ -715,6 +722,12 @@ bool recvDestroyDroid(NETQUEUE queue)
 		}
 	}
 	NETend();
+
+	if (!getDebugMappingStatus())
+	{
+		debug(LOG_WARNING, "Failed to remove droid for player %u.", NetPlay.players[queue.index].position);
+		return false;
+	}
 
 	// If the droid has not died on our machine yet, destroy it
 	if(!psDroid->died)

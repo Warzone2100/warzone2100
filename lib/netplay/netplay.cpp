@@ -3475,16 +3475,16 @@ const char *messageTypeToString(unsigned messageType_)
 		case GAME_LASSAT:                   return "GAME_LASSAT";
 		case GAME_GAME_TIME:                return "GAME_GAME_TIME";
 		case GAME_PLAYER_LEFT:              return "GAME_PLAYER_LEFT";
+		case GAME_DROIDDISEMBARK:           return "GAME_DROIDDISEMBARK";
 		// The following messages are used for debug mode.
 		case GAME_DEBUG_MODE:               return "GAME_DEBUG_MODE";
-		case GAME_DROID:                    return "GAME_DROID";
-		case GAME_BUILDFINISHED:            return "GAME_BUILDFINISHED";
-		case GAME_FEATURES:                 return "GAME_FEATURES";
-		case GAME_DROIDDEST:                return "GAME_DROIDDEST";
-		case GAME_STRUCTDEST:               return "GAME_STRUCTDEST";
-		case GAME_FEATUREDEST:              return "GAME_FEATUREDEST";
-		case GAME_RESEARCH:                 return "GAME_RESEARCH";
-		case GAME_DROIDDISEMBARK:           return "GAME_DROIDDISEMBARK";
+		case GAME_DEBUG_ADD_DROID:          return "GAME_DEBUG_ADD_DROID";
+		case GAME_DEBUG_ADD_STRUCTURE:      return "GAME_DEBUG_ADD_STRUCTURE";
+		case GAME_DEBUG_ADD_FEATURE:        return "GAME_DEBUG_ADD_FEATURE";
+		case GAME_DEBUG_REMOVE_DROID:       return "GAME_DEBUG_REMOVE_DROID";
+		case GAME_DEBUG_REMOVE_STRUCTURE:   return "GAME_DEBUG_REMOVE_STRUCTURE";
+		case GAME_DEBUG_REMOVE_FEATURE:     return "GAME_DEBUG_REMOVE_FEATURE";
+		case GAME_DEBUG_FINISH_RESEARCH:    return "GAME_DEBUG_FINISH_RESEARCH";
 		// End of redundant messages.
 		case GAME_MAX_TYPE:                 return "GAME_MAX_TYPE";
 	}
