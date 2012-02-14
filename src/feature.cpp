@@ -506,13 +506,14 @@ bool destroyFeature(FEATURE *psDel, unsigned impactTime)
 			for (int width = 0; width < b.size.x; ++width)
 			{
 				MAPTILE *psTile = mapTile(b.map.x + width, b.map.y + breadth);
-				// stops water texture chnaging for underwateer festures
+				// stops water texture changing for underwater features
 				if (terrainType(psTile) != TER_WATER)
 				{
 					if (terrainType(psTile) != TER_CLIFFFACE)
 					{
 						/* Clear feature bits */
 						psTile->texture = TileNumber_texture(psTile->texture) | RUBBLE_TILE;
+						auxClearBlocking(b.map.x + width, b.map.y + breadth, AUXBITS_ALL);
 					}
 					else
 					{
