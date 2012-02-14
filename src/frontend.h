@@ -185,6 +185,8 @@ enum
 	FE_P5,								// player 5 buton
 	FE_P6,								// player 6 buton
 	FE_P7,								// player 7 buton
+	FE_MP_PR,  // Multiplayer player random button
+	FE_MP_PMAX = FE_MP_PR + MAX_PLAYERS_IN_GUI,  // Multiplayer player blah button
 
 	FRONTEND_GAMEOPTIONS = 21000,           // Game Options menu
 	FRONTEND_LANGUAGE,
@@ -192,6 +194,7 @@ enum
 	FRONTEND_RADAR,
 	FRONTEND_RADAR_R,
 	FRONTEND_COLOUR,
+	FRONTEND_COLOUR_MP,
 	FRONTEND_DIFFICULTY,
 	FRONTEND_DIFFICULTY_R,
 	FRONTEND_SCROLLSPEED_SL,

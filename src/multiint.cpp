@@ -873,6 +873,11 @@ bool joinGame(const char* host, uint32_t port)
 
 	changeTitleMode(MULTIOPTION);
 
+	if (war_getMPcolour() >= 0)
+	{
+		SendColourRequest(selectedPlayer, war_getMPcolour());
+	}
+
 	return true;
 }
 
@@ -1982,14 +1987,27 @@ static bool changePosition(UBYTE player, UBYTE position)
 	return false;
 }
 
-bool changeColour(UBYTE player, UBYTE col)
+bool changeColour(unsigned player, int col, bool isHost)
 {
-	int i;
+	if (col < 0 || col >= MAX_PLAYERS_IN_GUI)
+	{
+		return true;
+	}
 
-	for (i = 0; i < MAX_PLAYERS; i++)
+	if (getPlayerColour(player) == col)
+	{
+		return true;  // Nothing to do.
+	}
+
+	for (unsigned i = 0; i < MAX_PLAYERS; ++i)
 	{
 		if (getPlayerColour(i) == col)
 		{
+			if (!isHost && NetPlay.players[i].allocated)
+			{
+				return true;  // May not swap.
+			}
+
 			debug(LOG_NET, "Swapping colours between players %d(%d) and %d(%d)",
 			      player, getPlayerColour(player), i, getPlayerColour(i));
 			setPlayerColour(i, getPlayerColour(player));
@@ -2018,7 +2036,7 @@ static bool SendColourRequest(UBYTE player, UBYTE col)
 {
 	if(NetPlay.isHost)			// do or request the change
 	{
-		return changeColour(player, col);
+		return changeColour(player, col, true);
 	}
 	else
 	{
@@ -2072,7 +2090,7 @@ bool recvColourRequest(NETQUEUE queue)
 
 	resetReadyStatus(false);
 
-	return changeColour(player, col);
+	return changeColour(player, col, false);
 }
 
 bool recvPositionRequest(NETQUEUE queue)
@@ -4217,6 +4235,17 @@ void displayMultiBut(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT 
 		if (tc == MAX_PLAYERS)
 		{
 			iV_DrawImage(FrontImages, toDraw[n], x, y);
+		}
+		else if (tc == MAX_PLAYERS + 1)
+		{
+			const int scale = 4000;
+			int f = realTime%scale;
+			PIELIGHT mix;
+			mix.byte.r = 128 + iSinR(65536*f/scale + 65536*0/3, 127);
+			mix.byte.g = 128 + iSinR(65536*f/scale + 65536*1/3, 127);
+			mix.byte.b = 128 + iSinR(65536*f/scale + 65536*2/3, 127);
+			mix.byte.a = 255;
+			iV_DrawImageTc(FrontImages, toDraw[n], toDraw[n] + 1, x, y, mix);
 		}
 		else
 		{

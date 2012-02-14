@@ -2461,6 +2461,10 @@ bool NEThostGame(const char* SessionName, const char* PlayerName,
 		NETaddRedirects();
 	}
 	NET_InitPlayers();
+	for (unsigned n = 0; n < MAX_PLAYERS_IN_GUI; ++n)
+	{
+		changeColour(n, rand()%(n + 1), true);  // Put colours in random order.
+	}
 	if(!NetPlay.bComms)
 	{
 		selectedPlayer			= 0;
@@ -2469,10 +2473,10 @@ bool NEThostGame(const char* SessionName, const char* PlayerName,
 		NetPlay.players[0].connection	= -1;
 		NetPlay.playercount		= 1;
 		debug(LOG_NET, "Hosting but no comms");
-		// Now switch player color of the host to what they normally use for SP games
-		if ( getPlayerColour(NET_HOST_ONLY) != war_GetSPcolor())
+		// Now switch player color of the host to what they normally use for MP games
+		if (war_getMPcolour() >= 0)
 		{
-			changeColour(NET_HOST_ONLY, war_GetSPcolor());
+			changeColour(NET_HOST_ONLY, war_getMPcolour(), true);
 		}
 		return true;
 	}
@@ -2546,9 +2550,9 @@ bool NEThostGame(const char* SessionName, const char* PlayerName,
 	MultiPlayerJoin(selectedPlayer);
 
 	// Now switch player color of the host to what they normally use for SP games
-	if ( getPlayerColour(NET_HOST_ONLY) != war_GetSPcolor())
+	if (war_getMPcolour() >= 0)
 	{
-		changeColour(NET_HOST_ONLY, war_GetSPcolor());
+		changeColour(NET_HOST_ONLY, war_getMPcolour(), true);
 	}
 
 	allow_joining = true;
