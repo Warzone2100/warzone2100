@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -74,8 +74,10 @@ extern void keyStatusAllInactive	( void );
 extern void keyAllMappingsInactive(void);
 extern void	keyAllMappingsActive	( void );
 extern void	keySetMappingStatus		( KEY_MAPPING *psMapping, bool state );
-extern void	processDebugMappings	( bool val );
-extern bool	getDebugMappingStatus	( void );
+void processDebugMappings(unsigned player, bool val);
+bool getDebugMappingStatus();
+bool getWantedDebugMappingStatus(unsigned player);
+std::string getWantedDebugMappingStatuses(bool val);
 extern	bool	keyReAssignMappingName(char *pName, KEY_CODE newMetaCode, KEY_CODE newSubCode);
 
 extern	bool	keyReAssignMapping( KEY_CODE origMetaCode, KEY_CODE origSubCode,

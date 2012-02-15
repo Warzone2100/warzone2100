@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -722,11 +722,6 @@ void researchResult(UDWORD researchIndex, UBYTE player, bool bDisplay, STRUCTURE
 	char						consoleMsg[MAX_RESEARCH_MSG_SIZE];
 
 	ASSERT_OR_RETURN( , researchIndex < asResearch.size(), "Invalid research index %u", researchIndex);
-
-	if (!isInSync())
-	{
-		sendResearchStatus(NULL, researchIndex, player, false);
-	}
 
 	MakeResearchCompleted(&asPlayerResList[player][researchIndex]);
 

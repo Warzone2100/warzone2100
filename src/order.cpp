@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -4096,38 +4096,8 @@ void orderStructureObj(UDWORD player, BASE_OBJECT *psObj)
 	{
 		if (lasSatStructSelected(psStruct))
 		{
-			// Lassats have just one weapon
-			unsigned int firePause = weaponFirePause(&asWeaponStats[psStruct->asWeaps[0].nStat], (UBYTE)player);
-			unsigned int damLevel = PERCENT(psStruct->body, structureBody(psStruct));
-
-			if (damLevel < HEAVY_DAMAGE_LEVEL)
-			{
-				firePause += firePause;
-			}
-
-			if (isHumanPlayer(player)
-				&& (gameTime - psStruct->asWeaps[0].lastFired <= firePause) )
-			{
-				/* Too soon to fire again */
-				break;
-			}
-
 			// send the weapon fire
-			if(bMultiMessages)
-			{
-				sendLasSat(player,psStruct,psObj);
-			}
-			else
-			{
-				//ok to fire - so fire away
-				proj_SendProjectile(&psStruct->asWeaps[0], NULL, player, psObj->pos, psObj, true, 0);
-				//set up last fires time
-				psStruct->asWeaps[0].lastFired =  gameTime;
-				psStruct->asWeaps[0].ammo = 1; // see SendLasSat()
-
-				//play 5 second countdown message
-				audio_QueueTrackPos(ID_SOUND_LAS_SAT_COUNTDOWN, psObj->pos.x, psObj->pos.y, psObj->pos.z);
-			}
+			sendLasSat(player, psStruct, psObj);
 
 			break;
 		}

@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -100,7 +100,6 @@ struct DROID_TEMPLATE : public BASE_STATS
 	bool		enabled;                    ///< Has been enabled
 };
 
-struct PACKAGED_CHECK;
 class DROID_GROUP;
 struct STRUCTURE;
 
@@ -183,9 +182,6 @@ struct DROID : public BASE_OBJECT
 	/* anim data */
 	ANIM_OBJECT     *psCurAnim;
 	SDWORD          iAudioID;
-
-	// Synch checking
-	PACKAGED_CHECK *gameCheckDroid;                 ///< Last PACKAGED_CHECK, for synchronisation use only (see multisync.c). TODO Make synch perfect, so that this isn't needed at all.
 };
 
 #endif // __INCLUDED_DROIDDEF_H__

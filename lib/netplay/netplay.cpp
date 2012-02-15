@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -3475,21 +3475,16 @@ const char *messageTypeToString(unsigned messageType_)
 		case GAME_LASSAT:                   return "GAME_LASSAT";
 		case GAME_GAME_TIME:                return "GAME_GAME_TIME";
 		case GAME_PLAYER_LEFT:              return "GAME_PLAYER_LEFT";
-		// The following messages (not including GAME_MAX_TYPE) are currently redundant, and should probably at some point not be
-		// sent, except (some of them) when using cheats in debug mode.
-		case GAME_DROID:                    return "GAME_DROID";
-		case GAME_BUILDFINISHED:            return "GAME_BUILDFINISHED";
-		case GAME_FEATURES:                 return "GAME_FEATURES";
-		case GAME_DROIDDEST:                return "GAME_DROIDDEST";
-		case GAME_STRUCTDEST:               return "GAME_STRUCTDEST";
-		case GAME_FEATUREDEST:              return "GAME_FEATUREDEST";
-		case GAME_RESEARCH:                 return "GAME_RESEARCH";
-		case GAME_CHECK_DROID:              return "GAME_CHECK_DROID";
-		case GAME_CHECK_STRUCT:             return "GAME_CHECK_STRUCT";
-		case GAME_CHECK_POWER:              return "GAME_CHECK_POWER";
-		case GAME_DEMOLISH:                 return "GAME_DEMOLISH";
-		case GAME_DROIDEMBARK:              return "GAME_DROIDEMBARK";
 		case GAME_DROIDDISEMBARK:           return "GAME_DROIDDISEMBARK";
+		// The following messages are used for debug mode.
+		case GAME_DEBUG_MODE:               return "GAME_DEBUG_MODE";
+		case GAME_DEBUG_ADD_DROID:          return "GAME_DEBUG_ADD_DROID";
+		case GAME_DEBUG_ADD_STRUCTURE:      return "GAME_DEBUG_ADD_STRUCTURE";
+		case GAME_DEBUG_ADD_FEATURE:        return "GAME_DEBUG_ADD_FEATURE";
+		case GAME_DEBUG_REMOVE_DROID:       return "GAME_DEBUG_REMOVE_DROID";
+		case GAME_DEBUG_REMOVE_STRUCTURE:   return "GAME_DEBUG_REMOVE_STRUCTURE";
+		case GAME_DEBUG_REMOVE_FEATURE:     return "GAME_DEBUG_REMOVE_FEATURE";
+		case GAME_DEBUG_FINISH_RESEARCH:    return "GAME_DEBUG_FINISH_RESEARCH";
 		// End of redundant messages.
 		case GAME_MAX_TYPE:                 return "GAME_MAX_TYPE";
 	}

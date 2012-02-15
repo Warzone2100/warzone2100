@@ -39,9 +39,9 @@
 	<key>CFBundleShortVersionString</key>
 	<string>VCS_TAG [VCS_SHORT_HASH]</string>
 	<key>NSHumanReadableCopyright</key>
-	<string>Copyright © 1999-2004 Eidos Interactive, Copyright © 2005-2011 The Warzone 2100 Project</string>
+	<string>Copyright © 1999-2004 Eidos Interactive, Copyright © 2005-2012 The Warzone 2100 Project</string>
 	<key>CFBundleGetInfoString</key>
-	<string>VCS_TAG [VCS_SHORT_HASH], Copyright © 1999-2004 Eidos Interactive, Copyright © 2005-2011 The Warzone 2100 Project</string>
+	<string>VCS_TAG [VCS_SHORT_HASH], Copyright © 1999-2004 Eidos Interactive, Copyright © 2005-2012 The Warzone 2100 Project</string>
 	<key>CFBundleHelpBookFolder</key>
 	<string>WarzoneHelp</string>
 	<key>CFBundleHelpBookName</key>

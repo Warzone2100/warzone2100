@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -822,11 +822,6 @@ void structureBuild(STRUCTURE *psStruct, DROID *psDroid, int buildPoints, int bu
 		if (psDroid)
 		{
 			intBuildFinished(psDroid);
-		}
-
-		if (!isInSync() && bMultiMessages && myResponsibility(psStruct->player))
-		{
-			SendBuildFinished(psStruct);
 		}
 
 		//only play the sound if selected player
@@ -3138,15 +3133,6 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 				{
 					int prevState = intGetResearchState();
 
-					if(bMultiMessages)
-					{
-						if (myResponsibility(psStructure->player) && !isInSync())
-						{
-							// This message should have no effect if in synch.
-							SendResearch(psStructure->player, researchIndex, true);
-						}
-					}
-
 					//store the last topic researched - if its the best
 					if (psResFacility->psBestTopic == NULL)
 					{
@@ -4635,12 +4621,6 @@ bool destroyStruct(STRUCTURE *psDel, unsigned impactTime)
 	const unsigned          burnDurationOther   = 10000;
 
 	CHECK_STRUCTURE(psDel);
-
-	if (bMultiMessages && !isInSync())
-	{
-		// Every player should be sending this message at once, and ignoring it later.
-		SendDestroyStructure(psDel);
-	}
 
 	/* Firstly, are we dealing with a wall section */
 	bMinor = psDel->pStructureType->type == REF_WALL || psDel->pStructureType->type == REF_WALLCORNER;

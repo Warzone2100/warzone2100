@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -68,6 +68,7 @@
 #include "multistat.h"
 #include "multigifts.h"								// gifts and alliances.
 #include "multiint.h"
+#include "keymap.h"
 
 // ////////////////////////////////////////////////////////////////////////////
 // ////////////////////////////////////////////////////////////////////////////
@@ -240,6 +241,10 @@ bool multiPlayerLoop(void)
 					debug(LOG_NET, "=== Sending hash to host ===");
 					sendDataCheck();
 				}
+			}
+			if (NetPlay.bComms)
+			{
+				sendPing();
 			}
 			// Only have to do this on a true MP game
 			if (NetPlay.isHost && !ingame.isAllPlayersDataOK && NetPlay.bComms)
@@ -569,23 +574,8 @@ bool recvMessage(void)
 			processedMessage1 = true;
 			switch(type)
 			{
-			case GAME_DROID:						// new droid of known type
-				recvDroid(queue);
-				break;
 			case GAME_DROIDINFO:					//droid update info
 				recvDroidInfo(queue);
-				break;
-			case GAME_DROIDDEST:					// droid destroy
-				recvDestroyDroid(queue);
-				break;
-			case GAME_CHECK_DROID:				// droid damage and position checks
-				recvDroidCheck(queue);
-				break;
-			case GAME_CHECK_STRUCT:				// structure damage checks.
-				recvStructureCheck(queue);
-				break;
-			case GAME_CHECK_POWER:				// Power level syncing.
-				recvPowerCheck(queue);
 				break;
 			case NET_TEXTMSG:					// simple text message
 				recvTextMessage(queue);
@@ -599,15 +589,6 @@ bool recvMessage(void)
 			case NET_BEACONMSG:					//beacon (blip) message
 				recvBeacon(queue);
 				break;
-			case GAME_BUILDFINISHED:				// a building is complete
-				recvBuildFinished(queue);
-				break;
-			case GAME_STRUCTDEST:				// structure destroy
-				recvDestroyStructure(queue);
-				break;
-			case GAME_DROIDEMBARK:
-				recvDroidEmbark(queue);              //droid has embarked on a Transporter
-				break;
 			case GAME_DROIDDISEMBARK:
 				recvDroidDisEmbark(queue);           //droid has disembarked from a Transporter
 				break;
@@ -616,6 +597,30 @@ bool recvMessage(void)
 				break;
 			case GAME_LASSAT:
 				recvLasSat(queue);
+				break;
+			case GAME_DEBUG_MODE:
+				recvProcessDebugMappings(queue);
+				break;
+			case GAME_DEBUG_ADD_DROID:
+				recvDroid(queue);
+				break;
+			case GAME_DEBUG_ADD_STRUCTURE:
+				recvBuildFinished(queue);
+				break;
+			case GAME_DEBUG_ADD_FEATURE:
+				recvMultiPlayerFeature(queue);
+				break;
+			case GAME_DEBUG_REMOVE_DROID:
+				recvDestroyDroid(queue);
+				break;
+			case GAME_DEBUG_REMOVE_STRUCTURE:
+				recvDestroyStructure(queue);
+				break;
+			case GAME_DEBUG_REMOVE_FEATURE:
+				recvDestroyFeature(queue);
+				break;
+			case GAME_DEBUG_FINISH_RESEARCH:
+				recvResearch(queue);
 				break;
 			default:
 				processedMessage1 = false;
@@ -633,17 +638,8 @@ bool recvMessage(void)
 		case GAME_TEMPLATEDEST:				// template destroy
 			recvDestroyTemplate(queue);
 			break;
-		case GAME_FEATUREDEST:				// feature destroy
-			recvDestroyFeature(queue);
-			break;
 		case NET_PING:						// diagnostic ping msg.
 			recvPing(queue);
-			break;
-		case GAME_DEMOLISH:					// structure demolished.
-			recvDemolishFinished(queue);
-			break;
-		case GAME_RESEARCH:					// some research has been done.
-			recvResearch(queue);
 			break;
 		case NET_OPTIONS:
 			recvOptions(queue);
@@ -707,9 +703,6 @@ bool recvMessage(void)
 			break;
 		case GAME_ARTIFACTS:
 			recvMultiPlayerRandomArtifacts(queue);
-			break;
-		case GAME_FEATURES:
-			recvMultiPlayerFeature(queue);
 			break;
 		case GAME_ALLIANCE:
 			recvAlliance(queue, true);
@@ -781,7 +774,7 @@ bool recvMessage(void)
 bool SendResearch(uint8_t player, uint32_t index, bool trigger)
 {
 	// Send the player that is researching the topic and the topic itself
-	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_RESEARCH);
+	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_DEBUG_FINISH_RESEARCH);
 		NETuint8_t(&player);
 		NETuint32_t(&index);
 	NETend();
@@ -796,18 +789,23 @@ static bool recvResearch(NETQUEUE queue)
 	uint32_t		index;
 	int				i;
 	PLAYER_RESEARCH	*pPlayerRes;
-	RESEARCH		*pResearch;
 
-	NETbeginDecode(queue, GAME_RESEARCH);
+	NETbeginDecode(queue, GAME_DEBUG_FINISH_RESEARCH);
 		NETuint8_t(&player);
 		NETuint32_t(&index);
 	NETend();
+
+	if (!getDebugMappingStatus())
+	{
+		debug(LOG_WARNING, "Failed to finish research for player %u.", NetPlay.players[queue.index].position);
+		return false;
+	}
 
 	syncDebug("player%d, index%u", player, index);
 
 	if (player >= MAX_PLAYERS || index >= asResearch.size())
 	{
-		debug(LOG_ERROR, "Bad GAME_RESEARCH received, player is %d, index is %u", (int)player, index);
+		debug(LOG_ERROR, "Bad GAME_DEBUG_FINISH_RESEARCH received, player is %d, index is %u", (int)player, index);
 		return false;
 	}
 
@@ -818,10 +816,6 @@ static bool recvResearch(NETQUEUE queue)
 	{
 		MakeResearchCompleted(pPlayerRes);
 		researchResult(index, player, false, NULL, true);
-
-		// Take off the power if available
-		pResearch = &asResearch[index];
-		usePower(player, pResearch->researchPower);
 	}
 
 	// Update allies research accordingly
@@ -1493,7 +1487,7 @@ static bool recvDestroyTemplate(NETQUEUE queue)
 // send a destruct feature message.
 bool SendDestroyFeature(FEATURE *pF)
 {
-	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_FEATUREDEST);
+	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_DEBUG_REMOVE_FEATURE);
 		NETuint32_t(&pF->id);
 	return NETend();
 }
@@ -1504,9 +1498,15 @@ bool recvDestroyFeature(NETQUEUE queue)
 	FEATURE *pF;
 	uint32_t	id;
 
-	NETbeginDecode(queue, GAME_FEATUREDEST);
+	NETbeginDecode(queue, GAME_DEBUG_REMOVE_FEATURE);
 		NETuint32_t(&id);
 	NETend();
+
+	if (!getDebugMappingStatus())
+	{
+		debug(LOG_WARNING, "Failed to remove feature for player %u.", NetPlay.players[queue.index].position);
+		return false;
+	}
 
 	pF = IdToFeature(id,ANYPLAYER);
 	if (pF == NULL)

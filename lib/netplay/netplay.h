@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -103,22 +103,17 @@ enum MESSAGE_TYPES
 	GAME_LASSAT,                    ///< lassat firing.
 	GAME_GAME_TIME,                 ///< Game time. Used for synchronising, so that all messages are executed at the same gameTime on all clients.
 	GAME_PLAYER_LEFT,               ///< Player has left or dropped.
-	// The following messages (not including GAME_MAX_TYPE) are currently redundant, and should probably at some point not be
-	// sent, except (some of them) when using cheats in debug mode.
-	GAME_DROID,                     ///< a new droid
-	GAME_BUILDFINISHED,             ///< a building is complete.
-	GAME_FEATURES,                  ///< information regarding features.
-	GAME_DROIDDEST,                 ///< issue a droid destruction, will be sent by all players at the same time, and have no effect, if synchronised.
-	GAME_STRUCTDEST,                ///< specify a strucutre to destroy, will be sent by all players at the same time, and have no effect, if synchronised.
-	GAME_FEATUREDEST,               ///< destroy a game feature.
-	GAME_RESEARCH,                  ///< Research has been completed.
-	GAME_CHECK_DROID,               ///< check & update bot position and damage.
-	GAME_CHECK_STRUCT,              ///< check & update struct damage.
-	GAME_CHECK_POWER,               ///< power levels for a player.
-	GAME_DEMOLISH,                  ///< a demolish is complete.
-	GAME_DROIDEMBARK,               ///< droid embarked on a Transporter
 	GAME_DROIDDISEMBARK,            ///< droid disembarked from a Transporter
-	// End of redundant messages.
+	// The following messages are used for debug mode.
+	GAME_DEBUG_MODE,                ///< Request enable/disable debug mode.
+	GAME_DEBUG_ADD_DROID,           ///< Add droid.
+	GAME_DEBUG_ADD_STRUCTURE,       ///< Add structure.
+	GAME_DEBUG_ADD_FEATURE,         ///< Add feature.
+	GAME_DEBUG_REMOVE_DROID,        ///< Remove droid.
+	GAME_DEBUG_REMOVE_STRUCTURE,    ///< Remove structure.
+	GAME_DEBUG_REMOVE_FEATURE,      ///< Remove feature.
+	GAME_DEBUG_FINISH_RESEARCH,     ///< Research has been completed.
+	// End of debug messages.
 	GAME_MAX_TYPE                   ///< Maximum+1 valid GAME_ type, *MUST* be last.
 };
 //#define SYNC_FLAG (NUM_GAME_PACKETS * NUM_GAME_PACKETS)	//special flag used for logging.
@@ -191,16 +186,6 @@ struct GAMESTRUCT
 // the following structure is going to be used to track if we sync or not
 struct SYNC_COUNTER
 {
-	uint64_t	sentDroidCheck;
-	uint64_t	unsentDroidCheck;
-	uint64_t	sentStructureCheck;
-	uint64_t	unsentStructureCheck;
-	uint64_t	sentPowerCheck;
-	uint64_t	unsentPowerCheck;
-	uint64_t	sentScoreCheck;
-	uint64_t	unsentScoreCheck;
-	uint64_t	sentPing;
-	uint64_t	unsentPing;
 	uint16_t	kicks;
 	uint16_t	joins;
 	uint16_t	left;
