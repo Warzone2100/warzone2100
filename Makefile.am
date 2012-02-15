@@ -57,7 +57,7 @@ javascript-doc-base:
 	grep $(top_srcdir)/src/qtscript.cpp -e '//--' | sed 's/\/\/--//' > doc/functions.tex
 	grep $(top_srcdir)/src/qtscriptfuncs.cpp -e '//--' | sed 's/\/\/--//' >> doc/functions.tex
 	grep $(top_srcdir)/src/qtscriptfuncs.cpp -e '//;;' | sed 's/\/\/;;//' > doc/objects.tex
-	cp $(top_srcdir)/doc/javascript.tex doc/
+	test $(abs_top_srcdir) = $(abs_top_builddir) || cp $(top_srcdir)/doc/javascript.tex doc/
 
 javascript-doc: javascript-doc-base
 if PDFLATEX
@@ -68,7 +68,7 @@ endif
 
 javascript-doc-html: javascript-doc-base
 if HEVEA
-	(cd doc; hevea javascript.tex)
+	(cd doc; hevea javascript.tex; hevea javascript.tex)
 if HACHA
 	(cd doc; hacha -o javascript-index.html javascript.html)
 endif
