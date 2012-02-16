@@ -238,9 +238,8 @@ QScriptValue convFeature(FEATURE *psFeature, QScriptEngine *engine)
 //;;   \item[DROID_TRANSPORTER] Transporters.
 //;;   \item[DROID_COMMAND] Commanders.
 //;;  \end{description}
-//;; \item[group] The group this droid is member of. This is a numerical ID. If not a member of any group,
-//;; this value is not set. Always check if set before use.
-//;; \item[armed] The percentage of weapon capability that is fully armed. Only defined on VTOLs.
+//;; \item[group] The group this droid is member of. This is a numerical ID. If not a member of any group, will be set to \emph{null}.
+//;; \item[armed] The percentage of weapon capability that is fully armed. Will be \emph{null} for droids other than VTOLs.
 //;; \item[experience] Amount of experience this droid has, based on damage it has dealt to enemies.
 //;; \item[cost] What it would cost to build the droid. (3.2+ only)
 //;; \item[isVTOL] True if the droid is VTOL. (3.2+ only)
@@ -303,9 +302,17 @@ QScriptValue convDroid(DROID *psDroid, QScriptEngine *engine)
 		if (psDroid->asWeaps[0].ammo > asWeaponStats[psDroid->asWeaps[0].nStat].numRounds)
 			debug(LOG_ERROR, "%s has %d and %d", objInfo(psDroid), psDroid->asWeaps[0].ammo, asWeaponStats[psDroid->asWeaps[0].nStat].numRounds);
 	}
+	else
+	{
+		value.setProperty("armed", QScriptValue::NullValue);
+	}
 	if (psDroid->psGroup)
 	{
 		value.setProperty("group", (int)psDroid->psGroup->id, QScriptValue::ReadOnly);
+	}
+	else
+	{
+		value.setProperty("group", QScriptValue::NullValue);
 	}
 	return value;
 }
