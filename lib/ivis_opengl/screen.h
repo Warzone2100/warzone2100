@@ -64,4 +64,6 @@ void screen_enableMapPreview(char *name, int width, int height, Vector2i *player
 void screen_disableMapPreview(void);
 bool screen_getMapPreview(void);
 
+void screen_EnableVBO();
+
 #endif

@@ -36,7 +36,7 @@
  *	Global Variables
  */
 
-static bool shadersAvailable;
+static bool shadersAvailable = false;
 static GLuint shaderProgram[SHADER_MAX];
 static GLfloat shaderStretch = 0;
 static GLint locTeam, locStretch, locTCMask, locFog, locNormalMap, locEcm, locTime;
