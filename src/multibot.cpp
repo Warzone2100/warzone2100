@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -27,6 +27,7 @@
 
 #include "droid.h"						// for droid sending and ordering.
 #include "droiddef.h"
+#include "keymap.h"
 #include "stats.h"
 #include "move.h"						// for ordering droids
 #include "objmem.h"
@@ -165,98 +166,9 @@ bool sendDroidSecondary(const DROID* psDroid, SECONDARY_ORDER sec, SECONDARY_STA
 	return true;
 }
 
-/** Broadcast droid and transporter loading information
- *
- *  \sa recvDroidEmbark(),sendDroidDisEmbark(),recvDroidDisEmbark()
- */
-bool sendDroidEmbark(const DROID* psDroid, const DROID* psTransporter)
-{
-	if (!bMultiMessages)
-		return true;
-
-	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_DROIDEMBARK);
-	{
-		uint8_t player = psDroid->player;
-		uint32_t droidID = psDroid->id;
-		uint32_t transporterID = psTransporter->id;
-
-		NETuint8_t(&player);
-		NETuint32_t(&droidID);
-		NETuint32_t(&transporterID);
-	}
-	return NETend();
-}
-
-/** Receive droid and transporter loading information
- *
- *  \sa sendDroidEmbark(),sendDroidDisEmbark(),recvDroidDisEmbark()
- */
-bool recvDroidEmbark(NETQUEUE queue)
-{
-	DROID* psDroid;
-	DROID* psTransporterDroid;
-	bool bDroidRemoved;
-
-	NETbeginDecode(queue, GAME_DROIDEMBARK);
-	{
-		uint8_t player;
-		uint32_t droidID;
-		uint32_t transporterID;
-
-		NETuint8_t(&player);
-		NETuint32_t(&droidID);
-		NETuint32_t(&transporterID);
-
-		// we have to find the droid on our (local) list first.
-		psDroid = IdToDroid(droidID, player);
-		if (!psDroid)
-		{
-			NETend();
-			// Possible it already died? (sync error?)
-			debug(LOG_WARNING, "player's %d droid %d wasn't found?", player,droidID);
-			return false;
-		}
-		psTransporterDroid = IdToDroid(transporterID, player);
-		if (!psTransporterDroid)
-		{
-			NETend();
-			// Possible it already died? (sync error?)
-			debug(LOG_WARNING, "player's %d transport droid %d wasn't found?", player,transporterID);
-			return false;
-		}
-
-		if (psDroid == NULL)
-		{
-			// how can this happen?
-			return true;
-		}
-
-		// Take it out of the world without destroying it (just removes it from the droid list)
-		bDroidRemoved = droidRemove(psDroid, apsDroidLists);
-
-		// Init the order for when disembark
-		psDroid->order.type = DORDER_NONE;
-		setDroidTarget(psDroid, NULL);
-		psDroid->order.psStats = NULL;
-
-		if (bDroidRemoved)
-		{
-			// and now we need to add it to their transporter group!
-			psTransporterDroid->psGroup->add(psDroid);
-		}
-		else
-		{
-			// possible sync error?
-			debug(LOG_WARNING, "Eh? Where did unit %d go? Couldn't load droid onto transporter.", droidID);
-		}
-	}
-	NETend();
-	return true;
-}
-
 /** Broadcast that droid is being unloaded from a transporter
  *
- *  \sa sendDroidEmbark(),recvDroidEmbark(),recvDroidDisEmbark()
+ *  \sa recvDroidDisEmbark()
  */
 bool sendDroidDisembark(DROID const *psTransporter, DROID const *psDroid)
 {
@@ -278,7 +190,7 @@ bool sendDroidDisembark(DROID const *psTransporter, DROID const *psDroid)
 
 /** Receive info about a droid that is being unloaded from a transporter
  *
- *  \sa sendDroidEmbark(),recvDroidEmbark(),sendDroidDisEmbark()
+ *  \sa sendDroidDisEmbark()
  */
 bool recvDroidDisEmbark(NETQUEUE queue)
 {
@@ -360,7 +272,7 @@ bool SendDroid(const DROID_TEMPLATE* pTemplate, uint32_t x, uint32_t y, uint8_t 
 	}
 
 	debug(LOG_SYNC, "Droid sent with id of %u", id);
-	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_DROID);
+	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_DEBUG_ADD_DROID);
 	{
 		Position pos(x, y, 0);
 		uint32_t templateID = pTemplate->multiPlayerID;
@@ -397,7 +309,7 @@ bool recvDroid(NETQUEUE queue)
 	bool haveInitialOrders;
 	INITIAL_DROID_ORDERS initialOrders;
 
-	NETbeginDecode(queue, GAME_DROID);
+	NETbeginDecode(queue, GAME_DEBUG_ADD_DROID);
 	{
 		NETuint8_t(&player);
 		NETuint32_t(&id);
@@ -416,7 +328,13 @@ bool recvDroid(NETQUEUE queue)
 	}
 	NETend();
 
-	ASSERT( player < MAX_PLAYERS, "invalid player %u", player);
+	if (!getDebugMappingStatus())
+	{
+		debug(LOG_WARNING, "Failed to add droid for player %u.", NetPlay.players[queue.index].position);
+		return false;
+	}
+
+	ASSERT_OR_RETURN(false, player < MAX_PLAYERS, "invalid player %u", player);
 
 	debug(LOG_LIFE, "<=== getting Droid from %u id of %u ",player,id);
 	if ((pos.x == 0 && pos.y == 0) || pos.x > world_coord(mapWidth) || pos.y > world_coord(mapHeight))
@@ -772,7 +690,7 @@ bool SendDestroyDroid(const DROID* psDroid)
 		return true;
 	}
 
-	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_DROIDDEST);
+	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_DEBUG_REMOVE_DROID);
 	{
 		uint32_t id = psDroid->id;
 
@@ -789,7 +707,7 @@ bool recvDestroyDroid(NETQUEUE queue)
 {
 	DROID* psDroid;
 
-	NETbeginDecode(queue, GAME_DROIDDEST);
+	NETbeginDecode(queue, GAME_DEBUG_REMOVE_DROID);
 	{
 		uint32_t id;
 
@@ -804,6 +722,12 @@ bool recvDestroyDroid(NETQUEUE queue)
 		}
 	}
 	NETend();
+
+	if (!getDebugMappingStatus())
+	{
+		debug(LOG_WARNING, "Failed to remove droid for player %u.", NetPlay.players[queue.index].position);
+		return false;
+	}
 
 	// If the droid has not died on our machine yet, destroy it
 	if(!psDroid->died)

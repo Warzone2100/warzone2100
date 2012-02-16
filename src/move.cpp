@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -1478,8 +1478,7 @@ static void moveUpdateDroidDirection(DROID *psDroid, SDWORD *pSpeed, uint16_t di
 
 	int diff = angleDelta(direction - *pDroidDir);
 	// Turn while moving - slow down speed depending on target angle so that we can turn faster
-	int maxSpeed = std::max<int>(psDroid->baseSpeed * (iSpinAngle - abs(diff)) / iSpinAngle, 0);
-	*pSpeed = std::min(*pSpeed, maxSpeed);
+	*pSpeed = std::max<int>(*pSpeed * (iSpinAngle - abs(diff)) / iSpinAngle, 0);
 
 	// iTurnSpeed is turn speed at max velocity, increase turn speed up to iSpinSpeed when slowing down
 	int turnSpeed = std::min<int>(iTurnSpeed + int64_t(iSpinSpeed - iTurnSpeed) * abs(diff) / iSpinAngle, iSpinSpeed);

@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -634,12 +634,6 @@ static void gameStateUpdate()
 	}
 
 	objmemUpdate();
-
-	// Do completely useless stuff.
-	if (!isInSync())
-	{
-		sendCheck();  // send some pointless checking info if we're doomed anyway
-	}
 
 	// Must end update, since we may or may not have ticked, and some message queue processing code may vary depending on whether it's in an update.
 	gameTimeUpdateEnd();

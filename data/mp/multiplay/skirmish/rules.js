@@ -224,18 +224,18 @@ function checkEndConditions()
 // /////////////////////////////////////////////////////////////////
 // WARNING MESSAGES
 // Base Under Attack
-function eventStructureAttacked(hitStruct, attackerObj)
+function eventAttacked(victimObj, attackerObj)
 {
 	if (gameTime > lastHitTime + 10)
 	{
 		lastHitTime = gameTime;
-		if (hitStruct)
+		if (victimObj.type == STRUCTURE)
 		{
-			playSound("pcv337.ogg", hitStruct.x, hitStruct.y, hitStruct.z);	// show position if still alive
+			playSound("pcv337.ogg", victimObj.x, victimObj.y, victimObj.z);	// show position if still alive
 		}
 		else
 		{
-			playSound("pcv337.ogg");
+			playSound("pcv399.ogg", victimObj.x, victimObj.y, victimObj.z);
 		}
 	}
 }

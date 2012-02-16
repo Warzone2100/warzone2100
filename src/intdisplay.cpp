@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -658,9 +658,30 @@ void intDisplayPowerBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DEC
 	}
 
 	iV_DrawImage(IntImages,IMAGE_PBAR_BOTTOM,x0,y0);
-
+	if (Avail < 0)
+	{
+		const char *need = _("Need more resources!");
+		if ((gameTime2 / 1250) % 5 == 0 )
+		{
+			iV_SetTextColour(WZCOL_BLACK);
+			iV_SetFont(font_small);
+			iV_DrawText(need, iX + 102, iY - 1  );
+			iV_SetFont(font_scaled);
+			iV_SetTextColour(WZCOL_RED);
+		}
+		else
+		{
+			iV_SetTextColour(WZCOL_RED);
+			iV_SetFont(font_small);
+			iV_DrawText(need, iX + 102, iY - 1  );
+			iV_SetFont(font_scaled);
+		}
+	}
+	else
+	{
+		iV_SetTextColour(WZCOL_TEXT_BRIGHT);
+	}
 	/* draw text value */
-	iV_SetTextColour(WZCOL_TEXT_BRIGHT);
 	iV_DrawText( szVal, iX, iY );
 }
 

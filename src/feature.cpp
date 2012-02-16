@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -378,11 +378,6 @@ bool removeFeature(FEATURE *psDel)
 	ASSERT_OR_RETURN(false, psDel != NULL, "Invalid feature pointer");
 	ASSERT_OR_RETURN(false, !psDel->died, "Feature already dead");
 
-	if (bMultiMessages && !ingame.localJoiningInProgress && !isInSync())
-	{
-		SendDestroyFeature(psDel);	// inform other players of destruction
-	}
-
 	//remove from the map data
 	StructureBounds b = getStructureBounds(psDel);
 	for (int breadth = 0; breadth < b.size.y; ++breadth)
@@ -511,13 +506,14 @@ bool destroyFeature(FEATURE *psDel, unsigned impactTime)
 			for (int width = 0; width < b.size.x; ++width)
 			{
 				MAPTILE *psTile = mapTile(b.map.x + width, b.map.y + breadth);
-				// stops water texture chnaging for underwateer festures
+				// stops water texture changing for underwater features
 				if (terrainType(psTile) != TER_WATER)
 				{
 					if (terrainType(psTile) != TER_CLIFFFACE)
 					{
 						/* Clear feature bits */
 						psTile->texture = TileNumber_texture(psTile->texture) | RUBBLE_TILE;
+						auxClearBlocking(b.map.x + width, b.map.y + breadth, AUXBITS_ALL);
 					}
 					else
 					{

@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -1054,7 +1054,7 @@ bool initTerrain(void)
 /// free all memory and opengl buffers used by the terrain renderer
 void shutdownTerrain(void)
 {
-	int x,y;
+	ASSERT_OR_RETURN( ,sectors, "trying to shutdown terrain when it didn't need it!");
 	glDeleteBuffers(1, &geometryVBO);
 	glDeleteBuffers(1, &geometryIndexVBO);
 	glDeleteBuffers(1, &waterVBO);
@@ -1063,9 +1063,9 @@ void shutdownTerrain(void)
 	glDeleteBuffers(1, &textureIndexVBO);
 	glDeleteBuffers(1, &decalVBO);
 	
-	for (x = 0; x < xSectors; x++)
+	for (int x = 0; x < xSectors; x++)
 	{
-		for (y = 0; y < ySectors; y++)
+		for (int y = 0; y < ySectors; y++)
 		{
 			free(sectors[x*ySectors + y].textureOffset);
 			free(sectors[x*ySectors + y].textureSize);

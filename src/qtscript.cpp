@@ -93,8 +93,12 @@ static bool callFunction(QScriptEngine *engine, const QString &function, const Q
 	QScriptValue value = engine->globalObject().property(function);
 	if (!value.isValid() || !value.isFunction())
 	{
-		return false;	// not necessarily an error, may just be a trigger that is not defined (ie not needed)
+		// not necessarily an error, may just be a trigger that is not defined (ie not needed)
+		// or it could be a typo in the function name or ...
+		debug(LOG_WARNING, "function (%s) not defined?", function.toUtf8().constData());
+		return false;
 	}
+
 	QScriptValue result = value.call(QScriptValue(), args);
 	if (engine->hasUncaughtException())
 	{

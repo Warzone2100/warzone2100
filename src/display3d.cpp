@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -800,13 +800,16 @@ void draw3DScene( void )
 		char buildInfo[255];
 		if (showLevelName)
 		{
-			iV_DrawText( getLevelName(), RET_X + 134, 420 + E_H );
+			iV_SetFont(font_small);
+			iV_SetTextColour(WZCOL_TEXT_MEDIUM);
+			iV_DrawText( getLevelName(), RET_X + 134, 410 + E_H );
 		}
-		getAsciiTime(buildInfo,gameTime);
-		iV_DrawText( buildInfo, RET_X + 134, 434 + E_H );
+		getAsciiTime(buildInfo, gameTime);
+		iV_DrawText( buildInfo, RET_X + 134, 422 + E_H );
+
 		if (getDebugMappingStatus() && !demoGetStatus())
 		{
-			iV_DrawText( "DEBUG ", RET_X + 134, 448 + E_H );
+			iV_DrawText( "DEBUG ", RET_X + 134, 436 + E_H );
 		}
 	}
 

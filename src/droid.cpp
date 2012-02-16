@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -291,7 +291,6 @@ DROID::DROID(uint32_t id, unsigned player)
 	, action(DACTION_NONE)
 	, actionPos(0, 0)
 	, psCurAnim(NULL)
-	, gameCheckDroid(NULL)
 {
 	order.type = DORDER_NONE;
 	order.pos = Vector2i(0, 0);
@@ -345,8 +344,6 @@ DROID::~DROID()
 	clustRemoveObject((BASE_OBJECT *)psDroid);
 
 	free(sMove.asPath);
-
-	delete gameCheckDroid;
 }
 
 
@@ -412,15 +409,6 @@ void	removeDroidBase(DROID *psDel)
 	}
 
 	syncDebugDroid(psDel, '#');
-
-	//ajl, inform others of destruction.
-	// Everyone else should be doing this at the same time, assuming it's in synch (so everyone sends a GAME_DROIDDEST message at once)...
-	if (!isInSync() && bMultiMessages
-	 && !(psDel->player != selectedPlayer && psDel->order.type == DORDER_RECYCLE))
-	{
-		ASSERT_OR_RETURN( , droidOnMap(psDel), "Asking other players to destroy droid driving off the map");
-		SendDestroyDroid(psDel);
-	}
 
 	/* remove animation if present */
 	if (psDel->psCurAnim != NULL)
