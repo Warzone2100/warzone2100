@@ -578,7 +578,8 @@ void clustObjectAttacked(BASE_OBJECT *psObj)
 				ASSERT(!"invalid object type", "clustObjectAttacked: invalid object type");
 				return;
 		}
-
+		// and fire the sound effect (and/or...) for the added callback trigger we just processed
+		triggerEventAttacked(psObj, g_pProjLastAttacker);
 		aClusterAttacked[psObj->cluster] = gameTime;
 	}
 }

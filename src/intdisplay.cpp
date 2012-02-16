@@ -658,9 +658,30 @@ void intDisplayPowerBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DEC
 	}
 
 	iV_DrawImage(IntImages,IMAGE_PBAR_BOTTOM,x0,y0);
-
+	if (Avail < 0)
+	{
+		const char *need = _("Need more resources!");
+		if ((gameTime2 / 1250) % 5 == 0 )
+		{
+			iV_SetTextColour(WZCOL_BLACK);
+			iV_SetFont(font_small);
+			iV_DrawText(need, iX + 102, iY - 1  );
+			iV_SetFont(font_scaled);
+			iV_SetTextColour(WZCOL_RED);
+		}
+		else
+		{
+			iV_SetTextColour(WZCOL_RED);
+			iV_SetFont(font_small);
+			iV_DrawText(need, iX + 102, iY - 1  );
+			iV_SetFont(font_scaled);
+		}
+	}
+	else
+	{
+		iV_SetTextColour(WZCOL_TEXT_BRIGHT);
+	}
 	/* draw text value */
-	iV_SetTextColour(WZCOL_TEXT_BRIGHT);
 	iV_DrawText( szVal, iX, iY );
 }
 
