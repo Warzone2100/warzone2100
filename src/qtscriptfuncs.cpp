@@ -51,6 +51,7 @@
 #include "frontend.h"
 #include "loop.h"
 #include "scriptextern.h"
+#include "gateway.h"
 
 #define FAKE_REF_LASSAT 999
 
@@ -214,6 +215,11 @@ QScriptValue convFeature(FEATURE *psFeature, QScriptEngine *engine)
 //;;   \item[DORDER_DEMOLISH] Order a droid to demolish something.
 //;;   \item[DORDER_EMBARK] Order a droid to embark on a transport.
 //;;   \item[DORDER_DISEMBARK] Order a transport to disembark its units at the given position.
+//;;   \item[DORDER_FIRESUPPORT] Order a droid to fire at whatever the target sensor is targeting. (3.2+ only)
+//;;   \item[DORDER_STOP] Order a droid to stop whatever it is doing. (3.2+ only)
+//;;   \item[DORDER_RTR] Order a droid to return for repairs. (3.2+ only)
+//;;   \item[DORDER_RTB] Order a droid to return to base. (3.2+ only)
+//;;   \item[DORDER_HOLD] Order a droid to hold its position. (3.2+ only)
 //;;  \end{description}
 //;; \item[action] The current action of the droid. This is how it intends to carry out its plan. The
 //;; C++ code may change the action frequently as it tries to carry out its order. You never want to set
@@ -543,6 +549,25 @@ static QScriptValue js_enumBlips(QScriptContext *context, QScriptEngine *engine)
 		v.setProperty("x", map_coord(p.x), QScriptValue::ReadOnly);
 		v.setProperty("y", map_coord(p.y), QScriptValue::ReadOnly);
 		result.setProperty(i, v);
+	}
+	return result;
+}
+
+//-- \subsection{enumGateways()}
+//-- Return an array containing all the gateways on the current map. The array contains object with the properties
+//-- x1, y1, x2 and y2.
+static QScriptValue js_enumGateways(QScriptContext *, QScriptEngine *engine)
+{
+	QScriptValue result = engine->newArray(gwNumGateways());
+	int i = 0;
+	for (GATEWAY *psGateway = gwGetGateways(); psGateway; psGateway = psGateway->psNext)
+	{
+		QScriptValue v = engine->newObject();
+		v.setProperty("x1", psGateway->x1, QScriptValue::ReadOnly);
+		v.setProperty("y1", psGateway->y1, QScriptValue::ReadOnly);
+		v.setProperty("x2", psGateway->x2, QScriptValue::ReadOnly);
+		v.setProperty("y2", psGateway->y2, QScriptValue::ReadOnly);
+		result.setProperty(i++, v);
 	}
 	return result;
 }
@@ -1474,6 +1499,22 @@ static QScriptValue js_droidCanReach(QScriptContext *context, QScriptEngine *)
 	return QScriptValue(fpathCheck(psDroid->pos, Vector3i(world_coord(x), world_coord(y), 0), psPropStats->propulsionType));
 }
 
+//-- \subsection{orderDroid(droid, order)}
+//-- Give a droid an order to do something.
+static QScriptValue js_orderDroid(QScriptContext *context, QScriptEngine *)
+{
+	QScriptValue droidVal = context->argument(0);
+	int id = droidVal.property("id").toInt32();
+	int player = droidVal.property("player").toInt32();
+	DROID *psDroid = IdToDroid(id, player);
+	SCRIPT_ASSERT(context, psDroid, "Droid id %d not found belonging to player %d", id, player);
+	DROID_ORDER order = (DROID_ORDER)context->argument(1).toInt32();
+	SCRIPT_ASSERT(context, order == DORDER_TEMP_HOLD || order == DORDER_RTR || order == DORDER_STOP || order == DORDER_RTB, 
+	              "Invalid order: %s", getDroidOrderName(order));
+	orderDroid(psDroid, order, ModeQueue);
+	return true;
+}
+
 //-- \subsection{orderDroidObj(droid, order, object)}
 //-- Give a droid an order to do something to something.
 static QScriptValue js_orderDroidObj(QScriptContext *context, QScriptEngine *)
@@ -2118,6 +2159,7 @@ bool registerFunctions(QScriptEngine *engine)
 	engine->globalObject().setProperty("_", engine->newFunction(js_translate));
 	engine->globalObject().setProperty("label", engine->newFunction(js_label));
 	engine->globalObject().setProperty("enumLabels", engine->newFunction(js_enumLabels));
+	engine->globalObject().setProperty("enumGateways", engine->newFunction(js_enumGateways));
 
 	// horrible hacks follow -- do not rely on these being present!
 	engine->globalObject().setProperty("hackNetOff", engine->newFunction(js_hackNetOff));
@@ -2150,6 +2192,7 @@ bool registerFunctions(QScriptEngine *engine)
 	engine->globalObject().setProperty("orderDroidStatsLoc", engine->newFunction(js_orderDroidBuild)); // deprecated
 	engine->globalObject().setProperty("orderDroidBuild", engine->newFunction(js_orderDroidBuild));
 	engine->globalObject().setProperty("orderDroidObj", engine->newFunction(js_orderDroidObj));
+	engine->globalObject().setProperty("orderDroid", engine->newFunction(js_orderDroid));
 	engine->globalObject().setProperty("buildDroid", engine->newFunction(js_buildDroid));
 	engine->globalObject().setProperty("addDroid", engine->newFunction(js_addDroid));
 	engine->globalObject().setProperty("componentAvailable", engine->newFunction(js_componentAvailable));
@@ -2199,6 +2242,11 @@ bool registerFunctions(QScriptEngine *engine)
 	engine->globalObject().setProperty("DORDER_DEMOLISH", DORDER_DEMOLISH, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("DORDER_EMBARK", DORDER_EMBARK, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("DORDER_DISEMBARK", DORDER_DISEMBARK, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("DORDER_FIRESUPPORT", DORDER_FIRESUPPORT, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("DORDER_HOLD", DORDER_TEMP_HOLD, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("DORDER_RTR", DORDER_RTR, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("DORDER_RTB", DORDER_RTB, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("DORDER_STOP", DORDER_STOP, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("COMMAND", IDRET_COMMAND, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("BUILD", IDRET_BUILD, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("MANUFACTURE", IDRET_MANUFACTURE, QScriptValue::ReadOnly | QScriptValue::Undeletable);
