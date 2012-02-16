@@ -31,6 +31,7 @@
 #include <QtScript/QScriptValue>
 #include <QtCore/QStringList>
 
+#include "action.h"
 #include "console.h"
 #include "design.h"
 #include "map.h"
@@ -220,6 +221,7 @@ QScriptValue convFeature(FEATURE *psFeature, QScriptEngine *engine)
 //;;   \item[DORDER_RTR] Order a droid to return for repairs. (3.2+ only)
 //;;   \item[DORDER_RTB] Order a droid to return to base. (3.2+ only)
 //;;   \item[DORDER_HOLD] Order a droid to hold its position. (3.2+ only)
+//;;   \item[DORDER_REARM] Order a VTOL droid to rearm. If given a target, will go to specified rearm pad. If not, will go to nearest rearm pad. (3.2+ only)
 //;;  \end{description}
 //;; \item[action] The current action of the droid. This is how it intends to carry out its plan. The
 //;; C++ code may change the action frequently as it tries to carry out its order. You never want to set
@@ -1509,9 +1511,17 @@ static QScriptValue js_orderDroid(QScriptContext *context, QScriptEngine *)
 	DROID *psDroid = IdToDroid(id, player);
 	SCRIPT_ASSERT(context, psDroid, "Droid id %d not found belonging to player %d", id, player);
 	DROID_ORDER order = (DROID_ORDER)context->argument(1).toInt32();
-	SCRIPT_ASSERT(context, order == DORDER_TEMP_HOLD || order == DORDER_RTR || order == DORDER_STOP || order == DORDER_RTB, 
+	SCRIPT_ASSERT(context, order == DORDER_TEMP_HOLD || order == DORDER_RTR || order == DORDER_STOP
+		      || order == DORDER_RTB || order == DORDER_REARM,
 	              "Invalid order: %s", getDroidOrderName(order));
-	orderDroid(psDroid, order, ModeQueue);
+	if (order == DORDER_REARM)
+	{
+		moveToRearm(psDroid);
+	}
+	else
+	{
+		orderDroid(psDroid, order, ModeQueue);
+	}
 	return true;
 }
 
@@ -2247,6 +2257,7 @@ bool registerFunctions(QScriptEngine *engine)
 	engine->globalObject().setProperty("DORDER_RTR", DORDER_RTR, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("DORDER_RTB", DORDER_RTB, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("DORDER_STOP", DORDER_STOP, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("DORDER_REARM", DORDER_REARM, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("COMMAND", IDRET_COMMAND, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("BUILD", IDRET_BUILD, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("MANUFACTURE", IDRET_MANUFACTURE, QScriptValue::ReadOnly | QScriptValue::Undeletable);
