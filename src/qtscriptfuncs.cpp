@@ -126,7 +126,7 @@ QScriptValue convStructure(STRUCTURE *psStruct, QScriptEngine *engine)
 			WEAPON_STATS *psWeap = &asWeaponStats[psStruct->asWeaps[i].nStat];
 			aa = aa || psWeap->surfaceToAir & SHOOT_IN_AIR;
 			ga = ga || psWeap->surfaceToAir & SHOOT_ON_GROUND;
-			range = MAX(psWeap->longRange, range);
+			range = MAX((int)psWeap->longRange, range);
 		}
 	}
 	QScriptValue value = convObj(psStruct, engine);
@@ -250,7 +250,7 @@ QScriptValue convDroid(DROID *psDroid, QScriptEngine *engine)
 			WEAPON_STATS *psWeap = &asWeaponStats[psDroid->asWeaps[i].nStat];
 			aa = aa || psWeap->surfaceToAir & SHOOT_IN_AIR;
 			ga = ga || psWeap->surfaceToAir & SHOOT_ON_GROUND;
-			range = MAX(psWeap->longRange, range);
+			range = MAX((int)psWeap->longRange, range);
 		}
 	}
 	DROID_TYPE type = psDroid->droidType;
@@ -282,8 +282,10 @@ QScriptValue convDroid(DROID *psDroid, QScriptEngine *engine)
 	value.setProperty("health", 100.0 / (double)psDroid->originalBody * (double)psDroid->body, QScriptValue::ReadOnly);
 	if (isVtolDroid(psDroid))
 	{
-		value.setProperty("armed", 100.0 / (double)asWeaponStats[psDroid->asWeaps[0].nStat].numRounds
+		value.setProperty("armed", 100.0 / (double)MAX(asWeaponStats[psDroid->asWeaps[0].nStat].numRounds, 1)
 		                  * (double)psDroid->asWeaps[0].ammo);
+		if (psDroid->asWeaps[0].ammo > asWeaponStats[psDroid->asWeaps[0].nStat].numRounds)
+			debug(LOG_ERROR, "%s has %d and %d", objInfo(psDroid), psDroid->asWeaps[0].ammo, asWeaponStats[psDroid->asWeaps[0].nStat].numRounds);
 	}
 	if (psDroid->psGroup)
 	{
@@ -350,7 +352,7 @@ bool loadLabels(const char *filename)
 {
 	if (!PHYSFS_exists(filename))
 	{
-		debug(LOG_SAVE, "No %s found -- use fallback method", filename);
+		debug(LOG_SAVE, "No %s found -- not adding any labels", filename);
 		return false;
 	}
 	WzConfig ini(filename);
@@ -361,6 +363,7 @@ bool loadLabels(const char *filename)
 	}
 	labels.clear();
 	QStringList list = ini.childGroups();
+	debug(LOG_SAVE, "Loading %d labels...", list.size());
 	for (int i = 0; i < list.size(); ++i)
 	{
 		ini.beginGroup(list[i]);
@@ -450,6 +453,19 @@ bool writeLabels(const char *filename)
 // Script functions
 //
 // All script functions should be prefixed with "js_" then followed by same name as in script.
+
+//-- \subsection{enumLabels()}
+//-- Returns a string list of labels that exist for this map.
+static QScriptValue js_enumLabels(QScriptContext *, QScriptEngine *engine)
+{
+	QStringList matches = labels.keys();
+	QScriptValue result = engine->newArray(matches.size());
+	for (int i = 0; i < matches.size(); i++)
+	{
+		result.setProperty(i, QScriptValue(matches[i]), QScriptValue::ReadOnly);
+	}
+	return result;
+}
 
 //-- \subsection{label(key)}
 //-- Fetch something denoted by a label. A label refers to an area, a position or a \emph{game object} on 
@@ -2093,6 +2109,7 @@ bool registerFunctions(QScriptEngine *engine)
 	// Register functions to the script engine here
 	engine->globalObject().setProperty("_", engine->newFunction(js_translate));
 	engine->globalObject().setProperty("label", engine->newFunction(js_label));
+	engine->globalObject().setProperty("enumLabels", engine->newFunction(js_enumLabels));
 
 	// horrible hacks follow -- do not rely on these being present!
 	engine->globalObject().setProperty("hackNetOff", engine->newFunction(js_hackNetOff));
