@@ -295,7 +295,7 @@ msgstr "Укреплённая оборонительная точка с кру
 #: data/mp/messages/strings/resstrings.txt:331
 #: data/mp/messages/strings/resstrings.txt:337
 msgid "Automatically targets enemies within sensor range"
-msgstr "автоматически наводится на цели в пределах радиуса действия датчика"
+msgstr "Автоматически наводится на цели в пределах радиуса действия датчика"
 
 #: data/base/messages/resmessages12.rmsg:29
 #: data/base/messages/resmessages12.rmsg:40
@@ -351,7 +351,7 @@ msgstr "Бронированная Башня Лансера"
 #: data/base/messages/resmessages23.rmsg:37
 #: data/base/messages/resmessages3.rmsg:433
 msgid "Research Breakthrough Improves Construction Rates"
-msgstr "Прорыв в Исследовании. улучшает скорость строительства"
+msgstr "Прорыв в Исследовании. Улучшает скорость строительства"
 
 #: data/base/messages/resmessages12.rmsg:49
 #: data/base/messages/resmessages23.rmsg:38
@@ -387,13 +387,13 @@ msgstr "Приказывает назначенным единицам непр�
 #: data/base/messages/resmessages12.rmsg:62
 #: data/base/messages/resmessagesall.rmsg:84
 msgid "Counter-battery fire continues until enemy battery is suppressed"
-msgstr "Кнтр-батарея продолжает вести огонь пока вражеская батарея не будет уничтожена"
+msgstr "Контр-батарея продолжает вести огонь пока вражеская батарея не будет уничтожена"
 
 #: data/base/messages/resmessages12.rmsg:70
 #: data/base/messages/resmessages23.rmsg:48
 #: data/base/messages/resmessages3.rmsg:444
 msgid "CB Sensor Improved"
-msgstr "КБ башня улучшена"
+msgstr "КБ датчик улучшен"
 
 #: data/base/messages/resmessages12.rmsg:71
 #: data/base/messages/resmessages2.rmsg:379
@@ -493,7 +493,7 @@ msgstr "Доступно новое оружие"
 
 #: data/base/messages/resmessages12.rmsg:104
 msgid ".50-calibre heavy machinegun"
-msgstr "Тяжелый пулемет калибра .50"
+msgstr "Тяжёлый пулемет калибра .50"
 
 #: data/base/messages/resmessages12.rmsg:105
 #: data/base/messages/resmessages1.rmsg:523
