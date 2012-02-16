@@ -56,6 +56,8 @@ extern void screenDumpToDisk(const char* path);
 
 extern int wz_texture_compression;
 
+extern bool opengl_fallback_mode;
+
 extern void screenDoDumpToDiskIfRequired(void);
 
 void screen_enableMapPreview(char *name, int width, int height, Vector2i *playerpositions);

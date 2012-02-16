@@ -45,6 +45,8 @@
 /* global used to indicate preferred internal OpenGL format */
 int wz_texture_compression = 0;
 
+bool opengl_fallback_mode = false;
+
 static bool		bBackDrop = false;
 static char		screendump_filename[PATH_MAX];
 static bool		screendump_required = false;
@@ -125,7 +127,7 @@ bool screenInitialise()
 
 	pie_SetShaderAvailability(GLEW_VERSION_2_0); // Simple check / close enough
 
-	if (GLEW_VERSION_2_0)
+	if (GLEW_VERSION_2_0 && !opengl_fallback_mode)
 	{
 		/* Dump information about OpenGL 2.0+ implementation to the console and the dump file */
 		GLint glMaxTIUs, glMaxTCs, glMaxTIUAs, glmaxSamples, glmaxSamplesbuf;
