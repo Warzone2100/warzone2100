@@ -113,11 +113,13 @@ QScriptValue convResearch(RESEARCH *psResearch, QScriptEngine *engine, int playe
 //;; \item[isCB] True if the structure has counter-battery ability. (3.2+ only)
 //;; \item[isRadarDetector] True if the structure has radar detector ability. (3.2+ only)
 //;; \item[range] Maximum range of its weapons. (3.2+ only)
+//;; \item[hasIndirect] One or more of the structure's weapons are indirect. (3.2+ only)
 //;; \end{description}
 QScriptValue convStructure(STRUCTURE *psStruct, QScriptEngine *engine)
 {
 	bool aa = false;
 	bool ga = false;
+	bool indirect = false;
 	int range = -1;
 	for (int i = 0; i < psStruct->numWeaps; i++)
 	{
@@ -126,6 +128,7 @@ QScriptValue convStructure(STRUCTURE *psStruct, QScriptEngine *engine)
 			WEAPON_STATS *psWeap = &asWeaponStats[psStruct->asWeaps[i].nStat];
 			aa = aa || psWeap->surfaceToAir & SHOOT_IN_AIR;
 			ga = ga || psWeap->surfaceToAir & SHOOT_ON_GROUND;
+			indirect = indirect || psWeap->movementModel == MM_INDIRECT || psWeap->movementModel == MM_HOMINGINDIRECT;
 			range = MAX((int)psWeap->longRange, range);
 		}
 	}
@@ -134,6 +137,7 @@ QScriptValue convStructure(STRUCTURE *psStruct, QScriptEngine *engine)
 	value.setProperty("isSensor", structStandardSensor(psStruct), QScriptValue::ReadOnly);
 	value.setProperty("canHitAir", aa, QScriptValue::ReadOnly);
 	value.setProperty("canHitGround", ga, QScriptValue::ReadOnly);
+	value.setProperty("hasIndirect", indirect, QScriptValue::ReadOnly);
 	value.setProperty("isRadarDetector", objRadarDetector(psStruct), QScriptValue::ReadOnly);
 	value.setProperty("range", range, QScriptValue::ReadOnly);
 	value.setProperty("status", (int)psStruct->status, QScriptValue::ReadOnly);
@@ -236,12 +240,14 @@ QScriptValue convFeature(FEATURE *psFeature, QScriptEngine *engine)
 //;; \item[isSensor] True if the droid has sensor ability. (3.2+ only)
 //;; \item[isCB] True if the droid has counter-battery ability. (3.2+ only)
 //;; \item[isRadarDetector] True if the droid has radar detector ability. (3.2+ only)
+//;; \item[hasIndirect] One or more of the droid's weapons are indirect. (3.2+ only)
 //;; \item[range] Maximum range of its weapons. (3.2+ only)
 //;; \end{description}
 QScriptValue convDroid(DROID *psDroid, QScriptEngine *engine)
 {
 	bool aa = false;
 	bool ga = false;
+	bool indirect = false;
 	int range = -1;
 	for (int i = 0; i < psDroid->numWeaps; i++)
 	{
@@ -250,6 +256,7 @@ QScriptValue convDroid(DROID *psDroid, QScriptEngine *engine)
 			WEAPON_STATS *psWeap = &asWeaponStats[psDroid->asWeaps[i].nStat];
 			aa = aa || psWeap->surfaceToAir & SHOOT_IN_AIR;
 			ga = ga || psWeap->surfaceToAir & SHOOT_ON_GROUND;
+			indirect = indirect || psWeap->movementModel == MM_INDIRECT || psWeap->movementModel == MM_HOMINGINDIRECT;
 			range = MAX((int)psWeap->longRange, range);
 		}
 	}
@@ -259,6 +266,7 @@ QScriptValue convDroid(DROID *psDroid, QScriptEngine *engine)
 	value.setProperty("range", range, QScriptValue::ReadOnly);
 	value.setProperty("order", (int)psDroid->order.type, QScriptValue::ReadOnly);
 	value.setProperty("cost", calcDroidPower(psDroid), QScriptValue::ReadOnly);
+	value.setProperty("hasIndirect", indirect, QScriptValue::ReadOnly);
 	switch (psDroid->droidType) // hide some engine craziness
 	{
 	case DROID_CYBORG_CONSTRUCT:
@@ -455,7 +463,7 @@ bool writeLabels(const char *filename)
 // All script functions should be prefixed with "js_" then followed by same name as in script.
 
 //-- \subsection{enumLabels()}
-//-- Returns a string list of labels that exist for this map.
+//-- Returns a string list of labels that exist for this map. (3.2+ only)
 static QScriptValue js_enumLabels(QScriptContext *, QScriptEngine *engine)
 {
 	QStringList matches = labels.keys();
