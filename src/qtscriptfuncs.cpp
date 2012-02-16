@@ -2149,6 +2149,26 @@ static QScriptValue js_loadLevel(QScriptContext *context, QScriptEngine *)
 	return QScriptValue();
 }
 
+//-- \subsection{chat(target player, message)}
+//-- Send a message to target player. Target may also be \emph{ALL_PLAYERS} or \emph{ALLIES}. (3.2+ only)
+static QScriptValue js_chat(QScriptContext *context, QScriptEngine *)
+{
+	int target = context->argument(0).toInt32();
+	QString message = context->argument(1).toString();
+	if (target == -1) // all
+	{
+		return QScriptValue(sendTextMessage(message.toUtf8().constData(), true));
+	}
+	else if (target == -2) // allies
+	{
+		return QScriptValue(sendTextMessage(QString(". " + message).toUtf8().constData(), false));
+	}
+	else // specific player
+	{
+		return QScriptValue(sendTextMessage(QString(QString::number(target) + " " + message).toUtf8().constData(), false));
+	}
+}
+
 //-- \subsection{hackNetOff()}
 //-- Turn off network transmissions. FIXME - find a better way.
 static QScriptValue js_hackNetOff(QScriptContext *, QScriptEngine *)
@@ -2216,6 +2236,7 @@ bool registerFunctions(QScriptEngine *engine)
 	engine->globalObject().setProperty("isVTOL", engine->newFunction(js_isVTOL));
 	engine->globalObject().setProperty("safeDest", engine->newFunction(js_safeDest));
 	engine->globalObject().setProperty("activateStructure", engine->newFunction(js_activateStructure));
+	engine->globalObject().setProperty("chat", engine->newFunction(js_chat));
 
 	// Functions that operate on the current player only
 	engine->globalObject().setProperty("centreView", engine->newFunction(js_centreView));
@@ -2314,6 +2335,8 @@ bool registerFunctions(QScriptEngine *engine)
 	engine->globalObject().setProperty("FEATURE", OBJ_FEATURE, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("POSITION", POSITION, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("AREA", AREA, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("ALL_PLAYERS", -1, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("ALLIES", -2, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 
 	// Static knowledge about players
 	//== \item[playerData] An array of information about the players in a game. Each item in the array is an object
