@@ -2240,7 +2240,7 @@ msgstr "Все посадочные площадки автоматически 
 #: data/base/messages/strings/resstrings.txt:459
 #: data/mp/messages/strings/resstrings.txt:489
 msgid "Improved Sensor Tower Available"
-msgstr "Доступна Улучшенная башня с датчиком "
+msgstr "Доступна улучшенная радарная вышка"
 
 #: data/base/messages/resmessages2.rmsg:357
 #: data/base/messages/strings/resstrings.txt:460
@@ -2252,7 +2252,7 @@ msgstr "Новая технология строительства укрепл�
 #: data/base/messages/strings/resstrings.txt:461
 #: data/mp/messages/strings/resstrings.txt:491
 msgid "Replaces existing sensor tower"
-msgstr "Заменяет существующие башни с датчиками"
+msgstr "Заменяет существующие радарные вышки"
 
 #: data/base/messages/resmessages2.rmsg:359
 #: data/base/messages/resmessagesall.rmsg:51
@@ -2260,7 +2260,7 @@ msgstr "Заменяет существующие башни с датчикам
 #: data/base/messages/strings/resstrings.txt:462
 #: data/mp/messages/strings/resstrings.txt:492
 msgid "May be assigned as spotter for indirect fire weapons"
-msgstr "Можно назначить в качесвте корректировщика орудий непрямого огня"
+msgstr "Можно назначить в качестве корректировщика орудий непрямого огня"
 
 #: data/base/messages/resmessages2.rmsg:368
 #: data/base/messages/strings/resstrings.txt:480
@@ -2285,7 +2285,7 @@ msgstr "Легкий корпус Альянса"
 #: data/base/messages/strings/resstrings.txt:528
 #: data/mp/messages/strings/resstrings.txt:563
 msgid "Superior armor and body points to Viper"
-msgstr "Броня выше чем у Гадюки"
+msgstr "Броня лучше, чем у Гадюки"
 
 #: data/base/messages/resmessages2.rmsg:402
 #: data/base/messages/strings/resstrings.txt:529
@@ -2297,7 +2297,7 @@ msgstr "Медленнее Гадюки"
 #: data/base/messages/strings/resstrings.txt:530
 #: data/mp/messages/strings/resstrings.txt:565
 msgid "High power costs and slower to produce than Viper"
-msgstr "Дороже и дольше производить чем Гадюку"
+msgstr "Дороже и дольше производить, чем Гадюку"
 
 #: data/base/messages/resmessages2.rmsg:411
 #: data/base/messages/strings/resstrings.txt:539
@@ -2310,7 +2310,7 @@ msgstr "Средний корпус Альянса"
 #: data/base/messages/strings/resstrings.txt:540
 #: data/mp/messages/strings/resstrings.txt:575
 msgid "Superior armor and body points to Cobra"
-msgstr "Броня выше чем у Кобры"
+msgstr "Броня лучше, чем у Кобры"
 
 #: data/base/messages/resmessages2.rmsg:413
 #: data/base/messages/strings/resstrings.txt:541
@@ -2322,7 +2322,7 @@ msgstr "Медленнее Кобры"
 #: data/base/messages/strings/resstrings.txt:542
 #: data/mp/messages/strings/resstrings.txt:577
 msgid "High power costs and slower to produce than Cobra"
-msgstr "дороже и дольше производить, чем Кобру"
+msgstr "Дороже и дольше производить, чем Кобру"
 
 #: data/base/messages/resmessages2.rmsg:423
 #: data/base/messages/strings/names.txt:945
@@ -2337,7 +2337,7 @@ msgstr "Двигатель с турбонаддувом"
 #: data/base/messages/strings/resstrings.txt:581
 #: data/mp/messages/strings/resstrings.txt:616
 msgid "Vehicle Thermal Armor Improved"
-msgstr "Термоброня Улучшена"
+msgstr "Термоброня улучшена"
 
 #: data/base/messages/resmessages2.rmsg:445
 #: data/base/messages/resmessages3.rmsg:610
@@ -2351,7 +2351,7 @@ msgstr "высокотемпературные слои брони"
 #: data/base/messages/strings/resstrings.txt:583
 #: data/mp/messages/strings/resstrings.txt:618
 msgid "Increases Thermal Armor"
-msgstr "Повышает Термоброню"
+msgstr "Улучшает термоброню"
 
 #: data/base/messages/resmessages2.rmsg:455
 #: data/base/messages/resmessages2.rmsg:466
@@ -2442,25 +2442,25 @@ msgstr "Только воздушные цели"
 #: data/base/messages/strings/resstrings.txt:642
 #: data/mp/messages/strings/resstrings.txt:677
 msgid "Quad 80mm flak weapon"
-msgstr "Счетверенная 80мм зенитка"
+msgstr "Счетверённая 80мм зенитка"
 
 #: data/base/messages/resmessages2.rmsg:522
 #: data/base/messages/strings/resstrings.txt:648
 #: data/mp/messages/strings/resstrings.txt:683
 msgid "30mm Anti-Aircraft machinegun"
-msgstr "Противовоздушный 30 мм пулемёт"
+msgstr "Противовоздушный 30мм пулемёт"
 
 #: data/base/messages/resmessages2.rmsg:533
 #: data/base/messages/strings/resstrings.txt:654
 #: data/mp/messages/strings/resstrings.txt:689
 msgid "Quad 30mm Anti-Aircraft machinegun"
-msgstr "Счетверённый противовоздушный 30 мм пулемёт"
+msgstr "Счетверённый противовоздушный 30мм пулемёт"
 
 #: data/base/messages/resmessages2.rmsg:544
 #: data/base/messages/strings/resstrings.txt:660
 #: data/mp/messages/strings/resstrings.txt:695
 msgid "Detects and locks-on to VTOL engine emissions"
-msgstr "Обнаруживает и берет на прицел отслеживая выхлопы двигателей ВВС"
+msgstr "Обнаруживает и берёт на прицел, отслеживая выхлопы двигателей ВВС"
 
 #: data/base/messages/resmessages2.rmsg:554
 #: data/base/messages/resmessages3.rmsg:697
@@ -2473,14 +2473,14 @@ msgstr "Модерницация ПВО"
 #: data/base/messages/strings/resstrings.txt:670
 #: data/mp/messages/strings/resstrings.txt:705
 msgid "High Explosive Flak shards"
-msgstr "Мощные взрывчатые снаряды для зениток"
+msgstr "Мощные фугасные снаряды для зениток"
 
 #: data/base/messages/resmessages2.rmsg:556
 #: data/base/messages/resmessages3.rmsg:699
 #: data/base/messages/strings/resstrings.txt:671
 #: data/mp/messages/strings/resstrings.txt:706
 msgid "Increases AA Flak damage"
-msgstr "Повышает Урон от ПВО"
+msgstr "Повышает урон, нанесённый ПВО"
 
 #: data/base/messages/resmessages2.rmsg:557
 #: data/base/messages/resmessages3.rmsg:700
@@ -2536,7 +2536,7 @@ msgstr "Супербомба взрывается в близи врага"
 #: data/base/messages/strings/resstrings.txt:698
 #: data/mp/messages/strings/resstrings.txt:733
 msgid "Drops High Explosive Cluster bombs"
-msgstr "Сбрасывает разрывные кластерные бомбы"
+msgstr "Сбрасывает фугасные кластерные бомбы"
 
 #: data/base/messages/resmessages2.rmsg:600
 #: data/base/messages/strings/resstrings.txt:699
@@ -2548,7 +2548,7 @@ msgstr "Лучшие цели: Постройки"
 #: data/base/messages/strings/resstrings.txt:704
 #: data/mp/messages/strings/resstrings.txt:739
 msgid "Drops High Explosive Armor Piercing bombs"
-msgstr "Сбрасывает разрывные бронебойные бомбы"
+msgstr "Сбрасывает бронебойные бомбы"
 
 #: data/base/messages/resmessages2.rmsg:611
 #: data/base/messages/strings/resstrings.txt:705
@@ -2566,7 +2566,7 @@ msgstr "Отслеживает по тепловому следу"
 #: data/base/messages/strings/resstrings.txt:730
 #: data/mp/messages/strings/resstrings.txt:765
 msgid "Hyper-velocity automatic-cannon firing 88mm rounds"
-msgstr "Гипер Скоростная (ГС) автоматическая пушка, стреляющая 80мм снарядами"
+msgstr "Гиперскоростная (ГС) автоматическая пушка, стреляющая 80мм снарядами"
 
 #: data/base/messages/resmessages2.rmsg:634
 #: data/base/messages/strings/resstrings.txt:732
@@ -2578,13 +2578,13 @@ msgstr "Заменяет среднюю пушку"
 #: data/base/messages/strings/resstrings.txt:736
 #: data/mp/messages/strings/resstrings.txt:771
 msgid "76mm hyper-velocity quad-barrel automatic-cannon"
-msgstr "76мм гиперскоростная счетверенная автоматическая пушка "
+msgstr "76мм гиперскоростная счетверённая автоматическая пушка"
 
 #: data/base/messages/resmessages2.rmsg:654
 #: data/base/messages/strings/resstrings.txt:758
 #: data/mp/messages/strings/resstrings.txt:797
 msgid "Heavy Flame-thrower firing Propylene Oxide gel"
-msgstr "Тяжелый огнемет, выпрыскивающий пламя из горючей смеси Оксида пропилена."
+msgstr "Тяжелый огнемёт, выпрыскивающий пламя из горючей смеси Оксида пропилена"
 
 #: data/base/messages/resmessages2.rmsg:665
 #: data/base/messages/strings/resstrings.txt:766
@@ -2596,19 +2596,19 @@ msgstr "Оксид Пропилена позволяет получить све
 #: data/base/messages/strings/resstrings.txt:774
 #: data/mp/messages/strings/resstrings.txt:813
 msgid "105mm Howitzer may be assigned to a sensor"
-msgstr "105мм гаубицу можно привязать к датчику"
+msgstr "105мм гаубицу можно привязать к радару"
 
 #: data/base/messages/resmessages2.rmsg:687
 #: data/base/messages/strings/resstrings.txt:780
 #: data/mp/messages/strings/resstrings.txt:821
 msgid "155mm Howitzer may be assigned to a sensor"
-msgstr "155мм гаубицу можно привязать к датчику"
+msgstr "155мм гаубицу можно привязать к радару"
 
 #: data/base/messages/resmessages2.rmsg:698
 #: data/base/messages/strings/resstrings.txt:788
 #: data/mp/messages/strings/resstrings.txt:829
 msgid "105m Howitzer firing incendiaries, may be assigned to a sensor"
-msgstr "105мм Гаубицу, стреляющую зажигательными снарядами, можно привязать к датчику"
+msgstr "105мм гаубицу, стреляющую зажигательными снарядами, можно привязать к радару"
 
 #: data/base/messages/resmessages2.rmsg:699
 #: data/base/messages/strings/resstrings.txt:789
@@ -2657,7 +2657,7 @@ msgstr "Все гаубицы автоматически улучшены"
 #: data/base/messages/strings/resstrings.txt:802
 #: data/mp/messages/strings/resstrings.txt:843
 msgid "High Explosive shells"
-msgstr "Взрывчатые снаряды"
+msgstr "Фугасные снаряды"
 
 #: data/base/messages/resmessages2.rmsg:721
 #: data/base/messages/resmessages3.rmsg:776
@@ -2722,7 +2722,7 @@ msgstr "Увеличивает сопротивление захвату НЕК�
 
 #: data/base/messages/resmessages3.rmsg:28
 msgid "Computer systems can now be 'ring-fenced' from NEXUS"
-msgstr "Кмпьютерные системы теперь можно оградить от НЕКСУС"
+msgstr "Компьютерные системы теперь можно оградить от НЕКСУС"
 
 #: data/base/messages/resmessages3.rmsg:37
 msgid "New Cyborg Research Available"
@@ -2734,7 +2734,7 @@ msgstr "Аэродинамический пакет скачка"
 
 #: data/base/messages/resmessages3.rmsg:39
 msgid "Gives Cyborg limited flight abilities"
-msgstr "Дает киборгам ограниченные возможности полета"
+msgstr "Даёт киборгам ограниченные возможности полёта"
 
 #: data/base/messages/resmessages3.rmsg:40
 msgid "Jump Cyborgs can now be researched"
@@ -2754,7 +2754,7 @@ msgstr "Многослойные сплавы связаны с энергопо
 #: data/base/messages/strings/resstrings.txt:78
 #: data/mp/messages/strings/resstrings.txt:98
 msgid "Armed with Revenger Surface-to-Air missile"
-msgstr "Вооружен ракетой класса Мститель Земля-Вздух"
+msgstr "Вооружен ракетой класса Мститель Земля-Воздух"
 
 #: data/base/messages/resmessages3.rmsg:93
 #: data/base/messages/resmessages3.rmsg:148
@@ -2808,11 +2808,11 @@ msgstr "Связанные металлические слои оформлен�
 
 #: data/base/messages/resmessages3.rmsg:203
 msgid "SAM site with Avenger missiles"
-msgstr "Установка с ракетами класса Змля-Воздух Мститель"
+msgstr "Установка с ракетами Мститель класса Земля-Воздух"
 
 #: data/base/messages/resmessages3.rmsg:214
 msgid "SAM site with Vindicator missiles"
-msgstr "Установка с ракетами класса Земля-Воздух Защитник"
+msgstr "Установка с ракетами Защитник класса Земля-Воздух"
 
 #: data/base/messages/resmessages3.rmsg:225
 msgid "Artillery battery firing Firestorm Missiles"
@@ -3336,7 +3336,7 @@ msgstr "Доступна новая системная башня для диз�
 
 #: data/base/messages/resmessagesall.rmsg:49
 msgid "Improved sensor range"
-msgstr "Увеличивает радиус действия датчика"
+msgstr "Увеличивает радиус действия радара"
 
 #: data/base/messages/resmessagesall.rmsg:50
 msgid "Makes excellent scout vehicle"
@@ -3344,7 +3344,7 @@ msgstr "Создает Превосходную Машину-Разведчик"
 
 #: data/base/messages/resmessagesall.rmsg:60
 msgid "Extended sensor range"
-msgstr "Расширен обзор датчика"
+msgstr "Расширен обзор радара"
 
 #: data/base/messages/resmessagesall.rmsg:61
 msgid "Keeps map areas under constant surveillance"
@@ -3352,7 +3352,7 @@ msgstr "постоянно наблоюдает за областями на к�
 
 #: data/base/messages/resmessagesall.rmsg:70
 msgid "Sensors Improved"
-msgstr "Датчик Улучшен"
+msgstr "Радар улучшен"
 
 #: data/base/messages/resmessagesall.rmsg:71
 msgid "New Thermal Emissions detection"
@@ -3360,15 +3360,15 @@ msgstr "Новая система теплового наведения"
 
 #: data/base/messages/resmessagesall.rmsg:72
 msgid "Extends Sensor Range"
-msgstr "Увеличивает обзор датчика"
+msgstr "Увеличивает обзор радара"
 
 #: data/base/messages/resmessagesall.rmsg:73
 msgid "All sensors upgraded automatically"
-msgstr "Все датчики улучшаются автоматически"
+msgstr "Все радарные установки улучшаются автоматически"
 
 #: data/base/messages/resmessagesall.rmsg:82
 msgid "Counter-battery tower detects enemy indirect fire batteries"
-msgstr "Кнтр-Батарея обнаруживает вражеские батареи непрямого залпового огня"
+msgstr "Контратарея обнаруживает вражеские батареи непрямого залпового огня"
 
 #: data/base/messages/resmessagesall.rmsg:92
 msgid "Collective Heavy Body"
