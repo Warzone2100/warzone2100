@@ -5089,14 +5089,14 @@ msgstr "Сенсорная башня"
 #: data/mp/messages/strings/names.txt:423
 #: data/mp/messages/strings/names.txt:900
 msgid "Hardened Sensor Tower"
-msgstr "Укреплённая сенсорная башня"
+msgstr "Укреплённая радарная башня"
 
 #: data/base/messages/strings/names.txt:369
 #: data/base/messages/strings/names.txt:887
 #: data/mp/messages/strings/names.txt:366
 #: data/mp/messages/strings/names.txt:898
 msgid "Sensor Turret"
-msgstr "Башня с датчиком"
+msgstr "Радарная башня"
 
 #: data/base/messages/strings/names.txt:371
 #: data/base/messages/strings/names.txt:372
@@ -5197,7 +5197,7 @@ msgstr "Ремонтный центр"
 #: data/base/messages/strings/names.txt:394
 #: data/mp/messages/strings/names.txt:392
 msgid "Command Relay Center"
-msgstr "Комендный пост"
+msgstr "Командный пост"
 
 #: data/base/messages/strings/names.txt:395
 #: data/mp/messages/strings/names.txt:393
