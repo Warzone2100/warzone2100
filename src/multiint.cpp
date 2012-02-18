@@ -1431,9 +1431,9 @@ static void addGameOptions()
 
 	// game type
 	addBlueForm(MULTIOP_OPTIONS,MULTIOP_GAMETYPE,_("Scavengers"),MCOL0,MROW5,MULTIOP_BLUEFORMW,27);
-	addMultiBut(psWScreen, MULTIOP_GAMETYPE, MULTIOP_CAMPAIGN, MCOL1, 2, MULTIOP_BUTW, MULTIOP_BUTH, _("Scavengers"),
+	addMultiBut(psWScreen, MULTIOP_GAMETYPE, MULTIOP_CAMPAIGN, MCOL2, 2, MULTIOP_BUTW, MULTIOP_BUTH, _("Scavengers"),
 	            IMAGE_SCAVENGERS_ON, IMAGE_SCAVENGERS_ON_HI, true);
-	addMultiBut(psWScreen, MULTIOP_GAMETYPE, MULTIOP_SKIRMISH, MCOL2, 2, MULTIOP_BUTW, MULTIOP_BUTH, _("No Scavengers"),
+	addMultiBut(psWScreen, MULTIOP_GAMETYPE, MULTIOP_SKIRMISH, MCOL3, 2, MULTIOP_BUTW, MULTIOP_BUTH, _("No Scavengers"),
 	            IMAGE_SCAVENGERS_OFF, IMAGE_SCAVENGERS_OFF_HI, true);
 
 	widgSetButtonState(psWScreen, MULTIOP_CAMPAIGN,	0);
@@ -1576,7 +1576,7 @@ static void addGameOptions()
 		}
 
 	addBlueForm(MULTIOP_OPTIONS, MULTIOP_MAP_PREVIEW, _("Map Preview"), MCOL0, MROW9, MULTIOP_BLUEFORMW, 27);
-	addMultiBut(psWScreen,MULTIOP_MAP_PREVIEW, MULTIOP_MAP_BUT, MCOL2, 2, MULTIOP_BUTW, MULTIOP_BUTH,
+	addMultiBut(psWScreen,MULTIOP_MAP_PREVIEW, MULTIOP_MAP_BUT, MCOL3, 2, MULTIOP_BUTW, MULTIOP_BUTH,
 	            _("Click to see Map"), IMAGE_FOG_OFF, IMAGE_FOG_OFF_HI, true);
 	widgSetButtonState(psWScreen, MULTIOP_MAP_BUT,0); //1 = OFF  0=ON
 
@@ -1590,17 +1590,20 @@ static void addGameOptions()
 	// host Games button
 	if(ingame.bHostSetup && !bHosted && !challengeActive)
 	{
-		addMultiBut(psWScreen,MULTIOP_OPTIONS,MULTIOP_HOST,MULTIOP_HOSTX,MULTIOP_HOSTY,35,28,
-					_("Start Hosting Game"), IMAGE_HOST, IMAGE_HOST_HI, IMAGE_HOST_HI);
+		addBlueForm(MULTIOP_OPTIONS, MULTIOP_HOST, _("Start Hosting Game"), MCOL0, MROW11, MULTIOP_BLUEFORMW, 27);
+		addMultiBut(psWScreen, MULTIOP_HOST, MULTIOP_HOST_BUT, MCOL3, 0, MULTIOP_BUTW, MULTIOP_BUTH,
+			_("Start Hosting Game"), IMAGE_HOST, IMAGE_HOST_HI, IMAGE_HOST_HI);
 	}
 
 	// hosted or hosting.
 	// limits button.
 	if (ingame.bHostSetup)
 	{
-		addMultiBut(psWScreen,MULTIOP_OPTIONS,MULTIOP_STRUCTLIMITS,MULTIOP_STRUCTLIMITSX,MULTIOP_STRUCTLIMITSY,
-		            35, 28, challengeActive ? _("Show Structure Limits") : _("Set Structure Limits"),
-		            IMAGE_SLIM, IMAGE_SLIM_HI, IMAGE_SLIM_HI);
+		addBlueForm(MULTIOP_OPTIONS, MULTIOP_STRUCTLIMITS, challengeActive ? _("Show Structure Limits") : _("Set Structure Limits"),
+						MCOL0, MROW10, MULTIOP_BLUEFORMW, 27);
+
+		addMultiBut(psWScreen, MULTIOP_STRUCTLIMITS, MULTIOP_LIMITS_BUT, MCOL3, 4, MULTIOP_BUTW, MULTIOP_BUTH,
+					 challengeActive ? _("Show Structure Limits") : _("Set Structure Limits"), IMAGE_SLIM, IMAGE_SLIM_HI, IMAGE_SLIM_HI);
 	}
 
 	// Add any relevant factory disabled icons.
@@ -1785,11 +1788,11 @@ static void closePositionChooser()
 
 static int playerBoxHeight(int player)
 {
-	int gap = MULTIOP_PLAYERSH - 4 - 3 - MULTIOP_TEAMSHEIGHT*game.maxPlayers;
+	int gap = MULTIOP_PLAYERSH - MULTIOP_TEAMSHEIGHT * game.maxPlayers;
 	int gapDiv = game.maxPlayers - 1;
 	gap = std::min(gap, 5*gapDiv);
 	STATIC_ASSERT(MULTIOP_TEAMSHEIGHT == MULTIOP_PLAYERHEIGHT);  // Why are these different defines?
-	return (MULTIOP_TEAMSHEIGHT*gapDiv + gap)*NetPlay.players[player].position/gapDiv + 4;
+	return (MULTIOP_TEAMSHEIGHT*gapDiv + gap)*NetPlay.players[player].position/gapDiv;
 }
 
 static void addPositionChooser(int player)
@@ -1811,14 +1814,14 @@ static void addColourChooser(UDWORD player)
 
 	// add form.
 	addBlueForm(MULTIOP_PLAYERS,MULTIOP_COLCHOOSER_FORM,"",
-				7,
+				8,
 				playerBoxHeight(player),
 				MULTIOP_ROW_WIDTH,MULTIOP_PLAYERHEIGHT);
 
 	// add the flags
 	int flagW = iV_GetImageWidth(FrontImages, IMAGE_PLAYERN);
 	int flagH = iV_GetImageHeight(FrontImages, IMAGE_PLAYERN);
-	int space = MULTIOP_ROW_WIDTH - 7 - flagW*MAX_PLAYERS_IN_GUI;
+	int space = MULTIOP_ROW_WIDTH - 0 - flagW*MAX_PLAYERS_IN_GUI;
 	int spaceDiv = MAX_PLAYERS_IN_GUI;
 	space = std::min(space, 5*spaceDiv);
 	for (i = 0; i < MAX_PLAYERS_IN_GUI; i++)
@@ -2152,11 +2155,11 @@ static void addTeamChooser(UDWORD player)
 	initChooser(player);
 
 	// add form.
-	addBlueForm(MULTIOP_PLAYERS, MULTIOP_TEAMCHOOSER_FORM, "", 7, playerBoxHeight(player), MULTIOP_ROW_WIDTH, MULTIOP_TEAMSHEIGHT);
+	addBlueForm(MULTIOP_PLAYERS, MULTIOP_TEAMCHOOSER_FORM, "", 8, playerBoxHeight(player), MULTIOP_ROW_WIDTH, MULTIOP_TEAMSHEIGHT);
 
 	int teamW = iV_GetImageWidth(FrontImages, IMAGE_TEAM0);
 	int teamH = iV_GetImageHeight(FrontImages, IMAGE_TEAM0);
-	int space = MULTIOP_ROW_WIDTH - 7 - teamW*(game.maxPlayers + 1);
+	int space = MULTIOP_ROW_WIDTH - 4 - teamW*(game.maxPlayers + 1);
 	int spaceDiv = game.maxPlayers;
 	space = std::min(space, 3*spaceDiv);
 
@@ -2200,7 +2203,7 @@ static void drawReadyButton(UDWORD player)
 
 	// add form to hold 'ready' botton
 	addBlueForm(MULTIOP_PLAYERS,MULTIOP_READY_FORM_ID + player,"",
-				8 + MULTIOP_PLAYERWIDTH - MULTIOP_READY_WIDTH,
+				7 + MULTIOP_PLAYERWIDTH - MULTIOP_READY_WIDTH,
 				playerBoxHeight(player),
 				MULTIOP_READY_WIDTH,MULTIOP_READY_HEIGHT);
 
@@ -2227,9 +2230,9 @@ static void drawReadyButton(UDWORD player)
 	unsigned images[2][2] = {{IMAGE_CHECK_OFF, IMAGE_CHECK_ON}, {IMAGE_CHECK_OFF_HI, IMAGE_CHECK_ON_HI}};
 
 	// draw 'ready' button
-	addMultiBut(psWScreen, MULTIOP_READY_FORM_ID + player, MULTIOP_READY_START + player, 3, 8, MULTIOP_READY_WIDTH, MULTIOP_READY_HEIGHT,
+	addMultiBut(psWScreen, MULTIOP_READY_FORM_ID + player, MULTIOP_READY_START + player, 3, 10, MULTIOP_READY_WIDTH, MULTIOP_READY_HEIGHT,
 	            toolTips[isMe][isReady], images[0][isReady], images[0][isReady], images[isMe][isReady]);
-	addText(MULTIOP_READY_START+MAX_PLAYERS+player, 0,10,
+	addText(MULTIOP_READY_START+MAX_PLAYERS+player, 0, 14,
 	        _("READY?"), MULTIOP_READY_FORM_ID + player);
 }
 
@@ -2856,7 +2859,7 @@ static void processMultiopWidgets(UDWORD id)
 	// these work all the time.
 	switch(id)
 	{
-	case MULTIOP_STRUCTLIMITS:
+	case MULTIOP_LIMITS_BUT:
 		changeTitleMode(MULTILIMIT);
 		break;
 
@@ -2891,7 +2894,7 @@ static void processMultiopWidgets(UDWORD id)
 		addMultiRequest(MultiPlayersPath, ".sta", MULTIOP_PNAME, 0, 0);
 		break;
 
-	case MULTIOP_HOST:
+	case MULTIOP_HOST_BUT:
 		debug(LOG_NET, "MULTIOP_HOST enabled");
 		sstrcpy(game.name, widgGetString(psWScreen, MULTIOP_GNAME));	// game name
 		sstrcpy(sPlayer, widgGetString(psWScreen, MULTIOP_PNAME));	// pname
