@@ -38,16 +38,19 @@
 
 // TODO -- parse and check that all setTimer, removeTimer and queue calls have quoted first parameters
 
-// TODO -- these should go into a common header
-#define CAMP_CLEAN                              0                       // campaign subtypes
-#define CAMP_BASE                               1
-#define CAMP_WALLS                              2
-#define NO_ALLIANCES            0                       //alliance possibilities for games.
-#define ALLIANCES                       1
-#define ALLIANCES_TEAMS         2                       //locked teams
-#define LEV_LOW                                 400                     // how many points to allocate for res levels???
-#define LEV_MED                                 700
-#define LEV_HI                                  1000
+#define CUR_PLAYERS 4
+
+enum OBJECT_TYPE
+{
+	OBJ_DROID,      ///< Droids
+	OBJ_STRUCTURE,  ///< All Buildings
+	OBJ_FEATURE,    ///< Things like roads, trees, bridges, fires
+	OBJ_PROJECTILE, ///< Comes out of guns, stupid :-)
+	OBJ_TARGET,     ///< for the camera tracking
+	OBJ_NUM_TYPES,   ///< number of object types
+	POSITION = OBJ_NUM_TYPES,
+	AREA
+};
 
 enum STRUCT_STATES
 {
@@ -95,6 +98,9 @@ static int obj_uid = 11;
 #define ARG_PLAYER(vnum) \
 	do { ARG_NUMBER(vnum); int vplayer = context->argument(vnum).toInt32(); SCRIPT_ASSERT(context, vplayer < MAX_PLAYERS && vplayer >= 0, "Invalid player %d", vplayer); } while(0)
 
+#define ARG_ORDER(vnum) \
+	ARG_NUMBER(vnum)
+
 #define ARG_OBJ(vnum) do { \
 	SCRIPT_ASSERT(context, context->argument(vnum).isObject(), "Argument %d should be an object", vnum); \
 	QScriptValue vval = context->argument(vnum); \
@@ -107,6 +113,17 @@ static int obj_uid = 11;
 #define ARG_DROID(vnum)	ARG_OBJ(vnum)
 #define ARG_STRUCT(vnum) ARG_OBJ(vnum)
 
+static QScriptValue convResearch(QScriptEngine *engine)
+{
+	QScriptValue value = engine->newObject();
+	value.setProperty("power", 100);
+	value.setProperty("points", 100);
+	value.setProperty("started", 0); // including whether an ally has started it
+	value.setProperty("done", false);
+	value.setProperty("name", "Fake");
+	return value;
+}
+
 static QScriptValue convObj(QScriptEngine *engine)
 {
 	QScriptValue value = engine->newObject();
@@ -116,6 +133,11 @@ static QScriptValue convObj(QScriptEngine *engine)
 	value.setProperty("z", 0, QScriptValue::ReadOnly);
 	value.setProperty("player", 1, QScriptValue::ReadOnly);
 	value.setProperty("selected", 0, QScriptValue::ReadOnly);
+	value.setProperty("player", 0, QScriptValue::ReadOnly);
+	value.setProperty("armour", 0, QScriptValue::ReadOnly);
+	value.setProperty("thermal", 0, QScriptValue::ReadOnly);
+	value.setProperty("selected", false, QScriptValue::ReadOnly);
+	value.setProperty("name", "Fake", QScriptValue::ReadOnly);
 	return value;
 }
 
@@ -123,15 +145,49 @@ static QScriptValue convObj(QScriptEngine *engine)
 static QScriptValue convStructure(QScriptEngine *engine)
 {
 	QScriptValue value = convObj(engine);
+	value.setProperty("type", OBJ_STRUCTURE, QScriptValue::ReadOnly);
 	value.setProperty("status", (int)SS_BUILT, QScriptValue::ReadOnly);
+	value.setProperty("isCB", false, QScriptValue::ReadOnly);
+	value.setProperty("isSensor", false, QScriptValue::ReadOnly);
+	value.setProperty("canHitAir", false, QScriptValue::ReadOnly);
+	value.setProperty("canHitGround", true, QScriptValue::ReadOnly);
+	value.setProperty("hasIndirect", false, QScriptValue::ReadOnly);
+	value.setProperty("isRadarDetector", false, QScriptValue::ReadOnly);
+	value.setProperty("range", 100, QScriptValue::ReadOnly);
+	value.setProperty("health", 100, QScriptValue::ReadOnly);
+	value.setProperty("cost", 100, QScriptValue::ReadOnly);
+	value.setProperty("modules", QScriptValue::NullValue);
 	return value;
 }
 
 static QScriptValue convDroid(QScriptEngine *engine)
 {
 	QScriptValue value = convObj(engine);
+	value.setProperty("type", OBJ_DROID, QScriptValue::ReadOnly);
 	value.setProperty("action", 0, QScriptValue::ReadOnly);
 	value.setProperty("order", 0, QScriptValue::ReadOnly);
+	value.setProperty("action", 0, QScriptValue::ReadOnly);
+	value.setProperty("isCB", false, QScriptValue::ReadOnly);
+	value.setProperty("isSensor", false, QScriptValue::ReadOnly);
+	value.setProperty("canHitAir", false, QScriptValue::ReadOnly);
+	value.setProperty("canHitGround", true, QScriptValue::ReadOnly);
+	value.setProperty("hasIndirect", false, QScriptValue::ReadOnly);
+	value.setProperty("isRadarDetector", false, QScriptValue::ReadOnly);
+	value.setProperty("range", 100, QScriptValue::ReadOnly);
+	value.setProperty("health", 100, QScriptValue::ReadOnly);
+	value.setProperty("cost", 100, QScriptValue::ReadOnly);
+	value.setProperty("experience", 1000, QScriptValue::ReadOnly);
+	value.setProperty("group", QScriptValue::NullValue);
+	value.setProperty("armed", QScriptValue::NullValue);
+	return value;
+}
+
+static QScriptValue convFeature(QScriptEngine *engine)
+{
+	QScriptValue value = convObj(engine);
+	value.setProperty("type", OBJ_FEATURE, QScriptValue::ReadOnly);
+	value.setProperty("health", 100, QScriptValue::ReadOnly);
+	value.setProperty("damageable", true, QScriptValue::ReadOnly);
 	return value;
 }
 
@@ -159,6 +215,30 @@ static bool callFunction(QScriptEngine *engine, QString function, QScriptValueLi
 	return true;
 }
 
+static QScriptValue js_enumLabels(QScriptContext *, QScriptEngine *)
+{
+	return QScriptValue();
+}
+
+static QScriptValue js_label(QScriptContext *, QScriptEngine *engine)
+{
+	QScriptValue ret = engine->newObject();
+	return ret;
+}
+
+static QScriptValue js_enumBlips(QScriptContext *context, QScriptEngine *engine)
+{
+	ARG_PLAYER(0);
+	QScriptValue result = engine->newArray(0);
+	return result;
+}
+
+static QScriptValue js_enumGateways(QScriptContext *context, QScriptEngine *engine)
+{
+	QScriptValue result = engine->newArray(0);
+	return result;
+}
+
 static QScriptValue js_enumGroup(QScriptContext *context, QScriptEngine *engine)
 {
 	ARG_COUNT_EXACT(1);
@@ -183,7 +263,41 @@ static QScriptValue js_enumStruct(QScriptContext *context, QScriptEngine *engine
 	{
 	default:
 	case 3: ARG_PLAYER(2); // fall-through
-	case 2: ARG_STRING(1); // fall-through
+	case 2: // fall-through
+	case 1: ARG_PLAYER(0); break;
+	}
+	QScriptValue result = engine->newArray(3);
+	for (int i = 0; i < 3; i++)
+	{
+		result.setProperty(i, convStructure(engine));
+	}
+	return result;
+}
+
+static QScriptValue js_enumFeature(QScriptContext *context, QScriptEngine *engine)
+{
+	QScriptValue result = engine->newArray(3);
+	for (int i = 0; i < 3; i++)
+	{
+		result.setProperty(i, convFeature(engine));
+	}
+	return result;
+}
+
+static QScriptValue js_pickStructLocation(QScriptContext *context, QScriptEngine *engine)
+{
+	ARG_DROID(0);
+	return QScriptValue(true);
+}
+
+static QScriptValue js_enumStructOffWorld(QScriptContext *context, QScriptEngine *engine)
+{
+	ARG_COUNT_VAR(0, 3);
+	switch (context->argumentCount())
+	{
+	default:
+	case 3: ARG_PLAYER(2); // fall-through
+	case 2: // fall-through
 	case 1: ARG_PLAYER(0); break;
 	}
 	QScriptValue result = engine->newArray(3);
@@ -212,6 +326,45 @@ static QScriptValue js_enumDroid(QScriptContext *context, QScriptEngine *engine)
 	return result;
 }
 
+static QScriptValue js_activateStructure(QScriptContext *context, QScriptEngine *)
+{
+	ARG_COUNT_VAR(1, 3);
+	ARG_STRUCT(0);
+	return QScriptValue();
+}
+
+static QScriptValue js_pursueResearch(QScriptContext *context, QScriptEngine *engine)
+{
+	ARG_COUNT_EXACT(2);
+	ARG_STRUCT(0);
+	return QScriptValue(true);
+}
+
+static QScriptValue js_getResearch(QScriptContext *context, QScriptEngine *engine)
+{
+	ARG_COUNT_EXACT(1);
+	return convResearch(engine);
+}
+
+static QScriptValue js_enumResearch(QScriptContext *context, QScriptEngine *engine)
+{
+	QScriptValue result = engine->newArray(1);
+	result.setProperty(0, convResearch(engine));
+	return result;
+}
+
+static QScriptValue js_componentAvailable(QScriptContext *context, QScriptEngine *engine)
+{
+	ARG_COUNT_EXACT(2);
+	return QScriptValue(true);
+}
+
+static QScriptValue js_addDroid(QScriptContext *context, QScriptEngine *engine)
+{
+	ARG_PLAYER(0);
+	return QScriptValue(true);
+}
+
 static QScriptValue js_debug(QScriptContext *context, QScriptEngine *engine)
 {
 	return QScriptValue();
@@ -224,17 +377,22 @@ static QScriptValue js_structureIdle(QScriptContext *context, QScriptEngine *)
 	return QScriptValue(true);
 }
 
+static QScriptValue js_removeStruct(QScriptContext *context, QScriptEngine *)
+{
+	ARG_COUNT_EXACT(1);
+	ARG_STRUCT(0);
+	return QScriptValue(true);
+}
+
 static QScriptValue js_console(QScriptContext *context, QScriptEngine *engine)
 {
 	return QScriptValue();
 }
 
-/* Build a droid template in the specified factory */
 static QScriptValue js_buildDroid(QScriptContext *context, QScriptEngine *)
 {
-	ARG_COUNT_EXACT(2);
-	ARG_STRING(0);
-	ARG_STRUCT(1);
+	ARG_STRUCT(0);
+	ARG_STRING(1);
 	return QScriptValue(true);
 }
 
@@ -274,14 +432,51 @@ static QScriptValue js_groupSize(QScriptContext *context, QScriptEngine *)
 	return QScriptValue(3);
 }
 
+static QScriptValue js_droidCanReach(QScriptContext *context, QScriptEngine *)
+{
+	ARG_COUNT_EXACT(3);
+	ARG_DROID(0);
+	ARG_NUMBER(1);
+	ARG_NUMBER(2);
+	return QScriptValue(true);
+}
+
+static QScriptValue js_orderDroid(QScriptContext *context, QScriptEngine *)
+{
+	ARG_COUNT_EXACT(2);
+	ARG_DROID(0);
+	ARG_ORDER(1);
+	return QScriptValue(true);
+}
+
+static QScriptValue js_orderDroidObj(QScriptContext *context, QScriptEngine *)
+{
+	ARG_COUNT_EXACT(3);
+	ARG_DROID(0);
+	ARG_ORDER(1);
+	ARG_OBJ(2);
+	return QScriptValue(true);
+}
+
+static QScriptValue js_orderDroidBuild(QScriptContext *context, QScriptEngine *)
+{
+	ARG_COUNT_EXACT(5);
+	ARG_DROID(0);
+	ARG_ORDER(1);
+	ARG_NUMBER(2);
+	ARG_NUMBER(3);
+	ARG_NUMBER(4);
+	return QScriptValue(true);
+}
+
 static QScriptValue js_orderDroidLoc(QScriptContext *context, QScriptEngine *)
 {
 	ARG_COUNT_EXACT(4);
 	ARG_DROID(0);
-	ARG_NUMBER(1);
+	ARG_ORDER(1);
 	ARG_NUMBER(2);
 	ARG_NUMBER(3);
-	return QScriptValue();
+	return QScriptValue(true);
 }
 
 static QScriptValue js_setMissionTime(QScriptContext *context, QScriptEngine *)
@@ -383,7 +578,35 @@ static QScriptValue js_enableStructure(QScriptContext *context, QScriptEngine *e
 	return QScriptValue();
 }
 
+static QScriptValue js_setTutorialMode(QScriptContext *context, QScriptEngine *engine)
+{
+	ARG_COUNT_EXACT(1);
+	ARG_BOOL(0);
+	return QScriptValue();
+}
+
+static QScriptValue js_setMiniMap(QScriptContext *context, QScriptEngine *engine)
+{
+	ARG_COUNT_EXACT(1);
+	ARG_BOOL(0);
+	return QScriptValue();
+}
+
+static QScriptValue js_setDesign(QScriptContext *context, QScriptEngine *engine)
+{
+	ARG_COUNT_EXACT(1);
+	ARG_BOOL(0);
+	return QScriptValue();
+}
+
 static QScriptValue js_addReticuleButton(QScriptContext *context, QScriptEngine *engine)
+{
+	ARG_COUNT_EXACT(1);
+	ARG_NUMBER(0);
+	return QScriptValue();
+}
+
+static QScriptValue js_removeReticuleButton(QScriptContext *context, QScriptEngine *engine)
 {
 	ARG_COUNT_EXACT(1);
 	ARG_NUMBER(0);
@@ -420,7 +643,87 @@ static QScriptValue js_allianceExistsBetween(QScriptContext *context, QScriptEng
 	return QScriptValue(false);
 }
 
-static QScriptValue js_removeTimer(QScriptContext *context, QScriptEngine *engine)
+static QScriptValue js_objFromId(QScriptContext *context, QScriptEngine *engine)
+{
+	ARG_COUNT_EXACT(1);
+	ARG_NUMBER(0);
+	return QScriptValue(convDroid(engine));
+}
+
+static QScriptValue js_setDroidExperience(QScriptContext *context, QScriptEngine *)
+{
+	ARG_COUNT_EXACT(2);
+	ARG_DROID(0);
+	ARG_NUMBER(1);
+	return QScriptValue();
+}
+
+static QScriptValue js_safeDest(QScriptContext *context, QScriptEngine *)
+{
+	ARG_COUNT_EXACT(3);
+	ARG_NUMBER(0);
+	ARG_NUMBER(1);
+	ARG_NUMBER(2);
+	return QScriptValue(true);
+}
+
+static QScriptValue js_addStructure(QScriptContext *context, QScriptEngine *)
+{
+	ARG_COUNT_EXACT(4);
+	ARG_NUMBER(0);
+	ARG_PLAYER(1);
+	ARG_NUMBER(2);
+	ARG_NUMBER(3);
+	return QScriptValue(true);
+}
+
+static QScriptValue js_setNoGoArea(QScriptContext *context, QScriptEngine *)
+{
+	ARG_COUNT_EXACT(5);
+	ARG_NUMBER(0);
+	ARG_NUMBER(1);
+	ARG_NUMBER(2);
+	ARG_NUMBER(3);
+	ARG_PLAYER(4);
+	return QScriptValue(true);
+}
+
+static QScriptValue js_setScrollParams(QScriptContext *context, QScriptEngine *)
+{
+	ARG_COUNT_EXACT(4);
+	ARG_NUMBER(0);
+	ARG_NUMBER(1);
+	ARG_NUMBER(2);
+	ARG_NUMBER(3);
+	return QScriptValue();
+}
+
+static QScriptValue js_loadLevel(QScriptContext *context, QScriptEngine *)
+{
+	ARG_COUNT_EXACT(1);
+	ARG_STRING(0);
+	return QScriptValue();
+}
+
+static QScriptValue js_chat(QScriptContext *context, QScriptEngine *)
+{
+	ARG_COUNT_EXACT(2);
+	ARG_PLAYER(0);
+	ARG_STRING(1);
+	return QScriptValue(true);
+}
+
+static QScriptValue js_hackNetOff(QScriptContext *context, QScriptEngine *)
+{
+	return QScriptValue();
+}
+
+static QScriptValue js_hackNetOn(QScriptContext *context, QScriptEngine *)
+{
+	return QScriptValue();
+}
+
+static QScriptValue js_removeTimer(QScriptContext *context, QScriptEngine *)
 {
 	ARG_COUNT_EXACT(1);
 	ARG_STRING(0);
@@ -453,6 +756,15 @@ static QScriptValue js_setTimer(QScriptContext *context, QScriptEngine *engine)
 	int player = engine->globalObject().property("me").toInt32();
 	timerNode node(engine, funcName, player);
 	timers.push_back(node);
+	return QScriptValue();
+}
+
+static QScriptValue js_bind(QScriptContext *context, QScriptEngine *engine)
+{
+	ARG_COUNT_VAR(2, 3);
+	ARG_STRING(0);
+	ARG_OBJ(1);
+	// TBD implement it for testing
 	return QScriptValue();
 }
 
@@ -527,8 +839,15 @@ static QScriptValue js_playerPower(QScriptContext *context, QScriptEngine *engin
 static QScriptValue js_isStructureAvailable(QScriptContext *context, QScriptEngine *engine)
 {
 	ARG_COUNT_EXACT(2);
-	ARG_STRING(0);
-	ARG_PLAYER(1);
+	ARG_PLAYER(0);
+	ARG_STRING(1);
+	return QScriptValue(true);
+}
+
+static QScriptValue js_isVTOL(QScriptContext *context, QScriptEngine *engine)
+{
+	ARG_COUNT_EXACT(1);
+	ARG_DROID(0);
 	return QScriptValue(true);
 }
 
@@ -552,33 +871,55 @@ bool testPlayerScript(QString path, int player, int difficulty)
 		fprintf(stderr, "Uncaught exception at line %d, file %s: %s\n", line, path.toAscii().constData(), result.toString().toAscii().constData());
 		return false;
 	}
+
 	// Special functions
 	engine->globalObject().setProperty("setTimer", engine->newFunction(js_setTimer));
 	engine->globalObject().setProperty("queue", engine->newFunction(js_queue));
 	engine->globalObject().setProperty("removeTimer", engine->newFunction(js_removeTimer));
 	engine->globalObject().setProperty("include", engine->newFunction(js_include));
+	engine->globalObject().setProperty("bind", engine->newFunction(js_bind));
 
 	// Special global variables
-	engine->globalObject().setProperty("me", player, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("version", 1, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("selectedPlayer", 0, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("gameTime", 2, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("difficulty", difficulty, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("mapName", "Test", QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("baseType", CAMP_BASE, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("alliancesType", ALLIANCES_TEAMS, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("powerType", LEV_MED, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("maxPlayers", 4, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("difficulty", 1, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("mapName", "TEST", QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("baseType", 1, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("alliancesType", 2, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("powerType", 1, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("maxPlayers", CUR_PLAYERS, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("scavengers", true, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("mapWidth", 80, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("mapHeight", 80, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 
+	// Most special global
+	engine->globalObject().setProperty("me", player, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+
+	// Register functions to the script engine here
 	engine->globalObject().setProperty("_", engine->newFunction(js_translate));
+	engine->globalObject().setProperty("label", engine->newFunction(js_label));
+	engine->globalObject().setProperty("enumLabels", engine->newFunction(js_enumLabels));
+	engine->globalObject().setProperty("enumGateways", engine->newFunction(js_enumGateways));
+
+	// horrible hacks follow -- do not rely on these being present!
+	engine->globalObject().setProperty("hackNetOff", engine->newFunction(js_hackNetOff));
+	engine->globalObject().setProperty("hackNetOn", engine->newFunction(js_hackNetOn));
+	engine->globalObject().setProperty("objFromId", engine->newFunction(js_objFromId));
 
 	// General functions -- geared for use in AI scripts
 	engine->globalObject().setProperty("debug", engine->newFunction(js_debug));
 	engine->globalObject().setProperty("console", engine->newFunction(js_console));
 	engine->globalObject().setProperty("structureIdle", engine->newFunction(js_structureIdle));
-	engine->globalObject().setProperty("buildDroid", engine->newFunction(js_buildDroid));
 	engine->globalObject().setProperty("enumStruct", engine->newFunction(js_enumStruct));
+	engine->globalObject().setProperty("enumStructOffWorld", engine->newFunction(js_enumStructOffWorld));
 	engine->globalObject().setProperty("enumDroid", engine->newFunction(js_enumDroid));
 	engine->globalObject().setProperty("enumGroup", engine->newFunction(js_enumGroup));
+	engine->globalObject().setProperty("enumFeature", engine->newFunction(js_enumFeature));
+	engine->globalObject().setProperty("enumBlips", engine->newFunction(js_enumBlips));
+	engine->globalObject().setProperty("enumResearch", engine->newFunction(js_enumResearch));
+	engine->globalObject().setProperty("getResearch", engine->newFunction(js_getResearch));
+	engine->globalObject().setProperty("pursueResearch", engine->newFunction(js_pursueResearch));
 	engine->globalObject().setProperty("distBetweenTwoPoints", engine->newFunction(js_distBetweenTwoPoints));
 	engine->globalObject().setProperty("newGroup", engine->newFunction(js_newGroup));
 	engine->globalObject().setProperty("groupAddArea", engine->newFunction(js_groupAddArea));
@@ -587,6 +928,19 @@ bool testPlayerScript(QString path, int player, int difficulty)
 	engine->globalObject().setProperty("orderDroidLoc", engine->newFunction(js_orderDroidLoc));
 	engine->globalObject().setProperty("playerPower", engine->newFunction(js_playerPower));
 	engine->globalObject().setProperty("isStructureAvailable", engine->newFunction(js_isStructureAvailable));
+	engine->globalObject().setProperty("pickStructLocation", engine->newFunction(js_pickStructLocation));
+	engine->globalObject().setProperty("droidCanReach", engine->newFunction(js_droidCanReach));
+	engine->globalObject().setProperty("orderDroidStatsLoc", engine->newFunction(js_orderDroidBuild)); // deprecated
+	engine->globalObject().setProperty("orderDroidBuild", engine->newFunction(js_orderDroidBuild));
+	engine->globalObject().setProperty("orderDroidObj", engine->newFunction(js_orderDroidObj));
+	engine->globalObject().setProperty("orderDroid", engine->newFunction(js_orderDroid));
+	engine->globalObject().setProperty("buildDroid", engine->newFunction(js_buildDroid));
+	engine->globalObject().setProperty("addDroid", engine->newFunction(js_addDroid));
+	engine->globalObject().setProperty("componentAvailable", engine->newFunction(js_componentAvailable));
+	engine->globalObject().setProperty("isVTOL", engine->newFunction(js_isVTOL));
+	engine->globalObject().setProperty("safeDest", engine->newFunction(js_safeDest));
+	engine->globalObject().setProperty("activateStructure", engine->newFunction(js_activateStructure));
+	engine->globalObject().setProperty("chat", engine->newFunction(js_chat));
 
 	// Functions that operate on the current player only
 	engine->globalObject().setProperty("centreView", engine->newFunction(js_centreView));
@@ -601,36 +955,128 @@ bool testPlayerScript(QString path, int player, int difficulty)
 	engine->globalObject().setProperty("completeResearch", engine->newFunction(js_completeResearch));
 	engine->globalObject().setProperty("enableResearch", engine->newFunction(js_enableResearch));
 	engine->globalObject().setProperty("setPower", engine->newFunction(js_setPower));
+	engine->globalObject().setProperty("setTutorialMode", engine->newFunction(js_setTutorialMode));
+	engine->globalObject().setProperty("setDesign", engine->newFunction(js_setDesign));
+	engine->globalObject().setProperty("setMiniMap", engine->newFunction(js_setMiniMap));
 	engine->globalObject().setProperty("addReticuleButton", engine->newFunction(js_addReticuleButton));
+	engine->globalObject().setProperty("removeReticuleButton", engine->newFunction(js_removeReticuleButton));
 	engine->globalObject().setProperty("enableStructure", engine->newFunction(js_enableStructure));
 	engine->globalObject().setProperty("makeComponentAvailable", engine->newFunction(js_makeComponentAvailable));
 	engine->globalObject().setProperty("enableComponent", engine->newFunction(js_enableComponent));
 	engine->globalObject().setProperty("allianceExistsBetween", engine->newFunction(js_allianceExistsBetween));
+	engine->globalObject().setProperty("removeStruct", engine->newFunction(js_removeStruct));
+	engine->globalObject().setProperty("setScrollParams", engine->newFunction(js_setScrollParams));
+	engine->globalObject().setProperty("addStructure", engine->newFunction(js_addStructure));
+	engine->globalObject().setProperty("loadLevel", engine->newFunction(js_loadLevel));
+	engine->globalObject().setProperty("setDroidExperience", engine->newFunction(js_setDroidExperience));
+	engine->globalObject().setProperty("setNoGoArea", engine->newFunction(js_setNoGoArea));
 
 	// Set some useful constants
 	engine->globalObject().setProperty("DORDER_ATTACK", 0, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("DORDER_MOVE", 0, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("DORDER_SCOUT", 0, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("DORDER_BUILD", 0, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("mapWidth", 64, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("mapHeight", 64, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("DORDER_MOVE", 1, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("DORDER_SCOUT", 2, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("DORDER_BUILD", 2, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("DORDER_HELPBUILD", 3, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("DORDER_LINEBUILD", 4, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("DORDER_REPAIR", 5, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("DORDER_RETREAT", 6, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("DORDER_PATROL", 7, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("DORDER_DEMOLISH", 8, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("DORDER_EMBARK", 9, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("DORDER_DISEMBARK", 10, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("DORDER_FIRESUPPORT", 11, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("DORDER_HOLD", 12, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("DORDER_RTR", 13, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("DORDER_RTB", 14, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("DORDER_STOP", 15, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("DORDER_REARM", 16, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("COMMAND", 0, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("OPTIONS", 0, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("BUILD", 0, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("MANUFACTURE", 0, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("RESEARCH", 0, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("INTELMAP", 0, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("DESIGN", 0, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("CANCEL", 0, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("CAMP_CLEAN", CAMP_CLEAN, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("CAMP_BASE", CAMP_BASE, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("CAMP_WALLS", CAMP_WALLS, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("NO_ALLIANCES", NO_ALLIANCES, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("ALLIANCES", ALLIANCES, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("ALLIANCES_TEAMS", ALLIANCES_TEAMS, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("BUILD", 1, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("MANUFACTURE", 2, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("RESEARCH", 3, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("INTELMAP", 4, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("DESIGN", 5, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("CANCEL", 6, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("CAMP_CLEAN", 0, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("CAMP_BASE", 1, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("CAMP_WALLS", 2, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("NO_ALLIANCES", 0, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("ALLIANCES", 1, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("ALLIANCES_TEAMS", 2, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("BEING_BUILT", SS_BEING_BUILT, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("BUILT", SS_BUILT, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("BEING_DEMOLISHED", SS_BEING_DEMOLISHED, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("DROID_CONSTRUCT", 0, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("DROID_WEAPON", 1, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("DROID_PERSON", 2, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("DROID_REPAIR", 3, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("DROID_SENSOR", 4, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("DROID_ECM", 5, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("DROID_CYBORG", 6, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("DROID_TRANSPORTER", 7, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("DROID_COMMAND", 8, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("HQ", 0, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("FACTORY", 1, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("POWER_GEN", 2, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("RESOURCE_EXTRACTOR", 3, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("DEFENSE", 4, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("LASSAT", 5, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("WALL", 6, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("RESEARCH_LAB", 7, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("REPAIR_FACILITY", 8, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("CYBORG_FACTORY", 9, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("VTOL_FACTORY", 10, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("REARM_PAD", 11, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("SAT_UPLINK", 12, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("GATE", 13, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("COMMAND_CONTROL", 14, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("EASY", 0, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("MEDIUM", 1, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("HARD", 2, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("INSANE", 3, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("STRUCTURE", OBJ_STRUCTURE, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("DROID", OBJ_DROID, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("FEATURE", OBJ_FEATURE, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("POSITION", POSITION, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("AREA", AREA, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("ALL_PLAYERS", -1, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("ALLIES", -2, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+
+	QScriptValue playerData = engine->newArray(CUR_PLAYERS);
+	for (int i = 0; i < CUR_PLAYERS; i++)
+	{
+		QScriptValue vector = engine->newObject();
+		vector.setProperty("difficulty", 0, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+		vector.setProperty("colour", 0, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+		vector.setProperty("position", i, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+		vector.setProperty("team", i, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+		playerData.setProperty(i, vector, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	}
+	engine->globalObject().setProperty("playerData", playerData, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+
+	// Static map knowledge about start positions
+	//== \item[derrickPositions] An array of derrick starting positions on the current map. Each item in the array is an
+	//== object containing the x and y variables for a derrick.
+	//== \item[startPositions] An array of player start positions on the current map. Each item in the array is an
+	//== object containing the x and y variables for a player start position.
+	QScriptValue startPositions = engine->newArray(CUR_PLAYERS);
+	for (int i = 0; i < CUR_PLAYERS; i++)
+	{
+		QScriptValue vector = engine->newObject();
+		vector.setProperty("x", 40, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+		vector.setProperty("y", 40, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+		startPositions.setProperty(i, vector, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	}
+	QScriptValue derrickPositions = engine->newArray(6);
+	for (int i = 0; i < 6; i++)
+	{
+		QScriptValue vector = engine->newObject();
+		vector.setProperty("x", 40, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+		vector.setProperty("y", 40, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+		derrickPositions.setProperty(i, vector, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	}
+	engine->globalObject().setProperty("derrickPositions", derrickPositions, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("startPositions", startPositions, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 
 	// Call init
 	callFunction(engine, "eventGameInit", QScriptValueList());
@@ -656,17 +1102,15 @@ bool testPlayerScript(QString path, int player, int difficulty)
 
 	// Now test timers
 	// TODO -- implement object parameters
-	QMutableListIterator<timerNode> iter(timers);
-	while (iter.hasNext())
+	for (int i = 0; i < timers.size(); ++i)
 	{
-		timerNode node = iter.next();
+		timerNode node = timers.at(i);
 		callFunction(node.engine, node.function, QScriptValueList());
 	}
 
 	// Clean up
 	delete engine;
 	timers.clear();
-
 	return true;
 }
 
