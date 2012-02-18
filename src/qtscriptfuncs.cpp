@@ -110,7 +110,7 @@ QScriptValue convResearch(RESEARCH *psResearch, QScriptEngine *engine, int playe
 //;; \item[modules] If the stattype is set to one of the factories, POWER_GEN or RESEARCH_LAB, then this property is set to the
 //;; number of module upgrades it has.
 //;; \item[canHitAir] True if the structure has anti-air capabilities. (3.2+ only)
-//;; \item[canHitSurface] True if the structure has anti-ground capabilities. (3.2+ only)
+//;; \item[canHitGround] True if the structure has anti-ground capabilities. (3.2+ only)
 //;; \item[isSensor] True if the structure has sensor ability. (3.2+ only)
 //;; \item[isCB] True if the structure has counter-battery ability. (3.2+ only)
 //;; \item[isRadarDetector] True if the structure has radar detector ability. (3.2+ only)
@@ -179,6 +179,10 @@ QScriptValue convStructure(STRUCTURE *psStruct, QScriptEngine *engine)
 	{
 		value.setProperty("modules", ((POWER_GEN *)psStruct->pFunctionality)->capacity);
 	}
+	else
+	{
+		value.setProperty("modules", QScriptValue::NullValue);
+	}
 	return value;
 }
 
@@ -243,7 +247,8 @@ QScriptValue convFeature(FEATURE *psFeature, QScriptEngine *engine)
 //;; \item[experience] Amount of experience this droid has, based on damage it has dealt to enemies.
 //;; \item[cost] What it would cost to build the droid. (3.2+ only)
 //;; \item[isVTOL] True if the droid is VTOL. (3.2+ only)
-//;; \item[isAA] True if the droid has anti-air capabilities. (3.2+ only)
+//;; \item[canHitAir] True if the droid has anti-air capabilities. (3.2+ only)
+//;; \item[canHitGround] True if the droid has anti-ground capabilities. (3.2+ only)
 //;; \item[isSensor] True if the droid has sensor ability. (3.2+ only)
 //;; \item[isCB] True if the droid has counter-battery ability. (3.2+ only)
 //;; \item[isRadarDetector] True if the droid has radar detector ability. (3.2+ only)
@@ -270,7 +275,14 @@ QScriptValue convDroid(DROID *psDroid, QScriptEngine *engine)
 	DROID_TYPE type = psDroid->droidType;
 	QScriptValue value = convObj(psDroid, engine);
 	value.setProperty("action", (int)psDroid->action, QScriptValue::ReadOnly);
-	value.setProperty("range", range, QScriptValue::ReadOnly);
+	if (range >= 0)
+	{
+		value.setProperty("range", range, QScriptValue::ReadOnly);
+	}
+	else
+	{
+		value.setProperty("range", QScriptValue::NullValue);
+	}
 	value.setProperty("order", (int)psDroid->order.type, QScriptValue::ReadOnly);
 	value.setProperty("cost", calcDroidPower(psDroid), QScriptValue::ReadOnly);
 	value.setProperty("hasIndirect", indirect, QScriptValue::ReadOnly);
@@ -1184,7 +1196,7 @@ static QScriptValue js_enumStructOffWorld(QScriptContext *context, QScriptEngine
 
 //-- \subsection{enumFeature(player, name)}
 //-- Returns an array of all features seen by player of given name, as defined in "features.txt".
-//-- If player is -1, it will return all features irrespective of visibility to any player. If
+//-- If player is \emph{ALL_PLAYERS}, it will return all features irrespective of visibility to any player. If
 //-- name is empty, it will return any feature.
 static QScriptValue js_enumFeature(QScriptContext *context, QScriptEngine *engine)
 {
