@@ -324,7 +324,7 @@ function buildFundamentals2()
 		return;
 	}
 	// Build cyborg factory if we don't have one
-	if (isStructureAvailable(cybFactory, me))
+	if (isStructureAvailable(me, cybFactory))
 	{
 		var cyblist = enumStruct(me, cybFactory);
 		if (cyblist.length == 0 && playerPower(me) > 250 && grabTrucksAndBuild(20, cybFactory, 1))
