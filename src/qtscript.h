@@ -82,5 +82,6 @@ bool triggerEventDestroyed(BASE_OBJECT *psVictim);
 bool triggerEventStructureReady(STRUCTURE *psStruct);
 bool triggerEventSeen(BASE_OBJECT *psViewer, BASE_OBJECT *psSeen);
 bool triggerEventObjectTransfer(BASE_OBJECT *psObj, int from);
+bool triggerEventChat(int from, int to, const char *message);
 
 #endif

@@ -1965,7 +1965,6 @@ void kf_ShowGridInfo(void)
 void kf_SendTextMessage(void)
 {
 	UDWORD	ch;
-	char tmp[MAX_CONSOLE_STRING_LENGTH + 100];
 	utf_32_char unicode;
 
 	if(bAllowOtherKeyPresses)									// just starting.
@@ -2000,33 +1999,8 @@ void kf_SendTextMessage(void)
 			sstrcpy(ConsoleMsg, sTextToSend);
 			eventFireCallbackTrigger((TRIGGER_TYPE)CALL_CONSOLE);
 
-			if (runningMultiplayer())
-			{
-				sendTextMessage(sTextToSend,false);
-				attemptCheatCode(sTextToSend);
-			}
-			else
-			{
-				unsigned int i;
-
-				//show the message we sent on our local console as well (even in skirmish, to see console commands)
-				sstrcpy(tmp, getPlayerName(selectedPlayer));
-				sstrcat(tmp, " : ");        // seperator
-				sstrcat(tmp, sTextToSend);  // add message
-				addConsoleMessage(tmp,DEFAULT_JUSTIFY, selectedPlayer);
-
-				//in skirmish send directly to AIs, for command and chat procesing
-				for (i = 0; i < game.maxPlayers; ++i)		//don't use MAX_PLAYERS here, although possible
-				{
-					if (openchannels[i]
-					 && i != selectedPlayer)
-					{
-						sendAIMessage(sTextToSend, selectedPlayer, i);
-					}
-				}
-
-				attemptCheatCode(sTextToSend);
-			}
+			sendTextMessage(sTextToSend,false);
+			attemptCheatCode(sTextToSend);
 			return;
 		}
 		else if(ch == INPBUF_BKSPACE )							// delete

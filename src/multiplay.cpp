@@ -55,7 +55,7 @@
 #include "effects.h"
 #include "lib/gamelib/gtime.h"
 #include "keybind.h"
-
+#include "qtscript.h"
 #include "lib/script/script.h"				//Because of "ScriptTabs.h"
 #include "scripttabs.h"			//because of CALL_AI_MSG
 #include "scriptcb.h"			//for console callback
@@ -997,16 +997,6 @@ bool sendTextMessage(const char *pStr, bool all)
 	char				msg[MAX_CONSOLE_STRING_LENGTH];
 	char*				curStr = (char*)pStr;
 
-	if (!ingame.localOptionsReceived)
-	{
-		if(!bMultiPlayer)
-		{
-			// apparently we are not in a mp game, so dump the message to the console.
-			addConsoleMessage(curStr,LEFT_JUSTIFY, SYSTEM_MESSAGE);
-		}
-		return true;
-	}
-
 	memset(display,0x0, sizeof(display));	//clear buffer
 	memset(msg,0x0, sizeof(display));		//clear buffer
 	memset(sendto,0x0, sizeof(sendto));		//clear private flag
@@ -1150,6 +1140,8 @@ bool sendAIMessage(char *pStr, UDWORD player, UDWORD to)
 	//check if this is one of the local players, don't need net send then
 	if (to == selectedPlayer || myResponsibility(to))	//(the only) human on this machine or AI on this machine
 	{
+		triggerEventChat(player, to, pStr);
+
 		//Just show "him" the message
 		displayAIMessage(pStr, player, to);
 
@@ -1321,6 +1313,7 @@ bool recvTextMessageAI(NETQUEUE queue)
 	//sstrcpy(msg, getPlayerName(sender));  // name
 	//sstrcat(msg, " : ");                  // seperator
 	sstrcpy(msg, newmsg);
+	triggerEventChat(sender, receiver, newmsg);
 
 	//Display the message and make the script callback
 	displayAIMessage(msg, sender, receiver);

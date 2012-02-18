@@ -787,3 +787,26 @@ bool triggerEventObjectTransfer(BASE_OBJECT *psObj, int from)
 	}
 	return true;
 }
+
+//__ \subsection{eventChat(from, to, message)}
+//__ An event that is run whenever a chat message is received. The \emph{from} parameter is the
+//__ player sending the chat message. For the moment, the \emph{to} parameter is always the script
+//__ player.
+bool triggerEventChat(int from, int to, const char *message)
+{
+	for (int i = 0; i < scripts.size() && message; ++i)
+	{
+		QScriptEngine *engine = scripts.at(i);
+		int me = engine->globalObject().property("me").toInt32();
+		if (me == to)
+		{
+			QScriptEngine *engine = scripts.at(i);
+			QScriptValueList args;
+			args += QScriptValue(from);
+			args += QScriptValue(to);
+			args += QScriptValue(message);
+			callFunction(engine, "eventChat", args);
+		}
+	}
+	return true;
+}

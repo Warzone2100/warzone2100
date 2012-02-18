@@ -618,3 +618,8 @@ function eventDroidIdle(droid)
 		}
 	}
 }
+
+function eventChat(from, to, message)
+{
+	//debug(me + ": message from " + from + " to " + to + ": " + message);
+}
