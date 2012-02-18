@@ -795,7 +795,7 @@ static QScriptValue js_componentAvailable(QScriptContext *context, QScriptEngine
 //-- \subsection{addDroid(player, x, y, name, body, propulsion, reserved, droid type, turrets...)}
 //-- Create and place a droid at the given x, y position as belonging to the given player, built with
 //-- the given components. Currently does not support placing droids in multiplayer, doing so will
-//-- cause a desync.
+//-- cause a desync. Returns a boolean that is true on success.
 static QScriptValue js_addDroid(QScriptContext *context, QScriptEngine *engine)
 {
 	int player = context->argument(0).toInt32();
@@ -947,7 +947,7 @@ static int get_first_available_component(STRUCTURE *psFactory, const QScriptValu
 //-- passed as ordinary strings, or as a list of strings. If passed as a list, the first available
 //-- component in the list will be used. The second reserved parameter used to be a droid type.
 //-- It is now unused and in 3.2+ should be passed \emph{null}, while in 3.1 it should be the
-//-- droid type to be built.
+//-- droid type to be built. Returns a boolean that is true if production was started.
 // TODO - fix memory leaks
 static QScriptValue js_buildDroid(QScriptContext *context, QScriptEngine *engine)
 {
@@ -1395,7 +1395,7 @@ static QScriptValue js_structureIdle(QScriptContext *context, QScriptEngine *)
 }
 
 //-- \subsection{removeStruct(structure)}
-//-- Immediately remove the given structure from the map.
+//-- Immediately remove the given structure from the map. Returns a boolean that is true on success.
 static QScriptValue js_removeStruct(QScriptContext *context, QScriptEngine *)
 {
 	QScriptValue structVal = context->argument(0);
@@ -1403,8 +1403,7 @@ static QScriptValue js_removeStruct(QScriptContext *context, QScriptEngine *)
 	int player = structVal.property("player").toInt32();
 	STRUCTURE *psStruct = IdToStruct(id, player);
 	SCRIPT_ASSERT(context, psStruct, "No such structure id %d belonging to player %d", id, player);
-	removeStruct(psStruct, true);
-	return QScriptValue();
+	return QScriptValue(removeStruct(psStruct, true));
 }
 
 //-- \subsection{console(strings...)}
@@ -1541,7 +1540,7 @@ static QScriptValue js_orderDroid(QScriptContext *context, QScriptEngine *)
 	{
 		orderDroid(psDroid, order, ModeQueue);
 	}
-	return true;
+	return QScriptValue(true);
 }
 
 //-- \subsection{orderDroidObj(droid, order, object)}
@@ -1561,7 +1560,7 @@ static QScriptValue js_orderDroidObj(QScriptContext *context, QScriptEngine *)
 	SCRIPT_ASSERT(context, psObj, "Object id %d not found belonging to player %d", oid, oplayer);
 	SCRIPT_ASSERT(context, validOrderForObj(order), "Invalid order: %s", getDroidOrderName(order));
 	orderDroidObj(psDroid, order, psObj, ModeQueue);
-	return true;
+	return QScriptValue(true);
 }
 
 //-- \subsection{orderDroidBuild(droid, order, structure type, x, y)}
@@ -2162,7 +2161,8 @@ static QScriptValue js_loadLevel(QScriptContext *context, QScriptEngine *)
 }
 
 //-- \subsection{chat(target player, message)}
-//-- Send a message to target player. Target may also be \emph{ALL_PLAYERS} or \emph{ALLIES}. (3.2+ only)
+//-- Send a message to target player. Target may also be \emph{ALL_PLAYERS} or \emph{ALLIES}.
+//-- Returns a boolean that is true on success. (3.2+ only)
 static QScriptValue js_chat(QScriptContext *context, QScriptEngine *)
 {
 	int target = context->argument(0).toInt32();
