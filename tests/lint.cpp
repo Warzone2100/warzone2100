@@ -74,6 +74,8 @@ static QList<timerNode> timers;
 static int obj_uid = 11;
 #define MAX_PLAYERS 8
 
+#define ASSERT(_cond, ...) do { if (!_cond) qFatal(__VA_ARGS__); } while(0)
+
 // ----------------------------------------------------------------------------------------
 // Utility functions -- not called directly from scripts
 
@@ -192,11 +194,12 @@ static QScriptValue convFeature(QScriptEngine *engine)
 }
 
 // Call a function by name
-static bool callFunction(QScriptEngine *engine, QString function, QScriptValueList args)
+static bool callFunction(QScriptEngine *engine, QString function, QScriptValueList args, bool required=false)
 {
 	QScriptValue value = engine->globalObject().property(function);
 	if (!value.isValid() || !value.isFunction())
 	{
+		ASSERT(!required, "Function %s not found", function.toAscii().constData());
 		return false;	// not necessarily an error, may just be a trigger that is not defined (ie not needed)
 	}
 	QScriptValue result = value.call(QScriptValue(), args);
@@ -1085,6 +1088,10 @@ bool testPlayerScript(QString path, int player, int difficulty)
 	engine->globalObject().setProperty("gameTime", 10101, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 
 	callFunction(engine, "eventStartLevel", QScriptValueList());
+	callFunction(engine, "eventLaunchTransporter", QScriptValueList());
+	callFunction(engine, "eventReinforcementsArrived", QScriptValueList());
+	callFunction(engine, "eventMissionTimeout", QScriptValueList());
+	callFunction(engine, "eventVideoDone", QScriptValueList());
 
 	// Call other events
 	{
@@ -1099,13 +1106,49 @@ bool testPlayerScript(QString path, int player, int difficulty)
 		args += convObj(engine);
 		callFunction(engine, "eventStructureAttacked", args);
 	}
+	{
+		QScriptValueList args;
+		args += convResearch(engine);
+		args += convStructure(engine);
+		callFunction(engine, "eventResearched", args);
+	}
+	{
+		QScriptValueList args;
+		args += convObj(engine);
+		args += convObj(engine);
+		callFunction(engine, "eventAttacked", args);
+	}
+	{
+		QScriptValueList args;
+		args += convStructure(engine);
+		args += convDroid(engine);
+		callFunction(engine, "eventStructureBuilt", args);
+	}
+	{
+		QScriptValueList args;
+		args += convDroid(engine);
+		callFunction(engine, "eventDroidIdle", args);
+	}
+	{
+		QScriptValueList args;
+		args += QScriptValue(0);
+		args += QScriptValue(1);
+		args += QScriptValue("message");
+		callFunction(engine, "eventChat", args);
+	}
+	{
+		QScriptValueList args;
+		args += convObj(engine);
+		args += convObj(engine);
+		callFunction(engine, "eventObjectSeen", args);
+	}
 
 	// Now test timers
 	// TODO -- implement object parameters
 	for (int i = 0; i < timers.size(); ++i)
 	{
 		timerNode node = timers.at(i);
-		callFunction(node.engine, node.function, QScriptValueList());
+		callFunction(node.engine, node.function, QScriptValueList(), true);
 	}
 
 	// Clean up
