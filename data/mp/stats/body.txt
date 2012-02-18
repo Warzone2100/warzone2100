@@ -1,7 +1,7 @@
 Body key,Unused,Size,Build power,Build points,Weight,Body points,Body model,Unused,Weapon slots,Engine power,AFRK,AFRH,AREK,AREH,ALEK,ALEH,ARIK,ARIH,ATOK,ATOH,ABOK,ABOH,Flame model,Designable
 ZNULLBODY,Level All,LIGHT,0,0,0,0,MIBNKBOD.PIE,20,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 TransporterBody,Level All,MEDIUM,325,637,250,200,drcytran.pie,100,1,2000,20,9,20,9,20,9,20,9,20,9,20,9,0,0
-MP-SuperTransportBody,Level All,HEAVY,500,1000,1850,1000,drtrans.pie,100,1,6100,200,200,200,200,200,200,200,200,200,200,200,200,0,0
+SuperTransportBody,Level All,HEAVY,500,625,1850,1000,drtrans.pie,100,1,7525,40,40,40,40,40,40,40,40,40,40,40,40,0,0
 Superbody,Level All,HEAVY,10,10,2700,9000,DRHBOD11.PIE,500,1,40000,999,999,999,999,999,999,999,999,999,999,999,999,0,0
 FireBody,Level One,LIGHT,4,75,3000,200,EXFIRE.PIE,50,1,4000,4,1,4,1,4,1,4,1,4,1,4,1,0,0
 CybRotMgGrd,Level All,LIGHT,21,75,150,200,cybd_std.pie,100,1,600,12,6,12,6,12,6,12,6,12,6,12,6,0,0
