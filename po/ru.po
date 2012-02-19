@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
 "POT-Creation-Date: 2012-02-19 21:22+0100\n"
-"PO-Revision-Date: 2011-01-15 09:57+0300\n"
+"PO-Revision-Date: 2012-02-19 01:24+0400\n"
 "Last-Translator: \n"
 "Language-Team: Russian <>\n"
 "Language: ru\n"
@@ -5197,7 +5197,7 @@ msgstr "Ремонтный центр"
 #: data/base/messages/strings/names.txt:394
 #: data/mp/messages/strings/names.txt:392
 msgid "Command Relay Center"
-msgstr "Комендный пост"
+msgstr "Командный пост"
 
 #: data/base/messages/strings/names.txt:395
 #: data/mp/messages/strings/names.txt:393
@@ -9585,19 +9585,16 @@ msgid "Mini-Rocket Array Cobra Half-tracks"
 msgstr "Батарея миниракет Кобра на полугусеницы"
 
 #: data/mp/messages/strings/names.txt:351
-#, fuzzy
 msgid "Jammer Tower"
-msgstr "Башня с огнеметом"
+msgstr "Глушительная башня"
 
 #: data/mp/messages/strings/names.txt:352
-#, fuzzy
 msgid "Jammer Turret"
-msgstr "Туррель захвата"
+msgstr "Глушительная туррель"
 
 #: data/mp/messages/strings/names.txt:353
-#, fuzzy
 msgid "Electronic Countermeasures"
-msgstr "Лаборатория электроники"
+msgstr "Электронные контрмеры"
 
 #: data/mp/messages/strings/names.txt:363
 #: data/mp/messages/strings/names.txt:1703
@@ -10237,15 +10234,17 @@ msgstr "Системная локализация"
 
 #: lib/ivis_opengl/screen.cpp:144
 msgid "OpenGL 2.0 is not supported by your system. Some things may look wrong. Please upgrade your graphics driver/hardware, if possible."
-msgstr ""
+msgstr "OpenGL 2.0 не поддерживается вашей системой. Некоторые вещи могут выглядить неправильно. Пожалуйста, обновите ваши графические драйвера/железо, если возможно"
 
 #: lib/ivis_opengl/screen.cpp:152
+#, fuzzy
 msgid "OpenGL 1.5/2.0 is not supported by your system. Some things may look wrong. Please upgrade your graphics driver/hardware, if possible."
-msgstr ""
+msgstr "OpenGL 2.0 не поддерживается вашей системой. Некоторые вещи могут выглядить неправильно. Пожалуйста, обновите ваши графические драйвера/железо, если возможно"
 
 #: lib/ivis_opengl/screen.cpp:158
+#, fuzzy
 msgid "OpenGL 1.4 + VBO extension is not supported by your system. The game requires this. Please upgrade your graphics drivers/hardware, if possible."
-msgstr ""
+msgstr "OpenGL 1.4 не поддерживается вашей системой. Игра требует это. Пожалуйста, обновите ваши графические драйвера/железо, если возможно"
 
 #: lib/netplay/netplay.cpp:193
 #: lib/netplay/netplay.cpp:1024
@@ -10265,55 +10264,59 @@ msgid ""
 "If you're using a router configure it to use UPnP\n"
 " or to forward the port to your system."
 msgstr ""
+"Ошибка при подключении к лобби серверу: : %s.\n"
+"Убедитесь, что порт %d может принимать входящие подключения. \n"
+"Если вы используете роутер, настройте его, используя UPnP\n"
+"или открыть порты к вашей системе"
 
 #: lib/netplay/netplay.cpp:2706
 msgid "Failed to get a lobby response!"
-msgstr ""
+msgstr "Не получилось получить ответ от лобби"
 
 #: po/custom/mac-infoplist.txt:1
 msgid ""
 "Copyright © 1999-2004 Eidos Interactive.\n"
 "Copyright © 2005-2011 The Warzone 2100 Project"
 msgstr ""
+"Авторское право © 1999-2004 Eidos Interactive.\n"
+"Авторское право © 2005-2011 The Warzone 2100 Project"
 
 #: po/custom/mac-infoplist.txt:2
 #: po/custom/warzone2100.desktop.txt:2
 msgid "Warzone 2100"
-msgstr ""
+msgstr "Warzone 2100"
 
 #: po/custom/mac-infoplist.txt:3
 msgid "Warzone 2100 Map / Mod File"
-msgstr ""
+msgstr "Карта / Мод Warzone 2100"
 
 #: po/custom/mac-infoplist.txt:4
 msgid "Warzone 2100 Campaign Mod File"
-msgstr ""
+msgstr "Файл с кампанией Warzone 2100"
 
 #: po/custom/mac-infoplist.txt:5
-#, fuzzy
 msgid "Warzone 2100 Multiplayer Mod File"
-msgstr "запуск мультиплеерного аудио"
+msgstr "Файл с модом мультиплеера Warzone 2100"
 
 #: po/custom/mac-infoplist.txt:6
 msgid "Warzone 2100 Global Mod File"
-msgstr ""
+msgstr "Файл с глобальным модом Warzone 2100"
 
 #: po/custom/mac-infoplist.txt:7
 msgid "Warzone"
-msgstr ""
+msgstr "Warzone"
 
 #: po/custom/mac-infoplist.txt:8
 msgid "Warzone 2100 Music Mod File"
-msgstr ""
+msgstr "Файл с музыкальным модом Warzone 2100"
 
 #: po/custom/warzone2100.desktop.txt:1
 msgid "Postnuclear realtime strategy"
-msgstr ""
+msgstr "Постядерная стратегия в реальном времени"
 
 #: po/custom/warzone2100.desktop.txt:3
-#, fuzzy
 msgid "Strategy Game"
-msgstr "Сохранить игру"
+msgstr "Стратегия"
 
 #: src/challenge.cpp:222
 #: src/hci.cpp:918
@@ -10483,20 +10486,19 @@ msgstr "прямо на экран хоста"
 
 #: src/clparse.cpp:265
 msgid "Enable texture compression"
-msgstr ""
+msgstr "Включить сжатие текстур"
 
 #: src/clparse.cpp:266
 msgid "Disable texture compression"
-msgstr ""
+msgstr "Отключить сжатие текстур"
 
 #: src/clparse.cpp:267
 msgid "Only use OpenGL 1.5"
 msgstr ""
 
 #: src/configuration.cpp:96
-#, fuzzy
 msgid "My Game"
-msgstr "Игра"
+msgstr "Моя Игра"
 
 #: src/configuration.cpp:97
 #: src/multistat.cpp:124
@@ -10530,7 +10532,7 @@ msgstr "Удалить проект"
 #: src/design.cpp:631
 #: src/design.cpp:4685
 msgid "Store Template"
-msgstr ""
+msgstr "Хранить Шаблон"
 
 #: src/design.cpp:684
 #: src/design.cpp:731
@@ -10652,7 +10654,7 @@ msgstr "Системы"
 
 #: src/design.cpp:4680
 msgid "Delete Template"
-msgstr ""
+msgstr "Удалить Шаблон"
 
 #: src/display3d.cpp:651
 msgid "Player left"
@@ -10669,7 +10671,7 @@ msgstr "Ожидание других игроков"
 
 #: src/display3d.cpp:664
 msgid "Out of sync"
-msgstr ""
+msgstr "Рассинхронизация"
 
 #: src/display.cpp:1657
 msgid "Cannot Build. Oil Resource Burning."
@@ -10677,9 +10679,9 @@ msgstr "Строительство невозможно. Горит нефть."
 
 #: src/display.cpp:1845
 #: src/display.cpp:2396
-#, fuzzy, c-format
+#, c-format
 msgid "%s - Damage %d%% - Experience %.1f, %s"
-msgstr "%s - повреждение %d%% - опыт %d, %s"
+msgstr "%s - повреждение %d%% - опыт %.1f, %s"
 
 #: src/display.cpp:1861
 #, c-format
@@ -10805,7 +10807,7 @@ msgstr "ГЛАВНОЕ МЕНЮ"
 
 #: src/frontend.cpp:116
 msgid "Visit our official site: http://wz2100.net"
-msgstr ""
+msgstr "Посетите наш оффициальный сайт: http://wz2100.net"
 
 #: src/frontend.cpp:187
 msgid "Fast Play"
@@ -10872,7 +10874,7 @@ msgstr "Присоединиться"
 
 #: src/frontend.cpp:384
 msgid "TCP PORT 2100 MUST BE OPENED IN YOUR FIREWALL / ROUTER TO HOST GAMES!"
-msgstr ""
+msgstr "Порт TCP 2100 должен быть открыт в вашем фаерволе / роутере чтобы создавать игры!"
 
 #: src/frontend.cpp:444
 #: src/multiint.cpp:1398
@@ -10927,7 +10929,7 @@ msgstr "Полный экран"
 
 #: src/frontend.cpp:531
 msgid "Scanlines"
-msgstr ""
+msgstr "Туман Войны"
 
 #: src/frontend.cpp:535
 #: src/frontend.cpp:556
@@ -10954,7 +10956,7 @@ msgstr "Выкл."
 #: src/frontend.cpp:539
 #: src/frontend.cpp:677
 msgid "50%"
-msgstr ""
+msgstr "50%"
 
 #: src/frontend.cpp:543
 #: src/frontend.cpp:682
@@ -11037,15 +11039,13 @@ msgid "Texture size"
 msgstr "Размер текстур"
 
 #: src/frontend.cpp:819
-#, fuzzy
 msgid "Vertical sync"
-msgstr "Вертикальная синхронизация*"
+msgstr "Вертикальная синхронизация"
 
 #: src/frontend.cpp:854
 #: src/frontend.cpp:915
-#, fuzzy
 msgid "Unsupported"
-msgstr "Транспортник"
+msgstr "Неподдерживается"
 
 #: src/frontend.cpp:859
 msgid "VIDEO OPTIONS"
@@ -11069,15 +11069,13 @@ msgstr "Повернуть  экран"
 
 #: src/frontend.cpp:1086
 #: src/frontend.cpp:1159
-#, fuzzy
 msgid "Middle Mouse"
-msgstr "Средняя кнопка"
+msgstr "Средняя кнопка Мыши"
 
 #: src/frontend.cpp:1090
 #: src/frontend.cpp:1154
-#, fuzzy
 msgid "Right Mouse"
-msgstr "Правая кнопка"
+msgstr "Правая кнопка Мыши"
 
 #: src/frontend.cpp:1094
 msgid "MOUSE OPTIONS"
@@ -11145,7 +11143,7 @@ msgstr "Вращение"
 #: src/frontend.cpp:1280
 #: src/frontend.cpp:1301
 msgid "Fixed"
-msgstr "Починенный"
+msgstr "Зафиксированный"
 
 #: src/frontend.cpp:1256
 #: src/frontend.cpp:1272
@@ -11164,7 +11162,6 @@ msgstr "КАРТА СОХРАНЕНА!"
 #: src/hci.cpp:1554
 #: src/loop.cpp:257
 #: src/loop.cpp:273
-#, fuzzy
 msgid "GAME SAVED: "
 msgstr "ИГРА СОХРАНЕНА:"
 
@@ -11186,7 +11183,7 @@ msgstr "Игрок %u начитерил себе нового дроида: %s.
 #: src/hci.cpp:2019
 #, fuzzy, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid."
-msgstr "Игрок %u начитерил себе нового дроида: %s."
+msgstr "Игрок %u создал (Debug Menu) себе нового дроида: %s."
 
 #: src/hci.cpp:3281
 msgid "Commanders (F6)"
@@ -11334,9 +11331,8 @@ msgid "Tab Scroll right"
 msgstr "Таб скрол на право"
 
 #: src/hci.cpp:5159
-#, fuzzy
 msgid "Ally progress"
-msgstr "прогресс постройки"
+msgstr "Прогресс Союзников"
 
 #: src/ingameop.cpp:112
 #: src/ingameop.cpp:196
@@ -11351,12 +11347,12 @@ msgstr "Внимание: Вы владелец этой игры. Если вы
 #: src/ingameop.cpp:187
 #: src/ingameop.cpp:522
 msgid "Tactical UI (Target Origin Icon): Show"
-msgstr ""
+msgstr "Тактический интерфейс (Цель): Показать"
 
 #: src/ingameop.cpp:192
 #: src/ingameop.cpp:526
 msgid "Tactical UI (Target Origin Icon): Hide"
-msgstr ""
+msgstr "Тактический интерфейс (Цель): Спрятать"
 
 #: src/ingameop.cpp:275
 #: src/ingameop.cpp:498
@@ -11389,9 +11385,8 @@ msgstr ""
 "Warzone попробует запустить игру без него. Молитесь!"
 
 #: src/intdisplay.cpp:205
-#, fuzzy
 msgid "Waiting for Power"
-msgstr "Ожидание других игроков"
+msgstr "Ожидание энергии"
 
 #: src/intdisplay.cpp:253
 msgid "Build Progress"
@@ -11402,9 +11397,8 @@ msgid "Construction Progress"
 msgstr "Прогресс строительства"
 
 #: src/intdisplay.cpp:296
-#, fuzzy
 msgid "Research Progress"
-msgstr "исследование завершено"
+msgstr "Прогресс Разработки"
 
 #: src/intdisplay.cpp:663
 msgid "Need more resources!"
@@ -11756,14 +11750,14 @@ msgid "Game Speed Reset"
 msgstr "Скорость Игры Сброшена"
 
 #: src/keybind.cpp:2640
-#, fuzzy, c-format
+#, c-format
 msgid "Game Speed Increased to %s"
-msgstr "Скорость игры увеличена в %3.1f"
+msgstr "Скорость игры увеличена в %s"
 
 #: src/keybind.cpp:2644
-#, fuzzy, c-format
+#, c-format
 msgid "Game Speed Reduced to %s"
-msgstr "Скорость игры уменьшена в %3.1f"
+msgstr "Скорость игры уменьшена в %s"
 
 #: src/keybind.cpp:2700
 msgid "Radar showing friend-foe colors"
@@ -12420,13 +12414,12 @@ msgid "You Discover Blueprints For %s"
 msgstr "Вы открыли чертежи: %s"
 
 #: src/multiint.cpp:213
-#, fuzzy
 msgid "Medium"
-msgstr "Скорость: средняя"
+msgstr "Средняя"
 
 #: src/multiint.cpp:213
 msgid "Insane"
-msgstr ""
+msgstr "Безумная"
 
 #: src/multiint.cpp:658
 #: src/multilimit.cpp:190
@@ -12455,32 +12448,30 @@ msgid "IP"
 msgstr "IP"
 
 #: src/multiint.cpp:947
-#, fuzzy
 msgid "[Password required]"
-msgstr "*** пароль не требуется! ***"
+msgstr "[Требуется пароль]"
 
 #: src/multiint.cpp:951
 msgid "[No Tanks]"
-msgstr ""
+msgstr "[Нет танков]"
 
 #: src/multiint.cpp:955
-#, fuzzy
 msgid "[No Cyborgs]"
-msgstr "Производит киборгов"
+msgstr "[Нет киборгов]"
 
 #: src/multiint.cpp:959
 msgid "[No VTOLs]"
-msgstr ""
+msgstr "[Нет летательных аппаратов]"
 
 #: src/multiint.cpp:963
 #, c-format
 msgid "Hosted by %s"
-msgstr ""
+msgstr "Создатель %s"
 
 #: src/multiint.cpp:967
 #, c-format
 msgid "Hosted by %s —%s"
-msgstr ""
+msgstr "Создатель %s —%s"
 
 #: src/multiint.cpp:987
 msgid "No games are available"
@@ -12647,37 +12638,35 @@ msgstr "Установить лимиты сооружений"
 
 #: src/multiint.cpp:1680
 msgid "DIFFICULTY"
-msgstr ""
+msgstr "СЛОЖНОСТЬ"
 
 #: src/multiint.cpp:1694
 msgid "Less aggressive"
-msgstr ""
+msgstr "Менее агрессивны"
 
 #: src/multiint.cpp:1695
-#, fuzzy
 msgid "Plays nice"
-msgstr "Игрок"
+msgstr "Играет красиво"
 
 #: src/multiint.cpp:1696
 msgid "No holds barred"
-msgstr ""
+msgstr "Нет запрещенных приемов"
 
 #: src/multiint.cpp:1697
-#, fuzzy
 msgid "Starts with advantages"
-msgstr "Начать с Продвинутой Базой"
+msgstr "Начать с преимуществом"
 
 #: src/multiint.cpp:1725
 msgid "CHOOSE AI"
-msgstr ""
+msgstr "ВЫБЕРИТЕ ИИ"
 
 #: src/multiint.cpp:1741
 msgid "Allow human players to join in this slot"
-msgstr ""
+msgstr "Позволить игрокам просоединиться в этот слот"
 
 #: src/multiint.cpp:1749
 msgid "Leave this slot unused"
-msgstr ""
+msgstr "Оставить этот слот неиспользуемым"
 
 #: src/multiint.cpp:2168
 msgid "Team"
@@ -12685,22 +12674,19 @@ msgstr "Команда"
 
 #: src/multiint.cpp:2211
 msgid "You cannot change difficulty in a challenge"
-msgstr ""
+msgstr "Вы не можете поменять сложность в вызове"
 
 #: src/multiint.cpp:2211
-#, fuzzy
 msgid "Click to change difficulty"
-msgstr "Нажмите, чтобы изменить сложность AI."
+msgstr "Нажмите, чтобы изменить сложность "
 
 #: src/multiint.cpp:2226
-#, fuzzy
 msgid "Waiting for player"
-msgstr "Ожидание других игроков"
+msgstr "Ожидание игрока"
 
 #: src/multiint.cpp:2226
-#, fuzzy
 msgid "Player is ready"
-msgstr "Игрок исчез"
+msgstr "Игрок готов"
 
 #: src/multiint.cpp:2226
 msgid "Click when ready"
@@ -12715,28 +12701,24 @@ msgid "PLAYERS"
 msgstr "ИГРОКИ"
 
 #: src/multiint.cpp:2312
-#, fuzzy
 msgid "Click to change to this slot"
-msgstr "Нажмите, чтобы изменить настройки игрока."
+msgstr "Нажмите, чтобы выбрать этот слот"
 
 #: src/multiint.cpp:2340
 msgid "Choose Team"
 msgstr "Выбрать команду."
 
 #: src/multiint.cpp:2370
-#, fuzzy
 msgid "Click to change player colour"
-msgstr "Нажмите, чтобы изменить настройки игрока."
+msgstr "Нажмите, чтобы изменить цвет игрока"
 
 #: src/multiint.cpp:2398
-#, fuzzy
 msgid "Click to change player position"
-msgstr "Нажмите, чтобы изменить настройки игрока."
+msgstr "Нажмите, чтобы изменить позицию игрока"
 
 #: src/multiint.cpp:2402
-#, fuzzy
 msgid "Click to change AI"
-msgstr "Нажмите, чтобы изменить настройки игрока."
+msgstr "Нажмите, чтобы изменить ИИ"
 
 #: src/multiint.cpp:2463
 msgid "CHAT"
@@ -12748,12 +12730,12 @@ msgstr "Всем игрокам нужен такой же мод, что и у 
 
 #: src/multiint.cpp:2536
 msgid "Connecting to the lobby server..."
-msgstr ""
+msgstr "Соединяемся с лобби сервером"
 
 #: src/multiint.cpp:2683
-#, fuzzy, c-format
+#, c-format
 msgid "*** password [%s] is now required! ***"
-msgstr "Требуется пароль! [%s]"
+msgstr "***Теперь требуется пароль [%s]!***"
 
 #: src/multiint.cpp:2691
 msgid "*** password is NOT required! ***"
@@ -12778,37 +12760,36 @@ msgstr "Хост стартует"
 
 #: src/multiint.cpp:3724
 msgid "Can't connect to lobby server!"
-msgstr ""
+msgstr "Не могу соединиться с лобби сервером"
 
 #: src/multiint.cpp:3811
 #, c-format
 msgid "Mods: %s"
-msgstr ""
+msgstr "Моды: %s"
 
 #: src/multiint.cpp:3818
 msgid "Mods: None!"
-msgstr ""
+msgstr "Модов: Нет!"
 
 #: src/multiint.cpp:3828
-#, fuzzy, c-format
+#, c-format
 msgid "Version: %s"
-msgstr "Версия %s%s%s%s"
+msgstr "Версия %s"
 
 #: src/multiint.cpp:3879
-#, fuzzy, c-format
+#, c-format
 msgid "Click to take player slot %d"
-msgstr "Нажмите, чтобы изменить настройки игрока."
+msgstr "Нажмите, чтобы перейти в %d слот"
 
 #: src/multiint.cpp:3888
 #: src/multiint.cpp:4081
 msgid "Open"
-msgstr ""
+msgstr "Открыть"
 
 #: src/multiint.cpp:3888
 #: src/multiint.cpp:4082
-#, fuzzy
 msgid "Closed"
-msgstr "Закрыть"
+msgstr "Закрыто"
 
 #: src/multiint.cpp:3939
 #, c-format
@@ -12850,14 +12831,13 @@ msgid "%s (%u) has an incompatible mod, and has been kicked."
 msgstr "%s (%u) имеет несовместимый мод и отключен."
 
 #: src/multijoin.cpp:446
-#, fuzzy, c-format
+#, c-format
 msgid "%s is joining the game"
-msgstr "%s присоединился к игре"
+msgstr "%s присоединяется к игре"
 
 #: src/multijoin.cpp:457
-#, fuzzy
 msgid "Server message:"
-msgstr "Системное сообщение"
+msgstr "Системное сообщение:"
 
 #: src/multilimit.cpp:183
 msgid "Apply Defaults and Return To Previous Screen"
@@ -12884,12 +12864,12 @@ msgid "Any number of players"
 msgstr "Любое число игроков"
 
 #: src/multimenu.cpp:655
-#, fuzzy, c-format
+#, c-format
 msgid "%d player"
 msgid_plural "%d players"
-msgstr[0] "2 игрока"
-msgstr[1] "2 игрока"
-msgstr[2] "2 игрока"
+msgstr[0] "%d  игрок"
+msgstr[1] "%d игрока"
+msgstr[2] "%d игроков"
 
 #: src/multimenu.cpp:793
 msgid "Score"
@@ -12979,35 +12959,35 @@ msgstr "Голубой"
 
 #: src/multiplay.cpp:1939
 msgid "Yellow"
-msgstr ""
+msgstr "Желтый"
 
 #: src/multiplay.cpp:1940
 msgid "Purple"
-msgstr ""
+msgstr "Фиолетовый"
 
 #: src/multiplay.cpp:1941
 msgid "White"
-msgstr ""
+msgstr "Белый"
 
 #: src/multiplay.cpp:1942
 msgid "Bright blue"
-msgstr ""
+msgstr "Ярко-синий"
 
 #: src/multiplay.cpp:1943
 msgid "Neon green"
-msgstr ""
+msgstr "Зеленый неон"
 
 #: src/multiplay.cpp:1944
 msgid "Infrared"
-msgstr ""
+msgstr "Инфракраснйы"
 
 #: src/multiplay.cpp:1945
 msgid "Ultraviolet"
-msgstr ""
+msgstr "Ультрафиолетовый"
 
 #: src/multiplay.cpp:1946
 msgid "Brown"
-msgstr ""
+msgstr "Коричневый"
 
 #: src/order.cpp:803
 msgid "We can't do that! We must be a Cyborg unit to use a Cyborg Transport!"
@@ -13190,9 +13170,8 @@ msgstr[1] "выбрано %u юнита"
 msgstr[2] "выбрано %u юнитов"
 
 #: src/structure.cpp:2563
-#, fuzzy
 msgid "Command Control Limit Reached - Production Halted"
-msgstr "Достигнут Предел - Производство Остановлено"
+msgstr "Достигнут Предел Командного Контроля - Производство Остановлено"
 
 #: src/structure.cpp:5569
 #: src/structure.cpp:5594
@@ -13200,8 +13179,8 @@ msgstr "Достигнут Предел - Производство Остано�
 msgid "%s - %u Unit assigned - Damage %3.0f%%"
 msgid_plural "%s - %u Units assigned - Damage %3.0f%%"
 msgstr[0] "%s - %u Юнит назначен"
-msgstr[1] "%s - %u Юнитов назначено"
-msgstr[2] "%s - %u Юнита назначено"
+msgstr[1] "%s - %u Юнита назначено"
+msgstr[2] "%s - %u Юнитов назначено"
 
 #: src/structure.cpp:5599
 #: src/structure.cpp:5667
@@ -13212,9 +13191,9 @@ msgid "%s - Damage %3.0f%%"
 msgstr "%s - повреждение %3.0f%%"
 
 #: src/structure.cpp:5649
-#, fuzzy, c-format
+#, c-format
 msgid "%s - Connected %u of %u - Damage %3.0f%%"
-msgstr "%s - подключено %u из %u"
+msgstr "%s - Подключено %u из %u - Урон %3.0f%%"
 
 #: src/structure.cpp:5812
 #: src/structure.cpp:5857
