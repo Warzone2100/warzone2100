@@ -144,7 +144,7 @@ bool InitRadar(void)
 	colRadarMe = WZCOL_WHITE;
 	if (mapWidth < 150)	// too small!
 	{
-		RadarZoom = DEFAULT_RADARZOOM * 2;
+		RadarZoom = pie_GetVideoBufferWidth() <= 640 ? 14 : DEFAULT_RADARZOOM * 2;
 	}
 	pie_InitRadar();
 

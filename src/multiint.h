@@ -56,7 +56,7 @@ extern	bool	startMultiOptions		(bool bReenter);
 extern	void	frontendMultiMessages	(void);
 
 bool addMultiBut(W_SCREEN *screen, UDWORD formid, UDWORD id, UDWORD x, UDWORD y, UDWORD width, UDWORD height, const char* tipres, UDWORD norm, UDWORD down, UDWORD hi, unsigned tc = MAX_PLAYERS);
-extern bool changeColour(UBYTE player, UBYTE col);
+bool changeColour(unsigned player, int col, bool isHost);
 extern	char	sPlayer[128];
 
 void	kickPlayer(uint32_t player_id, const char *reason, LOBBY_ERROR_TYPES type);
@@ -131,11 +131,11 @@ void loadMapPreview(bool hideInterface);
 
 #define MULTIOP_PLAYERS			10231
 #define MULTIOP_PLAYERSX		360
-#define MULTIOP_PLAYERSY		15
+#define MULTIOP_PLAYERSY		1
 #define MULTIOP_PLAYER_START		10232		//list of players
 #define MULTIOP_PLAYER_END		10249
 #define MULTIOP_PLAYERSW		263
-#define MULTIOP_PLAYERSH		330
+#define MULTIOP_PLAYERSH		364
 
 #define MULTIOP_ROW_WIDTH		246
 
@@ -143,7 +143,7 @@ void loadMapPreview(bool hideInterface);
 #define MULTIOP_TEAMS_START		102310			//List of teams
 #define MULTIOP_TEAMS_END		102341
 #define MULTIOP_TEAMSWIDTH		29
-#define	MULTIOP_TEAMSHEIGHT		36
+#define	MULTIOP_TEAMSHEIGHT		38
 
 #define MULTIOP_TEAMCHOOSER_FORM	102800
 #define MULTIOP_TEAMCHOOSER			102810
@@ -155,18 +155,18 @@ void loadMapPreview(bool hideInterface);
 #define MULTIOP_READY_START             (MULTIOP_READY_FORM_ID + MAX_PLAYERS + 1)
 #define	MULTIOP_READY_END               (MULTIOP_READY_START + MAX_PLAYERS - 1)
 #define MULTIOP_READY_WIDTH			41
-#define MULTIOP_READY_HEIGHT		36
+#define MULTIOP_READY_HEIGHT		38
 #define MULTIOP_READY_IMG_OFFSET_X	3
 #define MULTIOP_READY_IMG_OFFSET_Y	6
 
 #define MULTIOP_PLAYERWIDTH		245
-#define	MULTIOP_PLAYERHEIGHT		36
+#define	MULTIOP_PLAYERHEIGHT	38
 
 #define MULTIOP_OPTIONS			10250
 #define MULTIOP_OPTIONSX		40
-#define MULTIOP_OPTIONSY		15
+#define MULTIOP_OPTIONSY		1
 #define MULTIOP_OPTIONSW		284
-#define MULTIOP_OPTIONSH		330
+#define MULTIOP_OPTIONSH		364
 
 #define MULTIOP_EDITBOXW		196
 #define	MULTIOP_EDITBOXH		30
@@ -183,6 +183,8 @@ void loadMapPreview(bool hideInterface);
 #define	MROW8					MROW7+31
 #define	MROW9					MROW8+31
 #define	MROW10					MROW9+31
+#define	MROW11					MROW10+31
+#define	MROW12					MROW11+31
 
 #define MCOL0					50
 #define MCOL1					(MCOL0+26+10)	// rem 10 for 4 lines.
@@ -226,10 +228,12 @@ void loadMapPreview(bool hideInterface);
 #define MULTIOP_REFRESHY		453
 
 #define MULTIOP_HOST			10276
+#define MULTIOP_HOST_BUT		0xf0f0
 #define MULTIOP_HOSTX			5
 #define MULTIOP_HOSTY			MROW3+3
 
-#define MULTIOP_STRUCTLIMITS	10277
+#define MULTIOP_STRUCTLIMITS	21277	// we are using 10277 already
+#define MULTIOP_LIMITS_BUT		0xf0d0
 #define MULTIOP_STRUCTLIMITSX	5
 #define MULTIOP_STRUCTLIMITSY	MROW2+5
 
@@ -240,7 +244,7 @@ void loadMapPreview(bool hideInterface);
 
 #define MULTIOP_CHATBOX			10278
 #define MULTIOP_CHATBOXX		MULTIOP_OPTIONSX
-#define MULTIOP_CHATBOXY		350
+#define MULTIOP_CHATBOXY		364
 #define MULTIOP_CHATBOXW		((MULTIOP_PLAYERSX+MULTIOP_PLAYERSW) - MULTIOP_OPTIONSX)
 #define MULTIOP_CHATBOXH		115
 

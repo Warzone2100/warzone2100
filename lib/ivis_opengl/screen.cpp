@@ -45,6 +45,8 @@
 /* global used to indicate preferred internal OpenGL format */
 int wz_texture_compression = 0;
 
+bool opengl_fallback_mode = false;
+
 static bool		bBackDrop = false;
 static char		screendump_filename[PATH_MAX];
 static bool		screendump_required = false;
@@ -71,18 +73,6 @@ bool screenInitialise()
 		exit(1);
 	}
 
-	// Copy this info to be used by the crash handler for the dump file
-	ssprintf(buf, "OpenGL Vendor: %s", glGetString(GL_VENDOR));
-	addDumpInfo(buf);
-	ssprintf(buf, "OpenGL Renderer: %s", glGetString(GL_RENDERER));
-	addDumpInfo(buf);
-	ssprintf(buf, "OpenGL Version: %s", glGetString(GL_VERSION));
-	addDumpInfo(buf);
-	if (GLEW_VERSION_2_0)
-	{
-		ssprintf(buf, "OpenGL GLSL Version : %s", glGetString(GL_SHADING_LANGUAGE_VERSION));
-		addDumpInfo(buf);
-	}
 	/* Dump general information about OpenGL implementation to the console and the dump file */
 	ssprintf(buf, "OpenGL Vendor: %s", glGetString(GL_VENDOR));
 	addDumpInfo(buf);
@@ -114,7 +104,7 @@ bool screenInitialise()
 	debug(LOG_3D, "  * Anisotropic filtering %s supported.", GLEW_EXT_texture_filter_anisotropic ? "is" : "is NOT");
 	debug(LOG_3D, "  * Rectangular texture %s supported.", GLEW_ARB_texture_rectangle ? "is" : "is NOT");
 	debug(LOG_3D, "  * FrameBuffer Object (FBO) %s supported.", GLEW_EXT_framebuffer_object ? "is" : "is NOT");
-	debug(LOG_3D, "  * Vertex Buffer Object (VBO) %s supported.", GLEW_ARB_vertex_buffer_object ? "is" : "is NOT");
+	debug(LOG_3D, "  * ARB Vertex Buffer Object (VBO) %s supported.", GLEW_ARB_vertex_buffer_object ? "is" : "is NOT");
 	debug(LOG_3D, "  * NPOT %s supported.", GLEW_ARB_texture_non_power_of_two ? "is" : "is NOT");
 	debug(LOG_3D, "  * texture cube_map %s supported.", GLEW_ARB_texture_cube_map ? "is" : "is NOT");
 	glGetIntegerv(GL_MAX_TEXTURE_UNITS, &glMaxTUs);
@@ -123,9 +113,7 @@ bool screenInitialise()
 	screenWidth = MAX(screenWidth, 640);
 	screenHeight = MAX(screenHeight, 480);
 
-	pie_SetShaderAvailability(GLEW_VERSION_2_0); // Simple check / close enough
-
-	if (GLEW_VERSION_2_0)
+	if (GLEW_VERSION_2_0 && !opengl_fallback_mode)
 	{
 		/* Dump information about OpenGL 2.0+ implementation to the console and the dump file */
 		GLint glMaxTIUs, glMaxTCs, glMaxTIUAs, glmaxSamples, glmaxSamplesbuf;
@@ -145,16 +133,31 @@ bool screenInitialise()
 		glGetIntegerv(GL_SAMPLES, &glmaxSamples);
 		debug(LOG_3D, "  * (current) Max Sample level is %d.", (int) glmaxSamples);
 
-		pie_LoadShaders();
+		if (pie_LoadShaders())
+		{
+			pie_SetShaderAvailability(true);
+		}
+
 	}
-	else if (GLEW_VERSION_1_4)
+	else if (GLEW_VERSION_1_5)
 	{
 		debug(LOG_POPUP, _("OpenGL 2.0 is not supported by your system. Some things may look wrong. Please upgrade your graphics driver/hardware, if possible."));
 	}
-	else
+	else // less than 1.5
 	{
-		debug(LOG_FATAL, _("OpenGL 1.4 is not supported by your system. The game requires this. Please upgrade your graphics drivers/hardware, if possible."));
-		exit(1);
+#ifndef WZ_OS_MAC
+		// Check if VBO extension available for haxx
+		if (GLEW_VERSION_1_4 && GLEW_ARB_vertex_buffer_object)
+		{
+			debug(LOG_POPUP, _("OpenGL 1.5/2.0 is not supported by your system. Some things may look wrong. Please upgrade your graphics driver/hardware, if possible."));
+			// screen_EnableVBO should be called later, so nothing (quesoGLC) will call glewInit twice and flush our tweaks into void
+		}
+		else
+#endif
+		{
+			debug(LOG_FATAL, _("OpenGL 1.4 + VBO extension is not supported by your system. The game requires this. Please upgrade your graphics drivers/hardware, if possible."));
+			exit(1);
+		}
 	}
 
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
@@ -168,6 +171,30 @@ void screenShutDown(void)
 {
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_ACCUM_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+}
+
+// Make OpenGL's VBO functions available under the core names for implementations that have them only as extensions, namely Mesa.
+void screen_EnableVBO()
+{
+#ifndef WZ_OS_MAC
+	// no need if there is OpenGL 1.5 available
+	if (!GLEW_VERSION_1_5 && GLEW_ARB_vertex_buffer_object)
+	{
+		debug(LOG_WARNING, "OpenGL 1.4+: Using VBO extension functions under the core names.");
+
+		__glewBindBuffer = __glewBindBufferARB;
+		__glewBufferData = __glewBufferDataARB;
+		__glewBufferSubData = __glewBufferSubDataARB;
+		__glewDeleteBuffers = __glewDeleteBuffersARB;
+		__glewGenBuffers = __glewGenBuffersARB;
+		__glewGetBufferParameteriv = __glewGetBufferParameterivARB;
+		__glewGetBufferPointerv = __glewGetBufferPointervARB;
+		__glewGetBufferSubData = __glewGetBufferSubDataARB;
+		__glewIsBuffer = __glewIsBufferARB;
+		__glewMapBuffer = __glewMapBufferARB;
+		__glewUnmapBuffer = __glewUnmapBufferARB;
+	}
+#endif
 }
 
 void screen_SetBackDropFromFile(const char* filename)

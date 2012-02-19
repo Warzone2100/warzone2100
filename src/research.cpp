@@ -1196,16 +1196,16 @@ void researchResult(UDWORD researchIndex, UBYTE player, bool bDisplay, STRUCTURE
                 {
                     compInc++;
                 }
-                if (compInc >= 32)
+                if (compInc >= 128)
                 {
-					debug(LOG_ERROR, "researchResult - more than 32 weapons now available");
+					debug(LOG_ERROR, "researchResult - more than 128 weapons now available");
                    
 					//don't bother checking any more
                     break;
                 }
-                if (vtolCompInc >= 32)
+                if (vtolCompInc >= 128)
                 {
-					debug(LOG_ERROR, "researchResult - more than 32 vtol weapons now available");
+					debug(LOG_ERROR, "researchResult - more than 128 vtol weapons now available");
                     
 					//don't bother checking any more
                     break;

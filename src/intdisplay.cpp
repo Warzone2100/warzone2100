@@ -2315,7 +2315,7 @@ void CreateIMDButton(IMAGEFILE *ImageFile, UWORD ImageID, void *Object, UDWORD P
 			//ASSERT( Radius <= OBJECT_RADIUS,"Object too big for button - %s",
 			//		((BASE_STATS*)Object)->pName );
 			// NOTE: The Super transport is huge, and is considered a component type, so refit it to inside the button.
-			if ((!strcmp("MP-SuperTransportBody",((BASE_STATS*)Object)->pName)))
+			if ((!strcmp("SuperTransportBody",((BASE_STATS*)Object)->pName)))
 			{
 				scale /= 2;
 			}

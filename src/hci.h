@@ -226,7 +226,7 @@
 #define	MAXSTRUCTURES	200	//bumped up from 80.  NOTE: was used for max # in build menus.
 #define	MAXRESEARCH		200 //was 80 topic displayed   "           "
 #define	MAXFEATURES		80
-#define	MAXCOMPONENT	80
+#define	MAXCOMPONENT	200
 #define	MAXEXTRASYS		80
 
 enum INTMODE

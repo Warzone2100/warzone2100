@@ -472,7 +472,6 @@ AC_CONFIG_FILES([Makefile
 		doc/Makefile
 		icons/Makefile
 		data/Makefile
-		data/mods/multiplay/Makefile
 		data/music/Makefile
 		pkg/nsis/Makefile
 		win32/Makefile

@@ -118,7 +118,7 @@ R-Sys-VTOLStrike-Turret01,Sys-VstrikeTurret01,SENSOR,0,0,8
 R-Sys-VTOLCBS-Turret01,Sys-VTOLCBTurret01,SENSOR,0,0,8
 R-Vehicle-Prop-Tracks,tracked01,PROPULSION,0,0,5
 R-Cyborg-Transport,TransporterBody,BODY,0,0,2
-MP-SuperTransport,MP-SuperTransportBody,BODY,0,0,2
+R-SuperTransport,SuperTransportBody,BODY,0,0,2
 R-Vehicle-Prop-VTOL,V-Tol,PROPULSION,0,0,5
 R-Vehicle-Prop-Wheels,wheeled01,PROPULSION,0,0,5
 R-Sys-RadarDetector01,RadarDetector,SENSOR,0,0,8
