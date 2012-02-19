@@ -1996,12 +1996,20 @@ static QScriptValue js_playerPower(QScriptContext *context, QScriptEngine *engin
 	return QScriptValue(getPower(player));
 }
 
-//-- \subsection{isStructureAvailable(structure type, player)}
+//-- \subsection{isStructureAvailable(structure type[, player])}
 static QScriptValue js_isStructureAvailable(QScriptContext *context, QScriptEngine *engine)
 {
 	QString building = context->argument(0).toString();
 	int index = getStructStatFromName(building.toUtf8().constData());
-	int player = context->argument(1).toInt32();
+	int player;
+	if (context->argumentCount() > 1)
+	{
+		player = context->argument(1).toInt32();
+	}
+	else
+	{
+		player = engine->globalObject().property("me").toInt32();
+	}
 	return QScriptValue(apStructTypeLists[player][index] == AVAILABLE
 			    && asStructLimits[player][index].currentQuantity < asStructLimits[player][index].limit);
 }

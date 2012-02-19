@@ -19,6 +19,7 @@ const resModule = "A0ResearchModule1";
 var attackGroup;
 var vtolGroup;
 var attackRun = 0;
+var researchDone = false;
 
 // --- utility functions
 
@@ -195,7 +196,7 @@ function grabTrucksAndBuild(range, bstats, maxBlockingTiles)
 
 function buildPowerGenerators()
 {
-	if (isStructureAvailable(powGen, me))
+	if (isStructureAvailable(powGen))
 	{
 		if (!grabTrucksAndBuild(20, powGen, 1))
 		{
@@ -294,7 +295,7 @@ function buildFundamentals()
 		checkLocalJobs(droids[j], structlist);
 	}
 	// If we need power generators, try to queue up production of them with any idle trucks
-	if (needPwGen && isStructureAvailable(powGen, me) && grabTrucksAndBuild(20, powGen, 1))
+	if (needPwGen && isStructureAvailable(powGen) && grabTrucksAndBuild(20, powGen, 1))
 	{
 		return; // exit early
 	}
@@ -303,28 +304,30 @@ function buildFundamentals()
 
 function buildFundamentals2()
 {
-	// Need factories? FIXME, check real limits
 	var factlist = enumStruct(me, factory);
-	var reslist = enumStruct(me, resLab);
-	var hqlist = enumStruct(me, playerHQ);
 	// Build as many research labs as factories
-	if (reslist.length < factlist.length && grabTrucksAndBuild(20, resLab, 1))
+	if (!researchDone && isStructureAvailable(resLab))
 	{
-		return;
+		var reslist = enumStruct(me, resLab);
+		if (reslist.length < factlist.length && grabTrucksAndBuild(20, resLab, 1))
+		{
+			return;	// done here
+		}
 	}
 	// Build as many factories as we can afford
 	if ((factlist.length < 2 || (factlist.length < 4 && playerPower(me) > factlist.length * 1000))
-	    && grabTrucksAndBuild(20, factory, 1))
+	    && isStructureAvailable(factory) && grabTrucksAndBuild(20, factory, 1))
 	{
 		return; // done here
 	}
 	// Build HQ if missing
-	if (hqlist.length == 0 && grabTrucksAndBuild(20, playerHQ, 1))
+	var hqlist = enumStruct(me, playerHQ);
+	if (isStructureAvailable(playerHQ) && hqlist.length == 0 && grabTrucksAndBuild(20, playerHQ, 1))
 	{
 		return;
 	}
 	// Build cyborg factory if we don't have one
-	if (isStructureAvailable(me, cybFactory))
+	if (isStructureAvailable(cybFactory))
 	{
 		var cyblist = enumStruct(me, cybFactory);
 		if (cyblist.length == 0 && playerPower(me) > 250 && grabTrucksAndBuild(20, cybFactory, 1))
@@ -333,7 +336,7 @@ function buildFundamentals2()
 		}
 	}
 	// Build VTOL factory if we don't have one
-	if (isStructureAvailable(me, vtolFactory))
+	if (isStructureAvailable(vtolFactory))
 	{
 		var vfaclist = enumStruct(me, vtolFactory);
 		if (vfaclist.length == 0 && playerPower(me) > 500 && grabTrucksAndBuild(20, vtolFactory, 1))
@@ -351,6 +354,7 @@ function maintenance()
 	if (reslist.length == 0)
 	{
 		// No research left, salvage res lab
+		researchDone = true; // and do not rebuild them
 		var lablist = enumStruct(me, resLab);
 		var builders = enumDroid(me, DROID_CONSTRUCT);
 		for (i = 0; i < lablist.length; i++)
@@ -437,7 +441,7 @@ function eventStructureBuilt(struct, droid)
 	}
 	else if (struct.stattype == POWER_GEN && droid)
 	{
-		if (isStructureAvailable(powModule, me)) // Immediately upgrade it, if possible
+		if (isStructureAvailable(powModule)) // Immediately upgrade it, if possible
 		{
 			var builders = enumDroid(me, DROID_CONSTRUCT);
 			for (i = 0; i < builders.length; i++)
@@ -597,7 +601,7 @@ function eventStartLevel()
 	setTimer("maintenance", 1000 * 60 * 2); // every 2 minutes, call it to check if anything left to do
 
 	/*
-	if (numFactories() > 1 && isStructureAvailable(defStructs[0], me) && playerData[me].difficulty > MEDIUM)
+	if (numFactories() > 1 && isStructureAvailable(defStructs[0]) && playerData[me].difficulty > MEDIUM)
 	{
 		dbgPlr("TRUCK RUSH!");
 		queue("truckRush");
