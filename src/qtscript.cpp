@@ -268,7 +268,7 @@ static QScriptValue js_include(QScriptContext *context, QScriptEngine *engine)
 	if (!loadFile(path.toAscii().constData(), &bytes, &size))
 	{
 		debug(LOG_ERROR, "Failed to read include file \"%s\"", path.toAscii().constData());
-		return false;
+		return QScriptValue(false);
 	}
 	QString source = QString::fromAscii(bytes, size);
 	free(bytes);
@@ -277,7 +277,7 @@ static QScriptValue js_include(QScriptContext *context, QScriptEngine *engine)
 	{
 		debug(LOG_ERROR, "Syntax error in include %s line %d: %s", 
 		      path.toAscii().constData(), syntax.errorLineNumber(), syntax.errorMessage().toAscii().constData());
-		return false;
+		return QScriptValue(false);
 	}
 	context->setActivationObject(engine->globalObject());
 	context->setThisObject(engine->globalObject());
@@ -287,9 +287,9 @@ static QScriptValue js_include(QScriptContext *context, QScriptEngine *engine)
 		int line = engine->uncaughtExceptionLineNumber();
 		debug(LOG_ERROR, "Uncaught exception at line %d, include file %s: %s",
 		      line, path.toAscii().constData(), result.toString().toAscii().constData());
-		return false;
+		return QScriptValue(false);
 	}
-	return QScriptValue();
+	return QScriptValue(true);
 }
 
 bool initScripts()
