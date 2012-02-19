@@ -841,9 +841,9 @@ static QScriptValue js_playerPower(QScriptContext *context, QScriptEngine *engin
 
 static QScriptValue js_isStructureAvailable(QScriptContext *context, QScriptEngine *engine)
 {
-	ARG_COUNT_EXACT(2);
-	ARG_PLAYER(0);
-	ARG_STRING(1);
+	ARG_COUNT_VAR(1, 2);
+	ARG_STRING(0);
+	if (context->argumentCount() > 1) ARG_PLAYER(1);
 	return QScriptValue(true);
 }
 
@@ -861,19 +861,6 @@ bool testPlayerScript(QString path, int player, int difficulty)
 	input.open(QIODevice::ReadOnly);
 	QString source(QString::fromUtf8(input.readAll()));
 	input.close();
-	QScriptSyntaxCheckResult syntax = QScriptEngine::checkSyntax(source);
-	if (syntax.state() != QScriptSyntaxCheckResult::Valid)
-	{
-		fprintf(stderr, "Syntax error in %s line %d: %s\n", path.toAscii().constData(), syntax.errorLineNumber(), syntax.errorMessage().toAscii().constData());
-		return false;
-	}
-	QScriptValue result = engine->evaluate(source, path);
-	if (engine->hasUncaughtException())
-	{
-		int line = engine->uncaughtExceptionLineNumber();
-		fprintf(stderr, "Uncaught exception at line %d, file %s: %s\n", line, path.toAscii().constData(), result.toString().toAscii().constData());
-		return false;
-	}
 
 	// Special functions
 	engine->globalObject().setProperty("setTimer", engine->newFunction(js_setTimer));
@@ -1080,6 +1067,21 @@ bool testPlayerScript(QString path, int player, int difficulty)
 	}
 	engine->globalObject().setProperty("derrickPositions", derrickPositions, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("startPositions", startPositions, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+
+	QScriptSyntaxCheckResult syntax = QScriptEngine::checkSyntax(source);
+	if (syntax.state() != QScriptSyntaxCheckResult::Valid)
+	{
+		fprintf(stderr, "Syntax error in %s line %d: %s\n", path.toAscii().constData(), syntax.errorLineNumber(), syntax.errorMessage().toAscii().constData());
+		return false;
+	}
+	QScriptValue result = engine->evaluate(source, path);
+	if (engine->hasUncaughtException())
+	{
+		int line = engine->uncaughtExceptionLineNumber();
+		fprintf(stderr, "Uncaught exception at line %d, file %s: %s\n", line, path.toAscii().constData(), result.toString().toAscii().constData());
+		abort();
+		return false;
+	}
 
 	// Call init
 	callFunction(engine, "eventGameInit", QScriptValueList());
