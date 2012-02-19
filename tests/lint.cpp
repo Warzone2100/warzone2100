@@ -1071,15 +1071,14 @@ bool testPlayerScript(QString path, int player, int difficulty)
 	QScriptSyntaxCheckResult syntax = QScriptEngine::checkSyntax(source);
 	if (syntax.state() != QScriptSyntaxCheckResult::Valid)
 	{
-		fprintf(stderr, "Syntax error in %s line %d: %s\n", path.toAscii().constData(), syntax.errorLineNumber(), syntax.errorMessage().toAscii().constData());
+		qFatal("Syntax error in %s line %d: %s", path.toAscii().constData(), syntax.errorLineNumber(), syntax.errorMessage().toAscii().constData());
 		return false;
 	}
 	QScriptValue result = engine->evaluate(source, path);
 	if (engine->hasUncaughtException())
 	{
 		int line = engine->uncaughtExceptionLineNumber();
-		fprintf(stderr, "Uncaught exception at line %d, file %s: %s\n", line, path.toAscii().constData(), result.toString().toAscii().constData());
-		abort();
+		qFatal("Uncaught exception at line %d, file %s: %s", line, path.toAscii().constData(), result.toString().toAscii().constData());
 		return false;
 	}
 
