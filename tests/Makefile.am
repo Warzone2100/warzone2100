@@ -3,12 +3,13 @@ AM_CFLAGS = -g
 
 BUILT_SOURCES = maplist.txt modellist.txt jslist.txt
 
+if !MINGW32
 bin_PROGRAMS = qslint
-check_PROGRAMS = maptest modeltest qtscripttest
-
 qslint_SOURCES = qslint.cpp lint.cpp
 qslint_LDADD = $(PHYSFS_LIBS) $(QT4_LIBS)
+endif
 
+check_PROGRAMS = maptest modeltest qtscripttest
 qtscripttest_SOURCES = qtscripttest.cpp lint.cpp
 qtscripttest_LDADD = $(PHYSFS_LIBS) $(QT4_LIBS)
 
