@@ -406,7 +406,7 @@ bool runMultiPlayerMenu(void)
 		break;
 	case FRONTEND_JOIN:
 		ingame.bHostSetup = false;
-		if (getLobbyError() != ERROR_CHEAT)
+		if (getLobbyError() != ERROR_INVALID)
 		{
 			setLobbyError(ERROR_NOERROR);
 		}

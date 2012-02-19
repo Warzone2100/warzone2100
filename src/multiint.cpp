@@ -747,7 +747,7 @@ void runConnectionScreen(void)
 			bMultiMessages = false;
 			break;
 		case CON_TYPESID_START+0: // Lobby button
-			if (LobbyError != ERROR_CHEAT)
+			if (LobbyError != ERROR_INVALID)
 			{
 				setLobbyError(ERROR_NOERROR);
 			}
@@ -990,7 +990,7 @@ static void addGames(void)
 			txt = _("Game is full");
 			break;
 		case ERROR_KICKED:
-		case ERROR_CHEAT:
+		case ERROR_INVALID:
 			txt = _("You were kicked!");
 			break;
 		case ERROR_WRONGVERSION:
@@ -1879,6 +1879,7 @@ bool recvTeamRequest(NETQUEUE queue)
 
 	if (!NetPlay.isHost || !bHosted)  // Only host should act, and only if the game hasn't started yet.
 	{
+		ASSERT(false, "Host only routine detected for client!");
 		return true;
 	}
 
@@ -1889,8 +1890,15 @@ bool recvTeamRequest(NETQUEUE queue)
 
 	if (player > MAX_PLAYERS || team > MAX_PLAYERS)
 	{
+		debug(LOG_NET, "NET_TEAMREQUEST invalid, player %d team, %d", (int) player, (int) team);
 		debug(LOG_ERROR, "Invalid NET_TEAMREQUEST from player %d: Tried to change player %d (team %d)",
 		      queue.index, (int)player, (int)team);
+		return false;
+	}
+
+	if (whosResponsible(player) != queue.index)
+	{
+		HandleBadParam("NET_TEAMREQUEST given incorrect params.", player, queue.index);
 		return false;
 	}
 
@@ -1898,6 +1906,7 @@ bool recvTeamRequest(NETQUEUE queue)
 	{
 		resetReadyStatus(false);
 	}
+	debug(LOG_NET, "%s is now part of team: %d", NetPlay.players[player].name, (int) team);
 	changeTeam(player, team); // we do this regardless, in case of sync issues
 
 	return true;
@@ -1911,7 +1920,7 @@ static bool SendReadyRequest(UBYTE player, bool bReady)
 	}
 	else
 	{
-		NETbeginEncode(NETbroadcastQueue(), NET_READY_REQUEST);
+		NETbeginEncode(NETnetQueue(NET_HOST_ONLY), NET_READY_REQUEST);
 			NETuint8_t(&player);
 			NETbool(&bReady);
 		NETend();
@@ -1926,6 +1935,7 @@ bool recvReadyRequest(NETQUEUE queue)
 
 	if (!NetPlay.isHost || !bHosted)  // Only host should act, and only if the game hasn't started yet.
 	{
+		ASSERT(false, "Host only routine detected for client!");
 		return true;
 	}
 
@@ -1938,6 +1948,12 @@ bool recvReadyRequest(NETQUEUE queue)
 	{
 		debug(LOG_ERROR, "Invalid NET_READY_REQUEST from player %d: player id = %d",
 		      queue.index, (int)player);
+		return false;
+	}
+
+	if (whosResponsible(player) != queue.index)
+	{
+		HandleBadParam("NET_READY_REQUEST given incorrect params.", player, queue.index);
 		return false;
 	}
 
@@ -1981,6 +1997,7 @@ static bool changePosition(UBYTE player, UBYTE position)
 	debug(LOG_ERROR, "Failed to swap positions for player %d, position %d", (int)player, (int)position);
 	if (player < game.maxPlayers && position < game.maxPlayers)
 	{
+		debug(LOG_NET, "corrupted positions :player (%hhu) new position (%hhu) old position (%d)", player, position, NetPlay.players[player].position );
 		// Positions were corrupted. Attempt to fix.
 		NetPlay.players[player].position = position;
 		NETBroadcastPlayerInfo(player);
@@ -2026,6 +2043,7 @@ bool changeColour(unsigned player, int col, bool isHost)
 	if (player < game.maxPlayers && col < MAX_PLAYERS)
 	{
 		// Colours were corrupted. Attempt to fix.
+		debug(LOG_NET, "corrupted colors :player (%hhu) new position (%hhu) old color (%d)", player, col, NetPlay.players[player].colour );
 		setPlayerColour(player, col);
 		NetPlay.players[player].colour = col;
 		NETBroadcastPlayerInfo(player);
@@ -2076,6 +2094,7 @@ bool recvColourRequest(NETQUEUE queue)
 
 	if (!NetPlay.isHost || !bHosted)  // Only host should act, and only if the game hasn't started yet.
 	{
+		ASSERT(false, "Host only routine detected for client!");
 		return true;
 	}
 
@@ -2091,6 +2110,12 @@ bool recvColourRequest(NETQUEUE queue)
 		return false;
 	}
 
+	if (whosResponsible(player) != queue.index)
+	{
+		HandleBadParam("NET_COLOURREQUEST given incorrect params.", player, queue.index);
+		return false;
+	}
+
 	resetReadyStatus(false);
 
 	return changeColour(player, col, false);
@@ -2102,6 +2127,7 @@ bool recvPositionRequest(NETQUEUE queue)
 
 	if (!NetPlay.isHost || !bHosted)  // Only host should act, and only if the game hasn't started yet.
 	{
+		ASSERT(false, "Host only routine detected for client!");
 		return true;
 	}
 
@@ -2110,10 +2136,17 @@ bool recvPositionRequest(NETQUEUE queue)
 		NETuint8_t(&position);
 	NETend();
 	debug(LOG_NET, "Host received position request from player %d to %d", player, position);
+
 	if (player > MAX_PLAYERS || position > MAX_PLAYERS)
 	{
 		debug(LOG_ERROR, "Invalid NET_POSITIONREQUEST from player %d: Tried to change player %d to %d",
 		      queue.index, (int)player, (int)position);
+		return false;
+	}
+
+	if (whosResponsible(player) != queue.index)
+	{
+		HandleBadParam("NET_POSITIONREQUEST given incorrect params.", player, queue.index);
 		return false;
 	}
 
@@ -3048,6 +3081,19 @@ static void processMultiopWidgets(UDWORD id)
 				NETsetPlayerConnectionStatus(CONNECTIONSTATUS_NORMAL, NET_ALL_PLAYERS);
 			}
 		}
+
+		if (NetPlay.isHost && game.alliance != ALLIANCES_TEAMS)
+		{
+			if(mouseDown(MOUSE_RMB) && player != NetPlay.hostPlayer) // both buttons....
+			{
+				char *msg;
+
+				sasprintf(&msg, _("The host has kicked %s from the game!"), getPlayerName(player));
+				sendTextMessage(msg, true);
+				kickPlayer(player, "you are unwanted by the host.", ERROR_KICKED);
+				resetReadyStatus(true);		//reset and send notification to all clients
+			}
+		}
 	}
 
 	if (id >= MULTIOP_COLOUR_START && id <= MULTIOP_COLOUR_END && (id - MULTIOP_COLOUR_START == selectedPlayer || NetPlay.isHost))
@@ -3112,8 +3158,8 @@ static void processMultiopWidgets(UDWORD id)
 		char *msg;
 
 		sasprintf(&msg, _("The host has kicked %s from the game!"), getPlayerName(teamChooserUp));
-		sendTextMessage(msg, true);
 		kickPlayer(teamChooserUp, "you are unwanted by the host.", ERROR_KICKED);
+		sendTextMessage(msg, true);
 		resetReadyStatus(true);		//reset and send notification to all clients
 		closeTeamChooser();
 	}
@@ -3211,10 +3257,23 @@ void frontendMultiMessages(void)
 				uint32_t reason;
 				uint32_t victim;
 
+				if(!NetPlay.isHost)				// only host should act
+				{
+					ASSERT(false, "Host only routine detected for client!");
+					break;
+				}
+
 				NETbeginDecode(queue, NET_FILE_CANCELLED);
 					NETuint32_t(&victim);
 					NETuint32_t(&reason);
 				NETend();
+
+				if (whosResponsible(victim) != queue.index)
+				{
+					HandleBadParam("NET_FILE_CANCELLED given incorrect params.", victim, queue.index);
+					return;
+				}
+
 				switch (reason)
 				{
 					case STUCK_IN_FILE_LOOP:
@@ -3294,6 +3353,12 @@ void frontendMultiMessages(void)
 				break;
 			}
 
+			if (whosResponsible(player_id) != queue.index && queue.index != NET_HOST_ONLY)
+			{
+				HandleBadParam("NET_PLAYER_DROPPED given incorrect params.", player_id, queue.index);
+				break;
+			}
+
 			debug(LOG_INFO,"** player %u has dropped!", player_id);
 
 			MultiPlayerLeave(player_id);		// get rid of their stuff
@@ -3321,6 +3386,11 @@ void frontendMultiMessages(void)
 			break;
 		}
 		case NET_FIREUP:					// campaign game started.. can fire the whole shebang up...
+			if (NET_HOST_ONLY != queue.index)
+			{
+				HandleBadParam("NET_FIREUP given incorrect params.", 255, queue.index);
+				break;
+			}
 			debug(LOG_NET, "NET_FIREUP was received ...");
 			if(ingame.localOptionsReceived)
 			{
@@ -3355,7 +3425,15 @@ void frontendMultiMessages(void)
 
 			if (player_id == NET_HOST_ONLY)
 			{
-				debug(LOG_ERROR, "someone tried to kick the host--check your netplay logs!");
+				char buf[250]= {'\0'};
+
+				ssprintf(buf, "*Player %d (%s : %s) tried to kick %u", (int) queue.index, NetPlay.players[queue.index].name, NetPlay.players[queue.index].IPtextAddress, player_id);
+				NETlogEntry(buf, SYNC_FLAG, 0);
+				debug(LOG_ERROR, "%s", buf);
+				if (NetPlay.isHost)
+				{
+					NETplayerKicked((unsigned int) queue.index);
+				}
 				break;
 			}
 
@@ -3568,7 +3646,7 @@ bool startMultiOptions(bool bReenter)
 	loadMapPreview(false);
 	addTopForm();
 
-	if (getLobbyError() != ERROR_CHEAT)
+	if (getLobbyError() != ERROR_INVALID)
 	{
 		setLobbyError(ERROR_NOERROR);
 	}

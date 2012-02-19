@@ -339,7 +339,7 @@ static void updateLatency()
 	// Find out what latency has been agreed on, next.
 	for (player = 0; player < game.maxPlayers; ++player)
 	{
-		if (!NetPlay.players[player].kick)  // .kick: Don't wait for dropped players.
+		if (NetPlay.players[player].allocated)  // Don't wait for dropped/kicked players.
 		{
 			//minWantedLatency = MIN(minWantedLatency, wantedLatencies[player]);  // Minimum, so the clients don't increase the latency to try to make one slow computer run faster.
 			maxWantedLatency = MAX(maxWantedLatency, wantedLatencies[player]);  // Maximum, since the host experiences lower latency than everyone else.
@@ -429,7 +429,7 @@ bool checkPlayerGameTime(unsigned player)
 
 	for (player = begin; player < end; ++player)
 	{
-		if (gameTime > gameQueueTime[player] && !NetPlay.players[player].kick)  // .kick: Don't wait for dropped players.
+		if (gameTime > gameQueueTime[player] && NetPlay.players[player].allocated)  // Don't wait for players that have been kicked/dropped.
 		{
 			return false;  // Still waiting for this player.
 		}

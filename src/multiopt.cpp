@@ -56,12 +56,19 @@
 #include "template.h"
 #include "lib/framework/wzapp.h"
 
+extern bool		bHosted;
 
 // send complete game info set!
 void sendOptions()
 {
 	bool dummy = true;
 	unsigned int i;
+
+	if (!NetPlay.isHost || !bHosted)  // Only host should act, and only if the game hasn't started yet.
+	{
+		ASSERT(false, "Host only routine detected for client or not hosting yet!");
+		return;
+	}
 
 	NETbeginEncode(NETbroadcastQueue(), NET_OPTIONS);
 
