@@ -40,6 +40,7 @@
 #include "lib/ivis_opengl/piedef.h"
 #include "lib/ivis_opengl/piestate.h"
 #include "lib/ivis_opengl/pieclip.h"
+#include "lib/ivis_opengl/screen.h"
 
 #include "terrain.h"
 #include "map.h"
@@ -710,6 +711,9 @@ bool initTerrain(void)
 	int decalSize;
 	int maxSectorSizeIndices, maxSectorSizeVertices;
 	bool decreasedSize = false;
+
+	// call VBO support hack before using it
+	screen_EnableVBO();
 	
 	// this information is useful to prevent crashes with buggy opengl implementations
 	glGetIntegerv(GL_MAX_ELEMENTS_VERTICES, &GLmaxElementsVertices);

@@ -6,7 +6,7 @@ R-Defense-PlasmiteFlamer,Level Three,0,0,IMAGE_RES_DEFENCE,0,0,RES_EMP_PFL,Plasm
 R-Wpn-Mortar-Incenediary,Level Three,0,0,IMAGE_RES_WEAPONTECH,0,0,RES_IMORT,0,Mortar-Incenediary,WEAPON,3600,1,2,0,0,0,0,0,1
 R-Defense-MortarPit-Incenediary,Level Three,0,0,IMAGE_RES_DEFENCE,0,0,RES_EMP_IMP,Emplacement-MortarPit-Incenediary,0,BODY,2400,0,2,0,1,0,1,0,0
 R-Cyborg-Transport,Level All,0,0,IMAGE_RES_CYBORGTECH,0,0,RES_CYTRANS,0,TransporterBody,BODY,3600,1,2,0,0,0,0,0,1
-MP-SuperTransport,Level All,0,0,IMAGE_RES_CYBORGTECH,0,0,RES_SUPERTRANS,0,MP-SuperTransportBody,BODY,4000,1,2,0,0,0,0,0,1
+R-SuperTransport,Level All,0,0,IMAGE_RES_CYBORGTECH,0,0,RES_SUPERTRANS,0,SuperTransportBody,BODY,4000,1,2,0,0,0,0,0,1
 R-Cyborg-Armor-Heat07,Level Three,IMAGE_RES_GRPUPG,1,IMAGE_RES_CYBORGTECH,icamrhot.pie,0,0,0,0,BODY,14000,0,1,1,0,0,0,0,0
 R-Cyborg-Armor-Heat08,Level Three,IMAGE_RES_GRPUPG,1,IMAGE_RES_CYBORGTECH,icamrhot.pie,0,0,0,0,BODY,16000,0,1,1,0,0,0,0,0
 R-Cyborg-Armor-Heat09,Level Three,IMAGE_RES_GRPUPG,1,IMAGE_RES_CYBORGTECH,icamrhot.pie,0,0,0,0,BODY,18000,0,1,1,0,0,0,0,0

@@ -1220,10 +1220,6 @@ static bool startGameOptionsMenu(void)
 	addMultiBut(psWScreen, FRONTEND_BOTFORM, FE_P6, FRONTEND_POS4M+(3*(w+6)), FRONTEND_POS4Y, w, h, NULL, IMAGE_PLAYERN, IMAGE_PLAYERX, true, 6);
 	addMultiBut(psWScreen, FRONTEND_BOTFORM, FE_P7, FRONTEND_POS4M+(4*(w+6)), FRONTEND_POS4Y, w, h, NULL, IMAGE_PLAYERN, IMAGE_PLAYERX, true, 7);
 
-	// language
-	addTextButton(FRONTEND_LANGUAGE,  FRONTEND_POS2X - 25, FRONTEND_POS5Y, _("Language"), 0);
-	addTextButton(FRONTEND_LANGUAGE_R,  FRONTEND_POS2M - 25, FRONTEND_POS5Y, getLanguageName(), 0);
-
 	// FIXME: if playercolor = 1-3, then we Assert in widgSetButtonState() since we don't define FE_P1 - FE_P3
 	// I assume the reason is that in SP games, those are reserved for the AI?  Valid values are 0, 4-7.
 	// This is a workaround, until we find what is setting that to 1-3.  See configuration.c:701
@@ -1233,11 +1229,25 @@ static bool startGameOptionsMenu(void)
 		playercolor = 0;
 	}
 	widgSetButtonState(psWScreen, FE_P0 + playercolor, WBUT_LOCK);
-	addTextButton(FRONTEND_COLOUR, FRONTEND_POS4X-25, FRONTEND_POS4Y, _("Unit Colour"), 0);
+	addTextButton(FRONTEND_COLOUR, FRONTEND_POS4X-25, FRONTEND_POS4Y, _("Unit Colour (SP)"), 0);
+
+	playercolor = war_getMPcolour();
+	for (int colour = -1; colour < MAX_PLAYERS_IN_GUI; ++colour)
+	{
+		int cellX = (colour + 1)%7;
+		int cellY = (colour + 1)/7;
+		addMultiBut(psWScreen, FRONTEND_BOTFORM, FE_MP_PR + colour + 1, FRONTEND_POS5M + cellX*(w+2), FRONTEND_POS5Y + cellY*(h+2) - 5, w, h, NULL, IMAGE_PLAYERN, IMAGE_PLAYERX, true, colour >= 0? colour : MAX_PLAYERS + 1);
+	}
+	widgSetButtonState(psWScreen, FE_MP_PR + playercolor + 1, WBUT_LOCK);
+	addTextButton(FRONTEND_COLOUR_MP, FRONTEND_POS5X - 25, FRONTEND_POS5Y, _("Unit Colour (MP)"), 0);
+
+	// language
+	addTextButton(FRONTEND_LANGUAGE,  FRONTEND_POS6X - 25, FRONTEND_POS6Y, _("Language"), 0);
+	addTextButton(FRONTEND_LANGUAGE_R,  FRONTEND_POS6M - 25, FRONTEND_POS6Y, getLanguageName(), 0);
 
 	// Radar
-	addTextButton(FRONTEND_RADAR, FRONTEND_POS6X - 25, FRONTEND_POS6Y, _("Radar"), 0);
-	addTextButton(FRONTEND_RADAR_R, FRONTEND_POS6M - 25, FRONTEND_POS6Y, rotateRadar ? _("Rotating") : _("Fixed"), 0);
+	addTextButton(FRONTEND_RADAR, FRONTEND_POS7X - 25, FRONTEND_POS7Y, _("Radar"), 0);
+	addTextButton(FRONTEND_RADAR_R, FRONTEND_POS7M - 25, FRONTEND_POS7Y, rotateRadar ? _("Rotating") : _("Fixed"), 0);
 
 	// Quit
 	addMultiBut(psWScreen, FRONTEND_BOTFORM, FRONTEND_QUIT, 10, 10, 30, 29, P_("menu", "Return"), IMAGE_RETURN, IMAGE_RETURN_HI, IMAGE_RETURN_HI);
@@ -1262,7 +1272,8 @@ bool runGameOptionsMenu(void)
 		widgSetString(psWScreen, FRONTEND_SIDETEXT, _("GAME OPTIONS"));
 		widgSetTipText(widgGetFromID(psWScreen, FRONTEND_QUIT), P_("menu", "Return"));
 		widgSetString(psWScreen, FRONTEND_LANGUAGE, _("Language"));
-		widgSetString(psWScreen, FRONTEND_COLOUR, _("Unit Colour"));
+		widgSetString(psWScreen, FRONTEND_COLOUR, _("Unit Colour (SP)"));
+		widgSetString(psWScreen, FRONTEND_COLOUR_MP, _("Unit Colour (MP)"));
 		widgSetString(psWScreen, FRONTEND_DIFFICULTY, _("Difficulty"));
 		widgSetString(psWScreen, FRONTEND_SCROLLSPEED, _("Scroll Speed"));
 		widgSetString(psWScreen, FRONTEND_RADAR, _("Radar"));
@@ -1369,6 +1380,17 @@ bool runGameOptionsMenu(void)
 
 	default:
 		break;
+	}
+
+	if (id >= FE_MP_PR && id <= FE_MP_PMAX)
+	{
+		int chosenColour = id - FE_MP_PR - 1;
+		for (int colour = -1; colour < MAX_PLAYERS_IN_GUI; ++colour)
+		{
+			int thisID = FE_MP_PR + colour + 1;
+			widgSetButtonState(psWScreen, thisID, id == thisID? WBUT_LOCK : 0);
+		}
+		war_setMPcolour(chosenColour);
 	}
 
 	// If close button pressed then return from this menu.

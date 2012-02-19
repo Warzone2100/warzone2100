@@ -336,11 +336,12 @@ void selNextSpecifiedUnit(DROID_TYPE unitType)
 {
 	static DROID *psOldRD = NULL; // pointer to last selected repair unit
 	DROID *psResult = NULL, *psFirst = NULL;
+	bool bLaterInList = false;
 
 	for (DROID *psCurr = apsDroidLists[selectedPlayer]; psCurr && !psResult; psCurr = psCurr->psNext)
 	{
 		//exceptions - as always...
-		bool bMatch = false, bLaterInList = false;
+		bool bMatch = false;
 		if (unitType == DROID_CONSTRUCT)
 		{
 			if (psCurr->droidType == DROID_CONSTRUCT ||
@@ -439,14 +440,13 @@ void selNextUnassignedUnit()
 {
 	static DROID *psOldNS = NULL;
 	DROID *psResult = NULL, *psFirst = NULL;
+	bool bLaterInList = false;
 
 	for (DROID *psCurr = apsDroidLists[selectedPlayer]; psCurr && !psResult; psCurr = psCurr->psNext)
 	{
 		/* Only look at unselected ones */
 		if (psCurr->group == UBYTE_MAX)
 		{
-			bool bLaterInList = false;
-
 			/* Keep a record of first one */
 			if (!psFirst)
 			{
@@ -507,6 +507,7 @@ void selNextUnassignedUnit()
 void selNextSpecifiedBuilding(STRUCTURE_TYPE structType)
 {
 	STRUCTURE *psResult = NULL, *psOldStruct = NULL, *psFirst = NULL;
+	bool bLaterInList = false;
 
 	/* Firstly, start coughing if the type is invalid */
 	ASSERT(structType <= NUM_DIFF_BUILDINGS, "Invalid structure type %u", structType);
@@ -516,7 +517,6 @@ void selNextSpecifiedBuilding(STRUCTURE_TYPE structType)
 		if ((psCurr->pStructureType->type == structType) &&
 		    (psCurr->status == SS_BUILT))
 		{
-			bool bLaterInList = false;
 			if (!psFirst)
 			{
 				psFirst = psCurr;

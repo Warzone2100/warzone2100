@@ -1,10 +1,10 @@
 #!/bin/sh
 
-DirectorY="libpng-1.5.8"
 OutDir="libpng"
-FileName="libpng-1.5.8.tar.gz"
-SourceDLP="http://downloads.sourceforge.net/project/libpng/libpng15/1.5.8/libpng-1.5.8.tar.gz"
-MD5Sum="dc2b84a1c077531ceb5bf9d79ad889a4"
+DirectorY="${OutDir}-1.5.9"
+FileName="${DirectorY}.tar.gz"
+SourceDLP="http://downloads.sourceforge.net/project/libpng/libpng15/1.5.9/${FileName}"
+MD5Sum="c740ba66cd7074ba2471b6a4ff48e1fb"
 
 configs/FetchSource.sh "${DirectorY}" "${OutDir}" "${FileName}" "${SourceDLP}" "${MD5Sum}"
 exit ${?}

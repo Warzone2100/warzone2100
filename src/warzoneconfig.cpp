@@ -58,6 +58,7 @@ struct WARZONE_GLOBALS
 	bool		ColouredCursor;
 	bool		MusicEnabled;
 	int8_t		SPcolor;
+	int             MPcolour;
 };
 
 /***************************************************************************/
@@ -87,6 +88,7 @@ void war_SetDefaultStates(void)//Sets all states
 	war_SetPauseOnFocusLoss(false);
 	war_SetMusicEnabled(true);
 	war_SetSPcolor(0);		//default color is green
+	war_setMPcolour(-1);            // Default color is random.
 }
 
 void war_SetSPcolor(int color)
@@ -102,6 +104,16 @@ void war_SetSPcolor(int color)
 int8_t war_GetSPcolor(void)
 {
 	return warGlobs.SPcolor;
+}
+
+void war_setMPcolour(int colour)
+{
+	warGlobs.MPcolour = colour;
+}
+
+int war_getMPcolour()
+{
+	return warGlobs.MPcolour;
 }
 
 void war_setFullscreen(bool b)

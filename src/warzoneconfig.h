@@ -76,6 +76,8 @@ extern bool war_GetMusicEnabled(void);
 extern void war_SetMusicEnabled(bool enabled);
 extern int8_t war_GetSPcolor(void);
 extern void war_SetSPcolor(int color);
+void war_setMPcolour(int colour);
+int war_getMPcolour();
 void war_setScanlineMode(SCANLINE_MODE mode);
 SCANLINE_MODE war_getScanlineMode(void);
 

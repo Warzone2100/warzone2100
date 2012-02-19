@@ -57,6 +57,8 @@
 #define	IDDES_PARTFORM		5027		// Part buttons form
 #define IDDES_WEAPONS_A		5028		// The weapon TURRET_A button for the Component form (right)
 #define IDDES_WEAPONS_B		5029		// The weapon TURRET_B button for the Component form (right)
+#define IDDES_TABSCRL_LEFT	5030		// left scroll button
+#define IDDES_TABSCRL_RIGHT	5031		// right scroll button
 
 #define IDDES_STOREBUTTON	5905		// Stored template button
 

@@ -277,21 +277,21 @@ Section $(TEXT_SecOpenAL) SecOpenAL
 
 SectionEnd
 
-SectionGroup /e $(TEXT_SecMods) secMods
-
-Section $(TEXT_SecOriginalMod) SecOriginalMod
-
-  SetOutPath "$INSTDIR\mods\multiplay"
-  File "${TOP_BUILDDIR}\data\mods\multiplay\old-1.10-balance.wz"
-  SetOutPath "$INSTDIR"
-
-  !insertmacro MUI_STARTMENU_WRITE_BEGIN "Application"
-    CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER-${PACKAGE_VERSION}\${PACKAGE_NAME}- Old 1.10 Balance.lnk" "$INSTDIR\${PACKAGE}.exe" "--mod_mp=old-1.10-balance.wz"
-  !insertmacro MUI_STARTMENU_WRITE_END
-
-SectionEnd
-
-SectionGroupEnd
+;SectionGroup /e $(TEXT_SecMods) secMods
+;
+;Section $(TEXT_SecOriginalMod) SecOriginalMod
+;
+;  SetOutPath "$INSTDIR\mods\multiplay"
+;  File "${TOP_BUILDDIR}\data\mods\multiplay\old-1.10-balance.wz"
+;  SetOutPath "$INSTDIR"
+;
+;  !insertmacro MUI_STARTMENU_WRITE_BEGIN "Application"
+;    CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER-${PACKAGE_VERSION}\${PACKAGE_NAME}- Old 1.10 Balance.lnk" "$INSTDIR\${PACKAGE}.exe" "--mod_mp=old-1.10-balance.wz"
+;  !insertmacro MUI_STARTMENU_WRITE_END
+;
+;SectionEnd
+;
+;SectionGroupEnd
 
 SectionGroup $(TEXT_SecFMVs) SecFMVs
 
@@ -545,8 +545,8 @@ FunctionEnd
   LangString TEXT_SecOpenAL ${LANG_ENGLISH} "OpenAL libraries"
   LangString DESC_SecOpenAL ${LANG_ENGLISH} "Runtime libraries for OpenAL, a free Audio interface. Implementation by Creative Labs."
 
-  LangString TEXT_SecMods ${LANG_ENGLISH} "Mods"
-  LangString DESC_SecMods ${LANG_ENGLISH} "Various mods for Warzone 2100."
+;  LangString TEXT_SecMods ${LANG_ENGLISH} "Mods"
+;  LangString DESC_SecMods ${LANG_ENGLISH} "Various mods for Warzone 2100."
 
   LangString TEXT_SecFMVs ${LANG_ENGLISH} "Videos"
   LangString DESC_SecFMVs ${LANG_ENGLISH} "Download and install in-game cutscenes."
@@ -583,8 +583,8 @@ FunctionEnd
   LangString TEXT_SecOpenAL ${LANG_DUTCH} "OpenAL bibliotheken"
   LangString DESC_SecOpenAL ${LANG_DUTCH} "Vereiste bibliotheken voor OpenAL, een opensource/vrije Audio Bibliotheek."
 
-  LangString TEXT_SecMods ${LANG_DUTCH} "Mods"
-  LangString DESC_SecMods ${LANG_DUTCH} "Verschillende mods."
+;  LangString TEXT_SecMods ${LANG_DUTCH} "Mods"
+;  LangString DESC_SecMods ${LANG_DUTCH} "Verschillende mods."
 
   LangString TEXT_SecFMVs ${LANG_DUTCH} "Videos"
   LangString DESC_SecFMVs ${LANG_DUTCH} "Download and install in-game cutscenes."
@@ -621,8 +621,8 @@ FunctionEnd
   LangString TEXT_SecOpenAL ${LANG_GERMAN} "OpenAL Bibliotheken"
   LangString DESC_SecOpenAL ${LANG_GERMAN} "Bibliotheken fьr OpenAL, ein freies Audio Interface. Implementation von Creative Labs."
 
-  LangString TEXT_SecMods ${LANG_GERMAN} "Mods"
-  LangString DESC_SecMods ${LANG_GERMAN} "Verschiedene Mods."
+;  LangString TEXT_SecMods ${LANG_GERMAN} "Mods"
+;  LangString DESC_SecMods ${LANG_GERMAN} "Verschiedene Mods."
 
   LangString TEXT_SecFMVs ${LANG_GERMAN} "Videos"
   LangString DESC_SecFMVs ${LANG_GERMAN} "Videos herunterladen und installieren."
@@ -659,8 +659,8 @@ FunctionEnd
   LangString TEXT_SecOpenAL ${LANG_RUSSIAN} "Библиотека OpenAL"
   LangString DESC_SecOpenAL ${LANG_RUSSIAN} "Свободно распространяемый аппаратно- программный интерфейс (API) для работы с аудиоданными. Версия от Creative Labs."
 
-  LangString TEXT_SecMods ${LANG_RUSSIAN} "Модификации"
-  LangString DESC_SecMods ${LANG_RUSSIAN} "Различные модификации для Warzone 2100."
+;  LangString TEXT_SecMods ${LANG_RUSSIAN} "Модификации"
+;  LangString DESC_SecMods ${LANG_RUSSIAN} "Различные модификации для Warzone 2100."
 
   LangString TEXT_SecFMVs ${LANG_RUSSIAN} "Видео"
   LangString DESC_SecFMVs ${LANG_RUSSIAN} "Скачать и установить внутриигровые ролики."
@@ -692,8 +692,8 @@ FunctionEnd
 
     !insertmacro MUI_DESCRIPTION_TEXT ${SecOpenAL} $(DESC_SecOpenAL)
 
-    !insertmacro MUI_DESCRIPTION_TEXT ${SecMods} $(DESC_SecMods)
-    !insertmacro MUI_DESCRIPTION_TEXT ${SecOriginalMod} $(DESC_SecOriginalMod)
+;    !insertmacro MUI_DESCRIPTION_TEXT ${SecMods} $(DESC_SecMods)
+;    !insertmacro MUI_DESCRIPTION_TEXT ${SecOriginalMod} $(DESC_SecOriginalMod)
 	
     !insertmacro MUI_DESCRIPTION_TEXT ${SecFMVs} $(DESC_SecFMVs)
 	!insertmacro MUI_DESCRIPTION_TEXT ${SecFMVs_Eng} $(DESC_SecFMVs_Eng)

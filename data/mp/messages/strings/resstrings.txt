@@ -27,7 +27,7 @@
 
 //R-Cyborg-Transport		Cyborg Transport
 
-//MP-SuperTransport		Super Transport
+//R-SuperTransport		Super Transport
 
 //R-Cyborg-Metals01			Cyborg Composite Alloys 
 
