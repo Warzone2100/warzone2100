@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2012-02-07 18:40+0100\n"
+"POT-Creation-Date: 2012-02-19 21:22+0100\n"
 "PO-Revision-Date: 2009-06-10 14:43+0100\n"
 "Last-Translator: Tomaž Povšin <tomaz.povsin@gmail.com>\n"
 "Language-Team: Slovenian <sl@li.org>\n"
@@ -10320,12 +10320,16 @@ msgstr "Težki top Piton Zračna blazina"
 msgid "System locale"
 msgstr "Lokalni sistem"
 
-#: lib/ivis_opengl/screen.cpp:152
+#: lib/ivis_opengl/screen.cpp:144
 msgid "OpenGL 2.0 is not supported by your system. Some things may look wrong. Please upgrade your graphics driver/hardware, if possible."
 msgstr ""
 
-#: lib/ivis_opengl/screen.cpp:156
-msgid "OpenGL 1.4 is not supported by your system. The game requires this. Please upgrade your graphics drivers/hardware, if possible."
+#: lib/ivis_opengl/screen.cpp:152
+msgid "OpenGL 1.5/2.0 is not supported by your system. Some things may look wrong. Please upgrade your graphics driver/hardware, if possible."
+msgstr ""
+
+#: lib/ivis_opengl/screen.cpp:158
+msgid "OpenGL 1.4 + VBO extension is not supported by your system. The game requires this. Please upgrade your graphics drivers/hardware, if possible."
 msgstr ""
 
 #: lib/netplay/netplay.cpp:193
@@ -10348,7 +10352,7 @@ msgid ""
 " or to forward the port to your system."
 msgstr ""
 
-#: lib/netplay/netplay.cpp:2702
+#: lib/netplay/netplay.cpp:2706
 msgid "Failed to get a lobby response!"
 msgstr ""
 
@@ -10414,150 +10418,173 @@ msgstr "Shrani igro"
 msgid "Close"
 msgstr "Zapri"
 
-#: src/clparse.cpp:241
+#: src/cheat.cpp:161
+#, c-format
+msgid "%s wants to enable debug mode. Enabled: %s, Disabled: %s."
+msgstr ""
+
+#: src/cheat.cpp:165
+#, c-format
+msgid "%s wants to disable debug mode. Enabled: %s, Disabled: %s."
+msgstr ""
+
+#: src/cheat.cpp:171
+msgid "Debug mode now enabled!"
+msgstr ""
+
+#: src/cheat.cpp:175
+#, fuzzy
+msgid "Debug mode now disabled!"
+msgstr "Razhroščevalni meni je odprt"
+
+#: src/clparse.cpp:242
 msgid "Set configuration directory"
 msgstr "Določi direktorij z nastavitvami"
 
-#: src/clparse.cpp:241
+#: src/clparse.cpp:242
 msgid "configuration directory"
 msgstr "Direktorij z nastavitvami"
 
-#: src/clparse.cpp:242
+#: src/clparse.cpp:243
 msgid "Set default data directory"
 msgstr "Določi privzeti podatkovni direktorij"
 
-#: src/clparse.cpp:242
+#: src/clparse.cpp:243
 msgid "data directory"
 msgstr "podatkovni direktorij"
 
-#: src/clparse.cpp:243
+#: src/clparse.cpp:244
 msgid "Show debug for given level"
 msgstr "Pokaži razhroščitev za dano stopnjo"
 
-#: src/clparse.cpp:243
+#: src/clparse.cpp:244
 msgid "debug level"
 msgstr "razhrošči stopnjo"
 
-#: src/clparse.cpp:244
+#: src/clparse.cpp:245
 msgid "Log debug output to file"
 msgstr "Zabeleži proizvod razhroščitve v datoteko"
 
-#: src/clparse.cpp:244
+#: src/clparse.cpp:245
 msgid "file"
 msgstr "datoteka"
 
-#: src/clparse.cpp:245
+#: src/clparse.cpp:246
 msgid "Flush all debug output written to stderr"
 msgstr "Splakni ves proizvod razhroščitve napisan v stderr"
 
-#: src/clparse.cpp:246
+#: src/clparse.cpp:247
 msgid "Play in fullscreen mode"
 msgstr "Igraj v celozaslonskem načinu"
 
-#: src/clparse.cpp:247
+#: src/clparse.cpp:248
 msgid "Load a specific game"
 msgstr "Naloži določeno igro"
 
-#: src/clparse.cpp:247
+#: src/clparse.cpp:248
 msgid "game-name"
 msgstr "Ime igre"
 
-#: src/clparse.cpp:248
+#: src/clparse.cpp:249
 msgid "Show this help message and exit"
 msgstr "Pokaži to sporočilo pomoči in pojdi ven"
 
-#: src/clparse.cpp:249
+#: src/clparse.cpp:250
 msgid "Enable a global mod"
 msgstr "Omogoči celoten mod"
 
-#: src/clparse.cpp:249
 #: src/clparse.cpp:250
 #: src/clparse.cpp:251
+#: src/clparse.cpp:252
 msgid "mod"
 msgstr "mod"
 
-#: src/clparse.cpp:250
+#: src/clparse.cpp:251
 msgid "Enable a campaign only mod"
 msgstr "Omogoči le bojno pohodni mod"
 
-#: src/clparse.cpp:251
+#: src/clparse.cpp:252
 msgid "Enable a multiplay only mod"
 msgstr "Omogoči le večigralski mod"
 
-#: src/clparse.cpp:252
+#: src/clparse.cpp:253
 msgid "Disable asserts"
 msgstr "Prepreči zahteve"
 
-#: src/clparse.cpp:253
+#: src/clparse.cpp:254
 msgid "Causes a crash to test the crash handler"
 msgstr ""
 
-#: src/clparse.cpp:254
+#: src/clparse.cpp:255
 msgid "Load a saved game"
 msgstr "Naloži shranjeno igro"
 
-#: src/clparse.cpp:254
+#: src/clparse.cpp:255
 msgid "savegame"
 msgstr "Shranjena igra"
 
-#: src/clparse.cpp:255
+#: src/clparse.cpp:256
 msgid "Play in windowed mode"
 msgstr "Igraj v okenskem načinu"
 
-#: src/clparse.cpp:256
+#: src/clparse.cpp:257
 msgid "Show version information and exit"
 msgstr "Pokaži informacijo o verziji in pojdi ven"
 
-#: src/clparse.cpp:257
+#: src/clparse.cpp:258
 msgid "Set the resolution to use"
 msgstr "Določi ločljivosti uporabo"
 
-#: src/clparse.cpp:257
+#: src/clparse.cpp:258
 msgid "WIDTHxHEIGHT"
 msgstr "ŠIRINAxVIŠINA"
 
-#: src/clparse.cpp:258
+#: src/clparse.cpp:259
 msgid "Enable shadows"
 msgstr "Omogoči sence"
 
-#: src/clparse.cpp:259
+#: src/clparse.cpp:260
 msgid "Disable shadows"
 msgstr "Prepreči sence"
 
-#: src/clparse.cpp:260
+#: src/clparse.cpp:261
 msgid "Enable sound"
 msgstr "Omogoči zvoke"
 
-#: src/clparse.cpp:261
+#: src/clparse.cpp:262
 msgid "Disable sound"
 msgstr "Prepreči zvoke"
 
-#: src/clparse.cpp:262
+#: src/clparse.cpp:263
 msgid "connect directly to IP/hostname"
 msgstr "poveži se direktno na IP/ime gostitelja"
 
-#: src/clparse.cpp:262
+#: src/clparse.cpp:263
 msgid "host"
 msgstr "gostitelj"
 
-#: src/clparse.cpp:263
+#: src/clparse.cpp:264
 msgid "go directly to host screen"
 msgstr "pojdi naravnost na gostiteljev zaslon"
 
-#: src/clparse.cpp:264
+#: src/clparse.cpp:265
 msgid "Enable texture compression"
 msgstr ""
 
-#: src/clparse.cpp:265
+#: src/clparse.cpp:266
 msgid "Disable texture compression"
 msgstr ""
 
-#: src/configuration.cpp:95
+#: src/clparse.cpp:267
+msgid "Only use OpenGL 1.5"
+msgstr ""
+
+#: src/configuration.cpp:96
 #, fuzzy
 msgid "My Game"
 msgstr "Končaj igro"
 
-#: src/configuration.cpp:96
+#: src/configuration.cpp:97
 #: src/multistat.cpp:124
 msgid "Player"
 msgstr "Igralec"
@@ -10722,7 +10749,7 @@ msgid "Player dropped"
 msgstr "Igralec izpadel"
 
 #: src/display3d.cpp:659
-#: src/multiint.cpp:2206
+#: src/multiint.cpp:2226
 msgid "Waiting for other players"
 msgstr "Čakanje ostalih igralcev"
 
@@ -10749,11 +10776,11 @@ msgstr "%s - Poškodbe %d%% - Izkušenj %d %s"
 msgid "Unit Lost!"
 msgstr "Enota izgubljena!"
 
-#: src/droid.cpp:1287
+#: src/droid.cpp:1275
 msgid "Structure Restored"
 msgstr "Zgradba obnovljena"
 
-#: src/droid.cpp:2257
+#: src/droid.cpp:2245
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
@@ -10762,7 +10789,7 @@ msgstr[1] "Skupina %u izbrana - %u enota"
 msgstr[2] "Skupina %u izbrana - %u enoti"
 msgstr[3] "Skupina %u izbrana - %u enote"
 
-#: src/droid.cpp:2270
+#: src/droid.cpp:2258
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
@@ -10771,7 +10798,7 @@ msgstr[1] "%u enota dodeljena skupini %u"
 msgstr[2] "%u enoti dodeljeni skupini %u"
 msgstr[3] "%u enote dodeljene skupini %u"
 
-#: src/droid.cpp:2283
+#: src/droid.cpp:2271
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
@@ -10780,7 +10807,7 @@ msgstr[1] "Centriran na skupino %u - %u enota"
 msgstr[2] "Centriran na skupino %u - %u enoti"
 msgstr[3] "Centriran na skupino %u - %u enote"
 
-#: src/droid.cpp:2287
+#: src/droid.cpp:2275
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
@@ -10789,49 +10816,49 @@ msgstr[1] "Poravnava s skupino %u - %u enota"
 msgstr[2] "Poravnava s skupino %u - %u enoti"
 msgstr[3] "Poravnava s skupino %u - %u enote"
 
-#: src/droid.cpp:2469
+#: src/droid.cpp:2457
 msgid "Rookie"
 msgstr "Novinec"
 
-#: src/droid.cpp:2470
+#: src/droid.cpp:2458
 msgctxt "rank"
 msgid "Green"
 msgstr "Zelen"
 
-#: src/droid.cpp:2471
+#: src/droid.cpp:2459
 msgid "Trained"
 msgstr "Izurjen"
 
-#: src/droid.cpp:2472
+#: src/droid.cpp:2460
 msgid "Regular"
 msgstr "Navaden"
 
-#: src/droid.cpp:2473
+#: src/droid.cpp:2461
 msgid "Professional"
 msgstr "Poklicni"
 
-#: src/droid.cpp:2474
+#: src/droid.cpp:2462
 msgid "Veteran"
 msgstr "Veteran"
 
-#: src/droid.cpp:2475
+#: src/droid.cpp:2463
 msgid "Elite"
 msgstr "Elita"
 
-#: src/droid.cpp:2476
+#: src/droid.cpp:2464
 msgid "Special"
 msgstr "Poseben"
 
-#: src/droid.cpp:2477
+#: src/droid.cpp:2465
 msgid "Hero"
 msgstr "Junak"
 
-#: src/droid.cpp:3435
+#: src/droid.cpp:3423
 #, c-format
 msgid "%s wanted to give you a %s but you have too many!"
 msgstr ""
 
-#: src/droid.cpp:3439
+#: src/droid.cpp:3427
 #, c-format
 msgid "You wanted to give %s a %s but they have too many!"
 msgstr ""
@@ -10887,8 +10914,8 @@ msgstr "UČNE VAJE"
 #: src/frontend.cpp:728
 #: src/frontend.cpp:862
 #: src/frontend.cpp:1097
-#: src/frontend.cpp:1243
-#: src/frontend.cpp:1263
+#: src/frontend.cpp:1253
+#: src/frontend.cpp:1273
 msgctxt "menu"
 msgid "Return"
 msgstr "Nazaj"
@@ -10939,7 +10966,7 @@ msgid "TCP PORT 2100 MUST BE OPENED IN YOUR FIREWALL / ROUTER TO HOST GAMES!"
 msgstr ""
 
 #: src/frontend.cpp:444
-#: src/multiint.cpp:1391
+#: src/multiint.cpp:1398
 msgid "OPTIONS"
 msgstr "MOŽNOSTI"
 
@@ -11022,7 +11049,7 @@ msgstr ""
 
 #: src/frontend.cpp:543
 #: src/frontend.cpp:682
-#: src/multiplay.cpp:1926
+#: src/multiplay.cpp:1934
 msgid "Black"
 msgstr "Črna"
 
@@ -11153,70 +11180,77 @@ msgid "MOUSE OPTIONS"
 msgstr "MOŽNOSTI IGRE"
 
 #: src/frontend.cpp:1194
-#: src/frontend.cpp:1266
+#: src/frontend.cpp:1277
 msgid "Difficulty"
 msgstr "Težavnost"
 
 #: src/frontend.cpp:1198
-#: src/frontend.cpp:1273
-#: src/frontend.cpp:1310
+#: src/frontend.cpp:1284
+#: src/frontend.cpp:1321
 #: src/multiint.cpp:213
 msgid "Easy"
 msgstr "Lahka"
 
 #: src/frontend.cpp:1201
-#: src/frontend.cpp:1276
-#: src/frontend.cpp:1302
+#: src/frontend.cpp:1287
+#: src/frontend.cpp:1313
 msgid "Normal"
 msgstr "Običajna"
 
 #: src/frontend.cpp:1205
-#: src/frontend.cpp:1279
-#: src/frontend.cpp:1306
+#: src/frontend.cpp:1290
+#: src/frontend.cpp:1317
 #: src/multiint.cpp:213
 msgid "Hard"
 msgstr "Težka"
 
 #: src/frontend.cpp:1210
-#: src/frontend.cpp:1267
+#: src/frontend.cpp:1278
 msgid "Scroll Speed"
 msgstr "Hitrost pomikanja"
 
-#: src/frontend.cpp:1224
-#: src/frontend.cpp:1264
+#: src/frontend.cpp:1232
+#: src/frontend.cpp:1275
+#, fuzzy
+msgid "Unit Colour (SP)"
+msgstr "Barva enot"
+
+#: src/frontend.cpp:1242
+#: src/frontend.cpp:1276
+#, fuzzy
+msgid "Unit Colour (MP)"
+msgstr "Barva enot"
+
+#: src/frontend.cpp:1245
+#: src/frontend.cpp:1274
 msgid "Language"
 msgstr "Jezik"
 
-#: src/frontend.cpp:1236
-#: src/frontend.cpp:1265
-msgid "Unit Colour"
-msgstr "Barva enot"
-
-#: src/frontend.cpp:1239
-#: src/frontend.cpp:1268
+#: src/frontend.cpp:1249
+#: src/frontend.cpp:1279
 msgid "Radar"
 msgstr ""
 
-#: src/frontend.cpp:1240
-#: src/frontend.cpp:1269
-#: src/frontend.cpp:1290
+#: src/frontend.cpp:1250
+#: src/frontend.cpp:1280
+#: src/frontend.cpp:1301
 #, fuzzy
 msgid "Rotating"
 msgstr "Zavrti desno"
 
-#: src/frontend.cpp:1240
-#: src/frontend.cpp:1269
-#: src/frontend.cpp:1290
+#: src/frontend.cpp:1250
+#: src/frontend.cpp:1280
+#: src/frontend.cpp:1301
 msgid "Fixed"
 msgstr ""
 
-#: src/frontend.cpp:1246
-#: src/frontend.cpp:1262
+#: src/frontend.cpp:1256
+#: src/frontend.cpp:1272
 msgid "GAME OPTIONS"
 msgstr "MOŽNOSTI IGRE"
 
-#: src/frontend.cpp:1399
-#: src/multiint.cpp:2470
+#: src/frontend.cpp:1421
+#: src/multiint.cpp:2490
 msgid "Mod: "
 msgstr ""
 
@@ -11276,7 +11310,7 @@ msgid "Build (F3)"
 msgstr "Gradnja (F3)"
 
 #: src/hci.cpp:3417
-#: src/multiint.cpp:1495
+#: src/multiint.cpp:1502
 #: src/multimenu.cpp:799
 msgid "Power"
 msgstr "Moč"
@@ -11473,8 +11507,12 @@ msgstr "Potek izdelave"
 msgid "Research Progress"
 msgstr "Raziskovanje izboljšano"
 
+#: src/intdisplay.cpp:663
+msgid "Need more resources!"
+msgstr ""
+
 #: src/intelmap.cpp:242
-#: src/keybind.cpp:1364
+#: src/keybind.cpp:1327
 msgid "PAUSED"
 msgstr "IGRA USTAVLJENA"
 
@@ -11495,32 +11533,32 @@ msgid "New Intelligence Report"
 msgstr "Novo obveščevalno poročilo"
 
 #: src/intorder.cpp:166
-#: src/keymap.cpp:390
+#: src/keymap.cpp:404
 msgid "Short Range"
 msgstr "Kratki domet"
 
 #: src/intorder.cpp:167
-#: src/keymap.cpp:397
+#: src/keymap.cpp:411
 msgid "Long Range"
 msgstr "Dolgi domet"
 
 #: src/intorder.cpp:168
-#: src/keymap.cpp:389
+#: src/keymap.cpp:403
 msgid "Optimum Range"
 msgstr "Najugodnejši domet"
 
 #: src/intorder.cpp:169
-#: src/keymap.cpp:409
+#: src/keymap.cpp:423
 msgid "Retreat at Medium Damage"
 msgstr "Umik pri srednje težki poškodbi"
 
 #: src/intorder.cpp:170
-#: src/keymap.cpp:410
+#: src/keymap.cpp:424
 msgid "Retreat at Heavy Damage"
 msgstr "Umik pri težki poškodbi"
 
 #: src/intorder.cpp:171
-#: src/keymap.cpp:411
+#: src/keymap.cpp:425
 msgid "Do or Die!"
 msgstr "Stori ali umri!"
 
@@ -11529,37 +11567,37 @@ msgid "Fire-At-Will"
 msgstr "Streljaj-po-želji"
 
 #: src/intorder.cpp:173
-#: src/keymap.cpp:385
+#: src/keymap.cpp:399
 msgid "Return Fire"
 msgstr "Vračaj streljanje"
 
 #: src/intorder.cpp:174
-#: src/keymap.cpp:383
+#: src/keymap.cpp:397
 msgid "Hold Fire"
 msgstr "Ustavi streljanje"
 
 #: src/intorder.cpp:175
-#: src/keymap.cpp:392
+#: src/keymap.cpp:406
 msgid "Patrol"
 msgstr "Patruliraj"
 
 #: src/intorder.cpp:176
-#: src/keymap.cpp:391
+#: src/keymap.cpp:405
 msgid "Pursue"
 msgstr "Zasleduj"
 
 #: src/intorder.cpp:177
-#: src/keymap.cpp:387
+#: src/keymap.cpp:401
 msgid "Guard Position"
 msgstr "Straži položaj"
 
 #: src/intorder.cpp:178
-#: src/keymap.cpp:394
+#: src/keymap.cpp:408
 msgid "Hold Position"
 msgstr "Drži položaj"
 
 #: src/intorder.cpp:179
-#: src/keymap.cpp:393
+#: src/keymap.cpp:407
 msgid "Return For Repair"
 msgstr "Vrni se na popravilo"
 
@@ -11568,12 +11606,12 @@ msgid "Return To HQ"
 msgstr "Vrni se v GS"
 
 #: src/intorder.cpp:181
-#: src/keymap.cpp:395
+#: src/keymap.cpp:409
 msgid "Go to Transport"
 msgstr "Pojdi do prevoza"
 
 #: src/intorder.cpp:182
-#: src/keymap.cpp:419
+#: src/keymap.cpp:434
 msgid "Return for Recycling"
 msgstr "Vrni se za reciklažo"
 
@@ -11609,257 +11647,248 @@ msgstr "Oprostite, ta goljufija je onemogočena v igrah z večimi igralci."
 msgid "Warning! This cheat is buggy.  We recommend to NOT use it."
 msgstr "Opozorilo! Ta goljufija je hroščata. Priporočamo, da se je NE uporablja."
 
-#: src/keybind.cpp:242
+#: src/keybind.cpp:227
 msgid "Lets us see what you see!"
 msgstr "Dovoli nam videti kar vidite vi!"
 
-#: src/keybind.cpp:244
+#: src/keybind.cpp:229
 msgid "Fine, weapon & sensor display is off!"
 msgstr "Vredu, prikaz orožja & senzorjev je izklopljen!"
 
-#: src/keybind.cpp:417
-#: src/keybind.cpp:447
-#: src/keybind.cpp:464
-#: src/keybind.cpp:508
-#: src/keybind.cpp:616
-#: src/keybind.cpp:656
-#: src/keybind.cpp:762
-#: src/keybind.cpp:1252
-#: src/keybind.cpp:1311
-#: src/keybind.cpp:1418
-#: src/keybind.cpp:1547
-#: src/keybind.cpp:1905
-#: src/keybind.cpp:1946
+#: src/keybind.cpp:402
+#: src/keybind.cpp:432
+#: src/keybind.cpp:449
+#: src/keybind.cpp:493
+#: src/keybind.cpp:601
+#: src/keybind.cpp:641
+#: src/keybind.cpp:747
+#: src/keybind.cpp:1274
+#: src/keybind.cpp:1381
+#: src/keybind.cpp:1510
+#: src/keybind.cpp:1868
+#: src/keybind.cpp:1909
 #, c-format
 msgid "(Player %u) is using cheat :%s"
 msgstr "(Igralec %u) uporablja goljufijo :%s"
 
-#: src/keybind.cpp:418
+#: src/keybind.cpp:403
 msgid "Hard as nails!!!"
 msgstr "Trdo kot žeblji!!!"
 
-#: src/keybind.cpp:432
+#: src/keybind.cpp:417
 msgid "Takings thing easy!"
 msgstr "Enostavno jemanje stvari!"
 
-#: src/keybind.cpp:448
+#: src/keybind.cpp:433
 msgid "1000 big ones!!!"
 msgstr "1000 velikih!!!"
 
-#: src/keybind.cpp:465
+#: src/keybind.cpp:450
 msgid "Power overwhelming"
 msgstr "Neustavljiva moč"
 
-#: src/keybind.cpp:480
+#: src/keybind.cpp:465
 msgid "Back to normality!"
 msgstr "Nazaj v normalnost!"
 
-#: src/keybind.cpp:493
+#: src/keybind.cpp:478
 msgid "Getting tricky!"
 msgstr "Postaja zapleteno!"
 
-#: src/keybind.cpp:509
+#: src/keybind.cpp:494
 msgid "Twice as nice!"
 msgstr "Dvakrat tako dobro!"
 
-#: src/keybind.cpp:520
+#: src/keybind.cpp:505
 msgid "FPS display is enabled."
 msgstr "Prikaz SNS je omogočen."
 
-#: src/keybind.cpp:524
+#: src/keybind.cpp:509
 msgid "FPS display is disabled."
 msgstr "Prikaz SNS je onemogočen."
 
-#: src/keybind.cpp:581
+#: src/keybind.cpp:566
 #, c-format
 msgid "(Player %u) is using a cheat :Num Droids: %d  Num Structures: %d  Num Features: %d"
 msgstr "(Igralec %u) uporablja goljufijo :Št droidov: %d  Št zgradb: %d  Št odlik: %d"
 
-#: src/keybind.cpp:617
+#: src/keybind.cpp:602
 msgid "Infinite power disabled"
 msgstr "Neustavljiva moč onemogočena"
 
-#: src/keybind.cpp:617
+#: src/keybind.cpp:602
 msgid "Infinite power enabled"
 msgstr "Neustavljiva moč omogočena"
 
-#: src/keybind.cpp:657
+#: src/keybind.cpp:642
 msgid "All items made available"
 msgstr "Vse zadeve dane na voljo"
 
-#: src/keybind.cpp:763
+#: src/keybind.cpp:748
 msgid "Fog on"
 msgstr "Megla vklopljena"
 
-#: src/keybind.cpp:763
+#: src/keybind.cpp:748
 msgid "Fog off"
 msgstr "Megla izklopljena"
 
-#: src/keybind.cpp:1174
+#: src/keybind.cpp:1159
 #, c-format
 msgid "Warning!  This cheat can cause dire problems later on! [%s]"
 msgstr "Opozorilo! Ta goljufija lahko kasneje povzroči resne težave! [%s]"
 
-#: src/keybind.cpp:1174
+#: src/keybind.cpp:1159
 msgid "Ending Mission."
 msgstr "Končujem misijo."
 
-#: src/keybind.cpp:1253
-msgid "CHEATS ARE NOW ENABLED!"
-msgstr "GOLJUFIJE SO SEDAJ OMOGOČENE!"
-
-#: src/keybind.cpp:1253
-msgid "CHEATS ARE NOW DISABLED!"
-msgstr "GOLJUFIJE SO SEDAJ ONEMOGOČENE!"
-
-#: src/keybind.cpp:1312
+#: src/keybind.cpp:1275
 msgid "God Mode ON"
 msgstr "Božji način VKLOPLJEN"
 
-#: src/keybind.cpp:1312
+#: src/keybind.cpp:1275
 msgid "God Mode OFF"
 msgstr "Božji način IZKLOPLJEN"
 
-#: src/keybind.cpp:1324
+#: src/keybind.cpp:1287
 msgid "View Aligned to North"
 msgstr "Pogled poravnan na sever"
 
-#: src/keybind.cpp:1333
+#: src/keybind.cpp:1296
 #, fuzzy, c-format
 msgid "Trap cursor %s"
 msgstr "Ujemi kazalec"
 
-#: src/keybind.cpp:1419
+#: src/keybind.cpp:1382
 msgid "Researched EVERYTHING for you!"
 msgstr "Raziskal VSE za vas!"
 
-#: src/keybind.cpp:1484
+#: src/keybind.cpp:1447
 #, c-format
 msgid "(Player %u) is using cheat :%s %s"
 msgstr "(Igralec %u) uporablja goljufijo :%s %s"
 
-#: src/keybind.cpp:1484
+#: src/keybind.cpp:1447
 msgid "Researched"
 msgstr "Raziskano"
 
-#: src/keybind.cpp:1505
+#: src/keybind.cpp:1468
 msgid "Only displaying energy bars when selected"
 msgstr "Črte moči prikazane le ob izboru"
 
-#: src/keybind.cpp:1508
+#: src/keybind.cpp:1471
 msgid "Always displaying energy bars for units"
 msgstr "Vedno prikazane črte moči za enote"
 
-#: src/keybind.cpp:1511
+#: src/keybind.cpp:1474
 msgid "Always displaying energy bars for units and structures"
 msgstr "Vedno prikazane črte moči za enote in zgradbe"
 
-#: src/keybind.cpp:1533
+#: src/keybind.cpp:1496
 msgid "Demo mode off - Returning to normal game mode"
 msgstr "Demo način izklopljen - Vračanje na navadni način igre"
 
-#: src/keybind.cpp:1548
+#: src/keybind.cpp:1511
 msgid "Debug menu is Open"
 msgstr "Razhroščevalni meni je odprt"
 
-#: src/keybind.cpp:1585
+#: src/keybind.cpp:1548
 #, fuzzy
 msgid "Unable to locate any oil derricks!"
 msgstr "Ni mogoče najti nobenih tovornjakov!"
 
-#: src/keybind.cpp:1807
+#: src/keybind.cpp:1770
 msgid "Oh, the weather outside is frightful... SNOW"
 msgstr "Oh, vreme zunaj je strašno... SNEG"
 
-#: src/keybind.cpp:1813
+#: src/keybind.cpp:1776
 msgid "Singing in the rain, I'm singing in the rain... RAIN"
 msgstr "Pojem v dežju, jaz pojem v dežju... DEŽ"
 
-#: src/keybind.cpp:1819
+#: src/keybind.cpp:1782
 msgid "Forecast : Clear skies for all areas... NO WEATHER"
 msgstr "Napoved : jasno nebo za vsa območja... NI VREMENA"
 
-#: src/keybind.cpp:1904
+#: src/keybind.cpp:1867
 msgid "Warning! This can have drastic consequences if used incorrectly in missions."
 msgstr "Opozorilo! To ima lahko drastične posledice, če se nepravilno uporabi v misijah"
 
-#: src/keybind.cpp:1906
+#: src/keybind.cpp:1869
 msgid "All enemies destroyed by cheating!"
 msgstr "Vsi sovražniki uničeni z goljufanjem!"
 
-#: src/keybind.cpp:1947
+#: src/keybind.cpp:1910
 msgid "Destroying selected droids and structures!"
 msgstr "Uničevanje izbranih droidov in zgradb!"
 
-#: src/keybind.cpp:2460
+#: src/keybind.cpp:2477
 msgid "Centered on player HQ, direction NORTH"
 msgstr "Centriran na GS igralca, smer SEVER"
 
-#: src/keybind.cpp:2472
+#: src/keybind.cpp:2489
 msgid "Unable to locate HQ!"
 msgstr "Ni mogoče najti GS!"
 
-#: src/keybind.cpp:2479
+#: src/keybind.cpp:2496
 msgid "Formation speed limiting has been removed from the game due to bugs."
 msgstr ""
 
-#: src/keybind.cpp:2528
+#: src/keybind.cpp:2545
 msgid "Vertical rotation direction: Normal"
 msgstr ""
 
-#: src/keybind.cpp:2533
+#: src/keybind.cpp:2550
 msgid "Vertical rotation direction: Flipped"
 msgstr ""
 
-#: src/keybind.cpp:2542
+#: src/keybind.cpp:2559
 msgid "Screen shake when things die: Off"
 msgstr ""
 
-#: src/keybind.cpp:2547
+#: src/keybind.cpp:2564
 msgid "Screen shake when things die: On"
 msgstr ""
 
-#: src/keybind.cpp:2596
+#: src/keybind.cpp:2613
 #, fuzzy
 msgid "Sorry, but game speed cannot be changed in multiplayer."
 msgstr "Oprostite, ta goljufija je onemogočena v igrah z večimi igralci."
 
-#: src/keybind.cpp:2619
-#: src/keybind.cpp:2671
+#: src/keybind.cpp:2636
+#: src/keybind.cpp:2688
 msgid "Game Speed Reset"
 msgstr "Hitrost igre ponastavljena"
 
-#: src/keybind.cpp:2623
+#: src/keybind.cpp:2640
 #, fuzzy, c-format
 msgid "Game Speed Increased to %s"
 msgstr "Hitrost igre povečana na %3.1f"
 
-#: src/keybind.cpp:2627
+#: src/keybind.cpp:2644
 #, fuzzy, c-format
 msgid "Game Speed Reduced to %s"
 msgstr "Hitrost igre zmanjšana na %3.1f"
 
-#: src/keybind.cpp:2683
+#: src/keybind.cpp:2700
 msgid "Radar showing friend-foe colors"
 msgstr "Radar kaže barve prijateja-sovražnika"
 
-#: src/keybind.cpp:2687
+#: src/keybind.cpp:2704
 msgid "Radar showing player colors"
 msgstr "Radar kaže barve igralca"
 
-#: src/keybind.cpp:2702
+#: src/keybind.cpp:2719
 msgid "Radar showing only objects"
 msgstr "Radar kaže samo predmete"
 
-#: src/keybind.cpp:2705
+#: src/keybind.cpp:2722
 msgid "Radar blending terrain and height"
 msgstr "Radar združuje teren in višino "
 
-#: src/keybind.cpp:2708
+#: src/keybind.cpp:2725
 msgid "Radar showing terrain"
 msgstr "Radar kaže teren"
 
-#: src/keybind.cpp:2711
+#: src/keybind.cpp:2728
 msgid "Radar showing height"
 msgstr "Radar kaže višino"
 
@@ -11868,9 +11897,9 @@ msgid "KEY MAPPING"
 msgstr "VNAŠANJE TIPK"
 
 #: src/keyedit.cpp:377
-#: src/multiint.cpp:718
-#: src/multiint.cpp:1184
-#: src/multiint.cpp:1581
+#: src/multiint.cpp:720
+#: src/multiint.cpp:1191
+#: src/multiint.cpp:1588
 msgid "Return To Previous Screen"
 msgstr "Vrni se na prejšnji zaslon"
 
@@ -11878,498 +11907,543 @@ msgstr "Vrni se na prejšnji zaslon"
 msgid "Select Default"
 msgstr "Izberi privzeto"
 
-#: src/keymap.cpp:295
+#: src/keymap.cpp:309
 msgid "Manufacture"
 msgstr "Izdeluj"
 
-#: src/keymap.cpp:296
+#: src/keymap.cpp:310
 msgid "Research"
 msgstr "Razišči"
 
-#: src/keymap.cpp:297
+#: src/keymap.cpp:311
 msgid "Build"
 msgstr "Gradi"
 
-#: src/keymap.cpp:298
+#: src/keymap.cpp:312
 msgid "Design"
 msgstr "Načrtuj"
 
-#: src/keymap.cpp:299
+#: src/keymap.cpp:313
 msgid "Intelligence Display"
 msgstr "Obveščevalni zaslon"
 
-#: src/keymap.cpp:300
+#: src/keymap.cpp:314
 msgid "Commanders"
 msgstr "Poveljniki"
 
-#: src/keymap.cpp:301
+#: src/keymap.cpp:315
 msgid "Toggle Radar"
 msgstr "Nastavi radar"
 
-#: src/keymap.cpp:302
+#: src/keymap.cpp:316
 msgid "Toggle Console Display"
 msgstr "Nastavi konzolni zaslon"
 
-#: src/keymap.cpp:303
+#: src/keymap.cpp:317
 msgid "Toggle Damage Bars On/Off"
 msgstr "Nastavi vklop/izklop črt škode"
 
-#: src/keymap.cpp:304
+#: src/keymap.cpp:318
 msgid "Take Screen Shot"
 msgstr "Naredi sliko zaslona"
 
-#: src/keymap.cpp:305
+#: src/keymap.cpp:319
 msgid "Toggle Formation Speed Limiting"
 msgstr "Nastavi omejevanje hitrosti reda"
 
-#: src/keymap.cpp:306
+#: src/keymap.cpp:320
 msgid "View Location of Previous Message"
 msgstr "Poglej položaj prejšnjega sporočila"
 
-#: src/keymap.cpp:307
+#: src/keymap.cpp:321
 #, fuzzy
 msgid "Toggle Sensor display"
 msgstr "Nastavi konzolni zaslon"
 
-#: src/keymap.cpp:311
+#: src/keymap.cpp:325
 msgid "Assign Group 0"
 msgstr "Dodeli skupino 0"
 
-#: src/keymap.cpp:312
+#: src/keymap.cpp:326
 msgid "Assign Group 1"
 msgstr "Dodeli skupino 1"
 
-#: src/keymap.cpp:313
+#: src/keymap.cpp:327
 msgid "Assign Group 2"
 msgstr "Dodeli skupino 2"
 
-#: src/keymap.cpp:314
+#: src/keymap.cpp:328
 msgid "Assign Group 3"
 msgstr "Dodeli skupino 3"
 
-#: src/keymap.cpp:315
+#: src/keymap.cpp:329
 msgid "Assign Group 4"
 msgstr "Dodeli skupino 4"
 
-#: src/keymap.cpp:316
+#: src/keymap.cpp:330
 msgid "Assign Group 5"
 msgstr "Dodeli skupino 5"
 
-#: src/keymap.cpp:317
+#: src/keymap.cpp:331
 msgid "Assign Group 6"
 msgstr "Dodeli skupino 6"
 
-#: src/keymap.cpp:318
+#: src/keymap.cpp:332
 msgid "Assign Group 7"
 msgstr "Dodeli skupino 7"
 
-#: src/keymap.cpp:319
+#: src/keymap.cpp:333
 msgid "Assign Group 8"
 msgstr "Dodeli skupino 8"
 
-#: src/keymap.cpp:320
+#: src/keymap.cpp:334
 msgid "Assign Group 9"
 msgstr "Dodeli skupino 9"
 
-#: src/keymap.cpp:324
+#: src/keymap.cpp:338
 msgid "Select Group 0"
 msgstr "Izberite skupino 0"
 
-#: src/keymap.cpp:325
+#: src/keymap.cpp:339
 msgid "Select Group 1"
 msgstr "Izberite skupino 1"
 
-#: src/keymap.cpp:326
+#: src/keymap.cpp:340
 msgid "Select Group 2"
 msgstr "Izberite skupino 2"
 
-#: src/keymap.cpp:327
+#: src/keymap.cpp:341
 msgid "Select Group 3"
 msgstr "Izberite skupino 3"
 
-#: src/keymap.cpp:328
+#: src/keymap.cpp:342
 msgid "Select Group 4"
 msgstr "Izberite skupino 4"
 
-#: src/keymap.cpp:329
+#: src/keymap.cpp:343
 msgid "Select Group 5"
 msgstr "Izberite skupino 5"
 
-#: src/keymap.cpp:330
+#: src/keymap.cpp:344
 msgid "Select Group 6"
 msgstr "Izberite skupino 6"
 
-#: src/keymap.cpp:331
+#: src/keymap.cpp:345
 msgid "Select Group 7"
 msgstr "Izberite skupino 7"
 
-#: src/keymap.cpp:332
+#: src/keymap.cpp:346
 msgid "Select Group 8"
 msgstr "Izberite skupino 8"
 
-#: src/keymap.cpp:333
+#: src/keymap.cpp:347
 msgid "Select Group 9"
 msgstr "Izberite skupino 9"
 
-#: src/keymap.cpp:337
+#: src/keymap.cpp:351
 msgid "Select Commander 0"
 msgstr "Izberite poveljnika 0"
 
-#: src/keymap.cpp:338
+#: src/keymap.cpp:352
 msgid "Select Commander 1"
 msgstr "Izberite poveljnika 1"
 
-#: src/keymap.cpp:339
+#: src/keymap.cpp:353
 msgid "Select Commander 2"
 msgstr "Izberite poveljnika 2"
 
-#: src/keymap.cpp:340
+#: src/keymap.cpp:354
 msgid "Select Commander 3"
 msgstr "Izberite poveljnika 3"
 
-#: src/keymap.cpp:341
+#: src/keymap.cpp:355
 msgid "Select Commander 4"
 msgstr "Izberite poveljnika 4"
 
-#: src/keymap.cpp:342
+#: src/keymap.cpp:356
 msgid "Select Commander 5"
 msgstr "Izberite poveljnika 5"
 
-#: src/keymap.cpp:343
+#: src/keymap.cpp:357
 msgid "Select Commander 6"
 msgstr "Izberite poveljnika 6"
 
-#: src/keymap.cpp:344
+#: src/keymap.cpp:358
 msgid "Select Commander 7"
 msgstr "Izberite poveljnika 7"
 
-#: src/keymap.cpp:345
+#: src/keymap.cpp:359
 msgid "Select Commander 8"
 msgstr "Izberite poveljnika 8"
 
-#: src/keymap.cpp:346
+#: src/keymap.cpp:360
 msgid "Select Commander 9"
 msgstr "Izberite poveljnika 9"
 
-#: src/keymap.cpp:350
+#: src/keymap.cpp:364
 #, fuzzy
 msgid "Multiplayer Options / Alliance dialog"
 msgstr "Večigralske možnosti"
 
-#: src/keymap.cpp:353
+#: src/keymap.cpp:367
 msgid "Snap View to North"
 msgstr "Usmeri pogled na sever"
 
-#: src/keymap.cpp:354
+#: src/keymap.cpp:368
 msgid "Toggle Tracking Camera"
 msgstr "Nastavi sledilno kamero"
 
-#: src/keymap.cpp:355
+#: src/keymap.cpp:369
 msgid "Display In-Game Options"
 msgstr "Prikaži možnosti v igri"
 
-#: src/keymap.cpp:356
+#: src/keymap.cpp:370
 msgid "Zoom Radar Out"
 msgstr "Zumiraj radar ven"
 
-#: src/keymap.cpp:357
+#: src/keymap.cpp:371
 msgid "Zoom Radar In"
 msgstr "Zumiraj radar noter"
 
-#: src/keymap.cpp:358
+#: src/keymap.cpp:372
 msgid "Zoom In"
 msgstr "Zumiraj ven"
 
-#: src/keymap.cpp:359
+#: src/keymap.cpp:373
 msgid "Zoom Out"
 msgstr "Zumiraj noter"
 
-#: src/keymap.cpp:360
+#: src/keymap.cpp:374
 msgid "Pitch Forward"
 msgstr "Nagni naprej"
 
-#: src/keymap.cpp:361
+#: src/keymap.cpp:375
 msgid "Rotate Left"
 msgstr "Zavrti levo"
 
-#: src/keymap.cpp:362
+#: src/keymap.cpp:376
 msgid "Reset Pitch"
 msgstr "Ponastavi naklon"
 
-#: src/keymap.cpp:363
+#: src/keymap.cpp:377
 msgid "Rotate Right"
 msgstr "Zavrti desno"
 
-#: src/keymap.cpp:364
+#: src/keymap.cpp:378
 msgid "Pitch Back"
 msgstr "Nagni nazaj"
 
-#: src/keymap.cpp:365
+#: src/keymap.cpp:379
 msgid "Orders Menu"
 msgstr "Ukazni meni"
 
-#: src/keymap.cpp:366
+#: src/keymap.cpp:380
 msgid "Decrease Game Speed"
 msgstr "Zmanjšaj hitrost igre"
 
-#: src/keymap.cpp:367
+#: src/keymap.cpp:381
 msgid "Increase Game Speed"
 msgstr "Povečaj hitrost igre"
 
-#: src/keymap.cpp:368
+#: src/keymap.cpp:382
 msgid "Reset Game Speed"
 msgstr "Ponastavi hitrost igre"
 
-#: src/keymap.cpp:369
+#: src/keymap.cpp:383
 msgid "View North"
 msgstr "Poglej sever"
 
-#: src/keymap.cpp:370
+#: src/keymap.cpp:384
 msgid "View South"
 msgstr "Poglej jug"
 
-#: src/keymap.cpp:371
+#: src/keymap.cpp:385
 msgid "View East"
 msgstr "Poglej vzhod"
 
-#: src/keymap.cpp:372
+#: src/keymap.cpp:386
 msgid "View West"
 msgstr "Poglej zahod"
 
-#: src/keymap.cpp:373
+#: src/keymap.cpp:387
 msgid "View next Oil Derrick"
 msgstr "Poglej naslednjo naftno vrtino"
 
-#: src/keymap.cpp:374
+#: src/keymap.cpp:388
 msgid "View next Repair Unit"
 msgstr "Poglej naslednjo enoto za popravila"
 
-#: src/keymap.cpp:375
+#: src/keymap.cpp:389
 msgid "View next Truck"
 msgstr "Poglej naslednji tovornjak"
 
-#: src/keymap.cpp:376
+#: src/keymap.cpp:390
 msgid "View next Sensor Unit"
 msgstr "Poglej naslednjo senzorsko enoto"
 
-#: src/keymap.cpp:377
+#: src/keymap.cpp:391
 msgid "View next Commander"
 msgstr "Poglej naslednjega poveljnika"
 
-#: src/keymap.cpp:378
+#: src/keymap.cpp:392
 msgid "Toggle Overlays"
 msgstr "Nastavi prekrivanja"
 
-#: src/keymap.cpp:379
+#: src/keymap.cpp:393
 msgid "Console On/Off"
 msgstr "Konzola vklopljena/izklopljena"
 
-#: src/keymap.cpp:382
+#: src/keymap.cpp:396
 msgid "Center View on HQ"
 msgstr "Centriraj pogled na GS"
 
-#: src/keymap.cpp:384
+#: src/keymap.cpp:398
 msgid "View Unassigned Units"
 msgstr "Poglej nedodeljene enote"
 
-#: src/keymap.cpp:386
+#: src/keymap.cpp:400
 msgid "Fire at Will"
 msgstr "Streljaj po želji"
 
-#: src/keymap.cpp:388
+#: src/keymap.cpp:402
 msgid "Return to HQ"
 msgstr "Vrni se v GS"
 
-#: src/keymap.cpp:396
+#: src/keymap.cpp:410
 msgid "Send Text Message"
 msgstr "Pošlji besedilno sporočilo"
 
-#: src/keymap.cpp:399
+#: src/keymap.cpp:413
 msgid "Drop a beacon"
 msgstr ""
 
-#: src/keymap.cpp:401
+#: src/keymap.cpp:415
 #, fuzzy
 msgid "Sensor display On"
 msgstr "Domet senzorja"
 
-#: src/keymap.cpp:402
+#: src/keymap.cpp:416
 msgid "Sensor display Off"
 msgstr ""
 
-#: src/keymap.cpp:403
+#: src/keymap.cpp:417
 #, fuzzy
 msgid "Toggles shadows"
 msgstr "Omogoči sence"
 
-#: src/keymap.cpp:404
+#: src/keymap.cpp:418
 #, fuzzy
 msgid "Trap cursor"
 msgstr "Ujemi kazalec"
 
-#: src/keymap.cpp:405
+#: src/keymap.cpp:419
 #, fuzzy
 msgid "Toggle radar terrain"
 msgstr "Nastavi radar"
 
-#: src/keymap.cpp:406
+#: src/keymap.cpp:420
 msgid "Toggle ally-enemy radar view"
 msgstr ""
 
-#: src/keymap.cpp:415
+#: src/keymap.cpp:429
 msgid "Select all Combat Units"
 msgstr "Izberi vse bojne enote"
 
-#: src/keymap.cpp:416
+#: src/keymap.cpp:430
+#, fuzzy
+msgid "Select all Cyborgs"
+msgstr "Izberi vse zračne blazine"
+
+#: src/keymap.cpp:431
 msgid "Select all Heavily Damaged Units"
 msgstr "Izberi vse težko poškodovane enote"
 
-#: src/keymap.cpp:417
+#: src/keymap.cpp:432
 msgid "Select all Half-tracks"
 msgstr "Izberi vse polgosenice"
 
-#: src/keymap.cpp:418
+#: src/keymap.cpp:433
 msgid "Select all Hovers"
 msgstr "Izberi vse zračne blazine"
 
-#: src/keymap.cpp:420
+#: src/keymap.cpp:435
 msgid "Select all Units on Screen"
 msgstr "Izberi vse enote na zaslonu"
 
-#: src/keymap.cpp:421
+#: src/keymap.cpp:436
 msgid "Select all Tracks"
 msgstr "Izberi vse gosenice"
 
-#: src/keymap.cpp:422
+#: src/keymap.cpp:437
 msgid "Select EVERY unit"
 msgstr "Izberi VSE enote"
 
-#: src/keymap.cpp:423
+#: src/keymap.cpp:438
 msgid "Select all VTOLs"
 msgstr "Izberi vse NVP"
 
-#: src/keymap.cpp:424
+#: src/keymap.cpp:439
 msgid "Select all Wheels"
 msgstr "Izberi vsa kolesa"
 
-#: src/keymap.cpp:425
+#: src/keymap.cpp:440
 msgid "Show frame rate"
 msgstr ""
 
-#: src/keymap.cpp:426
+#: src/keymap.cpp:441
 #, fuzzy
 msgid "Select all Similar Units"
 msgstr "Izberi vse istovrstne enote"
 
-#: src/keymap.cpp:430
+#: src/keymap.cpp:445
+#, fuzzy
+msgid "Select all Combat Cyborgs"
+msgstr "Izberi vse bojne enote"
+
+#: src/keymap.cpp:446
+#, fuzzy
+msgid "Select all Engineers"
+msgstr "Izberi vse zračne blazine"
+
+#: src/keymap.cpp:447
+#, fuzzy
+msgid "Select all Land Combat Units"
+msgstr "Izberi vse bojne enote"
+
+#: src/keymap.cpp:448
+#, fuzzy
+msgid "Select all Mechanics"
+msgstr "Izberi vse gosenice"
+
+#: src/keymap.cpp:449
+#, fuzzy
+msgid "Select all Transporters"
+msgstr "Izberi vse gosenice"
+
+#: src/keymap.cpp:450
+#, fuzzy
+msgid "Select all Repair Tanks"
+msgstr "Izberi vse gosenice"
+
+#: src/keymap.cpp:451
+#, fuzzy
+msgid "Select all Sensor Units"
+msgstr "Izberi vse istovrstne enote"
+
+#: src/keymap.cpp:452
+#, fuzzy
+msgid "Select all Trucks"
+msgstr "Izberi vse gosenice"
+
+#: src/keymap.cpp:456
 msgid "Select next Factory"
 msgstr "Izberi naslednjo tovarno"
 
-#: src/keymap.cpp:431
+#: src/keymap.cpp:457
 msgid "Select next Research Facility"
 msgstr "Izberi naslednjo raziskovalno stavbo"
 
-#: src/keymap.cpp:432
+#: src/keymap.cpp:458
 msgid "Select next Power Generator"
 msgstr "Izberi naslednji generator moči"
 
-#: src/keymap.cpp:433
+#: src/keymap.cpp:459
 msgid "Select next Cyborg Factory"
 msgstr "Izberi naslednjo tovarno kiborgov"
 
-#: src/keymap.cpp:436
+#: src/keymap.cpp:462
 #, fuzzy
 msgid "Toggle Debug Mappings"
 msgstr "Vnosi tipk"
 
-#: src/keymap.cpp:437
+#: src/keymap.cpp:463
 msgid "Toggle display of droid path"
 msgstr ""
 
-#: src/keymap.cpp:438
+#: src/keymap.cpp:464
 msgid "Toggle display of gateways"
 msgstr ""
 
-#: src/keymap.cpp:439
+#: src/keymap.cpp:465
 msgid "Show all keyboard mappings - use pause!"
 msgstr ""
 
-#: src/keymap.cpp:440
+#: src/keymap.cpp:466
 #, fuzzy
 msgid "Toggle visibility"
 msgstr "Nastavi prekrivanja"
 
-#: src/keymap.cpp:441
+#: src/keymap.cpp:467
 #, fuzzy
 msgid "Raise tile height"
 msgstr "Zavrti desno"
 
-#: src/keymap.cpp:442
+#: src/keymap.cpp:468
 msgid "Lower tile height"
 msgstr ""
 
-#: src/keymap.cpp:443
+#: src/keymap.cpp:469
 msgid "Toggles on/off DEMO Mode"
 msgstr ""
 
-#: src/keymap.cpp:444
+#: src/keymap.cpp:470
 #, fuzzy
 msgid "End Mission"
 msgstr "Končujem misijo."
 
-#: src/keymap.cpp:445
+#: src/keymap.cpp:471
 #, fuzzy
 msgid "Toggles All fog"
 msgstr "Nastavi zavezniško stanje"
 
-#: src/keymap.cpp:446
+#: src/keymap.cpp:472
 msgid "Trigger some weather"
 msgstr ""
 
-#: src/keymap.cpp:447
+#: src/keymap.cpp:473
 msgid "Flip terrain triangle"
 msgstr ""
 
-#: src/keymap.cpp:448
+#: src/keymap.cpp:474
 #, fuzzy
 msgid "Realign height of all objects on the map"
 msgstr "Uskladi višino vseh predmetov na mapi"
 
-#: src/keymap.cpp:451
+#: src/keymap.cpp:477
 #, fuzzy
 msgid "Make all items available"
 msgstr "Vse zadeve dane na voljo"
 
-#: src/keymap.cpp:452
+#: src/keymap.cpp:478
 #, fuzzy
 msgid "Kill Selected Unit(s)"
 msgstr "Predaj izbrane enote"
 
-#: src/keymap.cpp:453
+#: src/keymap.cpp:479
 #, fuzzy
 msgid "Toggle god Mode Status"
 msgstr "Nastavi zavezniško stanje"
 
-#: src/keymap.cpp:454
+#: src/keymap.cpp:480
 #, fuzzy
 msgid "Display Options Screen"
 msgstr "Prikaži možnosti v igri"
 
-#: src/keymap.cpp:455
+#: src/keymap.cpp:481
 #, fuzzy
 msgid "Complete current research"
 msgstr "Omogoči raziskavo poveljniške kupole"
 
-#: src/keymap.cpp:456
+#: src/keymap.cpp:482
 #, fuzzy
 msgid "Toggle watch window"
 msgstr "Omogoči sence"
 
-#: src/keymap.cpp:457
+#: src/keymap.cpp:483
 msgid "Trace a game object"
 msgstr ""
 
-#: src/keymap.cpp:458
+#: src/keymap.cpp:484
 #, fuzzy
 msgid "Toggle Driving Mode"
 msgstr "Nastavi sledilno kamero"
@@ -12413,57 +12487,57 @@ msgstr "Nadaljuj igro"
 msgid "GAME SAVED :"
 msgstr "IGRA SHRANJENA:"
 
-#: src/move.cpp:2308
+#: src/move.cpp:2307
 #, c-format
 msgid "You found %u power in an oil drum."
 msgstr "Našli ste %u moči v sodu nafte"
 
-#: src/multigifts.cpp:172
+#: src/multigifts.cpp:173
 #, c-format
 msgid "%s Gives You A Visibility Report"
 msgstr "%s vam da poročilo o vidljivosti"
 
-#: src/multigifts.cpp:194
+#: src/multigifts.cpp:195
 #, c-format
 msgid "%s Gives you a %s"
 msgstr "%s vam da %s"
 
-#: src/multigifts.cpp:242
+#: src/multigifts.cpp:243
 #, c-format
 msgid "Tried to give away a non-empty %s - but this is not allowed."
 msgstr "Poskušal oddati ne-prazen %s - vendar to ni dovoljeno."
 
-#: src/multigifts.cpp:284
+#: src/multigifts.cpp:285
 #, c-format
 msgid "%s Gives You Technology Documents"
 msgstr "%s vam da tehnološke dokumente"
 
-#: src/multigifts.cpp:335
+#: src/multigifts.cpp:336
 #, c-format
 msgid "%s Gives You %u Power"
 msgstr "%s vam da %u moči"
 
-#: src/multigifts.cpp:363
+#: src/multigifts.cpp:364
 #, c-format
 msgid "%s Requests An Alliance With You"
 msgstr "%s predlaga zavezništvo z vami"
 
-#: src/multigifts.cpp:372
+#: src/multigifts.cpp:373
 #, c-format
 msgid "You Invite %s To Form An Alliance"
 msgstr "Povabili ste %s v zavezništvo"
 
-#: src/multigifts.cpp:393
+#: src/multigifts.cpp:394
 #, c-format
 msgid "%s Breaks The Alliance With %s"
 msgstr "%s je prekinil zavezništvo z %s"
 
-#: src/multigifts.cpp:423
+#: src/multigifts.cpp:424
 #, c-format
 msgid "%s Forms An Alliance With %s"
 msgstr "%s je sklenil zavezništvo z %s"
 
-#: src/multigifts.cpp:744
+#: src/multigifts.cpp:751
 #, c-format
 msgid "You Discover Blueprints For %s"
 msgstr "Odkrijete načrte za %s"
@@ -12477,411 +12551,411 @@ msgstr "Hitrost: srednje hitra"
 msgid "Insane"
 msgstr ""
 
-#: src/multiint.cpp:656
+#: src/multiint.cpp:658
 #: src/multilimit.cpp:190
 msgid "Accept Settings"
 msgstr "Sprejmi nastavitve"
 
-#: src/multiint.cpp:658
-#: src/multiint.cpp:1231
+#: src/multiint.cpp:660
+#: src/multiint.cpp:1238
 #, fuzzy
 msgid "Cancel"
 msgstr "Suličar"
 
-#: src/multiint.cpp:669
+#: src/multiint.cpp:671
 msgid "IP Address or Machine Name"
 msgstr "IP naslov ali ime računalnika"
 
-#: src/multiint.cpp:715
+#: src/multiint.cpp:717
 msgid "CONNECTION"
 msgstr "POVEZAVA"
 
-#: src/multiint.cpp:720
+#: src/multiint.cpp:722
 msgid "Lobby"
 msgstr "Veža"
 
-#: src/multiint.cpp:721
+#: src/multiint.cpp:723
 msgid "IP"
 msgstr "IP"
 
-#: src/multiint.cpp:940
+#: src/multiint.cpp:947
 #, fuzzy
 msgid "[Password required]"
 msgstr "*** geslo NI potrebno! ***"
 
-#: src/multiint.cpp:944
+#: src/multiint.cpp:951
 msgid "[No Tanks]"
 msgstr ""
 
-#: src/multiint.cpp:948
+#: src/multiint.cpp:955
 #, fuzzy
 msgid "[No Cyborgs]"
 msgstr "Izdeluje kiborge"
 
-#: src/multiint.cpp:952
+#: src/multiint.cpp:959
 msgid "[No VTOLs]"
 msgstr ""
 
-#: src/multiint.cpp:956
+#: src/multiint.cpp:963
 #, c-format
 msgid "Hosted by %s"
 msgstr ""
 
-#: src/multiint.cpp:960
+#: src/multiint.cpp:967
 #, c-format
 msgid "Hosted by %s —%s"
 msgstr ""
 
-#: src/multiint.cpp:980
+#: src/multiint.cpp:987
 msgid "No games are available"
 msgstr "Nobenih iger ni na voljo"
 
-#: src/multiint.cpp:983
+#: src/multiint.cpp:990
 msgid "Game is full"
 msgstr "Igra je polna"
 
-#: src/multiint.cpp:987
+#: src/multiint.cpp:994
 msgid "You were kicked!"
 msgstr "Bili ste brcnjeni!"
 
-#: src/multiint.cpp:990
+#: src/multiint.cpp:997
 msgid "Wrong Game Version!"
 msgstr "Napačna verzija igre!"
 
-#: src/multiint.cpp:993
+#: src/multiint.cpp:1000
 msgid "You have an incompatible mod."
 msgstr ""
 
-#: src/multiint.cpp:997
+#: src/multiint.cpp:1004
 msgid "Host couldn't send file?"
 msgstr ""
 
-#: src/multiint.cpp:1001
+#: src/multiint.cpp:1008
 msgid "Incorrect Password!"
 msgstr "Napačno geslo!"
 
-#: src/multiint.cpp:1004
+#: src/multiint.cpp:1011
 msgid "Host has dropped connection!"
 msgstr ""
 
-#: src/multiint.cpp:1008
+#: src/multiint.cpp:1015
 msgid "Connection Error"
 msgstr "Napaka v povezavi"
 
-#: src/multiint.cpp:1112
+#: src/multiint.cpp:1119
 msgid "Searching"
 msgstr "Iskanje"
 
-#: src/multiint.cpp:1181
+#: src/multiint.cpp:1188
 msgid "GAMES"
 msgstr "IGRE"
 
-#: src/multiint.cpp:1189
+#: src/multiint.cpp:1196
 msgid "Refresh Games List"
 msgstr "Osveži spisek iger"
 
-#: src/multiint.cpp:1211
+#: src/multiint.cpp:1218
 #, fuzzy
 msgid "Enter Password:"
 msgstr "Najprej vnesite geslo"
 
-#: src/multiint.cpp:1229
+#: src/multiint.cpp:1236
 msgid "OK"
 msgstr ""
 
-#: src/multiint.cpp:1347
+#: src/multiint.cpp:1354
 msgid "Tanks disabled!!"
 msgstr ""
 
-#: src/multiint.cpp:1348
+#: src/multiint.cpp:1355
 #, fuzzy
 msgid "Cyborgs disabled."
 msgstr "Nov kiborg na voljo"
 
-#: src/multiint.cpp:1349
+#: src/multiint.cpp:1356
 msgid "VTOLs disabled."
 msgstr ""
 
-#: src/multiint.cpp:1396
-#: src/multiint.cpp:1405
+#: src/multiint.cpp:1403
+#: src/multiint.cpp:1412
 msgid "Select Game Name"
 msgstr "Izberite ime igre"
 
-#: src/multiint.cpp:1397
+#: src/multiint.cpp:1404
 #, fuzzy
 msgid "One-Player Skirmish"
 msgstr "Enoigralski spopad"
 
-#: src/multiint.cpp:1408
+#: src/multiint.cpp:1415
 msgid "Select Map"
 msgstr "Izberite mapo"
 
-#: src/multiint.cpp:1416
+#: src/multiint.cpp:1423
 msgid "Click to set Password"
 msgstr "Kliknite za nastavitev gesla"
 
-#: src/multiint.cpp:1426
-#: src/multiint.cpp:1427
+#: src/multiint.cpp:1433
+#: src/multiint.cpp:1434
 #, fuzzy
 msgid "Scavengers"
 msgstr "Plenilec"
 
-#: src/multiint.cpp:1429
+#: src/multiint.cpp:1436
 #, fuzzy
 msgid "No Scavengers"
 msgstr "Plenilec"
 
-#: src/multiint.cpp:1459
+#: src/multiint.cpp:1466
 msgid "Select Player Name"
 msgstr "Izberite ime igralca"
 
-#: src/multiint.cpp:1462
+#: src/multiint.cpp:1469
 #: src/multimenu.cpp:792
 msgid "Alliances"
 msgstr "Zavezništva"
 
-#: src/multiint.cpp:1465
+#: src/multiint.cpp:1472
 msgid "No Alliances"
 msgstr "Nobenih zavezništev"
 
-#: src/multiint.cpp:1467
+#: src/multiint.cpp:1474
 msgid "Allow Alliances"
 msgstr "Dovoli zavezništva"
 
-#: src/multiint.cpp:1471
+#: src/multiint.cpp:1478
 msgid "Locked Teams"
 msgstr "Zaklenjene skupine"
 
-#: src/multiint.cpp:1497
+#: src/multiint.cpp:1504
 msgid "Low Power Levels"
 msgstr "Nizke stopnje moči"
 
-#: src/multiint.cpp:1499
+#: src/multiint.cpp:1506
 msgid "Medium Power Levels"
 msgstr "Srednje velike stopnje moči"
 
-#: src/multiint.cpp:1501
+#: src/multiint.cpp:1508
 msgid "High Power Levels"
 msgstr "Visoke stopnje moči"
 
-#: src/multiint.cpp:1533
+#: src/multiint.cpp:1540
 msgid "Base"
 msgstr "Baza"
 
-#: src/multiint.cpp:1535
+#: src/multiint.cpp:1542
 msgid "Start with No Bases"
 msgstr "Začnite brez baz"
 
-#: src/multiint.cpp:1537
+#: src/multiint.cpp:1544
 msgid "Start with Bases"
 msgstr "Začnite z bazami"
 
-#: src/multiint.cpp:1539
+#: src/multiint.cpp:1546
 msgid "Start with Advanced Bases"
 msgstr "Začnite z naprednimi bazami"
 
-#: src/multiint.cpp:1571
+#: src/multiint.cpp:1578
 msgid "Map Preview"
 msgstr "Predogled mape"
 
-#: src/multiint.cpp:1573
+#: src/multiint.cpp:1580
 msgid "Click to see Map"
 msgstr "Kliknite za ogled mape"
 
-#: src/multiint.cpp:1587
+#: src/multiint.cpp:1594
 msgid "Start Hosting Game"
 msgstr "Začnite gostiti igro"
 
-#: src/multiint.cpp:1595
+#: src/multiint.cpp:1602
 #, fuzzy
 msgid "Show Structure Limits"
 msgstr "Nastavite gradbene omejitve"
 
-#: src/multiint.cpp:1595
+#: src/multiint.cpp:1602
 msgid "Set Structure Limits"
 msgstr "Nastavite gradbene omejitve"
 
-#: src/multiint.cpp:1673
+#: src/multiint.cpp:1680
 msgid "DIFFICULTY"
 msgstr ""
 
-#: src/multiint.cpp:1687
+#: src/multiint.cpp:1694
 msgid "Less aggressive"
 msgstr ""
 
-#: src/multiint.cpp:1688
+#: src/multiint.cpp:1695
 #, fuzzy
 msgid "Plays nice"
 msgstr "Igralec"
 
-#: src/multiint.cpp:1689
+#: src/multiint.cpp:1696
 msgid "No holds barred"
 msgstr ""
 
-#: src/multiint.cpp:1690
+#: src/multiint.cpp:1697
 #, fuzzy
 msgid "Starts with advantages"
 msgstr "Začnite z naprednimi bazami"
 
-#: src/multiint.cpp:1718
+#: src/multiint.cpp:1725
 msgid "CHOOSE AI"
 msgstr ""
 
-#: src/multiint.cpp:1734
+#: src/multiint.cpp:1741
 msgid "Allow human players to join in this slot"
 msgstr ""
 
-#: src/multiint.cpp:1742
+#: src/multiint.cpp:1749
 msgid "Leave this slot unused"
 msgstr ""
 
-#: src/multiint.cpp:2148
+#: src/multiint.cpp:2168
 msgid "Team"
 msgstr "Skupina"
 
-#: src/multiint.cpp:2191
+#: src/multiint.cpp:2211
 msgid "You cannot change difficulty in a challenge"
 msgstr ""
 
-#: src/multiint.cpp:2191
+#: src/multiint.cpp:2211
 #, fuzzy
 msgid "Click to change difficulty"
 msgstr "Kliknite za nastavitev gesla"
 
-#: src/multiint.cpp:2206
+#: src/multiint.cpp:2226
 #, fuzzy
 msgid "Waiting for player"
 msgstr "Čakanje ostalih igralcev"
 
-#: src/multiint.cpp:2206
+#: src/multiint.cpp:2226
 #, fuzzy
 msgid "Player is ready"
 msgstr "Igralec izpadel"
 
-#: src/multiint.cpp:2206
+#: src/multiint.cpp:2226
 msgid "Click when ready"
 msgstr "Kliknite, ko boste pripravljeni"
 
-#: src/multiint.cpp:2213
+#: src/multiint.cpp:2233
 msgid "READY?"
 msgstr ""
 
-#: src/multiint.cpp:2257
+#: src/multiint.cpp:2277
 msgid "PLAYERS"
 msgstr "IGRALCI"
 
-#: src/multiint.cpp:2292
+#: src/multiint.cpp:2312
 #, fuzzy
 msgid "Click to change to this slot"
 msgstr "Kliknite za nastavitev gesla"
 
-#: src/multiint.cpp:2320
+#: src/multiint.cpp:2340
 #, fuzzy
 msgid "Choose Team"
 msgstr "Zaklenjene skupine"
 
-#: src/multiint.cpp:2350
+#: src/multiint.cpp:2370
 #, fuzzy
 msgid "Click to change player colour"
 msgstr "Radar kaže barve igralca"
 
-#: src/multiint.cpp:2378
+#: src/multiint.cpp:2398
 #, fuzzy
 msgid "Click to change player position"
 msgstr "Straži položaj"
 
-#: src/multiint.cpp:2382
+#: src/multiint.cpp:2402
 #, fuzzy
 msgid "Click to change AI"
 msgstr "Kliknite za nastavitev gesla"
 
-#: src/multiint.cpp:2443
+#: src/multiint.cpp:2463
 msgid "CHAT"
 msgstr "POGOVOR"
 
-#: src/multiint.cpp:2475
+#: src/multiint.cpp:2495
 msgid "All players need to have the same mods to join your game."
 msgstr ""
 
-#: src/multiint.cpp:2516
+#: src/multiint.cpp:2536
 msgid "Connecting to the lobby server..."
 msgstr ""
 
-#: src/multiint.cpp:2663
+#: src/multiint.cpp:2683
 #, fuzzy, c-format
 msgid "*** password [%s] is now required! ***"
 msgstr "*** geslo je sedaj potrebno! ***"
 
-#: src/multiint.cpp:2671
+#: src/multiint.cpp:2691
 msgid "*** password is NOT required! ***"
 msgstr "*** geslo NI potrebno! ***"
 
-#: src/multiint.cpp:2886
+#: src/multiint.cpp:2906
 msgid "Sorry! Failed to host the game."
 msgstr ""
 
-#: src/multiint.cpp:3007
+#: src/multiint.cpp:3027
 msgid "'Locked Teams' mode enabled"
 msgstr "Omogočen način 'zaklenjene skupine'"
 
-#: src/multiint.cpp:3091
+#: src/multiint.cpp:3111
 #, c-format
 msgid "The host has kicked %s from the game!"
 msgstr "Gostitelj je brcnil %s iz igre!"
 
-#: src/multiint.cpp:3157
+#: src/multiint.cpp:3177
 msgid "Host is Starting Game"
 msgstr "Gostitelj začenja igro"
 
-#: src/multiint.cpp:3704
+#: src/multiint.cpp:3724
 msgid "Can't connect to lobby server!"
 msgstr ""
 
-#: src/multiint.cpp:3791
+#: src/multiint.cpp:3811
 #, c-format
 msgid "Mods: %s"
 msgstr ""
 
-#: src/multiint.cpp:3798
+#: src/multiint.cpp:3818
 msgid "Mods: None!"
 msgstr ""
 
-#: src/multiint.cpp:3808
+#: src/multiint.cpp:3828
 #, fuzzy, c-format
 msgid "Version: %s"
 msgstr "Verzija %s%s%s%s"
 
-#: src/multiint.cpp:3859
+#: src/multiint.cpp:3879
 #, fuzzy, c-format
 msgid "Click to take player slot %d"
 msgstr "Radar kaže barve igralca"
 
-#: src/multiint.cpp:3868
-#: src/multiint.cpp:4061
+#: src/multiint.cpp:3888
+#: src/multiint.cpp:4081
 msgid "Open"
 msgstr ""
 
-#: src/multiint.cpp:3868
-#: src/multiint.cpp:4062
+#: src/multiint.cpp:3888
+#: src/multiint.cpp:4082
 #, fuzzy
 msgid "Closed"
 msgstr "Zapri"
 
-#: src/multiint.cpp:3919
+#: src/multiint.cpp:3939
 #, c-format
 msgid "Sending Map: %d%% "
 msgstr ""
 
-#: src/multiint.cpp:3927
+#: src/multiint.cpp:3947
 #, c-format
 msgid "Map: %d%% downloaded"
 msgstr ""
 
-#: src/multiint.cpp:3953
+#: src/multiint.cpp:3973
 msgid "HOST"
 msgstr ""
 
-#: src/multiint.cpp:3960
+#: src/multiint.cpp:3980
 #: src/multimenu.cpp:808
 msgid "Ping"
 msgstr "Ping"
@@ -12991,81 +13065,81 @@ msgstr "Predaj izbrane enote"
 msgid "Give Power To Player"
 msgstr "Daj igralcu moč"
 
-#: src/multiplay.cpp:257
+#: src/multiplay.cpp:263
 #, c-format
 msgid "Kicking player %s, because they tried to bypass data integrity check!"
 msgstr ""
 
-#: src/multiplay.cpp:1035
+#: src/multiplay.cpp:1037
 #, fuzzy
 msgid "(allies"
 msgstr "Zavezništva"
 
-#: src/multiplay.cpp:1043
+#: src/multiplay.cpp:1045
 msgid "(private to "
 msgstr ""
 
-#: src/multiplay.cpp:1056
+#: src/multiplay.cpp:1058
 msgid "[invalid]"
 msgstr ""
 
-#: src/multiplay.cpp:1923
+#: src/multiplay.cpp:1931
 msgid "Green"
 msgstr "Zelena"
 
-#: src/multiplay.cpp:1924
+#: src/multiplay.cpp:1932
 msgid "Orange"
 msgstr "Oranžna"
 
-#: src/multiplay.cpp:1925
+#: src/multiplay.cpp:1933
 msgid "Grey"
 msgstr "Siva"
 
-#: src/multiplay.cpp:1927
+#: src/multiplay.cpp:1935
 msgid "Red"
 msgstr "Rdeča"
 
-#: src/multiplay.cpp:1928
+#: src/multiplay.cpp:1936
 msgid "Blue"
 msgstr "Modra"
 
-#: src/multiplay.cpp:1929
+#: src/multiplay.cpp:1937
 msgid "Pink"
 msgstr "Roza"
 
-#: src/multiplay.cpp:1930
+#: src/multiplay.cpp:1938
 msgid "Cyan"
 msgstr "Cijan"
 
-#: src/multiplay.cpp:1931
+#: src/multiplay.cpp:1939
 msgid "Yellow"
 msgstr ""
 
-#: src/multiplay.cpp:1932
+#: src/multiplay.cpp:1940
 msgid "Purple"
 msgstr ""
 
-#: src/multiplay.cpp:1933
+#: src/multiplay.cpp:1941
 msgid "White"
 msgstr ""
 
-#: src/multiplay.cpp:1934
+#: src/multiplay.cpp:1942
 msgid "Bright blue"
 msgstr ""
 
-#: src/multiplay.cpp:1935
+#: src/multiplay.cpp:1943
 msgid "Neon green"
 msgstr ""
 
-#: src/multiplay.cpp:1936
+#: src/multiplay.cpp:1944
 msgid "Infrared"
 msgstr ""
 
-#: src/multiplay.cpp:1937
+#: src/multiplay.cpp:1945
 msgid "Ultraviolet"
 msgstr ""
 
-#: src/multiplay.cpp:1938
+#: src/multiplay.cpp:1946
 msgid "Brown"
 msgstr ""
 
@@ -13073,26 +13147,26 @@ msgstr ""
 msgid "We can't do that! We must be a Cyborg unit to use a Cyborg Transport!"
 msgstr ""
 
-#: src/qtscriptfuncs.cpp:1514
+#: src/qtscriptfuncs.cpp:1578
 #: src/scriptfuncs.cpp:3259
 msgid "YOU ARE VICTORIOUS!"
 msgstr "ZMAGALI STE!"
 
-#: src/qtscriptfuncs.cpp:1519
+#: src/qtscriptfuncs.cpp:1583
 #: src/scriptfuncs.cpp:3263
 msgid "YOU WERE DEFEATED!"
 msgstr "BILI STE PREMAGANI!"
 
-#: src/research.cpp:1156
+#: src/research.cpp:1151
 #, c-format
 msgid "Research completed: %s"
 msgstr "Raziskava dokončana: %s"
 
-#: src/research.cpp:1161
+#: src/research.cpp:1156
 msgid "Research Completed"
 msgstr "Raziskava dokončana"
 
-#: src/research.cpp:1897
+#: src/research.cpp:1880
 msgid "Research Award"
 msgstr "Raziskovalna nagrada"
 
@@ -13224,7 +13298,24 @@ msgstr "Prejet poziv od %s!"
 msgid "Beacon %d"
 msgstr "Poziv %d"
 
-#: src/selection.cpp:116
+#: src/selection.cpp:422
+#: src/selection.cpp:502
+msgid "Unable to locate any repair units!"
+msgstr "Ni mogoče najti nobenih enot za popravila!"
+
+#: src/selection.cpp:425
+msgid "Unable to locate any Trucks!"
+msgstr "Ni mogoče najti nobenih tovornjakov!"
+
+#: src/selection.cpp:428
+msgid "Unable to locate any Sensor Units!"
+msgstr "Ni mogoče najti nobenih senzorskih enot!"
+
+#: src/selection.cpp:431
+msgid "Unable to locate any Commanders!"
+msgstr "Ni mogoče najti nobenih poveljnikov!"
+
+#: src/selection.cpp:701
 #, c-format
 msgid "%u unit selected"
 msgid_plural "%u units selected"
@@ -13233,29 +13324,12 @@ msgstr[1] "%u enota izbrana"
 msgstr[2] "%u enoti izbrani"
 msgstr[3] "%u enote izbrane"
 
-#: src/selection.cpp:433
-#: src/selection.cpp:520
-msgid "Unable to locate any repair units!"
-msgstr "Ni mogoče najti nobenih enot za popravila!"
-
-#: src/selection.cpp:436
-msgid "Unable to locate any Trucks!"
-msgstr "Ni mogoče najti nobenih tovornjakov!"
-
-#: src/selection.cpp:439
-msgid "Unable to locate any Sensor Units!"
-msgstr "Ni mogoče najti nobenih senzorskih enot!"
-
-#: src/selection.cpp:442
-msgid "Unable to locate any Commanders!"
-msgstr "Ni mogoče najti nobenih poveljnikov!"
-
-#: src/structure.cpp:2555
+#: src/structure.cpp:2563
 msgid "Command Control Limit Reached - Production Halted"
 msgstr "Meja poveljniškega nadzora dosežena - izdelava ustavljena"
 
-#: src/structure.cpp:5564
-#: src/structure.cpp:5589
+#: src/structure.cpp:5569
+#: src/structure.cpp:5594
 #, fuzzy, c-format
 msgid "%s - %u Unit assigned - Damage %3.0f%%"
 msgid_plural "%s - %u Units assigned - Damage %3.0f%%"
@@ -13264,50 +13338,50 @@ msgstr[1] "%s - %u enota dodeljena"
 msgstr[2] "%s - %u enoti dodeljeni"
 msgstr[3] "%s - %u enote dodeljene"
 
-#: src/structure.cpp:5594
-#: src/structure.cpp:5662
-#: src/structure.cpp:5677
-#: src/structure.cpp:5691
+#: src/structure.cpp:5599
+#: src/structure.cpp:5667
+#: src/structure.cpp:5682
+#: src/structure.cpp:5696
 #, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - Poškodbe %3.0f%%"
 
-#: src/structure.cpp:5644
+#: src/structure.cpp:5649
 #, fuzzy, c-format
 msgid "%s - Connected %u of %u - Damage %3.0f%%"
 msgstr "%s - povezane %u od %u"
 
-#: src/structure.cpp:5807
-#: src/structure.cpp:5852
+#: src/structure.cpp:5812
+#: src/structure.cpp:5857
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - elektronsko poškodovan"
 
-#: src/structure.cpp:6103
+#: src/structure.cpp:6108
 msgid "Electronic Reward - Visibility Report"
 msgstr "Elektronska nagrada - poročilo o vidljivosti"
 
-#: src/structure.cpp:6143
+#: src/structure.cpp:6148
 msgid "Factory Reward - Propulsion"
 msgstr "Nagrada tovarne - pogon"
 
-#: src/structure.cpp:6167
+#: src/structure.cpp:6172
 msgid "Factory Reward - Body"
 msgstr "Nagrada tovarne - telo"
 
-#: src/structure.cpp:6191
+#: src/structure.cpp:6196
 msgid "Factory Reward - Weapon"
 msgstr "Nagrada tovarne - orožje"
 
-#: src/structure.cpp:6200
+#: src/structure.cpp:6205
 msgid "Factory Reward - Nothing"
 msgstr "Nagrada tovarne - nič"
 
-#: src/structure.cpp:6228
+#: src/structure.cpp:6233
 msgid "Repair Facility Award - Repair"
 msgstr "Nagrada stavbe za popravila - popravilo"
 
-#: src/structure.cpp:6235
+#: src/structure.cpp:6240
 msgid "Repair Facility Award - Nothing"
 msgstr "Nagrada stavbe za popravila - nič"
 
@@ -13320,7 +13394,7 @@ msgstr "Odpošlji prevoz"
 msgid "There is not enough room in the Transport!"
 msgstr ""
 
-#: src/transporter.cpp:1660
+#: src/transporter.cpp:1654
 msgid "Reinforcements landing"
 msgstr "Okrepitve pristajajo"
 
@@ -13343,6 +13417,12 @@ msgstr "- Zgrajen %s"
 #, fuzzy, c-format
 msgid "Version %s-%s%s%s%s"
 msgstr "Verzija %s%s%s%s"
+
+#~ msgid "CHEATS ARE NOW ENABLED!"
+#~ msgstr "GOLJUFIJE SO SEDAJ OMOGOČENE!"
+
+#~ msgid "CHEATS ARE NOW DISABLED!"
+#~ msgstr "GOLJUFIJE SO SEDAJ ONEMOGOČENE!"
 
 #~ msgid "Activate self-test"
 #~ msgstr "Sproži samopregled"
