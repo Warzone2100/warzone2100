@@ -90,6 +90,15 @@ void recvMultiStats(NETQUEUE queue)
 
 		if (playerIndex >= MAX_PLAYERS)
 		{
+			NETend();
+			return;
+		}
+
+
+		if (playerIndex != queue.index && queue.index != NET_HOST_ONLY)
+		{
+			HandleBadParam("NET_PLAYER_STATS given incorrect params.", playerIndex, queue.index);
+			NETend();
 			return;
 		}
 

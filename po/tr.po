@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2012-02-19 21:22+0100\n"
+"POT-Creation-Date: 2012-02-20 00:33+0100\n"
 "PO-Revision-Date: 2012-01-10 22:06+0200\n"
 "Last-Translator: Ayhan GÖRGÜLÜ <ayhangorgulu45@gmail.com>\n"
 "Language-Team: Turkey <warzone-dev@gna.org>\n"
@@ -1098,7 +1098,7 @@ msgstr "Tüm Cyborg Fabrikaları otomatik olarak geliştirildi"
 #: data/base/messages/strings/names.txt:399
 #: data/base/messages/strings/names.txt:782
 #: data/mp/messages/strings/names.txt:398
-#: data/mp/messages/strings/names.txt:791
+#: data/mp/messages/strings/names.txt:792
 msgid "Cyborg Factory"
 msgstr "Cyborg Fabrikası"
 
@@ -1226,7 +1226,7 @@ msgstr "Hasar Direnci Arttırıldı"
 
 #: data/base/messages/resmessages1.rmsg:313
 #: data/base/messages/strings/names.txt:805
-#: data/mp/messages/strings/names.txt:814
+#: data/mp/messages/strings/names.txt:815
 msgid "Reinforced Base Structure Materials"
 msgstr "Desteklenmiş Üs Binası Materyali"
 
@@ -1363,7 +1363,7 @@ msgstr "Araç Motoru Güçlendirildi"
 
 #: data/base/messages/resmessages1.rmsg:390
 #: data/base/messages/strings/names.txt:942
-#: data/mp/messages/strings/names.txt:953
+#: data/mp/messages/strings/names.txt:954
 msgid "Fuel Injection Engine"
 msgstr "Yakıt Enjeksiyon Sistemi"
 
@@ -1476,7 +1476,7 @@ msgstr "Hız: Yavaş"
 
 #: data/base/messages/resmessages1.rmsg:445
 #: data/base/messages/strings/names.txt:976
-#: data/mp/messages/strings/names.txt:987
+#: data/mp/messages/strings/names.txt:988
 msgid "Wheeled Propulsion"
 msgstr "Tekerlekli Yürütücü"
 
@@ -2172,7 +2172,7 @@ msgstr "Fabrika Üretim Hızı Artırıldı"
 #: data/base/messages/resmessages2.rmsg:313
 #: data/base/messages/strings/names.txt:835
 #: data/base/messages/strings/resstrings.txt:390
-#: data/mp/messages/strings/names.txt:844
+#: data/mp/messages/strings/names.txt:845
 #: data/mp/messages/strings/resstrings.txt:418
 msgid "Dedicated Synaptic Link Data Analysis"
 msgstr "Gelişmiş Sinaptik Bağlantı Veri Analizi"
@@ -2180,7 +2180,7 @@ msgstr "Gelişmiş Sinaptik Bağlantı Veri Analizi"
 #: data/base/messages/resmessages2.rmsg:324
 #: data/base/messages/strings/names.txt:808
 #: data/base/messages/strings/resstrings.txt:400
-#: data/mp/messages/strings/names.txt:817
+#: data/mp/messages/strings/names.txt:818
 #: data/mp/messages/strings/resstrings.txt:428
 msgid "Hardened Base Structure Materials"
 msgstr "Sertleştirilmiş Üs Binası Materyalleri"
@@ -2216,7 +2216,7 @@ msgstr "DİvK Yeniden Silahlandırma Süresi Kısaltıldı"
 #: data/base/messages/resmessages2.rmsg:346
 #: data/base/messages/strings/names.txt:843
 #: data/base/messages/strings/resstrings.txt:422
-#: data/mp/messages/strings/names.txt:852
+#: data/mp/messages/strings/names.txt:853
 #: data/mp/messages/strings/resstrings.txt:450
 msgid "Automated VTOL Rearming"
 msgstr "Otomatik DİvK Y. Silahlandırma"
@@ -2326,7 +2326,7 @@ msgstr "Kobraya göre üretimi daha uzun sürer ve maliyeti daha fazladır"
 #: data/base/messages/resmessages2.rmsg:423
 #: data/base/messages/strings/names.txt:945
 #: data/base/messages/strings/resstrings.txt:560
-#: data/mp/messages/strings/names.txt:956
+#: data/mp/messages/strings/names.txt:957
 #: data/mp/messages/strings/resstrings.txt:595
 msgid "Turbo-Charged Engine"
 msgstr "Çift Motor"
@@ -2875,13 +2875,13 @@ msgstr "Buharlı Türbin Üretim Gücü Arttı"
 # Wenn man Brain als KI-gestütztes Forschungsorgan betrachtet, könnte die Übersetzung hinhauen -Kreuvf
 #: data/base/messages/resmessages3.rmsg:379
 #: data/base/messages/strings/names.txt:838
-#: data/mp/messages/strings/names.txt:847
+#: data/mp/messages/strings/names.txt:848
 msgid "Neural Synapse Research Brain"
 msgstr "Sinirsel Sinaptik Araştırma Beyni"
 
 #: data/base/messages/resmessages3.rmsg:390
 #: data/base/messages/strings/names.txt:811
-#: data/mp/messages/strings/names.txt:820
+#: data/mp/messages/strings/names.txt:821
 msgid "Advanced Base Structure Materials"
 msgstr "Gelişmiş Üs Binası Materyali"
 
@@ -2896,7 +2896,7 @@ msgstr "Gelişmiş DİvK Üretimi"
 
 #: data/base/messages/resmessages3.rmsg:423
 #: data/base/messages/strings/names.txt:846
-#: data/mp/messages/strings/names.txt:855
+#: data/mp/messages/strings/names.txt:856
 msgid "Robotic VTOL Rearming"
 msgstr "Robotik DİvK Y. Silahlandırma"
 
@@ -2997,7 +2997,7 @@ msgstr "Üretimde Çok Pahalı"
 
 #: data/base/messages/resmessages3.rmsg:566
 #: data/base/messages/strings/names.txt:948
-#: data/mp/messages/strings/names.txt:959
+#: data/mp/messages/strings/names.txt:960
 msgid "Gas Turbine Engine"
 msgstr "Gaz Türbinli Motor"
 
@@ -4586,7 +4586,7 @@ msgid "New Design"
 msgstr "Yeni Tasarım"
 
 #: data/base/messages/strings/names.txt:15
-#: src/design.cpp:1301
+#: src/design.cpp:1302
 msgid "Transport"
 msgstr "Taşıyıcı"
 
@@ -4597,16 +4597,15 @@ msgstr "Taşıyıcı"
 #: data/mp/messages/strings/names.txt:16
 #: data/mp/messages/strings/names.txt:154
 #: data/mp/messages/strings/names.txt:314
-#: data/mp/messages/strings/names.txt:1471
+#: data/mp/messages/strings/names.txt:1472
 msgid "Truck"
 msgstr "Kamyon"
 
 #: data/base/messages/strings/names.txt:17
 #: data/base/messages/strings/names.txt:173
-#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1832
 #: data/mp/messages/strings/names.txt:17
 #: data/mp/messages/strings/names.txt:176
-#: data/mp/messages/strings/names.txt:1838
+#: data/mp/messages/strings/names.txt:1839
 msgid "Machinegun Viper Wheels"
 msgstr "Makinalı Engerek Tekerlekler"
 
@@ -4634,7 +4633,7 @@ msgstr "Hafif Topçu Engerek Paletler"
 #: data/base/messages/strings/names.txt:148
 #: data/base/messages/strings/names.txt:1421
 #: data/mp/messages/strings/names.txt:149
-#: data/mp/messages/strings/names.txt:1435
+#: data/mp/messages/strings/names.txt:1436
 msgid "Heavy Machinegun Cobra Half-tracks"
 msgstr "Ağır Makinalı Kobra Yarım Paletler"
 
@@ -4663,9 +4662,8 @@ msgid "Repair Turret Viper Half-tracks"
 msgstr "Tamir Tareti Engerek Yarım Paletler"
 
 #: data/base/messages/strings/names.txt:174
-#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1833
 #: data/mp/messages/strings/names.txt:177
-#: data/mp/messages/strings/names.txt:1839
+#: data/mp/messages/strings/names.txt:1840
 msgid "Twin Machinegun Viper Wheels"
 msgstr "Çift Makinalı Engerek Tekerlekler"
 
@@ -4680,9 +4678,8 @@ msgid "Heavy Machinegun Viper Half-tracks"
 msgstr "Ağır Makinalı Engerek Yarım Paletler"
 
 #: data/base/messages/strings/names.txt:177
-#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1840
 #: data/mp/messages/strings/names.txt:180
-#: data/mp/messages/strings/names.txt:1846
+#: data/mp/messages/strings/names.txt:1847
 msgid "Heavy Machinegun Viper Tracks"
 msgstr "Ağır Makinalı Engerek Paletler"
 
@@ -4706,7 +4703,7 @@ msgstr "Sığınak Yokedici Engerek Tekerlekler"
 
 #: data/base/messages/strings/names.txt:183
 #: data/mp/messages/strings/names.txt:186
-#: data/mp/messages/strings/names.txt:1360
+#: data/mp/messages/strings/names.txt:1361
 msgid "Medium Cannon Cobra Tracks"
 msgstr "Orta Topçu Kobra Paletler"
 
@@ -4718,7 +4715,7 @@ msgstr "Ağır Topçu Kobra Paletler"
 #: data/base/messages/strings/names.txt:185
 #: data/base/messages/strings/names.txt:1344
 #: data/mp/messages/strings/names.txt:188
-#: data/mp/messages/strings/names.txt:1358
+#: data/mp/messages/strings/names.txt:1359
 msgid "Cobra Truck"
 msgstr "Kobra Kamyon"
 
@@ -4728,7 +4725,7 @@ msgstr "Algılayıcı Kobra Yarım Paletler"
 
 #: data/base/messages/strings/names.txt:187
 #: data/mp/messages/strings/names.txt:190
-#: data/mp/messages/strings/names.txt:1359
+#: data/mp/messages/strings/names.txt:1360
 msgid "Flamer Cobra Tracks"
 msgstr "Alev Atıcı Kobra Paletler"
 
@@ -4745,7 +4742,7 @@ msgstr "Komuta Tareti Kobra Yarım Paletler"
 #: data/base/messages/strings/names.txt:190
 #: data/base/messages/strings/names.txt:1420
 #: data/mp/messages/strings/names.txt:193
-#: data/mp/messages/strings/names.txt:1434
+#: data/mp/messages/strings/names.txt:1435
 msgid "Lancer Cobra Half-tracks"
 msgstr "Roketatar Kobra Yarım Paletler"
 
@@ -4759,25 +4756,23 @@ msgid "Light Cannon Python Tracks"
 msgstr "Hafif Topçu Piton Paletler"
 
 #: data/base/messages/strings/names.txt:194
-#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1923
 #: data/mp/messages/strings/names.txt:197
-#: data/mp/messages/strings/names.txt:1929
+#: data/mp/messages/strings/names.txt:1930
 msgid "Medium Cannon Python Tracks"
 msgstr "Orta Topçu Piton Paletler"
 
 #: data/base/messages/strings/names.txt:195
-#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1848
 #: data/mp/messages/strings/names.txt:198
-#: data/mp/messages/strings/names.txt:1357
-#: data/mp/messages/strings/names.txt:1511
-#: data/mp/messages/strings/names.txt:1854
+#: data/mp/messages/strings/names.txt:1358
+#: data/mp/messages/strings/names.txt:1512
+#: data/mp/messages/strings/names.txt:1855
 msgid "Heavy Cannon Python Tracks"
 msgstr "Ağır Topçu Piton Paletler"
 
 #: data/base/messages/strings/names.txt:196
 #: data/base/messages/strings/names.txt:1422
 #: data/mp/messages/strings/names.txt:199
-#: data/mp/messages/strings/names.txt:1436
+#: data/mp/messages/strings/names.txt:1437
 msgid "Command Turret Python Tracks"
 msgstr "Komta Tareti Piton Paletler"
 
@@ -4852,7 +4847,7 @@ msgstr "Makinalı"
 #: data/mp/messages/strings/names.txt:216
 #: data/mp/messages/strings/names.txt:479
 #: data/mp/messages/strings/names.txt:537
-#: data/mp/messages/strings/names.txt:1069
+#: data/mp/messages/strings/names.txt:1070
 msgid "Flamer"
 msgstr "Alev Atıcı"
 
@@ -5051,14 +5046,14 @@ msgstr "Yarım Paletler III"
 #: data/base/messages/strings/names.txt:330
 #: data/base/messages/strings/names.txt:693
 #: data/mp/messages/strings/names.txt:333
-#: data/mp/messages/strings/names.txt:698
+#: data/mp/messages/strings/names.txt:699
 msgid "Cyborg Propulsion II"
 msgstr "Cyborg-Antrieb II"
 
 #: data/base/messages/strings/names.txt:331
 #: data/base/messages/strings/names.txt:694
 #: data/mp/messages/strings/names.txt:334
-#: data/mp/messages/strings/names.txt:699
+#: data/mp/messages/strings/names.txt:700
 msgid "Cyborg Propulsion III"
 msgstr "Cyborg-Antrieb III"
 
@@ -5070,7 +5065,7 @@ msgstr "Denizci"
 #: data/base/messages/strings/names.txt:341
 #: data/base/messages/strings/names.txt:692
 #: data/mp/messages/strings/names.txt:342
-#: data/mp/messages/strings/names.txt:697
+#: data/mp/messages/strings/names.txt:698
 msgid "Cyborg Propulsion"
 msgstr "Cyborg Yürütücü"
 
@@ -5084,7 +5079,7 @@ msgstr "Tamir Tareti"
 #: data/base/messages/strings/names.txt:888
 #: data/mp/messages/strings/names.txt:364
 #: data/mp/messages/strings/names.txt:422
-#: data/mp/messages/strings/names.txt:899
+#: data/mp/messages/strings/names.txt:900
 msgid "Sensor Tower"
 msgstr "Algılayıcı Kulesi"
 
@@ -5093,7 +5088,7 @@ msgstr "Algılayıcı Kulesi"
 #: data/base/messages/strings/names.txt:889
 #: data/mp/messages/strings/names.txt:365
 #: data/mp/messages/strings/names.txt:423
-#: data/mp/messages/strings/names.txt:900
+#: data/mp/messages/strings/names.txt:901
 msgid "Hardened Sensor Tower"
 msgstr "Gelişmiş Algılayıcı Kulesi"
 
@@ -5101,7 +5096,7 @@ msgstr "Gelişmiş Algılayıcı Kulesi"
 #: data/base/messages/strings/names.txt:369
 #: data/base/messages/strings/names.txt:887
 #: data/mp/messages/strings/names.txt:366
-#: data/mp/messages/strings/names.txt:898
+#: data/mp/messages/strings/names.txt:899
 msgid "Sensor Turret"
 msgstr "Algılayıcı Tareti"
 
@@ -5125,7 +5120,7 @@ msgstr "A.B Sensör Kule"
 #: data/base/messages/strings/names.txt:376
 #: data/base/messages/strings/names.txt:906
 #: data/mp/messages/strings/names.txt:374
-#: data/mp/messages/strings/names.txt:917
+#: data/mp/messages/strings/names.txt:918
 msgid "VTOL Strike Turret"
 msgstr "DİvK -Şok Kulesi"
 
@@ -5162,7 +5157,7 @@ msgstr "Fabrika"
 #: data/base/messages/strings/names.txt:386
 #: data/base/messages/strings/names.txt:793
 #: data/mp/messages/strings/names.txt:384
-#: data/mp/messages/strings/names.txt:802
+#: data/mp/messages/strings/names.txt:803
 msgid "Factory Module"
 msgstr "Fabrika Eki"
 
@@ -5174,7 +5169,7 @@ msgstr "Güç Jeneratörü"
 #: data/base/messages/strings/names.txt:388
 #: data/base/messages/strings/names.txt:816
 #: data/mp/messages/strings/names.txt:386
-#: data/mp/messages/strings/names.txt:825
+#: data/mp/messages/strings/names.txt:826
 msgid "Power Module"
 msgstr "Güç Jeneratörü Eki"
 
@@ -5186,7 +5181,7 @@ msgstr "Araştırma Tesisi"
 #: data/base/messages/strings/names.txt:390
 #: data/base/messages/strings/names.txt:831
 #: data/mp/messages/strings/names.txt:388
-#: data/mp/messages/strings/names.txt:840
+#: data/mp/messages/strings/names.txt:841
 msgid "Research Module"
 msgstr "Araştırma T. Eki"
 
@@ -5198,7 +5193,7 @@ msgstr "Binayı Yık"
 #: data/base/messages/strings/names.txt:393
 #: data/base/messages/strings/names.txt:1448
 #: data/mp/messages/strings/names.txt:391
-#: data/mp/messages/strings/names.txt:1462
+#: data/mp/messages/strings/names.txt:1463
 msgid "Repair Center"
 msgstr "Tamir Merkezi"
 
@@ -5220,7 +5215,7 @@ msgstr "Sert Girit Duvar"
 #: data/base/messages/strings/names.txt:398
 #: data/base/messages/strings/names.txt:850
 #: data/mp/messages/strings/names.txt:397
-#: data/mp/messages/strings/names.txt:859
+#: data/mp/messages/strings/names.txt:860
 msgid "VTOL Factory"
 msgstr "DİvK Fabrikası"
 
@@ -5238,7 +5233,7 @@ msgstr "Cehennem Alevi Atıcı Bağlama Noktası"
 #: data/base/messages/strings/names.txt:404
 #: data/base/messages/strings/names.txt:747
 #: data/mp/messages/strings/names.txt:403
-#: data/mp/messages/strings/names.txt:756
+#: data/mp/messages/strings/names.txt:757
 msgid "Pepperpot Pit"
 msgstr "BiberPot Kuyusu"
 
@@ -5247,13 +5242,13 @@ msgstr "BiberPot Kuyusu"
 #: data/base/messages/strings/names.txt:745
 #: data/mp/messages/strings/names.txt:404
 #: data/mp/messages/strings/names.txt:487
-#: data/mp/messages/strings/names.txt:754
+#: data/mp/messages/strings/names.txt:755
 msgid "Hellstorm Emplacement"
 msgstr "Sabitlenmiş Cehennem Fırtınası"
 
 #: data/base/messages/strings/names.txt:409
 #: data/base/messages/strings/names.txt:715
-#: data/mp/messages/strings/names.txt:724
+#: data/mp/messages/strings/names.txt:725
 msgid "Tornado AA Flak Site"
 msgstr "Kasırga AA Uçaksavar Sitesi"
 
@@ -5265,21 +5260,21 @@ msgstr "Girdap AA Uçaksavar Sitesi"
 #: data/base/messages/strings/names.txt:411
 #: data/base/messages/strings/names.txt:713
 #: data/mp/messages/strings/names.txt:410
-#: data/mp/messages/strings/names.txt:722
+#: data/mp/messages/strings/names.txt:723
 msgid "Hurricane AA Site"
 msgstr "Fırtına AA Sitesi"
 
 #: data/base/messages/strings/names.txt:412
 #: data/base/messages/strings/names.txt:714
 #: data/mp/messages/strings/names.txt:411
-#: data/mp/messages/strings/names.txt:723
+#: data/mp/messages/strings/names.txt:724
 msgid "Whirlwind AA Site"
 msgstr "Hortum AA Sitesi"
 
 #: data/base/messages/strings/names.txt:414
 #: data/base/messages/strings/names.txt:726
 #: data/mp/messages/strings/names.txt:413
-#: data/mp/messages/strings/names.txt:735
+#: data/mp/messages/strings/names.txt:736
 msgid "Ripple Rocket Battery"
 msgstr "Dalgalı Roket Bataryası"
 
@@ -5296,28 +5291,28 @@ msgstr "Hücüm Silahlı Koruma Kulesi"
 #: data/base/messages/strings/names.txt:419
 #: data/base/messages/strings/names.txt:770
 #: data/mp/messages/strings/names.txt:418
-#: data/mp/messages/strings/names.txt:779
+#: data/mp/messages/strings/names.txt:780
 msgid "Assault Gun Hardpoint"
 msgstr "Hücüm Silahlı Bağlama Noktası"
 
 #: data/base/messages/strings/names.txt:420
 #: data/base/messages/strings/names.txt:771
 #: data/mp/messages/strings/names.txt:419
-#: data/mp/messages/strings/names.txt:780
+#: data/mp/messages/strings/names.txt:781
 msgid "Assault Cannon Hardpoint"
 msgstr "Hücüm Topu Bağlama Noktası"
 
 #: data/base/messages/strings/names.txt:426
 #: data/base/messages/strings/names.txt:892
 #: data/mp/messages/strings/names.txt:425
-#: data/mp/messages/strings/names.txt:903
+#: data/mp/messages/strings/names.txt:904
 msgid "CB Tower"
 msgstr "A.B Kulesi"
 
 #: data/base/messages/strings/names.txt:427
 #: data/base/messages/strings/names.txt:899
 #: data/mp/messages/strings/names.txt:426
-#: data/mp/messages/strings/names.txt:910
+#: data/mp/messages/strings/names.txt:911
 msgid "VTOL CB Tower"
 msgstr "DİvK A.B Kulesi"
 
@@ -5328,49 +5323,49 @@ msgstr "DİvK Radar Kulesi"
 #: data/base/messages/strings/names.txt:431
 #: data/base/messages/strings/names.txt:764
 #: data/mp/messages/strings/names.txt:430
-#: data/mp/messages/strings/names.txt:773
+#: data/mp/messages/strings/names.txt:774
 msgid "Heavy Machinegun Hardpoint"
 msgstr "Ağır Makinalı Bağlama Noktası"
 
 #: data/base/messages/strings/names.txt:432
 #: data/base/messages/strings/names.txt:765
 #: data/mp/messages/strings/names.txt:431
-#: data/mp/messages/strings/names.txt:774
+#: data/mp/messages/strings/names.txt:775
 msgid "Light Cannon Hardpoint"
 msgstr "Hafif Topçu Bağlama Noktası"
 
 #: data/base/messages/strings/names.txt:433
 #: data/base/messages/strings/names.txt:766
 #: data/mp/messages/strings/names.txt:432
-#: data/mp/messages/strings/names.txt:775
+#: data/mp/messages/strings/names.txt:776
 msgid "Medium Cannon Hardpoint"
 msgstr "Orta Topçu Bağlama Noktası"
 
 #: data/base/messages/strings/names.txt:434
 #: data/base/messages/strings/names.txt:767
 #: data/mp/messages/strings/names.txt:433
-#: data/mp/messages/strings/names.txt:776
+#: data/mp/messages/strings/names.txt:777
 msgid "Heavy Cannon Hardpoint"
 msgstr "Ağır Topçu Bağlama Noktası"
 
 #: data/base/messages/strings/names.txt:435
 #: data/base/messages/strings/names.txt:768
 #: data/mp/messages/strings/names.txt:434
-#: data/mp/messages/strings/names.txt:777
+#: data/mp/messages/strings/names.txt:778
 msgid "Flamer Hardpoint"
 msgstr "Alev Atıcı Bağlama Noktası"
 
 #: data/base/messages/strings/names.txt:436
 #: data/base/messages/strings/names.txt:769
 #: data/mp/messages/strings/names.txt:435
-#: data/mp/messages/strings/names.txt:778
+#: data/mp/messages/strings/names.txt:779
 msgid "Lancer Hardpoint"
 msgstr "Roketatar Bağlama Noktası"
 
 #: data/base/messages/strings/names.txt:438
 #: data/base/messages/strings/names.txt:755
 #: data/mp/messages/strings/names.txt:437
-#: data/mp/messages/strings/names.txt:764
+#: data/mp/messages/strings/names.txt:765
 msgid "Machinegun Guard Tower"
 msgstr "Makinalı Koruma Kulesi"
 
@@ -5381,7 +5376,7 @@ msgstr "Çift Makinalı Koruma Kulesi"
 
 #: data/base/messages/strings/names.txt:440
 #: data/mp/messages/strings/names.txt:439
-#: data/mp/messages/strings/names.txt:765
+#: data/mp/messages/strings/names.txt:766
 msgid "Heavy Machinegun Tower"
 msgstr "Ağır Makinalı Kulesi"
 
@@ -5393,14 +5388,14 @@ msgstr "Alev Atıcı Koruma Kulesi"
 
 #: data/base/messages/strings/names.txt:442
 #: data/mp/messages/strings/names.txt:441
-#: data/mp/messages/strings/names.txt:746
-#: data/mp/messages/strings/names.txt:767
+#: data/mp/messages/strings/names.txt:747
+#: data/mp/messages/strings/names.txt:768
 msgid "Lancer Tower"
 msgstr "Roketatar Kulesi"
 
 #: data/base/messages/strings/names.txt:443
 #: data/mp/messages/strings/names.txt:442
-#: data/mp/messages/strings/names.txt:768
+#: data/mp/messages/strings/names.txt:769
 msgid "Mini-Rocket Tower"
 msgstr "Mini Roket Kulesi"
 
@@ -5409,7 +5404,7 @@ msgstr "Mini Roket Kulesi"
 #: data/base/messages/strings/names.txt:733
 #: data/mp/messages/strings/names.txt:445
 #: data/mp/messages/strings/names.txt:495
-#: data/mp/messages/strings/names.txt:742
+#: data/mp/messages/strings/names.txt:743
 msgid "Machinegun Bunker"
 msgstr "Makinalı Sığınak"
 
@@ -5425,21 +5420,21 @@ msgstr "Çift Makinalı Sığınak"
 #: data/base/messages/strings/names.txt:734
 #: data/mp/messages/strings/names.txt:447
 #: data/mp/messages/strings/names.txt:499
-#: data/mp/messages/strings/names.txt:743
+#: data/mp/messages/strings/names.txt:744
 msgid "Heavy Machinegun Bunker"
 msgstr "Ağır Makinalı Sığınak"
 
 #: data/base/messages/strings/names.txt:449
 #: data/base/messages/strings/names.txt:735
 #: data/mp/messages/strings/names.txt:448
-#: data/mp/messages/strings/names.txt:744
+#: data/mp/messages/strings/names.txt:745
 msgid "Light Cannon Bunker"
 msgstr "Hafif Topçu Sığınak"
 
 #: data/base/messages/strings/names.txt:450
 #: data/base/messages/strings/names.txt:736
 #: data/mp/messages/strings/names.txt:449
-#: data/mp/messages/strings/names.txt:745
+#: data/mp/messages/strings/names.txt:746
 msgid "Flamer Bunker"
 msgstr "Alev Atıcı Sığınak"
 
@@ -5454,7 +5449,7 @@ msgstr "Roketatar Sığınak"
 #: data/base/messages/strings/names.txt:752
 #: data/mp/messages/strings/names.txt:453
 #: data/mp/messages/strings/names.txt:455
-#: data/mp/messages/strings/names.txt:761
+#: data/mp/messages/strings/names.txt:762
 msgid "Tank Traps"
 msgstr "Tank Tuzakları"
 
@@ -5463,7 +5458,7 @@ msgstr "Tank Tuzakları"
 #: data/base/messages/strings/names.txt:753
 #: data/mp/messages/strings/names.txt:454
 #: data/mp/messages/strings/names.txt:456
-#: data/mp/messages/strings/names.txt:762
+#: data/mp/messages/strings/names.txt:763
 msgid "Dragon's Teeth"
 msgstr "Ejder'in Dişi"
 
@@ -5471,7 +5466,7 @@ msgstr "Ejder'in Dişi"
 #: data/base/messages/strings/names.txt:460
 #: data/base/messages/strings/names.txt:842
 #: data/mp/messages/strings/names.txt:459
-#: data/mp/messages/strings/names.txt:851
+#: data/mp/messages/strings/names.txt:852
 msgid "VTOL Rearming Pad"
 msgstr "DİvK Yeniden Silahlandırma Rampası"
 
@@ -5480,7 +5475,7 @@ msgstr "DİvK Yeniden Silahlandırma Rampası"
 #: data/base/messages/strings/names.txt:719
 #: data/mp/messages/strings/names.txt:462
 #: data/mp/messages/strings/names.txt:483
-#: data/mp/messages/strings/names.txt:728
+#: data/mp/messages/strings/names.txt:729
 msgid "Howitzer Emplacement"
 msgstr "Sabitlenmiş Obüs"
 
@@ -5488,8 +5483,8 @@ msgstr "Sabitlenmiş Obüs"
 #: data/base/messages/strings/names.txt:740
 #: data/base/messages/strings/names.txt:1362
 #: data/mp/messages/strings/names.txt:463
-#: data/mp/messages/strings/names.txt:749
-#: data/mp/messages/strings/names.txt:1376
+#: data/mp/messages/strings/names.txt:750
+#: data/mp/messages/strings/names.txt:1377
 msgid "Flashlight Emplacement"
 msgstr "Sabitlenmiş Flaşışı"
 
@@ -5501,63 +5496,63 @@ msgstr "Flaşışığı Bağlama Noktası"
 #: data/base/messages/strings/names.txt:467
 #: data/base/messages/strings/names.txt:777
 #: data/mp/messages/strings/names.txt:466
-#: data/mp/messages/strings/names.txt:786
+#: data/mp/messages/strings/names.txt:787
 msgid "Rail Gun Hardpoint"
 msgstr "Demir Silahı Bağlama Noktası"
 
 #: data/base/messages/strings/names.txt:469
 #: data/base/messages/strings/names.txt:761
 #: data/mp/messages/strings/names.txt:468
-#: data/mp/messages/strings/names.txt:770
+#: data/mp/messages/strings/names.txt:771
 msgid "Scourge Missile Tower"
 msgstr "Felaket Füzesi Kulesi"
 
 #: data/base/messages/strings/names.txt:470
 #: data/base/messages/strings/names.txt:762
 #: data/mp/messages/strings/names.txt:469
-#: data/mp/messages/strings/names.txt:771
+#: data/mp/messages/strings/names.txt:772
 msgid "Needle Gun Tower"
 msgstr "İğne Silahı Kulesi"
 
 #: data/base/messages/strings/names.txt:471
 #: data/base/messages/strings/names.txt:743
 #: data/mp/messages/strings/names.txt:470
-#: data/mp/messages/strings/names.txt:752
+#: data/mp/messages/strings/names.txt:753
 msgid "Gauss Cannon Emplacement"
 msgstr "Sabitlenmiş Manyetik Top"
 
 #: data/base/messages/strings/names.txt:474
 #: data/base/messages/strings/names.txt:1033
 #: data/mp/messages/strings/names.txt:473
-#: data/mp/messages/strings/names.txt:1044
+#: data/mp/messages/strings/names.txt:1045
 msgid "Light Cannon"
 msgstr "Hafif Topçu"
 
 #: data/base/messages/strings/names.txt:475
 #: data/base/messages/strings/names.txt:1034
 #: data/mp/messages/strings/names.txt:474
-#: data/mp/messages/strings/names.txt:1045
+#: data/mp/messages/strings/names.txt:1046
 msgid "Medium Cannon"
 msgstr "Orta Topçu"
 
 #: data/base/messages/strings/names.txt:476
 #: data/base/messages/strings/names.txt:1035
 #: data/mp/messages/strings/names.txt:475
-#: data/mp/messages/strings/names.txt:1046
+#: data/mp/messages/strings/names.txt:1047
 msgid "Heavy Cannon"
 msgstr "Ağır Topçu"
 
 #: data/base/messages/strings/names.txt:477
 #: data/base/messages/strings/names.txt:1036
 #: data/mp/messages/strings/names.txt:476
-#: data/mp/messages/strings/names.txt:1047
+#: data/mp/messages/strings/names.txt:1048
 msgid "Hyper Velocity Cannon"
 msgstr "Yüksek Hız Topu"
 
 #: data/base/messages/strings/names.txt:478
 #: data/base/messages/strings/names.txt:1037
 #: data/mp/messages/strings/names.txt:477
-#: data/mp/messages/strings/names.txt:1048
+#: data/mp/messages/strings/names.txt:1049
 msgid "Assault Cannon"
 msgstr "Hücüm Topu"
 
@@ -5569,7 +5564,7 @@ msgstr "Cehennem Alevi Atıcı"
 #: data/base/messages/strings/names.txt:483
 #: data/base/messages/strings/names.txt:1061
 #: data/mp/messages/strings/names.txt:482
-#: data/mp/messages/strings/names.txt:1072
+#: data/mp/messages/strings/names.txt:1073
 msgid "Howitzer"
 msgstr "Obüs Topu"
 
@@ -5582,8 +5577,8 @@ msgstr "Yer Sarsıcı"
 #: data/base/messages/strings/names.txt:722
 #: data/base/messages/strings/names.txt:1453
 #: data/mp/messages/strings/names.txt:485
-#: data/mp/messages/strings/names.txt:731
-#: data/mp/messages/strings/names.txt:1467
+#: data/mp/messages/strings/names.txt:732
+#: data/mp/messages/strings/names.txt:1468
 msgid "Ground Shaker Emplacement"
 msgstr "Sabitlenmiş Yer Sarsıcı"
 
@@ -5595,7 +5590,7 @@ msgstr "Cehennem Fırtınası"
 #: data/base/messages/strings/names.txt:492
 #: data/base/messages/strings/names.txt:1083
 #: data/mp/messages/strings/names.txt:491
-#: data/mp/messages/strings/names.txt:1094
+#: data/mp/messages/strings/names.txt:1095
 msgid "Pulse Laser"
 msgstr "Darbeli Lazer"
 
@@ -5604,35 +5599,35 @@ msgstr "Darbeli Lazer"
 #: data/base/messages/strings/names.txt:1098
 #: data/mp/messages/strings/names.txt:494
 #: data/mp/messages/strings/names.txt:539
-#: data/mp/messages/strings/names.txt:1109
+#: data/mp/messages/strings/names.txt:1110
 msgid "Machinegun"
 msgstr "Makinalı Tüfek"
 
 #: data/base/messages/strings/names.txt:497
 #: data/base/messages/strings/names.txt:1099
 #: data/mp/messages/strings/names.txt:496
-#: data/mp/messages/strings/names.txt:1110
+#: data/mp/messages/strings/names.txt:1111
 msgid "Twin Machinegun"
 msgstr "Çift Makinalı"
 
 #: data/base/messages/strings/names.txt:499
 #: data/base/messages/strings/names.txt:1100
 #: data/mp/messages/strings/names.txt:498
-#: data/mp/messages/strings/names.txt:1111
+#: data/mp/messages/strings/names.txt:1112
 msgid "Heavy Machinegun"
 msgstr "Ağır Makinalı"
 
 #: data/base/messages/strings/names.txt:501
 #: data/base/messages/strings/names.txt:1101
 #: data/mp/messages/strings/names.txt:500
-#: data/mp/messages/strings/names.txt:1112
+#: data/mp/messages/strings/names.txt:1113
 msgid "Assault Gun"
 msgstr "Hücüm Silahı"
 
 #: data/base/messages/strings/names.txt:504
 #: data/base/messages/strings/names.txt:1120
 #: data/mp/messages/strings/names.txt:503
-#: data/mp/messages/strings/names.txt:1131
+#: data/mp/messages/strings/names.txt:1132
 msgid "Scourge Missile"
 msgstr "Felaket Füzesi"
 
@@ -5644,21 +5639,21 @@ msgstr "Melek Füze"
 #: data/base/messages/strings/names.txt:506
 #: data/base/messages/strings/names.txt:1119
 #: data/mp/messages/strings/names.txt:505
-#: data/mp/messages/strings/names.txt:1130
+#: data/mp/messages/strings/names.txt:1131
 msgid "Vindicator SAM"
 msgstr "İntikamcı SAM"
 
 #: data/base/messages/strings/names.txt:507
 #: data/base/messages/strings/names.txt:1122
 #: data/mp/messages/strings/names.txt:506
-#: data/mp/messages/strings/names.txt:1133
+#: data/mp/messages/strings/names.txt:1134
 msgid "Archangel Missile"
 msgstr "BaşMelek Füzesi"
 
 #: data/base/messages/strings/names.txt:509
 #: data/base/messages/strings/names.txt:1118
 #: data/mp/messages/strings/names.txt:508
-#: data/mp/messages/strings/names.txt:1129
+#: data/mp/messages/strings/names.txt:1130
 msgid "Avenger SAM"
 msgstr "İntikamcı SAM"
 
@@ -5670,7 +5665,7 @@ msgstr "DİvK Felaket Füzesi"
 #: data/base/messages/strings/names.txt:513
 #: data/base/messages/strings/names.txt:1138
 #: data/mp/messages/strings/names.txt:512
-#: data/mp/messages/strings/names.txt:1149
+#: data/mp/messages/strings/names.txt:1150
 msgid "Mortar"
 msgstr "Havan T."
 
@@ -5702,21 +5697,21 @@ msgstr "Sabitlenmiş BiberPot"
 #: data/base/messages/strings/names.txt:519
 #: data/base/messages/strings/names.txt:1142
 #: data/mp/messages/strings/names.txt:518
-#: data/mp/messages/strings/names.txt:1153
+#: data/mp/messages/strings/names.txt:1154
 msgid "Needle Gun"
 msgstr "İğne Topu"
 
 #: data/base/messages/strings/names.txt:520
 #: data/base/messages/strings/names.txt:1143
 #: data/mp/messages/strings/names.txt:519
-#: data/mp/messages/strings/names.txt:1154
+#: data/mp/messages/strings/names.txt:1155
 msgid "Rail Gun"
 msgstr "Demir Topu"
 
 #: data/base/messages/strings/names.txt:521
 #: data/base/messages/strings/names.txt:1144
 #: data/mp/messages/strings/names.txt:520
-#: data/mp/messages/strings/names.txt:1155
+#: data/mp/messages/strings/names.txt:1156
 msgid "Gauss Cannon"
 msgstr "Manyetik Top"
 
@@ -5733,14 +5728,14 @@ msgstr "Sığınak Yokedici"
 #: data/base/messages/strings/names.txt:526
 #: data/base/messages/strings/names.txt:1183
 #: data/mp/messages/strings/names.txt:525
-#: data/mp/messages/strings/names.txt:1197
+#: data/mp/messages/strings/names.txt:1198
 msgid "Mini-Rocket Pod"
 msgstr "Mini Roket Kabı"
 
 #: data/base/messages/strings/names.txt:527
 #: data/base/messages/strings/names.txt:1184
 #: data/mp/messages/strings/names.txt:526
-#: data/mp/messages/strings/names.txt:1198
+#: data/mp/messages/strings/names.txt:1199
 msgid "Ripple Rockets"
 msgstr "Dalgalı Roketler"
 
@@ -5772,7 +5767,7 @@ msgstr "DİvK -Tank Öldürücü"
 #: data/base/messages/strings/names.txt:544
 #: data/base/messages/strings/names.txt:980
 #: data/mp/messages/strings/names.txt:543
-#: data/mp/messages/strings/names.txt:991
+#: data/mp/messages/strings/names.txt:992
 msgid "Tornado Flak Turret"
 msgstr "Kasırga UÇAKSAVAR Tareti"
 
@@ -5784,14 +5779,14 @@ msgstr "Tufan UÇAKSAVAR Tareti"
 #: data/base/messages/strings/names.txt:550
 #: data/base/messages/strings/names.txt:983
 #: data/mp/messages/strings/names.txt:550
-#: data/mp/messages/strings/names.txt:994
+#: data/mp/messages/strings/names.txt:995
 msgid "Whirlwind AA Turret"
 msgstr "Fırtına UÇAKSAVAR Tareti"
 
 #: data/base/messages/strings/names.txt:551
 #: data/base/messages/strings/names.txt:982
 #: data/mp/messages/strings/names.txt:551
-#: data/mp/messages/strings/names.txt:993
+#: data/mp/messages/strings/names.txt:994
 msgid "Hurricane AA Turret"
 msgstr "Girdap UÇAKSAVAR Tareti"
 
@@ -6063,22 +6058,22 @@ msgid "Cyborg Superdense Composite Alloys Mk3"
 msgstr "Cyborg Süper Yoğun Alaşımları Kdm3"
 
 #: data/base/messages/strings/names.txt:673
-#: data/mp/messages/strings/names.txt:678
+#: data/mp/messages/strings/names.txt:679
 msgid "Bunker Blaster Cyborg"
 msgstr "Sığınak Yokedici Cyborg"
 
 #: data/base/messages/strings/names.txt:674
-#: data/mp/messages/strings/names.txt:679
+#: data/mp/messages/strings/names.txt:680
 msgid "Heavy Gunner Cyborg"
 msgstr "Ağır Makinalı Cyborg"
 
 #: data/base/messages/strings/names.txt:675
-#: data/mp/messages/strings/names.txt:680
+#: data/mp/messages/strings/names.txt:681
 msgid "Flamer Cyborg"
 msgstr "Alev Atıcı Cyborg"
 
 #: data/base/messages/strings/names.txt:676
-#: data/mp/messages/strings/names.txt:681
+#: data/mp/messages/strings/names.txt:682
 msgid "Machinegunner Cyborg"
 msgstr "Makinalı Tüfekli Cyborg"
 
@@ -6103,101 +6098,101 @@ msgid "Flashlight Gunner Cyborg"
 msgstr "Flaşışık Lazerli Cyborg"
 
 #: data/base/messages/strings/names.txt:683
-#: data/mp/messages/strings/names.txt:688
+#: data/mp/messages/strings/names.txt:689
 msgid "Jump Bunker Blaster"
 msgstr "Zıplayan Sığınak Yokedici Cyborg"
 
 #: data/base/messages/strings/names.txt:684
-#: data/mp/messages/strings/names.txt:689
+#: data/mp/messages/strings/names.txt:690
 msgid "Jump Heavy Gunner"
 msgstr "Zıplayan Roketatar Cyborg"
 
 # Das Cyborg mal des Klanges wegen hinzugefügt -Kreuvf
 #: data/base/messages/strings/names.txt:685
-#: data/mp/messages/strings/names.txt:690
+#: data/mp/messages/strings/names.txt:691
 msgid "Jump Lancer"
 msgstr "Zıplayan Roketatar Cyborg"
 
 #: data/base/messages/strings/names.txt:686
-#: data/mp/messages/strings/names.txt:691
+#: data/mp/messages/strings/names.txt:692
 msgid "Jump Assault Gunner"
 msgstr "Zıplayan Hücüm Silahlı Cyborg"
 
 #: data/base/messages/strings/names.txt:687
-#: data/mp/messages/strings/names.txt:692
+#: data/mp/messages/strings/names.txt:693
 msgid "Jump Needle Gunner"
 msgstr "Zıplayan İğne Silahlı Cyborg"
 
 # Das Cyborg mal des Klanges wegen hinzugefügt
 #: data/base/messages/strings/names.txt:688
-#: data/mp/messages/strings/names.txt:693
+#: data/mp/messages/strings/names.txt:694
 msgid "Jump Scourge"
 msgstr "Zıplayan Felaket Füzeli Cyborg"
 
 #: data/base/messages/strings/names.txt:689
-#: data/mp/messages/strings/names.txt:694
+#: data/mp/messages/strings/names.txt:695
 msgid "Jump Flashlight Gunner"
 msgstr "Zıplayan Flaşışık Lazerli Cyborg"
 
 # Pack wie Equipment übersetzt -Kreuvf
 #: data/base/messages/strings/names.txt:691
-#: data/mp/messages/strings/names.txt:696
+#: data/mp/messages/strings/names.txt:697
 msgid "Cyborg Jump Pack"
 msgstr "Cyborg Zıplama Paketi"
 
 #: data/base/messages/strings/names.txt:697
-#: data/mp/messages/strings/names.txt:702
+#: data/mp/messages/strings/names.txt:703
 msgid "Hardcrete"
 msgstr "Sert Girit"
 
 #: data/base/messages/strings/names.txt:699
-#: data/mp/messages/strings/names.txt:704
+#: data/mp/messages/strings/names.txt:705
 msgid "NP-Hardcrete"
 msgstr "NP-Sert Girit"
 
 #: data/base/messages/strings/names.txt:701
-#: data/mp/messages/strings/names.txt:706
+#: data/mp/messages/strings/names.txt:707
 msgid "Improved Hardcrete"
 msgstr "Geliştirilmiş Sert Girit"
 
 #: data/base/messages/strings/names.txt:702
-#: data/mp/messages/strings/names.txt:707
+#: data/mp/messages/strings/names.txt:708
 msgid "Improved Hardcrete Mk2"
 msgstr "Geliştirilmiş Sert Girit Kdm2"
 
 #: data/base/messages/strings/names.txt:703
-#: data/mp/messages/strings/names.txt:708
+#: data/mp/messages/strings/names.txt:709
 msgid "Improved Hardcrete Mk3"
 msgstr "Geliştirilmiş Sert Girit Kdm3"
 
 #: data/base/messages/strings/names.txt:704
-#: data/mp/messages/strings/names.txt:709
+#: data/mp/messages/strings/names.txt:710
 msgid "Supercrete"
 msgstr "Süper Girit"
 
 #: data/base/messages/strings/names.txt:705
-#: data/mp/messages/strings/names.txt:710
+#: data/mp/messages/strings/names.txt:711
 msgid "Supercrete Mk2"
 msgstr "Süper Girit Kdm2"
 
 #: data/base/messages/strings/names.txt:706
-#: data/mp/messages/strings/names.txt:711
+#: data/mp/messages/strings/names.txt:712
 msgid "Supercrete Mk3"
 msgstr "Süper Girit Kdm3"
 
 # Kofferwort aus Plasti_k und Be_ton -Kreuvf
 #: data/base/messages/strings/names.txt:707
-#: data/mp/messages/strings/names.txt:712
+#: data/mp/messages/strings/names.txt:713
 msgid "Plascrete"
 msgstr "Plas Girit "
 
 #: data/base/messages/strings/names.txt:708
-#: data/mp/messages/strings/names.txt:713
+#: data/mp/messages/strings/names.txt:714
 msgid "Plascrete Mk2"
 msgstr "Plas Girit Kdm2"
 
 #: data/base/messages/strings/names.txt:709
-#: data/mp/messages/strings/names.txt:714
+#: data/mp/messages/strings/names.txt:715
 msgid "Plascrete Mk3"
 msgstr "Plas Duvar Kdm3"
 
@@ -6208,15 +6203,15 @@ msgstr "Sabitlenmiş Y.H Topu"
 
 #: data/base/messages/strings/names.txt:720
 #: data/base/messages/strings/names.txt:1371
-#: data/mp/messages/strings/names.txt:729
-#: data/mp/messages/strings/names.txt:1385
+#: data/mp/messages/strings/names.txt:730
+#: data/mp/messages/strings/names.txt:1386
 msgid "Tank Killer Emplacement"
 msgstr "Sabitlenmiş Tank Öldürücü"
 
 #: data/base/messages/strings/names.txt:723
 #: data/base/messages/strings/names.txt:1452
-#: data/mp/messages/strings/names.txt:732
-#: data/mp/messages/strings/names.txt:1466
+#: data/mp/messages/strings/names.txt:733
+#: data/mp/messages/strings/names.txt:1467
 msgid "Bombard Pit"
 msgstr "Bombardıman Kuyusu"
 
@@ -6225,31 +6220,31 @@ msgid "Angel Missile Battery"
 msgstr "Melek Füze Bataryası"
 
 #: data/base/messages/strings/names.txt:729
-#: data/mp/messages/strings/names.txt:738
+#: data/mp/messages/strings/names.txt:739
 msgid "Archangel Missile Battery"
 msgstr "BaşMelek Füze Bataryası"
 
 #: data/base/messages/strings/names.txt:730
 #: data/base/messages/strings/names.txt:1216
-#: data/mp/messages/strings/names.txt:739
-#: data/mp/messages/strings/names.txt:1230
+#: data/mp/messages/strings/names.txt:740
+#: data/mp/messages/strings/names.txt:1231
 msgid "Mortar Pit"
 msgstr "Havan T. Kuyusu"
 
 #: data/base/messages/strings/names.txt:731
-#: data/mp/messages/strings/names.txt:740
-#: data/mp/messages/strings/names.txt:1382
+#: data/mp/messages/strings/names.txt:741
+#: data/mp/messages/strings/names.txt:1383
 msgid "Mini-Rocket Battery"
 msgstr "Mini Roket Bataryası"
 
 #: data/base/messages/strings/names.txt:738
 #: data/base/messages/strings/names.txt:1374
-#: data/mp/messages/strings/names.txt:1388
+#: data/mp/messages/strings/names.txt:1389
 msgid "Pulse Laser Emplacement"
 msgstr "Sabitlenmiş Darbeli Lazer"
 
 #: data/base/messages/strings/names.txt:742
-#: data/mp/messages/strings/names.txt:751
+#: data/mp/messages/strings/names.txt:752
 msgid "Rail Gun Emplacement"
 msgstr "Sabitlenmiş Demir Topu"
 
@@ -6264,15 +6259,15 @@ msgstr "Sabitlenmiş Hücüm Silahı"
 
 #: data/base/messages/strings/names.txt:749
 #: data/base/messages/strings/names.txt:1363
-#: data/mp/messages/strings/names.txt:758
-#: data/mp/messages/strings/names.txt:1377
+#: data/mp/messages/strings/names.txt:759
+#: data/mp/messages/strings/names.txt:1378
 msgid "Avenger SAM Site"
 msgstr "İntikamcı SAM Site"
 
 #: data/base/messages/strings/names.txt:750
 #: data/base/messages/strings/names.txt:1364
-#: data/mp/messages/strings/names.txt:759
-#: data/mp/messages/strings/names.txt:1378
+#: data/mp/messages/strings/names.txt:760
+#: data/mp/messages/strings/names.txt:1379
 msgid "Vindicator SAM Site"
 msgstr "İntikamcı2 SAM Site"
 
@@ -6290,15 +6285,15 @@ msgstr "Mini Roket Koruma Kulesi"
 
 #: data/base/messages/strings/names.txt:772
 #: data/base/messages/strings/names.txt:1382
-#: data/mp/messages/strings/names.txt:781
-#: data/mp/messages/strings/names.txt:1396
+#: data/mp/messages/strings/names.txt:782
+#: data/mp/messages/strings/names.txt:1397
 msgid "Scourge Missile Hardpoint"
 msgstr "Felaket Füze Bağlama Noktası"
 
 #: data/base/messages/strings/names.txt:774
 #: data/base/messages/strings/names.txt:1380
-#: data/mp/messages/strings/names.txt:783
-#: data/mp/messages/strings/names.txt:1394
+#: data/mp/messages/strings/names.txt:784
+#: data/mp/messages/strings/names.txt:1395
 msgid "Tank Killer Hardpoint"
 msgstr "Tank Öldürücü Bağlama Noktası"
 
@@ -6309,13 +6304,13 @@ msgstr "Y.H Topu Bağlama Noktası"
 
 #: data/base/messages/strings/names.txt:778
 #: data/base/messages/strings/names.txt:1383
-#: data/mp/messages/strings/names.txt:787
-#: data/mp/messages/strings/names.txt:1397
+#: data/mp/messages/strings/names.txt:788
+#: data/mp/messages/strings/names.txt:1398
 msgid "Gauss Cannon Hardpoint"
 msgstr "Manyetik Top Bağlama Noktası"
 
 #: data/base/messages/strings/names.txt:780
-#: data/mp/messages/strings/names.txt:789
+#: data/mp/messages/strings/names.txt:790
 msgid "Command Relay Post"
 msgstr "Komutan Yönetim Üssü"
 
@@ -6380,54 +6375,54 @@ msgid "Advanced Factory Production Mk3"
 msgstr "Modern Fabrika Üretimi Kdm3"
 
 #: data/base/messages/strings/names.txt:806
-#: data/mp/messages/strings/names.txt:815
+#: data/mp/messages/strings/names.txt:816
 msgid "Reinforced Base Structure Materials Mk2"
 msgstr "Desteklenmiş Üs Binası Materyali Kdm2"
 
 #: data/base/messages/strings/names.txt:807
-#: data/mp/messages/strings/names.txt:816
+#: data/mp/messages/strings/names.txt:817
 msgid "Reinforced Base Structure Materials Mk3"
 msgstr "Desteklenmiş Üs Binası Materyali Kdm3"
 
 #: data/base/messages/strings/names.txt:809
-#: data/mp/messages/strings/names.txt:818
+#: data/mp/messages/strings/names.txt:819
 msgid "Hardened Base Structure Materials Mk2"
 msgstr "Sertleştirilmiş Üs Binası Materyali Kdm2"
 
 #: data/base/messages/strings/names.txt:810
-#: data/mp/messages/strings/names.txt:819
+#: data/mp/messages/strings/names.txt:820
 msgid "Hardened Base Structure Materials Mk3"
 msgstr "Sertleştirilmiş Üs Binası Materyali Kdm3"
 
 #: data/base/messages/strings/names.txt:812
-#: data/mp/messages/strings/names.txt:821
+#: data/mp/messages/strings/names.txt:822
 msgid "Advanced Base Structure Materials Mk2"
 msgstr "Gelişmiş Üs Binası Materyali Kdm2"
 
 #: data/base/messages/strings/names.txt:813
-#: data/mp/messages/strings/names.txt:822
+#: data/mp/messages/strings/names.txt:823
 msgid "Advanced Base Structure Materials Mk3"
 msgstr "Gelişmiş Üs Binası Materyali Kdm3"
 
 #: data/base/messages/strings/names.txt:817
-#: data/mp/messages/strings/names.txt:826
+#: data/mp/messages/strings/names.txt:827
 msgid "Gas Turbine Generator"
 msgstr "Gaz Türbinli Jeneratör"
 
 #: data/base/messages/strings/names.txt:818
-#: data/mp/messages/strings/names.txt:827
+#: data/mp/messages/strings/names.txt:828
 msgid "Vapor Turbine Generator"
 msgstr "Vapur Türbinli Jeneratör"
 
 #: data/base/messages/strings/names.txt:820
 #: data/base/messages/strings/names.txt:1449
-#: data/mp/messages/strings/names.txt:829
-#: data/mp/messages/strings/names.txt:1463
+#: data/mp/messages/strings/names.txt:830
+#: data/mp/messages/strings/names.txt:1464
 msgid "Repair Facility"
 msgstr "Tamir Tesisi"
 
 #: data/base/messages/strings/names.txt:821
-#: data/mp/messages/strings/names.txt:830
+#: data/mp/messages/strings/names.txt:831
 msgid "Automated Repair Facility"
 msgstr "Otomatik Tamir Tesisi"
 
@@ -6464,62 +6459,62 @@ msgid "Advanced Repair Facility Upgrade Mk3"
 msgstr "Gelişmiş Tamir Tesisi Yükseltmesi Kdm3"
 
 #: data/base/messages/strings/names.txt:832
-#: data/mp/messages/strings/names.txt:841
+#: data/mp/messages/strings/names.txt:842
 msgid "Synaptic Link Data Analysis"
 msgstr "Sinaptik Bağlantı Veri Analizi"
 
 #: data/base/messages/strings/names.txt:833
-#: data/mp/messages/strings/names.txt:842
+#: data/mp/messages/strings/names.txt:843
 msgid "Synaptic Link Data Analysis Mk2"
 msgstr "Sinaptik Bağlantı Veri Analizi Kdm2"
 
 #: data/base/messages/strings/names.txt:834
-#: data/mp/messages/strings/names.txt:843
+#: data/mp/messages/strings/names.txt:844
 msgid "Synaptic Link Data Analysis Mk3"
 msgstr "Sinaptik Bağlantı Veri Analizi Kdm3"
 
 #: data/base/messages/strings/names.txt:836
-#: data/mp/messages/strings/names.txt:845
+#: data/mp/messages/strings/names.txt:846
 msgid "Dedicated Synaptic Link Data Analysis Mk2"
 msgstr "Gelişmiş Sinaptik Bağlantı Veri Analizi Kdm2"
 
 #: data/base/messages/strings/names.txt:837
-#: data/mp/messages/strings/names.txt:846
+#: data/mp/messages/strings/names.txt:847
 msgid "Dedicated Synaptic Link Data Analysis Mk3"
 msgstr "Gelişmiş Sinaptik Bağlantı Veri Analizi Kdm3"
 
 #: data/base/messages/strings/names.txt:839
-#: data/mp/messages/strings/names.txt:848
+#: data/mp/messages/strings/names.txt:849
 msgid "Neural Synapse Research Brain Mk2"
 msgstr "Sinirsel Sinapse Araştırma Beyini Kdm2"
 
 #: data/base/messages/strings/names.txt:840
-#: data/mp/messages/strings/names.txt:849
+#: data/mp/messages/strings/names.txt:850
 msgid "Neural Synapse Research Brain Mk3"
 msgstr "Sinirsel Sinapse Araştırma Beyini Kdm3"
 
 #: data/base/messages/strings/names.txt:844
-#: data/mp/messages/strings/names.txt:853
+#: data/mp/messages/strings/names.txt:854
 msgid "Automated VTOL Rearming Mk2"
 msgstr "Otomatik DİvK Y. Silahlandırma Kdm2"
 
 #: data/base/messages/strings/names.txt:845
-#: data/mp/messages/strings/names.txt:854
+#: data/mp/messages/strings/names.txt:855
 msgid "Automated VTOL Rearming Mk3"
 msgstr "Otomatik DİvK Y. Silahlandırma Kdm3"
 
 #: data/base/messages/strings/names.txt:847
-#: data/mp/messages/strings/names.txt:856
+#: data/mp/messages/strings/names.txt:857
 msgid "Robotic VTOL Rearming Mk2"
 msgstr "Robotik DİvK Y. Silahlandırma Kdm2"
 
 #: data/base/messages/strings/names.txt:848
-#: data/mp/messages/strings/names.txt:857
+#: data/mp/messages/strings/names.txt:858
 msgid "Robotic VTOL Rearming Mk3"
 msgstr "Robotik DİvK Y. Silahlandırma Kdm3"
 
 #: data/base/messages/strings/names.txt:849
-#: data/mp/messages/strings/names.txt:858
+#: data/mp/messages/strings/names.txt:859
 msgid "Robotic VTOL Rearming Mk4"
 msgstr "Robotik DİvK Y. Silahlandırma Kdm4"
 
@@ -6540,92 +6535,92 @@ msgid "Advanced VTOL Production Mk3"
 msgstr "Gelişmiş DİvK Üretimi Kdm3"
 
 #: data/base/messages/strings/names.txt:858
-#: data/mp/messages/strings/names.txt:867
+#: data/mp/messages/strings/names.txt:868
 msgid "Cyborg Self-Repair"
 msgstr "Cyborg Oto-Tamir"
 
 #: data/base/messages/strings/names.txt:859
-#: data/mp/messages/strings/names.txt:868
+#: data/mp/messages/strings/names.txt:869
 msgid "Automated Cyborg Repair Mk2"
 msgstr "Otomatik Cyborg Tamiri Kdm2"
 
 #: data/base/messages/strings/names.txt:860
-#: data/mp/messages/strings/names.txt:869
+#: data/mp/messages/strings/names.txt:870
 msgid "Automated Cyborg Repair Mk3"
 msgstr "Otomatik Cyborg Tamiri Kdm3"
 
 #: data/base/messages/strings/names.txt:862
-#: data/mp/messages/strings/names.txt:871
+#: data/mp/messages/strings/names.txt:872
 msgid "Defenses Self-Repair"
 msgstr "Savunmalar Oto-Tamir"
 
 #: data/base/messages/strings/names.txt:863
-#: data/mp/messages/strings/names.txt:872
+#: data/mp/messages/strings/names.txt:873
 msgid "Automated Defenses Repair Mk2"
 msgstr "Otomatik Savunma Tamiri Kdm2"
 
 #: data/base/messages/strings/names.txt:864
-#: data/mp/messages/strings/names.txt:873
+#: data/mp/messages/strings/names.txt:874
 msgid "Automated Defenses Repair Mk3"
 msgstr "Otomatik Savunma Tamiri Kdm3"
 
 #: data/base/messages/strings/names.txt:866
-#: data/mp/messages/strings/names.txt:875
+#: data/mp/messages/strings/names.txt:876
 msgid "Base Structure Self-Repair"
 msgstr "Üs Binası Oto-Tamir"
 
 #: data/base/messages/strings/names.txt:867
-#: data/mp/messages/strings/names.txt:876
+#: data/mp/messages/strings/names.txt:877
 msgid "Automated Base Structure Repair Mk2"
 msgstr "Otomatik Üs Binası Tamiri Kdm2"
 
 #: data/base/messages/strings/names.txt:868
-#: data/mp/messages/strings/names.txt:877
+#: data/mp/messages/strings/names.txt:878
 msgid "Automated Base Structure Repair Mk3"
 msgstr "Otomatik Üs Binası Tamiri Kdm3"
 
 #: data/base/messages/strings/names.txt:870
-#: data/mp/messages/strings/names.txt:879
+#: data/mp/messages/strings/names.txt:880
 msgid "Vehicle Self-Repair"
 msgstr "Araçlar Oto-Tamir"
 
 #: data/base/messages/strings/names.txt:871
-#: data/mp/messages/strings/names.txt:880
+#: data/mp/messages/strings/names.txt:881
 msgid "Automated Vehicle Repair Mk2"
 msgstr "Otomatik Araç Tamiri Kdm2"
 
 #: data/base/messages/strings/names.txt:872
-#: data/mp/messages/strings/names.txt:881
+#: data/mp/messages/strings/names.txt:882
 msgid "Automated Vehicle Repair Mk3"
 msgstr "Otomatik Araç Tamiri Kdm3"
 
 #: data/base/messages/strings/names.txt:874
-#: data/mp/messages/strings/names.txt:885
+#: data/mp/messages/strings/names.txt:886
 msgid "Sensor Upgrade"
 msgstr "Algılayıcı Yükseltmesi"
 
 #: data/base/messages/strings/names.txt:876
-#: data/mp/messages/strings/names.txt:887
+#: data/mp/messages/strings/names.txt:888
 msgid "Construction Unit"
 msgstr "İnşa Birimi"
 
 #: data/base/messages/strings/names.txt:878
-#: data/mp/messages/strings/names.txt:889
+#: data/mp/messages/strings/names.txt:890
 msgid "Engineering"
 msgstr "Mühendislik"
 
 #: data/base/messages/strings/names.txt:879
-#: data/mp/messages/strings/names.txt:890
+#: data/mp/messages/strings/names.txt:891
 msgid "Improved Engineering"
 msgstr "Gelişmiş Mühendislik"
 
 #: data/base/messages/strings/names.txt:880
-#: data/mp/messages/strings/names.txt:891
+#: data/mp/messages/strings/names.txt:892
 msgid "Advanced Engineering"
 msgstr "İleri Mühendislik"
 
 #: data/base/messages/strings/names.txt:882
-#: data/mp/messages/strings/names.txt:893
+#: data/mp/messages/strings/names.txt:894
 msgid "Mobile Repair Turret"
 msgstr "Mobil Tamir Tareti"
 
@@ -6635,84 +6630,84 @@ msgstr "Ağır Mobil Tamir Tareti"
 
 #: data/base/messages/strings/names.txt:884
 #: data/base/messages/strings/resstrings.txt:450
-#: data/mp/messages/strings/names.txt:895
+#: data/mp/messages/strings/names.txt:896
 #: data/mp/messages/strings/resstrings.txt:480
 msgid "Mobile Repair Upgrade"
 msgstr "Mobil Tamir Yükseltmesi"
 
 #: data/base/messages/strings/names.txt:885
-#: data/mp/messages/strings/names.txt:896
+#: data/mp/messages/strings/names.txt:897
 msgid "Mobile Repair Upgrade Mk2"
 msgstr "Mobil Tamir Yükseltmesi Kdm2"
 
 #: data/base/messages/strings/names.txt:891
-#: data/mp/messages/strings/names.txt:902
+#: data/mp/messages/strings/names.txt:903
 msgid "CB Turret"
 msgstr "A.B Tareti"
 
 #: data/base/messages/strings/names.txt:893
-#: data/mp/messages/strings/names.txt:904
+#: data/mp/messages/strings/names.txt:905
 msgid "CB Sensor Upgrade"
 msgstr "A.B Algılayıcı Yükseltmesi"
 
 #: data/base/messages/strings/names.txt:894
-#: data/mp/messages/strings/names.txt:905
+#: data/mp/messages/strings/names.txt:906
 msgid "CB Sensor Upgrade 2"
 msgstr "A.B Algılayıcı Yükseltmesi Kdm2"
 
 #: data/base/messages/strings/names.txt:895
-#: data/mp/messages/strings/names.txt:906
+#: data/mp/messages/strings/names.txt:907
 msgid "CB Sensor Upgrade 3"
 msgstr "A.B Algılayıcı Yükseltmesi Kdm3"
 
 #: data/base/messages/strings/names.txt:897
-#: data/mp/messages/strings/names.txt:908
+#: data/mp/messages/strings/names.txt:909
 msgid "VTOL CB Turret"
 msgstr "DİvK A.B Tareti"
 
 #: data/base/messages/strings/names.txt:900
-#: data/mp/messages/strings/names.txt:911
+#: data/mp/messages/strings/names.txt:912
 msgid "VTOL CB Upgrade"
 msgstr "DİvK A.B Yükseltmesi"
 
 #: data/base/messages/strings/names.txt:901
-#: data/mp/messages/strings/names.txt:912
+#: data/mp/messages/strings/names.txt:913
 msgid "VTOL CB Upgrade 2"
 msgstr "DİvK A.B Yükseltmesi Kdm2"
 
 #: data/base/messages/strings/names.txt:902
-#: data/mp/messages/strings/names.txt:913
+#: data/mp/messages/strings/names.txt:914
 msgid "VTOL CB Upgrade 3"
 msgstr "DİvK A.B Yükseltmesi Kdm3"
 
 #: data/base/messages/strings/names.txt:903
-#: data/mp/messages/strings/names.txt:914
+#: data/mp/messages/strings/names.txt:915
 msgid "VTOL Strike Upgrade"
 msgstr "DİvK Vuruş Yükseltmesi"
 
 #: data/base/messages/strings/names.txt:904
-#: data/mp/messages/strings/names.txt:915
+#: data/mp/messages/strings/names.txt:916
 msgid "VTOL Strike Upgrade Mk2"
 msgstr "DİvK Vuruş Yükseltmesi Kdm2"
 
 #: data/base/messages/strings/names.txt:905
-#: data/mp/messages/strings/names.txt:916
+#: data/mp/messages/strings/names.txt:917
 msgid "VTOL Strike Upgrade Mk3"
 msgstr "DİvK Vuruş Yükseltmesi Kdm3"
 
 #: data/base/messages/strings/names.txt:907
 #: data/mp/messages/strings/names.txt:427
-#: data/mp/messages/strings/names.txt:918
+#: data/mp/messages/strings/names.txt:919
 msgid "VTOL Strike Tower"
 msgstr "DİvK Vuruş Kulesi"
 
 #: data/base/messages/strings/names.txt:910
-#: data/mp/messages/strings/names.txt:921
+#: data/mp/messages/strings/names.txt:922
 msgid "Improved Scrambler"
 msgstr "Gelişmiş Sinyal Bozucu"
 
 #: data/base/messages/strings/names.txt:911
-#: data/mp/messages/strings/names.txt:922
+#: data/mp/messages/strings/names.txt:923
 msgid "Scrambler Turret Mk2"
 msgstr "Sinyal Bozucu Tareti Kdm2"
 
@@ -6733,292 +6728,292 @@ msgid "NEXUS Resistance Circuits Mk3"
 msgstr "NEXUS Direnç Devreleri Kdm3"
 
 #: data/base/messages/strings/names.txt:918
-#: data/mp/messages/strings/names.txt:929
+#: data/mp/messages/strings/names.txt:930
 msgid "Sensor Lock"
 msgstr "Algılayıcı Kilidi"
 
 #: data/base/messages/strings/names.txt:922
-#: data/mp/messages/strings/names.txt:933
+#: data/mp/messages/strings/names.txt:934
 msgid "Thermal Armor"
 msgstr "Termal Zırh"
 
 #: data/base/messages/strings/names.txt:923
-#: data/mp/messages/strings/names.txt:934
+#: data/mp/messages/strings/names.txt:935
 msgid "Thermal Armor Mk2"
 msgstr "Termal Zırh Kdm2"
 
 #: data/base/messages/strings/names.txt:924
-#: data/mp/messages/strings/names.txt:935
+#: data/mp/messages/strings/names.txt:936
 msgid "Thermal Armor Mk3"
 msgstr "Termal Zırh Kdm3"
 
 #: data/base/messages/strings/names.txt:925
-#: data/mp/messages/strings/names.txt:936
+#: data/mp/messages/strings/names.txt:937
 msgid "High Intensity Thermal Armor"
 msgstr "Yüksek Isıya Dayanıklı Araç Termal Zırhı"
 
 #: data/base/messages/strings/names.txt:926
-#: data/mp/messages/strings/names.txt:937
+#: data/mp/messages/strings/names.txt:938
 msgid "High Intensity Thermal Armor Mk2"
 msgstr "Yüksek Isıya Dayanıklı Araç Termal Zırhı Kdm2"
 
 #: data/base/messages/strings/names.txt:927
-#: data/mp/messages/strings/names.txt:938
+#: data/mp/messages/strings/names.txt:939
 msgid "High Intensity Thermal Armor Mk3"
 msgstr "Yüksek Isıya Dayanıklı Araç Termal Zırhı Kdm3"
 
 #: data/base/messages/strings/names.txt:929
-#: data/mp/messages/strings/names.txt:940
+#: data/mp/messages/strings/names.txt:941
 msgid "Light Body - Viper"
 msgstr "Hafif Beden - Engerek"
 
 #: data/base/messages/strings/names.txt:930
-#: data/mp/messages/strings/names.txt:941
+#: data/mp/messages/strings/names.txt:942
 msgid "Light Body - Leopard"
 msgstr "Hafif Beden - Leopar"
 
 #: data/base/messages/strings/names.txt:931
-#: data/mp/messages/strings/names.txt:942
+#: data/mp/messages/strings/names.txt:943
 msgid "Light Body - Retaliation"
 msgstr "Hafif Beden - İsyan"
 
 #: data/base/messages/strings/names.txt:932
-#: data/mp/messages/strings/names.txt:943
+#: data/mp/messages/strings/names.txt:944
 msgid "Light Body - Bug"
 msgstr "Hafif Beden - Böcek"
 
 #: data/base/messages/strings/names.txt:933
-#: data/mp/messages/strings/names.txt:944
+#: data/mp/messages/strings/names.txt:945
 msgid "Medium Body - Cobra"
 msgstr "Orta Beden - Kobra"
 
 #: data/base/messages/strings/names.txt:934
-#: data/mp/messages/strings/names.txt:945
+#: data/mp/messages/strings/names.txt:946
 msgid "Medium Body - Panther"
 msgstr "Orta Beden - Panter"
 
 #: data/base/messages/strings/names.txt:935
-#: data/mp/messages/strings/names.txt:946
+#: data/mp/messages/strings/names.txt:947
 msgid "Medium Body - Retribution"
 msgstr "Orta Beden - Cezalandırma"
 
 #: data/base/messages/strings/names.txt:936
-#: data/mp/messages/strings/names.txt:947
+#: data/mp/messages/strings/names.txt:948
 msgid "Medium Body - Scorpion"
 msgstr "Orta Beden - Akrep"
 
 #: data/base/messages/strings/names.txt:937
-#: data/mp/messages/strings/names.txt:948
+#: data/mp/messages/strings/names.txt:949
 msgid "Heavy Body - Tiger"
 msgstr "Ağır Beden - Kaplan"
 
 #: data/base/messages/strings/names.txt:938
-#: data/mp/messages/strings/names.txt:949
+#: data/mp/messages/strings/names.txt:950
 msgid "Heavy Body - Vengeance"
 msgstr "Ağır Beden - İntikam"
 
 #: data/base/messages/strings/names.txt:939
-#: data/mp/messages/strings/names.txt:950
+#: data/mp/messages/strings/names.txt:951
 msgid "Heavy Body - Python"
 msgstr "Ağır Beden - Piton"
 
 #: data/base/messages/strings/names.txt:940
-#: data/mp/messages/strings/names.txt:951
+#: data/mp/messages/strings/names.txt:952
 msgid "Heavy Body - Mantis"
 msgstr "Ağır Beden - P. Devesi"
 
 #: data/base/messages/strings/names.txt:943
-#: data/mp/messages/strings/names.txt:954
+#: data/mp/messages/strings/names.txt:955
 msgid "Fuel Injection Engine Mk2"
 msgstr "Yakıt Enjeksiyon Sistemi  Kdm2"
 
 #: data/base/messages/strings/names.txt:944
-#: data/mp/messages/strings/names.txt:955
+#: data/mp/messages/strings/names.txt:956
 msgid "Fuel Injection Engine Mk3"
 msgstr "Yakıt Enjeksiyon Sistemi  Kdm3"
 
 #: data/base/messages/strings/names.txt:946
-#: data/mp/messages/strings/names.txt:957
+#: data/mp/messages/strings/names.txt:958
 msgid "Turbo-Charged Engine Mk2"
 msgstr "Çift Motor Kdm2"
 
 #: data/base/messages/strings/names.txt:947
-#: data/mp/messages/strings/names.txt:958
+#: data/mp/messages/strings/names.txt:959
 msgid "Turbo-Charged Engine Mk3"
 msgstr "Çift Motor Kdm3"
 
 #: data/base/messages/strings/names.txt:949
-#: data/mp/messages/strings/names.txt:960
+#: data/mp/messages/strings/names.txt:961
 msgid "Gas Turbine Engine Mk2"
 msgstr "Gaz Türbini Mühendisliği Kdm2"
 
 #: data/base/messages/strings/names.txt:950
-#: data/mp/messages/strings/names.txt:961
+#: data/mp/messages/strings/names.txt:962
 msgid "Gas Turbine Engine Mk3"
 msgstr "Gaz Türbini Mühendisliği Kdm3"
 
 #: data/base/messages/strings/names.txt:953
-#: data/mp/messages/strings/names.txt:964
+#: data/mp/messages/strings/names.txt:965
 msgid "Composite Alloys"
 msgstr "Kompozit Alaşımları"
 
 #: data/base/messages/strings/names.txt:954
-#: data/mp/messages/strings/names.txt:965
+#: data/mp/messages/strings/names.txt:966
 msgid "Composite Alloys Mk2"
 msgstr "Kompozit Alaşımları Kdm2"
 
 #: data/base/messages/strings/names.txt:955
-#: data/mp/messages/strings/names.txt:966
+#: data/mp/messages/strings/names.txt:967
 msgid "Composite Alloys Mk3"
 msgstr "Kompozit Alaşımları Kdm3"
 
 #: data/base/messages/strings/names.txt:956
-#: data/mp/messages/strings/names.txt:967
+#: data/mp/messages/strings/names.txt:968
 msgid "Dense Composite Alloys"
 msgstr "Yoğunlaştırılmış Kompazit Alaşımları"
 
 #: data/base/messages/strings/names.txt:957
-#: data/mp/messages/strings/names.txt:968
+#: data/mp/messages/strings/names.txt:969
 msgid "Dense Composite Alloys Mk2"
 msgstr "Yoğunlaştırılmış Kompazit Alaşımları Kdm2"
 
 #: data/base/messages/strings/names.txt:958
-#: data/mp/messages/strings/names.txt:969
+#: data/mp/messages/strings/names.txt:970
 msgid "Dense Composite Alloys Mk3"
 msgstr "Yoğunlaştırılmış Kompazit Alaşımları Kdm3"
 
 #: data/base/messages/strings/names.txt:959
-#: data/mp/messages/strings/names.txt:970
+#: data/mp/messages/strings/names.txt:971
 msgid "Superdense Composite Alloys"
 msgstr "Yüksek Yoğunlukta Kompozit Alaşımları"
 
 #: data/base/messages/strings/names.txt:960
-#: data/mp/messages/strings/names.txt:971
+#: data/mp/messages/strings/names.txt:972
 msgid "Superdense Composite Alloys Mk2"
 msgstr "Yüksek Yoğunlukta Kompozit Alaşımları Kdm2"
 
 #: data/base/messages/strings/names.txt:961
-#: data/mp/messages/strings/names.txt:972
+#: data/mp/messages/strings/names.txt:973
 msgid "Superdense Composite Alloys Mk3"
 msgstr "Yüksek Yoğunlukta Kompozit Alaşımları Kdm3"
 
 #: data/base/messages/strings/names.txt:964
-#: data/mp/messages/strings/names.txt:975
+#: data/mp/messages/strings/names.txt:976
 msgid "Hover Propulsion"
 msgstr "Hovercraft Yürütücü"
 
 #: data/base/messages/strings/names.txt:965
-#: data/mp/messages/strings/names.txt:976
+#: data/mp/messages/strings/names.txt:977
 msgid "Hover Propulsion II"
 msgstr "Hovercraft II"
 
 #: data/base/messages/strings/names.txt:967
-#: data/mp/messages/strings/names.txt:978
+#: data/mp/messages/strings/names.txt:979
 msgid "Half-tracked Propulsion"
 msgstr "Yarım Paletli Yürütücü"
 
 #: data/base/messages/strings/names.txt:968
-#: data/mp/messages/strings/names.txt:979
+#: data/mp/messages/strings/names.txt:980
 msgid "Half-tracked Propulsion II"
 msgstr "Yarım Paletli Yürütücü II"
 
 #: data/base/messages/strings/names.txt:970
-#: data/mp/messages/strings/names.txt:981
+#: data/mp/messages/strings/names.txt:982
 msgid "Tracked Propulsion"
 msgstr "Palet Yürütücü"
 
 #: data/base/messages/strings/names.txt:971
-#: data/mp/messages/strings/names.txt:982
+#: data/mp/messages/strings/names.txt:983
 msgid "Tracked Propulsion II"
 msgstr "Palet Yürütücü II"
 
 #: data/base/messages/strings/names.txt:973
-#: data/mp/messages/strings/names.txt:984
+#: data/mp/messages/strings/names.txt:985
 msgid "VTOL Propulsion"
 msgstr "DİvK Uçuş Parçası"
 
 #: data/base/messages/strings/names.txt:974
-#: data/mp/messages/strings/names.txt:985
+#: data/mp/messages/strings/names.txt:986
 msgid "VTOL Propulsion II"
 msgstr "DİvK Uçuş Parçası II"
 
 #: data/base/messages/strings/names.txt:977
-#: data/mp/messages/strings/names.txt:988
+#: data/mp/messages/strings/names.txt:989
 msgid "Wheeled Propulsion II"
 msgstr "Tekerlekli Yürütücü II"
 
 #: data/base/messages/strings/names.txt:984
-#: data/mp/messages/strings/names.txt:995
+#: data/mp/messages/strings/names.txt:996
 msgid "AA Thermal Imaging Sensor"
 msgstr "AA Termal Hedefleme Algılayıcısı"
 
 #: data/base/messages/strings/names.txt:985
-#: data/mp/messages/strings/names.txt:996
+#: data/mp/messages/strings/names.txt:997
 msgid "AA Target Acquisition Shells"
 msgstr "AA Hedef Alıcı Mermiler"
 
 #: data/base/messages/strings/names.txt:986
-#: data/mp/messages/strings/names.txt:997
+#: data/mp/messages/strings/names.txt:998
 msgid "AA Target Prediction Computer"
 msgstr "Hedef Tespit Edici AA Bilgisayarı"
 
 #: data/base/messages/strings/names.txt:987
-#: data/mp/messages/strings/names.txt:998
+#: data/mp/messages/strings/names.txt:999
 msgid "AA HE Flak"
 msgstr "Patlayıcılığı arttırılmış AA Uçaksavar"
 
 #: data/base/messages/strings/names.txt:988
-#: data/mp/messages/strings/names.txt:999
+#: data/mp/messages/strings/names.txt:1000
 msgid "AA HE Flak Mk2"
 msgstr "Patlayıcılığı arttırılmış AA Uçaksavar Kdm2"
 
 #: data/base/messages/strings/names.txt:989
-#: data/mp/messages/strings/names.txt:1000
+#: data/mp/messages/strings/names.txt:1001
 msgid "AA HE Flak Mk3"
 msgstr "Patlayıcılığı arttırılmış AA Uçaksavar Kdm3"
 
 #: data/base/messages/strings/names.txt:990
-#: data/mp/messages/strings/names.txt:1001
+#: data/mp/messages/strings/names.txt:1002
 msgid "AA HEAP Flak"
 msgstr "Patlayıcılığı arttırılmış Zırh Delici  AA Uçaksavar"
 
 #: data/base/messages/strings/names.txt:991
-#: data/mp/messages/strings/names.txt:1002
+#: data/mp/messages/strings/names.txt:1003
 msgid "AA HEAP Flak Mk2"
 msgstr "Patlayıcılığı arttırılmış Zırh Delici  AA Uçaksavar Kdm2"
 
 #: data/base/messages/strings/names.txt:992
-#: data/mp/messages/strings/names.txt:1003
+#: data/mp/messages/strings/names.txt:1004
 msgid "AA HEAP Flak Mk3"
 msgstr "Patlayıcılığı arttırılmış Zırh Delici  AA Uçaksavar Kdm3"
 
 #: data/base/messages/strings/names.txt:993
-#: data/mp/messages/strings/names.txt:1004
+#: data/mp/messages/strings/names.txt:1005
 msgid "AA Ammunition Hopper"
 msgstr "AA Mühimmat Sıçratıcı"
 
 #: data/base/messages/strings/names.txt:994
-#: data/mp/messages/strings/names.txt:1005
+#: data/mp/messages/strings/names.txt:1006
 msgid "AA Ammunition Hopper Mk2"
 msgstr "AA Mühimmat Sıçratıcı Kdm2"
 
 #: data/base/messages/strings/names.txt:995
-#: data/mp/messages/strings/names.txt:1006
+#: data/mp/messages/strings/names.txt:1007
 msgid "AA Ammunition Hopper Mk3"
 msgstr "AA Mühimmat Sıçratıcı Kdm3"
 
 #: data/base/messages/strings/names.txt:996
-#: data/mp/messages/strings/names.txt:1007
+#: data/mp/messages/strings/names.txt:1008
 msgid "AA Chainfeed Loader"
 msgstr "AA Zincir Yükleme Sistemi"
 
 #: data/base/messages/strings/names.txt:997
-#: data/mp/messages/strings/names.txt:1008
+#: data/mp/messages/strings/names.txt:1009
 msgid "AA Chainfeed Loader Mk2"
 msgstr "AA Zincir Yükleme Sistemi Kdm2"
 
 #: data/base/messages/strings/names.txt:998
-#: data/mp/messages/strings/names.txt:1009
+#: data/mp/messages/strings/names.txt:1010
 msgid "AA Chainfeed Loader Mk3"
 msgstr "AA Zincir Yükleme Sistemi Kdm3"
 
@@ -7027,17 +7022,17 @@ msgid "Cluster Bombs Bay"
 msgstr "Demet Bombalar"
 
 #: data/base/messages/strings/names.txt:1004
-#: data/mp/messages/strings/names.txt:1015
+#: data/mp/messages/strings/names.txt:1016
 msgid "HEAP Bomb Bay"
 msgstr "Y.P.Z.D Bomba Demeti"
 
 #: data/base/messages/strings/names.txt:1005
-#: data/mp/messages/strings/names.txt:1016
+#: data/mp/messages/strings/names.txt:1017
 msgid "Phosphor Bomb Bay"
 msgstr "Fosfor Bomba Demeti"
 
 #: data/base/messages/strings/names.txt:1006
-#: data/mp/messages/strings/names.txt:1017
+#: data/mp/messages/strings/names.txt:1018
 msgid "Thermite Bomb Bay"
 msgstr "Termik Bomba Demeti"
 
@@ -7054,255 +7049,255 @@ msgid "Target Acquisition Bombsight"
 msgstr "Hedef Alıcı Bombardıman Hedefleyici"
 
 #: data/base/messages/strings/names.txt:1012
-#: data/mp/messages/strings/names.txt:1023
+#: data/mp/messages/strings/names.txt:1024
 msgid "Cannon Laser Rangefinder"
 msgstr "Topçu Lazer Menzi Bulucu"
 
 #: data/base/messages/strings/names.txt:1013
-#: data/mp/messages/strings/names.txt:1024
+#: data/mp/messages/strings/names.txt:1025
 msgid "Cannon Laser Designator"
 msgstr "Lazerli Hedef Belirleme Sistemi"
 
 #: data/base/messages/strings/names.txt:1014
-#: data/mp/messages/strings/names.txt:1025
+#: data/mp/messages/strings/names.txt:1026
 msgid "HEAT Cannon Shells"
 msgstr "Patlayıcılığı Arttırılmış Topçu Mermileri"
 
 #: data/base/messages/strings/names.txt:1015
-#: data/mp/messages/strings/names.txt:1026
+#: data/mp/messages/strings/names.txt:1027
 msgid "HEAT Cannon Shells Mk2"
 msgstr "Patlayıcılığı Arttırılmış Topçu Mermileri Kdm2"
 
 #: data/base/messages/strings/names.txt:1016
-#: data/mp/messages/strings/names.txt:1027
+#: data/mp/messages/strings/names.txt:1028
 msgid "HEAT Cannon Shells Mk3"
 msgstr "Patlayıcılığı Arttırılmış Topçu Mermileri Kdm3"
 
 #: data/base/messages/strings/names.txt:1017
-#: data/mp/messages/strings/names.txt:1028
+#: data/mp/messages/strings/names.txt:1029
 msgid "APFSDS Cannon Rounds"
 msgstr "Z.D.F.S.D.S Topçu Mermileri"
 
 #: data/base/messages/strings/names.txt:1018
-#: data/mp/messages/strings/names.txt:1029
+#: data/mp/messages/strings/names.txt:1030
 msgid "APFSDS Cannon Rounds Mk2"
 msgstr "Z.D.F.S.D.S Topçu Mermileri Kdm2"
 
 #: data/base/messages/strings/names.txt:1019
-#: data/mp/messages/strings/names.txt:1030
+#: data/mp/messages/strings/names.txt:1031
 msgid "APFSDS Cannon Rounds Mk3"
 msgstr "Z.D.F.S.D.S Topçu Mermileri Kdm3"
 
 #: data/base/messages/strings/names.txt:1020
-#: data/mp/messages/strings/names.txt:1031
+#: data/mp/messages/strings/names.txt:1032
 msgid "HVAPFSDS Cannon Rounds"
 msgstr "Y.H.A.D.F.S.D.M Top Mermileri"
 
 #: data/base/messages/strings/names.txt:1021
-#: data/mp/messages/strings/names.txt:1032
+#: data/mp/messages/strings/names.txt:1033
 msgid "HVAPFSDS Cannon Rounds Mk2"
 msgstr "Y.H.A.D.F.S.D.M Top Mermileri Kdm2"
 
 #: data/base/messages/strings/names.txt:1022
-#: data/mp/messages/strings/names.txt:1033
+#: data/mp/messages/strings/names.txt:1034
 msgid "HVAPFSDS Cannon Rounds Mk3"
 msgstr "Y.H.A.D.F.S.D.M Top Mermileri Kdm3"
 
 # auto -> selbst
 # Substantiv im Englischen absichtlich als Adjektiv im Deutschen -Kreuvf
 #: data/base/messages/strings/names.txt:1026
-#: data/mp/messages/strings/names.txt:1037
+#: data/mp/messages/strings/names.txt:1038
 msgid "Cannon Autoloader"
 msgstr "Topçu Otomatik Yükleme Sistemi"
 
 #: data/base/messages/strings/names.txt:1027
-#: data/mp/messages/strings/names.txt:1038
+#: data/mp/messages/strings/names.txt:1039
 msgid "Cannon Autoloader Mk2"
 msgstr "Topçu Otomatik Yükleme Sistemi Kdm2"
 
 #: data/base/messages/strings/names.txt:1028
-#: data/mp/messages/strings/names.txt:1039
+#: data/mp/messages/strings/names.txt:1040
 msgid "Cannon Autoloader Mk3"
 msgstr "Topçu Otomatik Yükleme Sistemi Kdm3"
 
 # Substantiv im Englischen absichtlich adjektivisch im Deutschen -Kreuvf
 #: data/base/messages/strings/names.txt:1029
-#: data/mp/messages/strings/names.txt:1040
+#: data/mp/messages/strings/names.txt:1041
 msgid "Cannon Rapid Loader"
 msgstr "Topçu Hızlı Yükleme Sistemi"
 
 #: data/base/messages/strings/names.txt:1030
-#: data/mp/messages/strings/names.txt:1041
+#: data/mp/messages/strings/names.txt:1042
 msgid "Cannon Rapid Loader Mk2"
 msgstr "Topçu Hızlı Yükleme Sistemi Kdm2"
 
 #: data/base/messages/strings/names.txt:1031
-#: data/mp/messages/strings/names.txt:1042
+#: data/mp/messages/strings/names.txt:1043
 msgid "Cannon Rapid Loader Mk3"
 msgstr "Topçu Hızlı Yükleme Sistemi Kdm3"
 
 #: data/base/messages/strings/names.txt:1039
-#: data/mp/messages/strings/names.txt:1050
+#: data/mp/messages/strings/names.txt:1051
 msgid "Improved Laser Focusing"
 msgstr "Gelişmiş Lazer Odaklayıcı"
 
 #: data/base/messages/strings/names.txt:1040
-#: data/mp/messages/strings/names.txt:1051
+#: data/mp/messages/strings/names.txt:1052
 msgid "Improved Laser Focusing Mk2"
 msgstr "Gelişmiş Lazer Odaklayıcı Kdm2"
 
 #: data/base/messages/strings/names.txt:1041
-#: data/mp/messages/strings/names.txt:1052
+#: data/mp/messages/strings/names.txt:1053
 msgid "Improved Laser Focusing Mk3"
 msgstr "Gelişmiş Lazer Odaklayıcı Kdm3"
 
 #: data/base/messages/strings/names.txt:1042
-#: data/mp/messages/strings/names.txt:1053
+#: data/mp/messages/strings/names.txt:1054
 msgid "Hi-Energy Laser Emitter"
 msgstr "Yüksek Enerjili Lazer Emici"
 
 #: data/base/messages/strings/names.txt:1043
-#: data/mp/messages/strings/names.txt:1054
+#: data/mp/messages/strings/names.txt:1055
 msgid "Hi-Energy Laser Emitter Mk2"
 msgstr "Yüksek Enerjili Lazer Emici Kdm2"
 
 #: data/base/messages/strings/names.txt:1044
-#: data/mp/messages/strings/names.txt:1055
+#: data/mp/messages/strings/names.txt:1056
 msgid "Hi-Energy Laser Emitter Mk3"
 msgstr "Yüksek Enerjili Lazer Emici Kdm3"
 
 #: data/base/messages/strings/names.txt:1045
-#: data/mp/messages/strings/names.txt:1056
+#: data/mp/messages/strings/names.txt:1057
 msgid "Thermopole Energizer"
 msgstr "Termal Enerji Verici"
 
 #: data/base/messages/strings/names.txt:1046
-#: data/mp/messages/strings/names.txt:1057
+#: data/mp/messages/strings/names.txt:1058
 msgid "Thermopole Energizer Mk2"
 msgstr "Termal Enerji Verici Kdm2"
 
 #: data/base/messages/strings/names.txt:1047
-#: data/mp/messages/strings/names.txt:1058
+#: data/mp/messages/strings/names.txt:1059
 msgid "Thermopole Energizer Mk3"
 msgstr "Termal Enerji Verici Kdm3"
 
 #: data/base/messages/strings/names.txt:1049
-#: data/mp/messages/strings/names.txt:1060
+#: data/mp/messages/strings/names.txt:1061
 msgid "High Temperature Flamer Gel"
 msgstr "Yüksek Isıda Flamer Jeli"
 
 #: data/base/messages/strings/names.txt:1050
-#: data/mp/messages/strings/names.txt:1061
+#: data/mp/messages/strings/names.txt:1062
 msgid "High Temperature Flamer Gel Mk2"
 msgstr "Yüksek Isıda Flamer Jeli Kdm2"
 
 #: data/base/messages/strings/names.txt:1051
-#: data/mp/messages/strings/names.txt:1062
+#: data/mp/messages/strings/names.txt:1063
 msgid "High Temperature Flamer Gel Mk3"
 msgstr "Yüksek Isıda Flamer Jeli Kdm3"
 
 #: data/base/messages/strings/names.txt:1052
-#: data/mp/messages/strings/names.txt:1063
+#: data/mp/messages/strings/names.txt:1064
 msgid "Superhot Flamer Gel"
 msgstr "İnanılmaz Sıcak Flamer Jeli"
 
 #: data/base/messages/strings/names.txt:1053
-#: data/mp/messages/strings/names.txt:1064
+#: data/mp/messages/strings/names.txt:1065
 msgid "Superhot Flamer Gel Mk2"
 msgstr "İnanılmaz Sıcak Flamer Jeli Kdm2"
 
 #: data/base/messages/strings/names.txt:1054
-#: data/mp/messages/strings/names.txt:1065
+#: data/mp/messages/strings/names.txt:1066
 msgid "Superhot Flamer Gel Mk3"
 msgstr "İnanılmaz Sıcak Flamer Jeli Kdm3"
 
 #: data/base/messages/strings/names.txt:1055
-#: data/mp/messages/strings/names.txt:1066
+#: data/mp/messages/strings/names.txt:1067
 msgid "Flamer Autoloader"
 msgstr "Alev Atıcı Otomatik Yükleme Sistemi"
 
 #: data/base/messages/strings/names.txt:1056
-#: data/mp/messages/strings/names.txt:1067
+#: data/mp/messages/strings/names.txt:1068
 msgid "Flamer Autoloader Mk2"
 msgstr "Alev Atıcı Otomatik Yükleme Sistemi Kdm2"
 
 #: data/base/messages/strings/names.txt:1057
-#: data/mp/messages/strings/names.txt:1068
+#: data/mp/messages/strings/names.txt:1069
 msgid "Flamer Autoloader Mk3"
 msgstr "Alev Atıcı Otomatik Yükleme Sistemi Kdm3"
 
 #: data/base/messages/strings/names.txt:1059
-#: data/mp/messages/strings/names.txt:1070
+#: data/mp/messages/strings/names.txt:1071
 msgid "Heavy Flamer - Inferno"
 msgstr "Ağır Flamer - Cehennem Alevi Atar"
 
 #: data/base/messages/strings/names.txt:1062
-#: data/mp/messages/strings/names.txt:1073
+#: data/mp/messages/strings/names.txt:1074
 msgid "Heavy Howitzer - Ground Shaker"
 msgstr "Ağır Havan - Yer Sarsıcı"
 
 #: data/base/messages/strings/names.txt:1063
-#: data/mp/messages/strings/names.txt:1074
+#: data/mp/messages/strings/names.txt:1075
 msgid "Rotary Howitzer - Hellstorm"
 msgstr "Dönüşlü Havan - Cehennem Fırtınası"
 
 #: data/base/messages/strings/names.txt:1066
-#: data/mp/messages/strings/names.txt:1077
+#: data/mp/messages/strings/names.txt:1078
 msgid "Target Acquisition Artillery Shells"
 msgstr "Hedef Alıcı Batarya Mermileri"
 
 #: data/base/messages/strings/names.txt:1067
-#: data/mp/messages/strings/names.txt:1078
+#: data/mp/messages/strings/names.txt:1079
 msgid "Target Acquisition Artillery Shells Mk2"
 msgstr "Hedef Alıcı Batarya Mermileri Kdm2"
 
 #: data/base/messages/strings/names.txt:1068
-#: data/mp/messages/strings/names.txt:1079
+#: data/mp/messages/strings/names.txt:1080
 msgid "Target Prediction Artillery Shells"
 msgstr "Hedef Tahminli Batarya Mermileri"
 
 #: data/base/messages/strings/names.txt:1070
-#: data/mp/messages/strings/names.txt:1081
+#: data/mp/messages/strings/names.txt:1082
 msgid "HE Howitzer Shells"
 msgstr "Patlayıcılığı arttırılmış Havan Mermileri"
 
 #: data/base/messages/strings/names.txt:1071
-#: data/mp/messages/strings/names.txt:1082
+#: data/mp/messages/strings/names.txt:1083
 msgid "HE Howitzer Shells Mk2"
 msgstr "Patlayıcılığı arttırılmış Havan Mermileri Kdm2"
 
 #: data/base/messages/strings/names.txt:1072
-#: data/mp/messages/strings/names.txt:1083
+#: data/mp/messages/strings/names.txt:1084
 msgid "HE Howitzer Shells Mk3"
 msgstr "Patlayıcılığı arttırılmış Havan Mermileri Kdm3"
 
 #: data/base/messages/strings/names.txt:1073
-#: data/mp/messages/strings/names.txt:1084
+#: data/mp/messages/strings/names.txt:1085
 msgid "HEAP Howitzer Shells"
 msgstr "Patlayıcılığı Arttırılmış, Zırh Delici Havan Mermileri"
 
 #: data/base/messages/strings/names.txt:1074
-#: data/mp/messages/strings/names.txt:1085
+#: data/mp/messages/strings/names.txt:1086
 msgid "HEAP Howitzer Shells Mk2"
 msgstr "Patlayıcılığı Arttırılmış, Zırh Delici Havan Mermileri Kdm2"
 
 #: data/base/messages/strings/names.txt:1075
-#: data/mp/messages/strings/names.txt:1086
+#: data/mp/messages/strings/names.txt:1087
 msgid "HEAP Howitzer Shells Mk3"
 msgstr "Patlayıcılığı Arttırılmış, Zırh Delici Havan Mermileri Kdm3"
 
 #: data/base/messages/strings/names.txt:1077
-#: data/mp/messages/strings/names.txt:1088
+#: data/mp/messages/strings/names.txt:1089
 msgid "Howitzer Autoloader"
 msgstr "Havan Otomatik Yükleyici"
 
 #: data/base/messages/strings/names.txt:1078
-#: data/mp/messages/strings/names.txt:1089
+#: data/mp/messages/strings/names.txt:1090
 msgid "Howitzer Autoloader Mk2"
 msgstr "Havan Otomatik Yükleyici Kdm2"
 
 #: data/base/messages/strings/names.txt:1079
-#: data/mp/messages/strings/names.txt:1090
+#: data/mp/messages/strings/names.txt:1091
 msgid "Howitzer Autoloader Mk3"
 msgstr "Havan Otomatik Yükleyici Kdm3"
 
@@ -7311,57 +7306,57 @@ msgid "Fast Loader"
 msgstr "Hızlı Yükleyici"
 
 #: data/base/messages/strings/names.txt:1082
-#: data/mp/messages/strings/names.txt:1093
+#: data/mp/messages/strings/names.txt:1094
 msgid "Laser - Flashlight"
 msgstr "Lazer - Flaşışığı"
 
 #: data/base/messages/strings/names.txt:1085
-#: data/mp/messages/strings/names.txt:1096
+#: data/mp/messages/strings/names.txt:1097
 msgid "Hardened MG Bullets"
 msgstr "Sertleştirilmiş M.T Mermileri"
 
 #: data/base/messages/strings/names.txt:1086
-#: data/mp/messages/strings/names.txt:1097
+#: data/mp/messages/strings/names.txt:1098
 msgid "APDSB MG Bullets"
 msgstr "Z.D.G.S.M  Makinalı Mermileri"
 
 #: data/base/messages/strings/names.txt:1087
-#: data/mp/messages/strings/names.txt:1098
+#: data/mp/messages/strings/names.txt:1099
 msgid "APDSB MG Bullets Mk2"
 msgstr "Z.D.G.S.M  Makinalı Mermileri Kdm2"
 
 #: data/base/messages/strings/names.txt:1088
-#: data/mp/messages/strings/names.txt:1099
+#: data/mp/messages/strings/names.txt:1100
 msgid "APDSB MG Bullets Mk3"
 msgstr "Z.D.G.S.M  Makinalı Mermileri Kdm3"
 
 #: data/base/messages/strings/names.txt:1089
-#: data/mp/messages/strings/names.txt:1100
+#: data/mp/messages/strings/names.txt:1101
 msgid "Tungsten-Tipped MG Bullets"
 msgstr "Tugsten Makinalı Tüfek Mermileri"
 
 #: data/base/messages/strings/names.txt:1090
-#: data/mp/messages/strings/names.txt:1101
+#: data/mp/messages/strings/names.txt:1102
 msgid "Tungsten-Tipped MG Bullets Mk2"
 msgstr "Tugsten Makinalı Tüfek Mermileri Kdm2"
 
 #: data/base/messages/strings/names.txt:1091
-#: data/mp/messages/strings/names.txt:1102
+#: data/mp/messages/strings/names.txt:1103
 msgid "Tungsten-Tipped MG Bullets Mk3"
 msgstr "Tugsten Makinalı Tüfek Mermileri Kdm3"
 
 #: data/base/messages/strings/names.txt:1092
-#: data/mp/messages/strings/names.txt:1103
+#: data/mp/messages/strings/names.txt:1104
 msgid "Depleted Uranium MG Bullets"
 msgstr "Güçlendirilmiş Uranyum M.T Mermileri"
 
 #: data/base/messages/strings/names.txt:1093
-#: data/mp/messages/strings/names.txt:1104
+#: data/mp/messages/strings/names.txt:1105
 msgid "Depleted Uranium MG Bullets Mk2"
 msgstr "Güçlendirilmiş Uranyum M.T Mermileri Kdm2"
 
 #: data/base/messages/strings/names.txt:1095
-#: data/mp/messages/strings/names.txt:1106
+#: data/mp/messages/strings/names.txt:1107
 msgid "Chaingun Upgrade"
 msgstr "Zincirsilah Sistemi"
 
@@ -7370,142 +7365,142 @@ msgid "Rapid Fire Chaingun Upgrade"
 msgstr "Hızlı Yükleme Sistemli Zincirsilah Mekanizma Yükseltmesi"
 
 #: data/base/messages/strings/names.txt:1097
-#: data/mp/messages/strings/names.txt:1108
+#: data/mp/messages/strings/names.txt:1109
 msgid "Hyper Fire Chaingun Upgrade"
 msgstr "Yüksek Hızda Zincirsilah Yükseltmesi"
 
 #: data/base/messages/strings/names.txt:1103
-#: data/mp/messages/strings/names.txt:1114
+#: data/mp/messages/strings/names.txt:1115
 msgid "Target Prediction Missiles"
 msgstr "Hedef Tahmin-Güdümlü Füzeler"
 
 #: data/base/messages/strings/names.txt:1104
-#: data/mp/messages/strings/names.txt:1115
+#: data/mp/messages/strings/names.txt:1116
 msgid "Search & Destroy Missiles"
 msgstr "Araştır-ve-Yoket Füzeler"
 
 #: data/base/messages/strings/names.txt:1105
-#: data/mp/messages/strings/names.txt:1116
+#: data/mp/messages/strings/names.txt:1117
 msgid "Advanced Missile Warhead"
 msgstr "Gelişmiş Füze Savaş Başlığı"
 
 #: data/base/messages/strings/names.txt:1106
-#: data/mp/messages/strings/names.txt:1117
+#: data/mp/messages/strings/names.txt:1118
 msgid "Advanced Missile Warhead Mk2"
 msgstr "Gelişmiş Füze Savaş Başlığı Kdm2"
 
 #: data/base/messages/strings/names.txt:1107
-#: data/mp/messages/strings/names.txt:1118
+#: data/mp/messages/strings/names.txt:1119
 msgid "Advanced Missile Warhead Mk3"
 msgstr "Gelişmiş Füze Savaş Başlığı Kdm3"
 
 #: data/base/messages/strings/names.txt:1108
-#: data/mp/messages/strings/names.txt:1119
+#: data/mp/messages/strings/names.txt:1120
 msgid "Advanced Missile Allocation System"
 msgstr "Gelişmiş Füze Tahsis Sistemi"
 
 #: data/base/messages/strings/names.txt:1109
-#: data/mp/messages/strings/names.txt:1120
+#: data/mp/messages/strings/names.txt:1121
 msgid "Advanced Missile Allocation System Mk2"
 msgstr "Gelişmiş Füze Tahsis Sistemi Kdm2"
 
 #: data/base/messages/strings/names.txt:1110
-#: data/mp/messages/strings/names.txt:1121
+#: data/mp/messages/strings/names.txt:1122
 msgid "Advanced Missile Allocation System Mk3"
 msgstr "Gelişmiş Füze Tahsis Sistemi Kdm3"
 
 #: data/base/messages/strings/names.txt:1111
-#: data/mp/messages/strings/names.txt:1122
+#: data/mp/messages/strings/names.txt:1123
 msgid "HEAP Missile Warhead"
 msgstr "P.A.Z.D. Savaş Başlığı"
 
 #: data/base/messages/strings/names.txt:1112
-#: data/mp/messages/strings/names.txt:1123
+#: data/mp/messages/strings/names.txt:1124
 msgid "HEAP Missile Warhead Mk2"
 msgstr "P.A.Z.D. Savaş Başlığı Kdm2"
 
 #: data/base/messages/strings/names.txt:1113
-#: data/mp/messages/strings/names.txt:1124
+#: data/mp/messages/strings/names.txt:1125
 msgid "HEAP Missile Warhead Mk3"
 msgstr "P.A.Z.D. Savaş Başlığı Kdm3"
 
 #: data/base/messages/strings/names.txt:1114
-#: data/mp/messages/strings/names.txt:1125
+#: data/mp/messages/strings/names.txt:1126
 msgid "Improved Missile Loading System"
 msgstr "Gelişmiş Füze Yükleme Sistemi"
 
 #: data/base/messages/strings/names.txt:1125
-#: data/mp/messages/strings/names.txt:1136
+#: data/mp/messages/strings/names.txt:1137
 msgid "Mortar Targeting Computer"
 msgstr "Havan T. Hedefleme Bilgisayarı"
 
 #: data/base/messages/strings/names.txt:1126
-#: data/mp/messages/strings/names.txt:1137
+#: data/mp/messages/strings/names.txt:1138
 msgid "Thermal Imaging Mortar Shells"
 msgstr "Termal Görüntüleyici Havan T. Gülleleri"
 
 #: data/base/messages/strings/names.txt:1127
-#: data/mp/messages/strings/names.txt:1138
+#: data/mp/messages/strings/names.txt:1139
 msgid "Target Acquisition Mortar Shells"
 msgstr "Hedef Alıcılı Havan T. Gülleleri"
 
 #: data/base/messages/strings/names.txt:1128
-#: data/mp/messages/strings/names.txt:1139
+#: data/mp/messages/strings/names.txt:1140
 msgid "HE Mortar Shells"
 msgstr "Patlayıcılığı Arttırılmış Havan Gülleleri"
 
 #: data/base/messages/strings/names.txt:1129
-#: data/mp/messages/strings/names.txt:1140
+#: data/mp/messages/strings/names.txt:1141
 msgid "HE Mortar Shells Mk2"
 msgstr "Patlayıcılığı Arttırılmış Havan Gülleleri Kdm2"
 
 #: data/base/messages/strings/names.txt:1130
-#: data/mp/messages/strings/names.txt:1141
+#: data/mp/messages/strings/names.txt:1142
 msgid "HE Mortar Shells Mk3"
 msgstr "Patlayıcılığı Arttırılmış Havan Gülleleri Kdm3"
 
 #: data/base/messages/strings/names.txt:1131
-#: data/mp/messages/strings/names.txt:1142
+#: data/mp/messages/strings/names.txt:1143
 msgid "HEAP Mortar Shells"
 msgstr "P.A.Z.D Havan T. Gülleleri"
 
 #: data/base/messages/strings/names.txt:1132
-#: data/mp/messages/strings/names.txt:1143
+#: data/mp/messages/strings/names.txt:1144
 msgid "HEAP Mortar Shells Mk2"
 msgstr "P.A.Z.D Havan T. Gülleleri Kdm2"
 
 #: data/base/messages/strings/names.txt:1133
-#: data/mp/messages/strings/names.txt:1144
+#: data/mp/messages/strings/names.txt:1145
 msgid "HEAP Mortar Shells Mk3"
 msgstr "P.A.Z.D Havan T. Gülleleri Kdm3"
 
 #: data/base/messages/strings/names.txt:1134
-#: data/mp/messages/strings/names.txt:1145
+#: data/mp/messages/strings/names.txt:1146
 msgid "Mortar Autoloader"
 msgstr "Havan T. Otomatik Yükleme Sistemi"
 
 #: data/base/messages/strings/names.txt:1135
-#: data/mp/messages/strings/names.txt:1146
+#: data/mp/messages/strings/names.txt:1147
 msgid "Mortar Autoloader Mk2"
 msgstr "Havan T. Otomatik Yükleme Sistemi Kdm2"
 
 #: data/base/messages/strings/names.txt:1136
-#: data/mp/messages/strings/names.txt:1147
+#: data/mp/messages/strings/names.txt:1148
 msgid "Mortar Autoloader Mk3"
 msgstr "Havan T. Otomatik Yükleme Sistemi Kdm3"
 
 #: data/base/messages/strings/names.txt:1137
-#: data/mp/messages/strings/names.txt:1148
+#: data/mp/messages/strings/names.txt:1149
 msgid "Mortar Fast Loader"
 msgstr "Havan Hızlı Yükleyici"
 
 #: data/base/messages/strings/names.txt:1139
-#: data/mp/messages/strings/names.txt:1150
+#: data/mp/messages/strings/names.txt:1151
 msgid "Heavy Mortar - Bombard"
 msgstr "Ağır Havan Topu - Bombardıman"
 
 #: data/base/messages/strings/names.txt:1140
-#: data/mp/messages/strings/names.txt:1151
+#: data/mp/messages/strings/names.txt:1152
 msgid "Rotary Mortar - Pepperpot"
 msgstr "Dönüşlü Havan - BiberPot"
 
@@ -7514,32 +7509,32 @@ msgid "Target Prediction Computer"
 msgstr "Hedef Alıcı Bilgisayar"
 
 #: data/base/messages/strings/names.txt:1146
-#: data/mp/messages/strings/names.txt:1157
+#: data/mp/messages/strings/names.txt:1158
 msgid "Hardened Rail Dart"
 msgstr "Sertleştirilmiş Demir İğneleri"
 
 #: data/base/messages/strings/names.txt:1147
-#: data/mp/messages/strings/names.txt:1158
+#: data/mp/messages/strings/names.txt:1159
 msgid "Hardened Rail Dart Mk2"
 msgstr "Sertleştirilmiş Demir İğneleri Kdm2"
 
 #: data/base/messages/strings/names.txt:1148
-#: data/mp/messages/strings/names.txt:1159
+#: data/mp/messages/strings/names.txt:1160
 msgid "Hardened Rail Dart Mk3"
 msgstr "Sertleştirilmiş Demir İğneleri Kdm3"
 
 #: data/base/messages/strings/names.txt:1149
-#: data/mp/messages/strings/names.txt:1160
+#: data/mp/messages/strings/names.txt:1161
 msgid "Rail Gun ROF"
 msgstr "Demir Topu Hedef Tutturması"
 
 #: data/base/messages/strings/names.txt:1150
-#: data/mp/messages/strings/names.txt:1161
+#: data/mp/messages/strings/names.txt:1162
 msgid "Rail Gun ROF Mk2"
 msgstr "Demir Topu Hedef Tutturması Kdm2"
 
 #: data/base/messages/strings/names.txt:1151
-#: data/mp/messages/strings/names.txt:1162
+#: data/mp/messages/strings/names.txt:1163
 msgid "Rail Gun ROF Mk3"
 msgstr "Demir Topu Hedef Tutturması Kdm3"
 
@@ -7588,283 +7583,283 @@ msgid "Fast Fire Mini-Rockets Mk3"
 msgstr "Hızlı Ateşlenen Mini Roketler Kdm3"
 
 #: data/base/messages/strings/names.txt:1164
-#: data/mp/messages/strings/names.txt:1180
+#: data/mp/messages/strings/names.txt:1181
 msgid "Rapid Fire Mini-Rockets"
 msgstr "Hızlı Ateşlenen Mini Roketler"
 
 #: data/base/messages/strings/names.txt:1165
-#: data/mp/messages/strings/names.txt:1181
+#: data/mp/messages/strings/names.txt:1182
 msgid "Rapid Fire Mini-Rockets Mk2"
 msgstr "Hızlı Ateşlenen Mini Roketler Kdm2"
 
 #: data/base/messages/strings/names.txt:1166
-#: data/mp/messages/strings/names.txt:1182
+#: data/mp/messages/strings/names.txt:1183
 msgid "Rapid Fire Mini-Rockets Mk3"
 msgstr "Hızlı Ateşlenen Mini Roketler Kdm3"
 
 #: data/base/messages/strings/names.txt:1167
-#: data/mp/messages/strings/names.txt:1165
+#: data/mp/messages/strings/names.txt:1166
 msgid "Improved Rocket Wire Guidance"
 msgstr "Gelişmiş Roket Güdüm Sistemi"
 
 #: data/base/messages/strings/names.txt:1168
-#: data/mp/messages/strings/names.txt:1166
+#: data/mp/messages/strings/names.txt:1167
 msgid "Rocket Laser Designator"
 msgstr "Roket Lazerli Hedefleme Sistemi"
 
 #: data/base/messages/strings/names.txt:1169
-#: data/mp/messages/strings/names.txt:1167
+#: data/mp/messages/strings/names.txt:1168
 msgid "Thermal Imaging Rockets"
 msgstr "Termal Hedef Alıcı Roketler"
 
 #: data/base/messages/strings/names.txt:1170
-#: data/mp/messages/strings/names.txt:1171
+#: data/mp/messages/strings/names.txt:1172
 msgid "HEAT Rocket Warhead"
 msgstr "Patlayıcılığı arttırılmış Zırh Delici Roket Savaş Başlığı"
 
 #: data/base/messages/strings/names.txt:1171
-#: data/mp/messages/strings/names.txt:1172
+#: data/mp/messages/strings/names.txt:1173
 msgid "HEAT Rocket Warhead Mk2"
 msgstr "Patlayıcılığı arttırılmış Zırh Delici Roket Savaş Başlığı Kdm2"
 
 #: data/base/messages/strings/names.txt:1172
-#: data/mp/messages/strings/names.txt:1173
+#: data/mp/messages/strings/names.txt:1174
 msgid "HEAT Rocket Warhead Mk3"
 msgstr "Patlayıcılığı arttırılmış Zırh Delici Roket Savaş Başlığı Kdm3"
 
 # http://de.wikipedia.org/wiki/Quetschkopf -Kreuvf
 #: data/base/messages/strings/names.txt:1173
-#: data/mp/messages/strings/names.txt:1174
+#: data/mp/messages/strings/names.txt:1175
 msgid "HESH Rocket Warhead"
 msgstr "P.A.S.H Roket Savaşbaşlığı"
 
 #: data/base/messages/strings/names.txt:1174
-#: data/mp/messages/strings/names.txt:1175
+#: data/mp/messages/strings/names.txt:1176
 msgid "HESH Rocket Warhead Mk2"
 msgstr "P.A.S.H Roket Savaşbaşlığı Kdm2"
 
 #: data/base/messages/strings/names.txt:1175
-#: data/mp/messages/strings/names.txt:1176
+#: data/mp/messages/strings/names.txt:1177
 msgid "HESH Rocket Warhead Mk3"
 msgstr "P.A.S.H Roket Savaşbaşlığı Kdm3"
 
 #: data/base/messages/strings/names.txt:1176
-#: data/mp/messages/strings/names.txt:1177
+#: data/mp/messages/strings/names.txt:1178
 msgid "Rocket Autoloader"
 msgstr "Roketatar Otomatik Yükleyici"
 
 #: data/base/messages/strings/names.txt:1177
-#: data/mp/messages/strings/names.txt:1178
+#: data/mp/messages/strings/names.txt:1179
 msgid "Rocket Autoloader Mk2"
 msgstr "Roketatar Otomatik Yükleyici Kdm2"
 
 #: data/base/messages/strings/names.txt:1178
-#: data/mp/messages/strings/names.txt:1179
+#: data/mp/messages/strings/names.txt:1180
 msgid "Rocket Autoloader Mk3"
 msgstr "Roketatar Otomatik Yükleyici Kdm3"
 
 #: data/base/messages/strings/names.txt:1180
-#: data/mp/messages/strings/names.txt:1194
+#: data/mp/messages/strings/names.txt:1195
 msgid "Lancer AT Rocket"
 msgstr "Roketatar-A.T Roketi "
 
 #: data/base/messages/strings/names.txt:1182
-#: data/mp/messages/strings/names.txt:1196
+#: data/mp/messages/strings/names.txt:1197
 msgid "Bunker Buster Rocket"
 msgstr "Sığınak Yokedici Roket"
 
 #: data/base/messages/strings/names.txt:1185
-#: data/mp/messages/strings/names.txt:1199
+#: data/mp/messages/strings/names.txt:1200
 msgid "Tank Killer Rocket"
 msgstr "Tank Öldürücü Roket"
 
 #: data/base/messages/strings/names.txt:1187
-#: data/mp/messages/strings/names.txt:1201
+#: data/mp/messages/strings/names.txt:1202
 msgid "Machinegun Artifact"
 msgstr "Makinalı Eseri"
 
 #: data/base/messages/strings/names.txt:1190
-#: data/mp/messages/strings/names.txt:1204
+#: data/mp/messages/strings/names.txt:1205
 msgid "New Paradigm Command Center"
 msgstr "Yeni Paradigma Komuta Merkezi"
 
 #: data/base/messages/strings/names.txt:1191
-#: data/mp/messages/strings/names.txt:1205
+#: data/mp/messages/strings/names.txt:1206
 msgid "Collective Command Center"
 msgstr "Kollektif Komuta Merkezi"
 
 #: data/base/messages/strings/names.txt:1201
-#: data/mp/messages/strings/names.txt:1215
+#: data/mp/messages/strings/names.txt:1216
 msgid "Scavenger Factory"
 msgstr "Çöpçü Fabrikası"
 
 #: data/base/messages/strings/names.txt:1202
-#: data/mp/messages/strings/names.txt:1216
+#: data/mp/messages/strings/names.txt:1217
 msgid "Scavenger Gun Tower"
 msgstr "Çöpçü Sİlah Kulesi"
 
 #: data/base/messages/strings/names.txt:1203
-#: data/mp/messages/strings/names.txt:1217
+#: data/mp/messages/strings/names.txt:1218
 msgid "Scavenger Horizontal Wall"
 msgstr "Çöpçü Yatay Duvarı"
 
 #: data/base/messages/strings/names.txt:1204
-#: data/mp/messages/strings/names.txt:1218
+#: data/mp/messages/strings/names.txt:1219
 msgid "Scavenger Power Generator"
 msgstr "Çöpçü Güç Jeneratörü"
 
 #: data/base/messages/strings/names.txt:1205
-#: data/mp/messages/strings/names.txt:1219
+#: data/mp/messages/strings/names.txt:1220
 msgid "Scavenger Rocket Pit"
 msgstr "Çöpçü Roket Kuyusu"
 
 #: data/base/messages/strings/names.txt:1206
-#: data/mp/messages/strings/names.txt:1220
+#: data/mp/messages/strings/names.txt:1221
 msgid "Scavenger AT-Rocket Pit"
 msgstr "Çöpçü A.T Roket Kuyusu"
 
 #: data/base/messages/strings/names.txt:1207
-#: data/mp/messages/strings/names.txt:1221
+#: data/mp/messages/strings/names.txt:1222
 msgid "Scavenger Bunker"
 msgstr "Çöpçü Sığınağı"
 
 #: data/base/messages/strings/names.txt:1208
-#: data/mp/messages/strings/names.txt:1222
+#: data/mp/messages/strings/names.txt:1223
 msgid "Scavenger CornerWall"
 msgstr "Çöpçü Köşe Duvarı"
 
 #: data/base/messages/strings/names.txt:1209
-#: data/mp/messages/strings/names.txt:1223
+#: data/mp/messages/strings/names.txt:1224
 msgid "Scavenger Flame Tower"
 msgstr "Çöpçü Alev Atıcı Kule"
 
 #: data/base/messages/strings/names.txt:1210
-#: data/mp/messages/strings/names.txt:1224
+#: data/mp/messages/strings/names.txt:1225
 msgid "Scavenger Flame Tower End"
 msgstr "Çöpçü Alev Atıcı Kule-Köşe"
 
 #: data/base/messages/strings/names.txt:1211
-#: data/mp/messages/strings/names.txt:1225
+#: data/mp/messages/strings/names.txt:1226
 msgid "Look-Out Tower"
 msgstr "Dış Gözetleme Kulesi"
 
 #: data/base/messages/strings/names.txt:1212
-#: data/mp/messages/strings/names.txt:1226
+#: data/mp/messages/strings/names.txt:1227
 msgid "Cannon Tower"
 msgstr "Topçu Kulesi"
 
 #: data/base/messages/strings/names.txt:1235
-#: data/mp/messages/strings/names.txt:1249
+#: data/mp/messages/strings/names.txt:1250
 msgid "Artifact"
 msgstr "Eser"
 
 #: data/base/messages/strings/names.txt:1236
-#: data/mp/messages/strings/names.txt:1250
+#: data/mp/messages/strings/names.txt:1251
 msgid "Oil Resource"
 msgstr "Petrol Kaynağı"
 
 #: data/base/messages/strings/names.txt:1262
-#: data/mp/messages/strings/names.txt:1276
+#: data/mp/messages/strings/names.txt:1277
 msgid "Bridge"
 msgstr "Köprü"
 
 #: data/base/messages/strings/names.txt:1265
-#: data/mp/messages/strings/names.txt:1279
+#: data/mp/messages/strings/names.txt:1280
 msgid "Ruined Factory"
 msgstr "Kalıntı Fabrika"
 
 #: data/base/messages/strings/names.txt:1266
-#: data/mp/messages/strings/names.txt:1280
+#: data/mp/messages/strings/names.txt:1281
 msgid "Warehouse"
 msgstr "Depo"
 
 #: data/base/messages/strings/names.txt:1267
-#: data/mp/messages/strings/names.txt:1281
+#: data/mp/messages/strings/names.txt:1282
 msgid "Hut"
 msgstr "Kulübe"
 
 #: data/base/messages/strings/names.txt:1275
-#: data/mp/messages/strings/names.txt:1289
+#: data/mp/messages/strings/names.txt:1290
 msgid "Oil Drum"
 msgstr "Petrol Varili"
 
 #: data/base/messages/strings/names.txt:1293
-#: data/mp/messages/strings/names.txt:1307
+#: data/mp/messages/strings/names.txt:1308
 msgid "Wreck"
 msgstr "Enkaz"
 
 #: data/base/messages/strings/names.txt:1295
-#: data/mp/messages/strings/names.txt:1309
+#: data/mp/messages/strings/names.txt:1310
 msgid "Wrecked Tank"
 msgstr "Tank Enkazı"
 
 #: data/base/messages/strings/names.txt:1313
-#: data/mp/messages/strings/names.txt:1327
+#: data/mp/messages/strings/names.txt:1328
 msgid "Wrecked Bridge"
 msgstr "Köprü Enkazı"
 
 #: data/base/messages/strings/names.txt:1314
-#: data/mp/messages/strings/names.txt:1328
+#: data/mp/messages/strings/names.txt:1329
 msgid "Wrecked Van"
 msgstr "Kamyon Enkazı"
 
 #: data/base/messages/strings/names.txt:1315
-#: data/mp/messages/strings/names.txt:1329
+#: data/mp/messages/strings/names.txt:1330
 msgid "Wrecked Vehicle"
 msgstr "Araç Enkazı"
 
 #: data/base/messages/strings/names.txt:1316
-#: data/mp/messages/strings/names.txt:1330
+#: data/mp/messages/strings/names.txt:1331
 msgid "Wrecked Tanker"
 msgstr "Tanker Enkazı"
 
 #: data/base/messages/strings/names.txt:1320
 #: data/base/messages/strings/names.txt:1336
-#: data/mp/messages/strings/names.txt:1334
-#: data/mp/messages/strings/names.txt:1350
+#: data/mp/messages/strings/names.txt:1335
+#: data/mp/messages/strings/names.txt:1351
 msgid "Cyborg Laboratory"
 msgstr "Cyborg Labaratuarı"
 
 #: data/base/messages/strings/names.txt:1321
-#: data/mp/messages/strings/names.txt:1335
+#: data/mp/messages/strings/names.txt:1336
 msgid "Advanced Warfare Laboratory"
 msgstr "Gelişmiş Harp Labaratuarı"
 
 #: data/base/messages/strings/names.txt:1322
 #: data/base/messages/strings/names.txt:1338
-#: data/mp/messages/strings/names.txt:1336
-#: data/mp/messages/strings/names.txt:1352
+#: data/mp/messages/strings/names.txt:1337
+#: data/mp/messages/strings/names.txt:1353
 msgid "Engineering Laboratory"
 msgstr "Mühendislik Labaratuarı"
 
 #: data/base/messages/strings/names.txt:1323
 #: data/base/messages/strings/names.txt:1339
-#: data/mp/messages/strings/names.txt:1337
-#: data/mp/messages/strings/names.txt:1353
+#: data/mp/messages/strings/names.txt:1338
+#: data/mp/messages/strings/names.txt:1354
 msgid "Robotics Laboratory"
 msgstr "Robotik Labaratuar"
 
 #: data/base/messages/strings/names.txt:1324
-#: data/mp/messages/strings/names.txt:1338
+#: data/mp/messages/strings/names.txt:1339
 msgid "Laser Optics Laboratory"
 msgstr "Lazer optik Labaratuarı"
 
 #: data/base/messages/strings/names.txt:1325
 #: data/base/messages/strings/names.txt:1337
-#: data/mp/messages/strings/names.txt:1339
-#: data/mp/messages/strings/names.txt:1351
+#: data/mp/messages/strings/names.txt:1340
+#: data/mp/messages/strings/names.txt:1352
 msgid "Electronics Laboratory"
 msgstr "Elektronik Labaratuarı"
 
 #: data/base/messages/strings/names.txt:1326
 #: data/base/messages/strings/names.txt:1335
-#: data/mp/messages/strings/names.txt:1340
-#: data/mp/messages/strings/names.txt:1349
+#: data/mp/messages/strings/names.txt:1341
+#: data/mp/messages/strings/names.txt:1350
 msgid "Chemical Laboratory"
 msgstr "Kimyasal Labaratuar"
 
 #: data/base/messages/strings/names.txt:1334
-#: data/mp/messages/strings/names.txt:1348
+#: data/mp/messages/strings/names.txt:1349
 msgid "Advanced Warfare"
 msgstr "Modern Harp"
 
@@ -7885,7 +7880,7 @@ msgid "MRL Emplacement"
 msgstr "Sabitlenmiş MRL Bataryası"
 
 #: data/base/messages/strings/names.txt:1375
-#: data/mp/messages/strings/names.txt:1389
+#: data/mp/messages/strings/names.txt:1390
 msgid "Railgun Emplacement"
 msgstr "Sabitlenmiş Demir Silahı"
 
@@ -7894,49 +7889,47 @@ msgid "Angel Missile Emplacement"
 msgstr "Sabitlenmiş Melek Füzesi"
 
 #: data/base/messages/strings/names.txt:1378
-#: data/mp/messages/strings/names.txt:1392
+#: data/mp/messages/strings/names.txt:1393
 msgid "Archangel Missile Emplacement"
 msgstr "Sabitlenmiş BaşMelek Füzesi"
 
 #: data/base/messages/strings/names.txt:1423
-#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1881
-#: data/mp/messages/strings/names.txt:1887
+#: data/mp/messages/strings/names.txt:1888
 msgid "Repair Turret Cobra Tracks"
 msgstr "Tamir Tareti Kobra Paletler"
 
 # Das Cyborg mal des Klanges wegen hinzugefügt -Kreuvf
 #: data/base/messages/strings/names.txt:1436
-#: data/mp/messages/strings/names.txt:1450
-#: data/mp/messages/strings/names.txt:1517
+#: data/mp/messages/strings/names.txt:1451
+#: data/mp/messages/strings/names.txt:1518
 msgid "Scourge"
 msgstr "Felaket Füzeli Cyborg"
 
 #: data/base/messages/strings/names.txt:1437
-#: data/mp/messages/strings/names.txt:1451
+#: data/mp/messages/strings/names.txt:1452
 msgid "Bunker Blaster"
 msgstr "Sığınak vurucu"
 
 #: data/base/messages/strings/names.txt:1438
-#: data/mp/messages/strings/names.txt:1452
-#: data/mp/messages/strings/names.txt:1518
+#: data/mp/messages/strings/names.txt:1453
+#: data/mp/messages/strings/names.txt:1519
 msgid "Flashlight Gunner"
 msgstr "Flaşışığı Silahlı"
 
 #: data/base/messages/strings/names.txt:1439
-#: data/mp/messages/strings/names.txt:1453
-#: data/mp/messages/strings/names.txt:1606
+#: data/mp/messages/strings/names.txt:1454
+#: data/mp/messages/strings/names.txt:1607
 msgid "Needle Gunner"
 msgstr "İğne Silahlı"
 
 #: data/base/messages/strings/names.txt:1440
-#: data/mp/messages/strings/names.txt:1454
+#: data/mp/messages/strings/names.txt:1455
 msgid "Downed Transport"
 msgstr "Düşmüş Taşıma Gemisi"
 
 #: data/base/messages/strings/names.txt:1458
-#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1922
-#: data/mp/messages/strings/names.txt:1472
-#: data/mp/messages/strings/names.txt:1928
+#: data/mp/messages/strings/names.txt:1473
+#: data/mp/messages/strings/names.txt:1929
 msgid "Tank Killer Python Tracks"
 msgstr "Tank Öldürücü Piton Paletler"
 
@@ -7949,31 +7942,31 @@ msgid "Cyclone AA Python Half-tracks"
 msgstr "Girdap Uçaksavar Piton Yarım Paletler"
 
 #: data/base/messages/strings/names.txt:1461
-#: data/mp/messages/strings/names.txt:1475
+#: data/mp/messages/strings/names.txt:1476
 msgid "Assault Gun Python Tracks"
 msgstr "Hücüm Silahlı Piton Paletler"
 
 #: data/base/messages/strings/names.txt:1467
-#: data/mp/messages/strings/names.txt:1481
+#: data/mp/messages/strings/names.txt:1482
 msgid "Flashlight"
 msgstr "Flaşışığı"
 
 #: data/base/messages/strings/names.txt:1468
-#: data/mp/messages/strings/names.txt:1482
+#: data/mp/messages/strings/names.txt:1483
 msgid "VTOL Flashlight"
 msgstr "DİvK Flaşışığı"
 
 #: data/base/messages/strings/names.txt:1471
 #: data/base/messages/strings/names.txt:1472
-#: data/mp/messages/strings/names.txt:755
-#: data/mp/messages/strings/names.txt:1485
+#: data/mp/messages/strings/names.txt:756
+#: data/mp/messages/strings/names.txt:1486
 msgid "Rotary MG Bunker"
 msgstr "Dönüşlü M.T Sığınağı"
 
 #: data/base/messages/strings/names.txt:1477
 #: data/base/messages/strings/names.txt:1478
-#: data/mp/messages/strings/names.txt:1491
 #: data/mp/messages/strings/names.txt:1492
+#: data/mp/messages/strings/names.txt:1493
 msgid "Missile Silo"
 msgstr "Füze Silosu"
 
@@ -9085,497 +9078,6 @@ msgstr "Onları Dünyayı yeniden inşa etmek için kullanacağız."
 msgid "Slowly, out of the ashes we will rise again..."
 msgstr "Yavaşça, küllerimizden yeniden doğacağız..."
 
-#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1822
-#: data/mp/messages/strings/names.txt:1828
-msgid "Heavy Repair Turret Cobra Hover"
-msgstr "Ağır Tamir Tareti Kobra Hovercraft"
-
-#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1823
-#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1834
-#: data/mp/messages/strings/names.txt:1829
-#: data/mp/messages/strings/names.txt:1840
-msgid "Heavy Machinegun Viper Wheels"
-msgstr "Ağır Makinalı Engerek Tekerlekler"
-
-#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1824
-#: data/mp/messages/strings/names.txt:1830
-msgid "Scourge Mantis Hover"
-msgstr "Felaket F. P.Devesi Hovercraft"
-
-#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1825
-#: data/mp/messages/strings/names.txt:1831
-msgid "Tank Killer Mantis Hover"
-msgstr "Tank Öldürücü P. Devesi Hovercraft"
-
-#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1826
-#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1841
-#: data/mp/messages/strings/names.txt:1832
-#: data/mp/messages/strings/names.txt:1847
-msgid "Heavy Machinegun Cobra Tracks"
-msgstr "Ağır Makinalı Kobra Paletler"
-
-#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1827
-#: data/mp/messages/strings/names.txt:1833
-msgid "Heavy Cannon Cobra Hover"
-msgstr "Ağır Topçu Kobra hovercraft"
-
-#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1835
-#: data/mp/messages/strings/names.txt:1841
-msgid "Heavy Machinegun Cobra Wheels"
-msgstr "Ağır Makinalı Kobra Tekerlekler"
-
-#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1836
-#: data/mp/messages/strings/names.txt:1842
-msgid "Heavy Machinegun Cobra Hover"
-msgstr "Ağır Makinalı Kobra Hovercraft"
-
-#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1838
-#: data/mp/messages/strings/names.txt:1844
-msgid "Machinegun Viper Tracks"
-msgstr "Makinalı Engerek Tekerlekler"
-
-#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1839
-#: data/mp/messages/strings/names.txt:1845
-msgid "Twin Machinegun Viper Tracks"
-msgstr "Çift Makinalı Engerek Tekerlekler"
-
-#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1843
-#: data/mp/messages/strings/names.txt:1849
-msgid "Medium Cannon Cobra Hover"
-msgstr "Orta Topçu Kobra Hovercraft"
-
-#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1844
-#: data/mp/messages/strings/names.txt:1850
-msgid "Medium Cannon Scorpion Hover"
-msgstr "Orta Topçu Akrep Hovercraft"
-
-#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1845
-#: data/mp/messages/strings/names.txt:1851
-msgid "Medium Cannon Scorpion Tracks"
-msgstr "Orta Topçu Scorpion Paletler"
-
-#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1846
-#: data/mp/messages/strings/names.txt:1852
-msgid "Medium Cannon Python Hover"
-msgstr "Orta Topçu Piton Hovercraft"
-
-#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1847
-#: data/mp/messages/strings/names.txt:1853
-msgid "Heavy Cannon Python Hover"
-msgstr "Ağır Topçu Piton Hovercraft"
-
-#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1849
-#: data/mp/messages/strings/names.txt:1855
-msgid "Rail Gun Mantis Tracks"
-msgstr "Manyetik Top P. Devesi Paletler"
-
-#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1850
-#: data/mp/messages/strings/names.txt:1856
-msgid "Pulse Laser Mantis Tracks"
-msgstr "Darbeli Lazer P. Devesi Paletler"
-
-#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1851
-#: data/mp/messages/strings/names.txt:1857
-msgid "Lancer Python Tracks"
-msgstr "Roketatar Piton Paletler"
-
-#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1852
-#: data/mp/messages/strings/names.txt:1858
-msgid "Lancer Mantis Tracks"
-msgstr "Roketatar P. Devesi Paletler"
-
-#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1853
-#: data/mp/messages/strings/names.txt:1859
-msgid "Tank Killer Vengeance Tracks"
-msgstr "Tank Öldürücü İntikam Paletler"
-
-#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1858
-#: data/mp/messages/strings/names.txt:1864
-msgid "Heavy Cannon Tiger Tracks"
-msgstr "Ağır Topçu Kaplan PAletler"
-
-#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1859
-#: data/mp/messages/strings/names.txt:1865
-msgid "Needle Gun Tiger Tracks"
-msgstr "İğne Silahı Kaplan Paletler"
-
-#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1860
-#: data/mp/messages/strings/names.txt:1866
-msgid "Needle Gun Retribution Tracks"
-msgstr "İğne Silahı Cezalandırma Paletler"
-
-#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1861
-#: data/mp/messages/strings/names.txt:1867
-msgid "Needle Gun Vengeance Tracks"
-msgstr "İğne Silahı İntikam Paletler"
-
-#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1862
-#: data/mp/messages/strings/names.txt:1868
-msgid "Vengeance Tracks Rail Gun"
-msgstr "İntikam Paletler Demir Silahı"
-
-#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1863
-#: data/mp/messages/strings/names.txt:1869
-msgid "Vengeance Tracks Gauss Cannon"
-msgstr "İntikam Paletler Manyetik Top"
-
-# Original is screwed ~.~
-#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1864
-#: data/mp/messages/strings/names.txt:1870
-msgid "Vengeance Tracks Gauss Scourge"
-msgstr "İntikam Paletler Manyetik Fırtına"
-
-#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1867
-#: data/mp/messages/strings/names.txt:1873
-msgid "VTOL Cluster Bomb Bay Bug VTOL"
-msgstr "DİvK Demet Bombaları Böcek DİvK "
-
-#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1868
-#: data/mp/messages/strings/names.txt:1874
-msgid "VTOL Bunker Buster Bug VTOL"
-msgstr "DİvK Sığınak Yokedici Böcek DİvK "
-
-#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1869
-#: data/mp/messages/strings/names.txt:1875
-msgid "VTOL Cluster Bomb Bay Scorpion VTOL"
-msgstr "DİvK Demet Bomları Akrep DİvK "
-
-#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1870
-#: data/mp/messages/strings/names.txt:1876
-msgid "VTOL Bunker Buster Scorpion VTOL"
-msgstr "DİvK Sığınak Yokedici DİvK "
-
-#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1873
-#: data/mp/messages/strings/names.txt:1879
-msgid "VTOL Lancer Bug VTOL"
-msgstr "DİvK Roketatar Böcek DİvK "
-
-#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1874
-msgid "VTOL HPV Cannon Bug VTOL"
-msgstr "DİvK -Y.H.T Böcek DİvK "
-
-#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1875
-#: data/mp/messages/strings/names.txt:1881
-msgid "VTOL Lancer Scorpion VTOL"
-msgstr "DİvK Roketatar Akrep DİvK "
-
-#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1876
-msgid "VTOL HPV Cannon Scorpion VTOL"
-msgstr "DİvK Y.H.T Akrep DİvK "
-
-#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1877
-#: data/mp/messages/strings/names.txt:1883
-msgid "VTOL Lancer Mantis VTOL"
-msgstr "DİvK Roketatar P. Devesi DİvK "
-
-#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1878
-msgid "VTOL HPV Cannon Mantis VTOL"
-msgstr "DİvK Y.H.T  P. Devesi DİvK "
-
-#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1882
-#: data/mp/messages/strings/names.txt:1888
-msgid "Repair Turret Mantis Tracks"
-msgstr "Tamir Tareti P. Devesi Paletler"
-
-#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1884
-#: data/mp/messages/strings/names.txt:1890
-msgid "Lancer Scorpion Tracks"
-msgstr "Roketatar Akrep Paletler"
-
-#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1885
-#: data/mp/messages/strings/names.txt:1891
-msgid "Heavy Cannon Scorpion Tracks"
-msgstr "Ağır Topçu Akrep Paletler"
-
-#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1886
-#: data/mp/messages/strings/names.txt:1892
-msgid "Lancer Scorpion VTOL"
-msgstr "Roketatar Akrep DİvK "
-
-#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1887
-#: data/mp/messages/strings/names.txt:1893
-msgid "Bunker Buster Scorpion VTOL"
-msgstr "Sığnak Yokedici Akrep DİvK "
-
-#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1889
-#: data/mp/messages/strings/names.txt:1895
-msgid "Command Turret Viper Tracks"
-msgstr "Komuta Tareti Engerek Paletler"
-
-#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1890
-#: data/mp/messages/strings/names.txt:1896
-msgid "Command Turret Cobra Tracks"
-msgstr "Komuta Tareti Kobra Paletler"
-
-#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1891
-#: data/mp/messages/strings/names.txt:1897
-msgid "Command Turret Scorpion Tracks"
-msgstr "Komuta Tareti Akrep Paletler"
-
-#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1892
-#: data/mp/messages/strings/names.txt:1898
-msgid "Command Turret Mantis Tracks"
-msgstr "Komuta Tareti P. Devesi Paletler"
-
-#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1894
-#: data/mp/messages/strings/names.txt:1900
-msgid "Lancer Cobra Tracks"
-msgstr "Roketatar Kobra Paletler"
-
-#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1895
-#: data/mp/messages/strings/names.txt:1901
-msgid "Heavy Cannon Mantis Tracks"
-msgstr "Ağır Topçu P. Devesi Paletler"
-
-#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1896
-#: data/mp/messages/strings/names.txt:1902
-msgid "Tank Killer Mantis Tracks"
-msgstr "Tank Öldürücü P. Devesi Paletler"
-
-#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1897
-#: data/mp/messages/strings/names.txt:1903
-msgid "Scourge Mantis Tracks"
-msgstr "Felaket F.  P. Devesi Paletler"
-
-#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1898
-#: data/mp/messages/strings/names.txt:1904
-msgid "Heavy Machinegun Scorpion Tracks"
-msgstr "Ağır Makinalı Akrep Paletler"
-
-#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1900
-#: data/mp/messages/strings/names.txt:1906
-msgid "Repair Scorpion Tracks"
-msgstr "Tamir Tareti Akrep Paletler"
-
-#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1901
-#: data/mp/messages/strings/names.txt:1907
-msgid "Heavy Repair Scorpion Hover"
-msgstr "Ağır Tamir Tareti Akrep Hovercraft"
-
-#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1904
-#: data/mp/messages/strings/names.txt:1910
-msgid "Truck Cobra Hover"
-msgstr "Kamyon Kobra Hovercraft"
-
-#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1905
-#: data/mp/messages/strings/names.txt:1911
-msgid "Truck Scorpion Hover"
-msgstr "Kamyon Akrep Hovercraft"
-
-#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1906
-#: data/mp/messages/strings/names.txt:1912
-msgid "Truck Mantis Hover"
-msgstr "Kamyon P. Devesi Hovercraft"
-
-#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1909
-#: data/mp/messages/strings/names.txt:1915
-msgid "Bunker Buster Cobra Tracks"
-msgstr "Sığınak Yokedici Kobra Paletler"
-
-#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1910
-#: data/mp/messages/strings/names.txt:1916
-msgid "Bunker Buster Scorpion Tracks"
-msgstr "Sığınak Yokedici Akrep Paletler"
-
-#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1911
-#: data/mp/messages/strings/names.txt:1917
-msgid "Bunker Buster Mantis Tracks"
-msgstr "Sığınak Yokedici P. Devesi Paletler"
-
-#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1913
-#: data/mp/messages/strings/names.txt:1919
-msgid "Lancer Viper Tracks"
-msgstr "Roketatar Engerek Paletler"
-
-#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1915
-#: data/mp/messages/strings/names.txt:1921
-msgid "Mini-Rocket Cobra Half-Tracks"
-msgstr "Mini Roket Kobra Yarım Paletler"
-
-#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1916
-#: data/mp/messages/strings/names.txt:1922
-msgid "Mini-Rocket Cobra Tracks"
-msgstr "Mini Roket Kobra Paletler"
-
-#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1917
-msgid "Mini-Rocket Artillery Cobra Tracks"
-msgstr "Mini Roket Bataryası Kobra Paletler"
-
-#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1919
-#: data/mp/messages/strings/names.txt:1925
-msgid "Inferno Cobra Half-Tracks"
-msgstr "Cehennem Alevi Atıcı Kobra Yarım Paletler"
-
-#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1920
-msgid "HPV Cannon Python Hover"
-msgstr "Y.H. Topu Piton Hovercraft"
-
-#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1924
-#: data/mp/messages/strings/names.txt:1930
-msgid "Scourge Python Tracks"
-msgstr "Felaket Füzesi Piton Paletler"
-
-#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1925
-#: data/mp/messages/strings/names.txt:1931
-msgid "Gauss Cannon Python Tracks"
-msgstr "Manyetik top Piton Paletler"
-
-#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1926
-#: data/mp/messages/strings/names.txt:1932
-msgid "Pulse Laser Python Tracks"
-msgstr "Darbeli Lazer Piton Paletler"
-
-#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1927
-#: data/mp/messages/strings/names.txt:1933
-msgid "Pulse Laser Tiger Tracks"
-msgstr "Darbeli Lazer Kaplan Paletler"
-
-#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1928
-#: data/mp/messages/strings/names.txt:1934
-msgid "Heavy Laser Tiger Tracks"
-msgstr "Ağır Lazer Kaplan Paletler"
-
-#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1929
-#: data/mp/messages/strings/names.txt:1935
-msgid "Gauss Cannon Wyvern Tracks"
-msgstr "Manyetik Top Wyvern Paletler"
-
-#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1930
-#: data/mp/messages/strings/names.txt:1936
-msgid "Pulse Laser Wyvern Tracks"
-msgstr "Darbeli Lazer Wyvern Paletler"
-
-#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1931
-#: data/mp/messages/strings/names.txt:1937
-msgid "Heavy Laser Wyvern Tracks"
-msgstr "Ağır Lazer Wyvern Paletler"
-
-#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1933
-#: data/mp/messages/strings/names.txt:1939
-msgid "Machinegun Viper Half-Tracks"
-msgstr "Makinalı Engerek Yarım Paletler"
-
-#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1934
-#: data/mp/messages/strings/names.txt:1940
-msgid "Flamer Viper Half-Tracks"
-msgstr "Alev Atıcı Engerek Yarım Paletler"
-
-#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1937
-#: data/mp/messages/strings/names.txt:1943
-msgid "Inferno Cobra Hover"
-msgstr "Cehennem Alevi Atıcı Kobra Hoercraft"
-
-#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1938
-#: data/mp/messages/strings/names.txt:1944
-msgid "Medium Cannon Cobra Half Track"
-msgstr "Orta Topçu Kobra Yarım Paletler"
-
-#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1939
-#: data/mp/messages/strings/names.txt:1945
-msgid "Inferno Python Hover"
-msgstr "Cehennem Alevi Atıcı Piton Hovercraft"
-
-#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1940
-#: data/mp/messages/strings/names.txt:1946
-msgid "Assault Gun Python Hover"
-msgstr "Hücüm Silahı Piton Hovercraft"
-
-#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1941
-#: data/mp/messages/strings/names.txt:1947
-msgid "Assault Gun Python Half Track"
-msgstr "Hücüm Silahı Piton Yarım Paletler"
-
-#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1942
-#: data/mp/messages/strings/names.txt:1948
-msgid "Heavy Machinegun Scorpion Half Tracks"
-msgstr "Ağır Makinalı Akrep Yarım Paletler"
-
-#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1943
-#: data/mp/messages/strings/names.txt:1949
-msgid "Assault Cannon Mantis Hover"
-msgstr "Hücüm Topu P. Devesi Hovercraft"
-
-#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1944
-#: data/mp/messages/strings/names.txt:1950
-msgid "Pulse Laser Leopard Hover"
-msgstr "Darbeli Lazer Leopar Hovercraft"
-
-#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1945
-#: data/mp/messages/strings/names.txt:1951
-msgid "Pulse Laser Panther Hover"
-msgstr "Darbeli Lazer Panter Hovercraft"
-
-#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1946
-#: data/mp/messages/strings/names.txt:1952
-msgid "Rail Gun Tiger Hover"
-msgstr "Demir Silahı Kaplan Hovercraft"
-
-#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1947
-#: data/mp/messages/strings/names.txt:1953
-msgid "Pulse Laser Tiger Hover"
-msgstr "Darbeli Lazer Kaplan Hovercraft"
-
-#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1948
-#: data/mp/messages/strings/names.txt:1954
-msgid "Plasma Cannon Wyvern Tracks"
-msgstr "Plazma Topu Wyvern Paletler"
-
-#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1949
-#: data/mp/messages/strings/names.txt:1955
-msgid "Scourge Missile Wyvern Tracks"
-msgstr "Felaket F. Wyvern Paletler"
-
-#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1950
-#: data/mp/messages/strings/names.txt:1956
-msgid "Flashlight Retribution Hover"
-msgstr "Flaşışığı Cezalandırma Hovercraft"
-
-#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1951
-#: data/mp/messages/strings/names.txt:1957
-msgid "Mini-Rocket Viper Half Track"
-msgstr "Mini Roket Engerek Yarım Paletler"
-
-#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1952
-#: data/mp/messages/strings/names.txt:1958
-msgid "Mini-Rocket Array Viper Half Track"
-msgstr "Seri Atışlı Mini Roket Engerek Yarım Paletler"
-
-#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1953
-#: data/mp/messages/strings/names.txt:1959
-msgid "Phosphor Bomb Bay Mantis VTOL"
-msgstr "Fosfor Bomba Demeti P. Devesi DİvK "
-
-# HEAP = high explosive, armor piercing -Kreuvf
-#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1954
-#: data/mp/messages/strings/names.txt:1960
-msgid "Heap Bomb Bay Mantis VTOL"
-msgstr "Y.P.Z.D Bomba Demeti P. Devesi DİvK "
-
-#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1955
-#: data/mp/messages/strings/names.txt:1961
-msgid "Heap Bomb Bay Retribution VTOL"
-msgstr "Y.P.Z.D Bomba Demeti Cezalandırma DİvK "
-
-#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1956
-#: data/mp/messages/strings/names.txt:1962
-msgid "Scourge Retaliation VTOL"
-msgstr "Felaket F. İsyan DİvK "
-
-#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1957
-#: data/mp/messages/strings/names.txt:1963
-msgid "Plasmite Retribution VTOL"
-msgstr "Plasmit Aleci Atıcı Cezalandırıcı DİvK "
-
-#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1962
-#: data/mp/messages/strings/names.txt:675
-msgid "Super Transport"
-msgstr "Süper Taşıyıcı"
-
-#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1963
-#: data/mp/messages/strings/names.txt:676
-msgid "Super Transport Body"
-msgstr "Süper Taşıyıcı Beden"
-
 #: data/mp/messages/strings/names.txt:15
 #: data/mp/messages/strings/names.txt:673
 msgid "Cyborg Transport"
@@ -9619,7 +9121,7 @@ msgid "Electronic Countermeasures"
 msgstr "Elektronik Önlemler"
 
 #: data/mp/messages/strings/names.txt:363
-#: data/mp/messages/strings/names.txt:1703
+#: data/mp/messages/strings/names.txt:1704
 msgid "Radar Detector"
 msgstr "Radar Tespi Edici"
 
@@ -9632,17 +9134,17 @@ msgid "Nexus Link"
 msgstr "NEXUS Bağlantı"
 
 #: data/mp/messages/strings/names.txt:378
-#: data/mp/messages/strings/names.txt:920
+#: data/mp/messages/strings/names.txt:921
 msgid "Nexus Link Turret"
 msgstr "NEXUS Bağlantı Tareti"
 
 #: data/mp/messages/strings/names.txt:395
-#: data/mp/messages/strings/names.txt:719
+#: data/mp/messages/strings/names.txt:720
 msgid "Hardcrete Gate"
 msgstr "Sert Girit Kapı"
 
 #: data/mp/messages/strings/names.txt:401
-#: data/mp/messages/strings/names.txt:730
+#: data/mp/messages/strings/names.txt:731
 msgid "Inferno Bunker"
 msgstr "Cehennem Alevi Atıcı Sığınak"
 
@@ -9651,32 +9153,32 @@ msgid "Tornado AA Site"
 msgstr "Kasırga AA Sitesi"
 
 #: data/mp/messages/strings/names.txt:409
-#: data/mp/messages/strings/names.txt:721
+#: data/mp/messages/strings/names.txt:722
 msgid "AA Flak Cannon Emplacement"
 msgstr "Sabitlenmiş AA Uçaksavar Topu"
 
 #: data/mp/messages/strings/names.txt:465
-#: data/mp/messages/strings/names.txt:785
+#: data/mp/messages/strings/names.txt:786
 msgid "Pulse Laser Hardpoint"
 msgstr "Darbeli Lazer Bağlama Noktası"
 
 #: data/mp/messages/strings/names.txt:467
-#: data/mp/messages/strings/names.txt:747
+#: data/mp/messages/strings/names.txt:748
 msgid "Pulse Laser Tower"
 msgstr "Darbeli Lazer Kulesi"
 
 #: data/mp/messages/strings/names.txt:504
-#: data/mp/messages/strings/names.txt:1132
+#: data/mp/messages/strings/names.txt:1133
 msgid "Seraph Missile Array"
 msgstr "Serap Füze Bataryası"
 
 #: data/mp/messages/strings/names.txt:522
-#: data/mp/messages/strings/names.txt:1195
+#: data/mp/messages/strings/names.txt:1196
 msgid "Mini-Rocket Array"
 msgstr "Mini Roket Bataryası"
 
 #: data/mp/messages/strings/names.txt:544
-#: data/mp/messages/strings/names.txt:992
+#: data/mp/messages/strings/names.txt:993
 msgid "AA Flak Cannon"
 msgstr "AA Uçaksavar Topu"
 
@@ -9685,8 +9187,8 @@ msgid "VTOL Flak Cannon"
 msgstr "DİvK  Uçaksavar Topu"
 
 #: data/mp/messages/strings/names.txt:558
-#: data/mp/messages/strings/names.txt:1693
-#: data/mp/messages/strings/names.txt:1700
+#: data/mp/messages/strings/names.txt:1694
+#: data/mp/messages/strings/names.txt:1701
 msgid "Laser Satellite Command Post"
 msgstr "Lazer Uydusu Komuta Merkezi"
 
@@ -9706,548 +9208,925 @@ msgstr "NEXUS Duvarı"
 msgid "Nexus Corner Wall"
 msgstr "Nexus Köşe Duvarı"
 
-#: data/mp/messages/strings/names.txt:715
+#: data/mp/messages/strings/names.txt:675
+#: data/mp/messages/strings/names.txt:676
+msgid "Super Transport"
+msgstr "Süper Taşıyıcı"
+
+#: data/mp/messages/strings/names.txt:677
+msgid "Super Transport Body"
+msgstr "Süper Taşıyıcı Beden"
+
+#: data/mp/messages/strings/names.txt:716
 msgid "Plasteel"
 msgstr "Plastel"
 
-#: data/mp/messages/strings/names.txt:716
+#: data/mp/messages/strings/names.txt:717
 msgid "Plasteel Mk2"
 msgstr "Plastel Kdm2"
 
-#: data/mp/messages/strings/names.txt:717
+#: data/mp/messages/strings/names.txt:718
 msgid "Plasteel Mk3"
 msgstr "Plastel KDm3"
 
-#: data/mp/messages/strings/names.txt:726
-#: data/mp/messages/strings/names.txt:1387
+#: data/mp/messages/strings/names.txt:727
+#: data/mp/messages/strings/names.txt:1388
 msgid "Hyper Velocity Cannon Emplacement"
 msgstr "Sabitlenmiş Yüksek Hız Topu"
 
-#: data/mp/messages/strings/names.txt:737
-#: data/mp/messages/strings/names.txt:1390
+#: data/mp/messages/strings/names.txt:738
+#: data/mp/messages/strings/names.txt:1391
 msgid "Seraph Missile Battery"
 msgstr "Serap Füze Bataryası"
 
-#: data/mp/messages/strings/names.txt:766
+#: data/mp/messages/strings/names.txt:767
 msgid "Flamer Tower"
 msgstr "Alev Atıcı Kule"
 
-#: data/mp/messages/strings/names.txt:784
-#: data/mp/messages/strings/names.txt:1395
+#: data/mp/messages/strings/names.txt:785
+#: data/mp/messages/strings/names.txt:1396
 msgid "Hyper Velocity Cannon Hardpoint"
 msgstr "Yüksek Hız Topu Bağlama Noktası"
 
-#: data/mp/messages/strings/names.txt:803
+#: data/mp/messages/strings/names.txt:804
 msgid "Automated Manufacturing"
 msgstr "Otomatik Üretim"
 
-#: data/mp/messages/strings/names.txt:806
+#: data/mp/messages/strings/names.txt:807
 msgid "Robotic Manufacturing"
 msgstr "Robotik Üretim"
 
-#: data/mp/messages/strings/names.txt:809
+#: data/mp/messages/strings/names.txt:810
 msgid "Advanced Manufacturing"
 msgstr "Modern Üretim"
 
-#: data/mp/messages/strings/names.txt:811
+#: data/mp/messages/strings/names.txt:812
 msgid "Self-Replicating Manufacturing"
 msgstr "Kendini Kopyalayan Üretim"
 
-#: data/mp/messages/strings/names.txt:812
+#: data/mp/messages/strings/names.txt:813
 msgid "Advanced Manufacturing Mk3"
 msgstr "Modern Üretim"
 
-#: data/mp/messages/strings/names.txt:833
+#: data/mp/messages/strings/names.txt:834
 msgid "Robotic Repair Facility"
 msgstr "Robotik Tamir Tesisi"
 
-#: data/mp/messages/strings/names.txt:835
+#: data/mp/messages/strings/names.txt:836
 msgid "Advanced Repair Facility"
 msgstr "Modern Tamir Tesisi"
 
-#: data/mp/messages/strings/names.txt:836
+#: data/mp/messages/strings/names.txt:837
 msgid "Robotic Repair Facility Mk3"
 msgstr "Robotik Tamir Tesisi Kdm3"
 
-#: data/mp/messages/strings/names.txt:837
+#: data/mp/messages/strings/names.txt:838
 msgid "Advanced Repair Facility Mk2"
 msgstr "Modern Tamir Tesisi Kdm2"
 
-#: data/mp/messages/strings/names.txt:838
+#: data/mp/messages/strings/names.txt:839
 msgid "Advanced Repair Facility Mk3"
 msgstr "Modern Tamir Tesisi Kdm3"
 
-#: data/mp/messages/strings/names.txt:883
+#: data/mp/messages/strings/names.txt:884
 msgid "Auto-Repair"
 msgstr "Otomatik Tamir"
 
-#: data/mp/messages/strings/names.txt:894
-#: data/mp/messages/strings/names.txt:1645
+#: data/mp/messages/strings/names.txt:895
 #: data/mp/messages/strings/names.txt:1646
+#: data/mp/messages/strings/names.txt:1647
 msgid "Heavy Repair Turret"
 msgstr "Ağır Tamir Tareti"
 
-#: data/mp/messages/strings/names.txt:924
+#: data/mp/messages/strings/names.txt:925
 msgid "Nexus Intruder Program"
 msgstr "Nexus Davetsiz Programı"
 
-#: data/mp/messages/strings/names.txt:925
-#: data/mp/messages/strings/names.txt:1686
+#: data/mp/messages/strings/names.txt:926
+#: data/mp/messages/strings/names.txt:1687
 msgid "Nexus Resistance Circuits"
 msgstr "NEXUS Direnç Devreleri"
 
-#: data/mp/messages/strings/names.txt:926
+#: data/mp/messages/strings/names.txt:927
 msgid "Nexus Resistance Circuits Mk2"
 msgstr "NEXUS Direnç Devreleri Kdm2"
 
-#: data/mp/messages/strings/names.txt:927
+#: data/mp/messages/strings/names.txt:928
 msgid "Nexus Resistance Circuits Mk3"
 msgstr "NEXUS Direnç Devreleri Kdm3"
 
-#: data/mp/messages/strings/names.txt:1014
+#: data/mp/messages/strings/names.txt:1015
 msgid "Cluster Bomb Bay"
 msgstr "Demet Bombalar"
 
-#: data/mp/messages/strings/names.txt:1019
+#: data/mp/messages/strings/names.txt:1020
 msgid "HE Bomb Shells"
 msgstr "P.A Bombalar"
 
-#: data/mp/messages/strings/names.txt:1020
+#: data/mp/messages/strings/names.txt:1021
 msgid "Improved Bomb Warhead"
 msgstr "Gelişmiş Bomba Savaş Başlığı"
 
-#: data/mp/messages/strings/names.txt:1021
+#: data/mp/messages/strings/names.txt:1022
 msgid "Advanced Bomb Warhead"
 msgstr "Modern Bomba Savaş Başlığı"
 
-#: data/mp/messages/strings/names.txt:1091
+#: data/mp/messages/strings/names.txt:1092
 msgid "Howitzer Fast Loader"
 msgstr "Obüs Hızlı Yükleme Sistemi"
 
-#: data/mp/messages/strings/names.txt:1107
+#: data/mp/messages/strings/names.txt:1108
 msgid "Rapid Fire Chaingun"
 msgstr "Hızlı Ateşlenen Zincirsilah"
 
-#: data/mp/messages/strings/names.txt:1156
+#: data/mp/messages/strings/names.txt:1157
 msgid "Rail Target Prediction Computer"
 msgstr "Demir Hedefleme Bilgisayarı"
 
-#: data/mp/messages/strings/names.txt:1164
+#: data/mp/messages/strings/names.txt:1165
 msgid "Stabilized Rockets"
 msgstr "Stabilize Roketler"
 
-#: data/mp/messages/strings/names.txt:1168
+#: data/mp/messages/strings/names.txt:1169
 msgid "HE Rockets"
 msgstr "P.A Roketler"
 
-#: data/mp/messages/strings/names.txt:1169
+#: data/mp/messages/strings/names.txt:1170
 msgid "HE Rockets Mk2"
 msgstr "P.A Roketler Kdm2"
 
-#: data/mp/messages/strings/names.txt:1170
+#: data/mp/messages/strings/names.txt:1171
 msgid "HE Rockets Mk3"
 msgstr "P.A Roketler Kdm3"
 
-#: data/mp/messages/strings/names.txt:1383
+#: data/mp/messages/strings/names.txt:1384
 msgid "Assault Gun Tower"
 msgstr "Hücüm Silahlı Kule"
 
-#: data/mp/messages/strings/names.txt:1437
+#: data/mp/messages/strings/names.txt:1438
 msgid "Repair Cobra Tracks"
 msgstr "Tamir Tareti Kobra Paletler"
 
-#: data/mp/messages/strings/names.txt:1473
+#: data/mp/messages/strings/names.txt:1474
 msgid "Hyper Velocity Cannon Python Tracks"
 msgstr "Yüksek Hız Topu Piton Paletler"
 
-#: data/mp/messages/strings/names.txt:1474
+#: data/mp/messages/strings/names.txt:1475
 msgid "AA Flak Cannon Python Half-tracks"
 msgstr "AA Uçaksavar Piton Yarım Paletler"
 
-#: data/mp/messages/strings/names.txt:1512
+#: data/mp/messages/strings/names.txt:1513
 msgid "Bunker Buster Cobra Hover"
 msgstr "Sığınak Yokedici Kobra Hovercraft"
 
-#: data/mp/messages/strings/names.txt:1514
+#: data/mp/messages/strings/names.txt:1515
 msgid "Sensor Upgrade Mk2"
 msgstr "Algılayıcı Yükseltme Kdm2"
 
-#: data/mp/messages/strings/names.txt:1515
+#: data/mp/messages/strings/names.txt:1516
 msgid "Sensor Upgrade Mk3"
 msgstr "Algılayıcı Yükseltme Kdm3"
 
-#: data/mp/messages/strings/names.txt:1516
+#: data/mp/messages/strings/names.txt:1517
 msgid "Vapor Turbine Generator Mk2"
 msgstr "Vapur Türbinli Jeneratör Kdm2"
 
-#: data/mp/messages/strings/names.txt:1520
+#: data/mp/messages/strings/names.txt:1521
 msgid "Gas Turbine Generator Mk2"
 msgstr "Gaz Türbinl Jeneratör Kdm2"
 
-#: data/mp/messages/strings/names.txt:1521
+#: data/mp/messages/strings/names.txt:1522
 msgid "Gas Turbine Generator Mk3"
 msgstr "Vapur Türbinl Jeneratör Kdm3"
 
-#: data/mp/messages/strings/names.txt:1524
+#: data/mp/messages/strings/names.txt:1525
 msgid "Vapor Turbine Generator Mk3"
 msgstr "Vapur Türbinli Jeneratör Kdm3"
 
-#: data/mp/messages/strings/names.txt:1612
+#: data/mp/messages/strings/names.txt:1613
 msgid "Thermite Flamer"
 msgstr "Termik Alevi Atıcı"
 
-#: data/mp/messages/strings/names.txt:1617
+#: data/mp/messages/strings/names.txt:1618
 msgid "Grenadier"
 msgstr "El Bombacı"
 
-#: data/mp/messages/strings/names.txt:1624
+#: data/mp/messages/strings/names.txt:1625
 msgid "Combat Engineer"
 msgstr "Savaş Mühendisi"
 
-#: data/mp/messages/strings/names.txt:1629
+#: data/mp/messages/strings/names.txt:1630
 msgid "Cyborg Mechanic"
 msgstr "Mekanikçi Cyborg"
 
-#: data/mp/messages/strings/names.txt:1633
 #: data/mp/messages/strings/names.txt:1634
+#: data/mp/messages/strings/names.txt:1635
 msgid "Incendiary Howitzer"
 msgstr "Kundakçı Havan Topu"
 
-#: data/mp/messages/strings/names.txt:1635
 #: data/mp/messages/strings/names.txt:1636
+#: data/mp/messages/strings/names.txt:1637
 msgid "Incendiary Howitzer Emplacement"
 msgstr "Sabitlenmiş Kundakçı Havan Topu"
 
-#: data/mp/messages/strings/names.txt:1637
 #: data/mp/messages/strings/names.txt:1638
+#: data/mp/messages/strings/names.txt:1639
 msgid "Plasmite Flamer"
 msgstr "Plazmit Alev Atıcı"
 
-#: data/mp/messages/strings/names.txt:1639
 #: data/mp/messages/strings/names.txt:1640
+#: data/mp/messages/strings/names.txt:1641
 msgid "Plasmite Flamer Bunker"
 msgstr "Plazmit Alevi Atıcı Sığınak"
 
-#: data/mp/messages/strings/names.txt:1641
 #: data/mp/messages/strings/names.txt:1642
+#: data/mp/messages/strings/names.txt:1643
 msgid "Incendiary Mortar"
 msgstr "Kundakçı Havan Topu"
 
-#: data/mp/messages/strings/names.txt:1643
 #: data/mp/messages/strings/names.txt:1644
+#: data/mp/messages/strings/names.txt:1645
 msgid "Incendiary Mortar Pit"
 msgstr "Kundakçı Havan Topu Kuyusu"
 
-#: data/mp/messages/strings/names.txt:1648
+#: data/mp/messages/strings/names.txt:1649
 msgid "Cyborg Superdense Thermal Armor"
 msgstr "Cyborg Süper Termal Zırhı"
 
-#: data/mp/messages/strings/names.txt:1649
+#: data/mp/messages/strings/names.txt:1650
 msgid "Cyborg Superdense Thermal Armor Mk2"
 msgstr "Cyborg Süper Termal Zırhı Kdm2"
 
-#: data/mp/messages/strings/names.txt:1650
+#: data/mp/messages/strings/names.txt:1651
 msgid "Cyborg Superdense Thermal Armor Mk3"
 msgstr "Cyborg Süper Termal Zırhı Kdm3"
 
-#: data/mp/messages/strings/names.txt:1652
+#: data/mp/messages/strings/names.txt:1653
 msgid "Vehicle Superdense Thermal Armor"
 msgstr "Araç Süper Termal Zırhı"
 
-#: data/mp/messages/strings/names.txt:1653
+#: data/mp/messages/strings/names.txt:1654
 msgid "Vehicle Superdense Thermal Armor Mk2"
 msgstr "Araç Süper Termal Zırhı Kdm2"
 
-#: data/mp/messages/strings/names.txt:1654
+#: data/mp/messages/strings/names.txt:1655
 msgid "Vehicle Superdense Thermal Armor Mk3"
 msgstr "Araç Süper Termal Zırhı Kdm3"
 
-#: data/mp/messages/strings/names.txt:1658
 #: data/mp/messages/strings/names.txt:1659
 #: data/mp/messages/strings/names.txt:1660
 #: data/mp/messages/strings/names.txt:1661
+#: data/mp/messages/strings/names.txt:1662
 msgid "Super Heavy-Gunner"
 msgstr "Süper Ağır Silahlı"
 
-#: data/mp/messages/strings/names.txt:1663
 #: data/mp/messages/strings/names.txt:1664
 #: data/mp/messages/strings/names.txt:1665
 #: data/mp/messages/strings/names.txt:1666
+#: data/mp/messages/strings/names.txt:1667
 msgid "Super Auto-Cannon Cyborg"
 msgstr "Süper Otomatik Topçu Cyborg"
 
-#: data/mp/messages/strings/names.txt:1668
 #: data/mp/messages/strings/names.txt:1669
 #: data/mp/messages/strings/names.txt:1670
 #: data/mp/messages/strings/names.txt:1671
+#: data/mp/messages/strings/names.txt:1672
 msgid "Super HPV Cyborg"
 msgstr "Süper Y.H. Topçu Cyborg"
 
-#: data/mp/messages/strings/names.txt:1673
 #: data/mp/messages/strings/names.txt:1674
 #: data/mp/messages/strings/names.txt:1675
 #: data/mp/messages/strings/names.txt:1676
+#: data/mp/messages/strings/names.txt:1677
 msgid "Super Tank-Killer Cyborg"
 msgstr "Süper Tank Öldürücü Cyborg"
 
-#: data/mp/messages/strings/names.txt:1678
 #: data/mp/messages/strings/names.txt:1679
+#: data/mp/messages/strings/names.txt:1680
 msgid "Heavy Laser"
 msgstr "Ağır Lazer"
 
-#: data/mp/messages/strings/names.txt:1680
+#: data/mp/messages/strings/names.txt:1681
 msgid "VTOL Heavy Laser"
 msgstr "DİvK  Ağır Lazeri"
 
-#: data/mp/messages/strings/names.txt:1681
 #: data/mp/messages/strings/names.txt:1682
+#: data/mp/messages/strings/names.txt:1683
 msgid "Heavy Laser Emplacement"
 msgstr "Sabitlenmiş Ağır Lazer"
 
-#: data/mp/messages/strings/names.txt:1688
 #: data/mp/messages/strings/names.txt:1689
+#: data/mp/messages/strings/names.txt:1690
 msgid "Twin Assault Cannon"
 msgstr "Çift Hücüm Topu"
 
-#: data/mp/messages/strings/names.txt:1690
 #: data/mp/messages/strings/names.txt:1691
+#: data/mp/messages/strings/names.txt:1692
 msgid "Twin Assault Cannon Bunker"
 msgstr "Çift Hücüm Topçu Sığınak"
 
-#: data/mp/messages/strings/names.txt:1694
-#: data/mp/messages/strings/names.txt:1699
-#: data/mp/messages/strings/names.txt:1701
+#: data/mp/messages/strings/names.txt:1695
+#: data/mp/messages/strings/names.txt:1700
+#: data/mp/messages/strings/names.txt:1702
 msgid "Satellite Uplink Center"
 msgstr "Uydu Bağlantı Merkezi"
 
-#: data/mp/messages/strings/names.txt:1695
-#: data/mp/messages/strings/names.txt:1697
+#: data/mp/messages/strings/names.txt:1696
+#: data/mp/messages/strings/names.txt:1698
 msgid "Wide Spectrum Sensor"
 msgstr "Geniş Spektrum Algılayıcı"
 
-#: data/mp/messages/strings/names.txt:1696
-#: data/mp/messages/strings/names.txt:1698
+#: data/mp/messages/strings/names.txt:1697
+#: data/mp/messages/strings/names.txt:1699
 msgid "Wide Spectrum Sensor Tower"
 msgstr "Geniş Spektrum Algılayıcı Kulesi"
 
-#: data/mp/messages/strings/names.txt:1716
 #: data/mp/messages/strings/names.txt:1717
+#: data/mp/messages/strings/names.txt:1718
 msgid "Plasma Cannon"
 msgstr "Plazma Topu"
 
-#: data/mp/messages/strings/names.txt:1718
 #: data/mp/messages/strings/names.txt:1719
+#: data/mp/messages/strings/names.txt:1720
 msgid "Plasma Cannon Emplacement"
 msgstr "Sabitlenmiş Plazma Topu"
 
-#: data/mp/messages/strings/names.txt:1721
+#: data/mp/messages/strings/names.txt:1722
 msgid "Sunburst AA Rocket Array"
 msgstr "Güneş Işığı AA Roketleri"
 
-#: data/mp/messages/strings/names.txt:1722
+#: data/mp/messages/strings/names.txt:1723
 msgid "Sunburst AA"
 msgstr "Güneş Işığı AA"
 
-#: data/mp/messages/strings/names.txt:1723
+#: data/mp/messages/strings/names.txt:1724
 msgid "VTOL Sunburst AA"
 msgstr "DİvK  Güneş Işığı AA"
 
-#: data/mp/messages/strings/names.txt:1724
 #: data/mp/messages/strings/names.txt:1725
+#: data/mp/messages/strings/names.txt:1726
 msgid "Sunburst AA Site"
 msgstr "Güneş Işığı AA Yeri"
 
-#: data/mp/messages/strings/names.txt:1727
 #: data/mp/messages/strings/names.txt:1728
 #: data/mp/messages/strings/names.txt:1729
 #: data/mp/messages/strings/names.txt:1730
+#: data/mp/messages/strings/names.txt:1731
 msgid "Super Pulse Laser Cyborg"
 msgstr "Süper Darbeli Lazer Cyborg"
 
-#: data/mp/messages/strings/names.txt:1732
 #: data/mp/messages/strings/names.txt:1733
 #: data/mp/messages/strings/names.txt:1734
 #: data/mp/messages/strings/names.txt:1735
+#: data/mp/messages/strings/names.txt:1736
 msgid "Super Rail-Gunner"
 msgstr "Süper Demir Silahlı"
 
-#: data/mp/messages/strings/names.txt:1737
 #: data/mp/messages/strings/names.txt:1738
 #: data/mp/messages/strings/names.txt:1739
 #: data/mp/messages/strings/names.txt:1740
+#: data/mp/messages/strings/names.txt:1741
 msgid "Super Scourge Cyborg"
 msgstr "Süper Felket F. Cyborg"
 
-#: data/mp/messages/strings/names.txt:1742
 #: data/mp/messages/strings/names.txt:1743
+#: data/mp/messages/strings/names.txt:1744
 msgid "Nexus Link Tower"
 msgstr "NEXUS Bağlantı Kulesi"
 
-#: data/mp/messages/strings/names.txt:1745
-#: data/mp/messages/strings/names.txt:1748
+#: data/mp/messages/strings/names.txt:1746
+#: data/mp/messages/strings/names.txt:1749
 msgid "EMP Cannon"
 msgstr "EMP Topu"
 
-#: data/mp/messages/strings/names.txt:1746
 #: data/mp/messages/strings/names.txt:1747
+#: data/mp/messages/strings/names.txt:1748
 msgid "EMP Cannon Tower"
 msgstr "EMP Topu Kulesi"
 
-#: data/mp/messages/strings/names.txt:1752
-#: data/mp/messages/strings/names.txt:1754
+#: data/mp/messages/strings/names.txt:1753
+#: data/mp/messages/strings/names.txt:1755
 msgid "Mass Driver Fortress"
 msgstr "Kitle Sürücü Kale"
 
-#: data/mp/messages/strings/names.txt:1753
+#: data/mp/messages/strings/names.txt:1754
 msgid "Mass Driver"
 msgstr "Kitle Sürücü"
 
-#: data/mp/messages/strings/names.txt:1756
 #: data/mp/messages/strings/names.txt:1757
 #: data/mp/messages/strings/names.txt:1758
+#: data/mp/messages/strings/names.txt:1759
 msgid "Cannon Fortress"
 msgstr "Topçu Kale"
 
-#: data/mp/messages/strings/names.txt:1760
 #: data/mp/messages/strings/names.txt:1761
 #: data/mp/messages/strings/names.txt:1762
+#: data/mp/messages/strings/names.txt:1763
 msgid "Heavy Rocket Bastion"
 msgstr "Ağır Roketçi Kale"
 
-#: data/mp/messages/strings/names.txt:1764
 #: data/mp/messages/strings/names.txt:1765
 #: data/mp/messages/strings/names.txt:1766
+#: data/mp/messages/strings/names.txt:1767
 msgid "Missile Fortress"
 msgstr "Füze Kalesi"
 
-#: data/mp/messages/strings/names.txt:1770
+#: data/mp/messages/strings/names.txt:1771
 msgid "Heavy Body - Wyvern"
 msgstr "Ağır Beden - Wyvern"
 
-#: data/mp/messages/strings/names.txt:1771
+#: data/mp/messages/strings/names.txt:1772
 msgid "Wyvern"
 msgstr "Wyvern"
 
-#: data/mp/messages/strings/names.txt:1773
+#: data/mp/messages/strings/names.txt:1774
 msgid "Multi Turret Body - Dragon"
 msgstr "Çift Taret Bedeni - Ejderha"
 
-#: data/mp/messages/strings/names.txt:1774
+#: data/mp/messages/strings/names.txt:1775
 msgid "Dragon"
 msgstr "Ejderha"
 
-#: data/mp/messages/strings/names.txt:1776
+#: data/mp/messages/strings/names.txt:1777
 msgid "Superhot Plasmite gel"
 msgstr "Süper Isıda Plazme Alevi Atar Jeli"
 
-#: data/mp/messages/strings/names.txt:1777
+#: data/mp/messages/strings/names.txt:1778
 msgid "Superhot Plasmite gel Mk2"
 msgstr "Süper Isıda Plazme Alevi Atar Jeli Kdm2"
 
-#: data/mp/messages/strings/names.txt:1778
+#: data/mp/messages/strings/names.txt:1779
 msgid "Superhot Plasmite gel Mk3"
 msgstr "Süper Isıda Plazme Alevi Atar Jeli Kdm3"
 
-#: data/mp/messages/strings/names.txt:1782
-#: data/mp/messages/strings/names.txt:1784
+#: data/mp/messages/strings/names.txt:1783
+#: data/mp/messages/strings/names.txt:1785
 msgid "EMP Mortar"
 msgstr "EMP-Havanı"
 
-#: data/mp/messages/strings/names.txt:1783
-#: data/mp/messages/strings/names.txt:1785
+#: data/mp/messages/strings/names.txt:1784
+#: data/mp/messages/strings/names.txt:1786
 msgid "EMP Mortar Pit"
 msgstr "EMP-Havan Kuyusu"
 
-#: data/mp/messages/strings/names.txt:1786
-#: data/mp/messages/strings/names.txt:1788
+#: data/mp/messages/strings/names.txt:1787
+#: data/mp/messages/strings/names.txt:1789
 msgid "Stormbringer AA Laser"
 msgstr "Fırtınacı AA Lazeri"
 
-#: data/mp/messages/strings/names.txt:1787
-#: data/mp/messages/strings/names.txt:1789
+#: data/mp/messages/strings/names.txt:1788
+#: data/mp/messages/strings/names.txt:1790
 msgid "Stormbringer Emplacement"
 msgstr "Sabitlenmiş Fırtınacı"
 
-#: data/mp/messages/strings/names.txt:1790
 #: data/mp/messages/strings/names.txt:1791
+#: data/mp/messages/strings/names.txt:1792
 msgid "Vindicator Hardpoint"
 msgstr "Vindikatör SAM"
 
-#: data/mp/messages/strings/names.txt:1792
 #: data/mp/messages/strings/names.txt:1793
+#: data/mp/messages/strings/names.txt:1794
 msgid "Whirlwind Hardpoint"
 msgstr "Kasırga Bağlama Noktası"
 
-#: data/mp/messages/strings/names.txt:1794
 #: data/mp/messages/strings/names.txt:1795
+#: data/mp/messages/strings/names.txt:1796
 msgid "AA Flak Cannon Hardpoint"
 msgstr "AA Uçaksavar Topu Bağlama Noktası"
 
-#: data/mp/messages/strings/names.txt:1796
 #: data/mp/messages/strings/names.txt:1797
+#: data/mp/messages/strings/names.txt:1798
 msgid "Avenger Hardpoint"
 msgstr "İntikamcı SAM"
 
-#: data/mp/messages/strings/names.txt:1801
 #: data/mp/messages/strings/names.txt:1802
+#: data/mp/messages/strings/names.txt:1803
 msgid "Twin Assault Gun"
 msgstr "Çift Hücüm Silahı"
 
-#: data/mp/messages/strings/names.txt:1803
 #: data/mp/messages/strings/names.txt:1804
+#: data/mp/messages/strings/names.txt:1805
 msgid "Twin Assault Gun Hardpoint"
 msgstr "Çift Hücüm Topu Bağlama Noktası"
 
-#: data/mp/messages/strings/names.txt:1806
+#: data/mp/messages/strings/names.txt:1807
 msgid "VTOL Plasmite Bomb Bay"
 msgstr "DİvK  Plazmit Bomba Demeti"
 
-#: data/mp/messages/strings/names.txt:1807
+#: data/mp/messages/strings/names.txt:1808
 msgid "Plasmite Bomb"
 msgstr "Plasmit Bombalar"
 
-#: data/mp/messages/strings/names.txt:1808
+#: data/mp/messages/strings/names.txt:1809
 msgid "VTOL EMP Missile Launcher"
 msgstr "DİvK  EMP Füze Atıcı"
 
-#: data/mp/messages/strings/names.txt:1809
+#: data/mp/messages/strings/names.txt:1810
 msgid "EMP Missile Launcher"
 msgstr "EMP Füze Atıcı"
 
-#: data/mp/messages/strings/names.txt:1813
 #: data/mp/messages/strings/names.txt:1814
+#: data/mp/messages/strings/names.txt:1815
 msgid "Command Turret II"
 msgstr "Komuta Tareti II"
 
-#: data/mp/messages/strings/names.txt:1815
 #: data/mp/messages/strings/names.txt:1816
+#: data/mp/messages/strings/names.txt:1817
 msgid "Command Turret III"
 msgstr "Komuta Tareti III"
 
-#: data/mp/messages/strings/names.txt:1817
 #: data/mp/messages/strings/names.txt:1818
+#: data/mp/messages/strings/names.txt:1819
 msgid "Command Turret IV"
 msgstr "Komuta Tareti IV"
 
+#: data/mp/messages/strings/names.txt:1829
+msgid "Heavy Repair Turret Cobra Hover"
+msgstr "Ağır Tamir Tareti Kobra Hovercraft"
+
+#: data/mp/messages/strings/names.txt:1830
+#: data/mp/messages/strings/names.txt:1841
+msgid "Heavy Machinegun Viper Wheels"
+msgstr "Ağır Makinalı Engerek Tekerlekler"
+
+#: data/mp/messages/strings/names.txt:1831
+msgid "Scourge Mantis Hover"
+msgstr "Felaket F. P.Devesi Hovercraft"
+
+#: data/mp/messages/strings/names.txt:1832
+msgid "Tank Killer Mantis Hover"
+msgstr "Tank Öldürücü P. Devesi Hovercraft"
+
+#: data/mp/messages/strings/names.txt:1833
+#: data/mp/messages/strings/names.txt:1848
+msgid "Heavy Machinegun Cobra Tracks"
+msgstr "Ağır Makinalı Kobra Paletler"
+
+#: data/mp/messages/strings/names.txt:1834
+msgid "Heavy Cannon Cobra Hover"
+msgstr "Ağır Topçu Kobra hovercraft"
+
+#: data/mp/messages/strings/names.txt:1842
+msgid "Heavy Machinegun Cobra Wheels"
+msgstr "Ağır Makinalı Kobra Tekerlekler"
+
+#: data/mp/messages/strings/names.txt:1843
+msgid "Heavy Machinegun Cobra Hover"
+msgstr "Ağır Makinalı Kobra Hovercraft"
+
+#: data/mp/messages/strings/names.txt:1845
+msgid "Machinegun Viper Tracks"
+msgstr "Makinalı Engerek Tekerlekler"
+
+#: data/mp/messages/strings/names.txt:1846
+msgid "Twin Machinegun Viper Tracks"
+msgstr "Çift Makinalı Engerek Tekerlekler"
+
+#: data/mp/messages/strings/names.txt:1850
+msgid "Medium Cannon Cobra Hover"
+msgstr "Orta Topçu Kobra Hovercraft"
+
+#: data/mp/messages/strings/names.txt:1851
+msgid "Medium Cannon Scorpion Hover"
+msgstr "Orta Topçu Akrep Hovercraft"
+
+#: data/mp/messages/strings/names.txt:1852
+msgid "Medium Cannon Scorpion Tracks"
+msgstr "Orta Topçu Scorpion Paletler"
+
+#: data/mp/messages/strings/names.txt:1853
+msgid "Medium Cannon Python Hover"
+msgstr "Orta Topçu Piton Hovercraft"
+
+#: data/mp/messages/strings/names.txt:1854
+msgid "Heavy Cannon Python Hover"
+msgstr "Ağır Topçu Piton Hovercraft"
+
+#: data/mp/messages/strings/names.txt:1856
+msgid "Rail Gun Mantis Tracks"
+msgstr "Manyetik Top P. Devesi Paletler"
+
+#: data/mp/messages/strings/names.txt:1857
+msgid "Pulse Laser Mantis Tracks"
+msgstr "Darbeli Lazer P. Devesi Paletler"
+
+#: data/mp/messages/strings/names.txt:1858
+msgid "Lancer Python Tracks"
+msgstr "Roketatar Piton Paletler"
+
+#: data/mp/messages/strings/names.txt:1859
+msgid "Lancer Mantis Tracks"
+msgstr "Roketatar P. Devesi Paletler"
+
+#: data/mp/messages/strings/names.txt:1860
+msgid "Tank Killer Vengeance Tracks"
+msgstr "Tank Öldürücü İntikam Paletler"
+
+#: data/mp/messages/strings/names.txt:1865
+msgid "Heavy Cannon Tiger Tracks"
+msgstr "Ağır Topçu Kaplan PAletler"
+
+#: data/mp/messages/strings/names.txt:1866
+msgid "Needle Gun Tiger Tracks"
+msgstr "İğne Silahı Kaplan Paletler"
+
+#: data/mp/messages/strings/names.txt:1867
+msgid "Needle Gun Retribution Tracks"
+msgstr "İğne Silahı Cezalandırma Paletler"
+
+#: data/mp/messages/strings/names.txt:1868
+msgid "Needle Gun Vengeance Tracks"
+msgstr "İğne Silahı İntikam Paletler"
+
+#: data/mp/messages/strings/names.txt:1869
+msgid "Vengeance Tracks Rail Gun"
+msgstr "İntikam Paletler Demir Silahı"
+
+#: data/mp/messages/strings/names.txt:1870
+msgid "Vengeance Tracks Gauss Cannon"
+msgstr "İntikam Paletler Manyetik Top"
+
+# Original is screwed ~.~
+#: data/mp/messages/strings/names.txt:1871
+msgid "Vengeance Tracks Gauss Scourge"
+msgstr "İntikam Paletler Manyetik Fırtına"
+
+#: data/mp/messages/strings/names.txt:1874
+msgid "VTOL Cluster Bomb Bay Bug VTOL"
+msgstr "DİvK Demet Bombaları Böcek DİvK "
+
+#: data/mp/messages/strings/names.txt:1875
+msgid "VTOL Bunker Buster Bug VTOL"
+msgstr "DİvK Sığınak Yokedici Böcek DİvK "
+
+#: data/mp/messages/strings/names.txt:1876
+msgid "VTOL Cluster Bomb Bay Scorpion VTOL"
+msgstr "DİvK Demet Bomları Akrep DİvK "
+
+#: data/mp/messages/strings/names.txt:1877
+msgid "VTOL Bunker Buster Scorpion VTOL"
+msgstr "DİvK Sığınak Yokedici DİvK "
+
 #: data/mp/messages/strings/names.txt:1880
+msgid "VTOL Lancer Bug VTOL"
+msgstr "DİvK Roketatar Böcek DİvK "
+
+#: data/mp/messages/strings/names.txt:1881
 msgid "VTOL Hyper Velocity Cannon Bug VTOL"
 msgstr "DİvK -Yüksek Hız Topu Böcek DİvK "
 
 #: data/mp/messages/strings/names.txt:1882
+msgid "VTOL Lancer Scorpion VTOL"
+msgstr "DİvK Roketatar Akrep DİvK "
+
+#: data/mp/messages/strings/names.txt:1883
 msgid "VTOL Hyper Velocity Cannon Scorpion VTOL"
 msgstr "DİvK  Yüksek Hız Topu Akrep DİvK "
 
 #: data/mp/messages/strings/names.txt:1884
+msgid "VTOL Lancer Mantis VTOL"
+msgstr "DİvK Roketatar P. Devesi DİvK "
+
+#: data/mp/messages/strings/names.txt:1885
 msgid "VTOL Hyper Velocity Cannon Mantis VTOL"
 msgstr "DİvK  Yüksek Hız Topu P. Devesi DİvK "
 
+#: data/mp/messages/strings/names.txt:1889
+msgid "Repair Turret Mantis Tracks"
+msgstr "Tamir Tareti P. Devesi Paletler"
+
+#: data/mp/messages/strings/names.txt:1891
+msgid "Lancer Scorpion Tracks"
+msgstr "Roketatar Akrep Paletler"
+
+#: data/mp/messages/strings/names.txt:1892
+msgid "Heavy Cannon Scorpion Tracks"
+msgstr "Ağır Topçu Akrep Paletler"
+
+#: data/mp/messages/strings/names.txt:1893
+msgid "Lancer Scorpion VTOL"
+msgstr "Roketatar Akrep DİvK "
+
+#: data/mp/messages/strings/names.txt:1894
+msgid "Bunker Buster Scorpion VTOL"
+msgstr "Sığnak Yokedici Akrep DİvK "
+
+#: data/mp/messages/strings/names.txt:1896
+msgid "Command Turret Viper Tracks"
+msgstr "Komuta Tareti Engerek Paletler"
+
+#: data/mp/messages/strings/names.txt:1897
+msgid "Command Turret Cobra Tracks"
+msgstr "Komuta Tareti Kobra Paletler"
+
+#: data/mp/messages/strings/names.txt:1898
+msgid "Command Turret Scorpion Tracks"
+msgstr "Komuta Tareti Akrep Paletler"
+
+#: data/mp/messages/strings/names.txt:1899
+msgid "Command Turret Mantis Tracks"
+msgstr "Komuta Tareti P. Devesi Paletler"
+
+#: data/mp/messages/strings/names.txt:1901
+msgid "Lancer Cobra Tracks"
+msgstr "Roketatar Kobra Paletler"
+
+#: data/mp/messages/strings/names.txt:1902
+msgid "Heavy Cannon Mantis Tracks"
+msgstr "Ağır Topçu P. Devesi Paletler"
+
+#: data/mp/messages/strings/names.txt:1903
+msgid "Tank Killer Mantis Tracks"
+msgstr "Tank Öldürücü P. Devesi Paletler"
+
+#: data/mp/messages/strings/names.txt:1904
+msgid "Scourge Mantis Tracks"
+msgstr "Felaket F.  P. Devesi Paletler"
+
+#: data/mp/messages/strings/names.txt:1905
+msgid "Heavy Machinegun Scorpion Tracks"
+msgstr "Ağır Makinalı Akrep Paletler"
+
+#: data/mp/messages/strings/names.txt:1907
+msgid "Repair Scorpion Tracks"
+msgstr "Tamir Tareti Akrep Paletler"
+
+#: data/mp/messages/strings/names.txt:1908
+msgid "Heavy Repair Scorpion Hover"
+msgstr "Ağır Tamir Tareti Akrep Hovercraft"
+
+#: data/mp/messages/strings/names.txt:1911
+msgid "Truck Cobra Hover"
+msgstr "Kamyon Kobra Hovercraft"
+
+#: data/mp/messages/strings/names.txt:1912
+msgid "Truck Scorpion Hover"
+msgstr "Kamyon Akrep Hovercraft"
+
+#: data/mp/messages/strings/names.txt:1913
+msgid "Truck Mantis Hover"
+msgstr "Kamyon P. Devesi Hovercraft"
+
+#: data/mp/messages/strings/names.txt:1916
+msgid "Bunker Buster Cobra Tracks"
+msgstr "Sığınak Yokedici Kobra Paletler"
+
+#: data/mp/messages/strings/names.txt:1917
+msgid "Bunker Buster Scorpion Tracks"
+msgstr "Sığınak Yokedici Akrep Paletler"
+
+#: data/mp/messages/strings/names.txt:1918
+msgid "Bunker Buster Mantis Tracks"
+msgstr "Sığınak Yokedici P. Devesi Paletler"
+
+#: data/mp/messages/strings/names.txt:1920
+msgid "Lancer Viper Tracks"
+msgstr "Roketatar Engerek Paletler"
+
+#: data/mp/messages/strings/names.txt:1922
+msgid "Mini-Rocket Cobra Half-Tracks"
+msgstr "Mini Roket Kobra Yarım Paletler"
+
 #: data/mp/messages/strings/names.txt:1923
+msgid "Mini-Rocket Cobra Tracks"
+msgstr "Mini Roket Kobra Paletler"
+
+#: data/mp/messages/strings/names.txt:1924
 msgid "Mini-Rocket Array Cobra Tracks"
 msgstr "Mini Roketler Kobra Paletler"
 
 #: data/mp/messages/strings/names.txt:1926
+msgid "Inferno Cobra Half-Tracks"
+msgstr "Cehennem Alevi Atıcı Kobra Yarım Paletler"
+
+#: data/mp/messages/strings/names.txt:1927
 msgid "Hyper Velocity Cannon Python Hover"
 msgstr "Yüksek Hız Topu Piton Hovercraft"
+
+#: data/mp/messages/strings/names.txt:1931
+msgid "Scourge Python Tracks"
+msgstr "Felaket Füzesi Piton Paletler"
+
+#: data/mp/messages/strings/names.txt:1932
+msgid "Gauss Cannon Python Tracks"
+msgstr "Manyetik top Piton Paletler"
+
+#: data/mp/messages/strings/names.txt:1933
+msgid "Pulse Laser Python Tracks"
+msgstr "Darbeli Lazer Piton Paletler"
+
+#: data/mp/messages/strings/names.txt:1934
+msgid "Pulse Laser Tiger Tracks"
+msgstr "Darbeli Lazer Kaplan Paletler"
+
+#: data/mp/messages/strings/names.txt:1935
+msgid "Heavy Laser Tiger Tracks"
+msgstr "Ağır Lazer Kaplan Paletler"
+
+#: data/mp/messages/strings/names.txt:1936
+msgid "Gauss Cannon Wyvern Tracks"
+msgstr "Manyetik Top Wyvern Paletler"
+
+#: data/mp/messages/strings/names.txt:1937
+msgid "Pulse Laser Wyvern Tracks"
+msgstr "Darbeli Lazer Wyvern Paletler"
+
+#: data/mp/messages/strings/names.txt:1938
+msgid "Heavy Laser Wyvern Tracks"
+msgstr "Ağır Lazer Wyvern Paletler"
+
+#: data/mp/messages/strings/names.txt:1940
+msgid "Machinegun Viper Half-Tracks"
+msgstr "Makinalı Engerek Yarım Paletler"
+
+#: data/mp/messages/strings/names.txt:1941
+msgid "Flamer Viper Half-Tracks"
+msgstr "Alev Atıcı Engerek Yarım Paletler"
+
+#: data/mp/messages/strings/names.txt:1944
+msgid "Inferno Cobra Hover"
+msgstr "Cehennem Alevi Atıcı Kobra Hoercraft"
+
+#: data/mp/messages/strings/names.txt:1945
+msgid "Medium Cannon Cobra Half Track"
+msgstr "Orta Topçu Kobra Yarım Paletler"
+
+#: data/mp/messages/strings/names.txt:1946
+msgid "Inferno Python Hover"
+msgstr "Cehennem Alevi Atıcı Piton Hovercraft"
+
+#: data/mp/messages/strings/names.txt:1947
+msgid "Assault Gun Python Hover"
+msgstr "Hücüm Silahı Piton Hovercraft"
+
+#: data/mp/messages/strings/names.txt:1948
+msgid "Assault Gun Python Half Track"
+msgstr "Hücüm Silahı Piton Yarım Paletler"
+
+#: data/mp/messages/strings/names.txt:1949
+msgid "Heavy Machinegun Scorpion Half Tracks"
+msgstr "Ağır Makinalı Akrep Yarım Paletler"
+
+#: data/mp/messages/strings/names.txt:1950
+msgid "Assault Cannon Mantis Hover"
+msgstr "Hücüm Topu P. Devesi Hovercraft"
+
+#: data/mp/messages/strings/names.txt:1951
+msgid "Pulse Laser Leopard Hover"
+msgstr "Darbeli Lazer Leopar Hovercraft"
+
+#: data/mp/messages/strings/names.txt:1952
+msgid "Pulse Laser Panther Hover"
+msgstr "Darbeli Lazer Panter Hovercraft"
+
+#: data/mp/messages/strings/names.txt:1953
+msgid "Rail Gun Tiger Hover"
+msgstr "Demir Silahı Kaplan Hovercraft"
+
+#: data/mp/messages/strings/names.txt:1954
+msgid "Pulse Laser Tiger Hover"
+msgstr "Darbeli Lazer Kaplan Hovercraft"
+
+#: data/mp/messages/strings/names.txt:1955
+msgid "Plasma Cannon Wyvern Tracks"
+msgstr "Plazma Topu Wyvern Paletler"
+
+#: data/mp/messages/strings/names.txt:1956
+msgid "Scourge Missile Wyvern Tracks"
+msgstr "Felaket F. Wyvern Paletler"
+
+#: data/mp/messages/strings/names.txt:1957
+msgid "Flashlight Retribution Hover"
+msgstr "Flaşışığı Cezalandırma Hovercraft"
+
+#: data/mp/messages/strings/names.txt:1958
+msgid "Mini-Rocket Viper Half Track"
+msgstr "Mini Roket Engerek Yarım Paletler"
+
+#: data/mp/messages/strings/names.txt:1959
+msgid "Mini-Rocket Array Viper Half Track"
+msgstr "Seri Atışlı Mini Roket Engerek Yarım Paletler"
+
+#: data/mp/messages/strings/names.txt:1960
+msgid "Phosphor Bomb Bay Mantis VTOL"
+msgstr "Fosfor Bomba Demeti P. Devesi DİvK "
+
+# HEAP = high explosive, armor piercing -Kreuvf
+#: data/mp/messages/strings/names.txt:1961
+msgid "Heap Bomb Bay Mantis VTOL"
+msgstr "Y.P.Z.D Bomba Demeti P. Devesi DİvK "
+
+#: data/mp/messages/strings/names.txt:1962
+msgid "Heap Bomb Bay Retribution VTOL"
+msgstr "Y.P.Z.D Bomba Demeti Cezalandırma DİvK "
+
+#: data/mp/messages/strings/names.txt:1963
+msgid "Scourge Retaliation VTOL"
+msgstr "Felaket F. İsyan DİvK "
+
+#: data/mp/messages/strings/names.txt:1964
+msgid "Plasmite Retribution VTOL"
+msgstr "Plasmit Aleci Atıcı Cezalandırıcı DİvK "
 
 #: lib/framework/i18n.cpp:92
 #: lib/framework/i18n.cpp:153
@@ -10269,16 +10148,16 @@ msgid "OpenGL 1.4 + VBO extension is not supported by your system. The game requ
 msgstr "OpenGL 1.4 sisteminiz tarafından desteklenmiyor. Oyun buna gereksinim duyar. Lütfen grafik sürücünüzü/donanımınızı yükseltin, mümkünse."
 
 #: lib/netplay/netplay.cpp:193
-#: lib/netplay/netplay.cpp:1024
+#: lib/netplay/netplay.cpp:1051
 msgid "Enter password here"
 msgstr "Parolayı buraya gir"
 
-#: lib/netplay/netplay.cpp:2019
+#: lib/netplay/netplay.cpp:2081
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr "Konnte Lobbyserver-Namen nicht auflösen (%s)!"
 
-#: lib/netplay/netplay.cpp:2041
+#: lib/netplay/netplay.cpp:2103
 #, fuzzy, c-format
 msgid ""
 "Error connecting to the lobby server: %s.\n"
@@ -10287,14 +10166,15 @@ msgid ""
 " or to forward the port to your system."
 msgstr "Bekleme odası sunucusuna bağlanırken hata: %s. Port %d un gelen mesajlara erişebilir olduğuna emin olun .Eğer bir yönlendirici kullanıyorsanız, onu UPnP veya sisteminizin ileri port'unu kullanabilir hale getirin."
 
-#: lib/netplay/netplay.cpp:2706
+#: lib/netplay/netplay.cpp:2768
 msgid "Failed to get a lobby response!"
 msgstr ""
 
 #: po/custom/mac-infoplist.txt:1
+#, fuzzy
 msgid ""
 "Copyright © 1999-2004 Eidos Interactive.\n"
-"Copyright © 2005-2011 The Warzone 2100 Project"
+"Copyright © 2005-2012 The Warzone 2100 Project"
 msgstr ""
 "Telif Hakkı © 1999-2004 Eidos İnteraktif.\n"
 "Telif Hakkı © 2005-2011 Warzone 2100 Projesi"
@@ -10520,158 +10400,168 @@ msgid "My Game"
 msgstr "Oyunum"
 
 #: src/configuration.cpp:97
-#: src/multistat.cpp:124
+#: src/multistat.cpp:133
 msgid "Player"
 msgstr "Oyuncu"
 
-#: src/design.cpp:450
-#: src/design.cpp:463
-#: src/design.cpp:3479
+#: src/design.cpp:451
+#: src/design.cpp:464
+#: src/design.cpp:3522
 msgid "New Vehicle"
 msgstr "Yeni Araç"
 
-#: src/design.cpp:508
+#: src/design.cpp:509
 msgid "Vehicle Body"
 msgstr "Araç Bedeni"
 
-#: src/design.cpp:528
+#: src/design.cpp:529
 msgid "Vehicle Propulsion"
 msgstr "Araç Yürütücüsü"
 
-#: src/design.cpp:549
-#: src/design.cpp:572
-#: src/design.cpp:596
+#: src/design.cpp:550
+#: src/design.cpp:573
+#: src/design.cpp:597
 msgid "Vehicle Turret"
 msgstr "Araç Tareti"
 
-#: src/design.cpp:615
+#: src/design.cpp:616
 msgid "Delete Design"
 msgstr "Tasarımı Sil"
 
-#: src/design.cpp:631
-#: src/design.cpp:4685
+#: src/design.cpp:632
+#: src/design.cpp:4775
 msgid "Store Template"
 msgstr "Kalıbı Depola"
 
-#: src/design.cpp:684
-#: src/design.cpp:731
+#: src/design.cpp:685
+#: src/design.cpp:732
 msgid "Kinetic Armour"
 msgstr "Kinetik Zırh"
 
-#: src/design.cpp:693
-#: src/design.cpp:741
+#: src/design.cpp:694
+#: src/design.cpp:742
 msgid "Thermal Armour"
 msgstr "Termal Zırh"
 
-#: src/design.cpp:709
-#: src/design.cpp:761
+#: src/design.cpp:710
+#: src/design.cpp:762
 msgid "Engine Output"
 msgstr "Motor Gücü"
 
-#: src/design.cpp:717
-#: src/design.cpp:770
-#: src/design.cpp:1512
-#: src/design.cpp:1536
-#: src/design.cpp:1557
-#: src/design.cpp:1573
-#: src/design.cpp:1593
-#: src/design.cpp:1610
-#: src/design.cpp:1630
-#: src/design.cpp:1647
-#: src/design.cpp:1688
-#: src/design.cpp:1720
-#: src/design.cpp:1852
-#: src/design.cpp:1868
-#: src/design.cpp:1906
-#: src/design.cpp:1939
+#: src/design.cpp:718
+#: src/design.cpp:771
+#: src/design.cpp:1513
+#: src/design.cpp:1537
+#: src/design.cpp:1558
+#: src/design.cpp:1574
+#: src/design.cpp:1594
+#: src/design.cpp:1611
+#: src/design.cpp:1631
+#: src/design.cpp:1648
+#: src/design.cpp:1689
+#: src/design.cpp:1721
+#: src/design.cpp:1853
+#: src/design.cpp:1869
+#: src/design.cpp:1907
+#: src/design.cpp:1940
 msgid "Weight"
 msgstr "Ağırlık"
 
-#: src/design.cpp:801
-#: src/design.cpp:819
+#: src/design.cpp:802
+#: src/design.cpp:820
 msgid "Total Power Required"
 msgstr "Toplam Güç Gereksinimi"
 
-#: src/design.cpp:832
-#: src/design.cpp:851
+#: src/design.cpp:833
+#: src/design.cpp:852
 msgid "Total Body Points"
 msgstr "Toplam Beden Puanı"
 
-#: src/design.cpp:1022
-#: src/design.cpp:1051
+#: src/design.cpp:1023
+#: src/design.cpp:1052
 msgid "Power Usage"
 msgstr "Güç Kullanımı"
 
-#: src/design.cpp:1324
+#: src/design.cpp:1325
 msgid "Hydra "
 msgstr "Püsküllü Bela"
 
-#: src/design.cpp:1492
-#: src/design.cpp:1520
+#: src/design.cpp:1493
+#: src/design.cpp:1521
 msgid "Sensor Range"
 msgstr "Algılayıcı'nın Görüş Alanı"
 
-#: src/design.cpp:1504
-#: src/design.cpp:1528
+#: src/design.cpp:1505
+#: src/design.cpp:1529
 msgid "Sensor Power"
 msgstr "Algılayıcı Gücü"
 
-#: src/design.cpp:1549
-#: src/design.cpp:1565
+#: src/design.cpp:1550
+#: src/design.cpp:1566
 msgid "ECM Power"
 msgstr "ECM-Güç"
 
-#: src/design.cpp:1585
-#: src/design.cpp:1602
-#: src/design.cpp:1622
-#: src/design.cpp:1639
+#: src/design.cpp:1586
+#: src/design.cpp:1603
+#: src/design.cpp:1623
+#: src/design.cpp:1640
 msgid "Build Points"
 msgstr "İnşa Noktaları"
 
-#: src/design.cpp:1660
-#: src/design.cpp:1696
+#: src/design.cpp:1661
+#: src/design.cpp:1697
 msgid "Range"
 msgstr "Menzil"
 
-#: src/design.cpp:1672
-#: src/design.cpp:1704
+#: src/design.cpp:1673
+#: src/design.cpp:1705
 msgid "Damage"
 msgstr "Hasar"
 
-#: src/design.cpp:1680
-#: src/design.cpp:1712
+#: src/design.cpp:1681
+#: src/design.cpp:1713
 msgid "Rate-of-Fire"
 msgstr "Ateş Oranı"
 
-#: src/design.cpp:1840
-#: src/design.cpp:1860
+#: src/design.cpp:1841
+#: src/design.cpp:1861
 msgid "Air Speed"
 msgstr "Hava Hızı"
 
-#: src/design.cpp:1878
-#: src/design.cpp:1915
+#: src/design.cpp:1879
+#: src/design.cpp:1916
 msgid "Road Speed"
 msgstr "Yol Hızı"
 
-#: src/design.cpp:1888
-#: src/design.cpp:1923
+#: src/design.cpp:1889
+#: src/design.cpp:1924
 msgid "Off-Road Speed"
 msgstr "Yer Hızı"
 
-#: src/design.cpp:1896
-#: src/design.cpp:1931
+#: src/design.cpp:1897
+#: src/design.cpp:1932
 msgid "Water Speed"
 msgstr "Sudaki Hızı"
 
-#: src/design.cpp:2057
+#: src/design.cpp:2022
+#: src/hci.cpp:4915
+msgid "Tab Scroll left"
+msgstr "Tabloyu Sola Kaydır"
+
+#: src/design.cpp:2037
+#: src/hci.cpp:4930
+msgid "Tab Scroll right"
+msgstr "Tabloyu Sağa Kaydır"
+
+#: src/design.cpp:2100
 msgid "Weapons"
 msgstr "Silahlar"
 
-#: src/design.cpp:2077
+#: src/design.cpp:2120
 msgid "Systems"
 msgstr "Sistemler"
 
-#: src/design.cpp:4680
+#: src/design.cpp:4770
 msgid "Delete Template"
 msgstr "Kalıbı Sil"
 
@@ -10684,7 +10574,7 @@ msgid "Player dropped"
 msgstr "Oyuncu Düştü"
 
 #: src/display3d.cpp:659
-#: src/multiint.cpp:2226
+#: src/multiint.cpp:2262
 msgid "Waiting for other players"
 msgstr "Diğer oyuncular bekleniyor"
 
@@ -10975,7 +10865,7 @@ msgstr "%50"
 
 #: src/frontend.cpp:543
 #: src/frontend.cpp:682
-#: src/multiplay.cpp:1934
+#: src/multiplay.cpp:1963
 msgid "Black"
 msgstr "Siyah"
 
@@ -11166,7 +11056,7 @@ msgid "GAME OPTIONS"
 msgstr "OYUN AYARLARI"
 
 #: src/frontend.cpp:1421
-#: src/multiint.cpp:2490
+#: src/multiint.cpp:2526
 msgid "Mod: "
 msgstr "Mod: "
 
@@ -11338,14 +11228,6 @@ msgstr "Fabrika Teslim Noktası"
 #: src/hci.cpp:4835
 msgid "Loop Production"
 msgstr "Üretimi Tekrarla"
-
-#: src/hci.cpp:4915
-msgid "Tab Scroll left"
-msgstr "Tabloyu Sola Kaydır"
-
-#: src/hci.cpp:4930
-msgid "Tab Scroll right"
-msgstr "Tabloyu Sağa Kaydır"
 
 #: src/hci.cpp:5159
 msgid "Ally progress"
@@ -12648,191 +12530,196 @@ msgstr "Haritayı Gör"
 msgid "Click to see Map"
 msgstr "Haritayı görmek için tıkla"
 
-#: src/multiint.cpp:1594
+#: src/multiint.cpp:1593
+#: src/multiint.cpp:1595
 msgid "Start Hosting Game"
 msgstr "Oyunu kurulumunu başlat"
 
 #: src/multiint.cpp:1602
+#: src/multiint.cpp:1606
 msgid "Show Structure Limits"
 msgstr "Bina limitlerini göster"
 
 #: src/multiint.cpp:1602
+#: src/multiint.cpp:1606
 msgid "Set Structure Limits"
 msgstr "Bina limitlerini ayarla"
 
-#: src/multiint.cpp:1680
+#: src/multiint.cpp:1683
 msgid "DIFFICULTY"
 msgstr "ZORLUK"
 
-#: src/multiint.cpp:1694
+#: src/multiint.cpp:1697
 msgid "Less aggressive"
 msgstr "Daha az agresif"
 
-#: src/multiint.cpp:1695
+#: src/multiint.cpp:1698
 msgid "Plays nice"
 msgstr "Güzel çalış"
 
-#: src/multiint.cpp:1696
+#: src/multiint.cpp:1699
 msgid "No holds barred"
 msgstr "Hiçbir tutar engellenmedi"
 
-#: src/multiint.cpp:1697
+#: src/multiint.cpp:1700
 msgid "Starts with advantages"
 msgstr "Avantajlar ile başlar"
 
-#: src/multiint.cpp:1725
+#: src/multiint.cpp:1728
 msgid "CHOOSE AI"
 msgstr "Y.Z SEÇ"
 
-#: src/multiint.cpp:1741
+#: src/multiint.cpp:1744
 msgid "Allow human players to join in this slot"
 msgstr "İnsan oyuncuların bu slota girmesi için izin ver"
 
-#: src/multiint.cpp:1749
+#: src/multiint.cpp:1752
 msgid "Leave this slot unused"
 msgstr "Bu slotu kullanılmaz olarak belirle"
 
-#: src/multiint.cpp:2168
+#: src/multiint.cpp:2204
 msgid "Team"
 msgstr "Takım"
 
-#: src/multiint.cpp:2211
+#: src/multiint.cpp:2247
 msgid "You cannot change difficulty in a challenge"
 msgstr "Mücadele modunda zorluğu değiştiremezsin"
 
-#: src/multiint.cpp:2211
+#: src/multiint.cpp:2247
 msgid "Click to change difficulty"
 msgstr "Zorluğu değiştirmek için tıkla"
 
-#: src/multiint.cpp:2226
+#: src/multiint.cpp:2262
 #, fuzzy
 msgid "Waiting for player"
 msgstr "Diğer oyuncular bekleniyor"
 
-#: src/multiint.cpp:2226
+#: src/multiint.cpp:2262
 #, fuzzy
 msgid "Player is ready"
 msgstr "Oyuncu Düştü"
 
-#: src/multiint.cpp:2226
+#: src/multiint.cpp:2262
 msgid "Click when ready"
 msgstr "Hazırsan tıkla"
 
-#: src/multiint.cpp:2233
+#: src/multiint.cpp:2269
 msgid "READY?"
 msgstr "HAZIR?"
 
-#: src/multiint.cpp:2277
+#: src/multiint.cpp:2313
 msgid "PLAYERS"
 msgstr "OYUNCULAR"
 
-#: src/multiint.cpp:2312
+#: src/multiint.cpp:2348
 msgid "Click to change to this slot"
 msgstr "Bu slotu değiştirmek için tıkla"
 
-#: src/multiint.cpp:2340
+#: src/multiint.cpp:2376
 msgid "Choose Team"
 msgstr "Takım seç"
 
-#: src/multiint.cpp:2370
+#: src/multiint.cpp:2406
 msgid "Click to change player colour"
 msgstr "Oyuncu renklerini değiştirmek için tıkla"
 
-#: src/multiint.cpp:2398
+#: src/multiint.cpp:2434
 msgid "Click to change player position"
 msgstr "Oyun pozisyonunu ayarlarını değiştirmek için tıkla"
 
-#: src/multiint.cpp:2402
+#: src/multiint.cpp:2438
 msgid "Click to change AI"
 msgstr "Yapay zekayı ayarlamak için tıkla"
 
-#: src/multiint.cpp:2463
+#: src/multiint.cpp:2499
 msgid "CHAT"
 msgstr "SOHBET"
 
-#: src/multiint.cpp:2495
+#: src/multiint.cpp:2531
 msgid "All players need to have the same mods to join your game."
 msgstr "Tüm oyuncular oyununa girebilmek için aynı moda ihtiyaç duyar."
 
-#: src/multiint.cpp:2536
+#: src/multiint.cpp:2572
 msgid "Connecting to the lobby server..."
 msgstr ""
 
-#: src/multiint.cpp:2683
+#: src/multiint.cpp:2719
 #, c-format
 msgid "*** password [%s] is now required! ***"
 msgstr "*** Şifre [%s] şimdi isteniyor ! ***"
 
-#: src/multiint.cpp:2691
+#: src/multiint.cpp:2727
 msgid "*** password is NOT required! ***"
 msgstr "*** Şifreye gerek yok! ***"
 
-#: src/multiint.cpp:2906
+#: src/multiint.cpp:2942
 msgid "Sorry! Failed to host the game."
 msgstr "Üzgünüm! Oyun kurulurken bir hata oldu."
 
 # festgelegt ungleich fest -Kreuvf
-#: src/multiint.cpp:3027
+#: src/multiint.cpp:3063
 msgid "'Locked Teams' mode enabled"
 msgstr "\"Takım Kilidi\"-Modu Aktif"
 
-#: src/multiint.cpp:3111
+#: src/multiint.cpp:3091
+#: src/multiint.cpp:3160
+#: src/multimenu.cpp:1523
 #, c-format
 msgid "The host has kicked %s from the game!"
 msgstr "Kurucu %s isimli oyuncuyu oyundan attı!"
 
-#: src/multiint.cpp:3177
+#: src/multiint.cpp:3226
 msgid "Host is Starting Game"
 msgstr "Kurucu oyunu başlatıyor"
 
-#: src/multiint.cpp:3724
+#: src/multiint.cpp:3805
 msgid "Can't connect to lobby server!"
 msgstr ""
 
-#: src/multiint.cpp:3811
+#: src/multiint.cpp:3892
 #, c-format
 msgid "Mods: %s"
 msgstr ""
 
-#: src/multiint.cpp:3818
+#: src/multiint.cpp:3899
 msgid "Mods: None!"
 msgstr ""
 
-#: src/multiint.cpp:3828
+#: src/multiint.cpp:3909
 #, fuzzy, c-format
 msgid "Version: %s"
 msgstr "Sürüm %s-%s%s%s%s"
 
-#: src/multiint.cpp:3879
+#: src/multiint.cpp:3960
 #, c-format
 msgid "Click to take player slot %d"
 msgstr "Oyuncu slotu %d almak için tıkla "
 
-#: src/multiint.cpp:3888
-#: src/multiint.cpp:4081
+#: src/multiint.cpp:3969
+#: src/multiint.cpp:4162
 msgid "Open"
 msgstr "Aç"
 
-#: src/multiint.cpp:3888
-#: src/multiint.cpp:4082
+#: src/multiint.cpp:3969
+#: src/multiint.cpp:4163
 msgid "Closed"
 msgstr "Kapandı"
 
-#: src/multiint.cpp:3939
+#: src/multiint.cpp:4020
 #, c-format
 msgid "Sending Map: %d%% "
 msgstr "Harita Gönderiliyor: %d%%"
 
-#: src/multiint.cpp:3947
+#: src/multiint.cpp:4028
 #, c-format
 msgid "Map: %d%% downloaded"
 msgstr "Harita: %d%% indirildi"
 
-#: src/multiint.cpp:3973
+#: src/multiint.cpp:4054
 msgid "HOST"
 msgstr "KURUCU"
 
-#: src/multiint.cpp:3980
+#: src/multiint.cpp:4061
 #: src/multimenu.cpp:808
 msgid "Ping"
 msgstr "Ping"
@@ -12852,17 +12739,17 @@ msgstr "%s Oyundan çıktı"
 msgid "File transfer has been aborted for %d."
 msgstr "Dosya transferi iptal %d "
 
-#: src/multijoin.cpp:405
+#: src/multijoin.cpp:418
 #, c-format
 msgid "%s (%u) has an incompatible mod, and has been kicked."
 msgstr "%s (%u) uyumsuz bir mod.Ve oyundan atıldı"
 
-#: src/multijoin.cpp:446
+#: src/multijoin.cpp:459
 #, fuzzy, c-format
 msgid "%s is joining the game"
 msgstr "%s Oyuna katılıyor"
 
-#: src/multijoin.cpp:457
+#: src/multijoin.cpp:470
 #, fuzzy
 msgid "Server message:"
 msgstr "Sistem İletisi:"
@@ -12939,80 +12826,85 @@ msgstr "Seçili birimleri bağışla"
 msgid "Give Power To Player"
 msgstr "Oyuncuya güç ver"
 
+#: src/multimenu.cpp:1525
+#, c-format
+msgid "kicked %s : %s from the game, and added them to the banned list!"
+msgstr "%s : %s oyundan atıldı ve engelli listesine kaydedildi!"
+
 #: src/multiplay.cpp:263
 #, c-format
 msgid "Kicking player %s, because they tried to bypass data integrity check!"
 msgstr "Oyuncu atılıyor %s veri bütünlüğünü korumak için!"
 
-#: src/multiplay.cpp:1037
+#: src/multiplay.cpp:1066
 msgid "(allies"
 msgstr "(Müttefikler"
 
-#: src/multiplay.cpp:1045
+#: src/multiplay.cpp:1074
 msgid "(private to "
 msgstr "(bir direk"
 
-#: src/multiplay.cpp:1058
+#: src/multiplay.cpp:1087
 msgid "[invalid]"
 msgstr "[gereksiz]"
 
-#: src/multiplay.cpp:1931
+#: src/multiplay.cpp:1960
 msgid "Green"
 msgstr "Yeşil"
 
-#: src/multiplay.cpp:1932
+#: src/multiplay.cpp:1961
 msgid "Orange"
 msgstr "Turuncu"
 
-#: src/multiplay.cpp:1933
+#: src/multiplay.cpp:1962
 msgid "Grey"
 msgstr "Gri"
 
-#: src/multiplay.cpp:1935
+#: src/multiplay.cpp:1964
 msgid "Red"
 msgstr "Kırmızı"
 
-#: src/multiplay.cpp:1936
+#: src/multiplay.cpp:1965
 msgid "Blue"
 msgstr "Koyu Mavi"
 
-#: src/multiplay.cpp:1937
+#: src/multiplay.cpp:1966
 msgid "Pink"
 msgstr "Pembe"
 
-#: src/multiplay.cpp:1938
+#: src/multiplay.cpp:1967
 msgid "Cyan"
 msgstr "Mavi"
 
-#: src/multiplay.cpp:1939
+#: src/multiplay.cpp:1968
 msgid "Yellow"
 msgstr "Sarı"
 
-#: src/multiplay.cpp:1940
+#: src/multiplay.cpp:1969
 msgid "Purple"
 msgstr "Mor"
 
-#: src/multiplay.cpp:1941
+#: src/multiplay.cpp:1970
 msgid "White"
 msgstr "Beyaz"
 
-#: src/multiplay.cpp:1942
+#: src/multiplay.cpp:1971
 msgid "Bright blue"
 msgstr "Açık Mavi"
 
-#: src/multiplay.cpp:1943
+#: src/multiplay.cpp:1972
 msgid "Neon green"
 msgstr "Neon yeşili"
 
-#: src/multiplay.cpp:1944
+#: src/multiplay.cpp:1973
 msgid "Infrared"
 msgstr "Kızılötesi"
 
-#: src/multiplay.cpp:1945
+#: src/multiplay.cpp:1974
 msgid "Ultraviolet"
 msgstr "Morötesi"
 
-#: src/multiplay.cpp:1946
+#: src/multiplay.cpp:1975
 msgid "Brown"
 msgstr "Kahverengi"
 
@@ -13288,6 +13180,21 @@ msgstr " - %s İnşa"
 #, c-format
 msgid "Version %s-%s%s%s%s"
 msgstr "Sürüm %s-%s%s%s%s"
+
+#~ msgid "VTOL HPV Cannon Bug VTOL"
+#~ msgstr "DİvK -Y.H.T Böcek DİvK "
+
+#~ msgid "VTOL HPV Cannon Scorpion VTOL"
+#~ msgstr "DİvK Y.H.T Akrep DİvK "
+
+#~ msgid "VTOL HPV Cannon Mantis VTOL"
+#~ msgstr "DİvK Y.H.T  P. Devesi DİvK "
+
+#~ msgid "Mini-Rocket Artillery Cobra Tracks"
+#~ msgstr "Mini Roket Bataryası Kobra Paletler"
+
+#~ msgid "HPV Cannon Python Hover"
+#~ msgstr "Y.H. Topu Piton Hovercraft"
 
 #~ msgid "CHEATS ARE NOW ENABLED!"
 #~ msgstr "HİLELER DEVREDE!"
@@ -13989,9 +13896,6 @@ msgstr "Sürüm %s-%s%s%s%s"
 
 #~ msgid "Player number"
 #~ msgstr "Oyuncu numarası"
-
-#~ msgid "kicked %s : %s from the game, and added them to the banned list!"
-#~ msgstr "%s : %s oyundan atıldı ve engelli listesine kaydedildi!"
 
 #~ msgid " (modified and switched locally)"
 #~ msgstr " (duzenlenmis ve anahtarlanmis yerel dil dosyasi)"

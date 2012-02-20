@@ -211,7 +211,7 @@ void addTemplateBack(unsigned player, DROID_TEMPLATE *psNew);
 // syncing.
 extern bool sendScoreCheck		(void);							//score check only(frontend)
 extern bool sendPing			(void);							// allow game to request pings.
-
+extern void HandleBadParam(const char *msg, const int from, const int actual);
 // multijoin
 extern bool sendResearchStatus  (STRUCTURE *psBuilding, UDWORD index, UBYTE player, bool bStart);
 

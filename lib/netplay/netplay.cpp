@@ -165,7 +165,7 @@ unsigned NET_PlayerConnectionStatus[CONNECTIONSTATUS_NORMAL][MAX_PLAYERS];
 **/
 static char const *versionString = version_getVersionString();
 static int NETCODE_VERSION_MAJOR = 6;
-static int NETCODE_VERSION_MINOR = 4;
+static int NETCODE_VERSION_MINOR = 5;
 
 bool NETisCorrectVersion(uint32_t game_version_major, uint32_t game_version_minor)
 {
@@ -338,6 +338,11 @@ static void NETSendPlayerInfoTo(uint32_t index, unsigned to)
 	NETSendNPlayerInfoTo(&index, 1, to);
 }
 
+static void NETsendPlayerInfo(uint32_t index)
+{
+	NETSendPlayerInfoTo(index, NET_HOST_ONLY);
+}
+
 static void NETSendAllPlayerInfoTo(unsigned to)
 {
 	static uint32_t indices[MAX_PLAYERS];
@@ -414,6 +419,12 @@ static void NET_DestroyPlayer(unsigned int index)
  */
 static void NETplayerClientDisconnect(uint32_t index)
 {
+	if (!NetPlay.isHost)
+	{
+		ASSERT(false, "Host only routine detected for client!");
+		return;
+	}
+
 	if(connected_bsocket[index])
 	{
 		debug(LOG_NET, "Player (%u) has left unexpectedly, closing socket %p", index, connected_bsocket[index]);
@@ -468,6 +479,12 @@ static void NETplayerDropped(UDWORD index)
 {
 	uint32_t id = index;
 
+	if (!NetPlay.isHost)
+	{
+		ASSERT(false, "Host only routine detected for client!");
+		return;
+	}
+
 	// Send message type specifically for dropped / disconnects
 	NETbeginEncode(NETbroadcastQueue(), NET_PLAYER_DROPPED);
 		NETuint32_t(&id);
@@ -491,7 +508,10 @@ void NETplayerKicked(UDWORD index)
 	debug(LOG_INFO, "Player %u was kicked.", index);
 	sync_counter.kicks++;
 	NETlogEntry("Player was kicked.", SYNC_FLAG, index);
-	addToBanList(NetPlay.players[index].IPtextAddress, NetPlay.players[index].name);
+	if (NetPlay.isHost && NetPlay.players[index].allocated)
+	{
+		addToBanList(NetPlay.players[index].IPtextAddress, NetPlay.players[index].name);
+	}
 	NETplayerLeaving(index);		// need to close socket for the player that left.
 	NETsetPlayerConnectionStatus(CONNECTIONSTATUS_PLAYER_LEAVING, index);
 }
@@ -507,9 +527,16 @@ bool NETchangePlayerName(UDWORD index, char *newName)
 	}
 	debug(LOG_NET, "Requesting a change of player name for pid=%u to %s", index, newName);
 	NETlogEntry("Player wants a name change.", SYNC_FLAG, index);
-	sstrcpy(NetPlay.players[index].name, newName);
 
-	NETBroadcastPlayerInfo(index);
+	sstrcpy(NetPlay.players[index].name, newName);
+	if (NetPlay.isHost)
+	{
+		NETSendAllPlayerInfoTo(NET_ALL_PLAYERS);
+	}
+	else
+	{
+		NETsendPlayerInfo(index);
+	}
 
 	return true;
 }
@@ -1361,6 +1388,37 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 			}
 			else if (NetPlay.isHost && sender == playerQueue.index)
 			{
+				if (((  message->type == NET_FIREUP
+					|| message->type == NET_KICK
+					|| message->type == NET_PLAYER_LEAVING
+					|| message->type == NET_PLAYER_DROPPED
+					|| message->type == NET_REJECTED
+					|| message->type == NET_PLAYER_JOINED) && sender != NET_HOST_ONLY)
+					||
+					(( message->type == NET_HOST_DROPPED
+					|| message->type == NET_OPTIONS
+					|| message->type == NET_FILE_REQUESTED
+					|| message->type == NET_READY_REQUEST
+					|| message->type == NET_TEAMREQUEST
+					|| message->type == NET_COLOURREQUEST
+					|| message->type == NET_POSITIONREQUEST
+					|| message->type == NET_FILE_CANCELLED
+					|| message->type == NET_JOIN
+					|| message->type == NET_PLAYER_INFO) && receiver != NET_HOST_ONLY))
+				{
+					depart:
+					char msg[256] = {'\0'};
+
+					ssprintf(msg, "Auto-kicking player %u, lacked the required access level for command(%d).", (unsigned int)sender, (int)message->type);
+					sendTextMessage(msg, true);
+					NETlogEntry(msg, SYNC_FLAG, sender);
+					addToBanList(NetPlay.players[sender].IPtextAddress, NetPlay.players[sender].name);
+					NETplayerDropped(sender);
+					connected_bsocket[sender] = NULL;
+					debug(LOG_ERROR, "%s", msg);
+					break;
+				}
+
 				// We are the host, and player is asking us to send the message to receiver.
 				NETbeginEncode(NETnetQueue(receiver), NET_SEND_TO_PLAYER);
 					NETuint8_t(&sender);
@@ -1378,6 +1436,7 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 			else
 			{
 				debug(LOG_ERROR, "Player %d sent us a NET_SEND_TO_PLAYER addressed to %d from %d. We are %d.", playerQueue.index, receiver, sender, selectedPlayer);
+				goto depart;
 			}
 
 			break;
@@ -1612,11 +1671,15 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 */
 static void NETcheckPlayers(void)
 {
-	int i;
-
-	for (i = 0; i< MAX_PLAYERS ; i++)
+	if (!NetPlay.isHost)
 	{
-		if (NetPlay.players[i].allocated == 0) continue;		// not allocated means that it most like it is a AI player
+		ASSERT(false, "Host only routine detected for client or not hosting yet!");
+		return;
+	}
+
+	for (int i = 0; i< MAX_PLAYERS ; i++)
+	{
+		if (NetPlay.players[i].allocated == 0) continue;		// not allocated means that it most likely it is a AI player
 		if (NetPlay.players[i].heartbeat == 0 && NetPlay.players[i].heartattacktime == 0)	// looks like they are dead
 		{
 			NetPlay.players[i].heartattacktime = gameTime2;		// mark when this occured
@@ -1635,7 +1698,7 @@ static void NETcheckPlayers(void)
 		if (NetPlay.players[i].kick)
 		{
 			debug(LOG_NET, "Kicking player %d", i);
-			NETplayerDropped(i);
+			kickPlayer(i, "you are unwanted by the host.", ERROR_KICKED);
 		}
 	}
 }
@@ -1657,9 +1720,8 @@ bool NETrecvNet(NETQUEUE *queue, uint8_t *type)
 	{
 		NETfixPlayerCount();
 		NETallowJoining();
+		NETcheckPlayers();		// make sure players are still alive & well
 	}
-
-	NETcheckPlayers();		// make sure players are still alive & well
 
 	if (socket_set == NULL || checkSockets(socket_set, NET_READ_TIMEOUT) <= 0)
 	{
@@ -2586,7 +2648,7 @@ bool NETfindGame(void)
 	int result = 0;
 	debug(LOG_NET, "Looking for games...");
 	
-	if (getLobbyError() == ERROR_CHEAT || getLobbyError() == ERROR_KICKED)
+	if (getLobbyError() == ERROR_INVALID || getLobbyError() == ERROR_KICKED)
 	{
 		return false;
 	}

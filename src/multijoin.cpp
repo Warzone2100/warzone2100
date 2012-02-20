@@ -290,7 +290,6 @@ bool MultiPlayerLeave(UDWORD playerIndex)
 		NetPlay.players[playerIndex].wzFile.isSending = false;
 		NetPlay.players[playerIndex].needFile = false;
 	}
-	NetPlay.players[playerIndex].kick = true;  // Don't wait for GAME_GAME_TIME messages from them.
 
 	if (widgGetFromID(psWScreen, IDRET_FORM))
 	{
@@ -333,8 +332,10 @@ bool MultiPlayerJoin(UDWORD playerIndex)
 
 		// setup data for this player, then broadcast it to the other players.
 		setupNewPlayer(playerIndex);						// setup all the guff for that player.
-		sendOptions();
-
+		if (bHosted)
+		{
+			sendOptions();
+		}
 		// if skirmish and game full, then kick...
 		if (NetPlay.playercount > game.maxPlayers)
 		{
@@ -376,6 +377,12 @@ bool recvDataCheck(NETQUEUE queue)
 	uint32_t player = queue.index;
 	uint32_t tempBuffer[DATA_MAXDATA] = {0};
 
+	if(!NetPlay.isHost)				// only host should act
+	{
+		ASSERT(false, "Host only routine detected for client!");
+		return false;
+	}
+
 	NETbeginDecode(queue, NET_DATA_CHECK);
 	for(i = 0; i < DATA_MAXDATA; i++)
 	{
@@ -386,6 +393,12 @@ bool recvDataCheck(NETQUEUE queue)
 	if (player >= MAX_PLAYERS) // invalid player number.
 	{
 		debug(LOG_ERROR, "invalid player number (%u) detected.", player);
+		return false;
+	}
+
+	if (whosResponsible(player) != queue.index)
+	{
+		HandleBadParam("NET_DATA_CHECK given incorrect params.", player, queue.index);
 		return false;
 	}
 
