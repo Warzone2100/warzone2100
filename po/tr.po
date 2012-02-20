@@ -8,9 +8,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2012-02-20 00:33+0100\n"
-"PO-Revision-Date: 2012-01-10 22:06+0200\n"
-"Last-Translator: Ayhan GÖRGÜLÜ <ayhangorgulu45@gmail.com>\n"
+"POT-Creation-Date: 2012-02-20 20:23+0100\n"
+"PO-Revision-Date: 2012-02-20 21:03+0200\n"
+"Last-Translator: Ayhan GÖRGÜLÜ <ayahngorgulu45@gmail.com>\n"
 "Language-Team: Turkey <warzone-dev@gna.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -10138,46 +10138,47 @@ msgid "OpenGL 2.0 is not supported by your system. Some things may look wrong. P
 msgstr "OpenGL 2.0 sisteminiz tarafından desteklenmiyor. Bazı şeyler yanlış görünebilir. Lütfen grafik sürücünüzü/donanımınızı yükseltin, mümkünse."
 
 #: lib/ivis_opengl/screen.cpp:152
-#, fuzzy
 msgid "OpenGL 1.5/2.0 is not supported by your system. Some things may look wrong. Please upgrade your graphics driver/hardware, if possible."
-msgstr "OpenGL 2.0 sisteminiz tarafından desteklenmiyor. Bazı şeyler yanlış görünebilir. Lütfen grafik sürücünüzü/donanımınızı yükseltin, mümkünse."
+msgstr "OpenGL 1.5/2.0 sisteminiz tarafından desteklenmiyor. Bazı şeyler yanlış görünebilir. Lütfen grafik sürücünüzü/donanımınızı yükseltin, mümkünse."
 
 #: lib/ivis_opengl/screen.cpp:158
-#, fuzzy
 msgid "OpenGL 1.4 + VBO extension is not supported by your system. The game requires this. Please upgrade your graphics drivers/hardware, if possible."
-msgstr "OpenGL 1.4 sisteminiz tarafından desteklenmiyor. Oyun buna gereksinim duyar. Lütfen grafik sürücünüzü/donanımınızı yükseltin, mümkünse."
+msgstr "OpenGL 1.4 + VBO sisteminiz tarafından desteklenmiyor. Oyun buna gereksinim duyar. Lütfen grafik sürücünüzü/donanımınızı yükseltin, mümkünse."
 
 #: lib/netplay/netplay.cpp:193
 #: lib/netplay/netplay.cpp:1051
 msgid "Enter password here"
 msgstr "Parolayı buraya gir"
 
-#: lib/netplay/netplay.cpp:2081
+#: lib/netplay/netplay.cpp:2079
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr "Konnte Lobbyserver-Namen nicht auflösen (%s)!"
 
-#: lib/netplay/netplay.cpp:2103
-#, fuzzy, c-format
+#: lib/netplay/netplay.cpp:2101
+#, c-format
 msgid ""
 "Error connecting to the lobby server: %s.\n"
 "Make sure port %d can receive incoming connections.\n"
 "If you're using a router configure it to use UPnP\n"
 " or to forward the port to your system."
-msgstr "Bekleme odası sunucusuna bağlanırken hata: %s. Port %d un gelen mesajlara erişebilir olduğuna emin olun .Eğer bir yönlendirici kullanıyorsanız, onu UPnP veya sisteminizin ileri port'unu kullanabilir hale getirin."
-
-#: lib/netplay/netplay.cpp:2768
-msgid "Failed to get a lobby response!"
 msgstr ""
+"Bekleme odası sunucusuna ulaşmaya çalışırken hata %s.\n"
+"Port %d un gelen mesajlara erişebilir olduğuna emin olun.\n"
+"Eğer bir yönlendirici kullanıyorsanız, onu UPnP veya sisteminizin \n"
+"ileri port'unu kullanabilir hale getirin."
+
+#: lib/netplay/netplay.cpp:2766
+msgid "Failed to get a lobby response!"
+msgstr "Bekleme odası cevabı alma başarısız!"
 
 #: po/custom/mac-infoplist.txt:1
-#, fuzzy
 msgid ""
 "Copyright © 1999-2004 Eidos Interactive.\n"
 "Copyright © 2005-2012 The Warzone 2100 Project"
 msgstr ""
 "Telif Hakkı © 1999-2004 Eidos İnteraktif.\n"
-"Telif Hakkı © 2005-2011 Warzone 2100 Projesi"
+"Telif Hakkı © 2005-2012 Warzone 2100 Projesi"
 
 #: po/custom/mac-infoplist.txt:2
 #: po/custom/warzone2100.desktop.txt:2
@@ -10236,21 +10237,20 @@ msgstr "Kapat"
 #: src/cheat.cpp:161
 #, c-format
 msgid "%s wants to enable debug mode. Enabled: %s, Disabled: %s."
-msgstr ""
+msgstr "%s hata ayıklama modunu devreye almak istiyor. Etkin: %s, Etkin değil: %s."
 
 #: src/cheat.cpp:165
 #, c-format
 msgid "%s wants to disable debug mode. Enabled: %s, Disabled: %s."
-msgstr ""
+msgstr "%s hata ayıklama modunu devre dışı bırakmak istiyor. Etkin: %s, Etkin değil: %s."
 
 #: src/cheat.cpp:171
 msgid "Debug mode now enabled!"
-msgstr ""
+msgstr "Hata ayıklama modu devrede!"
 
 #: src/cheat.cpp:175
-#, fuzzy
 msgid "Debug mode now disabled!"
-msgstr "Debug-Menüsü açıldı"
+msgstr "Hata ayıklama modu devre dışı!"
 
 #: src/clparse.cpp:242
 msgid "Set configuration directory"
@@ -10393,7 +10393,7 @@ msgstr "Doku sıkıştırma devre dışı"
 
 #: src/clparse.cpp:267
 msgid "Only use OpenGL 1.5"
-msgstr ""
+msgstr "Sadece OpenGL 1.5'i kullan"
 
 #: src/configuration.cpp:96
 msgid "My Game"
@@ -10779,7 +10779,7 @@ msgstr "Oyuna Katıl"
 
 #: src/frontend.cpp:384
 msgid "TCP PORT 2100 MUST BE OPENED IN YOUR FIREWALL / ROUTER TO HOST GAMES!"
-msgstr ""
+msgstr "TCP PORT 2100 GÜVENLİK DUVARINIZDA İZİN VERİLMİŞ OLMALI / OYUN YÖNETİCİSİ OLMAK İÇİN!"
 
 #: src/frontend.cpp:444
 #: src/multiint.cpp:1398
@@ -11018,15 +11018,13 @@ msgstr "Kaydırma hızı"
 
 #: src/frontend.cpp:1232
 #: src/frontend.cpp:1275
-#, fuzzy
 msgid "Unit Colour (SP)"
-msgstr "Birim Rengi"
+msgstr "Birim Rengi (T.O)"
 
 #: src/frontend.cpp:1242
 #: src/frontend.cpp:1276
-#, fuzzy
 msgid "Unit Colour (MP)"
-msgstr "Birim Rengi"
+msgstr "Birim Rengi (Ç.O)"
 
 #: src/frontend.cpp:1245
 #: src/frontend.cpp:1274
@@ -11301,7 +11299,7 @@ msgstr "Araştırma İlerlemesi"
 
 #: src/intdisplay.cpp:663
 msgid "Need more resources!"
-msgstr ""
+msgstr "Daha fazla kaynak lazım!"
 
 #: src/intelmap.cpp:242
 #: src/keybind.cpp:1327
@@ -12038,9 +12036,8 @@ msgid "Select all Combat Units"
 msgstr "Tüm Savaş Birimlerini Seç"
 
 #: src/keymap.cpp:430
-#, fuzzy
 msgid "Select all Cyborgs"
-msgstr "Tüm HoverCraft'lı Araçları Seç"
+msgstr "Tüm Cyborgları seç"
 
 #: src/keymap.cpp:431
 msgid "Select all Heavily Damaged Units"
@@ -12083,44 +12080,36 @@ msgid "Select all Similar Units"
 msgstr "Benzer Tüm Birimleri Seç"
 
 #: src/keymap.cpp:445
-#, fuzzy
 msgid "Select all Combat Cyborgs"
-msgstr "Tüm Savaş Birimlerini Seç"
+msgstr "Tüm Savaş Cyborglarını seç"
 
 #: src/keymap.cpp:446
-#, fuzzy
 msgid "Select all Engineers"
-msgstr "Tüm HoverCraft'lı Araçları Seç"
+msgstr "Tüm Mühendisleri seç"
 
 #: src/keymap.cpp:447
-#, fuzzy
 msgid "Select all Land Combat Units"
-msgstr "Tüm Savaş Birimlerini Seç"
+msgstr "Tüm Kara Savaş Birimlerini seç"
 
 #: src/keymap.cpp:448
-#, fuzzy
 msgid "Select all Mechanics"
-msgstr "Tüm Paletli Araçları Seç"
+msgstr "Tüm Mekanikleri seç"
 
 #: src/keymap.cpp:449
-#, fuzzy
 msgid "Select all Transporters"
-msgstr "Tüm Paletli Araçları Seç"
+msgstr "Tüm Taşıyıcıları seç"
 
 #: src/keymap.cpp:450
-#, fuzzy
 msgid "Select all Repair Tanks"
-msgstr "Tüm Paletli Araçları Seç"
+msgstr "Tüm Tamir Tanklarını seç"
 
 #: src/keymap.cpp:451
-#, fuzzy
 msgid "Select all Sensor Units"
-msgstr "Benzer Tüm Birimleri Seç"
+msgstr "Tüm Algılayıcı Birimleri seç"
 
 #: src/keymap.cpp:452
-#, fuzzy
 msgid "Select all Trucks"
-msgstr "Tüm Paletli Araçları Seç"
+msgstr "Tüm kamyonları seç"
 
 #: src/keymap.cpp:456
 msgid "Select next Factory"
@@ -12351,32 +12340,30 @@ msgid "IP"
 msgstr "IP"
 
 #: src/multiint.cpp:947
-#, fuzzy
 msgid "[Password required]"
-msgstr "*** Şifreye gerek yok! ***"
+msgstr "[Şifre gerekli]"
 
 #: src/multiint.cpp:951
 msgid "[No Tanks]"
-msgstr ""
+msgstr "[Tanklar yok]"
 
 #: src/multiint.cpp:955
-#, fuzzy
 msgid "[No Cyborgs]"
-msgstr "Cyborgları Üretir"
+msgstr "[Cyborg yok]"
 
 #: src/multiint.cpp:959
 msgid "[No VTOLs]"
-msgstr ""
+msgstr "[DİvK'lar yok]"
 
 #: src/multiint.cpp:963
 #, c-format
 msgid "Hosted by %s"
-msgstr ""
+msgstr "%s tarafından kuruldu"
 
 #: src/multiint.cpp:967
 #, c-format
 msgid "Hosted by %s —%s"
-msgstr ""
+msgstr "%s —%s tarafından kuruldu"
 
 #: src/multiint.cpp:987
 msgid "No games are available"
@@ -12590,14 +12577,12 @@ msgid "Click to change difficulty"
 msgstr "Zorluğu değiştirmek için tıkla"
 
 #: src/multiint.cpp:2262
-#, fuzzy
 msgid "Waiting for player"
 msgstr "Diğer oyuncular bekleniyor"
 
 #: src/multiint.cpp:2262
-#, fuzzy
 msgid "Player is ready"
-msgstr "Oyuncu Düştü"
+msgstr "Oyuncu hazır"
 
 #: src/multiint.cpp:2262
 msgid "Click when ready"
@@ -12641,7 +12626,7 @@ msgstr "Tüm oyuncular oyununa girebilmek için aynı moda ihtiyaç duyar."
 
 #: src/multiint.cpp:2572
 msgid "Connecting to the lobby server..."
-msgstr ""
+msgstr "Bekleme odası sunucusuna bağlanılıyor..."
 
 #: src/multiint.cpp:2719
 #, c-format
@@ -12674,21 +12659,21 @@ msgstr "Kurucu oyunu başlatıyor"
 
 #: src/multiint.cpp:3805
 msgid "Can't connect to lobby server!"
-msgstr ""
+msgstr "Bekleme odası sunucusuna bağlanılamıyor!"
 
 #: src/multiint.cpp:3892
 #, c-format
 msgid "Mods: %s"
-msgstr ""
+msgstr "Mod: %s"
 
 #: src/multiint.cpp:3899
 msgid "Mods: None!"
-msgstr ""
+msgstr "Mod: Yok!"
 
 #: src/multiint.cpp:3909
-#, fuzzy, c-format
+#, c-format
 msgid "Version: %s"
-msgstr "Sürüm %s-%s%s%s%s"
+msgstr "Sürüm: %s"
 
 #: src/multiint.cpp:3960
 #, c-format
@@ -12745,14 +12730,13 @@ msgid "%s (%u) has an incompatible mod, and has been kicked."
 msgstr "%s (%u) uyumsuz bir mod.Ve oyundan atıldı"
 
 #: src/multijoin.cpp:459
-#, fuzzy, c-format
+#, c-format
 msgid "%s is joining the game"
 msgstr "%s Oyuna katılıyor"
 
 #: src/multijoin.cpp:470
-#, fuzzy
 msgid "Server message:"
-msgstr "Sistem İletisi:"
+msgstr "Sunucu iletisi:"
 
 #: src/multilimit.cpp:183
 msgid "Apply Defaults and Return To Previous Screen"
