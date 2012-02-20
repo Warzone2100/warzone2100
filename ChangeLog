@@ -35,6 +35,7 @@
    * Change: Remove old-1.10-balance mod, since it was broken (commit:5694a6fded95e7128c6b8222f6895ba200b75432)
  * Translations:
    * Update: Russian (ticket:3184, commit:b7541ac45b9babe0dd0e0b0ffeb3cbd6b9477a2e, commit:519b83fbd3cd086b1c29f4215a2cbbd46114f534)
+   * Update: Turkish (ticket:3192, commit:2c9886131b24c488bd70d36a2b81437def0002c5)
 
 2012-02-08: Version 3.1-beta2
  * General:
@@ -308,7 +309,7 @@ master_20110320qt and before:
 
 2011-10-23: Version 2.3.9
  * General:
-   * Change: Show damage on all buildings (ticket:2634, commit: eabe72073c5e594f7849cd53460b25ae95b3371e)
+   * Change: Show damage on all buildings (ticket:2634, commit:eabe72073c5e594f7849cd53460b25ae95b3371e)
    * Change: Use Ctrl-V instead of Tab to paste in edit boxes (ticket:2830, commit:d2f4b5a162151d3dac14e45931e727b181c9ef22)
    * Change: Mouse wheel scrolling in research and build menus (ticket:2110, commit:6a41d3f59f962800b2e0e3eba7e696f48dc46b36)
    * Fix: Make units follow their orders better (ticket:2391, commit:2c31de52476f81f6ef368a38483c912c08c69c22)
@@ -848,7 +849,7 @@ master_20110320qt and before:
    * Fix: Remove all fog of war darkening when satellite uplink built (r9216)
    * Fix: Faster game loading when vsync enabled (r9167, r9163)
    * Fix: Widget ID corruption leading to disappearing reticule and other GUI bugs (r9325)
-   * Fix: Miscellaneous crashes and asserts (r9153, ticket:1219, r9192, r9152, ticket: 1402, r9248, r9181, r9174)
+   * Fix: Miscellaneous crashes and asserts (r9153, ticket:1219, r9192, r9152, ticket:1402, r9248, r9181, r9174)
  * Graphics:
    * Change: Darken features and buildings that you cannot see due to fog of war (r9322, r9343)
    * Fix: Only lift fog of war for what you can see (r9199, r9204, r9216)
