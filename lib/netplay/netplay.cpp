@@ -1406,7 +1406,6 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 					|| message->type == NET_JOIN
 					|| message->type == NET_PLAYER_INFO) && receiver != NET_HOST_ONLY))
 				{
-					depart:
 					char msg[256] = {'\0'};
 
 					ssprintf(msg, "Auto-kicking player %u, lacked the required access level for command(%d).", (unsigned int)sender, (int)message->type);
@@ -1435,8 +1434,7 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 			}
 			else
 			{
-				debug(LOG_ERROR, "Player %d sent us a NET_SEND_TO_PLAYER addressed to %d from %d. We are %d.", playerQueue.index, receiver, sender, selectedPlayer);
-				goto depart;
+				debug(LOG_INFO, "Report this: Player %d sent us message type (%d) addressed to %d from %d. We are %d.", (int)playerQueue.index, (int)message->type, (int)receiver, (int)sender, selectedPlayer);
 			}
 
 			break;
