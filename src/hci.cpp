@@ -3524,6 +3524,10 @@ bool intAddOptions(void)
 	{
 		return false;
 	}
+	if (NetPlay.bComms)
+	{
+		widgSetButtonState(psWScreen, sButInit.id, WBUT_DISABLE);
+	}
 	sButInit.id = IDOPT_MAPSAVE;
 	sButInit.x += OPT_GAP + OPT_BUTWIDTH;
 	sButInit.pText = _("Save");
@@ -3531,6 +3535,10 @@ bool intAddOptions(void)
 	if (!widgAddButton(psWScreen, &sButInit))
 	{
 		return false;
+	}
+	if (NetPlay.bComms)
+	{
+		widgSetButtonState(psWScreen, sButInit.id, WBUT_DISABLE);
 	}
 	sButInit.id = IDOPT_MAPNEW;
 	sButInit.x = OPT_GAP;
@@ -3540,6 +3548,10 @@ bool intAddOptions(void)
 	if (!widgAddButton(psWScreen, &sButInit))
 	{
 		return false;
+	}
+	if (NetPlay.bComms)
+	{
+		widgSetButtonState(psWScreen, sButInit.id, WBUT_DISABLE);
 	}
 
 	/* Add the map size edit boxes */
@@ -3557,12 +3569,20 @@ bool intAddOptions(void)
 	{
 		return false;
 	}
+	if (NetPlay.bComms)
+	{
+		widgSetButtonState(psWScreen, sButInit.id, WBUT_DISABLE);
+	}
 	sEdInit.id = IDOPT_MAPHEIGHT;
 	sEdInit.x += OPT_GAP + OPT_BUTWIDTH;
 	sprintf(aText, "%d", mapHeight);
 	if (!widgAddEditBox(psWScreen, &sEdInit))
 	{
 		return false;
+	}
+	if (NetPlay.bComms)
+	{
+		widgSetButtonState(psWScreen, sButInit.id, WBUT_DISABLE);
 	}
 
 	/* Add the edit buttons */
@@ -3577,6 +3597,10 @@ bool intAddOptions(void)
 	if (!widgAddButton(psWScreen, &sButInit))
 	{
 		return false;
+	}
+	if (NetPlay.bComms)
+	{
+		widgSetButtonState(psWScreen, sButInit.id, WBUT_DISABLE);
 	}
 
 	/* Add the add object buttons */
@@ -3606,6 +3630,10 @@ bool intAddOptions(void)
 	{
 		return false;
 	}
+	if (NetPlay.bComms)
+	{
+		widgSetButtonState(psWScreen, sButInit.id, WBUT_DISABLE);
+	}
 
 	/* Edit pause */
 	sButInit.x = OPT_GAP;
@@ -3616,6 +3644,10 @@ bool intAddOptions(void)
 	if (!widgAddButton(psWScreen, &sButInit))
 	{
 		return false;
+	}
+	if (NetPlay.bComms)
+	{
+		widgSetButtonState(psWScreen, sButInit.id, WBUT_DISABLE);
 	}
 	if (editMode)
 	{
@@ -3631,7 +3663,10 @@ bool intAddOptions(void)
 	{
 		return false;
 	}
-
+	if (NetPlay.bComms)
+	{
+		widgSetButtonState(psWScreen, sButInit.id, WBUT_DISABLE);
+	}
 #ifdef EDIT_OPTIONS
 	/* Open the edit window - whatever that is supposed to be */
 	sButInit.x += OPT_GAP;
@@ -3700,7 +3735,10 @@ bool intAddOptions(void)
 		{
 			return false;
 		}
-
+		if (NetPlay.bComms)
+		{
+			widgSetButtonState(psWScreen, sButInit.id, WBUT_DISABLE);
+		}
 		/* Update the initialisation structure for the next button */
 		sButInit.id += 1;
 		sButInit.x += OPT_BUTWIDTH+OPT_GAP;
