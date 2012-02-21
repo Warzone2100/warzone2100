@@ -328,7 +328,7 @@ bool recvDroid(NETQUEUE queue)
 	}
 	NETend();
 
-	if (!getDebugMappingStatus())
+	if (!getDebugMappingStatus() && bMultiPlayer)
 	{
 		debug(LOG_WARNING, "Failed to add droid for player %u.", NetPlay.players[queue.index].position);
 		return false;
@@ -723,7 +723,7 @@ bool recvDestroyDroid(NETQUEUE queue)
 	}
 	NETend();
 
-	if (!getDebugMappingStatus())
+	if (!getDebugMappingStatus() && bMultiPlayer)
 	{
 		debug(LOG_WARNING, "Failed to remove droid for player %u.", NetPlay.players[queue.index].position);
 		return false;

@@ -89,7 +89,7 @@ bool recvBuildFinished(NETQUEUE queue)
 
 	ASSERT_OR_RETURN(false, player < MAX_PLAYERS, "invalid player %u", player);
 
-	if (!getDebugMappingStatus())
+	if (!getDebugMappingStatus() && bMultiPlayer)
 	{
 		debug(LOG_WARNING, "Failed to add structure for player %u.", NetPlay.players[queue.index].position);
 		return false;
@@ -183,7 +183,7 @@ bool recvDestroyStructure(NETQUEUE queue)
 		NETuint32_t(&structID);
 	NETend();
 
-	if (!getDebugMappingStatus())
+	if (!getDebugMappingStatus() && bMultiPlayer)
 	{
 		debug(LOG_WARNING, "Failed to remove structure for player %u.", NetPlay.players[queue.index].position);
 		return false;
