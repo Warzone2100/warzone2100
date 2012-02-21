@@ -266,7 +266,7 @@ bool multiPlayerLoop(void)
 							NETlogEntry(msg, SYNC_FLAG, index);
 
 #ifndef DEBUG
-							kickPlayer(index, "it is not nice to cheat!", ERROR_CHEAT);
+							kickPlayer(index, "invalid data!", ERROR_INVALID);
 #endif
 							debug(LOG_WARNING, "Kicking Player %s (%u), they tried to bypass data integrity check!", getPlayerName(index), index);
 						}
@@ -655,12 +655,19 @@ bool recvMessage(void)
 			}
 			NETend();
 
+			if (whosResponsible(player_id) != queue.index && queue.index != NET_HOST_ONLY)
+			{
+				HandleBadParam("NET_PLAYER_DROPPED given incorrect params.", player_id, queue.index);
+				break;
+			}
+
 			debug(LOG_INFO,"** player %u has dropped!", player_id);
 
 			if (NetPlay.players[player_id].allocated)
-				{
-					MultiPlayerLeave(player_id);		// get rid of their stuff
-				}
+			{
+				MultiPlayerLeave(player_id);		// get rid of their stuff
+				NET_InitPlayer(player_id, false);
+			}
 			NETsetPlayerConnectionStatus(CONNECTIONSTATUS_PLAYER_DROPPED, player_id);
 			break;
 		}
@@ -718,11 +725,20 @@ bool recvMessage(void)
 				NETuint32_t(&player_id);
 				NETstring(reason, MAX_KICK_REASON);
 				NETenum(&KICK_TYPE);
+				NETenum(&KICK_TYPE);
 			NETend();
 
 			if (player_id == NET_HOST_ONLY)
 			{
-				debug(LOG_ERROR, "someone tried to kick the host--check your netplay logs!");
+				char buf[250]= {'\0'};
+
+				ssprintf(buf, "Player %d (%s : %s) tried to kick %u", (int) queue.index, NetPlay.players[queue.index].name, NetPlay.players[queue.index].IPtextAddress, player_id);
+				NETlogEntry(buf, SYNC_FLAG, 0);
+				debug(LOG_ERROR, "%s", buf);
+				if (NetPlay.isHost)
+				{
+					NETplayerKicked((unsigned int) queue.index);
+				}
 				break;
 			}
 			else if (selectedPlayer == player_id)  // we've been told to leave.
@@ -769,7 +785,20 @@ bool recvMessage(void)
 	return true;
 }
 
+void HandleBadParam(const char *msg, const int from, const int actual)
+{
+	char buf[255];
+	LOBBY_ERROR_TYPES KICK_TYPE = ERROR_INVALID;
 
+	ssprintf(buf, "!!>Msg: %s, Actual: %d, Bad: %d", msg, actual, from);
+	NETlogEntry(buf, SYNC_FLAG, actual);
+	if (NetPlay.isHost)
+	{
+		ssprintf(buf, "Auto kicking player %s, invalid command received.", NetPlay.players[actual].name);
+		sendTextMessage(buf, true);
+		kickPlayer(actual, buf, KICK_TYPE);
+	}
+}
 // ////////////////////////////////////////////////////////////////////////////
 // Research Stuff. Nat games only send the result of research procedures.
 bool SendResearch(uint8_t player, uint32_t index, bool trigger)
@@ -1258,7 +1287,7 @@ bool recvTextMessage(NETQUEUE queue)
 		playerIndex = queue.index;  // Fix corrupted playerIndex.
 	}
 
-	if (playerIndex >= MAX_PLAYERS)
+	if (playerIndex >= MAX_PLAYERS || (!NetPlay.players[playerIndex].allocated && NetPlay.players[playerIndex].ai == AI_OPEN))
 	{
 		return false;
 	}
@@ -1528,10 +1557,10 @@ bool recvMapFileRequested(NETQUEUE queue)
 	PHYSFS_sint64 fileSize_64;
 	PHYSFS_file	*pFileHandle;
 
-	// We are not the host, so we don't care. (in fact, this would be a error)
-	if(!NetPlay.isHost)
+	if(!NetPlay.isHost)				// only host should act
 	{
-		return true;
+		ASSERT(false, "Host only routine detected for client!");
+		return false;
 	}
 
 	//	Check to see who wants the file

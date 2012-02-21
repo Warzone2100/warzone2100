@@ -26,7 +26,7 @@ CLEANFILES = \
 TESTS = maptest modeltest qtscripttest
 
 maplist.txt:
-	(cd $(abs_top_srcdir)/data ; find base -name game.map > $(abs_top_builddir)/tests/maplist.txt )
+	(cd $(abs_top_srcdir)/data ; find base mp -name game.map > $(abs_top_builddir)/tests/maplist.txt )
 	touch $@
 
 modellist.txt:

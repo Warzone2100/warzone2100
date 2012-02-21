@@ -1,6 +1,41 @@
-2012-02-08: Version 3.1-beta2
- * Javascript:
-   * Fix: Make sure we run Nexus AI on the correct players when some players use javascript-based AIs (ticket:3137)
+2012-02-20: Version 3.1-beta3
+ * General:
+   * Change: New keyboard shortcuts for unit selection:
+     * Ctrl+C: All cyborgs
+     * Shift+C: All cyborgs with weapons
+     * Shift+E: All cyborg engineers
+     * Shift+G: All ground based attack units including hovers
+     * Shift+M: All cyborg mechanics
+     * Shift+P: All transporters
+     * Shift+R: All tanks with repair turrets
+     * Shift+S: All sensor units
+     * Shift+T: All trucks
+   * Fix: Prevent features with low health from becoming indestructible (ticket:3134, commit:2fc761a304091080a91c5c3660c7b8e0196ffe2a)
+   * Fix: Correctly use unit speed modifiers (ticket:3140, commit:5a3925391ea12cda73a6feab687eeec646292091)
+   * Fix: Don't fire Lassat too many times when clicking fast (ticket:3163, commit:ea8d833e5c3e9dcd46f9ac799643ec0f513dadbe)
+   * Fix: Clear tile after destroying a feature (ticket:3155, commit:db74b52388325c511cbcf8c0f420693bb16890f1)
+   * Fix: Correctly check for needed OpenGL versions and extensions (commit:a7d2c06c280c867fea61173d25c25d69012db489)
+ * UI:
+   * Change: Add a 'Need more resources' indicator in the power bar when needed (commit:845d423cb28cfb1818d92719e759a40a61f27d9f)
+   * Fix: Show correct speed bars when designing VTOLs (ticket:3143, commit:2e0393130739d963b205f18ae55cfddb9a96e9e4)
+   * Fix: Play sound when getting attacked (ticket:3102, commit:001ef35faf1b1207db0e45ed18fbf072356372f6)
+   * Fix: Increase component limit in unit design GUI (ticket:3160, commit:60fb815bf3890724ec9479bd41445dd18a3e1725)
+   * Fix: Adapt minimap size to game resolution (ticket:2694, commit:bccb89cf37e5a91074ef43e6e6621e00d13c9fbc)
+ * Multiplayer:
+   * Change: Allow configuring preferred player colour (commit:cefd4179f7704e6207e4edc22e33c51363764cb6)
+   * Change: Make the Super Transport faster, lower armour, updated model (commit:78dd89477c44dc57b6ae88d244fa4e49d9a2a953)
+   * Change: Add in-game kick by right+left clicking over the player's channel icon (commit:9a005ac66ea5a3abc18a1fec004e22c187438b9d)
+   * Fix: Allow kicking players in non-alliance mode again (ticket:3121, commit:9a005ac66ea5a3abc18a1fec004e22c187438b9d)
+   * Fix: Make sure we run Nexus AI on the correct players when some players use javascript-based AIs (ticket:3137, commit:9d616939ecbf289d97baf7be7a2ec86b7e03d31c)
+   * Fix: Allow private messages to players 8 and 9 (ticket:3141, commit:e581b840d6ca3e5f0e22bcf3272b8589a68dc962)
+   * Fix: Update hosting screen for ten players, move Limits and Start Hosting buttons (ticket:3157, commit:ac3b802a44a8e99131198a1e11fd3cfeb355ea88)
+ * Campaign:
+   * Fix: Enable minimap and unit design in away missions when an HQ exists in the remote base (ticket:3182, commit:391ffb621e4d43d67d0cb61c5aa6c28a5375c81a)
+ * Mods:
+   * Change: Remove old-1.10-balance mod, since it was broken (commit:5694a6fded95e7128c6b8222f6895ba200b75432)
+ * Translations:
+   * Update: Russian (ticket:3184, commit:b7541ac45b9babe0dd0e0b0ffeb3cbd6b9477a2e, commit:519b83fbd3cd086b1c29f4215a2cbbd46114f534)
+   * Update: Turkish (ticket:3192, commit:2c9886131b24c488bd70d36a2b81437def0002c5)
 
 2012-02-08: Version 3.1-beta2
  * General:
@@ -274,7 +309,7 @@ master_20110320qt and before:
 
 2011-10-23: Version 2.3.9
  * General:
-   * Change: Show damage on all buildings (ticket:2634, commit: eabe72073c5e594f7849cd53460b25ae95b3371e)
+   * Change: Show damage on all buildings (ticket:2634, commit:eabe72073c5e594f7849cd53460b25ae95b3371e)
    * Change: Use Ctrl-V instead of Tab to paste in edit boxes (ticket:2830, commit:d2f4b5a162151d3dac14e45931e727b181c9ef22)
    * Change: Mouse wheel scrolling in research and build menus (ticket:2110, commit:6a41d3f59f962800b2e0e3eba7e696f48dc46b36)
    * Fix: Make units follow their orders better (ticket:2391, commit:2c31de52476f81f6ef368a38483c912c08c69c22)
@@ -814,7 +849,7 @@ master_20110320qt and before:
    * Fix: Remove all fog of war darkening when satellite uplink built (r9216)
    * Fix: Faster game loading when vsync enabled (r9167, r9163)
    * Fix: Widget ID corruption leading to disappearing reticule and other GUI bugs (r9325)
-   * Fix: Miscellaneous crashes and asserts (r9153, ticket:1219, r9192, r9152, ticket: 1402, r9248, r9181, r9174)
+   * Fix: Miscellaneous crashes and asserts (r9153, ticket:1219, r9192, r9152, ticket:1402, r9248, r9181, r9174)
  * Graphics:
    * Change: Darken features and buildings that you cannot see due to fog of war (r9322, r9343)
    * Fix: Only lift fog of war for what you can see (r9199, r9204, r9216)

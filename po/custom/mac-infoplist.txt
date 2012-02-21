@@ -1,4 +1,4 @@
-_("Copyright © 1999-2004 Eidos Interactive.\nCopyright © 2005-2011 The Warzone 2100 Project")
+_("Copyright © 1999-2004 Eidos Interactive.\nCopyright © 2005-2012 The Warzone 2100 Project")
 _("Warzone 2100")
 _("Warzone 2100 Map / Mod File")
 _("Warzone 2100 Campaign Mod File")

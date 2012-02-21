@@ -1512,6 +1512,22 @@ void intProcessMultiMenu(UDWORD id)
 	{
 		i = id - MULTIMENU_CHANNEL;
 		openchannels[i] = !openchannels[i];
+
+		if(mouseDown(MOUSE_RMB) && NetPlay.isHost) // both buttons....
+			{
+				char buf[250];
+
+				// Allow the host to kick the AI only in a MP game, or if they activated cheats in a skirmish game
+				if (NetPlay.bComms || Cheated)
+				{
+					ssprintf(buf, _("The host has kicked %s from the game!"), getPlayerName((unsigned int) i));
+					sendTextMessage(buf, true);
+					ssprintf(buf, _("kicked %s : %s from the game, and added them to the banned list!"), getPlayerName((unsigned int) i), NetPlay.players[i].IPtextAddress);
+					NETlogEntry(buf, SYNC_FLAG, (unsigned int) i);
+					kickPlayer((unsigned int) i, "you are unwanted by the host.", ERROR_KICKED);
+					return;
+				}
+			}
 	}
 
 	//radar gifts
