@@ -644,6 +644,54 @@ static QScriptValue js_activateStructure(QScriptContext *context, QScriptEngine 
 	return QScriptValue(true);
 }
 
+//-- \subsection{findResearch(research)}
+//-- Return list of research items remaining to research for the given research item.
+static QScriptValue js_findResearch(QScriptContext *context, QScriptEngine *engine)
+{
+	QList<RESEARCH *> list;
+	QString resName = context->argument(0).toString();
+	int player = engine->globalObject().property("me").toInt32();
+	RESEARCH *psTarget = getResearch(resName.toUtf8().constData());
+	SCRIPT_ASSERT(context, psTarget, "No such research: %s", resName.toUtf8().constData());
+	PLAYER_RESEARCH *plrRes = &asPlayerResList[player][psTarget->index];
+	if (IsResearchStartedPending(plrRes) || IsResearchCompleted(plrRes))
+	{
+		return engine->newArray(0); // return empty array
+	}
+	// Go down the requirements list for the desired tech
+	QList<RESEARCH *> reslist;
+	RESEARCH *cur = psTarget;
+	while (cur)
+	{
+		if (!(asPlayerResList[player][cur->index].ResearchStatus & RESEARCHED))
+		{
+			debug(LOG_SCRIPT, "Added research in %d's %s for %s", player, cur->pName, psTarget->pName);
+			list.append(cur);
+		}
+		RESEARCH *prev = cur;
+		cur = NULL;
+		if (prev->pPRList.size())
+		{
+			cur = &asResearch[prev->pPRList[0]]; // get first pre-req
+		}
+		for (int i = 1; i < prev->pPRList.size(); i++)
+		{
+			// push any other pre-reqs on the stack
+			reslist += &asResearch[prev->pPRList[i]];
+		}
+		if (!cur && reslist.size())
+		{
+			cur = reslist.takeFirst(); // retrieve options from the stack
+		}
+	}
+	QScriptValue retval = engine->newArray(list.size());
+	for (int i = 0; i < list.size(); i++)
+	{
+		retval.setProperty(i, convResearch(list[i], engine, i));
+	}
+	return retval;
+}	
+
 //-- \subsection{pursueResearch(lab, research)}
 //-- Start researching the first available technology on the way to the given technology.
 //-- First parameter is the structure to research in, which must be a research lab. The
@@ -2236,6 +2284,7 @@ bool registerFunctions(QScriptEngine *engine)
 	engine->globalObject().setProperty("enumResearch", engine->newFunction(js_enumResearch));
 	engine->globalObject().setProperty("getResearch", engine->newFunction(js_getResearch));
 	engine->globalObject().setProperty("pursueResearch", engine->newFunction(js_pursueResearch));
+	engine->globalObject().setProperty("findResearch", engine->newFunction(js_findResearch));
 	engine->globalObject().setProperty("distBetweenTwoPoints", engine->newFunction(js_distBetweenTwoPoints));
 	engine->globalObject().setProperty("newGroup", engine->newFunction(js_newGroup));
 	engine->globalObject().setProperty("groupAddArea", engine->newFunction(js_groupAddArea));
