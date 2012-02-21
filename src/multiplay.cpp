@@ -825,7 +825,7 @@ static bool recvResearch(NETQUEUE queue)
 		NETuint32_t(&index);
 	NETend();
 
-	if (!getDebugMappingStatus())
+	if (!getDebugMappingStatus() && bMultiPlayer)
 	{
 		debug(LOG_WARNING, "Failed to finish research for player %u.", NetPlay.players[queue.index].position);
 		return false;
@@ -1525,7 +1525,7 @@ bool recvDestroyFeature(NETQUEUE queue)
 		NETuint32_t(&id);
 	NETend();
 
-	if (!getDebugMappingStatus())
+	if (!getDebugMappingStatus() && bMultiPlayer)
 	{
 		debug(LOG_WARNING, "Failed to remove feature for player %u.", NetPlay.players[queue.index].position);
 		return false;

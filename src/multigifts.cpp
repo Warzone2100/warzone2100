@@ -585,7 +585,7 @@ void recvMultiPlayerFeature(NETQUEUE queue)
 	}
 	NETend();
 
-	if (!getDebugMappingStatus())
+	if (!getDebugMappingStatus() && bMultiPlayer)
 	{
 		debug(LOG_WARNING, "Failed to add feature for player %u.", NetPlay.players[queue.index].position);
 		return;
