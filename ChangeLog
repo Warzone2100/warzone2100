@@ -1,4 +1,4 @@
-2012-02-20: Version 3.1-beta3
+2012-02-21: Version 3.1-beta4
  * General:
    * Change: New keyboard shortcuts for unit selection:
      * Ctrl+C: All cyborgs
@@ -36,6 +36,9 @@
  * Translations:
    * Update: Russian (ticket:3184, commit:b7541ac45b9babe0dd0e0b0ffeb3cbd6b9477a2e, commit:519b83fbd3cd086b1c29f4215a2cbbd46114f534)
    * Update: Turkish (ticket:3192, commit:2c9886131b24c488bd70d36a2b81437def0002c5)
+
+2012-02-20: Version 3.1-beta3
+ * Unpublished
 
 2012-02-08: Version 3.1-beta2
  * General:
