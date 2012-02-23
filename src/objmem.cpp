@@ -183,10 +183,7 @@ void objmemUpdate(void)
 				break;
 			}
 			psCBObjDestroyed = NULL;
-			if (psCurr->died == gameTime || psCurr->died == 2)
-			{
-				triggerEventDestroyed(psCurr);
-			}
+			triggerEventDestroyed(psCurr);
 
 			psPrev = psCurr;
 		}
