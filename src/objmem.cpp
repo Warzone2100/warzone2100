@@ -143,7 +143,7 @@ void objmemUpdate(void)
 	   were destroyed before this turn */
 
 	/* First remove the objects from the start of the list */
-	while (psDestroyedObj != NULL && psDestroyedObj->died < gameTime - deltaGameTime)
+	while (psDestroyedObj != NULL && psDestroyedObj->died <= gameTime - deltaGameTime)
 	{
 		psNext = psDestroyedObj->psNext;
 		objmemDestroy(psDestroyedObj);
@@ -155,7 +155,7 @@ void objmemUpdate(void)
 	for(psCurr = psPrev = psDestroyedObj; psCurr != NULL; psCurr = psNext)
 	{
 		psNext = psCurr->psNext;
-		if (psCurr->died < gameTime - deltaGameTime)
+		if (psCurr->died <= gameTime - deltaGameTime)
 		{
 			objmemDestroy(psCurr);
 

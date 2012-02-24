@@ -43,7 +43,7 @@ struct PROJECTILE : public SIMPLE_OBJECT
 	PROJECTILE(uint32_t id, unsigned player) : SIMPLE_OBJECT(OBJ_PROJECTILE, id, player) {}
 
 	void            update();
-	bool            deleteIfDead() { if (died == 0 || died > gameTime - deltaGameTime) return false; delete this; return true; }
+	bool            deleteIfDead() { if (died == 0 || died >= gameTime - deltaGameTime) return false; delete this; return true; }
 
 
 	UBYTE           state;                  ///< current projectile state
