@@ -80,6 +80,7 @@
 #include <time.h>
 
 #if defined(WZ_OS_MAC)
+// NOTE: Moving these defines is likely to (and has in the past) break the mac builds
 # include <CoreServices/CoreServices.h>
 # include <unistd.h>
 # include "cocoa_wrapper.h"
