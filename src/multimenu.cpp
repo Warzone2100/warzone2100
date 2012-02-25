@@ -760,7 +760,7 @@ bool runMultiRequester(UDWORD id, UDWORD *mode, char *chosen, UDWORD *chosenValu
 
 static void displayExtraGubbins(UDWORD height)
 {
-	char	str[128];
+	char str[128];
 
 	//draw grid
 	iV_Line(MULTIMENU_FORM_X+MULTIMENU_C0 -6 , MULTIMENU_FORM_Y,
@@ -792,16 +792,14 @@ static void displayExtraGubbins(UDWORD height)
 	iV_DrawText(_("Alliances"), MULTIMENU_FORM_X+MULTIMENU_C0, MULTIMENU_FORM_Y+MULTIMENU_FONT_OSET);
 	iV_DrawText(_("Score"), MULTIMENU_FORM_X+MULTIMENU_C8, MULTIMENU_FORM_Y+MULTIMENU_FONT_OSET);
 	iV_DrawText(_("Kills"), MULTIMENU_FORM_X+MULTIMENU_C9, MULTIMENU_FORM_Y+MULTIMENU_FONT_OSET);
+	iV_DrawText(_("Units"), MULTIMENU_FORM_X+MULTIMENU_C10, MULTIMENU_FORM_Y+MULTIMENU_FONT_OSET);
 
-	if(getDebugMappingStatus())
-	{	// shows # units for *all* players in debug mode ONLY!
-		iV_DrawText(_("Units"), MULTIMENU_FORM_X+MULTIMENU_C10, MULTIMENU_FORM_Y+MULTIMENU_FONT_OSET);
+	if (getDebugMappingStatus())
+	{
 		iV_DrawText(_("Power"), MULTIMENU_FORM_X+MULTIMENU_C11, MULTIMENU_FORM_Y+MULTIMENU_FONT_OSET);
 	}
 	else
-	{	// shows # units for *yourself* (+ team member?) only.
-		iV_DrawText(_("Units"), MULTIMENU_FORM_X+MULTIMENU_C10, MULTIMENU_FORM_Y+MULTIMENU_FONT_OSET);
-
+	{
 		// ping is useless for non MP games, so display something useful depending on mode.
 		if (runningMultiplayer())
 		{
@@ -814,16 +812,14 @@ static void displayExtraGubbins(UDWORD height)
 	}
 
 #ifdef DEBUG
-	{
-		unsigned int width;
+	unsigned int width;
 
-		sprintf(str,"Traf: %u/%u", NETgetBytesSent(), NETgetBytesRecvd());
-		width = iV_GetTextWidth(str);
-		iV_DrawText(str, MULTIMENU_FORM_X, MULTIMENU_FORM_Y + MULTIMENU_FORM_H);
+	sprintf(str,"Traf: %u/%u", NETgetBytesSent(), NETgetBytesRecvd());
+	width = iV_GetTextWidth(str);
+	iV_DrawText(str, MULTIMENU_FORM_X, MULTIMENU_FORM_Y + MULTIMENU_FORM_H);
 
-		sprintf(str,"Pack: %u/%u", NETgetPacketsSent(), NETgetPacketsRecvd());
-		iV_DrawText(str, MULTIMENU_FORM_X + 20 + width, MULTIMENU_FORM_Y + MULTIMENU_FORM_H);
-	}
+	sprintf(str,"Pack: %u/%u", NETgetPacketsSent(), NETgetPacketsRecvd());
+	iV_DrawText(str, MULTIMENU_FORM_X + 20 + width, MULTIMENU_FORM_Y + MULTIMENU_FORM_H);
 #endif
 	return;
 }
@@ -831,191 +827,139 @@ static void displayExtraGubbins(UDWORD height)
 
 static void displayMultiPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
 {
-	char			str[128];
-	UDWORD			x					= xOffset+psWidget->x;
-	UDWORD			y					= yOffset+psWidget->y;
-	UDWORD			player = psWidget->UserData; //get the in game player number.
-	Position		position;
-	Vector3i 		rotation;
+	char str[128];
+	int x = xOffset + psWidget->x;
+	int y = yOffset + psWidget->y;
+	unsigned player = psWidget->UserData;  // Get the in game player number.
 
-	if( responsibleFor(player,0) )
+	if (responsibleFor(player, 0))
 	{
 		displayExtraGubbins(widgGetFromID(psWScreen,MULTIMENU_FORM)->height);
 	}
 
-	iV_SetFont(font_regular);											// font
+	iV_SetFont(font_regular);  // font
 	iV_SetTextColour(WZCOL_TEXT_BRIGHT);
 
-	if(isHumanPlayer(player) || (game.type == SKIRMISH && player<game.maxPlayers) )
+	const bool isHuman = isHumanPlayer(player);
+	const bool isAlly = aiCheckAlliances(selectedPlayer, player);
+	const bool isSelectedPlayer = player == selectedPlayer;
+
+	SetPlayerTextColor(alliances[selectedPlayer][player], player);
+
+	if (isHuman || (game.type == SKIRMISH && player<game.maxPlayers) )
 	{
 		ssprintf(str, "%d: %s", NetPlay.players[player].position, getPlayerName(player));
-		if (isHumanPlayer(player))
-		{
-			SetPlayerTextColor(alliances[selectedPlayer][player], player);
-		}
-		else
-		{
-			SetPlayerTextColor(alliances[selectedPlayer][player], player);
-		}
 
-		while(iV_GetTextWidth(str) >= (MULTIMENU_C0-MULTIMENU_C2-10) )
+		while (iV_GetTextWidth(str) >= MULTIMENU_C0 - MULTIMENU_C2 - 10)
 		{
-			str[strlen(str)-1]='\0';
+			str[strlen(str) - 1] = '\0';
 		}
-		iV_DrawText(str, x+MULTIMENU_C2, y+MULTIMENU_FONT_OSET);
+		iV_DrawText(str, x + MULTIMENU_C2, y + MULTIMENU_FONT_OSET);
 
 		//c3-7 alliance
 		//manage buttons by showing or hiding them. gifts only in campaign,
+		if (game.alliance != NO_ALLIANCES)
 		{
-			if(game.alliance != NO_ALLIANCES)
+			if (isAlly && !isSelectedPlayer && !giftsUp[player] )
 			{
-				if(alliances[selectedPlayer][player] == ALLIANCE_FORMED)
+				if (game.alliance != ALLIANCES_TEAMS)
 				{
-					if(player != selectedPlayer &&  !giftsUp[player] )
-					{
-						if (game.alliance != ALLIANCES_TEAMS)
-						{
-							widgReveal(psWScreen,MULTIMENU_GIFT_RAD+ player);
-							widgReveal(psWScreen,MULTIMENU_GIFT_RES+ player);
-						}
-						widgReveal(psWScreen,MULTIMENU_GIFT_DRO+ player);
-						widgReveal(psWScreen,MULTIMENU_GIFT_POW+ player);
-						giftsUp[player] = true;
-					}
+					widgReveal(psWScreen, MULTIMENU_GIFT_RAD + player);
+					widgReveal(psWScreen, MULTIMENU_GIFT_RES + player);
 				}
-				else
+				widgReveal(psWScreen, MULTIMENU_GIFT_DRO + player);
+				widgReveal(psWScreen, MULTIMENU_GIFT_POW + player);
+				giftsUp[player] = true;
+			}
+			else if (!isAlly && !isSelectedPlayer && giftsUp[player])
+			{
+				if (game.alliance != ALLIANCES_TEAMS)
 				{
-					if(player != selectedPlayer && giftsUp[player])
-					{
-						if (game.alliance != ALLIANCES_TEAMS)
-						{
-							widgHide(psWScreen,MULTIMENU_GIFT_RAD+ player);
-							widgHide(psWScreen,MULTIMENU_GIFT_RES+ player);
-						}
-						widgHide(psWScreen,MULTIMENU_GIFT_DRO+ player);
-						widgHide(psWScreen,MULTIMENU_GIFT_POW+ player);
-						giftsUp[player] = false;
-					}
+					widgHide(psWScreen, MULTIMENU_GIFT_RAD + player);
+					widgHide(psWScreen, MULTIMENU_GIFT_RES + player);
 				}
+				widgHide(psWScreen, MULTIMENU_GIFT_DRO + player);
+				widgHide(psWScreen, MULTIMENU_GIFT_POW + player);
+				giftsUp[player] = false;
 			}
 		}
 	}
-	if(isHumanPlayer(player))
+
+	// Let's use the real score for MP games
+	if (NetPlay.bComms)
 	{
-		SetPlayerTextColor(alliances[selectedPlayer][player], player);
-
-		// Let's use the real score for MP games
-		if (NetPlay.bComms)
+		//c8:score,
+		if (Cheated)
 		{
-			//c8:score,
-			if (Cheated)
-			{
-				sprintf(str,"(cheated)");
-			}
-			else
-			{
-				sprintf(str,"%d",getMultiStats(player).recentScore);
-			}
-			iV_DrawText(str, x+MULTIMENU_C8, y+MULTIMENU_FONT_OSET);
-
-			//c9:kills,
-			sprintf(str,"%d",getMultiStats(player).recentKills);
-			iV_DrawText(str, x+MULTIMENU_C9, y+MULTIMENU_FONT_OSET);
+			sprintf(str, "(cheated)");
 		}
 		else
 		{
-			// estimate of score for skirmish games
-			sprintf(str,"%d",ingame.skScores[player][0]);
-			iV_DrawText(str, x+MULTIMENU_C8, y+MULTIMENU_FONT_OSET);
-			// estimated kills
-			sprintf(str,"%d",ingame.skScores[player][1]);
-			iV_DrawText(str, x+MULTIMENU_C9, y+MULTIMENU_FONT_OSET);
+			sprintf(str, "%d", getMultiStats(player).recentScore);
 		}
+		iV_DrawText(str, x + MULTIMENU_C8, y + MULTIMENU_FONT_OSET);
 
-		if(!getDebugMappingStatus())
-		{
-			//only show player's units, and nobody elses.
-			//c10:units
-			if (myResponsibility(player))
-			{
-				SetPlayerTextColor(alliances[selectedPlayer][player], player);
-				sprintf(str, "%d", getNumDroids(player) + getNumTransporterDroids(player));
-				iV_DrawText(str, x+MULTIMENU_C10, y+MULTIMENU_FONT_OSET);
-			}
-
-			if (runningMultiplayer())
-			{
-				//c11:ping
-				if (player != selectedPlayer)
-				{
-					if (ingame.PingTimes[player] >= 2000)
-					{
-						sprintf(str,"???");
-					}
-					else
-					{
-						sprintf(str, "%d", ingame.PingTimes[player]);
-					}
-					iV_DrawText(str, x+MULTIMENU_C11, y+MULTIMENU_FONT_OSET);
-				}
-			}
-			else
-			{
-				int num;
-				STRUCTURE *temp;
-				// NOTE, This tallys up *all* the structures you have. Test out via 'start with no base'.
-				for (num = 0, temp = apsStructLists[player]; temp != NULL;num++,temp = temp->psNext) {}
-				//c11: Structures
-				sprintf(str, "%d", num);
-				iV_DrawText(str, x+MULTIMENU_C11, y+MULTIMENU_FONT_OSET);
-			}
-		}
+		//c9:kills,
+		sprintf(str, "%d", getMultiStats(player).recentKills);
+		iV_DrawText(str, x + MULTIMENU_C9, y + MULTIMENU_FONT_OSET);
 	}
 	else
 	{
-		SetPlayerTextColor(alliances[selectedPlayer][player], player);
+		// estimate of score for skirmish games
+		sprintf(str, "%d", ingame.skScores[player][0]);
+		iV_DrawText(str, x + MULTIMENU_C8, y + MULTIMENU_FONT_OSET);
+		// estimated kills
+		sprintf(str, "%d", ingame.skScores[player][1]);
+		iV_DrawText(str, x + MULTIMENU_C9, y + MULTIMENU_FONT_OSET);
+	}
 
-		// Let's use the real score for MP games
-		if (NetPlay.bComms)
-		{
-			//c8:score,
-			if (Cheated)
-			{
-				sprintf(str,"(cheated)");
-			}
-			else
-			{
-				sprintf(str,"%d",getMultiStats(player).recentScore);
-			}
-			iV_DrawText(str, x+MULTIMENU_C8, y+MULTIMENU_FONT_OSET);
-
-			//c9:kills,
-			sprintf(str,"%d",getMultiStats(player).recentKills);
-			iV_DrawText(str, x+MULTIMENU_C9, y+MULTIMENU_FONT_OSET);
-		}
-		else
-		{
-			// estimate of score for skirmish games
-			sprintf(str,"%d",ingame.skScores[player][0]);
-			iV_DrawText(str, x+MULTIMENU_C8, y+MULTIMENU_FONT_OSET);
-			// estimated kills
-			sprintf(str,"%d",ingame.skScores[player][1]);
-			iV_DrawText(str, x+MULTIMENU_C9, y+MULTIMENU_FONT_OSET);
-		}
+	//only show player's and allies' unit counts, and nobody elses.
+	//c10:units
+	if (isAlly || getDebugMappingStatus())
+	{
+		sprintf(str, "%d", getNumDroids(player) + getNumTransporterDroids(player));
+		iV_DrawText(str, x + MULTIMENU_C10, y + MULTIMENU_FONT_OSET);
 	}
 
 	/* Display player power instead of number of played games
 	  * and number of units instead of ping when in debug mode
 	  */
-	if(getDebugMappingStatus())			//Won't pass this when in both release and multiplayer modes
+	if (getDebugMappingStatus())  //Won't pass this when in both release and multiplayer modes
 	{
-		//c10: Total number of player units in possession
-		sprintf(str,"%d",getNumDroids(player) + getNumTransporterDroids(player));
-		iV_DrawText(str, x+MULTIMENU_C10, y+MULTIMENU_FONT_OSET);
-
 		//c11: Player power
 		sprintf(str, "%u", (int)getPower(player));
-		iV_DrawText(str, MULTIMENU_FORM_X+MULTIMENU_C11, y+MULTIMENU_FONT_OSET);
+		iV_DrawText(str, MULTIMENU_FORM_X + MULTIMENU_C11, y + MULTIMENU_FONT_OSET);
+	}
+	else if (runningMultiplayer())
+	{
+		//c11:ping
+		if (!isSelectedPlayer && isHuman)
+		{
+			if (ingame.PingTimes[player] >= 2000)
+			{
+				sprintf(str, "???");
+			}
+			else
+			{
+				sprintf(str, "%d", ingame.PingTimes[player]);
+			}
+			iV_DrawText(str, x + MULTIMENU_C11, y + MULTIMENU_FONT_OSET);
+		}
+	}
+	else
+	{
+		//c11: Structures
+		if (isAlly || getDebugMappingStatus())
+		{
+			// NOTE, This tallys up *all* the structures you have. Test out via 'start with no base'.
+			int num = 0;
+			for (STRUCTURE *temp = apsStructLists[player]; temp != NULL; temp = temp->psNext)
+			{
+				++num;
+			}
+			sprintf(str, "%d", num);
+			iV_DrawText(str, x + MULTIMENU_C11, y + MULTIMENU_FONT_OSET);
+		}
 	}
 
 	// a droid of theirs.
@@ -1027,11 +971,8 @@ static void displayMultiPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset,
 	if (displayDroid)
 	{
 		pie_SetGeometricOffset( MULTIMENU_FORM_X+MULTIMENU_C1 ,y+MULTIMENU_PLAYER_H);
-		rotation.x = -15;
-		rotation.y = 45;
-		rotation.z = 0;
-		position.x = 0;
-		position.y = 0;
+		Vector3i rotation(-15, 45, 0);
+		Position position(0, 0, 2000);  // Scale them.
 		if (displayDroid->droidType == DROID_SUPERTRANSPORTER)
 		{
 			position.z = 7850;
@@ -1040,33 +981,30 @@ static void displayMultiPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset,
 		{
 			position.z = 4100;
 		}
-		else
-		{
-			position.z = 2000;		//scale them!
-		}
+
 		displayComponentButtonObject(displayDroid, &rotation, &position, false, 100);
 	}
-	else if(apsDroidLists[player])
+	else if (apsDroidLists[player])
 	{
 		// Show that they have droids, but not which droids, since we can't see them.
 		iV_DrawImageTc(IntImages, IMAGE_GENERIC_TANK, IMAGE_GENERIC_TANK_TC, MULTIMENU_FORM_X + MULTIMENU_C1 - iV_GetImageWidth(IntImages, IMAGE_GENERIC_TANK)/2, y + MULTIMENU_PLAYER_H - iV_GetImageHeight(IntImages, IMAGE_GENERIC_TANK), pal_GetTeamColour(getPlayerColour(player)));
 	}
 
 	// clean up widgets if player leaves while menu is up.
-	if(!isHumanPlayer(player) && !(game.type == SKIRMISH && player<game.maxPlayers))
+	if (!isHuman && !(game.type == SKIRMISH && player < game.maxPlayers))
 	{
-		if(widgGetFromID(psWScreen,MULTIMENU_CHANNEL+player))
+		if (widgGetFromID(psWScreen, MULTIMENU_CHANNEL + player) != NULL)
 		{
-			widgDelete(psWScreen,MULTIMENU_CHANNEL+ player);
+			widgDelete(psWScreen, MULTIMENU_CHANNEL + player);
 		}
 
-		if(widgGetFromID(psWScreen,MULTIMENU_ALLIANCE_BASE+player) )
+		if (widgGetFromID(psWScreen, MULTIMENU_ALLIANCE_BASE + player) != NULL)
 		{
-			widgDelete(psWScreen,MULTIMENU_ALLIANCE_BASE+ player);
-			widgDelete(psWScreen,MULTIMENU_GIFT_RAD+ player);
-			widgDelete(psWScreen,MULTIMENU_GIFT_RES+ player);
-			widgDelete(psWScreen,MULTIMENU_GIFT_DRO+ player);
-			widgDelete(psWScreen,MULTIMENU_GIFT_POW+ player);
+			widgDelete(psWScreen, MULTIMENU_ALLIANCE_BASE + player);
+			widgDelete(psWScreen, MULTIMENU_GIFT_RAD + player);
+			widgDelete(psWScreen, MULTIMENU_GIFT_RES + player);
+			widgDelete(psWScreen, MULTIMENU_GIFT_DRO + player);
+			widgDelete(psWScreen, MULTIMENU_GIFT_POW + player);
 			giftsUp[player] = false;
 		}
 	}
