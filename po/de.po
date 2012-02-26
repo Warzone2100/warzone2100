@@ -1,19 +1,19 @@
 # German translation of warzone2100
-# Copyright (c) 2007-2008 Warzone 2100 Resurrection Project
+# Copyright (c) 2007-2012 Warzone 2100 Resurrection Project
 # Copyright (c) 2008 Rosetta Contributors and Canonical Ltd 2008
 # This file is distributed under the same license as the warzone2100 package.
 #
 # Dennis Schridde <devurandom@gna.org>, 2007.
 # Martin Koller <koller@etm.at>, 2007.
 # Martin Koller <m.koller@surfeu.at>, 2007.
-# Steven \"Kreuvf\" Koenig <kreuvf@wz2100.net>, 2008-2011.
+# Steven \"Kreuvf\" Koenig <kreuvf@wz2100.net>, 2008-2012.
 # raymond, 2011.
 msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2012-02-20 00:33+0100\n"
-"PO-Revision-Date: 2012-01-07 14:58+0100\n"
+"POT-Creation-Date: 2012-02-26 02:32+0100\n"
+"PO-Revision-Date: 2012-02-23 14:59+0100\n"
 "Last-Translator: Steven 'Kreuvf' Koenig <translations@kreuvf.de>\n"
 "Language-Team: Deutsch <warzone-dev@gna.org>\n"
 "Language: \n"
@@ -10152,46 +10152,47 @@ msgid "OpenGL 2.0 is not supported by your system. Some things may look wrong. P
 msgstr "OpenGL 2.0 wird von Ihrem System nicht unterstützt. Manche Dinge könnten falsch aussehen. Bitte aktualisieren Sie, falls möglich, Grafiktreiber oder -hardware."
 
 #: lib/ivis_opengl/screen.cpp:152
-#, fuzzy
 msgid "OpenGL 1.5/2.0 is not supported by your system. Some things may look wrong. Please upgrade your graphics driver/hardware, if possible."
-msgstr "OpenGL 2.0 wird von Ihrem System nicht unterstützt. Manche Dinge könnten falsch aussehen. Bitte aktualisieren Sie, falls möglich, Grafiktreiber oder -hardware."
+msgstr "OpenGL 1.5/2.0 wird von Ihrem System nicht unterstützt. Manche Dinge könnten falsch aussehen. Bitte aktualisieren Sie, falls möglich, Grafiktreiber oder -hardware."
 
 #: lib/ivis_opengl/screen.cpp:158
-#, fuzzy
 msgid "OpenGL 1.4 + VBO extension is not supported by your system. The game requires this. Please upgrade your graphics drivers/hardware, if possible."
-msgstr "OpenGL 1.4 wird von Ihrem System nicht unterstützt. Das Spiel erfordert dies. Bitte aktualisieren Sie, falls möglich, Grafiktreiber oder -hardware."
+msgstr "OpenGL 1.4 + VBO-Erweiterung wird von Ihrem System nicht unterstützt. Das Spiel erfordert dies. Bitte aktualisieren Sie, falls möglich, Grafiktreiber oder -hardware."
 
 #: lib/netplay/netplay.cpp:193
 #: lib/netplay/netplay.cpp:1051
 msgid "Enter password here"
 msgstr "Passwort hier eingeben"
 
-#: lib/netplay/netplay.cpp:2081
+#: lib/netplay/netplay.cpp:2079
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr "Konnte Lobbyserver-Namen nicht auflösen (%s)!"
 
-#: lib/netplay/netplay.cpp:2103
-#, fuzzy, c-format
+#: lib/netplay/netplay.cpp:2101
+#, c-format
 msgid ""
 "Error connecting to the lobby server: %s.\n"
 "Make sure port %d can receive incoming connections.\n"
 "If you're using a router configure it to use UPnP\n"
 " or to forward the port to your system."
-msgstr "Fehler beim Verbinden zum Lobbyserver: %s. Stellen Sie sicher, dass Port %d eingehende Verbindungen empfangen kann. Wenn Sie einen Router benutzen, konfigurieren Sie diesen zur Nutzung von UPnP oder leiten Sie den Port zu Ihrem System weiter."
-
-#: lib/netplay/netplay.cpp:2768
-msgid "Failed to get a lobby response!"
 msgstr ""
+"Fehler beim Verbinden zum Lobbyserver: %s.\n"
+"Stellen Sie sicher, dass Port %d eingehende Verbindungen empfangen kann.\n"
+"Wenn Sie einen Router benutzen, konfigurieren Sie diesen zur Nutzung von UPnP\n"
+" oder leiten Sie den Port zu Ihrem System weiter."
+
+#: lib/netplay/netplay.cpp:2766
+msgid "Failed to get a lobby response!"
+msgstr "Keine Lobbyantwort erhalten!"
 
 #: po/custom/mac-infoplist.txt:1
-#, fuzzy
 msgid ""
 "Copyright © 1999-2004 Eidos Interactive.\n"
 "Copyright © 2005-2012 The Warzone 2100 Project"
 msgstr ""
 "Copyright © 1999-2004 Eidos Interactive.\n"
-"Copyright © 2005-2011 The Warzone 2100 Project"
+"Copyright © 2005-2012 The Warzone 2100 Project"
 
 #: po/custom/mac-infoplist.txt:2
 #: po/custom/warzone2100.desktop.txt:2
@@ -10235,8 +10236,8 @@ msgstr "Strategiespiel"
 #: src/hci.cpp:918
 #: src/hci.cpp:3361
 #: src/hci.cpp:3484
-#: src/hci.cpp:3883
-#: src/hci.cpp:4892
+#: src/hci.cpp:3921
+#: src/hci.cpp:4930
 #: src/intelmap.cpp:531
 #: src/intorder.cpp:727
 #: src/loadsave.cpp:240
@@ -10251,21 +10252,20 @@ msgstr "Schließen"
 #: src/cheat.cpp:161
 #, c-format
 msgid "%s wants to enable debug mode. Enabled: %s, Disabled: %s."
-msgstr ""
+msgstr "%s möchte den Debug-Modus einschalten. Eingeschaltet: %s, Ausgeschaltet: %s."
 
 #: src/cheat.cpp:165
 #, c-format
 msgid "%s wants to disable debug mode. Enabled: %s, Disabled: %s."
-msgstr ""
+msgstr "%s möchte den Debug-Modus ausschalten. Eingeschaltet: %s, Ausgeschaltet: %s."
 
 #: src/cheat.cpp:171
 msgid "Debug mode now enabled!"
-msgstr ""
+msgstr "Debug-Modus nun eingeschaltet!"
 
 #: src/cheat.cpp:175
-#, fuzzy
 msgid "Debug mode now disabled!"
-msgstr "Debug-Menü ist offen"
+msgstr "Debug-Modus nun ausgeschaltet!"
 
 #: src/clparse.cpp:242
 msgid "Set configuration directory"
@@ -10408,7 +10408,7 @@ msgstr "Deaktiviere Texturkompression"
 
 #: src/clparse.cpp:267
 msgid "Only use OpenGL 1.5"
-msgstr ""
+msgstr "Nur OpenGl 1.5 nutzen"
 
 #: src/configuration.cpp:96
 msgid "My Game"
@@ -10559,12 +10559,12 @@ msgid "Water Speed"
 msgstr "Wassergeschwindigkeit"
 
 #: src/design.cpp:2022
-#: src/hci.cpp:4915
+#: src/hci.cpp:4953
 msgid "Tab Scroll left"
 msgstr "Reiter nach links durchschalten"
 
 #: src/design.cpp:2037
-#: src/hci.cpp:4930
+#: src/hci.cpp:4968
 msgid "Tab Scroll right"
 msgstr "Reiter nach rechts durchschalten"
 
@@ -10794,7 +10794,7 @@ msgstr "Spiel beitreten"
 
 #: src/frontend.cpp:384
 msgid "TCP PORT 2100 MUST BE OPENED IN YOUR FIREWALL / ROUTER TO HOST GAMES!"
-msgstr ""
+msgstr "TCP-PORT 2100 MUSS IN IHRER FIREWALL/IHREM ROUTER GEÖFFNET SEIN, UM SPIELE ZU LEITEN!"
 
 #: src/frontend.cpp:444
 #: src/multiint.cpp:1398
@@ -11033,15 +11033,13 @@ msgstr "Scrollgeschwindigkeit"
 
 #: src/frontend.cpp:1232
 #: src/frontend.cpp:1275
-#, fuzzy
 msgid "Unit Colour (SP)"
-msgstr "Einheitenfarbe"
+msgstr "Einheitenfarbe (SP)"
 
 #: src/frontend.cpp:1242
 #: src/frontend.cpp:1276
-#, fuzzy
 msgid "Unit Colour (MP)"
-msgstr "Einheitenfarbe"
+msgstr "Einheitenfarbe (MP)"
 
 #: src/frontend.cpp:1245
 #: src/frontend.cpp:1274
@@ -11148,103 +11146,103 @@ msgstr "Laden"
 msgid "Load Map File"
 msgstr "Kartendatei laden"
 
-#: src/hci.cpp:3529
+#: src/hci.cpp:3533
 msgid "Save"
 msgstr "Speichern"
 
-#: src/hci.cpp:3530
+#: src/hci.cpp:3534
 msgid "Save Map File"
 msgstr "Kartendatei speichern"
 
-#: src/hci.cpp:3538
+#: src/hci.cpp:3546
 msgid "New"
 msgstr "Neu"
 
-#: src/hci.cpp:3539
+#: src/hci.cpp:3547
 msgid "New Blank Map"
 msgstr "Neue leere Karte"
 
-#: src/hci.cpp:3575
+#: src/hci.cpp:3595
 msgid "Tile"
 msgstr "Kartenkachel"
 
-#: src/hci.cpp:3576
+#: src/hci.cpp:3596
 msgid "Place tiles on map"
 msgstr "Kartenkacheln platzieren"
 
-#: src/hci.cpp:3585
+#: src/hci.cpp:3609
 msgid "Unit"
 msgstr "Einheit"
 
-#: src/hci.cpp:3586
+#: src/hci.cpp:3610
 msgid "Place Unit on map"
 msgstr "Einheit auf der Karte platzieren"
 
-#: src/hci.cpp:3594
+#: src/hci.cpp:3618
 msgid "Struct"
 msgstr "Gebäude"
 
-#: src/hci.cpp:3595
+#: src/hci.cpp:3619
 msgid "Place Structures on map"
 msgstr "Gebäude auf der Karte platzieren"
 
 # gemäß: http://dict.leo.org/ende?search=Feat -Kreuvf
-#: src/hci.cpp:3603
+#: src/hci.cpp:3627
 msgid "Feat"
 msgstr "Leistung"
 
-#: src/hci.cpp:3604
+#: src/hci.cpp:3628
 msgid "Place Features on map"
 msgstr "Feature auf der Karte platzieren"
 
-#: src/hci.cpp:3614
+#: src/hci.cpp:3642
 msgid "Pause"
 msgstr "Pause"
 
-#: src/hci.cpp:3615
+#: src/hci.cpp:3643
 msgid "Pause or unpause the game"
 msgstr "Spiel pausieren oder fortsetzen"
 
-#: src/hci.cpp:3629
+#: src/hci.cpp:3661
 msgid "Align height of all map objects"
 msgstr "Höhe aller Kartenobjekte abgleichen"
 
-#: src/hci.cpp:3639
+#: src/hci.cpp:3674
 msgid "Edit"
 msgstr "Bearbeiten"
 
-#: src/hci.cpp:3640
+#: src/hci.cpp:3675
 msgid "Start Edit Mode"
 msgstr "Bearbeitungsmodus starten"
 
-#: src/hci.cpp:3654
+#: src/hci.cpp:3689
 #: src/ingameop.cpp:113
 #: src/ingameop.cpp:257
 #: src/ingameop.cpp:261
 msgid "Quit"
 msgstr "Beenden"
 
-#: src/hci.cpp:3655
+#: src/hci.cpp:3690
 msgid "Exit Game"
 msgstr "Spiel verlassen"
 
-#: src/hci.cpp:3681
+#: src/hci.cpp:3716
 msgid "Current Player:"
 msgstr "Aktueller Spieler:"
 
-#: src/hci.cpp:3960
+#: src/hci.cpp:3998
 msgid "Progress Bar"
 msgstr "Fortschrittsbalken"
 
-#: src/hci.cpp:4817
+#: src/hci.cpp:4855
 msgid "Factory Delivery Point"
 msgstr "Fabrik-Auslieferungspunkt"
 
-#: src/hci.cpp:4835
+#: src/hci.cpp:4873
 msgid "Loop Production"
 msgstr "Produktion wiederholen"
 
-#: src/hci.cpp:5159
+#: src/hci.cpp:5197
 msgid "Ally progress"
 msgstr "Fortschritt des Verbündeten"
 
@@ -11316,7 +11314,7 @@ msgstr "Forschungsfortschritt"
 
 #: src/intdisplay.cpp:663
 msgid "Need more resources!"
-msgstr ""
+msgstr "Brauche mehr Ressourcen!"
 
 #: src/intelmap.cpp:242
 #: src/keybind.cpp:1327
@@ -12053,9 +12051,8 @@ msgid "Select all Combat Units"
 msgstr "Alle Kampfeinheiten auswählen"
 
 #: src/keymap.cpp:430
-#, fuzzy
 msgid "Select all Cyborgs"
-msgstr "Alle Hoverfahrzeuge auswählen"
+msgstr "Alle Cyborgs auswählen"
 
 #: src/keymap.cpp:431
 msgid "Select all Heavily Damaged Units"
@@ -12098,44 +12095,36 @@ msgid "Select all Similar Units"
 msgstr "Alle ähnlichen Einheiten auswählen"
 
 #: src/keymap.cpp:445
-#, fuzzy
 msgid "Select all Combat Cyborgs"
-msgstr "Alle Kampfeinheiten auswählen"
+msgstr "Alle Kampfcyborgs auswählen"
 
 #: src/keymap.cpp:446
-#, fuzzy
 msgid "Select all Engineers"
-msgstr "Alle Hoverfahrzeuge auswählen"
+msgstr "Alle Baumeister auswählen"
 
 #: src/keymap.cpp:447
-#, fuzzy
 msgid "Select all Land Combat Units"
-msgstr "Alle Kampfeinheiten auswählen"
+msgstr "Alle Landkampfeinheiten auswählen"
 
 #: src/keymap.cpp:448
-#, fuzzy
 msgid "Select all Mechanics"
-msgstr "Alle Kettenfahrzeuge auswählen"
+msgstr "Alle Mechaniker auswählen"
 
 #: src/keymap.cpp:449
-#, fuzzy
 msgid "Select all Transporters"
-msgstr "Alle Kettenfahrzeuge auswählen"
+msgstr "Alle Transporter auswählen"
 
 #: src/keymap.cpp:450
-#, fuzzy
 msgid "Select all Repair Tanks"
-msgstr "Alle Kettenfahrzeuge auswählen"
+msgstr "Alle Reparaturpanzer auswählen"
 
 #: src/keymap.cpp:451
-#, fuzzy
 msgid "Select all Sensor Units"
-msgstr "Alle ähnlichen Einheiten auswählen"
+msgstr "Alle Sensoreinheiten auswählen"
 
 #: src/keymap.cpp:452
-#, fuzzy
 msgid "Select all Trucks"
-msgstr "Alle Kettenfahrzeuge auswählen"
+msgstr "Alle LKW auswählen"
 
 #: src/keymap.cpp:456
 msgid "Select next Factory"
@@ -12366,32 +12355,30 @@ msgid "IP"
 msgstr "IP"
 
 #: src/multiint.cpp:947
-#, fuzzy
 msgid "[Password required]"
-msgstr "*** Passwort wird nicht benötigt! ***"
+msgstr "[Passwort benötigt]"
 
 #: src/multiint.cpp:951
 msgid "[No Tanks]"
-msgstr ""
+msgstr "[Keine Panzer]"
 
 #: src/multiint.cpp:955
-#, fuzzy
 msgid "[No Cyborgs]"
-msgstr "Produziert Cyborgs"
+msgstr "[Keine Cyborgs]"
 
 #: src/multiint.cpp:959
 msgid "[No VTOLs]"
-msgstr ""
+msgstr "[Keine VTOLs]"
 
 #: src/multiint.cpp:963
 #, c-format
 msgid "Hosted by %s"
-msgstr ""
+msgstr "Geleitet von %s"
 
 #: src/multiint.cpp:967
 #, c-format
 msgid "Hosted by %s —%s"
-msgstr ""
+msgstr "Geleitet von %s —%s"
 
 #: src/multiint.cpp:987
 msgid "No games are available"
@@ -12605,14 +12592,12 @@ msgid "Click to change difficulty"
 msgstr "Klicken, um Schwierigkeitsgrad zu ändern"
 
 #: src/multiint.cpp:2262
-#, fuzzy
 msgid "Waiting for player"
-msgstr "Warte auf andere Spieler"
+msgstr "Warte auf Spieler"
 
 #: src/multiint.cpp:2262
-#, fuzzy
 msgid "Player is ready"
-msgstr "Spieler ausgefallen"
+msgstr "Spieler ist bereit"
 
 #: src/multiint.cpp:2262
 msgid "Click when ready"
@@ -12656,7 +12641,7 @@ msgstr "Alle Spieler benötigen dieselben Mods, um Ihrem Spiel beitreten zu kön
 
 #: src/multiint.cpp:2572
 msgid "Connecting to the lobby server..."
-msgstr ""
+msgstr "Verbinde zum Lobbyserver..."
 
 #: src/multiint.cpp:2719
 #, c-format
@@ -12689,21 +12674,21 @@ msgstr "Der Spielleiter startet das Spiel"
 
 #: src/multiint.cpp:3805
 msgid "Can't connect to lobby server!"
-msgstr ""
+msgstr "Kann nicht zum Lobbyserver verbinden!"
 
 #: src/multiint.cpp:3892
 #, c-format
 msgid "Mods: %s"
-msgstr ""
+msgstr "Mods: %s"
 
 #: src/multiint.cpp:3899
 msgid "Mods: None!"
-msgstr ""
+msgstr "Mods: Keine!"
 
 #: src/multiint.cpp:3909
-#, fuzzy, c-format
+#, c-format
 msgid "Version: %s"
-msgstr "Version %s%s%s%s"
+msgstr "Version: %s"
 
 #: src/multiint.cpp:3960
 #, c-format
@@ -12760,14 +12745,13 @@ msgid "%s (%u) has an incompatible mod, and has been kicked."
 msgstr "%s (%u) hat einen inkompatiblen Mod und wurde rausgeschmissen."
 
 #: src/multijoin.cpp:459
-#, fuzzy, c-format
+#, c-format
 msgid "%s is joining the game"
-msgstr "%s ist dem Spiel beigetreten"
+msgstr "%s tritt dem Spiel bei"
 
 #: src/multijoin.cpp:470
-#, fuzzy
 msgid "Server message:"
-msgstr "Systemnachricht:"
+msgstr "Servernachricht:"
 
 #: src/multilimit.cpp:183
 msgid "Apply Defaults and Return To Previous Screen"
@@ -12844,7 +12828,7 @@ msgstr "Energie übertragen"
 #: src/multimenu.cpp:1525
 #, c-format
 msgid "kicked %s : %s from the game, and added them to the banned list!"
-msgstr ""
+msgstr "%s : %s aus dem Spiel geworfen und zur Bannliste hinzugefügt!"
 
 #: src/multiplay.cpp:263
 #, c-format
@@ -13192,9 +13176,9 @@ msgstr " - %s gebaut"
 #. TRANSLATORS: This string looks as follows when expanded.
 #. "Version <version name/number> <working copy state><BUILD DATE><BUILD TYPE>"
 #: src/version.cpp:157
-#, fuzzy, c-format
+#, c-format
 msgid "Version %s-%s%s%s%s"
-msgstr "Version %s%s%s%s"
+msgstr "Version %s-%s%s%s%s"
 
 #~ msgid "VTOL HPV Cannon Bug VTOL"
 #~ msgstr "VTOL-Hochgeschwindigkeitsgeschütz Bug VTOL"
