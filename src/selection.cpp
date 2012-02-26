@@ -59,7 +59,7 @@ static unsigned int selSelectAllUnits(unsigned int player, bool bOnScreen)
 		if (!bOnScreen || droidOnScreen(psDroid, 0))
 		{
 			/* can select everything except transporters */
-			if (psDroid->droidType != DROID_TRANSPORTER)
+			if (psDroid->droidType != DROID_TRANSPORTER && psDroid->droidType != DROID_SUPERTRANSPORTER)
 			{
 				SelectDroid(psDroid);
 				count++;
@@ -89,7 +89,7 @@ static unsigned int selSelectAllSameProp(unsigned int player, PROPULSION_TYPE pr
 			PROPULSION_STATS *psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
 			ASSERT(psPropStats != NULL, "invalid propulsion stats pointer");
 			/* Same as that asked for - don't want Transporters*/
-			if (psPropStats->propulsionType == propType && psDroid->droidType != DROID_TRANSPORTER)
+			if (psPropStats->propulsionType == propType && (psDroid->droidType != DROID_TRANSPORTER && psDroid->droidType != DROID_SUPERTRANSPORTER))
 			{
 				SelectDroid(psDroid);
 				count++;
@@ -144,7 +144,7 @@ static unsigned int selSelectAllCombat(unsigned int player, bool bOnScreen)
 			if (!bOnScreen || droidOnScreen(psDroid, 0))
 			{
 				// we don't want to get the Transporter
-				if (psDroid->droidType != DROID_TRANSPORTER)
+				if (psDroid->droidType != DROID_TRANSPORTER && psDroid->droidType != DROID_SUPERTRANSPORTER)
 				{
 					SelectDroid(psDroid);
 					count++;
@@ -242,7 +242,7 @@ static unsigned int selSelectAllDamaged(unsigned int player, bool bOnScreen)
 			if (!bOnScreen || droidOnScreen(psDroid, 0))
 			{
 				// we don't want to get the Transporter
-				if (psDroid->droidType != DROID_TRANSPORTER)
+				if (psDroid->droidType != DROID_TRANSPORTER && psDroid->droidType != DROID_SUPERTRANSPORTER)
 				{
 					SelectDroid(psDroid);
 					count++;

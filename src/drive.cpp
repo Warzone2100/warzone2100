@@ -256,7 +256,7 @@ static void ChangeDriver(void)
 		{
 			if (psDroid->sMove.Status == MOVEDRIVE)
 			{
-				ASSERT((psDroid->droidType != DROID_TRANSPORTER || psDroid->droidType != DROID_SUPERTRANSPORTER), "Tried to control a transporter" );
+				ASSERT((psDroid->droidType != DROID_TRANSPORTER && psDroid->droidType != DROID_SUPERTRANSPORTER), "Tried to control a transporter" );
 				secondarySetState(psDroid, DSO_HALTTYPE, DSS_HALT_GUARD);
 				psDroid->sMove.Status = MOVEINACTIVE;
 			}

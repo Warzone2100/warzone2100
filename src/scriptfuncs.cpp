@@ -1093,7 +1093,8 @@ bool scrAddDroidToMissionList(void)
 
 #ifdef SCRIPT_CHECK_MAX_UNITS
 	// Don't build a new droid if player limit reached, unless it's a transporter.
-	if( IsPlayerDroidLimitReached(player) && (psTemplate->droidType != DROID_TRANSPORTER) ) {
+	if( IsPlayerDroidLimitReached(player) && (psTemplate->droidType != DROID_TRANSPORTER && psTemplate->droidType != DROID_SUPERTRANSPORTER))
+	{
 		debug( LOG_NEVER, "scrAddUnit : Max units reached ,player %d\n", player );
 		psDroid = NULL;
 	} else
@@ -1134,7 +1135,8 @@ bool scrAddDroid(void)
 
 #ifdef SCRIPT_CHECK_MAX_UNITS
 	// Don't build a new droid if player limit reached, unless it's a transporter.
-	if( IsPlayerDroidLimitReached(player) && (psTemplate->droidType != DROID_TRANSPORTER) ) {
+	if( IsPlayerDroidLimitReached(player) && (psTemplate->droidType != DROID_TRANSPORTER && psTemplate->droidType != DROID_SUPERTRANSPORTER) )
+	{
 		debug( LOG_NEVER, "scrAddUnit : Max units reached ,player %d\n", player );
 		psDroid = NULL;
 	} else
@@ -8632,7 +8634,7 @@ bool scrTransporterCapacity(void)
 		return false;
 	}
 
-	if(psDroid->droidType != DROID_TRANSPORTER)
+	if(psDroid->droidType != DROID_TRANSPORTER && psDroid->droidType != DROID_SUPERTRANSPORTER)
 	{
 		debug(LOG_ERROR, "scrTransporterCapacity(): passed droid is not a transporter");
 		return false;
@@ -8665,7 +8667,7 @@ bool scrTransporterFlying(void)
 		return false;
 	}
 
-	if(psDroid->droidType != DROID_TRANSPORTER)
+	if(psDroid->droidType != DROID_TRANSPORTER && psDroid->droidType != DROID_SUPERTRANSPORTER)
 	{
 		debug(LOG_ERROR,"scrTransporterFlying(): passed droid is not a transporter");
 		return false;
@@ -8698,7 +8700,7 @@ bool scrUnloadTransporter(void)
 		return false;
 	}
 
-	if(psDroid->droidType != DROID_TRANSPORTER)
+	if(psDroid->droidType != DROID_TRANSPORTER && psDroid->droidType != DROID_SUPERTRANSPORTER)
 	{
 		debug(LOG_ERROR,"scrUnloadTransporter(): passed droid is not a transporter");
 		return false;

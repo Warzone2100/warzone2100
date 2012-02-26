@@ -1027,8 +1027,8 @@ bool transporterIsEmpty(const DROID* psTransporter)
 
 	// Assume dead droids and non-transporter droids to be empty
 	return (isDead((const BASE_OBJECT*)psTransporter)
-	     || psTransporter->droidType != DROID_TRANSPORTER
-		 || psTransporter->droidType != DROID_SUPERTRANSPORTER
+	     || (psTransporter->droidType != DROID_TRANSPORTER
+		 && psTransporter->droidType != DROID_SUPERTRANSPORTER)
 	     || psTransporter->psGroup->psList == NULL
 	     || psTransporter->psGroup->psList == psTransporter);
 }

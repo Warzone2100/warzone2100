@@ -115,7 +115,7 @@ bool scrGroupAddArea(void)
 		if (((SDWORD)psDroid->pos.x >= x1) && ((SDWORD)psDroid->pos.x <= x2) &&
 			((SDWORD)psDroid->pos.y >= y1) && ((SDWORD)psDroid->pos.y <= y2) &&
 			psDroid->droidType != DROID_COMMAND &&
-			psDroid->droidType != DROID_TRANSPORTER )
+			(psDroid->droidType != DROID_TRANSPORTER && psDroid->droidType != DROID_SUPERTRANSPORTER))
 
 		{
 			psGroup->add(psDroid);
@@ -153,7 +153,7 @@ bool scrGroupAddAreaNoGroup(void)
 		if (((SDWORD)psDroid->pos.x >= x1) && ((SDWORD)psDroid->pos.x <= x2) &&
 			((SDWORD)psDroid->pos.y >= y1) && ((SDWORD)psDroid->pos.y <= y2) &&
 			psDroid->droidType != DROID_COMMAND &&
-			psDroid->droidType != DROID_TRANSPORTER &&
+			(psDroid->droidType != DROID_TRANSPORTER && psDroid->droidType != DROID_SUPERTRANSPORTER) &&
 			psDroid->psGroup   == NULL)
 		{
 			psGroup->add(psDroid);
