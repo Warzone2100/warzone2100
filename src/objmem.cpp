@@ -990,7 +990,7 @@ void objCount(int *droids, int *structures, int *features)
 		for (DROID *psDroid = apsDroidLists[i]; psDroid; psDroid = psDroid->psNext)
 		{
 			(*droids)++;
-			if (psDroid->droidType == DROID_TRANSPORTER)
+			if (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER)
 			{
 				DROID *psTrans = psDroid->psGroup->psList;
 

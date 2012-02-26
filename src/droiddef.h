@@ -69,6 +69,7 @@ enum DROID_TYPE
 	DROID_PERSON,           ///< person
 	DROID_CYBORG,           ///< cyborg-type thang
 	DROID_TRANSPORTER,      ///< guess what this is!
+	DROID_SUPERTRANSPORTER,		///< SuperTransport (MP)
 	DROID_COMMAND,          ///< Command droid
 	DROID_REPAIR,           ///< Repair droid
 	DROID_DEFAULT,          ///< Default droid
@@ -130,7 +131,8 @@ struct DROID : public BASE_OBJECT
 	DROID(uint32_t id, unsigned player);
 	~DROID();
 
-	/// UTF-8 name of the droid. This is generated from the droid template and cannot be changed by the game player after creation.
+	/// UTF-8 name of the droid. This is generated from the droid template
+	///  WARNING: This *can* be changed by the game player after creation & can be translated, do NOT rely on this being the same for everyone!
 	char            aName[MAX_STR_LENGTH];
 
 	DROID_TYPE      droidType;                      ///< The type of droid

@@ -509,6 +509,7 @@ static void gameStateUpdate()
 					numConstructorDroids[i] += 1;
 					break;
 				case DROID_TRANSPORTER:
+				case DROID_SUPERTRANSPORTER:
 					if( (psCurr->psGroup != NULL) )
 					{
 						DROID *psDroid = NULL;
@@ -551,6 +552,7 @@ static void gameStateUpdate()
 					numConstructorDroids[i] += 1;
 					break;
 				case DROID_TRANSPORTER:
+				case DROID_SUPERTRANSPORTER:
 					if( (psCurr->psGroup != NULL) )
 					{
 						numTransporterDroids[i] += psCurr->psGroup->refCount-1;

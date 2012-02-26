@@ -706,6 +706,7 @@ static QScriptValue js_addDroid(QScriptContext *context, QScriptEngine *engine)
 		case DROID_WEAPON:
 		case DROID_CYBORG:
 		case DROID_TRANSPORTER:
+		case DROID_SUPERTRANSPORTER:
 		case DROID_DEFAULT:
 		case DROID_CYBORG_SUPER:
 			j = getCompFromName(COMP_WEAPON, context->argument(8 + i).toString().toUtf8().constData());
@@ -865,6 +866,7 @@ static QScriptValue js_buildDroid(QScriptContext *context, QScriptEngine *engine
 		case DROID_WEAPON:
 		case DROID_CYBORG:
 		case DROID_TRANSPORTER:
+		case DROID_SUPERTRANSPORTER:
 		case DROID_DEFAULT:
 		case DROID_CYBORG_SUPER:
 			j = get_first_available_component(psStruct, context->argument(6 + i), COMP_WEAPON);
@@ -1480,7 +1482,7 @@ static QScriptValue js_setReinforcementTime(QScriptContext *context, QScriptEngi
 		 * time to -1 at the between stage if there are not going to be reinforcements on the submap  */
 		for (psDroid = apsDroidLists[selectedPlayer]; psDroid != NULL; psDroid = psDroid->psNext)
 		{
-			if (psDroid->droidType == DROID_TRANSPORTER)
+			if (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER)
 			{
 				break;
 			}

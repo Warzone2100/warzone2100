@@ -578,10 +578,9 @@ void addTransporterTimerInterface(void)
 	if (mission.ETA >= 0)
 	{
 		//check the player has at least one Transporter back at base
-		for (DROID *psDroid = mission.apsDroidLists[selectedPlayer]; psDroid !=
-			NULL; psDroid = psDroid->psNext)
+		for (DROID *psDroid = mission.apsDroidLists[selectedPlayer]; psDroid != NULL; psDroid = psDroid->psNext)
 		{
-			if (psDroid->droidType == DROID_TRANSPORTER)
+			if (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER)
 			{
 				psTransporter = psDroid;
 				break;
@@ -1004,37 +1003,37 @@ void placeLimboDroids(void)
 	for (psDroid = apsLimboDroids[selectedPlayer]; psDroid != NULL; psDroid = psNext)
 	{
         psNext = psDroid->psNext;
-        if (droidRemove(psDroid, apsLimboDroids))
-        {
-    		addDroid(psDroid, apsDroidLists);
-    		//KILL OFF TRANSPORTER - should never be one but....
-	    	if (psDroid->droidType == DROID_TRANSPORTER)
-		    {
-			    vanishDroid(psDroid);
-                continue;
-		    }
-            //set up location for each of the droids
-	    	droidX = map_coord(getLandingX(LIMBO_LANDING));
-		    droidY = map_coord(getLandingY(LIMBO_LANDING));
-		    pickRes = pickHalfATile(&droidX, &droidY,LOOK_FOR_EMPTY_TILE);
-		    if (pickRes == NO_FREE_TILE )
-		    {
-			    ASSERT( false, "placeLimboUnits: Unable to find a free location" );
-		    }
-		    psDroid->pos.x = (UWORD)world_coord(droidX);
-		    psDroid->pos.y = (UWORD)world_coord(droidY);
-		    ASSERT(worldOnMap(psDroid->pos.x,psDroid->pos.y), "limbo droid is not on the map");
-		    psDroid->pos.z = map_Height(psDroid->pos.x, psDroid->pos.y);
-		    updateDroidOrientation(psDroid);
-		    psDroid->selected = false;
-            //this is mainly for VTOLs
+		if (droidRemove(psDroid, apsLimboDroids))
+		{
+			addDroid(psDroid, apsDroidLists);
+			//KILL OFF TRANSPORTER - should never be one but....
+			if (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER)
+			{
+				vanishDroid(psDroid);
+				continue;
+			}
+			//set up location for each of the droids
+			droidX = map_coord(getLandingX(LIMBO_LANDING));
+			droidY = map_coord(getLandingY(LIMBO_LANDING));
+			pickRes = pickHalfATile(&droidX, &droidY,LOOK_FOR_EMPTY_TILE);
+			if (pickRes == NO_FREE_TILE )
+			{
+				ASSERT( false, "placeLimboUnits: Unable to find a free location" );
+			}
+			psDroid->pos.x = (UWORD)world_coord(droidX);
+			psDroid->pos.y = (UWORD)world_coord(droidY);
+			ASSERT(worldOnMap(psDroid->pos.x,psDroid->pos.y), "limbo droid is not on the map");
+			psDroid->pos.z = map_Height(psDroid->pos.x, psDroid->pos.y);
+			updateDroidOrientation(psDroid);
+			psDroid->selected = false;
+			//this is mainly for VTOLs
 			setDroidBase(psDroid, NULL);
-		    psDroid->cluster = 0;
-		    //initialise the movement data
-		    initDroidMovement(psDroid);
-            //make sure the died flag is not set
-            psDroid->died = false;
-        }
+			psDroid->cluster = 0;
+			//initialise the movement data
+			initDroidMovement(psDroid);
+			//make sure the died flag is not set
+			psDroid->died = false;
+		}
         else
         {
             ASSERT( false, "placeLimboUnits: Unable to remove unit from Limbo list" );
@@ -1086,7 +1085,7 @@ void saveCampaignData(void)
 		while(psDroid != NULL)
 		{
 			psNext = psDroid->psNext;
-			if (psDroid->droidType == DROID_TRANSPORTER)
+			if (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER)
 			{
 				// Empty the transporter into the mission list
 				ASSERT(psDroid->psGroup != NULL, "saveCampaignData: Transporter does not have a group");
@@ -1140,7 +1139,7 @@ void saveCampaignData(void)
         for (psDroid = mission.apsDroidLists[selectedPlayer]; psDroid != NULL;
             psDroid = psDroid->psNext)
         {
-            if (psDroid->droidType == DROID_TRANSPORTER)
+            if (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER)
             {
                 //fill it with droids from the mission list
                 for (psSafeDroid = mission.apsDroidLists[selectedPlayer]; psSafeDroid !=
@@ -1402,7 +1401,7 @@ void processMissionLimbo(void)
 	{
 		psNext = psDroid->psNext;
 		//KILL OFF TRANSPORTER - should never be one but....
-		if (psDroid->droidType == DROID_TRANSPORTER)
+		if (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER)
 		{
 			vanishDroid(psDroid);
 		}
@@ -1632,23 +1631,22 @@ void resetLimboMission(void)
 Only interested in Transporters at present*/
 void missionDroidUpdate(DROID *psDroid)
 {
-	ASSERT( psDroid != NULL,
-		"unitUpdate: Invalid unit pointer" );
+	ASSERT (psDroid != NULL, "unitUpdate: Invalid unit pointer");
 
     /*This is required for Transporters that are moved offWorld so the
     saveGame doesn't try to set their position in the map - especially important
     for endCam2 where there isn't a valid map!*/
-    if (psDroid->droidType == DROID_TRANSPORTER)
+    if (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER)
     {
 	    psDroid->pos.x = INVALID_XY;
 	    psDroid->pos.y = INVALID_XY;
     }
 
 	//ignore all droids except Transporters
-	if ( (psDroid->droidType != DROID_TRANSPORTER)           ||
-		 !(orderState(psDroid, DORDER_TRANSPORTOUT)          ||
-		   orderState(psDroid, DORDER_TRANSPORTIN)           ||
-		   orderState(psDroid, DORDER_TRANSPORTRETURN))         )
+	if ((psDroid->droidType != DROID_TRANSPORTER && psDroid->droidType != DROID_SUPERTRANSPORTER)
+		|| !(orderState(psDroid, DORDER_TRANSPORTOUT)  ||
+		   orderState(psDroid, DORDER_TRANSPORTIN)     ||
+		   orderState(psDroid, DORDER_TRANSPORTRETURN)))
 	{
 		return;
 	}
@@ -1687,7 +1685,7 @@ static void missionResetDroids(void)
 			}
 
 			//KILL OFF TRANSPORTER
-			if (psDroid->droidType == DROID_TRANSPORTER)
+			if (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER)
 			{
 				vanishDroid(psDroid);
 			}
@@ -1819,21 +1817,20 @@ void unloadTransporter(DROID *psTransporter, UDWORD x, UDWORD y, bool goingHome)
 	}
 
 	//unload all the droids from within the current Transporter
-	if (psTransporter->droidType == DROID_TRANSPORTER)
+	if (psTransporter->droidType == DROID_TRANSPORTER || psTransporter->droidType == DROID_SUPERTRANSPORTER)
 	{
 		// If the scripts asked for transporter tracking then clear the "tracking a transporter" flag
 		// since the transporters landed and unloaded now.
-		if(psTransporter->player == selectedPlayer) {
+		if (psTransporter->player == selectedPlayer)
+		{
 			bTrackingTransporter = false;
 		}
 
 		// reset the transporter cluster
 		psTransporter->cluster = 0;
-		for (psDroid = psTransporter->psGroup->psList; psDroid != NULL
-				&& psDroid != psTransporter; psDroid = psNext)
+		for (psDroid = psTransporter->psGroup->psList; psDroid != NULL && psDroid != psTransporter; psDroid = psNext)
 		{
 			psNext = psDroid->psGrpNext;
-
 			//add it back into current droid lists
 			addDroid(psDroid, ppCurrentList);
 
@@ -1845,7 +1842,7 @@ void unloadTransporter(DROID *psTransporter, UDWORD x, UDWORD y, bool goingHome)
 				//swap the droid and map pointers
 				swapMissionPointers();
 			}
-			if (!pickATileGen(&droidX, &droidY,LOOK_FOR_EMPTY_TILE,zonedPAT))
+			if (!pickATileGen(&droidX, &droidY, LOOK_FOR_EMPTY_TILE, zonedPAT))
 			{
 				ASSERT( false, "unloadTransporter: Unable to find a valid location" );
 			}
@@ -1950,10 +1947,9 @@ void missionMoveTransporterOffWorld( DROID *psTransporter )
         if (psTransporter->player == selectedPlayer)
         {
             psDroid = NULL;
-            for (psDroid = mission.apsDroidLists[selectedPlayer]; psDroid !=
-                NULL; psDroid = psDroid->psNext)
+            for (psDroid = mission.apsDroidLists[selectedPlayer]; psDroid != NULL; psDroid = psDroid->psNext)
             {
-                if (psDroid->droidType != DROID_TRANSPORTER)
+                if (psDroid->droidType != DROID_TRANSPORTER && psDroid->droidType != DROID_SUPERTRANSPORTER)
                 {
                     break;
                 }
@@ -3167,11 +3163,10 @@ bool getPlayCountDown(void)
 //checks to see if the player has any droids (except Transporters left)
 bool missionDroidsRemaining(UDWORD player)
 {
-    DROID   *psDroid;
     bool    bDroidsRemaining = false;
-    for (psDroid = apsDroidLists[player]; psDroid != NULL; psDroid = psDroid->psNext)
+    for (DROID *psDroid = apsDroidLists[player]; psDroid != NULL; psDroid = psDroid->psNext)
     {
-        if (psDroid->droidType != DROID_TRANSPORTER)
+        if (psDroid->droidType != DROID_TRANSPORTER && psDroid->droidType != DROID_SUPERTRANSPORTER)
         {
             bDroidsRemaining = true;
             //don't bother looking for more
@@ -3189,12 +3184,10 @@ void moveDroidsToSafety(DROID *psTransporter)
 {
     DROID       *psDroid, *psNext;
 
-    ASSERT( psTransporter->droidType == DROID_TRANSPORTER,
-        "moveUnitsToSafety: unit not a Transporter" );
+    ASSERT ((psTransporter->droidType == DROID_TRANSPORTER || psTransporter->droidType == DROID_SUPERTRANSPORTER), "unit not a Transporter");
 
     //move droids out of Transporter into mission list
-	for (psDroid = psTransporter->psGroup->psList; psDroid != NULL
-			&& psDroid != psTransporter; psDroid = psNext)
+	for (psDroid = psTransporter->psGroup->psList; psDroid != NULL && psDroid != psTransporter; psDroid = psNext)
 	{
 		psNext = psDroid->psGrpNext;
 		psTransporter->psGroup->remove(psDroid);
@@ -3247,10 +3240,9 @@ void resetMissionWidgets(void)
     //check not a typical reinforcement mission
     else if (!missionForReInforcements())
     {
-        for (psDroid = apsDroidLists[selectedPlayer]; psDroid != NULL; psDroid =
-            psDroid->psNext)
+        for (psDroid = apsDroidLists[selectedPlayer]; psDroid != NULL; psDroid = psDroid->psNext)
         {
-            if (psDroid->droidType == DROID_TRANSPORTER)
+            if (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER)
             {
                 intAddTransporterLaunch(psDroid);
                 break;
@@ -3260,10 +3252,9 @@ void resetMissionWidgets(void)
         one sitting in the mission list which is waiting to come back in*/
         if (!psDroid)
         {
-            for (psDroid = mission.apsDroidLists[selectedPlayer]; psDroid != NULL;
-                psDroid = psDroid->psNext)
+            for (psDroid = mission.apsDroidLists[selectedPlayer]; psDroid != NULL; psDroid = psDroid->psNext)
             {
-                if (psDroid->droidType == DROID_TRANSPORTER &&
+                if ((psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER) &&
                     psDroid->action == DACTION_TRANSPORTWAITTOFLYIN)
                 {
                     intAddTransporterLaunch(psDroid);
@@ -3293,11 +3284,10 @@ void emptyTransporters(bool bOffWorld)
     DROID       *psTransporter, *psDroid, *psNext, *psNextTrans;
 
     //see if there are any Transporters in the world
-    for (psTransporter = apsDroidLists[selectedPlayer]; psTransporter != NULL;
-        psTransporter = psNextTrans)
+    for (psTransporter = apsDroidLists[selectedPlayer]; psTransporter != NULL; psTransporter = psNextTrans)
     {
         psNextTrans = psTransporter->psNext;
-        if (psTransporter->droidType == DROID_TRANSPORTER)
+        if (psTransporter->droidType == DROID_TRANSPORTER || psTransporter->droidType == DROID_SUPERTRANSPORTER)
         {
             //if flying in, empty the contents
             if (orderState(psTransporter, DORDER_TRANSPORTIN))
@@ -3339,7 +3329,7 @@ void emptyTransporters(bool bOffWorld)
     for (psTransporter = mission.apsDroidLists[selectedPlayer]; psTransporter !=
         NULL; psTransporter = psTransporter->psNext)
     {
-        if (psTransporter->droidType == DROID_TRANSPORTER)
+        if (psTransporter->droidType == DROID_TRANSPORTER || psTransporter->droidType == DROID_SUPERTRANSPORTER)
         {
             //for each droid within the transporter...
  		    for (psDroid = psTransporter->psGroup->psList; psDroid != NULL

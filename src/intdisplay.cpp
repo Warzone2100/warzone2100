@@ -2150,14 +2150,17 @@ void CreateIMDButton(IMAGEFILE *ImageFile, UWORD ImageID, void *Object, UDWORD P
 	UDWORD basePlateSize;
 	SDWORD scale;
 
-	if(Down) {
+	if(Down)
+	{
 		ox = oy = 2;
-	} else {
+	}
+	else
+	{
 		ox = oy = 0;
 	}
 
-	if((IMDType == IMDTYPE_DROID) || (IMDType == IMDTYPE_DROIDTEMPLATE)) {	// The case where we have to render a composite droid.
-
+	if ((IMDType == IMDTYPE_DROID) || (IMDType == IMDTYPE_DROIDTEMPLATE))
+	{	// The case where we have to render a composite droid.
 		if(Down)
 		{
 			//the top button is smaller than the bottom button
@@ -2191,7 +2194,7 @@ void CreateIMDButton(IMAGEFILE *ImageFile, UWORD ImageID, void *Object, UDWORD P
 			}
 		}
 
-		if(IMDType == IMDTYPE_DROID)
+		if (IMDType == IMDTYPE_DROID)
 		{
 			Radius = getComponentDroidRadius((DROID*)Object);
 		}
@@ -2216,12 +2219,12 @@ void CreateIMDButton(IMAGEFILE *ImageFile, UWORD ImageID, void *Object, UDWORD P
 
 		if(IMDType == IMDTYPE_DROID)
 		{
-			if(((DROID*)Object)->droidType == DROID_TRANSPORTER)
+			if (((DROID*)Object)->droidType == DROID_TRANSPORTER || ((DROID*)Object)->droidType == DROID_SUPERTRANSPORTER)
 			{
 				Position.x = 0;
 				Position.y = 0;//BUT_TRANSPORTER_ALT;
 				Position.z = BUTTON_DEPTH;
-				if ((!strcmp("Cyborg Transport",((DROID*)Object)->aName)))
+				if (((DROID*)Object)->droidType == DROID_TRANSPORTER)
 				{
 					scale = DROID_BUT_SCALE/2;
 				}
@@ -2238,12 +2241,12 @@ void CreateIMDButton(IMAGEFILE *ImageFile, UWORD ImageID, void *Object, UDWORD P
 		}
 		else//(IMDType == IMDTYPE_DROIDTEMPLATE)
 		{
-			if(((DROID_TEMPLATE*)Object)->droidType == DROID_TRANSPORTER)
+			if (((DROID_TEMPLATE*)Object)->droidType == DROID_TRANSPORTER || ((DROID_TEMPLATE*)Object)->droidType == DROID_SUPERTRANSPORTER)
 			{
 				Position.x = 0;
 				Position.y = 0;//BUT_TRANSPORTER_ALT;
 				Position.z = BUTTON_DEPTH;
-				if ((!strcmp("Cyborg Transport",((DROID_TEMPLATE*)Object)->aName)))
+				if (((DROID_TEMPLATE*)Object)->droidType == DROID_TRANSPORTER)
 				{
 					scale = DROID_BUT_SCALE/2;
 				}
@@ -2260,14 +2263,12 @@ void CreateIMDButton(IMAGEFILE *ImageFile, UWORD ImageID, void *Object, UDWORD P
 		}
 
 		//lefthand display droid buttons
-		if(IMDType == IMDTYPE_DROID)
+		if (IMDType == IMDTYPE_DROID)
 		{
 			displayComponentButtonObject((DROID*)Object,&Rotation,&Position,true, scale);
 		}
 		else
 		{
-
-
 			displayComponentButtonTemplate((DROID_TEMPLATE*)Object,&Rotation,&Position,true, scale);
 		}
 	}
@@ -2315,7 +2316,7 @@ void CreateIMDButton(IMAGEFILE *ImageFile, UWORD ImageID, void *Object, UDWORD P
 			//ASSERT( Radius <= OBJECT_RADIUS,"Object too big for button - %s",
 			//		((BASE_STATS*)Object)->pName );
 			// NOTE: The Super transport is huge, and is considered a component type, so refit it to inside the button.
-			if ((!strcmp("SuperTransportBody",((BASE_STATS*)Object)->pName)))
+			if (((DROID*)Object)->droidType == DROID_SUPERTRANSPORTER)
 			{
 				scale /= 2;
 			}
@@ -2323,18 +2324,18 @@ void CreateIMDButton(IMAGEFILE *ImageFile, UWORD ImageID, void *Object, UDWORD P
 		else if(IMDType == IMDTYPE_RESEARCH)
 		{
 			Radius = getResearchRadius((BASE_STATS*)Object);
-			if(Radius <= 100)
+			if (Radius <= 100)
 			{
 				Size = 2;//small structure
 				scale = rescaleButtonObject(Radius, COMP_BUT_SCALE, COMPONENT_RADIUS);
 				//scale = COMP_BUT_SCALE;
 			}
-			else if(Radius <= 128)
+			else if (Radius <= 128)
 			{
 				Size = 2;//small structure
 				scale = SMALL_STRUCT_SCALE;
 			}
-			else if(Radius <= 256)
+			else if (Radius <= 256)
 			{
 				Size = 1;//med structure
 				scale = MED_STRUCT_SCALE;
@@ -2345,15 +2346,15 @@ void CreateIMDButton(IMAGEFILE *ImageFile, UWORD ImageID, void *Object, UDWORD P
 				scale = LARGE_STRUCT_SCALE;
 			}
 		}
-		else if(IMDType == IMDTYPE_STRUCTURE)
+		else if (IMDType == IMDTYPE_STRUCTURE)
 		{
 			basePlateSize = getStructureSizeMax((STRUCTURE*)Object);
-			if(basePlateSize == 1)
+			if (basePlateSize == 1)
 			{
 				Size = 2;//small structure
 				scale = SMALL_STRUCT_SCALE;
 			}
-			else if(basePlateSize == 2)
+			else if (basePlateSize == 2)
 			{
 				Size = 1;//med structure
 				scale = MED_STRUCT_SCALE;
@@ -2364,15 +2365,15 @@ void CreateIMDButton(IMAGEFILE *ImageFile, UWORD ImageID, void *Object, UDWORD P
 				scale = LARGE_STRUCT_SCALE;
 			}
 		}
-		else if(IMDType == IMDTYPE_STRUCTURESTAT)
+		else if (IMDType == IMDTYPE_STRUCTURESTAT)
 		{
 			basePlateSize = getStructureStatSizeMax((STRUCTURE_STATS*)Object);
-			if(basePlateSize == 1)
+			if (basePlateSize == 1)
 			{
 				Size = 2;//small structure
 				scale = SMALL_STRUCT_SCALE;
 			}
-			else if(basePlateSize == 2)
+			else if (basePlateSize == 2)
 			{
 				Size = 1;//med structure
 				scale = MED_STRUCT_SCALE;
@@ -2388,19 +2389,22 @@ void CreateIMDButton(IMAGEFILE *ImageFile, UWORD ImageID, void *Object, UDWORD P
 
 			Radius = ((iIMDShape*)Object)->sradius;
 
-			if(Radius <= 128) {
+			if (Radius <= 128)
+			{
 				Size = 2;//small structure
 				scale = SMALL_STRUCT_SCALE;
-			} else if(Radius <= 256) {
+			}
+			else if (Radius <= 256)
+			{
 				Size = 1;//med structure
 				scale = MED_STRUCT_SCALE;
-			} else {
+			}
+			else
+			{
 				Size = 0;
 				scale = LARGE_STRUCT_SCALE;
 			}
 		}
-
-
 
 		ClearButton(Down,Size, buttonType);
 
@@ -2424,15 +2428,24 @@ void CreateIMDButton(IMAGEFILE *ImageFile, UWORD ImageID, void *Object, UDWORD P
 		pie_SetDepthBufferStatus(DEPTH_CMP_LEQ_WRT_ON);
 
 		/* all non droid buttons */
-		if(IMDType == IMDTYPE_COMPONENT) {
+		if (IMDType == IMDTYPE_COMPONENT)
+		{
 			displayComponentButton((BASE_STATS*)Object,&Rotation,&Position,true, scale);
-		} else if(IMDType == IMDTYPE_RESEARCH) {
+		}
+		else if (IMDType == IMDTYPE_RESEARCH)
+		{
 			displayResearchButton((BASE_STATS*)Object,&Rotation,&Position,true, scale);
-		} else if(IMDType == IMDTYPE_STRUCTURE) {
+		}
+		else if (IMDType == IMDTYPE_STRUCTURE)
+		{
 			displayStructureButton((STRUCTURE*)Object,&Rotation,&Position,true, scale);
-		} else if(IMDType == IMDTYPE_STRUCTURESTAT) {
+		}
+		else if (IMDType == IMDTYPE_STRUCTURESTAT)
+		{
 			displayStructureStatButton((STRUCTURE_STATS*)Object, &Rotation, &Position, true, scale);
-		} else {
+		}
+		else
+		{
 			displayIMDButton((iIMDShape*)Object,&Rotation,&Position,true, scale);
 		}
 

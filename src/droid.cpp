@@ -188,7 +188,7 @@ int32_t droidDamage(DROID *psDroid, unsigned damage, WEAPON_CLASS weaponClass, W
 	else if (relativeDamage < 0)
 	{
 		// HACK: Prevent transporters from being destroyed in single player
-		if ( (game.type == CAMPAIGN) && !bMultiPlayer && (psDroid->droidType == DROID_TRANSPORTER) )
+		if ((game.type == CAMPAIGN) && !bMultiPlayer && (psDroid->droidType == DROID_TRANSPORTER))
 		{
 			debug(LOG_ATTACK, "Transport(%d) saved from death--since it should never die (SP only)", psDroid->id);
 			psDroid->body = 1;
@@ -318,13 +318,12 @@ DROID::~DROID()
 		psDroid->psCurAnim = NULL;
 	}
 
-	if (psDroid->droidType == DROID_TRANSPORTER)
+	if (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER)
 	{
 		if (psDroid->psGroup)
 		{
 			//free all droids associated with this Transporter
-			for (psCurr = psDroid->psGroup->psList; psCurr != NULL && psCurr !=
-				psDroid; psCurr = psNext)
+			for (psCurr = psDroid->psGroup->psList; psCurr != NULL && psCurr != psDroid; psCurr = psNext)
 			{
 				psNext = psCurr->psGrpNext;
 				delete psCurr;
@@ -419,13 +418,12 @@ void	removeDroidBase(DROID *psDel)
 	}
 
 	//kill all the droids inside the transporter
-	if (psDel->droidType == DROID_TRANSPORTER)
+	if (psDel->droidType == DROID_TRANSPORTER || psDel->droidType == DROID_SUPERTRANSPORTER)
 	{
 		if (psDel->psGroup)
 		{
 			//free all droids associated with this Transporter
-			for (psCurr = psDel->psGroup->psList; psCurr != NULL && psCurr !=
-				psDel; psCurr = psNext)
+			for (psCurr = psDel->psGroup->psList; psCurr != NULL && psCurr != psDel; psCurr = psNext)
 			{
 				psNext = psCurr->psGrpNext;
 
@@ -588,7 +586,7 @@ bool droidRemove(DROID *psDroid, DROID *pList[MAX_PLAYERS])
 	}
 
 	// leave the current group if any - not if its a Transporter droid
-	if (psDroid->droidType != DROID_TRANSPORTER && psDroid->psGroup)
+	if ((psDroid->droidType != DROID_TRANSPORTER && psDroid->droidType != DROID_SUPERTRANSPORTER) && psDroid->psGroup)
 	{
 		psDroid->psGroup->remove(psDroid);
 		psDroid->psGroup = NULL;
@@ -1429,7 +1427,8 @@ DROID_TYPE droidTemplateType(DROID_TEMPLATE *psTemplate)
 	    psTemplate->droidType == DROID_CYBORG_SUPER ||
 	    psTemplate->droidType == DROID_CYBORG_CONSTRUCT ||
 	    psTemplate->droidType == DROID_CYBORG_REPAIR ||
-	    psTemplate->droidType == DROID_TRANSPORTER)
+	    psTemplate->droidType == DROID_TRANSPORTER ||
+		psTemplate->droidType == DROID_SUPERTRANSPORTER)
 	{
 		type = psTemplate->droidType;
 	}
@@ -1855,7 +1854,7 @@ DROID *reallyBuildDroid(DROID_TEMPLATE *pTemplate, Position pos, UDWORD player, 
 		psDroid->pos.z = map_Height(psDroid->pos.x, psDroid->pos.y);
 	}
 
-	if (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_COMMAND)
+	if (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER || psDroid->droidType == DROID_COMMAND)
 	{
 		psGrp = grpCreate();
 		psGrp->add(psDroid);
@@ -1879,7 +1878,8 @@ DROID *reallyBuildDroid(DROID_TEMPLATE *pTemplate, Position pos, UDWORD player, 
 		(psDroid->droidType != DROID_CYBORG_CONSTRUCT) &&
 		(psDroid->droidType != DROID_REPAIR) &&
 		(psDroid->droidType != DROID_CYBORG_REPAIR) &&
-		(psDroid->droidType != DROID_TRANSPORTER))
+		(psDroid->droidType != DROID_TRANSPORTER) &&
+		(psDroid->droidType != DROID_SUPERTRANSPORTER))
 	{
 		uint32_t numKills = 0;
 		experienceLoc = 0;
@@ -1956,7 +1956,7 @@ DROID *reallyBuildDroid(DROID_TEMPLATE *pTemplate, Position pos, UDWORD player, 
 	}
 
 	/* transporter-specific stuff */
-	if (psDroid->droidType == DROID_TRANSPORTER)
+	if (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER)
 	{
 		//add transporter launch button if selected player and not a reinforcable situation
 		if ( player == selectedPlayer && !missionCanReEnforce())
@@ -2943,14 +2943,14 @@ UBYTE checkCommandExist(UBYTE player)
 bool isVtolDroid(const DROID* psDroid)
 {
 	return asPropulsionStats[psDroid->asBits[COMP_PROPULSION].nStat].propulsionType == PROPULSION_TYPE_LIFT
-	    && psDroid->droidType != DROID_TRANSPORTER;
+	    && (psDroid->droidType != DROID_TRANSPORTER && psDroid->droidType != DROID_SUPERTRANSPORTER);
 }
 
 /* returns true if the droid has lift propulsion and is moving */ 
 bool isFlying(const DROID* psDroid)
 {
 	return (asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat)->propulsionType == PROPULSION_TYPE_LIFT  
-			&& ( psDroid->sMove.Status != MOVEINACTIVE || psDroid->droidType == DROID_TRANSPORTER ); 
+			&& (psDroid->sMove.Status != MOVEINACTIVE || psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER);
 }
 
 /* returns true if it's a VTOL weapon droid which has completed all runs */
@@ -3564,7 +3564,7 @@ DROID * giftSingleDroid(DROID *psD, UDWORD to)
 			psNewDroid->armour[WC_HEAT] = armourH;
 			psNewDroid->experience = numKills;
 			psNewDroid->rot.direction = direction;
-			if (!(psNewDroid->droidType == DROID_PERSON || cyborgDroid(psNewDroid) || psNewDroid->droidType == DROID_TRANSPORTER))
+			if (!(psNewDroid->droidType == DROID_PERSON || cyborgDroid(psNewDroid) || (psNewDroid->droidType == DROID_TRANSPORTER || psNewDroid->droidType == DROID_SUPERTRANSPORTER)))
 			{
 				updateDroidOrientation(psNewDroid);
 			}
@@ -3656,7 +3656,7 @@ bool checkValidWeaponForProp(DROID_TEMPLATE *psTemplate)
 void SelectDroid(DROID *psDroid)
 {
 	// we shouldn't ever control the transporter in SP games
-	if (psDroid->droidType != DROID_TRANSPORTER || bMultiPlayer)
+	if ((psDroid->droidType != DROID_TRANSPORTER && psDroid->droidType != DROID_SUPERTRANSPORTER) || bMultiPlayer)
 	{
 		psDroid->selected = true;
 		intRefreshScreen();
@@ -3717,7 +3717,7 @@ bool isConstructionDroid(BASE_OBJECT const *psObject)
 
 bool droidOnMap(const DROID *psDroid)
 {
-	if (psDroid->died == NOT_CURRENT_LIST || psDroid->droidType == DROID_TRANSPORTER
+	if (psDroid->died == NOT_CURRENT_LIST || psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER
 		|| psDroid->pos.x == INVALID_XY || psDroid->pos.y == INVALID_XY || missionIsOffworld()
 		|| mapHeight == 0)
 	{

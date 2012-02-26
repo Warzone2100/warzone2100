@@ -527,7 +527,7 @@ bool intAddTransButtonForm(void)
 	for(psDroid = transInterfaceDroidList(); psDroid; psDroid = psDroid->psNext)
 	{
 		//only interested in Transporter droids
-		if (  psDroid->droidType == DROID_TRANSPORTER &&
+		if ((psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER) &&
 			 (psDroid->action != DACTION_TRANSPORTOUT &&
 			  psDroid->action != DACTION_TRANSPORTIN     ) )
 		{
@@ -586,7 +586,7 @@ bool intAddTransButtonForm(void)
 	//add each button
 	for(psDroid = transInterfaceDroidList(); psDroid; psDroid = psDroid->psNext)
 	{
-		if ( psDroid->droidType == DROID_TRANSPORTER &&
+		if ((psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER) &&
 			 (psDroid->action != DACTION_TRANSPORTOUT &&
 			  psDroid->action != DACTION_TRANSPORTIN     ) )
 		{
@@ -851,11 +851,10 @@ bool intAddDroidsAvailForm(void)
 	//calc num buttons
 	numButtons = 0;
 	//look through the list of droids that were built before the mission
-	for(psDroid = mission.apsDroidLists[selectedPlayer]; psDroid; psDroid =
-		psDroid->psNext)
+	for (psDroid = mission.apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
 	{
 		//ignore any Transporters!
-		if (psDroid->droidType != DROID_TRANSPORTER)
+		if (psDroid->droidType != DROID_TRANSPORTER && psDroid->droidType != DROID_SUPERTRANSPORTER)
 		{
 			numButtons++;
 		}
@@ -920,8 +919,7 @@ bool intAddDroidsAvailForm(void)
 	sBarInit.sMinorCol = WZCOL_ACTION_PROGRESS_BAR_MINOR;
 
 	//add droids built before the mission
-	for (psDroid = mission.apsDroidLists[selectedPlayer]; psDroid != NULL;
-		psDroid = psDroid->psNext)
+	for (psDroid = mission.apsDroidLists[selectedPlayer]; psDroid != NULL; psDroid = psDroid->psNext)
 	{
 		//stop adding the buttons once MAX_DROIDS has been reached
 		if (sBFormInit.id == (IDTRANS_DROIDSTART + MAX_DROIDS))
@@ -929,7 +927,7 @@ bool intAddDroidsAvailForm(void)
 			break;
 		}
 		//don't add Transporter Droids!
-		if (psDroid->droidType != DROID_TRANSPORTER)
+		if ((psDroid->droidType != DROID_TRANSPORTER && psDroid->droidType != DROID_SUPERTRANSPORTER))
 		{
 			/* Set the tip and add the button */
 //			sBFormInit.pTip = psDroid->pName;
@@ -1025,12 +1023,12 @@ UDWORD calcRemainingCapacity(DROID *psTransporter)
 
 bool transporterIsEmpty(const DROID* psTransporter)
 {
-	ASSERT(psTransporter->droidType == DROID_TRANSPORTER, "Non-transporter droid given");
+	ASSERT((psTransporter->droidType == DROID_TRANSPORTER || psTransporter->droidType == DROID_SUPERTRANSPORTER), "Non-transporter droid given");
 
 	// Assume dead droids and non-transporter droids to be empty
 	return (isDead((const BASE_OBJECT*)psTransporter)
 	     || psTransporter->droidType != DROID_TRANSPORTER
-
+		 || psTransporter->droidType != DROID_SUPERTRANSPORTER
 	     || psTransporter->psGroup->psList == NULL
 	     || psTransporter->psGroup->psList == psTransporter);
 }
@@ -1260,7 +1258,7 @@ void setCurrentTransporter(UDWORD id)
 	for (psDroid = transInterfaceDroidList(); psDroid != NULL; psDroid =
 		psDroid->psNext)
 	{
-		if ( psDroid->droidType == DROID_TRANSPORTER &&
+		if ((psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER) &&
 			 (psDroid->action != DACTION_TRANSPORTOUT &&
 			  psDroid->action != DACTION_TRANSPORTIN     ) )
 		{
@@ -1370,7 +1368,7 @@ void intTransporterAddDroid(UDWORD id)
 	for (psDroid = transInterfaceDroidList(); psDroid != NULL; psDroid = psNext)
 	{
 		psNext = psDroid->psNext;
-		if (psDroid->droidType != DROID_TRANSPORTER)
+		if (psDroid->droidType != DROID_TRANSPORTER && psDroid->droidType != DROID_SUPERTRANSPORTER)
 		{
 			if (currID == id)
 			{
@@ -1449,14 +1447,10 @@ bool checkTransporterSpace(DROID *psTransporter, DROID *psAssigned)
 	DROID		*psDroid, *psNext;
 	UDWORD		capacity;
 
-	ASSERT( psTransporter != NULL,
-		"checkTransporterSpace: Invalid droid pointer" );
-	ASSERT( psAssigned != NULL,
-		"checkTransporterSpace: Invalid droid pointer" );
-	ASSERT( psTransporter->droidType == DROID_TRANSPORTER,
-		"checkTransporterSpace: Droid is not a Transporter" );
-    ASSERT( psTransporter->psGroup != NULL,
-        "checkTransporterSpace: tranporter doesn't have a group" );
+	ASSERT (psTransporter != NULL, "Invalid droid pointer");
+	ASSERT (psAssigned != NULL, "Invalid droid pointer");
+	ASSERT ((psTransporter->droidType == DROID_TRANSPORTER || psTransporter->droidType == DROID_SUPERTRANSPORTER), "Droid is not a Transporter");
+	ASSERT (psTransporter->psGroup != NULL, "tranporter doesn't have a group" );
 
 	//work out how much space is currently left
 	capacity = TRANSPORTER_CAPACITY;
@@ -1560,9 +1554,9 @@ bool launchTransporter(DROID *psTransporter)
 	//otherwise just launches the Transporter
 	else
 	{
-		if (psTransporter->droidType != DROID_TRANSPORTER)
+		if (psTransporter->droidType != DROID_TRANSPORTER && psTransporter->droidType != DROID_SUPERTRANSPORTER)
 		{
-			ASSERT( false, "launchTransporter: Invalid Transporter Droid" );
+			ASSERT( false, "Invalid Transporter Droid" );
 			return false;
 		}
 
@@ -1591,7 +1585,7 @@ have arrived - returns true when there*/
 bool updateTransporter(DROID *psTransporter)
 {
 	ASSERT_OR_RETURN(true, psTransporter != NULL, "Invalid droid pointer");
-	ASSERT_OR_RETURN(true, psTransporter->droidType == DROID_TRANSPORTER, "Invalid droid type");
+	ASSERT_OR_RETURN(true, (psTransporter->droidType == DROID_TRANSPORTER || psTransporter->droidType == DROID_SUPERTRANSPORTER), "Invalid droid type");
 
 	//if not moving to mission site, exit
 	if ( psTransporter->action != DACTION_TRANSPORTOUT &&
@@ -1804,10 +1798,8 @@ void resetTransporter()
 /*checks the order of the droid to see if its currently flying*/
 bool transporterFlying(DROID *psTransporter)
 {
-	ASSERT( psTransporter != NULL,
-		"transporterFlying: Invalid droid pointer" );
-	ASSERT( psTransporter->droidType == DROID_TRANSPORTER,
-		"transporterFlying: Droid is not a Transporter" );
+	ASSERT (psTransporter != NULL, "Invalid droid pointer");
+	ASSERT ((psTransporter->droidType == DROID_TRANSPORTER || psTransporter->droidType == DROID_SUPERTRANSPORTER), "Droid is not a Transporter");
 
 	return psTransporter->order.type == DORDER_TRANSPORTOUT ||
 	       psTransporter->order.type == DORDER_TRANSPORTIN ||

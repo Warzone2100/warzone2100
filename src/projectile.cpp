@@ -1469,6 +1469,7 @@ static ObjectShape establishTargetShape(BASE_OBJECT *psTarget)
 					return abs(psTarget->sDisplay.imd->radius) * 2;
 				case DROID_DEFAULT:
 				case DROID_TRANSPORTER:
+				case DROID_SUPERTRANSPORTER:
 				default:
 					return TILE_UNITS/4;  // how will we arrive at this?
 			}
@@ -1701,6 +1702,7 @@ int establishTargetHeight(BASE_OBJECT const *psTarget)
 				case DROID_CYBORG_SUPER:
 				case DROID_DEFAULT:
 				case DROID_TRANSPORTER:
+				case DROID_SUPERTRANSPORTER:
 				// Commanders don't have pIMD either
 				case DROID_COMMAND:
 				case DROID_ANY:

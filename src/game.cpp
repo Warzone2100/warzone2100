@@ -2090,7 +2090,7 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 				if (psCurr->droidType != DROID_PERSON
 				// && psCurr->droidType != DROID_CYBORG
 				 && !cyborgDroid(psCurr)
-				 && psCurr->droidType != DROID_TRANSPORTER
+				 && (psCurr->droidType != DROID_TRANSPORTER && psCurr->droidType != DROID_SUPERTRANSPORTER)
 				 && psCurr->pos.x != INVALID_XY)
 				{
 					updateDroidOrientation(psCurr);
@@ -2230,7 +2230,7 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 			{
 				if (psCurr->droidType != DROID_PERSON
 				 && !cyborgDroid(psCurr)
-				 && psCurr->droidType != DROID_TRANSPORTER
+				 && (psCurr->droidType != DROID_TRANSPORTER && psCurr->droidType != DROID_SUPERTRANSPORTER)
 				 && psCurr->pos.x != INVALID_XY)
 				{
 					updateDroidOrientation(psCurr);
@@ -4042,7 +4042,7 @@ static bool loadSaveDroidPointers(const QString &pFileName, DROID **ppsCurrentDr
 
 		for (psDroid = ppsCurrentDroidLists[player]; psDroid && psDroid->id != id; psDroid = psDroid->psNext)
 		{
-			if (psDroid->droidType == DROID_TRANSPORTER && psDroid->psGroup != NULL)  // Check for droids in the transporter.
+			if ((psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER) && psDroid->psGroup != NULL)  // Check for droids in the transporter.
 			{
 				for (DROID *psTrDroid = psDroid->psGroup->psList; psTrDroid != NULL; psTrDroid = psTrDroid->psGrpNext)
 				{
@@ -4143,6 +4143,7 @@ static bool loadSaveDroid(const char *pFileName, DROID **ppsCurrentDroidLists)
 		switch (droidType)
 		{
 			case DROID_TRANSPORTER: ++priority;
+			case DROID_SUPERTRANSPORTER: ++priority;
 			case DROID_COMMAND:     ++priority;
 			default:                break;
 		}
@@ -4320,7 +4321,7 @@ static bool loadSaveDroid(const char *pFileName, DROID **ppsCurrentDroidLists)
 			scriptSetStartPos(psDroid->player, psDroid->pos.x, psDroid->pos.y);	// set map start position, FIXME - save properly elsewhere!
 		}
 
-		if (psDroid->psGroup == NULL || psDroid->psGroup->type != GT_TRANSPORTER || psDroid->droidType == DROID_TRANSPORTER)  // do not add to list if on a transport, then the group list is used instead
+		if (psDroid->psGroup == NULL || psDroid->psGroup->type != GT_TRANSPORTER || psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER)  // do not add to list if on a transport, then the group list is used instead
 		{
 			addDroid(psDroid, ppsCurrentDroidLists);
 		}
@@ -4457,7 +4458,7 @@ static bool writeDroidFile(const char *pFileName, DROID **ppsCurrentDroidLists)
 		for (DROID *psCurr = ppsCurrentDroidLists[player]; psCurr != NULL; psCurr = psCurr->psNext)
 		{
 			writeDroid(ini, psCurr, onMission, counter);
-			if (psCurr->droidType == DROID_TRANSPORTER)	// if transporter save any droids in the grp
+			if (psCurr->droidType == DROID_TRANSPORTER || psCurr->droidType == DROID_SUPERTRANSPORTER)	// if transporter save any droids in the grp
 			{
 				for (DROID *psTrans = psCurr->psGroup->psList; psTrans != NULL; psTrans = psTrans->psGrpNext)
 				{
