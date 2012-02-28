@@ -324,7 +324,6 @@ void moveTurnDroid(DROID *psDroid, UDWORD x, UDWORD y)
 // Tell a droid to move out the way for a shuffle
 static void moveShuffleDroid(DROID *psDroid, Vector2i s)
 {
-	DROID	*psCurr;
 	SDWORD  mx, my;
 	bool	frontClear = true, leftClear = true, rightClear = true;
 	SDWORD	lvx,lvy, rvx,rvy, svx,svy;
@@ -344,14 +343,14 @@ static void moveShuffleDroid(DROID *psDroid, Vector2i s)
 	shuffleMove = SHUFFLE_MOVE;
 
 	// calculate the possible movement vectors
-	lvx = -s.y * shuffleMove / shuffleMag;
-	lvy = s.x * shuffleMove / shuffleMag;
+	svx = s.x * shuffleMove / shuffleMag;  // Straight in the direction of s.
+	svy = s.y * shuffleMove / shuffleMag;
 
-	rvx = s.y * shuffleMove / shuffleMag;
-	rvy = -s.x * shuffleMove / shuffleMag;
+	lvx = -svy;  // 90° to the... right?
+	lvy = svx;
 
-	svx = lvy; // sx * SHUFFLE_MOVE / shuffleMag;
-	svy = rvx; // sy * SHUFFLE_MOVE / shuffleMag;
+	rvx = svy;   // 90° to the... left?
+	rvy = -svx;
 
 	// check for blocking tiles
 	if (fpathBlockingTile(map_coord((SDWORD)psDroid->pos.x + lvx),
@@ -371,26 +370,24 @@ static void moveShuffleDroid(DROID *psDroid, Vector2i s)
 	}
 
 	// find any droids that could block the shuffle
-	// TODO Use mapgrid.h iterator.
-	for(psCurr=apsDroidLists[psDroid->player]; psCurr; psCurr=psCurr->psNext)
+	gridStartIterate(psDroid->pos.x, psDroid->pos.y, SHUFFLE_DIST);
+	for (BASE_OBJECT *psCurr_ = gridIterate(); psCurr_ != NULL; psCurr_ = gridIterate())
 	{
-		if (psCurr != psDroid)
+		DROID *psCurr = castDroid(psCurr_);
+		if (psCurr == NULL || psCurr->died || psCurr == psDroid)
 		{
-			int32_t xdiff = psCurr->pos.x - psDroid->pos.x;
-			int32_t ydiff = psCurr->pos.y - psDroid->pos.y;
-			if (abs(xdiff) < SHUFFLE_DIST && abs(ydiff) < SHUFFLE_DIST && xdiff*xdiff + ydiff*ydiff < SHUFFLE_DIST*SHUFFLE_DIST)
-			{
-				uint16_t droidDir = iAtan2(xdiff, ydiff);
-				int diff = angleDelta(shuffleDir - droidDir);
-				if (diff > -DEG(135) && diff < -DEG(45))
-				{
-					leftClear = false;
-				}
-				else if (diff > DEG(45) && diff < DEG(135))
-				{
-					rightClear = false;
-				}
-			}
+			continue;
+		}
+
+		uint16_t droidDir = iAtan2(removeZ(psCurr->pos - psDroid->pos));
+		int diff = angleDelta(shuffleDir - droidDir);
+		if (diff > -DEG(135) && diff < -DEG(45))
+		{
+			leftClear = false;
+		}
+		else if (diff > DEG(45) && diff < DEG(135))
+		{
+			rightClear = false;
 		}
 	}
 
@@ -627,21 +624,6 @@ static bool moveNextTarget(DROID *psDroid)
 
 	CHECK_DROID(psDroid);
 	return true;
-}
-
-/* Look at the next target point from the route */
-static Vector2i movePeekNextTarget(DROID *psDroid)
-{
-	// See if there is anything left in the move list
-	if (psDroid->sMove.pathIndex == psDroid->sMove.numPoints)
-	{
-		// No points left - fudge one to continue the same direction
-		return psDroid->sMove.target*2 - psDroid->sMove.src;
-	}
-	else
-	{
-		return psDroid->sMove.asPath[psDroid->sMove.pathIndex];
-	}
 }
 
 // Watermelon:fix these magic number...the collision radius should be based on pie imd radius not some static int's...
@@ -1373,19 +1355,12 @@ static bool moveReachedWayPoint(DROID *psDroid)
 	// Calculate the vector to the droid
 	const Vector2i droid = removeZ(psDroid->pos) - psDroid->sMove.target;
 	const bool last = psDroid->sMove.pathIndex == psDroid->sMove.numPoints;
-	const int sqprecision = last ? ((TILE_UNITS / 4) * (TILE_UNITS / 4)) : ((TILE_UNITS / 2) * (TILE_UNITS / 2));
+	int sqprecision = last ? ((TILE_UNITS / 4) * (TILE_UNITS / 4)) : ((TILE_UNITS / 2) * (TILE_UNITS / 2));
 
-	// See if we have reached the next waypoint - occasionally happens due to bumping
-	if (!last)
+	if (last && psDroid->sMove.bumpTime != 0)
 	{
-		const int nsqprecision = (TILE_UNITS / 2) * (TILE_UNITS / 2);
-		const Vector2i next = movePeekNextTarget(psDroid); 
-		const Vector2i ndroid = removeZ(psDroid->pos) - next; 
-
-		if (ndroid*ndroid < nsqprecision)
-		{
-			return true;
-		}
+		// Make waypoint tolerance 1 tile after 0 seconds, 2 tiles after 3 seconds, X tiles after (X + 1)² seconds.
+		sqprecision = (gameTime - psDroid->sMove.bumpTime + GAME_TICKS_PER_SEC)*(TILE_UNITS*TILE_UNITS / GAME_TICKS_PER_SEC);
 	}
 
 	// Else check current waypoint
