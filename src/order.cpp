@@ -793,12 +793,15 @@ void orderUpdateDroid(DROID *psDroid)
 
 			temp = (DROID*)psDroid->order.psObj;
 			// FIXME: since we now have 2 transporter types, we should fix this in the scripts for campaign
-			if ((temp->droidType == DROID_TRANSPORTER) && !cyborgDroid(psDroid) && game.type != CAMPAIGN && bMultiPlayer)
+			if (temp->droidType == DROID_TRANSPORTER && !cyborgDroid(psDroid) && game.type != CAMPAIGN && bMultiPlayer)
 			{
 				psDroid->order = DroidOrder(DORDER_NONE);
 				actionDroid(psDroid, DACTION_NONE);
-				audio_PlayTrack( ID_SOUND_BUILD_FAIL );
-				addConsoleMessage(_("We can't do that! We must be a Cyborg unit to use a Cyborg Transport!"), DEFAULT_JUSTIFY, selectedPlayer);
+				if (psDroid->player == selectedPlayer)
+				{
+					audio_PlayTrack(ID_SOUND_BUILD_FAIL);
+					addConsoleMessage(_("We can't do that! We must be a Cyborg unit to use a Cyborg Transport!"), DEFAULT_JUSTIFY, selectedPlayer);
+				}
 			}
 			else
 			{
