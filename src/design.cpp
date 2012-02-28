@@ -889,6 +889,7 @@ void desSetupDesignTemplates(void)
 		 * cyborg, person or command droid,
 		 */
 		if (psTempl->droidType != DROID_TRANSPORTER        &&
+			psTempl->droidType != DROID_SUPERTRANSPORTER   &&
 		    psTempl->droidType != DROID_CYBORG             &&
 		    psTempl->droidType != DROID_CYBORG_SUPER       &&
 		    psTempl->droidType != DROID_CYBORG_CONSTRUCT   &&
@@ -1300,6 +1301,11 @@ const char *GetDefaultTemplateName(DROID_TEMPLATE *psTemplate)
 	if(psTemplate->droidType == DROID_TRANSPORTER)
 	{
 		sstrcpy(aCurrName, _("Transport"));
+		return aCurrName;
+	}
+	if(psTemplate->droidType == DROID_SUPERTRANSPORTER)
+	{
+		sstrcpy(aCurrName, _("Super Transport"));
 		return aCurrName;
 	}
 

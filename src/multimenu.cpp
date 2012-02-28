@@ -1032,8 +1032,18 @@ static void displayMultiPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset,
 		rotation.z = 0;
 		position.x = 0;
 		position.y = 0;
-		position.z = 2000;		//scale them!
-
+		if (displayDroid->droidType == DROID_SUPERTRANSPORTER)
+		{
+			position.z = 7850;
+		}
+		else if (displayDroid->droidType == DROID_TRANSPORTER)
+		{
+			position.z = 4100;
+		}
+		else
+		{
+			position.z = 2000;		//scale them!
+		}
 		displayComponentButtonObject(displayDroid, &rotation, &position, false, 100);
 	}
 	else if(apsDroidLists[player])

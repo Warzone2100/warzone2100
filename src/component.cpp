@@ -673,6 +673,7 @@ static void displayCompObj(DROID *psDroid, bool bButton)
 			{
 			case DROID_DEFAULT:
 			case DROID_TRANSPORTER:
+			case DROID_SUPERTRANSPORTER:
 			case DROID_CYBORG:
 			case DROID_CYBORG_SUPER:
 			case DROID_WEAPON:
@@ -1002,7 +1003,7 @@ void displayComponentObject(DROID *psDroid)
 	position.z = -(st.pos.y - player.p.z);
 	position.y = st.pos.z;
 
-	if(psDroid->droidType == DROID_TRANSPORTER)
+	if(psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER)
 	{
 		position.y += bobTransporterHeight();
 	}

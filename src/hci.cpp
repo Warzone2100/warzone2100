@@ -6313,28 +6313,34 @@ DROID *intGotoNextDroidType(DROID *CurrDroid,UDWORD droidType,bool AllowGroup)
 	DROID *psDroid;
 	bool Found = false;
 
-	if(CurrDroid != NULL) {
+	if(CurrDroid != NULL)
+	{
 		CurrentDroid = CurrDroid;
 	}
 
-	if( ((SWORD)droidType != CurrentDroidType) && (droidType != DROID_ANY)) {
+	if( ((SWORD)droidType != CurrentDroidType) && (droidType != DROID_ANY))
+	{
 		CurrentDroid = NULL;
 		CurrentDroidType = (SWORD)droidType;
 	}
 
-	if(CurrentDroid != NULL) {
+	if(CurrentDroid != NULL)
+	{
 		psDroid = CurrentDroid;
-	} else {
+	}
+	else
+	{
 		psDroid = apsDroidLists[selectedPlayer];
 	}
 
 	for(; psDroid != NULL; psDroid = psDroid->psNext)
 	{
-		if( ( ((UDWORD)psDroid->droidType == droidType) ||
-				  ((droidType == DROID_ANY) && (psDroid->droidType != DROID_TRANSPORTER)) ) &&
-				  ((psDroid->group == UBYTE_MAX) || AllowGroup) )
+		if ((((UDWORD)psDroid->droidType == droidType) ||
+				  ((droidType == DROID_ANY) && (psDroid->droidType != DROID_TRANSPORTER && psDroid->droidType != DROID_SUPERTRANSPORTER)) ) &&
+				  ((psDroid->group == UBYTE_MAX) || AllowGroup))
 		{
-			if(psDroid != CurrentDroid) {
+			if(psDroid != CurrentDroid)
+			{
 				clearSel();
 				SelectDroid(psDroid);
 				CurrentDroid = psDroid;
@@ -6345,14 +6351,16 @@ DROID *intGotoNextDroidType(DROID *CurrDroid,UDWORD droidType,bool AllowGroup)
 	}
 
 	// Start back at the begining?
-	if((!Found) && (CurrentDroid != NULL)) {
+	if((!Found) && (CurrentDroid != NULL))
+	{
 		for(psDroid = apsDroidLists[selectedPlayer]; (psDroid != CurrentDroid) && (psDroid != NULL); psDroid = psDroid->psNext)
 		{
 			if( ( ((UDWORD)psDroid->droidType == droidType) ||
-				  ((droidType == DROID_ANY) && (psDroid->droidType != DROID_TRANSPORTER)) ) &&
+				  ((droidType == DROID_ANY) && (psDroid->droidType != DROID_TRANSPORTER && psDroid->droidType != DROID_SUPERTRANSPORTER)) ) &&
 				  ((psDroid->group == UBYTE_MAX) || AllowGroup) )
 			{
-				if(psDroid != CurrentDroid) {
+				if(psDroid != CurrentDroid)
+				{
 					clearSel();
 					SelectDroid(psDroid);
 					CurrentDroid = psDroid;
@@ -6370,13 +6378,12 @@ DROID *intGotoNextDroidType(DROID *CurrDroid,UDWORD droidType,bool AllowGroup)
 		psCBSelectedDroid = NULL;
 
 		// Center it on screen.
-		if(CurrentDroid) {
+		if(CurrentDroid)
+		{
 			intSetMapPos(CurrentDroid->pos.x, CurrentDroid->pos.y);
 		}
-
 		return CurrentDroid;
 	}
-
 	return NULL;
 }
 

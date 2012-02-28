@@ -2426,7 +2426,7 @@ static bool structPlaceDroid(STRUCTURE *psStructure, DROID_TEMPLATE *psTempl,
 			}
 			//if vtol droid - send it to ReArm Pad if one exists
 			placed = false;
-			if (isVtolDroid(psNewDroid) && psNewDroid->droidType != DROID_TRANSPORTER)
+			if (isVtolDroid(psNewDroid) && (psNewDroid->droidType != DROID_TRANSPORTER && psNewDroid->droidType != DROID_SUPERTRANSPORTER))
 			{
 				moveToRearm(psNewDroid);
 			}
@@ -3287,7 +3287,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 				if (psDroid->body < psDroid->originalBody)
 				{
 					//if in multiPlayer, and a Transporter - make sure its on the ground before repairing
-					if (bMultiPlayer && psDroid->droidType == DROID_TRANSPORTER)
+					if (bMultiPlayer && (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER))
 					{
 						if (!(psDroid->sMove.Status == MOVEINACTIVE &&
 							psDroid->sMove.iVertSpeed == 0))
@@ -5709,7 +5709,7 @@ bool validTemplateForFactory(DROID_TEMPLATE *psTemplate, STRUCTURE *psFactory)
 	if (!bMultiPlayer)
 	{
 		//ignore Transporter Droids
-		if (psTemplate->droidType == DROID_TRANSPORTER)
+		if (psTemplate->droidType == DROID_TRANSPORTER || psTemplate->droidType == DROID_SUPERTRANSPORTER)
 		{
 			return false;
 		}
@@ -5829,7 +5829,7 @@ bool electronicDamage(BASE_OBJECT *psTarget, UDWORD damage, UBYTE attackPlayer)
 		//in multiPlayer cannot attack a Transporter with EW
 		if (bMultiPlayer)
 		{
-			ASSERT_OR_RETURN(true, psDroid->droidType != DROID_TRANSPORTER, "Cannot attack a Transporter in multiPlayer");
+			ASSERT_OR_RETURN(true, (psDroid->droidType != DROID_TRANSPORTER && psDroid->droidType != DROID_SUPERTRANSPORTER), "Cannot attack a Transporter in multiPlayer");
 		}
 
 		if (psDroid->resistance == ACTION_START_TIME)

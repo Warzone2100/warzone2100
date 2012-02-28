@@ -1,0 +1,40 @@
+// qslint settings for all configurations
+
+#include "Base-Tests.xcconfig"
+
+
+PRODUCT_NAME = qslint
+
+GCC_PREPROCESSOR_DEFINITIONS = $(inherited) $(BUILD_PREPROCESSOR_DEFINITIONS)
+
+
+OTHER_CFLAGS = $(FlagsForCandCpp) $(WarnForC) $(inherited)
+OTHER_CFLAGS[arch=i386] = $(inherited) // intel 32 bit only
+OTHER_CFLAGS[arch=x86_64] = $(inherited) // intel 64 bit only
+
+OTHER_CPLUSPLUSFLAGS = $(FlagsForCandCpp) $(WarnForCpp)
+OTHER_CPLUSPLUSFLAGS[arch=i386] = $(inherited) // intel 32 bit only
+OTHER_CPLUSPLUSFLAGS[arch=x86_64] = $(inherited) // intel 64 bit only
+
+
+// Warnings
+GCC_WARN_CHECK_SWITCH_STATEMENTS = YES // -Wswitch
+GCC_WARN_INITIALIZER_NOT_FULLY_BRACKETED = YES // -Wmissing-braces
+GCC_WARN_ABOUT_RETURN_TYPE = YES // -Wreturn-type
+GCC_WARN_MISSING_PARENTHESES = YES // -Wparentheses
+GCC_WARN_ABOUT_MISSING_FIELD_INITIALIZERS = YES // -Wmissing-field-initializers
+GCC_WARN_TYPECHECK_CALLS_TO_PRINTF = NO // FIXME: -Wno-format  Hides some "format not a string literal and no format arguments" warnings; these should be fixed at some point
+GCC_WARN_UNDECLARED_SELECTOR = YES // -Wundeclared-selector
+GCC_WARN_UNUSED_FUNCTION = YES // -Wunused-function
+GCC_WARN_UNUSED_LABEL = YES // -Wunused-label
+GCC_WARN_UNUSED_VALUE = YES // -Wunused-value
+GCC_WARN_UNUSED_VARIABLE = YES // -Wunused-variable
+
+// Build setting dependent warnings
+WarnForCandCpp = -Wall -Wextra -Wcast-align -Wwrite-strings -Wpointer-arith $(WarnForCandCppDep)
+WarnForC = -Wstrict-prototypes -Wdeclaration-after-statement $(WarnForCDep)
+WarnForCpp = $(WarnForCppDep)
+
+// Additional build flags for both c and c++ files
+FlagsForCandCpp = $(BuildDependentFlagsForCandCpp) $(WarnForCandCpp)
+FlagsForCandCpp[arch=i386] = $(inherited) // Flags for intel 32 bit only

@@ -10,9 +10,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2012-02-20 00:33+0100\n"
-"PO-Revision-Date: 2012-02-19 01:24+0400\n"
-"Last-Translator: \n"
+"POT-Creation-Date: 2012-02-26 02:32+0100\n"
+"PO-Revision-Date: 2012-02-19 17:06+0800\n"
+"Last-Translator: vadim s. sabinich <vadim@sabini.ch>\n"
 "Language-Team: Russian <>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
@@ -24,6 +24,7 @@ msgstr ""
 "X-Poedit-Language: Russian\n"
 "X-Poedit-SourceCharset: utf-8\n"
 "X-Poedit-Basepath: ..\n"
+"X-Poedit-Bookmarks: 82,-1,-1,-1,-1,-1,-1,-1,-1,-1\n"
 
 #: data/base/messages/messages.rmsg:2
 msgid "Structure Research Completed"
@@ -155,7 +156,7 @@ msgstr "Доступна новая защитная постройка"
 
 #: data/base/messages/resmessages12.rmsg:5
 msgid "Armored Mortar battery pit"
-msgstr "Укреплённый миномётный бункер"
+msgstr "Укреплённый миномётный ДОТ"
 
 #: data/base/messages/resmessages12.rmsg:6
 #: data/base/messages/resmessages12.rmsg:17
@@ -183,7 +184,7 @@ msgstr "Укреплённый миномётный бункер"
 #: data/mp/messages/strings/resstrings.txt:205
 #: data/mp/messages/strings/resstrings.txt:211
 msgid "Assigned automatically to nearest sensor or CB tower"
-msgstr "Автоматически привязывается к ближайшему датчику или КБ башне"
+msgstr "Автоматически привязывается к ближайшему радару или КБ башне"
 
 #: data/base/messages/resmessages12.rmsg:7
 #: data/base/messages/resmessages12.rmsg:18
@@ -295,7 +296,7 @@ msgstr "Укреплённая оборонительная точка с кру
 #: data/mp/messages/strings/resstrings.txt:331
 #: data/mp/messages/strings/resstrings.txt:337
 msgid "Automatically targets enemies within sensor range"
-msgstr "автоматически наводится на цели в пределах радиуса действия датчика"
+msgstr "Автоматически наводится на цели в пределах радиуса действия радара"
 
 #: data/base/messages/resmessages12.rmsg:29
 #: data/base/messages/resmessages12.rmsg:40
@@ -373,11 +374,11 @@ msgstr "Все гусеницы автоматически улучшены"
 #: data/base/messages/resmessages12.rmsg:59
 #: data/base/messages/resmessages1.rmsg:4
 msgid "New Systems Turret Available for Design"
-msgstr "Доступна новая системная турель"
+msgstr "Доступна турельная установка"
 
 #: data/base/messages/resmessages12.rmsg:60
 msgid "Counter-battery turret detects enemy indirect fire batteries"
-msgstr "Контр-батарея обнаруживает вражеские орудия непрямого огня"
+msgstr "Контрбатарея обнаруживает вражеские орудия непрямого огня"
 
 #: data/base/messages/resmessages12.rmsg:61
 #: data/base/messages/resmessagesall.rmsg:83
@@ -387,11 +388,12 @@ msgstr "Приказывает назначенным единицам непр�
 #: data/base/messages/resmessages12.rmsg:62
 #: data/base/messages/resmessagesall.rmsg:84
 msgid "Counter-battery fire continues until enemy battery is suppressed"
-msgstr "Кнтр-батарея продолжает вести огонь пока вражеская батарея не будет уничтожена"
+msgstr "Контрбатарея продолжает вести огонь, пока вражеская батарея не будет уничтожена"
 
 #: data/base/messages/resmessages12.rmsg:70
 #: data/base/messages/resmessages23.rmsg:48
 #: data/base/messages/resmessages3.rmsg:444
+#, fuzzy
 msgid "CB Sensor Improved"
 msgstr "КБ башня улучшена"
 
@@ -405,12 +407,14 @@ msgstr "Новые системы обнаружения огня"
 #: data/base/messages/resmessages12.rmsg:72
 #: data/base/messages/resmessages23.rmsg:50
 #: data/base/messages/resmessages3.rmsg:446
+#, fuzzy
 msgid "Extends CB Range"
 msgstr "Увеличивает радиус действия КБ башни"
 
 #: data/base/messages/resmessages12.rmsg:73
 #: data/base/messages/resmessages23.rmsg:51
 #: data/base/messages/resmessages3.rmsg:447
+#, fuzzy
 msgid "All CB sensors upgraded automatically"
 msgstr "Все КБ башни автоматически улучшаются"
 
@@ -571,7 +575,7 @@ msgstr "Улучшение пулемёта"
 
 #: data/base/messages/resmessages12.rmsg:115
 msgid "Chaingun mechanism replaces belt-feed"
-msgstr "Цепной механизм подачи патронов заменил пулеметную ленту"
+msgstr "Цепной механизм подачи патронов заменил пулемётную ленту"
 
 #: data/base/messages/resmessages12.rmsg:116
 #: data/base/messages/resmessages23.rmsg:149
@@ -619,7 +623,7 @@ msgstr "Доступно новое артиллерийское орудие"
 #: data/base/messages/strings/resstrings.txt:892
 #: data/mp/messages/strings/resstrings.txt:935
 msgid "May be assigned to a sensor"
-msgstr "Можно привязать к сенсору"
+msgstr "Можно привязать к радару"
 
 #: data/base/messages/resmessages12.rmsg:127
 #: data/base/messages/resmessages1.rmsg:567
@@ -703,7 +707,7 @@ msgstr "Доступны новые ракеты"
 
 #: data/base/messages/resmessages12.rmsg:159
 msgid "Rocket artillery; can be assigned to a sensor"
-msgstr "Ракетная артиллерия, можно привязать к датчику"
+msgstr "Ракетная артиллерия, можно привязать к радару"
 
 #: data/base/messages/resmessages12.rmsg:160
 msgid "Best Targets: Vehicles and Emplacements"
@@ -792,7 +796,7 @@ msgstr "Стреляет залпами миниракет"
 
 #: data/base/messages/resmessages12.rmsg:226
 msgid "Best Targets: Base structures"
-msgstr "лучшие цели: порстройки"
+msgstr "Лучшие цели: постройки"
 
 #: data/base/messages/resmessages1.rmsg:5
 msgid "New battlefield computer system"
@@ -800,7 +804,7 @@ msgstr "Новая боевая компьютерная система"
 
 #: data/base/messages/resmessages1.rmsg:6
 msgid "Commander leads groups acts as factory delivery point"
-msgstr "Командир указывает группам к точкек сборки фабрики"
+msgstr "Командир указывает группам к точке сборки фабрики"
 
 #: data/base/messages/resmessages1.rmsg:7
 #: data/base/messages/resmessages1.rmsg:436
@@ -912,7 +916,7 @@ msgstr "Киборг, вооруженный пулеметом"
 #: data/mp/messages/strings/resstrings.txt:100
 #: data/mp/messages/strings/resstrings.txt:106
 msgid "Requires Cyborg factory to produce"
-msgstr "для производства требуется Завод киборгов"
+msgstr "Для производства требуется Завод киборгов"
 
 #: data/base/messages/resmessages1.rmsg:49
 msgid "Armed with Cyborg Cannon"
@@ -2107,7 +2111,7 @@ msgstr "Бронированная усиленная позиция с Гипе
 #: data/base/messages/strings/resstrings.txt:204
 #: data/mp/messages/strings/resstrings.txt:228
 msgid "Armored strongpoint with Inferno Flamer"
-msgstr "Усиленная точка с Адской пушкой"
+msgstr "Усиленная точка с огнемётом Адовое пламя"
 
 #: data/base/messages/resmessages2.rmsg:214
 #: data/base/messages/strings/resstrings.txt:218
@@ -2137,7 +2141,7 @@ msgstr "Укреплённая оборонительная точка с шту
 #: data/base/messages/strings/resstrings.txt:302
 #: data/mp/messages/strings/resstrings.txt:330
 msgid "Armored hardpoint with Inferno flamer"
-msgstr "Укреплённая  точка с огнемётом Адской пушкой"
+msgstr "Укреплённая  точка с огнемётом Адовое пламя"
 
 #: data/base/messages/resmessages2.rmsg:269
 #: data/base/messages/strings/resstrings.txt:308
@@ -2162,7 +2166,7 @@ msgstr "Роботопроизводство киборгов"
 #: data/base/messages/strings/resstrings.txt:366
 #: data/mp/messages/strings/resstrings.txt:394
 msgid "New Robotic Techniques improve factory production"
-msgstr "Новая Робтизированная технология повышает производство"
+msgstr "Новая Роботизированная технология повышает производство"
 
 #: data/base/messages/resmessages2.rmsg:303
 #: data/base/messages/strings/resstrings.txt:367
@@ -2176,7 +2180,7 @@ msgstr "Увеличивает производительность заводо
 #: data/mp/messages/strings/names.txt:845
 #: data/mp/messages/strings/resstrings.txt:418
 msgid "Dedicated Synaptic Link Data Analysis"
-msgstr "Углубленный анализ синаптической связи"
+msgstr "Углублённый анализ синаптической связи"
 
 #: data/base/messages/resmessages2.rmsg:324
 #: data/base/messages/strings/names.txt:808
@@ -2184,7 +2188,7 @@ msgstr "Углубленный анализ синаптической связ�
 #: data/mp/messages/strings/names.txt:818
 #: data/mp/messages/strings/resstrings.txt:428
 msgid "Hardened Base Structure Materials"
-msgstr "Укрепленные стройматериалы"
+msgstr "Укреплённые стройматериалы"
 
 #: data/base/messages/resmessages2.rmsg:335
 #: data/base/messages/strings/names.txt:851
@@ -2198,7 +2202,7 @@ msgstr "Роботопроизводство ВВС"
 #: data/base/messages/strings/resstrings.txt:413
 #: data/mp/messages/strings/resstrings.txt:441
 msgid "Increases VTOL factory output"
-msgstr "Повышает выход заводов ВВС"
+msgstr "Повышает производительность заводов ВВС"
 
 #: data/base/messages/resmessages2.rmsg:337
 #: data/base/messages/resmessages3.rmsg:414
@@ -10130,12 +10134,12 @@ msgstr "OpenGL 1.4 не поддерживается вашей системой
 msgid "Enter password here"
 msgstr "Введите пароль"
 
-#: lib/netplay/netplay.cpp:2081
+#: lib/netplay/netplay.cpp:2079
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr "Не могу получить имя основного сервера (%s)!"
 
-#: lib/netplay/netplay.cpp:2103
+#: lib/netplay/netplay.cpp:2101
 #, c-format
 msgid ""
 "Error connecting to the lobby server: %s.\n"
@@ -10148,7 +10152,7 @@ msgstr ""
 "Если вы используете роутер, настройте его, используя UPnP\n"
 "или открыть порты к вашей системе"
 
-#: lib/netplay/netplay.cpp:2768
+#: lib/netplay/netplay.cpp:2766
 msgid "Failed to get a lobby response!"
 msgstr "Не получилось получить ответ от лобби"
 
@@ -10202,8 +10206,8 @@ msgstr "Стратегия"
 #: src/hci.cpp:918
 #: src/hci.cpp:3361
 #: src/hci.cpp:3484
-#: src/hci.cpp:3883
-#: src/hci.cpp:4892
+#: src/hci.cpp:3921
+#: src/hci.cpp:4930
 #: src/intelmap.cpp:531
 #: src/intorder.cpp:727
 #: src/loadsave.cpp:240
@@ -10525,12 +10529,12 @@ msgid "Water Speed"
 msgstr "Скорость по воде"
 
 #: src/design.cpp:2022
-#: src/hci.cpp:4915
+#: src/hci.cpp:4953
 msgid "Tab Scroll left"
 msgstr "Таб скрол налево"
 
 #: src/design.cpp:2037
-#: src/hci.cpp:4930
+#: src/hci.cpp:4968
 msgid "Tab Scroll right"
 msgstr "Таб скрол на право"
 
@@ -11117,102 +11121,102 @@ msgstr "Загрузить "
 msgid "Load Map File"
 msgstr "Загрузить карту."
 
-#: src/hci.cpp:3529
+#: src/hci.cpp:3533
 msgid "Save"
 msgstr "Сохранить "
 
-#: src/hci.cpp:3530
+#: src/hci.cpp:3534
 msgid "Save Map File"
 msgstr "Сохранить карту."
 
-#: src/hci.cpp:3538
+#: src/hci.cpp:3546
 msgid "New"
 msgstr "Новый"
 
-#: src/hci.cpp:3539
+#: src/hci.cpp:3547
 msgid "New Blank Map"
 msgstr "Новая пустая карта."
 
-#: src/hci.cpp:3575
+#: src/hci.cpp:3595
 msgid "Tile"
 msgstr "Плитка"
 
-#: src/hci.cpp:3576
+#: src/hci.cpp:3596
 msgid "Place tiles on map"
 msgstr "Поместить эемент изображения на карту"
 
-#: src/hci.cpp:3585
+#: src/hci.cpp:3609
 msgid "Unit"
 msgstr "Юнит"
 
-#: src/hci.cpp:3586
+#: src/hci.cpp:3610
 msgid "Place Unit on map"
 msgstr "Поместить юнита на карту"
 
-#: src/hci.cpp:3594
+#: src/hci.cpp:3618
 msgid "Struct"
 msgstr "Постройки"
 
-#: src/hci.cpp:3595
+#: src/hci.cpp:3619
 msgid "Place Structures on map"
 msgstr "Расположить постройки на карте"
 
-#: src/hci.cpp:3603
+#: src/hci.cpp:3627
 msgid "Feat"
 msgstr "Разное"
 
-#: src/hci.cpp:3604
+#: src/hci.cpp:3628
 msgid "Place Features on map"
 msgstr "Поместить особый элемент на карту"
 
-#: src/hci.cpp:3614
+#: src/hci.cpp:3642
 msgid "Pause"
 msgstr "Пауза"
 
-#: src/hci.cpp:3615
+#: src/hci.cpp:3643
 msgid "Pause or unpause the game"
 msgstr "Пауза или продолжить игру"
 
-#: src/hci.cpp:3629
+#: src/hci.cpp:3661
 msgid "Align height of all map objects"
 msgstr "Выровнять высоту всех объектов на карте"
 
-#: src/hci.cpp:3639
+#: src/hci.cpp:3674
 msgid "Edit"
 msgstr "Редактировать"
 
-#: src/hci.cpp:3640
+#: src/hci.cpp:3675
 msgid "Start Edit Mode"
 msgstr "Включить режим редактирования"
 
-#: src/hci.cpp:3654
+#: src/hci.cpp:3689
 #: src/ingameop.cpp:113
 #: src/ingameop.cpp:257
 #: src/ingameop.cpp:261
 msgid "Quit"
 msgstr "Выход"
 
-#: src/hci.cpp:3655
+#: src/hci.cpp:3690
 msgid "Exit Game"
 msgstr "Выйти из игры"
 
-#: src/hci.cpp:3681
+#: src/hci.cpp:3716
 msgid "Current Player:"
 msgstr "Текущий игрок"
 
-#: src/hci.cpp:3960
+#: src/hci.cpp:3998
 msgid "Progress Bar"
 msgstr "Панель прогресса"
 
-#: src/hci.cpp:4817
+#: src/hci.cpp:4855
 msgid "Factory Delivery Point"
 msgstr "Точка прибытия с фабрики"
 
-#: src/hci.cpp:4835
+#: src/hci.cpp:4873
 msgid "Loop Production"
 msgstr "Повторное производство"
 
-#: src/hci.cpp:5159
+#: src/hci.cpp:5197
 msgid "Ally progress"
 msgstr "Прогресс Союзников"
 
@@ -12754,7 +12758,7 @@ msgstr "Любое число игроков"
 #, c-format
 msgid "%d player"
 msgid_plural "%d players"
-msgstr[0] "%d  игрок"
+msgstr[0] "%d игрок"
 msgstr[1] "%d игрока"
 msgstr[2] "%d игроков"
 

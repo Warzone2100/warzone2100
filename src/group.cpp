@@ -118,7 +118,7 @@ void DROID_GROUP::add(DROID *psDroid)
 		}
 		psDroid->psGroup = this;
 
-		if (psDroid->droidType == DROID_TRANSPORTER)
+		if (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER)
 		{
 			ASSERT_OR_RETURN(, (type == GT_NORMAL), "grpJoin: Cannot have two transporters in a group" );
 			ASSERT_OR_RETURN(, psList == NULL, "Adding transporter to non-empty list.");
@@ -203,7 +203,7 @@ void DROID_GROUP::remove(DROID *psDroid)
 			type = GT_NORMAL;
 			psCommander = NULL;
 		}
-		else if ((psDroid->droidType == DROID_TRANSPORTER) && (type == GT_TRANSPORTER))
+		else if ((psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER) && (type == GT_TRANSPORTER))
 		{
 			type = GT_NORMAL;
 		}

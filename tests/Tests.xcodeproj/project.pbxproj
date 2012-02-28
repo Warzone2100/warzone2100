@@ -1,0 +1,929 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXAggregateTarget section */
+		43E7009A14F9829600D419C5 /* All Tests */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 43E7009D14F982CA00D419C5 /* Build configuration list for PBXAggregateTarget "All Tests" */;
+			buildPhases = (
+			);
+			dependencies = (
+				43E700E614F9865C00D419C5 /* PBXTargetDependency */,
+				43E700E814F9865C00D419C5 /* PBXTargetDependency */,
+				43E7010614F9889100D419C5 /* PBXTargetDependency */,
+				43E7012114F98A6700D419C5 /* PBXTargetDependency */,
+			);
+			name = "All Tests";
+			productName = "All Tests";
+		};
+/* End PBXAggregateTarget section */
+
+/* Begin PBXBuildFile section */
+		43E700A914F9844C00D419C5 /* maptest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43E7009614F9826C00D419C5 /* maptest.cpp */; };
+		43E700AE14F9849D00D419C5 /* mapload.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43E700AC14F9849D00D419C5 /* mapload.cpp */; };
+		43E700B514F9852E00D419C5 /* PhysFS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43E7008B14F9823C00D419C5 /* PhysFS.framework */; };
+		43E700B614F9852F00D419C5 /* Png.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43E7008914F9823C00D419C5 /* Png.framework */; };
+		43E700EA14F986B500D419C5 /* modeltest.c in Sources */ = {isa = PBXBuildFile; fileRef = 43E7009714F9826C00D419C5 /* modeltest.c */; };
+		43E7010C14F988C400D419C5 /* QtCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43E7FE8714F9823A00D419C5 /* QtCore.framework */; };
+		43E7010D14F988C500D419C5 /* QtScript.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43E7FE8814F9823A00D419C5 /* QtScript.framework */; };
+		43E7010E14F988CE00D419C5 /* PhysFS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43E7008B14F9823C00D419C5 /* PhysFS.framework */; };
+		43E7010F14F9891100D419C5 /* lint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43E7009414F9826C00D419C5 /* lint.cpp */; };
+		43E7011014F9891900D419C5 /* qslint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43E7009814F9826C00D419C5 /* qslint.cpp */; };
+		43E7012614F98AD500D419C5 /* QtScript.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43E7FE8814F9823A00D419C5 /* QtScript.framework */; };
+		43E7012714F98AD600D419C5 /* QtCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43E7FE8714F9823A00D419C5 /* QtCore.framework */; };
+		43E7012814F98ADC00D419C5 /* PhysFS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43E7008B14F9823C00D419C5 /* PhysFS.framework */; };
+		43E7012914F98AF800D419C5 /* qtscripttest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43E7009914F9826C00D419C5 /* qtscripttest.cpp */; };
+		43E7012A14F98AFE00D419C5 /* lint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43E7009414F9826C00D419C5 /* lint.cpp */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		43E7007C14F9823C00D419C5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 43E7FE8A14F9823A00D419C5 /* Warzone.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 02356D750BD3BB3400E9A019;
+			remoteInfo = Warzone;
+		};
+		43E7007E14F9823C00D419C5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 43E7FE8A14F9823A00D419C5 /* Warzone.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 4318434B1363942200BA2BC5;
+			remoteInfo = MiniUPnPc;
+		};
+		43E7008014F9823C00D419C5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 43E7FE8A14F9823A00D419C5 /* Warzone.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 43502D521347640700A02A1F;
+			remoteInfo = GLExtensionWrangler;
+		};
+		43E7008214F9823C00D419C5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 43E7FE8A14F9823A00D419C5 /* Warzone.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 02356D830BD3BB4100E9A019;
+			remoteInfo = Zlib;
+		};
+		43E7008414F9823C00D419C5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 43E7FE8A14F9823A00D419C5 /* Warzone.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 43CCDD1B14BA474E00B21363;
+			remoteInfo = Fribidi;
+		};
+		43E7008614F9823C00D419C5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 43E7FE8A14F9823A00D419C5 /* Warzone.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 02356E090BD3BCFE00E9A019;
+			remoteInfo = Ogg;
+		};
+		43E7008814F9823C00D419C5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 43E7FE8A14F9823A00D419C5 /* Warzone.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 02356DC20BD3BBFC00E9A019;
+			remoteInfo = Png;
+		};
+		43E7008A14F9823C00D419C5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 43E7FE8A14F9823A00D419C5 /* Warzone.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 02DDA8B10BD3C2F20049AB60;
+			remoteInfo = PhysFS;
+		};
+		43E7008C14F9823C00D419C5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 43E7FE8A14F9823A00D419C5 /* Warzone.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 02DDA7EE0BD3C03F0049AB60;
+			remoteInfo = Vorbis;
+		};
+		43E7008E14F9823C00D419C5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 43E7FE8A14F9823A00D419C5 /* Warzone.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 022B2F220BD55814002E64E3;
+			remoteInfo = Gettext;
+		};
+		43E7009014F9823C00D419C5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 43E7FE8A14F9823A00D419C5 /* Warzone.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 97AEAB330E8C1B5200A10721;
+			remoteInfo = Theora;
+		};
+		43E7009214F9823C00D419C5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 43E7FE8A14F9823A00D419C5 /* Warzone.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 4366718213D1FD5600FE85BA;
+			remoteInfo = QuesoGLC;
+		};
+		43E700AF14F9851500D419C5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 43E7FE8A14F9823A00D419C5 /* Warzone.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 438B0C05137730FE008184FC;
+			remoteInfo = "Fetch Third Party Sources";
+		};
+		43E700B114F9851500D419C5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 43E7FE8A14F9823A00D419C5 /* Warzone.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 02356DC10BD3BBFC00E9A019;
+			remoteInfo = Png;
+		};
+		43E700B314F9851500D419C5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 43E7FE8A14F9823A00D419C5 /* Warzone.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 02DDA8B00BD3C2F20049AB60;
+			remoteInfo = PhysFS;
+		};
+		43E700E514F9865C00D419C5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 43E7FE1314F9771800D419C5 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 43E700A014F9830C00D419C5;
+			remoteInfo = maptest;
+		};
+		43E700E714F9865C00D419C5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 43E7FE1314F9771800D419C5 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 43E700DF14F9862500D419C5;
+			remoteInfo = modeltest;
+		};
+		43E7010514F9889100D419C5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 43E7FE1314F9771800D419C5 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 43E700FF14F9887F00D419C5;
+			remoteInfo = qslint;
+		};
+		43E7010814F988B700D419C5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 43E7FE8A14F9823A00D419C5 /* Warzone.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 438B0C05137730FE008184FC;
+			remoteInfo = "Fetch Third Party Sources";
+		};
+		43E7010A14F988B700D419C5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 43E7FE8A14F9823A00D419C5 /* Warzone.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 02DDA8B00BD3C2F20049AB60;
+			remoteInfo = PhysFS;
+		};
+		43E7012014F98A6700D419C5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 43E7FE1314F9771800D419C5 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 43E7011514F989BC00D419C5;
+			remoteInfo = qtscripttest;
+		};
+		43E7012214F98AC600D419C5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 43E7FE8A14F9823A00D419C5 /* Warzone.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 438B0C05137730FE008184FC;
+			remoteInfo = "Fetch Third Party Sources";
+		};
+		43E7012414F98AC600D419C5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 43E7FE8A14F9823A00D419C5 /* Warzone.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 02DDA8B00BD3C2F20049AB60;
+			remoteInfo = PhysFS;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		43E7009414F9826C00D419C5 /* lint.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = lint.cpp; sourceTree = SOURCE_ROOT; };
+		43E7009514F9826C00D419C5 /* lint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lint.h; sourceTree = SOURCE_ROOT; };
+		43E7009614F9826C00D419C5 /* maptest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = maptest.cpp; sourceTree = SOURCE_ROOT; };
+		43E7009714F9826C00D419C5 /* modeltest.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = modeltest.c; sourceTree = SOURCE_ROOT; };
+		43E7009814F9826C00D419C5 /* qslint.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = qslint.cpp; sourceTree = SOURCE_ROOT; };
+		43E7009914F9826C00D419C5 /* qtscripttest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = qtscripttest.cpp; sourceTree = SOURCE_ROOT; };
+		43E700A114F9830C00D419C5 /* maptest */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = maptest; sourceTree = BUILT_PRODUCTS_DIR; };
+		43E700AB14F9849D00D419C5 /* maplib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = maplib.h; path = ../tools/map/maplib.h; sourceTree = SOURCE_ROOT; };
+		43E700AC14F9849D00D419C5 /* mapload.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mapload.cpp; path = ../tools/map/mapload.cpp; sourceTree = SOURCE_ROOT; };
+		43E700AD14F9849D00D419C5 /* mapload.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mapload.h; path = ../tools/map/mapload.h; sourceTree = SOURCE_ROOT; };
+		43E700E014F9862500D419C5 /* modeltest */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = modeltest; sourceTree = BUILT_PRODUCTS_DIR; };
+		43E7010014F9887F00D419C5 /* qslint */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = qslint; sourceTree = BUILT_PRODUCTS_DIR; };
+		43E7011614F989BC00D419C5 /* qtscripttest */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = qtscripttest; sourceTree = BUILT_PRODUCTS_DIR; };
+		43E7FE2D14F97D2A00D419C5 /* Base-Tests.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Base-Tests.xcconfig"; path = "configs/Base-Tests.xcconfig"; sourceTree = SOURCE_ROOT; };
+		43E7FE2E14F97D2A00D419C5 /* maptest-All.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "maptest-All.xcconfig"; path = "configs/maptest-All.xcconfig"; sourceTree = SOURCE_ROOT; };
+		43E7FE2F14F97D2A00D419C5 /* maptest-Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "maptest-Debug.xcconfig"; path = "configs/maptest-Debug.xcconfig"; sourceTree = SOURCE_ROOT; };
+		43E7FE3014F97D2A00D419C5 /* maptest-Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "maptest-Release.xcconfig"; path = "configs/maptest-Release.xcconfig"; sourceTree = SOURCE_ROOT; };
+		43E7FE3114F97D2A00D419C5 /* maptest-StaticAnalyzer.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "maptest-StaticAnalyzer.xcconfig"; path = "configs/maptest-StaticAnalyzer.xcconfig"; sourceTree = SOURCE_ROOT; };
+		43E7FE3214F97D2A00D419C5 /* modeltest-All.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "modeltest-All.xcconfig"; path = "configs/modeltest-All.xcconfig"; sourceTree = SOURCE_ROOT; };
+		43E7FE3314F97D2A00D419C5 /* modeltest-Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "modeltest-Debug.xcconfig"; path = "configs/modeltest-Debug.xcconfig"; sourceTree = SOURCE_ROOT; };
+		43E7FE3414F97D2A00D419C5 /* modeltest-Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "modeltest-Release.xcconfig"; path = "configs/modeltest-Release.xcconfig"; sourceTree = SOURCE_ROOT; };
+		43E7FE3514F97D2A00D419C5 /* modeltest-StaticAnalyzer.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "modeltest-StaticAnalyzer.xcconfig"; path = "configs/modeltest-StaticAnalyzer.xcconfig"; sourceTree = SOURCE_ROOT; };
+		43E7FE3614F97D2A00D419C5 /* Project-All.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Project-All.xcconfig"; path = "configs/Project-All.xcconfig"; sourceTree = SOURCE_ROOT; };
+		43E7FE3714F97D2A00D419C5 /* qslint-All.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "qslint-All.xcconfig"; path = "configs/qslint-All.xcconfig"; sourceTree = SOURCE_ROOT; };
+		43E7FE3814F97D2A00D419C5 /* qslint-Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "qslint-Debug.xcconfig"; path = "configs/qslint-Debug.xcconfig"; sourceTree = SOURCE_ROOT; };
+		43E7FE3914F97D2A00D419C5 /* qslint-Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "qslint-Release.xcconfig"; path = "configs/qslint-Release.xcconfig"; sourceTree = SOURCE_ROOT; };
+		43E7FE3A14F97D2A00D419C5 /* qslint-StaticAnalyzer.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "qslint-StaticAnalyzer.xcconfig"; path = "configs/qslint-StaticAnalyzer.xcconfig"; sourceTree = SOURCE_ROOT; };
+		43E7FE3B14F97D2A00D419C5 /* qtscripttest-All.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "qtscripttest-All.xcconfig"; path = "configs/qtscripttest-All.xcconfig"; sourceTree = SOURCE_ROOT; };
+		43E7FE3C14F97D2A00D419C5 /* qtscripttest-Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "qtscripttest-Debug.xcconfig"; path = "configs/qtscripttest-Debug.xcconfig"; sourceTree = SOURCE_ROOT; };
+		43E7FE3D14F97D2A00D419C5 /* qtscripttest-Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "qtscripttest-Release.xcconfig"; path = "configs/qtscripttest-Release.xcconfig"; sourceTree = SOURCE_ROOT; };
+		43E7FE3E14F97D2A00D419C5 /* qtscripttest-StaticAnalyzer.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "qtscripttest-StaticAnalyzer.xcconfig"; path = "configs/qtscripttest-StaticAnalyzer.xcconfig"; sourceTree = SOURCE_ROOT; };
+		43E7FE8714F9823A00D419C5 /* QtCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QtCore.framework; path = ../macosx/external/QT/QtCore.framework; sourceTree = SOURCE_ROOT; };
+		43E7FE8814F9823A00D419C5 /* QtScript.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QtScript.framework; path = ../macosx/external/QT/QtScript.framework; sourceTree = SOURCE_ROOT; };
+		43E7FE8914F9823A00D419C5 /* QtScriptTools.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QtScriptTools.framework; path = ../macosx/external/QT/QtScriptTools.framework; sourceTree = SOURCE_ROOT; };
+		43E7FE8A14F9823A00D419C5 /* Warzone.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Warzone.xcodeproj; path = ../macosx/Warzone.xcodeproj; sourceTree = SOURCE_ROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		43E7009F14F9830C00D419C5 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				43E700B514F9852E00D419C5 /* PhysFS.framework in Frameworks */,
+				43E700B614F9852F00D419C5 /* Png.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		43E700DE14F9862500D419C5 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		43E700FE14F9887F00D419C5 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				43E7010C14F988C400D419C5 /* QtCore.framework in Frameworks */,
+				43E7010D14F988C500D419C5 /* QtScript.framework in Frameworks */,
+				43E7010E14F988CE00D419C5 /* PhysFS.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		43E7011414F989BC00D419C5 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				43E7012614F98AD500D419C5 /* QtScript.framework in Frameworks */,
+				43E7012714F98AD600D419C5 /* QtCore.framework in Frameworks */,
+				43E7012814F98ADC00D419C5 /* PhysFS.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		43E700A214F9830C00D419C5 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				43E700A114F9830C00D419C5 /* maptest */,
+				43E700E014F9862500D419C5 /* modeltest */,
+				43E7010014F9887F00D419C5 /* qslint */,
+				43E7011614F989BC00D419C5 /* qtscripttest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		43E700AA14F9845C00D419C5 /* External Sources */ = {
+			isa = PBXGroup;
+			children = (
+				43E700AB14F9849D00D419C5 /* maplib.h */,
+				43E700AC14F9849D00D419C5 /* mapload.cpp */,
+				43E700AD14F9849D00D419C5 /* mapload.h */,
+			);
+			name = "External Sources";
+			sourceTree = "<group>";
+		};
+		43E7FE1114F9771800D419C5 = {
+			isa = PBXGroup;
+			children = (
+				43E7FE2C14F97B2200D419C5 /* Configurations */,
+				43E7FE8414F981AB00D419C5 /* Tests */,
+				43E7FE8514F981BF00D419C5 /* External frameworks */,
+				43E7FE8614F981EB00D419C5 /* System frameworks */,
+				43E700A214F9830C00D419C5 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		43E7FE2C14F97B2200D419C5 /* Configurations */ = {
+			isa = PBXGroup;
+			children = (
+				43E7FE2D14F97D2A00D419C5 /* Base-Tests.xcconfig */,
+				43E7FE2E14F97D2A00D419C5 /* maptest-All.xcconfig */,
+				43E7FE2F14F97D2A00D419C5 /* maptest-Debug.xcconfig */,
+				43E7FE3014F97D2A00D419C5 /* maptest-Release.xcconfig */,
+				43E7FE3114F97D2A00D419C5 /* maptest-StaticAnalyzer.xcconfig */,
+				43E7FE3214F97D2A00D419C5 /* modeltest-All.xcconfig */,
+				43E7FE3314F97D2A00D419C5 /* modeltest-Debug.xcconfig */,
+				43E7FE3414F97D2A00D419C5 /* modeltest-Release.xcconfig */,
+				43E7FE3514F97D2A00D419C5 /* modeltest-StaticAnalyzer.xcconfig */,
+				43E7FE3614F97D2A00D419C5 /* Project-All.xcconfig */,
+				43E7FE3714F97D2A00D419C5 /* qslint-All.xcconfig */,
+				43E7FE3814F97D2A00D419C5 /* qslint-Debug.xcconfig */,
+				43E7FE3914F97D2A00D419C5 /* qslint-Release.xcconfig */,
+				43E7FE3A14F97D2A00D419C5 /* qslint-StaticAnalyzer.xcconfig */,
+				43E7FE3B14F97D2A00D419C5 /* qtscripttest-All.xcconfig */,
+				43E7FE3C14F97D2A00D419C5 /* qtscripttest-Debug.xcconfig */,
+				43E7FE3D14F97D2A00D419C5 /* qtscripttest-Release.xcconfig */,
+				43E7FE3E14F97D2A00D419C5 /* qtscripttest-StaticAnalyzer.xcconfig */,
+			);
+			name = Configurations;
+			sourceTree = "<group>";
+		};
+		43E7FE8414F981AB00D419C5 /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				43E700AA14F9845C00D419C5 /* External Sources */,
+				43E7009414F9826C00D419C5 /* lint.cpp */,
+				43E7009514F9826C00D419C5 /* lint.h */,
+				43E7009614F9826C00D419C5 /* maptest.cpp */,
+				43E7009714F9826C00D419C5 /* modeltest.c */,
+				43E7009814F9826C00D419C5 /* qslint.cpp */,
+				43E7009914F9826C00D419C5 /* qtscripttest.cpp */,
+			);
+			name = Tests;
+			sourceTree = "<group>";
+		};
+		43E7FE8514F981BF00D419C5 /* External frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				43E7FE8714F9823A00D419C5 /* QtCore.framework */,
+				43E7FE8814F9823A00D419C5 /* QtScript.framework */,
+				43E7FE8914F9823A00D419C5 /* QtScriptTools.framework */,
+				43E7FE8A14F9823A00D419C5 /* Warzone.xcodeproj */,
+			);
+			name = "External frameworks";
+			sourceTree = "<group>";
+		};
+		43E7FE8614F981EB00D419C5 /* System frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = "System frameworks";
+			sourceTree = "<group>";
+		};
+		43E7FE8B14F9823A00D419C5 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				43E7007D14F9823C00D419C5 /* Warzone.app */,
+				43E7007F14F9823C00D419C5 /* MiniUPnPc.framework */,
+				43E7008114F9823C00D419C5 /* GLExtensionWrangler.framework */,
+				43E7008314F9823C00D419C5 /* Zlib.framework */,
+				43E7008514F9823C00D419C5 /* fribidi.framework */,
+				43E7008714F9823C00D419C5 /* Ogg.framework */,
+				43E7008914F9823C00D419C5 /* Png.framework */,
+				43E7008B14F9823C00D419C5 /* PhysFS.framework */,
+				43E7008D14F9823C00D419C5 /* Vorbis.framework */,
+				43E7008F14F9823C00D419C5 /* Gettext.framework */,
+				43E7009114F9823C00D419C5 /* Theora.framework */,
+				43E7009314F9823C00D419C5 /* QuesoGLC.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		43E700A014F9830C00D419C5 /* maptest */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 43E700A614F9830D00D419C5 /* Build configuration list for PBXNativeTarget "maptest" */;
+			buildPhases = (
+				43E7009E14F9830C00D419C5 /* Sources */,
+				43E7009F14F9830C00D419C5 /* Frameworks */,
+				43E7013A14F98F0700D419C5 /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				43E700B014F9851500D419C5 /* PBXTargetDependency */,
+				43E700B214F9851500D419C5 /* PBXTargetDependency */,
+				43E700B414F9851500D419C5 /* PBXTargetDependency */,
+			);
+			name = maptest;
+			productName = maptest;
+			productReference = 43E700A114F9830C00D419C5 /* maptest */;
+			productType = "com.apple.product-type.tool";
+		};
+		43E700DF14F9862500D419C5 /* modeltest */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 43E700E914F9866C00D419C5 /* Build configuration list for PBXNativeTarget "modeltest" */;
+			buildPhases = (
+				43E700DD14F9862500D419C5 /* Sources */,
+				43E700DE14F9862500D419C5 /* Frameworks */,
+				43E7013714F98EB700D419C5 /* modellist */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = modeltest;
+			productName = modeltest;
+			productReference = 43E700E014F9862500D419C5 /* modeltest */;
+			productType = "com.apple.product-type.tool";
+		};
+		43E700FF14F9887F00D419C5 /* qslint */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 43E7010714F9889E00D419C5 /* Build configuration list for PBXNativeTarget "qslint" */;
+			buildPhases = (
+				43E700FD14F9887F00D419C5 /* Sources */,
+				43E700FE14F9887F00D419C5 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				43E7010914F988B700D419C5 /* PBXTargetDependency */,
+				43E7010B14F988B700D419C5 /* PBXTargetDependency */,
+			);
+			name = qslint;
+			productName = qslint;
+			productReference = 43E7010014F9887F00D419C5 /* qslint */;
+			productType = "com.apple.product-type.tool";
+		};
+		43E7011514F989BC00D419C5 /* qtscripttest */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 43E7011D14F989FF00D419C5 /* Build configuration list for PBXNativeTarget "qtscripttest" */;
+			buildPhases = (
+				43E7011314F989BC00D419C5 /* Sources */,
+				43E7011414F989BC00D419C5 /* Frameworks */,
+				43E7013414F98BDA00D419C5 /* jslist */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				43E7012314F98AC600D419C5 /* PBXTargetDependency */,
+				43E7012514F98AC600D419C5 /* PBXTargetDependency */,
+			);
+			name = qtscripttest;
+			productName = qtscripttest;
+			productReference = 43E7011614F989BC00D419C5 /* qtscripttest */;
+			productType = "com.apple.product-type.tool";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		43E7FE1314F9771800D419C5 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+			};
+			buildConfigurationList = 43E7FE1614F9771800D419C5 /* Build configuration list for PBXProject "Tests" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				English,
+				Japanese,
+				French,
+				German,
+			);
+			mainGroup = 43E7FE1114F9771800D419C5;
+			productRefGroup = 43E700A214F9830C00D419C5 /* Products */;
+			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 43E7FE8B14F9823A00D419C5 /* Products */;
+					ProjectRef = 43E7FE8A14F9823A00D419C5 /* Warzone.xcodeproj */;
+				},
+			);
+			projectRoot = "";
+			targets = (
+				43E7009A14F9829600D419C5 /* All Tests */,
+				43E700A014F9830C00D419C5 /* maptest */,
+				43E700DF14F9862500D419C5 /* modeltest */,
+				43E7011514F989BC00D419C5 /* qtscripttest */,
+				43E700FF14F9887F00D419C5 /* qslint */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		43E7007D14F9823C00D419C5 /* Warzone.app */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.application;
+			path = Warzone.app;
+			remoteRef = 43E7007C14F9823C00D419C5 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		43E7007F14F9823C00D419C5 /* MiniUPnPc.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = MiniUPnPc.framework;
+			remoteRef = 43E7007E14F9823C00D419C5 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		43E7008114F9823C00D419C5 /* GLExtensionWrangler.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = GLExtensionWrangler.framework;
+			remoteRef = 43E7008014F9823C00D419C5 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		43E7008314F9823C00D419C5 /* Zlib.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Zlib.framework;
+			remoteRef = 43E7008214F9823C00D419C5 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		43E7008514F9823C00D419C5 /* fribidi.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = fribidi.framework;
+			remoteRef = 43E7008414F9823C00D419C5 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		43E7008714F9823C00D419C5 /* Ogg.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Ogg.framework;
+			remoteRef = 43E7008614F9823C00D419C5 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		43E7008914F9823C00D419C5 /* Png.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Png.framework;
+			remoteRef = 43E7008814F9823C00D419C5 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		43E7008B14F9823C00D419C5 /* PhysFS.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = PhysFS.framework;
+			remoteRef = 43E7008A14F9823C00D419C5 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		43E7008D14F9823C00D419C5 /* Vorbis.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Vorbis.framework;
+			remoteRef = 43E7008C14F9823C00D419C5 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		43E7008F14F9823C00D419C5 /* Gettext.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Gettext.framework;
+			remoteRef = 43E7008E14F9823C00D419C5 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		43E7009114F9823C00D419C5 /* Theora.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Theora.framework;
+			remoteRef = 43E7009014F9823C00D419C5 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		43E7009314F9823C00D419C5 /* QuesoGLC.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = QuesoGLC.framework;
+			remoteRef = 43E7009214F9823C00D419C5 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		43E7013414F98BDA00D419C5 /* jslist */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = jslist;
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = ". configs/scripts/jslist.sh";
+		};
+		43E7013714F98EB700D419C5 /* modellist */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = modellist;
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = ". configs/scripts/modellist.sh";
+		};
+		43E7013A14F98F0700D419C5 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = ". configs/scripts/maplist.sh";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		43E7009E14F9830C00D419C5 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				43E700A914F9844C00D419C5 /* maptest.cpp in Sources */,
+				43E700AE14F9849D00D419C5 /* mapload.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		43E700DD14F9862500D419C5 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				43E700EA14F986B500D419C5 /* modeltest.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		43E700FD14F9887F00D419C5 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				43E7010F14F9891100D419C5 /* lint.cpp in Sources */,
+				43E7011014F9891900D419C5 /* qslint.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		43E7011314F989BC00D419C5 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				43E7012914F98AF800D419C5 /* qtscripttest.cpp in Sources */,
+				43E7012A14F98AFE00D419C5 /* lint.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		43E700B014F9851500D419C5 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "Fetch Third Party Sources";
+			targetProxy = 43E700AF14F9851500D419C5 /* PBXContainerItemProxy */;
+		};
+		43E700B214F9851500D419C5 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = Png;
+			targetProxy = 43E700B114F9851500D419C5 /* PBXContainerItemProxy */;
+		};
+		43E700B414F9851500D419C5 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = PhysFS;
+			targetProxy = 43E700B314F9851500D419C5 /* PBXContainerItemProxy */;
+		};
+		43E700E614F9865C00D419C5 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 43E700A014F9830C00D419C5 /* maptest */;
+			targetProxy = 43E700E514F9865C00D419C5 /* PBXContainerItemProxy */;
+		};
+		43E700E814F9865C00D419C5 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 43E700DF14F9862500D419C5 /* modeltest */;
+			targetProxy = 43E700E714F9865C00D419C5 /* PBXContainerItemProxy */;
+		};
+		43E7010614F9889100D419C5 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 43E700FF14F9887F00D419C5 /* qslint */;
+			targetProxy = 43E7010514F9889100D419C5 /* PBXContainerItemProxy */;
+		};
+		43E7010914F988B700D419C5 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "Fetch Third Party Sources";
+			targetProxy = 43E7010814F988B700D419C5 /* PBXContainerItemProxy */;
+		};
+		43E7010B14F988B700D419C5 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = PhysFS;
+			targetProxy = 43E7010A14F988B700D419C5 /* PBXContainerItemProxy */;
+		};
+		43E7012114F98A6700D419C5 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 43E7011514F989BC00D419C5 /* qtscripttest */;
+			targetProxy = 43E7012014F98A6700D419C5 /* PBXContainerItemProxy */;
+		};
+		43E7012314F98AC600D419C5 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "Fetch Third Party Sources";
+			targetProxy = 43E7012214F98AC600D419C5 /* PBXContainerItemProxy */;
+		};
+		43E7012514F98AC600D419C5 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = PhysFS;
+			targetProxy = 43E7012414F98AC600D419C5 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		43E7009B14F9829700D419C5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "All Tests";
+			};
+			name = Debug;
+		};
+		43E7009C14F9829700D419C5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "All Tests";
+			};
+			name = Release;
+		};
+		43E700A414F9830C00D419C5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 43E7FE2F14F97D2A00D419C5 /* maptest-Debug.xcconfig */;
+			buildSettings = {
+			};
+			name = Debug;
+		};
+		43E700A514F9830C00D419C5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 43E7FE3014F97D2A00D419C5 /* maptest-Release.xcconfig */;
+			buildSettings = {
+			};
+			name = Release;
+		};
+		43E700D614F9859500D419C5 /* StaticAnalyzer */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 43E7FE3614F97D2A00D419C5 /* Project-All.xcconfig */;
+			buildSettings = {
+			};
+			name = StaticAnalyzer;
+		};
+		43E700D714F9859500D419C5 /* StaticAnalyzer */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "All Tests";
+			};
+			name = StaticAnalyzer;
+		};
+		43E700D814F9859500D419C5 /* StaticAnalyzer */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 43E7FE3114F97D2A00D419C5 /* maptest-StaticAnalyzer.xcconfig */;
+			buildSettings = {
+			};
+			name = StaticAnalyzer;
+		};
+		43E700E214F9862500D419C5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 43E7FE3314F97D2A00D419C5 /* modeltest-Debug.xcconfig */;
+			buildSettings = {
+			};
+			name = Debug;
+		};
+		43E700E314F9862500D419C5 /* StaticAnalyzer */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 43E7FE3514F97D2A00D419C5 /* modeltest-StaticAnalyzer.xcconfig */;
+			buildSettings = {
+			};
+			name = StaticAnalyzer;
+		};
+		43E700E414F9862500D419C5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 43E7FE3414F97D2A00D419C5 /* modeltest-Release.xcconfig */;
+			buildSettings = {
+			};
+			name = Release;
+		};
+		43E7010214F9888000D419C5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 43E7FE3814F97D2A00D419C5 /* qslint-Debug.xcconfig */;
+			buildSettings = {
+			};
+			name = Debug;
+		};
+		43E7010314F9888000D419C5 /* StaticAnalyzer */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 43E7FE3A14F97D2A00D419C5 /* qslint-StaticAnalyzer.xcconfig */;
+			buildSettings = {
+			};
+			name = StaticAnalyzer;
+		};
+		43E7010414F9888000D419C5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 43E7FE3914F97D2A00D419C5 /* qslint-Release.xcconfig */;
+			buildSettings = {
+			};
+			name = Release;
+		};
+		43E7011814F989BD00D419C5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 43E7FE3C14F97D2A00D419C5 /* qtscripttest-Debug.xcconfig */;
+			buildSettings = {
+			};
+			name = Debug;
+		};
+		43E7011914F989BD00D419C5 /* StaticAnalyzer */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 43E7FE3E14F97D2A00D419C5 /* qtscripttest-StaticAnalyzer.xcconfig */;
+			buildSettings = {
+			};
+			name = StaticAnalyzer;
+		};
+		43E7011A14F989BD00D419C5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 43E7FE3D14F97D2A00D419C5 /* qtscripttest-Release.xcconfig */;
+			buildSettings = {
+			};
+			name = Release;
+		};
+		43E7FE1414F9771800D419C5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 43E7FE3614F97D2A00D419C5 /* Project-All.xcconfig */;
+			buildSettings = {
+			};
+			name = Debug;
+		};
+		43E7FE1514F9771800D419C5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 43E7FE3614F97D2A00D419C5 /* Project-All.xcconfig */;
+			buildSettings = {
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		43E7009D14F982CA00D419C5 /* Build configuration list for PBXAggregateTarget "All Tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				43E7009B14F9829700D419C5 /* Debug */,
+				43E700D714F9859500D419C5 /* StaticAnalyzer */,
+				43E7009C14F9829700D419C5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		43E700A614F9830D00D419C5 /* Build configuration list for PBXNativeTarget "maptest" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				43E700A414F9830C00D419C5 /* Debug */,
+				43E700D814F9859500D419C5 /* StaticAnalyzer */,
+				43E700A514F9830C00D419C5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		43E700E914F9866C00D419C5 /* Build configuration list for PBXNativeTarget "modeltest" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				43E700E214F9862500D419C5 /* Debug */,
+				43E700E314F9862500D419C5 /* StaticAnalyzer */,
+				43E700E414F9862500D419C5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		43E7010714F9889E00D419C5 /* Build configuration list for PBXNativeTarget "qslint" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				43E7010214F9888000D419C5 /* Debug */,
+				43E7010314F9888000D419C5 /* StaticAnalyzer */,
+				43E7010414F9888000D419C5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		43E7011D14F989FF00D419C5 /* Build configuration list for PBXNativeTarget "qtscripttest" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				43E7011814F989BD00D419C5 /* Debug */,
+				43E7011914F989BD00D419C5 /* StaticAnalyzer */,
+				43E7011A14F989BD00D419C5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		43E7FE1614F9771800D419C5 /* Build configuration list for PBXProject "Tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				43E7FE1414F9771800D419C5 /* Debug */,
+				43E700D614F9859500D419C5 /* StaticAnalyzer */,
+				43E7FE1514F9771800D419C5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 43E7FE1314F9771800D419C5 /* Project object */;
+}

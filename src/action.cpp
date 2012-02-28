@@ -406,7 +406,7 @@ bool actionTargetTurret(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, WEAPON *
 	{
 		DROID *psDroid = (DROID *)psAttacker;
 
-		if (psDroid->droidType == DROID_WEAPON || psDroid->droidType == DROID_TRANSPORTER
+		if (psDroid->droidType == DROID_WEAPON || psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER
 			|| psDroid->droidType == DROID_COMMAND || psDroid->droidType == DROID_CYBORG
 			|| psDroid->droidType == DROID_CYBORG_SUPER)
 		{
@@ -2220,7 +2220,7 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 		// can't attack without a weapon
 		// or yourself
 		if ((psDroid->asWeaps[0].nStat == 0) ||
-			(psDroid->droidType == DROID_TRANSPORTER) ||
+			(psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER) ||
 			(psAction->psObj == psDroid))
 		{
 			break;
@@ -2241,7 +2241,7 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 			//in multiPlayer cannot electronically attack a tranporter
 			if (bMultiPlayer
 			    && psAction->psObj->type == OBJ_DROID
-			    && ((DROID *)psAction->psObj)->droidType == DROID_TRANSPORTER)
+			    && (((DROID *)psAction->psObj)->droidType == DROID_TRANSPORTER || ((DROID *)psAction->psObj)->droidType == DROID_SUPERTRANSPORTER))
 			{
 				psDroid->action = DACTION_NONE;
 				break;

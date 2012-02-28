@@ -10,7 +10,6 @@ autorevision.h:
 	(cd $(top_srcdir) && ./build_tools/autorevision.sh $(abs_top_builddir)/src/autorevision.h || true)
 
 BUILT_SOURCES = \
-	autorevision.h \
 	scriptvals_parser.h
 
 CLEANFILES = $(BUILT_SOURCES)

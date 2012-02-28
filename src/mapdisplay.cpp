@@ -110,6 +110,7 @@ void renderResearchToBuffer(RESEARCH *psResearch, UDWORD OriginX, UDWORD OriginY
 				IMDType = IMDTYPE_COMPONENT;
 				psResGraphic = psResearch->psStat;
 				// NOTE: Another kludge to deal with the superTransport to make it "fit" the display.
+				// Using pName, should be safe to compare, pName doesn't get translated.
 				if (!strcmp("SuperTransport", psResearch->pName))
 				{
 					scale = RESEARCH_COMPONENT_SCALE / 3;

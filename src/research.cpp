@@ -949,7 +949,7 @@ void researchResult(UDWORD researchIndex, UBYTE player, bool bDisplay, STRUCTURE
 				for (psDroid = apsDroidLists[player]; psDroid != NULL; psDroid = psDroid->psNext)
 				{
 					droidSensorUpgrade(psDroid);
-					if (psDroid->droidType == DROID_TRANSPORTER)
+					if (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER)
 					{
 						upgradeTransporterDroids(psDroid, droidSensorUpgrade);
 					}
@@ -957,7 +957,7 @@ void researchResult(UDWORD researchIndex, UBYTE player, bool bDisplay, STRUCTURE
 				for (psDroid = mission.apsDroidLists[player]; psDroid != NULL; psDroid = psDroid->psNext)
 				{
 					droidSensorUpgrade(psDroid);
-					if (psDroid->droidType == DROID_TRANSPORTER)
+					if (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER)
 					{
 						upgradeTransporterDroids(psDroid, droidSensorUpgrade);
 					}
@@ -965,7 +965,7 @@ void researchResult(UDWORD researchIndex, UBYTE player, bool bDisplay, STRUCTURE
 				for (psDroid = apsLimboDroids[player]; psDroid != NULL; psDroid = psDroid->psNext)
 				{
 					droidSensorUpgrade(psDroid);
-					if (psDroid->droidType == DROID_TRANSPORTER)
+					if (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER)
 					{
 						upgradeTransporterDroids(psDroid, droidSensorUpgrade);
 					}
@@ -988,7 +988,7 @@ void researchResult(UDWORD researchIndex, UBYTE player, bool bDisplay, STRUCTURE
 				for (psDroid = apsDroidLists[player]; psDroid != NULL; psDroid = psDroid->psNext)
 				{
 					droidECMUpgrade(psDroid);
-					if (psDroid->droidType == DROID_TRANSPORTER)
+					if (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER)
 					{
 						upgradeTransporterDroids(psDroid, droidECMUpgrade);
 					}
@@ -996,7 +996,7 @@ void researchResult(UDWORD researchIndex, UBYTE player, bool bDisplay, STRUCTURE
 				for (psDroid = mission.apsDroidLists[player]; psDroid != NULL; psDroid = psDroid->psNext)
 				{
 					droidECMUpgrade(psDroid);
-					if (psDroid->droidType == DROID_TRANSPORTER)
+					if (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER)
 					{
 						upgradeTransporterDroids(psDroid, droidECMUpgrade);
 					}
@@ -1004,7 +1004,7 @@ void researchResult(UDWORD researchIndex, UBYTE player, bool bDisplay, STRUCTURE
 				for (psDroid = apsLimboDroids[player]; psDroid != NULL; psDroid = psDroid->psNext)
 				{
 					droidECMUpgrade(psDroid);
-					if (psDroid->droidType == DROID_TRANSPORTER)
+					if (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER)
 					{
 						upgradeTransporterDroids(psDroid, droidECMUpgrade);
 					}
@@ -1030,7 +1030,7 @@ void researchResult(UDWORD researchIndex, UBYTE player, bool bDisplay, STRUCTURE
 				for (psDroid = mission.apsDroidLists[player]; psDroid != NULL; psDroid = psDroid->psNext)
 				{
 					droidBodyUpgrade(pFunction, psDroid);
-					if (psDroid->droidType == DROID_TRANSPORTER)
+					if (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER)
 					{
 						upgradeTransporterDroids(psDroid, droidSensorUpgrade);
 					}
@@ -1038,7 +1038,7 @@ void researchResult(UDWORD researchIndex, UBYTE player, bool bDisplay, STRUCTURE
 				for (psDroid = apsLimboDroids[player]; psDroid != NULL; psDroid = psDroid->psNext)
 				{
 					droidBodyUpgrade(pFunction, psDroid);
-					if (psDroid->droidType == DROID_TRANSPORTER)
+					if (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER)
 					{
 						upgradeTransporterDroids(psDroid, droidSensorUpgrade);
 					}
@@ -1973,7 +1973,7 @@ void replaceDroidComponent(DROID *pList, UDWORD oldType, UDWORD oldCompInc,
 	{
 		switchComponent(psDroid, oldType, oldCompInc, newCompInc);
 		// Need to replace the units inside the transporter
-		if (psDroid->droidType == DROID_TRANSPORTER)
+		if (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER)
 		{
 			replaceTransDroidComponents(psDroid, oldType, oldCompInc, newCompInc);
 		}
@@ -1986,8 +1986,7 @@ void replaceTransDroidComponents(DROID *psTransporter, UDWORD oldType,
 {
     DROID       *psCurr;
 
-    ASSERT( psTransporter->droidType == DROID_TRANSPORTER,
-        "replaceTransUnitComponents: invalid unit type" );
+    ASSERT ((psTransporter->droidType == DROID_TRANSPORTER || psTransporter->droidType == DROID_SUPERTRANSPORTER), "invalid unit type" );
 
     for (psCurr = psTransporter->psGroup->psList; psCurr != NULL; psCurr =
         psCurr->psGrpNext)

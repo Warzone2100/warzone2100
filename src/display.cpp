@@ -81,7 +81,7 @@
 
 struct	_dragBox dragBox3D,wallDrag;
 
-#define POSSIBLE_SELECTIONS		13
+#define POSSIBLE_SELECTIONS		14
 #define POSSIBLE_TARGETS		23
 
 extern char DROIDDOING[512];		// holds the string on what the droid is doing
@@ -779,7 +779,7 @@ void processMouseClickInput(void)
 		}
 		else
 		{
-			if (!bMultiPlayer  && establishSelection(selectedPlayer) == SC_DROID_TRANSPORTER)
+			if (!bMultiPlayer  && (establishSelection(selectedPlayer) == SC_DROID_TRANSPORTER || establishSelection(selectedPlayer) == SC_DROID_SUPERTRANSPORTER))
 			{
 				// Never, *ever* let user control the transport in SP games--it breaks the scripts!
 				ASSERT(game.type == CAMPAIGN, "Game type was set incorrectly!");
@@ -1012,7 +1012,7 @@ void processMouseClickInput(void)
 				item = MT_BLOCKING;
 			}
 
-			if (specialOrderKeyDown() && selection == SC_DROID_TRANSPORTER &&
+			if (specialOrderKeyDown() && (selection == SC_DROID_TRANSPORTER || selection == SC_DROID_SUPERTRANSPORTER) &&
 				arnMPointers[item][selection] == CURSOR_MOVE && bMultiPlayer)
 			{
 				// Alt+move = disembark transporter
@@ -1705,7 +1705,7 @@ static void dealWithLMBDroid(DROID* psDroid, SELECTION_TYPE selection)
 		FeedbackOrderGiven();
 		driveDisableTactical();
 	}
-	else if (psDroid->droidType == DROID_TRANSPORTER)
+	else if (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER)
 	{
 		if (selection == SC_INVALID)
 		{
@@ -2358,7 +2358,7 @@ static void dealWithRMB( void )
 					dealWithDroidSelect(psDroid, false);
 				}
 				// Not a transporter
-				else if (psDroid->droidType != DROID_TRANSPORTER)
+				else if (psDroid->droidType != DROID_TRANSPORTER && psDroid->droidType != DROID_SUPERTRANSPORTER)
 				{
 					if (bRightClickOrders)
 					{
@@ -2567,7 +2567,7 @@ static void dealWithRMB( void )
 				{
 					if (psDroid->selected)
 					{
-						if (psDroid->droidType == DROID_TRANSPORTER)
+						if (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER)
 						{
 							orderDroidLoc(psDroid, DORDER_DISEMBARK, mouseTileX *
 								TILE_UNITS + TILE_UNITS/2, mouseTileY * TILE_UNITS +
@@ -2653,7 +2653,7 @@ STRUCTURE	*psStructure;
 								retVal = MT_SENSOR;
 							}
 						}
-						else if (psDroid->droidType == DROID_TRANSPORTER &&
+						else if ((psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER) &&
 								 selectedPlayer == psDroid->player)
 						{
 							//check the transporter is not full
@@ -2836,7 +2836,7 @@ STRUCTURE	*psStructure;
 // enum in DroidDef.h
 //
 //#define NUM_DROID_WEIGHTS (10)
-#define NUM_DROID_WEIGHTS (13)
+#define NUM_DROID_WEIGHTS (14)
 UBYTE DroidSelectionWeights[NUM_DROID_WEIGHTS] = {
 	3,	//DROID_WEAPON,
 	1,	//DROID_SENSOR,
@@ -2845,6 +2845,7 @@ UBYTE DroidSelectionWeights[NUM_DROID_WEIGHTS] = {
 	3,	//DROID_PERSON,
 	3,	//DROID_CYBORG,
 	9,	//DROID_TRANSPORTER,
+	10, //DROID_SUPERTRANSPORTER
 	0,	//DROID_COMMAND,
 	4,	//DROID_REPAIR,
 	5,	//DROID_DEFAULT,
@@ -2943,6 +2944,7 @@ SELECTION_TYPE	selectionClass;
 			selectionClass = SC_DROID_DIRECT;
 			break;
 		case DROID_TRANSPORTER:
+		case DROID_SUPERTRANSPORTER:
 			//can remove this is NEVER going to select the Transporter to move
 			//Never say Never!! cos here we go in multiPlayer!!
 			selectionClass = SC_DROID_TRANSPORTER;
