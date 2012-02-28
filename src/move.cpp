@@ -2479,7 +2479,19 @@ void moveUpdateDroid(DROID *psDroid)
 				// No more waypoints - finish
 				if ( psPropStats->propulsionType == PROPULSION_TYPE_LIFT )
 				{
-					psDroid->sMove.Status = MOVEHOVER;
+					// check the location for vtols
+					Vector2i tar = removeZ(psDroid->pos);
+					if (psDroid->order.type != DORDER_PATROL && psDroid->order.type != DORDER_CIRCLE  // Not doing an order which means we never land (which means we might want to land).
+					    && actionVTOLLandingPos(psDroid, &tar)  // Can find a sensible place to land.
+					    && map_coord(tar) != map_coord(psDroid->sMove.destination))  // We're not at the right place to land.
+					{
+						psDroid->sMove.destination = tar;
+						moveDroidTo(psDroid, psDroid->sMove.destination.x, psDroid->sMove.destination.y);
+					}
+					else
+					{
+						psDroid->sMove.Status = MOVEHOVER;
+					}
 				}
 				else
 				{
