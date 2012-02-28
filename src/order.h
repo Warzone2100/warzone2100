@@ -133,7 +133,7 @@ extern void orderGroupMoralCheck(DROID_GROUP *psGroup);
 extern const char* getDroidOrderName(DROID_ORDER order);
 
 /** \brief Gets a player's transporter. */
-extern DROID *FindATransporter(unsigned player);
+DROID *FindATransporter(DROID const *embarkee);
 
 /** \brief Checks if there are any damaged buildings to repair. */
 extern BASE_OBJECT * checkForDamagedStruct(DROID *psDroid, STRUCTURE *psTarget);
