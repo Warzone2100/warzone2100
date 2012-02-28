@@ -1625,16 +1625,15 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		{
 			if (psStruct->pStructureType->type == REF_HQ)
 			{
-				UDWORD	droidX = psStruct->pos.x;
-				UDWORD	droidY = psStruct->pos.y;
+				Vector2i pos = removeZ(psStruct->pos);
 
 				psDroid->order = *psOrder;
 				// Find a place to land for vtols. And Transporters in a multiPlay game.
 				if (isVtolDroid(psDroid) || (game.type == SKIRMISH && (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER)))
 				{
-					actionVTOLLandingPos(psDroid, &droidX,&droidY);
+					actionVTOLLandingPos(psDroid, &pos);
 				}
-				actionDroid(psDroid, DACTION_MOVE, droidX,droidY);
+				actionDroid(psDroid, DACTION_MOVE, pos.x, pos.y);
 				break;
 			}
 		}
@@ -1718,13 +1717,11 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 				 * repaired, need to find a suitable location to drop down. */
 				if (game.type == SKIRMISH && (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER))
 				{
-					UDWORD droidX, droidY;
-					droidX = psDroid->order.pos.x;
-					droidY = psDroid->order.pos.y;
+					Vector2i pos = psDroid->order.pos;
 
 					objTrace(psDroid->id, "Repair transport");
-					actionVTOLLandingPos(psDroid, &droidX,&droidY);
-					actionDroid(psDroid, DACTION_MOVE, droidX,droidY);
+					actionVTOLLandingPos(psDroid, &pos);
+					actionDroid(psDroid, DACTION_MOVE, pos.x, pos.y);
 				}
 				else
 				{

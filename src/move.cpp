@@ -328,7 +328,6 @@ static void moveShuffleDroid(DROID *psDroid, Vector2i s)
 	bool	frontClear = true, leftClear = true, rightClear = true;
 	SDWORD	lvx,lvy, rvx,rvy, svx,svy;
 	SDWORD	shuffleMove;
-	SDWORD	tarX,tarY;
 
 	CHECK_DROID(psDroid);
 
@@ -414,11 +413,10 @@ static void moveShuffleDroid(DROID *psDroid, Vector2i s)
 	}
 
 	// check the location for vtols
-	tarX = (SDWORD)psDroid->pos.x + mx;
-	tarY = (SDWORD)psDroid->pos.y + my;
+	Vector2i tar = removeZ(psDroid->pos) + Vector2i(mx, my);
 	if (isVtolDroid(psDroid))
 	{
-		actionVTOLLandingPos(psDroid, (UDWORD *)&tarX,(UDWORD *)&tarY);
+		actionVTOLLandingPos(psDroid, &tar);
 	}
 
 
@@ -429,8 +427,7 @@ static void moveShuffleDroid(DROID *psDroid, Vector2i s)
 	}
 	psDroid->sMove.Status = MOVESHUFFLE;
 	psDroid->sMove.src = removeZ(psDroid->pos);
-	psDroid->sMove.target.x = tarX;
-	psDroid->sMove.target.y = tarY;
+	psDroid->sMove.target = tar;
 	psDroid->sMove.numPoints = 0;
 	psDroid->sMove.pathIndex = 0;
 

@@ -2440,11 +2440,10 @@ static bool structPlaceDroid(STRUCTURE *psStructure, DROID_TEMPLATE *psTempl,
 
 				if (isVtolDroid(psNewDroid))
 				{
-					UDWORD droidX = psFlag->coords.x;
-					UDWORD droidY = psFlag->coords.y;
+					Vector2i pos = removeZ(psFlag->coords);
 					//find a suitable location near the delivery point
-					actionVTOLLandingPos(psNewDroid, &droidX, &droidY);
-					orderDroidLoc(psNewDroid, DORDER_MOVE, droidX, droidY, ModeQueue);
+					actionVTOLLandingPos(psNewDroid, &pos);
+					orderDroidLoc(psNewDroid, DORDER_MOVE, pos.x, pos.y, ModeQueue);
 				}
 				else
 				{
