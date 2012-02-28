@@ -56,6 +56,7 @@ static const StringToEnum<DROID_TYPE> map_DROID_TYPE[] =
 	{"CYBORG_CONSTRUCT",    DROID_CYBORG_CONSTRUCT  },
 	{"CYBORG_REPAIR",       DROID_CYBORG_REPAIR     },
 	{"TRANSPORTER",         DROID_TRANSPORTER       },
+	{"SUPERTRANSPORTER",    DROID_SUPERTRANSPORTER  },
 	{"ZNULLDROID",          DROID_ANY               },
 	{"DROID",               DROID_DEFAULT           },
 };
@@ -71,6 +72,7 @@ bool researchedTemplate(DROID_TEMPLATE *psCurr, int player)
 	case DROID_CYBORG_CONSTRUCT:
 	case DROID_CYBORG_REPAIR:
 	case DROID_TRANSPORTER:
+	case DROID_SUPERTRANSPORTER:
 		return (apCompLists[player][COMP_BODY][psCurr->asParts[COMP_BODY]] == AVAILABLE);
 	default:
 		break; // now proceed to normal droids...

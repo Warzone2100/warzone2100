@@ -56,6 +56,29 @@
 //used to get a location next to a droid - withinh one tile
 #define LOOK_NEXT_TO_DROID		8
 
+
+/* The different types of droid */
+// NOTE, if you add to, or change this list then you'll need
+// to update the DroidSelectionWeights lookup table in Display.c
+enum DROID_TYPE
+{
+	DROID_WEAPON,           ///< Weapon droid
+	DROID_SENSOR,           ///< Sensor droid
+	DROID_ECM,              ///< ECM droid
+	DROID_CONSTRUCT,        ///< Constructor droid
+	DROID_PERSON,           ///< person
+	DROID_CYBORG,           ///< cyborg-type thang
+	DROID_TRANSPORTER,      ///< guess what this is!
+	DROID_COMMAND,          ///< Command droid
+	DROID_REPAIR,           ///< Repair droid
+	DROID_DEFAULT,          ///< Default droid
+	DROID_CYBORG_CONSTRUCT, ///< cyborg constructor droid - new for update 28/5/99
+	DROID_CYBORG_REPAIR,    ///< cyborg repair droid - new for update 28/5/99
+	DROID_CYBORG_SUPER,     ///< cyborg repair droid - new for update 7/6/99
+	DROID_SUPERTRANSPORTER,	///< SuperTransport (MP)
+	DROID_ANY,              ///< Any droid. Only used as a parameter for intGotoNextDroidType(DROID_TYPE).
+};
+
 struct COMPONENT
 {
 	UBYTE           nStat;          ///< Allowing a maximum of 255 stats per file
@@ -108,7 +131,8 @@ struct DROID : public BASE_OBJECT
 	DROID(uint32_t id, unsigned player);
 	~DROID();
 
-	/// UTF-8 name of the droid. This is generated from the droid template and cannot be changed by the game player after creation.
+	/// UTF-8 name of the droid. This is generated from the droid template
+	///  WARNING: This *can* be changed by the game player after creation & can be translated, do NOT rely on this being the same for everyone!
 	char            aName[MAX_STR_LENGTH];
 
 	DROID_TYPE      droidType;                      ///< The type of droid

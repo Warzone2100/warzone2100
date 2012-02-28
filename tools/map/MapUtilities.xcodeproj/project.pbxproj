@@ -58,211 +58,211 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = 438C94F2149BD20F001BAF3A /* Warzone.xcodeproj */;
 			proxyType = 2;
-			remoteGlobalIDString = 02356D750BD3BB3400E9A019 /* Warzone.app */;
+			remoteGlobalIDString = 02356D750BD3BB3400E9A019;
 			remoteInfo = Warzone;
 		};
 		438C9579149BD2ED001BAF3A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 438C94F2149BD20F001BAF3A /* Warzone.xcodeproj */;
 			proxyType = 2;
-			remoteGlobalIDString = 4318434B1363942200BA2BC5 /* MiniUPnPc.framework */;
+			remoteGlobalIDString = 4318434B1363942200BA2BC5;
 			remoteInfo = MiniUPnPc;
 		};
 		438C957B149BD2ED001BAF3A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 438C94F2149BD20F001BAF3A /* Warzone.xcodeproj */;
 			proxyType = 2;
-			remoteGlobalIDString = 43502D521347640700A02A1F /* GLExtensionWrangler.framework */;
+			remoteGlobalIDString = 43502D521347640700A02A1F;
 			remoteInfo = GLExtensionWrangler;
 		};
 		438C957D149BD2ED001BAF3A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 438C94F2149BD20F001BAF3A /* Warzone.xcodeproj */;
 			proxyType = 2;
-			remoteGlobalIDString = 02356D830BD3BB4100E9A019 /* Zlib.framework */;
+			remoteGlobalIDString = 02356D830BD3BB4100E9A019;
 			remoteInfo = Zlib;
 		};
 		438C957F149BD2ED001BAF3A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 438C94F2149BD20F001BAF3A /* Warzone.xcodeproj */;
 			proxyType = 2;
-			remoteGlobalIDString = 02356E090BD3BCFE00E9A019 /* Ogg.framework */;
+			remoteGlobalIDString = 02356E090BD3BCFE00E9A019;
 			remoteInfo = Ogg;
 		};
 		438C9581149BD2ED001BAF3A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 438C94F2149BD20F001BAF3A /* Warzone.xcodeproj */;
 			proxyType = 2;
-			remoteGlobalIDString = 02356DC20BD3BBFC00E9A019 /* Png.framework */;
+			remoteGlobalIDString = 02356DC20BD3BBFC00E9A019;
 			remoteInfo = Png;
 		};
 		438C9583149BD2ED001BAF3A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 438C94F2149BD20F001BAF3A /* Warzone.xcodeproj */;
 			proxyType = 2;
-			remoteGlobalIDString = 02DDA8B10BD3C2F20049AB60 /* PhysFS.framework */;
+			remoteGlobalIDString = 02DDA8B10BD3C2F20049AB60;
 			remoteInfo = PhysFS;
 		};
 		438C9585149BD2ED001BAF3A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 438C94F2149BD20F001BAF3A /* Warzone.xcodeproj */;
 			proxyType = 2;
-			remoteGlobalIDString = 02DDA7EE0BD3C03F0049AB60 /* Vorbis.framework */;
+			remoteGlobalIDString = 02DDA7EE0BD3C03F0049AB60;
 			remoteInfo = Vorbis;
 		};
 		438C9587149BD2ED001BAF3A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 438C94F2149BD20F001BAF3A /* Warzone.xcodeproj */;
 			proxyType = 2;
-			remoteGlobalIDString = 022B2F220BD55814002E64E3 /* Gettext.framework */;
+			remoteGlobalIDString = 022B2F220BD55814002E64E3;
 			remoteInfo = Gettext;
 		};
 		438C9589149BD2ED001BAF3A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 438C94F2149BD20F001BAF3A /* Warzone.xcodeproj */;
 			proxyType = 2;
-			remoteGlobalIDString = 97AEAB330E8C1B5200A10721 /* Theora.framework */;
+			remoteGlobalIDString = 97AEAB330E8C1B5200A10721;
 			remoteInfo = Theora;
-		};
-		438C958B149BD2ED001BAF3A /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 438C94F2149BD20F001BAF3A /* Warzone.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 43AA702A13C7FC640015B52B /* QJson.framework */;
-			remoteInfo = QJson;
 		};
 		438C958D149BD2ED001BAF3A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 438C94F2149BD20F001BAF3A /* Warzone.xcodeproj */;
 			proxyType = 2;
-			remoteGlobalIDString = 4366718213D1FD5600FE85BA /* QuesoGLC.framework */;
+			remoteGlobalIDString = 4366718213D1FD5600FE85BA;
 			remoteInfo = QuesoGLC;
 		};
 		438C95E5149BD60B001BAF3A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 438C94F2149BD20F001BAF3A /* Warzone.xcodeproj */;
 			proxyType = 1;
-			remoteGlobalIDString = 02356DC10BD3BBFC00E9A019 /* Png */;
+			remoteGlobalIDString = 02356DC10BD3BBFC00E9A019;
 			remoteInfo = Png;
 		};
 		438C95E7149BD60B001BAF3A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 438C94F2149BD20F001BAF3A /* Warzone.xcodeproj */;
 			proxyType = 1;
-			remoteGlobalIDString = 02DDA8B00BD3C2F20049AB60 /* PhysFS */;
+			remoteGlobalIDString = 02DDA8B00BD3C2F20049AB60;
 			remoteInfo = PhysFS;
 		};
 		438C95EF149BD669001BAF3A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 438C94F2149BD20F001BAF3A /* Warzone.xcodeproj */;
 			proxyType = 1;
-			remoteGlobalIDString = 02356DC10BD3BBFC00E9A019 /* Png */;
+			remoteGlobalIDString = 02356DC10BD3BBFC00E9A019;
 			remoteInfo = Png;
 		};
 		438C95F1149BD669001BAF3A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 438C94F2149BD20F001BAF3A /* Warzone.xcodeproj */;
 			proxyType = 1;
-			remoteGlobalIDString = 02DDA8B00BD3C2F20049AB60 /* PhysFS */;
+			remoteGlobalIDString = 02DDA8B00BD3C2F20049AB60;
 			remoteInfo = PhysFS;
 		};
 		438C95F4149BD698001BAF3A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 438C94F2149BD20F001BAF3A /* Warzone.xcodeproj */;
 			proxyType = 1;
-			remoteGlobalIDString = 02DDA8B00BD3C2F20049AB60 /* PhysFS */;
+			remoteGlobalIDString = 02DDA8B00BD3C2F20049AB60;
 			remoteInfo = PhysFS;
 		};
 		438C95F9149BD6D3001BAF3A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 438C94F2149BD20F001BAF3A /* Warzone.xcodeproj */;
 			proxyType = 1;
-			remoteGlobalIDString = 02DDA8B00BD3C2F20049AB60 /* PhysFS */;
+			remoteGlobalIDString = 02DDA8B00BD3C2F20049AB60;
 			remoteInfo = PhysFS;
 		};
 		438C95FB149BD6E2001BAF3A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 438C94F2149BD20F001BAF3A /* Warzone.xcodeproj */;
 			proxyType = 1;
-			remoteGlobalIDString = 02356DC10BD3BBFC00E9A019 /* Png */;
+			remoteGlobalIDString = 02356DC10BD3BBFC00E9A019;
 			remoteInfo = Png;
 		};
 		438C95FD149BD6E2001BAF3A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 438C94F2149BD20F001BAF3A /* Warzone.xcodeproj */;
 			proxyType = 1;
-			remoteGlobalIDString = 02DDA8B00BD3C2F20049AB60 /* PhysFS */;
+			remoteGlobalIDString = 02DDA8B00BD3C2F20049AB60;
 			remoteInfo = PhysFS;
 		};
 		438C9617149BDA31001BAF3A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 438C94C9149BD084001BAF3A /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 438C94E3149BD19D001BAF3A /* map2png */;
+			remoteGlobalIDString = 438C94E3149BD19D001BAF3A;
 			remoteInfo = map2png;
 		};
 		438C9619149BDA31001BAF3A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 438C94C9149BD084001BAF3A /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 438C952C149BD22C001BAF3A /* mapconv */;
+			remoteGlobalIDString = 438C952C149BD22C001BAF3A;
 			remoteInfo = mapconv;
 		};
 		438C961B149BDA31001BAF3A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 438C94C9149BD084001BAF3A /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 438C953C149BD26C001BAF3A /* mapinfo */;
+			remoteGlobalIDString = 438C953C149BD26C001BAF3A;
 			remoteInfo = mapinfo;
 		};
 		438C961D149BDA31001BAF3A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 438C94C9149BD084001BAF3A /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 438C9544149BD280001BAF3A /* map2lnd */;
+			remoteGlobalIDString = 438C9544149BD280001BAF3A;
 			remoteInfo = map2lnd;
 		};
 		438C961F149BDA31001BAF3A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 438C94C9149BD084001BAF3A /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 438C954C149BD290001BAF3A /* map2preview */;
+			remoteGlobalIDString = 438C954C149BD290001BAF3A;
 			remoteInfo = map2preview;
 		};
 		438C9627149BDCE7001BAF3A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 438C94F2149BD20F001BAF3A /* Warzone.xcodeproj */;
 			proxyType = 1;
-			remoteGlobalIDString = 43FA570C10FF8E9B0074E914 /* Setup Prebuilt Components */;
+			remoteGlobalIDString = 43FA570C10FF8E9B0074E914;
 			remoteInfo = "Setup Prebuilt Components";
 		};
 		438C9629149BDCFF001BAF3A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 438C94F2149BD20F001BAF3A /* Warzone.xcodeproj */;
 			proxyType = 1;
-			remoteGlobalIDString = 43FA570C10FF8E9B0074E914 /* Setup Prebuilt Components */;
+			remoteGlobalIDString = 43FA570C10FF8E9B0074E914;
 			remoteInfo = "Setup Prebuilt Components";
 		};
 		438C962B149BDD16001BAF3A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 438C94F2149BD20F001BAF3A /* Warzone.xcodeproj */;
 			proxyType = 1;
-			remoteGlobalIDString = 43FA570C10FF8E9B0074E914 /* Setup Prebuilt Components */;
+			remoteGlobalIDString = 43FA570C10FF8E9B0074E914;
 			remoteInfo = "Setup Prebuilt Components";
 		};
 		438C962D149BDD21001BAF3A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 438C94F2149BD20F001BAF3A /* Warzone.xcodeproj */;
 			proxyType = 1;
-			remoteGlobalIDString = 43FA570C10FF8E9B0074E914 /* Setup Prebuilt Components */;
+			remoteGlobalIDString = 43FA570C10FF8E9B0074E914;
 			remoteInfo = "Setup Prebuilt Components";
 		};
 		438C962F149BDD2D001BAF3A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 438C94F2149BD20F001BAF3A /* Warzone.xcodeproj */;
 			proxyType = 1;
-			remoteGlobalIDString = 43FA570C10FF8E9B0074E914 /* Setup Prebuilt Components */;
+			remoteGlobalIDString = 43FA570C10FF8E9B0074E914;
 			remoteInfo = "Setup Prebuilt Components";
+		};
+		43E7FE5714F97D8000D419C5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 438C94F2149BD20F001BAF3A /* Warzone.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 43CCDD1B14BA474E00B21363;
+			remoteInfo = Fribidi;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -430,13 +430,13 @@
 				438C957A149BD2ED001BAF3A /* MiniUPnPc.framework */,
 				438C957C149BD2ED001BAF3A /* GLExtensionWrangler.framework */,
 				438C957E149BD2ED001BAF3A /* Zlib.framework */,
+				43E7FE5814F97D8000D419C5 /* fribidi.framework */,
 				438C9580149BD2ED001BAF3A /* Ogg.framework */,
 				438C9582149BD2ED001BAF3A /* Png.framework */,
 				438C9584149BD2ED001BAF3A /* PhysFS.framework */,
 				438C9586149BD2ED001BAF3A /* Vorbis.framework */,
 				438C9588149BD2ED001BAF3A /* Gettext.framework */,
 				438C958A149BD2ED001BAF3A /* Theora.framework */,
-				438C958C149BD2ED001BAF3A /* QJson.framework */,
 				438C958E149BD2ED001BAF3A /* QuesoGLC.framework */,
 			);
 			name = Products;
@@ -664,18 +664,18 @@
 			remoteRef = 438C9589149BD2ED001BAF3A /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		438C958C149BD2ED001BAF3A /* QJson.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = QJson.framework;
-			remoteRef = 438C958B149BD2ED001BAF3A /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
 		438C958E149BD2ED001BAF3A /* QuesoGLC.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
 			path = QuesoGLC.framework;
 			remoteRef = 438C958D149BD2ED001BAF3A /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		43E7FE5814F97D8000D419C5 /* fribidi.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = fribidi.framework;
+			remoteRef = 43E7FE5714F97D8000D419C5 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */

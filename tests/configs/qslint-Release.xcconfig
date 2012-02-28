@@ -1,0 +1,14 @@
+// qslint settings for Release configuration
+
+#include "qslint-All.xcconfig"
+
+
+GCC_OPTIMIZATION_LEVEL = 2
+BUILD_PREPROCESSOR_DEFINITIONS = $(inherited)
+
+BuildDependentFlagsForCandCpp = -fstack-protector
+
+// Build setting dependent warnings
+WarnForCandCppDep = -Wno-unused-parameter -Wno-format-security -Wno-sign-compare
+WarnForCDep = 
+WarnForCppDep = // -Wno-enum-compare // not currently supported by compiler

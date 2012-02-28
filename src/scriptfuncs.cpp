@@ -1093,7 +1093,8 @@ bool scrAddDroidToMissionList(void)
 
 #ifdef SCRIPT_CHECK_MAX_UNITS
 	// Don't build a new droid if player limit reached, unless it's a transporter.
-	if( IsPlayerDroidLimitReached(player) && (psTemplate->droidType != DROID_TRANSPORTER) ) {
+	if( IsPlayerDroidLimitReached(player) && (psTemplate->droidType != DROID_TRANSPORTER && psTemplate->droidType != DROID_SUPERTRANSPORTER))
+	{
 		debug( LOG_NEVER, "scrAddUnit : Max units reached ,player %d\n", player );
 		psDroid = NULL;
 	} else
@@ -1134,7 +1135,8 @@ bool scrAddDroid(void)
 
 #ifdef SCRIPT_CHECK_MAX_UNITS
 	// Don't build a new droid if player limit reached, unless it's a transporter.
-	if( IsPlayerDroidLimitReached(player) && (psTemplate->droidType != DROID_TRANSPORTER) ) {
+	if( IsPlayerDroidLimitReached(player) && (psTemplate->droidType != DROID_TRANSPORTER && psTemplate->droidType != DROID_SUPERTRANSPORTER) )
+	{
 		debug( LOG_NEVER, "scrAddUnit : Max units reached ,player %d\n", player );
 		psDroid = NULL;
 	} else
@@ -1186,7 +1188,7 @@ bool scrAddDroidToTransporter(void)
 
 	ASSERT(psTransporter != NULL, "scrAddUnitToTransporter: invalid transporter pointer");
 	ASSERT(psDroid != NULL, "scrAddUnitToTransporter: invalid unit pointer");
-	ASSERT(psTransporter->droidType == DROID_TRANSPORTER, "scrAddUnitToTransporter: invalid transporter type");
+	ASSERT((psTransporter->droidType == DROID_TRANSPORTER || psTransporter->droidType == DROID_SUPERTRANSPORTER), "scrAddUnitToTransporter: invalid transporter type");
 
 	/* check for space */
 	if (checkTransporterSpace(psTransporter, psDroid))
@@ -4660,7 +4662,7 @@ bool scrSetReinforcementTime(void)
         for (psDroid = apsDroidLists[selectedPlayer]; psDroid != NULL; psDroid =
             psDroid->psNext)
         {
-            if (psDroid->droidType == DROID_TRANSPORTER)
+            if (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER)
             {
                 break;
             }
@@ -7042,9 +7044,9 @@ bool ThreatInRange(SDWORD player, SDWORD range, SDWORD rangeX, SDWORD rangeY, bo
 		}
 
 		//check droids
-		for(psDroid = apsDroidLists[i]; psDroid; psDroid = psDroid->psNext)
+		for (psDroid = apsDroidLists[i]; psDroid; psDroid = psDroid->psNext)
 		{
-			if(psDroid->visible[player])		//can see this droid?
+			if (psDroid->visible[player])		//can see this droid?
 			{
 				if (!objHasWeapon((BASE_OBJECT *)psDroid))
 				{
@@ -7052,7 +7054,7 @@ bool ThreatInRange(SDWORD player, SDWORD range, SDWORD rangeX, SDWORD rangeY, bo
 				}
 
 				//if VTOLs are excluded, skip them
-				if(!bVTOLs && ((asPropulsionStats[psDroid->asBits[COMP_PROPULSION].nStat].propulsionType == PROPULSION_TYPE_LIFT) || (psDroid->droidType == DROID_TRANSPORTER)))
+				if (!bVTOLs && ((asPropulsionStats[psDroid->asBits[COMP_PROPULSION].nStat].propulsionType == PROPULSION_TYPE_LIFT) || (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER)))
 				{
 					continue;
 				}
@@ -7622,15 +7624,12 @@ bool scrFriendlyWeapObjCostInRange(void)
 static UDWORD costOrAmountInRange(SDWORD player, SDWORD lookingPlayer, SDWORD range,
 								   SDWORD rangeX, SDWORD rangeY, bool bVTOLs, bool justCount)
 {
-	UDWORD				droidCost;
-	DROID				*psDroid;
-
-	droidCost = 0;
+	UDWORD	droidCost = 0;
 
 	//check droids
-	for(psDroid = apsDroidLists[player]; psDroid; psDroid = psDroid->psNext)
+	for (DROID *psDroid = apsDroidLists[player]; psDroid; psDroid = psDroid->psNext)
 	{
-		if(psDroid->visible[lookingPlayer])		//can see this droid?
+		if (psDroid->visible[lookingPlayer])		//can see this droid?
 		{
 			if (!objHasWeapon((BASE_OBJECT *)psDroid))
 			{
@@ -7638,7 +7637,7 @@ static UDWORD costOrAmountInRange(SDWORD player, SDWORD lookingPlayer, SDWORD ra
 			}
 
 			//if VTOLs are excluded, skip them
-			if(!bVTOLs && ((asPropulsionStats[psDroid->asBits[COMP_PROPULSION].nStat].propulsionType == PROPULSION_TYPE_LIFT) || (psDroid->droidType == DROID_TRANSPORTER)))
+			if (!bVTOLs && ((asPropulsionStats[psDroid->asBits[COMP_PROPULSION].nStat].propulsionType == PROPULSION_TYPE_LIFT) || (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER)))
 			{
 				continue;
 			}
@@ -8036,7 +8035,7 @@ UDWORD numEnemyObjInRange(SDWORD player, SDWORD range, SDWORD rangeX, SDWORD ran
 				//if VTOLs are excluded, skip them
 				if (!bVTOLs
 				 && (asPropulsionStats[psDroid->asBits[COMP_PROPULSION].nStat].propulsionType == PROPULSION_TYPE_LIFT
-				  || psDroid->droidType == DROID_TRANSPORTER))
+				  || psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER))
 				{
 					continue;
 				}
@@ -8533,18 +8532,18 @@ bool scrGetClosestEnemy(void)
 
 	bestDist = 99999;
 
-	for(i=0;i<MAX_PLAYERS;i++)
+	for (i=0;i<MAX_PLAYERS;i++)
 	{
-		if((alliances[player][i] == ALLIANCE_FORMED) || (i == player))
+		if ((alliances[player][i] == ALLIANCE_FORMED) || (i == player))
 		{
 			continue;
 		}
 
 
 		//check droids
-		for(psDroid = apsDroidLists[i]; psDroid; psDroid = psDroid->psNext)
+		for (psDroid = apsDroidLists[i]; psDroid; psDroid = psDroid->psNext)
 		{
-			if(psDroid->visible[player])		//can see this droid?
+			if (psDroid->visible[player])		//can see this droid?
 			{
 				//if only weapon droids and don't have it, then skip
 				if (weaponOnly && !objHasWeapon((BASE_OBJECT *)psDroid))
@@ -8553,13 +8552,13 @@ bool scrGetClosestEnemy(void)
 				}
 
 				//if VTOLs are excluded, skip them
-				if(!bVTOLs && ((asPropulsionStats[psDroid->asBits[COMP_PROPULSION].nStat].propulsionType == PROPULSION_TYPE_LIFT) || (psDroid->droidType == DROID_TRANSPORTER)))
+				if (!bVTOLs && ((asPropulsionStats[psDroid->asBits[COMP_PROPULSION].nStat].propulsionType == PROPULSION_TYPE_LIFT) || (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER)))
 				{
 					continue;
 				}
 
 				dist = world_coord(hypotf(tx - map_coord(psDroid->pos.x), ty - map_coord(psDroid->pos.y)));
-				if(dist < bestDist)
+				if (dist < bestDist)
 				{
 					if((range < 0) || (dist < range))	//enemy in range
 					{
@@ -8573,20 +8572,20 @@ bool scrGetClosestEnemy(void)
 
 
 		//check structures
-		for(psStruct = apsStructLists[i]; psStruct; psStruct=psStruct->psNext)
+		for (psStruct = apsStructLists[i]; psStruct; psStruct=psStruct->psNext)
 		{
-			if(psStruct->visible[player])	//if can see it
+			if (psStruct->visible[player])	//if can see it
 			{
 				//only need defenses?
-				if(weaponOnly && (!objHasWeapon((BASE_OBJECT *) psStruct) || (psStruct->status != SS_BUILT) ))	//non-weapon-structures	or not finished
+				if (weaponOnly && (!objHasWeapon((BASE_OBJECT *) psStruct) || (psStruct->status != SS_BUILT) ))	//non-weapon-structures	or not finished
 				{
 					continue;
 				}
 
 				dist = world_coord(hypotf(tx - map_coord(psStruct->pos.x), ty - map_coord(psStruct->pos.y)));
-				if(dist < bestDist)
+				if (dist < bestDist)
 				{
-					if((range < 0) || (dist < range))	//in range
+					if ((range < 0) || (dist < range))	//in range
 					{
 						bestDist = dist;
 						bFound = true;
@@ -8598,7 +8597,7 @@ bool scrGetClosestEnemy(void)
 
 	}
 
-	if(bFound)
+	if (bFound)
 	{
 		scrFunctionResult.v.oval = psObj;
 		if (!stackPushResult((INTERP_TYPE)ST_BASEOBJECT, &scrFunctionResult))
@@ -8635,7 +8634,7 @@ bool scrTransporterCapacity(void)
 		return false;
 	}
 
-	if(psDroid->droidType != DROID_TRANSPORTER)
+	if(psDroid->droidType != DROID_TRANSPORTER && psDroid->droidType != DROID_SUPERTRANSPORTER)
 	{
 		debug(LOG_ERROR, "scrTransporterCapacity(): passed droid is not a transporter");
 		return false;
@@ -8668,7 +8667,7 @@ bool scrTransporterFlying(void)
 		return false;
 	}
 
-	if(psDroid->droidType != DROID_TRANSPORTER)
+	if(psDroid->droidType != DROID_TRANSPORTER && psDroid->droidType != DROID_SUPERTRANSPORTER)
 	{
 		debug(LOG_ERROR,"scrTransporterFlying(): passed droid is not a transporter");
 		return false;
@@ -8701,7 +8700,7 @@ bool scrUnloadTransporter(void)
 		return false;
 	}
 
-	if(psDroid->droidType != DROID_TRANSPORTER)
+	if(psDroid->droidType != DROID_TRANSPORTER && psDroid->droidType != DROID_SUPERTRANSPORTER)
 	{
 		debug(LOG_ERROR,"scrUnloadTransporter(): passed droid is not a transporter");
 		return false;

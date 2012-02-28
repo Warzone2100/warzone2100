@@ -883,6 +883,7 @@ static QScriptValue js_addDroid(QScriptContext *context, QScriptEngine *engine)
 		case DROID_WEAPON:
 		case DROID_CYBORG:
 		case DROID_TRANSPORTER:
+		case DROID_SUPERTRANSPORTER:
 		case DROID_DEFAULT:
 		case DROID_CYBORG_SUPER:
 			j = getCompFromName(COMP_WEAPON, context->argument(8 + i).toString().toUtf8().constData());
@@ -1503,7 +1504,7 @@ static QScriptValue js_groupAddArea(QScriptContext *context, QScriptEngine *engi
 	for (DROID *psDroid = apsDroidLists[player]; psGroup && psDroid; psDroid = psDroid->psNext)
 	{
 		if (psDroid->pos.x >= x1 && psDroid->pos.x <= x2 && psDroid->pos.y >= y1 && psDroid->pos.y <= y2
-		    && psDroid->droidType != DROID_COMMAND && psDroid->droidType != DROID_TRANSPORTER)
+		    && psDroid->droidType != DROID_COMMAND && (psDroid->droidType != DROID_TRANSPORTER && psDroid->droidType != DROID_SUPERTRANSPORTER))
 		{
 			psGroup->add(psDroid);
 		}
@@ -1697,7 +1698,7 @@ static QScriptValue js_setReinforcementTime(QScriptContext *context, QScriptEngi
 		 * time to -1 at the between stage if there are not going to be reinforcements on the submap  */
 		for (psDroid = apsDroidLists[selectedPlayer]; psDroid != NULL; psDroid = psDroid->psNext)
 		{
-			if (psDroid->droidType == DROID_TRANSPORTER)
+			if (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER)
 			{
 				break;
 			}
@@ -2379,6 +2380,7 @@ bool registerFunctions(QScriptEngine *engine)
 	engine->globalObject().setProperty("DROID_ECM", DROID_ECM, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("DROID_CYBORG", DROID_CYBORG, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("DROID_TRANSPORTER", DROID_TRANSPORTER, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("DROID_SUPERTRANSPORTER", DROID_SUPERTRANSPORTER, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("DROID_COMMAND", DROID_COMMAND, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("HQ", REF_HQ, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("FACTORY", REF_FACTORY, QScriptValue::ReadOnly | QScriptValue::Undeletable);

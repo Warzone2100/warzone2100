@@ -529,7 +529,7 @@ static void fpathExecute(PATHJOB *psJob, PATHRESULT *psResult)
 	case ASR_FAILED:
 		objTrace(psJob->droidID, "** Failed route **");
 		// Is this really a good idea? Was in original code.
-		if (psJob->propulsion == PROPULSION_TYPE_LIFT && psJob->droidType != DROID_TRANSPORTER)
+		if (psJob->propulsion == PROPULSION_TYPE_LIFT && (psJob->droidType != DROID_TRANSPORTER && psJob->droidType != DROID_SUPERTRANSPORTER))
 		{
 			objTrace(psJob->droidID, "Doing fallback for non-transport VTOL");
 			fpathSetMove(&psResult->sMove, psJob->destX, psJob->destY);

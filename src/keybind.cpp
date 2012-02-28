@@ -349,7 +349,7 @@ void	kf_CloneSelected( void )
 			}
 			psNewDroid->experience = psDroid->experience;
 			psNewDroid->rot.direction = psDroid->rot.direction;
-			if (!(psNewDroid->droidType == DROID_PERSON || cyborgDroid(psNewDroid) || psNewDroid->droidType == DROID_TRANSPORTER))
+			if (!(psNewDroid->droidType == DROID_PERSON || cyborgDroid(psNewDroid) || psNewDroid->droidType == DROID_TRANSPORTER || psNewDroid->droidType == DROID_SUPERTRANSPORTER))
 			{
 				updateDroidOrientation(psNewDroid);
 			}

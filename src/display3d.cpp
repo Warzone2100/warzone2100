@@ -2727,7 +2727,7 @@ void renderShadow( DROID *psDroid, iIMDShape *psShadowIMD )
 	Vector3i dv;
 
 	dv.x = psDroid->pos.x - player.p.x;
-	if(psDroid->droidType == DROID_TRANSPORTER)
+	if(psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER)
 	{
 		dv.x -= bobTransporterHeight()/2;
 	}
@@ -3596,7 +3596,7 @@ void calcScreenCoords(DROID *psDroid)
 	const int cZ = pie_RotateProject(&origin, &center);
 
 	// TODO: compute the droid's radius (using min/max for x,y,z)
-	if(psDroid->droidType == DROID_TRANSPORTER)
+	if (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER)
 	{
 		radius = 45;
 	}
@@ -3618,7 +3618,7 @@ void calcScreenCoords(DROID *psDroid)
 		{
 			//don't allow Transporter Droids to be selected here
 			//unless we're in multiPlayer mode!!!!
-			if (psDroid->droidType != DROID_TRANSPORTER || bMultiPlayer)
+			if ((psDroid->droidType != DROID_TRANSPORTER && psDroid->droidType != DROID_SUPERTRANSPORTER) || bMultiPlayer)
 			{
 				dealWithDroidSelect(psDroid, true);
 			}
