@@ -5709,7 +5709,7 @@ bool validTemplateForFactory(DROID_TEMPLATE *psTemplate, STRUCTURE *psFactory)
 	if (!bMultiPlayer)
 	{
 		//ignore Transporter Droids
-		if (psTemplate->droidType == DROID_TRANSPORTER)
+		if (psTemplate->droidType == DROID_TRANSPORTER || psTemplate->droidType == DROID_SUPERTRANSPORTER)
 		{
 			return false;
 		}

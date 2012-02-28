@@ -188,6 +188,7 @@ int32_t droidDamage(DROID *psDroid, unsigned damage, WEAPON_CLASS weaponClass, W
 	else if (relativeDamage < 0)
 	{
 		// HACK: Prevent transporters from being destroyed in single player
+		// FIXME: When we fix campaign scripts to use DROID_SUPERTRANSPORTER
 		if ((game.type == CAMPAIGN) && !bMultiPlayer && (psDroid->droidType == DROID_TRANSPORTER))
 		{
 			debug(LOG_ATTACK, "Transport(%d) saved from death--since it should never die (SP only)", psDroid->id);

@@ -1986,8 +1986,7 @@ void replaceTransDroidComponents(DROID *psTransporter, UDWORD oldType,
 {
     DROID       *psCurr;
 
-    ASSERT( psTransporter->droidType == DROID_TRANSPORTER,
-        "replaceTransUnitComponents: invalid unit type" );
+    ASSERT ((psTransporter->droidType == DROID_TRANSPORTER || psTransporter->droidType == DROID_SUPERTRANSPORTER), "invalid unit type" );
 
     for (psCurr = psTransporter->psGroup->psList; psCurr != NULL; psCurr =
         psCurr->psGrpNext)

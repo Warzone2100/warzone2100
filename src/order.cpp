@@ -792,11 +792,9 @@ void orderUpdateDroid(DROID *psDroid)
 			DROID *temp = NULL;
 
 			temp = (DROID*)psDroid->order.psObj;
-			if ((temp->droidType == DROID_TRANSPORTER) && !cyborgDroid(psDroid))
+			// FIXME: since we now have 2 transporter types, we should fix this in the scripts for campaign
+			if ((temp->droidType == DROID_TRANSPORTER) && !cyborgDroid(psDroid) && game.type != CAMPAIGN && bMultiPlayer)
 			{
-				// NOTE: since we only have one type of transport (DROID_TRANSPORT), it isn't worth changing tons of code
-				// to have two types available (DROID_TRANSPORT_SUPER), so we just check the name which can never be
-				// renamed anyway, so we should be safe with this kludge.
 				psDroid->order = DroidOrder(DORDER_NONE);
 				actionDroid(psDroid, DACTION_NONE);
 				audio_PlayTrack( ID_SOUND_BUILD_FAIL );
@@ -1483,8 +1481,9 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		else if (psOrder->psObj && !psOrder->psObj->died)
 		{
 			//cannot attack a Transporter with EW in multiPlayer
+			// FIXME: Why not ?
 			if (game.type == SKIRMISH && electronicDroid(psDroid)
-			    && psOrder->psObj->type == OBJ_DROID && ((DROID *)psOrder->psObj)->droidType == DROID_TRANSPORTER)
+			    && psOrder->psObj->type == OBJ_DROID && (((DROID *)psOrder->psObj)->droidType == DROID_TRANSPORTER || ((DROID *)psOrder->psObj)->droidType == DROID_SUPERTRANSPORTER))
 			{
 				break;
 			}
@@ -2491,6 +2490,7 @@ void orderSelectedLoc(uint32_t player, uint32_t x, uint32_t y, bool add)
 		if (psCurr->selected)
 		{
 			// can't use bMultiPlayer since multimsg could be off.
+			// FIXME: Fix this for DROID_SUPERTRANSPORTER when we fix campaign scripts
 			if (psCurr->droidType == DROID_TRANSPORTER && game.type == CAMPAIGN)
 			{
 				// Transport in campaign cannot be controlled by players

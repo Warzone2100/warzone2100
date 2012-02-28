@@ -69,13 +69,13 @@ enum DROID_TYPE
 	DROID_PERSON,           ///< person
 	DROID_CYBORG,           ///< cyborg-type thang
 	DROID_TRANSPORTER,      ///< guess what this is!
-	DROID_SUPERTRANSPORTER,		///< SuperTransport (MP)
 	DROID_COMMAND,          ///< Command droid
 	DROID_REPAIR,           ///< Repair droid
 	DROID_DEFAULT,          ///< Default droid
 	DROID_CYBORG_CONSTRUCT, ///< cyborg constructor droid - new for update 28/5/99
 	DROID_CYBORG_REPAIR,    ///< cyborg repair droid - new for update 28/5/99
 	DROID_CYBORG_SUPER,     ///< cyborg repair droid - new for update 7/6/99
+	DROID_SUPERTRANSPORTER,	///< SuperTransport (MP)
 	DROID_ANY,              ///< Any droid. Only used as a parameter for intGotoNextDroidType(DROID_TYPE).
 };
 

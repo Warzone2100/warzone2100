@@ -779,7 +779,7 @@ BASE_OBJECT *getBaseObjFromData(unsigned id, unsigned player, OBJECT_TYPE type)
 				return psObj;
 			}
 			// if transporter check any droids in the grp
-			if ((psObj->type == OBJ_DROID) && (((DROID*)psObj)->droidType == DROID_TRANSPORTER))
+			if ((psObj->type == OBJ_DROID) && ((((DROID*)psObj)->droidType == DROID_TRANSPORTER || ((DROID*)psObj)->droidType == DROID_SUPERTRANSPORTER)))
 			{
 				for(psTrans = ((DROID*)psObj)->psGroup->psList; psTrans != NULL; psTrans = psTrans->psGrpNext)
 				{
@@ -865,7 +865,7 @@ BASE_OBJECT *getBaseObjFromId(UDWORD id)
 					return psObj;
 				}
 				// if transporter check any droids in the grp
-				if ((psObj->type == OBJ_DROID) && (((DROID*)psObj)->droidType == DROID_TRANSPORTER))
+				if ((psObj->type == OBJ_DROID) && ((((DROID*)psObj)->droidType == DROID_TRANSPORTER || ((DROID*)psObj)->droidType == DROID_SUPERTRANSPORTER)))
 				{
 					for(psTrans = ((DROID*)psObj)->psGroup->psList; psTrans != NULL; psTrans = psTrans->psGrpNext)
 					{

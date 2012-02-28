@@ -237,7 +237,7 @@ static void sendGiftDroids(uint8_t from, uint8_t to)
 
 	for (psD = apsDroidLists[from]; psD && totalToSend != 0; psD = psD->psNext)
 	{
-		if (psD->droidType == DROID_TRANSPORTER
+		if ((psD->droidType == DROID_TRANSPORTER || psD->droidType == DROID_SUPERTRANSPORTER)
 		 && !transporterIsEmpty(psD))
 		{
 			CONPRINTF(ConsoleString, (ConsoleString, _("Tried to give away a non-empty %s - but this is not allowed."), psD->aName));

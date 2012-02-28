@@ -1188,7 +1188,7 @@ bool scrAddDroidToTransporter(void)
 
 	ASSERT(psTransporter != NULL, "scrAddUnitToTransporter: invalid transporter pointer");
 	ASSERT(psDroid != NULL, "scrAddUnitToTransporter: invalid unit pointer");
-	ASSERT(psTransporter->droidType == DROID_TRANSPORTER, "scrAddUnitToTransporter: invalid transporter type");
+	ASSERT((psTransporter->droidType == DROID_TRANSPORTER || psTransporter->droidType == DROID_SUPERTRANSPORTER), "scrAddUnitToTransporter: invalid transporter type");
 
 	/* check for space */
 	if (checkTransporterSpace(psTransporter, psDroid))

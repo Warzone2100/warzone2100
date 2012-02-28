@@ -1149,7 +1149,7 @@ static void moveCalcDroidSlide(DROID *psDroid, int *pmx, int *pmy)
 	{
 		if (psObj->type == OBJ_DROID)
 		{
-			if (((DROID *)psObj)->droidType == DROID_TRANSPORTER)
+			if (((DROID *)psObj)->droidType == DROID_TRANSPORTER || ((DROID *)psObj)->droidType == DROID_SUPERTRANSPORTER)
 			{
 				// ignore transporters
 				continue;
@@ -1270,7 +1270,7 @@ static Vector2i moveGetObstacleVector(DROID *psDroid, Vector2i dest)
 			continue;
 		}
 
-		if (psObstacle->droidType == DROID_TRANSPORTER ||
+		if ((psObstacle->droidType == DROID_TRANSPORTER || psObstacle->droidType == DROID_SUPERTRANSPORTER) ||
 		    (psObstacle->droidType == DROID_PERSON &&
 		     psObstacle->player != psDroid->player))
 		{

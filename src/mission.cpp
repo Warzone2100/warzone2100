@@ -671,6 +671,7 @@ void missionFlyTransportersIn( SDWORD iPlayer, bool bTrackTransporter )
 		NULL; psTransporter = psNext)
 	{
 		psNext = psTransporter->psNext;
+		// FIXME: When we convert campaign scripts to use DROID_SUPERTRANSPORTER
 		if (psTransporter->droidType == DROID_TRANSPORTER)
 		{
 			// Check that this transporter actually contains some droids
@@ -1909,7 +1910,7 @@ void missionMoveTransporterOffWorld( DROID *psTransporter )
 {
     W_CLICKFORM     *psForm;
     DROID           *psDroid;
-
+	// FIXME: When we convert campaign scripts, use DROID_SUPERTRANSPORTER
 	if (psTransporter->droidType == DROID_TRANSPORTER)
 	{
     	/* trigger script callback */
