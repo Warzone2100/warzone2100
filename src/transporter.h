@@ -48,7 +48,7 @@ extern void intProcessTransporter(UDWORD id);
 extern void transporterAddDroid(DROID *psTransporter, DROID *psDroidToAdd);
 void transporterRemoveDroid(DROID *psTransport, DROID *psDroid, QUEUE_MODE mode);
 /*check to see if the droid can fit on the Transporter - return true if fits*/
-extern bool checkTransporterSpace(DROID *psTransporter, DROID *psAssigned);
+bool checkTransporterSpace(DROID const *psTransporter, DROID const *psAssigned, bool mayFlash = true);
 /*calculates how much space is remaining on the transporter - allows droids to take
 up different amount depending on their body size - currently all are set to one!*/
 extern UDWORD calcRemainingCapacity(DROID *psTransporter);

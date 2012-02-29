@@ -56,9 +56,7 @@ extern UDWORD realTime;
 #define gameTime2 realTime
 
 /// The difference between the previous and current gameTime.
-/// FIXME This should be renamed from frameTime to deltaGameTime.
 extern UDWORD deltaGameTime;
-#define frameTime deltaGameTime
 /// The difference between the previous and current graphicsTime.
 extern UDWORD deltaGraphicsTime;
 /// The difference between the previous and current realTime.

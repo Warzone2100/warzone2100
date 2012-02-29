@@ -402,7 +402,7 @@ bool removeFeature(FEATURE *psDel)
 		pos.x = psDel->pos.x;
 		pos.z = psDel->pos.y;
 		pos.y = map_Height(pos.x, pos.z) + 30;
-		addEffect(&pos, EFFECT_EXPLOSION, EXPLOSION_TYPE_DISCOVERY, false, NULL, 0, gameTime - deltaGameTime);
+		addEffect(&pos, EFFECT_EXPLOSION, EXPLOSION_TYPE_DISCOVERY, false, NULL, 0, gameTime - deltaGameTime + 1);
 		if (psDel->psStats->subType == FEAT_GEN_ARTE)
 		{
 			scoreUpdateVar(WD_ARTEFACTS_FOUND);

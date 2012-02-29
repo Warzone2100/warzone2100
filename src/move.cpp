@@ -324,12 +324,10 @@ void moveTurnDroid(DROID *psDroid, UDWORD x, UDWORD y)
 // Tell a droid to move out the way for a shuffle
 static void moveShuffleDroid(DROID *psDroid, Vector2i s)
 {
-	DROID	*psCurr;
 	SDWORD  mx, my;
 	bool	frontClear = true, leftClear = true, rightClear = true;
 	SDWORD	lvx,lvy, rvx,rvy, svx,svy;
 	SDWORD	shuffleMove;
-	SDWORD	tarX,tarY;
 
 	CHECK_DROID(psDroid);
 
@@ -344,14 +342,14 @@ static void moveShuffleDroid(DROID *psDroid, Vector2i s)
 	shuffleMove = SHUFFLE_MOVE;
 
 	// calculate the possible movement vectors
-	lvx = -s.y * shuffleMove / shuffleMag;
-	lvy = s.x * shuffleMove / shuffleMag;
+	svx = s.x * shuffleMove / shuffleMag;  // Straight in the direction of s.
+	svy = s.y * shuffleMove / shuffleMag;
 
-	rvx = s.y * shuffleMove / shuffleMag;
-	rvy = -s.x * shuffleMove / shuffleMag;
+	lvx = -svy;  // 90° to the... right?
+	lvy = svx;
 
-	svx = lvy; // sx * SHUFFLE_MOVE / shuffleMag;
-	svy = rvx; // sy * SHUFFLE_MOVE / shuffleMag;
+	rvx = svy;   // 90° to the... left?
+	rvy = -svx;
 
 	// check for blocking tiles
 	if (fpathBlockingTile(map_coord((SDWORD)psDroid->pos.x + lvx),
@@ -371,26 +369,24 @@ static void moveShuffleDroid(DROID *psDroid, Vector2i s)
 	}
 
 	// find any droids that could block the shuffle
-	// TODO Use mapgrid.h iterator.
-	for(psCurr=apsDroidLists[psDroid->player]; psCurr; psCurr=psCurr->psNext)
+	gridStartIterate(psDroid->pos.x, psDroid->pos.y, SHUFFLE_DIST);
+	for (BASE_OBJECT *psCurr_ = gridIterate(); psCurr_ != NULL; psCurr_ = gridIterate())
 	{
-		if (psCurr != psDroid)
+		DROID *psCurr = castDroid(psCurr_);
+		if (psCurr == NULL || psCurr->died || psCurr == psDroid)
 		{
-			int32_t xdiff = psCurr->pos.x - psDroid->pos.x;
-			int32_t ydiff = psCurr->pos.y - psDroid->pos.y;
-			if (abs(xdiff) < SHUFFLE_DIST && abs(ydiff) < SHUFFLE_DIST && xdiff*xdiff + ydiff*ydiff < SHUFFLE_DIST*SHUFFLE_DIST)
-			{
-				uint16_t droidDir = iAtan2(xdiff, ydiff);
-				int diff = angleDelta(shuffleDir - droidDir);
-				if (diff > -DEG(135) && diff < -DEG(45))
-				{
-					leftClear = false;
-				}
-				else if (diff > DEG(45) && diff < DEG(135))
-				{
-					rightClear = false;
-				}
-			}
+			continue;
+		}
+
+		uint16_t droidDir = iAtan2(removeZ(psCurr->pos - psDroid->pos));
+		int diff = angleDelta(shuffleDir - droidDir);
+		if (diff > -DEG(135) && diff < -DEG(45))
+		{
+			leftClear = false;
+		}
+		else if (diff > DEG(45) && diff < DEG(135))
+		{
+			rightClear = false;
 		}
 	}
 
@@ -417,11 +413,10 @@ static void moveShuffleDroid(DROID *psDroid, Vector2i s)
 	}
 
 	// check the location for vtols
-	tarX = (SDWORD)psDroid->pos.x + mx;
-	tarY = (SDWORD)psDroid->pos.y + my;
+	Vector2i tar = removeZ(psDroid->pos) + Vector2i(mx, my);
 	if (isVtolDroid(psDroid))
 	{
-		actionVTOLLandingPos(psDroid, (UDWORD *)&tarX,(UDWORD *)&tarY);
+		actionVTOLLandingPos(psDroid, &tar);
 	}
 
 
@@ -432,8 +427,7 @@ static void moveShuffleDroid(DROID *psDroid, Vector2i s)
 	}
 	psDroid->sMove.Status = MOVESHUFFLE;
 	psDroid->sMove.src = removeZ(psDroid->pos);
-	psDroid->sMove.target.x = tarX;
-	psDroid->sMove.target.y = tarY;
+	psDroid->sMove.target = tar;
 	psDroid->sMove.numPoints = 0;
 	psDroid->sMove.pathIndex = 0;
 
@@ -627,21 +621,6 @@ static bool moveNextTarget(DROID *psDroid)
 
 	CHECK_DROID(psDroid);
 	return true;
-}
-
-/* Look at the next target point from the route */
-static Vector2i movePeekNextTarget(DROID *psDroid)
-{
-	// See if there is anything left in the move list
-	if (psDroid->sMove.pathIndex == psDroid->sMove.numPoints)
-	{
-		// No points left - fudge one to continue the same direction
-		return psDroid->sMove.target*2 - psDroid->sMove.src;
-	}
-	else
-	{
-		return psDroid->sMove.asPath[psDroid->sMove.pathIndex];
-	}
 }
 
 // Watermelon:fix these magic number...the collision radius should be based on pie imd radius not some static int's...
@@ -1373,19 +1352,12 @@ static bool moveReachedWayPoint(DROID *psDroid)
 	// Calculate the vector to the droid
 	const Vector2i droid = removeZ(psDroid->pos) - psDroid->sMove.target;
 	const bool last = psDroid->sMove.pathIndex == psDroid->sMove.numPoints;
-	const int sqprecision = last ? ((TILE_UNITS / 4) * (TILE_UNITS / 4)) : ((TILE_UNITS / 2) * (TILE_UNITS / 2));
+	int sqprecision = last ? ((TILE_UNITS / 4) * (TILE_UNITS / 4)) : ((TILE_UNITS / 2) * (TILE_UNITS / 2));
 
-	// See if we have reached the next waypoint - occasionally happens due to bumping
-	if (!last)
+	if (last && psDroid->sMove.bumpTime != 0)
 	{
-		const int nsqprecision = (TILE_UNITS / 2) * (TILE_UNITS / 2);
-		const Vector2i next = movePeekNextTarget(psDroid); 
-		const Vector2i ndroid = removeZ(psDroid->pos) - next; 
-
-		if (ndroid*ndroid < nsqprecision)
-		{
-			return true;
-		}
+		// Make waypoint tolerance 1 tile after 0 seconds, 2 tiles after 3 seconds, X tiles after (X + 1)² seconds.
+		sqprecision = (gameTime - psDroid->sMove.bumpTime + GAME_TICKS_PER_SEC)*(TILE_UNITS*TILE_UNITS / GAME_TICKS_PER_SEC);
 	}
 
 	// Else check current waypoint
@@ -2507,7 +2479,19 @@ void moveUpdateDroid(DROID *psDroid)
 				// No more waypoints - finish
 				if ( psPropStats->propulsionType == PROPULSION_TYPE_LIFT )
 				{
-					psDroid->sMove.Status = MOVEHOVER;
+					// check the location for vtols
+					Vector2i tar = removeZ(psDroid->pos);
+					if (psDroid->order.type != DORDER_PATROL && psDroid->order.type != DORDER_CIRCLE  // Not doing an order which means we never land (which means we might want to land).
+					    && actionVTOLLandingPos(psDroid, &tar)  // Can find a sensible place to land.
+					    && map_coord(tar) != map_coord(psDroid->sMove.destination))  // We're not at the right place to land.
+					{
+						psDroid->sMove.destination = tar;
+						moveDroidTo(psDroid, psDroid->sMove.destination.x, psDroid->sMove.destination.y);
+					}
+					else
+					{
+						psDroid->sMove.Status = MOVEHOVER;
+					}
 				}
 				else
 				{
@@ -2648,7 +2632,7 @@ void moveUpdateDroid(DROID *psDroid)
 		pos.x = psDroid->pos.x + (18-rand()%36);
 		pos.z = psDroid->pos.y + (18-rand()%36);
 		pos.y = psDroid->pos.z + (psDroid->sDisplay.imd->max.y / 3);
-		addEffect(&pos, EFFECT_EXPLOSION, EXPLOSION_TYPE_SMALL, false, NULL, 0, gameTime - deltaGameTime);
+		addEffect(&pos, EFFECT_EXPLOSION, EXPLOSION_TYPE_SMALL, false, NULL, 0, gameTime - deltaGameTime + 1);
 	}
 
 	movePlayAudio( psDroid, bStarted, bStopped, moveSpeed );

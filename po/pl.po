@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2012-02-20 00:33+0100\n"
-"PO-Revision-Date: 2012-01-29 19:51+0100\n"
+"POT-Creation-Date: 2012-02-29 00:16+0100\n"
+"PO-Revision-Date: 2012-02-27 14:05+0100\n"
 "Last-Translator: Michał D. aka Emdek <emdeck@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
 "Language: pl\n"
@@ -241,7 +241,7 @@ msgstr "Przypisany automatycznie do najbliższego radaru lub wieży CB"
 #: data/mp/messages/strings/resstrings.txt:270
 #: data/mp/messages/strings/resstrings.txt:276
 msgid "Defensive Strength: Medium"
-msgstr "Siła obrony: Średnia"
+msgstr "Siła obrony: średnia"
 
 #: data/base/messages/resmessages12.rmsg:16
 msgid "Mini-rocket armored strongpoint"
@@ -338,7 +338,7 @@ msgstr "Automatycznie namierza wroga w zasięgu radaru"
 #: data/mp/messages/strings/resstrings.txt:338
 #: data/mp/messages/strings/resstrings.txt:354
 msgid "Defensive Strength: High"
-msgstr "Siła obrony: Wysoka"
+msgstr "Siła obrony: wysoka"
 
 #: data/base/messages/resmessages12.rmsg:38
 msgid "Armored hardpoint with Lancer AT missile"
@@ -909,7 +909,7 @@ msgstr "Uzbrojony w karabin maszynowy"
 #: data/mp/messages/strings/resstrings.txt:100
 #: data/mp/messages/strings/resstrings.txt:106
 msgid "Requires Cyborg factory to produce"
-msgstr "Wymaga Fabryki cyborgów do wyprodukowania"
+msgstr "Wymaga fabryki cyborgów do wyprodukowania"
 
 #: data/base/messages/resmessages1.rmsg:49
 msgid "Armed with Cyborg Cannon"
@@ -955,7 +955,7 @@ msgstr "Stalowa wieża z karabinem maszynowym"
 
 #: data/base/messages/resmessages1.rmsg:95
 msgid "Defensive Strength: Low"
-msgstr "Siła obrony: Niska"
+msgstr "Siła obrony: niska"
 
 #: data/base/messages/resmessages1.rmsg:104
 msgid "Armored guard tower with Mini-Pod Rocket"
@@ -1011,7 +1011,7 @@ msgstr "Nowa struktura bazy dostępna"
 
 #: data/base/messages/resmessages1.rmsg:203
 msgid "New Repair Facility Repairs Damaged Units"
-msgstr "Nowa Stacja Naprawcza naprawia uszkodzone jednostki"
+msgstr "Nowa stacja naprawcza naprawia uszkodzone jednostki"
 
 #: data/base/messages/resmessages1.rmsg:204
 msgid "Use the Command Console to send units back for repair"
@@ -1019,7 +1019,7 @@ msgstr "Użyj Konsoli Dowodzenia aby wysłać jednostki do naprawy"
 
 #: data/base/messages/resmessages1.rmsg:205
 msgid "Or select the Repair Facility as a unit's target"
-msgstr "Lub wybierz Stację Naprawczą jako cel jednostki"
+msgstr "Lub wybierz stację naprawczą jako cel jednostki"
 
 #: data/base/messages/resmessages1.rmsg:213
 #: data/base/messages/resmessages2.rmsg:279
@@ -1027,7 +1027,7 @@ msgstr "Lub wybierz Stację Naprawczą jako cel jednostki"
 #: data/base/messages/strings/resstrings.txt:333
 #: data/mp/messages/strings/resstrings.txt:361
 msgid "Repair Facility Improved"
-msgstr "Stacja Naprawcza ulepszona"
+msgstr "Stacja naprawcza ulepszona"
 
 #: data/base/messages/resmessages1.rmsg:214
 msgid "New automated repair techniques"
@@ -1047,7 +1047,7 @@ msgstr "Zwiększa prędkość napraw"
 #: data/base/messages/strings/resstrings.txt:336
 #: data/mp/messages/strings/resstrings.txt:364
 msgid "All repair facilities upgraded automatically"
-msgstr "Wszystkie Stacje Naprawcze ulepszone automatycznie"
+msgstr "Wszystkie stacje naprawcze ulepszone automatycznie"
 
 #: data/base/messages/resmessages1.rmsg:225
 msgid "Enables command turret research"
@@ -1091,7 +1091,7 @@ msgstr "Zwiększa szybkość produkcji cyborgów"
 #: data/mp/messages/strings/resstrings.txt:378
 #: data/mp/messages/strings/resstrings.txt:386
 msgid "All Cyborg factories upgraded automatically"
-msgstr "Wszystkie Fabryki cyborgów ulepszone automatycznie"
+msgstr "Wszystkie fabryki cyborgów ulepszone automatycznie"
 
 #: data/base/messages/resmessages1.rmsg:247
 #: data/base/messages/strings/names.txt:399
@@ -1119,7 +1119,7 @@ msgstr "Produkcja ulepszona"
 
 #: data/base/messages/resmessages1.rmsg:258
 msgid "Factory module enables medium and large bodies"
-msgstr "Moduł Fabryki pozwala na produkcję średnich i ciężkich kadłubów"
+msgstr "Moduł fabryki pozwala na produkcję średnich i ciężkich kadłubów"
 
 #: data/base/messages/resmessages1.rmsg:259
 #: data/base/messages/resmessages1.rmsg:270
@@ -1163,7 +1163,7 @@ msgstr "Moduł energetyczny dostępny"
 #: data/base/messages/resmessages23.rmsg:26
 #: data/base/messages/resmessages3.rmsg:367
 msgid "Improved Power Generator Performance"
-msgstr "Zwiększona wydajność Generatora"
+msgstr "Zwiększona wydajność generatora"
 
 #: data/base/messages/resmessages1.rmsg:281
 msgid "Burns oil more efficiently"
@@ -1171,7 +1171,7 @@ msgstr "Spala ropę bardziej efektywnie"
 
 #: data/base/messages/resmessages1.rmsg:282
 msgid "Use a truck to add the module to a power generator"
-msgstr "Użyj ciężarówki aby dodać moduł do Generatora"
+msgstr "Użyj ciężarówki aby dodać moduł do generatora"
 
 #: data/base/messages/resmessages1.rmsg:290
 msgid "Research Module Available"
@@ -1192,7 +1192,7 @@ msgstr "Zwiększa prędkość badań"
 
 #: data/base/messages/resmessages1.rmsg:293
 msgid "Use a truck to add the module to a research facility"
-msgstr "Użyj ciężarówki aby dodać moduł do Stacji Badawczej"
+msgstr "Użyj ciężarówki aby dodać moduł do stacji badawczej"
 
 #: data/base/messages/resmessages1.rmsg:301
 #: data/base/messages/resmessages2.rmsg:312
@@ -1212,7 +1212,7 @@ msgstr "Analiza danych połączenia synaptycznego"
 #: data/base/messages/strings/resstrings.txt:392
 #: data/mp/messages/strings/resstrings.txt:420
 msgid "All research facilities upgraded automatically"
-msgstr "Wszystkie Stacje Badawcze ulepszone automatycznie"
+msgstr "Wszystkie stacje badawcze ulepszone automatycznie"
 
 #: data/base/messages/resmessages1.rmsg:312
 #: data/base/messages/resmessages2.rmsg:323
@@ -1697,7 +1697,7 @@ msgstr "Turbina gazowa zwiększa wydajność"
 #: data/base/messages/resmessages23.rmsg:29
 #: data/base/messages/resmessages3.rmsg:370
 msgid "All power generators upgraded automatically"
-msgstr "Wszystkie Generatory ulepszone automatycznie"
+msgstr "Wszystkie generatory ulepszone automatycznie"
 
 #: data/base/messages/resmessages23.rmsg:49
 #: data/base/messages/resmessages23.rmsg:71
@@ -2146,14 +2146,14 @@ msgstr "Umocnienie uzbrojone w rakiety Tank Killer AT"
 #: data/base/messages/strings/resstrings.txt:334
 #: data/mp/messages/strings/resstrings.txt:362
 msgid "New robotic repair techniques"
-msgstr "Nowe robotyczne techniki napraw"
+msgstr "Nowe zrobotyzowane techniki napraw"
 
 #: data/base/messages/resmessages2.rmsg:291
 #: data/base/messages/strings/names.txt:786
 #: data/base/messages/strings/resstrings.txt:348
 #: data/mp/messages/strings/resstrings.txt:376
 msgid "Robotic Cyborg Production"
-msgstr "Robotyczna produkcja Cyborgów"
+msgstr "Robotyzacja produkcji cyborgów"
 
 #: data/base/messages/resmessages2.rmsg:302
 #: data/base/messages/strings/resstrings.txt:366
@@ -2188,14 +2188,14 @@ msgstr "Wzmocnione materiały struktur bazy"
 #: data/base/messages/strings/resstrings.txt:412
 #: data/mp/messages/strings/resstrings.txt:440
 msgid "Robotic VTOL Production"
-msgstr "Robotyczna produkcja VTOL"
+msgstr "Robotyzacja produkcji VTOL"
 
 #: data/base/messages/resmessages2.rmsg:336
 #: data/base/messages/resmessages3.rmsg:413
 #: data/base/messages/strings/resstrings.txt:413
 #: data/mp/messages/strings/resstrings.txt:441
 msgid "Increases VTOL factory output"
-msgstr "Przyśpiesza produkcję Fabryki VTOL"
+msgstr "Przyśpiesza produkcję fabryki VTOL"
 
 #: data/base/messages/resmessages2.rmsg:337
 #: data/base/messages/resmessages3.rmsg:414
@@ -2793,7 +2793,7 @@ msgstr "Uzbrojony w laser Flashlight"
 
 #: data/base/messages/resmessages3.rmsg:172
 msgid "Requires cyborg factory to produce"
-msgstr "Wymaga Fabryki cyborgów do produkcji"
+msgstr "Wymaga fabryki cyborgów do produkcji"
 
 #: data/base/messages/resmessages3.rmsg:181
 msgid "High tensile concrete-plastic composite"
@@ -2892,7 +2892,7 @@ msgstr "Zaawansowana produkcja VTOL"
 #: data/base/messages/strings/names.txt:846
 #: data/mp/messages/strings/names.txt:856
 msgid "Robotic VTOL Rearming"
-msgstr "Robotyczne dozbrajanie VTOL"
+msgstr "Robotyzacja dozbrajania VTOL"
 
 #: data/base/messages/resmessages3.rmsg:434
 msgid "Advanced Engineering Techniques"
@@ -3046,7 +3046,7 @@ msgstr "Wysoko-akcelerujące, sabotujące pociski przebijające pancerz"
 #: data/base/messages/resmessages3.rmsg:786
 #: data/base/messages/resmessages3.rmsg:1006
 msgid "Robotic loading system feeds rounds into breech"
-msgstr "Robotyczny system przeładowania ładuje pociski z tyłu lufy"
+msgstr "Zrobotyzowany system przeładowywania ładuje pociski z tyłu lufy"
 
 #: data/base/messages/resmessages3.rmsg:764
 msgid "Computer guided shells"
@@ -3748,7 +3748,7 @@ msgstr "Zbadaj artefakt modułu energetycznego."
 
 #: data/base/messages/strings/cam1strings.txt:142
 msgid "Then use a truck to upgrade your power generator with the module."
-msgstr "Potem użyj ciężarówki aby ulepszyć twój Generator tym modułem."
+msgstr "Potem użyj ciężarówki aby ulepszyć twój generator tym modułem."
 
 #: data/base/messages/strings/cam1strings.txt:145
 msgid "SCAVENGER BASE DETECTED"
@@ -3756,7 +3756,7 @@ msgstr "WYKRYTO BAZĘ ŚMIECIARZY"
 
 #: data/base/messages/strings/cam1strings.txt:146
 msgid "Defeat the scavengers and retrieve any artifacts."
-msgstr "Pokonaj śmieciarzy i odzyskaj wszystkie artefakty."
+msgstr "Pokonaj Śmieciarzy i odzyskaj wszystkie artefakty."
 
 #: data/base/messages/strings/cam1strings.txt:150
 msgid "Congratulations on defeating the New Paradigm, this sector is now secure."
@@ -4538,7 +4538,7 @@ msgstr "Cel misji"
 
 #: data/base/messages/strings/genstrings.txt:15
 msgid "Pre-Collapse Research Center"
-msgstr "Stacja badawcza z przed Zniszczenia"
+msgstr "Stacja badawcza sprzed Zniszczenia"
 
 #: data/base/messages/strings/genstrings.txt:17
 msgid "En-route To Mission Site"
@@ -4578,7 +4578,7 @@ msgid "New Design"
 msgstr "Nowy projekt"
 
 #: data/base/messages/strings/names.txt:15
-#: src/design.cpp:1302
+#: src/design.cpp:1303
 msgid "Transport"
 msgstr "Transportowiec"
 
@@ -5148,7 +5148,7 @@ msgstr "Fabryka"
 #: data/mp/messages/strings/names.txt:384
 #: data/mp/messages/strings/names.txt:803
 msgid "Factory Module"
-msgstr "Moduł Fabryki"
+msgstr "Moduł fabryki"
 
 #: data/base/messages/strings/names.txt:387
 #: data/mp/messages/strings/names.txt:385
@@ -5165,7 +5165,7 @@ msgstr "Moduł energetyczny"
 #: data/base/messages/strings/names.txt:389
 #: data/mp/messages/strings/names.txt:387
 msgid "Research Facility"
-msgstr "Stacja Badawcza"
+msgstr "Stacja badawcza"
 
 #: data/base/messages/strings/names.txt:390
 #: data/base/messages/strings/names.txt:831
@@ -6307,11 +6307,11 @@ msgstr "Automatyczna produkcja cyborgów Mk3"
 
 #: data/base/messages/strings/names.txt:787
 msgid "Robotic Cyborg Production Mk2"
-msgstr "Robotyczna produkcja cyborgów Mk2"
+msgstr "Robotyzacja produkcji cyborgów Mk2"
 
 #: data/base/messages/strings/names.txt:788
 msgid "Robotic Cyborg Production Mk3"
-msgstr "Robotyczna produkcja cyborgów Mk3"
+msgstr "Robotyzacja produkcji cyborgów Mk3"
 
 #: data/base/messages/strings/names.txt:789
 msgid "Advanced Cyborg Production"
@@ -6327,35 +6327,35 @@ msgstr "Zaawansowana produkcja cyborgów Mk3"
 
 #: data/base/messages/strings/names.txt:795
 msgid "Automated Factory Production Mk2"
-msgstr "Automatyzacja produkcji Fabryki Mk2"
+msgstr "Automatyzacja produkcji fabryki Mk2"
 
 #: data/base/messages/strings/names.txt:796
 msgid "Automated Factory Production Mk3"
-msgstr "Automatyzacja produkcji Fabryki Mk3"
+msgstr "Automatyzacja produkcji fabryki Mk3"
 
 #: data/base/messages/strings/names.txt:797
 msgid "Robotic Factory Production"
-msgstr "Robotyzacja produkcji Fabryki"
+msgstr "Robotyzacja produkcji fabryki"
 
 #: data/base/messages/strings/names.txt:798
 msgid "Robotic Factory Production Mk2"
-msgstr "Robotyzacja produkcji Fabryki Mk2"
+msgstr "Robotyzacja produkcji fabryki Mk2"
 
 #: data/base/messages/strings/names.txt:799
 msgid "Robotic Factory Production Mk3"
-msgstr "Robotyzacja produkcji Fabryki Mk3"
+msgstr "Robotyzacja produkcji fabryki Mk3"
 
 #: data/base/messages/strings/names.txt:800
 msgid "Advanced Factory Production"
-msgstr "Zaawansowana produkcja Fabryki"
+msgstr "Zaawansowana produkcja fabryki"
 
 #: data/base/messages/strings/names.txt:801
 msgid "Advanced Factory Production Mk2"
-msgstr "Zaawansowana produkcja Fabryki Mk2"
+msgstr "Zaawansowana produkcja fabryki Mk2"
 
 #: data/base/messages/strings/names.txt:802
 msgid "Advanced Factory Production Mk3"
-msgstr "Zaawansowana produkcja Fabryki Mk3"
+msgstr "Zaawansowana produkcja fabryki Mk3"
 
 #: data/base/messages/strings/names.txt:806
 #: data/mp/messages/strings/names.txt:816
@@ -6390,56 +6390,56 @@ msgstr "Zaawansowane materiały struktur bazy Mk3"
 #: data/base/messages/strings/names.txt:817
 #: data/mp/messages/strings/names.txt:827
 msgid "Gas Turbine Generator"
-msgstr "Turbina gazowa Generatora"
+msgstr "Turbina gazowa generatora"
 
 #: data/base/messages/strings/names.txt:818
 #: data/mp/messages/strings/names.txt:828
 msgid "Vapor Turbine Generator"
-msgstr "Turbina oparowa Generatora"
+msgstr "Turbina oparowa generatora"
 
 #: data/base/messages/strings/names.txt:820
 #: data/base/messages/strings/names.txt:1449
 #: data/mp/messages/strings/names.txt:830
 #: data/mp/messages/strings/names.txt:1464
 msgid "Repair Facility"
-msgstr "Stacja Naprawcza"
+msgstr "Stacja naprawcza"
 
 #: data/base/messages/strings/names.txt:821
 #: data/mp/messages/strings/names.txt:831
 msgid "Automated Repair Facility"
-msgstr "Zautomatyzowana Stacja Naprawcza"
+msgstr "Zautomatyzowana stacja naprawcza"
 
 #: data/base/messages/strings/names.txt:822
 msgid "Automated Repair Facility Upgrade Mk2"
-msgstr "Zautomatyzowana Stacja Naprawcza Mk2"
+msgstr "Zautomatyzowana stacja naprawcza Mk2"
 
 #: data/base/messages/strings/names.txt:823
 msgid "Automated Repair Facility Upgrade Mk3"
-msgstr "Zautomatyzowana Stacja Naprawcza Mk3"
+msgstr "Zautomatyzowana stacja naprawcza Mk3"
 
 #: data/base/messages/strings/names.txt:824
 msgid "Robotic Repair Facility Upgrade"
-msgstr "Robotyczna Stacja Naprawcza"
+msgstr "Zrobotyzowana stacja naprawcza"
 
 #: data/base/messages/strings/names.txt:825
 msgid "Robotic Repair Facility Upgrade Mk2"
-msgstr "Robotyczna Stacja Naprawcza Mk2"
+msgstr "Zrobotyzowana stacja naprawcza Mk2"
 
 #: data/base/messages/strings/names.txt:826
 msgid "Robotic Repair Facility Upgrade Mk3"
-msgstr "Robotyczna Stacja Naprawcza Mk3"
+msgstr "Zrobotyzowana stacja naprawcza Mk3"
 
 #: data/base/messages/strings/names.txt:827
 msgid "Advanced Repair Facility Upgrade"
-msgstr "Zaawansowana Stacja Naprawcza"
+msgstr "Zaawansowana stacja naprawcza"
 
 #: data/base/messages/strings/names.txt:828
 msgid "Advanced Repair Facility Upgrade Mk2"
-msgstr "Zaawansowana Stacja Naprawcza Mk2"
+msgstr "Zaawansowana stacja naprawcza Mk2"
 
 #: data/base/messages/strings/names.txt:829
 msgid "Advanced Repair Facility Upgrade Mk3"
-msgstr "Zaawansowana Stacja Naprawcza Mk3"
+msgstr "Zaawansowana stacja naprawcza Mk3"
 
 #: data/base/messages/strings/names.txt:832
 #: data/mp/messages/strings/names.txt:842
@@ -6489,25 +6489,25 @@ msgstr "Automatyczne dozbrajanie VTOL Mk3"
 #: data/base/messages/strings/names.txt:847
 #: data/mp/messages/strings/names.txt:857
 msgid "Robotic VTOL Rearming Mk2"
-msgstr "Robotyczne dozbrajanie VTOL Mk2"
+msgstr " Robotyzacja dozbrajania VTOL Mk2"
 
 #: data/base/messages/strings/names.txt:848
 #: data/mp/messages/strings/names.txt:858
 msgid "Robotic VTOL Rearming Mk3"
-msgstr "Robotyczne dozbrajanie VTOL Mk3"
+msgstr "Robotyzacja dozbrajania VTOL Mk3"
 
 #: data/base/messages/strings/names.txt:849
 #: data/mp/messages/strings/names.txt:859
 msgid "Robotic VTOL Rearming Mk4"
-msgstr "Robotyczne dozbrajanie VTOL Mk4"
+msgstr "Robotyzacja dozbrajania VTOL Mk4"
 
 #: data/base/messages/strings/names.txt:852
 msgid "Robotic VTOL Production Mk2"
-msgstr "Robotyczna produkcja VTOL Mk2"
+msgstr "Robotyzacja produkcji VTOL Mk2"
 
 #: data/base/messages/strings/names.txt:853
 msgid "Robotic VTOL Production Mk3"
-msgstr "Robotyczna produkcja VTOL Mk3"
+msgstr "Robotyzacja produkcji VTOL Mk3"
 
 #: data/base/messages/strings/names.txt:855
 msgid "Advanced VTOL Production Mk2"
@@ -7991,7 +7991,7 @@ msgstr "Samoreplikująca produkcja cyborgów"
 #: data/base/messages/strings/resstrings.txt:374
 #: data/mp/messages/strings/resstrings.txt:402
 msgid "Self-Replicating Factory Production"
-msgstr "Samo-powielająca produkcja Fabryki"
+msgstr "Samo-powielająca produkcja fabryki"
 
 #: data/base/messages/strings/resstrings.txt:444
 #: data/mp/messages/strings/resstrings.txt:472
@@ -8090,7 +8090,7 @@ msgstr "Kliknij na polu ropy oznaczonej na mapie by rozkazać ciężarówce budo
 
 #: data/base/script/text/tutorial3.slo:339
 msgid "The oil derrick is currently dormant. Build a power generator to convert the oil into power"
-msgstr "Platforma wydobywcza jest na razie bezczynna. Zbuduj Generator by zmienić ropę na energię."
+msgstr "Platforma wydobywcza jest na razie bezczynna. Zbuduj generator by zmienić ropę na energię."
 
 #: data/base/script/text/tutorial3.slo:356
 #: data/base/script/text/tutorial3.slo:573
@@ -8100,7 +8100,7 @@ msgstr "Kliknij na mrugający przycisk BUDUJ"
 
 #: data/base/script/text/tutorial3.slo:384
 msgid "Now left click the power generator in the build menu on the left"
-msgstr "Teraz wybierz Generator w menu budowy po lewej"
+msgstr "Teraz wybierz generator w menu budowy po lewej"
 
 #: data/base/script/text/tutorial3.slo:395
 msgid "Position the square at your base and left click to start the build process"
@@ -8112,11 +8112,11 @@ msgstr "Aby zwiększyć prędkość budowania, zaznacz drugą ciężarówkę"
 
 #: data/base/script/text/tutorial3.slo:447
 msgid "Now left click the power generator site"
-msgstr "Kliknij teraz na stanowisko Generatora"
+msgstr "Kliknij teraz na stanowisko generatora"
 
 #: data/base/script/text/tutorial3.slo:463
 msgid "The other truck will now help to build the power generator"
-msgstr "Inna ciężarówka teraz pomoże zbudować Generator"
+msgstr "Inna ciężarówka teraz pomoże zbudować generator"
 
 #: data/base/script/text/tutorial3.slo:501
 msgid "During missions you need to locate and recover technologies from before the Collapse"
@@ -9197,6 +9197,7 @@ msgstr "Narożnik muru NEXUS"
 
 #: data/mp/messages/strings/names.txt:675
 #: data/mp/messages/strings/names.txt:676
+#: src/design.cpp:1308
 msgid "Super Transport"
 msgstr "Super Transportowiec"
 
@@ -9237,43 +9238,43 @@ msgstr "Umocnienie z działem HPV"
 
 #: data/mp/messages/strings/names.txt:804
 msgid "Automated Manufacturing"
-msgstr "Automatyczna produkcja Fabryki"
+msgstr "Automatyczna produkcja fabryki"
 
 #: data/mp/messages/strings/names.txt:807
 msgid "Robotic Manufacturing"
-msgstr "Robotyczna produkcja Fabryki"
+msgstr "Robotyzacja produkcji fabryki"
 
 #: data/mp/messages/strings/names.txt:810
 msgid "Advanced Manufacturing"
-msgstr "Zaawansowana produkcja Fabryki"
+msgstr "Zaawansowana produkcja fabryki"
 
 #: data/mp/messages/strings/names.txt:812
 msgid "Self-Replicating Manufacturing"
-msgstr "Samoreplikująca produkcja Fabryki"
+msgstr "Samoreplikująca produkcja fabryki"
 
 #: data/mp/messages/strings/names.txt:813
 msgid "Advanced Manufacturing Mk3"
-msgstr "Zaawansowana produkcja Fabryki Mk3"
+msgstr "Zaawansowana produkcja fabryki Mk3"
 
 #: data/mp/messages/strings/names.txt:834
 msgid "Robotic Repair Facility"
-msgstr "Robotyczna Stacja Naprawcza"
+msgstr "Zrobotyzowana stacja naprawcza"
 
 #: data/mp/messages/strings/names.txt:836
 msgid "Advanced Repair Facility"
-msgstr "Zaawansowana Stacja Naprawcza"
+msgstr "Zaawansowana stacja naprawcza"
 
 #: data/mp/messages/strings/names.txt:837
 msgid "Robotic Repair Facility Mk3"
-msgstr "Robotyczna Stacja Naprawcza Mk3"
+msgstr "Zrobotyzowana stacja naprawcza Mk3"
 
 #: data/mp/messages/strings/names.txt:838
 msgid "Advanced Repair Facility Mk2"
-msgstr "Zaawansowana Stacja Naprawcza Mk2"
+msgstr "Zaawansowana stacja naprawcza Mk2"
 
 #: data/mp/messages/strings/names.txt:839
 msgid "Advanced Repair Facility Mk3"
-msgstr "Zaawansowana Stacja Naprawcza Mk3"
+msgstr "Zaawansowana stacja naprawcza Mk3"
 
 # Translated as 'Self-Repair' for better understand
 #: data/mp/messages/strings/names.txt:884
@@ -9377,19 +9378,19 @@ msgstr "Ulepszenie radaru Mk3"
 
 #: data/mp/messages/strings/names.txt:1517
 msgid "Vapor Turbine Generator Mk2"
-msgstr "Turbina parowa Generatora Mk2"
+msgstr "Turbina parowa generatora Mk2"
 
 #: data/mp/messages/strings/names.txt:1521
 msgid "Gas Turbine Generator Mk2"
-msgstr "Turbina gazowa Generatora Mk2"
+msgstr "Turbina gazowa generatora Mk2"
 
 #: data/mp/messages/strings/names.txt:1522
 msgid "Gas Turbine Generator Mk3"
-msgstr "Turbina gazowa Generatora Mk3"
+msgstr "Turbina gazowa generatora Mk3"
 
 #: data/mp/messages/strings/names.txt:1525
 msgid "Vapor Turbine Generator Mk3"
-msgstr "Turbina oparowa Generatora Mk3"
+msgstr "Turbina oparowa generatora Mk3"
 
 #: data/mp/messages/strings/names.txt:1613
 msgid "Thermite Flamer"
@@ -9473,21 +9474,21 @@ msgstr "Super Cyborg z działem"
 #: data/mp/messages/strings/names.txt:1666
 #: data/mp/messages/strings/names.txt:1667
 msgid "Super Auto-Cannon Cyborg"
-msgstr "Super Cyborg z działem automatycznym"
+msgstr "Super cyborg z działem automatycznym"
 
 #: data/mp/messages/strings/names.txt:1669
 #: data/mp/messages/strings/names.txt:1670
 #: data/mp/messages/strings/names.txt:1671
 #: data/mp/messages/strings/names.txt:1672
 msgid "Super HPV Cyborg"
-msgstr "Super Cyborg z działem HPV"
+msgstr "Super cyborg z działem HPV"
 
 #: data/mp/messages/strings/names.txt:1674
 #: data/mp/messages/strings/names.txt:1675
 #: data/mp/messages/strings/names.txt:1676
 #: data/mp/messages/strings/names.txt:1677
 msgid "Super Tank-Killer Cyborg"
-msgstr "Super Cyborg Tank Killer"
+msgstr "Super cyborg Tank Killer"
 
 #: data/mp/messages/strings/names.txt:1679
 #: data/mp/messages/strings/names.txt:1680
@@ -9496,7 +9497,7 @@ msgstr "Ciężki laser"
 
 #: data/mp/messages/strings/names.txt:1681
 msgid "VTOL Heavy Laser"
-msgstr "VTOL Ciężki laser"
+msgstr "VTOL ciężki laser"
 
 #: data/mp/messages/strings/names.txt:1682
 #: data/mp/messages/strings/names.txt:1683
@@ -9561,21 +9562,21 @@ msgstr "Stanowisko artylerii AA Sunburst"
 #: data/mp/messages/strings/names.txt:1730
 #: data/mp/messages/strings/names.txt:1731
 msgid "Super Pulse Laser Cyborg"
-msgstr "Super Cyborg z laserem pulsacyjnym"
+msgstr "Super cyborg z laserem pulsacyjnym"
 
 #: data/mp/messages/strings/names.txt:1733
 #: data/mp/messages/strings/names.txt:1734
 #: data/mp/messages/strings/names.txt:1735
 #: data/mp/messages/strings/names.txt:1736
 msgid "Super Rail-Gunner"
-msgstr "Super Cyborg z Railgunem "
+msgstr "Super cyborg z Railgunem "
 
 #: data/mp/messages/strings/names.txt:1738
 #: data/mp/messages/strings/names.txt:1739
 #: data/mp/messages/strings/names.txt:1740
 #: data/mp/messages/strings/names.txt:1741
 msgid "Super Scourge Cyborg"
-msgstr "Super Cyborg z rakietami Scourge"
+msgstr "Super cyborg z rakietami Scourge"
 
 #: data/mp/messages/strings/names.txt:1743
 #: data/mp/messages/strings/names.txt:1744
@@ -10125,27 +10126,25 @@ msgstr "Język systemu"
 msgid "OpenGL 2.0 is not supported by your system. Some things may look wrong. Please upgrade your graphics driver/hardware, if possible."
 msgstr "Twój system nie obsługuje OpenGL 2.0, niektóre rzeczy mogą wyglądać niewłaściwie. Zaktualizuj sterowniki / kartę graficzną, jeśli to możliwe."
 
-#: lib/ivis_opengl/screen.cpp:152
-#, fuzzy
+#: lib/ivis_opengl/screen.cpp:151
 msgid "OpenGL 1.5/2.0 is not supported by your system. Some things may look wrong. Please upgrade your graphics driver/hardware, if possible."
-msgstr "Twój system nie obsługuje OpenGL 2.0, niektóre rzeczy mogą wyglądać niewłaściwie. Zaktualizuj sterowniki / kartę graficzną, jeśli to możliwe."
+msgstr "Twój system nie obsługuje OpenGL 1.5 / 2.0, niektóre rzeczy mogą wyglądać niewłaściwie. Zaktualizuj sterowniki / kartę graficzną, jeśli to możliwe."
 
-#: lib/ivis_opengl/screen.cpp:158
-#, fuzzy
+#: lib/ivis_opengl/screen.cpp:156
 msgid "OpenGL 1.4 + VBO extension is not supported by your system. The game requires this. Please upgrade your graphics drivers/hardware, if possible."
-msgstr "Twój system nie obsługuje OpenGL 1.4 wymaganego przez grę. Zaktualizuj sterowniki / kartę graficzną, jeśli to możliwe."
+msgstr "Twój system nie obsługuje OpenGL + VBO 1.4 wymaganego przez grę. Zaktualizuj sterowniki / kartę graficzną, jeśli to możliwe."
 
 #: lib/netplay/netplay.cpp:193
 #: lib/netplay/netplay.cpp:1051
 msgid "Enter password here"
 msgstr "Wpisz hasło tutaj"
 
-#: lib/netplay/netplay.cpp:2081
+#: lib/netplay/netplay.cpp:2079
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr "Nie można rozwinąć nazwy serwera głównego (%s)!"
 
-#: lib/netplay/netplay.cpp:2103
+#: lib/netplay/netplay.cpp:2101
 #, c-format
 msgid ""
 "Error connecting to the lobby server: %s.\n"
@@ -10158,18 +10157,17 @@ msgstr ""
 "Jeśli używasz rutera, to skonfiguruj go do używania UPnP\n"
 "lub przekieruj port do twojego systemu."
 
-#: lib/netplay/netplay.cpp:2768
+#: lib/netplay/netplay.cpp:2766
 msgid "Failed to get a lobby response!"
 msgstr "Brak odpowiedzi z serwera lobby!"
 
 #: po/custom/mac-infoplist.txt:1
-#, fuzzy
 msgid ""
 "Copyright © 1999-2004 Eidos Interactive.\n"
 "Copyright © 2005-2012 The Warzone 2100 Project"
 msgstr ""
 "Copyright © 1999-2004 Eidos Interactive.\n"
-"Copyright © 2005-2011 The Warzone 2100 Project"
+"Copyright © 2005-2012 The Warzone 2100 Project"
 
 #: po/custom/mac-infoplist.txt:2
 #: po/custom/warzone2100.desktop.txt:2
@@ -10212,13 +10210,13 @@ msgstr "Gra strategiczna"
 #: src/hci.cpp:918
 #: src/hci.cpp:3361
 #: src/hci.cpp:3484
-#: src/hci.cpp:3883
-#: src/hci.cpp:4892
+#: src/hci.cpp:3921
+#: src/hci.cpp:4930
 #: src/intelmap.cpp:531
 #: src/intorder.cpp:727
 #: src/loadsave.cpp:240
 #: src/multimenu.cpp:498
-#: src/multimenu.cpp:1401
+#: src/multimenu.cpp:1349
 #: src/transporter.cpp:278
 #: src/transporter.cpp:359
 #: src/transporter.cpp:822
@@ -10228,21 +10226,20 @@ msgstr "Zamknij"
 #: src/cheat.cpp:161
 #, c-format
 msgid "%s wants to enable debug mode. Enabled: %s, Disabled: %s."
-msgstr ""
+msgstr "%s chce włączyć tryb odpluskwiania. Włączony: %s, Wyłączony: %s."
 
 #: src/cheat.cpp:165
 #, c-format
 msgid "%s wants to disable debug mode. Enabled: %s, Disabled: %s."
-msgstr ""
+msgstr "%s chce wyłączyć tryb odpluskwiania. Włączony: %s, Wyłączony: %s."
 
 #: src/cheat.cpp:171
 msgid "Debug mode now enabled!"
-msgstr ""
+msgstr "Tryb odpluskwiania został włączony!"
 
 #: src/cheat.cpp:175
-#, fuzzy
 msgid "Debug mode now disabled!"
-msgstr "Menu odpluskwiania jest otwarte"
+msgstr "Tryb odpluskwiania został wyłączony!"
 
 #: src/clparse.cpp:242
 msgid "Set configuration directory"
@@ -10384,7 +10381,7 @@ msgstr "Wyłącz kompresję tekstur"
 
 #: src/clparse.cpp:267
 msgid "Only use OpenGL 1.5"
-msgstr ""
+msgstr "Używaj tylko OpenGL 1.5"
 
 #: src/configuration.cpp:96
 msgid "My Game"
@@ -10397,7 +10394,7 @@ msgstr "Gracz"
 
 #: src/design.cpp:451
 #: src/design.cpp:464
-#: src/design.cpp:3522
+#: src/design.cpp:3528
 msgid "New Vehicle"
 msgstr "Nowy pojazd"
 
@@ -10420,7 +10417,7 @@ msgid "Delete Design"
 msgstr "Usuń projekt"
 
 #: src/design.cpp:632
-#: src/design.cpp:4775
+#: src/design.cpp:4781
 msgid "Store Template"
 msgstr "Zapisz szablon"
 
@@ -10441,20 +10438,20 @@ msgstr "Moc silnika"
 
 #: src/design.cpp:718
 #: src/design.cpp:771
-#: src/design.cpp:1513
-#: src/design.cpp:1537
-#: src/design.cpp:1558
-#: src/design.cpp:1574
-#: src/design.cpp:1594
-#: src/design.cpp:1611
-#: src/design.cpp:1631
-#: src/design.cpp:1648
-#: src/design.cpp:1689
-#: src/design.cpp:1721
-#: src/design.cpp:1853
-#: src/design.cpp:1869
-#: src/design.cpp:1907
-#: src/design.cpp:1940
+#: src/design.cpp:1519
+#: src/design.cpp:1543
+#: src/design.cpp:1564
+#: src/design.cpp:1580
+#: src/design.cpp:1600
+#: src/design.cpp:1617
+#: src/design.cpp:1637
+#: src/design.cpp:1654
+#: src/design.cpp:1695
+#: src/design.cpp:1727
+#: src/design.cpp:1859
+#: src/design.cpp:1875
+#: src/design.cpp:1913
+#: src/design.cpp:1946
 msgid "Weight"
 msgstr "Waga"
 
@@ -10468,91 +10465,91 @@ msgstr "Łączna wymagana energia"
 msgid "Total Body Points"
 msgstr "Łączne punkty zdrowia"
 
-#: src/design.cpp:1023
-#: src/design.cpp:1052
+#: src/design.cpp:1024
+#: src/design.cpp:1053
 msgid "Power Usage"
 msgstr "Zużycie energii"
 
-#: src/design.cpp:1325
+#: src/design.cpp:1331
 msgid "Hydra "
 msgstr "Hydra"
 
-#: src/design.cpp:1493
-#: src/design.cpp:1521
+#: src/design.cpp:1499
+#: src/design.cpp:1527
 msgid "Sensor Range"
 msgstr "Zasięg radaru"
 
-#: src/design.cpp:1505
-#: src/design.cpp:1529
+#: src/design.cpp:1511
+#: src/design.cpp:1535
 msgid "Sensor Power"
 msgstr "Moc radaru"
 
-#: src/design.cpp:1550
-#: src/design.cpp:1566
+#: src/design.cpp:1556
+#: src/design.cpp:1572
 msgid "ECM Power"
 msgstr "Moc ECM"
 
-#: src/design.cpp:1586
-#: src/design.cpp:1603
-#: src/design.cpp:1623
-#: src/design.cpp:1640
+#: src/design.cpp:1592
+#: src/design.cpp:1609
+#: src/design.cpp:1629
+#: src/design.cpp:1646
 msgid "Build Points"
 msgstr "Prędkość budowania"
 
-#: src/design.cpp:1661
-#: src/design.cpp:1697
+#: src/design.cpp:1667
+#: src/design.cpp:1703
 msgid "Range"
 msgstr "Zasięg"
 
-#: src/design.cpp:1673
-#: src/design.cpp:1705
+#: src/design.cpp:1679
+#: src/design.cpp:1711
 msgid "Damage"
 msgstr "Obrażenia"
 
-#: src/design.cpp:1681
-#: src/design.cpp:1713
+#: src/design.cpp:1687
+#: src/design.cpp:1719
 msgid "Rate-of-Fire"
 msgstr "Szybkostrzelność"
 
-#: src/design.cpp:1841
-#: src/design.cpp:1861
+#: src/design.cpp:1847
+#: src/design.cpp:1867
 msgid "Air Speed"
 msgstr "Prędkość w powietrzu"
 
-#: src/design.cpp:1879
-#: src/design.cpp:1916
+#: src/design.cpp:1885
+#: src/design.cpp:1922
 msgid "Road Speed"
 msgstr "Prędkość na drogach"
 
-#: src/design.cpp:1889
-#: src/design.cpp:1924
+#: src/design.cpp:1895
+#: src/design.cpp:1930
 msgid "Off-Road Speed"
 msgstr "Prędkość na bezdrożach"
 
-#: src/design.cpp:1897
-#: src/design.cpp:1932
+#: src/design.cpp:1903
+#: src/design.cpp:1938
 msgid "Water Speed"
 msgstr "Prędkość na wodzie"
 
-#: src/design.cpp:2022
-#: src/hci.cpp:4915
+#: src/design.cpp:2028
+#: src/hci.cpp:4953
 msgid "Tab Scroll left"
 msgstr "Przewiń zakładki w lewo"
 
-#: src/design.cpp:2037
-#: src/hci.cpp:4930
+#: src/design.cpp:2043
+#: src/hci.cpp:4968
 msgid "Tab Scroll right"
 msgstr "Przewiń zakładki w prawo"
 
-#: src/design.cpp:2100
+#: src/design.cpp:2106
 msgid "Weapons"
 msgstr "Bronie"
 
-#: src/design.cpp:2120
+#: src/design.cpp:2126
 msgid "Systems"
 msgstr "Systemy"
 
-#: src/design.cpp:4770
+#: src/design.cpp:4776
 msgid "Delete Template"
 msgstr "Usuń szablon"
 
@@ -10588,15 +10585,15 @@ msgstr "%s - Obrażenia %d%% - Doświadczenie %.1f, %s"
 msgid "%s - Allied - Damage %d%% - Experience %d, %s"
 msgstr "%s - Sojusznik - Obrażenia %d%% - Doświadczenie %d, %s"
 
-#: src/droid.cpp:204
+#: src/droid.cpp:205
 msgid "Unit Lost!"
 msgstr "Jednostka utracona!"
 
-#: src/droid.cpp:1275
+#: src/droid.cpp:1274
 msgid "Structure Restored"
 msgstr "Struktura odbudowana"
 
-#: src/droid.cpp:2245
+#: src/droid.cpp:2246
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
@@ -10604,7 +10601,7 @@ msgstr[0] "Wybrana grupa %u - %u jednostka"
 msgstr[1] "Wybrana grupa %u - %u jednostki"
 msgstr[2] "Wybrana grupa %u - %u jednostek"
 
-#: src/droid.cpp:2258
+#: src/droid.cpp:2259
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
@@ -10612,7 +10609,7 @@ msgstr[0] "%u jednostka przypisana do Grupy %u"
 msgstr[1] "%u jednostki przypisane do Grupy %u"
 msgstr[2] "%u jednostek przypisano do Grupy %u"
 
-#: src/droid.cpp:2271
+#: src/droid.cpp:2272
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
@@ -10620,7 +10617,7 @@ msgstr[0] "Wyśrodkowano na grupie %u - %u jednostka"
 msgstr[1] "Wyśrodkowano na grupie %u - %u jednostki"
 msgstr[2] "Wyśrodkowano na grupie %u - %u jednostek"
 
-#: src/droid.cpp:2275
+#: src/droid.cpp:2276
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
@@ -10629,49 +10626,49 @@ msgstr[1] "Wyrównanie z grupą %u - %u jednostki"
 msgstr[2] "Wyrównanie z grupą %u - %u jednostek"
 
 # I had really trouble with this one. This word has no meaning in Polish so I decided to translate it as 'Newbe'
-#: src/droid.cpp:2457
+#: src/droid.cpp:2458
 msgid "Rookie"
 msgstr "Nowicjusz"
 
-#: src/droid.cpp:2458
+#: src/droid.cpp:2459
 msgctxt "rank"
 msgid "Green"
 msgstr "Zielony"
 
-#: src/droid.cpp:2459
+#: src/droid.cpp:2460
 msgid "Trained"
 msgstr "Wyszkolony"
 
-#: src/droid.cpp:2460
+#: src/droid.cpp:2461
 msgid "Regular"
 msgstr "Zawodowy"
 
-#: src/droid.cpp:2461
+#: src/droid.cpp:2462
 msgid "Professional"
 msgstr "Profesjonalny"
 
-#: src/droid.cpp:2462
+#: src/droid.cpp:2463
 msgid "Veteran"
 msgstr "Weteran"
 
-#: src/droid.cpp:2463
+#: src/droid.cpp:2464
 msgid "Elite"
 msgstr "Elita"
 
-#: src/droid.cpp:2464
+#: src/droid.cpp:2465
 msgid "Special"
 msgstr "Specjalny"
 
-#: src/droid.cpp:2465
+#: src/droid.cpp:2466
 msgid "Hero"
 msgstr "Bohater"
 
-#: src/droid.cpp:3423
+#: src/droid.cpp:3424
 #, c-format
 msgid "%s wanted to give you a %s but you have too many!"
 msgstr "%s chciał dać ci %s ale masz już ich zbyt wiele!"
 
-#: src/droid.cpp:3427
+#: src/droid.cpp:3428
 #, c-format
 msgid "You wanted to give %s a %s but they have too many!"
 msgstr "Chciałeś dać %s %s ale ma ich już ich zbyt wiele!"
@@ -10756,8 +10753,8 @@ msgstr "JEDEN GRACZ"
 
 #: src/frontend.cpp:322
 #: src/ingameop.cpp:494
-#: src/mission.cpp:2496
-#: src/mission.cpp:2597
+#: src/mission.cpp:2493
+#: src/mission.cpp:2594
 msgid "Load Saved Game"
 msgstr "Załaduj zapisany stan gry"
 
@@ -11014,15 +11011,13 @@ msgstr "Szybkość przewijania"
 
 #: src/frontend.cpp:1232
 #: src/frontend.cpp:1275
-#, fuzzy
 msgid "Unit Colour (SP)"
-msgstr "Kolor jednostek"
+msgstr "Kolor jednostek (GJ)"
 
 #: src/frontend.cpp:1242
 #: src/frontend.cpp:1276
-#, fuzzy
 msgid "Unit Colour (MP)"
-msgstr "Kolor jednostek"
+msgstr "Kolor jednostek (GW)"
 
 #: src/frontend.cpp:1245
 #: src/frontend.cpp:1274
@@ -11128,102 +11123,102 @@ msgstr "Załaduj"
 msgid "Load Map File"
 msgstr "Załaduj plik mapy"
 
-#: src/hci.cpp:3529
+#: src/hci.cpp:3533
 msgid "Save"
 msgstr "Zapisz"
 
-#: src/hci.cpp:3530
+#: src/hci.cpp:3534
 msgid "Save Map File"
 msgstr "Zapisz plik mapy"
 
-#: src/hci.cpp:3538
+#: src/hci.cpp:3546
 msgid "New"
 msgstr "Nowa"
 
-#: src/hci.cpp:3539
+#: src/hci.cpp:3547
 msgid "New Blank Map"
 msgstr "Nowa mapa"
 
-#: src/hci.cpp:3575
+#: src/hci.cpp:3595
 msgid "Tile"
 msgstr "Kafel"
 
-#: src/hci.cpp:3576
+#: src/hci.cpp:3596
 msgid "Place tiles on map"
 msgstr "Umieść kafel na mapie"
 
-#: src/hci.cpp:3585
+#: src/hci.cpp:3609
 msgid "Unit"
 msgstr "Jednostka"
 
-#: src/hci.cpp:3586
+#: src/hci.cpp:3610
 msgid "Place Unit on map"
 msgstr "Umieść jednostkę na mapie"
 
-#: src/hci.cpp:3594
+#: src/hci.cpp:3618
 msgid "Struct"
 msgstr "Struktura"
 
-#: src/hci.cpp:3595
+#: src/hci.cpp:3619
 msgid "Place Structures on map"
 msgstr "Umieść struktury na mapie"
 
-#: src/hci.cpp:3603
+#: src/hci.cpp:3627
 msgid "Feat"
 msgstr "Obiekt"
 
-#: src/hci.cpp:3604
+#: src/hci.cpp:3628
 msgid "Place Features on map"
 msgstr "Umieść obiekty specjalne na mapie"
 
-#: src/hci.cpp:3614
+#: src/hci.cpp:3642
 msgid "Pause"
 msgstr "Pauza"
 
-#: src/hci.cpp:3615
+#: src/hci.cpp:3643
 msgid "Pause or unpause the game"
 msgstr "Spauzuj lub wznów grę"
 
-#: src/hci.cpp:3629
+#: src/hci.cpp:3661
 msgid "Align height of all map objects"
 msgstr "Wyrównaj wysokość wszystkich obiektów mapy"
 
-#: src/hci.cpp:3639
+#: src/hci.cpp:3674
 msgid "Edit"
 msgstr "Edytuj"
 
-#: src/hci.cpp:3640
+#: src/hci.cpp:3675
 msgid "Start Edit Mode"
 msgstr "Rozpocznij tryb edycji"
 
-#: src/hci.cpp:3654
+#: src/hci.cpp:3689
 #: src/ingameop.cpp:113
 #: src/ingameop.cpp:257
 #: src/ingameop.cpp:261
 msgid "Quit"
 msgstr "Wyjdź"
 
-#: src/hci.cpp:3655
+#: src/hci.cpp:3690
 msgid "Exit Game"
 msgstr "Zakończ grę"
 
-#: src/hci.cpp:3681
+#: src/hci.cpp:3716
 msgid "Current Player:"
 msgstr "Aktualny gracz:"
 
-#: src/hci.cpp:3960
+#: src/hci.cpp:3998
 msgid "Progress Bar"
 msgstr "Pasek postępu"
 
-#: src/hci.cpp:4817
+#: src/hci.cpp:4855
 msgid "Factory Delivery Point"
 msgstr "Punkt dostaw fabryki"
 
-#: src/hci.cpp:4835
+#: src/hci.cpp:4873
 msgid "Loop Production"
 msgstr "Cykl produkcji"
 
-#: src/hci.cpp:5159
+#: src/hci.cpp:5197
 msgid "Ally progress"
 msgstr "Postępy sojuszników"
 
@@ -11249,8 +11244,8 @@ msgstr "UI taktyczne (ikona pochodzenia celu): Ukryj"
 
 #: src/ingameop.cpp:275
 #: src/ingameop.cpp:498
-#: src/mission.cpp:2483
-#: src/mission.cpp:2600
+#: src/mission.cpp:2480
+#: src/mission.cpp:2597
 msgid "Save Game"
 msgstr "Zapisz grę"
 
@@ -11295,7 +11290,7 @@ msgstr "Postępy badania"
 
 #: src/intdisplay.cpp:663
 msgid "Need more resources!"
-msgstr ""
+msgstr "Potrzeba więcej zasobów!"
 
 #: src/intelmap.cpp:242
 #: src/keybind.cpp:1327
@@ -11407,11 +11402,11 @@ msgstr "Przetwórz"
 
 #: src/intorder.cpp:184
 msgid "Assign Factory Production"
-msgstr "Przypisz produkcję Fabryki"
+msgstr "Przypisz produkcję fabryki"
 
 #: src/intorder.cpp:185
 msgid "Assign Cyborg Factory Production"
-msgstr "Przypisz produkcję Fabryki Cyborgów"
+msgstr "Przypisz produkcję fabryki cyborgów"
 
 #: src/intorder.cpp:186
 msgid "Assign Fire Support"
@@ -11419,7 +11414,7 @@ msgstr "Przypisz wsparcie ogniowe"
 
 #: src/intorder.cpp:187
 msgid "Assign VTOL Factory Production"
-msgstr "Przypisz produkcję Fabryki VTOL"
+msgstr "Przypisz produkcję fabryki VTOL"
 
 #: src/intorder.cpp:188
 msgid "Circle"
@@ -12028,9 +12023,8 @@ msgid "Select all Combat Units"
 msgstr "Zaznacz wszystkie jednostki bojowe"
 
 #: src/keymap.cpp:430
-#, fuzzy
 msgid "Select all Cyborgs"
-msgstr "Zaznacz wszystkie poduszkowce"
+msgstr "Zaznacz wszystkie cyborgi"
 
 #: src/keymap.cpp:431
 msgid "Select all Heavily Damaged Units"
@@ -12073,60 +12067,52 @@ msgid "Select all Similar Units"
 msgstr "Zaznacz wszystkie podobne jednostki"
 
 #: src/keymap.cpp:445
-#, fuzzy
 msgid "Select all Combat Cyborgs"
-msgstr "Zaznacz wszystkie jednostki bojowe"
+msgstr "Zaznacz wszystkie cyborgi bojowe"
 
 #: src/keymap.cpp:446
-#, fuzzy
 msgid "Select all Engineers"
-msgstr "Zaznacz wszystkie poduszkowce"
+msgstr "Zaznacz wszystkich inżynierów"
 
 #: src/keymap.cpp:447
-#, fuzzy
 msgid "Select all Land Combat Units"
-msgstr "Zaznacz wszystkie jednostki bojowe"
+msgstr "Zaznacz wszystkie lądowe jednostki bojowe"
 
 #: src/keymap.cpp:448
-#, fuzzy
 msgid "Select all Mechanics"
-msgstr "Zaznacz wszystkie jednostki na gąsienicach"
+msgstr "Zaznacz wszystkich mechaników"
 
 #: src/keymap.cpp:449
-#, fuzzy
 msgid "Select all Transporters"
-msgstr "Zaznacz wszystkie jednostki na gąsienicach"
+msgstr "Zaznacz wszystkie transportery"
 
 #: src/keymap.cpp:450
-#, fuzzy
 msgid "Select all Repair Tanks"
-msgstr "Zaznacz wszystkie jednostki na gąsienicach"
+msgstr "Zaznacz wszystkie czołgi naprawcze"
 
 #: src/keymap.cpp:451
-#, fuzzy
 msgid "Select all Sensor Units"
-msgstr "Zaznacz wszystkie podobne jednostki"
+msgstr "Zaznacz wszystkie jednostki z radarami"
 
 #: src/keymap.cpp:452
-#, fuzzy
 msgid "Select all Trucks"
-msgstr "Zaznacz wszystkie jednostki na gąsienicach"
+msgstr "Zaznacz wszystkie ciężarówki"
 
 #: src/keymap.cpp:456
 msgid "Select next Factory"
-msgstr "Zaznacz kolejną Fabrykę"
+msgstr "Zaznacz kolejną fabrykę"
 
 #: src/keymap.cpp:457
 msgid "Select next Research Facility"
-msgstr "Zaznacz kolejną Stację Badawczą"
+msgstr "Zaznacz kolejną stację badawczą"
 
 #: src/keymap.cpp:458
 msgid "Select next Power Generator"
-msgstr "Zaznacz następny Generator"
+msgstr "Zaznacz następny generator"
 
 #: src/keymap.cpp:459
 msgid "Select next Cyborg Factory"
-msgstr "Zaznacz następną Fabrykę Cyborgów"
+msgstr "Zaznacz następną fabrykę cyborgów"
 
 #: src/keymap.cpp:462
 msgid "Toggle Debug Mappings"
@@ -12217,41 +12203,41 @@ msgstr "Przełącz tryb kierowania "
 msgid "Could not save game!"
 msgstr "Niemożna zapisać gry!"
 
-#: src/mission.cpp:2043
+#: src/mission.cpp:2040
 msgid "Load Transport"
 msgstr "Ładuj transport"
 
-#: src/mission.cpp:2431
+#: src/mission.cpp:2428
 msgid "OBJECTIVE ACHIEVED by cheating!"
 msgstr "CEL OSIĄGNIĘTY przez oszukiwanie!"
 
-#: src/mission.cpp:2431
+#: src/mission.cpp:2428
 msgid "OBJECTIVE ACHIEVED"
 msgstr "CEL OSIĄGNIĘTY"
 
-#: src/mission.cpp:2437
+#: src/mission.cpp:2434
 msgid "OBJECTIVE FAILED--and you cheated!"
 msgstr "CEL NIE OSIĄGNIĘTY--chociaż oszukiwałeś!"
 
-#: src/mission.cpp:2437
+#: src/mission.cpp:2434
 msgid "OBJECTIVE FAILED"
 msgstr "CEL NIE OSIĄGNIĘTY"
 
-#: src/mission.cpp:2462
-#: src/mission.cpp:2502
-#: src/mission.cpp:2614
+#: src/mission.cpp:2459
+#: src/mission.cpp:2499
+#: src/mission.cpp:2611
 msgid "Quit To Main Menu"
 msgstr "Wyjdź do menu głównego"
 
-#: src/mission.cpp:2470
+#: src/mission.cpp:2467
 msgid "Continue Game"
 msgstr "Kontynuuj grę"
 
-#: src/mission.cpp:2565
+#: src/mission.cpp:2562
 msgid "GAME SAVED :"
 msgstr "GRA ZAPISANA :"
 
-#: src/move.cpp:2307
+#: src/move.cpp:2279
 #, c-format
 msgid "You found %u power in an oil drum."
 msgstr "Znalazłeś %u energii w beczce z ropą."
@@ -12577,14 +12563,12 @@ msgid "Click to change difficulty"
 msgstr "Kliknij aby dostosować poziom trudności"
 
 #: src/multiint.cpp:2262
-#, fuzzy
 msgid "Waiting for player"
-msgstr "Oczekiwanie na graczy"
+msgstr "Oczekiwanie na gracza"
 
 #: src/multiint.cpp:2262
-#, fuzzy
 msgid "Player is ready"
-msgstr "Gracz odrzucony"
+msgstr "Gracz gotowy"
 
 #: src/multiint.cpp:2262
 msgid "Click when ready"
@@ -12649,7 +12633,7 @@ msgstr "Włączono 'zablokowane drużyny'"
 
 #: src/multiint.cpp:3091
 #: src/multiint.cpp:3160
-#: src/multimenu.cpp:1523
+#: src/multimenu.cpp:1471
 #, c-format
 msgid "The host has kicked %s from the game!"
 msgstr "Host wyrzucił %s z gry!"
@@ -12706,7 +12690,7 @@ msgid "HOST"
 msgstr "HOST"
 
 #: src/multiint.cpp:4061
-#: src/multimenu.cpp:808
+#: src/multimenu.cpp:806
 msgid "Ping"
 msgstr "Ping"
 
@@ -12731,14 +12715,13 @@ msgid "%s (%u) has an incompatible mod, and has been kicked."
 msgstr "%s (%u) ma niekompatybilny mod i został wyrzucony."
 
 #: src/multijoin.cpp:459
-#, fuzzy, c-format
+#, c-format
 msgid "%s is joining the game"
 msgstr "%s dołącza do gry"
 
 #: src/multijoin.cpp:470
-#, fuzzy
 msgid "Server message:"
-msgstr "Wiadomość systemowa:"
+msgstr "Wiadomość serwera:"
 
 #: src/multilimit.cpp:183
 msgid "Apply Defaults and Return To Previous Screen"
@@ -12780,43 +12763,42 @@ msgstr "Wynik"
 msgid "Kills"
 msgstr "Zabójstwa"
 
-#: src/multimenu.cpp:798
-#: src/multimenu.cpp:803
+#: src/multimenu.cpp:795
 msgid "Units"
 msgstr "Jednostki"
 
-#: src/multimenu.cpp:812
+#: src/multimenu.cpp:810
 msgid "Structs"
 msgstr "Konstrukcje"
 
-#: src/multimenu.cpp:1174
+#: src/multimenu.cpp:1122
 msgid "Channel"
 msgstr "Kanał"
 
-#: src/multimenu.cpp:1188
+#: src/multimenu.cpp:1136
 msgid "Toggle Alliance State"
 msgstr "Przełącz stan sojuszu"
 
-#: src/multimenu.cpp:1207
+#: src/multimenu.cpp:1155
 msgid "Give Visibility Report"
 msgstr "Przesyła raport widoczności"
 
-#: src/multimenu.cpp:1213
+#: src/multimenu.cpp:1161
 msgid "Leak Technology Documents"
 msgstr "Niekompletne dokumenty technologii"
 
-#: src/multimenu.cpp:1220
+#: src/multimenu.cpp:1168
 msgid "Hand Over Selected Units"
 msgstr "Przesuń nad zaznaczonymi jednostkami"
 
-#: src/multimenu.cpp:1226
+#: src/multimenu.cpp:1174
 msgid "Give Power To Player"
 msgstr "Przesyła energię graczowi"
 
-#: src/multimenu.cpp:1525
+#: src/multimenu.cpp:1473
 #, c-format
 msgid "kicked %s : %s from the game, and added them to the banned list!"
-msgstr ""
+msgstr "%s : %s został wyrzucony z gry i dodany do listy banicji!"
 
 #: src/multiplay.cpp:263
 #, c-format
@@ -12897,15 +12879,15 @@ msgstr "Brązowy"
 
 #: src/order.cpp:803
 msgid "We can't do that! We must be a Cyborg unit to use a Cyborg Transport!"
-msgstr "Nie możemy tego zrobić! Tylko cyborgi mogą korzystać Transportowca cyborgów!"
+msgstr "Nie możemy tego zrobić! Tylko cyborgi mogą korzystać transportowca cyborgów!"
 
-#: src/qtscriptfuncs.cpp:1578
-#: src/scriptfuncs.cpp:3259
+#: src/qtscriptfuncs.cpp:1580
+#: src/scriptfuncs.cpp:3261
 msgid "YOU ARE VICTORIOUS!"
 msgstr "ZWYCIĘŻYŁEŚ!"
 
-#: src/qtscriptfuncs.cpp:1583
-#: src/scriptfuncs.cpp:3263
+#: src/qtscriptfuncs.cpp:1585
+#: src/scriptfuncs.cpp:3265
 msgid "YOU WERE DEFEATED!"
 msgstr "ZOSTAŁEŚ POKONANY!"
 
@@ -13040,12 +13022,12 @@ msgstr "Całkowity czas gry - %s"
 msgid "You cheated!"
 msgstr "Oszukiwałeś!"
 
-#: src/scriptfuncs.cpp:9372
+#: src/scriptfuncs.cpp:9371
 #, c-format
 msgid "Beacon received from %s!"
 msgstr "Sygnał otrzymany od %s!"
 
-#: src/scriptfuncs.cpp:9409
+#: src/scriptfuncs.cpp:9408
 #, c-format
 msgid "Beacon %d"
 msgstr "Sygnał %d"
@@ -13075,12 +13057,12 @@ msgstr[0] "%u zaznaczona jednostka"
 msgstr[1] "%u zaznaczone jednostki"
 msgstr[2] "%u zaznaczonych jednostek"
 
-#: src/structure.cpp:2563
+#: src/structure.cpp:2562
 msgid "Command Control Limit Reached - Production Halted"
 msgstr "Limit kontrolny osiągnięty - produkcja wstrzymana"
 
-#: src/structure.cpp:5569
-#: src/structure.cpp:5594
+#: src/structure.cpp:5568
+#: src/structure.cpp:5593
 #, c-format
 msgid "%s - %u Unit assigned - Damage %3.0f%%"
 msgid_plural "%s - %u Units assigned - Damage %3.0f%%"
@@ -13088,51 +13070,51 @@ msgstr[0] "%s - %u Jednostka przydzielona - Obrażenia %3.0f%%"
 msgstr[1] "%s - %u Jednostki przydzielone - Obrażenia %3.0f%%"
 msgstr[2] "%s - %u Jednostek przydzielonych - Obrażenia %3.0f%%"
 
-#: src/structure.cpp:5599
-#: src/structure.cpp:5667
-#: src/structure.cpp:5682
-#: src/structure.cpp:5696
+#: src/structure.cpp:5598
+#: src/structure.cpp:5666
+#: src/structure.cpp:5681
+#: src/structure.cpp:5695
 #, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - Uszkodzenia %3.0f%%"
 
-#: src/structure.cpp:5649
+#: src/structure.cpp:5648
 #, c-format
 msgid "%s - Connected %u of %u - Damage %3.0f%%"
 msgstr "%s - Połączono %u z %u - Obrażenia %3.0f%%"
 
-#: src/structure.cpp:5812
-#: src/structure.cpp:5857
+#: src/structure.cpp:5811
+#: src/structure.cpp:5856
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Uszkodzony elektronicznie"
 
 # This maybe sound weird, but I translated this as 'stolen technology'
-#: src/structure.cpp:6108
+#: src/structure.cpp:6107
 msgid "Electronic Reward - Visibility Report"
 msgstr "Technologia skradziona - raport widoczności"
 
-#: src/structure.cpp:6148
+#: src/structure.cpp:6147
 msgid "Factory Reward - Propulsion"
 msgstr "Technologia skradziona - Napęd"
 
-#: src/structure.cpp:6172
+#: src/structure.cpp:6171
 msgid "Factory Reward - Body"
 msgstr "Technologia skradziona - Kadłub"
 
-#: src/structure.cpp:6196
+#: src/structure.cpp:6195
 msgid "Factory Reward - Weapon"
 msgstr "Technologia skradziona - Broń"
 
-#: src/structure.cpp:6205
+#: src/structure.cpp:6204
 msgid "Factory Reward - Nothing"
 msgstr "Technologia skradziona - Brak"
 
-#: src/structure.cpp:6233
+#: src/structure.cpp:6232
 msgid "Repair Facility Award - Repair"
 msgstr "Technologia skradziona - Naprawa"
 
-#: src/structure.cpp:6240
+#: src/structure.cpp:6239
 msgid "Repair Facility Award - Nothing"
 msgstr "Technologia skradziona - Brak"
 
@@ -13141,11 +13123,11 @@ msgstr "Technologia skradziona - Brak"
 msgid "Launch Transport"
 msgstr "Uruchom transport"
 
-#: src/transporter.cpp:1408
+#: src/transporter.cpp:1406
 msgid "There is not enough room in the Transport!"
 msgstr "Nie ma dość miejsca w Transportowcu!"
 
-#: src/transporter.cpp:1654
+#: src/transporter.cpp:1648
 msgid "Reinforcements landing"
 msgstr "Posiłki lądują"
 
@@ -13168,147 +13150,3 @@ msgstr " - Zbudowana %s"
 #, c-format
 msgid "Version %s-%s%s%s%s"
 msgstr "Wersja %s-%s%s%s%s"
-
-#~ msgid "VTOL HPV Cannon Bug VTOL"
-#~ msgstr "VTOL Robal działo HPV VTOL"
-
-#~ msgid "VTOL HPV Cannon Scorpion VTOL"
-#~ msgstr "VTOL Skorpion działo HPV VOL"
-
-#~ msgid "VTOL HPV Cannon Mantis VTOL"
-#~ msgstr "VTOL Modliszka działo HPV VTOL"
-
-#~ msgid "Mini-Rocket Artillery Cobra Tracks"
-#~ msgstr "Kobra artyleria minirakiet na gąsienicach"
-
-#~ msgid "HPV Cannon Python Hover"
-#~ msgstr "Pyton poduszkowiec z działem HPV"
-
-#~ msgid "CHEATS ARE NOW ENABLED!"
-#~ msgstr "OSZUKIWANIE JEST TERAZ AKTYWNE!"
-
-#~ msgid "CHEATS ARE NOW DISABLED!"
-#~ msgstr "OSZUKIWANIE JEST TERAZ WYŁĄCZONE!"
-
-#~ msgid "Activate self-test"
-#~ msgstr "Aktywuj autotest"
-
-#~ msgid "Failed to create building"
-#~ msgstr "Nie udało się utworzyć budynku"
-
-#~ msgid "Received invalid addGame data."
-#~ msgstr "Odebrano nieprawidłowe dane addGame."
-
-#~ msgid "Received invalid login data."
-#~ msgstr "Odebrano nieprawidłowe dane logowania."
-
-#~ msgid "Failed to communicate with the lobby."
-#~ msgstr "Nie udało się połączyć z lobby."
-
-#~ msgid "Got server error: %s"
-#~ msgstr "Odebrano błąd serwera: %s"
-
-#~ msgid "Game not in the lobby, please login first!"
-#~ msgstr "Gra poza lobby, najpierw się zaloguj!"
-
-#~ msgid "Authentication failed or not Authenticated"
-#~ msgstr "Uwierzytelnianie nie powiodło się"
-
-#~ msgid "The lobby rejected you!"
-#~ msgstr "Zostałeś odrzucony przez lobby!"
-
-#~ msgid "Login"
-#~ msgstr "Zaloguj się"
-
-#~ msgid "Logout"
-#~ msgstr "Wyloguj się"
-
-#~ msgid "LOBBY LOGIN"
-#~ msgstr "LOGOWANIE DO LOBBY"
-
-#~ msgid "Username:"
-#~ msgstr "Nazwa użytkownika:"
-
-#~ msgid "Use your wz2100.net credentials here."
-#~ msgstr "Użyj swoich danych użytkownika wz2100.net."
-
-#~ msgid "Factory output speed +100% per module"
-#~ msgstr "Wydajność produkcji fabryki +100% dla każdego modułu"
-
-#~ msgid "Factory output speed +60%"
-#~ msgstr "Wydajność produkcji fabryki +60%"
-
-#~ msgid "Power output +25%"
-#~ msgstr "Wydajność produkcji energii +25%"
-
-#~ msgid "AA accuracy +10%"
-#~ msgstr "Celność AA +10%"
-
-#~ msgid "Bomb damage +25%"
-#~ msgstr "Obrażenia zadawane przez bomby +25%"
-
-#~ msgid "Rearming speed +30%"
-#~ msgstr "Szybkość przeładowywania +30%"
-
-#~ msgid "AA reload time -15%"
-#~ msgstr "Szybkość przeładowania AA -15%"
-
-#~ msgid "Power output +30%"
-#~ msgstr "Wydajność produkcji energii +30%"
-
-#~ msgid "Laser reload time -15%"
-#~ msgstr "Czas przeładowania lasera -15%"
-
-#~ msgid "Radar detector tower detects enemy sensors"
-#~ msgstr "Wykrywacz radarów wykrywa radary wroga"
-
-#~ msgid "Combat engineer with construction ability"
-#~ msgstr "Cyborg inżynier z umiejętnością budowania"
-
-#~ msgid "Enables resistance to Nexus Link technology"
-#~ msgstr "Umożliwia obronę przed techologią Nexus"
-
-#~ msgid "Complete battlefield visibility"
-#~ msgstr "Kompletny widok na pole bitwy"
-
-#~ msgid "Does not offer sensor targeting"
-#~ msgstr "Nie oferuje celowania z użyciem radaru"
-
-#~ msgid "Combines standard, counter battery and VTOL sensors"
-#~ msgstr "Łączy standardowe radary CB i VTOL"
-
-#~ msgid "Very slow recharge time"
-#~ msgstr "Bardzo powolne przeładowanie"
-
-#~ msgid "Immense damage infliction capability"
-#~ msgstr "Możliwość zadania bardzo dużych obrażeń"
-
-#~ msgid "Narrow area of effect"
-#~ msgstr "Wąski zasięg działania"
-
-#~ msgid "Uses advanced mass driver railgun technology"
-#~ msgstr "Używa zaawansowanej technologii Railguna"
-
-#~ msgid "Uses advanced cannon technology"
-#~ msgstr "Używa zaawansowanej technologii działa"
-
-#~ msgid "Uses advanced rocket gun technology"
-#~ msgstr "Używa zaawansowanej technologii rakietowej"
-
-#~ msgid "Uses advanced missile gun technology"
-#~ msgstr "Używa zaawansowanej technologii pociskowej"
-
-#~ msgid "Powerful Electronic magnetic pulse weapon"
-#~ msgstr "Potężna broń elektromagnetyczna"
-
-#~ msgid "Slow moving Body"
-#~ msgstr "Powolny kadłub"
-
-#~ msgid "Very slow moving Body"
-#~ msgstr "Bardzo niska prędkość"
-
-#~ msgid "Hardpoint Whirlwind AA Gun Available"
-#~ msgstr "Umocnienie z działkiem AA Whirlwind dostępne"
-
-#~ msgid "Fires Electronic Magnetic Pulse Missiles"
-#~ msgstr "Strzela pociskami z magnetycznym impulsem"

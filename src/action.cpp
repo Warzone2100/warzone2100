@@ -2120,16 +2120,15 @@ void actionUpdateDroid(DROID *psDroid)
 		if (DROID_STOPPED(psDroid) ||
 			(psDroid->action == DACTION_WAITFORREARM))
 		{
-			UDWORD droidX = psDroid->psActionTarget[0]->pos.x;
-			UDWORD droidY = psDroid->psActionTarget[0]->pos.y;
-			if (!actionVTOLLandingPos(psDroid, &droidX, &droidY))
+			Vector2i pos = removeZ(psDroid->psActionTarget[0]->pos);
+			if (!actionVTOLLandingPos(psDroid, &pos))
 			{
 				// totally bunged up - give up
 				objTrace(psDroid->id, "Couldn't find a clear tile near rearm pad - returning to base");
 				orderDroid(psDroid, DORDER_RTB, ModeImmediate);
 				break;
 			}
-			moveDroidToDirect(psDroid, droidX,droidY);
+			moveDroidToDirect(psDroid, pos.x, pos.y);
 		}
 		break;
 	default:
@@ -2174,7 +2173,7 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 {
 	SDWORD			pbx,pby;
 	WEAPON_STATS		*psWeapStats = getWeaponStats(psDroid, 0);
-	UDWORD			droidX,droidY;
+	Vector2i                pos;
 	BASE_OBJECT		*psTarget;
 	//added MinRangeResult;
 	UBYTE	i;
@@ -2304,29 +2303,27 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 		psDroid->actionPos = psAction->psObj->pos;
 		psDroid->actionStarted = gameTime;
 		setDroidActionTarget(psDroid, psAction->psObj, 0);
-		droidX = psDroid->psActionTarget[0]->pos.x;
-		droidY = psDroid->psActionTarget[0]->pos.y;
-		if (!actionVTOLLandingPos(psDroid, &droidX, &droidY))
+		pos = removeZ(psDroid->psActionTarget[0]->pos);
+		if (!actionVTOLLandingPos(psDroid, &pos))
 		{
 			// totally bunged up - give up
 			orderDroid(psDroid, DORDER_RTB, ModeImmediate);
 			break;
 		}
-		moveDroidToDirect(psDroid, droidX, droidY);
+		moveDroidToDirect(psDroid, pos.x, pos.y);
 		break;
 	case DACTION_CLEARREARMPAD:
 		debug( LOG_NEVER, "Unit %d clearing rearm pad", psDroid->id);
 		psDroid->action = DACTION_CLEARREARMPAD;
 		setDroidActionTarget(psDroid, psAction->psObj, 0);
-		droidX = psDroid->psActionTarget[0]->pos.x;
-		droidY = psDroid->psActionTarget[0]->pos.y;
-		if (!actionVTOLLandingPos(psDroid, &droidX, &droidY))
+		pos = removeZ(psDroid->psActionTarget[0]->pos);
+		if (!actionVTOLLandingPos(psDroid, &pos))
 		{
 			// totally bunged up - give up
 			orderDroid(psDroid, DORDER_RTB, ModeImmediate);
 			break;
 		}
-		moveDroidToDirect(psDroid, droidX, droidY);
+		moveDroidToDirect(psDroid, pos.x, pos.y);
 		break;
 	case DACTION_MOVE:
 	case DACTION_TRANSPORTIN:
@@ -2710,7 +2707,7 @@ static bool vtolLandingTileSearchFunction(int x, int y, void* matchState)
 }
 
 // choose a landing position for a VTOL when it goes to rearm
-bool actionVTOLLandingPos(const DROID* psDroid, UDWORD* px, UDWORD* py)
+bool actionVTOLLandingPos(DROID const *psDroid, Vector2i *p)
 {
 	int startX, startY;
 	DROID* psCurr;
@@ -2720,8 +2717,8 @@ bool actionVTOLLandingPos(const DROID* psDroid, UDWORD* px, UDWORD* py)
 	CHECK_DROID(psDroid);
 
 	/* Initial box dimensions and set iteration count to zero */
-	startX = map_coord(*px);
-	startY = map_coord(*py);
+	startX = map_coord(p->x);
+	startY = map_coord(p->y);
 
 	// set blocking flags for all the other droids
 	for(psCurr=apsDroidLists[psDroid->player]; psCurr; psCurr = psCurr->psNext)
@@ -2751,8 +2748,8 @@ bool actionVTOLLandingPos(const DROID* psDroid, UDWORD* px, UDWORD* py)
 	{
 		debug( LOG_NEVER, "Unit %d landing pos (%d,%d)",
 		       psDroid->id, xyCoords.x, xyCoords.y);
-		*px = world_coord(xyCoords.x) + TILE_UNITS / 2;
-		*py = world_coord(xyCoords.y) + TILE_UNITS / 2;
+		p->x = world_coord(xyCoords.x) + TILE_UNITS / 2;
+		p->y = world_coord(xyCoords.y) + TILE_UNITS / 2;
 	}
 
 	// clear blocking flags for all the other droids

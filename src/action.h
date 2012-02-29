@@ -96,7 +96,7 @@ bool actionReachedBuildPos(DROID const *psDroid, int x, int y, uint16_t directio
 void moveToRearm(DROID *psDroid);
 
 /** Choose a landing position for a VTOL when it goes to rearm. */
-bool actionVTOLLandingPos(const DROID* psDroid, UDWORD* px, UDWORD* py);
+bool actionVTOLLandingPos(DROID const *psDroid, Vector2i *p);
 
 /** How many frames to skip before looking for a better target. */
 #define TARGET_UPD_SKIP_FRAMES 1000

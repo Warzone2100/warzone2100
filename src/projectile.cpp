@@ -896,6 +896,7 @@ static void proj_InFlightFunc(PROJECTILE *psProj)
 	{
 		// We hit!
 		setSpacetime(psProj, closestCollisionSpacetime);
+		psProj->time = std::max(psProj->time, gameTime - deltaGameTime + 1);  // Make sure .died gets set in the interval [gameTime - deltaGameTime + 1; gameTime].
 		if(psProj->time == psProj->prevSpacetime.time)
 		{
 			--psProj->prevSpacetime.time;
@@ -1401,7 +1402,7 @@ static void proj_checkBurnDamage(PROJECTILE *psProj)
 		unsigned damageRate = weaponIncenDamage(psStats,psProj->player);
 		debug(LOG_NEVER, "Burn damage of %d per second to object %d, player %d\n", damageRate, psCurr->id, psCurr->player);
 
-		int relativeDamage = objectDamage(psCurr, damageRate, psStats->weaponClass, psStats->weaponSubClass, gameTime - deltaGameTime/2, true);
+		int relativeDamage = objectDamage(psCurr, damageRate, psStats->weaponClass, psStats->weaponSubClass, gameTime - deltaGameTime/2 + 1, true);
 		proj_UpdateKills(psProj, relativeDamage);
 	}
 }

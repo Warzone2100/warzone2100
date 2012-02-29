@@ -72,13 +72,13 @@ bool combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 		return false;
 	}
 
-	unsigned fireTime = gameTime - deltaGameTime;  // Can fire earliest at the start of the tick.
+	unsigned fireTime = gameTime - deltaGameTime + 1;  // Can fire earliest at the start of the tick.
 
 	/*see if reload-able weapon and out of ammo*/
 	if (psStats->reloadTime && !psWeap->ammo)
 	{
 		fireTime = std::max(fireTime, psWeap->lastFired + weaponReloadTime(psStats, psAttacker->player));
-		if (gameTime <= fireTime)
+		if (gameTime < fireTime)
 		{
 			return false;
 		}
@@ -91,7 +91,7 @@ bool combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 	firePause = std::max(firePause, 1u);  // Don't shoot infinitely many shots at once.
 	fireTime = std::max(fireTime, psWeap->lastFired + firePause);
 
-	if (gameTime <= fireTime)
+	if (gameTime < fireTime)
 	{
 		/* Too soon to fire again */
 		return false;

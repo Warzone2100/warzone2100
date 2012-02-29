@@ -389,7 +389,7 @@ void recycleDroid(DROID *psDroid)
 
 	vanishDroid(psDroid);
 
-	addEffect(&position, EFFECT_EXPLOSION, EXPLOSION_TYPE_DISCOVERY, false, NULL, false, gameTime - deltaGameTime);
+	addEffect(&position, EFFECT_EXPLOSION, EXPLOSION_TYPE_DISCOVERY, false, NULL, false, gameTime - deltaGameTime + 1);
 
 	CHECK_DROID(psDroid);
 }
@@ -794,8 +794,8 @@ void droidUpdate(DROID *psDroid)
 
 			emissionInterval = CALC_DROID_SMOKE_INTERVAL(percentDamage);
 
-			int effectTime = std::max(gameTime - deltaGameTime, psDroid->lastEmission + emissionInterval);
-			if (gameTime > effectTime)
+			int effectTime = std::max(gameTime - deltaGameTime + 1, psDroid->lastEmission + emissionInterval);
+			if (gameTime >= effectTime)
 			{
    				dv.x = psDroid->pos.x + DROID_DAMAGE_SPREAD;
    				dv.z = psDroid->pos.y + DROID_DAMAGE_SPREAD;
@@ -836,7 +836,7 @@ void droidUpdate(DROID *psDroid)
 		else
 		{
 			// do burn damage
-			droidDamage(psDroid, BURN_DAMAGE, WC_HEAT, WSC_FLAME, gameTime - deltaGameTime/2, true);
+			droidDamage(psDroid, BURN_DAMAGE, WC_HEAT, WSC_FLAME, gameTime - deltaGameTime/2 + 1, true);
 		}
 	}
 
@@ -1383,7 +1383,7 @@ bool droidUpdateDroidRepair(DROID *psRepairDroid)
 		iVecEffect.y = psDroidToRepair->pos.z + rand()%8;;
 		iVecEffect.z = psDroidToRepair->pos.y + DROID_REPAIR_SPREAD;
 		effectGiveAuxVar(90+rand()%20);
-		addEffect(&iVecEffect, EFFECT_EXPLOSION, EXPLOSION_TYPE_LASER, false, NULL, 0, gameTime - deltaGameTime + rand()%deltaGameTime);
+		addEffect(&iVecEffect, EFFECT_EXPLOSION, EXPLOSION_TYPE_LASER, false, NULL, 0, gameTime - deltaGameTime + 1 + rand()%deltaGameTime);
 		droidAddWeldSound( iVecEffect );
 	}
 
@@ -2007,7 +2007,7 @@ void droidSetBits(DROID_TEMPLATE *pTemplate,DROID *psDroid)
 	psDroid->body = calcTemplateBody(pTemplate, psDroid->player);
 	psDroid->originalBody = psDroid->body;
 	psDroid->expectedDamage = 0;  // Begin life optimistically.
-	psDroid->time = gameTime - deltaGameTime;         // Start at beginning of tick.
+	psDroid->time = gameTime - deltaGameTime + 1;         // Start at beginning of tick.
 	psDroid->prevSpacetime.time = psDroid->time - 1;  // -1 for interpolation.
 
 	//create the droids weapons
