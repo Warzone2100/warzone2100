@@ -17,7 +17,8 @@ CLEANFILES = \
 	scriptvals_parser.h
 
 EXTRA_DIST = \
-	autorevision.h
+	autorevision.h \
+	cursorselection
 
 bin_PROGRAMS = warzone2100
 noinst_HEADERS = \
