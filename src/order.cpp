@@ -793,12 +793,15 @@ void orderUpdateDroid(DROID *psDroid)
 
 			temp = (DROID*)psDroid->order.psObj;
 			// FIXME: since we now have 2 transporter types, we should fix this in the scripts for campaign
-			if ((temp->droidType == DROID_TRANSPORTER) && !cyborgDroid(psDroid) && game.type != CAMPAIGN && bMultiPlayer)
+			if (temp->droidType == DROID_TRANSPORTER && !cyborgDroid(psDroid) && game.type != CAMPAIGN && bMultiPlayer)
 			{
 				psDroid->order = DroidOrder(DORDER_NONE);
 				actionDroid(psDroid, DACTION_NONE);
-				audio_PlayTrack( ID_SOUND_BUILD_FAIL );
-				addConsoleMessage(_("We can't do that! We must be a Cyborg unit to use a Cyborg Transport!"), DEFAULT_JUSTIFY, selectedPlayer);
+				if (psDroid->player == selectedPlayer)
+				{
+					audio_PlayTrack(ID_SOUND_BUILD_FAIL);
+					addConsoleMessage(_("We can't do that! We must be a Cyborg unit to use a Cyborg Transport!"), DEFAULT_JUSTIFY, selectedPlayer);
+				}
 			}
 			else
 			{
@@ -1625,16 +1628,15 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		{
 			if (psStruct->pStructureType->type == REF_HQ)
 			{
-				UDWORD	droidX = psStruct->pos.x;
-				UDWORD	droidY = psStruct->pos.y;
+				Vector2i pos = removeZ(psStruct->pos);
 
 				psDroid->order = *psOrder;
 				// Find a place to land for vtols. And Transporters in a multiPlay game.
 				if (isVtolDroid(psDroid) || (game.type == SKIRMISH && (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER)))
 				{
-					actionVTOLLandingPos(psDroid, &droidX,&droidY);
+					actionVTOLLandingPos(psDroid, &pos);
 				}
-				actionDroid(psDroid, DACTION_MOVE, droidX,droidY);
+				actionDroid(psDroid, DACTION_MOVE, pos.x, pos.y);
 				break;
 			}
 		}
@@ -1718,13 +1720,11 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 				 * repaired, need to find a suitable location to drop down. */
 				if (game.type == SKIRMISH && (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER))
 				{
-					UDWORD droidX, droidY;
-					droidX = psDroid->order.pos.x;
-					droidY = psDroid->order.pos.y;
+					Vector2i pos = psDroid->order.pos;
 
 					objTrace(psDroid->id, "Repair transport");
-					actionVTOLLandingPos(psDroid, &droidX,&droidY);
-					actionDroid(psDroid, DACTION_MOVE, droidX,droidY);
+					actionVTOLLandingPos(psDroid, &pos);
+					actionDroid(psDroid, DACTION_MOVE, pos.x, pos.y);
 				}
 				else
 				{
@@ -2909,19 +2909,31 @@ void orderSelectedStatsTwoLocDir(UDWORD player, DROID_ORDER order, STRUCTURE_STA
 
 
 /** This function runs though all player's droids to check if any of then is a transporter. Returns the transporter droid if any was found, and NULL else.*/
-DROID *FindATransporter(unsigned player)
+DROID *FindATransporter(DROID const *embarkee)
 {
-	DROID *psDroid;
+	bool isCyborg = cyborgDroid(embarkee) || !bMultiPlayer;  // In campaign, any unit can go on a regular transporter, so consider any unit to be a cyborg.
 
-	for (psDroid = apsDroidLists[player]; psDroid != NULL; psDroid = psDroid->psNext)
+	DROID *bestDroid = NULL;
+	unsigned bestDist = ~0u;
+
+	for (DROID *psDroid = apsDroidLists[embarkee->player]; psDroid != NULL; psDroid = psDroid->psNext)
 	{
-		if (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER)
+		if ((isCyborg && psDroid->droidType == DROID_TRANSPORTER) || psDroid->droidType == DROID_SUPERTRANSPORTER)
 		{
-			return psDroid;
+			unsigned dist = iHypot(removeZ(psDroid->pos - embarkee->pos));
+			if (!checkTransporterSpace(psDroid, embarkee, false))
+			{
+				dist += 0x8000000;  // Should prefer transports that aren't full.
+			}
+			if (dist < bestDist)
+			{
+				bestDroid = psDroid;
+				bestDist = dist;
+			}
 		}
 	}
 
-	return NULL;
+	return bestDroid;
 }
 
 
@@ -3296,8 +3308,8 @@ bool secondarySetState(DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STATE Stat
 					secondarySet = State;
 					break;
 				case DSS_RTL_TRANSPORT:
-					psTransport = FindATransporter(psDroid->player);
-					if (psTransport != NULL && !(bMultiPlayer && !cyborgDroid(psDroid)))
+					psTransport = FindATransporter(psDroid);
+					if (psTransport != NULL)
 					{
 						secondarySet = State;
 					}
@@ -3579,22 +3591,14 @@ bool secondarySetState(DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STATE Stat
 					CurrState |= DSS_RTL_BASE;
 					break;
 				case DSS_RTL_TRANSPORT:
-					psTransport = FindATransporter(psDroid->player);
+					psTransport = FindATransporter(psDroid);
 					if (psTransport != NULL)
 					{
-						// in multiPlayer can only put cyborgs onto a Transporter
-						if (bMultiPlayer && !cyborgDroid(psDroid))
+						order = DORDER_EMBARK;
+						CurrState |= DSS_RTL_TRANSPORT;
+						if (!orderState(psDroid, DORDER_EMBARK))
 						{
-							retVal = false;
-						}
-						else
-						{
-							order = DORDER_EMBARK;
-							CurrState |= DSS_RTL_TRANSPORT;
-							if (!orderState(psDroid, DORDER_EMBARK))
-							{
-								orderDroidObj(psDroid, DORDER_EMBARK, psTransport, ModeImmediate);
-							}
+							orderDroidObj(psDroid, DORDER_EMBARK, psTransport, ModeImmediate);
 						}
 					}
 					else

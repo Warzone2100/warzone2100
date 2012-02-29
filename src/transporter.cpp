@@ -158,7 +158,7 @@ static bool intAddTransButtonForm(void);
 static bool intAddTransContentsForm(void);
 static bool intAddDroidsAvailForm(void);
 void intRemoveTransContent(void);
-static UDWORD transporterSpaceRequired(DROID *psDroid);
+static UDWORD transporterSpaceRequired(DROID const *psDroid);
 static DROID* transInterfaceDroidList(void);
 static void intTransporterAddDroid(UDWORD id);
 static void intRemoveTransDroidsAvail(void);
@@ -1442,7 +1442,7 @@ void transporterAddDroid(DROID *psTransporter, DROID *psDroidToAdd)
 }
 
 /*check to see if the droid can fit on the Transporter - return true if fits*/
-bool checkTransporterSpace(DROID *psTransporter, DROID *psAssigned)
+bool checkTransporterSpace(DROID const *psTransporter, DROID const *psAssigned, bool mayFlash)
 {
 	DROID		*psDroid, *psNext;
 	UDWORD		capacity;
@@ -1462,8 +1462,8 @@ bool checkTransporterSpace(DROID *psTransporter, DROID *psAssigned)
 	}
 	if (capacity >= transporterSpaceRequired(psAssigned))
 	{
-        //when full flash the transporter button
-        if (capacity - transporterSpaceRequired(psAssigned) == 0)
+		//when full flash the transporter button
+		if (mayFlash && capacity - transporterSpaceRequired(psAssigned) == 0)
         {
             flashMissionButton(IDTRANS_LAUNCH);
         }
@@ -1476,7 +1476,7 @@ bool checkTransporterSpace(DROID *psTransporter, DROID *psAssigned)
 }
 
 /*returns the space the droid occupies on a transporter based on the body size*/
-UDWORD transporterSpaceRequired(DROID *psDroid)
+UDWORD transporterSpaceRequired(DROID const *psDroid)
 {
 	UDWORD	size;
 

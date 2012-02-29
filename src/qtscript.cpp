@@ -710,7 +710,6 @@ bool triggerEventResearched(RESEARCH *psResearch, STRUCTURE *psStruct, int playe
 		int me = engine->globalObject().property("me").toInt32();
 		if (me == player)
 		{
-			QScriptEngine *engine = scripts.at(i);
 			QScriptValueList args;
 			args += convResearch(psResearch, engine, player);
 			if (psStruct)
@@ -734,7 +733,6 @@ bool triggerEventDestroyed(BASE_OBJECT *psVictim)
 		int me = engine->globalObject().property("me").toInt32();
 		if (me == psVictim->player)
 		{
-			QScriptEngine *engine = scripts.at(i);
 			QScriptValueList args;
 			args += convMax(psVictim, engine);
 			callFunction(engine, "eventDestroyed", args);
@@ -755,7 +753,6 @@ bool triggerEventSeen(BASE_OBJECT *psViewer, BASE_OBJECT *psSeen)
 		int me = engine->globalObject().property("me").toInt32();
 		if (me == psViewer->player)
 		{
-			QScriptEngine *engine = scripts.at(i);
 			QScriptValueList args;
 			args += convMax(psViewer, engine);
 			args += convMax(psSeen, engine);
@@ -778,7 +775,6 @@ bool triggerEventObjectTransfer(BASE_OBJECT *psObj, int from)
 		int me = engine->globalObject().property("me").toInt32();
 		if (me == psObj->player || me == from)
 		{
-			QScriptEngine *engine = scripts.at(i);
 			QScriptValueList args;
 			args += convMax(psObj, engine);
 			args += QScriptValue(from);

@@ -2352,16 +2352,16 @@ static bool structPlaceDroid(STRUCTURE *psStructure, DROID_TEMPLATE *psTempl,
 			iVecEffect.x = psNewDroid->pos.x;
 			iVecEffect.y = map_Height( psNewDroid->pos.x, psNewDroid->pos.y ) + DROID_CONSTRUCTION_SMOKE_HEIGHT;
 			iVecEffect.z = psNewDroid->pos.y;
-			addEffect(&iVecEffect, EFFECT_CONSTRUCTION, CONSTRUCTION_TYPE_DRIFTING, false, NULL, 0, gameTime - deltaGameTime);
+			addEffect(&iVecEffect, EFFECT_CONSTRUCTION, CONSTRUCTION_TYPE_DRIFTING, false, NULL, 0, gameTime - deltaGameTime + 1);
 			iVecEffect.x = psNewDroid->pos.x - DROID_CONSTRUCTION_SMOKE_OFFSET;
 			iVecEffect.z = psNewDroid->pos.y - DROID_CONSTRUCTION_SMOKE_OFFSET;
-			addEffect(&iVecEffect, EFFECT_CONSTRUCTION, CONSTRUCTION_TYPE_DRIFTING, false, NULL, 0, gameTime - deltaGameTime);
+			addEffect(&iVecEffect, EFFECT_CONSTRUCTION, CONSTRUCTION_TYPE_DRIFTING, false, NULL, 0, gameTime - deltaGameTime + 1);
 			iVecEffect.z = psNewDroid->pos.y + DROID_CONSTRUCTION_SMOKE_OFFSET;
-			addEffect(&iVecEffect, EFFECT_CONSTRUCTION, CONSTRUCTION_TYPE_DRIFTING, false, NULL, 0, gameTime - deltaGameTime);
+			addEffect(&iVecEffect, EFFECT_CONSTRUCTION, CONSTRUCTION_TYPE_DRIFTING, false, NULL, 0, gameTime - deltaGameTime + 1);
 			iVecEffect.x = psNewDroid->pos.x + DROID_CONSTRUCTION_SMOKE_OFFSET;
-			addEffect(&iVecEffect, EFFECT_CONSTRUCTION, CONSTRUCTION_TYPE_DRIFTING, false, NULL, 0, gameTime - deltaGameTime);
+			addEffect(&iVecEffect, EFFECT_CONSTRUCTION, CONSTRUCTION_TYPE_DRIFTING, false, NULL, 0, gameTime - deltaGameTime + 1);
 			iVecEffect.z = psNewDroid->pos.y - DROID_CONSTRUCTION_SMOKE_OFFSET;
-			addEffect(&iVecEffect, EFFECT_CONSTRUCTION, CONSTRUCTION_TYPE_DRIFTING, false, NULL, 0, gameTime - deltaGameTime);
+			addEffect(&iVecEffect, EFFECT_CONSTRUCTION, CONSTRUCTION_TYPE_DRIFTING, false, NULL, 0, gameTime - deltaGameTime + 1);
 		}
 		/* add the droid to the list */
 		addDroid(psNewDroid, apsDroidLists);
@@ -2440,11 +2440,10 @@ static bool structPlaceDroid(STRUCTURE *psStructure, DROID_TEMPLATE *psTempl,
 
 				if (isVtolDroid(psNewDroid))
 				{
-					UDWORD droidX = psFlag->coords.x;
-					UDWORD droidY = psFlag->coords.y;
+					Vector2i pos = removeZ(psFlag->coords);
 					//find a suitable location near the delivery point
-					actionVTOLLandingPos(psNewDroid, &droidX, &droidY);
-					orderDroidLoc(psNewDroid, DORDER_MOVE, droidX, droidY, ModeQueue);
+					actionVTOLLandingPos(psNewDroid, &pos);
+					orderDroidLoc(psNewDroid, DORDER_MOVE, pos.x, pos.y, ModeQueue);
 				}
 				else
 				{
@@ -3354,7 +3353,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 					iVecEffect.y = psDroid->pos.z + (10-rand()%20);
 					iVecEffect.z = psDroid->pos.y + (10-rand()%20);
 					effectSetSize(100);
-					addEffect(&iVecEffect, EFFECT_EXPLOSION, EXPLOSION_TYPE_SPECIFIED, true, getImdFromIndex(MI_FLAME), 0, gameTime - deltaGameTime);
+					addEffect(&iVecEffect, EFFECT_EXPLOSION, EXPLOSION_TYPE_SPECIFIED, true, getImdFromIndex(MI_FLAME), 0, gameTime - deltaGameTime + 1);
 				}
 			}
 		}
@@ -3658,8 +3657,8 @@ void structureUpdate(STRUCTURE *psBuilding, bool mission)
 		if (damage > 0.)
 		{
 			emissionInterval = CalcStructureSmokeInterval(damage/65536.f);
-			unsigned effectTime = std::max(gameTime - deltaGameTime, psBuilding->lastEmission + emissionInterval);
-			if (gameTime > effectTime)
+			unsigned effectTime = std::max(gameTime - deltaGameTime + 1, psBuilding->lastEmission + emissionInterval);
+			if (gameTime >= effectTime)
 			{
 				widthScatter   = getStructureWidth(psBuilding)   * TILE_UNITS/2/3;
 				breadthScatter = getStructureBreadth(psBuilding) * TILE_UNITS/2/3;

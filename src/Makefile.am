@@ -10,12 +10,15 @@ autorevision.h:
 	(cd $(top_srcdir) && ./build_tools/autorevision.sh $(abs_top_builddir)/src/autorevision.h || true)
 
 BUILT_SOURCES = \
+	autorevision.h \
+	$(CLEANFILES)
+
+CLEANFILES = \
 	scriptvals_parser.h
 
-CLEANFILES = $(BUILT_SOURCES)
-
 EXTRA_DIST = \
-	autorevision.h
+	autorevision.h \
+	cursorselection
 
 bin_PROGRAMS = warzone2100
 noinst_HEADERS = \

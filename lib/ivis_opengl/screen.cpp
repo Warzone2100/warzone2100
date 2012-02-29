@@ -145,7 +145,6 @@ bool screenInitialise()
 	}
 	else // less than 1.5
 	{
-#ifndef WZ_OS_MAC
 		// Check if VBO extension available for haxx
 		if (GLEW_VERSION_1_4 && GLEW_ARB_vertex_buffer_object)
 		{
@@ -153,7 +152,6 @@ bool screenInitialise()
 			// screen_EnableVBO should be called later, so nothing (quesoGLC) will call glewInit twice and flush our tweaks into void
 		}
 		else
-#endif
 		{
 			debug(LOG_FATAL, _("OpenGL 1.4 + VBO extension is not supported by your system. The game requires this. Please upgrade your graphics drivers/hardware, if possible."));
 			exit(1);
@@ -173,10 +171,9 @@ void screenShutDown(void)
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_ACCUM_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 }
 
-// Make OpenGL's VBO functions available under the core names for implementations that have them only as extensions, namely Mesa.
+// Make OpenGL's VBO functions available under the core names for drivers that support OpenGL 1.4 only but have the VBO extension
 void screen_EnableVBO()
 {
-#ifndef WZ_OS_MAC
 	// no need if there is OpenGL 1.5 available
 	if (!GLEW_VERSION_1_5 && GLEW_ARB_vertex_buffer_object)
 	{
@@ -194,7 +191,6 @@ void screen_EnableVBO()
 		__glewMapBuffer = __glewMapBufferARB;
 		__glewUnmapBuffer = __glewUnmapBufferARB;
 	}
-#endif
 }
 
 void screen_SetBackDropFromFile(const char* filename)
