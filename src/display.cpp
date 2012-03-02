@@ -834,10 +834,13 @@ void processMouseClickInput(void)
 					item = MT_ENEMYDROID;
 				}
 			}
-			else if (selection == SC_DROID_DEMOLISH && ObjAllied)
+			else if (selection == SC_DROID_DEMOLISH)
 			{
-				// Can't demolish allied objects
-				item = MT_BLOCKING;
+				// Can't demolish allied objects, or something that isn't built yet
+				if (ObjAllied || (ObjUnderMouse && ObjUnderMouse->type == OBJ_STRUCTURE && ((STRUCTURE *)ObjUnderMouse)->status != SS_BUILT))
+				{
+					item = MT_BLOCKING;
+				}
 			}
 			// in multiPlayer check for what kind of unit can use it (TODO)
 			else if (bMultiPlayer && item == MT_TRANDROID)
