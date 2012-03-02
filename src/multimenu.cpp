@@ -1466,8 +1466,9 @@ void intProcessMultiMenu(UDWORD id)
 				char buf[250];
 
 				// Allow the host to kick the AI only in a MP game, or if they activated cheats in a skirmish game
-				if (NetPlay.bComms || Cheated)
+				if ((NetPlay.bComms || Cheated) && (NetPlay.players[i].allocated || (NetPlay.players[i].allocated == false && NetPlay.players[i].ai != AI_OPEN)))
 				{
+					inputLoseFocus();
 					ssprintf(buf, _("The host has kicked %s from the game!"), getPlayerName((unsigned int) i));
 					sendTextMessage(buf, true);
 					ssprintf(buf, _("kicked %s : %s from the game, and added them to the banned list!"), getPlayerName((unsigned int) i), NetPlay.players[i].IPtextAddress);
