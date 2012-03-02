@@ -2800,11 +2800,6 @@ SELECTION_TYPE	selectionClass;
 	selectionClass = SC_INVALID;
 	CurrWeight = UBYTE_MAX;
 
-	if (intDemolishSelectMode())
-	{
-		return SC_DROID_DEMOLISH;
-	}
-
 	for(psDroid = apsDroidLists[selectedPlayer];
 			psDroid /*&& !atLeastOne*/; psDroid = psDroid->psNext)
 	{
@@ -2888,6 +2883,10 @@ SELECTION_TYPE	selectionClass;
 
 		case DROID_CONSTRUCT:
 		case DROID_CYBORG_CONSTRUCT:
+			if (intDemolishSelectMode())
+			{
+				return SC_DROID_DEMOLISH;
+			}
 			selectionClass = SC_DROID_CONSTRUCT;
 			break;
 
