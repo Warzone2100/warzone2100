@@ -246,7 +246,7 @@ extern void inputNewFrame(void);
 
 static inline bool specialOrderKeyDown()
 {
-	return keyDown(KEY_LALT) || keyDown(KEY_RALT) || keyDown(KEY_LMETA) || keyDown(KEY_RMETA);
+	return keyDown(KEY_LALT) || keyDown(KEY_RALT) || keyDown(KEY_LMETA) || keyDown(KEY_RMETA) || keyDown(KEY_LSUPER) || keyDown(KEY_RSUPER);
 }
 
 #endif // _input_h
