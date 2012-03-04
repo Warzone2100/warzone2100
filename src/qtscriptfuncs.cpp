@@ -2411,11 +2411,13 @@ bool registerFunctions(QScriptEngine *engine)
 
 	// Static knowledge about players
 	//== \item[playerData] An array of information about the players in a game. Each item in the array is an object
-	//== containing the following variables: difficulty (see \emph{difficulty} global constant), colour, position, and team.
+	//== containing the following variables: difficulty (see \emph{difficulty} global constant), colour, position, 
+	//== team, and (3.2+ only) name.
 	QScriptValue playerData = engine->newArray(game.maxPlayers);
 	for (int i = 0; i < game.maxPlayers; i++)
 	{
 		QScriptValue vector = engine->newObject();
+		vector.setProperty("name", NetPlay.players[i].name, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 		vector.setProperty("difficulty", NetPlay.players[i].difficulty, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 		vector.setProperty("colour", NetPlay.players[i].colour, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 		vector.setProperty("position", NetPlay.players[i].position, QScriptValue::ReadOnly | QScriptValue::Undeletable);
