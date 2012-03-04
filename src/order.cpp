@@ -1493,7 +1493,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 			psDroid->order = *psOrder;
 
 			if (isVtolDroid(psDroid)
-			    || actionInsideMinRange(psDroid, psOrder->psObj, NULL)
+			    || actionInRange(psDroid, psOrder->psObj, 0)
 			    || (psOrder->type == DORDER_ATTACKTARGET
 			        && secondaryGetState(psDroid, DSO_HALTTYPE) == DSS_HALT_HOLD))
 			{
