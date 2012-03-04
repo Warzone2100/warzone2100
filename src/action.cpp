@@ -474,60 +474,20 @@ bool actionTargetTurret(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, WEAPON *
 // return whether a droid can see a target to fire on it
 bool actionVisibleTarget(DROID *psDroid, BASE_OBJECT *psTarget, int weapon_slot)
 {
-	WEAPON_STATS	*psStats;
-	int compIndex;
-
 	CHECK_DROID(psDroid);
 	ASSERT_OR_RETURN(false, psTarget != NULL, "Target is NULL");
-
-	if (psDroid->numWeaps == 0)
+	if (!psTarget->visible[psDroid->player])
 	{
-		if ( visibleObject(psDroid, psTarget, false) )
-		{
-			return true;
-		}
-	}
-
-	if (isVtolDroid(psDroid))
-	{
-		if ( visibleObject(psDroid, psTarget, false) )
-		{
-			return true;
-		}
 		return false;
 	}
-	compIndex = psDroid->asWeaps[weapon_slot].nStat;
-	ASSERT_OR_RETURN( false, compIndex < numWeaponStats, "Invalid range referenced for numWeaponStats, %d > %d", compIndex, numWeaponStats);
-	psStats = asWeaponStats + compIndex;
-
-	if (lineOfFire(psDroid, psTarget, weapon_slot, true))
+	if ((psDroid->numWeaps == 0 || isVtolDroid(psDroid)) && visibleObject(psDroid, psTarget, false))
 	{
-		if (proj_Direct(psStats))
-		{
-			return true;
-		}
-		else
-		{
-			// indirect can only attack things they can see unless attacking
-			// through a sensor droid - see DORDER_FIRESUPPORT
-			if (orderState(psDroid, DORDER_FIRESUPPORT))
-			{
-				if (psTarget->visible[psDroid->player])
-				{
-					return true;
-				}
-			}
-			else
-			{
-				if (visibleObject(psDroid, psTarget, false))
-				{
-					return true;
-				}
-			}
-		}
+		return true;
 	}
-
-	return false;
+	const int compIndex = psDroid->asWeaps[weapon_slot].nStat;
+	ASSERT_OR_RETURN( false, compIndex < numWeaponStats, "Invalid range referenced for numWeaponStats, %d > %d", compIndex, numWeaponStats);
+	return (orderState(psDroid, DORDER_FIRESUPPORT)	|| visibleObject(psDroid, psTarget, false))
+	       && lineOfFire(psDroid, psTarget, weapon_slot, true);
 }
 
 static void actionAddVtolAttackRun( DROID *psDroid )
@@ -1528,7 +1488,7 @@ void actionUpdateDroid(DROID *psDroid)
 					objTrace(psDroid->id, "DACTION_MOVETOBUILD: !validLocation");
 					cancelBuild(psDroid);
 				}
-				else
+				else // too far away
 				{
 					syncDebug("Reached build target: build");
 					psDroid->action = DACTION_BUILD_FOUNDATION;
