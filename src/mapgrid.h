@@ -37,7 +37,6 @@ extern void gridShutDown(void);
 // Resets seenThisTick[] to false.
 extern void gridReset(void);
 
-#define PREVIOUS_DEFAULT_GRID_SEARCH_RADIUS (20*TILE_UNITS)
 /// Find all objects within radius. Call gridIterate() to get the search results.
 extern void gridStartIterate(int32_t x, int32_t y, uint32_t radius);
 

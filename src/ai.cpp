@@ -852,8 +852,16 @@ bool aiChooseTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget, int weapon_slot
 		{
 			int targetValue = -1;
 			int tarDist = INT32_MAX;
+			int srange = longRange;
 
-			gridStartIterate(psObj->pos.x, psObj->pos.y, std::min(longRange, PREVIOUS_DEFAULT_GRID_SEARCH_RADIUS));
+			if (!proj_Direct(psWStats) && srange > objSensorRange(psObj))
+			{
+				// search radius of indirect weapons limited by their sight, unless they use
+				// external sensors to provide fire designation
+				srange = objSensorRange(psObj);
+			}
+
+			gridStartIterate(psObj->pos.x, psObj->pos.y, srange);
 			for (BASE_OBJECT *psCurr = gridIterate(); psCurr != NULL; psCurr = gridIterate())
 			{
 				// Prefer targets that aren't walls, then prefer finished targets to unfinished targets.
@@ -937,7 +945,7 @@ bool aiChooseSensorTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget)
 		BASE_OBJECT	*psCurr, *psTemp = NULL;
 		int		tarDist = SDWORD_MAX;
 
-		gridStartIterate(psObj->pos.x, psObj->pos.y, PREVIOUS_DEFAULT_GRID_SEARCH_RADIUS);
+		gridStartIterate(psObj->pos.x, psObj->pos.y, objSensorRange(psObj));
 		psCurr = gridIterate();
 		while (psCurr != NULL)
 		{
