@@ -105,7 +105,7 @@ bool customDebugfile = false;		// Default false: user has NOT specified where to
 
 char datadir[PATH_MAX] = ""; // Global that src/clparse.c:ParseCommandLine can write to, so it can override the default datadir on runtime. Needs to be empty on startup for ParseCommandLine to work!
 char configdir[PATH_MAX] = ""; // specifies custom USER directory. Same rules apply as datadir above.
-
+char rulesettag[40] = "";
 char * global_mods[MAX_MODS] = { NULL };
 char * campaign_mods[MAX_MODS] = { NULL };
 char * multiplay_mods[MAX_MODS] = { NULL };
@@ -1119,6 +1119,8 @@ int realmain(int argc, char *argv[])
 	make_dir(MultiCustomMapsPath, "maps", NULL); // MUST have this to prevent crashes when getting map
 	PHYSFS_mkdir("music");
 	PHYSFS_mkdir("logs");		// a place to hold our netplay, mingw crash reports & WZ logs
+	PHYSFS_mkdir("userdata");	// a place to store per-mod data user generated data
+	memset(rulesettag, 0, sizeof(rulesettag)); // tag to add to userdata to find user generated stuff
 	make_dir(MultiPlayersPath, "multiplay", NULL);
 	make_dir(MultiPlayersPath, "multiplay", "players");
 

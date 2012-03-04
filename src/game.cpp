@@ -42,7 +42,7 @@
 #include "lib/sound/audio.h"
 #include "lib/sound/audio_id.h"
 #include "modding.h"
-
+#include "main.h"
 #include "game.h"
 #include "qtscript.h"
 #include "fpath.h"
@@ -2865,6 +2865,37 @@ static bool gameLoad(const char* fileName)
 	}
 
 	debug(LOG_NEVER, "gl .gam file is version %u\n", fileHeader.version);
+
+	// Prior to getting here, the directory structure has been set to whereever the
+	// map or savegame is loaded from, so we will get the right ruleset file.
+	if (!PHYSFS_exists("ruleset.ini"))
+	{
+		debug(LOG_ERROR, "ruleset.ini not found! User generated data will not work.");
+		memset(rulesettag, 0, sizeof(rulesettag));
+	}
+	else
+	{
+		WzConfig ruleset("ruleset.ini");
+		ASSERT_OR_RETURN(false, ruleset.status() == QSettings::NoError, "%s not loaded", fileName);
+		if (!ruleset.contains("ruleset/tag"))
+		{
+			debug(LOG_ERROR, "ruleset tag not found in ruleset.ini!"); // fall-through
+		}
+		QString tag = ruleset.value("ruleset/tag", "[]").toString();
+		sstrcpy(rulesettag, tag.toUtf8().constData());
+		if (strspn(rulesettag, "abcdefghijklmnopqrstuvwxyz") != strlen(rulesettag)) // for safety
+		{
+			debug(LOG_ERROR, "ruleset.ini userdata tag contains invalid characters!");
+			debug(LOG_ERROR, "User generated data will not work.");
+			memset(rulesettag, 0, sizeof(rulesettag));
+		}
+		else
+		{
+			char tmppath[PATH_MAX];
+			ssprintf(tmppath, "userdata/%s", rulesettag);
+			PHYSFS_mkdir(tmppath);
+		}
+	}
 
 	//set main version Id from game file
 	saveGameVersion = fileHeader.version;

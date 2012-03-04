@@ -16,6 +16,7 @@ BASELIST = \
 	effects \
 	features \
 	gamedesc.lev \
+	ruleset.ini \
 	images \
 	messages \
 	misc \
@@ -30,6 +31,7 @@ BASELIST = \
 
 PATCHLIST = \
 	addon.lev \
+	ruleset.ini \
 	anims \
 	challenges \
 	components \

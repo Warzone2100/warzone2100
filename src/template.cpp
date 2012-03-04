@@ -38,6 +38,7 @@
 #include "hci.h"
 #include "multiplay.h"
 #include "projectile.h"
+#include "main.h"
 
 /* default droid design template */
 extern DROID_TEMPLATE	sDefaultDesignTemplate;
@@ -95,10 +96,10 @@ bool researchedTemplate(DROID_TEMPLATE *psCurr, int player)
 
 bool initTemplates()
 {
-	WzConfig ini("templates.ini");
+	WzConfig ini("userdata/" + QString(rulesettag) + "/storedtemplates.ini");
 	if (ini.status() != QSettings::NoError)
 	{
-		debug(LOG_FATAL, "Could not open templates.ini");
+		debug(LOG_FATAL, "Could not open storedtemplates.ini");
 		return false;
 	}
 	QStringList list = ini.childGroups();
@@ -168,10 +169,10 @@ bool initTemplates()
 bool storeTemplates()
 {
 	// Write stored templates (back) to file
-	WzConfig ini("templates.ini");
+	WzConfig ini("userdata/" + QString(rulesettag) + "/storedtemplates.ini");
 	if (ini.status() != QSettings::NoError || !ini.isWritable())
 	{
-		debug(LOG_FATAL, "Could not open templates.ini");
+		debug(LOG_FATAL, "Could not open storedtemplates.ini");
 		return false;
 	}
 	for (DROID_TEMPLATE *psCurr = apsDroidTemplates[selectedPlayer]; psCurr != NULL; psCurr = psCurr->psNext)
