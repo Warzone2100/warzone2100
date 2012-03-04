@@ -446,10 +446,8 @@ bool actionTargetTurret(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, WEAPON *
 	}
 	onTarget = abs(angleDelta(targetRotation - (tRotation + psAttacker->rot.direction))) <= rotationTolerance;
 
-	/* set muzzle pitch if direct fire */
-	if (!bRepair && (proj_Direct(psWeapStats) || ((psAttacker->type == OBJ_DROID)
-													  && !proj_Direct(psWeapStats)
-												  && actionInsideMinRange((DROID *)psAttacker, psTarget, psWeapStats))))
+	/* Set muzzle pitch if not repairing or outside minimum range */
+	if (!bRepair && objPosDiffSq(psAttacker, psTarget) > psWeapStats->minRange * psWeapStats->minRange)
 	{
 		dx = psTarget->pos.x - psAttacker->pos.x;
 		dy = psTarget->pos.y - psAttacker->pos.y;
@@ -459,10 +457,6 @@ bool actionTargetTurret(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, WEAPON *
 		dxy = iHypot(dx, dy);
 
 		targetPitch = iAtan2(dz, dxy);
-
-		/* invert calculations for bottom-mounted weapons (i.e. for vtols) */
-		//if (bInvert) { why do anything here? }
-
 		pitchError = angleDelta(targetPitch - tPitch);
 
 		tPitch += clip(pitchError, -pitchRate, pitchRate);  // Addition wrapping intended.
