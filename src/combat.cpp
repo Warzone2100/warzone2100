@@ -158,9 +158,8 @@ bool combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 	int dist = iHypot(removeZ(deltaPos));
 	longRange = proj_GetLongRange(psStats);
 
-	/* modification by CorvusCorax - calculate shooting angle */
 	int min_angle = 0;
-	// only calculate for indirect shots
+	// Calculate angle for indirect shots
 	if (!proj_Direct(psStats) && dist > 0)
 	{
 		min_angle = arcOfFire(psAttacker,psTarget,weapon_slot,true);

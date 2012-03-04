@@ -468,10 +468,6 @@ bool actionTargetTurret(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, WEAPON *
 		tPitch += clip(pitchError, -pitchRate, pitchRate);  // Addition wrapping intended.
 		tPitch = (uint16_t)clip(angleDelta(tPitch), pitchLowerLimit, pitchUpperLimit);  // Cast wrapping intended.
 		onTarget = onTarget && targetPitch == tPitch;
-
-		/* re-invert result for bottom-mounted weapons (i.e. for vtols) */
-		//if (bInvert) { why do anything here? }
-
 	}
 
 	psWeapon->rot.direction = tRotation;
@@ -1440,7 +1436,7 @@ void actionUpdateDroid(DROID *psDroid)
 						}
 					}
 				}
-				else
+				else // too far away
 				{
 					// try to close the range
 					moveDroidTo(psDroid, psDroid->psActionTarget[0]->pos.x, psDroid->psActionTarget[0]->pos.y);

@@ -480,7 +480,8 @@ static SDWORD targetAttackWeight(BASE_OBJECT *psTarget, BASE_OBJECT *psAttacker,
 }
 
 
-// Find the best nearest target for a droid
+// Find the best nearest target for a droid.
+// If extraRange is higher than zero, then this is the range it accepts for movement to target.
 // Returns integer representing target priority, -1 if failed
 int aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot, int extraRange)
 {
@@ -634,10 +635,8 @@ int aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot, i
 					tmpOrigin = ORIGIN_ALLY;
 					bestTarget = psTarget;
 				}
-
 			}
 		}
-
 	}
 
 	if (bestTarget)
