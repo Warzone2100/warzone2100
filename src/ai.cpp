@@ -745,7 +745,6 @@ bool aiChooseTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget, int weapon_slot
 		*targetOrigin = ORIGIN_UNKNOWN;
 	}
 		
-	/* Get the sensor range */
 	switch (psObj->type)
 	{
 	case OBJ_DROID:
@@ -753,12 +752,14 @@ bool aiChooseTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget, int weapon_slot
 		{
 			return false;
 		}
-
 		if (((DROID *)psObj)->asWeaps[0].nStat == 0 &&
 			((DROID *)psObj)->droidType != DROID_SENSOR)
 		{
-			// Can't attack without a weapon
-			return false;
+			return false;	// Can't target without a weapon or sensor
+		}
+		if (secondaryGetState((DROID *)psObj, DSO_HALTTYPE) == DSS_HALT_HOLD)
+		{
+			return false;	// Not sure why we check this here...
 		}
 		break;
 	case OBJ_STRUCTURE:
@@ -792,7 +793,7 @@ bool aiChooseTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget, int weapon_slot
 		        || curTargetWeight <= 0		// attacker had no valid target, use new one
 			|| newTargetWeight > curTargetWeight + OLD_TARGET_THRESHOLD)	// updating and new target is better
 		    && validTarget(psObj, psTarget, weapon_slot)
-		    && (aiDroidHasRange((DROID *)psObj, psTarget, weapon_slot) || (secondaryGetState((DROID *)psObj, DSO_HALTTYPE) != DSS_HALT_HOLD)))
+		    && aiDroidHasRange((DROID *)psObj, psTarget, weapon_slot))
 		{
 			ASSERT(!isDead(psTarget), "aiChooseTarget: Droid found a dead target!");
 			*ppsTarget = psTarget;

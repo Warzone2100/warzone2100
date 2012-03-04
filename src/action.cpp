@@ -271,7 +271,7 @@ bool actionInRange(DROID *psDroid, BASE_OBJECT *psObj, int weapon_slot)
 
 
 // check if a target is inside minimum weapon range
-bool actionInsideMinRange(DROID *psDroid, BASE_OBJECT *psObj, WEAPON_STATS *psStats)
+static bool actionInsideMinRange(DROID *psDroid, BASE_OBJECT *psObj, WEAPON_STATS *psStats)
 {
 	SDWORD	dx, dy, radSq, rangeSq, minRange;
 
