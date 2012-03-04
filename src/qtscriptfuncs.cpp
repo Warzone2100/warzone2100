@@ -645,7 +645,7 @@ static QScriptValue js_activateStructure(QScriptContext *context, QScriptEngine 
 }
 
 //-- \subsection{findResearch(research)}
-//-- Return list of research items remaining to research for the given research item.
+//-- Return list of research items remaining to research for the given research item. (3.2+ only)
 static QScriptValue js_findResearch(QScriptContext *context, QScriptEngine *engine)
 {
 	QList<RESEARCH *> list;
@@ -2220,21 +2220,22 @@ static QScriptValue js_loadLevel(QScriptContext *context, QScriptEngine *)
 //-- \subsection{chat(target player, message)}
 //-- Send a message to target player. Target may also be \emph{ALL_PLAYERS} or \emph{ALLIES}.
 //-- Returns a boolean that is true on success. (3.2+ only)
-static QScriptValue js_chat(QScriptContext *context, QScriptEngine *)
+static QScriptValue js_chat(QScriptContext *context, QScriptEngine *engine)
 {
+	int player = engine->globalObject().property("me").toInt32();
 	int target = context->argument(0).toInt32();
 	QString message = context->argument(1).toString();
 	if (target == -1) // all
 	{
-		return QScriptValue(sendTextMessage(message.toUtf8().constData(), true));
+		return QScriptValue(sendTextMessage(message.toUtf8().constData(), true, player));
 	}
 	else if (target == -2) // allies
 	{
-		return QScriptValue(sendTextMessage(QString(". " + message).toUtf8().constData(), false));
+		return QScriptValue(sendTextMessage(QString(". " + message).toUtf8().constData(), false, player));
 	}
 	else // specific player
 	{
-		return QScriptValue(sendTextMessage(QString(QString::number(target) + " " + message).toUtf8().constData(), false));
+		return QScriptValue(sendTextMessage(QString(QString::number(target) + " " + message).toUtf8().constData(), false, player));
 	}
 }
 

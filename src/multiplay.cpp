@@ -1016,7 +1016,7 @@ bool recvResearchStatus(NETQUEUE queue)
 // ////////////////////////////////////////////////////////////////////////////
 // Text Messaging between players. proceed string with players to send to.
 // eg "123hi there" sends "hi there" to players 1,2 and 3.
-bool sendTextMessage(const char *pStr, bool all)
+bool sendTextMessage(const char *pStr, bool all, uint32_t from)
 {
 	bool				normal = true;
 	bool				sendto[MAX_PLAYERS];
@@ -1045,7 +1045,7 @@ bool sendTextMessage(const char *pStr, bool all)
 			curStr++;
 			for (i = 0; i < game.maxPlayers; i++)
 			{
-				if (i != selectedPlayer && aiCheckAlliances(selectedPlayer, i))
+				if (i != from && aiCheckAlliances(from, i))
 				{
 					sendto[i] = true;
 				}
@@ -1093,7 +1093,7 @@ bool sendTextMessage(const char *pStr, bool all)
 	if (all)	//broadcast
 	{
 		NETbeginEncode(NETbroadcastQueue(), NET_TEXTMSG);
-		NETuint32_t(&selectedPlayer);		// who this msg is from
+		NETuint32_t(&from);		// who this msg is from
 		NETstring(msg,MAX_CONSOLE_STRING_LENGTH);	// the message to send
 		NETend();
 	}
@@ -1101,18 +1101,18 @@ bool sendTextMessage(const char *pStr, bool all)
 	{
 		for (i = 0; i < MAX_PLAYERS; i++)
 		{
-			if (i != selectedPlayer && openchannels[i])
+			if (i != from && openchannels[i])
 			{
 				if (isHumanPlayer(i))
 				{
 					NETbeginEncode(NETnetQueue(i), NET_TEXTMSG);
-					NETuint32_t(&selectedPlayer);		// who this msg is from
+					NETuint32_t(&from);		// who this msg is from
 					NETstring(msg,MAX_CONSOLE_STRING_LENGTH);	// the message to send
 					NETend();
 				}
 				else	//also send to AIs now (non-humans), needed for AI
 				{
-					sendAIMessage(msg, selectedPlayer, i);
+					sendAIMessage(msg, from, i);
 				}
 			}
 		}
@@ -1126,24 +1126,26 @@ bool sendTextMessage(const char *pStr, bool all)
 				if (isHumanPlayer(i))
 				{
 					NETbeginEncode(NETnetQueue(i), NET_TEXTMSG);
-					NETuint32_t(&selectedPlayer);				// who this msg is from
+					NETuint32_t(&from);				// who this msg is from
 					NETstring(display, MAX_CONSOLE_STRING_LENGTH);	// the message to send
 					NETend();
 				}
 				else	//also send to AIs now (non-humans), needed for AI
 				{
-					sendAIMessage(curStr, selectedPlayer, i);
+					sendAIMessage(curStr, from, i);
 				}
 			}
 		}
 	}
 
-	//This is for local display
-	sstrcpy(msg, NetPlay.players[selectedPlayer].name);		// name
-	sstrcat(msg, ": ");						// seperator
-	sstrcat(msg, (normal?curStr:display));						// add message
-
-	addConsoleMessage(msg, DEFAULT_JUSTIFY, selectedPlayer);	// display
+	// This is for local display
+	if (from == selectedPlayer)
+	{
+		sstrcpy(msg, NetPlay.players[from].name);		// name
+		sstrcat(msg, ": ");					// seperator
+		sstrcat(msg, (normal ? curStr : display));		// add message
+		addConsoleMessage(msg, DEFAULT_JUSTIFY, from);		// display
+	}
 
 	return true;
 }
