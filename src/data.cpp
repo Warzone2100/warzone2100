@@ -735,11 +735,6 @@ static bool dataTERTILESLoad(const char *fileName, void **ppData)
 	return true;
 }
 
-static void dataTERTILESRelease(WZ_DECL_UNUSED void *pData)
-{
-}
-
-
 static bool dataIMGLoad(const char *fileName, void **ppData)
 {
 	*ppData = iV_LoadImageFile(fileName);
@@ -1131,7 +1126,7 @@ static const RES_TYPE_MIN_FILE FileResourceTypes[] =
 	{"ANI", dataAnimLoad, dataAnimRelease},
 	{"ANIMCFG", dataAnimCfgLoad, NULL},
 	{"IMGPAGE", dataImageLoad, dataImageRelease},
-	{"TERTILES", dataTERTILESLoad, dataTERTILESRelease},
+	{"TERTILES", dataTERTILESLoad, NULL},
 	{"IMG", dataIMGLoad, dataIMGRelease},
 	{DT_TEXPAGE, dataTexPageLoad, dataImageRelease},
 	{DT_TCMASK, dataTexPageTCMaskLoad, dataImageRelease},
