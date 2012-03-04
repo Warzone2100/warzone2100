@@ -104,41 +104,15 @@ bool combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 		return false;
 	}
 
-	/* Check we can see the target */
-	if (psAttacker->type == OBJ_DROID && !isVtolDroid((DROID *)psAttacker)
-	    && (proj_Direct(psStats) || actionInsideMinRange((DROID *)psAttacker, psTarget, psStats)))
+	/* Check we can hit the target */
+	bool tall = (psAttacker->type == OBJ_DROID && isVtolDroid((DROID *)psAttacker))
+		    || (psAttacker->type == OBJ_STRUCTURE && ((STRUCTURE *)psAttacker)->pStructureType->height > 1);
+	if (proj_Direct(psStats) && !lineOfFire(psAttacker, psTarget, weapon_slot, tall))
 	{
-		if(!lineOfFire(psAttacker, psTarget, weapon_slot, true))
-		{
-			// Can't see the target - can't hit it with direct fire
-			objTrace(psAttacker->id, "combFire(%u[%s]->%u): Droid has no direct line of sight to target",
-			      psAttacker->id, ((DROID *)psAttacker)->aName, psTarget->id);
-			return false;
-		}
-	}
-	else if ((psAttacker->type == OBJ_STRUCTURE) &&
-			 (((STRUCTURE *)psAttacker)->pStructureType->height == 1) &&
-			 proj_Direct(psStats))
-	{
-		// a bunker can't shoot through walls
-		if (!lineOfFire(psAttacker, psTarget, weapon_slot, true))
-		{
-			// Can't see the target - can't hit it with direct fire
-			objTrace(psAttacker->id, "combFire(%u[%s]->%u): Structure has no direct line of sight to target",
-			      psAttacker->id, ((STRUCTURE *)psAttacker)->pStructureType->pName, psTarget->id);
-			return false;
-		}
-	}
-	else if ( proj_Direct(psStats) )
-	{
-		// VTOL or tall building
-		if (!lineOfFire(psAttacker, psTarget, weapon_slot, false))
-		{
-			// Can't see the target - can't hit it with direct fire
-			objTrace(psAttacker->id, "combFire(%u[%s]->%u): Tall object has no direct line of sight to target",
-			      psAttacker->id, psStats->pName, psTarget->id);
-			return false;
-		}
+		// Can't see the target - can't hit it with direct fire
+		objTrace(psAttacker->id, "combFire(%u[%s]->%u): No direct line of sight to target",
+		         psAttacker->id, objInfo(psAttacker), psTarget->id);
+		return false;
 	}
 
 	Vector3i deltaPos = psTarget->pos - psAttacker->pos;
@@ -179,15 +153,12 @@ bool combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 	}
 
 	int baseHitChance = 0;
-	if ((dist <= psStats->shortRange)  && (dist >= psStats->minRange))
+	if (dist <= psStats->shortRange && dist >= psStats->minRange)
 	{
 		// get weapon chance to hit in the short range
 		baseHitChance = weaponShortHit(psStats,psAttacker->player);
 	}
-	else if ((dist <= longRange && dist >= psStats->minRange)
-	         || (psAttacker->type == OBJ_DROID
-	             && !proj_Direct(psStats)
-	             && actionInsideMinRange((DROID *)psAttacker, psTarget, psStats)))
+	else if (dist <= longRange && dist >= psStats->minRange)
 	{
 		// get weapon chance to hit in the long range
 		baseHitChance = weaponLongHit(psStats,psAttacker->player);
