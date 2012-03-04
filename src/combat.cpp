@@ -350,55 +350,33 @@ void counterBatteryFire(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget)
 	projectile is sent - we may have to cater for these at some point*/
 	// also ignore cases where you attack your own player
 	// Also ignore cases where there are already 1000 missiles heading towards the attacker.
-	if ((psTarget == NULL) ||
-		((psAttacker != NULL) && (psAttacker->player == psTarget->player)) ||
-		aiObjectIsProbablyDoomed(psAttacker))
+	if (psTarget == NULL
+	    || (psAttacker != NULL && psAttacker->player == psTarget->player)
+	    || aiObjectIsProbablyDoomed(psAttacker))
 	{
 		return;
 	}
 
 	CHECK_OBJECT(psTarget);
 
-	gridStartIterate(psTarget->pos.x, psTarget->pos.y, PREVIOUS_DEFAULT_GRID_SEARCH_RADIUS);
-	for (psViewer = gridIterate(); psViewer != NULL; psViewer = gridIterate())
+	for (psViewer = apsSensorList[0]; psViewer; psViewer = psViewer->psNextFunc)
 	{
-		STRUCTURE	*psStruct;
-		DROID		*psDroid;
-		SDWORD		sensorRange = 0;
-
-		if (psViewer->player != psTarget->player)
+		if (aiCheckAlliances(psTarget->player, psViewer->player))
 		{
-			//ignore non target players' objects
-			continue;
-		}
-		if (psViewer->type == OBJ_STRUCTURE)
-		{
-			psStruct = (STRUCTURE *)psViewer;
-			//check if have a sensor of correct type
-			if (structCBSensor(psStruct) || structVTOLCBSensor(psStruct))
+			if ((psViewer->type == OBJ_STRUCTURE && !structCBSensor((STRUCTURE *)psViewer))
+			    || (psViewer->type == OBJ_DROID && !cbSensorDroid((DROID *)psViewer)))
 			{
-				sensorRange = psStruct->pStructureType->pSensor->range;
+				continue;
 			}
-		}
-		else if (psViewer->type == OBJ_DROID)
-		{
-			psDroid = (DROID *)psViewer;
-			//must be a CB sensor
-			if (cbSensorDroid(psDroid))
-			{
-				sensorRange = asSensorStats[psDroid->asBits[COMP_SENSOR].
-					nStat].range;
-			}
-		}
-		//check sensor distance from target
-		if (sensorRange)
-		{
-			SDWORD	xDiff = (SDWORD)psViewer->pos.x - (SDWORD)psTarget->pos.x;
-			SDWORD	yDiff = (SDWORD)psViewer->pos.y - (SDWORD)psTarget->pos.y;
+			const int sensorRange = objSensorRange(psViewer);
 
-			if (xDiff*xDiff + yDiff*yDiff < sensorRange * sensorRange)
+			// Check sensor distance from target
+			const int xDiff = psViewer->pos.x - psTarget->pos.x;
+			const int yDiff = psViewer->pos.y - psTarget->pos.y;
+
+			if (xDiff * xDiff + yDiff * yDiff < sensorRange * sensorRange)
 			{
-				//inform viewer of target
+				// Inform viewer of target
 				if (psViewer->type == OBJ_DROID)
 				{
 					orderDroidObj((DROID *)psViewer, DORDER_OBSERVE, psAttacker, ModeImmediate);
