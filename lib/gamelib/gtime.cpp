@@ -310,24 +310,18 @@ void gameTimeReset(UDWORD time)
 	deltaRealTime = 0;
 }
 
-void	getTimeComponents(UDWORD time, UDWORD *hours, UDWORD *minutes, UDWORD *seconds)
+void getTimeComponents(unsigned time, int *hours, int *minutes, int *seconds, int *milliseconds)
 {
-	UDWORD	h, m, s;
-	UDWORD	ticks_per_hour, ticks_per_minute;
+	*milliseconds = time % GAME_TICKS_PER_SEC;
+	time /= GAME_TICKS_PER_SEC;
 
-	/* Ticks in a minute */
-	ticks_per_minute = GAME_TICKS_PER_SEC * 60;
+	*seconds = time % 60;
+	time /= 60;
 
-	/* Ticks in an hour */
-	ticks_per_hour = ticks_per_minute * 60;
+	*minutes = time % 60;
+	time /= 60;
 
-	h = time / ticks_per_hour;
-	m = (time - (h * ticks_per_hour)) / ticks_per_minute;
-	s = (time - ((h * ticks_per_hour) + (m * ticks_per_minute))) / GAME_TICKS_PER_SEC;
-
-	*hours = h;
-	*minutes = m;
-	*seconds = s;
+	*hours = time;
 }
 
 static void updateLatency()
