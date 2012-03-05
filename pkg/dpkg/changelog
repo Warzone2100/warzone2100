@@ -1,3 +1,11 @@
+warzone2100 (10:2100master-1) unstable; urgency=low
+
+  * update version number
+  * update email address
+  * update packaging
+
+ -- Warzone 2100 Project <warzone2100-project@lists.sourceforge.net>  Mon, 05 Mar 2012 13:01:58 +0100
+
 warzone2100 (10:3.0~0master) unstable; urgency=low
 
   * Updated packaging.
