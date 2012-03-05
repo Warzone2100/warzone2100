@@ -56,8 +56,6 @@
 #include "template.h"
 #include "lib/framework/wzapp.h"
 
-extern bool		bHosted;
-
 // send complete game info set!
 void sendOptions()
 {
