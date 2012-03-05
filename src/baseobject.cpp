@@ -33,13 +33,14 @@
 
 static inline uint16_t interpolateAngle(uint16_t v1, uint16_t v2, uint32_t t1, uint32_t t2, uint32_t t)
 {
-	int32_t numer = t - t1, denom = t2 - t1;
+	const int numer = t - t1, denom = t2 - t1;
 	return v1 + angleDelta(v2 - v1) * numer/denom;
 }
 
 static Position interpolatePos(Position p1, Position p2, uint32_t t1, uint32_t t2, uint32_t t)
 {
-	return p1 + (p2 - p1) * int(t - t1) / int(t2 - t1);
+	const int numer = t - t1, denom = t2 - t1;
+	return p1 + (p2 - p1) * numer/denom;
 }
 
 Rotation interpolateRot(Rotation v1, Rotation v2, uint32_t t1, uint32_t t2, uint32_t t)
