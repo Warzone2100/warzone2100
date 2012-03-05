@@ -8,8 +8,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
-"Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2012-02-20 00:33+0100\n"
+"Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
+"POT-Creation-Date: 2012-03-05 12:57+0100\n"
 "PO-Revision-Date: 2011-09-11 13:13+0100\n"
 "Last-Translator: Cyp <Cyp>\n"
 "Language-Team: Dansk <da@li.org>\n"
@@ -4588,7 +4588,7 @@ msgid "New Design"
 msgstr "Nyt design"
 
 #: data/base/messages/strings/names.txt:15
-#: src/design.cpp:1302
+#: src/design.cpp:1303
 msgid "Transport"
 msgstr "Transport"
 
@@ -9282,6 +9282,7 @@ msgstr ""
 
 #: data/mp/messages/strings/names.txt:675
 #: data/mp/messages/strings/names.txt:676
+#: src/design.cpp:1308
 #, fuzzy
 msgid "Super Transport"
 msgstr "Transport"
@@ -10297,11 +10298,11 @@ msgstr "Elektronik"
 msgid "OpenGL 2.0 is not supported by your system. Some things may look wrong. Please upgrade your graphics driver/hardware, if possible."
 msgstr ""
 
-#: lib/ivis_opengl/screen.cpp:152
+#: lib/ivis_opengl/screen.cpp:151
 msgid "OpenGL 1.5/2.0 is not supported by your system. Some things may look wrong. Please upgrade your graphics driver/hardware, if possible."
 msgstr ""
 
-#: lib/ivis_opengl/screen.cpp:158
+#: lib/ivis_opengl/screen.cpp:156
 msgid "OpenGL 1.4 + VBO extension is not supported by your system. The game requires this. Please upgrade your graphics drivers/hardware, if possible."
 msgstr ""
 
@@ -10310,12 +10311,12 @@ msgstr ""
 msgid "Enter password here"
 msgstr "Indtast kodeord her"
 
-#: lib/netplay/netplay.cpp:2081
+#: lib/netplay/netplay.cpp:2079
 #, fuzzy, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr "Kunne ikke gemme spillet!"
 
-#: lib/netplay/netplay.cpp:2103
+#: lib/netplay/netplay.cpp:2101
 #, c-format
 msgid ""
 "Error connecting to the lobby server: %s.\n"
@@ -10324,7 +10325,7 @@ msgid ""
 " or to forward the port to your system."
 msgstr ""
 
-#: lib/netplay/netplay.cpp:2768
+#: lib/netplay/netplay.cpp:2766
 msgid "Failed to get a lobby response!"
 msgstr ""
 
@@ -10377,13 +10378,13 @@ msgstr "Gem spil"
 #: src/hci.cpp:918
 #: src/hci.cpp:3361
 #: src/hci.cpp:3484
-#: src/hci.cpp:3883
-#: src/hci.cpp:4892
+#: src/hci.cpp:3921
+#: src/hci.cpp:4930
 #: src/intelmap.cpp:531
 #: src/intorder.cpp:727
 #: src/loadsave.cpp:240
 #: src/multimenu.cpp:498
-#: src/multimenu.cpp:1401
+#: src/multimenu.cpp:1349
 #: src/transporter.cpp:278
 #: src/transporter.cpp:359
 #: src/transporter.cpp:822
@@ -10563,7 +10564,7 @@ msgstr "Spiller"
 
 #: src/design.cpp:451
 #: src/design.cpp:464
-#: src/design.cpp:3522
+#: src/design.cpp:3528
 msgid "New Vehicle"
 msgstr "Nyt design"
 
@@ -10586,7 +10587,7 @@ msgid "Delete Design"
 msgstr "Slet design"
 
 #: src/design.cpp:632
-#: src/design.cpp:4775
+#: src/design.cpp:4781
 msgid "Store Template"
 msgstr ""
 
@@ -10607,20 +10608,20 @@ msgstr "Hestekrafter"
 
 #: src/design.cpp:718
 #: src/design.cpp:771
-#: src/design.cpp:1513
-#: src/design.cpp:1537
-#: src/design.cpp:1558
-#: src/design.cpp:1574
-#: src/design.cpp:1594
-#: src/design.cpp:1611
-#: src/design.cpp:1631
-#: src/design.cpp:1648
-#: src/design.cpp:1689
-#: src/design.cpp:1721
-#: src/design.cpp:1853
-#: src/design.cpp:1869
-#: src/design.cpp:1907
-#: src/design.cpp:1940
+#: src/design.cpp:1519
+#: src/design.cpp:1543
+#: src/design.cpp:1564
+#: src/design.cpp:1580
+#: src/design.cpp:1600
+#: src/design.cpp:1617
+#: src/design.cpp:1637
+#: src/design.cpp:1654
+#: src/design.cpp:1695
+#: src/design.cpp:1727
+#: src/design.cpp:1859
+#: src/design.cpp:1875
+#: src/design.cpp:1913
+#: src/design.cpp:1946
 msgid "Weight"
 msgstr "Vægt"
 
@@ -10635,92 +10636,92 @@ msgstr "Produktionsomkostninger"
 msgid "Total Body Points"
 msgstr "Total skrogpoint"
 
-#: src/design.cpp:1023
-#: src/design.cpp:1052
+#: src/design.cpp:1024
+#: src/design.cpp:1053
 msgid "Power Usage"
 msgstr "Energi forbrug"
 
-#: src/design.cpp:1325
+#: src/design.cpp:1331
 msgid "Hydra "
 msgstr ""
 
-#: src/design.cpp:1493
-#: src/design.cpp:1521
+#: src/design.cpp:1499
+#: src/design.cpp:1527
 msgid "Sensor Range"
 msgstr "Sensorrækkevidde"
 
 # This is always 1000 ingame... any reason to have this at all? is it ever used?
-#: src/design.cpp:1505
-#: src/design.cpp:1529
+#: src/design.cpp:1511
+#: src/design.cpp:1535
 msgid "Sensor Power"
 msgstr "Sensoreffekt"
 
-#: src/design.cpp:1550
-#: src/design.cpp:1566
+#: src/design.cpp:1556
+#: src/design.cpp:1572
 msgid "ECM Power"
 msgstr "ECM Effekt"
 
-#: src/design.cpp:1586
-#: src/design.cpp:1603
-#: src/design.cpp:1623
-#: src/design.cpp:1640
+#: src/design.cpp:1592
+#: src/design.cpp:1609
+#: src/design.cpp:1629
+#: src/design.cpp:1646
 msgid "Build Points"
 msgstr "Effektivitet"
 
-#: src/design.cpp:1661
-#: src/design.cpp:1697
+#: src/design.cpp:1667
+#: src/design.cpp:1703
 msgid "Range"
 msgstr "Rækkevidde"
 
-#: src/design.cpp:1673
-#: src/design.cpp:1705
+#: src/design.cpp:1679
+#: src/design.cpp:1711
 msgid "Damage"
 msgstr "Skade"
 
-#: src/design.cpp:1681
-#: src/design.cpp:1713
+#: src/design.cpp:1687
+#: src/design.cpp:1719
 msgid "Rate-of-Fire"
 msgstr "Kadance"
 
-#: src/design.cpp:1841
-#: src/design.cpp:1861
+#: src/design.cpp:1847
+#: src/design.cpp:1867
 msgid "Air Speed"
 msgstr "Lufthastighed"
 
-#: src/design.cpp:1879
-#: src/design.cpp:1916
+#: src/design.cpp:1885
+#: src/design.cpp:1922
 msgid "Road Speed"
 msgstr "Vejhastighed"
 
-#: src/design.cpp:1889
-#: src/design.cpp:1924
+#: src/design.cpp:1895
+#: src/design.cpp:1930
 msgid "Off-Road Speed"
 msgstr "Hastighed i terræn"
 
-#: src/design.cpp:1897
-#: src/design.cpp:1932
+#: src/design.cpp:1903
+#: src/design.cpp:1938
 msgid "Water Speed"
 msgstr "Vandhastighed"
 
-#: src/design.cpp:2022
-#: src/hci.cpp:4915
+#: src/design.cpp:2028
+#: src/hci.cpp:4953
 msgid "Tab Scroll left"
 msgstr ""
 
-#: src/design.cpp:2037
-#: src/hci.cpp:4930
+#: src/design.cpp:2043
+#: src/hci.cpp:4968
 msgid "Tab Scroll right"
 msgstr ""
 
-#: src/design.cpp:2100
+#: src/design.cpp:2106
 msgid "Weapons"
 msgstr "Våben"
 
-#: src/design.cpp:2120
+#: src/design.cpp:2126
 msgid "Systems"
 msgstr "Systemer"
 
-#: src/design.cpp:4770
+#: src/design.cpp:4776
 msgid "Delete Template"
 msgstr ""
 
@@ -10741,100 +10742,100 @@ msgstr "Venter på andre spillere"
 msgid "Out of sync"
 msgstr ""
 
-#: src/display.cpp:1657
+#: src/display.cpp:1586
 msgid "Cannot Build. Oil Resource Burning."
 msgstr "Kan ikke bygge på brændende oilebrønd."
 
-#: src/display.cpp:1845
-#: src/display.cpp:2396
+#: src/display.cpp:1774
+#: src/display.cpp:2325
 #, c-format
 msgid "%s - Damage %d%% - Experience %.1f, %s"
 msgstr "%s - Skade %d%% - Oplevelse %.1f, %s"
 
-#: src/display.cpp:1861
+#: src/display.cpp:1790
 #, c-format
 msgid "%s - Allied - Damage %d%% - Experience %d, %s"
 msgstr "%s - Allierede - Skade %d%% - Oplevelse %d, %s"
 
-#: src/droid.cpp:204
+#: src/droid.cpp:205
 msgid "Unit Lost!"
 msgstr "Enhed tabt!"
 
-#: src/droid.cpp:1275
+#: src/droid.cpp:1274
 msgid "Structure Restored"
 msgstr "Bygning restoreret"
 
-#: src/droid.cpp:2245
+#: src/droid.cpp:2246
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
 msgstr[0] "Gruppe %u valgt - %u Enheder"
 msgstr[1] "Gruppe %u valgt - %u Enheder"
 
-#: src/droid.cpp:2258
+#: src/droid.cpp:2259
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
 msgstr[0] "%u enhed tildelt gruppe %u"
 msgstr[1] "%u enheder tildelt gruppe %u"
 
-#: src/droid.cpp:2271
+#: src/droid.cpp:2272
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
 msgstr[0] "Fokuseret på gruppe %u - %u Enhed"
 msgstr[1] "Fokuseret på gruppe %u - %u Enheder"
 
-#: src/droid.cpp:2275
+#: src/droid.cpp:2276
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] "Korrigerede med gruppe %u - %u Enhed"
 msgstr[1] "Korrigerede med gruppe %u - %u Enheder"
 
-#: src/droid.cpp:2457
+#: src/droid.cpp:2458
 msgid "Rookie"
 msgstr "Utrænet"
 
-#: src/droid.cpp:2458
+#: src/droid.cpp:2459
 msgctxt "rank"
 msgid "Green"
 msgstr "Grøn"
 
-#: src/droid.cpp:2459
+#: src/droid.cpp:2460
 msgid "Trained"
 msgstr "Trænet"
 
-#: src/droid.cpp:2460
+#: src/droid.cpp:2461
 msgid "Regular"
 msgstr "Regulær"
 
-#: src/droid.cpp:2461
+#: src/droid.cpp:2462
 msgid "Professional"
 msgstr "Professionel"
 
-#: src/droid.cpp:2462
+#: src/droid.cpp:2463
 msgid "Veteran"
 msgstr "Veteran"
 
-#: src/droid.cpp:2463
+#: src/droid.cpp:2464
 msgid "Elite"
 msgstr "Elite"
 
-#: src/droid.cpp:2464
+#: src/droid.cpp:2465
 msgid "Special"
 msgstr "Speciel"
 
-#: src/droid.cpp:2465
+#: src/droid.cpp:2466
 msgid "Hero"
 msgstr "Helt"
 
-#: src/droid.cpp:3423
+#: src/droid.cpp:3424
 #, c-format
 msgid "%s wanted to give you a %s but you have too many!"
 msgstr "%s ville give dig en %s, men du har for mange!"
 
-#: src/droid.cpp:3427
+#: src/droid.cpp:3428
 #, c-format
 msgid "You wanted to give %s a %s but they have too many!"
 msgstr "Du ville give %s en %s, men de har for mange!"
@@ -10920,8 +10921,8 @@ msgstr "SOLO SPILLER"
 
 #: src/frontend.cpp:322
 #: src/ingameop.cpp:494
-#: src/mission.cpp:2496
-#: src/mission.cpp:2597
+#: src/mission.cpp:2493
+#: src/mission.cpp:2594
 msgid "Load Saved Game"
 msgstr "Indlæs gemt spil"
 
@@ -11297,104 +11298,104 @@ msgstr "Indlæs"
 msgid "Load Map File"
 msgstr "Indlæs kortfil"
 
-#: src/hci.cpp:3529
+#: src/hci.cpp:3533
 msgid "Save"
 msgstr "Gem"
 
-#: src/hci.cpp:3530
+#: src/hci.cpp:3534
 msgid "Save Map File"
 msgstr "Gem kortfil"
 
-#: src/hci.cpp:3538
+#: src/hci.cpp:3546
 msgid "New"
 msgstr "Nyt"
 
-#: src/hci.cpp:3539
+#: src/hci.cpp:3547
 msgid "New Blank Map"
 msgstr "Nyt tomt kort"
 
-#: src/hci.cpp:3575
+#: src/hci.cpp:3595
 msgid "Tile"
 msgstr "Klinke"
 
-#: src/hci.cpp:3576
+#: src/hci.cpp:3596
 msgid "Place tiles on map"
 msgstr "Placer klinker på kortet"
 
-#: src/hci.cpp:3585
+#: src/hci.cpp:3609
 msgid "Unit"
 msgstr "Enhed"
 
-#: src/hci.cpp:3586
+#: src/hci.cpp:3610
 msgid "Place Unit on map"
 msgstr "Placer enhed på kortet"
 
-#: src/hci.cpp:3594
+#: src/hci.cpp:3618
 msgid "Struct"
 msgstr ""
 
-#: src/hci.cpp:3595
+#: src/hci.cpp:3619
 msgid "Place Structures on map"
 msgstr "Placer bygninger på kortet"
 
-#: src/hci.cpp:3603
+#: src/hci.cpp:3627
 msgid "Feat"
 msgstr ""
 
-#: src/hci.cpp:3604
+#: src/hci.cpp:3628
 #, fuzzy
 msgid "Place Features on map"
 msgstr "Placer Features på kortet"
 
-#: src/hci.cpp:3614
+#: src/hci.cpp:3642
 msgid "Pause"
 msgstr "Pause"
 
-#: src/hci.cpp:3615
+#: src/hci.cpp:3643
 msgid "Pause or unpause the game"
 msgstr "Pause eller fortsætte spillet"
 
-#: src/hci.cpp:3629
+#: src/hci.cpp:3661
 msgid "Align height of all map objects"
 msgstr ""
 
-#: src/hci.cpp:3639
+#: src/hci.cpp:3674
 msgid "Edit"
 msgstr ""
 
-#: src/hci.cpp:3640
+#: src/hci.cpp:3675
 #, fuzzy
 msgid "Start Edit Mode"
 msgstr "Start uden baser"
 
-#: src/hci.cpp:3654
+#: src/hci.cpp:3689
 #: src/ingameop.cpp:113
 #: src/ingameop.cpp:257
 #: src/ingameop.cpp:261
 msgid "Quit"
 msgstr "Afslut"
 
-#: src/hci.cpp:3655
+#: src/hci.cpp:3690
 msgid "Exit Game"
 msgstr "Forlad spil"
 
-#: src/hci.cpp:3681
+#: src/hci.cpp:3716
 msgid "Current Player:"
 msgstr "Nuværende spiller:"
 
-#: src/hci.cpp:3960
+#: src/hci.cpp:3998
 msgid "Progress Bar"
 msgstr "Statuslinje"
 
-#: src/hci.cpp:4817
+#: src/hci.cpp:4855
 msgid "Factory Delivery Point"
 msgstr "Leveringspunkt"
 
-#: src/hci.cpp:4835
+#: src/hci.cpp:4873
 msgid "Loop Production"
 msgstr "Gentag produktion"
 
-#: src/hci.cpp:5159
+#: src/hci.cpp:5197
 msgid "Ally progress"
 msgstr ""
 
@@ -11420,8 +11421,8 @@ msgstr ""
 
 #: src/ingameop.cpp:275
 #: src/ingameop.cpp:498
-#: src/mission.cpp:2483
-#: src/mission.cpp:2600
+#: src/mission.cpp:2480
+#: src/mission.cpp:2597
 msgid "Save Game"
 msgstr "Gem spil"
 
@@ -12403,41 +12404,41 @@ msgstr "Forfølgelseskamera"
 msgid "Could not save game!"
 msgstr "Kunne ikke gemme spillet!"
 
-#: src/mission.cpp:2043
+#: src/mission.cpp:2040
 msgid "Load Transport"
 msgstr "Fyld transportskib"
 
-#: src/mission.cpp:2431
+#: src/mission.cpp:2428
 msgid "OBJECTIVE ACHIEVED by cheating!"
 msgstr "MISSIONEN LYKKEDES ved snyd!"
 
-#: src/mission.cpp:2431
+#: src/mission.cpp:2428
 msgid "OBJECTIVE ACHIEVED"
 msgstr "MISSIONEN LYKKEDES"
 
-#: src/mission.cpp:2437
+#: src/mission.cpp:2434
 msgid "OBJECTIVE FAILED--and you cheated!"
 msgstr "MISSIONEN FEJLEDE--og du snød!"
 
-#: src/mission.cpp:2437
+#: src/mission.cpp:2434
 msgid "OBJECTIVE FAILED"
 msgstr "MISSIONEN FEJLEDE"
 
-#: src/mission.cpp:2462
-#: src/mission.cpp:2502
-#: src/mission.cpp:2614
+#: src/mission.cpp:2459
+#: src/mission.cpp:2499
+#: src/mission.cpp:2611
 msgid "Quit To Main Menu"
 msgstr "Tilbage til hovedmenu"
 
-#: src/mission.cpp:2470
+#: src/mission.cpp:2467
 msgid "Continue Game"
 msgstr "Fortsæt spil"
 
-#: src/mission.cpp:2565
+#: src/mission.cpp:2562
 msgid "GAME SAVED :"
 msgstr "SPIL GEMT :"
 
-#: src/move.cpp:2307
+#: src/move.cpp:2279
 #, c-format
 msgid "You found %u power in an oil drum."
 msgstr ""
@@ -12850,7 +12851,7 @@ msgstr "'Låste hold' slået til"
 
 #: src/multiint.cpp:3091
 #: src/multiint.cpp:3160
-#: src/multimenu.cpp:1523
+#: src/multimenu.cpp:1472
 #, c-format
 msgid "The host has kicked %s from the game!"
 msgstr "Værten har smidt %s fra spillet"
@@ -12908,36 +12909,36 @@ msgid "HOST"
 msgstr "VÆRT"
 
 #: src/multiint.cpp:4061
-#: src/multimenu.cpp:808
+#: src/multimenu.cpp:806
 msgid "Ping"
 msgstr "Ping"
 
-#: src/multijoin.cpp:101
-#: src/multijoin.cpp:102
+#: src/multijoin.cpp:95
+#: src/multijoin.cpp:96
 msgid "Players Still Joining"
 msgstr "Spillere tilkobler stadig"
 
-#: src/multijoin.cpp:269
+#: src/multijoin.cpp:263
 #, c-format
 msgid "%s has Left the Game"
 msgstr "%s har forladt spillet"
 
-#: src/multijoin.cpp:287
+#: src/multijoin.cpp:281
 #, c-format
 msgid "File transfer has been aborted for %d."
 msgstr "Filoverførsel er blevet annuleret for %d."
 
-#: src/multijoin.cpp:418
+#: src/multijoin.cpp:412
 #, c-format
 msgid "%s (%u) has an incompatible mod, and has been kicked."
 msgstr ""
 
-#: src/multijoin.cpp:459
+#: src/multijoin.cpp:453
 #, fuzzy, c-format
 msgid "%s is joining the game"
 msgstr "%s kom med i spillet"
 
-#: src/multijoin.cpp:470
+#: src/multijoin.cpp:464
 #, fuzzy
 msgid "Server message:"
 msgstr "Systembesked:"
@@ -12947,7 +12948,7 @@ msgstr "Systembesked:"
 msgid "Apply Defaults and Return To Previous Screen"
 msgstr "Tilbage"
 
-#: src/multilimit.cpp:314
+#: src/multilimit.cpp:317
 msgid "Limits reset to default values"
 msgstr ""
 
@@ -12982,40 +12983,39 @@ msgstr "Score"
 msgid "Kills"
 msgstr "Drabte"
 
-#: src/multimenu.cpp:798
-#: src/multimenu.cpp:803
+#: src/multimenu.cpp:795
 msgid "Units"
 msgstr "Enheder"
 
-#: src/multimenu.cpp:812
+#: src/multimenu.cpp:810
 msgid "Structs"
 msgstr "Bygninger"
 
-#: src/multimenu.cpp:1174
+#: src/multimenu.cpp:1122
 msgid "Channel"
 msgstr "Kanal"
 
-#: src/multimenu.cpp:1188
+#: src/multimenu.cpp:1136
 msgid "Toggle Alliance State"
 msgstr "Slå aliance status til/fra"
 
-#: src/multimenu.cpp:1207
+#: src/multimenu.cpp:1155
 msgid "Give Visibility Report"
 msgstr "Send rekonniseringsrapport"
 
-#: src/multimenu.cpp:1213
+#: src/multimenu.cpp:1161
 msgid "Leak Technology Documents"
 msgstr "Send forskningsresultater"
 
-#: src/multimenu.cpp:1220
+#: src/multimenu.cpp:1168
 msgid "Hand Over Selected Units"
 msgstr "Forær valgte enheder"
 
-#: src/multimenu.cpp:1226
+#: src/multimenu.cpp:1174
 msgid "Give Power To Player"
 msgstr "Forær energi"
 
-#: src/multimenu.cpp:1525
+#: src/multimenu.cpp:1474
 #, c-format
 msgid "kicked %s : %s from the game, and added them to the banned list!"
 msgstr ""
@@ -13101,13 +13101,13 @@ msgstr ""
 msgid "We can't do that! We must be a Cyborg unit to use a Cyborg Transport!"
 msgstr ""
 
-#: src/qtscriptfuncs.cpp:1578
-#: src/scriptfuncs.cpp:3259
+#: src/qtscriptfuncs.cpp:1580
+#: src/scriptfuncs.cpp:3261
 msgid "YOU ARE VICTORIOUS!"
 msgstr ""
 
-#: src/qtscriptfuncs.cpp:1583
-#: src/scriptfuncs.cpp:3263
+#: src/qtscriptfuncs.cpp:1585
+#: src/scriptfuncs.cpp:3265
 msgid "YOU WERE DEFEATED!"
 msgstr ""
 
@@ -13124,130 +13124,130 @@ msgstr "Forskning fuldendt"
 msgid "Research Award"
 msgstr "Forskningsgevinst"
 
-#: src/scores.cpp:99
+#: src/scores.cpp:100
 #, c-format
 msgid "Own Units: %u"
 msgstr "Egne enheder: %u"
 
-#: src/scores.cpp:100
+#: src/scores.cpp:101
 #, c-format
 msgid "Enemy Units: %u"
 msgstr "Fjendtlige enheder: %u"
 
-#: src/scores.cpp:101
+#: src/scores.cpp:102
 #, c-format
 msgid "Own Structures: %u"
 msgstr "Egne bygninger: %u"
 
-#: src/scores.cpp:102
+#: src/scores.cpp:103
 #, c-format
 msgid "Enemy Structures: %u"
 msgstr "Fjendtlige bygninger: %u"
 
-#: src/scores.cpp:103
+#: src/scores.cpp:104
 #, c-format
 msgid "Units Manufactured: %u"
 msgstr "Enheder fremstillet: %u"
 
-#: src/scores.cpp:104
+#: src/scores.cpp:105
 #, c-format
 msgid "Total Units: %u"
 msgstr "Enheder i alt: %u"
 
-#: src/scores.cpp:105
+#: src/scores.cpp:106
 #, c-format
 msgid "Structures Built: %u"
 msgstr "Bygninger bygget: %u"
 
-#: src/scores.cpp:106
+#: src/scores.cpp:107
 #, c-format
 msgid "Total Structures: %u"
 msgstr "Bygninger i alt: %u"
 
-#: src/scores.cpp:108
+#: src/scores.cpp:109
 #, c-format
 msgid "Rookie: %u"
 msgstr "Utrænet: %u"
 
-#: src/scores.cpp:109
+#: src/scores.cpp:110
 #, c-format
 msgctxt "rank"
 msgid "Green: %u"
 msgstr "Grøn: %u"
 
-#: src/scores.cpp:110
+#: src/scores.cpp:111
 #, c-format
 msgid "Trained: %u"
 msgstr "Trænet: %u"
 
-#: src/scores.cpp:111
+#: src/scores.cpp:112
 #, c-format
 msgid "Regular: %u"
 msgstr "Regulær: %u"
 
-#: src/scores.cpp:112
+#: src/scores.cpp:113
 #, c-format
 msgid "Professional: %u"
 msgstr "Professionel: %u"
 
-#: src/scores.cpp:113
+#: src/scores.cpp:114
 #, c-format
 msgid "Veteran: %u"
 msgstr "Veteran: %u"
 
-#: src/scores.cpp:114
+#: src/scores.cpp:115
 #, c-format
 msgid "Elite: %u"
 msgstr "Elite: %u"
 
-#: src/scores.cpp:115
+#: src/scores.cpp:116
 #, c-format
 msgid "Special: %u"
 msgstr "Speciel: %u"
 
-#: src/scores.cpp:116
+#: src/scores.cpp:117
 #, c-format
 msgid "Hero: %u"
 msgstr "Helt: %u"
 
-#: src/scores.cpp:350
+#: src/scores.cpp:307
 msgid "Unit Losses"
 msgstr "Tabte enheder"
 
-#: src/scores.cpp:351
+#: src/scores.cpp:308
 msgid "Structure Losses"
 msgstr "Tabte bygninger"
 
-#: src/scores.cpp:352
+#: src/scores.cpp:309
 msgid "Force Information"
 msgstr "Styrke Information"
 
-#: src/scores.cpp:432
+#: src/scores.cpp:389
 #, c-format
 msgid "ARTIFACTS RECOVERED: %d"
 msgstr "FUNDNE ARTEFAKTER: %d"
 
-#: src/scores.cpp:437
+#: src/scores.cpp:394
 #, c-format
 msgid "Mission Time - %s"
 msgstr "Anvendt tid: %s"
 
-#: src/scores.cpp:442
+#: src/scores.cpp:399
 #, c-format
 msgid "Total Game Time - %s"
 msgstr "Total anvendt tid: %s"
 
-#: src/scores.cpp:448
+#: src/scores.cpp:405
 #, c-format
 msgid "You cheated!"
 msgstr "Du snød!"
 
-#: src/scriptfuncs.cpp:9372
+#: src/scriptfuncs.cpp:9371
 #, c-format
 msgid "Beacon received from %s!"
 msgstr ""
 
-#: src/scriptfuncs.cpp:9409
+#: src/scriptfuncs.cpp:9408
 #, c-format
 msgid "Beacon %d"
 msgstr ""
@@ -13276,7 +13276,7 @@ msgid_plural "%u units selected"
 msgstr[0] "%u Enheder valgt"
 msgstr[1] "%u Enheder valgt"
 
-#: src/structure.cpp:2563
+#: src/structure.cpp:2562
 #, fuzzy
 msgid "Command Control Limit Reached - Production Halted"
 msgstr "Kommandobegrænsning nået - indstiller produktion"
@@ -13341,11 +13341,11 @@ msgstr "Reperationsgevinst - Ingen"
 msgid "Launch Transport"
 msgstr "Afsend transportskib"
 
-#: src/transporter.cpp:1408
+#: src/transporter.cpp:1406
 msgid "There is not enough room in the Transport!"
 msgstr ""
 
-#: src/transporter.cpp:1654
+#: src/transporter.cpp:1648
 msgid "Reinforcements landing"
 msgstr "Forstærkninger er ankommet"
 

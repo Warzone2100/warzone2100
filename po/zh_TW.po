@@ -7,8 +7,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
-"Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2012-02-20 00:33+0100\n"
+"Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
+"POT-Creation-Date: 2012-03-05 12:57+0100\n"
 "PO-Revision-Date: 2009-05-11 00:21+0800\n"
 "Last-Translator: \n"
 "Language-Team: zh_TW\n"
@@ -4579,7 +4579,7 @@ msgid "New Design"
 msgstr "新的設計"
 
 #: data/base/messages/strings/names.txt:15
-#: src/design.cpp:1302
+#: src/design.cpp:1303
 msgid "Transport"
 msgstr "運輸艦"
 
@@ -9248,6 +9248,7 @@ msgstr "NEXUS鈦鋼筋角牆"
 
 #: data/mp/messages/strings/names.txt:675
 #: data/mp/messages/strings/names.txt:676
+#: src/design.cpp:1308
 #, fuzzy
 msgid "Super Transport"
 msgstr "運輸艦"
@@ -10246,11 +10247,11 @@ msgstr "系統語系"
 msgid "OpenGL 2.0 is not supported by your system. Some things may look wrong. Please upgrade your graphics driver/hardware, if possible."
 msgstr ""
 
-#: lib/ivis_opengl/screen.cpp:152
+#: lib/ivis_opengl/screen.cpp:151
 msgid "OpenGL 1.5/2.0 is not supported by your system. Some things may look wrong. Please upgrade your graphics driver/hardware, if possible."
 msgstr ""
 
-#: lib/ivis_opengl/screen.cpp:158
+#: lib/ivis_opengl/screen.cpp:156
 msgid "OpenGL 1.4 + VBO extension is not supported by your system. The game requires this. Please upgrade your graphics drivers/hardware, if possible."
 msgstr ""
 
@@ -10259,12 +10260,12 @@ msgstr ""
 msgid "Enter password here"
 msgstr ""
 
-#: lib/netplay/netplay.cpp:2081
+#: lib/netplay/netplay.cpp:2079
 #, fuzzy, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr "載入已儲存的遊戲"
 
-#: lib/netplay/netplay.cpp:2103
+#: lib/netplay/netplay.cpp:2101
 #, c-format
 msgid ""
 "Error connecting to the lobby server: %s.\n"
@@ -10273,7 +10274,7 @@ msgid ""
 " or to forward the port to your system."
 msgstr ""
 
-#: lib/netplay/netplay.cpp:2768
+#: lib/netplay/netplay.cpp:2766
 msgid "Failed to get a lobby response!"
 msgstr ""
 
@@ -10326,13 +10327,13 @@ msgstr "儲存遊戲"
 #: src/hci.cpp:918
 #: src/hci.cpp:3361
 #: src/hci.cpp:3484
-#: src/hci.cpp:3883
-#: src/hci.cpp:4892
+#: src/hci.cpp:3921
+#: src/hci.cpp:4930
 #: src/intelmap.cpp:531
 #: src/intorder.cpp:727
 #: src/loadsave.cpp:240
 #: src/multimenu.cpp:498
-#: src/multimenu.cpp:1401
+#: src/multimenu.cpp:1349
 #: src/transporter.cpp:278
 #: src/transporter.cpp:359
 #: src/transporter.cpp:822
@@ -10512,7 +10513,7 @@ msgstr "玩家"
 
 #: src/design.cpp:451
 #: src/design.cpp:464
-#: src/design.cpp:3522
+#: src/design.cpp:3528
 msgid "New Vehicle"
 msgstr "新車身"
 
@@ -10535,7 +10536,7 @@ msgid "Delete Design"
 msgstr "刪除設計"
 
 #: src/design.cpp:632
-#: src/design.cpp:4775
+#: src/design.cpp:4781
 msgid "Store Template"
 msgstr ""
 
@@ -10556,20 +10557,20 @@ msgstr "引擎輸出"
 
 #: src/design.cpp:718
 #: src/design.cpp:771
-#: src/design.cpp:1513
-#: src/design.cpp:1537
-#: src/design.cpp:1558
-#: src/design.cpp:1574
-#: src/design.cpp:1594
-#: src/design.cpp:1611
-#: src/design.cpp:1631
-#: src/design.cpp:1648
-#: src/design.cpp:1689
-#: src/design.cpp:1721
-#: src/design.cpp:1853
-#: src/design.cpp:1869
-#: src/design.cpp:1907
-#: src/design.cpp:1940
+#: src/design.cpp:1519
+#: src/design.cpp:1543
+#: src/design.cpp:1564
+#: src/design.cpp:1580
+#: src/design.cpp:1600
+#: src/design.cpp:1617
+#: src/design.cpp:1637
+#: src/design.cpp:1654
+#: src/design.cpp:1695
+#: src/design.cpp:1727
+#: src/design.cpp:1859
+#: src/design.cpp:1875
+#: src/design.cpp:1913
+#: src/design.cpp:1946
 msgid "Weight"
 msgstr "重量"
 
@@ -10583,91 +10584,91 @@ msgstr "全部所需能源"
 msgid "Total Body Points"
 msgstr "HP"
 
-#: src/design.cpp:1023
-#: src/design.cpp:1052
+#: src/design.cpp:1024
+#: src/design.cpp:1053
 msgid "Power Usage"
 msgstr "需要能源"
 
-#: src/design.cpp:1325
+#: src/design.cpp:1331
 msgid "Hydra "
 msgstr ""
 
-#: src/design.cpp:1493
-#: src/design.cpp:1521
+#: src/design.cpp:1499
+#: src/design.cpp:1527
 msgid "Sensor Range"
 msgstr "雷達可視距離"
 
-#: src/design.cpp:1505
-#: src/design.cpp:1529
+#: src/design.cpp:1511
+#: src/design.cpp:1535
 msgid "Sensor Power"
 msgstr "雷達能源"
 
-#: src/design.cpp:1550
-#: src/design.cpp:1566
+#: src/design.cpp:1556
+#: src/design.cpp:1572
 msgid "ECM Power"
 msgstr "ECM Power"
 
-#: src/design.cpp:1586
-#: src/design.cpp:1603
-#: src/design.cpp:1623
-#: src/design.cpp:1640
+#: src/design.cpp:1592
+#: src/design.cpp:1609
+#: src/design.cpp:1629
+#: src/design.cpp:1646
 msgid "Build Points"
 msgstr "建築物HP（Build Points）"
 
-#: src/design.cpp:1661
-#: src/design.cpp:1697
+#: src/design.cpp:1667
+#: src/design.cpp:1703
 msgid "Range"
 msgstr "射程"
 
-#: src/design.cpp:1673
-#: src/design.cpp:1705
+#: src/design.cpp:1679
+#: src/design.cpp:1711
 msgid "Damage"
 msgstr "傷害"
 
-#: src/design.cpp:1681
-#: src/design.cpp:1713
+#: src/design.cpp:1687
+#: src/design.cpp:1719
 msgid "Rate-of-Fire"
 msgstr "射速"
 
-#: src/design.cpp:1841
-#: src/design.cpp:1861
+#: src/design.cpp:1847
+#: src/design.cpp:1867
 msgid "Air Speed"
 msgstr "空中移動速度"
 
-#: src/design.cpp:1879
-#: src/design.cpp:1916
+#: src/design.cpp:1885
+#: src/design.cpp:1922
 msgid "Road Speed"
 msgstr "道路移動速度"
 
-#: src/design.cpp:1889
-#: src/design.cpp:1924
+#: src/design.cpp:1895
+#: src/design.cpp:1930
 msgid "Off-Road Speed"
 msgstr "越野移動速度"
 
-#: src/design.cpp:1897
-#: src/design.cpp:1932
+#: src/design.cpp:1903
+#: src/design.cpp:1938
 msgid "Water Speed"
 msgstr "水面移動速度"
 
-#: src/design.cpp:2022
-#: src/hci.cpp:4915
+#: src/design.cpp:2028
+#: src/hci.cpp:4953
 msgid "Tab Scroll left"
 msgstr "頁簽向左捲動"
 
-#: src/design.cpp:2037
-#: src/hci.cpp:4930
+#: src/design.cpp:2043
+#: src/hci.cpp:4968
 msgid "Tab Scroll right"
 msgstr "頁簽向右捲動"
 
-#: src/design.cpp:2100
+#: src/design.cpp:2106
 msgid "Weapons"
 msgstr "武器裝備"
 
-#: src/design.cpp:2120
+#: src/design.cpp:2126
 msgid "Systems"
 msgstr "系統裝備"
 
-#: src/design.cpp:4770
+#: src/design.cpp:4776
 msgid "Delete Template"
 msgstr ""
 
@@ -10690,96 +10691,96 @@ msgstr "等待其他玩家"
 msgid "Out of sync"
 msgstr ""
 
-#: src/display.cpp:1657
+#: src/display.cpp:1586
 msgid "Cannot Build. Oil Resource Burning."
 msgstr "油田燃燒中，無法建築鑽油井"
 
-#: src/display.cpp:1845
-#: src/display.cpp:2396
+#: src/display.cpp:1774
+#: src/display.cpp:2325
 #, fuzzy, c-format
 msgid "%s - Damage %d%% - Experience %.1f, %s"
 msgstr "%s - 損傷 %d%% - 經驗值 %d, %s"
 
-#: src/display.cpp:1861
+#: src/display.cpp:1790
 #, fuzzy, c-format
 msgid "%s - Allied - Damage %d%% - Experience %d, %s"
 msgstr "%s - 損傷 %d%% - 經驗值 %d, %s"
 
-#: src/droid.cpp:204
+#: src/droid.cpp:205
 msgid "Unit Lost!"
 msgstr "損失單位！"
 
-#: src/droid.cpp:1275
+#: src/droid.cpp:1274
 msgid "Structure Restored"
 msgstr "建築物重建"
 
-#: src/droid.cpp:2245
+#: src/droid.cpp:2246
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
 msgstr[0] "第 %u 隊聽令 - 共 %u  單位"
 
-#: src/droid.cpp:2258
+#: src/droid.cpp:2259
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
 msgstr[0] "共 %u 單位 被指派為 第 %u 隊"
 
-#: src/droid.cpp:2271
+#: src/droid.cpp:2272
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
 msgstr[0] "視角移動至第 %u  隊 - 共 %u 單位"
 
-#: src/droid.cpp:2275
+#: src/droid.cpp:2276
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] "Aligning with Group %u - %u 單位"
 
-#: src/droid.cpp:2457
+#: src/droid.cpp:2458
 msgid "Rookie"
 msgstr "菜鳥"
 
-#: src/droid.cpp:2458
+#: src/droid.cpp:2459
 msgctxt "rank"
 msgid "Green"
 msgstr "青澀"
 
-#: src/droid.cpp:2459
+#: src/droid.cpp:2460
 msgid "Trained"
 msgstr "訓練有素的"
 
-#: src/droid.cpp:2460
+#: src/droid.cpp:2461
 msgid "Regular"
 msgstr "好樣的"
 
-#: src/droid.cpp:2461
+#: src/droid.cpp:2462
 msgid "Professional"
 msgstr "專家"
 
-#: src/droid.cpp:2462
+#: src/droid.cpp:2463
 msgid "Veteran"
 msgstr "老手"
 
-#: src/droid.cpp:2463
+#: src/droid.cpp:2464
 msgid "Elite"
 msgstr "菁英"
 
-#: src/droid.cpp:2464
+#: src/droid.cpp:2465
 msgid "Special"
 msgstr "特務"
 
-#: src/droid.cpp:2465
+#: src/droid.cpp:2466
 msgid "Hero"
 msgstr "英雄"
 
-#: src/droid.cpp:3423
+#: src/droid.cpp:3424
 #, c-format
 msgid "%s wanted to give you a %s but you have too many!"
 msgstr ""
 
-#: src/droid.cpp:3427
+#: src/droid.cpp:3428
 #, c-format
 msgid "You wanted to give %s a %s but they have too many!"
 msgstr ""
@@ -10865,8 +10866,8 @@ msgstr "SINGLE PLAYER"
 
 #: src/frontend.cpp:322
 #: src/ingameop.cpp:494
-#: src/mission.cpp:2496
-#: src/mission.cpp:2597
+#: src/mission.cpp:2493
+#: src/mission.cpp:2594
 msgid "Load Saved Game"
 msgstr "載入已儲存的遊戲"
 
@@ -11251,106 +11252,106 @@ msgstr "載入遊戲"
 msgid "Load Map File"
 msgstr "載入遊戲"
 
-#: src/hci.cpp:3529
+#: src/hci.cpp:3533
 #, fuzzy
 msgid "Save"
 msgstr "儲存遊戲"
 
-#: src/hci.cpp:3530
+#: src/hci.cpp:3534
 #, fuzzy
 msgid "Save Map File"
 msgstr "儲存遊戲"
 
-#: src/hci.cpp:3538
+#: src/hci.cpp:3546
 msgid "New"
 msgstr ""
 
-#: src/hci.cpp:3539
+#: src/hci.cpp:3547
 msgid "New Blank Map"
 msgstr ""
 
-#: src/hci.cpp:3575
+#: src/hci.cpp:3595
 msgid "Tile"
 msgstr "貼圖"
 
-#: src/hci.cpp:3576
+#: src/hci.cpp:3596
 msgid "Place tiles on map"
 msgstr "在地圖上加入貼圖"
 
-#: src/hci.cpp:3585
+#: src/hci.cpp:3609
 msgid "Unit"
 msgstr "單位"
 
-#: src/hci.cpp:3586
+#: src/hci.cpp:3610
 msgid "Place Unit on map"
 msgstr "在地圖上加入單位"
 
-#: src/hci.cpp:3594
+#: src/hci.cpp:3618
 msgid "Struct"
 msgstr "建築"
 
-#: src/hci.cpp:3595
+#: src/hci.cpp:3619
 msgid "Place Structures on map"
 msgstr "在地圖上加入建築物"
 
-#: src/hci.cpp:3603
+#: src/hci.cpp:3627
 msgid "Feat"
 msgstr "特徵"
 
-#: src/hci.cpp:3604
+#: src/hci.cpp:3628
 msgid "Place Features on map"
 msgstr "在地圖上加入特徵"
 
-#: src/hci.cpp:3614
+#: src/hci.cpp:3642
 msgid "Pause"
 msgstr ""
 
-#: src/hci.cpp:3615
+#: src/hci.cpp:3643
 msgid "Pause or unpause the game"
 msgstr "暫停（或繼續）遊戲"
 
-#: src/hci.cpp:3629
+#: src/hci.cpp:3661
 msgid "Align height of all map objects"
 msgstr "使地圖上所有物件等高"
 
-#: src/hci.cpp:3639
+#: src/hci.cpp:3674
 msgid "Edit"
 msgstr ""
 
-#: src/hci.cpp:3640
+#: src/hci.cpp:3675
 #, fuzzy
 msgid "Start Edit Mode"
 msgstr "開始時無基地"
 
-#: src/hci.cpp:3654
+#: src/hci.cpp:3689
 #: src/ingameop.cpp:113
 #: src/ingameop.cpp:257
 #: src/ingameop.cpp:261
 msgid "Quit"
 msgstr "退出"
 
-#: src/hci.cpp:3655
+#: src/hci.cpp:3690
 msgid "Exit Game"
 msgstr "離開遊戲"
 
-#: src/hci.cpp:3681
+#: src/hci.cpp:3716
 #, fuzzy
 msgid "Current Player:"
 msgstr "多人遊戲"
 
-#: src/hci.cpp:3960
+#: src/hci.cpp:3998
 msgid "Progress Bar"
 msgstr "進度條"
 
-#: src/hci.cpp:4817
+#: src/hci.cpp:4855
 msgid "Factory Delivery Point"
 msgstr "工廠單位產出點"
 
-#: src/hci.cpp:4835
+#: src/hci.cpp:4873
 msgid "Loop Production"
 msgstr "循環生產"
 
-#: src/hci.cpp:5159
+#: src/hci.cpp:5197
 #, fuzzy
 msgid "Ally progress"
 msgstr "建築物HP（Build Points）"
@@ -11377,8 +11378,8 @@ msgstr ""
 
 #: src/ingameop.cpp:275
 #: src/ingameop.cpp:498
-#: src/mission.cpp:2483
-#: src/mission.cpp:2600
+#: src/mission.cpp:2480
+#: src/mission.cpp:2597
 msgid "Save Game"
 msgstr "儲存遊戲"
 
@@ -12374,44 +12375,44 @@ msgstr "開啟或關閉追蹤視角"
 msgid "Could not save game!"
 msgstr "載入已儲存的遊戲"
 
-#: src/mission.cpp:2043
+#: src/mission.cpp:2040
 msgid "Load Transport"
 msgstr "送上運輸艦"
 
-#: src/mission.cpp:2431
+#: src/mission.cpp:2428
 #, fuzzy
 msgid "OBJECTIVE ACHIEVED by cheating!"
 msgstr "任務完成"
 
-#: src/mission.cpp:2431
+#: src/mission.cpp:2428
 msgid "OBJECTIVE ACHIEVED"
 msgstr "任務完成"
 
-#: src/mission.cpp:2437
+#: src/mission.cpp:2434
 #, fuzzy
 msgid "OBJECTIVE FAILED--and you cheated!"
 msgstr "任務失敗"
 
-#: src/mission.cpp:2437
+#: src/mission.cpp:2434
 msgid "OBJECTIVE FAILED"
 msgstr "任務失敗"
 
-#: src/mission.cpp:2462
-#: src/mission.cpp:2502
-#: src/mission.cpp:2614
+#: src/mission.cpp:2459
+#: src/mission.cpp:2499
+#: src/mission.cpp:2611
 msgid "Quit To Main Menu"
 msgstr "退出至主選單"
 
-#: src/mission.cpp:2470
+#: src/mission.cpp:2467
 msgid "Continue Game"
 msgstr "繼續遊戲"
 
-#: src/mission.cpp:2565
+#: src/mission.cpp:2562
 #, fuzzy
 msgid "GAME SAVED :"
 msgstr "遊戲已儲存"
 
-#: src/move.cpp:2307
+#: src/move.cpp:2279
 #, c-format
 msgid "You found %u power in an oil drum."
 msgstr ""
@@ -12828,7 +12829,7 @@ msgstr "鎖定同盟模式"
 
 #: src/multiint.cpp:3091
 #: src/multiint.cpp:3160
-#: src/multimenu.cpp:1523
+#: src/multimenu.cpp:1472
 #, c-format
 msgid "The host has kicked %s from the game!"
 msgstr "主玩家將 %s 踢出遊戲！"
@@ -12886,36 +12887,36 @@ msgid "HOST"
 msgstr ""
 
 #: src/multiint.cpp:4061
-#: src/multimenu.cpp:808
+#: src/multimenu.cpp:806
 msgid "Ping"
 msgstr "Ping"
 
-#: src/multijoin.cpp:101
-#: src/multijoin.cpp:102
+#: src/multijoin.cpp:95
+#: src/multijoin.cpp:96
 msgid "Players Still Joining"
 msgstr "玩家加入中"
 
-#: src/multijoin.cpp:269
+#: src/multijoin.cpp:263
 #, c-format
 msgid "%s has Left the Game"
 msgstr "%s 已離開遊戲"
 
-#: src/multijoin.cpp:287
+#: src/multijoin.cpp:281
 #, c-format
 msgid "File transfer has been aborted for %d."
 msgstr ""
 
-#: src/multijoin.cpp:418
+#: src/multijoin.cpp:412
 #, c-format
 msgid "%s (%u) has an incompatible mod, and has been kicked."
 msgstr ""
 
-#: src/multijoin.cpp:459
+#: src/multijoin.cpp:453
 #, fuzzy, c-format
 msgid "%s is joining the game"
 msgstr "%s 加入遊戲"
 
-#: src/multijoin.cpp:470
+#: src/multijoin.cpp:464
 #, fuzzy
 msgid "Server message:"
 msgstr "系統語系"
@@ -12925,7 +12926,7 @@ msgstr "系統語系"
 msgid "Apply Defaults and Return To Previous Screen"
 msgstr "回到前一個畫面"
 
-#: src/multilimit.cpp:314
+#: src/multilimit.cpp:317
 msgid "Limits reset to default values"
 msgstr ""
 
@@ -12959,40 +12960,39 @@ msgstr "分數"
 msgid "Kills"
 msgstr "殺敵數"
 
-#: src/multimenu.cpp:798
-#: src/multimenu.cpp:803
+#: src/multimenu.cpp:795
 msgid "Units"
 msgstr "單位"
 
-#: src/multimenu.cpp:812
+#: src/multimenu.cpp:810
 msgid "Structs"
 msgstr "建築"
 
-#: src/multimenu.cpp:1174
+#: src/multimenu.cpp:1122
 msgid "Channel"
 msgstr ""
 
-#: src/multimenu.cpp:1188
+#: src/multimenu.cpp:1136
 msgid "Toggle Alliance State"
 msgstr "開啟或關閉同盟狀態"
 
-#: src/multimenu.cpp:1207
+#: src/multimenu.cpp:1155
 msgid "Give Visibility Report"
 msgstr "提供可檢視的報告"
 
-#: src/multimenu.cpp:1213
+#: src/multimenu.cpp:1161
 msgid "Leak Technology Documents"
 msgstr "洩漏科技技術文件"
 
-#: src/multimenu.cpp:1220
+#: src/multimenu.cpp:1168
 msgid "Hand Over Selected Units"
 msgstr "交出選擇的單位"
 
-#: src/multimenu.cpp:1226
+#: src/multimenu.cpp:1174
 msgid "Give Power To Player"
 msgstr "提供玩家能源"
 
-#: src/multimenu.cpp:1525
+#: src/multimenu.cpp:1474
 #, c-format
 msgid "kicked %s : %s from the game, and added them to the banned list!"
 msgstr ""
@@ -13079,13 +13079,13 @@ msgstr ""
 msgid "We can't do that! We must be a Cyborg unit to use a Cyborg Transport!"
 msgstr ""
 
-#: src/qtscriptfuncs.cpp:1578
-#: src/scriptfuncs.cpp:3259
+#: src/qtscriptfuncs.cpp:1580
+#: src/scriptfuncs.cpp:3261
 msgid "YOU ARE VICTORIOUS!"
 msgstr "你獲勝了！"
 
-#: src/qtscriptfuncs.cpp:1583
-#: src/scriptfuncs.cpp:3263
+#: src/qtscriptfuncs.cpp:1585
+#: src/scriptfuncs.cpp:3265
 msgid "YOU WERE DEFEATED!"
 msgstr "你被打敗了！"
 
@@ -13102,130 +13102,130 @@ msgstr "已研發完成"
 msgid "Research Award"
 msgstr "研發中心獎勵"
 
-#: src/scores.cpp:99
+#: src/scores.cpp:100
 #, c-format
 msgid "Own Units: %u"
 msgstr "我方單位： %u"
 
-#: src/scores.cpp:100
+#: src/scores.cpp:101
 #, c-format
 msgid "Enemy Units: %u"
 msgstr "敵方單位： %u"
 
-#: src/scores.cpp:101
+#: src/scores.cpp:102
 #, c-format
 msgid "Own Structures: %u"
 msgstr "我方建築物： %u"
 
-#: src/scores.cpp:102
+#: src/scores.cpp:103
 #, c-format
 msgid "Enemy Structures: %u"
 msgstr "敵方建築物： %u"
 
-#: src/scores.cpp:103
+#: src/scores.cpp:104
 #, c-format
 msgid "Units Manufactured: %u"
 msgstr "生產單位總數： %u"
 
-#: src/scores.cpp:104
+#: src/scores.cpp:105
 #, c-format
 msgid "Total Units: %u"
 msgstr "全部單位： %u"
 
-#: src/scores.cpp:105
+#: src/scores.cpp:106
 #, c-format
 msgid "Structures Built: %u"
 msgstr "建築物總數： %u"
 
-#: src/scores.cpp:106
+#: src/scores.cpp:107
 #, c-format
 msgid "Total Structures: %u"
 msgstr "全部建築物： %u"
 
-#: src/scores.cpp:108
+#: src/scores.cpp:109
 #, c-format
 msgid "Rookie: %u"
 msgstr "菜鳥： %u"
 
-#: src/scores.cpp:109
+#: src/scores.cpp:110
 #, c-format
 msgctxt "rank"
 msgid "Green: %u"
 msgstr "青澀: %u"
 
-#: src/scores.cpp:110
+#: src/scores.cpp:111
 #, c-format
 msgid "Trained: %u"
 msgstr "訓練有素： %u"
 
-#: src/scores.cpp:111
+#: src/scores.cpp:112
 #, c-format
 msgid "Regular: %u"
 msgstr "好樣的： %u"
 
-#: src/scores.cpp:112
+#: src/scores.cpp:113
 #, c-format
 msgid "Professional: %u"
 msgstr "專家: %u"
 
-#: src/scores.cpp:113
+#: src/scores.cpp:114
 #, c-format
 msgid "Veteran: %u"
 msgstr "老手：%u"
 
-#: src/scores.cpp:114
+#: src/scores.cpp:115
 #, c-format
 msgid "Elite: %u"
 msgstr "菁英：%u"
 
-#: src/scores.cpp:115
+#: src/scores.cpp:116
 #, c-format
 msgid "Special: %u"
 msgstr "特務：%u"
 
-#: src/scores.cpp:116
+#: src/scores.cpp:117
 #, c-format
 msgid "Hero: %u"
 msgstr "英雄：%u"
 
-#: src/scores.cpp:350
+#: src/scores.cpp:307
 msgid "Unit Losses"
 msgstr "損失單位"
 
-#: src/scores.cpp:351
+#: src/scores.cpp:308
 msgid "Structure Losses"
 msgstr "損失建築物"
 
-#: src/scores.cpp:352
+#: src/scores.cpp:309
 msgid "Force Information"
 msgstr "武力資訊"
 
-#: src/scores.cpp:432
+#: src/scores.cpp:389
 #, c-format
 msgid "ARTIFACTS RECOVERED: %d"
 msgstr "尋獲遺留科技： %d"
 
-#: src/scores.cpp:437
+#: src/scores.cpp:394
 #, c-format
 msgid "Mission Time - %s"
 msgstr "任務進行時間 - %s"
 
-#: src/scores.cpp:442
+#: src/scores.cpp:399
 #, c-format
 msgid "Total Game Time - %s"
 msgstr "全部遊戲時間 - %s"
 
-#: src/scores.cpp:448
+#: src/scores.cpp:405
 #, c-format
 msgid "You cheated!"
 msgstr ""
 
-#: src/scriptfuncs.cpp:9372
+#: src/scriptfuncs.cpp:9371
 #, c-format
 msgid "Beacon received from %s!"
 msgstr "由 %s 獲得引導指標"
 
-#: src/scriptfuncs.cpp:9409
+#: src/scriptfuncs.cpp:9408
 #, c-format
 msgid "Beacon %d"
 msgstr "引導指標 %d"
@@ -13253,7 +13253,7 @@ msgid "%u unit selected"
 msgid_plural "%u units selected"
 msgstr[0] "已選取 %u 單位"
 
-#: src/structure.cpp:2563
+#: src/structure.cpp:2562
 msgid "Command Control Limit Reached - Production Halted"
 msgstr "已達到可控制單位總數上限，停止生產新單位"
 
@@ -13316,11 +13316,11 @@ msgstr "修理工廠回饋—無"
 msgid "Launch Transport"
 msgstr "發射運輸艦"
 
-#: src/transporter.cpp:1408
+#: src/transporter.cpp:1406
 msgid "There is not enough room in the Transport!"
 msgstr ""
 
-#: src/transporter.cpp:1654
+#: src/transporter.cpp:1648
 msgid "Reinforcements landing"
 msgstr "援軍已降落"
 
