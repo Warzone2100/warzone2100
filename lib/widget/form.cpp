@@ -262,9 +262,8 @@ static W_TABFORM* formCreateTabbed(const W_FORMINIT* psInit)
 }
 
 /* Free the tips strings for a tabbed form */
-static inline void formFreeTips(W_TABFORM *psForm)
+static inline void formFreeTips(W_TABFORM *)
 {
-	psForm = psForm;
 }
 
 /* Free a tabbed form widget */

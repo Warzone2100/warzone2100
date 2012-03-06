@@ -99,9 +99,9 @@ bool NETstopLogging(void)
 	snprintf(buf, sizeof(buf), "\n-Sync statistics -\n");
 	PHYSFS_write(pFileHandle, buf, strlen(buf), 1);
 	PHYSFS_write(pFileHandle, dash_line, strlen(dash_line), 1);
-	snprintf(buf, sizeof(buf), "joins: %hhu, kicks: %hhu, drops: %hhu, left %hhu\n", sync_counter.joins, sync_counter.kicks, sync_counter.drops, sync_counter.left );
+	snprintf(buf, sizeof(buf), "joins: %u, kicks: %u, drops: %u, left %u\n", sync_counter.joins, sync_counter.kicks, sync_counter.drops, sync_counter.left );
 	PHYSFS_write(pFileHandle, buf, strlen(buf), 1);
-	snprintf(buf, sizeof(buf), "banned: %hhu, cantjoin: %hhu, rejected: %hhu\n", sync_counter.banned, sync_counter.cantjoin, sync_counter.rejected );
+	snprintf(buf, sizeof(buf), "banned: %u, cantjoin: %u, rejected: %u\n", sync_counter.banned, sync_counter.cantjoin, sync_counter.rejected );
 	PHYSFS_write(pFileHandle, buf, strlen(buf), 1);
 	if (sync_counter.banned && IPlist)
 	{

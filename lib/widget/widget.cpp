@@ -1036,7 +1036,7 @@ void widgSetButtonFlash(W_SCREEN *psScreen, UDWORD id)
 	{
 		formSetFlash((W_FORM *)psWidget);
 	}
-	else if ((psWidget->type == WIDG_EDITBOX))
+	else if (psWidget->type == WIDG_EDITBOX)
 	{
 //		editBoxSetState((W_EDITBOX *)psWidget, state);
 	}
@@ -1065,7 +1065,7 @@ void widgClearButtonFlash(W_SCREEN *psScreen, UDWORD id)
 	{
 		formClearFlash((W_FORM *)psWidget);
 	}
-	else if ((psWidget->type == WIDG_EDITBOX))
+	else if (psWidget->type == WIDG_EDITBOX)
 	{
 	}
 	else
@@ -1092,7 +1092,7 @@ void widgSetButtonState(W_SCREEN *psScreen, UDWORD id, UDWORD state)
 	{
 		formSetClickState((W_CLICKFORM *)psWidget, state);
 	}
-	else if ((psWidget->type == WIDG_EDITBOX))
+	else if (psWidget->type == WIDG_EDITBOX)
 	{
 		editBoxSetState((W_EDITBOX *)psWidget, state);
 	}

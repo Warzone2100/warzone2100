@@ -58,8 +58,6 @@ static void printBaseObjInfo(const BASE_OBJECT* psObj)
  */
 static void printComponentInfo(const COMPONENT_STATS* psStats)
 {
-	psStats = psStats;
-
 	CONPRINTF(ConsoleString,(ConsoleString,"%s ref %d\n"
 			  "   bPwr %d bPnts %d wt %d bdy %d imd %p\n",
 			  getStatName(psStats), psStats->ref, psStats->buildPower,

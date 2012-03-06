@@ -5556,7 +5556,7 @@ void printStructureInfo(STRUCTURE *psStructure)
 #ifdef DEBUG
 		if (getDebugMappingStatus())
 		{
-			CONPRINTF(ConsoleString, (ConsoleString, "%s - %d Units assigned - ID %d - sensor range %hu - ECM %u",
+			CONPRINTF(ConsoleString, (ConsoleString, "%s - %d Units assigned - ID %d - sensor range %d - ECM %d",
 					  getStatName(psStructure->pStructureType), countAssignedDroids(psStructure),
 					  psStructure->id, structSensorRange(psStructure), structConcealment(psStructure)));
 		}
@@ -5573,7 +5573,7 @@ void printStructureInfo(STRUCTURE *psStructure)
 #ifdef DEBUG
 		if (getDebugMappingStatus())
 		{
-			CONPRINTF(ConsoleString, (ConsoleString, "%s - %d Units assigned - ID %d - armour %d|%d - sensor range %hu - ECM %u - born %u - depth %.02f",
+			CONPRINTF(ConsoleString, (ConsoleString, "%s - %d Units assigned - ID %d - armour %d|%d - sensor range %d - ECM %d - born %u - depth %.02f",
 				getStatName(psStructure->pStructureType), countAssignedDroids(psStructure),
 				psStructure->id, psStructure->armour[WC_KINETIC], psStructure->armour[WC_HEAT],
 					structSensorRange(psStructure), structConcealment(psStructure), psStructure->born, psStructure->foundationDepth));

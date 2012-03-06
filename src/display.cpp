@@ -1595,7 +1595,7 @@ static void dealWithLMBDroid(DROID* psDroid, SELECTION_TYPE selection)
 #ifdef DEBUG
 		if (getDebugMappingStatus())
 		{
-			CONPRINTF(ConsoleString, (ConsoleString, "(Enemy!) %s - Damage %d%% - ID %d - experience %f, %s - order %s - action %s - sensor range %hu - ECM %u - pitch %.0f",
+			CONPRINTF(ConsoleString, (ConsoleString, "(Enemy!) %s - Damage %d%% - ID %d - experience %f, %s - order %s - action %s - sensor range %d - ECM %d - pitch %.0f",
 						droidGetName(psDroid), 	100 - clip(PERCENT(psDroid->body, psDroid->originalBody), 0, 100), psDroid->id,
 						psDroid->experience/65536.f, getDroidLevelName(psDroid), getDroidOrderName(psDroid->order.type), getDroidActionName(psDroid->action),
 						droidSensorRange(psDroid), droidConcealment(psDroid), UNDEG(psDroid->rot.pitch)));
@@ -1743,7 +1743,7 @@ static void dealWithLMBDroid(DROID* psDroid, SELECTION_TYPE selection)
 		if (getDebugMappingStatus()) // cheating on, so output debug info
 		{
 			CONPRINTF(ConsoleString, (ConsoleString,
-						"%s - Damage %d%% - ID %d - experience %f, %s - order %s - action %s - sensor range %hu - ECM %u - pitch %.0f",
+						"%s - Damage %d%% - ID %d - experience %f, %s - order %s - action %s - sensor range %d - ECM %d - pitch %.0f",
 						droidGetName(psDroid),
 						100 - clip(PERCENT(psDroid->body, psDroid->originalBody), 0, 100), psDroid->id,
 						psDroid->experience/65536.f, getDroidLevelName(psDroid), getDroidOrderName(psDroid->order.type), getDroidActionName(psDroid->action),
@@ -2294,7 +2294,7 @@ static void dealWithRMB( void )
 						if (getDebugMappingStatus()) // cheating on, so output debug info
 						{
 							CONPRINTF(ConsoleString, (ConsoleString,
-										"%s - Damage %d%% - ID %d - experience %f, %s - order %s - action %s - sensor range %hu - ECM %u",
+										"%s - Damage %d%% - ID %d - experience %f, %s - order %s - action %s - sensor range %d - ECM %d",
 										droidGetName(psDroid),
 										100 - clip(PERCENT(psDroid->body, psDroid->originalBody), 0, 100), psDroid->id,
 										psDroid->experience/65536.f, getDroidLevelName(psDroid), getDroidOrderName(psDroid->order.type), getDroidActionName(psDroid->action),

@@ -316,7 +316,7 @@ featfailure:
 	}
 	else
 	{
-		debug(LOG_ERROR, "Unknown terrain signature in %s: %hu %hu %hu", path,
+		debug(LOG_ERROR, "Unknown terrain signature in %s: %u %u %u", path,
 			  terrainTypes[0], terrainTypes[1], terrainTypes[2]);
 		goto failure;
 	}
