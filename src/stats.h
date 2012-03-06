@@ -192,51 +192,6 @@ extern bool loadWeaponSounds(const char *pSoundData, UDWORD bufferSize);
 
 /*Load the Weapon Effect Modifiers from the file exported from Access*/
 extern bool loadWeaponModifiers(const char *pWeapModData, UDWORD bufferSize);
-/*******************************************************************************
-*		Set stats functions
-*******************************************************************************/
-/* Set the stats for a particular weapon type
- * The function uses the ref number in the stats structure to
- * index the correct array entry
- */
-extern void statsSetWeapon(WEAPON_STATS	*psStats, UDWORD index);
-
-/*Set the stats for a particular armour type*/
-//extern void statsSetArmour(ARMOUR_STATS	*psStats, UDWORD index);
-
-/*Set the stats for a particular body type*/
-extern void statsSetBody(BODY_STATS	*psStats, UDWORD index);
-
-/*Set the stats for a particular brain type*/
-extern void statsSetBrain(BRAIN_STATS	*psStats, UDWORD index);
-
-/*Set the stats for a particular propulsion type*/
-extern void statsSetPropulsion(PROPULSION_STATS	*psStats, UDWORD index);
-
-/*Set the stats for a particular sensor type*/
-extern void statsSetSensor(SENSOR_STATS	*psStats, UDWORD index);
-
-/*Set the stats for a particular ecm type*/
-extern void statsSetECM(ECM_STATS	*psStats, UDWORD index);
-
-/*Set the stats for a particular repair type*/
-extern void statsSetRepair(REPAIR_STATS	*psStats, UDWORD index);
-
-/*Set the stats for a particular construct type*/
-extern void statsSetConstruct(CONSTRUCT_STATS	*psStats, UDWORD index);
-
-/*******************************************************************************
-*		Get stats functions
-*******************************************************************************/
-extern WEAPON_STATS *statsGetWeapon(UDWORD ref);
-//extern ARMOUR_STATS *statsGetArmour(UDWORD ref);
-extern BODY_STATS *statsGetBody(UDWORD ref);
-extern BRAIN_STATS *statsGetBrain(UDWORD ref);
-extern PROPULSION_STATS *statsGetPropulsion(UDWORD ref);
-extern SENSOR_STATS *statsGetSensor(UDWORD ref);
-extern ECM_STATS *statsGetECM(UDWORD ref);
-extern REPAIR_STATS *statsGetRepair(UDWORD ref);
-extern CONSTRUCT_STATS *statsGetConstruct(UDWORD ref);
 
 /*******************************************************************************
 *		Generic stats functions

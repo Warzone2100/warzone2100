@@ -487,6 +487,50 @@ bool statsShutDown(void)
 		"setStats: Invalid " #type " ref number" ); \
 	memcpy((list) + (index), (stats), sizeof(type))
 
+/*******************************************************************************
+*		Set stats functions
+*******************************************************************************/
+/* Set the stats for a particular weapon type */
+static void statsSetWeapon(WEAPON_STATS	*psStats, UDWORD index)
+{
+	SET_STATS(psStats, asWeaponStats, index, WEAPON_STATS, REF_WEAPON_START);
+}
+/* Set the stats for a particular body type */
+static void statsSetBody(BODY_STATS	*psStats, UDWORD index)
+{
+	SET_STATS(psStats, asBodyStats, index, BODY_STATS, REF_BODY_START);
+}
+/* Set the stats for a particular brain type */
+static void statsSetBrain(BRAIN_STATS	*psStats, UDWORD index)
+{
+	SET_STATS(psStats, asBrainStats, index, BRAIN_STATS, REF_BRAIN_START);
+}
+/* Set the stats for a particular power type */
+static void statsSetPropulsion(PROPULSION_STATS	*psStats, UDWORD index)
+{
+	SET_STATS(psStats, asPropulsionStats, index, PROPULSION_STATS,
+		REF_PROPULSION_START);
+}
+/* Set the stats for a particular sensor type */
+static void statsSetSensor(SENSOR_STATS	*psStats, UDWORD index)
+{
+	SET_STATS(psStats, asSensorStats, index, SENSOR_STATS, REF_SENSOR_START);
+}
+/* Set the stats for a particular ecm type */
+static void statsSetECM(ECM_STATS	*psStats, UDWORD index)
+{
+	SET_STATS(psStats, asECMStats, index, ECM_STATS, REF_ECM_START);
+}
+/* Set the stats for a particular repair type */
+static void statsSetRepair(REPAIR_STATS	*psStats, UDWORD index)
+{
+	SET_STATS(psStats, asRepairStats, index, REPAIR_STATS, REF_REPAIR_START);
+}
+/* Set the stats for a particular construct type */
+static void statsSetConstruct(CONSTRUCT_STATS	*psStats, UDWORD index)
+{
+	SET_STATS(psStats, asConstructStats, index, CONSTRUCT_STATS, REF_CONSTRUCT_START);
+}
 
 /* Return the number of newlines in a file buffer */
 UDWORD numCR(const char *pFileBuffer, UDWORD fileSize)
@@ -2250,191 +2294,6 @@ bool loadPropulsionSounds(const char *pPropSoundData, UDWORD bufferSize)
 	}
 
 	return(true);
-}
-
-/*******************************************************************************
-*		Set stats functions
-*******************************************************************************/
-/* Set the stats for a particular weapon type */
-void statsSetWeapon(WEAPON_STATS	*psStats, UDWORD index)
-{
-	SET_STATS(psStats, asWeaponStats, index, WEAPON_STATS, REF_WEAPON_START);
-}
-/* Set the stats for a particular body type */
-void statsSetBody(BODY_STATS	*psStats, UDWORD index)
-{
-	SET_STATS(psStats, asBodyStats, index, BODY_STATS, REF_BODY_START);
-}
-/* Set the stats for a particular brain type */
-void statsSetBrain(BRAIN_STATS	*psStats, UDWORD index)
-{
-	SET_STATS(psStats, asBrainStats, index, BRAIN_STATS, REF_BRAIN_START);
-}
-/* Set the stats for a particular power type */
-void statsSetPropulsion(PROPULSION_STATS	*psStats, UDWORD index)
-{
-	SET_STATS(psStats, asPropulsionStats, index, PROPULSION_STATS,
-		REF_PROPULSION_START);
-}
-/* Set the stats for a particular sensor type */
-void statsSetSensor(SENSOR_STATS	*psStats, UDWORD index)
-{
-	SET_STATS(psStats, asSensorStats, index, SENSOR_STATS, REF_SENSOR_START);
-}
-/* Set the stats for a particular ecm type */
-void statsSetECM(ECM_STATS	*psStats, UDWORD index)
-{
-	SET_STATS(psStats, asECMStats, index, ECM_STATS, REF_ECM_START);
-}
-/* Set the stats for a particular repair type */
-void statsSetRepair(REPAIR_STATS	*psStats, UDWORD index)
-{
-	SET_STATS(psStats, asRepairStats, index, REPAIR_STATS, REF_REPAIR_START);
-}
-/* Set the stats for a particular construct type */
-void statsSetConstruct(CONSTRUCT_STATS	*psStats, UDWORD index)
-{
-	SET_STATS(psStats, asConstructStats, index, CONSTRUCT_STATS, REF_CONSTRUCT_START);
-}
-
-/*******************************************************************************
-*		Get stats functions
-*******************************************************************************/
-WEAPON_STATS *statsGetWeapon(UDWORD ref)
-{
-	UDWORD index;
-	ASSERT( (ref >= REF_WEAPON_START) && (ref < REF_WEAPON_START + REF_RANGE),
-		"statsGetWeapon: Invalid reference number: %x", ref );
-
-	for (index = 0; index < numWeaponStats; index++)
-	{
-		if (asWeaponStats[index].ref == ref)
-		{
-			return &asWeaponStats[index];
-		}
-	}
-	ASSERT( false, "statsGetWeapon: Reference number not found in list: %x", ref );
-	return NULL;	// should never get here, but this stops the compiler complaining.
-}
-
-BODY_STATS *statsGetBody(UDWORD ref)
-{
-	UDWORD index;
-	ASSERT( (ref >= REF_BODY_START) && (ref < REF_BODY_START + REF_RANGE),
-		"statsGetBody: Invalid reference number: %x", ref );
-
-	for (index = 0; index < numBodyStats; index++)
-	{
-		if (asBodyStats[index].ref == ref)
-		{
-			return &asBodyStats[index];
-		}
-	}
-	ASSERT( false, "statsGetBody: Reference number not found in list: %x", ref );
-	return NULL;	// should never get here, but this stops the compiler complaining.
-}
-
-BRAIN_STATS *statsGetBrain(UDWORD ref)
-{
-	UDWORD index;
-	ASSERT( (ref >= REF_BRAIN_START) && (ref < REF_BRAIN_START + REF_RANGE),
-		"statsGetBrain: Invalid reference number: %x", ref );
-
-	for (index = 0; index < numBrainStats; index++)
-	{
-		if (asBrainStats[index].ref == ref)
-		{
-			return &asBrainStats[index];
-		}
-	}
-	ASSERT( false, "statsGetBrain: Reference number not found in list: %x", ref );
-	return NULL;	// should never get here, but this stops the compiler complaining.
-}
-
-PROPULSION_STATS *statsGetPropulsion(UDWORD ref)
-{
-	UDWORD index;
-	ASSERT( (ref >= REF_PROPULSION_START) && (ref < REF_PROPULSION_START +
-		REF_RANGE),
-		"statsGetPropulsion: Invalid reference number: %x", ref );
-
-	for (index = 0; index < numPropulsionStats; index++)
-	{
-		if (asPropulsionStats[index].ref == ref)
-		{
-			return &asPropulsionStats[index];
-		}
-	}
-	ASSERT( false, "statsGetPropulsion: Reference number not found in list: %x", ref );
-	return NULL;	// should never get here, but this stops the compiler complaining.
-}
-
-SENSOR_STATS *statsGetSensor(UDWORD ref)
-{
-	UDWORD index;
-	ASSERT( (ref >= REF_SENSOR_START) && (ref < REF_SENSOR_START + REF_RANGE),
-		"statsGetSensor: Invalid reference number: %x", ref );
-
-	for (index = 0; index < numSensorStats; index++)
-	{
-		if (asSensorStats[index].ref == ref)
-		{
-			return &asSensorStats[index];
-		}
-	}
-	ASSERT( false, "statsGetSensor: Reference number not found in list: %x", ref );
-	return NULL;	// should never get here, but this stops the compiler complaining.
-}
-
-ECM_STATS *statsGetECM(UDWORD ref)
-{
-	UDWORD index;
-	ASSERT( (ref >= REF_ECM_START) && (ref < REF_ECM_START + REF_RANGE),
-		"statsGetECM: Invalid reference number: %x", ref );
-
-	for (index = 0; index < numECMStats; index++)
-	{
-		if (asECMStats[index].ref == ref)
-		{
-			return &asECMStats[index];
-		}
-	}
-	ASSERT( false, "statsGetECM: Reference number not found in list: %x", ref );
-	return NULL;	// should never get here, but this stops the compiler complaining.
-}
-
-REPAIR_STATS *statsGetRepair(UDWORD ref)
-{
-	UDWORD index;
-	ASSERT( (ref >= REF_REPAIR_START) && (ref < REF_REPAIR_START + REF_RANGE),
-		"statsGetRepair: Invalid reference number: %x", ref );
-
-	for (index = 0; index < numRepairStats; index++)
-	{
-		if (asRepairStats[index].ref == ref)
-		{
-			return &asRepairStats[index];
-		}
-	}
-	ASSERT( false, "statsGetRepair: Reference number not found in list: %x", ref );
-	return NULL;	// should never get here, but this stops the compiler complaining.
-}
-
-CONSTRUCT_STATS *statsGetConstruct(UDWORD ref)
-{
-	UDWORD index;
-	ASSERT( (ref >= REF_CONSTRUCT_START) && (ref < REF_CONSTRUCT_START + REF_RANGE),
-		"statsGetConstruct: Invalid reference number: %x", ref );
-
-	for (index = 0; index < numConstructStats; index++)
-	{
-		if (asConstructStats[index].ref == ref)
-		{
-			return &asConstructStats[index];
-		}
-	}
-	ASSERT( false, "statsGetConstruct: Reference number not found in list: %x", ref );
-	return NULL;	// should never get here, but this stops the compiler complaining.
 }
 
 /***********************************************************************************
