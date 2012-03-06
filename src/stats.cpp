@@ -97,6 +97,7 @@ UBYTE		*apStructTypeLists[MAX_PLAYERS];
 
 static bool compareYes(const char *strToCompare, const char *strOwner);
 static bool getMovementModel(const char* movementModel, MOVEMENT_MODEL* model);
+static void storeSpeedFactor(UDWORD terrainType, UDWORD propulsionType, UDWORD speedFactor);
 
 //Access functions for the max values to be used in the Design Screen
 static void setMaxComponentWeight(UDWORD weight);
@@ -2314,7 +2315,7 @@ void deallocTerrainTable(void)
 }
 
 //store the speed Factor in the terrain table
-void storeSpeedFactor(UDWORD terrainType, UDWORD propulsionType, UDWORD speedFactor)
+static void storeSpeedFactor(UDWORD terrainType, UDWORD propulsionType, UDWORD speedFactor)
 {
 	TERRAIN_TABLE *pTerrainTable = asTerrainTable;
 

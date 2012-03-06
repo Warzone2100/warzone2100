@@ -208,7 +208,6 @@ extern void deallocPropulsionTypes(void);
 extern void deallocTerrainTypes(void);
 extern void deallocTerrainTable(void);
 
-extern void storeSpeedFactor(UDWORD terrainType, UDWORD propulsionType, UDWORD speedFactor);
 extern UDWORD getSpeedFactor(UDWORD terrainType, UDWORD propulsionType);
 //return the type of stat this ref refers to!
 extern UDWORD statType(UDWORD ref);
