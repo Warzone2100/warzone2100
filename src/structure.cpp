@@ -4613,8 +4613,6 @@ bool removeStruct(STRUCTURE *psDel, bool bDestroy)
 bool destroyStruct(STRUCTURE *psDel, unsigned impactTime)
 {
 	UDWORD			widthScatter,breadthScatter,heightScatter;
-	bool			resourceFound = false;
-	bool                    bMinor;
 
 	const unsigned          burnDurationWall    =  1000;
 	const unsigned          burnDurationOilWell = 60000;
@@ -4623,7 +4621,15 @@ bool destroyStruct(STRUCTURE *psDel, unsigned impactTime)
 	CHECK_STRUCTURE(psDel);
 
 	/* Firstly, are we dealing with a wall section */
-	bMinor = psDel->pStructureType->type == REF_WALL || psDel->pStructureType->type == REF_WALLCORNER;
+	const bool bMinor = psDel->pStructureType->type == REF_WALL || psDel->pStructureType->type == REF_WALLCORNER;
+	const bool bDerrick = psDel->pStructureType->type == REF_RESOURCE_EXTRACTOR;
+	const bool bPowerGen = psDel->pStructureType->type == REF_POWER_GEN;
+
+	unsigned burnDuration = bMinor? burnDurationWall : bDerrick? burnDurationOilWell : burnDurationOther;
+	if (psDel->status == SS_BEING_BUILT || psDel->status == SS_BEING_DEMOLISHED)
+	{
+		burnDuration = burnDuration * psDel->currentBuildPts / psDel->pStructureType->buildPoints;
+	}
 
 	/* Only add if visible */
 	if(psDel->visible[selectedPlayer])
@@ -4650,7 +4656,7 @@ bool destroyStruct(STRUCTURE *psDel, unsigned impactTime)
 		pos.y = map_Height(pos.x, pos.z);
 
 		// Set off a fire, provide dimensions for the fire
-		if(bMinor)
+		if (bMinor)
 		{
 			effectGiveAuxVar(world_coord(psDel->pStructureType->baseWidth) / 4);
 		}
@@ -4658,28 +4664,20 @@ bool destroyStruct(STRUCTURE *psDel, unsigned impactTime)
 		{
 			effectGiveAuxVar(world_coord(psDel->pStructureType->baseWidth) / 3);
 		}
-		if (bMinor)  // walls
-		{
-			/* Give a duration */
-			effectGiveAuxVarSec(burnDurationWall);
-			/* Normal fire - no smoke */
-			addEffect(&pos, EFFECT_FIRE, FIRE_TYPE_LOCALISED, false, NULL, 0, impactTime);
-		}
-		else if(psDel->pStructureType->type == REF_RESOURCE_EXTRACTOR) // oil resources
+		/* Give a duration */
+		effectGiveAuxVarSec(burnDuration);
+		if (bDerrick)  // oil resources
 		{
 			/* Oil resources burn AND puff out smoke AND for longer*/
-			effectGiveAuxVarSec(burnDurationOilWell);
 			addEffect(&pos, EFFECT_FIRE, FIRE_TYPE_SMOKY, false, NULL, 0, impactTime);
 		}
-		else	// everything else
+		else  // everything else
 		{
-			/* Give a duration */
-			effectGiveAuxVarSec(burnDurationOther);
 			addEffect(&pos, EFFECT_FIRE, FIRE_TYPE_LOCALISED, false, NULL, 0, impactTime);
 		}
 
 		/* Power stations have their own desctruction sequence */
-		if(psDel->pStructureType->type == REF_POWER_GEN)
+		if (bPowerGen)
 		{
 			addEffect(&pos, EFFECT_DESTRUCTION, DESTRUCTION_TYPE_POWER_STATION, false, NULL, 0, impactTime);
 			pos.y += SHOCK_WAVE_HEIGHT;
@@ -4706,21 +4704,9 @@ bool destroyStruct(STRUCTURE *psDel, unsigned impactTime)
 	}
 
 	// Actually set the tiles on fire - even if the effect is not visible.
-	if (bMinor)  // walls
-	{
-		tileSetFire(psDel->pos.x, psDel->pos.y, burnDurationWall);
-	}
-	else if(psDel->pStructureType->type == REF_RESOURCE_EXTRACTOR)  // oil resources
-	{
-		/* Oil resources burn AND puff out smoke AND for longer*/
-		tileSetFire(psDel->pos.x, psDel->pos.y, burnDurationOilWell);
-	}
-	else  // everything else
-	{
-		tileSetFire(psDel->pos.x, psDel->pos.y, burnDurationOther);
-	}
+	tileSetFire(psDel->pos.x, psDel->pos.y, burnDuration);
 
-	resourceFound = removeStruct(psDel, true);
+	const bool resourceFound = removeStruct(psDel, true);
 	psDel->died = impactTime;
 
 	// Leave burn marks in the ground where building once stood
@@ -4748,7 +4734,7 @@ bool destroyStruct(STRUCTURE *psDel, unsigned impactTime)
 	}
 
 	// updates score stats only if not wall
-	if(psDel->pStructureType->type != REF_WALL && psDel->pStructureType->type != REF_WALLCORNER)
+	if (bMinor)
 	{
 		if(psDel->player == selectedPlayer)
 		{
