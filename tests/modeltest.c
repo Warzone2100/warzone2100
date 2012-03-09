@@ -29,6 +29,7 @@
 #ifndef WIN32
 #include <stdbool.h>
 #include <limits.h>
+#include <unistd.h>
 #else
 typedef int bool;
 #define PATH_MAX 255
