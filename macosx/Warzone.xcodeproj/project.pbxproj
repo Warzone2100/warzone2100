@@ -45,6 +45,7 @@
 			);
 			dependencies = (
 				43AE78FD10F0F4F500FED5D3 /* PBXTargetDependency */,
+				437D32F4150A47EC00B45AAE /* PBXTargetDependency */,
 			);
 			name = "Make DMGs for Release";
 			productName = "Make DMGs for Release";
@@ -419,6 +420,7 @@
 		4366729613D2122700FE85BA /* QuesoGLC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4366718213D1FD5600FE85BA /* QuesoGLC.framework */; };
 		4371B60F11D93FD1005A67AB /* pngpriv.h in Headers */ = {isa = PBXBuildFile; fileRef = 4371B60D11D93FD0005A67AB /* pngpriv.h */; };
 		437487CF14AE41C100ABC9C7 /* template.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4343651C149EA04800527137 /* template.cpp */; };
+		437D3360150A53E000B45AAE /* qslint in Copy Additional Executables */ = {isa = PBXBuildFile; fileRef = 437D32D9150A47A800B45AAE /* qslint */; };
 		437DABE714C3345B00DB5F94 /* swapinterval.mm in Sources */ = {isa = PBXBuildFile; fileRef = 437DABE614C3345B00DB5F94 /* swapinterval.mm */; };
 		438BDDF31129DC9A00998660 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 438BDDD71129DC9A00998660 /* InfoPlist.strings */; };
 		43A6285B13A6C4A400C6B786 /* geometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43A6285913A6C4A400C6B786 /* geometry.cpp */; };
@@ -765,6 +767,83 @@
 			remoteGlobalIDString = 4366718113D1FD5600FE85BA;
 			remoteInfo = QuesoGLC;
 		};
+		437D32D2150A47A800B45AAE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 437D32BF150A47A800B45AAE /* Tests.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 43E700A114F9830C00D419C5 /* maptest */;
+			remoteInfo = maptest;
+		};
+		437D32D4150A47A800B45AAE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 437D32BF150A47A800B45AAE /* Tests.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 43E700E014F9862500D419C5 /* modeltest */;
+			remoteInfo = modeltest;
+		};
+		437D32D6150A47A800B45AAE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 437D32BF150A47A800B45AAE /* Tests.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 43E7011614F989BC00D419C5 /* qtscripttest */;
+			remoteInfo = qtscripttest;
+		};
+		437D32D8150A47A800B45AAE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 437D32BF150A47A800B45AAE /* Tests.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 43E7010014F9887F00D419C5 /* qslint */;
+			remoteInfo = qslint;
+		};
+		437D32E9150A47A800B45AAE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 437D32C2150A47A800B45AAE /* MapUtilities.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 438C94E4149BD19D001BAF3A /* map2png */;
+			remoteInfo = map2png;
+		};
+		437D32EB150A47A800B45AAE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 437D32C2150A47A800B45AAE /* MapUtilities.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 438C9532149BD22C001BAF3A /* mapconv */;
+			remoteInfo = mapconv;
+		};
+		437D32ED150A47A800B45AAE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 437D32C2150A47A800B45AAE /* MapUtilities.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 438C9542149BD26C001BAF3A /* mapinfo */;
+			remoteInfo = mapinfo;
+		};
+		437D32EF150A47A800B45AAE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 437D32C2150A47A800B45AAE /* MapUtilities.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 438C954A149BD280001BAF3A /* map2lnd */;
+			remoteInfo = map2lnd;
+		};
+		437D32F1150A47A800B45AAE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 437D32C2150A47A800B45AAE /* MapUtilities.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 438C9552149BD290001BAF3A /* map2preview */;
+			remoteInfo = map2preview;
+		};
+		437D32F3150A47EC00B45AAE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 437D32BF150A47A800B45AAE /* Tests.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 43E7009A14F9829600D419C5 /* All Tests */;
+			remoteInfo = "All Tests";
+		};
+		437D3349150A53BB00B45AAE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 437D32BF150A47A800B45AAE /* Tests.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 43E700FF14F9887F00D419C5 /* qslint */;
+			remoteInfo = qslint;
+		};
 		438B0C11137731A0008184FC /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 02356D660BD3BB2600E9A019 /* Project object */;
@@ -924,6 +1003,17 @@
 				02581C870BD5AD1100957CBC /* Vorbis.framework in Copy frameworks */,
 			);
 			name = "Copy frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		437D3361150A53FE00B45AAE /* Copy Additional Executables */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 6;
+			files = (
+				437D3360150A53E000B45AAE /* qslint in Copy Additional Executables */,
+			);
+			name = "Copy Additional Executables";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		43B8FF4F127CD9BD006F5A13 /* Copy Fonts */ = {
@@ -1555,6 +1645,8 @@
 		436D24DE149642EB00BF74E3 /* SDLMain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SDLMain.h; path = ../3rdparty/SDL/mac/SDLMain.h; sourceTree = SOURCE_ROOT; };
 		436D24DF149642EB00BF74E3 /* SDLMain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SDLMain.m; path = ../3rdparty/SDL/mac/SDLMain.m; sourceTree = SOURCE_ROOT; };
 		4371B60D11D93FD0005A67AB /* pngpriv.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = pngpriv.h; path = external/libpng/pngpriv.h; sourceTree = SOURCE_ROOT; };
+		437D32BF150A47A800B45AAE /* Tests.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Tests.xcodeproj; path = ../tests/Tests.xcodeproj; sourceTree = SOURCE_ROOT; };
+		437D32C2150A47A800B45AAE /* MapUtilities.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = MapUtilities.xcodeproj; path = ../tools/map/MapUtilities.xcodeproj; sourceTree = SOURCE_ROOT; };
 		437DABE614C3345B00DB5F94 /* swapinterval.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = swapinterval.mm; path = ../lib/sdl/swapinterval.mm; sourceTree = SOURCE_ROOT; };
 		437FB24913CE5CA900E7EF5B /* swapinterval.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = swapinterval.cpp; path = ../lib/qtgame/swapinterval.cpp; sourceTree = SOURCE_ROOT; };
 		437FB24A13CE5CA900E7EF5B /* swapinterval.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = swapinterval.h; path = ../lib/qtgame/swapinterval.h; sourceTree = SOURCE_ROOT; };
@@ -2022,6 +2114,7 @@
 				43025DEC1120A4B6006C49B1 /* Configurations */,
 				0246A0980BD3CB97004D1C70 /* Warzone sources */,
 				023A1D4F0D2DAEC900EFEB37 /* Resources */,
+				437D32BE150A474700B45AAE /* Sub-Projects */,
 				430B59F010D45990008EA88A /* Third Party */,
 				432BE34210D9C0C500A486AB /* External frameworks */,
 				02DDA8DF0BD3C3A80049AB60 /* System frameworks */,
@@ -2990,6 +3083,38 @@
 			name = "SDL sources";
 			sourceTree = "<group>";
 		};
+		437D32BE150A474700B45AAE /* Sub-Projects */ = {
+			isa = PBXGroup;
+			children = (
+				437D32C2150A47A800B45AAE /* MapUtilities.xcodeproj */,
+				437D32BF150A47A800B45AAE /* Tests.xcodeproj */,
+			);
+			name = "Sub-Projects";
+			sourceTree = "<group>";
+		};
+		437D32C0150A47A800B45AAE /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				437D32D3150A47A800B45AAE /* maptest */,
+				437D32D5150A47A800B45AAE /* modeltest */,
+				437D32D7150A47A800B45AAE /* qtscripttest */,
+				437D32D9150A47A800B45AAE /* qslint */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		437D32C3150A47A800B45AAE /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				437D32EA150A47A800B45AAE /* map2png */,
+				437D32EC150A47A800B45AAE /* mapconv */,
+				437D32EE150A47A800B45AAE /* mapinfo */,
+				437D32F0150A47A800B45AAE /* map2lnd */,
+				437D32F2150A47A800B45AAE /* map2preview */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		43B8FF3C127CD949006F5A13 /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
@@ -3540,6 +3665,7 @@
 				43025CD1111FB66E006C49B1 /* i18n */,
 				02356D720BD3BB3400E9A019 /* Sources */,
 				02356D730BD3BB3400E9A019 /* Frameworks */,
+				437D3361150A53FE00B45AAE /* Copy Additional Executables */,
 				02581C7D0BD5ACEE00957CBC /* Copy frameworks */,
 				02581CC40BD5AD5300957CBC /* Copy game data */,
 			);
@@ -3558,6 +3684,7 @@
 				43FA571310FF8EE90074E914 /* PBXTargetDependency */,
 				4366728313D211DE00FE85BA /* PBXTargetDependency */,
 				43D1808B1336B74E001906EB /* PBXTargetDependency */,
+				437D334A150A53BB00B45AAE /* PBXTargetDependency */,
 			);
 			name = Warzone;
 			productName = Warzone;
@@ -3812,6 +3939,16 @@
 			mainGroup = 02356D640BD3BB2600E9A019;
 			productRefGroup = 02356D760BD3BB3400E9A019 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 437D32C3150A47A800B45AAE /* Products */;
+					ProjectRef = 437D32C2150A47A800B45AAE /* MapUtilities.xcodeproj */;
+				},
+				{
+					ProductGroup = 437D32C0150A47A800B45AAE /* Products */;
+					ProjectRef = 437D32BF150A47A800B45AAE /* Tests.xcodeproj */;
+				},
+			);
 			projectRoot = ..;
 			targets = (
 				02356D740BD3BB3400E9A019 /* Warzone */,
@@ -3833,6 +3970,72 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		437D32D3150A47A800B45AAE /* maptest */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			path = maptest;
+			remoteRef = 437D32D2150A47A800B45AAE /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		437D32D5150A47A800B45AAE /* modeltest */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			path = modeltest;
+			remoteRef = 437D32D4150A47A800B45AAE /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		437D32D7150A47A800B45AAE /* qtscripttest */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			path = qtscripttest;
+			remoteRef = 437D32D6150A47A800B45AAE /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		437D32D9150A47A800B45AAE /* qslint */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			path = qslint;
+			remoteRef = 437D32D8150A47A800B45AAE /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		437D32EA150A47A800B45AAE /* map2png */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			path = map2png;
+			remoteRef = 437D32E9150A47A800B45AAE /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		437D32EC150A47A800B45AAE /* mapconv */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			path = mapconv;
+			remoteRef = 437D32EB150A47A800B45AAE /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		437D32EE150A47A800B45AAE /* mapinfo */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			path = mapinfo;
+			remoteRef = 437D32ED150A47A800B45AAE /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		437D32F0150A47A800B45AAE /* map2lnd */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			path = map2lnd;
+			remoteRef = 437D32EF150A47A800B45AAE /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		437D32F2150A47A800B45AAE /* map2preview */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			path = map2preview;
+			remoteRef = 437D32F1150A47A800B45AAE /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		022B2F1E0BD55814002E64E3 /* Resources */ = {
@@ -4779,6 +4982,16 @@
 			isa = PBXTargetDependency;
 			target = 4366718113D1FD5600FE85BA /* QuesoGLC */;
 			targetProxy = 4366728213D211DE00FE85BA /* PBXContainerItemProxy */;
+		};
+		437D32F4150A47EC00B45AAE /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "All Tests";
+			targetProxy = 437D32F3150A47EC00B45AAE /* PBXContainerItemProxy */;
+		};
+		437D334A150A53BB00B45AAE /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = qslint;
+			targetProxy = 437D3349150A53BB00B45AAE /* PBXContainerItemProxy */;
 		};
 		438B0C12137731A0008184FC /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
