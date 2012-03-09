@@ -771,77 +771,77 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = 437D32BF150A47A800B45AAE /* Tests.xcodeproj */;
 			proxyType = 2;
-			remoteGlobalIDString = 43E700A114F9830C00D419C5 /* maptest */;
+			remoteGlobalIDString = 43E700A114F9830C00D419C5;
 			remoteInfo = maptest;
 		};
 		437D32D4150A47A800B45AAE /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 437D32BF150A47A800B45AAE /* Tests.xcodeproj */;
 			proxyType = 2;
-			remoteGlobalIDString = 43E700E014F9862500D419C5 /* modeltest */;
+			remoteGlobalIDString = 43E700E014F9862500D419C5;
 			remoteInfo = modeltest;
 		};
 		437D32D6150A47A800B45AAE /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 437D32BF150A47A800B45AAE /* Tests.xcodeproj */;
 			proxyType = 2;
-			remoteGlobalIDString = 43E7011614F989BC00D419C5 /* qtscripttest */;
+			remoteGlobalIDString = 43E7011614F989BC00D419C5;
 			remoteInfo = qtscripttest;
 		};
 		437D32D8150A47A800B45AAE /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 437D32BF150A47A800B45AAE /* Tests.xcodeproj */;
 			proxyType = 2;
-			remoteGlobalIDString = 43E7010014F9887F00D419C5 /* qslint */;
+			remoteGlobalIDString = 43E7010014F9887F00D419C5;
 			remoteInfo = qslint;
 		};
 		437D32E9150A47A800B45AAE /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 437D32C2150A47A800B45AAE /* MapUtilities.xcodeproj */;
 			proxyType = 2;
-			remoteGlobalIDString = 438C94E4149BD19D001BAF3A /* map2png */;
+			remoteGlobalIDString = 438C94E4149BD19D001BAF3A;
 			remoteInfo = map2png;
 		};
 		437D32EB150A47A800B45AAE /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 437D32C2150A47A800B45AAE /* MapUtilities.xcodeproj */;
 			proxyType = 2;
-			remoteGlobalIDString = 438C9532149BD22C001BAF3A /* mapconv */;
+			remoteGlobalIDString = 438C9532149BD22C001BAF3A;
 			remoteInfo = mapconv;
 		};
 		437D32ED150A47A800B45AAE /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 437D32C2150A47A800B45AAE /* MapUtilities.xcodeproj */;
 			proxyType = 2;
-			remoteGlobalIDString = 438C9542149BD26C001BAF3A /* mapinfo */;
+			remoteGlobalIDString = 438C9542149BD26C001BAF3A;
 			remoteInfo = mapinfo;
 		};
 		437D32EF150A47A800B45AAE /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 437D32C2150A47A800B45AAE /* MapUtilities.xcodeproj */;
 			proxyType = 2;
-			remoteGlobalIDString = 438C954A149BD280001BAF3A /* map2lnd */;
+			remoteGlobalIDString = 438C954A149BD280001BAF3A;
 			remoteInfo = map2lnd;
 		};
 		437D32F1150A47A800B45AAE /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 437D32C2150A47A800B45AAE /* MapUtilities.xcodeproj */;
 			proxyType = 2;
-			remoteGlobalIDString = 438C9552149BD290001BAF3A /* map2preview */;
+			remoteGlobalIDString = 438C9552149BD290001BAF3A;
 			remoteInfo = map2preview;
 		};
 		437D32F3150A47EC00B45AAE /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 437D32BF150A47A800B45AAE /* Tests.xcodeproj */;
 			proxyType = 1;
-			remoteGlobalIDString = 43E7009A14F9829600D419C5 /* All Tests */;
+			remoteGlobalIDString = 43E7009A14F9829600D419C5;
 			remoteInfo = "All Tests";
 		};
 		437D3349150A53BB00B45AAE /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 437D32BF150A47A800B45AAE /* Tests.xcodeproj */;
 			proxyType = 1;
-			remoteGlobalIDString = 43E700FF14F9887F00D419C5 /* qslint */;
+			remoteGlobalIDString = 43E700FF14F9887F00D419C5;
 			remoteInfo = qslint;
 		};
 		438B0C11137731A0008184FC /* PBXContainerItemProxy */ = {

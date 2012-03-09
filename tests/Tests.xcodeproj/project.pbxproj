@@ -45,21 +45,21 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = 43E7FE8A14F9823A00D419C5 /* Warzone.xcodeproj */;
 			proxyType = 1;
-			remoteGlobalIDString = 43FA570C10FF8E9B0074E914 /* Setup Prebuilt Components */;
+			remoteGlobalIDString = 43FA570C10FF8E9B0074E914;
 			remoteInfo = "Setup Prebuilt Components";
 		};
 		437D3325150A495600B45AAE /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 43E7FE8A14F9823A00D419C5 /* Warzone.xcodeproj */;
 			proxyType = 1;
-			remoteGlobalIDString = 43FA570C10FF8E9B0074E914 /* Setup Prebuilt Components */;
+			remoteGlobalIDString = 43FA570C10FF8E9B0074E914;
 			remoteInfo = "Setup Prebuilt Components";
 		};
 		437D3327150A496D00B45AAE /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 43E7FE8A14F9823A00D419C5 /* Warzone.xcodeproj */;
 			proxyType = 1;
-			remoteGlobalIDString = 43FA570C10FF8E9B0074E914 /* Setup Prebuilt Components */;
+			remoteGlobalIDString = 43FA570C10FF8E9B0074E914;
 			remoteInfo = "Setup Prebuilt Components";
 		};
 		43E7007C14F9823C00D419C5 /* PBXContainerItemProxy */ = {
