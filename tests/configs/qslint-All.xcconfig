@@ -8,6 +8,8 @@ PRODUCT_NAME = qslint
 GCC_PREPROCESSOR_DEFINITIONS = $(inherited) $(BUILD_PREPROCESSOR_DEFINITIONS)
 
 
+FRAMEWORK_SEARCH_PATHS = $(BUILT_PRODUCTS_DIR) $(FRAMEWORK_SEARCH_PATHS_QUOTED_2) $(FRAMEWORK_SEARCH_PATHS_QUOTED_3)
+
 OTHER_CFLAGS = $(FlagsForCandCpp) $(WarnForC) $(inherited)
 OTHER_CFLAGS[arch=i386] = $(inherited) // intel 32 bit only
 OTHER_CFLAGS[arch=x86_64] = $(inherited) // intel 64 bit only

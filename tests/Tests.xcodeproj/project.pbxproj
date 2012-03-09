@@ -15,7 +15,6 @@
 			dependencies = (
 				43E700E614F9865C00D419C5 /* PBXTargetDependency */,
 				43E700E814F9865C00D419C5 /* PBXTargetDependency */,
-				43E7010614F9889100D419C5 /* PBXTargetDependency */,
 				43E7012114F98A6700D419C5 /* PBXTargetDependency */,
 			);
 			name = "All Tests";
@@ -42,6 +41,27 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		437D3323150A494100B45AAE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 43E7FE8A14F9823A00D419C5 /* Warzone.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 43FA570C10FF8E9B0074E914 /* Setup Prebuilt Components */;
+			remoteInfo = "Setup Prebuilt Components";
+		};
+		437D3325150A495600B45AAE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 43E7FE8A14F9823A00D419C5 /* Warzone.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 43FA570C10FF8E9B0074E914 /* Setup Prebuilt Components */;
+			remoteInfo = "Setup Prebuilt Components";
+		};
+		437D3327150A496D00B45AAE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 43E7FE8A14F9823A00D419C5 /* Warzone.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 43FA570C10FF8E9B0074E914 /* Setup Prebuilt Components */;
+			remoteInfo = "Setup Prebuilt Components";
+		};
 		43E7007C14F9823C00D419C5 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 43E7FE8A14F9823A00D419C5 /* Warzone.xcodeproj */;
@@ -126,13 +146,6 @@
 			remoteGlobalIDString = 4366718213D1FD5600FE85BA;
 			remoteInfo = QuesoGLC;
 		};
-		43E700AF14F9851500D419C5 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 43E7FE8A14F9823A00D419C5 /* Warzone.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 438B0C05137730FE008184FC;
-			remoteInfo = "Fetch Third Party Sources";
-		};
 		43E700B114F9851500D419C5 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 43E7FE8A14F9823A00D419C5 /* Warzone.xcodeproj */;
@@ -161,20 +174,6 @@
 			remoteGlobalIDString = 43E700DF14F9862500D419C5;
 			remoteInfo = modeltest;
 		};
-		43E7010514F9889100D419C5 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 43E7FE1314F9771800D419C5 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 43E700FF14F9887F00D419C5;
-			remoteInfo = qslint;
-		};
-		43E7010814F988B700D419C5 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 43E7FE8A14F9823A00D419C5 /* Warzone.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 438B0C05137730FE008184FC;
-			remoteInfo = "Fetch Third Party Sources";
-		};
 		43E7010A14F988B700D419C5 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 43E7FE8A14F9823A00D419C5 /* Warzone.xcodeproj */;
@@ -188,13 +187,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = 43E7011514F989BC00D419C5;
 			remoteInfo = qtscripttest;
-		};
-		43E7012214F98AC600D419C5 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 43E7FE8A14F9823A00D419C5 /* Warzone.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 438B0C05137730FE008184FC;
-			remoteInfo = "Fetch Third Party Sources";
 		};
 		43E7012414F98AC600D419C5 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -405,7 +397,7 @@
 			buildRules = (
 			);
 			dependencies = (
-				43E700B014F9851500D419C5 /* PBXTargetDependency */,
+				437D3328150A496D00B45AAE /* PBXTargetDependency */,
 				43E700B214F9851500D419C5 /* PBXTargetDependency */,
 				43E700B414F9851500D419C5 /* PBXTargetDependency */,
 			);
@@ -441,7 +433,7 @@
 			buildRules = (
 			);
 			dependencies = (
-				43E7010914F988B700D419C5 /* PBXTargetDependency */,
+				437D3324150A494100B45AAE /* PBXTargetDependency */,
 				43E7010B14F988B700D419C5 /* PBXTargetDependency */,
 			);
 			name = qslint;
@@ -460,7 +452,7 @@
 			buildRules = (
 			);
 			dependencies = (
-				43E7012314F98AC600D419C5 /* PBXTargetDependency */,
+				437D3326150A495600B45AAE /* PBXTargetDependency */,
 				43E7012514F98AC600D419C5 /* PBXTargetDependency */,
 			);
 			name = qtscripttest;
@@ -676,10 +668,20 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		43E700B014F9851500D419C5 /* PBXTargetDependency */ = {
+		437D3324150A494100B45AAE /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			name = "Fetch Third Party Sources";
-			targetProxy = 43E700AF14F9851500D419C5 /* PBXContainerItemProxy */;
+			name = "Setup Prebuilt Components";
+			targetProxy = 437D3323150A494100B45AAE /* PBXContainerItemProxy */;
+		};
+		437D3326150A495600B45AAE /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "Setup Prebuilt Components";
+			targetProxy = 437D3325150A495600B45AAE /* PBXContainerItemProxy */;
+		};
+		437D3328150A496D00B45AAE /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "Setup Prebuilt Components";
+			targetProxy = 437D3327150A496D00B45AAE /* PBXContainerItemProxy */;
 		};
 		43E700B214F9851500D419C5 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -701,16 +703,6 @@
 			target = 43E700DF14F9862500D419C5 /* modeltest */;
 			targetProxy = 43E700E714F9865C00D419C5 /* PBXContainerItemProxy */;
 		};
-		43E7010614F9889100D419C5 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 43E700FF14F9887F00D419C5 /* qslint */;
-			targetProxy = 43E7010514F9889100D419C5 /* PBXContainerItemProxy */;
-		};
-		43E7010914F988B700D419C5 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = "Fetch Third Party Sources";
-			targetProxy = 43E7010814F988B700D419C5 /* PBXContainerItemProxy */;
-		};
 		43E7010B14F988B700D419C5 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = PhysFS;
@@ -720,11 +712,6 @@
 			isa = PBXTargetDependency;
 			target = 43E7011514F989BC00D419C5 /* qtscripttest */;
 			targetProxy = 43E7012014F98A6700D419C5 /* PBXContainerItemProxy */;
-		};
-		43E7012314F98AC600D419C5 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = "Fetch Third Party Sources";
-			targetProxy = 43E7012214F98AC600D419C5 /* PBXContainerItemProxy */;
 		};
 		43E7012514F98AC600D419C5 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
