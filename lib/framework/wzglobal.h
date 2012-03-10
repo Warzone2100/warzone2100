@@ -164,7 +164,7 @@
 #  define WZ_OS_INTEGRITY
 #elif defined(__MAKEDEPEND__)
 #else
-#  error "Warzone has not been tested on this OS. Please contact warzone-dev@gna.org"
+#  error "Warzone has not been tested on this OS. Please contact warzone2100-project@lists.sourceforge.net"
 #endif /* WZ_OS_x */
 
 #if defined(WZ_OS_WIN32) || defined(WZ_OS_WIN64)
@@ -248,7 +248,7 @@
 #  define WZ_CC_TINYC
 
 #else
-#  error "Warzone has not been tested on this compiler. Please contact warzone-dev@gna.org"
+#  error "Warzone has not been tested on this compiler. Please contact warzone2100-project@lists.sourceforge.net"
 #endif /* WZ_CC_x */
 
 
@@ -286,7 +286,7 @@
 #  define WZ_WS_X11
 
 #else
-#  error "Warzone has not been tested on this window system. Please contact warzone-dev@gna.org"
+#  error "Warzone has not been tested on this window system. Please contact warzone2100-project@lists.sourceforge.net"
 #endif /* WZ_WS_x */
 
 #if defined(WZ_WS_WIN16) || defined(WZ_WS_WIN32)

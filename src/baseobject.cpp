@@ -33,13 +33,14 @@
 
 static inline uint16_t interpolateAngle(uint16_t v1, uint16_t v2, uint32_t t1, uint32_t t2, uint32_t t)
 {
-	int32_t numer = t - t1, denom = t2 - t1;
+	const int numer = t - t1, denom = t2 - t1;
 	return v1 + angleDelta(v2 - v1) * numer/denom;
 }
 
 static Position interpolatePos(Position p1, Position p2, uint32_t t1, uint32_t t2, uint32_t t)
 {
-	return p1 + (p2 - p1) * int(t - t1) / int(t2 - t1);
+	const int numer = t - t1, denom = t2 - t1;
+	return p1 + (p2 - p1) * numer/denom;
 }
 
 Rotation interpolateRot(Rotation v1, Rotation v2, uint32_t t1, uint32_t t2, uint32_t t)
@@ -53,6 +54,8 @@ Rotation interpolateRot(Rotation v1, Rotation v2, uint32_t t1, uint32_t t2, uint
 
 static Spacetime interpolateSpacetime(Spacetime st1, Spacetime st2, uint32_t t)
 {
+	// Cyp says this should never happen, #3037 and #3238 say it does though.
+	ASSERT_OR_RETURN(st1, st1.time != st2.time, "Spacetime overlap!");
 	return Spacetime(interpolatePos(st1.pos, st2.pos, st1.time, st2.time, t), interpolateRot(st1.rot, st2.rot, st1.time, st2.time, t), t);
 }
 

@@ -2794,8 +2794,9 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 			{
 				psDroid = NULL;
 				psChosenObj = NULL;
+				psRepairFac->psObj = NULL;
 			}
-			
+
 			// skip droids that are trying to get to other repair factories
 			if (psDroid != NULL
 				&& (!orderState(psDroid, DORDER_RTR)

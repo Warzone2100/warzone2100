@@ -6,8 +6,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Warzone2100\n"
-"Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2012-02-29 00:16+0100\n"
+"Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
+"POT-Creation-Date: 2012-03-05 12:57+0100\n"
 "PO-Revision-Date: 2012-02-27 14:05+0100\n"
 "Last-Translator: Michał D. aka Emdek <emdeck@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
@@ -10570,17 +10570,17 @@ msgstr "Oczekiwanie na graczy"
 msgid "Out of sync"
 msgstr "Brak synchronizacji"
 
-#: src/display.cpp:1657
+#: src/display.cpp:1586
 msgid "Cannot Build. Oil Resource Burning."
 msgstr "Nie można budować. Płonie ropa."
 
-#: src/display.cpp:1845
-#: src/display.cpp:2396
+#: src/display.cpp:1774
+#: src/display.cpp:2325
 #, c-format
 msgid "%s - Damage %d%% - Experience %.1f, %s"
 msgstr "%s - Obrażenia %d%% - Doświadczenie %.1f, %s"
 
-#: src/display.cpp:1861
+#: src/display.cpp:1790
 #, c-format
 msgid "%s - Allied - Damage %d%% - Experience %d, %s"
 msgstr "%s - Sojusznik - Obrażenia %d%% - Doświadczenie %d, %s"
@@ -12633,7 +12633,7 @@ msgstr "Włączono 'zablokowane drużyny'"
 
 #: src/multiint.cpp:3091
 #: src/multiint.cpp:3160
-#: src/multimenu.cpp:1471
+#: src/multimenu.cpp:1472
 #, c-format
 msgid "The host has kicked %s from the game!"
 msgstr "Host wyrzucił %s z gry!"
@@ -12694,32 +12694,32 @@ msgstr "HOST"
 msgid "Ping"
 msgstr "Ping"
 
-#: src/multijoin.cpp:101
-#: src/multijoin.cpp:102
+#: src/multijoin.cpp:95
+#: src/multijoin.cpp:96
 msgid "Players Still Joining"
 msgstr "Gracze wciąż dołączają"
 
-#: src/multijoin.cpp:269
+#: src/multijoin.cpp:263
 #, c-format
 msgid "%s has Left the Game"
 msgstr "%s opuścił grę"
 
-#: src/multijoin.cpp:287
+#: src/multijoin.cpp:281
 #, c-format
 msgid "File transfer has been aborted for %d."
 msgstr "Transfer pliku został anulowany dla %d."
 
-#: src/multijoin.cpp:418
+#: src/multijoin.cpp:412
 #, c-format
 msgid "%s (%u) has an incompatible mod, and has been kicked."
 msgstr "%s (%u) ma niekompatybilny mod i został wyrzucony."
 
-#: src/multijoin.cpp:459
+#: src/multijoin.cpp:453
 #, c-format
 msgid "%s is joining the game"
 msgstr "%s dołącza do gry"
 
-#: src/multijoin.cpp:470
+#: src/multijoin.cpp:464
 msgid "Server message:"
 msgstr "Wiadomość serwera:"
 
@@ -12727,7 +12727,7 @@ msgstr "Wiadomość serwera:"
 msgid "Apply Defaults and Return To Previous Screen"
 msgstr "Zastosuj wartości domyślne i powróć do poprzedniego ekranu"
 
-#: src/multilimit.cpp:314
+#: src/multilimit.cpp:317
 msgid "Limits reset to default values"
 msgstr "Limity zresetowane do wartości domyślnych"
 
@@ -12795,7 +12795,7 @@ msgstr "Przesuń nad zaznaczonymi jednostkami"
 msgid "Give Power To Player"
 msgstr "Przesyła energię graczowi"
 
-#: src/multimenu.cpp:1473
+#: src/multimenu.cpp:1474
 #, c-format
 msgid "kicked %s : %s from the game, and added them to the banned list!"
 msgstr "%s : %s został wyrzucony z gry i dodany do listy banicji!"
@@ -12904,120 +12904,120 @@ msgstr "Badania ukończone"
 msgid "Research Award"
 msgstr "Technologia skradziona"
 
-#: src/scores.cpp:99
+#: src/scores.cpp:100
 #, c-format
 msgid "Own Units: %u"
 msgstr "Własne jednostki: %u"
 
-#: src/scores.cpp:100
+#: src/scores.cpp:101
 #, c-format
 msgid "Enemy Units: %u"
 msgstr "Jednostki przeciwnika: %u"
 
-#: src/scores.cpp:101
+#: src/scores.cpp:102
 #, c-format
 msgid "Own Structures: %u"
 msgstr "Własne struktury: %u"
 
-#: src/scores.cpp:102
+#: src/scores.cpp:103
 #, c-format
 msgid "Enemy Structures: %u"
 msgstr "Struktury przeciwnika: %u"
 
-#: src/scores.cpp:103
+#: src/scores.cpp:104
 #, c-format
 msgid "Units Manufactured: %u"
 msgstr "Zbudowane jednostki: %u"
 
-#: src/scores.cpp:104
+#: src/scores.cpp:105
 #, c-format
 msgid "Total Units: %u"
 msgstr "Jednostki razem: %u"
 
-#: src/scores.cpp:105
+#: src/scores.cpp:106
 #, c-format
 msgid "Structures Built: %u"
 msgstr "Zbudowane struktury: %u"
 
-#: src/scores.cpp:106
+#: src/scores.cpp:107
 #, c-format
 msgid "Total Structures: %u"
 msgstr "Całkowita liczba struktur: %u"
 
-#: src/scores.cpp:108
+#: src/scores.cpp:109
 #, c-format
 msgid "Rookie: %u"
 msgstr "Nowicjusz: %u"
 
-#: src/scores.cpp:109
+#: src/scores.cpp:110
 #, c-format
 msgctxt "rank"
 msgid "Green: %u"
 msgstr "Zielony: %u"
 
-#: src/scores.cpp:110
+#: src/scores.cpp:111
 #, c-format
 msgid "Trained: %u"
 msgstr "Wyszkolony: %u"
 
-#: src/scores.cpp:111
+#: src/scores.cpp:112
 #, c-format
 msgid "Regular: %u"
 msgstr "Zawodowy: %u"
 
-#: src/scores.cpp:112
+#: src/scores.cpp:113
 #, c-format
 msgid "Professional: %u"
 msgstr "Profesjonalny: %u"
 
-#: src/scores.cpp:113
+#: src/scores.cpp:114
 #, c-format
 msgid "Veteran: %u"
 msgstr "Weteran: %u"
 
-#: src/scores.cpp:114
+#: src/scores.cpp:115
 #, c-format
 msgid "Elite: %u"
 msgstr "Elita: %u"
 
-#: src/scores.cpp:115
+#: src/scores.cpp:116
 #, c-format
 msgid "Special: %u"
 msgstr "Specjalny: %u"
 
-#: src/scores.cpp:116
+#: src/scores.cpp:117
 #, c-format
 msgid "Hero: %u"
 msgstr "Bohater: %u"
 
-#: src/scores.cpp:350
+#: src/scores.cpp:307
 msgid "Unit Losses"
 msgstr "Straty w jednostkach"
 
-#: src/scores.cpp:351
+#: src/scores.cpp:308
 msgid "Structure Losses"
 msgstr "Straty w strukturach"
 
-#: src/scores.cpp:352
+#: src/scores.cpp:309
 msgid "Force Information"
 msgstr "Informacja o siłach"
 
-#: src/scores.cpp:432
+#: src/scores.cpp:389
 #, c-format
 msgid "ARTIFACTS RECOVERED: %d"
 msgstr "ODZYSKANE ARTEFAKTY: %d"
 
-#: src/scores.cpp:437
+#: src/scores.cpp:394
 #, c-format
 msgid "Mission Time - %s"
 msgstr "Czas misji - %s"
 
-#: src/scores.cpp:442
+#: src/scores.cpp:399
 #, c-format
 msgid "Total Game Time - %s"
 msgstr "Całkowity czas gry - %s"
 
-#: src/scores.cpp:448
+#: src/scores.cpp:405
 #, c-format
 msgid "You cheated!"
 msgstr "Oszukiwałeś!"
@@ -13061,8 +13061,8 @@ msgstr[2] "%u zaznaczonych jednostek"
 msgid "Command Control Limit Reached - Production Halted"
 msgstr "Limit kontrolny osiągnięty - produkcja wstrzymana"
 
-#: src/structure.cpp:5568
-#: src/structure.cpp:5593
+#: src/structure.cpp:5569
+#: src/structure.cpp:5594
 #, c-format
 msgid "%s - %u Unit assigned - Damage %3.0f%%"
 msgid_plural "%s - %u Units assigned - Damage %3.0f%%"
@@ -13070,51 +13070,51 @@ msgstr[0] "%s - %u Jednostka przydzielona - Obrażenia %3.0f%%"
 msgstr[1] "%s - %u Jednostki przydzielone - Obrażenia %3.0f%%"
 msgstr[2] "%s - %u Jednostek przydzielonych - Obrażenia %3.0f%%"
 
-#: src/structure.cpp:5598
-#: src/structure.cpp:5666
-#: src/structure.cpp:5681
-#: src/structure.cpp:5695
+#: src/structure.cpp:5599
+#: src/structure.cpp:5667
+#: src/structure.cpp:5682
+#: src/structure.cpp:5696
 #, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - Uszkodzenia %3.0f%%"
 
-#: src/structure.cpp:5648
+#: src/structure.cpp:5649
 #, c-format
 msgid "%s - Connected %u of %u - Damage %3.0f%%"
 msgstr "%s - Połączono %u z %u - Obrażenia %3.0f%%"
 
-#: src/structure.cpp:5811
-#: src/structure.cpp:5856
+#: src/structure.cpp:5812
+#: src/structure.cpp:5857
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Uszkodzony elektronicznie"
 
 # This maybe sound weird, but I translated this as 'stolen technology'
-#: src/structure.cpp:6107
+#: src/structure.cpp:6108
 msgid "Electronic Reward - Visibility Report"
 msgstr "Technologia skradziona - raport widoczności"
 
-#: src/structure.cpp:6147
+#: src/structure.cpp:6148
 msgid "Factory Reward - Propulsion"
 msgstr "Technologia skradziona - Napęd"
 
-#: src/structure.cpp:6171
+#: src/structure.cpp:6172
 msgid "Factory Reward - Body"
 msgstr "Technologia skradziona - Kadłub"
 
-#: src/structure.cpp:6195
+#: src/structure.cpp:6196
 msgid "Factory Reward - Weapon"
 msgstr "Technologia skradziona - Broń"
 
-#: src/structure.cpp:6204
+#: src/structure.cpp:6205
 msgid "Factory Reward - Nothing"
 msgstr "Technologia skradziona - Brak"
 
-#: src/structure.cpp:6232
+#: src/structure.cpp:6233
 msgid "Repair Facility Award - Repair"
 msgstr "Technologia skradziona - Naprawa"
 
-#: src/structure.cpp:6239
+#: src/structure.cpp:6240
 msgid "Repair Facility Award - Nothing"
 msgstr "Technologia skradziona - Brak"
 

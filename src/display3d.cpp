@@ -804,7 +804,7 @@ void draw3DScene( void )
 			iV_SetTextColour(WZCOL_TEXT_MEDIUM);
 			iV_DrawText( getLevelName(), RET_X + 134, 410 + E_H );
 		}
-		getAsciiTime(buildInfo, gameTime);
+		getAsciiTime(buildInfo, graphicsTime);
 		iV_DrawText( buildInfo, RET_X + 134, 422 + E_H );
 
 		if (getDebugMappingStatus() && !demoGetStatus())
