@@ -2298,7 +2298,6 @@ bool registerFunctions(QScriptEngine *engine)
 	engine->globalObject().setProperty("isStructureAvailable", engine->newFunction(js_isStructureAvailable));
 	engine->globalObject().setProperty("pickStructLocation", engine->newFunction(js_pickStructLocation));
 	engine->globalObject().setProperty("droidCanReach", engine->newFunction(js_droidCanReach));
-	engine->globalObject().setProperty("orderDroidStatsLoc", engine->newFunction(js_orderDroidBuild)); // deprecated
 	engine->globalObject().setProperty("orderDroidBuild", engine->newFunction(js_orderDroidBuild));
 	engine->globalObject().setProperty("orderDroidObj", engine->newFunction(js_orderDroidObj));
 	engine->globalObject().setProperty("orderDroid", engine->newFunction(js_orderDroid));
