@@ -1,7 +1,7 @@
 Source: warzone2100-video
 Section: games
 Priority: extra
-Maintainer: Warzone 2100 Project <warzone-dev@gna.org>
+Maintainer: Warzone 2100 Project <warzone2100-project@lists.sourceforge.net>
 Build-Depends: debhelper (>= 7.0.50~)
 Standards-Version: 3.8.4
 Homepage: http://wz2100.net/

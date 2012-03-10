@@ -1,1 +1,1 @@
-DEBEMAIL=warzone-dev@gna.org DEBFULLNAME="Warzone 2100 Project" dch -c changelog "$@"
+DEBEMAIL=warzone2100-project@lists.sourceforge.net DEBFULLNAME="Warzone 2100 Project" dch -c changelog "$@"

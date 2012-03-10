@@ -2418,7 +2418,11 @@ void moveUpdateDroid(DROID *psDroid)
 	case MOVEWAITROUTE:
 		moveDroidTo(psDroid, psDroid->sMove.destination.x, psDroid->sMove.destination.y);
 		moveSpeed = MAX(0, psDroid->sMove.speed - 1);
-		break;
+		if (psDroid->sMove.Status != MOVENAVIGATE)
+		{
+			break;
+		}
+		// No break.
 	case MOVENAVIGATE:
 		// Get the next control point
 		if (!moveNextTarget(psDroid))
@@ -2450,7 +2454,7 @@ void moveUpdateDroid(DROID *psDroid)
 			bStarted = true;
 		}
 
-		break;
+		// No break.
 	case MOVEPOINTTOPOINT:
 	case MOVEPAUSE:
 		// moving between two way points

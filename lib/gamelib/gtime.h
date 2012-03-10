@@ -134,7 +134,7 @@ extern UDWORD getModularScaledRealTime(UDWORD timePeriod, UDWORD requiredRange);
 
 
 /** Break down given time into its constituent components. */
-extern void	getTimeComponents(UDWORD time, UDWORD *hours, UDWORD *minutes, UDWORD *seconds);
+void getTimeComponents(unsigned time, int *hours, int *minutes, int *seconds, int *milliseconds);
 
 
 

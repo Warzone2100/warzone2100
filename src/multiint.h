@@ -59,6 +59,8 @@ bool addMultiBut(W_SCREEN *screen, UDWORD formid, UDWORD id, UDWORD x, UDWORD y,
 bool changeColour(unsigned player, int col, bool isHost);
 extern	char	sPlayer[128];
 
+extern bool bHosted;
+
 void	kickPlayer(uint32_t player_id, const char *reason, LOBBY_ERROR_TYPES type);
 void	addPlayerBox(bool);			// players (mid) box
 void loadMapPreview(bool hideInterface);

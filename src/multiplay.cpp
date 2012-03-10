@@ -725,7 +725,6 @@ bool recvMessage(void)
 				NETuint32_t(&player_id);
 				NETstring(reason, MAX_KICK_REASON);
 				NETenum(&KICK_TYPE);
-				NETenum(&KICK_TYPE);
 			NETend();
 
 			if (player_id == NET_HOST_ONLY)

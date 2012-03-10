@@ -519,7 +519,7 @@ static bool gdbExtendedBacktrace(int const dumpFile)
 	int status;
 	pid_t wpid;
 	                                  // Retrieve a full stack backtrace
-	static const char gdbCommands[] = "backtrace full\n"
+	static const char gdbCommands[] = "thread apply all backtrace full\n"
 
 	                                  // Move to the stack frame where we triggered the crash
 	                                  "frame 4\n"

@@ -1,7 +1,7 @@
 Source: warzone2100
 Section: games
 Priority: optional
-Maintainer: Warzone 2100 Project <warzone-dev@gna.org>
+Maintainer: Warzone 2100 Project <warzone2100-project@lists.sourceforge.net>
 Build-Depends: debhelper (>= 7),
  bison,
  flex (>= 2.5.35~) | flex (<< 2.5.34~), flex (>= 2.5.33~),

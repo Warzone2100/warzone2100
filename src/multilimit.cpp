@@ -303,7 +303,10 @@ void runLimitScreen(void)
 			// free limiter structure
 			freeLimitSet();
 			//inform others
-			sendOptions();
+			if (bHosted)
+			{
+				sendOptions();
+			}
 
 			eventReset();
 			changeTitleMode(MULTIOPTION);
@@ -380,7 +383,10 @@ void createLimitSet(void)
 	ingame.numStructureLimits	= numchanges;
 	ingame.pStructureLimits		= pEntry;
 
-	sendOptions();
+	if (bHosted)
+	{
+		sendOptions();
+	}
 }
 
 // ////////////////////////////////////////////////////////////////////////////
