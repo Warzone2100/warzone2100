@@ -53,6 +53,7 @@
 #include "loop.h"
 #include "scriptextern.h"
 #include "gateway.h"
+#include "mapgrid.h"
 
 #define FAKE_REF_LASSAT 999
 
@@ -1177,6 +1178,7 @@ static QScriptValue js_enumStruct(QScriptContext *context, QScriptEngine *engine
 	for (STRUCTURE *psStruct = apsStructLists[player]; psStruct; psStruct = psStruct->psNext)
 	{
 		if ((looking == -1 || psStruct->visible[looking])
+		    && !psStruct->died
 		    && (type == NUM_DIFF_BUILDINGS || type == psStruct->pStructureType->type)
 		    && (statsName.isEmpty() || statsName.compare(psStruct->pStructureType->pName) == 0))
 		{
@@ -1229,6 +1231,7 @@ static QScriptValue js_enumStructOffWorld(QScriptContext *context, QScriptEngine
 	for (STRUCTURE *psStruct = mission.apsStructLists[player]; psStruct; psStruct = psStruct->psNext)
 	{
 		if ((looking == -1 || psStruct->visible[looking])
+		    && !psStruct->died
 		    && (type == NUM_DIFF_BUILDINGS || type == psStruct->pStructureType->type)
 		    && (statsName.isEmpty() || statsName.compare(psStruct->pStructureType->pName) == 0))
 		{
@@ -1257,6 +1260,7 @@ static QScriptValue js_enumFeature(QScriptContext *context, QScriptEngine *engin
 	for (FEATURE *psFeat = apsFeatureLists[0]; psFeat; psFeat = psFeat->psNext)
 	{
 		if ((looking == -1 || psFeat->visible[looking])
+		    && !psFeat->died
 		    && (statsName.isEmpty() || statsName.compare(psFeat->psStats->pName) == 0))
 		{
 			matches.push_back(psFeat);
@@ -1295,7 +1299,9 @@ static QScriptValue js_enumDroid(QScriptContext *context, QScriptEngine *engine)
 	SCRIPT_ASSERT(context, looking < MAX_PLAYERS && looking >= -1, "Looking player index out of range: %d", looking);
 	for (DROID *psDroid = apsDroidLists[player]; psDroid; psDroid = psDroid->psNext)
 	{
-		if ((looking == -1 || psDroid->visible[looking]) && (droidType == DROID_ANY || droidType == psDroid->droidType))
+		if ((looking == -1 || psDroid->visible[looking])
+		    && !psDroid->died
+		    && (droidType == DROID_ANY || droidType == psDroid->droidType))
 		{
 			matches.push_back(psDroid);
 		}
@@ -2218,6 +2224,51 @@ static QScriptValue js_loadLevel(QScriptContext *context, QScriptEngine *)
 	return QScriptValue();
 }
 
+//-- \subsection{enumRange(x, y, range[, filter])}
+//-- Returns an array of game objects seen within range of given position that passes the optional filter
+//-- which can be one of a player index, ALL_PLAYERS, ALLIES or ENEMIES. By default, filter is 
+//-- ALL_PLAYERS. Calling this function is much faster than iterating over all game objects using 
+//-- other enum functions.
+static QScriptValue js_enumRange(QScriptContext *context, QScriptEngine *engine)
+{
+	int player = engine->globalObject().property("me").toInt32();
+	int x = world_coord(context->argument(0).toInt32());
+	int y = world_coord(context->argument(1).toInt32());
+	int range = context->argument(2).toInt32();
+	int filter = -1;
+	if (context->argumentCount() > 3)
+	{
+		filter = context->argument(3).toInt32();
+	}
+	if (filter >= 0)
+	{
+		gridStartIterateDroidsByPlayer(x, y, range, filter);
+	}
+	else
+	{
+		gridStartIterate(x, y, range);
+	}
+	QList<BASE_OBJECT *> list;
+	for (BASE_OBJECT *psObj = gridIterate(); psObj != NULL; psObj = gridIterate())
+	{
+		if (psObj->visible[player] && !psObj->died)
+		{
+			if ((filter >= 0 && psObj->player == filter) || filter == -1
+			    || (filter == -2 && aiCheckAlliances(psObj->player, player))
+			    || (filter == -3 && !aiCheckAlliances(psObj->player, player)))
+			{
+				list.append(psObj);
+			}
+		}
+	}
+	QScriptValue value = engine->newArray(list.size());
+	for (int i = 0; i < list.size(); i++)
+	{
+		value.setProperty(i, convMax(list[i], engine), QScriptValue::ReadOnly);
+	}
+	return value;
+}
+
 //-- \subsection{chat(target player, message)}
 //-- Send a message to target player. Target may also be \emph{ALL_PLAYERS} or \emph{ALLIES}.
 //-- Returns a boolean that is true on success. (3.2+ only)
@@ -2285,6 +2336,7 @@ bool registerFunctions(QScriptEngine *engine)
 	engine->globalObject().setProperty("enumFeature", engine->newFunction(js_enumFeature));
 	engine->globalObject().setProperty("enumBlips", engine->newFunction(js_enumBlips));
 	engine->globalObject().setProperty("enumResearch", engine->newFunction(js_enumResearch));
+	engine->globalObject().setProperty("enumRange", engine->newFunction(js_enumRange));
 	engine->globalObject().setProperty("getResearch", engine->newFunction(js_getResearch));
 	engine->globalObject().setProperty("pursueResearch", engine->newFunction(js_pursueResearch));
 	engine->globalObject().setProperty("findResearch", engine->newFunction(js_findResearch));
@@ -2410,6 +2462,7 @@ bool registerFunctions(QScriptEngine *engine)
 	engine->globalObject().setProperty("AREA", AREA, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("ALL_PLAYERS", -1, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("ALLIES", -2, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("ENEMIES", -3, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 
 	// Static knowledge about players
 	//== \item[playerData] An array of information about the players in a game. Each item in the array is an object

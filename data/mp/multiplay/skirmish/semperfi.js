@@ -282,7 +282,7 @@ function buildFundamentals()
 				if (bestDroid)
 				{
 					bestDroid.busy = true;
-					orderDroidStatsLoc(bestDroid, DORDER_BUILD, derrick, oils[i].x, oils[i].y);
+					orderDroidBuild(bestDroid, DORDER_BUILD, derrick, oils[i].x, oils[i].y);
 				}
 			}
 		}

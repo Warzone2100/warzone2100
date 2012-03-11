@@ -3673,11 +3673,6 @@ void structureUpdate(STRUCTURE *psBuilding, bool mission)
 		}
 	}
 
-	if (!mission)
-	{
-		processVisibilityLevel(psBuilding);
-	}
-
 	/* Update the fire damage data */
 	if (psBuilding->burnStart != 0 && psBuilding->burnStart != gameTime - deltaGameTime)  // -deltaGameTime, since projectiles are updated after structures.
 	{

@@ -487,7 +487,7 @@ static void processVisibilitySelf(BASE_OBJECT *psObj)
 {
 	int viewer;
 
-	if (psObj->type == OBJ_DROID)  // Why only droids? Would psObj->type != OBJ_FEATURE && psObj->sensorRange != 0 be a better check?
+	if (psObj->type != OBJ_FEATURE && psObj->sensorRange > 0)
 	{
 		// one can trivially see oneself
 		setSeenBy(psObj, psObj->player, UBYTE_MAX);
@@ -541,7 +541,7 @@ static void processVisibilityVision(BASE_OBJECT *psViewer)
 
 /* Find out what can see this object */
 // Fade in/out of view. Must be called after calculation of which objects are seen.
-void processVisibilityLevel(BASE_OBJECT *psObj)
+static void processVisibilityLevel(BASE_OBJECT *psObj)
 {
 	int player;
 
@@ -657,6 +657,18 @@ void processVisibility()
 				{
 					psTarget->visible[psObj->player] = UBYTE_MAX / 2;
 				}
+			}
+		}
+	}
+	for (int player = 0; player < MAX_PLAYERS; ++player)
+	{
+		BASE_OBJECT *lists[] = {apsDroidLists[player], apsStructLists[player], apsFeatureLists[player]};
+		unsigned list;
+		for (list = 0; list < sizeof(lists)/sizeof(*lists); ++list)
+		{
+			for (BASE_OBJECT *psObj = lists[list]; psObj != NULL; psObj = psObj->psNext)
+			{
+				processVisibilityLevel(psObj);
 			}
 		}
 	}

@@ -808,8 +808,6 @@ void droidUpdate(DROID *psDroid)
 		}
 	}
 
-	processVisibilityLevel((BASE_OBJECT*)psDroid);
-
 	// -----------------
 	/* Are we a sensor droid or a command droid? Show where we target for selectedPlayer. */
 	if (psDroid->player == selectedPlayer && (psDroid->droidType == DROID_SENSOR || psDroid->droidType == DROID_COMMAND))

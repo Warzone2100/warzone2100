@@ -353,9 +353,6 @@ void featureUpdate(FEATURE *psFeat)
 {
 	syncDebugFeature(psFeat, '<');
 
-	// update the visibility for the feature
-	processVisibilityLevel((BASE_OBJECT *)psFeat);
-
 	/* Update the fire damage data */
 	if (psFeat->burnStart != 0 && psFeat->burnStart != gameTime - deltaGameTime)  // -deltaGameTime, since projectiles are updated after features.
 	{

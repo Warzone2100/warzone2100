@@ -416,6 +416,8 @@ bool loadPlayerScript(QString path, int player, int difficulty)
 	engine->globalObject().setProperty("mapWidth", mapWidth, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	//== \item[mapHeight] Height of map in tiles.
 	engine->globalObject().setProperty("mapHeight", mapHeight, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	//== \item[scavengerPlayer] Index of scavenger player.
+	engine->globalObject().setProperty("scavengerPlayer", scavengerPlayer(), QScriptValue::ReadOnly | QScriptValue::Undeletable);
 
 	// Regular functions
 	registerFunctions(engine);
@@ -576,6 +578,7 @@ bool triggerEvent(SCRIPT_TRIGGER_TYPE trigger)
 			callFunction(engine, "eventGameInit", QScriptValueList());
 			break;
 		case TRIGGER_START_LEVEL:
+			processVisibility(); // make sure we initialize visibility first
 			callFunction(engine, "eventStartLevel", QScriptValueList());
 			break;
 		case TRIGGER_LAUNCH_TRANSPORTER:
