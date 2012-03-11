@@ -57,6 +57,7 @@
 #include "challenge.h"
 #include "configuration.h"
 #include "display.h"
+#include "display3d.h"
 #include "frontend.h"
 #include "game.h"
 #include "init.h"
@@ -830,6 +831,7 @@ static void stopGameLoop(void)
 {
 	if (gameLoopStatus != GAMECODE_NEWLEVEL)
 	{
+		clearBlueprints();
 		initLoadingScreen(true); // returning to f.e. do a loader.render not active
 		pie_EnableFog(false); // dont let the normal loop code set status on
 		fogStatus = 0;
