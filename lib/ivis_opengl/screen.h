@@ -56,7 +56,8 @@ extern void screenDumpToDisk(const char* path);
 
 extern int wz_texture_compression;
 
-extern bool opengl_fallback_mode;
+extern bool opengl_noshaders;
+extern bool opengl_novbos;
 
 extern void screenDoDumpToDiskIfRequired(void);
 

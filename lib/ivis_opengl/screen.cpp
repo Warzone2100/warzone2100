@@ -45,7 +45,8 @@
 /* global used to indicate preferred internal OpenGL format */
 int wz_texture_compression = 0;
 
-bool opengl_fallback_mode = false;
+bool opengl_noshaders = false;
+bool opengl_novbos = false;
 
 static bool		bBackDrop = false;
 static char		screendump_filename[PATH_MAX];
@@ -114,7 +115,7 @@ bool screenInitialise()
 	screenWidth = MAX(screenWidth, 640);
 	screenHeight = MAX(screenHeight, 480);
 
-	if (GLEW_VERSION_2_0 && !opengl_fallback_mode)
+	if (GLEW_VERSION_2_0)
 	{
 		/* Dump information about OpenGL 2.0+ implementation to the console and the dump file */
 		GLint glMaxTIUs, glMaxTCs, glMaxTIUAs, glmaxSamples, glmaxSamplesbuf;
@@ -134,7 +135,7 @@ bool screenInitialise()
 		glGetIntegerv(GL_SAMPLES, &glmaxSamples);
 		debug(LOG_3D, "  * (current) Max Sample level is %d.", (int) glmaxSamples);
 
-		if (pie_LoadShaders())
+		if (pie_LoadShaders() && !opengl_noshaders)
 		{
 			pie_SetShaderAvailability(true);
 		}
@@ -170,7 +171,7 @@ void screenShutDown(void)
 bool screen_IsVBOAvailable()
 {
 	// No VBO in fallback mode
-	if (opengl_fallback_mode)
+	if (opengl_novbos)
 	{
 		return false;
 	}

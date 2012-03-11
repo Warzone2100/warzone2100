@@ -232,7 +232,8 @@ typedef enum
 	CLI_CRASH,
 	CLI_TEXTURECOMPRESSION,
 	CLI_NOTEXTURECOMPRESSION,
-	CLI_FALLBACKMODE,
+	CLI_NOSHADERS,
+	CLI_NOVBOS,
 } CLI_OPTIONS;
 
 static const struct poptOption* getOptionsTable(void)
@@ -264,7 +265,8 @@ static const struct poptOption* getOptionsTable(void)
 		{ "host",       '\0', POPT_ARG_NONE,   NULL, CLI_HOSTLAUNCH, N_("go directly to host screen"),        NULL },
 		{ "texturecompression", '\0', POPT_ARG_NONE, NULL, CLI_TEXTURECOMPRESSION, N_("Enable texture compression"), NULL },
 		{ "notexturecompression", '\0', POPT_ARG_NONE, NULL, CLI_NOTEXTURECOMPRESSION, N_("Disable texture compression"), NULL },
-		{ "fallback-mode", '\0', POPT_ARG_NONE, NULL, CLI_FALLBACKMODE, N_("Only use OpenGL 1.5"), NULL },
+		{ "noshaders",  '\0', POPT_ARG_NONE,   NULL, CLI_NOSHADERS,  N_("Disable the use of OpenGL shaders"), NULL },
+		{ "novbos",     '\0', POPT_ARG_NONE,   NULL, CLI_NOVBOS,     N_("Disable the use of OpenGL Vertex Buffer Objects"), NULL },
 		// Terminating entry
 		{ NULL,         '\0', 0,               NULL, 0,              NULL,                                    NULL },
 	};
@@ -598,8 +600,12 @@ bool ParseCommandLine(int argc, const char** argv)
 				wz_texture_compression = GL_RGBA;
 				break;
 
-			case CLI_FALLBACKMODE:
-				opengl_fallback_mode = true;
+			case CLI_NOSHADERS:
+				opengl_noshaders = true;
+				break;
+
+			case CLI_NOVBOS:
+				opengl_novbos = true;
 				break;
 		};
 	}
