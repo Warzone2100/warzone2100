@@ -416,7 +416,7 @@ bool loadPlayerScript(QString path, int player, int difficulty)
 	engine->globalObject().setProperty("mapWidth", mapWidth, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	//== \item[mapHeight] Height of map in tiles.
 	engine->globalObject().setProperty("mapHeight", mapHeight, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	//== \item[scavengerPlayer] Index of scavenger player.
+	//== \item[scavengerPlayer] Index of scavenger player. (3.2+ only)
 	engine->globalObject().setProperty("scavengerPlayer", scavengerPlayer(), QScriptValue::ReadOnly | QScriptValue::Undeletable);
 
 	// Regular functions

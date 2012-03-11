@@ -2228,7 +2228,7 @@ static QScriptValue js_loadLevel(QScriptContext *context, QScriptEngine *)
 //-- Returns an array of game objects seen within range of given position that passes the optional filter
 //-- which can be one of a player index, ALL_PLAYERS, ALLIES or ENEMIES. By default, filter is 
 //-- ALL_PLAYERS. Calling this function is much faster than iterating over all game objects using 
-//-- other enum functions.
+//-- other enum functions. (3.2+ only)
 static QScriptValue js_enumRange(QScriptContext *context, QScriptEngine *engine)
 {
 	int player = engine->globalObject().property("me").toInt32();
