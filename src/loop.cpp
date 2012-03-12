@@ -171,8 +171,6 @@ static GAMECODE renderLoop()
 			{
 				// Using software cursors (when on) for these menus due to a bug in SDL's SDL_ShowCursor()
 				wzSetCursor(CURSOR_DEFAULT);
-
-				intRetVal = INT_INTERCEPT;
 			}
 
 #ifdef DEBUG
@@ -308,7 +306,8 @@ static GAMECODE renderLoop()
 		if (!gameUpdatePaused())
 		{
 			if (dragBox3D.status != DRAG_DRAGGING
-			 && wallDrag.status != DRAG_DRAGGING)
+			    && wallDrag.status != DRAG_DRAGGING
+			    && intRetVal != INT_INTERCEPT)
 			{
 				ProcessRadarInput();
 			}

@@ -1378,6 +1378,11 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 				debug(LOG_ERROR, "Incomplete NET_SEND_TO_PLAYER.");
 				break;
 			}
+			if (sender > MAX_PLAYERS || receiver > MAX_PLAYERS)
+			{
+				debug(LOG_ERROR, "Bad NET_SEND_TO_PLAYER.");
+				break;
+			}
 			if ((receiver == selectedPlayer || receiver == NET_ALL_PLAYERS) && playerQueue.index == NetPlay.hostPlayer)
 			{
 				// Message was sent to us via the host.

@@ -384,6 +384,11 @@ bool anyBlueprintTooClose(STRUCTURE_STATS const *stats, Vector2i pos, uint16_t d
 	return false;
 }
 
+void clearBlueprints()
+{
+	blueprints.clear();
+}
+
 static PIELIGHT structureBrightness(STRUCTURE *psStructure)
 {
 	PIELIGHT buildingBrightness;

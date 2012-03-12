@@ -2588,6 +2588,7 @@ static const Rational available_speed[] = {
 	Rational(1, 8),  // n
 	Rational(1, 5),  // n
 	Rational(1, 3),  // p
+	Rational(1, 2),
 	Rational(3, 4),  // p
 	Rational(1),     // p
 	Rational(5, 4),  // p
@@ -2624,7 +2625,19 @@ static void tryChangeSpeed(Rational newMod, Rational oldMod)
 	char modString[30];
 	if (newMod.d != 1)
 	{
-		ssprintf(modString, "%d/%d", newMod.n, newMod.d);
+		const float speed = float(newMod.n) / newMod.d;
+		if (speed > 0.4)
+		{
+			ssprintf(modString, "%.1f", speed);
+		}
+		else if (speed > 0.15)
+		{
+			ssprintf(modString, "%.2f", speed);
+		}
+		else
+		{
+			ssprintf(modString, "%.3f", speed);
+		}
 	}
 	else
 	{

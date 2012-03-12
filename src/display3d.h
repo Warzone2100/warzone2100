@@ -114,6 +114,7 @@ extern SDWORD	getCentreZ( void );
 STRUCTURE *getTileBlueprintStructure(int mapX, int mapY);  ///< Gets the blueprint at those coordinates, if any. Previous return value becomes invalid.
 STRUCTURE_STATS const *getTileBlueprintStats(int mapX, int mapY);  ///< Gets the structure stats of the blueprint at those coordinates, if any.
 bool anyBlueprintTooClose(STRUCTURE_STATS const *stats, Vector2i pos, uint16_t dir);  ///< Checks if any blueprint is too close to the given structure.
+void clearBlueprints();
 
 extern SDWORD mouseTileX, mouseTileY;
 extern Vector2i mousePos;
