@@ -1,3 +1,22 @@
+2012-03-13: Version 3.1_beta5
+ * General:
+   * Change: Adjust the burning time of destroyed oil derricks by the percentage they were completed (commit:f6ddbf1878ff2a387c4be95449d8a7835c18ebd8)
+   * Fix: Don't corrupt savegames (ticket:3200, commit:da9d427e5def9b82ab95c99b42ec8e2049bfcd12)
+   * Fix: Reduce unit delay by 200 ms (commit:f36cb966ce6effd58e1dc42e275d00fe9bd8904d)
+   * Fix: Reduce units shuffling around their destination (ticket:2996, commit:0b7605c4ee9464f5966a31d6523fb7e248f4323a)
+   * Fix: Don't land several VTOLs on the same tile (commit:9dcf5bdf4eb4d590ea15e1c5201ceefe0819a5dc)
+   * Fix: When picking up artifacts or oil drums with a sensor unit, don't make the units attached to it shoot (ticket:1281, commit:42017f5e12a29f21dd31e7b595a7158168efb063)
+   * Fix: Disable target prediction for droids that are trying to drive through stuff (commit:a94bd6629d17f50df9b3a58b97bb3f8cd734e12b)
+   * Fix: Make "Go to Transport" button work sensibly (commit:2d938a0323e5c47ce4a41c9fb6c5a0d42eb9593d)
+ * Multiplayer:
+   * Fix: Supertransporter fixes (ticket:3196, ticket:3210, ticket:3224, commit:fcede64e428e46657db2ef7b0f7bd1ce26b1d91d, commit:6bc90e6d2e0343d7d5e6e54be09f97f2c8e1cbd8, commit:475d1e625218924d252f5eb546e55824a5f697ed, commit:9e63fe34339128f5844d21a67f72a5c2d2bf0814)
+   * Fix: Don't kick players several times (ticket:3209, commit:bc65f978015b73bef462e53726ff53fcdc607d18)
+ * Translations:
+   * Update: Russian (ticket:3221, commit:f627fd803c3356fe344e09ac172634e93e774332)
+   * Update: German (ticket:3205, commit:6f5bf39951eccb4d2ee01cef7a64269820a1ddcb)
+   * Update: Polish (ticket:1347, commit:2042b60e4f144b483b12164d67f99adf4e915ac0)
+   * Update: French (ticket:3276, commit:a26aa5f3ad89312e47b026bcfe1b44271b47faef, commit:2c093a6ff96bce87f2edc1d1a7c10369a2f78c58)
+
 2012-02-21: Version 3.1-beta4
  * General:
    * Change: New keyboard shortcuts for unit selection:
