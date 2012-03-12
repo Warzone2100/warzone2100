@@ -711,7 +711,7 @@ UWORD fillResearchList(UWORD *plist, UDWORD playerID, UWORD topic, UWORD limit)
 /* process the results of a completed research topic */
 void researchResult(UDWORD researchIndex, UBYTE player, bool bDisplay, STRUCTURE *psResearchFacility, bool bTrigger)
 {
-	RESEARCH					aResearch = asResearch[researchIndex], *pResearch = &aResearch;
+	RESEARCH *                                      pResearch = &asResearch[researchIndex];
 	UDWORD						type, inc;
 	STRUCTURE					*psCurr;
 	DROID						*psDroid;
@@ -1163,7 +1163,7 @@ void researchResult(UDWORD researchIndex, UBYTE player, bool bDisplay, STRUCTURE
 	}
 	if ((bMultiPlayer || player == selectedPlayer) && bTrigger)
 	{
-		psCBLastResearch = pResearch;
+		psCBLastResearch = pResearch;  // Fun with pointers. Throw them into some random global variable, and get Nexus to absorb them.
 		CBResFacilityOwner = player;
 		psCBLastResStructure = psResearchFacility;
 		eventFireCallbackTrigger((TRIGGER_TYPE)CALL_RESEARCHCOMPLETED);
