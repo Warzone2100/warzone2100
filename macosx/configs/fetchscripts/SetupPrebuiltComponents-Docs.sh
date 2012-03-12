@@ -1,10 +1,10 @@
 #!/bin/sh
 
 OutDir="WarzoneHelp"
-DirectorY="${OutDir}-e0bcef3"
+DirectorY="${OutDir}-7f6ad1d"
 FileName="${DirectorY}.tgz"
 BuiltDLP="http://downloads.sourceforge.net/project/warzone2100/build-tools/mac/${FileName}"
-MD5Sum="015f892f2d635612ad8d6d4a439ff36e"
+MD5Sum="32240b607980ba99cd66fe2740330e5a"
 
 configs/FetchPrebuilt.sh "${DirectorY}" "${OutDir}" "${FileName}" "${BuiltDLP}" "${MD5Sum}"
 exit ${?}
