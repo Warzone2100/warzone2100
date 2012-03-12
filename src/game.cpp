@@ -5872,9 +5872,9 @@ static bool writeResearchFile(char *pFileName)
 		debug(LOG_ERROR, "Could not open %s", pFileName);
 		return false;
 	}
-	RESEARCH *psStats = &asResearch[0];
-	for (int i = 0; i < asResearch.size(); i++, psStats = &asResearch[i])
+	for (int i = 0; i < asResearch.size(); ++i)
 	{
+		RESEARCH *psStats = &asResearch[i];
 		bool valid = false;
 		QStringList possibles, researched, points;
 		for (int player = 0; player < game.maxPlayers; player++)

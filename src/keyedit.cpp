@@ -56,14 +56,15 @@
 #define	KM_START			10204
 #define	KM_END				10399
 
-#define KM_W				580
+#define KM_W				FRONTEND_BOTFORMW
 #define KM_H				440
-#define KM_X				30
+#define KM_X				FRONTEND_BOTFORMX
 #define KM_Y				20
+#define KM_SX				FRONTEND_SIDEX
 
 #define BUTTONSPERKEYMAPPAGE 20
 
-#define KM_ENTRYW			480
+#define KM_ENTRYW			(FRONTEND_BOTFORMW - 80)
 #define KM_ENTRYH			(( (KM_H-50)/BUTTONSPERKEYMAPPAGE )-3 )
 
 
@@ -352,7 +353,7 @@ bool startKeyMapEditor(bool first)
 	KEY_MAPPING	*psPresent = NULL, *psNext;
 	char		test[255];
 	addBackdrop();
-	addSideText	(FRONTEND_SIDETEXT ,KM_X-2,KM_Y,_("KEY MAPPING"));
+	addSideText	(FRONTEND_SIDETEXT ,KM_SX,KM_Y,_("KEY MAPPING"));
 
 	if (first)
 	{

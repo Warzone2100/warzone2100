@@ -48,20 +48,20 @@ extern bool isInGamePopupUp;
 // game options
 
 // initial options
-#define INTINGAMEOP_W			120
+#define INTINGAMEOP_W			150
 #define INTINGAMEOP_H			124
 #define INTINGAMEOP_HS			88
 
 #define INTINGAMEOP_X			((320-(INTINGAMEOP_W/2))+D_W)
 #define INTINGAMEOP_Y			((240-(INTINGAMEOP_H/2))+D_H)
 
-#define INTINGAMEOP2_W			290
+#define INTINGAMEOP2_W			350
 #define INTINGAMEOP2_H			120
 #define INTINGAMEOP2_X			((320-(INTINGAMEOP2_W/2))+D_W)
 #define INTINGAMEOP2_Y			((240-(INTINGAMEOP2_H/2))+D_H)
 
 // quit confirmation.
-#define INTINGAMEOP3_W			120
+#define INTINGAMEOP3_W			150
 #define INTINGAMEOP3_H			65
 #define INTINGAMEOP3_X			((320-(INTINGAMEOP3_W/2))+D_W)
 #define INTINGAMEOP3_Y			((240-(INTINGAMEOP3_H/2))+D_H)
@@ -115,7 +115,8 @@ enum
 
 // positions within option boxes.
 #define INTINGAMEOP_1_X		5
-#define INTINGAMEOP_MID		100
+#define INTINGAMEOP_2_X		10
+#define INTINGAMEOP_MID		160
 #define	INTINGAMEOP_1_Y		20
 #define	INTINGAMEOP_2_Y		40
 #define	INTINGAMEOP_3_Y		60

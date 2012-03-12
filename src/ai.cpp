@@ -186,7 +186,12 @@ static BASE_OBJECT *aiSearchSensorTargets(BASE_OBJECT *psObj, int weapon_slot, W
 			DROID		*psDroid = (DROID *)psSensor;
 
 			ASSERT_OR_RETURN(NULL, psDroid->droidType == DROID_SENSOR, "A non-sensor droid in a sensor list is non-sense");
-			psTemp = psDroid->order.psObj;
+			// Skip non-observing droids.
+			if (psDroid->action != DACTION_OBSERVE)
+			{
+				continue;
+			}
+			psTemp = psDroid->psActionTarget[0];
 			isCB = cbSensorDroid(psDroid);
 			isRD = objRadarDetector((BASE_OBJECT *)psDroid);
 		}

@@ -1467,7 +1467,7 @@ static void updateFire(EFFECT *psEffect)
 	LIGHT	light;
 	UDWORD	percent;
 
-	percent = PERCENT(graphicsTime - psEffect->birthTime, psEffect->lifeSpan);
+	percent = PERCENT(graphicsTime - psEffect->birthTime, std::max<unsigned>(psEffect->lifeSpan, 1));
 	if(percent > 100)
 	{
 		percent = 100;

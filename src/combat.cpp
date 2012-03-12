@@ -241,7 +241,7 @@ bool combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 	Vector3i predict = psTarget->pos;
 
 	//Watermelon:Target prediction
-	if (isDroid(psTarget))
+	if (isDroid(psTarget) && castDroid(psTarget)->sMove.bumpTime == 0)
 	{
 		DROID *psDroid = castDroid(psTarget);
 

@@ -623,19 +623,10 @@ void deleteTemplateFromProduction(DROID_TEMPLATE *psTemplate, unsigned player, Q
 					syncDebugStructure(psStruct, '<');
 					syncDebug("Clearing production");
 
-					// Clear the factory's subject.
-					psFactory->psSubject = NULL;
-
-					if (player == productionPlayer)
-					{
-						//check to see if anything left to produce
-						DROID_TEMPLATE *psNextTemplate = factoryProdUpdate(psStruct, NULL);
-						//power is returned by factoryProdAdjust()
-						if (psNextTemplate)
-						{
-							structSetManufacture(psStruct, psNextTemplate, ModeQueue);  // ModeQueue because production lists aren't synchronised.
-						}
-					}
+					// Clear the factory's subject, and returns power.
+					cancelProduction(psStruct, ModeImmediate, false);
+					// Check to see if anything left to produce. (Also calls cancelProduction again, if nothing left to produce, which is a no-op. But if other things are left to produce, doesn't call cancelProduction, so wouldn't return power without the explicit cancelProduction call above.)
+					doNextProduction(psStruct, NULL, ModeImmediate);
 
 					//tell the interface
 					intManufactureFinished(psStruct);

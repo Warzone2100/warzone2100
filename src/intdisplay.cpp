@@ -2316,9 +2316,14 @@ void CreateIMDButton(IMAGEFILE *ImageFile, UWORD ImageID, void *Object, UDWORD P
 			//ASSERT( Radius <= OBJECT_RADIUS,"Object too big for button - %s",
 			//		((BASE_STATS*)Object)->pName );
 			// NOTE: The Super transport is huge, and is considered a component type, so refit it to inside the button.
-			if (((DROID*)Object)->droidType == DROID_SUPERTRANSPORTER)
+			const char * const name = ((BASE_STATS*)Object)->pName;
+			if (!strcmp(name, "SuperTransportBody"))
 			{
-				scale /= 2;
+				scale *= .4;
+			}
+			else if (!strcmp(name, "TransporterBody"))
+			{
+				scale *= .6;
 			}
 		}
 		else if(IMDType == IMDTYPE_RESEARCH)
