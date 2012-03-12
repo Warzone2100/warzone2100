@@ -580,6 +580,10 @@ static bool startGraphicsOptionsMenu(void)
 		addTextButton(FRONTEND_SHADOWS_R, FRONTEND_POS7M - 55,  FRONTEND_POS6Y, _("Off"), 0);
 	}
 
+	// Radar
+	addTextButton(FRONTEND_RADAR, FRONTEND_POS7X - 35, FRONTEND_POS7Y, _("Radar"), 0);
+	addTextButton(FRONTEND_RADAR_R, FRONTEND_POS7M - 55, FRONTEND_POS7Y, rotateRadar ? _("Rotating") : _("Fixed"), 0);
+
 	// Add some text down the side of the form
 	addSideText(FRONTEND_SIDETEXT, FRONTEND_SIDEX, FRONTEND_SIDEY, _("GRAPHICS OPTIONS"));
 
@@ -687,6 +691,11 @@ bool runGraphicsOptionsMenu(void)
 				widgSetString(psWScreen, FRONTEND_SCANLINES_R, _("Off"));
 				break;
 		}
+
+	case FRONTEND_RADAR_R:
+		rotateRadar = !rotateRadar;
+		widgSetString(psWScreen, FRONTEND_RADAR_R, rotateRadar ? _("Rotating") : _("Fixed"));
+		break;
 
 	default:
 		break;
@@ -1190,35 +1199,41 @@ static bool startGameOptionsMenu(void)
 	addTopForm();
 	addBottomForm();
 
+	// language
+	addTextButton(FRONTEND_LANGUAGE,  FRONTEND_POS2X - 25, FRONTEND_POS2Y, _("Language"), 0);
+	addTextButton(FRONTEND_LANGUAGE_R,  FRONTEND_POS2M - 25, FRONTEND_POS2Y, getLanguageName(), 0);
+
 	// Difficulty
-	addTextButton(FRONTEND_DIFFICULTY, FRONTEND_POS2X-25, FRONTEND_POS2Y, _("Difficulty"), 0);
+	addTextButton(FRONTEND_DIFFICULTY, FRONTEND_POS3X-25, FRONTEND_POS3Y, _("Difficulty"), 0);
 	switch (getDifficultyLevel())
 	{
 		case DL_EASY:
-			addTextButton(FRONTEND_DIFFICULTY_R, FRONTEND_POS2M-25, FRONTEND_POS2Y, _("Easy"), 0);
+			addTextButton(FRONTEND_DIFFICULTY_R, FRONTEND_POS3M-25, FRONTEND_POS3Y, _("Easy"), 0);
 			break;
 		case DL_NORMAL:
-			addTextButton(FRONTEND_DIFFICULTY_R, FRONTEND_POS2M-25,FRONTEND_POS2Y, _("Normal"), 0);
+			addTextButton(FRONTEND_DIFFICULTY_R, FRONTEND_POS3M-25,FRONTEND_POS3Y, _("Normal"), 0);
 			break;
 		case DL_HARD:
 		default:
-			addTextButton(FRONTEND_DIFFICULTY_R, FRONTEND_POS2M-25, FRONTEND_POS2Y, _("Hard"), 0);
+			addTextButton(FRONTEND_DIFFICULTY_R, FRONTEND_POS3M-25, FRONTEND_POS3Y, _("Hard"), 0);
 			break;
 	}
 
 	// Scroll speed
-	addTextButton(FRONTEND_SCROLLSPEED, FRONTEND_POS3X-25, FRONTEND_POS3Y, _("Scroll Speed"), 0);
-	addFESlider(FRONTEND_SCROLLSPEED_SL, FRONTEND_BOTFORM, FRONTEND_POS3M, FRONTEND_POS3Y+5, 16, scroll_speed_accel / 100);
+	addTextButton(FRONTEND_SCROLLSPEED, FRONTEND_POS4X-25, FRONTEND_POS4Y, _("Scroll Speed"), 0);
+	addFESlider(FRONTEND_SCROLLSPEED_SL, FRONTEND_BOTFORM, FRONTEND_POS4M, FRONTEND_POS4Y+5, 16, scroll_speed_accel / 100);
 
 	// Colour stuff
+	addTextButton(FRONTEND_COLOUR, FRONTEND_POS5X-25, FRONTEND_POS5Y, _("Unit Colour:"), 0);
+
 	w = iV_GetImageWidth(FrontImages, IMAGE_PLAYERN);
 	h = iV_GetImageHeight(FrontImages, IMAGE_PLAYERN);
 
-	addMultiBut(psWScreen, FRONTEND_BOTFORM, FE_P0, FRONTEND_POS4M+(0*(w+6)), FRONTEND_POS4Y, w, h, NULL, IMAGE_PLAYERN, IMAGE_PLAYERX, true, 0);
-	addMultiBut(psWScreen, FRONTEND_BOTFORM, FE_P4, FRONTEND_POS4M+(1*(w+6)), FRONTEND_POS4Y, w, h, NULL, IMAGE_PLAYERN, IMAGE_PLAYERX, true, 4);
-	addMultiBut(psWScreen, FRONTEND_BOTFORM, FE_P5, FRONTEND_POS4M+(2*(w+6)), FRONTEND_POS4Y, w, h, NULL, IMAGE_PLAYERN, IMAGE_PLAYERX, true, 5);
-	addMultiBut(psWScreen, FRONTEND_BOTFORM, FE_P6, FRONTEND_POS4M+(3*(w+6)), FRONTEND_POS4Y, w, h, NULL, IMAGE_PLAYERN, IMAGE_PLAYERX, true, 6);
-	addMultiBut(psWScreen, FRONTEND_BOTFORM, FE_P7, FRONTEND_POS4M+(4*(w+6)), FRONTEND_POS4Y, w, h, NULL, IMAGE_PLAYERN, IMAGE_PLAYERX, true, 7);
+	addMultiBut(psWScreen, FRONTEND_BOTFORM, FE_P0, FRONTEND_POS6M+(0*(w+6)), FRONTEND_POS6Y, w, h, NULL, IMAGE_PLAYERN, IMAGE_PLAYERX, true, 0);
+	addMultiBut(psWScreen, FRONTEND_BOTFORM, FE_P4, FRONTEND_POS6M+(1*(w+6)), FRONTEND_POS6Y, w, h, NULL, IMAGE_PLAYERN, IMAGE_PLAYERX, true, 4);
+	addMultiBut(psWScreen, FRONTEND_BOTFORM, FE_P5, FRONTEND_POS6M+(2*(w+6)), FRONTEND_POS6Y, w, h, NULL, IMAGE_PLAYERN, IMAGE_PLAYERX, true, 5);
+	addMultiBut(psWScreen, FRONTEND_BOTFORM, FE_P6, FRONTEND_POS6M+(3*(w+6)), FRONTEND_POS6Y, w, h, NULL, IMAGE_PLAYERN, IMAGE_PLAYERX, true, 6);
+	addMultiBut(psWScreen, FRONTEND_BOTFORM, FE_P7, FRONTEND_POS6M+(4*(w+6)), FRONTEND_POS6Y, w, h, NULL, IMAGE_PLAYERN, IMAGE_PLAYERX, true, 7);
 
 	// FIXME: if playercolor = 1-3, then we Assert in widgSetButtonState() since we don't define FE_P1 - FE_P3
 	// I assume the reason is that in SP games, those are reserved for the AI?  Valid values are 0, 4-7.
@@ -1229,25 +1244,17 @@ static bool startGameOptionsMenu(void)
 		playercolor = 0;
 	}
 	widgSetButtonState(psWScreen, FE_P0 + playercolor, WBUT_LOCK);
-	addTextButton(FRONTEND_COLOUR, FRONTEND_POS4X-25, FRONTEND_POS4Y, _("Unit Colour (SP)"), 0);
+	addTextButton(FRONTEND_COLOUR_CAM, FRONTEND_POS6X, FRONTEND_POS6Y, _("Campaign"), 0);
 
 	playercolor = war_getMPcolour();
 	for (int colour = -1; colour < MAX_PLAYERS_IN_GUI; ++colour)
 	{
 		int cellX = (colour + 1)%7;
 		int cellY = (colour + 1)/7;
-		addMultiBut(psWScreen, FRONTEND_BOTFORM, FE_MP_PR + colour + 1, FRONTEND_POS5M + cellX*(w+2), FRONTEND_POS5Y + cellY*(h+2) - 5, w, h, NULL, IMAGE_PLAYERN, IMAGE_PLAYERX, true, colour >= 0? colour : MAX_PLAYERS + 1);
+		addMultiBut(psWScreen, FRONTEND_BOTFORM, FE_MP_PR + colour + 1, FRONTEND_POS7M + cellX*(w+2), FRONTEND_POS7Y + cellY*(h+2) - 5, w, h, NULL, IMAGE_PLAYERN, IMAGE_PLAYERX, true, colour >= 0? colour : MAX_PLAYERS + 1);
 	}
 	widgSetButtonState(psWScreen, FE_MP_PR + playercolor + 1, WBUT_LOCK);
-	addTextButton(FRONTEND_COLOUR_MP, FRONTEND_POS5X - 25, FRONTEND_POS5Y, _("Unit Colour (MP)"), 0);
-
-	// language
-	addTextButton(FRONTEND_LANGUAGE,  FRONTEND_POS6X - 25, FRONTEND_POS6Y, _("Language"), 0);
-	addTextButton(FRONTEND_LANGUAGE_R,  FRONTEND_POS6M - 25, FRONTEND_POS6Y, getLanguageName(), 0);
-
-	// Radar
-	addTextButton(FRONTEND_RADAR, FRONTEND_POS7X - 25, FRONTEND_POS7Y, _("Radar"), 0);
-	addTextButton(FRONTEND_RADAR_R, FRONTEND_POS7M - 25, FRONTEND_POS7Y, rotateRadar ? _("Rotating") : _("Fixed"), 0);
+	addTextButton(FRONTEND_COLOUR_MP, FRONTEND_POS7X, FRONTEND_POS7Y, _("Skirmish/Multiplayer"), 0);
 
 	// Quit
 	addMultiBut(psWScreen, FRONTEND_BOTFORM, FRONTEND_QUIT, 10, 10, 30, 29, P_("menu", "Return"), IMAGE_RETURN, IMAGE_RETURN_HI, IMAGE_RETURN_HI);
@@ -1294,11 +1301,6 @@ bool runGameOptionsMenu(void)
 			debug(LOG_ERROR, "runGameOptionsMenu: Unused difficulty level selected!");
 			break;
 		}
-		break;
-
-	case FRONTEND_RADAR_R:
-		rotateRadar = !rotateRadar;
-		widgSetString(psWScreen, FRONTEND_RADAR_R, rotateRadar ? _("Rotating") : _("Fixed"));
 		break;
 
 	case FRONTEND_SCROLLSPEED:
