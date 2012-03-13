@@ -165,6 +165,11 @@ static bool bLasSatStruct;
 static MOUSE_TARGET	itemUnderMouse(BASE_OBJECT **ppObjUnderCursor);
 static bool	bShakingPermitted = true;
 
+bool isMouseOverRadar()
+{
+	return mouseOverRadar;
+}
+
 void setMouseScroll(bool scroll)
 {
 	mouseScroll = scroll;
@@ -298,7 +303,7 @@ bool dispInitialise(void)
 }
 
 
-bool ProcessRadarInput()
+void ProcessRadarInput()
 {
 	int PosX, PosY;
 	int x = mouseX();
@@ -394,7 +399,6 @@ bool ProcessRadarInput()
 			}
 		}
 	}
-	return mouseOverRadar;
 }
 
 
@@ -432,7 +436,7 @@ void processInput(void)
 	ignoreRMBC = false;
 
 	/* Process all of our key mappings */
-	if (mousePressed(MOUSE_WUP))
+	if (mousePressed(MOUSE_WUP) && !isMouseOverRadar())
 	{
 		/* Ctrl+Alt+WheelUp makes game speed up */
 		if (keyDown(KEY_LCTRL) && keyDown(KEY_LALT))
@@ -449,7 +453,7 @@ void processInput(void)
 		}
 	}
 
-	if (mousePressed(MOUSE_WDN))
+	if (mousePressed(MOUSE_WDN) && !isMouseOverRadar())
 	{
 		/* Ctrl+Alt+WheelDown makes game slow down */
 		if (keyDown(KEY_LCTRL) && keyDown(KEY_LALT))

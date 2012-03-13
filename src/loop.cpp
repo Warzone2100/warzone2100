@@ -305,20 +305,16 @@ static GAMECODE renderLoop()
 	{
 		if (!gameUpdatePaused())
 		{
-			bool done = false;
 			if (dragBox3D.status != DRAG_DRAGGING
 			    && wallDrag.status != DRAG_DRAGGING
 			    && intRetVal != INT_INTERCEPT)
 			{
-				done = ProcessRadarInput();
+				ProcessRadarInput();
 			}
-			if (!done)
-			{
-				processInput();
-			}
+			processInput();
 
 			//no key clicks or in Intelligence Screen
-			if (!done && intRetVal == INT_NONE && !InGameOpUp && !isInGamePopupUp)
+			if (!isMouseOverRadar() && intRetVal == INT_NONE && !InGameOpUp && !isInGamePopupUp)
 			{
 				processMouseClickInput();
 			}
