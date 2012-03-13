@@ -2812,27 +2812,20 @@ void initNoGoAreas(void)
 //sets the coords for a no go area
 void setNoGoArea(UBYTE x1, UBYTE y1, UBYTE x2, UBYTE y2, UBYTE area)
 {
-	//quick check that x2 > x1 and y2 > y1
+	// make sure that x2 > x1 and y2 > y1
 	if (x2 < x1)
 	{
-		sLandingZone[area].x1 = x2;
-		sLandingZone[area].x2 = x1;
-	}
-	else
-	{
-		sLandingZone[area].x1 = x1;
-		sLandingZone[area].x2 = x2;
+		std::swap(x1, x2);
 	}
 	if (y2 < y1)
 	{
-		sLandingZone[area].y1 = y2;
-		sLandingZone[area].y2 = y1;
+		std::swap(y1, y2);
 	}
-	else
-	{
-		sLandingZone[area].y1 = y1;
-		sLandingZone[area].y2 = y2;
-	}
+
+	sLandingZone[area].x1 = x1;
+	sLandingZone[area].x2 = x2;
+	sLandingZone[area].y1 = y1;
+	sLandingZone[area].y2 = y2;
 
 	if (area == 0)
 	{
