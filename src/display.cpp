@@ -298,7 +298,7 @@ bool dispInitialise(void)
 }
 
 
-void ProcessRadarInput(void)
+bool ProcessRadarInput()
 {
 	int PosX, PosY;
 	int x = mouseX();
@@ -380,8 +380,21 @@ void ProcessRadarInput(void)
 					requestRadarTrack(PosX*TILE_UNITS,PosY*TILE_UNITS);
 				}
 			}
+			// ctrl-alt-scroll changes game speed
+			if (!keyDown(KEY_LCTRL) || !keyDown(KEY_LALT))
+			{
+				if (mousePressed(MOUSE_WUP))
+				{
+					kf_RadarZoomIn();
+				}
+				else if (mousePressed(MOUSE_WDN))
+				{
+					kf_RadarZoomOut();
+				}
+			}
 		}
 	}
+	return mouseOverRadar;
 }
 
 
@@ -397,17 +410,11 @@ void resetInput(void)
 /* Process the user input. This just processes the key input and jumping around the radar*/
 void processInput(void)
 {
-	bool mOverRadar = false;
 	bool mOverConstruction = false;
 
 	if (InGameOpUp || isInGamePopupUp)
 	{
 		dragBox3D.status = DRAG_RELEASED;	// disengage the dragging since it stops menu input
-	}
-
-	if (radarOnScreen && radarPermitted && CoordInRadar(mouseX(), mouseY()))
-	{
-		mOverRadar = true;
 	}
 
 	if(CoordInBuild(mouseX(), mouseY()))
@@ -432,11 +439,6 @@ void processInput(void)
 		{
 			kf_SpeedUp();
 		}
-		/* Decide if radar or world zoom in */
-		else if (mOverRadar)
-		{
-			kf_RadarZoomIn();
-		}
 		else if (mOverConstruction)
 		{
 			kf_BuildPrevPage();
@@ -453,11 +455,6 @@ void processInput(void)
 		if (keyDown(KEY_LCTRL) && keyDown(KEY_LALT))
 		{
 			kf_SlowDown();
-		}
-		/* Decide if radar or world zoom out */
-		else if (mOverRadar)
-		{
-			kf_RadarZoomOut();
 		}
 		else if (mOverConstruction)
 		{

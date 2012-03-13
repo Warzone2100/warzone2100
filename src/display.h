@@ -33,7 +33,7 @@ extern bool dispInitialise(void);
 extern void shakeStart(void);
 extern void shakeStop(void);
 
-extern void ProcessRadarInput(void);
+bool ProcessRadarInput();
 
 extern void processInput(void);
 /*don't want to do any of these whilst in the Intelligence Screen*/
