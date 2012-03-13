@@ -2827,7 +2827,7 @@ void setNoGoArea(UBYTE x1, UBYTE y1, UBYTE x2, UBYTE y2, UBYTE area)
 	sLandingZone[area].y1 = y1;
 	sLandingZone[area].y2 = y2;
 
-	if (area == 0)
+	if (area == 0 && x1 && y1)
 	{
 		addLandingLights(getLandingX(area) + 64, getLandingY(area) + 64);
 	}
