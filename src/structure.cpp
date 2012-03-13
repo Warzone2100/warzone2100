@@ -1273,16 +1273,36 @@ static void buildFlatten(STRUCTURE *pStructure, int h)
 	}
 }
 
+static bool isPulledToTerrain(STRUCTURE const *psBuilding)
+{
+	STRUCTURE_TYPE type = psBuilding->pStructureType->type;
+	return type == REF_DEFENSE || type == REF_GATE || type == REF_WALL || type == REF_WALLCORNER || type == REF_REARM_PAD;
+}
+
 void alignStructure(STRUCTURE *psBuilding)
 {
 	/* DEFENSIVE structures are pulled to the terrain */
-	if (psBuilding->pStructureType->type != REF_DEFENSE && psBuilding->pStructureType->type != REF_GATE && psBuilding->pStructureType->type != REF_WALL && psBuilding->pStructureType->type != REF_WALLCORNER)
+	if (!isPulledToTerrain(psBuilding))
 	{
 		int mapH = foundationHeight(psBuilding);
 
 		buildFlatten(psBuilding, mapH);
 		psBuilding->pos.z = mapH;
-		psBuilding->foundationDepth = 0.0f;
+		psBuilding->foundationDepth = psBuilding->pos.z;
+
+		// Align surrounding structures.
+		StructureBounds b = getStructureBounds(psBuilding);
+		for (int breadth = -1; breadth <= b.size.y; ++breadth)
+		{
+			for (int width = -1; width <= b.size.x; ++width)
+			{
+				STRUCTURE *neighbourStructure = castStructure(mapTile(b.map.x + width, b.map.y + breadth)->psObject);
+				if (neighbourStructure != NULL && isPulledToTerrain(neighbourStructure))
+				{
+					alignStructure(neighbourStructure);  // Recursive call, but will go to the else case, so will not re-recurse.
+				}
+			}
+		}
 	}
 	else
 	{
