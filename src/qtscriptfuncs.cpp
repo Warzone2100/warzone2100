@@ -256,6 +256,8 @@ QScriptValue convFeature(FEATURE *psFeature, QScriptEngine *engine)
 //;; \item[isRadarDetector] True if the droid has radar detector ability. (3.2+ only)
 //;; \item[hasIndirect] One or more of the droid's weapons are indirect. (3.2+ only)
 //;; \item[range] Maximum range of its weapons. (3.2+ only)
+//;; \item[body] The body component of the droid. (3.2+ only)
+//;; \item[propulsion] The propulsion component of the droid. (3.2+ only)
 //;; \end{description}
 QScriptValue convDroid(DROID *psDroid, QScriptEngine *engine)
 {
@@ -309,6 +311,8 @@ QScriptValue convDroid(DROID *psDroid, QScriptEngine *engine)
 	value.setProperty("droidType", (int)type, QScriptValue::ReadOnly);
 	value.setProperty("experience", (double)psDroid->experience / 65536.0, QScriptValue::ReadOnly);
 	value.setProperty("health", 100.0 / (double)psDroid->originalBody * (double)psDroid->body, QScriptValue::ReadOnly);
+	value.setProperty("body", asBodyStats[psDroid->asBits[COMP_BODY].nStat].pName);
+	value.setProperty("propulsion", asBodyStats[psDroid->asBits[COMP_PROPULSION].nStat].pName);
 	if (isVtolDroid(psDroid))
 	{
 		value.setProperty("armed", 100.0 / (double)MAX(asWeaponStats[psDroid->asWeaps[0].nStat].numRounds, 1)
@@ -347,6 +351,7 @@ QScriptValue convDroid(DROID *psDroid, QScriptEngine *engine)
 //;; \item[health] Percentage that this object is damaged (where 100% means not damaged at all).
 //;; \item[armour] Amount of armour points that protect against kinetic weapons.
 //;; \item[thermal] Amount of thermal protection that protect against heat based weapons.
+//;; \item[born] The game time at which this object was produced or came into the world. (3.2+ only)
 //;; \end{description}
 QScriptValue convObj(BASE_OBJECT *psObj, QScriptEngine *engine)
 {
@@ -362,6 +367,7 @@ QScriptValue convObj(BASE_OBJECT *psObj, QScriptEngine *engine)
 	value.setProperty("type", psObj->type, QScriptValue::ReadOnly);
 	value.setProperty("selected", psObj->selected, QScriptValue::ReadOnly);
 	value.setProperty("name", objInfo(psObj), QScriptValue::ReadOnly);
+	value.setProperty("born", psObj->born, QScriptValue::ReadOnly);
 	return value;
 }
 
