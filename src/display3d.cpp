@@ -2240,12 +2240,7 @@ void	renderStructure(STRUCTURE *psStructure)
 
 	dv.x = structX - player.p.x;
 	dv.z = -(structY - player.p.z);
-	if (defensive || structureIsBlueprint(psStructure))
-	{
-		dv.y = psStructure->pos.z;
-	} else {
-		dv.y = map_TileHeight(map_coord(structX), map_coord(structY));
-	}
+	dv.y = psStructure->pos.z;
 	/* Push the indentity matrix */
 	pie_MatBegin();
 
@@ -2654,7 +2649,7 @@ static bool	renderWallSection(STRUCTURE *psStructure)
 		/* Establish where it is in the world */
 		dv.x = structX - player.p.x;
 		dv.z = -(structY - player.p.z);
-		dv.y = map_Height(structX, structY);
+		dv.y = psStructure->pos.z;
 
 		if (psStructure->pStructureType->type == REF_GATE && psStructure->state == SAS_OPEN)
 		{

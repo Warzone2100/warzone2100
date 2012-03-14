@@ -2484,6 +2484,7 @@ void moveUpdateDroid(DROID *psDroid)
 					// check the location for vtols
 					Vector2i tar = removeZ(psDroid->pos);
 					if (psDroid->order.type != DORDER_PATROL && psDroid->order.type != DORDER_CIRCLE  // Not doing an order which means we never land (which means we might want to land).
+					    && psDroid->action != DACTION_MOVETOREARM && psDroid->action != DACTION_MOVETOREARMPOINT
 					    && actionVTOLLandingPos(psDroid, &tar)  // Can find a sensible place to land.
 					    && map_coord(tar) != map_coord(psDroid->sMove.destination))  // We're not at the right place to land.
 					{

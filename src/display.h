@@ -33,7 +33,7 @@ extern bool dispInitialise(void);
 extern void shakeStart(void);
 extern void shakeStop(void);
 
-extern void ProcessRadarInput(void);
+void ProcessRadarInput();
 
 extern void processInput(void);
 /*don't want to do any of these whilst in the Intelligence Screen*/
@@ -51,6 +51,8 @@ extern void clearSel(void);
 extern void clearSelection(void);
 // deal with selecting a droid
 extern void dealWithDroidSelect(DROID *psDroid, bool bDragBox);
+
+bool isMouseOverRadar();
 
 extern	void	setInvertMouseStatus( bool val );
 extern bool	getInvertMouseStatus( void );
