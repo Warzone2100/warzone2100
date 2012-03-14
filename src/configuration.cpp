@@ -121,12 +121,14 @@ bool loadConfig()
 	if (ini.contains("textureSize")) setTextureSize(ini.value("textureSize").toInt());
 	NetPlay.isUPNP = ini.value("UPnP", true).toBool();
 	if (ini.contains("FSAA")) war_setFSAA(ini.value("FSAA").toInt());
-	war_setFullscreen(ini.value("fullscreen", true).toBool());
+	// Leave this to false, some system will fail and they can't see the system popup dialog!
+	war_setFullscreen(ini.value("fullscreen", false).toBool());
 	war_SetTrapCursor(ini.value("trapCursor", false).toBool());
+	// this should be enabled on all systems by default
 	war_SetVsync(ini.value("vsync", true).toBool());
-
-	int width = ini.value("width", 800).toInt();
-	int height = ini.value("height", 600).toInt();
+	// 640x480 is minimum that we will support
+	int width = ini.value("width", 640).toInt();
+	int height = ini.value("height", 480).toInt();
 	if (width < 640 || height < 480)	// sanity check
 	{
 		width = 640;
