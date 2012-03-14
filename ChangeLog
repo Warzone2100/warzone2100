@@ -1,3 +1,14 @@
+2012-03-13: Version 3.1_beta6
+ * General:
+   * Fix: Make VTOLs rearm on rearming pads, not beside them (ticket:3285, commit:b4ad988996732c0266be62a301b9fb0a66940ad1)
+   * Fix: Make building on a tile only accessible diagonally work (ticket:3215, commit:c831b5b87a6188432bee2cd2ea15c3413fdc2ec4)
+ * Multiplayer:
+   * Fix: Make it work again (ticket:3281, commit:b7d07f663b4781a32e56b97716266b6db0583d50)
+ * UI:
+   * Fix: Make setting the camera position by right-clicking the minimap work again (ticket:3283, commit:91614562b0969c47ffed7020caa1e16c8ede5823)
+ * Graphics:
+   * Fix: Make VTOL rearming pads stay above the ground (ticket:702, commit:071d08fc16dcca48ae070a6044686034670411f3)
+
 2012-03-13: Version 3.1_beta5
  * General:
    * Change: Adjust the burning time of destroyed oil derricks by the percentage they were completed (commit:f6ddbf1878ff2a387c4be95449d8a7835c18ebd8)
