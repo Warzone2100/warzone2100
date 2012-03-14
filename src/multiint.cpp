@@ -4006,8 +4006,6 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *p
 	UDWORD		x = xOffset+psWidget->x;
 	UDWORD		y = yOffset+psWidget->y;
 	UDWORD		j = psWidget->UserData, eval;
-	PLAYERSTATS stat;
-
 	const int nameX = 32;
 
 	//bluboxes.
@@ -4077,7 +4075,7 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *p
 		}
 		else
 		{
-			stat = getMultiStats(j);
+			PLAYERSTATS stat = getMultiStats(j);
 
 			// star 1 total droid kills
 			eval = stat.totalKills;
