@@ -314,7 +314,7 @@ static GAMECODE renderLoop()
 			processInput();
 
 			//no key clicks or in Intelligence Screen
-			if (intRetVal == INT_NONE && !InGameOpUp && !isInGamePopupUp)
+			if (!isMouseOverRadar() && intRetVal == INT_NONE && !InGameOpUp && !isInGamePopupUp)
 			{
 				processMouseClickInput();
 			}

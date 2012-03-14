@@ -165,6 +165,11 @@ static bool bLasSatStruct;
 static MOUSE_TARGET	itemUnderMouse(BASE_OBJECT **ppObjUnderCursor);
 static bool	bShakingPermitted = true;
 
+bool isMouseOverRadar()
+{
+	return mouseOverRadar;
+}
+
 void setMouseScroll(bool scroll)
 {
 	mouseScroll = scroll;
@@ -298,7 +303,7 @@ bool dispInitialise(void)
 }
 
 
-void ProcessRadarInput(void)
+void ProcessRadarInput()
 {
 	int PosX, PosY;
 	int x = mouseX();
@@ -380,6 +385,18 @@ void ProcessRadarInput(void)
 					requestRadarTrack(PosX*TILE_UNITS,PosY*TILE_UNITS);
 				}
 			}
+			// ctrl-alt-scroll changes game speed
+			if (!keyDown(KEY_LCTRL) || !keyDown(KEY_LALT))
+			{
+				if (mousePressed(MOUSE_WUP))
+				{
+					kf_RadarZoomIn();
+				}
+				else if (mousePressed(MOUSE_WDN))
+				{
+					kf_RadarZoomOut();
+				}
+			}
 		}
 	}
 }
@@ -397,17 +414,11 @@ void resetInput(void)
 /* Process the user input. This just processes the key input and jumping around the radar*/
 void processInput(void)
 {
-	bool mOverRadar = false;
 	bool mOverConstruction = false;
 
 	if (InGameOpUp || isInGamePopupUp)
 	{
 		dragBox3D.status = DRAG_RELEASED;	// disengage the dragging since it stops menu input
-	}
-
-	if (radarOnScreen && radarPermitted && CoordInRadar(mouseX(), mouseY()))
-	{
-		mOverRadar = true;
 	}
 
 	if(CoordInBuild(mouseX(), mouseY()))
@@ -425,17 +436,12 @@ void processInput(void)
 	ignoreRMBC = false;
 
 	/* Process all of our key mappings */
-	if (mousePressed(MOUSE_WUP))
+	if (mousePressed(MOUSE_WUP) && !isMouseOverRadar())
 	{
 		/* Ctrl+Alt+WheelUp makes game speed up */
 		if (keyDown(KEY_LCTRL) && keyDown(KEY_LALT))
 		{
 			kf_SpeedUp();
-		}
-		/* Decide if radar or world zoom in */
-		else if (mOverRadar)
-		{
-			kf_RadarZoomIn();
 		}
 		else if (mOverConstruction)
 		{
@@ -447,17 +453,12 @@ void processInput(void)
 		}
 	}
 
-	if (mousePressed(MOUSE_WDN))
+	if (mousePressed(MOUSE_WDN) && !isMouseOverRadar())
 	{
 		/* Ctrl+Alt+WheelDown makes game slow down */
 		if (keyDown(KEY_LCTRL) && keyDown(KEY_LALT))
 		{
 			kf_SlowDown();
-		}
-		/* Decide if radar or world zoom out */
-		else if (mOverRadar)
-		{
-			kf_RadarZoomOut();
 		}
 		else if (mOverConstruction)
 		{
