@@ -176,17 +176,17 @@ void loadMapPreview(bool hideInterface);
 #define	MULTIOP_BLUEFORMW		226
 
 #define	MROW1					4
-#define	MROW2					MROW1+MULTIOP_EDITBOXH+4
-#define	MROW3					MROW2+MULTIOP_EDITBOXH+4
-#define	MROW4					MROW3+MULTIOP_EDITBOXH+4
-#define MROW5					MROW4+36
-#define	MROW6					MROW5+31
-#define	MROW7					MROW6+31
-#define	MROW8					MROW7+31
-#define	MROW9					MROW8+31
-#define	MROW10					MROW9+31
-#define	MROW11					MROW10+31
-#define	MROW12					MROW11+31
+#define	MROW2					MROW1+MULTIOP_EDITBOXH
+#define	MROW3					MROW2+MULTIOP_EDITBOXH
+#define	MROW4					MROW3+MULTIOP_EDITBOXH
+#define MROW5					MROW4+38
+#define	MROW6					MROW5+29
+#define	MROW7					MROW6+29
+#define	MROW8					MROW7+29
+#define	MROW9					MROW8+29
+#define	MROW10					MROW9+32
+#define	MROW11					MROW10+36
+#define	MROW12					MROW11+40
 
 #define MCOL0					50
 #define MCOL1					(MCOL0+26+10)	// rem 10 for 4 lines.
