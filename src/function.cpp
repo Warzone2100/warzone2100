@@ -1446,11 +1446,9 @@ void wallDefenceUpgrade(FUNCTION *pFunction, UBYTE player)
 }
 
 /*upgrades the droids inside a Transporter uwith the appropriate upgrade function*/
-void upgradeTransporterDroids(DROID *psTransporter,
-                              void(*pUpgradeFunction)(DROID *psDroid))
+void upgradeTransporterDroids(DROID *psTransporter, void(*pUpgradeFunction)(DROID *psDroid))
 {
-	// NOTE: may allow DROID_SUPERTRANSPORTER upgrades...
-    ASSERT (psTransporter->droidType == DROID_TRANSPORTER, "upgradeTransporterUnits: invalid unit type");
+    ASSERT (psTransporter->droidType == DROID_TRANSPORTER || psTransporter->droidType == DROID_SUPERTRANSPORTER, "upgradeTransporterUnits: invalid unit type");
 
     //loop thru' each unit in the Transporter
     for (DROID *psCurr = psTransporter->psGroup->psList; psCurr != NULL; psCurr = psCurr->psGrpNext)
