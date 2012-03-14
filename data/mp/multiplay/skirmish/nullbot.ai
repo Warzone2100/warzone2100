@@ -1,0 +1,3 @@
+[AI]
+name = "NullBot"
+js = nullbot.js
