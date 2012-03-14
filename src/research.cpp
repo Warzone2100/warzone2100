@@ -274,7 +274,7 @@ bool loadResearch(const char *pResearchData, UDWORD bufferSize)
 		}
 
 		//get the message viewdata - if any
-		if (strcmp(msgName, "0") && game.type == CAMPAIGN)
+		if (strcmp(msgName, "0"))
 		{
 			//check its a major tech code
 			ASSERT(research.techCode == TC_MAJOR, "This research should not have a message associated with it, %s the message will be ignored!", getResearchName(&research));
