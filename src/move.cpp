@@ -1108,7 +1108,6 @@ static void moveCalcBlockingSlide(DROID *psDroid, int32_t *pmx, int32_t *pmy, ui
 static void moveCalcDroidSlide(DROID *psDroid, int *pmx, int *pmy)
 {
 	int32_t		droidR, rad, radSq, objR, xdiff, ydiff, distSq, spmx, spmy;
-	BASE_OBJECT     *psObj, *psObst;
 	bool            bLegs;
 
 	CHECK_DROID(psDroid);
@@ -1122,10 +1121,17 @@ static void moveCalcDroidSlide(DROID *psDroid, int *pmx, int *pmy)
 	spmy = gameTimeAdjustedAverage(*pmy, EXTRA_PRECISION);
 
 	droidR = moveObjRadius((BASE_OBJECT *)psDroid);
-	psObst = NULL;
+	BASE_OBJECT *psObst = NULL;
 	gridStartIterate(psDroid->pos.x, psDroid->pos.y, OBJ_MAXRADIUS);
-	for (psObj = gridIterate(); psObj != NULL; psObj = gridIterate())
+	static std::vector<BASE_OBJECT *> list;  // static to avoid allocations.
+	gridGetIterateList(&list);
+	for (std::vector<BASE_OBJECT *>::const_iterator gi = list.begin(); gi != list.end(); ++gi)
 	{
+		BASE_OBJECT *psObj = *gi;
+		if (psObj->died)
+		{
+			continue;
+		}
 		if (psObj->type == OBJ_DROID)
 		{
 			if (((DROID *)psObj)->droidType == DROID_TRANSPORTER || ((DROID *)psObj)->droidType == DROID_SUPERTRANSPORTER)
