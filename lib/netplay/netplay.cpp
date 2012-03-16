@@ -287,6 +287,7 @@ void NET_InitPlayer(int i, bool initPosition)
 	NetPlay.players[i].difficulty = 1;		// normal
 	NetPlay.players[i].wzFile.isCancelled = false;
 	NetPlay.players[i].wzFile.isSending = false;
+	ingame.JoiningInProgress[i] = false;
 }
 
 void NET_InitPlayers()
