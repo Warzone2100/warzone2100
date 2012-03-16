@@ -2088,6 +2088,7 @@ void assignFactoryCommandDroid(STRUCTURE *psStruct, DROID *psCommander)
 		}
 
 		psFact->psCommander = NULL;
+		syncDebug("Removed commander from factory %d", psStruct->id);
 		if (!missionIsOffworld())
 		{
 			addFlagPosition(psFact->psAssemblyPoint);	// add the assembly point back into the list
@@ -2138,6 +2139,7 @@ void assignFactoryCommandDroid(STRUCTURE *psStruct, DROID *psCommander)
 			}
 		}
 		psFact->psCommander = psCommander;
+		syncDebug("Assigned commander %d to factory %d", psCommander->id, psStruct->id);
 	}
 }
 
