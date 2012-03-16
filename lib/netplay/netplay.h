@@ -286,7 +286,7 @@ extern char iptoconnect[PATH_MAX]; // holds IP/hostname from command line
 // ////////////////////////////////////////////////////////////////////////
 // functions available to you.
 extern int   NETinit(bool bFirstCall);				// init
-bool NETsend(uint8_t player, NetMessage const *message);                 ///< send to player, or broadcast if player == NET_ALL_PLAYERS.
+bool NETsend(NETQUEUE queue, NetMessage const *message);                 ///< send to player, or broadcast if player == NET_ALL_PLAYERS.
 extern bool NETrecvNet(NETQUEUE *queue, uint8_t *type);                  ///< recv a message from the net queues if possible.
 extern bool NETrecvGame(NETQUEUE *queue, uint8_t *type);                 ///< recv a message from the game queues which is sceduled to execute by time, if possible.
 void NETflush(void);                                                     ///< Flushes any data stuck in compression buffers.

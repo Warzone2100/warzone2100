@@ -473,9 +473,9 @@ bool NETend()
 			ASSERT(message.type > NET_MIN_TYPE && message.type < NET_MAX_TYPE, "Inserting %s into net queue.", messageTypeToString(message.type));
 		}
 
-		if (queueInfo.queueType == QUEUE_NET || queueInfo.queueType == QUEUE_BROADCAST)
+		if (queueInfo.queueType == QUEUE_NET || queueInfo.queueType == QUEUE_BROADCAST || queueInfo.queueType == QUEUE_TMP)
 		{
-			NETsend(queueInfo.index, &queue->getMessageForNet());
+			NETsend(queueInfo, &queue->getMessageForNet());
 			queue->popMessageForNet();
 		}
 

@@ -1239,8 +1239,9 @@ UDWORD NETgetPacketsRecvd(void)
 
 // ////////////////////////////////////////////////////////////////////////
 // Send a message to a player, option to guarantee message
-bool NETsend(uint8_t player, NetMessage const *message)
+bool NETsend(NETQUEUE queue, NetMessage const *message)
 {
+	uint8_t player = queue.index;
 	ssize_t result = 0;
 
 	if(!NetPlay.bComms)
@@ -1248,7 +1249,25 @@ bool NETsend(uint8_t player, NetMessage const *message)
 		return true;
 	}
 
-	if (player >= MAX_CONNECTED_PLAYERS && player != NET_ALL_PLAYERS) return false;
+	Socket **sockets = connected_bsocket;
+	bool isTmpQueue = false;
+	switch (queue.queueType)
+	{
+		case QUEUE_BROADCAST:
+			ASSERT_OR_RETURN(false, player == NET_ALL_PLAYERS, "Wrong queue index.");
+			break;
+		case QUEUE_NET:
+			ASSERT_OR_RETURN(false, player < MAX_CONNECTED_PLAYERS, "Wrong queue index.");
+			break;
+		case QUEUE_TMP:
+			sockets = tmp_socket;
+			isTmpQueue = true;
+
+			ASSERT_OR_RETURN(false, player < MAX_TMP_SOCKETS && NetPlay.isHost, "Wrong queue index.");
+			break;
+		default:
+			ASSERT_OR_RETURN(false, false, "Wrong queue type.");
+	}
 
 	if (NetPlay.isHost)
 	{
@@ -1257,11 +1276,11 @@ bool NETsend(uint8_t player, NetMessage const *message)
 		for (player = firstPlayer; player <= lastPlayer; ++player)
 		{
 			// We are the host, send directly to player.
-			if (connected_bsocket[player] != NULL)
+			if (sockets[player] != NULL)
 			{
 				uint8_t *rawData = message->rawDataDup();
 				ssize_t rawLen   = message->rawLen();
-				result = writeAll(connected_bsocket[player], rawData, rawLen);
+				result = writeAll(sockets[player], rawData, rawLen);
 				delete[] rawData;  // Done with the data.
 
 				if (result == rawLen)
@@ -1273,8 +1292,11 @@ bool NETsend(uint8_t player, NetMessage const *message)
 				{
 					// Write error, most likely client disconnect.
 					debug(LOG_ERROR, "Failed to send message: %s", strSockError(getSockErr()));
-					NETlogEntry("client disconnect?", SYNC_FLAG, player);
-					NETplayerClientDisconnect(player);
+					if (!isTmpQueue)
+					{
+						NETlogEntry("client disconnect?", SYNC_FLAG, player);
+						NETplayerClientDisconnect(player);
+					}
 				}
 			}
 		}
@@ -1338,13 +1360,20 @@ void NETflush()
 
 	if (NetPlay.isHost)
 	{
-		int player;
-		for (player = 0; player < MAX_CONNECTED_PLAYERS; ++player)
+		for (int player = 0; player < MAX_CONNECTED_PLAYERS; ++player)
 		{
 			// We are the host, send directly to player.
 			if (connected_bsocket[player] != NULL)
 			{
 				socketFlush(connected_bsocket[player]);
+			}
+		}
+		for (int player = 0; player < MAX_TMP_SOCKETS; ++player)
+		{
+			// We are the host, send directly to player.
+			if (tmp_socket[player] != NULL)
+			{
+				socketFlush(tmp_socket[player]);
 			}
 		}
 	}
@@ -2943,8 +2972,11 @@ bool NETjoinGame(const char* host, uint32_t port, const char* playername)
 			setLobbyError((LOBBY_ERROR_TYPES)rejection);
 			NETclose();
 		}
-
-		NETpop(queue);
+		else
+		{
+			debug(LOG_ERROR, "Unexpected %s.", messageTypeToString(type));
+			NETpop(queue);
+		}
 	}
 }
 
