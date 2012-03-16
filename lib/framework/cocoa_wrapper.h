@@ -33,8 +33,15 @@ void cocoaInit(void);
  * \param message Summary of the issue
  * \param information A more detailed explanation of the issue
  * \param style 0 is a warning, 1 is informational, and 2 is critical. (NSAlertStyle)
+ * \param buttonTitles A null-terminated list of button titles, displayed from right to left.
+ * \returns The index of the selected button. (0-indexed from leftmost argument, rightmost displayed button.)
  */
-void cocoaShowAlert(const char *message, const char *information, unsigned style);
+int cocoaShowAlert(const char *message, const char *information, unsigned style,
+                   const char *buttonTitles, ...) __attribute__ ((sentinel));
+
+void cocoaSelectFileInFinder(const char *filename);
+void cocoaOpenURL(const char *url);
+void cocoaOpenUserCrashReportFolder();
 
 #endif // WZ_OS_MAC
 

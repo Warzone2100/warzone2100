@@ -465,15 +465,22 @@ void _debug( int line, code_part part, const char *function, const char *str, ..
 				\nDo not forget to upload the %s file, WZdebuginfo.txt and the warzone2100.rpt files in your bug reports at http://developer.wz2100.net/newticket!", useInputBuffer1 ? inputBuffer[1] : inputBuffer[0], WZDebugfilename, WZDebugfilename);
 			MessageBoxA( NULL, wbuf, "Warzone has terminated unexpectedly", MB_OK|MB_ICONERROR);
 #elif defined(WZ_OS_MAC)
-			cocoaShowAlert("Warzone has terminated unexpectedly.",
-			               "Please check your logs for more details."
-			               "\n\nRun Console.app, search for \"wz2100\", and copy that to a file."
-			               "\n\nIf you are on 10.4 (Tiger) or 10.5 (Leopard) the crash report"
-			               " is in ~/Library/Logs/CrashReporter."
-			               " If you are on 10.6 (Snow Leopard), it is in"
-			               "\n~/Library/Logs/DiagnosticReports."
-			               "\n\nDo not forget to upload and attach those to a bug report at http://developer.wz2100.net/newticket"
-			               "\nThanks!", 2);
+			int clickedIndex = \
+			cocoaShowAlert("Warzone has quit unexpectedly.",
+			               "Please check your logs and attach them along with a bug report. Thanks!",
+			               2, "Show Log Files & Open Bug Reporter", "Ignore", NULL);
+			if (clickedIndex == 0)
+			{
+				if (WZDebugfilename == NULL) {
+					cocoaShowAlert("Unable to open debug log.",
+					               "The debug log subsystem has not yet been initialised.",
+					               2, "Continue", NULL);
+				} else {
+					cocoaSelectFileInFinder(WZDebugfilename);
+				}
+				cocoaOpenUserCrashReportFolder();
+				cocoaOpenURL("http://developer.wz2100.net/newticket");
+			}
 #else
 			const char* popupBuf = useInputBuffer1 ? inputBuffer[1] : inputBuffer[0];
 			wzFatalDialog(popupBuf);
@@ -491,7 +498,7 @@ void _debug( int line, code_part part, const char *function, const char *str, ..
 				wbuf,
 				"Warzone has detected a problem.", MB_OK|MB_ICONINFORMATION);
 #elif defined(WZ_OS_MAC)
-			cocoaShowAlert("Warzone has detected a problem.", inputBuffer[useInputBuffer1 ? 1 : 0], 0);
+			cocoaShowAlert("Warzone has detected a problem.", inputBuffer[useInputBuffer1 ? 1 : 0], 0, "OK", NULL);
 #endif
 		}
 
