@@ -3122,11 +3122,8 @@ static void	drawStructureSelections( void )
 		if (mouseDown(getRightClickOrders()?MOUSE_LMB:MOUSE_RMB))
 		{
 			psStruct = (STRUCTURE*)psClickedOn;
-			if(psStruct->status==SS_BUILT)
-			{
-				drawStructureHealth(psStruct);
-			}
-			else if(psStruct->status == SS_BEING_BUILT)
+			drawStructureHealth(psStruct);
+			if(psStruct->status == SS_BEING_BUILT)
 			{
 				drawStructureBuildProgress(psStruct);
 			}
