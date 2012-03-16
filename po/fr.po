@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2012-03-12 19:38+0100\n"
+"POT-Creation-Date: 2012-03-16 22:55+0100\n"
 "PO-Revision-Date: 2012-02-28 20:37+0100\n"
 "Last-Translator: AM <a@a.fr>\n"
 "Language-Team: French <warzone2100-project@lists.sourceforge.net>\n"
@@ -3406,7 +3406,7 @@ msgstr "Les roquettes détectent les émissions thermiques et se verrouillent de
 
 #: data/base/messages/resmessagesall.rmsg:126
 msgid "Anti-tank rocket"
-msgstr "Roquette anti-char"
+msgstr "Roquettes anti-char"
 
 #: data/base/messages/resmessagesall.rmsg:137
 msgid "High explosive shaped charge missile"
@@ -6411,20 +6411,20 @@ msgstr "Turbine à vapeur"
 #: data/mp/messages/strings/names.txt:830
 #: data/mp/messages/strings/names.txt:1464
 msgid "Repair Facility"
-msgstr "Atelier de réparations"
+msgstr "Atelier de réparation"
 
 #: data/base/messages/strings/names.txt:821
 #: data/mp/messages/strings/names.txt:831
 msgid "Automated Repair Facility"
-msgstr "Atelier de réparations automatisées"
+msgstr "Atelier de réparation automatisé"
 
 #: data/base/messages/strings/names.txt:822
 msgid "Automated Repair Facility Upgrade Mk2"
-msgstr "Atelier de réparations automatisées Mk2"
+msgstr "Atelier de réparation automatisé Mk2"
 
 #: data/base/messages/strings/names.txt:823
 msgid "Automated Repair Facility Upgrade Mk3"
-msgstr "Atelier de réparations automatisées Mk3"
+msgstr "Atelier de réparation automatisé Mk3"
 
 #: data/base/messages/strings/names.txt:824
 msgid "Robotic Repair Facility Upgrade"
@@ -6432,7 +6432,7 @@ msgstr "Atelier de réparations robotisées"
 
 #: data/base/messages/strings/names.txt:825
 msgid "Robotic Repair Facility Upgrade Mk2"
-msgstr "Atelier de réparations robotisées Mk2"
+msgstr "Atelier de réparation robotisé Mk2"
 
 #: data/base/messages/strings/names.txt:826
 msgid "Robotic Repair Facility Upgrade Mk3"
@@ -6440,7 +6440,7 @@ msgstr "Atelier réparations robotisées Mk3"
 
 #: data/base/messages/strings/names.txt:827
 msgid "Advanced Repair Facility Upgrade"
-msgstr "Atelier de réparations avancées"
+msgstr "Atelier de réparation avancé"
 
 #: data/base/messages/strings/names.txt:828
 msgid "Advanced Repair Facility Upgrade Mk2"
@@ -6448,7 +6448,7 @@ msgstr "Atelier de réparations avancées Mk2"
 
 #: data/base/messages/strings/names.txt:829
 msgid "Advanced Repair Facility Upgrade Mk3"
-msgstr "Atelier de réparations avancées Mk3"
+msgstr "Atelier de réparation avancé Mk3"
 
 #: data/base/messages/strings/names.txt:832
 #: data/mp/messages/strings/names.txt:842
@@ -7486,12 +7486,12 @@ msgstr "Chargeur rapide pour mortiers"
 #: data/base/messages/strings/names.txt:1139
 #: data/mp/messages/strings/names.txt:1151
 msgid "Heavy Mortar - Bombard"
-msgstr "Mortier lourd - bombarde"
+msgstr "Mortier lourd - Bombarde"
 
 #: data/base/messages/strings/names.txt:1140
 #: data/mp/messages/strings/names.txt:1152
 msgid "Rotary Mortar - Pepperpot"
-msgstr "Mortier rotatif - poivrière"
+msgstr "Mortier rotatif - Poivrière"
 
 #: data/base/messages/strings/names.txt:1145
 msgid "Target Prediction Computer"
@@ -7654,12 +7654,12 @@ msgstr "Lance-roquettes"
 #: data/base/messages/strings/names.txt:1182
 #: data/mp/messages/strings/names.txt:1197
 msgid "Bunker Buster Rocket"
-msgstr "Roquette anti-bunker"
+msgstr "Roquettes anti-bunker"
 
 #: data/base/messages/strings/names.txt:1185
 #: data/mp/messages/strings/names.txt:1200
 msgid "Tank Killer Rocket"
-msgstr "Roquette anti-char"
+msgstr "Roquettes anti-char"
 
 #: data/base/messages/strings/names.txt:1187
 #: data/mp/messages/strings/names.txt:1202
@@ -9257,23 +9257,23 @@ msgstr "Production de véhicules avancée Mk3"
 
 #: data/mp/messages/strings/names.txt:834
 msgid "Robotic Repair Facility"
-msgstr "Atelier de réparations robotisées"
+msgstr "Atelier de réparation robotisé"
 
 #: data/mp/messages/strings/names.txt:836
 msgid "Advanced Repair Facility"
-msgstr "Atelier de réparations avancées"
+msgstr "Atelier de réparation avancé"
 
 #: data/mp/messages/strings/names.txt:837
 msgid "Robotic Repair Facility Mk3"
-msgstr "Atelier de réparations robotisées Mk3"
+msgstr "Atelier de réparation robotisé Mk3"
 
 #: data/mp/messages/strings/names.txt:838
 msgid "Advanced Repair Facility Mk2"
-msgstr "Atelier de réparations avancées Mk2"
+msgstr "Atelier de réparation avancé Mk2"
 
 #: data/mp/messages/strings/names.txt:839
 msgid "Advanced Repair Facility Mk3"
-msgstr "Atelier de réparations avancées Mk3"
+msgstr "Atelier de réparation avancé Mk3"
 
 #: data/mp/messages/strings/names.txt:884
 msgid "Auto-Repair"
@@ -10131,16 +10131,16 @@ msgid "OpenGL 1.4 + VBO extension is not supported by your system. The game requ
 msgstr "OpenGL 1.4 + extension VBO n'est pas supporté par votre système. Le jeu ne peut pas être lancé sans."
 
 #: lib/netplay/netplay.cpp:193
-#: lib/netplay/netplay.cpp:1051
+#: lib/netplay/netplay.cpp:1052
 msgid "Enter password here"
 msgstr "Entrez le mot de passe :"
 
-#: lib/netplay/netplay.cpp:2084
+#: lib/netplay/netplay.cpp:2114
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr "Impossible de résourdre le DNS du serveur maître (%s)!"
 
-#: lib/netplay/netplay.cpp:2106
+#: lib/netplay/netplay.cpp:2136
 #, c-format
 msgid ""
 "Error connecting to the lobby server: %s.\n"
@@ -10149,7 +10149,7 @@ msgid ""
 " or to forward the port to your system."
 msgstr "Une erreur est survenue lors de la connection au serveur lobby : %s. Assurez-vous que le port %d peut être connecté. Si vous utilisez un routeur, configurez-le pour qu'il utilise UPnP, ou pour qu'il se connecte au port de votre ordinateur."
 
-#: lib/netplay/netplay.cpp:2771
+#: lib/netplay/netplay.cpp:2801
 msgid "Failed to get a lobby response!"
 msgstr "Le lobby le répond pas !"
 
@@ -10560,17 +10560,17 @@ msgstr "Attente des autres joueurs"
 msgid "Out of sync"
 msgstr ""
 
-#: src/display.cpp:1586
+#: src/display.cpp:1587
 msgid "Cannot Build. Oil Resource Burning."
 msgstr "Construction impossible pour le moment. Le gisement de pétrole est en feu."
 
-#: src/display.cpp:1774
-#: src/display.cpp:2325
+#: src/display.cpp:1775
+#: src/display.cpp:2326
 #, c-format
 msgid "%s - Damage %d%% - Experience %.1f, %s"
 msgstr "%s - Endommagé(e) à %d%% - Expérience %.1f, %s"
 
-#: src/display.cpp:1790
+#: src/display.cpp:1791
 #, c-format
 msgid "%s - Allied - Damage %d%% - Experience %d, %s"
 msgstr "%s - Allié - Endommagé(e) à %d%% - Expérience %d, %s"
@@ -11626,46 +11626,46 @@ msgstr "L'écran tremble lorsque des unités sont détruites : Off"
 msgid "Screen shake when things die: On"
 msgstr "L'écran tremble lorsque des unités sont détruites : On"
 
-#: src/keybind.cpp:2613
+#: src/keybind.cpp:2614
 msgid "Sorry, but game speed cannot be changed in multiplayer."
 msgstr "Désolé, mais la vitesse de jeu ne peut pas être modifiée pendant les parties multi-joueurs."
 
-#: src/keybind.cpp:2636
-#: src/keybind.cpp:2688
+#: src/keybind.cpp:2649
+#: src/keybind.cpp:2701
 msgid "Game Speed Reset"
 msgstr "Réinitialisation de la vitesse de jeu"
 
-#: src/keybind.cpp:2640
+#: src/keybind.cpp:2653
 #, c-format
 msgid "Game Speed Increased to %s"
 msgstr "Vitesse du jeu augmentée à %s"
 
-#: src/keybind.cpp:2644
+#: src/keybind.cpp:2657
 #, c-format
 msgid "Game Speed Reduced to %s"
 msgstr "Vitesse du jeu réduite à %s"
 
-#: src/keybind.cpp:2700
+#: src/keybind.cpp:2713
 msgid "Radar showing friend-foe colors"
 msgstr "Mini-map bicolore ami/ennemi"
 
-#: src/keybind.cpp:2704
+#: src/keybind.cpp:2717
 msgid "Radar showing player colors"
 msgstr "Mini-map montrant les couleurs des joueurs"
 
-#: src/keybind.cpp:2719
+#: src/keybind.cpp:2732
 msgid "Radar showing only objects"
 msgstr "Mini-map ne montrant que les objets"
 
-#: src/keybind.cpp:2722
+#: src/keybind.cpp:2735
 msgid "Radar blending terrain and height"
 msgstr "Mini-map mélangeant terrain et relief"
 
-#: src/keybind.cpp:2725
+#: src/keybind.cpp:2738
 msgid "Radar showing terrain"
 msgstr "Mini-map montrant le terrain"
 
-#: src/keybind.cpp:2728
+#: src/keybind.cpp:2741
 msgid "Radar showing height"
 msgstr "Mini-map montrant le relief"
 
@@ -12235,7 +12235,7 @@ msgstr "Continuer le jeu"
 msgid "GAME SAVED :"
 msgstr "Partie sauvegardée :"
 
-#: src/move.cpp:2279
+#: src/move.cpp:2285
 #, c-format
 msgid "You found %u power in an oil drum."
 msgstr "Vous avez trouvé %u unités d'énergie dans un baril de pétrole"
@@ -13053,62 +13053,62 @@ msgid_plural "%u units selected"
 msgstr[0] "%u unité sélectionnée"
 msgstr[1] "%u unités sélectionnées"
 
-#: src/structure.cpp:2562
+#: src/structure.cpp:2584
 msgid "Command Control Limit Reached - Production Halted"
 msgstr "Limite de capacité de contrôle atteinte - Arrêt de la production"
 
-#: src/structure.cpp:5555
-#: src/structure.cpp:5580
+#: src/structure.cpp:5577
+#: src/structure.cpp:5602
 #, c-format
 msgid "%s - %u Unit assigned - Damage %3.0f%%"
 msgid_plural "%s - %u Units assigned - Damage %3.0f%%"
 msgstr[0] "%s - %u unité assignée - Endommagé(e) à %3.0f%%"
 msgstr[1] "%s - %u unités assignées - Endommagé(e) à %3.0f%%"
 
-#: src/structure.cpp:5585
-#: src/structure.cpp:5653
-#: src/structure.cpp:5668
-#: src/structure.cpp:5682
+#: src/structure.cpp:5607
+#: src/structure.cpp:5675
+#: src/structure.cpp:5690
+#: src/structure.cpp:5704
 #, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - Endommagé(e) à %3.0f%%"
 
-#: src/structure.cpp:5635
+#: src/structure.cpp:5657
 #, c-format
 msgid "%s - Connected %u of %u - Damage %3.0f%%"
 msgstr "%s - %u connexions établies sur %u - Endommagé à %3.0f%%"
 
-#: src/structure.cpp:5798
-#: src/structure.cpp:5843
+#: src/structure.cpp:5820
+#: src/structure.cpp:5865
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Électroniquement endommagé(e)"
 
-#: src/structure.cpp:6094
+#: src/structure.cpp:6116
 msgid "Electronic Reward - Visibility Report"
 msgstr "Récompense électronique - Rapport de visibilité"
 
-#: src/structure.cpp:6134
+#: src/structure.cpp:6156
 msgid "Factory Reward - Propulsion"
 msgstr "Butin d'usine - Propulsion"
 
-#: src/structure.cpp:6158
+#: src/structure.cpp:6180
 msgid "Factory Reward - Body"
 msgstr "Butin d'usine - Châssis"
 
-#: src/structure.cpp:6182
+#: src/structure.cpp:6204
 msgid "Factory Reward - Weapon"
 msgstr "Butin d'usine - Armes"
 
-#: src/structure.cpp:6191
+#: src/structure.cpp:6213
 msgid "Factory Reward - Nothing"
 msgstr "Butin d'usine - Rien"
 
-#: src/structure.cpp:6219
+#: src/structure.cpp:6241
 msgid "Repair Facility Award - Repair"
 msgstr "Butin d'atelier de réparation - Réparation"
 
-#: src/structure.cpp:6226
+#: src/structure.cpp:6248
 msgid "Repair Facility Award - Nothing"
 msgstr "Butin atelier de réparation - Rien"
 
@@ -13117,11 +13117,11 @@ msgstr "Butin atelier de réparation - Rien"
 msgid "Launch Transport"
 msgstr "Envoyer le transporteur"
 
-#: src/transporter.cpp:1406
+#: src/transporter.cpp:1407
 msgid "There is not enough room in the Transport!"
 msgstr "Il n'y a plus assez de place dans le transporteur !"
 
-#: src/transporter.cpp:1648
+#: src/transporter.cpp:1649
 msgid "Reinforcements landing"
 msgstr "Les renforts sont arrivés !"
 
@@ -13853,13 +13853,13 @@ msgstr "Version %s - %s%s%s%s"
 #~ msgstr "Production de véhicules avancée Mk2"
 
 #~ msgid "Automated Repair Facility Mk2"
-#~ msgstr "Atelier de réparations automatisées Mk2"
+#~ msgstr "Atelier de réparation automatisé Mk2"
 
 #~ msgid "Automated Repair Facility Mk3"
-#~ msgstr "Atelier de réparations automatisées Mk3"
+#~ msgstr "Atelier de réparation automatisé Mk3"
 
 #~ msgid "Robotic Repair Facility Mk2"
-#~ msgstr "Atelier de réparations robotisées Mk2"
+#~ msgstr "Atelier de réparation robotisé Mk2"
 
 #~ msgid "HESH Mini-Rockets"
 #~ msgstr "Mini-roquettes HESH"
