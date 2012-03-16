@@ -4788,6 +4788,10 @@ static bool loadSaveStructure2(const char *pFileName, STRUCTURE **ppList)
 				setAssemblyPoint(psFactory->psAssemblyPoint, point.x, point.y, player, true);
 				psFactory->psAssemblyPoint->selected = ini.value("Factory/assemblyPoint/selected", false).toBool();
 			}
+			if (ini.contains("Factory/assemblyPoint/number"))
+			{
+				psFactory->psAssemblyPoint->factoryInc = ini.value("Factory/assemblyPoint/number", 42).toInt();
+			}
 			for (int runNum = 0; runNum < ini.value("Factory/productionRuns", 0).toInt(); runNum++)
 			{
 				ProductionRunEntry currentProd;
@@ -5004,6 +5008,7 @@ bool writeStructFile(const char *pFileName)
 					{
 						ini.setVector3i("Factory/assemblyPoint/pos", psFlag->coords);
 						if (psFlag->selected) ini.setValue("Factory/assemblyPoint/selected", psFlag->selected);
+						ini.setValue("Factory/assemblyPoint/number", psFlag->factoryInc);
 					}
 					if (psFactory->psCommander)
 					{
