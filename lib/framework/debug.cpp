@@ -190,14 +190,15 @@ void debug_callback_file( void ** data, const char * outputBuffer )
  * \param[in,out]	data	In: 	The filename to output to.
  * 							Out:	The filehandle.
  */
-bool debug_callback_file_init(void ** data)
+const char *WZDebugfilename;
+bool debug_callback_file_init(void **data)
 {
-	const char * filename = (const char *)*data;
+	WZDebugfilename = (const char *)*data;
 
-	FILE* const logfile = fopen(filename, "w");
+	FILE* const logfile = fopen(WZDebugfilename, "w");
 	if (!logfile)
 	{
-		fprintf(stderr, "Could not open %s for appending!\n", filename);
+		fprintf(stderr, "Could not open %s for appending!\n", WZDebugfilename);
 		return false;
 	}
 
@@ -460,11 +461,9 @@ void _debug( int line, code_part part, const char *function, const char *str, ..
 		{
 #if defined(WZ_OS_WIN)
 			char wbuf[512];
-			ssprintf(wbuf, "%s\n\nPlease check your stderr.txt file in the same directory as the program file for more details. \
-				\nDo not forget to upload both the stderr.txt file and the warzone2100.rpt file in your bug reports!", useInputBuffer1 ? inputBuffer[1] : inputBuffer[0]);
-			MessageBoxA( NULL,
-				wbuf,
-				"Warzone has terminated unexpectedly", MB_OK|MB_ICONERROR);
+			ssprintf(wbuf, "%s\n\nPlease check the file (%s) in your configuration directory for more details. \
+				\nDo not forget to upload the %s file, WZdebuginfo.txt and the warzone2100.rpt files in your bug reports at http://developer.wz2100.net/newticket!", useInputBuffer1 ? inputBuffer[1] : inputBuffer[0], WZDebugfilename, WZDebugfilename);
+			MessageBoxA( NULL, wbuf, "Warzone has terminated unexpectedly", MB_OK|MB_ICONERROR);
 #elif defined(WZ_OS_MAC)
 			cocoaShowAlert("Warzone has terminated unexpectedly.",
 			               "Please check your logs for more details."

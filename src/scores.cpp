@@ -182,7 +182,7 @@ static void dispAdditionalInfo( void );
 // --------------------------------------------------------------------
 
 /* The present mission data */
-static	MISSION_DATA	missionData;
+MISSION_DATA	missionData;
 static	UDWORD	dispST;
 static	bool	bDispStarted = false;
 static	char	text[255];
