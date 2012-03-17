@@ -2316,7 +2316,6 @@ static void intProcessObject(UDWORD id)
 {
 	BASE_OBJECT		*psObj;
 	STRUCTURE		*psStruct;
-	bool IsDeliveryRepos = false;
 	SDWORD			butIndex;
 	UDWORD			statButID;
 
@@ -2442,10 +2441,7 @@ static void intProcessObject(UDWORD id)
 				    }
                 }
 
-				psObj = intGetObject(id);
-				if(!IsDeliveryRepos) {
-					intResetWindows(psObj);
-				}
+				intResetWindows(psObj);
 
 				// If a construction droid button was clicked then
 				// clear all other selections and select it.
@@ -2482,7 +2478,6 @@ static void intProcessObject(UDWORD id)
 			}
 			else if (psObj->type == OBJ_STRUCTURE)
 			{
-
 				if (StructIsFactory((STRUCTURE *)psObj))
 				{
 					//might need to cancel the hold on production
