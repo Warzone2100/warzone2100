@@ -719,9 +719,6 @@
     <ClInclude Include="qtscriptfuncs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="message_parser.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="scriptvals_parser.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>

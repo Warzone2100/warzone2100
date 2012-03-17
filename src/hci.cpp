@@ -2316,7 +2316,6 @@ static void intProcessObject(UDWORD id)
 {
 	BASE_OBJECT		*psObj;
 	STRUCTURE		*psStruct;
-	bool IsDeliveryRepos = false;
 	SDWORD			butIndex;
 	UDWORD			statButID;
 
@@ -2442,10 +2441,7 @@ static void intProcessObject(UDWORD id)
 				    }
                 }
 
-				psObj = intGetObject(id);
-				if(!IsDeliveryRepos) {
-					intResetWindows(psObj);
-				}
+				intResetWindows(psObj);
 
 				// If a construction droid button was clicked then
 				// clear all other selections and select it.
@@ -2482,7 +2478,6 @@ static void intProcessObject(UDWORD id)
 			}
 			else if (psObj->type == OBJ_STRUCTURE)
 			{
-
 				if (StructIsFactory((STRUCTURE *)psObj))
 				{
 					//might need to cancel the hold on production
@@ -2493,6 +2488,12 @@ static void intProcessObject(UDWORD id)
 					//might need to cancel the hold on research facilty
 					releaseResearch((STRUCTURE *)psObj, ModeQueue);
 				}
+
+				for (STRUCTURE *psCurr = apsStructLists[selectedPlayer]; psCurr; psCurr = psCurr->psNext)
+				{
+					psCurr->selected = false;
+				}
+				psObj->selected = true;
 			}
 		}
 	}
@@ -4244,11 +4245,6 @@ static bool intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,b
 			if (!widgAddForm(psWScreen, &sBFormInit2))
 			{
 				return false;
-			}
-
-			if (psObj->selected)
-			{
-				widgSetButtonState(psWScreen, sBFormInit2.id, WBUT_CLICKLOCK);
 			}
 
 			if (psObj->type != OBJ_DROID || (((DROID *)psObj)->droidType == DROID_CONSTRUCT || ((DROID *)psObj)->droidType == DROID_CYBORG_CONSTRUCT))

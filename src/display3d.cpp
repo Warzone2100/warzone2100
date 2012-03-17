@@ -2293,7 +2293,7 @@ void	renderStructure(STRUCTURE *psStructure)
 	}
 
 	//first check if partially built - ANOTHER HACK!
-	if (psStructure->status == SS_BEING_BUILT || psStructure->status == SS_BEING_DEMOLISHED)
+	if (psStructure->status == SS_BEING_BUILT)
 	{
 		if (psStructure->prebuiltImd != NULL)
 		{
@@ -2674,9 +2674,7 @@ static bool	renderWallSection(STRUCTURE *psStructure)
 		pie_MatRotY(-rotation);
 
 		/* Actually render it */
-		if ( (psStructure->status == SS_BEING_BUILT ) ||
-			(psStructure->status == SS_BEING_DEMOLISHED ) ||
-			(psStructure->status == SS_BEING_BUILT && psStructure->pStructureType->type == REF_RESOURCE_EXTRACTOR) )
+		if (psStructure->status == SS_BEING_BUILT)
 		{
 			pie_Draw3DShape(psStructure->sDisplay.imd, 0, getPlayerColour(psStructure->player),
 					brightness, pie_HEIGHT_SCALED|pie_SHADOW|ecmFlag, structHeightScale(psStructure) * pie_RAISE_SCALE);
@@ -3122,11 +3120,8 @@ static void	drawStructureSelections( void )
 		if (mouseDown(getRightClickOrders()?MOUSE_LMB:MOUSE_RMB))
 		{
 			psStruct = (STRUCTURE*)psClickedOn;
-			if(psStruct->status==SS_BUILT)
-			{
-				drawStructureHealth(psStruct);
-			}
-			else if(psStruct->status == SS_BEING_BUILT)
+			drawStructureHealth(psStruct);
+			if(psStruct->status == SS_BEING_BUILT)
 			{
 				drawStructureBuildProgress(psStruct);
 			}

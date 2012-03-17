@@ -440,6 +440,15 @@ const char* getPlayerName(int player)
 		// make up a name for this player.
 		return getPlayerColourName(player);
 	}
+	else if (NetPlay.players[player].ai >= 0 && !NetPlay.players[player].allocated)
+	{
+		static char names[MAX_PLAYERS][StringSize];  // Must be static, since the getPlayerName() return value is used in tool tips... Long live the widget system.
+		// Add colour to player name.
+		sstrcpy(names[player], getPlayerColourName(player));
+		sstrcat(names[player], "-");
+		sstrcat(names[player], NetPlay.players[player].name);
+		return names[player];
+	}
 
 	return NetPlay.players[player].name;
 }

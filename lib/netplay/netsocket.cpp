@@ -627,6 +627,8 @@ void socketFlush(Socket *sock)
 	// Flush data out of zlib compression state.
 	do
 	{
+		sock->zDeflate.next_in = (Bytef *)NULL;
+		sock->zDeflate.avail_in = 0;
 		size_t alreadyHave = sock->zDeflateOutBuf.size();
 		sock->zDeflateOutBuf.resize(alreadyHave + 1000);  // 100 bytes would probably be enough to flush the rest in one go.
 		sock->zDeflate.next_out = (Bytef *)&sock->zDeflateOutBuf[alreadyHave];

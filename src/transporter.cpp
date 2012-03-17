@@ -1313,7 +1313,8 @@ void transporterRemoveDroid(DROID *psTransport, DROID *psDroid, QUEUE_MODE mode)
 		{
 			ASSERT(false, "Unable to find a valid location");
 		}
-		psDroid->pos = Vector3i(world_coord(droidPos), map_Height(psDroid->pos));
+		droidSetPosition(psDroid, world_coord(droidPos.x), world_coord(droidPos.y));
+		updateDroidOrientation(psDroid);
 	}
 
 	// remove it from the transporter group

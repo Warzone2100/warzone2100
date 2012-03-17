@@ -691,6 +691,7 @@ bool runGraphicsOptionsMenu(void)
 				widgSetString(psWScreen, FRONTEND_SCANLINES_R, _("Off"));
 				break;
 		}
+		break;
 
 	case FRONTEND_RADAR_R:
 		rotateRadar = !rotateRadar;
@@ -1279,8 +1280,9 @@ bool runGameOptionsMenu(void)
 		widgSetString(psWScreen, FRONTEND_SIDETEXT, _("GAME OPTIONS"));
 		widgSetTipText(widgGetFromID(psWScreen, FRONTEND_QUIT), P_("menu", "Return"));
 		widgSetString(psWScreen, FRONTEND_LANGUAGE, _("Language"));
-		widgSetString(psWScreen, FRONTEND_COLOUR, _("Unit Colour (SP)"));
-		widgSetString(psWScreen, FRONTEND_COLOUR_MP, _("Unit Colour (MP)"));
+		widgSetString(psWScreen, FRONTEND_COLOUR, _("Unit Colour:"));
+		widgSetString(psWScreen, FRONTEND_COLOUR_CAM, _("Campaign"));
+		widgSetString(psWScreen, FRONTEND_COLOUR_MP, _("Skirmish/Multiplayer"));
 		widgSetString(psWScreen, FRONTEND_DIFFICULTY, _("Difficulty"));
 		widgSetString(psWScreen, FRONTEND_SCROLLSPEED, _("Scroll Speed"));
 		widgSetString(psWScreen, FRONTEND_RADAR, _("Radar"));

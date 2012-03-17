@@ -838,7 +838,7 @@ void processMouseClickInput(void)
 			else if (selection == SC_DROID_DEMOLISH)
 			{
 				// Can't demolish allied objects, or something that isn't built yet
-				if (ObjAllied || (ObjUnderMouse && ObjUnderMouse->type == OBJ_STRUCTURE && ((STRUCTURE *)ObjUnderMouse)->status != SS_BUILT))
+				if (ObjAllied || (ObjUnderMouse && (ObjUnderMouse->type != OBJ_STRUCTURE || (((STRUCTURE *)ObjUnderMouse)->status == SS_BLUEPRINT_PLANNED))))
 				{
 					item = MT_BLOCKING;
 				}

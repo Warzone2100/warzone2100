@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Warzone 2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2012-03-12 19:38+0100\n"
+"POT-Creation-Date: 2012-03-17 20:56+0100\n"
 "PO-Revision-Date: 2012-01-04 14:25+0100\n"
 "Last-Translator: Mészáros Tamás <meszaros.tomi@hotmail.com>\n"
 "Language-Team: Magyar (Hungary) <meszaros.tomi@hotmail.com>\n"
@@ -10128,16 +10128,16 @@ msgid "OpenGL 1.4 + VBO extension is not supported by your system. The game requ
 msgstr "OpenGL 1.4 nem támogatja a rendszerd. A játéknak szüksége van rá. Kérlek frissítsd fel a drivert vagy hardware videokártyád, ha ez lehetséges."
 
 #: lib/netplay/netplay.cpp:193
-#: lib/netplay/netplay.cpp:1051
+#: lib/netplay/netplay.cpp:1052
 msgid "Enter password here"
 msgstr "Jelszó begépelés"
 
-#: lib/netplay/netplay.cpp:2084
+#: lib/netplay/netplay.cpp:2114
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr "Nem lehet feloldani a masterserver nevét (%s)!"
 
-#: lib/netplay/netplay.cpp:2106
+#: lib/netplay/netplay.cpp:2136
 #, fuzzy, c-format
 msgid ""
 "Error connecting to the lobby server: %s.\n"
@@ -10146,7 +10146,7 @@ msgid ""
 " or to forward the port to your system."
 msgstr "Hibás kapcsolódás a lobbi szerverhez: %s. Készíts megfelelő portot %d ahová beérkezik a bejövő kapcsolat. Ha rutert konfigurálod haszlnáld UPnP, vagy további portokat a rendszeredhez."
 
-#: lib/netplay/netplay.cpp:2771
+#: lib/netplay/netplay.cpp:2801
 msgid "Failed to get a lobby response!"
 msgstr ""
 
@@ -10198,10 +10198,10 @@ msgstr "Stratégiai játék"
 
 #: src/challenge.cpp:222
 #: src/hci.cpp:918
-#: src/hci.cpp:3361
-#: src/hci.cpp:3484
-#: src/hci.cpp:3921
-#: src/hci.cpp:4930
+#: src/hci.cpp:3362
+#: src/hci.cpp:3485
+#: src/hci.cpp:3922
+#: src/hci.cpp:4926
 #: src/intelmap.cpp:531
 #: src/intorder.cpp:727
 #: src/loadsave.cpp:240
@@ -10227,7 +10227,7 @@ msgstr ""
 msgid "Debug mode now enabled!"
 msgstr ""
 
-#: src/cheat.cpp:175
+#: src/cheat.cpp:176
 #, fuzzy
 msgid "Debug mode now disabled!"
 msgstr "Hibakeresés menü nyitva"
@@ -10523,12 +10523,12 @@ msgid "Water Speed"
 msgstr "Sebesség vizen"
 
 #: src/design.cpp:2028
-#: src/hci.cpp:4953
+#: src/hci.cpp:4949
 msgid "Tab Scroll left"
 msgstr "Tab görgetés balra"
 
 #: src/design.cpp:2043
-#: src/hci.cpp:4968
+#: src/hci.cpp:4964
 msgid "Tab Scroll right"
 msgstr "Tab görgetés jobbra"
 
@@ -10561,17 +10561,17 @@ msgstr "Várakozás további játékosra"
 msgid "Out of sync"
 msgstr "Szinkronizációból kilépett"
 
-#: src/display.cpp:1586
+#: src/display.cpp:1587
 msgid "Cannot Build. Oil Resource Burning."
 msgstr "Nem lehet építeni, amíg az olajmező lángol."
 
-#: src/display.cpp:1774
-#: src/display.cpp:2325
+#: src/display.cpp:1775
+#: src/display.cpp:2326
 #, c-format
 msgid "%s - Damage %d%% - Experience %.1f, %s"
 msgstr "%s - sérülés %d%% - tapasztalat %f, %s"
 
-#: src/display.cpp:1790
+#: src/display.cpp:1791
 #, c-format
 msgid "%s - Allied - Damage %d%% - Experience %d, %s"
 msgstr "%s - szövetséges - kár %d%% - tapasztalat %d, %s"
@@ -10673,7 +10673,7 @@ msgid "Tutorial"
 msgstr "Gyakorlás"
 
 #: src/frontend.cpp:110
-#: src/hci.cpp:3470
+#: src/hci.cpp:3471
 msgid "Options"
 msgstr "Beállítások"
 
@@ -10845,7 +10845,7 @@ msgstr "50%"
 
 #: src/frontend.cpp:543
 #: src/frontend.cpp:686
-#: src/multiplay.cpp:1962
+#: src/multiplay.cpp:1971
 msgid "Black"
 msgstr "Fekete"
 
@@ -10880,19 +10880,19 @@ msgid "Shadows"
 msgstr "Árnyékok"
 
 #: src/frontend.cpp:584
-#: src/frontend.cpp:1286
+#: src/frontend.cpp:1287
 msgid "Radar"
 msgstr "Radar"
 
 #: src/frontend.cpp:585
 #: src/frontend.cpp:697
-#: src/frontend.cpp:1287
+#: src/frontend.cpp:1288
 msgid "Rotating"
 msgstr "Forgatás"
 
 #: src/frontend.cpp:585
 #: src/frontend.cpp:697
-#: src/frontend.cpp:1287
+#: src/frontend.cpp:1288
 msgid "Fixed"
 msgstr "Rögzített"
 
@@ -10990,46 +10990,49 @@ msgid "Language"
 msgstr "Nyelv"
 
 #: src/frontend.cpp:1207
-#: src/frontend.cpp:1284
+#: src/frontend.cpp:1285
 msgid "Difficulty"
 msgstr "Nehézség"
 
 #: src/frontend.cpp:1211
-#: src/frontend.cpp:1291
-#: src/frontend.cpp:1323
+#: src/frontend.cpp:1292
+#: src/frontend.cpp:1324
 #: src/multiint.cpp:213
 msgid "Easy"
 msgstr "Könnyű"
 
 #: src/frontend.cpp:1214
-#: src/frontend.cpp:1294
-#: src/frontend.cpp:1315
+#: src/frontend.cpp:1295
+#: src/frontend.cpp:1316
 msgid "Normal"
 msgstr "Normális"
 
 #: src/frontend.cpp:1218
-#: src/frontend.cpp:1297
-#: src/frontend.cpp:1319
+#: src/frontend.cpp:1298
+#: src/frontend.cpp:1320
 #: src/multiint.cpp:213
 msgid "Hard"
 msgstr "Nehéz"
 
 #: src/frontend.cpp:1223
-#: src/frontend.cpp:1285
+#: src/frontend.cpp:1286
 msgid "Scroll Speed"
 msgstr "Görgetés sebessége"
 
 #: src/frontend.cpp:1227
+#: src/frontend.cpp:1282
 #, fuzzy
 msgid "Unit Colour:"
 msgstr "Egység Színek"
 
 #: src/frontend.cpp:1247
+#: src/frontend.cpp:1283
 #, fuzzy
 msgid "Campaign"
 msgstr "Új küldetés"
 
 #: src/frontend.cpp:1257
+#: src/frontend.cpp:1284
 #, fuzzy
 msgid "Skirmish/Multiplayer"
 msgstr "Többjátékos mód"
@@ -11039,17 +11042,7 @@ msgstr "Többjátékos mód"
 msgid "GAME OPTIONS"
 msgstr "JÁTÉK OPCIÓK"
 
-#: src/frontend.cpp:1282
-#, fuzzy
-msgid "Unit Colour (SP)"
-msgstr "Egység Színek"
-
-#: src/frontend.cpp:1283
-#, fuzzy
-msgid "Unit Colour (MP)"
-msgstr "Egység Színek"
-
-#: src/frontend.cpp:1423
+#: src/frontend.cpp:1424
 #: src/multiint.cpp:2526
 msgid "Mod: "
 msgstr "Mód:"
@@ -11084,144 +11077,144 @@ msgstr "%u csalt (hibakeresés menü), egy új droidja lett: %s."
 msgid "Player %u is cheating (debug menu) him/herself a new droid."
 msgstr "%u csalt (hibakeresés menü), egy új droidja lett."
 
-#: src/hci.cpp:3281
+#: src/hci.cpp:3282
 msgid "Commanders (F6)"
 msgstr "Parancsnokok (F6)"
 
-#: src/hci.cpp:3294
+#: src/hci.cpp:3295
 msgid "Intelligence Display (F5)"
 msgstr "Inteligens kijelző (F5)"
 
-#: src/hci.cpp:3307
+#: src/hci.cpp:3308
 msgid "Manufacture (F1)"
 msgstr "Gyártás (F1)"
 
-#: src/hci.cpp:3320
+#: src/hci.cpp:3321
 msgid "Design (F4)"
 msgstr "Tervezés (F4)"
 
-#: src/hci.cpp:3333
+#: src/hci.cpp:3334
 msgid "Research (F2)"
 msgstr "Kutatás (F2)"
 
-#: src/hci.cpp:3346
+#: src/hci.cpp:3347
 msgid "Build (F3)"
 msgstr "Építés (F3)"
 
-#: src/hci.cpp:3417
+#: src/hci.cpp:3418
 #: src/multiint.cpp:1502
 #: src/multimenu.cpp:799
 msgid "Power"
 msgstr "Energia"
 
-#: src/hci.cpp:3508
+#: src/hci.cpp:3509
 msgid "Map:"
 msgstr "Térkép:"
 
-#: src/hci.cpp:3521
+#: src/hci.cpp:3522
 msgid "Load"
 msgstr "Játék beolvasása"
 
-#: src/hci.cpp:3522
+#: src/hci.cpp:3523
 msgid "Load Map File"
 msgstr "Mentett játék betöltése"
 
-#: src/hci.cpp:3533
+#: src/hci.cpp:3534
 msgid "Save"
 msgstr "Mentés"
 
-#: src/hci.cpp:3534
+#: src/hci.cpp:3535
 msgid "Save Map File"
 msgstr "Térképfájl mentés"
 
-#: src/hci.cpp:3546
+#: src/hci.cpp:3547
 msgid "New"
 msgstr "Új"
 
-#: src/hci.cpp:3547
+#: src/hci.cpp:3548
 msgid "New Blank Map"
 msgstr "Új üres térkép"
 
-#: src/hci.cpp:3595
+#: src/hci.cpp:3596
 msgid "Tile"
 msgstr "Egymás mellé rak"
 
-#: src/hci.cpp:3596
+#: src/hci.cpp:3597
 msgid "Place tiles on map"
 msgstr "Terep felhelyezése a térképre"
 
-#: src/hci.cpp:3609
+#: src/hci.cpp:3610
 msgid "Unit"
 msgstr "Egység"
 
-#: src/hci.cpp:3610
+#: src/hci.cpp:3611
 msgid "Place Unit on map"
 msgstr "Egységek elhelyezése a térképen"
 
-#: src/hci.cpp:3618
+#: src/hci.cpp:3619
 msgid "Struct"
 msgstr "Szerkezet"
 
-#: src/hci.cpp:3619
+#: src/hci.cpp:3620
 msgid "Place Structures on map"
 msgstr "Építési korlátok meghatározása"
 
-#: src/hci.cpp:3627
+#: src/hci.cpp:3628
 msgid "Feat"
 msgstr "Tett"
 
-#: src/hci.cpp:3628
+#: src/hci.cpp:3629
 msgid "Place Features on map"
 msgstr "Technológiák elhelyezése a térképen"
 
-#: src/hci.cpp:3642
+#: src/hci.cpp:3643
 msgid "Pause"
 msgstr "Szünet"
 
-#: src/hci.cpp:3643
+#: src/hci.cpp:3644
 msgid "Pause or unpause the game"
 msgstr "Szünetelteti vagy folytatja a játékot"
 
-#: src/hci.cpp:3661
+#: src/hci.cpp:3662
 msgid "Align height of all map objects"
 msgstr "Egymáshoz igazítja az összes objektum magasságát a térképen"
 
-#: src/hci.cpp:3674
+#: src/hci.cpp:3675
 msgid "Edit"
 msgstr "Szerkesztés"
 
-#: src/hci.cpp:3675
+#: src/hci.cpp:3676
 msgid "Start Edit Mode"
 msgstr "Szerkesztő indítása"
 
-#: src/hci.cpp:3689
+#: src/hci.cpp:3690
 #: src/ingameop.cpp:113
 #: src/ingameop.cpp:257
 #: src/ingameop.cpp:261
 msgid "Quit"
 msgstr "Kilépés"
 
-#: src/hci.cpp:3690
+#: src/hci.cpp:3691
 msgid "Exit Game"
 msgstr "Kilépés a játékból"
 
-#: src/hci.cpp:3716
+#: src/hci.cpp:3717
 msgid "Current Player:"
 msgstr "Jelenlegi játék:"
 
-#: src/hci.cpp:3998
+#: src/hci.cpp:3999
 msgid "Progress Bar"
 msgstr "Eszköztár sor"
 
-#: src/hci.cpp:4855
+#: src/hci.cpp:4851
 msgid "Factory Delivery Point"
 msgstr "Gyár szállító pont"
 
-#: src/hci.cpp:4873
+#: src/hci.cpp:4869
 msgid "Loop Production"
 msgstr "Külső értékesítés"
 
-#: src/hci.cpp:5197
+#: src/hci.cpp:5193
 msgid "Ally progress"
 msgstr "Szövetséges állomány"
 
@@ -11631,46 +11624,46 @@ msgstr "A képernyő rázkódásának kikapcsolása egység elvesztésekor"
 msgid "Screen shake when things die: On"
 msgstr "A képernyő rázkódásának bekapcsolása egység elvesztésekor"
 
-#: src/keybind.cpp:2613
+#: src/keybind.cpp:2614
 msgid "Sorry, but game speed cannot be changed in multiplayer."
 msgstr "Elnézést, de a játék sebessége nem változtatható többjátékos módban."
 
-#: src/keybind.cpp:2636
-#: src/keybind.cpp:2688
+#: src/keybind.cpp:2649
+#: src/keybind.cpp:2701
 msgid "Game Speed Reset"
 msgstr "Játék sebesség újraindítás"
 
-#: src/keybind.cpp:2640
+#: src/keybind.cpp:2653
 #, c-format
 msgid "Game Speed Increased to %s"
 msgstr "Játék sebesség növekedett %s"
 
-#: src/keybind.cpp:2644
+#: src/keybind.cpp:2657
 #, c-format
 msgid "Game Speed Reduced to %s"
 msgstr "Játék sebesség csökkent %s"
 
-#: src/keybind.cpp:2700
+#: src/keybind.cpp:2713
 msgid "Radar showing friend-foe colors"
 msgstr "A radar, ami barátot vagy ellenséget mutat, elszíneződik"
 
-#: src/keybind.cpp:2704
+#: src/keybind.cpp:2717
 msgid "Radar showing player colors"
 msgstr "Radar mutatja a színezett játékost"
 
-#: src/keybind.cpp:2719
+#: src/keybind.cpp:2732
 msgid "Radar showing only objects"
 msgstr "Radar mutatja csak az objektumot "
 
-#: src/keybind.cpp:2722
+#: src/keybind.cpp:2735
 msgid "Radar blending terrain and height"
 msgstr "Radar keverés terep és magasság"
 
-#: src/keybind.cpp:2725
+#: src/keybind.cpp:2738
 msgid "Radar showing terrain"
 msgstr "Radar mutatja a terepet"
 
-#: src/keybind.cpp:2728
+#: src/keybind.cpp:2741
 msgid "Radar showing height"
 msgstr "Radar mutatja a magasságot"
 
@@ -12249,7 +12242,7 @@ msgstr "Játék folytatás"
 msgid "GAME SAVED :"
 msgstr "JÁTÉK MENTVE:"
 
-#: src/move.cpp:2279
+#: src/move.cpp:2285
 #, c-format
 msgid "You found %u power in an oil drum."
 msgstr "%u energiát találtál egy olajkúton."
@@ -12643,69 +12636,69 @@ msgstr " *** jelszót nem kötelező! ***"
 msgid "Sorry! Failed to host the game."
 msgstr "Elnézést! Nem sikerült a játékot létrehoznod."
 
-#: src/multiint.cpp:3063
+#: src/multiint.cpp:3064
 msgid "'Locked Teams' mode enabled"
 msgstr "'Fix csapatok' mód engedélyezve"
 
-#: src/multiint.cpp:3091
-#: src/multiint.cpp:3160
+#: src/multiint.cpp:3092
+#: src/multiint.cpp:3161
 #: src/multimenu.cpp:1472
 #, c-format
 msgid "The host has kicked %s from the game!"
 msgstr "A játékmester kirúgta %s a játékból!"
 
-#: src/multiint.cpp:3226
+#: src/multiint.cpp:3227
 msgid "Host is Starting Game"
 msgstr "A játékmester elindította a játékot"
 
-#: src/multiint.cpp:3805
+#: src/multiint.cpp:3806
 msgid "Can't connect to lobby server!"
 msgstr ""
 
-#: src/multiint.cpp:3892
+#: src/multiint.cpp:3893
 #, c-format
 msgid "Mods: %s"
 msgstr ""
 
-#: src/multiint.cpp:3899
+#: src/multiint.cpp:3900
 msgid "Mods: None!"
 msgstr ""
 
-#: src/multiint.cpp:3909
+#: src/multiint.cpp:3910
 #, fuzzy, c-format
 msgid "Version: %s"
 msgstr "Verzió %s%s%s%s"
 
-#: src/multiint.cpp:3960
+#: src/multiint.cpp:3961
 #, c-format
 msgid "Click to take player slot %d"
 msgstr "Kattintson a játékosok betöltéséhez %d"
 
-#: src/multiint.cpp:3969
-#: src/multiint.cpp:4162
+#: src/multiint.cpp:3970
+#: src/multiint.cpp:4163
 msgid "Open"
 msgstr "Megnyitás"
 
-#: src/multiint.cpp:3969
-#: src/multiint.cpp:4163
+#: src/multiint.cpp:3970
+#: src/multiint.cpp:4164
 msgid "Closed"
 msgstr "Bezárás"
 
-#: src/multiint.cpp:4020
+#: src/multiint.cpp:4021
 #, c-format
 msgid "Sending Map: %d%% "
 msgstr "Térkép küldés: %d%%"
 
-#: src/multiint.cpp:4028
+#: src/multiint.cpp:4029
 #, c-format
 msgid "Map: %d%% downloaded"
 msgstr "Térkép: %d%% letöltött"
 
-#: src/multiint.cpp:4054
+#: src/multiint.cpp:4055
 msgid "HOST"
 msgstr "GAZDAGÉP"
 
-#: src/multiint.cpp:4061
+#: src/multiint.cpp:4062
 #: src/multimenu.cpp:806
 msgid "Ping"
 msgstr "Pingelés"
@@ -12821,75 +12814,75 @@ msgstr "%s : %s ki lettek rúgva a játékból, és a tiltó listára kerültek.
 msgid "Kicking player %s, because they tried to bypass data integrity check!"
 msgstr "%s ki lett rúgva, mert megpróbálta kikerülni az adatok ellenőrzését."
 
-#: src/multiplay.cpp:1065
+#: src/multiplay.cpp:1074
 msgid "(allies"
 msgstr "(szövetség"
 
-#: src/multiplay.cpp:1073
+#: src/multiplay.cpp:1082
 msgid "(private to "
 msgstr "(magán a"
 
-#: src/multiplay.cpp:1086
+#: src/multiplay.cpp:1095
 msgid "[invalid]"
 msgstr "[érvénytelen]"
 
-#: src/multiplay.cpp:1959
+#: src/multiplay.cpp:1968
 msgid "Green"
 msgstr "Zöld"
 
-#: src/multiplay.cpp:1960
+#: src/multiplay.cpp:1969
 msgid "Orange"
 msgstr "Narancs"
 
-#: src/multiplay.cpp:1961
+#: src/multiplay.cpp:1970
 msgid "Grey"
 msgstr "Szürke"
 
-#: src/multiplay.cpp:1963
+#: src/multiplay.cpp:1972
 msgid "Red"
 msgstr "Vörös"
 
-#: src/multiplay.cpp:1964
+#: src/multiplay.cpp:1973
 msgid "Blue"
 msgstr "Kék"
 
-#: src/multiplay.cpp:1965
+#: src/multiplay.cpp:1974
 msgid "Pink"
 msgstr "Rózsaszín"
 
-#: src/multiplay.cpp:1966
+#: src/multiplay.cpp:1975
 msgid "Cyan"
 msgstr "Cián"
 
-#: src/multiplay.cpp:1967
+#: src/multiplay.cpp:1976
 msgid "Yellow"
 msgstr "Sárga"
 
-#: src/multiplay.cpp:1968
+#: src/multiplay.cpp:1977
 msgid "Purple"
 msgstr "Lila"
 
-#: src/multiplay.cpp:1969
+#: src/multiplay.cpp:1978
 msgid "White"
 msgstr "Fehér"
 
-#: src/multiplay.cpp:1970
+#: src/multiplay.cpp:1979
 msgid "Bright blue"
 msgstr "Élénk kék"
 
-#: src/multiplay.cpp:1971
+#: src/multiplay.cpp:1980
 msgid "Neon green"
 msgstr "Neon zöld"
 
-#: src/multiplay.cpp:1972
+#: src/multiplay.cpp:1981
 msgid "Infrared"
 msgstr "Infravörös"
 
-#: src/multiplay.cpp:1973
+#: src/multiplay.cpp:1982
 msgid "Ultraviolet"
 msgstr "Ultraviola"
 
-#: src/multiplay.cpp:1974
+#: src/multiplay.cpp:1983
 msgid "Brown"
 msgstr "Barna"
 
@@ -13072,62 +13065,62 @@ msgid_plural "%u units selected"
 msgstr[0] "%u egység kiválasztása"
 msgstr[1] "%u egységek kiválasztása"
 
-#: src/structure.cpp:2562
+#: src/structure.cpp:2584
 msgid "Command Control Limit Reached - Production Halted"
 msgstr "Szabályozási értéket elérték - Termelés megállt"
 
-#: src/structure.cpp:5555
-#: src/structure.cpp:5580
+#: src/structure.cpp:5577
+#: src/structure.cpp:5602
 #, fuzzy, c-format
 msgid "%s - %u Unit assigned - Damage %3.0f%%"
 msgid_plural "%s - %u Units assigned - Damage %3.0f%%"
 msgstr[0] "%s - %u Egység felhatalmazás"
 msgstr[1] "%s - %u Egységek felhatalmazása"
 
-#: src/structure.cpp:5585
-#: src/structure.cpp:5653
-#: src/structure.cpp:5668
-#: src/structure.cpp:5682
+#: src/structure.cpp:5607
+#: src/structure.cpp:5675
+#: src/structure.cpp:5690
+#: src/structure.cpp:5704
 #, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - Kár %3.0f%%"
 
-#: src/structure.cpp:5635
+#: src/structure.cpp:5657
 #, c-format
 msgid "%s - Connected %u of %u - Damage %3.0f%%"
 msgstr "%s - Kapcsolódott %u of %u- Kár %3.0f%%"
 
-#: src/structure.cpp:5798
-#: src/structure.cpp:5843
+#: src/structure.cpp:5820
+#: src/structure.cpp:5865
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Elektronikusan sérült"
 
-#: src/structure.cpp:6094
+#: src/structure.cpp:6116
 msgid "Electronic Reward - Visibility Report"
 msgstr "Elektronikus jutalom - Felderítési jelentés"
 
-#: src/structure.cpp:6134
+#: src/structure.cpp:6156
 msgid "Factory Reward - Propulsion"
 msgstr "Gyári jutalom - hajtómű"
 
-#: src/structure.cpp:6158
+#: src/structure.cpp:6180
 msgid "Factory Reward - Body"
 msgstr "Gyári jutalom - karosszéria"
 
-#: src/structure.cpp:6182
+#: src/structure.cpp:6204
 msgid "Factory Reward - Weapon"
 msgstr "Gyári jutalom - fegyver"
 
-#: src/structure.cpp:6191
+#: src/structure.cpp:6213
 msgid "Factory Reward - Nothing"
 msgstr "Gyári jutalom - nincs"
 
-#: src/structure.cpp:6219
+#: src/structure.cpp:6241
 msgid "Repair Facility Award - Repair"
 msgstr "Szervizüzem jutalom - javítás"
 
-#: src/structure.cpp:6226
+#: src/structure.cpp:6248
 msgid "Repair Facility Award - Nothing"
 msgstr "Szervizüzem jutalom - nincs"
 
@@ -13136,11 +13129,11 @@ msgstr "Szervizüzem jutalom - nincs"
 msgid "Launch Transport"
 msgstr "Szállítást indítása"
 
-#: src/transporter.cpp:1406
+#: src/transporter.cpp:1407
 msgid "There is not enough room in the Transport!"
 msgstr "Nincs elegendő férőhely a szállításhoz!"
 
-#: src/transporter.cpp:1648
+#: src/transporter.cpp:1649
 msgid "Reinforcements landing"
 msgstr "Utánpótlás leszállt"
 
@@ -13165,6 +13158,14 @@ msgstr " - Épített %s"
 #, fuzzy, c-format
 msgid "Version %s-%s%s%s%s"
 msgstr "Verzió %s%s%s%s"
+
+#, fuzzy
+#~ msgid "Unit Colour (SP)"
+#~ msgstr "Egység Színek"
+
+#, fuzzy
+#~ msgid "Unit Colour (MP)"
+#~ msgstr "Egység Színek"
 
 #~ msgid "VTOL HPV Cannon Bug VTOL"
 #~ msgstr "VTOL Bug nagysebességű ágyú"

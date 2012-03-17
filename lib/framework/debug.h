@@ -66,8 +66,8 @@ extern bool assertEnabled;
 /** Deals with failure in an assert. Expression is (re-)evaluated for output in the assert() call. */
 #define ASSERT_FAILURE(expr, expr_string, location_description, function, ...) \
 	( \
-		(void)_debug(LOG_INFO, function, __VA_ARGS__), \
-		(void)_debug(LOG_INFO, function, "Assert in Warzone: %s (%s), last script event: '%s'", \
+		(void)_debug(__LINE__, LOG_INFO, function, __VA_ARGS__), \
+		(void)_debug(__LINE__, LOG_INFO, function, "Assert in Warzone: %s (%s), last script event: '%s'", \
 	                                  location_description, expr_string, last_called_script_event), \
 		( assertEnabled ? (void)wz_assert(expr) : (void)0 )\
 	)
@@ -245,17 +245,16 @@ void debug_callback_win32debug(void** data, const char* outputBuffer);
  */
 bool debug_enable_switch(const char *str);
 // macro for always outputting informational responses on both debug & release builds
-#define info(...) do { _debug(LOG_INFO, __FUNCTION__, __VA_ARGS__); } while(0)
+#define info(...) do { _debug(__LINE__, LOG_INFO, __FUNCTION__, __VA_ARGS__); } while(0)
 /**
  * Output printf style format str with additional arguments.
  *
  * Only outputs if debugging of part was formerly enabled with debug_enable_switch.
  */
-#define debug(part, ...) do { if (enabled_debug[part]) _debug(part, __FUNCTION__, __VA_ARGS__); } while(0)
-void _debug( code_part part, const char *function, const char *str, ...)
-		WZ_DECL_FORMAT(printf, 3, 4);
+#define debug(part, ...) do { if (enabled_debug[part]) _debug(__LINE__, part, __FUNCTION__, __VA_ARGS__); } while(0)
+void _debug( int line, code_part part, const char *function, const char *str, ...) WZ_DECL_FORMAT(printf, 4, 5);
 
-#define debugBacktrace(part, ...) do { if (enabled_debug[part]) { _debug(part, __FUNCTION__, __VA_ARGS__); _debugBacktrace(part); }} while(0)
+#define debugBacktrace(part, ...) do { if (enabled_debug[part]) { _debug(__LINE__, part, __FUNCTION__, __VA_ARGS__); _debugBacktrace(part); }} while(0)
 void _debugBacktrace(code_part part);
 
 /** Global to keep track of which game object to trace. */

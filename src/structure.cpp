@@ -2088,6 +2088,7 @@ void assignFactoryCommandDroid(STRUCTURE *psStruct, DROID *psCommander)
 		}
 
 		psFact->psCommander = NULL;
+		syncDebug("Removed commander from factory %d", psStruct->id);
 		if (!missionIsOffworld())
 		{
 			addFlagPosition(psFact->psAssemblyPoint);	// add the assembly point back into the list
@@ -2138,6 +2139,7 @@ void assignFactoryCommandDroid(STRUCTURE *psStruct, DROID *psCommander)
 			}
 		}
 		psFact->psCommander = psCommander;
+		syncDebug("Assigned commander %d to factory %d", psCommander->id, psStruct->id);
 	}
 }
 
@@ -4641,7 +4643,7 @@ bool destroyStruct(STRUCTURE *psDel, unsigned impactTime)
 	const bool bPowerGen = psDel->pStructureType->type == REF_POWER_GEN;
 
 	unsigned burnDuration = bMinor? burnDurationWall : bDerrick? burnDurationOilWell : burnDurationOther;
-	if (psDel->status == SS_BEING_BUILT || psDel->status == SS_BEING_DEMOLISHED)
+	if (psDel->status == SS_BEING_BUILT)
 	{
 		burnDuration = burnDuration * psDel->currentBuildPts / psDel->pStructureType->buildPoints;
 	}
@@ -5965,7 +5967,7 @@ unsigned structureBodyBuilt(STRUCTURE const *psStructure)
 {
 	unsigned maxBody = structureBody(psStructure);
 
-	if (psStructure->status == SS_BEING_BUILT || psStructure->status == SS_BEING_DEMOLISHED)
+	if (psStructure->status == SS_BEING_BUILT)
 	{
 		// Calculate the body points the structure would have, if not damaged.
 		unsigned unbuiltBody = (maxBody + 9) / 10;  // See droidStartBuild() in droid.cpp.

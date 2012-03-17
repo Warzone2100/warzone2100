@@ -92,6 +92,13 @@ function eventGameInit()
 		"R-Wpn-Rocket-Damage01",
 		"R-Defense-WallTower01");
 
+	if (baseType == CAMP_CLEAN)
+	{
+		// No HQ, so no design or radar
+		setMiniMap(false);
+		setDesign(false);
+	}
+
 	for (var playnum = 0; playnum < maxPlayers; playnum++)
 	{
 		enableResearch("R-Sys-Sensor-Turret01", playnum);
@@ -120,10 +127,6 @@ function eventGameInit()
 				{
 					removeStruct(s);
 				}
-			}
-			if (playnum == selectedPlayer && playerData[playnum].difficulty != INSANE)
-			{
-				setMiniMap(false); // hide minimap since no HQ
 			}
 		}
 		else if (baseType == CAMP_BASE)

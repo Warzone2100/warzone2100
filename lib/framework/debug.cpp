@@ -32,6 +32,8 @@
 #include "string_ext.h"
 #include "wzapp.h"
 #include "lib/gamelib/gtime.h"
+#include <map>
+#include <string>
 
 #ifdef WZ_OS_LINUX
 #include <execinfo.h>  // Nonfatal runtime backtraces.
@@ -97,6 +99,8 @@ static const char *code_part_names[] = {
 static char inputBuffer[2][MAX_LEN_LOG_LINE];
 static bool useInputBuffer1 = false;
 static bool debug_flush_stderr = false;
+
+static std::map<std::string, int> warning_list;	// only used for LOG_WARNING
 
 /**
  * Convert code_part names to enum. Case insensitive.
@@ -290,7 +294,7 @@ void debug_exit(void)
 		free( curCallback );
 		curCallback = tmpCallback;
 	}
-
+	warning_list.clear();
 	callbackRegistry = NULL;
 }
 
@@ -370,7 +374,7 @@ void _realObjTrace(int id, const char *function, const char *str, ...)
 	printToDebugCallbacks(outputBuffer);
 }
 
-void _debug( code_part part, const char *function, const char *str, ... )
+void _debug( int line, code_part part, const char *function, const char *str, ... )
 {
 	va_list ap;
 	static char outputBuffer[MAX_LEN_LOG_LINE];
@@ -382,7 +386,23 @@ void _debug( code_part part, const char *function, const char *str, ... )
 	vssprintf(outputBuffer, str, ap);
 	va_end(ap);
 
-	ssprintf(inputBuffer[useInputBuffer1 ? 1 : 0], "[%s] %s", function, outputBuffer);
+	if (part == LOG_WARNING)
+	{
+		std::pair<std::map<std::string, int>::iterator, bool> ret;
+		ret = warning_list.insert(std::pair<std::string, int>(std::string(function) + "-" + std::string(outputBuffer), line));
+		if (ret.second)
+		{
+			ssprintf(inputBuffer[useInputBuffer1 ? 1 : 0], "[%s:%d] %s (**Further warnings of this type are suppressed.)", function, line, outputBuffer);
+		}
+		else
+		{
+			return;	// don't bother adding any more
+		}
+	}
+	else
+	{
+		ssprintf(inputBuffer[useInputBuffer1 ? 1 : 0], "[%s:%d] %s", function, line, outputBuffer);
+	}
 
 	if (sstrcmp(inputBuffer[0], inputBuffer[1]) == 0)
 	{
@@ -489,7 +509,7 @@ void _debugBacktrace(code_part part)
 	unsigned i;
 	for (i = 1; i + 2 < num; ++i)  // =1: Don't print "src/warzone2100(syncDebugBacktrace+0x16) [0x6312d1]". +2: Don't print last two lines of backtrace such as "/lib/libc.so.6(__libc_start_main+0xe6) [0x7f91e040ea26]", since the address varies (even with the same binary).
 	{
-		_debug(part, "BT", "%s", btc[i]);
+		_debug(0, part, "BT", "%s", btc[i]);
 	}
 	free(btc);
 #else
