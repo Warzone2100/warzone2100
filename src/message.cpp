@@ -751,11 +751,11 @@ VIEWDATA *getViewData(const char *pName)
 		while (iter != apsViewData.constEnd())
 		{
 			VIEWDATA *psViewData = iter.value();
-			debug(LOG_ERROR, "\t%s", psViewData->pName);
+			debug(LOG_WZ, "\t%s", psViewData->pName);
 			++iter;
 		}
 	}
-	ASSERT(ptr, "Message %s not found, those known listed above", pName);
+	ASSERT(ptr, "Message %s not found, run with --debug=wz to get a list of all known messages", pName);
 	return ptr;
 }
 

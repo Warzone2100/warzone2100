@@ -3018,6 +3018,7 @@ static void processMultiopWidgets(UDWORD id)
 	{
 		int idx = id - MULTIOP_AI_START;
 		NetPlay.players[aiChooserUp].ai = idx;
+		sstrcpy(NetPlay.players[aiChooserUp].name, getAIName(aiChooserUp));
 		game.skDiff[aiChooserUp] = difficultyValue[NetPlay.players[aiChooserUp].difficulty];    // set difficulty, in case re-enabled
 		NETBroadcastPlayerInfo(aiChooserUp);
 		closeAiChooser();
@@ -4161,7 +4162,7 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *p
 		{
 		case AI_OPEN: sstrcpy(aitext, _("Open")); break;
 		case AI_CLOSED: sstrcpy(aitext, _("Closed")); break;
-		default: sstrcpy(aitext, nameOverrides[j][0] == '\0' ? aidata[NetPlay.players[j].ai].name : nameOverrides[j]); break;
+		default: sstrcpy(aitext, nameOverrides[j][0] == '\0'? NetPlay.isHost? aidata[NetPlay.players[j].ai].name : NetPlay.players[j].name : nameOverrides[j]); break;
 		}
 		iV_DrawText(aitext, x + nameX, y + 22);
 	}

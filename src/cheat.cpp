@@ -169,6 +169,7 @@ void recvProcessDebugMappings(NETQUEUE queue)
 	if (!oldDebugMode && newDebugMode)
 	{
 		addConsoleMessage(_("Debug mode now enabled!"), DEFAULT_JUSTIFY,  SYSTEM_MESSAGE);
+		Cheated = true;
 	}
 	else if (oldDebugMode && !newDebugMode)
 	{

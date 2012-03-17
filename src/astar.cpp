@@ -338,7 +338,8 @@ static PathCoord fpathAStarExplore(PathfindContext &context, PathCoord tileF)
 	unsigned        nearestDist = 0xFFFFFFFF;
 
 	// search for a route
-	while (!context.nodes.empty())
+	bool foundIt = false;
+	while (!context.nodes.empty() && !foundIt)
 	{
 		PathNode node = fpathTakeNode(context.nodes);
 		if (context.map[node.p.x + node.p.y*mapWidth].visited)
@@ -358,7 +359,7 @@ static PathCoord fpathAStarExplore(PathfindContext &context, PathCoord tileF)
 		{
 			// reached the target
 			nearestCoord = node.p;
-			break;
+			foundIt = true;  // Break out of loop, but not before inserting neighbour nodes, since the neighbours may be important if the context gets reused.
 		}
 
 		// loop through possible moves in 8 directions to find a valid move
