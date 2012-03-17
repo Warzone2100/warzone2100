@@ -691,6 +691,7 @@ bool runGraphicsOptionsMenu(void)
 				widgSetString(psWScreen, FRONTEND_SCANLINES_R, _("Off"));
 				break;
 		}
+		break;
 
 	case FRONTEND_RADAR_R:
 		rotateRadar = !rotateRadar;
