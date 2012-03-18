@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2012-03-17 20:56+0100\n"
-"PO-Revision-Date: 2011-12-31 01:41+0100\n"
+"POT-Creation-Date: 2012-03-18 21:27+0100\n"
+"PO-Revision-Date: 2012-03-18 21:23+0100\n"
 "Last-Translator: Daniel Vijande <nsa_server@hotmail.com>\n"
 "Language-Team: Spanish <warzone2100-project@lists.sourceforge.net>\n"
 "Language: es\n"
@@ -10111,17 +10111,15 @@ msgstr "Plasmita Merecido ADV"
 msgid "System locale"
 msgstr "Idioma del sistema"
 
-#: lib/ivis_opengl/screen.cpp:144
+#: lib/ivis_opengl/screen.cpp:145
 msgid "OpenGL 2.0 is not supported by your system. Some things may look wrong. Please upgrade your graphics driver/hardware, if possible."
 msgstr "Tu sistema no soporta OpenGL 2.0. Algunas cosas podrían verse de forma inadecuada. Por favor, actualiza tus drivers/hardware gráfico si es posible."
 
-#: lib/ivis_opengl/screen.cpp:151
-#, fuzzy
+#: lib/ivis_opengl/screen.cpp:152
 msgid "OpenGL 1.5/2.0 is not supported by your system. Some things may look wrong. Please upgrade your graphics driver/hardware, if possible."
 msgstr "Tu sistema no soporta OpenGL 2.0. Algunas cosas podrían verse de forma inadecuada. Por favor, actualiza tus drivers/hardware gráfico si es posible."
 
-#: lib/ivis_opengl/screen.cpp:156
-#, fuzzy
+#: lib/ivis_opengl/screen.cpp:159
 msgid "OpenGL 1.4 + VBO extension is not supported by your system. The game requires this. Please upgrade your graphics drivers/hardware, if possible."
 msgstr "Tu sistema no soporta OpenGL 1.4. El juego lo necesita. Por favor, actualiza tus drivers/hardware gráfico si es posible."
 
@@ -10136,20 +10134,23 @@ msgid "Could not resolve masterserver name (%s)!"
 msgstr "¡No se pudo resolver el nombre del servidor maestro (%s)!"
 
 #: lib/netplay/netplay.cpp:2136
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error connecting to the lobby server: %s.\n"
 "Make sure port %d can receive incoming connections.\n"
 "If you're using a router configure it to use UPnP\n"
 " or to forward the port to your system."
-msgstr "Error al conectarse al vestíbulo: %s. Asegúrate de que el puerto %d puede recibir conexiones entrantes. Si estás usando un router, configúralo para que use UPnP, o redirige el puerto a tu sistema."
+msgstr ""
+"Error al conectarse al vestíbulo: %s. \n"
+" Asegúrate de que el puerto %d puede recibir conexiones entrantes. \n"
+" Si estás usando un router, configúralo para que use UPnP, \n"
+" o redirige el puerto a tu sistema."
 
 #: lib/netplay/netplay.cpp:2801
 msgid "Failed to get a lobby response!"
-msgstr ""
+msgstr "Fallo al obtener respuesta del vestíbulo!"
 
 #: po/custom/mac-infoplist.txt:1
-#, fuzzy
 msgid ""
 "Copyright © 1999-2004 Eidos Interactive.\n"
 "Copyright © 2005-2012 The Warzone 2100 Project"
@@ -10214,21 +10215,20 @@ msgstr "Cerrar"
 #: src/cheat.cpp:161
 #, c-format
 msgid "%s wants to enable debug mode. Enabled: %s, Disabled: %s."
-msgstr ""
+msgstr "%s intenta habilitar el modo de depuración. Activado %s, Desactivado %s."
 
 #: src/cheat.cpp:165
 #, c-format
 msgid "%s wants to disable debug mode. Enabled: %s, Disabled: %s."
-msgstr ""
+msgstr "%s intante deshabilitar el modo de depuración. Activado %s, Desactivado %s."
 
 #: src/cheat.cpp:171
 msgid "Debug mode now enabled!"
-msgstr ""
+msgstr "¡Modo de depuración activado!"
 
 #: src/cheat.cpp:176
-#, fuzzy
 msgid "Debug mode now disabled!"
-msgstr "El Menú de depuración está Abierto"
+msgstr "¡El modo de depuración está desactivado!"
 
 #: src/clparse.cpp:242
 msgid "Set configuration directory"
@@ -10370,7 +10370,7 @@ msgstr "Desactivar compresión de texturas"
 
 #: src/clparse.cpp:267
 msgid "Only use OpenGL 1.5"
-msgstr ""
+msgstr "Usar sólamente OpenGL 1.5"
 
 #: src/configuration.cpp:96
 msgid "My Game"
@@ -10542,20 +10542,20 @@ msgstr "Sistemas"
 msgid "Delete Template"
 msgstr "Borrar Plantilla"
 
-#: src/display3d.cpp:656
+#: src/display3d.cpp:657
 msgid "Player left"
 msgstr "Jugador Salió"
 
-#: src/display3d.cpp:660
+#: src/display3d.cpp:661
 msgid "Player dropped"
 msgstr "Jugador Desconectado"
 
-#: src/display3d.cpp:664
+#: src/display3d.cpp:665
 #: src/multiint.cpp:2262
 msgid "Waiting for other players"
 msgstr "Esperando a otros jugadores"
 
-#: src/display3d.cpp:669
+#: src/display3d.cpp:670
 msgid "Out of sync"
 msgstr "Desincronizado"
 
@@ -10705,11 +10705,11 @@ msgstr "TUTORIALES"
 #: src/frontend.cpp:381
 #: src/frontend.cpp:451
 #: src/frontend.cpp:592
-#: src/frontend.cpp:737
-#: src/frontend.cpp:871
-#: src/frontend.cpp:1106
-#: src/frontend.cpp:1260
-#: src/frontend.cpp:1280
+#: src/frontend.cpp:738
+#: src/frontend.cpp:872
+#: src/frontend.cpp:1107
+#: src/frontend.cpp:1261
+#: src/frontend.cpp:1281
 msgctxt "menu"
 msgid "Return"
 msgstr "Volver"
@@ -10756,7 +10756,7 @@ msgstr "Unirse a una Partida"
 
 #: src/frontend.cpp:384
 msgid "TCP PORT 2100 MUST BE OPENED IN YOUR FIREWALL / ROUTER TO HOST GAMES!"
-msgstr ""
+msgstr "EL PUERTO TCP 2100 DEBE ESTAR ABIERTO EN TU CORTAFUEGOS / ROUTER PARA HOSPEDAR PARTIDAS!"
 
 #: src/frontend.cpp:444
 #: src/multiint.cpp:1398
@@ -10804,8 +10804,8 @@ msgstr "2X"
 
 #: src/frontend.cpp:522
 #: src/frontend.cpp:661
-#: src/frontend.cpp:811
-#: src/frontend.cpp:894
+#: src/frontend.cpp:812
+#: src/frontend.cpp:895
 msgid "Fullscreen"
 msgstr "Pantalla Completa"
 
@@ -10821,17 +10821,17 @@ msgstr "Límites de Visión."
 #: src/frontend.cpp:628
 #: src/frontend.cpp:646
 #: src/frontend.cpp:691
-#: src/frontend.cpp:836
-#: src/frontend.cpp:846
-#: src/frontend.cpp:918
-#: src/frontend.cpp:979
-#: src/frontend.cpp:1022
-#: src/frontend.cpp:1063
-#: src/frontend.cpp:1075
-#: src/frontend.cpp:1087
-#: src/frontend.cpp:1122
-#: src/frontend.cpp:1135
-#: src/frontend.cpp:1149
+#: src/frontend.cpp:837
+#: src/frontend.cpp:847
+#: src/frontend.cpp:919
+#: src/frontend.cpp:980
+#: src/frontend.cpp:1023
+#: src/frontend.cpp:1064
+#: src/frontend.cpp:1076
+#: src/frontend.cpp:1088
+#: src/frontend.cpp:1123
+#: src/frontend.cpp:1136
+#: src/frontend.cpp:1150
 msgid "Off"
 msgstr "Desactivado"
 
@@ -10856,15 +10856,15 @@ msgstr "Agitar pantalla"
 #: src/frontend.cpp:615
 #: src/frontend.cpp:633
 #: src/frontend.cpp:642
-#: src/frontend.cpp:832
-#: src/frontend.cpp:984
-#: src/frontend.cpp:1018
-#: src/frontend.cpp:1059
-#: src/frontend.cpp:1071
-#: src/frontend.cpp:1083
-#: src/frontend.cpp:1127
-#: src/frontend.cpp:1140
-#: src/frontend.cpp:1154
+#: src/frontend.cpp:833
+#: src/frontend.cpp:985
+#: src/frontend.cpp:1019
+#: src/frontend.cpp:1060
+#: src/frontend.cpp:1072
+#: src/frontend.cpp:1084
+#: src/frontend.cpp:1128
+#: src/frontend.cpp:1141
+#: src/frontend.cpp:1155
 msgid "On"
 msgstr "Activado"
 
@@ -10877,19 +10877,19 @@ msgid "Shadows"
 msgstr "Sombras"
 
 #: src/frontend.cpp:584
-#: src/frontend.cpp:1287
+#: src/frontend.cpp:1288
 msgid "Radar"
 msgstr "Radar"
 
 #: src/frontend.cpp:585
-#: src/frontend.cpp:697
-#: src/frontend.cpp:1288
+#: src/frontend.cpp:698
+#: src/frontend.cpp:1289
 msgid "Rotating"
 msgstr "Rotando"
 
 #: src/frontend.cpp:585
-#: src/frontend.cpp:697
-#: src/frontend.cpp:1288
+#: src/frontend.cpp:698
+#: src/frontend.cpp:1289
 msgid "Fixed"
 msgstr "Reparado"
 
@@ -10897,148 +10897,145 @@ msgstr "Reparado"
 msgid "GRAPHICS OPTIONS"
 msgstr "OPCIONES GRÁFICAS"
 
-#: src/frontend.cpp:725
+#: src/frontend.cpp:726
 #: src/ingameop.cpp:168
 msgid "Voice Volume"
 msgstr "Volumen de Voces"
 
-#: src/frontend.cpp:729
+#: src/frontend.cpp:730
 #: src/ingameop.cpp:173
 msgid "FX Volume"
 msgstr "Volumen de Sonidos"
 
-#: src/frontend.cpp:733
+#: src/frontend.cpp:734
 #: src/ingameop.cpp:178
 msgid "Music Volume"
 msgstr "Volumen de Música"
 
-#: src/frontend.cpp:740
+#: src/frontend.cpp:741
 msgid "AUDIO OPTIONS"
 msgstr "OPCIONES DE AUDIO"
 
-#: src/frontend.cpp:804
+#: src/frontend.cpp:805
 msgid "* Takes effect on game restart"
 msgstr "* Tendrá efecto al reiniciar el juego"
 
-#: src/frontend.cpp:807
+#: src/frontend.cpp:808
 msgid "Graphics Mode*"
 msgstr "Modo Gráfico*"
 
-#: src/frontend.cpp:815
-#: src/frontend.cpp:889
+#: src/frontend.cpp:816
+#: src/frontend.cpp:890
 msgid "Windowed"
 msgstr "En ventana"
 
-#: src/frontend.cpp:819
+#: src/frontend.cpp:820
 msgid "Resolution*"
 msgstr "Resolución*"
 
-#: src/frontend.cpp:824
+#: src/frontend.cpp:825
 msgid "Texture size"
 msgstr "Tamaño de las texturas"
 
-#: src/frontend.cpp:828
+#: src/frontend.cpp:829
 msgid "Vertical sync"
 msgstr "Sincronización Vertical"
 
-#: src/frontend.cpp:863
-#: src/frontend.cpp:924
+#: src/frontend.cpp:864
+#: src/frontend.cpp:925
 msgid "Unsupported"
 msgstr "No Soportado"
 
-#: src/frontend.cpp:868
+#: src/frontend.cpp:869
 msgid "VIDEO OPTIONS"
 msgstr "OPCIONES DE VIDEO"
 
-#: src/frontend.cpp:1056
+#: src/frontend.cpp:1057
 msgid "Reverse Rotation"
 msgstr "Invertir Rotación"
 
-#: src/frontend.cpp:1067
+#: src/frontend.cpp:1068
 msgid "Trap Cursor"
 msgstr "Capturar Cursor"
 
-#: src/frontend.cpp:1080
+#: src/frontend.cpp:1081
 msgid "Switch Mouse Buttons"
 msgstr "Invertir botones del ratón"
 
-#: src/frontend.cpp:1092
+#: src/frontend.cpp:1093
 msgid "Rotate Screen"
 msgstr "Rotar Pantalla"
 
-#: src/frontend.cpp:1095
-#: src/frontend.cpp:1168
+#: src/frontend.cpp:1096
+#: src/frontend.cpp:1169
 msgid "Middle Mouse"
 msgstr "Botón central"
 
-#: src/frontend.cpp:1099
-#: src/frontend.cpp:1163
+#: src/frontend.cpp:1100
+#: src/frontend.cpp:1164
 msgid "Right Mouse"
 msgstr "Botón derecho"
 
-#: src/frontend.cpp:1103
+#: src/frontend.cpp:1104
 msgid "MOUSE OPTIONS"
 msgstr "OPCIONES DE RATÓN"
 
-#: src/frontend.cpp:1203
-#: src/frontend.cpp:1281
+#: src/frontend.cpp:1204
+#: src/frontend.cpp:1282
 msgid "Language"
 msgstr "Idioma"
 
-#: src/frontend.cpp:1207
-#: src/frontend.cpp:1285
+#: src/frontend.cpp:1208
+#: src/frontend.cpp:1286
 msgid "Difficulty"
 msgstr "Dificultad"
 
-#: src/frontend.cpp:1211
-#: src/frontend.cpp:1292
-#: src/frontend.cpp:1324
+#: src/frontend.cpp:1212
+#: src/frontend.cpp:1293
+#: src/frontend.cpp:1325
 #: src/multiint.cpp:213
 msgid "Easy"
 msgstr "Fácil"
 
-#: src/frontend.cpp:1214
-#: src/frontend.cpp:1295
-#: src/frontend.cpp:1316
+#: src/frontend.cpp:1215
+#: src/frontend.cpp:1296
+#: src/frontend.cpp:1317
 msgid "Normal"
 msgstr "Normal"
 
-#: src/frontend.cpp:1218
-#: src/frontend.cpp:1298
-#: src/frontend.cpp:1320
+#: src/frontend.cpp:1219
+#: src/frontend.cpp:1299
+#: src/frontend.cpp:1321
 #: src/multiint.cpp:213
 msgid "Hard"
 msgstr "Difícil"
 
-#: src/frontend.cpp:1223
-#: src/frontend.cpp:1286
+#: src/frontend.cpp:1224
+#: src/frontend.cpp:1287
 msgid "Scroll Speed"
 msgstr "Velocidad de desplazamiento"
 
-#: src/frontend.cpp:1227
-#: src/frontend.cpp:1282
-#, fuzzy
+#: src/frontend.cpp:1228
+#: src/frontend.cpp:1283
 msgid "Unit Colour:"
 msgstr "Color de las unidades"
 
-#: src/frontend.cpp:1247
-#: src/frontend.cpp:1283
-#, fuzzy
-msgid "Campaign"
-msgstr "Nueva Campaña"
-
-#: src/frontend.cpp:1257
+#: src/frontend.cpp:1248
 #: src/frontend.cpp:1284
-#, fuzzy
-msgid "Skirmish/Multiplayer"
-msgstr "Juego Multijugador"
+msgid "Campaign"
+msgstr "Campaña"
 
-#: src/frontend.cpp:1263
-#: src/frontend.cpp:1279
+#: src/frontend.cpp:1258
+#: src/frontend.cpp:1285
+msgid "Skirmish/Multiplayer"
+msgstr "Escaramuza/Multijugador"
+
+#: src/frontend.cpp:1264
+#: src/frontend.cpp:1280
 msgid "GAME OPTIONS"
 msgstr "OPCIONES DE JUEGO"
 
-#: src/frontend.cpp:1424
+#: src/frontend.cpp:1425
 #: src/multiint.cpp:2526
 msgid "Mod: "
 msgstr "Mod:"
@@ -11282,7 +11279,7 @@ msgstr "Progreso de Investigación"
 
 #: src/intdisplay.cpp:663
 msgid "Need more resources!"
-msgstr ""
+msgstr "¡Recursos escasos!"
 
 #: src/intelmap.cpp:242
 #: src/keybind.cpp:1327
@@ -12015,9 +12012,8 @@ msgid "Select all Combat Units"
 msgstr "Seleccionar todas las Unidades de Combate"
 
 #: src/keymap.cpp:430
-#, fuzzy
 msgid "Select all Cyborgs"
-msgstr "Seleccionar todos los Deslizadores"
+msgstr "Seleccionar todos los Cyborgs"
 
 #: src/keymap.cpp:431
 msgid "Select all Heavily Damaged Units"
@@ -12060,44 +12056,36 @@ msgid "Select all Similar Units"
 msgstr "Seleccionar todas las unidades Similares"
 
 #: src/keymap.cpp:445
-#, fuzzy
 msgid "Select all Combat Cyborgs"
-msgstr "Seleccionar todas las Unidades de Combate"
+msgstr "Seleccionar todos los Cyborgs de Combate"
 
 #: src/keymap.cpp:446
-#, fuzzy
 msgid "Select all Engineers"
-msgstr "Seleccionar todos los Deslizadores"
+msgstr "Seleccionar todos los Ingenieros"
 
 #: src/keymap.cpp:447
-#, fuzzy
 msgid "Select all Land Combat Units"
-msgstr "Seleccionar todas las Unidades de Combate"
+msgstr "Seleccionar todas las Unidades de Combate Terrestre"
 
 #: src/keymap.cpp:448
-#, fuzzy
 msgid "Select all Mechanics"
-msgstr "Seleccionar todas las Orugas"
+msgstr "Seleccionar todas los Mecánicos"
 
 #: src/keymap.cpp:449
-#, fuzzy
 msgid "Select all Transporters"
-msgstr "Seleccionar todas las Orugas"
+msgstr "Seleccionar todos los Transportes"
 
 #: src/keymap.cpp:450
-#, fuzzy
 msgid "Select all Repair Tanks"
-msgstr "Seleccionar todas las Orugas"
+msgstr "Seleccionar todas los Tanques de Reparación"
 
 #: src/keymap.cpp:451
-#, fuzzy
 msgid "Select all Sensor Units"
-msgstr "Seleccionar todas las unidades Similares"
+msgstr "Seleccionar todas las unidades de Sensor"
 
 #: src/keymap.cpp:452
-#, fuzzy
 msgid "Select all Trucks"
-msgstr "Seleccionar todas las Orugas"
+msgstr "Seleccionar todos los Camiones"
 
 #: src/keymap.cpp:456
 msgid "Select next Factory"
@@ -12328,32 +12316,30 @@ msgid "IP"
 msgstr "IP"
 
 #: src/multiint.cpp:947
-#, fuzzy
 msgid "[Password required]"
-msgstr "*** ¡contraseña NO requerida! ***"
+msgstr "[Contraseña Requerida]"
 
 #: src/multiint.cpp:951
 msgid "[No Tanks]"
-msgstr ""
+msgstr "[Sin Tanques]"
 
 #: src/multiint.cpp:955
-#, fuzzy
 msgid "[No Cyborgs]"
-msgstr "Produce Cyborgs"
+msgstr "[Sin Cyborgs]"
 
 #: src/multiint.cpp:959
 msgid "[No VTOLs]"
-msgstr ""
+msgstr "[Sin ADVs]"
 
 #: src/multiint.cpp:963
 #, c-format
 msgid "Hosted by %s"
-msgstr ""
+msgstr "Hospedado por %s"
 
 #: src/multiint.cpp:967
 #, c-format
 msgid "Hosted by %s —%s"
-msgstr ""
+msgstr "Hospedado por %s --- %s"
 
 #: src/multiint.cpp:987
 msgid "No games are available"
@@ -12566,14 +12552,12 @@ msgid "Click to change difficulty"
 msgstr "Click para ajustar dificultad de la IA"
 
 #: src/multiint.cpp:2262
-#, fuzzy
 msgid "Waiting for player"
-msgstr "Esperando a otros jugadores"
+msgstr "Esperando por jugador"
 
 #: src/multiint.cpp:2262
-#, fuzzy
 msgid "Player is ready"
-msgstr "Jugador Desconectado"
+msgstr "El Jugador está listo"
 
 #: src/multiint.cpp:2262
 msgid "Click when ready"
@@ -12617,7 +12601,7 @@ msgstr "Todos los jugadores necesitan tener los mismos mods para unirse"
 
 #: src/multiint.cpp:2572
 msgid "Connecting to the lobby server..."
-msgstr ""
+msgstr "Conectando al vestíbulo..."
 
 #: src/multiint.cpp:2719
 #, c-format
@@ -12649,21 +12633,21 @@ msgstr "Anfitrión Comenzando Partida"
 
 #: src/multiint.cpp:3806
 msgid "Can't connect to lobby server!"
-msgstr ""
+msgstr "¡No se pudo conectar al vestíbulo!"
 
 #: src/multiint.cpp:3893
 #, c-format
 msgid "Mods: %s"
-msgstr ""
+msgstr "Mods: %s"
 
 #: src/multiint.cpp:3900
 msgid "Mods: None!"
-msgstr ""
+msgstr "Mods: ¡Ninguno!"
 
 #: src/multiint.cpp:3910
-#, fuzzy, c-format
+#, c-format
 msgid "Version: %s"
-msgstr "Versión: %s%s%s%s"
+msgstr "Versión: %s"
 
 #: src/multiint.cpp:3961
 #, c-format
@@ -12720,14 +12704,13 @@ msgid "%s (%u) has an incompatible mod, and has been kicked."
 msgstr "%s (%u) tiene un mod incompatible, y ha sido expulsado"
 
 #: src/multijoin.cpp:453
-#, fuzzy, c-format
+#, c-format
 msgid "%s is joining the game"
 msgstr "%s se está uniendo a la partida"
 
 #: src/multijoin.cpp:464
-#, fuzzy
 msgid "Server message:"
-msgstr "Mensaje del sistema:"
+msgstr "Mensaje del servidor:"
 
 #: src/multilimit.cpp:183
 msgid "Apply Defaults and Return To Previous Screen"
@@ -13149,9 +13132,9 @@ msgstr " - Construido %s"
 #. TRANSLATORS: This string looks as follows when expanded.
 #. "Version <version name/number> <working copy state><BUILD DATE><BUILD TYPE>"
 #: src/version.cpp:157
-#, fuzzy, c-format
+#, c-format
 msgid "Version %s-%s%s%s%s"
-msgstr "Versión: %s%s%s%s"
+msgstr "Versión: %s-%s%s%s%s"
 
 #, fuzzy
 #~ msgid "Unit Colour (SP)"
