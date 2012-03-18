@@ -56,11 +56,12 @@ static int preview_width = 0, preview_height = 0;
 static Vector2i player_pos[MAX_PLAYERS];
 static bool mappreview = false;
 static char mapname[256];
+OPENGL_DATA opengl;
+extern bool writeGameInfo(const char *pFileName); // Used to help debug issues when we have fatal errors.
 
 /* Initialise the double buffered display */
 bool screenInitialise()
 {
-	char buf[256];
 	GLint glMaxTUs;
 	GLenum err;
 
@@ -74,18 +75,18 @@ bool screenInitialise()
 	}
 
 	/* Dump general information about OpenGL implementation to the console and the dump file */
-	ssprintf(buf, "OpenGL Vendor: %s", glGetString(GL_VENDOR));
-	addDumpInfo(buf);
-	debug(LOG_3D, "%s", buf);
-	ssprintf(buf, "OpenGL Renderer: %s", glGetString(GL_RENDERER));
-	addDumpInfo(buf);
-	debug(LOG_3D, "%s", buf);
-	ssprintf(buf, "OpenGL Version: %s", glGetString(GL_VERSION));
-	addDumpInfo(buf);
-	debug(LOG_3D, "%s", buf);
-	ssprintf(buf, "GLEW Version: %s", glewGetString(GLEW_VERSION));
-	addDumpInfo(buf);
-	debug(LOG_3D, "%s", buf);
+	ssprintf(opengl.vendor, "OpenGL Vendor: %s", glGetString(GL_VENDOR));
+	addDumpInfo(opengl.vendor);
+	debug(LOG_3D, "%s", opengl.vendor);
+	ssprintf(opengl.renderer, "OpenGL Renderer: %s", glGetString(GL_RENDERER));
+	addDumpInfo(opengl.renderer);
+	debug(LOG_3D, "%s", opengl.renderer);
+	ssprintf(opengl.version, "OpenGL Version: %s", glGetString(GL_VERSION));
+	addDumpInfo(opengl.version);
+	debug(LOG_3D, "%s", opengl.version);
+	ssprintf(opengl.GLEWversion, "GLEW Version: %s", glewGetString(GLEW_VERSION));
+	addDumpInfo(opengl.GLEWversion);
+	debug(LOG_3D, "%s", opengl.GLEWversion);
 
 	/* Dump extended information about OpenGL implementation to the console */
 	debug(LOG_3D, "OpenGL Extensions : %s", glGetString(GL_EXTENSIONS)); // FIXME This is too much for MAX_LEN_LOG_LINE
@@ -119,8 +120,8 @@ bool screenInitialise()
 		GLint glMaxTIUs, glMaxTCs, glMaxTIUAs, glmaxSamples, glmaxSamplesbuf;
 
 		debug(LOG_3D, "  * OpenGL GLSL Version : %s", glGetString(GL_SHADING_LANGUAGE_VERSION));
-		ssprintf(buf, "OpenGL GLSL Version : %s", glGetString(GL_SHADING_LANGUAGE_VERSION));
-		addDumpInfo(buf);
+		ssprintf(opengl.GLSLversion, "OpenGL GLSL Version : %s", glGetString(GL_SHADING_LANGUAGE_VERSION));
+		addDumpInfo(opengl.GLSLversion);
 
 		glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &glMaxTIUs);
 		debug(LOG_3D, "  * Total number of Texture Image Units (TIUs) supported is %d.", (int) glMaxTIUs);
@@ -145,7 +146,7 @@ bool screenInitialise()
 	}
 	else // less than 1.5
 	{
-		// Check if VBO extension available for haxx
+		// Check if VBO extension available for hacks
 		if (GLEW_VERSION_1_4 && GLEW_ARB_vertex_buffer_object)
 		{
 			debug(LOG_POPUP, _("OpenGL 1.5/2.0 is not supported by your system. Some things may look wrong. Please upgrade your graphics driver/hardware, if possible."));
@@ -153,6 +154,8 @@ bool screenInitialise()
 		}
 		else
 		{
+			// We wite this file in hopes that people will upload the information in it to us.
+			writeGameInfo("WZdebuginfo.txt");
 			debug(LOG_FATAL, _("OpenGL 1.4 + VBO extension is not supported by your system. The game requires this. Please upgrade your graphics drivers/hardware, if possible."));
 			exit(1);
 		}

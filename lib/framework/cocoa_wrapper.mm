@@ -22,22 +22,69 @@
 
 #ifdef WZ_OS_MAC
 #import <AppKit/AppKit.h>
+#import <stdarg.h>
 
 void cocoaInit()
 {
 	NSApplicationLoad();
 }
 
-void cocoaShowAlert(const char *message, const char *information, unsigned style)
+static inline NSString *nsstringify(const char *str)
+{
+	return [NSString stringWithUTF8String:str];
+}
+
+int cocoaShowAlert(const char *message, const char *information, unsigned style,
+                   const char *buttonTitle, ...)
 {
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 	NSAlert *alert = [[NSAlert alloc] init];
-	[alert addButtonWithTitle:@"OK"];
-	[alert setMessageText:[NSString stringWithUTF8String:message]];
-	[alert setInformativeText:[NSString stringWithUTF8String:information]];
+	[alert setMessageText:nsstringify(message)];
+	[alert setInformativeText:nsstringify(information)];
 	[alert setAlertStyle:style];
-	[alert runModal];
+
+	va_list args;
+	va_start(args, buttonTitle);
+	const char *currentButtonTitle = buttonTitle;
+	do {
+		[alert addButtonWithTitle:nsstringify(currentButtonTitle)];
+	} while ((currentButtonTitle = va_arg(args, const char *)));
+	va_end(args);
+
+	NSInteger buttonID = [alert runModal];
 	[pool release];
+	return buttonID - NSAlertFirstButtonReturn;
+}
+
+void cocoaSelectFileInFinder(const char *filename)
+{
+	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+	[[NSWorkspace sharedWorkspace] selectFile:nsstringify(filename) inFileViewerRootedAtPath:nil];
+	[pool release];
+}
+
+void cocoaOpenURL(const char *url)
+{
+	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+	[[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:nsstringify(url)]];
+	[pool release];
+}
+
+void cocoaOpenUserCrashReportFolder()
+{
+	SInt32 maj, min;
+	if (Gestalt(gestaltSystemVersionMajor, &maj) == noErr
+		&& Gestalt(gestaltSystemVersionMinor, &min) == noErr)
+	{
+		if (maj == 10 && min <= 5)
+		{
+			cocoaOpenURL("file://~/Library/Logs/CrashReporter");
+		}
+		else
+		{
+			cocoaOpenURL("file://~/Library/Logs/DiagnosticReports");
+		}
+	}
 }
 
 #endif // WZ_OS_MAC
