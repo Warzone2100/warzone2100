@@ -1,3 +1,16 @@
+2012-03-19: Version 3.1_beta7
+ * General:
+   * Fix: Don't randomly crash when moving units (ticket:3301, commit:fbc600ecdf9246a34038f58063baa2b460f6c984)
+   * Fix: When unloading a transporter, put the units on the terrain and not above or below it (ticket:3169, commit:f54529ae0a62b76db6c2bc65a74e60bb021a09e8)
+   * Fix: Improve pathfinding (commit:c9a618cd821d02b47315c24f4fe0cacecbe04ecc)
+   * Fix: Save factory numbers to properly restore their order on loading (ticket:3244, commit:c041fb3dab50bb6a6348fd9340bf0d61902e3c4d)
+ * Multiplayer:
+   * Fix: Show research messages again in the intelligence screen (ticket:3085, commit:c8dd2f173bda1469dbd20921ba0fab940e73037c)
+   * Fix: Disable unit design without HQ (ticket:3305, commit:d5a97c039912b4b29b34f8df6bbd925f684aa835)
+ * Translations:
+   * Update: French (ticket:3311, commit:f1e38830fd6ab7242a0078db53c9c2dfcb72ff33)
+   * Update: Spanish (ticket:3335, commit:952f62a87bae585472556f315157b51098c68dcc)
+
 2012-03-13: Version 3.1_beta6
  * General:
    * Fix: Make VTOLs rearm on rearming pads, not beside them (ticket:3285, commit:b4ad988996732c0266be62a301b9fb0a66940ad1)
