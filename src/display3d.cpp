@@ -132,6 +132,7 @@ static PIELIGHT getBlueprintColour(STRUCT_STATES state);
 static void NetworkDisplayPlainForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours);
 static void NetworkDisplayImage(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours);
 void NotifyUserOfError(char *msg);
+extern bool writeGameInfo(const char *pFileName); // Used to help debug issues when we have fatal errors & crash handler testing.
 /********************  Variables  ********************/
 // Should be cleaned up properly and be put in structures.
 
@@ -858,6 +859,7 @@ void draw3DScene( void )
 		ASSERT(false, "Yes, this is a assert.  This should not happen on release builds! Use --noassert to bypass in debug builds.");
 		debug(LOG_WARNING, " *** Warning!  You have compiled in debug mode! ***");
 #endif
+		writeGameInfo("WZdebuginfo.txt");		//also test writing out this file.
 		debug(LOG_FATAL, "Forcing a segfault! (crash handler test)");
 		// and here comes the crash
 		*crash = 0x3;

@@ -31,6 +31,7 @@
 #include "lib/framework/frameint.h"
 #include "lib/framework/physfs_ext.h"
 #include "lib/framework/strres.h"
+#include "lib/framework/opengl.h"
 
 #include "lib/gamelib/gtime.h"
 #include "lib/ivis_opengl/ivisdef.h"
@@ -85,6 +86,10 @@
 #include "challenge.h"
 #include "combat.h"
 #include "template.h"
+#include "version.h"
+#include "lib/ivis_opengl/screen.h"
+#include "keymap.h"
+#include <ctime>
 
 #define MAX_SAVE_NAME_SIZE_V19	40
 #define MAX_SAVE_NAME_SIZE	60
@@ -105,6 +110,7 @@ static const UDWORD NULL_ID = UDWORD_MAX;
 
 static UDWORD RemapPlayerNumber(UDWORD OldNumber);
 static void plotFeature(char *backDropSprite);
+bool writeGameInfo(const char *pFileName);
 
 struct GAME_SAVEHEADER
 {
@@ -2550,6 +2556,11 @@ bool saveGame(char *aFileName, GAME_TYPE saveType)
 
 	// Save labels
 	CurrentFileName[fileExtension] = '\0';
+	strcat(CurrentFileName, "gameinfo.ini");
+	writeGameInfo(CurrentFileName);
+
+	// Save labels
+	CurrentFileName[fileExtension] = '\0';
 	strcat(CurrentFileName, "labels.ini");
 	writeLabels(CurrentFileName);
 
@@ -4956,6 +4967,46 @@ static bool loadSaveStructure2(const char *pFileName, STRUCTURE **ppList)
 }
 
 // -----------------------------------------------------------------------------------------
+/*
+Writes some version info
+*/
+bool writeGameInfo(const char *pFileName)
+{
+	WzConfig ini(pFileName);
+	if (ini.status() != QSettings::NoError)
+	{
+		debug(LOG_ERROR, "Could not open %s", pFileName);
+		return false;
+	}
+	char ourtime[100] = {'\0'};
+	const time_t currentTime = time(NULL);
+	std::string time(ctime(&currentTime));
+	ini.beginGroup("GameProperties");
+	ini.setValue("current_time", time.data());
+	getAsciiTime(ourtime, graphicsTime);
+	ini.setValue("graphics_time", ourtime);
+	getAsciiTime(ourtime, gameTime);
+	ini.setValue("game_time", ourtime);
+	getAsciiTime( ourtime, gameTime - missionData.missionStarted);
+	ini.setValue("playing_time", ourtime);
+	ini.setValue("version", version_getVersionString());
+	ini.setValue("full_version", version_getFormattedVersionString());
+	ini.setValue("cheated", Cheated);
+	ini.setValue("debug", getDebugMappingStatus());
+	ini.setValue("level/map", getLevelName());
+	ini.setValue("mods", getModList() ? getModList() : "None");
+	ini.setValue("openGL_vendor", opengl.vendor);
+	ini.setValue("openGL_renderer", opengl.renderer);
+	ini.setValue("openGL_version", opengl.version);
+	ini.setValue("openGL_GLEW_version", opengl.GLEWversion);
+	ini.setValue("openGL_GLSL_version", opengl.GLSLversion);
+	// NOTE: deprecated for GL 3+. Needed this to check what extensions some chipsets support for the openGL hacks
+	std::string extensions = (const char *) glGetString(GL_EXTENSIONS);
+	ini.setValue("GL_EXTENSIONS", extensions.data());
+	ini.endGroup();
+	return true;
+}
+
 /*
 Writes the linked list of structure for each player to a file
 */

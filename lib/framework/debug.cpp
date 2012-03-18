@@ -190,14 +190,15 @@ void debug_callback_file( void ** data, const char * outputBuffer )
  * \param[in,out]	data	In: 	The filename to output to.
  * 							Out:	The filehandle.
  */
-bool debug_callback_file_init(void ** data)
+const char *WZDebugfilename;
+bool debug_callback_file_init(void **data)
 {
-	const char * filename = (const char *)*data;
+	WZDebugfilename = (const char *)*data;
 
-	FILE* const logfile = fopen(filename, "w");
+	FILE* const logfile = fopen(WZDebugfilename, "w");
 	if (!logfile)
 	{
-		fprintf(stderr, "Could not open %s for appending!\n", filename);
+		fprintf(stderr, "Could not open %s for appending!\n", WZDebugfilename);
 		return false;
 	}
 
@@ -460,21 +461,26 @@ void _debug( int line, code_part part, const char *function, const char *str, ..
 		{
 #if defined(WZ_OS_WIN)
 			char wbuf[512];
-			ssprintf(wbuf, "%s\n\nPlease check your stderr.txt file in the same directory as the program file for more details. \
-				\nDo not forget to upload both the stderr.txt file and the warzone2100.rpt file in your bug reports!", useInputBuffer1 ? inputBuffer[1] : inputBuffer[0]);
-			MessageBoxA( NULL,
-				wbuf,
-				"Warzone has terminated unexpectedly", MB_OK|MB_ICONERROR);
+			ssprintf(wbuf, "%s\n\nPlease check the file (%s) in your configuration directory for more details. \
+				\nDo not forget to upload the %s file, WZdebuginfo.txt and the warzone2100.rpt files in your bug reports at http://developer.wz2100.net/newticket!", useInputBuffer1 ? inputBuffer[1] : inputBuffer[0], WZDebugfilename, WZDebugfilename);
+			MessageBoxA( NULL, wbuf, "Warzone has terminated unexpectedly", MB_OK|MB_ICONERROR);
 #elif defined(WZ_OS_MAC)
-			cocoaShowAlert("Warzone has terminated unexpectedly.",
-			               "Please check your logs for more details."
-			               "\n\nRun Console.app, search for \"wz2100\", and copy that to a file."
-			               "\n\nIf you are on 10.4 (Tiger) or 10.5 (Leopard) the crash report"
-			               " is in ~/Library/Logs/CrashReporter."
-			               " If you are on 10.6 (Snow Leopard), it is in"
-			               "\n~/Library/Logs/DiagnosticReports."
-			               "\n\nDo not forget to upload and attach those to a bug report at http://developer.wz2100.net/newticket"
-			               "\nThanks!", 2);
+			int clickedIndex = \
+			cocoaShowAlert("Warzone has quit unexpectedly.",
+			               "Please check your logs and attach them along with a bug report. Thanks!",
+			               2, "Show Log Files & Open Bug Reporter", "Ignore", NULL);
+			if (clickedIndex == 0)
+			{
+				if (WZDebugfilename == NULL) {
+					cocoaShowAlert("Unable to open debug log.",
+					               "The debug log subsystem has not yet been initialised.",
+					               2, "Continue", NULL);
+				} else {
+					cocoaSelectFileInFinder(WZDebugfilename);
+				}
+				cocoaOpenUserCrashReportFolder();
+				cocoaOpenURL("http://developer.wz2100.net/newticket");
+			}
 #else
 			const char* popupBuf = useInputBuffer1 ? inputBuffer[1] : inputBuffer[0];
 			wzFatalDialog(popupBuf);
@@ -492,7 +498,7 @@ void _debug( int line, code_part part, const char *function, const char *str, ..
 				wbuf,
 				"Warzone has detected a problem.", MB_OK|MB_ICONINFORMATION);
 #elif defined(WZ_OS_MAC)
-			cocoaShowAlert("Warzone has detected a problem.", inputBuffer[useInputBuffer1 ? 1 : 0], 0);
+			cocoaShowAlert("Warzone has detected a problem.", inputBuffer[useInputBuffer1 ? 1 : 0], 0, "OK", NULL);
 #endif
 		}
 

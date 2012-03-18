@@ -52,7 +52,7 @@ struct MISSION_DATA
 	uint32_t    shotsOffTarget;	// How many misses
 	uint32_t    babasMowedDown; // How many barbarians did we mow down?
 };
-
+extern MISSION_DATA	missionData;
 // Could use widgets, but hey.....
 struct STAT_BAR
 {
