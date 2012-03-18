@@ -34,6 +34,7 @@
 #include "lib/gamelib/gtime.h"
 #include <map>
 #include <string>
+#include "src/warzoneconfig.h"	// for checking FS or not
 
 #ifdef WZ_OS_LINUX
 #include <execinfo.h>  // Nonfatal runtime backtraces.
@@ -459,6 +460,10 @@ void _debug( int line, code_part part, const char *function, const char *str, ..
 		// Throw up a dialog box for users since most don't have a clue to check the dump file for information. Use for (duh) Fatal errors, that force us to terminate the game.
 		if (part == LOG_FATAL)
 		{
+			if (war_getFullscreen())
+			{
+				wzToggleFullscreen();
+			}
 #if defined(WZ_OS_WIN)
 			char wbuf[512];
 			ssprintf(wbuf, "%s\n\nPlease check the file (%s) in your configuration directory for more details. \
