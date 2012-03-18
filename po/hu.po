@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Warzone 2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2012-03-17 20:56+0100\n"
+"POT-Creation-Date: 2012-03-19 00:49+0100\n"
 "PO-Revision-Date: 2012-01-04 14:25+0100\n"
 "Last-Translator: Mészáros Tamás <meszaros.tomi@hotmail.com>\n"
 "Language-Team: Magyar (Hungary) <meszaros.tomi@hotmail.com>\n"
@@ -123,6 +123,67 @@ msgstr "Fegyver fejlesztés elkészült"
 #: data/base/messages/strings/resstrings.txt:301
 #: data/base/messages/strings/resstrings.txt:307
 #: data/base/messages/strings/resstrings.txt:323
+#: data/mp/messages/resmessages12.rmsg:3
+#: data/mp/messages/resmessages12.rmsg:13
+#: data/mp/messages/resmessages12.rmsg:23
+#: data/mp/messages/resmessages12.rmsg:33
+#: data/mp/messages/resmessages1.rmsg:83
+#: data/mp/messages/resmessages1.rmsg:93
+#: data/mp/messages/resmessages1.rmsg:103
+#: data/mp/messages/resmessages1.rmsg:113
+#: data/mp/messages/resmessages1.rmsg:123
+#: data/mp/messages/resmessages1.rmsg:133
+#: data/mp/messages/resmessages1.rmsg:143
+#: data/mp/messages/resmessages1.rmsg:153
+#: data/mp/messages/resmessages1.rmsg:163
+#: data/mp/messages/resmessages1.rmsg:173
+#: data/mp/messages/resmessages23.rmsg:13
+#: data/mp/messages/resmessages2.rmsg:53
+#: data/mp/messages/resmessages2.rmsg:63
+#: data/mp/messages/resmessages2.rmsg:73
+#: data/mp/messages/resmessages2.rmsg:83
+#: data/mp/messages/resmessages2.rmsg:93
+#: data/mp/messages/resmessages2.rmsg:103
+#: data/mp/messages/resmessages2.rmsg:113
+#: data/mp/messages/resmessages2.rmsg:123
+#: data/mp/messages/resmessages2.rmsg:133
+#: data/mp/messages/resmessages2.rmsg:143
+#: data/mp/messages/resmessages2.rmsg:153
+#: data/mp/messages/resmessages2.rmsg:163
+#: data/mp/messages/resmessages2.rmsg:173
+#: data/mp/messages/resmessages2.rmsg:183
+#: data/mp/messages/resmessages2.rmsg:193
+#: data/mp/messages/resmessages2.rmsg:203
+#: data/mp/messages/resmessages2.rmsg:213
+#: data/mp/messages/resmessages2.rmsg:223
+#: data/mp/messages/resmessages2.rmsg:233
+#: data/mp/messages/resmessages2.rmsg:243
+#: data/mp/messages/resmessages3.rmsg:183
+#: data/mp/messages/resmessages3.rmsg:193
+#: data/mp/messages/resmessages3.rmsg:203
+#: data/mp/messages/resmessages3.rmsg:213
+#: data/mp/messages/resmessages3.rmsg:223
+#: data/mp/messages/resmessages3.rmsg:233
+#: data/mp/messages/resmessages3.rmsg:243
+#: data/mp/messages/resmessages3.rmsg:253
+#: data/mp/messages/resmessages3.rmsg:263
+#: data/mp/messages/resmessages3.rmsg:273
+#: data/mp/messages/resmessages3.rmsg:283
+#: data/mp/messages/resmessages3.rmsg:293
+#: data/mp/messages/resmessages3.rmsg:303
+#: data/mp/messages/resmessages3.rmsg:313
+#: data/mp/messages/resmessagesall.rmsg:193
+#: data/mp/messages/resmessagesall.rmsg:203
+#: data/mp/messages/resmessagesall.rmsg:213
+#: data/mp/messages/resmessagesall.rmsg:423
+#: data/mp/messages/resmessagesall.rmsg:443
+#: data/mp/messages/resmessagesall.rmsg:453
+#: data/mp/messages/resmessagesall.rmsg:463
+#: data/mp/messages/resmessagesall.rmsg:503
+#: data/mp/messages/resmessagesall.rmsg:513
+#: data/mp/messages/resmessagesall.rmsg:523
+#: data/mp/messages/resmessagesall.rmsg:533
+#: data/mp/messages/resmessagesall.rmsg:633
 #: data/mp/messages/strings/resstrings.txt:133
 #: data/mp/messages/strings/resstrings.txt:139
 #: data/mp/messages/strings/resstrings.txt:145
@@ -153,6 +214,7 @@ msgid "New Defensive Structure Available"
 msgstr "Új védelmi rendszer érhető el"
 
 #: data/base/messages/resmessages12.rmsg:5
+#: data/mp/messages/resmessages12.rmsg:4
 msgid "Armored Mortar battery pit"
 msgstr "Páncélozott aknavető árok"
 
@@ -174,6 +236,20 @@ msgstr "Páncélozott aknavető árok"
 #: data/base/messages/strings/resstrings.txt:175
 #: data/base/messages/strings/resstrings.txt:181
 #: data/base/messages/strings/resstrings.txt:187
+#: data/mp/messages/resmessages12.rmsg:5
+#: data/mp/messages/resmessages12.rmsg:15
+#: data/mp/messages/resmessages2.rmsg:95
+#: data/mp/messages/resmessages2.rmsg:105
+#: data/mp/messages/resmessages2.rmsg:115
+#: data/mp/messages/resmessages2.rmsg:125
+#: data/mp/messages/resmessages2.rmsg:135
+#: data/mp/messages/resmessages2.rmsg:145
+#: data/mp/messages/resmessages2.rmsg:155
+#: data/mp/messages/resmessages3.rmsg:205
+#: data/mp/messages/resmessages3.rmsg:215
+#: data/mp/messages/resmessagesall.rmsg:195
+#: data/mp/messages/resmessagesall.rmsg:205
+#: data/mp/messages/resmessagesall.rmsg:635
 #: data/mp/messages/strings/resstrings.txt:163
 #: data/mp/messages/strings/resstrings.txt:177
 #: data/mp/messages/strings/resstrings.txt:183
@@ -225,6 +301,41 @@ msgstr "Automatikusan kijelölt legközelebbi érzékelõ vagy CB Torony"
 #: data/base/messages/strings/resstrings.txt:236
 #: data/base/messages/strings/resstrings.txt:242
 #: data/base/messages/strings/resstrings.txt:248
+#: data/mp/messages/resmessages12.rmsg:6
+#: data/mp/messages/resmessages12.rmsg:16
+#: data/mp/messages/resmessages1.rmsg:96
+#: data/mp/messages/resmessages1.rmsg:116
+#: data/mp/messages/resmessages1.rmsg:176
+#: data/mp/messages/resmessages2.rmsg:56
+#: data/mp/messages/resmessages2.rmsg:66
+#: data/mp/messages/resmessages2.rmsg:76
+#: data/mp/messages/resmessages2.rmsg:86
+#: data/mp/messages/resmessages2.rmsg:96
+#: data/mp/messages/resmessages2.rmsg:106
+#: data/mp/messages/resmessages2.rmsg:116
+#: data/mp/messages/resmessages2.rmsg:126
+#: data/mp/messages/resmessages2.rmsg:136
+#: data/mp/messages/resmessages2.rmsg:146
+#: data/mp/messages/resmessages2.rmsg:156
+#: data/mp/messages/resmessages2.rmsg:166
+#: data/mp/messages/resmessages2.rmsg:186
+#: data/mp/messages/resmessages2.rmsg:206
+#: data/mp/messages/resmessages3.rmsg:186
+#: data/mp/messages/resmessages3.rmsg:196
+#: data/mp/messages/resmessages3.rmsg:206
+#: data/mp/messages/resmessages3.rmsg:216
+#: data/mp/messages/resmessages3.rmsg:236
+#: data/mp/messages/resmessages3.rmsg:266
+#: data/mp/messages/resmessagesall.rmsg:6
+#: data/mp/messages/resmessagesall.rmsg:196
+#: data/mp/messages/resmessagesall.rmsg:206
+#: data/mp/messages/resmessagesall.rmsg:216
+#: data/mp/messages/resmessagesall.rmsg:426
+#: data/mp/messages/resmessagesall.rmsg:446
+#: data/mp/messages/resmessagesall.rmsg:456
+#: data/mp/messages/resmessagesall.rmsg:466
+#: data/mp/messages/resmessagesall.rmsg:546
+#: data/mp/messages/resmessagesall.rmsg:636
 #: data/mp/messages/strings/resstrings.txt:136
 #: data/mp/messages/strings/resstrings.txt:142
 #: data/mp/messages/strings/resstrings.txt:148
@@ -246,10 +357,12 @@ msgid "Defensive Strength: Medium"
 msgstr "Védekezõ erõ: közepes"
 
 #: data/base/messages/resmessages12.rmsg:16
+#: data/mp/messages/resmessages12.rmsg:14
 msgid "Mini-rocket armored strongpoint"
 msgstr "Kisrakéta páncélozott erőd"
 
 #: data/base/messages/resmessages12.rmsg:27
+#: data/mp/messages/resmessages12.rmsg:24
 msgid "Armored hardpoint with Heavy Machinegun"
 msgstr "Páncélozott talapzat nehéz gépfegyverrel"
 
@@ -284,6 +397,30 @@ msgstr "Páncélozott talapzat nehéz gépfegyverrel"
 #: data/base/messages/strings/resstrings.txt:295
 #: data/base/messages/strings/resstrings.txt:303
 #: data/base/messages/strings/resstrings.txt:309
+#: data/mp/messages/resmessages12.rmsg:25
+#: data/mp/messages/resmessages12.rmsg:35
+#: data/mp/messages/resmessages1.rmsg:85
+#: data/mp/messages/resmessages1.rmsg:95
+#: data/mp/messages/resmessages1.rmsg:105
+#: data/mp/messages/resmessages1.rmsg:115
+#: data/mp/messages/resmessages1.rmsg:125
+#: data/mp/messages/resmessages1.rmsg:135
+#: data/mp/messages/resmessages1.rmsg:145
+#: data/mp/messages/resmessages1.rmsg:155
+#: data/mp/messages/resmessages1.rmsg:165
+#: data/mp/messages/resmessages23.rmsg:15
+#: data/mp/messages/resmessages2.rmsg:215
+#: data/mp/messages/resmessages2.rmsg:225
+#: data/mp/messages/resmessages2.rmsg:235
+#: data/mp/messages/resmessages2.rmsg:245
+#: data/mp/messages/resmessages3.rmsg:265
+#: data/mp/messages/resmessages3.rmsg:275
+#: data/mp/messages/resmessages3.rmsg:285
+#: data/mp/messages/resmessages3.rmsg:295
+#: data/mp/messages/resmessages3.rmsg:305
+#: data/mp/messages/resmessages3.rmsg:315
+#: data/mp/messages/resmessagesall.rmsg:425
+#: data/mp/messages/resmessagesall.rmsg:465
 #: data/mp/messages/strings/resstrings.txt:263
 #: data/mp/messages/strings/resstrings.txt:269
 #: data/mp/messages/strings/resstrings.txt:275
@@ -330,6 +467,29 @@ msgstr "Érzékelőtartományon belül automatikusan célozza meg az ellenséget
 #: data/base/messages/strings/resstrings.txt:304
 #: data/base/messages/strings/resstrings.txt:310
 #: data/base/messages/strings/resstrings.txt:326
+#: data/mp/messages/resmessages12.rmsg:26
+#: data/mp/messages/resmessages12.rmsg:36
+#: data/mp/messages/resmessages1.rmsg:106
+#: data/mp/messages/resmessages1.rmsg:126
+#: data/mp/messages/resmessages1.rmsg:136
+#: data/mp/messages/resmessages1.rmsg:146
+#: data/mp/messages/resmessages1.rmsg:156
+#: data/mp/messages/resmessages1.rmsg:166
+#: data/mp/messages/resmessages23.rmsg:16
+#: data/mp/messages/resmessages2.rmsg:176
+#: data/mp/messages/resmessages2.rmsg:196
+#: data/mp/messages/resmessages2.rmsg:216
+#: data/mp/messages/resmessages2.rmsg:226
+#: data/mp/messages/resmessages2.rmsg:236
+#: data/mp/messages/resmessages2.rmsg:246
+#: data/mp/messages/resmessages3.rmsg:226
+#: data/mp/messages/resmessages3.rmsg:246
+#: data/mp/messages/resmessages3.rmsg:256
+#: data/mp/messages/resmessages3.rmsg:276
+#: data/mp/messages/resmessages3.rmsg:286
+#: data/mp/messages/resmessages3.rmsg:296
+#: data/mp/messages/resmessages3.rmsg:306
+#: data/mp/messages/resmessages3.rmsg:316
 #: data/mp/messages/strings/resstrings.txt:224
 #: data/mp/messages/strings/resstrings.txt:248
 #: data/mp/messages/strings/resstrings.txt:290
@@ -343,17 +503,23 @@ msgid "Defensive Strength: High"
 msgstr "Védekező erő: magas"
 
 #: data/base/messages/resmessages12.rmsg:38
+#: data/mp/messages/resmessages12.rmsg:34
 msgid "Armored hardpoint with Lancer AT missile"
 msgstr "Páncélozott talapzat tankelhárító rakétával"
 
 #: data/base/messages/resmessages12.rmsg:48
 #: data/base/messages/resmessages23.rmsg:37
 #: data/base/messages/resmessages3.rmsg:433
+#: data/mp/messages/resmessages12.rmsg:43
+#: data/mp/messages/resmessages23.rmsg:33
+#: data/mp/messages/resmessages3.rmsg:393
 msgid "Research Breakthrough Improves Construction Rates"
 msgstr "Kutatási áttörés növeli az építési sebességet"
 
 #: data/base/messages/resmessages12.rmsg:49
 #: data/base/messages/resmessages23.rmsg:38
+#: data/mp/messages/resmessages12.rmsg:44
+#: data/mp/messages/resmessages23.rmsg:34
 msgid "Improved Engineering Techniques"
 msgstr "Továbbfejlesztett mérnöki módszerek"
 
@@ -366,37 +532,52 @@ msgstr "Megnövekedett építési sebesség"
 #: data/base/messages/resmessages12.rmsg:51
 #: data/base/messages/resmessages23.rmsg:40
 #: data/base/messages/resmessages3.rmsg:436
+#: data/mp/messages/resmessages12.rmsg:46
+#: data/mp/messages/resmessages23.rmsg:36
+#: data/mp/messages/resmessages3.rmsg:396
 msgid "All trucks upgraded automatically"
 msgstr "Munkagépek automatikusan fejlesztve"
 
 #: data/base/messages/resmessages12.rmsg:59
 #: data/base/messages/resmessages1.rmsg:4
+#: data/mp/messages/resmessages12.rmsg:53
+#: data/mp/messages/resmessages1.rmsg:3
 msgid "New Systems Turret Available for Design"
 msgstr "A tervezéshez újrendszerű lövegtorony érhető el"
 
 #: data/base/messages/resmessages12.rmsg:60
+#: data/mp/messages/resmessages12.rmsg:54
 msgid "Counter-battery turret detects enemy indirect fire batteries"
 msgstr "Válaszüteg ellenséges ütegtüzet észlelt"
 
 #: data/base/messages/resmessages12.rmsg:61
 #: data/base/messages/resmessagesall.rmsg:83
+#: data/mp/messages/resmessages12.rmsg:55
+#: data/mp/messages/resmessagesall.rmsg:95
 msgid "Orders assigned indirect fire units to fire at the enemy batteries"
 msgstr "Kijelölt egységeknek általános tűzparancs az ellenséges ütegekre"
 
 #: data/base/messages/resmessages12.rmsg:62
 #: data/base/messages/resmessagesall.rmsg:84
+#: data/mp/messages/resmessages12.rmsg:56
+#: data/mp/messages/resmessagesall.rmsg:96
 msgid "Counter-battery fire continues until enemy battery is suppressed"
 msgstr "Folyamatos válaszüteg tűz, az ellenséges lövegek megsemmisüléséig"
 
 #: data/base/messages/resmessages12.rmsg:70
 #: data/base/messages/resmessages23.rmsg:48
 #: data/base/messages/resmessages3.rmsg:444
+#: data/mp/messages/resmessages12.rmsg:63
+#: data/mp/messages/resmessages23.rmsg:43
+#: data/mp/messages/resmessages3.rmsg:403
 msgid "CB Sensor Improved"
 msgstr "CB érzékelő fejlesztve"
 
 #: data/base/messages/resmessages12.rmsg:71
 #: data/base/messages/resmessages2.rmsg:379
 #: data/base/messages/strings/resstrings.txt:486
+#: data/mp/messages/resmessages12.rmsg:64
+#: data/mp/messages/resmessages2.rmsg:344
 #: data/mp/messages/strings/resstrings.txt:516
 msgid "New fire detection systems"
 msgstr "Új tűz érzékelő rendszerek"
@@ -404,12 +585,18 @@ msgstr "Új tűz érzékelő rendszerek"
 #: data/base/messages/resmessages12.rmsg:72
 #: data/base/messages/resmessages23.rmsg:50
 #: data/base/messages/resmessages3.rmsg:446
+#: data/mp/messages/resmessages12.rmsg:65
+#: data/mp/messages/resmessages23.rmsg:45
+#: data/mp/messages/resmessages3.rmsg:405
 msgid "Extends CB Range"
 msgstr "Megnöveli a CB hatósugarát"
 
 #: data/base/messages/resmessages12.rmsg:73
 #: data/base/messages/resmessages23.rmsg:51
 #: data/base/messages/resmessages3.rmsg:447
+#: data/mp/messages/resmessages12.rmsg:66
+#: data/mp/messages/resmessages23.rmsg:46
+#: data/mp/messages/resmessages3.rmsg:406
 msgid "All CB sensors upgraded automatically"
 msgstr "CB érzékelők automatikusan fejlesztve"
 
@@ -420,10 +607,18 @@ msgstr "CB érzékelők automatikusan fejlesztve"
 #: data/base/messages/resmessages3.rmsg:741
 #: data/base/messages/resmessages3.rmsg:752
 #: data/base/messages/resmessagesall.rmsg:147
+#: data/mp/messages/resmessages12.rmsg:73
+#: data/mp/messages/resmessages12.rmsg:163
+#: data/mp/messages/resmessages12.rmsg:173
+#: data/mp/messages/resmessages1.rmsg:443
+#: data/mp/messages/resmessages3.rmsg:673
+#: data/mp/messages/resmessages3.rmsg:683
+#: data/mp/messages/resmessagesall.rmsg:163
 msgid "Cannon Upgrade"
 msgstr "Ágyú fejlesztés"
 
 #: data/base/messages/resmessages12.rmsg:82
+#: data/mp/messages/resmessages12.rmsg:74
 msgid "Determines range to target"
 msgstr "Céltávolság meghatározása"
 
@@ -439,6 +634,13 @@ msgstr "Megnövekedett ágyú célpontosság"
 #: data/base/messages/resmessages3.rmsg:744
 #: data/base/messages/resmessages3.rmsg:755
 #: data/base/messages/resmessagesall.rmsg:150
+#: data/mp/messages/resmessages12.rmsg:76
+#: data/mp/messages/resmessages12.rmsg:166
+#: data/mp/messages/resmessages12.rmsg:176
+#: data/mp/messages/resmessages1.rmsg:446
+#: data/mp/messages/resmessages3.rmsg:676
+#: data/mp/messages/resmessages3.rmsg:686
+#: data/mp/messages/resmessagesall.rmsg:166
 msgid "All cannons upgraded automatically"
 msgstr "Lövegek automatikusan fejlesztve"
 
@@ -446,6 +648,10 @@ msgstr "Lövegek automatikusan fejlesztve"
 #: data/base/messages/resmessages1.rmsg:510
 #: data/base/messages/resmessages2.rmsg:664
 #: data/base/messages/strings/resstrings.txt:765
+#: data/mp/messages/resmessages12.rmsg:83
+#: data/mp/messages/resmessages1.rmsg:463
+#: data/mp/messages/resmessages2.rmsg:603
+#: data/mp/messages/resmessagesall.rmsg:603
 #: data/mp/messages/strings/resstrings.txt:804
 msgid "Flamer Upgrade"
 msgstr "Lángvető fejlesztés"
@@ -454,6 +660,9 @@ msgstr "Lángvető fejlesztés"
 #: data/base/messages/resmessages12.rmsg:181
 #: data/base/messages/resmessages2.rmsg:731
 #: data/base/messages/strings/resstrings.txt:810
+#: data/mp/messages/resmessages12.rmsg:84
+#: data/mp/messages/resmessages12.rmsg:164
+#: data/mp/messages/resmessages2.rmsg:664
 #: data/mp/messages/strings/resstrings.txt:851
 msgid "Automatic loading mechanism replaces manual loader"
 msgstr "Automatikus újratöltés felváltja a kézi újratöltést"
@@ -466,6 +675,10 @@ msgstr "Megnövekedett lángvető tűzgyorsaság"
 #: data/base/messages/resmessages1.rmsg:513
 #: data/base/messages/resmessages2.rmsg:667
 #: data/base/messages/strings/resstrings.txt:768
+#: data/mp/messages/resmessages12.rmsg:86
+#: data/mp/messages/resmessages1.rmsg:466
+#: data/mp/messages/resmessages2.rmsg:606
+#: data/mp/messages/resmessagesall.rmsg:606
 #: data/mp/messages/strings/resstrings.txt:807
 msgid "All flamers upgraded automatically"
 msgstr "Lángvetők automatikusan fejlesztve"
@@ -484,6 +697,22 @@ msgstr "Lángvetők automatikusan fejlesztve"
 #: data/base/messages/strings/resstrings.txt:729
 #: data/base/messages/strings/resstrings.txt:735
 #: data/base/messages/strings/resstrings.txt:757
+#: data/mp/messages/resmessages12.rmsg:93
+#: data/mp/messages/resmessages1.rmsg:413
+#: data/mp/messages/resmessages1.rmsg:423
+#: data/mp/messages/resmessages1.rmsg:433
+#: data/mp/messages/resmessages1.rmsg:453
+#: data/mp/messages/resmessages1.rmsg:473
+#: data/mp/messages/resmessages1.rmsg:483
+#: data/mp/messages/resmessages23.rmsg:163
+#: data/mp/messages/resmessages2.rmsg:573
+#: data/mp/messages/resmessages2.rmsg:583
+#: data/mp/messages/resmessages2.rmsg:593
+#: data/mp/messages/resmessagesall.rmsg:293
+#: data/mp/messages/resmessagesall.rmsg:383
+#: data/mp/messages/resmessagesall.rmsg:433
+#: data/mp/messages/resmessagesall.rmsg:543
+#: data/mp/messages/resmessagesall.rmsg:683
 #: data/mp/messages/strings/resstrings.txt:764
 #: data/mp/messages/strings/resstrings.txt:770
 #: data/mp/messages/strings/resstrings.txt:796
@@ -491,6 +720,7 @@ msgid "New Weapon Turret Available"
 msgstr "Új lövegtorony érhető el"
 
 #: data/base/messages/resmessages12.rmsg:104
+#: data/mp/messages/resmessages12.rmsg:94
 msgid ".50-calibre heavy machinegun"
 msgstr "50-es kaliberű nehéz gépfegyver"
 
@@ -498,6 +728,12 @@ msgstr "50-es kaliberű nehéz gépfegyver"
 #: data/base/messages/resmessages1.rmsg:523
 #: data/base/messages/resmessages1.rmsg:534
 #: data/base/messages/resmessages23.rmsg:182
+#: data/mp/messages/resmessages12.rmsg:95
+#: data/mp/messages/resmessages1.rmsg:475
+#: data/mp/messages/resmessages1.rmsg:485
+#: data/mp/messages/resmessages23.rmsg:165
+#: data/mp/messages/resmessagesall.rmsg:685
+#: data/mp/messages/resmessagesall.rmsg:695
 msgid "Best Targets: Infantry, base structures, wheeled vehicles"
 msgstr "Célok: gyalogság, bázis épületek, kerekes járművek"
 
@@ -540,6 +776,55 @@ msgstr "Célok: gyalogság, bázis épületek, kerekes járművek"
 #: data/base/messages/strings/resstrings.txt:656
 #: data/base/messages/strings/resstrings.txt:688
 #: data/base/messages/strings/resstrings.txt:694
+#: data/mp/messages/resmessages12.rmsg:96
+#: data/mp/messages/resmessages1.rmsg:35
+#: data/mp/messages/resmessages1.rmsg:45
+#: data/mp/messages/resmessages1.rmsg:55
+#: data/mp/messages/resmessages1.rmsg:65
+#: data/mp/messages/resmessages1.rmsg:376
+#: data/mp/messages/resmessages1.rmsg:416
+#: data/mp/messages/resmessages1.rmsg:426
+#: data/mp/messages/resmessages2.rmsg:25
+#: data/mp/messages/resmessages2.rmsg:35
+#: data/mp/messages/resmessages2.rmsg:456
+#: data/mp/messages/resmessages2.rmsg:466
+#: data/mp/messages/resmessages2.rmsg:476
+#: data/mp/messages/resmessages2.rmsg:486
+#: data/mp/messages/resmessages2.rmsg:526
+#: data/mp/messages/resmessages2.rmsg:536
+#: data/mp/messages/resmessages3.rmsg:75
+#: data/mp/messages/resmessages3.rmsg:85
+#: data/mp/messages/resmessages3.rmsg:95
+#: data/mp/messages/resmessages3.rmsg:105
+#: data/mp/messages/resmessages3.rmsg:115
+#: data/mp/messages/resmessages3.rmsg:125
+#: data/mp/messages/resmessages3.rmsg:135
+#: data/mp/messages/resmessages3.rmsg:145
+#: data/mp/messages/resmessages3.rmsg:155
+#: data/mp/messages/resmessages3.rmsg:726
+#: data/mp/messages/resmessages3.rmsg:736
+#: data/mp/messages/resmessages3.rmsg:926
+#: data/mp/messages/resmessages3.rmsg:936
+#: data/mp/messages/resmessagesall.rmsg:175
+#: data/mp/messages/resmessagesall.rmsg:185
+#: data/mp/messages/resmessagesall.rmsg:225
+#: data/mp/messages/resmessagesall.rmsg:235
+#: data/mp/messages/resmessagesall.rmsg:245
+#: data/mp/messages/resmessagesall.rmsg:255
+#: data/mp/messages/resmessagesall.rmsg:335
+#: data/mp/messages/resmessagesall.rmsg:345
+#: data/mp/messages/resmessagesall.rmsg:355
+#: data/mp/messages/resmessagesall.rmsg:365
+#: data/mp/messages/resmessagesall.rmsg:376
+#: data/mp/messages/resmessagesall.rmsg:436
+#: data/mp/messages/resmessagesall.rmsg:475
+#: data/mp/messages/resmessagesall.rmsg:485
+#: data/mp/messages/resmessagesall.rmsg:495
+#: data/mp/messages/resmessagesall.rmsg:586
+#: data/mp/messages/resmessagesall.rmsg:596
+#: data/mp/messages/resmessagesall.rmsg:646
+#: data/mp/messages/resmessagesall.rmsg:666
+#: data/mp/messages/resmessagesall.rmsg:676
 #: data/mp/messages/strings/resstrings.txt:55
 #: data/mp/messages/strings/resstrings.txt:87
 #: data/mp/messages/strings/resstrings.txt:99
@@ -563,12 +848,21 @@ msgstr "Karosszéria fejlettsége: közepes"
 #: data/base/messages/resmessages3.rmsg:862
 #: data/base/messages/strings/resstrings.txt:845
 #: data/base/messages/strings/resstrings.txt:857
+#: data/mp/messages/resmessages12.rmsg:103
+#: data/mp/messages/resmessages1.rmsg:493
+#: data/mp/messages/resmessages1.rmsg:503
+#: data/mp/messages/resmessages23.rmsg:133
+#: data/mp/messages/resmessages2.rmsg:673
+#: data/mp/messages/resmessages2.rmsg:683
+#: data/mp/messages/resmessages3.rmsg:773
+#: data/mp/messages/resmessages3.rmsg:783
 #: data/mp/messages/strings/resstrings.txt:888
 #: data/mp/messages/strings/resstrings.txt:900
 msgid "Machinegun Upgrade"
 msgstr "Gépfegyver fejlesztés"
 
 #: data/base/messages/resmessages12.rmsg:115
+#: data/mp/messages/resmessages12.rmsg:104
 msgid "Chaingun mechanism replaces belt-feed"
 msgstr "Láncfegyver mechanikát felváltja az őv rendszerű"
 
@@ -590,6 +884,14 @@ msgstr "Megnövekedett gépfegyver tűzgyorsaság"
 #: data/base/messages/resmessages3.rmsg:865
 #: data/base/messages/strings/resstrings.txt:848
 #: data/base/messages/strings/resstrings.txt:860
+#: data/mp/messages/resmessages12.rmsg:106
+#: data/mp/messages/resmessages1.rmsg:496
+#: data/mp/messages/resmessages1.rmsg:506
+#: data/mp/messages/resmessages23.rmsg:136
+#: data/mp/messages/resmessages2.rmsg:676
+#: data/mp/messages/resmessages2.rmsg:686
+#: data/mp/messages/resmessages3.rmsg:776
+#: data/mp/messages/resmessages3.rmsg:786
 #: data/mp/messages/strings/resstrings.txt:891
 #: data/mp/messages/strings/resstrings.txt:903
 msgid "All machineguns upgraded automatically"
@@ -606,6 +908,15 @@ msgstr "Gépfegyverek automatikusan fejlesztve"
 #: data/base/messages/strings/resstrings.txt:779
 #: data/base/messages/strings/resstrings.txt:787
 #: data/base/messages/strings/resstrings.txt:891
+#: data/mp/messages/resmessages12.rmsg:113
+#: data/mp/messages/resmessages1.rmsg:513
+#: data/mp/messages/resmessages23.rmsg:153
+#: data/mp/messages/resmessages2.rmsg:613
+#: data/mp/messages/resmessages2.rmsg:623
+#: data/mp/messages/resmessages2.rmsg:633
+#: data/mp/messages/resmessages2.rmsg:693
+#: data/mp/messages/resmessagesall.rmsg:263
+#: data/mp/messages/resmessagesall.rmsg:273
 #: data/mp/messages/strings/resstrings.txt:812
 #: data/mp/messages/strings/resstrings.txt:820
 #: data/mp/messages/strings/resstrings.txt:828
@@ -616,6 +927,8 @@ msgstr "Új indirekt tűzfegyver érhető el"
 #: data/base/messages/resmessages12.rmsg:126
 #: data/base/messages/resmessages2.rmsg:764
 #: data/base/messages/strings/resstrings.txt:892
+#: data/mp/messages/resmessages12.rmsg:114
+#: data/mp/messages/resmessages2.rmsg:694
 #: data/mp/messages/strings/resstrings.txt:935
 msgid "May be assigned to a sensor"
 msgstr "Hozzárendelhető egy érzékelőhöz"
@@ -624,6 +937,10 @@ msgstr "Hozzárendelhető egy érzékelőhöz"
 #: data/base/messages/resmessages1.rmsg:567
 #: data/base/messages/resmessages2.rmsg:765
 #: data/base/messages/strings/resstrings.txt:893
+#: data/mp/messages/resmessages12.rmsg:115
+#: data/mp/messages/resmessages1.rmsg:515
+#: data/mp/messages/resmessages2.rmsg:695
+#: data/mp/messages/resmessagesall.rmsg:275
 #: data/mp/messages/strings/resstrings.txt:936
 msgid "Best Targets: Base structures, infantry, wheeled vehicles"
 msgstr "Célok: bázis épületek, gyalogság, kerekes járművek"
@@ -644,6 +961,22 @@ msgstr "Célok: bázis épületek, gyalogság, kerekes járművek"
 #: data/base/messages/resmessagesall.rmsg:128
 #: data/base/messages/resmessagesall.rmsg:139
 #: data/base/messages/strings/resstrings.txt:894
+#: data/mp/messages/resmessages12.rmsg:116
+#: data/mp/messages/resmessages12.rmsg:146
+#: data/mp/messages/resmessages12.rmsg:196
+#: data/mp/messages/resmessages12.rmsg:206
+#: data/mp/messages/resmessages1.rmsg:516
+#: data/mp/messages/resmessages1.rmsg:536
+#: data/mp/messages/resmessages2.rmsg:696
+#: data/mp/messages/resmessages3.rmsg:796
+#: data/mp/messages/resmessages3.rmsg:806
+#: data/mp/messages/resmessages3.rmsg:846
+#: data/mp/messages/resmessages3.rmsg:856
+#: data/mp/messages/resmessages3.rmsg:866
+#: data/mp/messages/resmessages3.rmsg:876
+#: data/mp/messages/resmessagesall.rmsg:146
+#: data/mp/messages/resmessagesall.rmsg:156
+#: data/mp/messages/resmessagesall.rmsg:276
 #: data/mp/messages/strings/resstrings.txt:937
 msgid "Body Points: Very Low"
 msgstr "Karosszéria fejlettsége: nagyon alacsony"
@@ -656,11 +989,19 @@ msgstr "Karosszéria fejlettsége: nagyon alacsony"
 #: data/base/messages/resmessages3.rmsg:994
 #: data/base/messages/resmessages3.rmsg:1005
 #: data/base/messages/strings/resstrings.txt:905
+#: data/mp/messages/resmessages12.rmsg:123
+#: data/mp/messages/resmessages12.rmsg:133
+#: data/mp/messages/resmessages1.rmsg:523
+#: data/mp/messages/resmessages23.rmsg:143
+#: data/mp/messages/resmessages2.rmsg:703
+#: data/mp/messages/resmessages3.rmsg:903
+#: data/mp/messages/resmessages3.rmsg:913
 #: data/mp/messages/strings/resstrings.txt:950
 msgid "Mortar Upgrade"
 msgstr "Aknavető fejlesztés"
 
 #: data/base/messages/resmessages12.rmsg:137
+#: data/mp/messages/resmessages12.rmsg:124
 msgid "Targeting systems compensate for distance and weather conditions"
 msgstr "Célzó rendszer kompenzálja a távolság-és időjárási viszonyokat"
 
@@ -678,11 +1019,19 @@ msgstr "Megnövelt aknavető célpontosság"
 #: data/base/messages/resmessages3.rmsg:997
 #: data/base/messages/resmessages3.rmsg:1008
 #: data/base/messages/strings/resstrings.txt:908
+#: data/mp/messages/resmessages12.rmsg:126
+#: data/mp/messages/resmessages12.rmsg:136
+#: data/mp/messages/resmessages1.rmsg:526
+#: data/mp/messages/resmessages23.rmsg:146
+#: data/mp/messages/resmessages2.rmsg:706
+#: data/mp/messages/resmessages3.rmsg:906
+#: data/mp/messages/resmessages3.rmsg:916
 #: data/mp/messages/strings/resstrings.txt:953
 msgid "All mortars upgraded automatically"
 msgstr "Aknavetők automatikusan fejlesztve"
 
 #: data/base/messages/resmessages12.rmsg:148
+#: data/mp/messages/resmessages12.rmsg:134
 msgid "Automatic loader replaces manual feed"
 msgstr "Automatikus betöltő helyettesíti a kéz betöltést"
 
@@ -697,14 +1046,22 @@ msgstr "Megnövelt aknavető tűzgyorsaság"
 #: data/base/messages/resmessages1.rmsg:587
 #: data/base/messages/resmessagesall.rmsg:125
 #: data/base/messages/resmessagesall.rmsg:136
+#: data/mp/messages/resmessages12.rmsg:143
+#: data/mp/messages/resmessages12.rmsg:193
+#: data/mp/messages/resmessages12.rmsg:203
+#: data/mp/messages/resmessages1.rmsg:533
+#: data/mp/messages/resmessagesall.rmsg:143
+#: data/mp/messages/resmessagesall.rmsg:153
 msgid "New Rocket Available"
 msgstr "Új rakéta érhető el"
 
 #: data/base/messages/resmessages12.rmsg:159
+#: data/mp/messages/resmessages12.rmsg:144
 msgid "Rocket artillery; can be assigned to a sensor"
 msgstr "Rakéta tüzérség; hozzárendelhető egy érzékelőhöz"
 
 #: data/base/messages/resmessages12.rmsg:160
+#: data/mp/messages/resmessages12.rmsg:145
 msgid "Best Targets: Vehicles and Emplacements"
 msgstr "Célok: járművek és védelmi állások"
 
@@ -715,11 +1072,22 @@ msgstr "Célok: járművek és védelmi állások"
 #: data/base/messages/resmessages2.rmsg:796
 #: data/base/messages/resmessagesall.rmsg:114
 #: data/base/messages/strings/resstrings.txt:965
+#: data/mp/messages/resmessages12.rmsg:153
+#: data/mp/messages/resmessages12.rmsg:183
+#: data/mp/messages/resmessages1.rmsg:543
+#: data/mp/messages/resmessages1.rmsg:553
+#: data/mp/messages/resmessages1.rmsg:563
+#: data/mp/messages/resmessages1.rmsg:573
+#: data/mp/messages/resmessages1.rmsg:583
+#: data/mp/messages/resmessages2.rmsg:713
+#: data/mp/messages/resmessages2.rmsg:723
+#: data/mp/messages/resmessagesall.rmsg:133
 #: data/mp/messages/strings/resstrings.txt:1010
 msgid "Rocket Upgrade"
 msgstr "Rakéta fejlesztés"
 
 #: data/base/messages/resmessages12.rmsg:170
+#: data/mp/messages/resmessages12.rmsg:154
 msgid "Autoloader increases reload rate"
 msgstr "Automatikus újratöltés felgyorsítja az újratöltést"
 
@@ -734,6 +1102,16 @@ msgstr "Megnövelt rakéta tűzgyorsaság"
 #: data/base/messages/resmessages2.rmsg:799
 #: data/base/messages/resmessagesall.rmsg:117
 #: data/base/messages/strings/resstrings.txt:968
+#: data/mp/messages/resmessages12.rmsg:156
+#: data/mp/messages/resmessages12.rmsg:186
+#: data/mp/messages/resmessages1.rmsg:546
+#: data/mp/messages/resmessages1.rmsg:556
+#: data/mp/messages/resmessages1.rmsg:566
+#: data/mp/messages/resmessages1.rmsg:576
+#: data/mp/messages/resmessages1.rmsg:586
+#: data/mp/messages/resmessages2.rmsg:716
+#: data/mp/messages/resmessages2.rmsg:726
+#: data/mp/messages/resmessagesall.rmsg:136
 #: data/mp/messages/strings/resstrings.txt:1013
 msgid "All rockets upgraded automatically"
 msgstr "Rakéták automatikusan fejlesztve"
@@ -744,6 +1122,7 @@ msgid "Increases Cannon ROF"
 msgstr "Megnövekedett ágyú tűzgyorsaság"
 
 #: data/base/messages/resmessages12.rmsg:192
+#: data/mp/messages/resmessages12.rmsg:174
 msgid "Armor-Piercing Fin-Stabilized Discarding Sabot"
 msgstr "Leváló köpenyes szárnystabilizált páncéltörő lövedék (APFSDS)"
 
@@ -754,6 +1133,7 @@ msgid "Increases Cannon damage"
 msgstr "Megnövekedett ágyú sebzés"
 
 #: data/base/messages/resmessages12.rmsg:203
+#: data/mp/messages/resmessages12.rmsg:184
 msgid "Rocket tracks the laser designator to the target"
 msgstr "Rakéta a lézeres célkijelölést követi"
 
@@ -764,6 +1144,7 @@ msgid "Increases Rocket accuracy"
 msgstr "Megnövekedett rakéta célpontosság"
 
 #: data/base/messages/resmessages12.rmsg:214
+#: data/mp/messages/resmessages12.rmsg:194
 msgid "Heavy anti-tank rocket"
 msgstr "Nehéz tankelhárító rakéta"
 
@@ -780,24 +1161,42 @@ msgstr "Nehéz tankelhárító rakéta"
 #: data/base/messages/resmessagesall.rmsg:127
 #: data/base/messages/strings/resstrings.txt:731
 #: data/base/messages/strings/resstrings.txt:737
+#: data/mp/messages/resmessages12.rmsg:195
+#: data/mp/messages/resmessages1.rmsg:415
+#: data/mp/messages/resmessages2.rmsg:585
+#: data/mp/messages/resmessages3.rmsg:795
+#: data/mp/messages/resmessages3.rmsg:925
+#: data/mp/messages/resmessages3.rmsg:935
+#: data/mp/messages/resmessages3.rmsg:945
+#: data/mp/messages/resmessagesall.rmsg:145
+#: data/mp/messages/resmessagesall.rmsg:385
+#: data/mp/messages/resmessagesall.rmsg:435
+#: data/mp/messages/resmessagesall.rmsg:715
 #: data/mp/messages/strings/resstrings.txt:766
 #: data/mp/messages/strings/resstrings.txt:772
 msgid "Best Targets: Vehicles"
 msgstr "Célok: járművek"
 
 #: data/base/messages/resmessages12.rmsg:225
+#: data/mp/messages/resmessages12.rmsg:204
 msgid "Fires salvoes of mini-rockets"
 msgstr "Sortűz kisrakétákkal"
 
 #: data/base/messages/resmessages12.rmsg:226
+#: data/mp/messages/resmessages12.rmsg:205
 msgid "Best Targets: Base structures"
 msgstr "Célok: bázis épületek"
 
 #: data/base/messages/resmessages1.rmsg:5
+#: data/mp/messages/resmessages1.rmsg:4
 msgid "New battlefield computer system"
 msgstr "Új harctéri számítógép rendszer"
 
 #: data/base/messages/resmessages1.rmsg:6
+#: data/mp/messages/resmessages1.rmsg:5
+#: data/mp/messages/resmessagesall.rmsg:725
+#: data/mp/messages/resmessagesall.rmsg:735
+#: data/mp/messages/resmessagesall.rmsg:745
 msgid "Commander leads groups acts as factory delivery point"
 msgstr "A parancsnok úgy irányítja a csapatokat mint a gyári szállítási pont"
 
@@ -807,6 +1206,15 @@ msgstr "A parancsnok úgy irányítja a csapatokat mint a gyári szállítási p
 #: data/base/messages/resmessages2.rmsg:645
 #: data/base/messages/resmessages3.rmsg:1041
 #: data/base/messages/strings/resstrings.txt:738
+#: data/mp/messages/resmessages1.rmsg:6
+#: data/mp/messages/resmessages1.rmsg:396
+#: data/mp/messages/resmessages1.rmsg:436
+#: data/mp/messages/resmessages2.rmsg:586
+#: data/mp/messages/resmessages3.rmsg:946
+#: data/mp/messages/resmessagesall.rmsg:386
+#: data/mp/messages/resmessagesall.rmsg:726
+#: data/mp/messages/resmessagesall.rmsg:736
+#: data/mp/messages/resmessagesall.rmsg:746
 #: data/mp/messages/strings/resstrings.txt:773
 msgid "Body Points: High"
 msgstr "Karosszéria fejlettsége: magas"
@@ -814,18 +1222,24 @@ msgstr "Karosszéria fejlettsége: magas"
 #: data/base/messages/resmessages1.rmsg:15
 #: data/base/messages/resmessages3.rmsg:15
 #: data/base/messages/resmessages3.rmsg:26
+#: data/mp/messages/resmessages1.rmsg:13
+#: data/mp/messages/resmessages3.rmsg:13
+#: data/mp/messages/resmessages3.rmsg:23
 msgid "Computer Technology Breakthrough"
 msgstr "Számítógépes technológiai áttörés"
 
 #: data/base/messages/resmessages1.rmsg:16
+#: data/mp/messages/resmessages1.rmsg:14
 msgid "Synaptic Link allows humans to interface directly with computers"
 msgstr "A szinaptikus kapcsolat lehetővé teszi, hogy az emberek közvetlenül kapcsolódjanak a számítógépekhez"
 
 #: data/base/messages/resmessages1.rmsg:17
+#: data/mp/messages/resmessages1.rmsg:15
 msgid "Cyborgs can now be researched"
 msgstr "Cyborg kutatás megkezdhető"
 
 #: data/base/messages/resmessages1.rmsg:18
+#: data/mp/messages/resmessages1.rmsg:16
 msgid "New research options available"
 msgstr "Rendelkezésre álló új kutatóopciók"
 
@@ -834,12 +1248,18 @@ msgstr "Rendelkezésre álló új kutatóopciók"
 #: data/base/messages/resmessages3.rmsg:59
 #: data/base/messages/resmessages3.rmsg:70
 #: data/base/messages/strings/resstrings.txt:31
+#: data/mp/messages/resmessages1.rmsg:23
+#: data/mp/messages/resmessages2.rmsg:13
+#: data/mp/messages/resmessages3.rmsg:53
+#: data/mp/messages/resmessages3.rmsg:63
 #: data/mp/messages/strings/resstrings.txt:35
 msgid "Cyborg Materials Improved"
 msgstr "Cyborg anyagok korszerűsítve"
 
 #: data/base/messages/resmessages1.rmsg:27
 #: data/base/messages/resmessages1.rmsg:401
+#: data/mp/messages/resmessages1.rmsg:24
+#: data/mp/messages/resmessages1.rmsg:364
 msgid "Layered composite alloys and energy-absorbing fibres"
 msgstr "Rétegelt kompozit ötvözetek és energiaelnyelő szálak"
 
@@ -862,6 +1282,14 @@ msgstr "Megnövekedett kinetikus páncél és karosszéria értékek"
 #: data/base/messages/resmessages3.rmsg:73
 #: data/base/messages/strings/resstrings.txt:34
 #: data/base/messages/strings/resstrings.txt:44
+#: data/mp/messages/resmessages1.rmsg:26
+#: data/mp/messages/resmessages23.rmsg:6
+#: data/mp/messages/resmessages2.rmsg:6
+#: data/mp/messages/resmessages2.rmsg:16
+#: data/mp/messages/resmessages3.rmsg:6
+#: data/mp/messages/resmessages3.rmsg:46
+#: data/mp/messages/resmessages3.rmsg:56
+#: data/mp/messages/resmessages3.rmsg:66
 #: data/mp/messages/strings/resstrings.txt:38
 #: data/mp/messages/strings/resstrings.txt:48
 msgid "All Cyborgs upgraded automatically"
@@ -879,12 +1307,34 @@ msgstr "Cyborgok automatikusan fejlesztve"
 #: data/base/messages/resmessages3.rmsg:114
 #: data/base/messages/strings/resstrings.txt:49
 #: data/base/messages/strings/resstrings.txt:65
+#: data/mp/messages/resmessages1.rmsg:33
+#: data/mp/messages/resmessages1.rmsg:43
+#: data/mp/messages/resmessages1.rmsg:53
+#: data/mp/messages/resmessages1.rmsg:63
+#: data/mp/messages/resmessages2.rmsg:23
+#: data/mp/messages/resmessages2.rmsg:33
+#: data/mp/messages/resmessages3.rmsg:73
+#: data/mp/messages/resmessages3.rmsg:83
+#: data/mp/messages/resmessages3.rmsg:93
+#: data/mp/messages/resmessages3.rmsg:103
+#: data/mp/messages/resmessagesall.rmsg:223
+#: data/mp/messages/resmessagesall.rmsg:233
+#: data/mp/messages/resmessagesall.rmsg:243
+#: data/mp/messages/resmessagesall.rmsg:253
+#: data/mp/messages/resmessagesall.rmsg:333
+#: data/mp/messages/resmessagesall.rmsg:343
+#: data/mp/messages/resmessagesall.rmsg:353
+#: data/mp/messages/resmessagesall.rmsg:363
+#: data/mp/messages/resmessagesall.rmsg:473
+#: data/mp/messages/resmessagesall.rmsg:483
+#: data/mp/messages/resmessagesall.rmsg:493
 #: data/mp/messages/strings/resstrings.txt:53
 #: data/mp/messages/strings/resstrings.txt:85
 msgid "New Cyborg Available"
 msgstr "Új Cyborg érhető el"
 
 #: data/base/messages/resmessages1.rmsg:38
+#: data/mp/messages/resmessages1.rmsg:34
 msgid "Armed with Cyborg Machinegun"
 msgstr "Cyborg gépfegyverrel felszerelt"
 
@@ -906,6 +1356,31 @@ msgstr "Cyborg gépfegyverrel felszerelt"
 #: data/base/messages/strings/resstrings.txt:68
 #: data/base/messages/strings/resstrings.txt:80
 #: data/base/messages/strings/resstrings.txt:86
+#: data/mp/messages/resmessages1.rmsg:36
+#: data/mp/messages/resmessages1.rmsg:46
+#: data/mp/messages/resmessages1.rmsg:56
+#: data/mp/messages/resmessages1.rmsg:66
+#: data/mp/messages/resmessages2.rmsg:26
+#: data/mp/messages/resmessages2.rmsg:36
+#: data/mp/messages/resmessages3.rmsg:76
+#: data/mp/messages/resmessages3.rmsg:86
+#: data/mp/messages/resmessages3.rmsg:96
+#: data/mp/messages/resmessages3.rmsg:106
+#: data/mp/messages/resmessages3.rmsg:116
+#: data/mp/messages/resmessages3.rmsg:126
+#: data/mp/messages/resmessages3.rmsg:136
+#: data/mp/messages/resmessages3.rmsg:146
+#: data/mp/messages/resmessagesall.rmsg:226
+#: data/mp/messages/resmessagesall.rmsg:236
+#: data/mp/messages/resmessagesall.rmsg:246
+#: data/mp/messages/resmessagesall.rmsg:256
+#: data/mp/messages/resmessagesall.rmsg:336
+#: data/mp/messages/resmessagesall.rmsg:346
+#: data/mp/messages/resmessagesall.rmsg:356
+#: data/mp/messages/resmessagesall.rmsg:366
+#: data/mp/messages/resmessagesall.rmsg:476
+#: data/mp/messages/resmessagesall.rmsg:486
+#: data/mp/messages/resmessagesall.rmsg:496
 #: data/mp/messages/strings/resstrings.txt:56
 #: data/mp/messages/strings/resstrings.txt:88
 #: data/mp/messages/strings/resstrings.txt:100
@@ -914,14 +1389,17 @@ msgid "Requires Cyborg factory to produce"
 msgstr "Cyborg gyár szükséges az előállításhoz"
 
 #: data/base/messages/resmessages1.rmsg:49
+#: data/mp/messages/resmessages1.rmsg:44
 msgid "Armed with Cyborg Cannon"
 msgstr "Cyborg ágyúval felszerelt"
 
 #: data/base/messages/resmessages1.rmsg:60
+#: data/mp/messages/resmessages1.rmsg:54
 msgid "Armed with Cyborg Flamer"
 msgstr "Cyborg lángvetővel felszerelt"
 
 #: data/base/messages/resmessages1.rmsg:71
+#: data/mp/messages/resmessages1.rmsg:64
 msgid "Armed with Lance Anti-Tank rocket"
 msgstr "Tankelhárító rakétával szerelt"
 
@@ -930,11 +1408,16 @@ msgstr "Tankelhárító rakétával szerelt"
 #: data/base/messages/resmessages3.rmsg:180
 #: data/base/messages/resmessages3.rmsg:191
 #: data/base/messages/strings/resstrings.txt:103
+#: data/mp/messages/resmessages1.rmsg:73
+#: data/mp/messages/resmessages2.rmsg:43
+#: data/mp/messages/resmessages3.rmsg:163
+#: data/mp/messages/resmessages3.rmsg:173
 #: data/mp/messages/strings/resstrings.txt:123
 msgid "Defenses Improved"
 msgstr "Védművek továbfejlesztve"
 
 #: data/base/messages/resmessages1.rmsg:82
+#: data/mp/messages/resmessages1.rmsg:74
 msgid "Improved Titanium-reinforced concrete"
 msgstr "Korszerűsített Titán erősítésű vasbeton"
 
@@ -947,15 +1430,21 @@ msgstr "Megnövekedett páncél és karosszéria értékek"
 #: data/base/messages/resmessages3.rmsg:183
 #: data/base/messages/resmessages3.rmsg:194
 #: data/base/messages/strings/resstrings.txt:106
+#: data/mp/messages/resmessages1.rmsg:76
+#: data/mp/messages/resmessages2.rmsg:46
+#: data/mp/messages/resmessages3.rmsg:166
+#: data/mp/messages/resmessages3.rmsg:176
 #: data/mp/messages/strings/resstrings.txt:126
 msgid "All defenses and walls upgraded automatically"
 msgstr "Védművek és falak automatikusan fejlesztve"
 
 #: data/base/messages/resmessages1.rmsg:93
+#: data/mp/messages/resmessages1.rmsg:84
 msgid "Steel tower with machinegun"
 msgstr "Gépfegyver torony"
 
 #: data/base/messages/resmessages1.rmsg:95
+#: data/mp/messages/resmessages1.rmsg:86
 msgid "Defensive Strength: Low"
 msgstr "Védelmi erő: alacsony"
 
@@ -964,6 +1453,7 @@ msgid "Armored guard tower with Mini-Pod Rocket"
 msgstr "Páncélozott őrtoron kis rakétavetővel"
 
 #: data/base/messages/resmessages1.rmsg:115
+#: data/mp/messages/resmessages1.rmsg:104
 msgid "Armored bunker with Machinegun"
 msgstr "Páncélozott bunker gépfegyverrel"
 
@@ -972,33 +1462,40 @@ msgid "Armored bunker with Lancer AT rocket"
 msgstr "Páncélozott bunker tankelhárító rakétával"
 
 #: data/base/messages/resmessages1.rmsg:137
+#: data/mp/messages/resmessages1.rmsg:124
 msgid "Armored bunker with Flamer"
 msgstr "Páncélozott bunker lángvetővel"
 
 #: data/base/messages/resmessages1.rmsg:148
+#: data/mp/messages/resmessages1.rmsg:134
 msgid "Armored bunker with Light Cannon"
 msgstr "Páncélozott bunker könnyű ágyúval"
 
 #: data/base/messages/resmessages1.rmsg:159
+#: data/mp/messages/resmessages1.rmsg:144
 msgid "Armored hardpoint with Light Cannon"
 msgstr "Páncélozott talapzat könnyű ágyúval"
 
 #: data/base/messages/resmessages1.rmsg:170
+#: data/mp/messages/resmessages1.rmsg:154
 msgid "Armored hardpoint with Medium Cannon"
 msgstr "Páncélozott talapzat közepes ágyúval"
 
 #: data/base/messages/resmessages1.rmsg:181
+#: data/mp/messages/resmessages1.rmsg:164
 msgid "Armored hardpoint with Heavy Cannon"
 msgstr "Páncélozott talapzat nehéz ágyúval"
 
 #: data/base/messages/resmessages1.rmsg:192
 #: data/base/messages/strings/resstrings.txt:324
+#: data/mp/messages/resmessages1.rmsg:174
 #: data/mp/messages/strings/resstrings.txt:352
 msgid "Reinforced concrete tank traps"
 msgstr "Megerősített vasbeton tankcsapda"
 
 #: data/base/messages/resmessages1.rmsg:193
 #: data/base/messages/strings/resstrings.txt:325
+#: data/mp/messages/resmessages1.rmsg:175
 #: data/mp/messages/strings/resstrings.txt:353
 msgid "Prevents enemy movement"
 msgstr "Megakadályozza az ellenség mozgását"
@@ -1008,18 +1505,26 @@ msgstr "Megakadályozza az ellenség mozgását"
 #: data/base/messages/resmessages1.rmsg:246
 #: data/base/messages/resmessagesall.rmsg:15
 #: data/base/messages/resmessagesall.rmsg:26
+#: data/mp/messages/resmessages1.rmsg:183
+#: data/mp/messages/resmessages1.rmsg:203
+#: data/mp/messages/resmessages1.rmsg:223
+#: data/mp/messages/resmessagesall.rmsg:13
+#: data/mp/messages/resmessagesall.rmsg:23
 msgid "New Base Structure Available"
 msgstr "Új bázisépület érhető el"
 
 #: data/base/messages/resmessages1.rmsg:203
+#: data/mp/messages/resmessages1.rmsg:184
 msgid "New Repair Facility Repairs Damaged Units"
 msgstr "Új szerviz létesítmény javítja a sérült egységeket"
 
 #: data/base/messages/resmessages1.rmsg:204
+#: data/mp/messages/resmessages1.rmsg:185
 msgid "Use the Command Console to send units back for repair"
 msgstr "Az egységek szervizüzembe küldéséhez használja a parancskonzolt"
 
 #: data/base/messages/resmessages1.rmsg:205
+#: data/mp/messages/resmessages1.rmsg:186
 msgid "Or select the Repair Facility as a unit's target"
 msgstr "Vagy válassza ki a szervizüzemet, mint egység célt"
 
@@ -1027,11 +1532,15 @@ msgstr "Vagy válassza ki a szervizüzemet, mint egység célt"
 #: data/base/messages/resmessages2.rmsg:279
 #: data/base/messages/resmessages3.rmsg:356
 #: data/base/messages/strings/resstrings.txt:333
+#: data/mp/messages/resmessages1.rmsg:193
+#: data/mp/messages/resmessages2.rmsg:253
+#: data/mp/messages/resmessages3.rmsg:323
 #: data/mp/messages/strings/resstrings.txt:361
 msgid "Repair Facility Improved"
 msgstr "Szervizüzem fejlesztve"
 
 #: data/base/messages/resmessages1.rmsg:214
+#: data/mp/messages/resmessages1.rmsg:194
 msgid "New automated repair techniques"
 msgstr "Új automatikus szerviz technológia"
 
@@ -1047,19 +1556,25 @@ msgstr "Megnövekedett szervizsebesség"
 #: data/base/messages/resmessages2.rmsg:282
 #: data/base/messages/resmessages3.rmsg:359
 #: data/base/messages/strings/resstrings.txt:336
+#: data/mp/messages/resmessages1.rmsg:196
+#: data/mp/messages/resmessages2.rmsg:256
+#: data/mp/messages/resmessages3.rmsg:326
 #: data/mp/messages/strings/resstrings.txt:364
 msgid "All repair facilities upgraded automatically"
 msgstr "Szervízüzemek automatikusan fejlesztve"
 
 #: data/base/messages/resmessages1.rmsg:225
+#: data/mp/messages/resmessages1.rmsg:204
 msgid "Enables command turret research"
 msgstr "Engedélyezi a parancsnoki lövegtorony fejlesztését"
 
 #: data/base/messages/resmessages1.rmsg:226
+#: data/mp/messages/resmessages1.rmsg:205
 msgid "Directs and collates information for command turrets"
 msgstr "Parancsnoki lövegtornyokhoz irányítja és gyűjti össze az információkat"
 
 #: data/base/messages/resmessages1.rmsg:227
+#: data/mp/messages/resmessages1.rmsg:206
 msgid "Controls up to five commanders"
 msgstr "5 feletti parancsnok irányítása"
 
@@ -1067,6 +1582,9 @@ msgstr "5 feletti parancsnok irányítása"
 #: data/base/messages/resmessages2.rmsg:290
 #: data/base/messages/strings/resstrings.txt:347
 #: data/base/messages/strings/resstrings.txt:355
+#: data/mp/messages/resmessages1.rmsg:213
+#: data/mp/messages/resmessages2.rmsg:263
+#: data/mp/messages/resmessagesall.rmsg:623
 #: data/mp/messages/strings/resstrings.txt:375
 #: data/mp/messages/strings/resstrings.txt:383
 msgid "Cyborg Production Improved"
@@ -1074,6 +1592,7 @@ msgstr "Cyborg gyártás fejlesztve"
 
 #: data/base/messages/resmessages1.rmsg:236
 #: data/base/messages/strings/names.txt:783
+#: data/mp/messages/resmessages1.rmsg:214
 msgid "Automated Cyborg Production"
 msgstr "Automatizált Cyborg gyártás"
 
@@ -1081,6 +1600,9 @@ msgstr "Automatizált Cyborg gyártás"
 #: data/base/messages/resmessages2.rmsg:292
 #: data/base/messages/strings/resstrings.txt:349
 #: data/base/messages/strings/resstrings.txt:357
+#: data/mp/messages/resmessages1.rmsg:215
+#: data/mp/messages/resmessages2.rmsg:265
+#: data/mp/messages/resmessagesall.rmsg:625
 #: data/mp/messages/strings/resstrings.txt:377
 #: data/mp/messages/strings/resstrings.txt:385
 msgid "Increases Cyborg factory output"
@@ -1090,6 +1612,9 @@ msgstr "Megnövekedett Cyborg gyártási teljesítmény"
 #: data/base/messages/resmessages2.rmsg:293
 #: data/base/messages/strings/resstrings.txt:350
 #: data/base/messages/strings/resstrings.txt:358
+#: data/mp/messages/resmessages1.rmsg:216
+#: data/mp/messages/resmessages2.rmsg:266
+#: data/mp/messages/resmessagesall.rmsg:626
 #: data/mp/messages/strings/resstrings.txt:378
 #: data/mp/messages/strings/resstrings.txt:386
 msgid "All Cyborg factories upgraded automatically"
@@ -1098,16 +1623,19 @@ msgstr "Cyborg gyárak automatikusan fejlesztve"
 #: data/base/messages/resmessages1.rmsg:247
 #: data/base/messages/strings/names.txt:399
 #: data/base/messages/strings/names.txt:782
+#: data/mp/messages/resmessages1.rmsg:224
 #: data/mp/messages/strings/names.txt:398
 #: data/mp/messages/strings/names.txt:792
 msgid "Cyborg Factory"
 msgstr "Cyborg gyár"
 
 #: data/base/messages/resmessages1.rmsg:248
+#: data/mp/messages/resmessages1.rmsg:225
 msgid "Produces Cyborgs"
 msgstr "Cyborgokat gyárt"
 
 #: data/base/messages/resmessages1.rmsg:249
+#: data/mp/messages/resmessages1.rmsg:226
 msgid "Research makes additional Cyborgs available"
 msgstr "Kutatással további Cyborgok érhetőek el"
 
@@ -1115,11 +1643,17 @@ msgstr "Kutatással további Cyborgok érhetőek el"
 #: data/base/messages/resmessages2.rmsg:334
 #: data/base/messages/resmessages3.rmsg:411
 #: data/base/messages/strings/resstrings.txt:411
+#: data/mp/messages/resmessages1.rmsg:233
+#: data/mp/messages/resmessages2.rmsg:273
+#: data/mp/messages/resmessages2.rmsg:303
+#: data/mp/messages/resmessages3.rmsg:373
+#: data/mp/messages/resmessagesall.rmsg:613
 #: data/mp/messages/strings/resstrings.txt:439
 msgid "Production Improved"
 msgstr "Gyártás fejlesztve"
 
 #: data/base/messages/resmessages1.rmsg:258
+#: data/mp/messages/resmessages1.rmsg:234
 msgid "Factory module enables medium and large bodies"
 msgstr "A gyármodul lehetővé teszi a közepes és nagy karosszéria osztályt"
 
@@ -1131,6 +1665,7 @@ msgid "Increases factory output"
 msgstr "Megnövekedett gyártási teljesítmény"
 
 #: data/base/messages/resmessages1.rmsg:260
+#: data/mp/messages/resmessages1.rmsg:236
 msgid "Use a truck to add modules to a factory"
 msgstr "Használd a munkagépet a gyár bővítéséhez"
 
@@ -1138,6 +1673,7 @@ msgstr "Használd a munkagépet a gyár bővítéséhez"
 #: data/base/messages/resmessages2.rmsg:301
 #: data/base/messages/strings/resstrings.txt:365
 #: data/base/messages/strings/resstrings.txt:373
+#: data/mp/messages/resmessages1.rmsg:243
 #: data/mp/messages/strings/resstrings.txt:393
 #: data/mp/messages/strings/resstrings.txt:401
 msgid "Vehicle Production Improved"
@@ -1145,6 +1681,7 @@ msgstr "Járműgyártás növekedett"
 
 #: data/base/messages/resmessages1.rmsg:269
 #: data/base/messages/strings/names.txt:794
+#: data/mp/messages/resmessages1.rmsg:244
 msgid "Automated Factory Production"
 msgstr "Automatizált gyári termelés"
 
@@ -1152,34 +1689,43 @@ msgstr "Automatizált gyári termelés"
 #: data/base/messages/resmessages2.rmsg:304
 #: data/base/messages/strings/resstrings.txt:368
 #: data/base/messages/strings/resstrings.txt:376
+#: data/mp/messages/resmessages1.rmsg:246
 #: data/mp/messages/strings/resstrings.txt:396
 #: data/mp/messages/strings/resstrings.txt:404
 msgid "All vehicle factories upgraded automatically"
 msgstr "Járműgyárak automatikusan fejlesztve"
 
 #: data/base/messages/resmessages1.rmsg:279
+#: data/mp/messages/resmessages1.rmsg:253
 msgid "Power Module Available"
 msgstr "Energiamodul rendelkezésre áll"
 
 #: data/base/messages/resmessages1.rmsg:280
 #: data/base/messages/resmessages23.rmsg:26
 #: data/base/messages/resmessages3.rmsg:367
+#: data/mp/messages/resmessages1.rmsg:254
+#: data/mp/messages/resmessages23.rmsg:23
+#: data/mp/messages/resmessages3.rmsg:333
 msgid "Improved Power Generator Performance"
 msgstr "Jobb erőmű teljesítmény"
 
 #: data/base/messages/resmessages1.rmsg:281
+#: data/mp/messages/resmessages1.rmsg:255
 msgid "Burns oil more efficiently"
 msgstr "Hatékonyabb olajfelhasználás"
 
 #: data/base/messages/resmessages1.rmsg:282
+#: data/mp/messages/resmessages1.rmsg:256
 msgid "Use a truck to add the module to a power generator"
 msgstr "Használd a munkagépet az áramfejlesztő bővítéséhez"
 
 #: data/base/messages/resmessages1.rmsg:290
+#: data/mp/messages/resmessages1.rmsg:263
 msgid "Research Module Available"
 msgstr "Kutatási modul rendelkezésre áll"
 
 #: data/base/messages/resmessages1.rmsg:291
+#: data/mp/messages/resmessages1.rmsg:264
 msgid "Research module expands research facilities"
 msgstr "A kutatási modul bővíti a kutató létesítményeket"
 
@@ -1193,6 +1739,7 @@ msgid "Increases research speed"
 msgstr "Megnövekedett kutatási sebesség"
 
 #: data/base/messages/resmessages1.rmsg:293
+#: data/mp/messages/resmessages1.rmsg:266
 msgid "Use a truck to add the module to a research facility"
 msgstr "Használd a munkagépet a kutatóközpont bővítéséhez"
 
@@ -1200,11 +1747,15 @@ msgstr "Használd a munkagépet a kutatóközpont bővítéséhez"
 #: data/base/messages/resmessages2.rmsg:312
 #: data/base/messages/resmessages3.rmsg:378
 #: data/base/messages/strings/resstrings.txt:389
+#: data/mp/messages/resmessages1.rmsg:273
+#: data/mp/messages/resmessages2.rmsg:283
+#: data/mp/messages/resmessages3.rmsg:343
 #: data/mp/messages/strings/resstrings.txt:417
 msgid "Research Improved"
 msgstr "Kutatás fejlesztve"
 
 #: data/base/messages/resmessages1.rmsg:302
+#: data/mp/messages/resmessages1.rmsg:274
 msgid "Synaptic link data analysis"
 msgstr "Szinaptikus kapcsolatú adatelemzés"
 
@@ -1212,6 +1763,9 @@ msgstr "Szinaptikus kapcsolatú adatelemzés"
 #: data/base/messages/resmessages2.rmsg:315
 #: data/base/messages/resmessages3.rmsg:381
 #: data/base/messages/strings/resstrings.txt:392
+#: data/mp/messages/resmessages1.rmsg:276
+#: data/mp/messages/resmessages2.rmsg:286
+#: data/mp/messages/resmessages3.rmsg:346
 #: data/mp/messages/strings/resstrings.txt:420
 msgid "All research facilities upgraded automatically"
 msgstr "Kutatási létesítmények automatikusan fejlesztve"
@@ -1221,12 +1775,17 @@ msgstr "Kutatási létesítmények automatikusan fejlesztve"
 #: data/base/messages/resmessages3.rmsg:389
 #: data/base/messages/resmessages3.rmsg:400
 #: data/base/messages/strings/resstrings.txt:399
+#: data/mp/messages/resmessages1.rmsg:283
+#: data/mp/messages/resmessages2.rmsg:293
+#: data/mp/messages/resmessages3.rmsg:353
+#: data/mp/messages/resmessages3.rmsg:363
 #: data/mp/messages/strings/resstrings.txt:427
 msgid "Increases Damage Resistance"
 msgstr "Megnövekedett sebzés ellenállás"
 
 #: data/base/messages/resmessages1.rmsg:313
 #: data/base/messages/strings/names.txt:805
+#: data/mp/messages/resmessages1.rmsg:284
 #: data/mp/messages/strings/names.txt:815
 msgid "Reinforced Base Structure Materials"
 msgstr "Megerősített bázisépület alapanyagok"
@@ -1250,106 +1809,137 @@ msgstr "Megnövekedett páncél és karosszéria értékek"
 #: data/base/messages/resmessages3.rmsg:392
 #: data/base/messages/resmessages3.rmsg:403
 #: data/base/messages/strings/resstrings.txt:402
+#: data/mp/messages/resmessages1.rmsg:286
+#: data/mp/messages/resmessages2.rmsg:296
+#: data/mp/messages/resmessages3.rmsg:356
+#: data/mp/messages/resmessages3.rmsg:366
 #: data/mp/messages/strings/resstrings.txt:430
 msgid "All base structures upgraded automatically"
 msgstr "Bázisépületek automatikusan fejlesztve"
 
 #: data/base/messages/resmessages1.rmsg:323
+#: data/mp/messages/resmessages1.rmsg:293
 msgid "Project Light Body"
 msgstr "Könnyű karosszéria terv"
 
 #: data/base/messages/resmessages1.rmsg:324
+#: data/mp/messages/resmessages1.rmsg:294
 msgid "Light body vulnerable to heavy weapons"
 msgstr "A könnyű karosszéria érzékeny a nehéz fegyverekre"
 
 #: data/base/messages/resmessages1.rmsg:325
+#: data/mp/messages/resmessages1.rmsg:295
 msgid "Good scout vehicle"
 msgstr "Jó felderítő jármű"
 
 #: data/base/messages/resmessages1.rmsg:326
+#: data/mp/messages/resmessages1.rmsg:296
 msgid "Low power cost and low production times"
 msgstr "Alacson energia igény és gyártási idő"
 
 #: data/base/messages/resmessages1.rmsg:334
+#: data/mp/messages/resmessages1.rmsg:303
 msgid "New Paradigm Light Body"
 msgstr "Új Paradigma könnyű karosszéria"
 
 #: data/base/messages/resmessages1.rmsg:335
+#: data/mp/messages/resmessages1.rmsg:304
 msgid "Inferior armor and body points to Viper"
 msgstr "Rosszabb páncél és karosszéria értékek a Viper-nél"
 
 #: data/base/messages/resmessages1.rmsg:336
 #: data/base/messages/resmessages3.rmsg:534
+#: data/mp/messages/resmessages1.rmsg:305
+#: data/mp/messages/resmessages3.rmsg:485
 msgid "Faster than Viper"
 msgstr "Gyorsabb mint a Viper"
 
 #: data/base/messages/resmessages1.rmsg:337
+#: data/mp/messages/resmessages1.rmsg:306
 msgid "Power cost and production time similar to Viper"
 msgstr "Energia igény és gyártási idő hasonló a Viper-hez"
 
 #: data/base/messages/resmessages1.rmsg:345
+#: data/mp/messages/resmessages1.rmsg:313
 msgid "Project Medium Body"
 msgstr "Közepes karosszéria terv"
 
 #: data/base/messages/resmessages1.rmsg:346
+#: data/mp/messages/resmessages1.rmsg:314
 msgid "Medium body increases armor and body points"
 msgstr "Közepes osztály, növeli a páncél és karosszéria értékeket"
 
 #: data/base/messages/resmessages1.rmsg:347
+#: data/mp/messages/resmessages1.rmsg:315
 msgid "Good medium tank and support vehicle"
 msgstr "Jó közepes tank és támogató jármű"
 
 #: data/base/messages/resmessages1.rmsg:348
+#: data/mp/messages/resmessages1.rmsg:316
 msgid "Average power costs and production times"
 msgstr "Átlagos energia igény és gyártási idő"
 
 #: data/base/messages/resmessages1.rmsg:356
+#: data/mp/messages/resmessages1.rmsg:323
 msgid "New Paradigm Medium body"
 msgstr "Új Paradigma közepes karosszéria"
 
 #: data/base/messages/resmessages1.rmsg:357
+#: data/mp/messages/resmessages1.rmsg:324
 msgid "Inferior armor and body points to Cobra"
 msgstr "Rosszabb páncél és karosszéria értékek a Cobra-nál"
 
 #: data/base/messages/resmessages1.rmsg:358
 #: data/base/messages/resmessages3.rmsg:545
+#: data/mp/messages/resmessages1.rmsg:325
+#: data/mp/messages/resmessages3.rmsg:495
 msgid "Faster than Cobra"
 msgstr "Gyorsabb mint a Cobra"
 
 #: data/base/messages/resmessages1.rmsg:359
+#: data/mp/messages/resmessages1.rmsg:326
 msgid "Power cost and production time similar to Cobra"
 msgstr "Az energia igény és a gyártási idő hasonló a Cobra-hoz"
 
 #: data/base/messages/resmessages1.rmsg:367
+#: data/mp/messages/resmessages1.rmsg:333
 msgid "Project Heavy Body"
 msgstr "Nehéz karosszéria terv"
 
 #: data/base/messages/resmessages1.rmsg:368
+#: data/mp/messages/resmessages1.rmsg:334
 msgid "Heavy body increases armor and body points"
 msgstr "Nehéz osztály, növeli a páncél és karosszéria értékeket"
 
 #: data/base/messages/resmessages1.rmsg:369
+#: data/mp/messages/resmessages1.rmsg:335
 msgid "Good main battle tank and heavy artillery platform"
 msgstr "Jó harckocsi és nehéztüzérségi platform"
 
 #: data/base/messages/resmessages1.rmsg:370
+#: data/mp/messages/resmessages1.rmsg:336
 msgid "Very high power costs and very slow to produce"
 msgstr "Nagyon magas energia igény és gyártási idő"
 
 #: data/base/messages/resmessages1.rmsg:378
+#: data/mp/messages/resmessages1.rmsg:343
 msgid "New Paradigm Heavy Body"
 msgstr "Új Paradigma nehéz karosszéria"
 
 #: data/base/messages/resmessages1.rmsg:379
+#: data/mp/messages/resmessages1.rmsg:344
 msgid "Less armor and body points than Python"
 msgstr "Kevesebb páncél és karosszéria érték mint a Python-nak"
 
 #: data/base/messages/resmessages1.rmsg:380
 #: data/base/messages/resmessages3.rmsg:556
+#: data/mp/messages/resmessages1.rmsg:345
+#: data/mp/messages/resmessages3.rmsg:505
 msgid "Faster than Python"
 msgstr "Gyorsabb mint a Python"
 
 #: data/base/messages/resmessages1.rmsg:381
+#: data/mp/messages/resmessages1.rmsg:346
 msgid "Power cost and production time the same as Python"
 msgstr "Energia igény és a gyártási idő megegyezik a Python-nal"
 
@@ -1358,12 +1948,17 @@ msgstr "Energia igény és a gyártási idő megegyezik a Python-nal"
 #: data/base/messages/resmessages3.rmsg:565
 #: data/base/messages/resmessages3.rmsg:576
 #: data/base/messages/strings/resstrings.txt:559
+#: data/mp/messages/resmessages1.rmsg:353
+#: data/mp/messages/resmessages2.rmsg:383
+#: data/mp/messages/resmessages3.rmsg:513
+#: data/mp/messages/resmessages3.rmsg:523
 #: data/mp/messages/strings/resstrings.txt:594
 msgid "Vehicle Engine Upgrade"
 msgstr "Jármű motor fejlesztés"
 
 #: data/base/messages/resmessages1.rmsg:390
 #: data/base/messages/strings/names.txt:942
+#: data/mp/messages/resmessages1.rmsg:354
 #: data/mp/messages/strings/names.txt:954
 msgid "Fuel Injection Engine"
 msgstr "Üzemanyag befecskendezéses motor"
@@ -1390,6 +1985,17 @@ msgstr "Jármű sebesség továbbfejlesztése"
 #: data/base/messages/strings/resstrings.txt:562
 #: data/base/messages/strings/resstrings.txt:574
 #: data/base/messages/strings/resstrings.txt:584
+#: data/mp/messages/resmessages1.rmsg:356
+#: data/mp/messages/resmessages1.rmsg:366
+#: data/mp/messages/resmessages2.rmsg:386
+#: data/mp/messages/resmessages2.rmsg:396
+#: data/mp/messages/resmessages2.rmsg:406
+#: data/mp/messages/resmessages3.rmsg:516
+#: data/mp/messages/resmessages3.rmsg:526
+#: data/mp/messages/resmessages3.rmsg:536
+#: data/mp/messages/resmessages3.rmsg:546
+#: data/mp/messages/resmessages3.rmsg:556
+#: data/mp/messages/resmessagesall.rmsg:656
 #: data/mp/messages/strings/resstrings.txt:597
 #: data/mp/messages/strings/resstrings.txt:609
 #: data/mp/messages/strings/resstrings.txt:619
@@ -1401,6 +2007,10 @@ msgstr "Járművek automatikusan fejlesztve"
 #: data/base/messages/resmessages3.rmsg:587
 #: data/base/messages/resmessages3.rmsg:598
 #: data/base/messages/strings/resstrings.txt:571
+#: data/mp/messages/resmessages1.rmsg:363
+#: data/mp/messages/resmessages2.rmsg:393
+#: data/mp/messages/resmessages3.rmsg:533
+#: data/mp/messages/resmessages3.rmsg:543
 #: data/mp/messages/strings/resstrings.txt:606
 msgid "Vehicle Bodies Improved"
 msgstr "Jármű karosszériák fejlesztve"
@@ -1418,23 +2028,32 @@ msgstr "Megnövekedett kinetikus páncél és karosszéria értékek"
 #: data/base/messages/resmessages1.rmsg:422
 #: data/base/messages/resmessages1.rmsg:433
 #: data/base/messages/resmessages1.rmsg:444
+#: data/mp/messages/resmessages1.rmsg:373
+#: data/mp/messages/resmessages1.rmsg:383
+#: data/mp/messages/resmessages1.rmsg:393
+#: data/mp/messages/resmessages1.rmsg:403
 msgid "New Propulsion Available"
 msgstr "Új meghajtás érhető el"
 
 #: data/base/messages/resmessages1.rmsg:412
+#: data/mp/messages/resmessages1.rmsg:374
 msgid "Armored Half-tracks"
 msgstr "Páncélozott féllánctalpas"
 
 #: data/base/messages/resmessages1.rmsg:413
+#: data/mp/messages/resmessages1.rmsg:375
 msgid "Speed: Medium"
 msgstr "Sebesség: Közepes"
 
 #: data/base/messages/resmessages1.rmsg:423
+#: data/mp/messages/resmessages1.rmsg:384
 msgid "Amphibious hover propulsion"
 msgstr "Kétéltű légpárnás hajtómű"
 
 #: data/base/messages/resmessages1.rmsg:424
 #: data/base/messages/resmessages1.rmsg:446
+#: data/mp/messages/resmessages1.rmsg:385
+#: data/mp/messages/resmessages1.rmsg:405
 msgid "Speed: Fast"
 msgstr "Sebesség: gyors"
 
@@ -1458,6 +2077,23 @@ msgstr "Sebesség: gyors"
 #: data/base/messages/strings/resstrings.txt:776
 #: data/base/messages/strings/resstrings.txt:782
 #: data/base/messages/strings/resstrings.txt:790
+#: data/mp/messages/resmessages1.rmsg:386
+#: data/mp/messages/resmessages1.rmsg:406
+#: data/mp/messages/resmessages1.rmsg:476
+#: data/mp/messages/resmessages1.rmsg:486
+#: data/mp/messages/resmessages23.rmsg:116
+#: data/mp/messages/resmessages23.rmsg:156
+#: data/mp/messages/resmessages2.rmsg:546
+#: data/mp/messages/resmessages2.rmsg:556
+#: data/mp/messages/resmessages2.rmsg:596
+#: data/mp/messages/resmessages2.rmsg:616
+#: data/mp/messages/resmessages2.rmsg:626
+#: data/mp/messages/resmessages2.rmsg:636
+#: data/mp/messages/resmessages3.rmsg:656
+#: data/mp/messages/resmessagesall.rmsg:126
+#: data/mp/messages/resmessagesall.rmsg:266
+#: data/mp/messages/resmessagesall.rmsg:706
+#: data/mp/messages/resmessagesall.rmsg:716
 #: data/mp/messages/strings/resstrings.txt:735
 #: data/mp/messages/strings/resstrings.txt:741
 #: data/mp/messages/strings/resstrings.txt:799
@@ -1468,51 +2104,65 @@ msgid "Body Points: Low"
 msgstr "Karosszéria fejlettsége: alacsony"
 
 #: data/base/messages/resmessages1.rmsg:434
+#: data/mp/messages/resmessages1.rmsg:394
 msgid "Armored Tracks"
 msgstr "Páncélozott lánctalpas"
 
 #: data/base/messages/resmessages1.rmsg:435
+#: data/mp/messages/resmessages1.rmsg:395
 msgid "Speed: Slow"
 msgstr "Sebesség: lassú"
 
 #: data/base/messages/resmessages1.rmsg:445
 #: data/base/messages/strings/names.txt:976
+#: data/mp/messages/resmessages1.rmsg:404
 #: data/mp/messages/strings/names.txt:988
 msgid "Wheeled Propulsion"
 msgstr "Kerekes hajtómű"
 
 #: data/base/messages/resmessages1.rmsg:456
+#: data/mp/messages/resmessages1.rmsg:414
 msgid "Light Cannon firing 40mm rounds"
 msgstr "Könnyű ágyú 40mm-es löveggel tüzel"
 
 #: data/base/messages/resmessages1.rmsg:467
+#: data/mp/messages/resmessages1.rmsg:424
 msgid "Medium Cannon firing 76mm rounds"
 msgstr "Közepes ágyú 76mm-es löveggel tüzel"
 
 #: data/base/messages/resmessages1.rmsg:478
+#: data/mp/messages/resmessages1.rmsg:434
 msgid "Heavy Cannon firing 120 mm rounds"
 msgstr "Nehéz ágyú 120mm-es löveggel tüzel"
 
 #: data/base/messages/resmessages1.rmsg:489
+#: data/mp/messages/resmessages1.rmsg:444
 msgid "High Explosive Anti-Tank Cannon Shells"
 msgstr "Nagy hatóerejű tankelhárító gránát"
 
 #: data/base/messages/resmessages1.rmsg:500
+#: data/mp/messages/resmessages1.rmsg:454
 msgid "Flame-thrower firing Propylene Oxide gel"
 msgstr "Lángvető Propilén-oxiddal tüzel"
 
 #: data/base/messages/resmessages1.rmsg:501
 #: data/base/messages/resmessages2.rmsg:655
 #: data/base/messages/strings/resstrings.txt:759
+#: data/mp/messages/resmessages1.rmsg:455
+#: data/mp/messages/resmessages2.rmsg:595
+#: data/mp/messages/resmessagesall.rmsg:295
 #: data/mp/messages/strings/resstrings.txt:798
 msgid "Best Targets: Bunkers, wheeled and hover vehicles"
 msgstr "Célok: bunkerek, kerekes és légpárnás járművek"
 
 #: data/base/messages/resmessages1.rmsg:502
+#: data/mp/messages/resmessages1.rmsg:456
+#: data/mp/messages/resmessagesall.rmsg:296
 msgid "Body Points: Very low"
 msgstr "Karosszéria fejlettsége: nagyon alacsony"
 
 #: data/base/messages/resmessages1.rmsg:511
+#: data/mp/messages/resmessages1.rmsg:464
 msgid "Propylene Oxide gel treated to burn at higher temperatures"
 msgstr "Propilén-oxid kezelése a magasabb égési hőmérséklet eléréséhez"
 
@@ -1524,14 +2174,17 @@ msgid "Increases Flamer damage"
 msgstr "Megnövekedett lángvető sebzés"
 
 #: data/base/messages/resmessages1.rmsg:522
+#: data/mp/messages/resmessages1.rmsg:474
 msgid "7.62mm machinegun"
 msgstr "7.62mm-es gépfegyver"
 
 #: data/base/messages/resmessages1.rmsg:533
+#: data/mp/messages/resmessages1.rmsg:484
 msgid "Twin 7.62mm machineguns"
 msgstr "7.62mm-es iker gépfegyverek"
 
 #: data/base/messages/resmessages1.rmsg:544
+#: data/mp/messages/resmessages1.rmsg:494
 msgid "Hardened case machinegun bullets"
 msgstr "Edzett fémmagvas gépfegyver lőszer"
 
@@ -1546,14 +2199,18 @@ msgid "Increases Machinegun damage"
 msgstr "Megnövelt gépfegyver sebzés"
 
 #: data/base/messages/resmessages1.rmsg:555
+#: data/mp/messages/resmessages1.rmsg:504
 msgid "Armor-Piercing Discard Sabot Bullets"
 msgstr "Leválóköpenyes páncéltörő lövedék (APDSB)"
 
 #: data/base/messages/resmessages1.rmsg:566
+#: data/mp/messages/resmessages1.rmsg:514
+#: data/mp/messages/resmessagesall.rmsg:274
 msgid "May be targeted directly or assigned to a sensor turret or tower"
 msgstr "Célba vehető közvetlenül, felderítő vagy érzékelő tornyon keresztül"
 
 #: data/base/messages/resmessages1.rmsg:577
+#: data/mp/messages/resmessages1.rmsg:524
 msgid "Improved high explosive shells"
 msgstr "Továbbfejlesztett nagy hatóerejű gránát"
 
@@ -1565,10 +2222,12 @@ msgid "Increases Mortar damage"
 msgstr "Megnövelt aknavető sebzés"
 
 #: data/base/messages/resmessages1.rmsg:588
+#: data/mp/messages/resmessages1.rmsg:534
 msgid "Fast firing light anti-vehicle rockets"
 msgstr "Gyorstüzelésű könnyű járműelhárító rakéták"
 
 #: data/base/messages/resmessages1.rmsg:589
+#: data/mp/messages/resmessages1.rmsg:535
 msgid "Best Targets: Wheeled and hover vehicles"
 msgstr "Célok: kerekes és légpárnás járművek"
 
@@ -1584,6 +2243,7 @@ msgid "Mini-Rocket Upgrade"
 msgstr "Kisrakéta fejlesztés"
 
 #: data/base/messages/resmessages1.rmsg:599
+#: data/mp/messages/resmessages1.rmsg:544
 msgid "Fin-stabilization improves flight trajectory"
 msgstr "Szárny stabilizáció javítja a röppályát"
 
@@ -1603,6 +2263,7 @@ msgid "All mini-rockets upgraded automatically"
 msgstr "Kisrakéták automatikusan fejlesztve"
 
 #: data/base/messages/resmessages1.rmsg:610
+#: data/mp/messages/resmessages1.rmsg:554
 msgid "Improved shaped charge warhead"
 msgstr "Jobb kumulatív robbanófej"
 
@@ -1614,6 +2275,7 @@ msgid "Increases Mini-Rocket damage"
 msgstr "Megnövekedett kisrakéta sebzés"
 
 #: data/base/messages/resmessages1.rmsg:621
+#: data/mp/messages/resmessages1.rmsg:564
 msgid "Automated reload system"
 msgstr "Automatikus újratöltő rendszer"
 
@@ -1622,10 +2284,12 @@ msgid "Increases Mini-Rockets ROF"
 msgstr "Megnövekedett kisrakéta tűzgyorsaság"
 
 #: data/base/messages/resmessages1.rmsg:632
+#: data/mp/messages/resmessages1.rmsg:574
 msgid "Tracks and directs in-flight rocket to target"
 msgstr "Repülés közben célra tart és irányít"
 
 #: data/base/messages/resmessages1.rmsg:643
+#: data/mp/messages/resmessages1.rmsg:584
 msgid "High Explosive Anti-Tank warhead"
 msgstr "Nagy hatóerejű tankelhárító robbanófej (HEAT)"
 
@@ -1638,6 +2302,8 @@ msgstr "Megnövekedett rakéta sebzés"
 
 #: data/base/messages/resmessages23.rmsg:4
 #: data/base/messages/resmessages3.rmsg:48
+#: data/mp/messages/resmessages23.rmsg:3
+#: data/mp/messages/resmessages3.rmsg:43
 msgid "Cyborg Propulsion Improved"
 msgstr "Cyborg hajtómű fejlesztve"
 
@@ -1655,6 +2321,16 @@ msgstr "Cyborg hajtómű fejlesztve"
 #: data/base/messages/strings/resstrings.txt:602
 #: data/base/messages/strings/resstrings.txt:612
 #: data/base/messages/strings/resstrings.txt:622
+#: data/mp/messages/resmessages23.rmsg:4
+#: data/mp/messages/resmessages2.rmsg:414
+#: data/mp/messages/resmessages2.rmsg:424
+#: data/mp/messages/resmessages2.rmsg:434
+#: data/mp/messages/resmessages2.rmsg:444
+#: data/mp/messages/resmessages3.rmsg:44
+#: data/mp/messages/resmessages3.rmsg:564
+#: data/mp/messages/resmessages3.rmsg:574
+#: data/mp/messages/resmessages3.rmsg:584
+#: data/mp/messages/resmessages3.rmsg:594
 #: data/mp/messages/strings/resstrings.txt:627
 #: data/mp/messages/strings/resstrings.txt:637
 #: data/mp/messages/strings/resstrings.txt:647
@@ -1676,6 +2352,16 @@ msgstr "Új páncélzat építése"
 #: data/base/messages/strings/resstrings.txt:603
 #: data/base/messages/strings/resstrings.txt:613
 #: data/base/messages/strings/resstrings.txt:623
+#: data/mp/messages/resmessages23.rmsg:5
+#: data/mp/messages/resmessages2.rmsg:415
+#: data/mp/messages/resmessages2.rmsg:425
+#: data/mp/messages/resmessages2.rmsg:435
+#: data/mp/messages/resmessages2.rmsg:445
+#: data/mp/messages/resmessages3.rmsg:45
+#: data/mp/messages/resmessages3.rmsg:565
+#: data/mp/messages/resmessages3.rmsg:575
+#: data/mp/messages/resmessages3.rmsg:585
+#: data/mp/messages/resmessages3.rmsg:595
 #: data/mp/messages/strings/resstrings.txt:628
 #: data/mp/messages/strings/resstrings.txt:638
 #: data/mp/messages/strings/resstrings.txt:648
@@ -1684,6 +2370,7 @@ msgid "Increases Body Points"
 msgstr "Megnövekedett karosszéria értékek"
 
 #: data/base/messages/resmessages23.rmsg:16
+#: data/mp/messages/resmessages23.rmsg:14
 msgid "Armored hardpoint with Hyper-Velocity Cannon"
 msgstr "Páncélozott talapzat nagysebességű ágyúval"
 
@@ -1693,17 +2380,23 @@ msgid "New Power Generation Technology"
 msgstr "Új energiatermelés technológia"
 
 #: data/base/messages/resmessages23.rmsg:28
+#: data/mp/messages/resmessages23.rmsg:24
 msgid "Gas turbine boosts power output"
 msgstr "Megnövelt gázturbina teljesítmény"
 
 #: data/base/messages/resmessages23.rmsg:29
 #: data/base/messages/resmessages3.rmsg:370
+#: data/mp/messages/resmessages23.rmsg:26
+#: data/mp/messages/resmessages3.rmsg:336
 msgid "All power generators upgraded automatically"
 msgstr "Áramfejlesztők automatikusan fejlesztve"
 
 #: data/base/messages/resmessages23.rmsg:49
 #: data/base/messages/resmessages23.rmsg:71
 #: data/base/messages/resmessages3.rmsg:445
+#: data/mp/messages/resmessages23.rmsg:44
+#: data/mp/messages/resmessages23.rmsg:64
+#: data/mp/messages/resmessages3.rmsg:404
 msgid "Improved fire detection systems"
 msgstr "Továbbfejlesztett tűzérzékelő rendszerek"
 
@@ -1711,16 +2404,24 @@ msgstr "Továbbfejlesztett tűzérzékelő rendszerek"
 #: data/base/messages/resmessages23.rmsg:81
 #: data/base/messages/resmessagesall.rmsg:59
 #: data/base/messages/resmessagesall.rmsg:81
+#: data/mp/messages/resmessages23.rmsg:53
+#: data/mp/messages/resmessages23.rmsg:73
+#: data/mp/messages/resmessagesall.rmsg:53
+#: data/mp/messages/resmessagesall.rmsg:93
+#: data/mp/messages/resmessagesall.rmsg:103
 msgid "New Systems Tower Available"
 msgstr "Új rendszertorony érhető el"
 
 #: data/base/messages/resmessages23.rmsg:60
+#: data/mp/messages/resmessages23.rmsg:54
 msgid "VTOL CB Tower detects enemy indirect fire batteries"
 msgstr "VTOL CB torony általános ellenséges tüzet észlelt"
 
 #: data/base/messages/resmessages23.rmsg:61
 #: data/base/messages/resmessages2.rmsg:369
 #: data/base/messages/strings/resstrings.txt:481
+#: data/mp/messages/resmessages23.rmsg:55
+#: data/mp/messages/resmessages2.rmsg:335
 #: data/mp/messages/strings/resstrings.txt:511
 msgid "Orders assigned VTOLs to attack the enemy batteries"
 msgstr "Támadási parancs a kijelölt VTOL egységeknek az ellenséges ütegekere"
@@ -1728,6 +2429,8 @@ msgstr "Támadási parancs a kijelölt VTOL egységeknek az ellenséges ütegeke
 #: data/base/messages/resmessages23.rmsg:62
 #: data/base/messages/resmessages2.rmsg:370
 #: data/base/messages/strings/resstrings.txt:482
+#: data/mp/messages/resmessages23.rmsg:56
+#: data/mp/messages/resmessages2.rmsg:336
 #: data/mp/messages/strings/resstrings.txt:512
 msgid "VTOLs attack until enemy battery is suppressed"
 msgstr "VTOL egységek támadása az ellenséges ütegek megsemmisüléséig"
@@ -1736,6 +2439,9 @@ msgstr "VTOL egységek támadása az ellenséges ütegek megsemmisüléséig"
 #: data/base/messages/resmessages2.rmsg:378
 #: data/base/messages/resmessages3.rmsg:455
 #: data/base/messages/strings/resstrings.txt:485
+#: data/mp/messages/resmessages23.rmsg:63
+#: data/mp/messages/resmessages2.rmsg:343
+#: data/mp/messages/resmessages3.rmsg:413
 #: data/mp/messages/strings/resstrings.txt:515
 msgid "VTOL CB Improved"
 msgstr "VTOL CB fejlesztve"
@@ -1744,6 +2450,9 @@ msgstr "VTOL CB fejlesztve"
 #: data/base/messages/resmessages2.rmsg:380
 #: data/base/messages/resmessages3.rmsg:457
 #: data/base/messages/strings/resstrings.txt:487
+#: data/mp/messages/resmessages23.rmsg:65
+#: data/mp/messages/resmessages2.rmsg:345
+#: data/mp/messages/resmessages3.rmsg:415
 #: data/mp/messages/strings/resstrings.txt:517
 msgid "Extends VTOL CB Range"
 msgstr "Megnöveli VTOL CB hatósugarát"
@@ -1752,19 +2461,25 @@ msgstr "Megnöveli VTOL CB hatósugarát"
 #: data/base/messages/resmessages2.rmsg:381
 #: data/base/messages/resmessages3.rmsg:458
 #: data/base/messages/strings/resstrings.txt:488
+#: data/mp/messages/resmessages23.rmsg:66
+#: data/mp/messages/resmessages2.rmsg:346
+#: data/mp/messages/resmessages3.rmsg:416
 #: data/mp/messages/strings/resstrings.txt:518
 msgid "All VTOL CB sensors upgraded automatically"
 msgstr "VTOL CB érzékelők automatikusan fejlesztve"
 
 #: data/base/messages/resmessages23.rmsg:82
+#: data/mp/messages/resmessages23.rmsg:74
 msgid "VTOL Strike Tower detects approaching enemies"
 msgstr "VTOL csapásmérő torony közeledő ellenséget észlelt"
 
 #: data/base/messages/resmessages23.rmsg:83
+#: data/mp/messages/resmessages23.rmsg:75
 msgid "Assigned VTOLs attack the enemy units"
 msgstr "A kijelölt VTOL egységek támadják az ellenséget"
 
 #: data/base/messages/resmessages23.rmsg:84
+#: data/mp/messages/resmessages23.rmsg:76
 msgid "Strike mission continues until enemy destroyed or they retreat"
 msgstr "Csapásmérés folytamatos az ellenség visszavonulásáig vagy megsemmisüléséig"
 
@@ -1774,20 +2489,29 @@ msgstr "Csapásmérés folytamatos az ellenség visszavonulásáig vagy megsemmi
 #: data/base/messages/resmessagesall.rmsg:37
 #: data/base/messages/strings/resstrings.txt:443
 #: data/base/messages/strings/resstrings.txt:479
+#: data/mp/messages/resmessages23.rmsg:83
+#: data/mp/messages/resmessages2.rmsg:333
+#: data/mp/messages/resmessages3.rmsg:433
+#: data/mp/messages/resmessagesall.rmsg:33
+#: data/mp/messages/resmessagesall.rmsg:283
+#: data/mp/messages/resmessagesall.rmsg:303
 #: data/mp/messages/strings/resstrings.txt:471
 #: data/mp/messages/strings/resstrings.txt:509
 msgid "New Systems Turret Available"
 msgstr "Új rendszertorony érhető el"
 
 #: data/base/messages/resmessages23.rmsg:93
+#: data/mp/messages/resmessages23.rmsg:84
 msgid "VTOL Strike turret used to spot targets"
 msgstr "VTOL csapásmérő lövegtorony az ellenség beméréséhez"
 
 #: data/base/messages/resmessages23.rmsg:94
+#: data/mp/messages/resmessages23.rmsg:85
 msgid "Assigned VTOLs attack the designated targets"
 msgstr "Kijelölt VTOL egységek támadják a kijelölt célokat"
 
 #: data/base/messages/resmessages23.rmsg:95
+#: data/mp/messages/resmessages23.rmsg:86
 msgid "Select new targets to continue the VTOL strikes"
 msgstr "Jelöljön ki új célt VTOL csapás folytatásához"
 
@@ -1795,11 +2519,15 @@ msgstr "Jelöljön ki új célt VTOL csapás folytatásához"
 #: data/base/messages/resmessages2.rmsg:389
 #: data/base/messages/resmessages3.rmsg:466
 #: data/base/messages/strings/resstrings.txt:499
+#: data/mp/messages/resmessages23.rmsg:93
+#: data/mp/messages/resmessages2.rmsg:353
+#: data/mp/messages/resmessages3.rmsg:423
 #: data/mp/messages/strings/resstrings.txt:529
 msgid "VTOL Strike Improved"
 msgstr "VTOL csapásmérő fejlesztve"
 
 #: data/base/messages/resmessages23.rmsg:104
+#: data/mp/messages/resmessages23.rmsg:94
 msgid "Improved target recognition systems"
 msgstr "Jobb célfelismerő rendszer"
 
@@ -1807,6 +2535,9 @@ msgstr "Jobb célfelismerő rendszer"
 #: data/base/messages/resmessages2.rmsg:391
 #: data/base/messages/resmessages3.rmsg:468
 #: data/base/messages/strings/resstrings.txt:501
+#: data/mp/messages/resmessages23.rmsg:95
+#: data/mp/messages/resmessages2.rmsg:355
+#: data/mp/messages/resmessages3.rmsg:425
 #: data/mp/messages/strings/resstrings.txt:531
 msgid "Extends VTOL Strike Range"
 msgstr "Megnöveli a VTOL csapás hatótávját"
@@ -1815,6 +2546,9 @@ msgstr "Megnöveli a VTOL csapás hatótávját"
 #: data/base/messages/resmessages2.rmsg:392
 #: data/base/messages/resmessages3.rmsg:469
 #: data/base/messages/strings/resstrings.txt:502
+#: data/mp/messages/resmessages23.rmsg:96
+#: data/mp/messages/resmessages2.rmsg:356
+#: data/mp/messages/resmessages3.rmsg:426
 #: data/mp/messages/strings/resstrings.txt:532
 msgid "All VTOL Strike sensors upgraded automatically"
 msgstr "VTOL csapásmérő érzékelők automatikusan fejlesztve"
@@ -1826,6 +2560,11 @@ msgstr "VTOL csapásmérő érzékelők automatikusan fejlesztve"
 #: data/base/messages/resmessages3.rmsg:708
 #: data/base/messages/strings/resstrings.txt:659
 #: data/base/messages/strings/resstrings.txt:677
+#: data/mp/messages/resmessages23.rmsg:103
+#: data/mp/messages/resmessages2.rmsg:493
+#: data/mp/messages/resmessages2.rmsg:513
+#: data/mp/messages/resmessages3.rmsg:623
+#: data/mp/messages/resmessages3.rmsg:643
 #: data/mp/messages/strings/resstrings.txt:694
 #: data/mp/messages/strings/resstrings.txt:712
 msgid "AA Upgrade"
@@ -1834,6 +2573,8 @@ msgstr "Légvédelmi fejlesztés"
 #: data/base/messages/resmessages23.rmsg:115
 #: data/base/messages/resmessages2.rmsg:709
 #: data/base/messages/strings/resstrings.txt:794
+#: data/mp/messages/resmessages23.rmsg:104
+#: data/mp/messages/resmessages2.rmsg:644
 #: data/mp/messages/strings/resstrings.txt:835
 msgid "Self-guided rocket powered shells"
 msgstr "Önvezérelt rakéta hajtású gránát"
@@ -1853,6 +2594,11 @@ msgstr "Megnövekedett légvédelmi célpontosság"
 #: data/base/messages/resmessages3.rmsg:711
 #: data/base/messages/strings/resstrings.txt:662
 #: data/base/messages/strings/resstrings.txt:680
+#: data/mp/messages/resmessages23.rmsg:106
+#: data/mp/messages/resmessages2.rmsg:496
+#: data/mp/messages/resmessages2.rmsg:516
+#: data/mp/messages/resmessages3.rmsg:626
+#: data/mp/messages/resmessages3.rmsg:646
 #: data/mp/messages/strings/resstrings.txt:697
 #: data/mp/messages/strings/resstrings.txt:715
 msgid "All AA weapons upgraded automatically"
@@ -1864,16 +2610,23 @@ msgstr "Légvédelmi fegyverek automatikusan fejlesztve"
 #: data/base/messages/resmessages3.rmsg:719
 #: data/base/messages/strings/resstrings.txt:697
 #: data/base/messages/strings/resstrings.txt:703
+#: data/mp/messages/resmessages23.rmsg:113
+#: data/mp/messages/resmessages2.rmsg:543
+#: data/mp/messages/resmessages2.rmsg:553
+#: data/mp/messages/resmessages3.rmsg:653
+#: data/mp/messages/resmessagesall.rmsg:703
 #: data/mp/messages/strings/resstrings.txt:732
 #: data/mp/messages/strings/resstrings.txt:738
 msgid "New Bomb Bay Available"
 msgstr "Új bombaszekrény érhető el"
 
 #: data/base/messages/resmessages23.rmsg:126
+#: data/mp/messages/resmessages23.rmsg:114
 msgid "Drops incendiary bombs"
 msgstr "Gyújtóbombákat dob le"
 
 #: data/base/messages/resmessages23.rmsg:127
+#: data/mp/messages/resmessages23.rmsg:115
 msgid "Best Targets: Bunkers and Hardpoints"
 msgstr "Célok: bunkerek és fegyvertartó talapzatok"
 
@@ -1901,19 +2654,25 @@ msgstr "Megnövekedett bombázási célpontosság"
 #: data/base/messages/resmessages2.rmsg:623
 #: data/base/messages/resmessages3.rmsg:733
 #: data/base/messages/strings/resstrings.txt:716
+#: data/mp/messages/resmessages23.rmsg:126
+#: data/mp/messages/resmessages2.rmsg:566
+#: data/mp/messages/resmessages3.rmsg:666
 #: data/mp/messages/strings/resstrings.txt:751
 msgid "All bomb bays upgraded automatically"
 msgstr "Bombaszekrények automatikusan fejlesztve"
 
 #: data/base/messages/resmessages23.rmsg:148
+#: data/mp/messages/resmessages23.rmsg:134
 msgid "Robotic advances make new chaingun upgrade available"
 msgstr "A fejlett robotizálás lehetővé teszi az új láncfegyver fejlesztését"
 
 #: data/base/messages/resmessages23.rmsg:159
+#: data/mp/messages/resmessages23.rmsg:144
 msgid "Shells detect and home to thermal heat signatures"
 msgstr "Gránátok észlelik és célként rögzítik az egyedi hőképeket"
 
 #: data/base/messages/resmessages23.rmsg:170
+#: data/mp/messages/resmessages23.rmsg:154
 msgid "105mm multi-barrel Howitzer may be assigned to a sensor"
 msgstr "Érzékelőt lehet rendelni a 105mm-es többcsöves tarackhoz"
 
@@ -1922,22 +2681,32 @@ msgstr "Érzékelőt lehet rendelni a 105mm-es többcsöves tarackhoz"
 #: data/base/messages/resmessages2.rmsg:688
 #: data/base/messages/strings/resstrings.txt:775
 #: data/base/messages/strings/resstrings.txt:781
+#: data/mp/messages/resmessages23.rmsg:155
+#: data/mp/messages/resmessages2.rmsg:615
+#: data/mp/messages/resmessages2.rmsg:625
+#: data/mp/messages/resmessagesall.rmsg:265
 #: data/mp/messages/strings/resstrings.txt:814
 #: data/mp/messages/strings/resstrings.txt:822
 msgid "Best Targets: Base Structures, infantry, wheeled vehicles"
 msgstr "Célok: bázis épületek, gyalogság, kerekes járművek"
 
 #: data/base/messages/resmessages23.rmsg:181
+#: data/mp/messages/resmessages23.rmsg:164
 msgid "Multi-barrel, rapid-fire machinegun"
 msgstr "Többcsöves, gyorstüzelő gépfegyver"
 
 #: data/base/messages/resmessages23.rmsg:183
+#: data/mp/messages/resmessages23.rmsg:166
+#: data/mp/messages/resmessagesall.rmsg:686
+#: data/mp/messages/resmessagesall.rmsg:696
 msgid "Replaces all machineguns"
 msgstr "Felvált minden gépfegyvert"
 
 #: data/base/messages/resmessages2.rmsg:4
 #: data/base/messages/resmessages3.rmsg:4
 #: data/base/messages/strings/resstrings.txt:41
+#: data/mp/messages/resmessages2.rmsg:3
+#: data/mp/messages/resmessages3.rmsg:3
 #: data/mp/messages/strings/resstrings.txt:45
 msgid "Cyborg Thermal Armor Improved"
 msgstr "Cyborg hőpajzs fejlesztve"
@@ -1945,6 +2714,8 @@ msgstr "Cyborg hőpajzs fejlesztve"
 #: data/base/messages/resmessages2.rmsg:5
 #: data/base/messages/resmessages3.rmsg:5
 #: data/base/messages/strings/resstrings.txt:42
+#: data/mp/messages/resmessages2.rmsg:4
+#: data/mp/messages/resmessages3.rmsg:4
 #: data/mp/messages/strings/resstrings.txt:46
 msgid "Heat resistant armored layers"
 msgstr "Hőálló páncélozott rétegek"
@@ -1960,6 +2731,8 @@ msgstr "Hőpajzs fejlődött"
 #: data/base/messages/resmessages2.rmsg:434
 #: data/base/messages/strings/resstrings.txt:32
 #: data/base/messages/strings/resstrings.txt:572
+#: data/mp/messages/resmessages2.rmsg:14
+#: data/mp/messages/resmessages2.rmsg:394
 #: data/mp/messages/strings/resstrings.txt:36
 #: data/mp/messages/strings/resstrings.txt:607
 msgid "Layered dense composite alloys and energy-absorbing fibres"
@@ -1968,6 +2741,7 @@ msgstr "Sűrűn rétegelt kompozit ötvözetek és energiaelnyelő szálak"
 #: data/base/messages/resmessages2.rmsg:27
 #: data/base/messages/strings/resstrings.txt:50
 #: data/base/messages/strings/resstrings.txt:84
+#: data/mp/messages/resmessages2.rmsg:24
 #: data/mp/messages/strings/resstrings.txt:54
 #: data/mp/messages/strings/resstrings.txt:104
 msgid "Armed with Bunker Buster rocket"
@@ -1975,18 +2749,21 @@ msgstr "Bunkertörő rakétával felszerelt"
 
 #: data/base/messages/resmessages2.rmsg:38
 #: data/base/messages/strings/resstrings.txt:66
+#: data/mp/messages/resmessages2.rmsg:34
 #: data/mp/messages/strings/resstrings.txt:86
 msgid "Armed with Cyborg Assault Gun"
 msgstr "Cyborg ostromfegyverrel felszerelt"
 
 #: data/base/messages/resmessages2.rmsg:49
 #: data/base/messages/strings/resstrings.txt:104
+#: data/mp/messages/resmessages2.rmsg:44
 #: data/mp/messages/strings/resstrings.txt:124
 msgid "High-tensile concrete reinforced with boron"
 msgstr "Nagy szilárdságú vasbeton Bórral megerősítve"
 
 #: data/base/messages/resmessages2.rmsg:60
 #: data/base/messages/strings/resstrings.txt:120
+#: data/mp/messages/resmessages2.rmsg:54
 #: data/mp/messages/strings/resstrings.txt:140
 msgid "AA Site with Cyclone Flak Turret"
 msgstr "Légvédelmi platform Cyclone légelhárító lövegtoronnyal"
@@ -1999,6 +2776,11 @@ msgstr "Légvédelmi platform Cyclone légelhárító lövegtoronnyal"
 #: data/base/messages/strings/resstrings.txt:115
 #: data/base/messages/strings/resstrings.txt:121
 #: data/base/messages/strings/resstrings.txt:133
+#: data/mp/messages/resmessages2.rmsg:55
+#: data/mp/messages/resmessages2.rmsg:75
+#: data/mp/messages/resmessages2.rmsg:85
+#: data/mp/messages/resmessages3.rmsg:185
+#: data/mp/messages/resmessages3.rmsg:195
 #: data/mp/messages/strings/resstrings.txt:135
 #: data/mp/messages/strings/resstrings.txt:141
 #: data/mp/messages/strings/resstrings.txt:153
@@ -2007,54 +2789,63 @@ msgstr "Automatikus támadás VTOL-okkal"
 
 #: data/base/messages/resmessages2.rmsg:71
 #: data/base/messages/strings/resstrings.txt:126
+#: data/mp/messages/resmessages2.rmsg:64
 #: data/mp/messages/strings/resstrings.txt:146
 msgid "AA Site with Hurricane Gun Turret"
 msgstr "Légvédelmi platform Hurricane lövegtoronnyal"
 
 #: data/base/messages/resmessages2.rmsg:72
 #: data/base/messages/strings/resstrings.txt:127
+#: data/mp/messages/resmessages2.rmsg:65
 #: data/mp/messages/strings/resstrings.txt:147
 msgid "Automatically targets VTOL"
 msgstr "Automatikus támadás VTOL"
 
 #: data/base/messages/resmessages2.rmsg:82
 #: data/base/messages/strings/resstrings.txt:132
+#: data/mp/messages/resmessages2.rmsg:74
 #: data/mp/messages/strings/resstrings.txt:152
 msgid "AA Site with Whirlwind Gun Turret"
 msgstr "Légvédelmi platform Whirlwind lövegtoronnyal"
 
 #: data/base/messages/resmessages2.rmsg:93
 #: data/base/messages/strings/resstrings.txt:114
+#: data/mp/messages/resmessages2.rmsg:84
 #: data/mp/messages/strings/resstrings.txt:134
 msgid "AA Site with Tornado Flak Turret"
 msgstr "Légvédelmi platform Tornado légelhárító lövegtoronnyal"
 
 #: data/base/messages/resmessages2.rmsg:104
 #: data/base/messages/strings/resstrings.txt:142
+#: data/mp/messages/resmessages2.rmsg:94
 #: data/mp/messages/strings/resstrings.txt:162
 msgid "Indirect fire rocket battery"
 msgstr "Általános tűz a rakéta ütegekkel"
 
 #: data/base/messages/resmessages2.rmsg:115
 #: data/base/messages/strings/resstrings.txt:154
+#: data/mp/messages/resmessages2.rmsg:104
 #: data/mp/messages/strings/resstrings.txt:176
 msgid "Armored Bombard battery pit"
 msgstr "Páncélozott bombavető árok"
 
 #: data/base/messages/resmessages2.rmsg:126
 #: data/base/messages/strings/resstrings.txt:168
+#: data/mp/messages/resmessages2.rmsg:114
 #: data/mp/messages/strings/resstrings.txt:190
 msgid "Armored howitzer emplacement"
 msgstr "Páncélozott tarack állás"
 
 #: data/base/messages/resmessages2.rmsg:137
 #: data/base/messages/strings/resstrings.txt:174
+#: data/mp/messages/resmessages2.rmsg:124
 #: data/mp/messages/strings/resstrings.txt:196
 msgid "Armored Ground Shaker howitzer emplacement"
 msgstr "Páncélozott Ground Shaker tarack állás"
 
 #: data/base/messages/resmessages2.rmsg:148
 #: data/base/messages/strings/resstrings.txt:160
+#: data/mp/messages/resmessages2.rmsg:134
 #: data/mp/messages/strings/resstrings.txt:182
 msgid "Armored Pepperpot mortar battery pit"
 msgstr "Páncélozott Pepperpot aknavető árok"
@@ -2063,6 +2854,8 @@ msgstr "Páncélozott Pepperpot aknavető árok"
 #: data/base/messages/resmessages2.rmsg:170
 #: data/base/messages/strings/resstrings.txt:180
 #: data/base/messages/strings/resstrings.txt:186
+#: data/mp/messages/resmessages2.rmsg:144
+#: data/mp/messages/resmessages2.rmsg:154
 #: data/mp/messages/strings/resstrings.txt:204
 #: data/mp/messages/strings/resstrings.txt:210
 msgid "Armored Hellstorm howitzer emplacement"
@@ -2070,6 +2863,7 @@ msgstr "Páncélozott Hellstorm tarack állás"
 
 #: data/base/messages/resmessages2.rmsg:181
 #: data/base/messages/strings/resstrings.txt:192
+#: data/mp/messages/resmessages2.rmsg:164
 #: data/mp/messages/strings/resstrings.txt:216
 msgid "Armored strongpoint with Tank Killer rocket"
 msgstr "Páncélozott erőd Tank Killer rakétával"
@@ -2088,6 +2882,17 @@ msgstr "Páncélozott erőd Tank Killer rakétával"
 #: data/base/messages/strings/resstrings.txt:205
 #: data/base/messages/strings/resstrings.txt:219
 #: data/base/messages/strings/resstrings.txt:225
+#: data/mp/messages/resmessages2.rmsg:165
+#: data/mp/messages/resmessages2.rmsg:175
+#: data/mp/messages/resmessages2.rmsg:185
+#: data/mp/messages/resmessages2.rmsg:195
+#: data/mp/messages/resmessages2.rmsg:205
+#: data/mp/messages/resmessages3.rmsg:225
+#: data/mp/messages/resmessages3.rmsg:235
+#: data/mp/messages/resmessages3.rmsg:245
+#: data/mp/messages/resmessages3.rmsg:255
+#: data/mp/messages/resmessagesall.rmsg:215
+#: data/mp/messages/resmessagesall.rmsg:455
 #: data/mp/messages/strings/resstrings.txt:217
 #: data/mp/messages/strings/resstrings.txt:223
 #: data/mp/messages/strings/resstrings.txt:229
@@ -2098,54 +2903,63 @@ msgstr "Automatikus támadás a hatótávon belüli ellenségekre"
 
 #: data/base/messages/resmessages2.rmsg:192
 #: data/base/messages/strings/resstrings.txt:198
+#: data/mp/messages/resmessages2.rmsg:174
 #: data/mp/messages/strings/resstrings.txt:222
 msgid "Armored strongpoint with Hyper-Velocity Cannon"
 msgstr "Páncélozott erőd nagysebességű ágyúval"
 
 #: data/base/messages/resmessages2.rmsg:203
 #: data/base/messages/strings/resstrings.txt:204
+#: data/mp/messages/resmessages2.rmsg:184
 #: data/mp/messages/strings/resstrings.txt:228
 msgid "Armored strongpoint with Inferno Flamer"
 msgstr "Páncélozott erőd Inferno lángvetővel"
 
 #: data/base/messages/resmessages2.rmsg:214
 #: data/base/messages/strings/resstrings.txt:218
+#: data/mp/messages/resmessages2.rmsg:194
 #: data/mp/messages/strings/resstrings.txt:246
 msgid "Armored strongpoint with Assault Cannon"
 msgstr "Páncélozott erőd ostromágyúval"
 
 #: data/base/messages/resmessages2.rmsg:225
 #: data/base/messages/strings/resstrings.txt:224
+#: data/mp/messages/resmessages2.rmsg:204
 #: data/mp/messages/strings/resstrings.txt:252
 msgid "Reinforced tower with Assault Gun"
 msgstr "Megerősített torony ostromfegyverrel"
 
 #: data/base/messages/resmessages2.rmsg:236
 #: data/base/messages/strings/resstrings.txt:288
+#: data/mp/messages/resmessages2.rmsg:214
 #: data/mp/messages/strings/resstrings.txt:316
 msgid "Armored hardpoint with Assault Gun"
 msgstr "Páncélozott talapzat ostromfegyverrel"
 
 #: data/base/messages/resmessages2.rmsg:247
 #: data/base/messages/strings/resstrings.txt:294
+#: data/mp/messages/resmessages2.rmsg:224
 #: data/mp/messages/strings/resstrings.txt:322
 msgid "Armored hardpoint with Assault Cannon"
 msgstr "Páncélozott talapzat ostromágyúval"
 
 #: data/base/messages/resmessages2.rmsg:258
 #: data/base/messages/strings/resstrings.txt:302
+#: data/mp/messages/resmessages2.rmsg:234
 #: data/mp/messages/strings/resstrings.txt:330
 msgid "Armored hardpoint with Inferno flamer"
 msgstr "Páncélozott talapzat Inferno lángvetővel"
 
 #: data/base/messages/resmessages2.rmsg:269
 #: data/base/messages/strings/resstrings.txt:308
+#: data/mp/messages/resmessages2.rmsg:244
 #: data/mp/messages/strings/resstrings.txt:336
 msgid "Armored hardpoint with Tank Killer AT missile"
 msgstr "Páncélozott talapzat Tank Killer rakétával"
 
 #: data/base/messages/resmessages2.rmsg:280
 #: data/base/messages/strings/resstrings.txt:334
+#: data/mp/messages/resmessages2.rmsg:254
 #: data/mp/messages/strings/resstrings.txt:362
 msgid "New robotic repair techniques"
 msgstr "Új javítórobot technikák"
@@ -2153,12 +2967,14 @@ msgstr "Új javítórobot technikák"
 #: data/base/messages/resmessages2.rmsg:291
 #: data/base/messages/strings/names.txt:786
 #: data/base/messages/strings/resstrings.txt:348
+#: data/mp/messages/resmessages2.rmsg:264
 #: data/mp/messages/strings/resstrings.txt:376
 msgid "Robotic Cyborg Production"
 msgstr "Robotizált Cyborg gyártás"
 
 #: data/base/messages/resmessages2.rmsg:302
 #: data/base/messages/strings/resstrings.txt:366
+#: data/mp/messages/resmessages2.rmsg:274
 #: data/mp/messages/strings/resstrings.txt:394
 msgid "New Robotic Techniques improve factory production"
 msgstr "Az új robotizálási módszerek megnövelték a gyárak termelékenységét"
@@ -2172,6 +2988,7 @@ msgstr "Megnövekedett gyári termelés arány"
 #: data/base/messages/resmessages2.rmsg:313
 #: data/base/messages/strings/names.txt:835
 #: data/base/messages/strings/resstrings.txt:390
+#: data/mp/messages/resmessages2.rmsg:284
 #: data/mp/messages/strings/names.txt:845
 #: data/mp/messages/strings/resstrings.txt:418
 msgid "Dedicated Synaptic Link Data Analysis"
@@ -2180,6 +2997,7 @@ msgstr "Célirányos szinaptikus kapcsolatú adatelemzés"
 #: data/base/messages/resmessages2.rmsg:324
 #: data/base/messages/strings/names.txt:808
 #: data/base/messages/strings/resstrings.txt:400
+#: data/mp/messages/resmessages2.rmsg:294
 #: data/mp/messages/strings/names.txt:818
 #: data/mp/messages/strings/resstrings.txt:428
 msgid "Hardened Base Structure Materials"
@@ -2188,6 +3006,7 @@ msgstr "Edzett bázis épület alapanyagok"
 #: data/base/messages/resmessages2.rmsg:335
 #: data/base/messages/strings/names.txt:851
 #: data/base/messages/strings/resstrings.txt:412
+#: data/mp/messages/resmessages2.rmsg:304
 #: data/mp/messages/strings/resstrings.txt:440
 msgid "Robotic VTOL Production"
 msgstr "Robotizált VTOL gyártás"
@@ -2195,6 +3014,8 @@ msgstr "Robotizált VTOL gyártás"
 #: data/base/messages/resmessages2.rmsg:336
 #: data/base/messages/resmessages3.rmsg:413
 #: data/base/messages/strings/resstrings.txt:413
+#: data/mp/messages/resmessages2.rmsg:305
+#: data/mp/messages/resmessages3.rmsg:375
 #: data/mp/messages/strings/resstrings.txt:441
 msgid "Increases VTOL factory output"
 msgstr "Megnövekedett VTOL gyártási teljesítmény"
@@ -2202,6 +3023,8 @@ msgstr "Megnövekedett VTOL gyártási teljesítmény"
 #: data/base/messages/resmessages2.rmsg:337
 #: data/base/messages/resmessages3.rmsg:414
 #: data/base/messages/strings/resstrings.txt:414
+#: data/mp/messages/resmessages2.rmsg:306
+#: data/mp/messages/resmessages3.rmsg:376
 #: data/mp/messages/strings/resstrings.txt:442
 msgid "All VTOL factories upgraded automatically"
 msgstr "VTOL gyárak automatikusan fejlesztve"
@@ -2209,6 +3032,8 @@ msgstr "VTOL gyárak automatikusan fejlesztve"
 #: data/base/messages/resmessages2.rmsg:345
 #: data/base/messages/resmessages3.rmsg:422
 #: data/base/messages/strings/resstrings.txt:421
+#: data/mp/messages/resmessages2.rmsg:313
+#: data/mp/messages/resmessages3.rmsg:383
 #: data/mp/messages/strings/resstrings.txt:449
 msgid "VTOL Rearming Times Reduced"
 msgstr "VTOL újratöltési idő csökkent"
@@ -2216,6 +3041,7 @@ msgstr "VTOL újratöltési idő csökkent"
 #: data/base/messages/resmessages2.rmsg:346
 #: data/base/messages/strings/names.txt:843
 #: data/base/messages/strings/resstrings.txt:422
+#: data/mp/messages/resmessages2.rmsg:314
 #: data/mp/messages/strings/names.txt:853
 #: data/mp/messages/strings/resstrings.txt:450
 msgid "Automated VTOL Rearming"
@@ -2231,24 +3057,29 @@ msgstr "Az újratöltési idő rövidül"
 #: data/base/messages/resmessages2.rmsg:348
 #: data/base/messages/resmessages3.rmsg:425
 #: data/base/messages/strings/resstrings.txt:424
+#: data/mp/messages/resmessages2.rmsg:316
+#: data/mp/messages/resmessages3.rmsg:386
 #: data/mp/messages/strings/resstrings.txt:452
 msgid "All rearming pads upgraded automatically"
 msgstr "Újratöltő platformok automatikusan fejlesztve"
 
 #: data/base/messages/resmessages2.rmsg:356
 #: data/base/messages/strings/resstrings.txt:459
+#: data/mp/messages/resmessages2.rmsg:323
 #: data/mp/messages/strings/resstrings.txt:489
 msgid "Improved Sensor Tower Available"
 msgstr "Továbbfejlesztett érzékelő torony érhető el"
 
 #: data/base/messages/resmessages2.rmsg:357
 #: data/base/messages/strings/resstrings.txt:460
+#: data/mp/messages/resmessages2.rmsg:324
 #: data/mp/messages/strings/resstrings.txt:490
 msgid "New construction techniques improve tower"
 msgstr "Az új építési eljárásokkal fejlődik a torony"
 
 #: data/base/messages/resmessages2.rmsg:358
 #: data/base/messages/strings/resstrings.txt:461
+#: data/mp/messages/resmessages2.rmsg:325
 #: data/mp/messages/strings/resstrings.txt:491
 msgid "Replaces existing sensor tower"
 msgstr "Felváltja a meglévő érzékelő tornyokat"
@@ -2257,24 +3088,30 @@ msgstr "Felváltja a meglévő érzékelő tornyokat"
 #: data/base/messages/resmessagesall.rmsg:51
 #: data/base/messages/resmessagesall.rmsg:62
 #: data/base/messages/strings/resstrings.txt:462
+#: data/mp/messages/resmessages2.rmsg:326
+#: data/mp/messages/resmessagesall.rmsg:46
+#: data/mp/messages/resmessagesall.rmsg:56
 #: data/mp/messages/strings/resstrings.txt:492
 msgid "May be assigned as spotter for indirect fire weapons"
 msgstr "Mint felderítőt lehet hozzárendelni az általános tűzfegyverekhez"
 
 #: data/base/messages/resmessages2.rmsg:368
 #: data/base/messages/strings/resstrings.txt:480
+#: data/mp/messages/resmessages2.rmsg:334
 #: data/mp/messages/strings/resstrings.txt:510
 msgid "VTOL CB turret detects enemy indirect fire batteries"
 msgstr "VTOL CB torony, általános ellenséges tüzet észlelt"
 
 #: data/base/messages/resmessages2.rmsg:390
 #: data/base/messages/strings/resstrings.txt:500
+#: data/mp/messages/resmessages2.rmsg:354
 #: data/mp/messages/strings/resstrings.txt:530
 msgid "New target recognition systems"
 msgstr "Új célfelismerő rendszerek"
 
 #: data/base/messages/resmessages2.rmsg:400
 #: data/base/messages/strings/resstrings.txt:527
+#: data/mp/messages/resmessages2.rmsg:363
 #: data/mp/messages/strings/resstrings.txt:562
 msgid "Collective Light Body"
 msgstr "Kollektív könnyű karosszéria"
@@ -2282,24 +3119,29 @@ msgstr "Kollektív könnyű karosszéria"
 #: data/base/messages/resmessages2.rmsg:401
 #: data/base/messages/resmessages3.rmsg:533
 #: data/base/messages/strings/resstrings.txt:528
+#: data/mp/messages/resmessages2.rmsg:364
+#: data/mp/messages/resmessages3.rmsg:484
 #: data/mp/messages/strings/resstrings.txt:563
 msgid "Superior armor and body points to Viper"
 msgstr "Kiváló páncélzat és karosszéria értékek Viper-hez"
 
 #: data/base/messages/resmessages2.rmsg:402
 #: data/base/messages/strings/resstrings.txt:529
+#: data/mp/messages/resmessages2.rmsg:365
 #: data/mp/messages/strings/resstrings.txt:564
 msgid "Slower than Viper"
 msgstr "Lassabb mint a Viper"
 
 #: data/base/messages/resmessages2.rmsg:403
 #: data/base/messages/strings/resstrings.txt:530
+#: data/mp/messages/resmessages2.rmsg:366
 #: data/mp/messages/strings/resstrings.txt:565
 msgid "High power costs and slower to produce than Viper"
 msgstr "Magas az energia költsége és lassabb a gyártása mint a Viper-nek"
 
 #: data/base/messages/resmessages2.rmsg:411
 #: data/base/messages/strings/resstrings.txt:539
+#: data/mp/messages/resmessages2.rmsg:373
 #: data/mp/messages/strings/resstrings.txt:574
 msgid "Collective Medium Body"
 msgstr "Kollektív közepes karosszéria"
@@ -2307,18 +3149,22 @@ msgstr "Kollektív közepes karosszéria"
 #: data/base/messages/resmessages2.rmsg:412
 #: data/base/messages/resmessages3.rmsg:544
 #: data/base/messages/strings/resstrings.txt:540
+#: data/mp/messages/resmessages2.rmsg:374
+#: data/mp/messages/resmessages3.rmsg:494
 #: data/mp/messages/strings/resstrings.txt:575
 msgid "Superior armor and body points to Cobra"
 msgstr "Kiváló páncélzat és karosszéria értékek Cobra-hoz"
 
 #: data/base/messages/resmessages2.rmsg:413
 #: data/base/messages/strings/resstrings.txt:541
+#: data/mp/messages/resmessages2.rmsg:375
 #: data/mp/messages/strings/resstrings.txt:576
 msgid "Slower than Cobra"
 msgstr "Lassabb mint a Cobra"
 
 #: data/base/messages/resmessages2.rmsg:414
 #: data/base/messages/strings/resstrings.txt:542
+#: data/mp/messages/resmessages2.rmsg:376
 #: data/mp/messages/strings/resstrings.txt:577
 msgid "High power costs and slower to produce than Cobra"
 msgstr "Magas az energia költsége és lassabb a gyártása mint a Cobra-nak"
@@ -2326,6 +3172,7 @@ msgstr "Magas az energia költsége és lassabb a gyártása mint a Cobra-nak"
 #: data/base/messages/resmessages2.rmsg:423
 #: data/base/messages/strings/names.txt:945
 #: data/base/messages/strings/resstrings.txt:560
+#: data/mp/messages/resmessages2.rmsg:384
 #: data/mp/messages/strings/names.txt:957
 #: data/mp/messages/strings/resstrings.txt:595
 msgid "Turbo-Charged Engine"
@@ -2334,6 +3181,9 @@ msgstr "Turbófeltöltős motor"
 #: data/base/messages/resmessages2.rmsg:444
 #: data/base/messages/resmessages3.rmsg:609
 #: data/base/messages/strings/resstrings.txt:581
+#: data/mp/messages/resmessages2.rmsg:403
+#: data/mp/messages/resmessages3.rmsg:553
+#: data/mp/messages/resmessagesall.rmsg:653
 #: data/mp/messages/strings/resstrings.txt:616
 msgid "Vehicle Thermal Armor Improved"
 msgstr "Jármű hőpajzs fejlesztve"
@@ -2341,6 +3191,9 @@ msgstr "Jármű hőpajzs fejlesztve"
 #: data/base/messages/resmessages2.rmsg:445
 #: data/base/messages/resmessages3.rmsg:610
 #: data/base/messages/strings/resstrings.txt:582
+#: data/mp/messages/resmessages2.rmsg:404
+#: data/mp/messages/resmessages3.rmsg:554
+#: data/mp/messages/resmessagesall.rmsg:654
 #: data/mp/messages/strings/resstrings.txt:617
 msgid "Heat-resistant armored layers"
 msgstr "Hőálló páncélozott rétegek"
@@ -2366,6 +3219,16 @@ msgstr "Megnövekedett hőpajzs értékek"
 #: data/base/messages/strings/resstrings.txt:601
 #: data/base/messages/strings/resstrings.txt:611
 #: data/base/messages/strings/resstrings.txt:621
+#: data/mp/messages/resmessages2.rmsg:413
+#: data/mp/messages/resmessages2.rmsg:423
+#: data/mp/messages/resmessages2.rmsg:433
+#: data/mp/messages/resmessages2.rmsg:443
+#: data/mp/messages/resmessages3.rmsg:563
+#: data/mp/messages/resmessages3.rmsg:573
+#: data/mp/messages/resmessages3.rmsg:583
+#: data/mp/messages/resmessages3.rmsg:593
+#: data/mp/messages/resmessages3.rmsg:603
+#: data/mp/messages/resmessages3.rmsg:613
 #: data/mp/messages/strings/resstrings.txt:626
 #: data/mp/messages/strings/resstrings.txt:636
 #: data/mp/messages/strings/resstrings.txt:646
@@ -2376,6 +3239,8 @@ msgstr "Járműhajtómű fejlesztve"
 #: data/base/messages/resmessages2.rmsg:458
 #: data/base/messages/resmessages3.rmsg:623
 #: data/base/messages/strings/resstrings.txt:594
+#: data/mp/messages/resmessages2.rmsg:416
+#: data/mp/messages/resmessages3.rmsg:566
 #: data/mp/messages/strings/resstrings.txt:629
 msgid "All half-tracks upgraded automatically"
 msgstr "Féllánctalpasok automatikusan fejlesztve"
@@ -2383,6 +3248,8 @@ msgstr "Féllánctalpasok automatikusan fejlesztve"
 #: data/base/messages/resmessages2.rmsg:469
 #: data/base/messages/resmessages3.rmsg:634
 #: data/base/messages/strings/resstrings.txt:604
+#: data/mp/messages/resmessages2.rmsg:426
+#: data/mp/messages/resmessages3.rmsg:576
 #: data/mp/messages/strings/resstrings.txt:639
 msgid "All hovers upgraded automatically"
 msgstr "Légpárnások automatikusan fejlesztve"
@@ -2390,6 +3257,8 @@ msgstr "Légpárnások automatikusan fejlesztve"
 #: data/base/messages/resmessages2.rmsg:480
 #: data/base/messages/resmessages3.rmsg:645
 #: data/base/messages/strings/resstrings.txt:614
+#: data/mp/messages/resmessages2.rmsg:436
+#: data/mp/messages/resmessages3.rmsg:586
 #: data/mp/messages/strings/resstrings.txt:649
 msgid "All tracks upgraded automatically"
 msgstr "Lánctalpasok automatikusan fejlesztve"
@@ -2397,6 +3266,8 @@ msgstr "Lánctalpasok automatikusan fejlesztve"
 #: data/base/messages/resmessages2.rmsg:491
 #: data/base/messages/resmessages3.rmsg:656
 #: data/base/messages/strings/resstrings.txt:624
+#: data/mp/messages/resmessages2.rmsg:446
+#: data/mp/messages/resmessages3.rmsg:596
 #: data/mp/messages/strings/resstrings.txt:659
 msgid "All wheels upgraded automatically"
 msgstr "Kerekes járművek automatikusan fejlesztve"
@@ -2409,6 +3280,10 @@ msgstr "Kerekes járművek automatikusan fejlesztve"
 #: data/base/messages/strings/resstrings.txt:641
 #: data/base/messages/strings/resstrings.txt:647
 #: data/base/messages/strings/resstrings.txt:653
+#: data/mp/messages/resmessages2.rmsg:453
+#: data/mp/messages/resmessages2.rmsg:463
+#: data/mp/messages/resmessages2.rmsg:473
+#: data/mp/messages/resmessages2.rmsg:483
 #: data/mp/messages/strings/resstrings.txt:670
 #: data/mp/messages/strings/resstrings.txt:676
 #: data/mp/messages/strings/resstrings.txt:682
@@ -2418,6 +3293,7 @@ msgstr "Új légvédelmi lövegtorony érhető el"
 
 #: data/base/messages/resmessages2.rmsg:500
 #: data/base/messages/strings/resstrings.txt:636
+#: data/mp/messages/resmessages2.rmsg:454
 #: data/mp/messages/strings/resstrings.txt:671
 msgid "Twin 80mm flak weapon"
 msgstr "80mm iker légelhárító löveg"
@@ -2430,6 +3306,13 @@ msgstr "80mm iker légelhárító löveg"
 #: data/base/messages/strings/resstrings.txt:643
 #: data/base/messages/strings/resstrings.txt:649
 #: data/base/messages/strings/resstrings.txt:655
+#: data/mp/messages/resmessages2.rmsg:455
+#: data/mp/messages/resmessages2.rmsg:465
+#: data/mp/messages/resmessages2.rmsg:475
+#: data/mp/messages/resmessages2.rmsg:485
+#: data/mp/messages/resmessagesall.rmsg:595
+#: data/mp/messages/resmessagesall.rmsg:645
+#: data/mp/messages/resmessagesall.rmsg:675
 #: data/mp/messages/strings/resstrings.txt:672
 #: data/mp/messages/strings/resstrings.txt:678
 #: data/mp/messages/strings/resstrings.txt:684
@@ -2439,24 +3322,29 @@ msgstr "Csak légi célok"
 
 #: data/base/messages/resmessages2.rmsg:511
 #: data/base/messages/strings/resstrings.txt:642
+#: data/mp/messages/resmessages2.rmsg:464
 #: data/mp/messages/strings/resstrings.txt:677
 msgid "Quad 80mm flak weapon"
 msgstr "80mm négyes légelhárító löveg"
 
 #: data/base/messages/resmessages2.rmsg:522
 #: data/base/messages/strings/resstrings.txt:648
+#: data/mp/messages/resmessages2.rmsg:474
 #: data/mp/messages/strings/resstrings.txt:683
 msgid "30mm Anti-Aircraft machinegun"
 msgstr "30mm légvédelmi gépfegyver"
 
 #: data/base/messages/resmessages2.rmsg:533
 #: data/base/messages/strings/resstrings.txt:654
+#: data/mp/messages/resmessages2.rmsg:484
+#: data/mp/messages/resmessagesall.rmsg:594
 #: data/mp/messages/strings/resstrings.txt:689
 msgid "Quad 30mm Anti-Aircraft machinegun"
 msgstr "30mm négyes légvédelmi gépfegyver"
 
 #: data/base/messages/resmessages2.rmsg:544
 #: data/base/messages/strings/resstrings.txt:660
+#: data/mp/messages/resmessages2.rmsg:494
 #: data/mp/messages/strings/resstrings.txt:695
 msgid "Detects and locks-on to VTOL engine emissions"
 msgstr "Érzékeli és célként rögzíti a VTOL hajtóművet"
@@ -2464,12 +3352,15 @@ msgstr "Érzékeli és célként rögzíti a VTOL hajtóművet"
 #: data/base/messages/resmessages2.rmsg:554
 #: data/base/messages/resmessages3.rmsg:697
 #: data/base/messages/strings/resstrings.txt:669
+#: data/mp/messages/resmessages2.rmsg:503
+#: data/mp/messages/resmessages3.rmsg:633
 #: data/mp/messages/strings/resstrings.txt:704
 msgid "AA Flak Upgrade"
 msgstr "Légelhárító fejlesztés"
 
 #: data/base/messages/resmessages2.rmsg:555
 #: data/base/messages/strings/resstrings.txt:670
+#: data/mp/messages/resmessages2.rmsg:504
 #: data/mp/messages/strings/resstrings.txt:705
 msgid "High Explosive Flak shards"
 msgstr "Nagy hatóerejű légelhárító szilánk"
@@ -2484,12 +3375,15 @@ msgstr "Megnövekedett légelhárító sebzés"
 #: data/base/messages/resmessages2.rmsg:557
 #: data/base/messages/resmessages3.rmsg:700
 #: data/base/messages/strings/resstrings.txt:672
+#: data/mp/messages/resmessages2.rmsg:506
+#: data/mp/messages/resmessages3.rmsg:636
 #: data/mp/messages/strings/resstrings.txt:707
 msgid "All AA flak weapons upgraded automatically"
 msgstr "Légelhárító fegyverek automatikusan fejlesztve"
 
 #: data/base/messages/resmessages2.rmsg:566
 #: data/base/messages/strings/resstrings.txt:678
+#: data/mp/messages/resmessages2.rmsg:514
 #: data/mp/messages/strings/resstrings.txt:713
 msgid "Recoil loaded AA ammunition hopper"
 msgstr "Hopper rendszerű automatikus légvédelmi lőszeradagolás"
@@ -2505,6 +3399,8 @@ msgstr "Megnövekedett légvédelmi tűzgyorsaság"
 #: data/base/messages/resmessages2.rmsg:587
 #: data/base/messages/strings/resstrings.txt:685
 #: data/base/messages/strings/resstrings.txt:691
+#: data/mp/messages/resmessages2.rmsg:523
+#: data/mp/messages/resmessages2.rmsg:533
 #: data/mp/messages/strings/resstrings.txt:720
 #: data/mp/messages/strings/resstrings.txt:726
 msgid "New Proximity Bomb Turret Available"
@@ -2512,6 +3408,7 @@ msgstr "Új közelségi gyújtólöveg bomba érhető el"
 
 #: data/base/messages/resmessages2.rmsg:577
 #: data/base/messages/strings/resstrings.txt:686
+#: data/mp/messages/resmessages2.rmsg:524
 #: data/mp/messages/strings/resstrings.txt:721
 msgid "Bomb turret explodes in proximity to enemy"
 msgstr "Bomba az ellenség közelében robban"
@@ -2520,6 +3417,8 @@ msgstr "Bomba az ellenség közelében robban"
 #: data/base/messages/resmessages2.rmsg:589
 #: data/base/messages/strings/resstrings.txt:687
 #: data/base/messages/strings/resstrings.txt:693
+#: data/mp/messages/resmessages2.rmsg:525
+#: data/mp/messages/resmessages2.rmsg:535
 #: data/mp/messages/strings/resstrings.txt:722
 #: data/mp/messages/strings/resstrings.txt:728
 msgid "Best Targets: Base Structures and Defenses"
@@ -2527,30 +3426,35 @@ msgstr "Célok: bázis épületek és védművek"
 
 #: data/base/messages/resmessages2.rmsg:588
 #: data/base/messages/strings/resstrings.txt:692
+#: data/mp/messages/resmessages2.rmsg:534
 #: data/mp/messages/strings/resstrings.txt:727
 msgid "Superbomb turret explodes in proximity to enemy"
 msgstr "Szuperbomba az ellenség közelében robban"
 
 #: data/base/messages/resmessages2.rmsg:599
 #: data/base/messages/strings/resstrings.txt:698
+#: data/mp/messages/resmessages2.rmsg:544
 #: data/mp/messages/strings/resstrings.txt:733
 msgid "Drops High Explosive Cluster bombs"
 msgstr "Nagy hatóerejű kazettás bombákat dob le"
 
 #: data/base/messages/resmessages2.rmsg:600
 #: data/base/messages/strings/resstrings.txt:699
+#: data/mp/messages/resmessages2.rmsg:545
 #: data/mp/messages/strings/resstrings.txt:734
 msgid "Best Targets: Base Structures"
 msgstr "Célok: bázis épületek"
 
 #: data/base/messages/resmessages2.rmsg:610
 #: data/base/messages/strings/resstrings.txt:704
+#: data/mp/messages/resmessages2.rmsg:554
 #: data/mp/messages/strings/resstrings.txt:739
 msgid "Drops High Explosive Armor Piercing bombs"
 msgstr "Nagy hatóerejű páncéltörő bombákat dob le"
 
 #: data/base/messages/resmessages2.rmsg:611
 #: data/base/messages/strings/resstrings.txt:705
+#: data/mp/messages/resmessages2.rmsg:555
 #: data/mp/messages/strings/resstrings.txt:740
 msgid "Best Targets: Defenses"
 msgstr "Célok: védművek"
@@ -2563,54 +3467,64 @@ msgstr "Hőkibocsájtás becélozva"
 
 #: data/base/messages/resmessages2.rmsg:632
 #: data/base/messages/strings/resstrings.txt:730
+#: data/mp/messages/resmessages2.rmsg:574
 #: data/mp/messages/strings/resstrings.txt:765
 msgid "Hyper-velocity automatic-cannon firing 88mm rounds"
 msgstr "Nagy sebességű automataágyú 88mm-es löveggel tüzel"
 
 #: data/base/messages/resmessages2.rmsg:634
 #: data/base/messages/strings/resstrings.txt:732
+#: data/mp/messages/resmessages2.rmsg:576
 #: data/mp/messages/strings/resstrings.txt:767
 msgid "Replaces Medium Cannon"
 msgstr "Felváltja a közepes ágyú"
 
 #: data/base/messages/resmessages2.rmsg:643
 #: data/base/messages/strings/resstrings.txt:736
+#: data/mp/messages/resmessages2.rmsg:584
 #: data/mp/messages/strings/resstrings.txt:771
 msgid "76mm hyper-velocity quad-barrel automatic-cannon"
 msgstr "76mm-es nagy sebességű négycsöves automataágyú"
 
 #: data/base/messages/resmessages2.rmsg:654
 #: data/base/messages/strings/resstrings.txt:758
+#: data/mp/messages/resmessages2.rmsg:594
 #: data/mp/messages/strings/resstrings.txt:797
 msgid "Heavy Flame-thrower firing Propylene Oxide gel"
 msgstr "Nehéz lángvető Propilén-oxiddal tüzel"
 
 #: data/base/messages/resmessages2.rmsg:665
 #: data/base/messages/strings/resstrings.txt:766
+#: data/mp/messages/resmessages2.rmsg:604
+#: data/mp/messages/resmessagesall.rmsg:604
 #: data/mp/messages/strings/resstrings.txt:805
 msgid "Propylene Oxide treated to burn at superhot temperatures"
 msgstr "Propilén-oxid kezelése a szuper magas égési hőmérséklet eléréséhez"
 
 #: data/base/messages/resmessages2.rmsg:676
 #: data/base/messages/strings/resstrings.txt:774
+#: data/mp/messages/resmessages2.rmsg:614
 #: data/mp/messages/strings/resstrings.txt:813
 msgid "105mm Howitzer may be assigned to a sensor"
 msgstr "Érzékelőt lehet rendelni a 105mm-es tarackhoz"
 
 #: data/base/messages/resmessages2.rmsg:687
 #: data/base/messages/strings/resstrings.txt:780
+#: data/mp/messages/resmessages2.rmsg:624
 #: data/mp/messages/strings/resstrings.txt:821
 msgid "155mm Howitzer may be assigned to a sensor"
 msgstr "Érzékelőt lehet rendelni a 155mm-es tarackhoz"
 
 #: data/base/messages/resmessages2.rmsg:698
 #: data/base/messages/strings/resstrings.txt:788
+#: data/mp/messages/resmessages2.rmsg:634
 #: data/mp/messages/strings/resstrings.txt:829
 msgid "105m Howitzer firing incendiaries, may be assigned to a sensor"
 msgstr "Érzékelőt lehet rendelni a 105mm-es gyutacsos tarackhoz"
 
 #: data/base/messages/resmessages2.rmsg:699
 #: data/base/messages/strings/resstrings.txt:789
+#: data/mp/messages/resmessages2.rmsg:635
 #: data/mp/messages/strings/resstrings.txt:830
 msgid "Best Targets: Base Structures, bunkers"
 msgstr "Célok: bázis épületek, bunkerek"
@@ -2624,6 +3538,12 @@ msgstr "Célok: bázis épületek, bunkerek"
 #: data/base/messages/strings/resstrings.txt:793
 #: data/base/messages/strings/resstrings.txt:801
 #: data/base/messages/strings/resstrings.txt:809
+#: data/mp/messages/resmessages2.rmsg:643
+#: data/mp/messages/resmessages2.rmsg:653
+#: data/mp/messages/resmessages2.rmsg:663
+#: data/mp/messages/resmessages3.rmsg:693
+#: data/mp/messages/resmessages3.rmsg:703
+#: data/mp/messages/resmessages3.rmsg:713
 #: data/mp/messages/strings/resstrings.txt:834
 #: data/mp/messages/strings/resstrings.txt:842
 #: data/mp/messages/strings/resstrings.txt:850
@@ -2646,6 +3566,12 @@ msgstr "Megnövelt tarack célpontosság"
 #: data/base/messages/strings/resstrings.txt:796
 #: data/base/messages/strings/resstrings.txt:804
 #: data/base/messages/strings/resstrings.txt:812
+#: data/mp/messages/resmessages2.rmsg:646
+#: data/mp/messages/resmessages2.rmsg:656
+#: data/mp/messages/resmessages2.rmsg:666
+#: data/mp/messages/resmessages3.rmsg:696
+#: data/mp/messages/resmessages3.rmsg:706
+#: data/mp/messages/resmessages3.rmsg:716
 #: data/mp/messages/strings/resstrings.txt:837
 #: data/mp/messages/strings/resstrings.txt:845
 #: data/mp/messages/strings/resstrings.txt:853
@@ -2654,6 +3580,8 @@ msgstr "Minden tarack fejlesztése automatikus"
 
 #: data/base/messages/resmessages2.rmsg:720
 #: data/base/messages/strings/resstrings.txt:802
+#: data/mp/messages/resmessages2.rmsg:564
+#: data/mp/messages/resmessages2.rmsg:654
 #: data/mp/messages/strings/resstrings.txt:843
 msgid "High Explosive shells"
 msgstr "Nagy hatóerejű gránát"
@@ -2674,18 +3602,21 @@ msgstr "Megnövelt tarack tűzerő"
 
 #: data/base/messages/resmessages2.rmsg:742
 #: data/base/messages/strings/resstrings.txt:846
+#: data/mp/messages/resmessages2.rmsg:674
 #: data/mp/messages/strings/resstrings.txt:889
 msgid "Tungsten-tipped armor-piercing bullets"
 msgstr "Wolfram magvas páncéltörő lövedék"
 
 #: data/base/messages/resmessages2.rmsg:753
 #: data/base/messages/strings/resstrings.txt:858
+#: data/mp/messages/resmessages2.rmsg:684
 #: data/mp/messages/strings/resstrings.txt:901
 msgid "Improved chaingun mechanism"
 msgstr "Továbbfejlesztett láncfegyver mechanika"
 
 #: data/base/messages/resmessages2.rmsg:775
 #: data/base/messages/strings/resstrings.txt:906
+#: data/mp/messages/resmessages2.rmsg:704
 #: data/mp/messages/strings/resstrings.txt:951
 msgid "High Explosive Armor-Piercing Shells"
 msgstr "Nagy hatóerejű, páncéltörő gránátok"
@@ -2698,74 +3629,95 @@ msgstr "Nagy hatóerejű, páncéltörő robbanófej"
 
 #: data/base/messages/resmessages2.rmsg:797
 #: data/base/messages/strings/resstrings.txt:966
+#: data/mp/messages/resmessages2.rmsg:724
 #: data/mp/messages/strings/resstrings.txt:1011
 msgid "High Explosive Squash Head warhead"
 msgstr "Nagy hatóerejű, rogyókúpos repeszhatású robbanófej"
 
 #: data/base/messages/resmessages3.rmsg:16
+#: data/mp/messages/resmessages3.rmsg:14
 msgid "NEXUS Intruder Program analyzed"
 msgstr "NEXUS behatoló program analizálva"
 
 #: data/base/messages/resmessages3.rmsg:17
+#: data/mp/messages/resmessages3.rmsg:15
 msgid "Intruder parasite isolated"
 msgstr "Behatoló program izolálva"
 
 #: data/base/messages/resmessages3.rmsg:18
 #: data/base/messages/resmessages3.rmsg:29
+#: data/mp/messages/resmessages3.rmsg:16
+#: data/mp/messages/resmessages3.rmsg:26
 msgid "Reduced chance of NEXUS take-over"
 msgstr "Csökkent az esély a NEXUS átvételére"
 
 #: data/base/messages/resmessages3.rmsg:27
+#: data/mp/messages/resmessages3.rmsg:24
 msgid "Improved NEXUS resistance circuitry"
 msgstr "Továbbfejlesztett NEXUS ellenálló áramkör"
 
 #: data/base/messages/resmessages3.rmsg:28
+#: data/mp/messages/resmessages3.rmsg:25
 msgid "Computer systems can now be 'ring-fenced' from NEXUS"
 msgstr "A számítógépes rendszerek ma már elszigetelődtek a NEXUS-tól"
 
 #: data/base/messages/resmessages3.rmsg:37
+#: data/mp/messages/resmessages3.rmsg:33
 msgid "New Cyborg Research Available"
 msgstr "Új Cyborg kutatás érhető el"
 
 #: data/base/messages/resmessages3.rmsg:38
+#: data/mp/messages/resmessages3.rmsg:34
 msgid "Aerodynamic Jump Pack"
 msgstr "Aerodinamikus ejtőernyő"
 
 #: data/base/messages/resmessages3.rmsg:39
+#: data/mp/messages/resmessages3.rmsg:35
 msgid "Gives Cyborg limited flight abilities"
 msgstr "A Cyborg-oknak korlátozott repülési képességeket ad"
 
 #: data/base/messages/resmessages3.rmsg:40
+#: data/mp/messages/resmessages3.rmsg:36
 msgid "Jump Cyborgs can now be researched"
 msgstr "Ejtőernyős Cyborg-ok kutathatók"
 
 #: data/base/messages/resmessages3.rmsg:60
 #: data/base/messages/resmessages3.rmsg:588
+#: data/mp/messages/resmessages3.rmsg:54
+#: data/mp/messages/resmessages3.rmsg:534
 msgid "Superdense composite alloys and energy-absorbing fibres"
 msgstr "Szupersűrű kompozit ötvözetek és energiaelnyelő szálak"
 
 #: data/base/messages/resmessages3.rmsg:71
 #: data/base/messages/resmessages3.rmsg:599
+#: data/mp/messages/resmessages3.rmsg:64
+#: data/mp/messages/resmessages3.rmsg:544
 msgid "Laminated alloys bonded with energy-deflecting optic bundles"
 msgstr "Ragasztással rétegelt ötvözetek, energiaeltérítő optikai szállal"
 
 #: data/base/messages/resmessages3.rmsg:82
 #: data/base/messages/strings/resstrings.txt:78
+#: data/mp/messages/resmessages3.rmsg:74
 #: data/mp/messages/strings/resstrings.txt:98
 msgid "Armed with Revenger Surface-to-Air missile"
 msgstr "Revenger föld-levegő rakétával felszerelt"
 
 #: data/base/messages/resmessages3.rmsg:93
 #: data/base/messages/resmessages3.rmsg:148
+#: data/mp/messages/resmessages3.rmsg:84
+#: data/mp/messages/resmessages3.rmsg:134
 msgid "Armed with Needle Gun"
 msgstr "Flechette ágyúval felszerelt"
 
 #: data/base/messages/resmessages3.rmsg:104
 #: data/base/messages/resmessages3.rmsg:159
+#: data/mp/messages/resmessages3.rmsg:94
+#: data/mp/messages/resmessages3.rmsg:144
 msgid "Armed with Scourge anti-tank missile"
 msgstr "Scourge tankelhárító rakétával felszerelt"
 
 #: data/base/messages/resmessages3.rmsg:115
+#: data/mp/messages/resmessages3.rmsg:104
 msgid "Armed with flashlight laser"
 msgstr "Könnyűlézerrel felszerelt"
 
@@ -2776,52 +3728,68 @@ msgstr "Könnyűlézerrel felszerelt"
 #: data/base/messages/resmessages3.rmsg:169
 #: data/base/messages/strings/resstrings.txt:77
 #: data/base/messages/strings/resstrings.txt:83
+#: data/mp/messages/resmessages3.rmsg:113
+#: data/mp/messages/resmessages3.rmsg:123
+#: data/mp/messages/resmessages3.rmsg:133
+#: data/mp/messages/resmessages3.rmsg:143
+#: data/mp/messages/resmessages3.rmsg:153
 #: data/mp/messages/strings/resstrings.txt:97
 #: data/mp/messages/strings/resstrings.txt:103
 msgid "New Jump Cyborg Available"
 msgstr "Új ejtőernyős Cyborg érhető el"
 
 #: data/base/messages/resmessages3.rmsg:126
+#: data/mp/messages/resmessages3.rmsg:114
 msgid "Armed with Lancer anti-tank missile"
 msgstr "Tankelhárító rakétával felszerelt"
 
 #: data/base/messages/resmessages3.rmsg:137
+#: data/mp/messages/resmessages3.rmsg:124
 msgid "Armed with Cyborg assault gun"
 msgstr "Cyborg ostromfegyverrel felszerelt"
 
 #: data/base/messages/resmessages3.rmsg:170
+#: data/mp/messages/resmessages3.rmsg:154
 msgid "Armed with Flashlight Laser"
 msgstr "Könnyűlézerrel szerelt"
 
 #: data/base/messages/resmessages3.rmsg:172
+#: data/mp/messages/resmessages3.rmsg:156
 msgid "Requires cyborg factory to produce"
 msgstr "Cyborg gyár szükséges az előállításhoz"
 
 #: data/base/messages/resmessages3.rmsg:181
+#: data/mp/messages/resmessages3.rmsg:164
 msgid "High tensile concrete-plastic composite"
 msgstr "Nagy szilárdságú vasbeton műanyag kompozit"
 
 #: data/base/messages/resmessages3.rmsg:192
+#: data/mp/messages/resmessages3.rmsg:174
 msgid "Bonded metallic laminates formed into walls and defenses"
 msgstr "Ragaszással rétegelt fémerősítés a falakba és a védművekbe"
 
 #: data/base/messages/resmessages3.rmsg:203
+#: data/mp/messages/resmessages3.rmsg:184
 msgid "SAM site with Avenger missiles"
 msgstr "SAM kilövő állás Avenger rakétákkal"
 
 #: data/base/messages/resmessages3.rmsg:214
+#: data/mp/messages/resmessages3.rmsg:194
 msgid "SAM site with Vindicator missiles"
 msgstr "SAM kilövő állás Vindicator rakétákkal"
 
 #: data/base/messages/resmessages3.rmsg:225
+#: data/mp/messages/resmessages3.rmsg:204
 msgid "Artillery battery firing Firestorm Missiles"
 msgstr "A tüzérség Firestorm rakétákkal tüzel"
 
 #: data/base/messages/resmessages3.rmsg:236
+#: data/mp/messages/resmessages3.rmsg:214
 msgid "Artillery battery firing Novastorm Missiles"
 msgstr "A tüzérségi üteg Novastorm rakétákkal tüzel"
 
 #: data/base/messages/resmessages3.rmsg:247
+#: data/mp/messages/resmessages3.rmsg:224
 msgid "Armored strongpoint with Flashlight laser"
 msgstr "Páncélozott erőd könnyűlézerrel"
 
@@ -2830,93 +3798,116 @@ msgid "Armored strongpoint with Pulse Laser"
 msgstr "Páncélozott erőd impulzus lézerrel"
 
 #: data/base/messages/resmessages3.rmsg:269
+#: data/mp/messages/resmessages3.rmsg:244
 msgid "Armored strongpoint with Rail Gun"
 msgstr "Páncélozott erőd sínágyúval"
 
 #: data/base/messages/resmessages3.rmsg:280
+#: data/mp/messages/resmessages3.rmsg:254
 msgid "Armored strongpoint with Gauss Cannon"
 msgstr "Páncélozott erőd Gauss ágyúval"
 
 #: data/base/messages/resmessages3.rmsg:291
+#: data/mp/messages/resmessages3.rmsg:264
 msgid "Armored guard tower with Scourge Missile"
 msgstr "Páncélozott őrtorony Scourge rakétával"
 
 #: data/base/messages/resmessages3.rmsg:302
+#: data/mp/messages/resmessages3.rmsg:274
 msgid "Armored guard tower with Needle Gun"
 msgstr "Páncélozott őrtorony nyílövedékes ágyúval"
 
 #: data/base/messages/resmessages3.rmsg:313
+#: data/mp/messages/resmessages3.rmsg:284
 msgid "Armored hardpoint with Scourge AT Missile"
 msgstr "Páncélozott talapzat Scourge tankelhárító rakétával"
 
 #: data/base/messages/resmessages3.rmsg:324
+#: data/mp/messages/resmessages3.rmsg:294
 msgid "Armored hardpoint with Flashlight laser"
 msgstr "Páncélozott talapzat könnyűlézerrel"
 
 #: data/base/messages/resmessages3.rmsg:335
+#: data/mp/messages/resmessages3.rmsg:304
 msgid "Armored hardpoint with Rail Gun"
 msgstr "Páncélozott talapzat sínágyúval"
 
 #: data/base/messages/resmessages3.rmsg:346
+#: data/mp/messages/resmessages3.rmsg:314
 msgid "Armored hardpoint with Gauss Cannon"
 msgstr "Páncélozott talapzat Gauss ágyúval"
 
 #: data/base/messages/resmessages3.rmsg:357
+#: data/mp/messages/resmessages3.rmsg:324
 msgid "Advanced repair techniques"
 msgstr "Fejlett javítási technikák"
 
 #: data/base/messages/resmessages3.rmsg:369
+#: data/mp/messages/resmessages3.rmsg:334
 msgid "Vapor Turbine boosts power output"
 msgstr "Megnövelt gőzturbina teljesítmény"
 
 #: data/base/messages/resmessages3.rmsg:379
 #: data/base/messages/strings/names.txt:838
+#: data/mp/messages/resmessages3.rmsg:344
 #: data/mp/messages/strings/names.txt:848
 msgid "Neural Synapse Research Brain"
 msgstr "Idegi szinaptikus kutató agy"
 
 #: data/base/messages/resmessages3.rmsg:390
 #: data/base/messages/strings/names.txt:811
+#: data/mp/messages/resmessages3.rmsg:354
 #: data/mp/messages/strings/names.txt:821
 msgid "Advanced Base Structure Materials"
 msgstr "Fejlett bázisépület alapanyagok"
 
 #: data/base/messages/resmessages3.rmsg:401
+#: data/mp/messages/resmessages3.rmsg:364
 msgid "High Density Base Structure Materials"
 msgstr "Nagy sűrűségű bázisépület alapanyagok"
 
 #: data/base/messages/resmessages3.rmsg:412
 #: data/base/messages/strings/names.txt:854
+#: data/mp/messages/resmessages3.rmsg:374
 msgid "Advanced VTOL Production"
 msgstr "Fejlett VTOL gyártás"
 
 #: data/base/messages/resmessages3.rmsg:423
 #: data/base/messages/strings/names.txt:846
+#: data/mp/messages/resmessages3.rmsg:384
 #: data/mp/messages/strings/names.txt:856
 msgid "Robotic VTOL Rearming"
 msgstr "Robotizált VTOL újratöltés"
 
 #: data/base/messages/resmessages3.rmsg:434
+#: data/mp/messages/resmessages3.rmsg:394
 msgid "Advanced Engineering Techniques"
 msgstr "Fejlett mérnöki módszerek"
 
 #: data/base/messages/resmessages3.rmsg:456
+#: data/mp/messages/resmessages3.rmsg:414
 msgid "Advanced fire detection systems"
 msgstr "Fejlett tűzérzékelő rendszerek"
 
 #: data/base/messages/resmessages3.rmsg:467
+#: data/mp/messages/resmessages3.rmsg:424
 msgid "Advanced target recognition systems"
 msgstr "Fejlett célfelismerő rendszer"
 
 #: data/base/messages/resmessages3.rmsg:478
+#: data/mp/messages/resmessages3.rmsg:434
+#: data/mp/messages/resmessagesall.rmsg:304
 msgid "Synaptic Link Scrambler technology"
 msgstr "Szinaptikus kapcsolatú kódolási technológia"
 
 #: data/base/messages/resmessages3.rmsg:479
+#: data/mp/messages/resmessages3.rmsg:435
+#: data/mp/messages/resmessagesall.rmsg:305
 msgid "Electronically attacks and disrupts enemy structures"
 msgstr "Elektronikus úton támad és rombolja az ellenséges épületeket"
 
 #: data/base/messages/resmessages3.rmsg:480
+#: data/mp/messages/resmessages3.rmsg:436
 msgid "Steals technology from enemies"
 msgstr "Technológiát lop az ellenségektől"
 
@@ -2924,6 +3915,11 @@ msgstr "Technológiát lop az ellenségektől"
 #: data/base/messages/resmessages3.rmsg:499
 #: data/base/messages/resmessages3.rmsg:510
 #: data/base/messages/resmessages3.rmsg:521
+#: data/mp/messages/resmessages3.rmsg:443
+#: data/mp/messages/resmessages3.rmsg:453
+#: data/mp/messages/resmessages3.rmsg:463
+#: data/mp/messages/resmessages3.rmsg:473
+#: data/mp/messages/resmessagesall.rmsg:323
 msgid "New Repair Technology Discovered"
 msgstr "Új javítási technológia felfedezve"
 
@@ -2931,108 +3927,149 @@ msgstr "Új javítási technológia felfedezve"
 #: data/base/messages/resmessages3.rmsg:500
 #: data/base/messages/resmessages3.rmsg:511
 #: data/base/messages/resmessages3.rmsg:522
+#: data/mp/messages/resmessages3.rmsg:444
+#: data/mp/messages/resmessages3.rmsg:454
+#: data/mp/messages/resmessages3.rmsg:464
+#: data/mp/messages/resmessages3.rmsg:474
+#: data/mp/messages/resmessagesall.rmsg:314
+#: data/mp/messages/resmessagesall.rmsg:324
 msgid "Synaptic Link technology breakthrough"
 msgstr "Szinaptikus kapcsolat technológiai áttörés"
 
 #: data/base/messages/resmessages3.rmsg:490
 #: data/base/messages/resmessages3.rmsg:523
+#: data/mp/messages/resmessages3.rmsg:445
+#: data/mp/messages/resmessages3.rmsg:475
+#: data/mp/messages/resmessagesall.rmsg:325
 msgid "On-board diagnostic and repair systems"
 msgstr "Fedélzeti diagnosztikai és szerviz rendszerek"
 
 #: data/base/messages/resmessages3.rmsg:491
+#: data/mp/messages/resmessages3.rmsg:446
 msgid "Enables self-repair in all Cyborgs"
 msgstr "Önjavítás képessége a Cyborg-oknak"
 
 #: data/base/messages/resmessages3.rmsg:501
 #: data/base/messages/resmessages3.rmsg:512
+#: data/mp/messages/resmessages3.rmsg:455
+#: data/mp/messages/resmessages3.rmsg:465
 msgid "Built-in diagnostic and repair systems"
 msgstr "Beépített diagnosztikai és szerviz rendszerek"
 
 #: data/base/messages/resmessages3.rmsg:502
+#: data/mp/messages/resmessages3.rmsg:456
 msgid "Enables self-repair in all base structures"
 msgstr "Önjavítás képessége a bázis épületeknek"
 
 #: data/base/messages/resmessages3.rmsg:513
+#: data/mp/messages/resmessages3.rmsg:466
 msgid "Enables self-repair in all defenses"
 msgstr "Önjavítás képessége az összes védműnek"
 
 #: data/base/messages/resmessages3.rmsg:524
+#: data/mp/messages/resmessages3.rmsg:476
 msgid "Enables self-repair in all vehicles"
 msgstr "Önjavítás képessége az összes járműnek"
 
 #: data/base/messages/resmessages3.rmsg:532
+#: data/mp/messages/resmessages3.rmsg:483
 msgid "NEXUS Light Body"
 msgstr "NEXUS könnyű karosszéria"
 
 #: data/base/messages/resmessages3.rmsg:535
+#: data/mp/messages/resmessages3.rmsg:486
 msgid "Expensive to produce"
 msgstr "Költséges az előállítása"
 
 #: data/base/messages/resmessages3.rmsg:543
+#: data/mp/messages/resmessages3.rmsg:493
 msgid "NEXUS Medium Body"
 msgstr "NEXUS közepes karosszéria"
 
 #: data/base/messages/resmessages3.rmsg:546
+#: data/mp/messages/resmessages3.rmsg:496
 msgid "Expensive and slow to produce"
 msgstr "Költséges és lassú az előállítása"
 
 #: data/base/messages/resmessages3.rmsg:554
+#: data/mp/messages/resmessages3.rmsg:503
 msgid "NEXUS Heavy Body"
 msgstr "NEXUS nehéz karosszéria"
 
 #: data/base/messages/resmessages3.rmsg:555
 #: data/base/messages/resmessagesall.rmsg:93
+#: data/mp/messages/resmessages3.rmsg:504
+#: data/mp/messages/resmessagesall.rmsg:114
 msgid "More armor and body points than Python"
 msgstr "Több páncél és karosszéria érték mint a Python-nak"
 
 #: data/base/messages/resmessages3.rmsg:557
+#: data/mp/messages/resmessages3.rmsg:506
+#: data/mp/messages/resmessagesall.rmsg:566
+#: data/mp/messages/resmessagesall.rmsg:576
 msgid "Very expensive to produce"
 msgstr "Nagyon költséges az előállítása"
 
 #: data/base/messages/resmessages3.rmsg:566
 #: data/base/messages/strings/names.txt:948
+#: data/mp/messages/resmessages3.rmsg:514
 #: data/mp/messages/strings/names.txt:960
 msgid "Gas Turbine Engine"
 msgstr "Gázturbina motor"
 
 #: data/base/messages/resmessages3.rmsg:577
+#: data/mp/messages/resmessages3.rmsg:524
 msgid "Ionizing Turbine Engine"
 msgstr "Ionturbina motor"
 
 #: data/base/messages/resmessages3.rmsg:665
 #: data/base/messages/resmessages3.rmsg:676
+#: data/mp/messages/resmessages3.rmsg:604
+#: data/mp/messages/resmessages3.rmsg:614
 msgid "New power efficient propulsion"
 msgstr "Új energiatakarékos meghajtás"
 
 #: data/base/messages/resmessages3.rmsg:666
 #: data/base/messages/resmessages3.rmsg:677
+#: data/mp/messages/resmessages3.rmsg:605
+#: data/mp/messages/resmessages3.rmsg:615
 msgid "Body Points and Speed Increased"
 msgstr "Sebesség és karosszéria értékek növekedtek"
 
 #: data/base/messages/resmessages3.rmsg:667
 #: data/base/messages/resmessages3.rmsg:678
+#: data/mp/messages/resmessages3.rmsg:606
+#: data/mp/messages/resmessages3.rmsg:616
 msgid "All VTOLs upgraded automatically"
 msgstr "Minden VTOL automatikusan fejlesztve"
 
 #: data/base/messages/resmessages3.rmsg:687
+#: data/mp/messages/resmessages3.rmsg:624
 msgid "Computer plots and guides shell to target's position"
 msgstr "Számítógép tervezi és irányítja az ágyúzást a célpontra"
 
 #: data/base/messages/resmessages3.rmsg:698
+#: data/mp/messages/resmessages3.rmsg:634
 msgid "High Explosive Armor Piercing Flak"
 msgstr "Nagy hatóerejű páncéltörő légelhárító"
 
 #: data/base/messages/resmessages3.rmsg:709
+#: data/mp/messages/resmessages3.rmsg:644
 msgid "Chainfeed loader eradicates jams and improves performance"
 msgstr "Láncos lőszeradagolás megszünteti az elakadást, és növeli a tűzgyorsaságot"
 
 #: data/base/messages/resmessages3.rmsg:720
+#: data/mp/messages/resmessages3.rmsg:654
 msgid "Drops high intensity thermite bombs"
 msgstr "Nagy erejű termit gyújtóbombákat dob le"
 
 #: data/base/messages/resmessages3.rmsg:721
 #: data/base/messages/resmessages3.rmsg:886
 #: data/base/messages/resmessagesall.rmsg:138
+#: data/mp/messages/resmessages3.rmsg:655
+#: data/mp/messages/resmessages3.rmsg:805
+#: data/mp/messages/resmessagesall.rmsg:155
+#: data/mp/messages/resmessagesall.rmsg:705
 msgid "Best Targets: Bunkers and hardpoints"
 msgstr "Célok: bunkerek és fegyvertartó talapzatok"
 
@@ -3041,48 +4078,65 @@ msgid "Bombs lock on and guide themselves to the target"
 msgstr "A bombák bemérik és önmagukat irányítják a célra"
 
 #: data/base/messages/resmessages3.rmsg:742
+#: data/mp/messages/resmessages3.rmsg:674
 msgid "High-Velocity Armor-Piercing Fin-Stabilised Discarding Sabot"
 msgstr "Nagy sebességű, leváló köpenyes, szárnystabilizált, űrméret alatti páncéltörő lövedék (HVAPFSDS)"
 
 #: data/base/messages/resmessages3.rmsg:753
 #: data/base/messages/resmessages3.rmsg:786
 #: data/base/messages/resmessages3.rmsg:1006
+#: data/mp/messages/resmessages3.rmsg:684
+#: data/mp/messages/resmessages3.rmsg:714
+#: data/mp/messages/resmessages3.rmsg:914
 msgid "Robotic loading system feeds rounds into breech"
 msgstr "Robotizált lőszeradagoló rendszer závárzathoz"
 
 #: data/base/messages/resmessages3.rmsg:764
+#: data/mp/messages/resmessages3.rmsg:694
 msgid "Computer guided shells"
 msgstr "Számítógép vezérelt gránát"
 
 #: data/base/messages/resmessages3.rmsg:775
+#: data/mp/messages/resmessages3.rmsg:704
 msgid "High Explosive Armor Piercing Shells"
 msgstr "Nagy hatóerejű páncéltörő gránát"
 
 #: data/base/messages/resmessages3.rmsg:796
 #: data/base/messages/resmessages3.rmsg:807
+#: data/mp/messages/resmessages3.rmsg:723
+#: data/mp/messages/resmessages3.rmsg:733
+#: data/mp/messages/resmessagesall.rmsg:373
 msgid "New Laser Weapon Available"
 msgstr "Új lézerfegyver érhető el"
 
 #: data/base/messages/resmessages3.rmsg:797
+#: data/mp/messages/resmessages3.rmsg:724
 msgid "Generates and concentrates bursts of laser energy"
 msgstr "Generálja és koncentrálja a kitörő lézer energiáját"
 
 #: data/base/messages/resmessages3.rmsg:798
 #: data/base/messages/resmessages3.rmsg:809
+#: data/mp/messages/resmessages3.rmsg:725
+#: data/mp/messages/resmessages3.rmsg:735
 msgid "Best Targets: Cyborgs"
 msgstr "Célok: Cyborgok"
 
 #: data/base/messages/resmessages3.rmsg:808
+#: data/mp/messages/resmessages3.rmsg:734
 msgid "Fires pulses of laser light"
 msgstr "Tüzelés impulzus lézerrel"
 
 #: data/base/messages/resmessages3.rmsg:818
 #: data/base/messages/resmessages3.rmsg:829
 #: data/base/messages/resmessages3.rmsg:840
+#: data/mp/messages/resmessages3.rmsg:743
+#: data/mp/messages/resmessages3.rmsg:753
+#: data/mp/messages/resmessages3.rmsg:763
 msgid "Laser Upgrade"
 msgstr "Lézer fejlesztés"
 
 #: data/base/messages/resmessages3.rmsg:819
+#: data/mp/messages/resmessages3.rmsg:744
 msgid "Improvement in laser optics reduces light dispersal"
 msgstr "Lézeroptika javulása csökkenti a fényszóródást"
 
@@ -3093,10 +4147,14 @@ msgstr "Megnövekedett lézer célpontosság"
 #: data/base/messages/resmessages3.rmsg:821
 #: data/base/messages/resmessages3.rmsg:832
 #: data/base/messages/resmessages3.rmsg:843
+#: data/mp/messages/resmessages3.rmsg:746
+#: data/mp/messages/resmessages3.rmsg:756
+#: data/mp/messages/resmessages3.rmsg:766
 msgid "All lasers upgraded automatically"
 msgstr "Lézerek automatikusan fejlesztve"
 
 #: data/base/messages/resmessages3.rmsg:830
+#: data/mp/messages/resmessages3.rmsg:754
 msgid "Improvement in laser emission density"
 msgstr "Lézeremisszió javult"
 
@@ -3105,6 +4163,7 @@ msgid "Increases Laser damage"
 msgstr "Megnövekedett lézer sebzés"
 
 #: data/base/messages/resmessages3.rmsg:841
+#: data/mp/messages/resmessages3.rmsg:764
 msgid "Improved Energizer reduces laser recharge time"
 msgstr "Jobb energiacellák csökkentik a lézerek újratöltési idejét"
 
@@ -3113,23 +4172,29 @@ msgid "Increases Laser ROF"
 msgstr "Megnövekedett lézer tűzgyorsaság"
 
 #: data/base/messages/resmessages3.rmsg:852
+#: data/mp/messages/resmessages3.rmsg:774
 msgid "Depleted uranium kinetic energy bullets"
 msgstr "Szegényített uránmagvas, kinetikus lőszer"
 
 #: data/base/messages/resmessages3.rmsg:863
+#: data/mp/messages/resmessages3.rmsg:784
 msgid "Collapsing Plutonium kinetic energy bullets"
 msgstr "Összeomló plutónium magvas, kinetikus lőszer"
 
 #: data/base/messages/resmessages3.rmsg:873
 #: data/base/messages/resmessages3.rmsg:884
+#: data/mp/messages/resmessages3.rmsg:793
+#: data/mp/messages/resmessages3.rmsg:803
 msgid "New Missile Turret Available"
 msgstr "Új rakéta lövegtorony érhető el"
 
 #: data/base/messages/resmessages3.rmsg:874
+#: data/mp/messages/resmessages3.rmsg:794
 msgid "Anti-tank missile"
 msgstr "Tankelhárító rakéta"
 
 #: data/base/messages/resmessages3.rmsg:885
+#: data/mp/messages/resmessages3.rmsg:804
 msgid "Bunker buster missile"
 msgstr "Bunkertörő rakéta"
 
@@ -3138,10 +4203,16 @@ msgstr "Bunkertörő rakéta"
 #: data/base/messages/resmessages3.rmsg:917
 #: data/base/messages/resmessages3.rmsg:972
 #: data/base/messages/resmessages3.rmsg:983
+#: data/mp/messages/resmessages3.rmsg:813
+#: data/mp/messages/resmessages3.rmsg:823
+#: data/mp/messages/resmessages3.rmsg:833
+#: data/mp/messages/resmessages3.rmsg:883
+#: data/mp/messages/resmessages3.rmsg:893
 msgid "Missile Upgrade"
 msgstr "Rakéta fejlesztés"
 
 #: data/base/messages/resmessages3.rmsg:896
+#: data/mp/messages/resmessages3.rmsg:814
 msgid "On-board computer predicts target movement"
 msgstr "Fedélzeti számítógép előrejelzi a cél mozgását"
 
@@ -3155,14 +4226,22 @@ msgstr "Megnövekedett rakéta célpontosság"
 #: data/base/messages/resmessages3.rmsg:920
 #: data/base/messages/resmessages3.rmsg:975
 #: data/base/messages/resmessages3.rmsg:986
+#: data/mp/messages/resmessages3.rmsg:816
+#: data/mp/messages/resmessages3.rmsg:826
+#: data/mp/messages/resmessages3.rmsg:836
+#: data/mp/messages/resmessages3.rmsg:886
+#: data/mp/messages/resmessages3.rmsg:896
 msgid "All missiles upgraded automatically"
 msgstr "Rakéták automatikusan fejlesztve"
 
 #: data/base/messages/resmessages3.rmsg:907
+#: data/mp/messages/resmessages3.rmsg:824
 msgid "Missile actively seeks and homes on targets"
 msgstr "A rakéták aktívan keresik és rögzítik a célt"
 
 #: data/base/messages/resmessages3.rmsg:918
+#: data/mp/messages/resmessages3.rmsg:664
+#: data/mp/messages/resmessages3.rmsg:834
 msgid "Low yield thermonuclear warhead"
 msgstr "Kisteljesítményű termonukleáris robbanófej"
 
@@ -3172,41 +4251,58 @@ msgstr "Megnövekedett rakéta sebzés"
 
 #: data/base/messages/resmessages3.rmsg:928
 #: data/base/messages/resmessages3.rmsg:939
+#: data/mp/messages/resmessages3.rmsg:843
+#: data/mp/messages/resmessages3.rmsg:853
 msgid "New SAM Turret Available"
 msgstr "Új SAM lövegtorony érhető el"
 
 #: data/base/messages/resmessages3.rmsg:929
+#: data/mp/messages/resmessages3.rmsg:844
+#: data/mp/messages/resmessagesall.rmsg:664
 msgid "Surface-to-air missile"
 msgstr "Föld-levegő rakéta (SAM)"
 
 #: data/base/messages/resmessages3.rmsg:930
 #: data/base/messages/resmessages3.rmsg:941
+#: data/mp/messages/resmessages3.rmsg:845
+#: data/mp/messages/resmessages3.rmsg:855
+#: data/mp/messages/resmessagesall.rmsg:585
+#: data/mp/messages/resmessagesall.rmsg:665
 msgid "Best Targets: Aerial targets only"
 msgstr "Célok: csak légi célok"
 
 #: data/base/messages/resmessages3.rmsg:940
+#: data/mp/messages/resmessages3.rmsg:854
+#: data/mp/messages/resmessagesall.rmsg:584
 msgid "Heavy surface-to-air missile"
 msgstr "Nehéz föld-levegő rakéta"
 
 #: data/base/messages/resmessages3.rmsg:950
 #: data/base/messages/resmessages3.rmsg:961
+#: data/mp/messages/resmessages3.rmsg:863
+#: data/mp/messages/resmessages3.rmsg:873
 msgid "New Artillery Missile Turret Available"
 msgstr "Új tüzérségi rakéta lövegtorony érhető el"
 
 #: data/base/messages/resmessages3.rmsg:951
+#: data/mp/messages/resmessages3.rmsg:864
 msgid "High explosive artillery missile"
 msgstr "Nagy hatóerejű tüzérségi rakéta"
 
 #: data/base/messages/resmessages3.rmsg:952
 #: data/base/messages/resmessages3.rmsg:963
+#: data/mp/messages/resmessages3.rmsg:865
+#: data/mp/messages/resmessages3.rmsg:875
 msgid "Best Targets: Base structures and cyborgs"
 msgstr "Célok: bázis épületek és cyborgok"
 
 #: data/base/messages/resmessages3.rmsg:962
+#: data/mp/messages/resmessages3.rmsg:874
 msgid "High explosive heavy artillery missile"
 msgstr "Nagy hatóerejű nehéztüzérségi rakéta"
 
 #: data/base/messages/resmessages3.rmsg:973
+#: data/mp/messages/resmessages3.rmsg:884
 msgid "Missiles detect and lock-on to targets while loading"
 msgstr "Rakéták érzékelik és rögzítik a célpontokat töltődés közben"
 
@@ -3216,38 +4312,50 @@ msgid "Increases Missile ROF"
 msgstr "Megnövekedett rakéta tűzgyorsaság"
 
 #: data/base/messages/resmessages3.rmsg:984
+#: data/mp/messages/resmessages3.rmsg:894
 msgid "Racked missile dispensers allow for fast reloading"
 msgstr "Keretes rakéta adagoló, lehetővé teszi a gyors újratöltés"
 
 #: data/base/messages/resmessages3.rmsg:995
+#: data/mp/messages/resmessages3.rmsg:904
 msgid "Self-guided rocket-powered shells"
 msgstr "Önvezérelt rakéta hajtású gránát"
 
 #: data/base/messages/resmessages3.rmsg:1016
 #: data/base/messages/resmessages3.rmsg:1027
 #: data/base/messages/resmessages3.rmsg:1038
+#: data/mp/messages/resmessages3.rmsg:923
+#: data/mp/messages/resmessages3.rmsg:933
+#: data/mp/messages/resmessages3.rmsg:943
 msgid "New Rail Gun Available"
 msgstr "Új sínágyú érhető el"
 
 #: data/base/messages/resmessages3.rmsg:1017
+#: data/mp/messages/resmessages3.rmsg:924
 msgid "Rapid fire rail gun firing needle darts"
 msgstr "Gyorstüzelésű sínágyú nyíllövedékekkel tüzel"
 
 #: data/base/messages/resmessages3.rmsg:1028
+#: data/mp/messages/resmessages3.rmsg:934
 msgid "Rail gun firing armor-piercing darts"
 msgstr "Sínágyú, páncéltörő nyíllövedékekkel tüzel"
 
 #: data/base/messages/resmessages3.rmsg:1039
+#: data/mp/messages/resmessages3.rmsg:944
 msgid "Heavy rail gun firing large kinetic energy darts"
 msgstr "Nehéz sínágyú, nagy kinetikus energiájú, nyíllövedékekkel tüzel"
 
 #: data/base/messages/resmessages3.rmsg:1049
 #: data/base/messages/resmessages3.rmsg:1060
 #: data/base/messages/resmessages3.rmsg:1071
+#: data/mp/messages/resmessages3.rmsg:953
+#: data/mp/messages/resmessages3.rmsg:963
+#: data/mp/messages/resmessages3.rmsg:973
 msgid "Rail Gun Upgrade"
 msgstr "Sínágyú fejlesztés"
 
 #: data/base/messages/resmessages3.rmsg:1050
+#: data/mp/messages/resmessages3.rmsg:954
 msgid "Computer predicts and compensates for target's movement"
 msgstr "A számítógép élőrre jelzi és kompenzálja a célpontok mozgását"
 
@@ -3258,10 +4366,14 @@ msgstr "Megnövekedett sínágyú célpontosság"
 #: data/base/messages/resmessages3.rmsg:1052
 #: data/base/messages/resmessages3.rmsg:1063
 #: data/base/messages/resmessages3.rmsg:1074
+#: data/mp/messages/resmessages3.rmsg:956
+#: data/mp/messages/resmessages3.rmsg:966
+#: data/mp/messages/resmessages3.rmsg:976
 msgid "All rail guns upgraded automatically"
 msgstr "Sínágyúk automatikusan fejlesztve"
 
 #: data/base/messages/resmessages3.rmsg:1061
+#: data/mp/messages/resmessages3.rmsg:964
 msgid "Improved armor-piercing dart"
 msgstr "Jobb páncéltörő nyíllövedék"
 
@@ -3270,6 +4382,7 @@ msgid "Increases Rail Gun damage"
 msgstr "Megnövekedett sínágyú sebzés"
 
 #: data/base/messages/resmessages3.rmsg:1072
+#: data/mp/messages/resmessages3.rmsg:974
 msgid "Increased gauss output speeds up reload time"
 msgstr "Fokozott gauss kilépő sebesség, felgyorsítja az újratöltési időt"
 
@@ -3278,82 +4391,110 @@ msgid "Increases Rail Gun ROF"
 msgstr "Megnövekedett sínágyú tűzgyorsaság"
 
 #: data/base/messages/resmessagesall.rmsg:4
+#: data/mp/messages/resmessagesall.rmsg:3
 msgid "New Construction Options Available"
 msgstr "Új építési lehetőségek állnak rendelkezésre"
 
 #: data/base/messages/resmessagesall.rmsg:5
+#: data/mp/messages/resmessagesall.rmsg:4
 msgid "Titanium-reinforced concrete"
 msgstr "Titán erősítésű vasbeton"
 
 #: data/base/messages/resmessagesall.rmsg:6
+#: data/mp/messages/resmessagesall.rmsg:5
 msgid "Enables Hardcrete walls"
 msgstr "Engedélyezi a vasbeton falat"
 
 #: data/base/messages/resmessagesall.rmsg:16
+#: data/mp/messages/resmessagesall.rmsg:14
 msgid "VTOL factory enables VTOL production"
 msgstr "VTOL gyár lehetővé teszi a VTOL gyártását"
 
 #: data/base/messages/resmessagesall.rmsg:17
+#: data/mp/messages/resmessagesall.rmsg:15
 msgid "VTOL rearming pads required to keep VTOLs flying"
 msgstr "VTOL újratöltő platformok szükségesek a VTOL-ek repüléséhez"
 
 #: data/base/messages/resmessagesall.rmsg:18
+#: data/mp/messages/resmessagesall.rmsg:16
 msgid "May be upgraded using factory modules"
 msgstr "Fejlesztéshez használd a gyármodulokat"
 
 #: data/base/messages/resmessagesall.rmsg:27
+#: data/mp/messages/resmessagesall.rmsg:24
 msgid "Refuels, rearms and repairs VTOLs"
 msgstr "VTOL javítás, üzemanyag és lőszer újratöltés"
 
 #: data/base/messages/resmessagesall.rmsg:28
+#: data/mp/messages/resmessagesall.rmsg:25
 msgid "Assign a VTOL by selecting the rearming pad as its target"
 msgstr "Újratöltő platform hozzárendelése a VTOL-hez, mint célt"
 
 #: data/base/messages/resmessagesall.rmsg:29
+#: data/mp/messages/resmessagesall.rmsg:26
 msgid "The VTOL returns to the selected pad for rearming"
 msgstr "A VTOL visszatér a kijelölt platformhoz az újratöltésre"
 
 #: data/base/messages/resmessagesall.rmsg:38
+#: data/mp/messages/resmessagesall.rmsg:34
 msgid "Battlefield repair unit"
 msgstr "Harctéri szerviz egység"
 
 #: data/base/messages/resmessagesall.rmsg:39
 #: data/base/messages/strings/resstrings.txt:445
+#: data/mp/messages/resmessagesall.rmsg:35
+#: data/mp/messages/resmessagesall.rmsg:285
 #: data/mp/messages/strings/resstrings.txt:473
 msgid "Automatically Repairs Damaged Units"
 msgstr "Automatikusan javítja a sérült egységeket"
 
 #: data/base/messages/resmessagesall.rmsg:40
 #: data/base/messages/strings/resstrings.txt:446
+#: data/mp/messages/resmessagesall.rmsg:36
+#: data/mp/messages/resmessagesall.rmsg:286
 #: data/mp/messages/strings/resstrings.txt:474
 msgid "Or damaged units may be selected as target"
 msgstr "vagy a sérült egységeket, mint a kijelölt célt"
 
 #: data/base/messages/resmessagesall.rmsg:48
+#: data/mp/messages/resmessagesall.rmsg:43
 msgid "New Systems Turret Available For Design"
 msgstr "A tervezéshez újrendszerű lövegtorony érhető el"
 
 #: data/base/messages/resmessagesall.rmsg:49
+#: data/mp/messages/resmessagesall.rmsg:44
+#: data/mp/messages/resmessagesall.rmsg:406
+#: data/mp/messages/resmessagesall.rmsg:556
 msgid "Improved sensor range"
 msgstr "Fejlesztett érzékelő tartomány"
 
 #: data/base/messages/resmessagesall.rmsg:50
+#: data/mp/messages/resmessagesall.rmsg:45
 msgid "Makes excellent scout vehicle"
 msgstr "Kiváló felderítő járművet készít"
 
 #: data/base/messages/resmessagesall.rmsg:60
+#: data/mp/messages/resmessagesall.rmsg:54
 msgid "Extended sensor range"
 msgstr "Kiterjesztett érzékelő tartomány"
 
 #: data/base/messages/resmessagesall.rmsg:61
+#: data/mp/messages/resmessagesall.rmsg:55
+#: data/mp/messages/resmessagesall.rmsg:395
+#: data/mp/messages/resmessagesall.rmsg:405
+#: data/mp/messages/resmessagesall.rmsg:555
 msgid "Keeps map areas under constant surveillance"
 msgstr "A területet állandó megfigyelés alatt tartja"
 
 #: data/base/messages/resmessagesall.rmsg:70
+#: data/mp/messages/resmessagesall.rmsg:63
+#: data/mp/messages/resmessagesall.rmsg:73
+#: data/mp/messages/resmessagesall.rmsg:83
 msgid "Sensors Improved"
 msgstr "Továbbfejlesztett érzékelők"
 
 #: data/base/messages/resmessagesall.rmsg:71
+#: data/mp/messages/resmessagesall.rmsg:64
 msgid "New Thermal Emissions detection"
 msgstr "Új hőérzékelés"
 
@@ -3362,50 +4503,64 @@ msgid "Extends Sensor Range"
 msgstr "Megnöveli az érzékelő hatósugarát"
 
 #: data/base/messages/resmessagesall.rmsg:73
+#: data/mp/messages/resmessagesall.rmsg:66
+#: data/mp/messages/resmessagesall.rmsg:76
+#: data/mp/messages/resmessagesall.rmsg:86
 msgid "All sensors upgraded automatically"
 msgstr "Érzékelők automatikusan fejlesztve"
 
 #: data/base/messages/resmessagesall.rmsg:82
+#: data/mp/messages/resmessagesall.rmsg:94
 msgid "Counter-battery tower detects enemy indirect fire batteries"
 msgstr "Válaszüteg torony általános ellenséges tüzet észlelt"
 
 #: data/base/messages/resmessagesall.rmsg:92
+#: data/mp/messages/resmessagesall.rmsg:113
 msgid "Collective Heavy Body"
 msgstr "Kollektív nehéz karosszéria"
 
 #: data/base/messages/resmessagesall.rmsg:94
+#: data/mp/messages/resmessagesall.rmsg:115
 msgid "Slower than Python"
 msgstr "Lassabb mint a Python"
 
 #: data/base/messages/resmessagesall.rmsg:95
+#: data/mp/messages/resmessagesall.rmsg:116
 msgid "High power costs and slow to produce"
 msgstr "Magas költség és lassú gyártás"
 
 #: data/base/messages/resmessagesall.rmsg:103
+#: data/mp/messages/resmessagesall.rmsg:123
 msgid "New Propulsion Available for Design"
 msgstr "A tervezéshez új hajtómű érhető el"
 
 #: data/base/messages/resmessagesall.rmsg:104
+#: data/mp/messages/resmessagesall.rmsg:124
 msgid "Vertical Take Off and Landing Propulsion"
 msgstr "Függőleges fel-és leszállási hajtómű"
 
 #: data/base/messages/resmessagesall.rmsg:105
+#: data/mp/messages/resmessagesall.rmsg:125
 msgid "Speed: VTOL"
 msgstr "Sebesség: VTOL"
 
 #: data/base/messages/resmessagesall.rmsg:115
+#: data/mp/messages/resmessagesall.rmsg:134
 msgid "Rocket detects and locks on to engine emissions"
 msgstr "Rakéták érzékelik és célként rögzítik hajtóművet"
 
 #: data/base/messages/resmessagesall.rmsg:126
+#: data/mp/messages/resmessagesall.rmsg:144
 msgid "Anti-tank rocket"
 msgstr "Tankelhárító rakéta"
 
 #: data/base/messages/resmessagesall.rmsg:137
+#: data/mp/messages/resmessagesall.rmsg:154
 msgid "High explosive shaped charge missile"
 msgstr "Nagy hatóerejű kumulatív töltetű rakéta"
 
 #: data/base/messages/resmessagesall.rmsg:148
+#: data/mp/messages/resmessagesall.rmsg:164
 msgid "Laser designator paints and guides rounds to the target"
 msgstr "A lézeres célzórendszer megjelöl és célravezet"
 
@@ -6317,6 +7472,7 @@ msgid "Robotic Cyborg Production Mk3"
 msgstr "Robotizált Cyborg gyártás Mk3"
 
 #: data/base/messages/strings/names.txt:789
+#: data/mp/messages/resmessagesall.rmsg:624
 msgid "Advanced Cyborg Production"
 msgstr "Fejlett Cyborg gyártás"
 
@@ -6349,6 +7505,7 @@ msgid "Robotic Factory Production Mk3"
 msgstr "Robotizált gyári termelés Mk3"
 
 #: data/base/messages/strings/names.txt:800
+#: data/mp/messages/resmessagesall.rmsg:614
 msgid "Advanced Factory Production"
 msgstr "Fejlett gyári termelés"
 
@@ -7987,6 +9144,7 @@ msgid "Self-Replicating Factory Production"
 msgstr "Önreprodukáló gyári termelés"
 
 #: data/base/messages/strings/resstrings.txt:444
+#: data/mp/messages/resmessagesall.rmsg:284
 #: data/mp/messages/strings/resstrings.txt:472
 msgid "Heavy repair unit"
 msgstr "Nehéz szerviz egység"
@@ -9060,6 +10218,623 @@ msgstr "Most itt az idő, hogy újraépítsük a világot."
 msgid "Slowly, out of the ashes we will rise again..."
 msgstr "Lassanként a hamvakból újra felemelkedünk..."
 
+#: data/mp/messages/resmessages12.rmsg:45
+msgid "Construction speed +10%"
+msgstr "Építési sebesség +10%"
+
+#: data/mp/messages/resmessages12.rmsg:75
+#: data/mp/messages/resmessagesall.rmsg:165
+msgid "Cannon accuracy +10%"
+msgstr "Löveg célpontosság +10%"
+
+#: data/mp/messages/resmessages12.rmsg:85
+msgid "Flamer reload time -15%"
+msgstr "Lángvető újratöltési idő -15%"
+
+#: data/mp/messages/resmessages12.rmsg:105
+#: data/mp/messages/resmessages23.rmsg:135
+#: data/mp/messages/resmessages2.rmsg:685
+msgid "Machinegun reload time -15%"
+msgstr "Gépfegyver újratöltési idő -15%"
+
+#: data/mp/messages/resmessages12.rmsg:125
+#: data/mp/messages/resmessages23.rmsg:145
+#: data/mp/messages/resmessages3.rmsg:905
+msgid "Mortar accuracy +10%"
+msgstr "Aknavető célpontosság +10%"
+
+#: data/mp/messages/resmessages12.rmsg:135
+#: data/mp/messages/resmessages3.rmsg:915
+msgid "Mortar reload time -10%"
+msgstr "Aknavető újratöltési idő -10%"
+
+#: data/mp/messages/resmessages12.rmsg:155
+#: data/mp/messages/resmessages1.rmsg:565
+msgid "Rocket reload time -15%"
+msgstr "Rakéta újratöltési idő -15%"
+
+#: data/mp/messages/resmessages12.rmsg:165
+#: data/mp/messages/resmessages3.rmsg:685
+msgid "Cannon reload time -10%"
+msgstr "Löveg újratöltési idő -10%"
+
+#: data/mp/messages/resmessages12.rmsg:175
+#: data/mp/messages/resmessages1.rmsg:445
+#: data/mp/messages/resmessages3.rmsg:675
+msgid "Cannon damage +25%"
+msgstr "Löveg sebzés +25%"
+
+#: data/mp/messages/resmessages12.rmsg:185
+#: data/mp/messages/resmessages1.rmsg:545
+#: data/mp/messages/resmessages1.rmsg:575
+#: data/mp/messages/resmessagesall.rmsg:135
+msgid "Rocket accuracy +10%"
+msgstr "Rakéta célpontosság +10%"
+
+#: data/mp/messages/resmessages1.rmsg:25
+#: data/mp/messages/resmessages3.rmsg:55
+#: data/mp/messages/resmessages3.rmsg:65
+msgid "Kinetic Armor +35%, Body Points +35%"
+msgstr "Kinetikus páncél +35%, karosszéria értékek +35%"
+
+#: data/mp/messages/resmessages1.rmsg:75
+msgid "Armour +35%, Body Points +30%"
+msgstr "Páncél +35%, karosszéria értékek +30%"
+
+#: data/mp/messages/resmessages1.rmsg:94
+msgid "Armored guard tower with Mini-Rocket Pod"
+msgstr "Páncélozott őrtoron kisrakéta vetővel"
+
+#: data/mp/messages/resmessages1.rmsg:114
+msgid "Armored guard tower with Lancer AT rocket"
+msgstr "Tankelhárító rakétával felszerelt őrtorony"
+
+#: data/mp/messages/resmessages1.rmsg:195
+#: data/mp/messages/resmessages2.rmsg:255
+#: data/mp/messages/resmessages3.rmsg:325
+msgid "Repair Speed +100%"
+msgstr "Javítási sebesség +100%"
+
+#: data/mp/messages/resmessages1.rmsg:235
+#, fuzzy, c-format
+msgid "Factory output speed +100% per module"
+msgstr "Gyár termelékenység +100% modulonként"
+
+#: data/mp/messages/resmessages1.rmsg:245
+#: data/mp/messages/resmessagesall.rmsg:615
+msgid "Factory output speed +60%"
+msgstr "Gyár termelékenység +60%"
+
+#: data/mp/messages/resmessages1.rmsg:265
+msgid "Research speed +85%"
+msgstr "Kutatási sebesség +85%"
+
+#: data/mp/messages/resmessages1.rmsg:275
+#: data/mp/messages/resmessages2.rmsg:285
+#: data/mp/messages/resmessages3.rmsg:345
+msgid "Research speed +30%"
+msgstr "Kutatási sebesség +30%"
+
+#: data/mp/messages/resmessages1.rmsg:285
+#: data/mp/messages/resmessages2.rmsg:45
+#: data/mp/messages/resmessages2.rmsg:295
+#: data/mp/messages/resmessages3.rmsg:165
+#: data/mp/messages/resmessages3.rmsg:175
+#: data/mp/messages/resmessages3.rmsg:355
+#: data/mp/messages/resmessages3.rmsg:365
+msgid "Armor +35%, Body Points +30%"
+msgstr "Páncél +35%, karosszéria értékek +30%"
+
+#: data/mp/messages/resmessages1.rmsg:355
+#: data/mp/messages/resmessages2.rmsg:385
+#: data/mp/messages/resmessages3.rmsg:515
+#: data/mp/messages/resmessages3.rmsg:525
+msgid "Vehicle speed +5%"
+msgstr "Jármű sebesség +5%"
+
+#: data/mp/messages/resmessages1.rmsg:365
+#: data/mp/messages/resmessages2.rmsg:395
+#: data/mp/messages/resmessages3.rmsg:535
+#: data/mp/messages/resmessages3.rmsg:545
+msgid "Kinetic armor +30%, body points +30%"
+msgstr "Kinetikus páncél +30%, karosszéria értékek +30%"
+
+#: data/mp/messages/resmessages1.rmsg:425
+#: data/mp/messages/resmessages1.rmsg:435
+#: data/mp/messages/resmessages2.rmsg:575
+msgid "Best Targets: Vehicles, Hardpoints"
+msgstr "Célok: járművek, fegyvertartó talapzatok"
+
+#: data/mp/messages/resmessages1.rmsg:465
+#: data/mp/messages/resmessages2.rmsg:605
+#: data/mp/messages/resmessagesall.rmsg:605
+msgid "Flamer damage +25%"
+msgstr "Lángvető sebzés +25%"
+
+#: data/mp/messages/resmessages1.rmsg:495
+#: data/mp/messages/resmessages1.rmsg:505
+#: data/mp/messages/resmessages2.rmsg:675
+#: data/mp/messages/resmessages3.rmsg:775
+#: data/mp/messages/resmessages3.rmsg:785
+msgid "Machinegun damage +25%"
+msgstr "Gépfegyver sebzés +25%"
+
+#: data/mp/messages/resmessages1.rmsg:525
+#: data/mp/messages/resmessages2.rmsg:705
+msgid "Mortar damage +25%"
+msgstr "Aknavető sebzés +25%"
+
+#: data/mp/messages/resmessages1.rmsg:555
+#: data/mp/messages/resmessages1.rmsg:585
+#: data/mp/messages/resmessages2.rmsg:715
+#: data/mp/messages/resmessages2.rmsg:725
+msgid "Rocket damage +25%"
+msgstr "Rakéta sebzés +25%"
+
+#: data/mp/messages/resmessages23.rmsg:25
+msgid "Power output +25%"
+msgstr "Energia termelés +25%"
+
+#: data/mp/messages/resmessages23.rmsg:35
+#: data/mp/messages/resmessages3.rmsg:395
+msgid "Construction speed +20%"
+msgstr "Építési sebesség +20%"
+
+#: data/mp/messages/resmessages23.rmsg:105
+#: data/mp/messages/resmessages2.rmsg:495
+#: data/mp/messages/resmessages3.rmsg:625
+msgid "AA accuracy +10%"
+msgstr "Légvédelmi célpontosság +10%"
+
+#: data/mp/messages/resmessages23.rmsg:123
+#: data/mp/messages/resmessages2.rmsg:563
+#: data/mp/messages/resmessages3.rmsg:663
+msgid "Bomb Upgrade"
+msgstr "Bomba feljavítás"
+
+#: data/mp/messages/resmessages23.rmsg:124
+msgid "Improved trinitramine explosive formula"
+msgstr "Jobb trinitramin robbanóanyag képlet"
+
+#: data/mp/messages/resmessages23.rmsg:125
+#: data/mp/messages/resmessages2.rmsg:565
+#: data/mp/messages/resmessages3.rmsg:665
+msgid "Bomb damage +25%"
+msgstr "Bomba sebzés +25%"
+
+#: data/mp/messages/resmessages2.rmsg:5
+msgid "Thermal Armor +45%"
+msgstr "Hővédelem +45%"
+
+#: data/mp/messages/resmessages2.rmsg:15
+msgid "Kinetic Armor +35%, and Body Points +35%"
+msgstr "Kinetikus páncél +35% és karosszéria értékek +35%"
+
+#: data/mp/messages/resmessages2.rmsg:275
+msgid "Factory production rate +60%"
+msgstr "Termelési arány +60%"
+
+#: data/mp/messages/resmessages2.rmsg:276
+#: data/mp/messages/resmessagesall.rmsg:616
+msgid "All factories upgraded automatically"
+msgstr "Minden gyár automatikusan továbbfejlesztve"
+
+#: data/mp/messages/resmessages2.rmsg:315
+#: data/mp/messages/resmessages3.rmsg:385
+msgid "Rearming speed +30%"
+msgstr "Újratöltési idő +30%"
+
+#: data/mp/messages/resmessages2.rmsg:405
+msgid "Thermal armor +40%"
+msgstr "Hővédelem +40%"
+
+#: data/mp/messages/resmessages2.rmsg:505
+#: data/mp/messages/resmessages3.rmsg:635
+msgid "AA Flak damage +25%"
+msgstr "Légelhárító sebzés +25%"
+
+#: data/mp/messages/resmessages2.rmsg:515
+#: data/mp/messages/resmessages3.rmsg:645
+msgid "AA reload time -15%"
+msgstr "Légvédelmi újratöltési idő -15%"
+
+#: data/mp/messages/resmessages2.rmsg:645
+#: data/mp/messages/resmessages3.rmsg:695
+msgid "Howitzer accuracy +10%"
+msgstr "Tarack célpontosság +10%"
+
+#: data/mp/messages/resmessages2.rmsg:655
+#: data/mp/messages/resmessages3.rmsg:705
+msgid "Howitzer damage +25%"
+msgstr "Tarack sebzés +25%"
+
+#: data/mp/messages/resmessages2.rmsg:665
+#: data/mp/messages/resmessages3.rmsg:715
+msgid "Howitzer reload time -10%"
+msgstr "Tarack újratöltés idő -10%"
+
+#: data/mp/messages/resmessages2.rmsg:714
+msgid "High Explosive Anti-Tank warheads"
+msgstr "Nagy hatóerejű tankelhárító robbanófejek (HEAT)"
+
+#: data/mp/messages/resmessages3.rmsg:5
+msgid "Thermal Armor +35%"
+msgstr "Hővédelem +35%"
+
+#: data/mp/messages/resmessages3.rmsg:234
+msgid "Armored guard tower with Pulse Laser"
+msgstr "Páncélozott őrtorony impulzus lézerrel"
+
+#: data/mp/messages/resmessages3.rmsg:335
+msgid "Power output +30%"
+msgstr "Energia termelés +30%"
+
+#: data/mp/messages/resmessages3.rmsg:555
+#: data/mp/messages/resmessagesall.rmsg:655
+msgid "Thermal Armor +40%"
+msgstr "Hővédelem +40%"
+
+#: data/mp/messages/resmessages3.rmsg:745
+msgid "Laser accuracy +10%"
+msgstr "Lézer pontosság +10%"
+
+#: data/mp/messages/resmessages3.rmsg:755
+msgid "Laser damage +25%"
+msgstr "Lézer sebzés +25%"
+
+#: data/mp/messages/resmessages3.rmsg:765
+msgid "Laser reload time -15%"
+msgstr "Lézer újratöltési idő -15%"
+
+#: data/mp/messages/resmessages3.rmsg:815
+#: data/mp/messages/resmessages3.rmsg:825
+msgid "Missile accuracy +10%"
+msgstr "Rakéta célpontosítás +10%"
+
+#: data/mp/messages/resmessages3.rmsg:835
+msgid "Missile damage +25%"
+msgstr "Rakéta sebzés +25%"
+
+#: data/mp/messages/resmessages3.rmsg:885
+#: data/mp/messages/resmessages3.rmsg:895
+msgid "Missile reload time -15%"
+msgstr "Rakéta újratöltési idő -15%"
+
+#: data/mp/messages/resmessages3.rmsg:955
+msgid "Rail Gun accuracy +10%"
+msgstr "Sínágyú célpontosság +10%"
+
+#: data/mp/messages/resmessages3.rmsg:965
+msgid "Rail Gun damage +25%"
+msgstr "Sínágyú sebzés +25%"
+
+#: data/mp/messages/resmessages3.rmsg:975
+msgid "Rail Gun reload time -15%"
+msgstr "Sínágyú újratöltési idő -15%"
+
+#: data/mp/messages/resmessagesall.rmsg:65
+msgid "Sensor Range +25%"
+msgstr "Észlelési távolság +25%"
+
+#: data/mp/messages/resmessagesall.rmsg:74
+msgid "Improved Thermal Emissions detection"
+msgstr "Hőérzékelés fejlődött"
+
+#: data/mp/messages/resmessagesall.rmsg:75
+msgid "Sensor Range +15%"
+msgstr "Észlelési távolság +15%"
+
+#: data/mp/messages/resmessagesall.rmsg:84
+msgid "Advanced Thermal Emissions detection"
+msgstr "Fejlett hőérzékelés"
+
+#: data/mp/messages/resmessagesall.rmsg:85
+msgid "Sensor Range +10%"
+msgstr "Észlelési távolság +10%"
+
+#: data/mp/messages/resmessagesall.rmsg:104
+msgid "Radar detector tower detects enemy sensors"
+msgstr "A radarérzékelő torony ellenséges érzékelőket észlel"
+
+#: data/mp/messages/resmessagesall.rmsg:105
+msgid "Orders assigned indirect fire units to fire at the enemy sensors"
+msgstr "Kijelölt egységeknek általános tűzparancs az ellenséges érzékelők ellen."
+
+#: data/mp/messages/resmessagesall.rmsg:106
+msgid "Counter-battery fire continues until enemy sensor is suppressed"
+msgstr "Folyamatos válaszüteg tűz, amíg az ellenséges érzékelő elfojtott."
+
+#: data/mp/messages/resmessagesall.rmsg:173
+msgid "Cyborg Transport Available"
+msgstr "Cyborg szállítóeszköz áll rendelkezésre"
+
+#: data/mp/messages/resmessagesall.rmsg:174
+#: data/mp/messages/resmessagesall.rmsg:184
+msgid "Armed with Machinegun"
+msgstr "Gépfegyverrel szerelt"
+
+#: data/mp/messages/resmessagesall.rmsg:176
+#: data/mp/messages/resmessagesall.rmsg:186
+msgid "Requires heavy VTOL factory to produce"
+msgstr "Szükséges a nehéz VTOL gyár az előállításhoz"
+
+#: data/mp/messages/resmessagesall.rmsg:183
+msgid "Super Transport Available"
+msgstr "Extra szállítóeszköz áll rendelkezésre"
+
+#: data/mp/messages/resmessagesall.rmsg:194
+msgid "Incendiary howitzer emplacement"
+msgstr "Gyújtóbombás tarack állás"
+
+#: data/mp/messages/resmessagesall.rmsg:204
+msgid "Armored Incendiary Mortar battery pit"
+msgstr "Páncélozott gyújtóbombás aknavető árok"
+
+#: data/mp/messages/resmessagesall.rmsg:214
+msgid "Armored strongpoint with Plasmite Flamer"
+msgstr "Páncélozott erőd plazmavetővel"
+
+#: data/mp/messages/resmessagesall.rmsg:224
+msgid "Armed with Cyborg Thermite Flamer"
+msgstr "Cyborg termit lángvetővel felszerelt"
+
+#: data/mp/messages/resmessagesall.rmsg:234
+msgid "Armed with grenades"
+msgstr "Gránátokkal felszerelt"
+
+#: data/mp/messages/resmessagesall.rmsg:244
+msgid "Combat engineer with construction ability"
+msgstr "Hadi mérnök építési képességgel"
+
+#: data/mp/messages/resmessagesall.rmsg:254
+msgid "Mechanic with repair ability"
+msgstr "Szerelő javítási képességgel"
+
+#: data/mp/messages/resmessagesall.rmsg:264
+msgid "Incendiary Howitzer may be assigned to a sensor"
+msgstr "Érzékelőt lehet rendelni a gyutacsos tarackhoz"
+
+#: data/mp/messages/resmessagesall.rmsg:294
+msgid "Plasmite Flame-thrower"
+msgstr "Plazmaláng vető"
+
+#: data/mp/messages/resmessagesall.rmsg:306
+msgid "Steals technology from structures and takes control of weapons"
+msgstr "Ellopja a technológiát az építményekből és átveszi a fegyverek irányítását"
+
+#: data/mp/messages/resmessagesall.rmsg:313
+msgid "New Electronic Technology Discovered"
+msgstr "Új elektronikai technológia felfedezve."
+
+#: data/mp/messages/resmessagesall.rmsg:315
+msgid "On-board resistance circuit systems"
+msgstr "Fedélzeti ellenálló áramkör rendszerek"
+
+#: data/mp/messages/resmessagesall.rmsg:316
+msgid "Enables resistance to Nexus Link technology"
+msgstr "Lehetővé teszi az ellenállást a NEXUS dekódoló technológia"
+
+#: data/mp/messages/resmessagesall.rmsg:326
+msgid "Enables self-repair"
+msgstr "Önjavítást tesz lehetővé"
+
+#: data/mp/messages/resmessagesall.rmsg:334
+msgid "Armed with medium cannon"
+msgstr "Közepes ágyúval felszerelt"
+
+#: data/mp/messages/resmessagesall.rmsg:344
+#: data/mp/messages/resmessagesall.rmsg:354
+msgid "Armed with hyper velocity cannon"
+msgstr "Nagysebességű ágyúval felszerelt"
+
+#: data/mp/messages/resmessagesall.rmsg:364
+msgid "Armed with tank killer rockets"
+msgstr "Tank Killer rakétákkal felszerelt"
+
+#: data/mp/messages/resmessagesall.rmsg:374
+msgid "Fires heavy pulses of laser light"
+msgstr "Tüzelés nagy impulzusú lézerrel"
+
+#: data/mp/messages/resmessagesall.rmsg:375
+msgid "Best Targets: Heavy cyborgs"
+msgstr "Célok: nehéz cyborgok"
+
+#: data/mp/messages/resmessagesall.rmsg:384
+msgid "76mm twin-barrel automatic-cannon"
+msgstr "76mm ikercsöves automata ágyú"
+
+#: data/mp/messages/resmessagesall.rmsg:393
+#: data/mp/messages/resmessagesall.rmsg:403
+msgid "New Systems Structure Available"
+msgstr "Új építmény szerkezet érhető el"
+
+#: data/mp/messages/resmessagesall.rmsg:394
+msgid "Complete battlefield visibility"
+msgstr "Teljes csatatér felderítve"
+
+#: data/mp/messages/resmessagesall.rmsg:396
+msgid "Does not offer sensor targeting"
+msgstr "Nem lehet radarral bemérni"
+
+#: data/mp/messages/resmessagesall.rmsg:404
+#: data/mp/messages/resmessagesall.rmsg:554
+msgid "Combines standard, counter battery and VTOL sensors"
+msgstr "Egyesített szabvány, válaszüteg és VTOL érzékelők"
+
+#: data/mp/messages/resmessagesall.rmsg:413
+msgid "New Advanced Weapon Available"
+msgstr "Új fejlett fegyver érhető el"
+
+#: data/mp/messages/resmessagesall.rmsg:414
+msgid "Very slow recharge time"
+msgstr "Nagyon lassú újratöltési idő"
+
+#: data/mp/messages/resmessagesall.rmsg:415
+msgid "Immense damage infliction capability"
+msgstr "Hatalmas károkozási képesség"
+
+#: data/mp/messages/resmessagesall.rmsg:416
+msgid "Narrow area of effect"
+msgstr "Effektek csak szűk területen"
+
+#: data/mp/messages/resmessagesall.rmsg:424
+msgid "Armored guard tower with Nexus Link"
+msgstr "Páncélozott őrtorony NEXUS dekóderrel"
+
+#: data/mp/messages/resmessagesall.rmsg:434
+#: data/mp/messages/resmessagesall.rmsg:444
+msgid "Plasma Cannon firing plasma"
+msgstr "Plazma ágyú plazmával tüzel"
+
+#: data/mp/messages/resmessagesall.rmsg:445
+#: data/mp/messages/resmessagesall.rmsg:505
+#: data/mp/messages/resmessagesall.rmsg:515
+#: data/mp/messages/resmessagesall.rmsg:525
+#: data/mp/messages/resmessagesall.rmsg:535
+#: data/mp/messages/resmessagesall.rmsg:545
+msgid "Best Targets : Vehicles"
+msgstr "Célok: járművek"
+
+#: data/mp/messages/resmessagesall.rmsg:454
+msgid "Armored strongpoint with Heavy Laser"
+msgstr "Nehéz lézerrel szerelt erőd"
+
+#: data/mp/messages/resmessagesall.rmsg:464
+msgid "Armored guard tower with EMP Cannon"
+msgstr "EMP ágyúval szerelt őrtorony"
+
+#: data/mp/messages/resmessagesall.rmsg:474
+msgid "Armed with Cyborg Pulse Laser"
+msgstr "Cyborg impulzus lézerrel"
+
+#: data/mp/messages/resmessagesall.rmsg:484
+msgid "Armed with Cyborg Rail Gun"
+msgstr "Cyborg sínágyúval"
+
+#: data/mp/messages/resmessagesall.rmsg:494
+msgid "Armed with Cyborg Scourge Missile Launcher"
+msgstr "Cyborg Scourge rakétakilövővel felszerelt"
+
+#: data/mp/messages/resmessagesall.rmsg:504
+msgid "Uses advanced mass driver railgun technology"
+msgstr "Fejlett elektromágneses katapult, sínágyú technológiát használ."
+
+#: data/mp/messages/resmessagesall.rmsg:506
+#: data/mp/messages/resmessagesall.rmsg:516
+#: data/mp/messages/resmessagesall.rmsg:526
+#: data/mp/messages/resmessagesall.rmsg:536
+msgid "Defensive Strength : High"
+msgstr "Védelmi erő : Magas"
+
+#: data/mp/messages/resmessagesall.rmsg:514
+msgid "Uses advanced cannon technology"
+msgstr "Fejlett ágyút használ."
+
+#: data/mp/messages/resmessagesall.rmsg:524
+msgid "Uses advanced rocket gun technology"
+msgstr "Fejlett rakéta technológiát használ."
+
+#: data/mp/messages/resmessagesall.rmsg:534
+msgid "Uses advanced missile gun technology"
+msgstr "Fejlett légvédelmi rakéta technológiát használ."
+
+#: data/mp/messages/resmessagesall.rmsg:544
+msgid "Powerful Electronic magnetic pulse weapon"
+msgstr "Erőteljes elektromágneses impulzus fegyver."
+
+#: data/mp/messages/resmessagesall.rmsg:553
+msgid "New System Available"
+msgstr "Új rendszer áll rendelkezésre."
+
+#: data/mp/messages/resmessagesall.rmsg:563
+msgid "Medium Super Heavy Body"
+msgstr "Középméretű extra nehéz karosszéria"
+
+#: data/mp/messages/resmessagesall.rmsg:564
+msgid "More armor and body points than Vengeance"
+msgstr "Több páncél és karosszéria pont, mint a Vengance-nek"
+
+#: data/mp/messages/resmessagesall.rmsg:565
+msgid "Slow moving Body"
+msgstr "Lassú mozgású karosszéria."
+
+#: data/mp/messages/resmessagesall.rmsg:573
+msgid "Large Super Heavy Body"
+msgstr "Nagyméretű extra nehéz karosszéria"
+
+#: data/mp/messages/resmessagesall.rmsg:574
+msgid "Maximum armor and body points"
+msgstr "Maximum páncél és karosszéria érték."
+
+#: data/mp/messages/resmessagesall.rmsg:575
+msgid "Very slow moving Body"
+msgstr "Nagyon lassú mozgású karosszéria."
+
+#: data/mp/messages/resmessagesall.rmsg:583
+msgid "Hardpoint Vindicator SAM Site Available"
+msgstr "Elérhető Vindicator SAM kilövő állás talapzat"
+
+#: data/mp/messages/resmessagesall.rmsg:593
+msgid "Hardpoint Whirlwind AA Gun Available"
+msgstr "Elérhető Whirlwind légvédelmi fegyver"
+
+#: data/mp/messages/resmessagesall.rmsg:634
+msgid "Armored EMP Mortar battery pit"
+msgstr "Páncélozott EMP aknavető árok"
+
+#: data/mp/messages/resmessagesall.rmsg:643
+msgid "Laser AA Gun Available"
+msgstr "Elérhető lézer légvédelmi löveg"
+
+#: data/mp/messages/resmessagesall.rmsg:644
+msgid "Twin Medium Anti-Aircraft Laser"
+msgstr "Közepes iker légvédelmi lézer"
+
+#: data/mp/messages/resmessagesall.rmsg:663
+msgid "Hardpoint Avenger SAM Site Available"
+msgstr "Elérhető Avenger SAM kilövőállás talapzat"
+
+#: data/mp/messages/resmessagesall.rmsg:673
+msgid "Hardpoint Cyclone AA Gun Available"
+msgstr "Elérhetőt Cyclone légvédelmi löveg"
+
+#: data/mp/messages/resmessagesall.rmsg:674
+msgid "Quad 80mm Anti-Aircraft machinegun"
+msgstr "80mm négyes légvédelmi gépfegyver"
+
+#: data/mp/messages/resmessagesall.rmsg:684
+#: data/mp/messages/resmessagesall.rmsg:694
+msgid "Twin Multi-barrel, rapid-fire machinegun"
+msgstr "Iker többcsöves, gyorstüzelő gépfegyver"
+
+#: data/mp/messages/resmessagesall.rmsg:693
+msgid "Hardpoint Twin Assault Gun Available"
+msgstr "Elérhető ikercsöves ostromlöveg"
+
+#: data/mp/messages/resmessagesall.rmsg:704
+msgid "Drops high intensity Plasmite bombs"
+msgstr "Nagy erejű plazma gyújtóbombákat dob le"
+
+#: data/mp/messages/resmessagesall.rmsg:713
+msgid "New VTOL Missile Launcher"
+msgstr "Új VTOL rakétakilövő"
+
+#: data/mp/messages/resmessagesall.rmsg:714
+msgid "Fires Electronic Magnetic Pulse Missiles"
+msgstr "Tüzelés elektromágneses impulzus rakétákkal"
+
+#: data/mp/messages/resmessagesall.rmsg:723
+#: data/mp/messages/resmessagesall.rmsg:733
+#: data/mp/messages/resmessagesall.rmsg:743
+msgid "Stronger Commander Turret Available for Design"
+msgstr "A tervezéshez erősebb parancsnoki lövegtorony érhető el"
+
+#: data/mp/messages/resmessagesall.rmsg:724
+#: data/mp/messages/resmessagesall.rmsg:734
+#: data/mp/messages/resmessagesall.rmsg:744
+msgid "Upgraded battlefield computer system"
+msgstr "Feljavított harctéri számítógép rendszer"
+
 #: data/mp/messages/strings/names.txt:15
 #: data/mp/messages/strings/names.txt:673
 msgid "Cyborg Transport"
@@ -10113,16 +11888,16 @@ msgstr "VTOL Retribution plazmavető"
 msgid "System locale"
 msgstr "Helyi rendszer"
 
-#: lib/ivis_opengl/screen.cpp:144
+#: lib/ivis_opengl/screen.cpp:145
 msgid "OpenGL 2.0 is not supported by your system. Some things may look wrong. Please upgrade your graphics driver/hardware, if possible."
 msgstr "OpenGL 2.0-t nem támogatja a te rendszered. Néhány dolgot rossznak látok. Kérlek frissítsd fel a drivert vagy hardware videokártyád, ha ez lehetséges."
 
-#: lib/ivis_opengl/screen.cpp:151
+#: lib/ivis_opengl/screen.cpp:152
 #, fuzzy
 msgid "OpenGL 1.5/2.0 is not supported by your system. Some things may look wrong. Please upgrade your graphics driver/hardware, if possible."
 msgstr "OpenGL 2.0-t nem támogatja a te rendszered. Néhány dolgot rossznak látok. Kérlek frissítsd fel a drivert vagy hardware videokártyád, ha ez lehetséges."
 
-#: lib/ivis_opengl/screen.cpp:156
+#: lib/ivis_opengl/screen.cpp:159
 #, fuzzy
 msgid "OpenGL 1.4 + VBO extension is not supported by your system. The game requires this. Please upgrade your graphics drivers/hardware, if possible."
 msgstr "OpenGL 1.4 nem támogatja a rendszerd. A játéknak szüksége van rá. Kérlek frissítsd fel a drivert vagy hardware videokártyád, ha ez lehetséges."
@@ -10544,20 +12319,20 @@ msgstr "Rendszerek"
 msgid "Delete Template"
 msgstr "Ideiglenes törlés"
 
-#: src/display3d.cpp:656
+#: src/display3d.cpp:657
 msgid "Player left"
 msgstr "Játékos marad"
 
-#: src/display3d.cpp:660
+#: src/display3d.cpp:661
 msgid "Player dropped"
 msgstr "Játékos kiszállt"
 
-#: src/display3d.cpp:664
+#: src/display3d.cpp:665
 #: src/multiint.cpp:2262
 msgid "Waiting for other players"
 msgstr "Várakozás további játékosra"
 
-#: src/display3d.cpp:669
+#: src/display3d.cpp:670
 msgid "Out of sync"
 msgstr "Szinkronizációból kilépett"
 
@@ -10707,11 +12482,11 @@ msgstr "Gyakorlások"
 #: src/frontend.cpp:381
 #: src/frontend.cpp:451
 #: src/frontend.cpp:592
-#: src/frontend.cpp:737
-#: src/frontend.cpp:871
-#: src/frontend.cpp:1106
-#: src/frontend.cpp:1260
-#: src/frontend.cpp:1280
+#: src/frontend.cpp:738
+#: src/frontend.cpp:872
+#: src/frontend.cpp:1107
+#: src/frontend.cpp:1261
+#: src/frontend.cpp:1281
 msgctxt "menu"
 msgid "Return"
 msgstr "Vissza"
@@ -10807,8 +12582,8 @@ msgstr "2X"
 
 #: src/frontend.cpp:522
 #: src/frontend.cpp:661
-#: src/frontend.cpp:811
-#: src/frontend.cpp:894
+#: src/frontend.cpp:812
+#: src/frontend.cpp:895
 msgid "Fullscreen"
 msgstr "Teljes képernyő"
 
@@ -10824,17 +12599,17 @@ msgstr "Kereső"
 #: src/frontend.cpp:628
 #: src/frontend.cpp:646
 #: src/frontend.cpp:691
-#: src/frontend.cpp:836
-#: src/frontend.cpp:846
-#: src/frontend.cpp:918
-#: src/frontend.cpp:979
-#: src/frontend.cpp:1022
-#: src/frontend.cpp:1063
-#: src/frontend.cpp:1075
-#: src/frontend.cpp:1087
-#: src/frontend.cpp:1122
-#: src/frontend.cpp:1135
-#: src/frontend.cpp:1149
+#: src/frontend.cpp:837
+#: src/frontend.cpp:847
+#: src/frontend.cpp:919
+#: src/frontend.cpp:980
+#: src/frontend.cpp:1023
+#: src/frontend.cpp:1064
+#: src/frontend.cpp:1076
+#: src/frontend.cpp:1088
+#: src/frontend.cpp:1123
+#: src/frontend.cpp:1136
+#: src/frontend.cpp:1150
 msgid "Off"
 msgstr "Ki"
 
@@ -10859,15 +12634,15 @@ msgstr "Képernyő villódzás"
 #: src/frontend.cpp:615
 #: src/frontend.cpp:633
 #: src/frontend.cpp:642
-#: src/frontend.cpp:832
-#: src/frontend.cpp:984
-#: src/frontend.cpp:1018
-#: src/frontend.cpp:1059
-#: src/frontend.cpp:1071
-#: src/frontend.cpp:1083
-#: src/frontend.cpp:1127
-#: src/frontend.cpp:1140
-#: src/frontend.cpp:1154
+#: src/frontend.cpp:833
+#: src/frontend.cpp:985
+#: src/frontend.cpp:1019
+#: src/frontend.cpp:1060
+#: src/frontend.cpp:1072
+#: src/frontend.cpp:1084
+#: src/frontend.cpp:1128
+#: src/frontend.cpp:1141
+#: src/frontend.cpp:1155
 msgid "On"
 msgstr "Be"
 
@@ -10880,19 +12655,19 @@ msgid "Shadows"
 msgstr "Árnyékok"
 
 #: src/frontend.cpp:584
-#: src/frontend.cpp:1287
+#: src/frontend.cpp:1288
 msgid "Radar"
 msgstr "Radar"
 
 #: src/frontend.cpp:585
-#: src/frontend.cpp:697
-#: src/frontend.cpp:1288
+#: src/frontend.cpp:698
+#: src/frontend.cpp:1289
 msgid "Rotating"
 msgstr "Forgatás"
 
 #: src/frontend.cpp:585
-#: src/frontend.cpp:697
-#: src/frontend.cpp:1288
+#: src/frontend.cpp:698
+#: src/frontend.cpp:1289
 msgid "Fixed"
 msgstr "Rögzített"
 
@@ -10900,149 +12675,149 @@ msgstr "Rögzített"
 msgid "GRAPHICS OPTIONS"
 msgstr "GRAFIKA BEÁLLÍTÁS"
 
-#: src/frontend.cpp:725
+#: src/frontend.cpp:726
 #: src/ingameop.cpp:168
 msgid "Voice Volume"
 msgstr "Beszéd hang"
 
-#: src/frontend.cpp:729
+#: src/frontend.cpp:730
 #: src/ingameop.cpp:173
 msgid "FX Volume"
 msgstr "FX hang"
 
-#: src/frontend.cpp:733
+#: src/frontend.cpp:734
 #: src/ingameop.cpp:178
 msgid "Music Volume"
 msgstr "Zenei hang"
 
-#: src/frontend.cpp:740
+#: src/frontend.cpp:741
 msgid "AUDIO OPTIONS"
 msgstr "HANG BEÁLLÍTÁS"
 
-#: src/frontend.cpp:804
+#: src/frontend.cpp:805
 msgid "* Takes effect on game restart"
 msgstr "* Játék újraindításakor effekteket bekapcsolja"
 
-#: src/frontend.cpp:807
+#: src/frontend.cpp:808
 msgid "Graphics Mode*"
 msgstr "Grafikus Mód*"
 
-#: src/frontend.cpp:815
-#: src/frontend.cpp:889
+#: src/frontend.cpp:816
+#: src/frontend.cpp:890
 msgid "Windowed"
 msgstr "Ablakos"
 
-#: src/frontend.cpp:819
+#: src/frontend.cpp:820
 msgid "Resolution*"
 msgstr "Felbontás*"
 
-#: src/frontend.cpp:824
+#: src/frontend.cpp:825
 msgid "Texture size"
 msgstr "Szöveg méret"
 
-#: src/frontend.cpp:828
+#: src/frontend.cpp:829
 msgid "Vertical sync"
 msgstr "Vízszintes szinkronizáció"
 
-#: src/frontend.cpp:863
-#: src/frontend.cpp:924
+#: src/frontend.cpp:864
+#: src/frontend.cpp:925
 msgid "Unsupported"
 msgstr "Nem támogatott"
 
-#: src/frontend.cpp:868
+#: src/frontend.cpp:869
 msgid "VIDEO OPTIONS"
 msgstr "VIDEO BEÁLLÍTÁS"
 
-#: src/frontend.cpp:1056
+#: src/frontend.cpp:1057
 msgid "Reverse Rotation"
 msgstr "Fordított forgatás"
 
-#: src/frontend.cpp:1067
+#: src/frontend.cpp:1068
 msgid "Trap Cursor"
 msgstr "Kurzor rögzítés"
 
 # célpont megadása jobb gombról átkerül a balra
-#: src/frontend.cpp:1080
+#: src/frontend.cpp:1081
 msgid "Switch Mouse Buttons"
 msgstr "Váltott egérparancs"
 
-#: src/frontend.cpp:1092
+#: src/frontend.cpp:1093
 msgid "Rotate Screen"
 msgstr "Képernyő forgatás"
 
-#: src/frontend.cpp:1095
-#: src/frontend.cpp:1168
+#: src/frontend.cpp:1096
+#: src/frontend.cpp:1169
 msgid "Middle Mouse"
 msgstr "Középső egérgomb"
 
-#: src/frontend.cpp:1099
-#: src/frontend.cpp:1163
+#: src/frontend.cpp:1100
+#: src/frontend.cpp:1164
 msgid "Right Mouse"
 msgstr "Jobb egérgomb"
 
-#: src/frontend.cpp:1103
+#: src/frontend.cpp:1104
 msgid "MOUSE OPTIONS"
 msgstr "EGÉR BEÁLLÍTÁS"
 
-#: src/frontend.cpp:1203
-#: src/frontend.cpp:1281
+#: src/frontend.cpp:1204
+#: src/frontend.cpp:1282
 msgid "Language"
 msgstr "Nyelv"
 
-#: src/frontend.cpp:1207
-#: src/frontend.cpp:1285
+#: src/frontend.cpp:1208
+#: src/frontend.cpp:1286
 msgid "Difficulty"
 msgstr "Nehézség"
 
-#: src/frontend.cpp:1211
-#: src/frontend.cpp:1292
-#: src/frontend.cpp:1324
+#: src/frontend.cpp:1212
+#: src/frontend.cpp:1293
+#: src/frontend.cpp:1325
 #: src/multiint.cpp:213
 msgid "Easy"
 msgstr "Könnyű"
 
-#: src/frontend.cpp:1214
-#: src/frontend.cpp:1295
-#: src/frontend.cpp:1316
+#: src/frontend.cpp:1215
+#: src/frontend.cpp:1296
+#: src/frontend.cpp:1317
 msgid "Normal"
 msgstr "Normális"
 
-#: src/frontend.cpp:1218
-#: src/frontend.cpp:1298
-#: src/frontend.cpp:1320
+#: src/frontend.cpp:1219
+#: src/frontend.cpp:1299
+#: src/frontend.cpp:1321
 #: src/multiint.cpp:213
 msgid "Hard"
 msgstr "Nehéz"
 
-#: src/frontend.cpp:1223
-#: src/frontend.cpp:1286
+#: src/frontend.cpp:1224
+#: src/frontend.cpp:1287
 msgid "Scroll Speed"
 msgstr "Görgetés sebessége"
 
-#: src/frontend.cpp:1227
-#: src/frontend.cpp:1282
+#: src/frontend.cpp:1228
+#: src/frontend.cpp:1283
 #, fuzzy
 msgid "Unit Colour:"
 msgstr "Egység Színek"
 
-#: src/frontend.cpp:1247
-#: src/frontend.cpp:1283
+#: src/frontend.cpp:1248
+#: src/frontend.cpp:1284
 #, fuzzy
 msgid "Campaign"
 msgstr "Új küldetés"
 
-#: src/frontend.cpp:1257
-#: src/frontend.cpp:1284
+#: src/frontend.cpp:1258
+#: src/frontend.cpp:1285
 #, fuzzy
 msgid "Skirmish/Multiplayer"
 msgstr "Többjátékos mód"
 
-#: src/frontend.cpp:1263
-#: src/frontend.cpp:1279
+#: src/frontend.cpp:1264
+#: src/frontend.cpp:1280
 msgid "GAME OPTIONS"
 msgstr "JÁTÉK OPCIÓK"
 
-#: src/frontend.cpp:1424
+#: src/frontend.cpp:1425
 #: src/multiint.cpp:2526
 msgid "Mod: "
 msgstr "Mód:"
@@ -13187,408 +14962,6 @@ msgstr "Verzió %s%s%s%s"
 
 #~ msgid "CHEATS ARE NOW DISABLED!"
 #~ msgstr "CSALÁS KIKAPCSOLVA!"
-
-#~ msgid "Construction speed +10%"
-#~ msgstr "Építési sebesség +10%"
-
-#~ msgid "Cannon accuracy +10%"
-#~ msgstr "Löveg célpontosság +10%"
-
-#~ msgid "Flamer reload time -15%"
-#~ msgstr "Lángvető újratöltési idő -15%"
-
-#~ msgid "Machinegun reload time -15%"
-#~ msgstr "Gépfegyver újratöltési idő -15%"
-
-#~ msgid "Mortar accuracy +10%"
-#~ msgstr "Aknavető célpontosság +10%"
-
-#~ msgid "Mortar reload time -10%"
-#~ msgstr "Aknavető újratöltési idő -10%"
-
-#~ msgid "Rocket reload time -15%"
-#~ msgstr "Rakéta újratöltési idő -15%"
-
-#~ msgid "Cannon reload time -10%"
-#~ msgstr "Löveg újratöltési idő -10%"
-
-#~ msgid "Cannon damage +25%"
-#~ msgstr "Löveg sebzés +25%"
-
-#~ msgid "Rocket accuracy +10%"
-#~ msgstr "Rakéta célpontosság +10%"
-
-#~ msgid "Kinetic Armor +35%, Body Points +35%"
-#~ msgstr "Kinetikus páncél +35%, karosszéria értékek +35%"
-
-#~ msgid "Armour +35%, Body Points +30%"
-#~ msgstr "Páncél +35%, karosszéria értékek +30%"
-
-#~ msgid "Armored guard tower with Mini-Rocket Pod"
-#~ msgstr "Páncélozott őrtoron kisrakéta vetővel"
-
-#~ msgid "Armored guard tower with Lancer AT rocket"
-#~ msgstr "Tankelhárító rakétával felszerelt őrtorony"
-
-#~ msgid "Repair Speed +100%"
-#~ msgstr "Javítási sebesség +100%"
-
-#~ msgid "Factory output speed +100% per module"
-#~ msgstr "Gyár termelékenység +100% modulonként"
-
-#~ msgid "Factory output speed +60%"
-#~ msgstr "Gyár termelékenység +60%"
-
-#~ msgid "Research speed +85%"
-#~ msgstr "Kutatási sebesség +85%"
-
-#~ msgid "Research speed +30%"
-#~ msgstr "Kutatási sebesség +30%"
-
-#~ msgid "Armor +35%, Body Points +30%"
-#~ msgstr "Páncél +35%, karosszéria értékek +30%"
-
-#~ msgid "Vehicle speed +5%"
-#~ msgstr "Jármű sebesség +5%"
-
-#~ msgid "Kinetic armor +30%, body points +30%"
-#~ msgstr "Kinetikus páncél +30%, karosszéria értékek +30%"
-
-#~ msgid "Best Targets: Vehicles, Hardpoints"
-#~ msgstr "Célok: járművek, fegyvertartó talapzatok"
-
-#~ msgid "Flamer damage +25%"
-#~ msgstr "Lángvető sebzés +25%"
-
-#~ msgid "Machinegun damage +25%"
-#~ msgstr "Gépfegyver sebzés +25%"
-
-#~ msgid "Mortar damage +25%"
-#~ msgstr "Aknavető sebzés +25%"
-
-#~ msgid "Rocket damage +25%"
-#~ msgstr "Rakéta sebzés +25%"
-
-#~ msgid "Power output +25%"
-#~ msgstr "Energia termelés +25%"
-
-#~ msgid "Construction speed +20%"
-#~ msgstr "Építési sebesség +20%"
-
-#~ msgid "AA accuracy +10%"
-#~ msgstr "Légvédelmi célpontosság +10%"
-
-#~ msgid "Bomb Upgrade"
-#~ msgstr "Bomba feljavítás"
-
-#~ msgid "Improved trinitramine explosive formula"
-#~ msgstr "Jobb trinitramin robbanóanyag képlet"
-
-#~ msgid "Bomb damage +25%"
-#~ msgstr "Bomba sebzés +25%"
-
-#~ msgid "Thermal Armor +45%"
-#~ msgstr "Hővédelem +45%"
-
-#~ msgid "Kinetic Armor +35%, and Body Points +35%"
-#~ msgstr "Kinetikus páncél +35% és karosszéria értékek +35%"
-
-#~ msgid "Factory production rate +60%"
-#~ msgstr "Termelési arány +60%"
-
-#~ msgid "All factories upgraded automatically"
-#~ msgstr "Minden gyár automatikusan továbbfejlesztve"
-
-#~ msgid "Rearming speed +30%"
-#~ msgstr "Újratöltési idő +30%"
-
-#~ msgid "Thermal armor +40%"
-#~ msgstr "Hővédelem +40%"
-
-#~ msgid "AA Flak damage +25%"
-#~ msgstr "Légelhárító sebzés +25%"
-
-#~ msgid "AA reload time -15%"
-#~ msgstr "Légvédelmi újratöltési idő -15%"
-
-#~ msgid "Howitzer accuracy +10%"
-#~ msgstr "Tarack célpontosság +10%"
-
-#~ msgid "Howitzer damage +25%"
-#~ msgstr "Tarack sebzés +25%"
-
-#~ msgid "Howitzer reload time -10%"
-#~ msgstr "Tarack újratöltés idő -10%"
-
-#~ msgid "High Explosive Anti-Tank warheads"
-#~ msgstr "Nagy hatóerejű tankelhárító robbanófejek (HEAT)"
-
-#~ msgid "Thermal Armor +35%"
-#~ msgstr "Hővédelem +35%"
-
-#~ msgid "Armored guard tower with Pulse Laser"
-#~ msgstr "Páncélozott őrtorony impulzus lézerrel"
-
-#~ msgid "Power output +30%"
-#~ msgstr "Energia termelés +30%"
-
-#~ msgid "Thermal Armor +40%"
-#~ msgstr "Hővédelem +40%"
-
-#~ msgid "Laser accuracy +10%"
-#~ msgstr "Lézer pontosság +10%"
-
-#~ msgid "Laser damage +25%"
-#~ msgstr "Lézer sebzés +25%"
-
-#~ msgid "Laser reload time -15%"
-#~ msgstr "Lézer újratöltési idő -15%"
-
-#~ msgid "Missile accuracy +10%"
-#~ msgstr "Rakéta célpontosítás +10%"
-
-#~ msgid "Missile damage +25%"
-#~ msgstr "Rakéta sebzés +25%"
-
-#~ msgid "Missile reload time -15%"
-#~ msgstr "Rakéta újratöltési idő -15%"
-
-#~ msgid "Rail Gun accuracy +10%"
-#~ msgstr "Sínágyú célpontosság +10%"
-
-#~ msgid "Rail Gun damage +25%"
-#~ msgstr "Sínágyú sebzés +25%"
-
-#~ msgid "Rail Gun reload time -15%"
-#~ msgstr "Sínágyú újratöltési idő -15%"
-
-#~ msgid "Sensor Range +25%"
-#~ msgstr "Észlelési távolság +25%"
-
-#~ msgid "Improved Thermal Emissions detection"
-#~ msgstr "Hőérzékelés fejlődött"
-
-#~ msgid "Sensor Range +15%"
-#~ msgstr "Észlelési távolság +15%"
-
-#~ msgid "Advanced Thermal Emissions detection"
-#~ msgstr "Fejlett hőérzékelés"
-
-#~ msgid "Sensor Range +10%"
-#~ msgstr "Észlelési távolság +10%"
-
-#~ msgid "Radar detector tower detects enemy sensors"
-#~ msgstr "A radarérzékelő torony ellenséges érzékelőket észlel"
-
-#~ msgid "Orders assigned indirect fire units to fire at the enemy sensors"
-#~ msgstr "Kijelölt egységeknek általános tűzparancs az ellenséges érzékelők ellen."
-
-#~ msgid "Counter-battery fire continues until enemy sensor is suppressed"
-#~ msgstr "Folyamatos válaszüteg tűz, amíg az ellenséges érzékelő elfojtott."
-
-#~ msgid "Cyborg Transport Available"
-#~ msgstr "Cyborg szállítóeszköz áll rendelkezésre"
-
-#~ msgid "Armed with Machinegun"
-#~ msgstr "Gépfegyverrel szerelt"
-
-#~ msgid "Requires heavy VTOL factory to produce"
-#~ msgstr "Szükséges a nehéz VTOL gyár az előállításhoz"
-
-#~ msgid "Super Transport Available"
-#~ msgstr "Extra szállítóeszköz áll rendelkezésre"
-
-#~ msgid "Incendiary howitzer emplacement"
-#~ msgstr "Gyújtóbombás tarack állás"
-
-#~ msgid "Armored Incendiary Mortar battery pit"
-#~ msgstr "Páncélozott gyújtóbombás aknavető árok"
-
-#~ msgid "Armored strongpoint with Plasmite Flamer"
-#~ msgstr "Páncélozott erőd plazmavetővel"
-
-#~ msgid "Armed with Cyborg Thermite Flamer"
-#~ msgstr "Cyborg termit lángvetővel felszerelt"
-
-#~ msgid "Armed with grenades"
-#~ msgstr "Gránátokkal felszerelt"
-
-#~ msgid "Combat engineer with construction ability"
-#~ msgstr "Hadi mérnök építési képességgel"
-
-#~ msgid "Mechanic with repair ability"
-#~ msgstr "Szerelő javítási képességgel"
-
-#~ msgid "Incendiary Howitzer may be assigned to a sensor"
-#~ msgstr "Érzékelőt lehet rendelni a gyutacsos tarackhoz"
-
-#~ msgid "Plasmite Flame-thrower"
-#~ msgstr "Plazmaláng vető"
-
-#~ msgid "Steals technology from structures and takes control of weapons"
-#~ msgstr "Ellopja a technológiát az építményekből és átveszi a fegyverek irányítását"
-
-#~ msgid "New Electronic Technology Discovered"
-#~ msgstr "Új elektronikai technológia felfedezve."
-
-#~ msgid "On-board resistance circuit systems"
-#~ msgstr "Fedélzeti ellenálló áramkör rendszerek"
-
-#~ msgid "Enables resistance to Nexus Link technology"
-#~ msgstr "Lehetővé teszi az ellenállást a NEXUS dekódoló technológia"
-
-#~ msgid "Enables self-repair"
-#~ msgstr "Önjavítást tesz lehetővé"
-
-#~ msgid "Armed with medium cannon"
-#~ msgstr "Közepes ágyúval felszerelt"
-
-#~ msgid "Armed with hyper velocity cannon"
-#~ msgstr "Nagysebességű ágyúval felszerelt"
-
-#~ msgid "Armed with tank killer rockets"
-#~ msgstr "Tank Killer rakétákkal felszerelt"
-
-#~ msgid "Fires heavy pulses of laser light"
-#~ msgstr "Tüzelés nagy impulzusú lézerrel"
-
-#~ msgid "Best Targets: Heavy cyborgs"
-#~ msgstr "Célok: nehéz cyborgok"
-
-#~ msgid "76mm twin-barrel automatic-cannon"
-#~ msgstr "76mm ikercsöves automata ágyú"
-
-#~ msgid "New Systems Structure Available"
-#~ msgstr "Új építmény szerkezet érhető el"
-
-#~ msgid "Complete battlefield visibility"
-#~ msgstr "Teljes csatatér felderítve"
-
-#~ msgid "Does not offer sensor targeting"
-#~ msgstr "Nem lehet radarral bemérni"
-
-#~ msgid "Combines standard, counter battery and VTOL sensors"
-#~ msgstr "Egyesített szabvány, válaszüteg és VTOL érzékelők"
-
-#~ msgid "New Advanced Weapon Available"
-#~ msgstr "Új fejlett fegyver érhető el"
-
-#~ msgid "Very slow recharge time"
-#~ msgstr "Nagyon lassú újratöltési idő"
-
-#~ msgid "Immense damage infliction capability"
-#~ msgstr "Hatalmas károkozási képesség"
-
-#~ msgid "Narrow area of effect"
-#~ msgstr "Effektek csak szűk területen"
-
-#~ msgid "Armored guard tower with Nexus Link"
-#~ msgstr "Páncélozott őrtorony NEXUS dekóderrel"
-
-#~ msgid "Plasma Cannon firing plasma"
-#~ msgstr "Plazma ágyú plazmával tüzel"
-
-#~ msgid "Best Targets : Vehicles"
-#~ msgstr "Célok: járművek"
-
-#~ msgid "Armored strongpoint with Heavy Laser"
-#~ msgstr "Nehéz lézerrel szerelt erőd"
-
-#~ msgid "Armored guard tower with EMP Cannon"
-#~ msgstr "EMP ágyúval szerelt őrtorony"
-
-#~ msgid "Armed with Cyborg Pulse Laser"
-#~ msgstr "Cyborg impulzus lézerrel"
-
-#~ msgid "Armed with Cyborg Rail Gun"
-#~ msgstr "Cyborg sínágyúval"
-
-#~ msgid "Armed with Cyborg Scourge Missile Launcher"
-#~ msgstr "Cyborg Scourge rakétakilövővel felszerelt"
-
-#~ msgid "Uses advanced mass driver railgun technology"
-#~ msgstr "Fejlett elektromágneses katapult, sínágyú technológiát használ."
-
-#~ msgid "Defensive Strength : High"
-#~ msgstr "Védelmi erő : Magas"
-
-#~ msgid "Uses advanced cannon technology"
-#~ msgstr "Fejlett ágyút használ."
-
-#~ msgid "Uses advanced rocket gun technology"
-#~ msgstr "Fejlett rakéta technológiát használ."
-
-#~ msgid "Uses advanced missile gun technology"
-#~ msgstr "Fejlett légvédelmi rakéta technológiát használ."
-
-#~ msgid "Powerful Electronic magnetic pulse weapon"
-#~ msgstr "Erőteljes elektromágneses impulzus fegyver."
-
-#~ msgid "New System Available"
-#~ msgstr "Új rendszer áll rendelkezésre."
-
-#~ msgid "Medium Super Heavy Body"
-#~ msgstr "Középméretű extra nehéz karosszéria"
-
-#~ msgid "More armor and body points than Vengeance"
-#~ msgstr "Több páncél és karosszéria pont, mint a Vengance-nek"
-
-#~ msgid "Slow moving Body"
-#~ msgstr "Lassú mozgású karosszéria."
-
-#~ msgid "Large Super Heavy Body"
-#~ msgstr "Nagyméretű extra nehéz karosszéria"
-
-#~ msgid "Maximum armor and body points"
-#~ msgstr "Maximum páncél és karosszéria érték."
-
-#~ msgid "Very slow moving Body"
-#~ msgstr "Nagyon lassú mozgású karosszéria."
-
-#~ msgid "Hardpoint Vindicator SAM Site Available"
-#~ msgstr "Elérhető Vindicator SAM kilövő állás talapzat"
-
-#~ msgid "Hardpoint Whirlwind AA Gun Available"
-#~ msgstr "Elérhető Whirlwind légvédelmi fegyver"
-
-#~ msgid "Armored EMP Mortar battery pit"
-#~ msgstr "Páncélozott EMP aknavető árok"
-
-#~ msgid "Laser AA Gun Available"
-#~ msgstr "Elérhető lézer légvédelmi löveg"
-
-#~ msgid "Twin Medium Anti-Aircraft Laser"
-#~ msgstr "Közepes iker légvédelmi lézer"
-
-#~ msgid "Hardpoint Avenger SAM Site Available"
-#~ msgstr "Elérhető Avenger SAM kilövőállás talapzat"
-
-#~ msgid "Hardpoint Cyclone AA Gun Available"
-#~ msgstr "Elérhetőt Cyclone légvédelmi löveg"
-
-#~ msgid "Quad 80mm Anti-Aircraft machinegun"
-#~ msgstr "80mm négyes légvédelmi gépfegyver"
-
-#~ msgid "Twin Multi-barrel, rapid-fire machinegun"
-#~ msgstr "Iker többcsöves, gyorstüzelő gépfegyver"
-
-#~ msgid "Hardpoint Twin Assault Gun Available"
-#~ msgstr "Elérhető ikercsöves ostromlöveg"
-
-#~ msgid "Drops high intensity Plasmite bombs"
-#~ msgstr "Nagy erejű plazma gyújtóbombákat dob le"
-
-#~ msgid "New VTOL Missile Launcher"
-#~ msgstr "Új VTOL rakétakilövő"
-
-#~ msgid "Fires Electronic Magnetic Pulse Missiles"
-#~ msgstr "Tüzelés elektromágneses impulzus rakétákkal"
-
-#~ msgid "Stronger Commander Turret Available for Design"
-#~ msgstr "A tervezéshez erősebb parancsnoki lövegtorony érhető el"
-
-#~ msgid "Upgraded battlefield computer system"
-#~ msgstr "Feljavított harctéri számítógép rendszer"
 
 #~ msgid "Received invalid addGame data."
 #~ msgstr "Érvénytelen játék hozzáadás adat érkezett."

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2012-03-17 20:56+0100\n"
+"POT-Creation-Date: 2012-03-19 00:49+0100\n"
 "PO-Revision-Date: 2012-02-20 21:03+0200\n"
 "Last-Translator: Ayhan GÖRGÜLÜ <ayahngorgulu45@gmail.com>\n"
 "Language-Team: Turkey <warzone2100-project@lists.sourceforge.net>\n"
@@ -122,6 +122,67 @@ msgstr "Silah Araştırması Tamamlandı"
 #: data/base/messages/strings/resstrings.txt:301
 #: data/base/messages/strings/resstrings.txt:307
 #: data/base/messages/strings/resstrings.txt:323
+#: data/mp/messages/resmessages12.rmsg:3
+#: data/mp/messages/resmessages12.rmsg:13
+#: data/mp/messages/resmessages12.rmsg:23
+#: data/mp/messages/resmessages12.rmsg:33
+#: data/mp/messages/resmessages1.rmsg:83
+#: data/mp/messages/resmessages1.rmsg:93
+#: data/mp/messages/resmessages1.rmsg:103
+#: data/mp/messages/resmessages1.rmsg:113
+#: data/mp/messages/resmessages1.rmsg:123
+#: data/mp/messages/resmessages1.rmsg:133
+#: data/mp/messages/resmessages1.rmsg:143
+#: data/mp/messages/resmessages1.rmsg:153
+#: data/mp/messages/resmessages1.rmsg:163
+#: data/mp/messages/resmessages1.rmsg:173
+#: data/mp/messages/resmessages23.rmsg:13
+#: data/mp/messages/resmessages2.rmsg:53
+#: data/mp/messages/resmessages2.rmsg:63
+#: data/mp/messages/resmessages2.rmsg:73
+#: data/mp/messages/resmessages2.rmsg:83
+#: data/mp/messages/resmessages2.rmsg:93
+#: data/mp/messages/resmessages2.rmsg:103
+#: data/mp/messages/resmessages2.rmsg:113
+#: data/mp/messages/resmessages2.rmsg:123
+#: data/mp/messages/resmessages2.rmsg:133
+#: data/mp/messages/resmessages2.rmsg:143
+#: data/mp/messages/resmessages2.rmsg:153
+#: data/mp/messages/resmessages2.rmsg:163
+#: data/mp/messages/resmessages2.rmsg:173
+#: data/mp/messages/resmessages2.rmsg:183
+#: data/mp/messages/resmessages2.rmsg:193
+#: data/mp/messages/resmessages2.rmsg:203
+#: data/mp/messages/resmessages2.rmsg:213
+#: data/mp/messages/resmessages2.rmsg:223
+#: data/mp/messages/resmessages2.rmsg:233
+#: data/mp/messages/resmessages2.rmsg:243
+#: data/mp/messages/resmessages3.rmsg:183
+#: data/mp/messages/resmessages3.rmsg:193
+#: data/mp/messages/resmessages3.rmsg:203
+#: data/mp/messages/resmessages3.rmsg:213
+#: data/mp/messages/resmessages3.rmsg:223
+#: data/mp/messages/resmessages3.rmsg:233
+#: data/mp/messages/resmessages3.rmsg:243
+#: data/mp/messages/resmessages3.rmsg:253
+#: data/mp/messages/resmessages3.rmsg:263
+#: data/mp/messages/resmessages3.rmsg:273
+#: data/mp/messages/resmessages3.rmsg:283
+#: data/mp/messages/resmessages3.rmsg:293
+#: data/mp/messages/resmessages3.rmsg:303
+#: data/mp/messages/resmessages3.rmsg:313
+#: data/mp/messages/resmessagesall.rmsg:193
+#: data/mp/messages/resmessagesall.rmsg:203
+#: data/mp/messages/resmessagesall.rmsg:213
+#: data/mp/messages/resmessagesall.rmsg:423
+#: data/mp/messages/resmessagesall.rmsg:443
+#: data/mp/messages/resmessagesall.rmsg:453
+#: data/mp/messages/resmessagesall.rmsg:463
+#: data/mp/messages/resmessagesall.rmsg:503
+#: data/mp/messages/resmessagesall.rmsg:513
+#: data/mp/messages/resmessagesall.rmsg:523
+#: data/mp/messages/resmessagesall.rmsg:533
+#: data/mp/messages/resmessagesall.rmsg:633
 #: data/mp/messages/strings/resstrings.txt:133
 #: data/mp/messages/strings/resstrings.txt:139
 #: data/mp/messages/strings/resstrings.txt:145
@@ -152,6 +213,7 @@ msgid "New Defensive Structure Available"
 msgstr "Yeni Savunma Binası Kullanılabilir"
 
 #: data/base/messages/resmessages12.rmsg:5
+#: data/mp/messages/resmessages12.rmsg:4
 msgid "Armored Mortar battery pit"
 msgstr "Zırhlı Havan kuyusu"
 
@@ -173,6 +235,20 @@ msgstr "Zırhlı Havan kuyusu"
 #: data/base/messages/strings/resstrings.txt:175
 #: data/base/messages/strings/resstrings.txt:181
 #: data/base/messages/strings/resstrings.txt:187
+#: data/mp/messages/resmessages12.rmsg:5
+#: data/mp/messages/resmessages12.rmsg:15
+#: data/mp/messages/resmessages2.rmsg:95
+#: data/mp/messages/resmessages2.rmsg:105
+#: data/mp/messages/resmessages2.rmsg:115
+#: data/mp/messages/resmessages2.rmsg:125
+#: data/mp/messages/resmessages2.rmsg:135
+#: data/mp/messages/resmessages2.rmsg:145
+#: data/mp/messages/resmessages2.rmsg:155
+#: data/mp/messages/resmessages3.rmsg:205
+#: data/mp/messages/resmessages3.rmsg:215
+#: data/mp/messages/resmessagesall.rmsg:195
+#: data/mp/messages/resmessagesall.rmsg:205
+#: data/mp/messages/resmessagesall.rmsg:635
 #: data/mp/messages/strings/resstrings.txt:163
 #: data/mp/messages/strings/resstrings.txt:177
 #: data/mp/messages/strings/resstrings.txt:183
@@ -224,6 +300,41 @@ msgstr "Otomatik olarak yakınlardaki bir algılayıcıya veya algılayıcı kul
 #: data/base/messages/strings/resstrings.txt:236
 #: data/base/messages/strings/resstrings.txt:242
 #: data/base/messages/strings/resstrings.txt:248
+#: data/mp/messages/resmessages12.rmsg:6
+#: data/mp/messages/resmessages12.rmsg:16
+#: data/mp/messages/resmessages1.rmsg:96
+#: data/mp/messages/resmessages1.rmsg:116
+#: data/mp/messages/resmessages1.rmsg:176
+#: data/mp/messages/resmessages2.rmsg:56
+#: data/mp/messages/resmessages2.rmsg:66
+#: data/mp/messages/resmessages2.rmsg:76
+#: data/mp/messages/resmessages2.rmsg:86
+#: data/mp/messages/resmessages2.rmsg:96
+#: data/mp/messages/resmessages2.rmsg:106
+#: data/mp/messages/resmessages2.rmsg:116
+#: data/mp/messages/resmessages2.rmsg:126
+#: data/mp/messages/resmessages2.rmsg:136
+#: data/mp/messages/resmessages2.rmsg:146
+#: data/mp/messages/resmessages2.rmsg:156
+#: data/mp/messages/resmessages2.rmsg:166
+#: data/mp/messages/resmessages2.rmsg:186
+#: data/mp/messages/resmessages2.rmsg:206
+#: data/mp/messages/resmessages3.rmsg:186
+#: data/mp/messages/resmessages3.rmsg:196
+#: data/mp/messages/resmessages3.rmsg:206
+#: data/mp/messages/resmessages3.rmsg:216
+#: data/mp/messages/resmessages3.rmsg:236
+#: data/mp/messages/resmessages3.rmsg:266
+#: data/mp/messages/resmessagesall.rmsg:6
+#: data/mp/messages/resmessagesall.rmsg:196
+#: data/mp/messages/resmessagesall.rmsg:206
+#: data/mp/messages/resmessagesall.rmsg:216
+#: data/mp/messages/resmessagesall.rmsg:426
+#: data/mp/messages/resmessagesall.rmsg:446
+#: data/mp/messages/resmessagesall.rmsg:456
+#: data/mp/messages/resmessagesall.rmsg:466
+#: data/mp/messages/resmessagesall.rmsg:546
+#: data/mp/messages/resmessagesall.rmsg:636
 #: data/mp/messages/strings/resstrings.txt:136
 #: data/mp/messages/strings/resstrings.txt:142
 #: data/mp/messages/strings/resstrings.txt:148
@@ -245,10 +356,12 @@ msgid "Defensive Strength: Medium"
 msgstr "Savunma gücü: Orta"
 
 #: data/base/messages/resmessages12.rmsg:16
+#: data/mp/messages/resmessages12.rmsg:14
 msgid "Mini-rocket armored strongpoint"
 msgstr "Zırhlı Mini-Roket Koruma Kulesi"
 
 #: data/base/messages/resmessages12.rmsg:27
+#: data/mp/messages/resmessages12.rmsg:24
 msgid "Armored hardpoint with Heavy Machinegun"
 msgstr "Ağır Makinalı Zırhlandırılmış Bağlama Noktası"
 
@@ -283,6 +396,30 @@ msgstr "Ağır Makinalı Zırhlandırılmış Bağlama Noktası"
 #: data/base/messages/strings/resstrings.txt:295
 #: data/base/messages/strings/resstrings.txt:303
 #: data/base/messages/strings/resstrings.txt:309
+#: data/mp/messages/resmessages12.rmsg:25
+#: data/mp/messages/resmessages12.rmsg:35
+#: data/mp/messages/resmessages1.rmsg:85
+#: data/mp/messages/resmessages1.rmsg:95
+#: data/mp/messages/resmessages1.rmsg:105
+#: data/mp/messages/resmessages1.rmsg:115
+#: data/mp/messages/resmessages1.rmsg:125
+#: data/mp/messages/resmessages1.rmsg:135
+#: data/mp/messages/resmessages1.rmsg:145
+#: data/mp/messages/resmessages1.rmsg:155
+#: data/mp/messages/resmessages1.rmsg:165
+#: data/mp/messages/resmessages23.rmsg:15
+#: data/mp/messages/resmessages2.rmsg:215
+#: data/mp/messages/resmessages2.rmsg:225
+#: data/mp/messages/resmessages2.rmsg:235
+#: data/mp/messages/resmessages2.rmsg:245
+#: data/mp/messages/resmessages3.rmsg:265
+#: data/mp/messages/resmessages3.rmsg:275
+#: data/mp/messages/resmessages3.rmsg:285
+#: data/mp/messages/resmessages3.rmsg:295
+#: data/mp/messages/resmessages3.rmsg:305
+#: data/mp/messages/resmessages3.rmsg:315
+#: data/mp/messages/resmessagesall.rmsg:425
+#: data/mp/messages/resmessagesall.rmsg:465
 #: data/mp/messages/strings/resstrings.txt:263
 #: data/mp/messages/strings/resstrings.txt:269
 #: data/mp/messages/strings/resstrings.txt:275
@@ -329,6 +466,29 @@ msgstr "Menzilindeki düşmanları otomatik olarak hedef alır"
 #: data/base/messages/strings/resstrings.txt:304
 #: data/base/messages/strings/resstrings.txt:310
 #: data/base/messages/strings/resstrings.txt:326
+#: data/mp/messages/resmessages12.rmsg:26
+#: data/mp/messages/resmessages12.rmsg:36
+#: data/mp/messages/resmessages1.rmsg:106
+#: data/mp/messages/resmessages1.rmsg:126
+#: data/mp/messages/resmessages1.rmsg:136
+#: data/mp/messages/resmessages1.rmsg:146
+#: data/mp/messages/resmessages1.rmsg:156
+#: data/mp/messages/resmessages1.rmsg:166
+#: data/mp/messages/resmessages23.rmsg:16
+#: data/mp/messages/resmessages2.rmsg:176
+#: data/mp/messages/resmessages2.rmsg:196
+#: data/mp/messages/resmessages2.rmsg:216
+#: data/mp/messages/resmessages2.rmsg:226
+#: data/mp/messages/resmessages2.rmsg:236
+#: data/mp/messages/resmessages2.rmsg:246
+#: data/mp/messages/resmessages3.rmsg:226
+#: data/mp/messages/resmessages3.rmsg:246
+#: data/mp/messages/resmessages3.rmsg:256
+#: data/mp/messages/resmessages3.rmsg:276
+#: data/mp/messages/resmessages3.rmsg:286
+#: data/mp/messages/resmessages3.rmsg:296
+#: data/mp/messages/resmessages3.rmsg:306
+#: data/mp/messages/resmessages3.rmsg:316
 #: data/mp/messages/strings/resstrings.txt:224
 #: data/mp/messages/strings/resstrings.txt:248
 #: data/mp/messages/strings/resstrings.txt:290
@@ -342,17 +502,23 @@ msgid "Defensive Strength: High"
 msgstr "Savunma gücü: Yüksek"
 
 #: data/base/messages/resmessages12.rmsg:38
+#: data/mp/messages/resmessages12.rmsg:34
 msgid "Armored hardpoint with Lancer AT missile"
 msgstr "Roketatar A-T füzeli Zırhlandırılmış Bağlama Noktası"
 
 #: data/base/messages/resmessages12.rmsg:48
 #: data/base/messages/resmessages23.rmsg:37
 #: data/base/messages/resmessages3.rmsg:433
+#: data/mp/messages/resmessages12.rmsg:43
+#: data/mp/messages/resmessages23.rmsg:33
+#: data/mp/messages/resmessages3.rmsg:393
 msgid "Research Breakthrough Improves Construction Rates"
 msgstr "İnşa oranları araştırmalar ile geliştirildi"
 
 #: data/base/messages/resmessages12.rmsg:49
 #: data/base/messages/resmessages23.rmsg:38
+#: data/mp/messages/resmessages12.rmsg:44
+#: data/mp/messages/resmessages23.rmsg:34
 msgid "Improved Engineering Techniques"
 msgstr "Gelişmiş Mühendislik Teknikleri"
 
@@ -365,37 +531,52 @@ msgstr "Arttırılmış inşa hızı"
 #: data/base/messages/resmessages12.rmsg:51
 #: data/base/messages/resmessages23.rmsg:40
 #: data/base/messages/resmessages3.rmsg:436
+#: data/mp/messages/resmessages12.rmsg:46
+#: data/mp/messages/resmessages23.rmsg:36
+#: data/mp/messages/resmessages3.rmsg:396
 msgid "All trucks upgraded automatically"
 msgstr "Tüm Kamyonlar otomatik olarak geliştirildi"
 
 #: data/base/messages/resmessages12.rmsg:59
 #: data/base/messages/resmessages1.rmsg:4
+#: data/mp/messages/resmessages12.rmsg:53
+#: data/mp/messages/resmessages1.rmsg:3
 msgid "New Systems Turret Available for Design"
 msgstr "Yeni sistem Tareti Tasarım için Hazır"
 
 #: data/base/messages/resmessages12.rmsg:60
+#: data/mp/messages/resmessages12.rmsg:54
 msgid "Counter-battery turret detects enemy indirect fire batteries"
 msgstr "Anti-Batarya kulesi düşmanın endirek silahlarını tespit eder"
 
 #: data/base/messages/resmessages12.rmsg:61
 #: data/base/messages/resmessagesall.rmsg:83
+#: data/mp/messages/resmessages12.rmsg:55
+#: data/mp/messages/resmessagesall.rmsg:95
 msgid "Orders assigned indirect fire units to fire at the enemy batteries"
 msgstr "Bizim bataryalarımız düşman bataryalarına karşılık verir"
 
 #: data/base/messages/resmessages12.rmsg:62
 #: data/base/messages/resmessagesall.rmsg:84
+#: data/mp/messages/resmessages12.rmsg:56
+#: data/mp/messages/resmessagesall.rmsg:96
 msgid "Counter-battery fire continues until enemy battery is suppressed"
 msgstr "Düşman bataryaları yok edilene kadar saldırı devam eder"
 
 #: data/base/messages/resmessages12.rmsg:70
 #: data/base/messages/resmessages23.rmsg:48
 #: data/base/messages/resmessages3.rmsg:444
+#: data/mp/messages/resmessages12.rmsg:63
+#: data/mp/messages/resmessages23.rmsg:43
+#: data/mp/messages/resmessages3.rmsg:403
 msgid "CB Sensor Improved"
 msgstr "A-B Kulesi Geliştirildi"
 
 #: data/base/messages/resmessages12.rmsg:71
 #: data/base/messages/resmessages2.rmsg:379
 #: data/base/messages/strings/resstrings.txt:486
+#: data/mp/messages/resmessages12.rmsg:64
+#: data/mp/messages/resmessages2.rmsg:344
 #: data/mp/messages/strings/resstrings.txt:516
 msgid "New fire detection systems"
 msgstr "Yeni ateşleme tespit sistemleri"
@@ -403,12 +584,18 @@ msgstr "Yeni ateşleme tespit sistemleri"
 #: data/base/messages/resmessages12.rmsg:72
 #: data/base/messages/resmessages23.rmsg:50
 #: data/base/messages/resmessages3.rmsg:446
+#: data/mp/messages/resmessages12.rmsg:65
+#: data/mp/messages/resmessages23.rmsg:45
+#: data/mp/messages/resmessages3.rmsg:405
 msgid "Extends CB Range"
 msgstr "A-B Kulesi görüş menzili arttı"
 
 #: data/base/messages/resmessages12.rmsg:73
 #: data/base/messages/resmessages23.rmsg:51
 #: data/base/messages/resmessages3.rmsg:447
+#: data/mp/messages/resmessages12.rmsg:66
+#: data/mp/messages/resmessages23.rmsg:46
+#: data/mp/messages/resmessages3.rmsg:406
 msgid "All CB sensors upgraded automatically"
 msgstr "Tüm A-B Kuleleri otomatik olarak geliitirildi"
 
@@ -419,10 +606,18 @@ msgstr "Tüm A-B Kuleleri otomatik olarak geliitirildi"
 #: data/base/messages/resmessages3.rmsg:741
 #: data/base/messages/resmessages3.rmsg:752
 #: data/base/messages/resmessagesall.rmsg:147
+#: data/mp/messages/resmessages12.rmsg:73
+#: data/mp/messages/resmessages12.rmsg:163
+#: data/mp/messages/resmessages12.rmsg:173
+#: data/mp/messages/resmessages1.rmsg:443
+#: data/mp/messages/resmessages3.rmsg:673
+#: data/mp/messages/resmessages3.rmsg:683
+#: data/mp/messages/resmessagesall.rmsg:163
 msgid "Cannon Upgrade"
 msgstr "Topçu Yükseltmesi"
 
 #: data/base/messages/resmessages12.rmsg:82
+#: data/mp/messages/resmessages12.rmsg:74
 msgid "Determines range to target"
 msgstr "Hedef'in uzaklığını belirler"
 
@@ -438,6 +633,13 @@ msgstr "Topçu Hedef Tutturması Arttırıldı"
 #: data/base/messages/resmessages3.rmsg:744
 #: data/base/messages/resmessages3.rmsg:755
 #: data/base/messages/resmessagesall.rmsg:150
+#: data/mp/messages/resmessages12.rmsg:76
+#: data/mp/messages/resmessages12.rmsg:166
+#: data/mp/messages/resmessages12.rmsg:176
+#: data/mp/messages/resmessages1.rmsg:446
+#: data/mp/messages/resmessages3.rmsg:676
+#: data/mp/messages/resmessages3.rmsg:686
+#: data/mp/messages/resmessagesall.rmsg:166
 msgid "All cannons upgraded automatically"
 msgstr "Tüm Topçular otomatik olarak geliştirildi"
 
@@ -445,6 +647,10 @@ msgstr "Tüm Topçular otomatik olarak geliştirildi"
 #: data/base/messages/resmessages1.rmsg:510
 #: data/base/messages/resmessages2.rmsg:664
 #: data/base/messages/strings/resstrings.txt:765
+#: data/mp/messages/resmessages12.rmsg:83
+#: data/mp/messages/resmessages1.rmsg:463
+#: data/mp/messages/resmessages2.rmsg:603
+#: data/mp/messages/resmessagesall.rmsg:603
 #: data/mp/messages/strings/resstrings.txt:804
 msgid "Flamer Upgrade"
 msgstr "Alev atıcı yükseltmesi"
@@ -453,6 +659,9 @@ msgstr "Alev atıcı yükseltmesi"
 #: data/base/messages/resmessages12.rmsg:181
 #: data/base/messages/resmessages2.rmsg:731
 #: data/base/messages/strings/resstrings.txt:810
+#: data/mp/messages/resmessages12.rmsg:84
+#: data/mp/messages/resmessages12.rmsg:164
+#: data/mp/messages/resmessages2.rmsg:664
 #: data/mp/messages/strings/resstrings.txt:851
 msgid "Automatic loading mechanism replaces manual loader"
 msgstr "Oto. Yükleme mekanizması Elle Yükleme mekanızması yerine geçecek"
@@ -465,6 +674,10 @@ msgstr "Alev Atıcı Ateş Oranı Arttırıldı"
 #: data/base/messages/resmessages1.rmsg:513
 #: data/base/messages/resmessages2.rmsg:667
 #: data/base/messages/strings/resstrings.txt:768
+#: data/mp/messages/resmessages12.rmsg:86
+#: data/mp/messages/resmessages1.rmsg:466
+#: data/mp/messages/resmessages2.rmsg:606
+#: data/mp/messages/resmessagesall.rmsg:606
 #: data/mp/messages/strings/resstrings.txt:807
 msgid "All flamers upgraded automatically"
 msgstr "Tüm Alev Atıcılar otomatik olarak geliştirildi"
@@ -483,6 +696,22 @@ msgstr "Tüm Alev Atıcılar otomatik olarak geliştirildi"
 #: data/base/messages/strings/resstrings.txt:729
 #: data/base/messages/strings/resstrings.txt:735
 #: data/base/messages/strings/resstrings.txt:757
+#: data/mp/messages/resmessages12.rmsg:93
+#: data/mp/messages/resmessages1.rmsg:413
+#: data/mp/messages/resmessages1.rmsg:423
+#: data/mp/messages/resmessages1.rmsg:433
+#: data/mp/messages/resmessages1.rmsg:453
+#: data/mp/messages/resmessages1.rmsg:473
+#: data/mp/messages/resmessages1.rmsg:483
+#: data/mp/messages/resmessages23.rmsg:163
+#: data/mp/messages/resmessages2.rmsg:573
+#: data/mp/messages/resmessages2.rmsg:583
+#: data/mp/messages/resmessages2.rmsg:593
+#: data/mp/messages/resmessagesall.rmsg:293
+#: data/mp/messages/resmessagesall.rmsg:383
+#: data/mp/messages/resmessagesall.rmsg:433
+#: data/mp/messages/resmessagesall.rmsg:543
+#: data/mp/messages/resmessagesall.rmsg:683
 #: data/mp/messages/strings/resstrings.txt:764
 #: data/mp/messages/strings/resstrings.txt:770
 #: data/mp/messages/strings/resstrings.txt:796
@@ -490,6 +719,7 @@ msgid "New Weapon Turret Available"
 msgstr "Yeni Silah Tareti Kullanılabilir"
 
 #: data/base/messages/resmessages12.rmsg:104
+#: data/mp/messages/resmessages12.rmsg:94
 msgid ".50-calibre heavy machinegun"
 msgstr ".50-Kalibrelik (12.7mm) ağır makinalı"
 
@@ -497,6 +727,12 @@ msgstr ".50-Kalibrelik (12.7mm) ağır makinalı"
 #: data/base/messages/resmessages1.rmsg:523
 #: data/base/messages/resmessages1.rmsg:534
 #: data/base/messages/resmessages23.rmsg:182
+#: data/mp/messages/resmessages12.rmsg:95
+#: data/mp/messages/resmessages1.rmsg:475
+#: data/mp/messages/resmessages1.rmsg:485
+#: data/mp/messages/resmessages23.rmsg:165
+#: data/mp/messages/resmessagesall.rmsg:685
+#: data/mp/messages/resmessagesall.rmsg:695
 msgid "Best Targets: Infantry, base structures, wheeled vehicles"
 msgstr "Harika hedefler: Piyadeler, Üs Binaları, Tekerlekli Araçlar"
 
@@ -539,6 +775,55 @@ msgstr "Harika hedefler: Piyadeler, Üs Binaları, Tekerlekli Araçlar"
 #: data/base/messages/strings/resstrings.txt:656
 #: data/base/messages/strings/resstrings.txt:688
 #: data/base/messages/strings/resstrings.txt:694
+#: data/mp/messages/resmessages12.rmsg:96
+#: data/mp/messages/resmessages1.rmsg:35
+#: data/mp/messages/resmessages1.rmsg:45
+#: data/mp/messages/resmessages1.rmsg:55
+#: data/mp/messages/resmessages1.rmsg:65
+#: data/mp/messages/resmessages1.rmsg:376
+#: data/mp/messages/resmessages1.rmsg:416
+#: data/mp/messages/resmessages1.rmsg:426
+#: data/mp/messages/resmessages2.rmsg:25
+#: data/mp/messages/resmessages2.rmsg:35
+#: data/mp/messages/resmessages2.rmsg:456
+#: data/mp/messages/resmessages2.rmsg:466
+#: data/mp/messages/resmessages2.rmsg:476
+#: data/mp/messages/resmessages2.rmsg:486
+#: data/mp/messages/resmessages2.rmsg:526
+#: data/mp/messages/resmessages2.rmsg:536
+#: data/mp/messages/resmessages3.rmsg:75
+#: data/mp/messages/resmessages3.rmsg:85
+#: data/mp/messages/resmessages3.rmsg:95
+#: data/mp/messages/resmessages3.rmsg:105
+#: data/mp/messages/resmessages3.rmsg:115
+#: data/mp/messages/resmessages3.rmsg:125
+#: data/mp/messages/resmessages3.rmsg:135
+#: data/mp/messages/resmessages3.rmsg:145
+#: data/mp/messages/resmessages3.rmsg:155
+#: data/mp/messages/resmessages3.rmsg:726
+#: data/mp/messages/resmessages3.rmsg:736
+#: data/mp/messages/resmessages3.rmsg:926
+#: data/mp/messages/resmessages3.rmsg:936
+#: data/mp/messages/resmessagesall.rmsg:175
+#: data/mp/messages/resmessagesall.rmsg:185
+#: data/mp/messages/resmessagesall.rmsg:225
+#: data/mp/messages/resmessagesall.rmsg:235
+#: data/mp/messages/resmessagesall.rmsg:245
+#: data/mp/messages/resmessagesall.rmsg:255
+#: data/mp/messages/resmessagesall.rmsg:335
+#: data/mp/messages/resmessagesall.rmsg:345
+#: data/mp/messages/resmessagesall.rmsg:355
+#: data/mp/messages/resmessagesall.rmsg:365
+#: data/mp/messages/resmessagesall.rmsg:376
+#: data/mp/messages/resmessagesall.rmsg:436
+#: data/mp/messages/resmessagesall.rmsg:475
+#: data/mp/messages/resmessagesall.rmsg:485
+#: data/mp/messages/resmessagesall.rmsg:495
+#: data/mp/messages/resmessagesall.rmsg:586
+#: data/mp/messages/resmessagesall.rmsg:596
+#: data/mp/messages/resmessagesall.rmsg:646
+#: data/mp/messages/resmessagesall.rmsg:666
+#: data/mp/messages/resmessagesall.rmsg:676
 #: data/mp/messages/strings/resstrings.txt:55
 #: data/mp/messages/strings/resstrings.txt:87
 #: data/mp/messages/strings/resstrings.txt:99
@@ -562,12 +847,21 @@ msgstr "Beden Puanı: Orta"
 #: data/base/messages/resmessages3.rmsg:862
 #: data/base/messages/strings/resstrings.txt:845
 #: data/base/messages/strings/resstrings.txt:857
+#: data/mp/messages/resmessages12.rmsg:103
+#: data/mp/messages/resmessages1.rmsg:493
+#: data/mp/messages/resmessages1.rmsg:503
+#: data/mp/messages/resmessages23.rmsg:133
+#: data/mp/messages/resmessages2.rmsg:673
+#: data/mp/messages/resmessages2.rmsg:683
+#: data/mp/messages/resmessages3.rmsg:773
+#: data/mp/messages/resmessages3.rmsg:783
 #: data/mp/messages/strings/resstrings.txt:888
 #: data/mp/messages/strings/resstrings.txt:900
 msgid "Machinegun Upgrade"
 msgstr "Makinalı Geliştirmesi"
 
 #: data/base/messages/resmessages12.rmsg:115
+#: data/mp/messages/resmessages12.rmsg:104
 msgid "Chaingun mechanism replaces belt-feed"
 msgstr "Kemer Atış sistemi yerine Zincirsilah sistemi getirildi"
 
@@ -589,6 +883,14 @@ msgstr "Makinalı Ateş Oranı arttırıldı"
 #: data/base/messages/resmessages3.rmsg:865
 #: data/base/messages/strings/resstrings.txt:848
 #: data/base/messages/strings/resstrings.txt:860
+#: data/mp/messages/resmessages12.rmsg:106
+#: data/mp/messages/resmessages1.rmsg:496
+#: data/mp/messages/resmessages1.rmsg:506
+#: data/mp/messages/resmessages23.rmsg:136
+#: data/mp/messages/resmessages2.rmsg:676
+#: data/mp/messages/resmessages2.rmsg:686
+#: data/mp/messages/resmessages3.rmsg:776
+#: data/mp/messages/resmessages3.rmsg:786
 #: data/mp/messages/strings/resstrings.txt:891
 #: data/mp/messages/strings/resstrings.txt:903
 msgid "All machineguns upgraded automatically"
@@ -605,6 +907,15 @@ msgstr "Tüm Makinalı tüfekler otomatik olarak geliştirildi"
 #: data/base/messages/strings/resstrings.txt:779
 #: data/base/messages/strings/resstrings.txt:787
 #: data/base/messages/strings/resstrings.txt:891
+#: data/mp/messages/resmessages12.rmsg:113
+#: data/mp/messages/resmessages1.rmsg:513
+#: data/mp/messages/resmessages23.rmsg:153
+#: data/mp/messages/resmessages2.rmsg:613
+#: data/mp/messages/resmessages2.rmsg:623
+#: data/mp/messages/resmessages2.rmsg:633
+#: data/mp/messages/resmessages2.rmsg:693
+#: data/mp/messages/resmessagesall.rmsg:263
+#: data/mp/messages/resmessagesall.rmsg:273
 #: data/mp/messages/strings/resstrings.txt:812
 #: data/mp/messages/strings/resstrings.txt:820
 #: data/mp/messages/strings/resstrings.txt:828
@@ -615,6 +926,8 @@ msgstr "Yeni Endirek Ateş Silahı Kullanılabilir"
 #: data/base/messages/resmessages12.rmsg:126
 #: data/base/messages/resmessages2.rmsg:764
 #: data/base/messages/strings/resstrings.txt:892
+#: data/mp/messages/resmessages12.rmsg:114
+#: data/mp/messages/resmessages2.rmsg:694
 #: data/mp/messages/strings/resstrings.txt:935
 msgid "May be assigned to a sensor"
 msgstr "Bir algılayıcıya bağlanabilir"
@@ -623,6 +936,10 @@ msgstr "Bir algılayıcıya bağlanabilir"
 #: data/base/messages/resmessages1.rmsg:567
 #: data/base/messages/resmessages2.rmsg:765
 #: data/base/messages/strings/resstrings.txt:893
+#: data/mp/messages/resmessages12.rmsg:115
+#: data/mp/messages/resmessages1.rmsg:515
+#: data/mp/messages/resmessages2.rmsg:695
+#: data/mp/messages/resmessagesall.rmsg:275
 #: data/mp/messages/strings/resstrings.txt:936
 msgid "Best Targets: Base structures, infantry, wheeled vehicles"
 msgstr "Harika Hedefler: Üs Binaları, Piyadeler, Tekerlekli Araçlar"
@@ -643,6 +960,22 @@ msgstr "Harika Hedefler: Üs Binaları, Piyadeler, Tekerlekli Araçlar"
 #: data/base/messages/resmessagesall.rmsg:128
 #: data/base/messages/resmessagesall.rmsg:139
 #: data/base/messages/strings/resstrings.txt:894
+#: data/mp/messages/resmessages12.rmsg:116
+#: data/mp/messages/resmessages12.rmsg:146
+#: data/mp/messages/resmessages12.rmsg:196
+#: data/mp/messages/resmessages12.rmsg:206
+#: data/mp/messages/resmessages1.rmsg:516
+#: data/mp/messages/resmessages1.rmsg:536
+#: data/mp/messages/resmessages2.rmsg:696
+#: data/mp/messages/resmessages3.rmsg:796
+#: data/mp/messages/resmessages3.rmsg:806
+#: data/mp/messages/resmessages3.rmsg:846
+#: data/mp/messages/resmessages3.rmsg:856
+#: data/mp/messages/resmessages3.rmsg:866
+#: data/mp/messages/resmessages3.rmsg:876
+#: data/mp/messages/resmessagesall.rmsg:146
+#: data/mp/messages/resmessagesall.rmsg:156
+#: data/mp/messages/resmessagesall.rmsg:276
 #: data/mp/messages/strings/resstrings.txt:937
 msgid "Body Points: Very Low"
 msgstr "Beden Puanı: Çok Düşük"
@@ -655,11 +988,19 @@ msgstr "Beden Puanı: Çok Düşük"
 #: data/base/messages/resmessages3.rmsg:994
 #: data/base/messages/resmessages3.rmsg:1005
 #: data/base/messages/strings/resstrings.txt:905
+#: data/mp/messages/resmessages12.rmsg:123
+#: data/mp/messages/resmessages12.rmsg:133
+#: data/mp/messages/resmessages1.rmsg:523
+#: data/mp/messages/resmessages23.rmsg:143
+#: data/mp/messages/resmessages2.rmsg:703
+#: data/mp/messages/resmessages3.rmsg:903
+#: data/mp/messages/resmessages3.rmsg:913
 #: data/mp/messages/strings/resstrings.txt:950
 msgid "Mortar Upgrade"
 msgstr "Havan T. Geliştirmesi"
 
 #: data/base/messages/resmessages12.rmsg:137
+#: data/mp/messages/resmessages12.rmsg:124
 msgid "Targeting systems compensate for distance and weather conditions"
 msgstr "Hedefleme sistemleri mesafe ve hava koşullarını hesaplayacak"
 
@@ -677,11 +1018,19 @@ msgstr "Havan hasarı arttırıldı"
 #: data/base/messages/resmessages3.rmsg:997
 #: data/base/messages/resmessages3.rmsg:1008
 #: data/base/messages/strings/resstrings.txt:908
+#: data/mp/messages/resmessages12.rmsg:126
+#: data/mp/messages/resmessages12.rmsg:136
+#: data/mp/messages/resmessages1.rmsg:526
+#: data/mp/messages/resmessages23.rmsg:146
+#: data/mp/messages/resmessages2.rmsg:706
+#: data/mp/messages/resmessages3.rmsg:906
+#: data/mp/messages/resmessages3.rmsg:916
 #: data/mp/messages/strings/resstrings.txt:953
 msgid "All mortars upgraded automatically"
 msgstr "Tüm Havanlar otomatik olarak geliştirildi"
 
 #: data/base/messages/resmessages12.rmsg:148
+#: data/mp/messages/resmessages12.rmsg:134
 msgid "Automatic loader replaces manual feed"
 msgstr "Elle yükleme sistemi yerine Oto Yükleyici getirildi"
 
@@ -696,14 +1045,22 @@ msgstr "Havan T. Ateş Oranı Arttırıldı"
 #: data/base/messages/resmessages1.rmsg:587
 #: data/base/messages/resmessagesall.rmsg:125
 #: data/base/messages/resmessagesall.rmsg:136
+#: data/mp/messages/resmessages12.rmsg:143
+#: data/mp/messages/resmessages12.rmsg:193
+#: data/mp/messages/resmessages12.rmsg:203
+#: data/mp/messages/resmessages1.rmsg:533
+#: data/mp/messages/resmessagesall.rmsg:143
+#: data/mp/messages/resmessagesall.rmsg:153
 msgid "New Rocket Available"
 msgstr "Yeni Roket Kullanılabilir"
 
 #: data/base/messages/resmessages12.rmsg:159
+#: data/mp/messages/resmessages12.rmsg:144
 msgid "Rocket artillery; can be assigned to a sensor"
 msgstr "Roket Bataryası; bir algılayıcıya bağlanabilir"
 
 #: data/base/messages/resmessages12.rmsg:160
+#: data/mp/messages/resmessages12.rmsg:145
 msgid "Best Targets: Vehicles and Emplacements"
 msgstr "Harika Hedefler: Araçlar ve Sabitlemeler"
 
@@ -714,11 +1071,22 @@ msgstr "Harika Hedefler: Araçlar ve Sabitlemeler"
 #: data/base/messages/resmessages2.rmsg:796
 #: data/base/messages/resmessagesall.rmsg:114
 #: data/base/messages/strings/resstrings.txt:965
+#: data/mp/messages/resmessages12.rmsg:153
+#: data/mp/messages/resmessages12.rmsg:183
+#: data/mp/messages/resmessages1.rmsg:543
+#: data/mp/messages/resmessages1.rmsg:553
+#: data/mp/messages/resmessages1.rmsg:563
+#: data/mp/messages/resmessages1.rmsg:573
+#: data/mp/messages/resmessages1.rmsg:583
+#: data/mp/messages/resmessages2.rmsg:713
+#: data/mp/messages/resmessages2.rmsg:723
+#: data/mp/messages/resmessagesall.rmsg:133
 #: data/mp/messages/strings/resstrings.txt:1010
 msgid "Rocket Upgrade"
 msgstr "Roket Geliştirmesi"
 
 #: data/base/messages/resmessages12.rmsg:170
+#: data/mp/messages/resmessages12.rmsg:154
 msgid "Autoloader increases reload rate"
 msgstr "Oto yükleyici yükleme hızı arttırıldı"
 
@@ -733,6 +1101,16 @@ msgstr "Roket Ateş Oranı Arttırıldı"
 #: data/base/messages/resmessages2.rmsg:799
 #: data/base/messages/resmessagesall.rmsg:117
 #: data/base/messages/strings/resstrings.txt:968
+#: data/mp/messages/resmessages12.rmsg:156
+#: data/mp/messages/resmessages12.rmsg:186
+#: data/mp/messages/resmessages1.rmsg:546
+#: data/mp/messages/resmessages1.rmsg:556
+#: data/mp/messages/resmessages1.rmsg:566
+#: data/mp/messages/resmessages1.rmsg:576
+#: data/mp/messages/resmessages1.rmsg:586
+#: data/mp/messages/resmessages2.rmsg:716
+#: data/mp/messages/resmessages2.rmsg:726
+#: data/mp/messages/resmessagesall.rmsg:136
 #: data/mp/messages/strings/resstrings.txt:1013
 msgid "All rockets upgraded automatically"
 msgstr "Tüm Roketler otomatik olarak yükseltildi"
@@ -743,6 +1121,7 @@ msgid "Increases Cannon ROF"
 msgstr "Topçu Ateş Oranı Arttırıldı"
 
 #: data/base/messages/resmessages12.rmsg:192
+#: data/mp/messages/resmessages12.rmsg:174
 msgid "Armor-Piercing Fin-Stabilized Discarding Sabot"
 msgstr "Zırh Parçalayıcı, fin-stabilize Sabotaj Mermileri"
 
@@ -753,6 +1132,7 @@ msgid "Increases Cannon damage"
 msgstr "Topçu Hasarı Arttırıldı"
 
 #: data/base/messages/resmessages12.rmsg:203
+#: data/mp/messages/resmessages12.rmsg:184
 msgid "Rocket tracks the laser designator to the target"
 msgstr "Roket hedefleme parçaları,  hedefleme için lazer hedefleyici kullacak"
 
@@ -763,6 +1143,7 @@ msgid "Increases Rocket accuracy"
 msgstr "Roket Hedef tutturması Arttırıldı"
 
 #: data/base/messages/resmessages12.rmsg:214
+#: data/mp/messages/resmessages12.rmsg:194
 msgid "Heavy anti-tank rocket"
 msgstr "Ağır Anti-tank Roketi"
 
@@ -779,24 +1160,42 @@ msgstr "Ağır Anti-tank Roketi"
 #: data/base/messages/resmessagesall.rmsg:127
 #: data/base/messages/strings/resstrings.txt:731
 #: data/base/messages/strings/resstrings.txt:737
+#: data/mp/messages/resmessages12.rmsg:195
+#: data/mp/messages/resmessages1.rmsg:415
+#: data/mp/messages/resmessages2.rmsg:585
+#: data/mp/messages/resmessages3.rmsg:795
+#: data/mp/messages/resmessages3.rmsg:925
+#: data/mp/messages/resmessages3.rmsg:935
+#: data/mp/messages/resmessages3.rmsg:945
+#: data/mp/messages/resmessagesall.rmsg:145
+#: data/mp/messages/resmessagesall.rmsg:385
+#: data/mp/messages/resmessagesall.rmsg:435
+#: data/mp/messages/resmessagesall.rmsg:715
 #: data/mp/messages/strings/resstrings.txt:766
 #: data/mp/messages/strings/resstrings.txt:772
 msgid "Best Targets: Vehicles"
 msgstr "Harika Hedefler: Araçlar"
 
 #: data/base/messages/resmessages12.rmsg:225
+#: data/mp/messages/resmessages12.rmsg:204
 msgid "Fires salvoes of mini-rockets"
 msgstr "Mini roketlerin yayılmış ateşleri"
 
 #: data/base/messages/resmessages12.rmsg:226
+#: data/mp/messages/resmessages12.rmsg:205
 msgid "Best Targets: Base structures"
 msgstr "Harika Hedefler: Üs Binaları"
 
 #: data/base/messages/resmessages1.rmsg:5
+#: data/mp/messages/resmessages1.rmsg:4
 msgid "New battlefield computer system"
 msgstr "Yeni Savaşçı Bilgisayar Sistemi"
 
 #: data/base/messages/resmessages1.rmsg:6
+#: data/mp/messages/resmessages1.rmsg:5
+#: data/mp/messages/resmessagesall.rmsg:725
+#: data/mp/messages/resmessagesall.rmsg:735
+#: data/mp/messages/resmessagesall.rmsg:745
 msgid "Commander leads groups acts as factory delivery point"
 msgstr "Komutanlar bağlandıkları fabrika teslim noktasına gelen araçlara liderlik eder."
 
@@ -806,6 +1205,15 @@ msgstr "Komutanlar bağlandıkları fabrika teslim noktasına gelen araçlara li
 #: data/base/messages/resmessages2.rmsg:645
 #: data/base/messages/resmessages3.rmsg:1041
 #: data/base/messages/strings/resstrings.txt:738
+#: data/mp/messages/resmessages1.rmsg:6
+#: data/mp/messages/resmessages1.rmsg:396
+#: data/mp/messages/resmessages1.rmsg:436
+#: data/mp/messages/resmessages2.rmsg:586
+#: data/mp/messages/resmessages3.rmsg:946
+#: data/mp/messages/resmessagesall.rmsg:386
+#: data/mp/messages/resmessagesall.rmsg:726
+#: data/mp/messages/resmessagesall.rmsg:736
+#: data/mp/messages/resmessagesall.rmsg:746
 #: data/mp/messages/strings/resstrings.txt:773
 msgid "Body Points: High"
 msgstr "Beden Puanı: Yüksek"
@@ -813,18 +1221,24 @@ msgstr "Beden Puanı: Yüksek"
 #: data/base/messages/resmessages1.rmsg:15
 #: data/base/messages/resmessages3.rmsg:15
 #: data/base/messages/resmessages3.rmsg:26
+#: data/mp/messages/resmessages1.rmsg:13
+#: data/mp/messages/resmessages3.rmsg:13
+#: data/mp/messages/resmessages3.rmsg:23
 msgid "Computer Technology Breakthrough"
 msgstr "Bilgisayar Teknolojisinde İlerleme"
 
 #: data/base/messages/resmessages1.rmsg:16
+#: data/mp/messages/resmessages1.rmsg:14
 msgid "Synaptic Link allows humans to interface directly with computers"
 msgstr "Sinaptik Bağlantı; İnsanlar ile bilgisayarların birbirine bağlanmasını sağlar"
 
 #: data/base/messages/resmessages1.rmsg:17
+#: data/mp/messages/resmessages1.rmsg:15
 msgid "Cyborgs can now be researched"
 msgstr "Cyborgler şimdi araştırılabilir"
 
 #: data/base/messages/resmessages1.rmsg:18
+#: data/mp/messages/resmessages1.rmsg:16
 msgid "New research options available"
 msgstr "Yeni Araştırma seçenekleri aktif"
 
@@ -833,12 +1247,18 @@ msgstr "Yeni Araştırma seçenekleri aktif"
 #: data/base/messages/resmessages3.rmsg:59
 #: data/base/messages/resmessages3.rmsg:70
 #: data/base/messages/strings/resstrings.txt:31
+#: data/mp/messages/resmessages1.rmsg:23
+#: data/mp/messages/resmessages2.rmsg:13
+#: data/mp/messages/resmessages3.rmsg:53
+#: data/mp/messages/resmessages3.rmsg:63
 #: data/mp/messages/strings/resstrings.txt:35
 msgid "Cyborg Materials Improved"
 msgstr "Cyborg Materyali Geliştirildi"
 
 #: data/base/messages/resmessages1.rmsg:27
 #: data/base/messages/resmessages1.rmsg:401
+#: data/mp/messages/resmessages1.rmsg:24
+#: data/mp/messages/resmessages1.rmsg:364
 msgid "Layered composite alloys and energy-absorbing fibres"
 msgstr "Katmanlı Maden alaşımları ve enerji soğurgan lifler"
 
@@ -861,6 +1281,14 @@ msgstr "Kinetik zırh ve beden puanı arttırıldı"
 #: data/base/messages/resmessages3.rmsg:73
 #: data/base/messages/strings/resstrings.txt:34
 #: data/base/messages/strings/resstrings.txt:44
+#: data/mp/messages/resmessages1.rmsg:26
+#: data/mp/messages/resmessages23.rmsg:6
+#: data/mp/messages/resmessages2.rmsg:6
+#: data/mp/messages/resmessages2.rmsg:16
+#: data/mp/messages/resmessages3.rmsg:6
+#: data/mp/messages/resmessages3.rmsg:46
+#: data/mp/messages/resmessages3.rmsg:56
+#: data/mp/messages/resmessages3.rmsg:66
 #: data/mp/messages/strings/resstrings.txt:38
 #: data/mp/messages/strings/resstrings.txt:48
 msgid "All Cyborgs upgraded automatically"
@@ -878,12 +1306,34 @@ msgstr "Tüm Cyborglar otomatik olarak geliştirildi"
 #: data/base/messages/resmessages3.rmsg:114
 #: data/base/messages/strings/resstrings.txt:49
 #: data/base/messages/strings/resstrings.txt:65
+#: data/mp/messages/resmessages1.rmsg:33
+#: data/mp/messages/resmessages1.rmsg:43
+#: data/mp/messages/resmessages1.rmsg:53
+#: data/mp/messages/resmessages1.rmsg:63
+#: data/mp/messages/resmessages2.rmsg:23
+#: data/mp/messages/resmessages2.rmsg:33
+#: data/mp/messages/resmessages3.rmsg:73
+#: data/mp/messages/resmessages3.rmsg:83
+#: data/mp/messages/resmessages3.rmsg:93
+#: data/mp/messages/resmessages3.rmsg:103
+#: data/mp/messages/resmessagesall.rmsg:223
+#: data/mp/messages/resmessagesall.rmsg:233
+#: data/mp/messages/resmessagesall.rmsg:243
+#: data/mp/messages/resmessagesall.rmsg:253
+#: data/mp/messages/resmessagesall.rmsg:333
+#: data/mp/messages/resmessagesall.rmsg:343
+#: data/mp/messages/resmessagesall.rmsg:353
+#: data/mp/messages/resmessagesall.rmsg:363
+#: data/mp/messages/resmessagesall.rmsg:473
+#: data/mp/messages/resmessagesall.rmsg:483
+#: data/mp/messages/resmessagesall.rmsg:493
 #: data/mp/messages/strings/resstrings.txt:53
 #: data/mp/messages/strings/resstrings.txt:85
 msgid "New Cyborg Available"
 msgstr "Yeni Cyborg kullanılabilir"
 
 #: data/base/messages/resmessages1.rmsg:38
+#: data/mp/messages/resmessages1.rmsg:34
 msgid "Armed with Cyborg Machinegun"
 msgstr "Makinalı Cyborg"
 
@@ -905,6 +1355,31 @@ msgstr "Makinalı Cyborg"
 #: data/base/messages/strings/resstrings.txt:68
 #: data/base/messages/strings/resstrings.txt:80
 #: data/base/messages/strings/resstrings.txt:86
+#: data/mp/messages/resmessages1.rmsg:36
+#: data/mp/messages/resmessages1.rmsg:46
+#: data/mp/messages/resmessages1.rmsg:56
+#: data/mp/messages/resmessages1.rmsg:66
+#: data/mp/messages/resmessages2.rmsg:26
+#: data/mp/messages/resmessages2.rmsg:36
+#: data/mp/messages/resmessages3.rmsg:76
+#: data/mp/messages/resmessages3.rmsg:86
+#: data/mp/messages/resmessages3.rmsg:96
+#: data/mp/messages/resmessages3.rmsg:106
+#: data/mp/messages/resmessages3.rmsg:116
+#: data/mp/messages/resmessages3.rmsg:126
+#: data/mp/messages/resmessages3.rmsg:136
+#: data/mp/messages/resmessages3.rmsg:146
+#: data/mp/messages/resmessagesall.rmsg:226
+#: data/mp/messages/resmessagesall.rmsg:236
+#: data/mp/messages/resmessagesall.rmsg:246
+#: data/mp/messages/resmessagesall.rmsg:256
+#: data/mp/messages/resmessagesall.rmsg:336
+#: data/mp/messages/resmessagesall.rmsg:346
+#: data/mp/messages/resmessagesall.rmsg:356
+#: data/mp/messages/resmessagesall.rmsg:366
+#: data/mp/messages/resmessagesall.rmsg:476
+#: data/mp/messages/resmessagesall.rmsg:486
+#: data/mp/messages/resmessagesall.rmsg:496
 #: data/mp/messages/strings/resstrings.txt:56
 #: data/mp/messages/strings/resstrings.txt:88
 #: data/mp/messages/strings/resstrings.txt:100
@@ -913,14 +1388,17 @@ msgid "Requires Cyborg factory to produce"
 msgstr "Üretim için Cyborg fabrikası gereklidir"
 
 #: data/base/messages/resmessages1.rmsg:49
+#: data/mp/messages/resmessages1.rmsg:44
 msgid "Armed with Cyborg Cannon"
 msgstr "Topçu Cyborg"
 
 #: data/base/messages/resmessages1.rmsg:60
+#: data/mp/messages/resmessages1.rmsg:54
 msgid "Armed with Cyborg Flamer"
 msgstr "Alev Atıcı Cyborg"
 
 #: data/base/messages/resmessages1.rmsg:71
+#: data/mp/messages/resmessages1.rmsg:64
 msgid "Armed with Lance Anti-Tank rocket"
 msgstr "Roket atar (A-T) Cyborg"
 
@@ -929,11 +1407,16 @@ msgstr "Roket atar (A-T) Cyborg"
 #: data/base/messages/resmessages3.rmsg:180
 #: data/base/messages/resmessages3.rmsg:191
 #: data/base/messages/strings/resstrings.txt:103
+#: data/mp/messages/resmessages1.rmsg:73
+#: data/mp/messages/resmessages2.rmsg:43
+#: data/mp/messages/resmessages3.rmsg:163
+#: data/mp/messages/resmessages3.rmsg:173
 #: data/mp/messages/strings/resstrings.txt:123
 msgid "Defenses Improved"
 msgstr "Savunmalar geliştirildi"
 
 #: data/base/messages/resmessages1.rmsg:82
+#: data/mp/messages/resmessages1.rmsg:74
 msgid "Improved Titanium-reinforced concrete"
 msgstr "Titanyum destekli güçlendirilmiş sert Girit "
 
@@ -946,15 +1429,21 @@ msgstr "Zırh ve beden puanı arttırıldı"
 #: data/base/messages/resmessages3.rmsg:183
 #: data/base/messages/resmessages3.rmsg:194
 #: data/base/messages/strings/resstrings.txt:106
+#: data/mp/messages/resmessages1.rmsg:76
+#: data/mp/messages/resmessages2.rmsg:46
+#: data/mp/messages/resmessages3.rmsg:166
+#: data/mp/messages/resmessages3.rmsg:176
 #: data/mp/messages/strings/resstrings.txt:126
 msgid "All defenses and walls upgraded automatically"
 msgstr "Tüm savunma duvarları otomatik olarak geliştirildi"
 
 #: data/base/messages/resmessages1.rmsg:93
+#: data/mp/messages/resmessages1.rmsg:84
 msgid "Steel tower with machinegun"
 msgstr "Makinalı Çelik kule"
 
 #: data/base/messages/resmessages1.rmsg:95
+#: data/mp/messages/resmessages1.rmsg:86
 msgid "Defensive Strength: Low"
 msgstr "Savunma Gücü: Düşük"
 
@@ -963,6 +1452,7 @@ msgid "Armored guard tower with Mini-Pod Rocket"
 msgstr "Zırhlı Mini Roket Pod'lu Koruma kulesi"
 
 #: data/base/messages/resmessages1.rmsg:115
+#: data/mp/messages/resmessages1.rmsg:104
 msgid "Armored bunker with Machinegun"
 msgstr "Makinalı Zırhlandırılmış sığınak"
 
@@ -971,33 +1461,40 @@ msgid "Armored bunker with Lancer AT rocket"
 msgstr "Zırhlı Roketatar A-T roketli sığınak"
 
 #: data/base/messages/resmessages1.rmsg:137
+#: data/mp/messages/resmessages1.rmsg:124
 msgid "Armored bunker with Flamer"
 msgstr "Alev atıcı zırhlandırılmış sığınak"
 
 #: data/base/messages/resmessages1.rmsg:148
+#: data/mp/messages/resmessages1.rmsg:134
 msgid "Armored bunker with Light Cannon"
 msgstr "Hafif topçu zırhlandırılmış sığınak"
 
 #: data/base/messages/resmessages1.rmsg:159
+#: data/mp/messages/resmessages1.rmsg:144
 msgid "Armored hardpoint with Light Cannon"
 msgstr "Hafif Topçu Zırhlandırılmış Bağlama Noktası"
 
 #: data/base/messages/resmessages1.rmsg:170
+#: data/mp/messages/resmessages1.rmsg:154
 msgid "Armored hardpoint with Medium Cannon"
 msgstr "Orta Topçu Zırhlandırılmış Bağlama Noktası"
 
 #: data/base/messages/resmessages1.rmsg:181
+#: data/mp/messages/resmessages1.rmsg:164
 msgid "Armored hardpoint with Heavy Cannon"
 msgstr "Ağır Makinalı Zırhlandırılmış Bağlama Noktası"
 
 #: data/base/messages/resmessages1.rmsg:192
 #: data/base/messages/strings/resstrings.txt:324
+#: data/mp/messages/resmessages1.rmsg:174
 #: data/mp/messages/strings/resstrings.txt:352
 msgid "Reinforced concrete tank traps"
 msgstr "Desteklenmiş Betonarme Tank Tuzakları"
 
 #: data/base/messages/resmessages1.rmsg:193
 #: data/base/messages/strings/resstrings.txt:325
+#: data/mp/messages/resmessages1.rmsg:175
 #: data/mp/messages/strings/resstrings.txt:353
 msgid "Prevents enemy movement"
 msgstr "Düşman Hareketini Engeller"
@@ -1007,18 +1504,26 @@ msgstr "Düşman Hareketini Engeller"
 #: data/base/messages/resmessages1.rmsg:246
 #: data/base/messages/resmessagesall.rmsg:15
 #: data/base/messages/resmessagesall.rmsg:26
+#: data/mp/messages/resmessages1.rmsg:183
+#: data/mp/messages/resmessages1.rmsg:203
+#: data/mp/messages/resmessages1.rmsg:223
+#: data/mp/messages/resmessagesall.rmsg:13
+#: data/mp/messages/resmessagesall.rmsg:23
 msgid "New Base Structure Available"
 msgstr "Yeni Üs Binası Kullanılabilir"
 
 #: data/base/messages/resmessages1.rmsg:203
+#: data/mp/messages/resmessages1.rmsg:184
 msgid "New Repair Facility Repairs Damaged Units"
 msgstr "Yeni Tamir Tesisi hasar almış birimleri tamir eder"
 
 #: data/base/messages/resmessages1.rmsg:204
+#: data/mp/messages/resmessages1.rmsg:185
 msgid "Use the Command Console to send units back for repair"
 msgstr "Birimini Komuta konsolunu kullanarak tamire gönder"
 
 #: data/base/messages/resmessages1.rmsg:205
+#: data/mp/messages/resmessages1.rmsg:186
 msgid "Or select the Repair Facility as a unit's target"
 msgstr "Yada hasarlı birim hedef olarak gösterilebilir"
 
@@ -1026,11 +1531,15 @@ msgstr "Yada hasarlı birim hedef olarak gösterilebilir"
 #: data/base/messages/resmessages2.rmsg:279
 #: data/base/messages/resmessages3.rmsg:356
 #: data/base/messages/strings/resstrings.txt:333
+#: data/mp/messages/resmessages1.rmsg:193
+#: data/mp/messages/resmessages2.rmsg:253
+#: data/mp/messages/resmessages3.rmsg:323
 #: data/mp/messages/strings/resstrings.txt:361
 msgid "Repair Facility Improved"
 msgstr "Tamir Tesisi Yükseltme"
 
 #: data/base/messages/resmessages1.rmsg:214
+#: data/mp/messages/resmessages1.rmsg:194
 msgid "New automated repair techniques"
 msgstr "Yeni otomatik tamir teknikleri"
 
@@ -1046,19 +1555,25 @@ msgstr "Tamir hızı arttırıldı"
 #: data/base/messages/resmessages2.rmsg:282
 #: data/base/messages/resmessages3.rmsg:359
 #: data/base/messages/strings/resstrings.txt:336
+#: data/mp/messages/resmessages1.rmsg:196
+#: data/mp/messages/resmessages2.rmsg:256
+#: data/mp/messages/resmessages3.rmsg:326
 #: data/mp/messages/strings/resstrings.txt:364
 msgid "All repair facilities upgraded automatically"
 msgstr "Tüm Tamir Tesisleri otomatik olarak geliştirildi"
 
 #: data/base/messages/resmessages1.rmsg:225
+#: data/mp/messages/resmessages1.rmsg:204
 msgid "Enables command turret research"
 msgstr "Komuta Tareti Araştırmasını aktif eder"
 
 #: data/base/messages/resmessages1.rmsg:226
+#: data/mp/messages/resmessages1.rmsg:205
 msgid "Directs and collates information for command turrets"
 msgstr "Komutanlardan bilgileri alır ve size sunar"
 
 #: data/base/messages/resmessages1.rmsg:227
+#: data/mp/messages/resmessages1.rmsg:206
 msgid "Controls up to five commanders"
 msgstr "Sadece 5 Komutanı Yönetebilir"
 
@@ -1066,6 +1581,9 @@ msgstr "Sadece 5 Komutanı Yönetebilir"
 #: data/base/messages/resmessages2.rmsg:290
 #: data/base/messages/strings/resstrings.txt:347
 #: data/base/messages/strings/resstrings.txt:355
+#: data/mp/messages/resmessages1.rmsg:213
+#: data/mp/messages/resmessages2.rmsg:263
+#: data/mp/messages/resmessagesall.rmsg:623
 #: data/mp/messages/strings/resstrings.txt:375
 #: data/mp/messages/strings/resstrings.txt:383
 msgid "Cyborg Production Improved"
@@ -1073,6 +1591,7 @@ msgstr "Cyborg Üretimi Geliştirildi"
 
 #: data/base/messages/resmessages1.rmsg:236
 #: data/base/messages/strings/names.txt:783
+#: data/mp/messages/resmessages1.rmsg:214
 msgid "Automated Cyborg Production"
 msgstr "Otomatik Cyborg Üretimi"
 
@@ -1080,6 +1599,9 @@ msgstr "Otomatik Cyborg Üretimi"
 #: data/base/messages/resmessages2.rmsg:292
 #: data/base/messages/strings/resstrings.txt:349
 #: data/base/messages/strings/resstrings.txt:357
+#: data/mp/messages/resmessages1.rmsg:215
+#: data/mp/messages/resmessages2.rmsg:265
+#: data/mp/messages/resmessagesall.rmsg:625
 #: data/mp/messages/strings/resstrings.txt:377
 #: data/mp/messages/strings/resstrings.txt:385
 msgid "Increases Cyborg factory output"
@@ -1089,6 +1611,9 @@ msgstr "Cyborg fabrikası üretim gücü arttırıldı"
 #: data/base/messages/resmessages2.rmsg:293
 #: data/base/messages/strings/resstrings.txt:350
 #: data/base/messages/strings/resstrings.txt:358
+#: data/mp/messages/resmessages1.rmsg:216
+#: data/mp/messages/resmessages2.rmsg:266
+#: data/mp/messages/resmessagesall.rmsg:626
 #: data/mp/messages/strings/resstrings.txt:378
 #: data/mp/messages/strings/resstrings.txt:386
 msgid "All Cyborg factories upgraded automatically"
@@ -1097,16 +1622,19 @@ msgstr "Tüm Cyborg Fabrikaları otomatik olarak geliştirildi"
 #: data/base/messages/resmessages1.rmsg:247
 #: data/base/messages/strings/names.txt:399
 #: data/base/messages/strings/names.txt:782
+#: data/mp/messages/resmessages1.rmsg:224
 #: data/mp/messages/strings/names.txt:398
 #: data/mp/messages/strings/names.txt:792
 msgid "Cyborg Factory"
 msgstr "Cyborg Fabrikası"
 
 #: data/base/messages/resmessages1.rmsg:248
+#: data/mp/messages/resmessages1.rmsg:225
 msgid "Produces Cyborgs"
 msgstr "Cyborgları Üretir"
 
 #: data/base/messages/resmessages1.rmsg:249
+#: data/mp/messages/resmessages1.rmsg:226
 msgid "Research makes additional Cyborgs available"
 msgstr "Cyborg araştırmalarını aktif eder"
 
@@ -1114,11 +1642,17 @@ msgstr "Cyborg araştırmalarını aktif eder"
 #: data/base/messages/resmessages2.rmsg:334
 #: data/base/messages/resmessages3.rmsg:411
 #: data/base/messages/strings/resstrings.txt:411
+#: data/mp/messages/resmessages1.rmsg:233
+#: data/mp/messages/resmessages2.rmsg:273
+#: data/mp/messages/resmessages2.rmsg:303
+#: data/mp/messages/resmessages3.rmsg:373
+#: data/mp/messages/resmessagesall.rmsg:613
 #: data/mp/messages/strings/resstrings.txt:439
 msgid "Production Improved"
 msgstr "Üretim Geliştirildi"
 
 #: data/base/messages/resmessages1.rmsg:258
+#: data/mp/messages/resmessages1.rmsg:234
 msgid "Factory module enables medium and large bodies"
 msgstr "Fabrika Eki Daha büyük bedenlerin üretimini aktif eder"
 
@@ -1130,6 +1664,7 @@ msgid "Increases factory output"
 msgstr "Fabrika üretim gücü arttırıldı"
 
 #: data/base/messages/resmessages1.rmsg:260
+#: data/mp/messages/resmessages1.rmsg:236
 msgid "Use a truck to add modules to a factory"
 msgstr "Bir Kamyonunu kullanarak Fabrikana ek inşa ettir"
 
@@ -1137,6 +1672,7 @@ msgstr "Bir Kamyonunu kullanarak Fabrikana ek inşa ettir"
 #: data/base/messages/resmessages2.rmsg:301
 #: data/base/messages/strings/resstrings.txt:365
 #: data/base/messages/strings/resstrings.txt:373
+#: data/mp/messages/resmessages1.rmsg:243
 #: data/mp/messages/strings/resstrings.txt:393
 #: data/mp/messages/strings/resstrings.txt:401
 msgid "Vehicle Production Improved"
@@ -1144,6 +1680,7 @@ msgstr "Araç Üretimi arttırıldı"
 
 #: data/base/messages/resmessages1.rmsg:269
 #: data/base/messages/strings/names.txt:794
+#: data/mp/messages/resmessages1.rmsg:244
 msgid "Automated Factory Production"
 msgstr "Otomatik Fabrika Üretimi"
 
@@ -1151,34 +1688,43 @@ msgstr "Otomatik Fabrika Üretimi"
 #: data/base/messages/resmessages2.rmsg:304
 #: data/base/messages/strings/resstrings.txt:368
 #: data/base/messages/strings/resstrings.txt:376
+#: data/mp/messages/resmessages1.rmsg:246
 #: data/mp/messages/strings/resstrings.txt:396
 #: data/mp/messages/strings/resstrings.txt:404
 msgid "All vehicle factories upgraded automatically"
 msgstr "Tüm Fabrikalar otomatik olarak geliştirildi"
 
 #: data/base/messages/resmessages1.rmsg:279
+#: data/mp/messages/resmessages1.rmsg:253
 msgid "Power Module Available"
 msgstr "Güç Eki Kullanılabilir"
 
 #: data/base/messages/resmessages1.rmsg:280
 #: data/base/messages/resmessages23.rmsg:26
 #: data/base/messages/resmessages3.rmsg:367
+#: data/mp/messages/resmessages1.rmsg:254
+#: data/mp/messages/resmessages23.rmsg:23
+#: data/mp/messages/resmessages3.rmsg:333
 msgid "Improved Power Generator Performance"
 msgstr "Güç Jeneratörü Performansı Arttırıldı"
 
 #: data/base/messages/resmessages1.rmsg:281
+#: data/mp/messages/resmessages1.rmsg:255
 msgid "Burns oil more efficiently"
 msgstr "Petrolü daha etkili yakma."
 
 #: data/base/messages/resmessages1.rmsg:282
+#: data/mp/messages/resmessages1.rmsg:256
 msgid "Use a truck to add the module to a power generator"
 msgstr "Kamyonunu kullanarak güç jeneratörüne bir ek inşa ettir."
 
 #: data/base/messages/resmessages1.rmsg:290
+#: data/mp/messages/resmessages1.rmsg:263
 msgid "Research Module Available"
 msgstr "Araştırma Eki Kullanılabilir"
 
 #: data/base/messages/resmessages1.rmsg:291
+#: data/mp/messages/resmessages1.rmsg:264
 msgid "Research module expands research facilities"
 msgstr "Daha fazla araştırma yeri sağlar."
 
@@ -1192,6 +1738,7 @@ msgid "Increases research speed"
 msgstr "Araştırma hızı arttırıldı"
 
 #: data/base/messages/resmessages1.rmsg:293
+#: data/mp/messages/resmessages1.rmsg:266
 msgid "Use a truck to add the module to a research facility"
 msgstr "Kamyonunu kullanarak Araştırma Tesisine bir ek inşa ettir."
 
@@ -1199,11 +1746,15 @@ msgstr "Kamyonunu kullanarak Araştırma Tesisine bir ek inşa ettir."
 #: data/base/messages/resmessages2.rmsg:312
 #: data/base/messages/resmessages3.rmsg:378
 #: data/base/messages/strings/resstrings.txt:389
+#: data/mp/messages/resmessages1.rmsg:273
+#: data/mp/messages/resmessages2.rmsg:283
+#: data/mp/messages/resmessages3.rmsg:343
 #: data/mp/messages/strings/resstrings.txt:417
 msgid "Research Improved"
 msgstr "Araştırma Geliştirildi"
 
 #: data/base/messages/resmessages1.rmsg:302
+#: data/mp/messages/resmessages1.rmsg:274
 msgid "Synaptic link data analysis"
 msgstr "Sinaptik Veri Analizi"
 
@@ -1211,6 +1762,9 @@ msgstr "Sinaptik Veri Analizi"
 #: data/base/messages/resmessages2.rmsg:315
 #: data/base/messages/resmessages3.rmsg:381
 #: data/base/messages/strings/resstrings.txt:392
+#: data/mp/messages/resmessages1.rmsg:276
+#: data/mp/messages/resmessages2.rmsg:286
+#: data/mp/messages/resmessages3.rmsg:346
 #: data/mp/messages/strings/resstrings.txt:420
 msgid "All research facilities upgraded automatically"
 msgstr "Tüm Araştırma Tesisleri otomatik olarak geliştirildi"
@@ -1220,12 +1774,17 @@ msgstr "Tüm Araştırma Tesisleri otomatik olarak geliştirildi"
 #: data/base/messages/resmessages3.rmsg:389
 #: data/base/messages/resmessages3.rmsg:400
 #: data/base/messages/strings/resstrings.txt:399
+#: data/mp/messages/resmessages1.rmsg:283
+#: data/mp/messages/resmessages2.rmsg:293
+#: data/mp/messages/resmessages3.rmsg:353
+#: data/mp/messages/resmessages3.rmsg:363
 #: data/mp/messages/strings/resstrings.txt:427
 msgid "Increases Damage Resistance"
 msgstr "Hasar Direnci Arttırıldı"
 
 #: data/base/messages/resmessages1.rmsg:313
 #: data/base/messages/strings/names.txt:805
+#: data/mp/messages/resmessages1.rmsg:284
 #: data/mp/messages/strings/names.txt:815
 msgid "Reinforced Base Structure Materials"
 msgstr "Desteklenmiş Üs Binası Materyali"
@@ -1249,106 +1808,137 @@ msgstr "Zırh ve beden puanı arttırıldı"
 #: data/base/messages/resmessages3.rmsg:392
 #: data/base/messages/resmessages3.rmsg:403
 #: data/base/messages/strings/resstrings.txt:402
+#: data/mp/messages/resmessages1.rmsg:286
+#: data/mp/messages/resmessages2.rmsg:296
+#: data/mp/messages/resmessages3.rmsg:356
+#: data/mp/messages/resmessages3.rmsg:366
 #: data/mp/messages/strings/resstrings.txt:430
 msgid "All base structures upgraded automatically"
 msgstr "Tüm üs binaları otomatik olarak geliştirildi"
 
 #: data/base/messages/resmessages1.rmsg:323
+#: data/mp/messages/resmessages1.rmsg:293
 msgid "Project Light Body"
 msgstr "Proje Hafif Bedeni"
 
 #: data/base/messages/resmessages1.rmsg:324
+#: data/mp/messages/resmessages1.rmsg:294
 msgid "Light body vulnerable to heavy weapons"
 msgstr "Hafif beden ağır silahlarda kolayca yaralanabilir"
 
 #: data/base/messages/resmessages1.rmsg:325
+#: data/mp/messages/resmessages1.rmsg:295
 msgid "Good scout vehicle"
 msgstr "İyi izci aracı olur"
 
 #: data/base/messages/resmessages1.rmsg:326
+#: data/mp/messages/resmessages1.rmsg:296
 msgid "Low power cost and low production times"
 msgstr "Çok az enerji ve üretim süresi gerektirir"
 
 #: data/base/messages/resmessages1.rmsg:334
+#: data/mp/messages/resmessages1.rmsg:303
 msgid "New Paradigm Light Body"
 msgstr "Yeni Paradigma Hafif Bedeni"
 
 #: data/base/messages/resmessages1.rmsg:335
+#: data/mp/messages/resmessages1.rmsg:304
 msgid "Inferior armor and body points to Viper"
 msgstr "Engerek'den daha düşük zırh'a ve beden puanına sahip"
 
 #: data/base/messages/resmessages1.rmsg:336
 #: data/base/messages/resmessages3.rmsg:534
+#: data/mp/messages/resmessages1.rmsg:305
+#: data/mp/messages/resmessages3.rmsg:485
 msgid "Faster than Viper"
 msgstr "Engerek'ten daha hızlı"
 
 #: data/base/messages/resmessages1.rmsg:337
+#: data/mp/messages/resmessages1.rmsg:306
 msgid "Power cost and production time similar to Viper"
 msgstr "Üretim maliyeti Engerek ile neredeyse aynı"
 
 #: data/base/messages/resmessages1.rmsg:345
+#: data/mp/messages/resmessages1.rmsg:313
 msgid "Project Medium Body"
 msgstr "Proje Orta Bedeni"
 
 #: data/base/messages/resmessages1.rmsg:346
+#: data/mp/messages/resmessages1.rmsg:314
 msgid "Medium body increases armor and body points"
 msgstr "Orta beden zırh ve beden puanı arttırılmış bedendir"
 
 #: data/base/messages/resmessages1.rmsg:347
+#: data/mp/messages/resmessages1.rmsg:315
 msgid "Good medium tank and support vehicle"
 msgstr "İyi orta tank ve destek aracı yapılabilir"
 
 #: data/base/messages/resmessages1.rmsg:348
+#: data/mp/messages/resmessages1.rmsg:316
 msgid "Average power costs and production times"
 msgstr "Üretimi çok fazla sürmez ve çok enerji gerektirmez"
 
 #: data/base/messages/resmessages1.rmsg:356
+#: data/mp/messages/resmessages1.rmsg:323
 msgid "New Paradigm Medium body"
 msgstr "Yeni Paradigma Orta Bedeni"
 
 #: data/base/messages/resmessages1.rmsg:357
+#: data/mp/messages/resmessages1.rmsg:324
 msgid "Inferior armor and body points to Cobra"
 msgstr "Kobra'dan daha düşük zırh'a ve beden puanına sahip"
 
 #: data/base/messages/resmessages1.rmsg:358
 #: data/base/messages/resmessages3.rmsg:545
+#: data/mp/messages/resmessages1.rmsg:325
+#: data/mp/messages/resmessages3.rmsg:495
 msgid "Faster than Cobra"
 msgstr "Kobra'dan hızlı"
 
 #: data/base/messages/resmessages1.rmsg:359
+#: data/mp/messages/resmessages1.rmsg:326
 msgid "Power cost and production time similar to Cobra"
 msgstr "Üretim maliyeti Kobra ile neredeyse aynı"
 
 #: data/base/messages/resmessages1.rmsg:367
+#: data/mp/messages/resmessages1.rmsg:333
 msgid "Project Heavy Body"
 msgstr "Proje Ağır Bedeni"
 
 #: data/base/messages/resmessages1.rmsg:368
+#: data/mp/messages/resmessages1.rmsg:334
 msgid "Heavy body increases armor and body points"
 msgstr "Ağır beden, Arttırılmış zırh ve beden puanına sahiptir"
 
 #: data/base/messages/resmessages1.rmsg:369
+#: data/mp/messages/resmessages1.rmsg:335
 msgid "Good main battle tank and heavy artillery platform"
 msgstr "İyi ana savaş tankı ve İyi batarya platformu olur"
 
 #: data/base/messages/resmessages1.rmsg:370
+#: data/mp/messages/resmessages1.rmsg:336
 msgid "Very high power costs and very slow to produce"
 msgstr "Çok fazla maliyeti vardır ve çok yavaş üretilir"
 
 #: data/base/messages/resmessages1.rmsg:378
+#: data/mp/messages/resmessages1.rmsg:343
 msgid "New Paradigm Heavy Body"
 msgstr "Yeni Paradigma Ağır Bedeni"
 
 #: data/base/messages/resmessages1.rmsg:379
+#: data/mp/messages/resmessages1.rmsg:344
 msgid "Less armor and body points than Python"
 msgstr "Piton'dan daha az zırh ve beden puanına sahip"
 
 #: data/base/messages/resmessages1.rmsg:380
 #: data/base/messages/resmessages3.rmsg:556
+#: data/mp/messages/resmessages1.rmsg:345
+#: data/mp/messages/resmessages3.rmsg:505
 msgid "Faster than Python"
 msgstr "Pitondan Hızlı"
 
 #: data/base/messages/resmessages1.rmsg:381
+#: data/mp/messages/resmessages1.rmsg:346
 msgid "Power cost and production time the same as Python"
 msgstr "Üretim maliyeti ve süresi Piton ile aynı"
 
@@ -1357,12 +1947,17 @@ msgstr "Üretim maliyeti ve süresi Piton ile aynı"
 #: data/base/messages/resmessages3.rmsg:565
 #: data/base/messages/resmessages3.rmsg:576
 #: data/base/messages/strings/resstrings.txt:559
+#: data/mp/messages/resmessages1.rmsg:353
+#: data/mp/messages/resmessages2.rmsg:383
+#: data/mp/messages/resmessages3.rmsg:513
+#: data/mp/messages/resmessages3.rmsg:523
 #: data/mp/messages/strings/resstrings.txt:594
 msgid "Vehicle Engine Upgrade"
 msgstr "Araç Motoru Güçlendirildi"
 
 #: data/base/messages/resmessages1.rmsg:390
 #: data/base/messages/strings/names.txt:942
+#: data/mp/messages/resmessages1.rmsg:354
 #: data/mp/messages/strings/names.txt:954
 msgid "Fuel Injection Engine"
 msgstr "Yakıt Enjeksiyon Sistemi"
@@ -1389,6 +1984,17 @@ msgstr "Araçların hızı arttırıldı"
 #: data/base/messages/strings/resstrings.txt:562
 #: data/base/messages/strings/resstrings.txt:574
 #: data/base/messages/strings/resstrings.txt:584
+#: data/mp/messages/resmessages1.rmsg:356
+#: data/mp/messages/resmessages1.rmsg:366
+#: data/mp/messages/resmessages2.rmsg:386
+#: data/mp/messages/resmessages2.rmsg:396
+#: data/mp/messages/resmessages2.rmsg:406
+#: data/mp/messages/resmessages3.rmsg:516
+#: data/mp/messages/resmessages3.rmsg:526
+#: data/mp/messages/resmessages3.rmsg:536
+#: data/mp/messages/resmessages3.rmsg:546
+#: data/mp/messages/resmessages3.rmsg:556
+#: data/mp/messages/resmessagesall.rmsg:656
 #: data/mp/messages/strings/resstrings.txt:597
 #: data/mp/messages/strings/resstrings.txt:609
 #: data/mp/messages/strings/resstrings.txt:619
@@ -1400,6 +2006,10 @@ msgstr "Tüm araçlar otomatik olarak geliştirildi"
 #: data/base/messages/resmessages3.rmsg:587
 #: data/base/messages/resmessages3.rmsg:598
 #: data/base/messages/strings/resstrings.txt:571
+#: data/mp/messages/resmessages1.rmsg:363
+#: data/mp/messages/resmessages2.rmsg:393
+#: data/mp/messages/resmessages3.rmsg:533
+#: data/mp/messages/resmessages3.rmsg:543
 #: data/mp/messages/strings/resstrings.txt:606
 msgid "Vehicle Bodies Improved"
 msgstr "Araç Bedenleri Geliştirildi"
@@ -1417,23 +2027,32 @@ msgstr "Kinetik zırh ve beden puanları arttırıldı"
 #: data/base/messages/resmessages1.rmsg:422
 #: data/base/messages/resmessages1.rmsg:433
 #: data/base/messages/resmessages1.rmsg:444
+#: data/mp/messages/resmessages1.rmsg:373
+#: data/mp/messages/resmessages1.rmsg:383
+#: data/mp/messages/resmessages1.rmsg:393
+#: data/mp/messages/resmessages1.rmsg:403
 msgid "New Propulsion Available"
 msgstr "Yeni Yürütücü Kullanılabilir"
 
 #: data/base/messages/resmessages1.rmsg:412
+#: data/mp/messages/resmessages1.rmsg:374
 msgid "Armored Half-tracks"
 msgstr "Zırhlı Yarım Paletler"
 
 #: data/base/messages/resmessages1.rmsg:413
+#: data/mp/messages/resmessages1.rmsg:375
 msgid "Speed: Medium"
 msgstr "Hız: Orta"
 
 #: data/base/messages/resmessages1.rmsg:423
+#: data/mp/messages/resmessages1.rmsg:384
 msgid "Amphibious hover propulsion"
 msgstr "Suda gidebilen HoverCraft Yürütücü"
 
 #: data/base/messages/resmessages1.rmsg:424
 #: data/base/messages/resmessages1.rmsg:446
+#: data/mp/messages/resmessages1.rmsg:385
+#: data/mp/messages/resmessages1.rmsg:405
 msgid "Speed: Fast"
 msgstr "Hız: Hızlı"
 
@@ -1457,6 +2076,23 @@ msgstr "Hız: Hızlı"
 #: data/base/messages/strings/resstrings.txt:776
 #: data/base/messages/strings/resstrings.txt:782
 #: data/base/messages/strings/resstrings.txt:790
+#: data/mp/messages/resmessages1.rmsg:386
+#: data/mp/messages/resmessages1.rmsg:406
+#: data/mp/messages/resmessages1.rmsg:476
+#: data/mp/messages/resmessages1.rmsg:486
+#: data/mp/messages/resmessages23.rmsg:116
+#: data/mp/messages/resmessages23.rmsg:156
+#: data/mp/messages/resmessages2.rmsg:546
+#: data/mp/messages/resmessages2.rmsg:556
+#: data/mp/messages/resmessages2.rmsg:596
+#: data/mp/messages/resmessages2.rmsg:616
+#: data/mp/messages/resmessages2.rmsg:626
+#: data/mp/messages/resmessages2.rmsg:636
+#: data/mp/messages/resmessages3.rmsg:656
+#: data/mp/messages/resmessagesall.rmsg:126
+#: data/mp/messages/resmessagesall.rmsg:266
+#: data/mp/messages/resmessagesall.rmsg:706
+#: data/mp/messages/resmessagesall.rmsg:716
 #: data/mp/messages/strings/resstrings.txt:735
 #: data/mp/messages/strings/resstrings.txt:741
 #: data/mp/messages/strings/resstrings.txt:799
@@ -1467,51 +2103,65 @@ msgid "Body Points: Low"
 msgstr "Beden Puanı: Düşük"
 
 #: data/base/messages/resmessages1.rmsg:434
+#: data/mp/messages/resmessages1.rmsg:394
 msgid "Armored Tracks"
 msgstr "Zırhlı Paletler"
 
 #: data/base/messages/resmessages1.rmsg:435
+#: data/mp/messages/resmessages1.rmsg:395
 msgid "Speed: Slow"
 msgstr "Hız: Yavaş"
 
 #: data/base/messages/resmessages1.rmsg:445
 #: data/base/messages/strings/names.txt:976
+#: data/mp/messages/resmessages1.rmsg:404
 #: data/mp/messages/strings/names.txt:988
 msgid "Wheeled Propulsion"
 msgstr "Tekerlekli Yürütücü"
 
 #: data/base/messages/resmessages1.rmsg:456
+#: data/mp/messages/resmessages1.rmsg:414
 msgid "Light Cannon firing 40mm rounds"
 msgstr "Hafif Topçu 40mm mermi ile ateş eder"
 
 #: data/base/messages/resmessages1.rmsg:467
+#: data/mp/messages/resmessages1.rmsg:424
 msgid "Medium Cannon firing 76mm rounds"
 msgstr "Orta Topçu 76mm mermi ile ateş eder"
 
 #: data/base/messages/resmessages1.rmsg:478
+#: data/mp/messages/resmessages1.rmsg:434
 msgid "Heavy Cannon firing 120 mm rounds"
 msgstr "Ağır Topçu 120mm mermi ile ateş eder"
 
 #: data/base/messages/resmessages1.rmsg:489
+#: data/mp/messages/resmessages1.rmsg:444
 msgid "High Explosive Anti-Tank Cannon Shells"
 msgstr "Yüksek patlayıcı Anti-Tank top mermileri"
 
 #: data/base/messages/resmessages1.rmsg:500
+#: data/mp/messages/resmessages1.rmsg:454
 msgid "Flame-thrower firing Propylene Oxide gel"
 msgstr "Alev Atıcı, Propan Oksit Jel ateşler"
 
 #: data/base/messages/resmessages1.rmsg:501
 #: data/base/messages/resmessages2.rmsg:655
 #: data/base/messages/strings/resstrings.txt:759
+#: data/mp/messages/resmessages1.rmsg:455
+#: data/mp/messages/resmessages2.rmsg:595
+#: data/mp/messages/resmessagesall.rmsg:295
 #: data/mp/messages/strings/resstrings.txt:798
 msgid "Best Targets: Bunkers, wheeled and hover vehicles"
 msgstr "Harika Hedefler: Sığınaklar, Tekerlekli ve HoverCraft araçlar"
 
 #: data/base/messages/resmessages1.rmsg:502
+#: data/mp/messages/resmessages1.rmsg:456
+#: data/mp/messages/resmessagesall.rmsg:296
 msgid "Body Points: Very low"
 msgstr "Beden Puanı: Çok Düşük"
 
 #: data/base/messages/resmessages1.rmsg:511
+#: data/mp/messages/resmessages1.rmsg:464
 msgid "Propylene Oxide gel treated to burn at higher temperatures"
 msgstr "Propan Oksit Jel Yüksek ısıda yakılacak"
 
@@ -1523,14 +2173,17 @@ msgid "Increases Flamer damage"
 msgstr "Alev Atıcı hasarı arttırıldı"
 
 #: data/base/messages/resmessages1.rmsg:522
+#: data/mp/messages/resmessages1.rmsg:474
 msgid "7.62mm machinegun"
 msgstr "7.62mm-Makinalı"
 
 #: data/base/messages/resmessages1.rmsg:533
+#: data/mp/messages/resmessages1.rmsg:484
 msgid "Twin 7.62mm machineguns"
 msgstr "Çift 7.62mm Makinalılar"
 
 #: data/base/messages/resmessages1.rmsg:544
+#: data/mp/messages/resmessages1.rmsg:494
 msgid "Hardened case machinegun bullets"
 msgstr "Güçlendirilmiş Makinalı Mermileri"
 
@@ -1545,14 +2198,18 @@ msgid "Increases Machinegun damage"
 msgstr "Makinalı hasarı arttırıldı"
 
 #: data/base/messages/resmessages1.rmsg:555
+#: data/mp/messages/resmessages1.rmsg:504
 msgid "Armor-Piercing Discard Sabot Bullets"
 msgstr "Zırh Delici Sabotaj Mermileri"
 
 #: data/base/messages/resmessages1.rmsg:566
+#: data/mp/messages/resmessages1.rmsg:514
+#: data/mp/messages/resmessagesall.rmsg:274
 msgid "May be targeted directly or assigned to a sensor turret or tower"
 msgstr "Bir algılayıcı birime yada algılayıcı kuleye bağlanabilir"
 
 #: data/base/messages/resmessages1.rmsg:577
+#: data/mp/messages/resmessages1.rmsg:524
 msgid "Improved high explosive shells"
 msgstr "Patlayıcılığı arttırılmış gülleler"
 
@@ -1564,10 +2221,12 @@ msgid "Increases Mortar damage"
 msgstr "Havan Hasarı Arttırıldı"
 
 #: data/base/messages/resmessages1.rmsg:588
+#: data/mp/messages/resmessages1.rmsg:534
 msgid "Fast firing light anti-vehicle rockets"
 msgstr "Hızlı ateşlenebilir hafif atnti-tank roketleri"
 
 #: data/base/messages/resmessages1.rmsg:589
+#: data/mp/messages/resmessages1.rmsg:535
 msgid "Best Targets: Wheeled and hover vehicles"
 msgstr "Harika Hedefler:Tekerlekli ve HoverCraft Araçlar"
 
@@ -1583,6 +2242,7 @@ msgid "Mini-Rocket Upgrade"
 msgstr "Mini Roket Geliştirmesi"
 
 #: data/base/messages/resmessages1.rmsg:599
+#: data/mp/messages/resmessages1.rmsg:544
 msgid "Fin-stabilization improves flight trajectory"
 msgstr "Sabit yörüngeli fin-stabilize roketler"
 
@@ -1602,6 +2262,7 @@ msgid "All mini-rockets upgraded automatically"
 msgstr "Tüm mini roketler otomatik olarak geliştirildi"
 
 #: data/base/messages/resmessages1.rmsg:610
+#: data/mp/messages/resmessages1.rmsg:554
 msgid "Improved shaped charge warhead"
 msgstr "Hızlı şarj edilebilir savaş başlığı arttırıldı"
 
@@ -1613,6 +2274,7 @@ msgid "Increases Mini-Rocket damage"
 msgstr "Mini-roket hasarı arttırıldı"
 
 #: data/base/messages/resmessages1.rmsg:621
+#: data/mp/messages/resmessages1.rmsg:564
 msgid "Automated reload system"
 msgstr "Otomatik Yükleme Sistemi"
 
@@ -1621,10 +2283,12 @@ msgid "Increases Mini-Rockets ROF"
 msgstr "Mini-Roket ateş oran arttırıldı"
 
 #: data/base/messages/resmessages1.rmsg:632
+#: data/mp/messages/resmessages1.rmsg:574
 msgid "Tracks and directs in-flight rocket to target"
 msgstr "Paletli ve uçuştaki DİvK 'lar direk hedef alınır"
 
 #: data/base/messages/resmessages1.rmsg:643
+#: data/mp/messages/resmessages1.rmsg:584
 msgid "High Explosive Anti-Tank warhead"
 msgstr "Yüksek patlayıcı Anti Tank Savaş Başlığı"
 
@@ -1637,6 +2301,8 @@ msgstr "Roket Hasarı Arttırıldı"
 
 #: data/base/messages/resmessages23.rmsg:4
 #: data/base/messages/resmessages3.rmsg:48
+#: data/mp/messages/resmessages23.rmsg:3
+#: data/mp/messages/resmessages3.rmsg:43
 msgid "Cyborg Propulsion Improved"
 msgstr "Cyborg Yürütücü Geliştirildi"
 
@@ -1654,6 +2320,16 @@ msgstr "Cyborg Yürütücü Geliştirildi"
 #: data/base/messages/strings/resstrings.txt:602
 #: data/base/messages/strings/resstrings.txt:612
 #: data/base/messages/strings/resstrings.txt:622
+#: data/mp/messages/resmessages23.rmsg:4
+#: data/mp/messages/resmessages2.rmsg:414
+#: data/mp/messages/resmessages2.rmsg:424
+#: data/mp/messages/resmessages2.rmsg:434
+#: data/mp/messages/resmessages2.rmsg:444
+#: data/mp/messages/resmessages3.rmsg:44
+#: data/mp/messages/resmessages3.rmsg:564
+#: data/mp/messages/resmessages3.rmsg:574
+#: data/mp/messages/resmessages3.rmsg:584
+#: data/mp/messages/resmessages3.rmsg:594
 #: data/mp/messages/strings/resstrings.txt:627
 #: data/mp/messages/strings/resstrings.txt:637
 #: data/mp/messages/strings/resstrings.txt:647
@@ -1675,6 +2351,16 @@ msgstr "Yeni Zırhlı İnşa"
 #: data/base/messages/strings/resstrings.txt:603
 #: data/base/messages/strings/resstrings.txt:613
 #: data/base/messages/strings/resstrings.txt:623
+#: data/mp/messages/resmessages23.rmsg:5
+#: data/mp/messages/resmessages2.rmsg:415
+#: data/mp/messages/resmessages2.rmsg:425
+#: data/mp/messages/resmessages2.rmsg:435
+#: data/mp/messages/resmessages2.rmsg:445
+#: data/mp/messages/resmessages3.rmsg:45
+#: data/mp/messages/resmessages3.rmsg:565
+#: data/mp/messages/resmessages3.rmsg:575
+#: data/mp/messages/resmessages3.rmsg:585
+#: data/mp/messages/resmessages3.rmsg:595
 #: data/mp/messages/strings/resstrings.txt:628
 #: data/mp/messages/strings/resstrings.txt:638
 #: data/mp/messages/strings/resstrings.txt:648
@@ -1683,6 +2369,7 @@ msgid "Increases Body Points"
 msgstr "Beden Puanı Arttırıldı"
 
 #: data/base/messages/resmessages23.rmsg:16
+#: data/mp/messages/resmessages23.rmsg:14
 msgid "Armored hardpoint with Hyper-Velocity Cannon"
 msgstr "Yüksek hız Topçu Bağlama Noktası"
 
@@ -1693,17 +2380,23 @@ msgid "New Power Generation Technology"
 msgstr "Yeni Jeneratör Teknolojisi"
 
 #: data/base/messages/resmessages23.rmsg:28
+#: data/mp/messages/resmessages23.rmsg:24
 msgid "Gas turbine boosts power output"
 msgstr "Gaz türbini güç çıkışı arttı"
 
 #: data/base/messages/resmessages23.rmsg:29
 #: data/base/messages/resmessages3.rmsg:370
+#: data/mp/messages/resmessages23.rmsg:26
+#: data/mp/messages/resmessages3.rmsg:336
 msgid "All power generators upgraded automatically"
 msgstr "Tüm Güç Jeneratörleri otomatik olarak geliştirildi"
 
 #: data/base/messages/resmessages23.rmsg:49
 #: data/base/messages/resmessages23.rmsg:71
 #: data/base/messages/resmessages3.rmsg:445
+#: data/mp/messages/resmessages23.rmsg:44
+#: data/mp/messages/resmessages23.rmsg:64
+#: data/mp/messages/resmessages3.rmsg:404
 msgid "Improved fire detection systems"
 msgstr "Gelişmiş ateş tespit sistemleri"
 
@@ -1711,16 +2404,24 @@ msgstr "Gelişmiş ateş tespit sistemleri"
 #: data/base/messages/resmessages23.rmsg:81
 #: data/base/messages/resmessagesall.rmsg:59
 #: data/base/messages/resmessagesall.rmsg:81
+#: data/mp/messages/resmessages23.rmsg:53
+#: data/mp/messages/resmessages23.rmsg:73
+#: data/mp/messages/resmessagesall.rmsg:53
+#: data/mp/messages/resmessagesall.rmsg:93
+#: data/mp/messages/resmessagesall.rmsg:103
 msgid "New Systems Tower Available"
 msgstr "Yeni Sistem Kulesi Kullanılabilir"
 
 #: data/base/messages/resmessages23.rmsg:60
+#: data/mp/messages/resmessages23.rmsg:54
 msgid "VTOL CB Tower detects enemy indirect fire batteries"
 msgstr "DİvK -A.B-Kulesi düşman bataryalarını tespit eder"
 
 #: data/base/messages/resmessages23.rmsg:61
 #: data/base/messages/resmessages2.rmsg:369
 #: data/base/messages/strings/resstrings.txt:481
+#: data/mp/messages/resmessages23.rmsg:55
+#: data/mp/messages/resmessages2.rmsg:335
 #: data/mp/messages/strings/resstrings.txt:511
 msgid "Orders assigned VTOLs to attack the enemy batteries"
 msgstr "DİvK lara bataryalara saldır emri verir"
@@ -1728,6 +2429,8 @@ msgstr "DİvK lara bataryalara saldır emri verir"
 #: data/base/messages/resmessages23.rmsg:62
 #: data/base/messages/resmessages2.rmsg:370
 #: data/base/messages/strings/resstrings.txt:482
+#: data/mp/messages/resmessages23.rmsg:56
+#: data/mp/messages/resmessages2.rmsg:336
 #: data/mp/messages/strings/resstrings.txt:512
 msgid "VTOLs attack until enemy battery is suppressed"
 msgstr "DİvKlar düşman bataryaları yok edilene kadar saldırıya devam eder"
@@ -1736,6 +2439,9 @@ msgstr "DİvKlar düşman bataryaları yok edilene kadar saldırıya devam eder"
 #: data/base/messages/resmessages2.rmsg:378
 #: data/base/messages/resmessages3.rmsg:455
 #: data/base/messages/strings/resstrings.txt:485
+#: data/mp/messages/resmessages23.rmsg:63
+#: data/mp/messages/resmessages2.rmsg:343
+#: data/mp/messages/resmessages3.rmsg:413
 #: data/mp/messages/strings/resstrings.txt:515
 msgid "VTOL CB Improved"
 msgstr "DİvK -A.B-Kulesi Geliştirildi"
@@ -1744,6 +2450,9 @@ msgstr "DİvK -A.B-Kulesi Geliştirildi"
 #: data/base/messages/resmessages2.rmsg:380
 #: data/base/messages/resmessages3.rmsg:457
 #: data/base/messages/strings/resstrings.txt:487
+#: data/mp/messages/resmessages23.rmsg:65
+#: data/mp/messages/resmessages2.rmsg:345
+#: data/mp/messages/resmessages3.rmsg:415
 #: data/mp/messages/strings/resstrings.txt:517
 msgid "Extends VTOL CB Range"
 msgstr "DİvK A.B kulesi Görüş Mesafesi Arttırıldı"
@@ -1752,19 +2461,25 @@ msgstr "DİvK A.B kulesi Görüş Mesafesi Arttırıldı"
 #: data/base/messages/resmessages2.rmsg:381
 #: data/base/messages/resmessages3.rmsg:458
 #: data/base/messages/strings/resstrings.txt:488
+#: data/mp/messages/resmessages23.rmsg:66
+#: data/mp/messages/resmessages2.rmsg:346
+#: data/mp/messages/resmessages3.rmsg:416
 #: data/mp/messages/strings/resstrings.txt:518
 msgid "All VTOL CB sensors upgraded automatically"
 msgstr "Tüm DİvK A.B Kuleleri otomatik olarak geliştirildi"
 
 #: data/base/messages/resmessages23.rmsg:82
+#: data/mp/messages/resmessages23.rmsg:74
 msgid "VTOL Strike Tower detects approaching enemies"
 msgstr "DİvK - vuruş kulesi yaklaşam düşmanları tespit eder"
 
 #: data/base/messages/resmessages23.rmsg:83
+#: data/mp/messages/resmessages23.rmsg:75
 msgid "Assigned VTOLs attack the enemy units"
 msgstr "DİvK lara gelen birime saldır emri verir"
 
 #: data/base/messages/resmessages23.rmsg:84
+#: data/mp/messages/resmessages23.rmsg:76
 msgid "Strike mission continues until enemy destroyed or they retreat"
 msgstr "Düşman birimi geri çekilene kadar yada öldürülene kadar saldırı vedam eder"
 
@@ -1774,20 +2489,29 @@ msgstr "Düşman birimi geri çekilene kadar yada öldürülene kadar saldırı 
 #: data/base/messages/resmessagesall.rmsg:37
 #: data/base/messages/strings/resstrings.txt:443
 #: data/base/messages/strings/resstrings.txt:479
+#: data/mp/messages/resmessages23.rmsg:83
+#: data/mp/messages/resmessages2.rmsg:333
+#: data/mp/messages/resmessages3.rmsg:433
+#: data/mp/messages/resmessagesall.rmsg:33
+#: data/mp/messages/resmessagesall.rmsg:283
+#: data/mp/messages/resmessagesall.rmsg:303
 #: data/mp/messages/strings/resstrings.txt:471
 #: data/mp/messages/strings/resstrings.txt:509
 msgid "New Systems Turret Available"
 msgstr "Yeni Sistem Kulesi Kullanılabilir"
 
 #: data/base/messages/resmessages23.rmsg:93
+#: data/mp/messages/resmessages23.rmsg:84
 msgid "VTOL Strike turret used to spot targets"
 msgstr "DİvK-Vuruş kulesi hedefleri görüntülemek için kullanılır"
 
 #: data/base/messages/resmessages23.rmsg:94
+#: data/mp/messages/resmessages23.rmsg:85
 msgid "Assigned VTOLs attack the designated targets"
 msgstr "Belirli hedeflere saldırmak için DİvK larını bağla"
 
 #: data/base/messages/resmessages23.rmsg:95
+#: data/mp/messages/resmessages23.rmsg:86
 msgid "Select new targets to continue the VTOL strikes"
 msgstr "DİvK Saldırılarına devam etmek için başka hedefler seç"
 
@@ -1795,11 +2519,15 @@ msgstr "DİvK Saldırılarına devam etmek için başka hedefler seç"
 #: data/base/messages/resmessages2.rmsg:389
 #: data/base/messages/resmessages3.rmsg:466
 #: data/base/messages/strings/resstrings.txt:499
+#: data/mp/messages/resmessages23.rmsg:93
+#: data/mp/messages/resmessages2.rmsg:353
+#: data/mp/messages/resmessages3.rmsg:423
 #: data/mp/messages/strings/resstrings.txt:529
 msgid "VTOL Strike Improved"
 msgstr "DİvK -Vuruş geliştirildi"
 
 #: data/base/messages/resmessages23.rmsg:104
+#: data/mp/messages/resmessages23.rmsg:94
 msgid "Improved target recognition systems"
 msgstr "Gelişmiş hedef algılama sistemleri"
 
@@ -1807,6 +2535,9 @@ msgstr "Gelişmiş hedef algılama sistemleri"
 #: data/base/messages/resmessages2.rmsg:391
 #: data/base/messages/resmessages3.rmsg:468
 #: data/base/messages/strings/resstrings.txt:501
+#: data/mp/messages/resmessages23.rmsg:95
+#: data/mp/messages/resmessages2.rmsg:355
+#: data/mp/messages/resmessages3.rmsg:425
 #: data/mp/messages/strings/resstrings.txt:531
 msgid "Extends VTOL Strike Range"
 msgstr "DİvK Vuruş mesafesi arttırıldı"
@@ -1815,6 +2546,9 @@ msgstr "DİvK Vuruş mesafesi arttırıldı"
 #: data/base/messages/resmessages2.rmsg:392
 #: data/base/messages/resmessages3.rmsg:469
 #: data/base/messages/strings/resstrings.txt:502
+#: data/mp/messages/resmessages23.rmsg:96
+#: data/mp/messages/resmessages2.rmsg:356
+#: data/mp/messages/resmessages3.rmsg:426
 #: data/mp/messages/strings/resstrings.txt:532
 msgid "All VTOL Strike sensors upgraded automatically"
 msgstr "Tüm DİvK Vuruş algılayıcıları otomatik olarak yükseltildi"
@@ -1826,6 +2560,11 @@ msgstr "Tüm DİvK Vuruş algılayıcıları otomatik olarak yükseltildi"
 #: data/base/messages/resmessages3.rmsg:708
 #: data/base/messages/strings/resstrings.txt:659
 #: data/base/messages/strings/resstrings.txt:677
+#: data/mp/messages/resmessages23.rmsg:103
+#: data/mp/messages/resmessages2.rmsg:493
+#: data/mp/messages/resmessages2.rmsg:513
+#: data/mp/messages/resmessages3.rmsg:623
+#: data/mp/messages/resmessages3.rmsg:643
 #: data/mp/messages/strings/resstrings.txt:694
 #: data/mp/messages/strings/resstrings.txt:712
 msgid "AA Upgrade"
@@ -1834,6 +2573,8 @@ msgstr "AA Geliştirmesi"
 #: data/base/messages/resmessages23.rmsg:115
 #: data/base/messages/resmessages2.rmsg:709
 #: data/base/messages/strings/resstrings.txt:794
+#: data/mp/messages/resmessages23.rmsg:104
+#: data/mp/messages/resmessages2.rmsg:644
 #: data/mp/messages/strings/resstrings.txt:835
 msgid "Self-guided rocket powered shells"
 msgstr "Güdümlü roket mermiler"
@@ -1853,6 +2594,11 @@ msgstr "AA Hedef Tutturması Arttırıldı"
 #: data/base/messages/resmessages3.rmsg:711
 #: data/base/messages/strings/resstrings.txt:662
 #: data/base/messages/strings/resstrings.txt:680
+#: data/mp/messages/resmessages23.rmsg:106
+#: data/mp/messages/resmessages2.rmsg:496
+#: data/mp/messages/resmessages2.rmsg:516
+#: data/mp/messages/resmessages3.rmsg:626
+#: data/mp/messages/resmessages3.rmsg:646
 #: data/mp/messages/strings/resstrings.txt:697
 #: data/mp/messages/strings/resstrings.txt:715
 msgid "All AA weapons upgraded automatically"
@@ -1864,16 +2610,23 @@ msgstr "Tüm AA silahları otomatik olarak geliştirldi"
 #: data/base/messages/resmessages3.rmsg:719
 #: data/base/messages/strings/resstrings.txt:697
 #: data/base/messages/strings/resstrings.txt:703
+#: data/mp/messages/resmessages23.rmsg:113
+#: data/mp/messages/resmessages2.rmsg:543
+#: data/mp/messages/resmessages2.rmsg:553
+#: data/mp/messages/resmessages3.rmsg:653
+#: data/mp/messages/resmessagesall.rmsg:703
 #: data/mp/messages/strings/resstrings.txt:732
 #: data/mp/messages/strings/resstrings.txt:738
 msgid "New Bomb Bay Available"
 msgstr "Yeni Bomba Paketi Kullanılabilir"
 
 #: data/base/messages/resmessages23.rmsg:126
+#: data/mp/messages/resmessages23.rmsg:114
 msgid "Drops incendiary bombs"
 msgstr "Bombalar direk olarak bırakılır"
 
 #: data/base/messages/resmessages23.rmsg:127
+#: data/mp/messages/resmessages23.rmsg:115
 msgid "Best Targets: Bunkers and Hardpoints"
 msgstr "Harika Hedefler: Sığınaklar ve Bağlama Noktaları"
 
@@ -1901,19 +2654,25 @@ msgstr "Bombardıman Hedef Tutturması Arttırıldı"
 #: data/base/messages/resmessages2.rmsg:623
 #: data/base/messages/resmessages3.rmsg:733
 #: data/base/messages/strings/resstrings.txt:716
+#: data/mp/messages/resmessages23.rmsg:126
+#: data/mp/messages/resmessages2.rmsg:566
+#: data/mp/messages/resmessages3.rmsg:666
 #: data/mp/messages/strings/resstrings.txt:751
 msgid "All bomb bays upgraded automatically"
 msgstr "Tüm bombardıman silahları otomatik olarak geliştirildi"
 
 #: data/base/messages/resmessages23.rmsg:148
+#: data/mp/messages/resmessages23.rmsg:134
 msgid "Robotic advances make new chaingun upgrade available"
 msgstr "Robotik gelişme yeni Zincirsilah sistemini getirdi"
 
 #: data/base/messages/resmessages23.rmsg:159
+#: data/mp/messages/resmessages23.rmsg:144
 msgid "Shells detect and home to thermal heat signatures"
 msgstr "Mermiler hedefi ısı alıcıları ile tespit eder"
 
 #: data/base/messages/resmessages23.rmsg:170
+#: data/mp/messages/resmessages23.rmsg:154
 msgid "105mm multi-barrel Howitzer may be assigned to a sensor"
 msgstr "105mm çoklu-bariyel Obüs bir algılayıcıya bağlanabilir"
 
@@ -1922,22 +2681,32 @@ msgstr "105mm çoklu-bariyel Obüs bir algılayıcıya bağlanabilir"
 #: data/base/messages/resmessages2.rmsg:688
 #: data/base/messages/strings/resstrings.txt:775
 #: data/base/messages/strings/resstrings.txt:781
+#: data/mp/messages/resmessages23.rmsg:155
+#: data/mp/messages/resmessages2.rmsg:615
+#: data/mp/messages/resmessages2.rmsg:625
+#: data/mp/messages/resmessagesall.rmsg:265
 #: data/mp/messages/strings/resstrings.txt:814
 #: data/mp/messages/strings/resstrings.txt:822
 msgid "Best Targets: Base Structures, infantry, wheeled vehicles"
 msgstr "Harika Hedefler: Üs Binaları, piyadeler, tekerlekli araçlar"
 
 #: data/base/messages/resmessages23.rmsg:181
+#: data/mp/messages/resmessages23.rmsg:164
 msgid "Multi-barrel, rapid-fire machinegun"
 msgstr "Çoklu-bariyel, hızlı ateşlenebilir makinalı"
 
 #: data/base/messages/resmessages23.rmsg:183
+#: data/mp/messages/resmessages23.rmsg:166
+#: data/mp/messages/resmessagesall.rmsg:686
+#: data/mp/messages/resmessagesall.rmsg:696
 msgid "Replaces all machineguns"
 msgstr "Tüm makinalılar ile değiştirilecek"
 
 #: data/base/messages/resmessages2.rmsg:4
 #: data/base/messages/resmessages3.rmsg:4
 #: data/base/messages/strings/resstrings.txt:41
+#: data/mp/messages/resmessages2.rmsg:3
+#: data/mp/messages/resmessages3.rmsg:3
 #: data/mp/messages/strings/resstrings.txt:45
 msgid "Cyborg Thermal Armor Improved"
 msgstr "Cyborg Termal Zırhı Geliştirildi"
@@ -1945,6 +2714,8 @@ msgstr "Cyborg Termal Zırhı Geliştirildi"
 #: data/base/messages/resmessages2.rmsg:5
 #: data/base/messages/resmessages3.rmsg:5
 #: data/base/messages/strings/resstrings.txt:42
+#: data/mp/messages/resmessages2.rmsg:4
+#: data/mp/messages/resmessages3.rmsg:4
 #: data/mp/messages/strings/resstrings.txt:46
 msgid "Heat resistant armored layers"
 msgstr "Isıya dayanıklı zırh katmanları"
@@ -1960,6 +2731,8 @@ msgstr "Termal Zırh Geliştirildi"
 #: data/base/messages/resmessages2.rmsg:434
 #: data/base/messages/strings/resstrings.txt:32
 #: data/base/messages/strings/resstrings.txt:572
+#: data/mp/messages/resmessages2.rmsg:14
+#: data/mp/messages/resmessages2.rmsg:394
 #: data/mp/messages/strings/resstrings.txt:36
 #: data/mp/messages/strings/resstrings.txt:607
 msgid "Layered dense composite alloys and energy-absorbing fibres"
@@ -1968,6 +2741,7 @@ msgstr "Katmanlı maden alaşımları ve enerji soğurgan lifler"
 #: data/base/messages/resmessages2.rmsg:27
 #: data/base/messages/strings/resstrings.txt:50
 #: data/base/messages/strings/resstrings.txt:84
+#: data/mp/messages/resmessages2.rmsg:24
 #: data/mp/messages/strings/resstrings.txt:54
 #: data/mp/messages/strings/resstrings.txt:104
 msgid "Armed with Bunker Buster rocket"
@@ -1975,18 +2749,21 @@ msgstr "Zırhlandırılmış Sığınak Yokedici Roket"
 
 #: data/base/messages/resmessages2.rmsg:38
 #: data/base/messages/strings/resstrings.txt:66
+#: data/mp/messages/resmessages2.rmsg:34
 #: data/mp/messages/strings/resstrings.txt:86
 msgid "Armed with Cyborg Assault Gun"
 msgstr "Zırhlandırılmış Cyborg Hücüm Silahlı"
 
 #: data/base/messages/resmessages2.rmsg:49
 #: data/base/messages/strings/resstrings.txt:104
+#: data/mp/messages/resmessages2.rmsg:44
 #: data/mp/messages/strings/resstrings.txt:124
 msgid "High-tensile concrete reinforced with boron"
 msgstr "Yüksek gerilimli bor ile desteklenmiş  beton"
 
 #: data/base/messages/resmessages2.rmsg:60
 #: data/base/messages/strings/resstrings.txt:120
+#: data/mp/messages/resmessages2.rmsg:54
 #: data/mp/messages/strings/resstrings.txt:140
 msgid "AA Site with Cyclone Flak Turret"
 msgstr "Girdap AA Uçaksavar Taretli Site"
@@ -1999,6 +2776,11 @@ msgstr "Girdap AA Uçaksavar Taretli Site"
 #: data/base/messages/strings/resstrings.txt:115
 #: data/base/messages/strings/resstrings.txt:121
 #: data/base/messages/strings/resstrings.txt:133
+#: data/mp/messages/resmessages2.rmsg:55
+#: data/mp/messages/resmessages2.rmsg:75
+#: data/mp/messages/resmessages2.rmsg:85
+#: data/mp/messages/resmessages3.rmsg:185
+#: data/mp/messages/resmessages3.rmsg:195
 #: data/mp/messages/strings/resstrings.txt:135
 #: data/mp/messages/strings/resstrings.txt:141
 #: data/mp/messages/strings/resstrings.txt:153
@@ -2007,54 +2789,63 @@ msgstr "Otomatik olarak DİvK 'ları hedef alır"
 
 #: data/base/messages/resmessages2.rmsg:71
 #: data/base/messages/strings/resstrings.txt:126
+#: data/mp/messages/resmessages2.rmsg:64
 #: data/mp/messages/strings/resstrings.txt:146
 msgid "AA Site with Hurricane Gun Turret"
 msgstr "Kasırga AA Uçaksavar Taretli Site"
 
 #: data/base/messages/resmessages2.rmsg:72
 #: data/base/messages/strings/resstrings.txt:127
+#: data/mp/messages/resmessages2.rmsg:65
 #: data/mp/messages/strings/resstrings.txt:147
 msgid "Automatically targets VTOL"
 msgstr "Otomatik olarak DİvK 'ları hedef alır"
 
 #: data/base/messages/resmessages2.rmsg:82
 #: data/base/messages/strings/resstrings.txt:132
+#: data/mp/messages/resmessages2.rmsg:74
 #: data/mp/messages/strings/resstrings.txt:152
 msgid "AA Site with Whirlwind Gun Turret"
 msgstr "Fırtına AA Uçaksavar Taretli Site"
 
 #: data/base/messages/resmessages2.rmsg:93
 #: data/base/messages/strings/resstrings.txt:114
+#: data/mp/messages/resmessages2.rmsg:84
 #: data/mp/messages/strings/resstrings.txt:134
 msgid "AA Site with Tornado Flak Turret"
 msgstr "Hortum AA Uçaksavar Taretli Site"
 
 #: data/base/messages/resmessages2.rmsg:104
 #: data/base/messages/strings/resstrings.txt:142
+#: data/mp/messages/resmessages2.rmsg:94
 #: data/mp/messages/strings/resstrings.txt:162
 msgid "Indirect fire rocket battery"
 msgstr "Endirek Roket Bataryası"
 
 #: data/base/messages/resmessages2.rmsg:115
 #: data/base/messages/strings/resstrings.txt:154
+#: data/mp/messages/resmessages2.rmsg:104
 #: data/mp/messages/strings/resstrings.txt:176
 msgid "Armored Bombard battery pit"
 msgstr "Zırhlandırılmış Bombardıman Kuyusu"
 
 #: data/base/messages/resmessages2.rmsg:126
 #: data/base/messages/strings/resstrings.txt:168
+#: data/mp/messages/resmessages2.rmsg:114
 #: data/mp/messages/strings/resstrings.txt:190
 msgid "Armored howitzer emplacement"
 msgstr "Sabitlenmiş obüs topu"
 
 #: data/base/messages/resmessages2.rmsg:137
 #: data/base/messages/strings/resstrings.txt:174
+#: data/mp/messages/resmessages2.rmsg:124
 #: data/mp/messages/strings/resstrings.txt:196
 msgid "Armored Ground Shaker howitzer emplacement"
 msgstr "Sabitlenmiş Yer Sarsıcı Obüs"
 
 #: data/base/messages/resmessages2.rmsg:148
 #: data/base/messages/strings/resstrings.txt:160
+#: data/mp/messages/resmessages2.rmsg:134
 #: data/mp/messages/strings/resstrings.txt:182
 msgid "Armored Pepperpot mortar battery pit"
 msgstr "Zırhlandırılmış BiberPot Kuyusu"
@@ -2063,6 +2854,8 @@ msgstr "Zırhlandırılmış BiberPot Kuyusu"
 #: data/base/messages/resmessages2.rmsg:170
 #: data/base/messages/strings/resstrings.txt:180
 #: data/base/messages/strings/resstrings.txt:186
+#: data/mp/messages/resmessages2.rmsg:144
+#: data/mp/messages/resmessages2.rmsg:154
 #: data/mp/messages/strings/resstrings.txt:204
 #: data/mp/messages/strings/resstrings.txt:210
 msgid "Armored Hellstorm howitzer emplacement"
@@ -2070,6 +2863,7 @@ msgstr "Sabitlenmiş Dönüşlü Obüs"
 
 #: data/base/messages/resmessages2.rmsg:181
 #: data/base/messages/strings/resstrings.txt:192
+#: data/mp/messages/resmessages2.rmsg:164
 #: data/mp/messages/strings/resstrings.txt:216
 msgid "Armored strongpoint with Tank Killer rocket"
 msgstr "Sabitlenmiş Tank Öldürücü"
@@ -2088,6 +2882,17 @@ msgstr "Sabitlenmiş Tank Öldürücü"
 #: data/base/messages/strings/resstrings.txt:205
 #: data/base/messages/strings/resstrings.txt:219
 #: data/base/messages/strings/resstrings.txt:225
+#: data/mp/messages/resmessages2.rmsg:165
+#: data/mp/messages/resmessages2.rmsg:175
+#: data/mp/messages/resmessages2.rmsg:185
+#: data/mp/messages/resmessages2.rmsg:195
+#: data/mp/messages/resmessages2.rmsg:205
+#: data/mp/messages/resmessages3.rmsg:225
+#: data/mp/messages/resmessages3.rmsg:235
+#: data/mp/messages/resmessages3.rmsg:245
+#: data/mp/messages/resmessages3.rmsg:255
+#: data/mp/messages/resmessagesall.rmsg:215
+#: data/mp/messages/resmessagesall.rmsg:455
 #: data/mp/messages/strings/resstrings.txt:217
 #: data/mp/messages/strings/resstrings.txt:223
 #: data/mp/messages/strings/resstrings.txt:229
@@ -2098,54 +2903,63 @@ msgstr "Menzillindeki düşmanları otomatik olarak hedef alır"
 
 #: data/base/messages/resmessages2.rmsg:192
 #: data/base/messages/strings/resstrings.txt:198
+#: data/mp/messages/resmessages2.rmsg:174
 #: data/mp/messages/strings/resstrings.txt:222
 msgid "Armored strongpoint with Hyper-Velocity Cannon"
 msgstr "Sabitlenmiş Yüksek Hız Topu"
 
 #: data/base/messages/resmessages2.rmsg:203
 #: data/base/messages/strings/resstrings.txt:204
+#: data/mp/messages/resmessages2.rmsg:184
 #: data/mp/messages/strings/resstrings.txt:228
 msgid "Armored strongpoint with Inferno Flamer"
 msgstr "Sabitlenmiş Cehennem Alevi Atıcı"
 
 #: data/base/messages/resmessages2.rmsg:214
 #: data/base/messages/strings/resstrings.txt:218
+#: data/mp/messages/resmessages2.rmsg:194
 #: data/mp/messages/strings/resstrings.txt:246
 msgid "Armored strongpoint with Assault Cannon"
 msgstr "Sabitlenmiş Hücüm Topu"
 
 #: data/base/messages/resmessages2.rmsg:225
 #: data/base/messages/strings/resstrings.txt:224
+#: data/mp/messages/resmessages2.rmsg:204
 #: data/mp/messages/strings/resstrings.txt:252
 msgid "Reinforced tower with Assault Gun"
 msgstr "Sabitlenmiş Hücüm Silahı"
 
 #: data/base/messages/resmessages2.rmsg:236
 #: data/base/messages/strings/resstrings.txt:288
+#: data/mp/messages/resmessages2.rmsg:214
 #: data/mp/messages/strings/resstrings.txt:316
 msgid "Armored hardpoint with Assault Gun"
 msgstr "Hücüm Silahı Bağlama Noktası"
 
 #: data/base/messages/resmessages2.rmsg:247
 #: data/base/messages/strings/resstrings.txt:294
+#: data/mp/messages/resmessages2.rmsg:224
 #: data/mp/messages/strings/resstrings.txt:322
 msgid "Armored hardpoint with Assault Cannon"
 msgstr "Hücüm Topu Bağlama Noktası"
 
 #: data/base/messages/resmessages2.rmsg:258
 #: data/base/messages/strings/resstrings.txt:302
+#: data/mp/messages/resmessages2.rmsg:234
 #: data/mp/messages/strings/resstrings.txt:330
 msgid "Armored hardpoint with Inferno flamer"
 msgstr "Cehennem Alevi Atıcı Bağlama Noktası"
 
 #: data/base/messages/resmessages2.rmsg:269
 #: data/base/messages/strings/resstrings.txt:308
+#: data/mp/messages/resmessages2.rmsg:244
 #: data/mp/messages/strings/resstrings.txt:336
 msgid "Armored hardpoint with Tank Killer AT missile"
 msgstr "Tank Öldürücü A.T Bağlama Noktası"
 
 #: data/base/messages/resmessages2.rmsg:280
 #: data/base/messages/strings/resstrings.txt:334
+#: data/mp/messages/resmessages2.rmsg:254
 #: data/mp/messages/strings/resstrings.txt:362
 msgid "New robotic repair techniques"
 msgstr "Yeni robotik tamir teknikleri"
@@ -2153,12 +2967,14 @@ msgstr "Yeni robotik tamir teknikleri"
 #: data/base/messages/resmessages2.rmsg:291
 #: data/base/messages/strings/names.txt:786
 #: data/base/messages/strings/resstrings.txt:348
+#: data/mp/messages/resmessages2.rmsg:264
 #: data/mp/messages/strings/resstrings.txt:376
 msgid "Robotic Cyborg Production"
 msgstr "Robotik Cyborg Üretimi"
 
 #: data/base/messages/resmessages2.rmsg:302
 #: data/base/messages/strings/resstrings.txt:366
+#: data/mp/messages/resmessages2.rmsg:274
 #: data/mp/messages/strings/resstrings.txt:394
 msgid "New Robotic Techniques improve factory production"
 msgstr "Yeni Robotik Teknikler ile Fabrika Üretimi Gelişti"
@@ -2172,6 +2988,7 @@ msgstr "Fabrika Üretim Hızı Artırıldı"
 #: data/base/messages/resmessages2.rmsg:313
 #: data/base/messages/strings/names.txt:835
 #: data/base/messages/strings/resstrings.txt:390
+#: data/mp/messages/resmessages2.rmsg:284
 #: data/mp/messages/strings/names.txt:845
 #: data/mp/messages/strings/resstrings.txt:418
 msgid "Dedicated Synaptic Link Data Analysis"
@@ -2180,6 +2997,7 @@ msgstr "Gelişmiş Sinaptik Bağlantı Veri Analizi"
 #: data/base/messages/resmessages2.rmsg:324
 #: data/base/messages/strings/names.txt:808
 #: data/base/messages/strings/resstrings.txt:400
+#: data/mp/messages/resmessages2.rmsg:294
 #: data/mp/messages/strings/names.txt:818
 #: data/mp/messages/strings/resstrings.txt:428
 msgid "Hardened Base Structure Materials"
@@ -2188,6 +3006,7 @@ msgstr "Sertleştirilmiş Üs Binası Materyalleri"
 #: data/base/messages/resmessages2.rmsg:335
 #: data/base/messages/strings/names.txt:851
 #: data/base/messages/strings/resstrings.txt:412
+#: data/mp/messages/resmessages2.rmsg:304
 #: data/mp/messages/strings/resstrings.txt:440
 msgid "Robotic VTOL Production"
 msgstr "Robotik DİvK Üretimi"
@@ -2195,6 +3014,8 @@ msgstr "Robotik DİvK Üretimi"
 #: data/base/messages/resmessages2.rmsg:336
 #: data/base/messages/resmessages3.rmsg:413
 #: data/base/messages/strings/resstrings.txt:413
+#: data/mp/messages/resmessages2.rmsg:305
+#: data/mp/messages/resmessages3.rmsg:375
 #: data/mp/messages/strings/resstrings.txt:441
 msgid "Increases VTOL factory output"
 msgstr "DİvK Fabrikası üretim gücü arttırıldı"
@@ -2202,6 +3023,8 @@ msgstr "DİvK Fabrikası üretim gücü arttırıldı"
 #: data/base/messages/resmessages2.rmsg:337
 #: data/base/messages/resmessages3.rmsg:414
 #: data/base/messages/strings/resstrings.txt:414
+#: data/mp/messages/resmessages2.rmsg:306
+#: data/mp/messages/resmessages3.rmsg:376
 #: data/mp/messages/strings/resstrings.txt:442
 msgid "All VTOL factories upgraded automatically"
 msgstr "Tüm DİvK Fabrikaları otomatik olarak geliştirildi"
@@ -2209,6 +3032,8 @@ msgstr "Tüm DİvK Fabrikaları otomatik olarak geliştirildi"
 #: data/base/messages/resmessages2.rmsg:345
 #: data/base/messages/resmessages3.rmsg:422
 #: data/base/messages/strings/resstrings.txt:421
+#: data/mp/messages/resmessages2.rmsg:313
+#: data/mp/messages/resmessages3.rmsg:383
 #: data/mp/messages/strings/resstrings.txt:449
 msgid "VTOL Rearming Times Reduced"
 msgstr "DİvK Yeniden Silahlandırma Süresi Kısaltıldı"
@@ -2216,6 +3041,7 @@ msgstr "DİvK Yeniden Silahlandırma Süresi Kısaltıldı"
 #: data/base/messages/resmessages2.rmsg:346
 #: data/base/messages/strings/names.txt:843
 #: data/base/messages/strings/resstrings.txt:422
+#: data/mp/messages/resmessages2.rmsg:314
 #: data/mp/messages/strings/names.txt:853
 #: data/mp/messages/strings/resstrings.txt:450
 msgid "Automated VTOL Rearming"
@@ -2231,24 +3057,29 @@ msgstr "Yeniden Silahlandırma süresini azaltır"
 #: data/base/messages/resmessages2.rmsg:348
 #: data/base/messages/resmessages3.rmsg:425
 #: data/base/messages/strings/resstrings.txt:424
+#: data/mp/messages/resmessages2.rmsg:316
+#: data/mp/messages/resmessages3.rmsg:386
 #: data/mp/messages/strings/resstrings.txt:452
 msgid "All rearming pads upgraded automatically"
 msgstr "Tüm Y. Silahlandır Rampaları otomatik olarak geliştirildi"
 
 #: data/base/messages/resmessages2.rmsg:356
 #: data/base/messages/strings/resstrings.txt:459
+#: data/mp/messages/resmessages2.rmsg:323
 #: data/mp/messages/strings/resstrings.txt:489
 msgid "Improved Sensor Tower Available"
 msgstr "Gelişmiş Algılayıcı Kulesi Kullanılabilir"
 
 #: data/base/messages/resmessages2.rmsg:357
 #: data/base/messages/strings/resstrings.txt:460
+#: data/mp/messages/resmessages2.rmsg:324
 #: data/mp/messages/strings/resstrings.txt:490
 msgid "New construction techniques improve tower"
 msgstr "Yeni inşa teknikleriyle geliştirilmiş kule"
 
 #: data/base/messages/resmessages2.rmsg:358
 #: data/base/messages/strings/resstrings.txt:461
+#: data/mp/messages/resmessages2.rmsg:325
 #: data/mp/messages/strings/resstrings.txt:491
 msgid "Replaces existing sensor tower"
 msgstr "Algılayıcı Kule ile değiştirilecek"
@@ -2257,24 +3088,30 @@ msgstr "Algılayıcı Kule ile değiştirilecek"
 #: data/base/messages/resmessagesall.rmsg:51
 #: data/base/messages/resmessagesall.rmsg:62
 #: data/base/messages/strings/resstrings.txt:462
+#: data/mp/messages/resmessages2.rmsg:326
+#: data/mp/messages/resmessagesall.rmsg:46
+#: data/mp/messages/resmessagesall.rmsg:56
 #: data/mp/messages/strings/resstrings.txt:492
 msgid "May be assigned as spotter for indirect fire weapons"
 msgstr "Endirek silahlara gözcü görevi yapabilir"
 
 #: data/base/messages/resmessages2.rmsg:368
 #: data/base/messages/strings/resstrings.txt:480
+#: data/mp/messages/resmessages2.rmsg:334
 #: data/mp/messages/strings/resstrings.txt:510
 msgid "VTOL CB turret detects enemy indirect fire batteries"
 msgstr "DİvK A.B Kulesi düşman endirek silah bataryalarını tespit eder"
 
 #: data/base/messages/resmessages2.rmsg:390
 #: data/base/messages/strings/resstrings.txt:500
+#: data/mp/messages/resmessages2.rmsg:354
 #: data/mp/messages/strings/resstrings.txt:530
 msgid "New target recognition systems"
 msgstr "Yeni Hedef Bulma Sistemleri"
 
 #: data/base/messages/resmessages2.rmsg:400
 #: data/base/messages/strings/resstrings.txt:527
+#: data/mp/messages/resmessages2.rmsg:363
 #: data/mp/messages/strings/resstrings.txt:562
 msgid "Collective Light Body"
 msgstr "Kollektif Hafif Bedeni"
@@ -2282,24 +3119,29 @@ msgstr "Kollektif Hafif Bedeni"
 #: data/base/messages/resmessages2.rmsg:401
 #: data/base/messages/resmessages3.rmsg:533
 #: data/base/messages/strings/resstrings.txt:528
+#: data/mp/messages/resmessages2.rmsg:364
+#: data/mp/messages/resmessages3.rmsg:484
 #: data/mp/messages/strings/resstrings.txt:563
 msgid "Superior armor and body points to Viper"
 msgstr "Engerek'den daha fazla zırh ve beden puanına sahip"
 
 #: data/base/messages/resmessages2.rmsg:402
 #: data/base/messages/strings/resstrings.txt:529
+#: data/mp/messages/resmessages2.rmsg:365
 #: data/mp/messages/strings/resstrings.txt:564
 msgid "Slower than Viper"
 msgstr "Engerek'den daha yavaş"
 
 #: data/base/messages/resmessages2.rmsg:403
 #: data/base/messages/strings/resstrings.txt:530
+#: data/mp/messages/resmessages2.rmsg:366
 #: data/mp/messages/strings/resstrings.txt:565
 msgid "High power costs and slower to produce than Viper"
 msgstr "Engerek'e göre üretimde daha uzun sürer ve maliyeti fazladır"
 
 #: data/base/messages/resmessages2.rmsg:411
 #: data/base/messages/strings/resstrings.txt:539
+#: data/mp/messages/resmessages2.rmsg:373
 #: data/mp/messages/strings/resstrings.txt:574
 msgid "Collective Medium Body"
 msgstr "Kollektifin Orta Bedeni"
@@ -2307,18 +3149,22 @@ msgstr "Kollektifin Orta Bedeni"
 #: data/base/messages/resmessages2.rmsg:412
 #: data/base/messages/resmessages3.rmsg:544
 #: data/base/messages/strings/resstrings.txt:540
+#: data/mp/messages/resmessages2.rmsg:374
+#: data/mp/messages/resmessages3.rmsg:494
 #: data/mp/messages/strings/resstrings.txt:575
 msgid "Superior armor and body points to Cobra"
 msgstr "Kobra'dan daha fazla zırh ve beden puanına sahip"
 
 #: data/base/messages/resmessages2.rmsg:413
 #: data/base/messages/strings/resstrings.txt:541
+#: data/mp/messages/resmessages2.rmsg:375
 #: data/mp/messages/strings/resstrings.txt:576
 msgid "Slower than Cobra"
 msgstr "Kobra'dan daha yavaş"
 
 #: data/base/messages/resmessages2.rmsg:414
 #: data/base/messages/strings/resstrings.txt:542
+#: data/mp/messages/resmessages2.rmsg:376
 #: data/mp/messages/strings/resstrings.txt:577
 msgid "High power costs and slower to produce than Cobra"
 msgstr "Kobraya göre üretimi daha uzun sürer ve maliyeti daha fazladır"
@@ -2326,6 +3172,7 @@ msgstr "Kobraya göre üretimi daha uzun sürer ve maliyeti daha fazladır"
 #: data/base/messages/resmessages2.rmsg:423
 #: data/base/messages/strings/names.txt:945
 #: data/base/messages/strings/resstrings.txt:560
+#: data/mp/messages/resmessages2.rmsg:384
 #: data/mp/messages/strings/names.txt:957
 #: data/mp/messages/strings/resstrings.txt:595
 msgid "Turbo-Charged Engine"
@@ -2334,6 +3181,9 @@ msgstr "Çift Motor"
 #: data/base/messages/resmessages2.rmsg:444
 #: data/base/messages/resmessages3.rmsg:609
 #: data/base/messages/strings/resstrings.txt:581
+#: data/mp/messages/resmessages2.rmsg:403
+#: data/mp/messages/resmessages3.rmsg:553
+#: data/mp/messages/resmessagesall.rmsg:653
 #: data/mp/messages/strings/resstrings.txt:616
 msgid "Vehicle Thermal Armor Improved"
 msgstr "Araç Termal Zırhı Geliştirildi"
@@ -2341,6 +3191,9 @@ msgstr "Araç Termal Zırhı Geliştirildi"
 #: data/base/messages/resmessages2.rmsg:445
 #: data/base/messages/resmessages3.rmsg:610
 #: data/base/messages/strings/resstrings.txt:582
+#: data/mp/messages/resmessages2.rmsg:404
+#: data/mp/messages/resmessages3.rmsg:554
+#: data/mp/messages/resmessagesall.rmsg:654
 #: data/mp/messages/strings/resstrings.txt:617
 msgid "Heat-resistant armored layers"
 msgstr "Isıya Dayanıklı Zırh Katmanları"
@@ -2366,6 +3219,16 @@ msgstr "Artırılmış Termal Zırh"
 #: data/base/messages/strings/resstrings.txt:601
 #: data/base/messages/strings/resstrings.txt:611
 #: data/base/messages/strings/resstrings.txt:621
+#: data/mp/messages/resmessages2.rmsg:413
+#: data/mp/messages/resmessages2.rmsg:423
+#: data/mp/messages/resmessages2.rmsg:433
+#: data/mp/messages/resmessages2.rmsg:443
+#: data/mp/messages/resmessages3.rmsg:563
+#: data/mp/messages/resmessages3.rmsg:573
+#: data/mp/messages/resmessages3.rmsg:583
+#: data/mp/messages/resmessages3.rmsg:593
+#: data/mp/messages/resmessages3.rmsg:603
+#: data/mp/messages/resmessages3.rmsg:613
 #: data/mp/messages/strings/resstrings.txt:626
 #: data/mp/messages/strings/resstrings.txt:636
 #: data/mp/messages/strings/resstrings.txt:646
@@ -2376,6 +3239,8 @@ msgstr "Araç Yürütücüsü Geliştirildi"
 #: data/base/messages/resmessages2.rmsg:458
 #: data/base/messages/resmessages3.rmsg:623
 #: data/base/messages/strings/resstrings.txt:594
+#: data/mp/messages/resmessages2.rmsg:416
+#: data/mp/messages/resmessages3.rmsg:566
 #: data/mp/messages/strings/resstrings.txt:629
 msgid "All half-tracks upgraded automatically"
 msgstr "Tüm Yarım Paletler otomatik olarak geliştirildi"
@@ -2383,6 +3248,8 @@ msgstr "Tüm Yarım Paletler otomatik olarak geliştirildi"
 #: data/base/messages/resmessages2.rmsg:469
 #: data/base/messages/resmessages3.rmsg:634
 #: data/base/messages/strings/resstrings.txt:604
+#: data/mp/messages/resmessages2.rmsg:426
+#: data/mp/messages/resmessages3.rmsg:576
 #: data/mp/messages/strings/resstrings.txt:639
 msgid "All hovers upgraded automatically"
 msgstr "Tüm Hovercraftlar otomatik olarak geliştirildi"
@@ -2390,6 +3257,8 @@ msgstr "Tüm Hovercraftlar otomatik olarak geliştirildi"
 #: data/base/messages/resmessages2.rmsg:480
 #: data/base/messages/resmessages3.rmsg:645
 #: data/base/messages/strings/resstrings.txt:614
+#: data/mp/messages/resmessages2.rmsg:436
+#: data/mp/messages/resmessages3.rmsg:586
 #: data/mp/messages/strings/resstrings.txt:649
 msgid "All tracks upgraded automatically"
 msgstr "Tüm Paletler otomatik olarak geliştirildi"
@@ -2397,6 +3266,8 @@ msgstr "Tüm Paletler otomatik olarak geliştirildi"
 #: data/base/messages/resmessages2.rmsg:491
 #: data/base/messages/resmessages3.rmsg:656
 #: data/base/messages/strings/resstrings.txt:624
+#: data/mp/messages/resmessages2.rmsg:446
+#: data/mp/messages/resmessages3.rmsg:596
 #: data/mp/messages/strings/resstrings.txt:659
 msgid "All wheels upgraded automatically"
 msgstr "Tüm Tekerlekler otomatik olarak geliştirildi"
@@ -2409,6 +3280,10 @@ msgstr "Tüm Tekerlekler otomatik olarak geliştirildi"
 #: data/base/messages/strings/resstrings.txt:641
 #: data/base/messages/strings/resstrings.txt:647
 #: data/base/messages/strings/resstrings.txt:653
+#: data/mp/messages/resmessages2.rmsg:453
+#: data/mp/messages/resmessages2.rmsg:463
+#: data/mp/messages/resmessages2.rmsg:473
+#: data/mp/messages/resmessages2.rmsg:483
 #: data/mp/messages/strings/resstrings.txt:670
 #: data/mp/messages/strings/resstrings.txt:676
 #: data/mp/messages/strings/resstrings.txt:682
@@ -2418,6 +3293,7 @@ msgstr "Yeni AA Tareti Kullanılabilir"
 
 #: data/base/messages/resmessages2.rmsg:500
 #: data/base/messages/strings/resstrings.txt:636
+#: data/mp/messages/resmessages2.rmsg:454
 #: data/mp/messages/strings/resstrings.txt:671
 msgid "Twin 80mm flak weapon"
 msgstr "Çift 80mm uçaksavar silahı "
@@ -2430,6 +3306,13 @@ msgstr "Çift 80mm uçaksavar silahı "
 #: data/base/messages/strings/resstrings.txt:643
 #: data/base/messages/strings/resstrings.txt:649
 #: data/base/messages/strings/resstrings.txt:655
+#: data/mp/messages/resmessages2.rmsg:455
+#: data/mp/messages/resmessages2.rmsg:465
+#: data/mp/messages/resmessages2.rmsg:475
+#: data/mp/messages/resmessages2.rmsg:485
+#: data/mp/messages/resmessagesall.rmsg:595
+#: data/mp/messages/resmessagesall.rmsg:645
+#: data/mp/messages/resmessagesall.rmsg:675
 #: data/mp/messages/strings/resstrings.txt:672
 #: data/mp/messages/strings/resstrings.txt:678
 #: data/mp/messages/strings/resstrings.txt:684
@@ -2439,24 +3322,29 @@ msgstr "Sadece hava birimlerini hedefler"
 
 #: data/base/messages/resmessages2.rmsg:511
 #: data/base/messages/strings/resstrings.txt:642
+#: data/mp/messages/resmessages2.rmsg:464
 #: data/mp/messages/strings/resstrings.txt:677
 msgid "Quad 80mm flak weapon"
 msgstr "Dörtlü 80mm uçaksavar silahı"
 
 #: data/base/messages/resmessages2.rmsg:522
 #: data/base/messages/strings/resstrings.txt:648
+#: data/mp/messages/resmessages2.rmsg:474
 #: data/mp/messages/strings/resstrings.txt:683
 msgid "30mm Anti-Aircraft machinegun"
 msgstr "30mm Uçaksavar makinalı"
 
 #: data/base/messages/resmessages2.rmsg:533
 #: data/base/messages/strings/resstrings.txt:654
+#: data/mp/messages/resmessages2.rmsg:484
+#: data/mp/messages/resmessagesall.rmsg:594
 #: data/mp/messages/strings/resstrings.txt:689
 msgid "Quad 30mm Anti-Aircraft machinegun"
 msgstr "Dörtlü 30mm Uçaksavar makinalı"
 
 #: data/base/messages/resmessages2.rmsg:544
 #: data/base/messages/strings/resstrings.txt:660
+#: data/mp/messages/resmessages2.rmsg:494
 #: data/mp/messages/strings/resstrings.txt:695
 msgid "Detects and locks-on to VTOL engine emissions"
 msgstr "DİvK ların motor emisyonlarını tespit eder ve kilitlenir"
@@ -2464,12 +3352,15 @@ msgstr "DİvK ların motor emisyonlarını tespit eder ve kilitlenir"
 #: data/base/messages/resmessages2.rmsg:554
 #: data/base/messages/resmessages3.rmsg:697
 #: data/base/messages/strings/resstrings.txt:669
+#: data/mp/messages/resmessages2.rmsg:503
+#: data/mp/messages/resmessages3.rmsg:633
 #: data/mp/messages/strings/resstrings.txt:704
 msgid "AA Flak Upgrade"
 msgstr "AA Uçaksavar Geliştirmesi"
 
 #: data/base/messages/resmessages2.rmsg:555
 #: data/base/messages/strings/resstrings.txt:670
+#: data/mp/messages/resmessages2.rmsg:504
 #: data/mp/messages/strings/resstrings.txt:705
 msgid "High Explosive Flak shards"
 msgstr "Patlayıcılığı arttırılmış Uçaksavar Mermileri"
@@ -2484,12 +3375,15 @@ msgstr "AA uçaksavar hasarı arttırıldı"
 #: data/base/messages/resmessages2.rmsg:557
 #: data/base/messages/resmessages3.rmsg:700
 #: data/base/messages/strings/resstrings.txt:672
+#: data/mp/messages/resmessages2.rmsg:506
+#: data/mp/messages/resmessages3.rmsg:636
 #: data/mp/messages/strings/resstrings.txt:707
 msgid "All AA flak weapons upgraded automatically"
 msgstr "Tüm AA uçaksavarlar otomatik olarak geliştirildi"
 
 #: data/base/messages/resmessages2.rmsg:566
 #: data/base/messages/strings/resstrings.txt:678
+#: data/mp/messages/resmessages2.rmsg:514
 #: data/mp/messages/strings/resstrings.txt:713
 msgid "Recoil loaded AA ammunition hopper"
 msgstr "Geri Tepmeli AA Mühimmat Ateşleyici"
@@ -2506,6 +3400,8 @@ msgstr "AA Hedef Tutturması Arttırıldı"
 #: data/base/messages/resmessages2.rmsg:587
 #: data/base/messages/strings/resstrings.txt:685
 #: data/base/messages/strings/resstrings.txt:691
+#: data/mp/messages/resmessages2.rmsg:523
+#: data/mp/messages/resmessages2.rmsg:533
 #: data/mp/messages/strings/resstrings.txt:720
 #: data/mp/messages/strings/resstrings.txt:726
 msgid "New Proximity Bomb Turret Available"
@@ -2513,6 +3409,7 @@ msgstr "Yeni Yakın Bomba Demetik Kullılabilir"
 
 #: data/base/messages/resmessages2.rmsg:577
 #: data/base/messages/strings/resstrings.txt:686
+#: data/mp/messages/resmessages2.rmsg:524
 #: data/mp/messages/strings/resstrings.txt:721
 msgid "Bomb turret explodes in proximity to enemy"
 msgstr "Bomba düşmanın yakınlarında patlar"
@@ -2521,6 +3418,8 @@ msgstr "Bomba düşmanın yakınlarında patlar"
 #: data/base/messages/resmessages2.rmsg:589
 #: data/base/messages/strings/resstrings.txt:687
 #: data/base/messages/strings/resstrings.txt:693
+#: data/mp/messages/resmessages2.rmsg:525
+#: data/mp/messages/resmessages2.rmsg:535
 #: data/mp/messages/strings/resstrings.txt:722
 #: data/mp/messages/strings/resstrings.txt:728
 msgid "Best Targets: Base Structures and Defenses"
@@ -2528,30 +3427,35 @@ msgstr "Harika Hedefler: Üs Binaları ve Savunmalar"
 
 #: data/base/messages/resmessages2.rmsg:588
 #: data/base/messages/strings/resstrings.txt:692
+#: data/mp/messages/resmessages2.rmsg:534
 #: data/mp/messages/strings/resstrings.txt:727
 msgid "Superbomb turret explodes in proximity to enemy"
 msgstr "Süper Bomba Tareti düşmanın yakınlarında patlar"
 
 #: data/base/messages/resmessages2.rmsg:599
 #: data/base/messages/strings/resstrings.txt:698
+#: data/mp/messages/resmessages2.rmsg:544
 #: data/mp/messages/strings/resstrings.txt:733
 msgid "Drops High Explosive Cluster bombs"
 msgstr "Yüksek Patlayıcılı Demet Bombalarını Bırakır"
 
 #: data/base/messages/resmessages2.rmsg:600
 #: data/base/messages/strings/resstrings.txt:699
+#: data/mp/messages/resmessages2.rmsg:545
 #: data/mp/messages/strings/resstrings.txt:734
 msgid "Best Targets: Base Structures"
 msgstr "Harika Hedefler: Üs Binaları"
 
 #: data/base/messages/resmessages2.rmsg:610
 #: data/base/messages/strings/resstrings.txt:704
+#: data/mp/messages/resmessages2.rmsg:554
 #: data/mp/messages/strings/resstrings.txt:739
 msgid "Drops High Explosive Armor Piercing bombs"
 msgstr "Patlayılığı Arttırılmış Zırh Delici Bombalar"
 
 #: data/base/messages/resmessages2.rmsg:611
 #: data/base/messages/strings/resstrings.txt:705
+#: data/mp/messages/resmessages2.rmsg:555
 #: data/mp/messages/strings/resstrings.txt:740
 msgid "Best Targets: Defenses"
 msgstr "Harika Hedefler: Savunmalar"
@@ -2564,54 +3468,64 @@ msgstr "Termal emisyonlara kilitlenir"
 
 #: data/base/messages/resmessages2.rmsg:632
 #: data/base/messages/strings/resstrings.txt:730
+#: data/mp/messages/resmessages2.rmsg:574
 #: data/mp/messages/strings/resstrings.txt:765
 msgid "Hyper-velocity automatic-cannon firing 88mm rounds"
 msgstr "Otomatik Yüksek Hız Topu 88mm mermileri ateşler"
 
 #: data/base/messages/resmessages2.rmsg:634
 #: data/base/messages/strings/resstrings.txt:732
+#: data/mp/messages/resmessages2.rmsg:576
 #: data/mp/messages/strings/resstrings.txt:767
 msgid "Replaces Medium Cannon"
 msgstr "Orta Top ile Değiştirilecek"
 
 #: data/base/messages/resmessages2.rmsg:643
 #: data/base/messages/strings/resstrings.txt:736
+#: data/mp/messages/resmessages2.rmsg:584
 #: data/mp/messages/strings/resstrings.txt:771
 msgid "76mm hyper-velocity quad-barrel automatic-cannon"
 msgstr "76mm Yüksek Hız Topu Dört-namlulu otomatik top"
 
 #: data/base/messages/resmessages2.rmsg:654
 #: data/base/messages/strings/resstrings.txt:758
+#: data/mp/messages/resmessages2.rmsg:594
 #: data/mp/messages/strings/resstrings.txt:797
 msgid "Heavy Flame-thrower firing Propylene Oxide gel"
 msgstr "Ağır Flamer Proplin Oksit Jel ateşler"
 
 #: data/base/messages/resmessages2.rmsg:665
 #: data/base/messages/strings/resstrings.txt:766
+#: data/mp/messages/resmessages2.rmsg:604
+#: data/mp/messages/resmessagesall.rmsg:604
 #: data/mp/messages/strings/resstrings.txt:805
 msgid "Propylene Oxide treated to burn at superhot temperatures"
 msgstr "Proplin Oksit Jel Daha yüksek ısıda yakılacak"
 
 #: data/base/messages/resmessages2.rmsg:676
 #: data/base/messages/strings/resstrings.txt:774
+#: data/mp/messages/resmessages2.rmsg:614
 #: data/mp/messages/strings/resstrings.txt:813
 msgid "105mm Howitzer may be assigned to a sensor"
 msgstr "105mm Obüs bir algılayıcıya bağlanabilir"
 
 #: data/base/messages/resmessages2.rmsg:687
 #: data/base/messages/strings/resstrings.txt:780
+#: data/mp/messages/resmessages2.rmsg:624
 #: data/mp/messages/strings/resstrings.txt:821
 msgid "155mm Howitzer may be assigned to a sensor"
 msgstr "155mm Obüs bir algılayıcıya bağlanabilir"
 
 #: data/base/messages/resmessages2.rmsg:698
 #: data/base/messages/strings/resstrings.txt:788
+#: data/mp/messages/resmessages2.rmsg:634
 #: data/mp/messages/strings/resstrings.txt:829
 msgid "105m Howitzer firing incendiaries, may be assigned to a sensor"
 msgstr "105mm Obüs kundak mermileri ateşler, bir algılayıcıya bağlanabilir"
 
 #: data/base/messages/resmessages2.rmsg:699
 #: data/base/messages/strings/resstrings.txt:789
+#: data/mp/messages/resmessages2.rmsg:635
 #: data/mp/messages/strings/resstrings.txt:830
 msgid "Best Targets: Base Structures, bunkers"
 msgstr "Harika Hedefler: Üs binaları, Sığınaklar"
@@ -2625,6 +3539,12 @@ msgstr "Harika Hedefler: Üs binaları, Sığınaklar"
 #: data/base/messages/strings/resstrings.txt:793
 #: data/base/messages/strings/resstrings.txt:801
 #: data/base/messages/strings/resstrings.txt:809
+#: data/mp/messages/resmessages2.rmsg:643
+#: data/mp/messages/resmessages2.rmsg:653
+#: data/mp/messages/resmessages2.rmsg:663
+#: data/mp/messages/resmessages3.rmsg:693
+#: data/mp/messages/resmessages3.rmsg:703
+#: data/mp/messages/resmessages3.rmsg:713
 #: data/mp/messages/strings/resstrings.txt:834
 #: data/mp/messages/strings/resstrings.txt:842
 #: data/mp/messages/strings/resstrings.txt:850
@@ -2647,6 +3567,12 @@ msgstr "Gelişmiş Obüs Hedef Tutturması"
 #: data/base/messages/strings/resstrings.txt:796
 #: data/base/messages/strings/resstrings.txt:804
 #: data/base/messages/strings/resstrings.txt:812
+#: data/mp/messages/resmessages2.rmsg:646
+#: data/mp/messages/resmessages2.rmsg:656
+#: data/mp/messages/resmessages2.rmsg:666
+#: data/mp/messages/resmessages3.rmsg:696
+#: data/mp/messages/resmessages3.rmsg:706
+#: data/mp/messages/resmessages3.rmsg:716
 #: data/mp/messages/strings/resstrings.txt:837
 #: data/mp/messages/strings/resstrings.txt:845
 #: data/mp/messages/strings/resstrings.txt:853
@@ -2655,6 +3581,8 @@ msgstr "Tüm Obüsler otomatik olarak geliştirldi"
 
 #: data/base/messages/resmessages2.rmsg:720
 #: data/base/messages/strings/resstrings.txt:802
+#: data/mp/messages/resmessages2.rmsg:564
+#: data/mp/messages/resmessages2.rmsg:654
 #: data/mp/messages/strings/resstrings.txt:843
 msgid "High Explosive shells"
 msgstr "P.A Gülleler"
@@ -2675,18 +3603,21 @@ msgstr "Obüs Ateş oranı arttırıldı"
 
 #: data/base/messages/resmessages2.rmsg:742
 #: data/base/messages/strings/resstrings.txt:846
+#: data/mp/messages/resmessages2.rmsg:674
 #: data/mp/messages/strings/resstrings.txt:889
 msgid "Tungsten-tipped armor-piercing bullets"
 msgstr "Tungsten kaplı zırh delici mermiler"
 
 #: data/base/messages/resmessages2.rmsg:753
 #: data/base/messages/strings/resstrings.txt:858
+#: data/mp/messages/resmessages2.rmsg:684
 #: data/mp/messages/strings/resstrings.txt:901
 msgid "Improved chaingun mechanism"
 msgstr "Güçlendirilmiş Zincirsilah mekanizması"
 
 #: data/base/messages/resmessages2.rmsg:775
 #: data/base/messages/strings/resstrings.txt:906
+#: data/mp/messages/resmessages2.rmsg:704
 #: data/mp/messages/strings/resstrings.txt:951
 msgid "High Explosive Armor-Piercing Shells"
 msgstr "P.A.Z.D Mermiler"
@@ -2699,76 +3630,97 @@ msgstr "Patlayıcılığı Arttırılmış Zırh Delici Savaş Başlığı"
 
 #: data/base/messages/resmessages2.rmsg:797
 #: data/base/messages/strings/resstrings.txt:966
+#: data/mp/messages/resmessages2.rmsg:724
 #: data/mp/messages/strings/resstrings.txt:1011
 msgid "High Explosive Squash Head warhead"
 msgstr "Patlayıcılığı arttırılmış dağılabilir mermili savaş başlığı"
 
 #: data/base/messages/resmessages3.rmsg:16
+#: data/mp/messages/resmessages3.rmsg:14
 msgid "NEXUS Intruder Program analyzed"
 msgstr "NEXUS Davetsiz Misafir Programı analizi"
 
 #: data/base/messages/resmessages3.rmsg:17
+#: data/mp/messages/resmessages3.rmsg:15
 msgid "Intruder parasite isolated"
 msgstr "Davetsiz Misafir virüsü silindi"
 
 #: data/base/messages/resmessages3.rmsg:18
 #: data/base/messages/resmessages3.rmsg:29
+#: data/mp/messages/resmessages3.rmsg:16
+#: data/mp/messages/resmessages3.rmsg:26
 msgid "Reduced chance of NEXUS take-over"
 msgstr "Nexus virüsü sistemlerimizden silindi"
 
 #: data/base/messages/resmessages3.rmsg:27
+#: data/mp/messages/resmessages3.rmsg:24
 msgid "Improved NEXUS resistance circuitry"
 msgstr "Arttırılmış NEXUS Direnç Devreleri"
 
 #: data/base/messages/resmessages3.rmsg:28
+#: data/mp/messages/resmessages3.rmsg:25
 msgid "Computer systems can now be 'ring-fenced' from NEXUS"
 msgstr "Bilgisayar sistemleri artık kendini Nexus'dan daha iyi koruyacak"
 
 #: data/base/messages/resmessages3.rmsg:37
+#: data/mp/messages/resmessages3.rmsg:33
 msgid "New Cyborg Research Available"
 msgstr "Yeni Cyborg Araştırması Kullanılabilir"
 
 # Pack wie Equipment übersetzt -Kreuvf
 #: data/base/messages/resmessages3.rmsg:38
+#: data/mp/messages/resmessages3.rmsg:34
 msgid "Aerodynamic Jump Pack"
 msgstr "Aerodinamik Zıplama Paketi"
 
 # kein Plural "Flugfähigkeiten", da man entweder fliegen kann oder nicht
 #: data/base/messages/resmessages3.rmsg:39
+#: data/mp/messages/resmessages3.rmsg:35
 msgid "Gives Cyborg limited flight abilities"
 msgstr "Cyborglere sınırlı olarak uçma kabiliyeti verir"
 
 #: data/base/messages/resmessages3.rmsg:40
+#: data/mp/messages/resmessages3.rmsg:36
 msgid "Jump Cyborgs can now be researched"
 msgstr "Zıplayan Cyborgler şimdi araştırılabilir"
 
 #: data/base/messages/resmessages3.rmsg:60
 #: data/base/messages/resmessages3.rmsg:588
+#: data/mp/messages/resmessages3.rmsg:54
+#: data/mp/messages/resmessages3.rmsg:534
 msgid "Superdense composite alloys and energy-absorbing fibres"
 msgstr "Yüksek Yoğunlukta kompozit alaşımları ve enerji soğurgan lifler"
 
 #: data/base/messages/resmessages3.rmsg:71
 #: data/base/messages/resmessages3.rmsg:599
+#: data/mp/messages/resmessages3.rmsg:64
+#: data/mp/messages/resmessages3.rmsg:544
 msgid "Laminated alloys bonded with energy-deflecting optic bundles"
 msgstr "Lamine alaşımları enerji saptırmalı optikler ile bağlandı"
 
 #: data/base/messages/resmessages3.rmsg:82
 #: data/base/messages/strings/resstrings.txt:78
+#: data/mp/messages/resmessages3.rmsg:74
 #: data/mp/messages/strings/resstrings.txt:98
 msgid "Armed with Revenger Surface-to-Air missile"
 msgstr "İntikamcı Yer-Hava Füzesi"
 
 #: data/base/messages/resmessages3.rmsg:93
 #: data/base/messages/resmessages3.rmsg:148
+#: data/mp/messages/resmessages3.rmsg:84
+#: data/mp/messages/resmessages3.rmsg:134
 msgid "Armed with Needle Gun"
 msgstr "İğne Silahlı"
 
 #: data/base/messages/resmessages3.rmsg:104
 #: data/base/messages/resmessages3.rmsg:159
+#: data/mp/messages/resmessages3.rmsg:94
+#: data/mp/messages/resmessages3.rmsg:144
 msgid "Armed with Scourge anti-tank missile"
 msgstr "Felaket anti-tank Füzesi"
 
 #: data/base/messages/resmessages3.rmsg:115
+#: data/mp/messages/resmessages3.rmsg:104
 msgid "Armed with flashlight laser"
 msgstr "Flaşışığı Lazerli"
 
@@ -2779,52 +3731,68 @@ msgstr "Flaşışığı Lazerli"
 #: data/base/messages/resmessages3.rmsg:169
 #: data/base/messages/strings/resstrings.txt:77
 #: data/base/messages/strings/resstrings.txt:83
+#: data/mp/messages/resmessages3.rmsg:113
+#: data/mp/messages/resmessages3.rmsg:123
+#: data/mp/messages/resmessages3.rmsg:133
+#: data/mp/messages/resmessages3.rmsg:143
+#: data/mp/messages/resmessages3.rmsg:153
 #: data/mp/messages/strings/resstrings.txt:97
 #: data/mp/messages/strings/resstrings.txt:103
 msgid "New Jump Cyborg Available"
 msgstr "Yeni Zıplayan Cyborg Kullanılabilir"
 
 #: data/base/messages/resmessages3.rmsg:126
+#: data/mp/messages/resmessages3.rmsg:114
 msgid "Armed with Lancer anti-tank missile"
 msgstr "Roketatar anti-tank Füzesi"
 
 #: data/base/messages/resmessages3.rmsg:137
+#: data/mp/messages/resmessages3.rmsg:124
 msgid "Armed with Cyborg assault gun"
 msgstr "Cyborg Hücüm Silahlı"
 
 #: data/base/messages/resmessages3.rmsg:170
+#: data/mp/messages/resmessages3.rmsg:154
 msgid "Armed with Flashlight Laser"
 msgstr "Flaşışığı Lazerli"
 
 #: data/base/messages/resmessages3.rmsg:172
+#: data/mp/messages/resmessages3.rmsg:156
 msgid "Requires cyborg factory to produce"
 msgstr "Üretmek için Cyborg Fabrikası gerekli"
 
 #: data/base/messages/resmessages3.rmsg:181
+#: data/mp/messages/resmessages3.rmsg:164
 msgid "High tensile concrete-plastic composite"
 msgstr "Yüksek gerilimli plastik, Maden alaşımla destekli duvar "
 
 #: data/base/messages/resmessages3.rmsg:192
+#: data/mp/messages/resmessages3.rmsg:174
 msgid "Bonded metallic laminates formed into walls and defenses"
 msgstr "Metalik Laminler duvarlar ve savunmalar ile bağlandı"
 
 #: data/base/messages/resmessages3.rmsg:203
+#: data/mp/messages/resmessages3.rmsg:184
 msgid "SAM site with Avenger missiles"
 msgstr "İntikamcı SAM Site"
 
 #: data/base/messages/resmessages3.rmsg:214
+#: data/mp/messages/resmessages3.rmsg:194
 msgid "SAM site with Vindicator missiles"
 msgstr "İntikamcı2 SAM Site"
 
 #: data/base/messages/resmessages3.rmsg:225
+#: data/mp/messages/resmessages3.rmsg:204
 msgid "Artillery battery firing Firestorm Missiles"
 msgstr "Batarya AteşFırtınası mermileri ateşler"
 
 #: data/base/messages/resmessages3.rmsg:236
+#: data/mp/messages/resmessages3.rmsg:214
 msgid "Artillery battery firing Novastorm Missiles"
 msgstr "Batarya NovaFırtınası mermileri ateşler"
 
 #: data/base/messages/resmessages3.rmsg:247
+#: data/mp/messages/resmessages3.rmsg:224
 msgid "Armored strongpoint with Flashlight laser"
 msgstr "Flaşışıklı Koruma Noktası"
 
@@ -2833,96 +3801,119 @@ msgid "Armored strongpoint with Pulse Laser"
 msgstr "Darbeli Lazerli Koruma Noktası"
 
 #: data/base/messages/resmessages3.rmsg:269
+#: data/mp/messages/resmessages3.rmsg:244
 msgid "Armored strongpoint with Rail Gun"
 msgstr "Demir Silahlı Koruma Noktası"
 
 #: data/base/messages/resmessages3.rmsg:280
+#: data/mp/messages/resmessages3.rmsg:254
 msgid "Armored strongpoint with Gauss Cannon"
 msgstr "Manyetik Toplu Koruma Noktası"
 
 #: data/base/messages/resmessages3.rmsg:291
+#: data/mp/messages/resmessages3.rmsg:264
 msgid "Armored guard tower with Scourge Missile"
 msgstr "Felaket Füzeli Koruma Kulesi"
 
 #: data/base/messages/resmessages3.rmsg:302
+#: data/mp/messages/resmessages3.rmsg:274
 msgid "Armored guard tower with Needle Gun"
 msgstr "İğne Silahlı Koruma Kulesi"
 
 #: data/base/messages/resmessages3.rmsg:313
+#: data/mp/messages/resmessages3.rmsg:284
 msgid "Armored hardpoint with Scourge AT Missile"
 msgstr "Felaket Füzeli Bağlama Noktası"
 
 #: data/base/messages/resmessages3.rmsg:324
+#: data/mp/messages/resmessages3.rmsg:294
 msgid "Armored hardpoint with Flashlight laser"
 msgstr "Flaşışıklı Bağlama Noktası"
 
 #: data/base/messages/resmessages3.rmsg:335
+#: data/mp/messages/resmessages3.rmsg:304
 msgid "Armored hardpoint with Rail Gun"
 msgstr "Demir Silahlı Bağlama Noktası"
 
 #: data/base/messages/resmessages3.rmsg:346
+#: data/mp/messages/resmessages3.rmsg:314
 msgid "Armored hardpoint with Gauss Cannon"
 msgstr "Manyetik Toplu Bağlama Noktası"
 
 #: data/base/messages/resmessages3.rmsg:357
+#: data/mp/messages/resmessages3.rmsg:324
 msgid "Advanced repair techniques"
 msgstr "Gelişmiş Tamir Teknikleri"
 
 #: data/base/messages/resmessages3.rmsg:369
+#: data/mp/messages/resmessages3.rmsg:334
 msgid "Vapor Turbine boosts power output"
 msgstr "Buharlı Türbin Üretim Gücü Arttı"
 
 # Wenn man Brain als KI-gestütztes Forschungsorgan betrachtet, könnte die Übersetzung hinhauen -Kreuvf
 #: data/base/messages/resmessages3.rmsg:379
 #: data/base/messages/strings/names.txt:838
+#: data/mp/messages/resmessages3.rmsg:344
 #: data/mp/messages/strings/names.txt:848
 msgid "Neural Synapse Research Brain"
 msgstr "Sinirsel Sinaptik Araştırma Beyni"
 
 #: data/base/messages/resmessages3.rmsg:390
 #: data/base/messages/strings/names.txt:811
+#: data/mp/messages/resmessages3.rmsg:354
 #: data/mp/messages/strings/names.txt:821
 msgid "Advanced Base Structure Materials"
 msgstr "Gelişmiş Üs Binası Materyali"
 
 #: data/base/messages/resmessages3.rmsg:401
+#: data/mp/messages/resmessages3.rmsg:364
 msgid "High Density Base Structure Materials"
 msgstr "Yüksek Gerilimli Üs Binası Materyalleri"
 
 #: data/base/messages/resmessages3.rmsg:412
 #: data/base/messages/strings/names.txt:854
+#: data/mp/messages/resmessages3.rmsg:374
 msgid "Advanced VTOL Production"
 msgstr "Gelişmiş DİvK Üretimi"
 
 #: data/base/messages/resmessages3.rmsg:423
 #: data/base/messages/strings/names.txt:846
+#: data/mp/messages/resmessages3.rmsg:384
 #: data/mp/messages/strings/names.txt:856
 msgid "Robotic VTOL Rearming"
 msgstr "Robotik DİvK Y. Silahlandırma"
 
 #: data/base/messages/resmessages3.rmsg:434
+#: data/mp/messages/resmessages3.rmsg:394
 msgid "Advanced Engineering Techniques"
 msgstr "Gelişmiş Mühendislik Teknikleri"
 
 #: data/base/messages/resmessages3.rmsg:456
+#: data/mp/messages/resmessages3.rmsg:414
 msgid "Advanced fire detection systems"
 msgstr "Gelişmiş Ateş Tespit Sistemleri"
 
 #: data/base/messages/resmessages3.rmsg:467
+#: data/mp/messages/resmessages3.rmsg:424
 msgid "Advanced target recognition systems"
 msgstr "Gelişmiş Hedef Tanıma Sistemleri"
 
 # Ist die Frage: Störtechnologie, die syn. Verb. nutzt oder die dagegen eingesetzt wird -Kreuvf
 #: data/base/messages/resmessages3.rmsg:478
+#: data/mp/messages/resmessages3.rmsg:434
+#: data/mp/messages/resmessagesall.rmsg:304
 msgid "Synaptic Link Scrambler technology"
 msgstr "Sinaptik Bağlantı Sinyal Bozucu Teknolojisi"
 
 # eigentlich müsste es Greift [...] elektronisch an heißen, aber das klingt gestelzt -Kreuvf
 #: data/base/messages/resmessages3.rmsg:479
+#: data/mp/messages/resmessages3.rmsg:435
+#: data/mp/messages/resmessagesall.rmsg:305
 msgid "Electronically attacks and disrupts enemy structures"
 msgstr "Eketronik saldırı ve düşman binalarını bozmak"
 
 #: data/base/messages/resmessages3.rmsg:480
+#: data/mp/messages/resmessages3.rmsg:436
 msgid "Steals technology from enemies"
 msgstr "Düşmandan Teknolojilerini çalar"
 
@@ -2930,6 +3921,11 @@ msgstr "Düşmandan Teknolojilerini çalar"
 #: data/base/messages/resmessages3.rmsg:499
 #: data/base/messages/resmessages3.rmsg:510
 #: data/base/messages/resmessages3.rmsg:521
+#: data/mp/messages/resmessages3.rmsg:443
+#: data/mp/messages/resmessages3.rmsg:453
+#: data/mp/messages/resmessages3.rmsg:463
+#: data/mp/messages/resmessages3.rmsg:473
+#: data/mp/messages/resmessagesall.rmsg:323
 msgid "New Repair Technology Discovered"
 msgstr "Yeni Tamir Teknolojisi Keşfedildi"
 
@@ -2937,108 +3933,149 @@ msgstr "Yeni Tamir Teknolojisi Keşfedildi"
 #: data/base/messages/resmessages3.rmsg:500
 #: data/base/messages/resmessages3.rmsg:511
 #: data/base/messages/resmessages3.rmsg:522
+#: data/mp/messages/resmessages3.rmsg:444
+#: data/mp/messages/resmessages3.rmsg:454
+#: data/mp/messages/resmessages3.rmsg:464
+#: data/mp/messages/resmessages3.rmsg:474
+#: data/mp/messages/resmessagesall.rmsg:314
+#: data/mp/messages/resmessagesall.rmsg:324
 msgid "Synaptic Link technology breakthrough"
 msgstr "Sinaptik Bağlantı Teknolojisinde Gelişme"
 
 #: data/base/messages/resmessages3.rmsg:490
 #: data/base/messages/resmessages3.rmsg:523
+#: data/mp/messages/resmessages3.rmsg:445
+#: data/mp/messages/resmessages3.rmsg:475
+#: data/mp/messages/resmessagesall.rmsg:325
 msgid "On-board diagnostic and repair systems"
 msgstr "Hasar-Tespit ve otomatik tamir sistemleri"
 
 #: data/base/messages/resmessages3.rmsg:491
+#: data/mp/messages/resmessages3.rmsg:446
 msgid "Enables self-repair in all Cyborgs"
 msgstr "Tüm Cyborglarda otomatik tamiri etkinleştirir"
 
 #: data/base/messages/resmessages3.rmsg:501
 #: data/base/messages/resmessages3.rmsg:512
+#: data/mp/messages/resmessages3.rmsg:455
+#: data/mp/messages/resmessages3.rmsg:465
 msgid "Built-in diagnostic and repair systems"
 msgstr "Yerleşik tamir sistemlerini tanımlamak"
 
 #: data/base/messages/resmessages3.rmsg:502
+#: data/mp/messages/resmessages3.rmsg:456
 msgid "Enables self-repair in all base structures"
 msgstr "Tüm Üs Binalarında otomatik tamiri etkinleştirir"
 
 #: data/base/messages/resmessages3.rmsg:513
+#: data/mp/messages/resmessages3.rmsg:466
 msgid "Enables self-repair in all defenses"
 msgstr "Tüm Savunmalarda otomatik tamiri etkinleştirir"
 
 #: data/base/messages/resmessages3.rmsg:524
+#: data/mp/messages/resmessages3.rmsg:476
 msgid "Enables self-repair in all vehicles"
 msgstr "Tüm Araçlarda otomatik tamiri etkinleştirir"
 
 #: data/base/messages/resmessages3.rmsg:532
+#: data/mp/messages/resmessages3.rmsg:483
 msgid "NEXUS Light Body"
 msgstr "NEXUS Hafif Bedeni"
 
 #: data/base/messages/resmessages3.rmsg:535
+#: data/mp/messages/resmessages3.rmsg:486
 msgid "Expensive to produce"
 msgstr "Üretimde Pahalıdır"
 
 #: data/base/messages/resmessages3.rmsg:543
+#: data/mp/messages/resmessages3.rmsg:493
 msgid "NEXUS Medium Body"
 msgstr "NEXUS Orta Bedeni"
 
 #: data/base/messages/resmessages3.rmsg:546
+#: data/mp/messages/resmessages3.rmsg:496
 msgid "Expensive and slow to produce"
 msgstr "Üretimde Pahalı ve Yavaş"
 
 #: data/base/messages/resmessages3.rmsg:554
+#: data/mp/messages/resmessages3.rmsg:503
 msgid "NEXUS Heavy Body"
 msgstr "NEXUS Ağır Bedeni "
 
 #: data/base/messages/resmessages3.rmsg:555
 #: data/base/messages/resmessagesall.rmsg:93
+#: data/mp/messages/resmessages3.rmsg:504
+#: data/mp/messages/resmessagesall.rmsg:114
 msgid "More armor and body points than Python"
 msgstr "Piton'dan daha fazla zırh ve beden puanına sahip"
 
 #: data/base/messages/resmessages3.rmsg:557
+#: data/mp/messages/resmessages3.rmsg:506
+#: data/mp/messages/resmessagesall.rmsg:566
+#: data/mp/messages/resmessagesall.rmsg:576
 msgid "Very expensive to produce"
 msgstr "Üretimde Çok Pahalı"
 
 #: data/base/messages/resmessages3.rmsg:566
 #: data/base/messages/strings/names.txt:948
+#: data/mp/messages/resmessages3.rmsg:514
 #: data/mp/messages/strings/names.txt:960
 msgid "Gas Turbine Engine"
 msgstr "Gaz Türbinli Motor"
 
 #: data/base/messages/resmessages3.rmsg:577
+#: data/mp/messages/resmessages3.rmsg:524
 msgid "Ionizing Turbine Engine"
 msgstr "İtonlaştırıcı Motor Türbini"
 
 #: data/base/messages/resmessages3.rmsg:665
 #: data/base/messages/resmessages3.rmsg:676
+#: data/mp/messages/resmessages3.rmsg:604
+#: data/mp/messages/resmessages3.rmsg:614
 msgid "New power efficient propulsion"
 msgstr "Yeni Enerji Tasarruflu Yürütücü"
 
 #: data/base/messages/resmessages3.rmsg:666
 #: data/base/messages/resmessages3.rmsg:677
+#: data/mp/messages/resmessages3.rmsg:605
+#: data/mp/messages/resmessages3.rmsg:615
 msgid "Body Points and Speed Increased"
 msgstr "Beden Puanı ve Zırh Arttırıldı"
 
 #: data/base/messages/resmessages3.rmsg:667
 #: data/base/messages/resmessages3.rmsg:678
+#: data/mp/messages/resmessages3.rmsg:606
+#: data/mp/messages/resmessages3.rmsg:616
 msgid "All VTOLs upgraded automatically"
 msgstr "Tüm DİvK lar otomatik olarak geliştirildi"
 
 #: data/base/messages/resmessages3.rmsg:687
+#: data/mp/messages/resmessages3.rmsg:624
 msgid "Computer plots and guides shell to target's position"
 msgstr "Bilgisayar grfikleri mermilerin hedef bulmasına klavuzluk edecek"
 
 #: data/base/messages/resmessages3.rmsg:698
+#: data/mp/messages/resmessages3.rmsg:634
 msgid "High Explosive Armor Piercing Flak"
 msgstr "Yüksek Patlayıcılı Zırh Delici Uçaksavar"
 
 #: data/base/messages/resmessages3.rmsg:709
+#: data/mp/messages/resmessages3.rmsg:644
 msgid "Chainfeed loader eradicates jams and improves performance"
 msgstr "Zincir Yükleyici sorunları ortadan kaldırır ve performansı arttırır"
 
 #: data/base/messages/resmessages3.rmsg:720
+#: data/mp/messages/resmessages3.rmsg:654
 msgid "Drops high intensity thermite bombs"
 msgstr "Yüksek yoğunlukta termik bombaları bırakır"
 
 #: data/base/messages/resmessages3.rmsg:721
 #: data/base/messages/resmessages3.rmsg:886
 #: data/base/messages/resmessagesall.rmsg:138
+#: data/mp/messages/resmessages3.rmsg:655
+#: data/mp/messages/resmessages3.rmsg:805
+#: data/mp/messages/resmessagesall.rmsg:155
+#: data/mp/messages/resmessagesall.rmsg:705
 msgid "Best Targets: Bunkers and hardpoints"
 msgstr "Harika Hedefler Sığınaklar ve Bağlama Noktaları"
 
@@ -3047,48 +4084,65 @@ msgid "Bombs lock on and guide themselves to the target"
 msgstr "Bombalar kendilsini hedefe kilitlerler"
 
 #: data/base/messages/resmessages3.rmsg:742
+#: data/mp/messages/resmessages3.rmsg:674
 msgid "High-Velocity Armor-Piercing Fin-Stabilised Discarding Sabot"
 msgstr "Yüksek Hızda Zırh Delici Fin Stabilize Sabotaj Mermileri"
 
 #: data/base/messages/resmessages3.rmsg:753
 #: data/base/messages/resmessages3.rmsg:786
 #: data/base/messages/resmessages3.rmsg:1006
+#: data/mp/messages/resmessages3.rmsg:684
+#: data/mp/messages/resmessages3.rmsg:714
+#: data/mp/messages/resmessages3.rmsg:914
 msgid "Robotic loading system feeds rounds into breech"
 msgstr "Robotik yükleme sistemi mermileri arkadan destekler"
 
 #: data/base/messages/resmessages3.rmsg:764
+#: data/mp/messages/resmessages3.rmsg:694
 msgid "Computer guided shells"
 msgstr "Bilgisayar Güdümlü Mermiler"
 
 #: data/base/messages/resmessages3.rmsg:775
+#: data/mp/messages/resmessages3.rmsg:704
 msgid "High Explosive Armor Piercing Shells"
 msgstr "P.A.Z.D Mermiler"
 
 #: data/base/messages/resmessages3.rmsg:796
 #: data/base/messages/resmessages3.rmsg:807
+#: data/mp/messages/resmessages3.rmsg:723
+#: data/mp/messages/resmessages3.rmsg:733
+#: data/mp/messages/resmessagesall.rmsg:373
 msgid "New Laser Weapon Available"
 msgstr "Yeni Lazer Silahı Kullanılabilir"
 
 #: data/base/messages/resmessages3.rmsg:797
+#: data/mp/messages/resmessages3.rmsg:724
 msgid "Generates and concentrates bursts of laser energy"
 msgstr "Lazer enerjisi üretir ve düşmana fırlatır"
 
 #: data/base/messages/resmessages3.rmsg:798
 #: data/base/messages/resmessages3.rmsg:809
+#: data/mp/messages/resmessages3.rmsg:725
+#: data/mp/messages/resmessages3.rmsg:735
 msgid "Best Targets: Cyborgs"
 msgstr "Harika Hedefler: Cyborgler"
 
 #: data/base/messages/resmessages3.rmsg:808
+#: data/mp/messages/resmessages3.rmsg:734
 msgid "Fires pulses of laser light"
 msgstr "Darbeli Lazer Işını ateşler"
 
 #: data/base/messages/resmessages3.rmsg:818
 #: data/base/messages/resmessages3.rmsg:829
 #: data/base/messages/resmessages3.rmsg:840
+#: data/mp/messages/resmessages3.rmsg:743
+#: data/mp/messages/resmessages3.rmsg:753
+#: data/mp/messages/resmessages3.rmsg:763
 msgid "Laser Upgrade"
 msgstr "Lazer Geliştirmesi"
 
 #: data/base/messages/resmessages3.rmsg:819
+#: data/mp/messages/resmessages3.rmsg:744
 msgid "Improvement in laser optics reduces light dispersal"
 msgstr "Geliştirilmiş lazer optikleri hafif dağıtıcı ile değiştirildi"
 
@@ -3099,10 +4153,14 @@ msgstr "Lazer Hedef Tutturması Arttırıldı"
 #: data/base/messages/resmessages3.rmsg:821
 #: data/base/messages/resmessages3.rmsg:832
 #: data/base/messages/resmessages3.rmsg:843
+#: data/mp/messages/resmessages3.rmsg:746
+#: data/mp/messages/resmessages3.rmsg:756
+#: data/mp/messages/resmessages3.rmsg:766
 msgid "All lasers upgraded automatically"
 msgstr "Tüm Lazerler otomatik olarak geliştirildi"
 
 #: data/base/messages/resmessages3.rmsg:830
+#: data/mp/messages/resmessages3.rmsg:754
 msgid "Improvement in laser emission density"
 msgstr "Lazer Emisyon Yoğunluğu arttırıldı"
 
@@ -3111,6 +4169,7 @@ msgid "Increases Laser damage"
 msgstr "Lazer Hasarı Arttırıldı"
 
 #: data/base/messages/resmessages3.rmsg:841
+#: data/mp/messages/resmessages3.rmsg:764
 msgid "Improved Energizer reduces laser recharge time"
 msgstr "Gelişmiş lazer üreticiler lazer şarj zamanını kısaltır"
 
@@ -3119,23 +4178,29 @@ msgid "Increases Laser ROF"
 msgstr "Lazer Ateş Oranı Arttırıldı"
 
 #: data/base/messages/resmessages3.rmsg:852
+#: data/mp/messages/resmessages3.rmsg:774
 msgid "Depleted uranium kinetic energy bullets"
 msgstr "Uranyum destekli kinetik enerjili mermiler"
 
 #: data/base/messages/resmessages3.rmsg:863
+#: data/mp/messages/resmessages3.rmsg:784
 msgid "Collapsing Plutonium kinetic energy bullets"
 msgstr "Çökertici Plutonyum destekli kinetik enerjili mermiler"
 
 #: data/base/messages/resmessages3.rmsg:873
 #: data/base/messages/resmessages3.rmsg:884
+#: data/mp/messages/resmessages3.rmsg:793
+#: data/mp/messages/resmessages3.rmsg:803
 msgid "New Missile Turret Available"
 msgstr "Yeni Füe Tareti Kullanılabilir"
 
 #: data/base/messages/resmessages3.rmsg:874
+#: data/mp/messages/resmessages3.rmsg:794
 msgid "Anti-tank missile"
 msgstr "Anti-tank Füzesi"
 
 #: data/base/messages/resmessages3.rmsg:885
+#: data/mp/messages/resmessages3.rmsg:804
 msgid "Bunker buster missile"
 msgstr "Sığınak Yokedici Füze"
 
@@ -3144,10 +4209,16 @@ msgstr "Sığınak Yokedici Füze"
 #: data/base/messages/resmessages3.rmsg:917
 #: data/base/messages/resmessages3.rmsg:972
 #: data/base/messages/resmessages3.rmsg:983
+#: data/mp/messages/resmessages3.rmsg:813
+#: data/mp/messages/resmessages3.rmsg:823
+#: data/mp/messages/resmessages3.rmsg:833
+#: data/mp/messages/resmessages3.rmsg:883
+#: data/mp/messages/resmessages3.rmsg:893
 msgid "Missile Upgrade"
 msgstr "Füze Geliştirmesi"
 
 #: data/base/messages/resmessages3.rmsg:896
+#: data/mp/messages/resmessages3.rmsg:814
 msgid "On-board computer predicts target movement"
 msgstr "Yol bilgisayarı hedefin hareketini tespit eder"
 
@@ -3161,14 +4232,22 @@ msgstr "Füze Hedef Tutturması arttırıldı"
 #: data/base/messages/resmessages3.rmsg:920
 #: data/base/messages/resmessages3.rmsg:975
 #: data/base/messages/resmessages3.rmsg:986
+#: data/mp/messages/resmessages3.rmsg:816
+#: data/mp/messages/resmessages3.rmsg:826
+#: data/mp/messages/resmessages3.rmsg:836
+#: data/mp/messages/resmessages3.rmsg:886
+#: data/mp/messages/resmessages3.rmsg:896
 msgid "All missiles upgraded automatically"
 msgstr "Tüm füzeler otomatik olarak geliştirildi"
 
 #: data/base/messages/resmessages3.rmsg:907
+#: data/mp/messages/resmessages3.rmsg:824
 msgid "Missile actively seeks and homes on targets"
 msgstr "Güdümlü füzeler hedef tutturmayı kolaylaştırır"
 
 #: data/base/messages/resmessages3.rmsg:918
+#: data/mp/messages/resmessages3.rmsg:664
+#: data/mp/messages/resmessages3.rmsg:834
 msgid "Low yield thermonuclear warhead"
 msgstr "Düşük Termonükleer savaş başlığı"
 
@@ -3178,41 +4257,58 @@ msgstr "Füze Hasarı Arttırıldı"
 
 #: data/base/messages/resmessages3.rmsg:928
 #: data/base/messages/resmessages3.rmsg:939
+#: data/mp/messages/resmessages3.rmsg:843
+#: data/mp/messages/resmessages3.rmsg:853
 msgid "New SAM Turret Available"
 msgstr "Yeni SAM Tareti Kullanılabilir"
 
 #: data/base/messages/resmessages3.rmsg:929
+#: data/mp/messages/resmessages3.rmsg:844
+#: data/mp/messages/resmessagesall.rmsg:664
 msgid "Surface-to-air missile"
 msgstr "Yer-Hava Füzesi"
 
 #: data/base/messages/resmessages3.rmsg:930
 #: data/base/messages/resmessages3.rmsg:941
+#: data/mp/messages/resmessages3.rmsg:845
+#: data/mp/messages/resmessages3.rmsg:855
+#: data/mp/messages/resmessagesall.rmsg:585
+#: data/mp/messages/resmessagesall.rmsg:665
 msgid "Best Targets: Aerial targets only"
 msgstr "Harika Hedefler Sadece Hava Birimleri"
 
 #: data/base/messages/resmessages3.rmsg:940
+#: data/mp/messages/resmessages3.rmsg:854
+#: data/mp/messages/resmessagesall.rmsg:584
 msgid "Heavy surface-to-air missile"
 msgstr "Ağır Yer-Hava Füzesi"
 
 #: data/base/messages/resmessages3.rmsg:950
 #: data/base/messages/resmessages3.rmsg:961
+#: data/mp/messages/resmessages3.rmsg:863
+#: data/mp/messages/resmessages3.rmsg:873
 msgid "New Artillery Missile Turret Available"
 msgstr "Yeni Batarya Füze Tareti Kullanılabilir"
 
 #: data/base/messages/resmessages3.rmsg:951
+#: data/mp/messages/resmessages3.rmsg:864
 msgid "High explosive artillery missile"
 msgstr "Patlayıcılığı arttırılmış batarya füzesi"
 
 #: data/base/messages/resmessages3.rmsg:952
 #: data/base/messages/resmessages3.rmsg:963
+#: data/mp/messages/resmessages3.rmsg:865
+#: data/mp/messages/resmessages3.rmsg:875
 msgid "Best Targets: Base structures and cyborgs"
 msgstr "Harika Hedefler: Üs Binaları ve Cyborglar"
 
 #: data/base/messages/resmessages3.rmsg:962
+#: data/mp/messages/resmessages3.rmsg:874
 msgid "High explosive heavy artillery missile"
 msgstr "Yüksek Patlayıcılı Ağır Batarya Füzesi"
 
 #: data/base/messages/resmessages3.rmsg:973
+#: data/mp/messages/resmessages3.rmsg:884
 msgid "Missiles detect and lock-on to targets while loading"
 msgstr "Yükleme sırasında hedef tespit edilir ve füzeler hedefe kilitlenir"
 
@@ -3222,38 +4318,50 @@ msgid "Increases Missile ROF"
 msgstr "Füze Ateş Oranı Arttırıldı"
 
 #: data/base/messages/resmessages3.rmsg:984
+#: data/mp/messages/resmessages3.rmsg:894
 msgid "Racked missile dispensers allow for fast reloading"
 msgstr "Racket füze hızlı yükleme için kullanılacak"
 
 #: data/base/messages/resmessages3.rmsg:995
+#: data/mp/messages/resmessages3.rmsg:904
 msgid "Self-guided rocket-powered shells"
 msgstr "Kendi Güdümlü roket mermiler"
 
 #: data/base/messages/resmessages3.rmsg:1016
 #: data/base/messages/resmessages3.rmsg:1027
 #: data/base/messages/resmessages3.rmsg:1038
+#: data/mp/messages/resmessages3.rmsg:923
+#: data/mp/messages/resmessages3.rmsg:933
+#: data/mp/messages/resmessages3.rmsg:943
 msgid "New Rail Gun Available"
 msgstr "Yeni Demir Silahı Kullanılabilir"
 
 #: data/base/messages/resmessages3.rmsg:1017
+#: data/mp/messages/resmessages3.rmsg:924
 msgid "Rapid fire rail gun firing needle darts"
 msgstr "Hızlı yükleyicili demir silahı iğne oklarını atar"
 
 #: data/base/messages/resmessages3.rmsg:1028
+#: data/mp/messages/resmessages3.rmsg:934
 msgid "Rail gun firing armor-piercing darts"
 msgstr "Demir silahı zırh delici oklar atar"
 
 #: data/base/messages/resmessages3.rmsg:1039
+#: data/mp/messages/resmessages3.rmsg:944
 msgid "Heavy rail gun firing large kinetic energy darts"
 msgstr "Ağır demir silahı büyük kinetik enerji okları atar"
 
 #: data/base/messages/resmessages3.rmsg:1049
 #: data/base/messages/resmessages3.rmsg:1060
 #: data/base/messages/resmessages3.rmsg:1071
+#: data/mp/messages/resmessages3.rmsg:953
+#: data/mp/messages/resmessages3.rmsg:963
+#: data/mp/messages/resmessages3.rmsg:973
 msgid "Rail Gun Upgrade"
 msgstr "Demir Silahı Geliştirmesi"
 
 #: data/base/messages/resmessages3.rmsg:1050
+#: data/mp/messages/resmessages3.rmsg:954
 msgid "Computer predicts and compensates for target's movement"
 msgstr "Bilgisayar hedefin hareketini tahmin eder"
 
@@ -3264,10 +4372,14 @@ msgstr "Demir Silahı hedef tutturması arttırıldı"
 #: data/base/messages/resmessages3.rmsg:1052
 #: data/base/messages/resmessages3.rmsg:1063
 #: data/base/messages/resmessages3.rmsg:1074
+#: data/mp/messages/resmessages3.rmsg:956
+#: data/mp/messages/resmessages3.rmsg:966
+#: data/mp/messages/resmessages3.rmsg:976
 msgid "All rail guns upgraded automatically"
 msgstr "Tüm demir silahları otomatik olarak geliştirildi"
 
 #: data/base/messages/resmessages3.rmsg:1061
+#: data/mp/messages/resmessages3.rmsg:964
 msgid "Improved armor-piercing dart"
 msgstr "Zırh delici oklar geliştirildi"
 
@@ -3276,6 +4388,7 @@ msgid "Increases Rail Gun damage"
 msgstr "Demir silahı hasarı arttırıldı"
 
 #: data/base/messages/resmessages3.rmsg:1072
+#: data/mp/messages/resmessages3.rmsg:974
 msgid "Increased gauss output speeds up reload time"
 msgstr "Manyetik top çıkış süresi azaltıldı"
 
@@ -3284,82 +4397,110 @@ msgid "Increases Rail Gun ROF"
 msgstr "Demir silahı ateş oranı arttırıldı"
 
 #: data/base/messages/resmessagesall.rmsg:4
+#: data/mp/messages/resmessagesall.rmsg:3
 msgid "New Construction Options Available"
 msgstr "Yeni İnşa Seçenekleri Kullanılabilir"
 
 #: data/base/messages/resmessagesall.rmsg:5
+#: data/mp/messages/resmessagesall.rmsg:4
 msgid "Titanium-reinforced concrete"
 msgstr "Titanyum-destekli Girit"
 
 #: data/base/messages/resmessagesall.rmsg:6
+#: data/mp/messages/resmessagesall.rmsg:5
 msgid "Enables Hardcrete walls"
 msgstr "Sert Girit duvarları aktif eder"
 
 #: data/base/messages/resmessagesall.rmsg:16
+#: data/mp/messages/resmessagesall.rmsg:14
 msgid "VTOL factory enables VTOL production"
 msgstr "DİvK Fabrikası DİvK üretimini etkinleştirir"
 
 #: data/base/messages/resmessagesall.rmsg:17
+#: data/mp/messages/resmessagesall.rmsg:15
 msgid "VTOL rearming pads required to keep VTOLs flying"
 msgstr "DİvK Yeniden Silahlandırma Rampaları, DİvK uçuşları için gereklidir"
 
 #: data/base/messages/resmessagesall.rmsg:18
+#: data/mp/messages/resmessagesall.rmsg:16
 msgid "May be upgraded using factory modules"
 msgstr "Fabrika Eki ile geliştirilebilir"
 
 #: data/base/messages/resmessagesall.rmsg:27
+#: data/mp/messages/resmessagesall.rmsg:24
 msgid "Refuels, rearms and repairs VTOLs"
 msgstr "Yakıt Doldurma, yeniden silahlandırma ve DİvK 'ların tamirini yapar"
 
 #: data/base/messages/resmessagesall.rmsg:28
+#: data/mp/messages/resmessagesall.rmsg:25
 msgid "Assign a VTOL by selecting the rearming pad as its target"
 msgstr "Bir DİvK 'u yeniden silahlandırma rampasına bağla.Ve yeniden silahlandırma için geri dönsün"
 
 #: data/base/messages/resmessagesall.rmsg:29
+#: data/mp/messages/resmessagesall.rmsg:26
 msgid "The VTOL returns to the selected pad for rearming"
 msgstr "DİvK seçilen rampaya yeniden silahlandırma için geri döner"
 
 #: data/base/messages/resmessagesall.rmsg:38
+#: data/mp/messages/resmessagesall.rmsg:34
 msgid "Battlefield repair unit"
 msgstr "Savaş alanı tamir birimi"
 
 #: data/base/messages/resmessagesall.rmsg:39
 #: data/base/messages/strings/resstrings.txt:445
+#: data/mp/messages/resmessagesall.rmsg:35
+#: data/mp/messages/resmessagesall.rmsg:285
 #: data/mp/messages/strings/resstrings.txt:473
 msgid "Automatically Repairs Damaged Units"
 msgstr "Hasarlı Birimleri otomatik olarak tamir eder"
 
 #: data/base/messages/resmessagesall.rmsg:40
 #: data/base/messages/strings/resstrings.txt:446
+#: data/mp/messages/resmessagesall.rmsg:36
+#: data/mp/messages/resmessagesall.rmsg:286
 #: data/mp/messages/strings/resstrings.txt:474
 msgid "Or damaged units may be selected as target"
 msgstr "Yada hasarlı birim direk hedef olarak seçilebilir"
 
 #: data/base/messages/resmessagesall.rmsg:48
+#: data/mp/messages/resmessagesall.rmsg:43
 msgid "New Systems Turret Available For Design"
 msgstr "Yeni Sistem Tareti Tasarımda Kullanılabilir"
 
 #: data/base/messages/resmessagesall.rmsg:49
+#: data/mp/messages/resmessagesall.rmsg:44
+#: data/mp/messages/resmessagesall.rmsg:406
+#: data/mp/messages/resmessagesall.rmsg:556
 msgid "Improved sensor range"
 msgstr "Arttırılmış algılayıcı Görüş Mesafesi"
 
 #: data/base/messages/resmessagesall.rmsg:50
+#: data/mp/messages/resmessagesall.rmsg:45
 msgid "Makes excellent scout vehicle"
 msgstr "Harika izci araç yapılabilir"
 
 #: data/base/messages/resmessagesall.rmsg:60
+#: data/mp/messages/resmessagesall.rmsg:54
 msgid "Extended sensor range"
 msgstr "Genişletilmiş algılayıcı Görüş Mesafesi"
 
 #: data/base/messages/resmessagesall.rmsg:61
+#: data/mp/messages/resmessagesall.rmsg:55
+#: data/mp/messages/resmessagesall.rmsg:395
+#: data/mp/messages/resmessagesall.rmsg:405
+#: data/mp/messages/resmessagesall.rmsg:555
 msgid "Keeps map areas under constant surveillance"
 msgstr "Bulunduğu bölgeyi gözlem altında tutar"
 
 #: data/base/messages/resmessagesall.rmsg:70
+#: data/mp/messages/resmessagesall.rmsg:63
+#: data/mp/messages/resmessagesall.rmsg:73
+#: data/mp/messages/resmessagesall.rmsg:83
 msgid "Sensors Improved"
 msgstr "Algılayıcı Geliştirildi"
 
 #: data/base/messages/resmessagesall.rmsg:71
+#: data/mp/messages/resmessagesall.rmsg:64
 msgid "New Thermal Emissions detection"
 msgstr "Yeni Termal Emisyon Tespit Sistemi"
 
@@ -3368,50 +4509,64 @@ msgid "Extends Sensor Range"
 msgstr "Algılayıcı Görüş Alanı Geliştirildi"
 
 #: data/base/messages/resmessagesall.rmsg:73
+#: data/mp/messages/resmessagesall.rmsg:66
+#: data/mp/messages/resmessagesall.rmsg:76
+#: data/mp/messages/resmessagesall.rmsg:86
 msgid "All sensors upgraded automatically"
 msgstr "Tüm algılayıcılar otomatik olarak geliştirildi"
 
 #: data/base/messages/resmessagesall.rmsg:82
+#: data/mp/messages/resmessagesall.rmsg:94
 msgid "Counter-battery tower detects enemy indirect fire batteries"
 msgstr "A.B Kulesi düşman endirek silahlarını tespit eder"
 
 #: data/base/messages/resmessagesall.rmsg:92
+#: data/mp/messages/resmessagesall.rmsg:113
 msgid "Collective Heavy Body"
 msgstr "Kollektif Ağır Bedeni"
 
 #: data/base/messages/resmessagesall.rmsg:94
+#: data/mp/messages/resmessagesall.rmsg:115
 msgid "Slower than Python"
 msgstr "Piton'dan daha yavaş"
 
 #: data/base/messages/resmessagesall.rmsg:95
+#: data/mp/messages/resmessagesall.rmsg:116
 msgid "High power costs and slow to produce"
 msgstr "Üretimde yavaştır ve Maliyeti çok yüksektir"
 
 #: data/base/messages/resmessagesall.rmsg:103
+#: data/mp/messages/resmessagesall.rmsg:123
 msgid "New Propulsion Available for Design"
 msgstr "Yeni Yürütücü Tasarım İçin Hazır"
 
 #: data/base/messages/resmessagesall.rmsg:104
+#: data/mp/messages/resmessagesall.rmsg:124
 msgid "Vertical Take Off and Landing Propulsion"
 msgstr "Dikey Kalkış ve İniş Yürütücüsü"
 
 #: data/base/messages/resmessagesall.rmsg:105
+#: data/mp/messages/resmessagesall.rmsg:125
 msgid "Speed: VTOL"
 msgstr "Hız: DİvK "
 
 #: data/base/messages/resmessagesall.rmsg:115
+#: data/mp/messages/resmessagesall.rmsg:134
 msgid "Rocket detects and locks on to engine emissions"
 msgstr "Roket Araç Emisyonlarını Tespit Edecek ve Kilitlenecek"
 
 #: data/base/messages/resmessagesall.rmsg:126
+#: data/mp/messages/resmessagesall.rmsg:144
 msgid "Anti-tank rocket"
 msgstr "Anti Tank Roketi"
 
 #: data/base/messages/resmessagesall.rmsg:137
+#: data/mp/messages/resmessagesall.rmsg:154
 msgid "High explosive shaped charge missile"
 msgstr "P.A.G.S Füzeler"
 
 #: data/base/messages/resmessagesall.rmsg:148
+#: data/mp/messages/resmessagesall.rmsg:164
 msgid "Laser designator paints and guides rounds to the target"
 msgstr "Lazer hedefleyici hedefi renklendirir"
 
@@ -6331,6 +7486,7 @@ msgid "Robotic Cyborg Production Mk3"
 msgstr "Robotik Cyborg Üretimi Kdm3"
 
 #: data/base/messages/strings/names.txt:789
+#: data/mp/messages/resmessagesall.rmsg:624
 msgid "Advanced Cyborg Production"
 msgstr "Modern Cyborg Üretimi"
 
@@ -6363,6 +7519,7 @@ msgid "Robotic Factory Production Mk3"
 msgstr "Robotik Fabrika Üretimi Kdm3"
 
 #: data/base/messages/strings/names.txt:800
+#: data/mp/messages/resmessagesall.rmsg:614
 msgid "Advanced Factory Production"
 msgstr "Modern Fabrika Üretimi"
 
@@ -8006,6 +9163,7 @@ msgid "Self-Replicating Factory Production"
 msgstr "Kendini Kopyalayan Araç Üretimi"
 
 #: data/base/messages/strings/resstrings.txt:444
+#: data/mp/messages/resmessagesall.rmsg:284
 #: data/mp/messages/strings/resstrings.txt:472
 msgid "Heavy repair unit"
 msgstr "Ağır Tamir Birimi"
@@ -9078,6 +10236,623 @@ msgstr "Onları Dünyayı yeniden inşa etmek için kullanacağız."
 msgid "Slowly, out of the ashes we will rise again..."
 msgstr "Yavaşça, küllerimizden yeniden doğacağız..."
 
+#: data/mp/messages/resmessages12.rmsg:45
+msgid "Construction speed +10%"
+msgstr "İnşa Hızı +10%"
+
+#: data/mp/messages/resmessages12.rmsg:75
+#: data/mp/messages/resmessagesall.rmsg:165
+msgid "Cannon accuracy +10%"
+msgstr "Topçu Hedef Tutturması +10%"
+
+#: data/mp/messages/resmessages12.rmsg:85
+msgid "Flamer reload time -15%"
+msgstr "Alev Atıcı Yeniden Yükle Süresi -15%"
+
+#: data/mp/messages/resmessages12.rmsg:105
+#: data/mp/messages/resmessages23.rmsg:135
+#: data/mp/messages/resmessages2.rmsg:685
+msgid "Machinegun reload time -15%"
+msgstr "Makinalı Yeniden Yükleme Süresi-15%"
+
+#: data/mp/messages/resmessages12.rmsg:125
+#: data/mp/messages/resmessages23.rmsg:145
+#: data/mp/messages/resmessages3.rmsg:905
+msgid "Mortar accuracy +10%"
+msgstr "Havan Topu Hedef Tutturması +10%"
+
+#: data/mp/messages/resmessages12.rmsg:135
+#: data/mp/messages/resmessages3.rmsg:915
+msgid "Mortar reload time -10%"
+msgstr "Havan Topu Yeniden Yükleme Süresi -10%"
+
+#: data/mp/messages/resmessages12.rmsg:155
+#: data/mp/messages/resmessages1.rmsg:565
+msgid "Rocket reload time -15%"
+msgstr "Roket Yeniden Yükleme Süresi -15%"
+
+#: data/mp/messages/resmessages12.rmsg:165
+#: data/mp/messages/resmessages3.rmsg:685
+msgid "Cannon reload time -10%"
+msgstr "Topçu Yeniden Yükleme Süresi -10%"
+
+#: data/mp/messages/resmessages12.rmsg:175
+#: data/mp/messages/resmessages1.rmsg:445
+#: data/mp/messages/resmessages3.rmsg:675
+msgid "Cannon damage +25%"
+msgstr "Topçu Hasarı +25%"
+
+#: data/mp/messages/resmessages12.rmsg:185
+#: data/mp/messages/resmessages1.rmsg:545
+#: data/mp/messages/resmessages1.rmsg:575
+#: data/mp/messages/resmessagesall.rmsg:135
+msgid "Rocket accuracy +10%"
+msgstr "Roket Hedef Tutturması +10%"
+
+#: data/mp/messages/resmessages1.rmsg:25
+#: data/mp/messages/resmessages3.rmsg:55
+#: data/mp/messages/resmessages3.rmsg:65
+msgid "Kinetic Armor +35%, Body Points +35%"
+msgstr "Kinetik Zırh +35%, Beden Puanı +35%"
+
+#: data/mp/messages/resmessages1.rmsg:75
+msgid "Armour +35%, Body Points +30%"
+msgstr "Zırh +35%, Beden Puanı +30%"
+
+#: data/mp/messages/resmessages1.rmsg:94
+msgid "Armored guard tower with Mini-Rocket Pod"
+msgstr "Mini Roketli Zırhlandırılmış Koruma Kulesi"
+
+#: data/mp/messages/resmessages1.rmsg:114
+msgid "Armored guard tower with Lancer AT rocket"
+msgstr "Roketatar A-T Zırhlandırılmış Koruma Kulesi"
+
+#: data/mp/messages/resmessages1.rmsg:195
+#: data/mp/messages/resmessages2.rmsg:255
+#: data/mp/messages/resmessages3.rmsg:325
+msgid "Repair Speed +100%"
+msgstr "Tamir Hızı +100%"
+
+#: data/mp/messages/resmessages1.rmsg:235
+#, fuzzy, c-format
+msgid "Factory output speed +100% per module"
+msgstr "Fabrika Üretim Hızı Her Ekde +100% artar"
+
+#: data/mp/messages/resmessages1.rmsg:245
+#: data/mp/messages/resmessagesall.rmsg:615
+msgid "Factory output speed +60%"
+msgstr "Fabrik Üretim Hızı +60%"
+
+#: data/mp/messages/resmessages1.rmsg:265
+msgid "Research speed +85%"
+msgstr "Araştırma Hızı +85%"
+
+#: data/mp/messages/resmessages1.rmsg:275
+#: data/mp/messages/resmessages2.rmsg:285
+#: data/mp/messages/resmessages3.rmsg:345
+msgid "Research speed +30%"
+msgstr "Araştırma Hızı +30%"
+
+#: data/mp/messages/resmessages1.rmsg:285
+#: data/mp/messages/resmessages2.rmsg:45
+#: data/mp/messages/resmessages2.rmsg:295
+#: data/mp/messages/resmessages3.rmsg:165
+#: data/mp/messages/resmessages3.rmsg:175
+#: data/mp/messages/resmessages3.rmsg:355
+#: data/mp/messages/resmessages3.rmsg:365
+msgid "Armor +35%, Body Points +30%"
+msgstr "Zırh +35%, Beden Puanı +30%"
+
+#: data/mp/messages/resmessages1.rmsg:355
+#: data/mp/messages/resmessages2.rmsg:385
+#: data/mp/messages/resmessages3.rmsg:515
+#: data/mp/messages/resmessages3.rmsg:525
+msgid "Vehicle speed +5%"
+msgstr "Araç Hızı +5%"
+
+#: data/mp/messages/resmessages1.rmsg:365
+#: data/mp/messages/resmessages2.rmsg:395
+#: data/mp/messages/resmessages3.rmsg:535
+#: data/mp/messages/resmessages3.rmsg:545
+msgid "Kinetic armor +30%, body points +30%"
+msgstr "Kinetik Zırh+30%, Beden Puanı +30%"
+
+#: data/mp/messages/resmessages1.rmsg:425
+#: data/mp/messages/resmessages1.rmsg:435
+#: data/mp/messages/resmessages2.rmsg:575
+msgid "Best Targets: Vehicles, Hardpoints"
+msgstr "Harika Hedefler: Araçlar, Bağlama Noktaları"
+
+#: data/mp/messages/resmessages1.rmsg:465
+#: data/mp/messages/resmessages2.rmsg:605
+#: data/mp/messages/resmessagesall.rmsg:605
+msgid "Flamer damage +25%"
+msgstr "Alev Atıcı Hasarı +25%"
+
+#: data/mp/messages/resmessages1.rmsg:495
+#: data/mp/messages/resmessages1.rmsg:505
+#: data/mp/messages/resmessages2.rmsg:675
+#: data/mp/messages/resmessages3.rmsg:775
+#: data/mp/messages/resmessages3.rmsg:785
+msgid "Machinegun damage +25%"
+msgstr "Makinalı Hasarı +25%"
+
+#: data/mp/messages/resmessages1.rmsg:525
+#: data/mp/messages/resmessages2.rmsg:705
+msgid "Mortar damage +25%"
+msgstr "Havan Topu Hasarı +25%"
+
+#: data/mp/messages/resmessages1.rmsg:555
+#: data/mp/messages/resmessages1.rmsg:585
+#: data/mp/messages/resmessages2.rmsg:715
+#: data/mp/messages/resmessages2.rmsg:725
+msgid "Rocket damage +25%"
+msgstr "Roket Hasarı +25%"
+
+#: data/mp/messages/resmessages23.rmsg:25
+msgid "Power output +25%"
+msgstr "Güç Üretimi +25%"
+
+#: data/mp/messages/resmessages23.rmsg:35
+#: data/mp/messages/resmessages3.rmsg:395
+msgid "Construction speed +20%"
+msgstr "İnşa Hızı +20%"
+
+#: data/mp/messages/resmessages23.rmsg:105
+#: data/mp/messages/resmessages2.rmsg:495
+#: data/mp/messages/resmessages3.rmsg:625
+msgid "AA accuracy +10%"
+msgstr "AA Hedef Tutturması +10%"
+
+#: data/mp/messages/resmessages23.rmsg:123
+#: data/mp/messages/resmessages2.rmsg:563
+#: data/mp/messages/resmessages3.rmsg:663
+msgid "Bomb Upgrade"
+msgstr "Bomba Yükseltmesi"
+
+#: data/mp/messages/resmessages23.rmsg:124
+msgid "Improved trinitramine explosive formula"
+msgstr "Gelişmiş Tnitramin Patlayıcı Formül"
+
+#: data/mp/messages/resmessages23.rmsg:125
+#: data/mp/messages/resmessages2.rmsg:565
+#: data/mp/messages/resmessages3.rmsg:665
+msgid "Bomb damage +25%"
+msgstr "Bomba Hasarı +25%"
+
+#: data/mp/messages/resmessages2.rmsg:5
+msgid "Thermal Armor +45%"
+msgstr "Termal Zırh +45%"
+
+#: data/mp/messages/resmessages2.rmsg:15
+msgid "Kinetic Armor +35%, and Body Points +35%"
+msgstr "Kinetik Zırh +35% ve Beden Puanı +35%"
+
+#: data/mp/messages/resmessages2.rmsg:275
+msgid "Factory production rate +60%"
+msgstr "Fabrika Üretim Oranı +60%"
+
+#: data/mp/messages/resmessages2.rmsg:276
+#: data/mp/messages/resmessagesall.rmsg:616
+msgid "All factories upgraded automatically"
+msgstr "Tüm Fabrikalar Otomatik Olarak Geliştirildi"
+
+#: data/mp/messages/resmessages2.rmsg:315
+#: data/mp/messages/resmessages3.rmsg:385
+msgid "Rearming speed +30%"
+msgstr "Yeniden Silahlandırma Hızı +30%"
+
+#: data/mp/messages/resmessages2.rmsg:405
+msgid "Thermal armor +40%"
+msgstr "Termal Zırh +40%"
+
+#: data/mp/messages/resmessages2.rmsg:505
+#: data/mp/messages/resmessages3.rmsg:635
+msgid "AA Flak damage +25%"
+msgstr "AA Uçaksavar Hasarı +25%"
+
+#: data/mp/messages/resmessages2.rmsg:515
+#: data/mp/messages/resmessages3.rmsg:645
+msgid "AA reload time -15%"
+msgstr "AA Yeniden Yükleme Süresi -15%"
+
+#: data/mp/messages/resmessages2.rmsg:645
+#: data/mp/messages/resmessages3.rmsg:695
+msgid "Howitzer accuracy +10%"
+msgstr "Obüs Hedef Tuturması +10%"
+
+#: data/mp/messages/resmessages2.rmsg:655
+#: data/mp/messages/resmessages3.rmsg:705
+msgid "Howitzer damage +25%"
+msgstr "Obüs Hasarı +25%"
+
+#: data/mp/messages/resmessages2.rmsg:665
+#: data/mp/messages/resmessages3.rmsg:715
+msgid "Howitzer reload time -10%"
+msgstr "Obüs Yeniden Yükleme Süresi -10%"
+
+#: data/mp/messages/resmessages2.rmsg:714
+msgid "High Explosive Anti-Tank warheads"
+msgstr "P.A Anti Tank Savaş Başlığı"
+
+#: data/mp/messages/resmessages3.rmsg:5
+msgid "Thermal Armor +35%"
+msgstr "Termal Zırh +35%"
+
+#: data/mp/messages/resmessages3.rmsg:234
+msgid "Armored guard tower with Pulse Laser"
+msgstr "Darbeli Lazerli Zırhlandırılmış Koruma Kulesi"
+
+#: data/mp/messages/resmessages3.rmsg:335
+msgid "Power output +30%"
+msgstr "Güç Üretimi +30%"
+
+#: data/mp/messages/resmessages3.rmsg:555
+#: data/mp/messages/resmessagesall.rmsg:655
+msgid "Thermal Armor +40%"
+msgstr "Termal zırh +40%"
+
+#: data/mp/messages/resmessages3.rmsg:745
+msgid "Laser accuracy +10%"
+msgstr "Lazer Hedef Tutturması +10%"
+
+#: data/mp/messages/resmessages3.rmsg:755
+msgid "Laser damage +25%"
+msgstr "Lazer Hasarı +25%"
+
+#: data/mp/messages/resmessages3.rmsg:765
+msgid "Laser reload time -15%"
+msgstr "Lazer Yeniden Yükleme Süresi -15%"
+
+#: data/mp/messages/resmessages3.rmsg:815
+#: data/mp/messages/resmessages3.rmsg:825
+msgid "Missile accuracy +10%"
+msgstr "Füze Hedef Tutturması +10%"
+
+#: data/mp/messages/resmessages3.rmsg:835
+msgid "Missile damage +25%"
+msgstr "Füze Hasarı +25%"
+
+#: data/mp/messages/resmessages3.rmsg:885
+#: data/mp/messages/resmessages3.rmsg:895
+msgid "Missile reload time -15%"
+msgstr "Füze Yeniden Yükleme Süresi -15%"
+
+#: data/mp/messages/resmessages3.rmsg:955
+msgid "Rail Gun accuracy +10%"
+msgstr "Demir Silah Hedef Tutturması +10%"
+
+#: data/mp/messages/resmessages3.rmsg:965
+msgid "Rail Gun damage +25%"
+msgstr "Demir Silahı Hasarı +25%"
+
+#: data/mp/messages/resmessages3.rmsg:975
+msgid "Rail Gun reload time -15%"
+msgstr "Demir Silahı Yeniden Yükleme Süresi -15%"
+
+#: data/mp/messages/resmessagesall.rmsg:65
+msgid "Sensor Range +25%"
+msgstr "Algılayıcı Görüş Mesafesi +25%"
+
+#: data/mp/messages/resmessagesall.rmsg:74
+msgid "Improved Thermal Emissions detection"
+msgstr "Gelişmiş Termal Emisyon Tespit Sistemi"
+
+#: data/mp/messages/resmessagesall.rmsg:75
+msgid "Sensor Range +15%"
+msgstr "Algılayıcı Görüş Mesafesi +15%"
+
+#: data/mp/messages/resmessagesall.rmsg:84
+msgid "Advanced Thermal Emissions detection"
+msgstr "Gelişmiş Termal Emisyon Tespit Sistemi"
+
+#: data/mp/messages/resmessagesall.rmsg:85
+msgid "Sensor Range +10%"
+msgstr "Algılayıcı Görüş Mesafesi+10%"
+
+#: data/mp/messages/resmessagesall.rmsg:104
+msgid "Radar detector tower detects enemy sensors"
+msgstr "Radar tespit edici kule düşman algılayıcılarını tespit eder"
+
+#: data/mp/messages/resmessagesall.rmsg:105
+msgid "Orders assigned indirect fire units to fire at the enemy sensors"
+msgstr "Bağlanmış endirek ateş birimlerini düşman bataryalarına karşı atağa kaldırır."
+
+#: data/mp/messages/resmessagesall.rmsg:106
+msgid "Counter-battery fire continues until enemy sensor is suppressed"
+msgstr "A.B Kulesi düşman endirek ateş silahları yok edilene kadar ateşe devam ettirir."
+
+#: data/mp/messages/resmessagesall.rmsg:173
+msgid "Cyborg Transport Available"
+msgstr "Cyborg Taşıma Gemisi Kullanılabilir"
+
+#: data/mp/messages/resmessagesall.rmsg:174
+#: data/mp/messages/resmessagesall.rmsg:184
+msgid "Armed with Machinegun"
+msgstr "Makinalı ile Desteklenmiş"
+
+#: data/mp/messages/resmessagesall.rmsg:176
+#: data/mp/messages/resmessagesall.rmsg:186
+msgid "Requires heavy VTOL factory to produce"
+msgstr "Ağır DİvK  Fabrikası üretim için gereklidir"
+
+#: data/mp/messages/resmessagesall.rmsg:183
+msgid "Super Transport Available"
+msgstr "Süper Taşıma Gemisi Kullanılabilir"
+
+#: data/mp/messages/resmessagesall.rmsg:194
+msgid "Incendiary howitzer emplacement"
+msgstr "Sabitlenmiş Dönüşlü Obüs"
+
+#: data/mp/messages/resmessagesall.rmsg:204
+msgid "Armored Incendiary Mortar battery pit"
+msgstr "Zırhlandırılmış Dönüşlü Havan Batarya Kuyusu"
+
+#: data/mp/messages/resmessagesall.rmsg:214
+msgid "Armored strongpoint with Plasmite Flamer"
+msgstr "Plazmit Alevi Atıcılı Zırhlandırılmış Koruyucu Nokta"
+
+#: data/mp/messages/resmessagesall.rmsg:224
+msgid "Armed with Cyborg Thermite Flamer"
+msgstr "Cyborg Termik Alevi Atıcı"
+
+#: data/mp/messages/resmessagesall.rmsg:234
+msgid "Armed with grenades"
+msgstr "El Bombalı"
+
+#: data/mp/messages/resmessagesall.rmsg:244
+msgid "Combat engineer with construction ability"
+msgstr "Savaş Mühendisi İnşa yeteneğine sahiptir"
+
+#: data/mp/messages/resmessagesall.rmsg:254
+msgid "Mechanic with repair ability"
+msgstr "Mekanik Tamir Yeteneğine Sahiptir"
+
+#: data/mp/messages/resmessagesall.rmsg:264
+msgid "Incendiary Howitzer may be assigned to a sensor"
+msgstr "Dönüşlü Obüs bir algılayıcıya bağlanabilir"
+
+#: data/mp/messages/resmessagesall.rmsg:294
+msgid "Plasmite Flame-thrower"
+msgstr "Plasmit Alevi Atıcı"
+
+#: data/mp/messages/resmessagesall.rmsg:306
+msgid "Steals technology from structures and takes control of weapons"
+msgstr "Binalardan teknolojileri çalar ve silah kontrolünü ele geçirir"
+
+#: data/mp/messages/resmessagesall.rmsg:313
+msgid "New Electronic Technology Discovered"
+msgstr "Yeni Elektronik Teknoloji Keşfedildi"
+
+#: data/mp/messages/resmessagesall.rmsg:315
+msgid "On-board resistance circuit systems"
+msgstr "NEXUS direnç devresi sistemi"
+
+#: data/mp/messages/resmessagesall.rmsg:316
+msgid "Enables resistance to Nexus Link technology"
+msgstr "Nexus Bağlantısı teknolojisine karşı direnci aktif eder."
+
+#: data/mp/messages/resmessagesall.rmsg:326
+msgid "Enables self-repair"
+msgstr "Otomatik Tamiri Aktif Eder"
+
+#: data/mp/messages/resmessagesall.rmsg:334
+msgid "Armed with medium cannon"
+msgstr "Orta Topçulu"
+
+#: data/mp/messages/resmessagesall.rmsg:344
+#: data/mp/messages/resmessagesall.rmsg:354
+msgid "Armed with hyper velocity cannon"
+msgstr "Yüksek Hız Topçusu"
+
+#: data/mp/messages/resmessagesall.rmsg:364
+msgid "Armed with tank killer rockets"
+msgstr "Tank Öldürücü Roketli"
+
+#: data/mp/messages/resmessagesall.rmsg:374
+msgid "Fires heavy pulses of laser light"
+msgstr "Lazer ile Ağır Hasar Verir"
+
+#: data/mp/messages/resmessagesall.rmsg:375
+msgid "Best Targets: Heavy cyborgs"
+msgstr "Harika Hedefler: Ağır Cyborglar"
+
+#: data/mp/messages/resmessagesall.rmsg:384
+msgid "76mm twin-barrel automatic-cannon"
+msgstr "76mm çift namlulu otomatik top"
+
+#: data/mp/messages/resmessagesall.rmsg:393
+#: data/mp/messages/resmessagesall.rmsg:403
+msgid "New Systems Structure Available"
+msgstr "Yeni Sistem Binası Kullanılabilir"
+
+#: data/mp/messages/resmessagesall.rmsg:394
+msgid "Complete battlefield visibility"
+msgstr "Savaş Alanında Tam Görüntüyü Sağlar"
+
+#: data/mp/messages/resmessagesall.rmsg:396
+msgid "Does not offer sensor targeting"
+msgstr "Algılayıcı Hedeflemesi Yapmaz"
+
+#: data/mp/messages/resmessagesall.rmsg:404
+#: data/mp/messages/resmessagesall.rmsg:554
+msgid "Combines standard, counter battery and VTOL sensors"
+msgstr "Standart Bileşen-, A.B ve DİvK  algılayıcıları "
+
+#: data/mp/messages/resmessagesall.rmsg:413
+msgid "New Advanced Weapon Available"
+msgstr "Yeni Gelişmiş Silah Kullanılabilir"
+
+#: data/mp/messages/resmessagesall.rmsg:414
+msgid "Very slow recharge time"
+msgstr "Çok yavaş şarj olur"
+
+#: data/mp/messages/resmessagesall.rmsg:415
+msgid "Immense damage infliction capability"
+msgstr "Büyük Hasar Verme Yeteneği Vardır"
+
+#: data/mp/messages/resmessagesall.rmsg:416
+msgid "Narrow area of effect"
+msgstr "Dar alana etki yapar"
+
+#: data/mp/messages/resmessagesall.rmsg:424
+msgid "Armored guard tower with Nexus Link"
+msgstr "Zırhlandırılmış Nexus Bağlantı Kulesi"
+
+#: data/mp/messages/resmessagesall.rmsg:434
+#: data/mp/messages/resmessagesall.rmsg:444
+msgid "Plasma Cannon firing plasma"
+msgstr "Plazma Topu, Plazma Ateşler"
+
+#: data/mp/messages/resmessagesall.rmsg:445
+#: data/mp/messages/resmessagesall.rmsg:505
+#: data/mp/messages/resmessagesall.rmsg:515
+#: data/mp/messages/resmessagesall.rmsg:525
+#: data/mp/messages/resmessagesall.rmsg:535
+#: data/mp/messages/resmessagesall.rmsg:545
+msgid "Best Targets : Vehicles"
+msgstr "Harika Hedefler: Araçlar"
+
+#: data/mp/messages/resmessagesall.rmsg:454
+msgid "Armored strongpoint with Heavy Laser"
+msgstr "Ağır Lazerli Zırhlandırılmış Koruma Noktası"
+
+#: data/mp/messages/resmessagesall.rmsg:464
+msgid "Armored guard tower with EMP Cannon"
+msgstr "EMP Topçusu Koruma Kulesi"
+
+#: data/mp/messages/resmessagesall.rmsg:474
+msgid "Armed with Cyborg Pulse Laser"
+msgstr "Cyborg Darbeli Lazer"
+
+#: data/mp/messages/resmessagesall.rmsg:484
+msgid "Armed with Cyborg Rail Gun"
+msgstr "Cyborg Demir Silahlı"
+
+#: data/mp/messages/resmessagesall.rmsg:494
+msgid "Armed with Cyborg Scourge Missile Launcher"
+msgstr "Cyborg Felaket Füzeli"
+
+#: data/mp/messages/resmessagesall.rmsg:504
+msgid "Uses advanced mass driver railgun technology"
+msgstr "İleri düzey kitle sürücü demir silahı teknolojisi"
+
+#: data/mp/messages/resmessagesall.rmsg:506
+#: data/mp/messages/resmessagesall.rmsg:516
+#: data/mp/messages/resmessagesall.rmsg:526
+#: data/mp/messages/resmessagesall.rmsg:536
+msgid "Defensive Strength : High"
+msgstr "Savunma Gücü : Yüksek"
+
+#: data/mp/messages/resmessagesall.rmsg:514
+msgid "Uses advanced cannon technology"
+msgstr "Gelişmiş Top teknolojsi"
+
+#: data/mp/messages/resmessagesall.rmsg:524
+msgid "Uses advanced rocket gun technology"
+msgstr "Gelişmiş Roket Teknolojisi"
+
+#: data/mp/messages/resmessagesall.rmsg:534
+msgid "Uses advanced missile gun technology"
+msgstr "Gelişmiş Füze Teknolojisi"
+
+#: data/mp/messages/resmessagesall.rmsg:544
+msgid "Powerful Electronic magnetic pulse weapon"
+msgstr "Güçlü EMP Silahı"
+
+#: data/mp/messages/resmessagesall.rmsg:553
+msgid "New System Available"
+msgstr "Yeni Sistem Kullanılabilir"
+
+#: data/mp/messages/resmessagesall.rmsg:563
+msgid "Medium Super Heavy Body"
+msgstr "Süper Orta Beden"
+
+#: data/mp/messages/resmessagesall.rmsg:564
+msgid "More armor and body points than Vengeance"
+msgstr "İntikam'dan daha fazla zırh ve beden puanı"
+
+#: data/mp/messages/resmessagesall.rmsg:565
+msgid "Slow moving Body"
+msgstr "Yavaş hareket eden beden"
+
+#: data/mp/messages/resmessagesall.rmsg:573
+msgid "Large Super Heavy Body"
+msgstr "Büyük Süper Beden"
+
+#: data/mp/messages/resmessagesall.rmsg:574
+msgid "Maximum armor and body points"
+msgstr "En fazla zırh ve beden puanı"
+
+#: data/mp/messages/resmessagesall.rmsg:575
+msgid "Very slow moving Body"
+msgstr "Çok yavaş hareket eder"
+
+#: data/mp/messages/resmessagesall.rmsg:583
+msgid "Hardpoint Vindicator SAM Site Available"
+msgstr "SAM'li Bağlama Noktası Kullanılabilir"
+
+#: data/mp/messages/resmessagesall.rmsg:593
+msgid "Hardpoint Whirlwind AA Gun Available"
+msgstr "AA Silah'lı Bağlma Noktası Kullanılabilir"
+
+#: data/mp/messages/resmessagesall.rmsg:634
+msgid "Armored EMP Mortar battery pit"
+msgstr "EMP Havan Kuyusu"
+
+#: data/mp/messages/resmessagesall.rmsg:643
+msgid "Laser AA Gun Available"
+msgstr "Lazer AA Silahı Kullanılabilir"
+
+#: data/mp/messages/resmessagesall.rmsg:644
+msgid "Twin Medium Anti-Aircraft Laser"
+msgstr "Çift Orta AA Lazeri"
+
+#: data/mp/messages/resmessagesall.rmsg:663
+msgid "Hardpoint Avenger SAM Site Available"
+msgstr "İntikamcı SAM Bağlama Noktası Kullanılabilir"
+
+#: data/mp/messages/resmessagesall.rmsg:673
+msgid "Hardpoint Cyclone AA Gun Available"
+msgstr "Girdap AA Silahlı Bağlama Noktası Kullanılabilir"
+
+#: data/mp/messages/resmessagesall.rmsg:674
+msgid "Quad 80mm Anti-Aircraft machinegun"
+msgstr "Dörtlü 80mm AA Makinalı"
+
+#: data/mp/messages/resmessagesall.rmsg:684
+#: data/mp/messages/resmessagesall.rmsg:694
+msgid "Twin Multi-barrel, rapid-fire machinegun"
+msgstr "Çift namlulu hızlı ateşlenebilir makinalı"
+
+#: data/mp/messages/resmessagesall.rmsg:693
+msgid "Hardpoint Twin Assault Gun Available"
+msgstr "Çift Hücüm Silahlı Bağlama Noktası Kullanılabilir"
+
+#: data/mp/messages/resmessagesall.rmsg:704
+msgid "Drops high intensity Plasmite bombs"
+msgstr "Yüksek patlayıcılı Plazmit bombaları atar"
+
+#: data/mp/messages/resmessagesall.rmsg:713
+msgid "New VTOL Missile Launcher"
+msgstr "Yeni DİvK Füze Atıcı"
+
+#: data/mp/messages/resmessagesall.rmsg:714
+msgid "Fires Electronic Magnetic Pulse Missiles"
+msgstr "EMP Füzeleri Ateşler"
+
+#: data/mp/messages/resmessagesall.rmsg:723
+#: data/mp/messages/resmessagesall.rmsg:733
+#: data/mp/messages/resmessagesall.rmsg:743
+msgid "Stronger Commander Turret Available for Design"
+msgstr "Güçlü Komuta Tareti Tasarım İçin Hazır"
+
+#: data/mp/messages/resmessagesall.rmsg:724
+#: data/mp/messages/resmessagesall.rmsg:734
+#: data/mp/messages/resmessagesall.rmsg:744
+msgid "Upgraded battlefield computer system"
+msgstr "Gelişmiş Savaşcı Bilgisayar Sistemi"
+
 #: data/mp/messages/strings/names.txt:15
 #: data/mp/messages/strings/names.txt:673
 msgid "Cyborg Transport"
@@ -10134,15 +11909,15 @@ msgstr "Plasmit Aleci Atıcı Cezalandırıcı DİvK "
 msgid "System locale"
 msgstr "Yerel Sistem"
 
-#: lib/ivis_opengl/screen.cpp:144
+#: lib/ivis_opengl/screen.cpp:145
 msgid "OpenGL 2.0 is not supported by your system. Some things may look wrong. Please upgrade your graphics driver/hardware, if possible."
 msgstr "OpenGL 2.0 sisteminiz tarafından desteklenmiyor. Bazı şeyler yanlış görünebilir. Lütfen grafik sürücünüzü/donanımınızı yükseltin, mümkünse."
 
-#: lib/ivis_opengl/screen.cpp:151
+#: lib/ivis_opengl/screen.cpp:152
 msgid "OpenGL 1.5/2.0 is not supported by your system. Some things may look wrong. Please upgrade your graphics driver/hardware, if possible."
 msgstr "OpenGL 1.5/2.0 sisteminiz tarafından desteklenmiyor. Bazı şeyler yanlış görünebilir. Lütfen grafik sürücünüzü/donanımınızı yükseltin, mümkünse."
 
-#: lib/ivis_opengl/screen.cpp:156
+#: lib/ivis_opengl/screen.cpp:159
 msgid "OpenGL 1.4 + VBO extension is not supported by your system. The game requires this. Please upgrade your graphics drivers/hardware, if possible."
 msgstr "OpenGL 1.4 + VBO sisteminiz tarafından desteklenmiyor. Oyun buna gereksinim duyar. Lütfen grafik sürücünüzü/donanımınızı yükseltin, mümkünse."
 
@@ -10566,20 +12341,20 @@ msgstr "Sistemler"
 msgid "Delete Template"
 msgstr "Kalıbı Sil"
 
-#: src/display3d.cpp:656
+#: src/display3d.cpp:657
 msgid "Player left"
 msgstr "Oyuncu Çıktı"
 
-#: src/display3d.cpp:660
+#: src/display3d.cpp:661
 msgid "Player dropped"
 msgstr "Oyuncu Düştü"
 
-#: src/display3d.cpp:664
+#: src/display3d.cpp:665
 #: src/multiint.cpp:2262
 msgid "Waiting for other players"
 msgstr "Diğer oyuncular bekleniyor"
 
-#: src/display3d.cpp:669
+#: src/display3d.cpp:670
 msgid "Out of sync"
 msgstr "Senkronize edilmemiş"
 
@@ -10729,11 +12504,11 @@ msgstr "VİDEOLAR"
 #: src/frontend.cpp:381
 #: src/frontend.cpp:451
 #: src/frontend.cpp:592
-#: src/frontend.cpp:737
-#: src/frontend.cpp:871
-#: src/frontend.cpp:1106
-#: src/frontend.cpp:1260
-#: src/frontend.cpp:1280
+#: src/frontend.cpp:738
+#: src/frontend.cpp:872
+#: src/frontend.cpp:1107
+#: src/frontend.cpp:1261
+#: src/frontend.cpp:1281
 msgctxt "menu"
 msgid "Return"
 msgstr "Geri dön"
@@ -10828,8 +12603,8 @@ msgstr "2X"
 
 #: src/frontend.cpp:522
 #: src/frontend.cpp:661
-#: src/frontend.cpp:811
-#: src/frontend.cpp:894
+#: src/frontend.cpp:812
+#: src/frontend.cpp:895
 msgid "Fullscreen"
 msgstr "Tam Ekran"
 
@@ -10845,17 +12620,17 @@ msgstr "Tarama yolları"
 #: src/frontend.cpp:628
 #: src/frontend.cpp:646
 #: src/frontend.cpp:691
-#: src/frontend.cpp:836
-#: src/frontend.cpp:846
-#: src/frontend.cpp:918
-#: src/frontend.cpp:979
-#: src/frontend.cpp:1022
-#: src/frontend.cpp:1063
-#: src/frontend.cpp:1075
-#: src/frontend.cpp:1087
-#: src/frontend.cpp:1122
-#: src/frontend.cpp:1135
-#: src/frontend.cpp:1149
+#: src/frontend.cpp:837
+#: src/frontend.cpp:847
+#: src/frontend.cpp:919
+#: src/frontend.cpp:980
+#: src/frontend.cpp:1023
+#: src/frontend.cpp:1064
+#: src/frontend.cpp:1076
+#: src/frontend.cpp:1088
+#: src/frontend.cpp:1123
+#: src/frontend.cpp:1136
+#: src/frontend.cpp:1150
 msgid "Off"
 msgstr "Kapalı"
 
@@ -10880,15 +12655,15 @@ msgstr "Ekran Sarsıntısı"
 #: src/frontend.cpp:615
 #: src/frontend.cpp:633
 #: src/frontend.cpp:642
-#: src/frontend.cpp:832
-#: src/frontend.cpp:984
-#: src/frontend.cpp:1018
-#: src/frontend.cpp:1059
-#: src/frontend.cpp:1071
-#: src/frontend.cpp:1083
-#: src/frontend.cpp:1127
-#: src/frontend.cpp:1140
-#: src/frontend.cpp:1154
+#: src/frontend.cpp:833
+#: src/frontend.cpp:985
+#: src/frontend.cpp:1019
+#: src/frontend.cpp:1060
+#: src/frontend.cpp:1072
+#: src/frontend.cpp:1084
+#: src/frontend.cpp:1128
+#: src/frontend.cpp:1141
+#: src/frontend.cpp:1155
 msgid "On"
 msgstr "Açık"
 
@@ -10901,19 +12676,19 @@ msgid "Shadows"
 msgstr "Gölgeler"
 
 #: src/frontend.cpp:584
-#: src/frontend.cpp:1287
+#: src/frontend.cpp:1288
 msgid "Radar"
 msgstr "Radar"
 
 #: src/frontend.cpp:585
-#: src/frontend.cpp:697
-#: src/frontend.cpp:1288
+#: src/frontend.cpp:698
+#: src/frontend.cpp:1289
 msgid "Rotating"
 msgstr "Dönüşlü"
 
 #: src/frontend.cpp:585
-#: src/frontend.cpp:697
-#: src/frontend.cpp:1288
+#: src/frontend.cpp:698
+#: src/frontend.cpp:1289
 msgid "Fixed"
 msgstr "Tamir edilmiş"
 
@@ -10921,148 +12696,148 @@ msgstr "Tamir edilmiş"
 msgid "GRAPHICS OPTIONS"
 msgstr "GRAFİK AYARLARI"
 
-#: src/frontend.cpp:725
+#: src/frontend.cpp:726
 #: src/ingameop.cpp:168
 msgid "Voice Volume"
 msgstr "Ses Düzeyi"
 
-#: src/frontend.cpp:729
+#: src/frontend.cpp:730
 #: src/ingameop.cpp:173
 msgid "FX Volume"
 msgstr "Ses Efekti"
 
-#: src/frontend.cpp:733
+#: src/frontend.cpp:734
 #: src/ingameop.cpp:178
 msgid "Music Volume"
 msgstr "Müzik Sesi"
 
-#: src/frontend.cpp:740
+#: src/frontend.cpp:741
 msgid "AUDIO OPTIONS"
 msgstr "SES AYARLARI"
 
-#: src/frontend.cpp:804
+#: src/frontend.cpp:805
 msgid "* Takes effect on game restart"
 msgstr "* Ayarlar oyun tekrar başlatıldığında etkili olacaktır."
 
-#: src/frontend.cpp:807
+#: src/frontend.cpp:808
 msgid "Graphics Mode*"
 msgstr "Grafik Modu*"
 
-#: src/frontend.cpp:815
-#: src/frontend.cpp:889
+#: src/frontend.cpp:816
+#: src/frontend.cpp:890
 msgid "Windowed"
 msgstr "Pencere"
 
-#: src/frontend.cpp:819
+#: src/frontend.cpp:820
 msgid "Resolution*"
 msgstr "Çözünürlük*"
 
-#: src/frontend.cpp:824
+#: src/frontend.cpp:825
 msgid "Texture size"
 msgstr "Yazı Boyutu"
 
-#: src/frontend.cpp:828
+#: src/frontend.cpp:829
 msgid "Vertical sync"
 msgstr "Dikey senk."
 
-#: src/frontend.cpp:863
-#: src/frontend.cpp:924
+#: src/frontend.cpp:864
+#: src/frontend.cpp:925
 msgid "Unsupported"
 msgstr "Desteklenmez"
 
-#: src/frontend.cpp:868
+#: src/frontend.cpp:869
 msgid "VIDEO OPTIONS"
 msgstr "VIDEO AYARLARI"
 
-#: src/frontend.cpp:1056
+#: src/frontend.cpp:1057
 msgid "Reverse Rotation"
 msgstr "Tersine Döndür"
 
-#: src/frontend.cpp:1067
+#: src/frontend.cpp:1068
 msgid "Trap Cursor"
 msgstr "İmleci Yakala"
 
-#: src/frontend.cpp:1080
+#: src/frontend.cpp:1081
 msgid "Switch Mouse Buttons"
 msgstr "Fare Düşmelerini Değiştir"
 
-#: src/frontend.cpp:1092
+#: src/frontend.cpp:1093
 msgid "Rotate Screen"
 msgstr "Ekranı Çevir"
 
-#: src/frontend.cpp:1095
-#: src/frontend.cpp:1168
+#: src/frontend.cpp:1096
+#: src/frontend.cpp:1169
 msgid "Middle Mouse"
 msgstr "Orta Fare Tuşu"
 
-#: src/frontend.cpp:1099
-#: src/frontend.cpp:1163
+#: src/frontend.cpp:1100
+#: src/frontend.cpp:1164
 msgid "Right Mouse"
 msgstr "Sağ Fare Tuşu"
 
-#: src/frontend.cpp:1103
+#: src/frontend.cpp:1104
 msgid "MOUSE OPTIONS"
 msgstr "FARE AYARLARI"
 
-#: src/frontend.cpp:1203
-#: src/frontend.cpp:1281
+#: src/frontend.cpp:1204
+#: src/frontend.cpp:1282
 msgid "Language"
 msgstr "Lisan"
 
-#: src/frontend.cpp:1207
-#: src/frontend.cpp:1285
+#: src/frontend.cpp:1208
+#: src/frontend.cpp:1286
 msgid "Difficulty"
 msgstr "Zorluk"
 
-#: src/frontend.cpp:1211
-#: src/frontend.cpp:1292
-#: src/frontend.cpp:1324
+#: src/frontend.cpp:1212
+#: src/frontend.cpp:1293
+#: src/frontend.cpp:1325
 #: src/multiint.cpp:213
 msgid "Easy"
 msgstr "Kolay"
 
-#: src/frontend.cpp:1214
-#: src/frontend.cpp:1295
-#: src/frontend.cpp:1316
+#: src/frontend.cpp:1215
+#: src/frontend.cpp:1296
+#: src/frontend.cpp:1317
 msgid "Normal"
 msgstr "Normal"
 
-#: src/frontend.cpp:1218
-#: src/frontend.cpp:1298
-#: src/frontend.cpp:1320
+#: src/frontend.cpp:1219
+#: src/frontend.cpp:1299
+#: src/frontend.cpp:1321
 #: src/multiint.cpp:213
 msgid "Hard"
 msgstr "Zor"
 
-#: src/frontend.cpp:1223
-#: src/frontend.cpp:1286
+#: src/frontend.cpp:1224
+#: src/frontend.cpp:1287
 msgid "Scroll Speed"
 msgstr "Kaydırma hızı"
 
-#: src/frontend.cpp:1227
-#: src/frontend.cpp:1282
+#: src/frontend.cpp:1228
+#: src/frontend.cpp:1283
 #, fuzzy
 msgid "Unit Colour:"
 msgstr "Birim Rengi (T.O)"
 
-#: src/frontend.cpp:1247
-#: src/frontend.cpp:1283
+#: src/frontend.cpp:1248
+#: src/frontend.cpp:1284
 #, fuzzy
 msgid "Campaign"
 msgstr "Yeni Oyun"
 
-#: src/frontend.cpp:1257
-#: src/frontend.cpp:1284
+#: src/frontend.cpp:1258
+#: src/frontend.cpp:1285
 #, fuzzy
 msgid "Skirmish/Multiplayer"
 msgstr "Çok Oyunculu"
 
-#: src/frontend.cpp:1263
-#: src/frontend.cpp:1279
+#: src/frontend.cpp:1264
+#: src/frontend.cpp:1280
 msgid "GAME OPTIONS"
 msgstr "OYUN AYARLARI"
 
-#: src/frontend.cpp:1424
+#: src/frontend.cpp:1425
 #: src/multiint.cpp:2526
 msgid "Mod: "
 msgstr "Mod: "
@@ -13256,408 +15031,6 @@ msgstr "Sürüm %s-%s%s%s%s"
 
 #~ msgid "Use your wz2100.net credentials here."
 #~ msgstr "Burada wz2100.net kimlik bilgilerini giriş yapmak için kullan"
-
-#~ msgid "Construction speed +10%"
-#~ msgstr "İnşa Hızı +10%"
-
-#~ msgid "Cannon accuracy +10%"
-#~ msgstr "Topçu Hedef Tutturması +10%"
-
-#~ msgid "Flamer reload time -15%"
-#~ msgstr "Alev Atıcı Yeniden Yükle Süresi -15%"
-
-#~ msgid "Machinegun reload time -15%"
-#~ msgstr "Makinalı Yeniden Yükleme Süresi-15%"
-
-#~ msgid "Mortar accuracy +10%"
-#~ msgstr "Havan Topu Hedef Tutturması +10%"
-
-#~ msgid "Mortar reload time -10%"
-#~ msgstr "Havan Topu Yeniden Yükleme Süresi -10%"
-
-#~ msgid "Rocket reload time -15%"
-#~ msgstr "Roket Yeniden Yükleme Süresi -15%"
-
-#~ msgid "Cannon reload time -10%"
-#~ msgstr "Topçu Yeniden Yükleme Süresi -10%"
-
-#~ msgid "Cannon damage +25%"
-#~ msgstr "Topçu Hasarı +25%"
-
-#~ msgid "Rocket accuracy +10%"
-#~ msgstr "Roket Hedef Tutturması +10%"
-
-#~ msgid "Kinetic Armor +35%, Body Points +35%"
-#~ msgstr "Kinetik Zırh +35%, Beden Puanı +35%"
-
-#~ msgid "Armour +35%, Body Points +30%"
-#~ msgstr "Zırh +35%, Beden Puanı +30%"
-
-#~ msgid "Armored guard tower with Mini-Rocket Pod"
-#~ msgstr "Mini Roketli Zırhlandırılmış Koruma Kulesi"
-
-#~ msgid "Armored guard tower with Lancer AT rocket"
-#~ msgstr "Roketatar A-T Zırhlandırılmış Koruma Kulesi"
-
-#~ msgid "Repair Speed +100%"
-#~ msgstr "Tamir Hızı +100%"
-
-#~ msgid "Factory output speed +100% per module"
-#~ msgstr "Fabrika Üretim Hızı Her Ekde +100% artar"
-
-#~ msgid "Factory output speed +60%"
-#~ msgstr "Fabrik Üretim Hızı +60%"
-
-#~ msgid "Research speed +85%"
-#~ msgstr "Araştırma Hızı +85%"
-
-#~ msgid "Research speed +30%"
-#~ msgstr "Araştırma Hızı +30%"
-
-#~ msgid "Armor +35%, Body Points +30%"
-#~ msgstr "Zırh +35%, Beden Puanı +30%"
-
-#~ msgid "Vehicle speed +5%"
-#~ msgstr "Araç Hızı +5%"
-
-#~ msgid "Kinetic armor +30%, body points +30%"
-#~ msgstr "Kinetik Zırh+30%, Beden Puanı +30%"
-
-#~ msgid "Best Targets: Vehicles, Hardpoints"
-#~ msgstr "Harika Hedefler: Araçlar, Bağlama Noktaları"
-
-#~ msgid "Flamer damage +25%"
-#~ msgstr "Alev Atıcı Hasarı +25%"
-
-#~ msgid "Machinegun damage +25%"
-#~ msgstr "Makinalı Hasarı +25%"
-
-#~ msgid "Mortar damage +25%"
-#~ msgstr "Havan Topu Hasarı +25%"
-
-#~ msgid "Rocket damage +25%"
-#~ msgstr "Roket Hasarı +25%"
-
-#~ msgid "Power output +25%"
-#~ msgstr "Güç Üretimi +25%"
-
-#~ msgid "Construction speed +20%"
-#~ msgstr "İnşa Hızı +20%"
-
-#~ msgid "AA accuracy +10%"
-#~ msgstr "AA Hedef Tutturması +10%"
-
-#~ msgid "Bomb Upgrade"
-#~ msgstr "Bomba Yükseltmesi"
-
-#~ msgid "Improved trinitramine explosive formula"
-#~ msgstr "Gelişmiş Tnitramin Patlayıcı Formül"
-
-#~ msgid "Bomb damage +25%"
-#~ msgstr "Bomba Hasarı +25%"
-
-#~ msgid "Thermal Armor +45%"
-#~ msgstr "Termal Zırh +45%"
-
-#~ msgid "Kinetic Armor +35%, and Body Points +35%"
-#~ msgstr "Kinetik Zırh +35% ve Beden Puanı +35%"
-
-#~ msgid "Factory production rate +60%"
-#~ msgstr "Fabrika Üretim Oranı +60%"
-
-#~ msgid "All factories upgraded automatically"
-#~ msgstr "Tüm Fabrikalar Otomatik Olarak Geliştirildi"
-
-#~ msgid "Rearming speed +30%"
-#~ msgstr "Yeniden Silahlandırma Hızı +30%"
-
-#~ msgid "Thermal armor +40%"
-#~ msgstr "Termal Zırh +40%"
-
-#~ msgid "AA Flak damage +25%"
-#~ msgstr "AA Uçaksavar Hasarı +25%"
-
-#~ msgid "AA reload time -15%"
-#~ msgstr "AA Yeniden Yükleme Süresi -15%"
-
-#~ msgid "Howitzer accuracy +10%"
-#~ msgstr "Obüs Hedef Tuturması +10%"
-
-#~ msgid "Howitzer damage +25%"
-#~ msgstr "Obüs Hasarı +25%"
-
-#~ msgid "Howitzer reload time -10%"
-#~ msgstr "Obüs Yeniden Yükleme Süresi -10%"
-
-#~ msgid "High Explosive Anti-Tank warheads"
-#~ msgstr "P.A Anti Tank Savaş Başlığı"
-
-#~ msgid "Thermal Armor +35%"
-#~ msgstr "Termal Zırh +35%"
-
-#~ msgid "Armored guard tower with Pulse Laser"
-#~ msgstr "Darbeli Lazerli Zırhlandırılmış Koruma Kulesi"
-
-#~ msgid "Power output +30%"
-#~ msgstr "Güç Üretimi +30%"
-
-#~ msgid "Thermal Armor +40%"
-#~ msgstr "Termal zırh +40%"
-
-#~ msgid "Laser accuracy +10%"
-#~ msgstr "Lazer Hedef Tutturması +10%"
-
-#~ msgid "Laser damage +25%"
-#~ msgstr "Lazer Hasarı +25%"
-
-#~ msgid "Laser reload time -15%"
-#~ msgstr "Lazer Yeniden Yükleme Süresi -15%"
-
-#~ msgid "Missile accuracy +10%"
-#~ msgstr "Füze Hedef Tutturması +10%"
-
-#~ msgid "Missile damage +25%"
-#~ msgstr "Füze Hasarı +25%"
-
-#~ msgid "Missile reload time -15%"
-#~ msgstr "Füze Yeniden Yükleme Süresi -15%"
-
-#~ msgid "Rail Gun accuracy +10%"
-#~ msgstr "Demir Silah Hedef Tutturması +10%"
-
-#~ msgid "Rail Gun damage +25%"
-#~ msgstr "Demir Silahı Hasarı +25%"
-
-#~ msgid "Rail Gun reload time -15%"
-#~ msgstr "Demir Silahı Yeniden Yükleme Süresi -15%"
-
-#~ msgid "Sensor Range +25%"
-#~ msgstr "Algılayıcı Görüş Mesafesi +25%"
-
-#~ msgid "Improved Thermal Emissions detection"
-#~ msgstr "Gelişmiş Termal Emisyon Tespit Sistemi"
-
-#~ msgid "Sensor Range +15%"
-#~ msgstr "Algılayıcı Görüş Mesafesi +15%"
-
-#~ msgid "Advanced Thermal Emissions detection"
-#~ msgstr "Gelişmiş Termal Emisyon Tespit Sistemi"
-
-#~ msgid "Sensor Range +10%"
-#~ msgstr "Algılayıcı Görüş Mesafesi+10%"
-
-#~ msgid "Radar detector tower detects enemy sensors"
-#~ msgstr "Radar tespit edici kule düşman algılayıcılarını tespit eder"
-
-#~ msgid "Orders assigned indirect fire units to fire at the enemy sensors"
-#~ msgstr "Bağlanmış endirek ateş birimlerini düşman bataryalarına karşı atağa kaldırır."
-
-#~ msgid "Counter-battery fire continues until enemy sensor is suppressed"
-#~ msgstr "A.B Kulesi düşman endirek ateş silahları yok edilene kadar ateşe devam ettirir."
-
-#~ msgid "Cyborg Transport Available"
-#~ msgstr "Cyborg Taşıma Gemisi Kullanılabilir"
-
-#~ msgid "Armed with Machinegun"
-#~ msgstr "Makinalı ile Desteklenmiş"
-
-#~ msgid "Requires heavy VTOL factory to produce"
-#~ msgstr "Ağır DİvK  Fabrikası üretim için gereklidir"
-
-#~ msgid "Super Transport Available"
-#~ msgstr "Süper Taşıma Gemisi Kullanılabilir"
-
-#~ msgid "Incendiary howitzer emplacement"
-#~ msgstr "Sabitlenmiş Dönüşlü Obüs"
-
-#~ msgid "Armored Incendiary Mortar battery pit"
-#~ msgstr "Zırhlandırılmış Dönüşlü Havan Batarya Kuyusu"
-
-#~ msgid "Armored strongpoint with Plasmite Flamer"
-#~ msgstr "Plazmit Alevi Atıcılı Zırhlandırılmış Koruyucu Nokta"
-
-#~ msgid "Armed with Cyborg Thermite Flamer"
-#~ msgstr "Cyborg Termik Alevi Atıcı"
-
-#~ msgid "Armed with grenades"
-#~ msgstr "El Bombalı"
-
-#~ msgid "Combat engineer with construction ability"
-#~ msgstr "Savaş Mühendisi İnşa yeteneğine sahiptir"
-
-#~ msgid "Mechanic with repair ability"
-#~ msgstr "Mekanik Tamir Yeteneğine Sahiptir"
-
-#~ msgid "Incendiary Howitzer may be assigned to a sensor"
-#~ msgstr "Dönüşlü Obüs bir algılayıcıya bağlanabilir"
-
-#~ msgid "Plasmite Flame-thrower"
-#~ msgstr "Plasmit Alevi Atıcı"
-
-#~ msgid "Steals technology from structures and takes control of weapons"
-#~ msgstr "Binalardan teknolojileri çalar ve silah kontrolünü ele geçirir"
-
-#~ msgid "New Electronic Technology Discovered"
-#~ msgstr "Yeni Elektronik Teknoloji Keşfedildi"
-
-#~ msgid "On-board resistance circuit systems"
-#~ msgstr "NEXUS direnç devresi sistemi"
-
-#~ msgid "Enables resistance to Nexus Link technology"
-#~ msgstr "Nexus Bağlantısı teknolojisine karşı direnci aktif eder."
-
-#~ msgid "Enables self-repair"
-#~ msgstr "Otomatik Tamiri Aktif Eder"
-
-#~ msgid "Armed with medium cannon"
-#~ msgstr "Orta Topçulu"
-
-#~ msgid "Armed with hyper velocity cannon"
-#~ msgstr "Yüksek Hız Topçusu"
-
-#~ msgid "Armed with tank killer rockets"
-#~ msgstr "Tank Öldürücü Roketli"
-
-#~ msgid "Fires heavy pulses of laser light"
-#~ msgstr "Lazer ile Ağır Hasar Verir"
-
-#~ msgid "Best Targets: Heavy cyborgs"
-#~ msgstr "Harika Hedefler: Ağır Cyborglar"
-
-#~ msgid "76mm twin-barrel automatic-cannon"
-#~ msgstr "76mm çift namlulu otomatik top"
-
-#~ msgid "New Systems Structure Available"
-#~ msgstr "Yeni Sistem Binası Kullanılabilir"
-
-#~ msgid "Complete battlefield visibility"
-#~ msgstr "Savaş Alanında Tam Görüntüyü Sağlar"
-
-#~ msgid "Does not offer sensor targeting"
-#~ msgstr "Algılayıcı Hedeflemesi Yapmaz"
-
-#~ msgid "Combines standard, counter battery and VTOL sensors"
-#~ msgstr "Standart Bileşen-, A.B ve DİvK  algılayıcıları "
-
-#~ msgid "New Advanced Weapon Available"
-#~ msgstr "Yeni Gelişmiş Silah Kullanılabilir"
-
-#~ msgid "Very slow recharge time"
-#~ msgstr "Çok yavaş şarj olur"
-
-#~ msgid "Immense damage infliction capability"
-#~ msgstr "Büyük Hasar Verme Yeteneği Vardır"
-
-#~ msgid "Narrow area of effect"
-#~ msgstr "Dar alana etki yapar"
-
-#~ msgid "Armored guard tower with Nexus Link"
-#~ msgstr "Zırhlandırılmış Nexus Bağlantı Kulesi"
-
-#~ msgid "Plasma Cannon firing plasma"
-#~ msgstr "Plazma Topu, Plazma Ateşler"
-
-#~ msgid "Best Targets : Vehicles"
-#~ msgstr "Harika Hedefler: Araçlar"
-
-#~ msgid "Armored strongpoint with Heavy Laser"
-#~ msgstr "Ağır Lazerli Zırhlandırılmış Koruma Noktası"
-
-#~ msgid "Armored guard tower with EMP Cannon"
-#~ msgstr "EMP Topçusu Koruma Kulesi"
-
-#~ msgid "Armed with Cyborg Pulse Laser"
-#~ msgstr "Cyborg Darbeli Lazer"
-
-#~ msgid "Armed with Cyborg Rail Gun"
-#~ msgstr "Cyborg Demir Silahlı"
-
-#~ msgid "Armed with Cyborg Scourge Missile Launcher"
-#~ msgstr "Cyborg Felaket Füzeli"
-
-#~ msgid "Uses advanced mass driver railgun technology"
-#~ msgstr "İleri düzey kitle sürücü demir silahı teknolojisi"
-
-#~ msgid "Defensive Strength : High"
-#~ msgstr "Savunma Gücü : Yüksek"
-
-#~ msgid "Uses advanced cannon technology"
-#~ msgstr "Gelişmiş Top teknolojsi"
-
-#~ msgid "Uses advanced rocket gun technology"
-#~ msgstr "Gelişmiş Roket Teknolojisi"
-
-#~ msgid "Uses advanced missile gun technology"
-#~ msgstr "Gelişmiş Füze Teknolojisi"
-
-#~ msgid "Powerful Electronic magnetic pulse weapon"
-#~ msgstr "Güçlü EMP Silahı"
-
-#~ msgid "New System Available"
-#~ msgstr "Yeni Sistem Kullanılabilir"
-
-#~ msgid "Medium Super Heavy Body"
-#~ msgstr "Süper Orta Beden"
-
-#~ msgid "More armor and body points than Vengeance"
-#~ msgstr "İntikam'dan daha fazla zırh ve beden puanı"
-
-#~ msgid "Slow moving Body"
-#~ msgstr "Yavaş hareket eden beden"
-
-#~ msgid "Large Super Heavy Body"
-#~ msgstr "Büyük Süper Beden"
-
-#~ msgid "Maximum armor and body points"
-#~ msgstr "En fazla zırh ve beden puanı"
-
-#~ msgid "Very slow moving Body"
-#~ msgstr "Çok yavaş hareket eder"
-
-#~ msgid "Hardpoint Vindicator SAM Site Available"
-#~ msgstr "SAM'li Bağlama Noktası Kullanılabilir"
-
-#~ msgid "Hardpoint Whirlwind AA Gun Available"
-#~ msgstr "AA Silah'lı Bağlma Noktası Kullanılabilir"
-
-#~ msgid "Armored EMP Mortar battery pit"
-#~ msgstr "EMP Havan Kuyusu"
-
-#~ msgid "Laser AA Gun Available"
-#~ msgstr "Lazer AA Silahı Kullanılabilir"
-
-#~ msgid "Twin Medium Anti-Aircraft Laser"
-#~ msgstr "Çift Orta AA Lazeri"
-
-#~ msgid "Hardpoint Avenger SAM Site Available"
-#~ msgstr "İntikamcı SAM Bağlama Noktası Kullanılabilir"
-
-#~ msgid "Hardpoint Cyclone AA Gun Available"
-#~ msgstr "Girdap AA Silahlı Bağlama Noktası Kullanılabilir"
-
-#~ msgid "Quad 80mm Anti-Aircraft machinegun"
-#~ msgstr "Dörtlü 80mm AA Makinalı"
-
-#~ msgid "Twin Multi-barrel, rapid-fire machinegun"
-#~ msgstr "Çift namlulu hızlı ateşlenebilir makinalı"
-
-#~ msgid "Hardpoint Twin Assault Gun Available"
-#~ msgstr "Çift Hücüm Silahlı Bağlama Noktası Kullanılabilir"
-
-#~ msgid "Drops high intensity Plasmite bombs"
-#~ msgstr "Yüksek patlayıcılı Plazmit bombaları atar"
-
-#~ msgid "New VTOL Missile Launcher"
-#~ msgstr "Yeni DİvK Füze Atıcı"
-
-#~ msgid "Fires Electronic Magnetic Pulse Missiles"
-#~ msgstr "EMP Füzeleri Ateşler"
-
-#~ msgid "Stronger Commander Turret Available for Design"
-#~ msgstr "Güçlü Komuta Tareti Tasarım İçin Hazır"
-
-#~ msgid "Upgraded battlefield computer system"
-#~ msgstr "Gelişmiş Savaşcı Bilgisayar Sistemi"
 
 #~ msgid "3 players"
 #~ msgstr "2 Oyuncu"
