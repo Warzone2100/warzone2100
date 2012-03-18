@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2012-03-18 22:26+0100\n"
+"POT-Creation-Date: 2012-03-19 00:49+0100\n"
 "PO-Revision-Date: 2012-02-28 20:37+0100\n"
 "Last-Translator: AM <a@a.fr>\n"
 "Language-Team: French <warzone2100-project@lists.sourceforge.net>\n"
@@ -130,6 +130,67 @@ msgstr "Recherche d'armement terminée"
 #: data/base/messages/strings/resstrings.txt:301
 #: data/base/messages/strings/resstrings.txt:307
 #: data/base/messages/strings/resstrings.txt:323
+#: data/mp/messages/resmessages12.rmsg:3
+#: data/mp/messages/resmessages12.rmsg:13
+#: data/mp/messages/resmessages12.rmsg:23
+#: data/mp/messages/resmessages12.rmsg:33
+#: data/mp/messages/resmessages1.rmsg:83
+#: data/mp/messages/resmessages1.rmsg:93
+#: data/mp/messages/resmessages1.rmsg:103
+#: data/mp/messages/resmessages1.rmsg:113
+#: data/mp/messages/resmessages1.rmsg:123
+#: data/mp/messages/resmessages1.rmsg:133
+#: data/mp/messages/resmessages1.rmsg:143
+#: data/mp/messages/resmessages1.rmsg:153
+#: data/mp/messages/resmessages1.rmsg:163
+#: data/mp/messages/resmessages1.rmsg:173
+#: data/mp/messages/resmessages23.rmsg:13
+#: data/mp/messages/resmessages2.rmsg:53
+#: data/mp/messages/resmessages2.rmsg:63
+#: data/mp/messages/resmessages2.rmsg:73
+#: data/mp/messages/resmessages2.rmsg:83
+#: data/mp/messages/resmessages2.rmsg:93
+#: data/mp/messages/resmessages2.rmsg:103
+#: data/mp/messages/resmessages2.rmsg:113
+#: data/mp/messages/resmessages2.rmsg:123
+#: data/mp/messages/resmessages2.rmsg:133
+#: data/mp/messages/resmessages2.rmsg:143
+#: data/mp/messages/resmessages2.rmsg:153
+#: data/mp/messages/resmessages2.rmsg:163
+#: data/mp/messages/resmessages2.rmsg:173
+#: data/mp/messages/resmessages2.rmsg:183
+#: data/mp/messages/resmessages2.rmsg:193
+#: data/mp/messages/resmessages2.rmsg:203
+#: data/mp/messages/resmessages2.rmsg:213
+#: data/mp/messages/resmessages2.rmsg:223
+#: data/mp/messages/resmessages2.rmsg:233
+#: data/mp/messages/resmessages2.rmsg:243
+#: data/mp/messages/resmessages3.rmsg:183
+#: data/mp/messages/resmessages3.rmsg:193
+#: data/mp/messages/resmessages3.rmsg:203
+#: data/mp/messages/resmessages3.rmsg:213
+#: data/mp/messages/resmessages3.rmsg:223
+#: data/mp/messages/resmessages3.rmsg:233
+#: data/mp/messages/resmessages3.rmsg:243
+#: data/mp/messages/resmessages3.rmsg:253
+#: data/mp/messages/resmessages3.rmsg:263
+#: data/mp/messages/resmessages3.rmsg:273
+#: data/mp/messages/resmessages3.rmsg:283
+#: data/mp/messages/resmessages3.rmsg:293
+#: data/mp/messages/resmessages3.rmsg:303
+#: data/mp/messages/resmessages3.rmsg:313
+#: data/mp/messages/resmessagesall.rmsg:193
+#: data/mp/messages/resmessagesall.rmsg:203
+#: data/mp/messages/resmessagesall.rmsg:213
+#: data/mp/messages/resmessagesall.rmsg:423
+#: data/mp/messages/resmessagesall.rmsg:443
+#: data/mp/messages/resmessagesall.rmsg:453
+#: data/mp/messages/resmessagesall.rmsg:463
+#: data/mp/messages/resmessagesall.rmsg:503
+#: data/mp/messages/resmessagesall.rmsg:513
+#: data/mp/messages/resmessagesall.rmsg:523
+#: data/mp/messages/resmessagesall.rmsg:533
+#: data/mp/messages/resmessagesall.rmsg:633
 #: data/mp/messages/strings/resstrings.txt:133
 #: data/mp/messages/strings/resstrings.txt:139
 #: data/mp/messages/strings/resstrings.txt:145
@@ -160,6 +221,7 @@ msgid "New Defensive Structure Available"
 msgstr "Nouvelle structure défensive disponible"
 
 #: data/base/messages/resmessages12.rmsg:5
+#: data/mp/messages/resmessages12.rmsg:4
 msgid "Armored Mortar battery pit"
 msgstr "Mortier retranché blindé"
 
@@ -181,6 +243,20 @@ msgstr "Mortier retranché blindé"
 #: data/base/messages/strings/resstrings.txt:175
 #: data/base/messages/strings/resstrings.txt:181
 #: data/base/messages/strings/resstrings.txt:187
+#: data/mp/messages/resmessages12.rmsg:5
+#: data/mp/messages/resmessages12.rmsg:15
+#: data/mp/messages/resmessages2.rmsg:95
+#: data/mp/messages/resmessages2.rmsg:105
+#: data/mp/messages/resmessages2.rmsg:115
+#: data/mp/messages/resmessages2.rmsg:125
+#: data/mp/messages/resmessages2.rmsg:135
+#: data/mp/messages/resmessages2.rmsg:145
+#: data/mp/messages/resmessages2.rmsg:155
+#: data/mp/messages/resmessages3.rmsg:205
+#: data/mp/messages/resmessages3.rmsg:215
+#: data/mp/messages/resmessagesall.rmsg:195
+#: data/mp/messages/resmessagesall.rmsg:205
+#: data/mp/messages/resmessagesall.rmsg:635
 #: data/mp/messages/strings/resstrings.txt:163
 #: data/mp/messages/strings/resstrings.txt:177
 #: data/mp/messages/strings/resstrings.txt:183
@@ -232,6 +308,41 @@ msgstr "Assigné automatiquement au radar ou radar de contre-batterie le plus pr
 #: data/base/messages/strings/resstrings.txt:236
 #: data/base/messages/strings/resstrings.txt:242
 #: data/base/messages/strings/resstrings.txt:248
+#: data/mp/messages/resmessages12.rmsg:6
+#: data/mp/messages/resmessages12.rmsg:16
+#: data/mp/messages/resmessages1.rmsg:96
+#: data/mp/messages/resmessages1.rmsg:116
+#: data/mp/messages/resmessages1.rmsg:176
+#: data/mp/messages/resmessages2.rmsg:56
+#: data/mp/messages/resmessages2.rmsg:66
+#: data/mp/messages/resmessages2.rmsg:76
+#: data/mp/messages/resmessages2.rmsg:86
+#: data/mp/messages/resmessages2.rmsg:96
+#: data/mp/messages/resmessages2.rmsg:106
+#: data/mp/messages/resmessages2.rmsg:116
+#: data/mp/messages/resmessages2.rmsg:126
+#: data/mp/messages/resmessages2.rmsg:136
+#: data/mp/messages/resmessages2.rmsg:146
+#: data/mp/messages/resmessages2.rmsg:156
+#: data/mp/messages/resmessages2.rmsg:166
+#: data/mp/messages/resmessages2.rmsg:186
+#: data/mp/messages/resmessages2.rmsg:206
+#: data/mp/messages/resmessages3.rmsg:186
+#: data/mp/messages/resmessages3.rmsg:196
+#: data/mp/messages/resmessages3.rmsg:206
+#: data/mp/messages/resmessages3.rmsg:216
+#: data/mp/messages/resmessages3.rmsg:236
+#: data/mp/messages/resmessages3.rmsg:266
+#: data/mp/messages/resmessagesall.rmsg:6
+#: data/mp/messages/resmessagesall.rmsg:196
+#: data/mp/messages/resmessagesall.rmsg:206
+#: data/mp/messages/resmessagesall.rmsg:216
+#: data/mp/messages/resmessagesall.rmsg:426
+#: data/mp/messages/resmessagesall.rmsg:446
+#: data/mp/messages/resmessagesall.rmsg:456
+#: data/mp/messages/resmessagesall.rmsg:466
+#: data/mp/messages/resmessagesall.rmsg:546
+#: data/mp/messages/resmessagesall.rmsg:636
 #: data/mp/messages/strings/resstrings.txt:136
 #: data/mp/messages/strings/resstrings.txt:142
 #: data/mp/messages/strings/resstrings.txt:148
@@ -253,10 +364,12 @@ msgid "Defensive Strength: Medium"
 msgstr "Puissance défensive : moyenne"
 
 #: data/base/messages/resmessages12.rmsg:16
+#: data/mp/messages/resmessages12.rmsg:14
 msgid "Mini-rocket armored strongpoint"
 msgstr "Pont défensif blindé à PMR"
 
 #: data/base/messages/resmessages12.rmsg:27
+#: data/mp/messages/resmessages12.rmsg:24
 msgid "Armored hardpoint with Heavy Machinegun"
 msgstr "Pont défensif à mitrailleuse lourde"
 
@@ -291,6 +404,30 @@ msgstr "Pont défensif à mitrailleuse lourde"
 #: data/base/messages/strings/resstrings.txt:295
 #: data/base/messages/strings/resstrings.txt:303
 #: data/base/messages/strings/resstrings.txt:309
+#: data/mp/messages/resmessages12.rmsg:25
+#: data/mp/messages/resmessages12.rmsg:35
+#: data/mp/messages/resmessages1.rmsg:85
+#: data/mp/messages/resmessages1.rmsg:95
+#: data/mp/messages/resmessages1.rmsg:105
+#: data/mp/messages/resmessages1.rmsg:115
+#: data/mp/messages/resmessages1.rmsg:125
+#: data/mp/messages/resmessages1.rmsg:135
+#: data/mp/messages/resmessages1.rmsg:145
+#: data/mp/messages/resmessages1.rmsg:155
+#: data/mp/messages/resmessages1.rmsg:165
+#: data/mp/messages/resmessages23.rmsg:15
+#: data/mp/messages/resmessages2.rmsg:215
+#: data/mp/messages/resmessages2.rmsg:225
+#: data/mp/messages/resmessages2.rmsg:235
+#: data/mp/messages/resmessages2.rmsg:245
+#: data/mp/messages/resmessages3.rmsg:265
+#: data/mp/messages/resmessages3.rmsg:275
+#: data/mp/messages/resmessages3.rmsg:285
+#: data/mp/messages/resmessages3.rmsg:295
+#: data/mp/messages/resmessages3.rmsg:305
+#: data/mp/messages/resmessages3.rmsg:315
+#: data/mp/messages/resmessagesall.rmsg:425
+#: data/mp/messages/resmessagesall.rmsg:465
 #: data/mp/messages/strings/resstrings.txt:263
 #: data/mp/messages/strings/resstrings.txt:269
 #: data/mp/messages/strings/resstrings.txt:275
@@ -337,6 +474,29 @@ msgstr "Attaque automatiquement les ennemis à portée"
 #: data/base/messages/strings/resstrings.txt:304
 #: data/base/messages/strings/resstrings.txt:310
 #: data/base/messages/strings/resstrings.txt:326
+#: data/mp/messages/resmessages12.rmsg:26
+#: data/mp/messages/resmessages12.rmsg:36
+#: data/mp/messages/resmessages1.rmsg:106
+#: data/mp/messages/resmessages1.rmsg:126
+#: data/mp/messages/resmessages1.rmsg:136
+#: data/mp/messages/resmessages1.rmsg:146
+#: data/mp/messages/resmessages1.rmsg:156
+#: data/mp/messages/resmessages1.rmsg:166
+#: data/mp/messages/resmessages23.rmsg:16
+#: data/mp/messages/resmessages2.rmsg:176
+#: data/mp/messages/resmessages2.rmsg:196
+#: data/mp/messages/resmessages2.rmsg:216
+#: data/mp/messages/resmessages2.rmsg:226
+#: data/mp/messages/resmessages2.rmsg:236
+#: data/mp/messages/resmessages2.rmsg:246
+#: data/mp/messages/resmessages3.rmsg:226
+#: data/mp/messages/resmessages3.rmsg:246
+#: data/mp/messages/resmessages3.rmsg:256
+#: data/mp/messages/resmessages3.rmsg:276
+#: data/mp/messages/resmessages3.rmsg:286
+#: data/mp/messages/resmessages3.rmsg:296
+#: data/mp/messages/resmessages3.rmsg:306
+#: data/mp/messages/resmessages3.rmsg:316
 #: data/mp/messages/strings/resstrings.txt:224
 #: data/mp/messages/strings/resstrings.txt:248
 #: data/mp/messages/strings/resstrings.txt:290
@@ -350,17 +510,23 @@ msgid "Defensive Strength: High"
 msgstr "Puissance défensive : élevée"
 
 #: data/base/messages/resmessages12.rmsg:38
+#: data/mp/messages/resmessages12.rmsg:34
 msgid "Armored hardpoint with Lancer AT missile"
 msgstr "Pont défensif à lance-missile anti-char"
 
 #: data/base/messages/resmessages12.rmsg:48
 #: data/base/messages/resmessages23.rmsg:37
 #: data/base/messages/resmessages3.rmsg:433
+#: data/mp/messages/resmessages12.rmsg:43
+#: data/mp/messages/resmessages23.rmsg:33
+#: data/mp/messages/resmessages3.rmsg:393
 msgid "Research Breakthrough Improves Construction Rates"
 msgstr "Une découverte tchnologique permet d'augmenter la vitesse de construction"
 
 #: data/base/messages/resmessages12.rmsg:49
 #: data/base/messages/resmessages23.rmsg:38
+#: data/mp/messages/resmessages12.rmsg:44
+#: data/mp/messages/resmessages23.rmsg:34
 msgid "Improved Engineering Techniques"
 msgstr "Techniques de construction améliorées"
 
@@ -373,37 +539,52 @@ msgstr "Augmente la vitesse de construction"
 #: data/base/messages/resmessages12.rmsg:51
 #: data/base/messages/resmessages23.rmsg:40
 #: data/base/messages/resmessages3.rmsg:436
+#: data/mp/messages/resmessages12.rmsg:46
+#: data/mp/messages/resmessages23.rmsg:36
+#: data/mp/messages/resmessages3.rmsg:396
 msgid "All trucks upgraded automatically"
 msgstr "Mise à jour automatique de tous les véhicules de construction"
 
 #: data/base/messages/resmessages12.rmsg:59
 #: data/base/messages/resmessages1.rmsg:4
+#: data/mp/messages/resmessages12.rmsg:53
+#: data/mp/messages/resmessages1.rmsg:3
 msgid "New Systems Turret Available for Design"
 msgstr "Nouveau système de tourelle disponible pour conception"
 
 #: data/base/messages/resmessages12.rmsg:60
+#: data/mp/messages/resmessages12.rmsg:54
 msgid "Counter-battery turret detects enemy indirect fire batteries"
 msgstr "Tourelle de contre-batterie calculant la position de l'artillerie enemie"
 
 #: data/base/messages/resmessages12.rmsg:61
 #: data/base/messages/resmessagesall.rmsg:83
+#: data/mp/messages/resmessages12.rmsg:55
+#: data/mp/messages/resmessagesall.rmsg:95
 msgid "Orders assigned indirect fire units to fire at the enemy batteries"
 msgstr "Ordonne aux unités d'artillerie associées de viser les batteries ennemies"
 
 #: data/base/messages/resmessages12.rmsg:62
 #: data/base/messages/resmessagesall.rmsg:84
+#: data/mp/messages/resmessages12.rmsg:56
+#: data/mp/messages/resmessagesall.rmsg:96
 msgid "Counter-battery fire continues until enemy battery is suppressed"
 msgstr "La riposte est continue jusqu'à élimination de l'artillerie ennemie détectée"
 
 #: data/base/messages/resmessages12.rmsg:70
 #: data/base/messages/resmessages23.rmsg:48
 #: data/base/messages/resmessages3.rmsg:444
+#: data/mp/messages/resmessages12.rmsg:63
+#: data/mp/messages/resmessages23.rmsg:43
+#: data/mp/messages/resmessages3.rmsg:403
 msgid "CB Sensor Improved"
 msgstr "Tourelle de contre-batterie améliorée"
 
 #: data/base/messages/resmessages12.rmsg:71
 #: data/base/messages/resmessages2.rmsg:379
 #: data/base/messages/strings/resstrings.txt:486
+#: data/mp/messages/resmessages12.rmsg:64
+#: data/mp/messages/resmessages2.rmsg:344
 #: data/mp/messages/strings/resstrings.txt:516
 msgid "New fire detection systems"
 msgstr "Nouveau système de détection de tirs"
@@ -411,12 +592,18 @@ msgstr "Nouveau système de détection de tirs"
 #: data/base/messages/resmessages12.rmsg:72
 #: data/base/messages/resmessages23.rmsg:50
 #: data/base/messages/resmessages3.rmsg:446
+#: data/mp/messages/resmessages12.rmsg:65
+#: data/mp/messages/resmessages23.rmsg:45
+#: data/mp/messages/resmessages3.rmsg:405
 msgid "Extends CB Range"
 msgstr "Portée des radars de contre-batterie augmentée"
 
 #: data/base/messages/resmessages12.rmsg:73
 #: data/base/messages/resmessages23.rmsg:51
 #: data/base/messages/resmessages3.rmsg:447
+#: data/mp/messages/resmessages12.rmsg:66
+#: data/mp/messages/resmessages23.rmsg:46
+#: data/mp/messages/resmessages3.rmsg:406
 msgid "All CB sensors upgraded automatically"
 msgstr "Mise à jour automatique de tous les radars de contre-batterie"
 
@@ -427,10 +614,18 @@ msgstr "Mise à jour automatique de tous les radars de contre-batterie"
 #: data/base/messages/resmessages3.rmsg:741
 #: data/base/messages/resmessages3.rmsg:752
 #: data/base/messages/resmessagesall.rmsg:147
+#: data/mp/messages/resmessages12.rmsg:73
+#: data/mp/messages/resmessages12.rmsg:163
+#: data/mp/messages/resmessages12.rmsg:173
+#: data/mp/messages/resmessages1.rmsg:443
+#: data/mp/messages/resmessages3.rmsg:673
+#: data/mp/messages/resmessages3.rmsg:683
+#: data/mp/messages/resmessagesall.rmsg:163
 msgid "Cannon Upgrade"
 msgstr "Mise à jour pour canons"
 
 #: data/base/messages/resmessages12.rmsg:82
+#: data/mp/messages/resmessages12.rmsg:74
 msgid "Determines range to target"
 msgstr "Détermine la distance à la cible"
 
@@ -446,6 +641,13 @@ msgstr "Précision de tir des canons accrue"
 #: data/base/messages/resmessages3.rmsg:744
 #: data/base/messages/resmessages3.rmsg:755
 #: data/base/messages/resmessagesall.rmsg:150
+#: data/mp/messages/resmessages12.rmsg:76
+#: data/mp/messages/resmessages12.rmsg:166
+#: data/mp/messages/resmessages12.rmsg:176
+#: data/mp/messages/resmessages1.rmsg:446
+#: data/mp/messages/resmessages3.rmsg:676
+#: data/mp/messages/resmessages3.rmsg:686
+#: data/mp/messages/resmessagesall.rmsg:166
 msgid "All cannons upgraded automatically"
 msgstr "Mise à jour automatique de tous les canons"
 
@@ -453,6 +655,10 @@ msgstr "Mise à jour automatique de tous les canons"
 #: data/base/messages/resmessages1.rmsg:510
 #: data/base/messages/resmessages2.rmsg:664
 #: data/base/messages/strings/resstrings.txt:765
+#: data/mp/messages/resmessages12.rmsg:83
+#: data/mp/messages/resmessages1.rmsg:463
+#: data/mp/messages/resmessages2.rmsg:603
+#: data/mp/messages/resmessagesall.rmsg:603
 #: data/mp/messages/strings/resstrings.txt:804
 msgid "Flamer Upgrade"
 msgstr "Mise à jour pour lance-flammes"
@@ -461,6 +667,9 @@ msgstr "Mise à jour pour lance-flammes"
 #: data/base/messages/resmessages12.rmsg:181
 #: data/base/messages/resmessages2.rmsg:731
 #: data/base/messages/strings/resstrings.txt:810
+#: data/mp/messages/resmessages12.rmsg:84
+#: data/mp/messages/resmessages12.rmsg:164
+#: data/mp/messages/resmessages2.rmsg:664
 #: data/mp/messages/strings/resstrings.txt:851
 msgid "Automatic loading mechanism replaces manual loader"
 msgstr "Le mécanisme de chargement automatique remplace le chargement manuel"
@@ -473,6 +682,10 @@ msgstr "Cadence de tir des lance-flammes augmentée"
 #: data/base/messages/resmessages1.rmsg:513
 #: data/base/messages/resmessages2.rmsg:667
 #: data/base/messages/strings/resstrings.txt:768
+#: data/mp/messages/resmessages12.rmsg:86
+#: data/mp/messages/resmessages1.rmsg:466
+#: data/mp/messages/resmessages2.rmsg:606
+#: data/mp/messages/resmessagesall.rmsg:606
 #: data/mp/messages/strings/resstrings.txt:807
 msgid "All flamers upgraded automatically"
 msgstr "Mise à jour automatique de tous les lance-flammes"
@@ -491,6 +704,22 @@ msgstr "Mise à jour automatique de tous les lance-flammes"
 #: data/base/messages/strings/resstrings.txt:729
 #: data/base/messages/strings/resstrings.txt:735
 #: data/base/messages/strings/resstrings.txt:757
+#: data/mp/messages/resmessages12.rmsg:93
+#: data/mp/messages/resmessages1.rmsg:413
+#: data/mp/messages/resmessages1.rmsg:423
+#: data/mp/messages/resmessages1.rmsg:433
+#: data/mp/messages/resmessages1.rmsg:453
+#: data/mp/messages/resmessages1.rmsg:473
+#: data/mp/messages/resmessages1.rmsg:483
+#: data/mp/messages/resmessages23.rmsg:163
+#: data/mp/messages/resmessages2.rmsg:573
+#: data/mp/messages/resmessages2.rmsg:583
+#: data/mp/messages/resmessages2.rmsg:593
+#: data/mp/messages/resmessagesall.rmsg:293
+#: data/mp/messages/resmessagesall.rmsg:383
+#: data/mp/messages/resmessagesall.rmsg:433
+#: data/mp/messages/resmessagesall.rmsg:543
+#: data/mp/messages/resmessagesall.rmsg:683
 #: data/mp/messages/strings/resstrings.txt:764
 #: data/mp/messages/strings/resstrings.txt:770
 #: data/mp/messages/strings/resstrings.txt:796
@@ -498,6 +727,7 @@ msgid "New Weapon Turret Available"
 msgstr "Nouvelle tourelle d'armement disponible"
 
 #: data/base/messages/resmessages12.rmsg:104
+#: data/mp/messages/resmessages12.rmsg:94
 msgid ".50-calibre heavy machinegun"
 msgstr "Mitrailleuse lourde de calibre 12,7mm"
 
@@ -505,6 +735,12 @@ msgstr "Mitrailleuse lourde de calibre 12,7mm"
 #: data/base/messages/resmessages1.rmsg:523
 #: data/base/messages/resmessages1.rmsg:534
 #: data/base/messages/resmessages23.rmsg:182
+#: data/mp/messages/resmessages12.rmsg:95
+#: data/mp/messages/resmessages1.rmsg:475
+#: data/mp/messages/resmessages1.rmsg:485
+#: data/mp/messages/resmessages23.rmsg:165
+#: data/mp/messages/resmessagesall.rmsg:685
+#: data/mp/messages/resmessagesall.rmsg:695
 msgid "Best Targets: Infantry, base structures, wheeled vehicles"
 msgstr "Efficace contre : infanterie, bâtiments, véhicules à roues"
 
@@ -547,6 +783,55 @@ msgstr "Efficace contre : infanterie, bâtiments, véhicules à roues"
 #: data/base/messages/strings/resstrings.txt:656
 #: data/base/messages/strings/resstrings.txt:688
 #: data/base/messages/strings/resstrings.txt:694
+#: data/mp/messages/resmessages12.rmsg:96
+#: data/mp/messages/resmessages1.rmsg:35
+#: data/mp/messages/resmessages1.rmsg:45
+#: data/mp/messages/resmessages1.rmsg:55
+#: data/mp/messages/resmessages1.rmsg:65
+#: data/mp/messages/resmessages1.rmsg:376
+#: data/mp/messages/resmessages1.rmsg:416
+#: data/mp/messages/resmessages1.rmsg:426
+#: data/mp/messages/resmessages2.rmsg:25
+#: data/mp/messages/resmessages2.rmsg:35
+#: data/mp/messages/resmessages2.rmsg:456
+#: data/mp/messages/resmessages2.rmsg:466
+#: data/mp/messages/resmessages2.rmsg:476
+#: data/mp/messages/resmessages2.rmsg:486
+#: data/mp/messages/resmessages2.rmsg:526
+#: data/mp/messages/resmessages2.rmsg:536
+#: data/mp/messages/resmessages3.rmsg:75
+#: data/mp/messages/resmessages3.rmsg:85
+#: data/mp/messages/resmessages3.rmsg:95
+#: data/mp/messages/resmessages3.rmsg:105
+#: data/mp/messages/resmessages3.rmsg:115
+#: data/mp/messages/resmessages3.rmsg:125
+#: data/mp/messages/resmessages3.rmsg:135
+#: data/mp/messages/resmessages3.rmsg:145
+#: data/mp/messages/resmessages3.rmsg:155
+#: data/mp/messages/resmessages3.rmsg:726
+#: data/mp/messages/resmessages3.rmsg:736
+#: data/mp/messages/resmessages3.rmsg:926
+#: data/mp/messages/resmessages3.rmsg:936
+#: data/mp/messages/resmessagesall.rmsg:175
+#: data/mp/messages/resmessagesall.rmsg:185
+#: data/mp/messages/resmessagesall.rmsg:225
+#: data/mp/messages/resmessagesall.rmsg:235
+#: data/mp/messages/resmessagesall.rmsg:245
+#: data/mp/messages/resmessagesall.rmsg:255
+#: data/mp/messages/resmessagesall.rmsg:335
+#: data/mp/messages/resmessagesall.rmsg:345
+#: data/mp/messages/resmessagesall.rmsg:355
+#: data/mp/messages/resmessagesall.rmsg:365
+#: data/mp/messages/resmessagesall.rmsg:376
+#: data/mp/messages/resmessagesall.rmsg:436
+#: data/mp/messages/resmessagesall.rmsg:475
+#: data/mp/messages/resmessagesall.rmsg:485
+#: data/mp/messages/resmessagesall.rmsg:495
+#: data/mp/messages/resmessagesall.rmsg:586
+#: data/mp/messages/resmessagesall.rmsg:596
+#: data/mp/messages/resmessagesall.rmsg:646
+#: data/mp/messages/resmessagesall.rmsg:666
+#: data/mp/messages/resmessagesall.rmsg:676
 #: data/mp/messages/strings/resstrings.txt:55
 #: data/mp/messages/strings/resstrings.txt:87
 #: data/mp/messages/strings/resstrings.txt:99
@@ -570,12 +855,21 @@ msgstr "Résistance : moyenne"
 #: data/base/messages/resmessages3.rmsg:862
 #: data/base/messages/strings/resstrings.txt:845
 #: data/base/messages/strings/resstrings.txt:857
+#: data/mp/messages/resmessages12.rmsg:103
+#: data/mp/messages/resmessages1.rmsg:493
+#: data/mp/messages/resmessages1.rmsg:503
+#: data/mp/messages/resmessages23.rmsg:133
+#: data/mp/messages/resmessages2.rmsg:673
+#: data/mp/messages/resmessages2.rmsg:683
+#: data/mp/messages/resmessages3.rmsg:773
+#: data/mp/messages/resmessages3.rmsg:783
 #: data/mp/messages/strings/resstrings.txt:888
 #: data/mp/messages/strings/resstrings.txt:900
 msgid "Machinegun Upgrade"
 msgstr "Mise à jour pour mitrailleuses"
 
 #: data/base/messages/resmessages12.rmsg:115
+#: data/mp/messages/resmessages12.rmsg:104
 msgid "Chaingun mechanism replaces belt-feed"
 msgstr "Les chargeurs à chaîne remplacent les chargeurs à bande"
 
@@ -597,6 +891,14 @@ msgstr "Cadence de tir des mitrailleuses augmentée"
 #: data/base/messages/resmessages3.rmsg:865
 #: data/base/messages/strings/resstrings.txt:848
 #: data/base/messages/strings/resstrings.txt:860
+#: data/mp/messages/resmessages12.rmsg:106
+#: data/mp/messages/resmessages1.rmsg:496
+#: data/mp/messages/resmessages1.rmsg:506
+#: data/mp/messages/resmessages23.rmsg:136
+#: data/mp/messages/resmessages2.rmsg:676
+#: data/mp/messages/resmessages2.rmsg:686
+#: data/mp/messages/resmessages3.rmsg:776
+#: data/mp/messages/resmessages3.rmsg:786
 #: data/mp/messages/strings/resstrings.txt:891
 #: data/mp/messages/strings/resstrings.txt:903
 msgid "All machineguns upgraded automatically"
@@ -613,6 +915,15 @@ msgstr "Mise à jour automatique de toutes les mitrailleuses"
 #: data/base/messages/strings/resstrings.txt:779
 #: data/base/messages/strings/resstrings.txt:787
 #: data/base/messages/strings/resstrings.txt:891
+#: data/mp/messages/resmessages12.rmsg:113
+#: data/mp/messages/resmessages1.rmsg:513
+#: data/mp/messages/resmessages23.rmsg:153
+#: data/mp/messages/resmessages2.rmsg:613
+#: data/mp/messages/resmessages2.rmsg:623
+#: data/mp/messages/resmessages2.rmsg:633
+#: data/mp/messages/resmessages2.rmsg:693
+#: data/mp/messages/resmessagesall.rmsg:263
+#: data/mp/messages/resmessagesall.rmsg:273
 #: data/mp/messages/strings/resstrings.txt:812
 #: data/mp/messages/strings/resstrings.txt:820
 #: data/mp/messages/strings/resstrings.txt:828
@@ -623,6 +934,8 @@ msgstr "Nouvelle artillerie disponible"
 #: data/base/messages/resmessages12.rmsg:126
 #: data/base/messages/resmessages2.rmsg:764
 #: data/base/messages/strings/resstrings.txt:892
+#: data/mp/messages/resmessages12.rmsg:114
+#: data/mp/messages/resmessages2.rmsg:694
 #: data/mp/messages/strings/resstrings.txt:935
 msgid "May be assigned to a sensor"
 msgstr "Peut être affecté(e) à un radar"
@@ -631,6 +944,10 @@ msgstr "Peut être affecté(e) à un radar"
 #: data/base/messages/resmessages1.rmsg:567
 #: data/base/messages/resmessages2.rmsg:765
 #: data/base/messages/strings/resstrings.txt:893
+#: data/mp/messages/resmessages12.rmsg:115
+#: data/mp/messages/resmessages1.rmsg:515
+#: data/mp/messages/resmessages2.rmsg:695
+#: data/mp/messages/resmessagesall.rmsg:275
 #: data/mp/messages/strings/resstrings.txt:936
 msgid "Best Targets: Base structures, infantry, wheeled vehicles"
 msgstr "Efficace contre : bâtiments, infanterie, véhicules à roues"
@@ -651,6 +968,22 @@ msgstr "Efficace contre : bâtiments, infanterie, véhicules à roues"
 #: data/base/messages/resmessagesall.rmsg:128
 #: data/base/messages/resmessagesall.rmsg:139
 #: data/base/messages/strings/resstrings.txt:894
+#: data/mp/messages/resmessages12.rmsg:116
+#: data/mp/messages/resmessages12.rmsg:146
+#: data/mp/messages/resmessages12.rmsg:196
+#: data/mp/messages/resmessages12.rmsg:206
+#: data/mp/messages/resmessages1.rmsg:516
+#: data/mp/messages/resmessages1.rmsg:536
+#: data/mp/messages/resmessages2.rmsg:696
+#: data/mp/messages/resmessages3.rmsg:796
+#: data/mp/messages/resmessages3.rmsg:806
+#: data/mp/messages/resmessages3.rmsg:846
+#: data/mp/messages/resmessages3.rmsg:856
+#: data/mp/messages/resmessages3.rmsg:866
+#: data/mp/messages/resmessages3.rmsg:876
+#: data/mp/messages/resmessagesall.rmsg:146
+#: data/mp/messages/resmessagesall.rmsg:156
+#: data/mp/messages/resmessagesall.rmsg:276
 #: data/mp/messages/strings/resstrings.txt:937
 msgid "Body Points: Very Low"
 msgstr "Résistance : très faible"
@@ -663,11 +996,19 @@ msgstr "Résistance : très faible"
 #: data/base/messages/resmessages3.rmsg:994
 #: data/base/messages/resmessages3.rmsg:1005
 #: data/base/messages/strings/resstrings.txt:905
+#: data/mp/messages/resmessages12.rmsg:123
+#: data/mp/messages/resmessages12.rmsg:133
+#: data/mp/messages/resmessages1.rmsg:523
+#: data/mp/messages/resmessages23.rmsg:143
+#: data/mp/messages/resmessages2.rmsg:703
+#: data/mp/messages/resmessages3.rmsg:903
+#: data/mp/messages/resmessages3.rmsg:913
 #: data/mp/messages/strings/resstrings.txt:950
 msgid "Mortar Upgrade"
 msgstr "Mise à jour pour mortiers"
 
 #: data/base/messages/resmessages12.rmsg:137
+#: data/mp/messages/resmessages12.rmsg:124
 msgid "Targeting systems compensate for distance and weather conditions"
 msgstr "Les systèmes de visée prennent en compte la distance et les conditions météorologiques lors du tir"
 
@@ -685,11 +1026,19 @@ msgstr "Précision de tir des mortiers accrue"
 #: data/base/messages/resmessages3.rmsg:997
 #: data/base/messages/resmessages3.rmsg:1008
 #: data/base/messages/strings/resstrings.txt:908
+#: data/mp/messages/resmessages12.rmsg:126
+#: data/mp/messages/resmessages12.rmsg:136
+#: data/mp/messages/resmessages1.rmsg:526
+#: data/mp/messages/resmessages23.rmsg:146
+#: data/mp/messages/resmessages2.rmsg:706
+#: data/mp/messages/resmessages3.rmsg:906
+#: data/mp/messages/resmessages3.rmsg:916
 #: data/mp/messages/strings/resstrings.txt:953
 msgid "All mortars upgraded automatically"
 msgstr "Mise à jour automatique de tous les mortiers"
 
 #: data/base/messages/resmessages12.rmsg:148
+#: data/mp/messages/resmessages12.rmsg:134
 msgid "Automatic loader replaces manual feed"
 msgstr "Chargeur automatique remplaçant le chargement manuel"
 
@@ -704,14 +1053,22 @@ msgstr "Cadence de tir des mortiers augmentée"
 #: data/base/messages/resmessages1.rmsg:587
 #: data/base/messages/resmessagesall.rmsg:125
 #: data/base/messages/resmessagesall.rmsg:136
+#: data/mp/messages/resmessages12.rmsg:143
+#: data/mp/messages/resmessages12.rmsg:193
+#: data/mp/messages/resmessages12.rmsg:203
+#: data/mp/messages/resmessages1.rmsg:533
+#: data/mp/messages/resmessagesall.rmsg:143
+#: data/mp/messages/resmessagesall.rmsg:153
 msgid "New Rocket Available"
 msgstr "Nouvelle roquette disponible"
 
 #: data/base/messages/resmessages12.rmsg:159
+#: data/mp/messages/resmessages12.rmsg:144
 msgid "Rocket artillery; can be assigned to a sensor"
 msgstr "Artillerie lance-roquettes pouvant être affectée à un radar"
 
 #: data/base/messages/resmessages12.rmsg:160
+#: data/mp/messages/resmessages12.rmsg:145
 msgid "Best Targets: Vehicles and Emplacements"
 msgstr "Efficace contre : véhicules et emplacements"
 
@@ -722,11 +1079,22 @@ msgstr "Efficace contre : véhicules et emplacements"
 #: data/base/messages/resmessages2.rmsg:796
 #: data/base/messages/resmessagesall.rmsg:114
 #: data/base/messages/strings/resstrings.txt:965
+#: data/mp/messages/resmessages12.rmsg:153
+#: data/mp/messages/resmessages12.rmsg:183
+#: data/mp/messages/resmessages1.rmsg:543
+#: data/mp/messages/resmessages1.rmsg:553
+#: data/mp/messages/resmessages1.rmsg:563
+#: data/mp/messages/resmessages1.rmsg:573
+#: data/mp/messages/resmessages1.rmsg:583
+#: data/mp/messages/resmessages2.rmsg:713
+#: data/mp/messages/resmessages2.rmsg:723
+#: data/mp/messages/resmessagesall.rmsg:133
 #: data/mp/messages/strings/resstrings.txt:1010
 msgid "Rocket Upgrade"
 msgstr "Mise à jour pour roquettes"
 
 #: data/base/messages/resmessages12.rmsg:170
+#: data/mp/messages/resmessages12.rmsg:154
 msgid "Autoloader increases reload rate"
 msgstr "Chargeur automatique augmentant la vitesse de rechargement"
 
@@ -741,6 +1109,16 @@ msgstr "Cadence de tir des lance-roquettes augmentée"
 #: data/base/messages/resmessages2.rmsg:799
 #: data/base/messages/resmessagesall.rmsg:117
 #: data/base/messages/strings/resstrings.txt:968
+#: data/mp/messages/resmessages12.rmsg:156
+#: data/mp/messages/resmessages12.rmsg:186
+#: data/mp/messages/resmessages1.rmsg:546
+#: data/mp/messages/resmessages1.rmsg:556
+#: data/mp/messages/resmessages1.rmsg:566
+#: data/mp/messages/resmessages1.rmsg:576
+#: data/mp/messages/resmessages1.rmsg:586
+#: data/mp/messages/resmessages2.rmsg:716
+#: data/mp/messages/resmessages2.rmsg:726
+#: data/mp/messages/resmessagesall.rmsg:136
 #: data/mp/messages/strings/resstrings.txt:1013
 msgid "All rockets upgraded automatically"
 msgstr "Mise à jour automatique de toutes les roquettes"
@@ -751,6 +1129,7 @@ msgid "Increases Cannon ROF"
 msgstr "Cadence de tir des canons augmentée"
 
 #: data/base/messages/resmessages12.rmsg:192
+#: data/mp/messages/resmessages12.rmsg:174
 msgid "Armor-Piercing Fin-Stabilized Discarding Sabot"
 msgstr "Obus APFSDS pour canons"
 
@@ -761,6 +1140,7 @@ msgid "Increases Cannon damage"
 msgstr "Dégâts des canons augmentés"
 
 #: data/base/messages/resmessages12.rmsg:203
+#: data/mp/messages/resmessages12.rmsg:184
 msgid "Rocket tracks the laser designator to the target"
 msgstr "Les roquettes suivent le guidage laser jusqu'à la cible"
 
@@ -771,6 +1151,7 @@ msgid "Increases Rocket accuracy"
 msgstr "Précision de tir des roquettes augmentée"
 
 #: data/base/messages/resmessages12.rmsg:214
+#: data/mp/messages/resmessages12.rmsg:194
 msgid "Heavy anti-tank rocket"
 msgstr "Roquette anti-char lourde"
 
@@ -787,24 +1168,42 @@ msgstr "Roquette anti-char lourde"
 #: data/base/messages/resmessagesall.rmsg:127
 #: data/base/messages/strings/resstrings.txt:731
 #: data/base/messages/strings/resstrings.txt:737
+#: data/mp/messages/resmessages12.rmsg:195
+#: data/mp/messages/resmessages1.rmsg:415
+#: data/mp/messages/resmessages2.rmsg:585
+#: data/mp/messages/resmessages3.rmsg:795
+#: data/mp/messages/resmessages3.rmsg:925
+#: data/mp/messages/resmessages3.rmsg:935
+#: data/mp/messages/resmessages3.rmsg:945
+#: data/mp/messages/resmessagesall.rmsg:145
+#: data/mp/messages/resmessagesall.rmsg:385
+#: data/mp/messages/resmessagesall.rmsg:435
+#: data/mp/messages/resmessagesall.rmsg:715
 #: data/mp/messages/strings/resstrings.txt:766
 #: data/mp/messages/strings/resstrings.txt:772
 msgid "Best Targets: Vehicles"
 msgstr "Efficace contre : véhicules"
 
 #: data/base/messages/resmessages12.rmsg:225
+#: data/mp/messages/resmessages12.rmsg:204
 msgid "Fires salvoes of mini-rockets"
 msgstr "Tire des salves de mini-roquettes à charge creuse"
 
 #: data/base/messages/resmessages12.rmsg:226
+#: data/mp/messages/resmessages12.rmsg:205
 msgid "Best Targets: Base structures"
 msgstr "Efficace contre : bâtiments"
 
 #: data/base/messages/resmessages1.rmsg:5
+#: data/mp/messages/resmessages1.rmsg:4
 msgid "New battlefield computer system"
 msgstr "Nouvel ordinateur de bataille"
 
 #: data/base/messages/resmessages1.rmsg:6
+#: data/mp/messages/resmessages1.rmsg:5
+#: data/mp/messages/resmessagesall.rmsg:725
+#: data/mp/messages/resmessagesall.rmsg:735
+#: data/mp/messages/resmessagesall.rmsg:745
 msgid "Commander leads groups acts as factory delivery point"
 msgstr "Les groupes menés par un commandant peuvent servir de point de ralliement à de nouvelles unités produites"
 
@@ -814,6 +1213,15 @@ msgstr "Les groupes menés par un commandant peuvent servir de point de rallieme
 #: data/base/messages/resmessages2.rmsg:645
 #: data/base/messages/resmessages3.rmsg:1041
 #: data/base/messages/strings/resstrings.txt:738
+#: data/mp/messages/resmessages1.rmsg:6
+#: data/mp/messages/resmessages1.rmsg:396
+#: data/mp/messages/resmessages1.rmsg:436
+#: data/mp/messages/resmessages2.rmsg:586
+#: data/mp/messages/resmessages3.rmsg:946
+#: data/mp/messages/resmessagesall.rmsg:386
+#: data/mp/messages/resmessagesall.rmsg:726
+#: data/mp/messages/resmessagesall.rmsg:736
+#: data/mp/messages/resmessagesall.rmsg:746
 #: data/mp/messages/strings/resstrings.txt:773
 msgid "Body Points: High"
 msgstr "Résistance : élevée"
@@ -821,18 +1229,24 @@ msgstr "Résistance : élevée"
 #: data/base/messages/resmessages1.rmsg:15
 #: data/base/messages/resmessages3.rmsg:15
 #: data/base/messages/resmessages3.rmsg:26
+#: data/mp/messages/resmessages1.rmsg:13
+#: data/mp/messages/resmessages3.rmsg:13
+#: data/mp/messages/resmessages3.rmsg:23
 msgid "Computer Technology Breakthrough"
 msgstr "Nouvelle découverte informatique"
 
 #: data/base/messages/resmessages1.rmsg:16
+#: data/mp/messages/resmessages1.rmsg:14
 msgid "Synaptic Link allows humans to interface directly with computers"
 msgstr "Le Lien Synaptique permet aux êtres humains de se connecter directement aux ordinateurs"
 
 #: data/base/messages/resmessages1.rmsg:17
+#: data/mp/messages/resmessages1.rmsg:15
 msgid "Cyborgs can now be researched"
 msgstr "Vous pouvez maintenant faire des recherches sur les Cyborgs"
 
 #: data/base/messages/resmessages1.rmsg:18
+#: data/mp/messages/resmessages1.rmsg:16
 msgid "New research options available"
 msgstr "Nouvelles options de recherche disponibles"
 
@@ -841,12 +1255,18 @@ msgstr "Nouvelles options de recherche disponibles"
 #: data/base/messages/resmessages3.rmsg:59
 #: data/base/messages/resmessages3.rmsg:70
 #: data/base/messages/strings/resstrings.txt:31
+#: data/mp/messages/resmessages1.rmsg:23
+#: data/mp/messages/resmessages2.rmsg:13
+#: data/mp/messages/resmessages3.rmsg:53
+#: data/mp/messages/resmessages3.rmsg:63
 #: data/mp/messages/strings/resstrings.txt:35
 msgid "Cyborg Materials Improved"
 msgstr "Matériaux de fabrication pour Cyborgs améliorés"
 
 #: data/base/messages/resmessages1.rmsg:27
 #: data/base/messages/resmessages1.rmsg:401
+#: data/mp/messages/resmessages1.rmsg:24
+#: data/mp/messages/resmessages1.rmsg:364
 msgid "Layered composite alloys and energy-absorbing fibres"
 msgstr "Blindage multi-couches d'alliages composites et de fibres absorbant les impacts"
 
@@ -869,6 +1289,14 @@ msgstr "Blindage cinétique et résistance augmentés"
 #: data/base/messages/resmessages3.rmsg:73
 #: data/base/messages/strings/resstrings.txt:34
 #: data/base/messages/strings/resstrings.txt:44
+#: data/mp/messages/resmessages1.rmsg:26
+#: data/mp/messages/resmessages23.rmsg:6
+#: data/mp/messages/resmessages2.rmsg:6
+#: data/mp/messages/resmessages2.rmsg:16
+#: data/mp/messages/resmessages3.rmsg:6
+#: data/mp/messages/resmessages3.rmsg:46
+#: data/mp/messages/resmessages3.rmsg:56
+#: data/mp/messages/resmessages3.rmsg:66
 #: data/mp/messages/strings/resstrings.txt:38
 #: data/mp/messages/strings/resstrings.txt:48
 msgid "All Cyborgs upgraded automatically"
@@ -886,12 +1314,34 @@ msgstr "Mise à jour automatique de tous les Cyborgs"
 #: data/base/messages/resmessages3.rmsg:114
 #: data/base/messages/strings/resstrings.txt:49
 #: data/base/messages/strings/resstrings.txt:65
+#: data/mp/messages/resmessages1.rmsg:33
+#: data/mp/messages/resmessages1.rmsg:43
+#: data/mp/messages/resmessages1.rmsg:53
+#: data/mp/messages/resmessages1.rmsg:63
+#: data/mp/messages/resmessages2.rmsg:23
+#: data/mp/messages/resmessages2.rmsg:33
+#: data/mp/messages/resmessages3.rmsg:73
+#: data/mp/messages/resmessages3.rmsg:83
+#: data/mp/messages/resmessages3.rmsg:93
+#: data/mp/messages/resmessages3.rmsg:103
+#: data/mp/messages/resmessagesall.rmsg:223
+#: data/mp/messages/resmessagesall.rmsg:233
+#: data/mp/messages/resmessagesall.rmsg:243
+#: data/mp/messages/resmessagesall.rmsg:253
+#: data/mp/messages/resmessagesall.rmsg:333
+#: data/mp/messages/resmessagesall.rmsg:343
+#: data/mp/messages/resmessagesall.rmsg:353
+#: data/mp/messages/resmessagesall.rmsg:363
+#: data/mp/messages/resmessagesall.rmsg:473
+#: data/mp/messages/resmessagesall.rmsg:483
+#: data/mp/messages/resmessagesall.rmsg:493
 #: data/mp/messages/strings/resstrings.txt:53
 #: data/mp/messages/strings/resstrings.txt:85
 msgid "New Cyborg Available"
 msgstr "Nouveau cyborg disponible"
 
 #: data/base/messages/resmessages1.rmsg:38
+#: data/mp/messages/resmessages1.rmsg:34
 msgid "Armed with Cyborg Machinegun"
 msgstr "Armé d'une mitrailleuse"
 
@@ -913,6 +1363,31 @@ msgstr "Armé d'une mitrailleuse"
 #: data/base/messages/strings/resstrings.txt:68
 #: data/base/messages/strings/resstrings.txt:80
 #: data/base/messages/strings/resstrings.txt:86
+#: data/mp/messages/resmessages1.rmsg:36
+#: data/mp/messages/resmessages1.rmsg:46
+#: data/mp/messages/resmessages1.rmsg:56
+#: data/mp/messages/resmessages1.rmsg:66
+#: data/mp/messages/resmessages2.rmsg:26
+#: data/mp/messages/resmessages2.rmsg:36
+#: data/mp/messages/resmessages3.rmsg:76
+#: data/mp/messages/resmessages3.rmsg:86
+#: data/mp/messages/resmessages3.rmsg:96
+#: data/mp/messages/resmessages3.rmsg:106
+#: data/mp/messages/resmessages3.rmsg:116
+#: data/mp/messages/resmessages3.rmsg:126
+#: data/mp/messages/resmessages3.rmsg:136
+#: data/mp/messages/resmessages3.rmsg:146
+#: data/mp/messages/resmessagesall.rmsg:226
+#: data/mp/messages/resmessagesall.rmsg:236
+#: data/mp/messages/resmessagesall.rmsg:246
+#: data/mp/messages/resmessagesall.rmsg:256
+#: data/mp/messages/resmessagesall.rmsg:336
+#: data/mp/messages/resmessagesall.rmsg:346
+#: data/mp/messages/resmessagesall.rmsg:356
+#: data/mp/messages/resmessagesall.rmsg:366
+#: data/mp/messages/resmessagesall.rmsg:476
+#: data/mp/messages/resmessagesall.rmsg:486
+#: data/mp/messages/resmessagesall.rmsg:496
 #: data/mp/messages/strings/resstrings.txt:56
 #: data/mp/messages/strings/resstrings.txt:88
 #: data/mp/messages/strings/resstrings.txt:100
@@ -921,14 +1396,17 @@ msgid "Requires Cyborg factory to produce"
 msgstr "Usine de production de Cyborgs nécessaire"
 
 #: data/base/messages/resmessages1.rmsg:49
+#: data/mp/messages/resmessages1.rmsg:44
 msgid "Armed with Cyborg Cannon"
 msgstr "Armé d'un canon"
 
 #: data/base/messages/resmessages1.rmsg:60
+#: data/mp/messages/resmessages1.rmsg:54
 msgid "Armed with Cyborg Flamer"
 msgstr "Armé d'un lance-flammes"
 
 #: data/base/messages/resmessages1.rmsg:71
+#: data/mp/messages/resmessages1.rmsg:64
 msgid "Armed with Lance Anti-Tank rocket"
 msgstr "Armé d'un lance-roquettes AC"
 
@@ -937,11 +1415,16 @@ msgstr "Armé d'un lance-roquettes AC"
 #: data/base/messages/resmessages3.rmsg:180
 #: data/base/messages/resmessages3.rmsg:191
 #: data/base/messages/strings/resstrings.txt:103
+#: data/mp/messages/resmessages1.rmsg:73
+#: data/mp/messages/resmessages2.rmsg:43
+#: data/mp/messages/resmessages3.rmsg:163
+#: data/mp/messages/resmessages3.rmsg:173
 #: data/mp/messages/strings/resstrings.txt:123
 msgid "Defenses Improved"
 msgstr "Défenses renforcées"
 
 #: data/base/messages/resmessages1.rmsg:82
+#: data/mp/messages/resmessages1.rmsg:74
 msgid "Improved Titanium-reinforced concrete"
 msgstr "Béton amélioré renforcé au titane"
 
@@ -954,15 +1437,21 @@ msgstr "Augmente le blindage et la résistance"
 #: data/base/messages/resmessages3.rmsg:183
 #: data/base/messages/resmessages3.rmsg:194
 #: data/base/messages/strings/resstrings.txt:106
+#: data/mp/messages/resmessages1.rmsg:76
+#: data/mp/messages/resmessages2.rmsg:46
+#: data/mp/messages/resmessages3.rmsg:166
+#: data/mp/messages/resmessages3.rmsg:176
 #: data/mp/messages/strings/resstrings.txt:126
 msgid "All defenses and walls upgraded automatically"
 msgstr "Mise à jour automatique de tous les murs et défenses"
 
 #: data/base/messages/resmessages1.rmsg:93
+#: data/mp/messages/resmessages1.rmsg:84
 msgid "Steel tower with machinegun"
 msgstr "Tour d'acier à mitrailleuse"
 
 #: data/base/messages/resmessages1.rmsg:95
+#: data/mp/messages/resmessages1.rmsg:86
 msgid "Defensive Strength: Low"
 msgstr "Puissance défensive : faible"
 
@@ -971,6 +1460,7 @@ msgid "Armored guard tower with Mini-Pod Rocket"
 msgstr "Tour de garde renforcée à PMR"
 
 #: data/base/messages/resmessages1.rmsg:115
+#: data/mp/messages/resmessages1.rmsg:104
 msgid "Armored bunker with Machinegun"
 msgstr "Bunker à mitrailleuse"
 
@@ -979,33 +1469,40 @@ msgid "Armored bunker with Lancer AT rocket"
 msgstr "Bunker à roquettes anti-char"
 
 #: data/base/messages/resmessages1.rmsg:137
+#: data/mp/messages/resmessages1.rmsg:124
 msgid "Armored bunker with Flamer"
 msgstr "Bunker à lance-flammes"
 
 #: data/base/messages/resmessages1.rmsg:148
+#: data/mp/messages/resmessages1.rmsg:134
 msgid "Armored bunker with Light Cannon"
 msgstr "Bunker à canon léger "
 
 #: data/base/messages/resmessages1.rmsg:159
+#: data/mp/messages/resmessages1.rmsg:144
 msgid "Armored hardpoint with Light Cannon"
 msgstr "Pont défensif à canon léger "
 
 #: data/base/messages/resmessages1.rmsg:170
+#: data/mp/messages/resmessages1.rmsg:154
 msgid "Armored hardpoint with Medium Cannon"
 msgstr "Pont défensif à canon moyen"
 
 #: data/base/messages/resmessages1.rmsg:181
+#: data/mp/messages/resmessages1.rmsg:164
 msgid "Armored hardpoint with Heavy Cannon"
 msgstr "Pont défensif à canon lourd"
 
 #: data/base/messages/resmessages1.rmsg:192
 #: data/base/messages/strings/resstrings.txt:324
+#: data/mp/messages/resmessages1.rmsg:174
 #: data/mp/messages/strings/resstrings.txt:352
 msgid "Reinforced concrete tank traps"
 msgstr "Pièges à tank en béton renforcé"
 
 #: data/base/messages/resmessages1.rmsg:193
 #: data/base/messages/strings/resstrings.txt:325
+#: data/mp/messages/resmessages1.rmsg:175
 #: data/mp/messages/strings/resstrings.txt:353
 msgid "Prevents enemy movement"
 msgstr "Empêchent l'ennemi de s'y déplacer"
@@ -1015,18 +1512,26 @@ msgstr "Empêchent l'ennemi de s'y déplacer"
 #: data/base/messages/resmessages1.rmsg:246
 #: data/base/messages/resmessagesall.rmsg:15
 #: data/base/messages/resmessagesall.rmsg:26
+#: data/mp/messages/resmessages1.rmsg:183
+#: data/mp/messages/resmessages1.rmsg:203
+#: data/mp/messages/resmessages1.rmsg:223
+#: data/mp/messages/resmessagesall.rmsg:13
+#: data/mp/messages/resmessagesall.rmsg:23
 msgid "New Base Structure Available"
 msgstr "Nouveau bâtiment disponible"
 
 #: data/base/messages/resmessages1.rmsg:203
+#: data/mp/messages/resmessages1.rmsg:184
 msgid "New Repair Facility Repairs Damaged Units"
 msgstr "Nouvel atelier de réparation réparant les unités endommagées"
 
 #: data/base/messages/resmessages1.rmsg:204
+#: data/mp/messages/resmessages1.rmsg:185
 msgid "Use the Command Console to send units back for repair"
 msgstr "Utilisez la console de commande pour envoyer des unités en réparation"
 
 #: data/base/messages/resmessages1.rmsg:205
+#: data/mp/messages/resmessages1.rmsg:186
 msgid "Or select the Repair Facility as a unit's target"
 msgstr "ou sélectionnez l'atelier de réparation comme cible pour une unité"
 
@@ -1034,11 +1539,15 @@ msgstr "ou sélectionnez l'atelier de réparation comme cible pour une unité"
 #: data/base/messages/resmessages2.rmsg:279
 #: data/base/messages/resmessages3.rmsg:356
 #: data/base/messages/strings/resstrings.txt:333
+#: data/mp/messages/resmessages1.rmsg:193
+#: data/mp/messages/resmessages2.rmsg:253
+#: data/mp/messages/resmessages3.rmsg:323
 #: data/mp/messages/strings/resstrings.txt:361
 msgid "Repair Facility Improved"
 msgstr "Ateliers de réparation améliorés"
 
 #: data/base/messages/resmessages1.rmsg:214
+#: data/mp/messages/resmessages1.rmsg:194
 msgid "New automated repair techniques"
 msgstr "Nouvelles techniques de réparation automatisée"
 
@@ -1054,19 +1563,25 @@ msgstr "Accélère la vitesse de réparation"
 #: data/base/messages/resmessages2.rmsg:282
 #: data/base/messages/resmessages3.rmsg:359
 #: data/base/messages/strings/resstrings.txt:336
+#: data/mp/messages/resmessages1.rmsg:196
+#: data/mp/messages/resmessages2.rmsg:256
+#: data/mp/messages/resmessages3.rmsg:326
 #: data/mp/messages/strings/resstrings.txt:364
 msgid "All repair facilities upgraded automatically"
 msgstr "Mise à jour automatique de tous les ateliers de réparation"
 
 #: data/base/messages/resmessages1.rmsg:225
+#: data/mp/messages/resmessages1.rmsg:204
 msgid "Enables command turret research"
 msgstr "Permet d'effectuer des recherches sur la tourelle de commandement"
 
 #: data/base/messages/resmessages1.rmsg:226
+#: data/mp/messages/resmessages1.rmsg:205
 msgid "Directs and collates information for command turrets"
 msgstr "Recueille et adresse des informations pour les tourelles de commandement"
 
 #: data/base/messages/resmessages1.rmsg:227
+#: data/mp/messages/resmessages1.rmsg:206
 msgid "Controls up to five commanders"
 msgstr "Contrôle jusqu'à cinq commandants"
 
@@ -1074,6 +1589,9 @@ msgstr "Contrôle jusqu'à cinq commandants"
 #: data/base/messages/resmessages2.rmsg:290
 #: data/base/messages/strings/resstrings.txt:347
 #: data/base/messages/strings/resstrings.txt:355
+#: data/mp/messages/resmessages1.rmsg:213
+#: data/mp/messages/resmessages2.rmsg:263
+#: data/mp/messages/resmessagesall.rmsg:623
 #: data/mp/messages/strings/resstrings.txt:375
 #: data/mp/messages/strings/resstrings.txt:383
 msgid "Cyborg Production Improved"
@@ -1081,6 +1599,7 @@ msgstr "Production de Cyborgs améliorée"
 
 #: data/base/messages/resmessages1.rmsg:236
 #: data/base/messages/strings/names.txt:783
+#: data/mp/messages/resmessages1.rmsg:214
 msgid "Automated Cyborg Production"
 msgstr "Production de Cyborgs automatisée"
 
@@ -1088,6 +1607,9 @@ msgstr "Production de Cyborgs automatisée"
 #: data/base/messages/resmessages2.rmsg:292
 #: data/base/messages/strings/resstrings.txt:349
 #: data/base/messages/strings/resstrings.txt:357
+#: data/mp/messages/resmessages1.rmsg:215
+#: data/mp/messages/resmessages2.rmsg:265
+#: data/mp/messages/resmessagesall.rmsg:625
 #: data/mp/messages/strings/resstrings.txt:377
 #: data/mp/messages/strings/resstrings.txt:385
 msgid "Increases Cyborg factory output"
@@ -1097,6 +1619,9 @@ msgstr "Augmente la vitesse de production des usines à Cyborgs"
 #: data/base/messages/resmessages2.rmsg:293
 #: data/base/messages/strings/resstrings.txt:350
 #: data/base/messages/strings/resstrings.txt:358
+#: data/mp/messages/resmessages1.rmsg:216
+#: data/mp/messages/resmessages2.rmsg:266
+#: data/mp/messages/resmessagesall.rmsg:626
 #: data/mp/messages/strings/resstrings.txt:378
 #: data/mp/messages/strings/resstrings.txt:386
 msgid "All Cyborg factories upgraded automatically"
@@ -1105,16 +1630,19 @@ msgstr "Mise à jour automatique de toutes les usines à Cyborgs"
 #: data/base/messages/resmessages1.rmsg:247
 #: data/base/messages/strings/names.txt:399
 #: data/base/messages/strings/names.txt:782
+#: data/mp/messages/resmessages1.rmsg:224
 #: data/mp/messages/strings/names.txt:398
 #: data/mp/messages/strings/names.txt:792
 msgid "Cyborg Factory"
 msgstr "Usine de Cyborgs"
 
 #: data/base/messages/resmessages1.rmsg:248
+#: data/mp/messages/resmessages1.rmsg:225
 msgid "Produces Cyborgs"
 msgstr "Produit des Cyborgs"
 
 #: data/base/messages/resmessages1.rmsg:249
+#: data/mp/messages/resmessages1.rmsg:226
 msgid "Research makes additional Cyborgs available"
 msgstr "De nouveaux Cyborgs seront disponibles après recherches"
 
@@ -1122,11 +1650,17 @@ msgstr "De nouveaux Cyborgs seront disponibles après recherches"
 #: data/base/messages/resmessages2.rmsg:334
 #: data/base/messages/resmessages3.rmsg:411
 #: data/base/messages/strings/resstrings.txt:411
+#: data/mp/messages/resmessages1.rmsg:233
+#: data/mp/messages/resmessages2.rmsg:273
+#: data/mp/messages/resmessages2.rmsg:303
+#: data/mp/messages/resmessages3.rmsg:373
+#: data/mp/messages/resmessagesall.rmsg:613
 #: data/mp/messages/strings/resstrings.txt:439
 msgid "Production Improved"
 msgstr "Production améliorée"
 
 #: data/base/messages/resmessages1.rmsg:258
+#: data/mp/messages/resmessages1.rmsg:234
 msgid "Factory module enables medium and large bodies"
 msgstr "Permet de construire des châssis moyens et lourds"
 
@@ -1138,6 +1672,7 @@ msgid "Increases factory output"
 msgstr "Les modules de production augmentent la vitesse de production des usines"
 
 #: data/base/messages/resmessages1.rmsg:260
+#: data/mp/messages/resmessages1.rmsg:236
 msgid "Use a truck to add modules to a factory"
 msgstr "Utilisez un véhicule de construction pour ajouter un module à une usine"
 
@@ -1145,6 +1680,7 @@ msgstr "Utilisez un véhicule de construction pour ajouter un module à une usin
 #: data/base/messages/resmessages2.rmsg:301
 #: data/base/messages/strings/resstrings.txt:365
 #: data/base/messages/strings/resstrings.txt:373
+#: data/mp/messages/resmessages1.rmsg:243
 #: data/mp/messages/strings/resstrings.txt:393
 #: data/mp/messages/strings/resstrings.txt:401
 msgid "Vehicle Production Improved"
@@ -1152,6 +1688,7 @@ msgstr "Production de véhicules améliorée"
 
 #: data/base/messages/resmessages1.rmsg:269
 #: data/base/messages/strings/names.txt:794
+#: data/mp/messages/resmessages1.rmsg:244
 msgid "Automated Factory Production"
 msgstr "Production de véhicules automatisée"
 
@@ -1159,34 +1696,43 @@ msgstr "Production de véhicules automatisée"
 #: data/base/messages/resmessages2.rmsg:304
 #: data/base/messages/strings/resstrings.txt:368
 #: data/base/messages/strings/resstrings.txt:376
+#: data/mp/messages/resmessages1.rmsg:246
 #: data/mp/messages/strings/resstrings.txt:396
 #: data/mp/messages/strings/resstrings.txt:404
 msgid "All vehicle factories upgraded automatically"
 msgstr "Toutes les usines de véhicules améliorées automatiquement"
 
 #: data/base/messages/resmessages1.rmsg:279
+#: data/mp/messages/resmessages1.rmsg:253
 msgid "Power Module Available"
 msgstr "Modules énergétiques disponibles"
 
 #: data/base/messages/resmessages1.rmsg:280
 #: data/base/messages/resmessages23.rmsg:26
 #: data/base/messages/resmessages3.rmsg:367
+#: data/mp/messages/resmessages1.rmsg:254
+#: data/mp/messages/resmessages23.rmsg:23
+#: data/mp/messages/resmessages3.rmsg:333
 msgid "Improved Power Generator Performance"
 msgstr "Performances des générateurs d'énergie améliorées"
 
 #: data/base/messages/resmessages1.rmsg:281
+#: data/mp/messages/resmessages1.rmsg:255
 msgid "Burns oil more efficiently"
 msgstr "Le pétrole est brûlé avec plus de rendement"
 
 #: data/base/messages/resmessages1.rmsg:282
+#: data/mp/messages/resmessages1.rmsg:256
 msgid "Use a truck to add the module to a power generator"
 msgstr "Utilisez un véhicule de construction pour ajouter un module à un générateur d'énergie"
 
 #: data/base/messages/resmessages1.rmsg:290
+#: data/mp/messages/resmessages1.rmsg:263
 msgid "Research Module Available"
 msgstr "Modules de recherche disponibles"
 
 #: data/base/messages/resmessages1.rmsg:291
+#: data/mp/messages/resmessages1.rmsg:264
 msgid "Research module expands research facilities"
 msgstr "Les modules de recherche agrandissent les centres de recherche"
 
@@ -1200,6 +1746,7 @@ msgid "Increases research speed"
 msgstr "Augmente la vitesse de recherche"
 
 #: data/base/messages/resmessages1.rmsg:293
+#: data/mp/messages/resmessages1.rmsg:266
 msgid "Use a truck to add the module to a research facility"
 msgstr "Utilisez un véhicule de construction pour ajouter un module à un centre de recherche"
 
@@ -1207,11 +1754,15 @@ msgstr "Utilisez un véhicule de construction pour ajouter un module à un centr
 #: data/base/messages/resmessages2.rmsg:312
 #: data/base/messages/resmessages3.rmsg:378
 #: data/base/messages/strings/resstrings.txt:389
+#: data/mp/messages/resmessages1.rmsg:273
+#: data/mp/messages/resmessages2.rmsg:283
+#: data/mp/messages/resmessages3.rmsg:343
 #: data/mp/messages/strings/resstrings.txt:417
 msgid "Research Improved"
 msgstr "Recherches accélérées"
 
 #: data/base/messages/resmessages1.rmsg:302
+#: data/mp/messages/resmessages1.rmsg:274
 msgid "Synaptic link data analysis"
 msgstr "Analyse de données par Lien Synaptique"
 
@@ -1219,6 +1770,9 @@ msgstr "Analyse de données par Lien Synaptique"
 #: data/base/messages/resmessages2.rmsg:315
 #: data/base/messages/resmessages3.rmsg:381
 #: data/base/messages/strings/resstrings.txt:392
+#: data/mp/messages/resmessages1.rmsg:276
+#: data/mp/messages/resmessages2.rmsg:286
+#: data/mp/messages/resmessages3.rmsg:346
 #: data/mp/messages/strings/resstrings.txt:420
 msgid "All research facilities upgraded automatically"
 msgstr "Mise à jour automatique de tous les centres de recherche"
@@ -1228,12 +1782,17 @@ msgstr "Mise à jour automatique de tous les centres de recherche"
 #: data/base/messages/resmessages3.rmsg:389
 #: data/base/messages/resmessages3.rmsg:400
 #: data/base/messages/strings/resstrings.txt:399
+#: data/mp/messages/resmessages1.rmsg:283
+#: data/mp/messages/resmessages2.rmsg:293
+#: data/mp/messages/resmessages3.rmsg:353
+#: data/mp/messages/resmessages3.rmsg:363
 #: data/mp/messages/strings/resstrings.txt:427
 msgid "Increases Damage Resistance"
 msgstr "Augmente la résistance aux dégâts"
 
 #: data/base/messages/resmessages1.rmsg:313
 #: data/base/messages/strings/names.txt:805
+#: data/mp/messages/resmessages1.rmsg:284
 #: data/mp/messages/strings/names.txt:815
 msgid "Reinforced Base Structure Materials"
 msgstr "Matériaux de construction améliorés"
@@ -1257,106 +1816,137 @@ msgstr "Augmente le blindage et la résistance"
 #: data/base/messages/resmessages3.rmsg:392
 #: data/base/messages/resmessages3.rmsg:403
 #: data/base/messages/strings/resstrings.txt:402
+#: data/mp/messages/resmessages1.rmsg:286
+#: data/mp/messages/resmessages2.rmsg:296
+#: data/mp/messages/resmessages3.rmsg:356
+#: data/mp/messages/resmessages3.rmsg:366
 #: data/mp/messages/strings/resstrings.txt:430
 msgid "All base structures upgraded automatically"
 msgstr "Mise à jour automatique de tous les bâtiments (non-défensifs)"
 
 #: data/base/messages/resmessages1.rmsg:323
+#: data/mp/messages/resmessages1.rmsg:293
 msgid "Project Light Body"
 msgstr "Châssis léger du Projet"
 
 #: data/base/messages/resmessages1.rmsg:324
+#: data/mp/messages/resmessages1.rmsg:294
 msgid "Light body vulnerable to heavy weapons"
 msgstr "Châssis léger vulnérable face aux armes lourdes"
 
 #: data/base/messages/resmessages1.rmsg:325
+#: data/mp/messages/resmessages1.rmsg:295
 msgid "Good scout vehicle"
 msgstr "Fait un bon véhicule d'éclairage"
 
 #: data/base/messages/resmessages1.rmsg:326
+#: data/mp/messages/resmessages1.rmsg:296
 msgid "Low power cost and low production times"
 msgstr "Faibles coût et délais de production"
 
 #: data/base/messages/resmessages1.rmsg:334
+#: data/mp/messages/resmessages1.rmsg:303
 msgid "New Paradigm Light Body"
 msgstr "Châssis léger du Nouveau Paradigme"
 
 #: data/base/messages/resmessages1.rmsg:335
+#: data/mp/messages/resmessages1.rmsg:304
 msgid "Inferior armor and body points to Viper"
 msgstr "Blindage et résistance inférieurs à la Vipère"
 
 #: data/base/messages/resmessages1.rmsg:336
 #: data/base/messages/resmessages3.rmsg:534
+#: data/mp/messages/resmessages1.rmsg:305
+#: data/mp/messages/resmessages3.rmsg:485
 msgid "Faster than Viper"
 msgstr "Plus rapide que la Vipère"
 
 #: data/base/messages/resmessages1.rmsg:337
+#: data/mp/messages/resmessages1.rmsg:306
 msgid "Power cost and production time similar to Viper"
 msgstr "Coûts et délais de production similaires à la Vipère"
 
 #: data/base/messages/resmessages1.rmsg:345
+#: data/mp/messages/resmessages1.rmsg:313
 msgid "Project Medium Body"
 msgstr "Châssis moyen du Projet"
 
 #: data/base/messages/resmessages1.rmsg:346
+#: data/mp/messages/resmessages1.rmsg:314
 msgid "Medium body increases armor and body points"
 msgstr "Châssis moyen avec plus de blindage et de résistance"
 
 #: data/base/messages/resmessages1.rmsg:347
+#: data/mp/messages/resmessages1.rmsg:315
 msgid "Good medium tank and support vehicle"
 msgstr "Bon char moyen et véhicule de soutien"
 
 #: data/base/messages/resmessages1.rmsg:348
+#: data/mp/messages/resmessages1.rmsg:316
 msgid "Average power costs and production times"
 msgstr "Coûts et délais de production moyens"
 
 #: data/base/messages/resmessages1.rmsg:356
+#: data/mp/messages/resmessages1.rmsg:323
 msgid "New Paradigm Medium body"
 msgstr "Châssis moyen du Nouveau Paradigme"
 
 #: data/base/messages/resmessages1.rmsg:357
+#: data/mp/messages/resmessages1.rmsg:324
 msgid "Inferior armor and body points to Cobra"
 msgstr "Blindage et résistance inférieurs au Cobra"
 
 #: data/base/messages/resmessages1.rmsg:358
 #: data/base/messages/resmessages3.rmsg:545
+#: data/mp/messages/resmessages1.rmsg:325
+#: data/mp/messages/resmessages3.rmsg:495
 msgid "Faster than Cobra"
 msgstr "Plus rapide que le Cobra"
 
 #: data/base/messages/resmessages1.rmsg:359
+#: data/mp/messages/resmessages1.rmsg:326
 msgid "Power cost and production time similar to Cobra"
 msgstr "Coûts et délais de production similaires au Cobra"
 
 #: data/base/messages/resmessages1.rmsg:367
+#: data/mp/messages/resmessages1.rmsg:333
 msgid "Project Heavy Body"
 msgstr "Châssis lourd du Projet"
 
 #: data/base/messages/resmessages1.rmsg:368
+#: data/mp/messages/resmessages1.rmsg:334
 msgid "Heavy body increases armor and body points"
 msgstr "Châssis lourd avec encore plus de blindage et de résistance"
 
 #: data/base/messages/resmessages1.rmsg:369
+#: data/mp/messages/resmessages1.rmsg:335
 msgid "Good main battle tank and heavy artillery platform"
 msgstr "Bon char d'assaut principal et plateforme d'artillerie"
 
 #: data/base/messages/resmessages1.rmsg:370
+#: data/mp/messages/resmessages1.rmsg:336
 msgid "Very high power costs and very slow to produce"
 msgstr "Très cher et très lent à produire"
 
 #: data/base/messages/resmessages1.rmsg:378
+#: data/mp/messages/resmessages1.rmsg:343
 msgid "New Paradigm Heavy Body"
 msgstr "Châssis lourd du Nouveau Paradigme"
 
 #: data/base/messages/resmessages1.rmsg:379
+#: data/mp/messages/resmessages1.rmsg:344
 msgid "Less armor and body points than Python"
 msgstr "Moins de blindage et de résistance que le Python"
 
 #: data/base/messages/resmessages1.rmsg:380
 #: data/base/messages/resmessages3.rmsg:556
+#: data/mp/messages/resmessages1.rmsg:345
+#: data/mp/messages/resmessages3.rmsg:505
 msgid "Faster than Python"
 msgstr "Plus rapide que le Python"
 
 #: data/base/messages/resmessages1.rmsg:381
+#: data/mp/messages/resmessages1.rmsg:346
 msgid "Power cost and production time the same as Python"
 msgstr "Coûts et délais de production similaires au Python"
 
@@ -1365,12 +1955,17 @@ msgstr "Coûts et délais de production similaires au Python"
 #: data/base/messages/resmessages3.rmsg:565
 #: data/base/messages/resmessages3.rmsg:576
 #: data/base/messages/strings/resstrings.txt:559
+#: data/mp/messages/resmessages1.rmsg:353
+#: data/mp/messages/resmessages2.rmsg:383
+#: data/mp/messages/resmessages3.rmsg:513
+#: data/mp/messages/resmessages3.rmsg:523
 #: data/mp/messages/strings/resstrings.txt:594
 msgid "Vehicle Engine Upgrade"
 msgstr "Mise à jour pour moteurs"
 
 #: data/base/messages/resmessages1.rmsg:390
 #: data/base/messages/strings/names.txt:942
+#: data/mp/messages/resmessages1.rmsg:354
 #: data/mp/messages/strings/names.txt:954
 msgid "Fuel Injection Engine"
 msgstr "Moteur à injection"
@@ -1397,6 +1992,17 @@ msgstr "Augmente la vitesse des véhicules"
 #: data/base/messages/strings/resstrings.txt:562
 #: data/base/messages/strings/resstrings.txt:574
 #: data/base/messages/strings/resstrings.txt:584
+#: data/mp/messages/resmessages1.rmsg:356
+#: data/mp/messages/resmessages1.rmsg:366
+#: data/mp/messages/resmessages2.rmsg:386
+#: data/mp/messages/resmessages2.rmsg:396
+#: data/mp/messages/resmessages2.rmsg:406
+#: data/mp/messages/resmessages3.rmsg:516
+#: data/mp/messages/resmessages3.rmsg:526
+#: data/mp/messages/resmessages3.rmsg:536
+#: data/mp/messages/resmessages3.rmsg:546
+#: data/mp/messages/resmessages3.rmsg:556
+#: data/mp/messages/resmessagesall.rmsg:656
 #: data/mp/messages/strings/resstrings.txt:597
 #: data/mp/messages/strings/resstrings.txt:609
 #: data/mp/messages/strings/resstrings.txt:619
@@ -1408,6 +2014,10 @@ msgstr "Mise à jour automatique de tous les véhicules"
 #: data/base/messages/resmessages3.rmsg:587
 #: data/base/messages/resmessages3.rmsg:598
 #: data/base/messages/strings/resstrings.txt:571
+#: data/mp/messages/resmessages1.rmsg:363
+#: data/mp/messages/resmessages2.rmsg:393
+#: data/mp/messages/resmessages3.rmsg:533
+#: data/mp/messages/resmessages3.rmsg:543
 #: data/mp/messages/strings/resstrings.txt:606
 msgid "Vehicle Bodies Improved"
 msgstr "Châssis améliorés"
@@ -1425,23 +2035,32 @@ msgstr "Augmente le blindage cinétique et la résistance"
 #: data/base/messages/resmessages1.rmsg:422
 #: data/base/messages/resmessages1.rmsg:433
 #: data/base/messages/resmessages1.rmsg:444
+#: data/mp/messages/resmessages1.rmsg:373
+#: data/mp/messages/resmessages1.rmsg:383
+#: data/mp/messages/resmessages1.rmsg:393
+#: data/mp/messages/resmessages1.rmsg:403
 msgid "New Propulsion Available"
 msgstr "Nouveau type de propulsion disponible"
 
 #: data/base/messages/resmessages1.rmsg:412
+#: data/mp/messages/resmessages1.rmsg:374
 msgid "Armored Half-tracks"
 msgstr "Autochenilles blindées"
 
 #: data/base/messages/resmessages1.rmsg:413
+#: data/mp/messages/resmessages1.rmsg:375
 msgid "Speed: Medium"
 msgstr "Vitesse : moyenne"
 
 #: data/base/messages/resmessages1.rmsg:423
+#: data/mp/messages/resmessages1.rmsg:384
 msgid "Amphibious hover propulsion"
 msgstr "Propulsion par aéroglisseur amphibie"
 
 #: data/base/messages/resmessages1.rmsg:424
 #: data/base/messages/resmessages1.rmsg:446
+#: data/mp/messages/resmessages1.rmsg:385
+#: data/mp/messages/resmessages1.rmsg:405
 msgid "Speed: Fast"
 msgstr "Vitesse : rapide"
 
@@ -1465,6 +2084,23 @@ msgstr "Vitesse : rapide"
 #: data/base/messages/strings/resstrings.txt:776
 #: data/base/messages/strings/resstrings.txt:782
 #: data/base/messages/strings/resstrings.txt:790
+#: data/mp/messages/resmessages1.rmsg:386
+#: data/mp/messages/resmessages1.rmsg:406
+#: data/mp/messages/resmessages1.rmsg:476
+#: data/mp/messages/resmessages1.rmsg:486
+#: data/mp/messages/resmessages23.rmsg:116
+#: data/mp/messages/resmessages23.rmsg:156
+#: data/mp/messages/resmessages2.rmsg:546
+#: data/mp/messages/resmessages2.rmsg:556
+#: data/mp/messages/resmessages2.rmsg:596
+#: data/mp/messages/resmessages2.rmsg:616
+#: data/mp/messages/resmessages2.rmsg:626
+#: data/mp/messages/resmessages2.rmsg:636
+#: data/mp/messages/resmessages3.rmsg:656
+#: data/mp/messages/resmessagesall.rmsg:126
+#: data/mp/messages/resmessagesall.rmsg:266
+#: data/mp/messages/resmessagesall.rmsg:706
+#: data/mp/messages/resmessagesall.rmsg:716
 #: data/mp/messages/strings/resstrings.txt:735
 #: data/mp/messages/strings/resstrings.txt:741
 #: data/mp/messages/strings/resstrings.txt:799
@@ -1475,51 +2111,65 @@ msgid "Body Points: Low"
 msgstr "Résistance : faible"
 
 #: data/base/messages/resmessages1.rmsg:434
+#: data/mp/messages/resmessages1.rmsg:394
 msgid "Armored Tracks"
 msgstr "Chenilles blindées"
 
 #: data/base/messages/resmessages1.rmsg:435
+#: data/mp/messages/resmessages1.rmsg:395
 msgid "Speed: Slow"
 msgstr "Vitesse : lente"
 
 #: data/base/messages/resmessages1.rmsg:445
 #: data/base/messages/strings/names.txt:976
+#: data/mp/messages/resmessages1.rmsg:404
 #: data/mp/messages/strings/names.txt:988
 msgid "Wheeled Propulsion"
 msgstr "Roues"
 
 #: data/base/messages/resmessages1.rmsg:456
+#: data/mp/messages/resmessages1.rmsg:414
 msgid "Light Cannon firing 40mm rounds"
 msgstr "Canon léger tirant des munitions de 40mm"
 
 #: data/base/messages/resmessages1.rmsg:467
+#: data/mp/messages/resmessages1.rmsg:424
 msgid "Medium Cannon firing 76mm rounds"
 msgstr "Canon moyen tirant des munitions de 76mm"
 
 #: data/base/messages/resmessages1.rmsg:478
+#: data/mp/messages/resmessages1.rmsg:434
 msgid "Heavy Cannon firing 120 mm rounds"
 msgstr "Canon lourd tirant des munitions de 120mm"
 
 #: data/base/messages/resmessages1.rmsg:489
+#: data/mp/messages/resmessages1.rmsg:444
 msgid "High Explosive Anti-Tank Cannon Shells"
 msgstr "Obus HEAT pour canons"
 
 #: data/base/messages/resmessages1.rmsg:500
+#: data/mp/messages/resmessages1.rmsg:454
 msgid "Flame-thrower firing Propylene Oxide gel"
 msgstr "Lance-flammes au gel d'oxyde de propylène"
 
 #: data/base/messages/resmessages1.rmsg:501
 #: data/base/messages/resmessages2.rmsg:655
 #: data/base/messages/strings/resstrings.txt:759
+#: data/mp/messages/resmessages1.rmsg:455
+#: data/mp/messages/resmessages2.rmsg:595
+#: data/mp/messages/resmessagesall.rmsg:295
 #: data/mp/messages/strings/resstrings.txt:798
 msgid "Best Targets: Bunkers, wheeled and hover vehicles"
 msgstr "Efficace contre : bunkers, véhicules à roues et aéroglisseurs"
 
 #: data/base/messages/resmessages1.rmsg:502
+#: data/mp/messages/resmessages1.rmsg:456
+#: data/mp/messages/resmessagesall.rmsg:296
 msgid "Body Points: Very low"
 msgstr "Résistance : très faible"
 
 #: data/base/messages/resmessages1.rmsg:511
+#: data/mp/messages/resmessages1.rmsg:464
 msgid "Propylene Oxide gel treated to burn at higher temperatures"
 msgstr "Gel d'oxyde de propylène traité pour brûler à plus hautes températures"
 
@@ -1531,14 +2181,17 @@ msgid "Increases Flamer damage"
 msgstr "Augmente les dégâts des lance-flammes"
 
 #: data/base/messages/resmessages1.rmsg:522
+#: data/mp/messages/resmessages1.rmsg:474
 msgid "7.62mm machinegun"
 msgstr "Mitrailleuse de calibre 7,62mm"
 
 #: data/base/messages/resmessages1.rmsg:533
+#: data/mp/messages/resmessages1.rmsg:484
 msgid "Twin 7.62mm machineguns"
 msgstr "Mitrailleuses jumelées de calibre 7,62mm"
 
 #: data/base/messages/resmessages1.rmsg:544
+#: data/mp/messages/resmessages1.rmsg:494
 msgid "Hardened case machinegun bullets"
 msgstr "Balles à enveloppe renforcée pour mitrailleuses"
 
@@ -1553,14 +2206,18 @@ msgid "Increases Machinegun damage"
 msgstr "Augmente les dégâts des mitrailleuses"
 
 #: data/base/messages/resmessages1.rmsg:555
+#: data/mp/messages/resmessages1.rmsg:504
 msgid "Armor-Piercing Discard Sabot Bullets"
 msgstr "Balles APDS"
 
 #: data/base/messages/resmessages1.rmsg:566
+#: data/mp/messages/resmessages1.rmsg:514
+#: data/mp/messages/resmessagesall.rmsg:274
 msgid "May be targeted directly or assigned to a sensor turret or tower"
 msgstr "Peut attaquer directement ou être affecté à un radar fixe ou mobile"
 
 #: data/base/messages/resmessages1.rmsg:577
+#: data/mp/messages/resmessages1.rmsg:524
 msgid "Improved high explosive shells"
 msgstr "Obus hautement explosifs améliorés"
 
@@ -1572,10 +2229,12 @@ msgid "Increases Mortar damage"
 msgstr "Augmente les dégâts des mortiers"
 
 #: data/base/messages/resmessages1.rmsg:588
+#: data/mp/messages/resmessages1.rmsg:534
 msgid "Fast firing light anti-vehicle rockets"
 msgstr "Roquettes légères anti-char à tir rapide"
 
 #: data/base/messages/resmessages1.rmsg:589
+#: data/mp/messages/resmessages1.rmsg:535
 msgid "Best Targets: Wheeled and hover vehicles"
 msgstr "Efficace contre : véhicules à roues et aéroglisseurs"
 
@@ -1591,6 +2250,7 @@ msgid "Mini-Rocket Upgrade"
 msgstr "Mise à jour pour mini-roquettes"
 
 #: data/base/messages/resmessages1.rmsg:599
+#: data/mp/messages/resmessages1.rmsg:544
 msgid "Fin-stabilization improves flight trajectory"
 msgstr "Ailerons stabilisateurs affinant la trajectoire"
 
@@ -1610,6 +2270,7 @@ msgid "All mini-rockets upgraded automatically"
 msgstr "Mise à jour automatique de toutes les mini-roquettes"
 
 #: data/base/messages/resmessages1.rmsg:610
+#: data/mp/messages/resmessages1.rmsg:554
 msgid "Improved shaped charge warhead"
 msgstr "Ogive à charge creuse améliorée"
 
@@ -1621,6 +2282,7 @@ msgid "Increases Mini-Rocket damage"
 msgstr "Augmente les dégâts des mini-roquettes"
 
 #: data/base/messages/resmessages1.rmsg:621
+#: data/mp/messages/resmessages1.rmsg:564
 msgid "Automated reload system"
 msgstr "Système de rechargement automatisé"
 
@@ -1629,10 +2291,12 @@ msgid "Increases Mini-Rockets ROF"
 msgstr "Augmente la cadence de tir des mini-roquettes"
 
 #: data/base/messages/resmessages1.rmsg:632
+#: data/mp/messages/resmessages1.rmsg:574
 msgid "Tracks and directs in-flight rocket to target"
 msgstr "Dirige les projectiles vers la cible lors du vol"
 
 #: data/base/messages/resmessages1.rmsg:643
+#: data/mp/messages/resmessages1.rmsg:584
 msgid "High Explosive Anti-Tank warhead"
 msgstr "Ogive HEAT pour roquettes"
 
@@ -1645,6 +2309,8 @@ msgstr "Augmente les dégâts des roquettes"
 
 #: data/base/messages/resmessages23.rmsg:4
 #: data/base/messages/resmessages3.rmsg:48
+#: data/mp/messages/resmessages23.rmsg:3
+#: data/mp/messages/resmessages3.rmsg:43
 msgid "Cyborg Propulsion Improved"
 msgstr "Propulsion bipédique améliorée"
 
@@ -1662,6 +2328,16 @@ msgstr "Propulsion bipédique améliorée"
 #: data/base/messages/strings/resstrings.txt:602
 #: data/base/messages/strings/resstrings.txt:612
 #: data/base/messages/strings/resstrings.txt:622
+#: data/mp/messages/resmessages23.rmsg:4
+#: data/mp/messages/resmessages2.rmsg:414
+#: data/mp/messages/resmessages2.rmsg:424
+#: data/mp/messages/resmessages2.rmsg:434
+#: data/mp/messages/resmessages2.rmsg:444
+#: data/mp/messages/resmessages3.rmsg:44
+#: data/mp/messages/resmessages3.rmsg:564
+#: data/mp/messages/resmessages3.rmsg:574
+#: data/mp/messages/resmessages3.rmsg:584
+#: data/mp/messages/resmessages3.rmsg:594
 #: data/mp/messages/strings/resstrings.txt:627
 #: data/mp/messages/strings/resstrings.txt:637
 #: data/mp/messages/strings/resstrings.txt:647
@@ -1683,6 +2359,16 @@ msgstr "Nouvelle construction blindée"
 #: data/base/messages/strings/resstrings.txt:603
 #: data/base/messages/strings/resstrings.txt:613
 #: data/base/messages/strings/resstrings.txt:623
+#: data/mp/messages/resmessages23.rmsg:5
+#: data/mp/messages/resmessages2.rmsg:415
+#: data/mp/messages/resmessages2.rmsg:425
+#: data/mp/messages/resmessages2.rmsg:435
+#: data/mp/messages/resmessages2.rmsg:445
+#: data/mp/messages/resmessages3.rmsg:45
+#: data/mp/messages/resmessages3.rmsg:565
+#: data/mp/messages/resmessages3.rmsg:575
+#: data/mp/messages/resmessages3.rmsg:585
+#: data/mp/messages/resmessages3.rmsg:595
 #: data/mp/messages/strings/resstrings.txt:628
 #: data/mp/messages/strings/resstrings.txt:638
 #: data/mp/messages/strings/resstrings.txt:648
@@ -1691,6 +2377,7 @@ msgid "Increases Body Points"
 msgstr "Augmente la résistance"
 
 #: data/base/messages/resmessages23.rmsg:16
+#: data/mp/messages/resmessages23.rmsg:14
 msgid "Armored hardpoint with Hyper-Velocity Cannon"
 msgstr "Pont défensif à auto-canon"
 
@@ -1700,17 +2387,23 @@ msgid "New Power Generation Technology"
 msgstr "Nouvelle technologie de production d'énergie"
 
 #: data/base/messages/resmessages23.rmsg:28
+#: data/mp/messages/resmessages23.rmsg:24
 msgid "Gas turbine boosts power output"
 msgstr "La turbine à gaz augmente la puissance des générateurs"
 
 #: data/base/messages/resmessages23.rmsg:29
 #: data/base/messages/resmessages3.rmsg:370
+#: data/mp/messages/resmessages23.rmsg:26
+#: data/mp/messages/resmessages3.rmsg:336
 msgid "All power generators upgraded automatically"
 msgstr "Mise à jour automatique de tous les générateurs d'énergie"
 
 #: data/base/messages/resmessages23.rmsg:49
 #: data/base/messages/resmessages23.rmsg:71
 #: data/base/messages/resmessages3.rmsg:445
+#: data/mp/messages/resmessages23.rmsg:44
+#: data/mp/messages/resmessages23.rmsg:64
+#: data/mp/messages/resmessages3.rmsg:404
 msgid "Improved fire detection systems"
 msgstr "Systèmes de détection de tirs améliorés"
 
@@ -1718,16 +2411,24 @@ msgstr "Systèmes de détection de tirs améliorés"
 #: data/base/messages/resmessages23.rmsg:81
 #: data/base/messages/resmessagesall.rmsg:59
 #: data/base/messages/resmessagesall.rmsg:81
+#: data/mp/messages/resmessages23.rmsg:53
+#: data/mp/messages/resmessages23.rmsg:73
+#: data/mp/messages/resmessagesall.rmsg:53
+#: data/mp/messages/resmessagesall.rmsg:93
+#: data/mp/messages/resmessagesall.rmsg:103
 msgid "New Systems Tower Available"
 msgstr "Nouvelle tour système disponible"
 
 #: data/base/messages/resmessages23.rmsg:60
+#: data/mp/messages/resmessages23.rmsg:54
 msgid "VTOL CB Tower detects enemy indirect fire batteries"
 msgstr "Tour radar de contre-batterie pour VTOLs détectant les batteries ennemies"
 
 #: data/base/messages/resmessages23.rmsg:61
 #: data/base/messages/resmessages2.rmsg:369
 #: data/base/messages/strings/resstrings.txt:481
+#: data/mp/messages/resmessages23.rmsg:55
+#: data/mp/messages/resmessages2.rmsg:335
 #: data/mp/messages/strings/resstrings.txt:511
 msgid "Orders assigned VTOLs to attack the enemy batteries"
 msgstr "Ordonne aux VTOLs associés de viser les batteries ennemies"
@@ -1735,6 +2436,8 @@ msgstr "Ordonne aux VTOLs associés de viser les batteries ennemies"
 #: data/base/messages/resmessages23.rmsg:62
 #: data/base/messages/resmessages2.rmsg:370
 #: data/base/messages/strings/resstrings.txt:482
+#: data/mp/messages/resmessages23.rmsg:56
+#: data/mp/messages/resmessages2.rmsg:336
 #: data/mp/messages/strings/resstrings.txt:512
 msgid "VTOLs attack until enemy battery is suppressed"
 msgstr "Les VTOLs attaquent jusqu'à destruction de la batterie ennemie"
@@ -1743,6 +2446,9 @@ msgstr "Les VTOLs attaquent jusqu'à destruction de la batterie ennemie"
 #: data/base/messages/resmessages2.rmsg:378
 #: data/base/messages/resmessages3.rmsg:455
 #: data/base/messages/strings/resstrings.txt:485
+#: data/mp/messages/resmessages23.rmsg:63
+#: data/mp/messages/resmessages2.rmsg:343
+#: data/mp/messages/resmessages3.rmsg:413
 #: data/mp/messages/strings/resstrings.txt:515
 msgid "VTOL CB Improved"
 msgstr "Radars de contre-batterie pour VTOLs améliorés"
@@ -1751,6 +2457,9 @@ msgstr "Radars de contre-batterie pour VTOLs améliorés"
 #: data/base/messages/resmessages2.rmsg:380
 #: data/base/messages/resmessages3.rmsg:457
 #: data/base/messages/strings/resstrings.txt:487
+#: data/mp/messages/resmessages23.rmsg:65
+#: data/mp/messages/resmessages2.rmsg:345
+#: data/mp/messages/resmessages3.rmsg:415
 #: data/mp/messages/strings/resstrings.txt:517
 msgid "Extends VTOL CB Range"
 msgstr "Augmente la portée des radars de contre-batterie pour VTOLs"
@@ -1759,19 +2468,25 @@ msgstr "Augmente la portée des radars de contre-batterie pour VTOLs"
 #: data/base/messages/resmessages2.rmsg:381
 #: data/base/messages/resmessages3.rmsg:458
 #: data/base/messages/strings/resstrings.txt:488
+#: data/mp/messages/resmessages23.rmsg:66
+#: data/mp/messages/resmessages2.rmsg:346
+#: data/mp/messages/resmessages3.rmsg:416
 #: data/mp/messages/strings/resstrings.txt:518
 msgid "All VTOL CB sensors upgraded automatically"
 msgstr "Mise à jour automatique de toutes les radars de contre-batterie pour VTOLs"
 
 #: data/base/messages/resmessages23.rmsg:82
+#: data/mp/messages/resmessages23.rmsg:74
 msgid "VTOL Strike Tower detects approaching enemies"
 msgstr "Tour radar de contre-batterie pour VTOLs détectant les ennemis à proximité"
 
 #: data/base/messages/resmessages23.rmsg:83
+#: data/mp/messages/resmessages23.rmsg:75
 msgid "Assigned VTOLs attack the enemy units"
 msgstr "Les VTOLs associés attaquent les unités ennemies repérées"
 
 #: data/base/messages/resmessages23.rmsg:84
+#: data/mp/messages/resmessages23.rmsg:76
 msgid "Strike mission continues until enemy destroyed or they retreat"
 msgstr "L'attaque continue jusqu'à ce que l'ennemi soit détruit ou batte en retraite"
 
@@ -1781,20 +2496,29 @@ msgstr "L'attaque continue jusqu'à ce que l'ennemi soit détruit ou batte en re
 #: data/base/messages/resmessagesall.rmsg:37
 #: data/base/messages/strings/resstrings.txt:443
 #: data/base/messages/strings/resstrings.txt:479
+#: data/mp/messages/resmessages23.rmsg:83
+#: data/mp/messages/resmessages2.rmsg:333
+#: data/mp/messages/resmessages3.rmsg:433
+#: data/mp/messages/resmessagesall.rmsg:33
+#: data/mp/messages/resmessagesall.rmsg:283
+#: data/mp/messages/resmessagesall.rmsg:303
 #: data/mp/messages/strings/resstrings.txt:471
 #: data/mp/messages/strings/resstrings.txt:509
 msgid "New Systems Turret Available"
 msgstr "Nouvelle tourelle système disponible"
 
 #: data/base/messages/resmessages23.rmsg:93
+#: data/mp/messages/resmessages23.rmsg:84
 msgid "VTOL Strike turret used to spot targets"
 msgstr "Tourelle radar pour VTOLs détectant les ennemis à proximité"
 
 #: data/base/messages/resmessages23.rmsg:94
+#: data/mp/messages/resmessages23.rmsg:85
 msgid "Assigned VTOLs attack the designated targets"
 msgstr "Les VTOLs associés attaquent les cibles désignées"
 
 #: data/base/messages/resmessages23.rmsg:95
+#: data/mp/messages/resmessages23.rmsg:86
 msgid "Select new targets to continue the VTOL strikes"
 msgstr "Désignez de nouvelles cibles pour continuer l'attaque aérienne"
 
@@ -1802,11 +2526,15 @@ msgstr "Désignez de nouvelles cibles pour continuer l'attaque aérienne"
 #: data/base/messages/resmessages2.rmsg:389
 #: data/base/messages/resmessages3.rmsg:466
 #: data/base/messages/strings/resstrings.txt:499
+#: data/mp/messages/resmessages23.rmsg:93
+#: data/mp/messages/resmessages2.rmsg:353
+#: data/mp/messages/resmessages3.rmsg:423
 #: data/mp/messages/strings/resstrings.txt:529
 msgid "VTOL Strike Improved"
 msgstr "Radars pour VTOLs améliorés"
 
 #: data/base/messages/resmessages23.rmsg:104
+#: data/mp/messages/resmessages23.rmsg:94
 msgid "Improved target recognition systems"
 msgstr "Systèmes de reconnaissance de cible améliorés"
 
@@ -1814,6 +2542,9 @@ msgstr "Systèmes de reconnaissance de cible améliorés"
 #: data/base/messages/resmessages2.rmsg:391
 #: data/base/messages/resmessages3.rmsg:468
 #: data/base/messages/strings/resstrings.txt:501
+#: data/mp/messages/resmessages23.rmsg:95
+#: data/mp/messages/resmessages2.rmsg:355
+#: data/mp/messages/resmessages3.rmsg:425
 #: data/mp/messages/strings/resstrings.txt:531
 msgid "Extends VTOL Strike Range"
 msgstr "Augmente la portée des radars pour VTOLs"
@@ -1822,6 +2553,9 @@ msgstr "Augmente la portée des radars pour VTOLs"
 #: data/base/messages/resmessages2.rmsg:392
 #: data/base/messages/resmessages3.rmsg:469
 #: data/base/messages/strings/resstrings.txt:502
+#: data/mp/messages/resmessages23.rmsg:96
+#: data/mp/messages/resmessages2.rmsg:356
+#: data/mp/messages/resmessages3.rmsg:426
 #: data/mp/messages/strings/resstrings.txt:532
 msgid "All VTOL Strike sensors upgraded automatically"
 msgstr "Mise à jour automatique de toutes les tours radar pour VTOLs"
@@ -1833,6 +2567,11 @@ msgstr "Mise à jour automatique de toutes les tours radar pour VTOLs"
 #: data/base/messages/resmessages3.rmsg:708
 #: data/base/messages/strings/resstrings.txt:659
 #: data/base/messages/strings/resstrings.txt:677
+#: data/mp/messages/resmessages23.rmsg:103
+#: data/mp/messages/resmessages2.rmsg:493
+#: data/mp/messages/resmessages2.rmsg:513
+#: data/mp/messages/resmessages3.rmsg:623
+#: data/mp/messages/resmessages3.rmsg:643
 #: data/mp/messages/strings/resstrings.txt:694
 #: data/mp/messages/strings/resstrings.txt:712
 msgid "AA Upgrade"
@@ -1841,6 +2580,8 @@ msgstr "Mise à jour pour armes DCA"
 #: data/base/messages/resmessages23.rmsg:115
 #: data/base/messages/resmessages2.rmsg:709
 #: data/base/messages/strings/resstrings.txt:794
+#: data/mp/messages/resmessages23.rmsg:104
+#: data/mp/messages/resmessages2.rmsg:644
 #: data/mp/messages/strings/resstrings.txt:835
 msgid "Self-guided rocket powered shells"
 msgstr "Munitions auto-guidées propulsées par fusées"
@@ -1860,6 +2601,11 @@ msgstr "Augmente la précision des armes DCA"
 #: data/base/messages/resmessages3.rmsg:711
 #: data/base/messages/strings/resstrings.txt:662
 #: data/base/messages/strings/resstrings.txt:680
+#: data/mp/messages/resmessages23.rmsg:106
+#: data/mp/messages/resmessages2.rmsg:496
+#: data/mp/messages/resmessages2.rmsg:516
+#: data/mp/messages/resmessages3.rmsg:626
+#: data/mp/messages/resmessages3.rmsg:646
 #: data/mp/messages/strings/resstrings.txt:697
 #: data/mp/messages/strings/resstrings.txt:715
 msgid "All AA weapons upgraded automatically"
@@ -1871,16 +2617,23 @@ msgstr "Mise à jour automatique de toutes les armes DCA"
 #: data/base/messages/resmessages3.rmsg:719
 #: data/base/messages/strings/resstrings.txt:697
 #: data/base/messages/strings/resstrings.txt:703
+#: data/mp/messages/resmessages23.rmsg:113
+#: data/mp/messages/resmessages2.rmsg:543
+#: data/mp/messages/resmessages2.rmsg:553
+#: data/mp/messages/resmessages3.rmsg:653
+#: data/mp/messages/resmessagesall.rmsg:703
 #: data/mp/messages/strings/resstrings.txt:732
 #: data/mp/messages/strings/resstrings.txt:738
 msgid "New Bomb Bay Available"
 msgstr "Nouvelle soute à bombes disponible"
 
 #: data/base/messages/resmessages23.rmsg:126
+#: data/mp/messages/resmessages23.rmsg:114
 msgid "Drops incendiary bombs"
 msgstr "Largue des bombes incendiaires"
 
 #: data/base/messages/resmessages23.rmsg:127
+#: data/mp/messages/resmessages23.rmsg:115
 msgid "Best Targets: Bunkers and Hardpoints"
 msgstr "Efficace contre : bunkers et ponts défensifs"
 
@@ -1908,19 +2661,25 @@ msgstr "Augmente la précision des bombes"
 #: data/base/messages/resmessages2.rmsg:623
 #: data/base/messages/resmessages3.rmsg:733
 #: data/base/messages/strings/resstrings.txt:716
+#: data/mp/messages/resmessages23.rmsg:126
+#: data/mp/messages/resmessages2.rmsg:566
+#: data/mp/messages/resmessages3.rmsg:666
 #: data/mp/messages/strings/resstrings.txt:751
 msgid "All bomb bays upgraded automatically"
 msgstr "Mise à jour automatique de tous les bombardiers"
 
 #: data/base/messages/resmessages23.rmsg:148
+#: data/mp/messages/resmessages23.rmsg:134
 msgid "Robotic advances make new chaingun upgrade available"
 msgstr "Les avancées en robotique permettent de mettre à jour les chargeurs"
 
 #: data/base/messages/resmessages23.rmsg:159
+#: data/mp/messages/resmessages23.rmsg:144
 msgid "Shells detect and home to thermal heat signatures"
 msgstr "Les obus détectent les signatures thermiques et se dirigent dessus"
 
 #: data/base/messages/resmessages23.rmsg:170
+#: data/mp/messages/resmessages23.rmsg:154
 msgid "105mm multi-barrel Howitzer may be assigned to a sensor"
 msgstr "Obusier rotatif de calibre 105mm pouvant être affecté à un radar"
 
@@ -1929,22 +2688,32 @@ msgstr "Obusier rotatif de calibre 105mm pouvant être affecté à un radar"
 #: data/base/messages/resmessages2.rmsg:688
 #: data/base/messages/strings/resstrings.txt:775
 #: data/base/messages/strings/resstrings.txt:781
+#: data/mp/messages/resmessages23.rmsg:155
+#: data/mp/messages/resmessages2.rmsg:615
+#: data/mp/messages/resmessages2.rmsg:625
+#: data/mp/messages/resmessagesall.rmsg:265
 #: data/mp/messages/strings/resstrings.txt:814
 #: data/mp/messages/strings/resstrings.txt:822
 msgid "Best Targets: Base Structures, infantry, wheeled vehicles"
 msgstr "Efficace contre : bâtiments, infanterie, véhicules à roues"
 
 #: data/base/messages/resmessages23.rmsg:181
+#: data/mp/messages/resmessages23.rmsg:164
 msgid "Multi-barrel, rapid-fire machinegun"
 msgstr "Mitrailleuse rotative multitube à tir rapide"
 
 #: data/base/messages/resmessages23.rmsg:183
+#: data/mp/messages/resmessages23.rmsg:166
+#: data/mp/messages/resmessagesall.rmsg:686
+#: data/mp/messages/resmessagesall.rmsg:696
 msgid "Replaces all machineguns"
 msgstr "Remplace toutes les mitrailleuses"
 
 #: data/base/messages/resmessages2.rmsg:4
 #: data/base/messages/resmessages3.rmsg:4
 #: data/base/messages/strings/resstrings.txt:41
+#: data/mp/messages/resmessages2.rmsg:3
+#: data/mp/messages/resmessages3.rmsg:3
 #: data/mp/messages/strings/resstrings.txt:45
 msgid "Cyborg Thermal Armor Improved"
 msgstr "Blindage thermique des Cyborgs amélioré"
@@ -1952,6 +2721,8 @@ msgstr "Blindage thermique des Cyborgs amélioré"
 #: data/base/messages/resmessages2.rmsg:5
 #: data/base/messages/resmessages3.rmsg:5
 #: data/base/messages/strings/resstrings.txt:42
+#: data/mp/messages/resmessages2.rmsg:4
+#: data/mp/messages/resmessages3.rmsg:4
 #: data/mp/messages/strings/resstrings.txt:46
 msgid "Heat resistant armored layers"
 msgstr "Plaques blindées résistantes à la chaleur"
@@ -1967,6 +2738,8 @@ msgstr "Blindage thermique renforcé"
 #: data/base/messages/resmessages2.rmsg:434
 #: data/base/messages/strings/resstrings.txt:32
 #: data/base/messages/strings/resstrings.txt:572
+#: data/mp/messages/resmessages2.rmsg:14
+#: data/mp/messages/resmessages2.rmsg:394
 #: data/mp/messages/strings/resstrings.txt:36
 #: data/mp/messages/strings/resstrings.txt:607
 msgid "Layered dense composite alloys and energy-absorbing fibres"
@@ -1975,6 +2748,7 @@ msgstr "Couches d'alliages composites denses avec fibres à absorption d'impact 
 #: data/base/messages/resmessages2.rmsg:27
 #: data/base/messages/strings/resstrings.txt:50
 #: data/base/messages/strings/resstrings.txt:84
+#: data/mp/messages/resmessages2.rmsg:24
 #: data/mp/messages/strings/resstrings.txt:54
 #: data/mp/messages/strings/resstrings.txt:104
 msgid "Armed with Bunker Buster rocket"
@@ -1982,18 +2756,21 @@ msgstr "Armé d'un lance-roquettes anti-bunker"
 
 #: data/base/messages/resmessages2.rmsg:38
 #: data/base/messages/strings/resstrings.txt:66
+#: data/mp/messages/resmessages2.rmsg:34
 #: data/mp/messages/strings/resstrings.txt:86
 msgid "Armed with Cyborg Assault Gun"
 msgstr "Armé d'un fusil d'assaut"
 
 #: data/base/messages/resmessages2.rmsg:49
 #: data/base/messages/strings/resstrings.txt:104
+#: data/mp/messages/resmessages2.rmsg:44
 #: data/mp/messages/strings/resstrings.txt:124
 msgid "High-tensile concrete reinforced with boron"
 msgstr "Béton HLE renforcé au bore"
 
 #: data/base/messages/resmessages2.rmsg:60
 #: data/base/messages/strings/resstrings.txt:120
+#: data/mp/messages/resmessages2.rmsg:54
 #: data/mp/messages/strings/resstrings.txt:140
 msgid "AA Site with Cyclone Flak Turret"
 msgstr "Site de DCA Cyclone"
@@ -2006,6 +2783,11 @@ msgstr "Site de DCA Cyclone"
 #: data/base/messages/strings/resstrings.txt:115
 #: data/base/messages/strings/resstrings.txt:121
 #: data/base/messages/strings/resstrings.txt:133
+#: data/mp/messages/resmessages2.rmsg:55
+#: data/mp/messages/resmessages2.rmsg:75
+#: data/mp/messages/resmessages2.rmsg:85
+#: data/mp/messages/resmessages3.rmsg:185
+#: data/mp/messages/resmessages3.rmsg:195
 #: data/mp/messages/strings/resstrings.txt:135
 #: data/mp/messages/strings/resstrings.txt:141
 #: data/mp/messages/strings/resstrings.txt:153
@@ -2014,54 +2796,63 @@ msgstr "Attaque automatiquement les VTOLs ennemis à portée"
 
 #: data/base/messages/resmessages2.rmsg:71
 #: data/base/messages/strings/resstrings.txt:126
+#: data/mp/messages/resmessages2.rmsg:64
 #: data/mp/messages/strings/resstrings.txt:146
 msgid "AA Site with Hurricane Gun Turret"
 msgstr "Site de DCA Ouragan"
 
 #: data/base/messages/resmessages2.rmsg:72
 #: data/base/messages/strings/resstrings.txt:127
+#: data/mp/messages/resmessages2.rmsg:65
 #: data/mp/messages/strings/resstrings.txt:147
 msgid "Automatically targets VTOL"
 msgstr "Attaque automatiquement les VTOLs ennemis à portée"
 
 #: data/base/messages/resmessages2.rmsg:82
 #: data/base/messages/strings/resstrings.txt:132
+#: data/mp/messages/resmessages2.rmsg:74
 #: data/mp/messages/strings/resstrings.txt:152
 msgid "AA Site with Whirlwind Gun Turret"
 msgstr "Site de DCA Tourbillon"
 
 #: data/base/messages/resmessages2.rmsg:93
 #: data/base/messages/strings/resstrings.txt:114
+#: data/mp/messages/resmessages2.rmsg:84
 #: data/mp/messages/strings/resstrings.txt:134
 msgid "AA Site with Tornado Flak Turret"
 msgstr "Site de DCA Tornade"
 
 #: data/base/messages/resmessages2.rmsg:104
 #: data/base/messages/strings/resstrings.txt:142
+#: data/mp/messages/resmessages2.rmsg:94
 #: data/mp/messages/strings/resstrings.txt:162
 msgid "Indirect fire rocket battery"
 msgstr "Batterie de roquettes à tir indirect"
 
 #: data/base/messages/resmessages2.rmsg:115
 #: data/base/messages/strings/resstrings.txt:154
+#: data/mp/messages/resmessages2.rmsg:104
 #: data/mp/messages/strings/resstrings.txt:176
 msgid "Armored Bombard battery pit"
 msgstr "Bombarde retranchée blindée"
 
 #: data/base/messages/resmessages2.rmsg:126
 #: data/base/messages/strings/resstrings.txt:168
+#: data/mp/messages/resmessages2.rmsg:114
 #: data/mp/messages/strings/resstrings.txt:190
 msgid "Armored howitzer emplacement"
 msgstr "Emplacement blindé à obusier"
 
 #: data/base/messages/resmessages2.rmsg:137
 #: data/base/messages/strings/resstrings.txt:174
+#: data/mp/messages/resmessages2.rmsg:124
 #: data/mp/messages/strings/resstrings.txt:196
 msgid "Armored Ground Shaker howitzer emplacement"
 msgstr "Emplacement blindé à Ground Shaker"
 
 #: data/base/messages/resmessages2.rmsg:148
 #: data/base/messages/strings/resstrings.txt:160
+#: data/mp/messages/resmessages2.rmsg:134
 #: data/mp/messages/strings/resstrings.txt:182
 msgid "Armored Pepperpot mortar battery pit"
 msgstr "Poivrière retranchée blindée"
@@ -2070,6 +2861,8 @@ msgstr "Poivrière retranchée blindée"
 #: data/base/messages/resmessages2.rmsg:170
 #: data/base/messages/strings/resstrings.txt:180
 #: data/base/messages/strings/resstrings.txt:186
+#: data/mp/messages/resmessages2.rmsg:144
+#: data/mp/messages/resmessages2.rmsg:154
 #: data/mp/messages/strings/resstrings.txt:204
 #: data/mp/messages/strings/resstrings.txt:210
 msgid "Armored Hellstorm howitzer emplacement"
@@ -2077,6 +2870,7 @@ msgstr "Emplacement blindé à Hellstorm"
 
 #: data/base/messages/resmessages2.rmsg:181
 #: data/base/messages/strings/resstrings.txt:192
+#: data/mp/messages/resmessages2.rmsg:164
 #: data/mp/messages/strings/resstrings.txt:216
 msgid "Armored strongpoint with Tank Killer rocket"
 msgstr "Pont défensif blindé à roquettes AC"
@@ -2095,6 +2889,17 @@ msgstr "Pont défensif blindé à roquettes AC"
 #: data/base/messages/strings/resstrings.txt:205
 #: data/base/messages/strings/resstrings.txt:219
 #: data/base/messages/strings/resstrings.txt:225
+#: data/mp/messages/resmessages2.rmsg:165
+#: data/mp/messages/resmessages2.rmsg:175
+#: data/mp/messages/resmessages2.rmsg:185
+#: data/mp/messages/resmessages2.rmsg:195
+#: data/mp/messages/resmessages2.rmsg:205
+#: data/mp/messages/resmessages3.rmsg:225
+#: data/mp/messages/resmessages3.rmsg:235
+#: data/mp/messages/resmessages3.rmsg:245
+#: data/mp/messages/resmessages3.rmsg:255
+#: data/mp/messages/resmessagesall.rmsg:215
+#: data/mp/messages/resmessagesall.rmsg:455
 #: data/mp/messages/strings/resstrings.txt:217
 #: data/mp/messages/strings/resstrings.txt:223
 #: data/mp/messages/strings/resstrings.txt:229
@@ -2105,54 +2910,63 @@ msgstr "Attaque automatiquement les ennemis à portée"
 
 #: data/base/messages/resmessages2.rmsg:192
 #: data/base/messages/strings/resstrings.txt:198
+#: data/mp/messages/resmessages2.rmsg:174
 #: data/mp/messages/strings/resstrings.txt:222
 msgid "Armored strongpoint with Hyper-Velocity Cannon"
 msgstr "Pont défensif blindé à auto-canon"
 
 #: data/base/messages/resmessages2.rmsg:203
 #: data/base/messages/strings/resstrings.txt:204
+#: data/mp/messages/resmessages2.rmsg:184
 #: data/mp/messages/strings/resstrings.txt:228
 msgid "Armored strongpoint with Inferno Flamer"
 msgstr "Pont défensif blindé à lance-flammes Inferno"
 
 #: data/base/messages/resmessages2.rmsg:214
 #: data/base/messages/strings/resstrings.txt:218
+#: data/mp/messages/resmessages2.rmsg:194
 #: data/mp/messages/strings/resstrings.txt:246
 msgid "Armored strongpoint with Assault Cannon"
 msgstr "Pont défensif blindé à canon d'assaut"
 
 #: data/base/messages/resmessages2.rmsg:225
 #: data/base/messages/strings/resstrings.txt:224
+#: data/mp/messages/resmessages2.rmsg:204
 #: data/mp/messages/strings/resstrings.txt:252
 msgid "Reinforced tower with Assault Gun"
 msgstr "Tour renforcée à fusil d'assaut"
 
 #: data/base/messages/resmessages2.rmsg:236
 #: data/base/messages/strings/resstrings.txt:288
+#: data/mp/messages/resmessages2.rmsg:214
 #: data/mp/messages/strings/resstrings.txt:316
 msgid "Armored hardpoint with Assault Gun"
 msgstr "Pont défensif à fusil d'assaut"
 
 #: data/base/messages/resmessages2.rmsg:247
 #: data/base/messages/strings/resstrings.txt:294
+#: data/mp/messages/resmessages2.rmsg:224
 #: data/mp/messages/strings/resstrings.txt:322
 msgid "Armored hardpoint with Assault Cannon"
 msgstr "Pont défensif à canon d'assaut"
 
 #: data/base/messages/resmessages2.rmsg:258
 #: data/base/messages/strings/resstrings.txt:302
+#: data/mp/messages/resmessages2.rmsg:234
 #: data/mp/messages/strings/resstrings.txt:330
 msgid "Armored hardpoint with Inferno flamer"
 msgstr "Pont défensif à lance-flammes Inferno"
 
 #: data/base/messages/resmessages2.rmsg:269
 #: data/base/messages/strings/resstrings.txt:308
+#: data/mp/messages/resmessages2.rmsg:244
 #: data/mp/messages/strings/resstrings.txt:336
 msgid "Armored hardpoint with Tank Killer AT missile"
 msgstr "Pont défensif à lance-missile AC"
 
 #: data/base/messages/resmessages2.rmsg:280
 #: data/base/messages/strings/resstrings.txt:334
+#: data/mp/messages/resmessages2.rmsg:254
 #: data/mp/messages/strings/resstrings.txt:362
 msgid "New robotic repair techniques"
 msgstr "Nouvelle technique de réparation robotisée"
@@ -2160,12 +2974,14 @@ msgstr "Nouvelle technique de réparation robotisée"
 #: data/base/messages/resmessages2.rmsg:291
 #: data/base/messages/strings/names.txt:786
 #: data/base/messages/strings/resstrings.txt:348
+#: data/mp/messages/resmessages2.rmsg:264
 #: data/mp/messages/strings/resstrings.txt:376
 msgid "Robotic Cyborg Production"
 msgstr "Production de Cyborgs robotisée"
 
 #: data/base/messages/resmessages2.rmsg:302
 #: data/base/messages/strings/resstrings.txt:366
+#: data/mp/messages/resmessages2.rmsg:274
 #: data/mp/messages/strings/resstrings.txt:394
 msgid "New Robotic Techniques improve factory production"
 msgstr "Nouvelle technique robotisée améliorant la production des usines"
@@ -2179,6 +2995,7 @@ msgstr "Augmente la vitesse de production des usines"
 #: data/base/messages/resmessages2.rmsg:313
 #: data/base/messages/strings/names.txt:835
 #: data/base/messages/strings/resstrings.txt:390
+#: data/mp/messages/resmessages2.rmsg:284
 #: data/mp/messages/strings/names.txt:845
 #: data/mp/messages/strings/resstrings.txt:418
 msgid "Dedicated Synaptic Link Data Analysis"
@@ -2187,6 +3004,7 @@ msgstr "Analyse de données par Lien Synaptique spécialisé"
 #: data/base/messages/resmessages2.rmsg:324
 #: data/base/messages/strings/names.txt:808
 #: data/base/messages/strings/resstrings.txt:400
+#: data/mp/messages/resmessages2.rmsg:294
 #: data/mp/messages/strings/names.txt:818
 #: data/mp/messages/strings/resstrings.txt:428
 msgid "Hardened Base Structure Materials"
@@ -2195,6 +3013,7 @@ msgstr "Matériaux de construction renforcés"
 #: data/base/messages/resmessages2.rmsg:335
 #: data/base/messages/strings/names.txt:851
 #: data/base/messages/strings/resstrings.txt:412
+#: data/mp/messages/resmessages2.rmsg:304
 #: data/mp/messages/strings/resstrings.txt:440
 msgid "Robotic VTOL Production"
 msgstr "Production aéronautique robotisée"
@@ -2202,6 +3021,8 @@ msgstr "Production aéronautique robotisée"
 #: data/base/messages/resmessages2.rmsg:336
 #: data/base/messages/resmessages3.rmsg:413
 #: data/base/messages/strings/resstrings.txt:413
+#: data/mp/messages/resmessages2.rmsg:305
+#: data/mp/messages/resmessages3.rmsg:375
 #: data/mp/messages/strings/resstrings.txt:441
 msgid "Increases VTOL factory output"
 msgstr "Augmente la vitesse de production des usines de VTOLs"
@@ -2209,6 +3030,8 @@ msgstr "Augmente la vitesse de production des usines de VTOLs"
 #: data/base/messages/resmessages2.rmsg:337
 #: data/base/messages/resmessages3.rmsg:414
 #: data/base/messages/strings/resstrings.txt:414
+#: data/mp/messages/resmessages2.rmsg:306
+#: data/mp/messages/resmessages3.rmsg:376
 #: data/mp/messages/strings/resstrings.txt:442
 msgid "All VTOL factories upgraded automatically"
 msgstr "Mise à jour automatique de toutes les usines de VTOLs"
@@ -2216,6 +3039,8 @@ msgstr "Mise à jour automatique de toutes les usines de VTOLs"
 #: data/base/messages/resmessages2.rmsg:345
 #: data/base/messages/resmessages3.rmsg:422
 #: data/base/messages/strings/resstrings.txt:421
+#: data/mp/messages/resmessages2.rmsg:313
+#: data/mp/messages/resmessages3.rmsg:383
 #: data/mp/messages/strings/resstrings.txt:449
 msgid "VTOL Rearming Times Reduced"
 msgstr "Temps de réarmement des VTOLs réduit"
@@ -2223,6 +3048,7 @@ msgstr "Temps de réarmement des VTOLs réduit"
 #: data/base/messages/resmessages2.rmsg:346
 #: data/base/messages/strings/names.txt:843
 #: data/base/messages/strings/resstrings.txt:422
+#: data/mp/messages/resmessages2.rmsg:314
 #: data/mp/messages/strings/names.txt:853
 #: data/mp/messages/strings/resstrings.txt:450
 msgid "Automated VTOL Rearming"
@@ -2238,24 +3064,29 @@ msgstr "Réduit le temps de réarmement"
 #: data/base/messages/resmessages2.rmsg:348
 #: data/base/messages/resmessages3.rmsg:425
 #: data/base/messages/strings/resstrings.txt:424
+#: data/mp/messages/resmessages2.rmsg:316
+#: data/mp/messages/resmessages3.rmsg:386
 #: data/mp/messages/strings/resstrings.txt:452
 msgid "All rearming pads upgraded automatically"
 msgstr "Mise à jour automatique de toutes les plateformes de réarmement"
 
 #: data/base/messages/resmessages2.rmsg:356
 #: data/base/messages/strings/resstrings.txt:459
+#: data/mp/messages/resmessages2.rmsg:323
 #: data/mp/messages/strings/resstrings.txt:489
 msgid "Improved Sensor Tower Available"
 msgstr "Tour radar améliorée disponible"
 
 #: data/base/messages/resmessages2.rmsg:357
 #: data/base/messages/strings/resstrings.txt:460
+#: data/mp/messages/resmessages2.rmsg:324
 #: data/mp/messages/strings/resstrings.txt:490
 msgid "New construction techniques improve tower"
 msgstr "Les nouvelles techniques de construction améliorent la tour"
 
 #: data/base/messages/resmessages2.rmsg:358
 #: data/base/messages/strings/resstrings.txt:461
+#: data/mp/messages/resmessages2.rmsg:325
 #: data/mp/messages/strings/resstrings.txt:491
 msgid "Replaces existing sensor tower"
 msgstr "Remplace la tour radar précédente"
@@ -2264,24 +3095,30 @@ msgstr "Remplace la tour radar précédente"
 #: data/base/messages/resmessagesall.rmsg:51
 #: data/base/messages/resmessagesall.rmsg:62
 #: data/base/messages/strings/resstrings.txt:462
+#: data/mp/messages/resmessages2.rmsg:326
+#: data/mp/messages/resmessagesall.rmsg:46
+#: data/mp/messages/resmessagesall.rmsg:56
 #: data/mp/messages/strings/resstrings.txt:492
 msgid "May be assigned as spotter for indirect fire weapons"
 msgstr "Peut être désignée comme cibleur automatique pour l'artillerie mobile"
 
 #: data/base/messages/resmessages2.rmsg:368
 #: data/base/messages/strings/resstrings.txt:480
+#: data/mp/messages/resmessages2.rmsg:334
 #: data/mp/messages/strings/resstrings.txt:510
 msgid "VTOL CB turret detects enemy indirect fire batteries"
 msgstr "Tourelle radar de CB pour VTOLs calculant la position des batteries ennemies"
 
 #: data/base/messages/resmessages2.rmsg:390
 #: data/base/messages/strings/resstrings.txt:500
+#: data/mp/messages/resmessages2.rmsg:354
 #: data/mp/messages/strings/resstrings.txt:530
 msgid "New target recognition systems"
 msgstr "Nouveaux systèmes de reconnaissance de cible"
 
 #: data/base/messages/resmessages2.rmsg:400
 #: data/base/messages/strings/resstrings.txt:527
+#: data/mp/messages/resmessages2.rmsg:363
 #: data/mp/messages/strings/resstrings.txt:562
 msgid "Collective Light Body"
 msgstr "Châssis léger du Collectif"
@@ -2289,24 +3126,29 @@ msgstr "Châssis léger du Collectif"
 #: data/base/messages/resmessages2.rmsg:401
 #: data/base/messages/resmessages3.rmsg:533
 #: data/base/messages/strings/resstrings.txt:528
+#: data/mp/messages/resmessages2.rmsg:364
+#: data/mp/messages/resmessages3.rmsg:484
 #: data/mp/messages/strings/resstrings.txt:563
 msgid "Superior armor and body points to Viper"
 msgstr "Blindage et résistance supérieurs à la Vipère"
 
 #: data/base/messages/resmessages2.rmsg:402
 #: data/base/messages/strings/resstrings.txt:529
+#: data/mp/messages/resmessages2.rmsg:365
 #: data/mp/messages/strings/resstrings.txt:564
 msgid "Slower than Viper"
 msgstr "Plus lent que la Vipère"
 
 #: data/base/messages/resmessages2.rmsg:403
 #: data/base/messages/strings/resstrings.txt:530
+#: data/mp/messages/resmessages2.rmsg:366
 #: data/mp/messages/strings/resstrings.txt:565
 msgid "High power costs and slower to produce than Viper"
 msgstr "Plus cher et plus lent à produire que la Vipère"
 
 #: data/base/messages/resmessages2.rmsg:411
 #: data/base/messages/strings/resstrings.txt:539
+#: data/mp/messages/resmessages2.rmsg:373
 #: data/mp/messages/strings/resstrings.txt:574
 msgid "Collective Medium Body"
 msgstr "Châssis moyen du Collectif"
@@ -2314,18 +3156,22 @@ msgstr "Châssis moyen du Collectif"
 #: data/base/messages/resmessages2.rmsg:412
 #: data/base/messages/resmessages3.rmsg:544
 #: data/base/messages/strings/resstrings.txt:540
+#: data/mp/messages/resmessages2.rmsg:374
+#: data/mp/messages/resmessages3.rmsg:494
 #: data/mp/messages/strings/resstrings.txt:575
 msgid "Superior armor and body points to Cobra"
 msgstr "Blindage et résistance supérieurs au Cobra"
 
 #: data/base/messages/resmessages2.rmsg:413
 #: data/base/messages/strings/resstrings.txt:541
+#: data/mp/messages/resmessages2.rmsg:375
 #: data/mp/messages/strings/resstrings.txt:576
 msgid "Slower than Cobra"
 msgstr "Plus lent que le Cobra"
 
 #: data/base/messages/resmessages2.rmsg:414
 #: data/base/messages/strings/resstrings.txt:542
+#: data/mp/messages/resmessages2.rmsg:376
 #: data/mp/messages/strings/resstrings.txt:577
 msgid "High power costs and slower to produce than Cobra"
 msgstr "Plus cher et plus lent à produire que le Cobra"
@@ -2333,6 +3179,7 @@ msgstr "Plus cher et plus lent à produire que le Cobra"
 #: data/base/messages/resmessages2.rmsg:423
 #: data/base/messages/strings/names.txt:945
 #: data/base/messages/strings/resstrings.txt:560
+#: data/mp/messages/resmessages2.rmsg:384
 #: data/mp/messages/strings/names.txt:957
 #: data/mp/messages/strings/resstrings.txt:595
 msgid "Turbo-Charged Engine"
@@ -2341,6 +3188,9 @@ msgstr "Moteur Turbo"
 #: data/base/messages/resmessages2.rmsg:444
 #: data/base/messages/resmessages3.rmsg:609
 #: data/base/messages/strings/resstrings.txt:581
+#: data/mp/messages/resmessages2.rmsg:403
+#: data/mp/messages/resmessages3.rmsg:553
+#: data/mp/messages/resmessagesall.rmsg:653
 #: data/mp/messages/strings/resstrings.txt:616
 msgid "Vehicle Thermal Armor Improved"
 msgstr "Blindage thermique des véhicules renforcé"
@@ -2348,6 +3198,9 @@ msgstr "Blindage thermique des véhicules renforcé"
 #: data/base/messages/resmessages2.rmsg:445
 #: data/base/messages/resmessages3.rmsg:610
 #: data/base/messages/strings/resstrings.txt:582
+#: data/mp/messages/resmessages2.rmsg:404
+#: data/mp/messages/resmessages3.rmsg:554
+#: data/mp/messages/resmessagesall.rmsg:654
 #: data/mp/messages/strings/resstrings.txt:617
 msgid "Heat-resistant armored layers"
 msgstr "Plaques blindées résistantes à la chaleur"
@@ -2373,6 +3226,16 @@ msgstr "Augmente le blindage thermique"
 #: data/base/messages/strings/resstrings.txt:601
 #: data/base/messages/strings/resstrings.txt:611
 #: data/base/messages/strings/resstrings.txt:621
+#: data/mp/messages/resmessages2.rmsg:413
+#: data/mp/messages/resmessages2.rmsg:423
+#: data/mp/messages/resmessages2.rmsg:433
+#: data/mp/messages/resmessages2.rmsg:443
+#: data/mp/messages/resmessages3.rmsg:563
+#: data/mp/messages/resmessages3.rmsg:573
+#: data/mp/messages/resmessages3.rmsg:583
+#: data/mp/messages/resmessages3.rmsg:593
+#: data/mp/messages/resmessages3.rmsg:603
+#: data/mp/messages/resmessages3.rmsg:613
 #: data/mp/messages/strings/resstrings.txt:626
 #: data/mp/messages/strings/resstrings.txt:636
 #: data/mp/messages/strings/resstrings.txt:646
@@ -2383,6 +3246,8 @@ msgstr "Propulsion améliorée pour véhicules"
 #: data/base/messages/resmessages2.rmsg:458
 #: data/base/messages/resmessages3.rmsg:623
 #: data/base/messages/strings/resstrings.txt:594
+#: data/mp/messages/resmessages2.rmsg:416
+#: data/mp/messages/resmessages3.rmsg:566
 #: data/mp/messages/strings/resstrings.txt:629
 msgid "All half-tracks upgraded automatically"
 msgstr "Mise à jour automatique de tous les véhicules à autochenilles"
@@ -2390,6 +3255,8 @@ msgstr "Mise à jour automatique de tous les véhicules à autochenilles"
 #: data/base/messages/resmessages2.rmsg:469
 #: data/base/messages/resmessages3.rmsg:634
 #: data/base/messages/strings/resstrings.txt:604
+#: data/mp/messages/resmessages2.rmsg:426
+#: data/mp/messages/resmessages3.rmsg:576
 #: data/mp/messages/strings/resstrings.txt:639
 msgid "All hovers upgraded automatically"
 msgstr "Mise à jour automatique de tous les aéroglisseurs"
@@ -2397,6 +3264,8 @@ msgstr "Mise à jour automatique de tous les aéroglisseurs"
 #: data/base/messages/resmessages2.rmsg:480
 #: data/base/messages/resmessages3.rmsg:645
 #: data/base/messages/strings/resstrings.txt:614
+#: data/mp/messages/resmessages2.rmsg:436
+#: data/mp/messages/resmessages3.rmsg:586
 #: data/mp/messages/strings/resstrings.txt:649
 msgid "All tracks upgraded automatically"
 msgstr "Mise à jour automatique de tous les véhicules à chenilles"
@@ -2404,6 +3273,8 @@ msgstr "Mise à jour automatique de tous les véhicules à chenilles"
 #: data/base/messages/resmessages2.rmsg:491
 #: data/base/messages/resmessages3.rmsg:656
 #: data/base/messages/strings/resstrings.txt:624
+#: data/mp/messages/resmessages2.rmsg:446
+#: data/mp/messages/resmessages3.rmsg:596
 #: data/mp/messages/strings/resstrings.txt:659
 msgid "All wheels upgraded automatically"
 msgstr "Mise à jour automatique de tous les véhicules à roues"
@@ -2416,6 +3287,10 @@ msgstr "Mise à jour automatique de tous les véhicules à roues"
 #: data/base/messages/strings/resstrings.txt:641
 #: data/base/messages/strings/resstrings.txt:647
 #: data/base/messages/strings/resstrings.txt:653
+#: data/mp/messages/resmessages2.rmsg:453
+#: data/mp/messages/resmessages2.rmsg:463
+#: data/mp/messages/resmessages2.rmsg:473
+#: data/mp/messages/resmessages2.rmsg:483
 #: data/mp/messages/strings/resstrings.txt:670
 #: data/mp/messages/strings/resstrings.txt:676
 #: data/mp/messages/strings/resstrings.txt:682
@@ -2425,6 +3300,7 @@ msgstr "Nouvelle tourelle de DCA disponible"
 
 #: data/base/messages/resmessages2.rmsg:500
 #: data/base/messages/strings/resstrings.txt:636
+#: data/mp/messages/resmessages2.rmsg:454
 #: data/mp/messages/strings/resstrings.txt:671
 msgid "Twin 80mm flak weapon"
 msgstr "Double canon de DCA de 80mm tirant des obus à fragmentation (flak)"
@@ -2437,6 +3313,13 @@ msgstr "Double canon de DCA de 80mm tirant des obus à fragmentation (flak)"
 #: data/base/messages/strings/resstrings.txt:643
 #: data/base/messages/strings/resstrings.txt:649
 #: data/base/messages/strings/resstrings.txt:655
+#: data/mp/messages/resmessages2.rmsg:455
+#: data/mp/messages/resmessages2.rmsg:465
+#: data/mp/messages/resmessages2.rmsg:475
+#: data/mp/messages/resmessages2.rmsg:485
+#: data/mp/messages/resmessagesall.rmsg:595
+#: data/mp/messages/resmessagesall.rmsg:645
+#: data/mp/messages/resmessagesall.rmsg:675
 #: data/mp/messages/strings/resstrings.txt:672
 #: data/mp/messages/strings/resstrings.txt:678
 #: data/mp/messages/strings/resstrings.txt:684
@@ -2446,24 +3329,29 @@ msgstr "Uniquement contre des cibles aériennes"
 
 #: data/base/messages/resmessages2.rmsg:511
 #: data/base/messages/strings/resstrings.txt:642
+#: data/mp/messages/resmessages2.rmsg:464
 #: data/mp/messages/strings/resstrings.txt:677
 msgid "Quad 80mm flak weapon"
 msgstr "Quadruple canon flak de 80mm"
 
 #: data/base/messages/resmessages2.rmsg:522
 #: data/base/messages/strings/resstrings.txt:648
+#: data/mp/messages/resmessages2.rmsg:474
 #: data/mp/messages/strings/resstrings.txt:683
 msgid "30mm Anti-Aircraft machinegun"
 msgstr "Mitrailleuse anti-aérienne de 30mm"
 
 #: data/base/messages/resmessages2.rmsg:533
 #: data/base/messages/strings/resstrings.txt:654
+#: data/mp/messages/resmessages2.rmsg:484
+#: data/mp/messages/resmessagesall.rmsg:594
 #: data/mp/messages/strings/resstrings.txt:689
 msgid "Quad 30mm Anti-Aircraft machinegun"
 msgstr "Mitrailleuse anti-aérienne quadritube de 30mm"
 
 #: data/base/messages/resmessages2.rmsg:544
 #: data/base/messages/strings/resstrings.txt:660
+#: data/mp/messages/resmessages2.rmsg:494
 #: data/mp/messages/strings/resstrings.txt:695
 msgid "Detects and locks-on to VTOL engine emissions"
 msgstr "Détecte et se verrouille sur les émissions moteur des VTOLs"
@@ -2471,12 +3359,15 @@ msgstr "Détecte et se verrouille sur les émissions moteur des VTOLs"
 #: data/base/messages/resmessages2.rmsg:554
 #: data/base/messages/resmessages3.rmsg:697
 #: data/base/messages/strings/resstrings.txt:669
+#: data/mp/messages/resmessages2.rmsg:503
+#: data/mp/messages/resmessages3.rmsg:633
 #: data/mp/messages/strings/resstrings.txt:704
 msgid "AA Flak Upgrade"
 msgstr "Mise à jour pour armes DCA à fragmentation (flak)"
 
 #: data/base/messages/resmessages2.rmsg:555
 #: data/base/messages/strings/resstrings.txt:670
+#: data/mp/messages/resmessages2.rmsg:504
 #: data/mp/messages/strings/resstrings.txt:705
 msgid "High Explosive Flak shards"
 msgstr "Obus à fragmentation hautement explosifs pour canons de DCA flak"
@@ -2491,12 +3382,15 @@ msgstr "Augmente les dégâts des armes de DCA flak"
 #: data/base/messages/resmessages2.rmsg:557
 #: data/base/messages/resmessages3.rmsg:700
 #: data/base/messages/strings/resstrings.txt:672
+#: data/mp/messages/resmessages2.rmsg:506
+#: data/mp/messages/resmessages3.rmsg:636
 #: data/mp/messages/strings/resstrings.txt:707
 msgid "All AA flak weapons upgraded automatically"
 msgstr "Mise à jour automatique de toutes les armes de DCA flak"
 
 #: data/base/messages/resmessages2.rmsg:566
 #: data/base/messages/strings/resstrings.txt:678
+#: data/mp/messages/resmessages2.rmsg:514
 #: data/mp/messages/strings/resstrings.txt:713
 msgid "Recoil loaded AA ammunition hopper"
 msgstr "Mécanisme de rechargement au recul pour canons de DCA"
@@ -2512,6 +3406,8 @@ msgstr "Augmente la cadence de tir des armes de DCA"
 #: data/base/messages/resmessages2.rmsg:587
 #: data/base/messages/strings/resstrings.txt:685
 #: data/base/messages/strings/resstrings.txt:691
+#: data/mp/messages/resmessages2.rmsg:523
+#: data/mp/messages/resmessages2.rmsg:533
 #: data/mp/messages/strings/resstrings.txt:720
 #: data/mp/messages/strings/resstrings.txt:726
 msgid "New Proximity Bomb Turret Available"
@@ -2519,6 +3415,7 @@ msgstr "Nouvelle tourelle lanceuse de mines de proximité disponible"
 
 #: data/base/messages/resmessages2.rmsg:577
 #: data/base/messages/strings/resstrings.txt:686
+#: data/mp/messages/resmessages2.rmsg:524
 #: data/mp/messages/strings/resstrings.txt:721
 msgid "Bomb turret explodes in proximity to enemy"
 msgstr "Une mine a explosé à proximité d'un ennemi"
@@ -2527,6 +3424,8 @@ msgstr "Une mine a explosé à proximité d'un ennemi"
 #: data/base/messages/resmessages2.rmsg:589
 #: data/base/messages/strings/resstrings.txt:687
 #: data/base/messages/strings/resstrings.txt:693
+#: data/mp/messages/resmessages2.rmsg:525
+#: data/mp/messages/resmessages2.rmsg:535
 #: data/mp/messages/strings/resstrings.txt:722
 #: data/mp/messages/strings/resstrings.txt:728
 msgid "Best Targets: Base Structures and Defenses"
@@ -2534,30 +3433,35 @@ msgstr "Efficace contre : bâtiments et défenses"
 
 #: data/base/messages/resmessages2.rmsg:588
 #: data/base/messages/strings/resstrings.txt:692
+#: data/mp/messages/resmessages2.rmsg:534
 #: data/mp/messages/strings/resstrings.txt:727
 msgid "Superbomb turret explodes in proximity to enemy"
 msgstr "Une super-mine a explosée à proximité d'un ennemi"
 
 #: data/base/messages/resmessages2.rmsg:599
 #: data/base/messages/strings/resstrings.txt:698
+#: data/mp/messages/resmessages2.rmsg:544
 #: data/mp/messages/strings/resstrings.txt:733
 msgid "Drops High Explosive Cluster bombs"
 msgstr "Largue des bombes à fragmentation"
 
 #: data/base/messages/resmessages2.rmsg:600
 #: data/base/messages/strings/resstrings.txt:699
+#: data/mp/messages/resmessages2.rmsg:545
 #: data/mp/messages/strings/resstrings.txt:734
 msgid "Best Targets: Base Structures"
 msgstr "Efficace contre : bâtiments"
 
 #: data/base/messages/resmessages2.rmsg:610
 #: data/base/messages/strings/resstrings.txt:704
+#: data/mp/messages/resmessages2.rmsg:554
 #: data/mp/messages/strings/resstrings.txt:739
 msgid "Drops High Explosive Armor Piercing bombs"
 msgstr "Largue des bombes HEAP"
 
 #: data/base/messages/resmessages2.rmsg:611
 #: data/base/messages/strings/resstrings.txt:705
+#: data/mp/messages/resmessages2.rmsg:555
 #: data/mp/messages/strings/resstrings.txt:740
 msgid "Best Targets: Defenses"
 msgstr "Efficace contre : défenses"
@@ -2570,54 +3474,64 @@ msgstr "Se verrouille sur les émissions de chaleur"
 
 #: data/base/messages/resmessages2.rmsg:632
 #: data/base/messages/strings/resstrings.txt:730
+#: data/mp/messages/resmessages2.rmsg:574
 #: data/mp/messages/strings/resstrings.txt:765
 msgid "Hyper-velocity automatic-cannon firing 88mm rounds"
 msgstr "Canon automatique rapide tirant des munitions de 88mm"
 
 #: data/base/messages/resmessages2.rmsg:634
 #: data/base/messages/strings/resstrings.txt:732
+#: data/mp/messages/resmessages2.rmsg:576
 #: data/mp/messages/strings/resstrings.txt:767
 msgid "Replaces Medium Cannon"
 msgstr "Remplace le canon moyen"
 
 #: data/base/messages/resmessages2.rmsg:643
 #: data/base/messages/strings/resstrings.txt:736
+#: data/mp/messages/resmessages2.rmsg:584
 #: data/mp/messages/strings/resstrings.txt:771
 msgid "76mm hyper-velocity quad-barrel automatic-cannon"
 msgstr "Canon automatique haute-vitesse quadritube tirant des munitions de 76mm"
 
 #: data/base/messages/resmessages2.rmsg:654
 #: data/base/messages/strings/resstrings.txt:758
+#: data/mp/messages/resmessages2.rmsg:594
 #: data/mp/messages/strings/resstrings.txt:797
 msgid "Heavy Flame-thrower firing Propylene Oxide gel"
 msgstr "Lance-flammes lourd au gel d'oxyde de propylène"
 
 #: data/base/messages/resmessages2.rmsg:665
 #: data/base/messages/strings/resstrings.txt:766
+#: data/mp/messages/resmessages2.rmsg:604
+#: data/mp/messages/resmessagesall.rmsg:604
 #: data/mp/messages/strings/resstrings.txt:805
 msgid "Propylene Oxide treated to burn at superhot temperatures"
 msgstr "Gel d'oxyde de propylène traité pour brûler à très hautes températures"
 
 #: data/base/messages/resmessages2.rmsg:676
 #: data/base/messages/strings/resstrings.txt:774
+#: data/mp/messages/resmessages2.rmsg:614
 #: data/mp/messages/strings/resstrings.txt:813
 msgid "105mm Howitzer may be assigned to a sensor"
 msgstr "Obusier de calibre 105mm pouvant être affecté à un radar"
 
 #: data/base/messages/resmessages2.rmsg:687
 #: data/base/messages/strings/resstrings.txt:780
+#: data/mp/messages/resmessages2.rmsg:624
 #: data/mp/messages/strings/resstrings.txt:821
 msgid "155mm Howitzer may be assigned to a sensor"
 msgstr "Obusier de calibre 155mm pouvant être affecté à un radar"
 
 #: data/base/messages/resmessages2.rmsg:698
 #: data/base/messages/strings/resstrings.txt:788
+#: data/mp/messages/resmessages2.rmsg:634
 #: data/mp/messages/strings/resstrings.txt:829
 msgid "105m Howitzer firing incendiaries, may be assigned to a sensor"
 msgstr "Obusier de calibre 105mm à obus incendiaires pouvant être affecté à un radar"
 
 #: data/base/messages/resmessages2.rmsg:699
 #: data/base/messages/strings/resstrings.txt:789
+#: data/mp/messages/resmessages2.rmsg:635
 #: data/mp/messages/strings/resstrings.txt:830
 msgid "Best Targets: Base Structures, bunkers"
 msgstr "Efficace contre : bâtiments, bunkers"
@@ -2631,6 +3545,12 @@ msgstr "Efficace contre : bâtiments, bunkers"
 #: data/base/messages/strings/resstrings.txt:793
 #: data/base/messages/strings/resstrings.txt:801
 #: data/base/messages/strings/resstrings.txt:809
+#: data/mp/messages/resmessages2.rmsg:643
+#: data/mp/messages/resmessages2.rmsg:653
+#: data/mp/messages/resmessages2.rmsg:663
+#: data/mp/messages/resmessages3.rmsg:693
+#: data/mp/messages/resmessages3.rmsg:703
+#: data/mp/messages/resmessages3.rmsg:713
 #: data/mp/messages/strings/resstrings.txt:834
 #: data/mp/messages/strings/resstrings.txt:842
 #: data/mp/messages/strings/resstrings.txt:850
@@ -2653,6 +3573,12 @@ msgstr "Augmente la précision des obusiers"
 #: data/base/messages/strings/resstrings.txt:796
 #: data/base/messages/strings/resstrings.txt:804
 #: data/base/messages/strings/resstrings.txt:812
+#: data/mp/messages/resmessages2.rmsg:646
+#: data/mp/messages/resmessages2.rmsg:656
+#: data/mp/messages/resmessages2.rmsg:666
+#: data/mp/messages/resmessages3.rmsg:696
+#: data/mp/messages/resmessages3.rmsg:706
+#: data/mp/messages/resmessages3.rmsg:716
 #: data/mp/messages/strings/resstrings.txt:837
 #: data/mp/messages/strings/resstrings.txt:845
 #: data/mp/messages/strings/resstrings.txt:853
@@ -2661,6 +3587,8 @@ msgstr "Mise à jour automatique de tous les obusiers"
 
 #: data/base/messages/resmessages2.rmsg:720
 #: data/base/messages/strings/resstrings.txt:802
+#: data/mp/messages/resmessages2.rmsg:564
+#: data/mp/messages/resmessages2.rmsg:654
 #: data/mp/messages/strings/resstrings.txt:843
 msgid "High Explosive shells"
 msgstr "Obus hautement explosifs"
@@ -2681,18 +3609,21 @@ msgstr "Augmente la cadence de tir des obusiers"
 
 #: data/base/messages/resmessages2.rmsg:742
 #: data/base/messages/strings/resstrings.txt:846
+#: data/mp/messages/resmessages2.rmsg:674
 #: data/mp/messages/strings/resstrings.txt:889
 msgid "Tungsten-tipped armor-piercing bullets"
 msgstr "Balles perforantes à pointe de tungstène"
 
 #: data/base/messages/resmessages2.rmsg:753
 #: data/base/messages/strings/resstrings.txt:858
+#: data/mp/messages/resmessages2.rmsg:684
 #: data/mp/messages/strings/resstrings.txt:901
 msgid "Improved chaingun mechanism"
 msgstr "Mécanisme d'alimentation amélioré"
 
 #: data/base/messages/resmessages2.rmsg:775
 #: data/base/messages/strings/resstrings.txt:906
+#: data/mp/messages/resmessages2.rmsg:704
 #: data/mp/messages/strings/resstrings.txt:951
 msgid "High Explosive Armor-Piercing Shells"
 msgstr "Obus HEAP pour obusiers"
@@ -2705,74 +3636,95 @@ msgstr "Ogives HEAP pour roquettes"
 
 #: data/base/messages/resmessages2.rmsg:797
 #: data/base/messages/strings/resstrings.txt:966
+#: data/mp/messages/resmessages2.rmsg:724
 #: data/mp/messages/strings/resstrings.txt:1011
 msgid "High Explosive Squash Head warhead"
 msgstr "Ogive HESH pour roquettes"
 
 #: data/base/messages/resmessages3.rmsg:16
+#: data/mp/messages/resmessages3.rmsg:14
 msgid "NEXUS Intruder Program analyzed"
 msgstr "Programme d'intrusion Nexus analysé"
 
 #: data/base/messages/resmessages3.rmsg:17
+#: data/mp/messages/resmessages3.rmsg:15
 msgid "Intruder parasite isolated"
 msgstr "Parasite intrus isolé"
 
 #: data/base/messages/resmessages3.rmsg:18
 #: data/base/messages/resmessages3.rmsg:29
+#: data/mp/messages/resmessages3.rmsg:16
+#: data/mp/messages/resmessages3.rmsg:26
 msgid "Reduced chance of NEXUS take-over"
 msgstr "Réduction du risque de prise de contrôle par Nexus"
 
 #: data/base/messages/resmessages3.rmsg:27
+#: data/mp/messages/resmessages3.rmsg:24
 msgid "Improved NEXUS resistance circuitry"
 msgstr "Résistance des circuits électroniques à Nexus améliorée"
 
 #: data/base/messages/resmessages3.rmsg:28
+#: data/mp/messages/resmessages3.rmsg:25
 msgid "Computer systems can now be 'ring-fenced' from NEXUS"
 msgstr "Les systèmes informatiques peuvent désormais faire barrière à Nexus"
 
 #: data/base/messages/resmessages3.rmsg:37
+#: data/mp/messages/resmessages3.rmsg:33
 msgid "New Cyborg Research Available"
 msgstr "Nouvelle recherche pour Cyborgs disponible"
 
 #: data/base/messages/resmessages3.rmsg:38
+#: data/mp/messages/resmessages3.rmsg:34
 msgid "Aerodynamic Jump Pack"
 msgstr "Jet-pack aérodynamique"
 
 #: data/base/messages/resmessages3.rmsg:39
+#: data/mp/messages/resmessages3.rmsg:35
 msgid "Gives Cyborg limited flight abilities"
 msgstr "Donne aux Cyborgs la possibilité de voler de façon limitée"
 
 #: data/base/messages/resmessages3.rmsg:40
+#: data/mp/messages/resmessages3.rmsg:36
 msgid "Jump Cyborgs can now be researched"
 msgstr "Des recherches sur la technologie des Jet-packs pour Cyborgs peuvent maintenant être effectuées"
 
 #: data/base/messages/resmessages3.rmsg:60
 #: data/base/messages/resmessages3.rmsg:588
+#: data/mp/messages/resmessages3.rmsg:54
+#: data/mp/messages/resmessages3.rmsg:534
 msgid "Superdense composite alloys and energy-absorbing fibres"
 msgstr "Couches d'alliages composites superdenses avec fibres à absorption d'impact intercalées"
 
 #: data/base/messages/resmessages3.rmsg:71
 #: data/base/messages/resmessages3.rmsg:599
+#: data/mp/messages/resmessages3.rmsg:64
+#: data/mp/messages/resmessages3.rmsg:544
 msgid "Laminated alloys bonded with energy-deflecting optic bundles"
 msgstr "Alliages laminés couplés à des déflecteurs d'énergie optiques"
 
 #: data/base/messages/resmessages3.rmsg:82
 #: data/base/messages/strings/resstrings.txt:78
+#: data/mp/messages/resmessages3.rmsg:74
 #: data/mp/messages/strings/resstrings.txt:98
 msgid "Armed with Revenger Surface-to-Air missile"
 msgstr "Armé de missiles SAM Avenger"
 
 #: data/base/messages/resmessages3.rmsg:93
 #: data/base/messages/resmessages3.rmsg:148
+#: data/mp/messages/resmessages3.rmsg:84
+#: data/mp/messages/resmessages3.rmsg:134
 msgid "Armed with Needle Gun"
 msgstr "Armé d'un canon à rail léger"
 
 #: data/base/messages/resmessages3.rmsg:104
 #: data/base/messages/resmessages3.rmsg:159
+#: data/mp/messages/resmessages3.rmsg:94
+#: data/mp/messages/resmessages3.rmsg:144
 msgid "Armed with Scourge anti-tank missile"
 msgstr "Armé de missiles Scourge AC"
 
 #: data/base/messages/resmessages3.rmsg:115
+#: data/mp/messages/resmessages3.rmsg:104
 msgid "Armed with flashlight laser"
 msgstr "Armé d'un laser Flashlight"
 
@@ -2783,52 +3735,68 @@ msgstr "Armé d'un laser Flashlight"
 #: data/base/messages/resmessages3.rmsg:169
 #: data/base/messages/strings/resstrings.txt:77
 #: data/base/messages/strings/resstrings.txt:83
+#: data/mp/messages/resmessages3.rmsg:113
+#: data/mp/messages/resmessages3.rmsg:123
+#: data/mp/messages/resmessages3.rmsg:133
+#: data/mp/messages/resmessages3.rmsg:143
+#: data/mp/messages/resmessages3.rmsg:153
 #: data/mp/messages/strings/resstrings.txt:97
 #: data/mp/messages/strings/resstrings.txt:103
 msgid "New Jump Cyborg Available"
 msgstr "Nouvel Aérocyborg disponible"
 
 #: data/base/messages/resmessages3.rmsg:126
+#: data/mp/messages/resmessages3.rmsg:114
 msgid "Armed with Lancer anti-tank missile"
 msgstr "Armé d'un lance-roquettes AC"
 
 #: data/base/messages/resmessages3.rmsg:137
+#: data/mp/messages/resmessages3.rmsg:124
 msgid "Armed with Cyborg assault gun"
 msgstr "Armé d'un fusil d'assaut"
 
 #: data/base/messages/resmessages3.rmsg:170
+#: data/mp/messages/resmessages3.rmsg:154
 msgid "Armed with Flashlight Laser"
 msgstr "Armé d'un laser Flashlight"
 
 #: data/base/messages/resmessages3.rmsg:172
+#: data/mp/messages/resmessages3.rmsg:156
 msgid "Requires cyborg factory to produce"
 msgstr "Nécessite une usine de production de Cyborgs"
 
 #: data/base/messages/resmessages3.rmsg:181
+#: data/mp/messages/resmessages3.rmsg:164
 msgid "High tensile concrete-plastic composite"
 msgstr "Composé mixte béton-plastique HLE"
 
 #: data/base/messages/resmessages3.rmsg:192
+#: data/mp/messages/resmessages3.rmsg:174
 msgid "Bonded metallic laminates formed into walls and defenses"
 msgstr "Feuilles métalliques laminées intégrées aux murs et défenses"
 
 #: data/base/messages/resmessages3.rmsg:203
+#: data/mp/messages/resmessages3.rmsg:184
 msgid "SAM site with Avenger missiles"
 msgstr "Site de missiles sol-air Avenger"
 
 #: data/base/messages/resmessages3.rmsg:214
+#: data/mp/messages/resmessages3.rmsg:194
 msgid "SAM site with Vindicator missiles"
 msgstr "Site de missiles sol-air Vindicator"
 
 #: data/base/messages/resmessages3.rmsg:225
+#: data/mp/messages/resmessages3.rmsg:204
 msgid "Artillery battery firing Firestorm Missiles"
 msgstr "Batterie d'artillerie tirant des missiles Firestorm"
 
 #: data/base/messages/resmessages3.rmsg:236
+#: data/mp/messages/resmessages3.rmsg:214
 msgid "Artillery battery firing Novastorm Missiles"
 msgstr "Batterie d'artillerie tirant des missiles Novastorm"
 
 #: data/base/messages/resmessages3.rmsg:247
+#: data/mp/messages/resmessages3.rmsg:224
 msgid "Armored strongpoint with Flashlight laser"
 msgstr "Pont défensif blindé à laser Flashlight"
 
@@ -2837,93 +3805,116 @@ msgid "Armored strongpoint with Pulse Laser"
 msgstr "Pont défensif blindé à laser à impulsions"
 
 #: data/base/messages/resmessages3.rmsg:269
+#: data/mp/messages/resmessages3.rmsg:244
 msgid "Armored strongpoint with Rail Gun"
 msgstr "Pont défensif blindé à canon à rail moyen"
 
 #: data/base/messages/resmessages3.rmsg:280
+#: data/mp/messages/resmessages3.rmsg:254
 msgid "Armored strongpoint with Gauss Cannon"
 msgstr "Pont défensif blindé à canon Gauss"
 
 #: data/base/messages/resmessages3.rmsg:291
+#: data/mp/messages/resmessages3.rmsg:264
 msgid "Armored guard tower with Scourge Missile"
 msgstr "Tour de garde renforcée à missiles Scourge"
 
 #: data/base/messages/resmessages3.rmsg:302
+#: data/mp/messages/resmessages3.rmsg:274
 msgid "Armored guard tower with Needle Gun"
 msgstr "Tour de garde renforcée à canon à rail léger"
 
 #: data/base/messages/resmessages3.rmsg:313
+#: data/mp/messages/resmessages3.rmsg:284
 msgid "Armored hardpoint with Scourge AT Missile"
 msgstr "Pont défensif à missiles Scourge AC"
 
 #: data/base/messages/resmessages3.rmsg:324
+#: data/mp/messages/resmessages3.rmsg:294
 msgid "Armored hardpoint with Flashlight laser"
 msgstr "Pont défensif à laser Flashlight"
 
 #: data/base/messages/resmessages3.rmsg:335
+#: data/mp/messages/resmessages3.rmsg:304
 msgid "Armored hardpoint with Rail Gun"
 msgstr "Pont défensif à canon à rail moyen"
 
 #: data/base/messages/resmessages3.rmsg:346
+#: data/mp/messages/resmessages3.rmsg:314
 msgid "Armored hardpoint with Gauss Cannon"
 msgstr "Pont défensif à canon Gauss"
 
 #: data/base/messages/resmessages3.rmsg:357
+#: data/mp/messages/resmessages3.rmsg:324
 msgid "Advanced repair techniques"
 msgstr "Techniques de réparation avancées"
 
 #: data/base/messages/resmessages3.rmsg:369
+#: data/mp/messages/resmessages3.rmsg:334
 msgid "Vapor Turbine boosts power output"
 msgstr "La turbine à vapeur augmente la puissance des générateurs"
 
 #: data/base/messages/resmessages3.rmsg:379
 #: data/base/messages/strings/names.txt:838
+#: data/mp/messages/resmessages3.rmsg:344
 #: data/mp/messages/strings/names.txt:848
 msgid "Neural Synapse Research Brain"
 msgstr "Cerveau de recherche"
 
 #: data/base/messages/resmessages3.rmsg:390
 #: data/base/messages/strings/names.txt:811
+#: data/mp/messages/resmessages3.rmsg:354
 #: data/mp/messages/strings/names.txt:821
 msgid "Advanced Base Structure Materials"
 msgstr "Matériaux de construction avancés"
 
 #: data/base/messages/resmessages3.rmsg:401
+#: data/mp/messages/resmessages3.rmsg:364
 msgid "High Density Base Structure Materials"
 msgstr "Matériaux de construction à haute densité"
 
 #: data/base/messages/resmessages3.rmsg:412
 #: data/base/messages/strings/names.txt:854
+#: data/mp/messages/resmessages3.rmsg:374
 msgid "Advanced VTOL Production"
 msgstr "Production aéronautique avancée"
 
 #: data/base/messages/resmessages3.rmsg:423
 #: data/base/messages/strings/names.txt:846
+#: data/mp/messages/resmessages3.rmsg:384
 #: data/mp/messages/strings/names.txt:856
 msgid "Robotic VTOL Rearming"
 msgstr "Réarmement des VTOLs robotisé"
 
 #: data/base/messages/resmessages3.rmsg:434
+#: data/mp/messages/resmessages3.rmsg:394
 msgid "Advanced Engineering Techniques"
 msgstr "Techniques d'ingénierie avancées"
 
 #: data/base/messages/resmessages3.rmsg:456
+#: data/mp/messages/resmessages3.rmsg:414
 msgid "Advanced fire detection systems"
 msgstr "Systèmes de détection de tirs avancés"
 
 #: data/base/messages/resmessages3.rmsg:467
+#: data/mp/messages/resmessages3.rmsg:424
 msgid "Advanced target recognition systems"
 msgstr "Systèmes de reconnaissance de cible avancés"
 
 #: data/base/messages/resmessages3.rmsg:478
+#: data/mp/messages/resmessages3.rmsg:434
+#: data/mp/messages/resmessagesall.rmsg:304
 msgid "Synaptic Link Scrambler technology"
 msgstr "Technologie de brouillage du Lien Synaptique"
 
 #: data/base/messages/resmessages3.rmsg:479
+#: data/mp/messages/resmessages3.rmsg:435
+#: data/mp/messages/resmessagesall.rmsg:305
 msgid "Electronically attacks and disrupts enemy structures"
 msgstr "Attaque électroniquement les structures ennemies et empêche leur bon fonctionnement"
 
 #: data/base/messages/resmessages3.rmsg:480
+#: data/mp/messages/resmessages3.rmsg:436
 msgid "Steals technology from enemies"
 msgstr "Dérobe des technologies ennemies"
 
@@ -2931,6 +3922,11 @@ msgstr "Dérobe des technologies ennemies"
 #: data/base/messages/resmessages3.rmsg:499
 #: data/base/messages/resmessages3.rmsg:510
 #: data/base/messages/resmessages3.rmsg:521
+#: data/mp/messages/resmessages3.rmsg:443
+#: data/mp/messages/resmessages3.rmsg:453
+#: data/mp/messages/resmessages3.rmsg:463
+#: data/mp/messages/resmessages3.rmsg:473
+#: data/mp/messages/resmessagesall.rmsg:323
 msgid "New Repair Technology Discovered"
 msgstr "Nouvelle technologie de réparation découverte"
 
@@ -2938,108 +3934,149 @@ msgstr "Nouvelle technologie de réparation découverte"
 #: data/base/messages/resmessages3.rmsg:500
 #: data/base/messages/resmessages3.rmsg:511
 #: data/base/messages/resmessages3.rmsg:522
+#: data/mp/messages/resmessages3.rmsg:444
+#: data/mp/messages/resmessages3.rmsg:454
+#: data/mp/messages/resmessages3.rmsg:464
+#: data/mp/messages/resmessages3.rmsg:474
+#: data/mp/messages/resmessagesall.rmsg:314
+#: data/mp/messages/resmessagesall.rmsg:324
 msgid "Synaptic Link technology breakthrough"
 msgstr "Avancée dans la technologie du Lien Synaptique"
 
 #: data/base/messages/resmessages3.rmsg:490
 #: data/base/messages/resmessages3.rmsg:523
+#: data/mp/messages/resmessages3.rmsg:445
+#: data/mp/messages/resmessages3.rmsg:475
+#: data/mp/messages/resmessagesall.rmsg:325
 msgid "On-board diagnostic and repair systems"
 msgstr "Systèmes embarqués de diagnostic et de réparation"
 
 #: data/base/messages/resmessages3.rmsg:491
+#: data/mp/messages/resmessages3.rmsg:446
 msgid "Enables self-repair in all Cyborgs"
 msgstr "Active l'auto-réparation pour tous les Cyborgs"
 
 #: data/base/messages/resmessages3.rmsg:501
 #: data/base/messages/resmessages3.rmsg:512
+#: data/mp/messages/resmessages3.rmsg:455
+#: data/mp/messages/resmessages3.rmsg:465
 msgid "Built-in diagnostic and repair systems"
 msgstr "Système de diagnostic et de réparation intégré"
 
 #: data/base/messages/resmessages3.rmsg:502
+#: data/mp/messages/resmessages3.rmsg:456
 msgid "Enables self-repair in all base structures"
 msgstr "Active l'auto-réparation pour tous les bâtiments"
 
 #: data/base/messages/resmessages3.rmsg:513
+#: data/mp/messages/resmessages3.rmsg:466
 msgid "Enables self-repair in all defenses"
 msgstr "Active l'auto-réparation pour tous les systèmes de défense"
 
 #: data/base/messages/resmessages3.rmsg:524
+#: data/mp/messages/resmessages3.rmsg:476
 msgid "Enables self-repair in all vehicles"
 msgstr "Active l'auto-réparation pour tous les véhicules"
 
 #: data/base/messages/resmessages3.rmsg:532
+#: data/mp/messages/resmessages3.rmsg:483
 msgid "NEXUS Light Body"
 msgstr "Châssis léger de NEXUS"
 
 #: data/base/messages/resmessages3.rmsg:535
+#: data/mp/messages/resmessages3.rmsg:486
 msgid "Expensive to produce"
 msgstr "Cher à produire"
 
 #: data/base/messages/resmessages3.rmsg:543
+#: data/mp/messages/resmessages3.rmsg:493
 msgid "NEXUS Medium Body"
 msgstr "Châssis moyen de NEXUS"
 
 #: data/base/messages/resmessages3.rmsg:546
+#: data/mp/messages/resmessages3.rmsg:496
 msgid "Expensive and slow to produce"
 msgstr "Cher et lent à produire"
 
 #: data/base/messages/resmessages3.rmsg:554
+#: data/mp/messages/resmessages3.rmsg:503
 msgid "NEXUS Heavy Body"
 msgstr "Châssis lourd de NEXUS"
 
 #: data/base/messages/resmessages3.rmsg:555
 #: data/base/messages/resmessagesall.rmsg:93
+#: data/mp/messages/resmessages3.rmsg:504
+#: data/mp/messages/resmessagesall.rmsg:114
 msgid "More armor and body points than Python"
 msgstr "Plus de blindage et de résistance que le Python"
 
 #: data/base/messages/resmessages3.rmsg:557
+#: data/mp/messages/resmessages3.rmsg:506
+#: data/mp/messages/resmessagesall.rmsg:566
+#: data/mp/messages/resmessagesall.rmsg:576
 msgid "Very expensive to produce"
 msgstr "Très cher à produire"
 
 #: data/base/messages/resmessages3.rmsg:566
 #: data/base/messages/strings/names.txt:948
+#: data/mp/messages/resmessages3.rmsg:514
 #: data/mp/messages/strings/names.txt:960
 msgid "Gas Turbine Engine"
 msgstr "Moteur à turbine à gaz"
 
 #: data/base/messages/resmessages3.rmsg:577
+#: data/mp/messages/resmessages3.rmsg:524
 msgid "Ionizing Turbine Engine"
 msgstr "Moteur à turbine ionisante"
 
 #: data/base/messages/resmessages3.rmsg:665
 #: data/base/messages/resmessages3.rmsg:676
+#: data/mp/messages/resmessages3.rmsg:604
+#: data/mp/messages/resmessages3.rmsg:614
 msgid "New power efficient propulsion"
 msgstr "Nouvelle propulsion économe en énergie"
 
 #: data/base/messages/resmessages3.rmsg:666
 #: data/base/messages/resmessages3.rmsg:677
+#: data/mp/messages/resmessages3.rmsg:605
+#: data/mp/messages/resmessages3.rmsg:615
 msgid "Body Points and Speed Increased"
 msgstr "Résistance et vitesse augmentées"
 
 #: data/base/messages/resmessages3.rmsg:667
 #: data/base/messages/resmessages3.rmsg:678
+#: data/mp/messages/resmessages3.rmsg:606
+#: data/mp/messages/resmessages3.rmsg:616
 msgid "All VTOLs upgraded automatically"
 msgstr "Mise à jour automatique de tous les VTOLs"
 
 #: data/base/messages/resmessages3.rmsg:687
+#: data/mp/messages/resmessages3.rmsg:624
 msgid "Computer plots and guides shell to target's position"
 msgstr "L'ordinateur calcule la position de la cible et y dirige l'obus"
 
 #: data/base/messages/resmessages3.rmsg:698
+#: data/mp/messages/resmessages3.rmsg:634
 msgid "High Explosive Armor Piercing Flak"
 msgstr "Obus HEAP pour canons de DCA"
 
 #: data/base/messages/resmessages3.rmsg:709
+#: data/mp/messages/resmessages3.rmsg:644
 msgid "Chainfeed loader eradicates jams and improves performance"
 msgstr "Chargeur chaîné éliminant les blocages et améliorant la performance de tir"
 
 #: data/base/messages/resmessages3.rmsg:720
+#: data/mp/messages/resmessages3.rmsg:654
 msgid "Drops high intensity thermite bombs"
 msgstr "Largue des bombes thermiques à haute intensité"
 
 #: data/base/messages/resmessages3.rmsg:721
 #: data/base/messages/resmessages3.rmsg:886
 #: data/base/messages/resmessagesall.rmsg:138
+#: data/mp/messages/resmessages3.rmsg:655
+#: data/mp/messages/resmessages3.rmsg:805
+#: data/mp/messages/resmessagesall.rmsg:155
+#: data/mp/messages/resmessagesall.rmsg:705
 msgid "Best Targets: Bunkers and hardpoints"
 msgstr "Efficace contre : bunkers et ponts défensifs"
 
@@ -3048,48 +4085,65 @@ msgid "Bombs lock on and guide themselves to the target"
 msgstr "Les bombes se verrouillent sur la cible et s'y dirigent d'elles-mêmes"
 
 #: data/base/messages/resmessages3.rmsg:742
+#: data/mp/messages/resmessages3.rmsg:674
 msgid "High-Velocity Armor-Piercing Fin-Stabilised Discarding Sabot"
 msgstr "Obus HVAPFSDS"
 
 #: data/base/messages/resmessages3.rmsg:753
 #: data/base/messages/resmessages3.rmsg:786
 #: data/base/messages/resmessages3.rmsg:1006
+#: data/mp/messages/resmessages3.rmsg:684
+#: data/mp/messages/resmessages3.rmsg:714
+#: data/mp/messages/resmessages3.rmsg:914
 msgid "Robotic loading system feeds rounds into breech"
 msgstr "Système de chargement de munitions robotisé"
 
 #: data/base/messages/resmessages3.rmsg:764
+#: data/mp/messages/resmessages3.rmsg:694
 msgid "Computer guided shells"
 msgstr "Obus guidés par ordinateur"
 
 #: data/base/messages/resmessages3.rmsg:775
+#: data/mp/messages/resmessages3.rmsg:704
 msgid "High Explosive Armor Piercing Shells"
 msgstr "Obus HEAP"
 
 #: data/base/messages/resmessages3.rmsg:796
 #: data/base/messages/resmessages3.rmsg:807
+#: data/mp/messages/resmessages3.rmsg:723
+#: data/mp/messages/resmessages3.rmsg:733
+#: data/mp/messages/resmessagesall.rmsg:373
 msgid "New Laser Weapon Available"
 msgstr "Nouvelle arme laser disponible"
 
 #: data/base/messages/resmessages3.rmsg:797
+#: data/mp/messages/resmessages3.rmsg:724
 msgid "Generates and concentrates bursts of laser energy"
 msgstr "Génère des décharges d'énergie laser concentrées"
 
 #: data/base/messages/resmessages3.rmsg:798
 #: data/base/messages/resmessages3.rmsg:809
+#: data/mp/messages/resmessages3.rmsg:725
+#: data/mp/messages/resmessages3.rmsg:735
 msgid "Best Targets: Cyborgs"
 msgstr "Efficace contre : Cyborgs"
 
 #: data/base/messages/resmessages3.rmsg:808
+#: data/mp/messages/resmessages3.rmsg:734
 msgid "Fires pulses of laser light"
 msgstr "Tire des impulsions laser"
 
 #: data/base/messages/resmessages3.rmsg:818
 #: data/base/messages/resmessages3.rmsg:829
 #: data/base/messages/resmessages3.rmsg:840
+#: data/mp/messages/resmessages3.rmsg:743
+#: data/mp/messages/resmessages3.rmsg:753
+#: data/mp/messages/resmessages3.rmsg:763
 msgid "Laser Upgrade"
 msgstr "Mise à jour pour lasers"
 
 #: data/base/messages/resmessages3.rmsg:819
+#: data/mp/messages/resmessages3.rmsg:744
 msgid "Improvement in laser optics reduces light dispersal"
 msgstr "Des percés en optique réduisent la dispersion des rayons laser"
 
@@ -3100,10 +4154,14 @@ msgstr "Augmente la précision de tir des lasers"
 #: data/base/messages/resmessages3.rmsg:821
 #: data/base/messages/resmessages3.rmsg:832
 #: data/base/messages/resmessages3.rmsg:843
+#: data/mp/messages/resmessages3.rmsg:746
+#: data/mp/messages/resmessages3.rmsg:756
+#: data/mp/messages/resmessages3.rmsg:766
 msgid "All lasers upgraded automatically"
 msgstr "Mise à jour automatique de tous les lasers"
 
 #: data/base/messages/resmessages3.rmsg:830
+#: data/mp/messages/resmessages3.rmsg:754
 msgid "Improvement in laser emission density"
 msgstr "Amélioration de la densité des émissions laser"
 
@@ -3112,6 +4170,7 @@ msgid "Increases Laser damage"
 msgstr "Augmente les dégâts des lasers"
 
 #: data/base/messages/resmessages3.rmsg:841
+#: data/mp/messages/resmessages3.rmsg:764
 msgid "Improved Energizer reduces laser recharge time"
 msgstr "Le concentrateur énergétique plus puissant réduit le temps de recharge des lasers"
 
@@ -3120,23 +4179,29 @@ msgid "Increases Laser ROF"
 msgstr "Augmente la cadence de tir des lasers"
 
 #: data/base/messages/resmessages3.rmsg:852
+#: data/mp/messages/resmessages3.rmsg:774
 msgid "Depleted uranium kinetic energy bullets"
 msgstr "Balles denses à l'uranium appauvri à haute énergie cinétique"
 
 #: data/base/messages/resmessages3.rmsg:863
+#: data/mp/messages/resmessages3.rmsg:784
 msgid "Collapsing Plutonium kinetic energy bullets"
 msgstr "Balles superdenses au plutonium à haute énergie cinétique"
 
 #: data/base/messages/resmessages3.rmsg:873
 #: data/base/messages/resmessages3.rmsg:884
+#: data/mp/messages/resmessages3.rmsg:793
+#: data/mp/messages/resmessages3.rmsg:803
 msgid "New Missile Turret Available"
 msgstr "Nouvelle tourelle à missiles disponible"
 
 #: data/base/messages/resmessages3.rmsg:874
+#: data/mp/messages/resmessages3.rmsg:794
 msgid "Anti-tank missile"
 msgstr "Missile anti-char"
 
 #: data/base/messages/resmessages3.rmsg:885
+#: data/mp/messages/resmessages3.rmsg:804
 msgid "Bunker buster missile"
 msgstr "Missile anti-bunker"
 
@@ -3145,10 +4210,16 @@ msgstr "Missile anti-bunker"
 #: data/base/messages/resmessages3.rmsg:917
 #: data/base/messages/resmessages3.rmsg:972
 #: data/base/messages/resmessages3.rmsg:983
+#: data/mp/messages/resmessages3.rmsg:813
+#: data/mp/messages/resmessages3.rmsg:823
+#: data/mp/messages/resmessages3.rmsg:833
+#: data/mp/messages/resmessages3.rmsg:883
+#: data/mp/messages/resmessages3.rmsg:893
 msgid "Missile Upgrade"
 msgstr "Mise à jour pour missiles"
 
 #: data/base/messages/resmessages3.rmsg:896
+#: data/mp/messages/resmessages3.rmsg:814
 msgid "On-board computer predicts target movement"
 msgstr "L'ordinateur embarqué corrige la trajectoire en temps réél en fonction du déplacement de la cible"
 
@@ -3162,14 +4233,22 @@ msgstr "Augmente la précision des missiles"
 #: data/base/messages/resmessages3.rmsg:920
 #: data/base/messages/resmessages3.rmsg:975
 #: data/base/messages/resmessages3.rmsg:986
+#: data/mp/messages/resmessages3.rmsg:816
+#: data/mp/messages/resmessages3.rmsg:826
+#: data/mp/messages/resmessages3.rmsg:836
+#: data/mp/messages/resmessages3.rmsg:886
+#: data/mp/messages/resmessages3.rmsg:896
 msgid "All missiles upgraded automatically"
 msgstr "Mise à jour automatique de tous les missiles"
 
 #: data/base/messages/resmessages3.rmsg:907
+#: data/mp/messages/resmessages3.rmsg:824
 msgid "Missile actively seeks and homes on targets"
 msgstr "Les missiles recherchent activement les cibles et s'y dirigent"
 
 #: data/base/messages/resmessages3.rmsg:918
+#: data/mp/messages/resmessages3.rmsg:664
+#: data/mp/messages/resmessages3.rmsg:834
 msgid "Low yield thermonuclear warhead"
 msgstr "Ogive thermonucléaire à faible rendement"
 
@@ -3179,41 +4258,58 @@ msgstr "Augmente les dégâts des missiles"
 
 #: data/base/messages/resmessages3.rmsg:928
 #: data/base/messages/resmessages3.rmsg:939
+#: data/mp/messages/resmessages3.rmsg:843
+#: data/mp/messages/resmessages3.rmsg:853
 msgid "New SAM Turret Available"
 msgstr "Nouvelle tourelle SAM disponible"
 
 #: data/base/messages/resmessages3.rmsg:929
+#: data/mp/messages/resmessages3.rmsg:844
+#: data/mp/messages/resmessagesall.rmsg:664
 msgid "Surface-to-air missile"
 msgstr "Missile sol-air"
 
 #: data/base/messages/resmessages3.rmsg:930
 #: data/base/messages/resmessages3.rmsg:941
+#: data/mp/messages/resmessages3.rmsg:845
+#: data/mp/messages/resmessages3.rmsg:855
+#: data/mp/messages/resmessagesall.rmsg:585
+#: data/mp/messages/resmessagesall.rmsg:665
 msgid "Best Targets: Aerial targets only"
 msgstr "Efficace contre : VTOLs uniquement"
 
 #: data/base/messages/resmessages3.rmsg:940
+#: data/mp/messages/resmessages3.rmsg:854
+#: data/mp/messages/resmessagesall.rmsg:584
 msgid "Heavy surface-to-air missile"
 msgstr "Missile sol-air lourd"
 
 #: data/base/messages/resmessages3.rmsg:950
 #: data/base/messages/resmessages3.rmsg:961
+#: data/mp/messages/resmessages3.rmsg:863
+#: data/mp/messages/resmessages3.rmsg:873
 msgid "New Artillery Missile Turret Available"
 msgstr "Nouvelle tourelle d'artillerie à missiles disponible"
 
 #: data/base/messages/resmessages3.rmsg:951
+#: data/mp/messages/resmessages3.rmsg:864
 msgid "High explosive artillery missile"
 msgstr "Missile d'artillerie hautement explosif"
 
 #: data/base/messages/resmessages3.rmsg:952
 #: data/base/messages/resmessages3.rmsg:963
+#: data/mp/messages/resmessages3.rmsg:865
+#: data/mp/messages/resmessages3.rmsg:875
 msgid "Best Targets: Base structures and cyborgs"
 msgstr "Efficace contre : bâtiments et Cyborgs"
 
 #: data/base/messages/resmessages3.rmsg:962
+#: data/mp/messages/resmessages3.rmsg:874
 msgid "High explosive heavy artillery missile"
 msgstr "Missile d'artillerie lourde hautement explosif"
 
 #: data/base/messages/resmessages3.rmsg:973
+#: data/mp/messages/resmessages3.rmsg:884
 msgid "Missiles detect and lock-on to targets while loading"
 msgstr "Les missiles détectent des cibles et se verrouillent dessus lors de leur chargement"
 
@@ -3223,38 +4319,50 @@ msgid "Increases Missile ROF"
 msgstr "Augmente la cadence de tir des missiles"
 
 #: data/base/messages/resmessages3.rmsg:984
+#: data/mp/messages/resmessages3.rmsg:894
 msgid "Racked missile dispensers allow for fast reloading"
 msgstr "Galerie de missiles permettant d'accélérer le rechargement"
 
 #: data/base/messages/resmessages3.rmsg:995
+#: data/mp/messages/resmessages3.rmsg:904
 msgid "Self-guided rocket-powered shells"
 msgstr "Obus auto-guidés propulsés par fusées"
 
 #: data/base/messages/resmessages3.rmsg:1016
 #: data/base/messages/resmessages3.rmsg:1027
 #: data/base/messages/resmessages3.rmsg:1038
+#: data/mp/messages/resmessages3.rmsg:923
+#: data/mp/messages/resmessages3.rmsg:933
+#: data/mp/messages/resmessages3.rmsg:943
 msgid "New Rail Gun Available"
 msgstr "Nouveau canon à rail disponible"
 
 #: data/base/messages/resmessages3.rmsg:1017
+#: data/mp/messages/resmessages3.rmsg:924
 msgid "Rapid fire rail gun firing needle darts"
 msgstr "Canon à rail à tir rapide projetant des aiguilles métalliques"
 
 #: data/base/messages/resmessages3.rmsg:1028
+#: data/mp/messages/resmessages3.rmsg:934
 msgid "Rail gun firing armor-piercing darts"
 msgstr "Canon à rail projetant des fléchettes métalliques perforantes"
 
 #: data/base/messages/resmessages3.rmsg:1039
+#: data/mp/messages/resmessages3.rmsg:944
 msgid "Heavy rail gun firing large kinetic energy darts"
 msgstr "Canon à rail lourd projetant de grosses fléchettes denses à haute énergie cinétique"
 
 #: data/base/messages/resmessages3.rmsg:1049
 #: data/base/messages/resmessages3.rmsg:1060
 #: data/base/messages/resmessages3.rmsg:1071
+#: data/mp/messages/resmessages3.rmsg:953
+#: data/mp/messages/resmessages3.rmsg:963
+#: data/mp/messages/resmessages3.rmsg:973
 msgid "Rail Gun Upgrade"
 msgstr "Mise à jour pour canons à rail"
 
 #: data/base/messages/resmessages3.rmsg:1050
+#: data/mp/messages/resmessages3.rmsg:954
 msgid "Computer predicts and compensates for target's movement"
 msgstr "L'ordinateur corrige le tir en fonction des déplacements de la cible, qu'il cherche à prévoir"
 
@@ -3265,10 +4373,14 @@ msgstr "Précision de tir des canons à rail augmentée"
 #: data/base/messages/resmessages3.rmsg:1052
 #: data/base/messages/resmessages3.rmsg:1063
 #: data/base/messages/resmessages3.rmsg:1074
+#: data/mp/messages/resmessages3.rmsg:956
+#: data/mp/messages/resmessages3.rmsg:966
+#: data/mp/messages/resmessages3.rmsg:976
 msgid "All rail guns upgraded automatically"
 msgstr "Mise à jour automatique de tous les canons à rail"
 
 #: data/base/messages/resmessages3.rmsg:1061
+#: data/mp/messages/resmessages3.rmsg:964
 msgid "Improved armor-piercing dart"
 msgstr "Fléchettes perforantes améliorées"
 
@@ -3277,6 +4389,7 @@ msgid "Increases Rail Gun damage"
 msgstr "Augmente les dégâts des canons à rail"
 
 #: data/base/messages/resmessages3.rmsg:1072
+#: data/mp/messages/resmessages3.rmsg:974
 msgid "Increased gauss output speeds up reload time"
 msgstr "Le champ magnétique intensifié diminue le temps de rechargement"
 
@@ -3285,82 +4398,110 @@ msgid "Increases Rail Gun ROF"
 msgstr "Cadence de tir des canons à rail augmentée"
 
 #: data/base/messages/resmessagesall.rmsg:4
+#: data/mp/messages/resmessagesall.rmsg:3
 msgid "New Construction Options Available"
 msgstr "Nouvelles options de construction disponibles"
 
 #: data/base/messages/resmessagesall.rmsg:5
+#: data/mp/messages/resmessagesall.rmsg:4
 msgid "Titanium-reinforced concrete"
 msgstr "Béton renforcé au titane"
 
 #: data/base/messages/resmessagesall.rmsg:6
+#: data/mp/messages/resmessagesall.rmsg:5
 msgid "Enables Hardcrete walls"
 msgstr "Permet la construction de murs en béton renforcé"
 
 #: data/base/messages/resmessagesall.rmsg:16
+#: data/mp/messages/resmessagesall.rmsg:14
 msgid "VTOL factory enables VTOL production"
 msgstr "L'usine de VTOLs permet de produire des VTOLs"
 
 #: data/base/messages/resmessagesall.rmsg:17
+#: data/mp/messages/resmessagesall.rmsg:15
 msgid "VTOL rearming pads required to keep VTOLs flying"
 msgstr "Des plateformes de réarment sont nécessaires pour maintenir les VTOL en état de vol"
 
 #: data/base/messages/resmessagesall.rmsg:18
+#: data/mp/messages/resmessagesall.rmsg:16
 msgid "May be upgraded using factory modules"
 msgstr "Peut être agrandie par des modules de production"
 
 #: data/base/messages/resmessagesall.rmsg:27
+#: data/mp/messages/resmessagesall.rmsg:24
 msgid "Refuels, rearms and repairs VTOLs"
 msgstr "Recharge et répare les VTOLs"
 
 #: data/base/messages/resmessagesall.rmsg:28
+#: data/mp/messages/resmessagesall.rmsg:25
 msgid "Assign a VTOL by selecting the rearming pad as its target"
 msgstr "Affectez un VTOL à une plateforme de réarmement en la lui donnant pour cible"
 
 #: data/base/messages/resmessagesall.rmsg:29
+#: data/mp/messages/resmessagesall.rmsg:26
 msgid "The VTOL returns to the selected pad for rearming"
 msgstr "Le VTOL retournera à sa plateforme pour se recharger"
 
 #: data/base/messages/resmessagesall.rmsg:38
+#: data/mp/messages/resmessagesall.rmsg:34
 msgid "Battlefield repair unit"
 msgstr "Unité de réparation mobile"
 
 #: data/base/messages/resmessagesall.rmsg:39
 #: data/base/messages/strings/resstrings.txt:445
+#: data/mp/messages/resmessagesall.rmsg:35
+#: data/mp/messages/resmessagesall.rmsg:285
 #: data/mp/messages/strings/resstrings.txt:473
 msgid "Automatically Repairs Damaged Units"
 msgstr "Répare automatiquement les unités endommagées situées à proximité"
 
 #: data/base/messages/resmessagesall.rmsg:40
 #: data/base/messages/strings/resstrings.txt:446
+#: data/mp/messages/resmessagesall.rmsg:36
+#: data/mp/messages/resmessagesall.rmsg:286
 #: data/mp/messages/strings/resstrings.txt:474
 msgid "Or damaged units may be selected as target"
 msgstr "Les unités endommagées peuvent aussi être choisies pour cible"
 
 #: data/base/messages/resmessagesall.rmsg:48
+#: data/mp/messages/resmessagesall.rmsg:43
 msgid "New Systems Turret Available For Design"
 msgstr "Nouvelle tourelle système disponible pour assemblage"
 
 #: data/base/messages/resmessagesall.rmsg:49
+#: data/mp/messages/resmessagesall.rmsg:44
+#: data/mp/messages/resmessagesall.rmsg:406
+#: data/mp/messages/resmessagesall.rmsg:556
 msgid "Improved sensor range"
 msgstr "Portée des radars améliorée"
 
 #: data/base/messages/resmessagesall.rmsg:50
+#: data/mp/messages/resmessagesall.rmsg:45
 msgid "Makes excellent scout vehicle"
 msgstr "Fait un excellent éclaireur"
 
 #: data/base/messages/resmessagesall.rmsg:60
+#: data/mp/messages/resmessagesall.rmsg:54
 msgid "Extended sensor range"
 msgstr "Portée radar étendue"
 
 #: data/base/messages/resmessagesall.rmsg:61
+#: data/mp/messages/resmessagesall.rmsg:55
+#: data/mp/messages/resmessagesall.rmsg:395
+#: data/mp/messages/resmessagesall.rmsg:405
+#: data/mp/messages/resmessagesall.rmsg:555
 msgid "Keeps map areas under constant surveillance"
 msgstr "Garde un secteur sous surveillance constante"
 
 #: data/base/messages/resmessagesall.rmsg:70
+#: data/mp/messages/resmessagesall.rmsg:63
+#: data/mp/messages/resmessagesall.rmsg:73
+#: data/mp/messages/resmessagesall.rmsg:83
 msgid "Sensors Improved"
 msgstr "Capteurs améliorés"
 
 #: data/base/messages/resmessagesall.rmsg:71
+#: data/mp/messages/resmessagesall.rmsg:64
 msgid "New Thermal Emissions detection"
 msgstr "Nouvelle technologie de détection d'émissions thermiques"
 
@@ -3369,50 +4510,64 @@ msgid "Extends Sensor Range"
 msgstr "Augmente la portée des radars"
 
 #: data/base/messages/resmessagesall.rmsg:73
+#: data/mp/messages/resmessagesall.rmsg:66
+#: data/mp/messages/resmessagesall.rmsg:76
+#: data/mp/messages/resmessagesall.rmsg:86
 msgid "All sensors upgraded automatically"
 msgstr "Mise à jour automatique de tous les radars"
 
 #: data/base/messages/resmessagesall.rmsg:82
+#: data/mp/messages/resmessagesall.rmsg:94
 msgid "Counter-battery tower detects enemy indirect fire batteries"
 msgstr "Tour radar de contre-batterie détectant les batteries ennemies"
 
 #: data/base/messages/resmessagesall.rmsg:92
+#: data/mp/messages/resmessagesall.rmsg:113
 msgid "Collective Heavy Body"
 msgstr "Châssis lourd du Collectif"
 
 #: data/base/messages/resmessagesall.rmsg:94
+#: data/mp/messages/resmessagesall.rmsg:115
 msgid "Slower than Python"
 msgstr "Plus lent que le Python"
 
 #: data/base/messages/resmessagesall.rmsg:95
+#: data/mp/messages/resmessagesall.rmsg:116
 msgid "High power costs and slow to produce"
 msgstr "Cher et lent à produire"
 
 #: data/base/messages/resmessagesall.rmsg:103
+#: data/mp/messages/resmessagesall.rmsg:123
 msgid "New Propulsion Available for Design"
 msgstr "Nouveau type de propulsion disponible pour conception"
 
 #: data/base/messages/resmessagesall.rmsg:104
+#: data/mp/messages/resmessagesall.rmsg:124
 msgid "Vertical Take Off and Landing Propulsion"
 msgstr "Avions à décollage et atterrissage vertical"
 
 #: data/base/messages/resmessagesall.rmsg:105
+#: data/mp/messages/resmessagesall.rmsg:125
 msgid "Speed: VTOL"
 msgstr "Vitesse : VTOL"
 
 #: data/base/messages/resmessagesall.rmsg:115
+#: data/mp/messages/resmessagesall.rmsg:134
 msgid "Rocket detects and locks on to engine emissions"
 msgstr "Les roquettes détectent les émissions thermiques et se verrouillent dessus"
 
 #: data/base/messages/resmessagesall.rmsg:126
+#: data/mp/messages/resmessagesall.rmsg:144
 msgid "Anti-tank rocket"
 msgstr "Roquettes anti-char"
 
 #: data/base/messages/resmessagesall.rmsg:137
+#: data/mp/messages/resmessagesall.rmsg:154
 msgid "High explosive shaped charge missile"
 msgstr "Missile hautement explosif à charge creuse"
 
 #: data/base/messages/resmessagesall.rmsg:148
+#: data/mp/messages/resmessagesall.rmsg:164
 msgid "Laser designator paints and guides rounds to the target"
 msgstr "Le viseur laser pointe sur la cible pour guider les obus"
 
@@ -6323,6 +7478,7 @@ msgid "Robotic Cyborg Production Mk3"
 msgstr "Production de Cyborgs robotisée Mk3"
 
 #: data/base/messages/strings/names.txt:789
+#: data/mp/messages/resmessagesall.rmsg:624
 msgid "Advanced Cyborg Production"
 msgstr "Production de Cyborgs avancée"
 
@@ -6355,6 +7511,7 @@ msgid "Robotic Factory Production Mk3"
 msgstr "Production de véhicules robotisée Mk3"
 
 #: data/base/messages/strings/names.txt:800
+#: data/mp/messages/resmessagesall.rmsg:614
 msgid "Advanced Factory Production"
 msgstr "Production de véhicules avancée"
 
@@ -7993,6 +9150,7 @@ msgid "Self-Replicating Factory Production"
 msgstr "Production de véhicules par auto-réplication"
 
 #: data/base/messages/strings/resstrings.txt:444
+#: data/mp/messages/resmessagesall.rmsg:284
 #: data/mp/messages/strings/resstrings.txt:472
 msgid "Heavy repair unit"
 msgstr "Unité de réparation lourde"
@@ -9064,6 +10222,623 @@ msgstr "Il est maintenant grand temps de les utiliser pour reconstruire le monde
 #: data/base/sequenceaudio/outro.txt:9
 msgid "Slowly, out of the ashes we will rise again..."
 msgstr "Lentement, la civilisation va renaître de ses cendres..."
+
+#: data/mp/messages/resmessages12.rmsg:45
+msgid "Construction speed +10%"
+msgstr "Vitesse de construction : +10%"
+
+#: data/mp/messages/resmessages12.rmsg:75
+#: data/mp/messages/resmessagesall.rmsg:165
+msgid "Cannon accuracy +10%"
+msgstr "Précision de tir des canons : +10%"
+
+#: data/mp/messages/resmessages12.rmsg:85
+msgid "Flamer reload time -15%"
+msgstr "Temps de rechargement des lance-flammes : -15%"
+
+#: data/mp/messages/resmessages12.rmsg:105
+#: data/mp/messages/resmessages23.rmsg:135
+#: data/mp/messages/resmessages2.rmsg:685
+msgid "Machinegun reload time -15%"
+msgstr "Temps de rechargement des mitrailleuses : -15%"
+
+#: data/mp/messages/resmessages12.rmsg:125
+#: data/mp/messages/resmessages23.rmsg:145
+#: data/mp/messages/resmessages3.rmsg:905
+msgid "Mortar accuracy +10%"
+msgstr "Précision de tir des mortiers : +10%"
+
+#: data/mp/messages/resmessages12.rmsg:135
+#: data/mp/messages/resmessages3.rmsg:915
+msgid "Mortar reload time -10%"
+msgstr "Temps de rechargement des mortiers : -10%"
+
+#: data/mp/messages/resmessages12.rmsg:155
+#: data/mp/messages/resmessages1.rmsg:565
+msgid "Rocket reload time -15%"
+msgstr "Temps de rechargement des lance-roquettes : -15%"
+
+#: data/mp/messages/resmessages12.rmsg:165
+#: data/mp/messages/resmessages3.rmsg:685
+msgid "Cannon reload time -10%"
+msgstr "Temps de rechargement des canons : -10%"
+
+#: data/mp/messages/resmessages12.rmsg:175
+#: data/mp/messages/resmessages1.rmsg:445
+#: data/mp/messages/resmessages3.rmsg:675
+msgid "Cannon damage +25%"
+msgstr "Dégâts des canons : +25%"
+
+#: data/mp/messages/resmessages12.rmsg:185
+#: data/mp/messages/resmessages1.rmsg:545
+#: data/mp/messages/resmessages1.rmsg:575
+#: data/mp/messages/resmessagesall.rmsg:135
+msgid "Rocket accuracy +10%"
+msgstr "Précision de tir des roquettes : +10%"
+
+#: data/mp/messages/resmessages1.rmsg:25
+#: data/mp/messages/resmessages3.rmsg:55
+#: data/mp/messages/resmessages3.rmsg:65
+msgid "Kinetic Armor +35%, Body Points +35%"
+msgstr "Blindage cinétique : +35% ; Résistance : +35%"
+
+#: data/mp/messages/resmessages1.rmsg:75
+msgid "Armour +35%, Body Points +30%"
+msgstr "Blindage : +35% ; Résistance : +30%"
+
+#: data/mp/messages/resmessages1.rmsg:94
+msgid "Armored guard tower with Mini-Rocket Pod"
+msgstr "Tour renforcée à PMR"
+
+#: data/mp/messages/resmessages1.rmsg:114
+msgid "Armored guard tower with Lancer AT rocket"
+msgstr "Tour de défense renforcée à roquettes AC"
+
+#: data/mp/messages/resmessages1.rmsg:195
+#: data/mp/messages/resmessages2.rmsg:255
+#: data/mp/messages/resmessages3.rmsg:325
+msgid "Repair Speed +100%"
+msgstr "Vitesse de réparation : +100%"
+
+#: data/mp/messages/resmessages1.rmsg:235
+#, c-format
+msgid "Factory output speed +100% per module"
+msgstr "Vitesse de production d'usine : +100% par module"
+
+#: data/mp/messages/resmessages1.rmsg:245
+#: data/mp/messages/resmessagesall.rmsg:615
+msgid "Factory output speed +60%"
+msgstr "Vitesse de production d'usine : +60%"
+
+#: data/mp/messages/resmessages1.rmsg:265
+msgid "Research speed +85%"
+msgstr "Vitesse de recherche : +85%"
+
+#: data/mp/messages/resmessages1.rmsg:275
+#: data/mp/messages/resmessages2.rmsg:285
+#: data/mp/messages/resmessages3.rmsg:345
+msgid "Research speed +30%"
+msgstr "Vitesse de recherche : +30%"
+
+#: data/mp/messages/resmessages1.rmsg:285
+#: data/mp/messages/resmessages2.rmsg:45
+#: data/mp/messages/resmessages2.rmsg:295
+#: data/mp/messages/resmessages3.rmsg:165
+#: data/mp/messages/resmessages3.rmsg:175
+#: data/mp/messages/resmessages3.rmsg:355
+#: data/mp/messages/resmessages3.rmsg:365
+msgid "Armor +35%, Body Points +30%"
+msgstr "Blindage : +35% ; Résistance : +30%"
+
+#: data/mp/messages/resmessages1.rmsg:355
+#: data/mp/messages/resmessages2.rmsg:385
+#: data/mp/messages/resmessages3.rmsg:515
+#: data/mp/messages/resmessages3.rmsg:525
+msgid "Vehicle speed +5%"
+msgstr "Vitesse des véhicules : +5%"
+
+#: data/mp/messages/resmessages1.rmsg:365
+#: data/mp/messages/resmessages2.rmsg:395
+#: data/mp/messages/resmessages3.rmsg:535
+#: data/mp/messages/resmessages3.rmsg:545
+msgid "Kinetic armor +30%, body points +30%"
+msgstr "Blindage cinétique : +30% ; Résistance ; +30%"
+
+#: data/mp/messages/resmessages1.rmsg:425
+#: data/mp/messages/resmessages1.rmsg:435
+#: data/mp/messages/resmessages2.rmsg:575
+msgid "Best Targets: Vehicles, Hardpoints"
+msgstr "Efficace contre : véhicules et ponts défensifs"
+
+#: data/mp/messages/resmessages1.rmsg:465
+#: data/mp/messages/resmessages2.rmsg:605
+#: data/mp/messages/resmessagesall.rmsg:605
+msgid "Flamer damage +25%"
+msgstr "Dégâts des lance-flammes : +25%"
+
+#: data/mp/messages/resmessages1.rmsg:495
+#: data/mp/messages/resmessages1.rmsg:505
+#: data/mp/messages/resmessages2.rmsg:675
+#: data/mp/messages/resmessages3.rmsg:775
+#: data/mp/messages/resmessages3.rmsg:785
+msgid "Machinegun damage +25%"
+msgstr "Dégâts des mitrailleuses : +25%"
+
+#: data/mp/messages/resmessages1.rmsg:525
+#: data/mp/messages/resmessages2.rmsg:705
+msgid "Mortar damage +25%"
+msgstr "Dégâts des mortiers : +25%"
+
+#: data/mp/messages/resmessages1.rmsg:555
+#: data/mp/messages/resmessages1.rmsg:585
+#: data/mp/messages/resmessages2.rmsg:715
+#: data/mp/messages/resmessages2.rmsg:725
+msgid "Rocket damage +25%"
+msgstr "Dégâts des roquettes : +25%"
+
+#: data/mp/messages/resmessages23.rmsg:25
+msgid "Power output +25%"
+msgstr "Puissance de sortie des générateurs : +25%"
+
+#: data/mp/messages/resmessages23.rmsg:35
+#: data/mp/messages/resmessages3.rmsg:395
+msgid "Construction speed +20%"
+msgstr "Vitesse de construction : +20%"
+
+#: data/mp/messages/resmessages23.rmsg:105
+#: data/mp/messages/resmessages2.rmsg:495
+#: data/mp/messages/resmessages3.rmsg:625
+msgid "AA accuracy +10%"
+msgstr "Précision de armes anti-aériennes : +10%"
+
+#: data/mp/messages/resmessages23.rmsg:123
+#: data/mp/messages/resmessages2.rmsg:563
+#: data/mp/messages/resmessages3.rmsg:663
+msgid "Bomb Upgrade"
+msgstr "Mise à jour pour bombes"
+
+#: data/mp/messages/resmessages23.rmsg:124
+msgid "Improved trinitramine explosive formula"
+msgstr "Obus améliorés au TNT"
+
+#: data/mp/messages/resmessages23.rmsg:125
+#: data/mp/messages/resmessages2.rmsg:565
+#: data/mp/messages/resmessages3.rmsg:665
+msgid "Bomb damage +25%"
+msgstr "Dégâts des bombes : +25%"
+
+#: data/mp/messages/resmessages2.rmsg:5
+msgid "Thermal Armor +45%"
+msgstr "Blindage thermique : +45%"
+
+#: data/mp/messages/resmessages2.rmsg:15
+msgid "Kinetic Armor +35%, and Body Points +35%"
+msgstr "Blindage cinétique : +35% ; Résistance : +35%"
+
+#: data/mp/messages/resmessages2.rmsg:275
+msgid "Factory production rate +60%"
+msgstr "Vitesse de production des usines : +60%"
+
+#: data/mp/messages/resmessages2.rmsg:276
+#: data/mp/messages/resmessagesall.rmsg:616
+msgid "All factories upgraded automatically"
+msgstr "Mise à jour automatique de toutes les usines de VTOLs"
+
+#: data/mp/messages/resmessages2.rmsg:315
+#: data/mp/messages/resmessages3.rmsg:385
+msgid "Rearming speed +30%"
+msgstr "Vitesse de réarmement : +30%"
+
+#: data/mp/messages/resmessages2.rmsg:405
+msgid "Thermal armor +40%"
+msgstr "Blindage thermique : +40%"
+
+#: data/mp/messages/resmessages2.rmsg:505
+#: data/mp/messages/resmessages3.rmsg:635
+msgid "AA Flak damage +25%"
+msgstr "Dégâts des armes DCA Flak : +25%"
+
+#: data/mp/messages/resmessages2.rmsg:515
+#: data/mp/messages/resmessages3.rmsg:645
+msgid "AA reload time -15%"
+msgstr "Temps de rechargement des armes anti-aériennes : -15%"
+
+#: data/mp/messages/resmessages2.rmsg:645
+#: data/mp/messages/resmessages3.rmsg:695
+msgid "Howitzer accuracy +10%"
+msgstr "Précision de tir des obusiers : +10%"
+
+#: data/mp/messages/resmessages2.rmsg:655
+#: data/mp/messages/resmessages3.rmsg:705
+msgid "Howitzer damage +25%"
+msgstr "Dégâts des obusiers : +25%"
+
+#: data/mp/messages/resmessages2.rmsg:665
+#: data/mp/messages/resmessages3.rmsg:715
+msgid "Howitzer reload time -10%"
+msgstr "Temps de rechargement des obusiers : -10%"
+
+#: data/mp/messages/resmessages2.rmsg:714
+msgid "High Explosive Anti-Tank warheads"
+msgstr "Ogives HEAT"
+
+#: data/mp/messages/resmessages3.rmsg:5
+msgid "Thermal Armor +35%"
+msgstr "Blindage thermique : +35%"
+
+#: data/mp/messages/resmessages3.rmsg:234
+msgid "Armored guard tower with Pulse Laser"
+msgstr "Tour de défense renforcée à laser à impulsions"
+
+#: data/mp/messages/resmessages3.rmsg:335
+msgid "Power output +30%"
+msgstr "Puissance de sortie des générateurs : +30%"
+
+#: data/mp/messages/resmessages3.rmsg:555
+#: data/mp/messages/resmessagesall.rmsg:655
+msgid "Thermal Armor +40%"
+msgstr "Blindage thermique : +40%"
+
+#: data/mp/messages/resmessages3.rmsg:745
+msgid "Laser accuracy +10%"
+msgstr "Précision de tir des lasers : +10%"
+
+#: data/mp/messages/resmessages3.rmsg:755
+msgid "Laser damage +25%"
+msgstr "Dégâts des lasers : +25%"
+
+#: data/mp/messages/resmessages3.rmsg:765
+msgid "Laser reload time -15%"
+msgstr "Temps de rechargement des lasers : -15%"
+
+#: data/mp/messages/resmessages3.rmsg:815
+#: data/mp/messages/resmessages3.rmsg:825
+msgid "Missile accuracy +10%"
+msgstr "Précision de tir des missiles : +10%"
+
+#: data/mp/messages/resmessages3.rmsg:835
+msgid "Missile damage +25%"
+msgstr "Dégâts des missiles : +25%"
+
+#: data/mp/messages/resmessages3.rmsg:885
+#: data/mp/messages/resmessages3.rmsg:895
+msgid "Missile reload time -15%"
+msgstr "Temps de rechargement des missiles : -15%"
+
+#: data/mp/messages/resmessages3.rmsg:955
+msgid "Rail Gun accuracy +10%"
+msgstr "Précision de tir des canons à rail : +10%"
+
+#: data/mp/messages/resmessages3.rmsg:965
+msgid "Rail Gun damage +25%"
+msgstr "Dégâts des canons à rail : +25%"
+
+#: data/mp/messages/resmessages3.rmsg:975
+msgid "Rail Gun reload time -15%"
+msgstr "Temps de rechargement des canons à rail : -15%"
+
+#: data/mp/messages/resmessagesall.rmsg:65
+msgid "Sensor Range +25%"
+msgstr "Portée des radars : +25%"
+
+#: data/mp/messages/resmessagesall.rmsg:74
+msgid "Improved Thermal Emissions detection"
+msgstr "Nouvelle technologie de détection d'émissions thermiques"
+
+#: data/mp/messages/resmessagesall.rmsg:75
+msgid "Sensor Range +15%"
+msgstr "Portée des radars : +15%"
+
+#: data/mp/messages/resmessagesall.rmsg:84
+msgid "Advanced Thermal Emissions detection"
+msgstr "Technologie avancée de détection d'émissions thermiques"
+
+#: data/mp/messages/resmessagesall.rmsg:85
+msgid "Sensor Range +10%"
+msgstr "Portée des radars : +10%"
+
+#: data/mp/messages/resmessagesall.rmsg:104
+msgid "Radar detector tower detects enemy sensors"
+msgstr "Tour radar à détectant les radars ennemis"
+
+#: data/mp/messages/resmessagesall.rmsg:105
+msgid "Orders assigned indirect fire units to fire at the enemy sensors"
+msgstr "Ordonne aux unités d'artillerie associées de tirer sur les radars ennemis"
+
+#: data/mp/messages/resmessagesall.rmsg:106
+msgid "Counter-battery fire continues until enemy sensor is suppressed"
+msgstr "Tir de riposte continu, jusqu'à l'élimination du radar ennemi"
+
+#: data/mp/messages/resmessagesall.rmsg:173
+msgid "Cyborg Transport Available"
+msgstr "Transporteur Cyborg disponible"
+
+#: data/mp/messages/resmessagesall.rmsg:174
+#: data/mp/messages/resmessagesall.rmsg:184
+msgid "Armed with Machinegun"
+msgstr "Armé d'une mitrailleuse"
+
+#: data/mp/messages/resmessagesall.rmsg:176
+#: data/mp/messages/resmessagesall.rmsg:186
+msgid "Requires heavy VTOL factory to produce"
+msgstr "Nécessite une usine à VTOLs agrandie pour être produit"
+
+#: data/mp/messages/resmessagesall.rmsg:183
+msgid "Super Transport Available"
+msgstr "Super-transporteur disponible"
+
+#: data/mp/messages/resmessagesall.rmsg:194
+msgid "Incendiary howitzer emplacement"
+msgstr "Emplacement à obusier incendiaire"
+
+#: data/mp/messages/resmessagesall.rmsg:204
+msgid "Armored Incendiary Mortar battery pit"
+msgstr "Mortier incendiaire retranché blindé"
+
+#: data/mp/messages/resmessagesall.rmsg:214
+msgid "Armored strongpoint with Plasmite Flamer"
+msgstr "Pont défensif blindé à lance-plasma"
+
+#: data/mp/messages/resmessagesall.rmsg:224
+msgid "Armed with Cyborg Thermite Flamer"
+msgstr "Armé d'un lance-flammes au plasma"
+
+#: data/mp/messages/resmessagesall.rmsg:234
+msgid "Armed with grenades"
+msgstr "Armé de grenades"
+
+#: data/mp/messages/resmessagesall.rmsg:244
+msgid "Combat engineer with construction ability"
+msgstr "Cyborg pouvant construire des structures"
+
+#: data/mp/messages/resmessagesall.rmsg:254
+msgid "Mechanic with repair ability"
+msgstr "Cyborg pouvant réparer des unités"
+
+#: data/mp/messages/resmessagesall.rmsg:264
+msgid "Incendiary Howitzer may be assigned to a sensor"
+msgstr "Obusier incendiaire pouvant être affecté à un radar"
+
+#: data/mp/messages/resmessagesall.rmsg:294
+msgid "Plasmite Flame-thrower"
+msgstr "Lance-plasma"
+
+#: data/mp/messages/resmessagesall.rmsg:306
+msgid "Steals technology from structures and takes control of weapons"
+msgstr "Prend le contrôle des unités/défenses et copie la technologie des bâtiments"
+
+#: data/mp/messages/resmessagesall.rmsg:313
+msgid "New Electronic Technology Discovered"
+msgstr "Nouvelle technologie électronique découverte"
+
+#: data/mp/messages/resmessagesall.rmsg:315
+msgid "On-board resistance circuit systems"
+msgstr "Systèmes de circuits résistifs embarqués"
+
+#: data/mp/messages/resmessagesall.rmsg:316
+msgid "Enables resistance to Nexus Link technology"
+msgstr "Permet de résister à la technologie du lien NEXUS"
+
+#: data/mp/messages/resmessagesall.rmsg:326
+msgid "Enables self-repair"
+msgstr "Permet l'auto-réparation"
+
+#: data/mp/messages/resmessagesall.rmsg:334
+msgid "Armed with medium cannon"
+msgstr "Armé d'un canon moyen"
+
+#: data/mp/messages/resmessagesall.rmsg:344
+#: data/mp/messages/resmessagesall.rmsg:354
+msgid "Armed with hyper velocity cannon"
+msgstr "Armé d'un auto-canon"
+
+#: data/mp/messages/resmessagesall.rmsg:364
+msgid "Armed with tank killer rockets"
+msgstr "Armé de roquettes anti-char"
+
+#: data/mp/messages/resmessagesall.rmsg:374
+msgid "Fires heavy pulses of laser light"
+msgstr "Tire de fortes impulsions laser"
+
+#: data/mp/messages/resmessagesall.rmsg:375
+msgid "Best Targets: Heavy cyborgs"
+msgstr "Efficace contre : Cyborgs lourds"
+
+#: data/mp/messages/resmessagesall.rmsg:384
+msgid "76mm twin-barrel automatic-cannon"
+msgstr "Canon automatique double de calibre 76mm"
+
+#: data/mp/messages/resmessagesall.rmsg:393
+#: data/mp/messages/resmessagesall.rmsg:403
+msgid "New Systems Structure Available"
+msgstr "Nouveau bâtiment système disponible"
+
+#: data/mp/messages/resmessagesall.rmsg:394
+msgid "Complete battlefield visibility"
+msgstr "Surveillance permanente et complète du champ de bataille"
+
+#: data/mp/messages/resmessagesall.rmsg:396
+msgid "Does not offer sensor targeting"
+msgstr "Aucune artillerie ne peut lui être affectée"
+
+#: data/mp/messages/resmessagesall.rmsg:404
+#: data/mp/messages/resmessagesall.rmsg:554
+msgid "Combines standard, counter battery and VTOL sensors"
+msgstr "Combine des radars classiques, CB et contrôle aérien"
+
+#: data/mp/messages/resmessagesall.rmsg:413
+msgid "New Advanced Weapon Available"
+msgstr "Nouvelle arme avancée disponible"
+
+#: data/mp/messages/resmessagesall.rmsg:414
+msgid "Very slow recharge time"
+msgstr "Temps de rechargement très lent"
+
+#: data/mp/messages/resmessagesall.rmsg:415
+msgid "Immense damage infliction capability"
+msgstr "Capacité offensive impressionante"
+
+#: data/mp/messages/resmessagesall.rmsg:416
+msgid "Narrow area of effect"
+msgstr "Effet sur une zone étroite"
+
+#: data/mp/messages/resmessagesall.rmsg:424
+msgid "Armored guard tower with Nexus Link"
+msgstr "Tour de garde renforcée à lien NEXUS"
+
+#: data/mp/messages/resmessagesall.rmsg:434
+#: data/mp/messages/resmessagesall.rmsg:444
+msgid "Plasma Cannon firing plasma"
+msgstr "Canon tirant des grosses munitions explosives au plasma"
+
+#: data/mp/messages/resmessagesall.rmsg:445
+#: data/mp/messages/resmessagesall.rmsg:505
+#: data/mp/messages/resmessagesall.rmsg:515
+#: data/mp/messages/resmessagesall.rmsg:525
+#: data/mp/messages/resmessagesall.rmsg:535
+#: data/mp/messages/resmessagesall.rmsg:545
+msgid "Best Targets : Vehicles"
+msgstr "Efficace contre : véhicules"
+
+#: data/mp/messages/resmessagesall.rmsg:454
+msgid "Armored strongpoint with Heavy Laser"
+msgstr "Pont défensif blindé à laser lourd"
+
+#: data/mp/messages/resmessagesall.rmsg:464
+msgid "Armored guard tower with EMP Cannon"
+msgstr "Tour de garde renforcée à canon EMP"
+
+#: data/mp/messages/resmessagesall.rmsg:474
+msgid "Armed with Cyborg Pulse Laser"
+msgstr "Armé d'un laser à impulsions"
+
+#: data/mp/messages/resmessagesall.rmsg:484
+msgid "Armed with Cyborg Rail Gun"
+msgstr "Armé d'un canon à rail"
+
+#: data/mp/messages/resmessagesall.rmsg:494
+msgid "Armed with Cyborg Scourge Missile Launcher"
+msgstr "Armé d'un lance-missiles Scourge "
+
+#: data/mp/messages/resmessagesall.rmsg:504
+msgid "Uses advanced mass driver railgun technology"
+msgstr "Utilise la technologie des canons électromagnétiques à un niveau avancé"
+
+#: data/mp/messages/resmessagesall.rmsg:506
+#: data/mp/messages/resmessagesall.rmsg:516
+#: data/mp/messages/resmessagesall.rmsg:526
+#: data/mp/messages/resmessagesall.rmsg:536
+msgid "Defensive Strength : High"
+msgstr "Puissance défensive : élevée"
+
+#: data/mp/messages/resmessagesall.rmsg:514
+msgid "Uses advanced cannon technology"
+msgstr "Utilise la technologie des canons à un niveau avancé"
+
+#: data/mp/messages/resmessagesall.rmsg:524
+msgid "Uses advanced rocket gun technology"
+msgstr "Utilise la technologie des roquettes à un niveau avancé"
+
+#: data/mp/messages/resmessagesall.rmsg:534
+msgid "Uses advanced missile gun technology"
+msgstr "Utilise la technologie des missiles à un niveau avancé"
+
+#: data/mp/messages/resmessagesall.rmsg:544
+msgid "Powerful Electronic magnetic pulse weapon"
+msgstr "Arme à impulsions électromagnétiques à haute puissance"
+
+#: data/mp/messages/resmessagesall.rmsg:553
+msgid "New System Available"
+msgstr "Nouveau système disponible"
+
+#: data/mp/messages/resmessagesall.rmsg:563
+msgid "Medium Super Heavy Body"
+msgstr "Châssis super lourd"
+
+#: data/mp/messages/resmessagesall.rmsg:564
+msgid "More armor and body points than Vengeance"
+msgstr "Plus de blindage et de résistance que la Vengeance"
+
+#: data/mp/messages/resmessagesall.rmsg:565
+msgid "Slow moving Body"
+msgstr "Châssis lent"
+
+#: data/mp/messages/resmessagesall.rmsg:573
+msgid "Large Super Heavy Body"
+msgstr "Grand châssis super lourd"
+
+#: data/mp/messages/resmessagesall.rmsg:574
+msgid "Maximum armor and body points"
+msgstr "Blindage et résistance maximaux"
+
+#: data/mp/messages/resmessagesall.rmsg:575
+msgid "Very slow moving Body"
+msgstr "Châssis très lent"
+
+#: data/mp/messages/resmessagesall.rmsg:583
+msgid "Hardpoint Vindicator SAM Site Available"
+msgstr "Pont défensif à missiles SAM Vindicator disponible"
+
+#: data/mp/messages/resmessagesall.rmsg:593
+msgid "Hardpoint Whirlwind AA Gun Available"
+msgstr "Pont défensif à DCA Tourbillon disponible"
+
+#: data/mp/messages/resmessagesall.rmsg:634
+msgid "Armored EMP Mortar battery pit"
+msgstr "Mortier EMP retranché blindé"
+
+#: data/mp/messages/resmessagesall.rmsg:643
+msgid "Laser AA Gun Available"
+msgstr "Canon laser anti-aérien disponible"
+
+#: data/mp/messages/resmessagesall.rmsg:644
+msgid "Twin Medium Anti-Aircraft Laser"
+msgstr "Double laser moyen anti-aérien"
+
+#: data/mp/messages/resmessagesall.rmsg:663
+msgid "Hardpoint Avenger SAM Site Available"
+msgstr "Pont défensif à missiles SAM Avenger disponible"
+
+#: data/mp/messages/resmessagesall.rmsg:673
+msgid "Hardpoint Cyclone AA Gun Available"
+msgstr "Pont défensif à DCA Cyclone disponible"
+
+#: data/mp/messages/resmessagesall.rmsg:674
+msgid "Quad 80mm Anti-Aircraft machinegun"
+msgstr "Mitrailleuse anti-aérienne quadritube de calibre 80mm"
+
+#: data/mp/messages/resmessagesall.rmsg:684
+#: data/mp/messages/resmessagesall.rmsg:694
+msgid "Twin Multi-barrel, rapid-fire machinegun"
+msgstr "Mitrailleuses rotatives jumelées"
+
+#: data/mp/messages/resmessagesall.rmsg:693
+msgid "Hardpoint Twin Assault Gun Available"
+msgstr "Pont défensif à double canon d'assaut disponible"
+
+#: data/mp/messages/resmessagesall.rmsg:704
+msgid "Drops high intensity Plasmite bombs"
+msgstr "Largue des bombes plasma à haute intensité"
+
+#: data/mp/messages/resmessagesall.rmsg:713
+msgid "New VTOL Missile Launcher"
+msgstr "Nouveau lance-missiles pour VTOLs"
+
+#: data/mp/messages/resmessagesall.rmsg:714
+msgid "Fires Electronic Magnetic Pulse Missiles"
+msgstr "Lance des missiles EMP (Pulsations ÉlectroMagnétiques)"
+
+#: data/mp/messages/resmessagesall.rmsg:723
+#: data/mp/messages/resmessagesall.rmsg:733
+#: data/mp/messages/resmessagesall.rmsg:743
+msgid "Stronger Commander Turret Available for Design"
+msgstr "Tourelle de Commandement renforcée disponible"
+
+#: data/mp/messages/resmessagesall.rmsg:724
+#: data/mp/messages/resmessagesall.rmsg:734
+#: data/mp/messages/resmessagesall.rmsg:744
+msgid "Upgraded battlefield computer system"
+msgstr "Ordinateur de bataille amélioré"
 
 #: data/mp/messages/strings/names.txt:15
 #: data/mp/messages/strings/names.txt:673
@@ -13298,405 +15073,6 @@ msgstr "Version %s - %s%s%s%s"
 #~ msgid "Viper Flamer Half-Track"
 #~ msgstr "Lance-flammes Vipère autochenilles"
 
-#~ msgid "Construction speed +10%"
-#~ msgstr "Vitesse de construction : +10%"
-
-#~ msgid "Cannon accuracy +10%"
-#~ msgstr "Précision de tir des canons : +10%"
-
-#~ msgid "Flamer reload time -15%"
-#~ msgstr "Temps de rechargement des lance-flammes : -15%"
-
-#~ msgid "Machinegun reload time -15%"
-#~ msgstr "Temps de rechargement des mitrailleuses : -15%"
-
-#~ msgid "Mortar accuracy +10%"
-#~ msgstr "Précision de tir des mortiers : +10%"
-
-#~ msgid "Mortar reload time -10%"
-#~ msgstr "Temps de rechargement des mortiers : -10%"
-
-#~ msgid "Rocket reload time -15%"
-#~ msgstr "Temps de rechargement des lance-roquettes : -15%"
-
-#~ msgid "Cannon reload time -10%"
-#~ msgstr "Temps de rechargement des canons : -10%"
-
-#~ msgid "Cannon damage +25%"
-#~ msgstr "Dégâts des canons : +25%"
-
-#~ msgid "Rocket accuracy +10%"
-#~ msgstr "Précision de tir des roquettes : +10%"
-
-#~ msgid "Kinetic Armor +35%, Body Points +35%"
-#~ msgstr "Blindage cinétique : +35% ; Résistance : +35%"
-
-#~ msgid "Armour +35%, Body Points +30%"
-#~ msgstr "Blindage : +35% ; Résistance : +30%"
-
-#~ msgid "Armored guard tower with Mini-Rocket Pod"
-#~ msgstr "Tour renforcée à PMR"
-
-#~ msgid "Armored guard tower with Lancer AT rocket"
-#~ msgstr "Tour de défense renforcée à roquettes AC"
-
-#~ msgid "Repair Speed +100%"
-#~ msgstr "Vitesse de réparation : +100%"
-
-#~ msgid "Factory output speed +100% per module"
-#~ msgstr "Vitesse de production d'usine : +100% par module"
-
-#~ msgid "Factory output speed +60%"
-#~ msgstr "Vitesse de production d'usine : +60%"
-
-#~ msgid "Research speed +85%"
-#~ msgstr "Vitesse de recherche : +85%"
-
-#~ msgid "Research speed +30%"
-#~ msgstr "Vitesse de recherche : +30%"
-
-#~ msgid "Armor +35%, Body Points +30%"
-#~ msgstr "Blindage : +35% ; Résistance : +30%"
-
-#~ msgid "Vehicle speed +5%"
-#~ msgstr "Vitesse des véhicules : +5%"
-
-#~ msgid "Kinetic armor +30%, body points +30%"
-#~ msgstr "Blindage cinétique : +30% ; Résistance ; +30%"
-
-#~ msgid "Best Targets: Vehicles, Hardpoints"
-#~ msgstr "Efficace contre : véhicules et ponts défensifs"
-
-#~ msgid "Flamer damage +25%"
-#~ msgstr "Dégâts des lance-flammes : +25%"
-
-#~ msgid "Machinegun damage +25%"
-#~ msgstr "Dégâts des mitrailleuses : +25%"
-
-#~ msgid "Mortar damage +25%"
-#~ msgstr "Dégâts des mortiers : +25%"
-
-#~ msgid "Rocket damage +25%"
-#~ msgstr "Dégâts des roquettes : +25%"
-
-#~ msgid "Power output +25%"
-#~ msgstr "Puissance de sortie des générateurs : +25%"
-
-#~ msgid "Construction speed +20%"
-#~ msgstr "Vitesse de construction : +20%"
-
-#~ msgid "AA accuracy +10%"
-#~ msgstr "Précision de armes anti-aériennes : +10%"
-
-#~ msgid "Bomb Upgrade"
-#~ msgstr "Mise à jour pour bombes"
-
-#~ msgid "Improved trinitramine explosive formula"
-#~ msgstr "Obus améliorés au TNT"
-
-#~ msgid "Bomb damage +25%"
-#~ msgstr "Dégâts des bombes : +25%"
-
-#~ msgid "Thermal Armor +45%"
-#~ msgstr "Blindage thermique : +45%"
-
-#~ msgid "Kinetic Armor +35%, and Body Points +35%"
-#~ msgstr "Blindage cinétique : +35% ; Résistance : +35%"
-
-#~ msgid "Factory production rate +60%"
-#~ msgstr "Vitesse de production des usines : +60%"
-
-#~ msgid "All factories upgraded automatically"
-#~ msgstr "Mise à jour automatique de toutes les usines de VTOLs"
-
-#~ msgid "Rearming speed +30%"
-#~ msgstr "Vitesse de réarmement : +30%"
-
-#~ msgid "Thermal armor +40%"
-#~ msgstr "Blindage thermique : +40%"
-
-#~ msgid "AA Flak damage +25%"
-#~ msgstr "Dégâts des armes DCA Flak : +25%"
-
-#~ msgid "AA reload time -15%"
-#~ msgstr "Temps de rechargement des armes anti-aériennes : -15%"
-
-#~ msgid "Howitzer accuracy +10%"
-#~ msgstr "Précision de tir des obusiers : +10%"
-
-#~ msgid "Howitzer damage +25%"
-#~ msgstr "Dégâts des obusiers : +25%"
-
-#~ msgid "Howitzer reload time -10%"
-#~ msgstr "Temps de rechargement des obusiers : -10%"
-
-#~ msgid "High Explosive Anti-Tank warheads"
-#~ msgstr "Ogives HEAT"
-
-#~ msgid "Thermal Armor +35%"
-#~ msgstr "Blindage thermique : +35%"
-
-#~ msgid "Armored guard tower with Pulse Laser"
-#~ msgstr "Tour de défense renforcée à laser à impulsions"
-
-#~ msgid "Power output +30%"
-#~ msgstr "Puissance de sortie des générateurs : +30%"
-
-#~ msgid "Thermal Armor +40%"
-#~ msgstr "Blindage thermique : +40%"
-
-#~ msgid "Laser accuracy +10%"
-#~ msgstr "Précision de tir des lasers : +10%"
-
-#~ msgid "Laser damage +25%"
-#~ msgstr "Dégâts des lasers : +25%"
-
-#~ msgid "Laser reload time -15%"
-#~ msgstr "Temps de rechargement des lasers : -15%"
-
-#~ msgid "Missile accuracy +10%"
-#~ msgstr "Précision de tir des missiles : +10%"
-
-#~ msgid "Missile damage +25%"
-#~ msgstr "Dégâts des missiles : +25%"
-
-#~ msgid "Missile reload time -15%"
-#~ msgstr "Temps de rechargement des missiles : -15%"
-
-#~ msgid "Rail Gun accuracy +10%"
-#~ msgstr "Précision de tir des canons à rail : +10%"
-
-#~ msgid "Rail Gun damage +25%"
-#~ msgstr "Dégâts des canons à rail : +25%"
-
-#~ msgid "Rail Gun reload time -15%"
-#~ msgstr "Temps de rechargement des canons à rail : -15%"
-
-#~ msgid "Sensor Range +25%"
-#~ msgstr "Portée des radars : +25%"
-
-#~ msgid "Improved Thermal Emissions detection"
-#~ msgstr "Nouvelle technologie de détection d'émissions thermiques"
-
-#~ msgid "Sensor Range +15%"
-#~ msgstr "Portée des radars : +15%"
-
-#~ msgid "Advanced Thermal Emissions detection"
-#~ msgstr "Technologie avancée de détection d'émissions thermiques"
-
-#~ msgid "Sensor Range +10%"
-#~ msgstr "Portée des radars : +10%"
-
-#~ msgid "Radar detector tower detects enemy sensors"
-#~ msgstr "Tour radar à détectant les radars ennemis"
-
-#~ msgid "Orders assigned indirect fire units to fire at the enemy sensors"
-#~ msgstr "Ordonne aux unités d'artillerie associées de tirer sur les radars ennemis"
-
-#~ msgid "Counter-battery fire continues until enemy sensor is suppressed"
-#~ msgstr "Tir de riposte continu, jusqu'à l'élimination du radar ennemi"
-
-#~ msgid "Cyborg Transport Available"
-#~ msgstr "Transporteur Cyborg disponible"
-
-#~ msgid "Armed with Machinegun"
-#~ msgstr "Armé d'une mitrailleuse"
-
-#~ msgid "Requires heavy VTOL factory to produce"
-#~ msgstr "Nécessite une usine à VTOLs agrandie pour être produit"
-
-#~ msgid "Incendiary howitzer emplacement"
-#~ msgstr "Emplacement à obusier incendiaire"
-
-#~ msgid "Armored Incendiary Mortar battery pit"
-#~ msgstr "Mortier incendiaire retranché blindé"
-
-#~ msgid "Armored strongpoint with Plasmite Flamer"
-#~ msgstr "Pont défensif blindé à lance-plasma"
-
-#~ msgid "Armed with Cyborg Thermite Flamer"
-#~ msgstr "Armé d'un lance-flammes au plasma"
-
-#~ msgid "Armed with grenades"
-#~ msgstr "Armé de grenades"
-
-#~ msgid "Combat engineer with construction ability"
-#~ msgstr "Cyborg pouvant construire des structures"
-
-#~ msgid "Mechanic with repair ability"
-#~ msgstr "Cyborg pouvant réparer des unités"
-
-#~ msgid "Incendiary Howitzer may be assigned to a sensor"
-#~ msgstr "Obusier incendiaire pouvant être affecté à un radar"
-
-#~ msgid "Plasmite Flame-thrower"
-#~ msgstr "Lance-plasma"
-
-#~ msgid "Steals technology from structures and takes control of weapons"
-#~ msgstr "Prend le contrôle des unités/défenses et copie la technologie des bâtiments"
-
-#~ msgid "New Electronic Technology Discovered"
-#~ msgstr "Nouvelle technologie électronique découverte"
-
-#~ msgid "On-board resistance circuit systems"
-#~ msgstr "Systèmes de circuits résistifs embarqués"
-
-#~ msgid "Enables resistance to Nexus Link technology"
-#~ msgstr "Permet de résister à la technologie du lien NEXUS"
-
-#~ msgid "Enables self-repair"
-#~ msgstr "Permet l'auto-réparation"
-
-#~ msgid "Armed with medium cannon"
-#~ msgstr "Armé d'un canon moyen"
-
-#~ msgid "Armed with hyper velocity cannon"
-#~ msgstr "Armé d'un auto-canon"
-
-#~ msgid "Armed with tank killer rockets"
-#~ msgstr "Armé de roquettes anti-char"
-
-#~ msgid "Fires heavy pulses of laser light"
-#~ msgstr "Tire de fortes impulsions laser"
-
-#~ msgid "Best Targets: Heavy cyborgs"
-#~ msgstr "Efficace contre : Cyborgs lourds"
-
-#~ msgid "76mm twin-barrel automatic-cannon"
-#~ msgstr "Canon automatique double de calibre 76mm"
-
-#~ msgid "New Systems Structure Available"
-#~ msgstr "Nouveau bâtiment système disponible"
-
-#~ msgid "Complete battlefield visibility"
-#~ msgstr "Surveillance permanente et complète du champ de bataille"
-
-#~ msgid "Does not offer sensor targeting"
-#~ msgstr "Aucune artillerie ne peut lui être affectée"
-
-#~ msgid "Combines standard, counter battery and VTOL sensors"
-#~ msgstr "Combine des radars classiques, CB et contrôle aérien"
-
-#~ msgid "New Advanced Weapon Available"
-#~ msgstr "Nouvelle arme avancée disponible"
-
-#~ msgid "Very slow recharge time"
-#~ msgstr "Temps de rechargement très lent"
-
-#~ msgid "Immense damage infliction capability"
-#~ msgstr "Capacité offensive impressionante"
-
-#~ msgid "Narrow area of effect"
-#~ msgstr "Effet sur une zone étroite"
-
-#~ msgid "Armored guard tower with Nexus Link"
-#~ msgstr "Tour de garde renforcée à lien NEXUS"
-
-#~ msgid "Plasma Cannon firing plasma"
-#~ msgstr "Canon tirant des grosses munitions explosives au plasma"
-
-#~ msgid "Best Targets : Vehicles"
-#~ msgstr "Efficace contre : véhicules"
-
-#~ msgid "Armored strongpoint with Heavy Laser"
-#~ msgstr "Pont défensif blindé à laser lourd"
-
-#~ msgid "Armored guard tower with EMP Cannon"
-#~ msgstr "Tour de garde renforcée à canon EMP"
-
-#~ msgid "Armed with Cyborg Pulse Laser"
-#~ msgstr "Armé d'un laser à impulsions"
-
-#~ msgid "Armed with Cyborg Rail Gun"
-#~ msgstr "Armé d'un canon à rail"
-
-#~ msgid "Armed with Cyborg Scourge Missile Launcher"
-#~ msgstr "Armé d'un lance-missiles Scourge "
-
-#~ msgid "Uses advanced mass driver railgun technology"
-#~ msgstr "Utilise la technologie des canons électromagnétiques à un niveau avancé"
-
-#~ msgid "Defensive Strength : High"
-#~ msgstr "Puissance défensive : élevée"
-
-#~ msgid "Uses advanced cannon technology"
-#~ msgstr "Utilise la technologie des canons à un niveau avancé"
-
-#~ msgid "Uses advanced rocket gun technology"
-#~ msgstr "Utilise la technologie des roquettes à un niveau avancé"
-
-#~ msgid "Uses advanced missile gun technology"
-#~ msgstr "Utilise la technologie des missiles à un niveau avancé"
-
-#~ msgid "Powerful Electronic magnetic pulse weapon"
-#~ msgstr "Arme à impulsions électromagnétiques à haute puissance"
-
-#~ msgid "New System Available"
-#~ msgstr "Nouveau système disponible"
-
-#~ msgid "Medium Super Heavy Body"
-#~ msgstr "Châssis super lourd"
-
-#~ msgid "More armor and body points than Vengeance"
-#~ msgstr "Plus de blindage et de résistance que la Vengeance"
-
-#~ msgid "Slow moving Body"
-#~ msgstr "Châssis lent"
-
-#~ msgid "Large Super Heavy Body"
-#~ msgstr "Grand châssis super lourd"
-
-#~ msgid "Maximum armor and body points"
-#~ msgstr "Blindage et résistance maximaux"
-
-#~ msgid "Very slow moving Body"
-#~ msgstr "Châssis très lent"
-
-#~ msgid "Hardpoint Vindicator SAM Site Available"
-#~ msgstr "Pont défensif à missiles SAM Vindicator disponible"
-
-#~ msgid "Hardpoint Whirlwind AA Gun Available"
-#~ msgstr "Pont défensif à DCA Tourbillon disponible"
-
-#~ msgid "Armored EMP Mortar battery pit"
-#~ msgstr "Mortier EMP retranché blindé"
-
-#~ msgid "Laser AA Gun Available"
-#~ msgstr "Canon laser anti-aérien disponible"
-
-#~ msgid "Twin Medium Anti-Aircraft Laser"
-#~ msgstr "Double laser moyen anti-aérien"
-
-#~ msgid "Hardpoint Avenger SAM Site Available"
-#~ msgstr "Pont défensif à missiles SAM Avenger disponible"
-
-#~ msgid "Hardpoint Cyclone AA Gun Available"
-#~ msgstr "Pont défensif à DCA Cyclone disponible"
-
-#~ msgid "Quad 80mm Anti-Aircraft machinegun"
-#~ msgstr "Mitrailleuse anti-aérienne quadritube de calibre 80mm"
-
-#~ msgid "Twin Multi-barrel, rapid-fire machinegun"
-#~ msgstr "Mitrailleuses rotatives jumelées"
-
-#~ msgid "Hardpoint Twin Assault Gun Available"
-#~ msgstr "Pont défensif à double canon d'assaut disponible"
-
-#~ msgid "Drops high intensity Plasmite bombs"
-#~ msgstr "Largue des bombes plasma à haute intensité"
-
-#~ msgid "New VTOL Missile Launcher"
-#~ msgstr "Nouveau lance-missiles pour VTOLs"
-
-#~ msgid "Fires Electronic Magnetic Pulse Missiles"
-#~ msgstr "Lance des missiles EMP (Pulsations ÉlectroMagnétiques)"
-
-#~ msgid "Stronger Commander Turret Available for Design"
-#~ msgstr "Tourelle de Commandement renforcée disponible"
-
-#~ msgid "Upgraded battlefield computer system"
-#~ msgstr "Ordinateur de bataille amélioré"
-
 #~ msgid "Disconnected from lobby server. Failed to register game."
 #~ msgstr "Déconnecté du serveur lobby. Impossible d'enregistrer le jeu."
 
@@ -13774,9 +15150,6 @@ msgstr "Version %s - %s%s%s%s"
 
 #~ msgid "Truck ordered to build Oil Derrick"
 #~ msgstr "Construction d'un puits de pétrole"
-
-#~ msgid "Super Transport Available"
-#~ msgstr "Super-transporteur disponible"
 
 #~ msgid "2 trucks ordered to build Oil Derrick"
 #~ msgstr "Deux véhicules de construction ont reçu l'ordre de construire un puits de pétrole"
