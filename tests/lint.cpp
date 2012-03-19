@@ -226,6 +226,10 @@ static QScriptValue js_enumLabels(QScriptContext *, QScriptEngine *)
 static QScriptValue js_label(QScriptContext *, QScriptEngine *engine)
 {
 	QScriptValue ret = engine->newObject();
+	ret.setProperty("x", 5);
+	ret.setProperty("y", 5);
+	ret.setProperty("x2", 15);
+	ret.setProperty("y2", 15);
 	return ret;
 }
 

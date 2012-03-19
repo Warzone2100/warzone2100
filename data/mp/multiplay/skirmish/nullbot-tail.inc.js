@@ -398,19 +398,19 @@ function tankReachibilityCheck(droid) {
 			return true;
 	}
 	for (var i=0; i<maxPlayers; ++i) if (isAnEnemy(i)) {
-		var list;
-		for (var j=0; j<allInAttackTargets.length; ++j)
-			list = list.concat(enumStruct(i,allInAttackTargets[j]));
-		for (var j=0; j<list.length; ++j) 
-			if (!droidCanReach(droid,list[j].x,list[j],y))
-				return true;
+		for (var j=0; j<allInAttackTargets.length; ++j) {
+			var list = enumStruct(i,allInAttackTargets[j]);
+			for (var k=0; k<list.length; ++k)
+				if (!droidCanReach(droid,list[k].x,list[k].y))
+					return true;
+		}
 	}
 	return false;
 }
 
 // returns a droid to base
 function forceReturnToBase(droid) {
-	if (typeof(orderDroid)=="undefined") {
+	if (typeof(orderDroid)=="undefined" || typeof(DORDER_RTB)=="undefined") {
 		orderDroidLoc(droid, DORDER_MOVE, startPositions[me].x, startPositions[me].y);
 	} else {
 		orderDroid(droid, DORDER_RTB);
@@ -552,7 +552,8 @@ function updateStatus() {
 function balanceTrucks() {
 	if (groupSize(builderGroup)==0 && groupSize(oilerGroup)>0) {
 		var trucks=enumGroup(oilerGroup);
-		groupAddDroid(builderGroup,trucks[0]);
+		if (trucks[0].id!=0) // otherwise we can sometimes crash when we are almost dead
+			groupAddDroid(builderGroup,trucks[0]);
 	}
 }
 
@@ -1111,7 +1112,7 @@ function doResearch() {
 			// vtols can be really scary, so give a bit more weight to AA research
 			ret.vtol = ret.vtol * 3 + ((earlyGame(20) && !HIGH_TECH_START)?0:1);
 			// don't forget completely about borgs
-			ret.borg += 2;
+			ret.borg += 5;
 			if (difficulty == EASY || difficulty == MEDIUM) {
 				ret.tank = 4;
 				ret.borg = 4;
@@ -1158,7 +1159,7 @@ function structureReady(struct) {
 // finds out which battle group contains this tank
 function groupOfTank(tank) {
 	for (i=0; i<NUM_GROUPS; ++i)
-		if (tank.group = battleGroup[i])
+		if (tank.group == battleGroup[i])
 			return i;
 }
 
@@ -1199,9 +1200,21 @@ function groupNeedsThisSortOfTank(gr,name) {
 
 // pick a suitable group for a new-born tank
 function addTankToSomeGroup(tank) {
+	if (tank.player!=me) {
+		debug("BUG: Player ",me,"trying to put tank",tank.id,"in a group, but the tank belongs to player",tank.player);
+		return;
+	}
+	if (random(100)<countEnemyTeams()*3) {
+		groupAddDroid(defendGroup, tank);
+		return;
+	}
 	var maxCount=-1, maxIdx=-1;
 	// find the biggest non-full group that needs this sort of tank
-	for (var i=0; i<NUM_GROUPS; ++i) if (droidCanReach(tank,startPositions[groupInfo[i].enemy].x,startPositions[groupInfo[i].enemy].y)) {
+	for (var i=0; i<NUM_GROUPS; ++i)  {
+		if (typeof(groupInfo[i].enemy)=="undefined")
+			continue;
+		if (!droidCanReach(tank,startPositions[groupInfo[i].enemy].x,startPositions[groupInfo[i].enemy].y))
+			continue;
 		var count=groupSize(battleGroup[i]);
 		if (count<NUM_WARRIORS && groupNeedsThisSortOfTank(i,tank.name))
 			if (count > maxCount) {
@@ -1215,7 +1228,11 @@ function addTankToSomeGroup(tank) {
 	}
 	maxCount=-1, maxIdx=-1;
 	// if nobody needs this sort of tank, find the biggest non-full group
-	for (var i=0; i<NUM_GROUPS; ++i) if (droidCanReach(tank,startPositions[groupInfo[i].enemy].x,startPositions[groupInfo[i].enemy].y)) {
+	for (var i=0; i<NUM_GROUPS; ++i) {
+		if (typeof(groupInfo[i].enemy)=="undefined")
+			continue;
+		if (!droidCanReach(tank,startPositions[groupInfo[i].enemy].x,startPositions[groupInfo[i].enemy].y))
+			continue;
 		var count=groupSize(battleGroup[i]);
 		if (count<NUM_WARRIORS)
 			if (count > maxCount) {
@@ -1225,26 +1242,34 @@ function addTankToSomeGroup(tank) {
 	}
 	if (maxIdx!=-1) {
 		groupAddDroid(battleGroup[maxIdx], tank);
-		returnToBase(tank);
 		return;
 	}
 	// if all groups are full, fill until absolute maximum
 	// but still consider AT/AP balance
-	for (var i=0; i<NUM_GROUPS; ++i) if (droidCanReach(tank,startPositions[groupInfo[i].enemy].x,startPositions[groupInfo[i].enemy].y)) {
+	for (var i=0; i<NUM_GROUPS; ++i) {
+		if (typeof(groupInfo[i].enemy)=="undefined")
+			continue;
+		if (!droidCanReach(tank,startPositions[groupInfo[i].enemy].x,startPositions[groupInfo[i].enemy].y))
+			continue;
 		if (groupSize(battleGroup[i])<MAX_WARRIORS && groupNeedsThisSortOfTank(i,tank.name)) {
 			groupAddDroid(battleGroup[i], tank);
 			return;
 		}
 	}
 	// if considering AT/AP balance failed, stop considering it
-	for (var i=0; i<NUM_GROUPS; ++i) if (droidCanReach(tank,startPositions[groupInfo[i].enemy].x,startPositions[groupInfo[i].enemy].y))
+	for (var i=0; i<NUM_GROUPS; ++i) {
+		if (typeof(groupInfo[i].enemy)=="undefined")
+			continue;
+		if (!droidCanReach(tank,startPositions[groupInfo[i].enemy].x,startPositions[groupInfo[i].enemy].y))
+			continue;
 		if (groupSize(battleGroup[i])<MAX_WARRIORS) {
 			groupAddDroid(battleGroup[i], tank);
 			return;
 		}
+	}
 	// if all groups are at absolute maximum, add a new group
 	var enemy=findEnemy();
-	if (droidCanReach(tank,startPositions[enemy].x,startPositions[enemy].y)) {
+	if (typeof(enemy)!="undefined") if (droidCanReach(tank,startPositions[enemy].x,startPositions[enemy].y)) {
 		if (NUM_GROUPS < MAX_GROUPS) {
 			battleGroup[NUM_GROUPS]=newGroup();
 			groupAddDroid(battleGroup[NUM_GROUPS], tank);
@@ -1254,7 +1279,7 @@ function addTankToSomeGroup(tank) {
 		}
 	}
 	// if too many groups, just put it somewhere
-	groupAddDroid(battleGroup[random(NUM_GROUPS)], tank);
+	groupAddDroid(defendGroup, tank);
 }
 
 // pick a suitable group for a new-born vtol
@@ -1288,30 +1313,6 @@ function addVtolToSomeGroup(vtol) {
 	}
 	// if too many groups, just put it somewhere
 	groupAddDroid(vtolGroup[random(NUM_VTOL_GROUPS)], vtol);
-}
-
-// remove some groups if too many groups are on the field
-function tooManyGroups() {
-	if (NUM_GROUPS <= MIN_GROUPS) 
-		return;
-	var smallestIdx, smallestSize=Infinity, largestSize=0;
-	for (var i=0; i<NUM_GROUPS; ++i) {
-		var size=groupSize(battleGroup[i]);
-		if (size<smallestSize) {
-			smallestIdx = i;
-			smallestSize - size;
-		}
-		if (size>largestSize)
-			largestSize = size;
-	}
-	if (largestSize >= MIN_WARRIORS) 
-		return;
-	var list=enumGroup(battleGroup[smallestIdx]);
-	--NUM_GROUPS;
-	battleGroup[smallestIdx]=battleGroup[NUM_GROUPS];
-	for (var i=0; i<list.length; ++i) {
-		addTankToSomeGroup(list[i]);
-	}
 }
 
 // checks if we actually need more trucks
@@ -1907,6 +1908,32 @@ function vtolAttack() {
 	}
 }
 
+// make sure the defenders of the base are somewhere near the base
+function returnDefendersToBase() {
+	var list=enumGroup(defendGroup);
+	for (var i=0; i<list.length; ++i)
+		returnToBase(list[i]);
+}
+
+function setTimers() {
+	setTimer("updateStatus",		10000);
+	setTimer("huntForOil", 		7000);
+	setTimer("doResearch", 		12000);
+	setTimer("executeBuildOrder",	5000);
+	setTimer("attackStuff",		3000);
+	setTimer("vtolAttack",		5000);
+	setTimer("cheat",			30000);
+	setTimer("becomeHarder",		480000);
+	setTimer("adapt",			30000);
+	setTimer("forceRegroup",		10000);
+	setTimer("sendAllForRepair",		5000);
+	setTimer("produceDroids",		3000);
+	setTimer("relaxStats",		10000);
+	setTimer("balanceTrucks",		10000);
+	setTimer("returnDefendersToBase",		20000);
+}
+
+
 	/**********/
 	/* Events */
 	/**********/
@@ -2089,6 +2116,7 @@ function eventStartLevel() {
 		personality.PEACE_TIME=0;
 	builderGroup=newGroup();
 	oilerGroup=newGroup();
+	defendGroup=newGroup();
 	NUM_GROUPS = ((countEnemyTeams()==1)?1:2);
 	for (i=0; i<MAX_GROUPS; ++i) {
 		battleGroup[i]=newGroup();
@@ -2100,7 +2128,6 @@ function eventStartLevel() {
 	NUM_VTOL_GROUPS = MIN_VTOL_GROUPS;
 	for (i=0; i<MAX_VTOL_GROUPS; ++i)
 		vtolGroup[i]=newGroup();
-	defendGroup=newGroup();
 	var trucks = enumDroid(me, DROID_CONSTRUCT);
 	for (var i=0; i<trucks.length; ++i) {
 		addTruckToSomeGroup(trucks[i]);
@@ -2110,21 +2137,7 @@ function eventStartLevel() {
 	}
 	setStatus(STATUS_EARLYGAME);
 	adapt();
-	setTimer("updateStatus",		10000);
-	setTimer("huntForOil", 		7000);
-	setTimer("doResearch", 		12000);
-	setTimer("executeBuildOrder",	5000);
-	setTimer("attackStuff",		3000);
-	setTimer("vtolAttack",		5000);
-	setTimer("cheat",			30000);
-	setTimer("becomeHarder",		480000);
-	setTimer("adapt",			30000);
-	setTimer("tooManyGroups",		30000);
-	setTimer("forceRegroup",		10000);
-	setTimer("sendAllForRepair",		5000);
-	setTimer("produceDroids",		3000);
-	setTimer("relaxStats",		10000);
-	setTimer("balanceTrucks",		10000);
+	queue("setTimers",80*me);
 }
 
 // currently unused events

@@ -230,19 +230,49 @@ function constructPersonality() {
 	} else {
 		
 		switch(subpersonality) {
-		case MR: case FR: case MF:
+		case MR:
+			this.researchPathPrimary = [
+				"R-Vehicle-Prop-Halftracks",
+				"R-Wpn-MG2Mk1",
+				"R-Struc-PowerModuleMk1",
+				"R-Wpn-Rocket-Damage02",
+				"R-Wpn-MG3Mk1",
+			];
+			break;
+		case MC:
+			this.researchPathPrimary = [
+				"R-Wpn-MG-Damage02",
+				"R-Wpn-Cannon-Damage03",
+				"R-Vehicle-Prop-Halftracks",
+				"R-Struc-PowerModuleMk1",
+				"R-Wpn-MG3Mk1",
+			];
+			break;
+		case FR:
+			this.researchPathPrimary = [
+				"R-Wpn-MG2Mk1",
+				"R-Wpn-Rocket-Damage02",
+				"R-Struc-PowerModuleMk1",
+				"R-Vehicle-Prop-Halftracks",
+			];
+			break;
+		case FC:
 			this.researchPathPrimary = [
 				"R-Wpn-MG2Mk1",
 				"R-Vehicle-Prop-Halftracks",
 			];
 			break;
-		case MC: case FC:
+		case MF:
 			this.researchPathPrimary = [
-				"R-Wpn-MG-Damage02",
-				"R-Wpn-Cannon-Damage01",
+				"R-Wpn-MG3Mk1",
+				"R-Vehicle-Prop-Halftracks",
+				"R-Struc-PowerModuleMk1",
 			];
 			break;
 		}
+		
+		this.researchPathPrimary = this.researchPathPrimary.concat(["R-Vehicle-Body05","R-Struc-RprFac-Upgrade01",]);
+
 		
 		this.researchPathFundamental = standardResearchPathFundamental;
 		
