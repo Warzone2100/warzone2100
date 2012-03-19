@@ -471,6 +471,7 @@ void _debug( int line, code_part part, const char *function, const char *str, ..
 			               2, "Show Log Files & Open Bug Reporter", "Ignore", NULL);
 			if (clickedIndex == 0)
 			{
+				cocoaOpenURL("http://developer.wz2100.net/newticket");
 				if (WZDebugfilename == NULL) {
 					cocoaShowAlert("Unable to open debug log.",
 					               "The debug log subsystem has not yet been initialised.",
@@ -479,7 +480,6 @@ void _debug( int line, code_part part, const char *function, const char *str, ..
 					cocoaSelectFileInFinder(WZDebugfilename);
 				}
 				cocoaOpenUserCrashReportFolder();
-				cocoaOpenURL("http://developer.wz2100.net/newticket");
 			}
 #else
 			const char* popupBuf = useInputBuffer1 ? inputBuffer[1] : inputBuffer[0];
