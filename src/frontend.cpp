@@ -1205,7 +1205,7 @@ static bool startGameOptionsMenu(void)
 	addTextButton(FRONTEND_LANGUAGE_R,  FRONTEND_POS2M - 25, FRONTEND_POS2Y, getLanguageName(), 0);
 
 	// Difficulty
-	addTextButton(FRONTEND_DIFFICULTY, FRONTEND_POS3X-25, FRONTEND_POS3Y, _("Difficulty"), 0);
+	addTextButton(FRONTEND_DIFFICULTY, FRONTEND_POS3X-25, FRONTEND_POS3Y, _("Campaign Difficulty"), 0);
 	switch (getDifficultyLevel())
 	{
 		case DL_EASY:
