@@ -271,6 +271,15 @@ void updatePlayerPower(UDWORD player)
 		{
 			updateCurrentPower((POWER_GEN *)psStruct->pFunctionality, player);
 		}
+		else if (psStruct->pStructureType->type == REF_HQ && psStruct->status == SS_BUILT)
+		{
+			asPower[player].currentPower += 2 * EXTRACT_POINTS * FP_ONE / GAME_UPDATES_PER_SEC;
+		}
+		ASSERT(asPower[player].currentPower >= 0, "negative power");
+		if (asPower[player].currentPower > MAX_POWER*FP_ONE)
+		{
+			asPower[player].currentPower = MAX_POWER*FP_ONE;
+		}
 	}
 	syncDebug("updatePlayerPower%u %"PRId64"->%"PRId64"", player, powerBefore, asPower[player].currentPower);
 
@@ -306,11 +315,6 @@ static void updateCurrentPower(POWER_GEN *psPowerGen, UDWORD player)
 	syncDebug("updateCurrentPower%d = %"PRId64",%u", player, extractedPower, psPowerGen->multiplier);
 
 	asPower[player].currentPower += (extractedPower * psPowerGen->multiplier) / 100;
-	ASSERT(asPower[player].currentPower >= 0, "negative power");
-	if (asPower[player].currentPower > MAX_POWER*FP_ONE)
-	{
-		asPower[player].currentPower = MAX_POWER*FP_ONE;
-	}
 }
 
 void setPower(unsigned player, int32_t power)
