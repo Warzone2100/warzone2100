@@ -1,3 +1,8 @@
+2012-03-19: Version 3.1_beta8
+ * General:
+   * Fix: Enable truck template when building factory before HQ (ticket:3337, commit:7291bb9b28e3d5835bf9cee6f5e407f4112cc8a9)
+   * Fix: Problem with continent generation making droids refuse orders (ticket:3269, commit:3bd70ae8b9be93bb19d4bc694b7197277bc412fe)
+
 2012-03-19: Version 3.1_beta7
  * General:
    * Fix: Don't randomly crash when moving units (ticket:3301, commit:fbc600ecdf9246a34038f58063baa2b460f6c984)
