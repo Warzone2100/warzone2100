@@ -1731,6 +1731,38 @@ static QScriptValue js_setDesign(QScriptContext *context, QScriptEngine *engine)
 	return QScriptValue();
 }
 
+//-- \subsection{enableTemplate(template name)} Enable a specific template (even if design is disabled).
+static QScriptValue js_enableTemplate(QScriptContext *context, QScriptEngine *engine)
+{
+	DROID_TEMPLATE *psCurr;
+	QString templateName = context->argument(0).toString();
+	bool found = false;
+	// FIXME: This dual data structure for templates is just plain insane.
+	for (psCurr = apsDroidTemplates[selectedPlayer]; psCurr != NULL; psCurr = psCurr->psNext)
+	{
+		if (!templateName.compare(psCurr->pName))
+		{
+			psCurr->enabled = true;
+			found = true;
+		}
+	}
+	if (!found)
+	{
+		debug(LOG_ERROR, "Template %s was not found!", templateName.toAscii().constData());
+		return QScriptValue(false);
+	}
+	for (std::list<DROID_TEMPLATE>::iterator i = localTemplates.begin(); i != localTemplates.end(); ++i)
+	{
+		psCurr = &*i;
+		if (!templateName.compare(psCurr->pName))
+		{
+			psCurr->enabled = true;
+		}
+	}
+	return QScriptValue();
+}
+
+
 //-- \subsection{addReticuleButton(button type)} Add reticule button. FIXME: This currently only works in tutorial.
 //-- Valid parameters for this and \emph{removeReticuleButton}: MANUFACTURE, RESEARCH, BUILD, DESIGN, INTELMAP, COMMAND, CANCEL.
 static QScriptValue js_addReticuleButton(QScriptContext *context, QScriptEngine *engine)
@@ -2068,6 +2100,7 @@ bool registerFunctions(QScriptEngine *engine)
 	engine->globalObject().setProperty("setPower", engine->newFunction(js_setPower));
 	engine->globalObject().setProperty("setTutorialMode", engine->newFunction(js_setTutorialMode));
 	engine->globalObject().setProperty("setDesign", engine->newFunction(js_setDesign));
+	engine->globalObject().setProperty("enableTemplate", engine->newFunction(js_enableTemplate));
 	engine->globalObject().setProperty("setMiniMap", engine->newFunction(js_setMiniMap));
 	engine->globalObject().setProperty("addReticuleButton", engine->newFunction(js_addReticuleButton));
 	engine->globalObject().setProperty("removeReticuleButton", engine->newFunction(js_removeReticuleButton));
