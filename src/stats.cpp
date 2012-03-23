@@ -1107,7 +1107,7 @@ bool loadBodyStats(const char *pFileName)
 		}
 		ini.endGroup();
 
-		statsSetBody(psStats, i);	//save the stats
+		statsSetBody(psStats, list.size() - 1 - i);	// save the stats (and reorder list, so that ZNULLBODY is zero)
 
 		//set the max stat values for the design screen
 		if (psStats->designable)
