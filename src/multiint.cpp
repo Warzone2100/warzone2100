@@ -1420,15 +1420,21 @@ static void addGameOptions()
 		widgSetButtonState(psWScreen, MULTIOP_MAP_ICON, WBUT_DISABLE);
 	}
 	// password box
-	addMultiEditBox(MULTIOP_OPTIONS, MULTIOP_PASSWORD_EDIT  , MCOL0, MROW4, _("Click to set Password"), NetPlay.gamePassword, IMAGE_UNLOCK_BLUE, IMAGE_LOCK_BLUE , MULTIOP_PASSWORD_BUT);
-	// disable for one-player skirmish
-	if (!NetPlay.bComms)
+	if (NetPlay.GamePassworded && ingame.bHostSetup && bHosted)
 	{
+		// FIXME: we can't force the state down (it gets reset), so we must handle it this way for now
+		addMultiEditBox(MULTIOP_OPTIONS, MULTIOP_PASSWORD_EDIT, MCOL0, MROW4, _("Password is already set!"), NetPlay.gamePassword, IMAGE_LOCK_BLUE, IMAGE_LOCK_BLUE, MULTIOP_PASSWORD_BUT);
+		// force the state down if a locked game
+		widgSetButtonState(psWScreen, MULTIOP_PASSWORD_BUT, WBUT_LOCK);
 		widgSetButtonState(psWScreen, MULTIOP_PASSWORD_EDIT, WEDBS_DISABLE);
-		widgSetButtonState(psWScreen, MULTIOP_PASSWORD_BUT, WBUT_DISABLE);
 	}
-	// buttons.
+	else if (ingame.bHostSetup && !bHosted && NetPlay.bComms)
+	{
+		// only show this when we are not hosting a game
+		addMultiEditBox(MULTIOP_OPTIONS, MULTIOP_PASSWORD_EDIT, MCOL0, MROW4, _("Click to set Password"), NetPlay.gamePassword, IMAGE_UNLOCK_BLUE, IMAGE_LOCK_BLUE, MULTIOP_PASSWORD_BUT);
+	}
 
+	// buttons
 	// game type
 	addBlueForm(MULTIOP_OPTIONS,MULTIOP_GAMETYPE,_("Scavengers"),MCOL0,MROW5,MULTIOP_BLUEFORMW,27);
 	addMultiBut(psWScreen, MULTIOP_GAMETYPE, MULTIOP_CAMPAIGN, MCOL2, 2, MULTIOP_BUTW, MULTIOP_BUTH, _("Scavengers"),
@@ -2584,10 +2590,9 @@ static void disableMultiButs(void)
 	if (NetPlay.GamePassworded)
 	{
 		// force the state down if a locked game
-		// FIXME: It don't seem to be locking it into the 2nd state?
 		widgSetButtonState(psWScreen, MULTIOP_PASSWORD_BUT, WBUT_LOCK);
+		widgSetButtonState(psWScreen, MULTIOP_PASSWORD_BUT, WBUT_DISABLE);
 	}
-	widgSetButtonState(psWScreen, MULTIOP_PASSWORD_BUT, WBUT_DISABLE);
 
 	// edit boxes
 	widgSetButtonState(psWScreen,MULTIOP_GNAME,WEDBS_DISABLE);
