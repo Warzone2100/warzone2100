@@ -85,7 +85,7 @@ function eventGameInit()
 	makeComponentAvailable("BabaFlame", me);
 	makeComponentAvailable("BaBaMG", me);
 	attackGroup = newGroup();	// allocate a new group
-	groupAddArea(attackGroup, 0, 0, (mapWidth * 128), (mapHeight * 128));
+	groupAddArea(attackGroup, 0, 0, mapWidth, mapHeight);
 }
 
 function eventStartLevel()
@@ -125,7 +125,7 @@ function eventAttacked(victim, attacker)
 		for (var i = 0; i < droidlist.length; i++)
 		{
 			var droid = droidlist[i];
-			if (distBetweenTwoPoints(victim.x, victim.y, attacker.x, attacker.y) < (24 * 128))
+			if (distBetweenTwoPoints(victim.x, victim.y, attacker.x, attacker.y) < 24)
 			{
 				orderDroidLoc(droid, DORDER_MOVE, attacker.x, attacker.y);
 			}
