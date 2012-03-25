@@ -2205,20 +2205,25 @@ static void NETregisterServer(int state)
 //  Check player "slots" & update player count if needed.
 void NETfixPlayerCount(void)
 {
+	int maxPlayers = game.maxPlayers;
 	int playercount = 0;
-
-	for (int index = 0; index < gamestruct.desc.dwMaxPlayers; index++)
+	for (int index = 0; index < game.maxPlayers; ++index)
 	{
-		if ((NetPlay.players[index].allocated == false && NetPlay.players[index].ai != AI_OPEN) || NetPlay.players[index].allocated)
+		if (NetPlay.players[index].ai == AI_CLOSED)
 		{
-			playercount++;
+			--maxPlayers;
+		}
+		else if (NetPlay.players[index].ai != AI_OPEN || NetPlay.players[index].allocated)
+		{
+			++playercount;
 		}
 	}
 
-	if (allow_joining && NetPlay.isHost && NetPlay.playercount != playercount)
+	if (allow_joining && NetPlay.isHost && (NetPlay.playercount != playercount || gamestruct.desc.dwMaxPlayers != maxPlayers))
 	{
-		debug(LOG_NET,"Updating player count from %d to %d", (int)NetPlay.playercount, playercount);
+		debug(LOG_NET, "Updating player count from %d/%d to %d/%d", (int)NetPlay.playercount, gamestruct.desc.dwMaxPlayers, playercount, maxPlayers);
 		gamestruct.desc.dwCurrentPlayers = NetPlay.playercount = playercount;
+		gamestruct.desc.dwMaxPlayers = maxPlayers;
 		NETregisterServer(WZ_SERVER_UPDATE);
 	}
 
