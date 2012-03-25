@@ -3821,35 +3821,41 @@ void displayRemoteGame(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGH
 	//draw game info
 	iV_SetFont(font_regular);
 
+	int lamp = IMAGE_LAMP_RED;
+	int statusStart = IMAGE_NOJOIN;
+	bool disableButton = true;
+	iV_SetTextColour(WZCOL_TEXT_DARK);
+
 	// As long as they got room, and mods are the same then we proccess the button(s) 
-	if ((NetPlay.games[gameID].desc.dwCurrentPlayers == NetPlay.games[gameID].desc.dwMaxPlayers)
-		|| strcmp(NetPlay.games[gameID].modlist, getModList()) != 0 )
+	if (NETisCorrectVersion(NetPlay.games[gameID].game_version_major, NetPlay.games[gameID].game_version_minor))
 	{
-		// FIXME: We should really use another way to indicate that the game is full other than our current big fat X.
-		// If game is full or wrong mod loaded
-		iV_SetTextColour(WZCOL_TEXT_DARK);
-		iV_DrawImage(FrontImages, IMAGE_NO, x + GAMES_STATUS_START, y + 3);
-		iV_DrawImage(FrontImages, IMAGE_LAMP_RED, x - 14, y + 8);
-		widgSetButtonState(psWScreen, psWidget->id, WBUT_DISABLE);
-	}
-	else if (NETisCorrectVersion(NetPlay.games[gameID].game_version_major, NetPlay.games[gameID].game_version_minor))
-	{
-
-		iV_SetTextColour(WZCOL_FORM_TEXT);
-		ssprintf(tmp, "%d/%d", NetPlay.games[gameID].desc.dwCurrentPlayers, NetPlay.games[gameID].desc.dwMaxPlayers);
-		iV_DrawText(tmp, x + GAMES_PLAYERS_START + 4 , y + 18);
-
-		//draw type overlay.
-		if (NetPlay.games[gameID].privateGame)	// check to see if it is a private game
+		if (strcmp(NetPlay.games[gameID].modlist, getModList()) != 0)
 		{
-			iV_DrawImage(FrontImages, IMAGE_LOCKED_NOBG, x + GAMES_STATUS_START, y + 3);
-			iV_DrawImage(FrontImages, IMAGE_LAMP_AMBER, x - 14, y + 8);
+			// If wrong mod loaded.
+			statusStart = IMAGE_NOJOIN_MOD;
+		}
+		else if (NetPlay.games[gameID].desc.dwCurrentPlayers >= NetPlay.games[gameID].desc.dwMaxPlayers)
+		{
+			// If game is full.
+			statusStart = IMAGE_NOJOIN_FULL;
 		}
 		else
-		{	// "Normal" game, not private.
-			iV_DrawImage(FrontImages, IMAGE_SKIRMISH_OVER, x + GAMES_STATUS_START, y + 3);
-			iV_DrawImage(FrontImages, IMAGE_LAMP_GREEN, x - 14, y + 8);
+		{
+			// Game is ok to join!
+			iV_SetTextColour(WZCOL_FORM_TEXT);
+			lamp = IMAGE_LAMP_GREEN;
+			statusStart = IMAGE_SKIRMISH_OVER;
+			disableButton = false;
+
+			if (NetPlay.games[gameID].privateGame)  // check to see if it is a private game
+			{
+				statusStart = IMAGE_LOCKED_NOBG;
+				lamp = IMAGE_LAMP_AMBER;
+			}
 		}
+
+		ssprintf(tmp, "%d/%d", NetPlay.games[gameID].desc.dwCurrentPlayers, NetPlay.games[gameID].desc.dwMaxPlayers);
+		iV_DrawText(tmp, x + GAMES_PLAYERS_START + 4 , y + 18);
 
 		// see what host limits are... then draw them.
 		if (NetPlay.games[gameID].limits)
@@ -3860,14 +3866,13 @@ void displayRemoteGame(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGH
 				iV_DrawImage(FrontImages, IMAGE_NO_CYBORG, x + GAMES_STATUS_START + (37 * 2), y + 2);
 			if(NetPlay.games[gameID].limits & NO_VTOLS)
 				iV_DrawImage(FrontImages, IMAGE_NO_VTOL, x + GAMES_STATUS_START + (37 * 3) , y + 2);
-		}	
+		}
 	}
-	else
-	{	//don't allow people to join games frome a different version of the game.
-		// FIXME: Need a 'Wrong version' icon
-		iV_SetTextColour(WZCOL_TEXT_DARK);
-		iV_DrawImage(FrontImages, IMAGE_NOJOIN, x + GAMES_STATUS_START + 42, y + 6 );
-		iV_DrawImage(FrontImages, IMAGE_LAMP_RED, x - 14, y + 8);
+	// Draw type overlay.
+	iV_DrawImage(FrontImages, statusStart, x + GAMES_STATUS_START, y + 3);
+	iV_DrawImage(FrontImages, lamp, x - 14, y + 8);
+	if (disableButton)
+	{
 		widgSetButtonState(psWScreen, psWidget->id, WBUT_DISABLE);
 	}
 
