@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2012-03-26 12:40+0200\n"
-"PO-Revision-Date: 2012-03-18 21:23+0100\n"
+"PO-Revision-Date: 2012-03-24 19:17+0100\n"
 "Last-Translator: Daniel Vijande <nsa_server@hotmail.com>\n"
 "Language-Team: Spanish <warzone2100-project@lists.sourceforge.net>\n"
 "Language: es\n"
@@ -12561,7 +12561,7 @@ msgstr "Opciones de Ratón"
 
 #: src/frontend.cpp:450
 msgid "Key Mappings"
-msgstr "Mapeos de teclas"
+msgstr "Atajos de Teclado"
 
 #: src/frontend.cpp:510
 msgid "Video Playback"
@@ -12586,7 +12586,7 @@ msgstr "Pantalla Completa"
 
 #: src/frontend.cpp:531
 msgid "Scanlines"
-msgstr "Límites de Visión."
+msgstr "Líneas de Visión"
 
 #: src/frontend.cpp:535
 #: src/frontend.cpp:556
@@ -12660,13 +12660,13 @@ msgstr "Radar"
 #: src/frontend.cpp:698
 #: src/frontend.cpp:1289
 msgid "Rotating"
-msgstr "Rotando"
+msgstr "Rotatorio"
 
 #: src/frontend.cpp:585
 #: src/frontend.cpp:698
 #: src/frontend.cpp:1289
 msgid "Fixed"
-msgstr "Reparado"
+msgstr "Fijo"
 
 #: src/frontend.cpp:588
 msgid "GRAPHICS OPTIONS"
@@ -13508,7 +13508,7 @@ msgstr "Ver Ubicación del Mensaje Anterior"
 
 #: src/keymap.cpp:321
 msgid "Toggle Sensor display"
-msgstr "Alternar Muestreo de Sensor"
+msgstr "Alternar Visualización de Sensores"
 
 #: src/keymap.cpp:325
 msgid "Assign Group 0"
@@ -13768,11 +13768,11 @@ msgstr "Poner una baliza"
 
 #: src/keymap.cpp:415
 msgid "Sensor display On"
-msgstr "Muestreo de Sensor Activado"
+msgstr "Visualización de Sensores Activada"
 
 #: src/keymap.cpp:416
 msgid "Sensor display Off"
-msgstr "Muestreo de Sensor Desactivado"
+msgstr "Visualización de Sensores Desactivada"
 
 #: src/keymap.cpp:417
 msgid "Toggles shadows"
