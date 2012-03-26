@@ -835,6 +835,21 @@ void processMouseClickInput(void)
 					item = MT_ENEMYDROID;
 				}
 			}
+			else if (selection == SC_DROID_REPAIR)
+			{
+				// We can't repair ourselves, so change it to a blocking cursor
+				for (DROID *psCurr = apsDroidLists[selectedPlayer]; psCurr != NULL; psCurr = psCurr->psNext)
+				{
+					if (psCurr->selected)
+					{
+						if ((ObjUnderMouse != NULL) && ObjUnderMouse->player == selectedPlayer && psCurr->id == ObjUnderMouse->id)
+						{
+							item = MT_BLOCKING;
+						}
+						break;
+					}
+				}
+			}
 			else if (selection == SC_DROID_DEMOLISH)
 			{
 				// Can't demolish allied objects, or something that isn't built yet

@@ -78,6 +78,7 @@ static CHEAT_ENTRY cheatCodes[] =
 	{"power info", kf_PowerInfo},
 	{"reload me", kf_Reload},	// reload selected weapons immediately
 	{"desync me", kf_ForceDesync},
+	{"damage me", kf_DamageMe},
 };
 
 bool attemptCheatCode(const char* cheat_name)

@@ -97,6 +97,8 @@ function eventGameInit()
 		// No HQ, so no design or radar
 		setMiniMap(false);
 		setDesign(false);
+		// This is the only template that should be enabled before design is allowed
+		enableTemplate("ConstructionDroid");
 	}
 
 	for (var playnum = 0; playnum < maxPlayers; playnum++)

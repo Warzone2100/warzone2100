@@ -84,8 +84,15 @@ bool NETstopLogging(void)
 	/* Output stats */
 	for (i = 0; i < NUM_GAME_PACKETS; i++)
 	{
-		snprintf(buf, sizeof(buf), "%-24s:\t received %u times, %u bytes; sent %u times, %u bytes\n", messageTypeToString(i),
-			packetcount[1][i], packetsize[1][i], packetcount[0][i], packetsize[0][i]);
+		if (!strcmp(messageTypeToString(i), "(UNUSED)"))
+		{
+			continue;
+		}
+		else
+		{
+			snprintf(buf, sizeof(buf), "%-24s:\t received %u times, %u bytes; sent %u times, %u bytes\n", messageTypeToString(i),
+				packetcount[1][i], packetsize[1][i], packetcount[0][i], packetsize[0][i]);
+		}
 		PHYSFS_write(pFileHandle, buf, strlen(buf), 1);
 		totalBytessent += packetsize[0][i];
 		totalBytesrecv += packetsize[1][i];

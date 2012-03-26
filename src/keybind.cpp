@@ -125,7 +125,6 @@ static void kfsf_SetSelectedDroidsState( SECONDARY_ORDER sec, SECONDARY_STATE St
  */
 bool runningMultiplayer(void)
 {
-	// NOTE: may want to only allow this for DEBUG builds?? -- Buginator
 	if (!bMultiPlayer || !NetPlay.bComms)
 		return false;
 
@@ -176,6 +175,50 @@ void	kf_PowerInfo( void )
 	for (i = 0; i < game.maxPlayers; i++)
 	{
 		console("Player %d: %d power", i, (int)getPower(i));
+	}
+}
+
+void kf_DamageMe(void)
+{
+#ifndef DEBUG
+	// Bail out if we're running a _true_ multiplayer game (to prevent MP cheating)
+	if (runningMultiplayer())
+	{
+		noMPCheatMsg();
+		return;
+	}
+#endif
+	for(DROID *psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
+	{
+		if (psDroid->selected)
+		{
+			int val = psDroid->body - ((psDroid->originalBody / 100) *20);
+			if (val > 0)
+			{
+				psDroid->body = val;
+				addConsoleMessage(_("Ouch! Droid's health is down 20%!"), LEFT_JUSTIFY, SYSTEM_MESSAGE);
+			}
+			else
+			{
+				psDroid->body = 0;
+			}
+		}
+	}
+	for(STRUCTURE *psStruct = apsStructLists[selectedPlayer]; psStruct; psStruct = psStruct->psNext)
+	{
+		if (psStruct->selected)
+		{
+			int val = psStruct->body - ((structureBody(psStruct) / 100) *20);
+			if (val > 0)
+			{
+				psStruct->body = val;
+				addConsoleMessage(_("Ouch! Structure's health is down 20%!"), LEFT_JUSTIFY, SYSTEM_MESSAGE);
+			}
+			else
+			{
+				psStruct->body = 0;
+			}
+		}
 	}
 }
 

@@ -76,14 +76,15 @@ void cocoaOpenUserCrashReportFolder()
 	if (Gestalt(gestaltSystemVersionMajor, &maj) == noErr
 		&& Gestalt(gestaltSystemVersionMinor, &min) == noErr)
 	{
-		if (maj == 10 && min <= 5)
-		{
-			cocoaOpenURL("file://~/Library/Logs/CrashReporter");
-		}
-		else
-		{
-			cocoaOpenURL("file://~/Library/Logs/DiagnosticReports");
-		}
+		NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+		NSArray *paths = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES);
+		NSString *libraryPath = ([paths count] > 0) ? [paths objectAtIndex:0] : nil;
+		if (libraryPath == nil) return;
+		NSURL *libraryURL = [NSURL fileURLWithPath:libraryPath isDirectory:YES];
+		NSString *subdir = (maj == 10 && min <= 5) ? @"Logs/CrashReporter" : @"Logs/DiagnosticReports";
+		NSURL *crashReportsURL = [NSURL URLWithString:subdir relativeToURL:libraryURL];
+		[[NSWorkspace sharedWorkspace] openURL:crashReportsURL];
+		[pool release];
 	}
 }
 
