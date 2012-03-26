@@ -160,6 +160,8 @@ static GAMECODE renderLoop()
 		if (!rotActive && getWidgetsStatus() && dragBox3D.status != DRAG_DRAGGING && wallDrag.status != DRAG_DRAGGING)
 		{
 			intRetVal = intRunWidgets();
+			// Send droid orders, if any. (Should do between intRunWidgets() calls, to avoid droid orders getting mixed up, in the case of multiple orders given while the game freezes due to net lag.)
+			sendQueuedDroidInfo();
 		}
 
 		//don't process the object lists if paused or about to quit to the front end
