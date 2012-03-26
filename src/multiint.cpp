@@ -3496,13 +3496,15 @@ void runMultiOptions(void)
 	char			str[3];
 
 	frontendMultiMessages();
-
-	for (i = 0; i < MAX_PLAYERS; i++)
+	if (NetPlay.isHost)
 	{
-		// send it for each player that needs it
-		if (NetPlay.players[i].wzFile.isSending)
+		for (i = 0; i < MAX_PLAYERS; i++)
 		{
-			sendMap();
+			// send it for each player that needs it
+			if (NetPlay.players[i].wzFile.isSending)
+			{
+				sendMap();
+			}
 		}
 	}
 
