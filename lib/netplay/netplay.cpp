@@ -246,6 +246,7 @@ static size_t NET_fillBuffer(Socket **pSocket, SocketSet* socket_set, uint8_t *b
 			bsocket = NULL;  // Because tcp_socket == bsocket...
 			//Game is pretty much over --should just end everything when HOST dies.
 			NetPlay.isHostAlive = false;
+			ingame.localJoiningInProgress = false;
 			setLobbyError(ERROR_HOSTDROPPED);
 			NETclose();
 			return 0;
@@ -1798,6 +1799,11 @@ bool NETrecvNet(NETQUEUE *queue, uint8_t *type)
 				NETplayerDropped(current);
 				connected_bsocket[current] = NULL;		// clear their socket
 			}
+			else
+			{
+				// lobby errors were set in NET_fillBuffer()
+				return false;
+			}
 		}
 	}
 
@@ -2691,7 +2697,7 @@ bool NETfindGame(void)
 	int result = 0;
 	debug(LOG_NET, "Looking for games...");
 	
-	if (getLobbyError() == ERROR_INVALID || getLobbyError() == ERROR_KICKED)
+	if (getLobbyError() == ERROR_INVALID || getLobbyError() == ERROR_KICKED || getLobbyError() == ERROR_HOSTDROPPED)
 	{
 		return false;
 	}
