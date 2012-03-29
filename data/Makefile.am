@@ -21,6 +21,7 @@ BASELIST = \
 	misc \
 	script \
 	sequenceaudio \
+	sequences \
 	shaders\
 	stats \
 	structs \
