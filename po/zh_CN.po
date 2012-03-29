@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2012-03-19 00:49+0100\n"
+"POT-Creation-Date: 2012-03-26 12:40+0200\n"
 "PO-Revision-Date: 2011-08-28 11:34+0800\n"
 "Last-Translator: Tunghsu\n"
 "Language-Team: Chinese Simplified <kde-i18n-doc@kde.org>\n"
@@ -12105,16 +12105,16 @@ msgid "OpenGL 1.4 + VBO extension is not supported by your system. The game requ
 msgstr ""
 
 #: lib/netplay/netplay.cpp:193
-#: lib/netplay/netplay.cpp:1052
+#: lib/netplay/netplay.cpp:1053
 msgid "Enter password here"
 msgstr "在这里输入密码"
 
-#: lib/netplay/netplay.cpp:2114
+#: lib/netplay/netplay.cpp:2121
 #, fuzzy, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr "不能解析游戏主机名"
 
-#: lib/netplay/netplay.cpp:2136
+#: lib/netplay/netplay.cpp:2143
 #, fuzzy, c-format
 msgid ""
 "Error connecting to the lobby server: %s.\n"
@@ -12123,7 +12123,7 @@ msgid ""
 " or to forward the port to your system."
 msgstr "连接Lobby服务器时发生错误：%s.确定%d端口可以接收 数据。如果你在使用路由器请将它设置为UPnP，或转发这个端口到你的系统"
 
-#: lib/netplay/netplay.cpp:2801
+#: lib/netplay/netplay.cpp:2817
 msgid "Failed to get a lobby response!"
 msgstr ""
 
@@ -12189,21 +12189,21 @@ msgstr "储存游戏"
 msgid "Close"
 msgstr "关闭"
 
-#: src/cheat.cpp:161
+#: src/cheat.cpp:162
 #, c-format
 msgid "%s wants to enable debug mode. Enabled: %s, Disabled: %s."
 msgstr ""
 
-#: src/cheat.cpp:165
+#: src/cheat.cpp:166
 #, c-format
 msgid "%s wants to disable debug mode. Enabled: %s, Disabled: %s."
 msgstr ""
 
-#: src/cheat.cpp:171
+#: src/cheat.cpp:172
 msgid "Debug mode now enabled!"
 msgstr ""
 
-#: src/cheat.cpp:176
+#: src/cheat.cpp:177
 #, fuzzy
 msgid "Debug mode now disabled!"
 msgstr "建筑选单将重新开启"
@@ -12536,7 +12536,7 @@ msgid "Player dropped"
 msgstr "玩家"
 
 #: src/display3d.cpp:665
-#: src/multiint.cpp:2262
+#: src/multiint.cpp:2269
 msgid "Waiting for other players"
 msgstr "等待其他玩家"
 
@@ -12544,17 +12544,17 @@ msgstr "等待其他玩家"
 msgid "Out of sync"
 msgstr ""
 
-#: src/display.cpp:1587
+#: src/display.cpp:1602
 msgid "Cannot Build. Oil Resource Burning."
 msgstr "油田燃烧中，无法建筑钻油井"
 
-#: src/display.cpp:1775
-#: src/display.cpp:2326
+#: src/display.cpp:1790
+#: src/display.cpp:2341
 #, c-format
 msgid "%s - Damage %d%% - Experience %.1f, %s"
 msgstr "%s - 损伤 %d%% - 经验值 %.1f, %s"
 
-#: src/display.cpp:1791
+#: src/display.cpp:1806
 #, fuzzy, c-format
 msgid "%s - Allied - Damage %d%% - Experience %d, %s"
 msgstr "%s - 损伤 %d%% - 经验值 %d, %s"
@@ -12741,7 +12741,7 @@ msgid "TCP PORT 2100 MUST BE OPENED IN YOUR FIREWALL / ROUTER TO HOST GAMES!"
 msgstr ""
 
 #: src/frontend.cpp:444
-#: src/multiint.cpp:1398
+#: src/multiint.cpp:1399
 msgid "OPTIONS"
 msgstr "选项"
 
@@ -13034,7 +13034,7 @@ msgid "GAME OPTIONS"
 msgstr "游戏选项"
 
 #: src/frontend.cpp:1425
-#: src/multiint.cpp:2526
+#: src/multiint.cpp:2533
 msgid "Mod: "
 msgstr "Mod："
 
@@ -13095,7 +13095,7 @@ msgid "Build (F3)"
 msgstr "建造新的建筑物 （F3）"
 
 #: src/hci.cpp:3418
-#: src/multiint.cpp:1502
+#: src/multiint.cpp:1509
 #: src/multimenu.cpp:799
 msgid "Power"
 msgstr "能源"
@@ -13291,7 +13291,7 @@ msgid "Need more resources!"
 msgstr ""
 
 #: src/intelmap.cpp:242
-#: src/keybind.cpp:1327
+#: src/keybind.cpp:1370
 msgid "PAUSED"
 msgstr "已暂停"
 
@@ -13418,262 +13418,270 @@ msgstr "指定VTOL工厂生产"
 msgid "Circle"
 msgstr "圆（循环）"
 
-#: src/keybind.cpp:137
+#: src/keybind.cpp:136
 msgid "Sorry, that cheat is disabled in multiplayer games."
 msgstr "抱歉，多人游戏中无法使用此作弊码"
 
-#: src/keybind.cpp:143
+#: src/keybind.cpp:142
 #, fuzzy
 msgid "Warning! This cheat is buggy.  We recommend to NOT use it."
 msgstr "警告：这个作弊方式有点小问题。我们建议不要使用。"
 
-#: src/keybind.cpp:227
+#: src/keybind.cpp:199
+msgid "Ouch! Droid's health is down 20%!"
+msgstr ""
+
+#: src/keybind.cpp:215
+msgid "Ouch! Structure's health is down 20%!"
+msgstr ""
+
+#: src/keybind.cpp:270
 msgid "Lets us see what you see!"
 msgstr "让我看看你看到了什么！"
 
-#: src/keybind.cpp:229
+#: src/keybind.cpp:272
 msgid "Fine, weapon & sensor display is off!"
 msgstr "关闭细节、武器及雷达显示"
 
-#: src/keybind.cpp:402
-#: src/keybind.cpp:432
-#: src/keybind.cpp:449
-#: src/keybind.cpp:493
-#: src/keybind.cpp:601
-#: src/keybind.cpp:641
-#: src/keybind.cpp:747
-#: src/keybind.cpp:1274
-#: src/keybind.cpp:1381
-#: src/keybind.cpp:1510
-#: src/keybind.cpp:1868
-#: src/keybind.cpp:1909
+#: src/keybind.cpp:445
+#: src/keybind.cpp:475
+#: src/keybind.cpp:492
+#: src/keybind.cpp:536
+#: src/keybind.cpp:644
+#: src/keybind.cpp:684
+#: src/keybind.cpp:790
+#: src/keybind.cpp:1317
+#: src/keybind.cpp:1424
+#: src/keybind.cpp:1553
+#: src/keybind.cpp:1911
+#: src/keybind.cpp:1952
 #, c-format
 msgid "(Player %u) is using cheat :%s"
 msgstr "玩家 %u 正在作弊：%s"
 
-#: src/keybind.cpp:403
+#: src/keybind.cpp:446
 msgid "Hard as nails!!!"
 msgstr "像爪子一样硬！！"
 
-#: src/keybind.cpp:417
+#: src/keybind.cpp:460
 msgid "Takings thing easy!"
 msgstr "让事情变简单！"
 
-#: src/keybind.cpp:433
+#: src/keybind.cpp:476
 msgid "1000 big ones!!!"
 msgstr "1000 big ones!!!"
 
-#: src/keybind.cpp:450
+#: src/keybind.cpp:493
 msgid "Power overwhelming"
 msgstr "巨大的能量"
 
-#: src/keybind.cpp:465
+#: src/keybind.cpp:508
 msgid "Back to normality!"
 msgstr "回到正常状态"
 
-#: src/keybind.cpp:478
+#: src/keybind.cpp:521
 msgid "Getting tricky!"
 msgstr "得到技巧！"
 
-#: src/keybind.cpp:494
+#: src/keybind.cpp:537
 msgid "Twice as nice!"
 msgstr "给我两倍的力量！！"
 
-#: src/keybind.cpp:505
+#: src/keybind.cpp:548
 msgid "FPS display is enabled."
 msgstr "FPS显示开启"
 
-#: src/keybind.cpp:509
+#: src/keybind.cpp:552
 msgid "FPS display is disabled."
 msgstr "FPS显示关闭"
 
-#: src/keybind.cpp:566
+#: src/keybind.cpp:609
 #, c-format
 msgid "(Player %u) is using a cheat :Num Droids: %d  Num Structures: %d  Num Features: %d"
 msgstr ""
 
-#: src/keybind.cpp:602
+#: src/keybind.cpp:645
 msgid "Infinite power disabled"
 msgstr "无限制能源：关"
 
-#: src/keybind.cpp:602
+#: src/keybind.cpp:645
 msgid "Infinite power enabled"
 msgstr "无限制能源：开"
 
-#: src/keybind.cpp:642
+#: src/keybind.cpp:685
 msgid "All items made available"
 msgstr "可使用所有的项目"
 
-#: src/keybind.cpp:748
+#: src/keybind.cpp:791
 msgid "Fog on"
 msgstr "战争迷雾开启"
 
-#: src/keybind.cpp:748
+#: src/keybind.cpp:791
 msgid "Fog off"
 msgstr "战争迷雾关闭"
 
-#: src/keybind.cpp:1159
+#: src/keybind.cpp:1202
 #, c-format
 msgid "Warning!  This cheat can cause dire problems later on! [%s]"
 msgstr ""
 
-#: src/keybind.cpp:1159
+#: src/keybind.cpp:1202
 #, fuzzy
 msgid "Ending Mission."
 msgstr "传来讯息..."
 
-#: src/keybind.cpp:1275
+#: src/keybind.cpp:1318
 msgid "God Mode ON"
 msgstr "上帝模式打开"
 
-#: src/keybind.cpp:1275
+#: src/keybind.cpp:1318
 msgid "God Mode OFF"
 msgstr "上帝模式关闭"
 
-#: src/keybind.cpp:1287
+#: src/keybind.cpp:1330
 msgid "View Aligned to North"
 msgstr "View Aligned to North"
 
-#: src/keybind.cpp:1296
+#: src/keybind.cpp:1339
 #, fuzzy, c-format
 msgid "Trap cursor %s"
 msgstr "捕捉鼠标"
 
-#: src/keybind.cpp:1382
+#: src/keybind.cpp:1425
 msgid "Researched EVERYTHING for you!"
 msgstr "替你研发所有科技！"
 
-#: src/keybind.cpp:1447
+#: src/keybind.cpp:1490
 #, c-format
 msgid "(Player %u) is using cheat :%s %s"
 msgstr ""
 
-#: src/keybind.cpp:1447
+#: src/keybind.cpp:1490
 #, fuzzy
 msgid "Researched"
 msgstr "研发新科技"
 
-#: src/keybind.cpp:1468
+#: src/keybind.cpp:1511
 msgid "Only displaying energy bars when selected"
 msgstr ""
 
-#: src/keybind.cpp:1471
+#: src/keybind.cpp:1514
 msgid "Always displaying energy bars for units"
 msgstr ""
 
-#: src/keybind.cpp:1474
+#: src/keybind.cpp:1517
 msgid "Always displaying energy bars for units and structures"
 msgstr ""
 
-#: src/keybind.cpp:1496
+#: src/keybind.cpp:1539
 msgid "Demo mode off - Returning to normal game mode"
 msgstr "关闭展示模式—回到正常游戏模式"
 
-#: src/keybind.cpp:1511
+#: src/keybind.cpp:1554
 #, fuzzy
 msgid "Debug menu is Open"
 msgstr "建筑选单将重新开启"
 
-#: src/keybind.cpp:1548
+#: src/keybind.cpp:1591
 #, fuzzy
 msgid "Unable to locate any oil derricks!"
 msgstr "找不到任何工程车单位！"
 
-#: src/keybind.cpp:1770
+#: src/keybind.cpp:1813
 msgid "Oh, the weather outside is frightful... SNOW"
 msgstr "喔，外面的天气真糟...下雪"
 
-#: src/keybind.cpp:1776
+#: src/keybind.cpp:1819
 msgid "Singing in the rain, I'm singing in the rain... RAIN"
 msgstr "下雨啦～下雨啦～"
 
-#: src/keybind.cpp:1782
+#: src/keybind.cpp:1825
 msgid "Forecast : Clear skies for all areas... NO WEATHER"
 msgstr "天气预报：一整片晴朗的天空。"
 
-#: src/keybind.cpp:1867
+#: src/keybind.cpp:1910
 msgid "Warning! This can have drastic consequences if used incorrectly in missions."
 msgstr ""
 
-#: src/keybind.cpp:1869
+#: src/keybind.cpp:1912
 #, fuzzy
 msgid "All enemies destroyed by cheating!"
 msgstr "敌军已经死了...由于你作弊的关系.."
 
-#: src/keybind.cpp:1910
+#: src/keybind.cpp:1953
 msgid "Destroying selected droids and structures!"
 msgstr ""
 
-#: src/keybind.cpp:2477
+#: src/keybind.cpp:2520
 msgid "Centered on player HQ, direction NORTH"
 msgstr "视角移至主基地，面向北方"
 
-#: src/keybind.cpp:2489
+#: src/keybind.cpp:2532
 msgid "Unable to locate HQ!"
 msgstr "无法定位至主基地"
 
-#: src/keybind.cpp:2496
+#: src/keybind.cpp:2539
 msgid "Formation speed limiting has been removed from the game due to bugs."
 msgstr ""
 
-#: src/keybind.cpp:2545
+#: src/keybind.cpp:2588
 msgid "Vertical rotation direction: Normal"
 msgstr ""
 
-#: src/keybind.cpp:2550
+#: src/keybind.cpp:2593
 msgid "Vertical rotation direction: Flipped"
 msgstr ""
 
-#: src/keybind.cpp:2559
+#: src/keybind.cpp:2602
 msgid "Screen shake when things die: Off"
 msgstr ""
 
-#: src/keybind.cpp:2564
+#: src/keybind.cpp:2607
 msgid "Screen shake when things die: On"
 msgstr ""
 
-#: src/keybind.cpp:2614
+#: src/keybind.cpp:2657
 #, fuzzy
 msgid "Sorry, but game speed cannot be changed in multiplayer."
 msgstr "抱歉，多人游戏中无法使用此作弊码"
 
-#: src/keybind.cpp:2649
-#: src/keybind.cpp:2701
+#: src/keybind.cpp:2692
+#: src/keybind.cpp:2744
 #, fuzzy
 msgid "Game Speed Reset"
 msgstr "重设游戏速度"
 
-#: src/keybind.cpp:2653
+#: src/keybind.cpp:2696
 #, fuzzy, c-format
 msgid "Game Speed Increased to %s"
 msgstr "游戏速度增加至 %3.1f"
 
-#: src/keybind.cpp:2657
+#: src/keybind.cpp:2700
 #, fuzzy, c-format
 msgid "Game Speed Reduced to %s"
 msgstr "游戏速度减少至 %3.1f"
 
-#: src/keybind.cpp:2713
+#: src/keybind.cpp:2756
 msgid "Radar showing friend-foe colors"
 msgstr "雷达显示友军颜色"
 
-#: src/keybind.cpp:2717
+#: src/keybind.cpp:2760
 msgid "Radar showing player colors"
 msgstr "雷达显示玩家颜色"
 
-#: src/keybind.cpp:2732
+#: src/keybind.cpp:2775
 msgid "Radar showing only objects"
 msgstr "雷达仅显示物件"
 
-#: src/keybind.cpp:2735
+#: src/keybind.cpp:2778
 msgid "Radar blending terrain and height"
 msgstr "雷达描绘地形及高度"
 
-#: src/keybind.cpp:2738
+#: src/keybind.cpp:2781
 msgid "Radar showing terrain"
 msgstr "雷达显示地形"
 
-#: src/keybind.cpp:2741
+#: src/keybind.cpp:2784
 msgid "Radar showing height"
 msgstr "雷达显示高度"
 
@@ -13683,8 +13691,8 @@ msgstr "键盘配置"
 
 #: src/keyedit.cpp:378
 #: src/multiint.cpp:720
-#: src/multiint.cpp:1191
-#: src/multiint.cpp:1588
+#: src/multiint.cpp:1189
+#: src/multiint.cpp:1595
 msgid "Return To Previous Screen"
 msgstr "回到前一个画面"
 
@@ -14349,7 +14357,7 @@ msgid "Accept Settings"
 msgstr "接受设定"
 
 #: src/multiint.cpp:660
-#: src/multiint.cpp:1238
+#: src/multiint.cpp:1239
 #, fuzzy
 msgid "Cancel"
 msgstr "枪骑兵火箭"
@@ -14370,391 +14378,396 @@ msgstr "游戏大厅"
 msgid "IP"
 msgstr "IP"
 
-#: src/multiint.cpp:947
+#: src/multiint.cpp:939
 #, fuzzy
 msgid "[Password required]"
 msgstr "*** 不需要密码 ***"
 
-#: src/multiint.cpp:951
+#: src/multiint.cpp:943
 msgid "[No Tanks]"
 msgstr ""
 
-#: src/multiint.cpp:955
+#: src/multiint.cpp:947
 #, fuzzy
 msgid "[No Cyborgs]"
 msgstr "生产生化人步兵"
 
-#: src/multiint.cpp:959
+#: src/multiint.cpp:951
 msgid "[No VTOLs]"
 msgstr ""
 
-#: src/multiint.cpp:963
+#: src/multiint.cpp:955
 #, c-format
 msgid "Hosted by %s"
 msgstr ""
 
-#: src/multiint.cpp:967
+#: src/multiint.cpp:959
 #, c-format
 msgid "Hosted by %s —%s"
 msgstr ""
 
-#: src/multiint.cpp:987
+#: src/multiint.cpp:979
 #, fuzzy
 msgid "No games are available"
 msgstr "可使用新的科技"
 
-#: src/multiint.cpp:990
+#: src/multiint.cpp:982
 msgid "Game is full"
 msgstr "游戏人数已满"
 
-#: src/multiint.cpp:994
+#: src/multiint.cpp:986
 msgid "You were kicked!"
 msgstr "你被踢了！"
 
-#: src/multiint.cpp:997
+#: src/multiint.cpp:989
 msgid "Wrong Game Version!"
 msgstr "错误的游戏版本"
 
-#: src/multiint.cpp:1000
+#: src/multiint.cpp:992
 msgid "You have an incompatible mod."
 msgstr "你有一个不兼容的mod"
 
-#: src/multiint.cpp:1004
+#: src/multiint.cpp:996
 msgid "Host couldn't send file?"
 msgstr "主玩家不能发送文件？"
 
-#: src/multiint.cpp:1008
+#: src/multiint.cpp:1000
 msgid "Incorrect Password!"
 msgstr "不正确的密码！"
 
-#: src/multiint.cpp:1011
+#: src/multiint.cpp:1003
 msgid "Host has dropped connection!"
 msgstr "主玩家掉线了！"
 
-#: src/multiint.cpp:1015
+#: src/multiint.cpp:1007
 msgid "Connection Error"
 msgstr "连接错误"
 
-#: src/multiint.cpp:1119
+#: src/multiint.cpp:1117
 msgid "Searching"
 msgstr "搜寻"
 
-#: src/multiint.cpp:1188
+#: src/multiint.cpp:1186
 msgid "GAMES"
 msgstr "游戏"
 
-#: src/multiint.cpp:1196
+#: src/multiint.cpp:1194
 msgid "Refresh Games List"
 msgstr "重新整理游戏清单"
 
-#: src/multiint.cpp:1218
+#: src/multiint.cpp:1219
 #, fuzzy
 msgid "Enter Password:"
 msgstr "按一下看地图"
 
-#: src/multiint.cpp:1236
+#: src/multiint.cpp:1237
 msgid "OK"
 msgstr "确定"
 
-#: src/multiint.cpp:1354
+#: src/multiint.cpp:1355
 msgid "Tanks disabled!!"
 msgstr "坦克被禁用"
 
-#: src/multiint.cpp:1355
+#: src/multiint.cpp:1356
 #, fuzzy
 msgid "Cyborgs disabled."
 msgstr "可生产新的生化人步兵"
 
-#: src/multiint.cpp:1356
+#: src/multiint.cpp:1357
 msgid "VTOLs disabled."
 msgstr "VTOL被禁用"
 
-#: src/multiint.cpp:1403
-#: src/multiint.cpp:1412
+#: src/multiint.cpp:1404
+#: src/multiint.cpp:1413
 msgid "Select Game Name"
 msgstr "选择游戏名称"
 
-#: src/multiint.cpp:1404
+#: src/multiint.cpp:1405
 #, fuzzy
 msgid "One-Player Skirmish"
 msgstr "单人战役模式"
 
-#: src/multiint.cpp:1415
+#: src/multiint.cpp:1416
 msgid "Select Map"
 msgstr "选择地图"
 
-#: src/multiint.cpp:1423
+#: src/multiint.cpp:1427
+#, fuzzy
+msgid "Password is already set!"
+msgstr "玩家"
+
+#: src/multiint.cpp:1435
 #, fuzzy
 msgid "Click to set Password"
 msgstr "按一下看地图"
 
-#: src/multiint.cpp:1433
-#: src/multiint.cpp:1434
+#: src/multiint.cpp:1440
+#: src/multiint.cpp:1441
 #, fuzzy
 msgid "Scavengers"
 msgstr "拾荒者"
 
-#: src/multiint.cpp:1436
+#: src/multiint.cpp:1443
 #, fuzzy
 msgid "No Scavengers"
 msgstr "拾荒者"
 
-#: src/multiint.cpp:1466
+#: src/multiint.cpp:1473
 msgid "Select Player Name"
 msgstr "选择玩家名称"
 
-#: src/multiint.cpp:1469
+#: src/multiint.cpp:1476
 #: src/multimenu.cpp:792
 msgid "Alliances"
 msgstr "同盟"
 
-#: src/multiint.cpp:1472
+#: src/multiint.cpp:1479
 msgid "No Alliances"
 msgstr "不允许同盟"
 
-#: src/multiint.cpp:1474
+#: src/multiint.cpp:1481
 msgid "Allow Alliances"
 msgstr "允许同盟"
 
-#: src/multiint.cpp:1478
+#: src/multiint.cpp:1485
 msgid "Locked Teams"
 msgstr "锁定同盟模式"
 
-#: src/multiint.cpp:1504
+#: src/multiint.cpp:1511
 msgid "Low Power Levels"
 msgstr "生产能源速度：慢"
 
-#: src/multiint.cpp:1506
+#: src/multiint.cpp:1513
 msgid "Medium Power Levels"
 msgstr "生产能源速度：中"
 
-#: src/multiint.cpp:1508
+#: src/multiint.cpp:1515
 msgid "High Power Levels"
 msgstr "生产能源速度：快"
 
-#: src/multiint.cpp:1540
+#: src/multiint.cpp:1547
 msgid "Base"
 msgstr "基地"
 
-#: src/multiint.cpp:1542
+#: src/multiint.cpp:1549
 msgid "Start with No Bases"
 msgstr "开始时无基地"
 
-#: src/multiint.cpp:1544
+#: src/multiint.cpp:1551
 msgid "Start with Bases"
 msgstr "开始时有基地"
 
-#: src/multiint.cpp:1546
+#: src/multiint.cpp:1553
 msgid "Start with Advanced Bases"
 msgstr "开始时具规模基地"
 
-#: src/multiint.cpp:1578
+#: src/multiint.cpp:1585
 msgid "Map Preview"
 msgstr "预览地图"
 
-#: src/multiint.cpp:1580
+#: src/multiint.cpp:1587
 msgid "Click to see Map"
 msgstr "按一下看地图"
 
-#: src/multiint.cpp:1593
-#: src/multiint.cpp:1595
+#: src/multiint.cpp:1600
+#: src/multiint.cpp:1602
 msgid "Start Hosting Game"
 msgstr "开始游戏"
 
-#: src/multiint.cpp:1602
-#: src/multiint.cpp:1606
+#: src/multiint.cpp:1609
+#: src/multiint.cpp:1613
 #, fuzzy
 msgid "Show Structure Limits"
 msgstr "设定建筑物数量限制"
 
-#: src/multiint.cpp:1602
-#: src/multiint.cpp:1606
+#: src/multiint.cpp:1609
+#: src/multiint.cpp:1613
 msgid "Set Structure Limits"
 msgstr "设定建筑物数量限制"
 
-#: src/multiint.cpp:1683
+#: src/multiint.cpp:1690
 msgid "DIFFICULTY"
 msgstr ""
 
-#: src/multiint.cpp:1697
+#: src/multiint.cpp:1704
 msgid "Less aggressive"
 msgstr ""
 
-#: src/multiint.cpp:1698
+#: src/multiint.cpp:1705
 #, fuzzy
 msgid "Plays nice"
 msgstr "玩家"
 
-#: src/multiint.cpp:1699
+#: src/multiint.cpp:1706
 msgid "No holds barred"
 msgstr ""
 
-#: src/multiint.cpp:1700
+#: src/multiint.cpp:1707
 #, fuzzy
 msgid "Starts with advantages"
 msgstr "开始时具规模基地"
 
-#: src/multiint.cpp:1728
+#: src/multiint.cpp:1735
 msgid "CHOOSE AI"
 msgstr ""
 
-#: src/multiint.cpp:1744
+#: src/multiint.cpp:1751
 msgid "Allow human players to join in this slot"
 msgstr ""
 
-#: src/multiint.cpp:1752
+#: src/multiint.cpp:1759
 msgid "Leave this slot unused"
 msgstr ""
 
-#: src/multiint.cpp:2204
+#: src/multiint.cpp:2211
 msgid "Team"
 msgstr "队伍"
 
-#: src/multiint.cpp:2247
+#: src/multiint.cpp:2254
 msgid "You cannot change difficulty in a challenge"
 msgstr ""
 
-#: src/multiint.cpp:2247
+#: src/multiint.cpp:2254
 #, fuzzy
 msgid "Click to change difficulty"
 msgstr "点击这里更改AI难度"
 
-#: src/multiint.cpp:2262
+#: src/multiint.cpp:2269
 #, fuzzy
 msgid "Waiting for player"
 msgstr "等待其他玩家"
 
-#: src/multiint.cpp:2262
+#: src/multiint.cpp:2269
 #, fuzzy
 msgid "Player is ready"
 msgstr "玩家"
 
-#: src/multiint.cpp:2262
+#: src/multiint.cpp:2269
 msgid "Click when ready"
 msgstr "按一下开始"
 
-#: src/multiint.cpp:2269
+#: src/multiint.cpp:2276
 msgid "READY?"
 msgstr "准备好了吗？"
 
-#: src/multiint.cpp:2313
+#: src/multiint.cpp:2320
 msgid "PLAYERS"
 msgstr "玩家"
 
-#: src/multiint.cpp:2348
+#: src/multiint.cpp:2355
 #, fuzzy
 msgid "Click to change to this slot"
 msgstr "点击这里更改玩家设置"
 
-#: src/multiint.cpp:2376
+#: src/multiint.cpp:2383
 #, fuzzy
 msgid "Choose Team"
 msgstr "锁定同盟模式"
 
-#: src/multiint.cpp:2406
+#: src/multiint.cpp:2413
 #, fuzzy
 msgid "Click to change player colour"
 msgstr "点击这里更改玩家设置"
 
-#: src/multiint.cpp:2434
+#: src/multiint.cpp:2441
 #, fuzzy
 msgid "Click to change player position"
 msgstr "点击这里更改玩家设置"
 
-#: src/multiint.cpp:2438
+#: src/multiint.cpp:2445
 #, fuzzy
 msgid "Click to change AI"
 msgstr "点击这里更改玩家设置"
 
-#: src/multiint.cpp:2499
+#: src/multiint.cpp:2506
 msgid "CHAT"
 msgstr "聊天"
 
-#: src/multiint.cpp:2531
+#: src/multiint.cpp:2538
 msgid "All players need to have the same mods to join your game."
 msgstr "所有玩家需要使用相同的mod以便进入游戏"
 
-#: src/multiint.cpp:2572
+#: src/multiint.cpp:2579
 msgid "Connecting to the lobby server..."
 msgstr ""
 
-#: src/multiint.cpp:2719
+#: src/multiint.cpp:2725
 #, fuzzy, c-format
 msgid "*** password [%s] is now required! ***"
 msgstr "*** 需要密码 ***"
 
-#: src/multiint.cpp:2727
+#: src/multiint.cpp:2733
 msgid "*** password is NOT required! ***"
 msgstr "*** 不需要密码 ***"
 
-#: src/multiint.cpp:2942
+#: src/multiint.cpp:2948
 msgid "Sorry! Failed to host the game."
 msgstr "对不起！本机无法作为游戏主要服务器"
 
-#: src/multiint.cpp:3064
+#: src/multiint.cpp:3070
 msgid "'Locked Teams' mode enabled"
 msgstr "锁定同盟模式"
 
-#: src/multiint.cpp:3092
-#: src/multiint.cpp:3161
+#: src/multiint.cpp:3098
+#: src/multiint.cpp:3167
 #: src/multimenu.cpp:1472
 #, c-format
 msgid "The host has kicked %s from the game!"
 msgstr "主玩家将 %s 踢出游戏！"
 
-#: src/multiint.cpp:3227
+#: src/multiint.cpp:3233
 msgid "Host is Starting Game"
 msgstr "主玩家已开始游戏"
 
-#: src/multiint.cpp:3806
+#: src/multiint.cpp:3819
 msgid "Can't connect to lobby server!"
 msgstr ""
 
-#: src/multiint.cpp:3893
+#: src/multiint.cpp:3911
 #, c-format
 msgid "Mods: %s"
 msgstr ""
 
-#: src/multiint.cpp:3900
+#: src/multiint.cpp:3918
 msgid "Mods: None!"
 msgstr ""
 
-#: src/multiint.cpp:3910
+#: src/multiint.cpp:3928
 #, fuzzy, c-format
 msgid "Version: %s"
 msgstr "版本 %s%s%s%s"
 
-#: src/multiint.cpp:3961
+#: src/multiint.cpp:3979
 #, fuzzy, c-format
 msgid "Click to take player slot %d"
 msgstr "点击这里更改玩家设置"
 
-#: src/multiint.cpp:3970
-#: src/multiint.cpp:4163
+#: src/multiint.cpp:3988
+#: src/multiint.cpp:4181
 msgid "Open"
 msgstr ""
 
-#: src/multiint.cpp:3970
-#: src/multiint.cpp:4164
+#: src/multiint.cpp:3988
+#: src/multiint.cpp:4182
 #, fuzzy
 msgid "Closed"
 msgstr "关闭"
 
-#: src/multiint.cpp:4021
+#: src/multiint.cpp:4039
 #, c-format
 msgid "Sending Map: %d%% "
 msgstr "发送地图：%d%%"
 
-#: src/multiint.cpp:4029
+#: src/multiint.cpp:4047
 #, c-format
 msgid "Map: %d%% downloaded"
 msgstr "地图：%d%%下载完成"
 
-#: src/multiint.cpp:4055
+#: src/multiint.cpp:4073
 msgid "HOST"
 msgstr "主玩家"
 
-#: src/multiint.cpp:4062
+#: src/multiint.cpp:4080
 #: src/multimenu.cpp:806
 msgid "Ping"
 msgstr "Ping"
