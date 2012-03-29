@@ -246,6 +246,7 @@ static size_t NET_fillBuffer(Socket **pSocket, SocketSet* socket_set, uint8_t *b
 			bsocket = NULL;  // Because tcp_socket == bsocket...
 			//Game is pretty much over --should just end everything when HOST dies.
 			NetPlay.isHostAlive = false;
+			ingame.localJoiningInProgress = false;
 			setLobbyError(ERROR_HOSTDROPPED);
 			NETclose();
 			return 0;
@@ -1419,6 +1420,7 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 				if (sender != selectedPlayer)  // TODO Tell host not to send us our own broadcast messages.
 				{
 					NETinsertMessageFromNet(NETnetQueue(sender), message);
+					NETlogPacket(message->type, message->rawLen(), true);
 				}
 			}
 			else if (NetPlay.isHost && sender == playerQueue.index)
@@ -1463,6 +1465,7 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 				if (receiver == NET_ALL_PLAYERS)
 				{
 					NETinsertMessageFromNet(NETnetQueue(sender), message);  // Message is also for the host.
+					NETlogPacket(message->type, message->rawLen(), true);
 					// Not sure if flushing here can make a difference, maybe it can:
 					//NETflush();  // Send the message to everyone as fast as possible.
 				}
@@ -1490,6 +1493,7 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 
 					// TODO Check that playerQueue is actually responsible for this game queue.
 					NETinsertMessageFromNet(NETgameQueue(player), message);
+					NETlogPacket(message->type, message->rawLen(), true);
 
 					delete message;
 					message = NULL;
@@ -1795,6 +1799,11 @@ bool NETrecvNet(NETQUEUE *queue, uint8_t *type)
 				NETplayerDropped(current);
 				connected_bsocket[current] = NULL;		// clear their socket
 			}
+			else
+			{
+				// lobby errors were set in NET_fillBuffer()
+				return false;
+			}
 		}
 	}
 
@@ -1811,8 +1820,6 @@ checkMessages:
 			}
 		}
 	}
-
-	//NETlogPacket(pMsg, true);
 
 	return false;
 }
@@ -2204,20 +2211,25 @@ static void NETregisterServer(int state)
 //  Check player "slots" & update player count if needed.
 void NETfixPlayerCount(void)
 {
+	int maxPlayers = game.maxPlayers;
 	int playercount = 0;
-
-	for (int index = 0; index < gamestruct.desc.dwMaxPlayers; index++)
+	for (int index = 0; index < game.maxPlayers; ++index)
 	{
-		if ((NetPlay.players[index].allocated == false && NetPlay.players[index].ai != AI_OPEN) || NetPlay.players[index].allocated)
+		if (NetPlay.players[index].ai == AI_CLOSED)
 		{
-			playercount++;
+			--maxPlayers;
+		}
+		else if (NetPlay.players[index].ai != AI_OPEN || NetPlay.players[index].allocated)
+		{
+			++playercount;
 		}
 	}
 
-	if (allow_joining && NetPlay.isHost && NetPlay.playercount != playercount)
+	if (allow_joining && NetPlay.isHost && (NetPlay.playercount != playercount || gamestruct.desc.dwMaxPlayers != maxPlayers))
 	{
-		debug(LOG_NET,"Updating player count from %d to %d", (int)NetPlay.playercount, playercount);
+		debug(LOG_NET, "Updating player count from %d/%d to %d/%d", (int)NetPlay.playercount, gamestruct.desc.dwMaxPlayers, playercount, maxPlayers);
 		gamestruct.desc.dwCurrentPlayers = NetPlay.playercount = playercount;
+		gamestruct.desc.dwMaxPlayers = maxPlayers;
 		NETregisterServer(WZ_SERVER_UPDATE);
 	}
 
@@ -2293,6 +2305,7 @@ static void NETallowJoining(void)
 			if (strcmp(buffer, "list") == 0)
 			{
 				debug(LOG_INFO, "An old client tried to connect, closing the socket.");
+				NETlogEntry("Dropping old client.", SYNC_FLAG, i);
 				connectFailed = true;
 			}
 			else
@@ -2318,11 +2331,12 @@ static void NETallowJoining(void)
 				}
 				else
 				{
-					// Commented out as each masterserver check creates an error.
 					debug(LOG_ERROR, "Received an invalid version \"%d.%d\".", major, minor);
 					result = htonl(ERROR_WRONGVERSION);
 					memcpy(&buffer, &result, sizeof(result));
 					writeAll(tmp_socket[i], &buffer, sizeof(result));
+					NETlogEntry("Invalid game version", SYNC_FLAG, i);
+					connectFailed = true;
 				}
 				if ((int)NetPlay.playercount == gamestruct.desc.dwMaxPlayers)
 				{
@@ -2462,8 +2476,10 @@ static void NETallowJoining(void)
 
 					if (rejected)
 					{
-						debug(LOG_INFO, "Rejecting new player, reason (%u).", (unsigned int) rejected);
-						//NETlogEntry(buf, SYNC_FLAG, index);  // buf undeclared in newnet branch.
+						char buf[256] = {'\0'};
+						ssprintf(buf, "**Rejecting player(%s), reason (%u). ", NetPlay.players[index].IPtextAddress, (unsigned int) rejected);
+						debug(LOG_INFO, "%s", buf);
+						NETlogEntry(buf, SYNC_FLAG, index);
 						NETbeginEncode(NETnetQueue(index), NET_REJECTED);
 							NETuint8_t(&rejected);
 						NETend();
@@ -2681,7 +2697,7 @@ bool NETfindGame(void)
 	int result = 0;
 	debug(LOG_NET, "Looking for games...");
 	
-	if (getLobbyError() == ERROR_INVALID || getLobbyError() == ERROR_KICKED)
+	if (getLobbyError() == ERROR_INVALID || getLobbyError() == ERROR_KICKED || getLobbyError() == ERROR_HOSTDROPPED)
 	{
 		return false;
 	}
@@ -3590,7 +3606,7 @@ const char *messageTypeToString(unsigned messageType_)
 		// End of redundant messages.
 		case GAME_MAX_TYPE:                 return "GAME_MAX_TYPE";
 	}
-	return "(INVALID MESSAGE TYPE)";
+	return "(UNUSED)";
 }
 
 /**

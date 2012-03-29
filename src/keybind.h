@@ -263,5 +263,6 @@ void    kf_ForceDesync(void);
 void	kf_PowerInfo( void );
 void	kf_BuildNextPage( void );
 void	kf_BuildPrevPage( void );
+extern void kf_DamageMe(void);
 
 #endif // __INCLUDED_SRC_KEYBIND_H__

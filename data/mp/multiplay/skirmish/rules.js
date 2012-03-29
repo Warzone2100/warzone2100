@@ -92,13 +92,6 @@ function eventGameInit()
 		"R-Wpn-Rocket-Damage01",
 		"R-Defense-WallTower01");
 
-	if (baseType == CAMP_CLEAN)
-	{
-		// No HQ, so no design or radar
-		setMiniMap(false);
-		setDesign(false);
-	}
-
 	for (var playnum = 0; playnum < maxPlayers; playnum++)
 	{
 		enableResearch("R-Sys-Sensor-Turret01", playnum);
@@ -157,6 +150,20 @@ function eventGameInit()
 			}
 		}
 	}
+
+	// Disabled by default
+	setMiniMap(false);
+	setDesign(false);
+	// This is the only template that should be enabled before design is allowed
+	enableTemplate("ConstructionDroid");
+
+	var structlist = enumStruct(me, HQ);
+	for (var i = 0; i < structlist.length; i++)
+	{
+		// Simulate build events to enable minimap/unit design when an HQ exists
+		eventStructureBuilt(structlist[i]);
+	}
+
 	hackNetOn();
 	setTimer("checkEndConditions", 100);
 }

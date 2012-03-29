@@ -819,8 +819,6 @@ void setLobbyError (LOBBY_ERROR_TYPES error_type)
 bool joinGame(const char* host, uint32_t port)
 {
 	PLAYERSTATS	playerStats;
-	LOBBY_ERROR_TYPES oldError;
-	UDWORD id;
 
 	if(ingame.localJoiningInProgress)
 	{
@@ -829,26 +827,23 @@ bool joinGame(const char* host, uint32_t port)
 
 	if (!NETjoinGame(host, port, (char*)sPlayer))	// join
 	{
-		// Save the error.
-		oldError = getLobbyError();
-		if (!oldError)
+		switch (getLobbyError())
 		{
-			oldError = ERROR_CONNECTION;
-		}
-		else if (oldError == ERROR_WRONGPASSWORD)
-		{
-			// Change to GAMEFIND, screen with a password dialog.
-			changeTitleMode(GAMEFIND);
-			showPasswordForm();
-
-			id = widgRunScreen(psWScreen); // Run the current set of widgets
-
-			if (id != CON_PASSWORD)
-			{
-				return false;
-			}
-
-			NETsetGamePassword(widgGetString(psWScreen, CON_PASSWORD));
+			case ERROR_HOSTDROPPED:
+				setLobbyError(ERROR_NOERROR);
+				break;
+			case ERROR_WRONGPASSWORD:
+				// Change to GAMEFIND, screen with a password dialog.
+				changeTitleMode(GAMEFIND);
+				showPasswordForm();
+				if (widgRunScreen(psWScreen) != CON_PASSWORD) // Run the current set of widgets
+				{
+					return false;
+				}
+				NETsetGamePassword(widgGetString(psWScreen, CON_PASSWORD));
+				break;
+			default:
+				break;
 		}
 
 		// Hide a (maybe shown) password form.
@@ -856,9 +851,6 @@ bool joinGame(const char* host, uint32_t port)
 
 		// Change to GAMEFIND, screen.
 		changeTitleMode(GAMEFIND);
-
-		// Reset the error to the saved one.
-		setLobbyError(oldError);
 
 		// Shows the lobby error.
 		addGames();
@@ -1058,7 +1050,10 @@ void runGameFind(void )
 		lastupdate = gameTime;
 		if(safeSearch)
 		{
-			NETfindGame();						// find games synchronously
+			if (!NETfindGame())						// find games synchronously
+			{
+				pie_LoadBackDrop(SCREEN_RANDOMBDROP);
+			}
 		}
 		addGames();									//redraw list
 		addConsoleBox();
@@ -1074,7 +1069,10 @@ void runGameFind(void )
 	if(id == MULTIOP_REFRESH)
 	{
 		ingame.localOptionsReceived = true;
-		NETfindGame();								// find games synchronously
+		if (!NETfindGame())							// find games synchronously
+		{
+			pie_LoadBackDrop(SCREEN_RANDOMBDROP);
+		}
 		addGames();									//redraw list.
 		addConsoleBox();
 	}
@@ -1199,7 +1197,10 @@ void startGameFind(void)
 		widgHide(psWScreen, MULTIOP_REFRESH);
 	}
 
-	NETfindGame();
+	if (!NETfindGame())
+	{
+		pie_LoadBackDrop(SCREEN_RANDOMBDROP);
+	}
 	addGames();	// now add games.
 	addConsoleBox();
 	displayConsoleMessages();
@@ -1275,7 +1276,7 @@ static void hidePasswordForm(void)
 	widgReveal(psWScreen, CON_CANCEL);
 	if (!safeSearch && (!disableLobbyRefresh))
 	{
-		widgReveal(psWScreen, MULTIOP_REFRESH);
+		if (widgGetFromID(psWScreen, MULTIOP_REFRESH)) widgReveal(psWScreen, MULTIOP_REFRESH);
 	}
 	addGames();
 	addConsoleBox();
@@ -1420,15 +1421,21 @@ static void addGameOptions()
 		widgSetButtonState(psWScreen, MULTIOP_MAP_ICON, WBUT_DISABLE);
 	}
 	// password box
-	addMultiEditBox(MULTIOP_OPTIONS, MULTIOP_PASSWORD_EDIT  , MCOL0, MROW4, _("Click to set Password"), NetPlay.gamePassword, IMAGE_UNLOCK_BLUE, IMAGE_LOCK_BLUE , MULTIOP_PASSWORD_BUT);
-	// disable for one-player skirmish
-	if (!NetPlay.bComms)
+	if (NetPlay.GamePassworded && ingame.bHostSetup && bHosted)
 	{
+		// FIXME: we can't force the state down (it gets reset), so we must handle it this way for now
+		addMultiEditBox(MULTIOP_OPTIONS, MULTIOP_PASSWORD_EDIT, MCOL0, MROW4, _("Password is already set!"), NetPlay.gamePassword, IMAGE_LOCK_BLUE, IMAGE_LOCK_BLUE, MULTIOP_PASSWORD_BUT);
+		// force the state down if a locked game
+		widgSetButtonState(psWScreen, MULTIOP_PASSWORD_BUT, WBUT_LOCK);
 		widgSetButtonState(psWScreen, MULTIOP_PASSWORD_EDIT, WEDBS_DISABLE);
-		widgSetButtonState(psWScreen, MULTIOP_PASSWORD_BUT, WBUT_DISABLE);
 	}
-	// buttons.
+	else if (ingame.bHostSetup && !bHosted && NetPlay.bComms)
+	{
+		// only show this when we are not hosting a game
+		addMultiEditBox(MULTIOP_OPTIONS, MULTIOP_PASSWORD_EDIT, MCOL0, MROW4, _("Click to set Password"), NetPlay.gamePassword, IMAGE_UNLOCK_BLUE, IMAGE_LOCK_BLUE, MULTIOP_PASSWORD_BUT);
+	}
 
+	// buttons
 	// game type
 	addBlueForm(MULTIOP_OPTIONS,MULTIOP_GAMETYPE,_("Scavengers"),MCOL0,MROW5,MULTIOP_BLUEFORMW,27);
 	addMultiBut(psWScreen, MULTIOP_GAMETYPE, MULTIOP_CAMPAIGN, MCOL2, 2, MULTIOP_BUTW, MULTIOP_BUTH, _("Scavengers"),
@@ -2584,10 +2591,9 @@ static void disableMultiButs(void)
 	if (NetPlay.GamePassworded)
 	{
 		// force the state down if a locked game
-		// FIXME: It don't seem to be locking it into the 2nd state?
 		widgSetButtonState(psWScreen, MULTIOP_PASSWORD_BUT, WBUT_LOCK);
+		widgSetButtonState(psWScreen, MULTIOP_PASSWORD_BUT, WBUT_DISABLE);
 	}
-	widgSetButtonState(psWScreen, MULTIOP_PASSWORD_BUT, WBUT_DISABLE);
 
 	// edit boxes
 	widgSetButtonState(psWScreen,MULTIOP_GNAME,WEDBS_DISABLE);
@@ -3490,13 +3496,15 @@ void runMultiOptions(void)
 	char			str[3];
 
 	frontendMultiMessages();
-
-	for (i = 0; i < MAX_PLAYERS; i++)
+	if (NetPlay.isHost)
 	{
-		// send it for each player that needs it
-		if (NetPlay.players[i].wzFile.isSending)
+		for (i = 0; i < MAX_PLAYERS; i++)
 		{
-			sendMap();
+			// send it for each player that needs it
+			if (NetPlay.players[i].wzFile.isSending)
+			{
+				sendMap();
+			}
 		}
 	}
 
@@ -3633,6 +3641,11 @@ void runMultiOptions(void)
 	if (CancelPressed())
 	{
 		processMultiopWidgets(CON_CANCEL);  // "Press" the cancel button to clean up net connections and stuff.
+	}
+	if (!NetPlay.isHostAlive && !ingame.bHostSetup)
+	{
+		changeTitleMode(GAMEFIND);
+		screen_RestartBackDrop();
 	}
 }
 
@@ -3816,35 +3829,41 @@ void displayRemoteGame(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGH
 	//draw game info
 	iV_SetFont(font_regular);
 
+	int lamp = IMAGE_LAMP_RED;
+	int statusStart = IMAGE_NOJOIN;
+	bool disableButton = true;
+	iV_SetTextColour(WZCOL_TEXT_DARK);
+
 	// As long as they got room, and mods are the same then we proccess the button(s) 
-	if ((NetPlay.games[gameID].desc.dwCurrentPlayers == NetPlay.games[gameID].desc.dwMaxPlayers)
-		|| strcmp(NetPlay.games[gameID].modlist, getModList()) != 0 )
+	if (NETisCorrectVersion(NetPlay.games[gameID].game_version_major, NetPlay.games[gameID].game_version_minor))
 	{
-		// FIXME: We should really use another way to indicate that the game is full other than our current big fat X.
-		// If game is full or wrong mod loaded
-		iV_SetTextColour(WZCOL_TEXT_DARK);
-		iV_DrawImage(FrontImages, IMAGE_NO, x + GAMES_STATUS_START, y + 3);
-		iV_DrawImage(FrontImages, IMAGE_LAMP_RED, x - 14, y + 8);
-		widgSetButtonState(psWScreen, psWidget->id, WBUT_DISABLE);
-	}
-	else if (NETisCorrectVersion(NetPlay.games[gameID].game_version_major, NetPlay.games[gameID].game_version_minor))
-	{
-
-		iV_SetTextColour(WZCOL_FORM_TEXT);
-		ssprintf(tmp, "%d/%d", NetPlay.games[gameID].desc.dwCurrentPlayers, NetPlay.games[gameID].desc.dwMaxPlayers);
-		iV_DrawText(tmp, x + GAMES_PLAYERS_START + 4 , y + 18);
-
-		//draw type overlay.
-		if (NetPlay.games[gameID].privateGame)	// check to see if it is a private game
+		if (strcmp(NetPlay.games[gameID].modlist, getModList()) != 0)
 		{
-			iV_DrawImage(FrontImages, IMAGE_LOCKED_NOBG, x + GAMES_STATUS_START, y + 3);
-			iV_DrawImage(FrontImages, IMAGE_LAMP_AMBER, x - 14, y + 8);
+			// If wrong mod loaded.
+			statusStart = IMAGE_NOJOIN_MOD;
+		}
+		else if (NetPlay.games[gameID].desc.dwCurrentPlayers >= NetPlay.games[gameID].desc.dwMaxPlayers)
+		{
+			// If game is full.
+			statusStart = IMAGE_NOJOIN_FULL;
 		}
 		else
-		{	// "Normal" game, not private.
-			iV_DrawImage(FrontImages, IMAGE_SKIRMISH_OVER, x + GAMES_STATUS_START, y + 3);
-			iV_DrawImage(FrontImages, IMAGE_LAMP_GREEN, x - 14, y + 8);
+		{
+			// Game is ok to join!
+			iV_SetTextColour(WZCOL_FORM_TEXT);
+			lamp = IMAGE_LAMP_GREEN;
+			statusStart = IMAGE_SKIRMISH_OVER;
+			disableButton = false;
+
+			if (NetPlay.games[gameID].privateGame)  // check to see if it is a private game
+			{
+				statusStart = IMAGE_LOCKED_NOBG;
+				lamp = IMAGE_LAMP_AMBER;
+			}
 		}
+
+		ssprintf(tmp, "%d/%d", NetPlay.games[gameID].desc.dwCurrentPlayers, NetPlay.games[gameID].desc.dwMaxPlayers);
+		iV_DrawText(tmp, x + GAMES_PLAYERS_START + 4 , y + 18);
 
 		// see what host limits are... then draw them.
 		if (NetPlay.games[gameID].limits)
@@ -3855,14 +3874,13 @@ void displayRemoteGame(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGH
 				iV_DrawImage(FrontImages, IMAGE_NO_CYBORG, x + GAMES_STATUS_START + (37 * 2), y + 2);
 			if(NetPlay.games[gameID].limits & NO_VTOLS)
 				iV_DrawImage(FrontImages, IMAGE_NO_VTOL, x + GAMES_STATUS_START + (37 * 3) , y + 2);
-		}	
+		}
 	}
-	else
-	{	//don't allow people to join games frome a different version of the game.
-		// FIXME: Need a 'Wrong version' icon
-		iV_SetTextColour(WZCOL_TEXT_DARK);
-		iV_DrawImage(FrontImages, IMAGE_NOJOIN, x + GAMES_STATUS_START + 42, y + 6 );
-		iV_DrawImage(FrontImages, IMAGE_LAMP_RED, x - 14, y + 8);
+	// Draw type overlay.
+	iV_DrawImage(FrontImages, statusStart, x + GAMES_STATUS_START, y + 3);
+	iV_DrawImage(FrontImages, lamp, x - 14, y + 8);
+	if (disableButton)
+	{
 		widgSetButtonState(psWScreen, psWidget->id, WBUT_DISABLE);
 	}
 

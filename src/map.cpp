@@ -1643,6 +1643,7 @@ static const Vector2i aDirOffset[] =
 };
 
 // Flood fill a "continent".
+// TODO take into account scroll limits and update continents on scroll limit changes
 static void mapFloodFill(int x, int y, int continent, uint8_t blockedBits, uint16_t MAPTILE::*varContinent)
 {
 	std::vector<Vector2i> open;
@@ -1661,7 +1662,7 @@ static void mapFloodFill(int x, int y, int continent, uint8_t blockedBits, uint1
 			// rely on the fact that all border tiles are inaccessible to avoid checking explicitly
 			Vector2i npos = pos + aDirOffset[i];
 
-			if (!tileOnMap(npos))
+			if (npos.x < 1 || npos.y < 1 || npos.x > mapWidth - 2 || npos.y > mapHeight - 2)
 			{
 				continue;
 			}
@@ -1693,9 +1694,9 @@ void mapFloodFillContinents()
 	}
 
 	/* Iterate over the whole map, looking for unset continents */
-	for (y = 0; y < mapHeight; y++)
+	for (y = 1; y < mapHeight - 2; y++)
 	{
-		for (x = 0; x < mapWidth; x++)
+		for (x = 1; x < mapWidth - 2; x++)
 		{
 			MAPTILE *psTile = mapTile(x, y);
 
