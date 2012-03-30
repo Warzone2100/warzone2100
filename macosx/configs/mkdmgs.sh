@@ -105,7 +105,7 @@ fi
 cd ../../
 echo "Copying the app cleanly."
 rm -r -f $dmgout/Warzone.app
-if ! tar -c --exclude '*.svg' --exclude 'Makefile*' --exclude 'makefile*' --exclude '.DS_Store' -C "${CONFIGURATION_BUILD_DIR}" Warzone.app | tar -xC $dmgout; then
+if ! tar -c --exclude '*.svg' --exclude 'Makefile*' --exclude 'makefile*' --exclude '.DS_Store' --exclude '.MD5SumLoc' -C "${CONFIGURATION_BUILD_DIR}" Warzone.app | tar -xC $dmgout; then
 	echo "error: Unable to copy the app" >&2
 	exit 1
 fi
