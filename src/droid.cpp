@@ -242,44 +242,50 @@ int32_t droidDamage(DROID *psDroid, unsigned damage, WEAPON_CLASS weaponClass, W
 
 // Check that psVictimDroid is not referred to by any other object in the game. We can dump out some
 // extra data in debug builds that help track down sources of dangling pointer errors.
-#ifdef DEBUG
-#define DROIDREF(func, line) "Illegal reference to droid from %s line %d", func, line
-#else
-#define DROIDREF(func, line) "Illegal reference to droid"
-#endif
 bool droidCheckReferences(DROID *psVictimDroid)
 {
 	int plr;
 
 	for (plr = 0; plr < MAX_PLAYERS; plr++)
 	{
-		STRUCTURE *psStruct;
-		DROID *psDroid;
-
-		for (psStruct = apsStructLists[plr]; psStruct != NULL; psStruct = psStruct->psNext)
+		for (STRUCTURE *psStruct = apsStructLists[plr]; psStruct != NULL; psStruct = psStruct->psNext)
 		{
-			unsigned int i;
-
-			for (i = 0; i < psStruct->numWeaps; i++)
+			for (int i = 0; i < psStruct->numWeaps; i++)
 			{
-				ASSERT_OR_RETURN(false, (DROID *)psStruct->psTarget[i] != psVictimDroid, DROIDREF(psStruct->targetFunc[i], psStruct->targetLine[i]));
+				ASSERT_OR_RETURN(false, (DROID *)psStruct->psTarget[i] != psVictimDroid, "Illegal reference to droid from %s:%d", psStruct->targetFunc[i], psStruct->targetLine[i]);
 			}
 		}
-		for (psDroid = apsDroidLists[plr]; psDroid != NULL; psDroid = psDroid->psNext)
+		for (DROID *psDroid = apsDroidLists[plr]; psDroid != NULL; psDroid = psDroid->psNext)
 		{
-			unsigned int i;
-
-			ASSERT_OR_RETURN(false, psDroid->order.psObj != psVictimDroid || psVictimDroid == psDroid, DROIDREF(psDroid->targetFunc, psDroid->targetLine));
-			for (i = 0; i < psDroid->numWeaps; i++)
+			if (psDroid->order.psObj == psVictimDroid)
 			{
-				ASSERT_OR_RETURN(false, (DROID *)psDroid->psActionTarget[i] != psVictimDroid || psVictimDroid == psDroid, 
-				                 DROIDREF(psDroid->actionTargetFunc[i], psDroid->actionTargetLine[i]));
+				debug(LOG_DEATH, "Death cleanup is postponed for this unit %p, (id %d name %s), droid %p (id %d name %s) still has orders concerning it! (%s:%d) ", psVictimDroid, psVictimDroid->id, psVictimDroid->aName,
+					psDroid, psDroid->id, psDroid->aName, psDroid->targetFunc, psDroid->targetLine);
+				return false;
+			}
+			if (psVictimDroid != psDroid)
+			{
+				debug(LOG_DEATH, "Death cleanup is postponed for this unit %p, (id %d name %s), we are still in primary list.", psVictimDroid, psVictimDroid->id, psVictimDroid->aName);
+				return false;
+			}
+			for (int i = 0; i < psDroid->numWeaps; i++)
+			{
+				if (psDroid->psActionTarget[i] == psVictimDroid)
+				{
+					debug(LOG_DEATH, "Death cleanup is postponed for this unit %p, (id %d name %s), droid %p (id %d name %s) still has actions concerning it! (%s:%d)", psVictimDroid, psVictimDroid->id, psVictimDroid->aName,
+						psDroid, psDroid->id, psDroid->aName, psDroid->actionTargetFunc[i], psDroid->actionTargetLine[i]);
+					return false;
+				}
+				if (psVictimDroid != psDroid)
+				{
+					debug(LOG_DEATH, "Death cleanup is postponed for this unit %p, (id %d name %s), we are still in primary list.", psVictimDroid, psVictimDroid->id, psVictimDroid->aName);
+					return false;
+				}
 			}
 		}
 	}
 	return true;
 }
-#undef DROIDREF
 
 DROID::DROID(uint32_t id, unsigned player)
 	: BASE_OBJECT(OBJ_DROID, id, player)
