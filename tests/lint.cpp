@@ -388,6 +388,18 @@ static QScriptValue js_removeStruct(QScriptContext *context, QScriptEngine *)
 {
 	ARG_COUNT_EXACT(1);
 	ARG_STRUCT(0);
+	fprintf(stderr, "removeStruct() is deprecated since version 3.2");
+	return QScriptValue(true);
+}
+
+static QScriptValue js_removeObject(QScriptContext *context, QScriptEngine *)
+{
+	ARG_COUNT_VAR(1, 2);
+	ARG_OBJ(0);
+	if (context->argumentCount() > 1)
+	{
+		ARG_BOOL(1);
+	}
 	return QScriptValue(true);
 }
 
@@ -626,6 +638,13 @@ static QScriptValue js_applyLimitSet(QScriptContext *context, QScriptEngine *eng
 	return QScriptValue();
 }
 
+static QScriptValue js_enableTemplate(QScriptContext *context, QScriptEngine *engine)
+{
+	ARG_COUNT_EXACT(1);
+	ARG_STRING(0);
+	return QScriptValue();
+}
+
 static QScriptValue js_enableComponent(QScriptContext *context, QScriptEngine *engine)
 {
 	ARG_COUNT_EXACT(2);
@@ -858,6 +877,15 @@ static QScriptValue js_isVTOL(QScriptContext *context, QScriptEngine *engine)
 	return QScriptValue(true);
 }
 
+static QScriptValue js_setAlliance(QScriptContext *context, QScriptEngine *engine)
+{
+	ARG_COUNT_EXACT(3);
+	ARG_PLAYER(0);
+	ARG_PLAYER(1);
+	ARG_BOOL(2);
+	return QScriptValue(true);
+}
+
 bool testPlayerScript(QString path, int player, int difficulty)
 {
 	QScriptEngine *engine = new QScriptEngine();
@@ -957,13 +985,16 @@ bool testPlayerScript(QString path, int player, int difficulty)
 	engine->globalObject().setProperty("enableStructure", engine->newFunction(js_enableStructure));
 	engine->globalObject().setProperty("makeComponentAvailable", engine->newFunction(js_makeComponentAvailable));
 	engine->globalObject().setProperty("enableComponent", engine->newFunction(js_enableComponent));
+	engine->globalObject().setProperty("enableTemplate", engine->newFunction(js_enableTemplate));
 	engine->globalObject().setProperty("allianceExistsBetween", engine->newFunction(js_allianceExistsBetween));
 	engine->globalObject().setProperty("removeStruct", engine->newFunction(js_removeStruct));
+	engine->globalObject().setProperty("removeObject", engine->newFunction(js_removeObject));
 	engine->globalObject().setProperty("setScrollParams", engine->newFunction(js_setScrollParams));
 	engine->globalObject().setProperty("addStructure", engine->newFunction(js_addStructure));
 	engine->globalObject().setProperty("loadLevel", engine->newFunction(js_loadLevel));
 	engine->globalObject().setProperty("setDroidExperience", engine->newFunction(js_setDroidExperience));
 	engine->globalObject().setProperty("setNoGoArea", engine->newFunction(js_setNoGoArea));
+	engine->globalObject().setProperty("setAlliance", engine->newFunction(js_setAlliance));
 
 	// Set some useful constants
 	engine->globalObject().setProperty("DORDER_ATTACK", 0, QScriptValue::ReadOnly | QScriptValue::Undeletable);

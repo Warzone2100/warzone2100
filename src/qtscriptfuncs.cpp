@@ -46,6 +46,7 @@
 #include "challenge.h"
 #include "research.h"
 #include "multilimit.h"
+#include "multigifts.h"
 #include "template.h"
 #include "lighting.h"
 #include "radar.h"
@@ -2369,6 +2370,24 @@ static QScriptValue js_chat(QScriptContext *context, QScriptEngine *engine)
 	}
 }
 
+//-- \subsection{setAlliance(player1, player2, value)}
+//-- Set alliance status between two players to either true or false. (3.2+ only)
+static QScriptValue js_setAlliance(QScriptContext *context, QScriptEngine *engine)
+{
+	int player1 = context->argument(0).toInt32();
+	int player2 = context->argument(1).toInt32();
+	bool value = context->argument(2).toBool();
+	if (value)
+	{
+		formAlliance(player1, player2, true, false, true);
+	}
+	else
+	{
+		breakAlliance(player1, player2, true, true);
+	}
+	return QScriptValue(true);
+}
+
 //-- \subsection{hackNetOff()}
 //-- Turn off network transmissions. FIXME - find a better way.
 static QScriptValue js_hackNetOff(QScriptContext *, QScriptEngine *)
@@ -2397,6 +2416,7 @@ bool registerFunctions(QScriptEngine *engine)
 	engine->globalObject().setProperty("label", engine->newFunction(js_label));
 	engine->globalObject().setProperty("enumLabels", engine->newFunction(js_enumLabels));
 	engine->globalObject().setProperty("enumGateways", engine->newFunction(js_enumGateways));
+	engine->globalObject().setProperty("setAlliance", engine->newFunction(js_setAlliance));
 
 	// horrible hacks follow -- do not rely on these being present!
 	engine->globalObject().setProperty("hackNetOff", engine->newFunction(js_hackNetOff));
