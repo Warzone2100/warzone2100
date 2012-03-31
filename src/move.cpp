@@ -1472,11 +1472,8 @@ static void moveUpdateDroidDirection(DROID *psDroid, SDWORD *pSpeed, uint16_t di
 // Calculate current speed perpendicular to droids direction
 static int moveCalcPerpSpeed(DROID *psDroid, uint16_t iDroidDir, SDWORD iSkidDecel)
 {
-	uint16_t        adiff;
-	int		perpSpeed;
-
-	adiff = angleDelta(iDroidDir - psDroid->sMove.moveDir);
-	perpSpeed = iSinR(adiff, psDroid->sMove.speed);
+	int adiff = angleDelta(iDroidDir - psDroid->sMove.moveDir);
+	int perpSpeed = iSinR(abs(adiff), psDroid->sMove.speed);
 
 	// decelerate the perpendicular speed
 	perpSpeed = MAX(0, perpSpeed - gameTimeAdjustedAverage(iSkidDecel));
