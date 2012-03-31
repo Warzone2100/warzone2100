@@ -38,7 +38,7 @@ private:
 	uint32_t state[624];  ///< 19937 bit state, rounded up to next 32 bits.
 };
 
-/// Seeds the random number generator. TODO The seed should be sent over the network, so that all clients generate the same number sequence.
+/// Seeds the random number generator. The seed is sent over the network, such that all clients generate the same number sequence, without the number sequence being the same each game.
 void gameSRand(uint32_t seed);
 
 /// Generates a random number in the interval [0...UINT32_MAX].
