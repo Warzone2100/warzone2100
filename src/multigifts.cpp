@@ -79,6 +79,13 @@ bool recvGift(NETQUEUE queue)
 		NETuint32_t(&droidID);
 	NETend();
 
+	if (!canGiveOrdersFor(queue.index, from))
+	{
+		debug(LOG_WARNING, "Gift from wrong player.");
+		syncDebug("Wrong player.");
+		return false;
+	}
+
 	// Handle the gift depending on what it is
 	switch (type)
 	{
@@ -489,6 +496,11 @@ bool recvAlliance(NETQUEUE queue, bool allowAudio)
 		NETuint8_t(&state);
 		NETint32_t(&value);
 	NETend();
+
+	if (!canGiveOrdersFor(queue.index, from))
+	{
+		return false;
+	}
 
 	switch (state)
 	{

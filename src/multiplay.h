@@ -153,6 +153,7 @@ extern bool isHumanPlayer(int player);				//to tell if the player is a computer 
 extern bool myResponsibility(int player);
 extern bool responsibleFor(int player, int playerinquestion);
 extern int whosResponsible(int player);
+bool canGiveOrdersFor(int player, int playerInQuestion);
 int scavengerSlot();    // Returns the player number that scavengers would have if they were enabled.
 int scavengerPlayer();  // Returns the player number that the scavengers have, or -1 if disabled.
 extern Vector3i cameraToHome		(UDWORD player,bool scroll);

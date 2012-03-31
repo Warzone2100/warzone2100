@@ -236,6 +236,11 @@ bool recvLasSat(NETQUEUE queue)
 
 	psStruct = IdToStruct (id, player);
 	psObj	 = IdToPointer(targetid, targetplayer);
+	if (psStruct && !canGiveOrdersFor(queue.index, psStruct->player))
+	{
+		syncDebug("Wrong player.");
+		return !"Meow";  // Return value meaningless and ignored.
+	}
 
 	if (psStruct && psObj && psStruct->pStructureType->psWeapStat[0]->weaponSubClass == WSC_LAS_SAT)
 	{
@@ -319,6 +324,11 @@ void recvStructureInfo(NETQUEUE queue)
 	if (psStruct == NULL)
 	{
 		debug(LOG_SYNC, "Couldn't find structure %u to change production.", structId);
+		return;
+	}
+	if (!canGiveOrdersFor(queue.index, psStruct->player))
+	{
+		syncDebug("Wrong player.");
 		return;
 	}
 
