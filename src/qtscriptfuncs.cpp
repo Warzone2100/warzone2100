@@ -2407,6 +2407,24 @@ static QScriptValue js_setAlliance(QScriptContext *context, QScriptEngine *engin
 	return QScriptValue(true);
 }
 
+//-- \subsection{setAssemblyPoint(structure, x, y)}
+//-- Set the assembly point droids go to when built for the specified structure. (3.2+ only)
+static QScriptValue js_setAssemblyPoint(QScriptContext *context, QScriptEngine *engine)
+{
+	QScriptValue structVal = context->argument(0);
+	int id = structVal.property("id").toInt32();
+	int player = structVal.property("player").toInt32();
+	STRUCTURE *psStruct = IdToStruct(id, player);
+	SCRIPT_ASSERT(context, psStruct, "No such structure id %d belonging to player %d", id, player);
+	int x = context->argument(1).toInt32();
+	int y = context->argument(2).toInt32();
+	SCRIPT_ASSERT(context, psStruct->pStructureType->type == REF_FACTORY
+	                       || psStruct->pStructureType->type == REF_CYBORG_FACTORY
+	                       || psStruct->pStructureType->type == REF_VTOL_FACTORY, "Structure not a factory");
+	setAssemblyPoint(((FACTORY *)psStruct->pFunctionality)->psAssemblyPoint, x, y, player, true);
+	return QScriptValue(true);
+}
+
 //-- \subsection{hackNetOff()}
 //-- Turn off network transmissions. FIXME - find a better way.
 static QScriptValue js_hackNetOff(QScriptContext *, QScriptEngine *)
@@ -2436,6 +2454,7 @@ bool registerFunctions(QScriptEngine *engine)
 	engine->globalObject().setProperty("enumLabels", engine->newFunction(js_enumLabels));
 	engine->globalObject().setProperty("enumGateways", engine->newFunction(js_enumGateways));
 	engine->globalObject().setProperty("setAlliance", engine->newFunction(js_setAlliance));
+	engine->globalObject().setProperty("setAssemblyPoint", engine->newFunction(js_setAssemblyPoint));
 
 	// horrible hacks follow -- do not rely on these being present!
 	engine->globalObject().setProperty("hackNetOff", engine->newFunction(js_hackNetOff));

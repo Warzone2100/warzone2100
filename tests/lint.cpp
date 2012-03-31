@@ -892,6 +892,15 @@ static QScriptValue js_setAlliance(QScriptContext *context, QScriptEngine *engin
 	return QScriptValue(true);
 }
 
+static QScriptValue js_setAssemblyPoint(QScriptContext *context, QScriptEngine *engine)
+{
+	ARG_COUNT_EXACT(3);
+	ARG_STRUCT(0);
+	ARG_NUMBER(1);
+	ARG_NUMBER(2);
+	return QScriptValue(true);
+}
+
 bool testPlayerScript(QString path, int player, int difficulty)
 {
 	QScriptEngine *engine = new QScriptEngine();
@@ -1002,6 +1011,7 @@ bool testPlayerScript(QString path, int player, int difficulty)
 	engine->globalObject().setProperty("setDroidExperience", engine->newFunction(js_setDroidExperience));
 	engine->globalObject().setProperty("setNoGoArea", engine->newFunction(js_setNoGoArea));
 	engine->globalObject().setProperty("setAlliance", engine->newFunction(js_setAlliance));
+	engine->globalObject().setProperty("setAssemblyPoint", engine->newFunction(js_setAssemblyPoint));
 
 	// Set some useful constants
 	engine->globalObject().setProperty("DORDER_ATTACK", 0, QScriptValue::ReadOnly | QScriptValue::Undeletable);
