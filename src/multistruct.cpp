@@ -163,7 +163,6 @@ bool recvBuildFinished(NETQUEUE queue)
 // Inform others that a structure has been destroyed
 bool SendDestroyStructure(STRUCTURE *s)
 {
-	technologyGiveAway(s);
 	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_DEBUG_REMOVE_STRUCTURE);
 
 	// Struct to destroy

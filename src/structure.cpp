@@ -4642,6 +4642,8 @@ bool destroyStruct(STRUCTURE *psDel, unsigned impactTime)
 
 	CHECK_STRUCTURE(psDel);
 
+	technologyGiveAway(psDel);  // Drop an artefact, if applicable.
+
 	/* Firstly, are we dealing with a wall section */
 	const bool bMinor = psDel->pStructureType->type == REF_WALL || psDel->pStructureType->type == REF_WALLCORNER;
 	const bool bDerrick = psDel->pStructureType->type == REF_RESOURCE_EXTRACTOR;

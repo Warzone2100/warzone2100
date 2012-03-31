@@ -35,8 +35,6 @@ extern bool sendGift			(uint8_t type, uint8_t to);
 extern bool recvGift                            (NETQUEUE queue);
 
 extern void technologyGiveAway				(const STRUCTURE* pS);
-extern void recvMultiPlayerRandomArtifacts      (NETQUEUE queue);
-extern void addMultiPlayerRandomArtifacts	(uint8_t quantity, FEATURE_TYPE type);
 extern void recvMultiPlayerFeature              (NETQUEUE queue);
 extern void sendMultiPlayerFeature(FEATURE_TYPE type, uint32_t x, uint32_t y, uint32_t id);
 

@@ -718,9 +718,6 @@ bool recvMessage(void)
 				startMultiplayerGame();
 			}
 			break;
-		case GAME_ARTIFACTS:
-			recvMultiPlayerRandomArtifacts(queue);
-			break;
 		case GAME_ALLIANCE:
 			recvAlliance(queue, true);
 			break;
