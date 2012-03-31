@@ -1092,6 +1092,8 @@ bool testPlayerScript(QString path, int player, int difficulty)
 		vector.setProperty("colour", 0, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 		vector.setProperty("position", i, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 		vector.setProperty("team", i, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+		vector.setProperty("isAI", i != 0, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+		vector.setProperty("isHuman", i == 0, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 		playerData.setProperty(i, vector, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	}
 	engine->globalObject().setProperty("playerData", playerData, QScriptValue::ReadOnly | QScriptValue::Undeletable);
