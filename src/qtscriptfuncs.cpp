@@ -1458,6 +1458,7 @@ static QScriptValue js_structureIdle(QScriptContext *context, QScriptEngine *)
 
 //-- \subsection{removeStruct(structure)}
 //-- Immediately remove the given structure from the map. Returns a boolean that is true on success.
+//-- No special effects are applied. Deprecated since 3.2.
 static QScriptValue js_removeStruct(QScriptContext *context, QScriptEngine *)
 {
 	QScriptValue structVal = context->argument(0);
@@ -1466,6 +1467,45 @@ static QScriptValue js_removeStruct(QScriptContext *context, QScriptEngine *)
 	STRUCTURE *psStruct = IdToStruct(id, player);
 	SCRIPT_ASSERT(context, psStruct, "No such structure id %d belonging to player %d", id, player);
 	return QScriptValue(removeStruct(psStruct, true));
+}
+
+//-- \subsection{removeObject(game object[, special effects?])}
+//-- Remove the given game object with special effects. Returns a boolean that is true on success.
+//-- A second, optional boolean parameter specifies whether special effects are to be applied. (3.2+ only)
+static QScriptValue js_removeObject(QScriptContext *context, QScriptEngine *)
+{
+	QScriptValue structVal = context->argument(0);
+	int id = structVal.property("id").toInt32();
+	int player = structVal.property("player").toInt32();
+	BASE_OBJECT *psObj = IdToPointer(id, player);
+	SCRIPT_ASSERT(context, psObj, "Object id %d not found belonging to player %d", id, player);
+	bool sfx = false;
+	if (context->argumentCount() > 1)
+	{
+		sfx = context->argument(1).toBool();
+	}
+	bool retval = false;
+	if (sfx)
+	{
+		switch (psObj->type)
+		{
+		case OBJ_STRUCTURE: destroyStruct((STRUCTURE *)psObj, gameTime); break;
+		case OBJ_DROID: retval = destroyDroid((DROID *)psObj, gameTime); break;
+		case OBJ_FEATURE: retval = destroyFeature((FEATURE *)psObj, gameTime); break;
+		default: SCRIPT_ASSERT(context, false, "Wrong game object type"); break;
+		}
+	}
+	else
+	{
+		switch (psObj->type)
+		{
+		case OBJ_STRUCTURE: retval = removeStruct((STRUCTURE *)psObj, true); break;
+		case OBJ_DROID: retval = removeDroidBase((DROID *)psObj); break;
+		case OBJ_FEATURE: retval = removeFeature((FEATURE *)psObj); break;
+		default: SCRIPT_ASSERT(context, false, "Wrong game object type"); break;
+		}
+	}
+	return QScriptValue(retval);
 }
 
 //-- \subsection{console(strings...)}
@@ -2423,6 +2463,7 @@ bool registerFunctions(QScriptEngine *engine)
 	engine->globalObject().setProperty("enableComponent", engine->newFunction(js_enableComponent));
 	engine->globalObject().setProperty("allianceExistsBetween", engine->newFunction(js_allianceExistsBetween));
 	engine->globalObject().setProperty("removeStruct", engine->newFunction(js_removeStruct));
+	engine->globalObject().setProperty("removeObject", engine->newFunction(js_removeObject));
 	engine->globalObject().setProperty("setScrollParams", engine->newFunction(js_setScrollParams));
 	engine->globalObject().setProperty("addStructure", engine->newFunction(js_addStructure));
 	engine->globalObject().setProperty("loadLevel", engine->newFunction(js_loadLevel));

@@ -77,7 +77,7 @@ extern UWORD	aDroidExperience[MAX_PLAYERS][MAX_RECYCLED_DROIDS];
 // initialise droid module
 extern bool droidInit(void);
 
-extern void removeDroidBase(DROID *psDel);
+bool removeDroidBase(DROID *psDel);
 
 extern bool loadDroidWeapons(const char *pWeaponData, UDWORD bufferSize);
 
@@ -173,7 +173,7 @@ extern bool droidUpdateRestore( DROID *psDroid );
 extern void recycleDroid(DROID *psDel);
 
 /* Remove a droid and free it's memory */
-void destroyDroid(DROID *psDel, unsigned impactTime);
+bool destroyDroid(DROID *psDel, unsigned impactTime);
 
 /* Same as destroy droid except no graphical effects */
 extern void	vanishDroid(DROID *psDel);

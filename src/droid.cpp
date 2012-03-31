@@ -395,7 +395,7 @@ void recycleDroid(DROID *psDroid)
 }
 
 
-void	removeDroidBase(DROID *psDel)
+bool removeDroidBase(DROID *psDel)
 {
 	DROID	*psCurr, *psNext;
 	STRUCTURE	*psStruct;
@@ -405,7 +405,7 @@ void	removeDroidBase(DROID *psDel)
 	if (isDead((BASE_OBJECT *)psDel))
 	{
 		// droid has already been killed, quit
-		return;
+		return true;
 	}
 
 	syncDebugDroid(psDel, '#');
@@ -499,6 +499,7 @@ void	removeDroidBase(DROID *psDel)
 	}
 
 	killDroid(psDel);
+	return true;
 }
 
 static void removeDroidFX(DROID *psDel, unsigned impactTime)
@@ -538,7 +539,7 @@ static void removeDroidFX(DROID *psDel, unsigned impactTime)
 	}
 }
 
-void destroyDroid(DROID *psDel, unsigned impactTime)
+bool destroyDroid(DROID *psDel, unsigned impactTime)
 {
 	if (psDel->lastHitWeapon == WSC_LAS_SAT)		// darken tile if lassat.
 	{
@@ -563,7 +564,7 @@ void destroyDroid(DROID *psDel, unsigned impactTime)
 	removeDroidFX(psDel, impactTime);
 	removeDroidBase(psDel);
 	psDel->died = impactTime;
-	return;
+	return true;
 }
 
 void	vanishDroid(DROID *psDel)

@@ -118,7 +118,7 @@ function eventGameInit()
 				    || (s.stattype != WALL && s.stattype != DEFENSE && s.stattype != GATE
 				        && s.stattype != RESOURCE_EXTRACTOR))
 				{
-					removeStruct(s);
+					removeObject(s, false);
 				}
 			}
 		}
@@ -137,7 +137,7 @@ function eventGameInit()
 				if ((playerData[playnum].difficulty != INSANE && (s.stattype == WALL || s.stattype == DEFENSE))
 				    || s.stattype == GATE || s.stattype == CYBORG_FACTORY || s.stattype == COMMAND_CONTROL)
 				{
-					removeStruct(s);
+					removeObject(s, false);
 				}
 			}
 		}
