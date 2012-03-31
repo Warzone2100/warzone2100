@@ -849,6 +849,25 @@ static QScriptValue js_componentAvailable(QScriptContext *context, QScriptEngine
 	return QScriptValue(avail);
 }
 
+//-- \subsection{addFeature(x, y, name)}
+//-- Create and place a feature at the given x, y position. Will cause a desync in multiplayer.
+//-- Returns the created game object on success, null otherwise. (3.2+ only)
+static QScriptValue js_addFeature(QScriptContext *context, QScriptEngine *engine)
+{
+	int x = context->argument(0).toInt32();
+	int y = context->argument(1).toInt32();
+	QString featName = context->argument(2).toString();
+	int feature = getFeatureStatFromName(featName.toUtf8().constData());
+	FEATURE_STATS *psStats = &asFeatureStats[feature];
+	for (FEATURE *psFeat = apsFeatureLists[0]; psFeat; psFeat = psFeat->psNext)
+	{
+		SCRIPT_ASSERT(context, map_coord(psFeat->pos.x) != x || map_coord(psFeat->pos.y) != y, 
+		              "Building feature on tile already occupied");
+		return QScriptValue::NullValue;
+	}
+	return convFeature(buildFeature(psStats, world_coord(x), world_coord(y), false), engine);
+}
+
 //-- \subsection{addDroid(player, x, y, name, body, propulsion, reserved, droid type, turrets...)}
 //-- Create and place a droid at the given x, y position as belonging to the given player, built with
 //-- the given components. Currently does not support placing droids in multiplayer, doing so will
@@ -2453,6 +2472,7 @@ bool registerFunctions(QScriptEngine *engine)
 	engine->globalObject().setProperty("orderDroid", engine->newFunction(js_orderDroid));
 	engine->globalObject().setProperty("buildDroid", engine->newFunction(js_buildDroid));
 	engine->globalObject().setProperty("addDroid", engine->newFunction(js_addDroid));
+	engine->globalObject().setProperty("addFeature", engine->newFunction(js_addFeature));
 	engine->globalObject().setProperty("componentAvailable", engine->newFunction(js_componentAvailable));
 	engine->globalObject().setProperty("isVTOL", engine->newFunction(js_isVTOL));
 	engine->globalObject().setProperty("safeDest", engine->newFunction(js_safeDest));

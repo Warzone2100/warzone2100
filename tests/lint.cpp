@@ -372,6 +372,12 @@ static QScriptValue js_addDroid(QScriptContext *context, QScriptEngine *engine)
 	return QScriptValue(true);
 }
 
+static QScriptValue js_addFeature(QScriptContext *context, QScriptEngine *engine)
+{
+	ARG_STRING(2);
+	return QScriptValue(convFeature(engine));
+}
+
 static QScriptValue js_debug(QScriptContext *context, QScriptEngine *engine)
 {
 	return QScriptValue();
@@ -958,6 +964,7 @@ bool testPlayerScript(QString path, int player, int difficulty)
 	engine->globalObject().setProperty("orderDroid", engine->newFunction(js_orderDroid));
 	engine->globalObject().setProperty("buildDroid", engine->newFunction(js_buildDroid));
 	engine->globalObject().setProperty("addDroid", engine->newFunction(js_addDroid));
+	engine->globalObject().setProperty("addFeature", engine->newFunction(js_addFeature));
 	engine->globalObject().setProperty("componentAvailable", engine->newFunction(js_componentAvailable));
 	engine->globalObject().setProperty("isVTOL", engine->newFunction(js_isVTOL));
 	engine->globalObject().setProperty("safeDest", engine->newFunction(js_safeDest));
