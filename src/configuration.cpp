@@ -73,7 +73,7 @@ bool loadConfig()
 	if (ini.contains("notexturecompression")) wz_texture_compression = GL_RGBA;
 	showFPS = ini.value("showFPS", false).toBool();
 	scroll_speed_accel = ini.value("scroll", DEFAULTSCROLL).toInt();
-	setShakeStatus(ini.value("shake", false).toBool());
+	setShakeStatus(ini.value("shake", true).toBool());
 	setDrawShadows(ini.value("shadows", true).toBool());
 	war_setSoundEnabled(ini.value("sound", true).toBool());
 	setInvertMouseStatus(ini.value("mouseflip", true).toBool());
