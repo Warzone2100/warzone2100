@@ -77,8 +77,6 @@
 #include "multiplay.h"
 #include "warzoneconfig.h"
 
-#define	SHAKE_TIME	(1500)
-
 struct	_dragBox dragBox3D,wallDrag;
 
 #define POSSIBLE_SELECTIONS		14
@@ -244,7 +242,7 @@ void	setShakeStatus( bool val )
 }
 
 
-void shakeStart(void)
+void shakeStart(unsigned int length)
 {
 	if(bShakingPermitted)
 	{
@@ -252,7 +250,7 @@ void shakeStart(void)
 		{
 			bScreenShakeActive = true;
 			screenShakeStarted = gameTime;
-			screenShakeLength = SHAKE_TIME;//1500;
+			screenShakeLength = length;
 		}
 	}
 }
@@ -270,17 +268,14 @@ static void shakeUpdate(void)
 	UDWORD	screenShakePercentage;
 
 	/* Check if we're shaking the screen or not */
-	if(bScreenShakeActive)
+	if (bScreenShakeActive)
 	{
-//		screenShakePercentage = (((gameTime-screenShakeStarted)<<8) / screenShakeLength) * 100;
-		screenShakePercentage = PERCENT(gameTime2-screenShakeStarted,screenShakeLength);
-//		screenShakePercentage = screenShakePercentage >> 8;
-
-		if(screenShakePercentage<100)
+		screenShakePercentage = PERCENT(gameTime-screenShakeStarted, screenShakeLength);
+		if (screenShakePercentage < 100)
 		{
 			player.r.z = 0 + DEG(screenShakeTable[screenShakePercentage]);
 		}
-		if(gameTime>(screenShakeStarted+screenShakeLength))
+		if (gameTime > (screenShakeStarted + screenShakeLength))
 		{
 			bScreenShakeActive = false;
 			player.r.z = 0;
@@ -288,7 +283,7 @@ static void shakeUpdate(void)
 	}
 	else
 	{
-		if(!getWarCamStatus())
+		if (!getWarCamStatus())
 		{
 			player.r.z = 0;
 		}
