@@ -529,7 +529,16 @@ bool recvAlliance(NETQUEUE queue, bool allowAudio)
 // add an artifact on destruction if required.
 void  technologyGiveAway(const STRUCTURE *pS)
 {
-	syncDebug("Adding artefact.");
+	// If a fully built factory (or with modules under construction) which is our responsibility got destroyed
+	if (pS->pStructureType->type == REF_FACTORY && (pS->status == SS_BUILT || pS->currentBuildPts >= pS->body))
+	{
+		syncDebug("Adding artefact.");
+	}
+	else
+	{
+		syncDebug("Not adding artefact.");
+		return;
+	}
 
 	int featureIndex;
 	for (featureIndex = 0; featureIndex < numFeatureStats && asFeatureStats[featureIndex].subType != FEAT_GEN_ARTE; ++featureIndex) {}
