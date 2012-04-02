@@ -5519,28 +5519,31 @@ bool writeTemplateFile(const char *pFileName)
 	}
 	for (int player = 0; player < MAX_PLAYERS; player++)
 	{
-		for (DROID_TEMPLATE *psCurr = apsDroidTemplates[player]; psCurr != NULL; psCurr = psCurr->psNext)
+		if (apsDroidLists[player] || apsStructLists[player])	// only write out templates of players that are still 'alive'
 		{
-			ini.beginGroup("template_" + QString::number(psCurr->multiPlayerID));
-			ini.setValue("name", psCurr->aName);
-			ini.setValue("ref", psCurr->ref);
-			ini.setValue("droidType", psCurr->droidType);
-			ini.setValue("multiPlayerID", psCurr->multiPlayerID);
-			setPlayer(ini, player);
-			ini.setValue("body", (asBodyStats + psCurr->asParts[COMP_BODY])->pName);
-			ini.setValue("propulsion", (asPropulsionStats + psCurr->asParts[COMP_PROPULSION])->pName);
-			ini.setValue("brain", (asBrainStats + psCurr->asParts[COMP_BRAIN])->pName);
-			ini.setValue("repair", (asRepairStats + psCurr->asParts[COMP_REPAIRUNIT])->pName);
-			ini.setValue("ecm", (asECMStats + psCurr->asParts[COMP_ECM])->pName);
-			ini.setValue("sensor", (asSensorStats + psCurr->asParts[COMP_SENSOR])->pName);
-			ini.setValue("construct", (asConstructStats + psCurr->asParts[COMP_CONSTRUCT])->pName);
-			ini.setValue("weapons", psCurr->numWeaps);
-			ini.setValue("enabled", psCurr->enabled);
-			for (int j = 0; j < psCurr->numWeaps; j++)
+			for (DROID_TEMPLATE *psCurr = apsDroidTemplates[player]; psCurr != NULL; psCurr = psCurr->psNext)
 			{
-				ini.setValue("weapon/" + QString::number(j + 1), (asWeaponStats + psCurr->asWeaps[j])->pName);
+				ini.beginGroup("template_" + QString::number(psCurr->multiPlayerID) + "_player" + QString::number(player));
+				ini.setValue("name", psCurr->aName);
+				ini.setValue("ref", psCurr->ref);
+				ini.setValue("droidType", psCurr->droidType);
+				ini.setValue("multiPlayerID", psCurr->multiPlayerID);
+				setPlayer(ini, player);
+				ini.setValue("body", (asBodyStats + psCurr->asParts[COMP_BODY])->pName);
+				ini.setValue("propulsion", (asPropulsionStats + psCurr->asParts[COMP_PROPULSION])->pName);
+				ini.setValue("brain", (asBrainStats + psCurr->asParts[COMP_BRAIN])->pName);
+				ini.setValue("repair", (asRepairStats + psCurr->asParts[COMP_REPAIRUNIT])->pName);
+				ini.setValue("ecm", (asECMStats + psCurr->asParts[COMP_ECM])->pName);
+				ini.setValue("sensor", (asSensorStats + psCurr->asParts[COMP_SENSOR])->pName);
+				ini.setValue("construct", (asConstructStats + psCurr->asParts[COMP_CONSTRUCT])->pName);
+				ini.setValue("weapons", psCurr->numWeaps);
+				ini.setValue("enabled", psCurr->enabled);
+				for (int j = 0; j < psCurr->numWeaps; j++)
+				{
+					ini.setValue("weapon/" + QString::number(j + 1), (asWeaponStats + psCurr->asWeaps[j])->pName);
+				}
+				ini.endGroup();
 			}
-			ini.endGroup();
 		}
 	}
 	return true;
