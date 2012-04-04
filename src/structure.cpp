@@ -4637,7 +4637,10 @@ bool destroyStruct(STRUCTURE *psDel, unsigned impactTime)
 
 	CHECK_STRUCTURE(psDel);
 
-	technologyGiveAway(psDel);  // Drop an artefact, if applicable.
+	if (bMultiPlayer)
+	{
+		technologyGiveAway(psDel);  // Drop an artefact, if applicable.
+	}
 
 	/* Firstly, are we dealing with a wall section */
 	const STRUCTURE_TYPE type = psDel->pStructureType->type;

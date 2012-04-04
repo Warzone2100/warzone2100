@@ -1500,6 +1500,7 @@ void displayImmediateMessage(MESSAGE *psMessage)
 	// remind the player that the message can be seen again from
 	// the intelligence screen
 	addConsoleMessage(_("New Intelligence Report"), CENTRE_JUSTIFY, SYSTEM_MESSAGE);
+	flashReticuleButton(IDRET_INTEL_MAP);
 }
 
 

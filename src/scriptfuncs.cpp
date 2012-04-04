@@ -1524,7 +1524,9 @@ bool scrAddMessage(void)
 		if (playImmediate)
 		{
 			displayImmediateMessage(psMessage);
-			stopReticuleButtonFlash(IDRET_INTEL_MAP);
+			// FIXME: We should add some kind of check to see if the FMVs are available or not, and enable this based on that.
+			// If we want to inform user of a message, we shouldn't stop the flash right?
+			//stopReticuleButtonFlash(IDRET_INTEL_MAP);
 		}
 	}
 
