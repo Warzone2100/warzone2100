@@ -1079,6 +1079,9 @@ int NETshutdown(void)
 	{
 		NETremRedirects();
 	}
+
+	free(NetPlay.MOTD);
+
 	return 0;
 }
 
