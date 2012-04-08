@@ -3,7 +3,6 @@
  *
  */
 
-
 // the human player
 public	INT		player, power;
 
@@ -25,7 +24,7 @@ public	INT		droidsInBase;
 // the message when gamma base changes player
 public	INTMESSAGE		gammaMessage;
 public	SOUND			incomingSnd;
-public		SOUND		powTransSnd;
+public	SOUND			powTransSnd;
 
 public	INT		secondMissionTime;
 private	INT		count1, count2;
@@ -33,7 +32,6 @@ private	INT		gammaStrucTot, gammaStrucNow, gammaDroidTot, nexusStrucTot, nexusSt
 
 trigger killWait(CALL_VIDEO_QUIT);
 trigger nowTrig(wait, 0);
-//trigger trapTimedTrig(wait, 6000);	//10min delay after player has seen gamma base for auto trigger
 trigger trapTimedTrig(every, 25);	//check for gamma base losing
 trigger trapLZTrig((droidInArea(player, X1[0], Y1[0], X2[0], Y2[0])) or (droidInArea(player, X1[0], Y1[0], X2[0], Y2[0])), 20);
 
@@ -45,17 +43,13 @@ event start(CALL_GAMEINIT)
 {
 	// set the gamma base to the player colour
 	playerColour = getPlayerColour(player);
-    //store the old colour so we can reset it later
-    oldColour = getPlayerColour(enemy[1]);
-    //get the enemy colour
-    nexusColour = getPlayerColour(enemy[0]);
+	// store the old colour so we can reset it later
+	oldColour = getPlayerColour(enemy[1]);
+	// get the enemy colour
+	nexusColour = getPlayerColour(enemy[0]);
 	setPlayerColour(playerColour, enemy[1]);
 
-	//setup alliances done in generic script!!
-	//createAlliance(enemy[0], enemy[1]);	//Nexus and Gamma
-	//createAlliance(player, enemy[1]);	//player and Gamma
-
-//store total structures for gamma base
+	// store total structures for gamma base
 	gammaStrucTot = numStructsInArea(enemy[1], regionsX1[1], regionsY1[1], regionsX2[1], regionsY2[1]);
 	gammaDroidTot = getDroidCount(enemy[1]);
 	nexusStrucTot = numStructsInArea(enemy[0], X1[1], Y1[1], X2[1], Y2[1]) + numStructsInArea(enemy[0], X1[0], Y1[0], X2[0], Y2[0]);
@@ -64,10 +58,9 @@ event start(CALL_GAMEINIT)
 
 event powStuff(wait, 5)
 {
-//Increase player's power (has to be done outside of GameInit, for savegame reasons!)
+	// Increase player's power (has to be done outside of GameInit, for savegame reasons!)
 	addPower(power, player);
 	playSound(powTransSnd, player);
-
 }
 
 // remove briefing
@@ -80,8 +73,8 @@ event killMessage(inactive)
 event makeFight(seenStructInArea(player, enemy[1], FALSE,
 		regionsX1[1], regionsY1[1], regionsX2[1], regionsY2[1]), 5)
 {
-//regions[1] is whole gamma base area
-//regions[0] is inside gamma base area
+	//regions[1] is whole gamma base area
+	//regions[0] is inside gamma base area
 	//break alliance between Nexus and Gamma base when player sees Gamma base
 	breakAlliance(enemy[0], enemy[1]);
 	//setEventTrigger(trapTimed, trapTimedTrig);	//only allow fight for set period before springing trap
@@ -112,27 +105,7 @@ event trapSprung(CALL_ELECTRONIC_TAKEOVER)
 
 event changeGammaBase(numDroidsInArea(player, regionsX1[0],regionsY1[0], regionsX2[0],regionsY2[0]) > 0, 19)
 {
-/*
-//John's old version
-//NB this keeps gamma as player 1, just changes colour to Nexus black
-//NB these regions have changed since
-	count1 = numDroidsInArea(player, regionsX1[0],regionsY1[0], regionsX2[0],regionsY2[0]);
-	count2 = numDroidsInArea(player, regionsX1[1],regionsY1[1], regionsX2[1],regionsY2[1]);
-	count2 = count2 - count1;
-
-	if ( (count1 > droidsInBase) or (count2 == 0) )
-	{
-		setPlayerColour(nexusColour, enemy[1]);
-		breakAlliance(player, enemy[1]);
-		createAlliance(enemy[0], enemy[1]);
-		addMessage(gammaMessage, MISS_MSG, player, TRUE);
-
-		setEventTrigger(changeGammaBase, inactive);
-		setEventTrigger(killMessage, killWait);
-	}
-*/
-//changed from John's version (by Kev) Just needs droidsInBase in gamma base (could be 1)
-//NB this keeps gamma as player 1, just changes colour to Nexus black
+	// this keeps gamma as player 1, just changes colour to Nexus black
 	setEventTrigger(trapSprung, inactive);
 	setEventTrigger(trapTimed, inactive);
 	setEventTrigger(makeFight, inactive);
@@ -148,9 +121,6 @@ event changeGammaBase(numDroidsInArea(player, regionsX1[0],regionsY1[0], regions
 	createAlliance(enemy[0], enemy[1]);
 	setEventTrigger(changeGammaBase, inactive);
 }
-
-
-
 
 //no way of knowing when to set enemy[0]'s colour back to the old value for the end of this mission
 //it may be a problem for future missions...

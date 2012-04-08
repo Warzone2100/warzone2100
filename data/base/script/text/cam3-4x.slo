@@ -6,7 +6,6 @@
 
 public		int		timeLimit;
 
-
 event start(CALL_GAMEINIT)
 {
 		setMissionTime(timeLimit);
