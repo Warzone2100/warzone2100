@@ -36,8 +36,6 @@
 #include <QtCore/QSettings>
 #include <QtCore/QFile>
 
-// TODO -- parse and check that all setTimer, removeTimer and queue calls have quoted first parameters
-
 #define CUR_PLAYERS 4
 
 enum OBJECT_TYPE

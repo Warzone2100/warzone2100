@@ -53,6 +53,7 @@ dist-hook:
 
 javascript-doc-base:
 	grep $(top_srcdir)/src/qtscript.cpp -e '//==' | sed 's/\/\/==//' > doc/globals.tex
+	grep $(top_srcdir)/src/qtscriptfuncs.cpp -e '//==' | sed 's/\/\/==//' >> doc/globals.tex
 	grep $(top_srcdir)/src/qtscript.cpp -e '//__' | sed 's/\/\/__//' > doc/events.tex
 	grep $(top_srcdir)/src/qtscript.cpp -e '//--' | sed 's/\/\/--//' > doc/functions.tex
 	grep $(top_srcdir)/src/qtscriptfuncs.cpp -e '//--' | sed 's/\/\/--//' >> doc/functions.tex
