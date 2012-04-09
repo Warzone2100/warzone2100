@@ -3,7 +3,7 @@ text = \
 _("Cyborg Propulsion Improved"),\
 _("New armored construction"),\
 _("Increases Body Points"),\
-_("All Cyborgs upgraded automatically"),\
+_("All Cyborgs upgraded automatically")
 
 imdName = "MICAPSUL.pie"
 sequenceName = "res_droid.ogg"
@@ -13,7 +13,7 @@ text = \
 _("New Defensive Structure Available"),\
 _("Armored hardpoint with Hyper-Velocity Cannon"),\
 _("Automatically targets enemies within sensor range"),\
-_("Defensive Strength: High"),\
+_("Defensive Strength: High")
 
 imdName = "MICAPSUL.pie"
 sequenceName = "res_struttech.ogg"
@@ -23,7 +23,7 @@ text = \
 _("Improved Power Generator Performance"),\
 _("Gas turbine boosts power output"),\
 _("Power output +25%"),\
-_("All power generators upgraded automatically"),\
+_("All power generators upgraded automatically")
 
 imdName = "MICAPSUL.pie"
 sequenceName = "res_pow.ogg"
@@ -33,7 +33,7 @@ text = \
 _("Research Breakthrough Improves Construction Rates"),\
 _("Improved Engineering Techniques"),\
 _("Construction speed +20%"),\
-_("All trucks upgraded automatically"),\
+_("All trucks upgraded automatically")
 
 imdName = "MICAPSUL.PIE"
 sequenceName = "res_systech.ogg"
@@ -43,7 +43,7 @@ text = \
 _("CB Sensor Improved"),\
 _("Improved fire detection systems"),\
 _("Extends CB Range"),\
-_("All CB sensors upgraded automatically"),\
+_("All CB sensors upgraded automatically")
 
 imdName = "MICAPSUL.PIE"
 sequenceName = "res_systech.ogg"
@@ -53,7 +53,7 @@ text = \
 _("New Systems Tower Available"),\
 _("VTOL CB Tower detects enemy indirect fire batteries"),\
 _("Orders assigned VTOLs to attack the enemy batteries"),\
-_("VTOLs attack until enemy battery is suppressed"),\
+_("VTOLs attack until enemy battery is suppressed")
 
 imdName = "MICAPSUL.PIE"
 sequenceName = "res_systech.ogg"
@@ -63,7 +63,7 @@ text = \
 _("VTOL CB Improved"),\
 _("Improved fire detection systems"),\
 _("Extends VTOL CB Range"),\
-_("All VTOL CB sensors upgraded automatically"),\
+_("All VTOL CB sensors upgraded automatically")
 
 imdName = "MICAPSUL.PIE"
 sequenceName = "res_systech.ogg"
@@ -73,7 +73,7 @@ text = \
 _("New Systems Tower Available"),\
 _("VTOL Strike Tower detects approaching enemies"),\
 _("Assigned VTOLs attack the enemy units"),\
-_("Strike mission continues until enemy destroyed or they retreat"),\
+_("Strike mission continues until enemy destroyed or they retreat")
 
 imdName = "MICAPSUL.PIE"
 sequenceName = "res_systech.ogg"
@@ -83,7 +83,7 @@ text = \
 _("New Systems Turret Available"),\
 _("VTOL Strike turret used to spot targets"),\
 _("Assigned VTOLs attack the designated targets"),\
-_("Select new targets to continue the VTOL strikes"),\
+_("Select new targets to continue the VTOL strikes")
 
 imdName = "MICAPSUL.PIE"
 sequenceName = "res_systech.ogg"
@@ -93,7 +93,7 @@ text = \
 _("VTOL Strike Improved"),\
 _("Improved target recognition systems"),\
 _("Extends VTOL Strike Range"),\
-_("All VTOL Strike sensors upgraded automatically"),\
+_("All VTOL Strike sensors upgraded automatically")
 
 imdName = "MICAPSUL.PIE"
 sequenceName = "res_systech.ogg"
@@ -103,7 +103,7 @@ text = \
 _("AA Upgrade"),\
 _("Self-guided rocket powered shells"),\
 _("AA accuracy +10%"),\
-_("All AA weapons upgraded automatically"),\
+_("All AA weapons upgraded automatically")
 
 imdName = "MICAPSUL.PIE"
 sequenceName = "res_weapons.ogg"
@@ -113,7 +113,7 @@ text = \
 _("New Bomb Bay Available"),\
 _("Drops incendiary bombs"),\
 _("Best Targets: Bunkers and Hardpoints"),\
-_("Body Points: Low"),\
+_("Body Points: Low")
 
 imdName = "MICAPSUL.PIE"
 sequenceName = "res_weapons.ogg"
@@ -123,7 +123,7 @@ text = \
 _("Bomb Upgrade"),\
 _("Improved trinitramine explosive formula"),\
 _("Bomb damage +25%"),\
-_("All bomb bays upgraded automatically"),\
+_("All bomb bays upgraded automatically")
 
 imdName = "MICAPSUL.PIE"
 sequenceName = "res_weapons.ogg"
@@ -133,7 +133,7 @@ text = \
 _("Machinegun Upgrade"),\
 _("Robotic advances make new chaingun upgrade available"),\
 _("Machinegun reload time -15%"),\
-_("All machineguns upgraded automatically"),\
+_("All machineguns upgraded automatically")
 
 imdName = "MICAPSUL.PIE"
 sequenceName = "res_weapons.ogg"
@@ -143,7 +143,7 @@ text = \
 _("Mortar Upgrade"),\
 _("Shells detect and home to thermal heat signatures"),\
 _("Mortar accuracy +10%"),\
-_("All mortars upgraded automatically"),\
+_("All mortars upgraded automatically")
 
 imdName = "MICAPSUL.PIE"
 sequenceName = "res_weapons.ogg"
@@ -153,7 +153,7 @@ text = \
 _("New Indirect Fire Weapon Available"),\
 _("105mm multi-barrel Howitzer may be assigned to a sensor"),\
 _("Best Targets: Base Structures, infantry, wheeled vehicles"),\
-_("Body Points: Low"),\
+_("Body Points: Low")
 
 imdName = "MICAPSUL.PIE"
 sequenceName = "res_weapons.ogg"
@@ -163,7 +163,7 @@ text = \
 _("New Weapon Turret Available"),\
 _("Multi-barrel, rapid-fire machinegun"),\
 _("Best Targets: Infantry, base structures, wheeled vehicles"),\
-_("Replaces all machineguns"),\
+_("Replaces all machineguns")
 
 imdName = "MICAPSUL.pie"
 sequenceName = "res_weapons.ogg"
