@@ -500,6 +500,12 @@ bool responsibleFor(int player, int playerinquestion)
 	return whosResponsible(playerinquestion) == player;
 }
 
+bool canGiveOrdersFor(int player, int playerInQuestion)
+{
+	return playerInQuestion >= 0 && playerInQuestion < MAX_PLAYERS &&
+	       (player == playerInQuestion || responsibleFor(player, playerInQuestion) || getDebugMappingStatus());
+}
+
 int scavengerSlot()
 {
 	// Scavengers used to always be in position 7, when scavengers were only supported in less than 8 player maps.
@@ -718,9 +724,6 @@ bool recvMessage(void)
 				startMultiplayerGame();
 			}
 			break;
-		case GAME_ARTIFACTS:
-			recvMultiPlayerRandomArtifacts(queue);
-			break;
 		case GAME_ALLIANCE:
 			recvAlliance(queue, true);
 			break;
@@ -936,6 +939,12 @@ bool recvResearchStatus(NETQUEUE queue)
 	if (player >= MAX_PLAYERS || index >= asResearch.size())
 	{
 		debug(LOG_ERROR, "Bad GAME_RESEARCHSTATUS received, player is %d, index is %u", (int)player, index);
+		return false;
+	}
+	if (!canGiveOrdersFor(queue.index, player))
+	{
+		debug(LOG_WARNING, "Droid order for wrong player.");
+		syncDebug("Wrong player.");
 		return false;
 	}
 
@@ -1424,6 +1433,10 @@ bool recvTemplate(NETQUEUE queue)
 
 		NETtemplate(&t);
 	NETend();
+	if (!canGiveOrdersFor(queue.index, player))
+	{
+		return false;
+	}
 
 	t.prefab = false;
 	t.psNext = NULL;
@@ -1477,6 +1490,10 @@ static bool recvDestroyTemplate(NETQUEUE queue)
 		NETuint8_t(&player);
 		NETuint32_t(&templateID);
 	NETend();
+	if (!canGiveOrdersFor(queue.index, player))
+	{
+		return false;
+	}
 
 	ASSERT_OR_RETURN(false, player < MAX_PLAYERS, "invalid player size: %d", player);
 

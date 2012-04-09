@@ -1027,7 +1027,7 @@ static void proj_ImpactFunc( PROJECTILE *psObj )
 			addEffect(&position, EFFECT_SAT_LASER, SAT_LASER_STANDARD, false, NULL, 0, psObj->time);
 			if (clipXY(psObj->pos.x, psObj->pos.y))
 			{
-				shakeStart();
+				shakeStart(1800);	// takes out lots of stuff so shake length is greater
 			}
 		}
 	}

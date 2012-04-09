@@ -666,7 +666,6 @@ void intDisplayPowerBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DEC
 			iV_SetTextColour(WZCOL_BLACK);
 			iV_SetFont(font_small);
 			iV_DrawText(need, iX + 102, iY - 1  );
-			iV_SetFont(font_scaled);
 			iV_SetTextColour(WZCOL_RED);
 		}
 		else
@@ -674,14 +673,14 @@ void intDisplayPowerBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DEC
 			iV_SetTextColour(WZCOL_RED);
 			iV_SetFont(font_small);
 			iV_DrawText(need, iX + 102, iY - 1  );
-			iV_SetFont(font_scaled);
 		}
 	}
 	else
 	{
 		iV_SetTextColour(WZCOL_TEXT_BRIGHT);
 	}
-	/* draw text value */
+	// draw text value
+	iV_SetFont(font_regular);
 	iV_DrawText( szVal, iX, iY );
 }
 

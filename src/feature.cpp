@@ -475,7 +475,7 @@ bool destroyFeature(FEATURE *psDel, unsigned impactTime)
 			addEffect(&pos, EFFECT_DESTRUCTION, DESTRUCTION_TYPE_SKYSCRAPER, true, psDel->sDisplay.imd, 0, impactTime);
 			initPerimeterSmoke(psDel->sDisplay.imd, pos);
 
-			shakeStart();
+			shakeStart(250);	// small shake
 		}
 
 		/* Then a sequence of effects */

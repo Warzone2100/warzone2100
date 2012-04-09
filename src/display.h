@@ -30,7 +30,7 @@
 /* Initialise the display system */
 extern bool dispInitialise(void);
 
-extern void shakeStart(void);
+extern void shakeStart(unsigned int length);
 extern void shakeStop(void);
 
 void ProcessRadarInput();

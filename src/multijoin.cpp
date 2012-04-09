@@ -239,6 +239,10 @@ void recvPlayerLeft(NETQUEUE queue)
 	NETbeginDecode(queue, GAME_PLAYER_LEFT);
 		NETuint32_t(&playerIndex);
 	NETend();
+	if (queue.index == NET_HOST_ONLY || queue.index == playerIndex)
+	{
+		return;
+	}
 
 	turnOffMultiMsg(true);
 	clearPlayer(playerIndex, false);  // don't do it quietly

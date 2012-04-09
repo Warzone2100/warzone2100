@@ -264,7 +264,8 @@ extern UDWORD			intLastWidget;
 
 /* The button ID of the objects stat when the stat screen is displayed */
 extern UDWORD			objStatID;
-
+// when the window for building / whatever else is up...
+extern bool SecondaryWindowUp;
 /* The current template for the design screen to start with*/
 extern std::vector<DROID_TEMPLATE *> apsTemplateList;  ///< Either a list of templates a factory can build or a list of designable templates, for UI use only.
 extern std::list<DROID_TEMPLATE> localTemplates;       ///< Unsychnronised list, for UI use only.

@@ -217,6 +217,10 @@ bool recvDroidDisEmbark(NETQUEUE queue)
 			debug(LOG_WARNING, "player's %d transport droid %d wasn't found?", player, transporterID);
 			return false;
 		}
+		if (!canGiveOrdersFor(queue.index, psTransporterDroid->player))
+		{
+			return false;
+		}
 		// we need to find the droid *in* the transporter
 		psCheckDroid = psTransporterDroid ->psGroup->psList;
 		while (psCheckDroid)
@@ -584,6 +588,12 @@ bool recvDroidInfo(NETQUEUE queue)
 				      queue.index, info.droidId, isHumanPlayer(info.player) ? "Human" : "AI", info.player);
 				syncDebug("Droid %d missing", info.droidId);
 				continue;  // Can't find the droid, so skip this droid.
+			}
+			if (!canGiveOrdersFor(queue.index, psDroid->player))
+			{
+				debug(LOG_WARNING, "Droid order for wrong player.");
+				syncDebug("Wrong player.");
+				continue;
 			}
 
 			CHECK_DROID(psDroid);

@@ -81,6 +81,7 @@
 #include "warzoneconfig.h"
 #include "modding.h"
 #include "qtscript.h"
+#include "random.h"
 
 #include "multiplay.h"
 #include "multiint.h"
@@ -2457,9 +2458,13 @@ void addPlayerBox(bool players)
  */
 static void SendFireUp(void)
 {
+	uint32_t randomSeed = rand();  // Pick a random random seed for the synchronised random number generator.
+
 	NETbeginEncode(NETbroadcastQueue(), NET_FIREUP);
-		// no payload necessary
+		NETuint32_t(&randomSeed);
 	NETend();
+
+	gameSRand(randomSeed);  // Set the seed for the synchronised random number generator. The clients will use the same seed.
 }
 
 // host kicks a player from a game.
@@ -3401,6 +3406,13 @@ void frontendMultiMessages(void)
 			debug(LOG_NET, "NET_FIREUP was received ...");
 			if(ingame.localOptionsReceived)
 			{
+				uint32_t randomSeed = 0;
+				NETbeginDecode(queue, NET_FIREUP);
+					NETuint32_t(&randomSeed);
+				NETend();
+
+				gameSRand(randomSeed);  // Set the seed for the synchronised random number generator, using the seed given by the host.
+
 				debug(LOG_NET, "& local Options Received (MP game)");
 				ingame.TimeEveryoneIsInGame = 0;			// reset time
 				resetDataHash();

@@ -84,6 +84,7 @@
 
 // Empty edit window
 //#define EDIT_OPTIONS
+bool SecondaryWindowUp = false;
 
 static UDWORD		newMapWidth, newMapHeight;
 
@@ -768,8 +769,7 @@ static void intDoScreenRefresh(void)
 			case IOBJ_MANUFACTURE:	// The manufacture screen (factorys on bottom bar)
 			case IOBJ_RESEARCH:		// The research screen
 				//pass in the currently selected object
-				intUpdateObject((BASE_OBJECT *)interfaceStructList(),psObjSelected,
-					StatsWasUp);
+				intUpdateObject((BASE_OBJECT *)interfaceStructList(), psObjSelected, StatsWasUp);
 				break;
 
 			case IOBJ_BUILD:
@@ -777,8 +777,7 @@ static void intDoScreenRefresh(void)
 			case IOBJ_BUILDSEL:		// Selecting a position for a new structure
 			case IOBJ_DEMOLISHSEL:	// Selecting a structure to demolish
 				//pass in the currently selected object
-				intUpdateObject((BASE_OBJECT *)apsDroidLists[selectedPlayer],psObjSelected,
-					StatsWasUp);
+				intUpdateObject((BASE_OBJECT *)apsDroidLists[selectedPlayer], psObjSelected, StatsWasUp);
 				break;
 
 			default:
@@ -1182,7 +1181,7 @@ void intResetScreen(bool NoAnim)
 	default:
 		break;
 	}
-
+	SecondaryWindowUp = false;
 	intMode = INT_NORMAL;
 	//clearSel() sets IntRefreshPending = true by calling intRefreshScreen() but if we're doing this then we won't need to refresh - hopefully!
 	IntRefreshPending = false;
@@ -1628,6 +1627,7 @@ INT_RETVAL intRunWidgets(void)
 	/* Extra code for the design screen to deal with the shadow bar graphs */
 	if (intMode == INT_DESIGN)
 	{
+		SecondaryWindowUp = true;
 		intRunDesign();
 	}
 
@@ -4810,7 +4810,7 @@ static bool intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 			return false;
 		}
 	}
-
+	SecondaryWindowUp = true;
 	psStatsScreenOwner = psOwner;
 
 	ClearStatBuffers();
@@ -6401,7 +6401,7 @@ bool CoordInBuild(int x, int y)
 	pos.x = x - RET_X;
 	pos.y = y - RET_Y + buildmenu_height; // guesstimation
 
-	if (pos.x < 0 || pos.y < 0 || pos.x >= RET_FORMWIDTH || pos.y >= buildmenu_height)
+	if ((pos.x < 0 || pos.y < 0 || pos.x >= RET_FORMWIDTH || pos.y >= buildmenu_height) || !SecondaryWindowUp)
 	{
 		return false;
 	}

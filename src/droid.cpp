@@ -253,27 +253,41 @@ bool droidCheckReferences(DROID *psVictimDroid)
 
 	for (plr = 0; plr < MAX_PLAYERS; plr++)
 	{
-		STRUCTURE *psStruct;
-		DROID *psDroid;
-
-		for (psStruct = apsStructLists[plr]; psStruct != NULL; psStruct = psStruct->psNext)
+		for (STRUCTURE *psStruct = apsStructLists[plr]; psStruct != NULL; psStruct = psStruct->psNext)
 		{
-			unsigned int i;
-
-			for (i = 0; i < psStruct->numWeaps; i++)
+			for (int i = 0; i < psStruct->numWeaps; i++)
 			{
 				ASSERT_OR_RETURN(false, (DROID *)psStruct->psTarget[i] != psVictimDroid, DROIDREF(psStruct->targetFunc[i], psStruct->targetLine[i]));
 			}
 		}
-		for (psDroid = apsDroidLists[plr]; psDroid != NULL; psDroid = psDroid->psNext)
+		for (DROID *psDroid = apsDroidLists[plr]; psDroid != NULL; psDroid = psDroid->psNext)
 		{
-			unsigned int i;
-
-			ASSERT_OR_RETURN(false, psDroid->order.psObj != psVictimDroid || psVictimDroid == psDroid, DROIDREF(psDroid->targetFunc, psDroid->targetLine));
-			for (i = 0; i < psDroid->numWeaps; i++)
+			if (psDroid->order.psObj == psVictimDroid)
 			{
-				ASSERT_OR_RETURN(false, (DROID *)psDroid->psActionTarget[i] != psVictimDroid || psVictimDroid == psDroid, 
-				                 DROIDREF(psDroid->actionTargetFunc[i], psDroid->actionTargetLine[i]));
+				debug(LOG_DEATH, "Death cleanup is postponed for this unit %p, (id %d name %s), droid %p (id %d name %s) still has orders concerning it!", psVictimDroid, psVictimDroid->id, psVictimDroid->aName,
+					psDroid, psDroid->id, psDroid->aName);
+				debug(LOG_DEATH, DROIDREF(psDroid->targetFunc, psDroid->targetLine));
+				return false;
+			}
+			if (psVictimDroid != psDroid)
+			{
+				debug(LOG_DEATH, "Death cleanup is postponed for this unit %p, (id %d name %s), we are still in primary list.", psVictimDroid, psVictimDroid->id, psVictimDroid->aName);
+				return false;
+			}
+			for (int i = 0; i < psDroid->numWeaps; i++)
+			{
+				if (psDroid->psActionTarget[i] == psVictimDroid)
+				{
+					debug(LOG_DEATH, "Death cleanup is postponed for this unit %p, (id %d name %s), droid %p (id %d name %s) still has actions concerning it!", psVictimDroid, psVictimDroid->id, psVictimDroid->aName,
+						psDroid, psDroid->id, psDroid->aName);
+					debug(LOG_DEATH, DROIDREF(psDroid->actionTargetFunc[i], psDroid->actionTargetLine[i]));
+					return false;
+				}
+				if (psVictimDroid != psDroid)
+				{
+					debug(LOG_DEATH, "Death cleanup is postponed for this unit %p, (id %d name %s), we are still in primary list.", psVictimDroid, psVictimDroid->id, psVictimDroid->aName);
+					return false;
+				}
 			}
 		}
 	}
