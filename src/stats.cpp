@@ -1089,7 +1089,7 @@ bool loadBodyStats(const char *pFileName)
 		{
 			psStats->droidTypeOverride = DROID_CYBORG_REPAIR;
 		}
-		psStats->ref = REF_BODY_START + i;
+		psStats->ref = REF_BODY_START + list.size() - 1 - i;
 		if (!getBodySize(ini.value("size").toString().toUtf8().constData(), &psStats->size))
 		{
 			ASSERT(false, "Unknown body size for %s", getStatName(psStats));
