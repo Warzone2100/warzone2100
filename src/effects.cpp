@@ -372,20 +372,25 @@ static void Effect_free(EFFECT *instance)
 	activeList.num--;
 }
 
+/*! Kills any active effect and frees effect memory pool */
 void shutdownEffectsSystem(void)
 {
-	EFFECT *eff;
+	EFFECT *eff, *effNext;
+	struct EffectChunk *effChunk, *effChunkNext;
 
-	/* Traverse the list */
-	for (eff = activeList.first; eff;)
+	/* Kill all active effects (moves them to inactive list) */
+	for (eff = activeList.first; eff; eff = effNext)
 	{
-		EFFECT *effNext = eff->next;
-
+		effNext = eff->next;
 		killEffect(eff);
-		eff = effNext;
 	}
-	chunkList.first = NULL;
-	chunkList.last = NULL;
+
+	/* Free memory for all effect chunks */
+	for (effChunk = chunkList.first; effChunk; effChunk = effChunkNext)
+	{
+		effChunkNext = effChunk->next;
+		free(effChunk);
+	}
 }
 
 /*!
