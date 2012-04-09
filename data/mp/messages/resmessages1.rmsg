@@ -232,7 +232,7 @@ sequenceName = "res_struttech.ogg"
 text = \
 _("Production Improved"),\
 _("Factory module enables medium and large bodies"),\
-_("Factory output speed +100% per module"),\
+_("Factory output speed +100%% per module"),\
 _("Use a truck to add modules to a factory")
 
 imdName = "MICAPSUL.pie"
