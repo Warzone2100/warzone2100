@@ -1317,6 +1317,7 @@ int realmain(int argc, char *argv[])
 	systemShutdown();
 	wzShutdown();
 	debug(LOG_MAIN, "Completed shutting down Warzone 2100");
+	dbgDumpFree();
 	return EXIT_SUCCESS;
 }
 

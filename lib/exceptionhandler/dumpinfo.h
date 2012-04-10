@@ -40,6 +40,8 @@ extern void dbgDumpLog(DumpFileHandle file);
 
 extern void dbgDumpInit(int argc, const char** argv, const char* packageVersion);
 
+extern void dbgDumpFree();
+
 extern void addDumpInfo(const char *inbuffer);
 
 #endif // __INCLUDED_LIB_EXCEPTIONHANDLER_DUMPINFO_H__
