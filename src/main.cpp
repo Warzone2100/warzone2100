@@ -1040,7 +1040,7 @@ bool getUTF8CmdLine(int* const utfargc, const char*** const utfargv) // explicit
 		LocalFree(wargv);
 		return false;
 	}
-	// the following malloc and UTF16toUTF8 will create leaks.
+	// the following malloc and UTF16toUTF8 will be cleaned up in realmain().
 	*utfargv = (const char**)malloc(sizeof(const char*) * wargc);
 	if (!*utfargv)
 	{
@@ -1313,6 +1313,14 @@ int realmain(int argc, char *argv[])
 	wzMain3();
 	saveConfig();
 	systemShutdown();
+#ifdef WZ_OS_WIN	// clean up the memory allocated for the command line conversion
+	for (int i=0; i<argc; i++)
+	{
+		const char*** const utfargvF = &utfargv;
+		free((void *)(*utfargvF)[i]);
+	}
+	free(utfargv);
+#endif
 	wzShutdown();
 	debug(LOG_MAIN, "Completed shutting down Warzone 2100");
 	return EXIT_SUCCESS;
