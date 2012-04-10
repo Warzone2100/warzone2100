@@ -1,7 +1,6 @@
 // Global settings for all Framework configurations
 
 
-GCC_VERSION = com.apple.compilers.llvm.clang.1_0
 INSTALL_PATH = @rpath
 DYLIB_COMPATIBILITY_VERSION = 1
 DYLIB_CURRENT_VERSION = 1
