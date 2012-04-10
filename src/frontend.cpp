@@ -400,11 +400,13 @@ bool runMultiPlayerMenu(void)
 		ingame.bHostSetup = true;
 		bMultiPlayer = true;
 		bMultiMessages = true;
+		NETinit(true);
 		game.type = SKIRMISH;		// needed?
 		lastTitleMode = MULTI;
 		changeTitleMode(MULTIOPTION);
 		break;
 	case FRONTEND_JOIN:
+		NETinit(true);
 		ingame.bHostSetup = false;
 		if (getLobbyError() != ERROR_INVALID)
 		{

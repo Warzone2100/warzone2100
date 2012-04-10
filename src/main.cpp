@@ -1162,8 +1162,6 @@ int realmain(int argc, char *argv[])
 
 	loadConfig();
 
-	NETinit(true);
-
 	// parse the command line
 	if (!ParseCommandLine(utfargc, utfargv))
 	{
