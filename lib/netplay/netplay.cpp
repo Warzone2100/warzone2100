@@ -1081,6 +1081,7 @@ int NETshutdown(void)
 	}
 
 	free(NetPlay.MOTD);
+	NETdeleteQueues();
 
 	return 0;
 }
