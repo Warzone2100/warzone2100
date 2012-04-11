@@ -428,6 +428,10 @@ void NETdeleteQueues()
 	{
 		delete pairQueue(NETnetQueue(i));
 	}
+	for (i = 0; i < MAX_PLAYERS; ++i)
+	{
+		delete gameQueues[NETgameQueue(i).index];
+	}
 
 	delete broadcastQueue;
 }
