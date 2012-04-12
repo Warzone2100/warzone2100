@@ -4262,7 +4262,7 @@ static bool loadSaveDroid(const char *pFileName, DROID **ppsCurrentDroidLists)
 		psDroid->burnStart = ini.value("burnStart", 0).toInt();
 		psDroid->experience = ini.value("experience", 0).toInt();
 		psDroid->timeLastHit = ini.value("timeLastHit", UDWORD_MAX).toInt();
-		psDroid->secondaryOrder = ini.value("secondaryOrder", DSS_NONE).toInt();
+		psDroid->secondaryOrder = ini.value("secondaryOrder", psDroid->secondaryOrder).toInt();
 		psDroid->secondaryOrderPending = psDroid->secondaryOrder;
 		psDroid->action = (DROID_ACTION)ini.value("action", DACTION_NONE).toInt();
 		psDroid->actionPos = ini.vector2i("action/pos");
