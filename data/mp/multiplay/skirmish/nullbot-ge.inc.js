@@ -37,50 +37,10 @@ function constructPersonality() {
 		"Body1REC", // viper
 	];
 
-	this.abWeapons = [
-	[
-		"Missile-MdArt", // seraph
-		"Mortar-Incenediary", // incendiary mortar
-		"Mortar2Mk1", // bombard
-		"Mortar3ROTARYMk1", // pepperpot
-		"Rocket-BB", // bunker buster
-		"Mortar1Mk1", // mortar
-	],
-	[
-		"Missile-MdArt", // seraph
-		"Mortar2Mk1", // bombard
-		"Mortar3ROTARYMk1", // pepperpot
-		"Mortar-Incenediary", // incendiary mortar
-		"Rocket-BB", // bunker buster
-		"Mortar1Mk1", // mortar
-	],
-	[
-		"Missile-MdArt", // seraph
-		"Mortar3ROTARYMk1", // pepperpot
-		"Mortar-Incenediary", // incendiary mortar
-		"Mortar2Mk1", // bombard
-		"Rocket-BB", // bunker buster
-		"Mortar1Mk1", // mortar
-	],
-	[
-		"Missile-MdArt", // seraph
-		"Rocket-BB", // bunker buster
-		"Rocket-MRL", // mra
-	],
-	];
+	this.abWeapons = standardTankAB;
 	
-	this.aaWeapons = [
-	[
-		"AAGunLaser", // stormbringer
-		"Missile-HvySAM", // vindicator
-		"Missile-LtSAM", // avenger
-		"QuadRotAAGun", // whirlwind
-		"AAGun2Mk1", // flak cannon
-		"Rocket-Sunburst", // sunburst
-		"QuadMg1AAGun", // hurricane
-	],
-	];
-
+	this.aaWeapons = standardTankAA;
+	
 	this.vtolWeapons = [
 		"Bomb5-VTOL-Plasmite", // plasmite bombs
 		"RailGun2-VTOL", // rail gun
@@ -346,7 +306,6 @@ function constructPersonality() {
 		}
 		
 		this.tankPropulsions = standardTankPropulsions;
-		
 		this.tankPropulsionsAA = [
 		[
 			"hover01", // hover
@@ -354,6 +313,26 @@ function constructPersonality() {
 			"wheeled01", // wheels
 		],
 		];
+		this.tankPropulsionsAB = [
+		[
+			"tracked01", // tracks
+			"HalfTrack", // half-track
+			"wheeled01", // wheels
+		],
+		];
+		
+		switch(subpersonality) {
+		case MF: 
+			this.tankPropulsionsAT = this.tankPropulsionsAA;
+			break;
+		case FR: case FC:
+			this.tankPropulsionsAP = this.tankPropulsionsAA;
+			break;
+		case MC:
+			this.tankPropulsionsAT = this.tankPropulsionsAB;
+			this.tankPropulsionsAP = this.tankPropulsionsAB;
+			break;
+		}
 		
 		this.apWeapons = [
 			standardTankLaser,
@@ -435,6 +414,8 @@ function constructPersonality() {
 }
 
 function buildOrder() {
+	if (difficulty == EASY) 
+		return standardBuildOrderNoob();
 	if (personality.buildOrderIdx==0)
 		return standardBuildOrderFRCFR();
 	else

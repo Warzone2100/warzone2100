@@ -221,6 +221,7 @@ const standardResearchPathFlamers = [
 	"R-Wpn-Flamer-ROF01",
 	"R-Wpn-Flamer-Damage03",
 	"R-Defense-HvyFlamer",
+	"R-Vehicle-Prop-Hover",
 	"R-Wpn-Flamer-ROF03",
 	"R-Defense-PlasmiteFlamer",
 	"R-Wpn-Flamer-Damage09",
@@ -484,6 +485,62 @@ const standardTankAPMachinegunRocket = [
 	"MG1Mk1", // mg
 ];
 
+const standardTankAB = [
+	[
+		"Missile-MdArt", // seraph
+		"Howitzer-Incenediary", // incendiary howitzer
+		"Howitzer03-Rot", // hellstorm
+		"Howitzer105Mk1", // howitzer
+		"Mortar-Incenediary", // incendiary mortar
+		"Mortar2Mk1", // bombard
+		"Mortar3ROTARYMk1", // pepperpot
+		"Rocket-BB", // bunker buster
+		"Rocket-MRL", // mra
+		"Mortar1Mk1", // mortar
+	],
+	[
+		"Missile-MdArt", // seraph
+		"Howitzer03-Rot", // hellstorm
+		"Howitzer-Incenediary", // incendiary howitzer
+		"Howitzer105Mk1", // howitzer
+		"Mortar2Mk1", // bombard
+		"Mortar3ROTARYMk1", // pepperpot
+		"Mortar-Incenediary", // incendiary mortar
+		"Rocket-BB", // bunker buster
+		"Rocket-MRL", // mra
+		"Mortar1Mk1", // mortar
+	],
+	[
+		"Howitzer03-Rot", // hellstorm
+		"Howitzer-Incenediary", // incendiary howitzer
+		"Missile-MdArt", // seraph
+		"Mortar3ROTARYMk1", // pepperpot
+		"Mortar-Incenediary", // incendiary mortar
+		"Mortar2Mk1", // bombard
+		"Rocket-BB", // bunker buster
+		"Rocket-MRL", // mra
+		"Mortar1Mk1", // mortar
+	],
+	[
+		"Missile-MdArt", // seraph
+		"Rocket-BB", // bunker buster
+		"Rocket-MRL", // mra
+	],
+];
+
+const standardTankAA = [
+	[
+		"AAGunLaser", // stormbringer
+		"Missile-HvySAM", // vindicator
+		"Missile-LtSAM", // avenger
+		"QuadRotAAGun", // whirlwind
+		"AAGun2Mk1", // flak cannon
+		"Rocket-Sunburst", // sunburst
+		"QuadMg1AAGun", // hurricane
+	],
+];
+
+
 const standardCyborgAPNoobOne = [
 	["Cyb-Hvybod-PulseLsr","Cyb-Hvywpn-PulseLsr"], // super pulse
 	["Cyb-Bod-Las1","Cyb-Wpn-Laser"], // flashlight
@@ -581,6 +638,10 @@ const standardCyborgMachinegunMortar = [
 	["CyborgChain1Ground", "CyborgChaingun"], // machinegun
 ];
 
+function standardBuildOrderNoob() {
+	return false;
+}
+
 function standardBuildOrderFRCFR() {
 	// Builds initial structures in the following order:
 	//     factory, lab, cc, factory, lab, generator, factory, generator, lab.
@@ -593,54 +654,30 @@ function standardBuildOrderFRCFR() {
 	var derrickCount = enumStruct(me, derrick).length;
 	var borgCount = enumStruct(me, borgfac).length;
 	var vtolCount = enumStruct(me, vtolfac).length;
-	if (genCount < 2 && playerPower(me) < EXTREME_LOW_POWER && isStructureAvailable(generator,me)) {
-		buildBasicStructure(generator); 
-		return true;
-	}
-	if (factoryCount < 1 && isStructureAvailable(factory,me)) {
-		buildBasicStructure(factory); 
-		return true;
-	}
-	if (labCount < 1 && isStructureAvailable(lab,me)) {
-		buildBasicStructure(lab); 
-		return true;
-	}
-	if (isStructureAvailable(command,me)) {
-		buildBasicStructure(command); 
-		return true;
-	}
-	if (factoryCount < 2 && isStructureAvailable(factory,me)) {
-		buildBasicStructure(factory); 
-		return true;
-	}
-	if (labCount < 2 && isStructureAvailable(lab,me)) {
-		buildBasicStructure(lab); 
-		return true;
-	}
-	if ((genCount < 1) && isStructureAvailable(generator,me)) {
-		buildBasicStructure(generator); 
-		return true;
-	}
-	if (factoryCount < 3 && isStructureAvailable(factory,me)) {
-		buildBasicStructure(factory); 
-		return true;
-	}
-	if ((genCount < 2) && isStructureAvailable(generator,me)) {
-		buildBasicStructure(generator); 
-		return true;
-	}
-	if (labCount < 3 && isStructureAvailable(lab,me) && (!earlyGame(10)&&!UNUSUAL_SITUATION)) {
-		buildBasicStructure(lab); 
-		return true;
-	}
-	if (borgCount < 2 && isStructureAvailable(borgfac,me) && RATE_TANK>0) {
-		buildBasicStructure(borgfac); 
-		return true;
-	}
-	if (vtolCount < 1 && isStructureAvailable(vtolfac,me)) {
-		buildBasicStructure(vtolfac); 
-		return true;
-	}
+	if (genCount < 2 && playerPower(me) < EXTREME_LOW_POWER && isStructureAvailable(generator,me))
+		return buildBasicStructure(generator); 
+	if (factoryCount < 1 && isStructureAvailable(factory,me))
+		return buildBasicStructure(factory); 
+	if (labCount < 1 && isStructureAvailable(lab,me))
+		return buildBasicStructure(lab); 
+	if (isStructureAvailable(command,me))
+		return buildBasicStructure(command); 
+	if (factoryCount < 2 && isStructureAvailable(factory,me))
+		return buildBasicStructure(factory,0); 
+	if (labCount < 2 && isStructureAvailable(lab,me))
+		return buildBasicStructure(lab,0); 
+	if ((genCount < 1) && isStructureAvailable(generator,me))
+		return buildBasicStructure(generator); 
+	if (factoryCount < 3 && isStructureAvailable(factory,me))
+		return buildBasicStructure(factory,0); 
+	if ((genCount < 2) && isStructureAvailable(generator,me))
+		return buildBasicStructure(generator,0); 
+	if (labCount < 3 && isStructureAvailable(lab,me) && (!earlyGame(10)&&!UNUSUAL_SITUATION))
+		return buildBasicStructure(lab,0); 
+	if (borgCount < 2 && isStructureAvailable(borgfac,me) && RATE_TANK>0)
+		return buildBasicStructure(borgfac,0); 
+	if (vtolCount < 1 && isStructureAvailable(vtolfac,me))
+		return buildBasicStructure(vtolfac,0); 
 	return false;
 }
 
@@ -657,45 +694,27 @@ function standardBuildOrderRFFRC() {
 	var derrickCount = enumStruct(me, derrick).length;
 	var borgCount = enumStruct(me, borgfac).length;
 	var vtolCount = enumStruct(me, vtolfac).length;
-	if (genCount < 2 && playerPower(me) < EXTREME_LOW_POWER && isStructureAvailable(generator,me)) {
-		buildBasicStructure(generator);
-		return true;
-	}
-	if (labCount < 1 && isStructureAvailable(lab,me)) {
-		buildBasicStructure(lab);
-		return true;
-	}
-	if (factoryCount < 2 && isStructureAvailable(factory,me)) {
-		buildBasicStructure(factory);
-		return true;
-	}
-	if (labCount < 2 && isStructureAvailable(lab,me)) {
-		buildBasicStructure(lab);
-		return true;
-	}
-	if (isStructureAvailable(command,me)) {
-		buildBasicStructure(command);
-		return true;
-	}
-	if ((genCount < 2) && isStructureAvailable(generator,me)) {
-		buildBasicStructure(generator);
-		return true;
-	}
-	if (factoryCount < 3 && isStructureAvailable(factory,me) && (!earlyGame(8)&&!UNUSUAL_SITUATION)) {
-		buildBasicStructure(factory);
-		return true;
-	}
-	if (labCount < 3 && isStructureAvailable(lab,me) && (!earlyGame(10)&&!UNUSUAL_SITUATION)) {
-		buildBasicStructure(lab);
-		return true;
-	}
-	if (borgCount < 2 && isStructureAvailable(borgfac,me) && RATE_TANK>0) {
-		buildBasicStructure(borgfac);
-		return true;
-	}
-	if (vtolCount < 1 && isStructureAvailable(vtolfac,me)) { 
-		buildBasicStructure(vtolfac);
-		return true;
-	}
+	if (genCount < 2 && playerPower(me) < EXTREME_LOW_POWER && isStructureAvailable(generator,me))
+		return buildBasicStructure(generator);
+	if (labCount < 1 && isStructureAvailable(lab,me))
+		return buildBasicStructure(lab);
+	if (factoryCount < 1 && isStructureAvailable(factory,me))
+		return buildBasicStructure(factory);
+	if (factoryCount < 2 && isStructureAvailable(factory,me))
+		return buildBasicStructure(factory,0);
+	if (labCount < 2 && isStructureAvailable(lab,me))
+		return buildBasicStructure(lab,0);
+	if (isStructureAvailable(command,me))
+		return buildBasicStructure(command,0);
+	if ((genCount < 2) && isStructureAvailable(generator,me))
+		return buildBasicStructure(generator);
+	if (factoryCount < 3 && isStructureAvailable(factory,me) && (!earlyGame(8)&&!UNUSUAL_SITUATION))
+		return buildBasicStructure(factory,0);
+	if (labCount < 3 && isStructureAvailable(lab,me) && (!earlyGame(10)&&!UNUSUAL_SITUATION))
+		return buildBasicStructure(lab,0);
+	if (borgCount < 2 && isStructureAvailable(borgfac,me) && RATE_TANK>0)
+		return buildBasicStructure(borgfac,0);
+	if (vtolCount < 1 && isStructureAvailable(vtolfac,me)) 
+		return buildBasicStructure(vtolfac,0);
 	return false;
 }
