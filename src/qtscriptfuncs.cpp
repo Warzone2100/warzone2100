@@ -57,6 +57,9 @@
 #include "mapgrid.h"
 
 #define FAKE_REF_LASSAT 999
+#define ALL_PLAYERS -1
+#define ALLIES -2
+#define ENEMIES -3
 
 // hack, this is used from scriptfuncs.cpp -- and we don't want to include any stinkin' wzscript headers here!
 // TODO, move this stuff into a script common subsystem
@@ -2322,21 +2325,27 @@ static QScriptValue js_loadLevel(QScriptContext *context, QScriptEngine *)
 	return QScriptValue();
 }
 
-//-- \subsection{enumRange(x, y, range[, filter])}
+//-- \subsection{enumRange(x, y, range[, filter[, seen]])}
 //-- Returns an array of game objects seen within range of given position that passes the optional filter
 //-- which can be one of a player index, ALL_PLAYERS, ALLIES or ENEMIES. By default, filter is 
-//-- ALL_PLAYERS. Calling this function is much faster than iterating over all game objects using 
-//-- other enum functions. (3.2+ only)
+//-- ALL_PLAYERS. Finally an optional parameter can specify whether only visible objects should be 
+//-- returned; by default only visible objects are returned. Calling this function is much faster than 
+//-- iterating over all game objects using other enum functions. (3.2+ only)
 static QScriptValue js_enumRange(QScriptContext *context, QScriptEngine *engine)
 {
 	int player = engine->globalObject().property("me").toInt32();
 	int x = world_coord(context->argument(0).toInt32());
 	int y = world_coord(context->argument(1).toInt32());
 	int range = context->argument(2).toInt32();
-	int filter = -1;
+	int filter = ALL_PLAYERS;
+	bool seen = true;
 	if (context->argumentCount() > 3)
 	{
 		filter = context->argument(3).toInt32();
+	}
+	if (context->argumentCount() > 4)
+	{
+		seen = context->argument(4).toBool();
 	}
 	if (filter >= 0)
 	{
@@ -2349,11 +2358,11 @@ static QScriptValue js_enumRange(QScriptContext *context, QScriptEngine *engine)
 	QList<BASE_OBJECT *> list;
 	for (BASE_OBJECT *psObj = gridIterate(); psObj != NULL; psObj = gridIterate())
 	{
-		if (psObj->visible[player] && !psObj->died)
+		if ((psObj->visible[player] || !seen) && !psObj->died)
 		{
-			if ((filter >= 0 && psObj->player == filter) || filter == -1
-			    || (filter == -2 && aiCheckAlliances(psObj->player, player))
-			    || (filter == -3 && !aiCheckAlliances(psObj->player, player)))
+			if ((filter >= 0 && psObj->player == filter) || filter == ALL_PLAYERS
+			    || (filter == ALLIES && aiCheckAlliances(psObj->player, player))
+			    || (filter == ENEMIES && !aiCheckAlliances(psObj->player, player)))
 			{
 				list.append(psObj);
 			}
@@ -2375,11 +2384,13 @@ static QScriptValue js_chat(QScriptContext *context, QScriptEngine *engine)
 	int player = engine->globalObject().property("me").toInt32();
 	int target = context->argument(0).toInt32();
 	QString message = context->argument(1).toString();
-	if (target == -1) // all
+	SCRIPT_ASSERT_PLAYER(context, player);
+	SCRIPT_ASSERT(context, target >= 0 || target == ALL_PLAYERS || target == ALLIES, "Message to invalid player %d", target);
+	if (target == ALL_PLAYERS) // all
 	{
 		return QScriptValue(sendTextMessage(message.toUtf8().constData(), true, player));
 	}
-	else if (target == -2) // allies
+	else if (target == ALLIES) // allies
 	{
 		return QScriptValue(sendTextMessage(QString(". " + message).toUtf8().constData(), false, player));
 	}
@@ -2598,9 +2609,9 @@ bool registerFunctions(QScriptEngine *engine)
 	engine->globalObject().setProperty("FEATURE", OBJ_FEATURE, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("POSITION", POSITION, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("AREA", AREA, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("ALL_PLAYERS", -1, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("ALLIES", -2, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("ENEMIES", -3, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("ALL_PLAYERS", ALL_PLAYERS, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("ALLIES", ALLIES, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("ENEMIES", ENEMIES, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 
 	// Static knowledge about players
 	//== \item[playerData] An array of information about the players in a game. Each item in the array is an object
