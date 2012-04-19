@@ -40,6 +40,9 @@ extern void gridReset(void);
 /// Find all objects within radius. Call gridIterate() to get the search results.
 extern void gridStartIterate(int32_t x, int32_t y, uint32_t radius);
 
+/// Find all objects within radius. Call gridIterate() to get the search results.
+extern void gridStartIterateArea(int32_t x, int32_t y, uint32_t x2, uint32_t y2);
+
 // Isn't, but could be used by some cluster system. Don't really understand what cluster.c is for.
 /// Find all objects within radius where object->type == OBJ_DROID && object->player == player. Call gridIterate() to get the search results.
 extern void gridStartIterateDroidsByPlayer(int32_t x, int32_t y, uint32_t radius, int player);

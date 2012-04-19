@@ -2347,14 +2347,70 @@ static QScriptValue js_enumRange(QScriptContext *context, QScriptEngine *engine)
 	{
 		seen = context->argument(4).toBool();
 	}
-	if (filter >= 0)
+	gridStartIterate(x, y, range);
+	QList<BASE_OBJECT *> list;
+	for (BASE_OBJECT *psObj = gridIterate(); psObj != NULL; psObj = gridIterate())
 	{
-		gridStartIterateDroidsByPlayer(x, y, range, filter);
+		if ((psObj->visible[player] || !seen) && !psObj->died)
+		{
+			if ((filter >= 0 && psObj->player == filter) || filter == ALL_PLAYERS
+			    || (filter == ALLIES && aiCheckAlliances(psObj->player, player))
+			    || (filter == ENEMIES && !aiCheckAlliances(psObj->player, player)))
+			{
+				list.append(psObj);
+			}
+		}
+	}
+	QScriptValue value = engine->newArray(list.size());
+	for (int i = 0; i < list.size(); i++)
+	{
+		value.setProperty(i, convMax(list[i], engine), QScriptValue::ReadOnly);
+	}
+	return value;
+}
+
+//-- \subsection{enumArea(<x1, y1, x2, y2 | label>[, filter[, seen]])}
+//-- Returns an array of game objects seen within the given area that passes the optional filter
+//-- which can be one of a player index, ALL_PLAYERS, ALLIES or ENEMIES. By default, filter is 
+//-- ALL_PLAYERS. Finally an optional parameter can specify whether only visible objects should be 
+//-- returned; by default only visible objects are returned. The label can either be actual 
+//-- positions or a label to an AREA. Calling this function is much faster than iterating over all
+//-- game objects using other enum functions. (3.2+ only)
+static QScriptValue js_enumArea(QScriptContext *context, QScriptEngine *engine)
+{
+	int player = engine->globalObject().property("me").toInt32();
+	int x1, y1, x2, y2, nextparam;
+	int filter = ALL_PLAYERS;
+	bool seen = true;
+	if (context->argument(0).isString())
+	{
+		QString label = context->argument(0).toString();
+		nextparam = 1;
+		SCRIPT_ASSERT(context, labels.contains(label), "Label %s not found", label.toUtf8().constData());
+		labeltype p = labels.value(label);
+		SCRIPT_ASSERT(context, p.type == AREA, "Wrong label type for %s", label.toUtf8().constData());
+		x1 = p.p1.x;
+		y1 = p.p1.y;
+		x2 = p.p2.x;
+		y2 = p.p2.y;
 	}
 	else
 	{
-		gridStartIterate(x, y, range);
+		x1 = world_coord(context->argument(0).toInt32());
+		y1 = world_coord(context->argument(1).toInt32());
+		x2 = world_coord(context->argument(2).toInt32());
+		y2 = world_coord(context->argument(3).toInt32());
+		nextparam = 4;
 	}
+	if (context->argumentCount() > nextparam++)
+	{
+		filter = context->argument(3).toInt32();
+	}
+	if (context->argumentCount() > nextparam++)
+	{
+		seen = context->argument(4).toBool();
+	}
+	gridStartIterateArea(x1, y1, x2, y2);
 	QList<BASE_OBJECT *> list;
 	for (BASE_OBJECT *psObj = gridIterate(); psObj != NULL; psObj = gridIterate())
 	{
@@ -2484,6 +2540,7 @@ bool registerFunctions(QScriptEngine *engine)
 	engine->globalObject().setProperty("enumBlips", engine->newFunction(js_enumBlips));
 	engine->globalObject().setProperty("enumResearch", engine->newFunction(js_enumResearch));
 	engine->globalObject().setProperty("enumRange", engine->newFunction(js_enumRange));
+	engine->globalObject().setProperty("enumArea", engine->newFunction(js_enumArea));
 	engine->globalObject().setProperty("getResearch", engine->newFunction(js_getResearch));
 	engine->globalObject().setProperty("pursueResearch", engine->newFunction(js_pursueResearch));
 	engine->globalObject().setProperty("findResearch", engine->newFunction(js_findResearch));

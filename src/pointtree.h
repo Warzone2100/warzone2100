@@ -56,6 +56,8 @@ public:
 	/// (More specifically, returns objects in a square with edge length 2*radius.)
 	/// Note: Not thread safe, because it modifies lastQueryResults, lastFilteredQueryIndices and the internal filter representation for faster lookups.
 	ResultVector &query(Filter &filter, int32_t x, int32_t y, uint32_t radius);
+	/// Returns all points which have not been filtered away within given rectangle. See function above on thread safety.
+	ResultVector &query(int32_t x, int32_t y, uint32_t x2, uint32_t y2);
 
 	ResultVector lastQueryResults;
 	IndexVector lastFilteredQueryIndices;
@@ -65,7 +67,7 @@ private:
 	typedef std::vector<Point> Vector;
 
 	template<bool IsFiltered>
-	ResultVector &queryMaybeFilter(Filter &filter, int32_t x, int32_t y, uint32_t radius);
+	ResultVector &queryMaybeFilter(Filter &filter, int32_t minXo, int32_t maxXo, int32_t minYo, int32_t maxYo);
 
 	Vector points;
 };

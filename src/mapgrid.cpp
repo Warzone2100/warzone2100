@@ -102,7 +102,7 @@ static bool isInRadius(int32_t x, int32_t y, uint32_t radius)
 // initialise the grid system to start iterating through units that
 // could affect a location (x,y in world coords)
 template<class Condition>
-void gridStartIterateFiltered(int32_t x, int32_t y, uint32_t radius, PointTree::Filter *filter, Condition const &condition)
+static void gridStartIterateFiltered(int32_t x, int32_t y, uint32_t radius, PointTree::Filter *filter, Condition const &condition)
 {
 	if (filter == NULL)
 	{
@@ -135,6 +135,14 @@ void gridStartIterateFiltered(int32_t x, int32_t y, uint32_t radius, PointTree::
 	*/
 }
 
+template<class Condition>
+static void gridStartIterateFilteredArea(int32_t x, int32_t y, int32_t x2, int32_t y2, Condition const &condition)
+{
+	gridPointTree->query(x, y, x2, y2);
+	gridPointTree->lastQueryResults.push_back(NULL);  // NULL-terminate the result.
+	gridIterator = &gridPointTree->lastQueryResults[0];
+}
+
 struct ConditionTrue
 {
 	bool test(BASE_OBJECT *) const
@@ -146,6 +154,11 @@ struct ConditionTrue
 void gridStartIterate(int32_t x, int32_t y, uint32_t radius)
 {
 	gridStartIterateFiltered(x, y, radius, NULL, ConditionTrue());
+}
+
+void gridStartIterateArea(int32_t x, int32_t y, uint32_t x2, uint32_t y2)
+{
+	gridStartIterateFilteredArea(x, y, x2, y2, ConditionTrue());
 }
 
 struct ConditionDroidsByPlayer

@@ -129,12 +129,8 @@ static unsigned current(std::vector<unsigned> &filterData, unsigned i)
 }
 
 template<bool IsFiltered>
-PointTree::ResultVector &PointTree::queryMaybeFilter(Filter &filter, int32_t x, int32_t y, uint32_t radius)
+PointTree::ResultVector &PointTree::queryMaybeFilter(Filter &filter, int32_t minXo, int32_t minYo, int32_t maxXo, int32_t maxYo)
 {
-	int32_t minXo = x - radius;
-	int32_t maxXo = x + radius;
-	int32_t minYo = y - radius;
-	int32_t maxYo = y + radius;
 	uint64_t minX = expandX(minXo);
 	uint64_t maxX = expandX(maxXo);
 	uint64_t minY = expandY(minYo);
@@ -274,13 +270,27 @@ PointTree::ResultVector &PointTree::queryMaybeFilter(Filter &filter, int32_t x, 
 	return lastQueryResults;
 }
 
+PointTree::ResultVector &PointTree::query(int32_t x, int32_t y, uint32_t x2, uint32_t y2)
+{
+	Filter unused;
+	return queryMaybeFilter<false>(unused, x, y, x2, y2);
+}
+
 PointTree::ResultVector &PointTree::query(int32_t x, int32_t y, uint32_t radius)
 {
 	Filter unused;
-	return queryMaybeFilter<false>(unused, x, y, radius);
+	int32_t minXo = x - radius;
+	int32_t maxXo = x + radius;
+	int32_t minYo = y - radius;
+	int32_t maxYo = y + radius;
+	return queryMaybeFilter<false>(unused, minXo, minYo, maxXo, maxYo);
 }
 
 PointTree::ResultVector &PointTree::query(Filter &filter, int32_t x, int32_t y, uint32_t radius)
 {
-	return queryMaybeFilter<true>(filter, x, y, radius);
+	int32_t minXo = x - radius;
+	int32_t maxXo = x + radius;
+	int32_t minYo = y - radius;
+	int32_t maxYo = y + radius;
+	return queryMaybeFilter<true>(filter, minXo, minYo, maxXo, maxYo);
 }
