@@ -105,9 +105,6 @@ static const UDWORD NULL_ID = UDWORD_MAX;
  */
 #define FIXME_CAST_ASSIGN(TYPE, lval, rval) memcpy(&lval, &rval, MIN(sizeof(lval), sizeof(rval)))
 
-/// @note This represents a size internal to savegame files, so: DO NOT CHANGE THIS
-#define MAX_GAME_STR_SIZE 20
-
 static UDWORD RemapPlayerNumber(UDWORD OldNumber);
 static void plotFeature(char *backDropSprite);
 bool writeGameInfo(const char *pFileName);
