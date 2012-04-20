@@ -13201,11 +13201,11 @@ msgstr "Figyelem! Ez a csalás hibákat tartalmaz. NEM ajánljuk használatra."
 
 #: src/keybind.cpp:199
 msgid "Ouch! Droid's health is down 20%!"
-msgstr ""
+msgstr "Aú! A droid egészsége 20 százalék alatt van!"
 
 #: src/keybind.cpp:215
 msgid "Ouch! Structure's health is down 20%!"
-msgstr ""
+msgstr "Aú! Szerkezet egészsége 20% alatt van!"
 
 #: src/keybind.cpp:270
 msgid "Lets us see what you see!"
@@ -14112,7 +14112,7 @@ msgstr "Előcsarnok"
 
 #: src/multiint.cpp:724
 msgid "IP"
-msgstr ""
+msgstr "IP"
 
 #: src/multiint.cpp:940
 #, fuzzy
@@ -14121,26 +14121,26 @@ msgstr " *** jelszót nem kötelező! ***"
 
 #: src/multiint.cpp:944
 msgid "[No Tanks]"
-msgstr ""
+msgstr "[Nincsenek Tankok]"
 
 #: src/multiint.cpp:948
 #, fuzzy
 msgid "[No Cyborgs]"
-msgstr "Cyborgokat gyárt"
+msgstr "[Nincsenek Cyborgok]"
 
 #: src/multiint.cpp:952
 msgid "[No VTOLs]"
-msgstr ""
+msgstr "[Nincs VTOLS]"
 
 #: src/multiint.cpp:956
 #, c-format
 msgid "Hosted by %s"
-msgstr ""
+msgstr "Kiszolgáló %s által"
 
 #: src/multiint.cpp:960
 #, c-format
 msgid "Hosted by %s —%s"
-msgstr ""
+msgstr "Kiszolgáló %s —%s által"
 
 #: src/multiint.cpp:980
 msgid "No games are available"
@@ -14409,7 +14409,7 @@ msgstr "Minden játékosnak ugyanazokkal a mod-okkal kell rendelkeznie, hogy csa
 
 #: src/multiint.cpp:2584
 msgid "Connecting to the lobby server..."
-msgstr ""
+msgstr "Kapcsolódás a kiszolgáló szerverhez..."
 
 #: src/multiint.cpp:2730
 #, c-format
@@ -14441,16 +14441,16 @@ msgstr "A játékmester elindította a játékot"
 
 #: src/multiint.cpp:3831
 msgid "Can't connect to lobby server!"
-msgstr ""
+msgstr "Nem tud kapcsolodni a kiszolgáló szerverhez !"
 
 #: src/multiint.cpp:3923
 #, c-format
 msgid "Mods: %s"
-msgstr ""
+msgstr "Mód: %s"
 
 #: src/multiint.cpp:3930
 msgid "Mods: None!"
-msgstr ""
+msgstr "Mód: Nincs!"
 
 #: src/multiint.cpp:3940
 #, fuzzy, c-format
@@ -14946,488 +14946,3 @@ msgstr " - Épített %s"
 #, fuzzy, c-format
 msgid "Version %s-%s%s%s%s"
 msgstr "Verzió %s%s%s%s"
-
-#~ msgid "Visit our official site: http://wz2100.net"
-#~ msgstr "Látogass el a hivatalos oldalra: http://wz2100.net"
-
-#, fuzzy
-#~ msgid "Unit Colour (SP)"
-#~ msgstr "Egység Színek"
-
-#, fuzzy
-#~ msgid "Unit Colour (MP)"
-#~ msgstr "Egység Színek"
-
-#~ msgid "VTOL HPV Cannon Bug VTOL"
-#~ msgstr "VTOL Bug nagysebességű ágyú"
-
-#~ msgid "VTOL HPV Cannon Scorpion VTOL"
-#~ msgstr "VTOL Scorpion nagysebességű ágyú"
-
-#~ msgid "VTOL HPV Cannon Mantis VTOL"
-#~ msgstr "VTOL Mantis nagysebességű ágyú"
-
-#~ msgid "Mini-Rocket Artillery Cobra Tracks"
-#~ msgstr "Cobra lánctalpas tüzérségi kisrakéta"
-
-#~ msgid "HPV Cannon Python Hover"
-#~ msgstr "Python légpárnás nagysebességű ágyú"
-
-#~ msgid "CHEATS ARE NOW ENABLED!"
-#~ msgstr "CSALÁS BEKAPCSOLVA!"
-
-#~ msgid "CHEATS ARE NOW DISABLED!"
-#~ msgstr "CSALÁS KIKAPCSOLVA!"
-
-#~ msgid "Received invalid addGame data."
-#~ msgstr "Érvénytelen játék hozzáadás adat érkezett."
-
-#~ msgid "Create a game first!"
-#~ msgstr "Játékcél felkutatása"
-
-#~ msgid "Received invalid login data."
-#~ msgstr "Érvénytelen bejelentkezési adat érkezett."
-
-#~ msgid "Failed to communicate with the lobby."
-#~ msgstr "Hibás kommunikáció a lobbinál."
-
-#~ msgid "Got server error: %s"
-#~ msgstr "Szerver hiba: %s"
-
-#~ msgid "Game not in the lobby, please login first!"
-#~ msgstr "Játékban ne legyen lobbi, kérlek jelentkezz be először!"
-
-#~ msgid "Activate self-test"
-#~ msgstr "Önellenőrzés aktiválása"
-
-#~ msgid "Failed to create building"
-#~ msgstr "Az épület létrehozása meghiúsult"
-
-#~ msgid "Authentication failed or not Authenticated"
-#~ msgstr "Azonosítás hibás vagy nem azonosított"
-
-#~ msgid "The lobby rejected you!"
-#~ msgstr "A lobbit elutasítom!"
-
-#~ msgid "Connect IP"
-#~ msgstr "Kapcsolódás IP!"
-
-#~ msgid "Login"
-#~ msgstr "Bejelentkezés"
-
-#~ msgid "Logout"
-#~ msgstr "Kijelentkezés"
-
-#~ msgid "LOBBY LOGIN"
-#~ msgstr "Lobbi bejelentkezés"
-
-#~ msgid "Username:"
-#~ msgstr "Felhasználó név:"
-
-#~ msgid "Password:"
-#~ msgstr "Jelszó megadása:"
-
-#~ msgid "Use your wz2100.net credentials here."
-#~ msgstr "Használd a wz2100.net igazolást itt."
-
-#~ msgid "You cannot change AI in a challenge"
-#~ msgstr "Nem tudsz változtatni az AI-on mozgásnál"
-
-#~ msgid "Players"
-#~ msgstr "Játékosok száma"
-
-#~ msgid "3 players"
-#~ msgstr "3 játékos"
-
-#~ msgid "4 players"
-#~ msgstr "4 játékos"
-
-#~ msgid "5 players"
-#~ msgstr "5 játékos"
-
-#~ msgid "6 players"
-#~ msgstr "6 játékos"
-
-#~ msgid "7 players"
-#~ msgstr "7 játékos"
-
-#~ msgid "8 players"
-#~ msgstr "8 játékos"
-
-#, fuzzy
-#~ msgid "9 players"
-#~ msgstr "2 játékos"
-
-#, fuzzy
-#~ msgid "10 players"
-#~ msgstr "2 játékos"
-
-#, fuzzy
-#~ msgid "11 players"
-#~ msgstr "2 játékos"
-
-#, fuzzy
-#~ msgid "12 players"
-#~ msgstr "2 játékos"
-
-#, fuzzy
-#~ msgid "13 players"
-#~ msgstr "3 játékos"
-
-#, fuzzy
-#~ msgid "14 players"
-#~ msgstr "4 játékos"
-
-#, fuzzy
-#~ msgid "15 players"
-#~ msgstr "5 játékos"
-
-#, fuzzy
-#~ msgid "16 players"
-#~ msgstr "6 játékos"
-
-#, fuzzy
-#~ msgid "FPS %d; PIEs %d; polys %d; States %d"
-#~ msgstr "FPS %d; FPS-limit: %d; PIEs %d; polys %d; Terr. polys %d; States %d"
-
-#~ msgid "Power Accrued"
-#~ msgstr "Energia felhalmozva"
-
-#~ msgid "Radar showing revealed terrain"
-#~ msgstr "Radar mutatja a felderített terepet"
-
-#~ msgid "Fog"
-#~ msgstr "Köd"
-
-#~ msgid "Mist"
-#~ msgstr "Homály"
-
-#~ msgid "Distance Fog"
-#~ msgstr "Távolsági köd"
-
-#~ msgid "* May negatively affect performance"
-#~ msgstr "* Hátrányosan érintheti a sebességet"
-
-#~ msgid "Congratulations your successfull evacuation of Beta Base."
-#~ msgstr "Gratulálok Béta bázis sikeres evakuálásához."
-
-#~ msgid "Cobra Hover Heavy-Repair"
-#~ msgstr "Cobra légpárnás nehéz szervízkocsi"
-
-#~ msgid "Viper HMG Wheels"
-#~ msgstr "Viper nehéz gépfegyver"
-
-#~ msgid "TK Mantis Hover"
-#~ msgstr "Mantis légpárnás Tank Killer"
-
-#~ msgid "Cobra HMG Tracks"
-#~ msgstr "Cobra lánctalpas nehéz gépfegyver"
-
-#~ msgid "Cobra Hover HC"
-#~ msgstr "Cobra légpárnás nehéz ágyú"
-
-#~ msgid "Scorpion Lancer Tracks"
-#~ msgstr "Scorpion lánctalpas tankelhárító"
-
-#~ msgid "Scorpion Heavy Cannon Tracks"
-#~ msgstr "Scorpion lánctalpas nehéz ágyú"
-
-#~ msgid "Scorpion Lancer VTOL"
-#~ msgstr "Scorpion VTOL tankelhárító"
-
-#~ msgid "Scorpion BB VTOL"
-#~ msgstr "Scorpion VTOL bunkertörő"
-
-#~ msgid "Viper Command Turret Tracks"
-#~ msgstr "Viper parancsnoki lánctalapas"
-
-#~ msgid "Cobra Command Turret Tracks"
-#~ msgstr "Cobra parancsnoki lánctalpas"
-
-#~ msgid "Scorpion Command Turret Tracks"
-#~ msgstr "Scorpion parancsnoki lánctalpas"
-
-#~ msgid "Mantis Command Turret Tracks"
-#~ msgstr "Mantis parancsnoki lánctalpas"
-
-#~ msgid "Cobra Lancer Tracks"
-#~ msgstr "Cobra lánctalpas tankelhárító rakéta"
-
-#~ msgid "Mantis Heavy Cannon Tracks"
-#~ msgstr "Mantis lánctalpas nehéz ágyú"
-
-#~ msgid "Mantis Tank Killer Tracks"
-#~ msgstr "Mantis lánctalpas Tank Killer rakéta"
-
-#~ msgid "Mantis Scourge Tracks"
-#~ msgstr "Mantis lánctalpas Scourge rakéta"
-
-#~ msgid "Scorpion Heavy Machinegun Tracks"
-#~ msgstr "Scorpion lánctalpas nehéz gépfegyver"
-
-#~ msgid "Scorpion Repair Tracks"
-#~ msgstr "Scorpion lánctalpas szervizkocsi"
-
-#~ msgid "Scorpion Heavy Repair Hover"
-#~ msgstr "Scorpion légpárnás nehéz szervizkocsi"
-
-#~ msgid "Cobra Hover Truck"
-#~ msgstr "Cobra légpárnás munkagép"
-
-#~ msgid "Scorpion Hover Truck"
-#~ msgstr "Scorpion légpárnás munkagép"
-
-#~ msgid "Mantis Hover Truck"
-#~ msgstr "Mantis légpárnás munkagép"
-
-#~ msgid "Cobra Bunker Buster Tracks"
-#~ msgstr "Cobra lánctalpas bunkertörő"
-
-#~ msgid "Scorpion Bunker Buster Tracks"
-#~ msgstr "Scorpion lánctalpas bunkertörő"
-
-#~ msgid "Mantis Bunker Buster Tracks"
-#~ msgstr "Mantis lánctalpas bunkertörő"
-
-#~ msgid "Viper Tracks Lancer"
-#~ msgstr "Viper lánctalpas tankelhárító rakéta"
-
-#~ msgid "Cobra Half-Tracks Mini-Pod"
-#~ msgstr "Cobra féllánctalpas kis rakétavető"
-
-#~ msgid "Cobra Tracks Mini-Pod"
-#~ msgstr "Cobra lánctalpas kis rakétavető"
-
-#~ msgid "Cobra Tracks Mini-Rocket Artillery"
-#~ msgstr "Cobra lánctalpas tüzérségi kisrakéta"
-
-#~ msgid "Cobra Inferno Half-track"
-#~ msgstr "Cobra féllánctalpas Inferno lángvető"
-
-#~ msgid "Python HVC Hover"
-#~ msgstr "Python lánctalpas nagysebességű ágyú"
-
-#~ msgid "Python Scourge Tracks"
-#~ msgstr "Python lánctalpas Scourge rakéta"
-
-#~ msgid "Python Gauss Cannon Tracks"
-#~ msgstr "Python lánctalpas Gauss ágyú"
-
-#~ msgid "Python Pulse Laser Tracks"
-#~ msgstr "Python lánctalpas impulzus lézer"
-
-#~ msgid "Tiger Pulse Laser Tracks"
-#~ msgstr "Tiger lánctalpas impulzus lézer"
-
-#~ msgid "Tiger Heavy Laser Tracks"
-#~ msgstr "Tiger lánctalpas nehéz lézer"
-
-#~ msgid "Wyvern Gauss Cannon Tracks"
-#~ msgstr "Wyvern lánctalpas Gauss ágyú"
-
-#~ msgid "Wyvern Pulse Laser Tracks"
-#~ msgstr "Wyvern lánctalpas impulzus lézer"
-
-#~ msgid "Wyvern Heavy Laser Tracks"
-#~ msgstr "Wyvern lánctalpas nehéz lézer"
-
-#~ msgid "Viper Machinegun Half-Track"
-#~ msgstr "Viper féllánctalpas gépfegyver"
-
-#~ msgid "Viper Flamer Half-Track"
-#~ msgstr "Viper féllánctalpas lángvető"
-
-#~ msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
-#~ msgstr "Nem lehet elérni az elcsarnok szervert! A %u TCP port nyitva van a kimenő forgalom számára?"
-
-#~ msgid ": Unknown cheat code."
-#~ msgstr ": ismeretlen megtévesztő kód"
-
-#~ msgid "Run in cheat mode"
-#~ msgstr "Futtatás megtévesztő módba"
-
-#~ msgid "Truck ordered to build Oil Derrick"
-#~ msgstr "Munkagép utasítva, hogy építsen olajkutat."
-
-#~ msgid "Colored Cursors*"
-#~ msgstr "Kiszínezett Kurzorok"
-
-#~ msgid "Infinite Production"
-#~ msgstr "Korlátlan termelés"
-
-#~ msgid "Player %u is cheating him/herself a new droid army of %s(s)."
-#~ msgstr "Player %u csalt (hibakeresés menü), új droidserege lett: %s."
-
-#~ msgid "You found %u power in an oil drum"
-#~ msgstr "%u energiát találtál egy olajkúton"
-
-#~ msgid "Player colour"
-#~ msgstr "Játékos színe"
-
-#~ msgid "Kick player"
-#~ msgstr "Játékos kirúgása"
-
-#~ msgid "Player position"
-#~ msgstr "Játékos pozíció"
-
-#~ msgid " (modified and switched locally)"
-#~ msgstr " (helyileg módosította és átállította)"
-
-#~ msgid " (switched locally)"
-#~ msgstr " (helyileg átállította)"
-
-#~ msgid "Player number"
-#~ msgstr "Player"
-
-#~ msgid "Mini-Rocket accuracy +10%"
-#~ msgstr "Increases Mini-Rocket accuracy"
-
-#~ msgid "Mini-Rocket damage +25%"
-#~ msgstr "Increases Mini-Rocket damage"
-
-#~ msgid "Mini-Rocket reload time -15%"
-#~ msgstr "Mini-Rocket Upgrade"
-
-#~ msgid "Automated Manufacturing Mk2"
-#~ msgstr "Automated VTOL Rearming Mk2"
-
-#~ msgid "Automated Manufacturing Mk3"
-#~ msgstr "Automated VTOL Rearming Mk3"
-
-#~ msgid "Robotic Manufacturing Mk2"
-#~ msgstr "Robotic VTOL Rearming Mk2"
-
-#~ msgid "Robotic Manufacturing Mk3"
-#~ msgstr "Robotic VTOL Rearming Mk3"
-
-#~ msgid "Advanced Manufacturing Mk2"
-#~ msgstr "Advanced Factory Production Mk2"
-
-#~ msgid "Automated Repair Facility Mk2"
-#~ msgstr "Automated Repair Facility"
-
-#~ msgid "Automated Repair Facility Mk3"
-#~ msgstr "Automated Repair Facility"
-
-#~ msgid "Robotic Repair Facility Mk2"
-#~ msgstr "Robotic Repair Facility Upgrade Mk2"
-
-#~ msgid "HESH Mini-Rockets"
-#~ msgstr "HE Mini-Rockets"
-
-#~ msgid "HESH Mini-Rockets Mk2"
-#~ msgstr "HE Mini-Rockets Mk2"
-
-#~ msgid "HESH Mini-Rockets Mk3"
-#~ msgstr "HE Mini-Rockets Mk3"
-
-#~ msgid "Thermite Flamer Cyborg"
-#~ msgstr "Thermite Flamer"
-
-#~ msgid "Grenadier Cyborg"
-#~ msgstr "Grenadier"
-
-#~ msgid "Spanish"
-#~ msgstr "Danish"
-
-#~ msgid "Finnish"
-#~ msgstr "Danish"
-
-#~ msgid "Irish"
-#~ msgstr "Skirmish"
-
-#~ msgid "Croatian"
-#~ msgstr "Latin"
-
-#~ msgid "Polish"
-#~ msgstr "Demolish"
-
-#~ msgid "Brazilian Portuguese"
-#~ msgstr "Portugese"
-
-#~ msgid "Portuguese"
-#~ msgstr "Portugese"
-
-#~ msgid ", mod: "
-#~ msgstr "mod"
-
-#~ msgid "Increases Bombing damage"
-#~ msgstr "Increases Cannon damage"
-
-#~ msgid "Basque"
-#~ msgstr "Base"
-
-#~ msgid "Norwegian (Nynorsk)"
-#~ msgstr "Norwegian"
-
-#~ msgid "Swedish (Sweden)"
-#~ msgstr "Swedish"
-
-#~ msgid "Turkish"
-#~ msgstr "Tracks"
-
-#~ msgid "Heavy Machinegun Cobra Half-trackS"
-#~ msgstr "Cobra Heavy Machinegun Half-track"
-
-#~ msgid "Peperpot Emplacement"
-#~ msgstr "Pepperpot Emplacement"
-
-#~ msgid "Cursor Mode"
-#~ msgstr "Power Module"
-
-#~ msgid "Hardware"
-#~ msgstr "Hardcrete"
-
-#~ msgid "Mini-Pod Artillery"
-#~ msgstr "Mini-Rocket Artillery"
-
-#~ msgid "Mini-Pod Battery"
-#~ msgstr "Mini-Rocket Battery"
-
-#~ msgid "Stabilized Mini-Pods"
-#~ msgstr "Stabilised Mini-Rockets"
-
-#~ msgid "Stabilized Mini-Pods Mk2"
-#~ msgstr "Stabilised Mini-Rockets Mk2"
-
-#~ msgid "HE Mini-Pods"
-#~ msgstr "Mini-Pod"
-
-#~ msgid "HE Mini-Pods Mk2"
-#~ msgstr "HE Mini-Rockets Mk2"
-
-#~ msgid "HE Mini-Pods Mk3"
-#~ msgstr "HE Mini-Rockets Mk3"
-
-#~ msgid "HEAP Mini-Pods"
-#~ msgstr "HEAP Mini-Rockets"
-
-#~ msgid "HEAP Mini-Pods Mk2"
-#~ msgstr "HEAP Mini-Rockets Mk2"
-
-#~ msgid "HEAP Mini-Pods Mk3"
-#~ msgstr "HEAP Mini-Rockets Mk3"
-
-#~ msgid "Fast Fire Mini-Pods"
-#~ msgstr "Fast Fire Mini-Rockets"
-
-#~ msgid "Fast Fire Mini-Pods Mk2"
-#~ msgstr "Fast Fire Mini-Rockets Mk2"
-
-#~ msgid "Fast Fire Mini-Pods Mk3"
-#~ msgstr "Fast Fire Mini-Rockets Mk3"
-
-#~ msgid "Rapid Fire Mini-Pods"
-#~ msgstr "Rapid Fire Mini-Rockets"
-
-#~ msgid "Rapid Fire Mini-Pods Mk2"
-#~ msgstr "Rapid Fire Mini-Rockets Mk2"
-
-#~ msgid "Rapid Fire Mini-Pods Mk3"
-#~ msgstr "Rapid Fire Mini-Rockets Mk3"
-
-#~ msgid "Cluster Bombs Bug VTOL"
-#~ msgstr "Bug Cluster Bomb VTOL"
-
-#~ msgid "Python Tank Killer Tracks"
-#~ msgstr "Mantis Tank Killer Tracks"
