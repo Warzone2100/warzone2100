@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2012-04-09 23:37+0200\n"
-"PO-Revision-Date: 2012-02-23 14:59+0100\n"
+"PO-Revision-Date: 2012-04-22 18:04+0200\n"
 "Last-Translator: Steven 'Kreuvf' Koenig <translations@kreuvf.de>\n"
 "Language-Team: Deutsch <warzone2100-project@lists.sourceforge.net>\n"
 "Language: \n"
@@ -10321,9 +10321,9 @@ msgid "Repair Speed +100%"
 msgstr "Reparaturgeschwindigkeit +100%"
 
 #: data/mp/messages/resmessages1.rmsg:235
-#, fuzzy, c-format
+#, c-format
 msgid "Factory output speed +100%% per module"
-msgstr "Fabrikproduktionsgeschwindigkeit +100% pro Modul"
+msgstr "Fabrikproduktionsgeschwindigkeit +100%% pro Modul"
 
 #: data/mp/messages/resmessages1.rmsg:245
 #: data/mp/messages/resmessagesall.rmsg:615
@@ -12505,7 +12505,7 @@ msgstr "HAUPTMENÜ"
 
 #: src/frontend.cpp:116
 msgid "Warzone 2100 is completely free and open source (FLOSS). Official site: http://wz2100.net/"
-msgstr ""
+msgstr "Warzone 2100 ist vollkommen frei und quelloffen (FLOSS). Offizielle Seite: http://wz2100.net/"
 
 #: src/frontend.cpp:187
 msgid "Fast Play"
@@ -12833,21 +12833,18 @@ msgstr "Scrollgeschwindigkeit"
 
 #: src/frontend.cpp:1228
 #: src/frontend.cpp:1283
-#, fuzzy
 msgid "Unit Colour:"
-msgstr "Einheitenfarbe (SP)"
+msgstr "Einheitenfarbe:"
 
 #: src/frontend.cpp:1248
 #: src/frontend.cpp:1284
-#, fuzzy
 msgid "Campaign"
-msgstr "Neue Kampagne"
+msgstr "Kampagne"
 
 #: src/frontend.cpp:1258
 #: src/frontend.cpp:1285
-#, fuzzy
 msgid "Skirmish/Multiplayer"
-msgstr "Mehrspieler"
+msgstr "Geplänkel/Mehrspieler"
 
 #: src/frontend.cpp:1264
 #: src/frontend.cpp:1280
@@ -13240,11 +13237,11 @@ msgstr "Warnung! Dieser Cheat ist fehlerbehaftet. Wir empfehlen ihn NICHT zu nut
 
 #: src/keybind.cpp:199
 msgid "Ouch! Droid's health is down 20%!"
-msgstr ""
+msgstr "Autsch! Einheitengesundheit um 20% runter"
 
 #: src/keybind.cpp:215
 msgid "Ouch! Structure's health is down 20%!"
-msgstr ""
+msgstr "Autsch! Gebäudegesundheit um 20% runter"
 
 #: src/keybind.cpp:270
 msgid "Lets us see what you see!"
@@ -14256,9 +14253,8 @@ msgid "Select Map"
 msgstr "Karte auswählen"
 
 #: src/multiint.cpp:1428
-#, fuzzy
 msgid "Password is already set!"
-msgstr "Spieler ist bereit"
+msgstr "Passwort ist schon gesetzt!"
 
 #: src/multiint.cpp:1436
 msgid "Click to set Password"

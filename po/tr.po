@@ -8,9 +8,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2012-04-09 23:37+0200\n"
-"PO-Revision-Date: 2012-02-20 21:03+0200\n"
-"Last-Translator: Ayhan GÖRGÜLÜ <ayahngorgulu45@gmail.com>\n"
+"POT-Creation-Date: 2012-04-22 16:57+0200\n"
+"PO-Revision-Date: 2012-04-22 17:42+0200\n"
+"Last-Translator: Ayhan GÖRGÜLÜ <ayhangorgulu45@gmail.com>\n"
 "Language-Team: Turkey <warzone2100-project@lists.sourceforge.net>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -363,7 +363,7 @@ msgstr "Zırhlı Mini-Roket Koruma Kulesi"
 #: data/base/messages/resmessages12.rmsg:27
 #: data/mp/messages/resmessages12.rmsg:24
 msgid "Armored hardpoint with Heavy Machinegun"
-msgstr "Ağır Makinalı Zırhlandırılmış Bağlama Noktası"
+msgstr "Zırhlı Ağır Makinalı bağlama noktası"
 
 #: data/base/messages/resmessages12.rmsg:28
 #: data/base/messages/resmessages12.rmsg:39
@@ -504,7 +504,7 @@ msgstr "Savunma gücü: Yüksek"
 #: data/base/messages/resmessages12.rmsg:38
 #: data/mp/messages/resmessages12.rmsg:34
 msgid "Armored hardpoint with Lancer AT missile"
-msgstr "Roketatar A-T füzeli Zırhlandırılmış Bağlama Noktası"
+msgstr "Zırhlı Mızrak roket bağlama noktası"
 
 #: data/base/messages/resmessages12.rmsg:48
 #: data/base/messages/resmessages23.rmsg:37
@@ -1235,7 +1235,7 @@ msgstr "Sinaptik Bağlantı; İnsanlar ile bilgisayarların birbirine bağlanmas
 #: data/base/messages/resmessages1.rmsg:17
 #: data/mp/messages/resmessages1.rmsg:15
 msgid "Cyborgs can now be researched"
-msgstr "Cyborgler şimdi araştırılabilir"
+msgstr "Sayborglar şimdi araştırılabilir"
 
 #: data/base/messages/resmessages1.rmsg:18
 #: data/mp/messages/resmessages1.rmsg:16
@@ -1253,7 +1253,7 @@ msgstr "Yeni Araştırma seçenekleri aktif"
 #: data/mp/messages/resmessages3.rmsg:63
 #: data/mp/messages/strings/resstrings.txt:35
 msgid "Cyborg Materials Improved"
-msgstr "Cyborg Materyali Geliştirildi"
+msgstr "Sayborg Materyali Geliştirildi"
 
 #: data/base/messages/resmessages1.rmsg:27
 #: data/base/messages/resmessages1.rmsg:401
@@ -1292,7 +1292,7 @@ msgstr "Kinetik zırh ve beden puanı arttırıldı"
 #: data/mp/messages/strings/resstrings.txt:38
 #: data/mp/messages/strings/resstrings.txt:48
 msgid "All Cyborgs upgraded automatically"
-msgstr "Tüm Cyborglar otomatik olarak geliştirildi"
+msgstr "Tüm Sayborglar otomatik olarak geliştirildi"
 
 #: data/base/messages/resmessages1.rmsg:37
 #: data/base/messages/resmessages1.rmsg:48
@@ -1330,12 +1330,12 @@ msgstr "Tüm Cyborglar otomatik olarak geliştirildi"
 #: data/mp/messages/strings/resstrings.txt:53
 #: data/mp/messages/strings/resstrings.txt:85
 msgid "New Cyborg Available"
-msgstr "Yeni Cyborg kullanılabilir"
+msgstr "Yeni Sayborg kullanılabilir"
 
 #: data/base/messages/resmessages1.rmsg:38
 #: data/mp/messages/resmessages1.rmsg:34
 msgid "Armed with Cyborg Machinegun"
-msgstr "Makinalı Cyborg"
+msgstr "Makinalı Sayborg"
 
 #: data/base/messages/resmessages1.rmsg:40
 #: data/base/messages/resmessages1.rmsg:51
@@ -1385,22 +1385,22 @@ msgstr "Makinalı Cyborg"
 #: data/mp/messages/strings/resstrings.txt:100
 #: data/mp/messages/strings/resstrings.txt:106
 msgid "Requires Cyborg factory to produce"
-msgstr "Üretim için Cyborg fabrikası gereklidir"
+msgstr "Üretim için Sayborg fabrikası gereklidir"
 
 #: data/base/messages/resmessages1.rmsg:49
 #: data/mp/messages/resmessages1.rmsg:44
 msgid "Armed with Cyborg Cannon"
-msgstr "Topçu Cyborg"
+msgstr "Topçu Sayborg"
 
 #: data/base/messages/resmessages1.rmsg:60
 #: data/mp/messages/resmessages1.rmsg:54
 msgid "Armed with Cyborg Flamer"
-msgstr "Alev Atıcı Cyborg"
+msgstr "Alev Atıcı Sayborg"
 
 #: data/base/messages/resmessages1.rmsg:71
 #: data/mp/messages/resmessages1.rmsg:64
 msgid "Armed with Lance Anti-Tank rocket"
-msgstr "Roket atar (A-T) Cyborg"
+msgstr "Mızrak roket (T.S) Sayborg"
 
 #: data/base/messages/resmessages1.rmsg:81
 #: data/base/messages/resmessages2.rmsg:48
@@ -1454,11 +1454,11 @@ msgstr "Zırhlı Mini Roket Pod'lu Koruma kulesi"
 #: data/base/messages/resmessages1.rmsg:115
 #: data/mp/messages/resmessages1.rmsg:104
 msgid "Armored bunker with Machinegun"
-msgstr "Makinalı Zırhlandırılmış sığınak"
+msgstr "Zırhlı makinalı sığınak"
 
 #: data/base/messages/resmessages1.rmsg:126
 msgid "Armored bunker with Lancer AT rocket"
-msgstr "Zırhlı Roketatar A-T roketli sığınak"
+msgstr "Zırhlı Mızrak roketli sığınak"
 
 #: data/base/messages/resmessages1.rmsg:137
 #: data/mp/messages/resmessages1.rmsg:124
@@ -1468,7 +1468,7 @@ msgstr "Alev atıcı zırhlandırılmış sığınak"
 #: data/base/messages/resmessages1.rmsg:148
 #: data/mp/messages/resmessages1.rmsg:134
 msgid "Armored bunker with Light Cannon"
-msgstr "Hafif topçu zırhlandırılmış sığınak"
+msgstr "Zırhlı hafif topçu sığınak"
 
 #: data/base/messages/resmessages1.rmsg:159
 #: data/mp/messages/resmessages1.rmsg:144
@@ -1587,13 +1587,13 @@ msgstr "Sadece 5 Komutanı Yönetebilir"
 #: data/mp/messages/strings/resstrings.txt:375
 #: data/mp/messages/strings/resstrings.txt:383
 msgid "Cyborg Production Improved"
-msgstr "Cyborg Üretimi Geliştirildi"
+msgstr "Sayborg Üretimi Geliştirildi"
 
 #: data/base/messages/resmessages1.rmsg:236
 #: data/base/messages/strings/names.txt:783
 #: data/mp/messages/resmessages1.rmsg:214
 msgid "Automated Cyborg Production"
-msgstr "Otomatik Cyborg Üretimi"
+msgstr "Otomatik Sayborg Üretimi"
 
 #: data/base/messages/resmessages1.rmsg:237
 #: data/base/messages/resmessages2.rmsg:292
@@ -1605,7 +1605,7 @@ msgstr "Otomatik Cyborg Üretimi"
 #: data/mp/messages/strings/resstrings.txt:377
 #: data/mp/messages/strings/resstrings.txt:385
 msgid "Increases Cyborg factory output"
-msgstr "Cyborg fabrikası üretim gücü arttırıldı"
+msgstr "Sayborg fabrikası üretim gücü arttırıldı"
 
 #: data/base/messages/resmessages1.rmsg:238
 #: data/base/messages/resmessages2.rmsg:293
@@ -1617,7 +1617,7 @@ msgstr "Cyborg fabrikası üretim gücü arttırıldı"
 #: data/mp/messages/strings/resstrings.txt:378
 #: data/mp/messages/strings/resstrings.txt:386
 msgid "All Cyborg factories upgraded automatically"
-msgstr "Tüm Cyborg Fabrikaları otomatik olarak geliştirildi"
+msgstr "Tüm Sayborg Fabrikaları otomatik olarak geliştirildi"
 
 #: data/base/messages/resmessages1.rmsg:247
 #: data/base/messages/strings/names.txt:399
@@ -1626,17 +1626,17 @@ msgstr "Tüm Cyborg Fabrikaları otomatik olarak geliştirildi"
 #: data/mp/messages/strings/names.txt:398
 #: data/mp/messages/strings/names.txt:792
 msgid "Cyborg Factory"
-msgstr "Cyborg Fabrikası"
+msgstr "Sayborg Fabrikası"
 
 #: data/base/messages/resmessages1.rmsg:248
 #: data/mp/messages/resmessages1.rmsg:225
 msgid "Produces Cyborgs"
-msgstr "Cyborgları Üretir"
+msgstr "Sayborgları Üretir"
 
 #: data/base/messages/resmessages1.rmsg:249
 #: data/mp/messages/resmessages1.rmsg:226
 msgid "Research makes additional Cyborgs available"
-msgstr "Cyborg araştırmalarını aktif eder"
+msgstr "Sayborg araştırmalarını aktif eder"
 
 #: data/base/messages/resmessages1.rmsg:257
 #: data/base/messages/resmessages2.rmsg:334
@@ -2304,7 +2304,7 @@ msgstr "Roket Hasarı Arttırıldı"
 #: data/mp/messages/resmessages23.rmsg:3
 #: data/mp/messages/resmessages3.rmsg:43
 msgid "Cyborg Propulsion Improved"
-msgstr "Cyborg Yürütücü Geliştirildi"
+msgstr "Sayborg Yürütücü Geliştirildi"
 
 #: data/base/messages/resmessages23.rmsg:5
 #: data/base/messages/resmessages2.rmsg:456
@@ -2568,7 +2568,7 @@ msgstr "Tüm DİvK Vuruş algılayıcıları otomatik olarak yükseltildi"
 #: data/mp/messages/strings/resstrings.txt:694
 #: data/mp/messages/strings/resstrings.txt:712
 msgid "AA Upgrade"
-msgstr "AA Geliştirmesi"
+msgstr "U.S. Geliştirmesi"
 
 #: data/base/messages/resmessages23.rmsg:115
 #: data/base/messages/resmessages2.rmsg:709
@@ -2585,7 +2585,7 @@ msgstr "Güdümlü roket mermiler"
 #: data/base/messages/strings/resstrings.txt:661
 #: data/mp/messages/strings/resstrings.txt:696
 msgid "Increases AA accuracy"
-msgstr "AA Hedef Tutturması Arttırıldı"
+msgstr "U.S. Hedef Tutturması Arttırıldı"
 
 #: data/base/messages/resmessages23.rmsg:117
 #: data/base/messages/resmessages2.rmsg:546
@@ -2602,7 +2602,7 @@ msgstr "AA Hedef Tutturması Arttırıldı"
 #: data/mp/messages/strings/resstrings.txt:697
 #: data/mp/messages/strings/resstrings.txt:715
 msgid "All AA weapons upgraded automatically"
-msgstr "Tüm AA silahları otomatik olarak geliştirldi"
+msgstr "Tüm U.S. silahları otomatik olarak geliştirldi"
 
 #: data/base/messages/resmessages23.rmsg:125
 #: data/base/messages/resmessages2.rmsg:598
@@ -2709,7 +2709,7 @@ msgstr "Tüm makinalılar ile değiştirilecek"
 #: data/mp/messages/resmessages3.rmsg:3
 #: data/mp/messages/strings/resstrings.txt:45
 msgid "Cyborg Thermal Armor Improved"
-msgstr "Cyborg Termal Zırhı Geliştirildi"
+msgstr "Sayborg Termal Zırhı Geliştirildi"
 
 #: data/base/messages/resmessages2.rmsg:5
 #: data/base/messages/resmessages3.rmsg:5
@@ -2752,7 +2752,7 @@ msgstr "Zırhlandırılmış Sığınak Yokedici Roket"
 #: data/mp/messages/resmessages2.rmsg:34
 #: data/mp/messages/strings/resstrings.txt:86
 msgid "Armed with Cyborg Assault Gun"
-msgstr "Zırhlandırılmış Cyborg Hücüm Silahlı"
+msgstr "Zırhlandırılmış Sayborg Hücüm Silahlı"
 
 #: data/base/messages/resmessages2.rmsg:49
 #: data/base/messages/strings/resstrings.txt:104
@@ -2766,7 +2766,7 @@ msgstr "Yüksek gerilimli bor ile desteklenmiş  beton"
 #: data/mp/messages/resmessages2.rmsg:54
 #: data/mp/messages/strings/resstrings.txt:140
 msgid "AA Site with Cyclone Flak Turret"
-msgstr "Girdap AA Uçaksavar Taretli Site"
+msgstr "Girdap Uçaksavar Taretli Site"
 
 #: data/base/messages/resmessages2.rmsg:61
 #: data/base/messages/resmessages2.rmsg:83
@@ -2792,7 +2792,7 @@ msgstr "Otomatik olarak DİvK 'ları hedef alır"
 #: data/mp/messages/resmessages2.rmsg:64
 #: data/mp/messages/strings/resstrings.txt:146
 msgid "AA Site with Hurricane Gun Turret"
-msgstr "Kasırga AA Uçaksavar Taretli Site"
+msgstr "Kasırga Uçaksavar Taretli Site"
 
 #: data/base/messages/resmessages2.rmsg:72
 #: data/base/messages/strings/resstrings.txt:127
@@ -2806,14 +2806,14 @@ msgstr "Otomatik olarak DİvK 'ları hedef alır"
 #: data/mp/messages/resmessages2.rmsg:74
 #: data/mp/messages/strings/resstrings.txt:152
 msgid "AA Site with Whirlwind Gun Turret"
-msgstr "Fırtına AA Uçaksavar Taretli Site"
+msgstr "Fırtına Uçaksavar Taretli Site"
 
 #: data/base/messages/resmessages2.rmsg:93
 #: data/base/messages/strings/resstrings.txt:114
 #: data/mp/messages/resmessages2.rmsg:84
 #: data/mp/messages/strings/resstrings.txt:134
 msgid "AA Site with Tornado Flak Turret"
-msgstr "Hortum AA Uçaksavar Taretli Site"
+msgstr "Hortum Uçaksavar Taretli Site"
 
 #: data/base/messages/resmessages2.rmsg:104
 #: data/base/messages/strings/resstrings.txt:142
@@ -2970,7 +2970,7 @@ msgstr "Yeni robotik tamir teknikleri"
 #: data/mp/messages/resmessages2.rmsg:264
 #: data/mp/messages/strings/resstrings.txt:376
 msgid "Robotic Cyborg Production"
-msgstr "Robotik Cyborg Üretimi"
+msgstr "Robotik Sayborg Üretimi"
 
 #: data/base/messages/resmessages2.rmsg:302
 #: data/base/messages/strings/resstrings.txt:366
@@ -3289,7 +3289,7 @@ msgstr "Tüm Tekerlekler otomatik olarak geliştirildi"
 #: data/mp/messages/strings/resstrings.txt:682
 #: data/mp/messages/strings/resstrings.txt:688
 msgid "New AA Turret Available"
-msgstr "Yeni AA Tareti Kullanılabilir"
+msgstr "Yeni U.S. Tareti Kullanılabilir"
 
 #: data/base/messages/resmessages2.rmsg:500
 #: data/base/messages/strings/resstrings.txt:636
@@ -3356,7 +3356,7 @@ msgstr "DİvK ların motor emisyonlarını tespit eder ve kilitlenir"
 #: data/mp/messages/resmessages3.rmsg:633
 #: data/mp/messages/strings/resstrings.txt:704
 msgid "AA Flak Upgrade"
-msgstr "AA Uçaksavar Geliştirmesi"
+msgstr "Uçaksavar Geliştirmesi"
 
 #: data/base/messages/resmessages2.rmsg:555
 #: data/base/messages/strings/resstrings.txt:670
@@ -3370,7 +3370,7 @@ msgstr "Patlayıcılığı arttırılmış Uçaksavar Mermileri"
 #: data/base/messages/strings/resstrings.txt:671
 #: data/mp/messages/strings/resstrings.txt:706
 msgid "Increases AA Flak damage"
-msgstr "AA uçaksavar hasarı arttırıldı"
+msgstr "Uçaksavar hasarı arttırıldı"
 
 #: data/base/messages/resmessages2.rmsg:557
 #: data/base/messages/resmessages3.rmsg:700
@@ -3379,21 +3379,21 @@ msgstr "AA uçaksavar hasarı arttırıldı"
 #: data/mp/messages/resmessages3.rmsg:636
 #: data/mp/messages/strings/resstrings.txt:707
 msgid "All AA flak weapons upgraded automatically"
-msgstr "Tüm AA uçaksavarlar otomatik olarak geliştirildi"
+msgstr "Tüm uçaksavarlar otomatik olarak geliştirildi"
 
 #: data/base/messages/resmessages2.rmsg:566
 #: data/base/messages/strings/resstrings.txt:678
 #: data/mp/messages/resmessages2.rmsg:514
 #: data/mp/messages/strings/resstrings.txt:713
 msgid "Recoil loaded AA ammunition hopper"
-msgstr "Geri Tepmeli AA Mühimmat Ateşleyici"
+msgstr "Geri Tepmeli U.S. Mühimmat Ateşleyici"
 
 #: data/base/messages/resmessages2.rmsg:567
 #: data/base/messages/resmessages3.rmsg:710
 #: data/base/messages/strings/resstrings.txt:679
 #: data/mp/messages/strings/resstrings.txt:714
 msgid "Increases AA ROF"
-msgstr "AA Hedef Tutturması Arttırıldı"
+msgstr "U.S. Hedef Tutturması Arttırıldı"
 
 # Gibt sicherlich einen deutschen Fachausdruck dafür, nur her damit -Kreuvf
 #: data/base/messages/resmessages2.rmsg:576
@@ -3665,7 +3665,7 @@ msgstr "Bilgisayar sistemleri artık kendini Nexus'dan daha iyi koruyacak"
 #: data/base/messages/resmessages3.rmsg:37
 #: data/mp/messages/resmessages3.rmsg:33
 msgid "New Cyborg Research Available"
-msgstr "Yeni Cyborg Araştırması Kullanılabilir"
+msgstr "Yeni Sayborg Araştırması Kullanılabilir"
 
 # Pack wie Equipment übersetzt -Kreuvf
 #: data/base/messages/resmessages3.rmsg:38
@@ -3677,12 +3677,12 @@ msgstr "Aerodinamik Zıplama Paketi"
 #: data/base/messages/resmessages3.rmsg:39
 #: data/mp/messages/resmessages3.rmsg:35
 msgid "Gives Cyborg limited flight abilities"
-msgstr "Cyborglere sınırlı olarak uçma kabiliyeti verir"
+msgstr "Sayborglara sınırlı olarak uçma kabiliyeti verir"
 
 #: data/base/messages/resmessages3.rmsg:40
 #: data/mp/messages/resmessages3.rmsg:36
 msgid "Jump Cyborgs can now be researched"
-msgstr "Zıplayan Cyborgler şimdi araştırılabilir"
+msgstr "Zıplayan Sayborglar şimdi araştırılabilir"
 
 #: data/base/messages/resmessages3.rmsg:60
 #: data/base/messages/resmessages3.rmsg:588
@@ -3739,17 +3739,17 @@ msgstr "Flaşışığı Lazerli"
 #: data/mp/messages/strings/resstrings.txt:97
 #: data/mp/messages/strings/resstrings.txt:103
 msgid "New Jump Cyborg Available"
-msgstr "Yeni Zıplayan Cyborg Kullanılabilir"
+msgstr "Yeni Zıplayan Sayborg Kullanılabilir"
 
 #: data/base/messages/resmessages3.rmsg:126
 #: data/mp/messages/resmessages3.rmsg:114
 msgid "Armed with Lancer anti-tank missile"
-msgstr "Roketatar anti-tank Füzesi"
+msgstr "Mızrak anti-tank roketi ile silahlandırılmış"
 
 #: data/base/messages/resmessages3.rmsg:137
 #: data/mp/messages/resmessages3.rmsg:124
 msgid "Armed with Cyborg assault gun"
-msgstr "Cyborg Hücüm Silahlı"
+msgstr "Sayborg Hücüm Silahlı"
 
 #: data/base/messages/resmessages3.rmsg:170
 #: data/mp/messages/resmessages3.rmsg:154
@@ -3759,7 +3759,7 @@ msgstr "Flaşışığı Lazerli"
 #: data/base/messages/resmessages3.rmsg:172
 #: data/mp/messages/resmessages3.rmsg:156
 msgid "Requires cyborg factory to produce"
-msgstr "Üretmek için Cyborg Fabrikası gerekli"
+msgstr "Üretmek için Sayborg Fabrikası gerekli"
 
 #: data/base/messages/resmessages3.rmsg:181
 #: data/mp/messages/resmessages3.rmsg:164
@@ -3953,7 +3953,7 @@ msgstr "Hasar-Tespit ve otomatik tamir sistemleri"
 #: data/base/messages/resmessages3.rmsg:491
 #: data/mp/messages/resmessages3.rmsg:446
 msgid "Enables self-repair in all Cyborgs"
-msgstr "Tüm Cyborglarda otomatik tamiri etkinleştirir"
+msgstr "Tüm Sayborglarda otomatik tamiri etkinleştirir"
 
 #: data/base/messages/resmessages3.rmsg:501
 #: data/base/messages/resmessages3.rmsg:512
@@ -4125,7 +4125,7 @@ msgstr "Lazer enerjisi üretir ve düşmana fırlatır"
 #: data/mp/messages/resmessages3.rmsg:725
 #: data/mp/messages/resmessages3.rmsg:735
 msgid "Best Targets: Cyborgs"
-msgstr "Harika Hedefler: Cyborgler"
+msgstr "Harika Hedefler: Sayborglar"
 
 #: data/base/messages/resmessages3.rmsg:808
 #: data/mp/messages/resmessages3.rmsg:734
@@ -4300,7 +4300,7 @@ msgstr "Patlayıcılığı arttırılmış batarya füzesi"
 #: data/mp/messages/resmessages3.rmsg:865
 #: data/mp/messages/resmessages3.rmsg:875
 msgid "Best Targets: Base structures and cyborgs"
-msgstr "Harika Hedefler: Üs Binaları ve Cyborglar"
+msgstr "Harika Hedefler: Üs Binaları ve Sayborglar"
 
 #: data/base/messages/resmessages3.rmsg:962
 #: data/mp/messages/resmessages3.rmsg:874
@@ -5841,7 +5841,7 @@ msgstr "Ağır Makinalı Engerek Paletler"
 #: data/base/messages/strings/names.txt:178
 #: data/mp/messages/strings/names.txt:181
 msgid "Lancer Viper Wheels"
-msgstr "Roketatar Engerek Tekerlekler"
+msgstr "Mızrak roket Engerek Tekerlekler"
 
 #: data/base/messages/strings/names.txt:179
 #: data/mp/messages/strings/names.txt:182
@@ -5899,7 +5899,7 @@ msgstr "Komuta Tareti Kobra Yarım Paletler"
 #: data/mp/messages/strings/names.txt:193
 #: data/mp/messages/strings/names.txt:1435
 msgid "Lancer Cobra Half-tracks"
-msgstr "Roketatar Kobra Yarım Paletler"
+msgstr "Mızrak roket Kobra Yarım Paletler"
 
 #: data/base/messages/strings/names.txt:191
 msgid "Mini-Rocket Artillery Cobra Half-tracks"
@@ -6015,7 +6015,7 @@ msgstr "Alev Atıcı"
 #: data/mp/messages/strings/names.txt:521
 #: data/mp/messages/strings/names.txt:535
 msgid "Lancer"
-msgstr "Roketatar"
+msgstr "Mızrak roket"
 
 #: data/base/messages/strings/names.txt:215
 #: data/base/messages/strings/names.txt:220
@@ -6029,7 +6029,7 @@ msgstr "Ağır Makinalı"
 #: data/base/messages/strings/names.txt:219
 #: data/mp/messages/strings/names.txt:222
 msgid "Cyborg Flamer"
-msgstr "Alev Atıcı Cyborg"
+msgstr "Alev Atıcı Sayborg"
 
 #: data/base/messages/strings/names.txt:222
 #: data/mp/messages/strings/names.txt:155
@@ -6040,7 +6040,7 @@ msgstr "Hücüm Silahlı"
 #: data/base/messages/strings/names.txt:226
 #: data/mp/messages/strings/names.txt:229
 msgid "Cyborg Cannon"
-msgstr "Cyborg-Geschütz"
+msgstr "Topçu Sayborg"
 
 #: data/base/messages/strings/names.txt:234
 #: data/mp/messages/strings/names.txt:237
@@ -6203,14 +6203,14 @@ msgstr "Yarım Paletler III"
 #: data/mp/messages/strings/names.txt:333
 #: data/mp/messages/strings/names.txt:699
 msgid "Cyborg Propulsion II"
-msgstr "Cyborg-Antrieb II"
+msgstr "Sayborg Yürütücü II"
 
 #: data/base/messages/strings/names.txt:331
 #: data/base/messages/strings/names.txt:694
 #: data/mp/messages/strings/names.txt:334
 #: data/mp/messages/strings/names.txt:700
 msgid "Cyborg Propulsion III"
-msgstr "Cyborg-Antrieb III"
+msgstr "Sayborg Yürütücü III"
 
 #: data/base/messages/strings/names.txt:334
 #: data/mp/messages/strings/names.txt:335
@@ -6222,7 +6222,7 @@ msgstr "Denizci"
 #: data/mp/messages/strings/names.txt:342
 #: data/mp/messages/strings/names.txt:698
 msgid "Cyborg Propulsion"
-msgstr "Cyborg Yürütücü"
+msgstr "Sayborg Yürütücü"
 
 #: data/base/messages/strings/names.txt:346
 #: data/mp/messages/strings/names.txt:347
@@ -6405,26 +6405,26 @@ msgstr "Sabitlenmiş Cehennem Fırtınası"
 #: data/base/messages/strings/names.txt:715
 #: data/mp/messages/strings/names.txt:725
 msgid "Tornado AA Flak Site"
-msgstr "Kasırga AA Uçaksavar Sitesi"
+msgstr "Kasırga Uçaksavar Sitesi"
 
 #: data/base/messages/strings/names.txt:410
 #: data/base/messages/strings/names.txt:712
 msgid "Cyclone AA Flak Site"
-msgstr "Girdap AA Uçaksavar Sitesi"
+msgstr "Girdap Uçaksavar Sitesi"
 
 #: data/base/messages/strings/names.txt:411
 #: data/base/messages/strings/names.txt:713
 #: data/mp/messages/strings/names.txt:410
 #: data/mp/messages/strings/names.txt:723
 msgid "Hurricane AA Site"
-msgstr "Fırtına AA Sitesi"
+msgstr "Fırtına U.S. Sitesi"
 
 #: data/base/messages/strings/names.txt:412
 #: data/base/messages/strings/names.txt:714
 #: data/mp/messages/strings/names.txt:411
 #: data/mp/messages/strings/names.txt:724
 msgid "Whirlwind AA Site"
-msgstr "Hortum AA Sitesi"
+msgstr "Hortum U.S. Sitesi"
 
 #: data/base/messages/strings/names.txt:414
 #: data/base/messages/strings/names.txt:726
@@ -6515,7 +6515,7 @@ msgstr "Alev Atıcı Bağlama Noktası"
 #: data/mp/messages/strings/names.txt:435
 #: data/mp/messages/strings/names.txt:779
 msgid "Lancer Hardpoint"
-msgstr "Roketatar Bağlama Noktası"
+msgstr "Mızrak roket bağlama noktası"
 
 #: data/base/messages/strings/names.txt:438
 #: data/base/messages/strings/names.txt:755
@@ -6546,7 +6546,7 @@ msgstr "Alev Atıcı Koruma Kulesi"
 #: data/mp/messages/strings/names.txt:747
 #: data/mp/messages/strings/names.txt:768
 msgid "Lancer Tower"
-msgstr "Roketatar Kulesi"
+msgstr "Mızrak roket Kulesi"
 
 #: data/base/messages/strings/names.txt:443
 #: data/mp/messages/strings/names.txt:442
@@ -6597,7 +6597,7 @@ msgstr "Alev Atıcı Sığınak"
 #: data/base/messages/strings/names.txt:737
 #: data/mp/messages/strings/names.txt:450
 msgid "Lancer Bunker"
-msgstr "Roketatar Sığınak"
+msgstr "Mızrak roketli sığınak"
 
 #: data/base/messages/strings/names.txt:454
 #: data/base/messages/strings/names.txt:456
@@ -6912,7 +6912,7 @@ msgstr "DİvK -Mini Roketi"
 #: data/base/messages/strings/names.txt:531
 #: data/mp/messages/strings/names.txt:530
 msgid "VTOL Lancer"
-msgstr "DİvK -Roketatar"
+msgstr "DİvK - Mızrak roket"
 
 #: data/base/messages/strings/names.txt:532
 #: data/mp/messages/strings/names.txt:531
@@ -7090,7 +7090,7 @@ msgstr "CAM2 ARAÇLAR"
 #: data/base/messages/strings/names.txt:632
 #: data/mp/messages/strings/names.txt:632
 msgid "CAM2 CYBORGS"
-msgstr "CAM2 CYBORGLER"
+msgstr "CAM2 SAYBORGLAR"
 
 #: data/base/messages/strings/names.txt:633
 #: data/mp/messages/strings/names.txt:633
@@ -7140,160 +7140,160 @@ msgstr "Üçüncü Seviye Füze Ateşleme Kodları"
 #: data/base/messages/strings/names.txt:655
 #: data/mp/messages/strings/names.txt:655
 msgid "Cyborg Thermal Armor"
-msgstr "Cyborg Termal Zırhı"
+msgstr "Sayborg Termal Zırhı"
 
 #: data/base/messages/strings/names.txt:656
 #: data/mp/messages/strings/names.txt:656
 msgid "Cyborg Thermal Armor Mk2"
-msgstr "Cyborg Termal Zırhı Kdm2"
+msgstr "Sayborg Termal Zırhı Kdm2"
 
 #: data/base/messages/strings/names.txt:657
 #: data/mp/messages/strings/names.txt:657
 msgid "Cyborg Thermal Armor Mk3"
-msgstr "Cyborg Termal Zırhı Kdm3"
+msgstr "Sayborg Termal Zırhı Kdm3"
 
 #: data/base/messages/strings/names.txt:658
 #: data/mp/messages/strings/names.txt:658
 msgid "Cyborg High Intensity Thermal Armor"
-msgstr "Yüksek Yoğunlukta Cyborg Termal Zırhı"
+msgstr "Yüksek Yoğunlukta Sayborg Termal Zırhı"
 
 #: data/base/messages/strings/names.txt:659
 #: data/mp/messages/strings/names.txt:659
 msgid "Cyborg High Intensity Thermal Armor Mk2"
-msgstr "Yüksek Yoğunlukta Cyborg Termal Zırhı Kdm2"
+msgstr "Yüksek Yoğunlukta Sayborg Termal Zırhı Kdm2"
 
 #: data/base/messages/strings/names.txt:660
 #: data/mp/messages/strings/names.txt:660
 msgid "Cyborg High Intensity Thermal Armor Mk3"
-msgstr "Yüksek Yoğunlukta Cyborg Termal Zırhı KDm3"
+msgstr "Yüksek Yoğunlukta Sayborg Termal Zırhı KDm3"
 
 #: data/base/messages/strings/names.txt:662
 #: data/mp/messages/strings/names.txt:662
 msgid "Cyborg Composite Alloys"
-msgstr "Cyborg Kompozit Alaşımları"
+msgstr "Sayborg Kompozit Alaşımları"
 
 #: data/base/messages/strings/names.txt:663
 #: data/mp/messages/strings/names.txt:663
 msgid "Cyborg Composite Alloys Mk2"
-msgstr "Cyborg Kompozit Alaşımları Kdm2"
+msgstr "Sayborg Kompozit Alaşımları Kdm2"
 
 #: data/base/messages/strings/names.txt:664
 #: data/mp/messages/strings/names.txt:664
 msgid "Cyborg Composite Alloys Mk3"
-msgstr "Cyborg Kompozit Alaşımları Kdm3"
+msgstr "Sayborg Kompozit Alaşımları Kdm3"
 
 #: data/base/messages/strings/names.txt:665
 #: data/mp/messages/strings/names.txt:665
 msgid "Cyborg Dense Composite Alloys"
-msgstr "Cyborg Yoğunlaştırılmış Kompozit Alaşımları"
+msgstr "Sayborg Yoğunlaştırılmış Kompozit Alaşımları"
 
 #: data/base/messages/strings/names.txt:666
 #: data/mp/messages/strings/names.txt:666
 msgid "Cyborg Dense Composite Alloys Mk2"
-msgstr "Cyborg Yoğunlaştırılmış Kompozit Alaşımları Kdm2"
+msgstr "Sayborg Yoğunlaştırılmış Kompozit Alaşımları Kdm2"
 
 #: data/base/messages/strings/names.txt:667
 #: data/mp/messages/strings/names.txt:667
 msgid "Cyborg Dense Composite Alloys Mk3"
-msgstr "Cyborg Yoğunlaştırılmış Kompozit Alaşımları Kdm3"
+msgstr "Sayborg Yoğunlaştırılmış Kompozit Alaşımları Kdm3"
 
 #: data/base/messages/strings/names.txt:668
 #: data/mp/messages/strings/names.txt:668
 msgid "Cyborg Superdense Composite Alloys"
-msgstr "Cyborg Süper Yoğun Alaşımları"
+msgstr "Sayborg Süper Yoğun Alaşımları"
 
 #: data/base/messages/strings/names.txt:669
 #: data/mp/messages/strings/names.txt:669
 msgid "Cyborg Superdense Composite Alloys Mk2"
-msgstr "Cyborg Süper Yoğun Alaşımları Kdm2"
+msgstr "Sayborg Süper Yoğun Alaşımları Kdm2"
 
 #: data/base/messages/strings/names.txt:670
 #: data/mp/messages/strings/names.txt:670
 msgid "Cyborg Superdense Composite Alloys Mk3"
-msgstr "Cyborg Süper Yoğun Alaşımları Kdm3"
+msgstr "Sayborg Süper Yoğun Alaşımları Kdm3"
 
 #: data/base/messages/strings/names.txt:673
 #: data/mp/messages/strings/names.txt:679
 msgid "Bunker Blaster Cyborg"
-msgstr "Sığınak Yokedici Cyborg"
+msgstr "Sığınak Yokedici Sayborg"
 
 #: data/base/messages/strings/names.txt:674
 #: data/mp/messages/strings/names.txt:680
 msgid "Heavy Gunner Cyborg"
-msgstr "Ağır Makinalı Cyborg"
+msgstr "Ağır Makinalı Sayborg"
 
 #: data/base/messages/strings/names.txt:675
 #: data/mp/messages/strings/names.txt:681
 msgid "Flamer Cyborg"
-msgstr "Alev Atıcı Cyborg"
+msgstr "Alev Atıcı Sayborg"
 
 #: data/base/messages/strings/names.txt:676
 #: data/mp/messages/strings/names.txt:682
 msgid "Machinegunner Cyborg"
-msgstr "Makinalı Tüfekli Cyborg"
+msgstr "Makinalı Tüfekli Sayborg"
 
 #: data/base/messages/strings/names.txt:677
 msgid "Lancer Cyborg"
-msgstr "Roketatar Cyborg"
+msgstr "Mızrak roketli Sayborg"
 
 #: data/base/messages/strings/names.txt:678
 msgid "Assault Gunner Cyborg"
-msgstr "Hücüm Silahlı Cyborg"
+msgstr "Hücüm Silahlı Sayborg"
 
 #: data/base/messages/strings/names.txt:679
 msgid "Needle Gunner Cyborg"
-msgstr "İğne Silahlı Cyborg"
+msgstr "İğne Silahlı Sayborg"
 
 #: data/base/messages/strings/names.txt:680
 msgid "Scourge Cyborg"
-msgstr "Felaket Füzeli Cyborg"
+msgstr "Felaket Füzeli Sayborg"
 
 #: data/base/messages/strings/names.txt:681
 msgid "Flashlight Gunner Cyborg"
-msgstr "Flaşışık Lazerli Cyborg"
+msgstr "Flaşışık Lazerli Sayborg"
 
 #: data/base/messages/strings/names.txt:683
 #: data/mp/messages/strings/names.txt:689
 msgid "Jump Bunker Blaster"
-msgstr "Zıplayan Sığınak Yokedici Cyborg"
+msgstr "Zıplayan Sığınak Yokedici Sayborg"
 
 #: data/base/messages/strings/names.txt:684
 #: data/mp/messages/strings/names.txt:690
 msgid "Jump Heavy Gunner"
-msgstr "Zıplayan Roketatar Cyborg"
+msgstr "Zıplayan ağır topçu Sayborg"
 
 # Das Cyborg mal des Klanges wegen hinzugefügt -Kreuvf
 #: data/base/messages/strings/names.txt:685
 #: data/mp/messages/strings/names.txt:691
 msgid "Jump Lancer"
-msgstr "Zıplayan Roketatar Cyborg"
+msgstr "Zıplayan Mızrak roketli Sayborg"
 
 #: data/base/messages/strings/names.txt:686
 #: data/mp/messages/strings/names.txt:692
 msgid "Jump Assault Gunner"
-msgstr "Zıplayan Hücüm Silahlı Cyborg"
+msgstr "Zıplayan Hücüm Silahlı Sayborg"
 
 #: data/base/messages/strings/names.txt:687
 #: data/mp/messages/strings/names.txt:693
 msgid "Jump Needle Gunner"
-msgstr "Zıplayan İğne Silahlı Cyborg"
+msgstr "Zıplayan İğne Silahlı Sayborg"
 
 # Das Cyborg mal des Klanges wegen hinzugefügt
 #: data/base/messages/strings/names.txt:688
 #: data/mp/messages/strings/names.txt:694
 msgid "Jump Scourge"
-msgstr "Zıplayan Felaket Füzeli Cyborg"
+msgstr "Zıplayan Felaket Füzeli Sayborg"
 
 #: data/base/messages/strings/names.txt:689
 #: data/mp/messages/strings/names.txt:695
 msgid "Jump Flashlight Gunner"
-msgstr "Zıplayan Flaşışık Lazerli Cyborg"
+msgstr "Zıplayan Flaşışık Lazerli Sayborg"
 
 # Pack wie Equipment übersetzt -Kreuvf
 #: data/base/messages/strings/names.txt:691
 #: data/mp/messages/strings/names.txt:697
 msgid "Cyborg Jump Pack"
-msgstr "Cyborg Zıplama Paketi"
+msgstr "Sayborg Zıplama Paketi"
 
 #: data/base/messages/strings/names.txt:697
 #: data/mp/messages/strings/names.txt:703
@@ -7432,7 +7432,7 @@ msgstr "Ağır Makinalı Koruma Kulesi"
 
 #: data/base/messages/strings/names.txt:758
 msgid "Lancer Guard Tower"
-msgstr "Roketatar Koruma Kulesi"
+msgstr "Mızrak roket Koruma Kulesi"
 
 #: data/base/messages/strings/names.txt:759
 msgid "Mini-Rocket Guard Tower"
@@ -7471,32 +7471,32 @@ msgstr "Komutan Yönetim Üssü"
 
 #: data/base/messages/strings/names.txt:784
 msgid "Automated Cyborg Production Mk2"
-msgstr "Otomatik Cyborg Üretimi Kdm2"
+msgstr "Otomatik Sayborg Üretimi Kdm2"
 
 #: data/base/messages/strings/names.txt:785
 msgid "Automated Cyborg Production Mk3"
-msgstr "Otomatik Cyborg Üretimi Kdm3"
+msgstr "Otomatik Sayborg Üretimi Kdm3"
 
 #: data/base/messages/strings/names.txt:787
 msgid "Robotic Cyborg Production Mk2"
-msgstr "Robotik Cyborg Üretimi Kdm2"
+msgstr "Robotik Sayborg Üretimi Kdm2"
 
 #: data/base/messages/strings/names.txt:788
 msgid "Robotic Cyborg Production Mk3"
-msgstr "Robotik Cyborg Üretimi Kdm3"
+msgstr "Robotik Sayborg Üretimi Kdm3"
 
 #: data/base/messages/strings/names.txt:789
 #: data/mp/messages/resmessagesall.rmsg:624
 msgid "Advanced Cyborg Production"
-msgstr "Modern Cyborg Üretimi"
+msgstr "Modern Sayborg Üretimi"
 
 #: data/base/messages/strings/names.txt:790
 msgid "Advanced Cyborg Production Mk2"
-msgstr "Modern Cyborg Üretimi Kdm2"
+msgstr "Modern Sayborg Üretimi Kdm2"
 
 #: data/base/messages/strings/names.txt:791
 msgid "Advanced Cyborg Production Mk3"
-msgstr "Modern Cyborg Üretimi Kdm3"
+msgstr "Modern Sayborg Üretimi Kdm3"
 
 #: data/base/messages/strings/names.txt:795
 msgid "Automated Factory Production Mk2"
@@ -7694,17 +7694,17 @@ msgstr "Gelişmiş DİvK Üretimi Kdm3"
 #: data/base/messages/strings/names.txt:858
 #: data/mp/messages/strings/names.txt:868
 msgid "Cyborg Self-Repair"
-msgstr "Cyborg Oto-Tamir"
+msgstr "Sayborg Oto-Tamir"
 
 #: data/base/messages/strings/names.txt:859
 #: data/mp/messages/strings/names.txt:869
 msgid "Automated Cyborg Repair Mk2"
-msgstr "Otomatik Cyborg Tamiri Kdm2"
+msgstr "Otomatik Sayborg Tamiri Kdm2"
 
 #: data/base/messages/strings/names.txt:860
 #: data/mp/messages/strings/names.txt:870
 msgid "Automated Cyborg Repair Mk3"
-msgstr "Otomatik Cyborg Tamiri Kdm3"
+msgstr "Otomatik Sayborg Tamiri Kdm3"
 
 #: data/base/messages/strings/names.txt:862
 #: data/mp/messages/strings/names.txt:872
@@ -8102,77 +8102,77 @@ msgstr "Tekerlekli Yürütücü II"
 #: data/base/messages/strings/names.txt:984
 #: data/mp/messages/strings/names.txt:996
 msgid "AA Thermal Imaging Sensor"
-msgstr "AA Termal Hedefleme Algılayıcısı"
+msgstr "U.S. Termal Hedefleme Algılayıcısı"
 
 #: data/base/messages/strings/names.txt:985
 #: data/mp/messages/strings/names.txt:997
 msgid "AA Target Acquisition Shells"
-msgstr "AA Hedef Alıcı Mermiler"
+msgstr "U.S. Hedef Alıcı Mermiler"
 
 #: data/base/messages/strings/names.txt:986
 #: data/mp/messages/strings/names.txt:998
 msgid "AA Target Prediction Computer"
-msgstr "Hedef Tespit Edici AA Bilgisayarı"
+msgstr "Hedef Tespit Edici U.S. Bilgisayarı"
 
 #: data/base/messages/strings/names.txt:987
 #: data/mp/messages/strings/names.txt:999
 msgid "AA HE Flak"
-msgstr "Patlayıcılığı arttırılmış AA Uçaksavar"
+msgstr "Patlayıcılığı arttırılmış Uçaksavar"
 
 #: data/base/messages/strings/names.txt:988
 #: data/mp/messages/strings/names.txt:1000
 msgid "AA HE Flak Mk2"
-msgstr "Patlayıcılığı arttırılmış AA Uçaksavar Kdm2"
+msgstr "Patlayıcılığı arttırılmış Uçaksavar Kdm2"
 
 #: data/base/messages/strings/names.txt:989
 #: data/mp/messages/strings/names.txt:1001
 msgid "AA HE Flak Mk3"
-msgstr "Patlayıcılığı arttırılmış AA Uçaksavar Kdm3"
+msgstr "Patlayıcılığı arttırılmış Uçaksavar Kdm3"
 
 #: data/base/messages/strings/names.txt:990
 #: data/mp/messages/strings/names.txt:1002
 msgid "AA HEAP Flak"
-msgstr "Patlayıcılığı arttırılmış Zırh Delici  AA Uçaksavar"
+msgstr "Patlayıcılığı arttırılmış Zırh Delici Uçaksavar"
 
 #: data/base/messages/strings/names.txt:991
 #: data/mp/messages/strings/names.txt:1003
 msgid "AA HEAP Flak Mk2"
-msgstr "Patlayıcılığı arttırılmış Zırh Delici  AA Uçaksavar Kdm2"
+msgstr "Patlayıcılığı arttırılmış Zırh Delici Uçaksavar Kdm2"
 
 #: data/base/messages/strings/names.txt:992
 #: data/mp/messages/strings/names.txt:1004
 msgid "AA HEAP Flak Mk3"
-msgstr "Patlayıcılığı arttırılmış Zırh Delici  AA Uçaksavar Kdm3"
+msgstr "Patlayıcılığı arttırılmış Zırh Delici Uçaksavar Kdm3"
 
 #: data/base/messages/strings/names.txt:993
 #: data/mp/messages/strings/names.txt:1005
 msgid "AA Ammunition Hopper"
-msgstr "AA Mühimmat Sıçratıcı"
+msgstr "U.S. Mühimmat Sıçratıcı"
 
 #: data/base/messages/strings/names.txt:994
 #: data/mp/messages/strings/names.txt:1006
 msgid "AA Ammunition Hopper Mk2"
-msgstr "AA Mühimmat Sıçratıcı Kdm2"
+msgstr "U.S. Mühimmat Sıçratıcı Kdm2"
 
 #: data/base/messages/strings/names.txt:995
 #: data/mp/messages/strings/names.txt:1007
 msgid "AA Ammunition Hopper Mk3"
-msgstr "AA Mühimmat Sıçratıcı Kdm3"
+msgstr "U.S. Mühimmat Sıçratıcı Kdm3"
 
 #: data/base/messages/strings/names.txt:996
 #: data/mp/messages/strings/names.txt:1008
 msgid "AA Chainfeed Loader"
-msgstr "AA Zincir Yükleme Sistemi"
+msgstr "U.S. Zincir Yükleme Sistemi"
 
 #: data/base/messages/strings/names.txt:997
 #: data/mp/messages/strings/names.txt:1009
 msgid "AA Chainfeed Loader Mk2"
-msgstr "AA Zincir Yükleme Sistemi Kdm2"
+msgstr "U.S. Zincir Yükleme Sistemi Kdm2"
 
 #: data/base/messages/strings/names.txt:998
 #: data/mp/messages/strings/names.txt:1010
 msgid "AA Chainfeed Loader Mk3"
-msgstr "AA Zincir Yükleme Sistemi Kdm3"
+msgstr "U.S. Zincir Yükleme Sistemi Kdm3"
 
 #: data/base/messages/strings/names.txt:1003
 msgid "Cluster Bombs Bay"
@@ -8803,22 +8803,22 @@ msgstr "P.A.S.H Roket Savaşbaşlığı Kdm3"
 #: data/base/messages/strings/names.txt:1176
 #: data/mp/messages/strings/names.txt:1178
 msgid "Rocket Autoloader"
-msgstr "Roketatar Otomatik Yükleyici"
+msgstr "Mızrak roket Otomatik Yükleyici"
 
 #: data/base/messages/strings/names.txt:1177
 #: data/mp/messages/strings/names.txt:1179
 msgid "Rocket Autoloader Mk2"
-msgstr "Roketatar Otomatik Yükleyici Kdm2"
+msgstr "Mızrak roket Otomatik Yükleyici Kdm2"
 
 #: data/base/messages/strings/names.txt:1178
 #: data/mp/messages/strings/names.txt:1180
 msgid "Rocket Autoloader Mk3"
-msgstr "Roketatar Otomatik Yükleyici Kdm3"
+msgstr "Mızrak roket Otomatik Yükleyici Kdm3"
 
 #: data/base/messages/strings/names.txt:1180
 #: data/mp/messages/strings/names.txt:1195
 msgid "Lancer AT Rocket"
-msgstr "Roketatar-A.T Roketi "
+msgstr "Mızrak roket-A.T Roketi "
 
 #: data/base/messages/strings/names.txt:1182
 #: data/mp/messages/strings/names.txt:1197
@@ -8975,7 +8975,7 @@ msgstr "Tanker Enkazı"
 #: data/mp/messages/strings/names.txt:1335
 #: data/mp/messages/strings/names.txt:1351
 msgid "Cyborg Laboratory"
-msgstr "Cyborg Labaratuarı"
+msgstr "Sayborg Labaratuarı"
 
 #: data/base/messages/strings/names.txt:1321
 #: data/mp/messages/strings/names.txt:1336
@@ -9060,7 +9060,7 @@ msgstr "Tamir Tareti Kobra Paletler"
 #: data/mp/messages/strings/names.txt:1451
 #: data/mp/messages/strings/names.txt:1518
 msgid "Scourge"
-msgstr "Felaket Füzeli Cyborg"
+msgstr "Felaket Füzeli Sayborg"
 
 #: data/base/messages/strings/names.txt:1437
 #: data/mp/messages/strings/names.txt:1452
@@ -9137,10 +9137,11 @@ msgstr "Zırhlandırılmış Ağır Makinalı Koruma Kulesi"
 msgid "Armored guard tower with Flamer"
 msgstr "Zırhlandırılmış Alev Atıcı Koruma Kulesi"
 
+# T.S : Tank Savar
 #: data/base/messages/strings/resstrings.txt:246
 #: data/mp/messages/strings/resstrings.txt:274
 msgid "Armored guard tower with Lancer AT Rocket"
-msgstr "Zırhlandırılmış Roketatar(A.T) Koruma Kulesi"
+msgstr "Zırhlandırılmış Mızrak roket T.S Koruma Kulesi"
 
 #: data/base/messages/strings/resstrings.txt:260
 #: data/mp/messages/strings/resstrings.txt:288
@@ -9155,7 +9156,7 @@ msgstr "Zırhlandırılmış Alev Atıcı Bağlama Noktası"
 #: data/base/messages/strings/resstrings.txt:356
 #: data/mp/messages/strings/resstrings.txt:384
 msgid "Self-Replicating Cyborg Production"
-msgstr "Kendini Kopyalayan Cyborg Üretimi"
+msgstr "Kendini Kopyalayan Sayborg Üretimi"
 
 #: data/base/messages/strings/resstrings.txt:374
 #: data/mp/messages/strings/resstrings.txt:402
@@ -9528,7 +9529,7 @@ msgstr "Bana sistemlerinizi açın."
 
 #: data/base/sequenceaudio/cam1/cam1out2.txt:2
 msgid "Let me meld with your machines and cyborgs."
-msgstr "Bana makinelerinizi ve Cyborglarinizi birleştirelim."
+msgstr "Bana makinelerinizi ve Sayborglarınızı birleştirelim."
 
 #: data/base/sequenceaudio/cam1/cam1out2.txt:4
 msgid "We will create the perfect nexus of man and machine."
@@ -9601,7 +9602,7 @@ msgstr "Bağlantı herhangi bir bilgisayara takılabilen yüksek hızda veri akt
 
 #: data/base/sequenceaudio/cam1/map1a_c.txt:10
 msgid "More importantly the development of the synaptic link made the creation of cyborgs possible. Early attempts at power suits for individual soldiers failed as they proved to be slow and unresponsive."
-msgstr "Dahada önemlisi sinaptik bağlantı Cyborg'ların yapımını sağladı. Bireysel askerler için ilk çalışmada yavaş ve tepkisiz olduğu kanıtlanmıştır."
+msgstr "Dahada önemlisi sinaptik bağlantı sayborgların yapımını sağladı. Bireysel askerler için ilk çalışmada yavaş ve tepkisiz olduğu kanıtlanmıştır."
 
 #: data/base/sequenceaudio/cam1/map1a_c.txt:12
 msgid "The synaptic link allowed soldiers to be placed in power suits that they controlled as easily as their own bodies. Power suits allowed infantry to function effectively on the battlefields of the 21st Century."
@@ -9961,7 +9962,7 @@ msgstr "Sizi selamlıyorum, Komutan."
 
 #: data/base/sequenceaudio/cam3/cam32a2.txt:4
 msgid "Enemy strike VTOLs have got us pinned down. We've managed to hold off cyborgs and tanks, but we haven't been able to make any progress along the valley."
-msgstr "Düşman Saldırı DİvK 'ları bize doğru geliyorlar. Biz cyborgları ve tankları tutmayı başardık, fakat vadi boyunca hiçbir başarıya ulaşamadık."
+msgstr "Düşman Saldırı DİvK 'ları bize doğru geliyorlar. Biz sayborgları ve tankları tutmayı başardık, fakat vadi boyunca hiçbir başarıya ulaşamadık."
 
 #: data/base/sequenceaudio/cam3/cam32a2.txt:7
 msgid "Can you try and reach us with anti-aircraft units?"
@@ -9973,7 +9974,7 @@ msgstr "Burası Takım Alfa. Tekrar ediyorum, burası takım Alfa. Bize acil yar
 
 #: data/base/sequenceaudio/cam3/cam32alp.txt:4
 msgid "We are under heavy attack from cyborgs, laser tanks, and strike VTOLs."
-msgstr "Cyborglar, Lazer Tanklar ve DİvK 'lar tarafından ağır saldırı altındayız."
+msgstr "Sayborglar, Lazer Tanklar ve DİvK 'lar tarafından ağır saldırı altındayız."
 
 #: data/base/sequenceaudio/cam3/cam32alp.txt:6
 msgid "We were trying to reach your position, but have been ambushed."
@@ -10069,7 +10070,7 @@ msgstr "Teslim olmak için 5 dakikan var yada kızartma zamanı!"
 
 #: data/base/sequenceaudio/cam3/cam3bg.txt:1
 msgid "Commander, we are under attack by NEXUS cyborgs and tanks. Please help as we...."
-msgstr "Komutan, Biz NEXUS tankları ve Cyborglari tarafından saldırı altındayız. Bize yardim edin...."
+msgstr "Komutan, Biz NEXUS tankları ve sayborgları tarafından saldırı altındayız. Bize yardim edin...."
 
 #: data/base/sequenceaudio/cam3/cam3bg.txt:3
 msgid "...cannot hold out much longer.  Repeat, please help, we cannot hold out much longer...."
@@ -10305,7 +10306,7 @@ msgstr "Mini Roketli Zırhlandırılmış Koruma Kulesi"
 
 #: data/mp/messages/resmessages1.rmsg:114
 msgid "Armored guard tower with Lancer AT rocket"
-msgstr "Roketatar A-T Zırhlandırılmış Koruma Kulesi"
+msgstr "Mızrak roket T.S Zırhlandırılmış Koruma Kulesi"
 
 #: data/mp/messages/resmessages1.rmsg:195
 #: data/mp/messages/resmessages2.rmsg:255
@@ -10314,9 +10315,9 @@ msgid "Repair Speed +100%"
 msgstr "Tamir Hızı +100%"
 
 #: data/mp/messages/resmessages1.rmsg:235
-#, fuzzy, c-format
+#, c-format
 msgid "Factory output speed +100%% per module"
-msgstr "Fabrika Üretim Hızı Her Ekde +100% artar"
+msgstr "Fabrika Üretim Hızı Her Ekde +100%% artar"
 
 #: data/mp/messages/resmessages1.rmsg:245
 #: data/mp/messages/resmessagesall.rmsg:615
@@ -10402,7 +10403,7 @@ msgstr "İnşa Hızı +20%"
 #: data/mp/messages/resmessages2.rmsg:495
 #: data/mp/messages/resmessages3.rmsg:625
 msgid "AA accuracy +10%"
-msgstr "AA Hedef Tutturması +10%"
+msgstr "U.S. Hedef Tutturması +10%"
 
 #: data/mp/messages/resmessages23.rmsg:123
 #: data/mp/messages/resmessages2.rmsg:563
@@ -10449,12 +10450,12 @@ msgstr "Termal Zırh +40%"
 #: data/mp/messages/resmessages2.rmsg:505
 #: data/mp/messages/resmessages3.rmsg:635
 msgid "AA Flak damage +25%"
-msgstr "AA Uçaksavar Hasarı +25%"
+msgstr "Uçaksavar Hasarı +25%"
 
 #: data/mp/messages/resmessages2.rmsg:515
 #: data/mp/messages/resmessages3.rmsg:645
 msgid "AA reload time -15%"
-msgstr "AA Yeniden Yükleme Süresi -15%"
+msgstr "U.S. Yeniden Yükleme Süresi -15%"
 
 #: data/mp/messages/resmessages2.rmsg:645
 #: data/mp/messages/resmessages3.rmsg:695
@@ -10564,7 +10565,7 @@ msgstr "A.B Kulesi düşman endirek ateş silahları yok edilene kadar ateşe de
 
 #: data/mp/messages/resmessagesall.rmsg:173
 msgid "Cyborg Transport Available"
-msgstr "Cyborg Taşıma Gemisi Kullanılabilir"
+msgstr "Sayborg Taşıma Gemisi Kullanılabilir"
 
 #: data/mp/messages/resmessagesall.rmsg:174
 #: data/mp/messages/resmessagesall.rmsg:184
@@ -10594,7 +10595,7 @@ msgstr "Plazmit Alevi Atıcılı Zırhlandırılmış Koruyucu Nokta"
 
 #: data/mp/messages/resmessagesall.rmsg:224
 msgid "Armed with Cyborg Thermite Flamer"
-msgstr "Cyborg Termik Alevi Atıcı"
+msgstr "Sayborg Termik Alevi Atıcı"
 
 #: data/mp/messages/resmessagesall.rmsg:234
 msgid "Armed with grenades"
@@ -10655,7 +10656,7 @@ msgstr "Lazer ile Ağır Hasar Verir"
 
 #: data/mp/messages/resmessagesall.rmsg:375
 msgid "Best Targets: Heavy cyborgs"
-msgstr "Harika Hedefler: Ağır Cyborglar"
+msgstr "Harika Hedefler: Ağır sayborg"
 
 #: data/mp/messages/resmessagesall.rmsg:384
 msgid "76mm twin-barrel automatic-cannon"
@@ -10723,15 +10724,15 @@ msgstr "EMP Topçusu Koruma Kulesi"
 
 #: data/mp/messages/resmessagesall.rmsg:474
 msgid "Armed with Cyborg Pulse Laser"
-msgstr "Cyborg Darbeli Lazer"
+msgstr "Sayborg Darbeli Lazer"
 
 #: data/mp/messages/resmessagesall.rmsg:484
 msgid "Armed with Cyborg Rail Gun"
-msgstr "Cyborg Demir Silahlı"
+msgstr "Sayborg Demir Silahlı"
 
 #: data/mp/messages/resmessagesall.rmsg:494
 msgid "Armed with Cyborg Scourge Missile Launcher"
-msgstr "Cyborg Felaket Füzeli"
+msgstr "Sayborg Felaket Füzeli"
 
 #: data/mp/messages/resmessagesall.rmsg:504
 msgid "Uses advanced mass driver railgun technology"
@@ -10794,7 +10795,7 @@ msgstr "SAM'li Bağlama Noktası Kullanılabilir"
 
 #: data/mp/messages/resmessagesall.rmsg:593
 msgid "Hardpoint Whirlwind AA Gun Available"
-msgstr "AA Silah'lı Bağlma Noktası Kullanılabilir"
+msgstr "U.S. SilaHlı Bağlma Noktası Kullanılabilir"
 
 #: data/mp/messages/resmessagesall.rmsg:634
 msgid "Armored EMP Mortar battery pit"
@@ -10802,11 +10803,11 @@ msgstr "EMP Havan Kuyusu"
 
 #: data/mp/messages/resmessagesall.rmsg:643
 msgid "Laser AA Gun Available"
-msgstr "Lazer AA Silahı Kullanılabilir"
+msgstr "Lazer U.S. Silahı Kullanılabilir"
 
 #: data/mp/messages/resmessagesall.rmsg:644
 msgid "Twin Medium Anti-Aircraft Laser"
-msgstr "Çift Orta AA Lazeri"
+msgstr "Çift Orta U.S. Lazeri"
 
 #: data/mp/messages/resmessagesall.rmsg:663
 msgid "Hardpoint Avenger SAM Site Available"
@@ -10814,11 +10815,11 @@ msgstr "İntikamcı SAM Bağlama Noktası Kullanılabilir"
 
 #: data/mp/messages/resmessagesall.rmsg:673
 msgid "Hardpoint Cyclone AA Gun Available"
-msgstr "Girdap AA Silahlı Bağlama Noktası Kullanılabilir"
+msgstr "Girdap U.S. Silahlı Bağlama Noktası Kullanılabilir"
 
 #: data/mp/messages/resmessagesall.rmsg:674
 msgid "Quad 80mm Anti-Aircraft machinegun"
-msgstr "Dörtlü 80mm AA Makinalı"
+msgstr "Dörtlü 80mm U.S. Makinalı"
 
 #: data/mp/messages/resmessagesall.rmsg:684
 #: data/mp/messages/resmessagesall.rmsg:694
@@ -10856,7 +10857,7 @@ msgstr "Gelişmiş Savaşcı Bilgisayar Sistemi"
 #: data/mp/messages/strings/names.txt:15
 #: data/mp/messages/strings/names.txt:673
 msgid "Cyborg Transport"
-msgstr "Cyborg Taşıma Gemisi"
+msgstr "Sayborg Taşıma Gemisi"
 
 #: data/mp/messages/strings/names.txt:144
 msgid "Light Cannon Viper Half-tracks"
@@ -10925,12 +10926,12 @@ msgstr "Cehennem Alevi Atıcı Sığınak"
 
 #: data/mp/messages/strings/names.txt:408
 msgid "Tornado AA Site"
-msgstr "Kasırga AA Sitesi"
+msgstr "Kasırga U.S. Sitesi"
 
 #: data/mp/messages/strings/names.txt:409
 #: data/mp/messages/strings/names.txt:722
 msgid "AA Flak Cannon Emplacement"
-msgstr "Sabitlenmiş AA Uçaksavar Topu"
+msgstr "Sabitlenmiş Uçaksavar Topu"
 
 #: data/mp/messages/strings/names.txt:465
 #: data/mp/messages/strings/names.txt:786
@@ -10955,7 +10956,7 @@ msgstr "Mini Roket Bataryası"
 #: data/mp/messages/strings/names.txt:544
 #: data/mp/messages/strings/names.txt:993
 msgid "AA Flak Cannon"
-msgstr "AA Uçaksavar Topu"
+msgstr "Uçaksavar Topu"
 
 #: data/mp/messages/strings/names.txt:545
 msgid "VTOL Flak Cannon"
@@ -11149,7 +11150,7 @@ msgstr "Yüksek Hız Topu Piton Paletler"
 
 #: data/mp/messages/strings/names.txt:1475
 msgid "AA Flak Cannon Python Half-tracks"
-msgstr "AA Uçaksavar Piton Yarım Paletler"
+msgstr "Uçaksavar Piton Yarım Paletler"
 
 #: data/mp/messages/strings/names.txt:1513
 msgid "Bunker Buster Cobra Hover"
@@ -11193,7 +11194,7 @@ msgstr "Savaş Mühendisi"
 
 #: data/mp/messages/strings/names.txt:1630
 msgid "Cyborg Mechanic"
-msgstr "Mekanikçi Cyborg"
+msgstr "Mekanikçi Sayborg"
 
 #: data/mp/messages/strings/names.txt:1634
 #: data/mp/messages/strings/names.txt:1635
@@ -11227,15 +11228,15 @@ msgstr "Kundakçı Havan Topu Kuyusu"
 
 #: data/mp/messages/strings/names.txt:1649
 msgid "Cyborg Superdense Thermal Armor"
-msgstr "Cyborg Süper Termal Zırhı"
+msgstr "Sayborg Süper Termal Zırhı"
 
 #: data/mp/messages/strings/names.txt:1650
 msgid "Cyborg Superdense Thermal Armor Mk2"
-msgstr "Cyborg Süper Termal Zırhı Kdm2"
+msgstr "Sayborg Süper Termal Zırhı Kdm2"
 
 #: data/mp/messages/strings/names.txt:1651
 msgid "Cyborg Superdense Thermal Armor Mk3"
-msgstr "Cyborg Süper Termal Zırhı Kdm3"
+msgstr "Sayborg Süper Termal Zırhı Kdm3"
 
 #: data/mp/messages/strings/names.txt:1653
 msgid "Vehicle Superdense Thermal Armor"
@@ -11261,21 +11262,21 @@ msgstr "Süper Ağır Silahlı"
 #: data/mp/messages/strings/names.txt:1666
 #: data/mp/messages/strings/names.txt:1667
 msgid "Super Auto-Cannon Cyborg"
-msgstr "Süper Otomatik Topçu Cyborg"
+msgstr "Süper Otomatik Topçu Sayborg"
 
 #: data/mp/messages/strings/names.txt:1669
 #: data/mp/messages/strings/names.txt:1670
 #: data/mp/messages/strings/names.txt:1671
 #: data/mp/messages/strings/names.txt:1672
 msgid "Super HPV Cyborg"
-msgstr "Süper Y.H. Topçu Cyborg"
+msgstr "Süper Y.H. Topçu Sayborg"
 
 #: data/mp/messages/strings/names.txt:1674
 #: data/mp/messages/strings/names.txt:1675
 #: data/mp/messages/strings/names.txt:1676
 #: data/mp/messages/strings/names.txt:1677
 msgid "Super Tank-Killer Cyborg"
-msgstr "Süper Tank Öldürücü Cyborg"
+msgstr "Süper Tank Öldürücü Sayborg"
 
 #: data/mp/messages/strings/names.txt:1679
 #: data/mp/messages/strings/names.txt:1680
@@ -11329,27 +11330,27 @@ msgstr "Sabitlenmiş Plazma Topu"
 
 #: data/mp/messages/strings/names.txt:1722
 msgid "Sunburst AA Rocket Array"
-msgstr "Güneş Işığı AA Roketleri"
+msgstr "Güneş Işığı U.S. Roketleri"
 
 #: data/mp/messages/strings/names.txt:1723
 msgid "Sunburst AA"
-msgstr "Güneş Işığı AA"
+msgstr "Güneş Işığı U.S."
 
 #: data/mp/messages/strings/names.txt:1724
 msgid "VTOL Sunburst AA"
-msgstr "DİvK  Güneş Işığı AA"
+msgstr "DİvK Güneş Işığı U.S."
 
 #: data/mp/messages/strings/names.txt:1725
 #: data/mp/messages/strings/names.txt:1726
 msgid "Sunburst AA Site"
-msgstr "Güneş Işığı AA Yeri"
+msgstr "Güneş Işığı U.S. Yeri"
 
 #: data/mp/messages/strings/names.txt:1728
 #: data/mp/messages/strings/names.txt:1729
 #: data/mp/messages/strings/names.txt:1730
 #: data/mp/messages/strings/names.txt:1731
 msgid "Super Pulse Laser Cyborg"
-msgstr "Süper Darbeli Lazer Cyborg"
+msgstr "Süper Darbeli Lazer Sayborg"
 
 #: data/mp/messages/strings/names.txt:1733
 #: data/mp/messages/strings/names.txt:1734
@@ -11363,7 +11364,7 @@ msgstr "Süper Demir Silahlı"
 #: data/mp/messages/strings/names.txt:1740
 #: data/mp/messages/strings/names.txt:1741
 msgid "Super Scourge Cyborg"
-msgstr "Süper Felket F. Cyborg"
+msgstr "Süper Felaket F. Sayborg"
 
 #: data/mp/messages/strings/names.txt:1743
 #: data/mp/messages/strings/names.txt:1744
@@ -11448,7 +11449,7 @@ msgstr "EMP-Havan Kuyusu"
 #: data/mp/messages/strings/names.txt:1787
 #: data/mp/messages/strings/names.txt:1789
 msgid "Stormbringer AA Laser"
-msgstr "Fırtınacı AA Lazeri"
+msgstr "Fırtına U.S. Lazeri"
 
 #: data/mp/messages/strings/names.txt:1788
 #: data/mp/messages/strings/names.txt:1790
@@ -11468,7 +11469,7 @@ msgstr "Kasırga Bağlama Noktası"
 #: data/mp/messages/strings/names.txt:1795
 #: data/mp/messages/strings/names.txt:1796
 msgid "AA Flak Cannon Hardpoint"
-msgstr "AA Uçaksavar Topu Bağlama Noktası"
+msgstr "Uçaksavar Topu Bağlama Noktası"
 
 #: data/mp/messages/strings/names.txt:1797
 #: data/mp/messages/strings/names.txt:1798
@@ -11588,11 +11589,11 @@ msgstr "Darbeli Lazer P. Devesi Paletler"
 
 #: data/mp/messages/strings/names.txt:1858
 msgid "Lancer Python Tracks"
-msgstr "Roketatar Piton Paletler"
+msgstr "Mızrak roket Piton Paletler"
 
 #: data/mp/messages/strings/names.txt:1859
 msgid "Lancer Mantis Tracks"
-msgstr "Roketatar P. Devesi Paletler"
+msgstr "Mızrak roket P. Devesi Paletler"
 
 #: data/mp/messages/strings/names.txt:1860
 msgid "Tank Killer Vengeance Tracks"
@@ -11645,7 +11646,7 @@ msgstr "DİvK Sığınak Yokedici DİvK "
 
 #: data/mp/messages/strings/names.txt:1880
 msgid "VTOL Lancer Bug VTOL"
-msgstr "DİvK Roketatar Böcek DİvK "
+msgstr "DİvK Mızrak roket Böcek DİvK "
 
 #: data/mp/messages/strings/names.txt:1881
 msgid "VTOL Hyper Velocity Cannon Bug VTOL"
@@ -11653,7 +11654,7 @@ msgstr "DİvK -Yüksek Hız Topu Böcek DİvK "
 
 #: data/mp/messages/strings/names.txt:1882
 msgid "VTOL Lancer Scorpion VTOL"
-msgstr "DİvK Roketatar Akrep DİvK "
+msgstr "DİvK Mızrak roket Akrep DİvK "
 
 #: data/mp/messages/strings/names.txt:1883
 msgid "VTOL Hyper Velocity Cannon Scorpion VTOL"
@@ -11661,7 +11662,7 @@ msgstr "DİvK  Yüksek Hız Topu Akrep DİvK "
 
 #: data/mp/messages/strings/names.txt:1884
 msgid "VTOL Lancer Mantis VTOL"
-msgstr "DİvK Roketatar P. Devesi DİvK "
+msgstr "DİvK Mızrak roket P. Devesi DİvK "
 
 #: data/mp/messages/strings/names.txt:1885
 msgid "VTOL Hyper Velocity Cannon Mantis VTOL"
@@ -11673,7 +11674,7 @@ msgstr "Tamir Tareti P. Devesi Paletler"
 
 #: data/mp/messages/strings/names.txt:1891
 msgid "Lancer Scorpion Tracks"
-msgstr "Roketatar Akrep Paletler"
+msgstr "Mızrak roket Akrep Paletler"
 
 #: data/mp/messages/strings/names.txt:1892
 msgid "Heavy Cannon Scorpion Tracks"
@@ -11681,7 +11682,7 @@ msgstr "Ağır Topçu Akrep Paletler"
 
 #: data/mp/messages/strings/names.txt:1893
 msgid "Lancer Scorpion VTOL"
-msgstr "Roketatar Akrep DİvK "
+msgstr "Mızrak roket Akrep DİvK "
 
 #: data/mp/messages/strings/names.txt:1894
 msgid "Bunker Buster Scorpion VTOL"
@@ -11705,7 +11706,7 @@ msgstr "Komuta Tareti P. Devesi Paletler"
 
 #: data/mp/messages/strings/names.txt:1901
 msgid "Lancer Cobra Tracks"
-msgstr "Roketatar Kobra Paletler"
+msgstr "Mızrak roket Kobra Paletler"
 
 #: data/mp/messages/strings/names.txt:1902
 msgid "Heavy Cannon Mantis Tracks"
@@ -11757,7 +11758,7 @@ msgstr "Sığınak Yokedici P. Devesi Paletler"
 
 #: data/mp/messages/strings/names.txt:1920
 msgid "Lancer Viper Tracks"
-msgstr "Roketatar Engerek Paletler"
+msgstr "Mızrak roket Engerek Paletler"
 
 #: data/mp/messages/strings/names.txt:1922
 msgid "Mini-Rocket Cobra Half-Tracks"
@@ -12488,7 +12489,7 @@ msgstr "ANA MENÜ"
 
 #: src/frontend.cpp:116
 msgid "Warzone 2100 is completely free and open source (FLOSS). Official site: http://wz2100.net/"
-msgstr ""
+msgstr "Warzone 2100 tamamen ücretsiz ve açık kaynaklıdır. Resmi site: http://wz2100.net/"
 
 #: src/frontend.cpp:187
 msgid "Fast Play"
@@ -12816,21 +12817,18 @@ msgstr "Kaydırma hızı"
 
 #: src/frontend.cpp:1228
 #: src/frontend.cpp:1283
-#, fuzzy
 msgid "Unit Colour:"
-msgstr "Birim Rengi (T.O)"
+msgstr "Birim Rengi:"
 
 #: src/frontend.cpp:1248
 #: src/frontend.cpp:1284
-#, fuzzy
 msgid "Campaign"
-msgstr "Yeni Oyun"
+msgstr "Seferberlik"
 
 #: src/frontend.cpp:1258
 #: src/frontend.cpp:1285
-#, fuzzy
 msgid "Skirmish/Multiplayer"
-msgstr "Çok Oyunculu"
+msgstr "Çatışma/Çok oyunculu"
 
 #: src/frontend.cpp:1264
 #: src/frontend.cpp:1280
@@ -13199,7 +13197,7 @@ msgstr "Fabrika Üretimine Ata"
 
 #: src/intorder.cpp:185
 msgid "Assign Cyborg Factory Production"
-msgstr "Cyborg Fabrikası Üretimine Ata"
+msgstr "Sayborg Fabrikası Üretimine Ata"
 
 #: src/intorder.cpp:186
 msgid "Assign Fire Support"
@@ -13223,11 +13221,11 @@ msgstr "Tehlike! Bu hile hatalıdır. Onu kullanmamanızı öneririz."
 
 #: src/keybind.cpp:199
 msgid "Ouch! Droid's health is down 20%!"
-msgstr ""
+msgstr "Auv! Droid'in canı  20%'nin altında!"
 
 #: src/keybind.cpp:215
 msgid "Ouch! Structure's health is down 20%!"
-msgstr ""
+msgstr "Auv! Binanın canı  20%'nin altında!"
 
 #: src/keybind.cpp:270
 msgid "Lets us see what you see!"
@@ -13829,7 +13827,7 @@ msgstr "Tüm Savaş Birimlerini Seç"
 
 #: src/keymap.cpp:430
 msgid "Select all Cyborgs"
-msgstr "Tüm Cyborgları seç"
+msgstr "Tüm Sayborgları seç"
 
 #: src/keymap.cpp:431
 msgid "Select all Heavily Damaged Units"
@@ -13873,7 +13871,7 @@ msgstr "Benzer Tüm Birimleri Seç"
 
 #: src/keymap.cpp:445
 msgid "Select all Combat Cyborgs"
-msgstr "Tüm Savaş Cyborglarını seç"
+msgstr "Tüm Savaş Sayborglarını seç"
 
 #: src/keymap.cpp:446
 msgid "Select all Engineers"
@@ -13917,7 +13915,7 @@ msgstr "Sonraki Güç Jeneratörü"
 
 #: src/keymap.cpp:459
 msgid "Select next Cyborg Factory"
-msgstr "Sonraki Cyborg Fabrikası"
+msgstr "Sonraki Sayborg Fabrikası"
 
 #: src/keymap.cpp:462
 msgid "Toggle Debug Mappings"
@@ -14141,7 +14139,7 @@ msgstr "[Tanklar yok]"
 
 #: src/multiint.cpp:948
 msgid "[No Cyborgs]"
-msgstr "[Cyborg yok]"
+msgstr "[Sayborg yok]"
 
 #: src/multiint.cpp:952
 msgid "[No VTOLs]"
@@ -14219,7 +14217,7 @@ msgstr "Tanklar Devre Dışı!!"
 
 #: src/multiint.cpp:1357
 msgid "Cyborgs disabled."
-msgstr "Cyborg'lar Devre Dışı"
+msgstr "Sayborglar devre dışı"
 
 #: src/multiint.cpp:1358
 msgid "VTOLs disabled."
@@ -14239,9 +14237,8 @@ msgid "Select Map"
 msgstr "Harita Seç"
 
 #: src/multiint.cpp:1428
-#, fuzzy
 msgid "Password is already set!"
-msgstr "Oyuncu hazır"
+msgstr "Şifre zaten ayarlanmış!"
 
 #: src/multiint.cpp:1436
 msgid "Click to set Password"
@@ -14690,7 +14687,7 @@ msgstr "Kahverengi"
 
 #: src/order.cpp:803
 msgid "We can't do that! We must be a Cyborg unit to use a Cyborg Transport!"
-msgstr "Bunu Yapamıyoruz! Biz Cyborg Taşıma Gemisi'ni kullanmak için bir Cyborg birimine sahip olmalıyız!"
+msgstr "Bunu Yapamıyoruz! Biz Sayborg Taşıma Gemisi'ni kullanmak için bir Sayborg birimine sahip olmalıyız!"
 
 #: src/qtscriptfuncs.cpp:1580
 #: src/scriptfuncs.cpp:3263
