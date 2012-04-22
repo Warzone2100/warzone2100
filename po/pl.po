@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2012-04-09 23:37+0200\n"
-"PO-Revision-Date: 2012-04-02 13:00+0100\n"
+"PO-Revision-Date: 2012-04-21 16:32+0100\n"
 "Last-Translator: Michał D. aka Emdek <emdeck@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
 "Language: pl\n"
@@ -12480,7 +12480,7 @@ msgstr "MENU GŁÓWNE"
 
 #: src/frontend.cpp:116
 msgid "Warzone 2100 is completely free and open source (FLOSS). Official site: http://wz2100.net/"
-msgstr ""
+msgstr "Warzone 2100 jest w pełni darmowym i otwartym oprogramowaniem (FLOSS). Oficjalna strona: http://wz2100.net/"
 
 #: src/frontend.cpp:187
 msgid "Fast Play"
@@ -14942,6 +14942,3 @@ msgstr " - Zbudowana %s"
 #, c-format
 msgid "Version %s-%s%s%s%s"
 msgstr "Wersja %s-%s%s%s%s"
-
-#~ msgid "Visit our official site: http://wz2100.net"
-#~ msgstr "Odwiedź naszą oficjalną stronę: http://wz2100.net"
