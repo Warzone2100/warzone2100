@@ -87,6 +87,20 @@ struct DecalVertex
 	GLfloat u, v;          // uv
 };
 
+static struct TerrainData
+{
+	RenderVertex *geometry;
+	RenderVertex *water;
+	DecalVertex *decaldata;
+	PIELIGHT *texture;
+	GLuint *geometryIndex;
+	GLuint *waterIndex;
+	GLuint *textureIndex;
+} terr_terrainData;
+
+/// Use VBO-based terrain renderer
+static bool terr_useVBO = true;
+
 /// The lightmap texture
 static GLuint lightmap_tex_num;
 /// When are we going to update the lightmap next?
@@ -138,10 +152,11 @@ static bool terrainInitalised = false;
 #define BUFFER_OFFSET(i) ((char *)NULL + (i))
 
 /// Helper variables for the DrawRangeElements functions
-GLuint dreStart, dreEnd, dreOffset;
-GLsizei dreCount;
+static GLuint dreStart, dreEnd, dreOffset;
+static GLsizei dreCount;
+static GLuint *dreIndexArray;
 /// Are we actually drawing something using the DrawRangeElements functions?
-bool drawRangeElementsStarted = false;
+static bool drawRangeElementsStarted = false;
 
 /// Pass all remaining triangles to OpenGL
 static void finishDrawRangeElements(void)
@@ -150,12 +165,25 @@ static void finishDrawRangeElements(void)
 	{
 		ASSERT(dreEnd - dreStart + 1 <= GLmaxElementsVertices, "too many vertices (%i)", (int)(dreEnd - dreStart + 1));
 		ASSERT(dreCount <= GLmaxElementsIndices, "too many indices (%i)", (int)dreCount);
-		glDrawRangeElements(GL_TRIANGLES,
-							dreStart,
-							dreEnd,
-							dreCount,
-							GL_UNSIGNED_INT,
-							BUFFER_OFFSET(sizeof(GLuint)*dreOffset));
+
+		if (terr_useVBO)
+		{
+			glDrawRangeElements(GL_TRIANGLES,
+					    dreStart,
+					    dreEnd,
+					    dreCount,
+					    GL_UNSIGNED_INT,
+					    BUFFER_OFFSET(sizeof(GLuint)*dreOffset));
+		}
+		else
+		{
+			glDrawRangeElements(GL_TRIANGLES,
+					    dreStart,
+					    dreEnd,
+					    dreCount,
+					    GL_UNSIGNED_INT,
+					    &dreIndexArray[dreOffset]);
+		}
 	}
 	drawRangeElementsStarted = false;
 }
@@ -169,7 +197,8 @@ static void addDrawRangeElements(GLenum mode,
                                  GLuint end, 
                                  GLsizei count, 
                                  GLenum type, 
-                                 GLuint offset)
+				 GLuint offset,
+				 GLuint *indexArray)
 {
 	ASSERT(mode == GL_TRIANGLES, "not supported");
 	ASSERT(type == GL_UNSIGNED_INT, "not supported");
@@ -189,6 +218,7 @@ static void addDrawRangeElements(GLenum mode,
 		dreEnd    = end;
 		dreCount  = count;
 		dreOffset = offset;
+		dreIndexArray = indexArray;
 		drawRangeElementsStarted = true;
 		return;
 	}
@@ -201,7 +231,7 @@ static void addDrawRangeElements(GLenum mode,
 	{
 		finishDrawRangeElements();
 		// start anew
-		addDrawRangeElements(mode, start, end, count, type, offset);
+		addDrawRangeElements(mode, start, end, count, type, offset, indexArray);
 	}
 	else
 	{
@@ -600,48 +630,76 @@ static void setSectorDecals(int x, int y,
  */
 static void updateSectorGeometry(int x, int y)
 {
-	RenderVertex *geometry;
-	RenderVertex *water;
-	DecalVertex *decaldata;
 	int geometrySize = 0;
 	int waterSize = 0;
 	int decalSize = 0;
-	
-	geometry  = (RenderVertex *)malloc(sizeof(RenderVertex)*sectors[x*ySectors + y].geometrySize);
-	water     = (RenderVertex *)malloc(sizeof(RenderVertex)*sectors[x*ySectors + y].waterSize);
 
-	setSectorGeometry(x, y, geometry, water, &geometrySize, &waterSize);
-	ASSERT(geometrySize == sectors[x*ySectors + y].geometrySize, "something went seriously wrong updating the terrain");
-	ASSERT(waterSize    == sectors[x*ySectors + y].waterSize   , "something went seriously wrong updating the terrain");
-	
-	glBindBuffer(GL_ARRAY_BUFFER, geometryVBO); glError();
-	glBufferSubData(GL_ARRAY_BUFFER, sizeof(RenderVertex)*sectors[x*ySectors + y].geometryOffset,
-	                                 sizeof(RenderVertex)*sectors[x*ySectors + y].geometrySize, geometry); glError();
-	glBindBuffer(GL_ARRAY_BUFFER, waterVBO); glError();
-	glBufferSubData(GL_ARRAY_BUFFER, sizeof(RenderVertex)*sectors[x*ySectors + y].waterOffset,
-	                                 sizeof(RenderVertex)*sectors[x*ySectors + y].waterSize, water); glError();
-
-	free(geometry);
-	free(water);
-
-	if (sectors[x*ySectors + y].decalSize <= 0)
+	if (terr_useVBO)
 	{
-		// Nothing to do here, and glBufferSubData(GL_ARRAY_BUFFER, 0, 0, *) crashes in my graphics driver. Probably shouldn't crash...
-		return;
+		RenderVertex *geometry;
+		RenderVertex *water;
+		DecalVertex *decaldata;
+
+		geometry  = (RenderVertex *)malloc(sizeof(RenderVertex)*sectors[x*ySectors + y].geometrySize);
+		water     = (RenderVertex *)malloc(sizeof(RenderVertex)*sectors[x*ySectors + y].waterSize);
+
+		setSectorGeometry(x, y, geometry, water, &geometrySize, &waterSize);
+
+		ASSERT(geometrySize == sectors[x*ySectors + y].geometrySize, "something went seriously wrong updating the terrain");
+		ASSERT(waterSize    == sectors[x*ySectors + y].waterSize   , "something went seriously wrong updating the terrain");
+
+		glBindBuffer(GL_ARRAY_BUFFER, geometryVBO); glError();
+		glBufferSubData(GL_ARRAY_BUFFER, sizeof(RenderVertex)*sectors[x*ySectors + y].geometryOffset,
+				sizeof(RenderVertex)*sectors[x*ySectors + y].geometrySize, geometry); glError();
+		glBindBuffer(GL_ARRAY_BUFFER, waterVBO); glError();
+		glBufferSubData(GL_ARRAY_BUFFER, sizeof(RenderVertex)*sectors[x*ySectors + y].waterOffset,
+				sizeof(RenderVertex)*sectors[x*ySectors + y].waterSize, water); glError();
+
+		free(geometry);
+		free(water);
+
+		if (sectors[x*ySectors + y].decalSize <= 0)
+		{
+			// Nothing to do here, and glBufferSubData(GL_ARRAY_BUFFER, 0, 0, *) crashes in my graphics driver. Probably shouldn't crash...
+			return;
+		}
+
+		decaldata = (DecalVertex *)malloc(sizeof(DecalVertex)*sectors[x*ySectors + y].decalSize);
+
+		setSectorDecals(x, y, decaldata, &decalSize);
+
+		ASSERT(decalSize == sectors[x*ySectors + y].decalSize   , "the amount of decals has changed");
+
+		if (terr_useVBO)
+		{
+			glBindBuffer(GL_ARRAY_BUFFER, decalVBO); glError();
+			glBufferSubData(GL_ARRAY_BUFFER, sizeof(DecalVertex)*sectors[x*ySectors + y].decalOffset,
+					sizeof(DecalVertex)*sectors[x*ySectors + y].decalSize, decaldata); glError();
+			glBindBuffer(GL_ARRAY_BUFFER, 0);
+		}
+
+		free (decaldata);
 	}
+	else
+	{
+		setSectorGeometry(x, y,
+				  terr_terrainData.geometry + sectors[x*ySectors + y].geometryOffset,
+				  terr_terrainData.water + sectors[x*ySectors + y].waterOffset,
+				  &geometrySize, &waterSize);
 
-	decaldata = (DecalVertex *)malloc(sizeof(DecalVertex)*sectors[x*ySectors + y].decalSize);
-	setSectorDecals(x, y, decaldata, &decalSize);
-	ASSERT(decalSize == sectors[x*ySectors + y].decalSize   , "the amount of decals has changed");
-	
-	glBindBuffer(GL_ARRAY_BUFFER, decalVBO); glError();
-	glBufferSubData(GL_ARRAY_BUFFER, sizeof(DecalVertex)*sectors[x*ySectors + y].decalOffset,
-	                                 sizeof(DecalVertex)*sectors[x*ySectors + y].decalSize, decaldata); glError();
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
+		ASSERT(geometrySize == sectors[x*ySectors + y].geometrySize, "something went seriously wrong updating the terrain");
+		ASSERT(waterSize    == sectors[x*ySectors + y].waterSize   , "something went seriously wrong updating the terrain");
 
-	free (decaldata);
+		if (sectors[x*ySectors + y].decalSize <= 0)
+		{
+			// Nothing to do here
+			return;
+		}
 
-	glBindBuffer(GL_ARRAY_BUFFER, 0);  // HACK Must unbind GL_ARRAY_BUFFER (don't know if it has to be unbound everywhere), otherwise text rendering may mysteriously crash.
+		setSectorDecals(x, y, terr_terrainData.decaldata + sectors[x*ySectors + y].decalOffset, &decalSize);
+
+		ASSERT(decalSize == sectors[x*ySectors + y].decalSize   , "the amount of decals has changed");
+	}
 }
 
 /**
@@ -698,23 +756,19 @@ bool initTerrain(void)
 	PIELIGHT colour[2][2], centerColour;
 	int layer = 0;
 	
-	RenderVertex *geometry;
-	RenderVertex *water;
-	DecalVertex *decaldata;
 	int geometrySize, geometryIndexSize;
 	int waterSize, waterIndexSize;
 	int textureSize, textureIndexSize;
-	GLuint *geometryIndex;
-	GLuint *waterIndex;
-	GLuint *textureIndex;
-	PIELIGHT *texture;
 	int decalSize;
+
 	int maxSectorSizeIndices, maxSectorSizeVertices;
 	bool decreasedSize = false;
 
-	// call VBO support hack before using it
-	screen_EnableVBO();
-	
+	// check VBO support before using it
+	terr_useVBO = screen_IsVBOAvailable();
+
+	debug(LOG_TERRAIN, "VBOs are%s available for usage", terr_useVBO ? "" : "n't");
+
 	// this information is useful to prevent crashes with buggy opengl implementations
 	glGetIntegerv(GL_MAX_ELEMENTS_VERTICES, &GLmaxElementsVertices);
 	glGetIntegerv(GL_MAX_ELEMENTS_INDICES,  &GLmaxElementsIndices);
@@ -768,18 +822,21 @@ bool initTerrain(void)
 	xSectors = (mapWidth +sectorSize-1)/sectorSize;
 	ySectors = (mapHeight+sectorSize-1)/sectorSize;
 	sectors = (Sector *)malloc(sizeof(Sector)*xSectors*ySectors);
-	
+
+	debug(LOG_TERRAIN, "xSectors: %d, ySectors: %d", xSectors, ySectors);
+
 	////////////////////
 	// fill the geometry part of the sectors
-	geometry = (RenderVertex *)malloc(sizeof(RenderVertex)*xSectors*ySectors*(sectorSize+1)*(sectorSize+1)*2);
-	geometryIndex = (GLuint *)malloc(sizeof(GLuint)*xSectors*ySectors*sectorSize*sectorSize*12);
+	terr_terrainData.geometry = (RenderVertex *)malloc(sizeof(RenderVertex)*xSectors*ySectors*(sectorSize+1)*(sectorSize+1)*2);
+	terr_terrainData.geometryIndex = (GLuint *)malloc(sizeof(GLuint)*xSectors*ySectors*sectorSize*sectorSize*12);
 	geometrySize = 0;
 	geometryIndexSize = 0;
 	
-	water = (RenderVertex *)malloc(sizeof(RenderVertex)*xSectors*ySectors*(sectorSize+1)*(sectorSize+1)*2);
-	waterIndex = (GLuint *)malloc(sizeof(GLuint)*xSectors*ySectors*sectorSize*sectorSize*12);
+	terr_terrainData.water = (RenderVertex *)malloc(sizeof(RenderVertex)*xSectors*ySectors*(sectorSize+1)*(sectorSize+1)*2);
+	terr_terrainData.waterIndex = (GLuint *)malloc(sizeof(GLuint)*xSectors*ySectors*sectorSize*sectorSize*12);
 	waterSize = 0;
 	waterIndexSize = 0;
+
 	for (x = 0; x < xSectors; x++)
 	{
 		for (y = 0; y < ySectors; y++)
@@ -790,10 +847,11 @@ bool initTerrain(void)
 			sectors[x*ySectors + y].waterOffset = waterSize;
 			sectors[x*ySectors + y].waterSize = 0;
 			
-			setSectorGeometry(x, y, geometry, water, &geometrySize, &waterSize);
+			setSectorGeometry(x, y, terr_terrainData.geometry, terr_terrainData.water, &geometrySize, &waterSize);
 			
 			sectors[x*ySectors + y].geometrySize = geometrySize - sectors[x*ySectors + y].geometryOffset;
 			sectors[x*ySectors + y].waterSize = waterSize - sectors[x*ySectors + y].waterOffset;
+
 			// and do the index buffers
 			sectors[x*ySectors + y].geometryIndexOffset = geometryIndexSize;
 			sectors[x*ySectors + y].geometryIndexSize = 0;
@@ -822,39 +880,42 @@ bool initTerrain(void)
 					 */
 #define q(i,j,center) ((x*ySectors+y)*(sectorSize+1)*(sectorSize+1)*2 + ((i)*(sectorSize+1)+(j))*2+(center))
 					// First triangle
-					geometryIndex[geometryIndexSize+0]  = q(i  ,j  ,1);	// Center vertex
-					geometryIndex[geometryIndexSize+1]  = q(i  ,j  ,0);	// Bottom left
-					geometryIndex[geometryIndexSize+2]  = q(i+1,j  ,0);	// Bottom right
+					terr_terrainData.geometryIndex[geometryIndexSize+0]  = q(i  ,j  ,1);	// Center vertex
+					terr_terrainData.geometryIndex[geometryIndexSize+1]  = q(i  ,j  ,0);	// Bottom left
+					terr_terrainData.geometryIndex[geometryIndexSize+2]  = q(i+1,j  ,0);	// Bottom right
 					// Second triangle
-					geometryIndex[geometryIndexSize+3]  = q(i  ,j  ,1);	// Center vertex
-					geometryIndex[geometryIndexSize+4]  = q(i  ,j+1,0);	// Top left
-					geometryIndex[geometryIndexSize+5]  = q(i  ,j  ,0);	// Bottom left
+					terr_terrainData.geometryIndex[geometryIndexSize+3]  = q(i  ,j  ,1);	// Center vertex
+					terr_terrainData.geometryIndex[geometryIndexSize+4]  = q(i  ,j+1,0);	// Top left
+					terr_terrainData.geometryIndex[geometryIndexSize+5]  = q(i  ,j  ,0);	// Bottom left
 					// Third triangle
-					geometryIndex[geometryIndexSize+6]  = q(i  ,j  ,1);	// Center vertex
-					geometryIndex[geometryIndexSize+7]  = q(i+1,j+1,0);	// Top right
-					geometryIndex[geometryIndexSize+8]  = q(i  ,j+1,0);	// Top left
+					terr_terrainData.geometryIndex[geometryIndexSize+6]  = q(i  ,j  ,1);	// Center vertex
+					terr_terrainData.geometryIndex[geometryIndexSize+7]  = q(i+1,j+1,0);	// Top right
+					terr_terrainData.geometryIndex[geometryIndexSize+8]  = q(i  ,j+1,0);	// Top left
 					// Fourth triangle
-					geometryIndex[geometryIndexSize+9]  = q(i  ,j  ,1);	// Center vertex
-					geometryIndex[geometryIndexSize+10] = q(i+1,j  ,0);	// Bottom right
-					geometryIndex[geometryIndexSize+11] = q(i+1,j+1,0);	// Top right
+					terr_terrainData.geometryIndex[geometryIndexSize+9]  = q(i  ,j  ,1);	// Center vertex
+					terr_terrainData.geometryIndex[geometryIndexSize+10] = q(i+1,j  ,0);	// Bottom right
+					terr_terrainData.geometryIndex[geometryIndexSize+11] = q(i+1,j+1,0);	// Top right
+
 					geometryIndexSize += 12;
+
 					if (isWater(i+x*sectorSize,j+y*sectorSize))
 					{
-						waterIndex[waterIndexSize+0]  = q(i  ,j  ,1);
-						waterIndex[waterIndexSize+1]  = q(i  ,j  ,0);
-						waterIndex[waterIndexSize+2]  = q(i+1,j  ,0);
+						terr_terrainData.waterIndex[waterIndexSize+0]  = q(i  ,j  ,1);
+						terr_terrainData.waterIndex[waterIndexSize+1]  = q(i  ,j  ,0);
+						terr_terrainData.waterIndex[waterIndexSize+2]  = q(i+1,j  ,0);
 						
-						waterIndex[waterIndexSize+3]  = q(i  ,j  ,1);
-						waterIndex[waterIndexSize+4]  = q(i  ,j+1,0);
-						waterIndex[waterIndexSize+5]  = q(i  ,j  ,0);
+						terr_terrainData.waterIndex[waterIndexSize+3]  = q(i  ,j  ,1);
+						terr_terrainData.waterIndex[waterIndexSize+4]  = q(i  ,j+1,0);
+						terr_terrainData.waterIndex[waterIndexSize+5]  = q(i  ,j  ,0);
 						
-						waterIndex[waterIndexSize+6]  = q(i  ,j  ,1);
-						waterIndex[waterIndexSize+7]  = q(i+1,j+1,0);
-						waterIndex[waterIndexSize+8]  = q(i  ,j+1,0);
+						terr_terrainData.waterIndex[waterIndexSize+6]  = q(i  ,j  ,1);
+						terr_terrainData.waterIndex[waterIndexSize+7]  = q(i+1,j+1,0);
+						terr_terrainData.waterIndex[waterIndexSize+8]  = q(i  ,j+1,0);
 						
-						waterIndex[waterIndexSize+9]  = q(i  ,j  ,1);
-						waterIndex[waterIndexSize+10] = q(i+1,j  ,0);
-						waterIndex[waterIndexSize+11] = q(i+1,j+1,0);
+						terr_terrainData.waterIndex[waterIndexSize+9]  = q(i  ,j  ,1);
+						terr_terrainData.waterIndex[waterIndexSize+10] = q(i+1,j  ,0);
+						terr_terrainData.waterIndex[waterIndexSize+11] = q(i+1,j+1,0);
+
 						waterIndexSize += 12;
 					}
 				}
@@ -863,34 +924,43 @@ bool initTerrain(void)
 			sectors[x*ySectors + y].waterIndexSize = waterIndexSize - sectors[x*ySectors + y].waterIndexOffset;
 		}
 	}
-	glGenBuffers(1, &geometryVBO); glError();
-	glBindBuffer(GL_ARRAY_BUFFER, geometryVBO); glError();
-	glBufferData(GL_ARRAY_BUFFER, sizeof(RenderVertex)*geometrySize, geometry, GL_DYNAMIC_DRAW); glError();
-	free(geometry);
-	
-	glGenBuffers(1, &geometryIndexVBO); glError();
-	glBindBuffer(GL_ARRAY_BUFFER, geometryIndexVBO); glError();
-	glBufferData(GL_ARRAY_BUFFER, sizeof(GLuint)*geometryIndexSize, geometryIndex, GL_STATIC_DRAW); glError();
-	free(geometryIndex);
-	
-	glGenBuffers(1, &waterVBO); glError();
-	glBindBuffer(GL_ARRAY_BUFFER, waterVBO); glError();
-	glBufferData(GL_ARRAY_BUFFER, sizeof(RenderVertex)*waterSize, water, GL_DYNAMIC_DRAW); glError();
-	free(water);
-	
-	glGenBuffers(1, &waterIndexVBO); glError();
-	glBindBuffer(GL_ARRAY_BUFFER, waterIndexVBO); glError();
-	glBufferData(GL_ARRAY_BUFFER, sizeof(GLuint)*waterIndexSize, waterIndex, GL_STATIC_DRAW); glError();
-	free(waterIndex);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
+	if (terr_useVBO)
+	{
+		glGenBuffers(1, &geometryVBO); glError();
+		glBindBuffer(GL_ARRAY_BUFFER, geometryVBO); glError();
+		glBufferData(GL_ARRAY_BUFFER, sizeof(RenderVertex)*geometrySize, terr_terrainData.geometry, GL_DYNAMIC_DRAW); glError();
+		free(terr_terrainData.geometry);
+		terr_terrainData.geometry = NULL;
+
+		glGenBuffers(1, &geometryIndexVBO); glError();
+		glBindBuffer(GL_ARRAY_BUFFER, geometryIndexVBO); glError();
+		glBufferData(GL_ARRAY_BUFFER, sizeof(GLuint)*geometryIndexSize, terr_terrainData.geometryIndex, GL_STATIC_DRAW); glError();
+		free(terr_terrainData.geometryIndex);
+		terr_terrainData.geometryIndex = NULL;
+
+		glGenBuffers(1, &waterVBO); glError();
+		glBindBuffer(GL_ARRAY_BUFFER, waterVBO); glError();
+		glBufferData(GL_ARRAY_BUFFER, sizeof(RenderVertex)*waterSize, terr_terrainData.water, GL_DYNAMIC_DRAW); glError();
+		free(terr_terrainData.water);
+		terr_terrainData.water = NULL;
+
+		glGenBuffers(1, &waterIndexVBO); glError();
+		glBindBuffer(GL_ARRAY_BUFFER, waterIndexVBO); glError();
+		glBufferData(GL_ARRAY_BUFFER, sizeof(GLuint)*waterIndexSize, terr_terrainData.waterIndex, GL_STATIC_DRAW); glError();
+		free(terr_terrainData.waterIndex);
+		terr_terrainData.waterIndex = NULL;
+
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+	}
 	
 	////////////////////
 	// fill the texture part of the sectors
-	texture = (PIELIGHT *)malloc(sizeof(PIELIGHT)*xSectors*ySectors*(sectorSize+1)*(sectorSize+1)*2*numGroundTypes);
-	textureIndex = (GLuint *)malloc(sizeof(GLuint)*xSectors*ySectors*sectorSize*sectorSize*12*numGroundTypes);
+	terr_terrainData.texture = (PIELIGHT *)malloc(sizeof(PIELIGHT)*xSectors*ySectors*(sectorSize+1)*(sectorSize+1)*2*numGroundTypes);
+	terr_terrainData.textureIndex = (GLuint *)malloc(sizeof(GLuint)*xSectors*ySectors*sectorSize*sectorSize*12*numGroundTypes);
 	textureSize = 0;
 	textureIndexSize = 0;
+
 	for (layer = 0; layer < numGroundTypes; layer++)
 	{
 		for (x = 0; x < xSectors; x++)
@@ -956,27 +1026,29 @@ bool initTerrain(void)
 								}
 							}
 						}
-						texture[xSectors*ySectors*(sectorSize+1)*(sectorSize+1)*2*layer+((x*ySectors+y)*(sectorSize+1)*(sectorSize+1)*2 + (i*(sectorSize+1)+j)*2)].rgba = colour[0][0].rgba;
+						terr_terrainData.texture[xSectors*ySectors*(sectorSize+1)*(sectorSize+1)*2*layer+((x*ySectors+y)*(sectorSize+1)*(sectorSize+1)*2 + (i*(sectorSize+1)+j)*2)].rgba = colour[0][0].rgba;
 						averageColour(&centerColour, colour[0][0], colour[0][1], colour[1][0], colour[1][1]);
-						texture[xSectors*ySectors*(sectorSize+1)*(sectorSize+1)*2*layer+((x*ySectors+y)*(sectorSize+1)*(sectorSize+1)*2 + (i*(sectorSize+1)+j)*2+1)].rgba = centerColour.rgba;
+						terr_terrainData.texture[xSectors*ySectors*(sectorSize+1)*(sectorSize+1)*2*layer+((x*ySectors+y)*(sectorSize+1)*(sectorSize+1)*2 + (i*(sectorSize+1)+j)*2+1)].rgba = centerColour.rgba;
 						textureSize += 2;
+
 						if ((draw) && i < sectorSize && j < sectorSize)
 						{
-							textureIndex[textureIndexSize+0]  = q(i  ,j  ,1);
-							textureIndex[textureIndexSize+1]  = q(i  ,j  ,0);
-							textureIndex[textureIndexSize+2]  = q(i+1,j  ,0);
+							terr_terrainData.textureIndex[textureIndexSize+0]  = q(i  ,j  ,1);
+							terr_terrainData.textureIndex[textureIndexSize+1]  = q(i  ,j  ,0);
+							terr_terrainData.textureIndex[textureIndexSize+2]  = q(i+1,j  ,0);
 							
-							textureIndex[textureIndexSize+3]  = q(i  ,j  ,1);
-							textureIndex[textureIndexSize+4]  = q(i  ,j+1,0);
-							textureIndex[textureIndexSize+5]  = q(i  ,j  ,0);
+							terr_terrainData.textureIndex[textureIndexSize+3]  = q(i  ,j  ,1);
+							terr_terrainData.textureIndex[textureIndexSize+4]  = q(i  ,j+1,0);
+							terr_terrainData.textureIndex[textureIndexSize+5]  = q(i  ,j  ,0);
 							
-							textureIndex[textureIndexSize+6]  = q(i  ,j  ,1);
-							textureIndex[textureIndexSize+7]  = q(i+1,j+1,0);
-							textureIndex[textureIndexSize+8]  = q(i  ,j+1,0);
+							terr_terrainData.textureIndex[textureIndexSize+6]  = q(i  ,j  ,1);
+							terr_terrainData.textureIndex[textureIndexSize+7]  = q(i+1,j+1,0);
+							terr_terrainData.textureIndex[textureIndexSize+8]  = q(i  ,j+1,0);
 							
-							textureIndex[textureIndexSize+9]  = q(i  ,j  ,1);
-							textureIndex[textureIndexSize+10] = q(i+1,j  ,0);
-							textureIndex[textureIndexSize+11] = q(i+1,j+1,0);
+							terr_terrainData.textureIndex[textureIndexSize+9]  = q(i  ,j  ,1);
+							terr_terrainData.textureIndex[textureIndexSize+10] = q(i+1,j  ,0);
+							terr_terrainData.textureIndex[textureIndexSize+11] = q(i+1,j+1,0);
+
 							textureIndexSize += 12;
 						}
 
@@ -987,36 +1059,51 @@ bool initTerrain(void)
 			}
 		}
 	}
-	glGenBuffers(1, &textureVBO); glError();
-	glBindBuffer(GL_ARRAY_BUFFER, textureVBO); glError();
-	glBufferData(GL_ARRAY_BUFFER, sizeof(PIELIGHT)*xSectors*ySectors*(sectorSize+1)*(sectorSize+1)*2*numGroundTypes, texture, GL_STATIC_DRAW); glError();
-	free(texture);
-	
-	glGenBuffers(1, &textureIndexVBO); glError();
-	glBindBuffer(GL_ARRAY_BUFFER, textureIndexVBO); glError();
-	glBufferData(GL_ARRAY_BUFFER, sizeof(GLuint)*textureIndexSize, textureIndex, GL_STATIC_DRAW); glError();
-	free(textureIndex);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+	if (terr_useVBO)
+	{
+		glGenBuffers(1, &textureVBO); glError();
+		glBindBuffer(GL_ARRAY_BUFFER, textureVBO); glError();
+		glBufferData(GL_ARRAY_BUFFER, sizeof(PIELIGHT)*xSectors*ySectors*(sectorSize+1)*(sectorSize+1)*2*numGroundTypes, terr_terrainData.texture, GL_STATIC_DRAW); glError();
+		free(terr_terrainData.texture);
+		terr_terrainData.texture = NULL;
+
+		glGenBuffers(1, &textureIndexVBO); glError();
+		glBindBuffer(GL_ARRAY_BUFFER, textureIndexVBO); glError();
+		glBufferData(GL_ARRAY_BUFFER, sizeof(GLuint)*textureIndexSize, terr_terrainData.textureIndex, GL_STATIC_DRAW); glError();
+		free(terr_terrainData.textureIndex);
+		terr_terrainData.textureIndex = NULL;
+
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+	}
 
 	// and finally the decals
-	decaldata = (DecalVertex *)malloc(sizeof(DecalVertex)*mapWidth*mapHeight*12);
+	terr_terrainData.decaldata = (DecalVertex *)malloc(sizeof(DecalVertex)*mapWidth*mapHeight*12);
 	decalSize = 0;
+
 	for (x = 0; x < xSectors; x++)
 	{
 		for (y = 0; y < ySectors; y++)
 		{
 			sectors[x*ySectors + y].decalOffset = decalSize;
 			sectors[x*ySectors + y].decalSize = 0;
-			setSectorDecals(x, y, decaldata, &decalSize);
+			setSectorDecals(x, y, terr_terrainData.decaldata, &decalSize);
 			sectors[x*ySectors + y].decalSize = decalSize - sectors[x*ySectors + y].decalOffset;
 		}
 	}
+
 	debug(LOG_TERRAIN, "%i decals found", decalSize/12);
-	glGenBuffers(1, &decalVBO); glError();
-	glBindBuffer(GL_ARRAY_BUFFER, decalVBO); glError();
-	glBufferData(GL_ARRAY_BUFFER, sizeof(DecalVertex)*decalSize, decaldata, GL_STATIC_DRAW); glError();
-	free(decaldata);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+	if (terr_useVBO)
+	{
+		glGenBuffers(1, &decalVBO); glError();
+		glBindBuffer(GL_ARRAY_BUFFER, decalVBO); glError();
+		glBufferData(GL_ARRAY_BUFFER, sizeof(DecalVertex)*decalSize, terr_terrainData.decaldata, GL_STATIC_DRAW); glError();
+		free(terr_terrainData.decaldata);
+		terr_terrainData.decaldata = NULL;
+
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+	}
 	
 	lightmap_tex_num = 0;
 	lightmapLastUpdate = 0;
@@ -1050,8 +1137,6 @@ bool initTerrain(void)
 
 	terrainInitalised = true;
 
-	glBindBuffer(GL_ARRAY_BUFFER, 0);  // HACK Must unbind GL_ARRAY_BUFFER (in this function, at least), otherwise text rendering may mysteriously crash.
-
 	return true;
 }
 
@@ -1059,13 +1144,34 @@ bool initTerrain(void)
 void shutdownTerrain(void)
 {
 	ASSERT_OR_RETURN( ,sectors, "trying to shutdown terrain when it didn't need it!");
-	glDeleteBuffers(1, &geometryVBO);
-	glDeleteBuffers(1, &geometryIndexVBO);
-	glDeleteBuffers(1, &waterVBO);
-	glDeleteBuffers(1, &waterIndexVBO);
-	glDeleteBuffers(1, &textureVBO);
-	glDeleteBuffers(1, &textureIndexVBO);
-	glDeleteBuffers(1, &decalVBO);
+
+	if (terr_useVBO)
+	{
+		glDeleteBuffers(1, &geometryVBO);
+		glDeleteBuffers(1, &geometryIndexVBO);
+		glDeleteBuffers(1, &waterVBO);
+		glDeleteBuffers(1, &waterIndexVBO);
+		glDeleteBuffers(1, &textureVBO);
+		glDeleteBuffers(1, &textureIndexVBO);
+		glDeleteBuffers(1, &decalVBO);
+	}
+	else
+	{
+		free(terr_terrainData.geometry);
+		terr_terrainData.geometry = NULL;
+		free(terr_terrainData.geometryIndex);
+		terr_terrainData.geometryIndex = NULL;
+		free(terr_terrainData.water);
+		terr_terrainData.water = NULL;
+		free(terr_terrainData.waterIndex);
+		terr_terrainData.waterIndex = NULL;
+		free(terr_terrainData.texture);
+		terr_terrainData.texture = NULL;
+		free(terr_terrainData.textureIndex);
+		terr_terrainData.textureIndex = NULL;
+		free(terr_terrainData.decaldata);
+		terr_terrainData.decaldata = NULL;
+	}
 	
 	for (int x = 0; x < xSectors; x++)
 	{
@@ -1233,10 +1339,17 @@ void drawTerrain(void)
 	
 	// bind the vertex buffer
 	glEnableClientState(GL_VERTEX_ARRAY);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, geometryIndexVBO); glError();
-	glBindBuffer(GL_ARRAY_BUFFER, geometryVBO); glError();
 
-	glVertexPointer(3, GL_FLOAT, sizeof(RenderVertex), BUFFER_OFFSET(0)); glError();
+	if (terr_useVBO)
+	{
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, geometryIndexVBO); glError();
+		glBindBuffer(GL_ARRAY_BUFFER, geometryVBO); glError();
+		glVertexPointer(3, GL_FLOAT, sizeof(RenderVertex), BUFFER_OFFSET(0)); glError();
+	}
+	else
+	{
+		glVertexPointer(3, GL_FLOAT, 0, terr_terrainData.geometry); glError();
+	}
 	
 	for (x = 0; x < xSectors; x++)
 	{
@@ -1249,13 +1362,18 @@ void drawTerrain(void)
 				                     sectors[x*ySectors + y].geometryOffset+sectors[x*ySectors + y].geometrySize,
 				                     sectors[x*ySectors + y].geometryIndexSize,
 				                     GL_UNSIGNED_INT,
-				                     sectors[x*ySectors + y].geometryIndexOffset);
+						     sectors[x*ySectors + y].geometryIndexOffset,
+						     terr_terrainData.geometryIndex);
 			}
 		}
 	}
 	finishDrawRangeElements();
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+	if (terr_useVBO)
+	{
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	}
 	
 	if (pie_GetFogStatus())
 	{
@@ -1273,8 +1391,6 @@ void drawTerrain(void)
 	///////////////////////////////////
 	// terrain
 
-	glEnableClientState(GL_COLOR_ARRAY);
-
 	// set up for texture coord generation
 	glEnable(GL_TEXTURE_GEN_S);
 	glEnable(GL_TEXTURE_GEN_T);
@@ -1287,15 +1403,22 @@ void drawTerrain(void)
 	// only draw colors
 	glDepthMask(GL_FALSE);
 
-	glEnableClientState(GL_VERTEX_ARRAY);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, textureIndexVBO); glError();
 	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-	
-	// load the vertex (geometry) buffer
-	glBindBuffer(GL_ARRAY_BUFFER, geometryVBO);
-	glVertexPointer(3, GL_FLOAT, sizeof(RenderVertex), BUFFER_OFFSET(0)); glError();
 
-	glBindBuffer(GL_ARRAY_BUFFER, textureVBO);
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_COLOR_ARRAY);
+
+	if (terr_useVBO)
+	{
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, textureIndexVBO); glError();
+		glBindBuffer(GL_ARRAY_BUFFER, geometryVBO);
+		glVertexPointer(3, GL_FLOAT, sizeof(RenderVertex), BUFFER_OFFSET(0)); glError();
+		glBindBuffer(GL_ARRAY_BUFFER, textureVBO);
+	}
+	else
+	{
+		glVertexPointer(3, GL_FLOAT, 0, terr_terrainData.geometry); glError();
+	}
 
 	ASSERT_OR_RETURN( , psGroundTypes, "Ground type was not set, no textures will be seen.");
 
@@ -1316,7 +1439,14 @@ void drawTerrain(void)
 		glTexGenfv(GL_T, GL_OBJECT_PLANE, paramsY);
 
 		// load the color buffer
-		glColorPointer(4, GL_UNSIGNED_BYTE, sizeof(PIELIGHT), BUFFER_OFFSET(sizeof(PIELIGHT)*xSectors*ySectors*(sectorSize+1)*(sectorSize+1)*2*layer));
+		if (terr_useVBO)
+		{
+			glColorPointer(4, GL_UNSIGNED_BYTE, sizeof(PIELIGHT), BUFFER_OFFSET(sizeof(PIELIGHT)*xSectors*ySectors*(sectorSize+1)*(sectorSize+1)*2*layer));
+		}
+		else
+		{
+			glColorPointer(4, GL_UNSIGNED_BYTE, sizeof(PIELIGHT), &terr_terrainData.texture[xSectors*ySectors*(sectorSize+1)*(sectorSize+1)*2*layer]);
+		}
 
 		for (x = 0; x < xSectors; x++)
 		{
@@ -1325,18 +1455,24 @@ void drawTerrain(void)
 				if (sectors[x*ySectors + y].draw)
 				{
 					addDrawRangeElements(GL_TRIANGLES,
-										 sectors[x*ySectors + y].geometryOffset,
-										 sectors[x*ySectors + y].geometryOffset+sectors[x*ySectors + y].geometrySize,
-										 sectors[x*ySectors + y].textureIndexSize[layer],
-										 GL_UNSIGNED_INT,
-										 sectors[x*ySectors + y].textureIndexOffset[layer]);
+							     sectors[x*ySectors + y].geometryOffset,
+							     sectors[x*ySectors + y].geometryOffset + sectors[x*ySectors + y].geometrySize,
+							     sectors[x*ySectors + y].textureIndexSize[layer],
+							     GL_UNSIGNED_INT,
+							     sectors[x*ySectors + y].textureIndexOffset[layer],
+							     terr_terrainData.textureIndex);
 				}
 			}
 		}
 		finishDrawRangeElements();
 	}
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+	if (terr_useVBO)
+	{
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	}
+
 	// we don't need this one anymore
 	glDisableClientState(GL_COLOR_ARRAY);
 
@@ -1358,10 +1494,18 @@ void drawTerrain(void)
 	// and the texture coordinates buffer
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY); glError();
 	glEnableClientState(GL_VERTEX_ARRAY); glError();
-	glBindBuffer(GL_ARRAY_BUFFER, decalVBO); glError();
-	glVertexPointer(3, GL_FLOAT, sizeof(DecalVertex), BUFFER_OFFSET(0)); glError();
-	glTexCoordPointer(2, GL_FLOAT, sizeof(DecalVertex), BUFFER_OFFSET(12)); glError();
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+	if (terr_useVBO)
+	{
+		glBindBuffer(GL_ARRAY_BUFFER, decalVBO); glError();
+		glVertexPointer(3, GL_FLOAT, sizeof(DecalVertex), BUFFER_OFFSET(0)); glError();
+		glTexCoordPointer(2, GL_FLOAT, sizeof(DecalVertex), BUFFER_OFFSET(12)); glError();
+	}
+	else
+	{
+		glVertexPointer(3, GL_FLOAT, sizeof(DecalVertex), terr_terrainData.decaldata); glError();
+		glTexCoordPointer(2, GL_FLOAT, sizeof(DecalVertex), &terr_terrainData.decaldata->u); glError();
+	}
 
 	size = 0;
 	offset = 0;
@@ -1389,6 +1533,11 @@ void drawTerrain(void)
 		}
 	}
 
+	if (terr_useVBO)
+	{
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+	}
+
 	////////////////////////////////
 	// disable the lightmap texture
 	glActiveTexture(GL_TEXTURE1);
@@ -1406,8 +1555,6 @@ void drawTerrain(void)
 	glDisableClientState(GL_VERTEX_ARRAY);
 
 	glDepthMask(GL_TRUE);
-
-	//glBindBuffer(GL_ARRAY_BUFFER, 0);  // HACK Must unbind GL_ARRAY_BUFFER (don't know if it has to be unbound everywhere), otherwise text rendering may mysteriously crash.
 }
 
 /**
@@ -1471,10 +1618,17 @@ void drawWater(void)
 
 	// bind the vertex buffer
 	glEnableClientState(GL_VERTEX_ARRAY);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, waterIndexVBO); glError();
-	glBindBuffer(GL_ARRAY_BUFFER, waterVBO); glError();
 
-	glVertexPointer(3, GL_FLOAT, sizeof(RenderVertex), BUFFER_OFFSET(0)); glError();
+	if (terr_useVBO)
+	{
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, waterIndexVBO); glError();
+		glBindBuffer(GL_ARRAY_BUFFER, waterVBO); glError();
+		glVertexPointer(3, GL_FLOAT, sizeof(RenderVertex), BUFFER_OFFSET(0)); glError();
+	}
+	else
+	{
+		glVertexPointer(3, GL_FLOAT, 0, terr_terrainData.water); glError();
+	}
 
 	for (x = 0; x < xSectors; x++)
 	{
@@ -1487,13 +1641,18 @@ void drawWater(void)
 				                     sectors[x*ySectors + y].geometryOffset+sectors[x*ySectors + y].geometrySize,
 				                     sectors[x*ySectors + y].waterIndexSize,
 				                     GL_UNSIGNED_INT,
-				                     sectors[x*ySectors + y].waterIndexOffset);
+						     sectors[x*ySectors + y].waterIndexOffset,
+						     terr_terrainData.waterIndex);
 			}
 		}
 	}
 	finishDrawRangeElements();
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+	if (terr_useVBO)
+	{
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	}
 
 	glDisableClientState(GL_VERTEX_ARRAY);
 	

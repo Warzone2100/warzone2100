@@ -90,7 +90,7 @@ bool screenInitialise()
 
 	/* Dump extended information about OpenGL implementation to the console */
 	debug(LOG_3D, "OpenGL Extensions : %s", glGetString(GL_EXTENSIONS)); // FIXME This is too much for MAX_LEN_LOG_LINE
-	debug(LOG_3D, "Supported OpenGL extensions:");
+	debug(LOG_3D, "Notable OpenGL features:");
 	debug(LOG_3D, "  * OpenGL 1.2 %s supported!", GLEW_VERSION_1_2 ? "is" : "is NOT");
 	debug(LOG_3D, "  * OpenGL 1.3 %s supported!", GLEW_VERSION_1_3 ? "is" : "is NOT");
 	debug(LOG_3D, "  * OpenGL 1.4 %s supported!", GLEW_VERSION_1_4 ? "is" : "is NOT");
@@ -140,25 +140,18 @@ bool screenInitialise()
 		}
 
 	}
-	else if (GLEW_VERSION_1_5)
+	else if (GLEW_VERSION_1_5 || GLEW_VERSION_1_4 || (GLEW_VERSION_1_3 && GLEW_ARB_texture_env_crossbar))
 	{
+		// corner cases: vbo(core 1.5 or ARB ext), texture crossbar (core 1.4 or ARB ext)
 		debug(LOG_POPUP, _("OpenGL 2.0 is not supported by your system. Some things may look wrong. Please upgrade your graphics driver/hardware, if possible."));
 	}
-	else // less than 1.5
+	else
 	{
-		// Check if VBO extension available for hacks
-		if (GLEW_VERSION_1_4 && GLEW_ARB_vertex_buffer_object)
-		{
-			debug(LOG_POPUP, _("OpenGL 1.5/2.0 is not supported by your system. Some things may look wrong. Please upgrade your graphics driver/hardware, if possible."));
-			// screen_EnableVBO should be called later, so nothing (quesoGLC) will call glewInit twice and flush our tweaks into void
-		}
-		else
-		{
-			// We wite this file in hopes that people will upload the information in it to us.
-			writeGameInfo("WZdebuginfo.txt");
-			debug(LOG_FATAL, _("OpenGL 1.4 + VBO extension is not supported by your system. The game requires this. Please upgrade your graphics drivers/hardware, if possible."));
-			exit(1);
-		}
+		// We wite this file in hopes that people will upload the information in it to us.
+		writeGameInfo("WZdebuginfo.txt");
+		debug(LOG_FATAL, _("OpenGL 1.4 is not supported by your system. The game requires this. Please upgrade your graphics drivers/hardware, if possible."));
+		exit(1);
+		
 	}
 
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
@@ -174,11 +167,22 @@ void screenShutDown(void)
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_ACCUM_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 }
 
-// Make OpenGL's VBO functions available under the core names for drivers that support OpenGL 1.4 only but have the VBO extension
-void screen_EnableVBO()
+bool screen_IsVBOAvailable()
 {
-	// no need if there is OpenGL 1.5 available
-	if (!GLEW_VERSION_1_5 && GLEW_ARB_vertex_buffer_object)
+	// No VBO in fallback mode
+	if (opengl_fallback_mode)
+	{
+		return false;
+	}
+
+	// Check for 2.0 first as there are some implmentations which have non-complete 1.5 along with full 2.0 support (atleast for GLEW detection)
+	if (GLEW_VERSION_2_0 || GLEW_VERSION_1_5)
+	{
+		return true;
+	}
+
+	// Make OpenGL's VBO functions available under the core names for drivers that support OpenGL 1.4 only but have the VBO extension
+	if (GLEW_VERSION_1_4 && GLEW_ARB_vertex_buffer_object)
 	{
 		debug(LOG_WARNING, "OpenGL 1.4+: Using VBO extension functions under the core names.");
 
@@ -193,7 +197,11 @@ void screen_EnableVBO()
 		__glewIsBuffer = __glewIsBufferARB;
 		__glewMapBuffer = __glewMapBufferARB;
 		__glewUnmapBuffer = __glewUnmapBufferARB;
+
+		return true;
 	}
+
+	return false;
 }
 
 void screen_SetBackDropFromFile(const char* filename)
