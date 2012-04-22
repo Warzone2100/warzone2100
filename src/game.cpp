@@ -6635,6 +6635,8 @@ static void plotFeature(char *backDropSprite)
 			endian_udword(&psSaveFeature->y);
 			xx = map_coord(psSaveFeature->x);
 			yy = map_coord(psSaveFeature->y);
+			if (xx > BACKDROP_HACK_WIDTH || yy > BACKDROP_HACK_HEIGHT)
+				continue;
 		}
 		else
 		{
