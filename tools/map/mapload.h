@@ -30,7 +30,7 @@
 #define TILE_HEIGHT	128
 #define TILE_WIDTH	128
 
-#define MAX_PLAYERS 8
+#define MAX_PLAYERS 11
 #define MAP_MAXAREA (256 * 256)
 
 // map.h: 321
