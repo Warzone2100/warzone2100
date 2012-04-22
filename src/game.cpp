@@ -5025,7 +5025,7 @@ bool writeStructFile(const char *pFileName)
 			}
 			for (int i = 0; i < psCurr->numWeaps; i++)
 			{
-				if (psCurr->psTarget[i])
+				if (psCurr->psTarget[i] && !psCurr->psTarget[i]->died)
 				{
 					ini.setValue("target/" + QString::number(i) + "/id", psCurr->psTarget[i]->id);
 					ini.setValue("target/" + QString::number(i) + "/player", psCurr->psTarget[i]->player);
