@@ -13201,11 +13201,11 @@ msgstr "Figyelem! Ez a csalás hibákat tartalmaz. NEM ajánljuk használatra."
 
 #: src/keybind.cpp:199
 msgid "Ouch! Droid's health is down 20%!"
-msgstr ""
+msgstr "Aú! A droid egészsége 20 százalék alatt van!"
 
 #: src/keybind.cpp:215
 msgid "Ouch! Structure's health is down 20%!"
-msgstr ""
+msgstr "Aú! Szerkezet egészsége 20% alatt van!"
 
 #: src/keybind.cpp:270
 msgid "Lets us see what you see!"
@@ -14112,7 +14112,7 @@ msgstr "Előcsarnok"
 
 #: src/multiint.cpp:724
 msgid "IP"
-msgstr ""
+msgstr "IP"
 
 #: src/multiint.cpp:940
 #, fuzzy
@@ -14121,26 +14121,26 @@ msgstr " *** jelszót nem kötelező! ***"
 
 #: src/multiint.cpp:944
 msgid "[No Tanks]"
-msgstr ""
+msgstr "[Nincsenek Tankok]"
 
 #: src/multiint.cpp:948
 #, fuzzy
 msgid "[No Cyborgs]"
-msgstr "Cyborgokat gyárt"
+msgstr "[Nincsenek Cyborgok]"
 
 #: src/multiint.cpp:952
 msgid "[No VTOLs]"
-msgstr ""
+msgstr "[Nincs VTOLS]"
 
 #: src/multiint.cpp:956
 #, c-format
 msgid "Hosted by %s"
-msgstr ""
+msgstr "Kiszolgáló %s által"
 
 #: src/multiint.cpp:960
 #, c-format
 msgid "Hosted by %s —%s"
-msgstr ""
+msgstr "Kiszolgáló %s —%s által"
 
 #: src/multiint.cpp:980
 msgid "No games are available"
@@ -14409,7 +14409,7 @@ msgstr "Minden játékosnak ugyanazokkal a mod-okkal kell rendelkeznie, hogy csa
 
 #: src/multiint.cpp:2584
 msgid "Connecting to the lobby server..."
-msgstr ""
+msgstr "Kapcsolódás a kiszolgáló szerverhez..."
 
 #: src/multiint.cpp:2730
 #, c-format
@@ -14441,16 +14441,16 @@ msgstr "A játékmester elindította a játékot"
 
 #: src/multiint.cpp:3831
 msgid "Can't connect to lobby server!"
-msgstr ""
+msgstr "Nem tud kapcsolodni a kiszolgáló szerverhez !"
 
 #: src/multiint.cpp:3923
 #, c-format
 msgid "Mods: %s"
-msgstr ""
+msgstr "Mód: %s"
 
 #: src/multiint.cpp:3930
 msgid "Mods: None!"
-msgstr ""
+msgstr "Mód: Nincs!"
 
 #: src/multiint.cpp:3940
 #, fuzzy, c-format
@@ -14950,11 +14950,9 @@ msgstr "Verzió %s%s%s%s"
 #~ msgid "Visit our official site: http://wz2100.net"
 #~ msgstr "Látogass el a hivatalos oldalra: http://wz2100.net"
 
-#, fuzzy
 #~ msgid "Unit Colour (SP)"
 #~ msgstr "Egység Színek"
 
-#, fuzzy
 #~ msgid "Unit Colour (MP)"
 #~ msgstr "Egység Színek"
 
@@ -15054,41 +15052,32 @@ msgstr "Verzió %s%s%s%s"
 #~ msgid "8 players"
 #~ msgstr "8 játékos"
 
-#, fuzzy
 #~ msgid "9 players"
-#~ msgstr "2 játékos"
+#~ msgstr "9 játékos"
 
-#, fuzzy
 #~ msgid "10 players"
-#~ msgstr "2 játékos"
+#~ msgstr "10 játékos"
 
-#, fuzzy
 #~ msgid "11 players"
-#~ msgstr "2 játékos"
+#~ msgstr "11 játékos"
 
-#, fuzzy
 #~ msgid "12 players"
-#~ msgstr "2 játékos"
+#~ msgstr "12 játékos"
 
-#, fuzzy
 #~ msgid "13 players"
-#~ msgstr "3 játékos"
+#~ msgstr "13 játékos"
 
-#, fuzzy
 #~ msgid "14 players"
-#~ msgstr "4 játékos"
+#~ msgstr "14 játékos"
 
-#, fuzzy
 #~ msgid "15 players"
-#~ msgstr "5 játékos"
+#~ msgstr "15 játékos"
 
-#, fuzzy
 #~ msgid "16 players"
-#~ msgstr "6 játékos"
+#~ msgstr "16 játékos"
 
-#, fuzzy
 #~ msgid "FPS %d; PIEs %d; polys %d; States %d"
-#~ msgstr "FPS %d; FPS-limit: %d; PIEs %d; polys %d; Terr. polys %d; States %d"
+#~ msgstr "FPS %d; FPS-korlát: %d; PIEs %d; polys %d; Terr. polys %d; Állam %d"
 
 #~ msgid "Power Accrued"
 #~ msgstr "Energia felhalmozva"
@@ -15277,157 +15266,157 @@ msgstr "Verzió %s%s%s%s"
 #~ msgstr " (helyileg átállította)"
 
 #~ msgid "Player number"
-#~ msgstr "Player"
+#~ msgstr "Játékosok száma"
 
 #~ msgid "Mini-Rocket accuracy +10%"
-#~ msgstr "Increases Mini-Rocket accuracy"
+#~ msgstr "Megnövekedett mini-rakéta pontosság"
 
 #~ msgid "Mini-Rocket damage +25%"
-#~ msgstr "Increases Mini-Rocket damage"
+#~ msgstr "Megnövekedett mini rakéta pusztitás +25%"
 
 #~ msgid "Mini-Rocket reload time -15%"
-#~ msgstr "Mini-Rocket Upgrade"
+#~ msgstr "Mini-rakéta töltési idő -15%"
 
 #~ msgid "Automated Manufacturing Mk2"
-#~ msgstr "Automated VTOL Rearming Mk2"
+#~ msgstr "Automatizálta VTOL-t miközben újra felfegyverezte Mk2"
 
 #~ msgid "Automated Manufacturing Mk3"
-#~ msgstr "Automated VTOL Rearming Mk3"
+#~ msgstr "Automatizálta VTOL-t miközben újra felfegyverezte Mk3"
 
 #~ msgid "Robotic Manufacturing Mk2"
-#~ msgstr "Robotic VTOL Rearming Mk2"
+#~ msgstr "Robotizált VTOL felfegyverező Mk2"
 
 #~ msgid "Robotic Manufacturing Mk3"
-#~ msgstr "Robotic VTOL Rearming Mk3"
+#~ msgstr "Robotizált VTOL felfegyverező Mk3"
 
 #~ msgid "Advanced Manufacturing Mk2"
-#~ msgstr "Advanced Factory Production Mk2"
+#~ msgstr "Haladó gyári termelés Mk2"
 
 #~ msgid "Automated Repair Facility Mk2"
-#~ msgstr "Automated Repair Facility"
+#~ msgstr "Automatizált javítási létesítmény MK2"
 
 #~ msgid "Automated Repair Facility Mk3"
-#~ msgstr "Automated Repair Facility"
+#~ msgstr "Automatizált javítási létesítmény MK3"
 
 #~ msgid "Robotic Repair Facility Mk2"
-#~ msgstr "Robotic Repair Facility Upgrade Mk2"
+#~ msgstr "Robotizált javítási létesítmény"
 
 #~ msgid "HESH Mini-Rockets"
-#~ msgstr "HE Mini-Rockets"
+#~ msgstr "HE Mini-rakéta"
 
 #~ msgid "HESH Mini-Rockets Mk2"
-#~ msgstr "HE Mini-Rockets Mk2"
+#~ msgstr "HE Mini-rakéta Mk2"
 
 #~ msgid "HESH Mini-Rockets Mk3"
-#~ msgstr "HE Mini-Rockets Mk3"
+#~ msgstr "HE Mini-rakéta Mk3"
 
 #~ msgid "Thermite Flamer Cyborg"
-#~ msgstr "Thermite Flamer"
+#~ msgstr "Termit lángvető"
 
 #~ msgid "Grenadier Cyborg"
-#~ msgstr "Grenadier"
+#~ msgstr "Gránátos Cyborg"
 
 #~ msgid "Spanish"
-#~ msgstr "Danish"
+#~ msgstr "Spanyol"
 
 #~ msgid "Finnish"
-#~ msgstr "Danish"
+#~ msgstr "Finn"
 
 #~ msgid "Irish"
-#~ msgstr "Skirmish"
+#~ msgstr "Ír"
 
 #~ msgid "Croatian"
-#~ msgstr "Latin"
+#~ msgstr "Horvát"
 
 #~ msgid "Polish"
-#~ msgstr "Demolish"
+#~ msgstr "Lengyel"
 
 #~ msgid "Brazilian Portuguese"
-#~ msgstr "Portugese"
+#~ msgstr "Portugál (brazil)"
 
 #~ msgid "Portuguese"
-#~ msgstr "Portugese"
+#~ msgstr "Portugál"
 
 #~ msgid ", mod: "
-#~ msgstr "mod"
+#~ msgstr "mód"
 
 #~ msgid "Increases Bombing damage"
-#~ msgstr "Increases Cannon damage"
+#~ msgstr "Menövekedett löveg pusztítás"
 
 #~ msgid "Basque"
-#~ msgstr "Base"
+#~ msgstr "Bázis"
 
 #~ msgid "Norwegian (Nynorsk)"
-#~ msgstr "Norwegian"
+#~ msgstr "Norvég"
 
 #~ msgid "Swedish (Sweden)"
-#~ msgstr "Swedish"
+#~ msgstr "Svéd"
 
 #~ msgid "Turkish"
-#~ msgstr "Tracks"
+#~ msgstr "Török"
 
 #~ msgid "Heavy Machinegun Cobra Half-trackS"
-#~ msgstr "Cobra Heavy Machinegun Half-track"
+#~ msgstr "Cobra nehéz gépfegyverrel fél-lánctalpas"
 
 #~ msgid "Peperpot Emplacement"
-#~ msgstr "Pepperpot Emplacement"
+#~ msgstr "Pepperpot elhelyezés"
 
 #~ msgid "Cursor Mode"
-#~ msgstr "Power Module"
+#~ msgstr "Energia modul"
 
 #~ msgid "Hardware"
-#~ msgstr "Hardcrete"
+#~ msgstr "Hardver"
 
 #~ msgid "Mini-Pod Artillery"
-#~ msgstr "Mini-Rocket Artillery"
+#~ msgstr "Mini-pod tűzérség"
 
 #~ msgid "Mini-Pod Battery"
-#~ msgstr "Mini-Rocket Battery"
+#~ msgstr "Mini-pod elem"
 
 #~ msgid "Stabilized Mini-Pods"
-#~ msgstr "Stabilised Mini-Rockets"
+#~ msgstr "Stabilizált mini-podok"
 
 #~ msgid "Stabilized Mini-Pods Mk2"
-#~ msgstr "Stabilised Mini-Rockets Mk2"
+#~ msgstr "Stabilizált mini-podok Mk2"
 
 #~ msgid "HE Mini-Pods"
-#~ msgstr "Mini-Pod"
+#~ msgstr "HE Mini-Podok"
 
 #~ msgid "HE Mini-Pods Mk2"
 #~ msgstr "HE Mini-Rockets Mk2"
 
-#~ msgid "HE Mini-Pods Mk3"
-#~ msgstr "HE Mini-Rockets Mk3"
+#~ msgid "HE Mini-Podok Mk3"
+#~ msgstr "HE Mini-Podok Mk3"
 
 #~ msgid "HEAP Mini-Pods"
-#~ msgstr "HEAP Mini-Rockets"
+#~ msgstr "HEAP Mini-Podok"
 
 #~ msgid "HEAP Mini-Pods Mk2"
-#~ msgstr "HEAP Mini-Rockets Mk2"
+#~ msgstr "HEAP Mini-Podok Mk2"
 
 #~ msgid "HEAP Mini-Pods Mk3"
-#~ msgstr "HEAP Mini-Rockets Mk3"
+#~ msgstr "HEAP Mini-Podok Mk3"
 
 #~ msgid "Fast Fire Mini-Pods"
-#~ msgstr "Fast Fire Mini-Rockets"
+#~ msgstr "Gyors tűzelő Mini-Podok"
 
 #~ msgid "Fast Fire Mini-Pods Mk2"
-#~ msgstr "Fast Fire Mini-Rockets Mk2"
+#~ msgstr "Gyors tűzelő Mini-Podok Mk2"
 
 #~ msgid "Fast Fire Mini-Pods Mk3"
-#~ msgstr "Fast Fire Mini-Rockets Mk3"
+#~ msgstr "Gyors tűzelő Mini-Podok Mk3"
 
 #~ msgid "Rapid Fire Mini-Pods"
-#~ msgstr "Rapid Fire Mini-Rockets"
+#~ msgstr "Gyors tűzelő Mini Podok"
 
 #~ msgid "Rapid Fire Mini-Pods Mk2"
-#~ msgstr "Rapid Fire Mini-Rockets Mk2"
+#~ msgstr "yors tűzelő Mini Podok Mk2"
 
 #~ msgid "Rapid Fire Mini-Pods Mk3"
-#~ msgstr "Rapid Fire Mini-Rockets Mk3"
+#~ msgstr "Gyors tűzelő Mini Podok Mk3"
 
 #~ msgid "Cluster Bombs Bug VTOL"
-#~ msgstr "Bug Cluster Bomb VTOL"
+#~ msgstr "Bogár bombaköteg VTOL"
 
 #~ msgid "Python Tank Killer Tracks"
-#~ msgstr "Mantis Tank Killer Tracks"
+#~ msgstr "Piton Tank ölő"

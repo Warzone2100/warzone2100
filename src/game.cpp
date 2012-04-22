@@ -4231,7 +4231,7 @@ static bool loadSaveDroid(const char *pFileName, DROID **ppsCurrentDroidLists)
 		psDroid->burnStart = ini.value("burnStart", 0).toInt();
 		psDroid->experience = ini.value("experience", 0).toInt();
 		psDroid->timeLastHit = ini.value("timeLastHit", UDWORD_MAX).toInt();
-		psDroid->secondaryOrder = ini.value("secondaryOrder", DSS_NONE).toInt();
+		psDroid->secondaryOrder = ini.value("secondaryOrder", psDroid->secondaryOrder).toInt();
 		psDroid->secondaryOrderPending = psDroid->secondaryOrder;
 		psDroid->action = (DROID_ACTION)ini.value("action", DACTION_NONE).toInt();
 		psDroid->actionPos = ini.vector2i("action/pos");
@@ -5025,7 +5025,7 @@ bool writeStructFile(const char *pFileName)
 			}
 			for (int i = 0; i < psCurr->numWeaps; i++)
 			{
-				if (psCurr->psTarget[i])
+				if (psCurr->psTarget[i] && !psCurr->psTarget[i]->died)
 				{
 					ini.setValue("target/" + QString::number(i) + "/id", psCurr->psTarget[i]->id);
 					ini.setValue("target/" + QString::number(i) + "/player", psCurr->psTarget[i]->player);
