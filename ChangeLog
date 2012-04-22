@@ -1,4 +1,4 @@
-2012-03-19: Version 3.1_beta8
+2012-04-22: Version 3.1_beta8
  * General:
    * Change: Make screen shake not shake on walls, and the duration depend on what was destroyed (commit:33842677af6b6cb591c5a3a677849eb600e10e2f)
    * Fix: Enable truck template when building factory before HQ (ticket:3337, commit:7291bb9b28e3d5835bf9cee6f5e407f4112cc8a9)
@@ -21,7 +21,7 @@
    * Update: Hungarian (ticket:3412, commit:b9d6e17f93c5f651c1070c4d89eedaec094794a1, commit:188b4ac5a010e8ab2c1b86b4e77728b76067f713)
    * Update: Brazilian (ticket:3415, commit:74bd1b13aed3a369e0c93796d56ee5f323593f27)
    * Update: Turkish (ticket:3417, commit:13128367ad68725d310bc3372dfe624b3045a881)
-
+   * Update: German (ticket:3418, commit:641092f6cefdc3cadbc871a18dc2e08a3b979932)
 
 2012-03-19: Version 3.1_beta7
  * General:
