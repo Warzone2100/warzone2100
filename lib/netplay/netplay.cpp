@@ -1079,6 +1079,10 @@ int NETshutdown(void)
 	{
 		NETremRedirects();
 	}
+
+	free(NetPlay.MOTD);
+	NETdeleteQueues();
+
 	return 0;
 }
 

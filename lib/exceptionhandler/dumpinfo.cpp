@@ -356,3 +356,8 @@ void dbgDumpInit(int argc, const char** argv, const char *packageVersion)
 	debug_register_callback(&debug_exceptionhandler_data, NULL, NULL, NULL );
 	createHeader(argc, argv, packageVersion);
 }
+
+void dbgDumpFree()
+{
+	free(dbgHeader);
+}
