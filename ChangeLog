@@ -1,7 +1,27 @@
-2012-03-19: Version 3.1_beta8
+2012-04-22: Version 3.1_beta8
  * General:
+   * Change: Make screen shake not shake on walls, and the duration depend on what was destroyed (commit:33842677af6b6cb591c5a3a677849eb600e10e2f)
    * Fix: Enable truck template when building factory before HQ (ticket:3337, commit:7291bb9b28e3d5835bf9cee6f5e407f4112cc8a9)
    * Fix: Problem with continent generation making droids refuse orders (ticket:3269, commit:3bd70ae8b9be93bb19d4bc694b7197277bc412fe)
+   * Fix: Don't show repair icon for a selected repair droid itself (ticket:3242, commit:1fae45407f91a89e632a6534b4bebc10450c3e31)
+ * Multiplayer:
+   * Change: Update GreatRift, MizaMaze and Wheel to include scavengers and new walls, add missing cliff tiles (ticket:2857, ticket:3317, commit:0ad1b227ff63958b1af969f6e6b3d256f8607647)
+   * Fix: Avoid mixing up droid orders during lag (commit:83f7adecc9ec6d769f10ee4df2e7f8c75a84ecb8)
+   * Fix: Factories drop artifacts again (commit:29966c5da299f944a0e52ab579d2b3a7ed8d3063, commit:aaeaa4140a157341f68eb827ddbfaf1e90c4261b, commit:8e48e9e422b6a962374e9f822c2de1e95f196942)
+   * Fix: Disable unit design when HQ gets destroyed (ticket:3342, commit:466880e1cdbc5830210dc8eaaed5a2d0b7781d76)
+   * Fix: Make unit design/radar depend on the existence of an HQ, not the base setting (commit:d0fc1e580d7fc57a5c10efabc764085835f45e51)
+ * Lobby:
+   * Change: Distinguish between wrong version, wrong mod and full game (commit:dc6a4b3eb82d2c062273b9ecd504e7065e3badfd)
+   * Change: Subtract closed slots from the shown maximum player number (commit:0c5aebfdc1baf3d19d1524b829a23e802d6590a4)
+   * Fix: Properly handle a disappearing host (ticket:3313, commit:0de4f38295d2db0e1df9db11c6ccb598f5e84d2f)
+   * Fix: Always show lock icon when a password is set, don't show it in games without password (ticket:3357, commit:bd6c1d203b784a923e9331f67b2cee7226daab99)
+ * Translations:
+   * Update: Spanish (ticket:3361, commit:a018ecdbb200dc6f83fc45f326ab82b60a78bdb1)
+   * Update: Polish (ticket:1347, commit:c0d7331cdc30ac4ccca1703d8a746f3f366ea500, commit:a67868fed5e3035a7d182095b9d49374c2b4047d)
+   * Update: Hungarian (ticket:3412, commit:b9d6e17f93c5f651c1070c4d89eedaec094794a1, commit:188b4ac5a010e8ab2c1b86b4e77728b76067f713)
+   * Update: Brazilian (ticket:3415, commit:74bd1b13aed3a369e0c93796d56ee5f323593f27)
+   * Update: Turkish (ticket:3417, commit:13128367ad68725d310bc3372dfe624b3045a881)
+   * Update: German (ticket:3418, commit:641092f6cefdc3cadbc871a18dc2e08a3b979932)
 
 2012-03-19: Version 3.1_beta7
  * General:
