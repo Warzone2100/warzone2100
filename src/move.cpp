@@ -2282,9 +2282,8 @@ static bool pickupOilDrum(int toPlayer, int fromPlayer)
 		CONPRINTF(ConsoleString, (ConsoleString, _("You found %u power in an oil drum."), OILDRUM_POWER));
 	}
 
-	// TODO This code is weird. When should new oil drums actually be added?
 	// fromPlayer == ANYPLAYER seems to mean that the drum was not pre-placed on the map.
-	if (bMultiPlayer && fromPlayer == ANYPLAYER && toPlayer == selectedPlayer)
+	if (bMultiPlayer && fromPlayer == ANYPLAYER)
 	{
 		// when player finds oil, we init the timer, and flag that we need a drum
 		if (!oilTimer)

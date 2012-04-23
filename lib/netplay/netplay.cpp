@@ -3354,6 +3354,8 @@ static SyncDebugLog syncDebugLog[MAX_SYNC_HISTORY];
 static uint32_t syncDebugExtraGameTime;
 static uint32_t syncDebugExtraCrc;
 
+static uint32_t syncDebugNumDumps = 0;
+
 void _syncDebug(const char *function, const char *str, ...)
 {
 #ifdef WZ_CC_MSVC
@@ -3417,6 +3419,8 @@ void resetSyncDebug()
 	syncDebugExtraCrc = 0xFFFFFFFF;
 
 	syncDebugNext = 0;
+
+	syncDebugNumDumps = 0;
 }
 
 uint32_t nextDebugSync(void)
@@ -3476,8 +3480,6 @@ static void recvDebugSync(NETQUEUE queue)
 
 bool checkDebugSync(uint32_t checkGameTime, uint32_t checkCrc)
 {
-	static uint32_t numDumps = 0;
-
 	if (checkGameTime == syncDebugLog[syncDebugNext].getGameTime())  // Can't happen - and syncDebugGameTime[] == 0, until just before sending the CRC, anyway.
 	{
 		debug(LOG_ERROR, "Huh? We aren't done yet...");
@@ -3520,9 +3522,9 @@ bool checkDebugSync(uint32_t checkGameTime, uint32_t checkCrc)
 	bufIndex = MIN(bufIndex, ARRAY_SIZE(debugSyncTmpBuf));  // snprintf will not overflow debugSyncTmpBuf, but returns as much as it would have printed if possible.
 	bufIndex += snprintf((char *)debugSyncTmpBuf + bufIndex, ARRAY_SIZE(debugSyncTmpBuf) - bufIndex, "===== END gameTime=%u, %u entries, CRC 0x%08X =====\n", syncDebugLog[logIndex].getGameTime(), syncDebugLog[logIndex].getNumEntries(), syncDebugLog[logIndex].getCrc());
 	bufIndex = MIN(bufIndex, ARRAY_SIZE(debugSyncTmpBuf));  // snprintf will not overflow debugSyncTmpBuf, but returns as much as it would have printed if possible.
-	if (numDumps < 5)
+	if (syncDebugNumDumps < 2)
 	{
-		++numDumps;
+		++syncDebugNumDumps;
 		sendDebugSync(debugSyncTmpBuf, bufIndex, syncDebugLog[logIndex].getGameTime());
 	}
 
