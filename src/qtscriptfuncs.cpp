@@ -245,7 +245,8 @@ QScriptValue convFeature(FEATURE *psFeature, QScriptEngine *engine)
 //;;   \item[DROID_SENSOR] Units with sensor turret.
 //;;   \item[DROID_ECM] Unit with ECM jammer turret.
 //;;   \item[DROID_CYBORG] Cyborgs with weapons.
-//;;   \item[DROID_TRANSPORTER] Transporters.
+//;;   \item[DROID_TRANSPORTER] Cyborg transporter.
+//;;   \item[DROID_SUPERTRANSPORTER] Droid transporter.
 //;;   \item[DROID_COMMAND] Commanders.
 //;;  \end{description}
 //;; \item[group] The group this droid is member of. This is a numerical ID. If not a member of any group, will be set to \emph{null}.
