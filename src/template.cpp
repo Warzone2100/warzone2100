@@ -45,7 +45,6 @@ extern DROID_TEMPLATE	sDefaultDesignTemplate;
 
 // Template storage
 DROID_TEMPLATE		*apsDroidTemplates[MAX_PLAYERS];
-DROID_TEMPLATE		*apsStaticTemplates;	// for AIs and scripts
 
 bool allowDesign = true;
 
@@ -236,10 +235,7 @@ void initTemplatePoints(void)
 			initTemplatePoints(pDroidDesign);
 		}
 	}
-	for (DROID_TEMPLATE *pDroidDesign = apsStaticTemplates; pDroidDesign != NULL; pDroidDesign = pDroidDesign->psNext)
-	{
-		initTemplatePoints(pDroidDesign);
-	}
+
 	for (std::list<DROID_TEMPLATE>::iterator pDroidDesign = localTemplates.begin(); pDroidDesign != localTemplates.end(); ++pDroidDesign)
 	{
 		initTemplatePoints(&*pDroidDesign);
@@ -344,30 +340,36 @@ bool loadDroidTemplates(const char *pDroidData, UDWORD bufferSize)
 		else
 		{
 			std::string playerType = line.s(6);
-			// Give those meant for humans to all human players.
-			// Also support the old template format, in which those meant
-			// for humans were player 0 (in campaign) or 5 (in multiplayer).
-			if ((!bMultiPlayer && playerType == "0") ||
-			    ( bMultiPlayer && playerType == "5") ||
-					      playerType == "YES"
-			   )
-			{
-				for (int i = 0; i < MAX_PLAYERS; ++i)
-				{
-					if (NetPlay.players[i].allocated)  // human prototype template
-					{
-						design.prefab = false;
-						addTemplateToList(&design, &apsDroidTemplates[i]);
-					}
-				}
-				localTemplates.push_front(design);
-				localTemplates.front().pName = strdup(localTemplates.front().pName);
-			}
-			// Add all templates to static template list
-			design.prefab = true;  // prefabricated templates referenced from VLOs
-			addTemplateToList(&design, &apsStaticTemplates);
-		}
 
+			for (int i = 0; i < MAX_PLAYERS; ++i)
+			{
+				// Give those meant for humans to all human players.
+				// Also support the old template format, in which those meant
+				// for humans were player 0 (in campaign) or 5 (in multiplayer), ("YES" is used in MP stats)
+				if (NetPlay.players[i].allocated &&
+					((!bMultiPlayer && playerType == "0") || (bMultiPlayer && playerType == "5") || playerType == "YES"))
+				{
+					debug(LOG_NEVER, "HUMAN (%d): %s id:%d enabled:%d", i, design.aName, design.multiPlayerID, design.enabled);
+					design.prefab = false;
+					addTemplateToList(&design, &apsDroidTemplates[i]);
+
+					// This sets up the UI templates for display purposes ONLY--we still only use apsDroidTemplates for making them.
+					// FIXME: Why are we doing this here, and not on demmand ?
+					localTemplates.push_front(design);
+					localTemplates.front().pName = strdup(localTemplates.front().pName);
+				}
+				else if (NetPlay.players[i].allocated)	//skip the ones not meant for puny humans
+				{
+					continue;
+				}
+				else	// assume everything else is for AI
+				{
+					debug(LOG_NEVER, "AI (%d): %s id:%d enabled:%d", i, design.aName, design.multiPlayerID, design.enabled);
+					design.prefab = true;  // prefabricated templates referenced from VLOs
+					addTemplateToList(&design, &apsDroidTemplates[i]);
+				}
+			}
+		}
 		debug(LOG_NEVER, "(default) Droid template found, aName: %s, MP ID: %d, ref: %u, pname: %s, prefab: %s, type:%d (loading)",
 			design.aName, design.multiPlayerID, design.ref, design.pName, design.prefab ? "yes":"no", design.droidType);
 	}
@@ -392,22 +394,11 @@ bool droidTemplateShutDown(void)
 			{
 				free(pTemplate->pName);
 			}
-			ASSERT(!pTemplate->prefab, "Static template %s in player template list!", pTemplate->aName);
 			delete pTemplate;
 		}
 		apsDroidTemplates[player] = NULL;
 	}
-	for (pTemplate = apsStaticTemplates; pTemplate != NULL; pTemplate = pNext)
-	{
-		pNext = pTemplate->psNext;
-		if (pTemplate->pName != sDefaultDesignTemplate.pName)		// sanity check probably no longer necessary
-		{
-			free(pTemplate->pName);
-		}
-		ASSERT(pTemplate->prefab, "Player template %s in static template list!", pTemplate->aName);
-		delete pTemplate;
-	}
-	apsStaticTemplates = NULL;
+
 	free(sDefaultDesignTemplate.pName);
 	sDefaultDesignTemplate.pName = NULL;
 
@@ -421,83 +412,6 @@ bool droidTemplateShutDown(void)
 }
 
 /*!
- * Get a static template from its aName.
- * This checks the all the Human's apsDroidTemplates list.
- * This function is similar to getTemplateFromUniqueName() but we use aName,
- * and not pName, since we don't have that information, and we are checking all player's list.
- * THIS FUNCTION WILL GO AWAY! Only used (badly) in "clone" cheat currently.
- * \param aName Template aName
- *
- */
-DROID_TEMPLATE	*GetHumanDroidTemplate(const char *aName)
-{
-	DROID_TEMPLATE	*templatelist, *found = NULL, *foundOtherPlayer = NULL;
-	int i, playerFound = 0;
-
-	for (i=0; i < MAX_PLAYERS; i++)
-	{
-		templatelist = apsDroidTemplates[i];
-		while (templatelist)
-		{
-			if (!strcmp(templatelist->aName, aName))
-			{
-				debug(LOG_NEVER, "Droid template found, aName: %s, MP ID: %d, ref: %u, pname: %s (for player %d)",
-					templatelist->aName, templatelist->multiPlayerID, templatelist->ref, templatelist->pName, i);
-				if (i == selectedPlayer)
-				{
-					found = templatelist;
-				}
-				else
-				{
-					foundOtherPlayer = templatelist;
-					playerFound = i;
-				}
-			}
-
-			templatelist = templatelist->psNext;
-		}
-	}
-
-	if (foundOtherPlayer && !found)
-	{
-		debug(LOG_ERROR, "The template was not in our list, but was in another players list.");
-		debug(LOG_ERROR, "Droid template's aName: %s, MP ID: %d, ref: %u, pname: %s (for player %d)",
-			foundOtherPlayer->aName, foundOtherPlayer->multiPlayerID, foundOtherPlayer->ref, foundOtherPlayer->pName, playerFound);
-		return foundOtherPlayer;
-	}
-
-	return found;
-}
-
-/*!
- * Get a static template from its aName.
- * This checks the AI apsStaticTemplates.
- * This function is similar to getTemplateFromTranslatedNameNoPlayer() but we use aName,
- * and not pName, since we don't have that information.
- * \param aName Template aName
- *
- */
-DROID_TEMPLATE *GetAIDroidTemplate(const char *aName)
-{
-	DROID_TEMPLATE	*templatelist, *found = NULL;
-
-	templatelist = apsStaticTemplates;
-	while (templatelist)
-	{
-		if (!strcmp(templatelist->aName, aName))
-		{
-			debug(LOG_INFO, "Droid template found, name: %s, MP ID: %d, ref: %u, pname: %s ",
-				templatelist->aName, templatelist->multiPlayerID, templatelist->ref, templatelist->pName);
-
-			found = templatelist;
-		}
-		templatelist = templatelist->psNext;
-	}
-
-	return found;
-}
-
-/*!
  * Gets a template from its name
  * relies on the name being unique (or it will return the first one it finds!)
  * \param pName Template name
@@ -507,15 +421,9 @@ DROID_TEMPLATE *GetAIDroidTemplate(const char *aName)
  */
 DROID_TEMPLATE * getTemplateFromUniqueName(const char *pName, unsigned int player)
 {
-	DROID_TEMPLATE *psCurr;
-	DROID_TEMPLATE *list = apsStaticTemplates;	// assume AI
+	DROID_TEMPLATE *list = apsDroidTemplates[player];
 
-	if (isHumanPlayer(player))
-	{
-		list = apsDroidTemplates[player];	// was human
-	}
-
-	for (psCurr = list; psCurr != NULL; psCurr = psCurr->psNext)
+	for (DROID_TEMPLATE *psCurr = list; psCurr != NULL; psCurr = psCurr->psNext)
 	{
 		if (strcmp(psCurr->pName, pName) == 0)
 		{
@@ -534,18 +442,17 @@ DROID_TEMPLATE * getTemplateFromUniqueName(const char *pName, unsigned int playe
  */
 DROID_TEMPLATE *getTemplateFromTranslatedNameNoPlayer(char const *pName)
 {
-	const char *rName;
-	DROID_TEMPLATE *psCurr;
-
-	for (psCurr = apsStaticTemplates; psCurr != NULL; psCurr = psCurr->psNext)
+	for (int i=0; i < MAX_PLAYERS; i++)
 	{
-		rName = psCurr->pName ? psCurr->pName : psCurr->aName;
-		if (strcmp(rName, pName) == 0)
+		for (DROID_TEMPLATE *psCurr = apsDroidTemplates[i]; psCurr != NULL; psCurr = psCurr->psNext)
 		{
-			return psCurr;
+			const char *rName = psCurr->pName ? psCurr->pName : psCurr->aName;
+			if (strcmp(rName, pName) == 0)
+			{
+				return psCurr;
+			}
 		}
 	}
-
 	return NULL;
 }
 

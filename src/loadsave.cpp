@@ -117,39 +117,51 @@ bool saveInMissionRes(void)
 // return whether the save screen was displayed in the middle of a mission
 bool saveMidMission(void)
 {
-	return bLoadSaveMode == SAVE_INGAME;
+	return bLoadSaveMode == SAVE_INGAME_MISSION;
 }
 
 // ////////////////////////////////////////////////////////////////////////////
 bool addLoadSave(LOADSAVE_MODE savemode, const char *title)
 {
-	bool bLoad;
-
+	bool bLoad = true;
+	char NewSaveGamePath[PATH_MAX] = {'\0'};
 	bLoadSaveMode = savemode;
 	UDWORD			slotCount;
-// removed hardcoded values!  change with the defines above! -Q
 	static char	sSlotCaps[totalslots][totalslotspace];
 	static char	sSlotTips[totalslots][totalslotspace];
 	char **i, **files;
 
 	switch(savemode)
 	{
-	case LOAD_FRONTEND:
-	case LOAD_MISSIONEND:
-	case LOAD_INGAME:
-		bLoad = true;
-		break;
-	case SAVE_MISSIONEND:
-	case SAVE_INGAME:
-	default:
-		bLoad = false;
-		break;
+		case LOAD_FRONTEND_MISSION:
+		case LOAD_INGAME_MISSION:
+		case LOAD_MISSIONEND:
+			ssprintf(NewSaveGamePath, "%s%s/", SaveGamePath, "campaign");
+			break;
+		case LOAD_FRONTEND_SKIRMISH:
+		case LOAD_INGAME_SKIRMISH:
+			ssprintf(NewSaveGamePath, "%s%s/", SaveGamePath, "skirmish");
+			break;
+		case SAVE_MISSIONEND:
+		case SAVE_INGAME_MISSION:
+			ssprintf(NewSaveGamePath, "%s%s/", SaveGamePath, "campaign");
+			bLoad = false;
+			break;
+		case SAVE_INGAME_SKIRMISH:
+			ssprintf(NewSaveGamePath, "%s%s/", SaveGamePath, "skirmish");
+			bLoad = false;
+			break;
+		default:
+			ASSERT("Invalid load/save mode!", "Invalid load/save mode!");
+			ssprintf(NewSaveGamePath, "%s%s/", SaveGamePath, "campaign");
+			break;
 	}
 
 	mode = bLoad;
 	debug(LOG_SAVE, "called (%d, %s)", bLoad, title);
 
-	if ((bLoadSaveMode == LOAD_INGAME) || (bLoadSaveMode == SAVE_INGAME))
+	if ((bLoadSaveMode == LOAD_INGAME_MISSION) || (bLoadSaveMode == SAVE_INGAME_MISSION)
+		|| (bLoadSaveMode == LOAD_INGAME_SKIRMISH) || (bLoadSaveMode == SAVE_INGAME_SKIRMISH))
 	{
 		if (!bMultiPlayer || (NetPlay.bComms ==0))
 		{
@@ -180,8 +192,6 @@ bool addLoadSave(LOADSAVE_MODE savemode, const char *title)
 		forceHidePowerBar();
 		intRemoveReticule();
 	}
-
-	(void) PHYSFS_mkdir(SaveGamePath); // just in case
 
 	psRequestScreen = widgCreateScreen(); // init the screen
 	widgSetTipFont(psRequestScreen,font_regular);
@@ -277,10 +287,10 @@ bool addLoadSave(LOADSAVE_MODE savemode, const char *title)
 	// fill slots.
 	slotCount = 0;
 
-	debug(LOG_SAVE, "Searching \"%s\" for savegames", SaveGamePath);
+	debug(LOG_SAVE, "Searching \"%s\" for savegames", NewSaveGamePath);
 
 	// add savegame filenames minus extensions to buttons
-	files = PHYSFS_enumerateFiles(SaveGamePath);
+	files = PHYSFS_enumerateFiles(NewSaveGamePath);
 	for (i = files; *i != NULL; ++i)
 	{
 		W_BUTTON *button;
@@ -300,7 +310,7 @@ bool addLoadSave(LOADSAVE_MODE savemode, const char *title)
 		debug(LOG_SAVE, "We found [%s]", *i);
 
 		/* Figure save-time */
-		snprintf(savefile, sizeof(savefile), "%s/%s", SaveGamePath, *i);
+		snprintf(savefile, sizeof(savefile), "%s/%s", NewSaveGamePath, *i);
 		savetime = PHYSFS_getLastModTime(savefile);
 		timeinfo = localtime(&savetime);
 		strftime(sSlotTips[slotCount], sizeof(sSlotTips[slotCount]), "%x %X", timeinfo);
@@ -330,7 +340,8 @@ bool closeLoadSave(void)
 	widgDelete(psRequestScreen,LOADSAVE_FORM);
 	bLoadSaveUp = false;
 
-	if ((bLoadSaveMode == LOAD_INGAME) || (bLoadSaveMode == SAVE_INGAME))
+	if ((bLoadSaveMode == LOAD_INGAME_MISSION) || (bLoadSaveMode == SAVE_INGAME_MISSION)
+		|| (bLoadSaveMode == LOAD_INGAME_SKIRMISH) || (bLoadSaveMode == SAVE_INGAME_SKIRMISH))
 	{
 
 		if (!bMultiPlayer || (NetPlay.bComms == 0))
@@ -410,6 +421,7 @@ bool runLoadSave(bool bResetMissionWidgets)
 	static char     sDelete[PATH_MAX];
 	UDWORD		i, campaign;
 	W_CONTEXT		context;
+	char NewSaveGamePath[PATH_MAX] = {'\0'};
 
 	id = widgRunScreen(psRequestScreen);
 
@@ -420,7 +432,14 @@ bool runLoadSave(bool bResetMissionWidgets)
 	{
 		goto cleanup;
 	}
-
+	if (bMultiPlayer)
+	{
+		ssprintf(NewSaveGamePath, "%s%s/", SaveGamePath, "skirmish");
+	}
+	else
+	{
+		ssprintf(NewSaveGamePath, "%s%s/", SaveGamePath, "campaign");
+	}
 	// clicked a load entry
 	if( id >= LOADENTRY_START  &&  id <= LOADENTRY_END )
 	{
@@ -429,7 +448,7 @@ bool runLoadSave(bool bResetMissionWidgets)
 		{
 			if( ((W_BUTTON *)widgGetFromID(psRequestScreen,id))->pText )
 			{
-				sprintf(sRequestResult, "%s%s%s", SaveGamePath, ((W_BUTTON *)widgGetFromID(psRequestScreen,id))->pText, sExt);
+				sprintf(sRequestResult, "%s%s%s", NewSaveGamePath, ((W_BUTTON *)widgGetFromID(psRequestScreen,id))->pText, sExt);
 			}
 			else
 			{
@@ -457,7 +476,7 @@ bool runLoadSave(bool bResetMissionWidgets)
 
 				if (((W_BUTTON *)widgGetFromID(psRequestScreen,id))->pText != NULL)
 				{
-					snprintf(sDelete, sizeof(sDelete), "%s%s%s", SaveGamePath,
+					snprintf(sDelete, sizeof(sDelete), "%s%s%s", NewSaveGamePath,
 					         ((W_BUTTON *)widgGetFromID(psRequestScreen,id))->pText, sExt);
 				}
 				else
@@ -524,7 +543,7 @@ bool runLoadSave(bool bResetMissionWidgets)
 		{
 			sstrcpy(sTemp, widgGetString(psRequestScreen, id));
 			removeWildcards(sTemp);
-			snprintf(sRequestResult, sizeof(sRequestResult), "%s%s%s", SaveGamePath, sTemp, sExt);
+			snprintf(sRequestResult, sizeof(sRequestResult), "%s%s%s", NewSaveGamePath, sTemp, sExt);
 			if (strlen(sDelete) != 0)
 			{
 				deleteSaveGame(sDelete);	//only delete game if a new game fills the slot

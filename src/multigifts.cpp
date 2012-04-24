@@ -81,7 +81,7 @@ bool recvGift(NETQUEUE queue)
 
 	if (!canGiveOrdersFor(queue.index, from))
 	{
-		debug(LOG_WARNING, "Gift from wrong player.");
+		debug(LOG_WARNING, "Gift (%d) from %d, to %d, queue.index %d", (int)type, (int)from, (int)to, (int)queue.index);
 		syncDebug("Wrong player.");
 		return false;
 	}

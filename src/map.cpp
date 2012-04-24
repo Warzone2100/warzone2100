@@ -1063,6 +1063,7 @@ bool mapShutdown(void)
 	free(psBlockMap[AUX_ASTARMAP]);
 	psBlockMap[AUX_ASTARMAP] = NULL;
 	free(psBlockMap[AUX_DANGERMAP]);
+	free(floodbucket);
 	psBlockMap[AUX_DANGERMAP] = NULL;
 	for (x = 0; x < MAX_PLAYERS + AUX_MAX; x++)
 	{
@@ -1071,6 +1072,7 @@ bool mapShutdown(void)
 	}
 
 	map = NULL;
+	floodbucket = NULL;
 	psGroundTypes = NULL;
 	mapDecals = NULL;
 	psMapTiles = NULL;

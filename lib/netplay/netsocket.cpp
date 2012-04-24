@@ -373,6 +373,7 @@ static int socketThreadFunction(void *)
 			{
 				SOCKET fd = i->first->fd[SOCK_CONNECTION];
 				maxfd = std::max(maxfd, fd);
+				ASSERT(!FD_ISSET(fd, &fds), "Duplicate file descriptor!");  // Shouldn't be possible, but blocking in send, after select says it won't block, shouldn't be possible either.
 				FD_SET(fd, &fds);
 			}
 		}
@@ -401,6 +402,7 @@ static int socketThreadFunction(void *)
 				}
 
 				// Write data.
+				// FIXME SOMEHOW AARGH This send() call can't block, but does anyway (at least sometimes, when someone quits, no idea why).
 				ssize_t ret = send(sock->fd[SOCK_CONNECTION], reinterpret_cast<char *>(&writeQueue[0]), writeQueue.size(), MSG_NOSIGNAL);
 				if (ret != SOCKET_ERROR)
 				{

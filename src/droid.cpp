@@ -1487,37 +1487,11 @@ bool loadDroidWeapons(const char *pWeaponData, UDWORD bufferSize)
 	for (unsigned i = 0; i < table.size(); ++i)
 	{
 		LineView line(table, i);
-
-		DROID_TEMPLATE *pTemplate;
 		std::string templateName = line.s(0);
 
-		for (int player = 0; player < MAX_PLAYERS + 2; ++player)
+		for (int player = 0; player < MAX_PLAYERS ; ++player)
 		{
-			if (player < MAX_PLAYERS)  // a player
-			{
-				if (!isHumanPlayer(player))
-				{
-					continue;	// no need to add to AIs, they use the static list
-				}
-				pTemplate = getTemplateFromUniqueName(templateName.c_str(), player);
-			}
-			else if (player == MAX_PLAYERS)  // special exception - the static list
-			{
-				// Add weapons to static list
-				pTemplate = getTemplateFromTranslatedNameNoPlayer(templateName.c_str());
-			}
-			else  // Special exception - the local UI list.
-			{
-				pTemplate = NULL;
-				for (std::list<DROID_TEMPLATE>::iterator j = localTemplates.begin(); j != localTemplates.end(); ++j)
-				{
-					if (j->pName == templateName)
-					{
-						pTemplate = &*j;
-						break;
-					}
-				}
-			}
+			DROID_TEMPLATE *pTemplate = getTemplateFromUniqueName(templateName.c_str(), player);
 
 			/* if Template not found - try default design */
 			if (!pTemplate)
@@ -1546,6 +1520,20 @@ bool loadDroidWeapons(const char *pWeaponData, UDWORD bufferSize)
 				//check valid weapon/propulsion
 				ASSERT_OR_RETURN(false, pTemplate->storeCount <= pTemplate->numWeaps, "Allocating more weapons than allowed for Template %s", templateName.c_str());
 				ASSERT_OR_RETURN(false, checkValidWeaponForProp(pTemplate), "Weapon is invalid for air propulsion for template %s", templateName.c_str());
+				if (player == selectedPlayer)	// FIXME: can you say hack? Why don't we make a list on demmand ? This *will* break on player change!
+				{
+					DROID_TEMPLATE *pUITemplate = NULL;
+					for (std::list<DROID_TEMPLATE>::iterator j = localTemplates.begin(); j != localTemplates.end(); ++j)
+					{
+						if (j->pName == templateName)
+						{
+							pUITemplate = &*j;
+							// update UI template as well (it already passed the checks above)
+							pUITemplate->asWeaps[pTemplate->storeCount] = incWpn;
+							break;
+						}
+					}
+				}
 				pTemplate->storeCount++;
 			}
 		}

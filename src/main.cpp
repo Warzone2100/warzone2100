@@ -1040,7 +1040,7 @@ bool getUTF8CmdLine(int* const utfargc, const char*** const utfargv) // explicit
 		LocalFree(wargv);
 		return false;
 	}
-	// the following malloc and UTF16toUTF8 will create leaks.
+	// the following malloc and UTF16toUTF8 will be cleaned up in realmain().
 	*utfargv = (const char**)malloc(sizeof(const char*) * wargc);
 	if (!*utfargv)
 	{
@@ -1118,6 +1118,8 @@ int realmain(int argc, char *argv[])
 	/*** Initialize directory structure ***/
 	make_dir(ScreenDumpPath, "screenshots", NULL);
 	make_dir(SaveGamePath, "savegames", NULL);
+	PHYSFS_mkdir("savegames/campaign");
+	PHYSFS_mkdir("savegames/skirmish");
 	make_dir(MultiCustomMapsPath, "maps", NULL); // MUST have this to prevent crashes when getting map
 	PHYSFS_mkdir("music");
 	PHYSFS_mkdir("logs");		// a place to hold our netplay, mingw crash reports & WZ logs
@@ -1163,8 +1165,6 @@ int realmain(int argc, char *argv[])
 	PhysicsEngineHandler engine;	// register abstract physfs filesystem
 
 	loadConfig();
-
-	NETinit(true);
 
 	// parse the command line
 	if (!ParseCommandLine(utfargc, utfargv))
@@ -1315,6 +1315,14 @@ int realmain(int argc, char *argv[])
 	wzMain3();
 	saveConfig();
 	systemShutdown();
+#ifdef WZ_OS_WIN	// clean up the memory allocated for the command line conversion
+	for (int i=0; i<argc; i++)
+	{
+		const char*** const utfargvF = &utfargv;
+		free((void *)(*utfargvF)[i]);
+	}
+	free(utfargv);
+#endif
 	wzShutdown();
 	debug(LOG_MAIN, "Completed shutting down Warzone 2100");
 	return EXIT_SUCCESS;

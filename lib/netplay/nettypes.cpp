@@ -420,6 +420,18 @@ void NETinitQueue(NETQUEUE queue)
 	}
 }
 
+void NETdeleteQueue(void)
+{
+	for (int i = 0; i < MAX_PLAYERS; ++i)
+	{
+		delete pairQueue(NETnetQueue(i));
+		delete gameQueues[i];
+	}
+
+		delete broadcastQueue;
+
+}
+
 void NETsetNoSendOverNetwork(NETQUEUE queue)
 {
 	sendQueue(queue)->setWillNeverGetMessagesForNet();  // Will not be sending over net.

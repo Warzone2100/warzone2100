@@ -5,7 +5,6 @@
 
 //storage
 extern DROID_TEMPLATE			*apsDroidTemplates[MAX_PLAYERS];
-extern DROID_TEMPLATE			*apsStaticTemplates;			// for AIs and scripts
 
 extern bool allowDesign;
 
@@ -24,9 +23,6 @@ bool templateIsIDF(DROID_TEMPLATE *psTemplate);
 /// Fills the list with Templates that can be manufactured in the Factory - based on size
 void fillTemplateList(std::vector<DROID_TEMPLATE *> &pList, STRUCTURE *psFactory);
 
-/* gets a template from its aName (when pName is unknown) */
-DROID_TEMPLATE *GetHumanDroidTemplate(const char *aName);
-DROID_TEMPLATE *GetAIDroidTemplate(const char *aName);
 /* gets a template from its name - relies on the name being unique */
 DROID_TEMPLATE *getTemplateFromUniqueName(const char *pName, unsigned int player);
 /* gets a template from its name - relies on the name being unique */

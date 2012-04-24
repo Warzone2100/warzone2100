@@ -92,7 +92,7 @@
 #include "clparse.h"
 #include "research.h"
 #include "template.h"
-
+#include "qtscript.h"
 /*
 	KeyBind.c
 	Holds all the functions that can be mapped to a key.
@@ -342,13 +342,9 @@ DROID	*psDroid;
 
 void	kf_CloneSelected( void )
 {
-	DROID		*psDroid;
-	DROID_TEMPLATE	sTemplate;
-	DROID_TEMPLATE	*sTemplate2 = NULL;
+	DROID_TEMPLATE	*sTemplate = NULL;
 	const int	limit = 10;	// make 10 clones
-	int             i;//, impact_side;
-	//const char *    msg;
-
+	const char *msg;
 #ifndef DEBUG
 	// Bail out if we're running a _true_ multiplayer game (to prevent MP cheating)
 	if (runningMultiplayer())
@@ -358,61 +354,52 @@ void	kf_CloneSelected( void )
 	}
 #endif
 
-	for (psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid=psDroid->psNext)
+	for (DROID *psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid=psDroid->psNext)
 	{
-		for (i = 0; psDroid->selected && i < limit; i++)
+		if (psDroid->selected)
 		{
-			// create a template based on the droid
-			if (!sTemplate2)
+			for (DROID_TEMPLATE *psTempl = apsDroidTemplates[selectedPlayer]; psTempl; psTempl = psTempl->psNext)
 			{
-				sTemplate2 = GetHumanDroidTemplate(psDroid->aName);
-				if (!sTemplate2)
-				{	// we now search the AI template list (apsStaticTemplates)
-					sTemplate2 = GetAIDroidTemplate(psDroid->aName);
+				if (!strcmp(psTempl->aName, psDroid->aName))
+				{
+					sTemplate = psTempl;
+					break;
 				}
 			}
-			if (!sTemplate2)
+
+			if (!sTemplate)
 			{
-				debug(LOG_ERROR, "We can't find the template for this droid: %s, id:%u, type:%d!", psDroid->aName, psDroid->id, psDroid->droidType);
+				debug(LOG_ERROR, "Cloning vat has been destoryed. We can't find the template for this droid: %s, id:%u, type:%d!", psDroid->aName, psDroid->id, psDroid->droidType);
 				return;
 			}
-			sTemplate = *sTemplate2;
-			templateSetParts(psDroid, &sTemplate);
 
-			// create a new droid
-			buildDroid(&sTemplate, psDroid->pos.x, psDroid->pos.y, psDroid->player, false, NULL);
-			/* // TODO psNewDroid is null, since we just sent a message, but haven't actually created the droid locally yet.
-			ASSERT_OR_RETURN(, psNewDroid != NULL, "Unable to build a unit");
-			addDroid(psNewDroid, apsDroidLists);
-			psNewDroid->body = psDroid->body;
-			for (impact_side = 0; impact_side < NUM_HIT_SIDES; impact_side=impact_side+1)
+			// create a new droid army
+			for (int i = 0; i < limit; i++)
 			{
-				psNewDroid->armour[impact_side][WC_KINETIC] = psDroid->armour[impact_side][WC_KINETIC];
-				psNewDroid->armour[impact_side][WC_HEAT] = psDroid->armour[impact_side][WC_HEAT];
+				DROID *psNewDroid = buildDroid(sTemplate, psDroid->pos.x + (i*12), psDroid->pos.y + (i*14), psDroid->player, false, NULL);
+				if (psNewDroid)
+				{
+					addDroid(psNewDroid, apsDroidLists);
+					psScrCBNewDroid = psNewDroid;
+					psScrCBNewDroidFact = NULL;
+					eventFireCallbackTrigger((TRIGGER_TYPE)CALL_NEWDROID);	// notify scripts so it will get assigned jobs
+					psScrCBNewDroid = NULL;
+					triggerEventDroidBuilt(psNewDroid, NULL);
+				}
+				else
+				{
+					debug(LOG_ERROR, "Cloning has failed for template:%s id:%d", sTemplate->pName, sTemplate->multiPlayerID);
+				}
 			}
-			psNewDroid->experience = psDroid->experience;
-			psNewDroid->rot.direction = psDroid->rot.direction;
-			if (!(psNewDroid->droidType == DROID_PERSON || cyborgDroid(psNewDroid) || psNewDroid->droidType == DROID_TRANSPORTER || psNewDroid->droidType == DROID_SUPERTRANSPORTER))
-			{
-				updateDroidOrientation(psNewDroid);
-			}
-		}
-		if (psNewDroid)
-		{
-			// Send a text message to all players, notifying them of
-			// the fact that we're cheating ourselves a new droid army
-			sasprintf((char**)&msg, _("Player %u is cheating him/herself a new droid army of %s(s)."), selectedPlayer, psNewDroid->aName);
+			sasprintf((char**)&msg, _("Player %u is cheating a new droid army of: %s."), selectedPlayer, psDroid->aName);
 			sendTextMessage(msg, true);
-			audio_PlayTrack(ID_SOUND_NEXUS_LAUGH1);
-			sTemplate2 = NULL;
-			psNewDroid->selected = true;
-			psNewDroid = NULL;
 			Cheated = true;
-			*/
+			audio_PlayTrack(ID_SOUND_NEXUS_LAUGH1);
+			return;
 		}
+		debug(LOG_INFO, "Nothing was selected?");
 	}
 }
-
 // --------------------------------------------------------------------------
 //
 ///* Prints out the date and time of the build of the game */
