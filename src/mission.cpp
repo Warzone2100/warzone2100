@@ -2468,9 +2468,12 @@ static bool _intAddMissionResult(bool result, bool bPlaySuccess)
 			widgAddButton(psWScreen, &sButInit);
 		}
 
+		// FIXME, We got serious issues with savegames at the *END* of some missions, and while they
+		// will load, they don't have the correct state information or other settings.
+		// See transition from CAM2->CAM3 for a example.
 		/* Only add save option if in the game for real, ie, not fastplay.
-	         * And the player hasn't just completed the whole game
-        	 * Don't add save option if just lost and in debug mode. */
+		* And the player hasn't just completed the whole game
+		* Don't add save option if just lost and in debug mode.
 		if (!bMultiPlayer && !testPlayerHasWon() && !(testPlayerHasLost() && getDebugMappingStatus()))
 		{
 			//save
@@ -2483,6 +2486,7 @@ static bool _intAddMissionResult(bool result, bool bPlaySuccess)
 			// automatically save the game to be able to restart a mission
 			saveGame((char *)"savegames/Autosave.gam", GTYPE_SAVE_START);
 		}
+		*/
 	}
 	else
 	{

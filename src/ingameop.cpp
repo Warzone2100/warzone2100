@@ -269,10 +269,20 @@ static bool _intAddInGameOptions(void)
 
 	if ((!bMultiPlayer || (NetPlay.bComms == 0)) && !bInTutorial)
 	{
-		// add 'load'
-		addIGTextButton(INTINGAMEOP_LOAD, INTINGAMEOP_1_X, INTINGAMEOP_3_Y, INTINGAMEOP_OP_W, _("Load Game"), OPALIGN);
-		// add 'save'
-		addIGTextButton(INTINGAMEOP_SAVE, INTINGAMEOP_1_X, INTINGAMEOP_4_Y, INTINGAMEOP_OP_W, _("Save Game"), OPALIGN);
+		if (!bMultiPlayer)
+		{
+			// add 'load'
+			addIGTextButton(INTINGAMEOP_LOAD_MISSION, INTINGAMEOP_1_X, INTINGAMEOP_3_Y, INTINGAMEOP_OP_W, _("Load Game"), OPALIGN);
+			// add 'save'
+			addIGTextButton(INTINGAMEOP_SAVE_MISSION, INTINGAMEOP_1_X, INTINGAMEOP_4_Y, INTINGAMEOP_OP_W, _("Save Game"), OPALIGN);
+		}
+		else
+		{
+			// add 'load'
+			addIGTextButton(INTINGAMEOP_LOAD_SKIRMISH, INTINGAMEOP_1_X, INTINGAMEOP_3_Y, INTINGAMEOP_OP_W, _("Load Game"), OPALIGN);
+			// add 'save'
+			addIGTextButton(INTINGAMEOP_SAVE_SKIRMISH, INTINGAMEOP_1_X, INTINGAMEOP_4_Y, INTINGAMEOP_OP_W, _("Save Game"), OPALIGN);
+		}
 	}
 
 	intMode		= INT_INGAMEOP;			// change interface mode.
@@ -489,15 +499,21 @@ void intProcessInGameOptions(UDWORD id)
 //			addConsoleMessage(_("GAME SAVED!"), LEFT_JUSTIFY, SYSTEM_MESSAGE);
 //		}
 //		break;
-	case INTINGAMEOP_LOAD:
+	case INTINGAMEOP_LOAD_MISSION:
 		intCloseInGameOptions(true, false);
-		addLoadSave(LOAD_INGAME, _("Load Saved Game"));	// change mode when loadsave returns
+		addLoadSave(LOAD_INGAME_MISSION, _("Load Campaign Saved Game"));	// change mode when loadsave returns
 		break;
-	case INTINGAMEOP_SAVE:
+	case INTINGAMEOP_LOAD_SKIRMISH:
 		intCloseInGameOptions(true, false);
-		addLoadSave(SAVE_INGAME, _("Save Game"));
+		addLoadSave(LOAD_INGAME_SKIRMISH, _("Load Skirmish Saved Game"));	// change mode when loadsave returns
 		break;
-
+	case INTINGAMEOP_SAVE_MISSION:
+		intCloseInGameOptions(true, false);
+		addLoadSave(SAVE_INGAME_MISSION, _("Save Campaign Game"));
+		break;
+	case INTINGAMEOP_SAVE_SKIRMISH:
+		intCloseInGameOptions(true, false);
+		addLoadSave(SAVE_INGAME_SKIRMISH, _("Save Skirmish Game"));
 	// GAME OPTIONS KEYS
 	case INTINGAMEOP_FXVOL:
 	case INTINGAMEOP_3DFXVOL:

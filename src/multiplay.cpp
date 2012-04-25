@@ -366,25 +366,36 @@ DROID_TEMPLATE *IdToTemplate(UDWORD tempId, UDWORD player)
 	DROID_TEMPLATE *psTempl = NULL;
 	UDWORD		i;
 
-	// First try static templates from scripts (could potentially also happen for currently human controlled players)
-	for (psTempl = apsStaticTemplates; psTempl && psTempl->multiPlayerID != tempId; psTempl = psTempl->psNext) ;
-	if (psTempl) return psTempl;
-
 	// Check if we know which player this is from, in that case, assume it is a player template
-	if (player != ANYPLAYER && player < MAX_PLAYERS)
+	// FIXME: nuke the ANYPLAYER hack
+	if (player != ANYPLAYER && player < MAX_PLAYERS )
 	{
-		for (psTempl = apsDroidTemplates[player]; psTempl && (psTempl->multiPlayerID != tempId); psTempl = psTempl->psNext) {}		// follow templates
+		for (psTempl = apsDroidTemplates[player]; psTempl && (psTempl->multiPlayerID != tempId); psTempl = psTempl->psNext)
+		{}		// follow templates
 
-		return psTempl;
+		if (psTempl)
+		{
+			return psTempl;
+		}
+		else
+		{
+			return NULL;
+		}
 	}
 
-	// We have no idea, so search through every player template
+	// It could be a AI template...or that of another player
 	for (i = 0; i < MAX_PLAYERS; i++)
 	{
-		for (psTempl = apsDroidTemplates[i]; psTempl && psTempl->multiPlayerID != tempId; psTempl = psTempl->psNext) ;
-		if (psTempl) return psTempl;
-	}
+		for (psTempl = apsDroidTemplates[i]; psTempl && psTempl->multiPlayerID != tempId; psTempl = psTempl->psNext)
+		{}	// follow templates
 
+		if (psTempl)
+		{
+			debug(LOG_NEVER, "Found template ID %d, for player %d, but found it in player's %d list?",tempId, player, i);
+			return psTempl;
+		}
+	}
+	// no error, since it is possible that we don't have this template defined yet.
 	return NULL;
 }
 

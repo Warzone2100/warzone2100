@@ -1,5 +1,5 @@
-#include "netqueue.h"
 #include "lib/framework/frame.h"
+#include "netqueue.h"
 
 // See comments in netqueue.h.
 

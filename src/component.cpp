@@ -39,6 +39,7 @@
 #include "order.h"
 #include "projectile.h"
 #include "transporter.h"
+#include "mission.h"
 
 #define GetRadius(x) ((x)->sradius)
 
@@ -531,13 +532,17 @@ static void displayCompObj(DROID *psDroid, bool bButton)
 	}
 	else
 	{
-		MAPTILE *psTile = worldTile(psDroid->pos.x, psDroid->pos.y);
 		pieFlag = pie_SHADOW;
-		if (psTile->jammerBits & alliancebits[psDroid->player])
-		{
-			pieFlag |= pie_ECM;
-		}
 		brightness = pal_SetBrightness(psDroid->illumination);
+		// NOTE: Beware of transporters that are offscreen, on a mission!  We should *not* be checking tiles at this point in time!
+		if (psDroid->droidType != DROID_TRANSPORTER && !missionIsOffworld())
+		{
+			MAPTILE *psTile = worldTile(psDroid->pos.x, psDroid->pos.y);
+			if (psTile->jammerBits & alliancebits[psDroid->player])
+			{
+				pieFlag |= pie_ECM;
+			}
+		}
 	}
 
 	/* set default components transparent */

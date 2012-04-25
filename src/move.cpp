@@ -56,7 +56,7 @@
 #include "multiplay.h"
 #include "multigifts.h"
 #include "random.h"
-
+#include "mission.h"
 #include "drive.h"
 
 /* max and min vtol heights above terrain */
@@ -1384,11 +1384,19 @@ SDWORD moveCalcDroidSpeed(DROID *psDroid)
 
 	CHECK_DROID(psDroid);
 
-	mapX = map_coord(psDroid->pos.x);
-	mapY = map_coord(psDroid->pos.y);
-	speed = calcDroidSpeed(psDroid->baseSpeed, terrainType(mapTile(mapX,mapY)),
-							  psDroid->asBits[COMP_PROPULSION].nStat,
-							  getDroidEffectiveLevel(psDroid));
+	// NOTE: This screws up since the transporter is offscreen still (on a mission!), and we are trying to find terrainType of a tile (that is offscreen!)
+	if (psDroid->droidType == DROID_TRANSPORTER && missionIsOffworld())
+	{
+		PROPULSION_STATS	*propulsion = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
+		speed = propulsion->maxSpeed;
+	}
+	else
+	{
+		mapX = map_coord(psDroid->pos.x);
+		mapY = map_coord(psDroid->pos.y);
+		speed = calcDroidSpeed(psDroid->baseSpeed, terrainType(mapTile(mapX,mapY)), psDroid->asBits[COMP_PROPULSION].nStat, getDroidEffectiveLevel(psDroid));
+	}
+
 
 	// now offset the speed for the slope of the droid
 	pitch = angleDelta(psDroid->rot.pitch);

@@ -1061,7 +1061,6 @@ int NETinit(bool bFirstCall)
 	return 0;
 }
 
-
 // ////////////////////////////////////////////////////////////////////////
 // SHUTDOWN THE CONNECTION.
 int NETshutdown(void)
@@ -1072,7 +1071,12 @@ int NETshutdown(void)
 	if (IPlist)
 		free(IPlist);
 	IPlist = NULL;
-
+	if (NetPlay.MOTD)
+	{
+		free(NetPlay.MOTD);
+	}
+	NetPlay.MOTD = NULL;
+	NETdeleteQueue();
 	SOCKETshutdown();
 
 	if (NetPlay.bComms && NetPlay.isUPNP)

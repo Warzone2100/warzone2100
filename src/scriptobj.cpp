@@ -976,10 +976,11 @@ bool scrValDefLoad(INTERP_VAL *psVal, WzConfig &ini)
 		psVal->v.oval = NULL;
 		if (ini.contains("data"))
 		{
+			// FIXME: Ugh. Find a better way to show full template info
 			psVal->v.oval = (void*)IdToTemplate(ini.value("data").toInt(), ANYPLAYER);
 			if ((DROID_TEMPLATE*)(psVal->v.oval) == NULL)
 			{
-				debug(LOG_FATAL, "Could not find template");
+				debug(LOG_FATAL, "Could not find template %d", ini.value("data").toInt());
 			}
 		}
 		break;
