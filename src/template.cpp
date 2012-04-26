@@ -354,8 +354,23 @@ bool loadDroidTemplates(const char *pDroidData, UDWORD bufferSize)
 
 					// This sets up the UI templates for display purposes ONLY--we still only use apsDroidTemplates for making them.
 					// FIXME: Why are we doing this here, and not on demmand ?
-					localTemplates.push_front(design);
-					localTemplates.front().pName = strdup(localTemplates.front().pName);
+					// Only add unique designs to the UI list (Note, perhaps better to use std::map instead?)
+					std::list<DROID_TEMPLATE>::iterator it;
+					for (it = localTemplates.begin(); it != localTemplates.end(); ++it)
+					{
+						DROID_TEMPLATE *psCurr = &*it;
+						if (psCurr->multiPlayerID == design.multiPlayerID)
+						{
+							debug(LOG_NEVER, "Design id:%d (%s) *NOT* added to UI list (duplicate), player= %d", design.multiPlayerID, design.aName, i);
+							break;
+						}
+					}
+					if (it == localTemplates.end())
+					{
+						debug(LOG_NEVER, "Design id:%d (%s) added to UI list, player =%d", design.multiPlayerID, design.aName, i);
+						localTemplates.push_front(design);
+						localTemplates.front().pName = strdup(localTemplates.front().pName);
+					}
 				}
 				else if (NetPlay.players[i].allocated)	//skip the ones not meant for puny humans
 				{
