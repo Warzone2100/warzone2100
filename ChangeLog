@@ -1,3 +1,13 @@
+2012-04-25: Version 3.1_beta9
+ * General:
+   * Change: Save campaign and skirmish games separately (ticket:3377, commit:d8789661fbffe2f648a06a0689de3a9350bbe8b0)
+   * Fix: Don't confuse different unit templates (ticket:3146, ticket:3369, commit:28c10b00a8f3bf6d87176e3aba8fba65993cedba)
+ * Multiplayer:
+   * Fix: Don't desync after picking up oil barrels (ticket:3396, ticket:3413, commit:b6834d18cb7a42a60675379ca99ae241cb65374e)
+ * Campaign:
+   * Change: Disable the save option between campaign missions and the autosave, since the resulting savegames don't always work correctly (ticket:3377, commit:62da559ebe7fbb0ede9592b4b5d9382fecd9ef09)
+   * Fix: Don't slow the game down by spamming asserts (ticket:3403, commit:9775d0c4f66f80d6378cee0dc9ea31d3cdfe5708)
+
 2012-04-22: Version 3.1_beta8
  * General:
    * Change: Make screen shake not shake on walls, and the duration depend on what was destroyed (commit:33842677af6b6cb591c5a3a677849eb600e10e2f)

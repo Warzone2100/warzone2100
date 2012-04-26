@@ -3729,7 +3729,7 @@ static bool writeGameFile(const char* fileName, SDWORD saveType)
 	PHYSFS_file* fileHandle = openSaveFile(fileName);
 	if (!fileHandle)
 	{
-		debug(LOG_ERROR, "writeGameFile: openSaveFile(\"%s\") failed", fileName);
+		debug(LOG_ERROR, "openSaveFile(\"%s\") failed", fileName);
 		return false;
 	}
 
@@ -3744,15 +3744,14 @@ static bool writeGameFile(const char* fileName, SDWORD saveType)
 
 	if (!serializeSaveGameHeader(fileHandle, &fileHeader))
 	{
-		debug(LOG_ERROR, "game.c:writeGameFile: could not write header to %s; PHYSFS error: %s", fileName, PHYSFS_getLastError());
+		debug(LOG_ERROR, "could not write header to %s; PHYSFS error: %s", fileName, PHYSFS_getLastError());
 		PHYSFS_close(fileHandle);
 		return false;
 	}
 
-	ASSERT( saveType == GTYPE_SAVE_START ||
-			saveType == GTYPE_SAVE_MIDMISSION,
-			"writeGameFile: invalid save type" );
-
+	ASSERT( saveType == GTYPE_SAVE_START || saveType == GTYPE_SAVE_MIDMISSION, "invalid save type" );
+	// clear out structure
+	memset(&saveGame, 0x0, sizeof(SAVE_GAME));
 	// saveKeymissionIsOffworld
 	saveGame.saveKey = getCampaignNumber();
 	if (missionIsOffworld())
@@ -3902,7 +3901,21 @@ static bool writeGameFile(const char* fileName, SDWORD saveType)
 
 	//version 38
 	sstrcpy(saveGame.modList, getModList());
-
+	// Attempt to see if we have a corrupted game structure in campaigns.
+	if (saveGame.sGame.type == CAMPAIGN)
+	{
+		// player 0 is always a human in campaign games
+		for (int i=1; i < MAX_PLAYERS; i++)
+		{
+			if (saveGame.sGame.skDiff[i] == UBYTE_MAX)
+			{
+				ASSERT(!"savegame corruption!","savegame corruption!");
+				debug(LOG_ERROR, "Savegame corruption detected, trying to salvage.  Please Report this issue @ wz2100.net");
+				debug(LOG_ERROR, "skDiff[i] was %d, level %s / %s, ", (int)saveGame.sGame.skDiff[i], saveGame.levelName, saveGame.sGame.map);
+				saveGame.sGame.skDiff[i] = 0;
+			}
+		}
+	}
 	status = serializeSaveGameData(fileHandle, &saveGame);
 
 	// Close the file
