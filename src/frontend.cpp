@@ -274,6 +274,8 @@ static void SPinit(void)
 {
 	uint8_t playercolor;
 
+	// clear out the skDiff array
+	memset(game.skDiff, 0x0, sizeof(game.skDiff));
 	NetPlay.bComms = false;
 	bMultiPlayer = false;
 	bMultiMessages = false;
