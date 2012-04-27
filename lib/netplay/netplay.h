@@ -240,6 +240,7 @@ struct PLAYER
 	bool		ready;			///< player ready to start?
 	int8_t		ai;			///< index into sorted list of AIs, zero is always default AI
 	int8_t		difficulty;		///< difficulty level of AI
+	bool		autoGame;		// if we are running a autogame (AI controls us)
 	bool		needFile;			///< if We need a file sent to us
 	WZFile		wzFile;				///< for each player, we keep track of map progress
 	char		IPtextAddress[40];	///< IP of this player
