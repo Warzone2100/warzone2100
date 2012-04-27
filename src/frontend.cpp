@@ -282,6 +282,7 @@ static void SPinit(void)
 	game.type = CAMPAIGN;
 	NET_InitPlayers();
 	NetPlay.players[0].allocated = true;
+	NetPlay.players[0].autoGame = false;
 	game.skDiff[0] = UBYTE_MAX;
 	game.maxPlayers = MAX_PLAYERS;
 	// make sure we have a valid color choice for our SP game. Valid values are 0, 4-7

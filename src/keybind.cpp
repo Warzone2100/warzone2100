@@ -137,6 +137,22 @@ static void noMPCheatMsg(void)
 }
 
 // --------------------------------------------------------------------------
+void kf_AutoGame(void)
+{
+#ifndef DEBUG
+	// Bail out if we're running a _true_ multiplayer game (to prevent MP cheating)
+	if (runningMultiplayer())
+	{
+		noMPCheatMsg();
+		return;
+	}
+#endif
+	// obviously, this just sets a flag, the AI scripts still need to take care of the request
+	// FIXME: move to script side
+	NetPlay.players[selectedPlayer].autoGame = !NetPlay.players[selectedPlayer].autoGame;
+	CONPRINTF(ConsoleString, (ConsoleString, "autogame request is %s. AI script *must* support this command!", NetPlay.players[selectedPlayer].autoGame ? "Enabled" : "Disabled"));
+}
+
 void	kf_ToggleMissionTimer( void )
 {
 	addConsoleMessage(_("Warning! This cheat is buggy.  We recommend to NOT use it."), DEFAULT_JUSTIFY,  SYSTEM_MESSAGE);

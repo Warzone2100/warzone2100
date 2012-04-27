@@ -261,6 +261,7 @@ static size_t NET_fillBuffer(Socket **pSocket, SocketSet* socket_set, uint8_t *b
 void NET_InitPlayer(int i, bool initPosition)
 {
 	NetPlay.players[i].allocated = false;
+	NetPlay.players[i].autoGame = false;
 	NetPlay.players[i].heartattacktime = 0;
 	NetPlay.players[i].heartbeat = true;		// we always start with a hearbeat
 	NetPlay.players[i].kick = false;

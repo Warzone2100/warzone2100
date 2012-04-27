@@ -308,7 +308,15 @@ void recvStructureInfo(NETQUEUE queue)
 			NETuint32_t(&templateId);
 			if (templateId != 0)
 			{
-				psTempl = IdToTemplate(templateId, player);
+				// For autogames, where we want the AI to take us over, our templates are not setup... so let's use any AI's templates.
+				if (!NetPlay.players[player].autoGame)
+				{
+					psTempl = IdToTemplate(templateId, player);
+				}
+				else
+				{
+					psTempl = IdToTemplate(templateId, ANYPLAYER);
+				}
 				if (psTempl == NULL)
 				{
 					debug(LOG_SYNC, "Synch error, don't have tempate id %u, so can't change production of factory %u!", templateId, structId);
