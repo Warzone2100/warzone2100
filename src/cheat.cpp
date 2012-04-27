@@ -79,6 +79,9 @@ static CHEAT_ENTRY cheatCodes[] =
 	{"reload me", kf_Reload},	// reload selected weapons immediately
 	{"desync me", kf_ForceDesync},
 	{"damage me", kf_DamageMe},
+	{"autogame on", kf_AutoGame},
+	{"autogame off", kf_AutoGame},
+
 };
 
 bool attemptCheatCode(const char* cheat_name)
@@ -118,7 +121,7 @@ bool attemptCheatCode(const char* cheat_name)
 
 	for (curCheat = cheatCodes; curCheat != EndCheat; ++curCheat)
 	{
-		if (strcmp(cheat_name, curCheat->pName) == 0)
+		if (strcasecmp(cheat_name, curCheat->pName) == 0)
 		{
 			char buf[256];
 

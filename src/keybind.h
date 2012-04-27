@@ -264,5 +264,6 @@ void	kf_PowerInfo( void );
 void	kf_BuildNextPage( void );
 void	kf_BuildPrevPage( void );
 extern void kf_DamageMe(void);
+extern void kf_AutoGame(void);
 
 #endif // __INCLUDED_SRC_KEYBIND_H__
