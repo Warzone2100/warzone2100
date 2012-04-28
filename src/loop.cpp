@@ -432,6 +432,7 @@ static void gameStateUpdate()
 	sendQueuedDroidInfo();
 
 	sendPlayerGameTime();
+	NETflush();  // Make sure the game time tick message is really sent over the network.
 
 	if (!paused && !scriptPaused() && !editPaused())
 	{
@@ -651,7 +652,6 @@ GAMECODE gameLoop(void)
 	const Rational renderFraction(2, 5);  // Minimum fraction of time spent rendering.
 	const Rational updateFraction = Rational(1) - renderFraction;
 
-	bool didTick = false;
 	while (true)
 	{
 		// Receive NET_BLAH messages.
@@ -665,7 +665,6 @@ GAMECODE gameLoop(void)
 		{
 			break;  // Not doing a game state update.
 		}
-		didTick = true;
 
 		ASSERT(!paused && !gameUpdatePaused() && !editPaused(), "Nonsensical pause values.");
 
@@ -682,10 +681,10 @@ GAMECODE gameLoop(void)
 		ASSERT(deltaGraphicsTime == 0, "Shouldn't update graphics and game state at once.");
 	}
 
-	if (didTick || realTime - lastFlushTime < 400u)
+	if (realTime - lastFlushTime < 400u)
 	{
 		lastFlushTime = realTime;
-		NETflush();  // Make sure the game time tick message is really sent over the network, and that we aren't waiting too long to send data.
+		NETflush();  // Make sure that we aren't waiting too long to send data.
 	}
 
 	unsigned before = wzGetTicks();
