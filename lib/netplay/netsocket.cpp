@@ -848,7 +848,7 @@ int checkSockets(const SocketSet* set, unsigned int timeout)
 	fd_set fds;
 	do
 	{
-		struct timeval tv = { timeout / 1000, (timeout % 1000) * 1000 };
+		struct timeval tv = {(int)(timeout / 1000), (int)(timeout % 1000) * 1000};  // Cast to int to avoid narrowing needed for C++11.
 
 		FD_ZERO(&fds);
 		for (size_t i = 0; i < set->fds.size(); ++i)
@@ -1132,7 +1132,7 @@ Socket *socketOpen(const SocketAddress *addr, unsigned timeout)
 
 		do
 		{
-			struct timeval tv = { timeout / 1000, (timeout % 1000) * 1000 };
+			struct timeval tv = {(int)(timeout / 1000), (int)(timeout % 1000) * 1000};  // Cast to int to avoid narrowing needed for C++11.
 
 			FD_ZERO(&conReady);
 			FD_SET(conn->fd[SOCK_CONNECTION], &conReady);
