@@ -93,6 +93,8 @@
 #include "research.h"
 #include "template.h"
 #include "qtscript.h"
+#include "multigifts.h"
+
 /*
 	KeyBind.c
 	Holds all the functions that can be mapped to a key.
@@ -147,10 +149,21 @@ void kf_AutoGame(void)
 		return;
 	}
 #endif
-	// obviously, this just sets a flag, the AI scripts still need to take care of the request
-	// FIXME: move to script side
-	NetPlay.players[selectedPlayer].autoGame = !NetPlay.players[selectedPlayer].autoGame;
-	CONPRINTF(ConsoleString, (ConsoleString, "autogame request is %s. AI script *must* support this command!", NetPlay.players[selectedPlayer].autoGame ? "Enabled" : "Disabled"));
+	if (game.type == CAMPAIGN)
+	{
+		CONPRINTF(ConsoleString, (ConsoleString, "Not possible with the campaign!"));
+		return;
+	}
+	// Notify all human players that we are trying to enable autogame
+	for (int i = 0; i < MAX_PLAYERS; i++)
+	{
+		if(NetPlay.players[i].allocated)
+		{
+			sendGift(AUTOGAME_GIFT, i);
+		}
+	}
+
+	CONPRINTF(ConsoleString, (ConsoleString, "autogame request has been sent to all players. AI script *must* support this command!"));
 }
 
 void	kf_ToggleMissionTimer( void )
