@@ -595,12 +595,13 @@ void	kf_FrameRate( void )
 	          frameRate(), loopPieCount, loopPolyCount, loopStateChanges));
 	if (runningMultiplayer())
 	{
-			CONPRINTF(ConsoleString,(ConsoleString,
-						"NETWORK:  Bytes: s-%d r-%d  Packets: s-%d r-%d",
-						NETgetBytesSent(),
-						NETgetBytesRecvd(),
-						NETgetPacketsSent(),
-						NETgetPacketsRecvd() ));
+		CONPRINTF(ConsoleString, (ConsoleString, "NETWORK:  Bytes: s-%d r-%d  Uncompressed Bytes: s-%d r-%d  Packets: s-%d r-%d",
+		                          NETgetStatistic(NetStatisticRawBytes, true),
+		                          NETgetStatistic(NetStatisticRawBytes, false),
+		                          NETgetStatistic(NetStatisticUncompressedBytes, true),
+		                          NETgetStatistic(NetStatisticUncompressedBytes, false),
+		                          NETgetStatistic(NetStatisticPackets, true),
+		                          NETgetStatistic(NetStatisticPackets, false)));
 	}
 	gameStats = !gameStats;
 	CONPRINTF(ConsoleString, (ConsoleString,"Built at %s on %s",__TIME__,__DATE__));

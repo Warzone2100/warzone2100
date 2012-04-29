@@ -812,14 +812,22 @@ static void displayExtraGubbins(UDWORD height)
 	}
 
 #ifdef DEBUG
-	unsigned int width;
+	unsigned width = 0;
 
-	sprintf(str,"Traf: %u/%u", NETgetBytesSent(), NETgetBytesRecvd());
-	width = iV_GetTextWidth(str);
-	iV_DrawText(str, MULTIMENU_FORM_X, MULTIMENU_FORM_Y + MULTIMENU_FORM_H);
+	sprintf(str, "Sent/Received —");
+	iV_DrawText(str, MULTIMENU_FORM_X + width, MULTIMENU_FORM_Y + MULTIMENU_FORM_H);
+	width += iV_GetTextWidth(str) + 20;
 
-	sprintf(str,"Pack: %u/%u", NETgetPacketsSent(), NETgetPacketsRecvd());
-	iV_DrawText(str, MULTIMENU_FORM_X + 20 + width, MULTIMENU_FORM_Y + MULTIMENU_FORM_H);
+	sprintf(str, "Traf: %u/%u", NETgetStatistic(NetStatisticRawBytes, true), NETgetStatistic(NetStatisticRawBytes, false));
+	iV_DrawText(str, MULTIMENU_FORM_X + width, MULTIMENU_FORM_Y + MULTIMENU_FORM_H);
+	width += iV_GetTextWidth(str) + 20;
+
+	sprintf(str, "Uncompressed: %u/%u", NETgetStatistic(NetStatisticUncompressedBytes, true), NETgetStatistic(NetStatisticUncompressedBytes, false));
+	iV_DrawText(str, MULTIMENU_FORM_X + width, MULTIMENU_FORM_Y + MULTIMENU_FORM_H);
+	width += iV_GetTextWidth(str) + 20;
+
+	sprintf(str, "Pack: %u/%u", NETgetStatistic(NetStatisticPackets, true), NETgetStatistic(NetStatisticPackets, false));
+	iV_DrawText(str, MULTIMENU_FORM_X + width, MULTIMENU_FORM_Y + MULTIMENU_FORM_H);
 #endif
 	return;
 }

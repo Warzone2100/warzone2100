@@ -301,13 +301,8 @@ extern void NETaddRedirects(void);
 extern void NETremRedirects(void);
 extern void NETdiscoverUPnPDevices(void);
 
-extern UDWORD	NETgetBytesSent(void);				// return bytes sent/recv.  call regularly for good results
-extern UDWORD	NETgetPacketsSent(void);			// return packets sent/recv.  call regularly for good results
-extern UDWORD	NETgetBytesRecvd(void);				// return bytes sent/recv.  call regularly for good results
-extern UDWORD	NETgetPacketsRecvd(void);			// return packets sent/recv.  call regularly for good results
-extern UDWORD	NETgetRecentBytesSent(void);		// more immediate functions.
-extern UDWORD	NETgetRecentPacketsSent(void);
-extern UDWORD	NETgetRecentBytesRecvd(void);
+enum NetStatisticType {NetStatisticRawBytes, NetStatisticUncompressedBytes, NetStatisticPackets};
+unsigned NETgetStatistic(NetStatisticType type, bool sent);     // Return some statistic. Call regularly for good results.
 
 extern void NETplayerKicked(UDWORD index);			// Cleanup after player has been kicked
 
