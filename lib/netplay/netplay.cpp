@@ -3398,7 +3398,7 @@ void resetSyncDebug()
 	syncDebugNumDumps = 0;
 }
 
-uint32_t nextDebugSync(void)
+GameCrcType nextDebugSync()
 {
 	uint32_t ret = syncDebugLog[syncDebugNext].getCrc();
 
@@ -3409,7 +3409,7 @@ uint32_t nextDebugSync(void)
 	syncDebugNext = (syncDebugNext + 1)%MAX_SYNC_HISTORY;
 	syncDebugLog[syncDebugNext].clear();
 
-	return ret;
+	return (GameCrcType)ret;
 }
 
 static void dumpDebugSync(uint8_t *buf, size_t bufLen, uint32_t time, unsigned player)
@@ -3453,7 +3453,7 @@ static void recvDebugSync(NETQUEUE queue)
 	dumpDebugSync(debugSyncTmpBuf, bufLen, time, queue.index);
 }
 
-bool checkDebugSync(uint32_t checkGameTime, uint32_t checkCrc)
+bool checkDebugSync(uint32_t checkGameTime, GameCrcType checkCrc)
 {
 	if (checkGameTime == syncDebugLog[syncDebugNext].getGameTime())  // Can't happen - and syncDebugGameTime[] == 0, until just before sending the CRC, anyway.
 	{
@@ -3466,7 +3466,7 @@ bool checkDebugSync(uint32_t checkGameTime, uint32_t checkCrc)
 	{
 		if (syncDebugLog[logIndex].getGameTime() == checkGameTime)
 		{
-			if (syncDebugLog[logIndex].getCrc() == checkCrc)  // Invert bits, since everyone else seems to do that with CRCs...
+			if ((GameCrcType)syncDebugLog[logIndex].getCrc() == checkCrc)
 			{
 				return true;                    // Check passed. (So far... There might still be more players to compare CRCs with.)
 			}
@@ -3477,7 +3477,7 @@ bool checkDebugSync(uint32_t checkGameTime, uint32_t checkCrc)
 
 	if (logIndex >= MAX_SYNC_HISTORY && syncDebugExtraGameTime == checkGameTime)
 	{
-		if (syncDebugExtraCrc == checkCrc)
+		if ((GameCrcType)syncDebugExtraCrc == checkCrc)
 		{
 			return true;
 		}
