@@ -1099,6 +1099,12 @@ int NETshutdown(void)
 	{
 		NETremRedirects();
 	}
+
+	// Reset net usage statistics.
+	nStats = nZeroStats;
+	nStatsLastSec = nZeroStats;
+	nStatsSecondLastSec = nZeroStats;
+
 	return 0;
 }
 
@@ -1182,7 +1188,7 @@ int NETclose(void)
 
 // ////////////////////////////////////////////////////////////////////////
 // return bytes of data sent recently.
-unsigned NETgetStatistic(NetStatisticType type, bool sent)
+unsigned NETgetStatistic(NetStatisticType type, bool sent, bool isTotal)
 {
 	unsigned Statistic::*statisticType = sent? &Statistic::sent : &Statistic::received;
 	Statistic NETSTATS::*statsType;
@@ -1202,6 +1208,10 @@ unsigned NETgetStatistic(NetStatisticType type, bool sent)
 		nStatsLastSec = nStats;
 	}
 
+	if (isTotal)
+	{
+		return nStats.*statsType.*statisticType;
+	}
 	return nStatsLastSec.*statsType.*statisticType - nStatsSecondLastSec.*statsType.*statisticType;
 }
 

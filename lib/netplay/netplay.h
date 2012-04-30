@@ -302,7 +302,7 @@ extern void NETremRedirects(void);
 extern void NETdiscoverUPnPDevices(void);
 
 enum NetStatisticType {NetStatisticRawBytes, NetStatisticUncompressedBytes, NetStatisticPackets};
-unsigned NETgetStatistic(NetStatisticType type, bool sent);     // Return some statistic. Call regularly for good results.
+unsigned NETgetStatistic(NetStatisticType type, bool sent, bool isTotal = false);     // Return some statistic. Call regularly for good results.
 
 extern void NETplayerKicked(UDWORD index);			// Cleanup after player has been kicked
 

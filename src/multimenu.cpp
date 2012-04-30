@@ -812,22 +812,29 @@ static void displayExtraGubbins(UDWORD height)
 	}
 
 #ifdef DEBUG
-	unsigned width = 0;
+	iV_SetFont(font_small);
+	for (unsigned q = 0; q < 2; ++q)
+	{
+		unsigned xPos = 0;
+		unsigned yPos = q*12;
+		bool isTotal = q != 0;
 
-	sprintf(str, "Sent/Received —");
-	iV_DrawText(str, MULTIMENU_FORM_X + width, MULTIMENU_FORM_Y + MULTIMENU_FORM_H);
-	width += iV_GetTextWidth(str) + 20;
+		char const *srText[2] = {_("Sent/Received per sec —"), _("Total Sent/Received —")};
+		sprintf(str, srText[q]);
+		iV_DrawText(str, MULTIMENU_FORM_X + xPos, MULTIMENU_FORM_Y + MULTIMENU_FORM_H + yPos);
+		xPos += iV_GetTextWidth(str) + 20;
 
-	sprintf(str, "Traf: %u/%u", NETgetStatistic(NetStatisticRawBytes, true), NETgetStatistic(NetStatisticRawBytes, false));
-	iV_DrawText(str, MULTIMENU_FORM_X + width, MULTIMENU_FORM_Y + MULTIMENU_FORM_H);
-	width += iV_GetTextWidth(str) + 20;
+		sprintf(str, _("Traf: %u/%u"), NETgetStatistic(NetStatisticRawBytes, true, isTotal), NETgetStatistic(NetStatisticRawBytes, false, isTotal));
+		iV_DrawText(str, MULTIMENU_FORM_X + xPos, MULTIMENU_FORM_Y + MULTIMENU_FORM_H + yPos);
+		xPos += iV_GetTextWidth(str) + 20;
 
-	sprintf(str, "Uncompressed: %u/%u", NETgetStatistic(NetStatisticUncompressedBytes, true), NETgetStatistic(NetStatisticUncompressedBytes, false));
-	iV_DrawText(str, MULTIMENU_FORM_X + width, MULTIMENU_FORM_Y + MULTIMENU_FORM_H);
-	width += iV_GetTextWidth(str) + 20;
+		sprintf(str, _("Uncompressed: %u/%u"), NETgetStatistic(NetStatisticUncompressedBytes, true, isTotal), NETgetStatistic(NetStatisticUncompressedBytes, false, isTotal));
+		iV_DrawText(str, MULTIMENU_FORM_X + xPos, MULTIMENU_FORM_Y + MULTIMENU_FORM_H + yPos);
+		xPos += iV_GetTextWidth(str) + 20;
 
-	sprintf(str, "Pack: %u/%u", NETgetStatistic(NetStatisticPackets, true), NETgetStatistic(NetStatisticPackets, false));
-	iV_DrawText(str, MULTIMENU_FORM_X + width, MULTIMENU_FORM_Y + MULTIMENU_FORM_H);
+		sprintf(str, _("Pack: %u/%u"), NETgetStatistic(NetStatisticPackets, true, isTotal), NETgetStatistic(NetStatisticPackets, false, isTotal));
+		iV_DrawText(str, MULTIMENU_FORM_X + xPos, MULTIMENU_FORM_Y + MULTIMENU_FORM_H + yPos);
+	}
 #endif
 	return;
 }
