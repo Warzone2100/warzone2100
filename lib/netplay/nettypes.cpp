@@ -126,18 +126,6 @@ static void queue(const Q &q, uint32_t &vOrig)
 }
 
 template<class Q>
-static void queueLarge(const Q &q, uint32_t &v)
-{
-	uint16_t b[2] = {uint16_t(v>>16), uint16_t(v)};
-	queue(q, b[0]);
-	queue(q, b[1]);
-	if (Q::Direction == Q::Read)
-	{
-		v = b[0]<<16 | b[1];
-	}
-}
-
-template<class Q>
 static void queue(const Q &q, uint64_t &v)
 {
 	uint32_t b[2] = {uint32_t(v>>32), uint32_t(v)};
@@ -284,19 +272,6 @@ static void queueAuto(T &v)
 	else if (NETgetPacketDir() == PACKET_DECODE)
 	{
 		queue(reader, v);
-	}
-}
-
-template<class T>
-static void queueAutoLarge(T &v)
-{
-	if (NETgetPacketDir() == PACKET_ENCODE)
-	{
-		queueLarge(writer, v);
-	}
-	else if (NETgetPacketDir() == PACKET_DECODE)
-	{
-		queueLarge(reader, v);
 	}
 }
 
@@ -575,11 +550,6 @@ void NETint32_t(int32_t *ip)
 void NETuint32_t(uint32_t *ip)
 {
 	queueAuto(*ip);
-}
-
-void NETuint32_tLarge(uint32_t *ip)
-{
-	queueAutoLarge(*ip);
 }
 
 void NETint64_t(int64_t *ip)

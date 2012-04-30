@@ -95,12 +95,17 @@ SYNC_COUNTER sync_counter;		// keeps track on how well we are in sync
 // ////////////////////////////////////////////////////////////////////////
 // Types
 
+struct Statistic
+{
+	unsigned sent;
+	unsigned received;
+};
+
 struct NETSTATS  // data regarding the last one second or so.
 {
-	UDWORD		bytesRecvd;
-	UDWORD		bytesSent;	// number of bytes sent in about 1 sec.
-	UDWORD		packetsSent;
-	UDWORD		packetsRecvd;
+	Statistic       rawBytes;               // Number of actual bytes, in about 1 sec.
+	Statistic       uncompressedBytes;      // Number of bytes sent, before compression, in about 1 sec.
+	Statistic       packets;                // Number of calls to writeAll, in about 1 sec.
 };
 
 struct NET_PLAYER_DATA
@@ -151,9 +156,14 @@ static char lanaddr[16];
 static Socket* tmp_socket[MAX_TMP_SOCKETS] = { NULL };
 
 static SocketSet* tmp_socket_set = NULL;
-static NETSTATS		nStats = { 0, 0, 0, 0 };
 static int32_t          NetGameFlags[4] = { 0, 0, 0, 0 };
 char iptoconnect[PATH_MAX] = "\0"; // holds IP/hostname from command line
+
+static NETSTATS nStats              = {{0, 0}, {0, 0}, {0, 0}};
+static NETSTATS nStatsLastSec       = {{0, 0}, {0, 0}, {0, 0}};
+static NETSTATS nStatsSecondLastSec = {{0, 0}, {0, 0}, {0, 0}};
+static const NETSTATS nZeroStats    = {{0, 0}, {0, 0}, {0, 0}};
+static int nStatsLastUpdateTime = 0;
 
 unsigned NET_PlayerConnectionStatus[CONNECTIONSTATUS_NORMAL][MAX_PLAYERS];
 
@@ -207,10 +217,15 @@ static size_t NET_fillBuffer(Socket **pSocket, SocketSet* socket_set, uint8_t *b
 		return 0;
 	}
 
-	size = readNoInt(socket, bufstart, bufsize);
+	size_t rawBytes;
+	size = readNoInt(socket, bufstart, bufsize, &rawBytes);
 
 	if ((size != 0 || !socketReadDisconnected(socket)) && size != SOCKET_ERROR)
 	{
+		nStats.rawBytes.received          += rawBytes;
+		nStats.uncompressedBytes.received += size;
+		nStats.packets.received           += 1;
+
 		return size;
 	}
 	else
@@ -1084,6 +1099,12 @@ int NETshutdown(void)
 	{
 		NETremRedirects();
 	}
+
+	// Reset net usage statistics.
+	nStats = nZeroStats;
+	nStatsLastSec = nZeroStats;
+	nStatsSecondLastSec = nZeroStats;
+
 	return 0;
 }
 
@@ -1167,80 +1188,31 @@ int NETclose(void)
 
 // ////////////////////////////////////////////////////////////////////////
 // return bytes of data sent recently.
-UDWORD NETgetBytesSent(void)
+unsigned NETgetStatistic(NetStatisticType type, bool sent, bool isTotal)
 {
-	static UDWORD	lastsec=0;
-	static UDWORD	timy=0;
-
-	if(  (UDWORD)clock() > (timy+CLOCKS_PER_SEC) )
+	unsigned Statistic::*statisticType = sent? &Statistic::sent : &Statistic::received;
+	Statistic NETSTATS::*statsType;
+	switch (type)
 	{
-		timy = clock();
-		lastsec = nStats.bytesSent;
-		nStats.bytesSent = 0;
+		case NetStatisticRawBytes:          statsType = &NETSTATS::rawBytes;          break;
+		case NetStatisticUncompressedBytes: statsType = &NETSTATS::uncompressedBytes; break;
+		case NetStatisticPackets:           statsType = &NETSTATS::packets;           break;
+		default: ASSERT(false, " "); return 0;
 	}
 
-	return lastsec;
-}
-
-UDWORD NETgetRecentBytesSent(void)
-{
-	return nStats.bytesSent;
-}
-
-
-UDWORD NETgetBytesRecvd(void)
-{
-	static UDWORD	lastsec=0;
-	static UDWORD	timy=0;
-	if(  (UDWORD)clock() > (timy+CLOCKS_PER_SEC) )
+	int time = wzGetTicks();
+	if ((unsigned)(time - nStatsLastUpdateTime) >= (unsigned)GAME_TICKS_PER_SEC)
 	{
-		timy = clock();
-		lastsec = nStats.bytesRecvd;
-		nStats.bytesRecvd = 0;
-	}
-	return lastsec;
-}
-
-UDWORD NETgetRecentBytesRecvd(void)
-{
-	return nStats.bytesRecvd;
-}
-
-
-//return number of packets sent last sec.
-UDWORD NETgetPacketsSent(void)
-{
-	static UDWORD	lastsec=0;
-	static UDWORD	timy=0;
-
-	if(  (UDWORD)clock() > (timy+CLOCKS_PER_SEC) )
-	{
-		timy = clock();
-		lastsec = nStats.packetsSent;
-		nStats.packetsSent = 0;
+		nStatsLastUpdateTime = time;
+		nStatsSecondLastSec = nStatsLastSec;
+		nStatsLastSec = nStats;
 	}
 
-	return lastsec;
-}
-
-
-UDWORD NETgetRecentPacketsSent(void)
-{
-	return nStats.packetsSent;
-}
-
-
-UDWORD NETgetPacketsRecvd(void)
-{
-	static UDWORD	lastsec=0;
-	static UDWORD	timy=0;
-	if(  (UDWORD)clock() > (timy+CLOCKS_PER_SEC) )
+	if (isTotal)
 	{
-		timy = clock();
-		lastsec = nStats.packetsRecvd;
-		nStats.packetsRecvd = 0;
+		return nStats.*statsType.*statisticType;
 	}
-	return lastsec;
+	return nStatsLastSec.*statsType.*statisticType - nStatsSecondLastSec.*statsType.*statisticType;
 }
 
 
@@ -1287,13 +1259,15 @@ bool NETsend(NETQUEUE queue, NetMessage const *message)
 			{
 				uint8_t *rawData = message->rawDataDup();
 				ssize_t rawLen   = message->rawLen();
-				result = writeAll(sockets[player], rawData, rawLen);
+				size_t compressedRawLen;
+				result = writeAll(sockets[player], rawData, rawLen, &compressedRawLen);
 				delete[] rawData;  // Done with the data.
 
 				if (result == rawLen)
 				{
-					nStats.bytesSent   += rawLen;
-					nStats.packetsSent += 1;
+					nStats.rawBytes.sent          += compressedRawLen;
+					nStats.uncompressedBytes.sent += rawLen;
+					nStats.packets.sent           += 1;
 				}
 				else if (result == SOCKET_ERROR)
 				{
@@ -1316,13 +1290,15 @@ bool NETsend(NETQUEUE queue, NetMessage const *message)
 		{
 			uint8_t *rawData = message->rawDataDup();
 			ssize_t rawLen   = message->rawLen();
-			result = writeAll(tcp_socket, rawData, rawLen);
+			size_t compressedRawLen;
+			result = writeAll(tcp_socket, rawData, rawLen, &compressedRawLen);
 			delete[] rawData;  // Done with the data.
 
 			if (result == rawLen)
 			{
-				nStats.bytesSent   += rawLen;
-				nStats.packetsSent += 1;
+				nStats.rawBytes.sent          += compressedRawLen;
+				nStats.uncompressedBytes.sent += rawLen;
+				nStats.packets.sent           += 1;
 			}
 			else if (result == SOCKET_ERROR)
 			{
@@ -1365,6 +1341,7 @@ void NETflush()
 
 	NETflushGameQueues();
 
+	size_t compressedRawLen;
 	if (NetPlay.isHost)
 	{
 		for (int player = 0; player < MAX_CONNECTED_PLAYERS; ++player)
@@ -1372,7 +1349,8 @@ void NETflush()
 			// We are the host, send directly to player.
 			if (connected_bsocket[player] != NULL)
 			{
-				socketFlush(connected_bsocket[player]);
+				socketFlush(connected_bsocket[player], &compressedRawLen);
+				nStats.rawBytes.sent += compressedRawLen;
 			}
 		}
 		for (int player = 0; player < MAX_TMP_SOCKETS; ++player)
@@ -1380,7 +1358,8 @@ void NETflush()
 			// We are the host, send directly to player.
 			if (tmp_socket[player] != NULL)
 			{
-				socketFlush(tmp_socket[player]);
+				socketFlush(tmp_socket[player], &compressedRawLen);
+				nStats.rawBytes.sent += compressedRawLen;
 			}
 		}
 	}
@@ -1388,7 +1367,8 @@ void NETflush()
 	{
 		if (bsocket != NULL)
 		{
-			socketFlush(bsocket);
+			socketFlush(bsocket, &compressedRawLen);
+			nStats.rawBytes.sent += compressedRawLen;
 		}
 	}
 }
@@ -3428,7 +3408,7 @@ void resetSyncDebug()
 	syncDebugNumDumps = 0;
 }
 
-uint32_t nextDebugSync(void)
+GameCrcType nextDebugSync()
 {
 	uint32_t ret = syncDebugLog[syncDebugNext].getCrc();
 
@@ -3439,7 +3419,7 @@ uint32_t nextDebugSync(void)
 	syncDebugNext = (syncDebugNext + 1)%MAX_SYNC_HISTORY;
 	syncDebugLog[syncDebugNext].clear();
 
-	return ret;
+	return (GameCrcType)ret;
 }
 
 static void dumpDebugSync(uint8_t *buf, size_t bufLen, uint32_t time, unsigned player)
@@ -3483,7 +3463,7 @@ static void recvDebugSync(NETQUEUE queue)
 	dumpDebugSync(debugSyncTmpBuf, bufLen, time, queue.index);
 }
 
-bool checkDebugSync(uint32_t checkGameTime, uint32_t checkCrc)
+bool checkDebugSync(uint32_t checkGameTime, GameCrcType checkCrc)
 {
 	if (checkGameTime == syncDebugLog[syncDebugNext].getGameTime())  // Can't happen - and syncDebugGameTime[] == 0, until just before sending the CRC, anyway.
 	{
@@ -3496,7 +3476,7 @@ bool checkDebugSync(uint32_t checkGameTime, uint32_t checkCrc)
 	{
 		if (syncDebugLog[logIndex].getGameTime() == checkGameTime)
 		{
-			if (syncDebugLog[logIndex].getCrc() == checkCrc)  // Invert bits, since everyone else seems to do that with CRCs...
+			if ((GameCrcType)syncDebugLog[logIndex].getCrc() == checkCrc)
 			{
 				return true;                    // Check passed. (So far... There might still be more players to compare CRCs with.)
 			}
@@ -3507,7 +3487,7 @@ bool checkDebugSync(uint32_t checkGameTime, uint32_t checkCrc)
 
 	if (logIndex >= MAX_SYNC_HISTORY && syncDebugExtraGameTime == checkGameTime)
 	{
-		if (syncDebugExtraCrc == checkCrc)
+		if ((GameCrcType)syncDebugExtraCrc == checkCrc)
 		{
 			return true;
 		}

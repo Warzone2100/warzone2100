@@ -473,8 +473,12 @@ static int socketThreadFunction(void *)
  * Similar to read(2) with the exception that this function won't be
  * interrupted by signals (EINTR).
  */
-ssize_t readNoInt(Socket* sock, void* buf, size_t max_size)
+ssize_t readNoInt(Socket* sock, void* buf, size_t max_size, size_t *rawByteCount)
 {
+	size_t ignored;
+	size_t &rawBytes = rawByteCount != NULL? *rawByteCount : ignored;
+	rawBytes = 0;
+
 	if (sock->fd[SOCK_CONNECTION] == INVALID_SOCKET)
 	{
 		debug(LOG_ERROR, "Invalid socket");
@@ -502,6 +506,7 @@ ssize_t readNoInt(Socket* sock, void* buf, size_t max_size)
 
 			sock->zInflate.next_in = &sock->zInflateInBuf[0];
 			sock->zInflate.avail_in = received;
+			rawBytes = received;
 
 			if (received == 0)
 			{
@@ -551,6 +556,7 @@ ssize_t readNoInt(Socket* sock, void* buf, size_t max_size)
 
 	sock->ready = false;
 
+	rawBytes = received;
 	return received;
 }
 
@@ -565,8 +571,12 @@ bool socketReadDisconnected(Socket *sock)
  *
  * @return @c size when succesful or @c SOCKET_ERROR if an error occurred.
  */
-ssize_t writeAll(Socket* sock, const void* buf, size_t size)
+ssize_t writeAll(Socket* sock, const void* buf, size_t size, size_t *rawByteCount)
 {
+	size_t ignored;
+	size_t &rawBytes = rawByteCount != NULL? *rawByteCount : ignored;
+	rawBytes = 0;
+
 	if (!sock
 	 || sock->fd[SOCK_CONNECTION] == INVALID_SOCKET)
 	{
@@ -592,6 +602,7 @@ ssize_t writeAll(Socket* sock, const void* buf, size_t size)
 			std::vector<uint8_t> &writeQueue = socketThreadWrites[sock];
 			writeQueue.insert(writeQueue.end(), static_cast<char const *>(buf), static_cast<char const *>(buf) + size);
 			wzMutexUnlock(socketThreadMutex);
+			rawBytes = size;
 		}
 		else
 		{
@@ -619,8 +630,12 @@ ssize_t writeAll(Socket* sock, const void* buf, size_t size)
 	return size;
 }
 
-void socketFlush(Socket *sock)
+void socketFlush(Socket *sock, size_t *rawByteCount)
 {
+	size_t ignored;
+	size_t &rawBytes = rawByteCount != NULL? *rawByteCount : ignored;
+	rawBytes = 0;
+
 	if (!sock->isCompressed)
 	{
 		return;  // Not compressed, so don't mess with zlib.
@@ -663,6 +678,7 @@ void socketFlush(Socket *sock)
 	//printf("\n");
 
 	// Data sent, don't send again.
+	rawBytes = sock->zDeflateOutBuf.size();
 	sock->zDeflateInSize = 0;
 	sock->zDeflateOutBuf.clear();
 }
@@ -848,7 +864,7 @@ int checkSockets(const SocketSet* set, unsigned int timeout)
 	fd_set fds;
 	do
 	{
-		struct timeval tv = { timeout / 1000, (timeout % 1000) * 1000 };
+		struct timeval tv = {(int)(timeout / 1000), (int)(timeout % 1000) * 1000};  // Cast to int to avoid narrowing needed for C++11.
 
 		FD_ZERO(&fds);
 		for (size_t i = 0; i < set->fds.size(); ++i)
@@ -1132,7 +1148,7 @@ Socket *socketOpen(const SocketAddress *addr, unsigned timeout)
 
 		do
 		{
-			struct timeval tv = { timeout / 1000, (timeout % 1000) * 1000 };
+			struct timeval tv = {(int)(timeout / 1000), (int)(timeout % 1000) * 1000};  // Cast to int to avoid narrowing needed for C++11.
 
 			FD_ZERO(&conReady);
 			FD_SET(conn->fd[SOCK_CONNECTION], &conReady);

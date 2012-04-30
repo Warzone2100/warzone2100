@@ -301,13 +301,8 @@ extern void NETaddRedirects(void);
 extern void NETremRedirects(void);
 extern void NETdiscoverUPnPDevices(void);
 
-extern UDWORD	NETgetBytesSent(void);				// return bytes sent/recv.  call regularly for good results
-extern UDWORD	NETgetPacketsSent(void);			// return packets sent/recv.  call regularly for good results
-extern UDWORD	NETgetBytesRecvd(void);				// return bytes sent/recv.  call regularly for good results
-extern UDWORD	NETgetPacketsRecvd(void);			// return packets sent/recv.  call regularly for good results
-extern UDWORD	NETgetRecentBytesSent(void);		// more immediate functions.
-extern UDWORD	NETgetRecentPacketsSent(void);
-extern UDWORD	NETgetRecentBytesRecvd(void);
+enum NetStatisticType {NetStatisticRawBytes, NetStatisticUncompressedBytes, NetStatisticPackets};
+unsigned NETgetStatistic(NetStatisticType type, bool sent, bool isTotal = false);     // Return some statistic. Call regularly for good results.
 
 extern void NETplayerKicked(UDWORD index);			// Cleanup after player has been kicked
 
@@ -357,8 +352,9 @@ void _syncDebugIntList(const char *function, const char *str, int *ints, size_t 
 #define syncDebugBacktrace() do { _syncDebugBacktrace(__FUNCTION__); } while(0)
 void _syncDebugBacktrace(const char *function);                  ///< Adds a backtrace to syncDebug, if the platform supports it. Can be a bit slow, don't call way too often, unless desperate.
 
-void resetSyncDebug(void);                                       ///< Resets the syncDebug, so syncDebug from a previous game doesn't cause a spurious desynch dump.
-uint32_t nextDebugSync(void);                                    ///< Returns a CRC corresponding to all syncDebug() calls since the last nextDebugSync() or resetSyncDebug() call.
-bool checkDebugSync(uint32_t checkGameTime, uint32_t checkCrc);  ///< Dumps all syncDebug() calls from that gameTime, if the CRC doesn't match.
+typedef uint16_t GameCrcType;  // Truncate CRC of game state to 16 bits, to save a bit of bandwidth.
+void resetSyncDebug();                                              ///< Resets the syncDebug, so syncDebug from a previous game doesn't cause a spurious desynch dump.
+GameCrcType nextDebugSync();                                        ///< Returns a CRC corresponding to all syncDebug() calls since the last nextDebugSync() or resetSyncDebug() call.
+bool checkDebugSync(uint32_t checkGameTime, GameCrcType checkCrc);  ///< Dumps all syncDebug() calls from that gameTime, if the CRC doesn't match.
 
 #endif
