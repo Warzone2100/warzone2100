@@ -62,7 +62,7 @@
 static void		recvGiftDroids					(uint8_t from, uint8_t to, uint32_t droidID);
 static void		sendGiftDroids					(uint8_t from, uint8_t to);
 static void		giftResearch					(uint8_t from, uint8_t to, bool send);
-
+static void	giftAutoGame(uint8_t from, uint8_t to, bool send);
 ///////////////////////////////////////////////////////////////////////////////
 // gifts..
 
@@ -105,6 +105,10 @@ bool recvGift(NETQUEUE queue)
 			audioTrack = ID_POWER_TRANSMIT;
 			giftPower(from, to, droidID, false);
 			break;
+		case AUTOGAME_GIFT:
+			audioTrack = ID_SOUND_NEXUS_SYNAPTIC_LINK;
+			giftAutoGame(from, to, false);
+			break;
 		default:
 			debug(LOG_ERROR, "recvGift: Unknown Gift recvd");
 			return false;
@@ -141,6 +145,10 @@ bool sendGift(uint8_t type, uint8_t to)
 			audioTrack = ID_POWER_TRANSMIT;
 			giftPower(selectedPlayer, to, 0, true);
 			break;
+		case AUTOGAME_GIFT:
+			giftAutoGame(selectedPlayer, to, true);
+			return true;
+			break;
 		default:
 			debug( LOG_ERROR, "Unknown Gift sent" );
 
@@ -153,6 +161,35 @@ bool sendGift(uint8_t type, uint8_t to)
 
 	return true;
 }
+
+static void giftAutoGame(uint8_t from, uint8_t to, bool send)
+{
+	uint32_t dummy = 0;
+
+	if (send)
+	{
+		uint8_t subType = AUTOGAME_GIFT;
+
+		NETbeginEncode(NETgameQueue(selectedPlayer), GAME_GIFT);
+			NETuint8_t(&subType);
+			NETuint8_t(&from);
+			NETuint8_t(&to);
+			NETuint32_t(&dummy);
+		NETend();
+		debug(LOG_SYNC, "We (%d) are telling %d we want to enable/disable a autogame", from, to);
+	}
+	// If we are recieving the "gift"
+	else
+	{
+		if (to == selectedPlayer)
+		{
+			NetPlay.players[from].autoGame = !NetPlay.players[from].autoGame ;
+			CONPRINTF(ConsoleString, (ConsoleString, "%s has %s the autoGame command", getPlayerName(from), NetPlay.players[from].autoGame ? "Enabled" : "Disabled"));
+			debug(LOG_SYNC, "We (%d) are being told that %d has %s autogame", selectedPlayer, from, NetPlay.players[from].autoGame ? "Enabled" : "Disabled");
+		}
+	}
+}
+
 
 // ////////////////////////////////////////////////////////////////////////////
 // give radar information

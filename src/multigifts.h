@@ -48,5 +48,6 @@ extern void giftRadar						(uint8_t from, uint8_t to, bool send);
 #define RESEARCH_GIFT	3
 #define POWER_GIFT		4
 #define STRUCTURE_GIFT	5	// Unused
+#define AUTOGAME_GIFT   6   // Notify others that we are now being controled by the AI
 
 #endif // __INCLUDED_SRC_MULTIGIFTS_H__

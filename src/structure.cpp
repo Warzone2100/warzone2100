@@ -1258,16 +1258,11 @@ static void buildFlatten(STRUCTURE *pStructure, int h)
 	{
 		for (int width = 0; width <= b.size.x; ++width)
 		{
-			if (pStructure->pStructureType->type != REF_WALL
-			    && pStructure->pStructureType->type != REF_WALLCORNER
-			    && pStructure->pStructureType->type != REF_GATE)
+			setTileHeight(b.map.x + width, b.map.y + breadth, h);
+			// We need to raise features on raised tiles to the new height
+			if (TileHasFeature(mapTile(b.map.x + width, b.map.y + breadth)))
 			{
-				setTileHeight(b.map.x + width, b.map.y + breadth, h);
-				// We need to raise features on raised tiles to the new height
-				if (TileHasFeature(mapTile(b.map.x + width, b.map.y + breadth)))
-				{
-					getTileFeature(b.map.x + width, b.map.y + breadth)->pos.z = h;
-				}
+				getTileFeature(b.map.x + width, b.map.y + breadth)->pos.z = h;
 			}
 		}
 	}
@@ -1292,6 +1287,7 @@ void alignStructure(STRUCTURE *psBuilding)
 
 		// Align surrounding structures.
 		StructureBounds b = getStructureBounds(psBuilding);
+		syncDebug("Flattened (%d+%d, %d+%d) to %d for %d(p%d)", b.map.x, b.size.x, b.map.y, b.size.y, mapH, psBuilding->id, psBuilding->player);
 		for (int breadth = -1; breadth <= b.size.y; ++breadth)
 		{
 			for (int width = -1; width <= b.size.x; ++width)
