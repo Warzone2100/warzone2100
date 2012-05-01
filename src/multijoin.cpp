@@ -239,7 +239,7 @@ void recvPlayerLeft(NETQUEUE queue)
 	NETbeginDecode(queue, GAME_PLAYER_LEFT);
 		NETuint32_t(&playerIndex);
 	NETend();
-	if (queue.index == NET_HOST_ONLY || queue.index == playerIndex)
+	if (queue.index != NET_HOST_ONLY && queue.index != playerIndex)
 	{
 		return;
 	}
@@ -247,6 +247,9 @@ void recvPlayerLeft(NETQUEUE queue)
 	turnOffMultiMsg(true);
 	clearPlayer(playerIndex, false);  // don't do it quietly
 	turnOffMultiMsg(false);
+	NetPlay.players[playerIndex].allocated = false;
+
+	debug(LOG_INFO, "** player %u has dropped, in-game!", playerIndex);
 }
 
 // ////////////////////////////////////////////////////////////////////////////

@@ -452,9 +452,12 @@ static void NETplayerClientDisconnect(uint32_t index)
 		NETlogEntry("Player has left unexpectedly.", SYNC_FLAG, index);
 		// Announce to the world. This was really icky, because we may have been calling the send
 		// function recursively. We really ought to have had a send queue, and now we finally do...
-		NETbeginEncode(NETbroadcastQueue(), NET_PLAYER_DROPPED);
-			NETuint32_t(&index);
-		NETend();
+		if (ingame.localJoiningInProgress)  // Only if game hasn't actually started yet.
+		{
+			NETbeginEncode(NETbroadcastQueue(), NET_PLAYER_DROPPED);
+				NETuint32_t(&index);
+			NETend();
+		}
 	}
 	else
 	{
@@ -485,7 +488,10 @@ static void NETplayerLeaving(UDWORD index)
 	}
 	sync_counter.left++;
 	MultiPlayerLeave(index);		// more cleanup
-	NET_DestroyPlayer(index);		// sets index player's array to false
+	if (ingame.localJoiningInProgress)  // Only if game hasn't actually started yet.
+	{
+		NET_DestroyPlayer(index);       // sets index player's array to false
+	}
 }
 
 /**
@@ -503,14 +509,17 @@ static void NETplayerDropped(UDWORD index)
 		return;
 	}
 
-	// Send message type specifically for dropped / disconnects
-	NETbeginEncode(NETbroadcastQueue(), NET_PLAYER_DROPPED);
-		NETuint32_t(&id);
-	NETend();
-	debug(LOG_INFO, "sending NET_PLAYER_DROPPED for player %d", id);
 	sync_counter.drops++;
-	NET_DestroyPlayer(id);		// just clears array
 	MultiPlayerLeave(id);			// more cleanup
+	if (ingame.localJoiningInProgress)  // Only if game hasn't actually started yet.
+	{
+		// Send message type specifically for dropped / disconnects
+		NETbeginEncode(NETbroadcastQueue(), NET_PLAYER_DROPPED);
+			NETuint32_t(&id);
+		NETend();
+		debug(LOG_INFO, "sending NET_PLAYER_DROPPED for player %d", id);
+		NET_DestroyPlayer(id);          // just clears array
+	}
 
 	NETsetPlayerConnectionStatus(CONNECTIONSTATUS_PLAYER_DROPPED, id);
 }
