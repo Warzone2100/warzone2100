@@ -459,19 +459,11 @@ bool actionTargetTurret(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, WEAPON *
 		dxy = iHypot(dx, dy);
 
 		targetPitch = iAtan2(dz, dxy);
-
-		/* invert calculations for bottom-mounted weapons (i.e. for vtols) */
-		//if (bInvert) { why do anything here? }
-
+		targetPitch = (uint16_t)clip(angleDelta(targetPitch), pitchLowerLimit, pitchUpperLimit);  // Cast wrapping intended.
 		pitchError = angleDelta(targetPitch - tPitch);
 
 		tPitch += clip(pitchError, -pitchRate, pitchRate);  // Addition wrapping intended.
-		tPitch = (uint16_t)clip(angleDelta(tPitch), pitchLowerLimit, pitchUpperLimit);  // Cast wrapping intended.
 		onTarget = onTarget && targetPitch == tPitch;
-
-		/* re-invert result for bottom-mounted weapons (i.e. for vtols) */
-		//if (bInvert) { why do anything here? }
-
 	}
 
 	psWeapon->rot.direction = tRotation;
