@@ -2653,18 +2653,7 @@ static bool	renderWallSection(STRUCTURE *psStructure)
 		dv.z = -(structY - player.p.z);
 		dv.y = psStructure->pos.z;
 
-		if (psStructure->pStructureType->type == REF_GATE && psStructure->state == SAS_OPEN)
-		{
-			dv.y -= height;
-		}
-		else if (psStructure->pStructureType->type == REF_GATE && psStructure->state == SAS_OPENING)
-		{
-			dv.y -= (height * std::max<int>(graphicsTime + GAME_TICKS_PER_UPDATE - psStructure->lastStateTime, 0)) / SAS_OPEN_SPEED;
-		}
-		else if (psStructure->pStructureType->type == REF_GATE && psStructure->state == SAS_CLOSING)
-		{
-			dv.y -= height - (height * std::max<int>(graphicsTime - psStructure->lastStateTime, 0)) / SAS_OPEN_SPEED;
-		}
+		dv.y -= gateCurrentOpenHeight(psStructure, graphicsTime, 1);  // Make gate stick out by 1 unit, so that the tops of ┼ gates can safely have heights differing by 1 unit.
 
 		/* Push the indentity matrix */
 		pie_MatBegin();

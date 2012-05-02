@@ -3594,6 +3594,32 @@ int requestOpenGate(STRUCTURE *psStructure)
 	return psStructure->lastStateTime + SAS_OPEN_SPEED - gameTime;
 }
 
+int gateCurrentOpenHeight(STRUCTURE const *psStructure, uint32_t time, int minimumStub)
+{
+	STRUCTURE_STATS const *psStructureStats = psStructure->pStructureType;
+	if (psStructureStats->type == REF_GATE)
+	{
+		int height = psStructure->sDisplay.imd->max.y;
+		int openHeight;
+		switch (psStructure->state)
+		{
+			case SAS_OPEN:
+				openHeight = height;
+				break;
+			case SAS_OPENING:
+				openHeight = (height * std::max<int>(time + GAME_TICKS_PER_UPDATE - psStructure->lastStateTime, 0)) / SAS_OPEN_SPEED;
+				break;
+			case SAS_CLOSING:
+				openHeight = height - (height * std::max<int>(time - psStructure->lastStateTime, 0)) / SAS_OPEN_SPEED;
+				break;
+			default:
+				return 0;
+		}
+		return std::max(std::min(openHeight, height - minimumStub), 0);
+	}
+	return 0;
+}
+
 /* The main update routine for all Structures */
 void structureUpdate(STRUCTURE *psBuilding, bool mission)
 {
