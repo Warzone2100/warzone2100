@@ -876,22 +876,19 @@ bool aiChooseTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget, int weapon_slot
 			gridStartIterate(psObj->pos.x, psObj->pos.y, std::min(longRange, PREVIOUS_DEFAULT_GRID_SEARCH_RADIUS));
 			for (BASE_OBJECT *psCurr = gridIterate(); psCurr != NULL; psCurr = gridIterate())
 			{
-				// Prefer targets that aren't walls, then prefer finished targets to unfinished targets.
-				int newTargetValue = 1*!(isStructure(psCurr) && castStructure(psCurr)->status != SS_BUILT)
-				                   + 2*!aiObjIsWall(psCurr);
-				// See if in sensor range and visible
-				int distSq = objPosDiffSq(psCurr->pos, psObj->pos);
-				if (newTargetValue < targetValue || (newTargetValue == targetValue && distSq >= tarDist))
-				{
-					continue;
-				}
-
 				/* Check that it is a valid target */
 				if (psCurr->type != OBJ_FEATURE && !aiObjectIsProbablyDoomed(psCurr)
 				    && !aiCheckAlliances(psCurr->player, psObj->player)
 				    && validTarget(psObj, psCurr, weapon_slot) && psCurr->visible[psObj->player] == UBYTE_MAX
 				    && aiStructHasRange((STRUCTURE *)psObj, psCurr, weapon_slot))
 				{
+					int newTargetValue = targetAttackWeight(psCurr, psObj, weapon_slot);
+					// See if in sensor range and visible
+					int distSq = objPosDiffSq(psCurr->pos, psObj->pos);
+					if (newTargetValue < targetValue || (newTargetValue == targetValue && distSq >= tarDist))
+					{
+						continue;
+					}
 
 					tmpOrigin = ORIGIN_VISUAL;
 					psTarget = psCurr;
