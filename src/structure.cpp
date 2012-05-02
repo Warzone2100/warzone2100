@@ -4775,7 +4775,7 @@ bool destroyStruct(STRUCTURE *psDel, unsigned impactTime)
 	}
 
 	// updates score stats only if not wall
-	if (bMinor)
+	if (!bMinor)
 	{
 		if(psDel->player == selectedPlayer)
 		{
