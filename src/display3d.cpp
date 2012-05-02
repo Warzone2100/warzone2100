@@ -2625,7 +2625,7 @@ void	renderDeliveryPoint(FLAG_POSITION *psPosition, bool blueprint)
 /// Draw a piece of wall
 static bool	renderWallSection(STRUCTURE *psStructure)
 {
-	int			structX, structY, height, ecmFlag = 0;
+	int			structX, structY, ecmFlag = 0;
 	PIELIGHT		brightness;
 	SDWORD			rotation;
 	Vector3i			dv;
@@ -2639,7 +2639,6 @@ static bool	renderWallSection(STRUCTURE *psStructure)
 			ecmFlag = pie_ECM;
 		}
 
-		height = psStructure->sDisplay.imd->max.y;
 		psStructure->sDisplay.frameNumber = currentGameFrame;
 		/* Get it's x and y coordinates so we don't have to deref. struct later */
 		structX = psStructure->pos.x;
