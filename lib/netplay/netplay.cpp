@@ -1481,18 +1481,23 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 			NETbeginDecode(playerQueue, NET_SHARE_GAME_QUEUE);
 				NETuint8_t(&player);
 				NETuint32_t(&num);
+				bool isSentByCorrectClient = responsibleFor(playerQueue.index, player);
+				isSentByCorrectClient = isSentByCorrectClient || (playerQueue.index == NET_HOST_ONLY && playerQueue.index != selectedPlayer);  // Let host spoof other people's NET_SHARE_GAME_QUEUE messages, but not our own. This allows the host to spoof a GAME_PLAYER_LEFT message (but spoofing any message when the player is still there will fail with desynch).
+				if (!isSentByCorrectClient || player > MAX_PLAYERS)
+				{
+					break;
+				}
 				for (n = 0; n < num; ++n)
 				{
 					NETnetMessage(&message);
 
-					// TODO Check that playerQueue is actually responsible for this game queue.
 					NETinsertMessageFromNet(NETgameQueue(player), message);
 					NETlogPacket(message->type, message->rawLen(), true);
 
 					delete message;
 					message = NULL;
 				}
-			if (!NETend() || player > MAX_PLAYERS)
+			if (!NETend())
 			{
 				debug(LOG_ERROR, "Bad NET_SHARE_GAME_QUEUE message.");
 				break;

@@ -227,29 +227,23 @@ static void resetMultiVisibility(UDWORD player)
 
 static void sendPlayerLeft(uint32_t playerIndex)
 {
-	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_PLAYER_LEFT);
-		NETuint32_t(&playerIndex);
+	NETbeginEncode(NETgameQueueForced(playerIndex), GAME_PLAYER_LEFT);
 	NETend();
 }
 
 void recvPlayerLeft(NETQUEUE queue)
 {
-	uint32_t playerIndex = 0;
-
 	NETbeginDecode(queue, GAME_PLAYER_LEFT);
-		NETuint32_t(&playerIndex);
 	NETend();
-	if (queue.index != NET_HOST_ONLY && queue.index != playerIndex)
-	{
-		return;
-	}
 
 	turnOffMultiMsg(true);
-	clearPlayer(playerIndex, false);  // don't do it quietly
+	clearPlayer(queue.index, false);  // don't do it quietly
 	turnOffMultiMsg(false);
-	NetPlay.players[playerIndex].allocated = false;
+	NetPlay.players[queue.index].allocated = false;
 
-	debug(LOG_INFO, "** player %u has dropped, in-game!", playerIndex);
+	NETsetPlayerConnectionStatus(CONNECTIONSTATUS_PLAYER_DROPPED, queue.index);
+
+	debug(LOG_INFO, "** player %u has dropped, in-game!", queue.index);
 }
 
 // ////////////////////////////////////////////////////////////////////////////

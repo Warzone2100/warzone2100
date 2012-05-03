@@ -338,6 +338,18 @@ NETQUEUE NETgameQueue(unsigned player)
 	return ret;
 }
 
+NETQUEUE NETgameQueueForced(unsigned player)
+{
+	NETQUEUE ret;
+	ASSERT(player < MAX_PLAYERS, "Huh?");
+	NetQueue *queue = gameQueues[player];
+	ret.queue = queue;
+	ret.isPair = false;
+	ret.index = player;
+	ret.queueType = QUEUE_GAME_FORCED;
+	return ret;
+}
+
 NETQUEUE NETbroadcastQueue()
 {
 	NETQUEUE ret;
@@ -451,7 +463,7 @@ bool NETend()
 		queue->pushMessage(message);
 		NETlogPacket(message.type, message.data.size(), false);
 
-		if (queueInfo.queueType == QUEUE_GAME)
+		if (queueInfo.queueType == QUEUE_GAME || queueInfo.queueType == QUEUE_GAME_FORCED)
 		{
 			ASSERT(message.type > GAME_MIN_TYPE && message.type < GAME_MAX_TYPE, "Inserting %s into game queue.", messageTypeToString(message.type));
 		}
@@ -468,6 +480,24 @@ bool NETend()
 
 		// We have ended the serialisation, so mark the direction invalid
 		NETsetPacketDir(PACKET_INVALID);
+
+		if (queueInfo.queueType == QUEUE_GAME_FORCED)  // If true, we must be the host, inserting a GAME_PLAYER_LEFT into the other player's game queue. Since they left, they're not around to complain about us messing with their queue, which would normally cause a desynch.
+		{
+			// Almost duplicate code from NETflushGameQueues() in here.
+
+			// Decoded in NETprocessSystemMessage in netplay.cpp.
+			uint8_t player = queueInfo.index;
+			uint32_t num = 1;
+			NetMessage backupMessage = message;  // 'message' will be overwritten, so we need a copy (to avoid trying to insert a message into itself).
+			NETbeginEncode(NETbroadcastQueue(), NET_SHARE_GAME_QUEUE);
+				NETuint8_t(&player);
+				NETuint32_t(&num);
+				for (uint32_t n = 0; n < num; ++n)
+				{
+					queueAuto(backupMessage);
+				}
+			NETend();
+		}
 
 		return true;  // Serialising never fails.
 	}
@@ -504,7 +534,7 @@ void NETflushGameQueues()
 			continue;  // Nothing to send for this player.
 		}
 
-		// Decoded in NETprocessSystemMessage in netplay.c.
+		// Decoded in NETprocessSystemMessage in netplay.cpp.
 		NETbeginEncode(NETbroadcastQueue(), NET_SHARE_GAME_QUEUE);
 			NETuint8_t(&player);
 			NETuint32_t(&num);
