@@ -1,4 +1,4 @@
-2012-05-03: Version 3.1_beta9
+2012-05-04: Version 3.1_beta9
  * General:
    * Change: Save campaign and skirmish games separately (ticket:3377, commit:d8789661fbffe2f648a06a0689de3a9350bbe8b0)
    * Change: Target selection improvements (commit:fb8efec5b0278468c445173f7d4e30e209f621c6, commit:430e55e5cd279c27bfee42736fb1a516be375114)
@@ -14,6 +14,7 @@
    * Fix: Don't desync or freeze when a player leaves (commit:2309f165b021e7ea0a4d9c8a2e85cdea6e8f10ba, commit:93f0e61d924d6709c8db68b53d19f7e3bbeaa911)
    * Fix: Network performance improvements (commit:b9cc7702b7dc7ff3781f32f69b9cac110ebd6b98, commit:049982522b9e247a2c8a23c43e89fdc1af9a3ad6)
    * Fix: Make debug build net usage stats meaningful (commit:5e3d4bcb388f36c86dd26b5f9783c7574c5a4901, commit:282efa8884a61d940b0414f0526b8abef78b62d0)
+   * Fix: Kicking of AIs (ticket:3439, commit:ca736e71af9e2444ae0133a19214f27db456e9a2)
  * Campaign:
    * Change: Disable the save option between campaign missions and the autosave, since the resulting savegames don't always work correctly (ticket:3377, commit:62da559ebe7fbb0ede9592b4b5d9382fecd9ef09)
    * Fix: Don't slow the game down by spamming asserts (ticket:3403, commit:9775d0c4f66f80d6378cee0dc9ea31d3cdfe5708)
