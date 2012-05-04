@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100 2.3_branch\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2012-05-04 21:53+0200\n"
+"POT-Creation-Date: 2012-05-03 18:57+0200\n"
 "PO-Revision-Date: 2010-11-23 21:01+0900\n"
 "Last-Translator: Joshua Shin <urgood2@gmail.com>\n"
 "Language-Team: Korean Translation Team <urgood2@gmail.com>\n"
@@ -11935,12 +11935,16 @@ msgstr "플라즈마이트 폭탄 투하실 레트리뷰션 VTOL"
 msgid "System locale"
 msgstr "사용자 시스템 언어"
 
-#: lib/ivis_opengl/screen.cpp:147
+#: lib/ivis_opengl/screen.cpp:145
 msgid "OpenGL 2.0 is not supported by your system. Some things may look wrong. Please upgrade your graphics driver/hardware, if possible."
 msgstr ""
 
-#: lib/ivis_opengl/screen.cpp:153
-msgid "OpenGL 1.4 is not supported by your system. The game requires this. Please upgrade your graphics drivers/hardware, if possible."
+#: lib/ivis_opengl/screen.cpp:152
+msgid "OpenGL 1.5/2.0 is not supported by your system. Some things may look wrong. Please upgrade your graphics driver/hardware, if possible."
+msgstr ""
+
+#: lib/ivis_opengl/screen.cpp:159
+msgid "OpenGL 1.4 + VBO extension is not supported by your system. The game requires this. Please upgrade your graphics drivers/hardware, if possible."
 msgstr ""
 
 #: lib/netplay/netplay.cpp:203
@@ -12052,150 +12056,146 @@ msgstr ""
 msgid "Debug mode now disabled!"
 msgstr "디버그 메뉴가 열였습니다"
 
-#: src/clparse.cpp:243
+#: src/clparse.cpp:242
 msgid "Set configuration directory"
 msgstr "환경 설정 디렉토리로 설정"
 
-#: src/clparse.cpp:243
+#: src/clparse.cpp:242
 msgid "configuration directory"
 msgstr "환경 설정 디렉토리"
 
-#: src/clparse.cpp:244
+#: src/clparse.cpp:243
 msgid "Set default data directory"
 msgstr "기본 자료 디렉토리로 설정"
 
-#: src/clparse.cpp:244
+#: src/clparse.cpp:243
 msgid "data directory"
 msgstr "자료 디렉토리"
 
-#: src/clparse.cpp:245
+#: src/clparse.cpp:244
 msgid "Show debug for given level"
 msgstr "특정 레벨의 디버깅 표시"
 
-#: src/clparse.cpp:245
+#: src/clparse.cpp:244
 msgid "debug level"
 msgstr "레벨 디버그하기"
 
-#: src/clparse.cpp:246
+#: src/clparse.cpp:245
 msgid "Log debug output to file"
 msgstr "파일로 디버깅 출력을 로그하기"
 
-#: src/clparse.cpp:246
+#: src/clparse.cpp:245
 msgid "file"
 msgstr "파일"
 
-#: src/clparse.cpp:247
+#: src/clparse.cpp:246
 msgid "Flush all debug output written to stderr"
 msgstr "모든 디버깅 출력을 stderr로 보내기(flush)"
 
-#: src/clparse.cpp:248
+#: src/clparse.cpp:247
 msgid "Play in fullscreen mode"
 msgstr "전체 화면 모드로 실행"
 
-#: src/clparse.cpp:249
+#: src/clparse.cpp:248
 msgid "Load a specific game"
 msgstr "특정 게임을 로드하기"
 
-#: src/clparse.cpp:249
+#: src/clparse.cpp:248
 msgid "game-name"
 msgstr "게임 네임(이름)"
 
-#: src/clparse.cpp:250
+#: src/clparse.cpp:249
 msgid "Show this help message and exit"
 msgstr "이 도움말 메시지를 보인 다음 종료하기"
 
-#: src/clparse.cpp:251
+#: src/clparse.cpp:250
 msgid "Enable a global mod"
 msgstr "글로벌 mod를 활성화하기"
 
+#: src/clparse.cpp:250
 #: src/clparse.cpp:251
 #: src/clparse.cpp:252
-#: src/clparse.cpp:253
 msgid "mod"
 msgstr "mod"
 
-#: src/clparse.cpp:252
+#: src/clparse.cpp:251
 msgid "Enable a campaign only mod"
 msgstr "캠페인용 mod를 활성화하기"
 
-#: src/clparse.cpp:253
+#: src/clparse.cpp:252
 msgid "Enable a multiplay only mod"
 msgstr "멀티플레이어용 mod를 활성화하기"
 
-#: src/clparse.cpp:254
+#: src/clparse.cpp:253
 msgid "Disable asserts"
 msgstr "assert 비활성화하기"
 
-#: src/clparse.cpp:255
+#: src/clparse.cpp:254
 msgid "Causes a crash to test the crash handler"
 msgstr "(컴퓨터) 크래시 핸들러를 시험하기 위해 크래시를 일으킵니다"
 
-#: src/clparse.cpp:256
+#: src/clparse.cpp:255
 msgid "Load a saved game"
 msgstr "저장된 게임 로드"
 
-#: src/clparse.cpp:256
+#: src/clparse.cpp:255
 msgid "savegame"
 msgstr "세이브게임"
 
-#: src/clparse.cpp:257
+#: src/clparse.cpp:256
 msgid "Play in windowed mode"
 msgstr "창(windowed) 모드로 실행"
 
-#: src/clparse.cpp:258
+#: src/clparse.cpp:257
 msgid "Show version information and exit"
 msgstr "버젼 정보를 보인 다음 종료하기"
 
-#: src/clparse.cpp:259
+#: src/clparse.cpp:258
 msgid "Set the resolution to use"
 msgstr "사용할 화면 해상도를 설정하십시오"
 
-#: src/clparse.cpp:259
+#: src/clparse.cpp:258
 msgid "WIDTHxHEIGHT"
 msgstr "너비x높이"
 
-#: src/clparse.cpp:260
+#: src/clparse.cpp:259
 msgid "Enable shadows"
 msgstr "그림자 사용"
 
-#: src/clparse.cpp:261
+#: src/clparse.cpp:260
 msgid "Disable shadows"
 msgstr "그림자 사용 안함"
 
-#: src/clparse.cpp:262
+#: src/clparse.cpp:261
 msgid "Enable sound"
 msgstr "소리 켜짐"
 
-#: src/clparse.cpp:263
+#: src/clparse.cpp:262
 msgid "Disable sound"
 msgstr "소리 꺼짐"
 
-#: src/clparse.cpp:264
+#: src/clparse.cpp:263
 msgid "connect directly to IP/hostname"
 msgstr "바로 IP 또는 호스트네임으로 연결"
 
-#: src/clparse.cpp:264
+#: src/clparse.cpp:263
 msgid "host"
 msgstr "호스트"
 
-#: src/clparse.cpp:265
+#: src/clparse.cpp:264
 msgid "go directly to host screen"
 msgstr "호스트 화면으로 바로 가기"
 
-#: src/clparse.cpp:266
+#: src/clparse.cpp:265
 msgid "Enable texture compression"
 msgstr ""
 
-#: src/clparse.cpp:267
+#: src/clparse.cpp:266
 msgid "Disable texture compression"
 msgstr ""
 
-#: src/clparse.cpp:268
-msgid "Disable the use of OpenGL shaders"
-msgstr ""
-
-#: src/clparse.cpp:269
-msgid "Disable the use of OpenGL Vertex Buffer Objects"
+#: src/clparse.cpp:267
+msgid "Only use OpenGL 1.5"
 msgstr ""
 
 #: src/configuration.cpp:96
@@ -14615,27 +14615,27 @@ msgstr "핑(Ping)"
 msgid "Players Still Joining"
 msgstr "플레이어가 아직 들어오고 있습니다"
 
-#: src/multijoin.cpp:273
+#: src/multijoin.cpp:264
 #, c-format
 msgid "%s has Left the Game"
 msgstr "%s가 게임을 퇴장하였습니다"
 
-#: src/multijoin.cpp:291
+#: src/multijoin.cpp:282
 #, c-format
 msgid "File transfer has been aborted for %d."
 msgstr "%d에게 파일 전송이 취소되었습니다"
 
-#: src/multijoin.cpp:422
+#: src/multijoin.cpp:413
 #, c-format
 msgid "%s (%u) has an incompatible mod, and has been kicked."
 msgstr "%s (%u)는 호환되지 않는 mod를 사용 중이며, 게임에서 퇴장당하였습니다."
 
-#: src/multijoin.cpp:463
+#: src/multijoin.cpp:454
 #, fuzzy, c-format
 msgid "%s is joining the game"
 msgstr "%s가 게임에 참여하였습니다"
 
-#: src/multijoin.cpp:474
+#: src/multijoin.cpp:465
 #, fuzzy
 msgid "Server message:"
 msgstr "시스템 메시지:"

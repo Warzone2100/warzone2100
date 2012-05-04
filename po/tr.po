@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2012-05-04 21:53+0200\n"
+"POT-Creation-Date: 2012-05-03 18:57+0200\n"
 "PO-Revision-Date: 2012-04-22 17:42+0200\n"
 "Last-Translator: Ayhan GÖRGÜLÜ <ayhangorgulu45@gmail.com>\n"
 "Language-Team: Turkey <warzone2100-project@lists.sourceforge.net>\n"
@@ -11910,13 +11910,16 @@ msgstr "Plasmit Aleci Atıcı Cezalandırıcı DİvK "
 msgid "System locale"
 msgstr "Yerel Sistem"
 
-#: lib/ivis_opengl/screen.cpp:147
+#: lib/ivis_opengl/screen.cpp:145
 msgid "OpenGL 2.0 is not supported by your system. Some things may look wrong. Please upgrade your graphics driver/hardware, if possible."
 msgstr "OpenGL 2.0 sisteminiz tarafından desteklenmiyor. Bazı şeyler yanlış görünebilir. Lütfen grafik sürücünüzü/donanımınızı yükseltin, mümkünse."
 
-#: lib/ivis_opengl/screen.cpp:153
-#, fuzzy
-msgid "OpenGL 1.4 is not supported by your system. The game requires this. Please upgrade your graphics drivers/hardware, if possible."
+#: lib/ivis_opengl/screen.cpp:152
+msgid "OpenGL 1.5/2.0 is not supported by your system. Some things may look wrong. Please upgrade your graphics driver/hardware, if possible."
+msgstr "OpenGL 1.5/2.0 sisteminiz tarafından desteklenmiyor. Bazı şeyler yanlış görünebilir. Lütfen grafik sürücünüzü/donanımınızı yükseltin, mümkünse."
+
+#: lib/ivis_opengl/screen.cpp:159
+msgid "OpenGL 1.4 + VBO extension is not supported by your system. The game requires this. Please upgrade your graphics drivers/hardware, if possible."
 msgstr "OpenGL 1.4 + VBO sisteminiz tarafından desteklenmiyor. Oyun buna gereksinim duyar. Lütfen grafik sürücünüzü/donanımınızı yükseltin, mümkünse."
 
 #: lib/netplay/netplay.cpp:203
@@ -12026,153 +12029,148 @@ msgstr "Hata ayıklama modu devrede!"
 msgid "Debug mode now disabled!"
 msgstr "Hata ayıklama modu devre dışı!"
 
-#: src/clparse.cpp:243
+#: src/clparse.cpp:242
 msgid "Set configuration directory"
 msgstr "Yapılandırma dizinini ayarla"
 
-#: src/clparse.cpp:243
+#: src/clparse.cpp:242
 msgid "configuration directory"
 msgstr "yapılandırma dizini"
 
-#: src/clparse.cpp:244
+#: src/clparse.cpp:243
 msgid "Set default data directory"
 msgstr "Standart veri dizinin ayarla"
 
-#: src/clparse.cpp:244
+#: src/clparse.cpp:243
 msgid "data directory"
 msgstr "veri dizini"
 
 # Aus dem Source ist ersichtlich, was mit "level" gemeint ist, kA, ob Sektion gut übersetzt ist -Kreuvf
-#: src/clparse.cpp:245
+#: src/clparse.cpp:244
 msgid "Show debug for given level"
 msgstr "Verilen seviyede Debug seyivesini göster"
 
-#: src/clparse.cpp:245
+#: src/clparse.cpp:244
 msgid "debug level"
 msgstr "Debug-Seviyesi"
 
-#: src/clparse.cpp:246
+#: src/clparse.cpp:245
 msgid "Log debug output to file"
 msgstr "Günlük Dosyaları Debugdan Çıkar"
 
-#: src/clparse.cpp:246
+#: src/clparse.cpp:245
 msgid "file"
 msgstr "dosya"
 
-#: src/clparse.cpp:247
+#: src/clparse.cpp:246
 msgid "Flush all debug output written to stderr"
 msgstr "Boş ayıklama çıkışı stderr'e"
 
-#: src/clparse.cpp:248
+#: src/clparse.cpp:247
 msgid "Play in fullscreen mode"
 msgstr "Tam ekran modunda yürüt"
 
-#: src/clparse.cpp:249
+#: src/clparse.cpp:248
 msgid "Load a specific game"
 msgstr "Belirli Bir Oyun Yükle"
 
-#: src/clparse.cpp:249
+#: src/clparse.cpp:248
 msgid "game-name"
 msgstr "oyun-ismi"
 
-#: src/clparse.cpp:250
+#: src/clparse.cpp:249
 msgid "Show this help message and exit"
 msgstr "Bu Yardımı Görüntüle ve Çık"
 
-#: src/clparse.cpp:251
+#: src/clparse.cpp:250
 msgid "Enable a global mod"
 msgstr "Küresel Mod'u Aktifleştir"
 
+#: src/clparse.cpp:250
 #: src/clparse.cpp:251
 #: src/clparse.cpp:252
-#: src/clparse.cpp:253
 msgid "mod"
 msgstr "Mod"
 
-#: src/clparse.cpp:252
+#: src/clparse.cpp:251
 msgid "Enable a campaign only mod"
 msgstr "Sadece Tek Oyunculu bir mod etkinleştir"
 
-#: src/clparse.cpp:253
+#: src/clparse.cpp:252
 msgid "Enable a multiplay only mod"
 msgstr "Sadece Çok oyunculu bir mod etkinleştir"
 
-#: src/clparse.cpp:254
+#: src/clparse.cpp:253
 msgid "Disable asserts"
 msgstr "İddia Devre Dışı"
 
-#: src/clparse.cpp:255
+#: src/clparse.cpp:254
 msgid "Causes a crash to test the crash handler"
 msgstr "Kaza işleyici test'i kazaya yol açtı"
 
-#: src/clparse.cpp:256
+#: src/clparse.cpp:255
 msgid "Load a saved game"
 msgstr "Kayıtlı oyun yükle"
 
-#: src/clparse.cpp:256
+#: src/clparse.cpp:255
 msgid "savegame"
 msgstr "Kayıtlı oyun"
 
-#: src/clparse.cpp:257
+#: src/clparse.cpp:256
 msgid "Play in windowed mode"
 msgstr "Pencere Modunda Oyna"
 
-#: src/clparse.cpp:258
+#: src/clparse.cpp:257
 msgid "Show version information and exit"
 msgstr "Sürüm bilgisini göster ve çık"
 
-#: src/clparse.cpp:259
+#: src/clparse.cpp:258
 msgid "Set the resolution to use"
 msgstr "Çözünürlüğü ayarlamak için kullan"
 
-#: src/clparse.cpp:259
+#: src/clparse.cpp:258
 msgid "WIDTHxHEIGHT"
 msgstr "GENİŞLİKxYÜKSEKLİK"
 
-#: src/clparse.cpp:260
+#: src/clparse.cpp:259
 msgid "Enable shadows"
 msgstr "Gölgeler Devrede"
 
-#: src/clparse.cpp:261
+#: src/clparse.cpp:260
 msgid "Disable shadows"
 msgstr "Gölgeler Devre Dışı"
 
-#: src/clparse.cpp:262
+#: src/clparse.cpp:261
 msgid "Enable sound"
 msgstr "Ses Devrede"
 
-#: src/clparse.cpp:263
+#: src/clparse.cpp:262
 msgid "Disable sound"
 msgstr "Ses Devre Dışı"
 
-#: src/clparse.cpp:264
+#: src/clparse.cpp:263
 msgid "connect directly to IP/hostname"
 msgstr "Direk olarak IP/Kurucu-adı' na bağlan."
 
-#: src/clparse.cpp:264
+#: src/clparse.cpp:263
 msgid "host"
 msgstr "Kurucu"
 
-#: src/clparse.cpp:265
+#: src/clparse.cpp:264
 msgid "go directly to host screen"
 msgstr "Direk kurulum ekranına git"
 
-#: src/clparse.cpp:266
+#: src/clparse.cpp:265
 msgid "Enable texture compression"
 msgstr "Doku sıkıştırma devrede"
 
-#: src/clparse.cpp:267
+#: src/clparse.cpp:266
 msgid "Disable texture compression"
 msgstr "Doku sıkıştırma devre dışı"
 
-#: src/clparse.cpp:268
-#, fuzzy
-msgid "Disable the use of OpenGL shaders"
-msgstr "Doku sıkıştırma devre dışı"
-
-#: src/clparse.cpp:269
-msgid "Disable the use of OpenGL Vertex Buffer Objects"
-msgstr ""
+#: src/clparse.cpp:267
+msgid "Only use OpenGL 1.5"
+msgstr "Sadece OpenGL 1.5'i kullan"
 
 #: src/configuration.cpp:96
 msgid "My Game"
@@ -14544,27 +14542,27 @@ msgstr "Ping"
 msgid "Players Still Joining"
 msgstr "Oyuncular hâlâ katılmakta "
 
-#: src/multijoin.cpp:273
+#: src/multijoin.cpp:264
 #, c-format
 msgid "%s has Left the Game"
 msgstr "%s Oyundan çıktı"
 
-#: src/multijoin.cpp:291
+#: src/multijoin.cpp:282
 #, c-format
 msgid "File transfer has been aborted for %d."
 msgstr "Dosya transferi iptal %d "
 
-#: src/multijoin.cpp:422
+#: src/multijoin.cpp:413
 #, c-format
 msgid "%s (%u) has an incompatible mod, and has been kicked."
 msgstr "%s (%u) uyumsuz bir mod.Ve oyundan atıldı"
 
-#: src/multijoin.cpp:463
+#: src/multijoin.cpp:454
 #, c-format
 msgid "%s is joining the game"
 msgstr "%s Oyuna katılıyor"
 
-#: src/multijoin.cpp:474
+#: src/multijoin.cpp:465
 msgid "Server message:"
 msgstr "Sunucu iletisi:"
 
@@ -15017,12 +15015,6 @@ msgstr " - %s İnşa"
 #, c-format
 msgid "Version %s-%s%s%s%s"
 msgstr "Sürüm %s-%s%s%s%s"
-
-#~ msgid "OpenGL 1.5/2.0 is not supported by your system. Some things may look wrong. Please upgrade your graphics driver/hardware, if possible."
-#~ msgstr "OpenGL 1.5/2.0 sisteminiz tarafından desteklenmiyor. Bazı şeyler yanlış görünebilir. Lütfen grafik sürücünüzü/donanımınızı yükseltin, mümkünse."
-
-#~ msgid "Only use OpenGL 1.5"
-#~ msgstr "Sadece OpenGL 1.5'i kullan"
 
 #~ msgid "Visit our official site: http://wz2100.net"
 #~ msgstr "Resmi internet sitemizi ziyaret edin: http://wz2100.net"
