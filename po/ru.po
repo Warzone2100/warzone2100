@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2012-05-03 18:57+0200\n"
+"POT-Creation-Date: 2012-05-04 21:53+0200\n"
 "PO-Revision-Date: 2012-02-19 17:06+0800\n"
 "Last-Translator: vadim s. sabinich <vadim@sabini.ch>\n"
 "Language-Team: Russian <>\n"
@@ -11891,18 +11891,13 @@ msgstr "Авиационный плазмит возмездия"
 msgid "System locale"
 msgstr "Системная локализация"
 
-#: lib/ivis_opengl/screen.cpp:145
+#: lib/ivis_opengl/screen.cpp:147
 msgid "OpenGL 2.0 is not supported by your system. Some things may look wrong. Please upgrade your graphics driver/hardware, if possible."
 msgstr "OpenGL 2.0 не поддерживается вашей системой. Некоторые вещи могут выглядить неправильно. Пожалуйста, обновите ваши графические драйвера/железо, если возможно"
 
-#: lib/ivis_opengl/screen.cpp:152
+#: lib/ivis_opengl/screen.cpp:153
 #, fuzzy
-msgid "OpenGL 1.5/2.0 is not supported by your system. Some things may look wrong. Please upgrade your graphics driver/hardware, if possible."
-msgstr "OpenGL 2.0 не поддерживается вашей системой. Некоторые вещи могут выглядить неправильно. Пожалуйста, обновите ваши графические драйвера/железо, если возможно"
-
-#: lib/ivis_opengl/screen.cpp:159
-#, fuzzy
-msgid "OpenGL 1.4 + VBO extension is not supported by your system. The game requires this. Please upgrade your graphics drivers/hardware, if possible."
+msgid "OpenGL 1.4 is not supported by your system. The game requires this. Please upgrade your graphics drivers/hardware, if possible."
 msgstr "OpenGL 1.4 не поддерживается вашей системой. Игра требует это. Пожалуйста, обновите ваши графические драйвера/железо, если возможно"
 
 #: lib/netplay/netplay.cpp:203
@@ -12014,146 +12009,151 @@ msgstr ""
 msgid "Debug mode now disabled!"
 msgstr "Открыто меню отладки"
 
-#: src/clparse.cpp:242
+#: src/clparse.cpp:243
 msgid "Set configuration directory"
 msgstr "выбрать папку с настройками"
 
-#: src/clparse.cpp:242
+#: src/clparse.cpp:243
 msgid "configuration directory"
 msgstr "папка с настройками"
 
-#: src/clparse.cpp:243
+#: src/clparse.cpp:244
 msgid "Set default data directory"
 msgstr "Выбрать папку с данными по умолчанию"
 
-#: src/clparse.cpp:243
+#: src/clparse.cpp:244
 msgid "data directory"
 msgstr "папка с данными"
 
-#: src/clparse.cpp:244
+#: src/clparse.cpp:245
 msgid "Show debug for given level"
 msgstr "Показать отладку данного уровня"
 
-#: src/clparse.cpp:244
+#: src/clparse.cpp:245
 msgid "debug level"
 msgstr "уровень отладки"
 
-#: src/clparse.cpp:245
+#: src/clparse.cpp:246
 msgid "Log debug output to file"
 msgstr "Лог отладки в файл"
 
-#: src/clparse.cpp:245
+#: src/clparse.cpp:246
 msgid "file"
 msgstr "файл"
 
-#: src/clparse.cpp:246
+#: src/clparse.cpp:247
 msgid "Flush all debug output written to stderr"
 msgstr "Слить все записи отладки в выходной файл stderr"
 
-#: src/clparse.cpp:247
+#: src/clparse.cpp:248
 msgid "Play in fullscreen mode"
 msgstr "Полноэкранный режим"
 
-#: src/clparse.cpp:248
+#: src/clparse.cpp:249
 msgid "Load a specific game"
 msgstr "Загрузить особую игру"
 
-#: src/clparse.cpp:248
+#: src/clparse.cpp:249
 msgid "game-name"
 msgstr "Название игры"
 
-#: src/clparse.cpp:249
+#: src/clparse.cpp:250
 msgid "Show this help message and exit"
 msgstr "Отобразить данное справочное сообщение и выйти"
 
-#: src/clparse.cpp:250
+#: src/clparse.cpp:251
 msgid "Enable a global mod"
 msgstr "включить глобальный мод"
 
-#: src/clparse.cpp:250
 #: src/clparse.cpp:251
 #: src/clparse.cpp:252
+#: src/clparse.cpp:253
 msgid "mod"
 msgstr "мод"
 
-#: src/clparse.cpp:251
+#: src/clparse.cpp:252
 msgid "Enable a campaign only mod"
 msgstr "включить мод для Кампаний "
 
-#: src/clparse.cpp:252
+#: src/clparse.cpp:253
 msgid "Enable a multiplay only mod"
 msgstr "Включить мод для мультиплеера"
 
-#: src/clparse.cpp:253
+#: src/clparse.cpp:254
 msgid "Disable asserts"
 msgstr "Отключить утверждения"
 
-#: src/clparse.cpp:254
+#: src/clparse.cpp:255
 msgid "Causes a crash to test the crash handler"
 msgstr "вызывает крэш для тестирования прораммы обработки "
 
-#: src/clparse.cpp:255
+#: src/clparse.cpp:256
 msgid "Load a saved game"
 msgstr "Загрузить игру"
 
-#: src/clparse.cpp:255
+#: src/clparse.cpp:256
 msgid "savegame"
 msgstr "сохранение"
 
-#: src/clparse.cpp:256
+#: src/clparse.cpp:257
 msgid "Play in windowed mode"
 msgstr "Оконный режим"
 
-#: src/clparse.cpp:257
+#: src/clparse.cpp:258
 msgid "Show version information and exit"
 msgstr "Показать номер версии и выйти"
 
-#: src/clparse.cpp:258
+#: src/clparse.cpp:259
 msgid "Set the resolution to use"
 msgstr "Установить используемое разрешение"
 
-#: src/clparse.cpp:258
+#: src/clparse.cpp:259
 msgid "WIDTHxHEIGHT"
 msgstr "ШИРИНАхВЫСОТА"
 
-#: src/clparse.cpp:259
+#: src/clparse.cpp:260
 msgid "Enable shadows"
 msgstr "Включить тени"
 
-#: src/clparse.cpp:260
+#: src/clparse.cpp:261
 msgid "Disable shadows"
 msgstr "Отключить тени"
 
-#: src/clparse.cpp:261
+#: src/clparse.cpp:262
 msgid "Enable sound"
 msgstr "Включить звук"
 
-#: src/clparse.cpp:262
+#: src/clparse.cpp:263
 msgid "Disable sound"
 msgstr "Отключить звук"
 
-#: src/clparse.cpp:263
+#: src/clparse.cpp:264
 msgid "connect directly to IP/hostname"
 msgstr "прямое соединение с IP/ имя сервера"
 
-#: src/clparse.cpp:263
+#: src/clparse.cpp:264
 msgid "host"
 msgstr "Хост"
 
-#: src/clparse.cpp:264
+#: src/clparse.cpp:265
 msgid "go directly to host screen"
 msgstr "прямо на экран хоста"
 
-#: src/clparse.cpp:265
+#: src/clparse.cpp:266
 msgid "Enable texture compression"
 msgstr "Включить сжатие текстур"
 
-#: src/clparse.cpp:266
+#: src/clparse.cpp:267
 msgid "Disable texture compression"
 msgstr "Отключить сжатие текстур"
 
-#: src/clparse.cpp:267
-msgid "Only use OpenGL 1.5"
+#: src/clparse.cpp:268
+#, fuzzy
+msgid "Disable the use of OpenGL shaders"
+msgstr "Отключить сжатие текстур"
+
+#: src/clparse.cpp:269
+msgid "Disable the use of OpenGL Vertex Buffer Objects"
 msgstr ""
 
 #: src/configuration.cpp:96
@@ -14535,27 +14535,27 @@ msgstr "Пинг"
 msgid "Players Still Joining"
 msgstr "Игроки еще соединяються"
 
-#: src/multijoin.cpp:264
+#: src/multijoin.cpp:273
 #, c-format
 msgid "%s has Left the Game"
 msgstr "%s покинул игру"
 
-#: src/multijoin.cpp:282
+#: src/multijoin.cpp:291
 #, c-format
 msgid "File transfer has been aborted for %d."
 msgstr "Передача файла была прервана на %d%%"
 
-#: src/multijoin.cpp:413
+#: src/multijoin.cpp:422
 #, c-format
 msgid "%s (%u) has an incompatible mod, and has been kicked."
 msgstr "%s (%u) имеет несовместимый мод и отключен."
 
-#: src/multijoin.cpp:454
+#: src/multijoin.cpp:463
 #, c-format
 msgid "%s is joining the game"
 msgstr "%s присоединяется к игре"
 
-#: src/multijoin.cpp:465
+#: src/multijoin.cpp:474
 msgid "Server message:"
 msgstr "Системное сообщение:"
 
@@ -15009,6 +15009,10 @@ msgstr " - сборка %s"
 #, fuzzy, c-format
 msgid "Version %s-%s%s%s%s"
 msgstr "Версия %s%s%s%s"
+
+#, fuzzy
+#~ msgid "OpenGL 1.5/2.0 is not supported by your system. Some things may look wrong. Please upgrade your graphics driver/hardware, if possible."
+#~ msgstr "OpenGL 2.0 не поддерживается вашей системой. Некоторые вещи могут выглядить неправильно. Пожалуйста, обновите ваши графические драйвера/железо, если возможно"
 
 #~ msgid "Visit our official site: http://wz2100.net"
 #~ msgstr "Посетите наш оффициальный сайт: http://wz2100.net"

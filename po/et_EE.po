@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2012-05-03 18:57+0200\n"
+"POT-Creation-Date: 2012-05-04 21:53+0200\n"
 "PO-Revision-Date: 2010-05-10 16:59+0200\n"
 "Last-Translator: erlando <erlando112@hotmail.com>\n"
 "Language-Team: Estonian <ee@li.org>\n"
@@ -11904,16 +11904,12 @@ msgstr "VTOL Retribution Täispommitus"
 msgid "System locale"
 msgstr "Süsteemi Asukoht"
 
-#: lib/ivis_opengl/screen.cpp:145
+#: lib/ivis_opengl/screen.cpp:147
 msgid "OpenGL 2.0 is not supported by your system. Some things may look wrong. Please upgrade your graphics driver/hardware, if possible."
 msgstr ""
 
-#: lib/ivis_opengl/screen.cpp:152
-msgid "OpenGL 1.5/2.0 is not supported by your system. Some things may look wrong. Please upgrade your graphics driver/hardware, if possible."
-msgstr ""
-
-#: lib/ivis_opengl/screen.cpp:159
-msgid "OpenGL 1.4 + VBO extension is not supported by your system. The game requires this. Please upgrade your graphics drivers/hardware, if possible."
+#: lib/ivis_opengl/screen.cpp:153
+msgid "OpenGL 1.4 is not supported by your system. The game requires this. Please upgrade your graphics drivers/hardware, if possible."
 msgstr ""
 
 #: lib/netplay/netplay.cpp:203
@@ -12020,146 +12016,150 @@ msgstr ""
 msgid "Debug mode now disabled!"
 msgstr "Debug menüü on avatud"
 
-#: src/clparse.cpp:242
+#: src/clparse.cpp:243
 msgid "Set configuration directory"
 msgstr "Määra konfiguratsiooni register"
 
-#: src/clparse.cpp:242
+#: src/clparse.cpp:243
 msgid "configuration directory"
 msgstr "konfiguratsiooni register"
 
-#: src/clparse.cpp:243
+#: src/clparse.cpp:244
 msgid "Set default data directory"
 msgstr "Määra default andmete register"
 
-#: src/clparse.cpp:243
+#: src/clparse.cpp:244
 msgid "data directory"
 msgstr "Andmete register"
 
-#: src/clparse.cpp:244
+#: src/clparse.cpp:245
 msgid "Show debug for given level"
 msgstr "Show debug for given level"
 
-#: src/clparse.cpp:244
+#: src/clparse.cpp:245
 msgid "debug level"
 msgstr "debug level"
 
-#: src/clparse.cpp:245
+#: src/clparse.cpp:246
 msgid "Log debug output to file"
 msgstr "Log debug output to file"
 
-#: src/clparse.cpp:245
+#: src/clparse.cpp:246
 msgid "file"
 msgstr "file"
 
-#: src/clparse.cpp:246
+#: src/clparse.cpp:247
 msgid "Flush all debug output written to stderr"
 msgstr "Flush all debug output written to stderr"
 
-#: src/clparse.cpp:247
+#: src/clparse.cpp:248
 msgid "Play in fullscreen mode"
 msgstr "Mängi fullscreen mode-is"
 
-#: src/clparse.cpp:248
+#: src/clparse.cpp:249
 msgid "Load a specific game"
 msgstr "Load a specific game"
 
-#: src/clparse.cpp:248
+#: src/clparse.cpp:249
 msgid "game-name"
 msgstr "mäng-nimi"
 
-#: src/clparse.cpp:249
+#: src/clparse.cpp:250
 msgid "Show this help message and exit"
 msgstr "Näita seda abi sõnumit ja välju"
 
-#: src/clparse.cpp:250
+#: src/clparse.cpp:251
 msgid "Enable a global mod"
 msgstr "Enable a global mod"
 
-#: src/clparse.cpp:250
 #: src/clparse.cpp:251
 #: src/clparse.cpp:252
+#: src/clparse.cpp:253
 msgid "mod"
 msgstr "mod"
 
-#: src/clparse.cpp:251
+#: src/clparse.cpp:252
 msgid "Enable a campaign only mod"
 msgstr "Enable a campaign only mod"
 
-#: src/clparse.cpp:252
+#: src/clparse.cpp:253
 msgid "Enable a multiplay only mod"
 msgstr "Enable a multiplay only mod"
 
-#: src/clparse.cpp:253
+#: src/clparse.cpp:254
 msgid "Disable asserts"
 msgstr "Disable asserts"
 
-#: src/clparse.cpp:254
+#: src/clparse.cpp:255
 msgid "Causes a crash to test the crash handler"
 msgstr "Tekitab kokkujooksu, et testida crash handlerit"
 
-#: src/clparse.cpp:255
+#: src/clparse.cpp:256
 msgid "Load a saved game"
 msgstr "Laadi salvestatud mäng"
 
-#: src/clparse.cpp:255
+#: src/clparse.cpp:256
 msgid "savegame"
 msgstr "mängusalvestus"
 
-#: src/clparse.cpp:256
+#: src/clparse.cpp:257
 msgid "Play in windowed mode"
 msgstr "Mängi akendatud mode-is"
 
-#: src/clparse.cpp:257
+#: src/clparse.cpp:258
 msgid "Show version information and exit"
 msgstr "Näita versiooni informatsiooni ja välju"
 
-#: src/clparse.cpp:258
+#: src/clparse.cpp:259
 msgid "Set the resolution to use"
 msgstr "Määra eristamisvõime"
 
-#: src/clparse.cpp:258
+#: src/clparse.cpp:259
 msgid "WIDTHxHEIGHT"
 msgstr "LAIUSxKÕRGUS"
 
-#: src/clparse.cpp:259
+#: src/clparse.cpp:260
 msgid "Enable shadows"
 msgstr "Luba varjud"
 
-#: src/clparse.cpp:260
+#: src/clparse.cpp:261
 msgid "Disable shadows"
 msgstr "Blokeeri varjud"
 
-#: src/clparse.cpp:261
+#: src/clparse.cpp:262
 msgid "Enable sound"
 msgstr "Luba hääl"
 
-#: src/clparse.cpp:262
+#: src/clparse.cpp:263
 msgid "Disable sound"
 msgstr "Blokeeri hääl"
 
-#: src/clparse.cpp:263
+#: src/clparse.cpp:264
 msgid "connect directly to IP/hostname"
 msgstr "ühenda otse IP/võõrustajanimega"
 
-#: src/clparse.cpp:263
+#: src/clparse.cpp:264
 msgid "host"
 msgstr "võõrustaja"
 
-#: src/clparse.cpp:264
+#: src/clparse.cpp:265
 msgid "go directly to host screen"
 msgstr "mine otse võõrustaja aknasse"
 
-#: src/clparse.cpp:265
+#: src/clparse.cpp:266
 msgid "Enable texture compression"
 msgstr ""
 
-#: src/clparse.cpp:266
+#: src/clparse.cpp:267
 msgid "Disable texture compression"
 msgstr ""
 
-#: src/clparse.cpp:267
-msgid "Only use OpenGL 1.5"
+#: src/clparse.cpp:268
+msgid "Disable the use of OpenGL shaders"
+msgstr ""
+
+#: src/clparse.cpp:269
+msgid "Disable the use of OpenGL Vertex Buffer Objects"
 msgstr ""
 
 #: src/configuration.cpp:96
@@ -14585,27 +14585,27 @@ msgstr "Ping"
 msgid "Players Still Joining"
 msgstr "Mängijad Ikka Liituvad"
 
-#: src/multijoin.cpp:264
+#: src/multijoin.cpp:273
 #, c-format
 msgid "%s has Left the Game"
 msgstr "%s Lahkus mängust"
 
-#: src/multijoin.cpp:282
+#: src/multijoin.cpp:291
 #, c-format
 msgid "File transfer has been aborted for %d."
 msgstr "%d -le Failide saatmine katkestatud."
 
-#: src/multijoin.cpp:413
+#: src/multijoin.cpp:422
 #, c-format
 msgid "%s (%u) has an incompatible mod, and has been kicked."
 msgstr "Mängijal %s (%u) on vale mod ja ta löödi mängust välja"
 
-#: src/multijoin.cpp:454
+#: src/multijoin.cpp:463
 #, fuzzy, c-format
 msgid "%s is joining the game"
 msgstr "%s Liitus Mänguga"
 
-#: src/multijoin.cpp:465
+#: src/multijoin.cpp:474
 #, fuzzy
 msgid "Server message:"
 msgstr "Süsteemi sõnum:"
