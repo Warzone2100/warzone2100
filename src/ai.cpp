@@ -62,6 +62,8 @@
 #define	EMP_DISABLED_PENALTY_F		10								//EMP shouldn't attack emped targets again
 #define	EMP_STRUCT_PENALTY_F		(EMP_DISABLED_PENALTY_F * 2)	//EMP don't attack structures, should be bigger than EMP_DISABLED_PENALTY_F
 
+#define TOO_CLOSE_PENALTY_F             20
+
 //Some weights for the units attached to a commander
 #define	WEIGHT_CMD_RANK				(WEIGHT_DIST_TILE * 4)			//A single rank is as important as 4 tiles distance
 #define	WEIGHT_CMD_SAME_TARGET		WEIGHT_DIST_TILE				//Don't want this to be too high, since a commander can have many units assigned
@@ -326,6 +328,13 @@ static SDWORD targetAttackWeight(BASE_OBJECT *psTarget, BASE_OBJECT *psAttacker,
 	//See if attacker is using an EMP weapon
 	bEmpWeap = (attackerWeapon->weaponSubClass == WSC_EMP);
 
+	int dist = iHypot(removeZ(psAttacker->pos - psTarget->pos));
+	bool tooClose = dist <= attackerWeapon->minRange;
+	if (tooClose)
+	{
+		dist = psAttacker->sensorRange;  // If object is too close to fire at, consider it to be at maximum range.
+	}
+
 	/* Calculate attack weight */
 	if(psTarget->type == OBJ_DROID)
 	{
@@ -347,7 +356,7 @@ static SDWORD targetAttackWeight(BASE_OBJECT *psTarget, BASE_OBJECT *psAttacker,
 		}
 		else
 		{
-			damageRatio = 1 - targetDroid->body / targetDroid->originalBody;
+			damageRatio = 100 - 100*targetDroid->body / targetDroid->originalBody;
 		}
 		assert(targetDroid->originalBody != 0); // Assert later so we get the info from above
 
@@ -385,8 +394,8 @@ static SDWORD targetAttackWeight(BASE_OBJECT *psTarget, BASE_OBJECT *psAttacker,
 		attackWeight = asWeaponModifier[weaponEffect][(asPropulsionStats + targetDroid->asBits[COMP_PROPULSION].nStat)->propulsionType] // Our weapon's effect against target
 				+ asWeaponModifierBody[weaponEffect][(asBodyStats + targetDroid->asBits[COMP_BODY].nStat)->size]
 				+ WEIGHT_DIST_TILE_DROID * psAttacker->sensorRange/TILE_UNITS
-				- WEIGHT_DIST_TILE_DROID * map_coord(iHypot(psAttacker->pos.x - targetDroid->pos.x, psAttacker->pos.y - targetDroid->pos.y)) // farer droids are less attractive
-				+ WEIGHT_HEALTH_DROID * damageRatio // we prefer damaged droids
+				- WEIGHT_DIST_TILE_DROID * dist/TILE_UNITS // farther droids are less attractive
+				+ WEIGHT_HEALTH_DROID * damageRatio/100 // we prefer damaged droids
 				+ targetTypeBonus; // some droid types have higher priority
 
 		/* If attacking with EMP try to avoid targets that were already "EMPed" */
@@ -402,7 +411,7 @@ static SDWORD targetAttackWeight(BASE_OBJECT *psTarget, BASE_OBJECT *psAttacker,
 		targetStructure = (STRUCTURE *)psTarget;
 
 		/* Calculate damage this target suffered */
-		damageRatio = 1 - targetStructure->body / structureBody(targetStructure);
+		damageRatio = 100 - 100*targetStructure->body / structureBody(targetStructure);
 
 		/* See if this type of a structure should be prioritized */
 		switch(targetStructure->pStructureType->type)
@@ -427,8 +436,8 @@ static SDWORD targetAttackWeight(BASE_OBJECT *psTarget, BASE_OBJECT *psAttacker,
 		/* Now calculate the overall weight */
 		attackWeight = asStructStrengthModifier[weaponEffect][targetStructure->pStructureType->strength] // Our weapon's effect against target
 				+ WEIGHT_DIST_TILE_STRUCT * psAttacker->sensorRange/TILE_UNITS
-				- WEIGHT_DIST_TILE_STRUCT * map_coord(iHypot(psAttacker->pos.x - targetStructure->pos.x, psAttacker->pos.y - targetStructure->pos.y)) // farer structs are less attractive
-				+ WEIGHT_HEALTH_STRUCT * damageRatio // we prefer damaged structures
+				- WEIGHT_DIST_TILE_STRUCT * dist/TILE_UNITS // farther structs are less attractive
+				+ WEIGHT_HEALTH_STRUCT * damageRatio/100 // we prefer damaged structures
 				+ targetTypeBonus; // some structure types have higher priority
 
 		/* Go for unfinished structures only if nothing else found (same for non-visible structures) */
@@ -452,6 +461,11 @@ static SDWORD targetAttackWeight(BASE_OBJECT *psTarget, BASE_OBJECT *psAttacker,
 	if(!visibleObject((BASE_OBJECT *)psAttacker, psTarget, true))
 	{
 		attackWeight /= WEIGHT_NOT_VISIBLE_F;
+	}
+
+	if (tooClose)
+	{
+		attackWeight /= TOO_CLOSE_PENALTY_F;
 	}
 
 	/* Commander-related criterias */
@@ -870,22 +884,19 @@ bool aiChooseTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget, int weapon_slot
 			gridStartIterate(psObj->pos.x, psObj->pos.y, srange);
 			for (BASE_OBJECT *psCurr = gridIterate(); psCurr != NULL; psCurr = gridIterate())
 			{
-				// Prefer targets that aren't walls, then prefer finished targets to unfinished targets.
-				int newTargetValue = 1*!(isStructure(psCurr) && castStructure(psCurr)->status != SS_BUILT)
-				                   + 2*!aiObjIsWall(psCurr);
-				// See if in sensor range and visible
-				int distSq = objPosDiffSq(psCurr->pos, psObj->pos);
-				if (newTargetValue < targetValue || (newTargetValue == targetValue && distSq >= tarDist))
-				{
-					continue;
-				}
-
 				/* Check that it is a valid target */
 				if (psCurr->type != OBJ_FEATURE && !aiObjectIsProbablyDoomed(psCurr)
 				    && !aiCheckAlliances(psCurr->player, psObj->player)
 				    && validTarget(psObj, psCurr, weapon_slot) && psCurr->visible[psObj->player] == UBYTE_MAX
 				    && aiStructHasRange((STRUCTURE *)psObj, psCurr, weapon_slot))
 				{
+					int newTargetValue = targetAttackWeight(psCurr, psObj, weapon_slot);
+					// See if in sensor range and visible
+					int distSq = objPosDiffSq(psCurr->pos, psObj->pos);
+					if (newTargetValue < targetValue || (newTargetValue == targetValue && distSq >= tarDist))
+					{
+						continue;
+					}
 
 					tmpOrigin = ORIGIN_VISUAL;
 					psTarget = psCurr;

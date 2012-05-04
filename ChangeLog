@@ -1,12 +1,28 @@
-2012-04-25: Version 3.1_beta9
+2012-05-03: Version 3.1_beta9
  * General:
    * Change: Save campaign and skirmish games separately (ticket:3377, commit:d8789661fbffe2f648a06a0689de3a9350bbe8b0)
-   * Fix: Don't confuse different unit templates (ticket:3146, ticket:3369, commit:28c10b00a8f3bf6d87176e3aba8fba65993cedba)
+   * Change: Target selection improvements (commit:fb8efec5b0278468c445173f7d4e30e209f621c6, commit:430e55e5cd279c27bfee42736fb1a516be375114)
+   * Fix: Don't confuse different unit templates (ticket:3146, ticket:3369, commit:28c10b00a8f3bf6d87176e3aba8fba65993cedba, commit:0de0c416297a1694146af7ca82189ee971c93502, commit:3bebe1a0d6c3e8f230b56def4a823430a2a58c9f, commit:0ad220b334cabb17d356e0132fc07c36624455da)
+   * Fix: Don't confuse Super Transport with other templates (ticket:3426, commit:146332aaee331997dd668bf36635fa190ca7ba2b)
+   * Fix: Don't keep revealing terrain after units are destroyed (ticket:3339, ticket:3419, commit:21326496e1b4348ec96a96e268d138394aef183c)
+   * Fix: Don't randomly prevent units from firing (ticket:3267, commit:17d3ea3863fb4b68da6b4bff7a11726d746c1aad)
+   * Fix: Don't accelerate just before reaching the destination (ticket:3424, commit:fb49891c23d368f85b16904c35642b75f278784c)
+   * Fix: Allow shooting through open gates (commit:fcd5510a1311cfc535685aeac2983df13800729e)
+   * Fix: Display correct destroyed structure count at end of game (ticket:3380, ticket:3435, commit:fae22f7e2031eff681a5e94b6cb51546789ad1c1)
  * Multiplayer:
    * Fix: Don't desync after picking up oil barrels (ticket:3396, ticket:3413, commit:b6834d18cb7a42a60675379ca99ae241cb65374e)
+   * Fix: Don't desync or freeze when a player leaves (commit:2309f165b021e7ea0a4d9c8a2e85cdea6e8f10ba, commit:93f0e61d924d6709c8db68b53d19f7e3bbeaa911)
+   * Fix: Network performance improvements (commit:b9cc7702b7dc7ff3781f32f69b9cac110ebd6b98, commit:049982522b9e247a2c8a23c43e89fdc1af9a3ad6)
+   * Fix: Make debug build net usage stats meaningful (commit:5e3d4bcb388f36c86dd26b5f9783c7574c5a4901, commit:282efa8884a61d940b0414f0526b8abef78b62d0)
  * Campaign:
    * Change: Disable the save option between campaign missions and the autosave, since the resulting savegames don't always work correctly (ticket:3377, commit:62da559ebe7fbb0ede9592b4b5d9382fecd9ef09)
    * Fix: Don't slow the game down by spamming asserts (ticket:3403, commit:9775d0c4f66f80d6378cee0dc9ea31d3cdfe5708)
+ * Graphics:
+   * Fix: Scavenger MRAs (ticket:3365, commit:e50d51339eb55f6990b97ad4e28722b6a4eea23c)
+   * Fix: Add gate corners, and fix gate team colour (commit:00bbfea089fc881ac5ca31b50c463bddfcf4c141, commit:0964038ae0c39c6fcb73eb2f6ef3700d295080ce)
+ * Translations:
+   * Update: Turkish (ticket:3417, commit:3015548e6d161ebca885893471edeb26043ffb28)
+   * Update: French (ticket:3430, commit:17f7f71f9b4b629491212dbb32d0ec811fa488b9)
 
 2012-04-22: Version 3.1_beta8
  * General:

@@ -1718,7 +1718,9 @@ int establishTargetHeight(BASE_OBJECT const *psTarget)
 		case OBJ_STRUCTURE:
 		{
 			STRUCTURE_STATS * psStructureStats = ((STRUCTURE const *)psTarget)->pStructureType;
-			return psStructureStats->pIMD[0]->max.y + psStructureStats->pIMD[0]->min.y;
+			int height = psStructureStats->pIMD[0]->max.y + psStructureStats->pIMD[0]->min.y;
+			height -= gateCurrentOpenHeight((STRUCTURE const *)psTarget, gameTime, 2);  // Treat gate as at least 2 units tall, even if open, so that it's possible to hit.
+			return height;
 		}
 		case OBJ_FEATURE:
 			// Just use imd ymax+ymin

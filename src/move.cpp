@@ -100,18 +100,11 @@
 #define BLOCK_DIST		64
 // How far a droid has to rotate before it is no longer 'stationary'
 #define BLOCK_DIR		90
-// The min and max ratios of target/obstruction distances for an obstruction
-// to be on the target
-#define BLOCK_MINRATIO	99.f / 100.f
-#define BLOCK_MAXRATIO	101.f / 100.f
-// The result of the dot product for two vectors to be the same direction
-#define BLOCK_DOTVAL	99.f / 100.f
 
 // How far out from an obstruction to start avoiding it
 #define AVOID_DIST		(TILE_UNITS*2)
 
-// maximum and minimum speed to approach a final way point
-#define MAX_END_SPEED		300
+// Speed to approach a final way point, if possible.
 #define MIN_END_SPEED		60
 
 // distance from final way point to start slowing
@@ -1562,12 +1555,8 @@ static void moveGetDroidPosDiffs(DROID *psDroid, int32_t *pDX, int32_t *pDY)
 // see if the droid is close to the final way point
 static void moveCheckFinalWaypoint( DROID *psDroid, SDWORD *pSpeed )
 {
-	SDWORD		minEndSpeed = psDroid->baseSpeed/3;
-
-	if (minEndSpeed > MIN_END_SPEED)
-	{
-		minEndSpeed = MIN_END_SPEED;
-	}
+	int minEndSpeed = (*pSpeed + 2)/3;
+	minEndSpeed = std::min(minEndSpeed, MIN_END_SPEED);
 
 	// don't do this for VTOLs doing attack runs
 	if (isVtolDroid(psDroid) && (psDroid->action == DACTION_VTOLATTACK))
@@ -1575,16 +1564,14 @@ static void moveCheckFinalWaypoint( DROID *psDroid, SDWORD *pSpeed )
 		return;
 	}
 
-	if (*pSpeed > minEndSpeed &&
-		(psDroid->sMove.Status != MOVESHUFFLE) &&
-		psDroid->sMove.pathIndex == psDroid->sMove.numPoints)
+	if (psDroid->sMove.Status != MOVESHUFFLE &&
+	    psDroid->sMove.pathIndex == psDroid->sMove.numPoints)
 	{
 		Vector2i diff = removeZ(psDroid->pos) - psDroid->sMove.target;
 		int distSq = diff*diff;
 		if (distSq < END_SPEED_RANGE*END_SPEED_RANGE)
 		{
-			*pSpeed = (MAX_END_SPEED-minEndSpeed) * distSq
-						/ (END_SPEED_RANGE*END_SPEED_RANGE) + minEndSpeed;
+			*pSpeed = (*pSpeed - minEndSpeed) * distSq / (END_SPEED_RANGE*END_SPEED_RANGE) + minEndSpeed;
 		}
 	}
 }
