@@ -452,9 +452,12 @@ static void NETplayerClientDisconnect(uint32_t index)
 		NETlogEntry("Player has left unexpectedly.", SYNC_FLAG, index);
 		// Announce to the world. This was really icky, because we may have been calling the send
 		// function recursively. We really ought to have had a send queue, and now we finally do...
-		NETbeginEncode(NETbroadcastQueue(), NET_PLAYER_DROPPED);
-			NETuint32_t(&index);
-		NETend();
+		if (ingame.localJoiningInProgress)  // Only if game hasn't actually started yet.
+		{
+			NETbeginEncode(NETbroadcastQueue(), NET_PLAYER_DROPPED);
+				NETuint32_t(&index);
+			NETend();
+		}
 	}
 	else
 	{
@@ -485,7 +488,10 @@ static void NETplayerLeaving(UDWORD index)
 	}
 	sync_counter.left++;
 	MultiPlayerLeave(index);		// more cleanup
-	NET_DestroyPlayer(index);		// sets index player's array to false
+	if (ingame.localJoiningInProgress)  // Only if game hasn't actually started yet.
+	{
+		NET_DestroyPlayer(index);       // sets index player's array to false
+	}
 }
 
 /**
@@ -503,14 +509,17 @@ static void NETplayerDropped(UDWORD index)
 		return;
 	}
 
-	// Send message type specifically for dropped / disconnects
-	NETbeginEncode(NETbroadcastQueue(), NET_PLAYER_DROPPED);
-		NETuint32_t(&id);
-	NETend();
-	debug(LOG_INFO, "sending NET_PLAYER_DROPPED for player %d", id);
 	sync_counter.drops++;
-	NET_DestroyPlayer(id);		// just clears array
 	MultiPlayerLeave(id);			// more cleanup
+	if (ingame.localJoiningInProgress)  // Only if game hasn't actually started yet.
+	{
+		// Send message type specifically for dropped / disconnects
+		NETbeginEncode(NETbroadcastQueue(), NET_PLAYER_DROPPED);
+			NETuint32_t(&id);
+		NETend();
+		debug(LOG_INFO, "sending NET_PLAYER_DROPPED for player %d", id);
+		NET_DestroyPlayer(id);          // just clears array
+	}
 
 	NETsetPlayerConnectionStatus(CONNECTIONSTATUS_PLAYER_DROPPED, id);
 }
@@ -1472,18 +1481,23 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 			NETbeginDecode(playerQueue, NET_SHARE_GAME_QUEUE);
 				NETuint8_t(&player);
 				NETuint32_t(&num);
+				bool isSentByCorrectClient = responsibleFor(playerQueue.index, player);
+				isSentByCorrectClient = isSentByCorrectClient || (playerQueue.index == NET_HOST_ONLY && playerQueue.index != selectedPlayer);  // Let host spoof other people's NET_SHARE_GAME_QUEUE messages, but not our own. This allows the host to spoof a GAME_PLAYER_LEFT message (but spoofing any message when the player is still there will fail with desynch).
+				if (!isSentByCorrectClient || player > MAX_PLAYERS)
+				{
+					break;
+				}
 				for (n = 0; n < num; ++n)
 				{
 					NETnetMessage(&message);
 
-					// TODO Check that playerQueue is actually responsible for this game queue.
 					NETinsertMessageFromNet(NETgameQueue(player), message);
 					NETlogPacket(message->type, message->rawLen(), true);
 
 					delete message;
 					message = NULL;
 				}
-			if (!NETend() || player > MAX_PLAYERS)
+			if (!NETend())
 			{
 				debug(LOG_ERROR, "Bad NET_SHARE_GAME_QUEUE message.");
 				break;

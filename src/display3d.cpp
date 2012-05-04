@@ -2625,7 +2625,7 @@ void	renderDeliveryPoint(FLAG_POSITION *psPosition, bool blueprint)
 /// Draw a piece of wall
 static bool	renderWallSection(STRUCTURE *psStructure)
 {
-	int			structX, structY, height, ecmFlag = 0;
+	int			structX, structY, ecmFlag = 0;
 	PIELIGHT		brightness;
 	SDWORD			rotation;
 	Vector3i			dv;
@@ -2639,7 +2639,6 @@ static bool	renderWallSection(STRUCTURE *psStructure)
 			ecmFlag = pie_ECM;
 		}
 
-		height = psStructure->sDisplay.imd->max.y;
 		psStructure->sDisplay.frameNumber = currentGameFrame;
 		/* Get it's x and y coordinates so we don't have to deref. struct later */
 		structX = psStructure->pos.x;
@@ -2653,18 +2652,7 @@ static bool	renderWallSection(STRUCTURE *psStructure)
 		dv.z = -(structY - player.p.z);
 		dv.y = psStructure->pos.z;
 
-		if (psStructure->pStructureType->type == REF_GATE && psStructure->state == SAS_OPEN)
-		{
-			dv.y -= height;
-		}
-		else if (psStructure->pStructureType->type == REF_GATE && psStructure->state == SAS_OPENING)
-		{
-			dv.y -= (height * std::max<int>(graphicsTime + GAME_TICKS_PER_UPDATE - psStructure->lastStateTime, 0)) / SAS_OPEN_SPEED;
-		}
-		else if (psStructure->pStructureType->type == REF_GATE && psStructure->state == SAS_CLOSING)
-		{
-			dv.y -= height - (height * std::max<int>(graphicsTime - psStructure->lastStateTime, 0)) / SAS_OPEN_SPEED;
-		}
+		dv.y -= gateCurrentOpenHeight(psStructure, graphicsTime, 1);  // Make gate stick out by 1 unit, so that the tops of ┼ gates can safely have heights differing by 1 unit.
 
 		/* Push the indentity matrix */
 		pie_MatBegin();

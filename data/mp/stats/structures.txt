@@ -20,7 +20,7 @@ A0CommandCentreNP,HQ,Level One,HARD,0,2,2,Concrete,500,3,10,1000,10,100,30,300,1
 A0CyborgFactory,CYBORG FACTORY,Level All,MEDIUM,1,1,2,Concrete,500,2,10,1000,100,100,30,150,255,20,ZNULLECM,DefaultSensor1Mk1,1,blcfact1.pie,blbcfact.pie,1,0
 A0FacMod1,FACTORY MODULE,Level All,MEDIUM,1,3,3,Concrete,250,2,10,500,100,100,25,150,255,30,ZNULLECM,DefaultSensor1Mk1,0,blfact1.pie,0,1,0
 A0HardcreteMk1CWall,CORNER WALL,Level All,HARD,1,1,1,Concrete,125,2,15,700,10,25,1,0,255,0,ZNULLECM,ZNULLSENSOR,0,BLWALLC1.pie,0,0,0
-A0HardcreteMk1Gate,GATE,Level All,HARD,1,1,1,Concrete,250,2,15,700,10,25,1,0,255,0,ZNULLECM,ZNULLSENSOR,0,BLGATEH.pie,0,0,0
+A0HardcreteMk1Gate,GATE,Level All,HARD,1,1,1,Concrete,250,2,15,700,10,25,1,0,255,0,ZNULLECM,ZNULLSENSOR,0,blgateh.pie@blgateh_x.pie@blgateh_t.pie@blgateh_l.pie,0,0,0
 A0HardcreteMk1Wall,WALL,Level All,HARD,1,1,1,Concrete,125,2,15,700,10,25,1,0,255,0,ZNULLECM,ZNULLSENSOR,0,blwallh.pie@blwallc1.pie@blwallh_t.pie@blwallh_l.pie,0,1,0
 A0LasSatCommand,DOOR,Level All,MEDIUM,1,2,2,Concrete,2500,2,16,1000,10,1000,1,0,255,0,ZNULLECM,0,1,milasbas.pie,0,0,1
 A0LightFactory,FACTORY,Level All,MEDIUM,1,3,3,Concrete,500,3,10,1000,100,100,30,150,255,20,ZNULLECM,BaBaSensor,1,blfact0.pie@factory_module1.pie@blfact1.pie@factory_module2.pie@blfact2.pie,blbfact.pie,1,0
