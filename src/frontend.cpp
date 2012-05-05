@@ -329,6 +329,7 @@ bool runSinglePlayerMenu(void)
 
 			case FRONTEND_LOADGAME_SKIRMISH:
 				SPinit();
+				bMultiPlayer = true;
 				addLoadSave(LOAD_FRONTEND_SKIRMISH, _("Load Skirmish Saved Game"));	// change mode when loadsave returns
 				break;
 
