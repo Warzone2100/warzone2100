@@ -207,6 +207,7 @@ bool runTutorialMenu(void)
 			break;
 
 		case FRONTEND_FASTPLAY:
+			NETinit(true);
 			NetPlay.players[0].allocated = true;
 			game.skDiff[0] = UBYTE_MAX;
 			sstrcpy(aLevelName, "FASTPLAY");
