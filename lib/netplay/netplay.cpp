@@ -3407,6 +3407,16 @@ void _syncDebugBacktrace(const char *function)
 	syncDebugLog[syncDebugNext].setCrc(backupCrc);
 }
 
+uint32_t syncDebugGetCrc()
+{
+	return syncDebugLog[syncDebugNext].getCrc();
+}
+
+void syncDebugSetCrc(uint32_t crc)
+{
+	syncDebugLog[syncDebugNext].setCrc(crc);
+}
+
 void resetSyncDebug()
 {
 	for (unsigned i = 0; i < MAX_SYNC_HISTORY; ++i)
