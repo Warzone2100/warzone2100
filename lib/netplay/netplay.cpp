@@ -280,7 +280,7 @@ void NET_InitPlayer(int i, bool initPosition)
 	NetPlay.players[i].heartattacktime = 0;
 	NetPlay.players[i].heartbeat = true;		// we always start with a hearbeat
 	NetPlay.players[i].kick = false;
-	if (!NetPlay.isHost)
+	if (ingame.localJoiningInProgress)
 	{	// only clear name outside of games.
 		NetPlay.players[i].name[0] = '\0';
 	}

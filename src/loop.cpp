@@ -427,13 +427,10 @@ static void gameStateUpdate()
 	          NetPlay.players[0].allocated, NetPlay.players[1].allocated, NetPlay.players[2].allocated, NetPlay.players[3].allocated, NetPlay.players[4].allocated, NetPlay.players[5].allocated, NetPlay.players[6].allocated, NetPlay.players[7].allocated, NetPlay.players[8].allocated, NetPlay.players[9].allocated,
 	          NetPlay.players[0].position, NetPlay.players[1].position, NetPlay.players[2].position, NetPlay.players[3].position, NetPlay.players[4].position, NetPlay.players[5].position, NetPlay.players[6].position, NetPlay.players[7].position, NetPlay.players[8].position, NetPlay.players[9].position
 	         );
-	// TODO: Figure out why the following player names aren't always synchronised.
-	uint32_t crc = syncDebugGetCrc();
 	for (unsigned n = 0; n < MAX_PLAYERS; ++n)
 	{
 		syncDebug("Player %d = \"%s\"", n, NetPlay.players[n].name);
 	}
-	syncDebugSetCrc(crc);  // Do not dump desynch logs because of NetPlay.players[n].name being different.
 
 	// Actually send pending droid orders.
 	sendQueuedDroidInfo();
