@@ -207,6 +207,7 @@ bool runTutorialMenu(void)
 			break;
 
 		case FRONTEND_FASTPLAY:
+			NETinit(true);
 			NetPlay.players[0].allocated = true;
 			game.skDiff[0] = UBYTE_MAX;
 			sstrcpy(aLevelName, "FASTPLAY");
@@ -328,6 +329,7 @@ bool runSinglePlayerMenu(void)
 
 			case FRONTEND_LOADGAME_SKIRMISH:
 				SPinit();
+				bMultiPlayer = true;
 				addLoadSave(LOAD_FRONTEND_SKIRMISH, _("Load Skirmish Saved Game"));	// change mode when loadsave returns
 				break;
 
