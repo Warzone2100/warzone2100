@@ -280,7 +280,7 @@ void NET_InitPlayer(int i, bool initPosition)
 	NetPlay.players[i].heartattacktime = 0;
 	NetPlay.players[i].heartbeat = true;		// we always start with a hearbeat
 	NetPlay.players[i].kick = false;
-	if (!NetPlay.isHost)
+	if (ingame.localJoiningInProgress)
 	{	// only clear name outside of games.
 		NetPlay.players[i].name[0] = '\0';
 	}
@@ -3405,6 +3405,16 @@ void _syncDebugBacktrace(const char *function)
 	// Use CRC of something platform-independent, to avoid false positive desynchs.
 	backupCrc = ~crcSum(~backupCrc, function, strlen(function) + 1);
 	syncDebugLog[syncDebugNext].setCrc(backupCrc);
+}
+
+uint32_t syncDebugGetCrc()
+{
+	return syncDebugLog[syncDebugNext].getCrc();
+}
+
+void syncDebugSetCrc(uint32_t crc)
+{
+	syncDebugLog[syncDebugNext].setCrc(crc);
 }
 
 void resetSyncDebug()

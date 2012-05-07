@@ -1874,7 +1874,7 @@ static QScriptValue js_gameOverMessage(QScriptContext *context, QScriptEngine *e
 	}
 	else
 	{
-		psViewData = getViewData("WIN");
+		psViewData = getViewData("END");	// FIXME: rename to FAILED|LOST ?
 		addConsoleMessage(_("YOU WERE DEFEATED!"), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 	}
 	ASSERT(psViewData, "Viewdata not found");
