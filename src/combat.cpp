@@ -35,6 +35,7 @@
 #include "mapgrid.h"
 #include "projectile.h"
 #include "random.h"
+#include "qtscript.h"
 
 // maximum random pause for firing
 #define RANDOM_PAUSE	500
@@ -402,6 +403,7 @@ int32_t objDamage(BASE_OBJECT *psObj, unsigned damage, unsigned originalhp, WEAP
 		bMultiMessages = bMultiPlayer;
 
 		clustObjectAttacked((BASE_OBJECT *)psObj);
+		triggerEventAttacked(psObj, g_pProjLastAttacker);
 
 		bMultiMessages = bMultiMessagesBackup;
 	}

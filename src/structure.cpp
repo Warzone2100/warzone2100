@@ -5855,6 +5855,7 @@ bool electronicDamage(BASE_OBJECT *psTarget, UDWORD damage, UBYTE attackPlayer)
 
 			// tell the cluster system it has been attacked
 			clustObjectAttacked(psStructure);
+			triggerEventAttacked(psStructure, g_pProjLastAttacker);
 
 			psStructure->resistance = (SWORD)(psStructure->resistance - damage);
 
@@ -5901,6 +5902,7 @@ bool electronicDamage(BASE_OBJECT *psTarget, UDWORD damage, UBYTE attackPlayer)
 		{
 			// tell the cluster system it has been attacked
 			clustObjectAttacked(psDroid);
+			triggerEventAttacked(psDroid, g_pProjLastAttacker);
 
 			psDroid->resistance = (SWORD)(psDroid->resistance - damage);
 

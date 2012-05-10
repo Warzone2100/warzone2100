@@ -71,9 +71,6 @@ void clustObjectAttacked(BASE_OBJECT *psObj);
 // get the cluster ID for an object
 SDWORD clustGetClusterID(BASE_OBJECT *psObj);
 
-// find the center of a cluster
-void clustGetCenter(BASE_OBJECT *psObj, SDWORD *px, SDWORD *py);
-
 // initialise iterating a cluster
 void clustInitIterate(SDWORD clusterID);
 

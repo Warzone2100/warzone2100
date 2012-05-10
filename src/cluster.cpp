@@ -463,54 +463,6 @@ BASE_OBJECT *clustIterate(void)
 	return psIterateObj;
 }
 
-// find the center of a cluster
-// NOTE: Unused! void clustGetCenter(BASE_OBJECT *psObj, SDWORD *px, SDWORD *py)
-void clustGetCenter(BASE_OBJECT *psObj, SDWORD *px, SDWORD *py)
-{
-	BASE_OBJECT		*psList;
-	BASE_OBJECT		*psCurr;
-	SDWORD			averagex, averagey, num;
-
-	switch (psObj->type)
-	{
-		case OBJ_DROID:
-			psList = (BASE_OBJECT *)apsDroidLists[psObj->player];
-			break;
-		case OBJ_STRUCTURE:
-			psList = (BASE_OBJECT *)apsStructLists[psObj->player];
-			break;
-		default:
-			ASSERT(!"invalid object type", "clustGetCenter: invalid object type");
-			psList = NULL;
-			break;
-	}
-
-	averagex = 0;
-	averagey = 0;
-	num = 0;
-	for (psCurr = psList; psCurr; psCurr=psCurr->psNext)
-	{
-		if (psCurr->cluster == psObj->cluster)
-		{
-			averagex += (SDWORD)psCurr->pos.x;
-			averagey += (SDWORD)psCurr->pos.y;
-			num += 1;
-		}
-	}
-
-	if (num > 0)
-	{
-		*px = averagex / num;
-		*py = averagey / num;
-	}
-	else
-	{
-		*px = (SDWORD)psObj->pos.x;
-		*py = (SDWORD)psObj->pos.y;
-	}
-}
-
-
 // tell the cluster system that an objects visibility has changed
 void clustObjectSeen(BASE_OBJECT *psObj, BASE_OBJECT *psViewer)
 {
@@ -552,7 +504,6 @@ void clustObjectSeen(BASE_OBJECT *psObj, BASE_OBJECT *psViewer)
 	}
 }
 
-
 // tell the cluster system that an object has been attacked
 void clustObjectAttacked(BASE_OBJECT *psObj)
 {
@@ -560,7 +511,6 @@ void clustObjectAttacked(BASE_OBJECT *psObj)
 	{
 		psScrCBTarget = psObj;
 		eventFireCallbackTrigger((TRIGGER_TYPE)CALL_ATTACKED);
-		triggerEventAttacked(psObj, g_pProjLastAttacker);
 
 		switch (psObj->type)
 		{
@@ -579,11 +529,9 @@ void clustObjectAttacked(BASE_OBJECT *psObj)
 				return;
 		}
 		// and fire the sound effect (and/or...) for the added callback trigger we just processed
-		triggerEventAttacked(psObj, g_pProjLastAttacker);
 		aClusterAttacked[psObj->cluster] = gameTime;
 	}
 }
-
 
 // reset the visibility for all clusters for a particular player
 void clustResetVisibility(SDWORD player)
