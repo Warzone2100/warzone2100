@@ -6339,11 +6339,9 @@ bool scrIsVtol(void)
 	return true;
 }
 
-
-
-
-// do the setting up of the template list for the tutorial.
-// This function looks like it searches for a template called "ViperLtMGWheels", and deletes it. Why?
+// Fix the tutorial's template list(s).
+// DO NOT MODIFY THIS WITHOUT KNOWING WHAT YOU ARE DOING.  You will break the tutorial!
+// In short, we want to design a ViperLtMGWheels, but it is already available to make, so we must delete it.
 bool scrTutorialTemplates(void)
 {
 	DROID_TEMPLATE	*psCurr, *psPrev;
@@ -6351,11 +6349,9 @@ bool scrTutorialTemplates(void)
 	// find ViperLtMGWheels
 	char const *pName = getDroidResourceName("ViperLtMGWheels");
 
-	for (psCurr = apsDroidTemplates[selectedPlayer],psPrev = NULL;
-			psCurr != NULL;
-			psCurr = psCurr->psNext)
+	for (psCurr = apsDroidTemplates[selectedPlayer], psPrev = NULL; psCurr != NULL;	psCurr = psCurr->psNext)
 	{
-		if (strcmp(pName,psCurr->aName)==0)
+		if (strcmp(pName, psCurr->aName)==0)
 		{
 			if (psPrev)
 			{
@@ -6365,15 +6361,24 @@ bool scrTutorialTemplates(void)
 			{
 				apsDroidTemplates[selectedPlayer] = psCurr->psNext;
 			}
-			//quit looking cos found
 			break;
 		}
 		psPrev = psCurr;
 	}
 
-	// Delete the template.
+	// Delete the template in *both* lists!
 	if(psCurr)
 	{
+		for (std::list<DROID_TEMPLATE>::iterator i = localTemplates.begin(); i != localTemplates.end(); ++i)
+		{
+			DROID_TEMPLATE *dropTemplate = &*i;
+			if (psCurr->multiPlayerID == dropTemplate->multiPlayerID)
+			{
+				free(dropTemplate->pName);
+				localTemplates.erase(i);
+				break;
+			}
+		}
 		delete psCurr;
 	}
 	else
