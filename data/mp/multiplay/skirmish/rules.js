@@ -236,7 +236,7 @@ function checkEndConditions()
 // Base Under Attack
 function eventAttacked(victimObj, attackerObj)
 {
-	if (gameTime > lastHitTime + 10)
+	if (gameTime > lastHitTime + 5000)
 	{
 		lastHitTime = gameTime;
 		if (victimObj.type == STRUCTURE)
