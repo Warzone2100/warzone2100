@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Warzone 2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2012-05-07 16:31+0200\n"
+"POT-Creation-Date: 2012-05-12 20:44+0200\n"
 "PO-Revision-Date: 2012-05-07 15:24+0100\n"
 "Last-Translator: Mészáros Tamás <meszaros.tomi@hotmail.com>\n"
 "Language-Team: Magyar (Hungary) <meszaros.tomi@hotmail.com>\n"
@@ -5287,7 +5287,7 @@ msgstr "Biztosítson egy LZ-t a hegyeknél. Azután hozzon létre egy előretolt
 #: data/base/messages/strings/cam3strings.txt:11
 #: data/base/sequenceaudio/cam3/c003.txa:16
 msgid "Team Gamma will contact you there."
-msgstr "Ott kapcsolatot létesít önnel a Gamma csapat."
+msgstr "Kapcsolatot létesít veled a Gamma csapat."
 
 #: data/base/messages/strings/cam3strings.txt:14
 msgid "TRANSPORT MISSION: Establish A Forward Base"
@@ -6049,7 +6049,6 @@ msgstr "Leopard"
 msgid "Retaliation"
 msgstr "Megtorlás"
 
-# bogár
 #: data/base/messages/strings/names.txt:237
 #: data/mp/messages/strings/names.txt:240
 msgid "Bug"
@@ -6779,7 +6778,7 @@ msgstr "Scourge rakéta"
 #: data/base/messages/strings/names.txt:505
 #: data/base/messages/strings/names.txt:1121
 msgid "Angel Missile"
-msgstr "Angel rakéta"
+msgstr "Angyal rakéta"
 
 #: data/base/messages/strings/names.txt:506
 #: data/base/messages/strings/names.txt:1119
@@ -7357,7 +7356,7 @@ msgstr "Bombavető árok"
 
 #: data/base/messages/strings/names.txt:728
 msgid "Angel Missile Battery"
-msgstr "Angel rakéta üteg"
+msgstr "Angyal rakéta üteg"
 
 #: data/base/messages/strings/names.txt:729
 #: data/mp/messages/strings/names.txt:739
@@ -9422,7 +9421,7 @@ msgstr "Egy új korszak"
 
 #: data/base/sequenceaudio/cam1/c001.txa:8
 msgid "Morning, July 4th, 2100"
-msgstr "2100 Július 4, Reggel"
+msgstr "2100 Július 4, reggel"
 
 #: data/base/sequenceaudio/cam1/c001.txa:9
 msgid "In-flight to Western Sector"
@@ -9570,7 +9569,7 @@ msgstr "Van technológiája és fegyverei. Tud rólunk, és nem barátságos."
 
 #: data/base/sequenceaudio/cam1/map1a_c.txt:4
 msgid "The Synaptic Link was developed by the Reed Corporation in conjunction with the US Military."
-msgstr "A szinaptikus kapcsolódást az US hadsereggel együtt fejlesztette a Reed Corporation."
+msgstr "A szinaptikus kapcsolódást az amerikai hadsereggel együtt fejlesztette a Reed Corporation."
 
 #: data/base/sequenceaudio/cam1/map1a_c.txt:6
 msgid "The synaptic link allows for almost instantaneous transfer of thought from human operators to vehicle control and guidance systems. The synaptic link is fitted into the base of the skull circling the spinal column."
@@ -10191,7 +10190,7 @@ msgstr "Betörtük az ajtót, és eltakarítottuk a testeket odabentről."
 
 #: data/base/sequenceaudio/devastation.txt:17
 msgid "We knew that things would never be the same again, but we were determined to build a new world out of the ruins. We rebuilt the landing pads and brought the old systems back on-line."
-msgstr "Tudtuk, hogy már semmi nem lesz újra a régi. De hittük, hogy kiválasztottak vagyunk egy új világ felépítésére a romokból. Újjá építettük a leszálló pályát és visszakapcsoltuk a régi rendszereket."
+msgstr "Tudtuk, hogy már semmi nem lesz újra a régi. De hittük, hogy kiválasztottak vagyunk egy új világ felépítésére a romokból. Újjá építettük a leszálló pályát, és visszakapcsoltuk a régi rendszereket."
 
 #: data/base/sequenceaudio/devastation.txt:19
 msgid "We were finally ready to begin the Project."
@@ -11393,7 +11392,7 @@ msgstr "Nehéz karosszéria - Wyvern"
 
 #: data/mp/messages/strings/names.txt:1772
 msgid "Wyvern"
-msgstr "Sárkány"
+msgstr "Wyvern"
 
 #: data/mp/messages/strings/names.txt:1774
 msgid "Multi Turret Body - Dragon"
@@ -12358,8 +12357,8 @@ msgstr "Szerkezet Helyrállítva"
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
-msgstr[0] "Csoport %u kiválasztott - %u Egység"
-msgstr[1] "Csoport %u kiválasztott - %u Egységek"
+msgstr[0] "csoport %u kiválasztott - %u egység"
+msgstr[1] "csoport %u kiválasztott - %u egységek"
 
 #: src/droid.cpp:2250
 #, c-format
@@ -12372,15 +12371,15 @@ msgstr[1] "%u egységek hozzárendelve a %u csoporthoz"
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
-msgstr[0] "Centred on Group %u - %u Unit"
-msgstr[1] "Centred on Group %u - %u Units"
+msgstr[0] "csoport középen %u - %u egység"
+msgstr[1] "csoport középen %u - %u egységek"
 
 #: src/droid.cpp:2267
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
-msgstr[0] "Aligning with Group %u - %u Unit"
-msgstr[1] "Aligning with Group %u - %u Units"
+msgstr[0] "csoport igazítás %u - %u egység"
+msgstr[1] "csoport igazítás %u - %u egységek"
 
 #: src/droid.cpp:2449
 msgid "Rookie"
@@ -12449,7 +12448,7 @@ msgstr "Beállítások"
 
 #: src/frontend.cpp:111
 msgid "View Intro"
-msgstr "Intro"
+msgstr "Intro nézet"
 
 #: src/frontend.cpp:113
 msgid "Quit Game"
@@ -12500,7 +12499,7 @@ msgstr "Kihívás"
 
 #: src/frontend.cpp:248
 msgid "Load Campaign Game"
-msgstr "Játék Betöltése"
+msgstr "Küldetés játék betöltése"
 
 #: src/frontend.cpp:249
 msgid "Load Skirmish Game"
@@ -14073,7 +14072,7 @@ msgstr "% szeretne szövetség önnel"
 #: src/multigifts.cpp:417
 #, c-format
 msgid "You Invite %s To Form An Alliance"
-msgstr "Meghívta %s t a szövetségbe"
+msgstr "Meghívta %s a szövetségbe"
 
 #: src/multigifts.cpp:438
 #, c-format
@@ -14263,7 +14262,7 @@ msgstr "Nincsenek szövetségek"
 
 #: src/multiint.cpp:1482
 msgid "Allow Alliances"
-msgstr "Szövetségeket megenged"
+msgstr "Megengedi szövetséget"
 
 #: src/multiint.cpp:1486
 msgid "Locked Teams"
@@ -14410,7 +14409,7 @@ msgstr "CSEVEGÉS"
 
 #: src/multiint.cpp:2543
 msgid "All players need to have the same mods to join your game."
-msgstr "Minden játékosnak ugyanazokkal a mod-okkal kell rendelkeznie, hogy csatlakozhassanak a játékához."
+msgstr "Minden játékosnak ugyanazokkal a mod-okkal kell rendelkeznie, hogy csatlakozhassanak a játékhoz."
 
 #: src/multiint.cpp:2584
 msgid "Connecting to the lobby server..."
@@ -14446,7 +14445,7 @@ msgstr "A játékmester elindította a játékot"
 
 #: src/multiint.cpp:3831
 msgid "Can't connect to lobby server!"
-msgstr "Nem tud kapcsolodni a kiszolgáló szerverhez !"
+msgstr "Nem tud kapcsolodni a kiszolgáló szerverhez!"
 
 #: src/multiint.cpp:3923
 #, c-format
@@ -14514,7 +14513,7 @@ msgstr "Fájl átvitel megszakítva: %d"
 #: src/multijoin.cpp:422
 #, c-format
 msgid "%s (%u) has an incompatible mod, and has been kicked."
-msgstr "%s (%u) nem kompatibilis mód-ja van, ezért ki lett rúgva a játékból."
+msgstr "%s (%u) nem kompatibilis módban van, ezért ki lett rúgva a játékból."
 
 #: src/multijoin.cpp:463
 #, c-format
@@ -14574,11 +14573,11 @@ msgstr "Épületek"
 
 #: src/multimenu.cpp:822
 msgid "Sent/Received per sec —"
-msgstr "Elküldött /Érkezett per másodperc —"
+msgstr "Elküldött/Érkezett per másodperc —"
 
 #: src/multimenu.cpp:822
 msgid "Total Sent/Received —"
-msgstr "Teljes Elküldött /Érkezett  —"
+msgstr "Teljes Elküldött/Érkezett —"
 
 #: src/multimenu.cpp:827
 #, c-format
@@ -14846,12 +14845,12 @@ msgstr "Teljes játék idő - %s"
 msgid "You cheated!"
 msgstr "Csaltál!"
 
-#: src/scriptfuncs.cpp:9373
+#: src/scriptfuncs.cpp:9378
 #, c-format
 msgid "Beacon received from %s!"
 msgstr "Jeladó érkezett %s csapatától!"
 
-#: src/scriptfuncs.cpp:9410
+#: src/scriptfuncs.cpp:9415
 #, c-format
 msgid "Beacon %d"
 msgstr "%d jeladó"
@@ -14898,12 +14897,12 @@ msgstr[1] "%s - %u Egységek felhatalmazása - Kár %3.0f%%"
 #: src/structure.cpp:5749
 #, c-format
 msgid "%s - Damage %3.0f%%"
-msgstr "%s - Kár %3.0f%%"
+msgstr "%s - kár %3.0f%%"
 
 #: src/structure.cpp:5702
 #, c-format
 msgid "%s - Connected %u of %u - Damage %3.0f%%"
-msgstr "%s - Kapcsolódott %u of %u- Kár %3.0f%%"
+msgstr "%s - kapcsolódott %u of %u- kár %3.0f%%"
 
 #: src/structure.cpp:5865
 #: src/structure.cpp:5910
@@ -15035,7 +15034,7 @@ msgstr "Verzió %s-%s%s%s%s"
 #~ msgstr "A lobbit elutasítom!"
 
 #~ msgid "Connect IP"
-#~ msgstr "Kapcsolódás IP!"
+#~ msgstr "IP Kapcsolódás!"
 
 #~ msgid "Login"
 #~ msgstr "Bejelentkezés"
@@ -15059,7 +15058,7 @@ msgstr "Verzió %s-%s%s%s%s"
 #~ msgstr "Nem tudsz változtatni az AI-on mozgásnál"
 
 #~ msgid "Players"
-#~ msgstr "Játékosok száma"
+#~ msgstr "Játékosok"
 
 #~ msgid "3 players"
 #~ msgstr "3 játékos"
@@ -15104,7 +15103,7 @@ msgstr "Verzió %s-%s%s%s%s"
 #~ msgstr "16 játékos"
 
 #~ msgid "FPS %d; PIEs %d; polys %d; States %d"
-#~ msgstr "FPS %d; FPS-korlát: %d; PIEs %d; polys %d; Terr. polys %d; Állam %d"
+#~ msgstr "FPS %d; PIEs %d; poli %d; Államok %d"
 
 #~ msgid "Power Accrued"
 #~ msgstr "Energia felhalmozva"
@@ -15119,7 +15118,7 @@ msgstr "Verzió %s-%s%s%s%s"
 #~ msgstr "Homály"
 
 #~ msgid "Distance Fog"
-#~ msgstr "Távolsági köd"
+#~ msgstr "Távoli köd"
 
 #~ msgid "* May negatively affect performance"
 #~ msgstr "* Hátrányosan érintheti a sebességet"
@@ -15254,7 +15253,7 @@ msgstr "Verzió %s-%s%s%s%s"
 #~ msgstr "Viper féllánctalpas lángvető"
 
 #~ msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
-#~ msgstr "Nem lehet elérni az elcsarnok szervert! A %u TCP port nyitva van a kimenő forgalom számára?"
+#~ msgstr "Nem lehet elérni a lobbi szervert! A %u TCP port nyitva van a kimenő forgalom számára?"
 
 #~ msgid ": Unknown cheat code."
 #~ msgstr ": ismeretlen megtévesztő kód"
@@ -15266,7 +15265,7 @@ msgstr "Verzió %s-%s%s%s%s"
 #~ msgstr "Munkagép utasítva, hogy építsen olajkutat."
 
 #~ msgid "Colored Cursors*"
-#~ msgstr "Kiszínezett Kurzorok"
+#~ msgstr "Kiszínezett kurzorok"
 
 #~ msgid "Infinite Production"
 #~ msgstr "Korlátlan termelés"
@@ -15335,7 +15334,7 @@ msgstr "Verzió %s-%s%s%s%s"
 #~ msgstr "HE Mini-rakéta Mk3"
 
 #~ msgid "Thermite Flamer Cyborg"
-#~ msgstr "Termit lángvető"
+#~ msgstr "Termit lángvető Cyborg"
 
 #~ msgid "Grenadier Cyborg"
 #~ msgstr "Gránátos Cyborg"
@@ -15362,13 +15361,13 @@ msgstr "Verzió %s-%s%s%s%s"
 #~ msgstr "Portugál"
 
 #~ msgid ", mod: "
-#~ msgstr "mód"
+#~ msgstr ", mód: "
 
 #~ msgid "Increases Bombing damage"
 #~ msgstr "Menövekedett löveg pusztítás"
 
 #~ msgid "Basque"
-#~ msgstr "Bázis"
+#~ msgstr "Baszk"
 
 #~ msgid "Norwegian (Nynorsk)"
 #~ msgstr "Norvég"
