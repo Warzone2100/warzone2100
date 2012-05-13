@@ -1,3 +1,19 @@
+2012-05-13: Version 3.1 beta10
+ * General:
+   * Fix: Loading of skirmish games (ticket:3451, commit:18216c60e76d05ad0fe2bf7d860347f76f70c8f8)
+   * Fix: Scavengers in Fast Play are on their own team again (ticket:3447, commit:c3218e7ecce6eaca4f4f2620cf42cce61cc9ff5c)
+   * Fix: Allow building the designed unit in the tutorial (ticket:3058, commit:7079ad295112abcd83e6be1e7c172d36aec64c25)
+ * Multiplayer:
+   * Fix: Don't desync occasionally when some player slots are empty (commit:1ef4fc6cfdf05435bbaaa95155c23ea1a76d6409, commit:ef685d0b892327b6e8af90da0ade792575925e3d)
+   * Fix: Don't tell players who lost that they won (ticket:3449, commit:25e118c628881f20411d027ff2d48e8a63a44730)
+ * Graphics:
+   * Change: Updated texture for the urban building features (commit:4a9ac7fc3ed17ee9b63e829b10de3791c0ee7bd9)
+   * Fix: Team colour mask on Plasmite Flamer, Sunburst AA and AA Flak Cannon (ticket:3433, commit:e36cdf11e827e85c79cbd9319507809c1fae838b)
+ * Translations:
+   * Update: Hungarian (ticket:3458, ticket:3470, commit:0def25206b7d23788919a2aa067e880626e542fc, commit:9bed66e764a176b7b4b448df5e1f534e1991c450)
+   * Update: Spanish (ticket:3473, commit:baa143872208ba54bec2dc41213ca622209e4868)
+
+
 2012-05-04: Version 3.1_beta9
  * General:
    * Change: Save campaign and skirmish games separately (ticket:3377, commit:d8789661fbffe2f648a06a0689de3a9350bbe8b0)
