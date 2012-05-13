@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2012-05-13 20:05+0200\n"
+"POT-Creation-Date: 2012-05-03 18:57+0200\n"
 "PO-Revision-Date: 2012-02-19 17:06+0800\n"
 "Last-Translator: vadim s. sabinich <vadim@sabini.ch>\n"
 "Language-Team: Russian <>\n"
@@ -11891,13 +11891,18 @@ msgstr "Авиационный плазмит возмездия"
 msgid "System locale"
 msgstr "Системная локализация"
 
-#: lib/ivis_opengl/screen.cpp:147
+#: lib/ivis_opengl/screen.cpp:145
 msgid "OpenGL 2.0 is not supported by your system. Some things may look wrong. Please upgrade your graphics driver/hardware, if possible."
 msgstr "OpenGL 2.0 не поддерживается вашей системой. Некоторые вещи могут выглядить неправильно. Пожалуйста, обновите ваши графические драйвера/железо, если возможно"
 
-#: lib/ivis_opengl/screen.cpp:153
+#: lib/ivis_opengl/screen.cpp:152
 #, fuzzy
-msgid "OpenGL 1.4 is not supported by your system. The game requires this. Please upgrade your graphics drivers/hardware, if possible."
+msgid "OpenGL 1.5/2.0 is not supported by your system. Some things may look wrong. Please upgrade your graphics driver/hardware, if possible."
+msgstr "OpenGL 2.0 не поддерживается вашей системой. Некоторые вещи могут выглядить неправильно. Пожалуйста, обновите ваши графические драйвера/железо, если возможно"
+
+#: lib/ivis_opengl/screen.cpp:159
+#, fuzzy
+msgid "OpenGL 1.4 + VBO extension is not supported by your system. The game requires this. Please upgrade your graphics drivers/hardware, if possible."
 msgstr "OpenGL 1.4 не поддерживается вашей системой. Игра требует это. Пожалуйста, обновите ваши графические драйвера/железо, если возможно"
 
 #: lib/netplay/netplay.cpp:203
@@ -12009,151 +12014,146 @@ msgstr ""
 msgid "Debug mode now disabled!"
 msgstr "Открыто меню отладки"
 
-#: src/clparse.cpp:243
+#: src/clparse.cpp:242
 msgid "Set configuration directory"
 msgstr "выбрать папку с настройками"
 
-#: src/clparse.cpp:243
+#: src/clparse.cpp:242
 msgid "configuration directory"
 msgstr "папка с настройками"
 
-#: src/clparse.cpp:244
+#: src/clparse.cpp:243
 msgid "Set default data directory"
 msgstr "Выбрать папку с данными по умолчанию"
 
-#: src/clparse.cpp:244
+#: src/clparse.cpp:243
 msgid "data directory"
 msgstr "папка с данными"
 
-#: src/clparse.cpp:245
+#: src/clparse.cpp:244
 msgid "Show debug for given level"
 msgstr "Показать отладку данного уровня"
 
-#: src/clparse.cpp:245
+#: src/clparse.cpp:244
 msgid "debug level"
 msgstr "уровень отладки"
 
-#: src/clparse.cpp:246
+#: src/clparse.cpp:245
 msgid "Log debug output to file"
 msgstr "Лог отладки в файл"
 
-#: src/clparse.cpp:246
+#: src/clparse.cpp:245
 msgid "file"
 msgstr "файл"
 
-#: src/clparse.cpp:247
+#: src/clparse.cpp:246
 msgid "Flush all debug output written to stderr"
 msgstr "Слить все записи отладки в выходной файл stderr"
 
-#: src/clparse.cpp:248
+#: src/clparse.cpp:247
 msgid "Play in fullscreen mode"
 msgstr "Полноэкранный режим"
 
-#: src/clparse.cpp:249
+#: src/clparse.cpp:248
 msgid "Load a specific game"
 msgstr "Загрузить особую игру"
 
-#: src/clparse.cpp:249
+#: src/clparse.cpp:248
 msgid "game-name"
 msgstr "Название игры"
 
-#: src/clparse.cpp:250
+#: src/clparse.cpp:249
 msgid "Show this help message and exit"
 msgstr "Отобразить данное справочное сообщение и выйти"
 
-#: src/clparse.cpp:251
+#: src/clparse.cpp:250
 msgid "Enable a global mod"
 msgstr "включить глобальный мод"
 
+#: src/clparse.cpp:250
 #: src/clparse.cpp:251
 #: src/clparse.cpp:252
-#: src/clparse.cpp:253
 msgid "mod"
 msgstr "мод"
 
-#: src/clparse.cpp:252
+#: src/clparse.cpp:251
 msgid "Enable a campaign only mod"
 msgstr "включить мод для Кампаний "
 
-#: src/clparse.cpp:253
+#: src/clparse.cpp:252
 msgid "Enable a multiplay only mod"
 msgstr "Включить мод для мультиплеера"
 
-#: src/clparse.cpp:254
+#: src/clparse.cpp:253
 msgid "Disable asserts"
 msgstr "Отключить утверждения"
 
-#: src/clparse.cpp:255
+#: src/clparse.cpp:254
 msgid "Causes a crash to test the crash handler"
 msgstr "вызывает крэш для тестирования прораммы обработки "
 
-#: src/clparse.cpp:256
+#: src/clparse.cpp:255
 msgid "Load a saved game"
 msgstr "Загрузить игру"
 
-#: src/clparse.cpp:256
+#: src/clparse.cpp:255
 msgid "savegame"
 msgstr "сохранение"
 
-#: src/clparse.cpp:257
+#: src/clparse.cpp:256
 msgid "Play in windowed mode"
 msgstr "Оконный режим"
 
-#: src/clparse.cpp:258
+#: src/clparse.cpp:257
 msgid "Show version information and exit"
 msgstr "Показать номер версии и выйти"
 
-#: src/clparse.cpp:259
+#: src/clparse.cpp:258
 msgid "Set the resolution to use"
 msgstr "Установить используемое разрешение"
 
-#: src/clparse.cpp:259
+#: src/clparse.cpp:258
 msgid "WIDTHxHEIGHT"
 msgstr "ШИРИНАхВЫСОТА"
 
-#: src/clparse.cpp:260
+#: src/clparse.cpp:259
 msgid "Enable shadows"
 msgstr "Включить тени"
 
-#: src/clparse.cpp:261
+#: src/clparse.cpp:260
 msgid "Disable shadows"
 msgstr "Отключить тени"
 
-#: src/clparse.cpp:262
+#: src/clparse.cpp:261
 msgid "Enable sound"
 msgstr "Включить звук"
 
-#: src/clparse.cpp:263
+#: src/clparse.cpp:262
 msgid "Disable sound"
 msgstr "Отключить звук"
 
-#: src/clparse.cpp:264
+#: src/clparse.cpp:263
 msgid "connect directly to IP/hostname"
 msgstr "прямое соединение с IP/ имя сервера"
 
-#: src/clparse.cpp:264
+#: src/clparse.cpp:263
 msgid "host"
 msgstr "Хост"
 
-#: src/clparse.cpp:265
+#: src/clparse.cpp:264
 msgid "go directly to host screen"
 msgstr "прямо на экран хоста"
 
-#: src/clparse.cpp:266
+#: src/clparse.cpp:265
 msgid "Enable texture compression"
 msgstr "Включить сжатие текстур"
 
-#: src/clparse.cpp:267
+#: src/clparse.cpp:266
 msgid "Disable texture compression"
 msgstr "Отключить сжатие текстур"
 
-#: src/clparse.cpp:268
-#, fuzzy
-msgid "Disable the use of OpenGL shaders"
-msgstr "Отключить сжатие текстур"
-
-#: src/clparse.cpp:269
-msgid "Disable the use of OpenGL Vertex Buffer Objects"
+#: src/clparse.cpp:267
+msgid "Only use OpenGL 1.5"
 msgstr ""
 
 #: src/configuration.cpp:96
@@ -12489,354 +12489,354 @@ msgstr "ОБУЧЕНИЕ"
 
 #. TRANSLATORS: "Return", in this context, means "return to previous screen/menu"
 #: src/frontend.cpp:190
-#: src/frontend.cpp:252
-#: src/frontend.cpp:392
-#: src/frontend.cpp:464
-#: src/frontend.cpp:605
-#: src/frontend.cpp:751
-#: src/frontend.cpp:885
-#: src/frontend.cpp:1120
-#: src/frontend.cpp:1274
-#: src/frontend.cpp:1294
+#: src/frontend.cpp:251
+#: src/frontend.cpp:390
+#: src/frontend.cpp:462
+#: src/frontend.cpp:603
+#: src/frontend.cpp:749
+#: src/frontend.cpp:883
+#: src/frontend.cpp:1118
+#: src/frontend.cpp:1272
+#: src/frontend.cpp:1292
 msgctxt "menu"
 msgid "Return"
 msgstr "Назад"
 
-#: src/frontend.cpp:245
+#: src/frontend.cpp:244
 msgid "New Campaign"
 msgstr "Новая кампания"
 
-#: src/frontend.cpp:246
+#: src/frontend.cpp:245
 msgid "Start Skirmish Game"
 msgstr "Начать Сражение"
 
-#: src/frontend.cpp:247
+#: src/frontend.cpp:246
 msgid "Challenges"
 msgstr "Вызов на поединок"
 
-#: src/frontend.cpp:248
+#: src/frontend.cpp:247
 #, fuzzy
 msgid "Load Campaign Game"
 msgstr "Загрузить кампанию"
 
-#: src/frontend.cpp:249
+#: src/frontend.cpp:248
 #, fuzzy
 msgid "Load Skirmish Game"
 msgstr "Начать Сражение"
 
-#: src/frontend.cpp:251
+#: src/frontend.cpp:250
 msgid "SINGLE PLAYER"
 msgstr "ОДИНОЧНАЯ ИГРА"
 
-#: src/frontend.cpp:327
+#: src/frontend.cpp:326
 #: src/ingameop.cpp:504
 #, fuzzy
 msgid "Load Campaign Saved Game"
 msgstr "Загрузить Игру"
 
-#: src/frontend.cpp:333
+#: src/frontend.cpp:331
 #: src/ingameop.cpp:508
 #, fuzzy
 msgid "Load Skirmish Saved Game"
 msgstr "Загрузить Игру"
 
-#: src/frontend.cpp:387
+#: src/frontend.cpp:385
 msgid "MULTI PLAYER"
 msgstr "МУЛЬТИПЛЕЕР"
 
-#: src/frontend.cpp:389
+#: src/frontend.cpp:387
 msgid "Host Game"
 msgstr "Создать игру"
 
-#: src/frontend.cpp:390
+#: src/frontend.cpp:388
 msgid "Join Game"
 msgstr "Присоединиться"
 
-#: src/frontend.cpp:395
+#: src/frontend.cpp:393
 msgid "TCP PORT 2100 MUST BE OPENED IN YOUR FIREWALL / ROUTER TO HOST GAMES!"
 msgstr "Порт TCP 2100 должен быть открыт в вашем фаерволе / роутере чтобы создавать игры!"
 
-#: src/frontend.cpp:457
+#: src/frontend.cpp:455
 #: src/multiint.cpp:1400
 msgid "OPTIONS"
 msgstr "ПАРАМЕТРЫ"
 
-#: src/frontend.cpp:458
+#: src/frontend.cpp:456
 msgid "Game Options"
 msgstr "Настройки игры"
 
-#: src/frontend.cpp:459
+#: src/frontend.cpp:457
 msgid "Graphics Options"
 msgstr "Настройки графики"
 
-#: src/frontend.cpp:460
+#: src/frontend.cpp:458
 msgid "Video Options"
 msgstr "Настройки видео"
 
-#: src/frontend.cpp:461
+#: src/frontend.cpp:459
 #: src/ingameop.cpp:268
 msgid "Audio Options"
 msgstr "Настройки звука"
 
-#: src/frontend.cpp:462
+#: src/frontend.cpp:460
 msgid "Mouse Options"
 msgstr "Настройки Мыши"
 
-#: src/frontend.cpp:463
+#: src/frontend.cpp:461
 msgid "Key Mappings"
 msgstr "Расскладка клавиатуры"
 
-#: src/frontend.cpp:523
+#: src/frontend.cpp:521
 msgid "Video Playback"
 msgstr "Воспроизведение видео"
 
-#: src/frontend.cpp:527
-#: src/frontend.cpp:679
+#: src/frontend.cpp:525
+#: src/frontend.cpp:677
 msgid "1X"
 msgstr "1Х"
 
-#: src/frontend.cpp:531
-#: src/frontend.cpp:669
+#: src/frontend.cpp:529
+#: src/frontend.cpp:667
 msgid "2X"
 msgstr "2X"
 
-#: src/frontend.cpp:535
-#: src/frontend.cpp:674
-#: src/frontend.cpp:825
-#: src/frontend.cpp:908
+#: src/frontend.cpp:533
+#: src/frontend.cpp:672
+#: src/frontend.cpp:823
+#: src/frontend.cpp:906
 msgid "Fullscreen"
 msgstr "Полный экран"
 
-#: src/frontend.cpp:544
+#: src/frontend.cpp:542
 msgid "Scanlines"
 msgstr "Туман Войны"
 
-#: src/frontend.cpp:548
-#: src/frontend.cpp:569
-#: src/frontend.cpp:577
-#: src/frontend.cpp:593
-#: src/frontend.cpp:623
-#: src/frontend.cpp:641
-#: src/frontend.cpp:659
-#: src/frontend.cpp:704
-#: src/frontend.cpp:850
-#: src/frontend.cpp:860
-#: src/frontend.cpp:932
-#: src/frontend.cpp:993
-#: src/frontend.cpp:1036
-#: src/frontend.cpp:1077
-#: src/frontend.cpp:1089
-#: src/frontend.cpp:1101
-#: src/frontend.cpp:1136
-#: src/frontend.cpp:1149
-#: src/frontend.cpp:1163
+#: src/frontend.cpp:546
+#: src/frontend.cpp:567
+#: src/frontend.cpp:575
+#: src/frontend.cpp:591
+#: src/frontend.cpp:621
+#: src/frontend.cpp:639
+#: src/frontend.cpp:657
+#: src/frontend.cpp:702
+#: src/frontend.cpp:848
+#: src/frontend.cpp:858
+#: src/frontend.cpp:930
+#: src/frontend.cpp:991
+#: src/frontend.cpp:1034
+#: src/frontend.cpp:1075
+#: src/frontend.cpp:1087
+#: src/frontend.cpp:1099
+#: src/frontend.cpp:1134
+#: src/frontend.cpp:1147
+#: src/frontend.cpp:1161
 msgid "Off"
 msgstr "Выкл."
 
-#: src/frontend.cpp:552
-#: src/frontend.cpp:694
+#: src/frontend.cpp:550
+#: src/frontend.cpp:692
 msgid "50%"
 msgstr "50%"
 
-#: src/frontend.cpp:556
-#: src/frontend.cpp:699
+#: src/frontend.cpp:554
+#: src/frontend.cpp:697
 #: src/multiplay.cpp:1999
 msgid "Black"
 msgstr "Чёрный"
 
-#: src/frontend.cpp:562
+#: src/frontend.cpp:560
 msgid "Screen Shake"
 msgstr "Дрожание экрана"
 
-#: src/frontend.cpp:565
-#: src/frontend.cpp:581
-#: src/frontend.cpp:589
-#: src/frontend.cpp:628
-#: src/frontend.cpp:646
-#: src/frontend.cpp:655
-#: src/frontend.cpp:846
-#: src/frontend.cpp:998
-#: src/frontend.cpp:1032
-#: src/frontend.cpp:1073
-#: src/frontend.cpp:1085
-#: src/frontend.cpp:1097
-#: src/frontend.cpp:1141
-#: src/frontend.cpp:1154
-#: src/frontend.cpp:1168
+#: src/frontend.cpp:563
+#: src/frontend.cpp:579
+#: src/frontend.cpp:587
+#: src/frontend.cpp:626
+#: src/frontend.cpp:644
+#: src/frontend.cpp:653
+#: src/frontend.cpp:844
+#: src/frontend.cpp:996
+#: src/frontend.cpp:1030
+#: src/frontend.cpp:1071
+#: src/frontend.cpp:1083
+#: src/frontend.cpp:1095
+#: src/frontend.cpp:1139
+#: src/frontend.cpp:1152
+#: src/frontend.cpp:1166
 msgid "On"
 msgstr "Вкл."
 
-#: src/frontend.cpp:574
+#: src/frontend.cpp:572
 msgid "Subtitles"
 msgstr "Субтитры"
 
-#: src/frontend.cpp:586
+#: src/frontend.cpp:584
 msgid "Shadows"
 msgstr "Тени"
 
-#: src/frontend.cpp:597
-#: src/frontend.cpp:1301
+#: src/frontend.cpp:595
+#: src/frontend.cpp:1299
 msgid "Radar"
 msgstr "Радар"
 
-#: src/frontend.cpp:598
-#: src/frontend.cpp:711
-#: src/frontend.cpp:1302
+#: src/frontend.cpp:596
+#: src/frontend.cpp:709
+#: src/frontend.cpp:1300
 msgid "Rotating"
 msgstr "Вращение"
 
-#: src/frontend.cpp:598
-#: src/frontend.cpp:711
-#: src/frontend.cpp:1302
+#: src/frontend.cpp:596
+#: src/frontend.cpp:709
+#: src/frontend.cpp:1300
 msgid "Fixed"
 msgstr "Зафиксированный"
 
-#: src/frontend.cpp:601
+#: src/frontend.cpp:599
 msgid "GRAPHICS OPTIONS"
 msgstr "Настройки графики"
 
-#: src/frontend.cpp:739
+#: src/frontend.cpp:737
 #: src/ingameop.cpp:168
 msgid "Voice Volume"
 msgstr "Громкость голоса"
 
-#: src/frontend.cpp:743
+#: src/frontend.cpp:741
 #: src/ingameop.cpp:173
 msgid "FX Volume"
 msgstr "Громкость эффектов"
 
-#: src/frontend.cpp:747
+#: src/frontend.cpp:745
 #: src/ingameop.cpp:178
 msgid "Music Volume"
 msgstr "Громкость музыкы"
 
-#: src/frontend.cpp:754
+#: src/frontend.cpp:752
 msgid "AUDIO OPTIONS"
 msgstr "Настройки аудио"
 
-#: src/frontend.cpp:818
+#: src/frontend.cpp:816
 msgid "* Takes effect on game restart"
 msgstr "* Применится после перезагрузки игры"
 
-#: src/frontend.cpp:821
+#: src/frontend.cpp:819
 msgid "Graphics Mode*"
 msgstr "Графический режим*"
 
-#: src/frontend.cpp:829
-#: src/frontend.cpp:903
+#: src/frontend.cpp:827
+#: src/frontend.cpp:901
 msgid "Windowed"
 msgstr "В окне"
 
-#: src/frontend.cpp:833
+#: src/frontend.cpp:831
 msgid "Resolution*"
 msgstr "Разрешение*"
 
-#: src/frontend.cpp:838
+#: src/frontend.cpp:836
 msgid "Texture size"
 msgstr "Размер текстур"
 
-#: src/frontend.cpp:842
+#: src/frontend.cpp:840
 msgid "Vertical sync"
 msgstr "Вертикальная синхронизация"
 
-#: src/frontend.cpp:877
-#: src/frontend.cpp:938
+#: src/frontend.cpp:875
+#: src/frontend.cpp:936
 msgid "Unsupported"
 msgstr "Неподдерживается"
 
-#: src/frontend.cpp:882
+#: src/frontend.cpp:880
 msgid "VIDEO OPTIONS"
 msgstr "Настройки видео"
 
-#: src/frontend.cpp:1070
+#: src/frontend.cpp:1068
 msgid "Reverse Rotation"
 msgstr "Инверсия мыши"
 
-#: src/frontend.cpp:1081
+#: src/frontend.cpp:1079
 msgid "Trap Cursor"
 msgstr "Захват курсора"
 
-#: src/frontend.cpp:1094
+#: src/frontend.cpp:1092
 msgid "Switch Mouse Buttons"
 msgstr "Настройки Мыши"
 
-#: src/frontend.cpp:1106
+#: src/frontend.cpp:1104
 msgid "Rotate Screen"
 msgstr "Повернуть  экран"
 
-#: src/frontend.cpp:1109
-#: src/frontend.cpp:1182
+#: src/frontend.cpp:1107
+#: src/frontend.cpp:1180
 msgid "Middle Mouse"
 msgstr "Средняя кнопка Мыши"
 
-#: src/frontend.cpp:1113
-#: src/frontend.cpp:1177
+#: src/frontend.cpp:1111
+#: src/frontend.cpp:1175
 msgid "Right Mouse"
 msgstr "Правая кнопка Мыши"
 
-#: src/frontend.cpp:1117
+#: src/frontend.cpp:1115
 msgid "MOUSE OPTIONS"
 msgstr "Настройки мыши"
 
-#: src/frontend.cpp:1217
-#: src/frontend.cpp:1295
+#: src/frontend.cpp:1215
+#: src/frontend.cpp:1293
 msgid "Language"
 msgstr "Язык"
 
-#: src/frontend.cpp:1221
-#: src/frontend.cpp:1299
+#: src/frontend.cpp:1219
+#: src/frontend.cpp:1297
 msgid "Difficulty"
 msgstr "Сложность"
 
-#: src/frontend.cpp:1225
-#: src/frontend.cpp:1306
-#: src/frontend.cpp:1338
+#: src/frontend.cpp:1223
+#: src/frontend.cpp:1304
+#: src/frontend.cpp:1336
 #: src/multiint.cpp:214
 msgid "Easy"
 msgstr "Легкая"
 
-#: src/frontend.cpp:1228
-#: src/frontend.cpp:1309
-#: src/frontend.cpp:1330
+#: src/frontend.cpp:1226
+#: src/frontend.cpp:1307
+#: src/frontend.cpp:1328
 msgid "Normal"
 msgstr "Нормальная"
 
-#: src/frontend.cpp:1232
-#: src/frontend.cpp:1312
-#: src/frontend.cpp:1334
+#: src/frontend.cpp:1230
+#: src/frontend.cpp:1310
+#: src/frontend.cpp:1332
 #: src/multiint.cpp:214
 msgid "Hard"
 msgstr "Тяжелая"
 
-#: src/frontend.cpp:1237
-#: src/frontend.cpp:1300
+#: src/frontend.cpp:1235
+#: src/frontend.cpp:1298
 msgid "Scroll Speed"
 msgstr "Скорость прокрутки"
 
-#: src/frontend.cpp:1241
-#: src/frontend.cpp:1296
+#: src/frontend.cpp:1239
+#: src/frontend.cpp:1294
 #, fuzzy
 msgid "Unit Colour:"
 msgstr "Цвет юнита"
 
-#: src/frontend.cpp:1261
-#: src/frontend.cpp:1297
+#: src/frontend.cpp:1259
+#: src/frontend.cpp:1295
 #, fuzzy
 msgid "Campaign"
 msgstr "Новая кампания"
 
-#: src/frontend.cpp:1271
-#: src/frontend.cpp:1298
+#: src/frontend.cpp:1269
+#: src/frontend.cpp:1296
 #, fuzzy
 msgid "Skirmish/Multiplayer"
 msgstr "Многопользовательская игра"
 
-#: src/frontend.cpp:1277
-#: src/frontend.cpp:1293
+#: src/frontend.cpp:1275
+#: src/frontend.cpp:1291
 msgid "GAME OPTIONS"
 msgstr "НАСТРОЙКИ ИГРЫ"
 
-#: src/frontend.cpp:1438
+#: src/frontend.cpp:1436
 #: src/multiint.cpp:2538
 msgid "Mod: "
 msgstr "Мод:"
@@ -14535,27 +14535,27 @@ msgstr "Пинг"
 msgid "Players Still Joining"
 msgstr "Игроки еще соединяються"
 
-#: src/multijoin.cpp:273
+#: src/multijoin.cpp:264
 #, c-format
 msgid "%s has Left the Game"
 msgstr "%s покинул игру"
 
-#: src/multijoin.cpp:291
+#: src/multijoin.cpp:282
 #, c-format
 msgid "File transfer has been aborted for %d."
 msgstr "Передача файла была прервана на %d%%"
 
-#: src/multijoin.cpp:422
+#: src/multijoin.cpp:413
 #, c-format
 msgid "%s (%u) has an incompatible mod, and has been kicked."
 msgstr "%s (%u) имеет несовместимый мод и отключен."
 
-#: src/multijoin.cpp:463
+#: src/multijoin.cpp:454
 #, c-format
 msgid "%s is joining the game"
 msgstr "%s присоединяется к игре"
 
-#: src/multijoin.cpp:474
+#: src/multijoin.cpp:465
 msgid "Server message:"
 msgstr "Системное сообщение:"
 
@@ -14881,12 +14881,12 @@ msgstr "Общее время игры: %s"
 msgid "You cheated!"
 msgstr "Ты читер!"
 
-#: src/scriptfuncs.cpp:9378
+#: src/scriptfuncs.cpp:9373
 #, c-format
 msgid "Beacon received from %s!"
 msgstr "Маяк получен от %s!"
 
-#: src/scriptfuncs.cpp:9415
+#: src/scriptfuncs.cpp:9410
 #, c-format
 msgid "Beacon %d"
 msgstr "Маяк %d"
@@ -15009,10 +15009,6 @@ msgstr " - сборка %s"
 #, fuzzy, c-format
 msgid "Version %s-%s%s%s%s"
 msgstr "Версия %s%s%s%s"
-
-#, fuzzy
-#~ msgid "OpenGL 1.5/2.0 is not supported by your system. Some things may look wrong. Please upgrade your graphics driver/hardware, if possible."
-#~ msgstr "OpenGL 2.0 не поддерживается вашей системой. Некоторые вещи могут выглядить неправильно. Пожалуйста, обновите ваши графические драйвера/железо, если возможно"
 
 #~ msgid "Visit our official site: http://wz2100.net"
 #~ msgstr "Посетите наш оффициальный сайт: http://wz2100.net"
