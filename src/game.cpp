@@ -2554,7 +2554,7 @@ bool saveGame(char *aFileName, GAME_TYPE saveType)
 		goto error;
 	}
 
-	// Save labels
+	// Save some game info
 	CurrentFileName[fileExtension] = '\0';
 	strcat(CurrentFileName, "gameinfo.ini");
 	writeGameInfo(CurrentFileName);
@@ -4694,6 +4694,9 @@ static bool loadSaveStructure2(const char *pFileName, STRUCTURE **ppList)
 		debug(LOG_ERROR, "Could not open %s", pFileName);
 		return false;
 	}
+
+	freeAllFlagPositions();		//clear any flags put in during level loads
+
 	QStringList list = ini.childGroups();
 	for (int i = 0; i < list.size(); ++i)
 	{
@@ -4945,6 +4948,8 @@ static bool loadSaveStructure2(const char *pFileName, STRUCTURE **ppList)
 		}
 		ini.endGroup();
 	}
+	resetFactoryNumFlag();	//reset flags into the masks
+
 	return true;
 }
 
