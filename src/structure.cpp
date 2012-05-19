@@ -985,6 +985,8 @@ bool structSetManufacture(STRUCTURE *psStruct, DROID_TEMPLATE *psTempl, QUEUE_MO
 	                 (int)psStruct->pStructureType->type);
 	/* psTempl might be NULL if the build is being cancelled in the middle */
 
+	ASSERT_OR_RETURN(false, (validTemplateForFactory(psTempl, psStruct) && researchedTemplate(psTempl, psStruct->player)) || psStruct->player == scavengerPlayer() || !bMultiPlayer, "Wrong template for player %d factory, type %d.", psStruct->player, psStruct->pStructureType->type);
+
 	psFact = &psStruct->pFunctionality->factory;
 
 	if (mode == ModeQueue)
