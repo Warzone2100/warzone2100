@@ -2505,7 +2505,7 @@ static void NETallowJoining(void)
 
 					char buf[250] = {'\0'};
 					snprintf(buf, sizeof(buf), "Player %s has joined, IP is: %s", name, NetPlay.players[index].IPtextAddress);
-					debug(LOG_INFO, buf);
+					debug(LOG_INFO, "%s", buf);
 					NETlogEntry(buf, SYNC_FLAG, index);
 
 					debug(LOG_NET, "Player, %s, with index of %u has joined using socket %p", name, (unsigned int)index, connected_bsocket[index]);
@@ -3177,7 +3177,7 @@ struct SyncDebugIntList : public SyncDebugEntry
 		{
 			switch (numInts)
 			{
-				case  0: index += snprintf(buf + index, bufSize - index, string); break;
+				case  0: index += snprintf(buf + index, bufSize - index, "%s", string); break;
 				case  1: index += snprintf(buf + index, bufSize - index, string, ints[0]); break;
 				case  2: index += snprintf(buf + index, bufSize - index, string, ints[0], ints[1]); break;
 				case  3: index += snprintf(buf + index, bufSize - index, string, ints[0], ints[1], ints[2]); break;
