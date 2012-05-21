@@ -4089,7 +4089,16 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *p
 			char buf[250] = {'\0'};
 
 			// show "actual" ping time
-			ssprintf(buf, "%s%s: %03d", subText.empty()? "" : ", ", _("Ping"), ingame.PingTimes[j]);
+			ssprintf(buf, "%s%s: ", subText.empty()? "" : ", ", _("Ping"));
+			subText += buf;
+			if (ingame.PingTimes[j] < PING_LIMIT)
+			{
+				ssprintf(buf, "%03d", ingame.PingTimes[j]);
+			}
+			else
+			{
+				ssprintf(buf, "∞");  // Player has ping of somewhat questionable quality.
+			}
 			subText += buf;
 		}
 		iV_DrawText(name.c_str(), x + nameX, y + (subText.empty()? 22 : 18));
