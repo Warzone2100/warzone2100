@@ -1133,7 +1133,7 @@ static QScriptValue js_debug(QScriptContext *context, QScriptEngine *engine)
 		}
 		result.append(s);
 	}
-	qWarning(result.toAscii().constData());
+	qWarning("%s", result.toAscii().constData());
 	return QScriptValue();
 }
 

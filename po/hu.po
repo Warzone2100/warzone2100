@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Warzone 2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2012-05-12 20:44+0200\n"
+"POT-Creation-Date: 2012-05-19 16:27+0200\n"
 "PO-Revision-Date: 2012-05-07 15:24+0100\n"
 "Last-Translator: Mészáros Tamás <meszaros.tomi@hotmail.com>\n"
 "Language-Team: Magyar (Hungary) <meszaros.tomi@hotmail.com>\n"
@@ -11926,8 +11926,8 @@ msgid ""
 "Copyright © 1999-2004 Eidos Interactive.\n"
 "Copyright © 2005-2012 The Warzone 2100 Project"
 msgstr ""
-"Copyright © 1999-2004 Eidos Interactive.\n"
-"Copyright © 2005-2011 The Warzone 2100 Projekt"
+"Copyright © 1999-2004 Eidos Interaktív.\n"
+"Copyright © 2005-2011 A Warzone 2100 Projekt"
 
 #: po/custom/mac-infoplist.txt:2
 #: po/custom/warzone2100.desktop.txt:2
@@ -14879,62 +14879,62 @@ msgid_plural "%u units selected"
 msgstr[0] "%u egység kiválasztása"
 msgstr[1] "%u egységek kiválasztása"
 
-#: src/structure.cpp:2580
+#: src/structure.cpp:2582
 msgid "Can't build anymore units, Command Control Limit Reached - Production Halted"
 msgstr "Szabályozási értéket elérték - Termelés megállt"
 
-#: src/structure.cpp:5622
-#: src/structure.cpp:5647
+#: src/structure.cpp:5624
+#: src/structure.cpp:5649
 #, c-format
 msgid "%s - %u Unit assigned - Damage %3.0f%%"
 msgid_plural "%s - %u Units assigned - Damage %3.0f%%"
 msgstr[0] "%s - %u Egység felhatalmazása - Kár %3.0f%%"
 msgstr[1] "%s - %u Egységek felhatalmazása - Kár %3.0f%%"
 
-#: src/structure.cpp:5652
-#: src/structure.cpp:5720
-#: src/structure.cpp:5735
-#: src/structure.cpp:5749
+#: src/structure.cpp:5654
+#: src/structure.cpp:5722
+#: src/structure.cpp:5737
+#: src/structure.cpp:5751
 #, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - kár %3.0f%%"
 
-#: src/structure.cpp:5702
+#: src/structure.cpp:5704
 #, c-format
 msgid "%s - Connected %u of %u - Damage %3.0f%%"
 msgstr "%s - kapcsolódott %u of %u- kár %3.0f%%"
 
-#: src/structure.cpp:5865
-#: src/structure.cpp:5910
+#: src/structure.cpp:5867
+#: src/structure.cpp:5912
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Elektronikusan sérült"
 
-#: src/structure.cpp:6161
+#: src/structure.cpp:6163
 msgid "Electronic Reward - Visibility Report"
 msgstr "Elektronikus jutalom - Felderítési jelentés"
 
-#: src/structure.cpp:6201
+#: src/structure.cpp:6203
 msgid "Factory Reward - Propulsion"
 msgstr "Gyári jutalom - hajtómű"
 
-#: src/structure.cpp:6225
+#: src/structure.cpp:6227
 msgid "Factory Reward - Body"
 msgstr "Gyári jutalom - karosszéria"
 
-#: src/structure.cpp:6249
+#: src/structure.cpp:6251
 msgid "Factory Reward - Weapon"
 msgstr "Gyári jutalom - fegyver"
 
-#: src/structure.cpp:6258
+#: src/structure.cpp:6260
 msgid "Factory Reward - Nothing"
 msgstr "Gyári jutalom - nincs"
 
-#: src/structure.cpp:6286
+#: src/structure.cpp:6288
 msgid "Repair Facility Award - Repair"
 msgstr "Szervizüzem jutalom - javítás"
 
-#: src/structure.cpp:6293
+#: src/structure.cpp:6295
 msgid "Repair Facility Award - Nothing"
 msgstr "Szervizüzem jutalom - nincs"
 

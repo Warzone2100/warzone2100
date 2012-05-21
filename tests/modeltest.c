@@ -211,7 +211,7 @@ static void check_pie(const char *input)
 		{
 			if (x < 0)
 			{
-				fprintf(stderr, "Bad CONNNECTORS directive in %s, level %d\n", input, level);
+				fprintf(stderr, "Bad CONNECTORS directive in %s, level %d\n", input, level);
 				exit(EXIT_FAILURE);
 			}
 			for (j = 0; j < x; ++j)

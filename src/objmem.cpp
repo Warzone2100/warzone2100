@@ -627,7 +627,7 @@ bool createFlagPosition(FLAG_POSITION **ppsNew, UDWORD player)
 {
 	ASSERT( player<MAX_PLAYERS, "createFlagPosition: invalid player number" );
 
-	*ppsNew = (FLAG_POSITION *)malloc(sizeof(FLAG_POSITION));
+	*ppsNew = (FLAG_POSITION *)calloc(1, sizeof(FLAG_POSITION));
 	if (*ppsNew == NULL)
 	{
 		debug(LOG_ERROR, "Out of memory");

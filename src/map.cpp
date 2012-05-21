@@ -282,7 +282,7 @@ static void init_tileNames(int type)
 	debug(LOG_TERRAIN, "name: %s, with %d entries", name, numlines);
 	if (numlines == 0 || numlines > MAX_TERRAIN_TILES)
 	{
-		debug(LOG_FATAL, "Rockie_enum paramater is out of range (%d). Aborting.", numlines);
+		debug(LOG_FATAL, "Rockie_enum parameter is out of range (%d). Aborting.", numlines);
 		abort();
 	}
 
