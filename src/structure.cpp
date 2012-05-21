@@ -337,13 +337,21 @@ void initFactoryNumFlag(void)
 //called at start of missions
 void resetFactoryNumFlag(void)
 {
-	STRUCTURE*   psStruct;
-	unsigned int i;
-
-	for(i = 0; i < MAX_PLAYERS; i++)
+	for(unsigned int i = 0; i < MAX_PLAYERS; i++)
 	{
-		//look throu the list of structures to see which have been used
-		for (psStruct = apsStructLists[i]; psStruct != NULL; psStruct = psStruct->psNext)
+		for (int type = 0; type < NUM_FLAG_TYPES; type++)
+		{
+		if (factoryNumFlag[i][type].size())
+		{
+			// reset them all to false
+			for (int k = 0; k < MAX_FACTORY; k++)
+			{
+				factoryNumFlag[i][type][k] = false;
+			}
+		}
+		}
+		//look through the list of structures to see which have been used
+		for (STRUCTURE *psStruct = apsStructLists[i]; psStruct != NULL; psStruct = psStruct->psNext)
 		{
 			FLAG_TYPE type;
 			switch (psStruct->pStructureType->type)
@@ -351,12 +359,25 @@ void resetFactoryNumFlag(void)
 				case REF_FACTORY:        type = FACTORY_FLAG; break;
 				case REF_CYBORG_FACTORY: type = CYBORG_FLAG;  break;
 				case REF_VTOL_FACTORY:   type = VTOL_FLAG;    break;
+				case REF_REPAIR_FACILITY: type = REPAIR_FLAG; break;
 				default: continue;
 			}
-			FACTORY *psFactory = &psStruct->pFunctionality->factory;
-			if (psFactory->psAssemblyPoint != NULL && psFactory->psAssemblyPoint->factoryInc < factoryNumFlag[i][type].size())
+
+			if (type == REPAIR_FLAG)
 			{
-				factoryNumFlag[i][type][psFactory->psAssemblyPoint->factoryInc] = true;
+				REPAIR_FACILITY *psRepair = &psStruct->pFunctionality->repairFacility;
+				if (psRepair->psDeliveryPoint != NULL)
+				{
+					factoryNumFlag[i][type][psRepair->psDeliveryPoint->factoryInc] = true;
+				}
+			}
+			else
+			{
+				FACTORY *psFactory = &psStruct->pFunctionality->factory;
+				if (psFactory->psAssemblyPoint != NULL)
+				{
+					factoryNumFlag[i][type][psFactory->psAssemblyPoint->factoryInc] = true;
+				}
 			}
 		}
 	}
@@ -984,6 +1005,8 @@ bool structSetManufacture(STRUCTURE *psStruct, DROID_TEMPLATE *psTempl, QUEUE_MO
 	                 || psStruct->pStructureType->type == REF_VTOL_FACTORY, "Invalid structure type %d for factory",
 	                 (int)psStruct->pStructureType->type);
 	/* psTempl might be NULL if the build is being cancelled in the middle */
+
+	ASSERT_OR_RETURN(false, (validTemplateForFactory(psTempl, psStruct) && researchedTemplate(psTempl, psStruct->player)) || psStruct->player == scavengerPlayer() || !bMultiPlayer, "Wrong template for player %d factory, type %d.", psStruct->player, psStruct->pStructureType->type);
 
 	psFact = &psStruct->pFunctionality->factory;
 
@@ -5003,37 +5026,41 @@ void setAssemblyPoint(FLAG_POSITION *psAssemblyPoint, UDWORD x, UDWORD y,
 /*sets the factory Inc for the Assembly Point*/
 void setFlagPositionInc(FUNCTIONALITY* pFunctionality, UDWORD player, UBYTE factoryType)
 {
-	FACTORY			*psFactory;
-	REPAIR_FACILITY *psRepair;
-
 	ASSERT_OR_RETURN( , player < MAX_PLAYERS, "invalid player number");
+	if (!factoryNumFlag[player][factoryType].size())
+	{
+		// first time init for this factory type, set them all to false
+		for (int k = 0; k < MAX_FACTORY; k++)
+		{
+			factoryNumFlag[player][factoryType].push_back(false);
+		}
+	}
+
 	//find the first vacant slot
-	unsigned inc;
-	for (inc = 0; inc < factoryNumFlag[player][factoryType].size(); ++inc)
+	for (unsigned inc = 0; inc < factoryNumFlag[player][factoryType].size(); ++inc)
 	{
 		if (!factoryNumFlag[player][factoryType][inc])
 		{
-			break;  // Found an unused number.
+			if (factoryType == REPAIR_FLAG)
+			{
+				// this is a special case, there are no flag numbers for this "factory"
+				REPAIR_FACILITY *psRepair = &pFunctionality->repairFacility;
+				psRepair->psDeliveryPoint->factoryInc = 0;
+				psRepair->psDeliveryPoint->factoryType = factoryType;
+				// factoryNumFlag[player][factoryType][inc] = true;
+			}
+			else
+			{
+				FACTORY *psFactory = &pFunctionality->factory;
+				psFactory->psAssemblyPoint->factoryInc = inc;
+				psFactory->psAssemblyPoint->factoryType = factoryType;
+				factoryNumFlag[player][factoryType][inc] = true;
+			}
+			return;
 		}
 	}
-	if (inc == factoryNumFlag[player][factoryType].size())
-	{
-		factoryNumFlag[player][factoryType].push_back(false);  // Make a new number.
-	}
-
-	if (factoryType == REPAIR_FLAG)
-	{
-		psRepair = &pFunctionality->repairFacility;
-		psRepair->psDeliveryPoint->factoryInc = 0;
-		psRepair->psDeliveryPoint->factoryType = factoryType;
-	}
-	else
-	{
-		psFactory = &pFunctionality->factory;
-		psFactory->psAssemblyPoint->factoryInc = inc;
-		psFactory->psAssemblyPoint->factoryType = factoryType;
-		factoryNumFlag[player][factoryType][inc] = true;
-	}
+	debug(LOG_ERROR, "We have too many factories of type %d, player %d", factoryType, player);
+	ASSERT( false, "Can't set flag!");
 }
 
 

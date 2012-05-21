@@ -56,7 +56,7 @@ struct ARRAY_INDEXES
 
 /* A simple error reporting routine */
 
-extern void scrv_error(const char* fmt, ...) WZ_DECL_FORMAT(printf, 1, 2);
+extern void scrv_error(const char* fmt, ...);
 
 // Lookup a type
 extern bool scrvLookUpType(const char *pIdent, INTERP_TYPE *pType);
