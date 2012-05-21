@@ -291,10 +291,8 @@ unsigned int selNumSelected(unsigned int player)
 
 // ---------------------------------------------------------------------
 // sub-function - selects all units with same name as one passed in
-static unsigned int selNameSelect(char *droidName, unsigned int player, bool bOnScreen)
+static void selNameSelect(char *droidName, unsigned int player, bool bOnScreen)
 {
-	unsigned int count = 0;
-
 	for (DROID *psDroid = apsDroidLists[player]; psDroid; psDroid = psDroid->psNext)
 	{
 		if (!psDroid->selected)
@@ -304,30 +302,25 @@ static unsigned int selNameSelect(char *droidName, unsigned int player, bool bOn
 				if (!strcmp(droidName, psDroid->aName))
 				{
 					SelectDroid(psDroid);
-					count++;
 				}
 			}
 		}
 	}
-
-	return (count ? count + 1 : 0);
 }
 
 // ---------------------------------------------------------------------
 // Selects all units the same as the one(s) selected
 static unsigned int selSelectAllSame(unsigned int player, bool bOnScreen)
 {
-	unsigned int count = 0;
-
 	for (DROID *psDroid = apsDroidLists[player]; psDroid; psDroid = psDroid->psNext)
 	{
 		if (psDroid->selected)
 		{
-			count += selNameSelect(psDroid->aName, player, bOnScreen);
+			selNameSelect(psDroid->aName, player, bOnScreen);
 		}
 	}
 
-	return count;
+	return selNumSelected(player);
 }
 
 // ffs am
