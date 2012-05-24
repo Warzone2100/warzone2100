@@ -730,7 +730,10 @@ bool pickupArtefact(int toPlayer, int fromPlayer)
 			}
 		}
 
-		audio_QueueTrack(ID_SOUND_ARTIFACT_RECOVERED);
+		if (toPlayer == selectedPlayer)
+		{
+			audio_QueueTrack(ID_SOUND_ARTIFACT_RECOVERED);
+		}
 
 		return true;
 	}
