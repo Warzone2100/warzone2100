@@ -685,7 +685,7 @@ GAMECODE gameLoop(void)
 		ASSERT(deltaGraphicsTime == 0, "Shouldn't update graphics and game state at once.");
 	}
 
-	if (realTime - lastFlushTime < 400u)
+	if (realTime - lastFlushTime >= 400u)
 	{
 		lastFlushTime = realTime;
 		NETflush();  // Make sure that we aren't waiting too long to send data.

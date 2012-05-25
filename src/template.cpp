@@ -77,8 +77,8 @@ bool researchedTemplate(DROID_TEMPLATE *psCurr, int player)
 		break; // now proceed to normal droids...
 	}
 	// Note the ugly special case for commanders - their weapon is unavailable
-	// NOTE: besides being one ugly & hard to debug if statement, this breaks the tutorial level, so skip this whole thing during tutorial.
-	if (!bInTutorial && (apCompLists[player][COMP_BODY][psCurr->asParts[COMP_BODY]] != AVAILABLE
+	// NOTE: This is one ugly & hard to debug if statement.
+	if (apCompLists[player][COMP_BODY][psCurr->asParts[COMP_BODY]] != AVAILABLE
 	    || (psCurr->asParts[COMP_BRAIN] > 0 && apCompLists[player][COMP_BRAIN][psCurr->asParts[COMP_BRAIN]] != AVAILABLE)
 	    || apCompLists[player][COMP_PROPULSION][psCurr->asParts[COMP_PROPULSION]] != AVAILABLE
 	    || (psCurr->asParts[COMP_SENSOR] > 0 && apCompLists[player][COMP_SENSOR][psCurr->asParts[COMP_SENSOR]] != AVAILABLE)
@@ -86,7 +86,7 @@ bool researchedTemplate(DROID_TEMPLATE *psCurr, int player)
 	    || (psCurr->asParts[COMP_REPAIRUNIT] > 0 && apCompLists[player][COMP_REPAIRUNIT][psCurr->asParts[COMP_REPAIRUNIT]] != AVAILABLE)
 	    || (psCurr->asParts[COMP_CONSTRUCT] > 0 && apCompLists[player][COMP_CONSTRUCT][psCurr->asParts[COMP_CONSTRUCT]] != AVAILABLE)
 	    || (psCurr->asParts[COMP_BRAIN] == 0 && psCurr->numWeaps > 0 && apCompLists[player][COMP_WEAPON][psCurr->asWeaps[0]] != AVAILABLE)
-	    || (psCurr->numWeaps > 1 && apCompLists[player][COMP_WEAPON][psCurr->asWeaps[1]] != AVAILABLE)))
+	    || (psCurr->numWeaps > 1 && apCompLists[player][COMP_WEAPON][psCurr->asWeaps[1]] != AVAILABLE))
 	{
 		return false;
 	}

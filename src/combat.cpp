@@ -367,7 +367,7 @@ void counterBatteryFire(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget)
 		DROID		*psDroid;
 		SDWORD		sensorRange = 0;
 
-		if (psViewer->player != psTarget->player)
+		if (!aiCheckAlliances(psViewer->player, psTarget->player))
 		{
 			//ignore non target players' objects
 			continue;
