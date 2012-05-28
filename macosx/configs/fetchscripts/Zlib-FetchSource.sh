@@ -1,10 +1,10 @@
 #!/bin/sh
 
-DirectorY="zlib-1.2.6"
 OutDir="zlib"
-FileName="zlib-1.2.6.tar.gz"
-SourceDLP="http://zlib.net/zlib-1.2.6.tar.gz"
-MD5Sum="618e944d7c7cd6521551e30b32322f4a"
+DirectorY="${OutDir}-1.2.7"
+FileName="${DirectorY}.tar.gz"
+SourceDLP="http://zlib.net/${FileName}"
+MD5Sum="60df6a37c56e7c1366cca812414f7b85"
 
 configs/FetchSource.sh "${DirectorY}" "${OutDir}" "${FileName}" "${SourceDLP}" "${MD5Sum}"
 exit ${?}

@@ -94,14 +94,6 @@ extern UBYTE				bDisplayMultiJoiningStatus;	// draw load progress?
 // ////////////////////////////////////////////////////////////////////////////
 // defines
 
-// NOTE: MaxMsgSize is currently set to 16K.  When MAX_BYTESPERSEC has been reached (sent + recv!), then we do NOT
-//       do the sync code checks anymore(!), needless to say, this can and does cause issues.
-// FIXME: We should define this externally so people with dial-up modems can configure this
-// FIXME: Use possible compression on the packets.
-// NOTE: Remember, we (now) allow 450 units max * 7 (1 human, 6 AI possible for Host) to send to the other player.
-
-#define MAX_BYTESPERSEC			14336
-
 // Bitmask for client lobby
 
 #define NO_VTOLS  1
@@ -129,7 +121,7 @@ extern UBYTE				bDisplayMultiJoiningStatus;	// draw load progress?
 //#define PING_LO                               0                       // this ping is kickin'.
 #define PING_MED				200			// this ping is crawlin'
 #define PING_HI					400			// this ping just plain sucks :P
-#define PING_LIMIT				1000		// if ping is bigger than this, then worry and panic.
+#define PING_LIMIT                              4000                    // If ping is bigger than this, then worry and panic, and don't even try showing the ping.
 
 #define LEV_LOW					400			// how many points to allocate for res levels???
 #define LEV_MED					700

@@ -1840,7 +1840,7 @@ void actionUpdateDroid(DROID *psDroid)
 		}
 		//can be either a droid or a structure now - AB 7/10/98
 		ASSERT_OR_RETURN(, (order->psObj->type == OBJ_DROID || order->psObj->type == OBJ_STRUCTURE)
-				   && (order->psObj->player == psDroid->player), "DACTION_FIRESUPPORT: incorrect target type" );
+				   && aiCheckAlliances(order->psObj->player, psDroid->player), "DACTION_FIRESUPPORT: incorrect target type" );
 
 			//don't move VTOL's
 			// also don't move closer to sensor towers

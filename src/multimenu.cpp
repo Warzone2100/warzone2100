@@ -950,13 +950,13 @@ static void displayMultiPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset,
 		//c11:ping
 		if (!isSelectedPlayer && isHuman)
 		{
-			if (ingame.PingTimes[player] >= 2000)
+			if (ingame.PingTimes[player] < PING_LIMIT)
 			{
-				sprintf(str, "???");
+				sprintf(str, "%03d", ingame.PingTimes[player]);
 			}
 			else
 			{
-				sprintf(str, "%d", ingame.PingTimes[player]);
+				sprintf(str, "∞");
 			}
 			iV_DrawText(str, x + MULTIMENU_C11, y + MULTIMENU_FONT_OSET);
 		}
