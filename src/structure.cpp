@@ -3709,9 +3709,18 @@ void structureUpdate(STRUCTURE *psBuilding, bool mission)
 		}
 	}
 
-	if (psBuilding->status == SS_BEING_BUILT && psBuilding->currentBuildPts == 0 && psBuilding->buildRate == 0 && !structureHasModules(psBuilding))
+	if (psBuilding->status == SS_BEING_BUILT && psBuilding->buildRate == 0 && !structureHasModules(psBuilding))
 	{
-		removeStruct(psBuilding, true);  // If giving up on building something, remove the structure (and remove it from the power queue).
+		if (psBuilding->pStructureType->powerToBuild == 0)
+		{
+			// Building is free, and not currently being built, so deconstruct slowly over 1 minute.
+			psBuilding->currentBuildPts -= std::min<int>(psBuilding->currentBuildPts, gameTimeAdjustedAverage(psBuilding->pStructureType->buildPoints, 60));
+		}
+
+		if (psBuilding->currentBuildPts == 0)
+		{
+			removeStruct(psBuilding, true);  // If giving up on building something, remove the structure (and remove it from the power queue).
+		}
 	}
 	psBuilding->lastBuildRate = psBuilding->buildRate;
 	psBuilding->buildRate = 0;  // Reset to 0, each truck building us will add to our buildRate.
