@@ -36,6 +36,7 @@
 #include "multiplay.h"
 #include "lib/sound/audio.h"
 #include "lib/sound/audio_id.h"
+#include "console.h"
 
 /**This represents the current selected player, which is the client's player.*/
 extern UDWORD selectedPlayer;
