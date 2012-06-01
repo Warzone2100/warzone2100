@@ -34,6 +34,8 @@
 #include "group.h"
 #include "order.h"
 #include "multiplay.h"
+#include "lib/sound/audio.h"
+#include "lib/sound/audio_id.h"
 
 /**This represents the current selected player, which is the client's player.*/
 extern UDWORD selectedPlayer;
@@ -100,6 +102,11 @@ void cmdDroidAddDroid(DROID *psCommander, DROID *psDroid)
 		secondarySetState(psDroid, DSO_HALTTYPE, (SECONDARY_STATE)(psCommander->secondaryOrder & DSS_HALT_MASK), ModeImmediate);
 
 		orderDroidObj(psDroid, DORDER_GUARD, (BASE_OBJECT *)psCommander, ModeImmediate);
+	}
+	else
+	{
+		audio_PlayTrack( ID_SOUND_BUILD_FAIL );
+		addConsoleMessage(_("Commander needs a higher level to command more units"), DEFAULT_JUSTIFY,  SYSTEM_MESSAGE);
 	}
 }
 
