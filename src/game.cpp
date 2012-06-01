@@ -6130,9 +6130,16 @@ static bool writeMessageFile(const char *pFileName)
 				{
 					// message has object so store Object Id
 					BASE_OBJECT *psObj = (BASE_OBJECT*)psMessage->pViewData;
-					ini.setValue("obj/id", psObj->id);
-					ini.setValue("obj/player", psObj->player);
-					ini.setValue("obj/type", psObj->type);
+					if (psObj)
+					{
+						ini.setValue("obj/id", psObj->id);
+						ini.setValue("obj/player", psObj->player);
+						ini.setValue("obj/type", psObj->type);
+					}
+					else
+					{
+						ASSERT(false, "Message type has no object data to save ?");
+					}
 				}
 			}
 			else
