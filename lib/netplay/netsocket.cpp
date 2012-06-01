@@ -402,7 +402,7 @@ static int socketThreadFunction(void *)
 				}
 
 				// Write data.
-				// FIXME SOMEHOW AARGH This send() call can't block, but does anyway (at least sometimes, when someone quits, no idea why).
+				// FIXME SOMEHOW AAARGH This send() call can't block, but unless the socket is not set to blocking (setting the socket to nonblocking had better work, or else), does anyway (at least sometimes, when someone quits). Not reproducible except in public releases.
 				ssize_t ret = send(sock->fd[SOCK_CONNECTION], reinterpret_cast<char *>(&writeQueue[0]), writeQueue.size(), MSG_NOSIGNAL);
 				if (ret != SOCKET_ERROR)
 				{
@@ -1052,8 +1052,6 @@ Socket *socketAccept(Socket *sock)
 				continue;
 			}
 
-			socketBlockSIGPIPE(newConn, true);
-
 			conn = new Socket;
 			if (conn == NULL)
 			{
@@ -1061,6 +1059,16 @@ Socket *socketAccept(Socket *sock)
 				abort();
 				return NULL;
 			}
+
+			debug(LOG_NET, "setting socket (%p) blocking status (false).", conn);
+			if (!setSocketBlocking(newConn, false))
+			{
+				debug(LOG_NET, "Couldn't set socket (%p) blocking status (false).  Closing.", conn);
+				socketClose(conn);
+				return NULL;
+			}
+
+			socketBlockSIGPIPE(newConn, true);
 
 			// Mark all unused socket handles as invalid
 			for (j = 0; j < ARRAY_SIZE(conn->fd); ++j)
@@ -1196,14 +1204,6 @@ Socket *socketOpen(const SocketAddress *addr, unsigned timeout)
 			socketClose(conn);
 			return NULL;
 		}
-	}
-
-	debug(LOG_NET, "setting socket (%p) blocking status (true).", conn);
-	if (!setSocketBlocking(conn->fd[SOCK_CONNECTION], true))
-	{
-		debug(LOG_NET, "Failed to set socket %p blocking status (true).  Closing.", conn);
-		socketClose(conn);
-		return NULL;
 	}
 
 	return conn;
