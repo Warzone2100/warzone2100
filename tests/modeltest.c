@@ -228,6 +228,7 @@ static void check_pie(const char *input)
 			}
 		}
 	}
+	fclose(fp);
 }
 
 int main(int argc, char **argv)
