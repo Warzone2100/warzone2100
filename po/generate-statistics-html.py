@@ -18,7 +18,6 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 import glob
-import os
 import re
 import subprocess
 
@@ -58,7 +57,7 @@ for i in glob.glob('*.po'):
 	percents['untranslated'] = (0 if messages['untranslated'] == 0 else (float(messages['untranslated']) / messages['amount']));
 	percents['translated'] = (1 - percents['fuzzy'] - percents['untranslated']);
 
-	catalog = '%5d%s' % (((1 - percents['translated']) * 1000), i)
+	catalog = '%6d%s' % (((1 - percents['translated']) * 10000), i)
 
 	catalogs[catalog] = '<li class="' + ('translation_complete' if percents['translated'] >= 0.9 else ('translation_unfinished' if percents['translated'] >= 0.8 else 'translation_incomplete')) + '">\n<span class="messages_translated" style="width: ' + str(width) + 'px" title="' + output.rstrip()[0:-1] + '">\n'
 
