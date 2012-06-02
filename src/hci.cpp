@@ -1207,8 +1207,13 @@ static void intProcessOptions(UDWORD id)
 
 	if (id >= IDOPT_PLAYERSTART && id <= IDOPT_PLAYEREND)
 	{
+		int oldSelectedPlayer = selectedPlayer;
+
 		widgSetButtonState(psWScreen, IDOPT_PLAYERSTART + selectedPlayer, 0);
+		oldSelectedPlayer = selectedPlayer;
 		selectedPlayer = id - IDOPT_PLAYERSTART;
+		NetPlay.players[selectedPlayer].allocated = !NetPlay.players[selectedPlayer].allocated;
+		NetPlay.players[oldSelectedPlayer].allocated = !NetPlay.players[oldSelectedPlayer].allocated;
 		// Do not change realSelectedPlayer here, so game doesn't pause.
 		widgSetButtonState(psWScreen, IDOPT_PLAYERSTART + selectedPlayer, WBUT_LOCK);
 	}
