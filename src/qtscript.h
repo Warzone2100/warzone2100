@@ -25,6 +25,7 @@
 #include "droiddef.h"
 #include "structuredef.h"
 #include "researchdef.h"
+#include "featuredef.h"
 
 enum SCRIPT_TRIGGER_TYPE
 {
@@ -83,5 +84,6 @@ bool triggerEventStructureReady(STRUCTURE *psStruct);
 bool triggerEventSeen(BASE_OBJECT *psViewer, BASE_OBJECT *psSeen);
 bool triggerEventObjectTransfer(BASE_OBJECT *psObj, int from);
 bool triggerEventChat(int from, int to, const char *message);
+bool triggerEventPickup(FEATURE *psFeat, DROID *psDroid);
 
 #endif

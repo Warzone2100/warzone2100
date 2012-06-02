@@ -752,6 +752,23 @@ bool triggerEventDestroyed(BASE_OBJECT *psVictim)
 	return true;
 }
 
+//__ \subsection{eventPickup(feature, droid)}
+//__ An event that is run whenever a feature is picked up. It is called for
+//__ all players / scripts.
+//__ Careful passing the parameter object around, since it is about to vanish! (3.2+ only)
+bool triggerEventPickup(FEATURE *psFeat, DROID *psDroid)
+{
+	for (int i = 0; i < scripts.size(); ++i)
+	{
+		QScriptEngine *engine = scripts.at(i);
+		QScriptValueList args;
+		args += convFeature(psFeat, engine);
+		args += convDroid(psDroid, engine);
+		callFunction(engine, "eventPickup", args);
+	}
+	return true;
+}
+
 //__ \subsection{eventObjectSeen(viewer, seen)}
 //__ An event that is run whenever an object goes from not seen to seen.
 //__ First parameter is \emph{game object} doing the seeing, the next the game

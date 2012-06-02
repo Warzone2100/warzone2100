@@ -58,6 +58,7 @@
 #include "random.h"
 #include "mission.h"
 #include "drive.h"
+#include "qtscript.h"
 
 /* max and min vtol heights above terrain */
 #define	VTOL_HEIGHT_MIN				250
@@ -2318,9 +2319,11 @@ static void checkLocalFeatures(DROID *psDroid)
 			{
 				case FEAT_OIL_DRUM:
 					pickedUp = pickupOilDrum(psDroid->player, psObj->player);
+					triggerEventPickup((FEATURE *)psObj, psDroid);
 					break;
 				case FEAT_GEN_ARTE:
 					pickedUp = pickupArtefact(psDroid->player, psObj->player);
+					triggerEventPickup((FEATURE *)psObj, psDroid);
 					break;
 				default:
 					break;
