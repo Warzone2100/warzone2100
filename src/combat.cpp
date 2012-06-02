@@ -371,7 +371,7 @@ void counterBatteryFire(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget)
  */
 int32_t objDamage(BASE_OBJECT *psObj, unsigned damage, unsigned originalhp, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, bool isDamagePerSecond)
 {
-	int	actualDamage, armour, level = 1;
+	int	actualDamage, armour, level = 1, lastHit = psObj->timeLastHit;
 
 	// If the previous hit was by an EMP cannon and this one is not:
 	// don't reset the weapon class and hit time
@@ -388,7 +388,6 @@ int32_t objDamage(BASE_OBJECT *psObj, unsigned damage, unsigned originalhp, WEAP
 		return 0;
 	}
 
-
 	// apply game difficulty setting
 	damage = modifyForDifficultyLevel(damage, psObj->player != selectedPlayer);
 
@@ -403,7 +402,7 @@ int32_t objDamage(BASE_OBJECT *psObj, unsigned damage, unsigned originalhp, WEAP
 		bMultiMessages = bMultiPlayer;
 
 		clustObjectAttacked((BASE_OBJECT *)psObj);
-		triggerEventAttacked(psObj, g_pProjLastAttacker);
+		triggerEventAttacked(psObj, g_pProjLastAttacker, lastHit);
 
 		bMultiMessages = bMultiMessagesBackup;
 	}

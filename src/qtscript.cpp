@@ -43,6 +43,8 @@
 
 #include "qtscriptfuncs.h"
 
+#define ATTACK_THROTTLE 100
+
 enum timerType
 {
 	TIMER_REPEAT, TIMER_ONESHOT_READY, TIMER_ONESHOT_DONE
@@ -687,12 +689,17 @@ bool triggerEventStructureReady(STRUCTURE *psStruct)
 //__ \subsection{eventAttacked(victim, attacker)}
 //__ An event that is run when an object belonging to the script's controlling player is
 //__ attacked. The attacker parameter may be either a structure or a droid.
-bool triggerEventAttacked(BASE_OBJECT *psVictim, BASE_OBJECT *psAttacker)
+bool triggerEventAttacked(BASE_OBJECT *psVictim, BASE_OBJECT *psAttacker, int lastHit)
 {
 	if (!psAttacker)
 	{
 		// do not fire off this event if there is no attacker -- nothing do respond to
 		// (FIXME -- consider this carefully)
+		return false;
+	}
+	// throttle the event for performance
+	if (gameTime - psVictim->timeLastHit < ATTACK_THROTTLE)
+	{
 		return false;
 	}
 	for (int i = 0; i < scripts.size(); ++i)

@@ -5885,13 +5885,14 @@ bool electronicDamage(BASE_OBJECT *psTarget, UDWORD damage, UBYTE attackPlayer)
 		else
 		{
 			//store the time it was hit
+			int lastHit = psStructure->timeLastHit;
 			psStructure->timeLastHit = gameTime;
 
 			psStructure->lastHitWeapon = WSC_ELECTRONIC;
 
 			// tell the cluster system it has been attacked
 			clustObjectAttacked(psStructure);
-			triggerEventAttacked(psStructure, g_pProjLastAttacker);
+			triggerEventAttacked(psStructure, g_pProjLastAttacker, lastHit);
 
 			psStructure->resistance = (SWORD)(psStructure->resistance - damage);
 
@@ -5917,6 +5918,7 @@ bool electronicDamage(BASE_OBJECT *psTarget, UDWORD damage, UBYTE attackPlayer)
 	{
 		psDroid = (DROID *)psTarget;
 		bCompleted = false;
+		int lastHit = psDroid->timeLastHit;
 
 		//in multiPlayer cannot attack a Transporter with EW
 		if (bMultiPlayer)
@@ -5938,7 +5940,7 @@ bool electronicDamage(BASE_OBJECT *psTarget, UDWORD damage, UBYTE attackPlayer)
 		{
 			// tell the cluster system it has been attacked
 			clustObjectAttacked(psDroid);
-			triggerEventAttacked(psDroid, g_pProjLastAttacker);
+			triggerEventAttacked(psDroid, g_pProjLastAttacker, lastHit);
 
 			psDroid->resistance = (SWORD)(psDroid->resistance - damage);
 
