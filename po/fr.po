@@ -1,6 +1,3 @@
-# MoroSqua <Unknown>, 2008.
-# TuniX12 <sedra12@gmail.com>, 2008.
-# Cyril Brulebois <kibi@debian.org>, 2008.
 # Gesierfou <gesierfou@yahoo.fr>, 2009.
 # Gilles J. Séguin <segg2@videotron.ca>, 2011.
 # Amiral JCDG <freddys3@hotmail.fr>, 2012.
@@ -8,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2012-05-19 16:27+0200\n"
-"PO-Revision-Date: 2012-05-15 18:44+0100\n"
+"POT-Creation-Date: 2012-06-02 16:56+0200\n"
+"PO-Revision-Date: 2012-05-29 14:57+0100\n"
 "Last-Translator: AM <a@a.fr>\n"
 "Language-Team: French <warzone2100-project@lists.sourceforge.net>\n"
 "Language: fr\n"
@@ -4556,7 +4553,7 @@ msgstr "Roquettes anti-char"
 #: data/base/messages/resmessagesall.rmsg:137
 #: data/mp/messages/resmessagesall.rmsg:154
 msgid "High explosive shaped charge missile"
-msgstr "Missile hautement explosif à charge creuse"
+msgstr "Ogive à charge creuse hautement explosive"
 
 #: data/base/messages/resmessagesall.rmsg:148
 #: data/mp/messages/resmessagesall.rmsg:164
@@ -9377,7 +9374,7 @@ msgstr "Maintenant cliquez sur les unités que vous voulez construire dans le me
 
 #: data/base/script/text/tutorial3.slo:1031
 msgid "Please wait whilst the factory manufactures the new unit(s)"
-msgstr "Patientez le temps que l'usine produit la(les) nouvelle(s) unité(s)."
+msgstr "Patientez le temps que l'usine produise la(les) nouvelle(s) unité(s)."
 
 #: data/base/script/text/tutorial3.slo:1053
 msgid "Congratulations commander - you are ready for your first mission"
@@ -9479,7 +9476,7 @@ msgstr "Vos attaques contre nous ne resteront pas impunies !"
 #: data/base/sequenceaudio/cam1/cam1cnp.txt:5
 #: data/base/sequenceaudio/cam1/sub13np2.txt:5
 msgid "You are in contravention of the New Paradigm."
-msgstr ""
+msgstr "Vous n'êtes pas digne de l'indulgence du Nouveau Paradigme."
 
 #: data/base/sequenceaudio/cam1/cam1dnp.txt:4
 msgid "All attack groups commence attack on enemy."
@@ -9487,7 +9484,7 @@ msgstr "Tous les groupes de combat commencent l'assaut sur l'ennemi."
 
 #: data/base/sequenceaudio/cam1/cam1dnp.txt:5
 msgid "They are in contravention of the New Paradigm."
-msgstr ""
+msgstr "Ils ne sont pas dignes de l'indulgence du Nouveau Paradigme."
 
 #: data/base/sequenceaudio/cam1/cam1dnp.txt:7
 msgid "They must be eradicated."
@@ -10048,7 +10045,7 @@ msgstr "Vous avez cinq minutes pour accepter, et dans le cas contraire, vous ser
 
 #: data/base/sequenceaudio/cam3/cam3bg.txt:1
 msgid "Commander, we are under attack by NEXUS cyborgs and tanks. Please help as we...."
-msgstr "Commandant, mous subissons des attaques répétées de troupes de NEXUS. Aidez-nous car..."
+msgstr "Commandant, nous subissons des attaques répétées de troupes de NEXUS. Aidez-nous car..."
 
 #: data/base/sequenceaudio/cam3/cam3bg.txt:3
 msgid "...cannot hold out much longer.  Repeat, please help, we cannot hold out much longer...."
@@ -11075,11 +11072,11 @@ msgstr "Bombes à fragmentation"
 
 #: data/mp/messages/strings/names.txt:1020
 msgid "HE Bomb Shells"
-msgstr "Obus HE pour mortiers"
+msgstr "Bombes HE"
 
 #: data/mp/messages/strings/names.txt:1021
 msgid "Improved Bomb Warhead"
-msgstr "Ogive à charge creuse améliorée"
+msgstr "Charge explosive améliorée"
 
 #: data/mp/messages/strings/names.txt:1022
 msgid "Advanced Bomb Warhead"
@@ -12141,6 +12138,10 @@ msgstr "Désactiver la compression des textures"
 #: src/clparse.cpp:267
 msgid "Only use OpenGL 1.5"
 msgstr "Utiliser seulement OpenGL 1.5"
+
+#: src/cmddroid.cpp:110
+msgid "Commander needs a higher level to command more units"
+msgstr ""
 
 #: src/configuration.cpp:96
 msgid "My Game"
@@ -14465,12 +14466,12 @@ msgid "Click to take player slot %d"
 msgstr "Cliquez pour prendre la position %d"
 
 #: src/multiint.cpp:4000
-#: src/multiint.cpp:4193
+#: src/multiint.cpp:4202
 msgid "Open"
 msgstr "Ouvert"
 
 #: src/multiint.cpp:4000
-#: src/multiint.cpp:4194
+#: src/multiint.cpp:4203
 msgid "Closed"
 msgstr "Fermé"
 
@@ -14498,27 +14499,27 @@ msgstr "Ping"
 msgid "Players Still Joining"
 msgstr "Les joueurs sont en cours de connexion"
 
-#: src/multijoin.cpp:273
+#: src/multijoin.cpp:254
 #, c-format
 msgid "%s has Left the Game"
 msgstr "%s a quitté la partie"
 
-#: src/multijoin.cpp:291
+#: src/multijoin.cpp:288
 #, c-format
 msgid "File transfer has been aborted for %d."
 msgstr "Le transfert du fichier a été suspendu pour %d."
 
-#: src/multijoin.cpp:422
+#: src/multijoin.cpp:419
 #, c-format
 msgid "%s (%u) has an incompatible mod, and has been kicked."
 msgstr "%s (%u) a un mode incompatible et a été refusé."
 
-#: src/multijoin.cpp:463
+#: src/multijoin.cpp:460
 #, c-format
 msgid "%s is joining the game"
 msgstr "%s vient de rejoindre la partie"
 
-#: src/multijoin.cpp:474
+#: src/multijoin.cpp:471
 msgid "Server message:"
 msgstr "Message du serveur :"
 
@@ -14702,12 +14703,12 @@ msgstr "Marron"
 msgid "We can't do that! We must be a Cyborg unit to use a Cyborg Transport!"
 msgstr "Vous ne croyez pas qu'on est un peu lourd pour entrer là dedans Commandant ?"
 
-#: src/qtscriptfuncs.cpp:1580
+#: src/qtscriptfuncs.cpp:1582
 #: src/scriptfuncs.cpp:3263
 msgid "YOU ARE VICTORIOUS!"
 msgstr "VOUS AVEZ GAGNÉ !"
 
-#: src/qtscriptfuncs.cpp:1585
+#: src/qtscriptfuncs.cpp:1587
 #: src/scriptfuncs.cpp:3267
 msgid "YOU WERE DEFEATED!"
 msgstr "VOUS AVEZ PERDU !"
@@ -14853,86 +14854,86 @@ msgstr "Balise reçue de %s !"
 msgid "Beacon %d"
 msgstr "Balise %d"
 
-#: src/selection.cpp:422
-#: src/selection.cpp:502
+#: src/selection.cpp:415
+#: src/selection.cpp:495
 msgid "Unable to locate any repair units!"
 msgstr "Impossible de localiser la moindre unité de réparation !"
 
-#: src/selection.cpp:425
+#: src/selection.cpp:418
 msgid "Unable to locate any Trucks!"
 msgstr "Impossible de localiser le moindre véhicule de construction !"
 
-#: src/selection.cpp:428
+#: src/selection.cpp:421
 msgid "Unable to locate any Sensor Units!"
 msgstr "Impossible de localiser la moindre unité radar !"
 
-#: src/selection.cpp:431
+#: src/selection.cpp:424
 msgid "Unable to locate any Commanders!"
 msgstr "Impossible de localiser le moindre commandant !"
 
-#: src/selection.cpp:701
+#: src/selection.cpp:694
 #, c-format
 msgid "%u unit selected"
 msgid_plural "%u units selected"
 msgstr[0] "%u unité sélectionnée"
 msgstr[1] "%u unités sélectionnées"
 
-#: src/structure.cpp:2582
+#: src/structure.cpp:2603
 msgid "Can't build anymore units, Command Control Limit Reached - Production Halted"
 msgstr "Impossible de produire plus d'unités, la limite de capacité de contrôle est atteinte - Arrêt de la production"
 
-#: src/structure.cpp:5624
-#: src/structure.cpp:5649
+#: src/structure.cpp:5658
+#: src/structure.cpp:5683
 #, c-format
 msgid "%s - %u Unit assigned - Damage %3.0f%%"
 msgid_plural "%s - %u Units assigned - Damage %3.0f%%"
 msgstr[0] "%s - %u unité assignée - Endommagé(e) à %3.0f%%"
 msgstr[1] "%s - %u unités assignées - Endommagé(e) à %3.0f%%"
 
-#: src/structure.cpp:5654
-#: src/structure.cpp:5722
-#: src/structure.cpp:5737
-#: src/structure.cpp:5751
+#: src/structure.cpp:5688
+#: src/structure.cpp:5756
+#: src/structure.cpp:5771
+#: src/structure.cpp:5785
 #, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - Endommagé(e) à %3.0f%%"
 
-#: src/structure.cpp:5704
+#: src/structure.cpp:5738
 #, c-format
 msgid "%s - Connected %u of %u - Damage %3.0f%%"
 msgstr "%s - %u connexions établies sur %u - Endommagé à %3.0f%%"
 
-#: src/structure.cpp:5867
-#: src/structure.cpp:5912
+#: src/structure.cpp:5901
+#: src/structure.cpp:5946
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Électroniquement endommagé(e)"
 
-#: src/structure.cpp:6163
+#: src/structure.cpp:6197
 msgid "Electronic Reward - Visibility Report"
 msgstr "Récompense électronique - Rapport de visibilité"
 
-#: src/structure.cpp:6203
+#: src/structure.cpp:6237
 msgid "Factory Reward - Propulsion"
 msgstr "Butin d'usine - Propulsion"
 
-#: src/structure.cpp:6227
+#: src/structure.cpp:6261
 msgid "Factory Reward - Body"
 msgstr "Butin d'usine - Châssis"
 
-#: src/structure.cpp:6251
+#: src/structure.cpp:6285
 msgid "Factory Reward - Weapon"
 msgstr "Butin d'usine - Armes"
 
-#: src/structure.cpp:6260
+#: src/structure.cpp:6294
 msgid "Factory Reward - Nothing"
 msgstr "Butin d'usine - Rien"
 
-#: src/structure.cpp:6288
+#: src/structure.cpp:6322
 msgid "Repair Facility Award - Repair"
 msgstr "Butin d'atelier de réparation - Réparation"
 
-#: src/structure.cpp:6295
+#: src/structure.cpp:6329
 msgid "Repair Facility Award - Nothing"
 msgstr "Butin atelier de réparation - Rien"
 
