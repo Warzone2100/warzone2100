@@ -2224,11 +2224,10 @@ void	renderStructure(STRUCTURE *psStructure)
 	colour = getPlayerColour(psStructure->player);
 	animFrame = 0;
 
-	/* Power stations and factories have pulsing lights. Hack for fortresses, since they need team colour. */
-	if (!defensive && psStructure->sDisplay.imd->numFrames > 0 && !(bMultiPlayer && psStructure->pStructureType->type == REF_BLASTDOOR))
+	if (strImd->numFrames > 0)
 	{
 		// Calculate an animation frame
-		animFrame = getModularScaledGraphicsTime(STRUCTURE_ANIM_RATE*GAME_TICKS_PER_SEC, STRUCTURE_ANIM_RATE);
+		animFrame = getModularScaledGraphicsTime(STRUCTURE_ANIM_RATE*GAME_TICKS_PER_SEC, strImd->numFrames);
 	}
 
 	// -------------------------------------------------------------------------------
