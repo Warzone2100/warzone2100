@@ -10,7 +10,7 @@ function constructPersonality() {
 	this.MIN_OILERS = 2;		// the usual number of trucks used for oil hunting
 	this.MAX_OILERS = 3+random(2);		// the maximum number of trucks used for oil hunting
 	this.MIN_DEFENDERS = 4;		// the minimum number of tanks before producing more trucks than necessary
-	this.DEFENSIVENESS = 2+random(4);		// regulates chance of spending money on defensive structures
+	this.DEFENSIVENESS = 2;		// regulates chance of spending money on defensive structures
 	this.PEACE_TIME = 10;		// the amount of minutes for free scouting (regrouping disabled, no defenses built)
 
 	this.THIS_AI_MAKES_TANKS = true;
@@ -185,13 +185,13 @@ function constructPersonality() {
 		this.atWeapons = [ standardTankATNoobOne, standardTankATNoobTwo, ];
 		this.apCyborgStats = [ standardCyborgAPNoobOne, standardCyborgAPNoobTwo, ];
 		this.atCyborgStats = [ standardCyborgATNoobOne, standardCyborgATNoobTwo, standardCyborgATNoobThree];
-		this.buildOrder = standardBuildOrderFRCFR;
 		
 	} else {
 		
 		switch(subpersonality) {
 		case MR:
-			this.researchPathPrimary = [
+			this.buildOrderIdx = 2;
+			this.researchPathPrimary = [ // rffrc
 				"R-Vehicle-Prop-Halftracks",
 				"R-Wpn-MG2Mk1",
 				"R-Struc-PowerModuleMk1",
@@ -200,35 +200,62 @@ function constructPersonality() {
 			];
 			break;
 		case MC:
-			this.researchPathPrimary = [
-				"R-Wpn-MG-Damage02",
-				"R-Wpn-Cannon-Damage03",
-				"R-Vehicle-Prop-Halftracks",
-				"R-Struc-PowerModuleMk1",
-				"R-Wpn-MG3Mk1",
-			];
+			this.buildOrderIdx = random(2); 
+			if (this.buildOrderIdx == 0) {
+				this.researchPathPrimary = [ // frcfr
+					"R-Wpn-MG-Damage02",
+					"R-Wpn-Cannon-Damage03",
+					"R-Vehicle-Prop-Halftracks",
+					"R-Struc-PowerModuleMk1",
+					"R-Wpn-MG3Mk1",
+				];
+			} else {
+				this.researchPathPrimary = [ // rffcr
+					"R-Wpn-Cannon-Damage02",
+					"R-Vehicle-Prop-Halftracks",
+					"R-Struc-PowerModuleMk1",
+					"R-Struc-Factory-Cyborg",
+					"R-Wpn-MG3Mk1",
+				];
+			}
 			break;
 		case FR:
-			this.researchPathPrimary = [
+			this.buildOrderIdx = 2;
+			this.researchPathPrimary = [ // rffrc
 				"R-Wpn-MG2Mk1",
 				"R-Wpn-Rocket-Damage02",
 				"R-Struc-PowerModuleMk1",
 				"R-Vehicle-Prop-Halftracks",
+				"R-Wpn-Flamer01Mk1",
+				"R-Struc-Factory-Cyborg",
 			];
 			break;
 		case FC:
-			this.researchPathPrimary = [
-				"R-Wpn-MG2Mk1",
-				"R-Vehicle-Prop-Halftracks",
-			];
+			this.buildOrderIdx = 2 * random(2);
+			if (this.buildOrderIdx == 0) {
+				this.researchPathPrimary = [ // frcfr
+					"R-Wpn-MG2Mk1",
+					"R-Vehicle-Prop-Halftracks",
+					"R-Wpn-Flamer01Mk1",
+					"R-Struc-Factory-Cyborg",
+				];
+			} else {
+				this.researchPathPrimary = [ // rffrc
+					"R-Wpn-MG-Damage01",
+					"R-Struc-Factory-Cyborg",
+					"R-Wpn-Flamer01Mk1",
+					"R-Struc-PowerModuleMk1",
+				];
+			}
 			break;
 		case MF:
-			this.researchPathPrimary = [
+			this.researchPathPrimary = [ // any
 				"R-Wpn-MG3Mk1",
 				"R-Vehicle-Prop-Halftracks",
 				"R-Struc-PowerModuleMk1",
 			];
 			break;
+			this.buildOrderIdx = random(3);
 		}
 		
 		this.researchPathPrimary = this.researchPathPrimary.concat(["R-Vehicle-Body05","R-Struc-RprFac-Upgrade01",]);
@@ -397,11 +424,6 @@ function constructPersonality() {
 			break;
 		}
 		
-		if ( subpersonality == MC || subpersonality == FC || ((subpersonality == MF) && (random(2) == 1)) )
-			this.buildOrderIdx = 0;
-		else
-			this.buildOrderIdx = 1;
-		
 		/*if (typeof(chat)!="undefined") switch(subpersonality) {
 			case MC: chat(ALLIES, "Machineguns Cannons"); break;
 			case MR: chat(ALLIES, "Machineguns Rockets"); break;
@@ -416,9 +438,13 @@ function constructPersonality() {
 function buildOrder() {
 	if (difficulty == EASY) 
 		return standardBuildOrderNoob();
-	if (personality.buildOrderIdx==0)
-		return standardBuildOrderFRCFR();
-	else
-		return standardBuildOrderRFFRC();
+	switch(personality.buildOrderIdx) {
+		case 0: // rush
+			return standardBuildOrderFRCFR();
+		case 1: // average
+			return standardBuildOrderRFFCR();
+		case 2: // tech
+			return standardBuildOrderRFFRC();
+	}
 
 }

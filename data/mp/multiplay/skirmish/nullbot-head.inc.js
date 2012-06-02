@@ -283,7 +283,7 @@ const standardResearchPathIncendiary = [
 	"R-Struc-VTOLPad-Upgrade01",
 	"R-Defense-Howitzer-Incenediary",
 	"R-Wpn-Bomb04",
-	"R-Wpn-Howitzer-Damage06",
+	"R-Wpn-Howitzer-Damage03",
 	"R-Wpn-Howitzer-ROF04",
 	"R-Wpn-Howitzer-Accuracy03",
 	"R-Wpn-Bomb05",
@@ -447,6 +447,7 @@ const standardTankRocket = [
 	"Missile-A-T", // scourge
 	"Rocket-HvyA-T", // tk
 	"Rocket-LtA-T", // lancer
+	"Rocket-MRL", // mini-rocket arty, not really AT but still better than minipod in most cases
 	"Rocket-Pod", // minipod
 ];
 
@@ -644,7 +645,7 @@ function standardBuildOrderNoob() {
 
 function standardBuildOrderFRCFR() {
 	// Builds initial structures in the following order:
-	//     factory, lab, cc, factory, lab, generator, factory, generator, lab.
+	//     factory, lab, cc, factory, generator, lab, factory, generator, lab.
 	//     * Doesn't build 3rd lab until 10th minute of the game.
 	// Also make sure we have at least one generator before our initial money runs out
 	var labCount = enumStruct(me, lab).length;
@@ -660,14 +661,14 @@ function standardBuildOrderFRCFR() {
 		return buildBasicStructure(factory); 
 	if (labCount < 1 && isStructureAvailable(lab,me))
 		return buildBasicStructure(lab); 
-	if (isStructureAvailable(command,me))
+	if (commandCount < 1 && isStructureAvailable(command,me))
 		return buildBasicStructure(command); 
 	if (factoryCount < 2 && isStructureAvailable(factory,me))
 		return buildBasicStructure(factory,0); 
-	if (labCount < 2 && isStructureAvailable(lab,me))
-		return buildBasicStructure(lab,0); 
 	if ((genCount < 1) && isStructureAvailable(generator,me))
 		return buildBasicStructure(generator); 
+	if (labCount < 2 && isStructureAvailable(lab,me))
+		return buildBasicStructure(lab,0); 
 	if (factoryCount < 3 && isStructureAvailable(factory,me))
 		return buildBasicStructure(factory,0); 
 	if ((genCount < 2) && isStructureAvailable(generator,me))
@@ -704,7 +705,7 @@ function standardBuildOrderRFFRC() {
 		return buildBasicStructure(factory,0);
 	if (labCount < 2 && isStructureAvailable(lab,me))
 		return buildBasicStructure(lab,0);
-	if (isStructureAvailable(command,me))
+	if (commandCount < 1 && isStructureAvailable(command,me))
 		return buildBasicStructure(command,0);
 	if ((genCount < 2) && isStructureAvailable(generator,me))
 		return buildBasicStructure(generator);
@@ -713,6 +714,43 @@ function standardBuildOrderRFFRC() {
 	if (labCount < 3 && isStructureAvailable(lab,me) && (!earlyGame(10)&&!UNUSUAL_SITUATION))
 		return buildBasicStructure(lab,0);
 	if (borgCount < 2 && isStructureAvailable(borgfac,me) && RATE_TANK>0)
+		return buildBasicStructure(borgfac,0);
+	if (vtolCount < 1 && isStructureAvailable(vtolfac,me)) 
+		return buildBasicStructure(vtolfac,0);
+	return false;
+}
+
+function standardBuildOrderRFFCR() {
+	// Builds initial structures in the following order:
+	//     lab, factory, factory, command center, lab, generator, generator, factory, factory, lab
+	//     * Doesn't build 3rd lab until 15th minute of the game.
+	// Also make sure we have at least one generator before our initial money runs out
+	var labCount = enumStruct(me, lab).length;
+	var factoryCount = enumStruct(me, factory).length;
+	var commandCount = enumStruct(me, command).length;
+	var genCount = enumStruct(me, generator).length;
+	var derrickCount = enumStruct(me, derrick).length;
+	var borgCount = enumStruct(me, borgfac).length;
+	var vtolCount = enumStruct(me, vtolfac).length;
+	if (genCount < 2 && playerPower(me) < EXTREME_LOW_POWER && isStructureAvailable(generator,me))
+		return buildBasicStructure(generator);
+	if (labCount < 1 && isStructureAvailable(lab,me))
+		return buildBasicStructure(lab);
+	if (factoryCount < 1 && isStructureAvailable(factory,me))
+		return buildBasicStructure(factory);
+	if (factoryCount < 2 && isStructureAvailable(factory,me))
+		return buildBasicStructure(factory,0);
+	if (commandCount < 1 && isStructureAvailable(command,me))
+		return buildBasicStructure(command,0);
+	if (labCount < 2 && isStructureAvailable(lab,me))
+		return buildBasicStructure(lab,0);
+	if ((genCount < 2) && isStructureAvailable(generator,me))
+		return buildBasicStructure(generator);
+	if (factoryCount < 4 && isStructureAvailable(factory,me) && (!UNUSUAL_SITUATION))
+		return buildBasicStructure(factory,0);
+	if (labCount < 3 && isStructureAvailable(lab,me) && (!earlyGame(15)&&!UNUSUAL_SITUATION))
+		return buildBasicStructure(lab,0);
+	if (borgCount < 3 && isStructureAvailable(borgfac,me) && RATE_TANK>0)
 		return buildBasicStructure(borgfac,0);
 	if (vtolCount < 1 && isStructureAvailable(vtolfac,me)) 
 		return buildBasicStructure(vtolfac,0);
