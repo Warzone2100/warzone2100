@@ -134,10 +134,10 @@ int mapDownloadProgress;
  *  * Connect to the lobby server.
  *  * Join a server for a game.
  */
-static Socket* tcp_socket = NULL;		//socket used to talk to lobbyserver/ host machine
+static Socket* tcp_socket = NULL;               ///< Socket used to talk to a lobby server (hosts also seem to temporarily act as lobby servers while the client negotiates joining the game), or to listen for clients (if we're the host, in which case we use rs_socket (declaration hidden somewhere inside a function) to talk to the lobby server).
 
-static Socket *bsocket = NULL;                  //buffered socket (holds tcp_socket) (clients only?)
-static Socket *connected_bsocket[MAX_CONNECTED_PLAYERS] = { NULL };
+static Socket *bsocket = NULL;                  ///< Socket used to talk to the host (clients only). If bsocket != NULL, then tcp_socket == NULL.
+static Socket *connected_bsocket[MAX_CONNECTED_PLAYERS] = { NULL };  ///< Sockets used to talk to clients (host only).
 static SocketSet* socket_set = NULL;
 
 // UPnP
@@ -153,7 +153,7 @@ static char lanaddr[16];
 /**
  * Used for connections with clients.
  */
-static Socket* tmp_socket[MAX_TMP_SOCKETS] = { NULL };
+static Socket* tmp_socket[MAX_TMP_SOCKETS] = { NULL };  ///< Sockets used to talk to clients which have not yet been assigned a player number (host only).
 
 static SocketSet* tmp_socket_set = NULL;
 static int32_t          NetGameFlags[4] = { 0, 0, 0, 0 };
@@ -253,12 +253,11 @@ static size_t NET_fillBuffer(Socket **pSocket, SocketSet* socket_set, uint8_t *b
 			debug(LOG_ERROR, "Fatal connection error: buffer size of (%d) was too small, current byte count was %ld", bufsize, (long)size);
 			NETlogEntry("Fatal connection error: buffer size was too small!", SYNC_FLAG, selectedPlayer);
 		}
-		if (tcp_socket == socket)
+		if (bsocket == socket)
 		{
 			debug(LOG_NET, "Host connection was lost!");
 			NETlogEntry("Host connection was lost!", SYNC_FLAG, selectedPlayer);
-			tcp_socket = NULL;
-			bsocket = NULL;  // Because tcp_socket == bsocket...
+			bsocket = NULL;
 			//Game is pretty much over --should just end everything when HOST dies.
 			NetPlay.isHostAlive = false;
 			ingame.localJoiningInProgress = false;
@@ -1114,13 +1113,6 @@ int NETclose(void)
 	server_not_there = false;
 	allow_joining = false;
 
-	if(bsocket)
-	{	// need SocketSet_DelSocket() as well, socket_set or tmp_socket_set?
-		debug(LOG_NET, "Closing bsocket %p socket %p (tcp_socket=%p)", bsocket, bsocket, tcp_socket);
-		//socketClose(bsocket);
-		bsocket=NULL;
-	}
-
 	for(i = 0; i < MAX_CONNECTED_PLAYERS; i++)
 	{
 		if (connected_bsocket[i])
@@ -1157,6 +1149,10 @@ int NETclose(void)
 		{
 			SocketSet_DelSocket(socket_set, tcp_socket);
 		}
+		if (bsocket)
+		{
+			SocketSet_DelSocket(socket_set, bsocket);
+		}
 		debug(LOG_NET, "Freeing socket_set %p", socket_set);
 		deleteSocketSet(socket_set);
 		socket_set=NULL;
@@ -1166,6 +1162,12 @@ int NETclose(void)
 		debug(LOG_NET, "Closing tcp_socket %p", tcp_socket);
 		socketClose(tcp_socket);
 		tcp_socket=NULL;
+	}
+	if (bsocket)
+	{
+		debug(LOG_NET, "Closing bsocket %p", bsocket);
+		socketClose(bsocket);
+		bsocket = NULL;
 	}
 
 	return 0;
@@ -1276,12 +1278,12 @@ bool NETsend(NETQUEUE queue, NetMessage const *message)
 	else if (player == NetPlay.hostPlayer)
 	{
 		// We are a client, send directly to player, who happens to be the host.
-		if (tcp_socket)
+		if (bsocket)
 		{
 			uint8_t *rawData = message->rawDataDup();
 			ssize_t rawLen   = message->rawLen();
 			size_t compressedRawLen;
-			result = writeAll(tcp_socket, rawData, rawLen, &compressedRawLen);
+			result = writeAll(bsocket, rawData, rawLen, &compressedRawLen);
 			delete[] rawData;  // Done with the data.
 
 			if (result == rawLen)
@@ -1294,12 +1296,11 @@ bool NETsend(NETQUEUE queue, NetMessage const *message)
 			{
 				// Write error, most likely host disconnect.
 				debug(LOG_ERROR, "Failed to send message: %s", strSockError(getSockErr()));
-				debug(LOG_ERROR, "Host connection was broken, socket %p.", tcp_socket);
+				debug(LOG_ERROR, "Host connection was broken, socket %p.", bsocket);
 				NETlogEntry("write error--client disconnect.", SYNC_FLAG, player);
-				SocketSet_DelSocket(socket_set, tcp_socket);            // mark it invalid
-				socketClose(tcp_socket);
-				tcp_socket = NULL;
-				bsocket = NULL;  // Because tcp_socket == bsocket...
+				SocketSet_DelSocket(socket_set, bsocket);            // mark it invalid
+				socketClose(bsocket);
+				bsocket = NULL;
 				NetPlay.players[NetPlay.hostPlayer].heartbeat = false;	// mark host as dead
 				//Game is pretty much over --should just end everything when HOST dies.
 				NetPlay.isHostAlive = false;
@@ -1584,7 +1585,7 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 			NETend();
 
 			debug(LOG_NET, "Receiving NET_PLAYER_JOINED for player %u using socket %p",
-				(unsigned int)index, tcp_socket);
+				(unsigned int)index, bsocket);
 
 			MultiPlayerJoin(index);
 			netPlayersUpdated = true;
@@ -2891,6 +2892,7 @@ bool NETjoinGame(const char* host, uint32_t port, const char* playername)
 	NETinitQueue(NETnetQueue(NET_HOST_ONLY));
 	// NOTE: tcp_socket = bsocket now!
 	bsocket = tcp_socket;
+	tcp_socket = NULL;
 	socketBeginCompression(bsocket);
 
 	// Send a join message to the host
@@ -2937,7 +2939,7 @@ bool NETjoinGame(const char* host, uint32_t port, const char* playername)
 
 			selectedPlayer = index;
 			realSelectedPlayer = selectedPlayer;
-			debug(LOG_NET, "NET_ACCEPTED received. Accepted into the game - I'm player %u using bsocket %p, tcp_socket=%p", (unsigned int)index, bsocket, tcp_socket);
+			debug(LOG_NET, "NET_ACCEPTED received. Accepted into the game - I'm player %u using bsocket %p", (unsigned int)index, bsocket);
 			NetPlay.isHost = false;
 			NetPlay.isHostAlive = true;
 
