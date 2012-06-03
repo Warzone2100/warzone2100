@@ -2403,8 +2403,9 @@ static void NETallowJoining(void)
  						debug(LOG_ERROR, "freeing temp socket %p, couldn't create player!", tmp_socket[i]);
 
  						// Tell the player that we are full.
+						uint8_t rejected = ERROR_FULL;
 						NETbeginEncode(NETnetTmpQueue(i), NET_REJECTED);
-							NETuint8_t((uint8_t *)ERROR_FULL);
+							NETuint8_t(&rejected);
 						NETend();
 						NETflush();
 						NETpop(NETnetTmpQueue(i));
