@@ -2921,6 +2921,11 @@ bool NETjoinGame(const char* host, uint32_t port, const char* playername)
 			return false;
 		}
 
+		if (bsocket == NULL)
+		{
+			return false;  // Connection dropped.
+		}
+
 		if (!NETrecvNet(&queue, &type))
 		{
 			continue;
@@ -2968,6 +2973,7 @@ bool NETjoinGame(const char* host, uint32_t port, const char* playername)
 
 			setLobbyError((LOBBY_ERROR_TYPES)rejection);
 			NETclose();
+			return false;
 		}
 		else
 		{
