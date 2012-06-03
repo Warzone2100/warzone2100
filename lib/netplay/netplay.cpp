@@ -810,42 +810,23 @@ static bool NETrecvGAMESTRUCT(GAMESTRUCT* ourgamestruct)
 	ssize_t result = 0;
 
 	// Read a GAMESTRUCT from the connection
-	if (tcp_socket == NULL
-	 || socket_set == NULL
-	 || checkSockets(socket_set, NET_TIMEOUT_DELAY) <= 0
-	 || !socketReadReady(tcp_socket)
-	 || (result = readNoInt(tcp_socket, buf, sizeof(buf))) != sizeof(buf))
+	result = readAll(tcp_socket, buf, sizeof(buf), NET_TIMEOUT_DELAY);
+	bool failed = false;
+	if (result == SOCKET_ERROR)
 	{
-		unsigned int time = wzGetTicks();
-		if (result == SOCKET_ERROR)
-		{
-			debug(LOG_ERROR, "Server socket (%p) ecountered error: %s", tcp_socket, strSockError(getSockErr()));
-			SocketSet_DelSocket(socket_set, tcp_socket);		// mark it invalid
-			socketClose(tcp_socket);
-			tcp_socket = NULL;
-			return false;
-		}
-		i = result;
-		while (i < sizeof(buf) && wzGetTicks() < time + 2500)
-		{
-			result = readNoInt(tcp_socket, buf+i, sizeof(buf)-i);
-			if (result == SOCKET_ERROR
-			 || (result == 0 && socketReadDisconnected(tcp_socket)))
-			{
-				debug(LOG_ERROR, "Server socket (%p) ecountered error: %s", tcp_socket, strSockError(getSockErr()));
-				debug(LOG_ERROR, "GAMESTRUCT recv failed; received %u bytes out of %d", i, (int)sizeof(buf));
-				SocketSet_DelSocket(socket_set, tcp_socket);		// mark it invalid
-				socketClose(tcp_socket);
-				tcp_socket = NULL;
-				return false;
-			}
-			i += result;
-		}
-		if (i != sizeof(buf))
-		{
-			debug(LOG_ERROR, "GAMESTRUCT recv size mismatch; received %u bytes; expecting %d", i, (int)sizeof(buf));
-			return false;
-		}
+		debug(LOG_ERROR, "Lobby server connection error: %s", strSockError(getSockErr()));
+		failed = true;
+	}
+	else if ((unsigned)result != sizeof(buf))
+	{
+		debug(LOG_ERROR, "GAMESTRUCT recv timed out; received %d bytes; expecting %d", (int)result, (int)sizeof(buf));
+		failed = true;
+	}
+	if (failed)
+	{
+		SocketSet_DelSocket(socket_set, tcp_socket);  // mark it invalid
+		socketClose(tcp_socket);
+		tcp_socket = NULL;
 	}
 
 	// Now dump the data into the game struct
@@ -2758,9 +2739,7 @@ bool NETfindGame(void)
 	debug(LOG_NET, "Sending list cmd");
 
 	if (writeAll(tcp_socket, "list", sizeof("list")) != SOCKET_ERROR
-	 && checkSockets(socket_set, NET_TIMEOUT_DELAY) > 0
-	 && socketReadReady(tcp_socket)
-	 && (result = readNoInt(tcp_socket, &gamesavailable, sizeof(gamesavailable))))
+	 && (result = readAll(tcp_socket, &gamesavailable, sizeof(gamesavailable), NET_TIMEOUT_DELAY)) == sizeof(gamesavailable))
 	{
 		gamesavailable = MIN(ntohl(gamesavailable), ARRAY_SIZE(NetPlay.games));
 	}
