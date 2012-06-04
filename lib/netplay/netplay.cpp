@@ -1619,13 +1619,7 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 			{
 				debug(LOG_NET, "Broadcast leaving message to everyone else");
 				NETbeginEncode(NETbroadcastQueue(), NET_PLAYER_LEAVING);
-				{
-					bool host = NetPlay.isHost;
-					uint32_t id = index;
-
-					NETuint32_t(&id);
-					NETbool(&host);
-				}
+					NETuint32_t(&index);
 				NETend();
 			}
 
@@ -1927,11 +1921,9 @@ UBYTE NETrecvFile(NETQUEUE queue)
 				debug(LOG_NET, "We are leaving 'nicely' after a fatal error");
 				NETbeginEncode(NETnetQueue(NET_HOST_ONLY), NET_PLAYER_LEAVING);
 				{
-					bool host = NetPlay.isHost;
 					uint32_t id = selectedPlayer;
 
 					NETuint32_t(&id);
-					NETbool(&host);
 				}
 				NETend();
 
