@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2012-05-19 16:27+0200\n"
+"POT-Creation-Date: 2012-06-02 16:56+0200\n"
 "PO-Revision-Date: 2012-05-14 17:43+0200\n"
 "Last-Translator: Ayhan GÖRGÜLÜ <ayhangorgulu45@gmail.com>\n"
 "Language-Team: Turkey <warzone2100-project@lists.sourceforge.net>\n"
@@ -12172,6 +12172,10 @@ msgstr "Doku sıkıştırma devre dışı"
 msgid "Only use OpenGL 1.5"
 msgstr "Sadece OpenGL 1.5'i kullan"
 
+#: src/cmddroid.cpp:110
+msgid "Commander needs a higher level to command more units"
+msgstr ""
+
 #: src/configuration.cpp:96
 msgid "My Game"
 msgstr "Oyunum"
@@ -14503,12 +14507,12 @@ msgid "Click to take player slot %d"
 msgstr "Oyuncu slotu %d almak için tıkla "
 
 #: src/multiint.cpp:4000
-#: src/multiint.cpp:4193
+#: src/multiint.cpp:4202
 msgid "Open"
 msgstr "Aç"
 
 #: src/multiint.cpp:4000
-#: src/multiint.cpp:4194
+#: src/multiint.cpp:4203
 msgid "Closed"
 msgstr "Kapandı"
 
@@ -14536,27 +14540,27 @@ msgstr "Ping"
 msgid "Players Still Joining"
 msgstr "Oyuncular hâlâ katılmakta "
 
-#: src/multijoin.cpp:273
+#: src/multijoin.cpp:254
 #, c-format
 msgid "%s has Left the Game"
 msgstr "%s Oyundan çıktı"
 
-#: src/multijoin.cpp:291
+#: src/multijoin.cpp:288
 #, c-format
 msgid "File transfer has been aborted for %d."
 msgstr "Dosya transferi iptal %d "
 
-#: src/multijoin.cpp:422
+#: src/multijoin.cpp:419
 #, c-format
 msgid "%s (%u) has an incompatible mod, and has been kicked."
 msgstr "%s (%u) uyumsuz bir mod.Ve oyundan atıldı"
 
-#: src/multijoin.cpp:463
+#: src/multijoin.cpp:460
 #, c-format
 msgid "%s is joining the game"
 msgstr "%s Oyuna katılıyor"
 
-#: src/multijoin.cpp:474
+#: src/multijoin.cpp:471
 msgid "Server message:"
 msgstr "Sunucu iletisi:"
 
@@ -14740,12 +14744,12 @@ msgstr "Kahverengi"
 msgid "We can't do that! We must be a Cyborg unit to use a Cyborg Transport!"
 msgstr "Bunu Yapamıyoruz! Biz Sayborg Taşıma Gemisi'ni kullanmak için bir Sayborg birimine sahip olmalıyız!"
 
-#: src/qtscriptfuncs.cpp:1580
+#: src/qtscriptfuncs.cpp:1582
 #: src/scriptfuncs.cpp:3263
 msgid "YOU ARE VICTORIOUS!"
 msgstr "KAZANDIN!"
 
-#: src/qtscriptfuncs.cpp:1585
+#: src/qtscriptfuncs.cpp:1587
 #: src/scriptfuncs.cpp:3267
 msgid "YOU WERE DEFEATED!"
 msgstr "YENİLDİN!"
@@ -14891,88 +14895,88 @@ msgstr "Sinyal alındı: %s !"
 msgid "Beacon %d"
 msgstr "Sinyal %d"
 
-#: src/selection.cpp:422
-#: src/selection.cpp:502
+#: src/selection.cpp:415
+#: src/selection.cpp:495
 msgid "Unable to locate any repair units!"
 msgstr "Hiç tamir birimi bulunamadı!"
 
-#: src/selection.cpp:425
+#: src/selection.cpp:418
 msgid "Unable to locate any Trucks!"
 msgstr "Hiç Kamyon birimi bulunamadı!"
 
-#: src/selection.cpp:428
+#: src/selection.cpp:421
 msgid "Unable to locate any Sensor Units!"
 msgstr "Hiç Algılayıcı birimi bulunamadı!"
 
-#: src/selection.cpp:431
+#: src/selection.cpp:424
 msgid "Unable to locate any Commanders!"
 msgstr "Hiç Komutan birimi bulunamadı!"
 
-#: src/selection.cpp:701
+#: src/selection.cpp:694
 #, c-format
 msgid "%u unit selected"
 msgid_plural "%u units selected"
 msgstr[0] "%u Birim seçildi"
 msgstr[1] "%u Birimler seçildi"
 
-#: src/structure.cpp:2582
+#: src/structure.cpp:2603
 msgid "Can't build anymore units, Command Control Limit Reached - Production Halted"
 msgstr "Daha fazla birim inşa edilemiyor, Kontrol Limitine Ulaştın - Üretim Durduruldu"
 
 # nix Gruppe! -Kreuvf
-#: src/structure.cpp:5624
-#: src/structure.cpp:5649
+#: src/structure.cpp:5658
+#: src/structure.cpp:5683
 #, c-format
 msgid "%s - %u Unit assigned - Damage %3.0f%%"
 msgid_plural "%s - %u Units assigned - Damage %3.0f%%"
 msgstr[0] "%s - %u Birim atandı - Hasar %3.0f%%"
 msgstr[1] "%s - %u Birimler atandı - Hasar %3.0f%%"
 
-#: src/structure.cpp:5654
-#: src/structure.cpp:5722
-#: src/structure.cpp:5737
-#: src/structure.cpp:5751
+#: src/structure.cpp:5688
+#: src/structure.cpp:5756
+#: src/structure.cpp:5771
+#: src/structure.cpp:5785
 #, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - Hasar %3.0f%%"
 
-#: src/structure.cpp:5704
+#: src/structure.cpp:5738
 #, c-format
 msgid "%s - Connected %u of %u - Damage %3.0f%%"
 msgstr "%s - Bağlandı %u de %u - Hasar %3.0f%%"
 
-#: src/structure.cpp:5867
-#: src/structure.cpp:5912
+#: src/structure.cpp:5901
+#: src/structure.cpp:5946
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Elektronik Hasar Aldı"
 
 # Reward ist zwar nicht Beute, aber im Krieg erbeutet man eben Dinge -Kreuvf
-#: src/structure.cpp:6163
+#: src/structure.cpp:6197
 msgid "Electronic Reward - Visibility Report"
 msgstr "Elektronik Ödül - Görünebilirlik Raporu"
 
-#: src/structure.cpp:6203
+#: src/structure.cpp:6237
 msgid "Factory Reward - Propulsion"
 msgstr "Fabrika Ödülü - Yürütücü"
 
-#: src/structure.cpp:6227
+#: src/structure.cpp:6261
 msgid "Factory Reward - Body"
 msgstr "Fabrika Ödülü - Beden"
 
-#: src/structure.cpp:6251
+#: src/structure.cpp:6285
 msgid "Factory Reward - Weapon"
 msgstr "Fabrika Ödülü - Silah"
 
-#: src/structure.cpp:6260
+#: src/structure.cpp:6294
 msgid "Factory Reward - Nothing"
 msgstr "Fabrika Ödülü - Sıfır"
 
-#: src/structure.cpp:6288
+#: src/structure.cpp:6322
 msgid "Repair Facility Award - Repair"
 msgstr "Tamir Tesisi Ödülü - Tamir"
 
-#: src/structure.cpp:6295
+#: src/structure.cpp:6329
 msgid "Repair Facility Award - Nothing"
 msgstr "Tamir Tesisi Ödülü - Sıfır"
 
