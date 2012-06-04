@@ -305,16 +305,17 @@ NETQUEUE NETnetTmpQueue(unsigned tmpPlayer)
 	ret.isPair = true;
 	ret.index = tmpPlayer;
 	ret.queueType = QUEUE_TMP;
+	ret.exclude = NET_NO_EXCLUDE;
 	return ret;
 }
 
-NETQUEUE NETnetQueue(unsigned player)
+NETQUEUE NETnetQueue(unsigned player, unsigned excludePlayer)
 {
 	NETQUEUE ret;
 
 	if (player == NET_ALL_PLAYERS)
 	{
-		return NETbroadcastQueue();
+		return NETbroadcastQueue(excludePlayer);
 	}
 
 	ASSERT(player < MAX_CONNECTED_PLAYERS, "Huh?");
@@ -323,6 +324,7 @@ NETQUEUE NETnetQueue(unsigned player)
 	ret.isPair = true;
 	ret.index = player;
 	ret.queueType = QUEUE_NET;
+	ret.exclude = excludePlayer;
 	return ret;
 }
 
@@ -335,6 +337,7 @@ NETQUEUE NETgameQueue(unsigned player)
 	ret.isPair = false;
 	ret.index = player;
 	ret.queueType = QUEUE_GAME;
+	ret.exclude = NET_NO_EXCLUDE;
 	return ret;
 }
 
@@ -347,10 +350,11 @@ NETQUEUE NETgameQueueForced(unsigned player)
 	ret.isPair = false;
 	ret.index = player;
 	ret.queueType = QUEUE_GAME_FORCED;
+	ret.exclude = NET_NO_EXCLUDE;
 	return ret;
 }
 
-NETQUEUE NETbroadcastQueue()
+NETQUEUE NETbroadcastQueue(unsigned excludePlayer)
 {
 	NETQUEUE ret;
 	NetQueue *queue = broadcastQueue;
@@ -358,6 +362,7 @@ NETQUEUE NETbroadcastQueue()
 	ret.isPair = false;
 	ret.index = NET_ALL_PLAYERS;
 	ret.queueType = QUEUE_BROADCAST;
+	ret.exclude = excludePlayer;
 	return ret;
 }
 

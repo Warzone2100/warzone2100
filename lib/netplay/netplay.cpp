@@ -1247,7 +1247,7 @@ bool NETsend(NETQUEUE queue, NetMessage const *message)
 		for (player = firstPlayer; player <= lastPlayer; ++player)
 		{
 			// We are the host, send directly to player.
-			if (sockets[player] != NULL)
+			if (sockets[player] != NULL && player != queue.exclude)
 			{
 				uint8_t *rawData = message->rawDataDup();
 				ssize_t rawLen   = message->rawLen();
@@ -1393,7 +1393,7 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 			if ((receiver == selectedPlayer || receiver == NET_ALL_PLAYERS) && playerQueue.index == NetPlay.hostPlayer)
 			{
 				// Message was sent to us via the host.
-				if (sender != selectedPlayer)  // TODO Tell host not to send us our own broadcast messages.
+				if (sender != selectedPlayer)  // Make sure host didn't send us our own broadcast messages, which shouldn't happen anyway.
 				{
 					NETinsertMessageFromNet(NETnetQueue(sender), message);
 					NETlogPacket(message->type, message->rawLen(), true);
@@ -1432,7 +1432,7 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 				}
 
 				// We are the host, and player is asking us to send the message to receiver.
-				NETbeginEncode(NETnetQueue(receiver), NET_SEND_TO_PLAYER);
+				NETbeginEncode(NETnetQueue(receiver, sender), NET_SEND_TO_PLAYER);
 					NETuint8_t(&sender);
 					NETuint8_t(&receiver);
 					NETnetMessage(&message);
