@@ -1801,12 +1801,16 @@ checkMessages:
 
 bool NETrecvGame(NETQUEUE *queue, uint8_t *type)
 {
-	uint32_t current;
-	for (current = 0; current < MAX_PLAYERS; ++current)
+	for (unsigned current = 0; current < MAX_PLAYERS; ++current)
 	{
 		*queue = NETgameQueue(current);
-		while (!checkPlayerGameTime(current) && NETisMessageReady(*queue))  // Check for any messages that are scheduled to be read now.
+		while (!checkPlayerGameTime(current))  // Check for any messages that are scheduled to be read now.
 		{
+			if (!NETisMessageReady(*queue))
+			{
+				return false;  // Still waiting for messages from this player, and all players should process messages in the same order. Will have to freeze the game while waiting.
+			}
+
 			*type = NETgetMessage(*queue)->type;
 
 			if (*type == GAME_GAME_TIME)
@@ -1816,23 +1820,11 @@ bool NETrecvGame(NETQUEUE *queue, uint8_t *type)
 				continue;
 			}
 
-			if (!NETprocessSystemMessage(*queue, *type))
-			{
-				return true;  // We couldn't process the message, let the caller deal with it..
-			}
-			else
-			{
-				debug(LOG_ERROR, "There was a system message in a game queue...");
-			}
-		}
-
-		if (!checkPlayerGameTime(current))
-		{
-			break;  // Still waiting for messages from this player, and all players should process messages in the same order.
+			return true;  // Have a message ready to read now.
 		}
 	}
 
-	return false;
+	return false;  // No messages sceduled to be read yet. Game can continue.
 }
 
 // ////////////////////////////////////////////////////////////////////////
