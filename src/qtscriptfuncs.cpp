@@ -760,6 +760,7 @@ static QScriptValue js_pursueResearch(QScriptContext *context, QScriptEngine *en
 	// Go down the requirements list for the desired tech
 	QList<RESEARCH *> reslist;
 	RESEARCH *cur = psResearch;
+	int iterations = 0;  // Only used to assert we're not stuck in the loop.
 	while (cur)
 	{
 		if (researchAvailable(cur->index, player))
@@ -802,6 +803,7 @@ static QScriptValue js_pursueResearch(QScriptContext *context, QScriptEngine *en
 		{
 			cur = reslist.takeFirst(); // retrieve options from the stack
 		}
+		ASSERT_OR_RETURN(QScriptValue(false), ++iterations < asResearch.size()*100 || !cur, "Possible cyclic dependencies in prerequisites, possibly of research \"%s\".", cur->pName);
 	}
 	debug(LOG_SCRIPT, "No research topic found for %s(%d)", objInfo(psStruct), psStruct->id);
 	return QScriptValue(false); // none found

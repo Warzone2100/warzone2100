@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: WZ2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2012-05-03 18:57+0200\n"
+"POT-Creation-Date: 2012-06-02 16:56+0200\n"
 "PO-Revision-Date: \n"
 "Last-Translator: metalwarrior95 <metalwarrioroften@gmail.com>\n"
 "Language-Team: \n"
@@ -12186,6 +12186,10 @@ msgstr ""
 msgid "Only use OpenGL 1.5"
 msgstr ""
 
+#: src/cmddroid.cpp:110
+msgid "Commander needs a higher level to command more units"
+msgstr ""
+
 #: src/configuration.cpp:96
 #, fuzzy
 msgid "My Game"
@@ -12516,358 +12520,358 @@ msgstr "Vježbe"
 
 #. TRANSLATORS: "Return", in this context, means "return to previous screen/menu"
 #: src/frontend.cpp:190
-#: src/frontend.cpp:251
-#: src/frontend.cpp:390
-#: src/frontend.cpp:462
-#: src/frontend.cpp:603
-#: src/frontend.cpp:749
-#: src/frontend.cpp:883
-#: src/frontend.cpp:1118
-#: src/frontend.cpp:1272
-#: src/frontend.cpp:1292
+#: src/frontend.cpp:252
+#: src/frontend.cpp:392
+#: src/frontend.cpp:464
+#: src/frontend.cpp:605
+#: src/frontend.cpp:751
+#: src/frontend.cpp:885
+#: src/frontend.cpp:1120
+#: src/frontend.cpp:1274
+#: src/frontend.cpp:1294
 msgctxt "menu"
 msgid "Return"
 msgstr "Natrag"
 
-#: src/frontend.cpp:244
+#: src/frontend.cpp:245
 msgid "New Campaign"
 msgstr "Nova Kampanja"
 
-#: src/frontend.cpp:245
+#: src/frontend.cpp:246
 msgid "Start Skirmish Game"
 msgstr "Početi Trening Igru"
 
-#: src/frontend.cpp:246
+#: src/frontend.cpp:247
 msgid "Challenges"
 msgstr "Izazovi"
 
-#: src/frontend.cpp:247
+#: src/frontend.cpp:248
 #, fuzzy
 msgid "Load Campaign Game"
 msgstr "Učitaj Igru"
 
-#: src/frontend.cpp:248
+#: src/frontend.cpp:249
 #, fuzzy
 msgid "Load Skirmish Game"
 msgstr "Početi Trening Igru"
 
-#: src/frontend.cpp:250
+#: src/frontend.cpp:251
 msgid "SINGLE PLAYER"
 msgstr "JEDAN IGRAČ"
 
-#: src/frontend.cpp:326
+#: src/frontend.cpp:327
 #: src/ingameop.cpp:504
 #, fuzzy
 msgid "Load Campaign Saved Game"
 msgstr "Učitaj Sačuvanu Igru"
 
-#: src/frontend.cpp:331
+#: src/frontend.cpp:333
 #: src/ingameop.cpp:508
 #, fuzzy
 msgid "Load Skirmish Saved Game"
 msgstr "Učitaj Sačuvanu Igru"
 
-#: src/frontend.cpp:385
+#: src/frontend.cpp:387
 msgid "MULTI PLAYER"
 msgstr "VIŠE IGRAČA"
 
-#: src/frontend.cpp:387
+#: src/frontend.cpp:389
 msgid "Host Game"
 msgstr "Napravi Igru"
 
-#: src/frontend.cpp:388
+#: src/frontend.cpp:390
 msgid "Join Game"
 msgstr "Pridruži se Igri"
 
-#: src/frontend.cpp:393
+#: src/frontend.cpp:395
 msgid "TCP PORT 2100 MUST BE OPENED IN YOUR FIREWALL / ROUTER TO HOST GAMES!"
 msgstr ""
 
-#: src/frontend.cpp:455
+#: src/frontend.cpp:457
 #: src/multiint.cpp:1400
 msgid "OPTIONS"
 msgstr "POSTAVKE"
 
-#: src/frontend.cpp:456
+#: src/frontend.cpp:458
 msgid "Game Options"
 msgstr "Opcije Igre"
 
-#: src/frontend.cpp:457
+#: src/frontend.cpp:459
 msgid "Graphics Options"
 msgstr "Grafičke opcije"
 
-#: src/frontend.cpp:458
+#: src/frontend.cpp:460
 msgid "Video Options"
 msgstr "Video opcije"
 
-#: src/frontend.cpp:459
+#: src/frontend.cpp:461
 #: src/ingameop.cpp:268
 msgid "Audio Options"
 msgstr "Audio opcije"
 
-#: src/frontend.cpp:460
+#: src/frontend.cpp:462
 msgid "Mouse Options"
 msgstr "Opcije miša"
 
-#: src/frontend.cpp:461
+#: src/frontend.cpp:463
 msgid "Key Mappings"
 msgstr ""
 
-#: src/frontend.cpp:521
+#: src/frontend.cpp:523
 msgid "Video Playback"
 msgstr "Video reprodukcija"
 
-#: src/frontend.cpp:525
-#: src/frontend.cpp:677
+#: src/frontend.cpp:527
+#: src/frontend.cpp:679
 msgid "1X"
 msgstr ""
 
-#: src/frontend.cpp:529
-#: src/frontend.cpp:667
+#: src/frontend.cpp:531
+#: src/frontend.cpp:669
 msgid "2X"
 msgstr ""
 
-#: src/frontend.cpp:533
-#: src/frontend.cpp:672
-#: src/frontend.cpp:823
-#: src/frontend.cpp:906
+#: src/frontend.cpp:535
+#: src/frontend.cpp:674
+#: src/frontend.cpp:825
+#: src/frontend.cpp:908
 msgid "Fullscreen"
 msgstr "Puni Ekran"
 
-#: src/frontend.cpp:542
+#: src/frontend.cpp:544
 msgid "Scanlines"
 msgstr ""
 
-#: src/frontend.cpp:546
-#: src/frontend.cpp:567
-#: src/frontend.cpp:575
-#: src/frontend.cpp:591
-#: src/frontend.cpp:621
-#: src/frontend.cpp:639
-#: src/frontend.cpp:657
-#: src/frontend.cpp:702
-#: src/frontend.cpp:848
-#: src/frontend.cpp:858
-#: src/frontend.cpp:930
-#: src/frontend.cpp:991
-#: src/frontend.cpp:1034
-#: src/frontend.cpp:1075
-#: src/frontend.cpp:1087
-#: src/frontend.cpp:1099
-#: src/frontend.cpp:1134
-#: src/frontend.cpp:1147
-#: src/frontend.cpp:1161
+#: src/frontend.cpp:548
+#: src/frontend.cpp:569
+#: src/frontend.cpp:577
+#: src/frontend.cpp:593
+#: src/frontend.cpp:623
+#: src/frontend.cpp:641
+#: src/frontend.cpp:659
+#: src/frontend.cpp:704
+#: src/frontend.cpp:850
+#: src/frontend.cpp:860
+#: src/frontend.cpp:932
+#: src/frontend.cpp:993
+#: src/frontend.cpp:1036
+#: src/frontend.cpp:1077
+#: src/frontend.cpp:1089
+#: src/frontend.cpp:1101
+#: src/frontend.cpp:1136
+#: src/frontend.cpp:1149
+#: src/frontend.cpp:1163
 msgid "Off"
 msgstr "Isključeno"
 
-#: src/frontend.cpp:550
-#: src/frontend.cpp:692
+#: src/frontend.cpp:552
+#: src/frontend.cpp:694
 msgid "50%"
 msgstr ""
 
-#: src/frontend.cpp:554
-#: src/frontend.cpp:697
+#: src/frontend.cpp:556
+#: src/frontend.cpp:699
 #: src/multiplay.cpp:1999
 msgid "Black"
 msgstr "Crni"
 
-#: src/frontend.cpp:560
+#: src/frontend.cpp:562
 msgid "Screen Shake"
 msgstr "Drmati Zaslon"
 
-#: src/frontend.cpp:563
-#: src/frontend.cpp:579
-#: src/frontend.cpp:587
-#: src/frontend.cpp:626
-#: src/frontend.cpp:644
-#: src/frontend.cpp:653
-#: src/frontend.cpp:844
-#: src/frontend.cpp:996
-#: src/frontend.cpp:1030
-#: src/frontend.cpp:1071
-#: src/frontend.cpp:1083
-#: src/frontend.cpp:1095
-#: src/frontend.cpp:1139
-#: src/frontend.cpp:1152
-#: src/frontend.cpp:1166
+#: src/frontend.cpp:565
+#: src/frontend.cpp:581
+#: src/frontend.cpp:589
+#: src/frontend.cpp:628
+#: src/frontend.cpp:646
+#: src/frontend.cpp:655
+#: src/frontend.cpp:846
+#: src/frontend.cpp:998
+#: src/frontend.cpp:1032
+#: src/frontend.cpp:1073
+#: src/frontend.cpp:1085
+#: src/frontend.cpp:1097
+#: src/frontend.cpp:1141
+#: src/frontend.cpp:1154
+#: src/frontend.cpp:1168
 msgid "On"
 msgstr "Uključeno"
 
-#: src/frontend.cpp:572
+#: src/frontend.cpp:574
 msgid "Subtitles"
 msgstr "Titlovi"
 
-#: src/frontend.cpp:584
+#: src/frontend.cpp:586
 msgid "Shadows"
 msgstr "Sjene"
 
-#: src/frontend.cpp:595
-#: src/frontend.cpp:1299
+#: src/frontend.cpp:597
+#: src/frontend.cpp:1301
 msgid "Radar"
 msgstr ""
 
-#: src/frontend.cpp:596
-#: src/frontend.cpp:709
-#: src/frontend.cpp:1300
+#: src/frontend.cpp:598
+#: src/frontend.cpp:711
+#: src/frontend.cpp:1302
 #, fuzzy
 msgid "Rotating"
 msgstr "Zakreni u desno"
 
-#: src/frontend.cpp:596
-#: src/frontend.cpp:709
-#: src/frontend.cpp:1300
+#: src/frontend.cpp:598
+#: src/frontend.cpp:711
+#: src/frontend.cpp:1302
 msgid "Fixed"
 msgstr ""
 
-#: src/frontend.cpp:599
+#: src/frontend.cpp:601
 msgid "GRAPHICS OPTIONS"
 msgstr "OPCIJE SLIKE"
 
-#: src/frontend.cpp:737
+#: src/frontend.cpp:739
 #: src/ingameop.cpp:168
 msgid "Voice Volume"
 msgstr "Glasovna jačina"
 
-#: src/frontend.cpp:741
+#: src/frontend.cpp:743
 #: src/ingameop.cpp:173
 msgid "FX Volume"
 msgstr "FX jačina"
 
-#: src/frontend.cpp:745
+#: src/frontend.cpp:747
 #: src/ingameop.cpp:178
 msgid "Music Volume"
 msgstr "Jačina glazbe"
 
-#: src/frontend.cpp:752
+#: src/frontend.cpp:754
 msgid "AUDIO OPTIONS"
 msgstr "OPCIJE ZVUKA"
 
-#: src/frontend.cpp:816
+#: src/frontend.cpp:818
 msgid "* Takes effect on game restart"
 msgstr "* Radi tek nakon ponovnog pokretanja igre"
 
-#: src/frontend.cpp:819
+#: src/frontend.cpp:821
 msgid "Graphics Mode*"
 msgstr "Grafički način"
 
-#: src/frontend.cpp:827
-#: src/frontend.cpp:901
+#: src/frontend.cpp:829
+#: src/frontend.cpp:903
 msgid "Windowed"
 msgstr "U prozoru"
 
-#: src/frontend.cpp:831
+#: src/frontend.cpp:833
 msgid "Resolution*"
 msgstr "Rezolucija*"
 
-#: src/frontend.cpp:836
+#: src/frontend.cpp:838
 msgid "Texture size"
 msgstr "Veličina tekstura*"
 
-#: src/frontend.cpp:840
+#: src/frontend.cpp:842
 #, fuzzy
 msgid "Vertical sync"
 msgstr "Verikarno osvježivanje*"
 
-#: src/frontend.cpp:875
-#: src/frontend.cpp:936
+#: src/frontend.cpp:877
+#: src/frontend.cpp:938
 #, fuzzy
 msgid "Unsupported"
 msgstr "Transport"
 
-#: src/frontend.cpp:880
+#: src/frontend.cpp:882
 msgid "VIDEO OPTIONS"
 msgstr "OPCIJE VIDEA"
 
-#: src/frontend.cpp:1068
+#: src/frontend.cpp:1070
 msgid "Reverse Rotation"
 msgstr "Obrni rotaciju"
 
-#: src/frontend.cpp:1079
+#: src/frontend.cpp:1081
 msgid "Trap Cursor"
 msgstr "Zarobi Kursor"
 
-#: src/frontend.cpp:1092
+#: src/frontend.cpp:1094
 msgid "Switch Mouse Buttons"
 msgstr "Zamjeni Tipke Miša"
 
-#: src/frontend.cpp:1104
+#: src/frontend.cpp:1106
 #, fuzzy
 msgid "Rotate Screen"
 msgstr "Zakreni u lijevo"
 
-#: src/frontend.cpp:1107
-#: src/frontend.cpp:1180
+#: src/frontend.cpp:1109
+#: src/frontend.cpp:1182
 msgid "Middle Mouse"
 msgstr ""
 
-#: src/frontend.cpp:1111
-#: src/frontend.cpp:1175
+#: src/frontend.cpp:1113
+#: src/frontend.cpp:1177
 msgid "Right Mouse"
 msgstr ""
 
-#: src/frontend.cpp:1115
+#: src/frontend.cpp:1117
 msgid "MOUSE OPTIONS"
 msgstr "OPCIJE MIŠA"
 
-#: src/frontend.cpp:1215
-#: src/frontend.cpp:1293
+#: src/frontend.cpp:1217
+#: src/frontend.cpp:1295
 msgid "Language"
 msgstr "Jezik"
 
-#: src/frontend.cpp:1219
-#: src/frontend.cpp:1297
+#: src/frontend.cpp:1221
+#: src/frontend.cpp:1299
 msgid "Difficulty"
 msgstr "Težina"
 
-#: src/frontend.cpp:1223
-#: src/frontend.cpp:1304
-#: src/frontend.cpp:1336
+#: src/frontend.cpp:1225
+#: src/frontend.cpp:1306
+#: src/frontend.cpp:1338
 #: src/multiint.cpp:214
 msgid "Easy"
 msgstr "Lagano"
 
-#: src/frontend.cpp:1226
-#: src/frontend.cpp:1307
-#: src/frontend.cpp:1328
+#: src/frontend.cpp:1228
+#: src/frontend.cpp:1309
+#: src/frontend.cpp:1330
 msgid "Normal"
 msgstr "Srednje"
 
-#: src/frontend.cpp:1230
-#: src/frontend.cpp:1310
-#: src/frontend.cpp:1332
+#: src/frontend.cpp:1232
+#: src/frontend.cpp:1312
+#: src/frontend.cpp:1334
 #: src/multiint.cpp:214
 msgid "Hard"
 msgstr "Teško"
 
-#: src/frontend.cpp:1235
-#: src/frontend.cpp:1298
+#: src/frontend.cpp:1237
+#: src/frontend.cpp:1300
 msgid "Scroll Speed"
 msgstr "Brzina "
 
-#: src/frontend.cpp:1239
-#: src/frontend.cpp:1294
+#: src/frontend.cpp:1241
+#: src/frontend.cpp:1296
 #, fuzzy
 msgid "Unit Colour:"
 msgstr "Boja"
 
-#: src/frontend.cpp:1259
-#: src/frontend.cpp:1295
+#: src/frontend.cpp:1261
+#: src/frontend.cpp:1297
 #, fuzzy
 msgid "Campaign"
 msgstr "Nova Kampanja"
 
-#: src/frontend.cpp:1269
-#: src/frontend.cpp:1296
+#: src/frontend.cpp:1271
+#: src/frontend.cpp:1298
 #, fuzzy
 msgid "Skirmish/Multiplayer"
 msgstr "Više Igrača"
 
-#: src/frontend.cpp:1275
-#: src/frontend.cpp:1291
+#: src/frontend.cpp:1277
+#: src/frontend.cpp:1293
 msgid "GAME OPTIONS"
 msgstr "OPCIJE IGRE"
 
-#: src/frontend.cpp:1436
+#: src/frontend.cpp:1438
 #: src/multiint.cpp:2538
 msgid "Mod: "
 msgstr "Modifikacija:"
@@ -14573,12 +14577,12 @@ msgid "Click to take player slot %d"
 msgstr "Karta prikazuje boje igrača"
 
 #: src/multiint.cpp:4000
-#: src/multiint.cpp:4193
+#: src/multiint.cpp:4202
 msgid "Open"
 msgstr ""
 
 #: src/multiint.cpp:4000
-#: src/multiint.cpp:4194
+#: src/multiint.cpp:4203
 #, fuzzy
 msgid "Closed"
 msgstr "Zatvori"
@@ -14607,27 +14611,27 @@ msgstr "Ping"
 msgid "Players Still Joining"
 msgstr "Igrači se još pridružuju"
 
-#: src/multijoin.cpp:264
+#: src/multijoin.cpp:254
 #, c-format
 msgid "%s has Left the Game"
 msgstr "%s je izašao iz igre"
 
-#: src/multijoin.cpp:282
+#: src/multijoin.cpp:288
 #, c-format
 msgid "File transfer has been aborted for %d."
 msgstr "Slanje podaaka je zaustavljeno za %d."
 
-#: src/multijoin.cpp:413
+#: src/multijoin.cpp:419
 #, c-format
 msgid "%s (%u) has an incompatible mod, and has been kicked."
 msgstr "%s (%u) ima nedopušten mod  i izbačen je."
 
-#: src/multijoin.cpp:454
+#: src/multijoin.cpp:460
 #, fuzzy, c-format
 msgid "%s is joining the game"
 msgstr "%s se pridužio igri."
 
-#: src/multijoin.cpp:465
+#: src/multijoin.cpp:471
 #, fuzzy
 msgid "Server message:"
 msgstr "Poruka servera:"
@@ -14812,12 +14816,12 @@ msgstr ""
 msgid "We can't do that! We must be a Cyborg unit to use a Cyborg Transport!"
 msgstr ""
 
-#: src/qtscriptfuncs.cpp:1580
+#: src/qtscriptfuncs.cpp:1582
 #: src/scriptfuncs.cpp:3263
 msgid "YOU ARE VICTORIOUS!"
 msgstr "POBJEDIO SI!!!"
 
-#: src/qtscriptfuncs.cpp:1585
+#: src/qtscriptfuncs.cpp:1587
 #: src/scriptfuncs.cpp:3267
 msgid "YOU WERE DEFEATED!"
 msgstr "IZGUBIO SI!!!"
@@ -14953,97 +14957,97 @@ msgstr "Trajanje igre - %s"
 msgid "You cheated!"
 msgstr "Koristio si šifre!!!"
 
-#: src/scriptfuncs.cpp:9373
+#: src/scriptfuncs.cpp:9378
 #, c-format
 msgid "Beacon received from %s!"
 msgstr "%s je postavio zastavicu."
 
-#: src/scriptfuncs.cpp:9410
+#: src/scriptfuncs.cpp:9415
 #, c-format
 msgid "Beacon %d"
 msgstr "Zastavica %d"
 
-#: src/selection.cpp:422
-#: src/selection.cpp:502
+#: src/selection.cpp:415
+#: src/selection.cpp:495
 msgid "Unable to locate any repair units!"
 msgstr "Nemaš ni jednog mobilnog servisera."
 
-#: src/selection.cpp:425
+#: src/selection.cpp:418
 msgid "Unable to locate any Trucks!"
 msgstr "Nemaš ni jedan kamion."
 
-#: src/selection.cpp:428
+#: src/selection.cpp:421
 msgid "Unable to locate any Sensor Units!"
 msgstr "Nemaš ni jedan mobilni radar."
 
-#: src/selection.cpp:431
+#: src/selection.cpp:424
 msgid "Unable to locate any Commanders!"
 msgstr "Nemaš ni jednog kapetana."
 
-#: src/selection.cpp:701
+#: src/selection.cpp:694
 #, fuzzy, c-format
 msgid "%u unit selected"
 msgid_plural "%u units selected"
 msgstr[0] "%u jedinica odabrana"
 msgstr[1] "%u jedinica odabrana"
 
-#: src/structure.cpp:2580
+#: src/structure.cpp:2603
 #, fuzzy
 msgid "Can't build anymore units, Command Control Limit Reached - Production Halted"
 msgstr "Limit prijeđen - Proizvodnja prekinuta"
 
-#: src/structure.cpp:5622
-#: src/structure.cpp:5647
+#: src/structure.cpp:5658
+#: src/structure.cpp:5683
 #, fuzzy, c-format
 msgid "%s - %u Unit assigned - Damage %3.0f%%"
 msgid_plural "%s - %u Units assigned - Damage %3.0f%%"
 msgstr[0] "%s - %u jedinica dodjeljena"
 msgstr[1] "%s - %u jedinica dodjeljena"
 
-#: src/structure.cpp:5652
-#: src/structure.cpp:5720
-#: src/structure.cpp:5735
-#: src/structure.cpp:5749
+#: src/structure.cpp:5688
+#: src/structure.cpp:5756
+#: src/structure.cpp:5771
+#: src/structure.cpp:5785
 #, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - Oštečen %3.0f%%"
 
-#: src/structure.cpp:5702
+#: src/structure.cpp:5738
 #, fuzzy, c-format
 msgid "%s - Connected %u of %u - Damage %3.0f%%"
 msgstr "%s - Povezan s %u od %u"
 
-#: src/structure.cpp:5865
-#: src/structure.cpp:5910
+#: src/structure.cpp:5901
+#: src/structure.cpp:5946
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Hakirano"
 
-#: src/structure.cpp:6161
+#: src/structure.cpp:6197
 msgid "Electronic Reward - Visibility Report"
 msgstr "Nagrada hakirane građevine - Vizualno izvješče"
 
-#: src/structure.cpp:6201
+#: src/structure.cpp:6237
 msgid "Factory Reward - Propulsion"
 msgstr "Nagrada hakirane Tvornice - Vozni sustav"
 
-#: src/structure.cpp:6225
+#: src/structure.cpp:6261
 msgid "Factory Reward - Body"
 msgstr "Nagrada hakirane Tvornice - Trup"
 
-#: src/structure.cpp:6249
+#: src/structure.cpp:6285
 msgid "Factory Reward - Weapon"
 msgstr "Nagrada hakirane Tvornice - Oružje"
 
-#: src/structure.cpp:6258
+#: src/structure.cpp:6294
 msgid "Factory Reward - Nothing"
 msgstr "Nagrada hakirane Tvornice - Ništa"
 
-#: src/structure.cpp:6286
+#: src/structure.cpp:6322
 msgid "Repair Facility Award - Repair"
 msgstr "Nagrada hakiranog Servisa - Poravak"
 
-#: src/structure.cpp:6293
+#: src/structure.cpp:6329
 msgid "Repair Facility Award - Nothing"
 msgstr "Nagrada hakiranog Servisa - Ništa"
 

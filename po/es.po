@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2012-05-12 20:44+0200\n"
+"POT-Creation-Date: 2012-06-02 16:56+0200\n"
 "PO-Revision-Date: 2012-05-12 20:02+0100\n"
 "Last-Translator: Daniel Vijande <nsa_server@hotmail.com>\n"
 "Language-Team: Spanish <warzone2100-project@lists.sourceforge.net>\n"
@@ -12147,6 +12147,10 @@ msgstr "Desactivar compresión de texturas"
 msgid "Only use OpenGL 1.5"
 msgstr "Usar sólamente OpenGL 1.5"
 
+#: src/cmddroid.cpp:110
+msgid "Commander needs a higher level to command more units"
+msgstr ""
+
 #: src/configuration.cpp:96
 msgid "My Game"
 msgstr "Mi Partida"
@@ -14470,12 +14474,12 @@ msgid "Click to take player slot %d"
 msgstr "Click para cambiar la posición del jugador %d"
 
 #: src/multiint.cpp:4000
-#: src/multiint.cpp:4193
+#: src/multiint.cpp:4202
 msgid "Open"
 msgstr "Abrir"
 
 #: src/multiint.cpp:4000
-#: src/multiint.cpp:4194
+#: src/multiint.cpp:4203
 msgid "Closed"
 msgstr "Cerrado"
 
@@ -14503,27 +14507,27 @@ msgstr "Ping"
 msgid "Players Still Joining"
 msgstr "Todavia hay jugadores uniéndose"
 
-#: src/multijoin.cpp:273
+#: src/multijoin.cpp:254
 #, c-format
 msgid "%s has Left the Game"
 msgstr "%s abandonó la partida"
 
-#: src/multijoin.cpp:291
+#: src/multijoin.cpp:288
 #, c-format
 msgid "File transfer has been aborted for %d."
 msgstr "La transferencia de archivos ha sido abortada para %d"
 
-#: src/multijoin.cpp:422
+#: src/multijoin.cpp:419
 #, c-format
 msgid "%s (%u) has an incompatible mod, and has been kicked."
 msgstr "%s (%u) tiene un mod incompatible, y ha sido expulsado"
 
-#: src/multijoin.cpp:463
+#: src/multijoin.cpp:460
 #, c-format
 msgid "%s is joining the game"
 msgstr "%s se está uniendo a la partida"
 
-#: src/multijoin.cpp:474
+#: src/multijoin.cpp:471
 msgid "Server message:"
 msgstr "Mensaje del servidor:"
 
@@ -14707,12 +14711,12 @@ msgstr "Marrón"
 msgid "We can't do that! We must be a Cyborg unit to use a Cyborg Transport!"
 msgstr "¡No podemos hacer eso! ¡Debemos ser una unidad cyborg para usar el transporte Cyborg!"
 
-#: src/qtscriptfuncs.cpp:1580
+#: src/qtscriptfuncs.cpp:1582
 #: src/scriptfuncs.cpp:3263
 msgid "YOU ARE VICTORIOUS!"
 msgstr "¡ERES EL GANADOR!"
 
-#: src/qtscriptfuncs.cpp:1585
+#: src/qtscriptfuncs.cpp:1587
 #: src/scriptfuncs.cpp:3267
 msgid "YOU WERE DEFEATED!"
 msgstr "¡HAS SIDO DERROTADO!"
@@ -14858,86 +14862,86 @@ msgstr "¡Baliza recibida de %s!"
 msgid "Beacon %d"
 msgstr "Baliza %d"
 
-#: src/selection.cpp:422
-#: src/selection.cpp:502
+#: src/selection.cpp:415
+#: src/selection.cpp:495
 msgid "Unable to locate any repair units!"
 msgstr "¡Imposible localizar ninguna unidad de reparación!"
 
-#: src/selection.cpp:425
+#: src/selection.cpp:418
 msgid "Unable to locate any Trucks!"
 msgstr "¡Imposible localizar ningún Camión!"
 
-#: src/selection.cpp:428
+#: src/selection.cpp:421
 msgid "Unable to locate any Sensor Units!"
 msgstr "¡Imposible localizar ninguna unidad de sensores!"
 
-#: src/selection.cpp:431
+#: src/selection.cpp:424
 msgid "Unable to locate any Commanders!"
 msgstr "¡Imposible localizar ningún Comandante!"
 
-#: src/selection.cpp:701
+#: src/selection.cpp:694
 #, c-format
 msgid "%u unit selected"
 msgid_plural "%u units selected"
 msgstr[0] "%u unidad seleccionada"
 msgstr[1] "%u unidades seleccionadas"
 
-#: src/structure.cpp:2580
+#: src/structure.cpp:2603
 msgid "Can't build anymore units, Command Control Limit Reached - Production Halted"
 msgstr "Alcanzado Límite de Control de Unidades - Producción Detenida"
 
-#: src/structure.cpp:5622
-#: src/structure.cpp:5647
+#: src/structure.cpp:5658
+#: src/structure.cpp:5683
 #, c-format
 msgid "%s - %u Unit assigned - Damage %3.0f%%"
 msgid_plural "%s - %u Units assigned - Damage %3.0f%%"
 msgstr[0] "%s - %u Unidad asignada - Daño %3.0f%%"
 msgstr[1] "%s - %u Unidades asignadas - Daño %3.0f%%"
 
-#: src/structure.cpp:5652
-#: src/structure.cpp:5720
-#: src/structure.cpp:5735
-#: src/structure.cpp:5749
+#: src/structure.cpp:5688
+#: src/structure.cpp:5756
+#: src/structure.cpp:5771
+#: src/structure.cpp:5785
 #, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - Daño %3.0f%%"
 
-#: src/structure.cpp:5702
+#: src/structure.cpp:5738
 #, c-format
 msgid "%s - Connected %u of %u - Damage %3.0f%%"
 msgstr "%s - Conectado %u de %u - Daño %3.0f%%"
 
-#: src/structure.cpp:5865
-#: src/structure.cpp:5910
+#: src/structure.cpp:5901
+#: src/structure.cpp:5946
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Dañado Electrónicamente"
 
-#: src/structure.cpp:6161
+#: src/structure.cpp:6197
 msgid "Electronic Reward - Visibility Report"
 msgstr "Recompensa de Electrónica - Informe de Visibilidad"
 
-#: src/structure.cpp:6201
+#: src/structure.cpp:6237
 msgid "Factory Reward - Propulsion"
 msgstr "Recompensa de Fábrica - Propulsión"
 
-#: src/structure.cpp:6225
+#: src/structure.cpp:6261
 msgid "Factory Reward - Body"
 msgstr "Recompensa de Fábrica - Carrocería"
 
-#: src/structure.cpp:6249
+#: src/structure.cpp:6285
 msgid "Factory Reward - Weapon"
 msgstr "Recompensa de Fábrica - Arma"
 
-#: src/structure.cpp:6258
+#: src/structure.cpp:6294
 msgid "Factory Reward - Nothing"
 msgstr "Recompensa de Fábrica - Nada"
 
-#: src/structure.cpp:6286
+#: src/structure.cpp:6322
 msgid "Repair Facility Award - Repair"
 msgstr "Premio de Instalación de Reparación - Reparación"
 
-#: src/structure.cpp:6293
+#: src/structure.cpp:6329
 msgid "Repair Facility Award - Nothing"
 msgstr "Premio de Instalación de Reparación - Nada"
 
