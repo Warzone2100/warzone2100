@@ -6350,6 +6350,15 @@ UDWORD getSaveGameType(void)
 	return gameType;
 }
 
+static void plotBackdropPixel(char *backDropSprite, int xx, int yy, PIELIGHT const &colour)
+{
+	xx = clip(xx, 0, BACKDROP_HACK_WIDTH - 1);
+	yy = clip(yy, 0, BACKDROP_HACK_HEIGHT - 1);
+	char *pixel = backDropSprite + (yy*BACKDROP_HACK_WIDTH + xx)*3;
+	pixel[0] = colour.byte.r;
+	pixel[1] = colour.byte.g;
+	pixel[2] = colour.byte.b;
+}
 
 /**
  * \param[out] backDropSprite The premade map texture.
@@ -6429,9 +6438,7 @@ bool plotStructurePreview16(char *backDropSprite, Vector2i playeridpos[])
 				color = WZCOL_MAP_PREVIEW_HQ;
 			}
 			// and now we blit the color to the texture
-			backDropSprite[3 * ((yy * BACKDROP_HACK_WIDTH) + xx)] = color.byte.r;
-			backDropSprite[3 * ((yy * BACKDROP_HACK_WIDTH) + xx) + 1] = color.byte.g;
-			backDropSprite[3 * ((yy * BACKDROP_HACK_WIDTH) + xx) + 2] = color.byte.b;
+			plotBackdropPixel(backDropSprite, xx, yy, color);
 			ini.endGroup();
 		}
 		// And now we need to show features.
@@ -6559,9 +6566,7 @@ bool plotStructurePreview16(char *backDropSprite, Vector2i playeridpos[])
 		}
 
 		// and now we blit the color to the texture
-		backDropSprite[3 * ((yy * BACKDROP_HACK_WIDTH) + xx)] = color.byte.r;
-		backDropSprite[3 * ((yy * BACKDROP_HACK_WIDTH) + xx) + 1] = color.byte.g;
-		backDropSprite[3 * ((yy * BACKDROP_HACK_WIDTH) + xx) + 2] = color.byte.b;
+		plotBackdropPixel(backDropSprite, xx, yy, color);
 	}
 
 	// And now we need to show features.
@@ -6619,9 +6624,7 @@ static void plotFeature(char *backDropSprite)
 				// and now we blit the color to the texture
 				xx = map_coord(pos.x);
 				yy = map_coord(pos.y);
-				backDropSprite[3 * ((yy * BACKDROP_HACK_WIDTH) + xx)] = colour->byte.r;
-				backDropSprite[3 * ((yy * BACKDROP_HACK_WIDTH) + xx) + 1] = colour->byte.g;
-				backDropSprite[3 * ((yy * BACKDROP_HACK_WIDTH) + xx) + 2] = colour->byte.b;
+				plotBackdropPixel(backDropSprite, xx, yy, *colour);
 			}
 			ini.endGroup();
 		}
@@ -6683,8 +6686,6 @@ static void plotFeature(char *backDropSprite)
 		xx = map_coord(psSaveFeature->x);
 		yy = map_coord(psSaveFeature->y);
 		// and now we blit the color to the texture
-		backDropSprite[3 * ((yy * BACKDROP_HACK_WIDTH) + xx)] = colour->byte.r;
-		backDropSprite[3 * ((yy * BACKDROP_HACK_WIDTH) + xx) + 1] = colour->byte.g;
-		backDropSprite[3 * ((yy * BACKDROP_HACK_WIDTH) + xx) + 2] = colour->byte.b;
+		plotBackdropPixel(backDropSprite, xx, yy, *colour);
 	}
 }
