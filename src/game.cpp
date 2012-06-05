@@ -6579,7 +6579,8 @@ static void plotFeature(char *backDropSprite)
 	UDWORD sizeOfSaveFeature = 0;
 	char *pFileData = NULL;
 	char aFileName[256];
-	const PIELIGHT color = WZCOL_MAP_PREVIEW_OIL;
+	const PIELIGHT colourOil = WZCOL_MAP_PREVIEW_OIL;
+	const PIELIGHT colourBarrel = WZCOL_MAP_PREVIEW_BARREL;
 
 	psLevel = levFindDataSet(game.map);
 	strcpy(aFileName, psLevel->apDataFiles[0]);
@@ -6604,14 +6605,23 @@ static void plotFeature(char *backDropSprite)
 			Position pos = ini.vector3i("position");
 
 			// we only care about oil
+			PIELIGHT const *colour = NULL;
 			if (name.startsWith("OilResource"))
+			{
+				colour = &colourOil;
+			}
+			else if (name.startsWith("OilDrum"))
+			{
+				colour = &colourBarrel;
+			}
+			if (colour != NULL)
 			{
 				// and now we blit the color to the texture
 				xx = map_coord(pos.x);
 				yy = map_coord(pos.y);
-				backDropSprite[3 * ((yy * BACKDROP_HACK_WIDTH) + xx)] = color.byte.r;
-				backDropSprite[3 * ((yy * BACKDROP_HACK_WIDTH) + xx) + 1] = color.byte.g;
-				backDropSprite[3 * ((yy * BACKDROP_HACK_WIDTH) + xx) + 2] = color.byte.b;
+				backDropSprite[3 * ((yy * BACKDROP_HACK_WIDTH) + xx)] = colour->byte.r;
+				backDropSprite[3 * ((yy * BACKDROP_HACK_WIDTH) + xx) + 1] = colour->byte.g;
+				backDropSprite[3 * ((yy * BACKDROP_HACK_WIDTH) + xx) + 2] = colour->byte.b;
 			}
 			ini.endGroup();
 		}
@@ -6655,20 +6665,26 @@ static void plotFeature(char *backDropSprite)
 		psSaveFeature = (SAVE_FEATURE_V2*) pFileData;
 
 		// we only care about oil
+		PIELIGHT const *colour = NULL;
 		if (strncmp(psSaveFeature->name, "OilResource", 11) == 0)
 		{
-			endian_udword(&psSaveFeature->x);
-			endian_udword(&psSaveFeature->y);
-			xx = map_coord(psSaveFeature->x);
-			yy = map_coord(psSaveFeature->y);
+			colour = &colourOil;
+		}
+		else if (strncmp(psSaveFeature->name, "OilDrum", 7) == 0)
+		{
+			colour = &colourBarrel;
 		}
 		else
 		{
 			continue;
 		}
+		endian_udword(&psSaveFeature->x);
+		endian_udword(&psSaveFeature->y);
+		xx = map_coord(psSaveFeature->x);
+		yy = map_coord(psSaveFeature->y);
 		// and now we blit the color to the texture
-		backDropSprite[3 * ((yy * BACKDROP_HACK_WIDTH) + xx)] = color.byte.r;
-		backDropSprite[3 * ((yy * BACKDROP_HACK_WIDTH) + xx) + 1] = color.byte.g;
-		backDropSprite[3 * ((yy * BACKDROP_HACK_WIDTH) + xx) + 2] = color.byte.b;
+		backDropSprite[3 * ((yy * BACKDROP_HACK_WIDTH) + xx)] = colour->byte.r;
+		backDropSprite[3 * ((yy * BACKDROP_HACK_WIDTH) + xx) + 1] = colour->byte.g;
+		backDropSprite[3 * ((yy * BACKDROP_HACK_WIDTH) + xx) + 2] = colour->byte.b;
 	}
 }
