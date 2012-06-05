@@ -1,2 +1,6 @@
-/image
-/image.pro
+image/
+image.pro
+
+# Mac builds
+build/
+
