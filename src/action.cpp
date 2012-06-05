@@ -1827,10 +1827,7 @@ void actionUpdateDroid(DROID *psDroid)
 		// WSS shouldn't get a free pass to hit anything on map
 		if (cbSensorDroid(psDroid) && asSensorStats[psDroid->asBits[COMP_SENSOR].nStat].type != SUPER_SENSOR)
 		{
-			// don't move to the target, just make sure it is visible
-			// Anyone commenting this out will get a knee capping from John.
-			// You have been warned!!
-			psDroid->psActionTarget[0]->visible[psDroid->player] = UBYTE_MAX;
+			// Don't move to the target.
 		}
 		else
 		{
