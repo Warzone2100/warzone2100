@@ -1803,11 +1803,15 @@ void actionUpdateDroid(DROID *psDroid)
 			}
 
 			//ready to start building the structure
+			DroidStartBuild dsb;
 			if ( psDroid->action != DACTION_NONE &&
-				droidStartBuild(psDroid))
+				(dsb = droidStartBuild(psDroid)))
 			{
-				debug( LOG_NEVER, "DACTION_BUILD_FOUNDATION: start build");
-				psDroid->action = DACTION_BUILD;
+				if (dsb == DroidStartBuildSuccess)  // Not if waiting for oil to finish burning.
+				{
+					debug( LOG_NEVER, "DACTION_BUILD_FOUNDATION: start build");
+					psDroid->action = DACTION_BUILD;
+				}
 			}
 			else
 			{
