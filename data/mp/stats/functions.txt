@@ -58,9 +58,9 @@ Weapon Upgrade,Wpn-Flamer-ROF03,FLAME,45,0,0,0,0,0,0
 Weapon Upgrade,Wpn-MG-Damage01,MACHINE GUN,0,0,0,25,0,0,0
 Weapon Upgrade,Wpn-MG-Damage02,MACHINE GUN,0,0,0,50,0,0,0
 Weapon Upgrade,Wpn-MG-Damage03,MACHINE GUN,0,0,0,75,0,0,0
-Weapon Upgrade,Wpn-MG-ROF01,MACHINE GUN,15,0,0,0,0,0,0
-Weapon Upgrade,Wpn-MG-ROF02,MACHINE GUN,30,0,0,0,0,0,0
-Weapon Upgrade,Wpn-MG-ROF03,MACHINE GUN,45,0,0,0,0,0,0
+Weapon Upgrade,Wpn-MG-ROF01,MACHINE GUN,17,0,0,0,0,0,0
+Weapon Upgrade,Wpn-MG-ROF02,MACHINE GUN,34,0,0,0,0,0,0
+Weapon Upgrade,Wpn-MG-ROF03,MACHINE GUN,50,0,0,0,0,0,0
 Weapon Upgrade,Wpn-Artillery-Damage01,MORTARS,0,0,0,25,25,25,0
 Weapon Upgrade,Wpn-Artillery-Damage02,MORTARS,0,0,0,50,50,50,0
 Weapon Upgrade,Wpn-Artillery-Damage03,MORTARS,0,0,0,75,75,75,0
