@@ -6,7 +6,7 @@ find base mp -name game.map > "${CONFIGURATION_BUILD_DIR}/maplist.txt"
 
 cd "${CONFIGURATION_BUILD_DIR}"
 touch "maplist.txt"
-./maptest
+./maptest | grep -ve 'Testing map:'
 echo "warning: check output for test failures" >&2
 
 exit ${?}
