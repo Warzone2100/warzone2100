@@ -134,7 +134,8 @@ int32_t droidDamage(DROID *psDroid, unsigned damage, WEAPON_CLASS weaponClass, W
 extern void droidUpdate(DROID *psDroid);
 
 /* Set up a droid to build a structure - returns true if successful */
-extern bool droidStartBuild(DROID *psDroid);
+enum DroidStartBuild {DroidStartBuildFailed, DroidStartBuildSuccess, DroidStartBuildPending};
+DroidStartBuild droidStartBuild(DROID *psDroid);
 
 /* Sets a droid to start demolishing - returns true if successful */
 extern bool	droidStartDemolishing( DROID *psDroid );

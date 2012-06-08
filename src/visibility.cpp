@@ -482,6 +482,20 @@ static void setSeenBy(BASE_OBJECT *psObj, unsigned viewer, int val /*= UBYTE_MAX
 	}
 }
 
+static void setSeenByInstantly(BASE_OBJECT *psObj, unsigned viewer, int val /*= UBYTE_MAX*/)
+{
+	//forward out vision to our allies
+	int ally;
+	for (ally = 0; ally < MAX_PLAYERS; ++ally)
+	{
+		if (hasSharedVision(viewer, ally))
+		{
+			psObj->seenThisTick[ally] = MAX(psObj->seenThisTick[ally], val);
+			psObj->visible[ally] = MAX(psObj->visible[ally], val);
+		}
+	}
+}
+
 // Calculate which objects we should know about based on alliances and satellite view.
 static void processVisibilitySelf(BASE_OBJECT *psObj)
 {
@@ -504,6 +518,24 @@ static void processVisibilitySelf(BASE_OBJECT *psObj)
 	}
 
 	psObj->bTargetted = false;	// Remove any targetting locks from last update.
+
+	// If we're a CB sensor, make our target visible instantly. Although this is actually checking visibility of our target, we do it here anyway.
+	STRUCTURE *psStruct = castStructure(psObj);
+	// you can always see anything that a CB sensor is targetting
+	// Anyone commenting this out again will get a knee capping from John.
+	// You have been warned!!
+	if (psStruct != NULL && (structCBSensor(psStruct) || structVTOLCBSensor(psStruct)) && psStruct->psTarget[0] != NULL)
+	{
+		setSeenByInstantly(psStruct->psTarget[0], psObj->player, UBYTE_MAX);
+	}
+	DROID *psDroid = castDroid(psObj);
+	// WSS shouldn't get a free pass to hit anything on map
+	if (psDroid != NULL && psDroid->action == DACTION_OBSERVE && cbSensorDroid(psDroid) && asSensorStats[psDroid->asBits[COMP_SENSOR].nStat].type != SUPER_SENSOR)
+	{
+		// Anyone commenting this out will get a knee capping from John.
+		// You have been warned!!
+		setSeenByInstantly(psDroid->psActionTarget[0], psObj->player, UBYTE_MAX);
+	}
 }
 
 // Calculate which objects we can see. Better to call after processVisibilitySelf, since that check is cheaper.

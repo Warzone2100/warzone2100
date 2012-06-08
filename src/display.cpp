@@ -1956,7 +1956,6 @@ static void dealWithLMBFeature(FEATURE* psFeature)
 					{
 						// Can't build because it's burning
 						AddDerrickBurningMessage();
-						break;
 					}
 
 					sendDroidInfo(psCurr, DroidOrder(DORDER_BUILD, &asStructureStats[i], removeZ(psFeature->pos), player.r.y), ctrlShiftDown());

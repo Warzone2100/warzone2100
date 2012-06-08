@@ -1,0 +1,453 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		4381A98C157E89A300EDD41B /* image.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4381A98B157E89A300EDD41B /* image.cpp */; };
+		4381AA09157E8E7100EDD41B /* QtCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4381AA08157E8E7100EDD41B /* QtCore.framework */; };
+		4381AA0B157E8E7100EDD41B /* QtGui.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4381AA0A157E8E7100EDD41B /* QtGui.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		4381A9C1157E8DA100EDD41B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4381A9AE157E8DA100EDD41B /* Warzone.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 02356D750BD3BB3400E9A019 /* Warzone.app */;
+			remoteInfo = Warzone;
+		};
+		4381A9C3157E8DA100EDD41B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4381A9AE157E8DA100EDD41B /* Warzone.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 4318434B1363942200BA2BC5 /* MiniUPnPc.framework */;
+			remoteInfo = MiniUPnPc;
+		};
+		4381A9C5157E8DA100EDD41B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4381A9AE157E8DA100EDD41B /* Warzone.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 43502D521347640700A02A1F /* GLExtensionWrangler.framework */;
+			remoteInfo = GLExtensionWrangler;
+		};
+		4381A9C7157E8DA100EDD41B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4381A9AE157E8DA100EDD41B /* Warzone.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 02356D830BD3BB4100E9A019 /* Zlib.framework */;
+			remoteInfo = Zlib;
+		};
+		4381A9C9157E8DA100EDD41B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4381A9AE157E8DA100EDD41B /* Warzone.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 43CCDD1B14BA474E00B21363 /* fribidi.framework */;
+			remoteInfo = Fribidi;
+		};
+		4381A9CB157E8DA100EDD41B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4381A9AE157E8DA100EDD41B /* Warzone.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 02356E090BD3BCFE00E9A019 /* Ogg.framework */;
+			remoteInfo = Ogg;
+		};
+		4381A9CD157E8DA100EDD41B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4381A9AE157E8DA100EDD41B /* Warzone.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 02356DC20BD3BBFC00E9A019 /* Png.framework */;
+			remoteInfo = Png;
+		};
+		4381A9CF157E8DA100EDD41B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4381A9AE157E8DA100EDD41B /* Warzone.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 02DDA8B10BD3C2F20049AB60 /* PhysFS.framework */;
+			remoteInfo = PhysFS;
+		};
+		4381A9D1157E8DA100EDD41B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4381A9AE157E8DA100EDD41B /* Warzone.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 02DDA7EE0BD3C03F0049AB60 /* Vorbis.framework */;
+			remoteInfo = Vorbis;
+		};
+		4381A9D3157E8DA100EDD41B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4381A9AE157E8DA100EDD41B /* Warzone.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 022B2F220BD55814002E64E3 /* Gettext.framework */;
+			remoteInfo = Gettext;
+		};
+		4381A9D5157E8DA100EDD41B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4381A9AE157E8DA100EDD41B /* Warzone.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 97AEAB330E8C1B5200A10721 /* Theora.framework */;
+			remoteInfo = Theora;
+		};
+		4381A9D7157E8DA100EDD41B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4381A9AE157E8DA100EDD41B /* Warzone.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 4366718213D1FD5600FE85BA /* QuesoGLC.framework */;
+			remoteInfo = QuesoGLC;
+		};
+		4381A9D9157E8DBD00EDD41B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4381A9AE157E8DA100EDD41B /* Warzone.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 43FA570C10FF8E9B0074E914 /* Setup Prebuilt Components */;
+			remoteInfo = "Setup Prebuilt Components";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		4381A97F157E88DE00EDD41B /* image */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = image; sourceTree = BUILT_PRODUCTS_DIR; };
+		4381A98B157E89A300EDD41B /* image.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = image.cpp; sourceTree = SOURCE_ROOT; };
+		4381A9A4157E8C6400EDD41B /* Base-Image.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Base-Image.xcconfig"; path = "configs/Base-Image.xcconfig"; sourceTree = SOURCE_ROOT; };
+		4381A9A5157E8C6400EDD41B /* Project-All.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Project-All.xcconfig"; path = "configs/Project-All.xcconfig"; sourceTree = SOURCE_ROOT; };
+		4381A9A6157E8CBF00EDD41B /* image-All.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "image-All.xcconfig"; path = "configs/image-All.xcconfig"; sourceTree = SOURCE_ROOT; };
+		4381A9A7157E8CBF00EDD41B /* image-Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "image-Debug.xcconfig"; path = "configs/image-Debug.xcconfig"; sourceTree = SOURCE_ROOT; };
+		4381A9A8157E8CBF00EDD41B /* image-Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "image-Release.xcconfig"; path = "configs/image-Release.xcconfig"; sourceTree = SOURCE_ROOT; };
+		4381A9A9157E8CBF00EDD41B /* image-StaticAnalyzer.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "image-StaticAnalyzer.xcconfig"; path = "configs/image-StaticAnalyzer.xcconfig"; sourceTree = SOURCE_ROOT; };
+		4381A9AE157E8DA100EDD41B /* Warzone.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Warzone.xcodeproj; path = ../../macosx/Warzone.xcodeproj; sourceTree = SOURCE_ROOT; };
+		4381AA08157E8E7100EDD41B /* QtCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QtCore.framework; path = ../../macosx/external/QT/QtCore.framework; sourceTree = SOURCE_ROOT; };
+		4381AA0A157E8E7100EDD41B /* QtGui.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QtGui.framework; path = ../../macosx/external/QT/QtGui.framework; sourceTree = SOURCE_ROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		4381A97D157E88DE00EDD41B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4381AA09157E8E7100EDD41B /* QtCore.framework in Frameworks */,
+				4381AA0B157E8E7100EDD41B /* QtGui.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		4381A965157E87B300EDD41B = {
+			isa = PBXGroup;
+			children = (
+				4381A989157E894100EDD41B /* Configurations */,
+				4381A98A157E896B00EDD41B /* Source */,
+				4381A988157E890600EDD41B /* External frameworks */,
+				4381A9AD157E8D7800EDD41B /* System frameworks */,
+				4381A980157E88DE00EDD41B /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		4381A980157E88DE00EDD41B /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				4381A97F157E88DE00EDD41B /* image */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		4381A988157E890600EDD41B /* External frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				4381A9AE157E8DA100EDD41B /* Warzone.xcodeproj */,
+				4381AA08157E8E7100EDD41B /* QtCore.framework */,
+				4381AA0A157E8E7100EDD41B /* QtGui.framework */,
+			);
+			name = "External frameworks";
+			sourceTree = "<group>";
+		};
+		4381A989157E894100EDD41B /* Configurations */ = {
+			isa = PBXGroup;
+			children = (
+				4381A9A6157E8CBF00EDD41B /* image-All.xcconfig */,
+				4381A9A7157E8CBF00EDD41B /* image-Debug.xcconfig */,
+				4381A9A8157E8CBF00EDD41B /* image-Release.xcconfig */,
+				4381A9A9157E8CBF00EDD41B /* image-StaticAnalyzer.xcconfig */,
+				4381A9A4157E8C6400EDD41B /* Base-Image.xcconfig */,
+				4381A9A5157E8C6400EDD41B /* Project-All.xcconfig */,
+			);
+			name = Configurations;
+			sourceTree = "<group>";
+		};
+		4381A98A157E896B00EDD41B /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				4381A98B157E89A300EDD41B /* image.cpp */,
+			);
+			name = Source;
+			sourceTree = "<group>";
+		};
+		4381A9AD157E8D7800EDD41B /* System frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = "System frameworks";
+			sourceTree = "<group>";
+		};
+		4381A9AF157E8DA100EDD41B /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				4381A9C2157E8DA100EDD41B /* Warzone.app */,
+				4381A9C4157E8DA100EDD41B /* MiniUPnPc.framework */,
+				4381A9C6157E8DA100EDD41B /* GLExtensionWrangler.framework */,
+				4381A9C8157E8DA100EDD41B /* Zlib.framework */,
+				4381A9CA157E8DA100EDD41B /* fribidi.framework */,
+				4381A9CC157E8DA100EDD41B /* Ogg.framework */,
+				4381A9CE157E8DA100EDD41B /* Png.framework */,
+				4381A9D0157E8DA100EDD41B /* PhysFS.framework */,
+				4381A9D2157E8DA100EDD41B /* Vorbis.framework */,
+				4381A9D4157E8DA100EDD41B /* Gettext.framework */,
+				4381A9D6157E8DA100EDD41B /* Theora.framework */,
+				4381A9D8157E8DA100EDD41B /* QuesoGLC.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		4381A97E157E88DE00EDD41B /* image */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4381A984157E88E000EDD41B /* Build configuration list for PBXNativeTarget "image" */;
+			buildPhases = (
+				4381A97C157E88DE00EDD41B /* Sources */,
+				4381A97D157E88DE00EDD41B /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				4381A9DA157E8DBD00EDD41B /* PBXTargetDependency */,
+			);
+			name = image;
+			productName = image;
+			productReference = 4381A97F157E88DE00EDD41B /* image */;
+			productType = "com.apple.product-type.tool";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		4381A967157E87B300EDD41B /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+			};
+			buildConfigurationList = 4381A96A157E87B300EDD41B /* Build configuration list for PBXProject "Image" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				English,
+				Japanese,
+				French,
+				German,
+			);
+			mainGroup = 4381A965157E87B300EDD41B;
+			productRefGroup = 4381A980157E88DE00EDD41B /* Products */;
+			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 4381A9AF157E8DA100EDD41B /* Products */;
+					ProjectRef = 4381A9AE157E8DA100EDD41B /* Warzone.xcodeproj */;
+				},
+			);
+			projectRoot = "";
+			targets = (
+				4381A97E157E88DE00EDD41B /* image */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		4381A9C2157E8DA100EDD41B /* Warzone.app */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.application;
+			path = Warzone.app;
+			remoteRef = 4381A9C1157E8DA100EDD41B /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4381A9C4157E8DA100EDD41B /* MiniUPnPc.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = MiniUPnPc.framework;
+			remoteRef = 4381A9C3157E8DA100EDD41B /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4381A9C6157E8DA100EDD41B /* GLExtensionWrangler.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = GLExtensionWrangler.framework;
+			remoteRef = 4381A9C5157E8DA100EDD41B /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4381A9C8157E8DA100EDD41B /* Zlib.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Zlib.framework;
+			remoteRef = 4381A9C7157E8DA100EDD41B /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4381A9CA157E8DA100EDD41B /* fribidi.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = fribidi.framework;
+			remoteRef = 4381A9C9157E8DA100EDD41B /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4381A9CC157E8DA100EDD41B /* Ogg.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Ogg.framework;
+			remoteRef = 4381A9CB157E8DA100EDD41B /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4381A9CE157E8DA100EDD41B /* Png.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Png.framework;
+			remoteRef = 4381A9CD157E8DA100EDD41B /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4381A9D0157E8DA100EDD41B /* PhysFS.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = PhysFS.framework;
+			remoteRef = 4381A9CF157E8DA100EDD41B /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4381A9D2157E8DA100EDD41B /* Vorbis.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Vorbis.framework;
+			remoteRef = 4381A9D1157E8DA100EDD41B /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4381A9D4157E8DA100EDD41B /* Gettext.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Gettext.framework;
+			remoteRef = 4381A9D3157E8DA100EDD41B /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4381A9D6157E8DA100EDD41B /* Theora.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Theora.framework;
+			remoteRef = 4381A9D5157E8DA100EDD41B /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4381A9D8157E8DA100EDD41B /* QuesoGLC.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = QuesoGLC.framework;
+			remoteRef = 4381A9D7157E8DA100EDD41B /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
+
+/* Begin PBXSourcesBuildPhase section */
+		4381A97C157E88DE00EDD41B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4381A98C157E89A300EDD41B /* image.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		4381A9DA157E8DBD00EDD41B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "Setup Prebuilt Components";
+			targetProxy = 4381A9D9157E8DBD00EDD41B /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		4381A968157E87B300EDD41B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4381A9A5157E8C6400EDD41B /* Project-All.xcconfig */;
+			buildSettings = {
+			};
+			name = Debug;
+		};
+		4381A969157E87B300EDD41B /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4381A9A5157E8C6400EDD41B /* Project-All.xcconfig */;
+			buildSettings = {
+			};
+			name = Release;
+		};
+		4381A982157E88E000EDD41B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4381A9A7157E8CBF00EDD41B /* image-Debug.xcconfig */;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../../macosx/external/QT\"",
+				);
+			};
+			name = Debug;
+		};
+		4381A983157E88E000EDD41B /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4381A9A8157E8CBF00EDD41B /* image-Release.xcconfig */;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../../macosx/external/QT\"",
+				);
+			};
+			name = Release;
+		};
+		4381A9AB157E8D2E00EDD41B /* StaticAnalyzer */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4381A9A5157E8C6400EDD41B /* Project-All.xcconfig */;
+			buildSettings = {
+			};
+			name = StaticAnalyzer;
+		};
+		4381A9AC157E8D2E00EDD41B /* StaticAnalyzer */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4381A9A9157E8CBF00EDD41B /* image-StaticAnalyzer.xcconfig */;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../../macosx/external/QT\"",
+				);
+			};
+			name = StaticAnalyzer;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		4381A96A157E87B300EDD41B /* Build configuration list for PBXProject "Image" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4381A969157E87B300EDD41B /* Release */,
+				4381A968157E87B300EDD41B /* Debug */,
+				4381A9AB157E8D2E00EDD41B /* StaticAnalyzer */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4381A984157E88E000EDD41B /* Build configuration list for PBXNativeTarget "image" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4381A983157E88E000EDD41B /* Release */,
+				4381A982157E88E000EDD41B /* Debug */,
+				4381A9AC157E8D2E00EDD41B /* StaticAnalyzer */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 4381A967157E87B300EDD41B /* Project object */;
+}

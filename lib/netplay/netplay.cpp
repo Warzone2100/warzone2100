@@ -1247,7 +1247,7 @@ bool NETsend(NETQUEUE queue, NetMessage const *message)
 		for (player = firstPlayer; player <= lastPlayer; ++player)
 		{
 			// We are the host, send directly to player.
-			if (sockets[player] != NULL)
+			if (sockets[player] != NULL && player != queue.exclude)
 			{
 				uint8_t *rawData = message->rawDataDup();
 				ssize_t rawLen   = message->rawLen();
@@ -1393,7 +1393,7 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 			if ((receiver == selectedPlayer || receiver == NET_ALL_PLAYERS) && playerQueue.index == NetPlay.hostPlayer)
 			{
 				// Message was sent to us via the host.
-				if (sender != selectedPlayer)  // TODO Tell host not to send us our own broadcast messages.
+				if (sender != selectedPlayer)  // Make sure host didn't send us our own broadcast messages, which shouldn't happen anyway.
 				{
 					NETinsertMessageFromNet(NETnetQueue(sender), message);
 					NETlogPacket(message->type, message->rawLen(), true);
@@ -1432,7 +1432,7 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 				}
 
 				// We are the host, and player is asking us to send the message to receiver.
-				NETbeginEncode(NETnetQueue(receiver), NET_SEND_TO_PLAYER);
+				NETbeginEncode(NETnetQueue(receiver, sender), NET_SEND_TO_PLAYER);
 					NETuint8_t(&sender);
 					NETuint8_t(&receiver);
 					NETnetMessage(&message);
@@ -1619,13 +1619,7 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 			{
 				debug(LOG_NET, "Broadcast leaving message to everyone else");
 				NETbeginEncode(NETbroadcastQueue(), NET_PLAYER_LEAVING);
-				{
-					bool host = NetPlay.isHost;
-					uint32_t id = index;
-
-					NETuint32_t(&id);
-					NETbool(&host);
-				}
+					NETuint32_t(&index);
 				NETend();
 			}
 
@@ -1807,12 +1801,16 @@ checkMessages:
 
 bool NETrecvGame(NETQUEUE *queue, uint8_t *type)
 {
-	uint32_t current;
-	for (current = 0; current < MAX_PLAYERS; ++current)
+	for (unsigned current = 0; current < MAX_PLAYERS; ++current)
 	{
 		*queue = NETgameQueue(current);
-		while (!checkPlayerGameTime(current) && NETisMessageReady(*queue))  // Check for any messages that are scheduled to be read now.
+		while (!checkPlayerGameTime(current))  // Check for any messages that are scheduled to be read now.
 		{
+			if (!NETisMessageReady(*queue))
+			{
+				return false;  // Still waiting for messages from this player, and all players should process messages in the same order. Will have to freeze the game while waiting.
+			}
+
 			*type = NETgetMessage(*queue)->type;
 
 			if (*type == GAME_GAME_TIME)
@@ -1822,23 +1820,11 @@ bool NETrecvGame(NETQUEUE *queue, uint8_t *type)
 				continue;
 			}
 
-			if (!NETprocessSystemMessage(*queue, *type))
-			{
-				return true;  // We couldn't process the message, let the caller deal with it..
-			}
-			else
-			{
-				debug(LOG_ERROR, "There was a system message in a game queue...");
-			}
-		}
-
-		if (!checkPlayerGameTime(current))
-		{
-			break;  // Still waiting for messages from this player, and all players should process messages in the same order.
+			return true;  // Have a message ready to read now.
 		}
 	}
 
-	return false;
+	return false;  // No messages sceduled to be read yet. Game can continue.
 }
 
 // ////////////////////////////////////////////////////////////////////////
@@ -1927,11 +1913,9 @@ UBYTE NETrecvFile(NETQUEUE queue)
 				debug(LOG_NET, "We are leaving 'nicely' after a fatal error");
 				NETbeginEncode(NETnetQueue(NET_HOST_ONLY), NET_PLAYER_LEAVING);
 				{
-					bool host = NetPlay.isHost;
 					uint32_t id = selectedPlayer;
 
 					NETuint32_t(&id);
-					NETbool(&host);
 				}
 				NETend();
 

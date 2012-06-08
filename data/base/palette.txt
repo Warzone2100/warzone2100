@@ -86,3 +86,4 @@ E0,E0,E0,ff	// team11 - white
 32,4b,a0,ff	// blueprint planned by ally
 ff,80,40,ff	// construction bar text
 00,ff,00,ff	// power queue bar text
+80,c0,00,ff	// WZCOL_MAP_PREVIEW_BARREL

@@ -110,8 +110,9 @@
 #define WZCOL_BLUEPRINT_PLANNED_BY_ALLY                 psPalette[85]
 #define WZCOL_CONSTRUCTION_BARTEXT                      psPalette[86]
 #define WZCOL_POWERQUEUE_BARTEXT                        psPalette[87]
+#define WZCOL_MAP_PREVIEW_BARREL                        psPalette[88]
 
-#define WZCOL_MAX                                       88
+#define WZCOL_MAX                                       89
 
 //*************************************************************************
 
