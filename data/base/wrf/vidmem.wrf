@@ -47,3 +47,5 @@ file		TEXPAGE	"page-85-cliff-arizona.png"
 file		TEXPAGE	"page-86-bottom-arizona.png"
 file		TEXPAGE	"page-87-mud-arizona.png"
 file		TEXPAGE	"page-88-grass-arizona.png"
+/* Added for Mysteryem's Sand Mod */
+file		TEXPAGE	"page-109-sand-arizona.png"
