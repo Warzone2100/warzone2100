@@ -7,6 +7,7 @@ PRODUCT_NAME = modeltest
 
 GCC_PREPROCESSOR_DEFINITIONS = $(inherited) $(BUILD_PREPROCESSOR_DEFINITIONS)
 
+FRAMEWORK_SEARCH_PATHS =
 
 OTHER_CFLAGS = $(FlagsForCandCpp) $(WarnForC) $(inherited)
 OTHER_CFLAGS[arch=i386] = $(inherited) // intel 32 bit only
