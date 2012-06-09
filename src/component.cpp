@@ -626,7 +626,7 @@ static void displayCompObj(DROID *psDroid, bool bButton)
 
 			if ( psJet != NULL )
 			{
-				pie_Draw3DShape(psJet, getModularScaledGraphicsTime(100, psJet->numFrames), colour, brightness, pie_ADDITIVE, 200);
+				pie_Draw3DShape(psJet, getModularScaledGraphicsTime(psJet->animInterval, psJet->numFrames), colour, brightness, pie_ADDITIVE, 200);
 			}
 		}
 	}
@@ -902,7 +902,7 @@ static void displayCompObj(DROID *psDroid, bool bButton)
 						pie_MatRotY(-player.r.y);
 						pie_MatRotX(-player.r.x);
 
-						pie_Draw3DShape(psShape, getModularScaledGraphicsTime(100, psShape->numFrames), 0, brightness, pie_ADDITIVE, 140);
+						pie_Draw3DShape(psShape, getModularScaledGraphicsTime(psShape->animInterval, psShape->numFrames), 0, brightness, pie_ADDITIVE, 140);
 
 						pie_MatRotX(player.r.x);
 						pie_MatRotY(player.r.y);
