@@ -9,45 +9,14 @@ data/texpages/bdrops/backdrop6.png
 	- CC0		- Copyright (c) 2010-2011 jorzi
 data/base/texpages/page-25-sky-urban.png
 	- CC BY 2.0 - Adapted from a photo Copyright (c) 2006 Mark A. Vargas
-lib/framework/tagfile.*
-	- Public Domain
-lib/netplay/miniupnpc/*
+3rdparty/miniupnpc/*
 	- BSD, copyright Thomas Bernard (http://miniupnp.free.fr)
+3rdparty/quesoglc/*
+	- LGPL 2.1, copyright Bertrand Coconnier
 data/base/texpages/page-6-features-rockies.png
 	- CC BY SA 3.0	- Copyright (c) 2009 <Mysteryem>
 data/base/texpages/page-17-droid-weapons.png
 	- CC BY SA 3.0	- Copyright (c) 2009 <Mysteryem>
-data/base/texpages/page-40-ground-plants.png
-data/base/texpages/page-41-slightly-cracked-concrete.png
-data/base/texpages/page-42-rock.png
-data/base/texpages/page-43-mud.png
-data/base/texpages/page-53-cracked-concrete.png
-data/base/texpages/page-54-snow-grass.png
-data/base/texpages/page-55-grass.png
-	- GPLv2 or later - Copyright (c) 2008 Image*After/Tristan Bethe (imageafter.com)
-data/base/texpages/page-44-mud.png
-data/base/texpages/page-45-yellow-sand.png
-data/base/texpages/page-46-cliff.png
-data/base/texpages/page-47-tiles.png
-	Some source textures have been used which are created by CGTextures.com.
-	Permission is granted to use these specific textures under the GPLv2 or
-	any later version (at your option). As additional requirement, this text
-	should be included in a relevant place in any released product. Note that
-	textures downloaded from CGTextures.com DO NOT fall under the GPL license
-	by default.
-data/base/texpages/page-48-rubble.png
-	- CC BY 2.0 - Adapted from a photo Copyright (c) 2006 Peter Kaminski
-data/base/texpages/page-49-dirt.png
-	- CC BY 2.0 - Adapted from a photo Copyright (c) 2005 Jennifer Boyer
-data/base/texpages/page-50-rocks.png
-	- CC BY 2.0 - Adapted from a photo Copyright (c) 2007 Mitch Featherston
-data/base/texpages/page-51-debris.png
-	- CC BY-SA 2.0 - Adapted from a photo Copyright (c) 2006 Bart Everson
-data/base/texpages/page-52-plants-on-rock.png
-	- CC BY 2.0 - Adapted from a photo Copyright (c) 2008 Sherrie Thai
-data/base/texpages/page-56-gravel.png
-data/base/texpages/page-58-snow-gravel.png
-	- CC BY 2.0 - Adapted from a photo Copyright (c) 2007 Konstantin Kleine-Niermann
 data/base/components/prop/prsrwhl1.pie
 data/base/components/prop/prslwhl1.pie
 data/base/components/prop/prmrwhl1.pie
