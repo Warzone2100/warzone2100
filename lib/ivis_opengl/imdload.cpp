@@ -135,10 +135,24 @@ static bool _imd_load_polys( const char **ppFileData, iIMDShape *s, int pieVersi
 
 			ASSERT(tWidth > 0, "%s: texture width = %d", GetLastResourceFilename(), tWidth);
 			ASSERT(tHeight > 0, "%s: texture height = %d (width=%d)", GetLastResourceFilename(), tHeight, tWidth);
+			ASSERT(nFrames > 1, "%s: animation frames = %d", GetLastResourceFilename(), nFrames);
+			ASSERT(pbRate > 0, "%s: animation interval = %d ms", GetLastResourceFilename(), pbRate);
 
 			/* Must have same number of frames and same playback rate for all polygons */
-			s->numFrames = nFrames;
-			s->animInterval = pbRate;
+			if (s->numFrames == 0)
+			{
+				s->numFrames = nFrames;
+				s->animInterval = pbRate;
+			}
+			else
+			{
+				ASSERT(s->numFrames == nFrames,
+					   "%s: varying number of frames within one PIE level: %d != %d",
+						GetLastResourceFilename(), nFrames, s->numFrames);
+				ASSERT(s->animInterval == pbRate,
+					   "%s: varying animation intervals within one PIE level: %d != %d",
+						GetLastResourceFilename(), pbRate, s->animInterval);
+			}
 
 			poly->texAnim.x = tWidth / OLD_TEXTURE_SIZE_FIX;
 			poly->texAnim.y = tHeight / OLD_TEXTURE_SIZE_FIX;

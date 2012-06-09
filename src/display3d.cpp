@@ -309,7 +309,6 @@ static std::vector<Blueprint> blueprints;
 
 #define	TARGET_TO_SENSOR_TIME	((4*(GAME_TICKS_PER_SEC))/5)
 #define	DEST_TARGET_TIME	(GAME_TICKS_PER_SEC/4)
-#define STRUCTURE_ANIM_RATE 4
 
 /// The distance the selection box will pulse
 #define BOX_PULSE_SIZE  10
@@ -2147,7 +2146,7 @@ void renderProximityMsg(PROXIMITY_DISPLAY *psProxDisp)
 	pie_MatRotY(-player.r.y);
 	pie_MatRotX(-player.r.x);
 
-	pie_Draw3DShape(proxImd, getModularScaledGraphicsTime(1000, 4), 0, WZCOL_WHITE, pie_ADDITIVE, 192);
+	pie_Draw3DShape(proxImd, getModularScaledGraphicsTime(proxImd->animInterval, proxImd->numFrames), 0, WZCOL_WHITE, pie_ADDITIVE, 192);
 
 	//get the screen coords for determining when clicked on
 	calcFlagPosScreenCoords(&x, &y, &r);
@@ -2227,7 +2226,7 @@ void	renderStructure(STRUCTURE *psStructure)
 	if (strImd->numFrames > 0)
 	{
 		// Calculate an animation frame
-		animFrame = getModularScaledGraphicsTime(STRUCTURE_ANIM_RATE*GAME_TICKS_PER_SEC, strImd->numFrames);
+		animFrame = getModularScaledGraphicsTime(strImd->animInterval, strImd->numFrames);
 	}
 
 	// -------------------------------------------------------------------------------
@@ -2428,7 +2427,7 @@ void	renderStructure(STRUCTURE *psStructure)
 
 									pie_MatRotY(-player.r.y);
 									pie_MatRotX(-player.r.x);
-									pie_Draw3DShape(pRepImd, getModularScaledGraphicsTime(100, pRepImd->numFrames), colour, buildingBrightness, pie_ADDITIVE, 192);
+									pie_Draw3DShape(pRepImd, getModularScaledGraphicsTime(pRepImd->animInterval, pRepImd->numFrames), colour, buildingBrightness, pie_ADDITIVE, 192);
 
 									pie_MatRotX(player.r.x);
 									pie_MatRotY(player.r.y);
@@ -2540,7 +2539,7 @@ void	renderStructure(STRUCTURE *psStructure)
 						pie_TRANSLATE(psStructure->sDisplay.imd->connectors->x, psStructure->sDisplay.imd->connectors->z,
 						             psStructure->sDisplay.imd->connectors->y);
 						lImd = getImdFromIndex(MI_LANDING);
-						pie_Draw3DShape(lImd, getModularScaledGraphicsTime(1024, lImd->numFrames), colour, buildingBrightness, 0, 0);
+						pie_Draw3DShape(lImd, getModularScaledGraphicsTime(lImd->animInterval, lImd->numFrames), colour, buildingBrightness, 0, 0);
 						pie_MatEnd();
 					}
 				}
