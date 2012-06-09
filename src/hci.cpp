@@ -1862,7 +1862,6 @@ INT_RETVAL intRunWidgets(void)
 					if( ((STRUCTURE_STATS*)psPositionStats)->type == REF_RESOURCE_EXTRACTOR) {
 						if(fireOnLocation(structX,structY)) {
 							AddDerrickBurningMessage();
-							CanBuild = false;
 						}
 					}
 

@@ -1803,11 +1803,15 @@ void actionUpdateDroid(DROID *psDroid)
 			}
 
 			//ready to start building the structure
+			DroidStartBuild dsb;
 			if ( psDroid->action != DACTION_NONE &&
-				droidStartBuild(psDroid))
+				(dsb = droidStartBuild(psDroid)))
 			{
-				debug( LOG_NEVER, "DACTION_BUILD_FOUNDATION: start build");
-				psDroid->action = DACTION_BUILD;
+				if (dsb == DroidStartBuildSuccess)  // Not if waiting for oil to finish burning.
+				{
+					debug( LOG_NEVER, "DACTION_BUILD_FOUNDATION: start build");
+					psDroid->action = DACTION_BUILD;
+				}
 			}
 			else
 			{
@@ -1823,10 +1827,7 @@ void actionUpdateDroid(DROID *psDroid)
 		// WSS shouldn't get a free pass to hit anything on map
 		if (cbSensorDroid(psDroid) && asSensorStats[psDroid->asBits[COMP_SENSOR].nStat].type != SUPER_SENSOR)
 		{
-			// don't move to the target, just make sure it is visible
-			// Anyone commenting this out will get a knee capping from John.
-			// You have been warned!!
-			psDroid->psActionTarget[0]->visible[psDroid->player] = UBYTE_MAX;
+			// Don't move to the target.
 		}
 		else
 		{

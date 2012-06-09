@@ -955,7 +955,7 @@ droidBuildStartAudioCallback( void *psObj )
 
 
 /* Set up a droid to build a structure - returns true if successful */
-bool droidStartBuild(DROID *psDroid)
+DroidStartBuild droidStartBuild(DROID *psDroid)
 {
 	STRUCTURE *psStruct;
 
@@ -974,14 +974,13 @@ bool droidStartBuild(DROID *psDroid)
 		{
 			intBuildFinished(psDroid);
 			cancelBuild(psDroid);
-			return false;
+			return DroidStartBuildFailed;
 		}
 		// Can't build on burning oil derricks.
 		if (psStructStat->type == REF_RESOURCE_EXTRACTOR && fireOnLocation(psDroid->order.pos.x,psDroid->order.pos.y))
 		{
-			intBuildFinished(psDroid);
-			cancelBuild(psDroid);
-			return false;
+			// Don't cancel build, since we can wait for it to stop burning.
+			return DroidStartBuildPending;
 		}
 		//ok to build
 		psStruct = buildStructureDir(psStructStat, psDroid->order.pos.x, psDroid->order.pos.y, psDroid->order.direction, psDroid->player,false);
@@ -989,7 +988,7 @@ bool droidStartBuild(DROID *psDroid)
 		{
 			intBuildFinished(psDroid);
 			cancelBuild(psDroid);
-			return false;
+			return DroidStartBuildFailed;
 		}
 		psStruct->body = (psStruct->body + 9) / 10;  // Structures start at 10% health. Round up.
 	}
@@ -1021,7 +1020,7 @@ bool droidStartBuild(DROID *psDroid)
 
 	CHECK_DROID(psDroid);
 
-	return true;
+	return DroidStartBuildSuccess;
 }
 
 static void droidAddWeldSound( Vector3i iVecEffect )

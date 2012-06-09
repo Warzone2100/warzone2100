@@ -56,28 +56,28 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = 43E7FE1314F9771800D419C5 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 430FEDB0150EA4580008DE82 /* mkdir */;
+			remoteGlobalIDString = 430FEDB0150EA4580008DE82;
 			remoteInfo = mkdir;
 		};
 		430FEDB9150EA5230008DE82 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 43E7FE1314F9771800D419C5 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 430FEDB0150EA4580008DE82 /* mkdir */;
+			remoteGlobalIDString = 430FEDB0150EA4580008DE82;
 			remoteInfo = mkdir;
 		};
 		430FEDBB150EA5310008DE82 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 43E7FE1314F9771800D419C5 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 430FEDB0150EA4580008DE82 /* mkdir */;
+			remoteGlobalIDString = 430FEDB0150EA4580008DE82;
 			remoteInfo = mkdir;
 		};
 		430FEDBD150EA5390008DE82 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 43E7FE1314F9771800D419C5 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 430FEDB0150EA4580008DE82 /* mkdir */;
+			remoteGlobalIDString = 430FEDB0150EA4580008DE82;
 			remoteInfo = mkdir;
 		};
 		437D3323150A494100B45AAE /* PBXContainerItemProxy */ = {

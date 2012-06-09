@@ -441,6 +441,7 @@ void screenDoDumpToDiskIfRequired(void)
 			return;
 		}
 	}
+	glPixelStorei(GL_PACK_ALIGNMENT, 1);
 	glReadPixels(0, 0, image.width, image.height, GL_RGB, GL_UNSIGNED_BYTE, image.bmp);
 
 	iV_saveImage_PNG(fileName, &image);

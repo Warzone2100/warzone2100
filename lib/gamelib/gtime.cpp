@@ -393,6 +393,8 @@ void recvPlayerGameTime(NETQUEUE queue)
 		NETuint16_t(&wantedLatencies[queue.index]);
 	NETend();
 
+	syncDebug("GAME_GAME_TIME p%d;lat%u,ct%u,crc%04X,wlat%u", queue.index, latencyTicks, checkTime, checkCrc, wantedLatencies[queue.index]);
+
 	gameQueueTime[queue.index] = checkTime + latencyTicks * GAME_TICKS_PER_UPDATE;  // gameTime when future messages shall be processed.
 
 	gameQueueCheckTime[queue.index] = checkTime;

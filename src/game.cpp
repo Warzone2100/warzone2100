@@ -6350,6 +6350,15 @@ UDWORD getSaveGameType(void)
 	return gameType;
 }
 
+static void plotBackdropPixel(char *backDropSprite, int xx, int yy, PIELIGHT const &colour)
+{
+	xx = clip(xx, 0, BACKDROP_HACK_WIDTH - 1);
+	yy = clip(yy, 0, BACKDROP_HACK_HEIGHT - 1);
+	char *pixel = backDropSprite + (yy*BACKDROP_HACK_WIDTH + xx)*3;
+	pixel[0] = colour.byte.r;
+	pixel[1] = colour.byte.g;
+	pixel[2] = colour.byte.b;
+}
 
 /**
  * \param[out] backDropSprite The premade map texture.
@@ -6429,9 +6438,7 @@ bool plotStructurePreview16(char *backDropSprite, Vector2i playeridpos[])
 				color = WZCOL_MAP_PREVIEW_HQ;
 			}
 			// and now we blit the color to the texture
-			backDropSprite[3 * ((yy * BACKDROP_HACK_WIDTH) + xx)] = color.byte.r;
-			backDropSprite[3 * ((yy * BACKDROP_HACK_WIDTH) + xx) + 1] = color.byte.g;
-			backDropSprite[3 * ((yy * BACKDROP_HACK_WIDTH) + xx) + 2] = color.byte.b;
+			plotBackdropPixel(backDropSprite, xx, yy, color);
 			ini.endGroup();
 		}
 		// And now we need to show features.
@@ -6559,9 +6566,7 @@ bool plotStructurePreview16(char *backDropSprite, Vector2i playeridpos[])
 		}
 
 		// and now we blit the color to the texture
-		backDropSprite[3 * ((yy * BACKDROP_HACK_WIDTH) + xx)] = color.byte.r;
-		backDropSprite[3 * ((yy * BACKDROP_HACK_WIDTH) + xx) + 1] = color.byte.g;
-		backDropSprite[3 * ((yy * BACKDROP_HACK_WIDTH) + xx) + 2] = color.byte.b;
+		plotBackdropPixel(backDropSprite, xx, yy, color);
 	}
 
 	// And now we need to show features.
@@ -6579,7 +6584,8 @@ static void plotFeature(char *backDropSprite)
 	UDWORD sizeOfSaveFeature = 0;
 	char *pFileData = NULL;
 	char aFileName[256];
-	const PIELIGHT color = WZCOL_MAP_PREVIEW_OIL;
+	const PIELIGHT colourOil = WZCOL_MAP_PREVIEW_OIL;
+	const PIELIGHT colourBarrel = WZCOL_MAP_PREVIEW_BARREL;
 
 	psLevel = levFindDataSet(game.map);
 	strcpy(aFileName, psLevel->apDataFiles[0]);
@@ -6604,14 +6610,21 @@ static void plotFeature(char *backDropSprite)
 			Position pos = ini.vector3i("position");
 
 			// we only care about oil
+			PIELIGHT const *colour = NULL;
 			if (name.startsWith("OilResource"))
+			{
+				colour = &colourOil;
+			}
+			else if (name.startsWith("OilDrum"))
+			{
+				colour = &colourBarrel;
+			}
+			if (colour != NULL)
 			{
 				// and now we blit the color to the texture
 				xx = map_coord(pos.x);
 				yy = map_coord(pos.y);
-				backDropSprite[3 * ((yy * BACKDROP_HACK_WIDTH) + xx)] = color.byte.r;
-				backDropSprite[3 * ((yy * BACKDROP_HACK_WIDTH) + xx) + 1] = color.byte.g;
-				backDropSprite[3 * ((yy * BACKDROP_HACK_WIDTH) + xx) + 2] = color.byte.b;
+				plotBackdropPixel(backDropSprite, xx, yy, *colour);
 			}
 			ini.endGroup();
 		}
@@ -6655,22 +6668,24 @@ static void plotFeature(char *backDropSprite)
 		psSaveFeature = (SAVE_FEATURE_V2*) pFileData;
 
 		// we only care about oil
+		PIELIGHT const *colour = NULL;
 		if (strncmp(psSaveFeature->name, "OilResource", 11) == 0)
 		{
-			endian_udword(&psSaveFeature->x);
-			endian_udword(&psSaveFeature->y);
-			xx = map_coord(psSaveFeature->x);
-			yy = map_coord(psSaveFeature->y);
-			if (xx > BACKDROP_HACK_WIDTH || yy > BACKDROP_HACK_HEIGHT)
-				continue;
+			colour = &colourOil;
+		}
+		else if (strncmp(psSaveFeature->name, "OilDrum", 7) == 0)
+		{
+			colour = &colourBarrel;
 		}
 		else
 		{
 			continue;
 		}
+		endian_udword(&psSaveFeature->x);
+		endian_udword(&psSaveFeature->y);
+		xx = map_coord(psSaveFeature->x);
+		yy = map_coord(psSaveFeature->y);
 		// and now we blit the color to the texture
-		backDropSprite[3 * ((yy * BACKDROP_HACK_WIDTH) + xx)] = color.byte.r;
-		backDropSprite[3 * ((yy * BACKDROP_HACK_WIDTH) + xx) + 1] = color.byte.g;
-		backDropSprite[3 * ((yy * BACKDROP_HACK_WIDTH) + xx) + 2] = color.byte.b;
+		plotBackdropPixel(backDropSprite, xx, yy, *colour);
 	}
 }

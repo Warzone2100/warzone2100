@@ -2781,14 +2781,6 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 		{
 			psChosenObj = psStructure->psTarget[0];
 		}
-
-		// you can always see anything that a CB sensor is targeting
-		// Anyone commenting this out again will get a knee capping from John.
-		// You have been warned!!
-		if ((structCBSensor(psStructure) || structVTOLCBSensor(psStructure)) && psStructure->psTarget[0] != NULL)
-		{
-			psStructure->psTarget[0]->visible[psStructure->player] = UBYTE_MAX;
-		}
 	}
 	//only interested if the Structure "does" something!
 	if (psStructure->pFunctionality == NULL)

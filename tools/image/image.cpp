@@ -43,7 +43,7 @@ void crushPng(std::string const &pngFilename)
 	system( "advpng -z4 TEMPORARY_FILE.png > /dev/null 2> /dev/null");
 	system(("mv TEMPORARY_FILE.png " + pngFilename + " > /dev/null 2> /dev/null").c_str());
 	*/
-	system(("optipng -o7 " + pngFilename + " > /dev/null 2> /dev/null").c_str());
+	system(("optipng -i0 -o5 -f0-5 -strip all " + pngFilename + " > /dev/null 2> /dev/null").c_str());
 	system(("advpng -z4 " + pngFilename + " > /dev/null 2> /dev/null").c_str());
 }
 
