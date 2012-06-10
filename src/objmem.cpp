@@ -660,7 +660,7 @@ void removeFlagPosition(FLAG_POSITION *psDel)
 	FLAG_POSITION		*psPrev=NULL, *psCurr;
 
 	ASSERT( psDel != NULL,
-		"removeFlagPosition: Invalid Flag Positionpointer" );
+		"removeFlagPosition: Invalid Flag Position pointer" );
 
 	if (apsFlagPosLists[psDel->player] == psDel)
 	{
