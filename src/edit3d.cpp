@@ -119,11 +119,7 @@ bool	inHighlight(UDWORD realX, UDWORD realY)
 
 void init3DBuilding(BASE_STATS *psStats,BUILDCALLBACK CallBack,void *UserData)
 {
-	ASSERT(psStats, "Bad parameter");
-	if (!psStats)
-	{
-		return;
-	}
+	ASSERT_OR_RETURN(,psStats, "Bad parameter");
 
 	buildState = BUILD3D_POS;
 
