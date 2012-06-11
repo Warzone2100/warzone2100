@@ -2575,7 +2575,7 @@ void	renderDeliveryPoint(FLAG_POSITION *psPosition, bool blueprint)
 	dv.y = psPosition->coords.z;
 
 	/* Push the indentity matrix */
-	pie_MatBegin();
+	ScopedPieMatrix matScope;
 
 	pie_TRANSLATE(dv.x,dv.y,dv.z);
 
@@ -2616,8 +2616,6 @@ void	renderDeliveryPoint(FLAG_POSITION *psPosition, bool blueprint)
 	psPosition->screenX = x;
 	psPosition->screenY = y;
 	psPosition->screenR = r;
-
-	pie_MatEnd();
 }
 
 /// Draw a piece of wall

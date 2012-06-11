@@ -42,3 +42,5 @@ file		TEXPAGE	"page-81-water-2.png"
 /* These are MP specific */
 file		TEXPAGE	"page-28-naval.png"
 file		TEXPAGE	"page-59-more-weapons.png"
+/* Added for Mysteryem's Sand Mod */
+file		TEXPAGE "page-109-sand-arizona.png"
