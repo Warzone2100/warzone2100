@@ -1,3 +1,59 @@
+2012-06-xx: Version 3.1 beta11
+ * General:
+   * Change: CB sensor also defends allies (commit:313738ed235c69c64c83eb9b987d63efc95d8782)
+   * Change: Structures with no cost to build (oil derricks) deconstruct when abandoned, taking one minute for 100% build progress (commit:5ba90fec427096f6016867852ce696126514d378)
+   * Change: Queue building on burning oil wells, trucks wait until the fire stops (commit:353357b1b6f3b8a12131abd7c2c2cef571402e5b)
+   * Fix: CB fire against mobile targets (ticket:3529, commit:193eba2a9f8d4a5fc2dd6ed58dabe4c42e1eaa1a)
+   * Fix: Weapon reloading (commit:74d8086132a3f847ea13b88254096fe68a30474b)
+   * Fix: Correct unit count of commanders after loading a savegame (ticket:3062, ticket:3513, commit:b3f3b089f1438bf66fad0e3d4db4447bd2dd6d23)
+   * Fix: Correct factory numbers after loading a savegame (ticket:3384, commit:737b3d9d24ab1634dafd09558fc8b8a5354ffa9c)
+   * Fix: Show correct number of selected units (ticket:3479, commit:22799c2b2607949b1920e8d1f143311c167f7a39)
+ * Graphics:
+   * Change: New cliff decals to make cliffs more visible (commit:4a53a0e010452a1ef2a64d92fd3f12c27b451a50)
+ * Multiplayer:
+   * Change: Add oil barrels to map preview (commit:5b07a7b755a529d37c5f308b5ecd6df52da05fec)
+   * Fix: Don't crash when a player fails to join a game (commit:bf2483cbd7430bd81457a6931c1e526828c7d18a, commit:7a0cd2eccfe733215ee43cab28243d7f29918b75)
+   * Fix: Don't freeze when a player leaves (ticket:3410, commit:53ce0a7c38822feda52bc9ba24fd45d02a0fa7cc, commit:e0939a02175e56f8a0f1468286f0cbd039053174)
+   * Fix: Don't desync when a player leaves (commit:35f301b1ba7f76be1bbfc80d8cdb924f12d6ae7e)
+   * Fix: More consistent ping display (commit:bedd8704f2aef5afd1c2acfa4566a0445d3b22fb)
+   * Fix: When a player freezes, don't block communication (e.g. chat) between the remaining ones (commit:e14c39fb38ba8c6f11bb4f8e3f0e78a61cb86828)
+   * Fix: Show all players when a player has left (ticket:3461, commit:00b1968184ff4f215ed7de8b217857f0d5866ad1)
+   * Fix: Play "Artifact recovered" sound only to the player who actually found it (ticket:3488, commit:acaf4620e0f14d50b0c1696e0236ef9e82ca8e6a)
+ * Multiplayer balance (commit:ea7b1912fdd6d733288e9b5e783af8cd1c3cf408):
+   * Nerf flamers, mostly by decreasing incendiary damage of flamers, to compensate the fact that it is unaffected by armor type modifiers. Also decrease incendiary radius to prevent ground flamers from causing incendiary damage to walls.
+     * Inferno: price 80->110, incendiary radius 64->48, incendiary damage 40->32
+     * Thermite Cyborg: incendiary damage 38->32
+     * Plasmite: price 80->130, incendiary radius 96->60, incendiary damage 63->50
+     * incendiary Mortar: price 150->200, pit price 135->170, incendiary damage 30->22
+     * incendiary Howitzer: price 250->300, emplacement price 325->400, incendiary damage 60->32
+     * Thermite Bombs: incendiary damage 200->120
+     * Plasmite Bombs: incendiary damage 200->140
+   * Nerf machineguns to compensate the ROF fix that used to decrease with game FPS.
+     * HMG: damage 18->17
+     * AG: fire pause 3->4, damage 20->19
+     * TAG: price 100->120, fire pause 3->4, damage 30->28
+     * AG Cyborg: fire pause 4->5, damage 20->18
+     * MG: ROF upgrades 15%/30%/45% -> 17%/34%/50%.
+     * Whirlwind: fire pause 3->4
+   * Slightly nerf rocket branch in comparison to cannons. Most importantly, nerf MRAs to compensate the fix in indirect fire mechanics.
+     * Minipod: range 1152->1088
+     * MRA: damage 34->29, splash damage 30->29, reload time 145->165
+     * MC: research points 4800->3600
+     * HPV: research points 7200->4800
+   * Make T3 missiles homing, making use of the new homing-indirect targeting class. Nerf Seraphs to compensate that fact.
+     * Seraph: damage 120->110, splash 100->90, targeting class INDIRECT->HOMING-INDIRECT
+     * Archangel: targeting class INDIRECT->HOMING-INDIRECT
+   * Make walls effective even after gates are invented.
+     * Gates: price 25->75
+   * Make cannon fortresses cheaper, while nerfing range, in order to make them usable in low oil matchups and less effective in high-oil settings.
+     * Cannon Fortress: price 1000->900, range 1792->1408
+ * Translations:
+   * Update: Polish (ticket:1347, commit:9fc92b7d64200c65f7ea8baab617ed8d19a773cf)
+   * Update: French (ticket:3483, ticket:3512, commit:badb8c05cb3e9e8a8e1af529288d57b96126e482, commit:113796a9d6a8e34ced9c93bae213ba53b19d5944)
+   * Update: Hungarian (ticket:3485, commit:d74ebad6a32dbe49771223c347ad9515a101976b)
+   * Update: Turkish (ticket:3486, commit:a400fe055fd5d176cd809bcfdc0973cf839a4a2c)
+   * Update: Dutch (ticket:3484, commit:c46d2d56ea3cbfe9d7ba7516f5b1962a2fef2d37)
+
 2012-05-13: Version 3.1 beta10
  * General:
    * Fix: Loading of skirmish games (ticket:3451, commit:18216c60e76d05ad0fe2bf7d860347f76f70c8f8)
