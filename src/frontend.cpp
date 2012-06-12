@@ -250,6 +250,11 @@ static void startSinglePlayerMenu(void)
 
 	addSideText	 (FRONTEND_SIDETEXT ,FRONTEND_SIDEX,FRONTEND_SIDEY,_("SINGLE PLAYER"));
 	addMultiBut(psWScreen, FRONTEND_BOTFORM, FRONTEND_QUIT, 10, 10, 30, 29, P_("menu", "Return"), IMAGE_RETURN, IMAGE_RETURN_HI, IMAGE_RETURN_HI);
+	// show this only when the video sequences are not installed
+	if (!PHYSFS_exists("sequences/devastation.ogg"))
+	{
+		addSmallTextButton(FRONTEND_HYPERLINK, FRONTEND_POS1X, FRONTEND_POS7Y + 12, _("Campaign videos are missing! Get them from http://wz2100.net"), 0);
+	}
 }
 
 static void frontEndNewGame( void )
