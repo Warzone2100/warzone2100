@@ -18,9 +18,9 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 /*
- * Screen.c
+ * screen.cpp
  *
- * Basic double buffered display using direct draw.
+ * Basic double buffered display using OpenGL.
  *
  */
 
@@ -42,6 +42,7 @@
 #include "src/console.h"
 #include "src/levels.h"
 #include <vector>
+#include <algorithm>
 
 /* global used to indicate preferred internal OpenGL format */
 int wz_texture_compression = 0;
