@@ -523,13 +523,14 @@ struct BLOCKING_CALLBACK_DATA
 {
 	PROPULSION_TYPE propulsionType;
 	bool blocking;
+	Vector2i src;
 	Vector2i dst;
 };
 
 static bool moveBlockingTileCallback(Vector2i pos, int32_t dist, void *data_)
 {
 	BLOCKING_CALLBACK_DATA *data = (BLOCKING_CALLBACK_DATA *)data_;
-	data->blocking |= pos != data->dst && fpathBlockingTile(map_coord(pos.x), map_coord(pos.y), data->propulsionType);
+	data->blocking |= pos != data->src && pos != data->dst && fpathBlockingTile(map_coord(pos.x), map_coord(pos.y), data->propulsionType);
 	return !data->blocking;
 }
 
@@ -543,6 +544,7 @@ static int32_t moveDirectPathToWaypoint(DROID *psDroid, unsigned positionIndex)
 	BLOCKING_CALLBACK_DATA data;
 	data.propulsionType = getPropulsionStats(psDroid)->propulsionType;
 	data.blocking = false;
+	data.src = src;
 	data.dst = dst;
 	rayCast(src, dst, &moveBlockingTileCallback, &data);
 	return data.blocking? -1 - dist : dist;
