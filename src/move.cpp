@@ -1284,7 +1284,7 @@ static Vector2i moveGetObstacleVector(DROID *psDroid, Vector2i dest)
 
 		// Find very approximate position of obstacle relative to us when we get close, based on our guesses.
 		Vector2i deltaDiff = iSinCosR(obstDirectionGuess, (int64_t)std::max(iHypot(diff) - totalRadius*2/3, 0)*obstSpeedGuess / ourMaxSpeed);
-		if (!fpathBlockingTile(psObstacle->pos.x + deltaDiff.x, psObstacle->pos.y + deltaDiff.y, obstaclePropStats->propulsionType))  // Don't assume obstacle can go through cliffs.
+		if (!fpathBlockingTile(map_coord(psObstacle->pos.x + deltaDiff.x), map_coord(psObstacle->pos.y + deltaDiff.y), obstaclePropStats->propulsionType))  // Don't assume obstacle can go through cliffs.
 		{
 			diff += deltaDiff;
 		}
