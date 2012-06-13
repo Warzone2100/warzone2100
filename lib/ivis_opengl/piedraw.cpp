@@ -459,10 +459,6 @@ void pie_Draw3DShape(iIMDShape *shape, int frame, int team, PIELIGHT colour, int
 
 	ASSERT(frame >= 0, "Negative frame %d", frame);
 	ASSERT(team >= 0, "Negative team %d", team);
-	if (frame == 0)
-	{
-		frame = team;
-	}
 
 	if (drawing_interface || !shadows)
 	{
