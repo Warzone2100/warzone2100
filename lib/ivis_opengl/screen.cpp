@@ -41,6 +41,7 @@
 #include "screen.h"
 #include "src/console.h"
 #include "src/levels.h"
+#include <vector>
 
 /* global used to indicate preferred internal OpenGL format */
 int wz_texture_compression = 0;
@@ -88,8 +89,35 @@ bool screenInitialise()
 	addDumpInfo(opengl.GLEWversion);
 	debug(LOG_3D, "%s", opengl.GLEWversion);
 
+	GLubyte const *extensionsBegin = glGetString(GL_EXTENSIONS);
+	GLubyte const *extensionsEnd = extensionsBegin + strlen((char const *)extensionsBegin);
+	std::vector<std::string> glExtensions;
+	for (GLubyte const *i = extensionsBegin; i < extensionsEnd; )
+	{
+		GLubyte const *j = std::find(i, extensionsEnd, ' ');
+		glExtensions.push_back(std::string(i, j));
+		i = j + 1;
+	}
+
 	/* Dump extended information about OpenGL implementation to the console */
-	debug(LOG_3D, "OpenGL Extensions : %s", glGetString(GL_EXTENSIONS)); // FIXME This is too much for MAX_LEN_LOG_LINE
+
+	std::string line;
+	for (unsigned n = 0; n < glExtensions.size(); ++n)
+	{
+		std::string word = " ";
+		word += glExtensions[n];
+		if (n + 1 != glExtensions.size())
+		{
+			word += ',';
+		}
+		if (line.size() + word.size() > 160)
+		{
+			debug(LOG_3D, "OpenGL Extensions:%s", line.c_str());
+			line.clear();
+		}
+		line += word;
+	}
+	debug(LOG_3D, "OpenGL Extensions:%s", line.c_str());
 	debug(LOG_3D, "Supported OpenGL extensions:");
 	debug(LOG_3D, "  * OpenGL 1.2 %s supported!", GLEW_VERSION_1_2 ? "is" : "is NOT");
 	debug(LOG_3D, "  * OpenGL 1.3 %s supported!", GLEW_VERSION_1_3 ? "is" : "is NOT");
