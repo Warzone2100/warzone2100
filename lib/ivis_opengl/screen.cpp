@@ -181,11 +181,16 @@ bool screenInitialise()
 			debug(LOG_POPUP, _("OpenGL 1.5/2.0 is not supported by your system. Some things may look wrong. Please upgrade your graphics driver/hardware, if possible."));
 			// screen_EnableVBO should be called later, so nothing (quesoGLC) will call glewInit twice and flush our tweaks into void
 		}
+		else if (GLEW_VERSION_1_2 && GLEW_ARB_vertex_buffer_object && GLEW_ARB_texture_env_crossbar)
+		{
+			debug(LOG_POPUP, _("OpenGL 1.4 + VBO extension is not supported by your system. Some things may look wrong. Please upgrade your graphics driver/hardware, if possible."));
+			// screen_EnableVBO should be called later, so nothing (quesoGLC) will call glewInit twice and flush our tweaks into void
+		}
 		else
 		{
 			// We wite this file in hopes that people will upload the information in it to us.
 			writeGameInfo("WZdebuginfo.txt");
-			debug(LOG_FATAL, _("OpenGL 1.4 + VBO extension is not supported by your system. The game requires this. Please upgrade your graphics drivers/hardware, if possible."));
+			debug(LOG_FATAL, _("OpenGL 1.2 + VBO extension + TEC extension is not supported by your system. The game requires this. Please upgrade your graphics drivers/hardware, if possible."));
 			exit(1);
 		}
 	}
