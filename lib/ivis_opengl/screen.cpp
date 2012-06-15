@@ -119,7 +119,7 @@ bool screenInitialise()
 		line += word;
 	}
 	debug(LOG_3D, "OpenGL Extensions:%s", line.c_str());
-	debug(LOG_3D, "Supported OpenGL extensions:");
+	debug(LOG_3D, "Notable OpenGL features:");
 	debug(LOG_3D, "  * OpenGL 1.2 %s supported!", GLEW_VERSION_1_2 ? "is" : "is NOT");
 	debug(LOG_3D, "  * OpenGL 1.3 %s supported!", GLEW_VERSION_1_3 ? "is" : "is NOT");
 	debug(LOG_3D, "  * OpenGL 1.4 %s supported!", GLEW_VERSION_1_4 ? "is" : "is NOT");
@@ -143,8 +143,11 @@ bool screenInitialise()
 	screenWidth = MAX(screenWidth, 640);
 	screenHeight = MAX(screenHeight, 480);
 
-	if (GLEW_VERSION_2_0 && !opengl_fallback_mode)
+	std::pair<int, int> glslVersion(0, 0);
+	if (GLEW_ARB_shading_language_100 && GLEW_ARB_shader_objects)
 	{
+		sscanf((char const *)glGetString(GL_SHADING_LANGUAGE_VERSION), "%d.%d", &glslVersion.first, &glslVersion.second);
+
 		/* Dump information about OpenGL 2.0+ implementation to the console and the dump file */
 		GLint glMaxTIUs, glMaxTCs, glMaxTIUAs, glmaxSamples, glmaxSamplesbuf;
 
@@ -162,37 +165,29 @@ bool screenInitialise()
 		debug(LOG_3D, "  * (current) Max Sample buffer is %d.", (int) glmaxSamplesbuf);
 		glGetIntegerv(GL_SAMPLES, &glmaxSamples);
 		debug(LOG_3D, "  * (current) Max Sample level is %d.", (int) glmaxSamples);
+	}
 
+	bool canRunAtAll = GLEW_VERSION_1_2 && GLEW_ARB_vertex_buffer_object && GLEW_ARB_texture_env_crossbar;
+	bool canRunShaders = canRunAtAll && glslVersion >= std::make_pair(1, 20);  // glGetString(GL_SHADING_LANGUAGE_VERSION) >= "1.20"
+
+	if (canRunShaders && !opengl_fallback_mode)
+	{
 		if (pie_LoadShaders())
 		{
 			pie_SetShaderAvailability(true);
 		}
-
 	}
-	else if (GLEW_VERSION_1_5)
+	else if (canRunAtAll)
 	{
-		debug(LOG_POPUP, _("OpenGL 2.0 is not supported by your system. Some things may look wrong. Please upgrade your graphics driver/hardware, if possible."));
+		// corner cases: vbo(core 1.5 or ARB ext), texture crossbar (core 1.4 or ARB ext)
+		debug(LOG_POPUP, _("OpenGL GLSL shader version 1.20 is not supported by your system. Some things may look wrong. Please upgrade your graphics driver/hardware, if possible."));
 	}
-	else // less than 1.5
+	else
 	{
-		// Check if VBO extension available for hacks
-		if (GLEW_VERSION_1_4 && GLEW_ARB_vertex_buffer_object)
-		{
-			debug(LOG_POPUP, _("OpenGL 1.5/2.0 is not supported by your system. Some things may look wrong. Please upgrade your graphics driver/hardware, if possible."));
-			// screen_EnableVBO should be called later, so nothing (quesoGLC) will call glewInit twice and flush our tweaks into void
-		}
-		else if (GLEW_VERSION_1_2 && GLEW_ARB_vertex_buffer_object && GLEW_ARB_texture_env_crossbar)
-		{
-			debug(LOG_POPUP, _("OpenGL 1.4 + VBO extension is not supported by your system. Some things may look wrong. Please upgrade your graphics driver/hardware, if possible."));
-			// screen_EnableVBO should be called later, so nothing (quesoGLC) will call glewInit twice and flush our tweaks into void
-		}
-		else
-		{
-			// We wite this file in hopes that people will upload the information in it to us.
-			writeGameInfo("WZdebuginfo.txt");
-			debug(LOG_FATAL, _("OpenGL 1.2 + VBO extension + TEC extension is not supported by your system. The game requires this. Please upgrade your graphics drivers/hardware, if possible."));
-			exit(1);
-		}
+		// We write this file in hopes that people will upload the information in it to us.
+		writeGameInfo("WZdebuginfo.txt");
+		debug(LOG_FATAL, _("OpenGL 1.2 + VBO + TEC is not supported by your system. The game requires this. Please upgrade your graphics drivers/hardware, if possible."));
+		exit(1);
 	}
 
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
