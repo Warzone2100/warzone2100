@@ -505,6 +505,17 @@ ASR_RETVAL fpathAStarRoute(MOVE_CONTROL *psMove, PATHJOB *psJob)
 
 		PathExploredTile &tile = context.map[map_coord(p.x) + map_coord(p.y)*mapWidth];
 		newP = p - Vector2i(tile.dx, tile.dy)*(TILE_UNITS/64);
+		Vector2i mapP = map_coord(newP);
+		int xSide = newP.x - world_coord(mapP.x) > TILE_UNITS/2? 1 : -1;  // 1 if newP is on right-hand side of the tile, or -1 if newP is on the left-hand side of the tile.
+		int ySide = newP.y - world_coord(mapP.y) > TILE_UNITS/2? 1 : -1;  // 1 if newP is on bottom side of the tile, or -1 if newP is on the top side of the tile.
+		if (context.isBlocked(mapP.x + xSide, mapP.y))
+		{
+			newP.x = world_coord(mapP.x) + TILE_UNITS/2;  // Point too close to a blocking tile on left or right side, so move the point to the middle.
+		}
+		if (context.isBlocked(mapP.x, mapP.y + ySide))
+		{
+			newP.y = world_coord(mapP.y) + TILE_UNITS/2;  // Point too close to a blocking tile on rop or bottom side, so move the point to the middle.
+		}
 		if (map_coord(p) == Vector2i(context.tileS.x, context.tileS.y) || p == newP)
 		{
 			break;  // We stopped moving, because we reached the destination or the closest reachable tile to context.tileS. Give up now.
