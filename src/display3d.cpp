@@ -3238,7 +3238,8 @@ static void	drawDroidSelections( void )
 			}
 			mulH = (float)psDroid->body / (float)psDroid->originalBody;
 			damage = mulH * (float)psDroid->sDisplay.screenR;// (((psDroid->sDisplay.screenR*10000)/100)*damage)/10000;
-			if(damage>psDroid->sDisplay.screenR) damage = psDroid->sDisplay.screenR;
+			if (damage > psDroid->sDisplay.screenR)
+				damage = psDroid->sDisplay.screenR;
 
 			damage *=2;
 			scrX = psDroid->sDisplay.screenX;
@@ -3270,20 +3271,15 @@ static void	drawDroidSelections( void )
 				pie_BoxFill(scrX - scrR, scrY + scrR+4, scrX - scrR + damage, scrY + scrR + 5, powerColShadow);
 
 				/* Write the droid rank out */
-				if((scrX+scrR)>0 && (scrY+scrR)>0 && (scrX-scrR) < pie_GetVideoBufferWidth() && (scrY-scrR) < pie_GetVideoBufferHeight())
+				if (	(scrX + scrR) > 0
+					&&	(scrX - scrR) < pie_GetVideoBufferWidth()
+					&&	(scrY + scrR) > 0
+					&&	(scrY - scrR) < pie_GetVideoBufferHeight())
 				{
 					drawDroidRank(psDroid);
 					drawDroidSensorLock(psDroid);
-
-					if ((psDroid->droidType == DROID_COMMAND) ||
-						hasCommander(psDroid))
-					{
-						drawDroidCmndNo(psDroid);
-					}
-					else if(psDroid->group!=UBYTE_MAX)
-					{
-						drawDroidGroupNumber(psDroid);
-					}
+					drawDroidCmndNo(psDroid);
+					drawDroidGroupNumber(psDroid);
 				}
 			}
 
@@ -3293,8 +3289,6 @@ static void	drawDroidSelections( void )
 			}
 		}
 	}
-
-
 
 	/* Are we over an enemy droid */
 	if(bMouseOverDroid && !bMouseOverOwnDroid)
@@ -3354,7 +3348,8 @@ static void	drawDroidSelections( void )
 					mulH = (float)psDroid->body / (float)psDroid->originalBody;
 				}
 				damage = mulH * (float)psDroid->sDisplay.screenR;// (((psDroid->sDisplay.screenR*10000)/100)*damage)/10000;
-				if(damage>psDroid->sDisplay.screenR) damage = psDroid->sDisplay.screenR;
+				if (damage > psDroid->sDisplay.screenR)
+					damage = psDroid->sDisplay.screenR;
 				damage *=2;
 				scrX = psDroid->sDisplay.screenX;
 				scrY = psDroid->sDisplay.screenY;
@@ -3362,7 +3357,10 @@ static void	drawDroidSelections( void )
 
 				/* Yeah, yeah yeah - hardcoded palette entries - need to change to #defined colour names */
 				/* Three DFX clips properly right now - not sure if software does */
-				if((scrX+scrR)>0 && (scrY+scrR)>0 && (scrX-scrR) < pie_GetVideoBufferWidth() && (scrY-scrR) < pie_GetVideoBufferHeight())
+				if (	(scrX + scrR) > 0
+					&&	(scrX - scrR) < pie_GetVideoBufferWidth()
+					&&	(scrY + scrR) > 0
+					&&	(scrY - scrR) < pie_GetVideoBufferHeight())
 				{
 					if(!driveModeActive() || driveIsDriven(psDroid)) {
 						boxCol = WZCOL_WHITE;
@@ -3394,7 +3392,7 @@ static void	drawDroidSelections( void )
 				if(psDroid->bTargetted && (psDroid->visible[selectedPlayer] == UBYTE_MAX))
 				{
 					scrX = psDroid->sDisplay.screenX;
-					scrY = psDroid->sDisplay.screenY - 8;
+					scrY = psDroid->sDisplay.screenY;
 					index = IMAGE_BLUE1 + getModularScaledRealTime(1020, 5);
 					iV_DrawImage(IntImages,index,scrX,scrY);
 				}
@@ -3409,7 +3407,7 @@ static void	drawDroidSelections( void )
 			if(psFeature->bTargetted)
 			{
 				scrX = psFeature->sDisplay.screenX;
-				scrY = psFeature->sDisplay.screenY - (psFeature->sDisplay.imd->max.y / 4);
+				scrY = psFeature->sDisplay.screenY;
 				iV_DrawImage(IntImages,getTargettingGfx(),scrX,scrY);
 			}
 		}
@@ -3420,91 +3418,68 @@ static void	drawDroidSelections( void )
 
 /* ---------------------------------------------------------------------------- */
 /// X offset to display the group number at
-#define GN_X_OFFSET	(28)
-/// Y offset to display the group number at
-#define GN_Y_OFFSET (17)
+#define GN_X_OFFSET	(8)
 /// Draw the number of the group the droid is in next to the droid
 static void	drawDroidGroupNumber(DROID *psDroid)
 {
-UWORD	id;
-UDWORD	id2;
-bool	bDraw;
-SDWORD	xShift,yShift;
+	UWORD id = UWORD_MAX;
 
-	bDraw = true;
-
-	id = id2 = UDWORD_MAX;
-
-	/* Is the unit in a group? */
-	if(hasCommander(psDroid))
+	switch(psDroid->group)
 	{
-		id2 = IMAGE_GN_STAR;
-
+	case 0:
+		id = IMAGE_GN_0;
+		break;
+	case 1:
+		id = IMAGE_GN_1;
+		break;
+	case 2:
+		id = IMAGE_GN_2;
+		break;
+	case 3:
+		id = IMAGE_GN_3;
+		break;
+	case 4:
+		id = IMAGE_GN_4;
+		break;
+	case 5:
+		id = IMAGE_GN_5;
+		break;
+	case 6:
+		id = IMAGE_GN_6;
+		break;
+	case 7:
+		id = IMAGE_GN_7;
+		break;
+	case 8:
+		id = IMAGE_GN_8;
+		break;
+	case 9:
+		id = IMAGE_GN_9;
+		break;
+	default:
+		break;
 	}
-	//else
+
+	if(id != UWORD_MAX)
 	{
-		switch(psDroid->group)
-		{
-		case 0:
-			id = IMAGE_GN_0;
-			break;
-		case 1:
-			id = IMAGE_GN_1;
-			break;
-		case 2:
-			id = IMAGE_GN_2;
-			break;
-		case 3:
-			id = IMAGE_GN_3;
-			break;
-		case 4:
-			id = IMAGE_GN_4;
-			break;
-		case 5:
-			id = IMAGE_GN_5;
-			break;
-		case 6:
-			id = IMAGE_GN_6;
-			break;
-		case 7:
-			id = IMAGE_GN_7;
-			break;
-		case 8:
-			id = IMAGE_GN_8;
-			break;
-		case 9:
-			id = IMAGE_GN_9;
-			break;
-		default:
-			bDraw = false;
-			break;
-		}
-	}
-	if(bDraw)
-	{
-		xShift = GN_X_OFFSET;  // yeah yeah, I know
-		yShift = GN_Y_OFFSET;
-		xShift = ((xShift*pie_GetResScalingFactor())/100);
-		yShift = ((yShift*pie_GetResScalingFactor())/100);
+		int xShift = psDroid->sDisplay.screenR + GN_X_OFFSET;
+		int yShift = psDroid->sDisplay.screenR;
 		iV_DrawImage(IntImages,id,psDroid->sDisplay.screenX-xShift,psDroid->sDisplay.screenY+yShift);
-		if(id2!=UDWORD_MAX)
-		{
-			iV_DrawImage(IntImages,id2,psDroid->sDisplay.screenX-xShift,psDroid->sDisplay.screenY+yShift-8);
-		}
 	}
 }
 
+/// X offset to display the group number at
+#define CMND_STAR_X_OFFSET	(6)
+#define CMND_GN_Y_OFFSET	(8)
 /// Draw the number of the commander the droid is assigned to
 static void	drawDroidCmndNo(DROID *psDroid)
 {
-UWORD	id;
-UDWORD	id2;
-bool	bDraw;
-SDWORD	xShift,yShift, index;
+	SDWORD	xShift,yShift, index;
+	UDWORD	id2;
+	UWORD	id;
+	bool	bDraw = true;
 
-	bDraw = true;
-
-	id = id2 = UDWORD_MAX;
+	id = UWORD_MAX;
 
 	id2 = IMAGE_GN_STAR;
 	index = SDWORD_MAX;
@@ -3552,11 +3527,9 @@ SDWORD	xShift,yShift, index;
 
 	if(bDraw)
 	{
-		xShift = GN_X_OFFSET;  // yeah yeah, I know
-		yShift = GN_Y_OFFSET;
-		xShift = ((xShift*pie_GetResScalingFactor())/100);
-		yShift = ((yShift*pie_GetResScalingFactor())/100);
-		iV_DrawImage(IntImages,id2,psDroid->sDisplay.screenX-xShift-6,psDroid->sDisplay.screenY+yShift);
+		xShift = psDroid->sDisplay.screenR + GN_X_OFFSET;
+		yShift = psDroid->sDisplay.screenR - CMND_GN_Y_OFFSET;
+		iV_DrawImage(IntImages,id2,psDroid->sDisplay.screenX-xShift-CMND_STAR_X_OFFSET,psDroid->sDisplay.screenY+yShift);
 		iV_DrawImage(IntImages,id,psDroid->sDisplay.screenX-xShift,psDroid->sDisplay.screenY+yShift);
 	}
 }
@@ -3565,31 +3538,40 @@ SDWORD	xShift,yShift, index;
 
 /**	Get the onscreen coordinates of a droid so we can draw a bounding box
  * This need to be severely speeded up and the accuracy increased to allow variable size bouding boxes
+ * @todo Remove all magic numbers and hacks
  */
 void calcScreenCoords(DROID *psDroid)
 {
 	/* Get it's absolute dimensions */
-	const Vector3i origin(0, 0, 0);
-	Vector2i center(0, 0);
-	UDWORD radius;
+	const BODY_STATS *psBStats = asBodyStats + psDroid->asBits[COMP_BODY].nStat;
+	Vector3i origin;
+	Vector2i center;
+	int wsRadius = 22; // World space radius, 22 = magic minimum
+	float radius;
 
-	/* get the screen corrdinates */
-	const int cZ = pie_RotateProject(&origin, &center);
-
-	// TODO: compute the droid's radius (using min/max for x,y,z)
-	if (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER)
+	// NOTE: This only takes into account body, but seems "good enough"
+	if (psBStats && psBStats->pIMD)
 	{
-		radius = 45;
+		wsRadius = MAX(wsRadius, psBStats->pIMD->radius);
+	}
+
+	origin = Vector3i(0, wsRadius, 0); // take the center of the object
+
+	/* get the screen coordinates */
+	// FP12_SHIFT-STRETCHED_Z_SHIFT is the shift of the scaling on the depth returned
+	const float cZ = pie_RotateProject(&origin, &center) / (float) (1 << (FP12_SHIFT-STRETCHED_Z_SHIFT));
+
+	//Watermelon:added a crash protection hack...
+	if (cZ >= 0)
+	{
+		// 330 is the near plane depth from pie_PerspectiveBegin
+		// not sure where magic comes from, could be another 1<<FP12_SHIFT-STRETCHED_Z_SHIFT
+		const int magic = 4;
+		radius = (wsRadius * 330 * magic) / cZ;
 	}
 	else
 	{
-		radius = 22;
-	}
-
-	//Watermelon:added a crash protection hack...
-	if (cZ != 0)
-	{
-		radius = (radius * pie_GetResScalingFactor()) * 80 / cZ;
+		radius = 1; // 1 just in case some other code assumes radius != 0
 	}
 
 	/* Deselect all the droids if we've released the drag box */
@@ -3605,7 +3587,6 @@ void calcScreenCoords(DROID *psDroid)
 			}
 		}
 	}
-	center.y -= 4;
 
 	/* Store away the screen coordinates so we can select the droids without doing a trasform */
 	psDroid->sDisplay.screenX = center.x;
@@ -4249,7 +4230,9 @@ static void	drawDroidRank(DROID *psDroid)
 	if(gfxId!=UDWORD_MAX)
 	{
 		/* Render the rank graphic at the correct location */ // remove hardcoded numbers?!
-		iV_DrawImage(IntImages,(UWORD)gfxId,psDroid->sDisplay.screenX+20,psDroid->sDisplay.screenY+8);
+		iV_DrawImage(IntImages,(UWORD)gfxId,
+					 psDroid->sDisplay.screenX+psDroid->sDisplay.screenR + 8,
+					 psDroid->sDisplay.screenY+psDroid->sDisplay.screenR);
 	}
 }
 
@@ -4262,8 +4245,7 @@ static void	drawDroidSensorLock(DROID *psDroid)
 	if (orderState(psDroid, DORDER_FIRESUPPORT))
 	{
 		/* Render the sensor graphic at the correct location - which is what?!*/
-		iV_DrawImage(IntImages,IMAGE_GN_STAR,psDroid->sDisplay.screenX+20,
-			psDroid->sDisplay.screenY-20);
+		iV_DrawImage(IntImages,IMAGE_GN_STAR, psDroid->sDisplay.screenX, psDroid->sDisplay.screenY);
 	}
 }
 

@@ -419,7 +419,7 @@
 		4366722A13D20B5700FE85BA /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43B8FD34127CB13F006F5A13 /* OpenGL.framework */; };
 		4366727413D211AE00FE85BA /* QuesoGLC.framework in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 4366718213D1FD5600FE85BA /* QuesoGLC.framework */; };
 		4366729613D2122700FE85BA /* QuesoGLC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4366718213D1FD5600FE85BA /* QuesoGLC.framework */; };
-		4371B60F11D93FD1005A67AB /* pngpriv.h in Headers */ = {isa = PBXBuildFile; fileRef = 4371B60D11D93FD0005A67AB /* pngpriv.h */; };
+		4371B60F11D93FD1005A67AB /* pngpriv.h in Headers */ = {isa = PBXBuildFile; fileRef = 4371B60D11D93FD0005A67AB /* pngpriv.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		437487CF14AE41C100ABC9C7 /* template.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4343651C149EA04800527137 /* template.cpp */; };
 		437D3360150A53E000B45AAE /* qslint in Copy Additional Executables */ = {isa = PBXBuildFile; fileRef = 437D32D9150A47A800B45AAE /* qslint */; };
 		437DABE714C3345B00DB5F94 /* swapinterval.mm in Sources */ = {isa = PBXBuildFile; fileRef = 437DABE614C3345B00DB5F94 /* swapinterval.mm */; };
