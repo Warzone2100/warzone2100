@@ -143,8 +143,11 @@ bool screenInitialise()
 	screenWidth = MAX(screenWidth, 640);
 	screenHeight = MAX(screenHeight, 480);
 
-	if (GLEW_VERSION_2_0)
+	std::pair<int, int> glslVersion(0, 0);
+	if (GLEW_ARB_shading_language_100 && GLEW_ARB_shader_objects)
 	{
+		sscanf((char const *)glGetString(GL_SHADING_LANGUAGE_VERSION), "%d.%d", &glslVersion.first, &glslVersion.second);
+
 		/* Dump information about OpenGL 2.0+ implementation to the console and the dump file */
 		GLint glMaxTIUs, glMaxTCs, glMaxTIUAs, glmaxSamples, glmaxSamplesbuf;
 
@@ -162,23 +165,28 @@ bool screenInitialise()
 		debug(LOG_3D, "  * (current) Max Sample buffer is %d.", (int) glmaxSamplesbuf);
 		glGetIntegerv(GL_SAMPLES, &glmaxSamples);
 		debug(LOG_3D, "  * (current) Max Sample level is %d.", (int) glmaxSamples);
+	}
 
-		if (pie_LoadShaders() && !opengl_noshaders)
+	bool canRunAtAll = GLEW_VERSION_1_2 /*&& GLEW_ARB_vertex_buffer_object*/ && GLEW_ARB_texture_env_crossbar;  // There seems to be a fallback for missing GLEW_ARB_vertex_buffer_object, in the 3.1 branch.
+	bool canRunShaders = canRunAtAll && glslVersion >= std::make_pair(1, 20);  // glGetString(GL_SHADING_LANGUAGE_VERSION) >= "1.20"
+
+	if (canRunShaders && !opengl_noshaders)
+	{
+		if (pie_LoadShaders())
 		{
 			pie_SetShaderAvailability(true);
 		}
-
 	}
-	else if (GLEW_VERSION_1_2 && GLEW_ARB_vertex_buffer_object && GLEW_ARB_texture_env_crossbar)
+	else if (canRunAtAll)
 	{
 		// corner cases: vbo(core 1.5 or ARB ext), texture crossbar (core 1.4 or ARB ext)
-		debug(LOG_POPUP, _("OpenGL 2.0 is not supported by your system. Some things may look wrong. Please upgrade your graphics driver/hardware, if possible."));
+		debug(LOG_POPUP, _("OpenGL GLSL shader version 1.20 is not supported by your system. Some things may look wrong. Please upgrade your graphics driver/hardware, if possible."));
 	}
 	else
 	{
-		// We wite this file in hopes that people will upload the information in it to us.
+		// We write this file in hopes that people will upload the information in it to us.
 		writeGameInfo("WZdebuginfo.txt");
-		debug(LOG_FATAL, _("OpenGL 1.2 + VBO + TEC is not supported by your system. The game requires this. Please upgrade your graphics drivers/hardware, if possible."));
+		debug(LOG_FATAL, _("OpenGL 1.2 + TEC is not supported by your system. The game requires this. Please upgrade your graphics drivers/hardware, if possible."));
 		exit(1);
 	}
 
