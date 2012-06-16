@@ -5786,6 +5786,7 @@ void printStructureInfo(STRUCTURE *psStructure)
 if not a good combination!*/
 bool validTemplateForFactory(DROID_TEMPLATE *psTemplate, STRUCTURE *psFactory)
 {
+	ASSERT_OR_RETURN(false, psTemplate, "Invalid template!");
 	//not in multiPlayer! - AB 26/5/99
 	if (!bMultiPlayer)
 	{
