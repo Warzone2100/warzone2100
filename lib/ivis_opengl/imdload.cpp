@@ -121,65 +121,57 @@ static bool _imd_load_polys( const char **ppFileData, iIMDShape *s, int pieVersi
 			poly->normal = pie_SurfaceNormal3fv(p0, p1, p2);
 		}
 
-		// texture coord routine
-		if (poly->flags & iV_IMD_TEX)
+		if (poly->flags & iV_IMD_TEXANIM)
 		{
-			int nFrames, framesPerLine, frame, pbRate;
-			float tWidth, tHeight;
+			int nFrames, pbRate, tWidth, tHeight;
 
-			if (poly->flags & iV_IMD_TEXANIM)
+			// even the psx needs to skip the data
+			if (sscanf(pFileData, "%d %d %d %d%n", &nFrames, &pbRate, &tWidth, &tHeight, &cnt) != 4)
 			{
-				if (sscanf(pFileData, "%d %d %f %f%n", &nFrames, &pbRate, &tWidth, &tHeight, &cnt) != 4)
-				{
-					debug(LOG_ERROR, "(_load_polys) [poly %u] error reading texanim data", i);
-					return false;
-				}
-				pFileData += cnt;
+				debug(LOG_ERROR, "(_load_polys) [poly %u] error reading texanim data", i);
+				return false;
+			}
+			pFileData += cnt;
 
-				ASSERT(tWidth > 0.0001f, "%s: texture width = %f", GetLastResourceFilename(), tWidth);
-				ASSERT(tHeight > 0.f, "%s: texture height = %f (width=%f)", GetLastResourceFilename(), tHeight, tWidth);
-				ASSERT(nFrames > 1, "%s: animation frames = %d", GetLastResourceFilename(), nFrames);
-				ASSERT(pbRate > 0, "%s: animation interval = %d ms", GetLastResourceFilename(), pbRate);
+			ASSERT(tWidth > 0, "%s: texture width = %d", GetLastResourceFilename(), tWidth);
+			ASSERT(tHeight > 0, "%s: texture height = %d (width=%d)", GetLastResourceFilename(), tHeight, tWidth);
+			ASSERT(nFrames > 1, "%s: animation frames = %d", GetLastResourceFilename(), nFrames);
+			ASSERT(pbRate > 0, "%s: animation interval = %d ms", GetLastResourceFilename(), pbRate);
 
-				/* Must have same number of frames and same playback rate for all polygons */
-				if (s->numFrames == 0)
-				{
-					s->numFrames = nFrames;
-					s->animInterval = pbRate;
-				}
-				else
-				{
-					ASSERT(s->numFrames == nFrames,
-						"%s: varying number of frames within one PIE level: %d != %d",
-							GetLastResourceFilename(), nFrames, s->numFrames);
-					ASSERT(s->animInterval == pbRate,
-						"%s: varying animation intervals within one PIE level: %d != %d",
-							GetLastResourceFilename(), pbRate, s->animInterval);
-				}
-
-				poly->texAnim.x = tWidth;
-				poly->texAnim.y = tHeight;
-
-				if (pieVersion != PIE_FLOAT_VER)
-				{
-					poly->texAnim.x /= OLD_TEXTURE_SIZE_FIX;
-					poly->texAnim.y /= OLD_TEXTURE_SIZE_FIX;
-				}
-				framesPerLine = 1/poly->texAnim.x;
+			/* Must have same number of frames and same playback rate for all polygons */
+			if (s->numFrames == 0)
+			{
+				s->numFrames = nFrames;
+				s->animInterval = pbRate;
 			}
 			else
 			{
-				nFrames = 1;
-				framesPerLine = 1;
-				pbRate = 1;
-				tWidth = 0.f;
-				tHeight = 0.f;
-				poly->texAnim.x = 0;
-				poly->texAnim.y = 0;
+				ASSERT(s->numFrames == nFrames,
+					   "%s: varying number of frames within one PIE level: %d != %d",
+						GetLastResourceFilename(), nFrames, s->numFrames);
+				ASSERT(s->animInterval == pbRate,
+					   "%s: varying animation intervals within one PIE level: %d != %d",
+						GetLastResourceFilename(), pbRate, s->animInterval);
 			}
 
+			poly->texAnim.x = tWidth / OLD_TEXTURE_SIZE_FIX;
+			poly->texAnim.y = tHeight / OLD_TEXTURE_SIZE_FIX;
+		}
+		else
+		{
+			poly->texAnim.x = 0;
+			poly->texAnim.y = 0;
+		}
+
+		// PC texture coord routine
+		if (poly->flags & iV_IMD_TEX)
+		{
+			int nFrames, framesPerLine, frame;
+
+			nFrames = MAX(1, s->numFrames);
 			poly->texCoord = (Vector2f *)malloc(sizeof(*poly->texCoord) * nFrames * poly->npnts);
 			ASSERT_OR_RETURN(false, poly->texCoord, "Out of memory allocating texture coordinates");
+			framesPerLine = OLD_TEXTURE_SIZE_FIX / (poly->texAnim.x * OLD_TEXTURE_SIZE_FIX);
 			for (j = 0; j < poly->npnts; j++)
 			{
 				float VertexU, VertexV;
@@ -199,12 +191,12 @@ static bool _imd_load_polys( const char **ppFileData, iIMDShape *s, int pieVersi
 
 				for (frame = 0; frame < nFrames; frame++)
 				{
-					const float uFrame = (frame % framesPerLine) * poly->texAnim.x;
-					const float vFrame = (frame / framesPerLine) * poly->texAnim.y;
+					const int uFrame = (frame % framesPerLine) * (poly->texAnim.x * OLD_TEXTURE_SIZE_FIX);
+					const int vFrame = (frame / framesPerLine) * (poly->texAnim.y * OLD_TEXTURE_SIZE_FIX);
 					Vector2f *c = &poly->texCoord[frame * poly->npnts + j];
 
-					c->x = VertexU + uFrame;
-					c->y = VertexV + vFrame;
+					c->x = VertexU + uFrame / OLD_TEXTURE_SIZE_FIX;
+					c->y = VertexV + vFrame / OLD_TEXTURE_SIZE_FIX;
 				}
 			}
 		}
