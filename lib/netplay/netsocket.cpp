@@ -907,6 +907,7 @@ int checkSockets(const SocketSet* set, unsigned int timeout)
  */
 ssize_t readAll(Socket* sock, void* buf, size_t size, unsigned int timeout)
 {
+	ASSERT_OR_RETURN( SOCKET_ERROR, sock, "We don't have a valid socket!");
 	ASSERT(!sock->isCompressed, "readAll on compressed sockets not implemented.");
 
 	const SocketSet set = {std::vector<Socket *>(1, sock)};

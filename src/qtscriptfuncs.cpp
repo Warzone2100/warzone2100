@@ -811,13 +811,16 @@ static QScriptValue js_pursueResearch(QScriptContext *context, QScriptEngine *en
 
 //-- \subsection{getResearch(research)}
 //-- Fetch information about a given technology item, given by a string that matches
-//-- its definition in "research.txt".
+//-- its definition in "research.txt". If not found, returns null.
 static QScriptValue js_getResearch(QScriptContext *context, QScriptEngine *engine)
 {
 	int player = engine->globalObject().property("me").toInt32();
 	QString resName = context->argument(0).toString();
 	RESEARCH *psResearch = getResearch(resName.toUtf8().constData());
-	SCRIPT_ASSERT(context, psResearch, "No such research: %s", resName.toUtf8().constData());
+	if (!psResearch)
+	{
+		return QScriptValue::NullValue;
+	}
 	return convResearch(psResearch, engine, player);
 }
 

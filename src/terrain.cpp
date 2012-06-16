@@ -711,9 +711,6 @@ bool initTerrain(void)
 	int decalSize;
 	int maxSectorSizeIndices, maxSectorSizeVertices;
 	bool decreasedSize = false;
-
-	// call VBO support hack before using it
-	screen_EnableVBO();
 	
 	// this information is useful to prevent crashes with buggy opengl implementations
 	glGetIntegerv(GL_MAX_ELEMENTS_VERTICES, &GLmaxElementsVertices);
