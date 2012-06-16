@@ -211,16 +211,23 @@ bool screen_IsVBOAvailable()
 		return false;
 	}
 
-	// Check for 2.0 first as there are some implmentations which have non-complete 1.5 along with full 2.0 support (atleast for GLEW detection)
-	if (GLEW_VERSION_2_0 || GLEW_VERSION_1_5)
+	return GLEW_VERSION_1_5 || GLEW_ARB_vertex_buffer_object;
+}
+
+// Make OpenGL's VBO functions available under the core names for drivers that support OpenGL 1.4 only but have the VBO extension
+void screen_EnableMissingFunctions()
+{
+	if (!GLEW_VERSION_1_3 && GLEW_ARB_multitexture)
 	{
-		return true;
+		debug(LOG_WARNING, "Pre-OpenGL 1.3: Fixing ARB_multitexture extension function names.");
+
+		__glewActiveTexture = __glewActiveTextureARB;
+		__glewMultiTexCoord2fv = __glewMultiTexCoord2fvARB;
 	}
 
-	// Make OpenGL's VBO functions available under the core names for drivers that support OpenGL 1.4 only but have the VBO extension
-	if (GLEW_VERSION_1_4 && GLEW_ARB_vertex_buffer_object)
+	if (!GLEW_VERSION_1_5 && GLEW_ARB_vertex_buffer_object)
 	{
-		debug(LOG_WARNING, "OpenGL 1.4+: Using VBO extension functions under the core names.");
+		debug(LOG_WARNING, "Pre-OpenGL 1.5: Fixing ARB_vertex_buffer_object extension function names.");
 
 		__glewBindBuffer = __glewBindBufferARB;
 		__glewBufferData = __glewBufferDataARB;
@@ -233,11 +240,28 @@ bool screen_IsVBOAvailable()
 		__glewIsBuffer = __glewIsBufferARB;
 		__glewMapBuffer = __glewMapBufferARB;
 		__glewUnmapBuffer = __glewUnmapBufferARB;
-
-		return true;
 	}
 
-	return false;
+	if (!GLEW_VERSION_2_0 && GLEW_ARB_shader_objects)
+	{
+		debug(LOG_WARNING, "Pre-OpenGL 2.0: Fixing ARB_shader_objects extension function names.");
+
+		__glewGetUniformLocation = __glewGetUniformLocationARB;
+		__glewAttachShader = __glewAttachObjectARB;
+		__glewCompileShader = __glewCompileShaderARB;
+		__glewCreateProgram = __glewCreateProgramObjectARB;
+		__glewCreateShader = __glewCreateShaderObjectARB;
+		__glewGetProgramInfoLog = __glewGetInfoLogARB;
+		__glewGetShaderInfoLog = __glewGetInfoLogARB;  // Same as previous.
+		__glewGetProgramiv = __glewGetObjectParameterivARB;
+		__glewUseProgram = __glewUseProgramObjectARB;
+		__glewGetShaderiv = __glewGetObjectParameterivARB;
+		__glewLinkProgram = __glewLinkProgramARB;
+		__glewShaderSource = __glewShaderSourceARB;
+		__glewUniform1f = __glewUniform1fARB;
+		__glewUniform1i = __glewUniform1iARB;
+		__glewUniform4fv = __glewUniform4fvARB;
+	}
 }
 
 void screen_SetBackDropFromFile(const char* filename)

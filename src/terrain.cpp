@@ -764,9 +764,6 @@ bool initTerrain(void)
 	int maxSectorSizeIndices, maxSectorSizeVertices;
 	bool decreasedSize = false;
 
-	// check VBO support before using it
-	terr_useVBO = screen_IsVBOAvailable();
-
 	debug(LOG_TERRAIN, "VBOs are%s available for usage", terr_useVBO ? "" : "n't");
 
 	// this information is useful to prevent crashes with buggy opengl implementations
