@@ -117,14 +117,14 @@ QScriptValue convStructure(STRUCTURE *psStruct, QScriptEngine *engine)
 		value.setProperty("stattype", (int)REF_WALL, QScriptValue::ReadOnly);
 		break;
 	case REF_BLASTDOOR:
-		value.setProperty("stattype", (int)REF_DEFENSE, QScriptValue::ReadOnly);
-		break;
 	case REF_DEFENSE:
 		if (isLasSat(psStruct->pStructureType))
 		{
 			value.setProperty("stattype", (int)FAKE_REF_LASSAT, QScriptValue::ReadOnly);
 			break;
 		}
+		value.setProperty("stattype", (int)REF_DEFENSE, QScriptValue::ReadOnly);
+		break;
 	default:
 		value.setProperty("stattype", (int)psStruct->pStructureType->type, QScriptValue::ReadOnly);
 		break;
