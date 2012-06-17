@@ -44,7 +44,9 @@ EXTRA_DIST= \
 	pkg/dpkg \
 	macosx \
 	3rdparty/SDL/mac \
-	tools/image \
+	tools/image/image.cpp \
+	tools/image/configs \
+	tools/image/Image.xcodeproj \
 	po/custom/mac-infoplist.txt \
 	po/custom/warzone2100.desktop.txt
 
