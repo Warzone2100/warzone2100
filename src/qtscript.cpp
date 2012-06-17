@@ -698,7 +698,7 @@ bool triggerEventAttacked(BASE_OBJECT *psVictim, BASE_OBJECT *psAttacker, int la
 		return false;
 	}
 	// throttle the event for performance
-	if (gameTime - psVictim->timeLastHit < ATTACK_THROTTLE)
+	if (gameTime - lastHit < ATTACK_THROTTLE)
 	{
 		return false;
 	}
