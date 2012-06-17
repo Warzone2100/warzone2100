@@ -17,7 +17,9 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
+
 #include "crc.h"
+#include "lib/netplay/netsocket.h"  // For htonl
 
 // Invariant:
 // crcTable[0] = 0;
@@ -63,4 +65,100 @@ uint32_t crcSumVector2i(uint32_t crc, const Vector2i *data, size_t dataLen)
 	}
 
 	return crc;
+}
+
+// Let primes[n] = {2, 3, 5, 7, 11, ...}.
+// Invariant: sha256TableH[n] = sqrt(primes[n]) << 32
+static const uint32_t sha256TableH[8] = {0x6A09E667, 0xBB67AE85, 0x3C6EF372, 0xA54FF53A, 0x510E527F, 0x9B05688C, 0x1F83D9AB, 0x5BE0CD19};
+// Invariant: sha256TableK[n] = pow(primes[n], 1/3.) << 32
+static const uint32_t sha256TableK[64] = {0x428A2F98, 0x71374491, 0xB5C0FBCF, 0xE9B5DBA5, 0x3956C25B, 0x59F111F1, 0x923F82A4, 0xAB1C5ED5, 0xD807AA98, 0x12835B01, 0x243185BE, 0x550C7DC3, 0x72BE5D74, 0x80DEB1FE, 0x9BDC06A7, 0xC19BF174, 0xE49B69C1, 0xEFBE4786, 0x0FC19DC6, 0x240CA1CC, 0x2DE92C6F, 0x4A7484AA, 0x5CB0A9DC, 0x76F988DA, 0x983E5152, 0xA831C66D, 0xB00327C8, 0xBF597FC7, 0xC6E00BF3, 0xD5A79147, 0x06CA6351, 0x14292967, 0x27B70A85, 0x2E1B2138, 0x4D2C6DFC, 0x53380D13, 0x650A7354, 0x766A0ABB, 0x81C2C92E, 0x92722C85, 0xA2BFE8A1, 0xA81A664B, 0xC24B8B70, 0xC76C51A3, 0xD192E819, 0xD6990624, 0xF40E3585, 0x106AA070, 0x19A4C116, 0x1E376C08, 0x2748774C, 0x34B0BCB5, 0x391C0CB3, 0x4ED8AA4A, 0x5B9CCA4F, 0x682E6FF3, 0x748F82EE, 0x78A5636F, 0x84C87814, 0x8CC70208, 0x90BEFFFA, 0xA4506CEB, 0xBEF9A3F7, 0xC67178F2};
+
+// Rotate right.
+static inline uint32_t ror(uint32_t a, int shift)
+{
+	return (a >> shift) | (a << (32 - shift));  // This is correctly optimised to a rotate-right instruction, in GCC, at least.
+}
+
+static void sha256SumBlock(uint32_t *w, uint32_t *h)
+{
+	for (unsigned i = 0; i < 16; ++i)
+	{
+		w[i] = ntohl(w[i]);  // Interpret data as big-endian 32-bit numbers.
+	}
+
+	// Extend w block from length 16 to 64.
+	for (unsigned i = 16; i < 64; ++i)
+	{
+		uint32_t s0 = ror(w[i - 15], 7) ^ ror(w[i - 15], 18) ^ (w[i - 15] >> 3);
+		uint32_t s1 = ror(w[i - 2], 17) ^ ror(w[i - 2], 19) ^ (w[i - 2] >> 10);
+		w[i] = w[i - 16] + s0 + w[i - 7] + s1;
+	}
+
+	uint32_t a = h[0], b = h[1], c = h[2], d = h[3], e = h[4], f = h[5], g = h[6], j = h[7];
+	for (unsigned i = 0; i < 64; ++i)
+	{
+		uint32_t s0 = ror(a, 2) ^ ror(a, 13) ^ ror(a, 22);
+		uint32_t maj = (a & b) ^ (a & c) ^ (b & c);  // Can be simplified to ((a ^ b) & c) ^ (a & b), but GCC does this at compile time.
+		uint32_t t2 = s0 + maj;
+		uint32_t s1 = ror(e, 6) ^ ror(e, 11) ^ ror(e, 25);
+		uint32_t ch = (e & (f ^ g)) ^ g;  // Equivalent to (e & f) ^ (~e & g), but saves a 'notl' instruction.
+		uint32_t t1 = j + s1 + ch + sha256TableK[i] + w[i];
+
+		j = g;
+		g = f;
+		f = e;
+		e = d + t1;
+		d = c;
+		c = b;
+		b = a;
+		a = t1 + t2;
+	}
+
+	h[0] += a;
+	h[1] += b;
+	h[2] += c;
+	h[3] += d;
+	h[4] += e;
+	h[5] += f;
+	h[6] += g;
+	h[7] += j;
+}
+
+std::vector<uint8_t> sha256Sum(void const *data, size_t dataLen)
+{
+	uint32_t h[8];
+	std::copy(sha256TableH, sha256TableH + 8, h);
+
+	// Add the suffix to the data.
+	char suffix[64 + 8];
+	size_t suffixLen = ((-9 - dataLen) & 63) + 9;
+	suffix[0] = 0x80;
+	memset(suffix + 1, 0x00, suffixLen - 1 - 8);
+	uint32_t size[2] = {htonl(dataLen >> 29), htonl(dataLen << 3)};  // Convert dataLen to number of bits, in big-endian format.
+	memcpy(suffix + suffixLen - 8, (char *)size, 8);
+
+	// Hash the data.
+	uint32_t w[64];  // 16 elements are passed to sha256SumBlock(), rest is used as scratch space by sha256SumBlock().
+	for (size_t z = 0; z + 63 < dataLen; z += 64)
+	{
+		memcpy((char *)w, (char const *)data + z, 64);
+		sha256SumBlock(w, h);
+	}
+	memcpy((char *)w, (char const *)data + (dataLen & ~63), dataLen & 63);
+	memcpy((char *)w + (dataLen & 63), suffix, ((suffixLen - 1) & 63) + 1);
+	sha256SumBlock(w, h);
+	if (suffixLen > 64)
+	{
+		memcpy((char *)w, suffix + (suffixLen & 63), 64);
+		sha256SumBlock(w, h);
+	}
+
+	// Convert result to big-endian, and return it.
+	for (unsigned i = 0; i < 8; ++i)
+	{
+		h[i] = htonl(h[i]);
+	}
+	std::vector<uint8_t> ret(32);
+	memcpy(&ret[0], h, 32);
+	return ret;
 }
