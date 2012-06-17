@@ -1926,7 +1926,6 @@ static bool setFunctionality(STRUCTURE	*psBuilding, STRUCTURE_TYPE functionType)
 			unsigned int x, y;
 
 			psFactory->capacity = (UBYTE) ((PRODUCTION_FUNCTION*)psBuilding->pStructureType->asFuncList[0])->capacity;
-			psFactory->productionOutput = (UBYTE) ((PRODUCTION_FUNCTION*)psBuilding->pStructureType->asFuncList[0])->productionOutput;
 			psFactory->psSubject = NULL;
 
 			// Default the secondary order - AB 22/04/99
@@ -1963,18 +1962,12 @@ static bool setFunctionality(STRUCTURE	*psBuilding, STRUCTURE_TYPE functionType)
 					ASSERT_OR_RETURN(false, false, "Invalid factory type");
 			}
 
-			// Take advantage of upgrades
-			structureProductionUpgrade(psBuilding);
+			structureProductionUpgrade(psBuilding); // set production output
 			break;
 		}
 		case REF_RESEARCH:
 		{
-			RESEARCH_FACILITY* psResFac = &psBuilding->pFunctionality->researchFacility;
-
-			psResFac->researchPoints = ((RESEARCH_FUNCTION *) psBuilding->pStructureType->asFuncList[0])->researchPoints;
-
-			// Take advantage of upgrades
-			structureResearchUpgrade(psBuilding);
+			structureResearchUpgrade(psBuilding); // set research points
 			break;
 		}
 		case REF_POWER_GEN:
@@ -2004,20 +1997,16 @@ static bool setFunctionality(STRUCTURE	*psBuilding, STRUCTURE_TYPE functionType)
 		case REF_REPAIR_FACILITY:
 		{
 			REPAIR_FACILITY* psRepairFac = &psBuilding->pFunctionality->repairFacility;
-			REPAIR_DROID_FUNCTION* pFuncRepair = (REPAIR_DROID_FUNCTION*)psBuilding->pStructureType->asFuncList[0];
 			unsigned int x, y;
 
-			psRepairFac->power = pFuncRepair->repairPoints;
 			psRepairFac->psObj = NULL;
 			psRepairFac->droidQueue = 0;
-
 			psRepairFac->psGroup = grpCreate();
 
 			// Add NULL droid to the group
 			psRepairFac->psGroup->add(NULL);
 
-			// Take advantage of upgrades
-			structureRepairUpgrade(psBuilding);
+			structureRepairUpgrade(psBuilding); // set repair power
 
 			// Create an assembly point for repaired droids
 			if (!createFlagPosition(&psRepairFac->psDeliveryPoint, psBuilding->player))
@@ -2040,12 +2029,7 @@ static bool setFunctionality(STRUCTURE	*psBuilding, STRUCTURE_TYPE functionType)
 		}
 		case REF_REARM_PAD:
 		{
-			REARM_PAD* psReArmPad = &psBuilding->pFunctionality->rearmPad;
-
-			psReArmPad->reArmPoints = ((REARM_PAD *)psBuilding->pStructureType->asFuncList[0])->reArmPoints;
-
-			// Take advantage of upgrades
-			structureReArmUpgrade(psBuilding);
+			structureReArmUpgrade(psBuilding); // set rearm points
 			break;
 		}
 
