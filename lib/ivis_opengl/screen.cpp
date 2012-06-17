@@ -172,6 +172,7 @@ bool screenInitialise()
 
 	if (canRunShaders && !opengl_fallback_mode)
 	{
+		screen_EnableMissingFunctions();  // We need to do this before pie_LoadShaders(), but the effect of this call will be undone later by iV_TextInit(), so we will need to call it again.
 		if (pie_LoadShaders())
 		{
 			pie_SetShaderAvailability(true);
