@@ -137,13 +137,6 @@ static UDWORD functionType(const char *pType)
 static bool storeName(FUNCTION *pFunction, const char *pNameToStore)
 {
 	pFunction->pName = strdup(pNameToStore);
-	if (pFunction->pName == NULL)
-	{
-		debug(LOG_FATAL, "Function Name - Out of memory");
-		abort();
-		return false;
-	}
-
 	return true;
 }
 
@@ -155,12 +148,6 @@ static bool loadProduction(const char *pData)
 	UDWORD					productionOutput;
 
 	psFunction = (PRODUCTION_FUNCTION *)malloc(sizeof(PRODUCTION_FUNCTION));
-	if (psFunction == NULL)
-	{
-		debug(LOG_FATAL, "Production Function - Out of memory");
-		abort();
-		return false;
-	}
 	memset(psFunction, 0, sizeof(PRODUCTION_FUNCTION));
 
 	//store the pointer in the Function Array
@@ -212,12 +199,6 @@ static bool loadProductionUpgradeFunction(const char *pData)
 	//allocate storage
 	psFunction = (PRODUCTION_UPGRADE_FUNCTION *)malloc(sizeof
 	        (PRODUCTION_UPGRADE_FUNCTION));
-	if (psFunction == NULL)
-	{
-		debug(LOG_FATAL, "Production Upgrade Function - Out of memory");
-		abort();
-		return false;
-	}
 	memset(psFunction, 0, sizeof(PRODUCTION_UPGRADE_FUNCTION));
 
 	//store the pointer in the Function Array
@@ -233,7 +214,6 @@ static bool loadProductionUpgradeFunction(const char *pData)
 	functionName[0] = '\0';
 	sscanf(pData, "%255[^,'\r\n],%d,%d,%d,%d", functionName, &factory,
 	       &cyborg, &vtol, &outputModifier);
-
 
 	psFunction->outputModifier = (UBYTE)outputModifier;
 	//allocate storage for the name
@@ -264,9 +244,6 @@ static bool loadProductionUpgradeFunction(const char *pData)
 	{
 		psFunction->vtolFactory = false;
 	}
-
-	//increment the number of upgrades
-	//numProductionUpgrades++;
 	return true;
 }
 
@@ -277,12 +254,6 @@ static bool loadResearchFunction(const char *pData)
 
 	//allocate storage
 	psFunction = (RESEARCH_FUNCTION *)malloc(sizeof(RESEARCH_FUNCTION));
-	if (psFunction == NULL)
-	{
-		debug(LOG_FATAL, "Research Function - Out of memory");
-		abort();
-		return false;
-	}
 	memset(psFunction, 0, sizeof(RESEARCH_FUNCTION));
 
 	//store the pointer in the Function Array
@@ -311,12 +282,6 @@ static bool loadReArmFunction(const char *pData)
 
 	//allocate storage
 	psFunction = (REARM_FUNCTION *)malloc(sizeof(REARM_FUNCTION));
-	if (psFunction == NULL)
-	{
-		debug(LOG_FATAL, "ReArm Function - Out of memory");
-		abort();
-		return false;
-	}
 	memset(psFunction, 0, sizeof(REARM_FUNCTION));
 
 	//store the pointer in the Function Array
@@ -348,12 +313,6 @@ static bool loadUpgradeFunction(const char *pData, UBYTE type)
 
 	//allocate storage
 	psFunction = (UPGRADE_FUNCTION *)malloc(sizeof(UPGRADE_FUNCTION));
-	if (psFunction == NULL)
-	{
-		debug(LOG_FATAL, "Upgrade Function - Out of memory");
-		abort();
-		return false;
-	}
 	memset(psFunction, 0, sizeof(UPGRADE_FUNCTION));
 
 	//store the pointer in the Function Array
@@ -383,7 +342,6 @@ static bool loadUpgradeFunction(const char *pData, UBYTE type)
 
 	return true;
 }
-
 
 
 static bool loadResearchUpgradeFunction(const char *pData)
@@ -426,18 +384,10 @@ static bool loadDroidBodyUpgradeFunction(const char *pData)
 {
 	DROIDBODY_UPGRADE_FUNCTION		*psFunction;
 	char							functionName[MAX_STR_LENGTH];
-	UDWORD							modifier, armourKinetic, armourHeat,
-	                                body, droid, cyborg;
+	UDWORD	modifier, armourKinetic, armourHeat, body, droid, cyborg;
 
 	//allocate storage
-	psFunction = (DROIDBODY_UPGRADE_FUNCTION *)malloc(
-	        sizeof(DROIDBODY_UPGRADE_FUNCTION));
-	if (psFunction == NULL)
-	{
-		debug(LOG_FATAL, "UnitBody Upgrade Function - Out of memory");
-		abort();
-		return false;
-	}
+	psFunction = (DROIDBODY_UPGRADE_FUNCTION *)malloc(sizeof(DROIDBODY_UPGRADE_FUNCTION));
 	memset(psFunction, 0, sizeof(DROIDBODY_UPGRADE_FUNCTION));
 
 	//store the pointer in the Function Array
@@ -497,14 +447,7 @@ static bool loadDroidSensorUpgradeFunction(const char *pData)
 	UDWORD							modifier, range;
 
 	//allocate storage
-	psFunction = (DROIDSENSOR_UPGRADE_FUNCTION *)malloc(
-	        sizeof(DROIDSENSOR_UPGRADE_FUNCTION));
-	if (psFunction == NULL)
-	{
-		debug(LOG_FATAL, "UnitSensor Upgrade Function - Out of memory");
-		abort();
-		return false;
-	}
+	psFunction = (DROIDSENSOR_UPGRADE_FUNCTION *)malloc(sizeof(DROIDSENSOR_UPGRADE_FUNCTION));
 	memset(psFunction, 0, sizeof(DROIDSENSOR_UPGRADE_FUNCTION));
 
 	//store the pointer in the Function Array
@@ -546,14 +489,7 @@ static bool loadWeaponUpgradeFunction(const char *pData)
 	                            radiusDamage, incenDamage, radiusHit;
 
 	//allocate storage
-	psFunction = (WEAPON_UPGRADE_FUNCTION *)malloc(sizeof
-	        (WEAPON_UPGRADE_FUNCTION));
-	if (psFunction == NULL)
-	{
-		debug(LOG_FATAL, "Weapon Upgrade Function - Out of memory");
-		abort();
-		return false;
-	}
+	psFunction = (WEAPON_UPGRADE_FUNCTION *)malloc(sizeof(WEAPON_UPGRADE_FUNCTION));
 	memset(psFunction, 0, sizeof(WEAPON_UPGRADE_FUNCTION));
 
 	//store the pointer in the Function Array
@@ -618,12 +554,6 @@ static bool loadStructureUpgradeFunction(const char *pData)
 	//allocate storage
 	psFunction = (STRUCTURE_UPGRADE_FUNCTION *)malloc(sizeof
 	        (STRUCTURE_UPGRADE_FUNCTION));
-	if (psFunction == NULL)
-	{
-		debug(LOG_FATAL, "Structure Upgrade Function - Out of memory");
-		abort();
-		return false;
-	}
 	memset(psFunction, 0, sizeof(STRUCTURE_UPGRADE_FUNCTION));
 
 	//store the pointer in the Function Array
@@ -669,12 +599,6 @@ static bool loadWallDefenceUpgradeFunction(const char *pData)
 	//allocate storage
 	psFunction = (WALLDEFENCE_UPGRADE_FUNCTION *)malloc(sizeof
 	        (WALLDEFENCE_UPGRADE_FUNCTION));
-	if (psFunction == NULL)
-	{
-		debug(LOG_FATAL, "WallDefence Upgrade Function - Out of memory");
-		abort();
-		return false;
-	}
 	memset(psFunction, 0, sizeof(WALLDEFENCE_UPGRADE_FUNCTION));
 
 	//store the pointer in the Function Array
@@ -716,14 +640,7 @@ static bool loadPowerGenFunction(const char *pData)
 	char						functionName[MAX_STR_LENGTH];
 
 	//allocate storage
-	psFunction = (POWER_GEN_FUNCTION *)malloc(sizeof
-	        (POWER_GEN_FUNCTION));
-	if (psFunction == NULL)
-	{
-		debug(LOG_FATAL, "Power Gen Function - Out of memory");
-		abort();
-		return false;
-	}
+	psFunction = (POWER_GEN_FUNCTION *)malloc(sizeof(POWER_GEN_FUNCTION));
 	memset(psFunction, 0, sizeof(POWER_GEN_FUNCTION));
 
 	//store the pointer in the Function Array
@@ -778,14 +695,7 @@ static bool loadResourceFunction(const char *pData)
 	char						functionName[MAX_STR_LENGTH];
 
 	//allocate storage
-	psFunction = (RESOURCE_FUNCTION *)malloc(sizeof
-	        (RESOURCE_FUNCTION));
-	if (psFunction == NULL)
-	{
-		debug(LOG_FATAL, "Resource Function - Out of memory");
-		abort();
-		return false;
-	}
+	psFunction = (RESOURCE_FUNCTION *)malloc(sizeof(RESOURCE_FUNCTION));
 	memset(psFunction, 0, sizeof(RESOURCE_FUNCTION));
 
 	//store the pointer in the Function Array
@@ -814,14 +724,7 @@ static bool loadRepairDroidFunction(const char *pData)
 	char						functionName[MAX_STR_LENGTH];
 
 	//allocate storage
-	psFunction = (REPAIR_DROID_FUNCTION *)malloc(sizeof
-	        (REPAIR_DROID_FUNCTION));
-	if (psFunction == NULL)
-	{
-		debug(LOG_FATAL, "Repair Droid Function - Out of memory");
-		abort();
-		return false;
-	}
+	psFunction = (REPAIR_DROID_FUNCTION *)malloc(sizeof(REPAIR_DROID_FUNCTION));
 	memset(psFunction, 0, sizeof(REPAIR_DROID_FUNCTION));
 
 	//store the pointer in the Function Array
@@ -849,19 +752,11 @@ static bool loadRepairDroidFunction(const char *pData)
 static bool loadWallFunction(const char *pData)
 {
 	WALL_FUNCTION			*psFunction;
-//	UDWORD					i;
 	char					functionName[MAX_STR_LENGTH];
 	char					structureName[MAX_STR_LENGTH];
-//	STRUCTURE_STATS			*pStructStat;
 
 	//allocate storage
 	psFunction = (WALL_FUNCTION *)malloc(sizeof(WALL_FUNCTION));
-	if (psFunction == NULL)
-	{
-		debug(LOG_FATAL, "Wall Function - Out of memory");
-		abort();
-		return false;
-	}
 	memset(psFunction, 0, sizeof(WALL_FUNCTION));
 
 	//store the pointer in the Function Array
@@ -1002,8 +897,6 @@ void structureBodyUpgrade(FUNCTION *pFunction, STRUCTURE *psBuilding)
 	}
 
 	prevBaseBody = (UWORD)structureBody(psBuilding);
-	//newBaseBody = (UWORD)(psBuilding->pStructureType->bodyPoints + (psBuilding->
-	//	pStructureType->bodyPoints * increase) / 100);
 	newBaseBody = (UWORD)(structureBaseBody(psBuilding) +
 	        (structureBaseBody(psBuilding) * increase) / 100);
 
@@ -1463,7 +1356,7 @@ void upgradeTransporterDroids(DROID *psTransporter, void(*pUpgradeFunction)(DROI
 
 bool FunctionShutDown(void)
 {
-	UDWORD		inc;//, player;
+	UDWORD		inc;
 	FUNCTION	*pFunction, **pStartList = asFunctions;
 
 	for (inc = 0; inc < numFunctions; inc++)
@@ -1512,19 +1405,10 @@ bool loadFunctionStats(const char *pFunctionData, UDWORD bufferSize)
 
 	//allocate storage for the Function pointer array
 	asFunctions = (FUNCTION **) malloc(totalFunctions * sizeof(FUNCTION *));
-	if (!asFunctions)
-	{
-		debug(LOG_FATAL, "Out of memory");
-		abort();
-		return false;
-	}
 	pStartList = asFunctions;
 	//initialise the storage
 	memset(asFunctions, 0, totalFunctions * sizeof(FUNCTION *));
 	numFunctions = 0;
-	//numProductionUpgrades =	numResearchUpgrades = 0;//numArmourUpgrades =
-	//numRepairUpgrades = numResistanceUpgrades = numBodyUpgrades =
-	//numWeaponUpgrades = 0;
 
 	for (i = 0; i < totalFunctions; i++)
 	{
