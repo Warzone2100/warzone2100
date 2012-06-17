@@ -252,6 +252,16 @@ void screen_EnableMissingFunctions()
 		__glewUniform1i = __glewUniform1iARB;
 		__glewUniform4fv = __glewUniform4fvARB;
 	}
+
+	if ((GLEW_ARB_imaging || GLEW_EXT_blend_color) && __glewBlendColor == NULL)
+	{
+		__glewBlendColor = __glewBlendColorEXT;  // Shouldn't be needed if GLEW_ARB_imaging is true, but apparently is needed even in that case, with some drivers..?
+		if (__glewBlendColor == NULL)
+		{
+			debug(LOG_ERROR, "Your graphics driver is broken, and claims to support ARB_imaging or EXT_blend_color without exporting glBlendColor[EXT].");
+			__GLEW_ARB_imaging = __GLEW_EXT_blend_color = 0;
+		}
+	}
 }
 
 void screen_SetBackDropFromFile(const char* filename)
