@@ -4886,9 +4886,9 @@ static bool loadSaveStructure2(const char *pFileName, STRUCTURE **ppList)
 			break;
 		case REF_REARM_PAD:
 			psReArmPad = ((REARM_PAD *)psStructure->pFunctionality);
-			psReArmPad->reArmPoints = ini.value("Rearm/reArmPoints").toInt();
-			psReArmPad->timeStarted = ini.value("Rearm/timeStarted").toInt();
-			psReArmPad->timeLastUpdated = ini.value("Rearm/timeLastUpdated").toInt();
+			psReArmPad->reArmPoints = ini.value("Rearm/reArmPoints", psReArmPad->reArmPoints).toInt();
+			psReArmPad->timeStarted = ini.value("Rearm/timeStarted", psReArmPad->timeStarted).toInt();
+			psReArmPad->timeLastUpdated = ini.value("Rearm/timeLastUpdated", psReArmPad->timeLastUpdated).toInt();
 			break;
 		case REF_WALL:
 		case REF_GATE:
