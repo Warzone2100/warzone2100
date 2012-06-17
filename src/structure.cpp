@@ -474,6 +474,8 @@ STRUCTURE_STATS::STRUCTURE_STATS(LineView line)
 	}
 
 	std::fill_n(psWeapStat, STRUCT_MAXWEAPS, (WEAPON_STATS *)NULL);
+
+	numWeaps = std::min<unsigned>(numWeaps, STRUCT_MAXWEAPS);
 }
 
 /* load the Structure stats from the Access database */
@@ -613,7 +615,7 @@ bool loadStructureWeapons(const char *pWeaponData, UDWORD bufferSize)
 		LineView line(table, i);
 
 		STRUCTURE_STATS *structureStats = line.stats(0, asStructureStats, numStructureStats);
-		for (unsigned j = 0; j < structureStats->numWeaps && !table.isError(); ++j)
+		for (unsigned j = 0; !table.isError() && j < structureStats->numWeaps; ++j)
 		{
 			structureStats->psWeapStat[j] = line.stats(1 + j, asWeaponStats, numWeaponStats);
 		}
