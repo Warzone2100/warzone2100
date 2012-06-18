@@ -389,7 +389,7 @@ void pie_ActivateFallback(SHADER_MODE, iIMDShape* shape, PIELIGHT teamcolour, PI
 	glTexEnvi(GL_TEXTURE_ENV, GL_SOURCE0_ALPHA,		GL_PREVIOUS);
 	glTexEnvi(GL_TEXTURE_ENV, GL_OPERAND0_ALPHA,	GL_SRC_ALPHA);
 
-	if (GLEW_ARB_imaging)
+	if (GLEW_ARB_imaging || GLEW_EXT_blend_color)
 	{
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_CONSTANT_COLOR, GL_ZERO);

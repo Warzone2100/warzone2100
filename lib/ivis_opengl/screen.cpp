@@ -172,6 +172,7 @@ bool screenInitialise()
 
 	if (canRunShaders && !opengl_noshaders)
 	{
+		screen_EnableMissingFunctions();  // We need to do this before pie_LoadShaders(), but the effect of this call will be undone later by iV_TextInit(), so we will need to call it again.
 		if (pie_LoadShaders())
 		{
 			pie_SetShaderAvailability(true);
@@ -261,6 +262,16 @@ void screen_EnableMissingFunctions()
 		__glewUniform1f = __glewUniform1fARB;
 		__glewUniform1i = __glewUniform1iARB;
 		__glewUniform4fv = __glewUniform4fvARB;
+	}
+
+	if ((GLEW_ARB_imaging || GLEW_EXT_blend_color) && __glewBlendColor == NULL)
+	{
+		__glewBlendColor = __glewBlendColorEXT;  // Shouldn't be needed if GLEW_ARB_imaging is true, but apparently is needed even in that case, with some drivers..?
+		if (__glewBlendColor == NULL)
+		{
+			debug(LOG_ERROR, "Your graphics driver is broken, and claims to support ARB_imaging or EXT_blend_color without exporting glBlendColor[EXT].");
+			__GLEW_ARB_imaging = __GLEW_EXT_blend_color = 0;
+		}
 	}
 }
 

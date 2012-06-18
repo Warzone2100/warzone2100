@@ -272,17 +272,17 @@ data		"wrf/multires3.wrf"
 
 // Tech 2
 
-level 		Sk-Rush2-T2
-players		4
-type		18
-dataset		MULTI_T2_C1
-game		"multiplay/maps/4c-rush2.gam"
-
 level 		Sk-Rush-T2
 players		4
 type		18
 dataset		MULTI_T2_C1
 game		"multiplay/maps/4c-rush.gam"
+
+level 		Sk-Rush2-T2
+players		4
+type		18
+dataset		MULTI_T2_C1
+game		"multiplay/maps/4c-rush2.gam"
 
 level 		Sk-StartUp-T2
 players		2
@@ -382,17 +382,17 @@ game		"multiplay/maps/8c-thepit.gam"
 
 // Tech 3
 
-level 		Sk-Rush2-T3
-players		4
-type		19
-dataset		MULTI_T3_C1
-game		"multiplay/maps/4c-rush2.gam"
-
 level 		Sk-Rush-T3
 players		4
 type		19
 dataset		MULTI_T3_C1
 game		"multiplay/maps/4c-rush.gam"
+
+level 		Sk-Rush2-T3
+players		4
+type		19
+dataset		MULTI_T3_C1
+game		"multiplay/maps/4c-rush2.gam"
 
 level 		Sk-StartUp-T3
 players		2

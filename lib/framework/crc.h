@@ -22,9 +22,13 @@
 
 #include "types.h"
 #include "vector.h"
+#include <vector>
+
 
 uint32_t crcSum(uint32_t crc, const void *data, size_t dataLen);
 uint32_t crcSumU16(uint32_t crc, const uint16_t *data, size_t dataLen);
 uint32_t crcSumVector2i(uint32_t crc, const Vector2i *data, size_t dataLen);
+
+std::vector<uint8_t> sha256Sum(void const *data, size_t dataLen);
 
 #endif //_CRC_H_
