@@ -1266,6 +1266,15 @@ int realmain(int argc, char *argv[])
 	war_SetWidth(pie_GetVideoBufferWidth());
 	war_SetHeight(pie_GetVideoBufferHeight());
 
+	if (!pie_GetShaderAvailability())
+	{
+		war_SetShaders(FALLBACK);
+	}
+	else
+	{
+		pie_SetShaderUsage(war_GetShaders()==SHADERS_ON);
+	}
+
 	pie_SetFogStatus(false);
 	pie_ScreenFlip(CLEAR_BLACK);
 

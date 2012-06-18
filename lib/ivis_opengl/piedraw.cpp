@@ -145,7 +145,7 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELI
 {
 	iIMDPoly *pPolys;
 	bool light = true;
-	bool shaders = pie_GetShaderAvailability();
+	bool shaders = pie_GetShaderUsage();
 
 	pie_SetAlphaTest((pieFlag & pie_PREMULTIPLIED) == 0);
 

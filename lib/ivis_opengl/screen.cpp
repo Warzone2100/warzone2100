@@ -47,7 +47,6 @@
 /* global used to indicate preferred internal OpenGL format */
 int wz_texture_compression = 0;
 
-bool opengl_fallback_mode = false;
 
 static bool		bBackDrop = false;
 static char		screendump_filename[PATH_MAX];
@@ -170,7 +169,7 @@ bool screenInitialise()
 	bool canRunAtAll = GLEW_VERSION_1_2 && GLEW_ARB_vertex_buffer_object && GLEW_ARB_texture_env_crossbar;
 	bool canRunShaders = canRunAtAll && glslVersion >= std::make_pair(1, 20);  // glGetString(GL_SHADING_LANGUAGE_VERSION) >= "1.20"
 
-	if (canRunShaders && !opengl_fallback_mode)
+	if (canRunShaders)
 	{
 		screen_EnableMissingFunctions();  // We need to do this before pie_LoadShaders(), but the effect of this call will be undone later by iV_TextInit(), so we will need to call it again.
 		if (pie_LoadShaders())

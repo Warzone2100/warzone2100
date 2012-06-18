@@ -599,7 +599,7 @@ bool ParseCommandLine(int argc, const char** argv)
 				break;
 
 			case CLI_FALLBACKMODE:
-				opengl_fallback_mode = true;
+				war_SetShaders(SHADERS_OFF);
 				break;
 		};
 	}
