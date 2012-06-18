@@ -124,7 +124,7 @@ static void sha256SumBlock(uint32_t *w, uint32_t *h)
 	h[7] += j;
 }
 
-std::vector<uint8_t> sha256Sum(void const *data, size_t dataLen)
+Sha256 sha256Sum(void const *data, size_t dataLen)
 {
 	uint32_t h[8];
 	std::copy(sha256TableH, sha256TableH + 8, h);
@@ -158,7 +158,35 @@ std::vector<uint8_t> sha256Sum(void const *data, size_t dataLen)
 	{
 		h[i] = htonl(h[i]);
 	}
-	std::vector<uint8_t> ret(32);
-	memcpy(&ret[0], h, 32);
+	Sha256 ret;
+	memcpy(ret.bytes, h, 32);
 	return ret;
+}
+
+bool Sha256::operator ==(Sha256 const &b) const
+{
+	return memcmp(bytes, b.bytes, Bytes) == 0;
+}
+
+bool Sha256::isZero() const
+{
+	return bytes[0] == 0x00 && memcmp(bytes, bytes + 1, Bytes - 1) == 0;
+}
+
+void Sha256::setZero()
+{
+	memset(bytes, 0x00, Bytes);
+}
+
+std::string Sha256::toString() const
+{
+	std::string str;
+	str.resize(Bytes*2);
+	char const *hexDigits = "0123456789abcdef";
+	for (unsigned n = 0; n < Bytes; ++n)
+	{
+		str[n*2    ] = hexDigits[bytes[n] >> 4];
+		str[n*2 + 1] = hexDigits[bytes[n] & 15];
+	}
+	return str;
 }

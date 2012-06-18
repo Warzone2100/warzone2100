@@ -115,7 +115,7 @@ char * override_mods[MAX_MODS] = { NULL };
 char * override_mod_list = NULL;
 bool use_override_mods = false;
 
-char *current_map[3] = { NULL };
+char *current_map = NULL;
 
 char * loaded_mods[MAX_MODS] = { NULL };
 char * mod_list = NULL;
@@ -274,28 +274,8 @@ void setOverrideMods(char * modlist)
 
 void setCurrentMap(char* map, int maxPlayers)
 {
-	free(current_map[0]);
-	free(current_map[1]);
-	// Transform "Sk-Rush-T2" into "4c-Rush.wz" so it can be matched by the map loader
-	current_map[0] = (char*)malloc(strlen(map) + 1 + 7);
-	snprintf(current_map[0], 3, "%d", maxPlayers);
-	strcat(current_map[0], "c-");
-	if (strncmp(map, "Sk-", 3) == 0)
-	{
-		strcat(current_map[0], map + 3);
-	}
-	else
-	{
-		strcat(current_map[0], map);
-	}
-	if (strncmp(current_map[0] + strlen(current_map[0]) - 3, "-T", 2) == 0)
-	{
-		current_map[0][strlen(current_map[0]) - 3] = '\0';
-	}
-	current_map[1] = (char*)malloc(strlen(map) + 1 + 7);
-	strcpy(current_map[1], current_map[0]);
-	strcat(current_map[1],".wz");
-	current_map[2] = NULL;
+	free(current_map);
+	current_map = map != NULL? strdup(map) : NULL;
 }
 
 void clearOverrideMods(void)
@@ -779,7 +759,9 @@ static void startGameLoop(void)
 {
 	SetGameMode(GS_NORMAL);
 
-	if (!levLoadData(aLevelName, NULL, GTYPE_SCENARIO_START))
+	//if (!levLoadData(game.map /*aLevelName*/, &game.hash, NULL, GTYPE_SCENARIO_START))
+	// Not sure what aLevelName is, in relation to game.map. But need to use aLevelName here, to be able to start the right map for campaign, and need game.hash, to start the right non-campaign map, if there are multiple identically named maps.
+	if (!levLoadData(aLevelName, &game.hash, NULL, GTYPE_SCENARIO_START))
 	{
 		debug( LOG_FATAL, "Shutting down after failure" );
 		exit(EXIT_FAILURE);

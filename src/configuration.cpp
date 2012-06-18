@@ -98,12 +98,14 @@ bool loadConfig()
 	if (ini.contains("mapName") && ini.contains("maxPlayers"))
 	{
 		sstrcpy(game.map, ini.value("mapName").toString().toUtf8().constData());
+		game.hash.setZero();
 		game.maxPlayers = ini.value("maxPlayers").toInt();	// FIXME: horrible kluge, MUST match map above
 	}
 	else
 	{
 		// Set a default map to prevent hosting games without a map.
 		sstrcpy(game.map, "Sk-Rush");
+		game.hash.setZero();
 		game.maxPlayers = 4;
 	}
 	game.power = ini.value("power", LEV_MED).toInt();
@@ -283,6 +285,7 @@ bool reloadMPConfig(void)
 	if (ini.contains("mapName") && ini.contains("maxPlayers"))
 	{
 		sstrcpy(game.map, ini.value("mapName").toString().toUtf8().constData());
+		game.hash.setZero();
 		game.maxPlayers = ini.value("maxPlayers").toInt();	// FIXME: horrible kluge, MUST match map above
 	}
 	game.power = ini.value("power", LEV_MED).toInt();

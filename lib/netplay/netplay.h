@@ -26,6 +26,7 @@
 #ifndef _netplay_h
 #define _netplay_h
 
+#include "lib/framework/crc.h"
 #include "nettypes.h"
 #include <physfs.h>
 
@@ -291,7 +292,7 @@ extern bool NETrecvNet(NETQUEUE *queue, uint8_t *type);                  ///< re
 extern bool NETrecvGame(NETQUEUE *queue, uint8_t *type);                 ///< recv a message from the game queues which is sceduled to execute by time, if possible.
 void NETflush(void);                                                     ///< Flushes any data stuck in compression buffers.
 
-extern UBYTE   NETsendFile(char *fileName, UDWORD player);	// send file chunk.
+int NETsendFile(char *mapName, Sha256 const &fileHash, UDWORD player);  // send file chunk.
 extern UBYTE   NETrecvFile(NETQUEUE queue);                     // recv file chunk
 
 extern int NETclose(void);					// close current game

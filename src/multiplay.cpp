@@ -1594,7 +1594,7 @@ bool recvDestroyFeature(NETQUEUE queue)
 // Network File packet processor.
 bool recvMapFileRequested(NETQUEUE queue)
 {
-	char mapStr[256],mapName[256],fixedname[256];
+	//char mapStr[256],mapName[256],fixedname[256];
 	uint32_t player;
 
 	PHYSFS_sint64 fileSize_64;
@@ -1617,30 +1617,11 @@ bool recvMapFileRequested(NETQUEUE queue)
 		NetPlay.players[player].wzFile.isCancelled = false;
 		NetPlay.players[player].wzFile.isSending = true;
 
-		memset(mapStr,0,256);
-		memset(mapName,0,256);
-		memset(fixedname,0,256);
+		LEVEL_DATASET *mapData = levFindDataSet(game.map, &game.hash);
 
 		addConsoleMessage("Map was requested: SENDING MAP!",DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 
-		sstrcpy(mapName, game.map);
-		if (	strstr(mapName,"-T1") != 0
-			|| strstr(mapName,"-T2") != 0
-			|| strstr(mapName,"-T3") != 0)
-		{
-		// chop off the -T1 *only when needed!*
-		mapName[strlen(game.map)-3] = 0;		// chop off the -T1 etc..
-		}
-		// chop off the sk- if required.
-		if(strncmp(mapName,"Sk-",3) == 0)
-		{
-			sstrcpy(mapStr, &(mapName[3]));
-			sstrcpy(mapName, mapStr);
-		}
-
-		snprintf(mapStr, sizeof(mapStr), "%dc-%s.wz", game.maxPlayers, mapName);
-		snprintf(fixedname, sizeof(fixedname), "maps/%s", mapStr);		//We know maps are in /maps dir...now. fix for linux -Q
-		sstrcpy(mapStr, fixedname);
+		char *mapStr = mapData->realFileName;
 		debug(LOG_NET, "Map was requested. Looking for %s", mapStr);
 
 		// Checking to see if file is available...
@@ -1655,7 +1636,7 @@ bool recvMapFileRequested(NETQUEUE queue)
 			NETbeginEncode(NETbroadcastQueue(), NET_HOST_DROPPED);
 			NETend();
 			abort();
-	}
+		}
 
 		// get the file's size.
 		fileSize_64 = PHYSFS_fileLength(pFileHandle);
@@ -1665,7 +1646,7 @@ bool recvMapFileRequested(NETQUEUE queue)
 		NetPlay.players[player].wzFile.fileSize_32 = (int32_t) fileSize_64;		//we don't support 64bit int nettypes.
 		NetPlay.players[player].wzFile.currPos = 0;
 
-		NETsendFile(mapStr, player);
+		NETsendFile(game.map, game.hash, player);
 	}
 	return true;
 }
@@ -1674,20 +1655,19 @@ bool recvMapFileRequested(NETQUEUE queue)
 void sendMap(void)
 {
 	int i = 0;
-	UBYTE done;
 
 	for (i = 0; i < MAX_PLAYERS; i++)
 	{
 		if (NetPlay.players[i].wzFile.isSending)
-	{
-			done = NETsendFile(game.map, i);
+		{
+			int done = NETsendFile(game.map, game.hash, i);
 			if (done == 100)
 			{
-		addConsoleMessage("MAP SENT!",DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+				addConsoleMessage("MAP SENT!",DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 				debug(LOG_NET, "=== File has been sent to player %d ===", i);
 				NetPlay.players[i].wzFile.isSending = false;
 				NetPlay.players[i].needFile = false;
-	}
+			}
 		}
 	}
 }
@@ -1710,6 +1690,7 @@ bool recvMapFileData(NETQUEUE queue)
 		{
 			return false;
 		}
+		loadMapPreview(false);
 		return true;
 	}
 
