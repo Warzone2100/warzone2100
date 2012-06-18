@@ -1,5 +1,10 @@
 2012-06-xx: Version 3.1 beta11
  * General:
+   * Fix: Sensibly handle multiple maps with the same name (ticket:3531, ticket:3180, commit:15c04ab10f87de89ca7dcae2813834bd1a03247b)
+   * Fix: Loading of rearm pads in savegames (ticket:3518, commit:eb3001bd2fb6c0494abb3677cd05f62c1b0d8a4a)
+   * Change: Add message on missing videos (commit:1a7c1a41b7a5171695e8e59f2d41c7de6638a14f)
+   * Fix: Player switching in debug mode (ticket:3264, commit:4a2f7d4399649662f33d146cbe97a12110b8995b)
+   * Fix: Obstacle prediction and avoidance (commit:d11516795a7d98a6bcf0cdeafe159435108344a4, commit:f7c6e38aa8e06051c6ac6e42ab9bbaf1b760c9e8)
    * Change: CB sensor also defends allies (commit:313738ed235c69c64c83eb9b987d63efc95d8782)
    * Change: Structures with no cost to build (oil derricks) deconstruct when abandoned, taking one minute for 100% build progress (commit:5ba90fec427096f6016867852ce696126514d378)
    * Change: Queue building on burning oil wells, trucks wait until the fire stops (commit:353357b1b6f3b8a12131abd7c2c2cef571402e5b)
@@ -9,6 +14,11 @@
    * Fix: Correct factory numbers after loading a savegame (ticket:3384, commit:737b3d9d24ab1634dafd09558fc8b8a5354ffa9c)
    * Fix: Show correct number of selected units (ticket:3479, commit:22799c2b2607949b1920e8d1f143311c167f7a39)
  * Graphics:
+   * Workaround: Allow setting archaic driver workarounds in the menu (commit:691df6a1837cec65fe7ac4e924c96868df2b749d)
+   * Change: Support structure animation (commit:190c7a99cccc9e831a49712ec431b194f0b65cb8, commit:2d0a089bad6b6b2fdca75556444a66e07ad3dbaa, commit:b59fe8bdb587671c8a382887c10ce804a1d1cd9a, commit:07a2a9671b32d4817942739de723f380c7b88cc7, commit:e636d41472762f0573979c1f05ada2e1484e4eca, commit:da433789c3e272c9c22307b6e74eeb81b2925e07)
+   * Fix: Placement of droid selection boxes and group/commander numbers (ticket:3547, commit:dd8025d10853fe775ef37c0c632647086752b4d9)
+   * Workaround: Improve archaic graphics driver support (commit:f54eb00d7044827e011bd3261108bfd446f6a68e, commit:8b8282cc1f9bbddd6c48cef4dbf1681b84160129, commit:0c03151e250a89f23ea5960cd488367112bd3fdc, commit:96272ebf5008ad7ac47865e3493d43a597371944, commit:f5a7fd52c01dbe848ecaab27da4a08fc7eef536a, commit:7867b7abe209613da26ae36897ac864eaee73a14)
+   * Change: New skybox for urban maps (ticket:3534, commit:aca180e0e860f42206bc9be21d9e7a65638afbec)
    * Change: New cliff decals to make cliffs more visible (commit:4a53a0e010452a1ef2a64d92fd3f12c27b451a50)
  * Multiplayer:
    * Change: Add oil barrels to map preview (commit:5b07a7b755a529d37c5f308b5ecd6df52da05fec)
@@ -47,6 +57,11 @@
      * Gates: price 25->75
    * Make cannon fortresses cheaper, while nerfing range, in order to make them usable in low oil matchups and less effective in high-oil settings.
      * Cannon Fortress: price 1000->900, range 1792->1408
+ * Scripts:
+   * Change: Add .type of game objects (commit:69727cdb9a6aa1994016f70426f64739dce6101e)
+   * Fix: Set Laser Satellite .stattype correctly (ticket:3506, commit:7dbe64278c23883253f1fbd0ae830332e85eb6b8)
+   * Fix: Do not crash on nonexisting structure referenced in structureweapons.txt (ticket:3543, commit:8aa4a686761b76f2d9a78423864dc173ba0bbd1f)
+   * Fix: Make getResearch() return null on missing tech (ticket:3548, commit:752eef9410c4ee3ba1ceb5984d98cb68729e641f)
  * Translations:
    * Update: Polish (ticket:1347, commit:9fc92b7d64200c65f7ea8baab617ed8d19a773cf)
    * Update: French (ticket:3483, ticket:3512, commit:badb8c05cb3e9e8a8e1af529288d57b96126e482, commit:113796a9d6a8e34ced9c93bae213ba53b19d5944)
