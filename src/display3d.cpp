@@ -28,6 +28,7 @@
 #include "lib/framework/opengl.h"
 #include "lib/framework/math_ext.h"
 #include "lib/framework/stdio_ext.h"
+#include "lib/framework/frameint.h"
 
 /* Includes direct access to render library */
 #include "lib/ivis_opengl/pieblitfunc.h"
@@ -317,6 +318,23 @@ static std::vector<Blueprint> blueprints;
 static const int BLUEPRINT_OPACITY=120;
 
 /********************  Functions  ********************/
+
+// HACK HACK HACK HACK HACK This function makes no sense, but seems to help.
+#define HACKSCALE 30/31  // HACK HACK Try to magically make it more accurate. HACK HACK
+#define SCALEHACK 31/30  // HACK HACK Try to magically make it more accurate. HACK HACK
+template <typename Whatever>
+static void hackScreenCoords(Whatever &d)
+{
+	d.screenX = int(d.screenX - screenWidth/2) * HACKSCALE + screenWidth/2;
+	d.screenY = int(d.screenY - screenHeight/3) * HACKSCALE + screenHeight/3;
+	d.screenR = d.screenR * HACKSCALE;
+}
+static void hackMouseCoords(Vector2i &d)
+{
+	d.x = int(d.x - screenWidth/2) * SCALEHACK + screenWidth/2;
+	d.y = int(d.y - screenHeight/3) * SCALEHACK + screenHeight/3;
+}
+
 
 static inline void rotateSomething(int &x, int &y, uint16_t angle)
 {
@@ -2153,6 +2171,7 @@ void renderProximityMsg(PROXIMITY_DISPLAY *psProxDisp)
 	psProxDisp->screenX = x;
 	psProxDisp->screenY = y;
 	psProxDisp->screenR = r;
+	hackScreenCoords(*psProxDisp);
 
 	pie_MatEnd();
 }
@@ -2554,6 +2573,7 @@ void	renderStructure(STRUCTURE *psStructure)
 		pie_RotateProject(&zero, &s);
 		psStructure->sDisplay.screenX = s.x;
 		psStructure->sDisplay.screenY = s.y;
+		hackScreenCoords(psStructure->sDisplay);
 	}
 
 	pie_MatEnd();
@@ -2616,6 +2636,7 @@ void	renderDeliveryPoint(FLAG_POSITION *psPosition, bool blueprint)
 	psPosition->screenX = x;
 	psPosition->screenY = y;
 	psPosition->screenR = r;
+	hackScreenCoords(*psPosition);
 }
 
 /// Draw a piece of wall
@@ -3592,6 +3613,7 @@ void calcScreenCoords(DROID *psDroid)
 	psDroid->sDisplay.screenX = center.x;
 	psDroid->sDisplay.screenY = center.y;
 	psDroid->sDisplay.screenR = radius;
+	hackScreenCoords(psDroid->sDisplay);
 }
 
 /**
@@ -3600,7 +3622,8 @@ void calcScreenCoords(DROID *psDroid)
  */
 static void locateMouse(void)
 {
-	const Vector2i pt(mouseX(), mouseY());
+	Vector2i pt(mouseX(), mouseY());
+	hackMouseCoords(pt);
 	int i, j;
 	unsigned idx, jdx;
 	int nearestZ = INT_MAX;

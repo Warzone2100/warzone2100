@@ -47,18 +47,19 @@ struct WARZONE_GLOBALS
 {
 	FMV_MODE	FMVmode;
 	SWORD		effectsLevel;
+	UDWORD		width;
+	UDWORD		height;
+	int8_t		SPcolor;
+	int			MPcolour;
+	FSAA_LEVEL  fsaa;
+	RENDER_MODE shaders;
 	bool		Fullscreen;
 	bool		soundEnabled;
 	bool		trapCursor;
-	UDWORD		width;
-	UDWORD		height;
-	FSAA_LEVEL  fsaa;
 	bool		vsync;
 	bool		pauseOnFocusLoss;
 	bool		ColouredCursor;
 	bool		MusicEnabled;
-	int8_t		SPcolor;
-	int             MPcolour;
 };
 
 /***************************************************************************/
@@ -84,11 +85,13 @@ void war_SetDefaultStates(void)//Sets all states
 {
 	//set those here and reset in clParse or loadConfig
 	war_setFSAA(0);
+	war_SetVsync(true);
 	war_setSoundEnabled( true );
 	war_SetPauseOnFocusLoss(false);
 	war_SetMusicEnabled(true);
 	war_SetSPcolor(0);		//default color is green
 	war_setMPcolour(-1);            // Default color is random.
+	war_SetShaders(SHADERS_ON);
 }
 
 void war_SetSPcolor(int color)
@@ -134,6 +137,16 @@ void war_setFSAA(unsigned int fsaa)
 unsigned int war_getFSAA()
 {
 	return warGlobs.fsaa;
+}
+
+void war_SetShaders(unsigned shaders)
+{
+	warGlobs.shaders = (RENDER_MODE)shaders;
+}
+
+unsigned war_GetShaders()
+{
+	return warGlobs.shaders;
 }
 
 void war_SetTrapCursor(bool b)

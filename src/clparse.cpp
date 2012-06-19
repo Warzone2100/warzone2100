@@ -601,7 +601,7 @@ bool ParseCommandLine(int argc, const char** argv)
 				break;
 
 			case CLI_NOSHADERS:
-				opengl_noshaders = true;
+				war_SetShaders(SHADERS_OFF);
 				break;
 
 			case CLI_NOVBOS:

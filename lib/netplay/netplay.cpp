@@ -52,6 +52,7 @@
 #include "src/multiplay.h"
 #include "src/warzoneconfig.h"
 #include "src/version.h"
+#include "src/loadsave.h"
 
 #ifdef WZ_OS_LINUX
 #include <execinfo.h>  // Nonfatal runtime backtraces.
@@ -1838,7 +1839,7 @@ bool NETrecvGame(NETQUEUE *queue, uint8_t *type)
 *         NET_BUFFER_SIZE is at 16k.  (also remember text chat, plus all the other cruff)
 */
 #define MAX_FILE_TRANSFER_PACKET 2048
-UBYTE NETsendFile(char *fileName, UDWORD player)
+int NETsendFile(char *fileName, Sha256 const &fileHash, UDWORD player)
 {
 	uint32_t        bytesToRead = 0;
 	uint8_t		sendto = 0;
@@ -1862,7 +1863,11 @@ UBYTE NETsendFile(char *fileName, UDWORD player)
 		NETint32_t(&NetPlay.players[player].wzFile.fileSize_32);		// total bytes in this file. (we don't support 64bit yet)
 		NETuint32_t(&bytesToRead);                                                // bytes in this packet
 		NETint32_t(&NetPlay.players[player].wzFile.currPos);			// start byte
-		NETstring(fileName, 256);										//256 = max filename size
+		if (NetPlay.players[player].wzFile.currPos == 0)
+		{
+			NETstring(fileName, 256);  //256 = max filename size
+			NETbin(const_cast<uint8_t *>(fileHash.bytes), fileHash.Bytes);  // const_cast ok since we're encoding, not decoding.
+		}
 		NETbin(inBuff, bytesToRead);
 	NETend();
 
@@ -1883,11 +1888,9 @@ UBYTE NETrecvFile(NETQUEUE queue)
 {
 	uint32_t        bytesToRead = 0;
 	int32_t		fileSize = 0, currPos = 0;
-	char		fileName[256];
 	uint8_t         outBuff[MAX_FILE_TRANSFER_PACKET];
 	static bool isLoop = false;
 
-	memset(fileName, 0x0, sizeof(fileName));
 	memset(outBuff, 0x0, sizeof(outBuff));
 
 	//read incoming bytes.
@@ -1895,11 +1898,27 @@ UBYTE NETrecvFile(NETQUEUE queue)
 	NETint32_t(&fileSize);		// total bytes in this file.
 	NETuint32_t(&bytesToRead);      // bytes in this packet
 	NETint32_t(&currPos);		// start byte
-	NETstring(fileName, 256);	// read filename (only valid on 1st packet)
-	debug(LOG_NET, "Creating new file %s, position is %d", fileName, currPos);
 
 	if (currPos == 0)	// first packet!
 	{
+		char mapName[256];
+		Sha256 fileHash;
+		memset(mapName, 0x0, sizeof(mapName));
+		fileHash.setZero();
+		// Read filename and hash (only valid on 1st packet)
+		NETstring(mapName, 256);
+		NETbin(fileHash.bytes, fileHash.Bytes);
+
+		removeWildcards(mapName);
+		char fileName[256];
+		if (strlen(mapName) >= 3 && mapName[strlen(mapName) - 3] == '-' && mapName[strlen(mapName) - 2] == 'T' && unsigned(mapName[strlen(mapName) - 1] - '1') < 3)
+		{
+			mapName[strlen(mapName) - 3] = '\0';  // Cut off "-T1", "-T2" or "-T3".
+		}
+		snprintf(fileName, sizeof(fileName), "maps/%dc-%s-%s.wz", game.maxPlayers, mapName, fileHash.toString().c_str());  // Wonder whether game.maxPlayers is initialised already?
+
+		debug(LOG_NET, "Creating new file %s hash %s", fileName, fileHash.toString().c_str());
+
 		if (PHYSFS_exists(fileName))
 		{
 			PHYSFS_file *fin;
@@ -1907,6 +1926,8 @@ UBYTE NETrecvFile(NETQUEUE queue)
 			fin = PHYSFS_openRead(fileName);
 			if (!fin)
 			{
+				NETend();
+
 				// the file exists, but we can't open it, and I have no clue how to fix this...
 				debug(LOG_FATAL, "PHYSFS_openRead(\"%s\") failed with error: %s\n", fileName, PHYSFS_getLastError());
 
@@ -1925,7 +1946,8 @@ UBYTE NETrecvFile(NETQUEUE queue)
 			{
 				fsize = PHYSFS_fileLength(fin);
 			}
-			if ((int32_t) fsize == fileSize)
+			Sha256 ourHash = findHashOfFile(fileName);
+			if (ourHash == fileHash)
 			{
 				uint32_t reason = ALREADY_HAVE_FILE;
 				debug(LOG_NET, "We already have the file %s! ", fileName);
@@ -1954,21 +1976,23 @@ UBYTE NETrecvFile(NETQUEUE queue)
 					PHYSFS_close(NetPlay.pMapFileHandle);
 					NetPlay.pMapFileHandle = NULL;
 					debug(LOG_FATAL, "Something is really wrong with the file's (%s) data, game can't detect it?", fileName);
-					return 100;
 				}
+				return 100;
 			}
 			PHYSFS_close(fin);
 
-			debug(LOG_NET, "We already have the file %s, but different size %d vs %d.  Redownloading", fileName, (int32_t) fsize, fileSize);
+			debug(LOG_NET, "We already have the file %s, but wrong hash, ours %s vs theirs %s.  Redownloading", fileName, ourHash.toString().c_str(), fileHash.toString().c_str());
 
 		}
 		NetPlay.pMapFileHandle = PHYSFS_openWrite(fileName);	// create a new file.
 	}
 
+	debug(LOG_NET, "New file position is %d", currPos);
+
 	if (!NetPlay.pMapFileHandle) // file can't be opened
 	{
 		debug(LOG_FATAL, "Fatal error while creating file: %s", PHYSFS_getLastError());
-		debug(LOG_FATAL, "Either we do not have write permission, or the host sent us a invalid file (%s)!", fileName);
+		debug(LOG_FATAL, "Either we do not have write permission, or the host sent us a invalid file!");
 		abort();
 	}
 

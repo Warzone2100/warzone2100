@@ -139,19 +139,26 @@ static bool InitialiseGlobals(void)
 }
 
 
-static bool loadLevFile(const char* filename, searchPathMode datadir, bool ignoreWrf)
+static bool loadLevFile(const char* filename, searchPathMode datadir, bool ignoreWrf, char const *realFileName)
 {
 	char *pBuffer;
 	UDWORD size;
 
-	debug( LOG_WZ, "Loading lev file: %s\n", filename );
+	if (realFileName == NULL)
+	{
+		debug(LOG_WZ, "Loading lev file: \"%s\", builtin\n", filename);
+	}
+	else
+	{
+		debug(LOG_WZ, "Loading lev file: \"%s\" from \"%s\"\n", filename, realFileName);
+	}
 
 	if (!PHYSFS_exists(filename) || !loadFile(filename, &pBuffer, &size))
 	{
 		debug(LOG_ERROR, "loadLevFile: File not found: %s\n", filename);
 		return false; // only in NDEBUG case
 	}
-	if (!levParse(pBuffer, size, datadir, ignoreWrf))
+	if (!levParse(pBuffer, size, datadir, ignoreWrf, realFileName))
 	{
 		debug(LOG_ERROR, "loadLevFile: Parse error in %s\n", filename);
 		return false;
@@ -235,10 +242,11 @@ void registerSearchPath( const char path[], unsigned int priority )
 bool rebuildSearchPath( searchPathMode mode, bool force )
 {
 	static searchPathMode current_mode = mod_clean;
+	static std::string current_current_map;
 	wzSearchPath * curSearchPath = searchPathRegistry;
 	char tmpstr[PATH_MAX] = "\0";
 
-	if (mode != current_mode || force ||
+	if (mode != current_mode || (current_map != NULL? current_map : "") != current_current_map || force ||
 	    (use_override_mods && strcmp(override_mod_list, getModList())))
 	{
 		if (mode != mod_clean)
@@ -247,6 +255,7 @@ bool rebuildSearchPath( searchPathMode mode, bool force )
 		}
 
 		current_mode = mode;
+		current_current_map = current_map != NULL? current_map : "";
 
 		// Start at the lowest priority
 		while( curSearchPath->lowerPriority )
@@ -356,14 +365,11 @@ bool rebuildSearchPath( searchPathMode mode, bool force )
 					PHYSFS_addToSearchPath(tmpstr, PHYSFS_APPEND);
 					curSearchPath = curSearchPath->higherPriority;
 				}
-				curSearchPath = searchPathRegistry;
-				while (curSearchPath->lowerPriority)
-					curSearchPath = curSearchPath->lowerPriority;
 				// Add the selected map first, for mapmod support
-				while (curSearchPath)
+				if (current_map != NULL)
 				{
-					addSubdirs(curSearchPath->path, "maps", PHYSFS_APPEND, current_map, false);
-					curSearchPath = curSearchPath->higherPriority;
+					std::string realPathAndDir = std::string(PHYSFS_getRealDir(current_map)) + current_map;
+					PHYSFS_addToSearchPath(realPathAndDir.c_str(), PHYSFS_APPEND);
 				}
 				curSearchPath = searchPathRegistry;
 				while (curSearchPath->lowerPriority)
@@ -403,15 +409,6 @@ bool rebuildSearchPath( searchPathMode mode, bool force )
 
 					curSearchPath = curSearchPath->higherPriority;
 				}
-				curSearchPath = searchPathRegistry;
-				while (curSearchPath->lowerPriority)
-					curSearchPath = curSearchPath->lowerPriority;
-				// Add maps last, so files in them don't override game data
-                                while (curSearchPath)
-				{
-					addSubdirs(curSearchPath->path, "maps", PHYSFS_APPEND, NULL, false);
-					curSearchPath = curSearchPath->higherPriority;
-				}
 				break;
 			default:
 				debug(LOG_ERROR, "Can't switch to unknown mods %i", mode);
@@ -443,35 +440,61 @@ bool rebuildSearchPath( searchPathMode mode, bool force )
 	return true;
 }
 
-
-bool buildMapList(void)
+typedef std::vector<std::string> MapFileList;
+static MapFileList listMapFiles()
 {
-	char ** filelist, ** file;
-	size_t len;
+	MapFileList ret;
 
-	if (!loadLevFile("gamedesc.lev", mod_campaign, false))
+	char **subdirlist = PHYSFS_enumerateFiles("maps");
+	for (char **i = subdirlist; *i != NULL; ++i)
+	{
+		if (*i[0] == '.')
+		{
+			continue;
+		}
+		std::string realFileName = std::string("maps/") + *i;
+		ret.push_back(realFileName);
+	}
+	PHYSFS_freeList(subdirlist);
+
+	return ret;
+}
+
+
+bool buildMapList()
+{
+	if (!loadLevFile("gamedesc.lev", mod_campaign, false, NULL))
 	{
 		return false;
 	}
-	loadLevFile("addon.lev", mod_multiplay, false);
+	loadLevFile("addon.lev", mod_multiplay, false, NULL);
 
-	filelist = PHYSFS_enumerateFiles("");
-	for ( file = filelist; *file != NULL; ++file )
+	MapFileList realFileNames = listMapFiles();
+	for (MapFileList::iterator realFileName = realFileNames.begin(); realFileName != realFileNames.end(); ++realFileName)
 	{
-		len = strlen( *file );
-		if ( len > 10 // Do not add addon.lev again
-				&& !strcasecmp( *file+(len-10), ".addon.lev") )
-		{
-			loadLevFile(*file, mod_multiplay, true);
-		}
-		// add support for X player maps using a new name to prevent conflicts.
-		if ( len > 13 && !strcasecmp( *file+(len-13), ".xplayers.lev") )
-		{
-			loadLevFile(*file, mod_multiplay, true);
-		}
+		std::string realFilePathAndName = PHYSFS_getRealDir(realFileName->c_str()) + *realFileName;
+		PHYSFS_addToSearchPath(realFilePathAndName.c_str(), PHYSFS_APPEND);
 
+		char **filelist = PHYSFS_enumerateFiles("");
+		for (char **file = filelist; *file != NULL; ++file)
+		{
+			size_t len = strlen(*file);
+			if (len > 10 && !strcasecmp(*file + (len - 10), ".addon.lev"))  // Do not add addon.lev again
+			{
+				loadLevFile(*file, mod_multiplay, true, realFileName->c_str());
+			}
+			// add support for X player maps using a new name to prevent conflicts.
+			if (len > 13 && !strcasecmp(*file + (len - 13), ".xplayers.lev"))
+			{
+				loadLevFile(*file, mod_multiplay, true, realFileName->c_str());
+			}
+
+		}
+		PHYSFS_freeList(filelist);
+
+		PHYSFS_removeFromSearchPath(realFilePathAndName.c_str());
 	}
-	PHYSFS_freeList( filelist );
+
 	return true;
 }
 
@@ -917,7 +940,7 @@ bool stageOneShutDown(void)
 	debug(LOG_TEXTURE, "=== stageOneShutDown ===");
 	pie_TexShutDown();
 	// no map for the main menu
-	setCurrentMap((char*)"", 1);
+	setCurrentMap(NULL, 1);
 	// Use mod_multiplay as the default (campaign might have set it to mod_singleplayer)
 	rebuildSearchPath( mod_multiplay, true );
 	pie_TexInit(); // restart it

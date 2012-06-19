@@ -98,12 +98,14 @@ bool loadConfig()
 	if (ini.contains("mapName") && ini.contains("maxPlayers"))
 	{
 		sstrcpy(game.map, ini.value("mapName").toString().toUtf8().constData());
+		game.hash.setZero();
 		game.maxPlayers = ini.value("maxPlayers").toInt();	// FIXME: horrible kluge, MUST match map above
 	}
 	else
 	{
 		// Set a default map to prevent hosting games without a map.
 		sstrcpy(game.map, "Sk-Rush");
+		game.hash.setZero();
 		game.maxPlayers = 4;
 	}
 	game.power = ini.value("power", LEV_MED).toInt();
@@ -121,6 +123,7 @@ bool loadConfig()
 	if (ini.contains("textureSize")) setTextureSize(ini.value("textureSize").toInt());
 	NetPlay.isUPNP = ini.value("UPnP", true).toBool();
 	if (ini.contains("FSAA")) war_setFSAA(ini.value("FSAA").toInt());
+	if (ini.contains("shaders")) war_SetShaders(ini.value("shaders").toInt());
 	// Leave this to false, some system will fail and they can't see the system popup dialog!
 	war_setFullscreen(ini.value("fullscreen", false).toBool());
 	war_SetTrapCursor(ini.value("trapCursor", false).toBool());
@@ -187,6 +190,7 @@ bool saveConfig()
 	ini.setValue("radarTerrainMode",(SDWORD)radarDrawMode);
 	ini.setValue("trapCursor", war_GetTrapCursor());
 	ini.setValue("vsync", war_GetVsync());
+	ini.setValue("shaders", war_GetShaders());
 	ini.setValue("textureSize", getTextureSize());
 	ini.setValue("FSAA", war_getFSAA());
 	ini.setValue("UPnP", (SDWORD)NetPlay.isUPNP);
@@ -281,6 +285,7 @@ bool reloadMPConfig(void)
 	if (ini.contains("mapName") && ini.contains("maxPlayers"))
 	{
 		sstrcpy(game.map, ini.value("mapName").toString().toUtf8().constData());
+		game.hash.setZero();
 		game.maxPlayers = ini.value("maxPlayers").toInt();	// FIXME: horrible kluge, MUST match map above
 	}
 	game.power = ini.value("power", LEV_MED).toInt();

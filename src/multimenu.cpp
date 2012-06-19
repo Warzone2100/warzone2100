@@ -196,7 +196,7 @@ static void SetPlayerTextColor( int mode, UDWORD player )
 // ////////////////////////////////////////////////////////////////////////////
 // enumerates maps in the gamedesc file.
 // returns only maps that are valid the right 'type'
-static char* enumerateMultiMaps(UDWORD* players, bool first, unsigned int camToUse, unsigned int numPlayers)
+static LEVEL_DATASET *enumerateMultiMaps(bool first, unsigned camToUse, unsigned numPlayers)
 {
 	static LEVEL_DATASET *lev;
 	unsigned int cam;
@@ -226,16 +226,8 @@ static char* enumerateMultiMaps(UDWORD* players, bool first, unsigned int camToU
 				&& (numPlayers == 0 || numPlayers == lev->players)
 				&& cam == camToUse )
 			{
-				char* const found = strdup(lev->pName);
-				if (found == NULL)
-				{
-					debug(LOG_FATAL, "Out of memory");
-					// No way to indicate out-of-memory failure by return value
-					abort();
-					return NULL;
-				}
+				LEVEL_DATASET *found = lev;
 
-				*players = lev->players;
 				lev = lev->psNext;
 				return found;
 			}
@@ -261,16 +253,8 @@ static char* enumerateMultiMaps(UDWORD* players, bool first, unsigned int camToU
 			    && (numPlayers == 0 || numPlayers == lev->players)
 			    && cam == camToUse )
 			{
-				char* const found = strdup(lev->pName);
-				if (found == NULL)
-				{
-					debug(LOG_FATAL, "Out of memory");
-					// No way to indicate out-of-memory failure by return value
-					abort();
-					return NULL;
-				}
+				LEVEL_DATASET *found = lev;
 
-				*players = lev->players;
 				lev = lev->psNext;
 				return found;
 			}
@@ -285,13 +269,13 @@ static char* enumerateMultiMaps(UDWORD* players, bool first, unsigned int camToU
 // ////////////////////////////////////////////////////////////////////////////
 void displayRequestOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
 {
+	LEVEL_DATASET *mapData = (LEVEL_DATASET *)psWidget->pUserData;
 
 	UDWORD	x = xOffset+psWidget->x;
 	UDWORD	y = yOffset+psWidget->y;
-	UDWORD	count;
 	char  butString[255];
 
-	strcpy(butString,((W_BUTTON *)psWidget)->pTip);
+	sstrcpy(butString, ((W_BUTTON *)psWidget)->pTip);
 
 	drawBlueBox(x,y,psWidget->width,psWidget->height);	//draw box
 
@@ -305,10 +289,36 @@ void displayRequestOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIEL
 
 	iV_DrawText(butString, x + 6, y + 12);	//draw text
 
-	// if map, then draw no. of players.
-	for(count=0;count<psWidget->UserData;count++)
+	if (mapData != NULL)
 	{
-		iV_DrawImage(FrontImages,IMAGE_WEE_GUY,(x+(6*count)+6),y+16);
+		// Display map hash, so we can see the difference between identically named maps.
+		Sha256 hash = mapData->realFileHash;  // levGetFileHash can be slightly expensive.
+		static uint32_t lastHashTime = 0;
+		if (lastHashTime != realTime && hash.isZero())
+		{
+			hash = levGetFileHash(mapData);
+			if (!hash.isZero())
+			{
+				lastHashTime = realTime;  // We just calculated a hash. Don't calculate any more hashes this frame.
+			}
+		}
+		if (!hash.isZero())
+		{
+			iV_SetFont(font_small);
+			iV_SetTextColour(WZCOL_TEXT_DARK);
+			sstrcpy(butString, hash.toString().c_str());
+			while (iV_GetTextWidth(butString) > psWidget->width - 10 - (8 + mapData->players*6))
+			{
+				butString[strlen(butString) - 1] = '\0';
+			}
+			iV_DrawText(butString, x + 6 + 8 + mapData->players*6, y + 26);
+		}
+
+		// if map, then draw no. of players.
+		for (int count = 0; count < mapData->players; ++count)
+		{
+			iV_DrawImage(FrontImages, IMAGE_WEE_GUY, x + 6*count + 6, y + 16);
+		}
 	}
 }
 
@@ -376,7 +386,6 @@ static unsigned int check_tip_index(unsigned int i) {
  */
 void addMultiRequest(const char* searchDir, const char* fileExtension, UDWORD mode, UBYTE mapCam, UBYTE numPlayers)
 {
-	UDWORD             players;
 	char**             fileList;
 	char**             currFile;
 	const unsigned int extensionLength = strlen(fileExtension);
@@ -415,16 +424,11 @@ void addMultiRequest(const char* searchDir, const char* fileExtension, UDWORD mo
 
 	if(mode == MULTIOP_MAP)									// if its a map, also look in the predone stuff.
 	{
-		char* map;
-		if ((map = enumerateMultiMaps(&players, true, mapCam, numPlayers)))
+		bool first = true;
+		while (enumerateMultiMaps(first, mapCam, numPlayers) != NULL)
 		{
-			free(map);
+			first = false;
 			numButtons++;
-			while ((map = enumerateMultiMaps(&players, false, mapCam, numPlayers)))
-			{
-				free(map);
-				numButtons++;
-			}
 		}
 	}
 
@@ -532,6 +536,8 @@ void addMultiRequest(const char* searchDir, const char* fileExtension, UDWORD mo
 
 		if(mode == MULTIOP_MAP)											// if its a map, set player flag.
 		{
+			ASSERT(false, "Confusing code, can we even get here?");
+
 			const char* mapText;
 			unsigned int mapTextLength;
 
@@ -574,36 +580,35 @@ void addMultiRequest(const char* searchDir, const char* fileExtension, UDWORD mo
 
 	if(mode == MULTIOP_MAP)
 	{
-		char* mapName;
-		if ((mapName = enumerateMultiMaps(&players, true, mapCam, numPlayers)))
+		LEVEL_DATASET *mapData;
+		bool first = true;
+		while ((mapData = enumerateMultiMaps(first, mapCam, numPlayers)) != NULL)
 		{
-			do
+			first = false;
+
+			unsigned int tip_index = check_tip_index(sButInit.id-M_REQUEST_BUT);
+
+			// add number of players to string.
+			sstrcpy(tips[tip_index], mapData->pName);
+
+			sButInit.pTip = tips[tip_index];
+			sButInit.pText = tips[tip_index];
+			sButInit.pUserData = mapData;
+
+			widgAddButton(psRScreen, &sButInit);
+
+			sButInit.id += 1;
+			sButInit.x = (SWORD)(sButInit.x + (R_BUT_W+ 4));
+			if (sButInit.x + R_BUT_W+ 2 > M_REQUEST_W)
 			{
-				unsigned int tip_index = check_tip_index(sButInit.id-M_REQUEST_BUT);
-
-				// add number of players to string.
-				sstrcpy(tips[tip_index], mapName);
-				free(mapName);
-
-				sButInit.pTip = tips[tip_index];
-				sButInit.pText = tips[tip_index];
-				sButInit.UserData	= players;
-
-				widgAddButton(psRScreen, &sButInit);
-
-				sButInit.id += 1;
-				sButInit.x = (SWORD)(sButInit.x + (R_BUT_W+ 4));
-				if (sButInit.x + R_BUT_W+ 2 > M_REQUEST_W)
-				{
-					sButInit.x = buttonsX;
-					sButInit.y = (SWORD)(sButInit.y +R_BUT_H + 4);
-				}
-				if (sButInit.y +R_BUT_H + 4 > M_REQUEST_H)
-				{
-					sButInit.y = 4;
-					sButInit.majorID += 1;
-				}
-			} while ((mapName = enumerateMultiMaps(&players, false, mapCam, numPlayers)));
+				sButInit.x = buttonsX;
+				sButInit.y = (SWORD)(sButInit.y +R_BUT_H + 4);
+			}
+			if (sButInit.y +R_BUT_H + 4 > M_REQUEST_H)
+			{
+				sButInit.y = 4;
+				sButInit.majorID += 1;
+			}
 		}
 	}
 	multiRequestUp = true;
@@ -669,7 +674,7 @@ static void closeMultiRequester(void)
 	return;
 }
 
-bool runMultiRequester(UDWORD id, UDWORD *mode, char *chosen, UDWORD *chosenValue, bool *isHoverPreview)
+bool runMultiRequester(UDWORD id, UDWORD *mode, char *chosen, LEVEL_DATASET **chosenValue, bool *isHoverPreview)
 {
 	static unsigned hoverId = 0;
 	static unsigned hoverStartTime = 0;
@@ -700,7 +705,7 @@ bool runMultiRequester(UDWORD id, UDWORD *mode, char *chosen, UDWORD *chosenValu
 	{
 		strcpy(chosen,((W_BUTTON *)widgGetFromID(psRScreen,id))->pText );
 
-		*chosenValue = ((W_BUTTON *)widgGetFromID(psRScreen,id))->UserData ;
+		*chosenValue = (LEVEL_DATASET *)((W_BUTTON *)widgGetFromID(psRScreen,id))->pUserData;
 		*mode = context;
 		*isHoverPreview = hoverPreview;
 		hoverPreviewId = id;

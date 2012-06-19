@@ -48,6 +48,13 @@ enum FSAA_LEVEL
 	FSAA_8X,
 	FSAA_MAX
 };
+
+enum RENDER_MODE
+{
+	FALLBACK,	/// Shaders not supported
+	SHADERS_OFF,/// Shaders supported but off
+	SHADERS_ON,	///  Shaders supported and on
+};
 /***************************************************************************/
 /*
  *	Global ProtoTypes
@@ -66,6 +73,8 @@ extern void war_SetTrapCursor(bool b);
 extern bool war_GetTrapCursor(void);
 extern void war_SetVsync(bool b);
 extern bool war_GetVsync(void);
+extern void war_SetShaders(unsigned);
+extern unsigned war_GetShaders(void);
 extern void war_SetWidth(UDWORD width);
 extern UDWORD war_GetWidth(void);
 extern void war_SetHeight(UDWORD height);
