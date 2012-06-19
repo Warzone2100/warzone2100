@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Warzone 2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2012-06-20 01:13+0200\n"
+"POT-Creation-Date: 2012-06-20 01:11+0200\n"
 "PO-Revision-Date: 2012-05-07 15:24+0100\n"
 "Last-Translator: Mészáros Tamás <meszaros.tomi@hotmail.com>\n"
 "Language-Team: Magyar (Hungary) <meszaros.tomi@hotmail.com>\n"
@@ -11893,7 +11893,7 @@ msgstr "OpenGL 2.0-t nem támogatja a te rendszered. Néhány dolgot rossznak l�
 
 #: lib/ivis_opengl/screen.cpp:189
 #, fuzzy
-msgid "OpenGL 1.2 + TEC is not supported by your system. The game requires this. Please upgrade your graphics drivers/hardware, if possible."
+msgid "OpenGL 1.2 + VBO + TEC is not supported by your system. The game requires this. Please upgrade your graphics drivers/hardware, if possible."
 msgstr "OpenGL 1.4 nem támogatja a rendszerd. A játéknak szüksége van rá. Kérlek frissítsd fel a drivert vagy hardware videokártyád, ha ez lehetséges."
 
 #: lib/netplay/netplay.cpp:204
@@ -11999,152 +11999,147 @@ msgstr "Hibamentesítés bekapcsolva!"
 msgid "Debug mode now disabled!"
 msgstr "Hibakeresés menü nyitva"
 
-#: src/clparse.cpp:243
+#: src/clparse.cpp:242
 msgid "Set configuration directory"
 msgstr "Konfigurációs könyvtár beállítása"
 
-#: src/clparse.cpp:243
+#: src/clparse.cpp:242
 msgid "configuration directory"
 msgstr "konfigurációs könyvtár"
 
-#: src/clparse.cpp:244
+#: src/clparse.cpp:243
 msgid "Set default data directory"
 msgstr "Alapértelmezett könyvtár beállítása"
 
-#: src/clparse.cpp:244
+#: src/clparse.cpp:243
 msgid "data directory"
 msgstr "adat könyvtár"
 
-#: src/clparse.cpp:245
+#: src/clparse.cpp:244
 msgid "Show debug for given level"
 msgstr "Hibakeresés megjelenítése az adott szinten"
 
-#: src/clparse.cpp:245
+#: src/clparse.cpp:244
 msgid "debug level"
 msgstr "hibakeresési szint"
 
-#: src/clparse.cpp:246
+#: src/clparse.cpp:245
 msgid "Log debug output to file"
 msgstr "Hiba naplózása fájlba"
 
-#: src/clparse.cpp:246
+#: src/clparse.cpp:245
 msgid "file"
 msgstr "fájl"
 
-#: src/clparse.cpp:247
+#: src/clparse.cpp:246
 msgid "Flush all debug output written to stderr"
 msgstr "Ömlesztve az összes hiba naplózásra került a stderr -be"
 
-#: src/clparse.cpp:248
+#: src/clparse.cpp:247
 msgid "Play in fullscreen mode"
 msgstr "Lejátszás teljesképernyős módba"
 
-#: src/clparse.cpp:249
+#: src/clparse.cpp:248
 msgid "Load a specific game"
 msgstr "Adott játék betöltése"
 
-#: src/clparse.cpp:249
+#: src/clparse.cpp:248
 msgid "game-name"
 msgstr "játék-név"
 
-#: src/clparse.cpp:250
+#: src/clparse.cpp:249
 msgid "Show this help message and exit"
 msgstr "Megmutatja ezt az üzenetet és kilép"
 
-#: src/clparse.cpp:251
+#: src/clparse.cpp:250
 msgid "Enable a global mod"
 msgstr "Engedélyezi a a teljes eljárást"
 
+#: src/clparse.cpp:250
 #: src/clparse.cpp:251
 #: src/clparse.cpp:252
-#: src/clparse.cpp:253
 msgid "mod"
 msgstr "mód"
 
-#: src/clparse.cpp:252
+#: src/clparse.cpp:251
 msgid "Enable a campaign only mod"
 msgstr "Csak a küldetéssorozat engedélyezése"
 
-#: src/clparse.cpp:253
+#: src/clparse.cpp:252
 msgid "Enable a multiplay only mod"
 msgstr "Csak többjátékos mód engedélyezése"
 
-#: src/clparse.cpp:254
+#: src/clparse.cpp:253
 msgid "Disable asserts"
 msgstr "Árnyékok tiltása"
 
-#: src/clparse.cpp:255
+#: src/clparse.cpp:254
 msgid "Causes a crash to test the crash handler"
 msgstr "Összeomláshoz vezetett az összeomlás kezelő tesztje"
 
-#: src/clparse.cpp:256
+#: src/clparse.cpp:255
 msgid "Load a saved game"
 msgstr "Egy mentett játék betöltése"
 
-#: src/clparse.cpp:256
+#: src/clparse.cpp:255
 msgid "savegame"
 msgstr "játék mentés"
 
-#: src/clparse.cpp:257
+#: src/clparse.cpp:256
 msgid "Play in windowed mode"
 msgstr "Lejátszás ablakos módba"
 
-#: src/clparse.cpp:258
+#: src/clparse.cpp:257
 msgid "Show version information and exit"
 msgstr "Mutatja a verzió információt és kilép"
 
-#: src/clparse.cpp:259
+#: src/clparse.cpp:258
 msgid "Set the resolution to use"
 msgstr "A használandó felbontás beállítása"
 
-#: src/clparse.cpp:259
+#: src/clparse.cpp:258
 msgid "WIDTHxHEIGHT"
 msgstr "SZÉLESSÉGxMAGASSÁG"
 
-#: src/clparse.cpp:260
+#: src/clparse.cpp:259
 msgid "Enable shadows"
 msgstr "Árnyékok bekapcsolása"
 
-#: src/clparse.cpp:261
+#: src/clparse.cpp:260
 msgid "Disable shadows"
 msgstr "Árnyékok kikapcsolása"
 
-#: src/clparse.cpp:262
+#: src/clparse.cpp:261
 msgid "Enable sound"
 msgstr "Hang bekapcsolás"
 
-#: src/clparse.cpp:263
+#: src/clparse.cpp:262
 msgid "Disable sound"
 msgstr "Hang kikapcsolása"
 
-#: src/clparse.cpp:264
+#: src/clparse.cpp:263
 msgid "connect directly to IP/hostname"
 msgstr "Kapcsolódás közvetlenül a(z) IP/gazdagép"
 
-#: src/clparse.cpp:264
+#: src/clparse.cpp:263
 msgid "host"
 msgstr "játékmester"
 
-#: src/clparse.cpp:265
+#: src/clparse.cpp:264
 msgid "go directly to host screen"
 msgstr "közvetlenül a fogadó képernyőre"
 
-#: src/clparse.cpp:266
+#: src/clparse.cpp:265
 msgid "Enable texture compression"
 msgstr "Szöveg tömörítés bekapcsolása"
 
-#: src/clparse.cpp:267
+#: src/clparse.cpp:266
 msgid "Disable texture compression"
 msgstr "Szöveg tömörítés kikapcsolása"
 
-#: src/clparse.cpp:268
-#, fuzzy
-msgid "Disable the use of OpenGL shaders"
-msgstr "Szöveg tömörítés kikapcsolása"
-
-#: src/clparse.cpp:269
-msgid "Disable the use of OpenGL Vertex Buffer Objects"
-msgstr ""
+#: src/clparse.cpp:267
+msgid "Only use OpenGL 1.5"
+msgstr "Használj OpenGL 1.5-öt"
 
 #: src/cmddroid.cpp:110
 msgid "Commander needs a higher level to command more units"
@@ -12320,20 +12315,20 @@ msgstr "Rendszerek"
 msgid "Delete Template"
 msgstr "Ideiglenes törlés"
 
-#: src/display3d.cpp:674
+#: src/display3d.cpp:656
 msgid "Player left"
 msgstr "Játékos marad"
 
-#: src/display3d.cpp:678
+#: src/display3d.cpp:660
 msgid "Player dropped"
 msgstr "Játékos kiszállt"
 
-#: src/display3d.cpp:682
+#: src/display3d.cpp:664
 #: src/multiint.cpp:2310
 msgid "Waiting for other players"
 msgstr "Várakozás további játékosra"
 
-#: src/display3d.cpp:687
+#: src/display3d.cpp:669
 msgid "Out of sync"
 msgstr "Szinkronizációból kilépett"
 
@@ -14992,9 +14987,6 @@ msgstr " - Épített %s"
 #, c-format
 msgid "Version %s-%s%s%s%s"
 msgstr "Verzió %s-%s%s%s%s"
-
-#~ msgid "Only use OpenGL 1.5"
-#~ msgstr "Használj OpenGL 1.5-öt"
 
 #~ msgid "OpenGL 2.0 is not supported by your system. Some things may look wrong. Please upgrade your graphics driver/hardware, if possible."
 #~ msgstr "OpenGL 2.0-t nem támogatja a te rendszered. Néhány dolgot rossznak látok. Kérlek frissítsd fel a drivert vagy hardware videokártyád, ha ez lehetséges."
