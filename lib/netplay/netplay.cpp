@@ -1922,7 +1922,6 @@ UBYTE NETrecvFile(NETQUEUE queue)
 		if (PHYSFS_exists(fileName))
 		{
 			PHYSFS_file *fin;
-			PHYSFS_sint64 fsize;
 			fin = PHYSFS_openRead(fileName);
 			if (!fin)
 			{
@@ -1941,10 +1940,6 @@ UBYTE NETrecvFile(NETQUEUE queue)
 				NETend();
 
 				abort();
-			}
-			else
-			{
-				fsize = PHYSFS_fileLength(fin);
 			}
 			Sha256 ourHash = findHashOfFile(fileName);
 			if (ourHash == fileHash)
