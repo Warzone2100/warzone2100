@@ -401,7 +401,7 @@ static void loadEmptyMapPreview()
 	for (unsigned n = 0; n < 125; ++n)
 	{
 		int sx = rand()%(ex - bx), sy = rand()%(ey - by);
-		char col[3] = {rand()%256, rand()%256, rand()%256};
+		char col[3] = {char(rand()%256), char(rand()%256), char(rand()%256)};
 		for (unsigned y = 0; y < by; ++y)
 			for (unsigned x = 0; x < bx; ++x)
 				if (("\2\1\261\11\6"[x]>>y & 1) == 1)  // ?
