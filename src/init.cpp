@@ -452,7 +452,7 @@ static MapFileList listMapFiles()
 		{
 			continue;
 		}
-		std::string realFileName = std::string("maps") + PHYSFS_getDirSeparator() + *i;
+		std::string realFileName = std::string("maps/") + *i;
 		ret.push_back(realFileName);
 	}
 	PHYSFS_freeList(subdirlist);
