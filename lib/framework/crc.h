@@ -38,6 +38,7 @@ struct Sha256
 	bool isZero() const;
 	void setZero();
 	std::string toString() const;
+	void fromString(std::string const &s);
 
 	uint8_t bytes[Bytes];
 };

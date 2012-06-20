@@ -446,7 +446,7 @@ void loadMapPreview(bool hideInterface)
 	psLevel = levFindDataSet(game.map, &game.hash);
 	if (psLevel == NULL)
 	{
-		debug(LOG_INFO, "Could not find level dataset. Probably waiting for download.");
+		debug(LOG_INFO, "Could not find level dataset \"%s\" %s. Probably waiting for download.", game.map, game.hash.toString().c_str());
 		loadEmptyMapPreview();
 		return;
 	}
@@ -3758,7 +3758,7 @@ bool startMultiOptions(bool bReenter)
 			game.type = SKIRMISH;
 			game.scavengers = false;
 			sstrcpy(game.map, DEFAULTSKIRMISHMAP);
-			game.hash.setZero();
+			game.hash = levGetMapNameHash(game.map);
 			game.maxPlayers = 4;
 		}
 
@@ -3783,7 +3783,7 @@ bool startMultiOptions(bool bReenter)
 
 			challenge.beginGroup("challenge");
 			sstrcpy(game.map, challenge.value("Map", game.map).toString().toAscii().constData());
-			game.hash.setZero();
+			game.hash = levGetMapNameHash(game.map);
 			game.maxPlayers = challenge.value("MaxPlayers", game.maxPlayers).toInt();	// TODO, read from map itself, not here!!
 			game.scavengers = challenge.value("Scavengers", game.scavengers).toInt();
 			game.alliance = ALLIANCES_TEAMS;

@@ -176,6 +176,19 @@ Sha256 levGetFileHash(LEVEL_DATASET *level)
 	return level->realFileHash;
 }
 
+Sha256 levGetMapNameHash(char const *mapName)
+{
+	LEVEL_DATASET *level = levFindDataSet(mapName, NULL);
+	if (level == NULL)
+	{
+		debug(LOG_WARNING, "Couldn't find map \"%s\" to hash.", mapName);
+		Sha256 zero;
+		zero.setZero();
+		return zero;
+	}
+	return levGetFileHash(level);
+}
+
 // parse a level description data file
 // the ignoreWrf hack is for compatibility with old maps that try to link in various
 // data files that we have removed
