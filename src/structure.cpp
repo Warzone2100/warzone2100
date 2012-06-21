@@ -4621,13 +4621,9 @@ bool removeStruct(STRUCTURE *psDel, bool bDestroy)
 		if (psDel->player == selectedPlayer)
 		{
 			//if currently trying to place a DP
-			if (tryingToGetLocation())
+			if (psFactory->psAssemblyPoint && psFactory->psAssemblyPoint->selected)
 			{
-				//need to check if this factory's DP is trying to be re-positioned
-				if (psAssemblyPoint == sBuildDetails.UserData)
-				{
-					kill3DBuilding();
-				}
+				cancelDeliveryRepos();
 			}
 		}
 	}
@@ -5054,28 +5050,6 @@ void setFlagPositionInc(FUNCTIONALITY* pFunctionality, UDWORD player, UBYTE fact
 	debug(LOG_ERROR, "We have too many factories of type %d, player %d", factoryType, player);
 	ASSERT( false, "Can't set flag!");
 }
-
-
-/* called from order.c.. delivery/assembly point handler*/
-/*now called from display.c */
-void processDeliveryPoint(UDWORD player, UDWORD x, UDWORD y)
-{
-	FLAG_POSITION	*psCurrFlag;//,*psFlag;//,*psNewFlag
-
-	for (psCurrFlag = apsFlagPosLists[player]; psCurrFlag; psCurrFlag = psCurrFlag->psNext)
-	{
-		// must be selected and have a valid pos.
-		if (psCurrFlag->selected)
-		{
-			setAssemblyPoint(psCurrFlag, x, y, player, true);
-
-			//deselect once moved
-			psCurrFlag->selected = false;
-			return;	//will want to break if more than one can be selected?
-		}
-	}
-}
-
 
 /*called when a structure has been built - checks through the list of callbacks
 for the scripts*/

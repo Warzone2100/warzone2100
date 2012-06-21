@@ -158,7 +158,6 @@ void init3DBuilding(BASE_STATS *psStats,BUILDCALLBACK CallBack,void *UserData)
 
 void	kill3DBuilding		( void )
 {
-	CancelDeliveryRepos();
     //cancel the drag boxes
     dragBox3D.status = DRAG_INACTIVE;
     wallDrag.status = DRAG_INACTIVE;
@@ -267,7 +266,7 @@ bool found3DBuilding(UDWORD *x, UDWORD *y)
 	if (ctrlShiftDown())
 	{
 		quickQueueMode = true;
-		init3DBuilding(sBuildDetails.psStats, NULL, NULL);
+		init3DBuilding(sBuildDetails.psStats, sBuildDetails.CallBack, sBuildDetails.UserData);
 	}
 	else
 	{
@@ -304,7 +303,7 @@ bool found3DBuildLocTwo(UDWORD *px1, UDWORD *py1, UDWORD *px2, UDWORD *py2)
 	if (ctrlShiftDown())
 	{
 		quickQueueMode = true;
-		init3DBuilding(sBuildDetails.psStats, NULL, NULL);
+		init3DBuilding(sBuildDetails.psStats, sBuildDetails.CallBack, sBuildDetails.UserData);
 	}
 
 	return true;

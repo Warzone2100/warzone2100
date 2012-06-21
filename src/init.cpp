@@ -1143,7 +1143,6 @@ bool stageThreeInitialise(void)
 	// Re-inititialise some static variables.
 
 	driveInitVars(false);
-	displayInitVars();
 	resizeRadar();
 
 	setAllPauseStates(false);
