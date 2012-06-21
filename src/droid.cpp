@@ -3208,30 +3208,6 @@ void updateVtolAttackRun(DROID *psDroid , int weapon_slot)
 	}
 }
 
-/*this mends the VTOL when it has been returned to home base whilst on an
-offworld mission*/
-void mendVtol(DROID *psDroid)
-{
-	UBYTE	i;
-	ASSERT_OR_RETURN( , vtolEmpty(psDroid), "droid is not an empty weapon VTOL!");
-
-	CHECK_DROID(psDroid);
-
-	/* set rearm value to no runs made */
-	for (i = 0;i < psDroid->numWeaps;i++)
-	{
-		psDroid->sMove.iAttackRuns[i] = 0;
-		//reset ammo and lastTimeFired
-		psDroid->asWeaps[i].ammo = asWeaponStats[psDroid->
-			asWeaps[i].nStat].numRounds;
-		psDroid->asWeaps[i].lastFired = 0;
-	}
-	/* set droid points to max */
-	psDroid->body = psDroid->originalBody;
-
-	CHECK_DROID(psDroid);
-}
-
 //assign rearmPad to the VTOL
 void assignVTOLPad(DROID *psNewDroid, STRUCTURE *psReArmPad)
 {

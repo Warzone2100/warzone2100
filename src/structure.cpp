@@ -3424,51 +3424,49 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 					psReArmPad->timeLastUpdated = gameTime;
 				}
 
-					/* do rearming */
-						UDWORD      pointsRequired;
+				/* do rearming */
+				UDWORD      pointsRequired;
 
-						//amount required is a factor of the droids' weight
-						pointsRequired = psDroid->weight / REARM_FACTOR;
-						//take numWeaps into consideration
-						pointsToAdd = psReArmPad->reArmPoints * (gameTime - psReArmPad->timeStarted) /
-						    GAME_TICKS_PER_SEC;
-						pointsAlreadyAdded = psReArmPad->reArmPoints * (psReArmPad->timeLastUpdated - psReArmPad->timeStarted) /
-						    GAME_TICKS_PER_SEC;
-						if (pointsToAdd >= pointsRequired)
+				//amount required is a factor of the droids' weight
+				pointsRequired = psDroid->weight / REARM_FACTOR;
+				//take numWeaps into consideration
+				pointsToAdd = psReArmPad->reArmPoints * (gameTime - psReArmPad->timeStarted) / GAME_TICKS_PER_SEC;
+				pointsAlreadyAdded = psReArmPad->reArmPoints * (psReArmPad->timeLastUpdated - psReArmPad->timeStarted) / GAME_TICKS_PER_SEC;
+				if (pointsToAdd >= pointsRequired)
+				{
+					// We should be fully loaded by now.
+					for (i = 0; i < psDroid->numWeaps; i++)
+					{
+						// set rearm value to no runs made
+						psDroid->asWeaps[i].usedAmmo = 0;
+						// reset ammo and lastFired
+						psDroid->asWeaps[i].ammo = asWeaponStats[psDroid->asWeaps[i].nStat].numRounds;
+						psDroid->asWeaps[i].lastFired = 0;
+					}
+				}
+				else
+				{
+					for (i = 0; i < psDroid->numWeaps; i++)
+					{
+						// Make sure it's a rearmable weapon (and so we don't divide by zero)
+						if (psDroid->asWeaps[i].usedAmmo > 0 && asWeaponStats[psDroid->asWeaps[i].nStat].numRounds > 0)
 						{
-							// We should be fully loaded by now.
-							for (i = 0; i < psDroid->numWeaps; i++)
+							// Do not "simplify" this formula.
+							// It is written this way to prevent rounding errors.
+							int ammoToAddThisTime =
+								pointsToAdd*getNumAttackRuns(psDroid,i)/pointsRequired -
+								pointsAlreadyAdded*getNumAttackRuns(psDroid,i)/pointsRequired;
+							psDroid->asWeaps[i].usedAmmo -= std::min<unsigned>(ammoToAddThisTime, psDroid->asWeaps[i].usedAmmo);
+							if (ammoToAddThisTime)
 							{
-								// set rearm value to no runs made
-								psDroid->asWeaps[i].usedAmmo = 0;
 								// reset ammo and lastFired
 								psDroid->asWeaps[i].ammo = asWeaponStats[psDroid->asWeaps[i].nStat].numRounds;
 								psDroid->asWeaps[i].lastFired = 0;
+								break;
 							}
 						}
-						else
-						{
-							for (i = 0; i < psDroid->numWeaps; i++)
-							{
-								// Make sure it's a rearmable weapon (and so we don't divide by zero)
-								if (psDroid->asWeaps[i].usedAmmo > 0 && asWeaponStats[psDroid->asWeaps[i].nStat].numRounds > 0)
-								{
-									// Do not "simplify" this formula.
-									// It is written this way to prevent rounding errors.
-									int ammoToAddThisTime =
-									    pointsToAdd*getNumAttackRuns(psDroid,i)/pointsRequired -
-									    pointsAlreadyAdded*getNumAttackRuns(psDroid,i)/pointsRequired;
-									psDroid->asWeaps[i].usedAmmo -= std::min<unsigned>(ammoToAddThisTime, psDroid->asWeaps[i].usedAmmo);
-									if (ammoToAddThisTime)
-									{
-										// reset ammo and lastFired
-										psDroid->asWeaps[i].ammo = asWeaponStats[psDroid->asWeaps[i].nStat].numRounds;
-										psDroid->asWeaps[i].lastFired = 0;
-										break;
-									}
-								}
-							}
-						}
+					}
+				}
 				/* do repairing */
 				if (psDroid->body < psDroid->originalBody)
 				{
