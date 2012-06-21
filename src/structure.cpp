@@ -3424,12 +3424,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 					psReArmPad->timeLastUpdated = gameTime;
 				}
 
-				// dont rearm on remote pcs.
-				// Huh?! Why not?! if(!bMultiPlayer || myResponsibility(psDroid->player))
-				{
 					/* do rearming */
-					if (psDroid->sMove.iAttackRuns != 0)
-					{
 						UDWORD      pointsRequired;
 
 						//amount required is a factor of the droids' weight
@@ -3445,7 +3440,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 							for (i = 0; i < psDroid->numWeaps; i++)
 							{
 								// set rearm value to no runs made
-								psDroid->sMove.iAttackRuns[i] = 0;
+								psDroid->asWeaps[i].usedAmmo = 0;
 								// reset ammo and lastFired
 								psDroid->asWeaps[i].ammo = asWeaponStats[psDroid->asWeaps[i].nStat].numRounds;
 								psDroid->asWeaps[i].lastFired = 0;
@@ -3456,21 +3451,14 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 							for (i = 0; i < psDroid->numWeaps; i++)
 							{
 								// Make sure it's a rearmable weapon (and so we don't divide by zero)
-								if (psDroid->sMove.iAttackRuns[i] > 0 && asWeaponStats[psDroid->asWeaps[i].nStat].numRounds > 0)
+								if (psDroid->asWeaps[i].usedAmmo > 0 && asWeaponStats[psDroid->asWeaps[i].nStat].numRounds > 0)
 								{
 									// Do not "simplify" this formula.
 									// It is written this way to prevent rounding errors.
 									int ammoToAddThisTime =
 									    pointsToAdd*getNumAttackRuns(psDroid,i)/pointsRequired -
 									    pointsAlreadyAdded*getNumAttackRuns(psDroid,i)/pointsRequired;
-									if (ammoToAddThisTime > psDroid->sMove.iAttackRuns[i])
-									{
-										psDroid->sMove.iAttackRuns[i] = 0;
-									}
-									else if (ammoToAddThisTime > 0)
-									{
-										psDroid->sMove.iAttackRuns[i] -= ammoToAddThisTime;
-									}
+									psDroid->asWeaps[i].usedAmmo -= std::min<unsigned>(ammoToAddThisTime, psDroid->asWeaps[i].usedAmmo);
 									if (ammoToAddThisTime)
 									{
 										// reset ammo and lastFired
@@ -3481,8 +3469,6 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 								}
 							}
 						}
-					}
-				}
 				/* do repairing */
 				if (psDroid->body < psDroid->originalBody)
 				{

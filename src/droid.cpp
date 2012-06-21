@@ -2021,6 +2021,7 @@ void droidSetBits(DROID_TEMPLATE *pTemplate,DROID *psDroid)
 			psDroid->asWeaps[inc].nStat = pTemplate->asWeaps[inc];
 			psDroid->asWeaps[inc].ammo = (asWeaponStats + psDroid->asWeaps[inc].nStat)->numRounds;
 		}
+		psDroid->asWeaps[inc].usedAmmo = 0;
 	}
 	//allocate the components hit points
 	psDroid->asBits[COMP_BODY].nStat = (UBYTE)pTemplate->asParts[COMP_BODY];
@@ -2963,7 +2964,7 @@ bool vtolEmpty(DROID *psDroid)
 	for (i = 0; i < psDroid->numWeaps; i++)
 	{
 		if (asWeaponStats[psDroid->asWeaps[i].nStat].vtolAttackRuns > 0 &&
-		    psDroid->sMove.iAttackRuns[i] < getNumAttackRuns(psDroid, i))
+		    psDroid->asWeaps[i].usedAmmo < getNumAttackRuns(psDroid, i))
 		{
 			return false;
 		}
@@ -2991,7 +2992,7 @@ bool vtolFull(DROID *psDroid)
 	for (i = 0; i < psDroid->numWeaps; i++)
 	{
 		if (asWeaponStats[psDroid->asWeaps[i].nStat].vtolAttackRuns > 0 &&
-		    psDroid->sMove.iAttackRuns[i] > 0)
+		    psDroid->asWeaps[i].usedAmmo > 0)
 		{
 			return false;
 		}
@@ -3177,7 +3178,7 @@ bool vtolHappy(const DROID* psDroid)
 	for (i = 0; i < psDroid->numWeaps; ++i)
 	{
 		if (asWeaponStats[psDroid->asWeaps[i].nStat].vtolAttackRuns > 0
-		 && psDroid->sMove.iAttackRuns[i] != 0)
+		 && psDroid->asWeaps[i].usedAmmo != 0)
 		{
 			return false;
 		}
@@ -3195,13 +3196,13 @@ void updateVtolAttackRun(DROID *psDroid , int weapon_slot)
 		{
 			if (asWeaponStats[psDroid->asWeaps[weapon_slot].nStat].vtolAttackRuns > 0)
 			{
-				psDroid->sMove.iAttackRuns[weapon_slot]++;
-				if (psDroid->sMove.iAttackRuns[weapon_slot] == getNumAttackRuns(psDroid, weapon_slot))
+				++psDroid->asWeaps[weapon_slot].usedAmmo;
+				if (psDroid->asWeaps[weapon_slot].usedAmmo == getNumAttackRuns(psDroid, weapon_slot))
 				{
 					psDroid->asWeaps[weapon_slot].ammo = 0;
 				}
 				//quick check doesn't go over limit
-				ASSERT( psDroid->sMove.iAttackRuns[weapon_slot] < UWORD_MAX, "too many attack runs");
+				ASSERT(psDroid->asWeaps[weapon_slot].usedAmmo < UWORD_MAX, "too many attack runs");
 			}
 		}
 	}

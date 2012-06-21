@@ -54,7 +54,7 @@ bool combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 	/* Watermelon:dont shoot if the weapon_slot of a vtol is empty */
 	if (psAttacker->type == OBJ_DROID && isVtolDroid(((DROID *)psAttacker)))
 	{
-		if (((DROID *)psAttacker)->sMove.iAttackRuns[weapon_slot] >= getNumAttackRuns(((DROID *)psAttacker), weapon_slot))
+		if (psWeap->usedAmmo >= getNumAttackRuns(((DROID *)psAttacker), weapon_slot))
 		{
 			objTrace(psAttacker->id, "VTOL slot %d is empty", weapon_slot);
 			return false;
