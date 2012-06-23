@@ -4541,7 +4541,6 @@ static void removeStructFromMap(STRUCTURE *psStruct)
 bool removeStruct(STRUCTURE *psDel, bool bDestroy)
 {
 	bool		resourceFound = false;
-	FACTORY		*psFactory;
 	SDWORD		cluster;
 	FLAG_POSITION	*psAssemblyPoint=NULL;
 
@@ -4598,7 +4597,7 @@ bool removeStruct(STRUCTURE *psDel, bool bDestroy)
 	//if it is a factory - need to reset the factoryNumFlag
 	if (StructIsFactory(psDel))
 	{
-		psFactory = &psDel->pFunctionality->factory;
+		FACTORY *psFactory = &psDel->pFunctionality->factory;
 
 		//need to initialise the production run as well
 		cancelProduction(psDel, ModeImmediate);
@@ -4618,13 +4617,9 @@ bool removeStruct(STRUCTURE *psDel, bool bDestroy)
 		}
 
 		//need to cancel the repositioning of the DP if selectedPlayer and currently moving
-		if (psDel->player == selectedPlayer)
+		if (psDel->player == selectedPlayer && psAssemblyPoint->selected)
 		{
-			//if currently trying to place a DP
-			if (psFactory->psAssemblyPoint && psFactory->psAssemblyPoint->selected)
-			{
-				cancelDeliveryRepos();
-			}
+			cancelDeliveryRepos();
 		}
 	}
 
