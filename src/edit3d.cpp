@@ -30,7 +30,6 @@
 #include "objects.h"
 #include "display.h"
 #include "hci.h"
-#include "geometry.h"
 
 /*
 Definition of a tile to highlight - presently more than is required
@@ -186,35 +185,12 @@ bool process3DBuilding(void)
 
 	if (buildState != BUILD3D_FINISHED)
 	{
-		Vector2i offset(TILE_UNITS/2, TILE_UNITS/2);  // This presumably gets added to the chosen coordinates, somewhere, based on looking at what pickStructLocation does. No idea where it gets added, though.
+		Vector2i size = getStatsSize(sBuildDetails.psStats, player.r.y);
+		Vector2i offset = size * (TILE_UNITS / 2);  // This presumably gets added to the chosen coordinates, somewhere, based on looking at what pickStructLocation does. No idea where it gets added, though.
 
 		if (validLocation(sBuildDetails.psStats, world_coord(Vector2i(bX, bY)) + offset, player.r.y, selectedPlayer, true))
 		{
 			buildState = BUILD3D_VALID;
-
-			// if it's a structure
-			if (sBuildDetails.psStats->ref >= REF_STRUCTURE_START && sBuildDetails.psStats->ref < REF_STRUCTURE_START + REF_RANGE)
-			{
-				STRUCTURE_STATS* const psBuilding = (STRUCTURE_STATS *)sBuildDetails.psStats;
-				switch(psBuilding->type)
-				{
-					case REF_FACTORY_MODULE:
-					case REF_RESEARCH_MODULE:
-					case REF_POWER_MODULE:
-					{
-						// If it's a module snap it
-						STRUCTURE const *psStruct = getTileStructure(bX, bY);
-						if (psStruct)
-						{
-							bX = map_coord(psStruct->pos.x);
-							bY = map_coord(psStruct->pos.y);
-						}
-						break;
-					}
-					default:
-						break;
-				}
-			}
 		}
 		else
 		{
