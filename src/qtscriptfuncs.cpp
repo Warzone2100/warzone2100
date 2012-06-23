@@ -2044,6 +2044,34 @@ static QScriptValue js_hackNetOn(QScriptContext *, QScriptEngine *)
 	return QScriptValue();
 }
 
+//-- \subsection{getDroidLimit([player[, unit type]])}
+//-- Return maximum number of droids that this player can produce. This limit is usually
+//-- fixed throughout a game and the same for all players. If no arguments are passed,
+//-- returns general unit limit for the current player. If a second, unit type argument 
+//-- is passed, the limit for this unit type is returned, which may be different from
+//-- the general unit limit (eg for commanders and construction droids).
+static QScriptValue js_getDroidLimit(QScriptContext *context, QScriptEngine *engine)
+{
+	if (context->argumentCount() > 1)
+	{
+		DROID_TYPE type = (DROID_TYPE)context->argument(1).toInt32();
+		if (type == DROID_COMMAND)
+		{
+			return QScriptValue(MAX_COMMAND_DROIDS);
+		}
+		else if (type == DROID_CONSTRUCT)
+		{
+			return QScriptValue(MAX_CONSTRUCTOR_DROIDS);
+		}
+		// else return general unit limit
+	}
+	if (context->argumentCount() > 0)
+	{
+		return QScriptValue(getMaxDroids(context->argument(0).toInt32()));
+	}
+	return QScriptValue(getMaxDroids(engine->globalObject().property("me").toInt32()));
+}
+
 // ----------------------------------------------------------------------------------------
 // Register functions with scripting system
 
@@ -2090,6 +2118,7 @@ bool registerFunctions(QScriptEngine *engine)
 	engine->globalObject().setProperty("isVTOL", engine->newFunction(js_isVTOL));
 	engine->globalObject().setProperty("safeDest", engine->newFunction(js_safeDest));
 	engine->globalObject().setProperty("activateStructure", engine->newFunction(js_activateStructure));
+	engine->globalObject().setProperty("getDroidLimit", engine->newFunction(js_getDroidLimit));
 
 	// Functions that operate on the current player only
 	engine->globalObject().setProperty("centreView", engine->newFunction(js_centreView));
