@@ -1898,6 +1898,7 @@ DROID *reallyBuildDroid(DROID_TEMPLATE *pTemplate, Position pos, UDWORD player, 
 	// Initialise the movement stuff
 	psDroid->baseSpeed = calcDroidBaseSpeed(pTemplate, psDroid->weight, (UBYTE)player);
 
+	psDroid->sMove.asPath = NULL;
 	initDroidMovement(psDroid);
 
 	// it was never drawn before
@@ -1988,6 +1989,7 @@ DROID *buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player, 
 //initialises the droid movement model
 void initDroidMovement(DROID *psDroid)
 {
+	free(psDroid->sMove.asPath);
 	memset(&psDroid->sMove, 0, sizeof(MOVE_CONTROL));
 }
 

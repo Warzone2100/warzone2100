@@ -1437,6 +1437,7 @@ void transporterAddDroid(DROID *psTransporter, DROID *psDroidToAdd)
 	{
 		visRemoveVisibility((BASE_OBJECT *)psDroidToAdd);
 	}
+	fpathRemoveDroidData(psDroidToAdd->id);
 
 	// This is called by droidRemove. But we still need to refresh after adding to the transporter group.
 	intRefreshScreen();
