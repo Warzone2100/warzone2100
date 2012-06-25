@@ -32,6 +32,7 @@ struct WEAPON
 	uint32_t        shotsFired;
 	Rotation	rot;
 	Rotation	prevRot;
+	unsigned        usedAmmo;    ///< Amount of ammunition used up by a VTOL
 };
 
 // Defined in droid.cpp.

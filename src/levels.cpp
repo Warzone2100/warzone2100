@@ -30,6 +30,9 @@
 #include "lib/framework/frame.h"
 #include "lib/framework/frameresource.h"
 #include "lib/framework/listmacs.h"
+#include "lib/framework/file.h"
+#include "lib/framework/crc.h"
+#include "lib/framework/physfs_ext.h"
 #include "lib/exceptionhandler/dumpinfo.h"
 #include "init.h"
 #include "objects.h"
@@ -68,7 +71,7 @@ static LEVEL_DATASET	*psBaseData = NULL;
 static LEVEL_DATASET	*psCurrLevel = NULL;
 
 // dummy level data for single WRF loads
-static LEVEL_DATASET	sSingleWRF = { 0, 0, 0, 0, mod_clean, { 0 }, 0, 0, 0 };
+static LEVEL_DATASET	sSingleWRF = {0, 0, 0, 0, mod_clean, {0}, 0, 0, 0, NULL, {{0}}};
 
 // return values from the lexer
 char *pLevToken;
@@ -124,6 +127,7 @@ void levShutDown(void)
 		}
 
 		free(toDelete->pName);
+		free(toDelete->realFileName);
 		free(toDelete);
 	}
 	psLevels = NULL;
@@ -141,26 +145,54 @@ void lev_error(const char* msg)
  *  @return a dataset with associated with the given @c name, or NULL if none
  *          could be found.
  */
-LEVEL_DATASET* levFindDataSet(const char* name)
+LEVEL_DATASET *levFindDataSet(char const *name, Sha256 const *hash)
 {
-	LEVEL_DATASET* psNewLevel;
-
-	for (psNewLevel = psLevels; psNewLevel; psNewLevel = psNewLevel->psNext)
+	if (hash != NULL && hash->isZero())
 	{
-		if (psNewLevel->pName != NULL
-		 && strcmp(psNewLevel->pName, name) == 0)
+		hash = NULL;  // Don't check hash if it's just 0000000000000000000000000000000000000000000000000000000000000000. Assuming real map files probably won't have that particular SHA-256 hash.
+	}
+
+	for (LEVEL_DATASET *psNewLevel = psLevels; psNewLevel != NULL; psNewLevel = psNewLevel->psNext)
+	{
+		if (psNewLevel->pName != NULL && strcmp(psNewLevel->pName, name) == 0)
 		{
-			return psNewLevel;
+			if (hash == NULL || levGetFileHash(psNewLevel) == *hash)
+			{
+				return psNewLevel;
+			}
 		}
 	}
 
 	return NULL;
 }
 
+Sha256 levGetFileHash(LEVEL_DATASET *level)
+{
+	if (level->realFileName != NULL && level->realFileHash.isZero())
+	{
+		level->realFileHash = findHashOfFile(level->realFileName);
+		debug(LOG_WZ, "Hash of file \"%s\" is %s.", level->realFileName, level->realFileHash.toString().c_str());
+	}
+	return level->realFileHash;
+}
+
+Sha256 levGetMapNameHash(char const *mapName)
+{
+	LEVEL_DATASET *level = levFindDataSet(mapName, NULL);
+	if (level == NULL)
+	{
+		debug(LOG_WARNING, "Couldn't find map \"%s\" to hash.", mapName);
+		Sha256 zero;
+		zero.setZero();
+		return zero;
+	}
+	return levGetFileHash(level);
+}
+
 // parse a level description data file
 // the ignoreWrf hack is for compatibility with old maps that try to link in various
 // data files that we have removed
-bool levParse(const char* buffer, size_t size, searchPathMode datadir, bool ignoreWrf)
+bool levParse(const char* buffer, size_t size, searchPathMode datadir, bool ignoreWrf, char const *realFileName)
 {
 	lexerinput_t input;
 	LEVELPARSER_STATE state;
@@ -202,6 +234,8 @@ bool levParse(const char* buffer, size_t size, searchPathMode datadir, bool igno
 				psDataSet->players = 1;
 				psDataSet->game = -1;
 				psDataSet->dataDir = datadir;
+				psDataSet->realFileName = realFileName != NULL? strdup(realFileName) : NULL;
+				psDataSet->realFileHash.setZero();  // The hash is only calculated on demand; for example, if the map name matches.
 				LIST_APPEND(psLevels, psDataSet, LEVEL_DATASET);
 				currData = 0;
 
@@ -592,13 +626,13 @@ char *getLevelName( void )
 
 
 // load up the data for a level
-bool levLoadData(const char* name, char *pSaveName, GAME_TYPE saveType)
+bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYPE saveType)
 {
 	LEVEL_DATASET	*psNewLevel, *psBaseData, *psChangeLevel;
 	SDWORD			i;
 	bool            bCamChangeSaveGame;
 
-	debug(LOG_WZ, "Loading level %s (%s, type %d)", name, pSaveName, (int)saveType);
+	debug(LOG_WZ, "Loading level %s hash %s (%s, type %d)", name, hash == NULL? "builtin" : hash->toString().c_str(), pSaveName, (int)saveType);
 	if (saveType == GTYPE_SAVE_START || saveType == GTYPE_SAVE_MIDMISSION)
 	{
 		if (!levReleaseAll())
@@ -611,7 +645,7 @@ bool levLoadData(const char* name, char *pSaveName, GAME_TYPE saveType)
 	levelLoadType = saveType;
 
 	// find the level dataset
-	psNewLevel = levFindDataSet(name);
+	psNewLevel = levFindDataSet(name, hash);
 	if (psNewLevel == NULL)
 	{
 		debug(LOG_WZ, "Dataset %s not found - trying to load as WRF", name);
@@ -686,7 +720,7 @@ bool levLoadData(const char* name, char *pSaveName, GAME_TYPE saveType)
 		}
 	}
 
-	setCurrentMap(psNewLevel->pName, psNewLevel->players);
+	setCurrentMap(psNewLevel->realFileName, psNewLevel->players);
 	if (!rebuildSearchPath(psNewLevel->dataDir, true))
 	{
 		return false;

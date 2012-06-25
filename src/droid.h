@@ -286,9 +286,6 @@ extern bool vtolFull(DROID *psDroid);
 /*Checks a vtol for being fully armed and fully repaired to see if ready to
 leave reArm pad */
 extern bool  vtolHappy(const DROID* psDroid);
-/*this mends the VTOL when it has been returned to home base whilst on an
-offworld mission*/
-extern void mendVtol(DROID *psDroid);
 /*checks if the droid is a VTOL droid and updates the attack runs as required*/
 extern void updateVtolAttackRun(DROID *psDroid, int weapon_slot);
 /*returns a count of the base number of attack runs for the weapon attached to the droid*/

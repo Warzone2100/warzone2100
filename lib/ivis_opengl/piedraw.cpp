@@ -53,6 +53,15 @@
 
 extern bool drawing_interface;
 
+// Shadow stencil stuff
+static void ss_GL2_1pass();
+static void ss_EXT_1pass();
+static void ss_ATI_1pass();
+static void ss_2pass();
+static void (*ShadowStencilFunc)() = 0;
+static GLenum ss_op_depth_pass_front = GL_INCR;
+static GLenum ss_op_depth_pass_back = GL_DECR;
+
 /*
  *	Local Variables
  */
@@ -136,7 +145,7 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELI
 {
 	iIMDPoly *pPolys;
 	bool light = true;
-	bool shaders = pie_GetShaderAvailability();
+	bool shaders = pie_GetShaderUsage();
 
 	pie_SetAlphaTest((pieFlag & pie_PREMULTIPLIED) == 0);
 
@@ -438,7 +447,30 @@ static void inverse_matrix(const float * src, float * dst)
 
 void pie_SetUp(void)
 {
-	// initialise pie engine (just a placeholder for now)
+	// initialise pie engine
+
+	if (GLEW_EXT_stencil_wrap)
+	{
+		ss_op_depth_pass_front = GL_INCR_WRAP;
+		ss_op_depth_pass_back = GL_DECR_WRAP;
+	}
+
+	if (GLEW_VERSION_2_0)
+	{
+		ShadowStencilFunc = ss_GL2_1pass;
+	}
+	else if (GLEW_EXT_stencil_two_side)
+	{
+		ShadowStencilFunc = ss_EXT_1pass;
+	}
+	else if (GLEW_ATI_separate_stencil)
+	{
+		ShadowStencilFunc = ss_ATI_1pass;
+	}
+	else
+	{
+		ShadowStencilFunc = ss_2pass;
+	}
 }
 
 void pie_CleanUp( void )
@@ -529,7 +561,6 @@ static void pie_DrawShadows(void)
 {
 	const float width = pie_GetVideoBufferWidth();
 	const float height = pie_GetVideoBufferHeight();
-	GLenum op_depth_pass_front = GL_INCR, op_depth_pass_back = GL_DECR;
 
 	pie_SetTexturePage(TEXPAGE_NONE);
 
@@ -541,60 +572,7 @@ static void pie_DrawShadows(void)
 	glDepthMask(GL_FALSE);
 	glEnable(GL_STENCIL_TEST);
 
-	// Check if we have the required extensions
-	if (GLEW_EXT_stencil_wrap)
-	{
-		op_depth_pass_front = GL_INCR_WRAP_EXT;
-		op_depth_pass_back = GL_DECR_WRAP_EXT;
-	}
-
-	// generic 1-pass version
-	if (GLEW_EXT_stencil_two_side)
-	{
-		glEnable(GL_STENCIL_TEST_TWO_SIDE_EXT);
-		glDisable(GL_CULL_FACE);
-		glStencilMask(~0);
-		glActiveStencilFaceEXT(GL_BACK);
-		glStencilOp(GL_KEEP, GL_KEEP, op_depth_pass_back);
-		glStencilFunc(GL_ALWAYS, 0, ~0);
-		glActiveStencilFaceEXT(GL_FRONT);
-		glStencilOp(GL_KEEP, GL_KEEP, op_depth_pass_front);
-		glStencilFunc(GL_ALWAYS, 0, ~0);
-
-		pie_ShadowDrawLoop();
-		
-		glDisable(GL_STENCIL_TEST_TWO_SIDE_EXT);
-	}
-	// check for ATI-specific 1-pass version
-	else if (GLEW_ATI_separate_stencil)
-	{
-		glDisable(GL_CULL_FACE);
-		glStencilMask(~0);
-		glStencilOpSeparateATI(GL_BACK, GL_KEEP, GL_KEEP, op_depth_pass_back);
-		glStencilOpSeparateATI(GL_FRONT, GL_KEEP, GL_KEEP, op_depth_pass_front);
-		glStencilFunc(GL_ALWAYS, 0, ~0);
-
-		pie_ShadowDrawLoop();	
-	}
-	// fall back to default 2-pass version
-	else
-	{
-		glStencilMask(~0);
-		glStencilFunc(GL_ALWAYS, 0, ~0);
-		glEnable(GL_CULL_FACE);
-		
-		// Setup stencil for front-facing polygons
-		glCullFace(GL_BACK);
-		glStencilOp(GL_KEEP, GL_KEEP, op_depth_pass_front);
-
-		pie_ShadowDrawLoop();
-
-		// Setup stencil for back-facing polygons
-		glCullFace(GL_FRONT);
-		glStencilOp(GL_KEEP, GL_KEEP, op_depth_pass_back);
-
-		pie_ShadowDrawLoop();
-	}
+	ShadowStencilFunc();
 
 	pie_SetRendMode(REND_ALPHA);
 	glEnable(GL_CULL_FACE);
@@ -697,4 +675,66 @@ void pie_GetResetCounts(unsigned int* pPieCount, unsigned int* pPolyCount, unsig
 	polyCount = 0;
 	pieStateCount = 0;
 	return;
+}
+
+// GL 2.0 1-pass version
+static void ss_GL2_1pass()
+{
+	glDisable(GL_CULL_FACE);
+	glStencilMask(~0);
+	glStencilOpSeparate(GL_BACK, GL_KEEP, GL_KEEP, GL_INCR_WRAP);
+	glStencilOpSeparate(GL_FRONT, GL_KEEP, GL_KEEP, GL_DECR_WRAP);
+	glStencilFunc(GL_ALWAYS, 0, ~0);
+
+	pie_ShadowDrawLoop();
+}
+
+// generic 1-pass version
+static void ss_EXT_1pass()
+{
+	glEnable(GL_STENCIL_TEST_TWO_SIDE_EXT);
+	glDisable(GL_CULL_FACE);
+	glStencilMask(~0);
+	glActiveStencilFaceEXT(GL_BACK);
+	glStencilOp(GL_KEEP, GL_KEEP, ss_op_depth_pass_back);
+	glStencilFunc(GL_ALWAYS, 0, ~0);
+	glActiveStencilFaceEXT(GL_FRONT);
+	glStencilOp(GL_KEEP, GL_KEEP, ss_op_depth_pass_front);
+	glStencilFunc(GL_ALWAYS, 0, ~0);
+
+	pie_ShadowDrawLoop();
+
+	glDisable(GL_STENCIL_TEST_TWO_SIDE_EXT);
+}
+
+// ATI-specific 1-pass version
+static void ss_ATI_1pass()
+{
+	glDisable(GL_CULL_FACE);
+	glStencilMask(~0);
+	glStencilOpSeparateATI(GL_BACK, GL_KEEP, GL_KEEP, ss_op_depth_pass_back);
+	glStencilOpSeparateATI(GL_FRONT, GL_KEEP, GL_KEEP, ss_op_depth_pass_front);
+	glStencilFunc(GL_ALWAYS, 0, ~0);
+
+	pie_ShadowDrawLoop();
+}
+
+// generic 2-pass version
+static void ss_2pass()
+{
+	glStencilMask(~0);
+	glStencilFunc(GL_ALWAYS, 0, ~0);
+	glEnable(GL_CULL_FACE);
+
+	// Setup stencil for front-facing polygons
+	glCullFace(GL_BACK);
+	glStencilOp(GL_KEEP, GL_KEEP, ss_op_depth_pass_front);
+
+	pie_ShadowDrawLoop();
+
+	// Setup stencil for back-facing polygons
+	glCullFace(GL_FRONT);
+	glStencilOp(GL_KEEP, GL_KEEP, ss_op_depth_pass_back);
+
+	pie_ShadowDrawLoop();
 }

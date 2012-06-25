@@ -47,7 +47,6 @@
 /* global used to indicate preferred internal OpenGL format */
 int wz_texture_compression = 0;
 
-bool opengl_fallback_mode = false;
 
 static bool		bBackDrop = false;
 static char		screendump_filename[PATH_MAX];
@@ -167,11 +166,14 @@ bool screenInitialise()
 		debug(LOG_3D, "  * (current) Max Sample level is %d.", (int) glmaxSamples);
 	}
 
-	bool canRunAtAll = GLEW_VERSION_1_2 && GLEW_ARB_vertex_buffer_object && GLEW_ARB_texture_env_crossbar;
+	bool haveARB_vertex_buffer_object = GLEW_ARB_vertex_buffer_object || GLEW_VERSION_1_5;
+	bool haveARB_texture_env_crossbar = GLEW_ARB_texture_env_crossbar || GLEW_NV_texture_env_combine4 || GLEW_VERSION_1_4;
+	bool canRunAtAll = GLEW_VERSION_1_2 && haveARB_vertex_buffer_object && haveARB_texture_env_crossbar;
 	bool canRunShaders = canRunAtAll && glslVersion >= std::make_pair(1, 20);  // glGetString(GL_SHADING_LANGUAGE_VERSION) >= "1.20"
 
-	if (canRunShaders && !opengl_fallback_mode)
+	if (canRunShaders)
 	{
+		screen_EnableMissingFunctions();  // We need to do this before pie_LoadShaders(), but the effect of this call will be undone later by iV_TextInit(), so we will need to call it again.
 		if (pie_LoadShaders())
 		{
 			pie_SetShaderAvailability(true);
@@ -250,6 +252,16 @@ void screen_EnableMissingFunctions()
 		__glewUniform1f = __glewUniform1fARB;
 		__glewUniform1i = __glewUniform1iARB;
 		__glewUniform4fv = __glewUniform4fvARB;
+	}
+
+	if ((GLEW_ARB_imaging || GLEW_EXT_blend_color) && __glewBlendColor == NULL)
+	{
+		__glewBlendColor = __glewBlendColorEXT;  // Shouldn't be needed if GLEW_ARB_imaging is true, but apparently is needed even in that case, with some drivers..?
+		if (__glewBlendColor == NULL)
+		{
+			debug(LOG_ERROR, "Your graphics driver is broken, and claims to support ARB_imaging or EXT_blend_color without exporting glBlendColor[EXT].");
+			__GLEW_ARB_imaging = __GLEW_EXT_blend_color = 0;
+		}
 	}
 }
 

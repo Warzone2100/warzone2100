@@ -88,8 +88,6 @@ bool SecondaryWindowUp = false;
 
 static UDWORD		newMapWidth, newMapHeight;
 
-static FLAG_POSITION debugMenuDroidDeliveryPoint;
-
 #define RETXOFFSET (0)// Reticule button offset
 #define RETYOFFSET (0)
 #define NUMRETBUTS	7 // Number of reticule buttons.
@@ -822,7 +820,7 @@ static void intDoScreenRefresh(void)
 			if (psFlag != NULL)
 			{
 				// need to restart the delivery point position
-				StartDeliveryPosition(psFlag);
+				startDeliveryPosition(psFlag);
 			}
 
 			// make sure the commander order screen is in the right state
@@ -1355,12 +1353,17 @@ static void intProcessEditStats(UDWORD id)
 		if (psPositionStats->ref >= REF_TEMPLATE_START &&
 		    psPositionStats->ref < REF_TEMPLATE_START + REF_RANGE)
 		{
+			FLAG_POSITION debugMenuDroidDeliveryPoint;
 			// Placing a droid from the debug menu, set up the flag. (This would probably be safe to do, even if we're placing something else.)
 			debugMenuDroidDeliveryPoint.factoryType = REPAIR_FLAG;
 			debugMenuDroidDeliveryPoint.factoryInc = 0;
-			deliveryPointToMove = &debugMenuDroidDeliveryPoint;
+			debugMenuDroidDeliveryPoint.player = selectedPlayer;
+			startDeliveryPosition(&debugMenuDroidDeliveryPoint);
 		}
-		intStartStructPosition(psPositionStats);
+		else
+		{
+			intStartStructPosition(psPositionStats);
+		}
 		editPosMode = IED_POS;
 	}
 	else if (id == IDSTAT_CLOSE)
@@ -1905,9 +1908,10 @@ INT_RETVAL intRunWidgets(void)
 			/* Directly positioning some type of object */
 			unsigned structX1 = INT32_MAX;
 			unsigned structY1 = INT32_MAX;
+			FLAG_POSITION flag;
 			structX2 = INT32_MAX - 1;
 			structY2 = INT32_MAX - 1;
-			if (found3DBuildLocTwo(&structX1, &structY1, &structX2, &structY2) || found3DBuilding(&structX1, &structY1))
+			if (sBuildDetails.psStats && (found3DBuilding(&structX1, &structY1) || found3DBuildLocTwo(&structX1, &structY1, &structX2, &structY2)))
 			{
 				if (structX2 == INT32_MAX - 1)
 				{
@@ -1923,6 +1927,12 @@ INT_RETVAL intRunWidgets(void)
 					std::swap(structY1, structY2);
 				}
 			}
+			else if (deliveryReposFinished(&flag))
+			{
+				structX2 = structX1 = map_coord(flag.coords.x);
+				structY2 = structY1 = map_coord(flag.coords.y);
+			}
+
 			for (unsigned j = structY1; j <= structY2; ++j)
 				for (unsigned i = structX1; i <= structX2; ++i)
 			{
@@ -2001,6 +2011,7 @@ INT_RETVAL intRunWidgets(void)
 					psDroid = buildDroid((DROID_TEMPLATE *)psPositionStats,
 								 world_coord(structX) + TILE_UNITS / 2, world_coord(structY) + TILE_UNITS / 2,
 								 selectedPlayer, false, NULL);
+					cancelDeliveryRepos();
 					if (psDroid)
 					{
 						addDroid(psDroid, apsDroidLists);
@@ -2751,7 +2762,7 @@ static void intProcessStats(UDWORD id)
 			psFlag = FindFactoryDelivery(psStruct);
 			if (psFlag)
 			{
-				StartDeliveryPosition(psFlag);
+				startDeliveryPosition(psFlag);
 			}
 		}
 	}
@@ -2896,8 +2907,6 @@ void intCommanderSelected(DROID *psDroid)
 	intAddCommand(psDroid);
 	widgHide(psWScreen, IDOBJ_FORM);
 }
-
-extern void FinishStructurePosition(UDWORD xPos,UDWORD yPos,void *UserData);
 
 /* Start looking for a structure location */
 static void intStartStructPosition(BASE_STATS *psStats)

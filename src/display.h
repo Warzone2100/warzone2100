@@ -183,11 +183,12 @@ BASE_OBJECT	*mouseTarget( void );
 bool StartObjectOrbit(BASE_OBJECT *psObj);
 void CancelObjectOrbit(void);
 
-extern void FinishDeliveryPosition(UDWORD xPos,UDWORD yPos,void *UserData);
-extern void CancelDeliveryRepos(void);
-extern void StartDeliveryPosition( OBJECT_POSITION *psLocation );
-extern bool DeliveryReposValid(void);
-extern FLAG_POSITION *deliveryPointToMove;
+extern void cancelDeliveryRepos(void);
+extern void startDeliveryPosition(FLAG_POSITION *psFlag);
+extern bool deliveryReposValid(void);
+extern void processDeliveryRepos(void);
+extern void renderDeliveryRepos(void);
+extern bool deliveryReposFinished(FLAG_POSITION *psFlag = NULL);
 
 extern void StartTacticalScrollObj(bool driveActive,BASE_OBJECT *psObj);
 extern void CancelTacticalScroll(void);
@@ -217,8 +218,6 @@ extern void	setDesiredPitch(SDWORD pitch);
 extern void setSensorAssigned(void);
 extern void	setShakeStatus( bool val );
 extern bool	getShakeStatus( void );
-
-extern void	displayInitVars(void);
 
 void AddDerrickBurningMessage(void);
 

@@ -183,17 +183,22 @@ PHYSFS_file* openLoadFile(const char* fileName, bool hard_fail)
 static bool loadFile2(const char *pFileName, char **ppFileData, UDWORD *pFileSize,
                       bool AllocateMem, bool hard_fail)
 {
-	PHYSFS_file *pfile;
-	PHYSFS_sint64 filesize;
-	PHYSFS_sint64 length_read;
+	if (PHYSFS_isDirectory(pFileName))
+	{
+		return false;
+	}
 
-	pfile = openLoadFile(pFileName, hard_fail);
+	PHYSFS_file *pfile = openLoadFile(pFileName, hard_fail);
 	if (!pfile)
 	{
 		return false;
 	}
 
-	filesize = PHYSFS_fileLength(pfile);
+	PHYSFS_sint64 filesize = PHYSFS_fileLength(pfile);
+	if (filesize < 0)
+	{
+		return false;  // File size could not be determined. Is a directory?
+	}
 
 	//debug(LOG_WZ, "loadFile2: %s opened, size %i", pFileName, filesize);
 
@@ -220,7 +225,7 @@ static bool loadFile2(const char *pFileName, char **ppFileData, UDWORD *pFileSiz
 	}
 
 	/* Load the file data */
-	length_read = PHYSFS_read(pfile, *ppFileData, 1, filesize);
+	PHYSFS_sint64 length_read = PHYSFS_read(pfile, *ppFileData, 1, filesize);
 	if (length_read != filesize)
 	{
 		if (AllocateMem)
@@ -334,6 +339,16 @@ bool loadFileToBufferNoError(const char *pFileName, char *pFileBuffer, UDWORD bu
 {
 	*pSize = bufferSize;
 	return loadFile2(pFileName, &pFileBuffer, pSize, false, false);
+}
+
+Sha256 findHashOfFile(char const *realFileName)
+{
+	char *realFileData = NULL;
+	uint32_t realFileSize = 0;
+	loadFile(realFileName, &realFileData, &realFileSize);
+	Sha256 realFileHash = sha256Sum(realFileData, realFileSize);
+	free(realFileData);
+	return realFileHash;
 }
 
 

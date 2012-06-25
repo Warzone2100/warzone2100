@@ -158,14 +158,14 @@ QScriptValue convStructure(STRUCTURE *psStruct, QScriptEngine *engine)
 		value.setProperty("stattype", (int)REF_WALL, QScriptValue::ReadOnly);
 		break;
 	case REF_BLASTDOOR:
-		value.setProperty("stattype", (int)REF_DEFENSE, QScriptValue::ReadOnly);
-		break;
 	case REF_DEFENSE:
 		if (isLasSat(psStruct->pStructureType))
 		{
 			value.setProperty("stattype", (int)FAKE_REF_LASSAT, QScriptValue::ReadOnly);
 			break;
 		}
+		value.setProperty("stattype", (int)REF_DEFENSE, QScriptValue::ReadOnly);
+		break;
 	default:
 		value.setProperty("stattype", (int)psStruct->pStructureType->type, QScriptValue::ReadOnly);
 		break;
@@ -426,7 +426,7 @@ bool loadLabels(const char *filename)
 		{
 			p.p1 = ini.vector2i("pos");
 			p.p2 = p.p1;
-			p.type = POSITION;
+			p.type = SCRIPT_POSITION;
 			p.player = -1;
 			p.id = -1;
 			labels.insert(label, p);
@@ -435,7 +435,7 @@ bool loadLabels(const char *filename)
 		{
 			p.p1 = ini.vector2i("pos1");
 			p.p2 = ini.vector2i("pos2");
-			p.type = AREA;
+			p.type = SCRIPT_AREA;
 			p.player = -1;
 			p.id = -1;
 			labels.insert(label, p);
@@ -470,14 +470,14 @@ bool writeLabels(const char *filename)
 	{
 		QString key = i.key();
 		labeltype l = i.value();
-		if (l.type == POSITION)
+		if (l.type == SCRIPT_POSITION)
 		{
 			ini.beginGroup("position_" + QString::number(c[0]++));
 			ini.setVector2i("pos", l.p1);
 			ini.setValue("label", key);
 			ini.endGroup();
 		}
-		else if (l.type == AREA)
+		else if (l.type == SCRIPT_AREA)
 		{
 			ini.beginGroup("area_" + QString::number(c[1]++));
 			ini.setVector2i("pos1", l.p1);
@@ -530,12 +530,13 @@ static QScriptValue js_label(QScriptContext *context, QScriptEngine *engine)
 	if (labels.contains(label))
 	{
 		labeltype p = labels.value(label);
-		if (p.type == AREA || p.type == POSITION)
+		if (p.type == SCRIPT_AREA || p.type == SCRIPT_POSITION)
 		{
 			ret.setProperty("x", map_coord(p.p1.x), QScriptValue::ReadOnly);
 			ret.setProperty("y", map_coord(p.p1.y), QScriptValue::ReadOnly);
+			ret.setProperty("type", p.type, QScriptValue::ReadOnly);
 		}
-		if (p.type == AREA)
+		if (p.type == SCRIPT_AREA)
 		{
 			ret.setProperty("x2", map_coord(p.p2.x), QScriptValue::ReadOnly);
 			ret.setProperty("xy", map_coord(p.p2.y), QScriptValue::ReadOnly);
@@ -2517,6 +2518,34 @@ static QScriptValue js_hackNetOn(QScriptContext *, QScriptEngine *)
 	return QScriptValue();
 }
 
+//-- \subsection{getDroidLimit([player[, unit type]])}
+//-- Return maximum number of droids that this player can produce. This limit is usually
+//-- fixed throughout a game and the same for all players. If no arguments are passed,
+//-- returns general unit limit for the current player. If a second, unit type argument 
+//-- is passed, the limit for this unit type is returned, which may be different from
+//-- the general unit limit (eg for commanders and construction droids).
+static QScriptValue js_getDroidLimit(QScriptContext *context, QScriptEngine *engine)
+{
+	if (context->argumentCount() > 1)
+	{
+		DROID_TYPE type = (DROID_TYPE)context->argument(1).toInt32();
+		if (type == DROID_COMMAND)
+		{
+			return QScriptValue(MAX_COMMAND_DROIDS);
+		}
+		else if (type == DROID_CONSTRUCT)
+		{
+			return QScriptValue(MAX_CONSTRUCTOR_DROIDS);
+		}
+		// else return general unit limit
+	}
+	if (context->argumentCount() > 0)
+	{
+		return QScriptValue(getMaxDroids(context->argument(0).toInt32()));
+	}
+	return QScriptValue(getMaxDroids(engine->globalObject().property("me").toInt32()));
+}
+
 // ----------------------------------------------------------------------------------------
 // Register functions with scripting system
 
@@ -2572,6 +2601,7 @@ bool registerFunctions(QScriptEngine *engine)
 	engine->globalObject().setProperty("safeDest", engine->newFunction(js_safeDest));
 	engine->globalObject().setProperty("activateStructure", engine->newFunction(js_activateStructure));
 	engine->globalObject().setProperty("chat", engine->newFunction(js_chat));
+	engine->globalObject().setProperty("getDroidLimit", engine->newFunction(js_getDroidLimit));
 
 	// Functions that operate on the current player only
 	engine->globalObject().setProperty("centreView", engine->newFunction(js_centreView));
@@ -2672,11 +2702,13 @@ bool registerFunctions(QScriptEngine *engine)
 	engine->globalObject().setProperty("STRUCTURE", OBJ_STRUCTURE, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("DROID", OBJ_DROID, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("FEATURE", OBJ_FEATURE, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("POSITION", POSITION, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("AREA", AREA, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("ALL_PLAYERS", ALL_PLAYERS, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("ALLIES", ALLIES, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("ENEMIES", ENEMIES, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("POSITION", SCRIPT_POSITION, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("AREA", SCRIPT_AREA, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("PLAYER_DATA", SCRIPT_PLAYER, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("RESEARCH_DATA", SCRIPT_RESEARCH, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 
 	// Static knowledge about players
 	//== \item[playerData] An array of information about the players in a game. Each item in the array is an object
@@ -2693,6 +2725,7 @@ bool registerFunctions(QScriptEngine *engine)
 		vector.setProperty("team", NetPlay.players[i].team, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 		vector.setProperty("isAI", !NetPlay.players[i].allocated && NetPlay.players[i].ai >= 0, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 		vector.setProperty("isHuman", NetPlay.players[i].allocated, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+		vector.setProperty("type", SCRIPT_PLAYER, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 		playerData.setProperty(i, vector, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	}
 	engine->globalObject().setProperty("playerData", playerData, QScriptValue::ReadOnly | QScriptValue::Undeletable);
@@ -2708,6 +2741,7 @@ bool registerFunctions(QScriptEngine *engine)
 		QScriptValue vector = engine->newObject();
 		vector.setProperty("x", map_coord(positions[i].x), QScriptValue::ReadOnly | QScriptValue::Undeletable);
 		vector.setProperty("y", map_coord(positions[i].y), QScriptValue::ReadOnly | QScriptValue::Undeletable);
+		vector.setProperty("type", SCRIPT_POSITION, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 		startPositions.setProperty(i, vector, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	}
 	QScriptValue derrickPositions = engine->newArray(derricks.size());
@@ -2716,6 +2750,7 @@ bool registerFunctions(QScriptEngine *engine)
 		QScriptValue vector = engine->newObject();
 		vector.setProperty("x", map_coord(derricks[i].x), QScriptValue::ReadOnly | QScriptValue::Undeletable);
 		vector.setProperty("y", map_coord(derricks[i].y), QScriptValue::ReadOnly | QScriptValue::Undeletable);
+		vector.setProperty("type", SCRIPT_POSITION, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 		derrickPositions.setProperty(i, vector, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	}
 	engine->globalObject().setProperty("derrickPositions", derrickPositions, QScriptValue::ReadOnly | QScriptValue::Undeletable);

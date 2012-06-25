@@ -392,6 +392,32 @@ static int guessMapTilesetType(LEVEL_DATASET *psLevel)
 	return TILESET_ARIZONA;
 }
 
+static void loadEmptyMapPreview()
+{
+	// No map is available to preview, so improvise.
+	char *imageData = (char *)malloc(BACKDROP_HACK_WIDTH * BACKDROP_HACK_HEIGHT * 3);
+	memset(imageData, 0, BACKDROP_HACK_WIDTH * BACKDROP_HACK_HEIGHT * 3); //dunno about background color
+	int const ex = 100, ey = 100, bx = 5, by = 8;
+	for (unsigned n = 0; n < 125; ++n)
+	{
+		int sx = rand()%(ex - bx), sy = rand()%(ey - by);
+		char col[3] = {char(rand()%256), char(rand()%256), char(rand()%256)};
+		for (unsigned y = 0; y < by; ++y)
+			for (unsigned x = 0; x < bx; ++x)
+				if (("\2\1\261\11\6"[x]>>y & 1) == 1)  // ?
+					memcpy(imageData + 3*(sx + x + BACKDROP_HACK_WIDTH*(sy + y)), col, 3);
+	}
+
+	// Slight hack to init array with a special value used to determine how many players on map
+	Vector2i playerpos[MAX_PLAYERS];
+	memset(playerpos, 0x77, sizeof(playerpos));
+
+	screen_enableMapPreview((char *)"This string is written somewhere and then ignored.", ex, ey, playerpos);
+
+	screen_Upload(imageData, true);
+	free(imageData);
+}
+
 /// Loads the entire map just to show a picture of it
 void loadMapPreview(bool hideInterface)
 {
@@ -417,8 +443,22 @@ void loadMapPreview(bool hideInterface)
 	}
 
 	// load the terrain types
-	psLevel = levFindDataSet(game.map);
-	ASSERT_OR_RETURN(, psLevel != NULL, "Could not find level dataset!");
+	psLevel = levFindDataSet(game.map, &game.hash);
+	if (psLevel == NULL)
+	{
+		debug(LOG_INFO, "Could not find level dataset \"%s\" %s. Probably waiting for download.", game.map, game.hash.toString().c_str());
+		loadEmptyMapPreview();
+		return;
+	}
+	setCurrentMap(psLevel->realFileName, psLevel->players);
+	if (psLevel->realFileName == NULL)
+	{
+		debug(LOG_WZ, "Loading map preview: \"%s\" builtin t%d", psLevel->pName, psLevel->dataDir);
+	}
+	else
+	{
+		debug(LOG_WZ, "Loading map preview: \"%s\" in \"%s\" %s t%d", psLevel->pName, psLevel->realFileName, psLevel->realFileHash.toString().c_str(), psLevel->dataDir);
+	}
 	rebuildSearchPath(psLevel->dataDir, false);
 	sstrcpy(aFileName,psLevel->apDataFiles[0]);
 	aFileName[strlen(aFileName)-4] = '\0';
@@ -2942,7 +2982,8 @@ static void processMultiopWidgets(UDWORD id)
 		debug(LOG_NET, "MULTIOP_HOST enabled");
 		sstrcpy(game.name, widgGetString(psWScreen, MULTIOP_GNAME));	// game name
 		sstrcpy(sPlayer, widgGetString(psWScreen, MULTIOP_PNAME));	// pname
-		sstrcpy(game.map, widgGetString(psWScreen, MULTIOP_MAP));		// add the name
+		// Should not set game.map or game.hash here, since MULTIOP_MAP's string came from game.map in the first place, anyway. Wouldn't know what to set the hash to, and clearing it means selecting the first map with the right name.
+		//sstrcpy(game.map, widgGetString(psWScreen, MULTIOP_MAP));  // add the name
 
 		resetReadyStatus(false);
 		resetDataHash();
@@ -3498,7 +3539,7 @@ void frontendMultiMessages(void)
 void runMultiOptions(void)
 {
 	static UDWORD	lastrefresh = 0;
-	UDWORD			id, value, i;
+	UDWORD			id, i;
 	char                    sTemp[128], oldGameMap[128];
 	int                     oldMaxPlayers;
 	PLAYERSTATS		playerStats;
@@ -3574,9 +3615,12 @@ void runMultiOptions(void)
 	if(multiRequestUp)
 	{
 		id = widgRunScreen(psRScreen);						// a requester box is up.
+		LEVEL_DATASET *mapData;
 		bool isHoverPreview;
-		if (runMultiRequester(id, &id, (char *)&sTemp, &value, &isHoverPreview))
+		if (runMultiRequester(id, &id, (char *)&sTemp, &mapData, &isHoverPreview))
 		{
+			Sha256 oldGameHash;
+
 			switch(id)
 			{
 			case MULTIOP_PNAME:
@@ -3594,22 +3638,27 @@ void runMultiOptions(void)
 				netPlayersUpdated = true;
 				break;
 			case MULTIOP_MAP:
+			{
 				sstrcpy(oldGameMap, game.map);
+				oldGameHash = game.hash;
 				oldMaxPlayers = game.maxPlayers;
 
-				sstrcpy(game.map, sTemp);
-				game.maxPlayers = value;
+				sstrcpy(game.map, mapData->pName);
+				game.hash = levGetFileHash(mapData);
+				game.maxPlayers = mapData->players;
 				loadMapPreview(!isHoverPreview);
 
 				if (isHoverPreview)
 				{
 					sstrcpy(game.map, oldGameMap);
+					game.hash = oldGameHash;
 					game.maxPlayers = oldMaxPlayers;
 				}
 
-				widgSetString(psWScreen,MULTIOP_MAP,sTemp);
+				widgSetString(psWScreen, MULTIOP_MAP, mapData->pName);
 				addGameOptions();
 				break;
+			}
 			default:
 				loadMapPreview(false);  // Restore the preview of the old map.
 				break;
@@ -3709,6 +3758,7 @@ bool startMultiOptions(bool bReenter)
 			game.type = SKIRMISH;
 			game.scavengers = false;
 			sstrcpy(game.map, DEFAULTSKIRMISHMAP);
+			game.hash = levGetMapNameHash(game.map);
 			game.maxPlayers = 4;
 		}
 
@@ -3733,6 +3783,7 @@ bool startMultiOptions(bool bReenter)
 
 			challenge.beginGroup("challenge");
 			sstrcpy(game.map, challenge.value("Map", game.map).toString().toAscii().constData());
+			game.hash = levGetMapNameHash(game.map);
 			game.maxPlayers = challenge.value("MaxPlayers", game.maxPlayers).toInt();	// TODO, read from map itself, not here!!
 			game.scavengers = challenge.value("Scavengers", game.scavengers).toInt();
 			game.alliance = ALLIANCES_TEAMS;

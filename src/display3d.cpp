@@ -1706,19 +1706,6 @@ void displayBlueprints(void)
 				blueprints.push_back(blueprint);
 			}
 		}
-		else
-		{
-			ASSERT(deliveryPointToMove != NULL, "Expected a delivery point.");
-			if (deliveryPointToMove)
-			{
-				// it's a droid (from the debug menu) or a delivery point
-				FLAG_POSITION pos = *deliveryPointToMove;
-				pos.coords.x = world_coord(sBuildDetails.x)+world_coord(1)/2;
-				pos.coords.y = world_coord(sBuildDetails.y)+world_coord(1)/2;
-				pos.coords.z = map_Height(pos.coords.x, pos.coords.y) + world_coord(1)/8;
-				renderDeliveryPoint(&pos, true);
-			}
-		}
 	}
 
 	// now we draw the blueprints for all ordered buildings
@@ -1752,6 +1739,8 @@ void displayBlueprints(void)
 	{
 		blueprint->renderBlueprint();
 	}
+
+	renderDeliveryRepos();
 }
 
 /// Draw Factory Delivery Points
@@ -2596,7 +2585,7 @@ void	renderDeliveryPoint(FLAG_POSITION *psPosition, bool blueprint)
 
 	if (blueprint)
 	{
-		colour = (buildState == BUILD3D_VALID) ? WZCOL_BLUEPRINT_VALID : WZCOL_BLUEPRINT_INVALID;
+		colour = deliveryReposValid() ? WZCOL_BLUEPRINT_VALID : WZCOL_BLUEPRINT_INVALID;
 	}
 	else
 	{
@@ -2842,7 +2831,7 @@ static void drawWeaponReloadBar(BASE_OBJECT *psObj, WEAPON *psWeap, int weapon_s
 		if (psObj->type == OBJ_DROID && isVtolDroid((DROID *)psObj))
 		{
 			//deal with VTOLs
-			firingStage = getNumAttackRuns((DROID *)psObj, weapon_slot) - ((DROID *)psObj)->sMove.iAttackRuns[weapon_slot];
+			firingStage = getNumAttackRuns((DROID *)psObj, weapon_slot) - ((DROID *)psObj)->asWeaps[weapon_slot].usedAmmo;
 
 			//compare with max value
 			interval = getNumAttackRuns((DROID *)psObj, weapon_slot);

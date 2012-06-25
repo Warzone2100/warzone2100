@@ -333,7 +333,8 @@ static bool serializeMultiplayerGame(PHYSFS_file* fileHandle, const MULTIPLAYERG
 	 || !PHYSFS_writeUBE32(fileHandle, serializeMulti->power)
 	 || !PHYSFS_writeUBE8(fileHandle, serializeMulti->base)
 	 || !PHYSFS_writeUBE8(fileHandle, serializeMulti->alliance)
-	 || !PHYSFS_writeUBE8(fileHandle, 0)
+	 || !PHYSFS_writeUBE8(fileHandle, serializeMulti->hash.Bytes)
+	 || !PHYSFS_write(fileHandle, serializeMulti->hash.bytes, serializeMulti->hash.Bytes, 1)
 	 || !PHYSFS_writeUBE16(fileHandle, 0)	// dummy, was bytesPerSec
 	 || !PHYSFS_writeUBE8(fileHandle, 0)	// dummy, was packetsPerSec
 	 || !PHYSFS_writeUBE8(fileHandle, challengeActive))	// reuse available field, was encryptKey
@@ -357,6 +358,9 @@ static bool deserializeMultiplayerGame(PHYSFS_file* fileHandle, MULTIPLAYERGAME*
 	uint8_t dummy8;
 	uint16_t dummy16;
 	char dummy8c[8];
+	uint8_t hashSize;
+
+	serializeMulti->hash.setZero();
 
 	if (!PHYSFS_readUBE8(fileHandle, &serializeMulti->type)
 	 || PHYSFS_read(fileHandle, serializeMulti->map, 1, 128) != 128
@@ -367,7 +371,8 @@ static bool deserializeMultiplayerGame(PHYSFS_file* fileHandle, MULTIPLAYERGAME*
 	 || !PHYSFS_readUBE32(fileHandle, &serializeMulti->power)
 	 || !PHYSFS_readUBE8(fileHandle, &serializeMulti->base)
 	 || !PHYSFS_readUBE8(fileHandle, &serializeMulti->alliance)
-	 || !PHYSFS_readUBE8(fileHandle, &dummy8)
+	 || !PHYSFS_readUBE8(fileHandle, &hashSize)
+	 || (hashSize == serializeMulti->hash.Bytes && !PHYSFS_read(fileHandle, serializeMulti->hash.bytes, serializeMulti->hash.Bytes, 1))
 	 || !PHYSFS_readUBE16(fileHandle, &dummy16)	// dummy, was bytesPerSec
 	 || !PHYSFS_readUBE8(fileHandle, &dummy8)	// dummy, was packetsPerSec
 	 || !PHYSFS_readUBE8(fileHandle, &dummy8))	// reused for challenge, was encryptKey
@@ -3219,7 +3224,7 @@ bool gameLoadV7(PHYSFS_file* fileHandle)
 		//copy the level name across
 		sstrcpy(aLevelName, saveGame.levelName);
 		//load up the level dataset
-		if (!levLoadData(aLevelName, saveGameName, (GAME_TYPE)gameType))
+		if (!levLoadData(aLevelName, NULL, saveGameName, (GAME_TYPE)gameType))
 		{
 			return false;
 		}
@@ -3657,7 +3662,9 @@ bool gameLoadV(PHYSFS_file* fileHandle, unsigned int version)
 		//copy the level name across
 		sstrcpy(aLevelName, saveGameData.levelName);
 		//load up the level dataset
-		if (!levLoadData(aLevelName, saveGameName, (GAME_TYPE)gameType))
+		//if (!levLoadData(saveGameData.sGame.map /*aLevelName*/, &saveGameData.sGame.hash, saveGameName, (GAME_TYPE)gameType))
+		// Not sure what aLevelName is, in relation to game.map. But need to use aLevelName here, to be able to start the right map for campaign, and need game.hash, to start the right non-campaign map, if there are multiple identically named maps.
+		if (!levLoadData(aLevelName, &saveGameData.sGame.hash, saveGameName, (GAME_TYPE)gameType))
 		{
 			return false;
 		}
@@ -4331,9 +4338,9 @@ static bool loadSaveDroid(const char *pFileName, DROID **ppsCurrentDroidLists)
 		psDroid->sMove.iVertSpeed = ini.value("vertSpeed").toInt();
 		psDroid->sMove.bumpTime = ini.value("bumpTime").toInt();
 		psDroid->sMove.shuffleStart = ini.value("shuffleStart").toInt();
-		for (int j = 0; j < sizeof(psDroid->sMove.iAttackRuns) / sizeof(psDroid->sMove.iAttackRuns[0]); ++j)
+		for (int j = 0; j < DROID_MAXWEAPS; ++j)
 		{
-			psDroid->sMove.iAttackRuns[j] = ini.value("attackRun/" + QString::number(j)).toInt();
+			psDroid->asWeaps[j].usedAmmo = ini.value("attackRun/" + QString::number(j)).toInt();
 		}
 		psDroid->sMove.lastBump = ini.value("lastBump").toInt();
 		psDroid->sMove.pauseTime = ini.value("pauseTime").toInt();
@@ -4481,9 +4488,9 @@ static bool writeDroid(WzConfig &ini, DROID *psCurr, bool onMission, int &counte
 	ini.setValue("vertSpeed", psCurr->sMove.iVertSpeed);
 	ini.setValue("bumpTime", psCurr->sMove.bumpTime);
 	ini.setValue("shuffleStart", psCurr->sMove.shuffleStart);
-	for (int i = 0; i < sizeof(psCurr->sMove.iAttackRuns) / sizeof(psCurr->sMove.iAttackRuns[0]); ++i)
+	for (int i = 0; i < DROID_MAXWEAPS; ++i)
 	{
-		ini.setValue("attackRun/" + QString::number(i), psCurr->sMove.iAttackRuns[i]);
+		ini.setValue("attackRun/" + QString::number(i), psCurr->asWeaps[i].usedAmmo);
 	}
 	ini.setValue("lastBump", psCurr->sMove.lastBump);
 	ini.setValue("pauseTime", psCurr->sMove.pauseTime);
@@ -4913,9 +4920,9 @@ static bool loadSaveStructure2(const char *pFileName, STRUCTURE **ppList)
 			break;
 		case REF_REARM_PAD:
 			psReArmPad = ((REARM_PAD *)psStructure->pFunctionality);
-			psReArmPad->reArmPoints = ini.value("Rearm/reArmPoints").toInt();
-			psReArmPad->timeStarted = ini.value("Rearm/timeStarted").toInt();
-			psReArmPad->timeLastUpdated = ini.value("Rearm/timeLastUpdated").toInt();
+			psReArmPad->reArmPoints = ini.value("Rearm/reArmPoints", psReArmPad->reArmPoints).toInt();
+			psReArmPad->timeStarted = ini.value("Rearm/timeStarted", psReArmPad->timeStarted).toInt();
+			psReArmPad->timeLastUpdated = ini.value("Rearm/timeLastUpdated", psReArmPad->timeLastUpdated).toInt();
 			break;
 		case REF_WALL:
 		case REF_GATE:
@@ -6412,7 +6419,7 @@ bool plotStructurePreview16(char *backDropSprite, Vector2i playeridpos[])
 	PIELIGHT color = WZCOL_BLACK ;
 	bool HQ = false;
 
-	psLevel = levFindDataSet(game.map);
+	psLevel = levFindDataSet(game.map, &game.hash);
 	strcpy(aFileName, psLevel->apDataFiles[0]);
 	aFileName[strlen(aFileName) - 4] = '\0';
 	strcat(aFileName, "/struct.bjo");
@@ -6614,7 +6621,7 @@ static void plotFeature(char *backDropSprite)
 	const PIELIGHT colourOil = WZCOL_MAP_PREVIEW_OIL;
 	const PIELIGHT colourBarrel = WZCOL_MAP_PREVIEW_BARREL;
 
-	psLevel = levFindDataSet(game.map);
+	psLevel = levFindDataSet(game.map, &game.hash);
 	strcpy(aFileName, psLevel->apDataFiles[0]);
 	aFileName[strlen(aFileName) - 4] = '\0';
 	strcat(aFileName, "/feat.bjo");
