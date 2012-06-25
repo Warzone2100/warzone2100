@@ -2396,7 +2396,7 @@ static QScriptValue js_enumArea(QScriptContext *context, QScriptEngine *engine)
 		nextparam = 1;
 		SCRIPT_ASSERT(context, labels.contains(label), "Label %s not found", label.toUtf8().constData());
 		labeltype p = labels.value(label);
-		SCRIPT_ASSERT(context, p.type == AREA, "Wrong label type for %s", label.toUtf8().constData());
+		SCRIPT_ASSERT(context, p.type == SCRIPT_AREA, "Wrong label type for %s", label.toUtf8().constData());
 		x1 = p.p1.x;
 		y1 = p.p1.y;
 		x2 = p.p2.x;
@@ -2518,6 +2518,35 @@ static QScriptValue js_hackNetOn(QScriptContext *, QScriptEngine *)
 	return QScriptValue();
 }
 
+//-- \subsection{getDroidProduction(factory)}
+//-- Return droid in production in given factory. Note that this droid is fully
+//-- virtual, and should never be passed anywhere.
+static QScriptValue js_getDroidProduction(QScriptContext *context, QScriptEngine *engine)
+{
+	QScriptValue structVal = context->argument(0);
+	int id = structVal.property("id").toInt32();
+	int player = structVal.property("player").toInt32();
+	STRUCTURE *psStruct = IdToStruct(id, player);
+	SCRIPT_ASSERT(context, psStruct, "No such structure id %d belonging to player %d", id, player);
+	FACTORY *psFactory = &psStruct->pFunctionality->factory;
+	DROID_TEMPLATE *psTemp = psFactory->psSubject;
+	if (!psTemp)
+	{
+		return QScriptValue::NullValue;
+	}
+	DROID sDroid(0, player), *psDroid = &sDroid;
+	psDroid->pos = psStruct->pos;
+	psDroid->rot = psStruct->rot;
+	psDroid->experience = 0;
+	droidSetName(psDroid, psTemp->aName);
+	droidSetBits(psTemp, psDroid);
+	psDroid->weight = calcDroidWeight(psTemp);
+	psDroid->baseSpeed = calcDroidBaseSpeed(psTemp, psDroid->weight, player);
+	objSensorCache((BASE_OBJECT *)psDroid, asSensorStats + psTemp->asParts[COMP_SENSOR]);
+	objEcmCache((BASE_OBJECT *)psDroid, asECMStats + psTemp->asParts[COMP_ECM]);
+	return convDroid(psDroid, engine);
+}
+
 //-- \subsection{getDroidLimit([player[, unit type]])}
 //-- Return maximum number of droids that this player can produce. This limit is usually
 //-- fixed throughout a game and the same for all players. If no arguments are passed,
@@ -2601,6 +2630,7 @@ bool registerFunctions(QScriptEngine *engine)
 	engine->globalObject().setProperty("safeDest", engine->newFunction(js_safeDest));
 	engine->globalObject().setProperty("activateStructure", engine->newFunction(js_activateStructure));
 	engine->globalObject().setProperty("chat", engine->newFunction(js_chat));
+	engine->globalObject().setProperty("getDroidProduction", engine->newFunction(js_getDroidProduction));
 	engine->globalObject().setProperty("getDroidLimit", engine->newFunction(js_getDroidLimit));
 
 	// Functions that operate on the current player only

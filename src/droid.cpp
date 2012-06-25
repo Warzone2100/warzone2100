@@ -302,9 +302,29 @@ DROID::DROID(uint32_t id, unsigned player)
 	order.direction = 0;
 	order.psObj = NULL;
 	order.psStats = NULL;
-
 	sMove.asPath = NULL;
 	sMove.Status = MOVEINACTIVE;
+	lastFrustratedTime = -UINT16_MAX;	// make sure we do not start the game frustrated
+	listSize = 0;
+	listPendingBegin = 0;
+	iAudioID = NO_SOUND;
+	psCurAnim = NULL;
+	group = UBYTE_MAX;
+	psBaseStruct = NULL;
+	sDisplay.frameNumber = 0;	// it was never drawn before
+	for (unsigned vPlayer = 0; vPlayer < MAX_PLAYERS; ++vPlayer)
+	{
+		visible[vPlayer] = hasSharedVision(vPlayer, player)? UINT8_MAX : 0;
+	}
+	memset(seenThisTick, 0, sizeof(seenThisTick));
+	died = 0;
+	burnStart = 0;
+	burnDamage = 0;
+	sDisplay.screenX = OFF_SCREEN;
+	sDisplay.screenY = OFF_SCREEN;
+	sDisplay.screenR = 0;
+	illumination = UBYTE_MAX;
+	resistance = ACTION_START_TIME;	// init the resistance to indicate no EW performed on this droid
 }
 
 /* DROID::~DROID: release all resources associated with a droid -
@@ -1848,16 +1868,6 @@ DROID *reallyBuildDroid(DROID_TEMPLATE *pTemplate, Position pos, UDWORD player, 
 		psGrp->add(psDroid);
 	}
 
-	psDroid->lastFrustratedTime = -UINT16_MAX;	// make sure we do not start the game frustrated
-
-	psDroid->listSize = 0;
-	psDroid->listPendingBegin = 0;
-
-	psDroid->iAudioID = NO_SOUND;
-	psDroid->psCurAnim = NULL;
-	psDroid->group = UBYTE_MAX;
-	psDroid->psBaseStruct = NULL;
-
 	// find the highest stored experience
 	// Unless game time is stopped, then we're hopefully loading a game and
 	// don't want to use up recycled experience for the droids we just loaded.
@@ -1895,11 +1905,7 @@ DROID *reallyBuildDroid(DROID_TEMPLATE *pTemplate, Position pos, UDWORD player, 
 	// Initialise the movement stuff
 	psDroid->baseSpeed = calcDroidBaseSpeed(pTemplate, psDroid->weight, (UBYTE)player);
 
-	psDroid->sMove.asPath = NULL;
 	initDroidMovement(psDroid);
-
-	// it was never drawn before
-	psDroid->sDisplay.frameNumber = 0;
 
 	//allocate 'easy-access' data!
 	objSensorCache((BASE_OBJECT *)psDroid, asSensorStats + pTemplate->asParts[COMP_SENSOR]);
@@ -1913,23 +1919,7 @@ DROID *reallyBuildDroid(DROID_TEMPLATE *pTemplate, Position pos, UDWORD player, 
 		                                  cyborgDroid(psDroid) ? CYBORG_BODY_UPGRADE : DROID_BODY_UPGRADE, (WEAPON_CLASS)inc);
 	}
 
-	//init the resistance to indicate no EW performed on this droid
-	psDroid->resistance = ACTION_START_TIME;
-
-	for (unsigned vPlayer = 0; vPlayer < MAX_PLAYERS; ++vPlayer)
-	{
-		psDroid->visible[vPlayer] = hasSharedVision(vPlayer, player)? UINT8_MAX : 0;
-	}
-	memset(psDroid->seenThisTick, 0, sizeof(psDroid->seenThisTick));
-	psDroid->died = 0;
-	psDroid->burnStart = 0;
-	psDroid->burnDamage = 0;
-	psDroid->sDisplay.screenX = OFF_SCREEN;
-	psDroid->sDisplay.screenY = OFF_SCREEN;
-	psDroid->sDisplay.screenR = 0;
-
 	/* Set droid's initial illumination */
-	psDroid->illumination = UBYTE_MAX;
 	psDroid->sDisplay.imd = BODY_IMD(psDroid, psDroid->player);
 
 	//don't worry if not on homebase cos not being drawn yet
