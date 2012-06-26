@@ -1123,6 +1123,9 @@ int realmain(int argc, char *argv[])
 		snprintf(buf, sizeof(buf), "%slogs%sWZlog-%02d%02d_%02d%02d%02d.txt", PHYSFS_getWriteDir(), PHYSFS_getDirSeparator(),
 			newtime->tm_mon + 1, newtime->tm_mday, newtime->tm_hour, newtime->tm_min, newtime->tm_sec );
 		debug_register_callback( debug_callback_file, debug_callback_file_init, debug_callback_file_exit, buf );
+
+		// FIXME: Change this to LOG_WZ on next release
+		debug(LOG_INFO, "Using %s debug file", buf);
 	}
 
 	// NOTE: it is now safe to use debug() calls to make sure output gets captured.
