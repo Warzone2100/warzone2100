@@ -1622,7 +1622,7 @@ bool recvMapFileRequested(NETQUEUE queue)
 		addConsoleMessage("Map was requested: SENDING MAP!",DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 
 		char *mapStr = mapData->realFileName;
-		debug(LOG_NET, "Map was requested. Looking for %s", mapStr);
+		debug(LOG_INFO, "Map was requested. Looking for %s", mapStr);
 
 		// Checking to see if file is available...
 		pFileHandle = PHYSFS_openRead(mapStr);
@@ -1640,7 +1640,7 @@ bool recvMapFileRequested(NETQUEUE queue)
 
 		// get the file's size.
 		fileSize_64 = PHYSFS_fileLength(pFileHandle);
-		debug(LOG_NET, "File is valid, sending [directory: %s] %s to client %u", PHYSFS_getRealDir(mapStr), mapStr, player);
+		debug(LOG_INFO, "File is valid, sending [directory: %s] %s to client %u", PHYSFS_getRealDir(mapStr), mapStr, player);
 
 		NetPlay.players[player].wzFile.pFileHandle = pFileHandle;
 		NetPlay.players[player].wzFile.fileSize_32 = (int32_t) fileSize_64;		//we don't support 64bit int nettypes.
@@ -1664,7 +1664,7 @@ void sendMap(void)
 			if (done == 100)
 			{
 				addConsoleMessage("MAP SENT!",DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
-				debug(LOG_NET, "=== File has been sent to player %d ===", i);
+				debug(LOG_INFO, "=== File has been sent to player %d ===", i);
 				NetPlay.players[i].wzFile.isSending = false;
 				NetPlay.players[i].needFile = false;
 			}
@@ -1680,7 +1680,7 @@ bool recvMapFileData(NETQUEUE queue)
 	{
 		addConsoleMessage("MAP DOWNLOADED!",DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 		sendTextMessage("MAP DOWNLOADED",true);					//send
-		debug(LOG_NET, "=== File has been received. ===");
+		debug(LOG_INFO, "=== File has been received. ===");
 
 		// clear out the old level list.
 		levShutDown();
