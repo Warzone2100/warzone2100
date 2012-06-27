@@ -1252,9 +1252,11 @@ int realmain(int argc, char *argv[])
 	war_SetHeight(pie_GetVideoBufferHeight());
 
 	// Fix up settings from the config file
+	// And initialize shader usage setting
 	if (!pie_GetShaderAvailability())
 	{
 		war_SetShaders(FALLBACK);
+		pie_SetShaderUsage(false);
 	}
 	else
 	{
@@ -1267,9 +1269,14 @@ int realmain(int argc, char *argv[])
 			war_SetShaders(SHADERS_ONLY);
 			pie_SetShaderUsage(true);
 		}
-		else if (war_GetShaders() == SHADERS_ONLY)
+		else if (war_GetShaders() == SHADERS_ONLY || war_GetShaders() == SHADERS_ON)
 		{
 			war_SetShaders(SHADERS_ON);
+			pie_SetShaderUsage(true);
+		}
+		else  // (war_GetShaders() == SHADERS_OFF)
+		{
+			pie_SetShaderUsage(false);
 		}
 	}
 
