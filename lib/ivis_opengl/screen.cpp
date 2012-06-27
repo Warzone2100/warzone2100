@@ -171,6 +171,8 @@ bool screenInitialise()
 	bool canRunFallback = GLEW_VERSION_1_2 && haveARB_vertex_buffer_object && haveARB_texture_env_crossbar;
 	bool canRunShaders = GLEW_VERSION_1_2 && haveARB_vertex_buffer_object && glslVersion >= std::make_pair(1, 20);  // glGetString(GL_SHADING_LANGUAGE_VERSION) >= "1.20"
 
+	pie_SetFallbackAvailability(canRunFallback);
+
 	if (canRunShaders)
 	{
 		screen_EnableMissingFunctions();  // We need to do this before pie_LoadShaders(), but the effect of this call will be undone later by iV_TextInit(), so we will need to call it again.
