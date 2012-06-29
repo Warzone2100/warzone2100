@@ -970,6 +970,8 @@ bool recvResearchStatus(NETQUEUE queue)
 	// psBuilding may be null if finishing
 	if (bStart)							// Starting research
 	{
+		ResetPendingResearchStatus(pPlayerRes);  // Reset pending state, even if research state is not changed due to the structure being destroyed.
+
 		psBuilding = IdToStruct(structRef, player);
 
 		// Set that facility to research
@@ -992,7 +994,6 @@ bool recvResearchStatus(NETQUEUE queue)
 			MakeResearchStarted(pPlayerRes);
 			psResFacilty->timeStartHold		= 0;
 		}
-
 	}
 	// Finished/cancelled research
 	else
