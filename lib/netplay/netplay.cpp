@@ -1917,7 +1917,7 @@ UBYTE NETrecvFile(NETQUEUE queue)
 		}
 		snprintf(fileName, sizeof(fileName), "maps/%dc-%s-%s.wz", game.maxPlayers, mapName, fileHash.toString().c_str());  // Wonder whether game.maxPlayers is initialised already?
 
-		debug(LOG_NET, "Creating new file %s hash %s", fileName, fileHash.toString().c_str());
+		debug(LOG_INFO, "Creating new file %s hash %s", fileName, fileHash.toString().c_str());
 
 		if (PHYSFS_exists(fileName))
 		{

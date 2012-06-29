@@ -38,6 +38,7 @@
 
 static bool shadersAvailable = false;
 static bool shaderUsage = false;
+static bool fallbackAvailable = true;
 static GLuint shaderProgram[SHADER_MAX];
 static GLfloat shaderStretch = 0;
 static GLint locTeam, locStretch, locTCMask, locFog, locNormalMap, locEcm, locTime;
@@ -140,6 +141,16 @@ void pie_SetShaderAvailability(bool availability)
 	shadersAvailable = availability;
 }
 
+bool pie_GetFallbackAvailability(void)
+{
+	return fallbackAvailable;
+}
+
+void pie_SetFallbackAvailability(bool availability)
+{
+	fallbackAvailable = availability;
+}
+
 bool pie_GetShaderUsage(void)
 {
 	return shaderUsage;
@@ -147,7 +158,10 @@ bool pie_GetShaderUsage(void)
 
 void pie_SetShaderUsage(bool usage)
 {
-	shaderUsage = pie_GetShaderAvailability() && usage;
+	bool valid = !usage && pie_GetFallbackAvailability();
+	valid = valid || (usage && pie_GetShaderAvailability());
+	if (valid)
+		shaderUsage = usage;
 }
 
 // Read shader into text buffer

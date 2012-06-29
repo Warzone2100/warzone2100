@@ -446,18 +446,18 @@ void loadMapPreview(bool hideInterface)
 	psLevel = levFindDataSet(game.map, &game.hash);
 	if (psLevel == NULL)
 	{
-		debug(LOG_INFO, "Could not find level dataset \"%s\" %s. Probably waiting for download.", game.map, game.hash.toString().c_str());
+		debug(LOG_INFO, "Could not find level dataset \"%s\" %s. We %s waiting for a download.", game.map, game.hash.toString().c_str(), NetPlay.players[selectedPlayer].needFile? "are":"aren't");
 		loadEmptyMapPreview();
 		return;
 	}
 	setCurrentMap(psLevel->realFileName, psLevel->players);
 	if (psLevel->realFileName == NULL)
 	{
-		debug(LOG_WZ, "Loading map preview: \"%s\" builtin t%d", psLevel->pName, psLevel->dataDir);
+		debug(LOG_INFO, "Loading map preview: \"%s\" builtin t%d", psLevel->pName, psLevel->dataDir);
 	}
 	else
 	{
-		debug(LOG_WZ, "Loading map preview: \"%s\" in \"%s\" %s t%d", psLevel->pName, psLevel->realFileName, psLevel->realFileHash.toString().c_str(), psLevel->dataDir);
+		debug(LOG_INFO, "Loading map preview: \"%s\" in (%s)\"%s\"  %s t%d", psLevel->pName, PHYSFS_getRealDir(psLevel->realFileName), psLevel->realFileName, psLevel->realFileHash.toString().c_str(), psLevel->dataDir);
 	}
 	rebuildSearchPath(psLevel->dataDir, false);
 	sstrcpy(aFileName,psLevel->apDataFiles[0]);
@@ -467,7 +467,7 @@ void loadMapPreview(bool hideInterface)
 
 	if (!loadFileToBuffer(aFileName, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
 	{
-		debug(LOG_ERROR, "Failed to load terrain types file");
+		debug(LOG_ERROR, "Failed to load terrain types file: [%s]", aFileName);
 		return;
 	}
 	if (pFileData)

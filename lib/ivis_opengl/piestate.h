@@ -85,6 +85,8 @@ extern void pie_SetRendMode(REND_MODE rendMode);
 // Shaders control center
 extern bool pie_GetShaderAvailability(void);
 extern void pie_SetShaderAvailability(bool);
+extern bool pie_GetFallbackAvailability(void);
+extern void pie_SetFallbackAvailability(bool);
 extern bool pie_GetShaderUsage(void);
 extern void pie_SetShaderUsage(bool);
 

@@ -1933,7 +1933,7 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 		pFileData = fileLoadBuffer;
 		if (!loadFileToBuffer(aFileName, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
 		{
-			debug( LOG_NEVER, "loadgame: Fail23\n" );
+			debug(LOG_ERROR, "Failed with: %s", aFileName);
 			goto error;
 		}
 
@@ -1943,7 +1943,7 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 		{
 			if (!loadTerrainTypeMap(pFileData, fileSize))
 			{
-				debug( LOG_NEVER, "loadgame: Fail25\n" );
+				debug(LOG_ERROR, "Failed with: %s", aFileName);
 				goto error;
 			}
 		}
@@ -1989,7 +1989,7 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 		//load the data into apsTemplates
 		if (!loadSaveTemplate(aFileName))
 		{
-			debug(LOG_NEVER, "Failed to load templates from %s", aFileName);
+			debug(LOG_ERROR, "Failed with: %s", aFileName);
 			goto error;
 		}
 	}
@@ -2012,7 +2012,7 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 		strcat(aFileName, "mission.map");
 		if (!mapLoad(aFileName, false))
 		{
-			debug(LOG_ERROR, "Failed to load map");
+			debug(LOG_ERROR, "Failed with: %s", aFileName);
 			return false;
 		}
 
@@ -2023,7 +2023,7 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 		// Load in the visibility data from the chosen file
 		if (!readVisibilityData(aFileName))
 		{
-			debug( LOG_NEVER, "loadgame: Fail33\n" );
+			debug(LOG_ERROR, "Failed with: %s", aFileName);
 			goto error;
 		}
 
@@ -2041,12 +2041,12 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 			pFileData = fileLoadBuffer;
 			if (!loadFileToBuffer(aFileName, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
 			{
-				debug( LOG_NEVER, "loadgame: Fail14\n" );
+				debug(LOG_ERROR, "Failed with: %s", aFileName);
 				goto error;
 			}
 			if (!loadSaveFeature(pFileData, fileSize))
 			{
-				debug( LOG_NEVER, "loadgame: Fail16\n" );
+				debug(LOG_ERROR, "Failed with: %s", aFileName);
 				goto error;
 			}
 		}
@@ -2064,13 +2064,13 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 			pFileData = fileLoadBuffer;
 			if (!loadFileToBuffer(aFileName, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
 			{
-				debug( LOG_NEVER, "loadgame: Fail17\n" );
+				debug(LOG_ERROR, "Failed with: %s", aFileName);
 				goto error;
 			}
 			//load the data into apsStructLists
 			if (!loadSaveStructure(pFileData, fileSize))
 			{
-				debug( LOG_NEVER, "loadgame: Fail19\n" );
+				debug(LOG_ERROR, "Failed with: %s", aFileName);
 				goto error;
 			}
 		}
@@ -2127,7 +2127,7 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 		strcat(aFileName, "game.map");
 		if (!mapLoad(aFileName, false))
 		{
-			debug( LOG_NEVER, "loadgame: Fail7\n" );
+			debug(LOG_ERROR, "Failed with: %s", aFileName);
 			return(false);
 		}
 	}
@@ -2146,7 +2146,7 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 			// load the fx data from the file
 			if (!readFXData(aFileName))
 			{
-				debug(LOG_ERROR, "loadgame: Fail33");
+				debug(LOG_ERROR, "Failed with: %s", aFileName);
 				goto error;
 			}
 		}
@@ -2203,12 +2203,12 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 			pFileData = fileLoadBuffer;
 			if (!loadFileToBuffer(aFileName, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
 			{
-				debug( LOG_NEVER, "loadgame: Fail8\n" );
+				debug(LOG_ERROR, "Failed with: %s", aFileName);
 				goto error;
 			}
 			if (!loadSaveDroidInit(pFileData,fileSize))
 			{
-				debug( LOG_NEVER, "loadgame: Fail10\n" );
+				debug(LOG_ERROR, "Failed with: %s", aFileName);
 				goto error;
 			}
 			debug(LOG_SAVE, "Loaded old style droids");
@@ -2281,14 +2281,14 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 		pFileData = fileLoadBuffer;
 		if (!loadFileToBuffer(aFileName, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
 		{
-			debug( LOG_NEVER, "loadgame: Fail14\n" );
+			debug(LOG_ERROR, "Failed with: %s", aFileName);
 			goto error;
 		}
 
 		//load the data into apsFeatureLists
 		if (!loadSaveFeature(pFileData, fileSize))
 		{
-			debug( LOG_NEVER, "loadgame: Fail16\n" );
+			debug(LOG_ERROR, "Failed with: %s", aFileName);
 			goto error;
 		}
 	}
@@ -2305,13 +2305,13 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 		pFileData = fileLoadBuffer;
 		if (!loadFileToBuffer(aFileName, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
 		{
-			debug( LOG_NEVER, "loadgame: Fail17\n" );
+			debug(LOG_ERROR, "Failed with: %s", aFileName);
 			goto error;
 		}
 		//load the data into apsStructLists
 		if (!loadSaveStructure(pFileData, fileSize))
 		{
-			debug( LOG_NEVER, "loadgame: Fail19\n" );
+			debug(LOG_ERROR, "Failed with: %s", aFileName);
 			goto error;
 		}
 	}
@@ -2354,7 +2354,7 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 			// Load in the visibility data from the chosen file
 			if (!readVisibilityData(aFileName))
 			{
-				debug( LOG_NEVER, "loadgame: Fail33\n" );
+				debug(LOG_ERROR, "Failed with: %s", aFileName);
 				goto error;
 			}
 		}
@@ -2372,7 +2372,7 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 			// Load the fx data from the chosen file
 			if (!readScoreData(aFileName))
 			{
-				debug( LOG_NEVER, "loadgame: Fail33\n" );
+				debug(LOG_ERROR, "Failed with: %s", aFileName);
 				goto error;
 			}
 		}
@@ -2390,7 +2390,7 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 
 			if (!readFiresupportDesignators(aFileName))
 			{
-				debug( LOG_NEVER, "loadMissionExtras: readFiresupportDesignators(%s) failed\n", aFileName );
+				debug(LOG_ERROR, "Failed with: %s", aFileName);
 				goto error;
 			}
 		}
@@ -2503,7 +2503,8 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 	return true;
 
 error:
-	debug(LOG_ERROR, "Game load failed");
+	debug(LOG_ERROR, "Game load failed for %s, FS:%s, params=%s,%s,%s", pGameToLoad, PHYSFS_getRealDir(pGameToLoad),
+		keepObjects ? "true":"false", freeMem ? "true":"false", UserSaveGame ? "true":"false");
 
 	/* Clear all the objects off the map and free up the map memory */
 	freeAllDroids();
