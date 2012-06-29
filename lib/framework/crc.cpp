@@ -190,3 +190,31 @@ std::string Sha256::toString() const
 	}
 	return str;
 }
+
+void Sha256::fromString(std::string const &s)
+{
+	setZero();
+	unsigned nChars = std::min<unsigned>(Bytes*2, s.size());
+	for (unsigned n = 0; n < nChars; ++n)
+	{
+		unsigned h;
+		unsigned c = s[n];
+		if (c >= '0' && c <= '9')
+		{
+			h = c - '0';
+		}
+		else if (c >= 'a' && c <= 'f')
+		{
+			h = c - 'a' + 10;
+		}
+		else if (c >= 'A' && c <= 'F')
+		{
+			h = c - 'A' + 10;
+		}
+		else
+		{
+			break;
+		}
+		bytes[n/2] |= h << (n%2? 0 : 4);
+	}
+}

@@ -109,6 +109,8 @@ static void	dealWithRMB( void );
 static bool	mouseInBox(SDWORD x0, SDWORD y0, SDWORD x1, SDWORD y1);
 static OBJECT_POSITION *checkMouseLoc(void);
 
+void finishDeliveryPosition(void);
+
 static bool	bInstantRadarJump = false;
 static SDWORD	desiredPitch = 340;
 static UDWORD	currentFrame;
@@ -289,14 +291,6 @@ static void shakeUpdate(void)
 		}
 	}
 }
-
-
-/* Initialise the display system */
-bool dispInitialise(void)
-{
-	return true;
-}
-
 
 void ProcessRadarInput()
 {
@@ -586,7 +580,13 @@ static bool CheckFinishedFindPosition(void)
 	/* Do not let the player position buildings 'under' the radar */
 	if(mouseReleased(MOUSE_LMB) && !OverRadar)
 	{
-		if (buildState == BUILD3D_VALID)
+
+		if (deliveryReposValid())
+		{
+			finishDeliveryPosition();
+			return true;
+		}
+		else if (buildState == BUILD3D_VALID)
 		{
 			if ((((STRUCTURE_STATS *)sBuildDetails.psStats)->type == REF_WALL
 			     || ((STRUCTURE_STATS *)sBuildDetails.psStats)->type == REF_GATE
@@ -760,6 +760,10 @@ void processMouseClickInput(void)
 				/* Stop the placement */
 				kill3DBuilding();
 				bRadarDragging = false;
+			}
+			if (mouseReleased(MOUSE_RMB))
+			{
+				cancelDeliveryRepos();
 			}
 			if (mouseDrag(MOUSE_ROTATE,(UDWORD *)&rotX,(UDWORD *)&rotY) && !rotActive && !bRadarDragging)
 			{
@@ -1378,12 +1382,6 @@ UDWORD		dispX,dispY,dispR;
 	return(psReturn);
 }
 
-// Dummy structure stats used for positioning delivery points.
-static STRUCTURE_STATS ReposStats;
-static bool ReposValid = false;
-static bool BVReposValid = false;
-static FLAG_POSITION *ReposFlag;
-FLAG_POSITION *deliveryPointToMove = NULL;
 
 void StartTacticalScrollObj(WZ_DECL_UNUSED bool driveActive, WZ_DECL_UNUSED BASE_OBJECT* psObj)
 {
@@ -1393,24 +1391,23 @@ void CancelTacticalScroll(void)
 {
 }
 
-
-void displayInitVars(void)
-{
-	ReposValid = false;
-	BVReposValid = false;
-}
-
-
-
 // Start repositioning a delivery point.
 //
-void StartDeliveryPosition( OBJECT_POSITION *psLocation )
+static FLAG_POSITION flagPos;
+static int flagStructId;
+static bool flagReposVarsValid;
+static bool flagReposFinished;
+
+void startDeliveryPosition(FLAG_POSITION *psFlag)
 {
 	FLAG_POSITION	*psFlagPos;
-	STRUCTURE_STATS	*tmpStructStats;
-	BASE_STATS	*tmpBaseStats;
 
-	//clear the Deliv Point if one
+	if (tryingToGetLocation()) // if we're placing a building don't place
+	{
+		return;
+	}
+
+	//clear the selected delivery point
 	for (psFlagPos = apsFlagPosLists[selectedPlayer]; psFlagPos;
 		psFlagPos = psFlagPos->psNext)
 	{
@@ -1418,84 +1415,119 @@ void StartDeliveryPosition( OBJECT_POSITION *psLocation )
 	}
 
 	//set this object position to be highlighted
-	psLocation->selected = true;
-	deliveryPointToMove = (FLAG_POSITION*)psLocation;
+	psFlag->selected = true;
+	flagPos = *psFlag;
 
-	if(bInTutorial)
+	STRUCTURE* psStruct = findDeliveryFactory(psFlag);
+	if (!psStruct)
+	{
+		flagStructId = 0; // not a struct, just a flag.
+	}
+	else
+	{
+		flagStructId = psStruct->id;
+	}
+	flagReposVarsValid = true;
+	flagReposFinished = false;
+
+	if (bInTutorial)
 	{
 		eventFireCallbackTrigger((TRIGGER_TYPE)CALL_DELIVPOINTMOVED);
 	}
-
-	// Setup dummy structure stats for positioning a delivery point.
-	ReposValid = false;
-	ReposFlag = NULL;
-	ReposStats.baseWidth = 1;
-	ReposStats.baseBreadth = 1;
-	ReposStats.ref = 0;//REF_STRUCTURE_START;
-
-	//set up the buildSite variable for drawing
-	buildSite.xTL = (UWORD)psLocation->screenX;
-	buildSite.yTL = (UWORD)psLocation->screenY;
-	buildSite.xBR = (UWORD)(buildSite.xTL-1);
-	buildSite.yBR = (UWORD)(buildSite.yTL-1);
-
-	tmpStructStats = &ReposStats;
-	tmpBaseStats = (BASE_STATS *)tmpStructStats;
-	init3DBuilding(tmpBaseStats, FinishDeliveryPosition, psLocation);
 }
 
 
 // Finished repositioning a delivery point.
 //
-void FinishDeliveryPosition(UDWORD xPos,UDWORD yPos,void *UserData)
+void finishDeliveryPosition()
 {
-	//This deals with adding waypoints and moving the primary
-	processDeliveryPoint(((FLAG_POSITION*)UserData)->player,
-		world_coord(xPos), world_coord(yPos));
-
-	//deselect it
-	((FLAG_POSITION*)UserData)->selected = false;
-	deliveryPointToMove = NULL;
-
-	CancelDeliveryRepos();
+	FLAG_POSITION* psFlagPos;
+	if (flagStructId)
+	{
+		flagReposVarsValid = false;
+		STRUCTURE* psStruct = IdToStruct(flagStructId, selectedPlayer);
+		if (StructIsFactory(psStruct) && psStruct->pFunctionality
+			&& psStruct->pFunctionality->factory.psAssemblyPoint)
+		{
+			setAssemblyPoint(psStruct->pFunctionality->factory.psAssemblyPoint,
+							 flagPos.coords.x, flagPos.coords.y, selectedPlayer, true);
+		}
+		//deselect once moved
+		for (psFlagPos = apsFlagPosLists[selectedPlayer]; psFlagPos;
+			psFlagPos = psFlagPos->psNext)
+		{
+			psFlagPos->selected = false;
+		}
+	}
+	flagReposFinished = true;
 }
 
 
 // Is there a valid delivery point repositioning going on.
-//
-bool DeliveryReposValid(void)
+
+bool deliveryReposValid(void)
 {
-	if(driveModeActive()) {
-		return ReposValid && (ReposFlag !=NULL);
-	} else {
-		return BVReposValid;
+	if (!flagReposVarsValid)
+		return false;
+
+	Vector2i map = map_coord(removeZ(flagPos.coords));
+
+	//make sure we are not too near map edge
+	if (map.x < scrollMinX + TOO_NEAR_EDGE || map.x + 1 > scrollMaxX - TOO_NEAR_EDGE ||
+	    map.y < scrollMinY + TOO_NEAR_EDGE || map.y + 1 > scrollMaxY - TOO_NEAR_EDGE)
+	{
+		return false;
 	}
+
+	// cant place on top of a delivery point...
+	for (FLAG_POSITION const *psCurrFlag = apsFlagPosLists[selectedPlayer]; psCurrFlag; psCurrFlag = psCurrFlag->psNext)
+	{
+		Vector2i flagTile = map_coord(removeZ(psCurrFlag->coords));
+		if (flagTile == map)
+			return false;
+	}
+
+	if (fpathBlockingTile(map.x, map.y, PROPULSION_TYPE_WHEELED))
+	{
+		return false;
+	}
+
+	return true;
 }
 
+bool deliveryReposFinished(FLAG_POSITION *psFlag)
+{
+	if (!flagReposVarsValid)
+		return false;
+
+	if (psFlag)
+		*psFlag = flagPos;
+	return flagReposFinished;
+}
+
+void processDeliveryRepos(void)
+{
+	if (!flagReposVarsValid)
+		return;
+
+	int bX = clip(mouseTileX, 2, mapWidth - 3);
+	int bY = clip(mouseTileY, 2, mapHeight - 3);
+
+	flagPos.coords = Vector3i(world_coord(Vector2i(bX, bY))+Vector2i(TILE_UNITS/2,TILE_UNITS/2), map_TileHeight(bX, bY) + 2*ASSEMBLY_POINT_Z_PADDING);
+}
 
 // Cancel repositioning of the delivery point without moving it.
 //
-void CancelDeliveryRepos(void)
+void cancelDeliveryRepos(void)
 {
-	if((ReposValid) && (ReposFlag!=NULL))
-	{
-		if(driveModeActive())
-		{
-			DROID *Driven = driveGetDriven();
-			if(Driven != NULL) {
-//				Driven->selected = true;
-				SelectDroid(Driven);
-				camAllignWithTarget((BASE_OBJECT *)Driven);
-			}
-			driveEnableControl();
-		}
-		ReposValid = false;
-		ReposFlag = NULL;
-	}
-
-	BVReposValid = false;
+	flagReposVarsValid = false;
 }
 
+void renderDeliveryRepos(void)
+{
+	if (flagReposVarsValid)
+		renderDeliveryPoint(&flagPos, true);
+}
 
 // check whether a clicked on droid is in a command group or assigned to a sensor
 static bool droidHasLeader(DROID *psDroid)
@@ -2111,7 +2143,7 @@ void	dealWithLMB( void )
 				}
 				else
 				{
-					StartDeliveryPosition(psLocation);
+					startDeliveryPosition((FLAG_POSITION *)psLocation);
 				}
 #if 0
 				/* We've clicked on one of our own DP */
@@ -2472,7 +2504,7 @@ static void dealWithRMB( void )
 					{
 						if (bRightClickOrders)
 						{
-							StartDeliveryPosition(psLocation);
+							startDeliveryPosition((FLAG_POSITION *)psLocation);
 						}
 						else
 						{
@@ -3001,8 +3033,6 @@ bool cyborgDroidSelected(UDWORD player)
 
 }
 
-
-
 /* Clear the selection flag for a player */
 void clearSel(void)
 {
@@ -3034,7 +3064,6 @@ void clearSel(void)
 	{
 		psFlagPos->selected = false;
 	}
-	deliveryPointToMove = NULL;
 
 	setSelectedGroup(UBYTE_MAX);
 	setSelectedCommander(UBYTE_MAX);
@@ -3055,3 +3084,11 @@ void setSensorAssigned(void)
 {
 	bSensorAssigned = true;
 }
+
+/* Initialise the display system */
+bool dispInitialise(void)
+{
+	flagReposVarsValid = false;
+	return true;
+}
+

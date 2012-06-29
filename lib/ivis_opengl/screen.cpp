@@ -166,8 +166,12 @@ bool screenInitialise()
 		debug(LOG_3D, "  * (current) Max Sample level is %d.", (int) glmaxSamples);
 	}
 
-	bool canRunAtAll = GLEW_VERSION_1_2 /*&& GLEW_ARB_vertex_buffer_object*/ && GLEW_ARB_texture_env_crossbar;  // There seems to be a fallback for missing GLEW_ARB_vertex_buffer_object, in the 3.1 branch.
-	bool canRunShaders = canRunAtAll && glslVersion >= std::make_pair(1, 20);  // glGetString(GL_SHADING_LANGUAGE_VERSION) >= "1.20"
+	//bool haveARB_vertex_buffer_object = GLEW_ARB_vertex_buffer_object || GLEW_VERSION_1_5;
+	bool haveARB_texture_env_crossbar = GLEW_ARB_texture_env_crossbar || GLEW_NV_texture_env_combine4 || GLEW_VERSION_1_4;
+	bool canRunFallback = GLEW_VERSION_1_2 /*&& haveARB_vertex_buffer_object*/ && haveARB_texture_env_crossbar;  // There seems to be a fallback for missing GLEW_ARB_vertex_buffer_object, in the 3.1 branch.
+	bool canRunShaders = GLEW_VERSION_1_2 /*&& haveARB_vertex_buffer_object*/ && glslVersion >= std::make_pair(1, 20);  // glGetString(GL_SHADING_LANGUAGE_VERSION) >= "1.20"
+
+	pie_SetFallbackAvailability(canRunFallback);
 
 	if (canRunShaders)
 	{
@@ -177,7 +181,7 @@ bool screenInitialise()
 			pie_SetShaderAvailability(true);
 		}
 	}
-	else if (canRunAtAll)
+	else if (canRunFallback)
 	{
 		// corner cases: vbo(core 1.5 or ARB ext), texture crossbar (core 1.4 or ARB ext)
 		debug(LOG_POPUP, _("OpenGL GLSL shader version 1.20 is not supported by your system. Some things may look wrong. Please upgrade your graphics driver/hardware, if possible."));

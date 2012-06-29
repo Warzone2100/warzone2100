@@ -5640,7 +5640,8 @@ bool scrGetGameStatus(void)
 
 			break;
 		case STATUS_DeliveryReposInProgress:
-			if (DeliveryReposValid()==true) bResult=true;
+			if (deliveryReposValid())
+				bResult=true;
 			break;
 
 		default:

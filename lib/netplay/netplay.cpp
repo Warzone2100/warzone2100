@@ -1917,7 +1917,7 @@ UBYTE NETrecvFile(NETQUEUE queue)
 		}
 		snprintf(fileName, sizeof(fileName), "maps/%dc-%s-%s.wz", game.maxPlayers, mapName, fileHash.toString().c_str());  // Wonder whether game.maxPlayers is initialised already?
 
-		debug(LOG_NET, "Creating new file %s hash %s", fileName, fileHash.toString().c_str());
+		debug(LOG_INFO, "Creating new file %s hash %s", fileName, fileHash.toString().c_str());
 
 		if (PHYSFS_exists(fileName))
 		{
@@ -1980,6 +1980,7 @@ UBYTE NETrecvFile(NETQUEUE queue)
 
 		}
 		NetPlay.pMapFileHandle = PHYSFS_openWrite(fileName);	// create a new file.
+		NetPlay.mapFileName = fileName;
 	}
 
 	debug(LOG_NET, "New file position is %d", currPos);
@@ -2006,8 +2007,17 @@ UBYTE NETrecvFile(NETQUEUE queue)
 
 	if (currPos + bytesToRead == fileSize)	// last packet
 	{
-		PHYSFS_close(NetPlay.pMapFileHandle);
+		int noError = PHYSFS_close(NetPlay.pMapFileHandle);
+		if (noError == 0)
+		{
+			debug(LOG_ERROR, "Could not close file handle after trying to save map: %s", PHYSFS_getLastError());
+		}
 		NetPlay.pMapFileHandle = NULL;
+		PHYSFS_File *file = PHYSFS_openRead(NetPlay.mapFileName.c_str());
+		int actualFileSize = PHYSFS_fileLength(file);
+		PHYSFS_close(file);
+		NetPlay.mapFileName.clear();
+		ASSERT(actualFileSize == fileSize, "Downloaded map too small! Got %d, expected %d!", actualFileSize, fileSize);
 	}
 
 	//return the percentage count

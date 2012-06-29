@@ -446,18 +446,18 @@ void loadMapPreview(bool hideInterface)
 	psLevel = levFindDataSet(game.map, &game.hash);
 	if (psLevel == NULL)
 	{
-		debug(LOG_INFO, "Could not find level dataset. Probably waiting for download.");
+		debug(LOG_INFO, "Could not find level dataset \"%s\" %s. We %s waiting for a download.", game.map, game.hash.toString().c_str(), NetPlay.players[selectedPlayer].needFile? "are":"aren't");
 		loadEmptyMapPreview();
 		return;
 	}
 	setCurrentMap(psLevel->realFileName, psLevel->players);
 	if (psLevel->realFileName == NULL)
 	{
-		debug(LOG_WZ, "Loading map preview: \"%s\" builtin t%d", psLevel->pName, psLevel->dataDir);
+		debug(LOG_INFO, "Loading map preview: \"%s\" builtin t%d", psLevel->pName, psLevel->dataDir);
 	}
 	else
 	{
-		debug(LOG_WZ, "Loading map preview: \"%s\" in \"%s\" %s t%d", psLevel->pName, psLevel->realFileName, psLevel->realFileHash.toString().c_str(), psLevel->dataDir);
+		debug(LOG_INFO, "Loading map preview: \"%s\" in (%s)\"%s\"  %s t%d", psLevel->pName, PHYSFS_getRealDir(psLevel->realFileName), psLevel->realFileName, psLevel->realFileHash.toString().c_str(), psLevel->dataDir);
 	}
 	rebuildSearchPath(psLevel->dataDir, false);
 	sstrcpy(aFileName,psLevel->apDataFiles[0]);
@@ -467,7 +467,7 @@ void loadMapPreview(bool hideInterface)
 
 	if (!loadFileToBuffer(aFileName, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
 	{
-		debug(LOG_ERROR, "Failed to load terrain types file");
+		debug(LOG_ERROR, "Failed to load terrain types file: [%s]", aFileName);
 		return;
 	}
 	if (pFileData)
@@ -3758,7 +3758,7 @@ bool startMultiOptions(bool bReenter)
 			game.type = SKIRMISH;
 			game.scavengers = false;
 			sstrcpy(game.map, DEFAULTSKIRMISHMAP);
-			game.hash.setZero();
+			game.hash = levGetMapNameHash(game.map);
 			game.maxPlayers = 4;
 		}
 
@@ -3783,7 +3783,7 @@ bool startMultiOptions(bool bReenter)
 
 			challenge.beginGroup("challenge");
 			sstrcpy(game.map, challenge.value("Map", game.map).toString().toAscii().constData());
-			game.hash.setZero();
+			game.hash = levGetMapNameHash(game.map);
 			game.maxPlayers = challenge.value("MaxPlayers", game.maxPlayers).toInt();	// TODO, read from map itself, not here!!
 			game.scavengers = challenge.value("Scavengers", game.scavengers).toInt();
 			game.alliance = ALLIANCES_TEAMS;

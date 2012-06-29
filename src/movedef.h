@@ -26,9 +26,6 @@
 
 #include "lib/framework/vector.h"
 
-//Watermelon:num of VTOL weapons should be same as DROID_MAXWEAPS
-#define VTOL_MAXWEAPS 3
-
 enum MOVE_STATUS
 {
 	MOVEINACTIVE,
@@ -65,9 +62,6 @@ struct MOVE_CONTROL
 
 	/* vtol movement - GJ */
 	SWORD	iVertSpeed;
-
-	// iAttackRuns tracks the amount of ammunition a VTOL has remaining for each weapon
-	UDWORD	iAttackRuns[VTOL_MAXWEAPS];
 };
 
 #endif // __INCLUDED_MOVEDEF_H__

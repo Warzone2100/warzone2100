@@ -494,9 +494,9 @@ static bool gdbExtendedBacktrace(int const dumpFile)
 	 * additions to the frame-pointer register's content.
 	 */
 	void const * const frame =
-#if   defined(SA_SIGINFO) && __WORDSIZE == 64
+#if   defined(SA_SIGINFO) && defined(REG_RBP)
 		sigcontext ? (void*)(sigcontext->uc_mcontext.gregs[REG_RBP] + sizeof(greg_t) + sizeof(void (*)(void))) : NULL;
-#elif defined(SA_SIGINFO) && __WORDSIZE == 32
+#elif defined(SA_SIGINFO) && defined(REG_EBP)
 		sigcontext ? (void*)(sigcontext->uc_mcontext.gregs[REG_EBP] + sizeof(greg_t) + sizeof(void (*)(void))) : NULL;
 #else
 		NULL;
@@ -506,9 +506,9 @@ static bool gdbExtendedBacktrace(int const dumpFile)
 	 * Faulting instruction.
 	 */
 	void (*instruction)(void) =
-#if   defined(SA_SIGINFO) && __WORDSIZE == 64
+#if   defined(SA_SIGINFO) && defined(REG_RIP)
 		sigcontext ? (void (*)(void))sigcontext->uc_mcontext.gregs[REG_RIP] : NULL;
-#elif defined(SA_SIGINFO) && __WORDSIZE == 32
+#elif defined(SA_SIGINFO) && defined(REG_EIP)
 		sigcontext ? (void (*)(void))sigcontext->uc_mcontext.gregs[REG_EIP] : NULL;
 #else
 		NULL;

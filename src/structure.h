@@ -183,9 +183,6 @@ extern bool checkStructureStatus( STRUCTURE_STATS *psStats, UDWORD player, UDWOR
 extern void setAssemblyPoint(FLAG_POSITION *psAssemblyPoint, UDWORD x, UDWORD y,
                              UDWORD player, bool bCheck);
 
-/* consider delivery points when selected by player*/
-extern void processDeliveryPoint(UDWORD player, UDWORD x, UDWORD y);
-
 /*called when a structure has been built - checks through the list of callbacks
 for the scripts*/
 extern void structureCompletedCallback(STRUCTURE_STATS *psStructType);

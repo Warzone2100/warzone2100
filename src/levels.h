@@ -93,6 +93,7 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 LEVEL_DATASET *levFindDataSet(char const *name, Sha256 const *hash = NULL);
 
 Sha256 levGetFileHash(LEVEL_DATASET *level);
+Sha256 levGetMapNameHash(char const *name);
 
 // free the currently loaded dataset
 extern bool levReleaseAll(void);

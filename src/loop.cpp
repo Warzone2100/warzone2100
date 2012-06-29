@@ -182,6 +182,7 @@ static GAMECODE renderLoop()
 
 			//handles callbacks for positioning of DP's
 			process3DBuilding();
+			processDeliveryRepos();
 
 			//ajl. get the incoming netgame messages and process them.
 			// FIXME Previous comment is deprecated. multiPlayerLoop does some other weird stuff, but not that anymore.

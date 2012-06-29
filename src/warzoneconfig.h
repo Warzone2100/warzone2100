@@ -52,8 +52,9 @@ enum FSAA_LEVEL
 enum RENDER_MODE
 {
 	FALLBACK,	/// Shaders not supported
-	SHADERS_OFF,/// Shaders supported but off
-	SHADERS_ON,	///  Shaders supported and on
+	SHADERS_OFF,/// Shaders supported but off (fallback supported)
+	SHADERS_ON,	/// Shaders supported and on (fallback supported)
+	SHADERS_ONLY/// Shaders but no fallback support
 };
 /***************************************************************************/
 /*

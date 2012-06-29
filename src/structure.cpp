@@ -1008,7 +1008,7 @@ bool structSetManufacture(STRUCTURE *psStruct, DROID_TEMPLATE *psTempl, QUEUE_MO
 	                 (int)psStruct->pStructureType->type);
 	/* psTempl might be NULL if the build is being cancelled in the middle */
 
-	ASSERT_OR_RETURN(false, (validTemplateForFactory(psTempl, psStruct) && researchedTemplate(psTempl, psStruct->player)) || psStruct->player == scavengerPlayer() || !bMultiPlayer, "Wrong template for player %d factory, type %d.", psStruct->player, psStruct->pStructureType->type);
+	ASSERT_OR_RETURN(false, (validTemplateForFactory(psTempl, psStruct) && researchedTemplate(psTempl, psStruct->player, true)) || psStruct->player == scavengerPlayer() || !bMultiPlayer, "Wrong template for player %d factory, type %d.", psStruct->player, psStruct->pStructureType->type);
 
 	psFact = &psStruct->pFunctionality->factory;
 
@@ -3424,61 +3424,45 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 					psReArmPad->timeLastUpdated = gameTime;
 				}
 
-				// dont rearm on remote pcs.
-				// Huh?! Why not?! if(!bMultiPlayer || myResponsibility(psDroid->player))
-				{
-					/* do rearming */
-					if (psDroid->sMove.iAttackRuns != 0)
-					{
-						UDWORD      pointsRequired;
+				/* do rearming */
+				UDWORD      pointsRequired;
 
-						//amount required is a factor of the droids' weight
-						pointsRequired = psDroid->weight / REARM_FACTOR;
-						//take numWeaps into consideration
-						pointsToAdd = psReArmPad->reArmPoints * (gameTime - psReArmPad->timeStarted) /
-						    GAME_TICKS_PER_SEC;
-						pointsAlreadyAdded = psReArmPad->reArmPoints * (psReArmPad->timeLastUpdated - psReArmPad->timeStarted) /
-						    GAME_TICKS_PER_SEC;
-						if (pointsToAdd >= pointsRequired)
+				//amount required is a factor of the droids' weight
+				pointsRequired = psDroid->weight / REARM_FACTOR;
+				//take numWeaps into consideration
+				pointsToAdd = psReArmPad->reArmPoints * (gameTime - psReArmPad->timeStarted) / GAME_TICKS_PER_SEC;
+				pointsAlreadyAdded = psReArmPad->reArmPoints * (psReArmPad->timeLastUpdated - psReArmPad->timeStarted) / GAME_TICKS_PER_SEC;
+				if (pointsToAdd >= pointsRequired)
+				{
+					// We should be fully loaded by now.
+					for (i = 0; i < psDroid->numWeaps; i++)
+					{
+						// set rearm value to no runs made
+						psDroid->asWeaps[i].usedAmmo = 0;
+						// reset ammo and lastFired
+						psDroid->asWeaps[i].ammo = asWeaponStats[psDroid->asWeaps[i].nStat].numRounds;
+						psDroid->asWeaps[i].lastFired = 0;
+					}
+				}
+				else
+				{
+					for (i = 0; i < psDroid->numWeaps; i++)
+					{
+						// Make sure it's a rearmable weapon (and so we don't divide by zero)
+						if (psDroid->asWeaps[i].usedAmmo > 0 && asWeaponStats[psDroid->asWeaps[i].nStat].numRounds > 0)
 						{
-							// We should be fully loaded by now.
-							for (i = 0; i < psDroid->numWeaps; i++)
+							// Do not "simplify" this formula.
+							// It is written this way to prevent rounding errors.
+							int ammoToAddThisTime =
+								pointsToAdd*getNumAttackRuns(psDroid,i)/pointsRequired -
+								pointsAlreadyAdded*getNumAttackRuns(psDroid,i)/pointsRequired;
+							psDroid->asWeaps[i].usedAmmo -= std::min<unsigned>(ammoToAddThisTime, psDroid->asWeaps[i].usedAmmo);
+							if (ammoToAddThisTime)
 							{
-								// set rearm value to no runs made
-								psDroid->sMove.iAttackRuns[i] = 0;
 								// reset ammo and lastFired
 								psDroid->asWeaps[i].ammo = asWeaponStats[psDroid->asWeaps[i].nStat].numRounds;
 								psDroid->asWeaps[i].lastFired = 0;
-							}
-						}
-						else
-						{
-							for (i = 0; i < psDroid->numWeaps; i++)
-							{
-								// Make sure it's a rearmable weapon (and so we don't divide by zero)
-								if (psDroid->sMove.iAttackRuns[i] > 0 && asWeaponStats[psDroid->asWeaps[i].nStat].numRounds > 0)
-								{
-									// Do not "simplify" this formula.
-									// It is written this way to prevent rounding errors.
-									int ammoToAddThisTime =
-									    pointsToAdd*getNumAttackRuns(psDroid,i)/pointsRequired -
-									    pointsAlreadyAdded*getNumAttackRuns(psDroid,i)/pointsRequired;
-									if (ammoToAddThisTime > psDroid->sMove.iAttackRuns[i])
-									{
-										psDroid->sMove.iAttackRuns[i] = 0;
-									}
-									else if (ammoToAddThisTime > 0)
-									{
-										psDroid->sMove.iAttackRuns[i] -= ammoToAddThisTime;
-									}
-									if (ammoToAddThisTime)
-									{
-										// reset ammo and lastFired
-										psDroid->asWeaps[i].ammo = asWeaponStats[psDroid->asWeaps[i].nStat].numRounds;
-										psDroid->asWeaps[i].lastFired = 0;
-										break;
-									}
-								}
+								break;
 							}
 						}
 					}
@@ -4557,7 +4541,6 @@ static void removeStructFromMap(STRUCTURE *psStruct)
 bool removeStruct(STRUCTURE *psDel, bool bDestroy)
 {
 	bool		resourceFound = false;
-	FACTORY		*psFactory;
 	SDWORD		cluster;
 	FLAG_POSITION	*psAssemblyPoint=NULL;
 
@@ -4614,7 +4597,7 @@ bool removeStruct(STRUCTURE *psDel, bool bDestroy)
 	//if it is a factory - need to reset the factoryNumFlag
 	if (StructIsFactory(psDel))
 	{
-		psFactory = &psDel->pFunctionality->factory;
+		FACTORY *psFactory = &psDel->pFunctionality->factory;
 
 		//need to initialise the production run as well
 		cancelProduction(psDel, ModeImmediate);
@@ -4634,17 +4617,9 @@ bool removeStruct(STRUCTURE *psDel, bool bDestroy)
 		}
 
 		//need to cancel the repositioning of the DP if selectedPlayer and currently moving
-		if (psDel->player == selectedPlayer)
+		if (psDel->player == selectedPlayer && psAssemblyPoint->selected)
 		{
-			//if currently trying to place a DP
-			if (tryingToGetLocation())
-			{
-				//need to check if this factory's DP is trying to be re-positioned
-				if (psAssemblyPoint == sBuildDetails.UserData)
-				{
-					kill3DBuilding();
-				}
-			}
+			cancelDeliveryRepos();
 		}
 	}
 
@@ -5070,28 +5045,6 @@ void setFlagPositionInc(FUNCTIONALITY* pFunctionality, UDWORD player, UBYTE fact
 	debug(LOG_ERROR, "We have too many factories of type %d, player %d", factoryType, player);
 	ASSERT( false, "Can't set flag!");
 }
-
-
-/* called from order.c.. delivery/assembly point handler*/
-/*now called from display.c */
-void processDeliveryPoint(UDWORD player, UDWORD x, UDWORD y)
-{
-	FLAG_POSITION	*psCurrFlag;//,*psFlag;//,*psNewFlag
-
-	for (psCurrFlag = apsFlagPosLists[player]; psCurrFlag; psCurrFlag = psCurrFlag->psNext)
-	{
-		// must be selected and have a valid pos.
-		if (psCurrFlag->selected)
-		{
-			setAssemblyPoint(psCurrFlag, x, y, player, true);
-
-			//deselect once moved
-			psCurrFlag->selected = false;
-			return;	//will want to break if more than one can be selected?
-		}
-	}
-}
-
 
 /*called when a structure has been built - checks through the list of callbacks
 for the scripts*/

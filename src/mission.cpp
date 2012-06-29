@@ -512,8 +512,7 @@ bool startMission(LEVEL_TYPE missionType, char *pGame)
 
 	if (!loaded)
 	{
-		debug( LOG_ERROR, "Unable to load mission file" );
-
+		debug(LOG_ERROR, "Failed to start mission, missiontype = %d, game, %s", (int)missionType, pGame);
 		return false;
 	}
 

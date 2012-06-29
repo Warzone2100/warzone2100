@@ -194,7 +194,7 @@ void recvOptions(NETQUEUE queue)
 			widgSetSliderPos(psWScreen, MULTIOP_SKSLIDE + i, game.skDiff[i]);
 		}
 	}
-	debug(LOG_NET, "Rebuilding map list");
+	debug(LOG_INFO, "Rebuilding map list");
 	// clear out the old level list.
 	levShutDown();
 	levInitialise();
@@ -206,13 +206,13 @@ void recvOptions(NETQUEUE queue)
 	{
 		uint32_t player = selectedPlayer;
 
-		debug(LOG_NET, "Map was not found, requesting map %s from host.", game.map);
+		debug(LOG_INFO, "Map was not found, requesting map %s from host.", game.map);
 		// Request the map from the host
 		NETbeginEncode(NETnetQueue(NET_HOST_ONLY), NET_FILE_REQUESTED);
 		NETuint32_t(&player);
 		NETend();
 
-		addConsoleMessage("MAP REQUESTED!",DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+		addConsoleMessage("MAP REQUESTED!", DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 	}
 	else
 	{

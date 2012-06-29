@@ -204,7 +204,7 @@ bool debug_callback_file_init(void **data)
 	}
 
 	setbuf(logfile, NULL);
-	fprintf(logfile, "\n--- Starting log ---\n");
+	fprintf(logfile, "\n--- Starting log [%s]---\n", WZDebugfilename);
 	*data = logfile;
 
 	return true;
@@ -316,7 +316,7 @@ void debug_register_callback( debug_callback_fn callback, debug_callback_init in
 	if (tmpCallback->init
 	 && !tmpCallback->init(&tmpCallback->data))
 	{
-		debug(LOG_ERROR, "Failed to initialise debug callback");
+		fprintf(stderr, "Failed to initialise debug callback, debugfile set to [%s]!\n", WZDebugfilename);
 		free(tmpCallback);
 		return;
 	}

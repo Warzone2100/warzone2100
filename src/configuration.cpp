@@ -98,7 +98,7 @@ bool loadConfig()
 	if (ini.contains("mapName") && ini.contains("maxPlayers"))
 	{
 		sstrcpy(game.map, ini.value("mapName").toString().toUtf8().constData());
-		game.hash.setZero();
+		game.hash.fromString(ini.value("mapHash").toString().toUtf8().constData());
 		game.maxPlayers = ini.value("maxPlayers").toInt();	// FIXME: horrible kluge, MUST match map above
 	}
 	else
@@ -212,6 +212,7 @@ bool saveConfig()
 				ini.setValue("gameName", game.name);			//  last hosted game
 			}
 			ini.setValue("mapName", game.map);				//  map name
+			ini.setValue("mapHash", game.hash.toString().c_str());          //  map hash
 			ini.setValue("maxPlayers", game.maxPlayers);		// maxPlayers
 			ini.setValue("power", game.power);				// power
 			ini.setValue("base", game.base);				// size of base
@@ -268,6 +269,7 @@ bool reloadMPConfig(void)
 			}
 		}
 		ini.setValue("mapName", game.map);				//  map name
+		ini.setValue("mapHash", game.hash.toString().c_str());          //  map hash
 		ini.setValue("maxPlayers", game.maxPlayers);		// maxPlayers
 		ini.setValue("power", game.power);				// power
 		ini.setValue("base", game.base);				// size of base
@@ -285,7 +287,7 @@ bool reloadMPConfig(void)
 	if (ini.contains("mapName") && ini.contains("maxPlayers"))
 	{
 		sstrcpy(game.map, ini.value("mapName").toString().toUtf8().constData());
-		game.hash.setZero();
+		game.hash.fromString(ini.value("mapHash").toString().toUtf8().constData());
 		game.maxPlayers = ini.value("maxPlayers").toInt();	// FIXME: horrible kluge, MUST match map above
 	}
 	game.power = ini.value("power", LEV_MED).toInt();
