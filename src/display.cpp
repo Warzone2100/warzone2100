@@ -1452,6 +1452,11 @@ void finishDeliveryPosition()
 			setAssemblyPoint(psStruct->pFunctionality->factory.psAssemblyPoint,
 							 flagPos.coords.x, flagPos.coords.y, selectedPlayer, true);
 		}
+		else if (psStruct->pStructureType->type == REF_REPAIR_FACILITY)
+		{
+			setAssemblyPoint(psStruct->pFunctionality->repairFacility.psDeliveryPoint,
+							 flagPos.coords.x, flagPos.coords.y, selectedPlayer, true);
+		}
 		//deselect once moved
 		for (psFlagPos = apsFlagPosLists[selectedPlayer]; psFlagPos;
 			psFlagPos = psFlagPos->psNext)
