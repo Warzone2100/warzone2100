@@ -128,8 +128,8 @@ static char *Tile_names = NULL;
 #define ROCKIE 3
 
 static int *map;			// 3D array pointer that holds the texturetype
-static int *mapDecals;		// array that tells us what tile is a decal
-#define MAX_TERRAIN_TILES 100		// max that we support (for now)
+static bool *mapDecals;           // array that tells us what tile is a decal
+#define MAX_TERRAIN_TILES 0x0200  // max that we support (for now), see TILE_NUMMASK
 
 /* Look up table that returns the terrain type of a given tile texture */
 UBYTE terrainTypes[MAX_TILE_TEXTURES];
@@ -686,21 +686,22 @@ static void SetDecals(const char *filename, const char *decal_type)
 	debug(LOG_TERRAIN, "reading: %s, with %d entries", filename, numlines);
 	//increment the pointer to the start of the next record
 	pFileData = strchr(pFileData,'\n') + 1;
-	if (numlines > MAX_TERRAIN_TILES)
-	{
-		debug(LOG_FATAL, "Too many tiles, we only support %d max at this time", MAX_TERRAIN_TILES);
-		abort();
-	}
-	mapDecals = (int *)malloc(sizeof(int)*MAX_TERRAIN_TILES);		// max of 80 tiles that we support
-	memset(mapDecals, 0x0, sizeof(int)*MAX_TERRAIN_TILES);	// set everything to false;
+	mapDecals = new bool[MAX_TERRAIN_TILES];
+	std::fill_n(mapDecals, MAX_TERRAIN_TILES, false);  // set everything to false.
 
 	for (i=0; i < numlines; i++)
 	{
+		tiledecal = -1;
 		sscanf(pFileData, "%d%n", &tiledecal, &cnt);
 		pFileData += cnt;
 		//increment the pointer to the start of the next record
 		pFileData = strchr(pFileData,'\n') + 1;
-		mapDecals[tiledecal] = 1;
+		if ((unsigned)tiledecal > MAX_TERRAIN_TILES)
+		{
+			debug(LOG_ERROR, "Tile index is out of range!  Was %d, our max is %d", tiledecal, MAX_TERRAIN_TILES);
+			continue;
+		}
+		mapDecals[tiledecal] = true;
 	}
 }
 // hasDecals()
@@ -1054,7 +1055,7 @@ bool mapShutdown(void)
 	}
 
 	free(psMapTiles);
-	free(mapDecals);
+	delete[] mapDecals;
 	free(psGroundTypes);
 	free(map);
 	free(Tile_names);
