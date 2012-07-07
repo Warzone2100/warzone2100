@@ -108,6 +108,7 @@ static inline void MakeResearchStarted(PLAYER_RESEARCH *x)              { x->Res
 /// Pending means not yet synchronised, so only permitted to affect the UI, not the game state.
 static inline void MakeResearchCancelledPending(PLAYER_RESEARCH *x)     { x->ResearchStatus &= ~RESBITS_PENDING_ONLY; x->ResearchStatus |= CANCELLED_RESEARCH_PENDING; }
 static inline void MakeResearchStartedPending(PLAYER_RESEARCH *x)       { x->ResearchStatus &= ~RESBITS_PENDING_ONLY; x->ResearchStatus |= STARTED_RESEARCH_PENDING;   }
+static inline void ResetPendingResearchStatus(PLAYER_RESEARCH *x)       { x->ResearchStatus &= ~RESBITS_PENDING_ONLY;                                                  }
 
 /// clear all bits in the status except for the possible bit
 static inline void ResetResearchStatus(PLAYER_RESEARCH *x)              { x->ResearchStatus &= ~RESBITS_PENDING;                                                       }

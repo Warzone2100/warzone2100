@@ -61,7 +61,27 @@ static const StringToEnum<DROID_TYPE> map_DROID_TYPE[] =
 	{"DROID",               DROID_DEFAULT           },
 };
 
-bool researchedTemplate(DROID_TEMPLATE *psCurr, int player)
+static bool researchedItem(DROID_TEMPLATE *psCurr, int player, COMPONENT_TYPE partIndex, int part, bool allowZero, bool allowRedundant)
+{
+	if (allowZero && part <= 0)
+	{
+		return true;
+	}
+	int availability = apCompLists[player][partIndex][part];
+	return availability == AVAILABLE || (allowRedundant && availability == REDUNDANT);
+}
+
+static bool researchedPart(DROID_TEMPLATE *psCurr, int player, COMPONENT_TYPE partIndex, bool allowZero, bool allowRedundant)
+{
+	return researchedItem(psCurr, player, partIndex, psCurr->asParts[partIndex], allowZero, allowRedundant);
+}
+
+static bool researchedWeap(DROID_TEMPLATE *psCurr, int player, int weapIndex, bool allowRedundant)
+{
+	return researchedItem(psCurr, player, COMP_WEAPON, psCurr->asWeaps[weapIndex], false, allowRedundant);
+}
+
+bool researchedTemplate(DROID_TEMPLATE *psCurr, int player, bool allowRedundant)
 {
 	// super hack -- cyborgs and transports are special, only check their body
 	switch (psCurr->droidType)
@@ -73,25 +93,25 @@ bool researchedTemplate(DROID_TEMPLATE *psCurr, int player)
 	case DROID_CYBORG_REPAIR:
 	case DROID_TRANSPORTER:
 	case DROID_SUPERTRANSPORTER:
-		return (apCompLists[player][COMP_BODY][psCurr->asParts[COMP_BODY]] == AVAILABLE);
+		return researchedPart(psCurr, player, COMP_BODY, false, allowRedundant);
 	default:
 		break; // now proceed to normal droids...
 	}
 	// Note the ugly special case for commanders - their weapon is unavailable
-	// NOTE: This is one ugly & hard to debug if statement.
-	if (apCompLists[player][COMP_BODY][psCurr->asParts[COMP_BODY]] != AVAILABLE
-	    || (psCurr->asParts[COMP_BRAIN] > 0 && apCompLists[player][COMP_BRAIN][psCurr->asParts[COMP_BRAIN]] != AVAILABLE)
-	    || apCompLists[player][COMP_PROPULSION][psCurr->asParts[COMP_PROPULSION]] != AVAILABLE
-	    || (psCurr->asParts[COMP_SENSOR] > 0 && apCompLists[player][COMP_SENSOR][psCurr->asParts[COMP_SENSOR]] != AVAILABLE)
-	    || (psCurr->asParts[COMP_ECM] > 0 && apCompLists[player][COMP_ECM][psCurr->asParts[COMP_ECM]] != AVAILABLE)
-	    || (psCurr->asParts[COMP_REPAIRUNIT] > 0 && apCompLists[player][COMP_REPAIRUNIT][psCurr->asParts[COMP_REPAIRUNIT]] != AVAILABLE)
-	    || (psCurr->asParts[COMP_CONSTRUCT] > 0 && apCompLists[player][COMP_CONSTRUCT][psCurr->asParts[COMP_CONSTRUCT]] != AVAILABLE)
-	    || (psCurr->asParts[COMP_BRAIN] == 0 && psCurr->numWeaps > 0 && apCompLists[player][COMP_WEAPON][psCurr->asWeaps[0]] != AVAILABLE)
-	    || (psCurr->numWeaps > 1 && apCompLists[player][COMP_WEAPON][psCurr->asWeaps[1]] != AVAILABLE))
+	// NOTE: This was one ugly & hard to debug if statement.
+	bool researchedEverything = researchedPart(psCurr, player, COMP_BODY,       false, allowRedundant)
+	                         && researchedPart(psCurr, player, COMP_BRAIN,      true,  allowRedundant)
+	                         && researchedPart(psCurr, player, COMP_PROPULSION, false, allowRedundant)
+	                         && researchedPart(psCurr, player, COMP_SENSOR,     true,  allowRedundant)
+	                         && researchedPart(psCurr, player, COMP_ECM,        true,  allowRedundant)
+	                         && researchedPart(psCurr, player, COMP_REPAIRUNIT, true,  allowRedundant)
+	                         && researchedPart(psCurr, player, COMP_CONSTRUCT,  true,  allowRedundant);
+	unsigned ignoreFirstWeapon = psCurr->asParts[COMP_BRAIN] != 0? 1 : 0;
+	for (unsigned weapIndex = ignoreFirstWeapon; weapIndex < psCurr->numWeaps && researchedEverything; ++weapIndex)
 	{
-		return false;
+		researchedEverything = researchedWeap(psCurr, player, weapIndex, allowRedundant);
 	}
-	return true;
+	return researchedEverything;
 }
 
 bool initTemplates()

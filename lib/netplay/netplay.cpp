@@ -1980,6 +1980,7 @@ UBYTE NETrecvFile(NETQUEUE queue)
 
 		}
 		NetPlay.pMapFileHandle = PHYSFS_openWrite(fileName);	// create a new file.
+		NetPlay.mapFileName = fileName;
 	}
 
 	debug(LOG_NET, "New file position is %d", currPos);
@@ -2006,8 +2007,17 @@ UBYTE NETrecvFile(NETQUEUE queue)
 
 	if (currPos + bytesToRead == fileSize)	// last packet
 	{
-		PHYSFS_close(NetPlay.pMapFileHandle);
+		int noError = PHYSFS_close(NetPlay.pMapFileHandle);
+		if (noError == 0)
+		{
+			debug(LOG_ERROR, "Could not close file handle after trying to save map: %s", PHYSFS_getLastError());
+		}
 		NetPlay.pMapFileHandle = NULL;
+		PHYSFS_File *file = PHYSFS_openRead(NetPlay.mapFileName.c_str());
+		int actualFileSize = PHYSFS_fileLength(file);
+		PHYSFS_close(file);
+		NetPlay.mapFileName.clear();
+		ASSERT(actualFileSize == fileSize, "Downloaded map too small! Got %d, expected %d!", actualFileSize, fileSize);
 	}
 
 	//return the percentage count
