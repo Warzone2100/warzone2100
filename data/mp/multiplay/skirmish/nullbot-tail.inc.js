@@ -2,7 +2,7 @@
 	/*************/
 	/* Variables */
 	/*************/
-	
+
 var	UNUSUAL_SITUATION = 0;
 // UNUSUAL_SITUATION is true if we are participating in challenge of some sort;
 // this is detected at eventStartLevel and does some tweaks to the AI to make it
@@ -12,29 +12,16 @@ var	HIGH_TECH_START = 0;
 // Defined at start of the game, this value remembers if we have started at T2
 // or at least at T1/advbases
 
-const	NUM_GROUPS = 6; // the maximum number of combat groups
-
 var	MAX_WARRIORS;		// the maximum number of droids in a group
 var	NUM_WARRIORS;		// the number of battle droids to maintain in a single group
 var	MIN_WARRIORS;		// the number of battle droids necessary to engage in combat
-const	NO_WARRIORS_AT_ALL = 1;		// the number of droids that doesn't make a cluster yet
+var	MIN_VTOLS;		// the minimum number of vtols to have in attack group before attack
+var	NUM_VTOLS;		// thenumber of vtols to maintain in an attack group
+var	MAX_VTOLS;		// the maximum size of a vtol attack group
+var	NUM_HARASS=4;		// the number of units to maintain in the harass group
 
-const	MIN_VTOL_GROUPS = 2;		// the maximum number of VTOL groups
-const	MAX_VTOL_GROUPS = 6;		// the maximum number of VTOL groups
 var	NUM_VTOL_GROUPS = MIN_VTOL_GROUPS;
-
-const	MIN_VTOLS = 4;		// the minimum number of vtols to have in attack group before attack
-const	NUM_VTOLS = 8;		// thenumber of vtols to maintain in an attack group
-const	MAX_VTOLS = 12;		// the maximum size of a vtol attack group
-
 var	ABS_MAX_TRUCKS = 10;			// try not to make too many trucks
-const	ABS_MAX_HOVER_TRUCKS = 13;			// make sure we build at least some hover trucks
-
-const	MAX_DISPERSE = 3; 		// the maximum dispersion of the attack group
-const	RETREAT_AT = 70;		// send the unit for repair if it has this much hit point percent left
-
-const	NUM_VTOL_PADS = 1;		// this many vtols per vtol pad are allowed
-const	BASE_SIZE = 20;		// range of alertness
 
 var	RATE_AP = 2;		// these values affect the amount of a certain weapon class in the mix
 var	RATE_AT = 1;		// this is for anti-tank
@@ -44,86 +31,9 @@ var	RATE_AB = 0;		// this is for anti-building
 var	RATE_TANK = 1; // these values affect the amount of hover tanks in the mix
 var	RATE_HOVER = 0;
 
-const	LOW_POWER = 700;		//decrease ambitions when power is below this level
-var	EXTREME_LOW_POWER = 250;
-
-const	MIN_SENSOR_DISTANCE = 10;		// minimum distance between sensor towers
-const	MAX_SENSOR_TANKS = 4;
-
-const	lab = "A0ResearchFacility";
-const	factory = "A0LightFactory";
-const	command = "A0CommandCentre";
-const	generator = "A0PowerGenerator";
-const	derrick = "A0ResourceExtractor";
-const	borgfac = "A0CyborgFactory";
-const	vtolfac = "A0VTolFactory1";
-const	vtolpad = "A0VtolPad";
-const	satlink = "A0Sat-linkCentre";
-const	lassat = "A0LasSatCommand";
-const	oilres = "OilResource";
-const	cbtower = "Sys-CB-Tower01";
-const	repair = "A0RepairCentre3";
-const	oildrum = "OilDrum";
-
-const	pmod = "A0PowMod1";
-const	fmod = "A0FacMod1";
-const	rmod = "A0ResearchModule1";
-
-// the same for all personalities ...
-const	sensors = [
-	"Sys-SensoTowerWS", // wide spectrum sensor
-	"Sys-SensoTower02", // hardened sensor
-	"Sys-SensoTower01", // sensor
-];
-
-// this one too ...
-const sensorTurrets = [
-	"Sensor-WideSpec", // wide spectrum sensor
-	"SensorTurret1Mk1", // sensor
-];
-
-// this one too ...
-const	vtolPropulsions = [
-	"V-Tol", // guess what ...
-];
-
-// this one too ...
-const	truckBodies = [
-	"Body3MBT", // retaliation
-	"Body2SUP", // leopard
-	"Body4ABT", // bug
-	"Body1REC", // viper
-];
-
-// this one too ...
-const	truckPropulsions = [
-	"hover01", // hover
-	"wheeled01", // wheels
-];
-
-
-// attack this; bottom items first
-const	attackTargets = [
-	borgfac,
-	factory,
-	vtolfac,
-	derrick,
-	lassat,
-];
-
-// attack this when going all-in
-const allInAttackTargets = [
-	borgfac,
-	factory,
-	vtolfac,
-	lassat,
-];
-
-// finally some variables
-
 var	personality;
 
-var	builderGroup, oilerGroup, battleGroup = [], vtolGroup = [], defendGroup;
+var	builderGroup, oilerGroup, battleGroup = [], vtolGroup = [], defendGroup, harassGroup;
 var	groupInfo = [];
 var	enemyInfo = [];
 var	derrickStats = [];
@@ -186,17 +96,19 @@ function becomeHarder() {
 	var enemies=countEnemies()+1;
 	MAX_WARRIORS = Math.floor(Math.min(150/enemies,13+gameTime/180000));
 	NUM_WARRIORS = Math.floor(Math.min(150/enemies,9+gameTime/180000));
-	MIN_WARRIORS = Math.floor(Math.min(150/enemies,5+gameTime/180000));
+	MIN_WARRIORS = Math.floor(Math.min(NUM_WARRIORS*0.8,5+gameTime/180000));
+	MAX_VTOLS = Math.floor(Math.min(Math.min(40,9+2*HIGH_TECH_START+gameTime/360000),150-150/enemies));
+	NUM_VTOLS = Math.floor(Math.min(Math.min(36,5+2*HIGH_TECH_START+gameTime/360000),MAX_VTOLS));
+	MIN_VTOLS = Math.floor(Math.min(Math.min(28,1+2*HIGH_TECH_START+gameTime/360000),NUM_VTOLS*0.8));
 }
 
-// checks if we can design tanks and research towers
-function iHaveCC() {
-	var list=enumStruct(me,command);
-	if (list.length == 0)
-		return false;
-	if (list[0].status == BEING_BUILT)
-		return false;
-	return true;
+// makes sure we have at least one operational structure of that type
+function iHaveStruct(stat) {
+	var list=enumStruct(me,stat)
+	for (i=0; i<list.length; ++i)
+		if (list[i].status==BUILT)
+			return true;
+	return false;
 }
 
 // checks if we can produce hovertanks
@@ -214,11 +126,7 @@ function iHaveArty() {
 function dontRunOutOfPower() {
 	// check for T2>= start and don't hang with no oil because of this procedure until a generator is built
 	if (HIGH_TECH_START==1) {
-		var list=enumStruct(me,generator)
-		for (i=0; i<list.length; ++i)
-			if (list[i].status==BUILT)
-				return true;
-		return false;
+		return iHaveStruct(generator);
 	}
 	return true;
 }
@@ -416,18 +324,24 @@ function tankReachibilityCheck(droid) {
 	return false;
 }
 
-// returns a droid to base
+// returns a droid to the base
 function forceReturnToBase(droid) {
 	var list=enumStruct(me,lab);
+	list=list.concat(enumStruct(me,generator));
 	if (list.length<=0)
 		return;
 	var i=random(list.length);
-	orderDroidLoc(droid, DORDER_MOVE, list[i].x, list[i].y);
+	orderDroidLoc(droid, DORDER_MOVE, list[i].x+1, list[i].y+1);
 }
 
-// returns a droid to base if not in base yet
+// is the droid already at the base?
+function droidIsAtHome(droid) {
+	return distBetweenTwoPoints(droid.x, droid.y, basePosition.x, basePosition.y) <= BASE_SIZE;
+}
+
+// returns a droid to the base if not at the base yet
 function returnToBase(droid) {
-	if (distBetweenTwoPoints(droid.x, droid.y, basePosition.x, basePosition.y) > BASE_SIZE)
+	if (!droidIsAtHome(droid))
 		forceReturnToBase(droid);
 }
 
@@ -484,13 +398,22 @@ function dangerLevel(x,y) {
 	return badGuys;
 }
 
+// returns a list of all repair facilities
+function getRepairList() {
+	var centers=[];
+	for (var ally=0; ally<maxPlayers; ++ally) if (allianceExistsBetween(me,ally) || ally==me)
+		for (var i=0; i<repair.length; ++i)
+			centers = centers.concat(enumStruct(ally, repair[i]));
+	return centers;
+}
+
 // checks if a droid needs to be sent for repair
 function needsRepair(droid) {
 	if (droid.health < RETREAT_AT) 
 		return true;
 	if (droid.health >= 99)
 		return false;
-	var centers = enumStruct(me, repair);
+	var centers = getRepairList();
 	if (centers.length == 0)
 		return false;
 	for (var i=0; i<centers.length; ++i) {
@@ -507,10 +430,7 @@ function sendForRepair(droid) {
 		return false;
 	if (!needsRepair(droid))
 		return false;
-	var centers = enumStruct(me, repair);
-	for (var i=0; i<maxPlayers; ++i) if (allianceExistsBetween(me,i)) {
-		centers = centers.concat(enumStruct(i, repair));
-	}
+	var centers = getRepairList();
 	var gr=groupOfTank(droid);
 	if (centers.length == 0)
 		return false;
@@ -603,13 +523,56 @@ function updateStatus() {
 /* Constructing the base */
 
 
-// make sure builderGroup is non-empty
-function balanceTrucks() {
-	if (groupSize(builderGroup)==0 && groupSize(oilerGroup)>0) {
+// make sure builderGroup is non-empty, 
+// make sure oiler group is non-empty, 
+// remix underpacked combat groups
+function balanceGroups() {
+	// HACK: this next check contains an ugly api level check to see whether we can produce cyborg engineers
+	var iHaveFactory = iHaveStruct(factory) || (iHaveStruct(borgfac) && typeof(DORDER_RTB)!="undefined");
+	// this fires if we have no factory to produce trucks and no builderGroup trucks to build a factory
+	if (groupSize(builderGroup)==0 && groupSize(oilerGroup)>0 && !iHaveFactory) {
 		var trucks=enumGroup(oilerGroup);
 		for (var i=0; i<trucks.length; ++i) {
 			groupAddDroid(builderGroup,trucks[i]);
 			return; // add only one truck
+		}
+	}
+	// this fires when we have no oilerGroup trucks to capture oil and no oil to produce oilerGroup trucks
+	if (groupSize(oilerGroup)==0 && groupSize(builderGroup)>0 && iHaveFactory && iHaveStruct(generator) && !iHaveStruct(derrick)) {
+		var trucks=enumGroup(builderGroup);
+		for (var i=0; i<trucks.length; ++i) {
+			groupAddDroid(oilerGroup,trucks[i]);
+			return; // add only one truck
+		}
+	}
+	// this fires when we have too many groups that don't have enough units inside
+	var size=[];
+	for (var i=0; i<NUM_GROUPS; ++i)
+		size[i]=groupSize(battleGroup[i]);
+	for (var i=0; i<NUM_GROUPS; ++i) if (size[i]<MIN_WARRIORS && size[i]>0) {
+		for (var j=0; j<NUM_GROUPS; ++j) if (i!=j && size[j]<MIN_WARRIORS && size[j]>0) {
+			if (size[j]>size[i]) { // merge a smaller group into a bigger group
+				var k=j; j=i; i=k;
+			}
+			var list=enumGroup(battleGroup[j]);
+			for (var k=0; k<list.length; ++k) {
+				groupAddDroid(battleGroup[i],list[k]);
+			}
+			return; // handle only one pair of groups at a time
+		}
+	}
+	for (var i=0; i<NUM_VTOL_GROUPS; ++i)
+		size[i]=groupSize(vtolGroup[i]);
+	for (var i=0; i<NUM_VTOL_GROUPS; ++i) if (size[i]<MIN_VTOLS && size[i]>0) {
+		for (var j=0; j<NUM_VTOL_GROUPS; ++j) if (i!=j && size[j]<MIN_VTOLS && size[j]>0) {
+			if (size[j]>size[i]) { // merge a smaller group into a bigger group
+				var k=j; j=i; i=k;
+			}			
+			var list=enumGroup(vtolGroup[j]);
+			for (var k=0; k<list.length; ++k) {
+				groupAddDroid(vtolGroup[i],list[k]);
+			}
+			return; // handle only one pair of groups at a time
 		}
 	}
 }
@@ -726,7 +689,7 @@ function buildGateways() {
 	// what to do on v3.1, when the gateway list is not exposed to scripts yet
 	if (typeof(enumGateways)=="undefined" || DEF_LIGHT == 1) {
 		var i=random(personality.hardpoints.length);
-		return buildTower(basePosition.x,basePosition.y,personality.hardpoints[i],0,0);
+		return buildTower(basePosition.x+random(10)-5,basePosition.y+random(10)-5,personality.hardpoints[i],1,0);
 	}
 	if (personality.hardpoints.length == 0) 
 		return false;
@@ -749,7 +712,7 @@ function buildGateways() {
 		gate.x2=t;
 	}
 	var i=random(personality.hardpoints.length);
-	return buildTower(gate.x1+random(gate.x2-gate.x1+1),gate.y1+random(gate.y2-gate.y1+1),personality.hardpoints[i],0,0);
+	return buildTower(gate.x1+random(gate.x2-gate.x1+1),gate.y1+random(gate.y2-gate.y1+1),personality.hardpoints[i],1,0);
 }
 
 // how many defenses do i have?
@@ -764,6 +727,10 @@ function countMyDefenses() {
 
 // build some defensive structure somewhere near (x,y)
 function buildTower(x,y,list,maxDangerLevel,forceLevel) {
+	if (x<2) x=2;
+	if (y<2) y=2;
+	if (x>mapWidth-3) x=mapWidth-3;
+	if (y>mapHeight-3) y=mapHeight-3;
 	if (maxDangerLevel == 0 && !safeDest(me,x,y))
 		return false;
 	var droidlist = enumGroup(oilerGroup);
@@ -849,20 +816,18 @@ function distanceToNearestStructure(x,y,structurelist) {
 function buildDefenses() {
 	if (earlyGame(personality.PEACE_TIME))
 		return false;
-	if (personality.DEFENSIVENESS == 0)
-		queue("buildGateways");
 	var oil=findHottestDerrick();
 	if (typeof(oil)=="undefined") {
 		oil={x:basePosition.x,y:basePosition.y};
 	}
-	if (isStructureAvailable(repair,me) && UNUSUAL_SITUATION==0 && random(2)==0) {
-		if (personality.THIS_AI_MAKES_TANKS || personality.THIS_AI_MAKES_CYBORGS) {
-			buildTower(oil.x,oil.y,[repair,],0,0);
-			return;
-		}
-	}
-	if (!iHaveCC()) 
+	if (UNUSUAL_SITUATION==0 && random(2)==0)
+		if (personality.THIS_AI_MAKES_TANKS || personality.THIS_AI_MAKES_CYBORGS)
+			if (buildTower(oil.x,oil.y,repair,0,0))
+				return;
+	if (!iHaveStruct(command)) 
 		return;
+	if (personality.DEFENSIVENESS == 0)
+		queue("buildGateways",100);
 	var success=false;
 	if (RATE_AA>0 && (difficulty==HARD || difficulty == INSANE)) {
 		success=buildTower(basePosition.x,basePosition.y,personality.antiair,0,0);
@@ -878,7 +843,7 @@ function buildDefenses() {
 				if (success) break;
 			case 3:
 			case 2:
-				success=buildTower(basePosition.x,basePosition.y,personality.artillery[random(personality.artillery.length)],0,0);
+				success=buildTower(basePosition.x+random(10)-5,basePosition.y+random(10)-5,personality.artillery[random(personality.artillery.length)],0,0);
 				if (success) break;
 			case 1:
 				if (tooManyDefenses) {
@@ -918,6 +883,9 @@ function keepBuildingThings() {
 		return buildBasicStructure(lab);
 	if (ccCount == 0 && isStructureAvailable(command, me))
 		return buildBasicStructure(command);
+	// build a lab for every three derricks
+	if (derrickCount>3*labCount && isStructureAvailable(lab, me))
+		return buildBasicStructure(lab);
 	// build generators when necessary
 	if (genCount < 2 || derrickCount - 4*genCount > 0)
 		if (isStructureAvailable(generator,me))
@@ -1112,8 +1080,10 @@ function pickupOilDrums() {
 	if (status == STATUS_PANIC)
 		return;
 	var drums=enumFeature(-1,oildrum);
+	drums=drums.concat(enumFeature(-1,artifact));
 	var list=enumGroup(oilerGroup);
 	list=list.concat(enumGroup(defendGroup));
+	list=list.concat(enumGroup(harassGroup));
 	for (var i=0; i<list.length; ++i) {
 		var droid=list[i];
 		if (isTruckBusy(droid))
@@ -1154,7 +1124,7 @@ function huntForOil() {
 					if (dangerLevel(list[j].x,list[j].y)>0)
 						danger=true;
 				}
-				if (!danger) {
+				if (!danger || random(15)==0) {
 					var tmp=getNearestCCPlayer(list[j].x,list[j].y,0); // friendly AIs shouldn't capture your oil
 					if (typeof(tmp)=="undefined" || tmp==me) {
 						var n=oillist.length;
@@ -1231,7 +1201,7 @@ function doResearch() {
 		if (!followResearchPath(lablist[i],personality.researchPathPrimary)) {
 			// pick some branchy research if the primary research path is finished
 			var economy=enumStruct(me,derrick).length;
-			if (random(100+economy*5)>100) // with 40 oils, it will pick fundamental research in 2/3 labs
+			if (random(140+economy*4)>100) // with 40 oils, it will pick fundamental research in around 2/3 labs
 				if (followResearchPath(lablist[i],personality.researchPathFundamental)) {
 					continue;
 				}
@@ -1339,6 +1309,10 @@ function addTankToSomeGroup(tank) {
 	forceReturnToBase(tank);
 	if (tank.player!=me) {
 		debug("BUG: Player ",me,"trying to put tank",tank.id,"in a group, but the tank belongs to player",tank.player);
+		return;
+	}
+	if (random(5)<1 && groupSize(harassGroup)<NUM_HARASS && tank.name.indexOf("AA")<=0) {
+		groupAddDroid(harassGroup, tank);
 		return;
 	}
 	if (random(100)<countEnemyTeams()*3 && groupSize(defendGroup)<MAX_WARRIORS) {
@@ -1490,27 +1464,33 @@ function needMoreTrucks() {
 // produce a tank with an anti-personnel weapon in some factory
 function produceAPTank(struct) {
 	var iap=random(personality.apWeapons.length);
-	var ib=random(personality.tankBodies.length);
 	var prop = personality.tankPropulsions;
 	if (typeof(personality.tankPropulsionsAP)!="undefined")
 		prop=personality.tankPropulsionsAP;
+	var body = personality.tankBodies;
+	if (typeof(personality.tankBodiesAP)!="undefined")
+		body=personality.tankBodiesAP;
 	if (random(RATE_TANK+RATE_HOVER) < RATE_HOVER)
 		prop=standardTankPropulsionsHover;
 	var ip=random(prop.length);
-	return buildDroid(struct, "AP Tank", personality.tankBodies[ib], prop[ip], "", DROID_WEAPON, personality.apWeapons[iap])	
+	var ib=random(body.length);
+	return buildDroid(struct, "AP Tank", body[ib], prop[ip], "", DROID_WEAPON, personality.apWeapons[iap])	
 }
 
 // produce a tank with an anti-tank weapon in some factory
 function produceATTank(struct) {
 	var iat=random(personality.atWeapons.length);
-	var ib=random(personality.tankBodies.length);
 	var prop = personality.tankPropulsions;
 	if (typeof(personality.tankPropulsionsAT)!="undefined")
 		prop=personality.tankPropulsionsAT;
+	var body = personality.tankBodies;
+	if (typeof(personality.tankBodiesAT)!="undefined")
+		body=personality.tankBodiesAT;
 	if (random(RATE_TANK+RATE_HOVER) < RATE_HOVER)
 		prop=standardTankPropulsionsHover;
 	var ip=random(prop.length);
-	return buildDroid(struct, "AT Tank", personality.tankBodies[ib], prop[ip], "", DROID_WEAPON, personality.atWeapons[iat])	
+	var ib=random(body.length);
+	return buildDroid(struct, "AT Tank", body[ib], prop[ip], "", DROID_WEAPON, personality.atWeapons[iat])	
 }
 
 // produce a tank with an anti-building weapon in some factory
@@ -1523,14 +1503,17 @@ function produceABTank(struct) {
 	}
 	if (personality.THIS_AI_MAKES_TANKS && ((sensortanks*5+1 > abtanks) || enumDroid(me,DROID_WEAPON).length < personality.MIN_DEFENDERS)) {
 		var iab=random(personality.abWeapons.length);
-		var ib=random(personality.tankBodies.length);
 		var prop = personality.tankPropulsions;
 		if (typeof(personality.tankPropulsionsAB)!="undefined")
 			prop=personality.tankPropulsionsAB;
+		var body = personality.tankBodies;
+		if (typeof(personality.tankBodiesAB)!="undefined")
+			body=personality.tankBodiesAB;
 		if (random(RATE_TANK+RATE_HOVER) < RATE_HOVER)
 			prop=standardTankPropulsionsHover;
 		var ip=random(prop.length);
-		return buildDroid(struct, "AB Tank", personality.tankBodies[ib], prop[ip], "", DROID_WEAPON, personality.abWeapons[iab])	
+		var ib=random(body.length);
+		return buildDroid(struct, "AB Tank", body[ib], prop[ip], "", DROID_WEAPON, personality.abWeapons[iab])	
 	} else if (sensortanks < MAX_SENSOR_TANKS) {
 		var prop=truckPropulsions;
 		if (RATE_TANK == 0)
@@ -1542,14 +1525,17 @@ function produceABTank(struct) {
 // produce a tank with an anti-air weapon in some factory
 function produceAATank(struct) {
 	var iaa=random(personality.aaWeapons.length);
-	var ib=random(personality.tankBodies.length);
 	var prop = personality.tankPropulsions;
 	if (typeof(personality.tankPropulsionsAA)!="undefined")
 		prop=personality.tankPropulsionsAA;
+	var body = personality.tankBodies;
+	if (typeof(personality.tankBodiesAA)!="undefined")
+		body=personality.tankBodiesAA;
 	if (random(RATE_TANK+RATE_HOVER) < RATE_HOVER)
 		prop=standardTankPropulsionsHover;
 	var ip=random(prop.length);
-	return buildDroid(struct, "AA Tank", personality.tankBodies[ib], prop[ip], "", DROID_WEAPON, personality.aaWeapons[iaa])	
+	var ib=random(body.length);
+	return buildDroid(struct, "AA Tank", body[ib], prop[ip], "", DROID_WEAPON, personality.aaWeapons[iaa])	
 }
 
 // produce a cyborg with an anti-personnel weapon in some factory
@@ -1597,7 +1583,7 @@ function produceDroids() {
 				break;
 			}
 			// we shouldn't produce tanks without a cc to avoid template cheating
-			if (!iHaveCC()) 
+			if (!iHaveStruct(command)) 
 				break;
 			// we shouldn't produce heavy cannon leopard half-tracks because people will laugh at us
 			if (HIGH_TECH_START==1) {
@@ -1936,9 +1922,11 @@ function regroupWarriors(gr) {
 	if (earlyGame(personality.PEACE_TIME))
 		return false;
 	var min = groupSize(battleGroup[gr])*0.6;
+	if (this.delaystaticregroup > 0)
+		min = groupSize(battleGroup[gr])*0.4;
 	if (min < MIN_WARRIORS)
 		min = MIN_WARRIORS;
-	var ret=new naiveFindClusters(list,MAX_DISPERSE + list.length/8);
+	var ret=new naiveFindClusters(list,MAX_DISPERSE + list.length/12);
 	if (ret.maxCount >= min) {
 		if (distBetweenTwoPoints(ret.xav[ret.maxIdx],ret.yav[ret.maxIdx],groupInfo[gr].lastX,groupInfo[gr].lastY)<5) {
 			++groupInfo[gr].idleTime;
@@ -1959,16 +1947,16 @@ function regroupWarriors(gr) {
 			for (var i=0; i<ret.clusters.length; ++i) 
 				if (i!=ret.maxIdx)  {
 					for (j=0; j<ret.clusters[i].length; ++j) 
-						if (!sendForRepair(list[ret.clusters[i][j]]))
+						if (!sendForRepair(list[ret.clusters[i][j]]) && !droidIsAtHome(list[ret.clusters[i][j]]))
 							orderDroidLoc(list[ret.clusters[i][j]], DORDER_MOVE, ret.xav[ret.maxIdx], ret.yav[ret.maxIdx]);
 				} else if (ret.maxCount < min || ret.maxCount < list.length/2) { // note: i==ret.maxIdx here
 					for (j=0; j<ret.clusters[i].length; ++j) 
-						if (!sendForRepair(list[ret.clusters[i][j]]))
+						if (!sendForRepair(list[ret.clusters[i][j]]) && !droidIsAtHome(list[ret.clusters[i][j]]))
 							stopDroid(list[ret.clusters[i][j]]);
 				}
 		} else {
 			for (var i=0; i<list.length; ++i)
-				if (!sendForRepair(list[i])) {
+				if (!sendForRepair(list[i]) && !droidIsAtHome(list[i])) {
 					//orderDroidLoc(list[i], DORDER_MOVE, list[ret.maxIdx].x,list[ret.maxIdx].y);
 					if (groupInfo[gr].delaystaticregroup > 0)
 						returnToBase(list[i]);
@@ -2034,6 +2022,22 @@ function nextGroup(gr) {
 	}
 }
 
+// send little groups to knock out defenseless targets
+function harassStuff() {
+	var list=cachedEnumEnemies();
+	for (var i=0; i<10; ++i) {
+		j=random(list.length);
+		if (typeof(list[j])!="undefined" && typeof(list[j].x)!="undefined" && typeof(list[j].y)!="undefined") {
+			if (safeDest(me,list[j].x,list[j].y)) {
+				var droids=enumGroup(harassGroup);
+				for (var k=0; k<droids.length; ++k) if (droids[k].order!=DORDER_SCOUT) {
+					orderDroidLoc(droids[k],DORDER_SCOUT,list[j].x,list[j].y);
+				}
+			}
+		}
+	}
+}
+
 // the attack
 function attackStuff() {
 	if (typeof(DORDER_OBSERVE)=="undefined")
@@ -2048,12 +2052,13 @@ function attackStuff() {
 	var gr=attackStuff.groupNumber;
 	var attackers=enumGroup(battleGroup[gr]);
 	if (sensorAttack || groupSize(battleGroup[gr]) >= MIN_WARRIORS || (groupSize(battleGroup[gr]) >= NO_WARRIORS_AT_ALL && earlyGame(personality.PEACE_TIME))) {
-		if (regroupWarriors(gr))
-			return;
+		var needRegrouping = regroupWarriors(gr);
 		var target=getGroupTarget(gr);
 		if (typeof(target) != "undefined") {
 			for (var i=0; i<attackers.length; ++i) {
 				droid=attackers[i];
+				if (needRegrouping && !droidIsAtHome(droid))
+					continue;
 				if (sendForRepair(droid))
 					continue;
 				if (!droidCanReach(droid,target.x,target.y)) { // useless droid ...
@@ -2079,6 +2084,7 @@ function vtolAttack() {
 	if (!personality.THIS_AI_MAKES_VTOLS)
 		return;
 	for (var gr=0; gr<NUM_VTOL_GROUPS; ++gr) if (groupSize(vtolGroup[gr])>=MIN_VTOLS) {
+		var patrol=random(10);
 		var target=findTarget(-1);
 		if (typeof(target) != "undefined") {
 			var vtols=enumGroup(vtolGroup[gr]);
@@ -2097,8 +2103,12 @@ function vtolAttack() {
 				}
 			}
 			if (list.length>=MIN_VTOLS) {
-				for (var i=0; i<list.length; ++i) 
-					orderDroidObj(vtols[list[i]], DORDER_ATTACK, target);
+				for (var i=0; i<list.length; ++i) {
+					if (patrol==0)
+						orderDroidObj(vtols[list[i]], DORDER_ATTACK, target);
+					else
+						orderDroidLoc(vtols[list[i]], DORDER_PATROL, target.x, target.y);
+				}
 			} 
 		} 
 	}
@@ -2161,9 +2171,10 @@ function setTimers() {
 	setTimer("sendAllForRepair",		5000+rnd());
 	setTimer("produceDroids",		3000+rnd());
 	setTimer("relaxStats",		10000+rnd());
-	setTimer("balanceTrucks",		10000+rnd());
+	setTimer("balanceGroups",		10000+rnd());
 	setTimer("returnDefendersToBase",		20000+rnd());
 	setTimer("callUpdateEnemyInfo",		2000+rnd());
+	setTimer("harassStuff",		3000+rnd());
 }
 
 function fallBack(droid,threat) {
@@ -2182,8 +2193,10 @@ function fallBack(droid,threat) {
 	
 // work harder
 function eventDroidIdle(droid) {
-	if (droid.droidType == DROID_CONSTRUCT)
+	if (droid.droidType == DROID_CONSTRUCT) {
 		queue("huntForOil");
+		queue("buildDefenses");
+	}
 }
 
 // something was just researched
@@ -2231,8 +2244,10 @@ function eventAttacked(victim, attacker) {
 			fallBack(victim,attacker);
 		return;
 	}
-	if (allianceExistsBetween(attacker.player,me)) // don't respond to friendly splash damage
-		return;
+	if (typeof(attacker.player)!="undefined") 
+		if (attacker.player >= 0 && attacker.player < maxPlayers)
+			if (allianceExistsBetween(attacker.player,me)) // don't respond to friendly splash damage
+				return;
 	eventAttacked.lastCall = gameTime;
 	personality.PEACE_TIME = 0;
 	if (status==STATUS_EARLYGAME)
@@ -2262,6 +2277,10 @@ function eventAttacked(victim, attacker) {
 			return;
 		}
 		if (victim.droidType == DROID_WEAPON || victim.droidType == DROID_CYBORG || victim.droidType == DROID_SENSOR) {
+			if (victim.group==harassGroup) {
+				returnToBase(victim);
+				return;
+			}
 			sendForRepair(victim);
 			var gr=groupOfTank(victim);
 			if (typeof(gr)=="undefined") { // defendGroup
@@ -2272,7 +2291,7 @@ function eventAttacked(victim, attacker) {
 			}
 			groupInfo[gr].idleTime=0;
 			if (!arty)
-				groupInfo[gr].delaystaticregroup=2;
+				groupInfo[gr].delaystaticregroup = 1 + (attacker.type==DROID ? 1 : 0);
 			if (regroupWarriors(gr))
 				return;
 			// group comes for help when one of its droids is under attack
@@ -2321,7 +2340,11 @@ function eventAttacked(victim, attacker) {
 	}
 }
 
-
+// we just picked up an oil drum (3.2+ only)
+function eventPickup(feature, droid) {
+	if (droid.player == me)
+		returnToBase(droid);
+}
 
 // laser satellite strike
 function eventStructureReady(structure) {
@@ -2374,6 +2397,7 @@ function eventStartLevel() {
 	// HACK: find a better way to find out if we are in challenge
 	if (playerPower(me)<1000 || playerPower(me) > 3300) 
 		UNUSUAL_SITUATION = 1;
+	becomeHarder();
 	if (baseType != CAMP_CLEAN)
 		personality.PEACE_TIME=0;
 	var list = enumDroid(me);
@@ -2387,6 +2411,7 @@ function eventStartLevel() {
 	builderGroup=newGroup();
 	oilerGroup=newGroup();
 	defendGroup=newGroup();
+	harassGroup=newGroup();
 	for (i=0; i<NUM_GROUPS; ++i)
 		battleGroup[i]=newGroup();
 	groupInfo[0]=new constructGroupInfo(findEnemy());
@@ -2410,7 +2435,6 @@ function eventStartLevel() {
 			addTankToSomeGroup(droid);
 	}
 	setStatus(STATUS_EARLYGAME);
-	becomeHarder();
 	adapt();
 	queue("executeBuildOrder",200);
 }

@@ -24,7 +24,7 @@ function constructPersonality() {
 	const MF = 4; // mg/flamers (uses flamers as AT weapon)
 	var subpersonality = random(5);
 	
-	this.tankBodies = standardTankBodies;
+	this.tankBodies = [ standardTankBodiesLight, ];
 	
 	this.vtolBodies = [
 		"Body7ABT", // retribution
@@ -191,6 +191,7 @@ function constructPersonality() {
 		switch(subpersonality) {
 		case MR:
 			this.buildOrderIdx = 2;
+			this.tankBodiesAT = [ standardTankBodiesHeavy, ];
 			this.researchPathPrimary = [ // rffrc
 				"R-Vehicle-Prop-Halftracks",
 				"R-Wpn-MG2Mk1",
@@ -201,6 +202,7 @@ function constructPersonality() {
 			break;
 		case MC:
 			this.buildOrderIdx = random(2); 
+			this.tankBodiesAP = [ standardTankBodiesHeavy, ];
 			if (this.buildOrderIdx == 0) {
 				this.researchPathPrimary = [ // frcfr
 					"R-Wpn-MG-Damage02",
@@ -221,6 +223,8 @@ function constructPersonality() {
 			break;
 		case FR:
 			this.buildOrderIdx = 2;
+			this.tankBodiesAP = [ standardTankBodiesHeavy, ];
+			this.tankBodiesAT = [ standardTankBodiesHeavy, ];
 			this.researchPathPrimary = [ // rffrc
 				"R-Wpn-MG2Mk1",
 				"R-Wpn-Rocket-Damage02",
@@ -232,6 +236,7 @@ function constructPersonality() {
 			break;
 		case FC:
 			this.buildOrderIdx = 2 * random(2);
+			this.tankBodiesAP = [ standardTankBodiesHeavy, ];
 			if (this.buildOrderIdx == 0) {
 				this.researchPathPrimary = [ // frcfr
 					"R-Wpn-MG2Mk1",
@@ -249,6 +254,7 @@ function constructPersonality() {
 			}
 			break;
 		case MF:
+ 			this.tankBodies = standardTankBodies;
 			this.researchPathPrimary = [ // any
 				"R-Wpn-MG3Mk1",
 				"R-Vehicle-Prop-Halftracks",

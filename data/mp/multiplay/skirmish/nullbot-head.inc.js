@@ -1,4 +1,26 @@
 
+const	NUM_GROUPS = 6; // the maximum number of combat groups
+
+const	NO_WARRIORS_AT_ALL = 1;		// the number of droids that doesn't make a cluster yet
+
+const	MIN_VTOL_GROUPS = 2;		// the maximum number of VTOL groups
+const	MAX_VTOL_GROUPS = 6;		// the maximum number of VTOL groups
+
+const	ABS_MAX_HOVER_TRUCKS = 13;			// make sure we build at least some hover trucks
+
+const	MAX_DISPERSE = 3; 		// the maximum dispersion of the attack group
+const	RETREAT_AT = 70;		// send the unit for repair if it has this much hit point percent left
+
+const	NUM_VTOL_PADS = 1;		// this many vtols per vtol pad are allowed
+const	BASE_SIZE = 20;		// range of alertness
+
+const	LOW_POWER = 700;		//decrease ambitions when power is below this level
+
+const	MIN_SENSOR_DISTANCE = 10;		// minimum distance between sensor towers
+const	MAX_SENSOR_TANKS = 4;
+
+var	EXTREME_LOW_POWER = 250;
+
 // some definitions useful for both personality code and tail code
 
 const	lab = "A0ResearchFacility";
@@ -13,11 +35,68 @@ const	satlink = "A0Sat-linkCentre";
 const	lassat = "A0LasSatCommand";
 const	oilres = "OilResource";
 const	cbtower = "Sys-CB-Tower01";
-const	repair = "A0RepairCentre3";
+const	oildrum = "OilDrum";
+const	artifact = "Crate";
 
 const	pmod = "A0PowMod1";
 const	fmod = "A0FacMod1";
 const	rmod = "A0ResearchModule1";
+
+// the following were declared as variables in order to 
+// make it possible to override them in personality 
+// definitions. but please don't override them unless
+// the personality is to work in a modded environment.
+
+var	sensors = [
+	"Sys-SensoTowerWS", // wide spectrum sensor
+	"Sys-SensoTower02", // hardened sensor
+	"Sys-SensoTower01", // sensor
+];
+
+var	repair = [
+	"A0RepairCentre3", // repair facility
+];
+
+var sensorTurrets = [
+	"Sensor-WideSpec", // wide spectrum sensor
+	"SensorTurret1Mk1", // sensor
+];
+
+var	vtolPropulsions = [
+	"V-Tol", // guess what ...
+];
+
+var	truckBodies = [
+	"Body3MBT", // retaliation
+	"Body2SUP", // leopard
+	"Body4ABT", // bug
+	"Body1REC", // viper
+];
+
+var	truckPropulsions = [
+	"hover01", // hover
+	"wheeled01", // wheels
+];
+
+
+// attack this; bottom items first
+var	attackTargets = [
+	borgfac,
+	factory,
+	vtolfac,
+	derrick,
+	lassat,
+];
+
+// attack this when going all-in
+var allInAttackTargets = [
+	borgfac,
+	factory,
+	vtolfac,
+	lassat,
+];
+
+// some trivial functions useful in personality definitions
 
 // random integer between 0 and max-1 (for convenience)
 function random(max) {
@@ -335,6 +414,40 @@ const standardTankBodies = [
 	],
 ];
 
+const standardTankBodiesLight = [
+	"Body14SUP", // dragon
+	"Body13SUP", // wyvern
+	"Body10MBT", // vengeance
+	"Body7ABT", // retribution
+	"Body12SUP", // mantis
+	"Body8MBT", // scorpion
+	"Body11ABT", // python
+	"Body9REC", // tiger
+	"Body3MBT", // retaliation
+	"Body5REC", // cobra
+	"Body6SUPP", // panther
+	"Body4ABT", // bug
+	"Body1REC", // viper
+	"Body2SUP", // leopard
+];
+
+const standardTankBodiesHeavy = [
+	"Body14SUP", // dragon
+	"Body13SUP", // wyvern
+	"Body10MBT", // vengeance
+	"Body7ABT", // retribution
+	"Body9REC", // tiger
+	"Body11ABT", // python
+	"Body12SUP", // mantis
+	"Body3MBT", // retaliation
+	"Body6SUPP", // panther
+	"Body5REC", // cobra
+	"Body8MBT", // scorpion
+	"Body2SUP", // leopard
+	"Body1REC", // viper
+	"Body4ABT", // bug
+];
+
 const standardTankPropulsions = [
 	[
 		"tracked01", // tracks
@@ -639,7 +752,11 @@ const standardCyborgMachinegunMortar = [
 	["CyborgChain1Ground", "CyborgChaingun"], // machinegun
 ];
 
+// standard build order definitions
+
 function standardBuildOrderNoob() {
+	// a noob doesn't know what a build order is, so it relies
+	// on keepBuildingThings() from the start
 	return false;
 }
 
