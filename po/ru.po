@@ -545,7 +545,7 @@ msgstr "Все гусеницы автоматически улучшены"
 #: data/mp/messages/resmessages12.rmsg:53
 #: data/mp/messages/resmessages1.rmsg:3
 msgid "New Systems Turret Available for Design"
-msgstr "Доступна турельная установка"
+msgstr "Доступна туррельная установка"
 
 #: data/base/messages/resmessages12.rmsg:60
 #: data/mp/messages/resmessages12.rmsg:54
@@ -574,7 +574,7 @@ msgstr "Контрбатарея продолжает вести огонь, п�
 #: data/mp/messages/resmessages3.rmsg:403
 #, fuzzy
 msgid "CB Sensor Improved"
-msgstr "КБ башня улучшена"
+msgstr "КБ датчик улучшен"
 
 #: data/base/messages/resmessages12.rmsg:71
 #: data/base/messages/resmessages2.rmsg:379
@@ -603,7 +603,7 @@ msgstr "Увеличивает радиус действия КБ башни"
 #: data/mp/messages/resmessages3.rmsg:406
 #, fuzzy
 msgid "All CB sensors upgraded automatically"
-msgstr "Все КБ башни автоматически улучшаются"
+msgstr "Все КБ датчики автоматически улучшаются"
 
 #: data/base/messages/resmessages12.rmsg:81
 #: data/base/messages/resmessages12.rmsg:180
@@ -670,7 +670,7 @@ msgstr "Улучшение огнемёта"
 #: data/mp/messages/resmessages2.rmsg:664
 #: data/mp/messages/strings/resstrings.txt:851
 msgid "Automatic loading mechanism replaces manual loader"
-msgstr "Ручная перезарядка заменяется автоматом заряжания"
+msgstr "Ручная перезарядка заменяется автоматической"
 
 #: data/base/messages/resmessages12.rmsg:94
 msgid "Increases Flamer ROF"
@@ -841,7 +841,7 @@ msgstr "Лучшие цели: пехота, постройки, колесны�
 #: data/mp/messages/strings/resstrings.txt:723
 #: data/mp/messages/strings/resstrings.txt:729
 msgid "Body Points: Medium"
-msgstr "Бронирование: среднее"
+msgstr "Живучесть: средняя"
 
 #: data/base/messages/resmessages12.rmsg:114
 #: data/base/messages/resmessages1.rmsg:543
@@ -984,7 +984,7 @@ msgstr "Лучшие цели: постройки, пехота, колесны�
 #: data/mp/messages/resmessagesall.rmsg:276
 #: data/mp/messages/strings/resstrings.txt:937
 msgid "Body Points: Very Low"
-msgstr "Бронирование: очень низкое"
+msgstr "Живучесть: очень низкая"
 
 #: data/base/messages/resmessages12.rmsg:136
 #: data/base/messages/resmessages12.rmsg:147
@@ -1008,7 +1008,7 @@ msgstr "Улучшение миномёта"
 #: data/base/messages/resmessages12.rmsg:137
 #: data/mp/messages/resmessages12.rmsg:124
 msgid "Targeting systems compensate for distance and weather conditions"
-msgstr "Дистанция и условия погоды компенсируется системой наведения"
+msgstr "Дистанция и условия погоды компенсируются системой наведения"
 
 #: data/base/messages/resmessages12.rmsg:138
 #: data/base/messages/resmessages23.rmsg:160
@@ -1038,7 +1038,7 @@ msgstr "Все миномёты автоматически улучшены"
 #: data/base/messages/resmessages12.rmsg:148
 #: data/mp/messages/resmessages12.rmsg:134
 msgid "Automatic loader replaces manual feed"
-msgstr "Ручная перезарядка заменяется автоматом заряжания"
+msgstr "Ручная перезарядка заменяется автоматической"
 
 #: data/base/messages/resmessages12.rmsg:149
 #: data/base/messages/resmessages3.rmsg:1007
@@ -1140,13 +1140,13 @@ msgstr "Увеличение урона пушки"
 #: data/base/messages/resmessages12.rmsg:203
 #: data/mp/messages/resmessages12.rmsg:184
 msgid "Rocket tracks the laser designator to the target"
-msgstr "Ракета следует лазерному целеуказателю до цели"
+msgstr "Ракета наводится на цель лазерным целеуказателем"
 
 #: data/base/messages/resmessages12.rmsg:204
 #: data/base/messages/resmessages1.rmsg:633
 #: data/base/messages/resmessagesall.rmsg:116
 msgid "Increases Rocket accuracy"
-msgstr "Увеличение точности ракеты"
+msgstr "Увеличивает точность ракеты"
 
 #: data/base/messages/resmessages12.rmsg:214
 #: data/mp/messages/resmessages12.rmsg:194
@@ -1222,7 +1222,7 @@ msgstr "Командир указывает группам к точке сбо�
 #: data/mp/messages/resmessagesall.rmsg:746
 #: data/mp/messages/strings/resstrings.txt:773
 msgid "Body Points: High"
-msgstr "Броня: высокая"
+msgstr "Живучесть: высокая"
 
 #: data/base/messages/resmessages1.rmsg:15
 #: data/base/messages/resmessages3.rmsg:15
@@ -1275,7 +1275,7 @@ msgstr "Слоистый композитный сплав и энергоабс
 #: data/base/messages/strings/resstrings.txt:33
 #: data/mp/messages/strings/resstrings.txt:37
 msgid "Increases Kinetic Armor and Body Points"
-msgstr "Увеличивает Кинетическую броню и общую бронебойность юнита"
+msgstr "Увеличивает Кинетическую броню и живучесть юнита"
 
 #: data/base/messages/resmessages1.rmsg:29
 #: data/base/messages/resmessages23.rmsg:7
@@ -1428,7 +1428,7 @@ msgstr "Улучшенный, укрепленный титаном бетон"
 
 #: data/base/messages/resmessages1.rmsg:83
 msgid "Increases Armour and Body Points"
-msgstr "Увеличивает броню и общую бронебойность"
+msgstr "Увеличивает броню и живучесть"
 
 #: data/base/messages/resmessages1.rmsg:84
 #: data/base/messages/resmessages2.rmsg:51
@@ -1451,7 +1451,7 @@ msgstr "Стальная башня с пулеметом"
 #: data/base/messages/resmessages1.rmsg:95
 #: data/mp/messages/resmessages1.rmsg:86
 msgid "Defensive Strength: Low"
-msgstr "Сила защиты: малая"
+msgstr "Сила защиты: слабая"
 
 #: data/base/messages/resmessages1.rmsg:104
 msgid "Armored guard tower with Mini-Pod Rocket"
@@ -1489,7 +1489,7 @@ msgstr "Укреплённая оборонительная точка со ср
 #: data/base/messages/resmessages1.rmsg:181
 #: data/mp/messages/resmessages1.rmsg:164
 msgid "Armored hardpoint with Heavy Cannon"
-msgstr "Укреплённая оборонительная точка с Тяжелой Пушкой"
+msgstr "Укреплённая оборонительная точка с тяжелой Пушкой"
 
 #: data/base/messages/resmessages1.rmsg:192
 #: data/base/messages/strings/resstrings.txt:324
@@ -1576,7 +1576,7 @@ msgstr "Позволяет исследовать командную турел�
 #: data/base/messages/resmessages1.rmsg:226
 #: data/mp/messages/resmessages1.rmsg:205
 msgid "Directs and collates information for command turrets"
-msgstr "направляет и обрабатывает информацию для командных турелей"
+msgstr "Направляет и обрабатывает информацию для командных турелей"
 
 #: data/base/messages/resmessages1.rmsg:227
 #: data/mp/messages/resmessages1.rmsg:206
@@ -1593,7 +1593,7 @@ msgstr "вмещает до пяти командиров"
 #: data/mp/messages/strings/resstrings.txt:375
 #: data/mp/messages/strings/resstrings.txt:383
 msgid "Cyborg Production Improved"
-msgstr "улучшает производство киборгов"
+msgstr "Производство киборгов улучшено"
 
 #: data/base/messages/resmessages1.rmsg:236
 #: data/base/messages/strings/names.txt:783
@@ -1642,7 +1642,7 @@ msgstr "Производит киборгов"
 #: data/base/messages/resmessages1.rmsg:249
 #: data/mp/messages/resmessages1.rmsg:226
 msgid "Research makes additional Cyborgs available"
-msgstr "Иследование даети доступ к дополнительным видам киборгов"
+msgstr "Иследование дает доступ к дополнительным видам киборгов"
 
 #: data/base/messages/resmessages1.rmsg:257
 #: data/base/messages/resmessages2.rmsg:334
@@ -1655,7 +1655,7 @@ msgstr "Иследование даети доступ к дополнитель
 #: data/mp/messages/resmessagesall.rmsg:613
 #: data/mp/messages/strings/resstrings.txt:439
 msgid "Production Improved"
-msgstr "производство улучшено"
+msgstr "Производство улучшено"
 
 #: data/base/messages/resmessages1.rmsg:258
 #: data/mp/messages/resmessages1.rmsg:234
@@ -1667,12 +1667,12 @@ msgstr "модуль завода позволяет создавать юнит
 #: data/base/messages/strings/resstrings.txt:375
 #: data/mp/messages/strings/resstrings.txt:403
 msgid "Increases factory output"
-msgstr "повышает выход фабрики"
+msgstr "повышает выход завода"
 
 #: data/base/messages/resmessages1.rmsg:260
 #: data/mp/messages/resmessages1.rmsg:236
 msgid "Use a truck to add modules to a factory"
-msgstr "используй строительный бульдозер чтобы достроить модули заводу"
+msgstr "используй строительный бульдозер чтобы достроить модули завода"
 
 #: data/base/messages/resmessages1.rmsg:268
 #: data/base/messages/resmessages2.rmsg:301
@@ -1703,7 +1703,7 @@ msgstr "все заводы улучшаются автоматически"
 #: data/base/messages/resmessages1.rmsg:279
 #: data/mp/messages/resmessages1.rmsg:253
 msgid "Power Module Available"
-msgstr "Модуль генератора"
+msgstr "ДОступен модуль генератора"
 
 #: data/base/messages/resmessages1.rmsg:280
 #: data/base/messages/resmessages23.rmsg:26
@@ -1712,7 +1712,7 @@ msgstr "Модуль генератора"
 #: data/mp/messages/resmessages23.rmsg:23
 #: data/mp/messages/resmessages3.rmsg:333
 msgid "Improved Power Generator Performance"
-msgstr "Повышена производительность генератора"
+msgstr "Повышенная производительность генератора"
 
 #: data/base/messages/resmessages1.rmsg:281
 #: data/mp/messages/resmessages1.rmsg:255
@@ -1722,7 +1722,7 @@ msgstr "Сжигает горючее более эфффективно"
 #: data/base/messages/resmessages1.rmsg:282
 #: data/mp/messages/resmessages1.rmsg:256
 msgid "Use a truck to add the module to a power generator"
-msgstr "используй бульдозер чтобы добавить модуль к генератору"
+msgstr "используй бульдозер,чтобы добавить модуль к генератору"
 
 #: data/base/messages/resmessages1.rmsg:290
 #: data/mp/messages/resmessages1.rmsg:263
@@ -1746,7 +1746,7 @@ msgstr "повышает скорость исследований"
 #: data/base/messages/resmessages1.rmsg:293
 #: data/mp/messages/resmessages1.rmsg:266
 msgid "Use a truck to add the module to a research facility"
-msgstr "используй бульдозер для добавки модуля к лаборатории"
+msgstr "используй бульдозер,чтобы добавить модуль к лаборатории"
 
 #: data/base/messages/resmessages1.rmsg:301
 #: data/base/messages/resmessages2.rmsg:312
@@ -1807,7 +1807,7 @@ msgstr "Улучшенные стройматериалы"
 #: data/mp/messages/strings/resstrings.txt:125
 #: data/mp/messages/strings/resstrings.txt:429
 msgid "Increases Armor and Body Points"
-msgstr "Увеличивает броню и общее здоровье"
+msgstr "Увеличивает броню и живучесть"
 
 #: data/base/messages/resmessages1.rmsg:315
 #: data/base/messages/resmessages2.rmsg:326
@@ -1825,12 +1825,12 @@ msgstr "Все постройки улучшаются автоматическ�
 #: data/base/messages/resmessages1.rmsg:323
 #: data/mp/messages/resmessages1.rmsg:293
 msgid "Project Light Body"
-msgstr "Легкий корпус Проекта"
+msgstr "Проектировать Легкий корпус"
 
 #: data/base/messages/resmessages1.rmsg:324
 #: data/mp/messages/resmessages1.rmsg:294
 msgid "Light body vulnerable to heavy weapons"
-msgstr "Легкая рама уязвима против тяжелых орудий"
+msgstr "Легкий корпус уязвим против тяжелого вооружения"
 
 #: data/base/messages/resmessages1.rmsg:325
 #: data/mp/messages/resmessages1.rmsg:295
@@ -1845,12 +1845,12 @@ msgstr "Низкая стоимость и быстро производится
 #: data/base/messages/resmessages1.rmsg:334
 #: data/mp/messages/resmessages1.rmsg:303
 msgid "New Paradigm Light Body"
-msgstr "Легкий корпус Новой Парадигмы"
+msgstr "Редизайн Легкого корпуса"
 
 #: data/base/messages/resmessages1.rmsg:335
 #: data/mp/messages/resmessages1.rmsg:304
 msgid "Inferior armor and body points to Viper"
-msgstr "Броня меньше чем у Гадюки"
+msgstr "Броня и живучесть меньше чем у Гадюки"
 
 #: data/base/messages/resmessages1.rmsg:336
 #: data/base/messages/resmessages3.rmsg:534
@@ -1867,12 +1867,12 @@ msgstr "Стоимость и скорость производства как �
 #: data/base/messages/resmessages1.rmsg:345
 #: data/mp/messages/resmessages1.rmsg:313
 msgid "Project Medium Body"
-msgstr "Средняя рама Проекта"
+msgstr "Проектировать Средний корпус"
 
 #: data/base/messages/resmessages1.rmsg:346
 #: data/mp/messages/resmessages1.rmsg:314
 msgid "Medium body increases armor and body points"
-msgstr "Средняя рама обладает повышенной бронёй"
+msgstr "Средний корпус обладает повышенной бронёй"
 
 #: data/base/messages/resmessages1.rmsg:347
 #: data/mp/messages/resmessages1.rmsg:315
@@ -1887,7 +1887,7 @@ msgstr "Средняя стоимость и скорость производс
 #: data/base/messages/resmessages1.rmsg:356
 #: data/mp/messages/resmessages1.rmsg:323
 msgid "New Paradigm Medium body"
-msgstr "Средний корпус Новой Парадигмы"
+msgstr "Редизайн Среднего корпуса"
 
 #: data/base/messages/resmessages1.rmsg:357
 #: data/mp/messages/resmessages1.rmsg:324
@@ -1909,12 +1909,12 @@ msgstr "Стоимость и Время производства как у Ко
 #: data/base/messages/resmessages1.rmsg:367
 #: data/mp/messages/resmessages1.rmsg:333
 msgid "Project Heavy Body"
-msgstr "Тяжелый корпус Проекта"
+msgstr "Проектировать Тяжелый корпус"
 
 #: data/base/messages/resmessages1.rmsg:368
 #: data/mp/messages/resmessages1.rmsg:334
 msgid "Heavy body increases armor and body points"
-msgstr "Тяжелая рама повышает броню"
+msgstr "Тяжелый корпус повышает броню"
 
 #: data/base/messages/resmessages1.rmsg:369
 #: data/mp/messages/resmessages1.rmsg:335
@@ -1929,12 +1929,12 @@ msgstr "Дорого и долго производить"
 #: data/base/messages/resmessages1.rmsg:378
 #: data/mp/messages/resmessages1.rmsg:343
 msgid "New Paradigm Heavy Body"
-msgstr "Тяжелый корпус Новой Парадигмы"
+msgstr "Редизайн Тяжелого корпуса"
 
 #: data/base/messages/resmessages1.rmsg:379
 #: data/mp/messages/resmessages1.rmsg:344
 msgid "Less armor and body points than Python"
-msgstr "Менее бронированный и чем Питон"
+msgstr "Менее бронированный и крепкий,чем Питон"
 
 #: data/base/messages/resmessages1.rmsg:380
 #: data/base/messages/resmessages3.rmsg:556
@@ -2018,7 +2018,7 @@ msgstr "Все машины улучшаются автоматически"
 #: data/mp/messages/resmessages3.rmsg:543
 #: data/mp/messages/strings/resstrings.txt:606
 msgid "Vehicle Bodies Improved"
-msgstr "корпус машин улучшены"
+msgstr "корпуса машин улучшены"
 
 #: data/base/messages/resmessages1.rmsg:402
 #: data/base/messages/resmessages2.rmsg:435
@@ -2027,7 +2027,7 @@ msgstr "корпус машин улучшены"
 #: data/base/messages/strings/resstrings.txt:573
 #: data/mp/messages/strings/resstrings.txt:608
 msgid "Increases kinetic armor and body points"
-msgstr "Повышает кинетическую броню и здоровье"
+msgstr "Повышает кинетическую броню и живучесть"
 
 #: data/base/messages/resmessages1.rmsg:411
 #: data/base/messages/resmessages1.rmsg:422
@@ -2043,7 +2043,7 @@ msgstr "Доступен новый движитель"
 #: data/base/messages/resmessages1.rmsg:412
 #: data/mp/messages/resmessages1.rmsg:374
 msgid "Armored Half-tracks"
-msgstr "Бронированные полугусенницы"
+msgstr "Бронированные полугусеницы"
 
 #: data/base/messages/resmessages1.rmsg:413
 #: data/mp/messages/resmessages1.rmsg:375
@@ -2060,7 +2060,7 @@ msgstr "Амфибия движитель - Ховер"
 #: data/mp/messages/resmessages1.rmsg:385
 #: data/mp/messages/resmessages1.rmsg:405
 msgid "Speed: Fast"
-msgstr "Скорость: быстрая"
+msgstr "Скорость: высокая"
 
 #: data/base/messages/resmessages1.rmsg:425
 #: data/base/messages/resmessages1.rmsg:447
@@ -2106,7 +2106,7 @@ msgstr "Скорость: быстрая"
 #: data/mp/messages/strings/resstrings.txt:823
 #: data/mp/messages/strings/resstrings.txt:831
 msgid "Body Points: Low"
-msgstr "Бронирование: низкое"
+msgstr "Живучесть: слабая"
 
 #: data/base/messages/resmessages1.rmsg:434
 #: data/mp/messages/resmessages1.rmsg:394
@@ -2164,7 +2164,7 @@ msgstr "Лучшие цели: Бункеры, колесный транспор
 #: data/mp/messages/resmessages1.rmsg:456
 #: data/mp/messages/resmessagesall.rmsg:296
 msgid "Body Points: Very low"
-msgstr "Броня: очень низкое"
+msgstr "Живучесть: очень слабая"
 
 #: data/base/messages/resmessages1.rmsg:511
 #: data/mp/messages/resmessages1.rmsg:464
@@ -2286,7 +2286,7 @@ msgstr "Автоматизированная система перезарядк
 
 #: data/base/messages/resmessages1.rmsg:622
 msgid "Increases Mini-Rockets ROF"
-msgstr "Увеличение скорострельности миниракет"
+msgstr "Увеличивает скорострельность миниракет"
 
 #: data/base/messages/resmessages1.rmsg:632
 #: data/mp/messages/resmessages1.rmsg:574
@@ -2341,7 +2341,7 @@ msgstr "Кибер движитель улучшен"
 #: data/mp/messages/strings/resstrings.txt:647
 #: data/mp/messages/strings/resstrings.txt:657
 msgid "New armored construction"
-msgstr "новая бронированная пострйка"
+msgstr "новая бронированная постройка"
 
 #: data/base/messages/resmessages23.rmsg:6
 #: data/base/messages/resmessages2.rmsg:457
@@ -2372,7 +2372,7 @@ msgstr "новая бронированная пострйка"
 #: data/mp/messages/strings/resstrings.txt:648
 #: data/mp/messages/strings/resstrings.txt:658
 msgid "Increases Body Points"
-msgstr "Увеличение бронирования"
+msgstr "Увеличивает живучесть"
 
 #: data/base/messages/resmessages23.rmsg:16
 #: data/mp/messages/resmessages23.rmsg:14
@@ -2403,7 +2403,7 @@ msgstr "Все генераторы энергии автоматически у
 #: data/mp/messages/resmessages23.rmsg:64
 #: data/mp/messages/resmessages3.rmsg:404
 msgid "Improved fire detection systems"
-msgstr "Улучшены системы обнаружения огня"
+msgstr "Улучшенные системы обнаружения огня"
 
 #: data/base/messages/resmessages23.rmsg:59
 #: data/base/messages/resmessages23.rmsg:81
@@ -2529,12 +2529,12 @@ msgstr "выбери новые цели для атаки ВВС"
 #: data/mp/messages/resmessages3.rmsg:423
 #: data/mp/messages/strings/resstrings.txt:529
 msgid "VTOL Strike Improved"
-msgstr "Боевкая Башня ВВС улучшена"
+msgstr "Боевая Башня ВВС улучшена"
 
 #: data/base/messages/resmessages23.rmsg:104
 #: data/mp/messages/resmessages23.rmsg:94
 msgid "Improved target recognition systems"
-msgstr "Улучшены системы опознования цели"
+msgstr "Улучшенные системы опознавания цели"
 
 #: data/base/messages/resmessages23.rmsg:105
 #: data/base/messages/resmessages2.rmsg:391
@@ -2545,7 +2545,7 @@ msgstr "Улучшены системы опознования цели"
 #: data/mp/messages/resmessages3.rmsg:425
 #: data/mp/messages/strings/resstrings.txt:531
 msgid "Extends VTOL Strike Range"
-msgstr "увеличивает радиус действия Боевой Башнии ВВС"
+msgstr "увеличивает радиус действия Боевой Башни ВВС"
 
 #: data/base/messages/resmessages23.rmsg:106
 #: data/base/messages/resmessages2.rmsg:392
@@ -2645,7 +2645,7 @@ msgstr "улучшенный бомбприцел"
 
 #: data/base/messages/resmessages23.rmsg:137
 msgid "Laser designator paints and guides bombs to the target"
-msgstr "Лазер целеуказатель наводит бомбы на цель"
+msgstr "Лазерный целеуказатель наводит бомбы на цель"
 
 #: data/base/messages/resmessages23.rmsg:138
 #: data/base/messages/resmessages2.rmsg:622
@@ -2669,7 +2669,7 @@ msgstr "Все отсеки для бомб улучшаются автомат�
 #: data/base/messages/resmessages23.rmsg:148
 #: data/mp/messages/resmessages23.rmsg:134
 msgid "Robotic advances make new chaingun upgrade available"
-msgstr "Дстижения робототехники позволяют исследовать новый цепной механизм"
+msgstr "Достижения робототехники позволяют исследовать новый цепной механизм"
 
 #: data/base/messages/resmessages23.rmsg:159
 #: data/mp/messages/resmessages23.rmsg:144
@@ -2723,7 +2723,7 @@ msgstr "Термоброня киборгов улучшена"
 #: data/mp/messages/resmessages3.rmsg:4
 #: data/mp/messages/strings/resstrings.txt:46
 msgid "Heat resistant armored layers"
-msgstr "Тепловое сопротивление слоев брони"
+msgstr "Огнеупорное покрытие брони"
 
 #: data/base/messages/resmessages2.rmsg:6
 #: data/base/messages/resmessages3.rmsg:6
@@ -2764,7 +2764,7 @@ msgstr "Киборг - Штурмовик"
 #: data/mp/messages/resmessages2.rmsg:44
 #: data/mp/messages/strings/resstrings.txt:124
 msgid "High-tensile concrete reinforced with boron"
-msgstr "Высокоэластичный бетон, укрепленный Бором"
+msgstr "Высокоэластичный бетон, укрепленный бором"
 
 #: data/base/messages/resmessages2.rmsg:60
 #: data/base/messages/strings/resstrings.txt:120
@@ -2853,7 +2853,7 @@ msgstr "Бронированная установка Сотрясателя"
 #: data/mp/messages/resmessages2.rmsg:134
 #: data/mp/messages/strings/resstrings.txt:182
 msgid "Armored Pepperpot mortar battery pit"
-msgstr "Бронированная установка батареи Пеперпот"
+msgstr "Бронированная установка батареи Пепперпот"
 
 #: data/base/messages/resmessages2.rmsg:159
 #: data/base/messages/resmessages2.rmsg:170
@@ -2925,7 +2925,7 @@ msgstr "Усиленная точка с огнемётом Адовое пла�
 #: data/mp/messages/resmessages2.rmsg:194
 #: data/mp/messages/strings/resstrings.txt:246
 msgid "Armored strongpoint with Assault Cannon"
-msgstr "Укреплённый опорный пункт с штурмовой пушкой"
+msgstr "Укреплённый опорный пункт со штурмовой пушкой"
 
 #: data/base/messages/resmessages2.rmsg:225
 #: data/base/messages/strings/resstrings.txt:224
@@ -2939,14 +2939,14 @@ msgstr "Усиленная башня со Штурмовой пушкой"
 #: data/mp/messages/resmessages2.rmsg:214
 #: data/mp/messages/strings/resstrings.txt:316
 msgid "Armored hardpoint with Assault Gun"
-msgstr "Укреплённая оборонительная точка с штурмовым орудием"
+msgstr "Укреплённая оборонительная точка со штурмовым орудием"
 
 #: data/base/messages/resmessages2.rmsg:247
 #: data/base/messages/strings/resstrings.txt:294
 #: data/mp/messages/resmessages2.rmsg:224
 #: data/mp/messages/strings/resstrings.txt:322
 msgid "Armored hardpoint with Assault Cannon"
-msgstr "Укреплённая оборонительная точка с штурмовой пушкой"
+msgstr "Укреплённая оборонительная точка со штурмовой пушкой"
 
 #: data/base/messages/resmessages2.rmsg:258
 #: data/base/messages/strings/resstrings.txt:302
@@ -3119,7 +3119,7 @@ msgstr "Новая система распознавания цели"
 #: data/mp/messages/resmessages2.rmsg:363
 #: data/mp/messages/strings/resstrings.txt:562
 msgid "Collective Light Body"
-msgstr "Легкий корпус Альянса"
+msgstr "Сборный Легкий корпус"
 
 #: data/base/messages/resmessages2.rmsg:401
 #: data/base/messages/resmessages3.rmsg:533
@@ -3149,7 +3149,7 @@ msgstr "Дороже и дольше производить, чем Гадюку
 #: data/mp/messages/resmessages2.rmsg:373
 #: data/mp/messages/strings/resstrings.txt:574
 msgid "Collective Medium Body"
-msgstr "Средний корпус Альянса"
+msgstr "Сборный средний корпус"
 
 #: data/base/messages/resmessages2.rmsg:412
 #: data/base/messages/resmessages3.rmsg:544
@@ -3361,7 +3361,7 @@ msgstr "Обнаруживает и берёт на прицел, отслежи
 #: data/mp/messages/resmessages3.rmsg:633
 #: data/mp/messages/strings/resstrings.txt:704
 msgid "AA Flak Upgrade"
-msgstr "Модерницация ПВО"
+msgstr "Модернизация ПВО"
 
 #: data/base/messages/resmessages2.rmsg:555
 #: data/base/messages/strings/resstrings.txt:670
@@ -4032,7 +4032,7 @@ msgstr "Ионизированный турбинный двигатель"
 #: data/mp/messages/resmessages3.rmsg:604
 #: data/mp/messages/resmessages3.rmsg:614
 msgid "New power efficient propulsion"
-msgstr "Новый энергоэффиктивный движитель"
+msgstr "Новый энергоэффективный движитель"
 
 #: data/base/messages/resmessages3.rmsg:666
 #: data/base/messages/resmessages3.rmsg:677
@@ -5283,7 +5283,7 @@ msgstr "НЕКСУС получил доступ к ядерным ракета�
 
 #: data/base/messages/strings/cam3strings.txt:9
 msgid "Take your forces to the Northern Sector"
-msgstr "отправте ваши войска в Северный сектор."
+msgstr "отправьте ваши войска в Северный сектор."
 
 #: data/base/messages/strings/cam3strings.txt:10
 #: data/base/sequenceaudio/cam3/c003.txa:15
@@ -5402,7 +5402,7 @@ msgstr "МИССИЯ НА ВЫЛЕТЕ: Обнаружена команда Ал
 
 #: data/base/messages/strings/cam3strings.txt:65
 msgid "Take a scout force to these coordinates and evaluate the situation."
-msgstr "Отправте группу разведки по этим координатам и оцените ситуацию."
+msgstr "Отправьте группу разведки по этим координатам и оцените ситуацию."
 
 #: data/base/messages/strings/cam3strings.txt:66
 msgid "Determine whether they are Team Alpha. If so, rescue and escort them back to the LZ."
@@ -8541,17 +8541,17 @@ msgstr "Продвинутая боеголовка Mk3"
 #: data/base/messages/strings/names.txt:1108
 #: data/mp/messages/strings/names.txt:1120
 msgid "Advanced Missile Allocation System"
-msgstr "Система обнаружения ракет"
+msgstr "Продвинутая система размещения ракет"
 
 #: data/base/messages/strings/names.txt:1109
 #: data/mp/messages/strings/names.txt:1121
 msgid "Advanced Missile Allocation System Mk2"
-msgstr "Система обнаружения ракет Мk2"
+msgstr "Продвинутая система размещения ракет Мk2"
 
 #: data/base/messages/strings/names.txt:1110
 #: data/mp/messages/strings/names.txt:1122
 msgid "Advanced Missile Allocation System Mk3"
-msgstr "Система обнаружения ракет Мk3"
+msgstr "Продвинутая система размещения ракет Мk3"
 
 #: data/base/messages/strings/names.txt:1111
 #: data/mp/messages/strings/names.txt:1123
