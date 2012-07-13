@@ -222,7 +222,7 @@ static const char* treapFindKeyRec(TREAP_NODE const * const psNode, const char *
 		return key;
 	}
 
-	return treapFindKeyRec(psNode->psLeft, string);
+	return treapFindKeyRec(psNode->psRight, string);
 }
 
 const char* treapFindKey(TREAP_NODE** psTreap, const char* string)
