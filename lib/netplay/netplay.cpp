@@ -576,7 +576,7 @@ void NETfixDuplicatePlayerNames(void)
 	for (i = 1; i != MAX_PLAYERS; ++i)
 	{
 		sstrcpy(name, NetPlay.players[i].name);
-		if (name[0] == '\0')
+		if (name[0] == '\0' || !NetPlay.players[i].allocated)
 		{
 			continue;  // Ignore empty names.
 		}
