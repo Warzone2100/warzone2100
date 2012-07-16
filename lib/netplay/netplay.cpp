@@ -795,7 +795,7 @@ static bool NETsendGAMESTRUCT(Socket* sock, const GAMESTRUCT* ourgamestruct)
 		return false;
 	}
 
-	debug(LOG_NET, "sent GAMESTRUCT size=%ld game is=%ld", sizeof(buf), sizeof(GAMESTRUCT));
+	debug(LOG_NET, "sent GAMESTRUCT size=%u game is=%u", (unsigned int)sizeof(buf), (unsigned int)sizeof(GAMESTRUCT));
 
 	return true;
 }
