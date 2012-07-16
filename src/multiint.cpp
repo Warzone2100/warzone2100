@@ -3262,6 +3262,7 @@ void startMultiplayerGame(void)
 		createLimitSet();
 		debug(LOG_NET,"sending our options to all clients");
 		sendOptions();
+		NETlaunched();								// tell server we are launching the game
 		NEThaltJoining();							// stop new players entering.
 		ingame.TimeEveryoneIsInGame = 0;
 		ingame.isAllPlayersDataOK = false;

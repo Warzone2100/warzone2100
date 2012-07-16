@@ -30,6 +30,16 @@
 #include "nettypes.h"
 #include <physfs.h>
 
+// platform host is
+#if defined WZ_OS_WIN
+#define HOST_PLATFORM 1
+#elif defined WZ_OS_UNIX
+#define HOST_PLATFORM 2
+#elif defined WZ_OS_MAC
+#define HOST_PLATFORM 4
+#else
+#define HOST_PLATFORM 6
+#endif
 // Lobby Connection errors
 
 enum LOBBY_ERROR_TYPES
@@ -124,6 +134,7 @@ enum MESSAGE_TYPES
 #define MaxMsgSize		16384		// max size of a message in bytes.
 #define	StringSize		64			// size of strings used.
 #define MaxGames		11			// max number of concurrently playable games to allow.
+#define IPSize			40			// size of IPv6/IPv4
 #define extra_string_size	159		// extra 199 char for future use
 #define map_string_size		40
 #define	hostname_string_size	40
@@ -174,8 +185,10 @@ struct GAMESTRUCT
 	// Game ID, used on the lobby server to link games with multiple address families to eachother
 	uint32_t	gameId;
 	uint32_t	limits;							// holds limits bitmask (NO_VTOL|NO_TANKS|NO_BORGS)
-	uint32_t	future3;						// for future use
+	uint32_t	os;								// OS platform
 	uint32_t	future4;						// for future use
+	char		Clientnames[StringSize * MAX_PLAYERS];	// server only use, not used for clients at this time
+	char		ClientIPs[IPSize * MAX_PLAYERS];		// server only use, not used for clients at this time
 };
 
 // ////////////////////////////////////////////////////////////////////////
@@ -319,6 +332,7 @@ extern bool	NEThostGame(const char* SessionName, const char* PlayerName,// host 
 			    SDWORD one, SDWORD two, SDWORD three, SDWORD four, UDWORD plyrs);
 extern bool	NETchangePlayerName(UDWORD player, char *newName);// change a players name.
 void            NETfixDuplicatePlayerNames(void);  // Change a player's name automatically, if there are duplicates.
+extern void NETlaunched(void);	// host started a game, and we are telling the lobby server.
 
 #include "netlog.h"
 
