@@ -3786,7 +3786,7 @@ bool startMultiOptions(bool bReenter)
 			sstrcpy(game.map, challenge.value("Map", game.map).toString().toAscii().constData());
 			game.hash = levGetMapNameHash(game.map);
 			game.maxPlayers = challenge.value("MaxPlayers", game.maxPlayers).toInt();	// TODO, read from map itself, not here!!
-			game.scavengers = challenge.value("Scavengers", game.scavengers).toInt();
+			game.scavengers = challenge.value("Scavengers", game.scavengers).toBool();
 			game.alliance = ALLIANCES_TEAMS;
 			netPlayersUpdated = true;
 			mapDownloadProgress = 100;
