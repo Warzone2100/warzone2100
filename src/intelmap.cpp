@@ -1286,7 +1286,6 @@ void intDisplayPIEView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL
 
 		OpenButtonRender((UWORD)(xOffset+Form->x), (UWORD)(yOffset+Form->y),
 			Form->width, Form->height);
-		//OpenButtonRender(Form->x, Form->y,Form->width, Form->height);
 
 		if (((VIEWDATA *)psMessage->pViewData)->type != VIEW_RES)
 		{

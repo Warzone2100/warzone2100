@@ -188,7 +188,6 @@ static bool actionInAttackRange(DROID *psDroid, BASE_OBJECT *psObj, int weapon_s
 		switch (psDroid->secondaryOrder & DSS_ARANGE_MASK)
 		{
 		case DSS_ARANGE_DEFAULT:
-			//if (psStats->shortHit > psStats->longHit)
 			if (weaponShortHit(psStats, psDroid->player) > weaponLongHit(psStats, psDroid->player))
 			{
 				rangeSq = psStats->shortRange * psStats->shortRange;

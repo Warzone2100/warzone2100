@@ -81,13 +81,11 @@
 
 // Is a clickable form widget hilited, either because the cursor is over it or it is flashing.
 //
-//#define formIsHilite(p) ( (((W_CLICKFORM*)p)->state & WCLICK_HILITE) || (((W_CLICKFORM*)p)->state & WCLICK_FLASHON) )
 #define formIsHilite(p) 	(((W_CLICKFORM*)p)->state & WCLICK_HILITE)
 #define formIsFlashing(p)	(((W_CLICKFORM*)p)->state & WCLICK_FLASHON)
 
 // Is a button widget hilited, either because the cursor is over it or it is flashing.
 //
-//#define buttonIsHilite(p) ( (((W_BUTTON*)p)->state & WBUTS_HILITE) ||	(((W_BUTTON*)p)->state & WBUTS_FLASHON) )
 #define buttonIsHilite(p) 	(((W_BUTTON*)p)->state & WBUTS_HILITE)
 #define buttonIsFlashing(p)  (((W_BUTTON*)p)->state & WBUTS_FLASHON)
 
@@ -132,8 +130,6 @@ STRUCTURE *droidGetCommandFactory(DROID *psDroid);
 
 static SDWORD ButtonDrawXOffset;
 static SDWORD ButtonDrawYOffset;
-
-static void DeleteButtonData(void);
 
 
 // Set audio IDs for form opening/closing anims.
@@ -1096,8 +1092,6 @@ void intDisplayStatsButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_
 			if(Down)
 			{
 				CurrentStatsTemplate = Stat;
-//				CurrentStatsShape = Object;
-//				CurrentStatsIndex = (SWORD)IMDIndex;
 			}
 
 		}
@@ -1107,8 +1101,6 @@ void intDisplayStatsButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_
 			//BLANK button for now - AB 9/1/98
 			Object = NULL;
 			CurrentStatsTemplate = NULL;
-//			CurrentStatsShape = NULL;
-//			CurrentStatsIndex = -1;
 		}
 
 
@@ -1137,8 +1129,6 @@ void intDisplayStatsButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_
 }
 
 
-
-
 void RenderToButton(IMAGEFILE *ImageFile,UWORD ImageID,void *Object,UDWORD Player,
 					RENDERED_BUTTON *Buffer,bool Down, UDWORD IMDType, UDWORD buttonType)
 {
@@ -1154,8 +1144,6 @@ void RenderBlankToButton(RENDERED_BUTTON *Buffer,bool Down, UDWORD buttonType)
 {
 	CreateBlankButton(Buffer,Down,buttonType);
 }
-
-
 
 
 void AdjustTabFormSize(W_TABFORM *Form,UDWORD *x0,UDWORD *y0,UDWORD *x1,UDWORD *y1)
@@ -1306,7 +1294,6 @@ void intClosePlainForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL
 }
 
 
-
 void intDisplayPlainForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
 {
 	W_TABFORM *Form = (W_TABFORM*)psWidget;
@@ -1379,16 +1366,10 @@ void intDisplayImageHilight(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ
 	switch(psWidget->type) {
 		case WIDG_FORM:
 			Hilight = formIsHilite(psWidget);
-//			if( ((W_CLICKFORM*)psWidget)->state & WCLICK_HILITE) ||  {
-//				Hilight = true;
-//			}
 			break;
 
 		case WIDG_BUTTON:
 			Hilight = buttonIsHilite(psWidget);
-//			if( ((W_BUTTON*)psWidget)->state & WBUTS_HILITE) {
-//				Hilight = true;
-//			}
 			break;
 
 		case WIDG_EDITBOX:
@@ -1439,9 +1420,6 @@ static void GetButtonState(WIDGET *psWidget,bool *Hilight,UDWORD *Down,bool *Gre
 	switch(psWidget->type) {
 		case WIDG_FORM:
 			*Hilight = formIsHilite(psWidget);
-//			if( ((W_CLICKFORM*)psWidget)->state & WCLICK_HILITE) {
-//				Hilight = true;
-//			}
 			if( ((W_CLICKFORM*)psWidget)->state & (WCLICK_DOWN | WCLICK_LOCKED | WCLICK_CLICKLOCK)) {
 				*Down = 1;
 			}
@@ -1452,9 +1430,6 @@ static void GetButtonState(WIDGET *psWidget,bool *Hilight,UDWORD *Down,bool *Gre
 
 		case WIDG_BUTTON:
 			*Hilight = buttonIsHilite(psWidget);
-//			if( ((W_BUTTON*)psWidget)->state & WBUTS_HILITE) {
-//				*Hilight = true;
-//			}
 			if( ((W_BUTTON*)psWidget)->state & (WBUTS_DOWN | WBUTS_LOCKED | WBUTS_CLICKLOCK)) {
 				*Down = 1;
 			}
@@ -1517,23 +1492,11 @@ void intDisplayButtonFlash(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_
 {
 	UDWORD x = xOffset+psWidget->x;
 	UDWORD y = yOffset+psWidget->y;
-	//bool Hilight = false;
-	//UDWORD Down = 0;
 	UWORD ImageID;
 
 	ASSERT( psWidget->type == WIDG_BUTTON,"intDisplayButtonFlash : Not a button" );
 
-	/* if( ((W_BUTTON*)psWidget)->state & WBUTS_HILITE)
-	{
-		Hilight = true;
-	}
-
-	if( ((W_BUTTON*)psWidget)->state & (WBUTS_DOWN | WBUTS_LOCKED | WBUTS_CLICKLOCK))
-	{
-		Down = 1;
-	} */
-
-	if ( /* Down && */ (gameTime2/250) % 2 == 0 )
+	if ((gameTime2 / 250) % 2 == 0)
 	{
 		ImageID = UNPACKDWORD_TRI_B(psWidget->UserData);
 	}
@@ -1559,8 +1522,8 @@ void intDisplayReticuleButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, 
 
 	ASSERT(psWidget->type == WIDG_BUTTON, "Not a button");
 
-//	iV_DrawImage(IntImages,ImageID,x,y);
-	if(((W_BUTTON*)psWidget)->state & WBUTS_GREY) {
+	if (((W_BUTTON*)psWidget)->state & WBUTS_GREY)
+	{
 		iV_DrawImage(IntImages,IMAGE_RETICULE_GREY,x,y);
 		return;
 	}
@@ -1669,10 +1632,6 @@ void intDisplayButtonPressed(WIDGET *psWidget, UDWORD xOffset,
 	}
 
 	Hilight = (UBYTE)buttonIsHilite(psButton);
-//	if (psButton->state & WBUTS_HILITE)
-//	{
-//		Hilight = 1;
-//	}
 
 	iV_DrawImage(IntImages,ImageID,x,y);
 	if (Hilight)
@@ -1703,10 +1662,6 @@ void intDisplayDPButton(WIDGET *psWidget, UDWORD xOffset,
 		}
 
 		hilight = (UBYTE)buttonIsHilite(psButton);
-//		if (psButton->state & WBUTS_HILITE)
-//		{
-//			hilight = true;
-//		}
 
 		switch(psStruct->pStructureType->type)
 		{
@@ -1799,7 +1754,6 @@ void intDisplayEditBox(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL
 }
 
 
-
 void intDisplayNumber(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
 {
 	W_LABEL		*Label = (W_LABEL*)psWidget;
@@ -1854,7 +1808,37 @@ void intInitialiseGraphics(void)
 //
 void interfaceDeleteGraphics(void)
 {
-	DeleteButtonData();
+	unsigned int i;
+
+	// Setting all these pointers may, or may not be necessary, but it surely is safe
+	// Look above (near the declaration of .*Surfaces) for a detailed description of why this .*Surfaces stuff is bad
+	for(i = 0; i < NUM_OBJECTSURFACES; ++i)
+	{
+		free(ObjectSurfaces[i].Buffer);
+		ObjectSurfaces[i].Buffer = NULL;
+		iV_SurfaceDestroy(ObjectSurfaces[i].Surface);
+	}
+
+	for(i = 0; i < NUM_TOPICSURFACES; ++i)
+	{
+		free(TopicSurfaces[i].Buffer);
+		TopicSurfaces[i].Buffer = NULL;
+		iV_SurfaceDestroy(TopicSurfaces[i].Surface);
+	}
+
+	for(i = 0; i < NUM_STATSURFACES; ++i)
+	{
+		free(StatSurfaces[i].Buffer);
+		StatSurfaces[i].Buffer = NULL;
+		iV_SurfaceDestroy(StatSurfaces[i].Surface);
+	}
+
+	for(i = 0; i < NUM_SYSTEM0SURFACES; ++i)
+	{
+		free(System0Surfaces[i].Buffer);
+		System0Surfaces[i].Buffer = NULL;
+		iV_SurfaceDestroy(System0Surfaces[i].Surface);
+	}
 }
 
 
@@ -2066,44 +2050,6 @@ SDWORD GetSystem0Buffer(void)
 	}
 
 	return -1;
-}
-
-/**
- * Free up surfaces and data from interface buttons.
- */
-void DeleteButtonData()
-{
-	unsigned int i;
-
-	// Setting all these pointers may, or may not be necessary, but it surely is safe
-	// Look above (near the declaration of .*Surfaces) for a detailed description of why this .*Surfaces stuff is bad
-	for(i = 0; i < NUM_OBJECTSURFACES; ++i)
-	{
-		free(ObjectSurfaces[i].Buffer);
-		ObjectSurfaces[i].Buffer = NULL;
-		iV_SurfaceDestroy(ObjectSurfaces[i].Surface);
-	}
-
-	for(i = 0; i < NUM_TOPICSURFACES; ++i)
-	{
-		free(TopicSurfaces[i].Buffer);
-		TopicSurfaces[i].Buffer = NULL;
-		iV_SurfaceDestroy(TopicSurfaces[i].Surface);
-	}
-
-	for(i = 0; i < NUM_STATSURFACES; ++i)
-	{
-		free(StatSurfaces[i].Buffer);
-		StatSurfaces[i].Buffer = NULL;
-		iV_SurfaceDestroy(StatSurfaces[i].Surface);
-	}
-
-	for(i = 0; i < NUM_SYSTEM0SURFACES; ++i)
-	{
-		free(System0Surfaces[i].Buffer);
-		System0Surfaces[i].Buffer = NULL;
-		iV_SurfaceDestroy(System0Surfaces[i].Surface);
-	}
 }
 
 
@@ -2462,18 +2408,8 @@ void CreateIMDButton(IMAGEFILE *ImageFile, UWORD ImageID, void *Object, UDWORD P
 //
 void CreateImageButton(IMAGEFILE *ImageFile,UWORD ImageID,RENDERED_BUTTON *Buffer,bool Down, UDWORD buttonType)
 {
-	UDWORD ox,oy;
-
-	ox = oy = 0;
-	/*if(Down)
-	{
-		ox = oy = 2;
-	} */
-
 	ClearButton(Down,0, buttonType);
-
-	iV_DrawImage(ImageFile,ImageID,ButXPos+ox,ButYPos+oy);
-//	DrawTransImageSR(Image,ox,oy);
+	iV_DrawImage(ImageFile, ImageID, ButXPos, ButYPos);
 }
 
 
@@ -2502,7 +2438,6 @@ bool DroidIsDemolishing(DROID *Droid)
 	BASE_STATS	*Stats;
 	UDWORD x,y;
 
-	//if(droidType(Droid) != DROID_CONSTRUCT) return false;
 	if (!(droidType(Droid) == DROID_CONSTRUCT ||
 		droidType(Droid) == DROID_CYBORG_CONSTRUCT))
 	{
@@ -2524,7 +2459,6 @@ bool DroidIsDemolishing(DROID *Droid)
 // Returns true if the droid is currently repairing another droid.
 bool DroidIsRepairing(DROID *Droid)
 {
-	//if(droidType(Droid) != DROID_REPAIR)
 	if (!(droidType(Droid) == DROID_REPAIR
 	   || droidType(Droid) == DROID_CYBORG_REPAIR))
 	{
@@ -2546,7 +2480,6 @@ bool DroidIsBuilding(DROID *Droid)
 	BASE_STATS	*Stats;
 	UDWORD x,y;
 
-	//if(droidType(Droid) != DROID_CONSTRUCT) return false;
     if (!(droidType(Droid) == DROID_CONSTRUCT ||
         droidType(Droid) == DROID_CYBORG_CONSTRUCT))
     {
@@ -2575,7 +2508,6 @@ bool DroidGoingToBuild(DROID *Droid)
 	BASE_STATS	*Stats;
 	UDWORD x,y;
 
-	//if(droidType(Droid) != DROID_CONSTRUCT) return false;
     if (!(droidType(Droid) == DROID_CONSTRUCT ||
         droidType(Droid) == DROID_CYBORG_CONSTRUCT))
     {
@@ -2765,7 +2697,6 @@ bool StatIsFeature(BASE_STATS const *Stat)
 iIMDShape *StatGetStructureIMD(BASE_STATS *Stat,UDWORD Player)
 {
 	(void)Player;
-	//return buildingIMDs[aBuildingIMDs[Player][((STRUCTURE_STATS*)Stat)->type]];
 	return ((STRUCTURE_STATS*)Stat)->pIMD[0];
 }
 
@@ -2779,53 +2710,44 @@ SDWORD StatIsComponent(BASE_STATS *Stat)
 {
 	if(Stat->ref >= REF_BODY_START &&
 				 Stat->ref < REF_BODY_START + REF_RANGE) {
-		//return true;
 		return COMP_BODY;
 	}
 
 	if(Stat->ref >= REF_BRAIN_START &&
 				 Stat->ref < REF_BRAIN_START + REF_RANGE) {
-		//return true;
 		return COMP_BRAIN;
 	}
 
 	if(Stat->ref >= REF_PROPULSION_START &&
 				 Stat->ref < REF_PROPULSION_START + REF_RANGE) {
-		//return true;
 		return COMP_PROPULSION;
 	}
 
 	if(Stat->ref >= REF_WEAPON_START &&
 				 Stat->ref < REF_WEAPON_START + REF_RANGE) {
-		//return true;
 		return COMP_WEAPON;
 	}
 
 	if(Stat->ref >= REF_SENSOR_START &&
 				 Stat->ref < REF_SENSOR_START + REF_RANGE) {
-		//return true;
 		return COMP_SENSOR;
 	}
 
 	if(Stat->ref >= REF_ECM_START &&
 				 Stat->ref < REF_ECM_START + REF_RANGE) {
-		//return true;
 		return COMP_ECM;
 	}
 
 	if(Stat->ref >= REF_CONSTRUCT_START &&
 				 Stat->ref < REF_CONSTRUCT_START + REF_RANGE) {
-		//return true;
 		return COMP_CONSTRUCT;
 	}
 
 	if(Stat->ref >= REF_REPAIR_START &&
 				 Stat->ref < REF_REPAIR_START + REF_RANGE) {
-		//return true;
 		return COMP_REPAIRUNIT;
 	}
 
-	//return false;
 	return COMP_UNKNOWN;
 }
 
@@ -2841,14 +2763,8 @@ bool StatGetComponentIMD(BASE_STATS *Stat, SDWORD compID,iIMDShape **CompIMD,iIM
 	case COMP_BODY:
 		*CompIMD = ((COMPONENT_STATS *)Stat)->pIMD;
 		return true;
-//		return ((COMPONENT_STATS *)Stat)->pIMD;
 
 	case COMP_BRAIN:
-//		ASSERT( ((UBYTE*)Stat >= (UBYTE*)asCommandDroids) &&
-//				 ((UBYTE*)Stat < (UBYTE*)asCommandDroids + sizeof(asCommandDroids)),
-//				 "StatGetComponentIMD: This 'BRAIN_STATS' is actually meant to be a 'COMMAND_DROID'" );
-
-//		psWStat = asWeaponStats + ((COMMAND_DROID *)Stat)->nWeapStat;
 		psWStat = ((BRAIN_STATS *)Stat)->psWeaponStat;
 		*MountIMD = psWStat->pMountGraphic;
 		*CompIMD = psWStat->pIMD;
@@ -2898,7 +2814,6 @@ bool StatIsResearch(BASE_STATS *Stat)
 				REF_RESEARCH_START + REF_RANGE);
 }
 
-//void StatGetResearchImage(BASE_STATS *psStat, SDWORD *Image,iIMDShape **Shape, bool drawTechIcon)
 void StatGetResearchImage(BASE_STATS *psStat, SDWORD *Image, iIMDShape **Shape,
                           BASE_STATS **ppGraphicData, bool drawTechIcon)
 {
@@ -2994,7 +2909,6 @@ void intDisplayDesignPowerBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, 
 }
 
 
-
 // Widget callback function to play an audio track.
 //
 #define WIDGETBEEPGAP (200)	// 200 milliseconds between each beep please
@@ -3049,12 +2963,6 @@ void intDisplayTransportButton(WIDGET *psWidget, UDWORD xOffset,
 		Hilight = formIsHilite(Form);
 
 		Buffer->State = Form->state;
-
-		//psDroid = (DROID*)Buffer->Data;
-
-		//there should always be a droid associated with the button
-		//ASSERT( psDroid != NULL,
-		//	"intDisplayTransportButton: invalid droid pointer" );
 
 		if (psDroid)
 		{
@@ -3328,10 +3236,6 @@ void intUpdateQuantitySlider(WIDGET *psWidget, W_CONTEXT *psContext)
 			}
 		}
 	}
-}
-
-void intUpdateOptionText(WIDGET *psWidget, W_CONTEXT *psContext)
-{
 }
 
 void intDisplayResSubGroup(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
