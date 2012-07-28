@@ -5908,7 +5908,7 @@ bool intAddProximityButton(PROXIMITY_DISPLAY *psProxDisp, UDWORD inc)
 		{							// go down the prox msgs and see if it's free.
 			for (psProxDisp2 = apsProxDisp[selectedPlayer]; psProxDisp2 && psProxDisp2->buttonID != cnt; psProxDisp2 = psProxDisp2->psNext) {}
 
-			if(psProxDisp == NULL)	// value was unused.
+			if(psProxDisp2 == NULL)	// value was unused.
 			{
 				sBFormInit.id = cnt;
 				break;
