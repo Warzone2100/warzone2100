@@ -3005,7 +3005,6 @@ bool secondarySupported(DROID *psDroid, SECONDARY_ORDER sec)
 		}
 		break;
 
-	case DSO_ATTACK_RANGE:
 	case DSO_ATTACK_LEVEL:
 		if (psDroid->droidType == DROID_REPAIR || psDroid->droidType == DROID_CYBORG_REPAIR)
 		{
@@ -3062,9 +3061,6 @@ SECONDARY_STATE secondaryGetState(DROID *psDroid, SECONDARY_ORDER sec, QUEUE_MOD
 
 	switch (sec)
 	{
-	case DSO_ATTACK_RANGE:
-		return (SECONDARY_STATE)(state & DSS_ARANGE_MASK);
-		break;
 	case DSO_REPAIR_LEVEL:
 		return (SECONDARY_STATE)(state & DSS_REPLEV_MASK);
 		break;
@@ -3231,10 +3227,6 @@ bool secondarySetState(DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STATE Stat
 	uint32_t secondarySet = 0;
 	switch (sec)
 	{
-		case DSO_ATTACK_RANGE:
-			secondaryMask = DSS_ARANGE_MASK;
-			secondarySet = State;
-			break;
 		case DSO_REPAIR_LEVEL:
 			secondaryMask = DSS_REPLEV_MASK;
 			secondarySet = State;
@@ -3321,6 +3313,7 @@ bool secondarySetState(DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STATE Stat
 				secondarySet |= DSS_HALT_GUARD;
 			}
 			break;
+		case DSO_UNUSED:
 		case DSO_FIRE_DESIGNATOR:
 			// Do nothing.
 			break;
@@ -3353,10 +3346,6 @@ bool secondarySetState(DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STATE Stat
 	retVal = true;
 	switch (sec)
 	{
-		case DSO_ATTACK_RANGE:
-			CurrState = (CurrState & ~DSS_ARANGE_MASK) | State;
-			break;
-
 		case DSO_REPAIR_LEVEL:
 			CurrState = (CurrState & ~DSS_REPLEV_MASK) | State;
 			psDroid->secondaryOrder = CurrState;
@@ -3760,7 +3749,6 @@ void secondarySetAverageGroupState(UDWORD player, UDWORD group)
 	#define MAX_ORDERS	4
 	struct { SECONDARY_ORDER order; UDWORD mask; } aOrders[MAX_ORDERS] =
 	{
-		{ DSO_ATTACK_RANGE, DSS_ARANGE_MASK },
 		{ DSO_REPAIR_LEVEL, DSS_REPLEV_MASK },
 		{ DSO_ATTACK_LEVEL, DSS_ALEV_MASK },
 		{ DSO_HALTTYPE, DSS_HALT_MASK }
@@ -4003,11 +3991,8 @@ bool setFactoryState(STRUCTURE *psStruct, SECONDARY_ORDER sec, SECONDARY_STATE S
 	CurrState = psFactory->secondaryOrder;
 
 	retVal = true;
-	switch (sec) {
-		case DSO_ATTACK_RANGE:
-			CurrState = (CurrState & ~DSS_ARANGE_MASK) | State;
-			break;
-
+	switch (sec)
+	{
 		case DSO_REPAIR_LEVEL:
 			CurrState = (CurrState & ~DSS_REPLEV_MASK) | State;
 			break;
@@ -4066,9 +4051,6 @@ bool getFactoryState(STRUCTURE *psStruct, SECONDARY_ORDER sec, SECONDARY_STATE *
 
 	switch (sec)
 	{
-	case DSO_ATTACK_RANGE:
-		*pState = (SECONDARY_STATE)(state & DSS_ARANGE_MASK);
-		break;
 	case DSO_REPAIR_LEVEL:
 		*pState = (SECONDARY_STATE)(state & DSS_REPLEV_MASK);
 		break;

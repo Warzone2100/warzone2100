@@ -185,31 +185,14 @@ static bool actionInAttackRange(DROID *psDroid, BASE_OBJECT *psObj, int weapon_s
 	}
 	else
 	{
-		switch (psDroid->secondaryOrder & DSS_ARANGE_MASK)
+		if (weaponShortHit(psStats, psDroid->player) > weaponLongHit(psStats, psDroid->player))
 		{
-		case DSS_ARANGE_DEFAULT:
-			if (weaponShortHit(psStats, psDroid->player) > weaponLongHit(psStats, psDroid->player))
-			{
-				rangeSq = psStats->shortRange * psStats->shortRange;
-			}
-			else
-			{
-				longRange = proj_GetLongRange(psStats);
-				rangeSq = longRange * longRange;
-			}
-			break;
-		case DSS_ARANGE_SHORT:
 			rangeSq = psStats->shortRange * psStats->shortRange;
-			break;
-		case DSS_ARANGE_LONG:
+		}
+		else
+		{
 			longRange = proj_GetLongRange(psStats);
 			rangeSq = longRange * longRange;
-			break;
-		default:
-			ASSERT(!"unknown attackrange order", "unknown attack range order");
-			longRange = proj_GetLongRange(psStats);
-			rangeSq = longRange * longRange;
-			break;
 		}
 	}
 

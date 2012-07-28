@@ -145,10 +145,6 @@ void kf_SelectAllLandCombatUnits();
 void kf_SelectAllCombatCyborgs();
 extern void	kf_SelectAllSameType( void );
 
-extern void	kf_SetDroidRangeShort( void );
-extern void	kf_SetDroidRangeDefault( void );
-extern void	kf_SetDroidRangeLong( void );
-
 extern void	kf_SetDroidRetreatMedium( void );
 extern void	kf_SetDroidRetreatHeavy( void );
 extern void	kf_SetDroidRetreatNever( void );

@@ -196,20 +196,6 @@ ORDERBUTTONS OrderButtons[NUM_ORDERS]=
 {
 	{
 		ORDBUTCLASS_NORMAL,
-		DSO_ATTACK_RANGE,
-		DSS_ARANGE_MASK,
-		ORD_BTYPE_RADIO,
-		ORD_JUSTIFY_CENTER | ORD_JUSTIFY_NEWLINE,
-		IDORDER_ATTACK_RANGE,
-		3,0,
-		{IMAGE_ORD_RANGE3UP,	IMAGE_ORD_RANGE1UP,	IMAGE_ORD_RANGE2UP},
-		{IMAGE_ORD_RANGE3UP,	IMAGE_ORD_RANGE1UP,	IMAGE_ORD_RANGE2UP},
-		{IMAGE_DES_HILIGHT,		IMAGE_DES_HILIGHT,	IMAGE_DES_HILIGHT},
-		{STR_DORD_RANGE3,	STR_DORD_RANGE1,	STR_DORD_RANGE2},
-		{DSS_ARANGE_DEFAULT,	DSS_ARANGE_SHORT,	DSS_ARANGE_LONG}
-	},
-	{
-		ORDBUTCLASS_NORMAL,
 		DSO_REPAIR_LEVEL,
 		DSS_REPLEV_MASK,
 		ORD_BTYPE_RADIO,
@@ -529,14 +515,12 @@ static std::vector<AVORDER> buildStructureOrderList(STRUCTURE *psStructure)
 
 	//this can be hard-coded!
 	std::vector<AVORDER> orders(4);
-	orders[0].OrderIndex = 0;//DSO_ATTACK_RANGE;
-	orders[1].OrderIndex = 1;//DSO_REPAIR_LEVEL;
-	orders[2].OrderIndex = 2;//DSO_ATTACK_LEVEL;
-	orders[3].OrderIndex = 5;//DSO_HALTTYPE;
+	orders[0].OrderIndex = 1;//DSO_REPAIR_LEVEL;
+	orders[1].OrderIndex = 2;//DSO_ATTACK_LEVEL;
+	orders[2].OrderIndex = 5;//DSO_HALTTYPE;
 
 	return orders;
 }
-
 
 // return the state for an order for all the units selected
 // if there are multiple states then don't return a state

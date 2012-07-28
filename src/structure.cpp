@@ -2356,10 +2356,6 @@ static bool structPlaceDroid(STRUCTURE *psStructure, DROID_TEMPLATE *psTempl,
 		{
 			uint32_t newState = psStructure->pFunctionality->factory.secondaryOrder;
 			uint32_t diff = newState ^ psNewDroid->secondaryOrder;
-			if ((diff & DSS_ARANGE_MASK) != 0)
-			{  // TODO Should synchronise factory.secondaryOrder and flag positions.
-				secondarySetState(psNewDroid, DSO_ATTACK_RANGE, (SECONDARY_STATE)(newState & DSS_ARANGE_MASK));
-			}
 			if ((diff & DSS_REPLEV_MASK) != 0)
 			{
 				secondarySetState(psNewDroid, DSO_REPAIR_LEVEL, (SECONDARY_STATE)(newState & DSS_REPLEV_MASK));

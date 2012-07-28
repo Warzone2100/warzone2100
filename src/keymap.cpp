@@ -159,15 +159,15 @@ _keymapsave keyMapSaveTable[] =
 	kf_SetDroidAttackReturn ,
 	kf_SetDroidAttackAtWill ,
 	kf_SetDroidReturnToBase ,
-	kf_SetDroidRangeDefault,
+	kf_NOOP,
 	kf_ToggleFormationSpeedLimiting,
-	kf_SetDroidRangeShort,
+	kf_NOOP,
 	kf_SetDroidMovePursue ,
 	kf_SetDroidMovePatrol ,
 	kf_SetDroidGoForRepair ,
 	kf_SetDroidMoveHold ,
 	kf_SendTextMessage,
-	kf_SetDroidRangeLong,
+	kf_NOOP,
 	kf_ScatterDroids,
 	kf_SetDroidRetreatMedium,
 	kf_SetDroidRetreatHeavy,
@@ -400,15 +400,12 @@ void	keyInitMappings( bool bForceDefaults )
 	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_F,      KEYMAP_PRESSED, kf_SetDroidAttackAtWill,  N_("Fire at Will"));
 	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_G,      KEYMAP_PRESSED, kf_SetDroidMoveGuard,     N_("Guard Position"));
 	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_H,      KEYMAP_PRESSED, kf_SetDroidReturnToBase,  N_("Return to HQ"));
-	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_I,      KEYMAP_PRESSED, kf_SetDroidRangeDefault,  N_("Optimum Range"));
-	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_O,      KEYMAP_PRESSED, kf_SetDroidRangeShort,    N_("Short Range"));
 	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_P,      KEYMAP_PRESSED, kf_SetDroidMovePursue,    N_("Pursue"));
 	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_Q,      KEYMAP_PRESSED, kf_SetDroidMovePatrol,    N_("Patrol"));
 	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_R,      KEYMAP_PRESSED, kf_SetDroidGoForRepair,   N_("Return For Repair"));
 	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_S,      KEYMAP_PRESSED, kf_SetDroidMoveHold,      N_("Hold Position"));
 	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_T,      KEYMAP_PRESSED, kf_SetDroidGoToTransport, N_("Go to Transport"));
 	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_RETURN, KEYMAP_PRESSED, kf_SendTextMessage,       N_("Send Text Message"));
-	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_U,      KEYMAP_PRESSED, kf_SetDroidRangeLong,     N_("Long Range"));
 
 	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LALT, KEY_H, KEYMAP_PRESSED, kf_AddHelpBlip, N_("Drop a beacon"));
 

@@ -81,7 +81,7 @@ typedef DroidOrderType DROID_ORDER;
 /** All the possible secondary orders for droids. */
 enum SECONDARY_ORDER
 {
-	DSO_ATTACK_RANGE,               /**< The attack range a given droid is allowed to fire: can be short, long or default (best chance to hit). */
+	DSO_UNUSED,
 	DSO_REPAIR_LEVEL,               /**< The repair level at which the droid falls back to repair: can be low, high or never. Used with DSS_REPLEV_LOW, DSS_REPLEV_HIGH, DSS_REPLEV_NEVER. */
 	DSO_ATTACK_LEVEL,               /**< The attack level at which a droid can attack: can be always, attacked or never. Used with DSS_ALEV_ALWAYS, DSS_ALEV_ATTACKED, DSS_ALEV_NEVER. */
 	DSO_ASSIGN_PRODUCTION,          /**< Assigns a factory to a command droid - the state is given by the factory number. */
@@ -125,7 +125,6 @@ enum SECONDARY_STATE
 };
 
 /** masks for the secondary order state. */
-#define DSS_ARANGE_MASK             0x000003
 #define DSS_REPLEV_MASK             0x00000c
 #define DSS_ALEV_MASK               0x000030
 #define DSS_HALT_MASK               0x0000c0
