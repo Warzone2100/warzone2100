@@ -5227,11 +5227,14 @@ DROID	*psDroid;
 
 	return(true);
 }
+
 // -----------------------------------------------------------------------------------------
 static bool	structHasModule(STRUCTURE *psStruct)
 {
-STRUCTURE_STATS	*psStats;
-bool			bFound;
+	STRUCTURE_STATS	*psStats;
+	bool bFound = false;
+
+	ASSERT_OR_RETURN(false, psStruct != NULL, "Testing for a module from a NULL struct");
 
 	/* Fail if the structure isn't built yet */
 	if(psStruct->status != SS_BUILT)
@@ -5239,18 +5242,6 @@ bool			bFound;
 		return(false);
 	}
 
-	/* Not found yet */
-	bFound = false;
-
-
-	if(psStruct==NULL)
-	{
-		ASSERT( psStruct!=NULL,"structHasModule - Testing for a module from a NULL struct - huh!?" );
-		return(false);
-	}
-
-	if(psStruct)
-	{
 		/* Grab a stats pointer */
 		psStats = psStruct->pStructureType;
 		if(StructIsFactory(psStruct)
@@ -5289,7 +5280,6 @@ bool			bFound;
 			bFound = false;
 		}
 
-	}
 	return(bFound);
 }
 
