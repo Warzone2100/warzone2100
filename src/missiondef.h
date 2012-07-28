@@ -55,9 +55,9 @@ struct MISSION
 	MAPTILE				*psMapTiles;					//the original mapTiles
 	int32_t                         mapWidth;                       //the original mapWidth
 	int32_t                         mapHeight;                      //the original mapHeight
-	uint8_t *                       psBlockMap[AUX_MAX];
-	uint8_t *                       psAuxMap[MAX_PLAYERS + AUX_MAX];
-	GATEWAY *                       psGateways;                     //the gateway list
+	uint8_t                        *psBlockMap[AUX_MAX];
+	uint8_t                        *psAuxMap[MAX_PLAYERS + AUX_MAX];
+	GATEWAY                        *psGateways;                     //the gateway list
 	int32_t                         scrollMinX;                     //scroll coords for original map
 	int32_t                         scrollMinY;
 	int32_t                         scrollMaxX;
@@ -72,13 +72,13 @@ struct MISSION
 
 	UDWORD				startTime;			//time the mission started
 	SDWORD				time;				//how long the mission can last
-											// < 0 = no limit
+	// < 0 = no limit
 	SDWORD				ETA;				//time taken for reinforcements to arrive
-											// < 0 = none allowed
-   	UDWORD				cheatTime;			//time the cheating started (mission time-wise!)
+	// < 0 = none allowed
+	UDWORD				cheatTime;			//time the cheating started (mission time-wise!)
 
-    UWORD               homeLZ_X;           //selectedPlayer's LZ x and y
-    UWORD               homeLZ_Y;
+	UWORD               homeLZ_X;           //selectedPlayer's LZ x and y
+	UWORD               homeLZ_Y;
 	SDWORD				playerX;			//original view position
 	SDWORD				playerY;
 
