@@ -1204,14 +1204,8 @@ bool startMissionOffClear(char *pGame)
 		return false;
 	}
 
-	//call after everything has been loaded up - done on stageThreeInit
-	//gridReset();
-
 	offWorldKeepLists = false;
 	intResetPreviousObj();
-
-	//this gets set when the timer is added in scriptFuncs
-	//mission.startTime = gameTime;
 
 	// The message should have been played at the between stage
 	missionCountDown &= ~NOT_PLAYED_ACTIVATED;
@@ -1231,14 +1225,8 @@ bool startMissionOffKeep(char *pGame)
 		return false;
 	}
 
-	//call after everything has been loaded up - done on stageThreeInit
-	//gridReset();
-
 	offWorldKeepLists = true;
 	intResetPreviousObj();
-
-	//this gets set when the timer is added in scriptFuncs
-	//mission.startTime = gameTime;
 
 	// The message should have been played at the between stage
 	missionCountDown &= ~NOT_PLAYED_ACTIVATED;
@@ -1299,9 +1287,6 @@ bool startMissionCampaignExpand(char *pGame)
 	{
 		return false;
 	}
-
-	//call after everything has been loaded up - done on stageThreeInit
-	//gridReset();
 
 	offWorldKeepLists = false;
 	return true;
@@ -1917,8 +1902,6 @@ void missionMoveTransporterOffWorld( DROID *psTransporter )
 		eventFireCallbackTrigger((TRIGGER_TYPE)CALL_TRANSPORTER_OFFMAP);
 		transporterSetScriptCurrent( NULL );
 
-		//gridRemoveObject( (BASE_OBJECT *) psTransporter ); - these happen in droidRemove()
-		//clustRemoveObject( (BASE_OBJECT *) psTransporter );
 		if (droidRemove(psTransporter, apsDroidLists))
         {
 		    addDroid(psTransporter, mission.apsDroidLists);

@@ -67,7 +67,6 @@ struct MISSION
 	FEATURE						*apsFeatureLists[MAX_PLAYERS];
 	BASE_OBJECT			*apsSensorList[1];
 	FEATURE				*apsOilList[1];
-	//struct _proximity_display	*apsProxDisp[MAX_PLAYERS];
 	FLAG_POSITION				*apsFlagPosLists[MAX_PLAYERS];
 	int32_t                         asCurrentPower[MAX_PLAYERS];
 
@@ -78,7 +77,6 @@ struct MISSION
 											// < 0 = none allowed
    	UDWORD				cheatTime;			//time the cheating started (mission time-wise!)
 
-	//LANDING_ZONE		homeLZ;
     UWORD               homeLZ_X;           //selectedPlayer's LZ x and y
     UWORD               homeLZ_Y;
 	SDWORD				playerX;			//original view position
@@ -89,7 +87,6 @@ struct MISSION
 	UWORD				iTranspEntryTileY[MAX_PLAYERS];
 	UWORD				iTranspExitTileX[MAX_PLAYERS];
 	UWORD				iTranspExitTileY[MAX_PLAYERS];
-
 };
 
 #endif // __INCLUDED_MISSIONDEF_H__
