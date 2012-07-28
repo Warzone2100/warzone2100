@@ -445,7 +445,6 @@ struct REPAIR_STATS : public COMPONENT_STATS
 
 struct WEAPON_STATS : public COMPONENT_STATS
 {
-	UDWORD			shortRange;				///< Max distance to target for	short	range	shot
 	UDWORD			longRange;				///< Max distance to target for	long range shot
 	UDWORD			minRange;				///< Min distance to target for	shot
 	UDWORD			shortHit;				///< Chance to hit at short range

@@ -625,7 +625,7 @@ bool loadWeaponStats(const char *pWeaponData, UDWORD bufferSize)
 	char			fireOnMove[MAX_STR_LENGTH], weaponClass[MAX_STR_LENGTH], weaponSubClass[MAX_STR_LENGTH],
 					weaponEffect[MAX_STR_LENGTH], movement[MAX_STR_LENGTH], facePlayer[MAX_STR_LENGTH],  //weaponEffect[15] caused stack corruption. --Qamly
 					faceInFlight[MAX_STR_LENGTH],lightWorld[MAX_STR_LENGTH];
-	UDWORD			longRange, effectSize, numAttackRuns, designable;
+	UDWORD			effectSize, numAttackRuns, designable;
 	UDWORD			numRounds;
 
 	char			*StatsName;
@@ -675,8 +675,8 @@ bool loadWeaponStats(const char *pWeaponData, UDWORD bufferSize)
 			WeaponName, dummy, &psStats->buildPower,&psStats->buildPoints,
 			&psStats->weight, &weaponsize, &dummyVal,
 			&psStats->body, GfxFile, mountGfx, muzzleGfx, flightGfx,
-			hitGfx, missGfx, waterGfx, trailGfx, &psStats->shortRange,
-			&psStats->longRange,&psStats->shortHit, &psStats->longHit,
+			hitGfx, missGfx, waterGfx, trailGfx, &dummyVal,
+			&psStats->longRange, &dummyVal, &psStats->longHit,
 			&psStats->firePause, &psStats->numExplosions, &numRounds,
 			&psStats->reloadTime, &psStats->damage, &psStats->radius,
 			&psStats->radiusHit, &psStats->radiusDamage, &psStats->incenTime,
@@ -995,24 +995,6 @@ bool loadWeaponStats(const char *pWeaponData, UDWORD bufferSize)
 		else
 		{
 			psStats->penetrate = false;
-		}
-
-		// error check the ranges
-		if (psStats->flightSpeed > 0 && !proj_Direct(psStats))
-		{
-			longRange = (UDWORD)proj_GetLongRange(psStats);
-		}
-		else
-		{
-			longRange = UDWORD_MAX;
-		}
-		if (psStats->shortRange > longRange)
-		{
-			debug( LOG_NEVER, "%s, flight speed is too low to reach short range (max range %d)\n", WeaponName, longRange );
-		}
-		else if (psStats->longRange > longRange)
-		{
-			debug( LOG_NEVER, "%s, flight speed is too low to reach long range (max range %d)\n", WeaponName, longRange );
 		}
 
 		//set the weapon sounds to default value
@@ -2849,12 +2831,6 @@ UDWORD	weaponReloadTime(WEAPON_STATS *psStats, UBYTE player)
 {
 	return (psStats->reloadTime - (psStats->reloadTime * asWeaponUpgrade[player][
 		psStats->weaponSubClass].firePause)/100);
-}
-
-UDWORD	weaponShortHit(const WEAPON_STATS* psStats, UBYTE player)
-{
-	return (psStats->shortHit + (psStats->shortHit * asWeaponUpgrade[player][
-		psStats->weaponSubClass].shortHit)/100);
 }
 
 UDWORD	weaponLongHit(const WEAPON_STATS* psStats, UBYTE player)

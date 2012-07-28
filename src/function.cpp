@@ -485,7 +485,7 @@ static bool loadWeaponUpgradeFunction(const char *pData)
 	WEAPON_UPGRADE_FUNCTION	*psFunction;
 	char						functionName[MAX_STR_LENGTH],
 	                            weaponSubClass[MAX_STR_LENGTH];
-	UDWORD						firePause, shortHit, longHit, damage,
+	UDWORD						firePause, dummyVal, longHit, damage,
 	                            radiusDamage, incenDamage, radiusHit;
 
 	//allocate storage
@@ -505,7 +505,7 @@ static bool loadWeaponUpgradeFunction(const char *pData)
 	functionName[0] = '\0';
 	weaponSubClass[0] = '\0';
 	sscanf(pData, "%255[^,'\r\n],%255[^,'\r\n],%d,%d,%d,%d,%d,%d,%d", functionName,
-	       weaponSubClass, &firePause, &shortHit, &longHit, &damage, &radiusDamage,
+	       weaponSubClass, &firePause, &dummyVal, &longHit, &damage, &radiusDamage,
 	       &incenDamage, &radiusHit);
 
 	//allocate storage for the name
@@ -518,7 +518,6 @@ static bool loadWeaponUpgradeFunction(const char *pData)
 
 	//check none of the %increases are over UBYTE max
 	if (firePause > UBYTE_MAX ||
-	    shortHit > UWORD_MAX ||
 	    longHit > UWORD_MAX ||
 	    damage > UWORD_MAX ||
 	    radiusDamage > UWORD_MAX ||
@@ -526,21 +525,16 @@ static bool loadWeaponUpgradeFunction(const char *pData)
 	    radiusHit > UWORD_MAX)
 	{
 		debug(LOG_ERROR, "A percentage increase for Weapon Upgrade function is too large");
-
 		return false;
 	}
 
 	//copy the data across
 	psFunction->firePause = (UBYTE)firePause;
-	psFunction->shortHit = (UWORD)shortHit;
 	psFunction->longHit = (UWORD)longHit;
 	psFunction->damage = (UWORD)damage;
 	psFunction->radiusDamage = (UWORD)radiusDamage;
 	psFunction->incenDamage = (UWORD)incenDamage;
 	psFunction->radiusHit = (UWORD)radiusHit;
-
-	//increment the number of upgrades
-	//numWeaponUpgrades++;
 
 	return true;
 }
@@ -1152,10 +1146,6 @@ void weaponUpgrade(FUNCTION *pFunction, UBYTE player)
 			pUpgrade->firePause = 100;
 		}
 		asWeaponUpgrade[player][pUpgrade->subClass].firePause = pUpgrade->firePause;
-	}
-	if (asWeaponUpgrade[player][pUpgrade->subClass].shortHit < pUpgrade->shortHit)
-	{
-		asWeaponUpgrade[player][pUpgrade->subClass].shortHit = pUpgrade->shortHit;
 	}
 	if (asWeaponUpgrade[player][pUpgrade->subClass].longHit < pUpgrade->longHit)
 	{

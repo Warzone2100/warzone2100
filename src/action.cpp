@@ -185,15 +185,8 @@ static bool actionInAttackRange(DROID *psDroid, BASE_OBJECT *psObj, int weapon_s
 	}
 	else
 	{
-		if (weaponShortHit(psStats, psDroid->player) > weaponLongHit(psStats, psDroid->player))
-		{
-			rangeSq = psStats->shortRange * psStats->shortRange;
-		}
-		else
-		{
-			longRange = proj_GetLongRange(psStats);
-			rangeSq = longRange * longRange;
-		}
+		longRange = proj_GetLongRange(psStats);
+		rangeSq = longRange * longRange;
 	}
 
 	/* check max range */
@@ -1830,9 +1823,8 @@ void actionUpdateDroid(DROID *psDroid)
 			if (!isVtolDroid(psDroid) &&
 				(order->psObj->type != OBJ_STRUCTURE))
 			{
-				//move droids to within short range of the sensor now!!!!
 				Vector2i diff = removeZ(psDroid->pos - order->psObj->pos);
-				int rangeSq = asWeaponStats[psDroid->asWeaps[0].nStat].shortRange;
+				int rangeSq = asWeaponStats[psDroid->asWeaps[0].nStat].longRange / 2; // move close to sensor
 				rangeSq = rangeSq * rangeSq;
 				if (diff*diff < rangeSq)
 				{

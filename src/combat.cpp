@@ -162,12 +162,7 @@ bool combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 	}
 
 	int baseHitChance = 0;
-	if (dist <= psStats->shortRange && dist >= psStats->minRange)
-	{
-		// get weapon chance to hit in the short range
-		baseHitChance = weaponShortHit(psStats,psAttacker->player);
-	}
-	else if (dist <= longRange && dist >= psStats->minRange)
+	if (dist <= longRange && dist >= psStats->minRange)
 	{
 		// get weapon chance to hit in the long range
 		baseHitChance = weaponLongHit(psStats,psAttacker->player);

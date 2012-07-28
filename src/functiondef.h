@@ -143,7 +143,6 @@ struct WEAPON_UPGRADE_FUNCTION : public FUNCTION
 {
 	WEAPON_SUBCLASS		subClass;			/*which weapons are affected */
 	UBYTE			firePause;			/*The % to decrease the fire pause or reload time */
-	UWORD			shortHit;			/*The % to increase the  short range accuracy */
 	UWORD			longHit;			/*The % to increase the long range accuracy */
 	UWORD			damage;				/*The % to increase the damage*/
 	UWORD			radiusDamage;		/*The % to increase the radius damage*/

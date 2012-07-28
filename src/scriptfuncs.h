@@ -651,7 +651,6 @@ extern bool scrMoveDroidStopped(void);
 extern bool scrUpdateVisibleTiles(void);
 extern bool scrCheckVisibleTile(void);
 extern bool scrAssembleWeaponTemplate(void);
-extern bool scrWeaponShortHitUpgrade(void);
 extern bool scrWeaponLongHitUpgrade(void);
 extern bool scrWeaponDamageUpgrade(void);
 extern bool scrWeaponFirePauseUpgrade(void);

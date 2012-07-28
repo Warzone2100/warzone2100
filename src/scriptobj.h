@@ -51,9 +51,7 @@ enum _objids
 	OBJID_SELECTED,		// if droid is selected (humans only)
 	OBJID_TARGET,		// added object->psTarget
 	OBJID_GROUP,		// group a droid belongs to
-	WEAPID_SHORT_RANGE,		// short range of a weapon
 	WEAPID_LONG_RANGE,		// short range of a weapon
-	WEAPID_SHORT_HIT,		// weapon's chance to hit in the short range
 	WEAPID_LONG_HIT,		// weapon's chance to hit in the long range
 	WEAPID_FIRE_PAUSE,		// weapon's fire pause
 	WEAPID_RELOAD_TIME,		// weapon's reload time
