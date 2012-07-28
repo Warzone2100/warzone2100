@@ -438,6 +438,8 @@ bool eventNewContext(SCRIPT_CODE *psCode, CONTEXT_RELEASE release,
 				if (!asCreateFuncs[type](psNewChunk->asVals + storeIndex))
 				{
 					debug(LOG_FATAL, "Failed to run script value init");
+					free(psNewChunk);
+					free(psContext);
 					return false;
 				}
 			}
