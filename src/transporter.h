@@ -53,7 +53,7 @@ bool checkTransporterSpace(DROID const *psTransporter, DROID const *psAssigned, 
 up different amount depending on their body size - currently all are set to one!*/
 extern UDWORD calcRemainingCapacity(DROID *psTransporter);
 
-extern bool transporterIsEmpty(const DROID* psTransporter);
+extern bool transporterIsEmpty(const DROID *psTransporter);
 
 /*launches the defined transporter to the offworld map*/
 extern bool launchTransporter(DROID *psTransporter);
@@ -70,16 +70,16 @@ extern void intRemoveTransporterLaunch(void);
 //process the launch transporter button click
 extern void processLaunchTransporter(void);
 
-extern SDWORD	bobTransporterHeight( void );
+extern SDWORD	bobTransporterHeight(void);
 
 /*This is used to display the transporter button and capacity when at the home base ONLY*/
 extern bool intAddTransporterLaunch(DROID *psDroid);
 
 /* set current transporter (for script callbacks) */
-extern void transporterSetScriptCurrent( DROID *psTransporter );
+extern void transporterSetScriptCurrent(DROID *psTransporter);
 
 /* get current transporter (for script callbacks) */
-extern DROID * transporterGetScriptCurrent( void );
+extern DROID *transporterGetScriptCurrent(void);
 
 /* check whether transporter on mission */
 //extern bool transporterOnMission( void );
@@ -88,7 +88,7 @@ extern DROID * transporterGetScriptCurrent( void );
 extern void resetTransporter(void);
 
 /* get time transporter launch button was pressed */
-extern UDWORD transporterGetLaunchTime( void );
+extern UDWORD transporterGetLaunchTime(void);
 
 /*set the time for the Launch*/
 extern void transporterSetLaunchTime(UDWORD time);
