@@ -1600,6 +1600,7 @@
 		4333612111A07FB900380F5E /* QtOpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QtOpenGL.framework; path = external/QT/QtOpenGL.framework; sourceTree = SOURCE_ROOT; };
 		4336D8A8111DDF0F0012E8E4 /* random.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = random.cpp; path = ../src/random.cpp; sourceTree = SOURCE_ROOT; };
 		4336D8A9111DDF0F0012E8E4 /* random.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = random.h; path = ../src/random.h; sourceTree = SOURCE_ROOT; };
+		433A44F715C6CA4000D1856A /* CS-ID.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "CS-ID.xcconfig"; path = "configs/CS-ID.xcconfig"; sourceTree = SOURCE_ROOT; };
 		434117201495024C003F06FF /* wzconfig.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = wzconfig.cpp; path = ../lib/framework/wzconfig.cpp; sourceTree = SOURCE_ROOT; };
 		434117211495024C003F06FF /* wzconfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = wzconfig.h; path = ../lib/framework/wzconfig.h; sourceTree = SOURCE_ROOT; };
 		4343651C149EA04800527137 /* template.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = template.cpp; path = ../src/template.cpp; sourceTree = SOURCE_ROOT; };
@@ -2765,6 +2766,7 @@
 		43025DEC1120A4B6006C49B1 /* Configurations */ = {
 			isa = PBXGroup;
 			children = (
+				433A44F715C6CA4000D1856A /* CS-ID.xcconfig */,
 				43CCDD9414BA502600B21363 /* Fribidi-All.xcconfig */,
 				43CCDD9514BA502600B21363 /* Fribidi-Debug.xcconfig */,
 				43CCDD9614BA502600B21363 /* Fribidi-Release.xcconfig */,
@@ -5386,6 +5388,7 @@
 		};
 		4389DBE5111B0A0700B98DEF /* StaticAnalyzer */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 433A44F715C6CA4000D1856A /* CS-ID.xcconfig */;
 			buildSettings = {
 				PRODUCT_NAME = "Make DMGs for Release";
 			};
@@ -5456,6 +5459,7 @@
 		};
 		43F77C8110F0125F00E04615 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 433A44F715C6CA4000D1856A /* CS-ID.xcconfig */;
 			buildSettings = {
 				PRODUCT_NAME = "Make DMGs for Release";
 			};
@@ -5463,6 +5467,7 @@
 		};
 		43F77C8210F0125F00E04615 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 433A44F715C6CA4000D1856A /* CS-ID.xcconfig */;
 			buildSettings = {
 				PRODUCT_NAME = "Make DMGs for Release";
 			};
