@@ -213,7 +213,7 @@ tools/qwzm/ui_qwzm.h
 macosx/Warzone.xcodeproj/xcuserdata/*
 macosx/Warzone.xcodeproj/project.xcworkspace/xcuserdata/*
 macosx/Warzone.xcworkspace/xcuserdata/*
-macosx/configs/codeident
+macosx/configs/CS-ID.xcconfig
 
 # build folders
 /macosx/build/

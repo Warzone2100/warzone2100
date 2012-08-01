@@ -23,6 +23,7 @@
 				438B0C101377317F008184FC /* Gettext - Fetch source */,
 			);
 			dependencies = (
+				43D670EA15C8506A000AD02A /* PBXTargetDependency */,
 			);
 			name = "Fetch Third Party Sources";
 			productName = "Fetch Third Party Sources";
@@ -37,6 +38,17 @@
 			);
 			name = Autorevision;
 			productName = Autorevision;
+		};
+		43D670E515C85038000AD02A /* CS-ID */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 43D670ED15C85090000AD02A /* Build configuration list for PBXAggregateTarget "CS-ID" */;
+			buildPhases = (
+				43D670E415C85038000AD02A /* Make CS-ID */,
+			);
+			dependencies = (
+			);
+			name = "CS-ID";
+			productName = "CS-ID";
 		};
 		43F77C7710F0125E00E04615 /* Make DMGs for Release */ = {
 			isa = PBXAggregateTarget;
@@ -939,6 +951,20 @@
 			remoteGlobalIDString = 43D180771336B6BF001906EB;
 			remoteInfo = Autorevision;
 		};
+		43D670E915C8506A000AD02A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 02356D660BD3BB2600E9A019 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 43D670E515C85038000AD02A;
+			remoteInfo = "CS-ID";
+		};
+		43D670EB15C85072000AD02A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 02356D660BD3BB2600E9A019 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 43D670E515C85038000AD02A;
+			remoteInfo = "CS-ID";
+		};
 		43FA571210FF8EE90074E914 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 02356D660BD3BB2600E9A019 /* Project object */;
@@ -1600,6 +1626,7 @@
 		4333612111A07FB900380F5E /* QtOpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QtOpenGL.framework; path = external/QT/QtOpenGL.framework; sourceTree = SOURCE_ROOT; };
 		4336D8A8111DDF0F0012E8E4 /* random.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = random.cpp; path = ../src/random.cpp; sourceTree = SOURCE_ROOT; };
 		4336D8A9111DDF0F0012E8E4 /* random.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = random.h; path = ../src/random.h; sourceTree = SOURCE_ROOT; };
+		433A44F715C6CA4000D1856A /* CS-ID.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "CS-ID.xcconfig"; path = "configs/CS-ID.xcconfig"; sourceTree = SOURCE_ROOT; };
 		434117201495024C003F06FF /* wzconfig.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = wzconfig.cpp; path = ../lib/framework/wzconfig.cpp; sourceTree = SOURCE_ROOT; };
 		434117211495024C003F06FF /* wzconfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = wzconfig.h; path = ../lib/framework/wzconfig.h; sourceTree = SOURCE_ROOT; };
 		4343651C149EA04800527137 /* template.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = template.cpp; path = ../src/template.cpp; sourceTree = SOURCE_ROOT; };
@@ -2765,6 +2792,7 @@
 		43025DEC1120A4B6006C49B1 /* Configurations */ = {
 			isa = PBXGroup;
 			children = (
+				433A44F715C6CA4000D1856A /* CS-ID.xcconfig */,
 				43CCDD9414BA502600B21363 /* Fribidi-All.xcconfig */,
 				43CCDD9514BA502600B21363 /* Fribidi-Debug.xcconfig */,
 				43CCDD9614BA502600B21363 /* Fribidi-Release.xcconfig */,
@@ -3791,6 +3819,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				43D670EC15C85072000AD02A /* PBXTargetDependency */,
 			);
 			name = MiniUPnPc;
 			productName = MiniUPnPc;
@@ -3941,6 +3970,7 @@
 			targets = (
 				02356D740BD3BB3400E9A019 /* Warzone */,
 				43D180771336B6BF001906EB /* Autorevision */,
+				43D670E515C85038000AD02A /* CS-ID */,
 				43FA570C10FF8E9B0074E914 /* Setup Prebuilt Components */,
 				438B0C05137730FE008184FC /* Fetch Third Party Sources */,
 				4318434A1363942200BA2BC5 /* MiniUPnPc */,
@@ -4444,6 +4474,20 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "# Config\nexport PATH=$PATH:/sw/bin:/opt/local/bin\nsauto=\"src/autorevision.h\"\ntauto=\"${OBJROOT}/autorev/autorevision.h\"\nfunction hfilter {\n\trm -f \"${OBJROOT}/autorevision.h\"\n\tsed -e 's:refs/heads/:branch/:' -e 's:refs/remotes/:remote/:' -e 's:branch/master:Master:' -e 's:\tv:\t:' -e 's:v/::' \"${sauto}\" | sed -e 's:_beta: Beta :' -e 's:_rc: RC :' > \"${OBJROOT}/autorevision.h\"\n}\nfunction bauto {\n\tif ! ./build_tools/autorevision.sh \"${tauto}\"; then\n\t\techo \"error: Could not run Autorevision\"\n\t\texit 1\n\tfi\n}\n\ncd ..\n\nif [[ ! -d \".git\" ]] && [[ ! -d \".hg\" ]] && [[ -f \"${sauto}\" ]]; then\n\t# Do not run if we will not get useful information\n\techo \"Not a repo.\"\n\thfilter\n\texit 0\nelif [ -d \"${OBJROOT}/autorev/\" ]; then\n\t# Only update src/autorevision.h if something has changed\n\tbauto\n\tmdck1=`md5 -q \"${sauto}\"`\n\tmdck2=`md5 -q \"${tauto}\"`\n\tif [ \"${mdck1}\" = \"${mdck2}\" ]; then\n\t\texit 0\n\tfi\nelse\n\tmkdir \"${OBJROOT}/autorev/\"\n\tbauto\nfi\n\ncp -a \"${tauto}\" \"${sauto}\"\nhfilter\nexit 0\n";
+		};
+		43D670E415C85038000AD02A /* Make CS-ID */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Make CS-ID";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = ". configs/fetchscripts/SetupPrebuiltComponents-CS-ID.sh";
 		};
 		43F77C7610F0125E00E04615 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -5055,6 +5099,16 @@
 			target = 43D180771336B6BF001906EB /* Autorevision */;
 			targetProxy = 43D1808A1336B74E001906EB /* PBXContainerItemProxy */;
 		};
+		43D670EA15C8506A000AD02A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 43D670E515C85038000AD02A /* CS-ID */;
+			targetProxy = 43D670E915C8506A000AD02A /* PBXContainerItemProxy */;
+		};
+		43D670EC15C85072000AD02A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 43D670E515C85038000AD02A /* CS-ID */;
+			targetProxy = 43D670EB15C85072000AD02A /* PBXContainerItemProxy */;
+		};
 		43FA571310FF8EE90074E914 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 43FA570C10FF8E9B0074E914 /* Setup Prebuilt Components */;
@@ -5386,6 +5440,7 @@
 		};
 		4389DBE5111B0A0700B98DEF /* StaticAnalyzer */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 433A44F715C6CA4000D1856A /* CS-ID.xcconfig */;
 			buildSettings = {
 				PRODUCT_NAME = "Make DMGs for Release";
 			};
@@ -5454,8 +5509,30 @@
 			};
 			name = Release;
 		};
+		43D670E615C85039000AD02A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "CS-ID";
+			};
+			name = Debug;
+		};
+		43D670E715C85039000AD02A /* StaticAnalyzer */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "CS-ID";
+			};
+			name = StaticAnalyzer;
+		};
+		43D670E815C85039000AD02A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "CS-ID";
+			};
+			name = Release;
+		};
 		43F77C8110F0125F00E04615 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 433A44F715C6CA4000D1856A /* CS-ID.xcconfig */;
 			buildSettings = {
 				PRODUCT_NAME = "Make DMGs for Release";
 			};
@@ -5463,6 +5540,7 @@
 		};
 		43F77C8210F0125F00E04615 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 433A44F715C6CA4000D1856A /* CS-ID.xcconfig */;
 			buildSettings = {
 				PRODUCT_NAME = "Make DMGs for Release";
 			};
@@ -5635,6 +5713,16 @@
 				43D1807F1336B6C0001906EB /* Debug */,
 				43D180801336B6C0001906EB /* StaticAnalyzer */,
 				43D180811336B6C0001906EB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		43D670ED15C85090000AD02A /* Build configuration list for PBXAggregateTarget "CS-ID" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				43D670E615C85039000AD02A /* Debug */,
+				43D670E715C85039000AD02A /* StaticAnalyzer */,
+				43D670E815C85039000AD02A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
