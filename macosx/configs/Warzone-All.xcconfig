@@ -1,6 +1,8 @@
 // Warzone settings for all configurations
 
 
+// CODE_SIGN_RESOURCE_RULES_PATH = "$(SRCROOT)/configs/ResourceRules.plist"
+
 INSTALL_PATH = $(HOME)/Applications
 LD_RUNPATH_SEARCH_PATHS = @loader_path/../Frameworks
 PREBINDING = NO

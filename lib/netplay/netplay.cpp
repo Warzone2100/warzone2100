@@ -1989,7 +1989,7 @@ UBYTE NETrecvFile(NETQUEUE queue)
 
 		}
 		NetPlay.pMapFileHandle = PHYSFS_openWrite(fileName);	// create a new file.
-		NetPlay.mapFileName = fileName;
+		sstrcpy(NetPlay.mapFileName, fileName);
 	}
 
 	debug(LOG_NET, "New file position is %d", currPos);
@@ -2022,10 +2022,10 @@ UBYTE NETrecvFile(NETQUEUE queue)
 			debug(LOG_ERROR, "Could not close file handle after trying to save map: %s", PHYSFS_getLastError());
 		}
 		NetPlay.pMapFileHandle = NULL;
-		PHYSFS_File *file = PHYSFS_openRead(NetPlay.mapFileName.c_str());
+		PHYSFS_File *file = PHYSFS_openRead(NetPlay.mapFileName);
 		int actualFileSize = PHYSFS_fileLength(file);
 		PHYSFS_close(file);
-		NetPlay.mapFileName.clear();
+		NetPlay.mapFileName[0] = '\0';
 		ASSERT(actualFileSize == fileSize, "Downloaded map too small! Got %d, expected %d!", actualFileSize, fileSize);
 	}
 
