@@ -273,7 +273,7 @@ struct NETPLAY
 	bool		isUPNP;					// if we want the UPnP detection routines to run
 	bool		isHostAlive;	/// if the host is still alive
 	PHYSFS_file *   pMapFileHandle;         ///< Only non-NULL during map download.
-	std::string     mapFileName;            ///< Only valid during map download.
+	char mapFileName[255];            ///< Only valid during map download.
 	char gamePassword[password_string_size];		//
 	bool GamePassworded;				// if we have a password or not.
 	bool ShowedMOTD;					// only want to show this once

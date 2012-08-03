@@ -419,6 +419,7 @@ bool resLoadFile(const char *pType, const char *pFile)
 	{
 		if (psT->HashedType == HashedType)
 		{
+			ASSERT(strcmp(psT->aType, pType) == 0, "Hash collision \"%s\" vs \"%s\"", psT->aType, pType);
 			break;
 		}
 	}
@@ -435,7 +436,8 @@ bool resLoadFile(const char *pType, const char *pFile)
 	{
 		if(psRes->HashedID == HashedName)
 		{
-			debug(LOG_WZ, "resLoadFile: Duplicate file name: %s (hash %x) for type %s",
+			ASSERT(strcasecmp(psRes->aID, pFile) == 0, "Hash collision \"%s\" vs \"%s\"", psRes->aID, pFile);
+			debug(LOG_WZ, "Duplicate file name: %s (hash %x) for type %s",
 			      pFile, HashedName, psT->aType);
 			// assume that they are actually both the same and silently fail
 			// lovely little hack to allow some files to be loaded from disk (believe it or not!).

@@ -1,3 +1,19 @@
+2012-08-05: Version 3.1 rc1
+ * General:
+   * Change: Allow multiple AIs with similar names (commit:ee95d785bdfd72a490863d7cdb3f504f88f9eecd)
+   * Change: Increase the maximum number of terrain tiles (commit:ab44eafb7bd1daa2d0f4efe367673b4c2985a05d)
+   * Change: No longer save last map played (ticket:3618)
+   * Fix: Saving the game might crash it (ticket:3620, commit:fdb1c0b52153d3368ae79e8f0befdd2744b43692)
+   * Fix: Qt backend compatibility with Qt 4.8.2 (ticket:3562, commit:df32833ab8b17e6db5815b7eca9f5fe01a5b7f8f)
+   * Fix: Scavengers in challenges were always disabled (ticket:3630, commit:95677b02b9959b05372e7dc10286fe184bfd6cdd)
+   * Fix: Moving repair delivery points (ticket:3581, commit:caabd96741fb3113dc96127ae32826ada643992a)
+   * Fix: Destroyed research lab can no longer block research (ticket:3570, commit:6a04b6ad677678e1d824209dda45a70f85b64a96)
+   * Fix: Do not halt production on template becoming redundant (commit:7621581c8f76f3b7a774182cd3b5eee8e26b7954)
+   * Fix: Do not require texture_env_crossbar for shaders (ticket:3575, ticket:3629, commit:64a3cc13deda9a59aae2cf0705c68dbe3eadeaa8)
+   * Fix: Various memory issues (commit:032956e649e69aa51edd80787c9c94bf2c08d164, commit:88e94391669e54808b2d6f40cba994d3501efb08)
+   * Fix: Possible crash when delivery points are removed (commit:6382bbb08ea7e6ca93a0ba83fdb65952778c962a, ticket:2041)
+   * Fix: Fix loading of campaign savegames (commit:1461b3a5a81b72381bc3cc3dbc57bbd2f5ce22a7, commit:9784c655af2a66bd541268e2c9e6f19fcd1ac200)
+
 2012-06-20: Version 3.1 beta11
  * General:
    * Change: CB sensor also defends allies (commit:313738ed235c69c64c83eb9b987d63efc95d8782)

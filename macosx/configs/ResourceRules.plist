@@ -4,6 +4,8 @@
 <dict>
 	<key>rules</key>
 	<dict>
+		<key>^Frameworks/</key>
+		<false/>
 		<key>^Resources/</key>
 		<true/>
 		<key>^Resources/.*\.lproj/</key>
@@ -32,15 +34,27 @@
 			<key>weight</key>
 			<real>10</real>
 		</dict>
-		<key>^Resources/data/sequences.wz$</key>
+		<key>^Resources/data/sequences\.wz$</key>
 		<dict>
 			<key>omit</key>
 			<true/>
 			<key>weight</key>
 			<real>30</real>
 		</dict>
-		<key>^info.plist$</key>
-		<true/>
+		<key>^Resources/WarzoneHelp/</key>
+		<dict>
+			<key>omit</key>
+			<true/>
+			<key>weight</key>
+			<real>30</real>
+		</dict>
+		<key>^Resources/data/music/music\.wpl$</key>
+		<dict>
+			<key>omit</key>
+			<true/>
+			<key>weight</key>
+			<real>30</real>
+		</dict>
 	</dict>
 </dict>
 </plist>

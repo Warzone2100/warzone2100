@@ -12,7 +12,6 @@ sequencelonme="sequences-lo.wz"
 sequencelomd5="ab2bbc28cef2a3f2ea3c186e18158acd"
 relbuild="${CONFIGURATION_BUILD_DIR}/"
 dmgout="build/dmgout"
-coident="${SRCROOT}/configs/codeident"
 
 # Fail if not release
 if [ ! "${CONFIGURATION}" = "Release" ]; then
@@ -22,24 +21,27 @@ fi
 
 # codesign setup
 signd () {
-	if [ -f "${coident}" ]; then
+	if [ ! -z "${CODE_SIGN_IDENTITY}" ]; then
 		# Local Config
-		local idetd=`cat ${coident}`
-		local resrul="${SRCROOT}/configs/codesignrules.plist"
+		local idetd="${CODE_SIGN_IDENTITY}"
+		local resrul="${SRCROOT}/configs/ResourceRules.plist"
 		local appth="/Volumes/Warzone 2100/Warzone.app"
 		
 		# Sign app
-		codesign -vfs "${idetd}" --keychain "CodeSign" --verify --resource-rules="${resrul}" "${appth}"
+		cp -a "${resrul}" "${appth}/"
+		/usr/bin/codesign -f -s "${idetd}" --resource-rules="${appth}/ResourceRules.plist" -vvv "${appth}"
+		rm "${appth}/ResourceRules.plist"
+		/usr/bin/codesign -vvv --verify "${appth}"
 		
-		# Sign the frameworks
+		# Verify the frameworks
 		local framelst=`\ls -1 "${appth}/Contents/Frameworks" | sed -n 's:.framework$:&:p'`
 		for fsignd in ${framelst}; do
 			if [ -d "${appth}/Contents/Frameworks/${fsignd}/Versions/A" ]; then
-				codesign -vfs "${idetd}" --keychain "CodeSign" --verify "${appth}/Contents/Frameworks/${fsignd}/Versions/A"
+				/usr/bin/codesign -vvv --verify "${appth}/Contents/Frameworks/${fsignd}/Versions/A"
 			fi
 		done
 	else
-		echo "warning: No codeident file found; code will not be signed."
+		echo "warning: No code signing identity configured; code will not be signed."
 	fi
 }
 
