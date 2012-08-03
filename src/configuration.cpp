@@ -95,19 +95,12 @@ bool loadConfig()
 	war_setMPcolour(ini.value("colourMP", -1).toInt());  // default is random (-1)
 	sstrcpy(game.name, ini.value("gameName", _("My Game")).toString().toUtf8().constData());
 	sstrcpy(sPlayer, ini.value("playerName", _("Player")).toString().toUtf8().constData());
-	if (ini.contains("mapName") && ini.contains("maxPlayers"))
-	{
-		sstrcpy(game.map, ini.value("mapName").toString().toUtf8().constData());
-		game.hash.fromString(ini.value("mapHash").toString().toUtf8().constData());
-		game.maxPlayers = ini.value("maxPlayers").toInt();	// FIXME: horrible kluge, MUST match map above
-	}
-	else
-	{
-		// Set a default map to prevent hosting games without a map.
-		sstrcpy(game.map, "Sk-Rush");
-		game.hash.setZero();
-		game.maxPlayers = 4;
-	}
+
+	// Set a default map to prevent hosting games without a map.
+	sstrcpy(game.map, "Sk-Rush");
+	game.hash.setZero();
+	game.maxPlayers = 4;
+
 	game.power = ini.value("power", LEV_MED).toInt();
 	game.base = ini.value("base", CAMP_BASE).toInt();
 	game.alliance = ini.value("alliance", NO_ALLIANCES).toInt();
@@ -268,9 +261,12 @@ bool reloadMPConfig(void)
 				sstrcpy(game.name, ini.value("gameName").toString().toUtf8().constData());
 			}
 		}
-		ini.setValue("mapName", game.map);				//  map name
-		ini.setValue("mapHash", game.hash.toString().c_str());          //  map hash
-		ini.setValue("maxPlayers", game.maxPlayers);		// maxPlayers
+
+		// Set a default map to prevent hosting games without a map.
+		sstrcpy(game.map, "Sk-Rush");
+		game.hash.setZero();
+		game.maxPlayers = 4;
+
 		ini.setValue("power", game.power);				// power
 		ini.setValue("base", game.base);				// size of base
 		ini.setValue("alliance", game.alliance);		// allow alliances
@@ -284,12 +280,12 @@ bool reloadMPConfig(void)
 	{
 		sstrcpy(game.name, ini.value("gameName").toString().toUtf8().constData());
 	}
-	if (ini.contains("mapName") && ini.contains("maxPlayers"))
-	{
-		sstrcpy(game.map, ini.value("mapName").toString().toUtf8().constData());
-		game.hash.fromString(ini.value("mapHash").toString().toUtf8().constData());
-		game.maxPlayers = ini.value("maxPlayers").toInt();	// FIXME: horrible kluge, MUST match map above
-	}
+
+	// Set a default map to prevent hosting games without a map.
+	sstrcpy(game.map, "Sk-Rush");
+	game.hash.setZero();
+	game.maxPlayers = 4;
+
 	game.power = ini.value("power", LEV_MED).toInt();
 	game.base = ini.value("base", CAMP_BASE).toInt();
 	game.alliance = ini.value("alliance", NO_ALLIANCES).toInt();

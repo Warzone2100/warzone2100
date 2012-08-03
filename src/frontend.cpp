@@ -300,6 +300,7 @@ static void SPinit(void)
 		playercolor = 0;	// default is green
 	}
 	setPlayerColour(0, playercolor);
+	game.hash.setZero();	// must reset this to zero
 }
 
 bool runSinglePlayerMenu(void)
