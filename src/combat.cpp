@@ -401,10 +401,12 @@ int32_t objDamage(BASE_OBJECT *psObj, unsigned damage, unsigned originalhp, WEAP
 
 	armour = psObj->armour[weaponClass];
 
-	debug(LOG_ATTACK, "objDamage(%d): body %d armour %d damage: %d", psObj->id, psObj->body, armour, damage);
-
 	if (psObj->type == OBJ_STRUCTURE || psObj->type == OBJ_DROID)
 	{
+		if (psObj->type == OBJ_STRUCTURE && ((STRUCTURE *)psObj)->status == SS_BEING_BUILT)
+		{
+			armour = 0;
+		}
 		// Force sending messages, even if messages were turned off, since a non-synchronised script will execute here. (Aaargh!)
 		bool bMultiMessagesBackup = bMultiMessages;
 		bMultiMessages = bMultiPlayer;
@@ -414,7 +416,7 @@ int32_t objDamage(BASE_OBJECT *psObj, unsigned damage, unsigned originalhp, WEAP
 
 		bMultiMessages = bMultiMessagesBackup;
 	}
-
+	debug(LOG_ATTACK, "objDamage(%d): body %d armour %d damage: %d", psObj->id, psObj->body, armour, damage);
 
 	if (psObj->type == OBJ_DROID)
 	{
@@ -491,13 +493,10 @@ unsigned int objGuessFutureDamage(WEAPON_STATS *psStats, unsigned int player, BA
 		return 0;
 	}
 
-
 	// apply game difficulty setting
 	damage = modifyForDifficultyLevel(damage, psTarget->player != selectedPlayer);
 
 	armour = MAX(armour, psTarget->armour[psStats->weaponClass]);
-
-	//debug(LOG_ATTACK, "objGuessFutureDamage(%d): body %d armour %d damage: %d", psObj->id, psObj->body, armour, damage);
 
 	if (psTarget->type == OBJ_DROID)
 	{
@@ -506,6 +505,11 @@ unsigned int objGuessFutureDamage(WEAPON_STATS *psStats, unsigned int player, BA
 		// Retrieve highest, applicable, experience level
 		level = getDroidEffectiveLevel(psDroid);
 	}
+	else if (psTarget->type == OBJ_STRUCTURE && ((STRUCTURE *)psTarget)->status == SS_BEING_BUILT)
+	{
+		armour = 0;
+	}
+	//debug(LOG_ATTACK, "objGuessFutureDamage(%d): body %d armour %d damage: %d", psObj->id, psObj->body, armour, damage);
 
 	// Reduce damage taken by EXP_REDUCE_DAMAGE % for each experience level
 	actualDamage = (damage * (100 - EXP_REDUCE_DAMAGE * level)) / 100;
