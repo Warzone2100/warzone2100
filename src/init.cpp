@@ -967,14 +967,6 @@ bool stageTwoInitialise(void)
 		setLasSatExists(false, i);
 	}
 
-	if(bMultiPlayer)
-	{
-		if (!multiTemplateSetup())
-		{
-			return false;
-		}
-	}
-
 	if (!dispInitialise())		/* Initialise the display system */
 	{
 		return false;

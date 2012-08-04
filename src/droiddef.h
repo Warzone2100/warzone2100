@@ -82,15 +82,15 @@ struct DROID_TEMPLATE : public BASE_STATS
 	 *
 	 * Weapons are stored in asWeaps, _not_ here at index COMP_WEAPON! (Which is the reason we do not have a COMP_NUMCOMPONENTS sized array here.)
 	 */
-	SDWORD          asParts[DROID_MAXCOMP];
+	int32_t         asParts[DROID_MAXCOMP];
 
 	UDWORD          buildPoints;                ///< total build points required to manufacture the droid
 	UDWORD          powerPoints;                ///< total power points required to build/maintain the droid
 	UDWORD          storeCount;                 ///< used to load in weaps and progs
 
 	/* The weapon systems */
-	UDWORD          numWeaps;                   ///< Number of weapons
-	UDWORD          asWeaps[DROID_MAXWEAPS];    ///< weapon indices
+	uint32_t        numWeaps;                   ///< Number of weapons
+	uint32_t        asWeaps[DROID_MAXWEAPS];    ///< weapon indices
 
 	DROID_TYPE      droidType;                  ///< The type of droid
 	UDWORD          multiPlayerID;              ///< multiplayer unique descriptor(cant use id's for templates). Used for save games as well now - AB 29/10/98
