@@ -120,6 +120,7 @@ static bool callFunction(QScriptEngine *engine, const QString &function, const Q
 		}
 		ASSERT(false, "Uncaught exception calling function \"%s\" at line %d: %s",
 		       function.toAscii().constData(), line, result.toString().toAscii().constData());
+		engine->clearExceptions();
 		return false;
 	}
 	return true;
