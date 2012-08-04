@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -41,15 +41,15 @@ enum EFFECT_GROUP
 	EFFECT_EXPLOSION,
 	EFFECT_CONSTRUCTION,
 	EFFECT_SMOKE,
-	EFFECT_STRUCTURE,
 	EFFECT_GRAVITON,
 	EFFECT_WAYPOINT,
 	EFFECT_BLOOD,
 	EFFECT_DESTRUCTION,
 	EFFECT_SAT_LASER,
-	EFFECT_DUST_BALL,
 	EFFECT_FIRE,
-	EFFECT_FIREWORK
+	EFFECT_FIREWORK,
+
+	EFFECT_FREED,
 };
 
 
@@ -151,7 +151,8 @@ void	initEffectsSystem(void);
 void	shutdownEffectsSystem(void);
 void	processEffects(void);
 void 	addEffect(const Vector3i *pos, EFFECT_GROUP group, EFFECT_TYPE type, bool specified, iIMDShape *imd, int lit);
-void	addMultiEffect(const Vector3i *basePos, Vector3i *scatter, EFFECT_GROUP group, EFFECT_TYPE type, bool specified, iIMDShape *imd, unsigned int number, bool lit, unsigned int size);
+void    addEffect(const Vector3i *pos, EFFECT_GROUP group, EFFECT_TYPE type, bool specified, iIMDShape *imd, int lit, unsigned effectTime);
+void    addMultiEffect(const Vector3i *basePos, Vector3i *scatter, EFFECT_GROUP group, EFFECT_TYPE type, bool specified, iIMDShape *imd, unsigned int number, bool lit, unsigned int size, unsigned effectTime);
 
 void	renderEffect(const EFFECT *psEffect);
 void	effectResetUpdates(void);

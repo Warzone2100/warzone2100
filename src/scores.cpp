@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -28,8 +28,10 @@
 
 // --------------------------------------------------------------------
 #include "lib/framework/wzapp.h"
+#include "lib/framework/wzconfig.h"
 #include "lib/framework/math_ext.h"
 #include "lib/framework/strres.h"
+#include "lib/framework/rational.h"
 #include "lib/gamelib/gtime.h"
 #include "console.h"
 #include "scores.h"
@@ -174,14 +176,13 @@ STAT_BAR	infoBars[]=
 };
 
 // --------------------------------------------------------------------
-static void constructTime(char *psText, UDWORD hours, UDWORD minutes, UDWORD seconds);
 static void drawStatBars(void);
 static void fillUpStats( void );
 static void dispAdditionalInfo( void );
 // --------------------------------------------------------------------
 
 /* The present mission data */
-static	MISSION_DATA	missionData;
+MISSION_DATA	missionData;
 static	UDWORD	dispST;
 static	bool	bDispStarted = false;
 static	char	text[255];
@@ -263,66 +264,23 @@ void	scoreDataToScreen(void)
 	drawStatBars();
 }
 
-// --------------------------------------------------------------------
-/* Builds an ascii string for the passed in components 04:02:23 for example */
-void	constructTime(char *psText, UDWORD hours, UDWORD minutes, UDWORD seconds)
+// Builds an ascii string for the passed in components 4:02:23 for example.
+void getAsciiTime(char *psText, unsigned time)
 {
-UDWORD	index;
-UDWORD	div;
+	int hours, minutes, seconds, milliseconds;
+	getTimeComponents(time, &hours, &minutes, &seconds, &milliseconds);
 
-	index = 0;
-	// Hours do not have trailing zeros
-	if(hours!=0)
+	char const *hourColon = hours != 0? ":" : "";
+
+	bool showMs = gameTimeGetMod() < Rational(1, 4);
+	if (showMs)
 	{
-   		if(hours<10)
-		{
-			// Less than 10 hours
-			psText[index++] = (UBYTE)('0'+ hours%10);
-		}
-		else if(hours<100)
-		{
-			// Over ten hours
-			psText[index++] = (UBYTE)('0'+ hours/10);
-			psText[index++] = (UBYTE)('0'+ hours%10);
-		}
-		else
-		{
-			// Over 100 hours - go outside people!!!!
-			// build hours
-			psText[index++] = (UBYTE)('0' + (hours/100));		// hmmmmmm....
-			div = hours/100;
-			psText[index++] = (UBYTE)('0' + (hours-(div*100))/10);	// nice
-			psText[index++] = (UBYTE)('0' + hours%10);
-
-		}
-	   	// Put in the hrs/mins separator - only for non-zero hours
-		psText[index++] = (UBYTE)(':');
+		sprintf(psText, "%.0d%s%02d:%02d.%03d", hours, hourColon, minutes, seconds, milliseconds);
 	}
-
-
-	// put in the minutes
-	psText[index++] = (UBYTE)('0' + minutes/10);
-	psText[index++] = (UBYTE)('0' + minutes%10);
-
-	// mins/secs separator
-	psText[index++] = (UBYTE)(':');
-
-
-	// Put in the seconds
-	psText[index++] = (UBYTE)('0' + seconds/10);
-	psText[index++] = (UBYTE)('0' + seconds%10);
-
-	// terminate the string
-	psText[index] = '\0';
-}
-// --------------------------------------------------------------------
-/* Builds an ascii string for the passed in time */
-void	getAsciiTime( char *psText, UDWORD time )
-{
-UDWORD	hours,minutes,seconds;
-
-	getTimeComponents(time,&hours,&minutes,&seconds);
-	constructTime(psText,hours,minutes,seconds);
+	else
+	{
+		sprintf(psText, "%.0d%s%02d:%02d", hours, hourColon, minutes, seconds);
+	}
 }
 
 

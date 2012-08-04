@@ -1,0 +1,97 @@
+/*
+	This file is part of Warzone 2100.
+	Copyright (C) 1999-2004  Eidos Interactive
+	Copyright (C) 2005-2012  Warzone 2100 Project
+
+	Warzone 2100 is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 2 of the License, or
+	(at your option) any later version.
+
+	Warzone 2100 is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with Warzone 2100; if not, write to the Free Software
+	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
+*/
+%defines
+%{
+/** @file
+ *
+ *  Parser for string resource files
+ */
+
+#include "lib/framework/frame.h"
+#include "lib/framework/strres.h"
+#include "lib/framework/strresly.h"
+
+extern int strres_lex(void);
+extern int strres_get_lineno(void);
+extern char* strres_get_text(void);
+
+void yyerror(const char* msg)
+{
+	debug(LOG_ERROR, "STRRES file parse error:\n%s at line %d\nText: '%s'", msg, strres_get_lineno(), strres_get_text());
+}
+
+// Forward declaration to allow pointers to this type
+struct STR_RES;
+
+#define YYPARSE_PARAM psStrRes
+
+%}
+
+%name-prefix="strres_"
+
+%union {
+	char  *sval;
+}
+
+	/* value tokens */
+%token <sval> TEXT_T
+%token <sval> QTEXT_T			/* Text with double quotes surrounding it */
+
+// Rule types
+%type <sval> string
+
+%destructor {
+#ifndef WZ_OS_WIN
+	// Force type checking by the compiler
+	char * const s = $$;
+
+	if (s)
+		free(s);
+#endif
+} TEXT_T QTEXT_T string
+
+%%
+
+file:			line
+			|	file line
+			;
+
+line:			TEXT_T string
+				{
+					/* Pass the text string to the string manager */
+					const bool success = strresStoreString((struct STR_RES*)psStrRes, $1, $2);
+
+					// Clean up our tokens
+					free($1);
+					free($2);
+
+					if (!success)
+					{
+						YYABORT;
+					}
+				}
+			;
+
+string: 		QTEXT_T
+			| '_' '(' QTEXT_T ')'
+				{
+					$$ = strdup(gettext($3));
+					free($3);
+				}

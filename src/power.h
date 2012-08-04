@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -27,18 +27,18 @@
 /** Free power on collection of oildrum. */
 #define OILDRUM_POWER		100
 
-/** Used to determine the power cost of repairing a droid.
-    Definately DON'T WANT the brackets round 1/2 - it will equate to zero! */
-#define REPAIR_POWER_FACTOR 1/5
-
-/** Used to multiply all repair calculations by to avaoid rounding errors. */
-#define POWER_FACTOR        100
-
 /** Allocate the space for the playerPower. */
 extern bool allocPlayerPower(void);
 
 /** Clear the playerPower. */
 extern void clearPlayerPower(void);
+
+/// Removes any pending power request from this structure.
+void delPowerRequest(STRUCTURE *psStruct);
+
+/// Checks how much power must be accumulated, before the power request from this structure can be satisfied.
+/// Returns -1 if there is no power request or if there is enough power already.
+int32_t checkPowerRequest(STRUCTURE *psStruct);
 
 /** Reset the power levels when a power_gen or resource_extractor is destroyed. */
 extern bool resetPlayerPower(UDWORD player, STRUCTURE *psStruct);
@@ -46,8 +46,8 @@ extern bool resetPlayerPower(UDWORD player, STRUCTURE *psStruct);
 /** Check the available power. */
 bool checkPower(int player, uint32_t quantity);
 
-extern int requestPowerFor(int player, int32_t amount, int points);
-extern int requestPrecisePowerFor(int player, int64_t amount, int points);
+bool requestPowerFor(STRUCTURE *psStruct, int32_t amount);
+bool requestPrecisePowerFor(STRUCTURE *psStruct, int64_t amount);
 
 extern void addPower(int player, int32_t quantity);
 
@@ -63,22 +63,12 @@ void setPrecisePower(unsigned player, int64_t power);
 /** Get the amount of power current held by the given player. */
 int32_t getPower(unsigned player);
 int64_t getPrecisePower(unsigned player);
+int32_t getPowerMinusQueued(unsigned player);
 
 /** Resets the power levels for all players when power is turned back on. */
 void powerCalc(bool on);
 
-/** Temp function to give all players some power when a new game has been loaded. */
-void newGameInitPower(void);
-
-/** Defines which structure types draw power - returns true if use power. */
-extern bool structUsesPower(STRUCTURE *psStruct);
-
-/** Defines which droid types draw power - returns true if use power. */
-extern bool droidUsesPower(DROID *psDroid);
-
 /** Flag used to check for power calculations to be done or not. */
 extern	bool			powerCalculated;
-
-extern void throttleEconomy(void);
 
 #endif // __INCLUDED_SRC_POWER_H__

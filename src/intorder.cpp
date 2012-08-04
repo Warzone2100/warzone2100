@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -558,7 +558,7 @@ static SECONDARY_STATE GetSecondaryStates(SECONDARY_ORDER sec)
 	{
 		for (unsigned i = 0; i < SelectedDroids.size(); ++i)
 		{
-			currState = secondaryGetState(SelectedDroids[i], sec);
+			currState = secondaryGetState(SelectedDroids[i], sec, ModeQueue);
 			if (bFirst)
 			{
 				state = currState;
@@ -976,6 +976,11 @@ void intRunOrder(void)
 	// Remove any NULL pointers from SelectedDroids.
 	SelectedDroids.erase(std::remove(SelectedDroids.begin(), SelectedDroids.end(), (DROID *)NULL), SelectedDroids.end());
 
+	if (psSelectedFactory != NULL && psSelectedFactory->died)
+	{
+		psSelectedFactory = NULL;
+	}
+
 	// If all dead then remove the screen.
 	// If droids no longer selected then remove screen.
 	if (SelectedDroids.empty())
@@ -1000,8 +1005,10 @@ static bool SetSecondaryState(SECONDARY_ORDER sec, unsigned State)
 		if (SelectedDroids[i])
 		{
 			//Only set the state if it's not a transporter.
-			if(SelectedDroids[i]->droidType != DROID_TRANSPORTER) {
-				if(!secondarySetState(SelectedDroids[i], sec, (SECONDARY_STATE)State)) {
+			if (SelectedDroids[i]->droidType != DROID_TRANSPORTER && SelectedDroids[i]->droidType != DROID_SUPERTRANSPORTER)
+			{
+				if (!secondarySetState(SelectedDroids[i], sec, (SECONDARY_STATE)State))
+				{
 					return false;
 				}
 			}
@@ -1161,7 +1168,6 @@ static bool intRefreshOrderButtons(void)
 {
 	SECONDARY_STATE State;
 	UWORD OrdIndex;
-	UWORD NumButs;
 	UDWORD	id;
 
 	for (unsigned j = 0; j < AvailableOrders.size() && j < MAX_DISPLAYABLE_ORDERS; ++j)
@@ -1171,25 +1177,8 @@ static bool intRefreshOrderButtons(void)
 		// Get current order state.
 		State = GetSecondaryStates(OrderButtons[OrdIndex].Order);
 
-		// Get number of buttons.
-		NumButs = OrderButtons[OrdIndex].NumButs;
 		// Set actual number of buttons.
-		OrderButtons[OrdIndex].AcNumButs = NumButs;
-
-		// Handle special case for factory -> command droid assignment buttons.
-		switch (OrderButtons[OrdIndex].Class) {
-			case ORDBUTCLASS_FACTORY:
-				NumButs = countAssignableFactories((UBYTE)selectedPlayer,FACTORY_FLAG);
-				break;
-			case ORDBUTCLASS_CYBORGFACTORY:
-				NumButs = countAssignableFactories((UBYTE)selectedPlayer,CYBORG_FLAG);
-				break;
-			case ORDBUTCLASS_VTOLFACTORY:
-				NumButs = countAssignableFactories((UBYTE)selectedPlayer,VTOL_FLAG);
-				break;
-			default:
-				break;
-		}
+		OrderButtons[OrdIndex].AcNumButs = OrderButtons[OrdIndex].NumButs;
 
 		id = OrderButtons[OrdIndex].ButBaseID;
 		for (unsigned i = 0; i < OrderButtons[OrdIndex].AcNumButs; ++i)

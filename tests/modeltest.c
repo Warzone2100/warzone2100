@@ -1,6 +1,6 @@
 /*
 	This file is part of Warzone 2100.
-	Copyright (C) 2007-2010  Warzone 2100 Project
+	Copyright (C) 2007-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -29,6 +29,7 @@
 #ifndef WIN32
 #include <stdbool.h>
 #include <limits.h>
+#include <unistd.h>
 #else
 typedef int bool;
 #define PATH_MAX 255
@@ -211,7 +212,7 @@ static void check_pie(const char *input)
 		{
 			if (x < 0)
 			{
-				fprintf(stderr, "Bad CONNNECTORS directive in %s, level %d\n", input, level);
+				fprintf(stderr, "Bad CONNECTORS directive in %s, level %d\n", input, level);
 				exit(EXIT_FAILURE);
 			}
 			for (j = 0; j < x; ++j)
@@ -227,6 +228,7 @@ static void check_pie(const char *input)
 			}
 		}
 	}
+	fclose(fp);
 }
 
 int main(int argc, char **argv)

@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -25,7 +25,10 @@
 #ifndef _parse_h
 #define _parse_h
 
+#include "lib/framework/frame.h"
 #include <physfs.h>
+
+class WzConfig;
 
 #include "interpreter.h"
 
@@ -107,9 +110,9 @@ enum ACCESS_TYPE
 // function pointer for script variable saving
 // if pBuffer is NULL the script system is just asking how much space the saved variable will require
 // otherwise pBuffer points to an array to store the value in
-typedef bool (*SCR_VAL_SAVE)(INTERP_VAL *psVal, char *pBuffer, UDWORD *pSize);
+typedef bool (*SCR_VAL_SAVE)(INTERP_VAL *psVal, WzConfig &ini);
 // function pointer for script variable loading
-typedef bool (*SCR_VAL_LOAD)(SDWORD version, INTERP_VAL *psVal, char *pBuffer, UDWORD size);
+typedef bool (*SCR_VAL_LOAD)(INTERP_VAL *psVal, WzConfig &ini);
 
 /* Type for a user type symbol */
 struct TYPE_SYMBOL
@@ -302,7 +305,7 @@ extern bool scriptInitParser(void);
 extern int scr_parse(void);
 
 /* Give an error message */
-void scr_error(const char *pMessage, ...) WZ_DECL_FORMAT(printf, 1, 2);
+void scr_error(const char *pMessage, ...);
 
 extern void scriptGetErrorData(int *pLine, char **ppText);
 

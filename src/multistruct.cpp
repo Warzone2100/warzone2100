@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -47,6 +47,9 @@
 #include "lib/sound/audio_id.h"
 #include "lib/sound/audio.h"
 #include "research.h"
+#include "qtscript.h"
+#include "keymap.h"
+#include "combat.h"
 
 // ////////////////////////////////////////////////////////////////////////////
 // structures
@@ -58,7 +61,7 @@ bool SendBuildFinished(STRUCTURE *psStruct)
 	uint8_t player = psStruct->player;
 	ASSERT( player < MAX_PLAYERS, "invalid player %u", player);
 
-	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_BUILDFINISHED);
+	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_DEBUG_ADD_STRUCTURE);
 		NETuint32_t(&psStruct->id);		// ID of building
 
 		// Along with enough info to build it (if needed)
@@ -77,19 +80,26 @@ bool recvBuildFinished(NETQUEUE queue)
 	uint32_t	type,typeindex;
 	uint8_t		player;
 
-	NETbeginDecode(queue, GAME_BUILDFINISHED);
+	NETbeginDecode(queue, GAME_DEBUG_ADD_STRUCTURE);
 		NETuint32_t(&structId);	// get the struct id.
 		NETuint32_t(&type); 	// Kind of building.
 		NETPosition(&pos);      // pos
 		NETuint8_t(&player);
 	NETend();
 
-	ASSERT( player < MAX_PLAYERS, "invalid player %u", player);
+	ASSERT_OR_RETURN(false, player < MAX_PLAYERS, "invalid player %u", player);
+
+	if (!getDebugMappingStatus() && bMultiPlayer)
+	{
+		debug(LOG_WARNING, "Failed to add structure for player %u.", NetPlay.players[queue.index].position);
+		return false;
+	}
 
 	psStruct = IdToStruct(structId,ANYPLAYER);
 
 	if (psStruct)
-	{												// make it complete.
+	{
+		// make it complete.
 		psStruct->currentBuildPts = psStruct->pStructureType->buildPoints+1;
 
 		if (psStruct->status != SS_BUILT)
@@ -137,6 +147,7 @@ bool recvBuildFinished(NETQUEUE queue)
 #if defined (DEBUG)
 		NETlogEntry("had to plonk down a building", SYNC_FLAG, player);
 #endif
+		triggerEventStructBuilt(psStruct, NULL);
 	}
 	else
 	{
@@ -149,58 +160,10 @@ bool recvBuildFinished(NETQUEUE queue)
 
 
 // ////////////////////////////////////////////////////////////////////////////
-// demolish message.
-bool SendDemolishFinished(STRUCTURE *psStruct, DROID *psDroid)
-{
-	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_DEMOLISH);
-
-		// Send what is being demolish and who is doing it
-		NETuint32_t(&psStruct->id);
-		NETuint32_t(&psDroid->id);
-
-	return NETend();
-}
-
-bool recvDemolishFinished(NETQUEUE queue)
-{
-	STRUCTURE	*psStruct;
-	DROID		*psDroid;
-	uint32_t	structID, droidID;
-
-	NETbeginDecode(queue, GAME_DEMOLISH);
-		NETuint32_t(&structID);
-		NETuint32_t(&droidID);
-	NETend();
-
-	psStruct = IdToStruct(structID, ANYPLAYER);
-	psDroid = IdToDroid(droidID, ANYPLAYER);
-	if (!psDroid)
-	{
-		debug(LOG_ERROR, "recvDemolishFinished: Packet with bad droid ID received. Discarding!");
-		return false;
-	}
-	if (psStruct)
-	{
-		// Demolish it
-		// Should never get here, if in synch.
-		removeStruct(psStruct, true);
-		if (psDroid && psDroid->psTarStats)
-		{
-			// Update droid if reqd
-			psDroid->psTarStats = NULL;
-		}
-	}
-
-	return true;
-}
-
-
-// ////////////////////////////////////////////////////////////////////////////
 // Inform others that a structure has been destroyed
 bool SendDestroyStructure(STRUCTURE *s)
 {
-	technologyGiveAway(s);
-	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_STRUCTDEST);
+	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_DEBUG_REMOVE_STRUCTURE);
 
 	// Struct to destroy
 	NETuint32_t(&s->id);
@@ -215,9 +178,15 @@ bool recvDestroyStructure(NETQUEUE queue)
 	uint32_t structID;
 	STRUCTURE *psStruct;
 
-	NETbeginDecode(queue, GAME_STRUCTDEST);
+	NETbeginDecode(queue, GAME_DEBUG_REMOVE_STRUCTURE);
 		NETuint32_t(&structID);
 	NETend();
+
+	if (!getDebugMappingStatus() && bMultiPlayer)
+	{
+		debug(LOG_WARNING, "Failed to remove structure for player %u.", NetPlay.players[queue.index].position);
+		return false;
+	}
 
 	// Struct to destory
 	psStruct = IdToStruct(structID,ANYPLAYER);
@@ -226,7 +195,7 @@ bool recvDestroyStructure(NETQUEUE queue)
 	{
 		turnOffMultiMsg(true);
 		// Remove the struct from remote players machine
-		destroyStruct(psStruct);
+		destroyStruct(psStruct, gameTime - deltaGameTime + 1);  // deltaGameTime is actually 0 here, since we're between updates. However, the value of gameTime - deltaGameTime + 1 will not change when we start the next tick.
 		turnOffMultiMsg(false);
 		// NOTE: I do not think this should be here!
 		technologyGiveAway(psStruct);
@@ -267,12 +236,33 @@ bool recvLasSat(NETQUEUE queue)
 
 	psStruct = IdToStruct (id, player);
 	psObj	 = IdToPointer(targetid, targetplayer);
+	if (psStruct && !canGiveOrdersFor(queue.index, psStruct->player))
+	{
+		syncDebug("Wrong player.");
+		return !"Meow";  // Return value meaningless and ignored.
+	}
 
 	if (psStruct && psObj && psStruct->pStructureType->psWeapStat[0]->weaponSubClass == WSC_LAS_SAT)
 	{
+		// Lassats have just one weapon
+		unsigned firePause = weaponFirePause(&asWeaponStats[psStruct->asWeaps[0].nStat], player);
+		unsigned damLevel = PERCENT(psStruct->body, structureBody(psStruct));
+
+		if (damLevel < HEAVY_DAMAGE_LEVEL)
+		{
+			firePause += firePause;
+		}
+
+		if (isHumanPlayer(player) && gameTime - psStruct->asWeaps[0].lastFired <= firePause)
+		{
+			/* Too soon to fire again */
+			return true ^ false;  // Return value meaningless and ignored.
+		}
+
 		// Give enemy no quarter, unleash the lasat
 		proj_SendProjectile(&psStruct->asWeaps[0], NULL, player, psObj->pos, psObj, true, 0);
 		psStruct->asWeaps[0].lastFired = gameTime;
+		psStruct->asWeaps[0].ammo = 1; // abducting this field for keeping track of triggers
 
 		// Play 5 second countdown message
 		audio_QueueTrackPos( ID_SOUND_LAS_SAT_COUNTDOWN, psObj->pos.x, psObj->pos.y, psObj->pos.z);
@@ -318,7 +308,15 @@ void recvStructureInfo(NETQUEUE queue)
 			NETuint32_t(&templateId);
 			if (templateId != 0)
 			{
-				psTempl = IdToTemplate(templateId, player);
+				// For autogames, where we want the AI to take us over, our templates are not setup... so let's use any AI's templates.
+				if (!NetPlay.players[player].autoGame)
+				{
+					psTempl = IdToTemplate(templateId, player);
+				}
+				else
+				{
+					psTempl = IdToTemplate(templateId, ANYPLAYER);
+				}
 				if (psTempl == NULL)
 				{
 					debug(LOG_SYNC, "Synch error, don't have tempate id %u, so can't change production of factory %u!", templateId, structId);
@@ -336,21 +334,21 @@ void recvStructureInfo(NETQUEUE queue)
 		debug(LOG_SYNC, "Couldn't find structure %u to change production.", structId);
 		return;
 	}
+	if (!canGiveOrdersFor(queue.index, psStruct->player))
+	{
+		syncDebug("Wrong player.");
+		return;
+	}
 
 	CHECK_STRUCTURE(psStruct);
 
 	if (StructIsFactory(psStruct))
 	{
-		if (psStruct->pFunctionality->factory.pendingCount == 0)
-		{
-			++psStruct->pFunctionality->factory.pendingCount;
-		}
-		if (--psStruct->pFunctionality->factory.pendingCount == 0)
-		{
-			// Subject is now synchronised, remove pending.
-			psStruct->pFunctionality->factory.psSubjectPending = NULL;
-			psStruct->pFunctionality->factory.statusPending = FACTORY_NOTHING_PENDING;
-		}
+		popStatusPending(psStruct->pFunctionality->factory);
+	}
+	else if (psStruct->pStructureType->type == REF_RESEARCH)
+	{
+		popStatusPending(psStruct->pFunctionality->researchFacility);
 	}
 
 	syncDebugStructure(psStruct, '<');
@@ -358,7 +356,7 @@ void recvStructureInfo(NETQUEUE queue)
 	switch (structureInfo)
 	{
 		case STRUCTUREINFO_MANUFACTURE:       structSetManufacture(psStruct, psTempl, ModeImmediate); break;
-		case STRUCTUREINFO_CANCELPRODUCTION:  cancelProduction(psStruct, ModeImmediate);              break;
+		case STRUCTUREINFO_CANCELPRODUCTION:  cancelProduction(psStruct, ModeImmediate, false);       break;
 		case STRUCTUREINFO_HOLDPRODUCTION:    holdProduction(psStruct, ModeImmediate);                break;
 		case STRUCTUREINFO_RELEASEPRODUCTION: releaseProduction(psStruct, ModeImmediate);             break;
 		case STRUCTUREINFO_HOLDRESEARCH:      holdResearch(psStruct, ModeImmediate);                  break;

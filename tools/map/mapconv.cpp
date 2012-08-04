@@ -399,18 +399,24 @@ int main(int argc, char **argv)
 	char filename[PATH_MAX], *p_filename, *base, *mapname;
 	GAMEMAP *map;
 	FILE *fp;
-	int i;
+	int i, argn = 1;
+	bool campaign = false;
 
-	if (argc != 2)
+	if (argc < 2)
 	{
 		printf("Usage: %s <map>\n", argv[0]);
 		return -1;
+	}
+	if (argc == 3 && strcmp(argv[1], "-cam") == 0)
+	{
+		campaign = true;
+		argn++;
 	}
 	
 	fillConversionTables();
 	validateTables();
 	physfs_init(argv[0]);
-	strcpy(filename, physfs_addmappath(argv[1]));
+	strcpy(filename, physfs_addmappath(argv[argn]));
 
 	map = mapLoad(filename);
 	if (!map)
@@ -608,6 +614,7 @@ int main(int argc, char **argv)
 	{
 		strcpy(filename, base);
 		strcat(filename, "/struct.ini");
+		printf("writing %s\n", filename);
 		fp = fopen(filename, "w");
 		if (!fp) printf("%s: %s\n", filename, strerror(errno));
 		for (i = 0; i < map->numStructures; i++)
@@ -627,7 +634,11 @@ int main(int argc, char **argv)
 			MADD("position = %u, %u, %u", psObj->x, psObj->y, psObj->z);
 			MADD("rotation = %u, 0, 0", DEG(psObj->direction));
 			MADD("name = %s", psObj->name);
-			if (psObj->player < map->numPlayers)
+			if (campaign)
+			{
+				MADD("player = %u", psObj->player);
+			}
+			else if (psObj->player < map->numPlayers)
 			{
 				MADD("startpos = %u", psObj->player);
 			}
@@ -695,7 +706,11 @@ int main(int argc, char **argv)
 			MADD("id = %u", psObj->id);
 			MADD("position = %u, %u, %u", psObj->x, psObj->y, psObj->z);
 			MADD("rotation = %u, 0, 0", DEG(psObj->direction));
-			if (psObj->player < map->numPlayers)
+			if (campaign)
+			{
+				MADD("player = %u", psObj->player);
+			}
+			else if (psObj->player < map->numPlayers)
 			{
 				MADD("startpos = %u", psObj->player);
 			}

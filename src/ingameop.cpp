@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -26,7 +26,7 @@
 #include <string.h>
 
 #include "lib/framework/frame.h"
-#include "lib/framework/wzapp_c.h"
+#include "lib/framework/wzapp.h"
 #include "lib/framework/strres.h"
 #include "lib/widget/widget.h"
 #include "lib/netplay/netplay.h"
@@ -61,7 +61,7 @@ bool 	isInGamePopupUp = false;
 
 // ////////////////////////////////////////////////////////////////////////////
 
-static bool addIGTextButton(UDWORD id, UWORD y, UWORD width, const char *string, UDWORD Style)
+static bool addIGTextButton(UDWORD id, UWORD x, UWORD y, UWORD width, const char *string, UDWORD Style)
 {
 	W_BUTINIT sButInit;
 
@@ -71,7 +71,7 @@ static bool addIGTextButton(UDWORD id, UWORD y, UWORD width, const char *string,
 	sButInit.style		= Style;
 
 
-	sButInit.x			= INTINGAMEOP_1_X;
+	sButInit.x			= x;
 	sButInit.y			= y;
 	sButInit.width		= width;
 	sButInit.height		= INTINGAMEOP_OP_H;
@@ -109,8 +109,8 @@ static bool addQuitOptions(void)
 
 	widgAddForm(psWScreen, &sFormInit);
 
-	addIGTextButton(INTINGAMEOP_RESUME, INTINGAMEOP_1_Y, INTINGAMEOP_OP_W, _("Resume Game"), OPALIGN);
-	addIGTextButton(INTINGAMEOP_QUIT_CONFIRM, INTINGAMEOP_2_Y, INTINGAMEOP_OP_W, _("Quit"), OPALIGN);
+	addIGTextButton(INTINGAMEOP_RESUME, INTINGAMEOP_1_X, INTINGAMEOP_1_Y, INTINGAMEOP_OP_W, _("Resume Game"), OPALIGN);
+	addIGTextButton(INTINGAMEOP_QUIT_CONFIRM, INTINGAMEOP_1_X, INTINGAMEOP_2_Y, INTINGAMEOP_OP_W, _("Quit"), OPALIGN);
 
 	if (NetPlay.isHost && bMultiPlayer && NetPlay.bComms)		// only show for real MP games
 	{
@@ -165,17 +165,17 @@ static bool addSlideOptions(void)
 	widgAddForm(psWScreen, &sFormInit);
 
 	// fx vol
-	addIGTextButton(INTINGAMEOP_FXVOL, INTINGAMEOP_1_Y, INTINGAMEOP_OP_W, _("Voice Volume"), WBUT_PLAIN);
+	addIGTextButton(INTINGAMEOP_FXVOL, INTINGAMEOP_2_X, INTINGAMEOP_1_Y, INTINGAMEOP_OP_W, _("Voice Volume"), WBUT_PLAIN);
 	addFESlider(INTINGAMEOP_FXVOL_S, INTINGAMEOP, INTINGAMEOP_MID, INTINGAMEOP_1_Y-5,
 				AUDIO_VOL_MAX, (int)(sound_GetUIVolume() * 100.0));
 
 	// fx vol
-	addIGTextButton(INTINGAMEOP_3DFXVOL, INTINGAMEOP_2_Y, INTINGAMEOP_OP_W, _("FX Volume"), WBUT_PLAIN);
+	addIGTextButton(INTINGAMEOP_3DFXVOL, INTINGAMEOP_2_X, INTINGAMEOP_2_Y, INTINGAMEOP_OP_W, _("FX Volume"), WBUT_PLAIN);
 	addFESlider(INTINGAMEOP_3DFXVOL_S, INTINGAMEOP, INTINGAMEOP_MID, INTINGAMEOP_2_Y-5,
 				AUDIO_VOL_MAX, (int)(sound_GetEffectsVolume() * 100.0));
 
 	// cd vol
-	addIGTextButton(INTINGAMEOP_CDVOL, INTINGAMEOP_3_Y, INTINGAMEOP_OP_W, _("Music Volume"), WBUT_PLAIN);
+	addIGTextButton(INTINGAMEOP_CDVOL, INTINGAMEOP_2_X, INTINGAMEOP_3_Y, INTINGAMEOP_OP_W, _("Music Volume"), WBUT_PLAIN);
 	addFESlider(INTINGAMEOP_CDVOL_S, INTINGAMEOP, INTINGAMEOP_MID, INTINGAMEOP_3_Y-5,
 				AUDIO_VOL_MAX, (int)(sound_GetMusicVolume() * 100));
 
@@ -183,17 +183,17 @@ static bool addSlideOptions(void)
 	// Tactical UI: Target Origin
 	if(tuiTargetOrigin)
 	{
-		addIGTextButton(INTINGAMEOP_TUI_TARGET_ORIGIN_SW, INTINGAMEOP_4_Y, INTINGAMEOP_SW_W,
+		addIGTextButton(INTINGAMEOP_TUI_TARGET_ORIGIN_SW, INTINGAMEOP_2_X, INTINGAMEOP_4_Y, INTINGAMEOP_SW_W,
 			_("Tactical UI (Target Origin Icon): Show"), WBUT_PLAIN);
 	}
 	else
 	{
-		addIGTextButton(INTINGAMEOP_TUI_TARGET_ORIGIN_SW, INTINGAMEOP_4_Y, INTINGAMEOP_SW_W,
+		addIGTextButton(INTINGAMEOP_TUI_TARGET_ORIGIN_SW, INTINGAMEOP_2_X, INTINGAMEOP_4_Y, INTINGAMEOP_SW_W,
 			_("Tactical UI (Target Origin Icon): Hide"), WBUT_PLAIN);
 	}
 #endif
 
-	addIGTextButton(INTINGAMEOP_RESUME, INTINGAMEOP_5_Y, INTINGAMEOP_SW_W, _("Resume Game"), OPALIGN);
+	addIGTextButton(INTINGAMEOP_RESUME, INTINGAMEOP_1_X, INTINGAMEOP_5_Y, INTINGAMEOP_SW_W, _("Resume Game"), OPALIGN);
 
 	return true;
 }
@@ -254,25 +254,35 @@ static bool _intAddInGameOptions(void)
 	// add 'quit' text
 	if ((!bMultiPlayer || (NetPlay.bComms == 0)) && !bInTutorial)
 	{
-		addIGTextButton(INTINGAMEOP_QUIT, INTINGAMEOP_5_Y, INTINGAMEOP_OP_W, _("Quit"), OPALIGN);
+		addIGTextButton(INTINGAMEOP_QUIT, INTINGAMEOP_1_X, INTINGAMEOP_5_Y, INTINGAMEOP_OP_W, _("Quit"), OPALIGN);
 	}
 	else
 	{
-		addIGTextButton(INTINGAMEOP_QUIT, INTINGAMEOP_3_Y, INTINGAMEOP_OP_W, _("Quit"), OPALIGN);
+		addIGTextButton(INTINGAMEOP_QUIT, INTINGAMEOP_1_X, INTINGAMEOP_3_Y, INTINGAMEOP_OP_W, _("Quit"), OPALIGN);
 	}
 
 	// add 'resume'
-	addIGTextButton(INTINGAMEOP_RESUME, INTINGAMEOP_1_Y, INTINGAMEOP_OP_W, _("Resume Game"), OPALIGN);
+	addIGTextButton(INTINGAMEOP_RESUME, INTINGAMEOP_1_X, INTINGAMEOP_1_Y, INTINGAMEOP_OP_W, _("Resume Game"), OPALIGN);
 
 	// add 'options'
-	addIGTextButton(INTINGAMEOP_OPTIONS, INTINGAMEOP_2_Y, INTINGAMEOP_OP_W, _("Audio Options"), OPALIGN);
+	addIGTextButton(INTINGAMEOP_OPTIONS, INTINGAMEOP_1_X, INTINGAMEOP_2_Y, INTINGAMEOP_OP_W, _("Audio Options"), OPALIGN);
 
 	if ((!bMultiPlayer || (NetPlay.bComms == 0)) && !bInTutorial)
 	{
-		// add 'load'
-		addIGTextButton(INTINGAMEOP_LOAD, INTINGAMEOP_3_Y, INTINGAMEOP_OP_W, _("Load Game"), OPALIGN);
-		// add 'save'
-		addIGTextButton(INTINGAMEOP_SAVE, INTINGAMEOP_4_Y, INTINGAMEOP_OP_W, _("Save Game"), OPALIGN);
+		if (!bMultiPlayer)
+		{
+			// add 'load'
+			addIGTextButton(INTINGAMEOP_LOAD_MISSION, INTINGAMEOP_1_X, INTINGAMEOP_3_Y, INTINGAMEOP_OP_W, _("Load Game"), OPALIGN);
+			// add 'save'
+			addIGTextButton(INTINGAMEOP_SAVE_MISSION, INTINGAMEOP_1_X, INTINGAMEOP_4_Y, INTINGAMEOP_OP_W, _("Save Game"), OPALIGN);
+		}
+		else
+		{
+			// add 'load'
+			addIGTextButton(INTINGAMEOP_LOAD_SKIRMISH, INTINGAMEOP_1_X, INTINGAMEOP_3_Y, INTINGAMEOP_OP_W, _("Load Game"), OPALIGN);
+			// add 'save'
+			addIGTextButton(INTINGAMEOP_SAVE_SKIRMISH, INTINGAMEOP_1_X, INTINGAMEOP_4_Y, INTINGAMEOP_OP_W, _("Save Game"), OPALIGN);
+		}
 	}
 
 	intMode		= INT_INGAMEOP;			// change interface mode.
@@ -489,15 +499,21 @@ void intProcessInGameOptions(UDWORD id)
 //			addConsoleMessage(_("GAME SAVED!"), LEFT_JUSTIFY, SYSTEM_MESSAGE);
 //		}
 //		break;
-	case INTINGAMEOP_LOAD:
+	case INTINGAMEOP_LOAD_MISSION:
 		intCloseInGameOptions(true, false);
-		addLoadSave(LOAD_INGAME, _("Load Saved Game"));	// change mode when loadsave returns
+		addLoadSave(LOAD_INGAME_MISSION, _("Load Campaign Saved Game"));	// change mode when loadsave returns
 		break;
-	case INTINGAMEOP_SAVE:
+	case INTINGAMEOP_LOAD_SKIRMISH:
 		intCloseInGameOptions(true, false);
-		addLoadSave(SAVE_INGAME, _("Save Game"));
+		addLoadSave(LOAD_INGAME_SKIRMISH, _("Load Skirmish Saved Game"));	// change mode when loadsave returns
 		break;
-
+	case INTINGAMEOP_SAVE_MISSION:
+		intCloseInGameOptions(true, false);
+		addLoadSave(SAVE_INGAME_MISSION, _("Save Campaign Game"));
+		break;
+	case INTINGAMEOP_SAVE_SKIRMISH:
+		intCloseInGameOptions(true, false);
+		addLoadSave(SAVE_INGAME_SKIRMISH, _("Save Skirmish Game"));
 	// GAME OPTIONS KEYS
 	case INTINGAMEOP_FXVOL:
 	case INTINGAMEOP_3DFXVOL:

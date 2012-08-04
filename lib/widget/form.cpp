@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -262,9 +262,8 @@ static W_TABFORM* formCreateTabbed(const W_FORMINIT* psInit)
 }
 
 /* Free the tips strings for a tabbed form */
-static inline void formFreeTips(W_TABFORM *psForm)
+static inline void formFreeTips(W_TABFORM *)
 {
-	psForm = psForm;
 }
 
 /* Free a tabbed form widget */

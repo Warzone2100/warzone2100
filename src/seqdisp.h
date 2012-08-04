@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -76,7 +76,7 @@ extern bool seq_StopFullScreenVideo(void);
 //control
 extern bool seq_GetVideoSize(SDWORD* pWidth, SDWORD* pHeight);
 //text
-extern bool seq_AddTextForVideo(const char* pText, SDWORD xOffset, SDWORD yOffset, SDWORD startTime, SDWORD endTime, SEQ_TEXT_POSITIONING textJustification);
+extern bool seq_AddTextForVideo(const char* pText, SDWORD xOffset, SDWORD yOffset, double startTime, double endTime, SEQ_TEXT_POSITIONING textJustification);
 //clear the sequence list
 extern void seq_ClearSeqList(void);
 //add a sequence to the list to be played

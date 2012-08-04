@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -73,7 +73,7 @@ bool scrGroupAddDroid(void)
 			"scrGroupAdd: cannot add a command droid to a group" );
 		return false;
 	}
-	if (psDroid->droidType == DROID_TRANSPORTER)
+	if (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER)
 	{
 		debug( LOG_ERROR,
 			"scrGroupAdd: cannot add a transporter to a group" );
@@ -115,7 +115,7 @@ bool scrGroupAddArea(void)
 		if (((SDWORD)psDroid->pos.x >= x1) && ((SDWORD)psDroid->pos.x <= x2) &&
 			((SDWORD)psDroid->pos.y >= y1) && ((SDWORD)psDroid->pos.y <= y2) &&
 			psDroid->droidType != DROID_COMMAND &&
-			psDroid->droidType != DROID_TRANSPORTER )
+			(psDroid->droidType != DROID_TRANSPORTER && psDroid->droidType != DROID_SUPERTRANSPORTER))
 
 		{
 			psGroup->add(psDroid);
@@ -153,7 +153,7 @@ bool scrGroupAddAreaNoGroup(void)
 		if (((SDWORD)psDroid->pos.x >= x1) && ((SDWORD)psDroid->pos.x <= x2) &&
 			((SDWORD)psDroid->pos.y >= y1) && ((SDWORD)psDroid->pos.y <= y2) &&
 			psDroid->droidType != DROID_COMMAND &&
-			psDroid->droidType != DROID_TRANSPORTER &&
+			(psDroid->droidType != DROID_TRANSPORTER && psDroid->droidType != DROID_SUPERTRANSPORTER) &&
 			psDroid->psGroup   == NULL)
 		{
 			psGroup->add(psDroid);
@@ -245,7 +245,7 @@ bool scrIdleGroup(void)
 
 	for(psDroid = psGroup->psList;psDroid; psDroid = psDroid->psGrpNext)
 	{
-		if (psDroid->order == DORDER_NONE || (psDroid->order == DORDER_GUARD && psDroid->psTarget == NULL))
+		if (psDroid->order.type == DORDER_NONE || (psDroid->order.type == DORDER_GUARD && psDroid->order.psObj == NULL))
 		{
 			count++;
 		}
@@ -608,7 +608,6 @@ bool scrOrderDroidStatsLoc(void)
 	DROID			*psDroid;
 	DROID_ORDER		order;
 	SDWORD			x,y, statIndex;
-	BASE_STATS		*psStats;
 
 	if (!stackPopParams(5, ST_DROID, &psDroid, VAL_INT, &order, ST_STRUCTURESTAT, &statIndex,
 						   VAL_INT, &x, VAL_INT, &y))
@@ -623,7 +622,7 @@ bool scrOrderDroidStatsLoc(void)
 	}
 
 	ASSERT_OR_RETURN( false, statIndex < numStructureStats, "Invalid range referenced for numStructureStats, %d > %d", statIndex, numStructureStats);
-	psStats = (asStructureStats + statIndex);
+	STRUCTURE_STATS *psStats = asStructureStats + statIndex;
 
 	ASSERT_OR_RETURN( false, psDroid != NULL, "Invalid Unit pointer" );
 	ASSERT_OR_RETURN( false, psStats != NULL, "Invalid object pointer" );
@@ -1070,6 +1069,7 @@ static UDWORD scrDroidTargetMask(DROID *psDroid)
 		mask |= SCR_DT_REPAIR;
 		break;
 	case DROID_TRANSPORTER:
+	case DROID_SUPERTRANSPORTER:
 		break;
 	case DROID_DEFAULT:
 	case DROID_ANY:
@@ -1169,7 +1169,6 @@ static BASE_OBJECT *scrTargetInArea(SDWORD tarPlayer, SDWORD visPlayer, SDWORD t
 {
 	BASE_OBJECT		*psTarget, *psCurr;
 	SDWORD			temp;
-	bool			bVisCheck;
 	UDWORD			tarMask;
 	TARGET_MASK		getTargetMask;
 	TARGET_PREF		targetPriority;
@@ -1194,17 +1193,6 @@ static BASE_OBJECT *scrTargetInArea(SDWORD tarPlayer, SDWORD visPlayer, SDWORD t
 		y2 = y1;
 		y1 = temp;
 	}
-
-	// see if a visibility check is required and for which player
-	if (visPlayer < 0 || visPlayer >= MAX_PLAYERS)
-	{
-		bVisCheck = false;
-	}
-	else
-	{
-		bVisCheck = true;
-	}
-		bVisCheck = false;
 
 	// see which target type to use
 	switch (tarType)
@@ -1231,8 +1219,7 @@ static BASE_OBJECT *scrTargetInArea(SDWORD tarPlayer, SDWORD visPlayer, SDWORD t
 	psTarget = NULL;
 	for(; psCurr; psCurr=psCurr->psNext)
 	{
-		if ((!bVisCheck || psCurr->visible[visPlayer]) &&
-			(cluster == 0 || psCurr->cluster == cluster) &&
+		if ((cluster == 0 || psCurr->cluster == cluster) &&
 			((SDWORD)psCurr->pos.x >= x1) &&
 			((SDWORD)psCurr->pos.x <= x2) &&
 			((SDWORD)psCurr->pos.y >= y1) &&
@@ -1409,7 +1396,7 @@ bool scrSkCanBuildTemplate(void)
 	}
 
 	// is factory big enough?
-	if(!validTemplateForFactory(psTempl, psStructure) )
+	if (!validTemplateForFactory(psTempl, psStructure, false))
 	{
 		goto failTempl;
 	}
@@ -1490,6 +1477,7 @@ bool scrSkCanBuildTemplate(void)
 
 	case DROID_PERSON:		        // person
 	case DROID_TRANSPORTER:	        // guess what this is!
+	case DROID_SUPERTRANSPORTER:
 	case DROID_DEFAULT:		        // Default droid
 	case DROID_ANY:
 	default:
@@ -1562,35 +1550,36 @@ bool scrSkLocateEnemy(void)
 bool skTopicAvail(UWORD inc, UDWORD player)
 {
 	UDWORD				incPR, incS;
-	PLAYER_RESEARCH		*pPlayerRes = asPlayerResList[player];
 	bool				bPRFound, bStructFound;
 
 
 	//if the topic is possible and has not already been researched - add to list
-	if ((IsResearchPossible(&pPlayerRes[inc])))
+	if ((IsResearchPossible(&asPlayerResList[player][inc])))
 	{
-		if (!IsResearchCompleted(&pPlayerRes[inc]) && !IsResearchStartedPending(&pPlayerRes[inc]))
+		if (!IsResearchCompleted(&asPlayerResList[player][inc])
+		    && !IsResearchStartedPending(&asPlayerResList[player][inc]))
 		{
-		return true;
+			return true;
 		}
 	}
 
 	// make sure that the research is not completed  or started by another researchfac
-	if (!IsResearchCompleted(&pPlayerRes[inc]) && !IsResearchStartedPending(&pPlayerRes[inc]))
+	if (!IsResearchCompleted(&asPlayerResList[player][inc])
+	    && !IsResearchStartedPending(&asPlayerResList[player][inc]))
 	{
 		// Research is not completed  ... also  it has not been started by another researchfac
 
 		//if there aren't any PR's - go to next topic
-		if (!asResearch[inc].numPRRequired)
+		if (asResearch[inc].pPRList.empty())
 		{
 			return false;
 		}
 
 		//check for pre-requisites
 		bPRFound = true;
-		for (incPR = 0; incPR < asResearch[inc].numPRRequired; incPR++)
+		for (incPR = 0; incPR < asResearch[inc].pPRList.size(); incPR++)
 		{
-			if (IsResearchCompleted(&(pPlayerRes[asResearch[inc].pPRList[incPR]]))==0)
+			if (IsResearchCompleted(&asPlayerResList[player][asResearch[inc].pPRList[incPR]]) == 0)
 			{
 				//if haven't pre-requisite - quit checking rest
 				bPRFound = false;
@@ -1605,7 +1594,7 @@ bool skTopicAvail(UWORD inc, UDWORD player)
 
 		//check for structure effects
 		bStructFound = true;
-		for (incS = 0; incS < asResearch[inc].numStructures; incS++)
+		for (incS = 0; incS < asResearch[inc].pStructList.size(); incS++)
 		{
 			//if (!checkStructureStatus(asStructureStats + asResearch[inc].
 			//	pStructList[incS], playerID, SS_BUILT))
@@ -1631,9 +1620,8 @@ bool skTopicAvail(UWORD inc, UDWORD player)
 // ********************************************************************************************
 bool scrSkDoResearch(void)
 {
-	SDWORD				player, bias;//,timeToResearch;//,*x,*y;
+	SDWORD				player, bias;
 	UWORD				i;
-
 	STRUCTURE			*psBuilding;
 	RESEARCH_FACILITY	*psResFacilty;
 
@@ -1651,7 +1639,7 @@ bool scrSkDoResearch(void)
 	}
 
 	// choose a topic to complete.
-	for(i=0; i < numResearch; i++)
+	for(i=0; i < asResearch.size(); i++)
 	{
 		if (skTopicAvail(i, player) && (!bMultiPlayer || !beingResearchedByAlly(i, player)))
 		{
@@ -1659,7 +1647,7 @@ bool scrSkDoResearch(void)
 		}
 	}
 
-	if(i != numResearch)
+	if (i != asResearch.size())
 	{
 		sendResearchStatus(psBuilding, i, player, true);			// inform others, I'm researching this.
 #if defined (DEBUG)
@@ -1773,7 +1761,7 @@ bool scrSkDifficultyModifier(void)
 			{
 				RESEARCH	*psResearch = (RESEARCH *)psResFacility->psSubject;
 
-				pPlayerRes = asPlayerResList[player] + (psResearch->ref - REF_RESEARCH_START);
+				pPlayerRes = &asPlayerResList[player][psResearch->ref - REF_RESEARCH_START];
 				pPlayerRes->currentPoints += (psResearch->researchPoints * 4 * game.skDiff[player]) / 100;
 				syncDebug("AI %d is cheating with research time.", player);
 			}
@@ -1793,7 +1781,6 @@ static bool defenseLocation(bool variantB)
 	UDWORD		x,y,gX,gY,dist,player,nearestSoFar,count;
 	GATEWAY		*psGate,*psChosenGate;
 	DROID		*psDroid;
-	BASE_STATS	*psWStats;
 	UDWORD		x1,x2,x3,x4,y1,y2,y3,y4;
 	bool		noWater;
 	UDWORD      minCount;
@@ -1820,7 +1807,7 @@ static bool defenseLocation(bool variantB)
 	ASSERT_OR_RETURN( false, statIndex < numStructureStats, "Invalid range referenced for numStructureStats, %d > %d", statIndex, numStructureStats);
 
 	ASSERT_OR_RETURN( false, statIndex2 < numStructureStats, "Invalid range referenced for numStructureStats, %d > %d", statIndex2, numStructureStats);
-	psWStats = (asStructureStats + statIndex2);
+	STRUCTURE_STATS *psWStats = (asStructureStats + statIndex2);
 
     // check for wacky coords.
 	if(		*pX < 0

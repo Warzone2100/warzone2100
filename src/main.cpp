@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -37,7 +37,6 @@
 #include "lib/framework/input.h"
 #include "lib/framework/frameint.h"
 #include "lib/framework/physfs_ext.h"
-#include "lib/framework/wzapp_c.h"
 #include "lib/exceptionhandler/exceptionhandler.h"
 #include "lib/exceptionhandler/dumpinfo.h"
 #include "lib/framework/wzfs.h"
@@ -58,6 +57,7 @@
 #include "challenge.h"
 #include "configuration.h"
 #include "display.h"
+#include "display3d.h"
 #include "frontend.h"
 #include "game.h"
 #include "init.h"
@@ -68,6 +68,7 @@
 #include "mission.h"
 #include "modding.h"
 #include "multiplay.h"
+#include "qtscript.h"
 #include "research.h"
 #include "scripttabs.h"
 #include "seqdisp.h"
@@ -76,9 +77,15 @@
 #include "wrappers.h"
 #include "version.h"
 #include "map.h"
-#include "parsetest.h"
 #include "keybind.h"
 #include <time.h>
+
+#if defined(WZ_OS_MAC)
+// NOTE: Moving these defines is likely to (and has in the past) break the mac builds
+# include <CoreServices/CoreServices.h>
+# include <unistd.h>
+# include "cocoa_wrapper.h"
+#endif // WZ_OS_MAC
 
 /* Always use fallbacks on Windows */
 #if defined(WZ_OS_WIN)
@@ -95,22 +102,11 @@ enum FOCUS_STATE
 	FOCUS_IN,		// Window has got the focus
 };
 
-#if defined(WZ_OS_WIN)
-# define WZ_WRITEDIR "Warzone 2100 master"
-#elif defined(WZ_OS_MAC)
-# include <CoreServices/CoreServices.h>
-# include <unistd.h>
-# include "cocoa_wrapper.h"
-# define WZ_WRITEDIR "Warzone 2100 master"
-#else
-# define WZ_WRITEDIR ".warzone2100-master"
-#endif
-
 bool customDebugfile = false;		// Default false: user has NOT specified where to store the stdout/err file.
 
 char datadir[PATH_MAX] = ""; // Global that src/clparse.c:ParseCommandLine can write to, so it can override the default datadir on runtime. Needs to be empty on startup for ParseCommandLine to work!
 char configdir[PATH_MAX] = ""; // specifies custom USER directory. Same rules apply as datadir above.
-
+char rulesettag[40] = "";
 char * global_mods[MAX_MODS] = { NULL };
 char * campaign_mods[MAX_MODS] = { NULL };
 char * multiplay_mods[MAX_MODS] = { NULL };
@@ -119,7 +115,7 @@ char * override_mods[MAX_MODS] = { NULL };
 char * override_mod_list = NULL;
 bool use_override_mods = false;
 
-char *current_map[3] = { NULL };
+char *current_map = NULL;
 
 char * loaded_mods[MAX_MODS] = { NULL };
 char * mod_list = NULL;
@@ -278,28 +274,8 @@ void setOverrideMods(char * modlist)
 
 void setCurrentMap(char* map, int maxPlayers)
 {
-	free(current_map[0]);
-	free(current_map[1]);
-	// Transform "Sk-Rush-T2" into "4c-Rush.wz" so it can be matched by the map loader
-	current_map[0] = (char*)malloc(strlen(map) + 1 + 7);
-	snprintf(current_map[0], 3, "%d", maxPlayers);
-	strcat(current_map[0], "c-");
-	if (strncmp(map, "Sk-", 3) == 0)
-	{
-		strcat(current_map[0], map + 3);
-	}
-	else
-	{
-		strcat(current_map[0], map);
-	}
-	if (strncmp(current_map[0] + strlen(current_map[0]) - 3, "-T", 2) == 0)
-	{
-		current_map[0][strlen(current_map[0]) - 3] = '\0';
-	}
-	current_map[1] = (char*)malloc(strlen(map) + 1 + 7);
-	strcpy(current_map[1], current_map[0]);
-	strcat(current_map[1],".wz");
-	current_map[2] = NULL;
+	free(current_map);
+	current_map = map != NULL? strdup(map) : NULL;
 }
 
 void clearOverrideMods(void)
@@ -751,13 +727,13 @@ static void startTitleLoop(void)
 {
 	SetGameMode(GS_TITLE_SCREEN);
 
-	screen_RestartBackDrop();
+	initLoadingScreen(true);
 	if (!frontendInitialise("wrf/frontend.wrf"))
 	{
 		debug( LOG_FATAL, "Shutting down after failure" );
 		exit(EXIT_FAILURE);
 	}
-	frontendInitVars();
+	closeLoadingScreen();
 }
 
 
@@ -783,7 +759,9 @@ static void startGameLoop(void)
 {
 	SetGameMode(GS_NORMAL);
 
-	if (!levLoadData(aLevelName, NULL, GTYPE_SCENARIO_START))
+	//if (!levLoadData(game.map /*aLevelName*/, &game.hash, NULL, GTYPE_SCENARIO_START))
+	// Not sure what aLevelName is, in relation to game.map. But need to use aLevelName here, to be able to start the right map for campaign, and need game.hash, to start the right non-campaign map, if there are multiple identically named maps.
+	if (!levLoadData(aLevelName, &game.hash, NULL, GTYPE_SCENARIO_START))
 	{
 		debug( LOG_FATAL, "Shutting down after failure" );
 		exit(EXIT_FAILURE);
@@ -822,6 +800,7 @@ static void startGameLoop(void)
 	{
 		eventFireCallbackTrigger((TRIGGER_TYPE)CALL_START_NEXT_LEVEL);
 	}
+	triggerEvent(TRIGGER_START_LEVEL);
 	screen_disableMapPreview();
 }
 
@@ -834,6 +813,7 @@ static void stopGameLoop(void)
 {
 	if (gameLoopStatus != GAMECODE_NEWLEVEL)
 	{
+		clearBlueprints();
 		initLoadingScreen(true); // returning to f.e. do a loader.render not active
 		pie_EnableFog(false); // dont let the normal loop code set status on
 		fogStatus = 0;
@@ -844,6 +824,7 @@ static void stopGameLoop(void)
 				debug(LOG_ERROR, "levReleaseAll failed!");
 			}
 		}
+		closeLoadingScreen();
 		reloadMPConfig();
 	}
 
@@ -882,6 +863,7 @@ static bool initSaveGameLoad(void)
 	}
 
 	screen_StopBackDrop();
+	closeLoadingScreen();
 
 	// Trap the cursor if cursor snapping is enabled
 	if (war_GetTrapCursor())
@@ -951,6 +933,7 @@ static void runTitleLoop(void)
 		case TITLECODE_SAVEGAMELOAD:
 			{
 				debug(LOG_MAIN, "TITLECODE_SAVEGAMELOAD");
+				initLoadingScreen(true);
 				// Restart into gameloop and load a savegame, ONLY on a good savegame load!
 				stopTitleLoop();
 				if (!initSaveGameLoad())
@@ -960,13 +943,15 @@ static void runTitleLoop(void)
 					startTitleLoop();
 					changeTitleMode(TITLE);
 				}
-
+				closeLoadingScreen();
 			break;
 			}
 		case TITLECODE_STARTGAME:
 			debug(LOG_MAIN, "TITLECODE_STARTGAME");
+			initLoadingScreen(true);
 			stopTitleLoop();
 			startGameLoop(); // Restart into gameloop
+			closeLoadingScreen();
 			break;
 		case TITLECODE_SHOWINTRO:
 			debug(LOG_MAIN, "TITLECODE_SHOWINTRO");
@@ -993,7 +978,7 @@ void mainLoop(void)
 	if (keyPressed(KEY_F10))
 	{
 		kf_ScreenDump();
-		inputLooseFocus();		// remove it from input stream
+		inputLoseFocus();		// remove it from input stream
 	}
 
 	if (NetPlay.bComms || focusState == FOCUS_IN || !war_GetPauseOnFocusLoss())
@@ -1037,7 +1022,7 @@ bool getUTF8CmdLine(int* const utfargc, const char*** const utfargv) // explicit
 		LocalFree(wargv);
 		return false;
 	}
-	// the following malloc and UTF16toUTF8 will create leaks.
+	// the following malloc and UTF16toUTF8 will be cleaned up in realmain().
 	*utfargv = (const char**)malloc(sizeof(const char*) * wargc);
 	if (!*utfargv)
 	{
@@ -1063,9 +1048,12 @@ bool getUTF8CmdLine(int* const utfargc, const char*** const utfargv) // explicit
 	return true;
 }
 
-int main(int argc, char *argv[])
+// for backend detection
+extern const char *BACKEND;
+
+int realmain(int argc, char *argv[])
 {
-	QApplication app(argc, argv);
+	wzMain(argc, argv);
 	int utfargc = argc;
 	const char** utfargv = (const char**)argv;
 
@@ -1112,9 +1100,13 @@ int main(int argc, char *argv[])
 	/*** Initialize directory structure ***/
 	make_dir(ScreenDumpPath, "screenshots", NULL);
 	make_dir(SaveGamePath, "savegames", NULL);
+	PHYSFS_mkdir("savegames/campaign");
+	PHYSFS_mkdir("savegames/skirmish");
 	make_dir(MultiCustomMapsPath, "maps", NULL); // MUST have this to prevent crashes when getting map
 	PHYSFS_mkdir("music");
 	PHYSFS_mkdir("logs");		// a place to hold our netplay, mingw crash reports & WZ logs
+	PHYSFS_mkdir("userdata");	// a place to store per-mod data user generated data
+	memset(rulesettag, 0, sizeof(rulesettag)); // tag to add to userdata to find user generated stuff
 	make_dir(MultiPlayersPath, "multiplay", NULL);
 	make_dir(MultiPlayersPath, "multiplay", "players");
 
@@ -1131,14 +1123,18 @@ int main(int argc, char *argv[])
 		// Note: We are using fopen(), and not physfs routines to open the file
 		// log name is logs/(or \)WZlog-MMDD_HHMMSS.txt
 		snprintf(buf, sizeof(buf), "%slogs%sWZlog-%02d%02d_%02d%02d%02d.txt", PHYSFS_getWriteDir(), PHYSFS_getDirSeparator(),
-			newtime->tm_mon, newtime->tm_mday, newtime->tm_hour, newtime->tm_min, newtime->tm_sec );
+			newtime->tm_mon + 1, newtime->tm_mday, newtime->tm_hour, newtime->tm_min, newtime->tm_sec );
 		debug_register_callback( debug_callback_file, debug_callback_file_init, debug_callback_file_exit, buf );
+
+		// FIXME: Change this to LOG_WZ on next release
+		debug(LOG_INFO, "Using %s debug file", buf);
 	}
 
 	// NOTE: it is now safe to use debug() calls to make sure output gets captured.
 	check_Physfs();
 	debug(LOG_WZ, "Warzone 2100 - %s", version_getFormattedVersionString());
 	debug(LOG_WZ, "Using language: %s", getLanguage());
+	debug(LOG_WZ, "Backend: %s", BACKEND);
 	debug(LOG_MEMORY, "sizeof: SIMPLE_OBJECT=%ld, BASE_OBJECT=%ld, DROID=%ld, STRUCTURE=%ld, FEATURE=%ld, PROJECTILE=%ld",
 	      (long)sizeof(SIMPLE_OBJECT), (long)sizeof(BASE_OBJECT), (long)sizeof(DROID), (long)sizeof(STRUCTURE), (long)sizeof(FEATURE), (long)sizeof(PROJECTILE));
 
@@ -1166,21 +1162,6 @@ int main(int argc, char *argv[])
 
 	// Find out where to find the data
 	scanDataDirs();
-
-	// This needs to be done after "scanDataDirs"
-	// for the root cert from cacert.
-	NETinit(true);
-
-	// Must be run before OpenGL driver is properly initialized due to
-	// strange conflicts - Per
-	if (selfTest)
-	{
-		memset(enabled_debug, 0, sizeof(*enabled_debug) * LOG_LAST);
-		fprintf(stdout, "Carrying out self-test:\n");
-		playListTest();
-		audioTest();
-		soundTest();
-	}
 
 	// Now we check the mods to see if they exist or not (specified on the command line)
 	// They are all capped at 100 mods max(see clparse.c)
@@ -1253,55 +1234,12 @@ int main(int argc, char *argv[])
 		}
 	}
 
-	debug(LOG_MAIN, "Qt initialization");
-	QGL::setPreferredPaintEngine(QPaintEngine::OpenGL); // Workaround for incorrect text rendering on nany platforms.
-
-	// Setting up OpenGL
-	QGLFormat format;
-	format.setDoubleBuffer(true);
-	format.setAlpha(true);
-	int w = pie_GetVideoBufferWidth();
-	int h = pie_GetVideoBufferHeight();
-
-	if (war_getFSAA())
+	if (!wzMain2())
 	{
-		format.setSampleBuffers(true);
-		format.setSamples(war_getFSAA());
-	}
-	WzMainWindow mainwindow(QSize(w, h), format);
-	mainwindow.setMinimumResolution(QSize(800, 600));
-	if (!mainwindow.context()->isValid())
-	{
-		QMessageBox::critical(NULL, "Oops!", "Warzone2100 failed to create an OpenGL context. This probably means that your graphics drivers are out of date. Try updating them!");
 		return EXIT_FAILURE;
 	}
-
-	screenWidth = w;
-	screenHeight = h;
-	if (war_getFullscreen())
-	{
-		mainwindow.resize(w,h);
-		mainwindow.showFullScreen();
-		if(w>mainwindow.width()) {
-			w = mainwindow.width();
-		}
-		if(h>mainwindow.height()) {
-			h = mainwindow.height();
-		}
-		pie_SetVideoBufferWidth(w);
-		pie_SetVideoBufferHeight(h);
-	}
-	else
-	{
-		mainwindow.show();
-		mainwindow.setMinimumSize(w, h);
-		mainwindow.setMaximumSize(w, h);
-	}
-
-	mainwindow.setSwapInterval(war_GetVsync());
-	war_SetVsync(mainwindow.swapInterval() > 0);
-
-	mainwindow.setReadyToPaint();
+	int w = pie_GetVideoBufferWidth();
+	int h = pie_GetVideoBufferHeight();
 
 	char buf[256];
 	ssprintf(buf, "Video Mode %d x %d (%s)", w, h, war_getFullscreen() ? "fullscreen" : "window");
@@ -1314,6 +1252,35 @@ int main(int argc, char *argv[])
 	}
 	war_SetWidth(pie_GetVideoBufferWidth());
 	war_SetHeight(pie_GetVideoBufferHeight());
+
+	// Fix up settings from the config file
+	// And initialize shader usage setting
+	if (!pie_GetShaderAvailability())
+	{
+		war_SetShaders(FALLBACK);
+		pie_SetShaderUsage(false);
+	}
+	else
+	{
+		if (war_GetShaders() == FALLBACK)
+		{
+			war_SetShaders(SHADERS_OFF);
+		}
+		if (!pie_GetFallbackAvailability())
+		{
+			war_SetShaders(SHADERS_ONLY);
+			pie_SetShaderUsage(true);
+		}
+		else if (war_GetShaders() == SHADERS_ONLY || war_GetShaders() == SHADERS_ON)
+		{
+			war_SetShaders(SHADERS_ON);
+			pie_SetShaderUsage(true);
+		}
+		else  // (war_GetShaders() == SHADERS_OFF)
+		{
+			pie_SetShaderUsage(false);
+		}
+	}
 
 	pie_SetFogStatus(false);
 	pie_ScreenFlip(CLEAR_BLACK);
@@ -1332,17 +1299,9 @@ int main(int argc, char *argv[])
 	//set all the pause states to false
 	setAllPauseStates(false);
 
-	/* Runtime unit testing */
-	if (selfTest)
-	{
-		parseTest();
-		levTest();
-		mapTest();
-		fprintf(stdout, "All tests PASSED!\n");
-		exit(0);
-	}
-
 	// Copy this info to be used by the crash handler for the dump file
+	ssprintf(buf,"Using Backend: %s", BACKEND);
+	addDumpInfo(buf);
 	ssprintf(buf,"Using language: %s", getLanguageName());
 	addDumpInfo(buf);
 
@@ -1367,9 +1326,18 @@ int main(int argc, char *argv[])
 	debug_MEMSTATS();
 #endif
 	debug(LOG_MAIN, "Entering main loop");
-	app.exec();
+	wzMain3();
 	saveConfig();
 	systemShutdown();
+#ifdef WZ_OS_WIN	// clean up the memory allocated for the command line conversion
+	for (int i=0; i<argc; i++)
+	{
+		const char*** const utfargvF = &utfargv;
+		free((void *)(*utfargvF)[i]);
+	}
+	free(utfargv);
+#endif
+	wzShutdown();
 	debug(LOG_MAIN, "Completed shutting down Warzone 2100");
 	return EXIT_SUCCESS;
 }

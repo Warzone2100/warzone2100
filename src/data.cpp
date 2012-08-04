@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -48,6 +48,7 @@
 #include "research.h"
 #include "scriptvals.h"
 #include "stats.h"
+#include "template.h"
 #include "text.h"
 #include "texture.h"
 
@@ -141,17 +142,12 @@ void dataClearSaveFlag(void)
 }
 
 /* Load the body stats */
-static bool bufferSBODYLoad(const char *pBuffer, UDWORD size, void **ppData)
+static bool bufferSBODYLoad(const char* fileName, void** ppData)
 {
-	calcDataHash((uint8_t *)pBuffer, size, DATA_SBODY);
-
-	if (!loadBodyStats(pBuffer, size)
-	 || !allocComponentList(COMP_BODY, numBodyStats))
+	if (!loadBodyStats(fileName) || !allocComponentList(COMP_BODY, numBodyStats))
 	{
 		return false;
 	}
-
-	// set a dummy value so the release function gets called
 	*ppData = (void *)1;
 	return true;
 }
@@ -295,19 +291,6 @@ static bool bufferSPROPTYPESLoad(const char *pBuffer, UDWORD size, void **ppData
 static bool bufferSPROPSNDLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
 	if (!loadPropulsionSounds(pBuffer, size))
-	{
-		return false;
-	}
-
-	//not interested in this value
-	*ppData = NULL;
-	return true;
-}
-
-/* Load the SSPECABIL stats */
-static bool bufferSSPECABILLoad(const char *pBuffer, UDWORD size, void **ppData)
-{
-	if (!loadSpecialAbility(pBuffer, size))
 	{
 		return false;
 	}
@@ -537,7 +520,7 @@ static bool bufferRESCHLoad(const char *pBuffer, UDWORD size, void **ppData)
 	calcDataHash((uint8_t *)pBuffer, size, DATA_RESCH);
 
 	//check to see if already loaded
-	if (numResearch > 0)
+	if (asResearch.size() > 0)
 	{
 		//release previous data before loading in the new
 		dataRESCHRelease(NULL);
@@ -665,37 +648,37 @@ static bool bufferRFUNCLoad(const char *pBuffer, UDWORD size, void **ppData)
 /* Load the message viewdata */
 static bool bufferSMSGLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
-	VIEWDATA	*pViewData;
+	const char *ptr;
 
-	pViewData = loadViewData(pBuffer, size);
-	if (!pViewData)
+	ptr = loadViewData(pBuffer, size);
+	if (!ptr)
 	{
 		return false;
 	}
 
 	// set the pointer so the release function gets called with it
-	*ppData = (void *)pViewData;
+	*ppData = (void *)ptr;
 	return true;
 }
 
 /* Load research message viewdata */
 static bool dataResearchMsgLoad(const char* fileName, void** ppData)
 {
-	VIEWDATA* pViewData = loadResearchViewData(fileName);
-	if (!pViewData)
+	const char *ptr = loadResearchViewData(fileName);
+	if (!ptr)
 	{
 		return false;
 	}
 
 	// set the pointer so the release function gets called with it
-	*ppData = pViewData;
+	*ppData = (void *)ptr;
 	return true;
 }
 
 // release the message viewdata
 static void dataSMSGRelease(void *pData)
 {
-	viewDataShutDown((VIEWDATA *)pData);
+	viewDataShutDown((const char *)pData);
 }
 
 /* Load an imd */
@@ -751,11 +734,6 @@ static bool dataTERTILESLoad(const char *fileName, void **ppData)
 
 	return true;
 }
-
-static void dataTERTILESRelease(WZ_DECL_UNUSED void *pData)
-{
-}
-
 
 static bool dataIMGLoad(const char *fileName, void **ppData)
 {
@@ -1101,7 +1079,6 @@ struct RES_TYPE_MIN_BUF
 static const RES_TYPE_MIN_BUF BufferResourceTypes[] =
 {
 	{"SWEAPON", bufferSWEAPONLoad, NULL},
-	{"SBODY", bufferSBODYLoad, dataReleaseStats},
 	{"SBRAIN", bufferSBRAINLoad, NULL},
 	{"SPROP", bufferSPROPLoad, NULL},
 	{"SSENSOR", bufferSSENSORLoad, NULL},
@@ -1111,7 +1088,6 @@ static const RES_TYPE_MIN_BUF BufferResourceTypes[] =
 	{"SPROPTYPES", bufferSPROPTYPESLoad, NULL},
 	{"SPROPSND", bufferSPROPSNDLoad, NULL},
 	{"STERRTABLE", bufferSTERRTABLELoad, NULL},
-	{"SSPECABIL", bufferSSPECABILLoad, NULL},
 	{"SBPIMD", bufferSBPIMDLoad, NULL},
 	{"SWEAPSND", bufferSWEAPSNDLoad, NULL},
 	{"SWEAPMOD", bufferSWEAPMODLoad, NULL},
@@ -1145,11 +1121,12 @@ struct RES_TYPE_MIN_FILE
 static const RES_TYPE_MIN_FILE FileResourceTypes[] =
 {
 	{"WAV", dataAudioLoad, (RES_FREE)sound_ReleaseTrack},
+	{"SBODY", bufferSBODYLoad, dataReleaseStats},
 	{"AUDIOCFG", dataAudioCfgLoad, NULL},
 	{"ANI", dataAnimLoad, dataAnimRelease},
 	{"ANIMCFG", dataAnimCfgLoad, NULL},
 	{"IMGPAGE", dataImageLoad, dataImageRelease},
-	{"TERTILES", dataTERTILESLoad, dataTERTILESRelease},
+	{"TERTILES", dataTERTILESLoad, NULL},
 	{"IMG", dataIMGLoad, dataIMGRelease},
 	{DT_TEXPAGE, dataTexPageLoad, dataImageRelease},
 	{DT_TCMASK, dataTexPageTCMaskLoad, dataImageRelease},

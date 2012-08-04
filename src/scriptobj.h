@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -96,9 +96,9 @@ extern bool scrGroupObjGet(UDWORD index);
 extern bool scrWeaponObjGet(UDWORD index);
 
 // default value save routine
-extern bool scrValDefSave(INTERP_VAL *psVal, char *pBuffer, UDWORD *pSize);
+extern bool scrValDefSave(INTERP_VAL *psVal, WzConfig &ini);
 
 // default value load routine
-extern bool scrValDefLoad(SDWORD version, INTERP_VAL *psVal, char *pBuffer, UDWORD size);
+extern bool scrValDefLoad(INTERP_VAL *psVal, WzConfig &ini);
 
 #endif // __INCLUDED_SRC_SCRIPTOBJ_H__

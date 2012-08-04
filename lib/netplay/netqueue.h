@@ -1,8 +1,7 @@
 #ifndef _NET_QUEUE_H_
 #define _NET_QUEUE_H_
 
-#include "lib/framework/types.h"
-
+#include "lib/framework/frame.h"
 #include <vector>
 #include <list>
 #include <deque>

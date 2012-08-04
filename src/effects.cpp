@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -36,6 +36,7 @@
 	************************************************************
 */
 #include "lib/framework/wzapp.h"
+#include "lib/framework/wzconfig.h"
 #include "lib/framework/frameresource.h"
 #include "lib/framework/input.h"
 #include "lib/framework/math_ext.h"
@@ -339,9 +340,9 @@ static EFFECT *Effect_malloc(void)
  * Return an effect into memory pool
  * \param self Effect to be freed
  */
-static void Effect_free(void *self)
+static void Effect_free(EFFECT *instance)
 {
-	EFFECT *instance = (EFFECT *)self;
+	instance->group = EFFECT_FREED;
 
 	/* Remove from activeList and fixup endings necessary */
 	if (instance->prev != NULL) {
@@ -458,7 +459,7 @@ void	effectSetSize(UDWORD size)
 }
 
 void addMultiEffect(const Vector3i *basePos, Vector3i *scatter, EFFECT_GROUP group,
-					   EFFECT_TYPE type, bool specified, iIMDShape *imd, unsigned int number, bool lit, unsigned int size)
+                    EFFECT_TYPE type, bool specified, iIMDShape *imd, unsigned int number, bool lit, unsigned int size, unsigned effectTime)
 {
 	if (number == 0)
 	{
@@ -471,7 +472,7 @@ void addMultiEffect(const Vector3i *basePos, Vector3i *scatter, EFFECT_GROUP gro
 	/* If there's only one, make sure it's in the centre */
 	if (number == 1)
 	{
-		addEffect(basePos,group,type,specified,imd,lit);
+		addEffect(basePos, group, type, specified, imd, lit, effectTime);
 	}
 	else
 	{
@@ -488,7 +489,7 @@ void addMultiEffect(const Vector3i *basePos, Vector3i *scatter, EFFECT_GROUP gro
 			                                                  rand()%(scatter->y*2 + 1),
 			                                                  rand()%(scatter->z*2 + 1)
 			                                                 );
-			addEffect(&scatPos,group,type,specified,imd,lit);
+			addEffect(&scatPos, group, type, specified, imd, lit, effectTime);
 		}
 	}
 }
@@ -502,6 +503,11 @@ void	SetEffectForPlayer(uint8_t player)
 }
 
 void addEffect(const Vector3i *pos, EFFECT_GROUP group, EFFECT_TYPE type, bool specified, iIMDShape *imd, int lit)
+{
+	return addEffect(pos, group, type, specified, imd, lit, graphicsTime);
+}
+
+void addEffect(const Vector3i *pos, EFFECT_GROUP group, EFFECT_TYPE type, bool specified, iIMDShape *imd, int lit, unsigned effectTime)
 {
 	EFFECT *psEffect = NULL;
 
@@ -536,7 +542,7 @@ void addEffect(const Vector3i *pos, EFFECT_GROUP group, EFFECT_TYPE type, bool s
 	SetEffectForPlayer(0);	// reset it
 
 	/* Set when it entered the world */
-	psEffect->birthTime = psEffect->lastFrame = graphicsTime;
+	psEffect->birthTime = psEffect->lastFrame = effectTime;
 
 	if(group == EFFECT_GRAVITON && (type == GRAVITON_TYPE_GIBLET || type == GRAVITON_TYPE_EMITTING_DR))
 	{
@@ -598,8 +604,7 @@ void addEffect(const Vector3i *pos, EFFECT_GROUP group, EFFECT_TYPE type, bool s
 		case EFFECT_FIREWORK:
 			effectSetupFirework(psEffect);
 			break;
-		case EFFECT_STRUCTURE:
-		case EFFECT_DUST_BALL:
+		case EFFECT_FREED:
 			ASSERT( false,"Weirdy group type for an effect" );
 			break;
 	}
@@ -623,14 +628,17 @@ void processEffects(void)
 	{
 		EFFECT *itNext = it->next; // If updateEffect deletes something, we would be screwed...
 
-		/* Run updates, effect may be deleted here */
-		updateEffect(it);
-
-		/* Is it on the grid */
-		if (clipXY(it->position.x, it->position.z))
+		if (it->birthTime <= graphicsTime)  // Don't process, if it doesn't exist yet.
 		{
-			/* Add it to the bucket */
-			bucketAddTypeToList(RENDER_EFFECT, it);
+			/* Run updates, effect may be deleted here */
+			updateEffect(it);
+
+			/* Is it on the grid */
+			if (it->group != EFFECT_FREED && clipXY(it->position.x, it->position.z))
+			{
+				/* Add it to the bucket */
+				bucketAddTypeToList(RENDER_EFFECT, it);
+			}
 		}
 
 		it = itNext;
@@ -666,9 +674,6 @@ static void updateEffect(EFFECT *psEffect)
 		if(!gamePaused()) updatePolySmoke(psEffect);
 		return;
 
-	case EFFECT_STRUCTURE:
-		return;
-
 	case EFFECT_GRAVITON:
 		if(!gamePaused()) updateGraviton(psEffect);
 		return;
@@ -693,7 +698,7 @@ static void updateEffect(EFFECT *psEffect)
 		if(!gamePaused()) updateFirework(psEffect);
 		return;
 
-	case EFFECT_DUST_BALL: // Apparently not a valid effect...
+	case EFFECT_FREED:
 		break;
 	}
 
@@ -973,9 +978,9 @@ static void updateExplosion(EFFECT *psEffect)
 		}
 	}
 	/* Time to update the frame number on the explosion */
-	else if (graphicsTime - psEffect->lastFrame > psEffect->frameDelay)
+	else while (graphicsTime - psEffect->lastFrame > psEffect->frameDelay)
 	{
-		psEffect->lastFrame = graphicsTime;
+		psEffect->lastFrame += psEffect->frameDelay;
 		/* Are we on the last frame? */
 
 		if (++psEffect->frameNumber >= effectGetNumFrames(psEffect))
@@ -1031,10 +1036,10 @@ static void updatePolySmoke(EFFECT *psEffect)
 {
 
 	/* Time to update the frame number on the smoke sprite */
-	if(graphicsTime - psEffect->lastFrame > psEffect->frameDelay)
+	while (graphicsTime - psEffect->lastFrame > psEffect->frameDelay)
 	{
 		/* Store away last frame change time */
-		psEffect->lastFrame = graphicsTime;
+		psEffect->lastFrame += psEffect->frameDelay;
 
 		/* Are we on the last frame? */
 		if(++psEffect->frameNumber >= effectGetNumFrames(psEffect))
@@ -1462,7 +1467,7 @@ static void updateFire(EFFECT *psEffect)
 	LIGHT	light;
 	UDWORD	percent;
 
-	percent = PERCENT(graphicsTime - psEffect->birthTime, psEffect->lifeSpan);
+	percent = PERCENT(graphicsTime - psEffect->birthTime, std::max<unsigned>(psEffect->lifeSpan, 1));
 	if(percent > 100)
 	{
 		percent = 100;
@@ -1574,9 +1579,6 @@ void renderEffect(const EFFECT *psEffect)
 		renderBloodEffect(psEffect);
 		return;
 
-	case EFFECT_STRUCTURE:
-		return;
-
 	case EFFECT_DESTRUCTION:
 		/*	There is no display func for a destruction effect -
 			it merely spawn other effects over time */
@@ -1595,7 +1597,7 @@ void renderEffect(const EFFECT *psEffect)
 		renderFirework(psEffect);
 		return;
 
-	case EFFECT_DUST_BALL: // Apparently not a valid effect...
+	case EFFECT_FREED:
 		break;
 	}
 
@@ -1718,6 +1720,7 @@ static void renderExplosionEffect(const EFFECT *psEffect)
 	if(TEST_FACING(psEffect))
 	{
 		/* Always face the viewer! */
+		// TODO This only faces towards the viewer, if the effect is in the middle of the screen... It draws the effect parallel with the screens near/far planes.
 		pie_MatRotY(-player.r.y);
 		pie_MatRotX(-player.r.x);
 	}
@@ -1742,7 +1745,17 @@ static void renderExplosionEffect(const EFFECT *psEffect)
 		pie_MatScale(psEffect->size / 100.f);
 	}
 
-	if(psEffect->type == EXPLOSION_TYPE_PLASMA)
+	bool premultiplied = false;
+	if (psEffect->imd->flags & iV_IMD_PREMULTIPLIED)
+	{
+		premultiplied = true;
+	}
+
+	if (premultiplied)
+	{
+		pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, brightness, pie_PREMULTIPLIED, 0);
+	}
+	else if (psEffect->type == EXPLOSION_TYPE_PLASMA)
 	{
 		pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, brightness, pie_ADDITIVE, EFFECT_PLASMA_ADDITIVE);
 	}
@@ -1893,8 +1906,6 @@ static void renderSmokeEffect(const EFFECT *psEffect)
 // ----------------------------------------------------------------------------------------
 void	effectSetupFirework(EFFECT *psEffect)
 {
-	UDWORD	camExtra;
-
 	if(psEffect->type == FIREWORK_TYPE_LAUNCHER)
 	{
 	 	psEffect->velocity.x = 200 - rand()%400;
@@ -1902,11 +1913,6 @@ void	effectSetupFirework(EFFECT *psEffect)
 		psEffect->velocity.y = 400 + rand()%200;	//height
 		psEffect->lifeSpan = GAME_TICKS_PER_SEC * 3;
 		psEffect->radius = 80 + rand()%150;
-		camExtra = 0;
-		if(getCampaignNumber()!=1)
-		{
-			camExtra+=rand()%200;
-		}
 		psEffect->size = 300+rand()%300;	//height it goes off
 		psEffect->imd = getImdFromIndex(MI_FIREWORK); // not actually drawn
 	}
@@ -1938,9 +1944,7 @@ void	effectSetupFirework(EFFECT *psEffect)
 			break;
 		}
 	}
-
 	psEffect->frameDelay = (EXPLOSION_FRAME_DELAY*2);
-
 }
 
 void	effectSetupSmoke(EFFECT *psEffect)

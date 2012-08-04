@@ -1,4 +1,4 @@
-﻿/* Localized versions of Info.plist keys */
+/* Localized versions of Info.plist keys */
 
 /* Only change the strings after the '='; '\n' gives you a new line, do not use it in the CFBundleName or CFBundleDisplayName strings */
 
@@ -9,8 +9,8 @@ CFBundleName = "Warzone";
 /* Warzone 2100 */ /* Name of the app bundle */
 CFBundleDisplayName = "Warzone 2100";
 
-/* Copyright © 1999-2004 Eidos Interactive.\nCopyright © 2005-2010 The Warzone 2100 Project */ /* Copyright string */
-NSHumanReadableCopyright = "Copyright © 1999-2004 Eidos Interactive.\nCopyright © 2005-2010 El projecte Warzone 2100";
+/* Copyright © 1999-2004 Eidos Interactive.\nCopyright © 2005-2012 The Warzone 2100 Project */ /* Copyright string */
+NSHumanReadableCopyright = "Copyright © 1999-2004 Eidos Interactive.\nCopyright © 2005-2012 El projecte Warzone 2100";
 
 
 /* Warzone 2100 Map / Mod File */ /* Description of .wz files */

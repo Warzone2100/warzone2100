@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -22,9 +22,26 @@
 
 #include "types.h"
 #include "vector.h"
+#include <vector>
+#include <string>
+
 
 uint32_t crcSum(uint32_t crc, const void *data, size_t dataLen);
 uint32_t crcSumU16(uint32_t crc, const uint16_t *data, size_t dataLen);
 uint32_t crcSumVector2i(uint32_t crc, const Vector2i *data, size_t dataLen);
+
+struct Sha256
+{
+	static const int Bytes = 32;
+
+	bool operator ==(Sha256 const &b) const;
+	bool isZero() const;
+	void setZero();
+	std::string toString() const;
+	void fromString(std::string const &s);
+
+	uint8_t bytes[Bytes];
+};
+Sha256 sha256Sum(void const *data, size_t dataLen);
 
 #endif //_CRC_H_

@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -62,21 +62,15 @@ void freeMessages(void);
 /** Removes all the proximity displays. */
 void releaseAllProxDisp(void);
 
-bool addToViewDataList(VIEWDATA* psViewData, unsigned int numData);
-
 /** Load the view data for the messages from the file exported from the world editor. */
-VIEWDATA* loadViewData(const char *pViewMsgData, UDWORD bufferSize);
-
-VIEWDATA* loadResearchViewData(const char* fileName);
+const char *loadViewData(const char *pViewMsgData, UDWORD bufferSize);
+const char *loadResearchViewData(const char* fileName);
 
 /** Get the view data that contains the text message pointer passed in. */
-VIEWDATA* getViewData(const char *pTextMsg);
+VIEWDATA *getViewData(const char *pTextMsg);
 
 /** Release the viewdata memory. */
-void viewDataShutDown(VIEWDATA *psViewData);
-
-// Unused
-PROXIMITY_DISPLAY * getProximityDisplay(MESSAGE *psMessage);
+void viewDataShutDown(const char *fileName);
 
 /** Looks through the players list of messages to find one with the same viewData
   * pointer and which is the same type of message - used in scriptFuncs. */

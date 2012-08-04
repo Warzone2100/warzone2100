@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -48,14 +48,20 @@ enum FSAA_LEVEL
 	FSAA_8X,
 	FSAA_MAX
 };
+
+enum RENDER_MODE
+{
+	FALLBACK,	/// Shaders not supported
+	SHADERS_OFF,/// Shaders supported but off (fallback supported)
+	SHADERS_ON,	/// Shaders supported and on (fallback supported)
+	SHADERS_ONLY/// Shaders but no fallback support
+};
 /***************************************************************************/
 /*
  *	Global ProtoTypes
  */
 /***************************************************************************/
 extern void	war_SetDefaultStates(void);
-extern void war_SetFog(bool val);
-extern bool war_GetFog(void);
 extern void war_SetFMVmode(FMV_MODE mode);
 extern FMV_MODE war_GetFMVmode(void);
 extern void war_SetAllowSubtitles(bool);
@@ -68,6 +74,8 @@ extern void war_SetTrapCursor(bool b);
 extern bool war_GetTrapCursor(void);
 extern void war_SetVsync(bool b);
 extern bool war_GetVsync(void);
+extern void war_SetShaders(unsigned);
+extern unsigned war_GetShaders(void);
 extern void war_SetWidth(UDWORD width);
 extern UDWORD war_GetWidth(void);
 extern void war_SetHeight(UDWORD height);
@@ -78,6 +86,8 @@ extern bool war_GetMusicEnabled(void);
 extern void war_SetMusicEnabled(bool enabled);
 extern int8_t war_GetSPcolor(void);
 extern void war_SetSPcolor(int color);
+void war_setMPcolour(int colour);
+int war_getMPcolour();
 void war_setScanlineMode(SCANLINE_MODE mode);
 SCANLINE_MODE war_getScanlineMode(void);
 

@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -17,12 +17,13 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*
- * CmdDroid.c
+/**
  *
+ * @file
  * Code for command droids
  *
  */
+
 #include <string.h>
 #include "lib/framework/frame.h"
 #include "objects.h"
@@ -33,42 +34,40 @@
 #include "group.h"
 #include "order.h"
 #include "multiplay.h"
+#include "lib/sound/audio.h"
+#include "lib/sound/audio_id.h"
+#include "console.h"
 
+/**This represents the current selected player, which is the client's player.*/
 extern UDWORD selectedPlayer;
 
-// the current command droid target designator for IDF structures
+
+/** This global instance is responsible for dealing with the each player's target designator.*/
 DROID	*apsCmdDesignator[MAX_PLAYERS];
 
-// whether experience should be boosted due to a multi game
+
+/** This global instance says whether experience should be boosted due to a multi game.*/
 static bool bMultiExpBoost = false;
 
-// Initialise the command droids
+
+/** This function allocs the global instance apsCmdDesignator.*/
 bool cmdDroidInit(void)
 {
 	memset(apsCmdDesignator, 0, sizeof(DROID *)*MAX_PLAYERS);
-
 	return true;
 }
-
 
 // ShutDown the command droids
 void cmdDroidShutDown(void)
 {
 }
 
-
-// Make new command droids available
-void cmdDroidAvailable(WZ_DECL_UNUSED BRAIN_STATS *psBrainStats, WZ_DECL_UNUSED SDWORD player)
-{
-}
-
-
-// update the command droids
+/** This function runs on all players to check if the player's current target designator as died.
+ * If it does, sets the target designator to NULL.
+ */
 void cmdDroidUpdate(void)
 {
-	SDWORD	i;
-
-	for(i=0; i<MAX_PLAYERS; i++)
+	for (int i = 0; i < MAX_PLAYERS; i++)
 	{
 		if (apsCmdDesignator[i] && apsCmdDesignator[i]->died)
 		{
@@ -77,8 +76,10 @@ void cmdDroidUpdate(void)
 	}
 }
 
-
-// add a droid to a command group
+/** This function adds the droid to the command group commanded by psCommander.
+ * It creates a group if it doesn't exist.
+ * If the group is not full, it adds the droid to it and sets all the droid's states and orders to the group's.
+ */
 void cmdDroidAddDroid(DROID *psCommander, DROID *psDroid)
 {
 	DROID_GROUP	*psGroup;
@@ -103,15 +104,18 @@ void cmdDroidAddDroid(DROID *psCommander, DROID *psDroid)
 
 		orderDroidObj(psDroid, DORDER_GUARD, (BASE_OBJECT *)psCommander, ModeImmediate);
 	}
+	else
+	{
+		audio_PlayTrack( ID_SOUND_BUILD_FAIL );
+		addConsoleMessage(_("Commander needs a higher level to command more units"), DEFAULT_JUSTIFY,  SYSTEM_MESSAGE);
+	}
 }
 
-// return the current target designator for a player
 DROID *cmdDroidGetDesignator(UDWORD player)
 {
 	return apsCmdDesignator[player];
 }
 
-// set the current target designator for a player
 void cmdDroidSetDesignator(DROID *psDroid)
 {
 	if (psDroid->droidType != DROID_COMMAND)
@@ -122,13 +126,15 @@ void cmdDroidSetDesignator(DROID *psDroid)
 	apsCmdDesignator[psDroid->player] = psDroid;
 }
 
-// set the current target designator for a player
 void cmdDroidClearDesignator(UDWORD player)
 {
 	apsCmdDesignator[player] = NULL;
 }
 
-// get the index of the command droid
+/** This function returns the index of the command droid. 
+ * It does this by searching throughout all the player's droids.
+ * @todo try to find something more efficient, has this function is of O(TotalNumberOfDroidsOfPlayer).
+ */
 SDWORD cmdDroidGetIndex(DROID *psCommander)
 {
 	SDWORD	index = 1;
@@ -151,8 +157,6 @@ SDWORD cmdDroidGetIndex(DROID *psCommander)
 	return index;
 }
 
-
-// note that commander experience should be increased
 void cmdDroidMultiExpBoost(bool bDoit)
 {
 	bMultiExpBoost = bDoit;
@@ -163,13 +167,13 @@ bool cmdGetDroidMultiExpBoost()
 	return bMultiExpBoost;
 }
 
-// get the maximum group size for a command droid
+/** This function returns the maximum group size of the command droid.*/
 unsigned int cmdDroidMaxGroup(const DROID* psCommander)
 {
 	return getDroidLevel(psCommander) * 2 + MIN_CMD_GROUP_DROIDS;
 }
 
-// update the kills of a command droid if psKiller is in a command group
+/** This function adds experience to the command droid of the psKiller's command group.*/
 void cmdDroidUpdateKills(DROID *psKiller, uint32_t experienceInc)
 {
 	ASSERT_OR_RETURN( , psKiller != NULL, "invalid Unit pointer" );
@@ -181,7 +185,7 @@ void cmdDroidUpdateKills(DROID *psKiller, uint32_t experienceInc)
 	}
 }
 
-// returns true if a droid in question is assigned to a commander
+/** This function returns true if the droid is assigned to a commander group and it is not the commander.*/
 bool hasCommander(const DROID* psDroid)
 {
 	ASSERT_OR_RETURN(false, psDroid != NULL, "invalid droid pointer");
@@ -196,7 +200,7 @@ bool hasCommander(const DROID* psDroid)
 	return false;
 }
 
-// get the level of a droids commander, if any
+/** This function returns the level of a droids commander. If the droid doesn't have commander, it returns 0.*/
 unsigned int cmdGetCommanderLevel(const DROID* psDroid)
 {
 	const DROID* psCommander;

@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -25,7 +25,8 @@
  */
 #include <string.h>
 
-#include "lib/framework/frame.h"
+#include "lib/framework/wzapp.h"
+#include "lib/framework/wzconfig.h"
 #include "lib/framework/endian_hack.h"
 #include "lib/framework/strres.h"
 #include "objects.h"
@@ -108,8 +109,8 @@ bool scrBaseObjGet(UDWORD index)
 			return false;
 		}
 		type = VAL_INT;
-		scrFunctionResult.v.ival = (SDWORD)((DROID *)psObj)->order;
-		if (scrFunctionResult.v.ival == DORDER_GUARD && ((DROID *)psObj)->psTarget == NULL)
+		scrFunctionResult.v.ival = ((DROID *)psObj)->order.type;
+		if (scrFunctionResult.v.ival == DORDER_GUARD && ((DROID *)psObj)->order.psObj == NULL)
 		{
 			scrFunctionResult.v.ival = DORDER_NONE;
 		}
@@ -153,7 +154,7 @@ bool scrBaseObjGet(UDWORD index)
 			return false;
 		}
 		type = VAL_INT;
-		scrFunctionResult.v.ival = (SDWORD)((DROID *)psObj)->orderX;
+		scrFunctionResult.v.ival = ((DROID *)psObj)->order.pos.x;
 		break;
 	case OBJID_ORDERY:
 		if (psObj->type != OBJ_DROID)
@@ -162,7 +163,7 @@ bool scrBaseObjGet(UDWORD index)
 			return false;
 		}
 		type = VAL_INT;
-		scrFunctionResult.v.ival = (SDWORD)((DROID *)psObj)->orderY;
+		scrFunctionResult.v.ival = ((DROID *)psObj)->order.pos.y;
 		break;
 	case OBJID_DROIDTYPE:
 		if (psObj->type != OBJ_DROID)
@@ -267,7 +268,7 @@ bool scrBaseObjGet(UDWORD index)
 		else if (psObj->type == OBJ_DROID)
 		{
 			type = (INTERP_TYPE)ST_STRUCTURESTAT;
-			scrFunctionResult.v.ival = (SDWORD)((STRUCTURE_STATS *)(((DROID *)psObj)->psTarStats) - asStructureStats);
+			scrFunctionResult.v.ival = ((DROID *)psObj)->order.psStats - asStructureStats;
 		}
 		else		//Nothing else supported
 		{
@@ -285,7 +286,7 @@ bool scrBaseObjGet(UDWORD index)
 		else if (psObj->type == OBJ_DROID)
 		{
 			type = (INTERP_TYPE)ST_BASEOBJECT;
-			scrFunctionResult.v.oval = ((DROID *)psObj)->psTarget;
+			scrFunctionResult.v.oval = ((DROID *)psObj)->order.psObj;
 		}
 		else		//Nothing else supported
 		{
@@ -708,12 +709,11 @@ static char *scrGetStatName(INTERP_TYPE type, UDWORD data)
 
 // default value save routine
 //TODO: use union
-bool scrValDefSave(INTERP_VAL *psVal, char *pBuffer, UDWORD *pSize)
+bool scrValDefSave(INTERP_VAL *psVal, WzConfig &ini)
 {
 	VIEWDATA	*psIntMessage;
 	const char	*pName;
 	RESEARCH	*psResearch;
-	char		*pPos;
 	DROID		*psCDroid;
 
 	switch ((unsigned)psVal->type)  // Unsigned cast to suppress compiler warnings due to enum abuse.
@@ -723,19 +723,7 @@ bool scrValDefSave(INTERP_VAL *psVal, char *pBuffer, UDWORD *pSize)
 		psIntMessage = (VIEWDATA *)psVal->v.oval;
 		if (psIntMessage != NULL)
 		{
-			if (pBuffer)
-			{
-				strcpy(pBuffer, psIntMessage->pName);
-			}
-			*pSize = strlen(psIntMessage->pName)+1;
-		}
-		else
-		{
-			if (pBuffer)
-			{
-				*pBuffer = '\0';
-			}
-			*pSize = 1;
+			ini.setValue("data", QString(psIntMessage->pName));
 		}
 		break;
 	case ST_BASEOBJECT:
@@ -743,19 +731,10 @@ bool scrValDefSave(INTERP_VAL *psVal, char *pBuffer, UDWORD *pSize)
 	case ST_STRUCTURE:
 	case ST_FEATURE:
 		// just save the id
-		if (pBuffer)
+		if (psVal->v.oval && ((BASE_OBJECT *)psVal->v.oval)->died <= NOT_CURRENT_LIST)
 		{
-			if (psVal->v.oval == NULL || ((BASE_OBJECT *)psVal->v.oval)->died > NOT_CURRENT_LIST)
-			{
-				*((UDWORD*)pBuffer) = UDWORD_MAX;
-			}
-			else
-			{
-				*((UDWORD*)pBuffer) = ((BASE_OBJECT *)psVal->v.oval)->id;
-			}
-			endian_udword((UDWORD*)pBuffer);
+			ini.setValue("data", QVariant(((BASE_OBJECT *)psVal->v.oval)->id));
 		}
-		*pSize = sizeof(UDWORD);
 		break;
 	case ST_BASESTATS:
 	case ST_COMPONENT:
@@ -770,138 +749,61 @@ bool scrValDefSave(INTERP_VAL *psVal, char *pBuffer, UDWORD *pSize)
 	case ST_REPAIR:
 	case ST_BRAIN:
 		pName = scrGetStatName(psVal->type, psVal->v.ival);
-		if (pName != NULL)
+		if (pName)
 		{
-			if (pBuffer)
-			{
-				strcpy(pBuffer, pName);
-			}
-			*pSize = strlen(pName) + 1;
-		}
-		else
-		{
-			return false;
+			ini.setValue("data", QString(pName));
 		}
 		break;
 	case ST_TEMPLATE:
-		if (pBuffer)
+		if (psVal->v.oval)
 		{
-			if (psVal->v.oval == NULL)
-			{
-				*((UDWORD*)pBuffer) = UDWORD_MAX;
-			}
-			else
-			{
-				*((UDWORD*)pBuffer) = ((DROID_TEMPLATE *)psVal->v.oval)->multiPlayerID;
-			}
-			endian_udword((UDWORD*)pBuffer);
+			ini.setValue("data", ((DROID_TEMPLATE *)psVal->v.oval)->multiPlayerID);
 		}
-		*pSize = sizeof(UDWORD);
 		break;
 	case ST_TEXTSTRING:
 	{
-		const char * const idStr = psVal->v.sval ? strresGetIDfromString(psStringRes, psVal->v.sval) : NULL;
-		uint16_t len = idStr ? strlen(idStr) + 1 : 0;
-
-		if (pBuffer)
+		const char *const idStr = psVal->v.sval ? strresGetIDfromString(psStringRes, psVal->v.sval) : NULL;
+		if (idStr)
 		{
-			*((uint16_t*)pBuffer) = len;
-			endian_uword((uint16_t*)pBuffer);
-
-			memcpy(pBuffer + sizeof(len), idStr, len);
+			ini.setValue("data", QString(idStr));
 		}
-		*pSize = sizeof(len) + len;
 		break;
 	}
 	case ST_LEVEL:
-		if (psVal->v.sval != NULL)
+		if (psVal->v.sval)
 		{
-			if (pBuffer)
-			{
-				strcpy(pBuffer, psVal->v.sval);
-			}
-			*pSize = strlen(psVal->v.sval)+1;
-		}
-		else
-		{
-			if (pBuffer)
-			{
-				*pBuffer = '\0';
-			}
-			*pSize = 1;
+			ini.setValue("data", QString(psVal->v.sval));
 		}
 		break;
 	case ST_RESEARCH:
 		psResearch = (RESEARCH *)psVal->v.oval;
-		if (psResearch != NULL)
+		if (psResearch && psResearch->pName && psResearch->pName[0] != '\0')
 		{
-			if (pBuffer)
-			{
-				strcpy(pBuffer, psResearch->pName);
-			}
-			*pSize = strlen(psResearch->pName)+1;
-		}
-		else
-		{
-			if (pBuffer)
-			{
-				*pBuffer = '\0';
-			}
-			*pSize = 1;
+			ini.setValue("data", QString(psResearch->pName));
+			ASSERT(psResearch == getResearch(psResearch->pName), "Research %s not found!", psResearch->pName);
 		}
 		break;
 	case ST_GROUP:
 	{
-		DROID_GROUP* const psGroup = (DROID_GROUP *)psVal->v.oval;
-		const int members = psGroup ? psGroup->getNumMembers() : UNALLOCATED_OBJECT;
-
-		if (pBuffer)
+		DROID_GROUP *const psGroup = (DROID_GROUP *)psVal->v.oval;
+		if (psGroup)
 		{
-			pPos = pBuffer;
-
-			*((SDWORD *)pPos) = members;
-			endian_sdword((SDWORD*)pPos);
-			pPos += sizeof(SDWORD);
-
-			if (psGroup)
+			const int members = psGroup->getNumMembers();
+			QStringList droids;
+			for (psCDroid = psGroup->psList; psCDroid; psCDroid = psCDroid->psGrpNext)
 			{
-				// store the run data
-				*((SDWORD *)pPos) = psGroup->sRunData.sPos.x;
-				endian_sdword((SDWORD*)pPos);
-				pPos += sizeof(SDWORD);
-				*((SDWORD *)pPos) = psGroup->sRunData.sPos.y;
-				endian_sdword((SDWORD*)pPos);
-				pPos += sizeof(SDWORD);
-				*((SDWORD *)pPos) = psGroup->sRunData.forceLevel;
-				endian_sdword((SDWORD*)pPos);
-				pPos += sizeof(SDWORD);
-				*((SDWORD *)pPos) = psGroup->sRunData.leadership;
-				endian_sdword((SDWORD*)pPos);
-				pPos += sizeof(SDWORD);
-				*((SDWORD *)pPos) = psGroup->sRunData.healthLevel;
-				endian_sdword((SDWORD*)pPos);
-				pPos += sizeof(SDWORD);
-
-				// now store the droids
-				for (psCDroid = psGroup->psList; psCDroid; psCDroid = psCDroid->psGrpNext)
-				{
-					checkValidId(psCDroid->id);
-
-					*((UDWORD *)pPos) = psCDroid->id;
-					endian_udword((UDWORD*)pPos);
-
-					pPos += sizeof(UDWORD);
-				}
+				checkValidId(psCDroid->id);
+				droids.push_back(QString::number(psCDroid->id));
 			}
-		}
-
-		if (!psGroup)
-		{
-			*pSize = sizeof(SDWORD);
-		}
-		else
-		{
-			*pSize = sizeof(SDWORD) + sizeof(UDWORD) * members + sizeof(SDWORD) * 5;	// members + runData
+			ini.setValue("members", QVariant(members));
+			if (droids.size() > 0)
+			{
+				ini.setValue("data", droids);
+			}
+			ini.setVector2i("runpos", psGroup->sRunData.sPos);
+			ini.setValue("forceLevel", QVariant(psGroup->sRunData.forceLevel));
+			ini.setValue("leadership", QVariant(psGroup->sRunData.leadership));
+			ini.setValue("healthLevel", QVariant(psGroup->sRunData.healthLevel));
 		}
 		break;
 	}
@@ -915,368 +817,227 @@ bool scrValDefSave(INTERP_VAL *psVal, char *pBuffer, UDWORD *pSize)
 		{
 			pName = NULL;
 		}
-		if (pName == NULL)
+		if (!pName)
 		{
-			debug(LOG_WARNING, "scrValDefSave: couldn't get sound track name");
-			// just save an empty string
-			pName = "";
+			debug(LOG_WARNING, "Could not get sound track name");
 		}
-		if (pBuffer)
+		if (pName)
 		{
-			strcpy(pBuffer, pName);
+			ini.setValue("data", QString(pName));
 		}
-		*pSize = strlen(pName) + 1;
 		break;
 	case ST_STRUCTUREID:
 	case ST_DROIDID:
-		// just save the variable contents directly
-		if (pBuffer)
-		{
-			*((UDWORD *)pBuffer) = psVal->v.ival;
-			endian_udword((UDWORD*)pBuffer);
-		}
-		*pSize = sizeof(UDWORD);
+		ini.setValue("data", QVariant(psVal->v.ival));
 		break;
 	default:
-		ASSERT( false, "scrValDefSave: unknown script variable type for save" );
+		ASSERT(false, "Unknown script variable type for save");
 		break;
 	}
 	return true;
 }
 
 /// default value load routine
-bool scrValDefLoad(SDWORD version, INTERP_VAL *psVal, char *pBuffer, UDWORD size)
+bool scrValDefLoad(INTERP_VAL *psVal, WzConfig &ini)
 {
-	char			*pPos;
 	DROID			*psCDroid;
-	SDWORD			index, members, savedMembers;
+	SDWORD			index, members;
 	UDWORD			id;
 	LEVEL_DATASET	*psLevel;
 	DROID_GROUP		*psGroup = NULL;
-	const char              *pName;
-	bool			bObjectDefined;
 
 	switch ((unsigned)psVal->type)  // Unsigned cast to suppress compiler warnings due to enum abuse.
 	{
 	case ST_INTMESSAGE:
-		if ((size == 1) &&
-			(*pBuffer == 0))
+		if (ini.contains("data"))
 		{
-			psVal->v.oval = NULL;
+			psVal->v.oval = (void*)getViewData(ini.value("data").toString().toAscii().constData());
 		}
 		else
 		{
-			psVal->v.oval = (void*)getViewData(pBuffer);
-			if (psVal->v.oval == NULL)
-			{
-				return false;
-			}
+			psVal->v.oval = NULL;
 		}
 		break;
 	case ST_BASEOBJECT:
 	case ST_DROID:
 	case ST_STRUCTURE:
 	case ST_FEATURE:
-		id = *((UDWORD *)pBuffer);
-		endian_udword(&id);
-
-		if (id == UDWORD_MAX)
+		if (ini.contains("data"))
 		{
-			psVal->v.oval = NULL;
+			psVal->v.oval = (void*)getBaseObjFromId(ini.value("data").toInt());
 		}
 		else
 		{
-			psVal->v.oval = (void*)getBaseObjFromId(id);
-			if (!psVal->v.oval)
-			{
-				debug(LOG_ERROR, "Could not find object id %d", id);
-			}
+			psVal->v.oval = NULL;
 		}
 		break;
 	case ST_BASESTATS:
 	case ST_COMPONENT:
 		break;
 	case ST_STRUCTURESTAT:
-		index = getStructStatFromName(pBuffer);
-		if (index == -1)
+		index = 0;
+		if (ini.contains("data"))
 		{
-			debug( LOG_FATAL, "scrValDefLoad: couldn't find structure stat %s", pBuffer );
-			abort();
-			index = 0;
+			index = getStructStatFromName(ini.value("data").toString().toAscii().constData());
+			if (index == -1)
+			{
+				debug( LOG_FATAL, "Could not find stat");
+				index = 0;
+			}
 		}
 		psVal->v.ival = index;
 		break;
 	case ST_FEATURESTAT:
-		index = getFeatureStatFromName(pBuffer);
-		if (index == -1)
+		index = 0;
+		if (ini.contains("data"))
 		{
-			debug( LOG_FATAL, "scrValDefLoad: couldn't find feature stat %s", pBuffer );
-			abort();
-			index = 0;
+			index = getFeatureStatFromName(ini.value("data").toString().toAscii().constData());
+			if (index == -1)
+			{
+				debug( LOG_FATAL, "Could not find stat");
+				index = 0;
+			}
 		}
 		psVal->v.ival = index;
 		break;
 	case ST_BODY:
-		index = getCompFromResName(COMP_BODY, pBuffer);
+		index = getCompFromResName(COMP_BODY, ini.value("data").toString().toAscii().constData());
 		if (index == -1)
 		{
-			debug( LOG_FATAL, "scrValDefLoad: couldn't find body component %s", pBuffer );
-			abort();
+			debug(LOG_FATAL, "Could not find body component");
 			index = 0;
 		}
 		psVal->v.ival = index;
 		break;
 	case ST_PROPULSION:
-		index = getCompFromResName(COMP_PROPULSION, pBuffer);
+		index = getCompFromResName(COMP_PROPULSION, ini.value("data").toString().toAscii().constData());
 		if (index == -1)
 		{
-			debug( LOG_FATAL, "scrValDefLoad: couldn't find propulsion component %s", pBuffer );
-			abort();
+			debug(LOG_FATAL, "Could not find propulsion component");
 			index = 0;
 		}
 		psVal->v.ival = index;
 		break;
 	case ST_ECM:
-		index = getCompFromResName(COMP_ECM, pBuffer);
+		index = getCompFromResName(COMP_ECM, ini.value("data").toString().toAscii().constData());
 		if (index == -1)
 		{
-			debug( LOG_FATAL, "scrValDefLoad: couldn't find ECM component %s", pBuffer );
-			abort();
+			debug(LOG_FATAL, "Could not find ECM component");
 			index = 0;
 		}
 		psVal->v.ival = index;
 		break;
 	case ST_SENSOR:
-		index = getCompFromResName(COMP_SENSOR, pBuffer);
+		index = getCompFromResName(COMP_SENSOR, ini.value("data").toString().toAscii().constData());
 		if (index == -1)
 		{
-			debug( LOG_FATAL, "scrValDefLoad: couldn't find sensor component %s", pBuffer );
-			abort();
+			debug(LOG_FATAL, "Could not find sensor component");
 			index = 0;
 		}
 		psVal->v.ival = index;
 		break;
 	case ST_CONSTRUCT:
-		index = getCompFromResName(COMP_CONSTRUCT, pBuffer);
+		index = getCompFromResName(COMP_CONSTRUCT, ini.value("data").toString().toAscii().constData());
 		if (index == -1)
 		{
-			debug( LOG_FATAL, "scrValDefLoad: couldn't find constructor component %s", pBuffer );
-			abort();
+			debug(LOG_FATAL, "Could not find constructor component");
 			index = 0;
 		}
 		psVal->v.ival = index;
 		break;
 	case ST_WEAPON:
-		index = getCompFromResName(COMP_WEAPON, pBuffer);
+		index = getCompFromResName(COMP_WEAPON, ini.value("data").toString().toAscii().constData());
 		if (index == -1)
 		{
-			debug( LOG_FATAL, "scrValDefLoad: couldn't find weapon %s", pBuffer );
-			abort();
+			debug(LOG_FATAL, "Could not find weapon");
 			index = 0;
 		}
 		psVal->v.ival = index;
 		break;
 	case ST_REPAIR:
-		index = getCompFromResName(COMP_REPAIRUNIT, pBuffer);
+		index = getCompFromResName(COMP_REPAIRUNIT, ini.value("data").toString().toAscii().constData());
 		if (index == -1)
 		{
-			debug( LOG_FATAL, "scrValDefLoad: couldn't find repair component %s", pBuffer );
-			abort();
+			debug(LOG_FATAL, "Could not find repair component");
 			index = 0;
 		}
 		psVal->v.ival = index;
 		break;
 	case ST_BRAIN:
-		index = getCompFromResName(COMP_BRAIN, pBuffer);
+		index = getCompFromResName(COMP_BRAIN, ini.value("data").toString().toAscii().constData());
 		if (index == -1)
 		{
-			debug( LOG_FATAL, "scrValDefLoad: couldn't find repair brain %s", pBuffer );
-			abort();
+			debug(LOG_FATAL, "Could not find repair brain");
 			index = 0;
 		}
 		psVal->v.ival = index;
 		break;
 	case ST_TEMPLATE:
-		id = *((UDWORD *)pBuffer);
-		endian_udword(&id);
-
-		if (id == UDWORD_MAX)
+		psVal->v.oval = NULL;
+		if (ini.contains("data"))
 		{
-			psVal->v.oval = NULL;
-		}
-		else
-		{
-			psVal->v.oval = (void*)IdToTemplate(id, ANYPLAYER);
+			// FIXME: Ugh. Find a better way to show full template info
+			psVal->v.oval = (void*)IdToTemplate(ini.value("data").toInt(), ANYPLAYER);
 			if ((DROID_TEMPLATE*)(psVal->v.oval) == NULL)
 			{
-				debug( LOG_FATAL, "scrValDefLoad: couldn't find template id %d", id );
-				abort();
+				debug(LOG_FATAL, "Could not find template %d", ini.value("data").toInt());
 			}
 		}
 		break;
 	case ST_TEXTSTRING:
+		psVal->v.sval = NULL;
+		if (ini.contains("data"))
 		{
-			const char* str;
-			char* idStr;
-			uint16_t len;
-
-			if (size < sizeof(len))
-			{
-				debug(LOG_ERROR, "Data size is too small, %u is expected, but %u is provided", (unsigned int)(sizeof(len)), (unsigned int)size);
-				return false;
-			}
-
-			len = *((uint16_t*)pBuffer);
-			endian_uword(&len);
-
-			if (size < sizeof(len) + len)
-			{
-				debug(LOG_ERROR, "Data size is too small, %u is expected, but %u is provided", (unsigned int)(sizeof(len) + len), (unsigned int)size);
-				return false;
-			}
-
-			if (len == 0)
-			{
-				psVal->v.sval = NULL;
-				return true;
-			}
-
-			idStr = (char *)malloc(len);
-			if (!idStr)
-			{
-				debug(LOG_ERROR, "Out of memory (tried to allocate %u bytes)", (unsigned int)len);
-				// Don't abort() here, as this might be the result from a bad "len" field in the data
-				return false;
-			}
-
-			memcpy(idStr, pBuffer + sizeof(len), len);
-
-			if (idStr[len - 1] != '\0')
-			{
-				debug(LOG_WARNING, "Non-NUL terminated string encountered!");
-			}
-			idStr[len - 1] = '\0';
-
-			str = strresGetString(psStringRes, idStr);
-			if (!str)
-			{
-				debug(LOG_ERROR, "Couldn't find string with id \"%s\"", idStr);
-				free(idStr);
-				return false;
-			}
-			free(idStr);
-
-			psVal->v.sval = strdup(str);
-			if (!psVal->v.sval)
-			{
-				debug(LOG_FATAL, "Out of memory");
-				abort();
-				return false;
-			}
+			psVal->v.sval = strdup(ini.value("data").toString().toAscii().constData());
 		}
 		break;
 	case ST_LEVEL:
-		if ((size == 1) &&
-			(*pBuffer == 0))
+		psVal->v.sval = NULL;
+		if (ini.contains("data"))
 		{
-			psVal->v.sval = '\0';
-		}
-		else
-		{
-			psLevel = levFindDataSet(pBuffer);
+			psLevel = levFindDataSet(ini.value("data").toString().toAscii().constData());
 			if (psLevel == NULL)
 			{
-				debug( LOG_FATAL, "scrValDefLoad: couldn't find level dataset %s", pBuffer );
-				abort();
+				debug(LOG_FATAL, "Could not find level dataset");
 			}
 			psVal->v.sval = psLevel->pName;
 		}
 		break;
 	case ST_RESEARCH:
-		if ((size == 1) &&
-			(*pBuffer == 0))
+		psVal->v.oval = NULL;
+		if (ini.contains("data"))
 		{
-			psVal->v.oval = NULL;
-		}
-		else
-		{
-			psVal->v.oval = (void*)getResearch(pBuffer);
-			if (psVal->v.oval == NULL)
+			QString research = ini.value("data").toString();
+			if (!research.isEmpty())
 			{
-				debug( LOG_FATAL, "scrValDefLoad: couldn't find research %s", pBuffer );
-				abort();
+				psVal->v.oval = (void*)getResearch(research.toUtf8().constData());
+				ASSERT_OR_RETURN(false, psVal->v.oval, "Could not find research %s", research.toUtf8().constData());
 			}
 		}
 		break;
 	case ST_GROUP:
-		bObjectDefined = true;
-
 		if (psVal->v.oval == NULL)
 		{
 			DROID_GROUP *tmp = grpCreate();
 			tmp->add(NULL);
 			psVal->v.oval = tmp;
 		}
-
-		pPos = pBuffer;
-
-		if (version < 2)
+		psGroup = (DROID_GROUP *)(psVal->v.oval);
+		members = ini.value("members", 0).toInt();
+		if (psGroup && members > 0)
 		{
-			members = size / sizeof(UDWORD);
-		}
-		else if (version < 3)
-		{
-			members = (size - sizeof(SDWORD)*4) / sizeof(UDWORD);
-		}
-		else
-		{
-			members = (size - sizeof(SDWORD)*6) / sizeof(UDWORD);
+			QStringList droids = ini.value("data").toStringList();
 
-			// get saved group member count/nullpointer flag
-			endian_sdword((SDWORD*)pPos);
-			bObjectDefined = ( *((SDWORD *)pPos) != UNALLOCATED_OBJECT );
-
-			if(bObjectDefined)
-			{
-				savedMembers = *((SDWORD *)pPos);	// get number of saved group members
-
-				ASSERT(savedMembers == members, "scrValDefLoad: calculated and saved group member count did not match." );
-			}
-			pPos += sizeof(SDWORD);
-		}
-
-		// make sure group was allocated when it was saved (relevant starting from version 3)
-		if( version < 3 || bObjectDefined )
-		{
-			if (version >= 2)
-			{
-				// load the retreat data
-				psGroup = (DROID_GROUP*)(psVal->v.oval);
-				endian_sdword((SDWORD*)pPos);
-				psGroup->sRunData.sPos.x = *((SDWORD *)pPos);
-				pPos += sizeof(SDWORD);
-				endian_sdword((SDWORD*)pPos);
-				psGroup->sRunData.sPos.y = *((SDWORD *)pPos);
-				pPos += sizeof(SDWORD);
-				endian_sdword((SDWORD*)pPos);
-				psGroup->sRunData.forceLevel = (UBYTE)(*((SDWORD *)pPos));
-				pPos += sizeof(SDWORD);
-				endian_sdword((SDWORD*)pPos);
-				psGroup->sRunData.leadership = (UBYTE)(*((SDWORD *)pPos));
-				pPos += sizeof(SDWORD);
-			}
-			if (version >= 3)
-			{
-				endian_sdword((SDWORD*)pPos);
-				psGroup->sRunData.healthLevel = (UBYTE)(*((SDWORD *)pPos));
-				pPos += sizeof(SDWORD);
-			}
+			// load the retreat data
+			psGroup->sRunData.sPos = ini.vector2i("runpos");
+			psGroup->sRunData.forceLevel = ini.value("forceLevel").toInt();
+			psGroup->sRunData.leadership = ini.value("leadership").toInt();
+			psGroup->sRunData.healthLevel = ini.value("healthLevel").toInt();
 
 			// load the droids
 			while (members > 0)
 			{
-				endian_udword((UDWORD*)pPos);
-				id = *((UDWORD *) pPos);
+				id = droids.takeLast().toInt();
 				psCDroid = (DROID *)getBaseObjFromId(id);
 				if (!psCDroid)
 				{
@@ -1286,14 +1047,8 @@ bool scrValDefLoad(SDWORD version, INTERP_VAL *psVal, char *pBuffer, UDWORD size
 				{
 					((DROID_GROUP*)(psVal->v.oval))->add(psCDroid);
 				}
-
-				pPos += sizeof(UDWORD);
-				members -= 1;
+				members--;
 			}
-		}
-		else		// a group var was unallocated during saving
-		{
-			pPos += sizeof(UWORD);
 		}
 		break;
 	case ST_SOUND:
@@ -1306,16 +1061,16 @@ bool scrValDefLoad(SDWORD version, INTERP_VAL *psVal, char *pBuffer, UDWORD size
 			break;
 		}
 
-		pName = pBuffer;
-		index = audio_GetTrackID( pName );
+		index = audio_GetTrackID(ini.value("data").toString().toAscii().constData());
 		if (index == SAMPLE_NOT_FOUND)
 		{
 			// find empty id and set track vals
-			index = audio_SetTrackVals(pName, false, 100, 1800);
-			if (!index)			//this is a NON fatal error.
+			QString soundname = ini.value("data").toString();
+			index = audio_SetTrackVals(soundname.toAscii().constData(), false, 100, 1800);
+			if (!index)			// this is a NON fatal error.
 			{
 				// We can't find filename of the sound for some reason.
-				debug(LOG_ERROR, "Sound ID not available %s not found", pName);
+				debug(LOG_ERROR, "Sound ID not available %s not found", soundname.toAscii().constData());
 				break;
 			}
 		}
@@ -1325,8 +1080,7 @@ bool scrValDefLoad(SDWORD version, INTERP_VAL *psVal, char *pBuffer, UDWORD size
 	case ST_DROIDID:
 	default:
 		// just set the contents directly
-		psVal->v.ival = *((SDWORD *)pBuffer);
-		endian_sdword(&psVal->v.ival);
+		psVal->v.ival = ini.value("data").toInt();
 		break;
 	}
 

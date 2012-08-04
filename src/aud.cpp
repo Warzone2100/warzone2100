@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -62,7 +62,7 @@ Vector3f audio_GetPlayerPos(void)
 
 	// Invert Y to match QSOUND axes
 	// @NOTE What is QSOUND? Why invert the Y axis?
-	pos.y = world_coord(GetHeightOfMap()) - pos.y;
+	pos.y = world_coord(mapHeight) - pos.y;
 
 	return pos;
 }
@@ -84,7 +84,7 @@ void audio_GetStaticPos(SDWORD iWorldX, SDWORD iWorldY, SDWORD *piX, SDWORD *piY
 	*piX = iWorldX;
 	*piZ = map_TileHeight(map_coord(iWorldX), map_coord(iWorldY));
 	/* invert y to match QSOUND axes */
-	*piY = world_coord(GetHeightOfMap()) - iWorldY;
+	*piY = world_coord(mapHeight) - iWorldY;
 }
 
 // @FIXME we don't need to do this, since we are not using qsound.
@@ -98,7 +98,7 @@ void audio_GetObjectPos(SIMPLE_OBJECT *psBaseObj, SDWORD *piX, SDWORD *piY, SDWO
 	*piZ = map_TileHeight(map_coord(psBaseObj->pos.x), map_coord(psBaseObj->pos.y));
 
 	/* invert y to match QSOUND axes */
-	*piY = world_coord(GetHeightOfMap()) - psBaseObj->pos.y;
+	*piY = world_coord(mapHeight) - psBaseObj->pos.y;
 }
 
 UDWORD sound_GetGameTime()

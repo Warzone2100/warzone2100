@@ -69,13 +69,6 @@ event seen(inactive)
 	//addMessage(MissionBrief, MISS_MSG, 0, true);
 	playSound(rescuedSnd, player);
 
-	count = 0;
-	while (count < numRegions)
-	{
-		takeOverDroidsInArea(curPlayer, player, RegionsX1[count], RegionsY1[count], RegionsX2[count], RegionsY2[count]);
-		takeOverStructsInArea(curPlayer, player, RegionsX1[count], RegionsY1[count], RegionsX2[count], RegionsY2[count]);
-		count = count + 1;
-	}
 	extraVictoryFlag = TRUE;
 	resetLimboMission();		//allow access to base
 	setScrollParams(0, 0, 64, 192);	//allow full map access
@@ -95,6 +88,13 @@ event seen(inactive)
 		enableStructure(strucStat[count], player);
 		count = count + 1;
 	}
+	count = 0;
+	while (count < numRegions)
+	{
+		takeOverDroidsInArea(curPlayer, player, RegionsX1[count], RegionsY1[count], RegionsX2[count], RegionsY2[count]);
+		takeOverStructsInArea(curPlayer, player, RegionsX1[count], RegionsY1[count], RegionsX2[count], RegionsY2[count]);
+		count = count + 1;
+	}
 
 	// reset the player's colour
 	setPlayerColour(oldColour, curPlayer);
@@ -108,8 +108,6 @@ event seen(inactive)
 
 //has player found gamma base?
 //needs to be object seen
-//CALL_OBJ_SEEN, INT player, ref BASEOBJ object, ref BASEOBJ viewer
-//event seen2(CALL_DROID_SEEN, player, ref objectDroid, ref viewerDroid)
 event seen2(CALL_OBJ_SEEN, player, ref objectObj, ref viewerObj)
 {
 	if (objectObj.player == curPlayer)
@@ -123,18 +121,7 @@ event seen2(CALL_OBJ_SEEN, player, ref objectObj, ref viewerObj)
 event betaDead(every, 10)	//45)
 {
 	//check to see if team beta (limbo units) still alive (otherwise lose!)
-	temp = 0;
-	count = 0;
-	//get count of team gamma units
-	while (count < numDroids)
-	{
-		if (droids[count] != NULLOBJECT)
-		{
-			temp = temp + 1;
-		}
-		count = count + 1;
-	}
-	if (temp >= getDroidCount(player))	//only gamma units alive => limbo units all dead!!
+	if (getDroidCount(curPlayer) <= 0 || getDroidCount(player) <= 0)  //limbo units all dead => limbo units all dead!!
 	{
 		extraFailFlag = TRUE;
 		// reset the player's colour

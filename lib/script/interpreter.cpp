@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -297,18 +297,16 @@ bool interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 	UDWORD			callDepth = 0;
 	bool			bTraceOn=false;		//enable to debug function/event calls
 
-	ASSERT( psContext != NULL,
-		"interpRunScript: invalid context pointer" );
+	ASSERT(psContext != NULL, "Invalid context pointer");
 
 	psProg = psContext->psCode;
 	psCurProg = psProg;		//remember for future use
 
-	ASSERT( psProg != NULL,
-		"interpRunScript: invalid script code pointer" );
+	ASSERT(psProg != NULL, "Invalid script code pointer");
 
 	if (bInterpRunning)
 	{
-		debug(LOG_ERROR,"interpRunScript: interpreter already running"
+		debug(LOG_ERROR, "Interpreter already running"
 			"                 - callback being called from within a script function?");
 		goto exit_with_error;
 	}
@@ -337,8 +335,7 @@ bool interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 	case IRT_TRIGGER:
 		if (index > psProg->numTriggers)
 		{
-			debug(LOG_ERROR,"interpRunScript: trigger index out of range");
-			ASSERT( false, "interpRunScript: trigger index out of range" );
+			ASSERT(false, "Trigger index out of range");
 			return false;
 		}
 		pCodeBase = psProg->pCode + psProg->pTriggerTab[index];
@@ -357,8 +354,7 @@ bool interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 	case IRT_EVENT:
 		if (index > psProg->numEvents)
 		{
-			debug(LOG_ERROR,"interpRunScript: trigger index out of range");
-			ASSERT( false, "interpRunScript: trigger index out of range" );
+			ASSERT(false, "Trigger index out of range");
 			return false;
 		}
 		pCodeBase = psProg->pCode + psProg->pEventTab[index];
@@ -376,8 +372,7 @@ bool interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 
 		break;
 	default:
-		debug(LOG_ERROR,"interpRunScript: unknown run type");
-		ASSERT( false, "interpRunScript: unknown run type" );
+		ASSERT(false, "Unknown run type");
 		return false;
 	}
 

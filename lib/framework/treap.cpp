@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -222,7 +222,7 @@ static const char* treapFindKeyRec(TREAP_NODE const * const psNode, const char *
 		return key;
 	}
 
-	return treapFindKeyRec(psNode->psLeft, string);
+	return treapFindKeyRec(psNode->psRight, string);
 }
 
 const char* treapFindKey(TREAP_NODE** psTreap, const char* string)

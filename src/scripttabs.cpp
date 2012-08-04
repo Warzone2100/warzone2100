@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -1754,6 +1754,7 @@ CONST_SYMBOL asConstantTable[] =
 	{ "DROID_PERSON",			VAL_INT,	false,	DROID_PERSON,			NULL, NULL, 0.0f },
 	{ "DROID_CYBORG",			VAL_INT,	false,	DROID_CYBORG,			NULL, NULL, 0.0f },
 	{ "DROID_CYBORG_SUPER",		VAL_INT,	false,	DROID_CYBORG_SUPER,		NULL, NULL, 0.0f },
+	{ "DROID_SUPERTRANSPORTER",	VAL_INT,	false,	DROID_SUPERTRANSPORTER,	NULL, NULL, 0.0f },
 	{ "DROID_TRANSPORTER",		VAL_INT,	false,	DROID_TRANSPORTER,		NULL, NULL, 0.0f },
 	{ "DROID_COMMAND",			VAL_INT,	false,	DROID_COMMAND,			NULL, NULL, 0.0f },
 	{ "DROID_REPAIR",			VAL_INT,	false,	DROID_REPAIR,			NULL, NULL, 0.0f },

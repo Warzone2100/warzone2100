@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -123,7 +123,7 @@ struct STRUCTURE_STATS : public BASE_STATS
 	UDWORD		resistance;			/*The number used to determine whether a
 									  structure can resist an enemy takeover -
 									  0 = cannot be attacked electrically*/
-	iIMDShape	*pIMD;		/*The IMD to draw for this structure */
+	std::vector<iIMDShape *> pIMD;          // The IMDs to draw for this structure, for each possible number of modules.
 	iIMDShape	*pBaseIMD;	/*The base IMD to draw for this structure */
 	struct ECM_STATS	*pECM;		/*Which ECM is standard for the structure -
 									  if any*/
@@ -143,11 +143,18 @@ enum STRUCT_STATES
 {
 	SS_BEING_BUILT,
 	SS_BUILT,
-	SS_BEING_DEMOLISHED,
 	SS_BLUEPRINT_VALID,
 	SS_BLUEPRINT_INVALID,
 	SS_BLUEPRINT_PLANNED,
 	SS_BLUEPRINT_PLANNED_BY_ALLY,
+};
+
+enum StatusPending
+{
+	FACTORY_NOTHING_PENDING = 0,
+	FACTORY_START_PENDING,
+	FACTORY_HOLD_PENDING,
+	FACTORY_CANCEL_PENDING
 };
 
 struct RESEARCH;
@@ -156,23 +163,12 @@ struct RESEARCH_FACILITY
 {
 	RESEARCH *      psSubject;                      // The subject the structure is working on.
 	RESEARCH *      psSubjectPending;               // The subject the structure is going to work on when the GAME_RESEARCHSTATUS message is received.
+	StatusPending   statusPending;                  ///< Pending = not yet synchronised.
+	unsigned        pendingCount;                   ///< Number of messages sent but not yet processed.
 	UDWORD		capacity;				/* Number of upgrade modules added*/
-	UDWORD		timeStarted;			/* The time the building started on the subject*/
 	UDWORD		researchPoints;			/* Research Points produced per research cycle*/
-	UDWORD		timeToResearch;			/* Time taken to research the topic*/
 	RESEARCH *      psBestTopic;                    // The topic with the most research points that was last performed
-	UDWORD		powerAccrued;			/* used to keep track of power before
-										   researching a topic*/
 	UDWORD		timeStartHold;		    /* The time the research facility was put on hold*/
-
-};
-
-enum FACTORY_STATUS_PENDING
-{
-	FACTORY_NOTHING_PENDING = 0,
-	FACTORY_START_PENDING,
-	FACTORY_HOLD_PENDING,
-	FACTORY_CANCEL_PENDING
 };
 
 struct DROID_TEMPLATE;
@@ -185,19 +181,17 @@ struct FACTORY
 	UBYTE				loopsPerformed;		/* how many times the loop has been performed*/
 	UBYTE				productionOutput;	/* Droid Build Points Produced Per
 											   Build Cycle*/
-	UDWORD				powerAccrued;		/* used to keep track of power before building a droid*/
 	DROID_TEMPLATE *                psSubject;              ///< The subject the structure is working on.
 	DROID_TEMPLATE *                psSubjectPending;       ///< The subject the structure is going to working on. (Pending = not yet synchronised.)
-	FACTORY_STATUS_PENDING          statusPending;          ///< Pending = not yet synchronised.
+	StatusPending                   statusPending;          ///< Pending = not yet synchronised.
 	unsigned                        pendingCount;           ///< Number of messages sent but not yet processed.
 
 	UDWORD				timeStarted;		/* The time the building started on the subject*/
-	UDWORD				timeToBuild;		/* Time taken to build one droid */
+	int                             buildPointsRemaining;   ///< Build points required to finish building the droid.
 	UDWORD				timeStartHold;		/* The time the factory was put on hold*/
 	FLAG_POSITION		*psAssemblyPoint;	/* Place for the new droids to assemble at */
 	struct DROID		*psCommander;	    // command droid to produce droids for (if any)
 	uint32_t                        secondaryOrder;         ///< Secondary order state for all units coming out of the factory.
-                                            // added AB 22/04/99
 };
 
 struct RES_EXTRACTOR
@@ -217,12 +211,9 @@ class DROID_GROUP;
 
 struct REPAIR_FACILITY
 {
-	UDWORD                          power;                  /* Power used in repairing */
-	UDWORD                          timeStarted;            /* Time repair started on current object */
+	UDWORD                          power;                  // Repair rate. Nothing to do with power.
 	BASE_OBJECT                     *psObj;                 /* Object being repaired */
-	UDWORD                          powerAccrued;           /* Used to keep track of power before repairing a droid */
 	FLAG_POSITION                   *psDeliveryPoint;       /* Place for the repaired droids to assemble at */
-	UDWORD                          currentPtsAdded;        /* stores the amount of body points added to the unit that is being worked on */
 
 	// The group the droids to be repaired by this facility belong to
 	DROID_GROUP *                   psGroup;
@@ -237,6 +228,11 @@ struct REARM_PAD
 	UDWORD                          timeLastUpdated;        /* Time rearm was last updated */
 };
 
+struct WALL
+{
+	unsigned                        type;                   // Type of wall, 0 = ─, 1 = ┼, 2 = ┴, 3 = ┘.
+};
+
 union FUNCTIONALITY
 {
 	RESEARCH_FACILITY researchFacility;
@@ -245,6 +241,7 @@ union FUNCTIONALITY
 	POWER_GEN         powerGenerator;
 	REPAIR_FACILITY   repairFacility;
 	REARM_PAD         rearmPad;
+	WALL              wall;
 };
 
 //this structure is used whenever an instance of a building is required in game
@@ -256,10 +253,11 @@ struct STRUCTURE : public BASE_OBJECT
 	STRUCTURE_STATS     *pStructureType;            /* pointer to the structure stats for this type of building */
 	STRUCT_STATES       status;                     /* defines whether the structure is being built, doing nothing or performing a function */
 	SWORD               currentBuildPts;            /* the build points currently assigned to this structure */
-	SWORD               currentPowerAccrued;        /* the power accrued for building this structure */
 	SWORD               resistance;                 /* current resistance points, 0 = cannot be attacked electrically */
 	UDWORD              lastResistance;             /* time the resistance was last increased*/
 	FUNCTIONALITY       *pFunctionality;            /* pointer to structure that contains fields necessary for functionality */
+	int                 buildRate;                  ///< Rate that this structure is being built, calculated each tick. Only meaningful if status == SS_BEING_BUILT. If construction hasn't started and build rate is 0, remove the structure.
+	int                 lastBuildRate;              ///< Needed if wanting the buildRate between buildRate being reset to 0 each tick and the trucks calculating it.
 
 	/* The weapons on the structure */
 	UWORD		numWeaps;
@@ -285,6 +283,8 @@ struct STRUCTURE : public BASE_OBJECT
 
 	STRUCT_ANIM_STATES	state;
 	UDWORD			lastStateTime;
+
+	iIMDShape *         prebuiltImd;
 };
 
 #define LOTS_OF 0xFFFFFFFF  // highest number the limit can be set to

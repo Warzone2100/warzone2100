@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -303,7 +303,10 @@ void runLimitScreen(void)
 			// free limiter structure
 			freeLimitSet();
 			//inform others
-			sendOptions();
+			if (bHosted)
+			{
+				sendOptions();
+			}
 
 			eventReset();
 			changeTitleMode(MULTIOPTION);
@@ -380,7 +383,10 @@ void createLimitSet(void)
 	ingame.numStructureLimits	= numchanges;
 	ingame.pStructureLimits		= pEntry;
 
-	sendOptions();
+	if (bHosted)
+	{
+		sendOptions();
+	}
 }
 
 // ////////////////////////////////////////////////////////////////////////////

@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -119,11 +119,7 @@ bool	inHighlight(UDWORD realX, UDWORD realY)
 
 void init3DBuilding(BASE_STATS *psStats,BUILDCALLBACK CallBack,void *UserData)
 {
-	ASSERT(psStats, "Bad parameter");
-	if (!psStats)
-	{
-		return;
-	}
+	ASSERT_OR_RETURN(,psStats, "Bad parameter");
 
 	buildState = BUILD3D_POS;
 
@@ -157,7 +153,6 @@ void init3DBuilding(BASE_STATS *psStats,BUILDCALLBACK CallBack,void *UserData)
 
 void	kill3DBuilding		( void )
 {
-	CancelDeliveryRepos();
     //cancel the drag boxes
     dragBox3D.status = DRAG_INACTIVE;
     wallDrag.status = DRAG_INACTIVE;
@@ -169,8 +164,6 @@ void	kill3DBuilding		( void )
 //
 bool process3DBuilding(void)
 {
-	UDWORD	bX,bY;
-
 	//if not trying to build ignore
 	if (buildState == BUILD3D_NONE)
   	{
@@ -182,13 +175,16 @@ bool process3DBuilding(void)
 		return true;
 	}
 
+	/* Need to update the building locations if we're building */
+	int bX = clip(mouseTileX, 2, mapWidth - 3);
+	int bY = clip(mouseTileY, 2, mapHeight - 3);
 
-	if (buildState != BUILD3D_FINISHED)// && buildState != BUILD3D_NONE)
+	if (buildState != BUILD3D_FINISHED)
 	{
-		bX = mouseTileX;
-		bY = mouseTileY;
+		Vector2i size = getStatsSize(sBuildDetails.psStats, player.r.y);
+		Vector2i offset = size * (TILE_UNITS / 2);  // This presumably gets added to the chosen coordinates, somewhere, based on looking at what pickStructLocation does. No idea where it gets added, though.
 
-		if (validLocation(sBuildDetails.psStats, bX, bY, player.r.y, selectedPlayer, true))
+		if (validLocation(sBuildDetails.psStats, world_coord(Vector2i(bX, bY)) + offset, player.r.y, selectedPlayer, true))
 		{
 			buildState = BUILD3D_VALID;
 		}
@@ -198,46 +194,8 @@ bool process3DBuilding(void)
 		}
 	}
 
-	/* Need to update the building locations if we're building */
-	bX = mouseTileX;
-	bY = mouseTileY;
-
-	if(mouseTileX<2)
-	{
-		bX = 2;
-	}
-	else
-	{
-		bX = mouseTileX;
-	}
-	if(mouseTileX > (SDWORD)(mapWidth-3))
-	{
-		bX = mapWidth-3;
-	}
-	else
-	{
-		bX = mouseTileX;
-	}
-
-	if(mouseTileY<2)
-	{
-		bY = 2;
-	}
-	else
-	{
-		bY = mouseTileY;
-	}
-	if(mouseTileY > (SDWORD)(mapHeight-3))
-	{
-		bY = mapHeight-3;
-	}
-	else
-	{
-		bY = mouseTileY;
-	}
-
-	sBuildDetails.x = buildSite.xTL = (UWORD)bX;
- 	sBuildDetails.y = buildSite.yTL = (UWORD)bY;
+	sBuildDetails.x = buildSite.xTL = bX;
+	sBuildDetails.y = buildSite.yTL = bY;
 	if (((player.r.y + 0x2000) & 0x4000) == 0)
 	{
 		buildSite.xBR = buildSite.xTL+sBuildDetails.width-1;
@@ -280,7 +238,7 @@ bool found3DBuilding(UDWORD *x, UDWORD *y)
 	if (ctrlShiftDown())
 	{
 		quickQueueMode = true;
-		init3DBuilding(sBuildDetails.psStats, NULL, NULL);
+		init3DBuilding(sBuildDetails.psStats, sBuildDetails.CallBack, sBuildDetails.UserData);
 	}
 	else
 	{
@@ -317,7 +275,7 @@ bool found3DBuildLocTwo(UDWORD *px1, UDWORD *py1, UDWORD *px2, UDWORD *py2)
 	if (ctrlShiftDown())
 	{
 		quickQueueMode = true;
-		init3DBuilding(sBuildDetails.psStats, NULL, NULL);
+		init3DBuilding(sBuildDetails.psStats, sBuildDetails.CallBack, sBuildDetails.UserData);
 	}
 
 	return true;

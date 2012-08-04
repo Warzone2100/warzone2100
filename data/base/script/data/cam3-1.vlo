@@ -17,7 +17,6 @@ allianceFlag	BOOL		FALSE		//TRUE if want enemies to use each others targets, oth
 
 /* Starting Enemy Power */
 power[0]	int		20000		//starting power values for each enemy listed above
-//power[1]	int		1000
 
 /*Health Retreat Level for each of the enemies listed above*/
 healthRetreat[0]	int		80
@@ -96,9 +95,6 @@ endMsg		INTMESSAGE	"END"
 
 /* Objectives */
 numObjectives	int		0	//MAX 3. Needs to be the same as the number of objective blips given next
-//objective[0]	INTMESSAGE	"FAST_OBJ1"
-//objectiveX[0]	int		1728	//doesn't use index to array, use world coords
-//objectiveY[0]	int		1216
 
 /* Victory Conditions */
 //NOTE: always assumes victory condition of: number of artifacts collected = victoryArt

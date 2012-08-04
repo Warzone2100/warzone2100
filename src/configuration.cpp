@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -23,11 +23,14 @@
  *
  */
 
+#include <QtCore/QSettings>
 #include "lib/framework/wzapp.h"
+#include "lib/framework/wzconfig.h"
 #include "lib/framework/input.h"
 #include "lib/netplay/netplay.h"
 #include "lib/sound/mixer.h"
 #include "lib/ivis_opengl/screen.h"
+#include "lib/framework/opengl.h"
 
 #include "advvis.h"
 #include "ai.h"
@@ -46,6 +49,7 @@
 // ////////////////////////////////////////////////////////////////////////////
 
 #define DEFAULTSCROLL	1000
+#define MASTERSERVERPORT	9990
 #define GAMESERVERPORT		2100
 
 static const char *fileName = "config";
@@ -66,6 +70,7 @@ bool loadConfig()
 	if (ini.contains("music_enabled")) war_SetMusicEnabled(ini.value("music_enabled").toBool());
 	if (ini.contains("language")) setLanguage(ini.value("language").toString().toUtf8().constData());
 	if (ini.contains("nomousewarp")) setMouseWarp(ini.value("nomousewarp").toBool());
+	if (ini.contains("notexturecompression")) wz_texture_compression = GL_RGBA;
 	showFPS = ini.value("showFPS", false).toBool();
 	scroll_speed_accel = ini.value("scroll", DEFAULTSCROLL).toInt();
 	setShakeStatus(ini.value("shake", false).toBool());
@@ -76,31 +81,34 @@ bool loadConfig()
 	setMiddleClickRotate(ini.value("MiddleClickRotate", false).toBool());
 	rotateRadar = ini.value("rotateRadar", true).toBool();
 	war_SetPauseOnFocusLoss(ini.value("PauseOnFocusLoss", false).toBool());
+	NETsetMasterserverName(ini.value("masterserver_name", "lobby.wz2100.net").toString().toUtf8().constData());
 	iV_font(ini.value("fontname", "DejaVu Sans").toString().toUtf8().constData(),
 		ini.value("fontface", "Book").toString().toUtf8().constData(),
 		ini.value("fontfacebold", "Bold").toString().toUtf8().constData());
+	NETsetMasterserverPort(ini.value("masterserver_port", MASTERSERVERPORT).toInt());
 	NETsetGameserverPort(ini.value("gameserver_port", GAMESERVERPORT).toInt());
 	war_SetFMVmode((FMV_MODE)ini.value("FMVmode", FMV_FULLSCREEN).toInt());
 	war_setScanlineMode((SCANLINE_MODE)ini.value("scanlines", SCANLINES_OFF).toInt());
 	seq_SetSubtitles(ini.value("subtitles", true).toBool());
 	setDifficultyLevel((DIFFICULTY_LEVEL)ini.value("difficulty", DL_NORMAL).toInt());
-	war_SetFog(ini.value("visfog", true).toBool());
 	war_SetSPcolor(ini.value("colour", 0).toInt());	// default is green (0)
+	war_setMPcolour(ini.value("colourMP", -1).toInt());  // default is random (-1)
 	sstrcpy(game.name, ini.value("gameName", _("My Game")).toString().toUtf8().constData());
 	sstrcpy(sPlayer, ini.value("playerName", _("Player")).toString().toUtf8().constData());
 	if (ini.contains("mapName") && ini.contains("maxPlayers"))
 	{
 		sstrcpy(game.map, ini.value("mapName").toString().toUtf8().constData());
+		game.hash.fromString(ini.value("mapHash").toString().toUtf8().constData());
 		game.maxPlayers = ini.value("maxPlayers").toInt();	// FIXME: horrible kluge, MUST match map above
 	}
 	else
 	{
 		// Set a default map to prevent hosting games without a map.
 		sstrcpy(game.map, "Sk-Rush");
+		game.hash.setZero();
 		game.maxPlayers = 4;
 	}
 	game.power = ini.value("power", LEV_MED).toInt();
-	game.fog = ini.value("fog").toBool();
 	game.base = ini.value("base", CAMP_BASE).toInt();
 	game.alliance = ini.value("alliance", NO_ALLIANCES).toInt();
 	memset(&ingame.phrases, 0, sizeof(ingame.phrases));
@@ -111,15 +119,19 @@ bool loadConfig()
 	}
 	bEnemyAllyRadarColor = ini.value("radarObjectMode").toBool();
 	radarDrawMode = (RADAR_DRAW_MODE)ini.value("radarTerrainMode", RADAR_MODE_DEFAULT).toInt();
+	radarDrawMode = (RADAR_DRAW_MODE)MIN(NUM_RADAR_MODES - 1, radarDrawMode); // restrict to allowed values
 	if (ini.contains("textureSize")) setTextureSize(ini.value("textureSize").toInt());
 	NetPlay.isUPNP = ini.value("UPnP", true).toBool();
 	if (ini.contains("FSAA")) war_setFSAA(ini.value("FSAA").toInt());
-	war_setFullscreen(ini.value("fullscreen", true).toBool());
+	if (ini.contains("shaders")) war_SetShaders(ini.value("shaders").toInt());
+	// Leave this to false, some system will fail and they can't see the system popup dialog!
+	war_setFullscreen(ini.value("fullscreen", false).toBool());
 	war_SetTrapCursor(ini.value("trapCursor", false).toBool());
+	// this should be enabled on all systems by default
 	war_SetVsync(ini.value("vsync", true).toBool());
-
-	int width = ini.value("width", 800).toInt();
-	int height = ini.value("height", 600).toInt();
+	// 640x480 is minimum that we will support
+	int width = ini.value("width", 640).toInt();
+	int height = ini.value("height", 480).toInt();
 	if (width < 640 || height < 480)	// sanity check
 	{
 		width = 640;
@@ -131,31 +143,6 @@ bool loadConfig()
 	war_SetHeight(height);
 
 	if (ini.contains("bpp")) pie_SetVideoBufferDepth(ini.value("bpp").toInt());
-
-	/**
-	 * Lobby
-	 */
-	lobbyclient.setHost(ini.value("lobby_host", "lobby.wz2100.net").toString());
-	if ((lobbyclient.getHost() == "lobby.wz2100.net" || lobbyclient.getHost() == "localhost")
-		&& ini.contains("lobby_ssl")
-		&& ini.value("lobby_ssl", true).toBool() == true)
-	{
-		lobbyclient.useSSL(true);
-		lobbyclient.setPort(ini.value("lobby_port", 9994).toInt());
-		lobbyclient.setUser(ini.value("lobby_user", "").toString());
-		lobbyclient.setToken(ini.value("lobby_token", "").toString());
-	}
-	else if (ini.value("lobby_ssl", true).toBool() == true)
-	{
-		lobbyclient.useSSL(true);
-		lobbyclient.setPort(ini.value("lobby_port", 9994).toInt());
-	}
-	else
-	{
-		lobbyclient.useSSL(false);
-		lobbyclient.setPort(ini.value("lobby_port", 9990).toInt());
-	}
-
 	return true;
 }
 
@@ -188,7 +175,6 @@ bool saveConfig()
 	}
 	ini.setValue("showFPS", (SDWORD)showFPS);
 	ini.setValue("scroll",(SDWORD)scroll_speed_accel);		// scroll
-	ini.setValue("visfog",(SDWORD)(!war_GetFog()));			// fogtype
 	ini.setValue("shake",(SDWORD)(getShakeStatus()));		// screenshake
 	ini.setValue("mouseflip",(SDWORD)(getInvertMouseStatus()));	// flipmouse
 	ini.setValue("nomousewarp", (SDWORD)getMouseWarp()); 		// mouse warp
@@ -204,11 +190,14 @@ bool saveConfig()
 	ini.setValue("radarTerrainMode",(SDWORD)radarDrawMode);
 	ini.setValue("trapCursor", war_GetTrapCursor());
 	ini.setValue("vsync", war_GetVsync());
+	ini.setValue("shaders", war_GetShaders());
 	ini.setValue("textureSize", getTextureSize());
 	ini.setValue("FSAA", war_getFSAA());
 	ini.setValue("UPnP", (SDWORD)NetPlay.isUPNP);
 	ini.setValue("rotateRadar", rotateRadar);
 	ini.setValue("PauseOnFocusLoss", war_GetPauseOnFocusLoss());
+	ini.setValue("masterserver_name", NETgetMasterserverName());
+	ini.setValue("masterserver_port", NETgetMasterserverPort());
 	ini.setValue("gameserver_port", NETgetGameserverPort());
 	if (!bMultiPlayer)
 	{
@@ -223,24 +212,15 @@ bool saveConfig()
 				ini.setValue("gameName", game.name);			//  last hosted game
 			}
 			ini.setValue("mapName", game.map);				//  map name
+			ini.setValue("mapHash", game.hash.toString().c_str());          //  map hash
 			ini.setValue("maxPlayers", game.maxPlayers);		// maxPlayers
 			ini.setValue("power", game.power);				// power
 			ini.setValue("base", game.base);				// size of base
-			ini.setValue("fog", game.fog);					// fog 'o war
 			ini.setValue("alliance", game.alliance);		// allow alliances
 		}
 		ini.setValue("playerName", (char*)sPlayer);		// player name
 	}
-
-	/**
-	 * Lobby
-	 */
-	ini.setValue("lobby_host", lobbyclient.getHost());
-	ini.setValue("lobby_ssl", lobbyclient.useSSL());
-	ini.setValue("lobby_port", lobbyclient.getPort());
-	ini.setValue("lobby_user", lobbyclient.getUser());
-	ini.setValue("lobby_token", lobbyclient.getToken());
-
+	ini.setValue("colourMP", war_getMPcolour());
 	ini.sync();
 	return true;
 }
@@ -289,10 +269,10 @@ bool reloadMPConfig(void)
 			}
 		}
 		ini.setValue("mapName", game.map);				//  map name
+		ini.setValue("mapHash", game.hash.toString().c_str());          //  map hash
 		ini.setValue("maxPlayers", game.maxPlayers);		// maxPlayers
 		ini.setValue("power", game.power);				// power
 		ini.setValue("base", game.base);				// size of base
-		ini.setValue("fog", game.fog);					// fog 'o war
 		ini.setValue("alliance", game.alliance);		// allow alliances
 		return true;
 	}
@@ -307,10 +287,10 @@ bool reloadMPConfig(void)
 	if (ini.contains("mapName") && ini.contains("maxPlayers"))
 	{
 		sstrcpy(game.map, ini.value("mapName").toString().toUtf8().constData());
+		game.hash.fromString(ini.value("mapHash").toString().toUtf8().constData());
 		game.maxPlayers = ini.value("maxPlayers").toInt();	// FIXME: horrible kluge, MUST match map above
 	}
 	game.power = ini.value("power", LEV_MED).toInt();
-	game.fog = ini.value("fog").toBool();
 	game.base = ini.value("base", CAMP_BASE).toInt();
 	game.alliance = ini.value("alliance", NO_ALLIANCES).toInt();
 

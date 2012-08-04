@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -32,7 +32,10 @@
 #include <sys/types.h>
 #endif
 
-#include "lib/framework/wzapp.h"
+#include <QtCore/QTime>
+#include "lib/framework/frame.h"
+#include "lib/framework/input.h"
+#include "lib/framework/wzconfig.h"
 #include "lib/netplay/netplay.h"
 #include "lib/ivis_opengl/bitimage.h"
 #include "lib/ivis_opengl/pieblitfunc.h"
@@ -334,7 +337,7 @@ bool closeChallenges()
 	widgDelete(psRequestScreen, CHALLENGE_FORM);
 	widgReleaseScreen(psRequestScreen);
 	// need to "eat" up the return key so it don't pass back to game.
-	inputLooseFocus();
+	inputLoseFocus();
 	challengesUp = false;
 	return true;
 }

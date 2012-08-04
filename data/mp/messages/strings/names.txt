@@ -672,8 +672,9 @@ R-Cyborg-Metals09				_("Cyborg Superdense Composite Alloys Mk3")
 
 R-Cyborg-Transport			_("Cyborg Transport")
 
-MP-SuperTransport		_("Super Transport")
-MP-SuperTransportBody	_("Super Transport Body")
+SuperTransport			_("Super Transport")
+R-SuperTransport		_("Super Transport")
+SuperTransportBody	_("Super Transport Body")
 
 R-Cyborg-Wpn-BB				_("Bunker Blaster Cyborg")
 R-Cyborg-Wpn-Cannon			_("Heavy Gunner Cyborg")

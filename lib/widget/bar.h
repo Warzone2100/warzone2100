@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -40,7 +40,9 @@ struct W_BARGRAPH : public WIDGET
 	int             precision;                      // Number of places after the decimal point to display, 0 by default.
 	PIELIGHT	majorCol;			// Colour for the major bar
 	PIELIGHT	minorCol;			// Colour for the minor bar
+	PIELIGHT        textCol;                        // Colour for the text on the bar.
 	const char	*pTip;				// The tool tip for the graph
+	QString         text;                           // Text on the bar.
 };
 
 /* Create a barGraph widget data structure */

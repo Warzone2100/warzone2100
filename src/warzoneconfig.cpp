@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -26,6 +26,7 @@
 #include "lib/framework/frame.h"
 #include "warzoneconfig.h"
 #include "lib/ivis_opengl/piestate.h"
+#include "lib/ivis_opengl/piepalette.h"
 #include "advvis.h"
 #include "component.h"
 
@@ -45,19 +46,20 @@
 struct WARZONE_GLOBALS
 {
 	FMV_MODE	FMVmode;
-	bool		bFog;
 	SWORD		effectsLevel;
+	UDWORD		width;
+	UDWORD		height;
+	int8_t		SPcolor;
+	int			MPcolour;
+	FSAA_LEVEL  fsaa;
+	RENDER_MODE shaders;
 	bool		Fullscreen;
 	bool		soundEnabled;
 	bool		trapCursor;
-	UDWORD		width;
-	UDWORD		height;
-	FSAA_LEVEL  fsaa;
 	bool		vsync;
 	bool		pauseOnFocusLoss;
 	bool		ColouredCursor;
 	bool		MusicEnabled;
-	int8_t		SPcolor;
 };
 
 /***************************************************************************/
@@ -82,12 +84,14 @@ static WARZONE_GLOBALS	warGlobs;//STATIC use or write an access function if you 
 void war_SetDefaultStates(void)//Sets all states
 {
 	//set those here and reset in clParse or loadConfig
-	war_SetFog(false);
 	war_setFSAA(0);
+	war_SetVsync(true);
 	war_setSoundEnabled( true );
 	war_SetPauseOnFocusLoss(false);
 	war_SetMusicEnabled(true);
 	war_SetSPcolor(0);		//default color is green
+	war_setMPcolour(-1);            // Default color is random.
+	war_SetShaders(SHADERS_ON);
 }
 
 void war_SetSPcolor(int color)
@@ -103,6 +107,16 @@ void war_SetSPcolor(int color)
 int8_t war_GetSPcolor(void)
 {
 	return warGlobs.SPcolor;
+}
+
+void war_setMPcolour(int colour)
+{
+	warGlobs.MPcolour = colour;
+}
+
+int war_getMPcolour()
+{
+	return warGlobs.MPcolour;
 }
 
 void war_setFullscreen(bool b)
@@ -123,6 +137,16 @@ void war_setFSAA(unsigned int fsaa)
 unsigned int war_getFSAA()
 {
 	return warGlobs.fsaa;
+}
+
+void war_SetShaders(unsigned shaders)
+{
+	warGlobs.shaders = (RENDER_MODE)shaders;
+}
+
+unsigned war_GetShaders()
+{
+	return warGlobs.shaders;
 }
 
 void war_SetTrapCursor(bool b)
@@ -163,36 +187,6 @@ void war_SetHeight(UDWORD height)
 UDWORD war_GetHeight(void)
 {
 	return warGlobs.height;
-}
-
-/***************************************************************************/
-/***************************************************************************/
-void war_SetFog(bool val)
-{
-	debug(LOG_FOG, "Visual fog turned %s", val ? "ON" : "OFF");
-
-	if (warGlobs.bFog != val)
-	{
-		warGlobs.bFog = val;
-	}
-	if (warGlobs.bFog == true)
-	{
-		setRevealStatus(false);
-	}
-	else
-	{
-		PIELIGHT black;
-
-		setRevealStatus(true);
-		black.rgba = 0;
-		black.byte.a = 255;
-		pie_SetFogColour(black);
-	}
-}
-
-bool war_GetFog(void)
-{
-	return  warGlobs.bFog;
 }
 
 /***************************************************************************/

@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -46,13 +46,14 @@ extern void intProcessTransporter(UDWORD id);
 
 /*Adds a droid to the transporter, removing it from the world*/
 extern void transporterAddDroid(DROID *psTransporter, DROID *psDroidToAdd);
+void transporterRemoveDroid(DROID *psTransport, DROID *psDroid, QUEUE_MODE mode);
 /*check to see if the droid can fit on the Transporter - return true if fits*/
-extern bool checkTransporterSpace(DROID *psTransporter, DROID *psAssigned);
+bool checkTransporterSpace(DROID const *psTransporter, DROID const *psAssigned, bool mayFlash = true);
 /*calculates how much space is remaining on the transporter - allows droids to take
 up different amount depending on their body size - currently all are set to one!*/
 extern UDWORD calcRemainingCapacity(DROID *psTransporter);
 
-extern bool transporterIsEmpty(const DROID* psTransporter);
+extern bool transporterIsEmpty(const DROID *psTransporter);
 
 /*launches the defined transporter to the offworld map*/
 extern bool launchTransporter(DROID *psTransporter);
@@ -69,16 +70,16 @@ extern void intRemoveTransporterLaunch(void);
 //process the launch transporter button click
 extern void processLaunchTransporter(void);
 
-extern SDWORD	bobTransporterHeight( void );
+extern SDWORD	bobTransporterHeight(void);
 
 /*This is used to display the transporter button and capacity when at the home base ONLY*/
 extern bool intAddTransporterLaunch(DROID *psDroid);
 
 /* set current transporter (for script callbacks) */
-extern void transporterSetScriptCurrent( DROID *psTransporter );
+extern void transporterSetScriptCurrent(DROID *psTransporter);
 
 /* get current transporter (for script callbacks) */
-extern DROID * transporterGetScriptCurrent( void );
+extern DROID *transporterGetScriptCurrent(void);
 
 /* check whether transporter on mission */
 //extern bool transporterOnMission( void );
@@ -87,7 +88,7 @@ extern DROID * transporterGetScriptCurrent( void );
 extern void resetTransporter(void);
 
 /* get time transporter launch button was pressed */
-extern UDWORD transporterGetLaunchTime( void );
+extern UDWORD transporterGetLaunchTime(void);
 
 /*set the time for the Launch*/
 extern void transporterSetLaunchTime(UDWORD time);

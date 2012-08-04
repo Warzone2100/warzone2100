@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -96,11 +96,6 @@ static	bool bRadarTrackingRequested = false;
 /* World coordinates for a radar track/jump */
 static  float	 radarX,radarY;
 
-/*	Where we were up to (pos and rot) last update - allows us to see whether
-	we are sufficently near our target to disable further tracking */
-static	Vector3i	oldPosition, oldRotation;
-static bool OldViewValid;
-
 //-----------------------------------------------------------------------------------
 /* Sets the camera to inactive to begin with */
 void	initWarCam( void )
@@ -110,8 +105,6 @@ void	initWarCam( void )
 
 	/* Logo setup */
 	warCamLogoRotation = 0;
-
-	OldViewValid = false;
 }
 
 
@@ -519,9 +512,6 @@ void	camAllignWithTarget(BASE_OBJECT *psTarget)
 
 	/* Store away when we started */
 	trackingCamera.lastUpdate = gameTime2;
-
-
-	OldViewValid = true;
 }
 
 #define GROUP_SELECTED 0xFFFFFFFF
@@ -909,33 +899,6 @@ static void updateCameraRotationPosition( UBYTE update )
 	}
 }
 
-/* Returns how far away we are from our goal in a radar track */
-static UDWORD getPositionMagnitude( void )
-{
-	Vector3i dif;
-	UDWORD val;
-
-	dif.x = abs(player.p.x - oldPosition.x);
-	dif.y = abs(player.p.y - oldPosition.y);
-	dif.z = abs(player.p.z - oldPosition.z);
-	val = (dif.x * dif.x) + (dif.y * dif.y) + (dif.z * dif.z);
-	return val;
-}
-
-
-static UDWORD getRotationMagnitude( void )
-{
-	Vector3i dif;
-	UDWORD val;
-
-	dif.x = abs(player.r.x - oldRotation.x);
-	dif.y = abs(player.r.y - oldRotation.y);
-	dif.z = abs(player.r.z - oldRotation.z);
-	val = (dif.x * dif.x) + (dif.y * dif.y) + (dif.z * dif.z);
-	return val;
-}
-
-
 /* Returns how far away we are from our goal in rotation */
 /* Updates the viewpoint according to the object being tracked */
 bool	camTrackCamera( void )
@@ -1024,20 +987,10 @@ bool	bFlying;
 		updateCameraRotationPosition(CAM_X_AND_Y);
 	}
 
-	/* Record the old positions for comparison */
-	oldPosition.x = player.p.x;
-	oldPosition.y = player.p.y;
-	oldPosition.z = player.p.z;
-
 	/* Update the position that's now stored in trackingCamera.position */
 	player.p.x = trackingCamera.position.x;
 	player.p.y = trackingCamera.position.y;
 	player.p.z = trackingCamera.position.z;
-
-	/* Record the old positions for comparison */
-	oldRotation.x = player.r.x;
-	oldRotation.y = player.r.y;
-	oldRotation.z = player.r.z;
 
 	/* Update the rotations that're now stored in trackingCamera.rotation */
 	player.r.x = trackingCamera.rotation.x;
@@ -1077,12 +1030,10 @@ bool	bFlying;
 		/*	This will ensure we come to a rest and terminate the tracking
 			routine once we're close enough
 		*/
-		if(getRotationMagnitude()<10000)
+		if (trackingCamera.velocity*trackingCamera.velocity + trackingCamera.acceleration*trackingCamera.acceleration < 1.f &&
+		    trackingCamera.rotVel*trackingCamera.rotVel     + trackingCamera.rotAccel*trackingCamera.rotAccel         < 1.f)
 		{
-			if(getPositionMagnitude() < 60)
-			{
-				setWarCamActive(false);
-			}
+			setWarCamActive(false);
 		}
 	}
 	return(true);

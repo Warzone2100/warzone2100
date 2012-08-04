@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -23,7 +23,8 @@
 #include "lib/framework/strres.h"
 #include "lib/framework/stdio_ext.h"
 #include "lib/framework/utf.h"
-#include "lib/framework/wzapp_c.h"
+#include "lib/framework/wzapp.h"
+#include "lib/framework/rational.h"
 #include "objects.h"
 #include "basedef.h"
 #include "map.h"
@@ -90,6 +91,9 @@
 #include "scriptfuncs.h"
 #include "clparse.h"
 #include "research.h"
+#include "template.h"
+#include "qtscript.h"
+#include "multigifts.h"
 
 /*
 	KeyBind.c
@@ -123,7 +127,6 @@ static void kfsf_SetSelectedDroidsState( SECONDARY_ORDER sec, SECONDARY_STATE St
  */
 bool runningMultiplayer(void)
 {
-	// NOTE: may want to only allow this for DEBUG builds?? -- Buginator
 	if (!bMultiPlayer || !NetPlay.bComms)
 		return false;
 
@@ -136,6 +139,33 @@ static void noMPCheatMsg(void)
 }
 
 // --------------------------------------------------------------------------
+void kf_AutoGame(void)
+{
+#ifndef DEBUG
+	// Bail out if we're running a _true_ multiplayer game (to prevent MP cheating)
+	if (runningMultiplayer())
+	{
+		noMPCheatMsg();
+		return;
+	}
+#endif
+	if (game.type == CAMPAIGN)
+	{
+		CONPRINTF(ConsoleString, (ConsoleString, "Not possible with the campaign!"));
+		return;
+	}
+	// Notify all human players that we are trying to enable autogame
+	for (int i = 0; i < MAX_PLAYERS; i++)
+	{
+		if(NetPlay.players[i].allocated)
+		{
+			sendGift(AUTOGAME_GIFT, i);
+		}
+	}
+
+	CONPRINTF(ConsoleString, (ConsoleString, "autogame request has been sent to all players. AI script *must* support this command!"));
+}
+
 void	kf_ToggleMissionTimer( void )
 {
 	addConsoleMessage(_("Warning! This cheat is buggy.  We recommend to NOT use it."), DEFAULT_JUSTIFY,  SYSTEM_MESSAGE);
@@ -162,21 +192,6 @@ void	kf_ToggleRadarJump( void )
 
 // --------------------------------------------------------------------------
 
-void	kf_ForceSync( void )
-{
-	DROID		*psCDroid, *psNDroid;
-
-	for(psCDroid = apsDroidLists[selectedPlayer]; psCDroid; psCDroid = psNDroid)
-	{
-		psNDroid = psCDroid->psNext;
-		if (psCDroid->selected)
-		{
-			ForceDroidSync(psCDroid);
-		}
-	}
-	
-}
-
 void kf_ForceDesync(void)
 {
 	syncDebug("Oh no!!! I went out of sync!!!");
@@ -189,6 +204,50 @@ void	kf_PowerInfo( void )
 	for (i = 0; i < game.maxPlayers; i++)
 	{
 		console("Player %d: %d power", i, (int)getPower(i));
+	}
+}
+
+void kf_DamageMe(void)
+{
+#ifndef DEBUG
+	// Bail out if we're running a _true_ multiplayer game (to prevent MP cheating)
+	if (runningMultiplayer())
+	{
+		noMPCheatMsg();
+		return;
+	}
+#endif
+	for(DROID *psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
+	{
+		if (psDroid->selected)
+		{
+			int val = psDroid->body - ((psDroid->originalBody / 100) *20);
+			if (val > 0)
+			{
+				psDroid->body = val;
+				addConsoleMessage(_("Ouch! Droid's health is down 20%!"), LEFT_JUSTIFY, SYSTEM_MESSAGE);
+			}
+			else
+			{
+				psDroid->body = 0;
+			}
+		}
+	}
+	for(STRUCTURE *psStruct = apsStructLists[selectedPlayer]; psStruct; psStruct = psStruct->psNext)
+	{
+		if (psStruct->selected)
+		{
+			int val = psStruct->body - ((structureBody(psStruct) / 100) *20);
+			if (val > 0)
+			{
+				psStruct->body = val;
+				addConsoleMessage(_("Ouch! Structure's health is down 20%!"), LEFT_JUSTIFY, SYSTEM_MESSAGE);
+			}
+			else
+			{
+				psStruct->body = 0;
+			}
+		}
 	}
 }
 
@@ -312,13 +371,9 @@ DROID	*psDroid;
 
 void	kf_CloneSelected( void )
 {
-	DROID		*psDroid;
-	DROID_TEMPLATE	sTemplate;
-	DROID_TEMPLATE	*sTemplate2 = NULL;
+	DROID_TEMPLATE	*sTemplate = NULL;
 	const int	limit = 10;	// make 10 clones
-	int             i;//, impact_side;
-	//const char *    msg;
-
+	const char *msg;
 #ifndef DEBUG
 	// Bail out if we're running a _true_ multiplayer game (to prevent MP cheating)
 	if (runningMultiplayer())
@@ -328,61 +383,52 @@ void	kf_CloneSelected( void )
 	}
 #endif
 
-	for (psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid=psDroid->psNext)
+	for (DROID *psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid=psDroid->psNext)
 	{
-		for (i = 0; psDroid->selected && i < limit; i++)
+		if (psDroid->selected)
 		{
-			// create a template based on the droid
-			if (!sTemplate2)
+			for (DROID_TEMPLATE *psTempl = apsDroidTemplates[selectedPlayer]; psTempl; psTempl = psTempl->psNext)
 			{
-				sTemplate2 = GetHumanDroidTemplate(psDroid->aName);
-				if (!sTemplate2)
-				{	// we now search the AI template list (apsStaticTemplates)
-					sTemplate2 = GetAIDroidTemplate(psDroid->aName);
+				if (!strcmp(psTempl->aName, psDroid->aName))
+				{
+					sTemplate = psTempl;
+					break;
 				}
 			}
-			if (!sTemplate2)
+
+			if (!sTemplate)
 			{
-				debug(LOG_ERROR, "We can't find the template for this droid: %s, id:%u, type:%d!", psDroid->aName, psDroid->id, psDroid->droidType);
+				debug(LOG_ERROR, "Cloning vat has been destoryed. We can't find the template for this droid: %s, id:%u, type:%d!", psDroid->aName, psDroid->id, psDroid->droidType);
 				return;
 			}
-			sTemplate = *sTemplate2;
-			templateSetParts(psDroid, &sTemplate);
 
-			// create a new droid
-			buildDroid(&sTemplate, psDroid->pos.x, psDroid->pos.y, psDroid->player, false, NULL);
-			/* // TODO psNewDroid is null, since we just sent a message, but haven't actually created the droid locally yet.
-			ASSERT_OR_RETURN(, psNewDroid != NULL, "Unable to build a unit");
-			addDroid(psNewDroid, apsDroidLists);
-			psNewDroid->body = psDroid->body;
-			for (impact_side = 0; impact_side < NUM_HIT_SIDES; impact_side=impact_side+1)
+			// create a new droid army
+			for (int i = 0; i < limit; i++)
 			{
-				psNewDroid->armour[impact_side][WC_KINETIC] = psDroid->armour[impact_side][WC_KINETIC];
-				psNewDroid->armour[impact_side][WC_HEAT] = psDroid->armour[impact_side][WC_HEAT];
+				DROID *psNewDroid = buildDroid(sTemplate, psDroid->pos.x + (i*12), psDroid->pos.y + (i*14), psDroid->player, false, NULL);
+				if (psNewDroid)
+				{
+					addDroid(psNewDroid, apsDroidLists);
+					psScrCBNewDroid = psNewDroid;
+					psScrCBNewDroidFact = NULL;
+					eventFireCallbackTrigger((TRIGGER_TYPE)CALL_NEWDROID);	// notify scripts so it will get assigned jobs
+					psScrCBNewDroid = NULL;
+					triggerEventDroidBuilt(psNewDroid, NULL);
+				}
+				else
+				{
+					debug(LOG_ERROR, "Cloning has failed for template:%s id:%d", sTemplate->pName, sTemplate->multiPlayerID);
+				}
 			}
-			psNewDroid->experience = psDroid->experience;
-			psNewDroid->rot.direction = psDroid->rot.direction;
-			if (!(psNewDroid->droidType == DROID_PERSON || cyborgDroid(psNewDroid) || psNewDroid->droidType == DROID_TRANSPORTER))
-			{
-				updateDroidOrientation(psNewDroid);
-			}
-		}
-		if (psNewDroid)
-		{
-			// Send a text message to all players, notifying them of
-			// the fact that we're cheating ourselves a new droid army
-			sasprintf((char**)&msg, _("Player %u is cheating him/herself a new droid army of %s(s)."), selectedPlayer, psNewDroid->aName);
+			sasprintf((char**)&msg, _("Player %u is cheating a new droid army of: %s."), selectedPlayer, psDroid->aName);
 			sendTextMessage(msg, true);
-			audio_PlayTrack(ID_SOUND_NEXUS_LAUGH1);
-			sTemplate2 = NULL;
-			psNewDroid->selected = true;
-			psNewDroid = NULL;
 			Cheated = true;
-			*/
+			audio_PlayTrack(ID_SOUND_NEXUS_LAUGH1);
+			return;
 		}
+		debug(LOG_INFO, "Nothing was selected?");
 	}
 }
-
 // --------------------------------------------------------------------------
 //
 ///* Prints out the date and time of the build of the game */
@@ -545,16 +591,17 @@ void kf_ToggleLevelName(void) // toggles level name
 /* Writes out the frame rate */
 void	kf_FrameRate( void )
 {
-	CONPRINTF(ConsoleString,(ConsoleString, _("FPS %d; PIEs %d; polys %d; Terr. polys %d; States %d"),
-	          frameGetAverageRate(), loopPieCount, loopPolyCount, loopTileCount, loopStateChanges));
+	CONPRINTF(ConsoleString,(ConsoleString, "FPS %d; PIEs %d; polys %d; States %d",
+	          frameRate(), loopPieCount, loopPolyCount, loopStateChanges));
 	if (runningMultiplayer())
 	{
-			CONPRINTF(ConsoleString,(ConsoleString,
-						"NETWORK:  Bytes: s-%d r-%d  Packets: s-%d r-%d",
-						NETgetBytesSent(),
-						NETgetBytesRecvd(),
-						NETgetPacketsSent(),
-						NETgetPacketsRecvd() ));
+		CONPRINTF(ConsoleString, (ConsoleString, "NETWORK:  Bytes: s-%d r-%d  Uncompressed Bytes: s-%d r-%d  Packets: s-%d r-%d",
+		                          NETgetStatistic(NetStatisticRawBytes, true),
+		                          NETgetStatistic(NetStatisticRawBytes, false),
+		                          NETgetStatistic(NetStatisticUncompressedBytes, true),
+		                          NETgetStatistic(NetStatisticUncompressedBytes, false),
+		                          NETgetStatistic(NetStatisticPackets, true),
+		                          NETgetStatistic(NetStatisticPackets, false)));
 	}
 	gameStats = !gameStats;
 	CONPRINTF(ConsoleString, (ConsoleString,"Built at %s on %s",__TIME__,__DATE__));
@@ -587,7 +634,6 @@ void kf_ShowNumObjects( void )
 void	kf_ToggleRadar( void )
 {
 		radarOnScreen = !radarOnScreen;
-//		addConsoleMessage("Radar display toggled",DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 }
 
 // --------------------------------------------------------------------------
@@ -825,6 +871,11 @@ void kf_MapCheck(void)
 /* Raises the tile under the mouse */
 void	kf_RaiseTile( void )
 {
+	if (runningMultiplayer())
+	{
+		return;  // Don't desynch if pressing 'W'...
+	}
+
 	raiseTile(mouseTileX, mouseTileY);
 }
 
@@ -833,6 +884,11 @@ void	kf_RaiseTile( void )
 /* Lowers the tile under the mouse */
 void	kf_LowerTile( void )
 {
+	if (runningMultiplayer())
+	{
+		return;  // Don't desynch if pressing 'A'...
+	}
+
 	lowerTile(mouseTileX, mouseTileY);
 }
 
@@ -1175,21 +1231,6 @@ void	kf_EndMissionOffWorld( void )
 
 	eventFireCallbackTrigger((TRIGGER_TYPE)CALL_MISSION_END);
 }
-// --------------------------------------------------------------------------
-/* Initialise the player power levels*/
-void	kf_NewPlayerPower( void )
-{
-#ifndef DEBUG
-	// Bail out if we're running a _true_ multiplayer game
-	if (runningMultiplayer())
-	{
-		noMPCheatMsg();
-		return;
-	}
-#endif
-
-	newGameInitPower();
-}
 
 // --------------------------------------------------------------------------
 // Display multiplayer guff.
@@ -1243,35 +1284,14 @@ void	kf_TogglePowerBar( void )
 /* Toggles whether we process debug key mappings */
 void	kf_ToggleDebugMappings( void )
 {
-	const char* cmsg;
-
-#ifndef DEBUG
-	// Prevent cheating in multiplayer when not compiled in debug mode by
-	// bailing out if we're running a _true_ multiplayer game
-	if (runningMultiplayer())
-	{
-		noMPCheatMsg();
-		return;
-	}
-#endif
-
-	if (getDebugMappingStatus())
-	{
-		processDebugMappings(false);
-	}
-	else
-	{
-		processDebugMappings(true);
-	}
-	sasprintf((char**)&cmsg, _("(Player %u) is using cheat :%s"), selectedPlayer,
-		 getDebugMappingStatus() ? _("CHEATS ARE NOW ENABLED!") : _("CHEATS ARE NOW DISABLED!"));
-	sendTextMessage(cmsg, true);
+	sendProcessDebugMappings(!getWantedDebugMappingStatus(selectedPlayer));
 }
 // --------------------------------------------------------------------------
 
 void	kf_ToggleGodMode( void )
 {
 	const char* cmsg;
+	static bool pastReveal = true;
 
 #ifndef DEBUG
 	// Bail out if we're running a _true_ multiplayer game (to prevent MP cheating)
@@ -1288,7 +1308,7 @@ void	kf_ToggleGodMode( void )
 		int player;
 
 		godMode = false;
-		setRevealStatus(game.fog);
+		setRevealStatus(pastReveal);
 		// now hide the features
 		while (psFeat)
 		{
@@ -1317,7 +1337,8 @@ void	kf_ToggleGodMode( void )
 	{
 		godMode = true; // view all structures and droids
 		revealAll(selectedPlayer);
-		setRevealStatus(false); // view the entire map
+		pastReveal = getRevealStatus();
+		setRevealStatus(true); // view the entire map
 	}
 
 	sasprintf((char**)&cmsg, _("(Player %u) is using cheat :%s"),
@@ -1411,12 +1432,9 @@ void	kf_FinishAllResearch(void)
 	}
 #endif
 
-	for (j = 0; j < numResearch; j++)
+	for (j = 0; j < asResearch.size(); j++)
 	{
-		PLAYER_RESEARCH	*pPlayerRes = asPlayerResList[selectedPlayer];
-
-		pPlayerRes += j; // select right tech
-		if (IsResearchCompleted(pPlayerRes) == false)
+		if (IsResearchCompleted(&asPlayerResList[selectedPlayer][j]) == false)
 		{
 			if (bMultiMessages)
 			{
@@ -1425,7 +1443,7 @@ void	kf_FinishAllResearch(void)
 			}
 			else
 			{
-				MakeResearchCompleted(pPlayerRes);
+				MakeResearchCompleted(&asPlayerResList[selectedPlayer][j]);
 				researchResult(j, selectedPlayer, false, NULL, false);
 			}
 		}
@@ -1486,17 +1504,17 @@ void	kf_FinishResearch( void )
 			pSubject = ((RESEARCH_FACILITY *)psCurr->pFunctionality)->psSubject;
 			if (pSubject)
 			{
+				int rindex = ((RESEARCH*)pSubject)->index;
 				if (bMultiMessages)
 				{
-					SendResearch(selectedPlayer, (RESEARCH*)pSubject - asResearch, true);
+					SendResearch(selectedPlayer, rindex, true);
 					// Wait for our message before doing anything.
 				}
 				else
 				{
-					researchResult((RESEARCH*)pSubject - asResearch, selectedPlayer, true, psCurr, true);
+					researchResult(rindex, selectedPlayer, true, psCurr, true);
 				}
-				sasprintf((char**)&cmsg, _("(Player %u) is using cheat :%s %s"),
-					selectedPlayer, _("Researched"), getName(pSubject->pName) );
+				sasprintf((char**)&cmsg, _("(Player %u) is using cheat :%s %s"), selectedPlayer, _("Researched"), getName(pSubject->pName));
 				sendTextMessage(cmsg, true);
 				intResearchFinished(psCurr);
 			}
@@ -1800,17 +1818,18 @@ void	kf_MovePause( void )
 // --------------------------------------------------------------------------
 void	kf_MoveToLastMessagePos( void )
 {
-	SDWORD	iX, iY, iZ;
+	int iX, iY, iZ;
 
 	if (!audio_GetPreviousQueueTrackPos( &iX, &iY, &iZ ))
 	{
 		return;
 	}
-
-// Should use requestRadarTrack but the camera gets jammed so use setViewpos - GJ
-//		requestRadarTrack( iX, iY );
-	setViewPos( map_coord(iX), map_coord(iY), true );
+	if (iX != 0 && iY != 0)
+	{
+		setViewPos(map_coord(iX), map_coord(iY), true);
+	}
 }
+
 // --------------------------------------------------------------------------
 /* Makes it snow if it's not snowing and stops it if it is */
 void	kf_ToggleWeather( void )
@@ -2016,7 +2035,6 @@ void kf_ShowGridInfo(void)
 void kf_SendTextMessage(void)
 {
 	UDWORD	ch;
-	char tmp[MAX_CONSOLE_STRING_LENGTH + 100];
 	utf_32_char unicode;
 
 	if(bAllowOtherKeyPresses)									// just starting.
@@ -2051,33 +2069,8 @@ void kf_SendTextMessage(void)
 			sstrcpy(ConsoleMsg, sTextToSend);
 			eventFireCallbackTrigger((TRIGGER_TYPE)CALL_CONSOLE);
 
-			if (runningMultiplayer())
-			{
-				sendTextMessage(sTextToSend,false);
-				attemptCheatCode(sTextToSend);
-			}
-			else
-			{
-				unsigned int i;
-
-				//show the message we sent on our local console as well (even in skirmish, to see console commands)
-				sstrcpy(tmp, getPlayerName(selectedPlayer));
-				sstrcat(tmp, " : ");        // seperator
-				sstrcat(tmp, sTextToSend);  // add message
-				addConsoleMessage(tmp,DEFAULT_JUSTIFY, selectedPlayer);
-
-				//in skirmish send directly to AIs, for command and chat procesing
-				for (i = 0; i < game.maxPlayers; ++i)		//don't use MAX_PLAYERS here, although possible
-				{
-					if (openchannels[i]
-					 && i != selectedPlayer)
-					{
-						sendAIMessage(sTextToSend, selectedPlayer, i);
-					}
-				}
-
-				attemptCheatCode(sTextToSend);
-			}
+			sendTextMessage(sTextToSend,false);
+			attemptCheatCode(sTextToSend);
 			return;
 		}
 		else if(ch == INPBUF_BKSPACE )							// delete
@@ -2249,6 +2242,48 @@ void	kf_SelectAllHalfTracked( void )
 }
 
 // --------------------------------------------------------------------------
+void kf_SelectAllCyborgs()
+{
+	selDroidSelection(selectedPlayer, DS_BY_TYPE, DST_CYBORG, false);
+}
+
+// --------------------------------------------------------------------------
+void kf_SelectAllEngineers()
+{
+	selDroidSelection(selectedPlayer, DS_BY_TYPE, DST_ENGINEER, false);
+}
+
+// --------------------------------------------------------------------------
+void kf_SelectAllMechanics()
+{
+	selDroidSelection(selectedPlayer, DS_BY_TYPE, DST_MECHANIC, false);
+}
+
+// --------------------------------------------------------------------------
+void kf_SelectAllTransporters()
+{
+	selDroidSelection(selectedPlayer, DS_BY_TYPE, DST_TRANSPORTER, false);
+}
+
+// --------------------------------------------------------------------------
+void kf_SelectAllRepairTanks()
+{
+	selDroidSelection(selectedPlayer, DS_BY_TYPE, DST_REPAIR_TANK, false);
+}
+
+// --------------------------------------------------------------------------
+void kf_SelectAllSensorUnits()
+{
+	selDroidSelection(selectedPlayer, DS_BY_TYPE, DST_SENSOR, false);
+}
+
+// --------------------------------------------------------------------------
+void kf_SelectAllTrucks()
+{
+	selDroidSelection(selectedPlayer, DS_BY_TYPE, DST_TRUCK, false);
+}
+
+// --------------------------------------------------------------------------
 void	kf_SelectAllDamaged( void )
 {
 	selDroidSelection(selectedPlayer,DS_BY_TYPE,DST_ALL_DAMAGED,false);
@@ -2258,6 +2293,18 @@ void	kf_SelectAllDamaged( void )
 void	kf_SelectAllCombatUnits( void )
 {
 	selDroidSelection(selectedPlayer,DS_BY_TYPE,DST_ALL_COMBAT,false);
+}
+
+// --------------------------------------------------------------------------
+void kf_SelectAllLandCombatUnits()
+{
+	selDroidSelection(selectedPlayer, DS_BY_TYPE, DST_ALL_COMBAT_LAND, false);
+}
+
+// --------------------------------------------------------------------------
+void kf_SelectAllCombatCyborgs()
+{
+	selDroidSelection(selectedPlayer, DS_BY_TYPE, DST_ALL_COMBAT_CYBORG, false);
 }
 
 // --------------------------------------------------------------------------
@@ -2387,10 +2434,12 @@ void	kf_ToggleVisibility( void )
 {
 	if(getRevealStatus())
 	{
+		console("Reveal OFF");
 		setRevealStatus(false);
 	}
 	else
 	{
+		console("Reveal ON");
 		setRevealStatus(true);
 	}
 }
@@ -2573,30 +2622,34 @@ void	kf_ToggleShadows( void )
 }
 // --------------------------------------------------------------------------
 
-float available_speed[] = {
+static const Rational available_speed[] = {
 // p = pumpkin allowed, n = new entries allowed in debug mode only.
 // Since some of these values can ruin a SP game, we disallow them in normal mode.
-	0.f,            // n
-	1.f / 8.f,	// n
-	1.f / 5.f,	// n
-	1.f / 3.f,	// p
-	3.f / 4.f,	// p
-	1.f / 1.f,	// p
-	5.f / 4.f,	// p
-	3.f / 2.f,	// p
-	2.f / 1.f,	// p (in debug mode only)
-	5.f / 2.f,	// n
-	3.f / 1.f,	// n
-	10.f / 1.f,	// n
-	20.f / 1.f	// n
+	Rational(0),     // n
+	Rational(1, 1000),// n
+	Rational(1, 100),// n
+	Rational(1, 40), // n
+	Rational(1, 8),  // n
+	Rational(1, 5),  // n
+	Rational(1, 3),  // p
+	Rational(1, 2),
+	Rational(3, 4),  // p
+	Rational(1),     // p
+	Rational(5, 4),  // p
+	Rational(3, 2),  // p
+	Rational(2),     // p (in debug mode only)
+	Rational(5, 2),  // n
+	Rational(3),     // n
+	Rational(10),    // n
+	Rational(20),    // n
+	Rational(30),    // n
+	Rational(60),    // n
+	Rational(100),   // n
 };
-unsigned int nb_available_speeds = 12;
+const unsigned nb_available_speeds = ARRAY_SIZE(available_speed);
 
-void kf_SpeedUp( void )
+static void tryChangeSpeed(Rational newMod, Rational oldMod)
 {
-	float           mod;
-	unsigned int    i;
-
 	// Bail out if we're running a _true_ multiplayer game or are playing a tutorial
 	if ((runningMultiplayer() && !getDebugMappingStatus()) || bInTutorial)
 	{
@@ -2607,75 +2660,76 @@ void kf_SpeedUp( void )
 		return;
 	}
 
-	// get the current modifier
-	gameTimeGetMod(&mod);
-
-	for (i = 1; i < nb_available_speeds; ++i)
+	// only in debug/cheat mode do we enable all time compression speeds.
+	if (!getDebugMappingStatus() && (newMod >= 2 || newMod <= 0))  // 2 = max officially allowed time compression
 	{
-		if (mod < available_speed[i])
+		return;
+	}
+
+	char modString[30];
+	if (newMod.d != 1)
+	{
+		const float speed = float(newMod.n) / newMod.d;
+		if (speed > 0.4)
 		{
-			mod = available_speed[i];
-			// only in debug/cheat mode do we enable all time compression speeds.
-			if (!getDebugMappingStatus())
-			{
-				if (mod >= 2.f / 1.f)		// max officialy allowed time compression
-					break;
-			}
-			if (mod == 1.f / 1.f)
-			{
-				CONPRINTF(ConsoleString,(ConsoleString,_("Game Speed Reset")));
-			}
-			else
-			{
-				CONPRINTF(ConsoleString,(ConsoleString,_("Game Speed Increased to %3.1f"), mod));
-			}
-			gameTimeSetMod(mod);
-			break;
+			ssprintf(modString, "%.1f", speed);
+		}
+		else if (speed > 0.15)
+		{
+			ssprintf(modString, "%.2f", speed);
+		}
+		else
+		{
+			ssprintf(modString, "%.3f", speed);
 		}
 	}
+	else
+	{
+		ssprintf(modString, "%d", newMod.n);
+	}
+
+	if (newMod == 1)
+	{
+		CONPRINTF(ConsoleString, (ConsoleString, _("Game Speed Reset")));
+	}
+	else if (newMod > oldMod)
+	{
+		CONPRINTF(ConsoleString, (ConsoleString, _("Game Speed Increased to %s"), modString));
+	}
+	else
+	{
+		CONPRINTF(ConsoleString, (ConsoleString, _("Game Speed Reduced to %s"), modString));
+	}
+	gameTimeSetMod(newMod);
+}
+
+void kf_SpeedUp( void )
+{
+	// get the current modifier
+	Rational mod = gameTimeGetMod();
+
+	Rational const *newMod = std::upper_bound(available_speed, available_speed + nb_available_speeds, mod);
+	if (newMod == available_speed + nb_available_speeds)
+	{
+		return;  // Already at maximum speed.
+	}
+
+	tryChangeSpeed(*newMod, mod);
 }
 
 void kf_SlowDown( void )
 {
-	float	mod;
-	int		i;
-
-	// Bail out if we're running a _true_ multiplayer game or are playing a tutorial
-	if ((runningMultiplayer() && !getDebugMappingStatus()) || bInTutorial)
-	{
-		if (!bInTutorial)
-		{
-			addConsoleMessage(_("Sorry, but game speed cannot be changed in multiplayer."), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
-		}
-		return;
-	}
-
 	// get the current modifier
-	gameTimeGetMod(&mod);
+	Rational mod = gameTimeGetMod();
 
-	for (i = nb_available_speeds - 2; i >= 0; --i)
+	Rational const *newMod = std::lower_bound(available_speed, available_speed + nb_available_speeds, mod);
+	if (newMod == available_speed)
 	{
-		if (mod > available_speed[i])
-		{
-			mod = available_speed[i];
-			// only in debug/cheat mode do we enable all time compression speeds.
-			if( !getDebugMappingStatus() )
-			{
-				if (mod < 1.f / 3.f)
-					break;
-			}
-			if (mod == 1.f / 1.f)
-			{
-				CONPRINTF(ConsoleString,(ConsoleString,_("Game Speed Reset")));
-			}
-			else
-			{
-				CONPRINTF(ConsoleString,(ConsoleString,_("Game Speed Reduced to %3.1f"),mod));
-			}
-			gameTimeSetMod(mod);
-			break;
-		}
+		return;  // Already at minimum speed.
 	}
+	--newMod;  // Point to lower speed instead of current speed.
+
+	tryChangeSpeed(*newMod, mod);
 }
 
 void kf_NormalSpeed( void )
@@ -2712,11 +2766,6 @@ void kf_ToggleRadarAllyEnemy(void)
 void kf_ToggleRadarTerrain(void)
 {
 	radarDrawMode = (RADAR_DRAW_MODE)(radarDrawMode + 1);
-
-	if (radarDrawMode == RADAR_MODE_TERRAIN_SEEN && getRevealStatus())
-	{
-		radarDrawMode = (RADAR_DRAW_MODE)(radarDrawMode + 1);  // skip this radar mode for fog of war mode
-	}
 	if (radarDrawMode >= NUM_RADAR_MODES)
 	{
 		radarDrawMode = (RADAR_DRAW_MODE)0;
@@ -2731,9 +2780,6 @@ void kf_ToggleRadarTerrain(void)
 			break;
 		case RADAR_MODE_TERRAIN:
 			CONPRINTF(ConsoleString, (ConsoleString, _("Radar showing terrain")));
-			break;
-		case RADAR_MODE_TERRAIN_SEEN:
-			CONPRINTF(ConsoleString, (ConsoleString, _("Radar showing revealed terrain")));
 			break;
 		case RADAR_MODE_HEIGHT_MAP:
 			CONPRINTF(ConsoleString, (ConsoleString, _("Radar showing height")));
@@ -2762,7 +2808,7 @@ void	kf_AddHelpBlip( void )
 	/* check if clicked on radar */
 	x = mouseX();
 	y = mouseY();
-	if(radarOnScreen && getHQExists(selectedPlayer))
+	if (radarOnScreen && radarPermitted)
 	{
 		if(CoordInRadar(x,y))
 		{
@@ -2783,15 +2829,7 @@ void	kf_AddHelpBlip( void )
 		worldY = mouseTileY*TILE_UNITS+TILE_UNITS/2;
 	}
 
-	//if chat message is empty, just send player name
-	//if(!strcmp(sCurrentConsoleText, ""))
-	//{
-		sstrcpy(tempStr, getPlayerName(selectedPlayer));		//temporary solution
-	//}
-	//else
-	//{
-	//	sstrcpy(tempStr, sCurrentConsoleText);
-	//}
+	sstrcpy(tempStr, getPlayerName(selectedPlayer));		//temporary solution
 
 	/* add beacon for the sender */
 	sstrcpy(beaconMsg[selectedPlayer], tempStr);
@@ -2841,7 +2879,6 @@ void kf_BuildPrevPage()
 	temp = psTForm->majorT - 1;
 	if (temp < 0)
 	{
-		temp = 0 ;
 		audio_PlayTrack(ID_SOUND_BUILD_FAIL);
 		return;
 	}

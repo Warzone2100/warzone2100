@@ -6,7 +6,7 @@ void physfs_init(const char* binpath)
 
     // Add cwd
     PHYSFS_setWriteDir(".");
-    PHYSFS_mount(".", NULL, 1);
+    PHYSFS_addToSearchPath(".", 1);
 }
 
 void physfs_shutdown()
@@ -27,7 +27,7 @@ char* physfs_addmappath(char *path)
     length = strlen(path);
     if (length >= 3 && strcmp(&path[length-3], ".wz")==0)
     {
-        PHYSFS_mount(path, NULL, 1);
+        PHYSFS_addToSearchPath(path, 1);
             
         strcat(p_result, "multiplay/maps/");
         p_result += strlen("multiplay/maps/");        
@@ -40,7 +40,7 @@ char* physfs_addmappath(char *path)
             strcpy(p_result, p_path);
 
 			path[strlen(path) - strlen(result) - 1] = '\0';
-			PHYSFS_mount(path, NULL, 1);
+			PHYSFS_addToSearchPath(path, 1);
         }
         else
         {

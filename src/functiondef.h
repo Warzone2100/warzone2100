@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -48,18 +48,6 @@ enum FUNCTION_TYPES
 	DROIDCONST_UPGRADE_TYPE,
 	REARM_TYPE,
 	REARM_UPGRADE_TYPE,
-	//DEFENSIVE_STRUCTURE_TYPE,
-	//RADAR_MAP_TYPE,
-	//POWER_REG_TYPE,
-	//POWER_RELAY_TYPE,
-	//ARMOUR_UPGRADE_TYPE,
-	//REPAIR_UPGRADE_TYPE,
-	//RESISTANCE_UPGRADE_TYPE,
-	//DROID_DESIGN_TYPE,
-	//MAP_MARKER_TYPE,
-	//SKY_DOME_MAP_TYPE,
-	//BODY_UPGRADE_TYPE,
-	//HQ_TYPE,
 
 	/* The number of function types */
 	NUMFUNCTIONS,
@@ -123,9 +111,8 @@ struct PRODUCTION_UPGRADE_FUNCTION : public FUNCTION
 /*To manufacture droids designed previously*/
 struct PRODUCTION_FUNCTION : public FUNCTION
 {
-	UBYTE                                   capacity;               // The max size of body the factory can produce
-	UWORD					productionOutput;	/*Droid Build Points Produced Per
-												  Build Cycle*/
+	BODY_SIZE capacity;      // The max size of body the factory can produce
+	UWORD productionOutput;	 // Droid Build Points Produced Per Build Cycle
 };
 
 /*To research topics available*/
@@ -154,9 +141,6 @@ typedef UPGRADE_FUNCTION	REARM_UPGRADE_FUNCTION;
 /*Upgrade the weapon ROF and accuracy for the weapons of a particular class*/
 struct WEAPON_UPGRADE_FUNCTION : public FUNCTION
 {
-// GNU C complains about this...
-//	WEAPON_CLASS            subClass;		/*which weapons are affected */
-// So need to do it this way...
 	WEAPON_SUBCLASS		subClass;			/*which weapons are affected */
 	UBYTE			firePause;			/*The % to decrease the fire pause or reload time */
 	UWORD			shortHit;			/*The % to increase the  short range accuracy */
@@ -200,115 +184,5 @@ struct DROIDSENSOR_UPGRADE_FUNCTION : public UPGRADE_FUNCTION
 {
 	UWORD					range;		// % to increase range by
 };
-
-
-#if(0)
-typedef struct _function_upgrade
-{
-	UDWORD		functionInc;			/*The index of the function in asFunctions */
-	bool		available;				/*Flag to indicate whether this Upgrade is available*/
-} FUNCTION_UPGRADE;
-#endif
-/*function used by HQ to input power values*/
-//typedef struct _hq_function
-//{
-//	//common stats
-//	FUNCTION_STATS;
-//
-//	UDWORD			power;				/*The power value of the HQ*/
-//} HQ_FUNCTION;
-
-
-/*upgrade the armour that can be applied to a droid/structure*/
-//typedef struct _armour_upgrade_function
-//{
-//	//common stats
-//	FUNCTION_STATS;
-//
-//	ARMOUR_STATS*	pArmour;		/*The armour to upgrade to*/
-//	UDWORD			buildPoints;	/*The number of build points required to upgrade
-//									  the structure*/
-//	UDWORD			powerRequired;	/*The amount of power required to upgrade*/
-//	UDWORD			armourPoints;	/*The percentage to increase the armour points by*/
-//} ARMOUR_UPGRADE_FUNCTION;
-
-/*To regulate power flows*/
-//typedef struct _power_reg_function
-//{
-//	//common stats
-//	FUNCTION_STATS;
-//
-//	UDWORD		maxPower;			/*The maximum amount of power output the
-//									  regulator can handle*/
-//} POWER_REG_FUNCTION;
-
-/*To transfer power across the map*/
-//typedef struct _power_relay_function
-//{
-//	//common stats
-//	FUNCTION_STATS;
-//
-//	UDWORD		powerRelayType;		/*Broadcast=0 cable=1*/
-//	UDWORD		powerRelayRange;	/*The range in map distances that the power
-//									  can be relayed*/
-//} POWER_RELAY_FUNCTION;
-
-/*To display the radar map*/
-//typedef struct _radar_map_function
-//{
-//	//common stats
-//	FUNCTION_STATS;
-//
-//	UDWORD		radarDecayRate;		/*How fast the droids out of LOS decay on the
-//									  radar*/
-//	UDWORD		radarRadius;		/*How far a radar building can see with 100%
-//									  accuracy*/
-//} RADAR_MAP_FUNCTION;
-
-/*Upgrade the repair points that can be obtained from a repair facitity*/
-//typedef struct _repair_upgrade_function
-//{
-	//common stats
-//	FUNCTION_STATS;
-
-//	struct REPAIR_STATS*	pRepair;		/*The repair unit to be upgraded*/
-//	UDWORD			repairPoints;	/*The percentage to increase the repair points by*/
-//	UDWORD			buildPoints;	/*The number of build points required to upgrade
-//									  the structure*/
-//	UDWORD			powerRequired;	/*The amount of power required to upgrade*/
-//} REPAIR_UPGRADE_FUNCTION;
-
-/*Upgrade the body points of the structure*/
-//typedef struct _body_upgrade_function
-//{
-//	//common stats
-//	FUNCTION_STATS;
-//
-///	UDWORD			bodyPoints;		/*The percentage to increase the body points by*/
-//} BODY_UPGRADE_FUNCTION;
-
-/*Upgrade the resistance*/
-//typedef struct _resistance_upgrade_function
-//{
-//	//common stats
-//	FUNCTION_STATS;
-//
-//	UDWORD			resistanceUpgrade;	/*This is unknown at the moment!!27/02/97*/
-//	UDWORD			buildPoints;		/*The number of build points required to
-//										  upgrade the structure*/
-//	UDWORD			powerRequired;		/*The amount of power required to upgrade*/
-//	UDWORD			resistancePoints;	/*The percentage to increase the resistance points by*/
-//} RESISTANCE_UPGRADE_FUNCTION;
-/*blocks LOS and restricts movement*/
-//typedef struct _defensive_structure_function
-//{
-//	//common stats
-//	FUNCTION_STATS;
-//
-//	struct SENSOR_STATS*	pSensor;		/*The Sensor fitted, if any*/
-//	struct ECM_STATS*		pECM;			/*The ECM fitted, if any*/
-//	UDWORD			weaponCapacity;	/*The size of weapon in system points that may
-//									  be added. 0 = no weapons can be added*/
-//} DEFENSIVE_STRUCTURE_FUNCTION;
 
 #endif // __INCLUDED_FUNCTIONDEF_H__

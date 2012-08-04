@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -47,6 +47,7 @@
 #define OLD_TEXTURE_SIZE_FIX 256.0f
 
 //Render style flags for all pie draw functions
+#define pie_ECM                 0x1
 #define pie_TRANSLUCENT         0x2
 #define pie_ADDITIVE            0x4
 #define pie_FORCE_FOG			0x8
@@ -55,6 +56,8 @@
 #define pie_BUTTON              0x40
 #define pie_SHADOW              0x80
 #define pie_STATIC_SHADOW       0x100
+#define pie_PREMULTIPLIED       0x200
+#define pie_FORCE_IMMEDIATE     0x400
 
 #define pie_RAISE_SCALE			256
 
@@ -72,7 +75,8 @@ enum REND_MODE
 	REND_ALPHA,
 	REND_ADDITIVE,
 	REND_OPAQUE,
-	REND_MULTIPLICATIVE
+	REND_MULTIPLICATIVE,
+	REND_PREMULTIPLIED,
 };
 
 enum DEPTH_MODE

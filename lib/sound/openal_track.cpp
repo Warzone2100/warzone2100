@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -1502,16 +1502,4 @@ void sound_SetEffectsVolume(float volume)
 		sfx3d_volume = 1.0;
 	}
 #endif
-}
-
-void soundTest()
-{
-	int i;
-
-	for (i = 0; i < 25; i++)
-	{
-		assert(sound_InitLibrary());
-		sound_ShutdownLibrary();
-	}
-	fprintf(stdout, "\tSound self-test: PASSED\n");
 }

@@ -24,10 +24,17 @@
 #include "basedef.h"
 #include "droiddef.h"
 #include "structuredef.h"
+#include "researchdef.h"
+#include "featuredef.h"
 
 enum SCRIPT_TRIGGER_TYPE
 {
-	TRIGGER_GAME_INIT
+	TRIGGER_GAME_INIT,
+	TRIGGER_START_LEVEL,
+	TRIGGER_LAUNCH_TRANSPORTER,
+	TRIGGER_REINFORCEMENTS_ARRIVED,
+	TRIGGER_VIDEO_QUIT,
+	TRIGGER_MISSION_TIMEOUT
 };
 
 // ----------------------------------------------
@@ -51,6 +58,15 @@ bool loadPlayerScript(QString path, int player, int difficulty);
 bool loadScriptStates(const char *filename);
 bool saveScriptStates(const char *filename);
 
+/// Load map labels (implemented in qtscriptfuncs.cpp)
+bool loadLabels(const char *filename);
+
+/// Write map labels to savegame (implemented in qtscriptfuncs.cpp)
+bool writeLabels(const char *filename);
+
+/// Tell script system that an object has been removed.
+void scriptRemoveObject(const BASE_OBJECT *psObj);
+
 // ----------------------------------------------
 // Event functions
 
@@ -59,9 +75,15 @@ bool triggerEvent(SCRIPT_TRIGGER_TYPE trigger);
 
 // For each trigger with function parameters, a function to trigger it here
 bool triggerEventDroidBuilt(DROID *psDroid, STRUCTURE *psFactory);
-bool triggerStructureAttacked(STRUCTURE *psVictim, BASE_OBJECT *psAttacker);
-
-// bool triggerEventReachedLocation(ORDER order, DROID *psDroid);
-// ...
+bool triggerEventAttacked(BASE_OBJECT *psVictim, BASE_OBJECT *psAttacker, int lastHit);
+bool triggerEventResearched(RESEARCH *psResearch, STRUCTURE *psStruct, int player);
+bool triggerEventStructBuilt(STRUCTURE *psStruct, DROID *psDroid);
+bool triggerEventDroidIdle(DROID *psDroid);
+bool triggerEventDestroyed(BASE_OBJECT *psVictim);
+bool triggerEventStructureReady(STRUCTURE *psStruct);
+bool triggerEventSeen(BASE_OBJECT *psViewer, BASE_OBJECT *psSeen);
+bool triggerEventObjectTransfer(BASE_OBJECT *psObj, int from);
+bool triggerEventChat(int from, int to, const char *message);
+bool triggerEventPickup(FEATURE *psFeat, DROID *psDroid);
 
 #endif

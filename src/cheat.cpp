@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -25,10 +25,12 @@
 
 #include "lib/framework/frame.h"
 #include "lib/exceptionhandler/dumpinfo.h"
+#include "lib/netplay/netplay.h"
 
 #include "cheat.h"
 #include "keybind.h"
 #include "keymap.h"
+#include "multiplay.h"
 
 struct CHEAT_ENTRY
 {
@@ -73,10 +75,13 @@ static CHEAT_ENTRY cheatCodes[] =
 	{"showlevelname", kf_ToggleLevelName}, // shows the current level name on screen
 	{"logical", kf_ToggleLogical}, //logical game updates separated from graphics updates.
 	{"pause", kf_TogglePauseMode}, // Pause the game.
-	{"sync me", kf_ForceSync},
 	{"power info", kf_PowerInfo},
 	{"reload me", kf_Reload},	// reload selected weapons immediately
 	{"desync me", kf_ForceDesync},
+	{"damage me", kf_DamageMe},
+	{"autogame on", kf_AutoGame},
+	{"autogame off", kf_AutoGame},
+
 };
 
 bool attemptCheatCode(const char* cheat_name)
@@ -116,7 +121,7 @@ bool attemptCheatCode(const char* cheat_name)
 
 	for (curCheat = cheatCodes; curCheat != EndCheat; ++curCheat)
 	{
-		if (strcmp(cheat_name, curCheat->pName) == 0)
+		if (strcasecmp(cheat_name, curCheat->pName) == 0)
 		{
 			char buf[256];
 
@@ -134,4 +139,44 @@ bool attemptCheatCode(const char* cheat_name)
 	}
 
 	return false;
+}
+
+void sendProcessDebugMappings(bool val)
+{
+	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_DEBUG_MODE);
+		NETbool(&val);
+	NETend();
+}
+
+void recvProcessDebugMappings(NETQUEUE queue)
+{
+	bool val = false;
+	NETbeginDecode(queue, GAME_DEBUG_MODE);
+		NETbool(&val);
+	NETend();
+
+	bool oldDebugMode = getDebugMappingStatus();
+	processDebugMappings(queue.index, val);
+	bool newDebugMode = getDebugMappingStatus();
+
+	char const *cmsg;
+	if (val)
+	{
+		sasprintf((char**)&cmsg, _("%s wants to enable debug mode. Enabled: %s, Disabled: %s."), getPlayerName(queue.index), getWantedDebugMappingStatuses(true).c_str(), getWantedDebugMappingStatuses(false).c_str());
+	}
+	else
+	{
+		sasprintf((char**)&cmsg, _("%s wants to disable debug mode. Enabled: %s, Disabled: %s."), getPlayerName(queue.index), getWantedDebugMappingStatuses(true).c_str(), getWantedDebugMappingStatuses(false).c_str());
+	}
+	addConsoleMessage(cmsg, DEFAULT_JUSTIFY,  SYSTEM_MESSAGE);
+
+	if (!oldDebugMode && newDebugMode)
+	{
+		addConsoleMessage(_("Debug mode now enabled!"), DEFAULT_JUSTIFY,  SYSTEM_MESSAGE);
+		Cheated = true;
+	}
+	else if (oldDebugMode && !newDebugMode)
+	{
+		addConsoleMessage(_("Debug mode now disabled!"), DEFAULT_JUSTIFY,  SYSTEM_MESSAGE);
+	}
 }

@@ -8,7 +8,7 @@ EXTRA_DIST = fonts.conf.wd_enable \
 CLEANFILES=$(INSTALLERFILE)
 
 if INSTALLER
-GMOFILES = $(addprefix $(top_builddir)/po/,$(addsuffix .gmo,$(basename $(notdir $(wildcard $(top_srcdir)/po/*.po)))))
+GMOFILES = $(addprefix $(top_srcdir)/po/,$(addsuffix .gmo,$(basename $(notdir $(wildcard $(top_srcdir)/po/*.po)))))
 
 all: $(INSTALLERFILE)
 
@@ -16,8 +16,8 @@ else
 GMOFILES =
 endif
 
-$(top_builddir)/po/%.gmo: $(top_srcdir)/po/%.po
-	$(MAKE) $(AM_MAKEFLAGS) -C $(top_builddir)/po $(notdir $@)
+$(top_srcdir)/po/%.gmo: $(top_srcdir)/po/%.po
+	$(MAKE) $(AM_MAKEFLAGS) -C $(top_srcdir)/po $(notdir $@)
 
 data:
 	$(MAKE) $(AM_MAKEFLAGS) -C ../../data/ all

@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -38,6 +38,9 @@
 
 
 #include <string.h>
+#include <vector>
+#include <algorithm>
+
 
 #define SHADOW_END_DISTANCE (8000*8000) // Keep in sync with lighting.c:FOG_END
 
@@ -50,12 +53,20 @@
 
 extern bool drawing_interface;
 
+// Shadow stencil stuff
+static void ss_GL2_1pass();
+static void ss_EXT_1pass();
+static void ss_ATI_1pass();
+static void ss_2pass();
+static void (*ShadowStencilFunc)() = 0;
+static GLenum ss_op_depth_pass_front = GL_INCR;
+static GLenum ss_op_depth_pass_back = GL_DECR;
+
 /*
  *	Local Variables
  */
 
 static unsigned int pieCount = 0;
-static unsigned int tileCount = 0;
 static unsigned int polyCount = 0;
 static bool shadows = false;
 static GLfloat lighting0[LIGHT_MAX][4] = {{0.0f, 0.0f, 0.0f, 1.0f},  {0.5f, 0.5f, 0.5f, 1.0f},  {0.8f, 0.8f, 0.8f, 1.0f},  {1.0f, 1.0f, 1.0f, 1.0f}};
@@ -108,7 +119,7 @@ void pie_EndLighting(void)
  * Avoids recalculating vertex projections for every poly
  ***************************************************************************/
 
-struct shadowcasting_shape_t
+struct ShadowcastingShape
 {
 	float		matrix[16];
 	iIMDShape*	shape;
@@ -117,7 +128,7 @@ struct shadowcasting_shape_t
 	Vector3f	light;
 };
 
-struct transluscent_shape_t
+struct TranslucentShape
 {
 	float		matrix[16];
 	iIMDShape*	shape;
@@ -127,23 +138,20 @@ struct transluscent_shape_t
 	int		flag_data;
 };
 
-static shadowcasting_shape_t* scshapes = NULL;
-static unsigned int scshapes_size = 0;
-static unsigned int nb_scshapes = 0;
-static transluscent_shape_t* tshapes = NULL;
-static unsigned int tshapes_size = 0;
-static unsigned int nb_tshapes = 0;
+static std::vector<ShadowcastingShape> scshapes;
+static std::vector<TranslucentShape> tshapes;
 
 static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELIGHT teamcolour, int pieFlag, int pieFlagData)
 {
 	iIMDPoly *pPolys;
 	bool light = true;
+	bool shaders = pie_GetShaderUsage();
 
-	pie_SetAlphaTest(true);
+	pie_SetAlphaTest((pieFlag & pie_PREMULTIPLIED) == 0);
 
 	/* Set fog status */
 	if (!(pieFlag & pie_FORCE_FOG) && 
-		(pieFlag & pie_ADDITIVE || pieFlag & pie_TRANSLUCENT || pieFlag & pie_BUTTON))
+		(pieFlag & pie_ADDITIVE || pieFlag & pie_TRANSLUCENT || pieFlag & pie_BUTTON || pieFlag & pie_PREMULTIPLIED))
 	{
 		pie_SetFogStatus(false);
 	}
@@ -165,15 +173,33 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELI
 		colour.byte.a = (UBYTE)pieFlagData;
 		light = false;
 	}
+	else if (pieFlag & pie_PREMULTIPLIED)
+	{
+		pie_SetRendMode(REND_PREMULTIPLIED);
+		light = false;
+	}
 	else
 	{
 		if (pieFlag & pie_BUTTON)
 		{
 			pie_SetDepthBufferStatus(DEPTH_CMP_LEQ_WRT_ON);
 			light = false;
-			pie_ActivateShader(SHADER_BUTTON, teamcolour, shape->tcmaskpage, shape->normalpage);
+			if (shaders)
+			{
+				pie_ActivateShader(SHADER_BUTTON, shape, teamcolour, colour);
+			}
+			else
+			{
+				pie_ActivateFallback(SHADER_BUTTON, shape, teamcolour, colour);
+			}
 		}
 		pie_SetRendMode(REND_OPAQUE);
+	}
+	if (pieFlag & pie_ECM)
+	{
+		pie_SetRendMode(REND_ALPHA);
+		light = true;
+		pie_SetShaderEcmEffect(true);
 	}
 
 	if (light)
@@ -183,7 +209,14 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELI
 		glMaterialfv(GL_FRONT, GL_SPECULAR, shape->material[LIGHT_SPECULAR]);
 		glMaterialf(GL_FRONT, GL_SHININESS, shape->shininess);
 		glMaterialfv(GL_FRONT, GL_EMISSION, shape->material[LIGHT_EMISSIVE]);
-		pie_ActivateShader(SHADER_COMPONENT, teamcolour, shape->tcmaskpage, shape->normalpage);
+		if (shaders)
+		{
+			pie_ActivateShader(SHADER_COMPONENT, shape, teamcolour, colour);
+		}
+		else
+		{
+			pie_ActivateFallback(SHADER_COMPONENT, shape, teamcolour, colour);
+		}
 	}
 
 	if (pieFlag & pie_HEIGHT_SCALED)	// construct
@@ -195,7 +228,7 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELI
 		glTranslatef(1.0f, (-shape->max.y * (pie_RAISE_SCALE - pieFlagData)) * (1.0f / pie_RAISE_SCALE), 1.0f);
 	}
 
-	glColor4ubv(colour.vector);	// Only need to set once for entire model
+	glColor4ubv(colour.vector);     // Only need to set once for entire model
 	pie_SetTexturePage(shape->texpage);
 
 	frame %= MAX(1, shape->numFrames);
@@ -226,7 +259,12 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELI
 		glNormal3fv((GLfloat*)&pPolys->normal);
 		for (n = 0; n < pPolys->npnts; n++)
 		{
-			glTexCoord2fv((GLfloat*)&pPolys->texCoord[frameidx * pPolys->npnts + n]);
+			GLfloat* texCoord = (GLfloat*)&pPolys->texCoord[frameidx * pPolys->npnts + n];
+			glTexCoord2fv(texCoord);
+			if (!shaders)
+			{
+				glMultiTexCoord2fv(GL_TEXTURE1, texCoord);
+			}
 			glVertex3fv((GLfloat*)&vertexCoords[n]);
 		}
 	}
@@ -234,8 +272,16 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELI
 
 	if (light || (pieFlag & pie_BUTTON))
 	{
-		pie_DeactivateShader();
+		if (shaders)
+		{
+			pie_DeactivateShader();
+		}
+		else
+		{
+			pie_DeactivateFallback();
+		}
 	}
+	pie_SetShaderEcmEffect(false);
 
 	if (pieFlag & pie_BUTTON)
 	{
@@ -243,57 +289,28 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELI
 	}
 }
 
-/// returns true if the edges are adjacent
-static bool compare_edge (EDGE *A, EDGE *B, const Vector3f *pVertices )
+static inline bool edgeLessThan(EDGE const &e1, EDGE const &e2)
 {
-	if(A->from == B->to)
-	{
-		if(A->to == B->from)
-		{
-			return true;
-		}
-		return pVertices[A->to] == pVertices[B->from];
-	}
+	if (e1.from != e2.from) return e1.from < e2.from;
+	return e1.to < e2.to;
+}
 
-	if (pVertices[A->from] != pVertices[B->to])
-	{
-		return false;
-	}
+static inline bool edgeEqual(EDGE const &e1, EDGE const &e2)
+{
+	return e1.from == e2.from && e1.to == e2.to;
+}
 
-	if(A->to == B->from)
-	{
-		return true;
-	}
-	return pVertices[A->to] == pVertices[B->from];
+static inline void flipEdge(EDGE &e)
+{
+	std::swap(e.from, e.to);
 }
 
 /// Add an edge to an edgelist
 /// Makes sure only silhouette edges are present
-static void addToEdgeList(int a, int b, EDGE *edgelist, unsigned int* edge_count, Vector3f *pVertices)
+static inline void addToEdgeList(int a, int b, std::vector<EDGE> &edgelist)
 {
 	EDGE newEdge = {a, b};
-	unsigned int i;
-	bool foundMatching = false;
-
-	for(i = 0; i < *edge_count; i++)
-	{
-		if(edgelist[i].from < 0)
-		{
-			// does not exist anymore
-			continue;
-		}
-		if(compare_edge(&newEdge, &edgelist[i], pVertices)) {
-			// remove the other too
-			edgelist[i].from = -1;
-			foundMatching = true;
-			break;
-		}
-	}
-	if(!foundMatching)
-	{
-		edgelist[*edge_count] = newEdge;
-		(*edge_count)++;
-	}
+	edgelist.push_back(newEdge);
 }
 
 /// scale the height according to the flags
@@ -317,15 +334,12 @@ static void pie_DrawShadow(iIMDShape *shape, int flag, int flag_data, Vector3f* 
 	unsigned int i, j, n;
 	Vector3f *pVertices;
 	iIMDPoly *pPolys;
-	unsigned int edge_count = 0;
-	static EDGE *edgelist = NULL;
-	static unsigned int edgelistsize = 256;
+	static std::vector<EDGE> edgelist;  // Static, to save allocations.
+	static std::vector<EDGE> edgelistFlipped;  // Static, to save allocations.
+	static std::vector<EDGE> edgelistFiltered;  // Static, to save allocations.
 	EDGE *drawlist = NULL;
 
-	if(!edgelist)
-	{
-		edgelist = (EDGE*)malloc(sizeof(EDGE)*edgelistsize);
-	}
+	unsigned edge_count;
 	pVertices = shape->points;
 	if( flag & pie_STATIC_SHADOW && shape->shadowEdgeList )
 	{
@@ -334,66 +348,47 @@ static void pie_DrawShadow(iIMDShape *shape, int flag, int flag_data, Vector3f* 
 	}
 	else
 	{
-
-		for (i = 0, pPolys = shape->polys; i < shape->npolys; ++i, ++pPolys) {
+		edgelist.clear();
+		for (i = 0, pPolys = shape->polys; i < shape->npolys; ++i, ++pPolys)
+		{
 			Vector3f p[3];
-			int current, first;
 			for(j = 0; j < 3; j++)
 			{
-				current = pPolys->pindex[j];
+				int current = pPolys->pindex[j];
 				p[j] = Vector3f(pVertices[current].x, scale_y(pVertices[current].y, flag, flag_data), pVertices[current].z);
 			}
 
 			Vector3f normal = crossProduct(p[2] - p[0], p[1] - p[0]);
 			if (normal * *light > 0)
 			{
-				first = pPolys->pindex[0];
-				for (n = 1; n < pPolys->npnts; n++) {
+				for (n = 1; n < pPolys->npnts; n++)
+				{
 					// link to the previous vertex
-					addToEdgeList(pPolys->pindex[n-1], pPolys->pindex[n], edgelist, &edge_count, pVertices);
-					// check if the edgelist is still large enough
-					if(edge_count >= edgelistsize-1)
-					{
-						// enlarge
-						EDGE* newstack;
-						edgelistsize *= 2;
-						newstack = (EDGE *)realloc(edgelist, sizeof(EDGE) * edgelistsize);
-						if (newstack == NULL)
-						{
-							debug(LOG_FATAL, "pie_DrawShadow: Out of memory!");
-							abort();
-							return;
-						}
-
-						edgelist = newstack;
-
-						debug(LOG_WARNING, "new edge list size: %u", edgelistsize);
-					}
+					addToEdgeList(pPolys->pindex[n-1], pPolys->pindex[n], edgelist);
 				}
 				// back to the first
-				addToEdgeList(pPolys->pindex[pPolys->npnts-1], first, edgelist, &edge_count, pVertices);
+				addToEdgeList(pPolys->pindex[pPolys->npnts-1], pPolys->pindex[0], edgelist);
 			}
 		}
+
+		// Remove duplicate pairs from the edge list. For example, in the list ((1 2), (2 6), (6 2), (3, 4)), remove (2 6) and (6 2).
+		edgelistFlipped = edgelist;
+		std::for_each(edgelistFlipped.begin(), edgelistFlipped.end(), flipEdge);
+		std::sort(edgelist.begin(), edgelist.end(), edgeLessThan);
+		std::sort(edgelistFlipped.begin(), edgelistFlipped.end(), edgeLessThan);
+		edgelistFiltered.resize(edgelist.size());
+		edgelistFiltered.erase(std::set_difference(edgelist.begin(), edgelist.end(), edgelistFlipped.begin(), edgelistFlipped.end(), edgelistFiltered.begin(), edgeLessThan), edgelistFiltered.end());
+
+		drawlist = &edgelistFiltered[0];
+		edge_count = edgelistFiltered.size();
 		//debug(LOG_WARNING, "we have %i edges", edge_count);
-		drawlist = edgelist;
 
 		if(flag & pie_STATIC_SHADOW)
 		{
-			// first compact the current edgelist
-			for(i = 0, j = 0; i < edge_count; i++)
-			{
-				if(edgelist[i].from < 0)
-				{
-					continue;
-				}
-				edgelist[j] = edgelist[i];
-				j++;
-			}
-			edge_count = j;
 			// then store it in the imd
 			shape->nShadowEdges = edge_count;
 			shape->shadowEdgeList = (EDGE *)realloc(shape->shadowEdgeList, sizeof(EDGE) * shape->nShadowEdges);
-			memcpy(shape->shadowEdgeList, edgelist, sizeof(EDGE) * shape->nShadowEdges);
+			std::copy(drawlist, drawlist + edge_count, shape->shadowEdgeList);
 		}
 	}
 
@@ -403,10 +398,6 @@ static void pie_DrawShadow(iIMDShape *shape, int flag, int flag_data, Vector3f* 
 	for(i=0;i<edge_count;i++)
 	{
 		int a = drawlist[i].from, b = drawlist[i].to;
-		if(a < 0)
-		{
-			continue;
-		}
 
 		glVertex3f(pVertices[b].x, scale_y(pVertices[b].y, flag, flag_data), pVertices[b].z);
 		glVertex3f(pVertices[b].x+light->x, scale_y(pVertices[b].y, flag, flag_data)+light->y, pVertices[b].z+light->z);
@@ -456,15 +447,36 @@ static void inverse_matrix(const float * src, float * dst)
 
 void pie_SetUp(void)
 {
-	// initialise pie engine (just a placeholder for now)
+	// initialise pie engine
+
+	if (GLEW_EXT_stencil_wrap)
+	{
+		ss_op_depth_pass_front = GL_INCR_WRAP;
+		ss_op_depth_pass_back = GL_DECR_WRAP;
+	}
+
+	if (GLEW_VERSION_2_0)
+	{
+		ShadowStencilFunc = ss_GL2_1pass;
+	}
+	else if (GLEW_EXT_stencil_two_side)
+	{
+		ShadowStencilFunc = ss_EXT_1pass;
+	}
+	else if (GLEW_ATI_separate_stencil)
+	{
+		ShadowStencilFunc = ss_ATI_1pass;
+	}
+	else
+	{
+		ShadowStencilFunc = ss_2pass;
+	}
 }
 
 void pie_CleanUp( void )
 {
-	free( tshapes );
-	free( scshapes );
-	tshapes = NULL;
-	scshapes = NULL;
+	tshapes.clear();
+	scshapes.clear();
 }
 
 void pie_Draw3DShape(iIMDShape *shape, int frame, int team, PIELIGHT colour, int pieFlag, int pieFlagData)
@@ -479,10 +491,6 @@ void pie_Draw3DShape(iIMDShape *shape, int frame, int team, PIELIGHT colour, int
 
 	ASSERT(frame >= 0, "Negative frame %d", frame);
 	ASSERT(team >= 0, "Negative team %d", team);
-	if (frame == 0)
-	{
-		frame = team;
-	}
 
 	if (drawing_interface || !shadows)
 	{
@@ -490,31 +498,16 @@ void pie_Draw3DShape(iIMDShape *shape, int frame, int team, PIELIGHT colour, int
 	}
 	else
 	{
-		if (pieFlag & (pie_ADDITIVE | pie_TRANSLUCENT))
+		if (pieFlag & (pie_ADDITIVE | pie_TRANSLUCENT | pie_PREMULTIPLIED) && !(pieFlag & pie_FORCE_IMMEDIATE))
 		{
-			if (tshapes_size <= nb_tshapes)
-			{
-				if (tshapes_size == 0)
-				{
-					tshapes_size = 64;
-					tshapes = (transluscent_shape_t*)malloc(tshapes_size*sizeof(transluscent_shape_t));
-					memset( tshapes, 0, tshapes_size*sizeof(transluscent_shape_t) );
-				}
-				else
-				{
-					const unsigned int old_size = tshapes_size;
-					tshapes_size <<= 1;
-					tshapes = (transluscent_shape_t*)realloc(tshapes, tshapes_size*sizeof(transluscent_shape_t));
-					memset( &tshapes[old_size], 0, (tshapes_size-old_size)*sizeof(transluscent_shape_t) );
-				}
-			}
-			glGetFloatv(GL_MODELVIEW_MATRIX, tshapes[nb_tshapes].matrix);
-			tshapes[nb_tshapes].shape = shape;
-			tshapes[nb_tshapes].frame = frame;
-			tshapes[nb_tshapes].colour = colour;
-			tshapes[nb_tshapes].flag = pieFlag;
-			tshapes[nb_tshapes].flag_data = pieFlagData;
-			nb_tshapes++;
+			TranslucentShape tshape;
+			glGetFloatv(GL_MODELVIEW_MATRIX, tshape.matrix);
+			tshape.shape = shape;
+			tshape.frame = frame;
+			tshape.colour = colour;
+			tshape.flag = pieFlag;
+			tshape.flag_data = pieFlagData;
+			tshapes.push_back(tshape);
 		}
 		else
 		{
@@ -523,46 +516,30 @@ void pie_Draw3DShape(iIMDShape *shape, int frame, int team, PIELIGHT colour, int
 				float distance;
 
 				// draw a shadow
-				if (scshapes_size <= nb_scshapes)
-				{
-					if (scshapes_size == 0)
-					{
-						scshapes_size = 64;
-						scshapes = (shadowcasting_shape_t*)malloc(scshapes_size*sizeof(shadowcasting_shape_t));
-						memset( scshapes, 0, scshapes_size*sizeof(shadowcasting_shape_t) );
-					}
-					else
-					{
-						const unsigned int old_size = scshapes_size;
-						scshapes_size <<= 1;
-						scshapes = (shadowcasting_shape_t*)realloc(scshapes, scshapes_size*sizeof(shadowcasting_shape_t));
-						memset( &scshapes[old_size], 0, (scshapes_size-old_size)*sizeof(shadowcasting_shape_t) );
-					}
-				}
-
-				glGetFloatv(GL_MODELVIEW_MATRIX, scshapes[nb_scshapes].matrix);
-				distance = scshapes[nb_scshapes].matrix[12] * scshapes[nb_scshapes].matrix[12];
-				distance += scshapes[nb_scshapes].matrix[13] * scshapes[nb_scshapes].matrix[13];
-				distance += scshapes[nb_scshapes].matrix[14] * scshapes[nb_scshapes].matrix[14];
+				ShadowcastingShape scshape;
+				glGetFloatv(GL_MODELVIEW_MATRIX, scshape.matrix);
+				distance = scshape.matrix[12] * scshape.matrix[12];
+				distance += scshape.matrix[13] * scshape.matrix[13];
+				distance += scshape.matrix[14] * scshape.matrix[14];
 
 				// if object is too far in the fog don't generate a shadow.
 				if (distance < SHADOW_END_DISTANCE)
 				{
 					float invmat[9], pos_light0[4];
 
-					inverse_matrix( scshapes[nb_scshapes].matrix, invmat );
+					inverse_matrix( scshape.matrix, invmat );
 
 					// Calculate the light position relative to the object
 					glGetLightfv(GL_LIGHT0, GL_POSITION, pos_light0);
-					scshapes[nb_scshapes].light.x = invmat[0] * pos_light0[0] + invmat[3] * pos_light0[1] + invmat[6] * pos_light0[2];
-					scshapes[nb_scshapes].light.y = invmat[1] * pos_light0[0] + invmat[4] * pos_light0[1] + invmat[7] * pos_light0[2];
-					scshapes[nb_scshapes].light.z = invmat[2] * pos_light0[0] + invmat[5] * pos_light0[1] + invmat[8] * pos_light0[2];
+					scshape.light.x = invmat[0] * pos_light0[0] + invmat[3] * pos_light0[1] + invmat[6] * pos_light0[2];
+					scshape.light.y = invmat[1] * pos_light0[0] + invmat[4] * pos_light0[1] + invmat[7] * pos_light0[2];
+					scshape.light.z = invmat[2] * pos_light0[0] + invmat[5] * pos_light0[1] + invmat[8] * pos_light0[2];
 
-					scshapes[nb_scshapes].shape = shape;
-					scshapes[nb_scshapes].flag = pieFlag;
-					scshapes[nb_scshapes].flag_data = pieFlagData;
+					scshape.shape = shape;
+					scshape.flag = pieFlag;
+					scshape.flag_data = pieFlagData;
 
-					nb_scshapes++;
+					scshapes.push_back(scshape);
 				}
 			}
 
@@ -573,9 +550,7 @@ void pie_Draw3DShape(iIMDShape *shape, int frame, int team, PIELIGHT colour, int
 
 static void pie_ShadowDrawLoop(void)
 {
-	unsigned int i = 0;
-
-	for (i = 0; i < nb_scshapes; i++)
+	for (unsigned i = 0; i < scshapes.size(); i++)
 	{
 		glLoadMatrixf(scshapes[i].matrix);
 		pie_DrawShadow(scshapes[i].shape, scshapes[i].flag, scshapes[i].flag_data, &scshapes[i].light);
@@ -586,7 +561,6 @@ static void pie_DrawShadows(void)
 {
 	const float width = pie_GetVideoBufferWidth();
 	const float height = pie_GetVideoBufferHeight();
-	GLenum op_depth_pass_front = GL_INCR, op_depth_pass_back = GL_DECR;
 
 	pie_SetTexturePage(TEXPAGE_NONE);
 
@@ -598,60 +572,7 @@ static void pie_DrawShadows(void)
 	glDepthMask(GL_FALSE);
 	glEnable(GL_STENCIL_TEST);
 
-	// Check if we have the required extensions
-	if (GLEW_EXT_stencil_wrap)
-	{
-		op_depth_pass_front = GL_INCR_WRAP_EXT;
-		op_depth_pass_back = GL_DECR_WRAP_EXT;
-	}
-
-	// generic 1-pass version
-	if (GLEW_EXT_stencil_two_side)
-	{
-		glEnable(GL_STENCIL_TEST_TWO_SIDE_EXT);
-		glDisable(GL_CULL_FACE);
-		glStencilMask(~0);
-		glActiveStencilFaceEXT(GL_BACK);
-		glStencilOp(GL_KEEP, GL_KEEP, op_depth_pass_back);
-		glStencilFunc(GL_ALWAYS, 0, ~0);
-		glActiveStencilFaceEXT(GL_FRONT);
-		glStencilOp(GL_KEEP, GL_KEEP, op_depth_pass_front);
-		glStencilFunc(GL_ALWAYS, 0, ~0);
-
-		pie_ShadowDrawLoop();
-		
-		glDisable(GL_STENCIL_TEST_TWO_SIDE_EXT);
-	}
-	// check for ATI-specific 1-pass version
-	else if (GLEW_ATI_separate_stencil)
-	{
-		glDisable(GL_CULL_FACE);
-		glStencilMask(~0);
-		glStencilOpSeparateATI(GL_BACK, GL_KEEP, GL_KEEP, op_depth_pass_back);
-		glStencilOpSeparateATI(GL_FRONT, GL_KEEP, GL_KEEP, op_depth_pass_front);
-		glStencilFunc(GL_ALWAYS, 0, ~0);
-
-		pie_ShadowDrawLoop();	
-	}
-	// fall back to default 2-pass version
-	else
-	{
-		glStencilMask(~0);
-		glStencilFunc(GL_ALWAYS, 0, ~0);
-		glEnable(GL_CULL_FACE);
-		
-		// Setup stencil for front-facing polygons
-		glCullFace(GL_BACK);
-		glStencilOp(GL_KEEP, GL_KEEP, op_depth_pass_front);
-
-		pie_ShadowDrawLoop();
-
-		// Setup stencil for back-facing polygons
-		glCullFace(GL_FRONT);
-		glStencilOp(GL_KEEP, GL_KEEP, op_depth_pass_back);
-
-		pie_ShadowDrawLoop();
-	}
+	ShadowStencilFunc();
 
 	pie_SetRendMode(REND_ALPHA);
 	glEnable(GL_CULL_FACE);
@@ -679,15 +600,13 @@ static void pie_DrawShadows(void)
 
 	glPopMatrix();
 
-	nb_scshapes = 0;
+	scshapes.clear();
 }
 
 static void pie_DrawRemainingTransShapes(void)
 {
-	unsigned int i = 0;
-
 	glPushMatrix();
-	for (i = 0; i < nb_tshapes; ++i)
+	for (unsigned i = 0; i < tshapes.size(); ++i)
 	{
 		glLoadMatrixf(tshapes[i].matrix);
 		pie_Draw3DShape2(tshapes[i].shape, tshapes[i].frame, tshapes[i].colour, tshapes[i].colour,
@@ -695,7 +614,7 @@ static void pie_DrawRemainingTransShapes(void)
 	}
 	glPopMatrix();
 
-	nb_tshapes = 0;
+	tshapes.clear();
 }
 
 void pie_RemainingPasses(void)
@@ -746,16 +665,76 @@ void pie_DrawImage(const PIEIMAGE *image, const PIERECT *dest, PIELIGHT colour)
 	glEnd();
 }
 
-void pie_GetResetCounts(unsigned int* pPieCount, unsigned int* pTileCount, unsigned int* pPolyCount, unsigned int* pStateCount)
+void pie_GetResetCounts(unsigned int* pPieCount, unsigned int* pPolyCount, unsigned int* pStateCount)
 {
 	*pPieCount  = pieCount;
-	*pTileCount = tileCount;
 	*pPolyCount = polyCount;
 	*pStateCount = pieStateCount;
 
 	pieCount = 0;
-	tileCount = 0;
 	polyCount = 0;
 	pieStateCount = 0;
 	return;
+}
+
+// GL 2.0 1-pass version
+static void ss_GL2_1pass()
+{
+	glDisable(GL_CULL_FACE);
+	glStencilMask(~0);
+	glStencilOpSeparate(GL_BACK, GL_KEEP, GL_KEEP, GL_INCR_WRAP);
+	glStencilOpSeparate(GL_FRONT, GL_KEEP, GL_KEEP, GL_DECR_WRAP);
+	glStencilFunc(GL_ALWAYS, 0, ~0);
+
+	pie_ShadowDrawLoop();
+}
+
+// generic 1-pass version
+static void ss_EXT_1pass()
+{
+	glEnable(GL_STENCIL_TEST_TWO_SIDE_EXT);
+	glDisable(GL_CULL_FACE);
+	glStencilMask(~0);
+	glActiveStencilFaceEXT(GL_BACK);
+	glStencilOp(GL_KEEP, GL_KEEP, ss_op_depth_pass_back);
+	glStencilFunc(GL_ALWAYS, 0, ~0);
+	glActiveStencilFaceEXT(GL_FRONT);
+	glStencilOp(GL_KEEP, GL_KEEP, ss_op_depth_pass_front);
+	glStencilFunc(GL_ALWAYS, 0, ~0);
+
+	pie_ShadowDrawLoop();
+
+	glDisable(GL_STENCIL_TEST_TWO_SIDE_EXT);
+}
+
+// ATI-specific 1-pass version
+static void ss_ATI_1pass()
+{
+	glDisable(GL_CULL_FACE);
+	glStencilMask(~0);
+	glStencilOpSeparateATI(GL_BACK, GL_KEEP, GL_KEEP, ss_op_depth_pass_back);
+	glStencilOpSeparateATI(GL_FRONT, GL_KEEP, GL_KEEP, ss_op_depth_pass_front);
+	glStencilFunc(GL_ALWAYS, 0, ~0);
+
+	pie_ShadowDrawLoop();
+}
+
+// generic 2-pass version
+static void ss_2pass()
+{
+	glStencilMask(~0);
+	glStencilFunc(GL_ALWAYS, 0, ~0);
+	glEnable(GL_CULL_FACE);
+
+	// Setup stencil for front-facing polygons
+	glCullFace(GL_BACK);
+	glStencilOp(GL_KEEP, GL_KEEP, ss_op_depth_pass_front);
+
+	pie_ShadowDrawLoop();
+
+	// Setup stencil for back-facing polygons
+	glCullFace(GL_FRONT);
+	glStencilOp(GL_KEEP, GL_KEEP, ss_op_depth_pass_back);
+
+	pie_ShadowDrawLoop();
 }

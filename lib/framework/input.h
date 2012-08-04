@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -79,8 +79,8 @@ enum KEY_CODE
 	KEY_QUOTE       = '\'',
 	KEY_BACKQUOTE   = '`',
 	KEY_LSHIFT      = 304,
-	KEY_LMETA       = 309,  // TODO Added after Qt branched.
-	KEY_LSUPER      = 310,  // TODO Added after Qt branched.
+	KEY_LMETA       = 310,  // TODO Added after Qt branched.
+	KEY_LSUPER      = 311,  // TODO Added after Qt branched.
 	KEY_BACKSLASH   = '\\',
 	KEY_Z           = 'z',
 	KEY_X           = 'x',
@@ -93,7 +93,7 @@ enum KEY_CODE
 	KEY_FULLSTOP    = '.',
 	KEY_FORWARDSLASH= '/',
 	KEY_RSHIFT      = 303,
-	KEY_RMETA       = 311,  // TODO Added after Qt branched.
+	KEY_RMETA       = 309,  // TODO Added after Qt branched.
 	KEY_RSUPER      = 312,  // TODO Added after Qt branched.
 	KEY_KP_STAR     = 268,
 	KEY_LALT        = 308,
@@ -145,10 +145,19 @@ enum KEY_CODE
 
 	KEY_IGNORE      = 5190
 };
+enum MOUSE_KEY_CODE
+{
+	MOUSE_LMB = 1,
+	MOUSE_MMB,
+	MOUSE_RMB,
+	MOUSE_WUP,
+	MOUSE_WDN,
+
+	MOUSE_BAD
+};
 
 /** Tell the input system that we have lost the focus. */
 extern void inputLoseFocus(void);
-#define inputLooseFocus inputLoseFocus  // TODO Fix horrible spelling.
 
 /** Converts the key code into an ascii string. */
 extern void keyScanToString(KEY_CODE code, char *ascii, UDWORD maxStringSize);
@@ -165,21 +174,14 @@ extern bool keyPressed(KEY_CODE code);
 /** This returns true if the key went from being down to being up this frame. */
 extern bool keyReleased(KEY_CODE code);
 
-enum MOUSE_KEY_CODE
-{
-	MOUSE_LMB = 1,
-	MOUSE_MMB,
-	MOUSE_RMB,
-	MOUSE_WUP,
-	MOUSE_WDN,
-	MOUSE_BAD
-};
-
 /** Return the current X position of the mouse. */
 extern uint16_t mouseX(void) WZ_DECL_PURE;
 
 /** Return the current Y position of the mouse. */
 extern uint16_t mouseY(void) WZ_DECL_PURE;
+
+/// Returns true iff the mouse is on the window.
+bool wzMouseInWindow();
 
 /// Return the position of the mouse where it was clicked last.
 Vector2i mousePressPos(MOUSE_KEY_CODE code) WZ_DECL_PURE;
@@ -244,7 +246,7 @@ extern void inputNewFrame(void);
 
 static inline bool specialOrderKeyDown()
 {
-	return keyDown(KEY_LALT) || keyDown(KEY_RALT) || keyDown(KEY_LMETA) || keyDown(KEY_RMETA);
+	return keyDown(KEY_LALT) || keyDown(KEY_RALT) || keyDown(KEY_LMETA) || keyDown(KEY_RMETA) || keyDown(KEY_LSUPER) || keyDown(KEY_RSUPER);
 }
 
-#endif
+#endif // _input_h

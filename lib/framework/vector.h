@@ -1,6 +1,6 @@
 /*
 	This file is part of Warzone 2100.
-	Copyright (C) 2007-2011  Warzone 2100 Project
+	Copyright (C) 2007-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -59,7 +59,6 @@ struct Vector3f
 	Vector3f() {}
 	Vector3f(float x, float y, float z) : x(x), y(y), z(z) {}
 	Vector3f(Vector3i const &v) : x(v.x), y(v.y), z(v.z) {}
-	Vector3f(Vector3f const &v) : x(v.x), y(v.y), z(v.z) {}
 	Vector3f(Vector2f const &xy, float z) : x(xy.x), y(xy.y), z(z) {}
 
 	float x, y, z;
@@ -162,6 +161,12 @@ static inline Vector2i const &operator +=(Vector2i &a, Vector2i const &b) { retu
 static inline Vector2f const &operator +=(Vector2f &a, Vector2f const &b) { return a = a + b; }
 static inline Vector3i const &operator +=(Vector3i &a, Vector3i const &b) { return a = a + b; }
 static inline Vector3f const &operator +=(Vector3f &a, Vector3f const &b) { return a = a + b; }
+
+// vector -= vector
+static inline Vector2i const &operator -=(Vector2i &a, Vector2i const &b) { return a = a - b; }
+static inline Vector2f const &operator -=(Vector2f &a, Vector2f const &b) { return a = a - b; }
+static inline Vector3i const &operator -=(Vector3i &a, Vector3i const &b) { return a = a - b; }
+static inline Vector3f const &operator -=(Vector3f &a, Vector3f const &b) { return a = a - b; }
 
 
 /*!

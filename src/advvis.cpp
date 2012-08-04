@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -31,9 +31,11 @@
 // ------------------------------------------------------------------------------------
 #define FADE_IN_TIME	(GAME_TICKS_PER_SEC/10)
 #define	START_DIVIDE	(8)
+#define MIN_ILLUM       (45.0f)
 
-static bool bRevealActive = false;
-
+/// Whether unexplored tiles should be shown as just darker fog. Left here as a future option
+/// for scripts, since campaign may still want total darkness on unexplored tiles.
+static bool bRevealActive = true;
 
 // ------------------------------------------------------------------------------------
 void	avUpdateTiles( void )
@@ -49,7 +51,7 @@ void	avUpdateTiles( void )
 	{
 		maxLevel = psTile->illumination;
 
-		if (psTile->level > 0 || psTile->tileExploredBits & playermask)	// seen
+		if (psTile->level > MIN_ILLUM || psTile->tileExploredBits & playermask)	// seen
 		{
 			// If we are not omniscient, and we are not seeing the tile, and none of our allies see the tile...
 			if (!godMode && !(alliancebits[selectedPlayer] & (satuplinkbits | psTile->sensorBits)))
@@ -58,7 +60,7 @@ void	avUpdateTiles( void )
 			}
 			if (psTile->level > maxLevel)
 			{
-				psTile->level = MAX(psTile->level - increment, 0);
+				psTile->level = MAX(psTile->level - increment, maxLevel);
 			}
 			else if (psTile->level < maxLevel)
 			{
@@ -69,7 +71,6 @@ void	avUpdateTiles( void )
 	}
 }
 
-
 // ------------------------------------------------------------------------------------
 UDWORD	avGetObjLightLevel(BASE_OBJECT *psObj,UDWORD origLevel)
 {
@@ -77,7 +78,7 @@ UDWORD	avGetObjLightLevel(BASE_OBJECT *psObj,UDWORD origLevel)
 	unsigned int lowest = origLevel / START_DIVIDE;
 	unsigned int newLevel = div * origLevel;
 
-	if(newLevel < lowest)
+	if (newLevel < lowest)
 	{
 		newLevel = lowest;
 	}
@@ -88,7 +89,7 @@ UDWORD	avGetObjLightLevel(BASE_OBJECT *psObj,UDWORD origLevel)
 // ------------------------------------------------------------------------------------
 bool	getRevealStatus( void )
 {
-	return(bRevealActive);
+	return bRevealActive;
 }
 
 // ------------------------------------------------------------------------------------
@@ -101,17 +102,14 @@ void	setRevealStatus( bool val )
 // ------------------------------------------------------------------------------------
 void	preProcessVisibility( void )
 {
-UDWORD		i,j;
-MAPTILE		*psTile;
-
-	for(i=0; i<mapWidth;i++)
+	for (int i = 0; i < mapWidth; i++)
 	{
-		for(j=0; j<mapHeight; j++)
+		for (int j = 0; j < mapHeight; j++)
 		{
-			psTile = mapTile(i,j);
-			psTile->level = 0;
+			MAPTILE *psTile = mapTile(i,j);
+			psTile->level = bRevealActive ? MIN(MIN_ILLUM, psTile->illumination / 4.0f) : 0;
 
-			if (!bRevealActive || TEST_TILE_VISIBLE(selectedPlayer, psTile))
+			if (TEST_TILE_VISIBLE(selectedPlayer, psTile))
 			{
 				psTile->level = psTile->illumination;
 			}

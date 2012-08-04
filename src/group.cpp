@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -64,6 +64,7 @@ DROID_GROUP::DROID_GROUP()
 	refCount = 0;
 	psList = NULL;
 	psCommander = NULL;
+	memset(&sRunData, 0, sizeof(sRunData));
 }
 
 // create a new group
@@ -117,9 +118,10 @@ void DROID_GROUP::add(DROID *psDroid)
 		}
 		psDroid->psGroup = this;
 
-		if (psDroid->droidType == DROID_TRANSPORTER)
+		if (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER)
 		{
 			ASSERT_OR_RETURN(, (type == GT_NORMAL), "grpJoin: Cannot have two transporters in a group" );
+			ASSERT_OR_RETURN(, psList == NULL, "Adding transporter to non-empty list.");
 			type = GT_TRANSPORTER;
 			psDroid->psGrpNext = psList;
 			psList = psDroid;
@@ -201,7 +203,7 @@ void DROID_GROUP::remove(DROID *psDroid)
 			type = GT_NORMAL;
 			psCommander = NULL;
 		}
-		else if ((psDroid->droidType == DROID_TRANSPORTER) && (type == GT_TRANSPORTER))
+		else if ((psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER) && (type == GT_TRANSPORTER))
 		{
 			type = GT_NORMAL;
 		}

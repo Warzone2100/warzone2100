@@ -12,6 +12,10 @@
 #include <QX11Info>
 #endif
 
+#ifdef WZ_WS_MAC
+#include "macosx_screen_resolutions.h"
+#endif
+
 /* Overloaded QWidget functions to handle resolution changing */
 
 void QtGameWidget::trapMouse()
@@ -194,10 +198,13 @@ void QtGameWidget::updateResolutionList()
 		}
 	}
 #elif defined(WZ_WS_MAC)
-	Q_UNUSED(minWidth);
-	Q_UNUSED(minHeight);
-	qWarning("Resolution query support for Mac not written yet");
+	macosxAppendAvailableScreenResolutions(mResolutions, QSize(minWidth, minHeight), pos());
+
+	// OS X will restore the resolution itself upon process termination.
+	mOriginalRefreshRate = 0;
+	mOriginalDepth = 0;
 #endif
+	// TODO: Sorting would be nice.
 }
 
 QGLFormat QtGameWidget::adjustFormat(const QGLFormat &format)
@@ -216,6 +223,7 @@ void QtGameWidget::initializeGL()
 QtGameWidget::QtGameWidget(QSize curResolution, const QGLFormat &format, QWidget *parent, Qt::WindowFlags f, const QGLWidget *shareWidget)
 	: QGLWidget(adjustFormat(format), parent, shareWidget, f), mOriginalResolution(0, 0), mMinimumSize(0, 0)
 {
+	QGLWidget::setFixedSize(curResolution);  // Don't know whether this needs to be done here, but if not, the window contents are displaced 2% of the time.
 	mWantedSize = curResolution;
 	mResolutionChanged = false;
 	updateResolutionList();
@@ -286,8 +294,9 @@ bool QtGameWidget::setResolution(const QSize res, int rate, int depth)
 		return false;
 	}
 #elif defined(WZ_WS_MAC)
-	qWarning("Resolution change support for Mac not written yet");
-	return false;
+	if (res != QSize(0,0)) {
+		macosxSetScreenResolution(res, pos());
+	}
 #endif
 	mCurrentResolution = res;
 	QGLWidget::setFixedSize(res);

@@ -8,5 +8,5 @@ PRODUCT_NAME = Theora
 HEADER_SEARCH_PATHS =  $(inherited)
 USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/external/libtheora/lib" "$(SRCROOT)/external/libtheora/include/**"
 
-WARNING_CFLAGS = -Wno-parentheses // Silence warnings that are not ours
+WARNING_CFLAGS = -Wno-parentheses -Wno-tautological-compare // Silence warnings that are not ours
 WARNING_CFLAGS[arch=i386] = $(inherited) -Wno-tautological-compare

@@ -23,6 +23,15 @@
 
 #include "lib/framework/frame.h"
 #include "qtscript.h"
+#include "featuredef.h"
+
+enum SCRIPT_TYPES
+{
+	SCRIPT_POSITION = OBJ_NUM_TYPES,
+	SCRIPT_AREA,
+	SCRIPT_PLAYER,
+	SCRIPT_RESEARCH,
+};
 
 #include <QtScript/QScriptEngine>
 
@@ -32,8 +41,18 @@
 /// Register functions to engine context
 bool registerFunctions(QScriptEngine *engine);
 
+// Utility conversion functions
 QScriptValue convDroid(DROID *psDroid, QScriptEngine *engine);
 QScriptValue convStructure(STRUCTURE *psStruct, QScriptEngine *engine);
 QScriptValue convObj(BASE_OBJECT *psObj, QScriptEngine *engine);
+QScriptValue convFeature(FEATURE *psFeature, QScriptEngine *engine);
+QScriptValue convMax(BASE_OBJECT *psObj, QScriptEngine *engine);
+QScriptValue convResearch(RESEARCH *psResearch, QScriptEngine *engine, int player);
 
+/// Assert for scripts that give useful backtraces and other info.
+#define SCRIPT_ASSERT(context, expr, ...) \
+	do { bool _wzeval = (expr); \
+	     if (!_wzeval) { debug(LOG_ERROR, __VA_ARGS__); \
+	       context->throwError(QScriptContext::ReferenceError, QString(#expr) +  " failed in " + QString(__FUNCTION__) + " at line " + QString::number(__LINE__)); \
+	     return QScriptValue(); } } while (0)
 #endif

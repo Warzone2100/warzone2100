@@ -1,4 +1,4 @@
-20	432	10	175	_("Commander, we are detecting NEXUS forces from these coordinates...")
+20	432	0.4	7.0	_("Commander, we are detecting NEXUS forces from these coordinates...")
 
 
 

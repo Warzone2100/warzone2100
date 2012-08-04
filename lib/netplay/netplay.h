@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -26,10 +26,20 @@
 #ifndef _netplay_h
 #define _netplay_h
 
+#include "lib/framework/crc.h"
 #include "nettypes.h"
-#include "netlobby.h"
 #include <physfs.h>
 
+// platform host is
+#if defined WZ_OS_WIN
+#define HOST_PLATFORM 1
+#elif defined WZ_OS_UNIX
+#define HOST_PLATFORM 2
+#elif defined WZ_OS_MAC
+#define HOST_PLATFORM 4
+#else
+#define HOST_PLATFORM 6
+#endif
 // Lobby Connection errors
 
 enum LOBBY_ERROR_TYPES
@@ -37,15 +47,13 @@ enum LOBBY_ERROR_TYPES
 	ERROR_NOERROR,
 	ERROR_CONNECTION,
 	ERROR_FULL,
-	ERROR_CHEAT,
+	ERROR_INVALID,
 	ERROR_KICKED,
 	ERROR_WRONGVERSION,
 	ERROR_WRONGPASSWORD,
 	ERROR_HOSTDROPPED,
 	ERROR_WRONGDATA,
-	ERROR_UNKNOWNFILEISSUE,
-	ERROR_AUTHENTICATION,
-	ERROR_LOBBY_REJECTED
+	ERROR_UNKNOWNFILEISSUE
 };
 
 enum CONNECTION_STATUS
@@ -60,6 +68,7 @@ enum CONNECTION_STATUS
 
 enum MESSAGE_TYPES
 {
+	// Net-related messages.
 	NET_MIN_TYPE = 33,              ///< Minimum-1 valid NET_ type, *MUST* be first.
 	NET_PING,                       ///< ping players.
 	NET_PLAYER_STATS,               ///< player stats
@@ -92,34 +101,29 @@ enum MESSAGE_TYPES
 	NET_DEBUG_SYNC,                 ///< Synch error messages, so people don't have to use pastebin.
 	NET_MAX_TYPE,                   ///< Maximum+1 valid NET_ type, *MUST* be last.
 
+	// Game-state-related messages, must be processed by all clients at the same game time.
 	GAME_MIN_TYPE = 111,            ///< Minimum-1 valid GAME_ type, *MUST* be first.
-	GAME_DROID,                     ///< a new droid
 	GAME_DROIDINFO,                 ///< update a droid order.
+	GAME_STRUCTUREINFO,             ///< Structure state.
+	GAME_RESEARCHSTATUS,            ///< research state.
 	GAME_TEMPLATE,                  ///< a new template
 	GAME_TEMPLATEDEST,              ///< remove template
-	GAME_FEATUREDEST,               ///< destroy a game feature.
-	GAME_RESEARCH,                  ///< Research has been completed.
-	GAME_FEATURES,                  ///< information regarding features.
 	GAME_ALLIANCE,                  ///< alliance data.
 	GAME_GIFT,                      ///< a luvly gift between players.
-	GAME_ARTIFACTS,                 ///< artifacts randomly placed.
-	GAME_RESEARCHSTATUS,            ///< research state.
-	GAME_STRUCTUREINFO,             ///< Structure state.
 	GAME_LASSAT,                    ///< lassat firing.
 	GAME_GAME_TIME,                 ///< Game time. Used for synchronising, so that all messages are executed at the same gameTime on all clients.
 	GAME_PLAYER_LEFT,               ///< Player has left or dropped.
-	// The following messages (not including GAME_MAX_TYPE) are currently redundant, and should probably at some point not be
-	// sent, except (some of them) when using cheats in debug mode.
-	GAME_DROIDDEST,                 ///< issue a droid destruction, will be sent by all players at the same time, and have no effect, if synchronised.
-	GAME_CHECK_DROID,               ///< check & update bot position and damage.
-	GAME_CHECK_STRUCT,              ///< check & update struct damage.
-	GAME_CHECK_POWER,               ///< power levels for a player.
-	GAME_STRUCTDEST,                ///< specify a strucutre to destroy, will be sent by all players at the same time, and have no effect, if synchronised.
-	GAME_BUILDFINISHED,             ///< a building is complete.
-	GAME_DEMOLISH,                  ///< a demolish is complete.
-	GAME_DROIDEMBARK,               ///< droid embarked on a Transporter
 	GAME_DROIDDISEMBARK,            ///< droid disembarked from a Transporter
-	// End of redundant messages.
+	// The following messages are used for debug mode.
+	GAME_DEBUG_MODE,                ///< Request enable/disable debug mode.
+	GAME_DEBUG_ADD_DROID,           ///< Add droid.
+	GAME_DEBUG_ADD_STRUCTURE,       ///< Add structure.
+	GAME_DEBUG_ADD_FEATURE,         ///< Add feature.
+	GAME_DEBUG_REMOVE_DROID,        ///< Remove droid.
+	GAME_DEBUG_REMOVE_STRUCTURE,    ///< Remove structure.
+	GAME_DEBUG_REMOVE_FEATURE,      ///< Remove feature.
+	GAME_DEBUG_FINISH_RESEARCH,     ///< Research has been completed.
+	// End of debug messages.
 	GAME_MAX_TYPE                   ///< Maximum+1 valid GAME_ type, *MUST* be last.
 };
 //#define SYNC_FLAG (NUM_GAME_PACKETS * NUM_GAME_PACKETS)	//special flag used for logging.
@@ -129,14 +133,63 @@ enum MESSAGE_TYPES
 // @NOTE / FIXME: We need a way to detect what should happen if the msg buffer exceeds this.
 #define MaxMsgSize		16384		// max size of a message in bytes.
 #define	StringSize		64			// size of strings used.
+#define MaxGames		11			// max number of concurrently playable games to allow.
+#define IPSize			40			// size of IPv6/IPv4
 #define extra_string_size	159		// extra 199 char for future use
 #define map_string_size		40
 #define	hostname_string_size	40
 #define modlist_string_size	255		// For a concatenated list of mods
 #define password_string_size 64		// longer passwords slow down the join code
 
+#define SESSION_JOINDISABLED	1
+
 #define MAX_CONNECTED_PLAYERS   MAX_PLAYERS
 #define MAX_TMP_SOCKETS         16
+
+struct SESSIONDESC  //Available game storage... JUST FOR REFERENCE!
+{
+	int32_t dwSize;
+	int32_t dwFlags;
+	char host[40];	// host's ip address (can fit a full IPv4 and IPv6 address + terminating NUL)
+	int32_t dwMaxPlayers;
+	int32_t dwCurrentPlayers;
+	int32_t dwUserFlags[4];
+};
+
+/**
+ * @note when changing this structure, NETsendGAMESTRUCT, NETrecvGAMESTRUCT and
+ *       the lobby server should be changed accordingly.
+ */
+struct GAMESTRUCT
+{
+	/* Version of this structure and thus the binary lobby protocol.
+	 * @NOTE: <em>MUST</em> be the first item of this struct.
+	 */
+	uint32_t	GAMESTRUCT_VERSION;
+
+	char		name[StringSize];
+	SESSIONDESC	desc;
+	// END of old GAMESTRUCT format
+	// NOTE: do NOT save the following items in game.c--it will break savegames.
+	char		secondaryHosts[2][40];
+	char		extra[extra_string_size];		// extra string (future use)
+	char		mapname[map_string_size];		// map server is hosting
+	char		hostname[hostname_string_size];	// ...
+	char		versionstring[StringSize];		// 
+	char		modlist[modlist_string_size];	// ???
+	uint32_t	game_version_major;				// 
+	uint32_t	game_version_minor;				// 
+	uint32_t	privateGame;					// if true, it is a private game
+	uint32_t	pureGame;						// NO mods allowed if true
+	uint32_t	Mods;							// number of concatenated mods?
+	// Game ID, used on the lobby server to link games with multiple address families to eachother
+	uint32_t	gameId;
+	uint32_t	limits;							// holds limits bitmask (NO_VTOL|NO_TANKS|NO_BORGS)
+	uint32_t	os;								// OS platform
+	uint32_t	future4;						// for future use
+	char		Clientnames[StringSize * MAX_PLAYERS];	// server only use, not used for clients at this time
+	char		ClientIPs[IPSize * MAX_PLAYERS];		// server only use, not used for clients at this time
+};
 
 // ////////////////////////////////////////////////////////////////////////
 // Message information. ie. the packets sent between machines.
@@ -146,16 +199,6 @@ enum MESSAGE_TYPES
 // the following structure is going to be used to track if we sync or not
 struct SYNC_COUNTER
 {
-	uint64_t	sentDroidCheck;
-	uint64_t	unsentDroidCheck;
-	uint64_t	sentStructureCheck;
-	uint64_t	unsentStructureCheck;
-	uint64_t	sentPowerCheck;
-	uint64_t	unsentPowerCheck;
-	uint64_t	sentScoreCheck;
-	uint64_t	unsentScoreCheck;
-	uint64_t	sentPing;
-	uint64_t	unsentPing;
 	uint16_t	kicks;
 	uint16_t	joins;
 	uint16_t	left;
@@ -211,6 +254,7 @@ struct PLAYER
 	bool		ready;			///< player ready to start?
 	int8_t		ai;			///< index into sorted list of AIs, zero is always default AI
 	int8_t		difficulty;		///< difficulty level of AI
+	bool		autoGame;		// if we are running a autogame (AI controls us)
 	bool		needFile;			///< if We need a file sent to us
 	WZFile		wzFile;				///< for each player, we keep track of map progress
 	char		IPtextAddress[40];	///< IP of this player
@@ -220,17 +264,21 @@ struct PLAYER
 // all the luvly Netplay info....
 struct NETPLAY
 {
+	GAMESTRUCT	games[MaxGames];	///< The collection of games
 	PLAYER		players[MAX_PLAYERS];	///< The array of players.
-	uint32_t	maxPlayers;				///< Maximum number of players.
 	uint32_t	playercount;		///< Number of players in game.
 	uint32_t	hostPlayer;		///< Index of host in player array
 	uint32_t	bComms;			///< Actually do the comms?
 	bool		isHost;			///< True if we are hosting the game
 	bool		isUPNP;					// if we want the UPnP detection routines to run
 	bool		isHostAlive;	/// if the host is still alive
-	PHYSFS_file	*pMapFileHandle;
+	PHYSFS_file *   pMapFileHandle;         ///< Only non-NULL during map download.
+	char mapFileName[255];            ///< Only valid during map download.
 	char gamePassword[password_string_size];		//
 	bool GamePassworded;				// if we have a password or not.
+	bool ShowedMOTD;					// only want to show this once
+	char MOTDbuffer[255];				// buffer for MOTD
+	char* MOTD;
 };
 
 struct PLAYER_IP
@@ -250,17 +298,15 @@ extern bool netPlayersUpdated;
 extern int mapDownloadProgress;
 extern char iptoconnect[PATH_MAX]; // holds IP/hostname from command line
 
-extern Lobby::Client lobbyclient;
-
 // ////////////////////////////////////////////////////////////////////////
 // functions available to you.
 extern int   NETinit(bool bFirstCall);				// init
-bool NETsend(uint8_t player, NetMessage const *message);                 ///< send to player, or broadcast if player == NET_ALL_PLAYERS.
+bool NETsend(NETQUEUE queue, NetMessage const *message);                 ///< send to player, or broadcast if player == NET_ALL_PLAYERS.
 extern bool NETrecvNet(NETQUEUE *queue, uint8_t *type);                  ///< recv a message from the net queues if possible.
 extern bool NETrecvGame(NETQUEUE *queue, uint8_t *type);                 ///< recv a message from the game queues which is sceduled to execute by time, if possible.
 void NETflush(void);                                                     ///< Flushes any data stuck in compression buffers.
 
-extern UBYTE   NETsendFile(char *fileName, UDWORD player);	// send file chunk.
+int NETsendFile(char *mapName, Sha256 const &fileHash, UDWORD player);  // send file chunk.
 extern UBYTE   NETrecvFile(NETQUEUE queue);                     // recv file chunk
 
 extern int NETclose(void);					// close current game
@@ -270,13 +316,8 @@ extern void NETaddRedirects(void);
 extern void NETremRedirects(void);
 extern void NETdiscoverUPnPDevices(void);
 
-extern UDWORD	NETgetBytesSent(void);				// return bytes sent/recv.  call regularly for good results
-extern UDWORD	NETgetPacketsSent(void);			// return packets sent/recv.  call regularly for good results
-extern UDWORD	NETgetBytesRecvd(void);				// return bytes sent/recv.  call regularly for good results
-extern UDWORD	NETgetPacketsRecvd(void);			// return packets sent/recv.  call regularly for good results
-extern UDWORD	NETgetRecentBytesSent(void);		// more immediate functions.
-extern UDWORD	NETgetRecentPacketsSent(void);
-extern UDWORD	NETgetRecentBytesRecvd(void);
+enum NetStatisticType {NetStatisticRawBytes, NetStatisticUncompressedBytes, NetStatisticPackets};
+unsigned NETgetStatistic(NetStatisticType type, bool sent, bool isTotal = false);     // Return some statistic. Call regularly for good results.
 
 extern void NETplayerKicked(UDWORD index);			// Cleanup after player has been kicked
 
@@ -285,15 +326,20 @@ extern SDWORD	NETgetGameFlags(UDWORD flag);			// return one of the four flags(dw
 extern int32_t	NETgetGameFlagsUnjoined(unsigned int gameid, unsigned int flag);	// return one of the four flags(dword) about the game.
 extern bool	NETsetGameFlags(UDWORD flag, SDWORD value);	// set game flag(1-4) to value.
 extern bool	NEThaltJoining(void);				// stop new players joining this game
-extern bool	NETfindGame(const int maxGames);		// find games being played(uses GAME_GUID);
-extern bool	NETjoinGame(const char* host, uint32_t port, const char* playername);			// join game given with playername
+extern bool	NETfindGame(void);		// find games being played(uses GAME_GUID);
+extern bool	NETjoinGame(const char* host, uint32_t port, const char* playername); // join game given with playername
 extern bool	NEThostGame(const char* SessionName, const char* PlayerName,// host a game
 			    SDWORD one, SDWORD two, SDWORD three, SDWORD four, UDWORD plyrs);
 extern bool	NETchangePlayerName(UDWORD player, char *newName);// change a players name.
 void            NETfixDuplicatePlayerNames(void);  // Change a player's name automatically, if there are duplicates.
+extern void NETlaunched(void);	// host started a game, and we are telling the lobby server.
 
 #include "netlog.h"
 
+extern void NETsetMasterserverName(const char* hostname);
+extern const char* NETgetMasterserverName(void);
+extern void NETsetMasterserverPort(unsigned int port);
+extern unsigned int NETgetMasterserverPort(void);
 extern void NETsetGameserverPort(unsigned int port);
 extern unsigned int NETgetGameserverPort(void);
 
@@ -317,11 +363,16 @@ const char *messageTypeToString(unsigned messageType);
 #define syncDebug(...) do { _syncDebug(__FUNCTION__, __VA_ARGS__); } while(0)
 void _syncDebug(const char *function, const char *str, ...)
 	WZ_DECL_FORMAT(printf, 2, 3);
+/// Faster than syncDebug. Make sure that str is a format string that takes ints only.
+void _syncDebugIntList(const char *function, const char *str, int *ints, size_t numInts);
 #define syncDebugBacktrace() do { _syncDebugBacktrace(__FUNCTION__); } while(0)
 void _syncDebugBacktrace(const char *function);                  ///< Adds a backtrace to syncDebug, if the platform supports it. Can be a bit slow, don't call way too often, unless desperate.
+uint32_t syncDebugGetCrc();                                      ///< syncDebug() calls between uint32_t crc = syncDebugGetCrc(); and syncDebugSetCrc(crc); appear in synch debug logs, but without triggering a desynch if different.
+void syncDebugSetCrc(uint32_t crc);                              ///< syncDebug() calls between uint32_t crc = syncDebugGetCrc(); and syncDebugSetCrc(crc); appear in synch debug logs, but without triggering a desynch if different.
 
-void resetSyncDebug(void);                                       ///< Resets the syncDebug, so syncDebug from a previous game doesn't cause a spurious desynch dump.
-uint32_t nextDebugSync(void);                                    ///< Returns a CRC corresponding to all syncDebug() calls since the last nextDebugSync() or resetSyncDebug() call.
-bool checkDebugSync(uint32_t checkGameTime, uint32_t checkCrc);  ///< Dumps all syncDebug() calls from that gameTime, if the CRC doesn't match.
+typedef uint16_t GameCrcType;  // Truncate CRC of game state to 16 bits, to save a bit of bandwidth.
+void resetSyncDebug();                                              ///< Resets the syncDebug, so syncDebug from a previous game doesn't cause a spurious desynch dump.
+GameCrcType nextDebugSync();                                        ///< Returns a CRC corresponding to all syncDebug() calls since the last nextDebugSync() or resetSyncDebug() call.
+bool checkDebugSync(uint32_t checkGameTime, GameCrcType checkCrc);  ///< Dumps all syncDebug() calls from that gameTime, if the CRC doesn't match.
 
 #endif

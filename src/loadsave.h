@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -29,11 +29,14 @@
 
 enum LOADSAVE_MODE
 {
-LOAD_FRONTEND,
+LOAD_FRONTEND_MISSION,
 LOAD_MISSIONEND,
+LOAD_INGAME_MISSION,
+LOAD_FRONTEND_SKIRMISH,
+LOAD_INGAME_SKIRMISH,
 SAVE_MISSIONEND,
-LOAD_INGAME,
-SAVE_INGAME
+SAVE_INGAME_MISSION,
+SAVE_INGAME_SKIRMISH
 };
 
 /***************************************************************************/

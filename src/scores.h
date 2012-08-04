@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -52,7 +52,7 @@ struct MISSION_DATA
 	uint32_t    shotsOffTarget;	// How many misses
 	uint32_t    babasMowedDown; // How many barbarians did we mow down?
 };
-
+extern MISSION_DATA	missionData;
 // Could use widgets, but hey.....
 struct STAT_BAR
 {
@@ -93,7 +93,7 @@ extern bool	scoreInitSystem			( void );
 extern void	scoreUpdateVar			( DATA_INDEX var );
 extern void	scoreDataToConsole		( void );
 extern void	scoreDataToScreen		( void );
-extern void	getAsciiTime			( char *psText, UDWORD time );
+void getAsciiTime(char *psText, unsigned time);
 extern bool readScoreData			( const char* fileName );
 extern bool writeScoreData			( const char* fileName );
 

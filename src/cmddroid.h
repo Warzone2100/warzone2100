@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -17,8 +17,11 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/** @file
- *  Typedef's for command droids
+/**
+ *
+ * @file
+ * Typedef's for command droids
+ *
  */
 
 #ifndef __INCLUDED_SRC_CMDDROID_H__
@@ -27,49 +30,47 @@
 #include "cmddroiddef.h"
 #include "droiddef.h"
 
-// Initialise the command droids
+/** \brief Initialises the global instance for command droids.*/
 extern bool cmdDroidInit(void);
 
-// ShutDown the command droids
+/** \brief Shut down commander code module.
+ */
 extern void cmdDroidShutDown(void);
 
-// Make new command droids available
-extern void cmdDroidAvailable(BRAIN_STATS *psBrainStats, SDWORD player);
-
-// update the command droids
+/** \brief Checks the validity of all target designators.*/
 extern void cmdDroidUpdate(void);
 
-// add a droid to a command group
+/** \brief Adds a droid to a command group.*/
 extern void cmdDroidAddDroid(DROID *psCommander, DROID *psDroid);
 
-// return the current target designator for a player
+/** \brief Returns the current target designator for a player.*/
 extern DROID *cmdDroidGetDesignator(UDWORD player);
 
-// set the current target designator for a player
+/** \brief Sets the current target designator for a player.*/
 extern void cmdDroidSetDesignator(DROID *psDroid);
 
-// set the current target designator for a player
+/** \brief Clears the current target designator for a player.*/
 extern void cmdDroidClearDesignator(UDWORD player);
 
-// get the index of the command droid
+/** \brief Gets the index of the command droid.*/
 extern SDWORD cmdDroidGetIndex(DROID *psCommander);
 
-// get the maximum group size for a command droid
+/** \brief Gets the maximum group size for a command droid.*/
 extern unsigned int cmdDroidMaxGroup(const DROID* psCommander);
 
-// update the kills of a command droid if psKiller is in a command group
+/** \brief Updates the experinence of a command droid if psKiller is in a command group.*/
 extern void cmdDroidUpdateKills(DROID *psKiller, uint32_t experienceInc);
 
-// get the level of a droids commander, if any
+/** \brief Gets the level of the droid group's commander, if any.*/
 extern unsigned int cmdGetCommanderLevel(const DROID* psDroid);
 
-// returns true if a unit in question has is assigned to a commander
+/** \brief Returns if the droid has commander.*/
 extern bool hasCommander(const DROID* psDroid);
 
-// note that commander experience should be increased
+/** \brief Sets whether commander experience should be increased in multiplayer games.*/
 extern void cmdDroidMultiExpBoost(bool bDoit);
 
-// check whether commander experience should be increased
+/** \brief Checks whether commander experience should be increased in multiplayer games.*/
 extern bool cmdGetDroidMultiExpBoost(void);
 
 #endif // __INCLUDED_SRC_CMDDROID_H__

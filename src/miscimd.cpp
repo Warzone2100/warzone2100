@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -125,24 +125,6 @@ iIMDShape	*getImdFromIndex(UDWORD	index)
 }
 // -------------------------------------------------------------------------------
 
-iIMDShape	*getRandomWreckageImd( void )
-{
-	iIMDShape *WreckageIMD;
-
-	// Get a random wreckage
-	WreckageIMD=(getImdFromIndex(MI_WRECK0 + rand()%((MI_WRECK4-MI_WRECK0)+1)));
-
-	// if it doesn't exsist (cam2) then get the first one
-	if (WreckageIMD==NULL)
-	{
-		WreckageIMD=(getImdFromIndex(MI_WRECK0));
-	}
-	// check to make sure one exists  (will fail on renderfeature if null)
-	assert(WreckageIMD);
-
-	return(WreckageIMD);
-}
-
 // -------------------------------------------------------------------------------
 iIMDShape	*getRandomDebrisImd( void )
 {
@@ -156,7 +138,7 @@ iIMDShape	*getRandomDebrisImd( void )
 }
 // -------------------------------------------------------------------------------
 
-iIMDShape	*pAssemblyPointIMDs[NUM_FLAG_TYPES][MAX_FACTORY];
+iIMDShape	*pAssemblyPointIMDs[NUM_FLAG_TYPES][MAX_FACTORY_FLAG_IMDS];
 
 static bool initMiscImd(unsigned i, unsigned n, const char *nameFormat, unsigned flagType)
 {
@@ -174,17 +156,16 @@ static bool initMiscImd(unsigned i, unsigned n, const char *nameFormat, unsigned
 
 bool	initMiscImds( void )
 {
-	unsigned        i;
-
 	/* Do the new loading system */
 	multiLoadMiscImds();
 
 	/* Now load the multi array stuff */
-	for (i=0; i < MAX_FACTORY; i++)
+	for (unsigned i = 0; i < MAX_FACTORY_FLAG_IMDS; ++i)
 	{
 		unsigned n = i + 1;
 
-		STATIC_ASSERT(MAX_FACTORY <= 32);  // Need to add more assembly point graphics, if increasing MAX_FACTORY.
+		STATIC_ASSERT(MAX_FACTORY <= MAX_FACTORY_FLAG_IMDS);
+		STATIC_ASSERT(MAX_FACTORY_FLAG_IMDS <= 32);  // Need to add more assembly point graphics, if increasing MAX_FACTORY_FLAG_IMDS.
 		if (!initMiscImd(i, n, "minum%u.pie",  FACTORY_FLAG) ||
 		    !initMiscImd(i, n, "micnum%u.pie", CYBORG_FLAG) ||
 		    !initMiscImd(i, n, "mivnum%u.pie", VTOL_FLAG) ||

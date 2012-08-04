@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -34,6 +34,7 @@
 #endif
 
 #include "lib/framework/types.h"
+#include "lib/framework/vector.h"
 
 /* ------------------------------------------------------------------------------------------- */
 
@@ -53,15 +54,23 @@ extern void screen_Upload(const char *newBackDropBmp, bool preview);
 /* screendump */
 extern void screenDumpToDisk(const char* path);
 
-/* Toggle the display between full screen or windowed */
-extern void	screenToggleMode(void);
-
 extern int wz_texture_compression;
+
 
 extern void screenDoDumpToDiskIfRequired(void);
 
 void screen_enableMapPreview(char *name, int width, int height, Vector2i *playerpositions);
 void screen_disableMapPreview(void);
 bool screen_getMapPreview(void);
+void screen_EnableMissingFunctions();
 
+struct OPENGL_DATA
+{
+	char vendor[256];
+	char renderer[256];
+	char version[256];
+	char GLEWversion[256];
+	char GLSLversion[256];
+};
+extern OPENGL_DATA opengl;
 #endif

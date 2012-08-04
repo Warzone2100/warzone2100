@@ -10,15 +10,16 @@ int main(int argc, char **argv)
 	QCoreApplication app(argc, argv);
 	char datapath[PATH_MAX], fullpath[PATH_MAX], filename[PATH_MAX];
 	FILE *fp = fopen("jslist.txt", "r");
-
 	if (!fp)
 	{
 		fprintf(stderr, "%s: Failed to open list file\n", argv[0]);
 		return -1;
 	}
-	strcpy(datapath, getenv("srcdir"));
+	if (getenv("srcdir"))
+	{
+		strcpy(datapath, getenv("srcdir"));
+	}
 	strcat(datapath, "/../data/");
-
 	while (!feof(fp))
 	{
 		fscanf(fp, "%s\n", &filename);

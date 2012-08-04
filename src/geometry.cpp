@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -81,6 +81,12 @@ UDWORD	bestSoFar;
 /* See header file for definition of QUAD */
 bool inQuad(const Vector2i *pt, const QUAD *quad)
 {
+	// Early out.
+	int minX = std::min(std::min(quad->coords[0].x, quad->coords[1].x), std::min(quad->coords[2].x, quad->coords[3].x)); if (pt->x < minX) return false;
+	int maxX = std::max(std::max(quad->coords[0].x, quad->coords[1].x), std::max(quad->coords[2].x, quad->coords[3].x)); if (pt->x > maxX) return false;
+	int minY = std::min(std::min(quad->coords[0].y, quad->coords[1].y), std::min(quad->coords[2].y, quad->coords[3].y)); if (pt->y < minY) return false;
+	int maxY = std::max(std::max(quad->coords[0].y, quad->coords[1].y), std::max(quad->coords[2].y, quad->coords[3].y)); if (pt->y > maxY) return false;
+
 	bool c = false;
 
 	for (int i = 0, j = 3; i < 4; j = i++)

@@ -5,7 +5,7 @@ AM_CXXFLAGS = $(WZ_CXXFLAGS) $(QT4_CFLAGS) -I../..
 BUILT_SOURCES = 
 CLEANFILES = $(BUILT_SOURCES)
 EXTRA_DIST = 
-bin_PROGRAMS = mapconv mapinfo map2lnd map2preview map2png
+noinst_PROGRAMS = mapconv mapinfo map2lnd map2preview map2png
 noinst_HEADERS = maplib.h mapload.h pngsave.h vector.h
 
 LIBLIST = $(LTLIBINTL) $(PHYSFS_LIBS) $(PNG_LIBS) $(QT4_LIBS)

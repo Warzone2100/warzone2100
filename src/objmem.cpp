@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -44,10 +44,7 @@
 #include "mapgrid.h"
 #include "combat.h"
 #include "visibility.h"
-
-#ifdef DEBUG
-static SDWORD factoryDeliveryPointCheck[MAX_PLAYERS][NUM_FLAG_TYPES][MAX_FACTORY];
-#endif
+#include "qtscript.h"
 
 // the initial value for the object ID
 #define OBJ_ID_INIT 20000
@@ -95,7 +92,7 @@ void objmemShutdown(void)
 
 /* Remove an object from the destroyed list, finally freeing its memory
  * Hopefully by this time, no pointers still refer to it! */
-static void objmemDestroy(BASE_OBJECT *psObj)
+static bool objmemDestroy(BASE_OBJECT *psObj)
 {
 	switch (psObj->type)
 	{
@@ -103,7 +100,7 @@ static void objmemDestroy(BASE_OBJECT *psObj)
 			debug(LOG_MEMORY, "freeing droid at %p", psObj);
 			if (!droidCheckReferences((DROID *)psObj))
 			{
-				return;
+				return false;
 			}
 			break;
 
@@ -111,7 +108,7 @@ static void objmemDestroy(BASE_OBJECT *psObj)
 			debug(LOG_MEMORY, "freeing structure at %p", psObj);
 			if (!structureCheckReferences((STRUCTURE *)psObj))
 			{
-				return;
+				return false;
 			}
 			break;
 
@@ -124,6 +121,7 @@ static void objmemDestroy(BASE_OBJECT *psObj)
 	}
 	delete psObj;
 	debug(LOG_MEMORY, "BASE_OBJECT* 0x%p is freed.", psObj);
+	return true;
 }
 
 /* General housekeeping for the object system */
@@ -146,10 +144,17 @@ void objmemUpdate(void)
 	   were destroyed before this turn */
 
 	/* First remove the objects from the start of the list */
-	while (psDestroyedObj != NULL && psDestroyedObj->died != gameTime)
+	while (psDestroyedObj != NULL && psDestroyedObj->died <= gameTime - deltaGameTime)
 	{
 		psNext = psDestroyedObj->psNext;
-		objmemDestroy(psDestroyedObj);
+		if (!objmemDestroy(psDestroyedObj))
+		{
+			if (psDestroyedObj->type == OBJ_DROID)
+			{
+				debug(LOG_DEATH, "skipping %p (%s: id %u) this round, will try again later.", psDestroyedObj, ((DROID *)psDestroyedObj)->aName, ((DROID *)psDestroyedObj)->id);
+				return;
+			}
+		}
 		psDestroyedObj = psNext;
 	}
 
@@ -158,7 +163,7 @@ void objmemUpdate(void)
 	for(psCurr = psPrev = psDestroyedObj; psCurr != NULL; psCurr = psNext)
 	{
 		psNext = psCurr->psNext;
-		if (psCurr->died != gameTime)
+		if (psCurr->died <= gameTime - deltaGameTime)
 		{
 			objmemDestroy(psCurr);
 
@@ -186,6 +191,7 @@ void objmemUpdate(void)
 				break;
 			}
 			psCBObjDestroyed = NULL;
+			triggerEventDestroyed(psCurr);
 
 			psPrev = psCurr;
 		}
@@ -242,6 +248,8 @@ static inline void destroyObject(OBJECT* list[], OBJECT* object)
 {
 	ASSERT(object != NULL,
 	       "destroyObject: Invalid pointer");
+
+	scriptRemoveObject(object);
 
 	// If the message to remove is the first one in the list then mark the next one as the first
 	if (list[object->player] == object)
@@ -619,7 +627,7 @@ bool createFlagPosition(FLAG_POSITION **ppsNew, UDWORD player)
 {
 	ASSERT( player<MAX_PLAYERS, "createFlagPosition: invalid player number" );
 
-	*ppsNew = (FLAG_POSITION *)malloc(sizeof(FLAG_POSITION));
+	*ppsNew = (FLAG_POSITION *)calloc(1, sizeof(FLAG_POSITION));
 	if (*ppsNew == NULL)
 	{
 		debug(LOG_ERROR, "Out of memory");
@@ -652,7 +660,7 @@ void removeFlagPosition(FLAG_POSITION *psDel)
 	FLAG_POSITION		*psPrev=NULL, *psCurr;
 
 	ASSERT( psDel != NULL,
-		"removeFlagPosition: Invalid Flag Positionpointer" );
+		"removeFlagPosition: Invalid Flag Position pointer" );
 
 	if (apsFlagPosLists[psDel->player] == psDel)
 	{
@@ -697,37 +705,33 @@ void freeAllFlagPositions(void)
 // check all flag positions for duplicate delivery points
 void checkFactoryFlags(void)
 {
-	FLAG_POSITION	*psFlag;
-	SDWORD			player, type, factory;
-
-	//clear the check array
-	for(player=0; player<MAX_PLAYERS; player++)
-	{
-		//for(type=0; type<NUM_FACTORY_TYPES; type++)
-        for(type=0; type<NUM_FLAG_TYPES; type++)
-		{
-			for(factory=0; factory<MAX_FACTORY; factory++)
-			{
-				factoryDeliveryPointCheck[player][type][factory] = 0;
-			}
-		}
-	}
+	static std::vector<unsigned> factoryDeliveryPointCheck[NUM_FLAG_TYPES];  // Static to save allocations.
 
 	//check the flags
-	for(player=0; player<MAX_PLAYERS; player++)
+	for (unsigned player = 0; player < MAX_PLAYERS; ++player)
 	{
-		psFlag = apsFlagPosLists[player];
+		//clear the check array
+		for (int type = 0; type < NUM_FLAG_TYPES; ++type)
+		{
+			factoryDeliveryPointCheck[type].clear();
+		}
+
+		FLAG_POSITION *psFlag = apsFlagPosLists[player];
 		while (psFlag)
 		{
 			if ((psFlag->type == POS_DELIVERY) &&//check this is attached to a unique factory
 				(psFlag->factoryType != REPAIR_FLAG))
 			{
-				type = psFlag->factoryType;
-				factory = psFlag->factoryInc;
-				ASSERT( factoryDeliveryPointCheck[player][type][factory] == 0,"DUPLICATE FACTORY DELIVERY POINT FOUND" );
-				factoryDeliveryPointCheck[player][type][factory] = 1;
+				unsigned type = psFlag->factoryType;
+				unsigned factory = psFlag->factoryInc;
+				factoryDeliveryPointCheck[type].push_back(factory);
 			}
 			psFlag = psFlag->psNext;
+		}
+		for (int type = 0; type < NUM_FLAG_TYPES; ++type)
+		{
+			std::sort(factoryDeliveryPointCheck[type].begin(), factoryDeliveryPointCheck[type].end());
+			ASSERT(std::unique(factoryDeliveryPointCheck[type].begin(), factoryDeliveryPointCheck[type].end()) == factoryDeliveryPointCheck[type].end(), "DUPLICATE FACTORY DELIVERY POINT FOUND");
 		}
 	}
 }
@@ -780,7 +784,7 @@ BASE_OBJECT *getBaseObjFromData(unsigned id, unsigned player, OBJECT_TYPE type)
 				return psObj;
 			}
 			// if transporter check any droids in the grp
-			if ((psObj->type == OBJ_DROID) && (((DROID*)psObj)->droidType == DROID_TRANSPORTER))
+			if ((psObj->type == OBJ_DROID) && ((((DROID*)psObj)->droidType == DROID_TRANSPORTER || ((DROID*)psObj)->droidType == DROID_SUPERTRANSPORTER)))
 			{
 				for(psTrans = ((DROID*)psObj)->psGroup->psList; psTrans != NULL; psTrans = psTrans->psGrpNext)
 				{
@@ -866,7 +870,7 @@ BASE_OBJECT *getBaseObjFromId(UDWORD id)
 					return psObj;
 				}
 				// if transporter check any droids in the grp
-				if ((psObj->type == OBJ_DROID) && (((DROID*)psObj)->droidType == DROID_TRANSPORTER))
+				if ((psObj->type == OBJ_DROID) && ((((DROID*)psObj)->droidType == DROID_TRANSPORTER || ((DROID*)psObj)->droidType == DROID_SUPERTRANSPORTER)))
 				{
 					for(psTrans = ((DROID*)psObj)->psGroup->psList; psTrans != NULL; psTrans = psTrans->psGrpNext)
 					{
@@ -991,7 +995,7 @@ void objCount(int *droids, int *structures, int *features)
 		for (DROID *psDroid = apsDroidLists[i]; psDroid; psDroid = psDroid->psNext)
 		{
 			(*droids)++;
-			if (psDroid->droidType == DROID_TRANSPORTER)
+			if (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER)
 			{
 				DROID *psTrans = psDroid->psGroup->psList;
 

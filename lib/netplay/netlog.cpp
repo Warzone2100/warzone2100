@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -84,8 +84,15 @@ bool NETstopLogging(void)
 	/* Output stats */
 	for (i = 0; i < NUM_GAME_PACKETS; i++)
 	{
-		snprintf(buf, sizeof(buf), "%-24s:\t received %u times, %u bytes; sent %u times, %u bytes\n", messageTypeToString(i),
-			packetcount[1][i], packetsize[1][i], packetcount[0][i], packetsize[0][i]);
+		if (!strcmp(messageTypeToString(i), "(UNUSED)"))
+		{
+			continue;
+		}
+		else
+		{
+			snprintf(buf, sizeof(buf), "%-24s:\t received %u times, %u bytes; sent %u times, %u bytes\n", messageTypeToString(i),
+				packetcount[1][i], packetsize[1][i], packetcount[0][i], packetsize[0][i]);
+		}
 		PHYSFS_write(pFileHandle, buf, strlen(buf), 1);
 		totalBytessent += packetsize[0][i];
 		totalBytesrecv += packetsize[1][i];
@@ -99,9 +106,9 @@ bool NETstopLogging(void)
 	snprintf(buf, sizeof(buf), "\n-Sync statistics -\n");
 	PHYSFS_write(pFileHandle, buf, strlen(buf), 1);
 	PHYSFS_write(pFileHandle, dash_line, strlen(dash_line), 1);
-	snprintf(buf, sizeof(buf), "joins: %hhu, kicks: %hhu, drops: %hhu, left %hhu\n", sync_counter.joins, sync_counter.kicks, sync_counter.drops, sync_counter.left );
+	snprintf(buf, sizeof(buf), "joins: %u, kicks: %u, drops: %u, left %u\n", sync_counter.joins, sync_counter.kicks, sync_counter.drops, sync_counter.left );
 	PHYSFS_write(pFileHandle, buf, strlen(buf), 1);
-	snprintf(buf, sizeof(buf), "banned: %hhu, cantjoin: %hhu, rejected: %hhu\n", sync_counter.banned, sync_counter.cantjoin, sync_counter.rejected );
+	snprintf(buf, sizeof(buf), "banned: %u, cantjoin: %u, rejected: %u\n", sync_counter.banned, sync_counter.cantjoin, sync_counter.rejected );
 	PHYSFS_write(pFileHandle, buf, strlen(buf), 1);
 	if (sync_counter.banned && IPlist)
 	{
@@ -118,16 +125,6 @@ bool NETstopLogging(void)
 
 	}
 	PHYSFS_write(pFileHandle, dash_line, strlen(dash_line), 1);
-	snprintf(buf, sizeof(buf), "sent/unsent DroidCheck %"PRIu64" / %"PRIu64"\n", sync_counter.sentDroidCheck, sync_counter.unsentDroidCheck);
-	PHYSFS_write(pFileHandle, buf, strlen(buf), 1);
-	snprintf(buf, sizeof(buf), "sent/unsent StructureCheck %"PRIu64" / %"PRIu64"\n", sync_counter.sentStructureCheck, sync_counter.unsentStructureCheck);
-	PHYSFS_write(pFileHandle, buf, strlen(buf), 1);
-	snprintf(buf, sizeof(buf), "sent/unsent PowerCheck %"PRIu64" / %"PRIu64"\n", sync_counter.sentPowerCheck, sync_counter.unsentPowerCheck);
-	PHYSFS_write(pFileHandle, buf, strlen(buf), 1);
-	snprintf(buf, sizeof(buf), "sent/unsent ScoreCheck %"PRIu64" / %"PRIu64"\n", sync_counter.sentScoreCheck, sync_counter.unsentScoreCheck);
-	PHYSFS_write(pFileHandle, buf, strlen(buf), 1);
-	snprintf(buf, sizeof(buf), "sent/unsent Ping %"PRIu64" / %"PRIu64"\n", sync_counter.sentPing, sync_counter.unsentPing);
-	PHYSFS_write(pFileHandle, buf, strlen(buf), 1);
 	PHYSFS_write(pFileHandle, dash_line, strlen(dash_line), 1);
 
 	if (!PHYSFS_close(pFileHandle))

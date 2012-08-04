@@ -7,17 +7,14 @@
 public		int		startPower;	//initial power level
 public		int		player;
 
-
 event start(CALL_GAMEINIT)
 {
 	//don't let player see 3B anymore
 	setScrollMinY(134);
-
 }
 
 event powBoost(wait, 5)
 {
 	//set starting power
 	addPower(startPower,player);
-
 }

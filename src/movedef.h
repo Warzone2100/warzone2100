@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -26,9 +26,6 @@
 
 #include "lib/framework/vector.h"
 
-//Watermelon:num of VTOL weapons should be same as DROID_MAXWEAPS
-#define VTOL_MAXWEAPS 3
-
 enum MOVE_STATUS
 {
 	MOVEINACTIVE,
@@ -43,11 +40,6 @@ enum MOVE_STATUS
 	MOVESHUFFLE,
 };
 
-/// Extra precision added to movement calculations, stored in ebitX, ebitY.
-#define EXTRA_BITS                              8
-#define EXTRA_PRECISION                         (1 << EXTRA_BITS)
-#define EXTRA_MASK                              (EXTRA_PRECISION - 1)
-
 struct MOVE_CONTROL
 {
 	MOVE_STATUS	Status;					// Inactive, Navigating or moving point to point status
@@ -58,7 +50,6 @@ struct MOVE_CONTROL
 	Vector2i destination;                                   // World coordinates of movement destination
 	Vector2i src, target;
 	int	speed;						// Speed of motion
-	uint8_t  eBitX, eBitY;                                  // extra bits stored in a temporary bit bucket
 
 	uint16_t moveDir;					// direction of motion (not the direction the droid is facing)
 	uint16_t bumpDir;					// direction at last bump
@@ -71,9 +62,6 @@ struct MOVE_CONTROL
 
 	/* vtol movement - GJ */
 	SWORD	iVertSpeed;
-
-	// iAttackRuns tracks the amount of ammunition a VTOL has remaining for each weapon
-	UDWORD	iAttackRuns[VTOL_MAXWEAPS];
 };
 
 #endif // __INCLUDED_MOVEDEF_H__

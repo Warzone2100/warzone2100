@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -35,15 +35,10 @@ extern bool recvDestroyStructure    (NETQUEUE queue);
 extern bool recvBuildFinished       (NETQUEUE queue);
 extern bool recvTemplate            (NETQUEUE queue);
 extern bool recvDestroyFeature      (NETQUEUE queue);
-extern bool recvDemolishFinished    (NETQUEUE queue);
 extern bool recvPing                (NETQUEUE queue);
 extern bool recvRequestDroid        (NETQUEUE queue);
 extern bool recvTextMessage         (NETQUEUE queue);
-extern bool recvDroidEmbark         (NETQUEUE queue);
 extern bool recvDroidDisEmbark      (NETQUEUE queue);
-extern bool recvDroidCheck          (NETQUEUE queue);
-extern bool recvStructureCheck      (NETQUEUE queue);
-extern bool recvPowerCheck          (NETQUEUE queue);
 extern bool recvColourRequest       (NETQUEUE queue);
 extern bool recvPositionRequest     (NETQUEUE queue);
 extern void recvOptions             (NETQUEUE queue);

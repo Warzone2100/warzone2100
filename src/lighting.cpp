@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -344,17 +344,18 @@ void UpdateFogDistance(float distance)
 
 void	calcDroidIllumination(DROID *psDroid)
 {
-UDWORD	lightVal;	// sum of light vals
-UDWORD	presVal;
-UDWORD	tileX,tileY;
-UDWORD	retVal;
-	float	adjust;
+	int lightVal, presVal, retVal;
+	float adjust;
+	const int tileX = map_coord(psDroid->pos.x);
+	const int tileY = map_coord(psDroid->pos.y);
 
-	/* See if the droid's at the edge of the map */
-	tileX = psDroid->pos.x/TILE_UNITS;
-	tileY = psDroid->pos.y/TILE_UNITS;
-	/* Are we at the edge */
-	if(tileX<=1 || tileX>=mapWidth-2 || tileY<=1 || tileY>=mapHeight-2)
+	/* Are we at the edge, or even on the map */
+	if (!tileOnMap(tileX, tileY))
+	{
+		psDroid->illumination = UBYTE_MAX;
+		return;
+	}
+	else if (tileX <= 1 || tileX >= mapWidth - 2 || tileY <= 1 || tileY >= mapHeight - 2)
 	{
 		lightVal = mapTile(tileX,tileY)->illumination;
 		lightVal += MIN_DROID_LIGHT_LEVEL;
@@ -366,18 +367,18 @@ UDWORD	retVal;
 				   mapTile(tileX,tileY-1)->illumination +	 //		***		pattern
 				   mapTile(tileX+1,tileY)->illumination +	 //		 *
 				   mapTile(tileX+1,tileY+1)->illumination;	 //
-		lightVal/=5;
+		lightVal /= 5;
 		lightVal += MIN_DROID_LIGHT_LEVEL;
 	}
 
 	/* Saturation */
-	if(lightVal>255) lightVal = 255;
+	if (lightVal > 255) lightVal = 255;
 	presVal = psDroid->illumination;
 	adjust = (float)lightVal - (float)presVal;
 	adjust *= graphicsTimeAdjustedIncrement(DROID_SEEK_LIGHT_SPEED);
 	retVal = presVal + adjust;
-	if(retVal > 255) retVal = 255;
-	psDroid->illumination = (UBYTE)retVal;
+	if (retVal > 255) retVal = 255;
+	psDroid->illumination = retVal;
 }
 
 void	doBuildingLights( void )

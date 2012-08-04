@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -22,12 +22,10 @@
  */
 
 #include <string.h>
-#include <QtGui/QApplication>
-#include <QtGui/QClipboard>
 
 #include "lib/framework/frame.h"
 #include "lib/framework/utf.h"
-#include "lib/framework/wzapp_c.h"
+#include "lib/framework/wzapp.h"
 #include "widget.h"
 #include "widgint.h"
 #include "editbox.h"
@@ -154,6 +152,7 @@ void W_EDITBOX::overwriteChar(QChar ch)
 	/* Update the insertion point */
 	++insPos;
 }
+
 
 /* Delete a character to the right of the position */
 void W_EDITBOX::delCharRight()
@@ -411,11 +410,7 @@ void W_EDITBOX::run(W_CONTEXT *psContext)
 				switch (key)
 				{
 					case KEY_V:
-						{
-							QClipboard *clipboard = QApplication::clipboard();
-							aText = clipboard->text(QClipboard::Selection);                           // try X11 specific buffer first
-							if (aText.isEmpty()) aText = clipboard->text(QClipboard::Clipboard);      // if not, try generic clipboard
-						}
+						aText = wzGetSelection();
 						insPos = aText.length();
 						/* Update the printable text */
 						fitStringEnd();

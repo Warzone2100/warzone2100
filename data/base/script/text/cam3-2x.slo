@@ -29,13 +29,12 @@ event start(CALL_GAMEINIT)
 	createAlliance(enemy, curPlayer);	//to stop them from getting killed to quickly!
 	newColour = getPlayerColour(player);
     
-    //store the old colour so we can reset it later
-    oldColour = getPlayerColour(curPlayer);
+	// store the old colour so we can reset it later
+	oldColour = getPlayerColour(curPlayer);
 	
-    setPlayerColour(newColour, curPlayer);	//make curPlayer units player colour
-	//group team alpha units (player 1) so can fail if all dead
-	//groupAddArea(teamAlpha, curPlayer, RegionsX1[0], RegionsY1[0], RegionsX2[0], RegionsY2[0]);
-//make these experienced
+	setPlayerColour(newColour, curPlayer);	//make curPlayer units player colour
+
+	//make these experienced
 	count = 0;
 	while (count < numDroids)
 	{
@@ -59,8 +58,6 @@ event seen(inactive)
 {
 	//give player briefing
 	addMessage(MissionBrief2, MISS_MSG, 0, true);
-	//this needs to change so that the units are taken over by ID!!!!!
-	//takeOverDroidsInArea(curPlayer, player, RegionsX1[count], RegionsY1[count], RegionsX2[count], RegionsY2[count]);
 	//structures should be OK
 	count = 0;
 	while (count < numDroids)
@@ -83,8 +80,6 @@ event seen(inactive)
 	//reset the player's colour
 	setPlayerColour(oldColour, curPlayer);
 
-	//stop player from failing now they've been rescued!
-	//setEventTrigger(alphaDead, inactive);
 	setEventTrigger(seen, inactive);
 }
 

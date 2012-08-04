@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -57,6 +57,7 @@ extern void	setViewAngle(SDWORD angle);
 extern UDWORD getViewDistance(void);
 extern void	setViewDistance(UDWORD dist);
 extern bool	radarOnScreen;
+extern bool	radarPermitted;
 extern bool rangeOnScreen; // Added to get sensor/gun range on screen.  -Q 5-10-05
 extern void	scaleMatrix( UDWORD percent );
 extern void setViewPos( UDWORD x, UDWORD y, bool Pan);
@@ -110,7 +111,10 @@ extern void setRubbleTile(UDWORD num);
 extern SDWORD	getCentreX( void );
 extern SDWORD	getCentreZ( void );
 
-STRUCTURE *getTileBlueprint(int mapX, int mapY);  ///< Gets the blueprint at those coordinates, if any.
+STRUCTURE *getTileBlueprintStructure(int mapX, int mapY);  ///< Gets the blueprint at those coordinates, if any. Previous return value becomes invalid.
+STRUCTURE_STATS const *getTileBlueprintStats(int mapX, int mapY);  ///< Gets the structure stats of the blueprint at those coordinates, if any.
+bool anyBlueprintTooClose(STRUCTURE_STATS const *stats, Vector2i pos, uint16_t dir);  ///< Checks if any blueprint is too close to the given structure.
+void clearBlueprints();
 
 extern SDWORD mouseTileX, mouseTileY;
 extern Vector2i mousePos;

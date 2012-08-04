@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -61,19 +61,13 @@
 #include "data.h"
 #include "scripttabs.h"
 
+#include "multimenu.h"
 #include "multiplay.h"
 #include "multirecv.h"
 #include "multiint.h"
 #include "multistat.h"
 #include "multigifts.h"
 #include "scriptcb.h"
-
-// ////////////////////////////////////////////////////////////////////////////
-// External Variables
-extern bool		bHosted;
-extern bool		multiRequestUp;
-// ////////////////////////////////////////////////////////////////////////////
-//external functions
 
 // ////////////////////////////////////////////////////////////////////////////
 // Local Functions
@@ -97,15 +91,48 @@ bool intDisplayMultiJoiningStatus(UBYTE joinCount)
 	RenderWindowFrame(FRAME_NORMAL, x, y ,w, h);		// draw a wee blu box.
 
 	// display how far done..
+	iV_SetFont(font_regular);
 	iV_DrawText(_("Players Still Joining"),
 					x+(w/2)-(iV_GetTextWidth(_("Players Still Joining"))/2),
 					y+(h/2)-8 );
-	if (!NetPlay.playercount)
+	unsigned playerCount = 0;  // Calculate what NetPlay.playercount should be, which is apparently only non-zero for the host.
+	for (unsigned player = 0; player < game.maxPlayers; ++player)
+	{
+		if (isHumanPlayer(player))
+		{
+			++playerCount;
+		}
+	}
+	if (!playerCount)
 	{
 		return true;
 	}
-	sprintf(sTmp,"%d%%", PERCENT((NetPlay.playercount-joinCount),NetPlay.playercount) );
+	iV_SetFont(font_large);
+	sprintf(sTmp, "%d%%", PERCENT(playerCount - joinCount, playerCount));
 	iV_DrawText(sTmp ,x + (w / 2) - 10, y + (h / 2) + 10);
+
+	iV_SetFont(font_small);
+	int yStep = iV_GetTextLineSize();
+	int yPos = RET_Y - yStep*game.maxPlayers;
+
+	static const std::string statusStrings[3] = {"☐ ", "☑ ", "☒ "};
+
+	for (unsigned player = 0; player < game.maxPlayers; ++player)
+	{
+		int status = -1;
+		if (isHumanPlayer(player))
+		{
+			status = ingame.JoiningInProgress[player]? 0 : 1;  // Human player, still joining or joined.
+		}
+		else if (NetPlay.players[player].ai >= 0)
+		{
+			status = 2;  // AI player (automatically joined).
+		}
+		if (status >= 0)
+		{
+			iV_DrawText((statusStrings[status] + getPlayerName(player)).c_str(), x + 5, yPos + yStep*NetPlay.players[player].position);
+		}
+	}
 
 	return true;
 }
@@ -144,7 +171,7 @@ void clearPlayer(UDWORD player,bool quietly)
 		}
 		else				// show effects
 		{
-			destroyDroid(apsDroidLists[player]);
+			destroyDroid(apsDroidLists[player], gameTime);
 		}
 	}
 
@@ -161,7 +188,7 @@ void clearPlayer(UDWORD player,bool quietly)
 		}
 		else			// show effects
 		{
-			destroyStruct(psStruct);
+			destroyStruct(psStruct, gameTime);
 		}
 
 		psStruct = psNext;
@@ -200,7 +227,11 @@ static void resetMultiVisibility(UDWORD player)
 
 static void sendPlayerLeft(uint32_t playerIndex)
 {
-	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_PLAYER_LEFT);
+	ASSERT(NetPlay.isHost, "Only host should call this.");
+
+	uint32_t forcedPlayerIndex = whosResponsible(playerIndex);
+	NETQUEUE (*netQueueType)(unsigned) = forcedPlayerIndex != selectedPlayer? NETgameQueueForced : NETgameQueue;
+	NETbeginEncode(netQueueType(forcedPlayerIndex), GAME_PLAYER_LEFT);
 		NETuint32_t(&playerIndex);
 	NETend();
 }
@@ -208,22 +239,31 @@ static void sendPlayerLeft(uint32_t playerIndex)
 void recvPlayerLeft(NETQUEUE queue)
 {
 	uint32_t playerIndex = 0;
-
 	NETbeginDecode(queue, GAME_PLAYER_LEFT);
 		NETuint32_t(&playerIndex);
 	NETend();
+	if (whosResponsible(playerIndex) != queue.index)
+	{
+		return;
+	}
 
 	turnOffMultiMsg(true);
 	clearPlayer(playerIndex, false);  // don't do it quietly
 	turnOffMultiMsg(false);
+	NetPlay.players[playerIndex].allocated = false;
+
+	char buf[256];
+	ssprintf(buf, _("%s has Left the Game"), getPlayerName(playerIndex));
+	addConsoleMessage(buf, DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+	NETsetPlayerConnectionStatus(CONNECTIONSTATUS_PLAYER_DROPPED, playerIndex);
+
+	debug(LOG_INFO, "** player %u has dropped, in-game!", playerIndex);
 }
 
 // ////////////////////////////////////////////////////////////////////////////
 // A remote player has left the game
 bool MultiPlayerLeave(UDWORD playerIndex)
 {
-	char	buf[255];
-
 	if (playerIndex >= MAX_PLAYERS)
 	{
 		ASSERT(false, "Bad player number");
@@ -232,8 +272,6 @@ bool MultiPlayerLeave(UDWORD playerIndex)
 
 	NETlogEntry("Player leaving game", SYNC_FLAG, playerIndex);
 	debug(LOG_NET,"** Player %u [%s], has left the game at game time %u.", playerIndex, getPlayerName(playerIndex), gameTime);
-
-	ssprintf(buf, _("%s has Left the Game"), getPlayerName(playerIndex));
 
 	if (ingame.localJoiningInProgress)
 	{
@@ -245,8 +283,6 @@ bool MultiPlayerLeave(UDWORD playerIndex)
 	}
 	game.skDiff[playerIndex] = 0;
 
-	addConsoleMessage(buf, DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
-
 	if (NetPlay.players[playerIndex].wzFile.isSending)
 	{
 		char buf[256];
@@ -257,7 +293,6 @@ bool MultiPlayerLeave(UDWORD playerIndex)
 		NetPlay.players[playerIndex].wzFile.isSending = false;
 		NetPlay.players[playerIndex].needFile = false;
 	}
-	NetPlay.players[playerIndex].kick = true;  // Don't wait for GAME_GAME_TIME messages from them.
 
 	if (widgGetFromID(psWScreen, IDRET_FORM))
 	{
@@ -300,9 +335,10 @@ bool MultiPlayerJoin(UDWORD playerIndex)
 
 		// setup data for this player, then broadcast it to the other players.
 		setupNewPlayer(playerIndex);						// setup all the guff for that player.
-		sendOptions();
-		bPlayerReadyGUI[playerIndex] = false;
-
+		if (bHosted)
+		{
+			sendOptions();
+		}
 		// if skirmish and game full, then kick...
 		if (NetPlay.playercount > game.maxPlayers)
 		{
@@ -344,6 +380,12 @@ bool recvDataCheck(NETQUEUE queue)
 	uint32_t player = queue.index;
 	uint32_t tempBuffer[DATA_MAXDATA] = {0};
 
+	if(!NetPlay.isHost)				// only host should act
+	{
+		ASSERT(false, "Host only routine detected for client!");
+		return false;
+	}
+
 	NETbeginDecode(queue, NET_DATA_CHECK);
 	for(i = 0; i < DATA_MAXDATA; i++)
 	{
@@ -354,6 +396,12 @@ bool recvDataCheck(NETQUEUE queue)
 	if (player >= MAX_PLAYERS) // invalid player number.
 	{
 		debug(LOG_ERROR, "invalid player number (%u) detected.", player);
+		return false;
+	}
+
+	if (whosResponsible(player) != queue.index)
+	{
+		HandleBadParam("NET_DATA_CHECK given incorrect params.", player, queue.index);
 		return false;
 	}
 
@@ -393,7 +441,6 @@ bool recvDataCheck(NETQUEUE queue)
 void setupNewPlayer(UDWORD player)
 {
 	UDWORD i;
-	char buf[255];
 
 	ingame.PingTimes[player] = 0;					// Reset ping time
 	ingame.JoiningInProgress[player] = true;			// Note that player is now joining
@@ -409,16 +456,20 @@ void setupNewPlayer(UDWORD player)
 
 	setMultiStats(player, getMultiStats(player), true);  // get the players score
 
-	ssprintf(buf, _("%s is Joining the Game"), getPlayerName(player));
-	addConsoleMessage(buf, DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+	if (selectedPlayer != player)
+	{
+		char buf[255];
+		ssprintf(buf, _("%s is joining the game"), getPlayerName(player));
+		addConsoleMessage(buf, DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+	}
 }
 
 
 // While not the perfect place for this, it has to do when a HOST joins (hosts) game
 // unfortunatly, we don't get the message until after the setup is done.
-void showMOTD(const char* motd)
+void ShowMOTD(void)
 {
 	// when HOST joins the game, show server MOTD message first
-	addConsoleMessage(_("System message:"), DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
-	addConsoleMessage(motd, DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
+	addConsoleMessage(_("Server message:"), DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
+	addConsoleMessage(NetPlay.MOTD, DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
 }

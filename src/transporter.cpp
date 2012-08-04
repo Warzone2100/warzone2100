@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -41,6 +41,7 @@
 #include "mission.h"
 #include "objects.h"
 #include "display.h"
+#include "qtscript.h"
 #include "lib/script/script.h"
 #include "scripttabs.h"
 #include "order.h"
@@ -58,30 +59,26 @@
 #include "mapgrid.h"
 #include "visibility.h"
 #include "multiplay.h"
+#include "qtscript.h"
 
 //#define IDTRANS_FORM			9000	//The Transporter base form
 #define IDTRANS_TABFORM			9001	//The Transporter tabbed form
 #define IDTRANS_CLOSE			9002	//The close button icon
-//#define IDTRANS_CONTENTFORM		9003	//The Transporter Contents form
 #define	IDTRANS_CONTABFORM		9004	//The Transporter Contents tabbed form
 #define IDTRANS_CONTCLOSE		9005	//The close icon on the Contents form
-//#define IDTRANS_DROIDS			9006	//The Droid base form
 #define IDTRANS_DROIDTAB		9007	//The Droid tab form
 #define IDTRANS_DROIDCLOSE		9008	//The close icon for the Droid form
-//#define IDTRANS_LAUNCH			9010	//The Transporter Launch button
 
 #define IDTRANS_START			9100	//The first button on the Transporter tab form
-#define	IDTRANS_END				9199	//The last button on the Transporter tab form
+#define	IDTRANS_END			9199	//The last button on the Transporter tab form
 #define IDTRANS_STATSTART		9200	//The status button for the first Transporter
 #define IDTRANS_STATEND			9299	//The status button for the last Transporter
 #define IDTRANS_CONTSTART		9300	//The first button on the Transporter contents tab form
 #define	IDTRANS_CONTEND			9399	//The last button on the Transporter contents tab form
 #define	IDTRANS_DROIDSTART		9400	//The first button on the Droid tab form
 #define	IDTRANS_DROIDEND		9499	//The last button on the Droid tab form
-#define IDTRANS_REPAIRBARSTART  9600    //The first repair status bar on Droid button
-#define IDTRANS_REPAIRBAREND    9699    //The last repair status bar on Droid button
-
-//#define	IDTRANS_CAPACITY		9500	//The capacity label
+#define IDTRANS_REPAIRBARSTART		9600    //The first repair status bar on Droid button
+#define IDTRANS_REPAIRBAREND		9699    //The last repair status bar on Droid button
 
 /* Transporter screen positions */
 #define TRANS_X					OBJ_BACKX
@@ -150,22 +147,20 @@ static  UWORD           objMajor = 0, objMinor = 0;
 
 /*functions */
 static bool intAddTransporterContents(void);
-static void transporterRemoveDroid(UDWORD id);
 static void setCurrentTransporter(UDWORD id);
 static void intRemoveTransContentNoAnim(void);
 static bool intAddTransButtonForm(void);
 static bool intAddTransContentsForm(void);
 static bool intAddDroidsAvailForm(void);
 void intRemoveTransContent(void);
-static UDWORD transporterSpaceRequired(DROID *psDroid);
-static DROID* transInterfaceDroidList(void);
+static UDWORD transporterSpaceRequired(DROID const *psDroid);
+static DROID *transInterfaceDroidList(void);
 static void intTransporterAddDroid(UDWORD id);
 static void intRemoveTransDroidsAvail(void);
 static void intRemoveTransDroidsAvailNoAnim(void);
 static bool _intRefreshTransporter(void);
 static bool _intAddTransporter(DROID *psSelected, bool offWorld);
 static void _intProcessTransporter(UDWORD id);
-
 
 //initialises Transporter variables
 void initTransporters(void)
@@ -174,26 +169,22 @@ void initTransporters(void)
 	psCurrTransporter = NULL;
 }
 
-
 // Call to refresh the transporter screen, ie when a droids boards it.
 //
 bool intRefreshTransporter(void)
 {
-//printf("intRefreshTransporter\n");
-
 	return _intRefreshTransporter();
 }
-
 
 static bool _intRefreshTransporter(void)
 {
 	// Is the transporter screen up?
-	if( (intMode == INT_TRANSPORTER) &&
-		(widgGetFromID(psWScreen,IDTRANS_FORM) != NULL))
+	if ((intMode == INT_TRANSPORTER) &&
+	    (widgGetFromID(psWScreen, IDTRANS_FORM) != NULL))
 	{
 		bool Ret;
 		// Refresh it by re-adding it.
-		Ret = intAddTransporter(psCurrTransporter,onMission);
+		Ret = intAddTransporter(psCurrTransporter, onMission);
 		intMode = INT_TRANSPORTER;
 		return Ret;
 	}
@@ -201,13 +192,10 @@ static bool _intRefreshTransporter(void)
 	return true;
 }
 
-
 bool intAddTransporter(DROID *psSelected, bool offWorld)
 {
-
-	return(_intAddTransporter(psSelected,offWorld));
+	return(_intAddTransporter(psSelected, offWorld));
 }
-
 
 /*Add the Transporter Interface*/
 static bool _intAddTransporter(DROID *psSelected, bool offWorld)
@@ -217,27 +205,28 @@ static bool _intAddTransporter(DROID *psSelected, bool offWorld)
 	onMission = offWorld;
 	psCurrTransporter = psSelected;
 
-    /*if transporter has died - close the interface - this can only happen in
-    multiPlayer where the transporter can be killed*/
-    if (bMultiPlayer)
-    {
-        if (psCurrTransporter && isDead((BASE_OBJECT *)psCurrTransporter))
-        {
-            intRemoveTransNoAnim();
-            return true;
-        }
-    }
+	/*if transporter has died - close the interface - this can only happen in
+	multiPlayer where the transporter can be killed*/
+	if (bMultiPlayer)
+	{
+		if (psCurrTransporter && isDead((BASE_OBJECT *)psCurrTransporter))
+		{
+			intRemoveTransNoAnim();
+			return true;
+		}
+	}
 
 	// Add the main Transporter form
 	// Is the form already up?
-	if(widgGetFromID(psWScreen,IDTRANS_FORM) != NULL)
+	if (widgGetFromID(psWScreen, IDTRANS_FORM) != NULL)
 	{
 		intRemoveTransNoAnim();
 		Animate = false;
 	}
 
 
-	if(intIsRefreshing()) {
+	if (intIsRefreshing())
+	{
 		Animate = false;
 	}
 
@@ -249,8 +238,8 @@ static bool _intAddTransporter(DROID *psSelected, bool offWorld)
 	sFormInit.y = (SWORD)TRANS_Y;
 	sFormInit.width = TRANS_WIDTH;
 	sFormInit.height = TRANS_HEIGHT;
-// If the window was closed then do open animation.
-	if(Animate)
+	// If the window was closed then do open animation.
+	if (Animate)
 	{
 		sFormInit.pDisplay = intOpenPlainForm;
 		sFormInit.disableChildren = true;
@@ -276,7 +265,7 @@ static bool _intAddTransporter(DROID *psSelected, bool offWorld)
 	sButInit.height = CLOSE_HEIGHT;
 	sButInit.pTip = _("Close");
 	sButInit.pDisplay = intDisplayImageHilight;
-	sButInit.UserData = PACKDWORD_TRI(0,IMAGE_CLOSEHILIGHT , IMAGE_CLOSE);
+	sButInit.UserData = PACKDWORD_TRI(0, IMAGE_CLOSEHILIGHT , IMAGE_CLOSE);
 	if (!widgAddButton(psWScreen, &sButInit))
 	{
 		return false;
@@ -311,14 +300,15 @@ bool intAddTransporterContents(void)
 {
 	bool			Animate = true;
 
-    // Is the form already up?
-	if(widgGetFromID(psWScreen,IDTRANS_CONTENTFORM) != NULL)
+	// Is the form already up?
+	if (widgGetFromID(psWScreen, IDTRANS_CONTENTFORM) != NULL)
 	{
 		intRemoveTransContentNoAnim();
 		Animate = false;
 	}
 
-	if(intIsRefreshing()) {
+	if (intIsRefreshing())
+	{
 		Animate = false;
 	}
 
@@ -330,8 +320,8 @@ bool intAddTransporterContents(void)
 	sFormInit.y = (SWORD)TRANSCONT_Y;
 	sFormInit.width = TRANSCONT_WIDTH;
 	sFormInit.height = TRANSCONT_HEIGHT;
-// If the window was closed then do open animation.
-	if(Animate)
+	// If the window was closed then do open animation.
+	if (Animate)
 	{
 		sFormInit.pDisplay = intOpenPlainForm;
 		sFormInit.disableChildren = true;
@@ -357,7 +347,7 @@ bool intAddTransporterContents(void)
 	sButInit.height = CLOSE_HEIGHT;
 	sButInit.pTip = _("Close");
 	sButInit.pDisplay = intDisplayImageHilight;
-	sButInit.UserData = PACKDWORD_TRI(0,IMAGE_CLOSEHILIGHT , IMAGE_CLOSE);
+	sButInit.UserData = PACKDWORD_TRI(0, IMAGE_CLOSEHILIGHT , IMAGE_CLOSE);
 	if (!widgAddButton(psWScreen, &sButInit))
 	{
 		return false;
@@ -368,7 +358,7 @@ bool intAddTransporterContents(void)
 		W_LABINIT sLabInit;
 		sLabInit.formID = IDTRANS_CONTENTFORM;
 		sLabInit.id = IDTRANS_CAPACITY;
-		sLabInit.x = (SWORD)sButInit.x -40;
+		sLabInit.x = (SWORD)sButInit.x - 40;
 		sLabInit.y = 0;
 		sLabInit.width = 16;
 		sLabInit.height = 16;
@@ -390,13 +380,13 @@ bool intAddTransporterContents(void)
 		sButFInit.x = OBJ_STARTX;
 		sButFInit.y = (UWORD)(STAT_SLDY - 1);
 
-		sButFInit.width = iV_GetImageWidth(IntImages,IMAGE_LAUNCHUP);
-		sButFInit.height = iV_GetImageHeight(IntImages,IMAGE_LAUNCHUP);
+		sButFInit.width = iV_GetImageWidth(IntImages, IMAGE_LAUNCHUP);
+		sButFInit.height = iV_GetImageHeight(IntImages, IMAGE_LAUNCHUP);
 		sButFInit.pTip = _("Launch Transport");
 		//sButInit.pText = "Launch";
 		sButFInit.pDisplay = intDisplayImageHilight;
 
-		sButFInit.UserData = PACKDWORD_TRI(0,IMAGE_LAUNCHDOWN,IMAGE_LAUNCHUP);
+		sButFInit.UserData = PACKDWORD_TRI(0, IMAGE_LAUNCHDOWN, IMAGE_LAUNCHUP);
 
 		if (!widgAddForm(psWScreen, &sButFInit))
 		{
@@ -415,20 +405,20 @@ bool intAddTransporterContents(void)
 /*This is used to display the transporter button and capacity when at the home base ONLY*/
 bool intAddTransporterLaunch(DROID *psDroid)
 {
-    UDWORD          capacity;
-    DROID           *psCurr, *psNext;
+	UDWORD          capacity;
+	DROID           *psCurr, *psNext;
 
-    if (bMultiPlayer)
-    {
-        return true;
-    }
+	if (bMultiPlayer)
+	{
+		return true;
+	}
 
-    //do this first so that if the interface is already up it syncs with this transporter
+	//do this first so that if the interface is already up it syncs with this transporter
 	//set up the static transporter
 	psCurrTransporter = psDroid;
 
-    //check the button is not already up
-	if(widgGetFromID(psWScreen,IDTRANS_LAUNCH) != NULL)
+	//check the button is not already up
+	if (widgGetFromID(psWScreen, IDTRANS_LAUNCH) != NULL)
 	{
 		return true;
 	}
@@ -439,11 +429,11 @@ bool intAddTransporterLaunch(DROID *psDroid)
 	sButInit.style = WFORM_CLICKABLE | WFORM_NOCLICKMOVE;
 	sButInit.x = RET_X;
 	sButInit.y = (SWORD)TIMER_Y;
-	sButInit.width = (UWORD)(10 + iV_GetImageWidth(IntImages,IMAGE_LAUNCHUP));
-	sButInit.height = iV_GetImageHeight(IntImages,IMAGE_LAUNCHUP);
+	sButInit.width = (UWORD)(10 + iV_GetImageWidth(IntImages, IMAGE_LAUNCHUP));
+	sButInit.height = iV_GetImageHeight(IntImages, IMAGE_LAUNCHUP);
 	sButInit.pTip = _("Launch Transport");
 	sButInit.pDisplay = intDisplayImageHilight;
-	sButInit.UserData = PACKDWORD_TRI(0,IMAGE_LAUNCHDOWN,IMAGE_LAUNCHUP);
+	sButInit.UserData = PACKDWORD_TRI(0, IMAGE_LAUNCHDOWN, IMAGE_LAUNCHUP);
 	if (!widgAddForm(psWScreen, &sButInit))
 	{
 		return false;
@@ -464,24 +454,24 @@ bool intAddTransporterLaunch(DROID *psDroid)
 		return false;
 	}
 
-    //when full flash the transporter button
-    if (psCurrTransporter && psCurrTransporter->psGroup)
-    {
-	    capacity = TRANSPORTER_CAPACITY;
-	    for (psCurr = psCurrTransporter->psGroup->psList; psCurr != NULL;
-            psCurr = psNext)
-	    {
-            psNext = psCurr->psGrpNext;
-            if (psCurr != psCurrTransporter)
-            {
-	    	    capacity -= transporterSpaceRequired(psCurr);
-            }
-	    }
-        if (capacity <= 0)
-        {
-            flashMissionButton(IDTRANS_LAUNCH);
-        }
-    }
+	//when full flash the transporter button
+	if (psCurrTransporter && psCurrTransporter->psGroup)
+	{
+		capacity = TRANSPORTER_CAPACITY;
+		for (psCurr = psCurrTransporter->psGroup->psList; psCurr != NULL;
+		     psCurr = psNext)
+		{
+			psNext = psCurr->psGrpNext;
+			if (psCurr != psCurrTransporter)
+			{
+				capacity -= transporterSpaceRequired(psCurr);
+			}
+		}
+		if (capacity <= 0)
+		{
+			flashMissionButton(IDTRANS_LAUNCH);
+		}
+	}
 
 
 
@@ -491,7 +481,7 @@ bool intAddTransporterLaunch(DROID *psDroid)
 /* Remove the Transporter Launch widget from the screen*/
 void intRemoveTransporterLaunch(void)
 {
-	if(widgGetFromID(psWScreen,IDTRANS_LAUNCH) != NULL)
+	if (widgGetFromID(psWScreen, IDTRANS_LAUNCH) != NULL)
 	{
 		widgDelete(psWScreen, IDTRANS_LAUNCH);
 	}
@@ -518,17 +508,17 @@ bool intAddTransButtonForm(void)
 	sFormInit.minorPos = WFORM_TABNONE;
 	sFormInit.majorSize = OBJ_TABWIDTH;
 	sFormInit.majorOffset = OBJ_TABOFFSET;
-	sFormInit.tabVertOffset = (OBJ_TABHEIGHT/2);
+	sFormInit.tabVertOffset = (OBJ_TABHEIGHT / 2);
 	sFormInit.tabMajorThickness = OBJ_TABHEIGHT;
 
 	numButtons = 0;
 	/*work out the number of buttons */
-	for(psDroid = transInterfaceDroidList(); psDroid; psDroid = psDroid->psNext)
+	for (psDroid = transInterfaceDroidList(); psDroid; psDroid = psDroid->psNext)
 	{
 		//only interested in Transporter droids
-		if (  psDroid->droidType == DROID_TRANSPORTER &&
-			 (psDroid->action != DACTION_TRANSPORTOUT &&
-			  psDroid->action != DACTION_TRANSPORTIN     ) )
+		if ((psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER) &&
+		    (psDroid->action != DACTION_TRANSPORTOUT &&
+		     psDroid->action != DACTION_TRANSPORTIN))
 		{
 			//set the first Transporter to be the current one if not already set
 			if (psCurrTransporter == NULL)
@@ -541,18 +531,19 @@ bool intAddTransButtonForm(void)
 
 	//set the number of tabs required
 	sFormInit.numMajor = numForms((OBJ_BUTWIDTH + OBJ_GAP) * numButtons,
-								  OBJ_WIDTH - OBJ_GAP);
+	        OBJ_WIDTH - OBJ_GAP);
 
 	sFormInit.pUserData = &StandardTab;
 	sFormInit.pTabDisplay = intDisplayTab;
 
 	if (sFormInit.numMajor > MAX_TAB_STD_SHOWN)
-	{	// we do NOT use smallTab icons here, so be safe and only display max # of
+	{
+		// we do NOT use smallTab icons here, so be safe and only display max # of
 		// standard sized tab icons.
 		sFormInit.numMajor = MAX_TAB_STD_SHOWN;
 	}
 	//set minor tabs to 1
-	for (i=0; i< sFormInit.numMajor; i++)
+	for (i = 0; i < sFormInit.numMajor; i++)
 	{
 		sFormInit.aNumMinors[i] = 1;
 	}
@@ -583,20 +574,20 @@ bool intAddTransButtonForm(void)
 	ClearTopicBuffers();
 
 	//add each button
-	for(psDroid = transInterfaceDroidList(); psDroid; psDroid = psDroid->psNext)
+	for (psDroid = transInterfaceDroidList(); psDroid; psDroid = psDroid->psNext)
 	{
-		if ( psDroid->droidType == DROID_TRANSPORTER &&
-			 (psDroid->action != DACTION_TRANSPORTOUT &&
-			  psDroid->action != DACTION_TRANSPORTIN     ) )
+		if ((psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER) &&
+		    (psDroid->action != DACTION_TRANSPORTOUT &&
+		     psDroid->action != DACTION_TRANSPORTIN))
 		{
 			/* Set the tip and add the button */
 			sBFormInit.pTip = droidGetName(psDroid);
 
-			BufferID = sBFormInit.id-IDTRANS_START;
-			ASSERT( BufferID < NUM_TOPICBUFFERS,"BufferID > NUM_TOPICBUFFERS" );
+			BufferID = sBFormInit.id - IDTRANS_START;
+			ASSERT(BufferID < NUM_TOPICBUFFERS, "BufferID > NUM_TOPICBUFFERS");
 			ClearTopicButtonBuffer(BufferID);
 			RENDERBUTTON_INUSE(&TopicBuffers[BufferID]);
-			TopicBuffers[BufferID].Data = (void*)psDroid;
+			TopicBuffers[BufferID].Data = (void *)psDroid;
 			sBFormInit.pUserData = &TopicBuffers[BufferID];
 			sBFormInit.pDisplay = intDisplayObjectButton;
 
@@ -616,8 +607,8 @@ bool intAddTransButtonForm(void)
 			//now do status button
 			sBFormInit2.pTip = NULL;
 
-			BufferID = (sBFormInit2.id-IDTRANS_STATSTART)*2+1;
-			ASSERT( BufferID < NUM_OBJECTBUFFERS,"BufferID > NUM_OBJECTBUFFERS" );
+			BufferID = (sBFormInit2.id - IDTRANS_STATSTART) * 2 + 1;
+			ASSERT(BufferID < NUM_OBJECTBUFFERS, "BufferID > NUM_OBJECTBUFFERS");
 			ClearObjectButtonBuffer(BufferID);
 			RENDERBUTTON_INUSE(&ObjectBuffers[BufferID]);
 			sBFormInit2.pUserData = &ObjectBuffers[BufferID];
@@ -631,7 +622,7 @@ bool intAddTransButtonForm(void)
 
 			/* Update the init struct for the next buttons */
 			sBFormInit.id += 1;
-			ASSERT( sBFormInit.id < IDTRANS_END,"Too many Transporter buttons" );
+			ASSERT(sBFormInit.id < IDTRANS_END, "Too many Transporter buttons");
 
 			sBFormInit.x += OBJ_BUTWIDTH + OBJ_GAP;
 			if (sBFormInit.x + OBJ_BUTWIDTH + OBJ_GAP > OBJ_WIDTH)
@@ -641,7 +632,7 @@ bool intAddTransButtonForm(void)
 			}
 
 			sBFormInit2.id += 1;
-			ASSERT( sBFormInit2.id < IDTRANS_STATEND,"Too many Transporter status buttons" );
+			ASSERT(sBFormInit2.id < IDTRANS_STATEND, "Too many Transporter status buttons");
 
 			sBFormInit2.x += OBJ_BUTWIDTH + OBJ_GAP;
 			if (sBFormInit2.x + OBJ_BUTWIDTH + OBJ_GAP > OBJ_WIDTH)
@@ -675,7 +666,7 @@ bool intAddTransContentsForm(void)
 	sFormInit.minorPos = WFORM_TABNONE;
 	sFormInit.majorSize = OBJ_TABWIDTH;
 	sFormInit.majorOffset = OBJ_TABOFFSET;
-	sFormInit.tabVertOffset = (OBJ_TABHEIGHT/2);
+	sFormInit.tabVertOffset = (OBJ_TABHEIGHT / 2);
 	sFormInit.tabMajorThickness = OBJ_TABHEIGHT;
 
 	//set the number of tabs required
@@ -686,7 +677,7 @@ bool intAddTransContentsForm(void)
 	sFormInit.numMajor = 1;
 
 	//set minor tabs to 1
-	for (i=0; i< sFormInit.numMajor; i++)
+	for (i = 0; i < sFormInit.numMajor; i++)
 	{
 		sFormInit.aNumMinors[i] = 1;
 	}
@@ -698,8 +689,6 @@ bool intAddTransContentsForm(void)
 	{
 		return false;
 	}
-
-
 
 	/* Add the transporter contents buttons */
 	W_FORMINIT sBFormInit;
@@ -719,15 +708,19 @@ bool intAddTransContentsForm(void)
 	if (psCurrTransporter != NULL)
 	{
 		for (psDroid = psCurrTransporter->psGroup->psList; psDroid != NULL && psDroid !=
-			psCurrTransporter; psDroid = psNext)
+		     psCurrTransporter; psDroid = psNext)
 		{
 			psNext = psDroid->psGrpNext;
+			if (psDroid->selected)
+			{
+				continue;  // Droid is queued to be ejected from the transport, so don't display it.
+			}
 			/* Set the tip and add the button */
 			sBFormInit.pTip = droidGetName(psDroid);
 			BufferID = GetStatBuffer();
-			ASSERT( BufferID >= 0,"Unable to acquire stat buffer." );
+			ASSERT(BufferID >= 0, "Unable to acquire stat buffer.");
 			RENDERBUTTON_INUSE(&StatBuffers[BufferID]);
-			StatBuffers[BufferID].Data = (void*)psDroid;
+			StatBuffers[BufferID].Data = (void *)psDroid;
 			sBFormInit.pUserData = &StatBuffers[BufferID];
 			sBFormInit.pDisplay = intDisplayTransportButton;
 
@@ -738,7 +731,7 @@ bool intAddTransContentsForm(void)
 
 			/* Update the init struct for the next button */
 			sBFormInit.id += 1;
-			ASSERT( sBFormInit.id < IDTRANS_CONTEND,"Too many Transporter Droid buttons" );
+			ASSERT(sBFormInit.id < IDTRANS_CONTEND, "Too many Transporter Droid buttons");
 
 			sBFormInit.x += OBJ_BUTWIDTH + OBJ_GAP;
 			if (sBFormInit.x + OBJ_BUTWIDTH + OBJ_GAP > TRANSCONT_WIDTH)
@@ -766,17 +759,16 @@ bool intAddDroidsAvailForm(void)
 	bool			Animate = true;
 
 	// Is the form already up?
-	if(widgGetFromID(psWScreen,IDTRANS_DROIDS) != NULL)
+	if (widgGetFromID(psWScreen, IDTRANS_DROIDS) != NULL)
 	{
 		intRemoveTransDroidsAvailNoAnim();
 		Animate = false;
 	}
 
-
-	if(intIsRefreshing()) {
+	if (intIsRefreshing())
+	{
 		Animate = false;
 	}
-
 
 	/* Add the droids available form */
 	W_FORMINIT sFormInit;
@@ -788,8 +780,8 @@ bool intAddDroidsAvailForm(void)
 	sFormInit.x = (SWORD)TRANSDROID_X;
 	sFormInit.y = (SWORD)TRANSDROID_Y;
 
-// If the window was closed then do open animation.
-	if(Animate)
+	// If the window was closed then do open animation.
+	if (Animate)
 	{
 		sFormInit.pDisplay = intOpenPlainForm;
 		sFormInit.disableChildren = true;
@@ -805,7 +797,6 @@ bool intAddDroidsAvailForm(void)
 		return false;
 	}
 
-
 	/* Add the close button */
 	W_BUTINIT sButInit;
 	sButInit.formID = IDTRANS_DROIDS;
@@ -816,12 +807,11 @@ bool intAddDroidsAvailForm(void)
 	sButInit.height = CLOSE_HEIGHT;
 	sButInit.pTip = _("Close");
 	sButInit.pDisplay = intDisplayImageHilight;
-	sButInit.UserData = PACKDWORD_TRI(0,IMAGE_CLOSEHILIGHT , IMAGE_CLOSE);
+	sButInit.UserData = PACKDWORD_TRI(0, IMAGE_CLOSEHILIGHT , IMAGE_CLOSE);
 	if (!widgAddButton(psWScreen, &sButInit))
 	{
 		return false;
 	}
-
 
 	//now add the tabbed droids available form
 	sFormInit = W_FORMINIT();
@@ -836,21 +826,20 @@ bool intAddDroidsAvailForm(void)
 	sFormInit.majorPos = WFORM_TABTOP;
 	sFormInit.minorPos = WFORM_TABNONE;
 
-	sFormInit.majorSize = (OBJ_TABWIDTH/2);
+	sFormInit.majorSize = (OBJ_TABWIDTH / 2);
 
 	sFormInit.majorOffset = OBJ_TABOFFSET;
-	sFormInit.tabVertOffset = (OBJ_TABHEIGHT/2);
+	sFormInit.tabVertOffset = (OBJ_TABHEIGHT / 2);
 	sFormInit.tabMajorThickness = OBJ_TABHEIGHT;
 	sFormInit.tabMajorGap = OBJ_TABOFFSET;
 
 	//calc num buttons
 	numButtons = 0;
 	//look through the list of droids that were built before the mission
-	for(psDroid = mission.apsDroidLists[selectedPlayer]; psDroid; psDroid =
-		psDroid->psNext)
+	for (psDroid = mission.apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
 	{
 		//ignore any Transporters!
-		if (psDroid->droidType != DROID_TRANSPORTER)
+		if (psDroid->droidType != DROID_TRANSPORTER && psDroid->droidType != DROID_SUPERTRANSPORTER)
 		{
 			numButtons++;
 		}
@@ -862,18 +851,19 @@ bool intAddDroidsAvailForm(void)
 	}
 
 	butPerForm = ((TRANSDROID_TABWIDTH - OBJ_GAP) /
-						(OBJ_BUTWIDTH + OBJ_GAP)) *
-				 ((TRANSDROID_TABHEIGHT - OBJ_GAP) /
-						(OBJ_BUTHEIGHT + OBJ_GAP));
+	        (OBJ_BUTWIDTH + OBJ_GAP)) *
+	        ((TRANSDROID_TABHEIGHT - OBJ_GAP) /
+	                (OBJ_BUTHEIGHT + OBJ_GAP));
 
 	sFormInit.numMajor = numForms(numButtons, butPerForm);
 	if (sFormInit.numMajor > MAX_TAB_SMALL_SHOWN)
-	{	// we DO use smallTab icons here, so be safe and only display max # of
+	{
+		// we DO use smallTab icons here, so be safe and only display max # of
 		// small sized tab icons. No scrolltabs here.
 		sFormInit.numMajor = MAX_TAB_SMALL_SHOWN;
 	}
 	//set minor tabs to 1
-	for (i=0; i< sFormInit.numMajor; i++)
+	for (i = 0; i < sFormInit.numMajor; i++)
 	{
 		sFormInit.aNumMinors[i] = 1;
 	}
@@ -886,8 +876,6 @@ bool intAddDroidsAvailForm(void)
 	{
 		return false;
 	}
-
-
 
 	/* Add the droids available buttons */
 	W_FORMINIT sBFormInit;
@@ -903,7 +891,7 @@ bool intAddDroidsAvailForm(void)
 
 	ClearSystem0Buffers();
 
-    /* Add the state of repair bar for each droid*/
+	/* Add the state of repair bar for each droid*/
 	W_BARINIT sBarInit;
 	sBarInit.id = IDTRANS_REPAIRBARSTART;
 	sBarInit.x = STAT_TIMEBARX;
@@ -915,8 +903,7 @@ bool intAddDroidsAvailForm(void)
 	sBarInit.sMinorCol = WZCOL_ACTION_PROGRESS_BAR_MINOR;
 
 	//add droids built before the mission
-	for (psDroid = mission.apsDroidLists[selectedPlayer]; psDroid != NULL;
-		psDroid = psDroid->psNext)
+	for (psDroid = mission.apsDroidLists[selectedPlayer]; psDroid != NULL; psDroid = psDroid->psNext)
 	{
 		//stop adding the buttons once MAX_DROIDS has been reached
 		if (sBFormInit.id == (IDTRANS_DROIDSTART + MAX_DROIDS))
@@ -924,15 +911,14 @@ bool intAddDroidsAvailForm(void)
 			break;
 		}
 		//don't add Transporter Droids!
-		if (psDroid->droidType != DROID_TRANSPORTER)
+		if ((psDroid->droidType != DROID_TRANSPORTER && psDroid->droidType != DROID_SUPERTRANSPORTER))
 		{
 			/* Set the tip and add the button */
-//			sBFormInit.pTip = psDroid->pName;
 			sBFormInit.pTip = droidGetName(psDroid);
 			BufferID = GetSystem0Buffer();
-			ASSERT( BufferID >= 0,"Unable to acquire stat buffer." );
+			ASSERT(BufferID >= 0, "Unable to acquire stat buffer.");
 			RENDERBUTTON_INUSE(&System0Buffers[BufferID]);
-			System0Buffers[BufferID].Data = (void*)psDroid;
+			System0Buffers[BufferID].Data = (void *)psDroid;
 			sBFormInit.pUserData = &System0Buffers[BufferID];
 			sBFormInit.pDisplay = intDisplayTransportButton;
 
@@ -941,12 +927,12 @@ bool intAddDroidsAvailForm(void)
 				return false;
 			}
 
-            //add bar to indicate stare of repair
+			//add bar to indicate stare of repair
 			sBarInit.size = (UWORD) PERCENT(psDroid->body, psDroid->originalBody);
-			if(sBarInit.size > 100)
-            {
-                sBarInit.size = 100;
-            }
+			if (sBarInit.size > 100)
+			{
+				sBarInit.size = 100;
+			}
 
 			sBarInit.formID = sBFormInit.id;
 			//sBarInit.iRange = TBAR_MAX_REPAIR;
@@ -957,7 +943,7 @@ bool intAddDroidsAvailForm(void)
 
 			/* Update the init struct for the next button */
 			sBFormInit.id += 1;
-			ASSERT( sBFormInit.id < IDTRANS_DROIDEND,"Too many Droids Built buttons" );
+			ASSERT(sBFormInit.id < IDTRANS_DROIDEND, "Too many Droids Built buttons");
 
 			sBFormInit.x += OBJ_BUTWIDTH + OBJ_GAP;
 			if (sBFormInit.x + OBJ_BUTWIDTH + OBJ_GAP > TRANSDROID_TABWIDTH)
@@ -971,33 +957,32 @@ bool intAddDroidsAvailForm(void)
 				sBFormInit.y = AVAIL_STARTY;
 				sBFormInit.majorID += 1;
 			}
-            //and bar
-    		sBarInit.id += 1;
+			//and bar
+			sBarInit.id += 1;
 		}
 	}
 
-    //reset which tab we were on
+	//reset which tab we were on
 	if (objMajor > (UWORD)(sFormInit.numMajor - 1))
-    {
-        //set to last if have lost a tab
-        widgSetTabs(psWScreen, IDTRANS_DROIDTAB, (UWORD)(sFormInit.numMajor-1), objMinor);
-    }
-    else
-    {
-        //set to same tab we were on previously
-        widgSetTabs(psWScreen, IDTRANS_DROIDTAB, objMajor, objMinor);
-    }
+	{
+		//set to last if have lost a tab
+		widgSetTabs(psWScreen, IDTRANS_DROIDTAB, (UWORD)(sFormInit.numMajor - 1), objMinor);
+	}
+	else
+	{
+		//set to same tab we were on previously
+		widgSetTabs(psWScreen, IDTRANS_DROIDTAB, objMajor, objMinor);
+	}
 
 	return true;
 }
-
 
 /*calculates how much space is remaining on the transporter - allows droids to take
 up different amount depending on their body size - currently all are set to one!*/
 UDWORD calcRemainingCapacity(DROID *psTransporter)
 {
 	SDWORD	capacity = TRANSPORTER_CAPACITY;
-	DROID *psDroid,*psNext;
+	DROID *psDroid, *psNext;
 
 	// If it's dead then just return 0.
 	if (isDead((BASE_OBJECT *)psTransporter))
@@ -1006,28 +991,30 @@ UDWORD calcRemainingCapacity(DROID *psTransporter)
 	}
 
 	for (psDroid = psTransporter->psGroup->psList; psDroid != NULL && psDroid !=
-		psTransporter; psDroid = psNext)
+	     psTransporter; psDroid = psNext)
 	{
 		psNext = psDroid->psGrpNext;
 		capacity -= transporterSpaceRequired(psDroid);
 	}
 
-
-	if(capacity < 0) capacity = 0;
+	if (capacity < 0)
+	{
+		capacity = 0;
+	}
 
 	return (UDWORD)capacity;
 }
 
-bool transporterIsEmpty(const DROID* psTransporter)
+bool transporterIsEmpty(const DROID *psTransporter)
 {
-	ASSERT(psTransporter->droidType == DROID_TRANSPORTER, "Non-transporter droid given");
+	ASSERT((psTransporter->droidType == DROID_TRANSPORTER || psTransporter->droidType == DROID_SUPERTRANSPORTER), "Non-transporter droid given");
 
 	// Assume dead droids and non-transporter droids to be empty
-	return (isDead((const BASE_OBJECT*)psTransporter)
-	     || psTransporter->droidType != DROID_TRANSPORTER
-
-	     || psTransporter->psGroup->psList == NULL
-	     || psTransporter->psGroup->psList == psTransporter);
+	return (isDead((const BASE_OBJECT *)psTransporter)
+	        || (psTransporter->droidType != DROID_TRANSPORTER
+	                && psTransporter->droidType != DROID_SUPERTRANSPORTER)
+	        || psTransporter->psGroup->psList == NULL
+	        || psTransporter->psGroup->psList == psTransporter);
 }
 
 static void intSetTransCapacityLabel(char *Label)
@@ -1038,31 +1025,27 @@ static void intSetTransCapacityLabel(char *Label)
 	{
 		capacity = calcRemainingCapacity(psCurrTransporter);
 
-		
 		//change round the way the remaining capacity is displayed - show 0/10 when empty now
 		capacity = TRANSPORTER_CAPACITY - capacity;
 
-		Label[0] = (UBYTE)('0'+capacity / 10);
-		Label[1] = (UBYTE)('0'+capacity % 10);
+		Label[0] = (UBYTE)('0' + capacity / 10);
+		Label[1] = (UBYTE)('0' + capacity % 10);
 	}
 }
-
 
 /*updates the capacity of the current Transporter*/
 void intUpdateTransCapacity(WIDGET *psWidget, W_CONTEXT *psContext)
 {
-	W_LABEL		*Label = (W_LABEL*)psWidget;
+	W_LABEL		*Label = (W_LABEL *)psWidget;
 
 	intSetTransCapacityLabel(Label->aText);
 }
-
 
 /* Process return codes from the Transporter Screen*/
 void intProcessTransporter(UDWORD id)
 {
 	_intProcessTransporter(id);
 }
-
 
 static void _intProcessTransporter(UDWORD id)
 {
@@ -1077,16 +1060,33 @@ static void _intProcessTransporter(UDWORD id)
 	{
 		//got to have a current transporter for this to work - and can't be flying
 		if (psCurrTransporter != NULL && !transporterFlying(psCurrTransporter))
-        {
-    		transporterRemoveDroid(id);
-	    	/*refresh the Contents list */
-		    intAddTransporterContents();
-    		if (onMission)
-	    	{
-		    	/*refresh the Avail list */
-			    intAddDroidsAvailForm();
-		    }
-        }
+		{
+			unsigned currID = IDTRANS_CONTSTART;
+			DROID *psDroid;
+			for (psDroid = psCurrTransporter->psGroup->psList; psDroid != NULL && psDroid != psCurrTransporter; psDroid = psDroid->psGrpNext)
+			{
+				if (psDroid->selected)
+				{
+					continue;  // Already scheduled this droid for removal.
+				}
+				if (currID == id)
+				{
+					break;
+				}
+				currID++;
+			}
+			if (psDroid != NULL)
+			{
+				transporterRemoveDroid(psCurrTransporter, psDroid, ModeQueue);
+			}
+			/*refresh the Contents list */
+			intAddTransporterContents();
+			if (onMission)
+			{
+				/*refresh the Avail list */
+				intAddDroidsAvailForm();
+			}
+		}
 	}
 	else if (id == IDTRANS_CLOSE)
 	{
@@ -1108,41 +1108,40 @@ static void _intProcessTransporter(UDWORD id)
 		if (psCurrTransporter != NULL && !transporterFlying(psCurrTransporter))
 		{
 			intTransporterAddDroid(id);
-            /*don't need to explicitly refresh here since intRefreshScreen()
-            is called by intTransporterAddDroid()*/
+			/*don't need to explicitly refresh here since intRefreshScreen()
+			is called by intTransporterAddDroid()*/
 			/*refresh the Contents list */
 			//intAddTransporterContents();
 			/*refresh the Avail list */
 			//intAddDroidsAvailForm();
 		}
 	}
-// Process form tab clicks.
+	// Process form tab clicks.
 	else if (id == IDTRANS_TABFORM)
-    {
-        //If tab clicked on Transporter screen then refresh rendered buttons.
+	{
+		//If tab clicked on Transporter screen then refresh rendered buttons.
 		RefreshObjectButtons();
 		RefreshTopicButtons();
-    }
-    else if (id == IDTRANS_CONTABFORM)
-    {
-        //If tab clicked on Transporter Contents screen then refresh rendered buttons.
+	}
+	else if (id == IDTRANS_CONTABFORM)
+	{
+		//If tab clicked on Transporter Contents screen then refresh rendered buttons.
 		RefreshStatsButtons();
-    }
-    else if (id == IDTRANS_DROIDTAB)
-    {
-        //If tab clicked on Droids Available screen then refresh rendered buttons.
+	}
+	else if (id == IDTRANS_DROIDTAB)
+	{
+		//If tab clicked on Droids Available screen then refresh rendered buttons.
 		RefreshSystem0Buttons();
-    }
+	}
 }
 
 /* Remove the Transporter widgets from the screen */
 void intRemoveTrans(void)
 {
-
 	W_TABFORM *Form;
 
 	// Start the window close animation.
-	Form = (W_TABFORM*)widgGetFromID(psWScreen,IDTRANS_FORM);
+	Form = (W_TABFORM *)widgGetFromID(psWScreen, IDTRANS_FORM);
 	if (Form)
 	{
 		Form->display = intClosePlainForm;
@@ -1154,7 +1153,6 @@ void intRemoveTrans(void)
 	intRemoveTransContent();
 	intRemoveTransDroidsAvail();
 	intMode = INT_NORMAL;
-
 }
 
 /* Remove the Transporter Content widgets from the screen w/o animation!*/
@@ -1170,11 +1168,10 @@ void intRemoveTransNoAnim(void)
 /* Remove the Transporter Content widgets from the screen */
 void intRemoveTransContent(void)
 {
-
 	W_TABFORM *Form;
 
 	// Start the window close animation.
-	Form = (W_TABFORM*)widgGetFromID(psWScreen,IDTRANS_CONTENTFORM);
+	Form = (W_TABFORM *)widgGetFromID(psWScreen, IDTRANS_CONTENTFORM);
 	if (Form)
 	{
 		Form->display = intClosePlainForm;
@@ -1182,7 +1179,6 @@ void intRemoveTransContent(void)
 		Form->pUserData = NULL; // Used to signal when the close anim has finished.
 		ClosingTransCont = true;
 	}
-
 }
 
 /* Remove the Transporter Content widgets from the screen w/o animation!*/
@@ -1195,30 +1191,28 @@ void intRemoveTransContentNoAnim(void)
 /* Remove the Transporter Droids Avail widgets from the screen */
 void intRemoveTransDroidsAvail(void)
 {
-
 	W_TABFORM *Form;
 
 	// Start the window close animation.
-	Form = (W_TABFORM*)widgGetFromID(psWScreen,IDTRANS_DROIDS);
+	Form = (W_TABFORM *)widgGetFromID(psWScreen, IDTRANS_DROIDS);
 	if (Form)
 	{
 		Form->display = intClosePlainForm;
 		Form->disableChildren = true;
 		Form->pUserData = NULL; // Used to signal when the close anim has finished.
 		ClosingTransDroids = true;
-        //remember which tab we were on
-        widgGetTabs(psWScreen, IDTRANS_DROIDTAB, &objMajor, &objMinor);
+		//remember which tab we were on
+		widgGetTabs(psWScreen, IDTRANS_DROIDTAB, &objMajor, &objMinor);
 	}
-
 }
 
 /* Remove the Transporter Droids Avail widgets from the screen w/o animation!*/
 void intRemoveTransDroidsAvailNoAnim(void)
 {
-	if (widgGetFromID(psWScreen,IDTRANS_DROIDS) != NULL)
+	if (widgGetFromID(psWScreen, IDTRANS_DROIDS) != NULL)
 	{
-	    //remember which tab we were on
-	    widgGetTabs(psWScreen, IDTRANS_DROIDTAB, &objMajor, &objMinor);
+		//remember which tab we were on
+		widgGetTabs(psWScreen, IDTRANS_DROIDTAB, &objMajor, &objMinor);
 
 		//remove main screen
 		widgDelete(psWScreen, IDTRANS_DROIDS);
@@ -1236,11 +1230,11 @@ void setCurrentTransporter(UDWORD id)
 
 	//loop thru all the droids to find the selected one
 	for (psDroid = transInterfaceDroidList(); psDroid != NULL; psDroid =
-		psDroid->psNext)
+	        psDroid->psNext)
 	{
-		if ( psDroid->droidType == DROID_TRANSPORTER &&
-			 (psDroid->action != DACTION_TRANSPORTOUT &&
-			  psDroid->action != DACTION_TRANSPORTIN     ) )
+		if ((psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER) &&
+		    (psDroid->action != DACTION_TRANSPORTOUT &&
+		     psDroid->action != DACTION_TRANSPORTIN))
 		{
 			if (currID == id)
 			{
@@ -1253,121 +1247,88 @@ void setCurrentTransporter(UDWORD id)
 	{
 		psCurrTransporter = psDroid;
 		//set the data for the transporter timer
-		widgSetUserData(psWScreen, IDTRANTIMER_DISPLAY, (void*)psCurrTransporter);
+		widgSetUserData(psWScreen, IDTRANTIMER_DISPLAY, (void *)psCurrTransporter);
 	}
 }
 
 /*removes a droid from the group associated with the transporter*/
-void transporterRemoveDroid(UDWORD id)
+void transporterRemoveDroid(DROID *psTransport, DROID *psDroid, QUEUE_MODE mode)
 {
-	DROID		*psDroid, *psNext;
-	UDWORD		currID;
-	UDWORD		droidX, droidY;
-	DROID_GROUP	*psGroup;
+	ASSERT_OR_RETURN(, psTransport != NULL && psDroid != NULL && psTransport != psDroid, "Something NULL or unloading transporter from itself");
 
-	ASSERT( psCurrTransporter != NULL, "transporterRemoveUnit:can't remove units" );
-
-	if (bMultiMessages)
+	if (bMultiMessages && mode == ModeQueue)
 	{
-		// Not sure how to fix this...
-		debug(LOG_ERROR, "TODO: Can't unload single droids, sending order to unload all at once, because this code is so convoluted.");
-		// All at once is better than nothing...
-		orderDroidLoc(psCurrTransporter, DORDER_DISEMBARK, psCurrTransporter->pos.x, psCurrTransporter->pos.y, ModeQueue);
+		sendDroidDisembark(psTransport, psDroid);
+		psDroid->selected = true;  // Remove from interface.
 		return;
 	}
 
-	currID = IDTRANS_CONTSTART;
-	for (psDroid = psCurrTransporter->psGroup->psList; psDroid != NULL && psDroid !=
-		psCurrTransporter; psDroid = psNext)
+	/*if we're offWorld we can't pick a tile without swapping the map
+	pointers - can't be bothered so just do this...*/
+	if (onMission)
 	{
-		psNext = psDroid->psGrpNext;
-		if (currID == id)
-		{
-			break;
-		}
-		currID++;
+		psDroid->pos.x = INVALID_XY;
+		psDroid->pos.y = INVALID_XY;
 	}
-	if (psDroid)
+	else
 	{
-		/*if we're offWorld we can't pick a tile without swapping the map
-		pointers - can't be bothered so just do this...*/
-		if (onMission)
+		Vector2i droidPos;
+		if (bMultiPlayer)
 		{
-			psDroid->pos.x = INVALID_XY;
-			psDroid->pos.y = INVALID_XY;
+			//set the units next to the transporter's current location
+			droidPos = map_coord(psTransport->pos);
 		}
 		else
 		{
-			if (bMultiPlayer)
-			{
-				//set the units next to the transporter's current location
-				droidX = map_coord(psCurrTransporter->pos.x);
-				droidY = map_coord(psCurrTransporter->pos.y);
-			}
-			else
-			{
-				//pick a tile because save games won't remember where the droid was when it was loaded
-				droidX = map_coord(getLandingX(0));
-				droidY = map_coord(getLandingY(0));
-			}
-			if (!pickATileGen(&droidX, &droidY,LOOK_FOR_EMPTY_TILE,zonedPAT))
-			{
-				ASSERT( false, "transporterRemoveUnit: Unable to find a valid location" );
-			}
-			psDroid->pos.x = (UWORD)world_coord(droidX);
-			psDroid->pos.y = (UWORD)world_coord(droidY);
-			psDroid->pos.z = map_Height(psDroid->pos.x, psDroid->pos.y);
+			//pick a tile because save games won't remember where the droid was when it was loaded
+			droidPos = map_coord(Vector2i(getLandingX(0), getLandingY(0)));
 		}
-
-		// remove it from the transporter group
-		psDroid->psGroup->remove(psDroid);
-
-		//add it back into apsDroidLists
-		if (onMission)
+		if (!pickATileGen(&droidPos, LOOK_FOR_EMPTY_TILE, zonedPAT))
 		{
-			//addDroid(psDroid, mission.apsBuiltDroids);
-			addDroid(psDroid, mission.apsDroidLists);
+			ASSERT(false, "Unable to find a valid location");
 		}
-		else
-		{
-			// add the droid back onto the droid list
-			addDroid(psDroid, apsDroidLists);
-
-			//inform all other players about that
-			if (bMultiMessages)
-			{
-				sendDroidDisEmbark(psDroid,psCurrTransporter);
-			}
-		}
-
-		if (psDroid->pos.x != INVALID_XY)
-		{
-			// We can update the orders now, since everyone has been
-			// notified of the droid exiting the transporter
-			updateDroidOrientation(psDroid);
-		}
-		//initialise the movement data
-		initDroidMovement(psDroid);
-		//reset droid orders
-		orderDroid(psDroid, DORDER_STOP, ModeImmediate);
-		psDroid->cluster = 0;
-		// check if it is a commander
-		if (psDroid->droidType == DROID_COMMAND)
-		{
-			psGroup = grpCreate();
-			psGroup->add(psDroid);
-		}
-		psDroid->selected = true;
-
-		if (calcRemainingCapacity(psCurrTransporter))
-		{
-			//make sure the button isn't flashing
-			stopMissionButtonFlash(IDTRANS_LAUNCH);
-		}
+		droidSetPosition(psDroid, world_coord(droidPos.x), world_coord(droidPos.y));
+		updateDroidOrientation(psDroid);
 	}
 
-	// we want to sync with all clients *now*.
-	ForceDroidSync(psDroid);
+	// remove it from the transporter group
+	psDroid->psGroup->remove(psDroid);
+
+	//add it back into apsDroidLists
+	if (onMission)
+	{
+		addDroid(psDroid, mission.apsDroidLists);
+	}
+	else
+	{
+		// add the droid back onto the droid list
+		addDroid(psDroid, apsDroidLists);
+	}
+
+	if (psDroid->pos.x != INVALID_XY)
+	{
+		// We can update the orders now, since everyone has been
+		// notified of the droid exiting the transporter
+		updateDroidOrientation(psDroid);
+	}
+	//initialise the movement data
+	initDroidMovement(psDroid);
+	//reset droid orders
+	orderDroid(psDroid, DORDER_STOP, ModeImmediate);
+	psDroid->cluster = 0;
+	// check if it is a commander
+	if (psDroid->droidType == DROID_COMMAND)
+	{
+		DROID_GROUP *psGroup = grpCreate();
+		psGroup->add(psDroid);
+	}
+	psDroid->selected = true;
+
+	if (calcRemainingCapacity(psTransport))
+	{
+		//make sure the button isn't flashing
+		stopMissionButtonFlash(IDTRANS_LAUNCH);
+	}
 }
 
 /*adds a droid to the current transporter via the interface*/
@@ -1376,13 +1337,13 @@ void intTransporterAddDroid(UDWORD id)
 	DROID		*psDroid, *psNext;
 	UDWORD		currID;
 
-	ASSERT( psCurrTransporter != NULL, "intTransporterAddUnit:can't remove units" );
+	ASSERT(psCurrTransporter != NULL, "intTransporterAddUnit:can't remove units");
 
 	currID = IDTRANS_DROIDSTART;
 	for (psDroid = transInterfaceDroidList(); psDroid != NULL; psDroid = psNext)
 	{
 		psNext = psDroid->psNext;
-		if (psDroid->droidType != DROID_TRANSPORTER)
+		if (psDroid->droidType != DROID_TRANSPORTER && psDroid->droidType != DROID_SUPERTRANSPORTER)
 		{
 			if (currID == id)
 			{
@@ -1397,18 +1358,17 @@ void intTransporterAddDroid(UDWORD id)
 	}
 }
 
-
 /*Adds a droid to the transporter, removing it from the world */
 void transporterAddDroid(DROID *psTransporter, DROID *psDroidToAdd)
 {
 	bool    bDroidRemoved;
 
-	ASSERT( psTransporter != NULL, "Was passed a NULL transporter" );
-	ASSERT( psDroidToAdd != NULL, "Was passed a NULL droid, can't add to transporter" );
+	ASSERT(psTransporter != NULL, "Was passed a NULL transporter");
+	ASSERT(psDroidToAdd != NULL, "Was passed a NULL droid, can't add to transporter");
 
 	if (!psTransporter || !psDroidToAdd)
 	{
-		debug(LOG_ERROR,"We can't add the unit to the transporter!");
+		debug(LOG_ERROR, "We can't add the unit to the transporter!");
 		return;
 	}
 	/* check for space */
@@ -1436,16 +1396,11 @@ void transporterAddDroid(DROID *psTransporter, DROID *psDroidToAdd)
 	{
 		// adding to transporter unit's group list
 		psTransporter->psGroup->add(psDroidToAdd);
-		
-		if (bMultiMessages)
-		{
-			//inform all other players to update their local lists
-			sendDroidEmbark(psDroidToAdd,psTransporter);
-		}
+		psDroidToAdd->selected = false;  // Display in transporter interface.
 	}
 	else
 	{
-		debug(LOG_ERROR,"droid %d not found, so nothing added to transporter!",psDroidToAdd->id);
+		debug(LOG_ERROR, "droid %d not found, so nothing added to transporter!", psDroidToAdd->id);
 	}
 	if (onMission)
 	{
@@ -1455,41 +1410,38 @@ void transporterAddDroid(DROID *psTransporter, DROID *psDroidToAdd)
 	{
 		visRemoveVisibility((BASE_OBJECT *)psDroidToAdd);
 	}
+	fpathRemoveDroidData(psDroidToAdd->id);
 
-	//this is called by droidRemove
-	//intRefreshScreen();
+	// This is called by droidRemove. But we still need to refresh after adding to the transporter group.
+	intRefreshScreen();
 }
 
 /*check to see if the droid can fit on the Transporter - return true if fits*/
-bool checkTransporterSpace(DROID *psTransporter, DROID *psAssigned)
+bool checkTransporterSpace(DROID const *psTransporter, DROID const *psAssigned, bool mayFlash)
 {
 	DROID		*psDroid, *psNext;
 	UDWORD		capacity;
 
-	ASSERT( psTransporter != NULL,
-		"checkTransporterSpace: Invalid droid pointer" );
-	ASSERT( psAssigned != NULL,
-		"checkTransporterSpace: Invalid droid pointer" );
-	ASSERT( psTransporter->droidType == DROID_TRANSPORTER,
-		"checkTransporterSpace: Droid is not a Transporter" );
-    ASSERT( psTransporter->psGroup != NULL,
-        "checkTransporterSpace: tranporter doesn't have a group" );
+	ASSERT(psTransporter != NULL, "Invalid droid pointer");
+	ASSERT(psAssigned != NULL, "Invalid droid pointer");
+	ASSERT((psTransporter->droidType == DROID_TRANSPORTER || psTransporter->droidType == DROID_SUPERTRANSPORTER), "Droid is not a Transporter");
+	ASSERT(psTransporter->psGroup != NULL, "tranporter doesn't have a group");
 
 	//work out how much space is currently left
 	capacity = TRANSPORTER_CAPACITY;
 	for (psDroid = psTransporter->psGroup->psList; psDroid != NULL && psDroid !=
-		psTransporter; psDroid = psNext)
+	     psTransporter; psDroid = psNext)
 	{
 		psNext = psDroid->psGrpNext;
 		capacity -= transporterSpaceRequired(psDroid);
 	}
 	if (capacity >= transporterSpaceRequired(psAssigned))
 	{
-        //when full flash the transporter button
-        if (capacity - transporterSpaceRequired(psAssigned) == 0)
-        {
-            flashMissionButton(IDTRANS_LAUNCH);
-        }
+		//when full flash the transporter button
+		if (mayFlash && capacity - transporterSpaceRequired(psAssigned) == 0)
+		{
+			flashMissionButton(IDTRANS_LAUNCH);
+		}
 		return true;
 	}
 	else
@@ -1499,7 +1451,7 @@ bool checkTransporterSpace(DROID *psTransporter, DROID *psAssigned)
 }
 
 /*returns the space the droid occupies on a transporter based on the body size*/
-UDWORD transporterSpaceRequired(DROID *psDroid)
+UDWORD transporterSpaceRequired(DROID const *psDroid)
 {
 	UDWORD	size;
 
@@ -1522,7 +1474,7 @@ UDWORD transporterSpaceRequired(DROID *psDroid)
 			size = HEAVY_DROID;
 			break;
 		default:
-			ASSERT( false, "transporterSpaceRequired: Unknown Droid size" );
+			ASSERT(false, "transporterSpaceRequired: Unknown Droid size");
 			size = 0;
 			break;
 		}
@@ -1531,7 +1483,7 @@ UDWORD transporterSpaceRequired(DROID *psDroid)
 }
 
 /*sets which list of droids to use for the transporter interface*/
-DROID * transInterfaceDroidList(void)
+DROID *transInterfaceDroidList(void)
 {
 	if (onMission)
 	{
@@ -1543,16 +1495,15 @@ DROID * transInterfaceDroidList(void)
 	}
 }
 
-UDWORD transporterGetLaunchTime( void )
+UDWORD transporterGetLaunchTime(void)
 {
 	return g_iLaunchTime;
 }
 
 void transporterSetLaunchTime(UDWORD time)
 {
-    g_iLaunchTime = time;
+	g_iLaunchTime = time;
 }
-
 
 /*launches the defined transporter to the offworld map*/
 bool launchTransporter(DROID *psTransporter)
@@ -1561,41 +1512,30 @@ bool launchTransporter(DROID *psTransporter)
 
 	//close the interface
 	intResetScreen(true);
-// Hmmm...Only do this if were at our home base about to go off world.
-//	//deselect all droids/structs etc
-//	clearSelection();
 
 	//this launches the mission if on homebase when the button is pressed
 	if (!onMission)
 	{
 		//tell the transporter to move to the new offworld location
-		missionGetTransporterExit( psTransporter->player, &iX, &iY );
+		missionGetTransporterExit(psTransporter->player, &iX, &iY);
 		orderDroidLoc(psTransporter, DORDER_TRANSPORTOUT, iX, iY, ModeQueue);
 		//g_iLaunchTime = gameTime;
-        transporterSetLaunchTime(gameTime);
+		transporterSetLaunchTime(gameTime);
 	}
 	//otherwise just launches the Transporter
 	else
 	{
-		if (psTransporter->droidType != DROID_TRANSPORTER)
+		if (psTransporter->droidType != DROID_TRANSPORTER && psTransporter->droidType != DROID_SUPERTRANSPORTER)
 		{
-			ASSERT( false, "launchTransporter: Invalid Transporter Droid" );
+			ASSERT(false, "Invalid Transporter Droid");
 			return false;
 		}
 
-		//remove out of stored list and add to current Droid list
-		//removeDroid(psTransporter, mission.apsDroidLists);
-		//addDroid(psTransporter, apsDroidLists);
-		//need to put the Transporter down at a specified location
-		//psTransporter->pos.x = getLandingX(psTransporter->player);
-		//psTransporter->pos.y = getLandingY(psTransporter->player);
-		//unloadTransporter(psTransporter, psTransporter->pos.x, psTransporter->pos.y, false);
-
 		orderDroid(psTransporter, DORDER_TRANSPORTIN, ModeImmediate);
 		/* set action transporter waits for timer */
-		actionDroid( psTransporter, DACTION_TRANSPORTWAITTOFLYIN );
+		actionDroid(psTransporter, DACTION_TRANSPORTWAITTOFLYIN);
 
-		missionSetReinforcementTime( gameTime );
+		missionSetReinforcementTime(gameTime);
 	}
 
 	return true;
@@ -1607,86 +1547,73 @@ bool launchTransporter(DROID *psTransporter)
 have arrived - returns true when there*/
 bool updateTransporter(DROID *psTransporter)
 {
-	ASSERT( psTransporter != NULL,
-		"updateTransporter: Invalid droid pointer" );
-
-
-	if (psTransporter->droidType != DROID_TRANSPORTER)
-	{
-		ASSERT( false, "updateTransporter: Invalid droid type" );
-		return true;
-	}
+	ASSERT_OR_RETURN(true, psTransporter != NULL, "Invalid droid pointer");
+	ASSERT_OR_RETURN(true, (psTransporter->droidType == DROID_TRANSPORTER || psTransporter->droidType == DROID_SUPERTRANSPORTER), "Invalid droid type");
 
 	//if not moving to mission site, exit
-	if ( psTransporter->action != DACTION_TRANSPORTOUT &&
-		 psTransporter->action != DACTION_TRANSPORTIN     )
+	if (psTransporter->action != DACTION_TRANSPORTOUT &&
+	    psTransporter->action != DACTION_TRANSPORTIN)
 	{
 		return true;
 	}
 
-    /*if the transporter (selectedPlayer only) is moving droids to safety and
-    all remaining droids are destoyed then we need to flag the end of mission
-    as long as we're not flying out*/
-    if (psTransporter->player == selectedPlayer && getDroidsToSafetyFlag()
-        && psTransporter->action != DACTION_TRANSPORTOUT)
-    {
-        //if there aren't any droids left...
-        if (!missionDroidsRemaining(selectedPlayer))
-        {
-            // Set the Transporter to have arrived at its destination
-            psTransporter->action = DACTION_NONE;
+	/*if the transporter (selectedPlayer only) is moving droids to safety and
+	all remaining droids are destoyed then we need to flag the end of mission
+	as long as we're not flying out*/
+	if (psTransporter->player == selectedPlayer && getDroidsToSafetyFlag()
+	    && psTransporter->action != DACTION_TRANSPORTOUT)
+	{
+		//if there aren't any droids left...
+		if (!missionDroidsRemaining(selectedPlayer))
+		{
+			// Set the Transporter to have arrived at its destination
+			psTransporter->action = DACTION_NONE;
 
 			//the script can call startMission for this callback for offworld missions
 			eventFireCallbackTrigger((TRIGGER_TYPE)CALL_START_NEXT_LEVEL);
+			triggerEvent(TRIGGER_START_LEVEL);
 
 			// clear order
-			psTransporter->order = DORDER_NONE;
-			setDroidTarget(psTransporter, NULL);
-			psTransporter->psTarStats = NULL;
+			psTransporter->order = DroidOrder(DORDER_NONE);
 
-    		return true;
-        }
-    }
+			return true;
+		}
+	}
 
 	// moving to a location
-    // if we're coming back for more droids then we want the transporter to
-    // fly to edge of map before turning round again
-	if ( psTransporter->sMove.Status == MOVEINACTIVE ||
-		 psTransporter->sMove.Status == MOVEHOVER ||
-		 (psTransporter->action == DACTION_TRANSPORTOUT && !missionIsOffworld() &&
-			(gameTime>transporterGetLaunchTime()+TRANSPORTOUT_TIME) &&
-            !getDroidsToSafetyFlag() ) )
+	// if we're coming back for more droids then we want the transporter to
+	// fly to edge of map before turning round again
+	if (psTransporter->sMove.Status == MOVEINACTIVE ||
+	    psTransporter->sMove.Status == MOVEHOVER ||
+	    (psTransporter->action == DACTION_TRANSPORTOUT && !missionIsOffworld() &&
+	     (gameTime > transporterGetLaunchTime() + TRANSPORTOUT_TIME) &&
+	     !getDroidsToSafetyFlag()))
 	{
-		audio_StopObjTrack( psTransporter, ID_SOUND_BLIMP_FLIGHT );
-		if ( psTransporter->action == DACTION_TRANSPORTIN )
+		audio_StopObjTrack(psTransporter, ID_SOUND_BLIMP_FLIGHT);
+		if (psTransporter->action == DACTION_TRANSPORTIN)
 		{
 			/* !!!! GJ Hack - should be landing audio !!!! */
-			audio_PlayObjDynamicTrack( psTransporter, ID_SOUND_BLIMP_TAKE_OFF, NULL );
+			audio_PlayObjDynamicTrack(psTransporter, ID_SOUND_BLIMP_TAKE_OFF, NULL);
 		}
 
-        //DON@T PLAY AUDIO FOR THE FIRST TRANSPORTER LOAD...AB 9/2/99
-        //show if selectedPlayer's transporter
-		//if ( onMission && psTransporter->action == DACTION_TRANSPORTIN &&
-        //    psTransporter->player == selectedPlayer)
-        //changed onMission to missionForReInforcements() to cater for cam2A/cam3A - AB 4/2/99
-        if (!bFirstTransporter && missionForReInforcements() &&
-            psTransporter->action == DACTION_TRANSPORTIN &&
-            psTransporter->player == selectedPlayer)
+		if (!bFirstTransporter && missionForReInforcements() &&
+		    psTransporter->action == DACTION_TRANSPORTIN &&
+		    psTransporter->player == selectedPlayer)
 		{
-            //play reinforcements have arrived message
-			audio_QueueTrackPos( ID_SOUND_TRANSPORT_LANDING,
-					psTransporter->pos.x, psTransporter->pos.y, psTransporter->pos.z );
-			addConsoleMessage(_("Reinforcements landing"),LEFT_JUSTIFY,SYSTEM_MESSAGE);
+			//play reinforcements have arrived message
+			audio_QueueTrackPos(ID_SOUND_TRANSPORT_LANDING,
+			        psTransporter->pos.x, psTransporter->pos.y, psTransporter->pos.z);
+			addConsoleMessage(_("Reinforcements landing"), LEFT_JUSTIFY, SYSTEM_MESSAGE);
 			//reset the data for the transporter timer
-			widgSetUserData(psWScreen, IDTRANTIMER_DISPLAY, (void*)NULL);
+			widgSetUserData(psWScreen, IDTRANTIMER_DISPLAY, (void *)NULL);
 			return true;
 		}
 
 		// Got to destination
 		psTransporter->action = DACTION_NONE;
 
-        //reset the flag to trigger the audio message
-        bFirstTransporter = false;
+		//reset the flag to trigger the audio message
+		bFirstTransporter = false;
 
 		return true;
 	}
@@ -1699,7 +1626,7 @@ bool updateTransporter(DROID *psTransporter)
 void processLaunchTransporter(void)
 {
 	UDWORD		capacity = TRANSPORTER_CAPACITY;
-    W_CLICKFORM *psForm;
+	W_CLICKFORM *psForm;
 
 	//launch the Transporter
 	if (psCurrTransporter)
@@ -1708,33 +1635,34 @@ void processLaunchTransporter(void)
 		capacity = calcRemainingCapacity(psCurrTransporter);
 		if (capacity != TRANSPORTER_CAPACITY)
 		{
-            //make sure the button doesn't flash once launched
-            stopMissionButtonFlash(IDTRANS_LAUNCH);
-            //disable the form so can't add any more droids into the transporter
-            psForm = (W_CLICKFORM*)widgGetFromID(psWScreen,IDTRANS_LAUNCH);
-            if (psForm)
-            {
-                formSetClickState(psForm, WBUT_LOCK);
-            }
+			//make sure the button doesn't flash once launched
+			stopMissionButtonFlash(IDTRANS_LAUNCH);
+			//disable the form so can't add any more droids into the transporter
+			psForm = (W_CLICKFORM *)widgGetFromID(psWScreen, IDTRANS_LAUNCH);
+			if (psForm)
+			{
+				formSetClickState(psForm, WBUT_LOCK);
+			}
 
-            //disable the form so can't add any more droids into the transporter
-            psForm = (W_CLICKFORM*)widgGetFromID(psWScreen,IDTRANTIMER_BUTTON);
-            if (psForm)
-            {
-                formSetClickState(psForm, WBUT_LOCK);
-            }
+			//disable the form so can't add any more droids into the transporter
+			psForm = (W_CLICKFORM *)widgGetFromID(psWScreen, IDTRANTIMER_BUTTON);
+			if (psForm)
+			{
+				formSetClickState(psForm, WBUT_LOCK);
+			}
 
 			launchTransporter(psCurrTransporter);
 			//set the data for the transporter timer
 			widgSetUserData(psWScreen, IDTRANTIMER_DISPLAY,
-				(void*)psCurrTransporter);
+			        (void *)psCurrTransporter);
 
 			eventFireCallbackTrigger((TRIGGER_TYPE)CALL_LAUNCH_TRANSPORTER);
+			triggerEvent(TRIGGER_LAUNCH_TRANSPORTER);
 		}
 	}
 }
 
-SDWORD	bobTransporterHeight( void )
+SDWORD	bobTransporterHeight(void)
 {
 	// Because 4320/12 = 360 degrees
 	// this gives us a bob frequency of 4.32 seconds.
@@ -1749,65 +1677,61 @@ SDWORD	bobTransporterHeight( void )
 /*causes one of the mission buttons (Launch Button or Mission Timer) to start flashing*/
 void flashMissionButton(UDWORD buttonID)
 {
-
 	W_TABFORM	*psForm;
 
 	//get the button from the id
-	psForm = (W_TABFORM*)widgGetFromID(psWScreen,buttonID);
+	psForm = (W_TABFORM *)widgGetFromID(psWScreen, buttonID);
 	if (psForm)
 	{
-        switch (buttonID)
-        {
-        case IDTRANS_LAUNCH:
-    		psForm->UserData = PACKDWORD_TRI(1,IMAGE_LAUNCHDOWN,IMAGE_LAUNCHUP);
-            break;
-        case IDTIMER_FORM:
-    		psForm->UserData = PACKDWORD_TRI(1,IMAGE_MISSION_CLOCK,IMAGE_MISSION_CLOCK_UP);
-            break;
-        default:
-            //do nothing other than in debug
-            ASSERT( false, "flashMissionButton: Unknown button ID" );
-            break;
-        }
+		switch (buttonID)
+		{
+		case IDTRANS_LAUNCH:
+			psForm->UserData = PACKDWORD_TRI(1, IMAGE_LAUNCHDOWN, IMAGE_LAUNCHUP);
+			break;
+		case IDTIMER_FORM:
+			psForm->UserData = PACKDWORD_TRI(1, IMAGE_MISSION_CLOCK, IMAGE_MISSION_CLOCK_UP);
+			break;
+		default:
+			//do nothing other than in debug
+			ASSERT(false, "flashMissionButton: Unknown button ID");
+			break;
+		}
 	}
-
 }
 
 /*stops one of the mission buttons (Launch Button or Mission Timer) flashing*/
 void stopMissionButtonFlash(UDWORD buttonID)
 {
-
 	W_TABFORM	*psForm;
 
 	//get the button from the id
-	psForm = (W_TABFORM*)widgGetFromID(psWScreen,buttonID);
+	psForm = (W_TABFORM *)widgGetFromID(psWScreen, buttonID);
 	if (psForm)
 	{
-        switch (buttonID)
-        {
-        case IDTRANS_LAUNCH:
-    		psForm->UserData = PACKDWORD_TRI(0,IMAGE_LAUNCHDOWN,IMAGE_LAUNCHUP);
-            break;
-        case IDTIMER_FORM:
-    		psForm->UserData = PACKDWORD_TRI(0,IMAGE_MISSION_CLOCK,IMAGE_MISSION_CLOCK_UP);
-            break;
-        default:
-            //do nothing other than in debug
-            ASSERT( false, "stopMissionButtonFlash: Unknown button ID" );
-            break;
-        }
+		switch (buttonID)
+		{
+		case IDTRANS_LAUNCH:
+			psForm->UserData = PACKDWORD_TRI(0, IMAGE_LAUNCHDOWN, IMAGE_LAUNCHUP);
+			break;
+		case IDTIMER_FORM:
+			psForm->UserData = PACKDWORD_TRI(0, IMAGE_MISSION_CLOCK, IMAGE_MISSION_CLOCK_UP);
+			break;
+		default:
+			//do nothing other than in debug
+			ASSERT(false, "stopMissionButtonFlash: Unknown button ID");
+			break;
+		}
 	}
-
 }
 
 /* set current transporter (for script callbacks) */
-void transporterSetScriptCurrent( DROID *psTransporter )
+void transporterSetScriptCurrent(DROID *psTransporter)
 {
 	g_psCurScriptTransporter = psTransporter;
 }
 
 /* get current transporter (for script callbacks) */
-DROID * transporterGetScriptCurrent( void )
+DROID *transporterGetScriptCurrent(void)
 {
 	return g_psCurScriptTransporter;
 }
@@ -1815,45 +1739,36 @@ DROID * transporterGetScriptCurrent( void )
 /*called when a Transporter has arrived back at the LZ when sending droids to safety*/
 void resetTransporter()
 {
-     W_CLICKFORM *psForm;
+	W_CLICKFORM *psForm;
 
-     //enable the form so can add more droids into the transporter
-     psForm = (W_CLICKFORM*)widgGetFromID(psWScreen,IDTRANS_LAUNCH);
-     if (psForm)
-     {
-        formSetClickState(psForm, 0);
-     }
+	//enable the form so can add more droids into the transporter
+	psForm = (W_CLICKFORM *)widgGetFromID(psWScreen, IDTRANS_LAUNCH);
+	if (psForm)
+	{
+		formSetClickState(psForm, 0);
+	}
 }
 
 /*checks the order of the droid to see if its currently flying*/
 bool transporterFlying(DROID *psTransporter)
 {
-	ASSERT( psTransporter != NULL,
-		"transporterFlying: Invalid droid pointer" );
-	ASSERT( psTransporter->droidType == DROID_TRANSPORTER,
-		"transporterFlying: Droid is not a Transporter" );
+	ASSERT(psTransporter != NULL, "Invalid droid pointer");
+	ASSERT((psTransporter->droidType == DROID_TRANSPORTER || psTransporter->droidType == DROID_SUPERTRANSPORTER), "Droid is not a Transporter");
 
-    if (psTransporter->order == DORDER_TRANSPORTOUT ||
-        psTransporter->order == DORDER_TRANSPORTIN ||
-        psTransporter->order == DORDER_TRANSPORTRETURN ||
-        //in multiPlayer mode the Transporter can be moved around
-        (bMultiPlayer && psTransporter->order == DORDER_MOVE) ||
-        //in multiPlayer mode the Transporter can be moved and emptied!
-        (bMultiPlayer && psTransporter->order == DORDER_DISEMBARK) ||
-        //in multiPlayer, descending still counts as flying
-        (bMultiPlayer && psTransporter->order == DORDER_NONE &&
-        psTransporter->sMove.iVertSpeed != 0))
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    }
+	return psTransporter->order.type == DORDER_TRANSPORTOUT ||
+	       psTransporter->order.type == DORDER_TRANSPORTIN ||
+	       psTransporter->order.type == DORDER_TRANSPORTRETURN ||
+	       //in multiPlayer mode the Transporter can be moved around
+	       (bMultiPlayer && psTransporter->order.type == DORDER_MOVE) ||
+	       //in multiPlayer mode the Transporter can be moved and emptied!
+	       (bMultiPlayer && psTransporter->order.type == DORDER_DISEMBARK) ||
+	       //in multiPlayer, descending still counts as flying
+	       (bMultiPlayer && psTransporter->order.type == DORDER_NONE &&
+	        psTransporter->sMove.iVertSpeed != 0);
 }
 
 //initialise the flag to indicate the first transporter has arrived - set in startMission()
 void initFirstTransporterFlag(void)
 {
-    bFirstTransporter = true;
+	bFirstTransporter = true;
 }

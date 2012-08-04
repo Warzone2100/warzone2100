@@ -1,39 +1,24 @@
-%.tab.hpp %.tab.cpp:: %.y
-	$(YACC) $(YFLAGS) $(AM_YFLAGS) -o$@ $<
-
-%.lex.hpp %.lex.cpp:: %.l
-	$(LEX) $(LFLAGS) $(AM_LFLAGS) -o$@ $<
-
-AM_CPPFLAGS = -DYY_NO_INPUT $(PHYSFS_CFLAGS) $(PNG_CFLAGS) $(OGGVORBIS_CFLAGS) $(OPENAL_CFLAGS) $(OPENGLC_CFLAGS) $(OPENGL_CFLAGS) $(WZ_CPPFLAGS) $(GLEW_CFLAGS)
+AM_CPPFLAGS = -DYY_NO_INPUT $(SDL_CFLAGS) $(PHYSFS_CFLAGS) $(PNG_CFLAGS) $(VORBISFILE_CFLAGS) $(VORBIS_CFLAGS) $(OPENAL_CFLAGS) $(OPENGLC_CFLAGS) $(OPENGL_CFLAGS) $(WZ_CPPFLAGS) $(GLEW_CFLAGS)
 AM_CFLAGS = $(WZ_CFLAGS)
 AM_CXXFLAGS = $(WZ_CXXFLAGS) $(QT4_CFLAGS)
 AM_LFLAGS = $(FLEX_FLAGS)
 AM_YFLAGS = -d
 
-version.o: autorevision.h
+.PHONY: autorevision.h
 
-autorevision.h: $(warzone2100_SOURCES) $(warzone2100_LIBS)
+autorevision.h:
 	(cd $(top_srcdir) && ./build_tools/autorevision.sh $(abs_top_builddir)/src/autorevision.h || true)
 
 BUILT_SOURCES = \
 	autorevision.h \
-	level_lexer.lex.cpp \
-	message_lexer.lex.cpp \
-	message_parser.tab.cpp \
-	message_parser.tab.hpp \
-	scriptvals_lexer.lex.cpp \
-	scriptvals_parser.tab.cpp \
-	scriptvals_parser.tab.hpp
+	$(CLEANFILES)
 
-CLEANFILES = $(BUILT_SOURCES)
+CLEANFILES = \
+	scriptvals_parser.h
 
 EXTRA_DIST = \
 	autorevision.h \
-	message_lexer.l \
-	message_parser.y \
-	scriptvals_lexer.l \
-	scriptvals_parser.y \
-	level_lexer.l
+	cursorselection
 
 bin_PROGRAMS = warzone2100
 noinst_HEADERS = \
@@ -105,8 +90,6 @@ noinst_HEADERS = \
 	mechanics.h \
 	messagedef.h \
 	message.h \
-	messagely.h \
-	message_parser.tab.hpp \
 	miscimd.h \
 	missiondef.h \
 	mission.h \
@@ -127,7 +110,6 @@ noinst_HEADERS = \
 	oprint.h \
 	orderdef.h \
 	order.h \
-	parsetest.h \
 	pointtree.h \
 	positiondef.h \
 	power.h \
@@ -148,7 +130,6 @@ noinst_HEADERS = \
 	scriptobj.h \
 	scripttabs.h \
 	scriptvals.h \
-	scriptvals_parser.tab.hpp \
 	selection.h \
 	seqdisp.h \
 	statsdef.h \
@@ -156,6 +137,7 @@ noinst_HEADERS = \
 	stringdef.h \
 	structuredef.h \
 	structure.h \
+	template.h \
 	terrain.h \
 	text.h \
 	texture.h \
@@ -215,7 +197,7 @@ warzone2100_SOURCES = \
 	keybind.cpp \
 	keyedit.cpp \
 	keymap.cpp \
-	level_lexer.lex.cpp \
+	level_lexer.lpp \
 	levels.cpp \
 	lighting.cpp \
 	loadsave.cpp \
@@ -226,8 +208,6 @@ warzone2100_SOURCES = \
 	mapgrid.cpp \
 	mechanics.cpp \
 	message.cpp \
-	message_lexer.lex.cpp \
-	message_parser.tab.cpp \
 	miscimd.cpp \
 	mission.cpp \
 	move.cpp \
@@ -246,7 +226,6 @@ warzone2100_SOURCES = \
 	objmem.cpp \
 	oprint.cpp \
 	order.cpp \
-	parsetest.cpp \
 	pointtree.cpp \
 	power.cpp \
 	projectile.cpp \
@@ -264,12 +243,13 @@ warzone2100_SOURCES = \
 	scriptobj.cpp \
 	scripttabs.cpp \
 	scriptvals.cpp \
-	scriptvals_lexer.lex.cpp \
-	scriptvals_parser.tab.cpp \
+	scriptvals_lexer.lpp \
+	scriptvals_parser.ypp \
 	selection.cpp \
 	seqdisp.cpp \
 	stats.cpp \
 	structure.cpp \
+	template.cpp \
 	terrain.cpp \
 	text.cpp \
 	texture.cpp \
@@ -283,7 +263,6 @@ warzone2100_SOURCES = \
 
 warzone2100_LIBS = \
 	$(top_builddir)/lib/widget/libwidget.a \
-	$(top_builddir)/lib/qtgame/libqtgame.a \
 	$(top_builddir)/lib/sequence/libsequence.a \
 	$(top_builddir)/lib/sound/libsound.a \
 	$(top_builddir)/lib/script/libscript.a \
@@ -292,11 +271,20 @@ warzone2100_LIBS = \
 	$(top_builddir)/lib/gamelib/libgamelib.a \
 	$(top_builddir)/lib/framework/libframework.a \
 	$(top_builddir)/lib/exceptionhandler/libexceptionhandler.a \
-	$(top_builddir)/3rdparty/miniupnpc/libminiupnpc.a
+	$(top_builddir)/3rdparty/miniupnpc/libminiupnpc.a \
+	$(top_builddir)/3rdparty/quesoglc/libquesoglc.a
 
-warzone2100_LDADD = $(warzone2100_LIBS) $(LTLIBINTL) $(PHYSFS_LIBS) $(PNG_LIBS) $(OGGVORBIS_LIBS) \
-	$(THEORA_LIBS) $(OPENAL_LIBS) $(OPENGLC_LIBS) $(OPENGL_LIBS) $(QT4_LIBS) $(QJSON_LIBS) $(GLEW_LIBS) \
-	$(X_LIBS) $(X_EXTRA_LIBS)
+if BACKEND_QT
+warzone2100_LIBS += $(top_builddir)/lib/qtgame/libqtgame.a
+endif
+
+if BACKEND_SDL
+warzone2100_LIBS += $(top_builddir)/lib/sdl/libsdl.a
+endif
+
+warzone2100_LDADD = $(warzone2100_LIBS) $(LTLIBINTL) $(SDL_LIBS) $(PHYSFS_LIBS) $(PNG_LIBS) $(VORBISFILE_LIBS) $(VORBIS_LIBS) \
+	$(THEORA_LIBS) $(OPENAL_LIBS) $(OPENGLC_LIBS) $(OPENGL_LIBS) $(QT4_LIBS) $(GLEW_LIBS) \
+	$(X_LIBS) $(X_EXTRA_LIBS) $(LDFLAGS)
 
 if MINGW32
 warzone2100_LDADD += $(top_builddir)/win32/warzone2100.o $(WIN32_LIBS)

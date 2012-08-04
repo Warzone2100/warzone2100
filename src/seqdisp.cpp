@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -72,8 +72,8 @@ struct SEQTEXT
 	char pText[MAX_STR_LENGTH];
 	UDWORD x;
 	UDWORD y;
-	UDWORD startFrame;
-	UDWORD endFrame;
+	double startTime;
+	double endTime;
 	bool	bSubtitle;
 };
 
@@ -281,7 +281,7 @@ bool seq_UpdateFullScreenVideo(int *pbClear)
 	unsigned int subMax = SUBTITLE_BOX_MIN + D_H2;
 
 	//get any text lines over bottom of the video
-	unsigned int realFrame = seq_GetFrameNumber();
+	double realTime = seq_GetFrameTime();
 	for (i = 0; i < MAX_TEXT_OVERLAYS; i++)
 	{
 		SEQTEXT seqtext = aSeqList[currentPlaySeq].aText[i];
@@ -289,7 +289,7 @@ bool seq_UpdateFullScreenVideo(int *pbClear)
 		{
 			if (seqtext.bSubtitle)
 			{
-				if (((realFrame >= seqtext.startFrame) && (realFrame <= seqtext.endFrame)) ||
+				if (((realTime >= seqtext.startTime) && (realTime <= seqtext.endTime)) ||
 				    aSeqList[currentPlaySeq].bSeqLoop) //if its a looped video always draw the text
 				{
 					if (subMin > seqtext.y && seqtext.y > SUBTITLE_BOX_MIN)
@@ -303,7 +303,7 @@ bool seq_UpdateFullScreenVideo(int *pbClear)
 				}
 			}
 
-			if (realFrame >= seqtext.endFrame && realFrame < seqtext.endFrame)
+			if (realTime >= seqtext.endTime && realTime < seqtext.endTime)
 			{
 				if (pbClear != NULL)
 				{
@@ -333,14 +333,14 @@ bool seq_UpdateFullScreenVideo(int *pbClear)
 	//call sequence player to download last frame
 	stillPlaying = seq_Update();
 	//print any text over the video
-	realFrame = seq_GetFrameNumber();//textFrame + 1;
+	realTime = seq_GetFrameTime();
 
 	for (i = 0; i < MAX_TEXT_OVERLAYS; i++)
 	{
 		SEQTEXT currentText = aSeqList[currentPlaySeq].aText[i];
 		if (currentText.pText[0] != '\0')
 		{
-			if (((realFrame >= currentText.startFrame) && (realFrame <= currentText.endFrame)) ||
+			if (((realTime >= currentText.startTime) && (realTime <= currentText.endTime)) ||
 			    (aSeqList[currentPlaySeq].bSeqLoop)) //if its a looped video always draw the text
 			{
 				if (bMoreThanOneSequenceLine)
@@ -399,7 +399,7 @@ bool seq_StopFullScreenVideo(void)
 }
 
 // add a string at x,y or add string below last line if x and y are 0
-bool seq_AddTextForVideo(const char* pText, SDWORD xOffset, SDWORD yOffset, SDWORD startFrame, SDWORD endFrame, SEQ_TEXT_POSITIONING textJustification)
+bool seq_AddTextForVideo(const char* pText, SDWORD xOffset, SDWORD yOffset, double startTime, double endTime, SEQ_TEXT_POSITIONING textJustification)
 {
 	SDWORD sourceLength, currentLength;
 	char* currentText;
@@ -476,8 +476,8 @@ bool seq_AddTextForVideo(const char* pText, SDWORD xOffset, SDWORD yOffset, SDWO
 	}
 
 	//set start and finish times for the objects
-	aSeqList[currentSeq].aText[aSeqList[currentSeq].currentText].startFrame = startFrame;
-	aSeqList[currentSeq].aText[aSeqList[currentSeq].currentText].endFrame = endFrame;
+	aSeqList[currentSeq].aText[aSeqList[currentSeq].currentText].startTime = startTime;
+	aSeqList[currentSeq].aText[aSeqList[currentSeq].currentText].endTime = endTime;
 	aSeqList[currentSeq].aText[aSeqList[currentSeq].currentText].bSubtitle = textJustification;
 
 	aSeqList[currentSeq].currentText++;
@@ -494,7 +494,7 @@ bool seq_AddTextForVideo(const char* pText, SDWORD xOffset, SDWORD yOffset, SDWO
 		{
 			textJustification = SEQ_TEXT_POSITION;
 		}
-		seq_AddTextForVideo(&pText[currentLength + 1], 0, 0, startFrame, endFrame, textJustification);
+		seq_AddTextForVideo(&pText[currentLength + 1], 0, 0, startTime, endTime, textJustification);
 	}
 	return true;
 }
@@ -505,7 +505,8 @@ static bool seq_AddTextFromFile(const char *pTextName, SEQ_TEXT_POSITIONING text
 	char aTextName[MAX_STR_LENGTH];
 	char *pTextBuffer, *pCurrentLine, *pText;
 	UDWORD fileSize;
-	SDWORD xOffset, yOffset, startFrame, endFrame;
+	SDWORD xOffset, yOffset;
+	double startTime, endTime;
 	const char *seps = "\n";
 
 	// NOTE: The original game never had a fullscreen mode for FMVs on >640x480 screens.
@@ -527,7 +528,7 @@ static bool seq_AddTextFromFile(const char *pTextName, SEQ_TEXT_POSITIONING text
 	{
 		if (*pCurrentLine != '/')
 		{
-			if (sscanf(pCurrentLine,"%d %d %d %d", &xOffset, &yOffset, &startFrame, &endFrame) == 4)
+			if (sscanf(pCurrentLine,"%d %d %lf %lf", &xOffset, &yOffset, &startTime, &endTime) == 4)
 			{
 				// Since all the positioning was hardcoded to specific values, we now calculate the
 				// ratio of our screen, compared to what the game expects and multiply that to x, y.
@@ -545,7 +546,7 @@ static bool seq_AddTextFromFile(const char *pTextName, SEQ_TEXT_POSITIONING text
 				ASSERT(pText != NULL, "error parsing text file");
 				if (pText != NULL)
 				{
-					seq_AddTextForVideo(_(&pText[1]), xOffset, yOffset, startFrame, endFrame, textJustification);
+					seq_AddTextForVideo(_(&pText[1]), xOffset, yOffset, startTime, endTime, textJustification);
 				}
 			}
 		}

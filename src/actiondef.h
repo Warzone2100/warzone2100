@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -46,7 +46,7 @@ enum DROID_ACTION
 	DACTION_TRANSPORTIN,				///< 13 move transporter onworld
 	DACTION_DROIDREPAIR,				///< 14 repairing a droid
 	DACTION_RESTORE,				///< 15 restore resistance points of a structure
-	DACTION_CLEARWRECK,				///< clearing building wreckage
+	DACTION_UNUSED,
 
 	// The states below are used by the action system
 	// but should not be given as an action
@@ -64,7 +64,7 @@ enum DROID_ACTION
 	DACTION_WAITDURINGREPAIR,			///< 28 waiting to be repaired by a facility
 	DACTION_MOVETODROIDREPAIR,			///< 29 moving to a new location next to droid to be repaired
 	DACTION_MOVETORESTORE,				///< 30 moving to a low resistance structure
-	DACTION_MOVETOCLEAR,				///< 31 moving to a building wreck location
+	DACTION_UNUSED2,
 	DACTION_MOVETOREARM,				///< 32 moving to a rearming pad - VTOLS
 	DACTION_WAITFORREARM,				///< 33 waiting for rearm - VTOLS
 	DACTION_MOVETOREARMPOINT,			///< 34 move to rearm point - VTOLS - this actually moves them onto the pad

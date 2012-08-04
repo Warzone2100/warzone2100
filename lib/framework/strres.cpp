@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -92,14 +92,8 @@ bool strresStoreString(STR_RES *psRes, const char* pID, const char* pString)
 
 const char* strresGetString(const STR_RES* psRes, const char* ID)
 {
-	const char * string;
-
 	ASSERT(psRes != NULL, "Invalid string resource pointer");
-
-	string = treapFind(psRes->psIDTreap, ID);
-	ASSERT(string, "Could not find string for id \"%s\"", ID);
-
-	return string;
+	return treapFind(psRes->psIDTreap, ID);
 }
 
 /* Load a string resource file */

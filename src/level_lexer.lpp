@@ -1,0 +1,179 @@
+/*
+	This file is part of Warzone 2100.
+	Copyright (C) 1999-2004  Eidos Interactive
+	Copyright (C) 2005-2012  Warzone 2100 Project
+
+	Warzone 2100 is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 2 of the License, or
+	(at your option) any later version.
+
+	Warzone 2100 is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with Warzone 2100; if not, write to the Free Software
+	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
+*/
+%{
+/* @file
+ *
+ * lexer for loading level description files
+ */
+
+#include "lib/framework/frame.h"
+#include "lib/framework/string_ext.h"
+
+#include "src/levels.h"
+#include "src/levelint.h"
+
+// fwrite declared with warn_unused_result, resulting in mysterious errors in "%%" on some distros.
+static inline bool no_warn_unused_result(int ignore) { if (ignore) {} return true; }
+#define fwrite(a, b, c, d) no_warn_unused_result(fwrite(a, b, c, d))
+
+/* Maximum length for any TEXT value */
+#ifndef YYLMAX
+#define YYLMAX	255
+#endif
+
+#include "lib/framework/lexer_input.h"
+
+/* Store for any string values */
+static char aText[YYLMAX];
+
+#ifndef yyextra
+# define yyextra yyget_extra()
+#endif
+
+/* Older GNU Flex versions don't define yyget_extra(), yyset_extra(),
+ * yyget_text() and yyget_lineno().
+ * (and neither define a subminor version)
+ */
+#if !defined(YY_FLEX_SUBMINOR_VERSION) || (YY_FLEX_SUBMINOR_VERSION < 9)
+# define yyget_extra  lev_get_extra
+# define yyset_extra  lev_set_extra
+# define yyget_lineno lev_get_lineno
+# define yyget_text   lev_get_text
+extern void yyset_extra(YY_EXTRA_TYPE user_defined);
+extern YY_EXTRA_TYPE yyget_extra(void);
+extern int yyget_lineno(void);
+int yyget_lineno()
+{
+	return yylineno;
+}
+
+extern char* yyget_text(void);
+char* yyget_text()
+{
+	return yytext;
+}
+#elif defined(YY_FLEX_SUBMINOR_VERSION) && YY_FLEX_SUBMINOR_VERSION == 33
+extern YY_EXTRA_TYPE yyget_extra(void);
+extern int lev_get_lineno(void);
+extern FILE *lev_get_in(void);
+extern FILE *lev_get_out(void);
+extern int lev_get_leng(void);
+extern char *lev_get_text(void);
+extern void lev_set_lineno(int line_number);
+extern void lev_set_in(FILE* in_str);
+extern void lev_set_out(FILE* out_str);
+extern int lev_get_debug(void);
+extern void lev_set_debug(int bdebug);
+extern int lev_lex_destroy(void);
+extern void lev_set_extra(YY_EXTRA_TYPE user_defined);
+#endif
+
+%}
+
+%option yylineno noyywrap nounput never-interactive
+%option prefix="lev_"
+
+%x COMMENT
+%x SLCOMMENT
+%x QUOTE
+
+%%
+
+	/* Keywords */
+level                                           return LTK_LEVEL;
+players                                         return LTK_PLAYERS;
+type                                            return LTK_TYPE;
+data                                            return LTK_DATA;
+game                                            return LTK_GAME;
+campaign                                        return LTK_CAMPAIGN;
+camstart                                        return LTK_CAMSTART;
+camchange                                       return LTK_CAMCHANGE;
+dataset                                         return LTK_DATASET;
+expand                                          return LTK_EXPAND;
+expand_limbo                                    return LTK_EXPAND_LIMBO;
+between                                         return LTK_BETWEEN;
+miss_keep                                       return LTK_MKEEP;
+miss_keep_limbo                                 return LTK_MKEEP_LIMBO;
+miss_clear                                      return LTK_MCLEAR;
+
+	/* Match text values */
+[a-zA-Z][-0-9_a-zA-Z]*		{
+								sstrcpy(aText, yytext);
+								pLevToken = aText;
+								return LTK_IDENT;
+							}
+
+	/* Match quoted text */
+\"							{ BEGIN QUOTE; }
+<QUOTE>\"					{ BEGIN 0; }
+<QUOTE>\n					{ lev_error("Unexpected end of line in string"); }
+<QUOTE>[^\"]*				{
+								sstrcpy(aText, yytext);
+								pLevToken = aText;
+								return LTK_STRING;
+							}
+
+	/* Match integer numbers */
+-?[0-9]+					{ levVal = atol(yytext); return LTK_INTEGER; }
+
+	/* Skip white space */
+[ \t\n\x0d\x0a]						;
+
+	/* Strip comments */
+"/*"						{ BEGIN COMMENT; }
+<COMMENT>"*/" |
+<COMMENT>"*/"\n				{ BEGIN 0; }
+<COMMENT>. |
+<COMMENT>\n					;
+
+	/* Strip single line comments */
+"//"						{ BEGIN SLCOMMENT; }
+<SLCOMMENT>\n				{ BEGIN 0; }
+<SLCOMMENT>[^\n]*			;
+
+	/* Match anything that's been missed and pass it as a char */
+.							return yytext[0];
+
+%%
+
+static YY_EXTRA_TYPE pBuffer = NULL;
+
+void yyset_extra(YY_EXTRA_TYPE user_defined)
+{
+	pBuffer = user_defined;
+}
+
+YY_EXTRA_TYPE yyget_extra()
+{
+	return pBuffer;
+}
+
+/* Older GNU Flex versions don't define yylex_destroy()
+ * (and neither define a subminor version)
+ */
+#if !defined(YY_FLEX_SUBMINOR_VERSION) || (YY_FLEX_SUBMINOR_VERSION < 9)
+int lev_lex_destroy(void)
+{
+	/* For non-reentrant C scanner only. */
+	yy_delete_buffer(YY_CURRENT_BUFFER);
+	yy_init = 1;
+	return 0;
+}
+#endif

@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -158,29 +158,4 @@ const char* PlayList_NextSong()
 	}
 
 	return PlayList_CurrentSong();
-}
-
-void playListTest()
-{
-	int i;
-
-	for (i = 0; i < 10; i++)
-	{
-		const char *cur, *next;
-
-		PlayList_Quit();
-		PlayList_Init();
-		PlayList_Read("music");
-		if (numSongs != 3)
-		{
-			fprintf(stderr, "Use the default playlist for selftest!");
-		}
-		cur = PlayList_CurrentSong();
-		next = PlayList_NextSong();
-		assert(cur != NULL && next != NULL && cur != next);
-		next = PlayList_NextSong();
-		assert(songList);
-		assert(numSongs == 3);
-	}
-	fprintf(stdout, "\tPlaylist self-test: PASSED\n");
 }

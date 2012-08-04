@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -30,8 +30,15 @@
 #include <stdio.h>
 #include <time.h>
 #include "string_ext.h"
-#include "lib/framework/wzapp_c.h"
+#include "wzapp.h"
 #include "lib/gamelib/gtime.h"
+#include <map>
+#include <string>
+#include "src/warzoneconfig.h"	// for checking FS or not
+
+#ifdef WZ_OS_LINUX
+#include <execinfo.h>  // Nonfatal runtime backtraces.
+#endif //WZ_OS_LINUX
 
 extern void NotifyUserOfError(char *);		// will throw up a notifier on error
 
@@ -87,13 +94,14 @@ static const char *code_part_names[] = {
 	"input",
 	"popup",
 	"console",
-	"lobby",
 	"last"
 };
 
 static char inputBuffer[2][MAX_LEN_LOG_LINE];
 static bool useInputBuffer1 = false;
 static bool debug_flush_stderr = false;
+
+static std::map<std::string, int> warning_list;	// only used for LOG_WARNING
 
 /**
  * Convert code_part names to enum. Case insensitive.
@@ -183,19 +191,20 @@ void debug_callback_file( void ** data, const char * outputBuffer )
  * \param[in,out]	data	In: 	The filename to output to.
  * 							Out:	The filehandle.
  */
-bool debug_callback_file_init(void ** data)
+const char *WZDebugfilename;
+bool debug_callback_file_init(void **data)
 {
-	const char * filename = (const char *)*data;
+	WZDebugfilename = (const char *)*data;
 
-	FILE* const logfile = fopen(filename, "w");
+	FILE* const logfile = fopen(WZDebugfilename, "w");
 	if (!logfile)
 	{
-		fprintf(stderr, "Could not open %s for appending!\n", filename);
+		fprintf(stderr, "Could not open %s for appending!\n", WZDebugfilename);
 		return false;
 	}
 
 	setbuf(logfile, NULL);
-	fprintf(logfile, "\n--- Starting log ---\n");
+	fprintf(logfile, "\n--- Starting log [%s]---\n", WZDebugfilename);
 	*data = logfile;
 
 	return true;
@@ -287,7 +296,7 @@ void debug_exit(void)
 		free( curCallback );
 		curCallback = tmpCallback;
 	}
-
+	warning_list.clear();
 	callbackRegistry = NULL;
 }
 
@@ -307,7 +316,7 @@ void debug_register_callback( debug_callback_fn callback, debug_callback_init in
 	if (tmpCallback->init
 	 && !tmpCallback->init(&tmpCallback->data))
 	{
-		debug(LOG_ERROR, "Failed to initialise debug callback");
+		fprintf(stderr, "Failed to initialise debug callback, debugfile set to [%s]!\n", WZDebugfilename);
 		free(tmpCallback);
 		return;
 	}
@@ -367,7 +376,7 @@ void _realObjTrace(int id, const char *function, const char *str, ...)
 	printToDebugCallbacks(outputBuffer);
 }
 
-void _debug( code_part part, const char *function, const char *str, ... )
+void _debug( int line, code_part part, const char *function, const char *str, ... )
 {
 	va_list ap;
 	static char outputBuffer[MAX_LEN_LOG_LINE];
@@ -379,7 +388,23 @@ void _debug( code_part part, const char *function, const char *str, ... )
 	vssprintf(outputBuffer, str, ap);
 	va_end(ap);
 
-	ssprintf(inputBuffer[useInputBuffer1 ? 1 : 0], "[%s] %s", function, outputBuffer);
+	if (part == LOG_WARNING)
+	{
+		std::pair<std::map<std::string, int>::iterator, bool> ret;
+		ret = warning_list.insert(std::pair<std::string, int>(std::string(function) + "-" + std::string(outputBuffer), line));
+		if (ret.second)
+		{
+			ssprintf(inputBuffer[useInputBuffer1 ? 1 : 0], "[%s:%d] %s (**Further warnings of this type are suppressed.)", function, line, outputBuffer);
+		}
+		else
+		{
+			return;	// don't bother adding any more
+		}
+	}
+	else
+	{
+		ssprintf(inputBuffer[useInputBuffer1 ? 1 : 0], "[%s:%d] %s", function, line, outputBuffer);
+	}
 
 	if (sstrcmp(inputBuffer[0], inputBuffer[1]) == 0)
 	{
@@ -435,23 +460,32 @@ void _debug( code_part part, const char *function, const char *str, ... )
 		// Throw up a dialog box for users since most don't have a clue to check the dump file for information. Use for (duh) Fatal errors, that force us to terminate the game.
 		if (part == LOG_FATAL)
 		{
+			if (war_getFullscreen())
+			{
+				wzToggleFullscreen();
+			}
 #if defined(WZ_OS_WIN)
 			char wbuf[512];
-			ssprintf(wbuf, "%s\n\nPlease check your stderr.txt file in the same directory as the program file for more details. \
-				\nDo not forget to upload both the stderr.txt file and the warzone2100.rpt file in your bug reports!", useInputBuffer1 ? inputBuffer[1] : inputBuffer[0]);
-			MessageBoxA( NULL,
-				wbuf,
-				"Warzone has terminated unexpectedly", MB_OK|MB_ICONERROR);
+			ssprintf(wbuf, "%s\n\nPlease check the file (%s) in your configuration directory for more details. \
+				\nDo not forget to upload the %s file, WZdebuginfo.txt and the warzone2100.rpt files in your bug reports at http://developer.wz2100.net/newticket!", useInputBuffer1 ? inputBuffer[1] : inputBuffer[0], WZDebugfilename, WZDebugfilename);
+			MessageBoxA( NULL, wbuf, "Warzone has terminated unexpectedly", MB_OK|MB_ICONERROR);
 #elif defined(WZ_OS_MAC)
-			cocoaShowAlert("Warzone has terminated unexpectedly.",
-			               "Please check your logs for more details."
-			               "\n\nRun Console.app, search for \"wz2100\", and copy that to a file."
-			               "\n\nIf you are on 10.4 (Tiger) or 10.5 (Leopard) the crash report"
-			               " is in ~/Library/Logs/CrashReporter."
-			               " If you are on 10.6 (Snow Leopard), it is in"
-			               "\n~/Library/Logs/DiagnosticReports."
-			               "\n\nDo not forget to upload and attach those to a bug report at http://developer.wz2100.net/newticket"
-			               "\nThanks!", 2);
+			int clickedIndex = \
+			cocoaShowAlert("Warzone has quit unexpectedly.",
+			               "Please check your logs and attach them along with a bug report. Thanks!",
+			               2, "Show Log Files & Open Bug Reporter", "Ignore", NULL);
+			if (clickedIndex == 0)
+			{
+				cocoaOpenURL("http://developer.wz2100.net/newticket");
+				if (WZDebugfilename == NULL) {
+					cocoaShowAlert("Unable to open debug log.",
+					               "The debug log subsystem has not yet been initialised.",
+					               2, "Continue", NULL);
+				} else {
+					cocoaSelectFileInFinder(WZDebugfilename);
+				}
+				cocoaOpenUserCrashReportFolder();
+			}
 #else
 			const char* popupBuf = useInputBuffer1 ? inputBuffer[1] : inputBuffer[0];
 			wzFatalDialog(popupBuf);
@@ -469,12 +503,29 @@ void _debug( code_part part, const char *function, const char *str, ... )
 				wbuf,
 				"Warzone has detected a problem.", MB_OK|MB_ICONINFORMATION);
 #elif defined(WZ_OS_MAC)
-			cocoaShowAlert("Warzone has detected a problem.", inputBuffer[useInputBuffer1 ? 1 : 0], 0);
+			cocoaShowAlert("Warzone has detected a problem.", inputBuffer[useInputBuffer1 ? 1 : 0], 0, "OK", NULL);
 #endif
 		}
 
 	}
 	useInputBuffer1 = !useInputBuffer1; // Swap buffers
+}
+
+void _debugBacktrace(code_part part)
+{
+#ifdef WZ_OS_LINUX
+	void *btv[20];
+	unsigned num = backtrace(btv, sizeof(btv)/sizeof(*btv));
+	char **btc = backtrace_symbols(btv, num);
+	unsigned i;
+	for (i = 1; i + 2 < num; ++i)  // =1: Don't print "src/warzone2100(syncDebugBacktrace+0x16) [0x6312d1]". +2: Don't print last two lines of backtrace such as "/lib/libc.so.6(__libc_start_main+0xe6) [0x7f91e040ea26]", since the address varies (even with the same binary).
+	{
+		_debug(0, part, "BT", "%s", btc[i]);
+	}
+	free(btc);
+#else
+	// debugBacktrace not implemented.
+#endif
 }
 
 bool debugPartEnabled(code_part codePart)

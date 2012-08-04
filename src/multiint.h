@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -28,11 +28,10 @@
 #include "lib/widget/widgbase.h"
 
 #define MAX_LEN_AI_NAME   40
+#define AI_CUSTOM        127
 #define AI_OPEN           -2
 #define AI_CLOSED         -1
 #define AI_NOT_FOUND     -99
-
-#define MaxGames		14			// max number of concurrently playable games to allow.
 
 void readAIs();	///< step 1, load AI definition files
 void loadMultiScripts();	///< step 2, load the actual AI scripts
@@ -42,6 +41,10 @@ int getNextAIAssignment(const char *name);
 
 extern LOBBY_ERROR_TYPES getLobbyError(void);
 extern void setLobbyError(LOBBY_ERROR_TYPES error_type);
+
+extern	void	runConnectionScreen		(void);
+extern	bool	startConnectionScreen	(void);
+extern	void	intProcessConnection	(UDWORD id);
 
 extern	void	runGameFind				(void);
 extern	void	startGameFind			(void);
@@ -53,8 +56,10 @@ extern	bool	startMultiOptions		(bool bReenter);
 extern	void	frontendMultiMessages	(void);
 
 bool addMultiBut(W_SCREEN *screen, UDWORD formid, UDWORD id, UDWORD x, UDWORD y, UDWORD width, UDWORD height, const char* tipres, UDWORD norm, UDWORD down, UDWORD hi, unsigned tc = MAX_PLAYERS);
-extern bool changeColour(UBYTE player, UBYTE col);
+bool changeColour(unsigned player, int col, bool isHost);
 extern	char	sPlayer[128];
+
+extern bool bHosted;
 
 void	kickPlayer(uint32_t player_id, const char *reason, LOBBY_ERROR_TYPES type);
 void	addPlayerBox(bool);			// players (mid) box
@@ -64,6 +69,9 @@ void loadMapPreview(bool hideInterface);
 // ////////////////////////////////////////////////////////////////
 // CONNECTION SCREEN
 
+#define CON_CONTYPES		10103
+#define CON_CONTYPESWIDTH	290
+#define CON_CONTYPES_FORM	10104
 #define CON_TYPESID_START	10105
 #define CON_TYPESID_END		10128
 
@@ -81,17 +89,16 @@ void loadMapPreview(bool hideInterface);
 #define CON_OKY				CON_SETTINGSHEIGHT-MULTIOP_OKH-3
 
 #define CON_CANCEL			10102
-#define CON_HOST_GAME		10103
-#define CON_JOIN_IP			10104
-#define CON_LOGOUT			10105
-#define CON_LOGIN			10106
+
+#define CON_PHONE			10132
+#define CON_PHONEX			20
+#define CON_PHONEY			45
 
 #define CON_IP				10133
 #define CON_IPX				20
 #define CON_IPY				45
 
 #define CON_IP_CANCEL		10134
-#define CON_IP_OK			10135
 
 //for clients
 #define CON_PASSWORD		10139
@@ -104,15 +111,6 @@ void loadMapPreview(bool hideInterface);
 #define CON_H_PASSWORDX		MCOL2
 #define CON_H_PASSWORDY		MROW10 +31
 
-// Login form
-#define CON_LOGIN_USER				10150
-#define CON_LOGIN_PASS				10151
-#define CON_LOGIN_YES				10152
-#define CON_LOGIN_NO				10153
-#define CON_LOGIN_USER_LABEL		10154
-#define CON_LOGIN_PASS_LABEL		10155
-#define CON_LOGIN_SIDETEXT			10156
-#define CON_LOGIN_INFOTEXT			10157
 
 
 // ////////////////////////////////////////////////////////////////
@@ -120,19 +118,26 @@ void loadMapPreview(bool hideInterface);
 
 #define GAMES_GAMESTART		10201
 #define GAMES_GAMEEND		GAMES_GAMESTART+20
-#define GAMES_GAMEWIDTH		225
-#define GAMES_GAMEHEIGHT	40
+#define GAMES_GAMEWIDTH		540
+#define GAMES_GAMEHEIGHT	28
+// We can have a max of 4 icons for status, current icon size if 36x25.
+#define GAMES_STATUS_START 393
+#define GAMES_GAMENAME_START 2
+#define GAMES_VERSION_START 2 + 6		// indent a bit
+#define GAMES_MAPNAME_START 173
+#define GAMES_MODNAME_START 173 + 6		// indent a bit
+#define GAMES_PLAYERS_START 360
 
 // ////////////////////////////////////////////////////////////////
 // GAME OPTIONS SCREEN
 
 #define MULTIOP_PLAYERS			10231
 #define MULTIOP_PLAYERSX		360
-#define MULTIOP_PLAYERSY		15
+#define MULTIOP_PLAYERSY		1
 #define MULTIOP_PLAYER_START		10232		//list of players
 #define MULTIOP_PLAYER_END		10249
 #define MULTIOP_PLAYERSW		263
-#define MULTIOP_PLAYERSH		330
+#define MULTIOP_PLAYERSH		364
 
 #define MULTIOP_ROW_WIDTH		246
 
@@ -140,7 +145,7 @@ void loadMapPreview(bool hideInterface);
 #define MULTIOP_TEAMS_START		102310			//List of teams
 #define MULTIOP_TEAMS_END		102341
 #define MULTIOP_TEAMSWIDTH		29
-#define	MULTIOP_TEAMSHEIGHT		36
+#define	MULTIOP_TEAMSHEIGHT		38
 
 #define MULTIOP_TEAMCHOOSER_FORM	102800
 #define MULTIOP_TEAMCHOOSER			102810
@@ -152,18 +157,18 @@ void loadMapPreview(bool hideInterface);
 #define MULTIOP_READY_START             (MULTIOP_READY_FORM_ID + MAX_PLAYERS + 1)
 #define	MULTIOP_READY_END               (MULTIOP_READY_START + MAX_PLAYERS - 1)
 #define MULTIOP_READY_WIDTH			41
-#define MULTIOP_READY_HEIGHT		36
+#define MULTIOP_READY_HEIGHT		38
 #define MULTIOP_READY_IMG_OFFSET_X	3
 #define MULTIOP_READY_IMG_OFFSET_Y	6
 
 #define MULTIOP_PLAYERWIDTH		245
-#define	MULTIOP_PLAYERHEIGHT		36
+#define	MULTIOP_PLAYERHEIGHT	38
 
 #define MULTIOP_OPTIONS			10250
 #define MULTIOP_OPTIONSX		40
-#define MULTIOP_OPTIONSY		15
+#define MULTIOP_OPTIONSY		1
 #define MULTIOP_OPTIONSW		284
-#define MULTIOP_OPTIONSH		330
+#define MULTIOP_OPTIONSH		364
 
 #define MULTIOP_EDITBOXW		196
 #define	MULTIOP_EDITBOXH		30
@@ -171,15 +176,17 @@ void loadMapPreview(bool hideInterface);
 #define	MULTIOP_BLUEFORMW		226
 
 #define	MROW1					4
-#define	MROW2					MROW1+MULTIOP_EDITBOXH+4
-#define	MROW3					MROW2+MULTIOP_EDITBOXH+4
-#define	MROW4					MROW3+MULTIOP_EDITBOXH+4
-#define MROW5					MROW4+36
-#define	MROW6					MROW5+31
-#define	MROW7					MROW6+31
-#define	MROW8					MROW7+31
-#define	MROW9					MROW8+31
-#define	MROW10					MROW9+31
+#define	MROW2					MROW1+MULTIOP_EDITBOXH
+#define	MROW3					MROW2+MULTIOP_EDITBOXH
+#define	MROW4					MROW3+MULTIOP_EDITBOXH
+#define MROW5					MROW4+38
+#define	MROW6					MROW5+29
+#define	MROW7					MROW6+29
+#define	MROW8					MROW7+29
+#define	MROW9					MROW8+29
+#define	MROW10					MROW9+32
+#define	MROW11					MROW10+36
+#define	MROW12					MROW11+40
 
 #define MCOL0					50
 #define MCOL1					(MCOL0+26+10)	// rem 10 for 4 lines.
@@ -223,10 +230,12 @@ void loadMapPreview(bool hideInterface);
 #define MULTIOP_REFRESHY		453
 
 #define MULTIOP_HOST			10276
+#define MULTIOP_HOST_BUT		0xf0f0
 #define MULTIOP_HOSTX			5
 #define MULTIOP_HOSTY			MROW3+3
 
-#define MULTIOP_STRUCTLIMITS	10277
+#define MULTIOP_STRUCTLIMITS	21277	// we are using 10277 already
+#define MULTIOP_LIMITS_BUT		0xf0d0
 #define MULTIOP_STRUCTLIMITSX	5
 #define MULTIOP_STRUCTLIMITSY	MROW2+5
 
@@ -237,9 +246,15 @@ void loadMapPreview(bool hideInterface);
 
 #define MULTIOP_CHATBOX			10278
 #define MULTIOP_CHATBOXX		MULTIOP_OPTIONSX
-#define MULTIOP_CHATBOXY		350
+#define MULTIOP_CHATBOXY		364
 #define MULTIOP_CHATBOXW		((MULTIOP_PLAYERSX+MULTIOP_PLAYERSW) - MULTIOP_OPTIONSX)
 #define MULTIOP_CHATBOXH		115
+
+#define MULTIOP_CONSOLEBOX		0x1A001		// TODO: these should be enums!
+#define MULTIOP_CONSOLEBOXX		MULTIOP_OPTIONSX
+#define MULTIOP_CONSOLEBOXY		432
+#define MULTIOP_CONSOLEBOXW		((MULTIOP_PLAYERSX + MULTIOP_PLAYERSW) - MULTIOP_OPTIONSX)
+#define MULTIOP_CONSOLEBOXH		48
 
 #define MULTIOP_CHATEDIT		10279
 #define MULTIOP_CHATEDITX		4
@@ -258,13 +273,9 @@ void loadMapPreview(bool hideInterface);
 #define MULTIOP_BASETYPE		10300
 #define MULTIOP_TECHLEVEL		10302
 #define MULTIOP_COMPUTER		10304
-#define	MULTIOP_FOG				10306
 
 #define MULTIOP_COMPUTER_Y		10308
 #define MULTIOP_COMPUTER_N		10309
-
-#define	MULTIOP_FOG_ON			10310
-#define	MULTIOP_FOG_OFF			10311
 
 #define MULTIOP_SKSLIDE			102842 //10313
 #define MULTIOP_SKSLIDE_END		102873 //10320
@@ -302,8 +313,18 @@ void loadMapPreview(bool hideInterface);
 
 // ///////////////////////////////
 // Many Button Variations..
-#define	CON_NAMEBOXWIDTH		CON_SETTINGSWIDTH-20
+
+#define CON_BUTWIDTH			60
+#define CON_BUTHEIGHT			46
+
+#define CON_CONBUTW			CON_CONTYPESWIDTH-15
+#define CON_CONBUTH			46
+
+#define	CON_NAMEBOXWIDTH		CON_SETTINGSWIDTH-CON_PHONEX
 #define	CON_NAMEBOXHEIGHT		15
+
+#define CON_COMBUTWIDTH			37
+#define CON_COMBUTHEIGHT		24
 
 #define MULTIOP_OKW			37
 #define MULTIOP_OKH			24

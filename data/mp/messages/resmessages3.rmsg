@@ -1,1274 +1,979 @@
-RES_CY_AH4
-{
-	{
-		_("Cyborg Thermal Armor Improved"),
-		_("Heat resistant armored layers"),
-		_("Thermal Armor +35%"),
-		_("All Cyborgs upgraded automatically"),
-	},
-	.imdName = "MICAPSUL.pie",
-	.imdName2 = NULL,
-	.sequenceName = "res_droid.ogg",
-	.audioName = NULL,
-};
-RES_SY_RESU1
-{
-	{
-		_("Computer Technology Breakthrough"),
-		_("NEXUS Intruder Program analyzed"),
-		_("Intruder parasite isolated"),
-		_("Reduced chance of NEXUS take-over"),
-	},
-	.imdName = "MICAPSUL.PIE",
-	.imdName2 = NULL,
-	.sequenceName = "res_systech.ogg",
-	.audioName = NULL,
-};
-RES_SY_RESU2
-{
-	{
-		_("Computer Technology Breakthrough"),
-		_("Improved NEXUS resistance circuitry"),
-		_("Computer systems can now be 'ring-fenced' from NEXUS"),
-		_("Reduced chance of NEXUS take-over"),
-	},
-	.imdName = "MICAPSUL.PIE",
-	.imdName2 = NULL,
-	.sequenceName = "res_systech.ogg",
-	.audioName = NULL,
-};
-RES_CY_JP1
-{
-	{
-		_("New Cyborg Research Available"),
-		_("Aerodynamic Jump Pack"),
-		_("Gives Cyborg limited flight abilities"),
-		_("Jump Cyborgs can now be researched"),
-	},
-	.imdName = "MICAPSUL.pie",
-	.imdName2 = NULL,
-	.sequenceName = "res_droid.ogg",
-	.audioName = NULL,
-};
-RES_CY_LG3
-{
-	{
-		_("Cyborg Propulsion Improved"),
-		_("New armored construction"),
-		_("Increases Body Points"),
-		_("All Cyborgs upgraded automatically"),
-	},
-	.imdName = "MICAPSUL.pie",
-	.imdName2 = NULL,
-	.sequenceName = "res_droid.ogg",
-	.audioName = NULL,
-};
-RES_CYMET7
-{
-	{
-		_("Cyborg Materials Improved"),
-		_("Superdense composite alloys and energy-absorbing fibres"),
-		_("Kinetic Armor +35%, Body Points +35%"),
-		_("All Cyborgs upgraded automatically"),
-	},
-	.imdName = "MICAPSUL.pie",
-	.imdName2 = NULL,
-	.sequenceName = "res_droid.ogg",
-	.audioName = NULL,
-};
-RES_CYMET10
-{
-	{
-		_("Cyborg Materials Improved"),
-		_("Laminated alloys bonded with energy-deflecting optic bundles"),
-		_("Kinetic Armor +35%, Body Points +35%"),
-		_("All Cyborgs upgraded automatically"),
-	},
-	.imdName = "MICAPSUL.pie",
-	.imdName2 = NULL,
-	.sequenceName = "res_droid.ogg",
-	.audioName = NULL,
-};
-RES_CYW_MIS
-{
-	{
-		_("New Cyborg Available"),
-		_("Armed with Revenger Surface-to-Air missile"),
-		_("Body Points: Medium"),
-		_("Requires Cyborg factory to produce"),
-	},
-	.imdName = "MICAPSUL.pie",
-	.imdName2 = NULL,
-	.sequenceName = "res_droid.ogg",
-	.audioName = NULL,
-};
-RES_CYW_RL1
-{
-	{
-		_("New Cyborg Available"),
-		_("Armed with Needle Gun"),
-		_("Body Points: Medium"),
-		_("Requires Cyborg factory to produce"),
-	},
-	.imdName = "MICAPSUL.pie",
-	.imdName2 = NULL,
-	.sequenceName = "res_droid.ogg",
-	.audioName = NULL,
-};
-RES_CYW_ATM
-{
-	{
-		_("New Cyborg Available"),
-		_("Armed with Scourge anti-tank missile"),
-		_("Body Points: Medium"),
-		_("Requires Cyborg factory to produce"),
-	},
-	.imdName = "MICAPSUL.pie",
-	.imdName2 = NULL,
-	.sequenceName = "res_droid.ogg",
-	.audioName = NULL,
-};
-RES_CYW_LS1
-{
-	{
-		_("New Cyborg Available"),
-		_("Armed with flashlight laser"),
-		_("Body Points: Medium"),
-		_("Requires Cyborg factory to produce"),
-	},
-	.imdName = "MICAPSUL.pie",
-	.imdName2 = NULL,
-	.sequenceName = "res_droid.ogg",
-	.audioName = NULL,
-};
-RES_CYJ_RKT
-{
-	{
-		_("New Jump Cyborg Available"),
-		_("Armed with Lancer anti-tank missile"),
-		_("Body Points: Medium"),
-		_("Requires Cyborg factory to produce"),
-	},
-	.imdName = "MICAPSUL.pie",
-	.imdName2 = NULL,
-	.sequenceName = "res_droid.ogg",
-	.audioName = NULL,
-};
-RES_CYJ_MG4
-{
-	{
-		_("New Jump Cyborg Available"),
-		_("Armed with Cyborg assault gun"),
-		_("Body Points: Medium"),
-		_("Requires Cyborg factory to produce"),
-	},
-	.imdName = "MICAPSUL.pie",
-	.imdName2 = NULL,
-	.sequenceName = "res_droid.ogg",
-	.audioName = NULL,
-};
-RES_CYJ_RL1
-{
-	{
-		_("New Jump Cyborg Available"),
-		_("Armed with Needle Gun"),
-		_("Body Points: Medium"),
-		_("Requires Cyborg factory to produce"),
-	},
-	.imdName = "MICAPSUL.pie",
-	.imdName2 = NULL,
-	.sequenceName = "res_droid.ogg",
-	.audioName = NULL,
-};
-RES_CYJ_ATM
-{
-	{
-		_("New Jump Cyborg Available"),
-		_("Armed with Scourge anti-tank missile"),
-		_("Body Points: Medium"),
-		_("Requires Cyborg factory to produce"),
-	},
-	.imdName = "MICAPSUL.pie",
-	.imdName2 = NULL,
-	.sequenceName = "res_droid.ogg",
-	.audioName = NULL,
-};
-RES_CYJ_LS1
-{
-	{
-		_("New Jump Cyborg Available"),
-		_("Armed with Flashlight Laser"),
-		_("Body Points: Medium"),
-		_("Requires cyborg factory to produce"),
-	},
-	.imdName = "MICAPSUL.pie",
-	.imdName2 = NULL,
-	.sequenceName = "res_droid.ogg",
-	.audioName = NULL,
-};
-RES_DF_WU7
-{
-	{
-		_("Defenses Improved"),
-		_("High tensile concrete-plastic composite"),
-		_("Armor +35%, Body Points +30%"),
-		_("All defenses and walls upgraded automatically"),
-	},
-	.imdName = "MICAPSUL.pie",
-	.imdName2 = NULL,
-	.sequenceName = "res_struttech.ogg",
-	.audioName = NULL,
-};
-RES_DF_WU10
-{
-	{
-		_("Defenses Improved"),
-		_("Bonded metallic laminates formed into walls and defenses"),
-		_("Armor +35%, Body Points +30%"),
-		_("All defenses and walls upgraded automatically"),
-	},
-	.imdName = "MICAPSUL.pie",
-	.imdName2 = NULL,
-	.sequenceName = "res_struttech.ogg",
-	.audioName = NULL,
-};
-RES_EMP_SAM1
-{
-	{
-		_("New Defensive Structure Available"),
-		_("SAM site with Avenger missiles"),
-		_("Automatically targets VTOLs"),
-		_("Defensive Strength: Medium"),
-	},
-	.imdName = "MICAPSUL.pie",
-	.imdName2 = NULL,
-	.sequenceName = "res_struttech.ogg",
-	.audioName = NULL,
-};
-RES_EMP_SAM2
-{
-	{
-		_("New Defensive Structure Available"),
-		_("SAM site with Vindicator missiles"),
-		_("Automatically targets VTOLs"),
-		_("Defensive Strength: Medium"),
-	},
-	.imdName = "MICAPSUL.pie",
-	.imdName2 = NULL,
-	.sequenceName = "res_struttech.ogg",
-	.audioName = NULL,
-};
-RES_EMP_MdAM
-{
-	{
-		_("New Defensive Structure Available"),
-		_("Artillery battery firing Firestorm Missiles"),
-		_("Assigned automatically to nearest sensor or CB tower"),
-		_("Defensive Strength: Medium"),
-	},
-	.imdName = "MICAPSUL.pie",
-	.imdName2 = NULL,
-	.sequenceName = "res_struttech.ogg",
-	.audioName = NULL,
-};
-RES_EMP_HvAM
-{
-	{
-		_("New Defensive Structure Available"),
-		_("Artillery battery firing Novastorm Missiles"),
-		_("Assigned automatically to nearest sensor or CB tower"),
-		_("Defensive Strength: Medium"),
-	},
-	.imdName = "MICAPSUL.pie",
-	.imdName2 = NULL,
-	.sequenceName = "res_struttech.ogg",
-	.audioName = NULL,
-};
-RES_EMP_PrisLas
-{
-	{
-		_("New Defensive Structure Available"),
-		_("Armored strongpoint with Flashlight laser"),
-		_("Automatically targets enemies in range"),
-		_("Defensive Strength: High"),
-	},
-	.imdName = "MICAPSUL.pie",
-	.imdName2 = NULL,
-	.sequenceName = "res_struttech.ogg",
-	.audioName = NULL,
-};
-RES_EMP_PulseLas
-{
-	{
-		_("New Defensive Structure Available"),
-		_("Armored guard tower with Pulse Laser"),
-		_("Automatically targets enemies in range"),
-		_("Defensive Strength: Medium"),
-	},
-	.imdName = "MICAPSUL.pie",
-	.imdName2 = NULL,
-	.sequenceName = "res_struttech.ogg",
-	.audioName = NULL,
-};
-RES_EMP_Rail2
-{
-	{
-		_("New Defensive Structure Available"),
-		_("Armored strongpoint with Rail Gun"),
-		_("Automatically targets enemies in range"),
-		_("Defensive Strength: High"),
-	},
-	.imdName = "MICAPSUL.pie",
-	.imdName2 = NULL,
-	.sequenceName = "res_struttech.ogg",
-	.audioName = NULL,
-};
-RES_EMP_Rail3
-{
-	{
-		_("New Defensive Structure Available"),
-		_("Armored strongpoint with Gauss Cannon"),
-		_("Automatically targets enemies in range"),
-		_("Defensive Strength: High"),
-	},
-	.imdName = "MICAPSUL.pie",
-	.imdName2 = NULL,
-	.sequenceName = "res_struttech.ogg",
-	.audioName = NULL,
-};
-RES_EMP_ATMTOW
-{
-	{
-		_("New Defensive Structure Available"),
-		_("Armored guard tower with Scourge Missile"),
-		_("Automatically targets enemies within sensor range"),
-		_("Defensive Strength: Medium"),
-	},
-	.imdName = "MICAPSUL.pie",
-	.imdName2 = NULL,
-	.sequenceName = "res_struttech.ogg",
-	.audioName = NULL,
-};
-RES_EMP_RL1TOW
-{
-	{
-		_("New Defensive Structure Available"),
-		_("Armored guard tower with Needle Gun"),
-		_("Automatically targets enemies within sensor range"),
-		_("Defensive Strength: High"),
-	},
-	.imdName = "MICAPSUL.pie",
-	.imdName2 = NULL,
-	.sequenceName = "res_struttech.ogg",
-	.audioName = NULL,
-};
-RES_WT9_ATM
-{
-	{
-		_("New Defensive Structure Available"),
-		_("Armored hardpoint with Scourge AT Missile"),
-		_("Automatically targets enemies within sensor range"),
-		_("Defensive Strength: High"),
-	},
-	.imdName = "MICAPSUL.pie",
-	.imdName2 = NULL,
-	.sequenceName = "res_struttech.ogg",
-	.audioName = NULL,
-};
-RES_WT14_PLS
-{
-	{
-		_("New Defensive Structure Available"),
-		_("Armored hardpoint with Flashlight laser"),
-		_("Automatically targets enemies within sensor range"),
-		_("Defensive Strength: High"),
-	},
-	.imdName = "MICAPSUL.pie",
-	.imdName2 = NULL,
-	.sequenceName = "res_struttech.ogg",
-	.audioName = NULL,
-};
-RES_WT15_RL2
-{
-	{
-		_("New Defensive Structure Available"),
-		_("Armored hardpoint with Rail Gun"),
-		_("Automatically targets enemies within sensor range"),
-		_("Defensive Strength: High"),
-	},
-	.imdName = "MICAPSUL.pie",
-	.imdName2 = NULL,
-	.sequenceName = "res_struttech.ogg",
-	.audioName = NULL,
-};
-RES_WT15_RL3
-{
-	{
-		_("New Defensive Structure Available"),
-		_("Armored hardpoint with Gauss Cannon"),
-		_("Automatically targets enemies within sensor range"),
-		_("Defensive Strength: High"),
-	},
-	.imdName = "MICAPSUL.pie",
-	.imdName2 = NULL,
-	.sequenceName = "res_struttech.ogg",
-	.audioName = NULL,
-};
-RES_ST_RFU7
-{
-	{
-		_("Repair Facility Improved"),
-		_("Advanced repair techniques"),
-		_("Repair Speed +100%"),
-		_("All repair facilities upgraded automatically"),
-	},
-	.imdName = "MICAPSUL.pie",
-	.imdName2 = NULL,
-	.sequenceName = "res_struttech.ogg",
-	.audioName = NULL,
-};
-RES_POWU2
-{
-	{
-		_("Improved Power Generator Performance"),
-		_("Vapor Turbine boosts power output"),
-		_("Power output +30%"),
-		_("All power generators upgraded automatically"),
-	},
-	.imdName = "MICAPSUL.pie",
-	.imdName2 = NULL,
-	.sequenceName = "res_pow.ogg",
-	.audioName = NULL,
-};
-RES_ST_RU7
-{
-	{
-		_("Research Improved"),
-		_("Neural Synapse Research Brain"),
-		_("Research speed +30%"),
-		_("All research facilities upgraded automatically"),
-	},
-	.imdName = "MICAPSUL.pie",
-	.imdName2 = NULL,
-	.sequenceName = "res_struttech.ogg",
-	.audioName = NULL,
-};
-RES_ST_MAT7
-{
-	{
-		_("Increases Damage Resistance"),
-		_("Advanced Base Structure Materials"),
-		_("Armor +35%, Body Points +30%"),
-		_("All base structures upgraded automatically"),
-	},
-	.imdName = "MICAPSUL.pie",
-	.imdName2 = NULL,
-	.sequenceName = "res_struttech.ogg",
-	.audioName = NULL,
-};
-RES_ST_MAT10
-{
-	{
-		_("Increases Damage Resistance"),
-		_("High Density Base Structure Materials"),
-		_("Armor +35%, Body Points +30%"),
-		_("All base structures upgraded automatically"),
-	},
-	.imdName = "MICAPSUL.pie",
-	.imdName2 = NULL,
-	.sequenceName = "res_struttech.ogg",
-	.audioName = NULL,
-};
-RES_ST_VFU4
-{
-	{
-		_("Production Improved"),
-		_("Advanced VTOL Production"),
-		_("Increases VTOL factory output"),
-		_("All VTOL factories upgraded automatically"),
-	},
-	.imdName = "MICAPSUL.pie",
-	.imdName2 = NULL,
-	.sequenceName = "res_struttech.ogg",
-	.audioName = NULL,
-};
-RES_ST_VPU4
-{
-	{
-		_("VTOL Rearming Times Reduced"),
-		_("Robotic VTOL Rearming"),
-		_("Rearming speed +30%"),
-		_("All rearming pads upgraded automatically"),
-	},
-	.imdName = "MICAPSUL.pie",
-	.imdName2 = NULL,
-	.sequenceName = "res_struttech.ogg",
-	.audioName = NULL,
-};
-RES_ENGIN3
-{
-	{
-		_("Research Breakthrough Improves Construction Rates"),
-		_("Advanced Engineering Techniques"),
-		_("Construction speed +20%"),
-		_("All trucks upgraded automatically"),
-	},
-	.imdName = "MICAPSUL.PIE",
-	.imdName2 = NULL,
-	.sequenceName = "res_systech.ogg",
-	.audioName = NULL,
-};
-RES_SY_CBSU3
-{
-	{
-		_("CB Sensor Improved"),
-		_("Improved fire detection systems"),
-		_("Extends CB Range"),
-		_("All CB sensors upgraded automatically"),
-	},
-	.imdName = "MICAPSUL.PIE",
-	.imdName2 = NULL,
-	.sequenceName = "res_systech.ogg",
-	.audioName = NULL,
-};
-RES_SY_VCBSU3
-{
-	{
-		_("VTOL CB Improved"),
-		_("Advanced fire detection systems"),
-		_("Extends VTOL CB Range"),
-		_("All VTOL CB sensors upgraded automatically"),
-	},
-	.imdName = "MICAPSUL.PIE",
-	.imdName2 = NULL,
-	.sequenceName = "res_systech.ogg",
-	.audioName = NULL,
-};
-RES_SY_VS3
-{
-	{
-		_("VTOL Strike Improved"),
-		_("Advanced target recognition systems"),
-		_("Extends VTOL Strike Range"),
-		_("All VTOL Strike sensors upgraded automatically"),
-	},
-	.imdName = "MICAPSUL.PIE",
-	.imdName2 = NULL,
-	.sequenceName = "res_systech.ogg",
-	.audioName = NULL,
-};
-RES_SY_ST1
-{
-	{
-		_("New Systems Turret Available"),
-		_("Synaptic Link Scrambler technology"),
-		_("Electronically attacks and disrupts enemy structures"),
-		_("Steals technology from enemies"),
-	},
-	.imdName = "MICAPSUL.PIE",
-	.imdName2 = NULL,
-	.sequenceName = "res_systech.ogg",
-	.audioName = NULL,
-};
-RES_SY_ACYB
-{
-	{
-		_("New Repair Technology Discovered"),
-		_("Synaptic Link technology breakthrough"),
-		_("On-board diagnostic and repair systems"),
-		_("Enables self-repair in all Cyborgs"),
-	},
-	.imdName = "MICAPSUL.PIE",
-	.imdName2 = NULL,
-	.sequenceName = "res_systech.ogg",
-	.audioName = NULL,
-};
-RES_SY_ASTRUC
-{
-	{
-		_("New Repair Technology Discovered"),
-		_("Synaptic Link technology breakthrough"),
-		_("Built-in diagnostic and repair systems"),
-		_("Enables self-repair in all base structures"),
-	},
-	.imdName = "MICAPSUL.PIE",
-	.imdName2 = NULL,
-	.sequenceName = "res_systech.ogg",
-	.audioName = NULL,
-};
-RES_SY_ADEF
-{
-	{
-		_("New Repair Technology Discovered"),
-		_("Synaptic Link technology breakthrough"),
-		_("Built-in diagnostic and repair systems"),
-		_("Enables self-repair in all defenses"),
-	},
-	.imdName = "MICAPSUL.PIE",
-	.imdName2 = NULL,
-	.sequenceName = "res_systech.ogg",
-	.audioName = NULL,
-};
-RES_SY_AVEH
-{
-	{
-		_("New Repair Technology Discovered"),
-		_("Synaptic Link technology breakthrough"),
-		_("On-board diagnostic and repair systems"),
-		_("Enables self-repair in all vehicles"),
-	},
-	.imdName = "MICAPSUL.PIE",
-	.imdName2 = NULL,
-	.sequenceName = "res_systech.ogg",
-	.audioName = NULL,
-};
-RES_V_B03
-{
-	{
-		_("NEXUS Light Body"),
-		_("Superior armor and body points to Viper"),
-		_("Faster than Viper"),
-		_("Expensive to produce"),
-	},
-	.imdName = "MICAPSUL.pie",
-	.imdName2 = NULL,
-	.sequenceName = "res_droid.ogg",
-	.audioName = NULL,
-};
-RES_V_B07
-{
-	{
-		_("NEXUS Medium Body"),
-		_("Superior armor and body points to Cobra"),
-		_("Faster than Cobra"),
-		_("Expensive and slow to produce"),
-	},
-	.imdName = "MICAPSUL.pie",
-	.imdName2 = NULL,
-	.sequenceName = "res_droid.ogg",
-	.audioName = NULL,
-};
-RES_V_B10
-{
-	{
-		_("NEXUS Heavy Body"),
-		_("More armor and body points than Python"),
-		_("Faster than Python"),
-		_("Very expensive to produce"),
-	},
-	.imdName = "MICAPSUL.pie",
-	.imdName2 = NULL,
-	.sequenceName = "res_droid.ogg",
-	.audioName = NULL,
-};
-RES_V_EN7
-{
-	{
-		_("Vehicle Engine Upgrade"),
-		_("Gas Turbine Engine"),
-		_("Vehicle speed +5%"),
-		_("All vehicles upgraded automatically"),
-	},
-	.imdName = "MICAPSUL.pie",
-	.imdName2 = NULL,
-	.sequenceName = "res_droid.ogg",
-	.audioName = NULL,
-};
-RES_V_EN10
-{
-	{
-		_("Vehicle Engine Upgrade"),
-		_("Ionizing Turbine Engine"),
-		_("Vehicle speed +5%"),
-		_("All vehicles upgraded automatically"),
-	},
-	.imdName = "MICAPSUL.pie",
-	.imdName2 = NULL,
-	.sequenceName = "res_droid.ogg",
-	.audioName = NULL,
-};
-RES_V_MET7
-{
-	{
-		_("Vehicle Bodies Improved"),
-		_("Superdense composite alloys and energy-absorbing fibres"),
-		_("Kinetic armor +30%, body points +30%"),
-		_("All vehicles upgraded automatically"),
-	},
-	.imdName = "MICAPSUL.pie",
-	.imdName2 = NULL,
-	.sequenceName = "res_droid.ogg",
-	.audioName = NULL,
-};
-RES_V_MET10
-{
-	{
-		_("Vehicle Bodies Improved"),
-		_("Laminated alloys bonded with energy-deflecting optic bundles"),
-		_("Kinetic armor +30%, body points +30%"),
-		_("All vehicles upgraded automatically"),
-	},
-	.imdName = "MICAPSUL.pie",
-	.imdName2 = NULL,
-	.sequenceName = "res_droid.ogg",
-	.audioName = NULL,
-};
-RES_V_AH4
-{
-	{
-		_("Vehicle Thermal Armor Improved"),
-		_("Heat-resistant armored layers"),
-		_("Thermal Armor +40%"),
-		_("All vehicles upgraded automatically"),
-	},
-	.imdName = "MICAPSUL.pie",
-	.imdName2 = NULL,
-	.sequenceName = "res_droid.ogg",
-	.audioName = NULL,
-};
-RES_HALFT3
-{
-	{
-		_("Vehicle Propulsion Improved"),
-		_("New armored construction"),
-		_("Increases Body Points"),
-		_("All half-tracks upgraded automatically"),
-	},
-	.imdName = "MICAPSUL.pie",
-	.imdName2 = NULL,
-	.sequenceName = "res_droid.ogg",
-	.audioName = NULL,
-};
-RES_V_P_H3
-{
-	{
-		_("Vehicle Propulsion Improved"),
-		_("New armored construction"),
-		_("Increases Body Points"),
-		_("All hovers upgraded automatically"),
-	},
-	.imdName = "MICAPSUL.pie",
-	.imdName2 = NULL,
-	.sequenceName = "res_droid.ogg",
-	.audioName = NULL,
-};
-RES_TRACK3
-{
-	{
-		_("Vehicle Propulsion Improved"),
-		_("New armored construction"),
-		_("Increases Body Points"),
-		_("All tracks upgraded automatically"),
-	},
-	.imdName = "MICAPSUL.pie",
-	.imdName2 = NULL,
-	.sequenceName = "res_droid.ogg",
-	.audioName = NULL,
-};
-RES_V_P_W3
-{
-	{
-		_("Vehicle Propulsion Improved"),
-		_("New armored construction"),
-		_("Increases Body Points"),
-		_("All wheels upgraded automatically"),
-	},
-	.imdName = "MICAPSUL.pie",
-	.imdName2 = NULL,
-	.sequenceName = "res_droid.ogg",
-	.audioName = NULL,
-};
-RES_V_P_V2
-{
-	{
-		_("Vehicle Propulsion Improved"),
-		_("New power efficient propulsion"),
-		_("Body Points and Speed Increased"),
-		_("All VTOLs upgraded automatically"),
-	},
-	.imdName = "MICAPSUL.pie",
-	.imdName2 = NULL,
-	.sequenceName = "res_droid.ogg",
-	.audioName = NULL,
-};
-RES_V_P_V3
-{
-	{
-		_("Vehicle Propulsion Improved"),
-		_("New power efficient propulsion"),
-		_("Body Points and Speed Increased"),
-		_("All VTOLs upgraded automatically"),
-	},
-	.imdName = "MICAPSUL.pie",
-	.imdName2 = NULL,
-	.sequenceName = "res_droid.ogg",
-	.audioName = NULL,
-};
-RES_W_AAAC3
-{
-	{
-		_("AA Upgrade"),
-		_("Computer plots and guides shell to target's position"),
-		_("AA accuracy +10%"),
-		_("All AA weapons upgraded automatically"),
-	},
-	.imdName = "MICAPSUL.PIE",
-	.imdName2 = NULL,
-	.sequenceName = "res_weapons.ogg",
-	.audioName = NULL,
-};
-RES_W_AAD4
-{
-	{
-		_("AA Flak Upgrade"),
-		_("High Explosive Armor Piercing Flak"),
-		_("AA Flak damage +25%"),
-		_("All AA flak weapons upgraded automatically"),
-	},
-	.imdName = "MICAPSUL.PIE",
-	.imdName2 = NULL,
-	.sequenceName = "res_weapons.ogg",
-	.audioName = NULL,
-};
-RES_W_AAROF4
-{
-	{
-		_("AA Upgrade"),
-		_("Chainfeed loader eradicates jams and improves performance"),
-		_("AA reload time -15%"),
-		_("All AA weapons upgraded automatically"),
-	},
-	.imdName = "MICAPSUL.PIE",
-	.imdName2 = NULL,
-	.sequenceName = "res_weapons.ogg",
-	.audioName = NULL,
-};
-RES_W_BMB4
-{
-	{
-		_("New Bomb Bay Available"),
-		_("Drops high intensity thermite bombs"),
-		_("Best Targets: Bunkers and hardpoints"),
-		_("Body Points: Low"),
-	},
-	.imdName = "MICAPSUL.PIE",
-	.imdName2 = NULL,
-	.sequenceName = "res_weapons.ogg",
-	.audioName = NULL,
-};
-RES_W_BAC3
-{
-	{
-		_("Bomb Upgrade"),
-		_("Low yield thermonuclear warhead"),
-		_("Bomb damage +25%"),
-		_("All bomb bays upgraded automatically"),
-	},
-	.imdName = "MICAPSUL.PIE",
-	.imdName2 = NULL,
-	.sequenceName = "res_weapons.ogg",
-	.audioName = NULL,
-};
-RES_W_CN_D7
-{
-	{
-		_("Cannon Upgrade"),
-		_("High-Velocity Armor-Piercing Fin-Stabilised Discarding Sabot"),
-		_("Cannon damage +25%"),
-		_("All cannons upgraded automatically"),
-	},
-	.imdName = "MICAPSUL.PIE",
-	.imdName2 = NULL,
-	.sequenceName = "res_weapons.ogg",
-	.audioName = NULL,
-};
-RES_W_CN_ROF4
-{
-	{
-		_("Cannon Upgrade"),
-		_("Robotic loading system feeds rounds into breech"),
-		_("Cannon reload time -10%"),
-		_("All cannons upgraded automatically"),
-	},
-	.imdName = "MICAPSUL.PIE",
-	.imdName2 = NULL,
-	.sequenceName = "res_weapons.ogg",
-	.audioName = NULL,
-};
-RES_W_HOWAC3
-{
-	{
-		_("Howitzer Upgrade"),
-		_("Computer guided shells"),
-		_("Howitzer accuracy +10%"),
-		_("All howitzers upgraded automatically"),
-	},
-	.imdName = "MICAPSUL.PIE",
-	.imdName2 = NULL,
-	.sequenceName = "res_weapons.ogg",
-	.audioName = NULL,
-};
-RES_W_HOWD4
-{
-	{
-		_("Howitzer Upgrade"),
-		_("High Explosive Armor Piercing Shells"),
-		_("Howitzer damage +25%"),
-		_("All howitzers upgraded automatically"),
-	},
-	.imdName = "MICAPSUL.PIE",
-	.imdName2 = NULL,
-	.sequenceName = "res_weapons.ogg",
-	.audioName = NULL,
-};
-RES_W_HOWRF4
-{
-	{
-		_("Howitzer Upgrade"),
-		_("Robotic loading system feeds rounds into breech"),
-		_("Howitzer reload time -10%"),
-		_("All howitzers upgraded automatically"),
-	},
-	.imdName = "MICAPSUL.PIE",
-	.imdName2 = NULL,
-	.sequenceName = "res_weapons.ogg",
-	.audioName = NULL,
-};
-RES_W_LAS1
-{
-	{
-		_("New Laser Weapon Available"),
-		_("Generates and concentrates bursts of laser energy"),
-		_("Best Targets: Cyborgs"),
-		_("Body Points: Medium"),
-	},
-	.imdName = "MICAPSUL.PIE",
-	.imdName2 = NULL,
-	.sequenceName = "res_weapons.ogg",
-	.audioName = NULL,
-};
-RES_W_LAS2
-{
-	{
-		_("New Laser Weapon Available"),
-		_("Fires pulses of laser light"),
-		_("Best Targets: Cyborgs"),
-		_("Body Points: Medium"),
-	},
-	.imdName = "MICAPSUL.PIE",
-	.imdName2 = NULL,
-	.sequenceName = "res_weapons.ogg",
-	.audioName = NULL,
-};
-RES_LASAC1
-{
-	{
-		_("Laser Upgrade"),
-		_("Improvement in laser optics reduces light dispersal"),
-		_("Laser accuracy +10%"),
-		_("All lasers upgraded automatically"),
-	},
-	.imdName = "MICAPSUL.PIE",
-	.imdName2 = NULL,
-	.sequenceName = "res_weapons.ogg",
-	.audioName = NULL,
-};
-RES_LASD1
-{
-	{
-		_("Laser Upgrade"),
-		_("Improvement in laser emission density"),
-		_("Laser damage +25%"),
-		_("All lasers upgraded automatically"),
-	},
-	.imdName = "MICAPSUL.PIE",
-	.imdName2 = NULL,
-	.sequenceName = "res_weapons.ogg",
-	.audioName = NULL,
-};
-RES_LASROF1
-{
-	{
-		_("Laser Upgrade"),
-		_("Improved Energizer reduces laser recharge time"),
-		_("Laser reload time -15%"),
-		_("All lasers upgraded automatically"),
-	},
-	.imdName = "MICAPSUL.PIE",
-	.imdName2 = NULL,
-	.sequenceName = "res_weapons.ogg",
-	.audioName = NULL,
-};
-RES_W_MG_D8
-{
-	{
-		_("Machinegun Upgrade"),
-		_("Depleted uranium kinetic energy bullets"),
-		_("Machinegun damage +25%"),
-		_("All machineguns upgraded automatically"),
-	},
-	.imdName = "MICAPSUL.PIE",
-	.imdName2 = NULL,
-	.sequenceName = "res_weapons.ogg",
-	.audioName = NULL,
-};
-RES_W_MG_D10
-{
-	{
-		_("Machinegun Upgrade"),
-		_("Collapsing Plutonium kinetic energy bullets"),
-		_("Machinegun damage +25%"),
-		_("All machineguns upgraded automatically"),
-	},
-	.imdName = "MICAPSUL.PIE",
-	.imdName2 = NULL,
-	.sequenceName = "res_weapons.ogg",
-	.audioName = NULL,
-};
-RES_W_ASM_AT
-{
-	{
-		_("New Missile Turret Available"),
-		_("Anti-tank missile"),
-		_("Best Targets: Vehicles"),
-		_("Body Points: Very Low"),
-	},
-	.imdName = "MICAPSUL.PIE",
-	.imdName2 = NULL,
-	.sequenceName = "res_weapons.ogg",
-	.audioName = NULL,
-};
-RES_W_ASM_BB
-{
-	{
-		_("New Missile Turret Available"),
-		_("Bunker buster missile"),
-		_("Best Targets: Bunkers and hardpoints"),
-		_("Body Points: Very Low"),
-	},
-	.imdName = "MICAPSUL.PIE",
-	.imdName2 = NULL,
-	.sequenceName = "res_weapons.ogg",
-	.audioName = NULL,
-};
-RES_W_MS_AC1
-{
-	{
-		_("Missile Upgrade"),
-		_("On-board computer predicts target movement"),
-		_("Missile accuracy +10%"),
-		_("All missiles upgraded automatically"),
-	},
-	.imdName = "MICAPSUL.PIE",
-	.imdName2 = NULL,
-	.sequenceName = "res_weapons.ogg",
-	.audioName = NULL,
-};
-RES_W_MS_AC2
-{
-	{
-		_("Missile Upgrade"),
-		_("Missile actively seeks and homes on targets"),
-		_("Missile accuracy +10%"),
-		_("All missiles upgraded automatically"),
-	},
-	.imdName = "MICAPSUL.PIE",
-	.imdName2 = NULL,
-	.sequenceName = "res_weapons.ogg",
-	.audioName = NULL,
-};
-RES_W_MS_D1
-{
-	{
-		_("Missile Upgrade"),
-		_("Low yield thermonuclear warhead"),
-		_("Missile damage +25%"),
-		_("All missiles upgraded automatically"),
-	},
-	.imdName = "MICAPSUL.PIE",
-	.imdName2 = NULL,
-	.sequenceName = "res_weapons.ogg",
-	.audioName = NULL,
-};
-RES_W_MS_LtSAM1
-{
-	{
-		_("New SAM Turret Available"),
-		_("Surface-to-air missile"),
-		_("Best Targets: Aerial targets only"),
-		_("Body Points: Very Low"),
-	},
-	.imdName = "MICAPSUL.PIE",
-	.imdName2 = NULL,
-	.sequenceName = "res_weapons.ogg",
-	.audioName = NULL,
-};
-RES_W_MS_HvSAM1
-{
-	{
-		_("New SAM Turret Available"),
-		_("Heavy surface-to-air missile"),
-		_("Best Targets: Aerial targets only"),
-		_("Body Points: Very Low"),
-	},
-	.imdName = "MICAPSUL.PIE",
-	.imdName2 = NULL,
-	.sequenceName = "res_weapons.ogg",
-	.audioName = NULL,
-};
-RES_W_MS_MART
-{
-	{
-		_("New Artillery Missile Turret Available"),
-		_("High explosive artillery missile"),
-		_("Best Targets: Base structures and cyborgs"),
-		_("Body Points: Very Low"),
-	},
-	.imdName = "MICAPSUL.PIE",
-	.imdName2 = NULL,
-	.sequenceName = "res_weapons.ogg",
-	.audioName = NULL,
-};
-RES_W_MS_HART
-{
-	{
-		_("New Artillery Missile Turret Available"),
-		_("High explosive heavy artillery missile"),
-		_("Best Targets: Base structures and cyborgs"),
-		_("Body Points: Very Low"),
-	},
-	.imdName = "MICAPSUL.PIE",
-	.imdName2 = NULL,
-	.sequenceName = "res_weapons.ogg",
-	.audioName = NULL,
-};
-RES_W_MS_ROF1
-{
-	{
-		_("Missile Upgrade"),
-		_("Missiles detect and lock-on to targets while loading"),
-		_("Missile reload time -15%"),
-		_("All missiles upgraded automatically"),
-	},
-	.imdName = "MICAPSUL.PIE",
-	.imdName2 = NULL,
-	.sequenceName = "res_weapons.ogg",
-	.audioName = NULL,
-};
-RES_W_SMS_ROF1
-{
-	{
-		_("Missile Upgrade"),
-		_("Racked missile dispensers allow for fast reloading"),
-		_("Missile reload time -15%"),
-		_("All missiles upgraded automatically"),
-	},
-	.imdName = "MICAPSUL.PIE",
-	.imdName2 = NULL,
-	.sequenceName = "res_weapons.ogg",
-	.audioName = NULL,
-};
-RES_W_M_AC3
-{
-	{
-		_("Mortar Upgrade"),
-		_("Self-guided rocket-powered shells"),
-		_("Mortar accuracy +10%"),
-		_("All mortars upgraded automatically"),
-	},
-	.imdName = "MICAPSUL.PIE",
-	.imdName2 = NULL,
-	.sequenceName = "res_weapons.ogg",
-	.audioName = NULL,
-};
-RES_W_M_ROF4
-{
-	{
-		_("Mortar Upgrade"),
-		_("Robotic loading system feeds rounds into breech"),
-		_("Mortar reload time -10%"),
-		_("All mortars upgraded automatically"),
-	},
-	.imdName = "MICAPSUL.PIE",
-	.imdName2 = NULL,
-	.sequenceName = "res_weapons.ogg",
-	.audioName = NULL,
-};
-RES_W_RAIL1
-{
-	{
-		_("New Rail Gun Available"),
-		_("Rapid fire rail gun firing needle darts"),
-		_("Best Targets: Vehicles"),
-		_("Body Points: Medium"),
-	},
-	.imdName = "MICAPSUL.PIE",
-	.imdName2 = NULL,
-	.sequenceName = "res_weapons.ogg",
-	.audioName = NULL,
-};
-RES_W_RAIL2
-{
-	{
-		_("New Rail Gun Available"),
-		_("Rail gun firing armor-piercing darts"),
-		_("Best Targets: Vehicles"),
-		_("Body Points: Medium"),
-	},
-	.imdName = "MICAPSUL.PIE",
-	.imdName2 = NULL,
-	.sequenceName = "res_weapons.ogg",
-	.audioName = NULL,
-};
-RES_W_RAIL3
-{
-	{
-		_("New Rail Gun Available"),
-		_("Heavy rail gun firing large kinetic energy darts"),
-		_("Best Targets: Vehicles"),
-		_("Body Points: High"),
-	},
-	.imdName = "MICAPSUL.PIE",
-	.imdName2 = NULL,
-	.sequenceName = "res_weapons.ogg",
-	.audioName = NULL,
-};
-RES_W_RAIL_AC1
-{
-	{
-		_("Rail Gun Upgrade"),
-		_("Computer predicts and compensates for target's movement"),
-		_("Rail Gun accuracy +10%"),
-		_("All rail guns upgraded automatically"),
-	},
-	.imdName = "MICAPSUL.PIE",
-	.imdName2 = NULL,
-	.sequenceName = "res_weapons.ogg",
-	.audioName = NULL,
-};
-RES_W_RAIL_D1
-{
-	{
-		_("Rail Gun Upgrade"),
-		_("Improved armor-piercing dart"),
-		_("Rail Gun damage +25%"),
-		_("All rail guns upgraded automatically"),
-	},
-	.imdName = "MICAPSUL.PIE",
-	.imdName2 = NULL,
-	.sequenceName = "res_weapons.ogg",
-	.audioName = NULL,
-};
-RES_W_RAIL_ROF1
-{
-	{
-		_("Rail Gun Upgrade"),
-		_("Increased gauss output speeds up reload time"),
-		_("Rail Gun reload time -15%"),
-		_("All rail guns upgraded automatically"),
-	},
-	.imdName = "MICAPSUL.PIE",
-	.imdName2 = NULL,
-	.sequenceName = "res_weapons.ogg",
-	.audioName = NULL,
-};
+[RES_CY_AH4]
+text = \
+_("Cyborg Thermal Armor Improved"),\
+_("Heat resistant armored layers"),\
+_("Thermal Armor +35%"),\
+_("All Cyborgs upgraded automatically")
+
+imdName = "MICAPSUL.pie"
+sequenceName = "res_droid.ogg"
+
+[RES_SY_RESU1]
+text = \
+_("Computer Technology Breakthrough"),\
+_("NEXUS Intruder Program analyzed"),\
+_("Intruder parasite isolated"),\
+_("Reduced chance of NEXUS take-over")
+
+imdName = "MICAPSUL.PIE"
+sequenceName = "res_systech.ogg"
+
+[RES_SY_RESU2]
+text = \
+_("Computer Technology Breakthrough"),\
+_("Improved NEXUS resistance circuitry"),\
+_("Computer systems can now be 'ring-fenced' from NEXUS"),\
+_("Reduced chance of NEXUS take-over")
+
+imdName = "MICAPSUL.PIE"
+sequenceName = "res_systech.ogg"
+
+[RES_CY_JP1]
+text = \
+_("New Cyborg Research Available"),\
+_("Aerodynamic Jump Pack"),\
+_("Gives Cyborg limited flight abilities"),\
+_("Jump Cyborgs can now be researched")
+
+imdName = "MICAPSUL.pie"
+sequenceName = "res_droid.ogg"
+
+[RES_CY_LG3]
+text = \
+_("Cyborg Propulsion Improved"),\
+_("New armored construction"),\
+_("Increases Body Points"),\
+_("All Cyborgs upgraded automatically")
+
+imdName = "MICAPSUL.pie"
+sequenceName = "res_droid.ogg"
+
+[RES_CYMET7]
+text = \
+_("Cyborg Materials Improved"),\
+_("Superdense composite alloys and energy-absorbing fibres"),\
+_("Kinetic Armor +35%, Body Points +35%"),\
+_("All Cyborgs upgraded automatically")
+
+imdName = "MICAPSUL.pie"
+sequenceName = "res_droid.ogg"
+
+[RES_CYMET10]
+text = \
+_("Cyborg Materials Improved"),\
+_("Laminated alloys bonded with energy-deflecting optic bundles"),\
+_("Kinetic Armor +35%, Body Points +35%"),\
+_("All Cyborgs upgraded automatically")
+
+imdName = "MICAPSUL.pie"
+sequenceName = "res_droid.ogg"
+
+[RES_CYW_MIS]
+text = \
+_("New Cyborg Available"),\
+_("Armed with Revenger Surface-to-Air missile"),\
+_("Body Points: Medium"),\
+_("Requires Cyborg factory to produce")
+
+imdName = "MICAPSUL.pie"
+sequenceName = "res_droid.ogg"
+
+[RES_CYW_RL1]
+text = \
+_("New Cyborg Available"),\
+_("Armed with Needle Gun"),\
+_("Body Points: Medium"),\
+_("Requires Cyborg factory to produce")
+
+imdName = "MICAPSUL.pie"
+sequenceName = "res_droid.ogg"
+
+[RES_CYW_ATM]
+text = \
+_("New Cyborg Available"),\
+_("Armed with Scourge anti-tank missile"),\
+_("Body Points: Medium"),\
+_("Requires Cyborg factory to produce")
+
+imdName = "MICAPSUL.pie"
+sequenceName = "res_droid.ogg"
+
+[RES_CYW_LS1]
+text = \
+_("New Cyborg Available"),\
+_("Armed with flashlight laser"),\
+_("Body Points: Medium"),\
+_("Requires Cyborg factory to produce")
+
+imdName = "MICAPSUL.pie"
+sequenceName = "res_droid.ogg"
+
+[RES_CYJ_RKT]
+text = \
+_("New Jump Cyborg Available"),\
+_("Armed with Lancer anti-tank missile"),\
+_("Body Points: Medium"),\
+_("Requires Cyborg factory to produce")
+
+imdName = "MICAPSUL.pie"
+sequenceName = "res_droid.ogg"
+
+[RES_CYJ_MG4]
+text = \
+_("New Jump Cyborg Available"),\
+_("Armed with Cyborg assault gun"),\
+_("Body Points: Medium"),\
+_("Requires Cyborg factory to produce")
+
+imdName = "MICAPSUL.pie"
+sequenceName = "res_droid.ogg"
+
+[RES_CYJ_RL1]
+text = \
+_("New Jump Cyborg Available"),\
+_("Armed with Needle Gun"),\
+_("Body Points: Medium"),\
+_("Requires Cyborg factory to produce")
+
+imdName = "MICAPSUL.pie"
+sequenceName = "res_droid.ogg"
+
+[RES_CYJ_ATM]
+text = \
+_("New Jump Cyborg Available"),\
+_("Armed with Scourge anti-tank missile"),\
+_("Body Points: Medium"),\
+_("Requires Cyborg factory to produce")
+
+imdName = "MICAPSUL.pie"
+sequenceName = "res_droid.ogg"
+
+[RES_CYJ_LS1]
+text = \
+_("New Jump Cyborg Available"),\
+_("Armed with Flashlight Laser"),\
+_("Body Points: Medium"),\
+_("Requires cyborg factory to produce")
+
+imdName = "MICAPSUL.pie"
+sequenceName = "res_droid.ogg"
+
+[RES_DF_WU7]
+text = \
+_("Defenses Improved"),\
+_("High tensile concrete-plastic composite"),\
+_("Armor +35%, Body Points +30%"),\
+_("All defenses and walls upgraded automatically")
+
+imdName = "MICAPSUL.pie"
+sequenceName = "res_struttech.ogg"
+
+[RES_DF_WU10]
+text = \
+_("Defenses Improved"),\
+_("Bonded metallic laminates formed into walls and defenses"),\
+_("Armor +35%, Body Points +30%"),\
+_("All defenses and walls upgraded automatically")
+
+imdName = "MICAPSUL.pie"
+sequenceName = "res_struttech.ogg"
+
+[RES_EMP_SAM1]
+text = \
+_("New Defensive Structure Available"),\
+_("SAM site with Avenger missiles"),\
+_("Automatically targets VTOLs"),\
+_("Defensive Strength: Medium")
+
+imdName = "MICAPSUL.pie"
+sequenceName = "res_struttech.ogg"
+
+[RES_EMP_SAM2]
+text = \
+_("New Defensive Structure Available"),\
+_("SAM site with Vindicator missiles"),\
+_("Automatically targets VTOLs"),\
+_("Defensive Strength: Medium")
+
+imdName = "MICAPSUL.pie"
+sequenceName = "res_struttech.ogg"
+
+[RES_EMP_MdAM]
+text = \
+_("New Defensive Structure Available"),\
+_("Artillery battery firing Firestorm Missiles"),\
+_("Assigned automatically to nearest sensor or CB tower"),\
+_("Defensive Strength: Medium")
+
+imdName = "MICAPSUL.pie"
+sequenceName = "res_struttech.ogg"
+
+[RES_EMP_HvAM]
+text = \
+_("New Defensive Structure Available"),\
+_("Artillery battery firing Novastorm Missiles"),\
+_("Assigned automatically to nearest sensor or CB tower"),\
+_("Defensive Strength: Medium")
+
+imdName = "MICAPSUL.pie"
+sequenceName = "res_struttech.ogg"
+
+[RES_EMP_PrisLas]
+text = \
+_("New Defensive Structure Available"),\
+_("Armored strongpoint with Flashlight laser"),\
+_("Automatically targets enemies in range"),\
+_("Defensive Strength: High")
+
+imdName = "MICAPSUL.pie"
+sequenceName = "res_struttech.ogg"
+
+[RES_EMP_PulseLas]
+text = \
+_("New Defensive Structure Available"),\
+_("Armored guard tower with Pulse Laser"),\
+_("Automatically targets enemies in range"),\
+_("Defensive Strength: Medium")
+
+imdName = "MICAPSUL.pie"
+sequenceName = "res_struttech.ogg"
+
+[RES_EMP_Rail2]
+text = \
+_("New Defensive Structure Available"),\
+_("Armored strongpoint with Rail Gun"),\
+_("Automatically targets enemies in range"),\
+_("Defensive Strength: High")
+
+imdName = "MICAPSUL.pie"
+sequenceName = "res_struttech.ogg"
+
+[RES_EMP_Rail3]
+text = \
+_("New Defensive Structure Available"),\
+_("Armored strongpoint with Gauss Cannon"),\
+_("Automatically targets enemies in range"),\
+_("Defensive Strength: High")
+
+imdName = "MICAPSUL.pie"
+sequenceName = "res_struttech.ogg"
+
+[RES_EMP_ATMTOW]
+text = \
+_("New Defensive Structure Available"),\
+_("Armored guard tower with Scourge Missile"),\
+_("Automatically targets enemies within sensor range"),\
+_("Defensive Strength: Medium")
+
+imdName = "MICAPSUL.pie"
+sequenceName = "res_struttech.ogg"
+
+[RES_EMP_RL1TOW]
+text = \
+_("New Defensive Structure Available"),\
+_("Armored guard tower with Needle Gun"),\
+_("Automatically targets enemies within sensor range"),\
+_("Defensive Strength: High")
+
+imdName = "MICAPSUL.pie"
+sequenceName = "res_struttech.ogg"
+
+[RES_WT9_ATM]
+text = \
+_("New Defensive Structure Available"),\
+_("Armored hardpoint with Scourge AT Missile"),\
+_("Automatically targets enemies within sensor range"),\
+_("Defensive Strength: High")
+
+imdName = "MICAPSUL.pie"
+sequenceName = "res_struttech.ogg"
+
+[RES_WT14_PLS]
+text = \
+_("New Defensive Structure Available"),\
+_("Armored hardpoint with Flashlight laser"),\
+_("Automatically targets enemies within sensor range"),\
+_("Defensive Strength: High")
+
+imdName = "MICAPSUL.pie"
+sequenceName = "res_struttech.ogg"
+
+[RES_WT15_RL2]
+text = \
+_("New Defensive Structure Available"),\
+_("Armored hardpoint with Rail Gun"),\
+_("Automatically targets enemies within sensor range"),\
+_("Defensive Strength: High")
+
+imdName = "MICAPSUL.pie"
+sequenceName = "res_struttech.ogg"
+
+[RES_WT15_RL3]
+text = \
+_("New Defensive Structure Available"),\
+_("Armored hardpoint with Gauss Cannon"),\
+_("Automatically targets enemies within sensor range"),\
+_("Defensive Strength: High")
+
+imdName = "MICAPSUL.pie"
+sequenceName = "res_struttech.ogg"
+
+[RES_ST_RFU7]
+text = \
+_("Repair Facility Improved"),\
+_("Advanced repair techniques"),\
+_("Repair Speed +100%"),\
+_("All repair facilities upgraded automatically")
+
+imdName = "MICAPSUL.pie"
+sequenceName = "res_struttech.ogg"
+
+[RES_POWU2]
+text = \
+_("Improved Power Generator Performance"),\
+_("Vapor Turbine boosts power output"),\
+_("Power output +30%"),\
+_("All power generators upgraded automatically")
+
+imdName = "MICAPSUL.pie"
+sequenceName = "res_pow.ogg"
+
+[RES_ST_RU7]
+text = \
+_("Research Improved"),\
+_("Neural Synapse Research Brain"),\
+_("Research speed +30%"),\
+_("All research facilities upgraded automatically")
+
+imdName = "MICAPSUL.pie"
+sequenceName = "res_struttech.ogg"
+
+[RES_ST_MAT7]
+text = \
+_("Increases Damage Resistance"),\
+_("Advanced Base Structure Materials"),\
+_("Armor +35%, Body Points +30%"),\
+_("All base structures upgraded automatically")
+
+imdName = "MICAPSUL.pie"
+sequenceName = "res_struttech.ogg"
+
+[RES_ST_MAT10]
+text = \
+_("Increases Damage Resistance"),\
+_("High Density Base Structure Materials"),\
+_("Armor +35%, Body Points +30%"),\
+_("All base structures upgraded automatically")
+
+imdName = "MICAPSUL.pie"
+sequenceName = "res_struttech.ogg"
+
+[RES_ST_VFU4]
+text = \
+_("Production Improved"),\
+_("Advanced VTOL Production"),\
+_("Increases VTOL factory output"),\
+_("All VTOL factories upgraded automatically")
+
+imdName = "MICAPSUL.pie"
+sequenceName = "res_struttech.ogg"
+
+[RES_ST_VPU4]
+text = \
+_("VTOL Rearming Times Reduced"),\
+_("Robotic VTOL Rearming"),\
+_("Rearming speed +30%"),\
+_("All rearming pads upgraded automatically")
+
+imdName = "MICAPSUL.pie"
+sequenceName = "res_struttech.ogg"
+
+[RES_ENGIN3]
+text = \
+_("Research Breakthrough Improves Construction Rates"),\
+_("Advanced Engineering Techniques"),\
+_("Construction speed +20%"),\
+_("All trucks upgraded automatically")
+
+imdName = "MICAPSUL.PIE"
+sequenceName = "res_systech.ogg"
+
+[RES_SY_CBSU3]
+text = \
+_("CB Sensor Improved"),\
+_("Improved fire detection systems"),\
+_("Extends CB Range"),\
+_("All CB sensors upgraded automatically")
+
+imdName = "MICAPSUL.PIE"
+sequenceName = "res_systech.ogg"
+
+[RES_SY_VCBSU3]
+text = \
+_("VTOL CB Improved"),\
+_("Advanced fire detection systems"),\
+_("Extends VTOL CB Range"),\
+_("All VTOL CB sensors upgraded automatically")
+
+imdName = "MICAPSUL.PIE"
+sequenceName = "res_systech.ogg"
+
+[RES_SY_VS3]
+text = \
+_("VTOL Strike Improved"),\
+_("Advanced target recognition systems"),\
+_("Extends VTOL Strike Range"),\
+_("All VTOL Strike sensors upgraded automatically")
+
+imdName = "MICAPSUL.PIE"
+sequenceName = "res_systech.ogg"
+
+[RES_SY_ST1]
+text = \
+_("New Systems Turret Available"),\
+_("Synaptic Link Scrambler technology"),\
+_("Electronically attacks and disrupts enemy structures"),\
+_("Steals technology from enemies")
+
+imdName = "MICAPSUL.PIE"
+sequenceName = "res_systech.ogg"
+
+[RES_SY_ACYB]
+text = \
+_("New Repair Technology Discovered"),\
+_("Synaptic Link technology breakthrough"),\
+_("On-board diagnostic and repair systems"),\
+_("Enables self-repair in all Cyborgs")
+
+imdName = "MICAPSUL.PIE"
+sequenceName = "res_systech.ogg"
+
+[RES_SY_ASTRUC]
+text = \
+_("New Repair Technology Discovered"),\
+_("Synaptic Link technology breakthrough"),\
+_("Built-in diagnostic and repair systems"),\
+_("Enables self-repair in all base structures")
+
+imdName = "MICAPSUL.PIE"
+sequenceName = "res_systech.ogg"
+
+[RES_SY_ADEF]
+text = \
+_("New Repair Technology Discovered"),\
+_("Synaptic Link technology breakthrough"),\
+_("Built-in diagnostic and repair systems"),\
+_("Enables self-repair in all defenses")
+
+imdName = "MICAPSUL.PIE"
+sequenceName = "res_systech.ogg"
+
+[RES_SY_AVEH]
+text = \
+_("New Repair Technology Discovered"),\
+_("Synaptic Link technology breakthrough"),\
+_("On-board diagnostic and repair systems"),\
+_("Enables self-repair in all vehicles")
+
+imdName = "MICAPSUL.PIE"
+sequenceName = "res_systech.ogg"
+
+[RES_V_B03]
+text = \
+_("NEXUS Light Body"),\
+_("Superior armor and body points to Viper"),\
+_("Faster than Viper"),\
+_("Expensive to produce")
+
+imdName = "MICAPSUL.pie"
+sequenceName = "res_droid.ogg"
+
+[RES_V_B07]
+text = \
+_("NEXUS Medium Body"),\
+_("Superior armor and body points to Cobra"),\
+_("Faster than Cobra"),\
+_("Expensive and slow to produce")
+
+imdName = "MICAPSUL.pie"
+sequenceName = "res_droid.ogg"
+
+[RES_V_B10]
+text = \
+_("NEXUS Heavy Body"),\
+_("More armor and body points than Python"),\
+_("Faster than Python"),\
+_("Very expensive to produce")
+
+imdName = "MICAPSUL.pie"
+sequenceName = "res_droid.ogg"
+
+[RES_V_EN7]
+text = \
+_("Vehicle Engine Upgrade"),\
+_("Gas Turbine Engine"),\
+_("Vehicle speed +5%"),\
+_("All vehicles upgraded automatically")
+
+imdName = "MICAPSUL.pie"
+sequenceName = "res_droid.ogg"
+
+[RES_V_EN10]
+text = \
+_("Vehicle Engine Upgrade"),\
+_("Ionizing Turbine Engine"),\
+_("Vehicle speed +5%"),\
+_("All vehicles upgraded automatically")
+
+imdName = "MICAPSUL.pie"
+sequenceName = "res_droid.ogg"
+
+[RES_V_MET7]
+text = \
+_("Vehicle Bodies Improved"),\
+_("Superdense composite alloys and energy-absorbing fibres"),\
+_("Kinetic armor +30%, body points +30%"),\
+_("All vehicles upgraded automatically")
+
+imdName = "MICAPSUL.pie"
+sequenceName = "res_droid.ogg"
+
+[RES_V_MET10]
+text = \
+_("Vehicle Bodies Improved"),\
+_("Laminated alloys bonded with energy-deflecting optic bundles"),\
+_("Kinetic armor +30%, body points +30%"),\
+_("All vehicles upgraded automatically")
+
+imdName = "MICAPSUL.pie"
+sequenceName = "res_droid.ogg"
+
+[RES_V_AH4]
+text = \
+_("Vehicle Thermal Armor Improved"),\
+_("Heat-resistant armored layers"),\
+_("Thermal Armor +40%"),\
+_("All vehicles upgraded automatically")
+
+imdName = "MICAPSUL.pie"
+sequenceName = "res_droid.ogg"
+
+[RES_HALFT3]
+text = \
+_("Vehicle Propulsion Improved"),\
+_("New armored construction"),\
+_("Increases Body Points"),\
+_("All half-tracks upgraded automatically")
+
+imdName = "MICAPSUL.pie"
+sequenceName = "res_droid.ogg"
+
+[RES_V_P_H3]
+text = \
+_("Vehicle Propulsion Improved"),\
+_("New armored construction"),\
+_("Increases Body Points"),\
+_("All hovers upgraded automatically")
+
+imdName = "MICAPSUL.pie"
+sequenceName = "res_droid.ogg"
+
+[RES_TRACK3]
+text = \
+_("Vehicle Propulsion Improved"),\
+_("New armored construction"),\
+_("Increases Body Points"),\
+_("All tracks upgraded automatically")
+
+imdName = "MICAPSUL.pie"
+sequenceName = "res_droid.ogg"
+
+[RES_V_P_W3]
+text = \
+_("Vehicle Propulsion Improved"),\
+_("New armored construction"),\
+_("Increases Body Points"),\
+_("All wheels upgraded automatically")
+
+imdName = "MICAPSUL.pie"
+sequenceName = "res_droid.ogg"
+
+[RES_V_P_V2]
+text = \
+_("Vehicle Propulsion Improved"),\
+_("New power efficient propulsion"),\
+_("Body Points and Speed Increased"),\
+_("All VTOLs upgraded automatically")
+
+imdName = "MICAPSUL.pie"
+sequenceName = "res_droid.ogg"
+
+[RES_V_P_V3]
+text = \
+_("Vehicle Propulsion Improved"),\
+_("New power efficient propulsion"),\
+_("Body Points and Speed Increased"),\
+_("All VTOLs upgraded automatically")
+
+imdName = "MICAPSUL.pie"
+sequenceName = "res_droid.ogg"
+
+[RES_W_AAAC3]
+text = \
+_("AA Upgrade"),\
+_("Computer plots and guides shell to target's position"),\
+_("AA accuracy +10%"),\
+_("All AA weapons upgraded automatically")
+
+imdName = "MICAPSUL.PIE"
+sequenceName = "res_weapons.ogg"
+
+[RES_W_AAD4]
+text = \
+_("AA Flak Upgrade"),\
+_("High Explosive Armor Piercing Flak"),\
+_("AA Flak damage +25%"),\
+_("All AA flak weapons upgraded automatically")
+
+imdName = "MICAPSUL.PIE"
+sequenceName = "res_weapons.ogg"
+
+[RES_W_AAROF4]
+text = \
+_("AA Upgrade"),\
+_("Chainfeed loader eradicates jams and improves performance"),\
+_("AA reload time -15%"),\
+_("All AA weapons upgraded automatically")
+
+imdName = "MICAPSUL.PIE"
+sequenceName = "res_weapons.ogg"
+
+[RES_W_BMB4]
+text = \
+_("New Bomb Bay Available"),\
+_("Drops high intensity thermite bombs"),\
+_("Best Targets: Bunkers and hardpoints"),\
+_("Body Points: Low")
+
+imdName = "MICAPSUL.PIE"
+sequenceName = "res_weapons.ogg"
+
+[RES_W_BAC3]
+text = \
+_("Bomb Upgrade"),\
+_("Low yield thermonuclear warhead"),\
+_("Bomb damage +25%"),\
+_("All bomb bays upgraded automatically")
+
+imdName = "MICAPSUL.PIE"
+sequenceName = "res_weapons.ogg"
+
+[RES_W_CN_D7]
+text = \
+_("Cannon Upgrade"),\
+_("High-Velocity Armor-Piercing Fin-Stabilised Discarding Sabot"),\
+_("Cannon damage +25%"),\
+_("All cannons upgraded automatically")
+
+imdName = "MICAPSUL.PIE"
+sequenceName = "res_weapons.ogg"
+
+[RES_W_CN_ROF4]
+text = \
+_("Cannon Upgrade"),\
+_("Robotic loading system feeds rounds into breech"),\
+_("Cannon reload time -10%"),\
+_("All cannons upgraded automatically")
+
+imdName = "MICAPSUL.PIE"
+sequenceName = "res_weapons.ogg"
+
+[RES_W_HOWAC3]
+text = \
+_("Howitzer Upgrade"),\
+_("Computer guided shells"),\
+_("Howitzer accuracy +10%"),\
+_("All howitzers upgraded automatically")
+
+imdName = "MICAPSUL.PIE"
+sequenceName = "res_weapons.ogg"
+
+[RES_W_HOWD4]
+text = \
+_("Howitzer Upgrade"),\
+_("High Explosive Armor Piercing Shells"),\
+_("Howitzer damage +25%"),\
+_("All howitzers upgraded automatically")
+
+imdName = "MICAPSUL.PIE"
+sequenceName = "res_weapons.ogg"
+
+[RES_W_HOWRF4]
+text = \
+_("Howitzer Upgrade"),\
+_("Robotic loading system feeds rounds into breech"),\
+_("Howitzer reload time -10%"),\
+_("All howitzers upgraded automatically")
+
+imdName = "MICAPSUL.PIE"
+sequenceName = "res_weapons.ogg"
+
+[RES_W_LAS1]
+text = \
+_("New Laser Weapon Available"),\
+_("Generates and concentrates bursts of laser energy"),\
+_("Best Targets: Cyborgs"),\
+_("Body Points: Medium")
+
+imdName = "MICAPSUL.PIE"
+sequenceName = "res_weapons.ogg"
+
+[RES_W_LAS2]
+text = \
+_("New Laser Weapon Available"),\
+_("Fires pulses of laser light"),\
+_("Best Targets: Cyborgs"),\
+_("Body Points: Medium")
+
+imdName = "MICAPSUL.PIE"
+sequenceName = "res_weapons.ogg"
+
+[RES_LASAC1]
+text = \
+_("Laser Upgrade"),\
+_("Improvement in laser optics reduces light dispersal"),\
+_("Laser accuracy +10%"),\
+_("All lasers upgraded automatically")
+
+imdName = "MICAPSUL.PIE"
+sequenceName = "res_weapons.ogg"
+
+[RES_LASD1]
+text = \
+_("Laser Upgrade"),\
+_("Improvement in laser emission density"),\
+_("Laser damage +25%"),\
+_("All lasers upgraded automatically")
+
+imdName = "MICAPSUL.PIE"
+sequenceName = "res_weapons.ogg"
+
+[RES_LASROF1]
+text = \
+_("Laser Upgrade"),\
+_("Improved Energizer reduces laser recharge time"),\
+_("Laser reload time -15%"),\
+_("All lasers upgraded automatically")
+
+imdName = "MICAPSUL.PIE"
+sequenceName = "res_weapons.ogg"
+
+[RES_W_MG_D8]
+text = \
+_("Machinegun Upgrade"),\
+_("Depleted uranium kinetic energy bullets"),\
+_("Machinegun damage +25%"),\
+_("All machineguns upgraded automatically")
+
+imdName = "MICAPSUL.PIE"
+sequenceName = "res_weapons.ogg"
+
+[RES_W_MG_D10]
+text = \
+_("Machinegun Upgrade"),\
+_("Collapsing Plutonium kinetic energy bullets"),\
+_("Machinegun damage +25%"),\
+_("All machineguns upgraded automatically")
+
+imdName = "MICAPSUL.PIE"
+sequenceName = "res_weapons.ogg"
+
+[RES_W_ASM_AT]
+text = \
+_("New Missile Turret Available"),\
+_("Anti-tank missile"),\
+_("Best Targets: Vehicles"),\
+_("Body Points: Very Low")
+
+imdName = "MICAPSUL.PIE"
+sequenceName = "res_weapons.ogg"
+
+[RES_W_ASM_BB]
+text = \
+_("New Missile Turret Available"),\
+_("Bunker buster missile"),\
+_("Best Targets: Bunkers and hardpoints"),\
+_("Body Points: Very Low")
+
+imdName = "MICAPSUL.PIE"
+sequenceName = "res_weapons.ogg"
+
+[RES_W_MS_AC1]
+text = \
+_("Missile Upgrade"),\
+_("On-board computer predicts target movement"),\
+_("Missile accuracy +10%"),\
+_("All missiles upgraded automatically")
+
+imdName = "MICAPSUL.PIE"
+sequenceName = "res_weapons.ogg"
+
+[RES_W_MS_AC2]
+text = \
+_("Missile Upgrade"),\
+_("Missile actively seeks and homes on targets"),\
+_("Missile accuracy +10%"),\
+_("All missiles upgraded automatically")
+
+imdName = "MICAPSUL.PIE"
+sequenceName = "res_weapons.ogg"
+
+[RES_W_MS_D1]
+text = \
+_("Missile Upgrade"),\
+_("Low yield thermonuclear warhead"),\
+_("Missile damage +25%"),\
+_("All missiles upgraded automatically")
+
+imdName = "MICAPSUL.PIE"
+sequenceName = "res_weapons.ogg"
+
+[RES_W_MS_LtSAM1]
+text = \
+_("New SAM Turret Available"),\
+_("Surface-to-air missile"),\
+_("Best Targets: Aerial targets only"),\
+_("Body Points: Very Low")
+
+imdName = "MICAPSUL.PIE"
+sequenceName = "res_weapons.ogg"
+
+[RES_W_MS_HvSAM1]
+text = \
+_("New SAM Turret Available"),\
+_("Heavy surface-to-air missile"),\
+_("Best Targets: Aerial targets only"),\
+_("Body Points: Very Low")
+
+imdName = "MICAPSUL.PIE"
+sequenceName = "res_weapons.ogg"
+
+[RES_W_MS_MART]
+text = \
+_("New Artillery Missile Turret Available"),\
+_("High explosive artillery missile"),\
+_("Best Targets: Base structures and cyborgs"),\
+_("Body Points: Very Low")
+
+imdName = "MICAPSUL.PIE"
+sequenceName = "res_weapons.ogg"
+
+[RES_W_MS_HART]
+text = \
+_("New Artillery Missile Turret Available"),\
+_("High explosive heavy artillery missile"),\
+_("Best Targets: Base structures and cyborgs"),\
+_("Body Points: Very Low")
+
+imdName = "MICAPSUL.PIE"
+sequenceName = "res_weapons.ogg"
+
+[RES_W_MS_ROF1]
+text = \
+_("Missile Upgrade"),\
+_("Missiles detect and lock-on to targets while loading"),\
+_("Missile reload time -15%"),\
+_("All missiles upgraded automatically")
+
+imdName = "MICAPSUL.PIE"
+sequenceName = "res_weapons.ogg"
+
+[RES_W_SMS_ROF1]
+text = \
+_("Missile Upgrade"),\
+_("Racked missile dispensers allow for fast reloading"),\
+_("Missile reload time -15%"),\
+_("All missiles upgraded automatically")
+
+imdName = "MICAPSUL.PIE"
+sequenceName = "res_weapons.ogg"
+
+[RES_W_M_AC3]
+text = \
+_("Mortar Upgrade"),\
+_("Self-guided rocket-powered shells"),\
+_("Mortar accuracy +10%"),\
+_("All mortars upgraded automatically")
+
+imdName = "MICAPSUL.PIE"
+sequenceName = "res_weapons.ogg"
+
+[RES_W_M_ROF4]
+text = \
+_("Mortar Upgrade"),\
+_("Robotic loading system feeds rounds into breech"),\
+_("Mortar reload time -10%"),\
+_("All mortars upgraded automatically")
+
+imdName = "MICAPSUL.PIE"
+sequenceName = "res_weapons.ogg"
+
+[RES_W_RAIL1]
+text = \
+_("New Rail Gun Available"),\
+_("Rapid fire rail gun firing needle darts"),\
+_("Best Targets: Vehicles"),\
+_("Body Points: Medium")
+
+imdName = "MICAPSUL.PIE"
+sequenceName = "res_weapons.ogg"
+
+[RES_W_RAIL2]
+text = \
+_("New Rail Gun Available"),\
+_("Rail gun firing armor-piercing darts"),\
+_("Best Targets: Vehicles"),\
+_("Body Points: Medium")
+
+imdName = "MICAPSUL.PIE"
+sequenceName = "res_weapons.ogg"
+
+[RES_W_RAIL3]
+text = \
+_("New Rail Gun Available"),\
+_("Heavy rail gun firing large kinetic energy darts"),\
+_("Best Targets: Vehicles"),\
+_("Body Points: High")
+
+imdName = "MICAPSUL.PIE"
+sequenceName = "res_weapons.ogg"
+
+[RES_W_RAIL_AC1]
+text = \
+_("Rail Gun Upgrade"),\
+_("Computer predicts and compensates for target's movement"),\
+_("Rail Gun accuracy +10%"),\
+_("All rail guns upgraded automatically")
+
+imdName = "MICAPSUL.PIE"
+sequenceName = "res_weapons.ogg"
+
+[RES_W_RAIL_D1]
+text = \
+_("Rail Gun Upgrade"),\
+_("Improved armor-piercing dart"),\
+_("Rail Gun damage +25%"),\
+_("All rail guns upgraded automatically")
+
+imdName = "MICAPSUL.PIE"
+sequenceName = "res_weapons.ogg"
+
+[RES_W_RAIL_ROF1]
+text = \
+_("Rail Gun Upgrade"),\
+_("Increased gauss output speeds up reload time"),\
+_("Rail Gun reload time -15%"),\
+_("All rail guns upgraded automatically")
+
+imdName = "MICAPSUL.PIE"
+sequenceName = "res_weapons.ogg"

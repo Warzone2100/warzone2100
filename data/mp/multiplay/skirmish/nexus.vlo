@@ -1,0 +1,422 @@
+/////////////////////////////////////////////////////////////////////
+// ai for skirmish game
+/////////////////////////////////////////////////////////////////////
+
+script "nexus.slo"
+run
+{
+	// research branches
+	branchDefault	int					0
+	branchVTOL		int					1
+
+	//default branch
+	numScouts[0]	int					3			// min number of droids in group to aim for.
+	numDefenders[0]	int					4
+	numAttackers[0]	int					8
+	numCyborgs[0]	int					15			// build cyborgs until scouts contains x droids
+
+	//vtol branch
+	numScouts[1]	int					3			// min number of droids in group to aim for.
+	numDefenders[1]	int					12
+	numAttackers[1]	int					0
+	numCyborgs[1]	int					25			// build cyborgs until scouts contains x droids
+
+	
+	//default branch
+	maxScouts[0]	int					3			// min number of droids in group to aim for.
+	maxDefenders[0]	int					5
+	maxAttackers[0]	int					-1
+	maxCyborgs[0]	int					35			// build cyborgs until scouts contains x droids
+
+	//vtol branch
+	maxScouts[1]	int					3			// min number of droids in group to aim for.
+	maxDefenders[1]	int					20
+	maxAttackers[1]	int					0
+	maxCyborgs[1]	int					50			// build cyborgs until scouts contains x droids
+	
+	tileExpand		int					12			// approx minutes to expand over the map.
+
+	/////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////
+	// structures
+
+ 	// generic names, often used.
+	oilRes			FEATURESTAT			"OilResource"
+	resLab			STRUCTURESTAT		"A0ResearchFacility"
+	powGen			STRUCTURESTAT		"A0PowerGenerator"
+	factory			STRUCTURESTAT		"A0LightFactory"
+	derrick			STRUCTURESTAT		"A0ResourceExtractor"
+	cybFactory		STRUCTURESTAT		"A0CyborgFactory"
+	playerHQ		STRUCTURESTAT		"A0CommandCentre"
+	vtolPad			STRUCTURESTAT		"A0VtolPad"
+	vtolFactory		STRUCTURESTAT		"A0VTolFactory1"
+	sensorTower		STRUCTURESTAT		"Sys-SensoTower02"
+	lassat			STRUCTURESTAT		"A0LasSatCommand"
+	nexusDefence	RESEARCHSTAT		"R-Sys-Resistance-Circuits"
+	uplink			STRUCTURESTAT		"A0Sat-linkCentre"
+
+	//number of research topics for each research branch
+	techCount[0]	int					6
+	
+	//how many res facilities to use when finished researching all specified research topics
+	maxIdleRes[0]	int					-1
+	
+	tech[0][0]		RESEARCHSTAT		"R-Wpn-MG3Mk1"			//HMG
+	tech[0][1]		RESEARCHSTAT		"R-Vehicle-Prop-Halftracks"	//half-tracks
+	tech[0][2]		RESEARCHSTAT		"R-Wpn-Rocket02-MRL"	//mini rocket artillery
+	tech[0][3]		RESEARCHSTAT		"R-Wpn-Rocket-ROF03"
+	tech[0][4]		RESEARCHSTAT		"R-Wpn-MG-Damage03"
+	tech[0][5]		RESEARCHSTAT		"R-Defense-Pillbox06"		//lancer bunker
+
+	//other tech: R-Vehicle-Prop-VTOL, R-Struc-VTOLPad, R-Struc-VTOLFactory
+	techCount[1]	int					19
+	
+	//how many res facilities to use when finished researching all specified research topics
+	maxIdleRes[1]	int					3
+	
+	tech[1][0]		RESEARCHSTAT		"R-Struc-VTOLFactory"
+	tech[1][1]		RESEARCHSTAT		"R-Struc-VTOLPad"
+	tech[1][2]		RESEARCHSTAT		"R-Wpn-MG3Mk1"				//HMG
+	
+	tech[1][3]		RESEARCHSTAT		"R-Wpn-Rocket02-MRL"	//mini rocket artillery
+	tech[1][4]		RESEARCHSTAT		"R-Wpn-Rocket-ROF03"
+	
+	tech[1][5]		RESEARCHSTAT		"R-Wpn-Flamer-Damage03"		//flamer damage 03
+	tech[1][6]		RESEARCHSTAT		"R-Wpn-Flamer-ROF03"		//flamer ROF 03
+	
+	tech[1][7]		RESEARCHSTAT		"R-Wpn-Rocket01-LtAT"		//Lancer
+	tech[1][8]		RESEARCHSTAT		"R-Vehicle-Body08"			//Scorpion body
+	tech[1][9]		RESEARCHSTAT		"R-Struc-Power-Upgrade03a"	//power upgrade 03a
+	tech[1][10]		RESEARCHSTAT		"R-Wpn-Missile-Accuracy02"	//lancer accuracy
+	tech[1][11]		RESEARCHSTAT		"R-Wpn-Missile-Damage03"	//lancer damage
+	
+	tech[1][12]		RESEARCHSTAT		"R-Wpn-Rocket03-HvAT"		//BB
+	tech[1][13]		RESEARCHSTAT		"R-Struc-VTOLPad-Upgrade06"
+	tech[1][14]		RESEARCHSTAT		"R-Struc-Factory-Upgrade04"
+	tech[1][15]		RESEARCHSTAT		"R-Sys-Autorepair-General"		//autorepair
+	tech[1][16]		RESEARCHSTAT		"R-Sys-Sensor-UpLink"
+	tech[1][17]		RESEARCHSTAT		"R-Sys-VTOLCBS-Turret01"
+	tech[1][18]		RESEARCHSTAT		"R-Sys-VTOLStrike-Tower01"
+
+	maxVtolFacs[0]	int					1
+	maxVtolFacs[1]	int					4
+
+	maxVTOLs[0]		int					5
+	maxVTOLs[1]		int					70
+
+	// incendry emplacements.
+	numIncendrys	int					8
+	incendrys[0]	STRUCTURESTAT		"Emplacement-MortarPit01"
+	incendrys[1]	STRUCTURESTAT		"Emplacement-MortarPit02"
+	incendrys[2]	STRUCTURESTAT		"Emplacement-MortarPit-Incenediary"
+	incendrys[3]	STRUCTURESTAT		"Emplacement-RotMor"
+	incendrys[4]	STRUCTURESTAT		"Emplacement-Howitzer105"
+	incendrys[5]	STRUCTURESTAT		"Emplacement-Howitzer150"
+	incendrys[6]	STRUCTURESTAT		"Emplacement-Howitzer-Incenediary"
+	incendrys[7]	STRUCTURESTAT		"Emplacement-RotHow"
+
+	//anti a.
+	vtolDefStruct[0] STRUCTURESTAT		"AASite-QuadMg1"	//1
+	vtolDefStruct[1] STRUCTURESTAT		"AASite-QuadBof" 	//2
+	vtolDefStruct[2] STRUCTURESTAT		"AASite-QuadRotMg"
+	vtolDefStruct[3] STRUCTURESTAT		"P0-AASite-SAM1" 	//3
+	vtolDefStruct[4] STRUCTURESTAT		"P0-AASite-SAM2"
+
+	// upgrade structures
+	powModule		STRUCTURESTAT		"A0PowMod1"
+	facModule		STRUCTURESTAT		"A0FacMod1"
+	resModule		STRUCTURESTAT		"A0ResearchModule1"
+
+ 	// Essential and fundamental structs. Fundamental => what you build on level start
+	numStructs		int					13
+	numFundamental		int					5
+	structs[0]		STRUCTURESTAT		"A0LightFactory"
+	structs[1]		STRUCTURESTAT		"A0ResearchFacility"
+	structs[2]		STRUCTURESTAT		"A0PowerGenerator"
+	structs[3]		STRUCTURESTAT		"A0CommandCentre"
+	structs[4]		STRUCTURESTAT		"A0CyborgFactory"
+
+	structs[5]		STRUCTURESTAT		"Sys-CB-Tower01"
+	structs[6]		STRUCTURESTAT		"Sys-SpyTower"
+
+	structs[7]		STRUCTURESTAT		"A0LasSatCommand"
+	structs[8]		STRUCTURESTAT		"A0Sat-linkCentre"
+	structs[9]		STRUCTURESTAT		"X-Super-Rocket"
+	structs[10]		STRUCTURESTAT		"X-Super-Cannon"
+	structs[11]		STRUCTURESTAT		"X-Super-MassDriver"
+	structs[12]		STRUCTURESTAT		"X-Super-Missile"
+
+	/* Base structures */
+	numBaseStruct	int					8
+	baseStruct[0]	STRUCTURESTAT		"A0PowerGenerator"
+	baseStruct[1]	STRUCTURESTAT		"A0LightFactory"
+	baseStruct[2]	STRUCTURESTAT		"A0CommandCentre"
+	baseStruct[3]	STRUCTURESTAT		"A0ResearchFacility"
+	baseStruct[4]	STRUCTURESTAT		"A0CyborgFactory"
+	baseStruct[5]	STRUCTURESTAT		"A0LasSatCommand"
+	baseStruct[6]	STRUCTURESTAT		"A0Sat-linkCentre"
+	baseStruct[7]	STRUCTURESTAT		"A0VTolFactory1"
+
+	// defensive structs.
+	numDefStructs	int					22
+	defStructs[0]	STRUCTURESTAT		"PillBox1"
+	defStructs[1]	STRUCTURESTAT		"Pillbox-RotMG"
+	defStructs[3]	STRUCTURESTAT		"GuardTower6"
+	defStructs[2]	STRUCTURESTAT		"PillBox4"		//LC
+	defStructs[4]	STRUCTURESTAT		"GuardTower5"		//Lancer
+	defStructs[5]	STRUCTURESTAT		"Sys-SensoTower02"
+	defStructs[6]	STRUCTURESTAT		"WallTower03"		//MC
+	defStructs[7]	STRUCTURESTAT		"WallTower04"		//HC
+	defStructs[8]	STRUCTURESTAT		"GuardTower5"		//Lancer
+
+	defStructs[9]	STRUCTURESTAT		"WallTower04"		//HC
+	defStructs[10]	STRUCTURESTAT		"WallTower-HPVcannon"
+	defStructs[11]	STRUCTURESTAT		"Emplacement-Howitzer105"
+	defStructs[12]	STRUCTURESTAT		"Emplacement-HvyATrocket"
+	defStructs[13]	STRUCTURESTAT		"Emplacement-MortarPit02"
+	defStructs[14]	STRUCTURESTAT		"WallTower06"
+	defStructs[15]	STRUCTURESTAT		"Emplacement-PulseLaser"	// Campaign 3 Defensive Structures
+	defStructs[16]	STRUCTURESTAT		"Emplacement-Rail2"
+
+	defStructs[17]	STRUCTURESTAT		"WallTower-HvATrocket"	//TK
+	defStructs[18]	STRUCTURESTAT		"WallTower-Atmiss"	//Scourge
+	defStructs[19]	STRUCTURESTAT		"WallTower-PulseLas"
+	defStructs[20]	STRUCTURESTAT		"WallTower-Rail2"
+	defStructs[21]	STRUCTURESTAT		"WallTower-Rail3"
+
+	// wall structs (4)
+	numWallWeaps	int					10
+	wall			STRUCTURESTAT		"A0HardcreteMk1Wall"
+	cornerWall		STRUCTURESTAT		"A0HardcreteMk1CWall"
+	wallWeaps[0]	STRUCTURESTAT		"WallTower01"
+	wallWeaps[1]	STRUCTURESTAT		"WallTower02"
+	wallWeaps[2]	STRUCTURESTAT		"WallTower03"
+	wallWeaps[3]	STRUCTURESTAT		"WallTower04"
+	wallWeaps[4]	STRUCTURESTAT		"WallTower06"
+	wallWeaps[5]	STRUCTURESTAT		"WallTower06"
+	wallWeaps[6]	STRUCTURESTAT		"WallTower-Rail2"
+	wallWeaps[7]	STRUCTURESTAT		"WallTower-PulseLas"
+	wallWeaps[8]	STRUCTURESTAT		"WallTower-Atmiss"
+	wallWeaps[9]	STRUCTURESTAT		"WallTower-HPVcannon"
+
+
+	// extra structs
+	numExtraStructs[0]	int					4
+	extraStructs[0][0]	STRUCTURESTAT		"A0LightFactory"
+	extraStructs[0][1]	STRUCTURESTAT		"A0LightFactory"
+	extraStructs[0][2]	STRUCTURESTAT		"A0ResearchFacility"
+	extraStructs[0][3]	STRUCTURESTAT		"A0CyborgFactory"
+	
+	numExtraStructs[1]	int					5
+	extraStructs[1][0]	STRUCTURESTAT		"A0VTolFactory1"
+	extraStructs[1][1]	STRUCTURESTAT		"A0VTolFactory1"
+	extraStructs[1][2]	STRUCTURESTAT		"A0CyborgFactory"
+	extraStructs[1][3]	STRUCTURESTAT		"A0VtolPad"
+	extraStructs[1][4]	STRUCTURESTAT		"A0LightFactory"
+
+	/////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////
+	// SKIRMISH TEMPLATES
+
+	// COMBAT TEMPLATES
+
+	//branchDefault
+	numTemplates[0]	int			48
+
+	tmpl[0][0]	TEMPLATE	"ViperMG01Wheels"		//MG
+	tmpl[0][1]	TEMPLATE	"ViperMG02Wheels"		//TMG
+	tmpl[0][2]	TEMPLATE	"ViperHMGWheels"		//HMG
+	tmpl[0][3]	TEMPLATE	"ViperPODWheels"		//POD
+	tmpl[0][4]	TEMPLATE	"ViperLtA-Twheels"		//Lancer
+	tmpl[0][5]	TEMPLATE	"ViperFlameWheels"		//Flamer
+	tmpl[0][6]	TEMPLATE	"ViperLtA-Twheels"		//Lancer
+	tmpl[0][7]	TEMPLATE	"CobraMRLHalftrack"		//MRL
+	tmpl[0][8]	TEMPLATE	"ViperLtCannonWheels"	//LC
+	tmpl[0][9]	TEMPLATE	"ViperPODWheels"		//POD
+	tmpl[0][10]	TEMPLATE	"ViperLtCannonHTracks"	//LC
+
+	tmpl[0][11]	TEMPLATE	"CobraLtA-Thalftrack"	//Lancer	HT
+	tmpl[0][12]	TEMPLATE	"CobraMRLHalftrack"		//MRL 	HT
+	tmpl[0][13]	TEMPLATE	"CobraInfernoHTracks"	//Inferno	HT
+	tmpl[0][14]	TEMPLATE	"SK-Cobra-Hover-Lancer"	//Lancer	H
+	tmpl[0][15]	TEMPLATE	"Sk-CobraBBHover"		//BB		H
+	tmpl[0][16]	TEMPLATE	"CobraMedCnTrks"		//MC		Tr
+	tmpl[0][17]	TEMPLATE	"SK-Cobra-Track-HVC"	//HVC	Tr
+	tmpl[0][18]	TEMPLATE	"CobraHvyCnTrks"		//HC		Tr
+
+	//tmpl[0][19]	TEMPLATE	"SK-Python-Hover-Mcannon"
+	//tmpl[0][20]	TEMPLATE	"PythonMedCnTrks"
+	//tmpl[0][21]	TEMPLATE	"SK-Python-Hover-Lancer"
+	//tmpl[0][22]	TEMPLATE	"SK-Python-Hover-Hcannon"
+
+	//Campaign 2
+	tmpl[0][19]	TEMPLATE	"PythonHoverHVC"		//HVC Hover
+	tmpl[0][20]	TEMPLATE	"SK-Cobra-Track-TK"
+	tmpl[0][21]	TEMPLATE	"Sk-PythonHvCanTrack"
+	tmpl[0][22]	TEMPLATE	"Sk-PythonHvCanTrack"
+
+	tmpl[0][23]	TEMPLATE	"SK-Panther-Hover-HVC"
+	tmpl[0][24]	TEMPLATE	"SK-Panther-Hover-TK"
+
+	tmpl[0][25]	TEMPLATE	"SK-Tiger-Track-Hcannon"
+	tmpl[0][26]	TEMPLATE	"SK-Tiger-Track-HVC"
+	tmpl[0][27]	TEMPLATE	"SK-Tiger-Track-Hcannon"
+	tmpl[0][28]	TEMPLATE	"SK-Tiger-Hover-TK"
+
+	//Campaign 3
+	tmpl[0][29]	TEMPLATE	"SK-Leopard-Htrk-Needle"
+	tmpl[0][30]	TEMPLATE	"SK-Tiger-Track-Hcannon"
+	tmpl[0][31]	TEMPLATE	"SK-Panther-Track-RailGun"
+	tmpl[0][32]	TEMPLATE	"SK-Panther-Hover-TK"
+	tmpl[0][33]	TEMPLATE	"SK-Tiger-Track-Scourge"
+	tmpl[0][34]	TEMPLATE	"SK-Tiger-Track-Gauss"
+	tmpl[0][35]	TEMPLATE	"SK-Tiger-Hover-Gauss"
+	tmpl[0][36]	TEMPLATE	"SK-Retre-Track-PulseLsr"
+	tmpl[0][37]	TEMPLATE	"SK-Retre-Track-FlashLight"
+
+	tmpl[0][38]	TEMPLATE	"SK-Retre-Track-RailGun"
+	tmpl[0][39]	TEMPLATE	"SK-Veng-Track-Scourge"
+	tmpl[0][40]	TEMPLATE	"SK-Retre-Hover-RailGun"
+	tmpl[0][41]	TEMPLATE	"SK-Retre-Track-Scourge"
+	tmpl[0][42]	TEMPLATE	"SK-Veng-Track-Gauss"
+	tmpl[0][43]	TEMPLATE	"SK-Veng-Hover-Gauss"
+	tmpl[0][44]	TEMPLATE	"SK-Veng-Track-PulseLsr"
+	tmpl[0][45]	TEMPLATE	"SK-Veng-Hover-Scourge"
+
+	tmpl[0][46]	TEMPLATE	"SK-Veng-Hover-Seraph"
+	tmpl[0][47]	TEMPLATE	"Dragon-Hover-SeraphGauss"
+	
+	
+	//branchVTOL
+	numTemplates[1]	int			18
+
+	tmpl[1][0]		TEMPLATE	"ViperMG01Wheels"
+	tmpl[1][1]		TEMPLATE	"ViperMG02Wheels"
+	tmpl[1][2]		TEMPLATE	"ViperHMGWheels"
+	tmpl[1][3]		TEMPLATE	"ViperHMGWheels"
+	tmpl[1][4]		TEMPLATE	"ViperLtA-Twheels"
+	tmpl[1][5]		TEMPLATE	"ViperHMGTracks"
+	tmpl[1][6]		TEMPLATE	"ViperLtA-Twheels"
+	tmpl[1][7]		TEMPLATE	"ViperLtA-Twheels"
+	tmpl[1][8]		TEMPLATE	"ViperHMGTracks"
+	tmpl[1][9]		TEMPLATE	"ViperHMGTracks"
+	tmpl[1][10]		TEMPLATE	"ViperMedCnTrks"
+
+	tmpl[1][11]		TEMPLATE	"SK-Cobra-Hover-HMG"
+	tmpl[1][12]		TEMPLATE	"SK-Cobra-Hover-Lancer"
+	
+	tmpl[1][13]		TEMPLATE	"H-Scorp-Trk-Lancer"
+	tmpl[1][14]		TEMPLATE	"H-Scorp-Trk-HC"
+	tmpl[1][15]		TEMPLATE	"H-Scorp-Trk-Lancer"
+	tmpl[1][16]		TEMPLATE	"H-Scorp-Trk-HC"
+	tmpl[1][17]		TEMPLATE	"H-Scorp-Trk-Lancer"
+	
+	/////////////////////////////////////////////////////////////////////
+	// SENSORS / REPAIR TEMPLATES
+
+	constructor	TEMPLATE	"ConstructorDroid"
+	hovertruck	TEMPLATE	"ScorpHoverTruck"
+	repairUnit	TEMPLATE	"ViperRepairHalftrack"
+
+	numSenseTemplates		int		10
+
+	//Campaign 1
+	sense[0]	TEMPLATE	"ViperRepairWheels"
+	sense[1]	TEMPLATE	"ViperRepairHalftrack"
+	sense[2]	TEMPLATE	"CobraSensorHalftrack"
+	//Campaign 2
+	sense[3]	TEMPLATE	"SK-Bug-Hover-Sensor"
+	sense[4]	TEMPLATE	"SK-Bug-Hover-Repair"
+	sense[5]	TEMPLATE	"SK-Leopard-Hover-Sensor"
+	sense[6]	TEMPLATE	"SK-Leopard-Hover-Repair"
+	sense[7]	TEMPLATE	"SK-Panther-Track-Repair"
+	//Campaign 3
+	sense[8]	TEMPLATE	"SK-Retal-Hover-Sensor"
+	sense[9]	TEMPLATE	"SK-Retal-Hover-Repair"
+
+	/////////////////////////////////////////////////////////////////////
+	// cyborg templates
+	numLightCyborgs	int			6
+	cybTempl[0]		TEMPLATE	"CyborgChain01Ground"
+	cybTempl[1]		TEMPLATE	"CyborgCannon01Grd"		//heavy gunner
+	cybTempl[2]		TEMPLATE	"CyborgFlamer01Grd"
+	cybTempl[3]		TEMPLATE	"CyborgRkt01Ground"
+	cybTempl[4]		TEMPLATE	"MP-Cyb-Needle-GRD"
+	cybTempl[5]		TEMPLATE	"MP-Cyb-Needle-GRD"
+	
+	cybMechanic		TEMPLATE	"Cyb-Mechanic"
+	cybEngineer		TEMPLATE	"Cyb-ComEng"
+
+	superCyb[0]		TEMPLATE	"Cyb-Hvy-Mcannon"
+	superCyb[1]		TEMPLATE	"Cyb-Hvy-HPV"
+	superCyb[2]		TEMPLATE	"Cyb-Hvy-Acannon"
+	superCyb[3]		TEMPLATE	"Cyb-Hvy-TK"
+
+
+	/////////////////////////////////////////////////////////////////////
+	// VTOL TEMPLATES
+
+	numVtolTemplates		int		8
+
+	vtols[0]	TEMPLATE	"P6-L-LTAT-V"		//Viper Lancer
+	vtols[1]	TEMPLATE	"P6-L-Bomb1-V"		//Viper Cluster Bombs Bay
+	vtols[2]	TEMPLATE	"SK-Bug-VTOL-CLBomb"
+	vtols[3]	TEMPLATE	"SK-Scorpion-VTOL-Hbomb"
+	vtols[4]	TEMPLATE	"H-Scorp-VTOL-Lancer"
+	vtols[5]	TEMPLATE	"H-Scorp-VTOL-BB"
+	vtols[6]	TEMPLATE	"H-Scorp-VTOL-Lancer"
+	vtols[7]	TEMPLATE	"SK-Retre-VTOL-Thermite"
+
+	/*
+	vtols[7]	TEMPLATE	"SK-Mantis-VTOL-BB"
+	vtols[8]	TEMPLATE	"SK-Leopard-VTOL-BB"
+	vtols[9]	TEMPLATE	"SK-Leopard-VTOL-PhosBomb"
+	vtols[10]	TEMPLATE	"SK-Panther-VTOL-Thermite"
+	vtols[11]	TEMPLATE	"SK-Panther-VTOL-BB"
+	vtols[12]	TEMPLATE	"SK-Panther-VTOL-Phosbomb"
+	vtols[13]	TEMPLATE	"SK-Panther-VTOL-TK"
+	//Campaign 3
+	vtols[14]	TEMPLATE	"SK-Retal-VTOL-Phosbomb"
+	vtols[16]	TEMPLATE	"SK-Retre-VTOL-PulseLsr"
+	vtols[17]	TEMPLATE	"SK-Retre-VTOL-Scourge"
+	*/
+
+
+	numVtolTargets		int				10
+
+	vtolTarget[0]		STRUCTURESTAT	"A0CommandCentre"
+	vtolTargetWeight[0]	int				10
+	vtolTarget[1]		STRUCTURESTAT	"A0LightFactory"
+	vtolTargetWeight[1]	int				80
+	vtolTarget[2]		STRUCTURESTAT	"A0CyborgFactory"
+	vtolTargetWeight[2]	int				60
+	vtolTarget[3]		STRUCTURESTAT	"A0VTolFactory1"
+	vtolTargetWeight[3]	int				100
+	vtolTarget[4]		STRUCTURESTAT	"A0LasSatCommand"
+	vtolTargetWeight[4]	int				90
+	vtolTarget[5]		STRUCTURESTAT	"A0Sat-linkCentre"
+	vtolTargetWeight[5]	int				10
+	vtolTarget[6]		STRUCTURESTAT	"A0ResearchFacility"
+	vtolTargetWeight[6]	int				10
+	vtolTarget[7]		STRUCTURESTAT	"A0PowerGenerator"
+	vtolTargetWeight[7]	int				15
+	vtolTarget[8]		STRUCTURESTAT	"A0ResourceExtractor"
+	vtolTargetWeight[8]	int				20
+	vtolTarget[9]		STRUCTURESTAT	"A0RepairCentre3"
+	vtolTargetWeight[9]	int				10
+	
+	
+	// Structure types AI will rebuild when they get destroyed (per tech branch basis)
+	
+	// branchDefault
+	numRebuildStat[0]	int				2
+	rebuildStat[0][0]	STRUCTURESTAT	"A0HardcreteMk1Wall"
+	rebuildStat[0][1]	STRUCTURESTAT	"A0HardcreteMk1CWall"
+
+	// branchVTOL
+	numRebuildStat[1]	int				2
+	rebuildStat[1][0]	STRUCTURESTAT	"A0HardcreteMk1Wall"
+	rebuildStat[1][1]	STRUCTURESTAT	"A0HardcreteMk1CWall"
+
+	/////////////////////////////////////////////////////////////////////
+}

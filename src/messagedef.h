@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -24,6 +24,7 @@
 #ifndef __INCLUDED_MESSAGEDEF_H__
 #define __INCLUDED_MESSAGEDEF_H__
 
+#include <QtCore/QStringList>
 #include "lib/ivis_opengl/pietypes.h"
 #include "lib/ivis_opengl/ivisdef.h"
 #include "positiondef.h"
@@ -50,6 +51,7 @@ enum VIEW_TYPE
 	VIEW_RPLX,			// full screen view sequence - flic.	extended format
 
 	VIEW_BEACON,			// Beacon message
+	VIEW_SIZE
 };
 
 enum PROX_TYPE
@@ -75,9 +77,7 @@ struct SEQ_DISPLAY
 	char		sequenceName[MAX_STR_LENGTH];
 
 	UBYTE		flag;			//flag data to control video playback 1 = loop till audio finish
-	UBYTE		numText;		//the number of textmessages associated with
-								//this sequence
-	const char**    ppTextMsg;	//Pointer to text messages - if any
+	QStringList     textMsg;	//Text messages - if any
 	char		*pAudio;		/*name of audio track to play (for this seq)*/
 };
 
@@ -104,10 +104,10 @@ struct VIEWDATA
 {
 	char		*pName;		//name ID of the message - used for loading in and identifying
 	VIEW_TYPE	type;		//the type of view
-	UBYTE		numText;	//the number of textmessages associated with this data
-	const char**    ppTextMsg;	//Pointer to text messages - if any
+	QStringList     textMsg;        //Text messages, if any
 	void*		pData;		/*the data required to view - either a
 							  VIEW_RESEARCH, VIEW_PROXIMITY or VIEW_REPLAY*/
+	const char      *fileName;      //file it came from, for piecemeal destruction (pretty lame reason)
 };
 
 typedef void* MSG_VIEWDATA;
@@ -140,13 +140,6 @@ struct PROXIMITY_DISPLAY : public OBJECT_POSITION
 	UDWORD			strobe;					//id of image last used
 	UDWORD			buttonID;				//id of the button for the interface
 	PROXIMITY_DISPLAY *     psNext;                         //pointer to the next in the list
-};
-
-struct VIEWDATA_LIST
-{
-	VIEWDATA				*psViewData;	//array of data
-	UBYTE					numViewData;	//number in array
-	VIEWDATA_LIST *         psNext;                         //next array of data
 };
 
 #endif // __INCLUDED_MESSAGEDEF_H__

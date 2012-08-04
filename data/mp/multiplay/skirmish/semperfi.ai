@@ -1,0 +1,5 @@
+[AI]
+name = "Semperfi"
+vlo = semperfi.vlo
+slo = semperfi.slo
+tip = "Experimental AI"

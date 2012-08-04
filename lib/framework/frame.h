@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -46,6 +46,9 @@
 #include "trig.h"
 #include "cursors.h"
 
+#define REALCONCAT(x, y) x ## y
+#define CONCAT(x, y) REALCONCAT(x, y)
+
 extern uint32_t selectedPlayer;      ///< The player number corresponding to this client.
 extern uint32_t realSelectedPlayer;  ///< The player number corresponding to this client (same as selectedPlayer, unless changing players in the debug menu).
 #define MAX_PLAYERS         11                 ///< Maximum number of players in the game.
@@ -59,6 +62,14 @@ typedef uint8_t PlayerMask;
 typedef uint16_t PlayerMask;
 #else
 #error Warzone 2100 is not a MMO.
+#endif
+
+#if defined(WZ_OS_WIN)
+# define WZ_WRITEDIR "Warzone 2100 master"
+#elif defined(WZ_OS_MAC)
+# define WZ_WRITEDIR "Warzone 2100 master"
+#else
+# define WZ_WRITEDIR ".warzone2100-master"
 #endif
 
 enum QUEUE_MODE
@@ -80,8 +91,6 @@ enum QUEUE_MODE
  *          when a part of the initialisation failed.
  */
 extern bool frameInitialise(void);
-
-extern bool selfTest;
 
 /** Shut down the framework library.
  * This clears up all the Direct Draw stuff and ensures
@@ -111,8 +120,8 @@ extern void frameUpdate(void);
 /** Returns the current frame we're on - used to establish whats on screen. */
 extern UDWORD frameGetFrameNumber(void);
 
-/** Return average framerate of the last seconds. */
-extern UDWORD frameGetAverageRate(void);
+/** Return framerate of the last second. */
+int frameRate();
 
 extern UDWORD HashString( const char *String );
 extern UDWORD HashStringIgnoreCase( const char *String );

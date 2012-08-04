@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -24,6 +24,7 @@
 #ifndef __INCLUDED_SRC_LEVELS_H__
 #define __INCLUDED_SRC_LEVELS_H__
 
+#include "lib/framework/crc.h"
 #include "init.h"
 #include "game.h"
 
@@ -68,6 +69,9 @@ struct LEVEL_DATASET
 	LEVEL_DATASET *psChange;                        // LEVEL_DATASET used when changing to this level from another
 
 	LEVEL_DATASET *psNext;
+
+	char *          realFileName;                   ///< Filename of the file containing the level, or NULL if the level is built in.
+	Sha256          realFileHash;                   ///< Use levGetFileHash() to read this value. SHA-256 hash of the file containing the level, or 0x00×32 if the level is built in or not yet calculated.
 };
 
 
@@ -75,7 +79,7 @@ struct LEVEL_DATASET
 extern LEVEL_DATASET	*psLevels;
 
 // parse a level description data file
-extern bool levParse(const char* buffer, size_t size, searchPathMode datadir, bool ignoreWrf);
+bool levParse(const char* buffer, size_t size, searchPathMode datadir, bool ignoreWrf, char const *realFileName);
 
 // shutdown the level system
 extern void levShutDown(void);
@@ -83,10 +87,13 @@ extern void levShutDown(void);
 extern bool levInitialise(void);
 
 // load up the data for a level
-extern bool levLoadData(const char* name, char *pSaveName, GAME_TYPE saveType);
+bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYPE saveType);
 
 // find the level dataset
-extern LEVEL_DATASET* levFindDataSet(const char* name);
+LEVEL_DATASET *levFindDataSet(char const *name, Sha256 const *hash = NULL);
+
+Sha256 levGetFileHash(LEVEL_DATASET *level);
+Sha256 levGetMapNameHash(char const *name);
 
 // free the currently loaded dataset
 extern bool levReleaseAll(void);

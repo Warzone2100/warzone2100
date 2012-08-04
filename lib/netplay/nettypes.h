@@ -1,6 +1,6 @@
 /*
 	This file is part of Warzone 2100.
-	Copyright (C) 2007-2011  Warzone 2100 Project
+	Copyright (C) 2007-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -40,6 +40,7 @@ enum QueueType
 	QUEUE_TMP,
 	QUEUE_NET,
 	QUEUE_GAME,
+	QUEUE_GAME_FORCED,
 	QUEUE_BROADCAST,
 };
 
@@ -49,12 +50,16 @@ struct NETQUEUE
 	bool isPair;
 	uint8_t index;
 	uint8_t queueType;
+	uint8_t exclude;
 };
 
+#define NET_NO_EXCLUDE 255
+
 NETQUEUE NETnetTmpQueue(unsigned tmpPlayer);  ///< One of the temp queues from before a client has joined the game. (See comments on tmpQueues in nettypes.cpp.)
-NETQUEUE NETnetQueue(unsigned player);        ///< The queue pair used for sending and receiving data directly from another client. (See comments on netQueues in nettypes.cpp.)
+NETQUEUE NETnetQueue(unsigned player, unsigned excludePlayer = NET_NO_EXCLUDE);  ///< The queue pair used for sending and receiving data directly from another client. (See comments on netQueues in nettypes.cpp.)
 NETQUEUE NETgameQueue(unsigned player);       ///< The game action queue. (See comments on gameQueues in nettypes.cpp.)
-NETQUEUE NETbroadcastQueue(void);             ///< The queue for sending data directly to the netQueues of all clients, not just a specific one. (See comments on broadcastQueue in nettypes.cpp.)
+NETQUEUE NETgameQueueForced(unsigned player); ///< Only used by the host, to force-feed a GAME_PLAYER_LEFT message into someone's game queue.
+NETQUEUE NETbroadcastQueue(unsigned excludePlayer = NET_NO_EXCLUDE);  ///< The queue for sending data directly to the netQueues of all clients, not just a specific one. (See comments on broadcastQueue in nettypes.cpp.)
 
 void NETinsertRawData(NETQUEUE queue, uint8_t *data, size_t dataLen);  ///< Dump raw data from sockets and raw data sent via host here.
 void NETinsertMessageFromNet(NETQUEUE queue, NetMessage const *message);     ///< Dump whole NetMessages into the queue.
@@ -64,7 +69,7 @@ NetMessage const *NETgetMessage(NETQUEUE queue);///< Returns the current message
 void NETinitQueue(NETQUEUE queue);             ///< Allocates the queue. Deletes the old queue, if there was one. Avoids a crash on NULL pointer deference when trying to use the queue.
 void NETsetNoSendOverNetwork(NETQUEUE queue);  ///< Used to mark that a game queue should not be sent over the network (for example, if it is being sent to us, instead).
 void NETmoveQueue(NETQUEUE src, NETQUEUE dst); ///< Used for moving the tmpQueue to a netQueue, once a newly-connected client is assigned a player number.
-
+void NETdeleteQueue(void);					///< Delete queues for cleanup
 void NETbeginEncode(NETQUEUE queue, uint8_t type);
 void NETbeginDecode(NETQUEUE queue, uint8_t type);
 bool NETend(void);
@@ -77,7 +82,6 @@ void NETint16_t(int16_t *ip);
 void NETuint16_t(uint16_t *ip);
 void NETint32_t(int32_t *ip);         ///< Encodes small values (< 836 288) in at most 3 bytes, large values (≥ 22 888 448) in 5 bytes.
 void NETuint32_t(uint32_t *ip);       ///< Encodes small values (< 1 672 576) in at most 3 bytes, large values (≥ 45 776 896) in 5 bytes.
-void NETuint32_tLarge(uint32_t *ip);  ///< Encodes all values in exactly 4 bytes.
 void NETint64_t(int64_t *ip);
 void NETuint64_t(uint64_t *ip);
 void NETbool(bool *bp);
@@ -104,6 +108,7 @@ static void NETenum(EnumT* enumPtr)
 
 void NETPosition(Position *vp);
 void NETRotation(Rotation *vp);
+void NETVector2i(Vector2i *vp);
 
 static inline void NETauto(int8_t *ip)    { NETint8_t(ip); }
 static inline void NETauto(uint8_t *ip)   { NETuint8_t(ip); }
@@ -116,6 +121,7 @@ static inline void NETauto(uint64_t *ip)  { NETuint64_t(ip); }
 static inline void NETauto(bool *bp)      { NETbool(bp); }
 static inline void NETauto(Position *vp)  { NETPosition(vp); }
 static inline void NETauto(Rotation *vp)  { NETRotation(vp); }
+static inline void NETauto(Vector2i *vp)  { NETVector2i(vp); }
 
 
 void NETnetMessage(NetMessage const **message);  ///< If decoding, must delete the NETMESSAGE.

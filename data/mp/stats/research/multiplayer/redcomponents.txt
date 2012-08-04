@@ -1,3 +1,4 @@
+Research ID,Component ID,unused
 R-Comp-CommandTurret02,CommandTurret1,WEAPON,10
 R-Comp-CommandTurret03,CommandTurret2,WEAPON,10
 R-Comp-CommandTurret04,CommandTurret3,WEAPON,10

@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -144,7 +144,7 @@
 #define STAT_SLDHEIGHT		12	//4	// Slider height.
 
 // Power bar position.
-#define POW_X			OBJ_BACKX
+#define POW_X			OBJ_BACKX + 12
 #define POW_Y			(OBJ_BACKY + OBJ_BACKHEIGHT + 6)
 #define POW_BARWIDTH	308
 
@@ -226,7 +226,7 @@
 #define	MAXSTRUCTURES	200	//bumped up from 80.  NOTE: was used for max # in build menus.
 #define	MAXRESEARCH		200 //was 80 topic displayed   "           "
 #define	MAXFEATURES		80
-#define	MAXCOMPONENT	80
+#define	MAXCOMPONENT	200
 #define	MAXEXTRASYS		80
 
 enum INTMODE
@@ -264,7 +264,8 @@ extern UDWORD			intLastWidget;
 
 /* The button ID of the objects stat when the stat screen is displayed */
 extern UDWORD			objStatID;
-
+// when the window for building / whatever else is up...
+extern bool SecondaryWindowUp;
 /* The current template for the design screen to start with*/
 extern std::vector<DROID_TEMPLATE *> apsTemplateList;  ///< Either a list of templates a factory can build or a list of designable templates, for UI use only.
 extern std::list<DROID_TEMPLATE> localTemplates;       ///< Unsychnronised list, for UI use only.
@@ -414,8 +415,11 @@ STRUCTURE *intFindAStructure(void);
 STRUCTURE* intGotoNextStructureType(UDWORD structType,bool JumpTo,bool CancelDrive);
 DROID *intGotoNextDroidType(DROID *CurrDroid,UDWORD droidType,bool AllowGroup);
 
-/*Checks to see if there are any research topics to do and flashes the button*/
-extern void intCheckResearchButton(void);
+/// Returns the number of researches that selectedPlayer is not already researching, or 0 if there are no free laboratories.
+int intGetResearchState();
+/// Flashes the button if the research button should flash, and more researches are available to research than before.
+/// Stops the button from flashing, if the research button shouldn't flash, and prevState is non-zero.
+void intNotifyResearchButton(int prevState);
 
 // see if a reticule button is enabled
 extern bool intCheckReticuleButEnabled(UDWORD id);

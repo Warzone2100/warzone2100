@@ -206,7 +206,7 @@ int main(int argc, char **argv)
 	{
 		GATEWAY *psGate = mapGateway(map, i);
 
-		MADD("		%hhu %hhu %hhu %hhu", psGate->x1, psGate->y1, psGate->x2, psGate->y2);
+		MADD("		%u %u %u %u", (unsigned)psGate->x1, (unsigned)psGate->y1, (unsigned)psGate->x2, (unsigned)psGate->y2);
 	}
 	MADD("	}");
 	MADD("}");

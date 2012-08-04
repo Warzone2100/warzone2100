@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -24,10 +24,8 @@
  */
 
 #include "lib/framework/frame.h"
-#include "lib/framework/wzapp_c.h"
+#include "lib/framework/wzapp.h"
 #include "netsocket.h"
-
-#include "lib/framework/wzapp_c.h"
 
 #include <vector>
 #include <algorithm>
@@ -375,6 +373,7 @@ static int socketThreadFunction(void *)
 			{
 				SOCKET fd = i->first->fd[SOCK_CONNECTION];
 				maxfd = std::max(maxfd, fd);
+				ASSERT(!FD_ISSET(fd, &fds), "Duplicate file descriptor!");  // Shouldn't be possible, but blocking in send, after select says it won't block, shouldn't be possible either.
 				FD_SET(fd, &fds);
 			}
 		}
@@ -403,6 +402,7 @@ static int socketThreadFunction(void *)
 				}
 
 				// Write data.
+				// FIXME SOMEHOW AAARGH This send() call can't block, but unless the socket is not set to blocking (setting the socket to nonblocking had better work, or else), does anyway (at least sometimes, when someone quits). Not reproducible except in public releases.
 				ssize_t ret = send(sock->fd[SOCK_CONNECTION], reinterpret_cast<char *>(&writeQueue[0]), writeQueue.size(), MSG_NOSIGNAL);
 				if (ret != SOCKET_ERROR)
 				{
@@ -473,8 +473,12 @@ static int socketThreadFunction(void *)
  * Similar to read(2) with the exception that this function won't be
  * interrupted by signals (EINTR).
  */
-ssize_t readNoInt(Socket* sock, void* buf, size_t max_size)
+ssize_t readNoInt(Socket* sock, void* buf, size_t max_size, size_t *rawByteCount)
 {
+	size_t ignored;
+	size_t &rawBytes = rawByteCount != NULL? *rawByteCount : ignored;
+	rawBytes = 0;
+
 	if (sock->fd[SOCK_CONNECTION] == INVALID_SOCKET)
 	{
 		debug(LOG_ERROR, "Invalid socket");
@@ -502,6 +506,7 @@ ssize_t readNoInt(Socket* sock, void* buf, size_t max_size)
 
 			sock->zInflate.next_in = &sock->zInflateInBuf[0];
 			sock->zInflate.avail_in = received;
+			rawBytes = received;
 
 			if (received == 0)
 			{
@@ -551,6 +556,7 @@ ssize_t readNoInt(Socket* sock, void* buf, size_t max_size)
 
 	sock->ready = false;
 
+	rawBytes = received;
 	return received;
 }
 
@@ -565,8 +571,12 @@ bool socketReadDisconnected(Socket *sock)
  *
  * @return @c size when succesful or @c SOCKET_ERROR if an error occurred.
  */
-ssize_t writeAll(Socket* sock, const void* buf, size_t size)
+ssize_t writeAll(Socket* sock, const void* buf, size_t size, size_t *rawByteCount)
 {
+	size_t ignored;
+	size_t &rawBytes = rawByteCount != NULL? *rawByteCount : ignored;
+	rawBytes = 0;
+
 	if (!sock
 	 || sock->fd[SOCK_CONNECTION] == INVALID_SOCKET)
 	{
@@ -592,6 +602,7 @@ ssize_t writeAll(Socket* sock, const void* buf, size_t size)
 			std::vector<uint8_t> &writeQueue = socketThreadWrites[sock];
 			writeQueue.insert(writeQueue.end(), static_cast<char const *>(buf), static_cast<char const *>(buf) + size);
 			wzMutexUnlock(socketThreadMutex);
+			rawBytes = size;
 		}
 		else
 		{
@@ -619,8 +630,12 @@ ssize_t writeAll(Socket* sock, const void* buf, size_t size)
 	return size;
 }
 
-void socketFlush(Socket *sock)
+void socketFlush(Socket *sock, size_t *rawByteCount)
 {
+	size_t ignored;
+	size_t &rawBytes = rawByteCount != NULL? *rawByteCount : ignored;
+	rawBytes = 0;
+
 	if (!sock->isCompressed)
 	{
 		return;  // Not compressed, so don't mess with zlib.
@@ -629,6 +644,8 @@ void socketFlush(Socket *sock)
 	// Flush data out of zlib compression state.
 	do
 	{
+		sock->zDeflate.next_in = (Bytef *)NULL;
+		sock->zDeflate.avail_in = 0;
 		size_t alreadyHave = sock->zDeflateOutBuf.size();
 		sock->zDeflateOutBuf.resize(alreadyHave + 1000);  // 100 bytes would probably be enough to flush the rest in one go.
 		sock->zDeflate.next_out = (Bytef *)&sock->zDeflateOutBuf[alreadyHave];
@@ -661,6 +678,7 @@ void socketFlush(Socket *sock)
 	//printf("\n");
 
 	// Data sent, don't send again.
+	rawBytes = sock->zDeflateOutBuf.size();
 	sock->zDeflateInSize = 0;
 	sock->zDeflateOutBuf.clear();
 }
@@ -846,7 +864,7 @@ int checkSockets(const SocketSet* set, unsigned int timeout)
 	fd_set fds;
 	do
 	{
-		struct timeval tv = { timeout / 1000, (timeout % 1000) * 1000 };
+		struct timeval tv = {(int)(timeout / 1000), (int)(timeout % 1000) * 1000};  // Cast to int to avoid narrowing needed for C++11.
 
 		FD_ZERO(&fds);
 		for (size_t i = 0; i < set->fds.size(); ++i)
@@ -889,6 +907,7 @@ int checkSockets(const SocketSet* set, unsigned int timeout)
  */
 ssize_t readAll(Socket* sock, void* buf, size_t size, unsigned int timeout)
 {
+	ASSERT_OR_RETURN( SOCKET_ERROR, sock, "We don't have a valid socket!");
 	ASSERT(!sock->isCompressed, "readAll on compressed sockets not implemented.");
 
 	const SocketSet set = {std::vector<Socket *>(1, sock)};
@@ -1034,8 +1053,6 @@ Socket *socketAccept(Socket *sock)
 				continue;
 			}
 
-			socketBlockSIGPIPE(newConn, true);
-
 			conn = new Socket;
 			if (conn == NULL)
 			{
@@ -1043,6 +1060,16 @@ Socket *socketAccept(Socket *sock)
 				abort();
 				return NULL;
 			}
+
+			debug(LOG_NET, "setting socket (%p) blocking status (false).", conn);
+			if (!setSocketBlocking(newConn, false))
+			{
+				debug(LOG_NET, "Couldn't set socket (%p) blocking status (false).  Closing.", conn);
+				socketClose(conn);
+				return NULL;
+			}
+
+			socketBlockSIGPIPE(newConn, true);
 
 			// Mark all unused socket handles as invalid
 			for (j = 0; j < ARRAY_SIZE(conn->fd); ++j)
@@ -1130,7 +1157,7 @@ Socket *socketOpen(const SocketAddress *addr, unsigned timeout)
 
 		do
 		{
-			struct timeval tv = { timeout / 1000, (timeout % 1000) * 1000 };
+			struct timeval tv = {(int)(timeout / 1000), (int)(timeout % 1000) * 1000};  // Cast to int to avoid narrowing needed for C++11.
 
 			FD_ZERO(&conReady);
 			FD_SET(conn->fd[SOCK_CONNECTION], &conReady);
@@ -1178,14 +1205,6 @@ Socket *socketOpen(const SocketAddress *addr, unsigned timeout)
 			socketClose(conn);
 			return NULL;
 		}
-	}
-
-	debug(LOG_NET, "setting socket (%p) blocking status (true).", conn);
-	if (!setSocketBlocking(conn->fd[SOCK_CONNECTION], true))
-	{
-		debug(LOG_NET, "Failed to set socket %p blocking status (true).  Closing.", conn);
-		socketClose(conn);
-		return NULL;
 	}
 
 	return conn;

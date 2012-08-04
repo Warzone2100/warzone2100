@@ -65,7 +65,7 @@
     <ClCompile Include="nettypes.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="netlobby.cpp">
+    <ClCompile Include="netjoin_stub.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -111,9 +111,6 @@
     </ClInclude>
     <ClInclude Include="..\..\3rdparty\miniupnpc\upnpreplyparse.h">
       <Filter>Source Files\miniUPnP\header files</Filter>
-    </ClInclude>
-    <ClInclude Include="netlobby.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="netqueue.h">
       <Filter>Header Files</Filter>

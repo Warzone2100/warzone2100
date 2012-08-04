@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -67,11 +67,10 @@ RID_MAXRID
 
 
 /* The store for the research stats */
-extern		RESEARCH				*asResearch;
-extern		UDWORD					numResearch;
+extern std::vector<RESEARCH> asResearch;
 
 //List of pointers to arrays of PLAYER_RESEARCH[numResearch] for each player
-extern PLAYER_RESEARCH*		asPlayerResList[MAX_PLAYERS];
+extern std::vector<PLAYER_RESEARCH> asPlayerResList[MAX_PLAYERS];
 
 //used for Callbacks to say which topic was last researched
 extern RESEARCH				*psCBLastResearch;
@@ -149,5 +148,7 @@ extern void enableSelfRepair(UBYTE player);
 void CancelAllResearch(UDWORD pl);
 
 extern bool researchInitVars(void);
+
+bool researchAvailable(int inc, int playerID);
 
 #endif // __INCLUDED_SRC_RESEARCH_H__

@@ -1,10 +1,10 @@
-20	432	0	60	_("Glad you could make it, Commander.")
+20	432	0.0	5.0	_("Glad you could make it, Commander.")
 
 
-20	432	70	235	_("Enemy strike VTOLs have got us pinned down. We've managed to hold off cyborgs and tanks, but we haven't been able to make any progress along the valley.")
+20	432	5.83333333333	19.5833333333	_("Enemy strike VTOLs have got us pinned down. We've managed to hold off cyborgs and tanks, but we haven't been able to make any progress along the valley.")
 
 
-20	432	245	275	_("Can you try and reach us with anti-aircraft units?")
+20	432	20.4166666667	22.9166666667	_("Can you try and reach us with anti-aircraft units?")
 
 
 

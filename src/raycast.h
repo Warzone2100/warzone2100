@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -26,11 +26,6 @@
 
 #include "lib/framework/vector.h"
 
-#define NUM_RAYS 360
-
-// maximum length for a visiblity ray
-#define RAY_MAXLEN INT_MAX
-
 
 /*!
  * The raycast intersection callback.
@@ -39,18 +34,17 @@
  * \param data Payload (store intermediate results here)
  * \return true if ore points are required, false otherwise
  */
-typedef bool (*RAY_CALLBACK)(Vector3i pos, int32_t dist, void* data);
+typedef bool (*RAY_CALLBACK)(Vector2i pos, int32_t dist, void* data);
 
 
 /*!
  * Cast a ray from a position into a certain direction
- * \param pos Position to cast from
- * \param dir Direction to cast into
- * \param length Maximum length
+ * \param src Position to cast from
+ * \param dst Position to cast to (casts to end of map, if dst is off the map)
  * \param callback Callback to call for each passed tile
  * \param data Data to pass through to the callback
  */
-extern void rayCast(Vector3i pos, uint16_t dir, uint32_t length, RAY_CALLBACK callback, void *data);
+void rayCast(Vector2i src, Vector2i dst, RAY_CALLBACK callback, void *data);
 
 
 // Calculates the maximum height and distance found along a line from any

@@ -1,0 +1,1056 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXAggregateTarget section */
+		438C9613149BDA19001BAF3A /* All Tools */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 438C9621149BDA42001BAF3A /* Build configuration list for PBXAggregateTarget "All Tools" */;
+			buildPhases = (
+			);
+			dependencies = (
+				438C9618149BDA31001BAF3A /* PBXTargetDependency */,
+				438C961A149BDA31001BAF3A /* PBXTargetDependency */,
+				438C961C149BDA31001BAF3A /* PBXTargetDependency */,
+				438C961E149BDA31001BAF3A /* PBXTargetDependency */,
+				438C9620149BDA31001BAF3A /* PBXTargetDependency */,
+			);
+			name = "All Tools";
+			productName = "All Tools";
+		};
+/* End PBXAggregateTarget section */
+
+/* Begin PBXBuildFile section */
+		438C95A7149BD3A0001BAF3A /* map2png.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 438C959C149BD34E001BAF3A /* map2png.cpp */; };
+		438C95A8149BD3A2001BAF3A /* maplib.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 438C95A0149BD34E001BAF3A /* maplib.cpp */; };
+		438C95A9149BD3A3001BAF3A /* mapload.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 438C95A2149BD34E001BAF3A /* mapload.cpp */; };
+		438C95AA149BD3A5001BAF3A /* pngsave.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 438C95A4149BD34E001BAF3A /* pngsave.cpp */; };
+		438C95BC149BD3F2001BAF3A /* mapconv.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 438C959E149BD34E001BAF3A /* mapconv.cpp */; };
+		438C95BD149BD3F5001BAF3A /* maplib.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 438C95A0149BD34E001BAF3A /* maplib.cpp */; };
+		438C95BE149BD3F5001BAF3A /* mapload.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 438C95A2149BD34E001BAF3A /* mapload.cpp */; };
+		438C95BF149BD3F6001BAF3A /* pngsave.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 438C95A4149BD34E001BAF3A /* pngsave.cpp */; };
+		438C95C0149BD407001BAF3A /* mapinfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 438C959F149BD34E001BAF3A /* mapinfo.cpp */; };
+		438C95C1149BD408001BAF3A /* maplib.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 438C95A0149BD34E001BAF3A /* maplib.cpp */; };
+		438C95C2149BD409001BAF3A /* mapload.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 438C95A2149BD34E001BAF3A /* mapload.cpp */; };
+		438C95C3149BD420001BAF3A /* map2lnd.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 438C959B149BD34E001BAF3A /* map2lnd.cpp */; };
+		438C95C4149BD422001BAF3A /* maplib.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 438C95A0149BD34E001BAF3A /* maplib.cpp */; };
+		438C95C5149BD423001BAF3A /* mapload.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 438C95A2149BD34E001BAF3A /* mapload.cpp */; };
+		438C95C6149BD449001BAF3A /* map2preview.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 438C959D149BD34E001BAF3A /* map2preview.cpp */; };
+		438C95C7149BD44B001BAF3A /* maplib.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 438C95A0149BD34E001BAF3A /* maplib.cpp */; };
+		438C95C8149BD44C001BAF3A /* mapload.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 438C95A2149BD34E001BAF3A /* mapload.cpp */; };
+		438C95C9149BD44D001BAF3A /* pngsave.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 438C95A4149BD34E001BAF3A /* pngsave.cpp */; };
+		438C95E9149BD62C001BAF3A /* Png.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 438C9582149BD2ED001BAF3A /* Png.framework */; };
+		438C95EA149BD62C001BAF3A /* PhysFS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 438C9584149BD2ED001BAF3A /* PhysFS.framework */; };
+		438C95ED149BD660001BAF3A /* Png.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 438C9582149BD2ED001BAF3A /* Png.framework */; };
+		438C95EE149BD660001BAF3A /* PhysFS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 438C9584149BD2ED001BAF3A /* PhysFS.framework */; };
+		438C95F3149BD683001BAF3A /* PhysFS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 438C9584149BD2ED001BAF3A /* PhysFS.framework */; };
+		438C95F6149BD6B9001BAF3A /* PhysFS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 438C9584149BD2ED001BAF3A /* PhysFS.framework */; };
+		438C95F7149BD6C4001BAF3A /* Png.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 438C9582149BD2ED001BAF3A /* Png.framework */; };
+		438C95F8149BD6C4001BAF3A /* PhysFS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 438C9584149BD2ED001BAF3A /* PhysFS.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		438C9577149BD2ED001BAF3A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 438C94F2149BD20F001BAF3A /* Warzone.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 02356D750BD3BB3400E9A019;
+			remoteInfo = Warzone;
+		};
+		438C9579149BD2ED001BAF3A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 438C94F2149BD20F001BAF3A /* Warzone.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 4318434B1363942200BA2BC5;
+			remoteInfo = MiniUPnPc;
+		};
+		438C957B149BD2ED001BAF3A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 438C94F2149BD20F001BAF3A /* Warzone.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 43502D521347640700A02A1F;
+			remoteInfo = GLExtensionWrangler;
+		};
+		438C957D149BD2ED001BAF3A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 438C94F2149BD20F001BAF3A /* Warzone.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 02356D830BD3BB4100E9A019;
+			remoteInfo = Zlib;
+		};
+		438C957F149BD2ED001BAF3A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 438C94F2149BD20F001BAF3A /* Warzone.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 02356E090BD3BCFE00E9A019;
+			remoteInfo = Ogg;
+		};
+		438C9581149BD2ED001BAF3A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 438C94F2149BD20F001BAF3A /* Warzone.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 02356DC20BD3BBFC00E9A019;
+			remoteInfo = Png;
+		};
+		438C9583149BD2ED001BAF3A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 438C94F2149BD20F001BAF3A /* Warzone.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 02DDA8B10BD3C2F20049AB60;
+			remoteInfo = PhysFS;
+		};
+		438C9585149BD2ED001BAF3A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 438C94F2149BD20F001BAF3A /* Warzone.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 02DDA7EE0BD3C03F0049AB60;
+			remoteInfo = Vorbis;
+		};
+		438C9587149BD2ED001BAF3A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 438C94F2149BD20F001BAF3A /* Warzone.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 022B2F220BD55814002E64E3;
+			remoteInfo = Gettext;
+		};
+		438C9589149BD2ED001BAF3A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 438C94F2149BD20F001BAF3A /* Warzone.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 97AEAB330E8C1B5200A10721;
+			remoteInfo = Theora;
+		};
+		438C958D149BD2ED001BAF3A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 438C94F2149BD20F001BAF3A /* Warzone.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 4366718213D1FD5600FE85BA;
+			remoteInfo = QuesoGLC;
+		};
+		438C95E5149BD60B001BAF3A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 438C94F2149BD20F001BAF3A /* Warzone.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 02356DC10BD3BBFC00E9A019;
+			remoteInfo = Png;
+		};
+		438C95E7149BD60B001BAF3A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 438C94F2149BD20F001BAF3A /* Warzone.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 02DDA8B00BD3C2F20049AB60;
+			remoteInfo = PhysFS;
+		};
+		438C95EF149BD669001BAF3A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 438C94F2149BD20F001BAF3A /* Warzone.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 02356DC10BD3BBFC00E9A019;
+			remoteInfo = Png;
+		};
+		438C95F1149BD669001BAF3A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 438C94F2149BD20F001BAF3A /* Warzone.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 02DDA8B00BD3C2F20049AB60;
+			remoteInfo = PhysFS;
+		};
+		438C95F4149BD698001BAF3A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 438C94F2149BD20F001BAF3A /* Warzone.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 02DDA8B00BD3C2F20049AB60;
+			remoteInfo = PhysFS;
+		};
+		438C95F9149BD6D3001BAF3A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 438C94F2149BD20F001BAF3A /* Warzone.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 02DDA8B00BD3C2F20049AB60;
+			remoteInfo = PhysFS;
+		};
+		438C95FB149BD6E2001BAF3A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 438C94F2149BD20F001BAF3A /* Warzone.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 02356DC10BD3BBFC00E9A019;
+			remoteInfo = Png;
+		};
+		438C95FD149BD6E2001BAF3A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 438C94F2149BD20F001BAF3A /* Warzone.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 02DDA8B00BD3C2F20049AB60;
+			remoteInfo = PhysFS;
+		};
+		438C9617149BDA31001BAF3A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 438C94C9149BD084001BAF3A /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 438C94E3149BD19D001BAF3A;
+			remoteInfo = map2png;
+		};
+		438C9619149BDA31001BAF3A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 438C94C9149BD084001BAF3A /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 438C952C149BD22C001BAF3A;
+			remoteInfo = mapconv;
+		};
+		438C961B149BDA31001BAF3A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 438C94C9149BD084001BAF3A /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 438C953C149BD26C001BAF3A;
+			remoteInfo = mapinfo;
+		};
+		438C961D149BDA31001BAF3A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 438C94C9149BD084001BAF3A /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 438C9544149BD280001BAF3A;
+			remoteInfo = map2lnd;
+		};
+		438C961F149BDA31001BAF3A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 438C94C9149BD084001BAF3A /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 438C954C149BD290001BAF3A;
+			remoteInfo = map2preview;
+		};
+		438C9627149BDCE7001BAF3A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 438C94F2149BD20F001BAF3A /* Warzone.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 43FA570C10FF8E9B0074E914;
+			remoteInfo = "Setup Prebuilt Components";
+		};
+		438C9629149BDCFF001BAF3A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 438C94F2149BD20F001BAF3A /* Warzone.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 43FA570C10FF8E9B0074E914;
+			remoteInfo = "Setup Prebuilt Components";
+		};
+		438C962B149BDD16001BAF3A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 438C94F2149BD20F001BAF3A /* Warzone.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 43FA570C10FF8E9B0074E914;
+			remoteInfo = "Setup Prebuilt Components";
+		};
+		438C962D149BDD21001BAF3A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 438C94F2149BD20F001BAF3A /* Warzone.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 43FA570C10FF8E9B0074E914;
+			remoteInfo = "Setup Prebuilt Components";
+		};
+		438C962F149BDD2D001BAF3A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 438C94F2149BD20F001BAF3A /* Warzone.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 43FA570C10FF8E9B0074E914;
+			remoteInfo = "Setup Prebuilt Components";
+		};
+		43E7FE5714F97D8000D419C5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 438C94F2149BD20F001BAF3A /* Warzone.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 43CCDD1B14BA474E00B21363;
+			remoteInfo = Fribidi;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		438C94E4149BD19D001BAF3A /* map2png */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = map2png; sourceTree = BUILT_PRODUCTS_DIR; };
+		438C94F2149BD20F001BAF3A /* Warzone.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Warzone.xcodeproj; path = ../../macosx/Warzone.xcodeproj; sourceTree = SOURCE_ROOT; };
+		438C9532149BD22C001BAF3A /* mapconv */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = mapconv; sourceTree = BUILT_PRODUCTS_DIR; };
+		438C9542149BD26C001BAF3A /* mapinfo */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = mapinfo; sourceTree = BUILT_PRODUCTS_DIR; };
+		438C954A149BD280001BAF3A /* map2lnd */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = map2lnd; sourceTree = BUILT_PRODUCTS_DIR; };
+		438C9552149BD290001BAF3A /* map2preview */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = map2preview; sourceTree = BUILT_PRODUCTS_DIR; };
+		438C959B149BD34E001BAF3A /* map2lnd.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = map2lnd.cpp; sourceTree = SOURCE_ROOT; };
+		438C959C149BD34E001BAF3A /* map2png.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = map2png.cpp; sourceTree = SOURCE_ROOT; };
+		438C959D149BD34E001BAF3A /* map2preview.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = map2preview.cpp; sourceTree = SOURCE_ROOT; };
+		438C959E149BD34E001BAF3A /* mapconv.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mapconv.cpp; sourceTree = SOURCE_ROOT; };
+		438C959F149BD34E001BAF3A /* mapinfo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mapinfo.cpp; sourceTree = SOURCE_ROOT; };
+		438C95A0149BD34E001BAF3A /* maplib.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = maplib.cpp; sourceTree = SOURCE_ROOT; };
+		438C95A1149BD34E001BAF3A /* maplib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = maplib.h; sourceTree = SOURCE_ROOT; };
+		438C95A2149BD34E001BAF3A /* mapload.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mapload.cpp; sourceTree = SOURCE_ROOT; };
+		438C95A3149BD34E001BAF3A /* mapload.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mapload.h; sourceTree = SOURCE_ROOT; };
+		438C95A4149BD34E001BAF3A /* pngsave.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = pngsave.cpp; sourceTree = SOURCE_ROOT; };
+		438C95A5149BD34E001BAF3A /* pngsave.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pngsave.h; sourceTree = SOURCE_ROOT; };
+		438C95A6149BD34E001BAF3A /* vector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vector.h; sourceTree = SOURCE_ROOT; };
+		438C95CF149BD4CC001BAF3A /* Base-Tools.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Base-Tools.xcconfig"; path = "configs/Base-Tools.xcconfig"; sourceTree = "<group>"; };
+		438C95D0149BD4CC001BAF3A /* map2lnd-All.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "map2lnd-All.xcconfig"; path = "configs/map2lnd-All.xcconfig"; sourceTree = "<group>"; };
+		438C95D1149BD4CC001BAF3A /* map2lnd-Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "map2lnd-Debug.xcconfig"; path = "configs/map2lnd-Debug.xcconfig"; sourceTree = "<group>"; };
+		438C95D2149BD4CC001BAF3A /* map2lnd-Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "map2lnd-Release.xcconfig"; path = "configs/map2lnd-Release.xcconfig"; sourceTree = "<group>"; };
+		438C95D3149BD4CC001BAF3A /* map2lnd-StaticAnalyzer.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "map2lnd-StaticAnalyzer.xcconfig"; path = "configs/map2lnd-StaticAnalyzer.xcconfig"; sourceTree = "<group>"; };
+		438C95D4149BD4CC001BAF3A /* map2png-All.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "map2png-All.xcconfig"; path = "configs/map2png-All.xcconfig"; sourceTree = "<group>"; };
+		438C95D5149BD4CC001BAF3A /* map2png-Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "map2png-Debug.xcconfig"; path = "configs/map2png-Debug.xcconfig"; sourceTree = "<group>"; };
+		438C95D6149BD4CC001BAF3A /* map2png-Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "map2png-Release.xcconfig"; path = "configs/map2png-Release.xcconfig"; sourceTree = "<group>"; };
+		438C95D7149BD4CC001BAF3A /* map2png-StaticAnalyzer.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "map2png-StaticAnalyzer.xcconfig"; path = "configs/map2png-StaticAnalyzer.xcconfig"; sourceTree = "<group>"; };
+		438C95D8149BD4CC001BAF3A /* map2preview-All.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "map2preview-All.xcconfig"; path = "configs/map2preview-All.xcconfig"; sourceTree = "<group>"; };
+		438C95D9149BD4CC001BAF3A /* map2preview-Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "map2preview-Debug.xcconfig"; path = "configs/map2preview-Debug.xcconfig"; sourceTree = "<group>"; };
+		438C95DA149BD4CC001BAF3A /* map2preview-Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "map2preview-Release.xcconfig"; path = "configs/map2preview-Release.xcconfig"; sourceTree = "<group>"; };
+		438C95DB149BD4CC001BAF3A /* map2preview-StaticAnalyzer.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "map2preview-StaticAnalyzer.xcconfig"; path = "configs/map2preview-StaticAnalyzer.xcconfig"; sourceTree = "<group>"; };
+		438C95DC149BD4CC001BAF3A /* mapconv-All.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "mapconv-All.xcconfig"; path = "configs/mapconv-All.xcconfig"; sourceTree = "<group>"; };
+		438C95DD149BD4CC001BAF3A /* mapconv-Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "mapconv-Debug.xcconfig"; path = "configs/mapconv-Debug.xcconfig"; sourceTree = "<group>"; };
+		438C95DE149BD4CC001BAF3A /* mapconv-Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "mapconv-Release.xcconfig"; path = "configs/mapconv-Release.xcconfig"; sourceTree = "<group>"; };
+		438C95DF149BD4CC001BAF3A /* mapconv-StaticAnalyzer.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "mapconv-StaticAnalyzer.xcconfig"; path = "configs/mapconv-StaticAnalyzer.xcconfig"; sourceTree = "<group>"; };
+		438C95E0149BD4CC001BAF3A /* mapinfo-All.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "mapinfo-All.xcconfig"; path = "configs/mapinfo-All.xcconfig"; sourceTree = "<group>"; };
+		438C95E1149BD4CC001BAF3A /* mapinfo-Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "mapinfo-Debug.xcconfig"; path = "configs/mapinfo-Debug.xcconfig"; sourceTree = "<group>"; };
+		438C95E2149BD4CC001BAF3A /* mapinfo-Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "mapinfo-Release.xcconfig"; path = "configs/mapinfo-Release.xcconfig"; sourceTree = "<group>"; };
+		438C95E3149BD4CC001BAF3A /* mapinfo-StaticAnalyzer.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "mapinfo-StaticAnalyzer.xcconfig"; path = "configs/mapinfo-StaticAnalyzer.xcconfig"; sourceTree = "<group>"; };
+		438C95E4149BD4CC001BAF3A /* Project-All.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Project-All.xcconfig"; path = "configs/Project-All.xcconfig"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		438C94E2149BD19D001BAF3A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				438C95E9149BD62C001BAF3A /* Png.framework in Frameworks */,
+				438C95EA149BD62C001BAF3A /* PhysFS.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		438C952E149BD22C001BAF3A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				438C95ED149BD660001BAF3A /* Png.framework in Frameworks */,
+				438C95EE149BD660001BAF3A /* PhysFS.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		438C953E149BD26C001BAF3A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				438C95F3149BD683001BAF3A /* PhysFS.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		438C9546149BD280001BAF3A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				438C95F6149BD6B9001BAF3A /* PhysFS.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		438C954E149BD290001BAF3A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				438C95F7149BD6C4001BAF3A /* Png.framework in Frameworks */,
+				438C95F8149BD6C4001BAF3A /* PhysFS.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		438C94C7149BD084001BAF3A = {
+			isa = PBXGroup;
+			children = (
+				438C9554149BD2A0001BAF3A /* Configurations */,
+				438C9599149BD34E001BAF3A /* Tools */,
+				438C94EA149BD1E2001BAF3A /* External frameworks */,
+				438C94F1149BD1F2001BAF3A /* System frameworks */,
+				438C94E5149BD19D001BAF3A /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		438C94E5149BD19D001BAF3A /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				438C94E4149BD19D001BAF3A /* map2png */,
+				438C9532149BD22C001BAF3A /* mapconv */,
+				438C9542149BD26C001BAF3A /* mapinfo */,
+				438C954A149BD280001BAF3A /* map2lnd */,
+				438C9552149BD290001BAF3A /* map2preview */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		438C94EA149BD1E2001BAF3A /* External frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				438C94F2149BD20F001BAF3A /* Warzone.xcodeproj */,
+			);
+			name = "External frameworks";
+			sourceTree = "<group>";
+		};
+		438C94F1149BD1F2001BAF3A /* System frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = "System frameworks";
+			sourceTree = "<group>";
+		};
+		438C9554149BD2A0001BAF3A /* Configurations */ = {
+			isa = PBXGroup;
+			children = (
+				438C95CF149BD4CC001BAF3A /* Base-Tools.xcconfig */,
+				438C95D0149BD4CC001BAF3A /* map2lnd-All.xcconfig */,
+				438C95D1149BD4CC001BAF3A /* map2lnd-Debug.xcconfig */,
+				438C95D2149BD4CC001BAF3A /* map2lnd-Release.xcconfig */,
+				438C95D3149BD4CC001BAF3A /* map2lnd-StaticAnalyzer.xcconfig */,
+				438C95D4149BD4CC001BAF3A /* map2png-All.xcconfig */,
+				438C95D5149BD4CC001BAF3A /* map2png-Debug.xcconfig */,
+				438C95D6149BD4CC001BAF3A /* map2png-Release.xcconfig */,
+				438C95D7149BD4CC001BAF3A /* map2png-StaticAnalyzer.xcconfig */,
+				438C95D8149BD4CC001BAF3A /* map2preview-All.xcconfig */,
+				438C95D9149BD4CC001BAF3A /* map2preview-Debug.xcconfig */,
+				438C95DA149BD4CC001BAF3A /* map2preview-Release.xcconfig */,
+				438C95DB149BD4CC001BAF3A /* map2preview-StaticAnalyzer.xcconfig */,
+				438C95DC149BD4CC001BAF3A /* mapconv-All.xcconfig */,
+				438C95DD149BD4CC001BAF3A /* mapconv-Debug.xcconfig */,
+				438C95DE149BD4CC001BAF3A /* mapconv-Release.xcconfig */,
+				438C95DF149BD4CC001BAF3A /* mapconv-StaticAnalyzer.xcconfig */,
+				438C95E0149BD4CC001BAF3A /* mapinfo-All.xcconfig */,
+				438C95E1149BD4CC001BAF3A /* mapinfo-Debug.xcconfig */,
+				438C95E2149BD4CC001BAF3A /* mapinfo-Release.xcconfig */,
+				438C95E3149BD4CC001BAF3A /* mapinfo-StaticAnalyzer.xcconfig */,
+				438C95E4149BD4CC001BAF3A /* Project-All.xcconfig */,
+			);
+			name = Configurations;
+			sourceTree = "<group>";
+		};
+		438C9560149BD2ED001BAF3A /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				438C9578149BD2ED001BAF3A /* Warzone.app */,
+				438C957A149BD2ED001BAF3A /* MiniUPnPc.framework */,
+				438C957C149BD2ED001BAF3A /* GLExtensionWrangler.framework */,
+				438C957E149BD2ED001BAF3A /* Zlib.framework */,
+				43E7FE5814F97D8000D419C5 /* fribidi.framework */,
+				438C9580149BD2ED001BAF3A /* Ogg.framework */,
+				438C9582149BD2ED001BAF3A /* Png.framework */,
+				438C9584149BD2ED001BAF3A /* PhysFS.framework */,
+				438C9586149BD2ED001BAF3A /* Vorbis.framework */,
+				438C9588149BD2ED001BAF3A /* Gettext.framework */,
+				438C958A149BD2ED001BAF3A /* Theora.framework */,
+				438C958E149BD2ED001BAF3A /* QuesoGLC.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		438C9599149BD34E001BAF3A /* Tools */ = {
+			isa = PBXGroup;
+			children = (
+				438C959B149BD34E001BAF3A /* map2lnd.cpp */,
+				438C959C149BD34E001BAF3A /* map2png.cpp */,
+				438C959D149BD34E001BAF3A /* map2preview.cpp */,
+				438C959E149BD34E001BAF3A /* mapconv.cpp */,
+				438C959F149BD34E001BAF3A /* mapinfo.cpp */,
+				438C95A0149BD34E001BAF3A /* maplib.cpp */,
+				438C95A1149BD34E001BAF3A /* maplib.h */,
+				438C95A2149BD34E001BAF3A /* mapload.cpp */,
+				438C95A3149BD34E001BAF3A /* mapload.h */,
+				438C95A4149BD34E001BAF3A /* pngsave.cpp */,
+				438C95A5149BD34E001BAF3A /* pngsave.h */,
+				438C95A6149BD34E001BAF3A /* vector.h */,
+			);
+			name = Tools;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		438C94E3149BD19D001BAF3A /* map2png */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 438C94E9149BD19F001BAF3A /* Build configuration list for PBXNativeTarget "map2png" */;
+			buildPhases = (
+				438C94E1149BD19D001BAF3A /* Sources */,
+				438C94E2149BD19D001BAF3A /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				438C95E6149BD60B001BAF3A /* PBXTargetDependency */,
+				438C95E8149BD60B001BAF3A /* PBXTargetDependency */,
+				438C9628149BDCE7001BAF3A /* PBXTargetDependency */,
+			);
+			name = map2png;
+			productName = map2png;
+			productReference = 438C94E4149BD19D001BAF3A /* map2png */;
+			productType = "com.apple.product-type.tool";
+		};
+		438C952C149BD22C001BAF3A /* mapconv */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 438C952F149BD22C001BAF3A /* Build configuration list for PBXNativeTarget "mapconv" */;
+			buildPhases = (
+				438C952D149BD22C001BAF3A /* Sources */,
+				438C952E149BD22C001BAF3A /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				438C95F0149BD669001BAF3A /* PBXTargetDependency */,
+				438C95F2149BD669001BAF3A /* PBXTargetDependency */,
+				438C962A149BDCFF001BAF3A /* PBXTargetDependency */,
+			);
+			name = mapconv;
+			productName = map2png;
+			productReference = 438C9532149BD22C001BAF3A /* mapconv */;
+			productType = "com.apple.product-type.tool";
+		};
+		438C953C149BD26C001BAF3A /* mapinfo */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 438C953F149BD26C001BAF3A /* Build configuration list for PBXNativeTarget "mapinfo" */;
+			buildPhases = (
+				438C953D149BD26C001BAF3A /* Sources */,
+				438C953E149BD26C001BAF3A /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				438C95F5149BD698001BAF3A /* PBXTargetDependency */,
+				438C962C149BDD16001BAF3A /* PBXTargetDependency */,
+			);
+			name = mapinfo;
+			productName = map2png;
+			productReference = 438C9542149BD26C001BAF3A /* mapinfo */;
+			productType = "com.apple.product-type.tool";
+		};
+		438C9544149BD280001BAF3A /* map2lnd */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 438C9547149BD280001BAF3A /* Build configuration list for PBXNativeTarget "map2lnd" */;
+			buildPhases = (
+				438C9545149BD280001BAF3A /* Sources */,
+				438C9546149BD280001BAF3A /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				438C95FA149BD6D3001BAF3A /* PBXTargetDependency */,
+				438C962E149BDD21001BAF3A /* PBXTargetDependency */,
+			);
+			name = map2lnd;
+			productName = map2png;
+			productReference = 438C954A149BD280001BAF3A /* map2lnd */;
+			productType = "com.apple.product-type.tool";
+		};
+		438C954C149BD290001BAF3A /* map2preview */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 438C954F149BD290001BAF3A /* Build configuration list for PBXNativeTarget "map2preview" */;
+			buildPhases = (
+				438C954D149BD290001BAF3A /* Sources */,
+				438C954E149BD290001BAF3A /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				438C95FC149BD6E2001BAF3A /* PBXTargetDependency */,
+				438C95FE149BD6E2001BAF3A /* PBXTargetDependency */,
+				438C9630149BDD2D001BAF3A /* PBXTargetDependency */,
+			);
+			name = map2preview;
+			productName = map2png;
+			productReference = 438C9552149BD290001BAF3A /* map2preview */;
+			productType = "com.apple.product-type.tool";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		438C94C9149BD084001BAF3A /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = 438C94CC149BD084001BAF3A /* Build configuration list for PBXProject "MapUtilities" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				English,
+				Japanese,
+				French,
+				German,
+			);
+			mainGroup = 438C94C7149BD084001BAF3A;
+			productRefGroup = 438C94E5149BD19D001BAF3A /* Products */;
+			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 438C9560149BD2ED001BAF3A /* Products */;
+					ProjectRef = 438C94F2149BD20F001BAF3A /* Warzone.xcodeproj */;
+				},
+			);
+			projectRoot = "";
+			targets = (
+				438C9613149BDA19001BAF3A /* All Tools */,
+				438C94E3149BD19D001BAF3A /* map2png */,
+				438C952C149BD22C001BAF3A /* mapconv */,
+				438C953C149BD26C001BAF3A /* mapinfo */,
+				438C9544149BD280001BAF3A /* map2lnd */,
+				438C954C149BD290001BAF3A /* map2preview */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		438C9578149BD2ED001BAF3A /* Warzone.app */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.application;
+			path = Warzone.app;
+			remoteRef = 438C9577149BD2ED001BAF3A /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		438C957A149BD2ED001BAF3A /* MiniUPnPc.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = MiniUPnPc.framework;
+			remoteRef = 438C9579149BD2ED001BAF3A /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		438C957C149BD2ED001BAF3A /* GLExtensionWrangler.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = GLExtensionWrangler.framework;
+			remoteRef = 438C957B149BD2ED001BAF3A /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		438C957E149BD2ED001BAF3A /* Zlib.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Zlib.framework;
+			remoteRef = 438C957D149BD2ED001BAF3A /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		438C9580149BD2ED001BAF3A /* Ogg.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Ogg.framework;
+			remoteRef = 438C957F149BD2ED001BAF3A /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		438C9582149BD2ED001BAF3A /* Png.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Png.framework;
+			remoteRef = 438C9581149BD2ED001BAF3A /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		438C9584149BD2ED001BAF3A /* PhysFS.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = PhysFS.framework;
+			remoteRef = 438C9583149BD2ED001BAF3A /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		438C9586149BD2ED001BAF3A /* Vorbis.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Vorbis.framework;
+			remoteRef = 438C9585149BD2ED001BAF3A /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		438C9588149BD2ED001BAF3A /* Gettext.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Gettext.framework;
+			remoteRef = 438C9587149BD2ED001BAF3A /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		438C958A149BD2ED001BAF3A /* Theora.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Theora.framework;
+			remoteRef = 438C9589149BD2ED001BAF3A /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		438C958E149BD2ED001BAF3A /* QuesoGLC.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = QuesoGLC.framework;
+			remoteRef = 438C958D149BD2ED001BAF3A /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		43E7FE5814F97D8000D419C5 /* fribidi.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = fribidi.framework;
+			remoteRef = 43E7FE5714F97D8000D419C5 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
+
+/* Begin PBXSourcesBuildPhase section */
+		438C94E1149BD19D001BAF3A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				438C95A7149BD3A0001BAF3A /* map2png.cpp in Sources */,
+				438C95A8149BD3A2001BAF3A /* maplib.cpp in Sources */,
+				438C95A9149BD3A3001BAF3A /* mapload.cpp in Sources */,
+				438C95AA149BD3A5001BAF3A /* pngsave.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		438C952D149BD22C001BAF3A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				438C95BC149BD3F2001BAF3A /* mapconv.cpp in Sources */,
+				438C95BD149BD3F5001BAF3A /* maplib.cpp in Sources */,
+				438C95BE149BD3F5001BAF3A /* mapload.cpp in Sources */,
+				438C95BF149BD3F6001BAF3A /* pngsave.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		438C953D149BD26C001BAF3A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				438C95C0149BD407001BAF3A /* mapinfo.cpp in Sources */,
+				438C95C1149BD408001BAF3A /* maplib.cpp in Sources */,
+				438C95C2149BD409001BAF3A /* mapload.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		438C9545149BD280001BAF3A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				438C95C3149BD420001BAF3A /* map2lnd.cpp in Sources */,
+				438C95C4149BD422001BAF3A /* maplib.cpp in Sources */,
+				438C95C5149BD423001BAF3A /* mapload.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		438C954D149BD290001BAF3A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				438C95C6149BD449001BAF3A /* map2preview.cpp in Sources */,
+				438C95C7149BD44B001BAF3A /* maplib.cpp in Sources */,
+				438C95C8149BD44C001BAF3A /* mapload.cpp in Sources */,
+				438C95C9149BD44D001BAF3A /* pngsave.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		438C95E6149BD60B001BAF3A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = Png;
+			targetProxy = 438C95E5149BD60B001BAF3A /* PBXContainerItemProxy */;
+		};
+		438C95E8149BD60B001BAF3A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = PhysFS;
+			targetProxy = 438C95E7149BD60B001BAF3A /* PBXContainerItemProxy */;
+		};
+		438C95F0149BD669001BAF3A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = Png;
+			targetProxy = 438C95EF149BD669001BAF3A /* PBXContainerItemProxy */;
+		};
+		438C95F2149BD669001BAF3A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = PhysFS;
+			targetProxy = 438C95F1149BD669001BAF3A /* PBXContainerItemProxy */;
+		};
+		438C95F5149BD698001BAF3A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = PhysFS;
+			targetProxy = 438C95F4149BD698001BAF3A /* PBXContainerItemProxy */;
+		};
+		438C95FA149BD6D3001BAF3A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = PhysFS;
+			targetProxy = 438C95F9149BD6D3001BAF3A /* PBXContainerItemProxy */;
+		};
+		438C95FC149BD6E2001BAF3A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = Png;
+			targetProxy = 438C95FB149BD6E2001BAF3A /* PBXContainerItemProxy */;
+		};
+		438C95FE149BD6E2001BAF3A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = PhysFS;
+			targetProxy = 438C95FD149BD6E2001BAF3A /* PBXContainerItemProxy */;
+		};
+		438C9618149BDA31001BAF3A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 438C94E3149BD19D001BAF3A /* map2png */;
+			targetProxy = 438C9617149BDA31001BAF3A /* PBXContainerItemProxy */;
+		};
+		438C961A149BDA31001BAF3A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 438C952C149BD22C001BAF3A /* mapconv */;
+			targetProxy = 438C9619149BDA31001BAF3A /* PBXContainerItemProxy */;
+		};
+		438C961C149BDA31001BAF3A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 438C953C149BD26C001BAF3A /* mapinfo */;
+			targetProxy = 438C961B149BDA31001BAF3A /* PBXContainerItemProxy */;
+		};
+		438C961E149BDA31001BAF3A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 438C9544149BD280001BAF3A /* map2lnd */;
+			targetProxy = 438C961D149BDA31001BAF3A /* PBXContainerItemProxy */;
+		};
+		438C9620149BDA31001BAF3A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 438C954C149BD290001BAF3A /* map2preview */;
+			targetProxy = 438C961F149BDA31001BAF3A /* PBXContainerItemProxy */;
+		};
+		438C9628149BDCE7001BAF3A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "Setup Prebuilt Components";
+			targetProxy = 438C9627149BDCE7001BAF3A /* PBXContainerItemProxy */;
+		};
+		438C962A149BDCFF001BAF3A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "Setup Prebuilt Components";
+			targetProxy = 438C9629149BDCFF001BAF3A /* PBXContainerItemProxy */;
+		};
+		438C962C149BDD16001BAF3A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "Setup Prebuilt Components";
+			targetProxy = 438C962B149BDD16001BAF3A /* PBXContainerItemProxy */;
+		};
+		438C962E149BDD21001BAF3A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "Setup Prebuilt Components";
+			targetProxy = 438C962D149BDD21001BAF3A /* PBXContainerItemProxy */;
+		};
+		438C9630149BDD2D001BAF3A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "Setup Prebuilt Components";
+			targetProxy = 438C962F149BDD2D001BAF3A /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		438C94CA149BD084001BAF3A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 438C95E4149BD4CC001BAF3A /* Project-All.xcconfig */;
+			buildSettings = {
+			};
+			name = Debug;
+		};
+		438C94CB149BD084001BAF3A /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 438C95E4149BD4CC001BAF3A /* Project-All.xcconfig */;
+			buildSettings = {
+			};
+			name = Release;
+		};
+		438C94E7149BD19E001BAF3A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 438C95D5149BD4CC001BAF3A /* map2png-Debug.xcconfig */;
+			buildSettings = {
+			};
+			name = Debug;
+		};
+		438C94E8149BD19E001BAF3A /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 438C95D6149BD4CC001BAF3A /* map2png-Release.xcconfig */;
+			buildSettings = {
+			};
+			name = Release;
+		};
+		438C9530149BD22C001BAF3A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 438C95DD149BD4CC001BAF3A /* mapconv-Debug.xcconfig */;
+			buildSettings = {
+			};
+			name = Debug;
+		};
+		438C9531149BD22C001BAF3A /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 438C95DE149BD4CC001BAF3A /* mapconv-Release.xcconfig */;
+			buildSettings = {
+			};
+			name = Release;
+		};
+		438C9540149BD26C001BAF3A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 438C95E1149BD4CC001BAF3A /* mapinfo-Debug.xcconfig */;
+			buildSettings = {
+			};
+			name = Debug;
+		};
+		438C9541149BD26C001BAF3A /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 438C95E2149BD4CC001BAF3A /* mapinfo-Release.xcconfig */;
+			buildSettings = {
+			};
+			name = Release;
+		};
+		438C9548149BD280001BAF3A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 438C95D1149BD4CC001BAF3A /* map2lnd-Debug.xcconfig */;
+			buildSettings = {
+			};
+			name = Debug;
+		};
+		438C9549149BD280001BAF3A /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 438C95D2149BD4CC001BAF3A /* map2lnd-Release.xcconfig */;
+			buildSettings = {
+			};
+			name = Release;
+		};
+		438C9550149BD290001BAF3A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 438C95D9149BD4CC001BAF3A /* map2preview-Debug.xcconfig */;
+			buildSettings = {
+			};
+			name = Debug;
+		};
+		438C9551149BD290001BAF3A /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 438C95DA149BD4CC001BAF3A /* map2preview-Release.xcconfig */;
+			buildSettings = {
+			};
+			name = Release;
+		};
+		438C95AB149BD3C6001BAF3A /* StaticAnalyzer */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 438C95E4149BD4CC001BAF3A /* Project-All.xcconfig */;
+			buildSettings = {
+			};
+			name = StaticAnalyzer;
+		};
+		438C95AC149BD3C6001BAF3A /* StaticAnalyzer */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 438C95D7149BD4CC001BAF3A /* map2png-StaticAnalyzer.xcconfig */;
+			buildSettings = {
+			};
+			name = StaticAnalyzer;
+		};
+		438C95AD149BD3C6001BAF3A /* StaticAnalyzer */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 438C95DF149BD4CC001BAF3A /* mapconv-StaticAnalyzer.xcconfig */;
+			buildSettings = {
+			};
+			name = StaticAnalyzer;
+		};
+		438C95AE149BD3C6001BAF3A /* StaticAnalyzer */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 438C95E3149BD4CC001BAF3A /* mapinfo-StaticAnalyzer.xcconfig */;
+			buildSettings = {
+			};
+			name = StaticAnalyzer;
+		};
+		438C95AF149BD3C6001BAF3A /* StaticAnalyzer */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 438C95D3149BD4CC001BAF3A /* map2lnd-StaticAnalyzer.xcconfig */;
+			buildSettings = {
+			};
+			name = StaticAnalyzer;
+		};
+		438C95B0149BD3C6001BAF3A /* StaticAnalyzer */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 438C95DB149BD4CC001BAF3A /* map2preview-StaticAnalyzer.xcconfig */;
+			buildSettings = {
+			};
+			name = StaticAnalyzer;
+		};
+		438C9614149BDA19001BAF3A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "All Tools";
+			};
+			name = Debug;
+		};
+		438C9615149BDA19001BAF3A /* StaticAnalyzer */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "All Tools";
+			};
+			name = StaticAnalyzer;
+		};
+		438C9616149BDA19001BAF3A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "All Tools";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		438C94CC149BD084001BAF3A /* Build configuration list for PBXProject "MapUtilities" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				438C94CA149BD084001BAF3A /* Debug */,
+				438C95AB149BD3C6001BAF3A /* StaticAnalyzer */,
+				438C94CB149BD084001BAF3A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		438C94E9149BD19F001BAF3A /* Build configuration list for PBXNativeTarget "map2png" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				438C94E7149BD19E001BAF3A /* Debug */,
+				438C95AC149BD3C6001BAF3A /* StaticAnalyzer */,
+				438C94E8149BD19E001BAF3A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		438C952F149BD22C001BAF3A /* Build configuration list for PBXNativeTarget "mapconv" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				438C9530149BD22C001BAF3A /* Debug */,
+				438C95AD149BD3C6001BAF3A /* StaticAnalyzer */,
+				438C9531149BD22C001BAF3A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		438C953F149BD26C001BAF3A /* Build configuration list for PBXNativeTarget "mapinfo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				438C9540149BD26C001BAF3A /* Debug */,
+				438C95AE149BD3C6001BAF3A /* StaticAnalyzer */,
+				438C9541149BD26C001BAF3A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		438C9547149BD280001BAF3A /* Build configuration list for PBXNativeTarget "map2lnd" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				438C9548149BD280001BAF3A /* Debug */,
+				438C95AF149BD3C6001BAF3A /* StaticAnalyzer */,
+				438C9549149BD280001BAF3A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		438C954F149BD290001BAF3A /* Build configuration list for PBXNativeTarget "map2preview" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				438C9550149BD290001BAF3A /* Debug */,
+				438C95B0149BD3C6001BAF3A /* StaticAnalyzer */,
+				438C9551149BD290001BAF3A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		438C9621149BDA42001BAF3A /* Build configuration list for PBXAggregateTarget "All Tools" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				438C9614149BDA19001BAF3A /* Debug */,
+				438C9615149BDA19001BAF3A /* StaticAnalyzer */,
+				438C9616149BDA19001BAF3A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 438C94C9149BD084001BAF3A /* Project object */;
+}

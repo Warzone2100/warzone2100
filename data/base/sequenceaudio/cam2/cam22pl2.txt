@@ -1,2 +1,2 @@
-20	432	25	150	_("NASDA Briefing follows...")
+20	432	2.08333333333	12.5	_("NASDA Briefing follows...")
 

@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -133,7 +133,16 @@ extern void	kf_SelectAllHovers( void );
 extern void	kf_SelectAllWheeled( void );
 extern void	kf_SelectAllTracked( void );
 extern void	kf_SelectAllHalfTracked( void );
+void kf_SelectAllCyborgs();
+void kf_SelectAllEngineers();
+void kf_SelectAllMechanics();
+void kf_SelectAllTransporters();
+void kf_SelectAllRepairTanks();
+void kf_SelectAllSensorUnits();
+void kf_SelectAllTrucks();
 extern void	kf_SelectAllCombatUnits( void );
+void kf_SelectAllLandCombatUnits();
+void kf_SelectAllCombatCyborgs();
 extern void	kf_SelectAllSameType( void );
 
 extern void	kf_SetDroidRangeShort( void );
@@ -250,10 +259,11 @@ extern void	kf_ToggleWatchWindow( void );
 
 bool runningMultiplayer(void);
 
-void	kf_ForceSync( void );
 void    kf_ForceDesync(void);
 void	kf_PowerInfo( void );
 void	kf_BuildNextPage( void );
 void	kf_BuildPrevPage( void );
+extern void kf_DamageMe(void);
+extern void kf_AutoGame(void);
 
 #endif // __INCLUDED_SRC_KEYBIND_H__

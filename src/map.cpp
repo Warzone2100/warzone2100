@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -36,7 +36,6 @@
 #include "hci.h"
 #include "projectile.h"
 #include "display3d.h"
-#include "lighting.h"
 #include "game.h"
 #include "texture.h"
 #include "advvis.h"
@@ -50,7 +49,7 @@
 #include "fpath.h"
 #include "levels.h"
 #include "scriptfuncs.h"
-#include "lib/framework/wzapp_c.h"
+#include "lib/framework/wzapp.h"
 
 #define GAME_TICKS_FOR_DANGER (GAME_TICKS_PER_SEC * 2)
 
@@ -92,14 +91,6 @@ struct GATEWAY_SAVE
 	UBYTE	x0,y0,x1,y1;
 };
 
-struct ZONEMAP_SAVEHEADER
-{
-	UWORD version;
-	UWORD numZones;
-	UWORD numEquivZones;
-	UWORD pad;
-};
-
 /* Sanity check definitions for the save struct file sizes */
 #define SAVE_HEADER_SIZE	16
 #define SAVE_TILE_SIZE		3
@@ -137,8 +128,8 @@ static char *Tile_names = NULL;
 #define ROCKIE 3
 
 static int *map;			// 3D array pointer that holds the texturetype
-static int *mapDecals;		// array that tells us what tile is a decal
-#define MAX_TERRAIN_TILES 100		// max that we support (for now)
+static bool *mapDecals;           // array that tells us what tile is a decal
+#define MAX_TERRAIN_TILES 0x0200  // max that we support (for now), see TILE_NUMMASK
 
 /* Look up table that returns the terrain type of a given tile texture */
 UBYTE terrainTypes[MAX_TILE_TEXTURES];
@@ -194,9 +185,12 @@ bool mapNew(UDWORD width, UDWORD height)
 		psTile->illumination = 255;
 		psTile->level = psTile->illumination;
 		memset(psTile->watchers, 0, sizeof(psTile->watchers));
+		memset(psTile->sensors, 0, sizeof(psTile->sensors));
+		memset(psTile->jammers, 0, sizeof(psTile->jammers));
 		psTile->colour= WZCOL_WHITE;
 		psTile->tileExploredBits = 0;
 		psTile->sensorBits = 0;
+		psTile->jammerBits = 0;
 		psTile++;
 	}
 
@@ -288,7 +282,7 @@ static void init_tileNames(int type)
 	debug(LOG_TERRAIN, "name: %s, with %d entries", name, numlines);
 	if (numlines == 0 || numlines > MAX_TERRAIN_TILES)
 	{
-		debug(LOG_FATAL, "Rockie_enum paramater is out of range (%d). Aborting.", numlines);
+		debug(LOG_FATAL, "Rockie_enum parameter is out of range (%d). Aborting.", numlines);
 		abort();
 	}
 
@@ -692,21 +686,22 @@ static void SetDecals(const char *filename, const char *decal_type)
 	debug(LOG_TERRAIN, "reading: %s, with %d entries", filename, numlines);
 	//increment the pointer to the start of the next record
 	pFileData = strchr(pFileData,'\n') + 1;
-	if (numlines > MAX_TERRAIN_TILES)
-	{
-		debug(LOG_FATAL, "Too many tiles, we only support %d max at this time", MAX_TERRAIN_TILES);
-		abort();
-	}
-	mapDecals = (int *)malloc(sizeof(int)*MAX_TERRAIN_TILES);		// max of 80 tiles that we support
-	memset(mapDecals, 0x0, sizeof(int)*MAX_TERRAIN_TILES);	// set everything to false;
+	mapDecals = new bool[MAX_TERRAIN_TILES];
+	std::fill_n(mapDecals, MAX_TERRAIN_TILES, false);  // set everything to false.
 
 	for (i=0; i < numlines; i++)
 	{
+		tiledecal = -1;
 		sscanf(pFileData, "%d%n", &tiledecal, &cnt);
 		pFileData += cnt;
 		//increment the pointer to the start of the next record
 		pFileData = strchr(pFileData,'\n') + 1;
-		mapDecals[tiledecal] = 1;
+		if ((unsigned)tiledecal > MAX_TERRAIN_TILES)
+		{
+			debug(LOG_ERROR, "Tile index is out of range!  Was %d, our max is %d", tiledecal, MAX_TERRAIN_TILES);
+			continue;
+		}
+		mapDecals[tiledecal] = true;
 	}
 }
 // hasDecals()
@@ -810,7 +805,6 @@ bool mapLoad(char *filename, bool preview)
 	// FIXME: the map preview code loads the map without setting the tileset
 	if (!tileset)
 	{
-		debug(LOG_WARNING, "tileset not loaded, using arizona (map preview?)");
 		tileset = strdup("texpages/tertilesc1hw");
 	}
 	
@@ -839,7 +833,10 @@ bool mapLoad(char *filename, bool preview)
 
 		// Visibility stuff
 		memset(psMapTiles[i].watchers, 0, sizeof(psMapTiles[i].watchers));
+		memset(psMapTiles[i].sensors, 0, sizeof(psMapTiles[i].sensors));
+		memset(psMapTiles[i].jammers, 0, sizeof(psMapTiles[i].jammers));
 		psMapTiles[i].sensorBits = 0;
+		psMapTiles[i].jammerBits = 0;
 		psMapTiles[i].tileExploredBits = 0;
 	}
 
@@ -866,8 +863,7 @@ bool mapLoad(char *filename, bool preview)
 		}
 		if (!gwNewGateway(x0, y0, x1, y1))
 		{
-			debug(LOG_ERROR, "%s: Unable to add gateway", filename);
-			goto failure;
+			debug(LOG_ERROR, "%s: Unable to add gateway %d - dropping it", filename, i);
 		}
 	}
 	
@@ -950,7 +946,6 @@ failure:
 /* Save the map data */
 bool mapSave(char **ppFileData, UDWORD *pFileSize)
 {
-	UDWORD	i;
 	MAP_SAVEHEADER	*psHeader = NULL;
 	MAP_SAVETILE	*psTileData = NULL;
 	MAPTILE	*psTile = NULL;
@@ -958,7 +953,6 @@ bool mapSave(char **ppFileData, UDWORD *pFileSize)
 	GATEWAY_SAVEHEADER *psGateHeader = NULL;
 	GATEWAY_SAVE *psGate = NULL;
 	SDWORD	numGateways = 0;
-	ZONEMAP_SAVEHEADER *psZoneHeader = NULL;
 
 	// find the number of non water gateways
 	for(psCurrGate = gwGetGateways(); psCurrGate; psCurrGate = psCurrGate->psNext)
@@ -970,8 +964,6 @@ bool mapSave(char **ppFileData, UDWORD *pFileSize)
 	*pFileSize = SAVE_HEADER_SIZE + mapWidth*mapHeight * SAVE_TILE_SIZE;
 	// Add on the size of the gateway data.
 	*pFileSize += sizeof(GATEWAY_SAVEHEADER) + sizeof(GATEWAY_SAVE)*numGateways;
-	// Add on the size of the zone data header. For backwards compatibility.
-	*pFileSize += sizeof(ZONEMAP_SAVEHEADER);
 
 	*ppFileData = (char*)malloc(*pFileSize);
 	if (*ppFileData == NULL)
@@ -999,7 +991,7 @@ bool mapSave(char **ppFileData, UDWORD *pFileSize)
 	/* Put the map data into the buffer */
 	psTileData = (MAP_SAVETILE *)(*ppFileData + SAVE_HEADER_SIZE);
 	psTile = psMapTiles;
-	for(i=0; i<mapWidth*mapHeight; i++)
+	for (int i = 0; i < mapWidth*mapHeight; i++)
 	{
 		psTileData->texture = psTile->texture;
 		if (psTile->ground == waterGroundType)
@@ -1015,7 +1007,7 @@ bool mapSave(char **ppFileData, UDWORD *pFileSize)
 		endian_uword(&psTileData->texture);
 
 		psTileData = (MAP_SAVETILE *)((UBYTE *)psTileData + SAVE_TILE_SIZE);
-		psTile ++;
+		psTile++;
 	}
 
 	// Put the gateway header.
@@ -1029,7 +1021,6 @@ bool mapSave(char **ppFileData, UDWORD *pFileSize)
 
 	psGate = (GATEWAY_SAVE*)(psGateHeader+1);
 
-	i=0;
 	// Put the gateway data.
 	for(psCurrGate = gwGetGateways(); psCurrGate; psCurrGate = psCurrGate->psNext)
 	{
@@ -1037,21 +1028,10 @@ bool mapSave(char **ppFileData, UDWORD *pFileSize)
 		psGate->y0 = psCurrGate->y1;
 		psGate->x1 = psCurrGate->x2;
 		psGate->y1 = psCurrGate->y2;
+		ASSERT(psGate->x0 == psGate->x1 || psGate->y0 == psGate->y1, "Invalid gateway coordinates (%d, %d, %d, %d)",
+		       psGate->x0, psGate->y0, psGate->x1, psGate->y1);
 		psGate++;
-		i++;
 	}
-
-	// Put the zone header.
-	psZoneHeader = (ZONEMAP_SAVEHEADER*)psGate;
-	psZoneHeader->version = 3;
-	psZoneHeader->numZones = 0;
-	psZoneHeader->numEquivZones = 0;
-
-	/* ZONEMAP_SAVEHEADER */
-	endian_uword(&psZoneHeader->version);
-	endian_uword(&psZoneHeader->numZones);
-	endian_uword(&psZoneHeader->numEquivZones);
-	endian_uword(&psZoneHeader->pad);
 
 	return true;
 }
@@ -1075,7 +1055,7 @@ bool mapShutdown(void)
 	}
 
 	free(psMapTiles);
-	free(mapDecals);
+	delete[] mapDecals;
 	free(psGroundTypes);
 	free(map);
 	free(Tile_names);
@@ -1084,6 +1064,7 @@ bool mapShutdown(void)
 	free(psBlockMap[AUX_ASTARMAP]);
 	psBlockMap[AUX_ASTARMAP] = NULL;
 	free(psBlockMap[AUX_DANGERMAP]);
+	free(floodbucket);
 	psBlockMap[AUX_DANGERMAP] = NULL;
 	for (x = 0; x < MAX_PLAYERS + AUX_MAX; x++)
 	{
@@ -1092,6 +1073,7 @@ bool mapShutdown(void)
 	}
 
 	map = NULL;
+	floodbucket = NULL;
 	psGroundTypes = NULL;
 	mapDecals = NULL;
 	psMapTiles = NULL;
@@ -1242,6 +1224,132 @@ bool map_Intersect(int* Cx, int* Cy, int* Vx, int* Vy, int* Sx, int* Sy)
 	return false;
 }
 
+// Rotate vector clockwise by quadrant*90° around (TILE_UNITS/2, TILE_UNITS/2). (Considering x to be to the right, and y down.)
+static Vector3i rotateWorldQuadrant(Vector3i v, int quadrant)
+{
+	switch (quadrant & 3)
+	{
+		default:  // Can't get here.
+		case 0: return v;                                                 break;  // 0°.
+		case 1: return Vector3i(TILE_UNITS - v.y,              v.x, v.z); break;  // 90° clockwise.
+		case 2: return Vector3i(TILE_UNITS - v.x, TILE_UNITS - v.y, v.z); break;  // 180°.
+		case 3: return Vector3i(             v.y, TILE_UNITS - v.x, v.z); break;  // 90° anticlockwise.
+	}
+}
+
+// Returns (0, 0) rotated clockwise quadrant*90° around (½, ½). (Considering x to be to the right, and y down.)
+static Vector2i quadrantCorner(int quadrant)
+{
+	int dx[4] = {0, 1, 1, 0};
+	int dy[4] = {0, 0, 1, 1};
+	return Vector2i(dx[quadrant & 3], dy[quadrant & 3]);
+}
+
+// Returns (0, -1) rotated clockwise quadrant*90° around (0, 0). (Considering x to be to the right, and y down.)
+static Vector2i quadrantDelta(int quadrant)
+{
+	int dx[4] = {0,  1, 0, -1};
+	int dy[4] = {-1, 0, 1,  0};
+	return Vector2i(dx[quadrant & 3], dy[quadrant & 3]);
+}
+
+
+static inline bool fracTest(int numerA, int denomA, int numerB, int denomB)
+{
+	return denomA > 0 && numerA >= 0 && (denomB <= 0 || numerB < 0 || (int64_t)numerA*denomB < (int64_t)numerB*denomA);
+}
+
+unsigned map_LineIntersect(Vector3i src, Vector3i dst, unsigned tMax)
+{
+	// Transform src and dst to a coordinate system such that the tile quadrant containing src has
+	// corners at (0, 0), (TILE_UNITS, 0), (TILE_UNITS/2, TILE_UNITS/2).
+	Vector2i tile = map_coord(removeZ(src));
+	src -= Vector3i(world_coord(tile), 0);
+	dst -= Vector3i(world_coord(tile), 0);
+	//            +0+
+	// quadrant = 3×1
+	//            +2+
+	int quadrant = ((src.x < src.y)*3) ^ (TILE_UNITS - src.x < src.y);
+	src = rotateWorldQuadrant(src, -quadrant);
+	dst = rotateWorldQuadrant(dst, -quadrant);
+	while (true)
+	{
+		int height[4];
+		for (int q = 0; q < 4; ++q)
+		{
+			Vector2i corner = tile + quadrantCorner(quadrant + q);
+			height[q] = map_TileHeightSurface(corner.x, corner.y);
+		}
+		Vector3i dif = dst - src;
+		//     We are considering the volume of a quadrant (the volume above a quarter of a map tile, which is
+		// a degenerate tetrahedron with a point at infinity). We have a line segment, and want to know where
+		// it exits the quadrant volume.
+		//     There are 5 possible cases. Cases 0-2, our line can exit one of the three sides of the quadrant
+		// volume (and pass into a neighbouring quadrant volume), or case 3, can exit through the bottom of the
+		// quadrant volume (which means intersecting the terrain), or case 4, the line segment can end (which
+		// means reaching the destination with no intersection.
+		//     Note that the height of the centre of the tile is the average of the corners, such that a tile
+		// consists of 4 flat triangles (which are not (in general) parallel to each other).
+		// +--0--+
+		//  \ 3 /
+		//   2 1
+		//    +
+		// Denominators are positive iff we are going in the direction of the line. First line crossed has the smallest fraction.
+		// numer/denom gives the intersection times for the 5 cases.
+		int numer[5], denom[5];
+		numer[0] = -(-src.y);
+		denom[0] =   -dif.y;
+		numer[1] = TILE_UNITS - (src.x + src.y);
+		denom[1] =               dif.x + dif.y;
+		numer[2] = -(-src.x + src.y);
+		denom[2] =   -dif.x + dif.y;
+		Vector3i normal(2*(height[1] - height[0]), height[2] + height[3] - height[0] - height[1], -2*TILE_UNITS);  // Normal pointing down, and not normalised.
+		numer[3] = height[0]*normal.z - src*normal;
+		denom[3] =                      dif*normal;
+		numer[4] = 1;
+		denom[4] = 1;
+		int firstIntersection = 0;
+		for (int test = 0; test < 5; ++test)
+		{
+			if (!fracTest(numer[firstIntersection], denom[firstIntersection], numer[test], denom[test]))
+			{
+				firstIntersection = test;
+			}
+		}
+		switch (firstIntersection)
+		{
+			case 0:  // Cross top line first (the tile boundary).
+				tile += quadrantDelta(quadrant);
+				quadrant += 2;
+				src = rotateWorldQuadrant(src, -2) + Vector3i(0, -TILE_UNITS, 0);
+				dst = rotateWorldQuadrant(dst, -2) + Vector3i(0, -TILE_UNITS, 0);
+
+				if (tile.x < 0 || tile.x >= mapWidth || tile.y < 0 || tile.y >= mapHeight)
+				{
+					// Intersect edge of map.
+					return (int64_t)tMax * numer[firstIntersection]/denom[firstIntersection];
+				}
+				break;
+			case 1:  // Cross bottom-right line first.
+				// Change to the new quadrant, and transform appropriately.
+				++quadrant;
+				src = rotateWorldQuadrant(src, -1);
+				dst = rotateWorldQuadrant(dst, -1);
+				break;
+			case 2:  // Cross bottom-left line first.
+				// Change to the new quadrant, and transform appropriately.
+				--quadrant;
+				src = rotateWorldQuadrant(src, 1);
+				dst = rotateWorldQuadrant(dst, 1);
+				break;
+			case 3:  // Intersect terrain!
+				return (int64_t)tMax * numer[firstIntersection]/denom[firstIntersection];
+			case 4:  // Line segment ends.
+				return UINT32_MAX;
+		}
+	}
+}
+
 /// The max height of the terrain and water at the specified world coordinates
 extern int32_t map_Height(int x, int y)
 {
@@ -1285,12 +1393,12 @@ extern int32_t map_Height(int x, int y)
 	center /= 4;
 
 	// we have:
-	//   y ->
-	// x 0,0  A  0,1
-	// |
-	// V D  center B
-	//
-	//   1,0  C  1,1
+	//   x ->
+	// y 0,0--D--1,0
+	// | |  \    / |
+	// V A  centre C
+	//   | /     \ |
+	//   0,1--B--1,1
 
 	// get heights for left and right corners and the distances
 	if (onTileY > onTileX)
@@ -1334,8 +1442,8 @@ extern int32_t map_Height(int x, int y)
 	ASSERT(towardsCenter <= TILE_UNITS/2, "towardsCenter is too high");
 
 	// now we have:
-	//         center
 	//    left   m    right
+	//         center
 
 	middle = (left + right)/2;
 	onBottom = left * (TILE_UNITS - towardsRight) + right * towardsRight;
@@ -1377,52 +1485,18 @@ bool mapObjIsAboveGround(const SIMPLE_OBJECT *psObj)
 
 /* returns the max and min height of a tile by looking at the four corners
    in tile coords */
-void getTileMaxMin(UDWORD x, UDWORD y, UDWORD *pMax, UDWORD *pMin)
+void getTileMaxMin(int x, int y, int *pMax, int *pMin)
 {
-	UDWORD	height, i, j;
-	int tileHeight = TILE_MIN_HEIGHT;
+	*pMin = INT32_MAX;
+	*pMax = INT32_MIN;
 
-	*pMin = TILE_MAX_HEIGHT;
-	*pMax = TILE_MIN_HEIGHT;
-
-	for (j=0; j < 2; j++)
+	for (int j = 0; j < 2; ++j)
+		for (int i = 0; i < 2; ++i)
 	{
-		for (i=0; i < 2; i++)
-		{
-			// it tileHeight is negative, that means we are in water, and will cause a underflow
-			// FIXME: When we add structures that *can* be on water, we need to handle this differently.
-			tileHeight = map_TileHeight(x+i, y+j);
-			if (tileHeight < 0)
-			{
-				// NOTE: should we assert here ?
-				height = TILE_MIN_HEIGHT;
-			}
-			else
-			{
-				height = tileHeight;
-			}
-			if (*pMin > height)
-			{
-				*pMin = height;
-			}
-			if (*pMax < height)
-			{
-				*pMax = height;
-			}
-		}
+		int height = map_TileHeight(x+i, y+j);
+		*pMin = std::min(*pMin, height);
+		*pMax = std::max(*pMax, height);
 	}
-}
-
-UDWORD GetWidthOfMap(void)
-{
-	return mapWidth;
-}
-
-
-
-UDWORD GetHeightOfMap(void)
-{
-	return mapHeight;
 }
 
 
@@ -1556,50 +1630,6 @@ bool readVisibilityData(const char* fileName)
 	return true;
 }
 
-static void astarTest(const char *name, int x1, int y1, int x2, int y2)
-{
-	int		i;
-	MOVE_CONTROL	route;
-	int		x = world_coord(x1);
-	int		y = world_coord(y1);
-	int		endx = world_coord(x2);
-	int		endy = world_coord(y2);
-	clock_t		stop;
-	clock_t		start = clock();
-	bool		retval;
-
-	scriptInit();
-	retval = levLoadData(name, NULL, GTYPE_SCENARIO_START);
-	ASSERT(retval, "Could not load %s", name);
-	route.asPath = NULL;
-	for (i = 0; i < 100; i++)
-	{
-		route.numPoints = 0;
-		free(route.asPath);
-		route.asPath = NULL;
-	}
-	stop = clock();
-	fprintf(stdout, "\t\tA* timing %s: %.02f (%d nodes)\n", name,
-	        (double)(stop - start) / (double)CLOCKS_PER_SEC, route.numPoints);
-	start = clock();
-	fpathTest(x, y, endx, endy);
-	stop = clock();
-	fprintf(stdout, "\t\tfPath timing %s: %.02f (%d nodes)\n", name,
-	        (double)(stop - start) / (double)CLOCKS_PER_SEC, route.numPoints);
-	retval = levReleaseAll();
-	assert(retval);
-}
-
-void mapTest()
-{
-	fprintf(stdout, "\tMap self-test...\n");
-
-	astarTest("Sk-BeggarsKanyon-T1", 16, 5, 119, 182);
-	astarTest("Sk-MizaMaze-T3", 5, 5, 108, 112);
-
-	fprintf(stdout, "\tMap self-test: PASSED\n");
-}
-
 // Convert a direction into an offset.
 // dir 0 => x = 0, y = -1
 #define NUM_DIR		8
@@ -1616,6 +1646,7 @@ static const Vector2i aDirOffset[] =
 };
 
 // Flood fill a "continent".
+// TODO take into account scroll limits and update continents on scroll limit changes
 static void mapFloodFill(int x, int y, int continent, uint8_t blockedBits, uint16_t MAPTILE::*varContinent)
 {
 	std::vector<Vector2i> open;
@@ -1634,7 +1665,7 @@ static void mapFloodFill(int x, int y, int continent, uint8_t blockedBits, uint1
 			// rely on the fact that all border tiles are inaccessible to avoid checking explicitly
 			Vector2i npos = pos + aDirOffset[i];
 
-			if (!tileOnMap(npos))
+			if (npos.x < 1 || npos.y < 1 || npos.x > mapWidth - 2 || npos.y > mapHeight - 2)
 			{
 				continue;
 			}
@@ -1666,9 +1697,9 @@ void mapFloodFillContinents()
 	}
 
 	/* Iterate over the whole map, looking for unset continents */
-	for (y = 0; y < mapHeight; y++)
+	for (y = 1; y < mapHeight - 2; y++)
 	{
-		for (x = 0; x < mapWidth; x++)
+		for (x = 1; x < mapWidth - 2; x++)
 		{
 			MAPTILE *psTile = mapTile(x, y);
 
@@ -1919,6 +1950,7 @@ void mapInit()
 	}
 
 	// Start thread
+	ASSERT(dangerSemaphore == NULL && dangerThread == NULL, "Map data not cleaned up before starting!");
 	if (game.type == SKIRMISH)
 	{
 		lastDangerPlayer = 0;

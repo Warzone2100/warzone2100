@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -35,6 +35,9 @@
 #include "console.h"
 #include "main.h"
 #include "radar.h"
+
+#include <string>
+#include <istream>
 
 /* Alex McLean, Pumpkin Studios, EIDOS Interactive */
 
@@ -212,8 +215,7 @@ void	toggleConsoleDrop( void )
 }
 
 /** Add a string to the console. */
-bool addConsoleMessage(const char *messageText, CONSOLE_TEXT_JUSTIFICATION jusType,
-							   SDWORD player)
+bool addConsoleMessage(const char *Text, CONSOLE_TEXT_JUSTIFICATION jusType, SDWORD player)
 {
 	int textLength;
 	CONSOLE_MESSAGE	*psMessage;
@@ -230,84 +232,101 @@ bool addConsoleMessage(const char *messageText, CONSOLE_TEXT_JUSTIFICATION jusTy
 		return false ;
 	}
 
-	/* Is the string too long? */
-	textLength = strlen(messageText);
+	std::istringstream stream(Text);
+	std::string lines;
+	char messageText[MAX_CONSOLE_STRING_LENGTH];
 
-	ASSERT( textLength<MAX_CONSOLE_STRING_LENGTH,
-		"Attempt to add a message to the console that exceeds MAX_CONSOLE_STRING_LENGTH" );
-
-	/* Are we using a defualt justification? */
-	if(jusType == DEFAULT_JUSTIFY)
+	while(std::getline(stream, lines))
 	{
-		/* Then set it */
-		jusType = defJustification;
-	}
+		sstrcpy(messageText, lines.c_str());
 
-	debug(LOG_CONSOLE, "(to player %d): %s", (int)player, messageText);
+		/* Is the string too long? */
+		textLength = strlen(messageText);
 
-	consoleStorage[messageIndex].player = player;
-
-	/* Precalculate and store (quicker!) the indent for justified text */
-	switch(jusType)
-	{
-		/* Allign to left edge of screen */
-	case LEFT_JUSTIFY:
-			consoleStorage[messageIndex].JustifyType = FTEXT_LEFTJUSTIFY;
-		break;
-
-		/* Allign to right edge of screen */
-	case RIGHT_JUSTIFY:
-			consoleStorage[messageIndex].JustifyType = FTEXT_RIGHTJUSTIFY;
-		break;
-
-		/* Allign to centre of the screen,NOT TO CENTRE OF CONSOLE!!!!!! */
-	case CENTRE_JUSTIFY:
-			consoleStorage[messageIndex].JustifyType = FTEXT_CENTRE;
-		break;
-		/* Gone tits up by the looks of it */
-	default:
-		debug( LOG_FATAL, "Weirdy type of text justification for console print" );
-		abort();
-		break;
-	}
-
-	/* Copy over the text of the message */
-	sstrcpy(consoleStorage[messageIndex].text, messageText);
-
-	/* Set the time when it was added - this might not be needed */
-	consoleStorage[messageIndex].timeAdded = gameTime2;
-
-	/* This is the present newest message */
-	consoleStorage[messageIndex].psNext = NULL;
-
-	consoleStorage[messageIndex].id = 0;
-
-	/* Are there no messages? */
-	if(consoleMessages == NULL)
-	{
-		consoleMessages = &consoleStorage[messageIndex];
-	}
-	else
-	{
-		/* Get to the last element in our message list */
-		for(psMessage = consoleMessages; psMessage->psNext; psMessage = psMessage->psNext)
+		// FIXME: We split the text correctly in the display routine, however, then the console has no idea it was split,
+		// so that is why you sometimes see text that is below the console line limit that was set via setConsoleLineInfo()
+		// As in the display routines, we should check to see if iV_GetTextWidth(lines.c_str()) > mainConsole.width, but that
+		// isn't working the way it should, so right now, we just throw a warning (only in debug mode) that the text it too long.
+		if (textLength > 72)
 		{
-			/* NOP */
-			;
+			debug(LOG_NEVER, "This line is too long, and will be split in the display routines! Line is:[%s]", lines.c_str());
 		}
-		/* Add it to the end */
-		psMessage->psNext = &consoleStorage[messageIndex];
-	}
 
-	/* Move on in our array */
-	if(messageIndex++ >= MAX_CONSOLE_MESSAGES-1)
-	{
-		/* Reset */
-		messageIndex = 0;
-	}
+		ASSERT( textLength < MAX_CONSOLE_STRING_LENGTH, "Attempt to add a message to the console that exceeds MAX_CONSOLE_STRING_LENGTH" );
 
-	/* There's one more active console message */
-	numActiveMessages++;
+		/* Are we using a defualt justification? */
+		if(jusType == DEFAULT_JUSTIFY)
+		{
+			/* Then set it */
+			jusType = defJustification;
+		}
+
+		debug(LOG_CONSOLE, "(to player %d): %s", (int)player, messageText);
+
+		consoleStorage[messageIndex].player = player;
+
+		/* Precalculate and store (quicker!) the indent for justified text */
+		switch(jusType)
+		{
+			/* Allign to left edge of screen */
+		case LEFT_JUSTIFY:
+			consoleStorage[messageIndex].JustifyType = FTEXT_LEFTJUSTIFY;
+			break;
+
+			/* Allign to right edge of screen */
+		case RIGHT_JUSTIFY:
+			consoleStorage[messageIndex].JustifyType = FTEXT_RIGHTJUSTIFY;
+			break;
+
+			/* Allign to centre of the screen,NOT TO CENTRE OF CONSOLE!!!!!! */
+		case CENTRE_JUSTIFY:
+			consoleStorage[messageIndex].JustifyType = FTEXT_CENTRE;
+			break;
+			/* Gone tits up by the looks of it */
+		default:
+			debug( LOG_FATAL, "Weirdy type of text justification for console print" );
+			abort();
+			break;
+		}
+
+		/* Copy over the text of the message */
+		sstrcpy(consoleStorage[messageIndex].text, messageText);
+
+		/* Set the time when it was added - this might not be needed */
+		consoleStorage[messageIndex].timeAdded = gameTime2;
+
+		/* This is the present newest message */
+		consoleStorage[messageIndex].psNext = NULL;
+
+		consoleStorage[messageIndex].id = 0;
+
+		/* Are there no messages? */
+		if(consoleMessages == NULL)
+		{
+			consoleMessages = &consoleStorage[messageIndex];
+		}
+		else
+		{
+			/* Get to the last element in our message list */
+			for(psMessage = consoleMessages; psMessage->psNext; psMessage = psMessage->psNext)
+			{
+				/* NOP */
+				;
+			}
+			/* Add it to the end */
+			psMessage->psNext = &consoleStorage[messageIndex];
+		}
+
+		/* Move on in our array */
+		if(messageIndex++ >= MAX_CONSOLE_MESSAGES-1)
+		{
+			/* Reset */
+			messageIndex = 0;
+		}
+
+		/* There's one more active console message */
+		numActiveMessages++;
+	}
 	return true;
 }
 
@@ -591,6 +610,8 @@ void	displayConsoleMessages( void )
 	{
 		return;
 	}
+
+	iV_SetFont(font_regular);
 
 	/* Get the travel to the next line */
 	linePitch = iV_GetTextLineSize();

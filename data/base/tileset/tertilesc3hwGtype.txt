@@ -1,7 +1,7 @@
 tertilesc3hw,10
 r_grass,page-99,3.0
-r_rock,page-100,3.0
-r_cliff,page-101,6.4
+r_rock,page-100,5.0
+r_cliff,page-101,9.6
 r_water,page-102,6.4
 r_tiles,page-103,5.0
 r_snowgrass,page-104,3.0

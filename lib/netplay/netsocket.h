@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -103,14 +103,14 @@ void socketArrayClose(Socket **sockets, size_t maxSockets);             ///< Clo
 
 char const *getSocketTextAddress(Socket const *sock);                   ///< Gets a string with the socket address.
 bool socketReadReady(Socket const *sock);                               ///< Returns if checkSockets found data to read from this Socket.
-ssize_t readNoInt(Socket *sock, void *buf, size_t max_size);            ///< Reads up to max_size bytes from the Socket.
+ssize_t readNoInt(Socket *sock, void *buf, size_t max_size, size_t *rawByteCount = NULL);  ///< Reads up to max_size bytes from the Socket. Raw count of bytes (after compression) returned in rawByteCount.
 ssize_t readAll(Socket* sock, void *buf, size_t size, unsigned timeout);///< Reads exactly size bytes from the Socket, or blocks until the timeout expires.
-ssize_t writeAll(Socket *sock, const void* buf, size_t size);           ///< Nonblocking write of size bytes to the Socket. All bytes will be written asynchronously, by a separate thread.
+ssize_t writeAll(Socket *sock, const void* buf, size_t size, size_t *rawByteCount = NULL);  ///< Nonblocking write of size bytes to the Socket. All bytes will be written asynchronously, by a separate thread. Raw count of bytes (after compression) returned in rawByteCount, which will often be 0 until the socket is flushed.
 
 // Sockets, compressed.
 void socketBeginCompression(Socket *sock);                              ///< Makes future data sent compressed, and future data received expected to be compressed.
 bool socketReadDisconnected(Socket *sock);                              ///< If readNoInt returned 0, returns true if this is the result of a disconnect, or false if the input compressed data just hasn't produced any output bytes.
-void socketFlush(Socket *sock);                                         ///< Actually sends the data written with writeAll. Only useful on compressed sockets. Note that flushing too often makes compression less effective.
+void socketFlush(Socket *sock, size_t *rawByteCount = NULL);            ///< Actually sends the data written with writeAll. Only useful on compressed sockets. Note that flushing too often makes compression less effective. Raw count of bytes (after compression) returned in rawByteCount.
 
 // Socket sets.
 SocketSet *allocSocketSet(void);                                        ///< Constructs a SocketSet.

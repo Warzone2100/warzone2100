@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -45,7 +45,7 @@
 #include "random.h"
 
 
-#define EXTRACT_POINTS	    1
+#define EXTRACT_POINTS      1
 #define EASY_POWER_MOD      110
 #define NORMAL_POWER_MOD    100
 #define HARD_POWER_MOD      90
@@ -55,28 +55,31 @@
 
 //flag used to check for power calculations to be done or not
 bool	powerCalculated;
-static UDWORD nextPowerSystemUpdate;
 
 /* Updates the current power based on the extracted power and a Power Generator*/
 static void updateCurrentPower(POWER_GEN *psPowerGen, UDWORD player);
 static int64_t updateExtractedPower(STRUCTURE *psBuilding);
 
 //returns the relevant list based on OffWorld or OnWorld
-static STRUCTURE* powerStructList(UBYTE player);
+static STRUCTURE *powerStructList(int player);
 
-struct PLAYER_POWER
+struct PowerRequest
 {
-	// All fields are 32.32 fixed point.
-	int64_t currentPower;         ///< The current amount of power avaialble to the player.
-	int64_t powerProduced;        ///< Power produced
-	int64_t powerRequested;       ///< Power requested
-	int64_t economyThrottle;      ///< What fraction of the requested power is actually delivered
+	int64_t  amount;              ///< Amount of power being requested.
+	unsigned id;                  ///< Structure which is requesting power.
 };
 
-static PLAYER_POWER asPower[MAX_PLAYERS];
+struct PlayerPower
+{
+	// All fields are 32.32 fixed point.
+	int64_t currentPower;                  ///< The current amount of power available to the player.
+	std::vector<PowerRequest> powerQueue;  ///< Requested power.
+};
+
+static PlayerPower asPower[MAX_PLAYERS];
 
 /*allocate the space for the playerPower*/
-bool allocPlayerPower(void)
+bool allocPlayerPower()
 {
 	clearPlayerPower();
 	powerCalculated = true;
@@ -84,66 +87,91 @@ bool allocPlayerPower(void)
 }
 
 /*clear the playerPower */
-void clearPlayerPower(void)
+void clearPlayerPower()
 {
-	UDWORD player;
-
-	for (player = 0; player < MAX_PLAYERS; player++)
+	for (unsigned player = 0; player < MAX_PLAYERS; player++)
 	{
 		asPower[player].currentPower = 0;
-		asPower[player].powerProduced = 0;
-		asPower[player].powerRequested = 0;
-		asPower[player].economyThrottle = FP_ONE;
+		asPower[player].powerQueue.clear();
 	}
-	nextPowerSystemUpdate = 0;
+}
+
+/// Returns true iff the power is available. New requests replace old ones (without losing the position in the queue).
+static bool addPowerRequest(unsigned player, unsigned id, int64_t amount)
+{
+	PlayerPower *p = &asPower[player];
+
+	int64_t requiredPower = amount;
+	size_t n;
+	for (n = 0; n < p->powerQueue.size() && p->powerQueue[n].id != id; ++n)
+	{
+		requiredPower += p->powerQueue[n].amount;
+	}
+	if (n == p->powerQueue.size())
+	{
+		p->powerQueue.resize(n + 1);
+		p->powerQueue[n].id = id;
+	}
+	p->powerQueue[n].amount = amount;
+	return requiredPower <= p->currentPower;
+}
+
+void delPowerRequest(STRUCTURE *psStruct)
+{
+	PlayerPower *p = &asPower[psStruct->player];
+
+	for (size_t n = 0; n < p->powerQueue.size(); ++n)
+	{
+		if (p->powerQueue[n].id == psStruct->id)
+		{
+			p->powerQueue.erase(p->powerQueue.begin() + n);
+			return;
+		}
+	}
+}
+
+static int64_t checkPrecisePowerRequest(STRUCTURE *psStruct)
+{
+	PlayerPower const *p = &asPower[psStruct->player];
+
+	int64_t requiredPower = 0;
+	for (size_t n = 0; n < p->powerQueue.size(); ++n)
+	{
+		requiredPower += p->powerQueue[n].amount;
+		if (p->powerQueue[n].id == psStruct->id)
+		{
+			if (requiredPower <= p->currentPower)
+			{
+				return -1;  // Have enough power.
+			}
+			return requiredPower - p->currentPower;
+		}
+	}
+
+	return -1;
+}
+
+int32_t checkPowerRequest(STRUCTURE *psStruct)
+{
+	int64_t power = checkPrecisePowerRequest(psStruct);
+	return power != -1? power / FP_ONE : -1;
+}
+
+static int64_t getQueuedPower(unsigned player)
+{
+	PlayerPower const *p = &asPower[player];
+
+	int64_t requiredPower = 0;
+	for (size_t n = 0; n < p->powerQueue.size(); ++n)
+	{
+		requiredPower += p->powerQueue[n].amount;
+	}
+	return requiredPower;
 }
 
 static void syncDebugEconomy(unsigned player, char ch)
 {
-	syncDebug("%c economy%u = %"PRId64",%"PRId64",%"PRId64",%"PRId64"", ch, player, asPower[player].currentPower, asPower[player].economyThrottle, asPower[player].powerProduced, asPower[player].powerRequested);
-}
-
-void throttleEconomy(void)
-{
-	int player;
-	int64_t newThrottle;
-
-	if (gameTime < nextPowerSystemUpdate)
-	{
-		return;
-	}
-	nextPowerSystemUpdate = gameTime + 1000;
-
-	for (player = 0; player < MAX_PLAYERS; player++)
-	{
-		syncDebugEconomy(player, '<');
-
-		if (asPower[player].currentPower >= asPower[player].powerRequested ||
-		    asPower[player].powerRequested <= asPower[player].powerProduced)
-		{
-			// we have enough power
-			newThrottle = FP_ONE;
-		}
-		else
-		{
-			newThrottle = (asPower[player].powerProduced + asPower[player].currentPower) / (asPower[player].powerRequested/FP_ONE + 1);
-		}
-		if (newThrottle <= asPower[player].economyThrottle)
-		{
-			// quickly slow down
-			asPower[player].economyThrottle = newThrottle;
-		}
-		else if ((asPower[player].powerRequested/FP_ONE + 1) * asPower[player].economyThrottle * 2 < asPower[player].currentPower)
-		{
-			// slowly speed up
-			asPower[player].economyThrottle += FP_ONE/50;
-		}
-		CLIP(asPower[player].economyThrottle, 0, FP_ONE);
-		asPower[player].powerProduced = 0;
-		asPower[player].powerRequested = 0;
-
-		syncDebugEconomy(player, '>');
-	}
+	syncDebug("%c economy%u = %"PRId64"", ch, player, asPower[player].currentPower);
 }
 
 /*check the current power - if enough return true, else return false */
@@ -214,7 +242,7 @@ static int64_t updateExtractedPower(STRUCTURE *psBuilding)
 }
 
 //returns the relevant list based on OffWorld or OnWorld
-STRUCTURE* powerStructList(UBYTE player)
+STRUCTURE* powerStructList(int player)
 {
 	ASSERT(player < MAX_PLAYERS, "powerStructList: Bad player");
 	if (offWorldKeepLists)
@@ -235,17 +263,18 @@ void updatePlayerPower(UDWORD player)
 
 	ASSERT(player < MAX_PLAYERS, "updatePlayerPower: Bad player");
 
-	for (psStruct = powerStructList((UBYTE)player); psStruct != NULL; psStruct =
-		psStruct->psNext)
+	syncDebugEconomy(player, '<');
+
+	for (psStruct = powerStructList(player); psStruct != NULL; psStruct = psStruct->psNext)
 	{
-		if (psStruct->pStructureType->type == REF_POWER_GEN && psStruct->
-			status == SS_BUILT)
+		if (psStruct->pStructureType->type == REF_POWER_GEN && psStruct->status == SS_BUILT)
 		{
 			updateCurrentPower((POWER_GEN *)psStruct->pFunctionality, player);
 		}
 	}
-	asPower[player].powerProduced += asPower[player].currentPower - powerBefore;
 	syncDebug("updatePlayerPower%u %"PRId64"->%"PRId64"", player, powerBefore, asPower[player].currentPower);
+
+	syncDebugEconomy(player, '<');
 }
 
 /* Updates the current power based on the extracted power and a Power Generator*/
@@ -306,7 +335,7 @@ int32_t getPower(unsigned player)
 {
 	ASSERT(player < MAX_PLAYERS, "Bad player (%u)", player);
 
-	return asPower[player].currentPower >> 32;
+	return asPower[player].currentPower / FP_ONE;
 }
 
 int64_t getPrecisePower(unsigned player)
@@ -316,99 +345,34 @@ int64_t getPrecisePower(unsigned player)
 	return asPower[player].currentPower;
 }
 
-/*Temp function to give all players some power when a new game has been loaded*/
-void newGameInitPower(void)
+int32_t getPowerMinusQueued(unsigned player)
 {
-	UDWORD		inc;
+	ASSERT(player < MAX_PLAYERS, "Bad player (%u)", player);
 
-	for (inc=0; inc < MAX_PLAYERS; inc++)
+	return (asPower[player].currentPower - getQueuedPower(player)) / FP_ONE;
+}
+
+bool requestPowerFor(STRUCTURE *psStruct, int32_t amount)
+{
+	return requestPrecisePowerFor(psStruct, amount*FP_ONE);
+}
+
+bool requestPrecisePowerFor(STRUCTURE *psStruct, int64_t amount)
+{
+	if (amount <= 0 || !powerCalculated)
 	{
-		addPower(inc, 400);
-	}
-}
-
-/*defines which structure types draw power - returns true if use power*/
-bool structUsesPower(STRUCTURE *psStruct)
-{
-    bool    bUsesPower = false;
-
-	ASSERT( psStruct != NULL,
-		"structUsesPower: Invalid Structure pointer" );
-
-    switch(psStruct->pStructureType->type)
-    {
-        case REF_FACTORY:
-	    case REF_CYBORG_FACTORY:
-    	case REF_VTOL_FACTORY:
-	    case REF_RESEARCH:
-	    case REF_REPAIR_FACILITY:
-            bUsesPower = true;
-            break;
-        default:
-            bUsesPower = false;
-            break;
-    }
-
-    return bUsesPower;
-}
-
-/*defines which droid types draw power - returns true if use power*/
-bool droidUsesPower(DROID *psDroid)
-{
-    bool    bUsesPower = false;
-
-	ASSERT(psDroid != NULL,	"droidUsesPower: Invalid unit pointer" );
-
-    switch(psDroid->droidType)
-    {
-        case DROID_CONSTRUCT:
-	    case DROID_REPAIR:
-        case DROID_CYBORG_CONSTRUCT:
-        case DROID_CYBORG_REPAIR:
-            bUsesPower = true;
-            break;
-        default:
-            bUsesPower = false;
-            break;
-    }
-
-    return bUsesPower;
-}
-
-// Why is there randomity in the power code?
-static int randomRound(int64_t val)
-{
-	return (val + gameRandU32()) >> 32;
-}
-
-int requestPowerFor(int player, int32_t amount, int points)
-{
-	return requestPrecisePowerFor(player, amount*FP_ONE, points);
-}
-
-int requestPrecisePowerFor(int player, int64_t amount, int points)
-{
-	int pointsConsidered = randomRound(points * asPower[player].economyThrottle);
-	// only what it needs for the n amount of points we consider giving
-	int64_t amountConsidered;
-
-	if (points == 0 || amount <= 0 || !powerCalculated)
-	{
-		return points;
+		return true;
 	}
 
-	amountConsidered = amount * pointsConsidered / points;
-
-	// keep track on how much energy we could possibly spend
-	asPower[player].powerRequested += amount;
-	
-	if (amountConsidered <= asPower[player].currentPower)
+	bool haveEnoughPower = addPowerRequest(psStruct->player, psStruct->id, amount);
+	if (haveEnoughPower)
 	{
 		// you can have it
-		asPower[player].currentPower -= amountConsidered;
-		syncDebug("requestPrecisePowerFor%d give%d,want%d", player, pointsConsidered, points);
-		return pointsConsidered;
+		asPower[psStruct->player].currentPower -= amount;
+		delPowerRequest(psStruct);
+		syncDebug("requestPrecisePowerFor%d,%u amount%"PRId64"", psStruct->player, psStruct->id, amount);
+		return true;
 	}
-	syncDebug("requestPrecisePowerFor%d giveNone,want%d", player, points);
-	return 0; // no power this frame
+	syncDebug("requestPrecisePowerFor%d,%u wait,amount%"PRId64"", psStruct->player, psStruct->id, amount);
+	return false;  // Not enough power in the queue.
 }

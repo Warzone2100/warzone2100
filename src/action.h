@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -83,20 +83,17 @@ void actionAlignTurret(BASE_OBJECT *psObj, int weapon_slot);
 /** Check if a target is within weapon range. */
 bool actionInRange(DROID *psDroid, BASE_OBJECT *psObj, int weapon_slot);
 
-/** Check if a target is inside minimum weapon range. */
-bool actionInsideMinRange(DROID *psDroid, BASE_OBJECT *psObj, WEAPON_STATS *psWeapStats);
-
 /** Return whether a droid can see a target to fire on it. */
 bool actionVisibleTarget(DROID *psDroid, BASE_OBJECT *psTarget, int weapon_slot);
 
 /** Check whether a droid is in the neighboring tile to a build position. */
-bool actionReachedBuildPos(DROID *psDroid, SDWORD x, SDWORD y, BASE_STATS *psStats);
+bool actionReachedBuildPos(DROID const *psDroid, int x, int y, uint16_t direction, BASE_STATS const *psStats);
 
 /** Send the vtol droid back to the nearest rearming pad - if there is one, otherwise return to base. */
 void moveToRearm(DROID *psDroid);
 
 /** Choose a landing position for a VTOL when it goes to rearm. */
-bool actionVTOLLandingPos(const DROID* psDroid, UDWORD* px, UDWORD* py);
+bool actionVTOLLandingPos(DROID const *psDroid, Vector2i *p);
 
 /** How many frames to skip before looking for a better target. */
 #define TARGET_UPD_SKIP_FRAMES 1000

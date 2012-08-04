@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -58,15 +58,12 @@ static void printBaseObjInfo(const BASE_OBJECT* psObj)
  */
 static void printComponentInfo(const COMPONENT_STATS* psStats)
 {
-	psStats = psStats;
-
 	CONPRINTF(ConsoleString,(ConsoleString,"%s ref %d\n"
 			  "   bPwr %d bPnts %d wt %d bdy %d imd %p\n",
 			  getStatName(psStats), psStats->ref, psStats->buildPower,
 			  psStats->buildPoints, psStats->weight, psStats->body,
 			  psStats->pIMD));
 }
-
 
 /** print out weapon information
  *  \param psStats the weapon to print the info for
@@ -80,15 +77,9 @@ static void printWeaponInfo(const WEAPON_STATS* psStats)
 	case WC_KINETIC:		//bullets etc
 		pWC = "WC_KINETIC";
 		break;
-	//case WC_EXPLOSIVE:	//rockets etc
-	//	pWC = "WC_EXPLOSIVE";
-	//	break;
 	case WC_HEAT:		//laser etc
 		pWC = "WC_HEAT";
 		break;
-	//case WC_MISC:		//others we haven't thought of!
-	//	pWC = "WC_MISC";
-	//	break;
 	default:
 		pWC = "UNKNOWN CLASS";
 		break;
@@ -101,9 +92,6 @@ static void printWeaponInfo(const WEAPON_STATS* psStats)
 	case WSC_CANNON:
 		pWSC = "WSC_CANNON";
 		break;
-	/*case WSC_ARTILLARY:
-		pWSC = "WSC_ARTILLARY";
-		break;*/
 	case WSC_MORTARS:
 		pWSC = "WSC_MORTARS";
 		break;
@@ -122,9 +110,6 @@ static void printWeaponInfo(const WEAPON_STATS* psStats)
 	case WSC_FLAME:
 		pWSC = "WSC_FLAME";
 		break;
-	/*case WSC_CLOSECOMBAT:
-		pWSC = "WSC_CLOSECOMBAT";
-		break;*/
 	case WSC_HOWITZERS:
 		pWSC = "WSC_HOWITZERS";
 		break;
@@ -181,14 +166,12 @@ static void printWeaponInfo(const WEAPON_STATS* psStats)
 		break;
 	}
 
-
 	CONPRINTF(ConsoleString,(ConsoleString,"Weapon: "));
 	printComponentInfo((COMPONENT_STATS *)psStats);
 	CONPRINTF(ConsoleString,(ConsoleString,"   sRng %d lRng %d mRng %d %s\n"
 			  "   sHt %d lHt %d pause %d dam %d\n",
 				psStats->shortRange, proj_GetLongRange(psStats), psStats->minRange,
 				proj_Direct(psStats) ? "direct" : "indirect",
-				//psStats->shortHit, psStats->longHit, psStats->firePause, psStats->damage));
 				weaponShortHit(psStats,(UBYTE)selectedPlayer), weaponLongHit(psStats,
 				(UBYTE)selectedPlayer), weaponFirePause(psStats,(UBYTE)selectedPlayer),
 				weaponDamage(psStats, (UBYTE)selectedPlayer)));
@@ -210,7 +193,6 @@ static void printWeaponInfo(const WEAPON_STATS* psStats)
  */
 void printDroidInfo(const DROID* psDroid)
 {
-	unsigned int i;
 	BODY_STATS			*psBdyStats;
 	PROPULSION_STATS	*psPropStats;
 	ECM_STATS			*psECMStats;
@@ -228,7 +210,7 @@ void printDroidInfo(const DROID* psDroid)
 		printWeaponInfo(asWeaponStats + psDroid->asWeaps[0].nStat);
 	}
 
-	for (i = 0; i < COMP_NUMCOMPONENTS; ++i)
+	for (int i = 0; i < COMP_NUMCOMPONENTS; ++i)
 	{
 		switch (i)
 		{
@@ -267,7 +249,6 @@ void printDroidInfo(const DROID* psDroid)
 				psECMStats = asECMStats + psDroid->asBits[i].nStat;
 				printComponentInfo((COMPONENT_STATS *)psECMStats);
 				CONPRINTF(ConsoleString,(ConsoleString,"   range %d loc %d imd %p\n",
-					//psECMStats->power, psECMStats->location, psECMStats->pMountGraphic));
 					ecmRange(psECMStats, psDroid->player), psECMStats->location,
 					psECMStats->pMountGraphic));
 			}
@@ -298,7 +279,6 @@ void printDroidInfo(const DROID* psDroid)
 				psConstStats = asConstructStats + psDroid->asBits[i].nStat;
 				printComponentInfo((COMPONENT_STATS *)psConstStats);
 				CONPRINTF(ConsoleString,(ConsoleString,"   cPnts %d imd %p\n",
-					//psConstStats->constructPoints, psConstStats->pMountGraphic));
 					constructorPoints(psConstStats, psDroid->player),
 					psConstStats->pMountGraphic));
 			}
@@ -310,7 +290,6 @@ void printDroidInfo(const DROID* psDroid)
 				psRepairStats = asRepairStats + psDroid->asBits[i].nStat;
 				printComponentInfo((COMPONENT_STATS *)psRepairStats);
 				CONPRINTF(ConsoleString,(ConsoleString,"   repPnts %d loc %d imd %p\n",
-					//psRepairStats->repairPoints, psRepairStats->location,
 					repairPoints(psRepairStats, psDroid->player),
 					psRepairStats->location,
 					psRepairStats->pMountGraphic));

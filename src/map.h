@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -107,6 +107,9 @@ struct MAPTILE
 	uint8_t			ground;			///< The ground type used for the terrain renderer
 	uint16_t                fireEndTime;            ///< The (uint16_t)(gameTime / GAME_TICKS_PER_UPDATE) that BITS_ON_FIRE should be cleared.
 	int32_t                 waterLevel;             ///< At what height is the water for this tile
+	PlayerMask		jammerBits;             ///< bit per player, who is jamming tile
+	uint8_t                 sensors[MAX_PLAYERS];   ///< player sees this tile with this many radar sensors
+	uint8_t                 jammers[MAX_PLAYERS];   ///< player jams the tile with this many objects
 };
 
 /* The size and contents of the map */
@@ -494,13 +497,6 @@ WZ_DECL_ALWAYS_INLINE static inline bool tileOnMap(Vector2i pos)
 	return tileOnMap(pos.x, pos.y);
 }
 
-/* Return true if a tile is not too near the map edge and not outside of the map */
-static inline bool tileInsideBuildRange(SDWORD x, SDWORD y)
-{
-	return (x >= TOO_NEAR_EDGE) && (x < ((SDWORD)mapWidth - TOO_NEAR_EDGE)) &&
-		(y >= TOO_NEAR_EDGE) && (y < ((SDWORD)mapHeight - TOO_NEAR_EDGE));
-}
-
 /* Return whether a world coordinate is on the map */
 WZ_DECL_ALWAYS_INLINE static inline bool worldOnMap(int x, int y)
 {
@@ -519,6 +515,14 @@ WZ_DECL_ALWAYS_INLINE static inline bool worldOnMap(Vector2i pos)
 /* Intersect a line with the map and report tile intersection points */
 bool map_Intersect(int *Cx, int *Cy, int *Vx, int* Vy, int *Sx, int *Sy);
 
+/// Finds the smallest 0 ≤ t ≤ 1 such that the line segment given by src + t * (dst - src) intersects the terrain.
+/// An intersection is defined to be the part of the line segment which is strictly inside the terrain (so if the
+/// line segment is exactly parallel with the terrain and leaves it again, it does not count as an intersection).
+/// Returns UINT32_MAX if no such 0 ≤ t ≤ 1 exists, otherwise returns t*tMax, rounded down to the nearest integer.
+/// If src is strictly inside the terrain, the line segment is only considered to intersect if it exits and reenters
+/// the terrain.
+unsigned map_LineIntersect(Vector3i src, Vector3i dst, unsigned tMax);
+
 /// The max height of the terrain and water at the specified world coordinates
 extern int32_t map_Height(int x, int y);
 
@@ -529,10 +533,8 @@ bool mapObjIsAboveGround(const SIMPLE_OBJECT *psObj);
 
 /* returns the max and min height of a tile by looking at the four corners
    in tile coords */
-extern void getTileMaxMin(UDWORD x, UDWORD y, UDWORD *pMax, UDWORD *pMin);
+void getTileMaxMin(int x, int y, int *pMax, int *pMin);
 
-UDWORD GetHeightOfMap(void);
-UDWORD GetWidthOfMap(void);
 extern bool readVisibilityData(const char* fileName);
 extern bool	writeVisibilityData(const char* fileName);
 

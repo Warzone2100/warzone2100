@@ -14,12 +14,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="chat_lexer.lex.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="chat_parser.tab.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="codeprint.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -35,20 +29,23 @@
     <ClCompile Include="script.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="script_lexer.lex.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="script_parser.tab.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="stack.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="chat_lexer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="chat_parser.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="script_lexer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="script_parser.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="chat_parser.tab.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="chat_processing.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -70,26 +67,29 @@
     <ClInclude Include="script.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="script_parser.tab.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="stack.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="chat_parser.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="script_parser.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <FlexGenerator Include="chat_lexer.l">
+    <FlexGenerator Include="chat_lexer.lpp">
       <Filter>FlexBison</Filter>
     </FlexGenerator>
-    <FlexGenerator Include="script_lexer.l">
+    <FlexGenerator Include="script_lexer.lpp">
       <Filter>FlexBison</Filter>
     </FlexGenerator>
   </ItemGroup>
   <ItemGroup>
-    <BisonParser Include="chat_parser.y">
+    <BisonParser Include="chat_parser.ypp">
       <Filter>FlexBison</Filter>
     </BisonParser>
-    <BisonParser Include="script_parser.y">
+    <BisonParser Include="script_parser.ypp">
       <Filter>FlexBison</Filter>
     </BisonParser>
   </ItemGroup>

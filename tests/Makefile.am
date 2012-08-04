@@ -3,12 +3,13 @@ AM_CFLAGS = -g
 
 BUILT_SOURCES = maplist.txt modellist.txt jslist.txt
 
+if !MINGW32
 bin_PROGRAMS = qslint
-check_PROGRAMS = maptest modeltest qtscripttest
-
 qslint_SOURCES = qslint.cpp lint.cpp
 qslint_LDADD = $(PHYSFS_LIBS) $(QT4_LIBS)
+endif
 
+check_PROGRAMS = maptest modeltest qtscripttest
 qtscripttest_SOURCES = qtscripttest.cpp lint.cpp
 qtscripttest_LDADD = $(PHYSFS_LIBS) $(QT4_LIBS)
 
@@ -25,13 +26,13 @@ CLEANFILES = \
 TESTS = maptest modeltest qtscripttest
 
 maplist.txt:
-	(cd $(abs_top_srcdir)/data ; find base mods -name game.map > $(abs_top_builddir)/tests/maplist.txt )
+	(cd $(abs_top_srcdir)/data ; find base mp -name game.map > $(abs_top_builddir)/tests/maplist.txt )
 	touch $@
 
 modellist.txt:
-	(cd $(abs_top_srcdir)/data ; find base mods mp -iname \*.pie > $(abs_top_builddir)/tests/modellist.txt )
+	(cd $(abs_top_srcdir)/data ; find base mp -iname \*.pie > $(abs_top_builddir)/tests/modellist.txt )
 	touch $@
 
 jslist.txt:
-	(cd $(abs_top_srcdir)/data ; find base mods mp -name \*.js > $(abs_top_builddir)/tests/jslist.txt )
+	(cd $(abs_top_srcdir)/data ; find base mp -name \*.js > $(abs_top_builddir)/tests/jslist.txt )
 	touch $@

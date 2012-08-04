@@ -20,16 +20,16 @@
     <ClCompile Include="animobj.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="audp_lexer.lex.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="audp_parser.tab.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="gtime.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="hashtable.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="audp_parser.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="audp_lexer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -40,7 +40,7 @@
     <ClInclude Include="animobj.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="audp_parser.tab.hpp">
+    <ClInclude Include="audp_parser.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="gtime.h">
@@ -54,13 +54,13 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <FlexGenerator Include="audp_lexer.l">
-      <Filter>FlexBison</Filter>
-    </FlexGenerator>
-  </ItemGroup>
-  <ItemGroup>
-    <BisonParser Include="audp_parser.y">
+    <BisonParser Include="audp_parser.ypp">
       <Filter>FlexBison</Filter>
     </BisonParser>
+  </ItemGroup>
+  <ItemGroup>
+    <FlexGenerator Include="audp_lexer.lpp">
+      <Filter>FlexBison</Filter>
+    </FlexGenerator>
   </ItemGroup>
 </Project>

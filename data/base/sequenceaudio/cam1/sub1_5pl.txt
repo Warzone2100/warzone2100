@@ -1,7 +1,7 @@
 //pos		frame	
 //x	y		start	end	Text	
 
-20	432		25	190	_("Information discovered at the previous enemy base indicates that the New Paradigm recovered two synaptic link artifacts.")
+20	432	2.08333333333	15.8333333333	_("Information discovered at the previous enemy base indicates that the New Paradigm recovered two synaptic link artifacts.")
 
 
 

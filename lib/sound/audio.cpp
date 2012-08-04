@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -38,7 +38,7 @@ static AUDIO_SAMPLE *g_psSampleQueue = NULL;
 static bool			g_bAudioEnabled = false;
 static bool			g_bAudioPaused = false;
 static AUDIO_SAMPLE g_sPreviousSample;
-static int			g_iPreviousSampleTime;
+static int			g_iPreviousSampleTime = 0;
 
 /** Counts the number of samples in the SampleQueue
  *  \return the number of samples in the SampleQueue
@@ -94,14 +94,18 @@ bool audio_Disabled( void )
 // =======================================================================================================================
 // =======================================================================================================================
 //
-bool audio_Init( AUDIO_CALLBACK pStopTrackCallback )
+bool audio_Init(AUDIO_CALLBACK pStopTrackCallback, bool really_enable)
 {
 	// init audio system
 	g_sPreviousSample.iTrack = NO_SAMPLE;
 	g_sPreviousSample.x = SAMPLE_COORD_INVALID;
 	g_sPreviousSample.y = SAMPLE_COORD_INVALID;
 	g_sPreviousSample.z = SAMPLE_COORD_INVALID;
-	g_bAudioEnabled = sound_Init();
+	g_bAudioEnabled = really_enable;
+	if (g_bAudioEnabled)
+	{
+		g_bAudioEnabled = sound_Init();
+	}
 	if (g_bAudioEnabled)
 	{
 		sound_SetStoppedCallback( pStopTrackCallback );
@@ -1185,26 +1189,4 @@ void audio_RemoveObj(SIMPLE_OBJECT const *psObj)
 
 	if (count)
 		debug(LOG_MEMORY, "audio_RemoveObj: ***Warning! psOBJ %p was found %u times in the list of playing audio samples", psObj, count);
-}
-
-static bool dummyCB(WZ_DECL_UNUSED void* dummy)
-{
-	return true;
-}
-
-void audioTest()
-{
-	int i;
-
-	for (i = 0; i < 10; i++)
-	{
-		// On non-debug builds prevent warnings about defining but not using dummyCB
-		dummyCB(NULL);
-
-		assert(audio_Shutdown());
-		assert(audio_Init(dummyCB));
-		assert(!audio_Disabled());
-		audio_Update();
-	}
-	fprintf(stdout, "\tAudio self-test: PASSED\n");
 }

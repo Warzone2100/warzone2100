@@ -49,14 +49,14 @@ ff,50,50,ff	// blueprint invalid
 a0,a0,0,ff	// health medium shadow
 a0,0,0,ff	// health low shadow
 80,c0,ff,ff	// health resistance
-00,60,00,ff	// team1 - green
-A0,70,00,ff	// team2 - orange
-80,80,80,ff	// team3 - gray
+10,70,10,ff	// team1 - green
+ff,b0,35,ff	// team2 - orange
+90,90,90,ff	// team3 - gray
 20,20,20,ff	// team4 - black
-80,00,00,ff	// team5 - red
-20,30,60,ff	// team6 - blue
-90,00,70,ff	// team7 - pink
-00,80,80,ff	// team8 - cyan
+9b,0f,0f,ff	// team5 - red
+27,31,b9,ff	// team6 - blue
+d0,10,b0,ff	// team7 - pink
+20,d0,d0,ff	// team8 - cyan
 7f,7f,7f,ff	// default form background
 bf,bf,bf,ff	// default form text
 ff,ff,ff,ff	// default form light
@@ -75,8 +75,8 @@ ff,ff,0,ff	// production run text
 ff,0,ff,ff	// WZCOL_MAP_PREVIEW_HQ
 ff,ff,00,ff	// WZCOL_MAP_PREVIEW_OIL
 b0,08,5f,ff	// fog colour
-80,C0,00,ff	// team9 - yellow
-B0,70,70,ff	// team10 - purple
+f0,e8,10,ff	// team9 - yellow
+70,00,74,ff	// team10 - purple
 E0,E0,E0,ff	// team11 - white
 20,20,FF,ff	// team12 - bright blue
 00,A0,00,ff	// team13 - neon green
@@ -84,3 +84,6 @@ E0,E0,E0,ff	// team11 - white
 10,00,40,ff	// team15 - ultraviolet
 40,60,00,ff	// team16 - brown
 32,4b,a0,ff	// blueprint planned by ally
+ff,80,40,ff	// construction bar text
+00,ff,00,ff	// power queue bar text
+80,c0,00,ff	// WZCOL_MAP_PREVIEW_BARREL

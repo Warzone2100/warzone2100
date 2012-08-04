@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -49,18 +49,18 @@ extern void featureUpdate(FEATURE *psFeat);
 extern bool removeFeature(FEATURE *psDel);
 
 /* Remove a Feature and free it's memory */
-extern bool destroyFeature(FEATURE *psDel);
+bool destroyFeature(FEATURE *psDel, unsigned impactTime);
 
 /* get a feature stat id from its name */
 extern SDWORD getFeatureStatFromName(const char *pName);
 
-/*looks around the given droid to see if there is any building
-wreckage to clear*/
-extern FEATURE	* checkForWreckage(DROID *psDroid);
-
-int32_t featureDamage(FEATURE *psFeature, UDWORD damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, HIT_SIDE impactSide);
+int32_t featureDamage(FEATURE *psFeature, unsigned damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, unsigned impactTime, bool isDamagePerSecond);
 
 extern void     featureInitVars(void);
+
+Vector2i getFeatureStatsSize(FEATURE_STATS const *pStructureType);
+StructureBounds getStructureBounds(FEATURE const *object);
+StructureBounds getStructureBounds(FEATURE_STATS const *stats, Vector2i pos);
 
 #define syncDebugFeature(psFeature, ch) _syncDebugFeature(__FUNCTION__, psFeature, ch)
 void _syncDebugFeature(const char *function, FEATURE const *psFeature, char ch);

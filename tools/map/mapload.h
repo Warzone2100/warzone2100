@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -30,7 +30,7 @@
 #define TILE_HEIGHT	128
 #define TILE_WIDTH	128
 
-#define MAX_PLAYERS 8
+#define MAX_PLAYERS 11
 #define MAP_MAXAREA (256 * 256)
 
 // map.h: 321

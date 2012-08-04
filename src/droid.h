@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -44,11 +44,7 @@
 // Changing this breaks campaign saves!
 #define MAX_RECYCLED_DROIDS 450
 
-//storage
-extern DROID_TEMPLATE			*apsDroidTemplates[MAX_PLAYERS];
-extern DROID_TEMPLATE			*apsStaticTemplates;			// for AIs and scripts
-
-//used to stop structures being built too near the edge and droids being placed down - pickATile
+//used to stop structures being built too near the edge and droids being placed down
 #define TOO_NEAR_EDGE	3
 
 /* Define max number of allowed droids per droid type */
@@ -70,7 +66,6 @@ enum PICKTILE
 {
 	NO_FREE_TILE,
 	FREE_TILE,
-	HALF_FREE_TILE
 };
 
 // the structure that was last hit
@@ -82,13 +77,9 @@ extern UWORD	aDroidExperience[MAX_PLAYERS][MAX_RECYCLED_DROIDS];
 // initialise droid module
 extern bool droidInit(void);
 
-extern void removeDroidBase(DROID *psDel);
+bool removeDroidBase(DROID *psDel);
 
-extern bool loadDroidTemplates(const char *pDroidData, UDWORD bufferSize);
 extern bool loadDroidWeapons(const char *pWeaponData, UDWORD bufferSize);
-
-/*initialise the template build and power points */
-extern void initTemplatePoints(void);
 
 struct INITIAL_DROID_ORDERS
 {
@@ -133,20 +124,18 @@ extern UDWORD calcTemplateBuild(DROID_TEMPLATE *psTemplate);
 /* Calculate the power points required to build/maintain the droid */
 extern UDWORD	calcTemplatePower(DROID_TEMPLATE *psTemplate);
 
-// return whether a template is for an IDF droid
-bool templateIsIDF(DROID_TEMPLATE *psTemplate);
-
 // return whether a droid is IDF
 bool idfDroid(DROID *psDroid);
 
 /* Do damage to a droid */
-int32_t droidDamage(DROID *psDroid, uint32_t damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, HIT_SIDE impactSide);
+int32_t droidDamage(DROID *psDroid, unsigned damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, unsigned impactTime, bool isDamagePerSecond);
 
 /* The main update routine for all droids */
 extern void droidUpdate(DROID *psDroid);
 
 /* Set up a droid to build a structure - returns true if successful */
-extern bool droidStartBuild(DROID *psDroid);
+enum DroidStartBuild {DroidStartBuildFailed, DroidStartBuildSuccess, DroidStartBuildPending};
+DroidStartBuild droidStartBuild(DROID *psDroid);
 
 /* Sets a droid to start demolishing - returns true if successful */
 extern bool	droidStartDemolishing( DROID *psDroid );
@@ -185,7 +174,7 @@ extern bool droidUpdateRestore( DROID *psDroid );
 extern void recycleDroid(DROID *psDel);
 
 /* Remove a droid and free it's memory */
-extern void destroyDroid(DROID *psDel);
+bool destroyDroid(DROID *psDel, unsigned impactTime);
 
 /* Same as destroy droid except no graphical effects */
 extern void	vanishDroid(DROID *psDel);
@@ -206,9 +195,6 @@ extern DROID_TYPE droidType(DROID *psDroid);
 /* Return the type of a droid from it's template */
 extern DROID_TYPE droidTemplateType(DROID_TEMPLATE *psTemplate);
 
-//fills the list with Templates that can be manufactured in the Factory - based on size
-void fillTemplateList(std::vector<DROID_TEMPLATE *> &pList, STRUCTURE *psFactory);
-
 extern void assignDroidsToGroup(UDWORD	playerNumber, UDWORD groupNumber);
 
 extern bool activateGroup(UDWORD playerNumber, UDWORD groupNumber);
@@ -220,16 +206,6 @@ extern bool activateGroupAndMove(UDWORD playerNumber, UDWORD groupNumber);
 bool calcDroidMuzzleLocation(DROID *psDroid, Vector3i *muzzle, int weapon_slot);
 /* calculate muzzle base location in 3d world added int weapon_slot to fix the always slot 0 hack*/
 bool calcDroidMuzzleBaseLocation(DROID *psDroid, Vector3i *muzzle, int weapon_slot);
-
-/* gets a template from its aName (when pName is unknown) */ 
-extern DROID_TEMPLATE	*GetHumanDroidTemplate(const char *aName);
-extern DROID_TEMPLATE	*GetAIDroidTemplate(const char *aName);
-/* gets a template from its name - relies on the name being unique */
-extern DROID_TEMPLATE * getTemplateFromUniqueName(const char *pName, unsigned int player);
-/* gets a template from its name - relies on the name being unique */
-extern DROID_TEMPLATE* getTemplateFromTranslatedNameNoPlayer(char const *pName);
-/*getTemplateFromMultiPlayerID gets template for unique ID  searching all lists */
-extern DROID_TEMPLATE* getTemplateFromMultiPlayerID(UDWORD multiPlayerID);
 
 // finds a droid for the player and sets it to be the current selected droid
 extern bool selectDroidByID(UDWORD id, UDWORD player);
@@ -248,12 +224,11 @@ extern void droidSetName(DROID *psDroid, const char *pName);
 // returns true when no droid on x,y square.
 extern bool	noDroid					(UDWORD x, UDWORD y);				// true if no droid at x,y
 // returns an x/y coord to place a droid
-extern bool pickATile				(UDWORD *x0,UDWORD *y0, UBYTE numIterations);
 extern PICKTILE pickHalfATile		(UDWORD *x, UDWORD *y, UBYTE numIterations);
-extern bool	pickATile2				(UDWORD *x, UDWORD *y, UDWORD numIterations);
 extern	bool	zonedPAT(UDWORD x, UDWORD y);
 extern	bool	pickATileGen(UDWORD *x, UDWORD *y, UBYTE numIterations,
 					 bool (*function)(UDWORD x, UDWORD y));
+bool pickATileGen(Vector2i *pos, unsigned numIterations, bool (*function)(UDWORD x, UDWORD y));
 extern	bool	pickATileGenThreat(UDWORD *x, UDWORD *y, UBYTE numIterations, SDWORD threatRange,
 					 SDWORD player, bool (*function)(UDWORD x, UDWORD y));
 
@@ -269,17 +244,12 @@ extern bool checkDroidsBuilding(STRUCTURE *psStructure);
 demolishing the specified structure - returns true if finds one*/
 extern bool checkDroidsDemolishing(STRUCTURE *psStructure);
 
-/* checks the structure for type and capacity and orders the droid to build
-a module if it can - returns true if order is set */
-extern bool buildModule(STRUCTURE *psStruct);
+/// Returns the next module which can be built after lastOrderedModule, or returns 0 if not possible.
+int nextModuleToBuild(STRUCTURE const *psStruct, int lastOrderedModule);
 
 /*Deals with building a module - checking if any droid is currently doing this
  - if so, helping to build the current one*/
 extern void setUpBuildModule(DROID *psDroid);
-
-/*return the name to display for the interface - we don't know if this is
-a string ID or something the user types in*/
-extern const char* getTemplateName(const DROID_TEMPLATE *psTemplate);
 
 /* Just returns true if the droid's present body points aren't as high as the original*/
 extern bool	droidIsDamaged(DROID *psDroid);
@@ -290,9 +260,7 @@ extern void	setSelectedGroup(UDWORD groupNumber);
 extern UDWORD	getSelectedCommander( void );
 extern void	setSelectedCommander(UDWORD commander);
 
-
 extern char const *getDroidResourceName(char const *pName);
-
 
 /*checks to see if an electronic warfare weapon is attached to the droid*/
 extern bool electronicDroid(DROID *psDroid);
@@ -302,12 +270,6 @@ extern bool droidUnderRepair(DROID *psDroid);
 
 //count how many Command Droids exist in the world at any one moment
 extern UBYTE checkCommandExist(UBYTE player);
-
-/* Set up a droid to clear a wrecked building feature - returns true if successful */
-extern bool droidStartClearing( DROID *psDroid );
-/* Update a construction droid while it is clearing
-   returns true while continues */
-extern bool droidUpdateClearing( DROID *psDroid );
 
 /*For a given repair droid, check if there are any damaged droids within
 a defined range*/
@@ -324,9 +286,6 @@ extern bool vtolFull(DROID *psDroid);
 /*Checks a vtol for being fully armed and fully repaired to see if ready to
 leave reArm pad */
 extern bool  vtolHappy(const DROID* psDroid);
-/*this mends the VTOL when it has been returned to home base whilst on an
-offworld mission*/
-extern void mendVtol(DROID *psDroid);
 /*checks if the droid is a VTOL droid and updates the attack runs as required*/
 extern void updateVtolAttackRun(DROID *psDroid, int weapon_slot);
 /*returns a count of the base number of attack runs for the weapon attached to the droid*/
@@ -372,12 +331,6 @@ extern void SelectDroid(DROID *psDroid);
 
 // De-select a droid and do any necessary housekeeping.
 extern void DeSelectDroid(DROID *psDroid);
-
-/*calculate the power cost to repair a droid*/
-extern UWORD powerReqForDroidRepair(DROID *psDroid);
-
-/*power cost for One repair point*/
-extern UWORD repairPowerPoint(DROID *psDroid);
 
 /* audio finished callback */
 extern bool droidAudioTrackStopped( void *psObj );
@@ -464,7 +417,7 @@ static inline Rotation getInterpolatedWeaponRotation(DROID *psDroid, int weaponS
 #define setDroidTarget(_psDroid, _psNewTarget) _setDroidTarget(_psDroid, _psNewTarget, __LINE__, __FUNCTION__)
 static inline void _setDroidTarget(DROID *psDroid, BASE_OBJECT *psNewTarget, int line, const char *func)
 {
-	psDroid->psTarget = psNewTarget;
+	psDroid->order.psObj = psNewTarget;
 	ASSERT(psNewTarget == NULL || !psNewTarget->died, "setDroidTarget: Set dead target");
 	ASSERT(psNewTarget == NULL || !psNewTarget->died || (psNewTarget->died == NOT_CURRENT_LIST && psDroid->died == NOT_CURRENT_LIST),
 	       "setDroidTarget: Set dead target");
@@ -511,7 +464,7 @@ static inline void _setDroidBase(DROID *psDroid, STRUCTURE *psNewBase, int line,
 
 static inline void setSaveDroidTarget(DROID *psSaveDroid, BASE_OBJECT *psNewTarget)
 {
-	psSaveDroid->psTarget = psNewTarget;
+	psSaveDroid->order.psObj = psNewTarget;
 #ifdef DEBUG
 	psSaveDroid->targetLine = 0;
 	sstrcpy(psSaveDroid->targetFunc, "savegame");

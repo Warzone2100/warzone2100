@@ -1,6 +1,6 @@
 /*
 	This file is part of Warzone 2100.
-	Copyright (C) 2007-2010  Warzone 2100 Project
+	Copyright (C) 2007-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -287,7 +287,7 @@ static void dump_to_pie(FILE *ctl, FILE *fp, const char *input)
 		{
 			if (!posList[j].dupe)
 			{
-				fprintf(ctl, " \n\t%d %d %d", posList[j].x, posList[j].y, posList[j].z);
+				fprintf(ctl, "\n\t%d %d %d", posList[j].x, posList[j].y, posList[j].z);
 			}
 		}
 		

@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -121,43 +121,65 @@ static bool _imd_load_polys( const char **ppFileData, iIMDShape *s, int pieVersi
 			poly->normal = pie_SurfaceNormal3fv(p0, p1, p2);
 		}
 
-		if (poly->flags & iV_IMD_TEXANIM)
-		{
-			int nFrames, pbRate, tWidth, tHeight;
-
-			// even the psx needs to skip the data
-			if (sscanf(pFileData, "%d %d %d %d%n", &nFrames, &pbRate, &tWidth, &tHeight, &cnt) != 4)
-			{
-				debug(LOG_ERROR, "(_load_polys) [poly %u] error reading texanim data", i);
-				return false;
-			}
-			pFileData += cnt;
-
-			ASSERT(tWidth > 0, "%s: texture width = %d", GetLastResourceFilename(), tWidth);
-			ASSERT(tHeight > 0, "%s: texture height = %d (width=%d)", GetLastResourceFilename(), tHeight, tWidth);
-
-			/* Must have same number of frames and same playback rate for all polygons */
-			s->numFrames = nFrames;
-			s->animInterval = pbRate;
-
-			poly->texAnim.x = tWidth / OLD_TEXTURE_SIZE_FIX;
-			poly->texAnim.y = tHeight / OLD_TEXTURE_SIZE_FIX;
-		}
-		else
-		{
-			poly->texAnim.x = 0;
-			poly->texAnim.y = 0;
-		}
-
-		// PC texture coord routine
+		// texture coord routine
 		if (poly->flags & iV_IMD_TEX)
 		{
-			int nFrames, framesPerLine, frame;
+			int nFrames, framesPerLine, frame, pbRate;
+			float tWidth, tHeight;
 
-			nFrames = MAX(1, s->numFrames);
+			if (poly->flags & iV_IMD_TEXANIM)
+			{
+				if (sscanf(pFileData, "%d %d %f %f%n", &nFrames, &pbRate, &tWidth, &tHeight, &cnt) != 4)
+				{
+					debug(LOG_ERROR, "(_load_polys) [poly %u] error reading texanim data", i);
+					return false;
+				}
+				pFileData += cnt;
+
+				ASSERT(tWidth > 0.0001f, "%s: texture width = %f", GetLastResourceFilename(), tWidth);
+				ASSERT(tHeight > 0.f, "%s: texture height = %f (width=%f)", GetLastResourceFilename(), tHeight, tWidth);
+				ASSERT(nFrames > 1, "%s: animation frames = %d", GetLastResourceFilename(), nFrames);
+				ASSERT(pbRate > 0, "%s: animation interval = %d ms", GetLastResourceFilename(), pbRate);
+
+				/* Must have same number of frames and same playback rate for all polygons */
+				if (s->numFrames == 0)
+				{
+					s->numFrames = nFrames;
+					s->animInterval = pbRate;
+				}
+				else
+				{
+					ASSERT(s->numFrames == nFrames,
+						"%s: varying number of frames within one PIE level: %d != %d",
+							GetLastResourceFilename(), nFrames, s->numFrames);
+					ASSERT(s->animInterval == pbRate,
+						"%s: varying animation intervals within one PIE level: %d != %d",
+							GetLastResourceFilename(), pbRate, s->animInterval);
+				}
+
+				poly->texAnim.x = tWidth;
+				poly->texAnim.y = tHeight;
+
+				if (pieVersion != PIE_FLOAT_VER)
+				{
+					poly->texAnim.x /= OLD_TEXTURE_SIZE_FIX;
+					poly->texAnim.y /= OLD_TEXTURE_SIZE_FIX;
+				}
+				framesPerLine = 1/poly->texAnim.x;
+			}
+			else
+			{
+				nFrames = 1;
+				framesPerLine = 1;
+				pbRate = 1;
+				tWidth = 0.f;
+				tHeight = 0.f;
+				poly->texAnim.x = 0;
+				poly->texAnim.y = 0;
+			}
+
 			poly->texCoord = (Vector2f *)malloc(sizeof(*poly->texCoord) * nFrames * poly->npnts);
 			ASSERT_OR_RETURN(false, poly->texCoord, "Out of memory allocating texture coordinates");
-			framesPerLine = OLD_TEXTURE_SIZE_FIX / (poly->texAnim.x * OLD_TEXTURE_SIZE_FIX);
 			for (j = 0; j < poly->npnts; j++)
 			{
 				float VertexU, VertexV;
@@ -177,12 +199,12 @@ static bool _imd_load_polys( const char **ppFileData, iIMDShape *s, int pieVersi
 
 				for (frame = 0; frame < nFrames; frame++)
 				{
-					const int uFrame = (frame % framesPerLine) * (poly->texAnim.x * OLD_TEXTURE_SIZE_FIX);
-					const int vFrame = (frame / framesPerLine) * (poly->texAnim.y * OLD_TEXTURE_SIZE_FIX);
+					const float uFrame = (frame % framesPerLine) * poly->texAnim.x;
+					const float vFrame = (frame / framesPerLine) * poly->texAnim.y;
 					Vector2f *c = &poly->texCoord[frame * poly->npnts + j];
 
-					c->x = VertexU + uFrame / OLD_TEXTURE_SIZE_FIX;
-					c->y = VertexV + vFrame / OLD_TEXTURE_SIZE_FIX;
+					c->x = VertexU + uFrame;
+					c->y = VertexV + vFrame;
 				}
 			}
 		}
@@ -224,7 +246,6 @@ static bool ReadPoints( const char **ppFileData, iIMDShape *s )
 static bool _imd_load_points( const char **ppFileData, iIMDShape *s )
 {
 	Vector3f *p = NULL;
-	int32_t tempXMax, tempXMin, tempZMax, tempZMin;
 	int32_t xmax, ymax, zmax;
 	double dx, dy, dz, rad_sq, rad, old_to_p_sq, old_to_p, old_to_new;
 	double xspan, yspan, zspan, maxspan;
@@ -247,8 +268,8 @@ static bool _imd_load_points( const char **ppFileData, iIMDShape *s )
 		return false;
 	}
 
-	s->max.x = s->max.y = s->max.z = tempXMax = tempZMax = -FP12_MULTIPLIER;
-	s->min.x = s->min.y = s->min.z = tempXMin = tempZMin = FP12_MULTIPLIER;
+	s->max.x = s->max.y = s->max.z = -FP12_MULTIPLIER;
+	s->min.x = s->min.y = s->min.z = FP12_MULTIPLIER;
 
 	vxmax.x = vymax.y = vzmax.z = -FP12_MULTIPLIER;
 	vxmin.x = vymin.y = vzmin.z = FP12_MULTIPLIER;
@@ -263,18 +284,6 @@ static bool _imd_load_points( const char **ppFileData, iIMDShape *s )
 		if (p->x < s->min.x)
 		{
 			s->min.x = p->x;
-		}
-
-		/* Biggest x coord so far within our height window? */
-		if( p->x > tempXMax && p->y > DROID_VIS_LOWER && p->y < DROID_VIS_UPPER )
-		{
-			tempXMax = p->x;
-		}
-
-		/* Smallest x coord so far within our height window? */
-		if( p->x < tempXMin && p->y > DROID_VIS_LOWER && p->y < DROID_VIS_UPPER )
-		{
-			tempXMin = p->x;
 		}
 
 		if (p->y > s->max.y)
@@ -293,18 +302,6 @@ static bool _imd_load_points( const char **ppFileData, iIMDShape *s )
 		if (p->z < s->min.z)
 		{
 			s->min.z = p->z;
-		}
-
-		/* Biggest z coord so far within our height window? */
-		if( p->z > tempZMax && p->y > DROID_VIS_LOWER && p->y < DROID_VIS_UPPER )
-		{
-			tempZMax = p->z;
-		}
-
-		/* Smallest z coord so far within our height window? */
-		if( p->z < tempZMax && p->y > DROID_VIS_LOWER && p->y < DROID_VIS_UPPER )
-		{
-			tempZMin = p->z;
 		}
 
 		// for tight sphere calculations
@@ -394,7 +391,6 @@ static bool _imd_load_points( const char **ppFileData, iIMDShape *s )
 
 	if (zspan > maxspan)
 	{
-		maxspan = zspan;
 		dia1 = vzmin;
 		dia2 = vzmax;
 	}
@@ -810,11 +806,12 @@ iIMDShape *iV_ProcessIMD( const char **ppFileData, const char *FileDataEnd )
 
 		ASSERT_OR_RETURN(NULL, texpage >= 0, "%s could not load tex page %s", pFileName, texfile);
 
-		// assign tex page to levels
+		// assign tex pages and flags to all levels
 		for (psShape = shape; psShape != NULL; psShape = psShape->next)
 		{
 			psShape->texpage = texpage;
 			psShape->normalpage = normalpage;
+			psShape->flags = imd_flags;
 		}
 
 		// check if model should use team colour mask
@@ -831,7 +828,6 @@ iIMDShape *iV_ProcessIMD( const char **ppFileData, const char *FileDataEnd )
 			// Propagate settings through levels
 			for (psShape = shape; psShape != NULL; psShape = psShape->next)
 			{
-				psShape->flags |= iV_IMD_TCMASK;
 				psShape->tcmaskpage = texpage_mask;
 			}
 		}

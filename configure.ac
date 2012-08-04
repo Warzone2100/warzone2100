@@ -35,6 +35,9 @@ AC_PROG_VERSION_CHECK([bison], [1.31])
 
 AC_PROG_LEX
 AC_PROG_VERSION_CHECK([${LEX}], [2.5.33], [2.5.34])
+# Hack to make sure flex produces files with names ylwrap expects.
+FLEX_FLAGS="-o lex.yy.c"
+AC_SUBST([FLEX_FLAGS])
 
 AX_WITH_PROG([PERL], [perl])
 AX_PROG_PERL_VERSION([5.10], [], [ PERL="" ])
@@ -55,6 +58,13 @@ AC_CHECK_PROG(A2X, a2x, a2x)
 AC_CHECK_PROG(WKHTMLTOPDF, wkhtmltopdf, wkhtmltopdf)
 AM_CONDITIONAL([A2X_AVAILABLE], test -n "$A2X")
 AM_CONDITIONAL([WKHTMLTOPDF_AVAILABLE], test -n "$WKHTMLTOPDF")
+
+AC_CHECK_PROG(PDFLATEX, pdflatex, pdflatex)
+AC_CHECK_PROG(HEVEA, hevea, hevea)
+AC_CHECK_PROG(HACHA, hacha, hacha)
+AM_CONDITIONAL(PDFLATEX, test -n "$PDFLATEX")
+AM_CONDITIONAL(HEVEA, test -n "$HEVEA")
+AM_CONDITIONAL(HACHA, test -n "$HACHA")
 
 # Enable Compiler/LibC GNU extensions
 AC_GNU_SOURCE
@@ -77,8 +87,21 @@ AM_GNU_GETTEXT_VERSION([0.15])
 PKG_PROG_PKG_CONFIG
 AC_PROG_VERSION_CHECK([pkg-config], [0.9])
 
+AC_MSG_CHECKING([for backend])
+AC_ARG_WITH([backend],
+	AS_HELP_STRING([--with-backend=sdl/qt], [Backend rendering code to use [sdl]]),
+	[ backend=${withval} ], [ backend="sdl" ])
+AM_CONDITIONAL([BACKEND_QT], test "$backend" = "qt")
+AM_CONDITIONAL([BACKEND_SDL], test "$backend" = "sdl")
+
 # Check for Qt
-PKG_CHECK_MODULES(QT4, QtCore QtGui QtOpenGL QtNetwork QtScript,,[:])
+if test "$backend" = "qt"; then
+	AC_MSG_RESULT([Qt])
+	PKG_CHECK_MODULES(QT4, QtCore QtGui QtOpenGL QtNetwork QtScript,,[:])
+else
+	AC_MSG_RESULT([SDL])
+	PKG_CHECK_MODULES(QT4, QtCore QtNetwork QtScript,,[:])
+fi
 if test "$pkg_failed" = "yes" ; then
 	AC_MSG_ERROR([Qt not found - required!])
 fi
@@ -129,7 +152,7 @@ esac
 AM_CONDITIONAL([MINGW32], test "x$host_os_mingw32" = "xyes")
 
 
-# Check for X11 (for qtgame)
+# Check for X11 (for qtgame and scrap)
 if test "x$host_os_mingw32" != "xyes" ; then
 	X_LIBS=""
 	AC_PATH_X
@@ -232,14 +255,6 @@ AC_ARG_ENABLE([sound],
 	[ enable_sound="${enableval}" ], [ enable_sound="yes" ])
 AS_IF([test "x$enable_sound" != "xyes"],[
 	AC_DEFINE([WZ_NOSOUND], [], [Causes sound to be disabled])
-])
-
-# Disables SSL for the Lobby
-AC_ARG_ENABLE([ssl],
-    AS_HELP_STRING([--disable-ssl], [Disable SSL [no]]),
-    [ enable_ssl="${enableval}" ], [ enable_ssl="yes" ])
-AS_IF([test "x$enable_ssl" != "xyes"],[
-	AC_DEFINE([NO_SSL], [], [Causes SSL to be disabled])
 ])
 
 # -O0 turns off all optimizations; this is necessary for accurate debugging
@@ -364,17 +379,19 @@ fi
 
 # Checks for modules:
 
+if test "$backend" = "sdl"; then
+	PKG_CHECK_MODULES([SDL], [sdl >= 1.2])
+fi
 PKG_CHECK_MODULES([PNG], [libpng >= 1.2])
 PKG_CHECK_MODULES([THEORA], [theora >= 1.0])
 
 AS_IF([test "x$enable_sound" = "xyes"],[
 	PKG_CHECK_MODULES([OPENAL], [openal >= 0.0.8])
-	PKG_CHECK_MODULES([OGGVORBIS], [vorbisfile >= 1.1])
+	PKG_CHECK_MODULES([VORBIS], [vorbis >= 1.1])
+	PKG_CHECK_MODULES([VORBISFILE], [vorbisfile >= 1.1])
 ])
 
 PKG_CHECK_MODULES([GLEW], [glew >= 1.5.2])
-
-PKG_CHECK_MODULES([QJSON], [QJson >= 0.7.1])
 
 # Checks for libraries:
 
@@ -390,11 +407,12 @@ fi
 
 # Look for PhysicsFS
 AC_CHECK_HEADER(physfs.h, , AC_MSG_ERROR([PhysicsFS header not found.]))
-AC_CHECK_LIB(physfs, PHYSFS_init, AC_SUBST([PHYSFS_LIBS], [-lphysfs]), AC_MSG_ERROR([PhysicsFS not found.]), [${WIN32_LIBS}])
+AC_CHECK_LIB(physfs, PHYSFS_mount, AC_SUBST([PHYSFS_LIBS], [-lphysfs]), AC_MSG_ERROR([PhysicsFS 2 not found.]), [${WIN32_LIBS}])
 
 if test "x$host_os_mingw32" != "xyes" ; then
 	AC_CHECK_HEADER(X11/extensions/Xrandr.h, , AC_MSG_ERROR([Xrandr header not found.]))
 fi
+
 
 # Look for OpenGL
 AC_CHECK_LIB(GL, main,
@@ -410,8 +428,20 @@ AC_CHECK_LIB(GLU, main,
 		[${OPENGL_LIBS} -lm]), [${OPENGL_LIBS} -lm])
 AC_SUBST([OPENGL_LIBS], [${OPENGL_LIBS}])
 
-# Look for OpenGLC
-PKG_CHECK_MODULES([OPENGLC], [quesoglc >= 0.7.2])
+# OpenGLC stuff
+ACX_PTHREAD
+CC="$PTHREAD_CC"
+AX_TLS
+
+PKG_CHECK_MODULES([FRIBIDI], [fribidi])
+PKG_CHECK_MODULES([FREETYPE], [freetype2])
+AC_CHECK_LIB(freetype, FTC_Manager_New,
+             AC_DEFINE([HAVE_FT_CACHE], [1],
+                       [Define if FreeType supports the caching routines]))
+PKG_CHECK_MODULES([FONTCONFIG], [fontconfig])
+
+OPENGLC_LIBS="${FRIBIDI_LIBS} ${FREETYPE_LIBS} ${FONTCONFIG_LIBS} ${PTHREAD_LIBS} ${OPENGL_LIBS} ${GLEW_LIBS}"
+AC_SUBST([OPENGLC_LIBS], [${OPENGLC_LIBS}])
 
 # When (cross-)compiling for Windows (MinGW) we need to link in BFD for the Dr.
 # MinGW derived exception handler.
@@ -427,7 +457,7 @@ WZ_CPPFLAGS="${WZ_CPPFLAGS} -DLOCALEDIR=\"\\\"\${localedir}\\\"\""
 WZ_CPPFLAGS="${WZ_CPPFLAGS} -I\$(top_srcdir)"
 
 # 3rdparty libs
-WZ_CPPFLAGS="${WZ_CPPFLAGS} -I\$(top_srcdir)/3rdparty"
+WZ_CPPFLAGS="${WZ_CPPFLAGS} -I\$(top_srcdir)/3rdparty -I\$(top_srcdir)/3rdparty/quesoglc"
 
 
 AC_SUBST([WZ_CPPFLAGS], [${WZ_CPPFLAGS}])
@@ -442,22 +472,23 @@ AC_CONFIG_FILES([Makefile
 		doc/Makefile
 		icons/Makefile
 		data/Makefile
-		data/mods/multiplay/Makefile
 		data/music/Makefile
 		pkg/nsis/Makefile
 		win32/Makefile
 		tests/Makefile
 		3rdparty/miniupnpc/Makefile
+		3rdparty/quesoglc/Makefile
 		lib/framework/Makefile
 		lib/exceptionhandler/Makefile
 		lib/gamelib/Makefile
 		lib/ivis_opengl/Makefile
 		lib/netplay/Makefile
+		lib/qtgame/Makefile
+		lib/sdl/Makefile
 		lib/script/Makefile
 		lib/sequence/Makefile
 		lib/sound/Makefile
 		lib/widget/Makefile
-		lib/qtgame/Makefile
 		tools/map/Makefile
 		src/Makefile])
 AC_OUTPUT
@@ -484,3 +515,5 @@ AS_IF([test -z "$A2X" -o -z "$WKHTMLTOPDF"],[
 		but means that things like "make dist" and building a Windows installer will fail.])
 ])
 
+AC_MSG_NOTICE()
+AC_MSG_NOTICE(Backend used: ${backend})

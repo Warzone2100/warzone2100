@@ -4,11 +4,7 @@
 #include <QtCore/qglobal.h>
 
 // framework
-#if defined(__MACOSX__)
-#  include "lib/framework/config-macosx.h"
-#else
-#  include "config.h"
-#endif
+#include "lib/framework/wzglobal.h"
 #include "lib/framework/types.h"
 #include "lib/framework/physfs_ext.h" // Also includes physfs.h
 

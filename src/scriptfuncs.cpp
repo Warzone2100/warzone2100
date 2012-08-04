@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -96,6 +96,7 @@
 #include "visibility.h"
 #include "design.h"
 #include "random.h"
+#include "template.h"
 
 static INTERP_VAL	scrFunctionResult;	//function return value to be pushed to stack
 
@@ -110,8 +111,18 @@ static bool	structHasModule(STRUCTURE *psStruct);
 static DROID_TEMPLATE* scrCheckTemplateExists(SDWORD player, DROID_TEMPLATE *psTempl);
 
 /// Hold the previously assigned player
-static Vector2i positions[MAX_PLAYERS];
+Vector2i positions[MAX_PLAYERS];
 std::vector<Vector2i> derricks;
+
+bool scriptOperatorEquals(INTERP_VAL const &v1, INTERP_VAL const &v2)
+{
+	ASSERT_OR_RETURN(false, scriptTypeIsPointer(v1.type) && scriptTypeIsPointer(v2.type), "Bad types.");
+	if (v1.type == (INTERP_TYPE)ST_RESEARCH && v1.type == (INTERP_TYPE)ST_RESEARCH)
+	{
+		return ((RESEARCH *)v1.v.oval)->ref == ((RESEARCH *)v2.v.oval)->ref;
+	}
+	return v1.v.oval == v2.v.oval;
+}
 
 void scriptSetStartPos(int position, int x, int y)
 {
@@ -1082,7 +1093,8 @@ bool scrAddDroidToMissionList(void)
 
 #ifdef SCRIPT_CHECK_MAX_UNITS
 	// Don't build a new droid if player limit reached, unless it's a transporter.
-	if( IsPlayerDroidLimitReached(player) && (psTemplate->droidType != DROID_TRANSPORTER) ) {
+	if( IsPlayerDroidLimitReached(player) && (psTemplate->droidType != DROID_TRANSPORTER && psTemplate->droidType != DROID_SUPERTRANSPORTER))
+	{
 		debug( LOG_NEVER, "scrAddUnit : Max units reached ,player %d\n", player );
 		psDroid = NULL;
 	} else
@@ -1123,7 +1135,8 @@ bool scrAddDroid(void)
 
 #ifdef SCRIPT_CHECK_MAX_UNITS
 	// Don't build a new droid if player limit reached, unless it's a transporter.
-	if( IsPlayerDroidLimitReached(player) && (psTemplate->droidType != DROID_TRANSPORTER) ) {
+	if( IsPlayerDroidLimitReached(player) && (psTemplate->droidType != DROID_TRANSPORTER && psTemplate->droidType != DROID_SUPERTRANSPORTER) )
+	{
 		debug( LOG_NEVER, "scrAddUnit : Max units reached ,player %d\n", player );
 		psDroid = NULL;
 	} else
@@ -1175,7 +1188,7 @@ bool scrAddDroidToTransporter(void)
 
 	ASSERT(psTransporter != NULL, "scrAddUnitToTransporter: invalid transporter pointer");
 	ASSERT(psDroid != NULL, "scrAddUnitToTransporter: invalid unit pointer");
-	ASSERT(psTransporter->droidType == DROID_TRANSPORTER, "scrAddUnitToTransporter: invalid transporter type");
+	ASSERT((psTransporter->droidType == DROID_TRANSPORTER || psTransporter->droidType == DROID_SUPERTRANSPORTER), "scrAddUnitToTransporter: invalid transporter type");
 
 	/* check for space */
 	if (checkTransporterSpace(psTransporter, psDroid))
@@ -1376,11 +1389,6 @@ bool scrAddReticuleButton(void)
 		return false;
 	}
 
-	if (selfTest)
-	{
-		return true;	// hack to prevent crashing in self-test
-	}
-
 	//set the appropriate flag to 'draw' the button
 	switch (val)
 	{
@@ -1427,11 +1435,6 @@ bool scrRemoveReticuleButton(void)
 	if (!stackPopParams(2, VAL_INT, &val,VAL_BOOL, &bReset))
 	{
 		return false;
-	}
-
-	if (selfTest)
-	{
-		return true;
 	}
 
 	if(bInTutorial)
@@ -1518,10 +1521,12 @@ bool scrAddMessage(void)
 			}
 		}
 
-		if (playImmediate && !selfTest)
+		if (playImmediate)
 		{
 			displayImmediateMessage(psMessage);
-			stopReticuleButtonFlash(IDRET_INTEL_MAP);
+			// FIXME: We should add some kind of check to see if the FMVs are available or not, and enable this based on that.
+			// If we want to inform user of a message, we shouldn't stop the flash right?
+			//stopReticuleButtonFlash(IDRET_INTEL_MAP);
 		}
 	}
 
@@ -1585,7 +1590,7 @@ bool scrBuildDroid(void)
 	                         psFactory->pStructureType->type == REF_CYBORG_FACTORY ||
 	                         psFactory->pStructureType->type == REF_VTOL_FACTORY),
 	                 "Structure is not a factory");
-	ASSERT_OR_RETURN(false, validTemplateForFactory(psTemplate, psFactory), "Invalid template - %s for factory - %s",
+	ASSERT_OR_RETURN(false, validTemplateForFactory(psTemplate, psFactory, true), "Invalid template - %s for factory - %s",
 	                 psTemplate->aName, psFactory->pStructureType->pName);
 
 	if (productionRun != 1)
@@ -1888,8 +1893,7 @@ bool scrAddFeature(void)
 
 	psStat = (FEATURE_STATS *)(asFeatureStats + iFeat);
 
-	ASSERT( psStat != NULL,
-			"scrAddFeature: Invalid feature pointer" );
+	ASSERT(psStat != NULL, "Invalid feature pointer");
 
 	if ( psStat != NULL )
 	{
@@ -1902,20 +1906,7 @@ bool scrAddFeature(void)
 			iTestX = map_coord(psFeat->pos.x);
 			iTestY = map_coord(psFeat->pos.y);
 
-			if ( (iTestX == iMapX) && (iTestY == iMapY) )
-			{
-				if ( psFeat->psStats->subType == FEAT_BUILD_WRECK )
-				{
-					/* remove feature */
-					removeFeature( psFeat );
-					break;
-				}
-				else
-				{
-					ASSERT( false,
-					"scrAddFeature: building feature on tile already occupied\n" );
-				}
-			}
+			ASSERT(iTestX != iMapX || iTestY != iMapY, "Building feature on tile already occupied");
 		}
 
 		psFeat = buildFeature( psStat, iX, iY, false );
@@ -3405,22 +3396,14 @@ bool scrAnyStructButWallsLeft(void)
 	}
 
 	//check the players list for any structures
-	structuresLeft = true;
-	if (apsStructLists[player] == NULL)
+	structuresLeft = false;
+	for (psCurr = apsStructLists[player]; psCurr != NULL; psCurr = psCurr->psNext)
 	{
-		structuresLeft = false;
-	}
-	else
-	{
-		structuresLeft = false;
-		for (psCurr = apsStructLists[player]; psCurr != NULL; psCurr = psCurr->psNext)
-		{
-			if (psCurr->pStructureType->type != REF_WALL && psCurr->pStructureType->
+		if (psCurr->pStructureType->type != REF_WALL && psCurr->pStructureType->
 				type != REF_WALLCORNER)
-			{
-				structuresLeft = true;
-				break;
-			}
+		{
+			structuresLeft = true;
+			break;
 		}
 	}
 
@@ -3802,26 +3785,7 @@ bool scrSetBackgroundFog(void)
 		return false;
 	}
 
-	//jps 17 feb 99 just set the status let other code worry about fogEnable/reveal
-	if (bState)//true, so go to false
-	{
-		//restart fog if it was off
-		if ((fogStatus == 0) && war_GetFog() && !(bMultiPlayer && game.fog))
-		{
-			pie_EnableFog(true);
-		}
-		fogStatus |= FOG_BACKGROUND;//set lowest bit of 3
-	}
-	else
-	{
-		fogStatus &= FOG_FLAGS-FOG_BACKGROUND;//clear middle bit of 3
-		//disable fog if it longer used
-		if (fogStatus == 0)
-		{
-			pie_SetFogStatus(false);
-			pie_EnableFog(false);
-		}
-	}
+	// no-op
 
 	return true;
 }
@@ -3836,25 +3800,8 @@ bool scrSetDepthFog(void)
 	{
 		return false;
 	}
-	if (bState)//true, so go to false
-	{
-		//restart fog if it was off
-		if ((fogStatus == 0) && war_GetFog() )
-		{
-			pie_EnableFog(true);
-		}
-		fogStatus |= FOG_DISTANCE;//set lowest bit of 3
-	}
-	else
-	{
-		fogStatus &= FOG_FLAGS-FOG_DISTANCE;//clear middle bit of 3
-		//disable fog if it longer used
-		if (fogStatus == 0)
-		{
-			pie_SetFogStatus(false);
-			pie_EnableFog(false);
-		}
-	}
+
+	// no-op
 
 	return true;
 }
@@ -3871,15 +3818,11 @@ bool scrSetFogColour(void)
 		return false;
 	}
 
-	if (war_GetFog())
-	{
-		scrFogColour.byte.r = red;
-		scrFogColour.byte.g = green;
-		scrFogColour.byte.b = blue;
-		scrFogColour.byte.a = 255;
-
-		pie_SetFogColour(scrFogColour);
-	}
+	scrFogColour.byte.r = red;
+	scrFogColour.byte.g = green;
+	scrFogColour.byte.b = blue;
+	scrFogColour.byte.a = 255;
+	pie_SetFogColour(scrFogColour);
 
 	return true;
 }
@@ -4300,15 +4243,15 @@ bool scrCompleteResearch(void)
 		return false;
 	}
 
-
-	if(psResearch == NULL)
+	if (psResearch == NULL)
 	{
-		ASSERT( false, "scrCompleteResearch: no such research topic" );
-		return false;
+		// hack to make T2 and T3 work even though the research lists 
+		// are polluted with tons of non-existent techs :(
+		return true;
 	}
 
-	researchIndex = psResearch - asResearch;	//TODO: fix if needed
-	if (researchIndex > numResearch)
+	researchIndex = psResearch->index;
+	if (researchIndex > asResearch.size())
 	{
 		ASSERT( false, "scrCompleteResearch: invalid research index" );
 		return false;
@@ -4721,7 +4664,7 @@ bool scrSetReinforcementTime(void)
         for (psDroid = apsDroidLists[selectedPlayer]; psDroid != NULL; psDroid =
             psDroid->psNext)
         {
-            if (psDroid->droidType == DROID_TRANSPORTER)
+            if (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER)
             {
                 break;
             }
@@ -4905,7 +4848,7 @@ SDWORD		sX,sY;
 				{
 					if(bVisible)
 					{
-						destroyFeature(psFeature);
+						destroyFeature(psFeature, gameTime);
 					}
 					else
 					{
@@ -5284,11 +5227,14 @@ DROID	*psDroid;
 
 	return(true);
 }
+
 // -----------------------------------------------------------------------------------------
 static bool	structHasModule(STRUCTURE *psStruct)
 {
-STRUCTURE_STATS	*psStats;
-bool			bFound;
+	STRUCTURE_STATS	*psStats;
+	bool bFound = false;
+
+	ASSERT_OR_RETURN(false, psStruct != NULL, "Testing for a module from a NULL struct");
 
 	/* Fail if the structure isn't built yet */
 	if(psStruct->status != SS_BUILT)
@@ -5296,18 +5242,6 @@ bool			bFound;
 		return(false);
 	}
 
-	/* Not found yet */
-	bFound = false;
-
-
-	if(psStruct==NULL)
-	{
-		ASSERT( psStruct!=NULL,"structHasModule - Testing for a module from a NULL struct - huh!?" );
-		return(false);
-	}
-
-	if(psStruct)
-	{
 		/* Grab a stats pointer */
 		psStats = psStruct->pStructureType;
 		if(StructIsFactory(psStruct)
@@ -5346,7 +5280,6 @@ bool			bFound;
 			bFound = false;
 		}
 
-	}
 	return(bFound);
 }
 
@@ -5395,7 +5328,7 @@ bool scrAddTemplate(void)
 // -----------------------------------------------------------------------------------------
 
 // additional structure check
-static bool structDoubleCheck(BASE_STATS *psStat,UDWORD xx,UDWORD yy, SDWORD maxBlockingTiles)
+bool structDoubleCheck(BASE_STATS *psStat,UDWORD xx,UDWORD yy, SDWORD maxBlockingTiles)
 {
 	UDWORD		x, y, xTL, yTL, xBR, yBR;
 	UBYTE		count = 0;
@@ -5473,20 +5406,22 @@ static bool structDoubleCheck(BASE_STATS *psStat,UDWORD xx,UDWORD yy, SDWORD max
 
 static bool pickStructLocation(DROID *psDroid, int index, int *pX, int *pY, int player, int maxBlockingTiles)
 {
-	STRUCTURE_STATS	*psStat;
+	STRUCTURE_STATS	*psStat = &asStructureStats[index];
 	UDWORD			numIterations = 30;
 	bool			found = false;
 	int startX, startY, incX, incY, x, y;
 
 	ASSERT_OR_RETURN(false, player < MAX_PLAYERS && player >= 0, "Invalid player number %d", player);
 
+	Vector2i offset(psStat->baseWidth * (TILE_UNITS / 2), psStat->baseBreadth * (TILE_UNITS / 2));  // This gets added to the chosen coordinates, at the end of the function.
+
 	// check for wacky coords.
 	if (*pX < 0 || *pX > world_coord(mapWidth) || *pY < 0 || *pY > world_coord(mapHeight))
 	{
+		debug(LOG_ERROR, "Bad parameters");
 		goto endstructloc;
 	}
 
-	psStat = &asStructureStats[index];			// get stat.
 	startX = map_coord(*pX);				// change to tile coords.
 	startY = map_coord(*pY);
 	x = startX;
@@ -5494,8 +5429,8 @@ static bool pickStructLocation(DROID *psDroid, int index, int *pX, int *pY, int 
 
 	// save a lot of typing... checks whether a position is valid
 	#define LOC_OK(_x, _y) (tileOnMap(_x, _y) && \
-	                        (!psDroid || fpathCheck(psDroid->pos, Vector3i(world_coord(_x), world_coord(_y), 0), PROPULSION_TYPE_WHEELED)) \
-	                        && validLocation((BASE_STATS*)psStat, _x, _y, 0, player, false) && structDoubleCheck((BASE_STATS*)psStat, _x, _y, maxBlockingTiles))
+				(!psDroid || fpathCheck(psDroid->pos, Vector3i(world_coord(_x), world_coord(_y), 0), PROPULSION_TYPE_WHEELED)) \
+				&& validLocation(psStat, world_coord(Vector2i(_x, _y)) + offset, 0, player, false) && structDoubleCheck(psStat, _x, _y, maxBlockingTiles))
 
 	// first try the original location
 	if (LOC_OK(startX, startY))
@@ -5548,8 +5483,12 @@ endstructloc:
 	// back to world coords.
 	if (found)	// did it!
 	{
-		*pX = world_coord(x) + (psStat->baseWidth * (TILE_UNITS / 2));
-		*pY = world_coord(y) + (psStat->baseBreadth * (TILE_UNITS / 2));
+		*pX = world_coord(x) + offset.x;
+		*pY = world_coord(y) + offset.y;
+	}
+	else
+	{
+		debug(LOG_SCRIPT, "Did not find valid positioning for %s", psStat->pName);
 	}
 	scrFunctionResult.v.bval = found;
 	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))		// success!
@@ -5566,8 +5505,7 @@ bool scrPickStructLocation(void)
 	SDWORD			index;
 	UDWORD			player;
 
-	if (!stackPopParams(4, ST_STRUCTURESTAT, &index, VAL_REF|VAL_INT, &pX ,
-        VAL_REF|VAL_INT, &pY, VAL_INT, &player))
+	if (!stackPopParams(4, ST_STRUCTURESTAT, &index, VAL_REF|VAL_INT, &pX, VAL_REF|VAL_INT, &pY, VAL_INT, &player))
 	{
 		return false;
 	}
@@ -5692,7 +5630,8 @@ bool scrGetGameStatus(void)
 
 			break;
 		case STATUS_DeliveryReposInProgress:
-			if (DeliveryReposValid()==true) bResult=true;
+			if (deliveryReposValid())
+				bResult=true;
 			break;
 
 		default:
@@ -6391,11 +6330,9 @@ bool scrIsVtol(void)
 	return true;
 }
 
-
-
-
-// do the setting up of the template list for the tutorial.
-// This function looks like it searches for a template called "ViperLtMGWheels", and deletes it. Why?
+// Fix the tutorial's template list(s).
+// DO NOT MODIFY THIS WITHOUT KNOWING WHAT YOU ARE DOING.  You will break the tutorial!
+// In short, we want to design a ViperLtMGWheels, but it is already available to make, so we must delete it.
 bool scrTutorialTemplates(void)
 {
 	DROID_TEMPLATE	*psCurr, *psPrev;
@@ -6403,11 +6340,9 @@ bool scrTutorialTemplates(void)
 	// find ViperLtMGWheels
 	char const *pName = getDroidResourceName("ViperLtMGWheels");
 
-	for (psCurr = apsDroidTemplates[selectedPlayer],psPrev = NULL;
-			psCurr != NULL;
-			psCurr = psCurr->psNext)
+	for (psCurr = apsDroidTemplates[selectedPlayer], psPrev = NULL; psCurr != NULL;	psCurr = psCurr->psNext)
 	{
-		if (strcmp(pName,psCurr->aName)==0)
+		if (strcmp(pName, psCurr->aName)==0)
 		{
 			if (psPrev)
 			{
@@ -6417,15 +6352,24 @@ bool scrTutorialTemplates(void)
 			{
 				apsDroidTemplates[selectedPlayer] = psCurr->psNext;
 			}
-			//quit looking cos found
 			break;
 		}
 		psPrev = psCurr;
 	}
 
-	// Delete the template.
+	// Delete the template in *both* lists!
 	if(psCurr)
 	{
+		for (std::list<DROID_TEMPLATE>::iterator i = localTemplates.begin(); i != localTemplates.end(); ++i)
+		{
+			DROID_TEMPLATE *dropTemplate = &*i;
+			if (psCurr->multiPlayerID == dropTemplate->multiPlayerID)
+			{
+				free(dropTemplate->pName);
+				localTemplates.erase(i);
+				break;
+			}
+		}
 		delete psCurr;
 	}
 	else
@@ -7098,9 +7042,9 @@ bool ThreatInRange(SDWORD player, SDWORD range, SDWORD rangeX, SDWORD rangeY, bo
 		}
 
 		//check droids
-		for(psDroid = apsDroidLists[i]; psDroid; psDroid = psDroid->psNext)
+		for (psDroid = apsDroidLists[i]; psDroid; psDroid = psDroid->psNext)
 		{
-			if(psDroid->visible[player])		//can see this droid?
+			if (psDroid->visible[player])		//can see this droid?
 			{
 				if (!objHasWeapon((BASE_OBJECT *)psDroid))
 				{
@@ -7108,7 +7052,7 @@ bool ThreatInRange(SDWORD player, SDWORD range, SDWORD rangeX, SDWORD rangeY, bo
 				}
 
 				//if VTOLs are excluded, skip them
-				if(!bVTOLs && ((asPropulsionStats[psDroid->asBits[COMP_PROPULSION].nStat].propulsionType == PROPULSION_TYPE_LIFT) || (psDroid->droidType == DROID_TRANSPORTER)))
+				if (!bVTOLs && ((asPropulsionStats[psDroid->asBits[COMP_PROPULSION].nStat].propulsionType == PROPULSION_TYPE_LIFT) || (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER)))
 				{
 					continue;
 				}
@@ -7178,14 +7122,8 @@ bool scrFogTileInRange(void)
 					//closer than last one?
 					if(wDist < wBestDist)
 					{
-						//tmpX = i;
-						//tmpY = j;
-						//if(pickATileGen(&tmpX, &tmpY, 4,zonedPAT))	//can reach (don't need many passes)
 						if(zonedPAT(i,j))	//Can reach this tile
 						{
-							//if((tmpX == i) && (tmpY == j))	//can't allow to change coords, otherwise might send to the same unrevealed tile next time
-															//and units will stuck forever
-							//{
 							if((threadRange <= 0) || (!ThreatInRange(player, threadRange, world_coord(i), world_coord(j), false)))
 							{
 									wBestDist = wDist;
@@ -7193,7 +7131,6 @@ bool scrFogTileInRange(void)
 									tBestY = j;
 									ok = true;
 							}
-							//}
 						}
 					}
 				}
@@ -7340,9 +7277,6 @@ bool scrNumResearchLeft(void)
 
 	UWORD				Stack[400];
 
-	PLAYER_RESEARCH		*pPlayerRes;
-
-
 	if (!stackPopParams(2, VAL_INT, &player, ST_RESEARCH, &psResearch ))
 	{
 		debug(LOG_ERROR,  "scrNumResearchLeft(): stack failed");
@@ -7355,10 +7289,8 @@ bool scrNumResearchLeft(void)
 		return false;
 	}
 
-	pPlayerRes = asPlayerResList[player];
-	index = psResearch - asResearch;	//TODO: fix if needed
-
-	if (index >= numResearch)
+	index = psResearch->index;
+	if (index >= asResearch.size())
 	{
 		ASSERT( false, "scrNumResearchLeft(): invalid research index" );
 		return false;
@@ -7368,15 +7300,15 @@ bool scrNumResearchLeft(void)
 	{
 		iResult = 1;
 	}
-	else if(IsResearchCompleted(&pPlayerRes[index]))
+	else if(IsResearchCompleted(&asPlayerResList[player][index]))
 	{
 		iResult = 0;
 	}
-	else if(IsResearchStarted(&pPlayerRes[index]))
+	else if(IsResearchStarted(&asPlayerResList[player][index]))
 	{
 		iResult = 1;
 	}
-	else if(IsResearchPossible(&pPlayerRes[index]) || IsResearchCancelled(&pPlayerRes[index]))
+	else if(IsResearchPossible(&asPlayerResList[player][index]) || IsResearchCancelled(&asPlayerResList[player][index]))
 	{
 		iResult = 1;
 	}
@@ -7390,10 +7322,9 @@ bool scrNumResearchLeft(void)
 		top = -1;
 
 		cur = 0;				//start with first index's PR
-		tempIndex = -1;
 		while(true)			//do
 		{
-			if(cur >= asResearch[index].numPRRequired)		//this one has no PRs or end of PRs reached
+			if (cur >= asResearch[index].pPRList.size())		//this one has no PRs or end of PRs reached
 			{
 				top = top - 2;
 				if(top < (-1))
@@ -7406,16 +7337,16 @@ bool scrNumResearchLeft(void)
 			}
 			else		//end of PRs not reached
 			{
-				iResult += asResearch[index].numPRRequired;		//add num of PRs this topic has
+				iResult += asResearch[index].pPRList.size();		//add num of PRs this topic has
 
 				tempIndex = asResearch[index].pPRList[cur];		//get cur node's index
 
 				//decide if has to check its PRs
-				if(!IsResearchCompleted(&pPlayerRes[tempIndex]) &&	//don't touch if completed already
+				if(!IsResearchCompleted(&asPlayerResList[player][tempIndex]) &&	//don't touch if completed already
 					!skTopicAvail(index,player) &&					//has no unresearched PRs left if available
 					!beingResearchedByAlly(index, player))			//will become available soon anyway
 				{
-					if(asResearch[tempIndex].numPRRequired > 0)	//node has any nodes itself
+					if(asResearch[tempIndex].pPRList.size() > 0)	//node has any nodes itself
 					{
 						Stack[top+1] = cur;								//so can go back to it further
 						Stack[top+2] = index;
@@ -7428,7 +7359,7 @@ bool scrNumResearchLeft(void)
 			}
 
 			cur++;				//try next node of the main node
-			if((cur >= asResearch[index].numPRRequired) && (top <= (-1)))	//nothing left
+			if((cur >= asResearch[index].pPRList.size()) && (top <= (-1)))	//nothing left
 			{
 				break;
 			}
@@ -7471,7 +7402,6 @@ bool scrResearchCompleted(void)
 	RESEARCH			*psResearch;
 	SDWORD				player;
 	UWORD				index;
-	PLAYER_RESEARCH		*pPlayerRes;
 
 	if (!stackPopParams(2,ST_RESEARCH, &psResearch, VAL_INT, &player ))
 	{
@@ -7485,16 +7415,14 @@ bool scrResearchCompleted(void)
 		return false;
 	}
 
-	pPlayerRes = asPlayerResList[player];
-	index = psResearch - asResearch;	//TODO: fix if needed
-
-	if (index >= numResearch)
+	index = psResearch->index;
+	if (index >= asResearch.size())
 	{
 		debug( LOG_ERROR, "scrResearchCompleted: invalid research index" );
 		return false;
 	}
 
-	if(IsResearchCompleted(&pPlayerRes[index]))
+	if(IsResearchCompleted(&asPlayerResList[player][index]))
 	{
 		scrFunctionResult.v.bval = true;
 		if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
@@ -7520,7 +7448,6 @@ bool scrResearchStarted(void)
 	RESEARCH			*psResearch;
 	SDWORD				player;
 	UWORD				index;
-	PLAYER_RESEARCH		*pPlayerRes;
 
 	if (!stackPopParams(2,ST_RESEARCH, &psResearch, VAL_INT, &player ))
 	{
@@ -7534,16 +7461,14 @@ bool scrResearchStarted(void)
 		return false;
 	}
 
-	pPlayerRes = asPlayerResList[player];
-	index = psResearch - asResearch;	//TODO: fix if needed
-
-	if (index >= numResearch)
+	index = psResearch->index;
+	if (index >= asResearch.size())
 	{
 		ASSERT( false, "scrResearchCompleted: invalid research index" );
 		return false;
 	}
 
-	if (IsResearchStartedPending(&pPlayerRes[index]))
+	if (IsResearchStartedPending(&asPlayerResList[player][index]))
 	{
 		scrFunctionResult.v.bval = true;
 		if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
@@ -7697,15 +7622,12 @@ bool scrFriendlyWeapObjCostInRange(void)
 static UDWORD costOrAmountInRange(SDWORD player, SDWORD lookingPlayer, SDWORD range,
 								   SDWORD rangeX, SDWORD rangeY, bool bVTOLs, bool justCount)
 {
-	UDWORD				droidCost;
-	DROID				*psDroid;
-
-	droidCost = 0;
+	UDWORD	droidCost = 0;
 
 	//check droids
-	for(psDroid = apsDroidLists[player]; psDroid; psDroid = psDroid->psNext)
+	for (DROID *psDroid = apsDroidLists[player]; psDroid; psDroid = psDroid->psNext)
 	{
-		if(psDroid->visible[lookingPlayer])		//can see this droid?
+		if (psDroid->visible[lookingPlayer])		//can see this droid?
 		{
 			if (!objHasWeapon((BASE_OBJECT *)psDroid))
 			{
@@ -7713,7 +7635,7 @@ static UDWORD costOrAmountInRange(SDWORD player, SDWORD lookingPlayer, SDWORD ra
 			}
 
 			//if VTOLs are excluded, skip them
-			if(!bVTOLs && ((asPropulsionStats[psDroid->asBits[COMP_PROPULSION].nStat].propulsionType == PROPULSION_TYPE_LIFT) || (psDroid->droidType == DROID_TRANSPORTER)))
+			if (!bVTOLs && ((asPropulsionStats[psDroid->asBits[COMP_PROPULSION].nStat].propulsionType == PROPULSION_TYPE_LIFT) || (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER)))
 			{
 				continue;
 			}
@@ -8111,7 +8033,7 @@ UDWORD numEnemyObjInRange(SDWORD player, SDWORD range, SDWORD rangeX, SDWORD ran
 				//if VTOLs are excluded, skip them
 				if (!bVTOLs
 				 && (asPropulsionStats[psDroid->asBits[COMP_PROPULSION].nStat].propulsionType == PROPULSION_TYPE_LIFT
-				  || psDroid->droidType == DROID_TRANSPORTER))
+				  || psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER))
 				{
 					continue;
 				}
@@ -8608,18 +8530,18 @@ bool scrGetClosestEnemy(void)
 
 	bestDist = 99999;
 
-	for(i=0;i<MAX_PLAYERS;i++)
+	for (i=0;i<MAX_PLAYERS;i++)
 	{
-		if((alliances[player][i] == ALLIANCE_FORMED) || (i == player))
+		if ((alliances[player][i] == ALLIANCE_FORMED) || (i == player))
 		{
 			continue;
 		}
 
 
 		//check droids
-		for(psDroid = apsDroidLists[i]; psDroid; psDroid = psDroid->psNext)
+		for (psDroid = apsDroidLists[i]; psDroid; psDroid = psDroid->psNext)
 		{
-			if(psDroid->visible[player])		//can see this droid?
+			if (psDroid->visible[player])		//can see this droid?
 			{
 				//if only weapon droids and don't have it, then skip
 				if (weaponOnly && !objHasWeapon((BASE_OBJECT *)psDroid))
@@ -8628,13 +8550,13 @@ bool scrGetClosestEnemy(void)
 				}
 
 				//if VTOLs are excluded, skip them
-				if(!bVTOLs && ((asPropulsionStats[psDroid->asBits[COMP_PROPULSION].nStat].propulsionType == PROPULSION_TYPE_LIFT) || (psDroid->droidType == DROID_TRANSPORTER)))
+				if (!bVTOLs && ((asPropulsionStats[psDroid->asBits[COMP_PROPULSION].nStat].propulsionType == PROPULSION_TYPE_LIFT) || (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER)))
 				{
 					continue;
 				}
 
 				dist = world_coord(hypotf(tx - map_coord(psDroid->pos.x), ty - map_coord(psDroid->pos.y)));
-				if(dist < bestDist)
+				if (dist < bestDist)
 				{
 					if((range < 0) || (dist < range))	//enemy in range
 					{
@@ -8648,20 +8570,20 @@ bool scrGetClosestEnemy(void)
 
 
 		//check structures
-		for(psStruct = apsStructLists[i]; psStruct; psStruct=psStruct->psNext)
+		for (psStruct = apsStructLists[i]; psStruct; psStruct=psStruct->psNext)
 		{
-			if(psStruct->visible[player])	//if can see it
+			if (psStruct->visible[player])	//if can see it
 			{
 				//only need defenses?
-				if(weaponOnly && (!objHasWeapon((BASE_OBJECT *) psStruct) || (psStruct->status != SS_BUILT) ))	//non-weapon-structures	or not finished
+				if (weaponOnly && (!objHasWeapon((BASE_OBJECT *) psStruct) || (psStruct->status != SS_BUILT) ))	//non-weapon-structures	or not finished
 				{
 					continue;
 				}
 
 				dist = world_coord(hypotf(tx - map_coord(psStruct->pos.x), ty - map_coord(psStruct->pos.y)));
-				if(dist < bestDist)
+				if (dist < bestDist)
 				{
-					if((range < 0) || (dist < range))	//in range
+					if ((range < 0) || (dist < range))	//in range
 					{
 						bestDist = dist;
 						bFound = true;
@@ -8673,7 +8595,7 @@ bool scrGetClosestEnemy(void)
 
 	}
 
-	if(bFound)
+	if (bFound)
 	{
 		scrFunctionResult.v.oval = psObj;
 		if (!stackPushResult((INTERP_TYPE)ST_BASEOBJECT, &scrFunctionResult))
@@ -8710,7 +8632,7 @@ bool scrTransporterCapacity(void)
 		return false;
 	}
 
-	if(psDroid->droidType != DROID_TRANSPORTER)
+	if(psDroid->droidType != DROID_TRANSPORTER && psDroid->droidType != DROID_SUPERTRANSPORTER)
 	{
 		debug(LOG_ERROR, "scrTransporterCapacity(): passed droid is not a transporter");
 		return false;
@@ -8743,7 +8665,7 @@ bool scrTransporterFlying(void)
 		return false;
 	}
 
-	if(psDroid->droidType != DROID_TRANSPORTER)
+	if(psDroid->droidType != DROID_TRANSPORTER && psDroid->droidType != DROID_SUPERTRANSPORTER)
 	{
 		debug(LOG_ERROR,"scrTransporterFlying(): passed droid is not a transporter");
 		return false;
@@ -8776,7 +8698,7 @@ bool scrUnloadTransporter(void)
 		return false;
 	}
 
-	if(psDroid->droidType != DROID_TRANSPORTER)
+	if(psDroid->droidType != DROID_TRANSPORTER && psDroid->droidType != DROID_SUPERTRANSPORTER)
 	{
 		debug(LOG_ERROR,"scrUnloadTransporter(): passed droid is not a transporter");
 		return false;
@@ -9478,26 +9400,14 @@ VIEWDATA *CreateBeaconViewData(SDWORD sender, UDWORD LocX, UDWORD LocY)
 	char				name[MAXSTRLEN];
 
 	//allocate message space
-	psViewData = (VIEWDATA *)malloc(sizeof(VIEWDATA));
-	if (psViewData == NULL)
-	{
-		ASSERT(false, "prepairHelpViewData() - Unable to allocate memory for viewdata");
-		return NULL;
-	}
-
-	memset(psViewData, 0, sizeof(VIEWDATA));
-
-	psViewData->numText = 1;
+	psViewData = new VIEWDATA;
 
 	//store name
 	sprintf(name, _("Beacon %d"), sender);
  	psViewData->pName = name;
 
-	//allocate space for text strings
-	psViewData->ppTextMsg = (const char **) malloc(sizeof(char *));
-
 	//store text message, hardcoded for now
-	psViewData->ppTextMsg[0] = strdup(getPlayerName(sender));
+	psViewData->textMsg.push_back(QString::fromUtf8(getPlayerName(sender)));
 
 	//store message type
 	psViewData->type = VIEW_BEACON;
@@ -9668,9 +9578,9 @@ SDWORD getNumRepairedBy(DROID *psDroidToCheck, SDWORD player)
 			continue;
 		}
 
-		if (psDroid->psTarget != NULL && psDroid->psTarget->type == OBJ_DROID)
+		if (psDroid->order.psObj != NULL && psDroid->order.psObj->type == OBJ_DROID)
 		{
-			if ((DROID *)psDroid->psTarget == psDroidToCheck)
+			if ((DROID *)psDroid->order.psObj == psDroidToCheck)
 			{
 				numRepaired++;
 			}
@@ -9809,7 +9719,6 @@ bool scrPursueResearch(void)
 	UDWORD				index;
 	SWORD				top;
 	bool				found;
-	PLAYER_RESEARCH		*pPlayerRes;
 	STRUCTURE			*psBuilding;
 	RESEARCH_FACILITY	*psResFacilty;
 
@@ -9837,10 +9746,8 @@ bool scrPursueResearch(void)
 		return true;
 	}
 
-	pPlayerRes = asPlayerResList[player];
-	index = psResearch - asResearch;
-
-	if (index >= numResearch)
+	index = psResearch->index;
+	if (index >= asResearch.size())
 	{
 		ASSERT(false, "scrPursueResearch: invalid research index");
 		return false;
@@ -9852,17 +9759,17 @@ bool scrPursueResearch(void)
 	{
 		found = false;
 	}
-	else if (IsResearchCompleted(&pPlayerRes[index]))
+	else if (IsResearchCompleted(&asPlayerResList[player][index]))
 	{
 		found = false;
 		//DbgMsg("Research already completed: %d", index);
 	}
-	else if (IsResearchStartedPending(&pPlayerRes[index]))
+	else if (IsResearchStartedPending(&asPlayerResList[player][index]))
 	{
 		found = false;
 		//DbgMsg("Research already in progress, %d", index);
 	}
-	else if (IsResearchPossible(&pPlayerRes[index]) || IsResearchCancelled(&pPlayerRes[index]))
+	else if (IsResearchPossible(&asPlayerResList[player][index]) || IsResearchCancelled(&asPlayerResList[player][index]))
 	{
 		foundIndex = index;
 		found = true;
@@ -9880,15 +9787,12 @@ bool scrPursueResearch(void)
 		top = -1;
 
 		cur = 0;				//start with first index's PR
-		tempIndex = -1;
 		while(true)	//do
 		{
-			//DbgMsg("Going on with %d, numPR: %d, %s", index, asResearch[index].numPRRequired, asResearch[index].pName);
+			//DbgMsg("Going on with %d, numPR: %d, %s", index, asResearch[index].pPRList.size(), asResearch[index].pName);
 
-			if (cur >= asResearch[index].numPRRequired)		//node has nodes?
+			if (cur >= asResearch[index].pPRList.size())		//node has nodes?
 			{
-				//DbgMsg("cur >= numPRRequired : %d (%d >= %d)", index, cur, asResearch[index].numPRRequired);
-
 				top = top - 2;
 				if (top < (-1))
 				{
@@ -9911,13 +9815,12 @@ bool scrPursueResearch(void)
 					foundIndex = tempIndex;		//done
 					break;
 				}
-				else if (!IsResearchCompleted(&pPlayerRes[tempIndex]) && !IsResearchStartedPending(&pPlayerRes[tempIndex]))  //not avail and not busy with it, can check this PR's PR
+				else if (!IsResearchCompleted(&asPlayerResList[player][tempIndex])
+				         && !IsResearchStartedPending(&asPlayerResList[player][tempIndex]))  //not avail and not busy with it, can check this PR's PR
 				{
 					//DbgMsg("node not complete, not started: %d, (cur=%d), %s", tempIndex,cur, asResearch[tempIndex].pName);
-					if (asResearch[tempIndex].numPRRequired > 0)	//node has any nodes itself
+					if (!asResearch[tempIndex].pPRList.empty())	//node has any nodes itself
 					{
-						//DbgMsg("node has nodes, so selecting as main node: %d, %s", tempIndex, asResearch[tempIndex].pName);
-
 						Stack[top+1] = cur;								//so can go back to it further
 						Stack[top+2] = index;
 						top = top + 2;
@@ -9939,7 +9842,7 @@ bool scrPursueResearch(void)
 			}
 
 			cur++;				//try next node of the main node
-			if((cur >= asResearch[index].numPRRequired) && (top <= (-1)))	//nothing left
+			if((cur >= asResearch[index].pPRList.size()) && (top <= (-1)))	//nothing left
 			{
 				break;
 			}
@@ -9947,7 +9850,7 @@ bool scrPursueResearch(void)
 		} // while(true)
 	}
 
-	if (found && foundIndex < numResearch)
+	if (found && foundIndex < asResearch.size())
 	{
 		sendResearchStatus(psBuilding, foundIndex, player, true);	// inform others, I'm researching this.
 #if defined (DEBUG)

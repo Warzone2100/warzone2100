@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -108,8 +108,11 @@
 #define WZCOL_TEAM15                                    psPalette[83]
 #define WZCOL_TEAM16                                    psPalette[84]
 #define WZCOL_BLUEPRINT_PLANNED_BY_ALLY                 psPalette[85]
+#define WZCOL_CONSTRUCTION_BARTEXT                      psPalette[86]
+#define WZCOL_POWERQUEUE_BARTEXT                        psPalette[87]
+#define WZCOL_MAP_PREVIEW_BARREL                        psPalette[88]
 
-#define WZCOL_MAX                                       86
+#define WZCOL_MAX                                       89
 
 //*************************************************************************
 

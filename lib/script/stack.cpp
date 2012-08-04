@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -644,7 +644,13 @@ bool stackBinaryOp(OPCODE opcode)
 			psV1->v.bval = psV1->v.fval == psV2->v.fval;
 		}else if(psV1->type == VAL_STRING && psV2->type == VAL_STRING){
 			psV1->v.bval = (strcasecmp(psV1->v.sval,psV2->v.sval) == 0);	/* case-insensitive */
-		}else{
+		}
+		else if (scriptTypeIsPointer(psV1->type))
+		{
+			psV1->v.bval = scriptOperatorEquals(*psV1, *psV2);
+		}
+		else
+		{
 			psV1->v.bval = psV1->v.ival == psV2->v.ival;
 		}
 		psV1->type = VAL_BOOL;
@@ -654,7 +660,13 @@ bool stackBinaryOp(OPCODE opcode)
 			psV1->v.bval = psV1->v.fval != psV2->v.fval;
 		}else if(psV1->type == VAL_STRING && psV2->type == VAL_STRING){
 			psV1->v.bval = (strcasecmp(psV1->v.sval,psV2->v.sval) != 0);	/* case-insensitive */
-		}else{
+		}
+		else if (scriptTypeIsPointer(psV1->type))
+		{
+			psV1->v.bval = !scriptOperatorEquals(*psV1, *psV2);
+		}
+		else
+		{
 			psV1->v.bval = psV1->v.ival != psV2->v.ival;
 		}
 

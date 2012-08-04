@@ -4,7 +4,8 @@
 
 
 PRODUCT_NAME = MiniUPnPc
-USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../3rdparty/miniupnpc" "$(SRCROOT)/.."
+HEADER_SEARCH_PATHS =  $(inherited) "$(SRCROOT)/.."
+USER_HEADER_SEARCH_PATHS = $(inherited) "$(SRCROOT)/../3rdparty/miniupnpc"
 GCC_STRICT_ALIASING = NO
 
 GCC_PREPROCESSOR_DEFINITIONS = $(inherited) _DARWIN_C_SOURCE

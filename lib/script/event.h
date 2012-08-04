@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -39,24 +39,12 @@ struct VAL_CHUNK
 	VAL_CHUNK *             psNext;
 };
 
-
-/* The number of links in a context event link chunk */
-#define CONTEXT_LINKS	10
-/* One chunk of event links for a script context */
-struct LINK_CHUNK
-{
-	SWORD			aLinks[CONTEXT_LINKS];
-
-	LINK_CHUNK *            psNext;
-};
-
 // Whether a context is released when there are no active triggers for it
 enum CONTEXT_RELEASE
 {
 	CR_RELEASE,		// release the context
 	CR_NORELEASE,	// do not release the context
 };
-
 
 /* The data needed within an object to run a script */
 struct SCRIPT_CONTEXT
@@ -126,7 +114,6 @@ enum SCR_USER_TYPES
 	ST_MAXTYPE,									// maximum possible type - should always be last
 };
 
-
 // The list of currently active triggers
 extern ACTIVE_TRIGGER	*psTrigList;
 
@@ -135,7 +122,6 @@ extern ACTIVE_TRIGGER	*psCallbackList;
 
 // The currently allocated contexts
 extern SCRIPT_CONTEXT	*psContList;
-
 
 /* Initialise the event system */
 extern bool eventInitialise(void);
@@ -156,5 +142,7 @@ extern void eventTimeReset(UDWORD initTime);
 
 extern const char *eventGetEventID(SCRIPT_CODE *psCode, SDWORD event);
 extern const char *eventGetTriggerID(SCRIPT_CODE *psCode, SDWORD trigger);
+
+bool scriptOperatorEquals(INTERP_VAL const &v1, INTERP_VAL const &v2);  // Defined in src/scriptfuncs.cpp.
 
 #endif

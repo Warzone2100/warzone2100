@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -29,32 +29,18 @@
 
 enum FEATURE_TYPE
 {
-	FEAT_BUILD_WRECK,
-	FEAT_HOVER,
+	FEAT_HOVER = 1, // hack since the one prior to this was removed
 	FEAT_TANK,
 	FEAT_GEN_ARTE,
 	FEAT_OIL_RESOURCE,
 	FEAT_BOULDER,
 	FEAT_VEHICLE,
 	FEAT_BUILDING,
-	FEAT_DROID,
+	FEAT_UNUSED,
 	FEAT_LOS_OBJ,
 	FEAT_OIL_DRUM,
 	FEAT_TREE,
 	FEAT_SKYSCRAPER,
-	//FEAT_MESA, // no longer used
-	//FEAT_MESA2,
-	//FEAT_CLIFF,
-	//FEAT_STACK,
-	//FEAT_BUILD_WRECK1,
-	//FEAT_BUILD_WRECK2,
-	//FEAT_BUILD_WRECK3,
-	//FEAT_BUILD_WRECK4,
-	//FEAT_BOULDER1,
-	//FEAT_BOULDER2,
-	//FEAT_BOULDER3,
-	//FEAT_FUTCAR,
-	//FEAT_FUTVAN,
 };
 
 /* Stats for a feature */

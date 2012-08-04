@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -22,7 +22,7 @@
  */
 
 #include "lib/framework/frame.h"
-#include "lib/framework/wzapp_c.h"
+#include "lib/framework/wzapp.h"
 #include "lib/framework/frameint.h"
 #include "widget.h"
 #include "widgint.h"
@@ -212,11 +212,11 @@ void tipDisplay(void)
 
 		/* Draw the tool tip */
 		pie_BoxFill(tx,ty, tx+tw, ty+th, pColours[WCOL_TIPBKGRND]);
-		iV_Box(tx,ty, tx+tw-1, ty+th-1, pColours[WCOL_LIGHT]);
 		iV_Line(tx+1, ty+th-2, tx+1,    ty+1, pColours[WCOL_DARK]);
 		iV_Line(tx+2, ty+1,    tx+tw-2, ty+1, pColours[WCOL_DARK]);
 		iV_Line(tx,	  ty+th,   tx+tw,   ty+th, pColours[WCOL_DARK]);
 		iV_Line(tx+tw,ty+th-1, tx+tw,   ty, pColours[WCOL_DARK]);
+		iV_Box(tx,ty, tx+tw-1, ty+th-1, pColours[WCOL_LIGHT]);
 
 		iV_SetFont(FontID);
 		iV_SetTextColour(TipColour);

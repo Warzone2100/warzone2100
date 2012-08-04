@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -30,7 +30,7 @@
 extern DROID			*apsDroidLists[MAX_PLAYERS];
 extern STRUCTURE		*apsStructLists[MAX_PLAYERS];
 extern FEATURE			*apsFeatureLists[MAX_PLAYERS];
-extern FLAG_POSITION		*apsFlagPosLists[MAX_PLAYERS];
+extern FLAG_POSITION	*apsFlagPosLists[MAX_PLAYERS];
 extern STRUCTURE		*apsExtractorLists[MAX_PLAYERS];
 extern BASE_OBJECT		*apsSensorList[1];
 extern FEATURE			*apsOilList[1];

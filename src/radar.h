@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -49,7 +49,6 @@ enum RADAR_DRAW_MODE
 {
 	RADAR_MODE_TERRAIN,				///< Draw terrain map
 	RADAR_MODE_DEFAULT = RADAR_MODE_TERRAIN,	///< Default is terrain map
-	RADAR_MODE_TERRAIN_SEEN,			///< Terrain map, showing only explored tiles
 	RADAR_MODE_HEIGHT_MAP,				///< Draw height map
 	RADAR_MODE_COMBINED,
 	RADAR_MODE_NO_TERRAIN,				///< Only display objects

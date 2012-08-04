@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -47,6 +47,7 @@ struct PATHJOB
 	DROID_TYPE	droidType;
 	int		destX, destY;
 	int		origX, origY;
+	StructureBounds dstStructure;
 	UDWORD		droidID;
 	FPATH_MOVETYPE	moveType;
 	int		owner;		///< Player owner
@@ -96,6 +97,8 @@ bool fpathBlockingTile(SDWORD x, SDWORD y, PROPULSION_TYPE propulsion);
 bool fpathDroidBlockingTile(DROID *psDroid, int x, int y, FPATH_MOVETYPE moveType);
 bool fpathBaseBlockingTile(SDWORD x, SDWORD y, PROPULSION_TYPE propulsion, int player, FPATH_MOVETYPE moveType);
 
+static inline bool fpathBlockingTile(Vector2i tile, PROPULSION_TYPE propulsion) { return fpathBlockingTile(tile.x, tile.y, propulsion); }
+
 /** Set a direct path to position.
  *
  *  Plan a path from @c psDroid's current position to given position without
@@ -107,10 +110,6 @@ extern void fpathSetDirectRoute(DROID* psDroid, SDWORD targetX, SDWORD targetY);
 
 /** Clean up path jobs and results for a droid. Function is thread-safe. */
 extern void fpathRemoveDroidData(int id);
-
-/** Check LOS (Line Of Sight) between two world positions.
- */
-extern bool fpathTileLOS(DROID *psDroid, Vector3i dest);
 
 /** Quick O(1) test of whether it is theoretically possible to go from origin to destination
  *  using the given propulsion type. orig and dest are in world coordinates. */

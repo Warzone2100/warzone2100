@@ -1,81 +1,35 @@
-MSG1
-{
-	{
-		_("Structure Research Completed"),
-	},
-	.imdName = "MICAPSUL.PIE",
-	.imdName2 = NULL,
-	.sequenceName = "res_pow.ogg",
-	.audioName = "Structure Research Completed.ogg",
-};
-MSG2
-{
-	{
-		_("Power Research Completed"),
-	},
-	.imdName = "MICAPSUL.PIE",
-	.imdName2 = NULL,
-	.sequenceName = "res_pow.ogg",
-	.audioName = "Power Research Completed.ogg",
-};
-MSG3
-{
-	{
-		_("Computer Research Completed"),
-	},
-	.imdName = "MICAPSUL.PIE",
-	.imdName2 = NULL,
-	.sequenceName = "res_pow.ogg",
-	.audioName = "Computer Research Completed.ogg",
-};
-MSG4
-{
-	{
-		_("Unit Research Completed"),
-	},
-	.imdName = "MICAPSUL.PIE",
-	.imdName2 = NULL,
-	.sequenceName = "res_pow.ogg",
-	.audioName = "Droid Research Completed.ogg",
-};
-MSG5
-{
-	{
-		_("Systems Research Completed"),
-	},
-	.imdName = "MICAPSUL.PIE",
-	.imdName2 = NULL,
-	.sequenceName = "res_pow.ogg",
-	.audioName = "Systems Research Completed.ogg",
-};
-MSG6
-{
-	{
-		_("Weapon Research Completed"),
-	},
-	.imdName = "MICAPSUL.PIE",
-	.imdName2 = NULL,
-	.sequenceName = "res_pow.ogg",
-	.audioName = "Weapon Research Completed.ogg",
-};
-/*
-MSG7
-{
-	{
-		_("Cyborg Research Completed"),
-	},
-	.imdName = "MICAPSUL.PIE",
-	.imdName2 = NULL,
-	.sequenceName = "res_pow.ogg",
-	.audioName = "Cyborg Research Completed.ogg",
-};
-MSG8
-{
-	{
-		_("Defensive Research Completed"),
-	},
-	.imdName = "MICAPSUL.PIE",
-	.imdName2 = NULL,
-	.sequenceName = "res_pow.ogg",
-	.audioName = "Defensive Research Completed.ogg",
-};*/
+[MSG1]
+text = _("Structure Research Completed")
+imdName = "MICAPSUL.PIE"
+sequenceName = "res_pow.ogg"
+audioName = "Structure Research Completed.ogg"
+
+[MSG2]
+text = _("Power Research Completed")
+imdName = "MICAPSUL.PIE"
+sequenceName = "res_pow.ogg"
+audioName = "Power Research Completed.ogg"
+
+[MSG3]
+text = _("Computer Research Completed")
+imdName = "MICAPSUL.PIE"
+sequenceName = "res_pow.ogg"
+audioName = "Computer Research Completed.ogg"
+
+[MSG4]
+text = _("Unit Research Completed")
+imdName = "MICAPSUL.PIE"
+sequenceName = "res_pow.ogg"
+audioName = "Droid Research Completed.ogg"
+
+[MSG5]
+text = _("Systems Research Completed")
+imdName = "MICAPSUL.PIE"
+sequenceName = "res_pow.ogg"
+audioName = "Systems Research Completed.ogg"
+
+[MSG6]
+text = _("Weapon Research Completed")
+imdName = "MICAPSUL.PIE"
+sequenceName = "res_pow.ogg"
+audioName = "Weapon Research Completed.ogg"

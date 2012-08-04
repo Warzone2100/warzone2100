@@ -1,7 +1,8 @@
 // Global settings for all Framework configurations
 
+#include "CS-ID.xcconfig"
 
-GCC_VERSION = com.apple.compilers.llvm.clang.1_0
+
 INSTALL_PATH = @rpath
 DYLIB_COMPATIBILITY_VERSION = 1
 DYLIB_CURRENT_VERSION = 1
@@ -9,3 +10,4 @@ LD_RUNPATH_SEARCH_PATHS = @loader_path @loader_path/.
 PREBINDING = NO
 FRAMEWORK_VERSION = A
 INFOPLIST_FILE = Resources/GenericFramework-Info.plist
+ALWAYS_SEARCH_USER_PATHS = NO

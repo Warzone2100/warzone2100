@@ -3,7 +3,7 @@
 	Copyright (C) 1997-XXXX  José Fonseca <j_r_fonseca@yahoo.co.uk>
 	 * Originally based on Matt Pietrek's MSJEXHND.CPP in Microsoft Systems Journal, April 1997.
 	Copyright (C) 2008  Giel van Schijndel
-	Copyright (C) 2008-2011  Warzone 2100 Project
+	Copyright (C) 2008-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -39,6 +39,8 @@
 #if !defined(WZ_CC_MSVC)
 #define HAVE_BFD	1
 #endif
+
+#define WSTRING(x) CONCAT(L, x)
 
 // Declare the static variables
 static wchar_t szLogFileName[MAX_PATH] = L"";
@@ -1203,7 +1205,8 @@ void ExchndlSetup(const char *packageVersion)
 	// NOTE: CSIDL_PERSONAL =  C:\Users\user name\Documents
 	if ( SUCCEEDED( SHGetFolderPathW( NULL, CSIDL_PERSONAL, NULL, SHGFP_TYPE_CURRENT, miniDumpPath ) ))
 	{
-		PathAppendW( miniDumpPath, L"Warzone 2100 master\\logs" );
+		PathAppendW( miniDumpPath, WSTRING(WZ_WRITEDIR));
+		PathAppendW( miniDumpPath, L"\\logs" );
 
 		if( !PathFileExistsW( miniDumpPath ) )
 		{

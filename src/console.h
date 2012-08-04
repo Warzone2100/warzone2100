@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -39,7 +39,7 @@ enum CONSOLE_TEXT_JUSTIFICATION
 
 extern char ConsoleString[MAX_CONSOLE_TMP_STRING_LENGTH];
 
-bool addConsoleMessage(const char *messageText, CONSOLE_TEXT_JUSTIFICATION jusType, SDWORD player);
+bool addConsoleMessage(const char *Text, CONSOLE_TEXT_JUSTIFICATION jusType, SDWORD player);
 void updateConsoleMessages(void);
 void initConsoleMessages(void);
 void removeTopConsoleMessage(void);

@@ -1,6 +1,6 @@
-20	432	25	100	_("Commander, we have just detected a missile launch at these coordinates.")
+20	432	2.08333333333	8.33333333333	_("Commander, we have just detected a missile launch at these coordinates.")
 
-20	432	125	260	_("Team Gamma are sending a team to investigate the launch site and to prevent any further launches.")
+20	432	10.4166666667	21.6666666667	_("Team Gamma are sending a team to investigate the launch site and to prevent any further launches.")
 
-20	432	270	565	_("We can only assume that Nexus has gained control of this site. We cannot determine whether the missile is nuclear-armed or where it is targeted. You are advised to begin preparations for the evacuation of your base.")
+20	432	22.5	47.0833333333	_("We can only assume that Nexus has gained control of this site. We cannot determine whether the missile is nuclear-armed or where it is targeted. You are advised to begin preparations for the evacuation of your base.")
 

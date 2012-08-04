@@ -1,5 +1,5 @@
 //pos		frame	
 //x	y		start	end	Text	
 
-20	432		150	325	_("Your attacks upon us will not go unpunished.")
-0	0		150	325	_("You are in contravention of the New Paradigm.")
+20	432	6.0	13.0	_("Your attacks upon us will not go unpunished.")
+0	0	6.0	13.0	_("You are in contravention of the New Paradigm.")

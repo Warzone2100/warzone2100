@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -86,7 +86,7 @@ void renderResearchToBuffer(RESEARCH *psResearch, UDWORD OriginX, UDWORD OriginY
 				/*HACK HACK HACK!
 				if its a 'tall thin (ie tower)' structure stat with something on
 				the top - offset the position to show the object on top*/
-				if (((STRUCTURE_STATS*)psResearch->psStat)->pIMD->nconnectors &&
+				if (((STRUCTURE_STATS*)psResearch->psStat)->pIMD[0]->nconnectors &&
 					getStructureStatHeight((STRUCTURE_STATS*)psResearch->psStat) > TOWER_HEIGHT)
 				{
 					Position.y -= 30;
@@ -110,7 +110,8 @@ void renderResearchToBuffer(RESEARCH *psResearch, UDWORD OriginX, UDWORD OriginY
 				IMDType = IMDTYPE_COMPONENT;
 				psResGraphic = psResearch->psStat;
 				// NOTE: Another kludge to deal with the superTransport to make it "fit" the display.
-				if (!strcmp("MP-SuperTransport", psResearch->pName))
+				// Using pName, should be safe to compare, pName doesn't get translated.
+				if (!strcmp("SuperTransport", psResearch->pName))
 				{
 					scale = RESEARCH_COMPONENT_SCALE / 3;
 				}

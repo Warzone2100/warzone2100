@@ -36,7 +36,7 @@ elif [[ -d "${OutDir}" ]] && [[ ! -f "${FileName}" ]]; then
     rm -fR "${DirectorY}" "${OutDir}"
 elif [[ -d "${OutDir}" ]] && [[ -f "${FileName}" ]]; then
     # Check to make sure we have the right file
-    MD5SumLoc=`cat "${OutDir}/.MD5SumLoc"`
+    MD5SumLoc=`cat "${OutDir}/.MD5SumLoc" 2>/dev/null || echo ""`
     if [ "${MD5SumLoc}" != "${MD5Sum}" ]; then
         echo "warning: Cached file is outdated or incorrect, removing" >&2
         rm -fR "${DirectorY}" "${OutDir}"

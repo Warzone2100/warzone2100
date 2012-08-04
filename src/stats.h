@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -46,6 +46,7 @@ extern PROPULSION_TYPES		*asPropulsionTypes;
 
 //used to hold the modifiers cross refd by weapon effect and propulsion type
 extern WEAPON_MODIFIER		asWeaponModifier[WE_NUMEFFECTS][PROPULSION_TYPE_NUM];
+extern WEAPON_MODIFIER		asWeaponModifierBody[WE_NUMEFFECTS][SIZE_NUM];
 
 //used to hold the current upgrade level per player per weapon subclass
 extern WEAPON_UPGRADE		asWeaponUpgrade[MAX_PLAYERS][WSC_NUM_WEAPON_SUBCLASSES];
@@ -151,7 +152,7 @@ extern bool loadWeaponStats(const char *pWeaponData, UDWORD bufferSize);
 //extern bool loadArmourStats(void);
 
 /*Load the body stats from the file exported from Access*/
-extern bool loadBodyStats(const char *pBodyData, UDWORD bufferSize);
+extern bool loadBodyStats(const char *pFileName);
 
 /*Load the brain stats from the file exported from Access*/
 extern bool loadBrainStats(const char *pBrainData, UDWORD bufferSize);
@@ -183,9 +184,6 @@ extern bool loadPropulsionSounds(const char *pSoundData, UDWORD bufferSize);
 /*Load the Terrain Table from the file exported from Access*/
 extern bool loadTerrainTable(const char *pTerrainTableData, UDWORD bufferSize);
 
-/*Load the Special Ability stats from the file exported from Access*/
-extern bool loadSpecialAbility(const char *pSAbilityData, UDWORD bufferSize);
-
 /* load the IMDs to use for each body-propulsion combination */
 extern bool loadBodyPropulsionIMDs(const char *pData, UDWORD bufferSize);
 
@@ -194,51 +192,6 @@ extern bool loadWeaponSounds(const char *pSoundData, UDWORD bufferSize);
 
 /*Load the Weapon Effect Modifiers from the file exported from Access*/
 extern bool loadWeaponModifiers(const char *pWeapModData, UDWORD bufferSize);
-/*******************************************************************************
-*		Set stats functions
-*******************************************************************************/
-/* Set the stats for a particular weapon type
- * The function uses the ref number in the stats structure to
- * index the correct array entry
- */
-extern void statsSetWeapon(WEAPON_STATS	*psStats, UDWORD index);
-
-/*Set the stats for a particular armour type*/
-//extern void statsSetArmour(ARMOUR_STATS	*psStats, UDWORD index);
-
-/*Set the stats for a particular body type*/
-extern void statsSetBody(BODY_STATS	*psStats, UDWORD index);
-
-/*Set the stats for a particular brain type*/
-extern void statsSetBrain(BRAIN_STATS	*psStats, UDWORD index);
-
-/*Set the stats for a particular propulsion type*/
-extern void statsSetPropulsion(PROPULSION_STATS	*psStats, UDWORD index);
-
-/*Set the stats for a particular sensor type*/
-extern void statsSetSensor(SENSOR_STATS	*psStats, UDWORD index);
-
-/*Set the stats for a particular ecm type*/
-extern void statsSetECM(ECM_STATS	*psStats, UDWORD index);
-
-/*Set the stats for a particular repair type*/
-extern void statsSetRepair(REPAIR_STATS	*psStats, UDWORD index);
-
-/*Set the stats for a particular construct type*/
-extern void statsSetConstruct(CONSTRUCT_STATS	*psStats, UDWORD index);
-
-/*******************************************************************************
-*		Get stats functions
-*******************************************************************************/
-extern WEAPON_STATS *statsGetWeapon(UDWORD ref);
-//extern ARMOUR_STATS *statsGetArmour(UDWORD ref);
-extern BODY_STATS *statsGetBody(UDWORD ref);
-extern BRAIN_STATS *statsGetBrain(UDWORD ref);
-extern PROPULSION_STATS *statsGetPropulsion(UDWORD ref);
-extern SENSOR_STATS *statsGetSensor(UDWORD ref);
-extern ECM_STATS *statsGetECM(UDWORD ref);
-extern REPAIR_STATS *statsGetRepair(UDWORD ref);
-extern CONSTRUCT_STATS *statsGetConstruct(UDWORD ref);
 
 /*******************************************************************************
 *		Generic stats functions
@@ -254,9 +207,7 @@ extern void statsDealloc(COMPONENT_STATS* pStats, UDWORD listSize,
 extern void deallocPropulsionTypes(void);
 extern void deallocTerrainTypes(void);
 extern void deallocTerrainTable(void);
-extern void deallocSpecialAbility(void);
 
-extern void storeSpeedFactor(UDWORD terrainType, UDWORD propulsionType, UDWORD speedFactor);
 extern UDWORD getSpeedFactor(UDWORD terrainType, UDWORD propulsionType);
 //return the type of stat this ref refers to!
 extern UDWORD statType(UDWORD ref);
@@ -276,7 +227,7 @@ extern char* allocateName(const char* name);
 extern const char* getName(const char *pNameID);
 /*sets the store to the body size based on the name passed in - returns false
 if doesn't compare with any*/
-extern bool getBodySize(const char *pSize, UBYTE *pStore);
+extern bool getBodySize(const char *pSize, BODY_SIZE *pStore);
 
 // Pass in a stat and get its name
 extern const char* getStatName(const void * pStat);
@@ -334,7 +285,7 @@ extern UDWORD	constructorPoints(CONSTRUCT_STATS *psStats, UBYTE player);
 /*Access functions for the upgradeable stats of a body*/
 extern UDWORD	bodyPower(BODY_STATS *psStats, UBYTE player, UBYTE bodyType);
 extern UDWORD	bodyArmour(BODY_STATS *psStats, UBYTE player, UBYTE bodyType,
-				   WEAPON_CLASS weaponClass, int side);
+				   WEAPON_CLASS weaponClass);
 
 /*dummy function for John*/
 extern void brainAvailable(BRAIN_STATS *psStat);
@@ -355,16 +306,16 @@ extern UDWORD getMaxWeaponDamage(void);
 extern UDWORD getMaxWeaponROF(void);
 extern UDWORD getMaxPropulsionSpeed(void);
 
-extern bool objHasWeapon(BASE_OBJECT *psObj);
+extern bool objHasWeapon(const BASE_OBJECT *psObj);
 
 extern void statsInitVars(void);
 
 /* Wrappers */
 
 /** If object is an active radar (has sensor turret), then return a pointer to its sensor stats. If not, return NULL. */
-SENSOR_STATS *objActiveRadar(BASE_OBJECT *psObj);
+SENSOR_STATS *objActiveRadar(const BASE_OBJECT *psObj);
 
 /** Returns whether object has a radar detector sensor. */
-bool objRadarDetector(BASE_OBJECT *psObj);
+bool objRadarDetector(const BASE_OBJECT *psObj);
 
 #endif // __INCLUDED_SRC_STATS_H__

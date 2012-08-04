@@ -11,6 +11,8 @@
 *.gmo
 *.pyc
 *.wz
+# Doxygen files
+/doc/code/html
 # LaTeX generated (binary) files
 *.aux
 *.log
@@ -78,12 +80,21 @@ win32/__BUILD_CONFIG.USER
 *.tab.[ch]
 *.lex.[ch]pp
 *.tab.[ch]pp
+*lexer.[ch]pp
+*parser.[ch]pp
+*lexer.[ch]
+*parser.[ch]
 /src/autorevision.h
-*.moc.h
+*moc.h
+*moc.cpp
 
 /doc/quickstartguide.html
 /doc/quickstartguide.pdf
 /doc/warzone2100.6
+/doc/events.tex
+/doc/functions.tex
+/doc/globals.tex
+/doc/objects.tex
 
 # Generated executables:
 /build_tools/autorevision/autorevision
@@ -92,6 +103,12 @@ win32/__BUILD_CONFIG.USER
 /tests/maptest
 /tests/pointtree.ppm
 /tests/pointtreetest
+/tests/qslint
+/tools/map/map2lnd
+/tools/map/map2png
+/tools/map/map2preview
+/tools/map/mapconv
+/tools/map/mapinfo
 
 # Autotool files:
 .deps
@@ -107,7 +124,9 @@ Makefile.in
 /ltmain.sh
 /missing
 /stamp-h1
+/ylwrap
 /po/POTFILES
+/po/messages.mo
 /po/remove-potcdate.sed
 /po/stamp-po
 /po/warzone2100.pot
@@ -194,7 +213,7 @@ tools/qwzm/ui_qwzm.h
 macosx/Warzone.xcodeproj/xcuserdata/*
 macosx/Warzone.xcodeproj/project.xcworkspace/xcuserdata/*
 macosx/Warzone.xcworkspace/xcuserdata/*
-macosx/configs/codeident
+macosx/configs/CS-ID.xcconfig
 
 # build folders
 /macosx/build/
@@ -235,6 +254,7 @@ data/etc/*
 data/fonts/
 devpkg/*
 *.opensdf
+*.aps
 *.sdf
 *.ipch
 *.tlog
@@ -242,6 +262,17 @@ devpkg/*
 *.cache*
 *manifest.*
 *.exp
+warzone*.*build
+*.lnk
 
 # profiler stuff
 win32/CodeAnalyst
+
+# Split img files
+data/base/images/frontend/
+data/base/images/intfac/
+
+# Tests
+/tests/jslist.txt
+/tests/maplist.txt
+/tests/modellist.txt

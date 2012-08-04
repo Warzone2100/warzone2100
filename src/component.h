@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -39,6 +39,7 @@ UDWORD getResearchRadius(BASE_STATS *Stat);
 UDWORD getStructureSizeMax(STRUCTURE *psStructure);
 UDWORD getStructureStatSizeMax(STRUCTURE_STATS *Stats);
 
+#define BLIP_ANIM_DURATION			(200)
 #define OBJECT_RADIUS				(128)
 #define COMPONENT_RADIUS			(64)
 #define DESIGN_DROID_SCALE			(200)
@@ -65,7 +66,7 @@ void displayComponentObject(DROID *psDroid);
 void compPersonToBits(DROID *psDroid);
 
 SDWORD rescaleButtonObject(SDWORD radius, SDWORD baseScale,SDWORD baseRadius);
-void destroyFXDroid(DROID *psDroid);
+void destroyFXDroid(DROID *psDroid, unsigned impactTime);
 
 /* Pass in the stats you're interested in and the COMPONENT - double reference, but works. NOTE: Unused!*/
 #define PART_IMD(STATS,DROID,COMPONENT,PLAYER)	(STATS[DROID->asBits[COMPONENT].nStat].pIMD)

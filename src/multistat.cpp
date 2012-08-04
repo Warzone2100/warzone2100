@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -90,6 +90,15 @@ void recvMultiStats(NETQUEUE queue)
 
 		if (playerIndex >= MAX_PLAYERS)
 		{
+			NETend();
+			return;
+		}
+
+
+		if (playerIndex != queue.index && queue.index != NET_HOST_ONLY)
+		{
+			HandleBadParam("NET_PLAYER_STATS given incorrect params.", playerIndex, queue.index);
+			NETend();
 			return;
 		}
 

@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -26,7 +26,8 @@
 #include "lib/framework/frame.h"
 #include "lib/framework/input.h"
 #include "lib/framework/strres.h"
-#include "lib/framework/wzapp_c.h"
+#include "lib/framework/wzapp.h"
+#include "lib/framework/rational.h"
 
 #include "lib/ivis_opengl/pieblitfunc.h"
 #include "lib/ivis_opengl/piestate.h" //ivis render code
@@ -93,13 +94,15 @@
 #include "objmem.h"
 #endif
 
+#include <numeric>
+
+
 static void fireWaitingCallbacks(void);
 
 /*
  * Global variables
  */
 unsigned int loopPieCount;
-unsigned int loopTileCount;
 unsigned int loopPolyCount;
 unsigned int loopStateChanges;
 
@@ -137,72 +140,12 @@ SDWORD	nextMissionType = LDS_NONE;//MISSION_NONE;
  /* Force 3D display */
 UDWORD	mcTime;
 
-/* The main game loop */
-GAMECODE gameLoop(void)
+static GAMECODE renderLoop()
 {
-	DROID		*psCurr, *psNext;
-	STRUCTURE	*psCBuilding, *psNBuilding;
-	FEATURE		*psCFeat, *psNFeat;
-	UDWORD		i,widgval;
-	bool		quitting=false;
-	INT_RETVAL	intRetVal;
-	int	        clearMode = 0;
-	bool            gameTicked;                     // true iff we are doing a logical update.
-	uint32_t        lastFlushTime = 0;
-
-	// Receive NET_BLAH messages.
-	// Receive GAME_BLAH messages, and if it's time, process exactly as many GAME_BLAH messages as required to be able to tick the gameTime.
-	recvMessage();
-
-	// Update gameTime and graphicsTime, and corresponding deltas. Note that gameTime and graphicsTime pause, if we aren't getting our GAME_GAME_TIME messages.
-	gameTimeUpdate();
-	gameTicked = deltaGameTime != 0;
-
-	if (gameTicked)
-	{
-		// Can't dump isHumanPlayer, since it causes spurious desynch dumps when players leave.
-		// TODO isHumanPlayer should probably be synchronised, since the game state seems to depend on it, so there might also be a risk of real desynchs when players leave.
-		//syncDebug("map = \"%s\", humanPlayers = %d %d %d %d %d %d %d %d", game.map, isHumanPlayer(0), isHumanPlayer(1), isHumanPlayer(2), isHumanPlayer(3), isHumanPlayer(4), isHumanPlayer(5), isHumanPlayer(6), isHumanPlayer(7));
-		syncDebug("map = \"%s\"", game.map);
-
-		// Actually send pending droid orders.
-		sendQueuedDroidInfo();
-
-		sendPlayerGameTime();
-		gameSRand(gameTime);   // Brute force way of synchronising the random number generator, which can't go out of synch.
-	}
-
-	if (gameTicked || realTime - lastFlushTime < 400u)
-	{
-		lastFlushTime = realTime;
-		NETflush();  // Make sure the game time tick message is really sent over the network, and that we aren't waiting too long to send data.
-	}
-
 	if (bMultiPlayer && !NetPlay.isHostAlive && NetPlay.bComms && !NetPlay.isHost)
 	{
 		intAddInGamePopup();
 	}
-
-	if (!war_GetFog())
-	{
-		PIELIGHT black;
-
-		// set the fog color to black (RGB)
-		// the fogbox will get this color
-		black.rgba = 0;
-		black.byte.a = 255;
-		pie_SetFogColour(black);
-	}
-	if(getDrawShadows())
-	{
-		clearMode |= CLEAR_SHADOW;
-	}
-	if (loopMissionState == LMS_SAVECONTINUE)
-	{
-		pie_SetFogStatus(false);
-		clearMode = CLEAR_BLACK;
-	}
-	pie_ScreenFlip(clearMode);//gameloopflip
 
 	HandleClosingWindows();	// Needs to be done outside the pause case.
 
@@ -210,92 +153,36 @@ GAMECODE gameLoop(void)
 
 	wzShowMouse(true);
 
+	INT_RETVAL intRetVal = INT_NONE;
 	if (!paused)
 	{
-		if (!scriptPaused() && !editPaused() && gameTicked)
-		{
-			/* Update the event system */
-			if (!bInTutorial)
-			{
-				eventProcessTriggers(gameTime/SCR_TICKRATE);
-			}
-			else
-			{
-				eventProcessTriggers(realTime/SCR_TICKRATE);
-			}
-			updateScripts();
-		}
-
 		/* Run the in game interface and see if it grabbed any mouse clicks */
 		if (!rotActive && getWidgetsStatus() && dragBox3D.status != DRAG_DRAGGING && wallDrag.status != DRAG_DRAGGING)
 		{
 			intRetVal = intRunWidgets();
-		}
-		else
-		{
-			intRetVal = INT_NONE;
+			// Send droid orders, if any. (Should do between intRunWidgets() calls, to avoid droid orders getting mixed up, in the case of multiple orders given while the game freezes due to net lag.)
+			sendQueuedDroidInfo();
 		}
 
 		//don't process the object lists if paused or about to quit to the front end
 		if (!gameUpdatePaused() && intRetVal != INT_QUIT)
 		{
-			if( dragBox3D.status != DRAG_DRAGGING
-				&& wallDrag.status != DRAG_DRAGGING
-				&& ( intRetVal == INT_INTERCEPT
-					|| ( radarOnScreen
-						 && CoordInRadar(mouseX(), mouseY())
-						 && getHQExists(selectedPlayer) ) ) )
+			if (dragBox3D.status != DRAG_DRAGGING && wallDrag.status != DRAG_DRAGGING
+			    && (intRetVal == INT_INTERCEPT
+			        || (radarOnScreen && CoordInRadar(mouseX(), mouseY()) && radarPermitted)))
 			{
 				// Using software cursors (when on) for these menus due to a bug in SDL's SDL_ShowCursor()
 				wzSetCursor(CURSOR_DEFAULT);
-
-				intRetVal = INT_INTERCEPT;
 			}
 
 #ifdef DEBUG
 			// check all flag positions for duplicate delivery points
 			checkFactoryFlags();
 #endif
-			if (!editPaused() && gameTicked)
-			{
-				// Update abandoned structures
-				handleAbandonedStructures();
-			}
 
 			//handles callbacks for positioning of DP's
 			process3DBuilding();
-
-			// Update the base movement stuff
-			// FIXME This function will be redundant with logical updates.
-			moveUpdateBaseSpeed();
-
-			// Update the visibility change stuff
-			visUpdateLevel();
-
-			if (!editPaused() && gameTicked)
-			{
-				// Put all droids/structures/features into the grid.
-				gridReset();
-
-				// Check which objects are visible.
-				processVisibility();
-
-				// Update the map.
-				mapUpdate();
-
-				//update the findpath system
-				fpathUpdate();
-
-				// update the cluster system
-				clusterUpdate();
-
-				// update the command droids
-				cmdDroidUpdate();
-				if(getDrivingStatus())
-				{
-					driveUpdate();
-				}
-			}
+			processDeliveryRepos();
 
 			//ajl. get the incoming netgame messages and process them.
 			// FIXME Previous comment is deprecated. multiPlayerLoop does some other weird stuff, but not that anymore.
@@ -304,226 +191,33 @@ GAMECODE gameLoop(void)
 				multiPlayerLoop();
 			}
 
-			if (!editPaused() && gameTicked)
+			for (unsigned i = 0; i < MAX_PLAYERS; i++)
 			{
-
-			fireWaitingCallbacks(); //Now is the good time to fire waiting callbacks (since interpreter is off now)
-
-			throttleEconomy();
-
-			for(i = 0; i < MAX_PLAYERS; i++)
-			{
-				//update the current power available for a player
-				updatePlayerPower(i);
-
-				//set the flag for each player
-				setHQExists(false, i);
-				setSatUplinkExists(false, i);
-
-				numCommandDroids[i] = 0;
-				numConstructorDroids[i] = 0;
-				numDroids[i]=0;
-				numTransporterDroids[i]=0;
-
-				for(psCurr = apsDroidLists[i]; psCurr; psCurr = psNext)
+				for (DROID *psCurr = apsDroidLists[i]; psCurr; psCurr = psCurr->psNext)
 				{
-					/* Copy the next pointer - not 100% sure if the droid could get destroyed
-					but this covers us anyway */
-					psNext = psCurr->psNext;
-					droidUpdate(psCurr);
-
-					// update the droid counts
-					numDroids[i]++;
-					switch (psCurr->droidType)
-					{
-						case DROID_COMMAND:
-							numCommandDroids[i] += 1;
-							break;
-						case DROID_CONSTRUCT:
-						case DROID_CYBORG_CONSTRUCT:
-							numConstructorDroids[i] += 1;
-							break;
-						case DROID_TRANSPORTER:
-							if( (psCurr->psGroup != NULL) )
-							{
-								DROID *psDroid = NULL;
-
-								numTransporterDroids[i] += psCurr->psGroup->refCount-1;
-								// and count the units inside it...
-									for (psDroid = psCurr->psGroup->psList; psDroid != NULL && psDroid != psCurr; psDroid = psDroid->psGrpNext)
-									{
-									if (psDroid->droidType == DROID_CYBORG_CONSTRUCT || psDroid->droidType == DROID_CONSTRUCT)
-										{
-											numConstructorDroids[i] += 1;
-										}
-									if (psDroid->droidType == DROID_COMMAND)
-									{
-										numCommandDroids[i] += 1;
-									}
-								}
-							}
-							break;
-						default:
-							break;
-					}
-				}
-
-				numMissionDroids[i]=0;
-				for(psCurr = mission.apsDroidLists[i]; psCurr; psCurr = psNext)
-				{
-					/* Copy the next pointer - not 100% sure if the droid could
-					get destroyed but this covers us anyway */
-					psNext = psCurr->psNext;
-					missionDroidUpdate(psCurr);
-					numMissionDroids[i]++;
-					switch (psCurr->droidType)
-					{
-						case DROID_COMMAND:
-							numCommandDroids[i] += 1;
-							break;
-						case DROID_CONSTRUCT:
-						case DROID_CYBORG_CONSTRUCT:
-							numConstructorDroids[i] += 1;
-							break;
-						case DROID_TRANSPORTER:
-							if( (psCurr->psGroup != NULL) )
-							{
-								numTransporterDroids[i] += psCurr->psGroup->refCount-1;
-							}
-							break;
-						default:
-							break;
-					}
-				}
-				for(psCurr = apsLimboDroids[i]; psCurr; psCurr = psNext)
-				{
-					/* Copy the next pointer - not 100% sure if the droid could
-					get destroyed but this covers us anyway */
-					psNext = psCurr->psNext;
-
-					// count the type of units
-					switch (psCurr->droidType)
-					{
-						case DROID_COMMAND:
-							numCommandDroids[i] += 1;
-							break;
-						case DROID_CONSTRUCT:
-						case DROID_CYBORG_CONSTRUCT:
-							numConstructorDroids[i] += 1;
-							break;
-						default:
-							break;
-					}
-				}
-
-				// FIXME: These for-loops are code duplicationo
-				/*set this up AFTER droidUpdate so that if trying to building a
-				new one, we know whether one exists already*/
-				setLasSatExists(false, i);
-				for (psCBuilding = apsStructLists[i]; psCBuilding; psCBuilding = psNBuilding)
-				{
-					/* Copy the next pointer - not 100% sure if the structure could get destroyed but this covers us anyway */
-					psNBuilding = psCBuilding->psNext;
-					structureUpdate(psCBuilding, false);
-					//set animation flag
-					if (psCBuilding->pStructureType->type == REF_HQ &&
-						psCBuilding->status == SS_BUILT)
-					{
-						setHQExists(true, i);
-					}
-					if (psCBuilding->pStructureType->type == REF_SAT_UPLINK &&
-						psCBuilding->status == SS_BUILT)
-					{
-						setSatUplinkExists(true, i);
-					}
-					//don't wait for the Las Sat to be built - can't build another if one is partially built
-					if (asWeaponStats[psCBuilding->asWeaps[0].nStat].
-						weaponSubClass == WSC_LAS_SAT)
-					{
-						setLasSatExists(true, i);
-					}
-				}
-				for (psCBuilding = mission.apsStructLists[i]; psCBuilding;
-						psCBuilding = psNBuilding)
-				{
-					/* Copy the next pointer - not 100% sure if the structure could get destroyed but this covers us anyway. It shouldn't do since its not even on the map!*/
-					psNBuilding = psCBuilding->psNext;
-					structureUpdate(psCBuilding, true); // update for mission
-					if (psCBuilding->pStructureType->type == REF_HQ &&
-						psCBuilding->status == SS_BUILT)
-					{
-						setHQExists(true, i);
-					}
-					if (psCBuilding->pStructureType->type == REF_SAT_UPLINK &&
-						psCBuilding->status == SS_BUILT)
-					{
-						setSatUplinkExists(true, i);
-					}
-					//don't wait for the Las Sat to be built - can't build another if one is partially built
-					if (asWeaponStats[psCBuilding->asWeaps[0].nStat].
-						weaponSubClass == WSC_LAS_SAT)
-					{
-						setLasSatExists(true, i);
-					}
-				}
-			}
-
-			missionTimerUpdate();
-
-			proj_UpdateAll();
-
-			for(psCFeat = apsFeatureLists[0]; psCFeat; psCFeat = psNFeat)
-			{
-				psNFeat = psCFeat->psNext;
-				featureUpdate(psCFeat);
-			}
-
-			}
-			else // if editPaused() or not gameTicked - make sure visual effects are updated
-			{
-				for (i = 0; i < MAX_PLAYERS; i++)
-				{
-					for(psCurr = apsDroidLists[i]; psCurr; psCurr = psNext)
-					{
-						/* Copy the next pointer - not 100% sure if the droid could get destroyed
-						but this covers us anyway */
-						psNext = psCurr->psNext;
-						processVisibilityLevel((BASE_OBJECT *)psCurr);
-						calcDroidIllumination(psCurr);
-					}
-					for (psCBuilding = apsStructLists[i]; psCBuilding; psCBuilding = psNBuilding)
-					{
-						/* Copy the next pointer - not 100% sure if the structure could get destroyed but this covers us anyway */
-						psNBuilding = psCBuilding->psNext;
-						processVisibilityLevel((BASE_OBJECT *)psCBuilding);
-					}
+					// Don't copy the next pointer - if droids somehow get destroyed in the graphics rendering loop, who cares if we crash.
+					calcDroidIllumination(psCurr);
 				}
 			}
 
 			/* update animations */
 			animObj_Update();
-
-			if (gameTicked)
-			{
-				objmemUpdate();
-			}
 		}
+
 		if (!consolePaused())
 		{
 			/* Process all the console messages */
 			updateConsoleMessages();
 		}
-		if (!scrollPaused() && !getWarCamStatus() && dragBox3D.status != DRAG_DRAGGING && intMode != INT_INGAMEOP )
+		if (!scrollPaused() && dragBox3D.status != DRAG_DRAGGING && intMode != INT_INGAMEOP )
 		{
 			scroll();
 		}
 	}
-	else // paused
+	else  // paused
 	{
 		// Using software cursors (when on) for these menus due to a bug in SDL's SDL_ShowCursor()
 		wzSetCursor(CURSOR_DEFAULT);
-
-		intRetVal = INT_NONE;
 
 		if(dragBox3D.status != DRAG_DRAGGING)
 		{
@@ -532,7 +226,7 @@ GAMECODE gameLoop(void)
 
 		if(InGameOpUp || isInGamePopupUp)		// ingame options menu up, run it!
 		{
-			widgval = widgRunScreen(psWScreen);
+			unsigned widgval = widgRunScreen(psWScreen);
 			intProcessInGameOptions(widgval);
 			if(widgval == INTINGAMEOP_QUIT_CONFIRM || widgval == INTINGAMEOP_POPUP_QUIT)
 			{
@@ -597,10 +291,8 @@ GAMECODE gameLoop(void)
 		}
 	}
 
-	// Must end update, since we may or may not have ticked, and some message queue processing code may vary depending on whether it's in an update.
-	gameTimeUpdateEnd();
-
 	/* Check for quit */
+	bool quitting = false;
 	if (intRetVal == INT_QUIT)
 	{
 		if (!loop_GetVideoStatus())
@@ -617,14 +309,15 @@ GAMECODE gameLoop(void)
 		if (!gameUpdatePaused())
 		{
 			if (dragBox3D.status != DRAG_DRAGGING
-			 && wallDrag.status != DRAG_DRAGGING)
+			    && wallDrag.status != DRAG_DRAGGING
+			    && intRetVal != INT_INTERCEPT)
 			{
 				ProcessRadarInput();
 			}
 			processInput();
 
 			//no key clicks or in Intelligence Screen
-			if (intRetVal == INT_NONE && !InGameOpUp && !isInGamePopupUp)
+			if (!isMouseOverRadar() && intRetVal == INT_NONE && !InGameOpUp && !isInGamePopupUp)
 			{
 				processMouseClickInput();
 			}
@@ -648,28 +341,20 @@ GAMECODE gameLoop(void)
 		pie_SetFogStatus(true);
 	}
 
-	pie_GetResetCounts(&loopPieCount, &loopTileCount, &loopPolyCount, &loopStateChanges);
+	pie_GetResetCounts(&loopPieCount, &loopPolyCount, &loopStateChanges);
 
-	if (fogStatus & FOG_BACKGROUND)
+	if ((fogStatus & FOG_BACKGROUND) && (loopMissionState == LMS_SAVECONTINUE))
 	{
-		if (loopMissionState == LMS_SAVECONTINUE)
-		{
-			pie_SetFogStatus(false);
-			clearMode = CLEAR_BLACK;
-		}
-	}
-	else
-	{
-		clearMode = CLEAR_BLACK;//force to black 3DFX
+		pie_SetFogStatus(false);
 	}
 
 	if (!quitting)
 	{
-			/* Check for toggling display mode */
-			if ((keyDown(KEY_LALT) || keyDown(KEY_RALT)) && keyPressed(KEY_RETURN))
-			{
-				screenToggleMode();
-			}
+		/* Check for toggling display mode */
+		if ((keyDown(KEY_LALT) || keyDown(KEY_RALT)) && keyPressed(KEY_RETURN))
+		{
+			wzToggleFullscreen();
+		}
 	}
 
 	// deal with the mission state
@@ -693,7 +378,6 @@ GAMECODE gameLoop(void)
 			break;
 		case LMS_SAVECONTINUE:
 			// just wait for this to be changed when the new mission starts
-			clearMode = CLEAR_BLACK;
 			break;
 		case LMS_NEWLEVEL:
 			//nextMissionType = MISSION_NONE;
@@ -708,14 +392,24 @@ GAMECODE gameLoop(void)
 			break;
 	}
 
-	if (quitting)
+	int clearMode = 0;
+	if(getDrawShadows())
+	{
+		clearMode |= CLEAR_SHADOW;
+	}
+	if (quitting || loopMissionState == LMS_SAVECONTINUE)
 	{
 		pie_SetFogStatus(false);
-		pie_ScreenFlip(CLEAR_BLACK);//gameloopflip
+		clearMode = CLEAR_BLACK;
+	}
+	pie_ScreenFlip(clearMode);//gameloopflip
+
+	if (quitting)
+	{
 		/* Check for toggling display mode */
 		if ((keyDown(KEY_LALT) || keyDown(KEY_RALT)) && keyPressed(KEY_RETURN))
 		{
-			screenToggleMode();
+			wzToggleFullscreen();
 		}
 		return GAMECODE_QUITGAME;
 	}
@@ -726,6 +420,287 @@ GAMECODE gameLoop(void)
 	}
 
 	return GAMECODE_CONTINUE;
+}
+
+static void gameStateUpdate()
+{
+	syncDebug("map = \"%s\", pseudorandom 32-bit integer = 0x%08X, allocated = %d %d %d %d %d %d %d %d %d %d, position = %d %d %d %d %d %d %d %d %d %d", game.map, gameRandU32(),
+	          NetPlay.players[0].allocated, NetPlay.players[1].allocated, NetPlay.players[2].allocated, NetPlay.players[3].allocated, NetPlay.players[4].allocated, NetPlay.players[5].allocated, NetPlay.players[6].allocated, NetPlay.players[7].allocated, NetPlay.players[8].allocated, NetPlay.players[9].allocated,
+	          NetPlay.players[0].position, NetPlay.players[1].position, NetPlay.players[2].position, NetPlay.players[3].position, NetPlay.players[4].position, NetPlay.players[5].position, NetPlay.players[6].position, NetPlay.players[7].position, NetPlay.players[8].position, NetPlay.players[9].position
+	         );
+	for (unsigned n = 0; n < MAX_PLAYERS; ++n)
+	{
+		syncDebug("Player %d = \"%s\"", n, NetPlay.players[n].name);
+	}
+
+	// Actually send pending droid orders.
+	sendQueuedDroidInfo();
+
+	sendPlayerGameTime();
+	NETflush();  // Make sure the game time tick message is really sent over the network.
+
+	if (!paused && !scriptPaused() && !editPaused())
+	{
+		/* Update the event system */
+		if (!bInTutorial)
+		{
+			eventProcessTriggers(gameTime/SCR_TICKRATE);
+		}
+		else
+		{
+			eventProcessTriggers(realTime/SCR_TICKRATE);
+		}
+		updateScripts();
+	}
+
+	// Update abandoned structures
+	handleAbandonedStructures();
+
+	// Update the visibility change stuff
+	visUpdateLevel();
+
+	// Put all droids/structures/features into the grid.
+	gridReset();
+
+	// Check which objects are visible.
+	processVisibility();
+
+	// Update the map.
+	mapUpdate();
+
+	//update the findpath system
+	fpathUpdate();
+
+	// update the cluster system
+	clusterUpdate();
+
+	// update the command droids
+	cmdDroidUpdate();
+	if(getDrivingStatus())
+	{
+		driveUpdate();
+	}
+
+	fireWaitingCallbacks(); //Now is the good time to fire waiting callbacks (since interpreter is off now)
+
+	for (unsigned i = 0; i < MAX_PLAYERS; i++)
+	{
+		//update the current power available for a player
+		updatePlayerPower(i);
+
+		//set the flag for each player
+		setSatUplinkExists(false, i);
+
+		numCommandDroids[i] = 0;
+		numConstructorDroids[i] = 0;
+		numDroids[i]=0;
+		numTransporterDroids[i]=0;
+
+		DROID *psNext;
+		for (DROID *psCurr = apsDroidLists[i]; psCurr != NULL; psCurr = psNext)
+		{
+			// Copy the next pointer - not 100% sure if the droid could get destroyed but this covers us anyway
+			psNext = psCurr->psNext;
+			droidUpdate(psCurr);
+
+			// update the droid counts
+			numDroids[i]++;
+			switch (psCurr->droidType)
+			{
+				case DROID_COMMAND:
+					numCommandDroids[i] += 1;
+					break;
+				case DROID_CONSTRUCT:
+				case DROID_CYBORG_CONSTRUCT:
+					numConstructorDroids[i] += 1;
+					break;
+				case DROID_TRANSPORTER:
+				case DROID_SUPERTRANSPORTER:
+					if( (psCurr->psGroup != NULL) )
+					{
+						DROID *psDroid = NULL;
+
+						numTransporterDroids[i] += psCurr->psGroup->refCount-1;
+						// and count the units inside it...
+							for (psDroid = psCurr->psGroup->psList; psDroid != NULL && psDroid != psCurr; psDroid = psDroid->psGrpNext)
+							{
+							if (psDroid->droidType == DROID_CYBORG_CONSTRUCT || psDroid->droidType == DROID_CONSTRUCT)
+								{
+									numConstructorDroids[i] += 1;
+								}
+							if (psDroid->droidType == DROID_COMMAND)
+							{
+								numCommandDroids[i] += 1;
+							}
+						}
+					}
+					break;
+				default:
+					break;
+			}
+		}
+
+		numMissionDroids[i]=0;
+		for (DROID *psCurr = mission.apsDroidLists[i]; psCurr != NULL; psCurr = psNext)
+		{
+			/* Copy the next pointer - not 100% sure if the droid could
+			get destroyed but this covers us anyway */
+			psNext = psCurr->psNext;
+			missionDroidUpdate(psCurr);
+			numMissionDroids[i]++;
+			switch (psCurr->droidType)
+			{
+				case DROID_COMMAND:
+					numCommandDroids[i] += 1;
+					break;
+				case DROID_CONSTRUCT:
+				case DROID_CYBORG_CONSTRUCT:
+					numConstructorDroids[i] += 1;
+					break;
+				case DROID_TRANSPORTER:
+				case DROID_SUPERTRANSPORTER:
+					if( (psCurr->psGroup != NULL) )
+					{
+						numTransporterDroids[i] += psCurr->psGroup->refCount-1;
+					}
+					break;
+				default:
+					break;
+			}
+		}
+		for (DROID *psCurr = apsLimboDroids[i]; psCurr != NULL; psCurr = psNext)
+		{
+			/* Copy the next pointer - not 100% sure if the droid could
+			get destroyed but this covers us anyway */
+			psNext = psCurr->psNext;
+
+			// count the type of units
+			switch (psCurr->droidType)
+			{
+				case DROID_COMMAND:
+					numCommandDroids[i] += 1;
+					break;
+				case DROID_CONSTRUCT:
+				case DROID_CYBORG_CONSTRUCT:
+					numConstructorDroids[i] += 1;
+					break;
+				default:
+					break;
+			}
+		}
+
+		// FIXME: These for-loops are code duplicationo
+		/*set this up AFTER droidUpdate so that if trying to building a
+		new one, we know whether one exists already*/
+		setLasSatExists(false, i);
+		STRUCTURE *psNBuilding;
+		for (STRUCTURE *psCBuilding = apsStructLists[i]; psCBuilding != NULL; psCBuilding = psNBuilding)
+		{
+			/* Copy the next pointer - not 100% sure if the structure could get destroyed but this covers us anyway */
+			psNBuilding = psCBuilding->psNext;
+			structureUpdate(psCBuilding, false);
+			if (psCBuilding->pStructureType->type == REF_SAT_UPLINK &&
+				psCBuilding->status == SS_BUILT)
+			{
+				setSatUplinkExists(true, i);
+			}
+			//don't wait for the Las Sat to be built - can't build another if one is partially built
+			if (asWeaponStats[psCBuilding->asWeaps[0].nStat].
+				weaponSubClass == WSC_LAS_SAT)
+			{
+				setLasSatExists(true, i);
+			}
+		}
+		for (STRUCTURE *psCBuilding = mission.apsStructLists[i]; psCBuilding != NULL; psCBuilding = psNBuilding)
+		{
+			/* Copy the next pointer - not 100% sure if the structure could get destroyed but this covers us anyway. It shouldn't do since its not even on the map!*/
+			psNBuilding = psCBuilding->psNext;
+			structureUpdate(psCBuilding, true); // update for mission
+			if (psCBuilding->pStructureType->type == REF_SAT_UPLINK &&
+				psCBuilding->status == SS_BUILT)
+			{
+				setSatUplinkExists(true, i);
+			}
+			//don't wait for the Las Sat to be built - can't build another if one is partially built
+			if (asWeaponStats[psCBuilding->asWeaps[0].nStat].
+				weaponSubClass == WSC_LAS_SAT)
+			{
+				setLasSatExists(true, i);
+			}
+		}
+	}
+
+	missionTimerUpdate();
+
+	proj_UpdateAll();
+
+	FEATURE *psNFeat;
+	for (FEATURE *psCFeat = apsFeatureLists[0]; psCFeat; psCFeat = psNFeat)
+	{
+		psNFeat = psCFeat->psNext;
+		featureUpdate(psCFeat);
+	}
+
+	objmemUpdate();
+
+	// Must end update, since we may or may not have ticked, and some message queue processing code may vary depending on whether it's in an update.
+	gameTimeUpdateEnd();
+}
+
+/* The main game loop */
+GAMECODE gameLoop(void)
+{
+	static uint32_t lastFlushTime = 0;
+
+	static int renderBudget = 0;  // Scaled time spent rendering minus scaled time spent updating.
+	static bool previousUpdateWasRender = false;
+	const Rational renderFraction(2, 5);  // Minimum fraction of time spent rendering.
+	const Rational updateFraction = Rational(1) - renderFraction;
+
+	while (true)
+	{
+		// Receive NET_BLAH messages.
+		// Receive GAME_BLAH messages, and if it's time, process exactly as many GAME_BLAH messages as required to be able to tick the gameTime.
+		recvMessage();
+
+		// Update gameTime and graphicsTime, and corresponding deltas. Note that gameTime and graphicsTime pause, if we aren't getting our GAME_GAME_TIME messages.
+		gameTimeUpdate(renderBudget > 0 || previousUpdateWasRender);
+
+		if (deltaGameTime == 0)
+		{
+			break;  // Not doing a game state update.
+		}
+
+		ASSERT(!paused && !gameUpdatePaused() && !editPaused(), "Nonsensical pause values.");
+
+		unsigned before = wzGetTicks();
+		syncDebug("Begin game state update, gameTime = %d", gameTime);
+		gameStateUpdate();
+		syncDebug("End game state update, gameTime = %d", gameTime);
+		unsigned after = wzGetTicks();
+
+		renderBudget -= (after - before) * renderFraction.n;
+		renderBudget = std::max(renderBudget, (-updateFraction*500).floor());
+		previousUpdateWasRender = false;
+
+		ASSERT(deltaGraphicsTime == 0, "Shouldn't update graphics and game state at once.");
+	}
+
+	if (realTime - lastFlushTime >= 400u)
+	{
+		lastFlushTime = realTime;
+		NETflush();  // Make sure that we aren't waiting too long to send data.
+	}
+
+	unsigned before = wzGetTicks();
+	GAMECODE renderReturn = renderLoop();
+	unsigned after = wzGetTicks();
+
+	renderBudget += (after - before) * updateFraction.n;
+	renderBudget = std::min(renderBudget, (renderFraction*500).floor());
+	previousUpdateWasRender = true;
+
+	return renderReturn;
 }
 
 /* The video playback loop */
@@ -761,6 +736,7 @@ void videoLoop(void)
 			if (!getScriptWinLoseVideo())
 			{
 				eventFireCallbackTrigger((TRIGGER_TYPE)CALL_VIDEO_QUIT);
+				triggerEvent(TRIGGER_VIDEO_QUIT);
 			}
 			else
 			{

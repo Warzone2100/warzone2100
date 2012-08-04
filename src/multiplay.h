@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -28,6 +28,7 @@
 #include "group.h"
 #include "featuredef.h"
 #include "droid.h"  // For INITIAL_DROID_ORDERS.
+#include "levels.h"  // For LevelHashSize.
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 // Game Options Structure. Enough info to completely describe the static stuff in a multiplayer game.
@@ -39,7 +40,7 @@ struct MULTIPLAYERGAME
 	char		map[128];					// name of multiplayer map being used.
 	uint8_t		maxPlayers;					// max players to allow
 	char		name[128];					// game name   (to be used)
-	bool		fog;
+	Sha256          hash;                                           ///< Hash of map file. Zero if built in.
 	uint32_t    power;						// power level for arena game
 	uint8_t		base;						// clean/base/base&defence
 	uint8_t		alliance;					// no/yes/AIs vs Humans
@@ -68,7 +69,6 @@ struct MULTIPLAYERINGAME
 	UDWORD				numStructureLimits;					// number of limits
 	MULTISTRUCTLIMITS	*pStructureLimits;					// limits chunk.
 	uint8_t				flags;  ///< Bitmask, shows which structures are disabled.
-	uint8_t				SPcolor;	//
 	UDWORD		skScores[MAX_PLAYERS][2];			// score+kills for local skirmish players.
 	char		phrases[5][255];					// 5 favourite text messages.
 };
@@ -81,22 +81,6 @@ enum STRUCTURE_INFO
 	STRUCTUREINFO_RELEASEPRODUCTION,
 	STRUCTUREINFO_HOLDRESEARCH,
 	STRUCTUREINFO_RELEASERESEARCH
-};
-
-struct PACKAGED_CHECK
-{
-	uint32_t gameTime;  ///< Game time that this synch check was made. Not touched by NETauto().
-	uint8_t player;
-	uint32_t droidID;
-	int32_t order;
-	uint32_t secondaryOrder;
-	uint32_t body;
-	uint32_t experience;
-	Position pos;
-	Rotation rot;
-	uint32_t targetID;  ///< Defined iff order == DORDER_ATTACK.
-	uint16_t orderX;    ///< Defined iff order == DORDER_MOVE.
-	uint16_t orderY;    ///< Defined iff order == DORDER_MOVE.
 };
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -112,13 +96,12 @@ extern UBYTE				bDisplayMultiJoiningStatus;	// draw load progress?
 // ////////////////////////////////////////////////////////////////////////////
 // defines
 
-// NOTE: MaxMsgSize is currently set to 16K.  When MAX_BYTESPERSEC has been reached (sent + recv!), then we do NOT
-//       do the sync code checks anymore(!), needless to say, this can and does cause issues.
-// FIXME: We should define this externally so people with dial-up modems can configure this
-// FIXME: Use possible compression on the packets.
-// NOTE: Remember, we (now) allow 450 units max * 7 (1 human, 6 AI possible for Host) to send to the other player.
+// Bitmask for client lobby
 
-#define MAX_BYTESPERSEC			14336
+#define NO_VTOLS  1
+#define NO_TANKS 2
+#define NO_BORGS 4
+
 
 #define ANYPLAYER				99
 
@@ -140,7 +123,7 @@ extern UBYTE				bDisplayMultiJoiningStatus;	// draw load progress?
 //#define PING_LO                               0                       // this ping is kickin'.
 #define PING_MED				200			// this ping is crawlin'
 #define PING_HI					400			// this ping just plain sucks :P
-#define PING_LIMIT				1000		// if ping is bigger than this, then worry and panic.
+#define PING_LIMIT                              4000                    // If ping is bigger than this, then worry and panic, and don't even try showing the ping.
 
 #define LEV_LOW					400			// how many points to allocate for res levels???
 #define LEV_MED					700
@@ -164,6 +147,7 @@ extern bool isHumanPlayer(int player);				//to tell if the player is a computer 
 extern bool myResponsibility(int player);
 extern bool responsibleFor(int player, int playerinquestion);
 extern int whosResponsible(int player);
+bool canGiveOrdersFor(int player, int playerInQuestion);
 int scavengerSlot();    // Returns the player number that scavengers would have if they were enabled.
 int scavengerPlayer();  // Returns the player number that the scavengers have, or -1 if disabled.
 extern Vector3i cameraToHome		(UDWORD player,bool scroll);
@@ -173,10 +157,10 @@ extern bool	multiPlayerLoop		(void);							// for loop.c
 
 extern bool recvMessage			(void);
 bool sendTemplate(uint32_t player, DROID_TEMPLATE *t);
-extern bool SendDestroyTemplate (DROID_TEMPLATE *t);
+extern bool SendDestroyTemplate(DROID_TEMPLATE *t, uint8_t player);
 extern bool SendResearch(uint8_t player, uint32_t index, bool trigger);
 extern bool SendDestroyFeature  (FEATURE *pF);					// send a destruct feature message.
-extern bool sendTextMessage		(const char *pStr,bool cast);		// send a text message
+extern bool sendTextMessage(const char *pStr, bool cast, uint32_t from = selectedPlayer);	// send a text message
 extern bool sendAIMessage		(char *pStr, UDWORD player, UDWORD to);	//send AI message
 void printConsoleNameChange(const char *oldName, const char *newName);  ///< Print message to console saying a name changed.
 
@@ -197,15 +181,13 @@ void sendStructureInfo                  (STRUCTURE *psStruct, STRUCTURE_INFO str
 // droids . multibot
 extern bool SendDroid                   (const DROID_TEMPLATE* pTemplate, uint32_t x, uint32_t y, uint8_t player, uint32_t id, const INITIAL_DROID_ORDERS *initialOrders);
 extern bool SendDestroyDroid	(const DROID* psDroid);
-extern bool SendDemolishFinished(STRUCTURE *psS,DROID *psD);
 void sendQueuedDroidInfo(void);  ///< Actually sends the droid orders which were queued by SendDroidInfo.
-bool sendDroidInfo(DROID *psDroid, DROID_ORDER order, uint32_t x, uint32_t y, const BASE_OBJECT *psObj, const BASE_STATS *psStats, uint32_t x2, uint32_t y2, uint16_t direction, bool add);
+void sendDroidInfo(DROID *psDroid, DroidOrder const &order, bool add);
 extern bool SendCmdGroup		(DROID_GROUP *psGroup, UWORD x, UWORD y, BASE_OBJECT *psObj);
 
 
 extern bool sendDroidSecondary	(const DROID* psDroid, SECONDARY_ORDER sec, SECONDARY_STATE state);
-extern bool sendDroidEmbark     (const DROID* psDroid, const DROID* psTransporter);
-extern bool sendDroidDisEmbark  (const DROID* psDroid, const DROID* psTransporter);
+bool sendDroidDisembark(DROID const *psTransporter, DROID const *psDroid);
 
 // Startup. mulitopt
 extern bool multiTemplateSetup	(void);
@@ -222,11 +204,9 @@ extern bool addTemplateToList(DROID_TEMPLATE *psNew, DROID_TEMPLATE **ppList);
 void addTemplateBack(unsigned player, DROID_TEMPLATE *psNew);
 
 // syncing.
-void sendCheck();  //send/recv  check info
 extern bool sendScoreCheck		(void);							//score check only(frontend)
 extern bool sendPing			(void);							// allow game to request pings.
-
-extern bool ForceDroidSync(const DROID *droidToSend);
+extern void HandleBadParam(const char *msg, const int from, const int actual);
 // multijoin
 extern bool sendResearchStatus  (STRUCTURE *psBuilding, UDWORD index, UBYTE player, bool bStart);
 
@@ -250,7 +230,5 @@ extern bool msgStackFireTop(void);
 extern	bool multiplayPlayersReady	(bool bNotifyStatus);
 extern	void startMultiplayerGame	(void);
 extern	void resetReadyStatus		(bool bSendOptions);
-
-extern	bool bPlayerReadyGUI[MAX_PLAYERS];
 
 #endif // __INCLUDED_SRC_MULTIPLAY_H__

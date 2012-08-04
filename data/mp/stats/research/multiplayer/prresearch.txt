@@ -41,8 +41,8 @@ R-Cyborg-Metals08,R-Cyborg-Metals07,585
 R-Cyborg-Metals09,R-Cyborg-Metals08,586
 R-Cyborg-Transport,R-Struc-Factory-Cyborg,1081
 R-Cyborg-Transport,R-Struc-VTOLFactory,1081
-MP-SuperTransport,R-Cyborg-Transport,1200
-MP-SuperTransport,R-Struc-VTOLFactory,1200
+R-SuperTransport,R-Cyborg-Transport,1200
+R-SuperTransport,R-Struc-VTOLFactory,1200
 R-Defense-AA-Laser,R-Wpn-AALaser,1152
 R-Defense-AASite-QuadBof,R-Wpn-AAGun02,555
 R-Defense-AASite-QuadMg1,R-Wpn-AAGun03,556

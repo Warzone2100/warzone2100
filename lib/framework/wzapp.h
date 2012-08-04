@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -17,106 +17,50 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-#ifndef WZAPP_H
-#define WZAPP_H
 
-#include <QtGui/QApplication>
-#include <QtGui/QImageReader>
-#include <QtOpenGL/QGLWidget>
-#include <QtCore/QBuffer>
-#include <QtCore/QTime>
-#include <QtCore/QThread>
-#include <QtCore/QMutex>
-#include <QtCore/QSemaphore>
-#include <QtCore/QSettings>
-#include <physfs.h>
+#ifndef __INCLUDED_WZAPP_C_H__
+#define __INCLUDED_WZAPP_C_H__
 
-#include "lib/qtgame/qtgame.h"
+#include "frame.h"
 
-// Get platform defines before checking for them.
-// Qt headers MUST come before platform specific stuff!
-#include "lib/framework/frame.h"
-#include "lib/framework/cursors.h"
-#include "lib/ivis_opengl/textdraw.h"
-#include "input.h"
+#include <QtCore/QSize>
 
-class WzConfig : public QSettings
-{
-public:
-	WzConfig(const QString &name, QObject *parent = 0) : QSettings(QString("wz::") + name, QSettings::IniFormat, parent) {}
-	Vector3f vector3f(const QString &name);
-	void setVector3f(const QString &name, const Vector3f &v);
-	Vector3i vector3i(const QString &name);
-	void setVector3i(const QString &name, const Vector3i &v);
-	Vector2i vector2i(const QString &name);
-	void setVector2i(const QString &name, const Vector2i &v);
-};
+struct WZ_THREAD;
+struct WZ_MUTEX;
+struct WZ_SEMAPHORE;
 
-class WzMainWindow : public QtGameWidget
-{
-	Q_OBJECT
 
-private:
-	void loadCursor(CURSOR cursor, int x, int y, QImageReader &buffer);
-	void mouseMoveEvent(QMouseEvent *event);
-	void mousePressEvent(QMouseEvent *event);
-	void mouseReleaseEvent(QMouseEvent *event);
-	void wheelEvent(QWheelEvent *event);
-	void keyPressEvent(QKeyEvent *event);
-	void keyReleaseEvent(QKeyEvent *event);
-	void inputMethodEvent(QInputMethodEvent *event);
-	void realHandleKeyEvent(QKeyEvent *event, bool pressed);
-	void focusOutEvent(QFocusEvent *event);
-	MOUSE_KEY_CODE buttonToIdx(Qt::MouseButton button);
+void wzMain(int &argc, char **argv);
+bool wzMain2();
+void wzMain3();
+void wzQuit(void);              ///< Quit game
+void wzShutdown();
+void wzToggleFullscreen();
+void wzSetCursor(CURSOR index);
+void wzScreenFlip(void);	///< Swap the graphics buffers
+void wzShowMouse(bool visible); ///< Show the Mouse?
+void wzGrabMouse(void);		///< Trap mouse cursor in application window
+void wzReleaseMouse(void);	///< Undo the wzGrabMouse operation
+bool wzActiveWindow(void);	///< Whether application currently has the mouse pointer over it
+int wzGetTicks(void);		///< Milliseconds since start of game
+void wzFatalDialog(const char *text);	///< Throw up a modal warning dialog
+QList<QSize> wzAvailableResolutions();  ///< Get list of available resolutions.
+void wzSetSwapInterval(int swap);
+int wzGetSwapInterval();
+QString wzGetSelection();
 
-	QCursor *cursors[CURSOR_MAX];
-	QTime tickCount;
-	QFont regularFont, boldFont, smallFont, scaledFont;
-	bool notReadyToPaint;  ///< HACK Don't draw during initial show(), since some global variables apparently aren't set up.
-	static WzMainWindow *myself;
-
-public:
-	WzMainWindow(QSize resolution, const QGLFormat &format, QWidget *parent = 0);
-	~WzMainWindow();
-	void initializeGL();
-	void resizeGL(int w, int h);
-	void paintGL();
-	static WzMainWindow *instance();
-	void setCursor(CURSOR index);
-	void setCursor(QCursor cursor);
-	void setFontType(enum iV_fonts FontID);
-	void setFontSize(float size);
-	int ticks() { return tickCount.elapsed(); }
-	void setReadyToPaint() { notReadyToPaint = false; }
-#if 0
-	// Re-enable when Qt's font rendering is improved.
-	void drawPixmap(int XPos, int YPos, QPixmap *pix);
-#endif
-
-public slots:
-	void close();
-};
-
-struct _wzThread : public QThread
-{
-	_wzThread(int (*threadFunc_)(void *), void *data_) : threadFunc(threadFunc_), data(data_) {}
-	void run()
-	{
-		ret = (*threadFunc)(data);
-	}
-	int (*threadFunc)(void *);
-	void *data;
-	int ret;
-};
-
-// This one couldn't be easier...
-struct _wzMutex : public QMutex
-{
-};
-
-struct _wzSemaphore : public QSemaphore
-{
-	_wzSemaphore(int startValue = 0) : QSemaphore(startValue) {}
-};
+// Thread related
+WZ_THREAD *wzThreadCreate(int (*threadFunc)(void *), void *data);
+int wzThreadJoin(WZ_THREAD *thread);
+void wzThreadStart(WZ_THREAD *thread);
+void wzYieldCurrentThread(void);
+WZ_MUTEX *wzMutexCreate(void);
+void wzMutexDestroy(WZ_MUTEX *mutex);
+void wzMutexLock(WZ_MUTEX *mutex);
+void wzMutexUnlock(WZ_MUTEX *mutex);
+WZ_SEMAPHORE *wzSemaphoreCreate(int startValue);
+void wzSemaphoreDestroy(WZ_SEMAPHORE *semaphore);
+void wzSemaphoreWait(WZ_SEMAPHORE *semaphore);
+void wzSemaphorePost(WZ_SEMAPHORE *semaphore);
 
 #endif

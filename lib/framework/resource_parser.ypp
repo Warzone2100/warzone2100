@@ -1,0 +1,128 @@
+/*
+	This file is part of Warzone 2100.
+	Copyright (C) 1999-2004  Eidos Interactive
+	Copyright (C) 2005-2012  Warzone 2100 Project
+
+	Warzone 2100 is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 2 of the License, or
+	(at your option) any later version.
+
+	Warzone 2100 is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with Warzone 2100; if not, write to the Free Software
+	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
+*/
+%defines
+%{
+/** @file
+ *
+ *  Parser for RES (*.wrf) files
+ */
+
+extern int res_lex(void);
+extern int res_get_lineno(void);
+extern char* res_get_text(void);
+
+/* Allow frame header files to be singly included */
+#define FRAME_LIB_INCLUDE
+
+#include "lib/framework/frame.h"
+#include <string.h>
+#include <stdlib.h>
+
+#include "lib/framework/string_ext.h"
+#include "lib/framework/frameresource.h"
+#include "lib/framework/resly.h"
+
+extern void yyerror(const char* msg);
+void yyerror(const char* msg)
+{
+	debug(LOG_ERROR, "RES file parse error:\n%s at line %d\nText: '%s'\n", msg, res_get_lineno(), res_get_text());
+}
+
+%}
+
+%name-prefix="res_"
+
+%union {
+	char  *sval;
+}
+
+	/* value tokens */
+%token <sval> TEXT_T
+%token <sval> QTEXT_T			/* Text with double quotes surrounding it */
+
+%destructor {
+#ifndef WZ_OS_WIN
+	// Force type checking by the compiler
+	char * const s = $$;
+
+	if (s)
+		free(s);
+#endif
+} TEXT_T QTEXT_T
+
+	/* keywords */
+%token DIRECTORY
+%token FILETOKEN
+
+%%
+
+res_file:			res_line
+				|	res_file res_line
+				;
+
+res_line:			dir_line
+				|	file_line
+				;
+
+dir_line:			DIRECTORY QTEXT_T
+				{
+					UDWORD len;
+
+					// set a new input directory
+					debug(LOG_NEVER, "directory: %s", $2);
+					if (strncmp($2, "/:", strlen("/:")) == 0)
+					{
+						// the new dir is rooted
+						sstrcpy(aCurrResDir, $2);
+					}
+					else
+					{
+						sstrcpy(aCurrResDir, aResDir);
+						sstrcat(aCurrResDir, $2);
+					}
+					if (strlen($2) > 0)
+					{
+						ASSERT(PHYSFS_isDirectory(aCurrResDir), "%s is not a directory!", aCurrResDir);
+						// Add a trailing '/'
+						len = strlen(aCurrResDir);
+						aCurrResDir[len] = '/';
+						aCurrResDir[len+1] = 0;
+						debug(LOG_NEVER, "Current resource directory: %s", aCurrResDir);
+					}
+					free($2);
+				}
+				;
+
+
+file_line:			FILETOKEN TEXT_T QTEXT_T
+				{
+					bool succes;
+					/* load a data file */
+					debug(LOG_NEVER, "file: %s %s", $2, $3);
+					succes = resLoadFile($2, $3);
+					free($2);
+					free($3);
+
+					if (!succes)
+					{
+						YYABORT;
+					}
+				}
+				;

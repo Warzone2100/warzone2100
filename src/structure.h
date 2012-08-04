@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -65,7 +65,7 @@ extern iIMDShape * factoryModuleIMDs[NUM_FACTORY_MODULES][NUM_FACMOD_TYPES];
 extern iIMDShape * researchModuleIMDs[NUM_RESEARCH_MODULES];
 extern iIMDShape * powerModuleIMDs[NUM_POWER_MODULES];
 
-extern ProductionRun asProductionRun[NUM_FACTORY_TYPES][MAX_FACTORY];
+extern std::vector<ProductionRun> asProductionRun[NUM_FACTORY_TYPES];
 
 //Value is stored for easy access to this structure stat
 extern UDWORD	factoryModuleStat;
@@ -111,9 +111,10 @@ extern bool loadStructureStrengthModifiers(const char *pStrengthModData, UDWORD 
 extern bool	structureStatsShutDown(void);
 
 int requestOpenGate(STRUCTURE *psStructure);
+int gateCurrentOpenHeight(STRUCTURE const *psStructure, uint32_t time, int minimumStub);  ///< Returns how far open the gate is, or 0 if the structure is not a gate.
 
-int32_t structureDamage(STRUCTURE *psStructure, UDWORD damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, HIT_SIDE impactSide);
-extern void structureBuild(STRUCTURE *psStructure, DROID *psDroid, int buildPoints);
+int32_t structureDamage(STRUCTURE *psStructure, unsigned damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, unsigned impactTime, bool isDamagePerSecond);
+extern void structureBuild(STRUCTURE *psStructure, DROID *psDroid, int buildPoints, int buildRate = 1);
 extern void structureDemolish(STRUCTURE *psStructure, DROID *psDroid, int buildPoints);
 extern bool structureRepair(STRUCTURE *psStruct, DROID *psDroid, int buildPoints);
 /* Set the type of droid for a factory to build */
@@ -126,12 +127,12 @@ extern void createTestStructures(void);
 STRUCTURE *buildStructure(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y, UDWORD player, bool FromSave);
 STRUCTURE *buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y, uint16_t direction, UDWORD player, bool FromSave);
 /// Create a blueprint structure, with just enough information to render it
-STRUCTURE *buildBlueprint(STRUCTURE_STATS *psStats, int32_t x, int32_t y, uint16_t direction, STRUCT_STATES state);
+STRUCTURE *buildBlueprint(STRUCTURE_STATS const *psStats, Vector2i xy, uint16_t direction, unsigned moduleIndex, STRUCT_STATES state);
 /* The main update routine for all Structures */
 void structureUpdate(STRUCTURE *psBuilding, bool mission);
 
 /* Remove a structure and free it's memory */
-extern bool destroyStruct(STRUCTURE *psDel);
+bool destroyStruct(STRUCTURE *psDel, unsigned impactTime);
 
 // remove a structure from a game without any visible effects
 // bDestroy = true if the object is to be destroyed
@@ -141,9 +142,16 @@ bool removeStruct(STRUCTURE *psDel, bool bDestroy);
 //fills the list with Structures that can be built
 extern UDWORD fillStructureList(STRUCTURE_STATS **ppList, UDWORD selectedPlayer,
 						 UDWORD limit);
-/* checks that the location is a valid one to build on and sets the outline colour
-x and y in tile-coords*/
-extern bool validLocation(BASE_STATS *psStats, unsigned x, unsigned y, uint16_t direction, unsigned player, bool bCheckBuildQueue);
+
+/// Checks if the two structures would be too close to build together.
+bool isBlueprintTooClose(STRUCTURE_STATS const *stats1, Vector2i pos1, uint16_t dir1, STRUCTURE_STATS const *stats2, Vector2i pos2, uint16_t dir2);
+
+/// Checks that the location is valid to build on.
+/// pos in world coords
+bool validLocation(BASE_STATS *psStats, Vector2i pos, uint16_t direction, unsigned player, bool bCheckBuildQueue);
+
+bool isWall(STRUCTURE_TYPE type);                                    ///< Structure is a wall. Not completely sure it handles all cases.
+bool isBuildableOnWalls(STRUCTURE_TYPE type);                        ///< Structure can be built on walls. Not completely sure it handles all cases.
 
 /* for a new structure, find a location along an edge which the droid can get
 to and return this as the destination for the droid */
@@ -175,9 +183,6 @@ extern bool checkStructureStatus( STRUCTURE_STATS *psStats, UDWORD player, UDWOR
 extern void setAssemblyPoint(FLAG_POSITION *psAssemblyPoint, UDWORD x, UDWORD y,
                              UDWORD player, bool bCheck);
 
-/* consider delivery points when selected by player*/
-extern void processDeliveryPoint(UDWORD player, UDWORD x, UDWORD y);
-
 /*called when a structure has been built - checks through the list of callbacks
 for the scripts*/
 extern void structureCompletedCallback(STRUCTURE_STATS *psStructType);
@@ -207,10 +212,6 @@ static inline bool isLasSat(STRUCTURE_STATS *pStructureType)
 	        && pStructureType->psWeapStat[0]->weaponSubClass == WSC_LAS_SAT);
 }
 
-/*sets the flag to indicate a HQ Exists - so draw Radar*/
-extern void setHQExists(bool state, UDWORD player);
-/*returns the status of the flag*/
-extern bool getHQExists(UDWORD player);
 /*sets the flag to indicate a SatUplink Exists - so draw everything!*/
 extern void setSatUplinkExists(bool state, UDWORD player);
 /*returns the status of the flag*/
@@ -255,7 +256,7 @@ extern void printStructureInfo(STRUCTURE *psStructure);
 
 /*Checks the template type against the factory type - returns false
 if not a good combination!*/
-extern bool validTemplateForFactory(DROID_TEMPLATE *psTemplate, STRUCTURE *psFactory);
+extern bool validTemplateForFactory(DROID_TEMPLATE *psTemplate, STRUCTURE *psFactory, bool complain);
 
 /*calculates the damage caused to the resistance levels of structures*/
 //extern bool electronicDamage(STRUCTURE *psStructure, UDWORD damage, UBYTE attackPlayer);
@@ -272,6 +273,7 @@ extern bool checkSpecificStructExists(UDWORD structInc, UDWORD player);
 extern int32_t getStructureDamage(const STRUCTURE* psStructure);
 
 /*Access functions for the upgradeable stats of a structure*/
+unsigned structureBodyBuilt(STRUCTURE const *psStruct);  ///< Returns the maximum body points of a structure with the current number of build points.
 extern UDWORD	structureBody(const STRUCTURE *psStruct);
 extern UDWORD	structureArmour(STRUCTURE_STATS *psStats, UBYTE player);
 extern UDWORD	structureResistance(STRUCTURE_STATS *psStats, UBYTE player);
@@ -313,7 +315,7 @@ extern void factoryLoopAdjust(STRUCTURE *psStruct, bool add);
 
 /*cancels the production run for the factory and returns any power that was
 accrued but not used*/
-extern void cancelProduction(STRUCTURE *psBuilding, QUEUE_MODE mode);
+void cancelProduction(STRUCTURE *psBuilding, QUEUE_MODE mode, bool mayClearProductionRun = true);
 
 /*set a factory's production run to hold*/
 extern void holdProduction(STRUCTURE *psBuilding, QUEUE_MODE mode);
@@ -378,7 +380,7 @@ extern STRUCTURE * giftSingleStructure(STRUCTURE *psStructure, UBYTE attackPlaye
 extern void changeProductionPlayer(UBYTE player);
 
 // La!
-extern bool IsStatExpansionModule(STRUCTURE_STATS *psStats);
+bool IsStatExpansionModule(STRUCTURE_STATS const *psStats);
 
 /// is this a blueprint and not a real structure?
 bool structureIsBlueprint(STRUCTURE *psStructure);
@@ -406,6 +408,8 @@ void cbNewDroid(STRUCTURE *psFactory, DROID *psDroid);
 
 WZ_DECL_PURE Vector2i getStructureSize(STRUCTURE const *psBuilding);
 WZ_DECL_PURE Vector2i getStructureStatsSize(STRUCTURE_STATS const *pStructureType, uint16_t direction);
+StructureBounds getStructureBounds(STRUCTURE const *object);
+StructureBounds getStructureBounds(STRUCTURE_STATS const *stats, Vector2i pos, uint16_t direction);
 
 static inline unsigned getStructureWidth(const STRUCTURE *psBuilding)   { return getStructureSize(psBuilding).x; }
 static inline unsigned getStructureBreadth(const STRUCTURE *psBuilding) { return getStructureSize(psBuilding).y; }
@@ -447,6 +451,63 @@ static inline void _setStructureTarget(STRUCTURE *psBuilding, BASE_OBJECT *psNew
 	(void)line;
 	(void)func;
 #endif
+}
+
+// Functions for the GUI to know what's pending, before it's synchronised.
+template<typename Functionality, typename Subject>
+static inline void setStatusPendingStart(Functionality &functionality, Subject *subject)
+{
+	functionality.psSubjectPending = subject;
+	functionality.statusPending = FACTORY_START_PENDING;
+	++functionality.pendingCount;
+}
+
+template<typename Functionality>
+static inline void setStatusPendingCancel(Functionality &functionality)
+{
+	functionality.psSubjectPending = NULL;
+	functionality.statusPending = FACTORY_CANCEL_PENDING;
+	++functionality.pendingCount;
+}
+
+template<typename Functionality>
+static inline void setStatusPendingHold(Functionality &functionality)
+{
+	if (functionality.psSubjectPending == NULL)
+	{
+		functionality.psSubjectPending = functionality.psSubject;
+	}
+	functionality.statusPending = FACTORY_HOLD_PENDING;
+	++functionality.pendingCount;
+}
+
+template<typename Functionality>
+static inline void setStatusPendingRelease(Functionality &functionality)
+{
+	if (functionality.psSubjectPending == NULL && functionality.statusPending != FACTORY_CANCEL_PENDING)
+	{
+		functionality.psSubjectPending = functionality.psSubject;
+	}
+	if (functionality.psSubjectPending != NULL)
+	{
+		functionality.statusPending = FACTORY_START_PENDING;
+	}
+	++functionality.pendingCount;
+}
+
+template<typename Functionality>
+static inline void popStatusPending(Functionality &functionality)
+{
+	if (functionality.pendingCount == 0)
+	{
+		++functionality.pendingCount;
+	}
+	if (--functionality.pendingCount == 0)
+	{
+		// Subject is now synchronised, remove pending.
+		functionality.psSubjectPending = NULL;
+		functionality.statusPending = FACTORY_NOTHING_PENDING;
+	}
 }
 
 void checkStructure(const STRUCTURE* psStructure, const char * const location_description, const char * function, const int recurse);

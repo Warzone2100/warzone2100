@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -40,6 +40,7 @@
 #include "lib/ivis_opengl/piedef.h"
 #include "lib/ivis_opengl/piestate.h"
 #include "lib/ivis_opengl/pieclip.h"
+#include "lib/ivis_opengl/screen.h"
 
 #include "terrain.h"
 #include "map.h"
@@ -89,7 +90,7 @@ struct DecalVertex
 /// The lightmap texture
 static GLuint lightmap_tex_num;
 /// When are we going to update the lightmap next?
-static unsigned int lightmapNextUpdate;
+static unsigned int lightmapLastUpdate;
 /// How big is the lightmap?
 static int lightmapWidth;
 static int lightmapHeight;
@@ -1015,7 +1016,7 @@ bool initTerrain(void)
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	
 	lightmap_tex_num = 0;
-	lightmapNextUpdate = 0;
+	lightmapLastUpdate = 0;
 	lightmapWidth = 1;
 	lightmapHeight = 1;
 	// determine the smallest power-of-two size we can use for the lightmap
@@ -1054,7 +1055,7 @@ bool initTerrain(void)
 /// free all memory and opengl buffers used by the terrain renderer
 void shutdownTerrain(void)
 {
-	int x,y;
+	ASSERT_OR_RETURN( ,sectors, "trying to shutdown terrain when it didn't need it!");
 	glDeleteBuffers(1, &geometryVBO);
 	glDeleteBuffers(1, &geometryIndexVBO);
 	glDeleteBuffers(1, &waterVBO);
@@ -1063,9 +1064,9 @@ void shutdownTerrain(void)
 	glDeleteBuffers(1, &textureIndexVBO);
 	glDeleteBuffers(1, &decalVBO);
 	
-	for (x = 0; x < xSectors; x++)
+	for (int x = 0; x < xSectors; x++)
 	{
-		for (y = 0; y < ySectors; y++)
+		for (int y = 0; y < ySectors; y++)
 		{
 			free(sectors[x*ySectors + y].textureOffset);
 			free(sectors[x*ySectors + y].textureSize);
@@ -1107,9 +1108,9 @@ void drawTerrain(void)
 	glEnable(GL_TEXTURE_2D);
 
 	// we limit the framerate of the lightmap, because updating a texture is an expensive operation
-	if (gameTime >= lightmapNextUpdate)
+	if (realTime - lightmapLastUpdate >= LIGHTMAP_REFRESH)
 	{
-		lightmapNextUpdate = gameTime + LIGHTMAP_REFRESH;
+		lightmapLastUpdate = realTime;
 
 		for (j = 0; j < mapHeight; ++j)
 		{

@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -57,6 +57,7 @@ W_BARGRAPH::W_BARGRAPH(W_BARINIT const *init)
 	, precision(init->precision)
 	, majorCol(init->sCol)
 	, minorCol(init->sMinorCol)
+	, textCol(WZCOL_BLACK)
 	, pTip(init->pTip)
 {
 	/* Set the display function */
@@ -210,6 +211,26 @@ void barGraphHiLiteLost(W_BARGRAPH *psWidget)
 }
 
 
+static void barGraphDisplayText(W_BARGRAPH *barGraph, int x0, int x1, int y1, PIELIGHT *pColours)
+{
+	if (!barGraph->text.isEmpty())
+	{
+		QByteArray utf = barGraph->text.toUtf8();
+		iV_SetFont(font_small);
+		int textWidth = iV_GetTextWidth(utf.constData());
+		Vector2i pos((x0 + x1 - textWidth)/2, y1);
+		iV_SetTextColour(WZCOL_BLACK);  // Add a shadow, to make it visible against any background.
+		for (int dx = -1; dx <= 1; ++dx)
+			for (int dy = -1; dy <= 1; ++dy)
+			{
+				iV_DrawText(utf.constData(), pos.x + dx*1.25f, pos.y + dy*1.25f);
+			}
+		iV_SetTextColour(barGraph->textCol);
+		iV_DrawText(utf.constData(), pos.x, pos.y - 0.25f);
+		iV_DrawText(utf.constData(), pos.x, pos.y + 0.25f);  // Draw twice, to make it more visible.
+	}
+}
+
 /* The simple bar graph display function */
 void barGraphDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
 {
@@ -253,6 +274,8 @@ void barGraphDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT 
 	iV_Line(x0,y0, x1,y0, pColours[WCOL_LIGHT]);
 	iV_Line(x1,y0, x1,y1, pColours[WCOL_DARK]);
 	iV_Line(x0,y1, x1,y1, pColours[WCOL_DARK]);
+
+	barGraphDisplayText(psBGraph, x0, x1, y1, pColours);
 }
 
 
@@ -335,6 +358,8 @@ void barGraphDisplayDouble(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIE
 	iV_Line(x0,y0, x1,y0, pColours[WCOL_LIGHT]);
 	iV_Line(x1,y0, x1,y1, pColours[WCOL_DARK]);
 	iV_Line(x0,y1, x1,y1, pColours[WCOL_DARK]);
+
+	barGraphDisplayText(psBGraph, x0, x1, y1, pColours);
 }
 
 
@@ -436,4 +461,6 @@ void barGraphDisplayTrough(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIE
 		iV_Line(tx1,ty0, tx1,ty1, pColours[WCOL_LIGHT]);
 		iV_Line(tx0,ty1, tx1,ty1, pColours[WCOL_LIGHT]);
 	}
+
+	barGraphDisplayText(psBGraph, x0, tx1, ty1, pColours);
 }

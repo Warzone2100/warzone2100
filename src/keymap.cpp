@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -32,6 +32,7 @@
 #include "lib/framework/frame.h"
 #include "lib/framework/input.h"
 #include "lib/framework/strres.h"
+#include "lib/netplay/netplay.h"
 #include "lib/gamelib/gtime.h"
 #include "keymap.h"
 #include "console.h"
@@ -76,7 +77,8 @@ SDWORD	spin;
 static	KEYMAP_MARKER	qwertyKeyMappings[NUM_QWERTY_KEYS];
 
 
-static	bool			bDoingDebugMappings = false;
+static bool bDoingDebugMappings = false;
+static bool bWantDebugMappings[MAX_PLAYERS] = {false};
 // ----------------------------------------------------------------------------------
 
 // ----------------------------------------------------------------------------------
@@ -214,7 +216,7 @@ _keymapsave keyMapSaveTable[] =
 	kf_AddHelpBlip,				//Add a beacon
 	kf_AllAvailable,
 	kf_ToggleDebugMappings,
-	kf_NewPlayerPower,
+	kf_NOOP,
 	kf_TogglePauseMode,
 	kf_MaxScrollLimits,
 	kf_DebugDroidInfo,
@@ -254,6 +256,15 @@ _keymapsave keyMapSaveTable[] =
 	kf_SetDroidGoToTransport,
 	kf_SetDroidMoveGuard,
 	kf_toggleTrapCursor,
+	kf_SelectAllCyborgs,
+	kf_SelectAllCombatCyborgs,
+	kf_SelectAllEngineers,
+	kf_SelectAllLandCombatUnits,
+	kf_SelectAllMechanics,
+	kf_SelectAllTransporters,
+	kf_SelectAllRepairTanks,
+	kf_SelectAllSensorUnits,
+	kf_SelectAllTrucks,
 	NULL		// last function!
 };
 
@@ -270,7 +281,10 @@ void	keyInitMappings( bool bForceDefaults )
 	keyMappings = NULL;
 	numActiveMappings = 0;
 	bKeyProcessing = true;
-	processDebugMappings(false);
+	for (unsigned n = 0; n < MAX_PLAYERS; ++n)
+	{
+		processDebugMappings(n, false);
+	}
 
 
 	for(i=0; i<NUM_QWERTY_KEYS; i++)
@@ -413,6 +427,7 @@ void	keyInitMappings( bool bForceDefaults )
 	//                                **********************************
 	//								In game mappings - COMBO (CTRL + LETTER) presses.
 	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LCTRL, KEY_A, KEYMAP_PRESSED, kf_SelectAllCombatUnits,   N_("Select all Combat Units"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LCTRL, KEY_C, KEYMAP_PRESSED, kf_SelectAllCyborgs,       N_("Select all Cyborgs"));
 	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LCTRL, KEY_D, KEYMAP_PRESSED, kf_SelectAllDamaged,       N_("Select all Heavily Damaged Units"));
 	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LCTRL, KEY_F, KEYMAP_PRESSED, kf_SelectAllHalfTracked,   N_("Select all Half-tracks"));
 	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LCTRL, KEY_H, KEYMAP_PRESSED, kf_SelectAllHovers,        N_("Select all Hovers"));
@@ -424,6 +439,17 @@ void	keyInitMappings( bool bForceDefaults )
 	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LCTRL, KEY_W, KEYMAP_PRESSED, kf_SelectAllWheeled,       N_("Select all Wheels"));
 	keyAddMapping(KEYMAP__DEBUG,     KEY_LCTRL, KEY_Y, KEYMAP_PRESSED, kf_FrameRate,              N_("Show frame rate"));
 	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LCTRL, KEY_Z, KEYMAP_PRESSED, kf_SelectAllSameType,      N_("Select all Similar Units"));
+	//                                **********************************
+	//                                **********************************
+	//                                                              In game mappings - COMBO (SHIFT + LETTER) presses.
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LSHIFT, KEY_C, KEYMAP_PRESSED, kf_SelectAllCombatCyborgs,   N_("Select all Combat Cyborgs"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LSHIFT, KEY_E, KEYMAP_PRESSED, kf_SelectAllEngineers,       N_("Select all Engineers"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LSHIFT, KEY_G, KEYMAP_PRESSED, kf_SelectAllLandCombatUnits, N_("Select all Land Combat Units"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LSHIFT, KEY_M, KEYMAP_PRESSED, kf_SelectAllMechanics,       N_("Select all Mechanics"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LSHIFT, KEY_P, KEYMAP_PRESSED, kf_SelectAllTransporters,    N_("Select all Transporters"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LSHIFT, KEY_R, KEYMAP_PRESSED, kf_SelectAllRepairTanks,     N_("Select all Repair Tanks"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LSHIFT, KEY_S, KEYMAP_PRESSED, kf_SelectAllSensorUnits,     N_("Select all Sensor Units"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LSHIFT, KEY_T, KEYMAP_PRESSED, kf_SelectAllTrucks,          N_("Select all Trucks"));
 	//                                **********************************
 	//                                **********************************
 	//									SELECT PLAYERS - DEBUG ONLY
@@ -476,7 +502,6 @@ void	keyInitMappings( bool bForceDefaults )
 	keyAddMapping(KEYMAP__DEBUG, KEY_IGNORE, KEY_N, KEYMAP_PRESSED, kf_GiveTemplateSet,				"Give template set(s) to player 0 ");
 	keyAddMapping(KEYMAP__DEBUG, KEY_LCTRL, KEY_KP_MINUS, KEYMAP_PRESSED, kf_SystemClose,			"System Close (EXIT)");			//not working right now
 	keyAddMapping(KEYMAP__DEBUG, KEY_LCTRL, KEY_I, KEYMAP_PRESSED, kf_RecalcLighting,				"Recalculate lighting");
-	keyAddMapping(KEYMAP__DEBUG, KEY_LCTRL, KEY_N, KEYMAP_PRESSED, kf_NewPlayerPower,				"New game player power");
 
 	// This is not needed, use ctrl-o
 	keyAddMapping(KEYMAP__DEBUG, KEY_LALT, KEY_F1, KEYMAP_PRESSED, kf_SelectPlayer,					"Select player  0");
@@ -1019,16 +1044,40 @@ UDWORD	entry;
 
 // ----------------------------------------------------------------------------------
 /* Defines whether we process debug key mapping stuff */
-void	processDebugMappings( bool val )
+void processDebugMappings(unsigned player, bool val)
 {
-	bDoingDebugMappings = val;
+	bWantDebugMappings[player] = val;
+	bDoingDebugMappings = true;
+	for (unsigned n = 0; n < MAX_PLAYERS; ++n)
+	{
+		bDoingDebugMappings = bDoingDebugMappings && (bWantDebugMappings[n] || !NetPlay.players[n].allocated);
+	}
 }
 
 // ----------------------------------------------------------------------------------
 /* Returns present status of debug mapping processing */
-bool	getDebugMappingStatus( void )
+bool getDebugMappingStatus()
 {
-	return(bDoingDebugMappings);
+	return bDoingDebugMappings;
+}
+bool getWantedDebugMappingStatus(unsigned player)
+{
+	return bWantDebugMappings[player];
+}
+std::string getWantedDebugMappingStatuses(bool val)
+{
+	char ret[MAX_PLAYERS + 1];
+	char *p = ret;
+	for (unsigned n = 0; n < MAX_PLAYERS; ++n)
+	{
+		if (NetPlay.players[n].allocated && bWantDebugMappings[n] == val)
+		{
+			*p++ = '0' + NetPlay.players[n].position;
+		}
+	}
+	std::sort(ret, p);
+	*p++ = '\0';
+	return ret;
 }
 // ----------------------------------------------------------------------------------
 bool	keyReAssignMapping( KEY_CODE origMetaCode, KEY_CODE origSubCode,

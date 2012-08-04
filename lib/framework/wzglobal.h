@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1992-2007  Trolltech ASA.
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -39,6 +39,11 @@
 #  include "config.h"
 #elif defined(__MACOSX__)
 #  include "config-macosx.h"
+#elif !defined(__MACOSX__) && !defined(HAVE_CONFIG_H)
+#  define PACKAGE "warzone2100"
+#  define PACKAGE_BUGREPORT "http://wz2100.net/"
+#  define PACKAGE_NAME "Warzone 2100"
+#  define PACKAGE_TARNAME "warzone2100"
 #endif
 
 
@@ -159,7 +164,7 @@
 #  define WZ_OS_INTEGRITY
 #elif defined(__MAKEDEPEND__)
 #else
-#  error "Warzone has not been tested on this OS. Please contact warzone-dev@gna.org"
+#  error "Warzone has not been tested on this OS. Please contact warzone2100-project@lists.sourceforge.net"
 #endif /* WZ_OS_x */
 
 #if defined(WZ_OS_WIN32) || defined(WZ_OS_WIN64)
@@ -243,7 +248,7 @@
 #  define WZ_CC_TINYC
 
 #else
-#  error "Warzone has not been tested on this compiler. Please contact warzone-dev@gna.org"
+#  error "Warzone has not been tested on this compiler. Please contact warzone2100-project@lists.sourceforge.net"
 #endif /* WZ_CC_x */
 
 
@@ -281,7 +286,7 @@
 #  define WZ_WS_X11
 
 #else
-#  error "Warzone has not been tested on this window system. Please contact warzone-dev@gna.org"
+#  error "Warzone has not been tested on this window system. Please contact warzone2100-project@lists.sourceforge.net"
 #endif /* WZ_WS_x */
 
 #if defined(WZ_WS_WIN16) || defined(WZ_WS_WIN32)

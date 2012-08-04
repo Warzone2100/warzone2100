@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -56,41 +56,12 @@
 //used to get a location next to a droid - withinh one tile
 #define LOOK_NEXT_TO_DROID		8
 
-
-/* The different types of droid */
-// NOTE, if you add to, or change this list then you'll need
-// to update the DroidSelectionWeights lookup table in Display.c
-enum DROID_TYPE
-{
-	DROID_WEAPON,           ///< Weapon droid
-	DROID_SENSOR,           ///< Sensor droid
-	DROID_ECM,              ///< ECM droid
-	DROID_CONSTRUCT,        ///< Constructor droid
-	DROID_PERSON,           ///< person
-	DROID_CYBORG,           ///< cyborg-type thang
-	DROID_TRANSPORTER,      ///< guess what this is!
-	DROID_COMMAND,          ///< Command droid
-	DROID_REPAIR,           ///< Repair droid
-	DROID_DEFAULT,          ///< Default droid
-	DROID_CYBORG_CONSTRUCT, ///< cyborg constructor droid - new for update 28/5/99
-	DROID_CYBORG_REPAIR,    ///< cyborg repair droid - new for update 28/5/99
-	DROID_CYBORG_SUPER,     ///< cyborg repair droid - new for update 7/6/99
-	DROID_ANY,              ///< Any droid. Only used as a parameter for intGotoNextDroidType(DROID_TYPE).
-};
-
 struct COMPONENT
 {
 	UBYTE           nStat;          ///< Allowing a maximum of 255 stats per file
 };
 
-struct OrderListEntry
-{
-	DROID_ORDER     order;
-	UWORD           x, y, x2, y2;   ///< line build requires two sets of coords
-	uint16_t        direction;      ///< Needed to align structures with viewport.
-	void*           psOrderTarget;  ///< this needs to cope with objects and stats
-};
-typedef std::vector<OrderListEntry> OrderList;
+typedef std::vector<DROID_ORDER_DATA> OrderList;
 
 struct DROID_TEMPLATE : public BASE_STATS
 {
@@ -125,9 +96,10 @@ struct DROID_TEMPLATE : public BASE_STATS
 	UDWORD          multiPlayerID;              ///< multiplayer unique descriptor(cant use id's for templates). Used for save games as well now - AB 29/10/98
 	DROID_TEMPLATE* psNext;                     ///< Pointer to next template
 	bool		prefab;                     ///< Not player designed, not saved, never delete or change
+	bool		stored;                     ///< Stored template
+	bool		enabled;                    ///< Has been enabled
 };
 
-struct PACKAGED_CHECK;
 class DROID_GROUP;
 struct STRUCTURE;
 
@@ -136,7 +108,8 @@ struct DROID : public BASE_OBJECT
 	DROID(uint32_t id, unsigned player);
 	~DROID();
 
-	/// UTF-8 name of the droid. This is generated from the droid template and cannot be changed by the game player after creation.
+	/// UTF-8 name of the droid. This is generated from the droid template
+	///  WARNING: This *can* be changed by the game player after creation & can be translated, do NOT rely on this being the same for everyone!
 	char            aName[MAX_STR_LENGTH];
 
 	DROID_TYPE      droidType;                      ///< The type of droid
@@ -173,13 +146,8 @@ struct DROID : public BASE_OBJECT
 	unsigned        listPendingBegin;               ///< Index of first order which will not be erased by a pending order. After all messages are processed, the orders in the range [listPendingBegin; listPendingEnd - 1] will remain.
 
 	/* Order data */
-	DROID_ORDER     order;
-	UWORD           orderX, orderY;
-	UWORD           orderX2, orderY2;
-	uint16_t        orderDirection;
+	DROID_ORDER_DATA order;
 
-	BASE_OBJECT*    psTarget;                       ///< Order target
-	BASE_STATS*     psTarStats;                     ///< What to build etc
 #ifdef DEBUG
 	// these are to help tracking down dangling pointers
 	char            targetFunc[MAX_EVENT_NAME_LEN];
@@ -192,6 +160,8 @@ struct DROID : public BASE_OBJECT
 
 	// secondary order data
 	UDWORD          secondaryOrder;
+	uint32_t        secondaryOrderPending;          ///< What the secondary order will be, after synchronisation.
+	int             secondaryOrderPendingCount;     ///< Number of pending secondary order changes.
 
 	/* Action data */
 	DROID_ACTION    action;
@@ -213,9 +183,6 @@ struct DROID : public BASE_OBJECT
 	/* anim data */
 	ANIM_OBJECT     *psCurAnim;
 	SDWORD          iAudioID;
-
-	// Synch checking
-	PACKAGED_CHECK *gameCheckDroid;                 ///< Last PACKAGED_CHECK, for synchronisation use only (see multisync.c). TODO Make synch perfect, so that this isn't needed at all.
 };
 
 #endif // __INCLUDED_DROIDDEF_H__

@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -85,8 +85,6 @@ struct RENDERED_BUTTON
 	void *Data;			// Any data we want to attach.
 	void *Data2;		// Any data we want to attach.
 	BUTTON_SURFACE *ButSurf;	// Surface to render the button into.
-//	uint8 *Buffer;		// Bitmap buffer.
-//	iSurface *Surface;	// Ivis surface definition.
 };
 
 extern RENDERED_BUTTON TopicBuffers[NUM_TOPICBUFFERS];
@@ -154,8 +152,6 @@ void intUpdateCommandExp(WIDGET *psWidget, W_CONTEXT *psContext);
 void intUpdateCommandFact(WIDGET *psWidget, W_CONTEXT *psContext);
 
 void intUpdateProgressBar(WIDGET *psWidget, W_CONTEXT *psContext);
-
-void intUpdateOptionText(WIDGET *psWidget, W_CONTEXT *psContext);
 
 void intUpdateQuantity(WIDGET *psWidget, W_CONTEXT *psContext);
 //callback to display the factory number
@@ -231,29 +227,23 @@ iIMDShape *DroidGetIMD(DROID *Droid);
 UDWORD DroidGetIMDIndex(DROID *Droid);
 bool DroidIsDemolishing(DROID *Droid);
 
-bool StructureIsManufacturingPending(STRUCTURE *structure);   ///< Returns true iff the structure is either manufacturing or on hold (even if not yet synchronised).
+bool StructureIsManufacturingPending(STRUCTURE *structure);   ///< Returns true iff the structure is either manufacturing or on hold (even if not yet synchronised). (But ignores research.)
+bool structureIsResearchingPending(STRUCTURE *structure);     ///< Returns true iff the structure is either researching or on hold (even if not yet synchronised). (But ignores manufacturing.)
 bool StructureIsOnHoldPending(STRUCTURE *structure);          ///< Returns true iff the structure is on hold (even if not yet synchronised).
 DROID_TEMPLATE *FactoryGetTemplate(FACTORY *Factory);
 
 RESEARCH_FACILITY *StructureGetResearch(STRUCTURE *Structure);
 FACTORY *StructureGetFactory(STRUCTURE *Structure);
-iIMDShape *StructureGetIMD(STRUCTURE *Structure);
 
-//iIMDShape *TemplateGetIMD(DROID_TEMPLATE *DroidTemp,UDWORD Player);
-//UDWORD TemplateGetIMDIndex(DROID_TEMPLATE *Template,UDWORD Player);
-
-//SDWORD ResearchGetImage(RESEARCH_FACILITY *Research);
-
-bool StatIsStructure(BASE_STATS *Stat);
+bool StatIsStructure(BASE_STATS const *Stat);
 iIMDShape *StatGetStructureIMD(BASE_STATS *Stat,UDWORD Player);
 bool StatIsTemplate(BASE_STATS *Stat);
-bool StatIsFeature(BASE_STATS *Stat);
+bool StatIsFeature(BASE_STATS const *Stat);
 
 SDWORD StatIsComponent(BASE_STATS *Stat);
 bool StatGetComponentIMD(BASE_STATS *Stat, SDWORD compID,iIMDShape **CompIMD,iIMDShape **MountIMD);
 
 bool StatIsResearch(BASE_STATS *Stat);
-//void StatGetResearchImage(BASE_STATS *Stat,SDWORD *Image,iIMDShape **Shape, bool drawTechIcon);
 void StatGetResearchImage(BASE_STATS *psStat, SDWORD *Image, iIMDShape **Shape,
                           BASE_STATS **ppGraphicData, bool drawTechIcon);
 
@@ -278,8 +268,6 @@ extern void intDisplayProximityBlips(WIDGET *psWidget, UDWORD xOffset,
 					UDWORD yOffset, PIELIGHT *pColours);
 
 extern void intUpdateQuantitySlider(WIDGET *psWidget, W_CONTEXT *psContext);
-
-
 
 extern void intDisplayDPButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 

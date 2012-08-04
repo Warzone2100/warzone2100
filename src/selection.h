@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -23,33 +23,40 @@
 
 enum SELECTION_CLASS
 {
-DS_ALL_UNITS,
-DS_BY_TYPE
+	DS_ALL_UNITS,
+	DS_BY_TYPE
 };
 
 enum SELECTIONTYPE
 {
-DST_UNUSED,
-DST_VTOL,
-DST_HOVER,
-DST_WHEELED,
-DST_TRACKED,
-DST_HALF_TRACKED,
-DST_ALL_COMBAT,
-DST_ALL_DAMAGED,
-DST_ALL_SAME
+	DST_UNUSED,
+	DST_VTOL,
+	DST_HOVER,
+	DST_WHEELED,
+	DST_TRACKED,
+	DST_HALF_TRACKED,
+	DST_CYBORG,
+	DST_ENGINEER,
+	DST_MECHANIC,
+	DST_TRANSPORTER,
+	DST_REPAIR_TANK,
+	DST_SENSOR,
+	DST_TRUCK,
+	DST_ALL_COMBAT,
+	DST_ALL_COMBAT_LAND,
+	DST_ALL_COMBAT_CYBORG,
+	DST_ALL_DAMAGED,
+	DST_ALL_SAME
 };
 
 // EXTERNALLY REFERENCED FUNCTIONS
-extern UDWORD	selDroidSelection( UDWORD	player, SELECTION_CLASS droidClass,
-						  SELECTIONTYPE droidType, bool bOnScreen );
-extern UDWORD	selDroidDeselect		( UDWORD player );
-extern UDWORD	selNumSelected			( UDWORD player );
-extern void	selNextRepairUnit			( void );
-extern void selNextUnassignedUnit		( void );
-extern void	selNextSpecifiedBuilding	( UDWORD structType );
-extern	void	selNextSpecifiedUnit	(UDWORD unitType);
+unsigned int selDroidSelection(unsigned int player, SELECTION_CLASS droidClass, SELECTIONTYPE droidType, bool bOnScreen);
+unsigned int selDroidDeselect(unsigned int player);
+unsigned int selNumSelected(unsigned int player);
+void selNextUnassignedUnit();
+void selNextSpecifiedBuilding(STRUCTURE_TYPE structType);
+void selNextSpecifiedUnit(DROID_TYPE unitType);
 // select the n'th command droid
-extern void selCommander(SDWORD n);
+void selCommander(int n);
 
 #endif // __INCLUDED_SRC_SELECTION_H__

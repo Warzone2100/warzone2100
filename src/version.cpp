@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 2007  Giel van Schijndel
-	Copyright (C) 2007-2011  Warzone 2100 Project
+	Copyright (C) 2007-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -26,6 +26,8 @@
 #include "stringdef.h"
 
 #include "src/autorevision.h"
+
+extern const char *BACKEND;
 
 // Two-step process to put quotes around anything, including preprocessor definitions.
 #define EXPAND(token) #token
@@ -152,7 +154,7 @@ const char* version_getFormattedVersionString()
 		// Construct the version string
 		// TRANSLATORS: This string looks as follows when expanded.
 		// "Version <version name/number> <working copy state><BUILD DATE><BUILD TYPE>"
-		snprintf(versionString, MAX_STR_LENGTH, _("Version %s%s%s%s"), version_getVersionString(), wc_state, build_date, build_type);
+		snprintf(versionString, MAX_STR_LENGTH, _("Version %s-%s%s%s%s"), BACKEND, version_getVersionString(), wc_state, build_date, build_type);
 	}
 
 	return versionString;

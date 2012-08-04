@@ -1,4 +1,4 @@
-20	432	10	100	_("Decoding Transmission...")
+20	432	0.4	4.0	_("Decoding Transmission...")
 
 
 

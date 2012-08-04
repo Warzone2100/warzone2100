@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -26,24 +26,27 @@
 // determines which option screen to use. when in GS_TITLE_SCREEN mode.
 enum tMode
 {
-	TITLE,					///< intro mode
-	SINGLE,					///< single player menu
-	MULTI,					///< multiplayer menu
-	OPTIONS,				///< options menu
-	GAME,					///<
-	TUTORIAL,				///< tutorial/fastplay
-	CREDITS,				///< credits
-	MULTIOPTION,			///< Host Screen
-	MULTILIMIT,				///< MULTIPLAYER, Limit the multistuff.
-	STARTGAME,				///< Fire up the game
-	SHOWINTRO,				///< reshow the intro
-	QUIT,					///< leaving game
-	LOADSAVEGAME,			///< loading a save game
-	KEYMAP,					///< keymap editor
-	GRAPHICS_OPTIONS,       ///< graphics options menu
-	AUDIO_OPTIONS,          ///< audio options menu
-	VIDEO_OPTIONS,          ///< video options menu
-	MOUSE_OPTIONS,          ///< mouse options menu
+	TITLE,			// 0 intro mode
+	SINGLE,			// 1 single player menu
+	MULTI,			// 2 multiplayer menu
+	OPTIONS,		// 3 options menu
+	GAME,			// 4
+	TUTORIAL,		// 5  tutorial/fastplay
+	CREDITS,		// 6  credits
+	PROTOCOL,		// 7  MULTIPLAYER, select proto
+	MULTIOPTION,	// 8 MULTIPLAYER, select game options
+	FORCESELECT,	// 9 MULTIPLAYER, Force design screen
+	GAMEFIND,		// 10 MULTIPLAYER, gamefinder.
+	MULTILIMIT,		// 11 MULTIPLAYER, Limit the multistuff.
+	STARTGAME,		// 12 Fire up the game
+	SHOWINTRO,		// 13 reshow the intro
+	QUIT,			// 14 leaving game
+	LOADSAVEGAME,	// 15 loading a save game
+	KEYMAP,			// 16 keymap editor
+	GRAPHICS_OPTIONS,       // 17 graphics options menu
+	AUDIO_OPTIONS,          // 18 audio options menu
+	VIDEO_OPTIONS,          // 19 video options menu
+	MOUSE_OPTIONS,          // 20 mouse options menu
 };
 
 extern tMode titleMode;					// the global case
@@ -59,6 +62,7 @@ extern bool	bLimiterLoaded;
 void changeTitleMode(tMode mode);
 bool runTitleMenu(void);
 bool runSinglePlayerMenu(void);
+bool runMultiPlayerMenu(void);
 bool runGameOptionsMenu(void);
 bool runOptionsMenu(void);
 bool runGraphicsOptionsMenu(void);
@@ -86,9 +90,9 @@ bool CancelPressed(void);
 // ////////////////////////////////////////////////////////////////////////////
 // defines.
 
-#define FRONTEND_TOPFORMX		80
+#define FRONTEND_TOPFORMX		50
 #define FRONTEND_TOPFORMY		10
-#define FRONTEND_TOPFORMW		480
+#define FRONTEND_TOPFORMW		540
 #define FRONTEND_TOPFORMH		150
 
 
@@ -98,9 +102,9 @@ bool CancelPressed(void);
 #define FRONTEND_TOPFORM_WIDEH	150
 
 
-#define FRONTEND_BOTFORMX		80
+#define FRONTEND_BOTFORMX		FRONTEND_TOPFORMX
 #define FRONTEND_BOTFORMY		170
-#define FRONTEND_BOTFORMW		480
+#define FRONTEND_BOTFORMW		FRONTEND_TOPFORMW
 #define FRONTEND_BOTFORMH		300
 
 
@@ -109,37 +113,37 @@ bool CancelPressed(void);
 
 #define FRONTEND_POS1X			20				// button positions
 #define FRONTEND_POS1Y			10
-#define FRONTEND_POS1M			290
+#define FRONTEND_POS1M			340
 
 #define FRONTEND_POS2X			20
 #define FRONTEND_POS2Y			50
-#define FRONTEND_POS2M			290
+#define FRONTEND_POS2M			340
 
 #define FRONTEND_POS3X			20
 #define FRONTEND_POS3Y			90
-#define FRONTEND_POS3M			290
+#define FRONTEND_POS3M			340
 
 #define FRONTEND_POS4X			20
 #define FRONTEND_POS4Y			130
-#define FRONTEND_POS4M			290
+#define FRONTEND_POS4M			340
 
 #define FRONTEND_POS5X			20
 #define FRONTEND_POS5Y			170
-#define FRONTEND_POS5M			290
+#define FRONTEND_POS5M			340
 
 #define FRONTEND_POS6X			20
 #define FRONTEND_POS6Y			210
-#define FRONTEND_POS6M			290
+#define FRONTEND_POS6M			340
 
 #define FRONTEND_POS7X			20
 #define FRONTEND_POS7Y			250
-#define FRONTEND_POS7M			290
+#define FRONTEND_POS7M			340
 
 #define FRONTEND_POS8X			-30				// special case for our hyperlink
 #define FRONTEND_POS8Y			278
 
 
-#define FRONTEND_SIDEX			44
+#define FRONTEND_SIDEX			24
 #define FRONTEND_SIDEY			FRONTEND_BOTFORMY
 #define FRONTEND_LOGOW			248
 #define FRONTEND_LOGOH			118
@@ -158,7 +162,6 @@ enum
 	FRONTEND_LOADCAM2,					// loading via --GAME CAM_2A
 	FRONTEND_LOADCAM3,					// loading via --GAME CAM_3A
 	FRONTEND_PASSWORDFORM,
-	FRONTEND_LOGINFORM,
 	FRONTEND_HYPERLINK,
 	// begin menu
 	FRONTEND_SINGLEPLAYER	= 20100,	// title screen
@@ -169,10 +172,13 @@ enum
 	FRONTEND_QUIT,
 	FRONTEND_FASTPLAY,					//tutorial menu option
 	FRONTEND_NEWGAME		= 20200,	// single player (menu)
-	FRONTEND_LOADGAME,
+	FRONTEND_LOADGAME_MISSION,
+	FRONTEND_LOADGAME_SKIRMISH,
 	FRONTEND_SKIRMISH,
 	FRONTEND_CHALLENGES,
-	FE_P0				= 20300,		// player 0 buton
+	FRONTEND_HOST			= 20300,	//multiplayer menu options
+	FRONTEND_JOIN,
+	FE_P0,								// player 0 buton
 	FE_P1,								// player 1 buton
 	FE_P2,								// player 2 buton
 	FE_P3,								// player 3 buton
@@ -180,6 +186,8 @@ enum
 	FE_P5,								// player 5 buton
 	FE_P6,								// player 6 buton
 	FE_P7,								// player 7 buton
+	FE_MP_PR,  // Multiplayer player random button
+	FE_MP_PMAX = FE_MP_PR + MAX_PLAYERS_IN_GUI,  // Multiplayer player blah button
 
 	FRONTEND_GAMEOPTIONS = 21000,           // Game Options menu
 	FRONTEND_LANGUAGE,
@@ -187,6 +195,8 @@ enum
 	FRONTEND_RADAR,
 	FRONTEND_RADAR_R,
 	FRONTEND_COLOUR,
+	FRONTEND_COLOUR_CAM,
+	FRONTEND_COLOUR_MP,
 	FRONTEND_DIFFICULTY,
 	FRONTEND_DIFFICULTY_R,
 	FRONTEND_SCROLLSPEED_SL,
@@ -203,8 +213,6 @@ enum
 	FRONTEND_SUBTITLES_R,
 	FRONTEND_SHADOWS,
 	FRONTEND_SHADOWS_R,
-	FRONTEND_FOGTYPE,
-	FRONTEND_FOGTYPE_R,
 
 	FRONTEND_AUDIOOPTIONS = 23000,          // Audio Options Menu
 	FRONTEND_3D_FX,						// 3d sound volume
@@ -226,6 +234,8 @@ enum
 	FRONTEND_VSYNC_R,
 	FRONTEND_FSAA,
 	FRONTEND_FSAA_R,
+	FRONTEND_SHADERS,
+	FRONTEND_SHADERS_R,
 
 	FRONTEND_MOUSEOPTIONS = 25000,          // Mouse Options Menu
 	FRONTEND_TRAP,
@@ -238,7 +248,7 @@ enum
 	FRONTEND_MMROTATE_R,
 
 	FRONTEND_KEYMAP			= 26000,	// Keymap menu
-	FRONTEND_LOBBYERROR 	= 31666	// Shows an lobby error
+	FRONTEND_NOGAMESAVAILABLE = 31666	// Used when no games are available in lobby
 
 };
 

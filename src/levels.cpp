@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -30,6 +30,9 @@
 #include "lib/framework/frame.h"
 #include "lib/framework/frameresource.h"
 #include "lib/framework/listmacs.h"
+#include "lib/framework/file.h"
+#include "lib/framework/crc.h"
+#include "lib/framework/physfs_ext.h"
 #include "lib/exceptionhandler/dumpinfo.h"
 #include "init.h"
 #include "objects.h"
@@ -38,7 +41,6 @@
 #include "mission.h"
 #include "levelint.h"
 #include "game.h"
-#include "lighting.h"
 #include "lib/ivis_opengl/piestate.h"
 #include "data.h"
 #include "lib/ivis_opengl/ivi.h"
@@ -48,6 +50,7 @@
 #include "lib/framework/lexer_input.h"
 #include "effects.h"
 #include "main.h"
+#include "multiint.h"
 
 extern int lev_get_lineno(void);
 extern char* lev_get_text(void);
@@ -68,7 +71,7 @@ static LEVEL_DATASET	*psBaseData = NULL;
 static LEVEL_DATASET	*psCurrLevel = NULL;
 
 // dummy level data for single WRF loads
-static LEVEL_DATASET	sSingleWRF = { 0, 0, 0, 0, mod_clean, { 0 }, 0, 0, 0 };
+static LEVEL_DATASET	sSingleWRF = {0, 0, 0, 0, mod_clean, {0}, 0, 0, 0, NULL, {{0}}};
 
 // return values from the lexer
 char *pLevToken;
@@ -124,6 +127,7 @@ void levShutDown(void)
 		}
 
 		free(toDelete->pName);
+		free(toDelete->realFileName);
 		free(toDelete);
 	}
 	psLevels = NULL;
@@ -141,26 +145,54 @@ void lev_error(const char* msg)
  *  @return a dataset with associated with the given @c name, or NULL if none
  *          could be found.
  */
-LEVEL_DATASET* levFindDataSet(const char* name)
+LEVEL_DATASET *levFindDataSet(char const *name, Sha256 const *hash)
 {
-	LEVEL_DATASET* psNewLevel;
-
-	for (psNewLevel = psLevels; psNewLevel; psNewLevel = psNewLevel->psNext)
+	if (hash != NULL && hash->isZero())
 	{
-		if (psNewLevel->pName != NULL
-		 && strcmp(psNewLevel->pName, name) == 0)
+		hash = NULL;  // Don't check hash if it's just 0000000000000000000000000000000000000000000000000000000000000000. Assuming real map files probably won't have that particular SHA-256 hash.
+	}
+
+	for (LEVEL_DATASET *psNewLevel = psLevels; psNewLevel != NULL; psNewLevel = psNewLevel->psNext)
+	{
+		if (psNewLevel->pName != NULL && strcmp(psNewLevel->pName, name) == 0)
 		{
-			return psNewLevel;
+			if (hash == NULL || levGetFileHash(psNewLevel) == *hash)
+			{
+				return psNewLevel;
+			}
 		}
 	}
 
 	return NULL;
 }
 
+Sha256 levGetFileHash(LEVEL_DATASET *level)
+{
+	if (level->realFileName != NULL && level->realFileHash.isZero())
+	{
+		level->realFileHash = findHashOfFile(level->realFileName);
+		debug(LOG_WZ, "Hash of file \"%s\" is %s.", level->realFileName, level->realFileHash.toString().c_str());
+	}
+	return level->realFileHash;
+}
+
+Sha256 levGetMapNameHash(char const *mapName)
+{
+	LEVEL_DATASET *level = levFindDataSet(mapName, NULL);
+	if (level == NULL)
+	{
+		debug(LOG_WARNING, "Couldn't find map \"%s\" to hash.", mapName);
+		Sha256 zero;
+		zero.setZero();
+		return zero;
+	}
+	return levGetFileHash(level);
+}
+
 // parse a level description data file
 // the ignoreWrf hack is for compatibility with old maps that try to link in various
 // data files that we have removed
-bool levParse(const char* buffer, size_t size, searchPathMode datadir, bool ignoreWrf)
+bool levParse(const char* buffer, size_t size, searchPathMode datadir, bool ignoreWrf, char const *realFileName)
 {
 	lexerinput_t input;
 	LEVELPARSER_STATE state;
@@ -202,6 +234,8 @@ bool levParse(const char* buffer, size_t size, searchPathMode datadir, bool igno
 				psDataSet->players = 1;
 				psDataSet->game = -1;
 				psDataSet->dataDir = datadir;
+				psDataSet->realFileName = realFileName != NULL? strdup(realFileName) : NULL;
+				psDataSet->realFileHash.setZero();  // The hash is only calculated on demand; for example, if the map name matches.
 				LIST_APPEND(psLevels, psDataSet, LEVEL_DATASET);
 				currData = 0;
 
@@ -592,13 +626,13 @@ char *getLevelName( void )
 
 
 // load up the data for a level
-bool levLoadData(const char* name, char *pSaveName, GAME_TYPE saveType)
+bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYPE saveType)
 {
 	LEVEL_DATASET	*psNewLevel, *psBaseData, *psChangeLevel;
 	SDWORD			i;
 	bool            bCamChangeSaveGame;
 
-	debug(LOG_WZ, "Loading level %s (%s, type %d)", name, pSaveName, (int)saveType);
+	debug(LOG_WZ, "Loading level %s hash %s (%s, type %d)", name, hash == NULL? "builtin" : hash->toString().c_str(), pSaveName, (int)saveType);
 	if (saveType == GTYPE_SAVE_START || saveType == GTYPE_SAVE_MIDMISSION)
 	{
 		if (!levReleaseAll())
@@ -611,10 +645,10 @@ bool levLoadData(const char* name, char *pSaveName, GAME_TYPE saveType)
 	levelLoadType = saveType;
 
 	// find the level dataset
-	psNewLevel = levFindDataSet(name);
+	psNewLevel = levFindDataSet(name, hash);
 	if (psNewLevel == NULL)
 	{
-		debug(LOG_WZ, "Dataset %s not found - trying to load as WRF", name);
+		debug(LOG_INFO, "Dataset %s not found - trying to load as WRF", name);
 		return levLoadSingleWRF(name);
 	}
 	debug(LOG_WZ, "** Data set found is %s type %d", psNewLevel->pName, (int)psNewLevel->type);
@@ -661,6 +695,7 @@ bool levLoadData(const char* name, char *pSaveName, GAME_TYPE saveType)
 				      psCurrLevel->psBaseData, psNewLevel->psBaseData, (int)psCurrLevel->type, (int)psNewLevel->type);
 				if (!levReleaseAll())	// this sets psCurrLevel to NULL
 				{
+					debug(LOG_ERROR, "Failed to release old data");
 					return false;
 				}
 			}
@@ -686,9 +721,10 @@ bool levLoadData(const char* name, char *pSaveName, GAME_TYPE saveType)
 		}
 	}
 
-	setCurrentMap(psNewLevel->pName, psNewLevel->players);
+	setCurrentMap(psNewLevel->realFileName, psNewLevel->players);
 	if (!rebuildSearchPath(psNewLevel->dataDir, true))
 	{
+		debug(LOG_ERROR, "Failed to rebuild search path");
 		return false;
 	}
 
@@ -698,6 +734,7 @@ bool levLoadData(const char* name, char *pSaveName, GAME_TYPE saveType)
 		debug(LOG_WZ, "Reseting old mission data");
 		if (!levReleaseMissionData())
 		{
+			debug(LOG_ERROR, "Failed to unload old mission data");
 			return false;
 		}
 	}
@@ -708,6 +745,7 @@ bool levLoadData(const char* name, char *pSaveName, GAME_TYPE saveType)
 	{
 		if (!saveGameReset())
 		{
+			debug(LOG_ERROR, "Failed to saveGameReset()!");
 			return false;
 		}
 	}
@@ -719,6 +757,7 @@ bool levLoadData(const char* name, char *pSaveName, GAME_TYPE saveType)
 		debug(LOG_WZ, "Calling stageOneInitialise!");
 		if (!stageOneInitialise())
 		{
+			debug(LOG_ERROR, "Failed stageOneInitialise!");
 			return false;
 		}
 	}
@@ -735,6 +774,7 @@ bool levLoadData(const char* name, char *pSaveName, GAME_TYPE saveType)
 				debug(LOG_WZ, "Loading [directory: %s] %s ...", PHYSFS_getRealDir(psBaseData->apDataFiles[i]), psBaseData->apDataFiles[i]);
 				if (!resLoad(psBaseData->apDataFiles[i], i))
 				{
+					debug(LOG_ERROR, "Failed resLoad(%s)!", psBaseData->apDataFiles[i]);
 					return false;
 				}
 			}
@@ -744,6 +784,7 @@ bool levLoadData(const char* name, char *pSaveName, GAME_TYPE saveType)
 	{
 		if (!campaignReset())
 		{
+			debug(LOG_ERROR, "Failed campaignReset()!");
 			return false;
 		}
 	}
@@ -758,6 +799,7 @@ bool levLoadData(const char* name, char *pSaveName, GAME_TYPE saveType)
 			{
 				if (!stageTwoInitialise())
 				{
+					debug(LOG_ERROR, "Failed stageTwoInitialise()!");
 					return false;
 				}
 			}
@@ -768,6 +810,7 @@ bool levLoadData(const char* name, char *pSaveName, GAME_TYPE saveType)
 				debug(LOG_WZ, "Init mission stuff");
 				if (!startMissionSave(psNewLevel->type))
 				{
+					debug(LOG_ERROR, "Failed startMissionSave(%d)!", psNewLevel->type);
 					return false;
 				}
 
@@ -778,6 +821,7 @@ bool levLoadData(const char* name, char *pSaveName, GAME_TYPE saveType)
 			debug(LOG_NEVER, "Loading savegame: %s", pSaveName);
 			if (!loadGame(pSaveName, false, true,true))
 			{
+				debug(LOG_ERROR, "Failed loadGame(%s)!", pSaveName);
 				return false;
 			}
 		}
@@ -788,6 +832,7 @@ bool levLoadData(const char* name, char *pSaveName, GAME_TYPE saveType)
 			debug(LOG_NEVER, "Start mission - no .gam");
 			if (!startMission((LEVEL_TYPE)psNewLevel->type, NULL))
 			{
+				debug(LOG_ERROR, "Failed startMission(%d)!", psNewLevel->type);
 				return false;
 			}
 		}
@@ -802,6 +847,7 @@ bool levLoadData(const char* name, char *pSaveName, GAME_TYPE saveType)
 			{
 				if (!stageTwoInitialise())
 				{
+					debug(LOG_ERROR, "Failed stageTwoInitialise() [camchange]!");
 					return false;
 				}
 			}
@@ -809,6 +855,7 @@ bool levLoadData(const char* name, char *pSaveName, GAME_TYPE saveType)
 			debug(LOG_NEVER, "loading savegame: %s", pSaveName);
 			if (!loadGame(pSaveName, false, true,true))
 			{
+				debug(LOG_ERROR, "Failed loadGame(%s)!", pSaveName);
 				return false;
 			}
 
@@ -831,6 +878,7 @@ bool levLoadData(const char* name, char *pSaveName, GAME_TYPE saveType)
 			{
 				if (!stageTwoInitialise())
 				{
+					debug(LOG_ERROR, "Failed stageTwoInitialise() [newdata]!");
 					return false;
 				}
 			}
@@ -844,6 +892,7 @@ bool levLoadData(const char* name, char *pSaveName, GAME_TYPE saveType)
 					debug(LOG_WZ, "Init mission stuff");
 					if (!startMissionSave(psNewLevel->type))
 					{
+						debug(LOG_ERROR, "Failed startMissionSave(%d)!", psNewLevel->type);
 						return false;
 					}
 
@@ -854,6 +903,7 @@ bool levLoadData(const char* name, char *pSaveName, GAME_TYPE saveType)
 				debug(LOG_NEVER, "Loading save game %s", pSaveName);
 				if (!loadGame(pSaveName, false, true,true))
 				{
+					debug(LOG_ERROR, "Failed loadGame(%s)!", pSaveName);
 					return false;
 				}
 			}
@@ -870,6 +920,7 @@ bool levLoadData(const char* name, char *pSaveName, GAME_TYPE saveType)
 					debug(LOG_WZ, "LDS_COMPLETE / LDS_CAMSTART");
 					if (!startMission(LDS_CAMSTART, psNewLevel->apDataFiles[i]))
 					{
+						debug(LOG_ERROR, "Failed startMission(%d, %s)!", LDS_CAMSTART, psNewLevel->apDataFiles[i]);
 						return false;
 					}
 					break;
@@ -877,6 +928,7 @@ bool levLoadData(const char* name, char *pSaveName, GAME_TYPE saveType)
 					debug(LOG_WZ, "LDS_BETWEEN");
 					if (!startMission(LDS_BETWEEN, psNewLevel->apDataFiles[i]))
 					{
+						debug(LOG_ERROR, "Failed startMission(%d, %s)!", LDS_BETWEEN, psNewLevel->apDataFiles[i]);
 						return false;
 					}
 					break;
@@ -885,6 +937,7 @@ bool levLoadData(const char* name, char *pSaveName, GAME_TYPE saveType)
 					debug(LOG_WZ, "LDS_MKEEP");
 					if (!startMission(LDS_MKEEP, psNewLevel->apDataFiles[i]))
 					{
+						debug(LOG_ERROR, "Failed startMission(%d, %s)!", LDS_MKEEP, psNewLevel->apDataFiles[i]);
 						return false;
 					}
 					break;
@@ -892,6 +945,7 @@ bool levLoadData(const char* name, char *pSaveName, GAME_TYPE saveType)
 					debug(LOG_WZ, "LDS_CAMCHANGE");
 					if (!startMission(LDS_CAMCHANGE, psNewLevel->apDataFiles[i]))
 					{
+						debug(LOG_ERROR, "Failed startMission(%d, %s)!", LDS_CAMCHANGE, psNewLevel->apDataFiles[i]);
 						return false;
 					}
 					break;
@@ -900,6 +954,7 @@ bool levLoadData(const char* name, char *pSaveName, GAME_TYPE saveType)
 					debug(LOG_WZ, "LDS_EXPAND");
 					if (!startMission(LDS_EXPAND, psNewLevel->apDataFiles[i]))
 					{
+						debug(LOG_ERROR, "Failed startMission(%d, %s)!", LDS_EXPAND, psNewLevel->apDataFiles[i]);
 						return false;
 					}
 					break;
@@ -907,6 +962,7 @@ bool levLoadData(const char* name, char *pSaveName, GAME_TYPE saveType)
 					debug(LOG_WZ, "LDS_LIMBO");
 					if (!startMission(LDS_EXPAND_LIMBO, psNewLevel->apDataFiles[i]))
 					{
+						debug(LOG_ERROR, "Failed startMission(%d, %s)!", LDS_EXPAND_LIMBO, psNewLevel->apDataFiles[i]);
 						return false;
 					}
 					break;
@@ -915,6 +971,7 @@ bool levLoadData(const char* name, char *pSaveName, GAME_TYPE saveType)
 					debug(LOG_WZ, "LDS_MCLEAR");
 					if (!startMission(LDS_MCLEAR, psNewLevel->apDataFiles[i]))
 					{
+						debug(LOG_ERROR, "Failed startMission(%d, %s)!", LDS_MCLEAR, psNewLevel->apDataFiles[i]);
 						return false;
 					}
 					break;
@@ -922,15 +979,16 @@ bool levLoadData(const char* name, char *pSaveName, GAME_TYPE saveType)
 					debug(LOG_WZ, "LDS_MKEEP_LIMBO");
 					if (!startMission(LDS_MKEEP_LIMBO, psNewLevel->apDataFiles[i]))
 					{
+						debug(LOG_ERROR, "Failed startMission(%d, %s)!", LDS_MKEEP_LIMBO, psNewLevel->apDataFiles[i]);
 						return false;
 					}
 					break;
 				default:
-					ASSERT( psNewLevel->type >= LDS_MULTI_TYPE_START,
-						"levLoadData: Unexpected mission type" );
+					ASSERT( psNewLevel->type >= LDS_MULTI_TYPE_START, "Unexpected mission type" );
 					debug(LOG_WZ, "default (MULTIPLAYER)");
 					if (!startMission(LDS_CAMSTART, psNewLevel->apDataFiles[i]))
 					{
+						debug(LOG_ERROR, "Failed startMission(%d, %s) (default)!", LDS_CAMSTART, psNewLevel->apDataFiles[i]);
 						return false;
 					}
 					break;
@@ -943,6 +1001,7 @@ bool levLoadData(const char* name, char *pSaveName, GAME_TYPE saveType)
 			debug(LOG_WZ, "Loading %s", psNewLevel->apDataFiles[i]);
 			if (!resLoad(psNewLevel->apDataFiles[i], i + CURRENT_DATAID))
 			{
+				debug(LOG_ERROR, "Failed resLoad(%s, %d) (default)!", psNewLevel->apDataFiles[i], i + CURRENT_DATAID);
 				return false;
 			}
 		}
@@ -953,23 +1012,30 @@ bool levLoadData(const char* name, char *pSaveName, GAME_TYPE saveType)
 		//load MidMission Extras
 		if (!loadMissionExtras(pSaveName, psNewLevel->type))
 		{
+			debug(LOG_ERROR, "Failed loadMissionExtras(%s, %d)!", pSaveName, psNewLevel->type);
 			return false;
 		}
 	}
 
+	if (bMultiPlayer)
+	{
+		loadMultiScripts();
+	}
 	if (pSaveName != NULL && saveType == GTYPE_SAVE_MIDMISSION)
 	{
 		//load script stuff
 		// load the event system state here for a save game
-		debug(LOG_NEVER, "Loading script system state");
+		debug(LOG_SAVE, "Loading script system state");
 		if (!loadScriptState(pSaveName))
 		{
+			debug(LOG_ERROR, "Failed loadScriptState(%s)!", pSaveName);
 			return false;
 		}
 	}
 
 	if (!stageThreeInitialise())
 	{
+		debug(LOG_ERROR, "Failed stageThreeInitialise()!");
 		return false;
 	}
 
@@ -1002,40 +1068,4 @@ bool levLoadData(const char* name, char *pSaveName, GAME_TYPE saveType)
 
 
 	return true;
-}
-
-static void levTestLoad(const char* level)
-{
-	static char savegameName[80];
-	bool retval;
-
-	retval = levLoadData(level, NULL, GTYPE_SCENARIO_START);
-	ASSERT(retval, "levLoadData failed selftest");
-	ASSERT(checkResearchStats(), "checkResearchStats failed selftest");
-	ASSERT(checkStructureStats(), "checkStructureStats failed selftest");
-	fprintf(stdout, "\t\tLoaded: %s\n", level);
-	strcpy(savegameName, "selftest/");
-	PHYSFS_mkdir(savegameName);
-	strcat(savegameName, level);
-	strcat(savegameName, ".gam");
-	retval = saveGame(savegameName, GTYPE_SAVE_START);
-	ASSERT(retval, "saveGame failed selftest");
-	strcpy(savegameName, "selftest/");	// we need to recreate string, because saveGame clobbered it
-	strcat(savegameName, level);
-	strcat(savegameName, ".gam");
-	retval = levReleaseAll();
-	assert(retval == true);
-	fprintf(stdout, "\t\tSaved: %s\n", savegameName);
-}
-
-void levTest(void)
-{
-	fprintf(stdout, "\tLevels self-test...\n");
-	levTestLoad("CAM_1A");
-	levTestLoad("CAM_2A");
-	levTestLoad("CAM_3A");
-	levTestLoad("FASTPLAY");
-	//levTestLoad("TUTORIAL3");
-	levTestLoad("Sk-BeggarsKanyon-T1");
-	fprintf(stdout, "\tLevels self-test: PASSED\n");
 }

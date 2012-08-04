@@ -1,0 +1,17 @@
+// Global settings for all Test configurations
+
+
+GCC_VERSION = com.apple.compilers.llvm.clang.1_0
+INSTALL_PATH = /usr/local/bin
+
+LD_RUNPATH_SEARCH_PATHS = $(RUNPATH_TESTS)
+
+ALWAYS_SEARCH_USER_PATHS = NO
+
+FRAMEWORK_SEARCH_PATHS = $(inherited) $(FRAMEWORK_SEARCH_PATHS_QUOTED_2) $(FRAMEWORK_SEARCH_PATHS_QUOTED_3)
+
+USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/.." "$(SRCROOT)/../tools" "$(SRCROOT)"
+
+srcdir = $(SRCROOT)
+
+RUNPATH_TESTS = @loader_path @loader_path/. @loader_path/../macosx/build/$(CONFIGURATION) @loader_path/../macosx/build/$(CONFIGURATION)/. @loader_path/Warzone.app/Contents/Frameworks /Applications/Warzone.app/Contents/Frameworks

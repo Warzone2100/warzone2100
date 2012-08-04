@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -61,15 +61,15 @@ PIELIGHT clanColours[]=
 {	// see frontend2.png for team color order.
 	// [r,g,b,a]
 	{{0,255,0,255}},		// green  Player 0
-	{{255,210,40,255}},		// orange Player 1
+	{{255,192,40,255}},             // orange Player 1
 	{{255,255,255,255}},	// grey   Player 2
 	{{0,0,0,255}},			// black  Player 3
 	{{255,0,0,255}},		// red    Player 4
 	{{20,20,255,255}},		// blue   Player 5
-	{{255,0,255,255}},		// pink   Player 6 (called purple in palette.txt)
+	{{255,0,192,255}},              // pink   Player 6
 	{{0,255,255,255}},		// cyan   Player 7
 	{{255,255,0,255}},              // yellow Player 8
-	{{192,0,255,255}},              // pink   Player 9
+	{{144,0,255,255}},              // purple Player 9
 	{{200,255,255,255}},            // white  Player A (Should be brighter than grey, but grey is already maximum.)
 	{{128,128,255,255}},            // bright blue Player B
 	{{128,255,128,255}},            // neon green  Player C
@@ -144,7 +144,7 @@ bool InitRadar(void)
 	colRadarMe = WZCOL_WHITE;
 	if (mapWidth < 150)	// too small!
 	{
-		RadarZoom = DEFAULT_RADARZOOM * 2;
+		RadarZoom = pie_GetVideoBufferWidth() <= 640 ? 14 : DEFAULT_RADARZOOM * 2;
 	}
 	pie_InitRadar();
 
@@ -333,8 +333,8 @@ static PIELIGHT appliedRadarColour(RADAR_DRAW_MODE radarDrawMode, MAPTILE *WTile
 {
 	PIELIGHT WScr = WZCOL_BLACK;	// squelch warning
 
-	// draw radar terrain on/off feature
-	if ((getRevealStatus() || radarDrawMode == RADAR_MODE_TERRAIN_SEEN) && !TEST_TILE_VISIBLE(selectedPlayer, WTile))
+	// draw radar on/off feature
+	if (!getRevealStatus() && !TEST_TILE_VISIBLE(selectedPlayer, WTile))
 	{
 		return WZCOL_RADAR_BACKGROUND;
 	}
@@ -342,7 +342,6 @@ static PIELIGHT appliedRadarColour(RADAR_DRAW_MODE radarDrawMode, MAPTILE *WTile
 	switch(radarDrawMode)
 	{
 		case RADAR_MODE_TERRAIN:
-		case RADAR_MODE_TERRAIN_SEEN:
 		{
 			// draw radar terrain on/off feature
 			PIELIGHT col = tileColours[TileNumber_tile(WTile->texture)];
@@ -353,14 +352,20 @@ static PIELIGHT appliedRadarColour(RADAR_DRAW_MODE radarDrawMode, MAPTILE *WTile
 			if (terrainType(WTile) == TER_CLIFFFACE)
 			{
 				col.byte.r /= 2;
-				col.byte.b /= 2;
 				col.byte.g /= 2;
+				col.byte.b /= 2;
 			}
 			if (!hasSensorOnTile(WTile, selectedPlayer))
 			{
+				col.byte.r = col.byte.r * 2 / 3;
+				col.byte.g = col.byte.g * 2 / 3;
+				col.byte.b = col.byte.b * 2 / 3;
+			}
+			if (!TEST_TILE_VISIBLE(selectedPlayer, WTile))
+			{
 				col.byte.r /= 2;
-				col.byte.b /= 2;
 				col.byte.g /= 2;
+				col.byte.b /= 2;
 			}
 			WScr = col;
 		}
@@ -376,14 +381,20 @@ static PIELIGHT appliedRadarColour(RADAR_DRAW_MODE radarDrawMode, MAPTILE *WTile
 			if (terrainType(WTile) == TER_CLIFFFACE)
 			{
 				col.byte.r /= 2;
-				col.byte.b /= 2;
 				col.byte.g /= 2;
+				col.byte.b /= 2;
 			}
 			if (!hasSensorOnTile(WTile, selectedPlayer))
 			{
+				col.byte.r = col.byte.r * 2 / 3;
+				col.byte.g = col.byte.g * 2 / 3;
+				col.byte.b = col.byte.b * 2 / 3;
+			}
+			if (!TEST_TILE_VISIBLE(selectedPlayer, WTile))
+			{
 				col.byte.r /= 2;
-				col.byte.b /= 2;
 				col.byte.g /= 2;
+				col.byte.b /= 2;
 			}
 			WScr = col;
 		}

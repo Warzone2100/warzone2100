@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -35,8 +35,6 @@ extern bool sendGift			(uint8_t type, uint8_t to);
 extern bool recvGift                            (NETQUEUE queue);
 
 extern void technologyGiveAway				(const STRUCTURE* pS);
-extern void recvMultiPlayerRandomArtifacts      (NETQUEUE queue);
-extern void addMultiPlayerRandomArtifacts	(uint8_t quantity, FEATURE_TYPE type);
 extern void recvMultiPlayerFeature              (NETQUEUE queue);
 extern void sendMultiPlayerFeature(FEATURE_TYPE type, uint32_t x, uint32_t y, uint32_t id);
 
@@ -50,5 +48,6 @@ extern void giftRadar						(uint8_t from, uint8_t to, bool send);
 #define RESEARCH_GIFT	3
 #define POWER_GIFT		4
 #define STRUCTURE_GIFT	5	// Unused
+#define AUTOGAME_GIFT   6   // Notify others that we are now being controled by the AI
 
 #endif // __INCLUDED_SRC_MULTIGIFTS_H__

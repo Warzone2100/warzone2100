@@ -1,6 +1,6 @@
 /*
 	This file is part of Warzone 2100.
-	Copyright (C) 2007-2011  Warzone 2100 Project
+	Copyright (C) 2007-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -126,18 +126,6 @@ static void queue(const Q &q, uint32_t &vOrig)
 }
 
 template<class Q>
-static void queueLarge(const Q &q, uint32_t &v)
-{
-	uint16_t b[2] = {uint16_t(v>>16), uint16_t(v)};
-	queue(q, b[0]);
-	queue(q, b[1]);
-	if (Q::Direction == Q::Read)
-	{
-		v = b[0]<<16 | b[1];
-	}
-}
-
-template<class Q>
 static void queue(const Q &q, uint64_t &v)
 {
 	uint32_t b[2] = {uint32_t(v>>32), uint32_t(v)};
@@ -235,6 +223,13 @@ static void queue(const Q &q, Rotation &v)
 	queue(q, v.roll);
 }
 
+template<class Q>
+static void queue(const Q &q, Vector2i &v)
+{
+	queue(q, v.x);
+	queue(q, v.y);
+}
+
 template<class Q, class T>
 static void queue(const Q &q, std::vector<T> &v)
 {
@@ -280,19 +275,6 @@ static void queueAuto(T &v)
 	}
 }
 
-template<class T>
-static void queueAutoLarge(T &v)
-{
-	if (NETgetPacketDir() == PACKET_ENCODE)
-	{
-		queueLarge(writer, v);
-	}
-	else if (NETgetPacketDir() == PACKET_DECODE)
-	{
-		queueLarge(reader, v);
-	}
-}
-
 // Queue selection functions
 
 /// Gets the &NetQueuePair::send or NetQueue *, corresponding to queue.
@@ -323,16 +305,17 @@ NETQUEUE NETnetTmpQueue(unsigned tmpPlayer)
 	ret.isPair = true;
 	ret.index = tmpPlayer;
 	ret.queueType = QUEUE_TMP;
+	ret.exclude = NET_NO_EXCLUDE;
 	return ret;
 }
 
-NETQUEUE NETnetQueue(unsigned player)
+NETQUEUE NETnetQueue(unsigned player, unsigned excludePlayer)
 {
 	NETQUEUE ret;
 
 	if (player == NET_ALL_PLAYERS)
 	{
-		return NETbroadcastQueue();
+		return NETbroadcastQueue(excludePlayer);
 	}
 
 	ASSERT(player < MAX_CONNECTED_PLAYERS, "Huh?");
@@ -341,6 +324,7 @@ NETQUEUE NETnetQueue(unsigned player)
 	ret.isPair = true;
 	ret.index = player;
 	ret.queueType = QUEUE_NET;
+	ret.exclude = excludePlayer;
 	return ret;
 }
 
@@ -353,10 +337,24 @@ NETQUEUE NETgameQueue(unsigned player)
 	ret.isPair = false;
 	ret.index = player;
 	ret.queueType = QUEUE_GAME;
+	ret.exclude = NET_NO_EXCLUDE;
 	return ret;
 }
 
-NETQUEUE NETbroadcastQueue()
+NETQUEUE NETgameQueueForced(unsigned player)
+{
+	NETQUEUE ret;
+	ASSERT(player < MAX_PLAYERS, "Huh?");
+	NetQueue *queue = gameQueues[player];
+	ret.queue = queue;
+	ret.isPair = false;
+	ret.index = player;
+	ret.queueType = QUEUE_GAME_FORCED;
+	ret.exclude = NET_NO_EXCLUDE;
+	return ret;
+}
+
+NETQUEUE NETbroadcastQueue(unsigned excludePlayer)
 {
 	NETQUEUE ret;
 	NetQueue *queue = broadcastQueue;
@@ -364,6 +362,7 @@ NETQUEUE NETbroadcastQueue()
 	ret.isPair = false;
 	ret.index = NET_ALL_PLAYERS;
 	ret.queueType = QUEUE_BROADCAST;
+	ret.exclude = excludePlayer;
 	return ret;
 }
 
@@ -413,6 +412,18 @@ void NETinitQueue(NETQUEUE queue)
 	}
 }
 
+void NETdeleteQueue(void)
+{
+	for (int i = 0; i < MAX_PLAYERS; ++i)
+	{
+		delete pairQueue(NETnetQueue(i));
+		delete gameQueues[i];
+	}
+
+		delete broadcastQueue;
+
+}
+
 void NETsetNoSendOverNetwork(NETQUEUE queue)
 {
 	sendQueue(queue)->setWillNeverGetMessagesForNet();  // Will not be sending over net.
@@ -457,7 +468,7 @@ bool NETend()
 		queue->pushMessage(message);
 		NETlogPacket(message.type, message.data.size(), false);
 
-		if (queueInfo.queueType == QUEUE_GAME)
+		if (queueInfo.queueType == QUEUE_GAME || queueInfo.queueType == QUEUE_GAME_FORCED)
 		{
 			ASSERT(message.type > GAME_MIN_TYPE && message.type < GAME_MAX_TYPE, "Inserting %s into game queue.", messageTypeToString(message.type));
 		}
@@ -466,14 +477,48 @@ bool NETend()
 			ASSERT(message.type > NET_MIN_TYPE && message.type < NET_MAX_TYPE, "Inserting %s into net queue.", messageTypeToString(message.type));
 		}
 
-		if (queueInfo.queueType == QUEUE_NET || queueInfo.queueType == QUEUE_BROADCAST)
+		if (queueInfo.queueType == QUEUE_NET || queueInfo.queueType == QUEUE_BROADCAST || queueInfo.queueType == QUEUE_TMP)
 		{
-			NETsend(queueInfo.index, &queue->getMessageForNet());
+			NETsend(queueInfo, &queue->getMessageForNet());
 			queue->popMessageForNet();
+			ASSERT(queue->numMessagesForNet() == 0, "Queue not empty.");
 		}
 
 		// We have ended the serialisation, so mark the direction invalid
 		NETsetPacketDir(PACKET_INVALID);
+
+		if (queueInfo.queueType == QUEUE_GAME_FORCED)  // If true, we must be the host, inserting a GAME_PLAYER_LEFT into the other player's game queue. Since they left, they're not around to complain about us messing with their queue, which would normally cause a desynch.
+		{
+			// Almost duplicate code from NETflushGameQueues() in here.
+			// Message must be sent as message in a NET_SHARE_GAME_QUEUE in a NET_SEND_TO_PLAYER.
+			// If not sent inside a NET_SEND_TO_PLAYER, and the message arrives at the same time as a real message from that player, then the messages may be processed in an unexpected order.
+			// See NETrecvNet, in the for (current = 0; current < MAX_CONNECTED_PLAYERS; ++current) loop.
+			// Assume dropped client sends a NET_SENT_TO_PLAYERS(broadcast, NET_SHARE_GAME_QUEUE(GAME_REALMESSAGE)), and then drops.
+			// The host then sends the NET_SEND_TO_PLAYER(broadcast, NET_SHARE_GAME_QUEUE(GAME_REALMESSAGE)) to everyone. If the host then spoofs a NET_SHARE_GAME_QUEUE(GAME_PLAYER_LEFT) without
+			// wrapping it in a NET_SEND_TO_PLAYER from that player, then the client may sometimes unwrap the real NET_SEND_TO_PLAYER message, then process the host's spoofed NET_SHARE_GAME_QUEUE
+			// message, and then after that process the previously unwrapped NET_SHARE_GAME_QUEUE(GAME_REALMESSAGE) message, such that the GAME_PLAYER_LEFT appears on the queue before the
+			// GAME_REALMESSAGE.
+
+			// Decoded in NETprocessSystemMessage in netplay.cpp.
+			uint8_t player = queueInfo.index;
+			uint32_t num = 1;
+			NetMessage backupMessage = message;  // 'message' will be overwritten, so we need a copy (to avoid trying to insert a message into itself).
+			NETbeginEncode(NETbroadcastQueue(), NET_SHARE_GAME_QUEUE);
+				NETuint8_t(&player);
+				NETuint32_t(&num);
+				for (uint32_t n = 0; n < num; ++n)
+				{
+					queueAuto(backupMessage);
+				}
+			NETsetPacketDir(PACKET_INVALID);  // Instead of NETend();
+			backupMessage = message;  // 'message' will be overwritten again, so we need a copy of this NET_SHARE_GAME_QUEUE message.
+			uint8_t allPlayers = NET_ALL_PLAYERS;
+			NETbeginEncode(NETbroadcastQueue(), NET_SEND_TO_PLAYER);
+				NETuint8_t(&player);
+				NETuint8_t(&allPlayers);
+				queueAuto(backupMessage);
+			NETend();  // This time we actually send it.
+		}
 
 		return true;  // Serialising never fails.
 	}
@@ -510,7 +555,7 @@ void NETflushGameQueues()
 			continue;  // Nothing to send for this player.
 		}
 
-		// Decoded in NETprocessSystemMessage in netplay.c.
+		// Decoded in NETprocessSystemMessage in netplay.cpp.
 		NETbeginEncode(NETbroadcastQueue(), NET_SHARE_GAME_QUEUE);
 			NETuint8_t(&player);
 			NETuint32_t(&num);
@@ -556,11 +601,6 @@ void NETint32_t(int32_t *ip)
 void NETuint32_t(uint32_t *ip)
 {
 	queueAuto(*ip);
-}
-
-void NETuint32_tLarge(uint32_t *ip)
-{
-	queueAutoLarge(*ip);
 }
 
 void NETint64_t(int64_t *ip)
@@ -644,6 +684,11 @@ void NETPosition(Position *vp)
 }
 
 void NETRotation(Rotation *vp)
+{
+	queueAuto(*vp);
+}
+
+void NETVector2i(Vector2i *vp)
 {
 	queueAuto(*vp);
 }

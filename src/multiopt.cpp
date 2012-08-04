@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2011  Warzone 2100 Project
+	Copyright (C) 2005-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -53,30 +53,28 @@
 #include "multiint.h"
 #include "multirecv.h"
 #include "scriptfuncs.h"
-
-#include "lib/framework/wzapp_c.h"
-
-// ////////////////////////////////////////////////////////////////////////////
-// External Variables
-
-extern char	buildTime[8];
-
-// ////////////////////////////////////////////////////////////////////////////
-// ////////////////////////////////////////////////////////////////////////////
+#include "template.h"
+#include "lib/framework/wzapp.h"
 
 // send complete game info set!
 void sendOptions()
 {
 	unsigned int i;
 
+	if (!NetPlay.isHost || !bHosted)  // Only host should act, and only if the game hasn't started yet.
+	{
+		ASSERT(false, "Host only routine detected for client or not hosting yet!");
+		return;
+	}
+
 	NETbeginEncode(NETbroadcastQueue(), NET_OPTIONS);
 
 	// First send information about the game
 	NETuint8_t(&game.type);
 	NETstring(game.map, 128);
+	NETbin(game.hash.bytes, game.hash.Bytes);
 	NETuint8_t(&game.maxPlayers);
 	NETstring(game.name, 128);
-	NETbool(&game.fog);
 	NETuint32_t(&game.power);
 	NETuint8_t(&game.base);
 	NETuint8_t(&game.alliance);
@@ -120,25 +118,6 @@ void sendOptions()
 }
 
 // ////////////////////////////////////////////////////////////////////////////
-/*!
- * check the wdg files that are being used.
- */
-static bool checkGameWdg(const char *nm)
-{
-	LEVEL_DATASET *lev;
-
-	for (lev = psLevels; lev; lev = lev->psNext)
-	{
-		if (strcmp(lev->pName, nm) == 0)
-		{
-			return true;
-		}
-	}
-
-	return false;
-}
-
-// ////////////////////////////////////////////////////////////////////////////
 // options for a game. (usually recvd in frontend)
 void recvOptions(NETQUEUE queue)
 {
@@ -150,9 +129,9 @@ void recvOptions(NETQUEUE queue)
 	// Get general information about the game
 	NETuint8_t(&game.type);
 	NETstring(game.map, 128);
+	NETbin(game.hash.bytes, game.hash.Bytes);
 	NETuint8_t(&game.maxPlayers);
 	NETstring(game.name, 128);
-	NETbool(&game.fog);
 	NETuint32_t(&game.power);
 	NETuint8_t(&game.base);
 	NETuint8_t(&game.alliance);
@@ -215,24 +194,25 @@ void recvOptions(NETQUEUE queue)
 			widgSetSliderPos(psWScreen, MULTIOP_SKSLIDE + i, game.skDiff[i]);
 		}
 	}
-	debug(LOG_NET, "Rebuilding map list");
+	debug(LOG_INFO, "Rebuilding map list");
 	// clear out the old level list.
 	levShutDown();
 	levInitialise();
+	setCurrentMap(NULL, 42);
 	rebuildSearchPath(mod_multiplay, true);	// MUST rebuild search path for the new maps we just got!
 	buildMapList();
 	// See if we have the map or not
-	if (!checkGameWdg(game.map))
+	if (levFindDataSet(game.map, &game.hash) == NULL)
 	{
 		uint32_t player = selectedPlayer;
 
-		debug(LOG_NET, "Map was not found, requesting map %s from host.", game.map);
+		debug(LOG_INFO, "Map was not found, requesting map %s from host.", game.map);
 		// Request the map from the host
 		NETbeginEncode(NETnetQueue(NET_HOST_ONLY), NET_FILE_REQUESTED);
 		NETuint32_t(&player);
 		NETend();
 
-		addConsoleMessage("MAP REQUESTED!",DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+		addConsoleMessage("MAP REQUESTED!", DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 	}
 	else
 	{
@@ -374,146 +354,6 @@ bool multiTemplateSetup(void)
 }
 
 // ////////////////////////////////////////////////////////////////////////////
-// remove structures from map before campaign play.
-static bool cleanMap(UDWORD player)
-{
-	DROID		*psD,*psD2;
-	STRUCTURE	*psStruct;
-	bool		firstFact,firstRes;
-
-	bMultiPlayer = false;
-	bMultiMessages = false;
-
-	firstFact = true;
-	firstRes = true;
-
-	switch(game.base)
-	{
-	case CAMP_CLEAN:									//clean map
-		psStruct = apsStructLists[player];
-		while (psStruct)						//strip away structures.
-		{
-			if ((psStruct->pStructureType->type != REF_WALL && psStruct->pStructureType->type != REF_WALLCORNER
-			     && psStruct->pStructureType->type != REF_DEFENSE && psStruct->pStructureType->type != REF_GATE
-			     && psStruct->pStructureType->type != REF_RESOURCE_EXTRACTOR)
-			    || NetPlay.players[player].difficulty != DIFFICULTY_INSANE || NetPlay.players[player].allocated)
-			{
-				removeStruct(psStruct, true);
-				psStruct = apsStructLists[player];			//restart,(list may have changed).
-			}
-			else
-			{
-				psStruct = psStruct->psNext;
-			}
-		}
-		psD = apsDroidLists[player];					// remove all but construction droids.
-		while(psD)
-		{
-			psD2=psD->psNext;
-			if (psD->droidType != DROID_CONSTRUCT && psD->droidType != DROID_CYBORG_CONSTRUCT)
-			{
-				killDroid(psD);
-			}
-			psD = psD2;
-		}
-		break;
-
-	case CAMP_BASE:												//just structs, no walls
-		psStruct = apsStructLists[player];
-		while(psStruct)
-		{
-			if (((psStruct->pStructureType->type == REF_WALL || psStruct->pStructureType->type == REF_WALLCORNER
-			      || psStruct->pStructureType->type == REF_DEFENSE || psStruct->pStructureType->type == REF_GATE)
-			     && (NetPlay.players[player].difficulty != DIFFICULTY_INSANE || NetPlay.players[player].allocated))
-			    || psStruct->pStructureType->type == REF_BLASTDOOR
-			    || psStruct->pStructureType->type == REF_CYBORG_FACTORY
-			    || psStruct->pStructureType->type == REF_COMMAND_CONTROL)
-			{
-				removeStruct(psStruct, true);
-				psStruct= apsStructLists[player];			//restart,(list may have changed).
-			}
-			else if( (psStruct->pStructureType->type == REF_FACTORY)
-				   ||(psStruct->pStructureType->type == REF_RESEARCH)
-				   ||(psStruct->pStructureType->type == REF_POWER_GEN))
-			{
-				if(psStruct->pStructureType->type == REF_FACTORY )
-				{
-					if(firstFact == true)
-					{
-						firstFact = false;
-						removeStruct(psStruct, true);
-						psStruct= apsStructLists[player];
-					}
-					else	// don't delete, just rejig!
-					{
-						if(((FACTORY*)psStruct->pFunctionality)->capacity != 0)
-						{
-							((FACTORY*)psStruct->pFunctionality)->capacity = 0;
-							((FACTORY*)psStruct->pFunctionality)->productionOutput = (UBYTE)((PRODUCTION_FUNCTION*)psStruct->pStructureType->asFuncList[0])->productionOutput;
-
-							psStruct->sDisplay.imd	= psStruct->pStructureType->pIMD;
-							psStruct->body			= (UWORD)(structureBody(psStruct));
-
-						}
-						psStruct				= psStruct->psNext;
-					}
-				}
-				else if(psStruct->pStructureType->type == REF_RESEARCH)
-				{
-					if(firstRes == true)
-					{
-						firstRes = false;
-						removeStruct(psStruct, true);
-						psStruct= apsStructLists[player];
-					}
-					else
-					{
-						if(((RESEARCH_FACILITY*)psStruct->pFunctionality)->capacity != 0)
-						{	// downgrade research
-							((RESEARCH_FACILITY*)psStruct->pFunctionality)->capacity = 0;
-							((RESEARCH_FACILITY*)psStruct->pFunctionality)->researchPoints = ((RESEARCH_FUNCTION*)psStruct->pStructureType->asFuncList[0])->researchPoints;
-							psStruct->sDisplay.imd	= psStruct->pStructureType->pIMD;
-							psStruct->body			= (UWORD)(structureBody(psStruct));
-						}
-						psStruct=psStruct->psNext;
-					}
-				}
-				else if(psStruct->pStructureType->type == REF_POWER_GEN)
-				{
-						if(((POWER_GEN*)psStruct->pFunctionality)->capacity != 0)
-						{	// downgrade powergen.
-							((POWER_GEN*)psStruct->pFunctionality)->capacity = 0;
-
-							psStruct->sDisplay.imd	= psStruct->pStructureType->pIMD;
-							psStruct->body			= (UWORD)(structureBody(psStruct));
-						}
-						structurePowerUpgrade(psStruct);
-						psStruct=psStruct->psNext;
-				}
-			}
-
-			else
-			{
-				psStruct=psStruct->psNext;
-			}
-		}
-		break;
-
-
-	case CAMP_WALLS:												//everything.
-		break;
-	default:
-		debug( LOG_FATAL, "Unknown Campaign Style" );
-		abort();
-		break;
-	}
-
-	bMultiPlayer = true;
-	bMultiMessages = true;
-	return true;
-}
-
-// ////////////////////////////////////////////////////////////////////////////
 static bool gameInit(void)
 {
 	UDWORD			player;
@@ -528,11 +368,6 @@ static bool gameInit(void)
 		intAddReticule();
 
 		return true;
-	}
-
-	for(player = 0;player<game.maxPlayers;player++)			// clean up only to the player limit for this map..
-	{
-		cleanMap(player);
 	}
 
 	for (player = 1; player < MAX_PLAYERS; player++)
@@ -551,10 +386,12 @@ static bool gameInit(void)
 		game.skDiff[scavengerPlayer()] = DIFF_SLIDER_STOPS / 2;
 	}
 
-	if (NetPlay.isHost)	// add oil drums
+	unsigned playerCount = 0;
+	for (int index = 0; index < game.maxPlayers; ++index)
 	{
-		addOilDrum(NetPlay.playercount * 2);
+		playerCount += NetPlay.players[index].ai >= 0 || NetPlay.players[index].allocated;
 	}
+	addOilDrum(playerCount * 2);  // Calculating playerCount instead of using NetPlay.playercount, since the latter seems to be 0 for non-hosts.
 
 	playerResponding();			// say howdy!
 

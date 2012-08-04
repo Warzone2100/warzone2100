@@ -1,6 +1,6 @@
 /*
 	This file is part of Warzone 2100.
-	Copyright (C) 2008-2011  Warzone 2100 Project
+	Copyright (C) 2008-2012  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -1043,6 +1043,11 @@ void seq_Shutdown()
 int seq_GetFrameNumber()
 {
 	return frames;
+}
+
+double seq_GetFrameTime()
+{
+	return videobuf_time;
 }
 
 // this controls the size of the video to display on screen

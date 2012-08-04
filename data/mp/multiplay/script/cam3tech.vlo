@@ -3,12 +3,8 @@ run
 {	  
 //ALWAYS MAKE THIS THE SAME AS THE INDEX OF THE LAST ENTRY IN THE camTech[] array
 numCamTech		int 	253
-//ALWAYS MAKE THIS THE ONE MORE THAN THE INDEX OF THE LAST ENTRY IN THE camTech[] array
+//ALWAYS MAKE THIS THE ONE MORE THAN THE INDEX OF THE LAST ENTRY IN THE camTechB[] array
 numCamTechB		int 	17
-
-initialPowerCl	int     2000
-initialPowerBa	int     3000
-initialPowerDe	int     4000
 
 // tech level three
 camTech	[0]	RESEARCHSTAT	"R-Wpn-RocketSlow-ROF03"

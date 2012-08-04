@@ -1,10 +1,10 @@
-SUBDIRS = mods/multiplay music
+SUBDIRS = music
 
 stamp:
 	touch stamp
 
 %.wz: $(abs_srcdir)/% stamp
-	(cd $(srcdir)/$(notdir $<) && $(ZIP) -r0 $(ZIP_UPDATE) $(abs_builddir)/$@ $(filter-out stamp,$(filter-out $<,$(^:$</%=%))) -x '*svn*' -x '*Makefile*' || [ $$? -eq 12 ] && true) # zip returns 12 on "nothing to do"
+	(cd $(srcdir)/$(notdir $<) && $(ZIP) -r0 $(ZIP_UPDATE) $(abs_builddir)/$@ $(filter-out stamp,$(filter-out $<,$(^:$</%=%))) -x '*svn*' -x '*Makefile*' -x '*.svg' || [ $$? -eq 12 ] && true) # zip returns 12 on "nothing to do"
 	$(ZIP) -T $@
 	rm -f stamp
 
@@ -12,17 +12,14 @@ BASELIST = \
 	palette.txt \
 	anims \
 	audio \
-	cacert.org-root.pem \
-	cacert.org-class3.pem \
-	challenges \
 	components \
 	effects \
 	features \
 	gamedesc.lev \
+	ruleset.ini \
 	images \
 	messages \
 	misc \
-	multiplay \
 	script \
 	sequenceaudio \
 	shaders\
@@ -34,7 +31,9 @@ BASELIST = \
 
 PATCHLIST = \
 	addon.lev \
+	ruleset.ini \
 	anims \
+	challenges \
 	components \
 	effects \
 	messages \
