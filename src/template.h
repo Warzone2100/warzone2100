@@ -35,6 +35,6 @@ a string ID or something the user types in*/
 const char* getTemplateName(const DROID_TEMPLATE *psTemplate);
 
 /// Have we researched the components of this template?
-bool researchedTemplate(DROID_TEMPLATE *psCurr, int player, bool allowRedundant = false);
+bool researchedTemplate(DROID_TEMPLATE *psCurr, int player, bool allowRedundant = false, bool verbose = false);
 
 #endif // TEMPLATE_H

@@ -81,7 +81,7 @@ static bool researchedWeap(DROID_TEMPLATE *psCurr, int player, int weapIndex, bo
 	return researchedItem(psCurr, player, COMP_WEAPON, psCurr->asWeaps[weapIndex], false, allowRedundant);
 }
 
-bool researchedTemplate(DROID_TEMPLATE *psCurr, int player, bool allowRedundant)
+bool researchedTemplate(DROID_TEMPLATE *psCurr, int player, bool allowRedundant, bool verbose)
 {
 	// super hack -- cyborgs and transports are special, only check their body
 	switch (psCurr->droidType)
@@ -99,17 +99,27 @@ bool researchedTemplate(DROID_TEMPLATE *psCurr, int player, bool allowRedundant)
 	}
 	// Note the ugly special case for commanders - their weapon is unavailable
 	// NOTE: This was one ugly & hard to debug if statement.
-	bool researchedEverything = researchedPart(psCurr, player, COMP_BODY,       false, allowRedundant)
-	                         && researchedPart(psCurr, player, COMP_BRAIN,      true,  allowRedundant)
-	                         && researchedPart(psCurr, player, COMP_PROPULSION, false, allowRedundant)
-	                         && researchedPart(psCurr, player, COMP_SENSOR,     true,  allowRedundant)
-	                         && researchedPart(psCurr, player, COMP_ECM,        true,  allowRedundant)
-	                         && researchedPart(psCurr, player, COMP_REPAIRUNIT, true,  allowRedundant)
-	                         && researchedPart(psCurr, player, COMP_CONSTRUCT,  true,  allowRedundant);
+	bool resBody = researchedPart(psCurr, player, COMP_BODY, false, allowRedundant);
+	bool resBrain = researchedPart(psCurr, player, COMP_BRAIN, true, allowRedundant);
+	bool resProp = researchedPart(psCurr, player, COMP_PROPULSION, false, allowRedundant);
+	bool resSensor = researchedPart(psCurr, player, COMP_SENSOR, true, allowRedundant);
+	bool resEcm = researchedPart(psCurr, player, COMP_ECM, true, allowRedundant);
+	bool resRepair = researchedPart(psCurr, player, COMP_REPAIRUNIT, true, allowRedundant);
+	bool resConstruct = researchedPart(psCurr, player, COMP_CONSTRUCT, true, allowRedundant);
+	bool researchedEverything = resBody && resBrain && resProp && resSensor && resEcm && resRepair && resConstruct;
+	if (verbose && !researchedEverything)
+	{
+		debug(LOG_ERROR, "%s : not researched : body=%d brai=%d prop=%d sensor=%d ecm=%d rep=%d con=%d", psCurr->aName,
+		      (int)resBody, (int)resBrain, (int)resProp, (int)resSensor, (int)resEcm, (int)resRepair, (int)resConstruct);
+	}
 	unsigned ignoreFirstWeapon = psCurr->asParts[COMP_BRAIN] != 0? 1 : 0;
 	for (unsigned weapIndex = ignoreFirstWeapon; weapIndex < psCurr->numWeaps && researchedEverything; ++weapIndex)
 	{
 		researchedEverything = researchedWeap(psCurr, player, weapIndex, allowRedundant);
+		if (!researchedEverything && verbose)
+		{
+			debug(LOG_ERROR, "%s : not researched weapon %u", psCurr->aName, weapIndex);
+		}
 	}
 	return researchedEverything;
 }
