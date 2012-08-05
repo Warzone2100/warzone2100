@@ -63,6 +63,7 @@ struct PIEIMAGE  ///< An area of texture.
 {
 	SDWORD texPage;
 	SWORD tu, tv, tw, th;
+	float invTextureSize;
 };
 
 /***************************************************************************/

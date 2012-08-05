@@ -26,7 +26,7 @@
 #include "tex.h"
 
 
-static unsigned short LoadTextureFile(const char *FileName)
+static unsigned short LoadTextureFile(const char *FileName, int *imageSize)
 {
 	iV_Image *pSprite;
 	unsigned int i;
@@ -36,6 +36,8 @@ static unsigned short LoadTextureFile(const char *FileName)
 	pSprite = (iV_Image*)resGetData("IMGPAGE", FileName);
 	debug(LOG_TEXTURE, "Load texture from resource cache: %s (%d, %d)",
 	      FileName, pSprite->width, pSprite->height);
+
+	*imageSize = pSprite->width;
 
 	/* Have we already uploaded this one? */
 	for (i = 0; i < _TEX_INDEX; ++i)
@@ -70,14 +72,14 @@ IMAGEFILE *iV_LoadImageFile(const char *fileName)
 		numImages += (*ptr == '\n') ? 1 : 0;
 		ptr++;
 	}
-	ImageFile = (IMAGEFILE *)malloc(sizeof(IMAGEFILE) + sizeof(IMAGEDEF) * numImages);
-	ImageFile->ImageDefs = (IMAGEDEF*)(ImageFile + 1); // we allocated extra space for it
+	ImageFile = new IMAGEFILE;
+	ImageFile->imageDefs.resize(numImages);
 	ptr = pFileData;
 	numImages = 0;
 	while (ptr < pFileData + pFileSize)
 	{
 		int temp, retval;
-		IMAGEDEF *ImageDef = &ImageFile->ImageDefs[numImages];
+		ImageDef *ImageDef = &ImageFile->imageDefs[numImages];
 
 		retval = sscanf(ptr, "%u,%u,%u,%u,%u,%d,%d%n", &ImageDef->TPageID, &ImageDef->Tu, &ImageDef->Tv, &ImageDef->Width,
 		       &ImageDef->Height, &ImageDef->XOffset, &ImageDef->YOffset, &temp);
@@ -94,6 +96,7 @@ IMAGEFILE *iV_LoadImageFile(const char *fileName)
 		}
 		while (ptr < pFileData + pFileSize && *ptr++ != '\n') {} // skip rest of line
 	}
+	ImageFile->pages.resize(tPages + 1);
 
 	dot = (char *)strrchr(fileName, '/');  // go to last path character
 	dot++;				// skip it
@@ -106,9 +109,8 @@ IMAGEFILE *iV_LoadImageFile(const char *fileName)
 		char path[PATH_MAX];
 
 		snprintf(path, PATH_MAX, "%s%u.png", texFileName, i);
-		ImageFile->TPageIDs[i] = LoadTextureFile(path);
+		ImageFile->pages[i].id = LoadTextureFile(path, &ImageFile->pages[i].size);
 	}
-	ImageFile->NumImages = numImages;
 	free(pFileData);
 
 	return ImageFile;
@@ -116,5 +118,5 @@ IMAGEFILE *iV_LoadImageFile(const char *fileName)
 
 void iV_FreeImageFile(IMAGEFILE *ImageFile)
 {
-	free(ImageFile);
+	delete ImageFile;
 }
