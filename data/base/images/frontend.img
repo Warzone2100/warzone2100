@@ -1,204 +1,204 @@
-0,15,5,483,228,0,0,"IMAGE FE LOGO"
-2,0,219,37,24,0,0,"IMAGE COM1"
-2,38,219,37,24,0,0,"IMAGE COM2"
-2,76,219,37,24,0,0,"IMAGE COM3"
-2,114,219,37,24,0,0,"IMAGE COM4"
-2,152,219,37,24,0,0,"IMAGE COM1 HI"
-2,190,219,37,24,0,0,"IMAGE COM2 HI"
-3,0,0,37,24,0,0,"IMAGE 14400 HI"
-3,38,0,37,24,0,0,"IMAGE 19200 HI"
-3,76,0,37,24,0,0,"IMAGE 56000 HI"
-3,114,0,37,24,0,0,"IMAGE 115200 HI"
-3,153,0,35,24,0,0,"IMAGE ARENA HI"
-3,191,0,35,24,0,0,"IMAGE CAMPAIGN HI"
-3,0,25,37,24,0,0,"IMAGE 14400"
-3,38,25,37,24,0,0,"IMAGE 19200"
-3,76,25,37,24,0,0,"IMAGE 56000"
-3,114,25,37,24,0,0,"IMAGE 115200"
-3,153,25,35,24,0,0,"IMAGE ARENA"
-3,191,25,35,24,0,0,"IMAGE CAMPAIGN"
-2,220,107,33,26,0,0,"IMAGE REFRESH"
-2,1,53,22,19,0,0,"IMAGE PLAYER0"
-2,24,53,22,19,0,0,"IMAGE PLAYER1"
-2,47,53,22,19,0,0,"IMAGE PLAYER2"
-2,70,53,22,19,0,0,"IMAGE PLAYER3"
-2,93,53,22,19,0,0,"IMAGE PLAYER4"
-2,116,53,22,19,0,0,"IMAGE PLAYER5"
-2,139,53,22,19,0,0,"IMAGE PLAYER6"
-2,162,53,22,19,0,0,"IMAGE PLAYER7"
-4,234,63,22,19,0,0,"IMAGE PLAYER8"
-4,71,155,22,19,0,0,"IMAGE PLAYER9"
-4,93,155,22,19,0,0,"IMAGE PLAYER10"
-4,115,155,22,19,0,0,"IMAGE PLAYERN"
-4,215,168,22,19,0,0,"IMAGE PLAYERN TC"
-2,219,135,35,28,0,0,"IMAGE HOST"
-2,112,25,35,24,0,0,"IMAGE NO"
-2,148,25,35,24,0,0,"IMAGE OK"
-2,148,0,35,24,0,0,"IMAGE QUESTION"
-2,36,75,35,24,0,0,"IMAGE POWMED"
-2,72,75,35,24,0,0,"IMAGE POWHI"
-2,108,75,35,24,0,0,"IMAGE POWLO HI"
-2,144,75,35,24,0,0,"IMAGE POWMED HI"
-2,180,75,35,24,0,0,"IMAGE POWHI HI"
-2,0,100,35,24,0,0,"IMAGE NOALLI"
-2,36,100,35,24,0,0,"IMAGE OFFALLI"
-2,72,100,35,24,0,0,"IMAGE ALLI"
-2,108,100,35,24,0,0,"IMAGE NOALLI HI"
-2,144,100,35,24,0,0,"IMAGE OFFALLI HI"
-2,180,100,35,24,0,0,"IMAGE ALLI HI"
-3,65,143,37,24,0,0,"IMAGE COM3 HI"
-3,103,143,37,24,0,0,"IMAGE COM4 HI"
-3,141,143,34,28,-2,-2,"IMAGE HI34"
-3,89,114,31,28,-2,-2,"IMAGE HI31"
-3,65,114,23,28,-2,-2,"IMAGE HI23"
-3,121,114,39,28,-2,-2,"IMAGE HI39"
-3,161,114,41,28,-2,-2,"IMAGE HI41"
-3,0,122,64,50,-2,-2,"IMAGE HI64"
-3,0,195,24,19,0,0,"IMAGE ARENA OVER"
-3,25,195,33,19,0,0,"IMAGE CAMPAIGN OVER"
-3,176,143,9,18,0,0,"IMAGE MEDAL GOLD"
-3,187,143,8,17,0,0,"IMAGE MEDAL SILVER"
-3,196,143,8,15,0,0,"IMAGE MEDAL BRONZE"
-2,0,75,35,24,0,0,"IMAGE POWLO"
-2,189,62,9,10,0,0,"IMAGE MULTIRANK1"
-2,220,75,30,29,0,0,"IMAGE RETURN"
-2,217,3,27,22,0,0,"IMAGE EDIT PLAYER"
-2,186,3,26,24,0,0,"IMAGE EDIT FORCE"
-2,191,34,19,24,3,0,"IMAGE EDIT MAP"
-2,222,34,20,24,3,0,"IMAGE EDIT GAME"
-2,0,150,35,24,0,0,"IMAGE TECHLO"
-2,36,150,35,24,0,0,"IMAGE TECHMED"
-2,72,150,35,24,0,0,"IMAGE TECHHI"
-2,108,150,35,24,0,0,"IMAGE TECHLO HI"
-2,144,150,35,24,0,0,"IMAGE TECHMED HI"
-2,180,150,35,24,0,0,"IMAGE TECHHI HI"
-2,0,125,35,24,0,0,"IMAGE NOBASE"
-2,36,125,35,24,0,0,"IMAGE SBASE"
-2,72,125,35,24,0,0,"IMAGE LBASE"
-2,108,125,35,24,0,0,"IMAGE NOBASE HI"
-2,144,125,35,24,0,0,"IMAGE SBASE HI"
-2,180,125,35,24,0,0,"IMAGE LBASE HI"
-3,0,50,35,24,0,0,"IMAGE NOLIMIT"
-3,36,50,35,24,0,0,"IMAGE TIMELIMIT"
-3,72,50,35,24,0,0,"IMAGE FRAGLIMIT"
-3,108,50,35,24,0,0,"IMAGE NOLIMIT HI"
-3,144,50,35,24,0,0,"IMAGE TIMELIMIT HI"
-3,180,50,35,24,0,0,"IMAGE FRAGLIMIT HI"
-2,219,167,30,29,0,0,"IMAGE RETURN HI"
-2,48,186,37,20,0,0,"IMAGE SLIM"
-2,89,187,37,20,0,0,"IMAGE SLIM HI"
-3,61,173,56,38,0,0,"IMAGE LOADFORCE"
-3,118,173,56,38,0,0,"IMAGE SAVEFORCE"
-3,61,212,56,38,0,0,"IMAGE CLEARFORCE"
-3,118,212,56,38,0,0,"IMAGE DEFAULTFORCE"
-3,175,173,56,38,0,0,"IMAGE HI56"
-3,207,137,35,24,0,0,"IMAGE COMPUTER N HI"
-3,207,112,35,24,0,0,"IMAGE COMPUTER N"
-3,175,212,35,24,0,0,"IMAGE COMPUTER Y"
-3,211,212,35,24,0,0,"IMAGE COMPUTER Y HI"
-3,180,240,12,12,0,0,"IMAGE LAMP RED"
-3,194,240,12,12,0,0,"IMAGE LAMP AMBER"
-3,208,240,12,12,0,0,"IMAGE LAMP GREEN"
-3,28,174,31,18,0,0,"IMAGE SKIRMISH OVER"
-3,30,217,28,21,0,0,"IMAGE TEAM OVER"
-2,36,25,35,24,0,0,"IMAGE SKIRMISH"
-2,36,0,35,24,0,0,"IMAGE TEAM"
-2,0,25,35,24,0,0,"IMAGE SKIRMISH HI"
-2,0,0,35,24,0,0,"IMAGE TEAM HI"
-3,228,1,27,20,0,0,"IMAGE PLAYER PC"
-2,203,62,9,10,0,0,"IMAGE MULTIRANK2"
-2,216,61,8,13,0,0,"IMAGE MEDAL DUMMY"
-2,80,25,24,21,-1,-1,"IMAGE PLAYERX"
-4,181,180,24,21,-1,-1,"IMAGE PLAYERX TC"
-3,0,75,35,24,0,0,"IMAGE FOG OFF"
-3,36,75,35,24,0,0,"IMAGE FOG ON"
-3,72,75,35,24,0,0,"IMAGE FOG OFF HI"
-3,108,75,35,24,0,0,"IMAGE FOG ON HI"
-2,79,4,11,11,0,0,"IMAGE WEE GUY"
-3,223,239,12,12,0,0,"IMAGE PENCIL"
-3,239,239,13,14,0,0,"IMAGE NOPENCIL"
-3,150,78,29,31,0,0,"IMAGE KEYMAP DEFAULT"
-2,237,62,9,10,0,0,"IMAGE MULTIRANK3"
-2,121,3,19,19,0,0,"IMAGE NOJOIN"
-2,90,0,19,19,0,0,"IMAGE NOJOIN FULL"
-2,0,174,19,19,0,0,"IMAGE NOJOIN MOD"
-4,0,0,35,24,0,0,"IMAGE ALLI TEAMS HI"
-4,36,0,35,24,0,0,"IMAGE ALLI TEAMS"
-4,0,27,25,21,0,0,"IMAGE TEAM0"
-4,25,27,25,21,0,0,"IMAGE TEAM1"
-4,50,27,25,21,0,0,"IMAGE TEAM2"
-4,75,27,25,21,0,0,"IMAGE TEAM3"
-4,100,27,25,21,0,0,"IMAGE TEAM4"
-4,125,27,25,21,0,0,"IMAGE TEAM5"
-4,150,27,25,21,0,0,"IMAGE TEAM6"
-4,175,27,25,21,0,0,"IMAGE TEAM7"
-4,215,0,25,21,0,0,"IMAGE TEAM8"
-4,215,21,25,21,0,0,"IMAGE TEAM9"
-4,200,42,25,21,0,0,"IMAGE TEAM10"
-4,225,42,25,21,0,0,"IMAGE TEAM11"
-4,82,48,25,21,0,0,"IMAGE TEAM12"
-4,107,48,25,21,0,0,"IMAGE TEAM13"
-4,132,48,25,21,0,0,"IMAGE TEAM14"
-4,157,48,25,21,0,0,"IMAGE TEAM15"
-2,168,182,35,28,0,0,"IMAGE HOST HI"
-3,221,54,78,29,0,0,"IMAGE KEYMAP DEFAULT HI"
-4,6,56,19,24,3,0,"IMAGE EDIT MAP HI"
-4,29,55,27,22,0,0,"IMAGE EDIT GAME HI"
-4,62,55,20,24,3,0,"IMAGE EDIT PLAYER HI"
-4,1,82,22,19,0,0,"IMAGE PLAYER0 HI"
-4,24,82,22,19,0,0,"IMAGE PLAYER1 HI"
-4,47,82,22,19,0,0,"IMAGE PLAYER2 HI"
-4,70,82,22,19,0,0,"IMAGE PLAYER3 HI"
-4,93,82,22,19,0,0,"IMAGE PLAYER4 HI"
-4,116,82,22,19,0,0,"IMAGE PLAYER5 HI"
-4,139,82,22,19,0,0,"IMAGE PLAYER6 HI"
-4,162,82,22,19,0,0,"IMAGE PLAYER7 HI"
-4,49,180,22,19,0,0,"IMAGE PLAYER8 HI"
-4,137,180,22,19,0,0,"IMAGE PLAYER9 HI"
-4,159,180,22,19,0,0,"IMAGE PLAYER10 HI"
-4,71,174,22,19,0,0,"IMAGE PLAYERN HI"
-4,93,174,22,19,0,0,"IMAGE PLAYERN HI TC"
-4,0,103,25,21,0,0,"IMAGE TEAM0 HI"
-4,25,103,25,21,0,0,"IMAGE TEAM1 HI"
-4,50,103,25,21,0,0,"IMAGE TEAM2 HI"
-4,75,103,25,21,0,0,"IMAGE TEAM3 HI"
-4,100,103,25,21,0,0,"IMAGE TEAM4 HI"
-4,125,103,25,21,0,0,"IMAGE TEAM5 HI"
-4,150,103,25,21,0,0,"IMAGE TEAM6 HI"
-4,175,103,25,21,0,0,"IMAGE TEAM7 HI"
-4,184,63,25,21,0,0,"IMAGE TEAM8 HI"
-4,209,63,25,21,0,0,"IMAGE TEAM9 HI"
-4,200,84,25,21,0,0,"IMAGE TEAM10 HI"
-4,225,84,25,21,0,0,"IMAGE TEAM11 HI"
-4,200,105,25,21,0,0,"IMAGE TEAM12 HI"
-4,225,105,25,21,0,0,"IMAGE TEAM13 HI"
-4,215,126,25,21,0,0,"IMAGE TEAM14 HI"
-4,215,147,25,21,0,0,"IMAGE TEAM15 HI"
-4,72,0,35,24,0,0,"IMAGE CHECK OFF"
-4,108,0,35,24,0,0,"IMAGE CHECK ON"
-4,144,0,35,24,0,0,"IMAGE CHECK OFF HI"
-4,180,0,35,24,0,0,"IMAGE CHECK ON HI"
-4,0,131,35,24,0,0,"IMAGE DARK LOCKED"
-4,36,131,35,24,0,0,"IMAGE DARK UNLOCKED"
-4,72,131,35,24,-4,0,"IMAGE LOCKED NOBG"
-4,108,131,35,24,-4,0,"IMAGE UNLOCKED NOBG"
-4,144,131,35,24,0,0,"IMAGE TRANS LOCKED"
-4,180,131,35,24,0,0,"IMAGE TRANS UNLOCKED"
-4,0,181,20,24,0,0,"IMAGE_UNLOCK_BLUE"
-4,29,181,20,24,0,0,"IMAGE LOCK BLUE"
-4,0,156,35,24,0,0,"IMAGE SCAVENGERS ON"
-4,36,156,35,24,0,0,"IMAGE SCAVENGERS OFF"
-4,144,156,35,24,0,0,"IMAGE SCAVENGERS ON HI"
-4,180,156,35,24,0,0,"IMAGE SCAVENGERS OFF HI"
-4,0,206,35,24,0,0,"IMAGE_KICK"
-4,36,206,35,24,0,0,"IMAGE_VTOL"
-4,72,206,35,24,0,0,"IMAGE_CYBORG"
-4,108,206,35,24,0,0,"IMAGE_TANK"
-4,0,232,35,24,0,0,"IMAGE_KICK_TRANS"
-4,36,232,35,24,0,0,"IMAGE_NO_VTOL"
-4,72,232,35,24,0,0,"IMAGE_NO_CYBORG"
-4,108,232,35,24,0,0,"IMAGE_NO_TANK"
-1,0,0,25,25,0,0,"IMAGE EASY"
-1,26,0,26,26,0,0,"IMAGE MEDIUM"
-1,52,0,26,26,0,0,"IMAGE HARD"
-1,78,0,26,26,0,0,"IMAGE INSANE"
+0,0,image_fe_logo.png
+0,0,image_com1.png
+0,0,image_com2.png
+0,0,image_com3.png
+0,0,image_com4.png
+0,0,image_com1_hi.png
+0,0,image_com2_hi.png
+0,0,image_14400_hi.png
+0,0,image_19200_hi.png
+0,0,image_56000_hi.png
+0,0,image_115200_hi.png
+0,0,image_arena_hi.png
+0,0,image_campaign_hi.png
+0,0,image_14400.png
+0,0,image_19200.png
+0,0,image_56000.png
+0,0,image_115200.png
+0,0,image_arena.png
+0,0,image_campaign.png
+0,0,image_refresh.png
+0,0,image_player0.png
+0,0,image_player1.png
+0,0,image_player2.png
+0,0,image_player3.png
+0,0,image_player4.png
+0,0,image_player5.png
+0,0,image_player6.png
+0,0,image_player7.png
+0,0,image_player8.png
+0,0,image_player9.png
+0,0,image_player10.png
+0,0,image_playern.png
+0,0,image_playern_tc.png
+0,0,image_host.png
+0,0,image_no.png
+0,0,image_ok.png
+0,0,image_question.png
+0,0,image_powmed.png
+0,0,image_powhi.png
+0,0,image_powlo_hi.png
+0,0,image_powmed_hi.png
+0,0,image_powhi_hi.png
+0,0,image_noalli.png
+0,0,image_offalli.png
+0,0,image_alli.png
+0,0,image_noalli_hi.png
+0,0,image_offalli_hi.png
+0,0,image_alli_hi.png
+0,0,image_com3_hi.png
+0,0,image_com4_hi.png
+-2,-2,image_hi34.png
+-2,-2,image_hi31.png
+-2,-2,image_hi23.png
+-2,-2,image_hi39.png
+-2,-2,image_hi41.png
+-2,-2,image_hi64.png
+0,0,image_arena_over.png
+0,0,image_campaign_over.png
+0,0,image_medal_gold.png
+0,0,image_medal_silver.png
+0,0,image_medal_bronze.png
+0,0,image_powlo.png
+0,0,image_multirank1.png
+0,0,image_return.png
+0,0,image_edit_player.png
+0,0,image_edit_force.png
+3,0,image_edit_map.png
+3,0,image_edit_game.png
+0,0,image_techlo.png
+0,0,image_techmed.png
+0,0,image_techhi.png
+0,0,image_techlo_hi.png
+0,0,image_techmed_hi.png
+0,0,image_techhi_hi.png
+0,0,image_nobase.png
+0,0,image_sbase.png
+0,0,image_lbase.png
+0,0,image_nobase_hi.png
+0,0,image_sbase_hi.png
+0,0,image_lbase_hi.png
+0,0,image_nolimit.png
+0,0,image_timelimit.png
+0,0,image_fraglimit.png
+0,0,image_nolimit_hi.png
+0,0,image_timelimit_hi.png
+0,0,image_fraglimit_hi.png
+0,0,image_return_hi.png
+0,0,image_slim.png
+0,0,image_slim_hi.png
+0,0,image_loadforce.png
+0,0,image_saveforce.png
+0,0,image_clearforce.png
+0,0,image_defaultforce.png
+0,0,image_hi56.png
+0,0,image_computer_n_hi.png
+0,0,image_computer_n.png
+0,0,image_computer_y.png
+0,0,image_computer_y_hi.png
+0,0,image_lamp_red.png
+0,0,image_lamp_amber.png
+0,0,image_lamp_green.png
+0,0,image_skirmish_over.png
+0,0,image_team_over.png
+0,0,image_skirmish.png
+0,0,image_team.png
+0,0,image_skirmish_hi.png
+0,0,image_team_hi.png
+0,0,image_player_pc.png
+0,0,image_multirank2.png
+0,0,image_medal_dummy.png
+-1,-1,image_playerx.png
+-1,-1,image_playerx_tc.png
+0,0,image_fog_off.png
+0,0,image_fog_on.png
+0,0,image_fog_off_hi.png
+0,0,image_fog_on_hi.png
+0,0,image_wee_guy.png
+0,0,image_pencil.png
+0,0,image_nopencil.png
+0,0,image_keymap_default.png
+0,0,image_multirank3.png
+0,0,image_nojoin.png
+0,0,image_nojoin_full.png
+0,0,image_nojoin_mod.png
+0,0,image_alli_teams_hi.png
+0,0,image_alli_teams.png
+0,0,image_team0.png
+0,0,image_team1.png
+0,0,image_team2.png
+0,0,image_team3.png
+0,0,image_team4.png
+0,0,image_team5.png
+0,0,image_team6.png
+0,0,image_team7.png
+0,0,image_team8.png
+0,0,image_team9.png
+0,0,image_team10.png
+0,0,image_team11.png
+0,0,image_team12.png
+0,0,image_team13.png
+0,0,image_team14.png
+0,0,image_team15.png
+0,0,image_host_hi.png
+0,0,image_keymap_default_hi.png
+3,0,image_edit_map_hi.png
+0,0,image_edit_game_hi.png
+3,0,image_edit_player_hi.png
+0,0,image_player0_hi.png
+0,0,image_player1_hi.png
+0,0,image_player2_hi.png
+0,0,image_player3_hi.png
+0,0,image_player4_hi.png
+0,0,image_player5_hi.png
+0,0,image_player6_hi.png
+0,0,image_player7_hi.png
+0,0,image_player8_hi.png
+0,0,image_player9_hi.png
+0,0,image_player10_hi.png
+0,0,image_playern_hi.png
+0,0,image_playern_hi_tc.png
+0,0,image_team0_hi.png
+0,0,image_team1_hi.png
+0,0,image_team2_hi.png
+0,0,image_team3_hi.png
+0,0,image_team4_hi.png
+0,0,image_team5_hi.png
+0,0,image_team6_hi.png
+0,0,image_team7_hi.png
+0,0,image_team8_hi.png
+0,0,image_team9_hi.png
+0,0,image_team10_hi.png
+0,0,image_team11_hi.png
+0,0,image_team12_hi.png
+0,0,image_team13_hi.png
+0,0,image_team14_hi.png
+0,0,image_team15_hi.png
+0,0,image_check_off.png
+0,0,image_check_on.png
+0,0,image_check_off_hi.png
+0,0,image_check_on_hi.png
+0,0,image_dark_locked.png
+0,0,image_dark_unlocked.png
+-4,0,image_locked_nobg.png
+-4,0,image_unlocked_nobg.png
+0,0,image_trans_locked.png
+0,0,image_trans_unlocked.png
+0,0,image_unlock_blue.png
+0,0,image_lock_blue.png
+0,0,image_scavengers_on.png
+0,0,image_scavengers_off.png
+0,0,image_scavengers_on_hi.png
+0,0,image_scavengers_off_hi.png
+0,0,image_kick.png
+0,0,image_vtol.png
+0,0,image_cyborg.png
+0,0,image_tank.png
+0,0,image_kick_trans.png
+0,0,image_no_vtol.png
+0,0,image_no_cyborg.png
+0,0,image_no_tank.png
+0,0,image_easy.png
+0,0,image_medium.png
+0,0,image_hard.png
+0,0,image_insane.png

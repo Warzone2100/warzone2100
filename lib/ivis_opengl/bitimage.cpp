@@ -25,98 +25,236 @@
 #include "bitimage.h"
 #include "tex.h"
 
+#include <set>
 
-static unsigned short LoadTextureFile(const char *FileName, int *imageSize)
+
+struct ImageMergeRectangle
 {
-	iV_Image *pSprite;
-	unsigned int i;
-
-	ASSERT_OR_RETURN( 0, resPresent("IMGPAGE", FileName), "Texture file \"%s\" not preloaded.", FileName);
-
-	pSprite = (iV_Image*)resGetData("IMGPAGE", FileName);
-	debug(LOG_TEXTURE, "Load texture from resource cache: %s (%d, %d)",
-	      FileName, pSprite->width, pSprite->height);
-
-	*imageSize = pSprite->width;
-
-	/* Have we already uploaded this one? */
-	for (i = 0; i < _TEX_INDEX; ++i)
+	bool operator <(ImageMergeRectangle const &b) const
 	{
-		if (strcasecmp(FileName, _TEX_PAGE[i].name) == 0)
-		{
-			debug(LOG_TEXTURE, "LoadTextureFile: already uploaded");
-			return _TEX_PAGE[i].id;
-		}
+		if (std::max(siz.x, siz.y) != std::max(b.siz.x, b.siz.y)) return std::max(siz.x, siz.y) < std::max(b.siz.x, b.siz.y);
+		if (std::min(siz.x, siz.y) != std::min(b.siz.x, b.siz.y)) return std::min(siz.x, siz.y) < std::min(b.siz.x, b.siz.y);
+		                                                          return siz.x                  < b.siz.x;
 	}
 
-	debug(LOG_TEXTURE, "LoadTextureFile: had to upload texture!");
-	return pie_AddTexPage(pSprite, FileName, 0, 0, true);
+	int index;  // Index in ImageDefs array.
+	int page;   // Texture page index.
+	Vector2i loc, siz;
+	iV_Image *data;
+};
+
+struct ImageMerge
+{
+	static const int pageSize = 256;
+
+	void arrange();
+
+	std::vector<ImageMergeRectangle> images;
+	std::vector<int> pages;  // List of page sizes, normally all pageSize, unless an image is too large for a normal page.
+};
+
+inline void ImageMerge::arrange()
+{
+	std::multiset<ImageMergeRectangle> freeSpace;
+	pages.clear();
+
+	std::sort(images.begin(), images.end());
+
+	std::vector<ImageMergeRectangle>::iterator r = images.end();
+	while (r != images.begin())
+	{
+		--r;
+
+		std::set<ImageMergeRectangle>::iterator f = freeSpace.lower_bound(*r);  // Find smallest free rectangle which is large enough.
+		while (f != freeSpace.end() && (f->siz.x < r->siz.x || f->siz.y < r->siz.y))
+		{
+			++f;  // Rectangle has wrong shape.
+		}
+		if (f == freeSpace.end())
+		{
+			// No free space, make new page.
+			int s = pageSize;
+			while (s < (r->siz.x | r->siz.y))
+			{
+				s *= 2;
+			}
+			ImageMergeRectangle newPage;
+			newPage.page = pages.size();
+			newPage.loc = Vector2i(0, 0);
+			newPage.siz = Vector2i(s, s);
+			pages.push_back(s);
+			f = freeSpace.insert(newPage);
+		}
+		r->page = f->page;
+		r->loc = f->loc;
+		ImageMergeRectangle spRight;
+		ImageMergeRectangle spDown;
+		spRight.page = f->page;
+		spDown.page  = f->page;
+		spRight.loc = f->loc + Vector2i(r->siz.x, 0);
+		spDown.loc  = f->loc + Vector2i(0, r->siz.y);
+		spRight.siz = Vector2i(f->siz.x - r->siz.x, r->siz.y);
+		spDown.siz  = Vector2i(r->siz.x, f->siz.y - r->siz.y);
+		if (spRight.siz.x <= spDown.siz.y)
+		{
+			// Split horizontally.
+			spDown.siz.x = f->siz.x;
+		}
+		else
+		{
+			// Split vertically.
+			spRight.siz.y = f->siz.y;
+		}
+		if (spRight.siz.x > 0 && spRight.siz.y > 0)
+		{
+			freeSpace.insert(spRight);
+		}
+		if (spDown.siz.x > 0 && spDown.siz.y > 0)
+		{
+			freeSpace.insert(spDown);
+		}
+		freeSpace.erase(f);
+	}
 }
 
 IMAGEFILE *iV_LoadImageFile(const char *fileName)
 {
-	char *pFileData, *ptr, *dot;
-	unsigned int pFileSize, numImages = 0, i, tPages = 0;
-	IMAGEFILE *ImageFile;
-	char texFileName[PATH_MAX];
+	// Find the directory of images.
+	std::string imageDir = fileName;
+	if (imageDir.find_last_of('.') != std::string::npos)
+	{
+		imageDir.erase(imageDir.find_last_of('.'));
+	}
+	imageDir += '/';
 
+	// Load the image list file.
+	char *pFileData;
+	unsigned pFileSize;
 	if (!loadFile(fileName, &pFileData, &pFileSize))
 	{
 		debug(LOG_ERROR, "iV_LoadImageFile: failed to open %s", fileName);
 		return NULL;
 	}
-	ptr = pFileData;
+
+	char *ptr = pFileData;
 	// count lines, which is identical to number of images
+	int numImages = 0;
 	while (ptr < pFileData + pFileSize && *ptr != '\0')
 	{
-		numImages += (*ptr == '\n') ? 1 : 0;
-		ptr++;
+		numImages += *ptr == '\n';
+		++ptr;
 	}
-	ImageFile = new IMAGEFILE;
-	ImageFile->imageDefs.resize(numImages);
+	IMAGEFILE *imageFile = new IMAGEFILE;
+	imageFile->imageDefs.resize(numImages);
+	ImageMerge pageLayout;
+	pageLayout.images.resize(numImages);
 	ptr = pFileData;
 	numImages = 0;
 	while (ptr < pFileData + pFileSize)
 	{
 		int temp, retval;
-		ImageDef *ImageDef = &ImageFile->imageDefs[numImages];
+		ImageDef *ImageDef = &imageFile->imageDefs[numImages];
 
-		retval = sscanf(ptr, "%u,%u,%u,%u,%u,%d,%d%n", &ImageDef->TPageID, &ImageDef->Tu, &ImageDef->Tv, &ImageDef->Width,
-		       &ImageDef->Height, &ImageDef->XOffset, &ImageDef->YOffset, &temp);
-		if (retval != 7)
+		char tmpName[256];
+		retval = sscanf(ptr, "%d,%d,%255[^\r\n\",]%n", &ImageDef->XOffset, &ImageDef->YOffset, tmpName, &temp);
+		if (retval != 3)
 		{
-			break;
+			debug(LOG_ERROR, "Bad line in \"%s\".", fileName);
+			return NULL;
 		}
-		ptr += temp;
+		std::string spriteName = imageDir + tmpName;
+
+		ImageMergeRectangle *imageRect = &pageLayout.images[numImages];
+		imageRect->index = numImages;
+		imageRect->data = new iV_Image;
+		if (!iV_loadImage_PNG(spriteName.c_str(), imageRect->data))
+		{
+			debug(LOG_ERROR, "Failed to find image \"%s\" listed in \"%s\".", spriteName.c_str(), fileName);
+			return NULL;
+		}
+		imageRect->siz = Vector2i(imageRect->data->width, imageRect->data->height);
 		numImages++;
-		// Find number of texture pages to load (no gaps allowed in number series, eg use intfac0, intfac1, etc.!)
-		if (ImageDef->TPageID > tPages)
-		{
-			tPages = ImageDef->TPageID;
-		}
+		ptr += temp;
 		while (ptr < pFileData + pFileSize && *ptr++ != '\n') {} // skip rest of line
-	}
-	ImageFile->pages.resize(tPages + 1);
-
-	dot = (char *)strrchr(fileName, '/');  // go to last path character
-	dot++;				// skip it
-	strcpy(texFileName, dot);	// make a copy
-	dot = strchr(texFileName, '.');	// find extension
-	*dot = '\0';			// then discard it
-	// Load the texture pages.
-	for (i = 0; i <= tPages; i++)
-	{
-		char path[PATH_MAX];
-
-		snprintf(path, PATH_MAX, "%s%u.png", texFileName, i);
-		ImageFile->pages[i].id = LoadTextureFile(path, &ImageFile->pages[i].size);
 	}
 	free(pFileData);
 
-	return ImageFile;
+	pageLayout.arrange();  // Arrange all the images onto texture pages (attempt to do so with as few pages as possible).
+	imageFile->pages.resize(pageLayout.pages.size());
+
+	std::vector<iV_Image> ivImages(pageLayout.pages.size());
+
+	for (unsigned p = 0; p < pageLayout.pages.size(); ++p)
+	{
+		int size = pageLayout.pages[p];
+		ivImages[p].depth = 4;
+		ivImages[p].width = size;
+		ivImages[p].height = size;
+		ivImages[p].bmp = (unsigned char *)malloc(size*size*4);  // MUST be malloc, since this is free()d later by pie_AddTexPage().
+		memset(ivImages[p].bmp, 0x00, size*size*4);
+		imageFile->pages[p].size = size;
+		// Must set imageFile->pages[p].id later, after filling out ivImages[p].bmp.
+	}
+
+	for (std::vector<ImageMergeRectangle>::const_iterator r = pageLayout.images.begin(); r != pageLayout.images.end(); ++r)
+	{
+		imageFile->imageDefs[r->index].TPageID = r->page;
+		imageFile->imageDefs[r->index].Tu = r->loc.x;
+		imageFile->imageDefs[r->index].Tv = r->loc.y;
+		imageFile->imageDefs[r->index].Width = r->siz.x;
+		imageFile->imageDefs[r->index].Height = r->siz.y;
+
+		// Copy image data onto texture page.
+		iV_Image *srcImage = r->data;
+		int srcDepth = srcImage->depth;
+		int srcStride = srcImage->width*srcDepth;  // Not sure whether to pad in the case that srcDepth ≠ 4, however this apparently cannot happen.
+		unsigned char *srcBytes = srcImage->bmp + 0*srcDepth + 0*srcStride;
+		iV_Image *dstImage = &ivImages[r->page];
+		int dstDepth = dstImage->depth;
+		int dstStride = dstImage->width*dstDepth;
+		unsigned char *dstBytes = dstImage->bmp + r->loc.x*dstDepth + r->loc.y*dstStride;
+		Vector2i size = r->siz;
+		unsigned char rgba[4] = {0x00, 0x00, 0x00, 0xFF};
+		for (int y = 0; y < size.y; ++y)
+			for (int x = 0; x < size.x; ++x)
+		{
+			memcpy(rgba, srcBytes + x*srcDepth + y*srcStride, srcDepth);
+			memcpy(dstBytes + x*dstDepth + y*dstStride, rgba, dstDepth);
+		}
+
+		// Finished reading the image data and copying it to the texture page, delete it.
+		free(r->data->bmp);
+		delete r->data;
+	}
+
+	// Debug usage only. Dump all images to disk (do mkdir images/, first). Doesn't dump the alpha channel, since the .ppm format doesn't support that.
+	/*for (unsigned p = 0; p < pageLayout.pages.size(); ++p)
+	{
+		char fName[100];
+		sprintf(fName, "%s-%d", fileName, p);
+		printf("Dump %s\n", fName);
+		FILE *f = fopen(fName, "wb");
+		iV_Image *image = &ivImages[p];
+		fprintf(f, "P6\n%d %d\n255\n", image->width, image->height);
+		for (int x = 0; x < image->width*image->height; ++x)
+			if (fwrite(image->bmp + x*4, 3, 1, f) == 0)
+				abort();
+		fclose(f);
+	}*/
+
+	// Upload texture pages and free image data.
+	for (unsigned p = 0; p < pageLayout.pages.size(); ++p)
+	{
+		char arbitraryName[256];
+		ssprintf(arbitraryName, "%s-%03u", fileName, p);
+		// Now we can set imageFile->pages[p].id. This free()s the ivImages[p].bmp array!
+		imageFile->pages[p].id = pie_AddTexPage(&ivImages[p], arbitraryName, 0, 0, true);
+	}
+
+	return imageFile;
 }
 
-void iV_FreeImageFile(IMAGEFILE *ImageFile)
+void iV_FreeImageFile(IMAGEFILE *imageFile)
 {
-	delete ImageFile;
+	delete imageFile;
 }
