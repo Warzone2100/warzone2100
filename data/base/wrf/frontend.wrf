@@ -4,17 +4,6 @@
 
 
 directory	"images"
-file		IMGPAGE	"frontend0.png"
-file		IMGPAGE	"frontend1.png"
-file		IMGPAGE	"frontend2.png"
-file		IMGPAGE	"frontend3.png"
-file		IMGPAGE	"frontend4.png"
-file		IMGPAGE	"intfac0.png"
-file		IMGPAGE	"intfac1.png"
-file		IMGPAGE	"intfac2.png"
-file		IMGPAGE	"intfac3.png"
-file		IMGPAGE	"intfac4.png"
-file		IMGPAGE	"intfac5.png"
 file		IMG	"intfac.img"
 file		IMG	"frontend.img"
 directory	"audio/sfx/interfce"

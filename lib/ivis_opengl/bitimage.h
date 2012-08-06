@@ -24,43 +24,43 @@
 
 static inline WZ_DECL_PURE unsigned short iV_GetImageWidth(const IMAGEFILE *ImageFile, const unsigned short ID)
 {
-	assert(ID < ImageFile->NumImages);
-	return ImageFile->ImageDefs[ID].Width;
+	assert(ID < ImageFile->imageDefs.size());
+	return ImageFile->imageDefs[ID].Width;
 }
 
 
 static inline WZ_DECL_PURE unsigned short iV_GetImageHeight(const IMAGEFILE *ImageFile, const unsigned short ID)
 {
-	assert(ID < ImageFile->NumImages);
-	return ImageFile->ImageDefs[ID].Height;
+	assert(ID < ImageFile->imageDefs.size());
+	return ImageFile->imageDefs[ID].Height;
 }
 
 
 static inline WZ_DECL_PURE short iV_GetImageXOffset(const IMAGEFILE *ImageFile, const unsigned short ID)
 {
-	assert(ID < ImageFile->NumImages);
-	return ImageFile->ImageDefs[ID].XOffset;
+	assert(ID < ImageFile->imageDefs.size());
+	return ImageFile->imageDefs[ID].XOffset;
 }
 
 
 static inline WZ_DECL_PURE short iV_GetImageYOffset(const IMAGEFILE *ImageFile, const unsigned short ID)
 {
-	assert(ID < ImageFile->NumImages);
-	return ImageFile->ImageDefs[ID].YOffset;
+	assert(ID < ImageFile->imageDefs.size());
+	return ImageFile->imageDefs[ID].YOffset;
 }
 
 
 static inline WZ_DECL_PURE unsigned short iV_GetImageCenterX(const IMAGEFILE *ImageFile, const unsigned short ID)
 {
-	assert(ID < ImageFile->NumImages);
-	return ImageFile->ImageDefs[ID].XOffset + ImageFile->ImageDefs[ID].Width/2;
+	assert(ID < ImageFile->imageDefs.size());
+	return ImageFile->imageDefs[ID].XOffset + ImageFile->imageDefs[ID].Width/2;
 }
 
 
 static inline WZ_DECL_PURE unsigned short iV_GetImageCenterY(const IMAGEFILE *ImageFile, const unsigned short ID)
 {
-	assert(ID < ImageFile->NumImages);
-	return ImageFile->ImageDefs[ID].YOffset + ImageFile->ImageDefs[ID].Height/2;
+	assert(ID < ImageFile->imageDefs.size());
+	return ImageFile->imageDefs[ID].YOffset + ImageFile->imageDefs[ID].Height/2;
 }
 
 

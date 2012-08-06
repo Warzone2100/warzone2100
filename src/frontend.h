@@ -145,8 +145,6 @@ bool CancelPressed(void);
 
 #define FRONTEND_SIDEX			24
 #define FRONTEND_SIDEY			FRONTEND_BOTFORMY
-#define FRONTEND_LOGOW			248
-#define FRONTEND_LOGOH			118
 
 enum
 {
