@@ -26,6 +26,7 @@
 #include "tex.h"
 
 #include <set>
+#include <algorithm>
 
 
 struct ImageMergeRectangle
