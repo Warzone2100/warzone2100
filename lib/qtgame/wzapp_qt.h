@@ -44,7 +44,7 @@ class WzMainWindow : public QtGameWidget
 	Q_OBJECT
 
 private:
-	void loadCursor(CURSOR cursor, int x, int y, QImage const &buffer);
+	void loadCursor(CURSOR cursor, char const *name);
 	void mouseMoveEvent(QMouseEvent *event);
 	void mousePressEvent(QMouseEvent *event);
 	void mouseReleaseEvent(QMouseEvent *event);

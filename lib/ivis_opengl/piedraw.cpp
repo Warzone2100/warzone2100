@@ -651,16 +651,16 @@ void pie_DrawImage(const PIEIMAGE *image, const PIERECT *dest, PIELIGHT colour)
 
 	glBegin(GL_TRIANGLE_STRIP);
 		//set up 4 pie verts
-		glTexCoord2f(image->tu / OLD_TEXTURE_SIZE_FIX, image->tv / OLD_TEXTURE_SIZE_FIX);
+		glTexCoord2f(image->tu * image->invTextureSize, image->tv * image->invTextureSize);
 		glVertex2f(dest->x, dest->y);
 
-		glTexCoord2f((image->tu + image->tw) / OLD_TEXTURE_SIZE_FIX, image->tv / OLD_TEXTURE_SIZE_FIX);
+		glTexCoord2f((image->tu + image->tw) * image->invTextureSize, image->tv * image->invTextureSize);
 		glVertex2f(dest->x + dest->w, dest->y);
 
-		glTexCoord2f(image->tu / OLD_TEXTURE_SIZE_FIX, (image->tv + image->th) / OLD_TEXTURE_SIZE_FIX);
+		glTexCoord2f(image->tu * image->invTextureSize, (image->tv + image->th) * image->invTextureSize);
 		glVertex2f(dest->x, dest->y + dest->h);
 
-		glTexCoord2f((image->tu + image->tw) / OLD_TEXTURE_SIZE_FIX, (image->tv + image->th) / OLD_TEXTURE_SIZE_FIX);
+		glTexCoord2f((image->tu + image->tw) * image->invTextureSize, (image->tv + image->th) * image->invTextureSize);
 		glVertex2f(dest->x + dest->w, dest->y + dest->h);
 	glEnd();
 }
