@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2012-06-20 01:11+0200\n"
+"POT-Creation-Date: 2012-08-08 00:24+0200\n"
 "PO-Revision-Date: 2008-05-05 12:29+0000\n"
 "Last-Translator: Jen Ockwell <jenfraggleubuntu@googlemail.com>\n"
 "Language-Team: English (United Kingdom) <en_GB@li.org>\n"
@@ -12210,25 +12210,25 @@ msgstr "Medium Body - Retribution"
 msgid "System locale"
 msgstr "System locale"
 
-#: lib/ivis_opengl/screen.cpp:183
+#: lib/ivis_opengl/screen.cpp:187
 msgid "OpenGL GLSL shader version 1.20 is not supported by your system. Some things may look wrong. Please upgrade your graphics driver/hardware, if possible."
 msgstr ""
 
-#: lib/ivis_opengl/screen.cpp:189
-msgid "OpenGL 1.2 + VBO + TEC is not supported by your system. The game requires this. Please upgrade your graphics drivers/hardware, if possible."
+#: lib/ivis_opengl/screen.cpp:193
+msgid "OpenGL 1.2 + TEC is not supported by your system. The game requires this. Please upgrade your graphics drivers/hardware, if possible."
 msgstr ""
 
-#: lib/netplay/netplay.cpp:204
-#: lib/netplay/netplay.cpp:1059
+#: lib/netplay/netplay.cpp:205
+#: lib/netplay/netplay.cpp:1068
 msgid "Enter password here"
 msgstr ""
 
-#: lib/netplay/netplay.cpp:2105
+#: lib/netplay/netplay.cpp:2124
 #, fuzzy, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr "Load a saved game"
 
-#: lib/netplay/netplay.cpp:2127
+#: lib/netplay/netplay.cpp:2146
 #, c-format
 msgid ""
 "Error connecting to the lobby server: %s.\n"
@@ -12237,7 +12237,7 @@ msgid ""
 " or to forward the port to your system."
 msgstr ""
 
-#: lib/netplay/netplay.cpp:2800
+#: lib/netplay/netplay.cpp:2853
 msgid "Failed to get a lobby response!"
 msgstr ""
 
@@ -12287,19 +12287,19 @@ msgid "Strategy Game"
 msgstr "Save Game"
 
 #: src/challenge.cpp:222
-#: src/hci.cpp:917
-#: src/hci.cpp:3366
-#: src/hci.cpp:3489
-#: src/hci.cpp:3926
-#: src/hci.cpp:4930
+#: src/hci.cpp:915
+#: src/hci.cpp:3375
+#: src/hci.cpp:3498
+#: src/hci.cpp:3935
+#: src/hci.cpp:4939
 #: src/intelmap.cpp:531
 #: src/intorder.cpp:727
 #: src/loadsave.cpp:250
 #: src/multimenu.cpp:502
 #: src/multimenu.cpp:1369
-#: src/transporter.cpp:278
-#: src/transporter.cpp:359
-#: src/transporter.cpp:822
+#: src/transporter.cpp:266
+#: src/transporter.cpp:348
+#: src/transporter.cpp:808
 msgid "Close"
 msgstr "Close"
 
@@ -12322,147 +12322,151 @@ msgstr ""
 msgid "Debug mode now disabled!"
 msgstr "Build menu will reopen"
 
-#: src/clparse.cpp:242
+#: src/clparse.cpp:243
 msgid "Set configuration directory"
 msgstr "Set configuration directory"
 
-#: src/clparse.cpp:242
+#: src/clparse.cpp:243
 msgid "configuration directory"
 msgstr "configuration directory"
 
-#: src/clparse.cpp:243
+#: src/clparse.cpp:244
 msgid "Set default data directory"
 msgstr "Set default data directory"
 
-#: src/clparse.cpp:243
+#: src/clparse.cpp:244
 msgid "data directory"
 msgstr "data directory"
 
-#: src/clparse.cpp:244
+#: src/clparse.cpp:245
 msgid "Show debug for given level"
 msgstr "Show debug for given level"
 
-#: src/clparse.cpp:244
+#: src/clparse.cpp:245
 msgid "debug level"
 msgstr "debug level"
 
-#: src/clparse.cpp:245
+#: src/clparse.cpp:246
 msgid "Log debug output to file"
 msgstr "Log debug output to file"
 
-#: src/clparse.cpp:245
+#: src/clparse.cpp:246
 msgid "file"
 msgstr "file"
 
-#: src/clparse.cpp:246
+#: src/clparse.cpp:247
 msgid "Flush all debug output written to stderr"
 msgstr ""
 
-#: src/clparse.cpp:247
+#: src/clparse.cpp:248
 msgid "Play in fullscreen mode"
 msgstr "Play in fullscreen mode"
 
-#: src/clparse.cpp:248
+#: src/clparse.cpp:249
 msgid "Load a specific game"
 msgstr "Load a specific game"
 
-#: src/clparse.cpp:248
+#: src/clparse.cpp:249
 msgid "game-name"
 msgstr "game-name"
 
-#: src/clparse.cpp:249
+#: src/clparse.cpp:250
 msgid "Show this help message and exit"
 msgstr "Show this help message and exit"
 
-#: src/clparse.cpp:250
+#: src/clparse.cpp:251
 msgid "Enable a global mod"
 msgstr "Enable a global mod"
 
-#: src/clparse.cpp:250
 #: src/clparse.cpp:251
 #: src/clparse.cpp:252
+#: src/clparse.cpp:253
 msgid "mod"
 msgstr "mod"
 
-#: src/clparse.cpp:251
+#: src/clparse.cpp:252
 msgid "Enable a campaign only mod"
 msgstr "Enable a campaign only mod"
 
-#: src/clparse.cpp:252
+#: src/clparse.cpp:253
 msgid "Enable a multiplay only mod"
 msgstr "Enable a multiplay only mod"
 
-#: src/clparse.cpp:253
+#: src/clparse.cpp:254
 #, fuzzy
 msgid "Disable asserts"
 msgstr "Disable shadows"
 
-#: src/clparse.cpp:254
+#: src/clparse.cpp:255
 msgid "Causes a crash to test the crash handler"
 msgstr ""
 
-#: src/clparse.cpp:255
+#: src/clparse.cpp:256
 msgid "Load a saved game"
 msgstr "Load a saved game"
 
-#: src/clparse.cpp:255
+#: src/clparse.cpp:256
 msgid "savegame"
 msgstr "savegame"
 
-#: src/clparse.cpp:256
+#: src/clparse.cpp:257
 msgid "Play in windowed mode"
 msgstr "Play in windowed mode"
 
-#: src/clparse.cpp:257
+#: src/clparse.cpp:258
 msgid "Show version information and exit"
 msgstr "Show version information and exit"
 
-#: src/clparse.cpp:258
+#: src/clparse.cpp:259
 msgid "Set the resolution to use"
 msgstr "Set the resolution to use"
 
-#: src/clparse.cpp:258
+#: src/clparse.cpp:259
 msgid "WIDTHxHEIGHT"
 msgstr "WIDTHxHEIGHT"
 
-#: src/clparse.cpp:259
+#: src/clparse.cpp:260
 msgid "Enable shadows"
 msgstr "Enable shadows"
 
-#: src/clparse.cpp:260
+#: src/clparse.cpp:261
 msgid "Disable shadows"
 msgstr "Disable shadows"
 
-#: src/clparse.cpp:261
+#: src/clparse.cpp:262
 msgid "Enable sound"
 msgstr "Enable sound"
 
-#: src/clparse.cpp:262
+#: src/clparse.cpp:263
 msgid "Disable sound"
 msgstr "Disable sound"
 
-#: src/clparse.cpp:263
+#: src/clparse.cpp:264
 msgid "connect directly to IP/hostname"
 msgstr ""
 
-#: src/clparse.cpp:263
+#: src/clparse.cpp:264
 msgid "host"
 msgstr ""
 
-#: src/clparse.cpp:264
+#: src/clparse.cpp:265
 msgid "go directly to host screen"
 msgstr ""
 
-#: src/clparse.cpp:265
+#: src/clparse.cpp:266
 msgid "Enable texture compression"
 msgstr ""
 
-#: src/clparse.cpp:266
+#: src/clparse.cpp:267
 msgid "Disable texture compression"
 msgstr ""
 
-#: src/clparse.cpp:267
-msgid "Only use OpenGL 1.5"
+#: src/clparse.cpp:268
+msgid "Disable the use of OpenGL shaders"
+msgstr ""
+
+#: src/clparse.cpp:269
+msgid "Disable the use of OpenGL Vertex Buffer Objects"
 msgstr ""
 
 #: src/cmddroid.cpp:110
@@ -12619,12 +12623,12 @@ msgid "Water Speed"
 msgstr "Water Speed"
 
 #: src/design.cpp:2028
-#: src/hci.cpp:4953
+#: src/hci.cpp:4962
 msgid "Tab Scroll left"
 msgstr "Tab Scroll left"
 
 #: src/design.cpp:2043
-#: src/hci.cpp:4968
+#: src/hci.cpp:4977
 msgid "Tab Scroll right"
 msgstr "Tab Scroll right"
 
@@ -12640,36 +12644,36 @@ msgstr "Systems"
 msgid "Delete Template"
 msgstr ""
 
-#: src/display3d.cpp:656
+#: src/display3d.cpp:674
 #, fuzzy
 msgid "Player left"
 msgstr "Player"
 
-#: src/display3d.cpp:660
+#: src/display3d.cpp:678
 #, fuzzy
 msgid "Player dropped"
 msgstr "Player"
 
-#: src/display3d.cpp:664
-#: src/multiint.cpp:2310
+#: src/display3d.cpp:682
+#: src/multiint.cpp:2312
 msgid "Waiting for other players"
 msgstr ""
 
-#: src/display3d.cpp:669
+#: src/display3d.cpp:687
 msgid "Out of sync"
 msgstr ""
 
-#: src/display.cpp:1597
+#: src/display.cpp:1566
 msgid "Cannot Build. Oil Resource Burning."
 msgstr "Cannot Build. Oil Resource Burning."
 
-#: src/display.cpp:1785
-#: src/display.cpp:2335
+#: src/display.cpp:1753
+#: src/display.cpp:2250
 #, fuzzy, c-format
 msgid "%s - Damage %d%% - Experience %.1f, %s"
 msgstr "%s - Damage %d%% - Experience %d, %s"
 
-#: src/display.cpp:1801
+#: src/display.cpp:1769
 #, fuzzy, c-format
 msgid "%s - Allied - Damage %d%% - Experience %d, %s"
 msgstr "%s - Damage %d%% - Experience %d, %s"
@@ -12682,77 +12686,77 @@ msgstr "Unit Lost!"
 msgid "Structure Restored"
 msgstr "Structure Restored"
 
-#: src/droid.cpp:2236
+#: src/droid.cpp:2239
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
 msgstr[0] "Group %u selected - %u Unit"
 msgstr[1] "Group %u selected - %u Units"
 
-#: src/droid.cpp:2249
+#: src/droid.cpp:2252
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
 msgstr[0] "%u unit assigned to Group %u"
 msgstr[1] "%u units assigned to Group %u"
 
-#: src/droid.cpp:2262
+#: src/droid.cpp:2265
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
 msgstr[0] "Centred on Group %u - %u Unit"
 msgstr[1] "Centred on Group %u - %u Units"
 
-#: src/droid.cpp:2266
+#: src/droid.cpp:2269
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] "Aligning with Group %u - %u Unit"
 msgstr[1] "Aligning with Group %u - %u Units"
 
-#: src/droid.cpp:2448
+#: src/droid.cpp:2451
 msgid "Rookie"
 msgstr "Rookie"
 
-#: src/droid.cpp:2449
+#: src/droid.cpp:2452
 msgctxt "rank"
 msgid "Green"
 msgstr "Green"
 
-#: src/droid.cpp:2450
+#: src/droid.cpp:2453
 msgid "Trained"
 msgstr "Trained"
 
-#: src/droid.cpp:2451
+#: src/droid.cpp:2454
 msgid "Regular"
 msgstr "Regular"
 
-#: src/droid.cpp:2452
+#: src/droid.cpp:2455
 msgid "Professional"
 msgstr "Professional"
 
-#: src/droid.cpp:2453
+#: src/droid.cpp:2456
 msgid "Veteran"
 msgstr "Veteran"
 
-#: src/droid.cpp:2454
+#: src/droid.cpp:2457
 msgid "Elite"
 msgstr "Elite"
 
-#: src/droid.cpp:2455
+#: src/droid.cpp:2458
 msgid "Special"
 msgstr "Special"
 
-#: src/droid.cpp:2456
+#: src/droid.cpp:2459
 msgid "Hero"
 msgstr "Hero"
 
-#: src/droid.cpp:3414
+#: src/droid.cpp:3393
 #, c-format
 msgid "%s wanted to give you a %s but you have too many!"
 msgstr ""
 
-#: src/droid.cpp:3418
+#: src/droid.cpp:3397
 #, c-format
 msgid "You wanted to give %s a %s but they have too many!"
 msgstr ""
@@ -12773,7 +12777,7 @@ msgid "Tutorial"
 msgstr "Tutorial"
 
 #: src/frontend.cpp:111
-#: src/hci.cpp:3475
+#: src/hci.cpp:3484
 msgid "Options"
 msgstr "Options"
 
@@ -12805,14 +12809,14 @@ msgstr "TUTORIALS"
 #. TRANSLATORS: "Return", in this context, means "return to previous screen/menu"
 #: src/frontend.cpp:191
 #: src/frontend.cpp:253
-#: src/frontend.cpp:398
-#: src/frontend.cpp:470
-#: src/frontend.cpp:611
-#: src/frontend.cpp:757
-#: src/frontend.cpp:903
-#: src/frontend.cpp:1158
-#: src/frontend.cpp:1312
-#: src/frontend.cpp:1332
+#: src/frontend.cpp:399
+#: src/frontend.cpp:471
+#: src/frontend.cpp:612
+#: src/frontend.cpp:758
+#: src/frontend.cpp:904
+#: src/frontend.cpp:1161
+#: src/frontend.cpp:1315
+#: src/frontend.cpp:1335
 msgctxt "menu"
 msgid "Return"
 msgstr "Return"
@@ -12849,518 +12853,518 @@ msgstr "SINGLE PLAYER"
 msgid "Campaign videos are missing! Get them from http://wz2100.net"
 msgstr ""
 
-#: src/frontend.cpp:333
+#: src/frontend.cpp:334
 #: src/ingameop.cpp:504
 #, fuzzy
 msgid "Load Campaign Saved Game"
 msgstr "Load Saved Game"
 
-#: src/frontend.cpp:339
+#: src/frontend.cpp:340
 #: src/ingameop.cpp:508
 #, fuzzy
 msgid "Load Skirmish Saved Game"
 msgstr "Load Saved Game"
 
-#: src/frontend.cpp:393
+#: src/frontend.cpp:394
 msgid "MULTI PLAYER"
 msgstr "MULTIPLAYER"
 
-#: src/frontend.cpp:395
+#: src/frontend.cpp:396
 msgid "Host Game"
 msgstr "Host Game"
 
-#: src/frontend.cpp:396
+#: src/frontend.cpp:397
 msgid "Join Game"
 msgstr "Join Game"
 
-#: src/frontend.cpp:401
+#: src/frontend.cpp:402
 msgid "TCP PORT 2100 MUST BE OPENED IN YOUR FIREWALL / ROUTER TO HOST GAMES!"
 msgstr ""
 
-#: src/frontend.cpp:463
-#: src/multiint.cpp:1440
+#: src/frontend.cpp:464
+#: src/multiint.cpp:1442
 msgid "OPTIONS"
 msgstr "OPTIONS"
 
-#: src/frontend.cpp:464
+#: src/frontend.cpp:465
 msgid "Game Options"
 msgstr "Game Options"
 
-#: src/frontend.cpp:465
+#: src/frontend.cpp:466
 msgid "Graphics Options"
 msgstr "Graphics Options"
 
-#: src/frontend.cpp:466
+#: src/frontend.cpp:467
 #, fuzzy
 msgid "Video Options"
 msgstr "Audio Options"
 
-#: src/frontend.cpp:467
+#: src/frontend.cpp:468
 #: src/ingameop.cpp:268
 msgid "Audio Options"
 msgstr "Audio Options"
 
-#: src/frontend.cpp:468
+#: src/frontend.cpp:469
 #, fuzzy
 msgid "Mouse Options"
 msgstr "Game Options"
 
-#: src/frontend.cpp:469
+#: src/frontend.cpp:470
 msgid "Key Mappings"
 msgstr "Key Mappings"
 
-#: src/frontend.cpp:529
+#: src/frontend.cpp:530
 msgid "Video Playback"
 msgstr "Video Playback"
 
-#: src/frontend.cpp:533
-#: src/frontend.cpp:685
+#: src/frontend.cpp:534
+#: src/frontend.cpp:686
 msgid "1X"
 msgstr ""
 
-#: src/frontend.cpp:537
-#: src/frontend.cpp:675
+#: src/frontend.cpp:538
+#: src/frontend.cpp:676
 msgid "2X"
 msgstr ""
 
-#: src/frontend.cpp:541
-#: src/frontend.cpp:680
-#: src/frontend.cpp:831
-#: src/frontend.cpp:926
+#: src/frontend.cpp:542
+#: src/frontend.cpp:681
+#: src/frontend.cpp:832
+#: src/frontend.cpp:927
 msgid "Fullscreen"
 msgstr "Fullscreen"
 
-#: src/frontend.cpp:550
+#: src/frontend.cpp:551
 msgid "Scanlines"
 msgstr ""
 
-#: src/frontend.cpp:554
-#: src/frontend.cpp:575
-#: src/frontend.cpp:583
-#: src/frontend.cpp:599
-#: src/frontend.cpp:629
-#: src/frontend.cpp:647
-#: src/frontend.cpp:665
-#: src/frontend.cpp:710
-#: src/frontend.cpp:856
-#: src/frontend.cpp:866
-#: src/frontend.cpp:896
-#: src/frontend.cpp:950
-#: src/frontend.cpp:1011
-#: src/frontend.cpp:1054
-#: src/frontend.cpp:1066
-#: src/frontend.cpp:1115
-#: src/frontend.cpp:1127
-#: src/frontend.cpp:1139
-#: src/frontend.cpp:1174
-#: src/frontend.cpp:1187
-#: src/frontend.cpp:1201
+#: src/frontend.cpp:555
+#: src/frontend.cpp:576
+#: src/frontend.cpp:584
+#: src/frontend.cpp:600
+#: src/frontend.cpp:630
+#: src/frontend.cpp:648
+#: src/frontend.cpp:666
+#: src/frontend.cpp:711
+#: src/frontend.cpp:857
+#: src/frontend.cpp:867
+#: src/frontend.cpp:897
+#: src/frontend.cpp:951
+#: src/frontend.cpp:1012
+#: src/frontend.cpp:1055
+#: src/frontend.cpp:1068
+#: src/frontend.cpp:1118
+#: src/frontend.cpp:1130
+#: src/frontend.cpp:1142
+#: src/frontend.cpp:1177
+#: src/frontend.cpp:1190
+#: src/frontend.cpp:1204
 msgid "Off"
 msgstr "Off"
 
-#: src/frontend.cpp:558
-#: src/frontend.cpp:700
+#: src/frontend.cpp:559
+#: src/frontend.cpp:701
 msgid "50%"
 msgstr ""
 
-#: src/frontend.cpp:562
-#: src/frontend.cpp:705
-#: src/multiplay.cpp:1980
+#: src/frontend.cpp:563
+#: src/frontend.cpp:706
+#: src/multiplay.cpp:1981
 msgid "Black"
 msgstr "Black"
 
-#: src/frontend.cpp:568
+#: src/frontend.cpp:569
 msgid "Screen Shake"
 msgstr "Screen Shake"
 
-#: src/frontend.cpp:571
-#: src/frontend.cpp:587
-#: src/frontend.cpp:595
-#: src/frontend.cpp:634
-#: src/frontend.cpp:652
-#: src/frontend.cpp:661
-#: src/frontend.cpp:852
-#: src/frontend.cpp:892
-#: src/frontend.cpp:1016
-#: src/frontend.cpp:1050
-#: src/frontend.cpp:1070
-#: src/frontend.cpp:1111
-#: src/frontend.cpp:1123
-#: src/frontend.cpp:1135
-#: src/frontend.cpp:1179
-#: src/frontend.cpp:1192
-#: src/frontend.cpp:1206
+#: src/frontend.cpp:572
+#: src/frontend.cpp:588
+#: src/frontend.cpp:596
+#: src/frontend.cpp:635
+#: src/frontend.cpp:653
+#: src/frontend.cpp:662
+#: src/frontend.cpp:853
+#: src/frontend.cpp:893
+#: src/frontend.cpp:1017
+#: src/frontend.cpp:1051
+#: src/frontend.cpp:1073
+#: src/frontend.cpp:1114
+#: src/frontend.cpp:1126
+#: src/frontend.cpp:1138
+#: src/frontend.cpp:1182
+#: src/frontend.cpp:1195
+#: src/frontend.cpp:1209
 msgid "On"
 msgstr "On"
 
-#: src/frontend.cpp:580
+#: src/frontend.cpp:581
 msgid "Subtitles"
 msgstr "Subtitles"
 
-#: src/frontend.cpp:592
+#: src/frontend.cpp:593
 msgid "Shadows"
 msgstr "Shadows"
 
-#: src/frontend.cpp:603
-#: src/frontend.cpp:1339
+#: src/frontend.cpp:604
+#: src/frontend.cpp:1342
 msgid "Radar"
 msgstr ""
 
-#: src/frontend.cpp:604
-#: src/frontend.cpp:717
-#: src/frontend.cpp:1340
+#: src/frontend.cpp:605
+#: src/frontend.cpp:718
+#: src/frontend.cpp:1343
 #, fuzzy
 msgid "Rotating"
 msgstr "Rotate Right"
 
-#: src/frontend.cpp:604
-#: src/frontend.cpp:717
-#: src/frontend.cpp:1340
+#: src/frontend.cpp:605
+#: src/frontend.cpp:718
+#: src/frontend.cpp:1343
 msgid "Fixed"
 msgstr ""
 
-#: src/frontend.cpp:607
+#: src/frontend.cpp:608
 #, fuzzy
 msgid "GRAPHICS OPTIONS"
 msgstr "GAME OPTIONS"
 
-#: src/frontend.cpp:745
+#: src/frontend.cpp:746
 #: src/ingameop.cpp:168
 msgid "Voice Volume"
 msgstr "Voice Volume"
 
-#: src/frontend.cpp:749
+#: src/frontend.cpp:750
 #: src/ingameop.cpp:173
 msgid "FX Volume"
 msgstr "FX Volume"
 
-#: src/frontend.cpp:753
+#: src/frontend.cpp:754
 #: src/ingameop.cpp:178
 msgid "Music Volume"
 msgstr "Music Volume"
 
-#: src/frontend.cpp:760
+#: src/frontend.cpp:761
 #, fuzzy
 msgid "AUDIO OPTIONS"
 msgstr "GAME OPTIONS"
 
-#: src/frontend.cpp:824
+#: src/frontend.cpp:825
 msgid "* Takes effect on game restart"
 msgstr "* Takes effect on game restart"
 
-#: src/frontend.cpp:827
+#: src/frontend.cpp:828
 msgid "Graphics Mode*"
 msgstr "Graphics Mode*"
 
-#: src/frontend.cpp:835
-#: src/frontend.cpp:921
+#: src/frontend.cpp:836
+#: src/frontend.cpp:922
 msgid "Windowed"
 msgstr "Windowed"
 
-#: src/frontend.cpp:839
+#: src/frontend.cpp:840
 msgid "Resolution*"
 msgstr "Resolution*"
 
-#: src/frontend.cpp:844
+#: src/frontend.cpp:845
 msgid "Texture size"
 msgstr "Texture size"
 
-#: src/frontend.cpp:848
+#: src/frontend.cpp:849
 msgid "Vertical sync"
 msgstr ""
 
-#: src/frontend.cpp:883
-#: src/frontend.cpp:956
+#: src/frontend.cpp:884
+#: src/frontend.cpp:957
 #, fuzzy
 msgid "Unsupported"
 msgstr "Transporter"
 
-#: src/frontend.cpp:888
+#: src/frontend.cpp:889
 #, fuzzy
 msgid "Shaders"
 msgstr "Shadows"
 
-#: src/frontend.cpp:900
+#: src/frontend.cpp:901
 #, fuzzy
 msgid "VIDEO OPTIONS"
 msgstr "GAME OPTIONS"
 
-#: src/frontend.cpp:1108
+#: src/frontend.cpp:1111
 #, fuzzy
 msgid "Reverse Rotation"
 msgstr "Reverse Mouse"
 
-#: src/frontend.cpp:1119
+#: src/frontend.cpp:1122
 msgid "Trap Cursor"
 msgstr "Trap Cursor"
 
-#: src/frontend.cpp:1132
+#: src/frontend.cpp:1135
 #, fuzzy
 msgid "Switch Mouse Buttons"
 msgstr "Game Options"
 
-#: src/frontend.cpp:1144
+#: src/frontend.cpp:1147
 #, fuzzy
 msgid "Rotate Screen"
 msgstr "Rotate Left"
 
-#: src/frontend.cpp:1147
-#: src/frontend.cpp:1220
+#: src/frontend.cpp:1150
+#: src/frontend.cpp:1223
 msgid "Middle Mouse"
 msgstr ""
 
-#: src/frontend.cpp:1151
-#: src/frontend.cpp:1215
+#: src/frontend.cpp:1154
+#: src/frontend.cpp:1218
 msgid "Right Mouse"
 msgstr ""
 
-#: src/frontend.cpp:1155
+#: src/frontend.cpp:1158
 #, fuzzy
 msgid "MOUSE OPTIONS"
 msgstr "GAME OPTIONS"
 
-#: src/frontend.cpp:1255
-#: src/frontend.cpp:1333
+#: src/frontend.cpp:1258
+#: src/frontend.cpp:1336
 msgid "Language"
 msgstr "Language"
 
-#: src/frontend.cpp:1259
-#: src/frontend.cpp:1337
+#: src/frontend.cpp:1262
+#: src/frontend.cpp:1340
 msgid "Difficulty"
 msgstr "Difficulty"
 
-#: src/frontend.cpp:1263
-#: src/frontend.cpp:1344
-#: src/frontend.cpp:1376
+#: src/frontend.cpp:1266
+#: src/frontend.cpp:1347
+#: src/frontend.cpp:1379
 #: src/multiint.cpp:214
 msgid "Easy"
 msgstr "Easy"
 
-#: src/frontend.cpp:1266
-#: src/frontend.cpp:1347
-#: src/frontend.cpp:1368
+#: src/frontend.cpp:1269
+#: src/frontend.cpp:1350
+#: src/frontend.cpp:1371
 msgid "Normal"
 msgstr "Normal"
 
-#: src/frontend.cpp:1270
-#: src/frontend.cpp:1350
-#: src/frontend.cpp:1372
+#: src/frontend.cpp:1273
+#: src/frontend.cpp:1353
+#: src/frontend.cpp:1375
 #: src/multiint.cpp:214
 msgid "Hard"
 msgstr "Hard"
 
-#: src/frontend.cpp:1275
-#: src/frontend.cpp:1338
+#: src/frontend.cpp:1278
+#: src/frontend.cpp:1341
 msgid "Scroll Speed"
 msgstr "Scroll Speed"
 
-#: src/frontend.cpp:1279
-#: src/frontend.cpp:1334
+#: src/frontend.cpp:1282
+#: src/frontend.cpp:1337
 #, fuzzy
 msgid "Unit Colour:"
 msgstr "Unit Colour"
 
-#: src/frontend.cpp:1299
-#: src/frontend.cpp:1335
+#: src/frontend.cpp:1302
+#: src/frontend.cpp:1338
 #, fuzzy
 msgid "Campaign"
 msgstr "New Campaign"
 
-#: src/frontend.cpp:1309
-#: src/frontend.cpp:1336
+#: src/frontend.cpp:1312
+#: src/frontend.cpp:1339
 #, fuzzy
 msgid "Skirmish/Multiplayer"
 msgstr "Multi Player Game"
 
-#: src/frontend.cpp:1315
-#: src/frontend.cpp:1331
+#: src/frontend.cpp:1318
+#: src/frontend.cpp:1334
 msgid "GAME OPTIONS"
 msgstr "GAME OPTIONS"
 
-#: src/frontend.cpp:1476
-#: src/multiint.cpp:2578
+#: src/frontend.cpp:1479
+#: src/multiint.cpp:2580
 msgid "Mod: "
 msgstr ""
 
-#: src/hci.cpp:1236
+#: src/hci.cpp:1234
 #, fuzzy
 msgid "MAP SAVED!"
 msgstr "GAME SAVED!"
 
-#: src/hci.cpp:1558
-#: src/loop.cpp:257
-#: src/loop.cpp:273
+#: src/hci.cpp:1561
+#: src/loop.cpp:258
+#: src/loop.cpp:274
 #, fuzzy
 msgid "GAME SAVED: "
 msgstr "GAME SAVED!"
 
-#: src/hci.cpp:1973
+#: src/hci.cpp:1983
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new structure: %s."
 msgstr "Player %u is cheating (debug menu) him/herself a new structure: %s."
 
-#: src/hci.cpp:1988
+#: src/hci.cpp:1998
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new feature: %s."
 msgstr "Player %u is cheating (debug menu) him/herself a new feature: %s."
 
-#: src/hci.cpp:2010
+#: src/hci.cpp:2021
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid: %s."
 msgstr "Player %u is cheating (debug menu) him/herself a new droid: %s."
 
-#: src/hci.cpp:2023
+#: src/hci.cpp:2034
 #, fuzzy, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid."
 msgstr "Player %u is cheating (debug menu) him/herself a new droid: %s."
 
-#: src/hci.cpp:3286
+#: src/hci.cpp:3295
 msgid "Commanders (F6)"
 msgstr "Commanders (F6)"
 
-#: src/hci.cpp:3299
+#: src/hci.cpp:3308
 msgid "Intelligence Display (F5)"
 msgstr "Intelligence Display (F5)"
 
-#: src/hci.cpp:3312
+#: src/hci.cpp:3321
 msgid "Manufacture (F1)"
 msgstr "Manufacture (F1)"
 
-#: src/hci.cpp:3325
+#: src/hci.cpp:3334
 msgid "Design (F4)"
 msgstr "Design (F4)"
 
-#: src/hci.cpp:3338
+#: src/hci.cpp:3347
 msgid "Research (F2)"
 msgstr "Research (F2)"
 
-#: src/hci.cpp:3351
+#: src/hci.cpp:3360
 msgid "Build (F3)"
 msgstr "Build (F3)"
 
-#: src/hci.cpp:3422
-#: src/multiint.cpp:1550
+#: src/hci.cpp:3431
+#: src/multiint.cpp:1552
 #: src/multimenu.cpp:804
 msgid "Power"
 msgstr "Power"
 
-#: src/hci.cpp:3513
+#: src/hci.cpp:3522
 msgid "Map:"
 msgstr ""
 
-#: src/hci.cpp:3526
+#: src/hci.cpp:3535
 #, fuzzy
 msgid "Load"
 msgstr "Load Game"
 
-#: src/hci.cpp:3527
+#: src/hci.cpp:3536
 #, fuzzy
 msgid "Load Map File"
 msgstr "Load Game"
 
-#: src/hci.cpp:3538
+#: src/hci.cpp:3547
 #, fuzzy
 msgid "Save"
 msgstr "Save Game"
 
-#: src/hci.cpp:3539
+#: src/hci.cpp:3548
 #, fuzzy
 msgid "Save Map File"
 msgstr "Save Game"
 
-#: src/hci.cpp:3551
+#: src/hci.cpp:3560
 msgid "New"
 msgstr ""
 
-#: src/hci.cpp:3552
+#: src/hci.cpp:3561
 msgid "New Blank Map"
 msgstr ""
 
-#: src/hci.cpp:3600
+#: src/hci.cpp:3609
 #, fuzzy
 msgid "Tile"
 msgstr "file"
 
-#: src/hci.cpp:3601
+#: src/hci.cpp:3610
 msgid "Place tiles on map"
 msgstr ""
 
-#: src/hci.cpp:3614
+#: src/hci.cpp:3623
 msgid "Unit"
 msgstr "Unit"
 
-#: src/hci.cpp:3615
+#: src/hci.cpp:3624
 msgid "Place Unit on map"
 msgstr ""
 
-#: src/hci.cpp:3623
+#: src/hci.cpp:3632
 msgid "Struct"
 msgstr "Struct"
 
-#: src/hci.cpp:3624
+#: src/hci.cpp:3633
 #, fuzzy
 msgid "Place Structures on map"
 msgstr "Set Structure Limits"
 
-#: src/hci.cpp:3632
+#: src/hci.cpp:3641
 msgid "Feat"
 msgstr "Feat"
 
-#: src/hci.cpp:3633
+#: src/hci.cpp:3642
 msgid "Place Features on map"
 msgstr ""
 
-#: src/hci.cpp:3647
+#: src/hci.cpp:3656
 msgid "Pause"
 msgstr ""
 
-#: src/hci.cpp:3648
+#: src/hci.cpp:3657
 #, fuzzy
 msgid "Pause or unpause the game"
 msgstr "The host has left the game!"
 
-#: src/hci.cpp:3666
+#: src/hci.cpp:3675
 msgid "Align height of all map objects"
 msgstr ""
 
-#: src/hci.cpp:3679
+#: src/hci.cpp:3688
 msgid "Edit"
 msgstr ""
 
-#: src/hci.cpp:3680
+#: src/hci.cpp:3689
 #, fuzzy
 msgid "Start Edit Mode"
 msgstr "Start with No Bases"
 
-#: src/hci.cpp:3694
+#: src/hci.cpp:3703
 #: src/ingameop.cpp:113
 #: src/ingameop.cpp:257
 #: src/ingameop.cpp:261
 msgid "Quit"
 msgstr "Quit"
 
-#: src/hci.cpp:3695
+#: src/hci.cpp:3704
 msgid "Exit Game"
 msgstr "Exit Game"
 
-#: src/hci.cpp:3721
+#: src/hci.cpp:3730
 #, fuzzy
 msgid "Current Player:"
 msgstr "Multi Player Game"
 
-#: src/hci.cpp:4003
+#: src/hci.cpp:4012
 msgid "Progress Bar"
 msgstr "Progress Bar"
 
-#: src/hci.cpp:4855
+#: src/hci.cpp:4864
 msgid "Factory Delivery Point"
 msgstr "Factory Delivery Point"
 
-#: src/hci.cpp:4873
+#: src/hci.cpp:4882
 msgid "Loop Production"
 msgstr "Loop Production"
 
-#: src/hci.cpp:5197
+#: src/hci.cpp:5206
 #, fuzzy
 msgid "Ally progress"
 msgstr "Build Points"
@@ -13392,7 +13396,7 @@ msgstr "Load Game"
 
 #: src/ingameop.cpp:277
 #: src/ingameop.cpp:284
-#: src/mission.cpp:2601
+#: src/mission.cpp:2551
 msgid "Save Game"
 msgstr "Save Game"
 
@@ -13859,7 +13863,7 @@ msgstr "KEY MAPPING"
 #: src/keyedit.cpp:378
 #: src/multiint.cpp:761
 #: src/multiint.cpp:1230
-#: src/multiint.cpp:1636
+#: src/multiint.cpp:1638
 msgid "Return To Previous Screen"
 msgstr "Return To Previous Screen"
 
@@ -14407,50 +14411,50 @@ msgstr ""
 msgid "Toggle Driving Mode"
 msgstr "Toggle Tracking Camera"
 
-#: src/loop.cpp:264
-#: src/loop.cpp:280
+#: src/loop.cpp:265
+#: src/loop.cpp:281
 #, fuzzy
 msgid "Could not save game!"
 msgstr "Load a saved game"
 
-#: src/mission.cpp:2040
+#: src/mission.cpp:1984
 msgid "Load Transport"
 msgstr "Load Transport"
 
-#: src/mission.cpp:2428
+#: src/mission.cpp:2378
 #, fuzzy
 msgid "OBJECTIVE ACHIEVED by cheating!"
 msgstr "OBJECTIVE ACHIEVED"
 
-#: src/mission.cpp:2428
+#: src/mission.cpp:2378
 msgid "OBJECTIVE ACHIEVED"
 msgstr "OBJECTIVE ACHIEVED"
 
-#: src/mission.cpp:2434
+#: src/mission.cpp:2384
 #, fuzzy
 msgid "OBJECTIVE FAILED--and you cheated!"
 msgstr "OBJECTIVE FAILED"
 
-#: src/mission.cpp:2434
+#: src/mission.cpp:2384
 msgid "OBJECTIVE FAILED"
 msgstr "OBJECTIVE FAILED"
 
-#: src/mission.cpp:2459
-#: src/mission.cpp:2503
-#: src/mission.cpp:2615
+#: src/mission.cpp:2409
+#: src/mission.cpp:2453
+#: src/mission.cpp:2564
 msgid "Quit To Main Menu"
 msgstr "Quit To Main Menu"
 
-#: src/mission.cpp:2467
+#: src/mission.cpp:2417
 msgid "Continue Game"
 msgstr "Continue Game"
 
-#: src/mission.cpp:2497
-#: src/mission.cpp:2598
+#: src/mission.cpp:2447
+#: src/mission.cpp:2548
 msgid "Load Saved Game"
 msgstr "Load Saved Game"
 
-#: src/mission.cpp:2566
+#: src/mission.cpp:2516
 #, fuzzy
 msgid "GAME SAVED :"
 msgstr "GAME SAVED!"
@@ -14643,296 +14647,306 @@ msgstr "New Cyborg Available"
 msgid "VTOLs disabled."
 msgstr ""
 
-#: src/multiint.cpp:1445
-#: src/multiint.cpp:1454
+#: src/multiint.cpp:1399
+#, fuzzy
+msgid "Satellite Uplink disabled."
+msgstr "Satellite Uplink"
+
+#: src/multiint.cpp:1400
+#, fuzzy
+msgid "Laser Satellite disabled."
+msgstr "Laser Satellite Command Post"
+
+#: src/multiint.cpp:1447
+#: src/multiint.cpp:1456
 msgid "Select Game Name"
 msgstr "Select Game Name"
 
-#: src/multiint.cpp:1446
+#: src/multiint.cpp:1448
 #, fuzzy
 msgid "One-Player Skirmish"
 msgstr "One Player Skirmish"
 
-#: src/multiint.cpp:1457
+#: src/multiint.cpp:1459
 msgid "Select Map"
 msgstr "Select Map"
 
-#: src/multiint.cpp:1468
+#: src/multiint.cpp:1470
 #, fuzzy
 msgid "Password is already set!"
 msgstr "Player"
 
-#: src/multiint.cpp:1476
+#: src/multiint.cpp:1478
 msgid "Click to set Password"
 msgstr ""
 
-#: src/multiint.cpp:1481
-#: src/multiint.cpp:1482
+#: src/multiint.cpp:1483
+#: src/multiint.cpp:1484
 #, fuzzy
 msgid "Scavengers"
 msgstr "Scavenger"
 
-#: src/multiint.cpp:1484
+#: src/multiint.cpp:1486
 #, fuzzy
 msgid "No Scavengers"
 msgstr "Scavenger"
 
-#: src/multiint.cpp:1514
+#: src/multiint.cpp:1516
 msgid "Select Player Name"
 msgstr "Select Player Name"
 
-#: src/multiint.cpp:1517
+#: src/multiint.cpp:1519
 #: src/multimenu.cpp:797
 msgid "Alliances"
 msgstr "Alliances"
 
-#: src/multiint.cpp:1520
+#: src/multiint.cpp:1522
 msgid "No Alliances"
 msgstr "No Alliances"
 
-#: src/multiint.cpp:1522
+#: src/multiint.cpp:1524
 msgid "Allow Alliances"
 msgstr "Allow Alliances"
 
-#: src/multiint.cpp:1526
+#: src/multiint.cpp:1528
 msgid "Locked Teams"
 msgstr "Locked Teams"
 
-#: src/multiint.cpp:1552
+#: src/multiint.cpp:1554
 msgid "Low Power Levels"
 msgstr "Low Power Levels"
 
-#: src/multiint.cpp:1554
+#: src/multiint.cpp:1556
 msgid "Medium Power Levels"
 msgstr "Medium Power Levels"
 
-#: src/multiint.cpp:1556
+#: src/multiint.cpp:1558
 msgid "High Power Levels"
 msgstr "High Power Levels"
 
-#: src/multiint.cpp:1588
+#: src/multiint.cpp:1590
 msgid "Base"
 msgstr "Base"
 
-#: src/multiint.cpp:1590
+#: src/multiint.cpp:1592
 msgid "Start with No Bases"
 msgstr "Start with No Bases"
 
-#: src/multiint.cpp:1592
+#: src/multiint.cpp:1594
 msgid "Start with Bases"
 msgstr "Start with Bases"
 
-#: src/multiint.cpp:1594
+#: src/multiint.cpp:1596
 msgid "Start with Advanced Bases"
 msgstr "Start with Advanced Bases"
 
-#: src/multiint.cpp:1626
+#: src/multiint.cpp:1628
 msgid "Map Preview"
 msgstr ""
 
-#: src/multiint.cpp:1628
+#: src/multiint.cpp:1630
 msgid "Click to see Map"
 msgstr ""
 
-#: src/multiint.cpp:1641
 #: src/multiint.cpp:1643
+#: src/multiint.cpp:1645
 msgid "Start Hosting Game"
 msgstr "Start Hosting Game"
 
-#: src/multiint.cpp:1650
-#: src/multiint.cpp:1654
+#: src/multiint.cpp:1652
+#: src/multiint.cpp:1656
 #, fuzzy
 msgid "Show Structure Limits"
 msgstr "Set Structure Limits"
 
-#: src/multiint.cpp:1650
-#: src/multiint.cpp:1654
+#: src/multiint.cpp:1652
+#: src/multiint.cpp:1656
 msgid "Set Structure Limits"
 msgstr "Set Structure Limits"
 
-#: src/multiint.cpp:1731
+#: src/multiint.cpp:1733
 msgid "DIFFICULTY"
 msgstr ""
 
-#: src/multiint.cpp:1745
-msgid "Less aggressive"
-msgstr ""
-
-#: src/multiint.cpp:1746
-#, fuzzy
-msgid "Plays nice"
-msgstr "Player"
-
 #: src/multiint.cpp:1747
-msgid "No holds barred"
+msgid "Less aggressive"
 msgstr ""
 
 #: src/multiint.cpp:1748
 #, fuzzy
+msgid "Plays nice"
+msgstr "Player"
+
+#: src/multiint.cpp:1749
+msgid "No holds barred"
+msgstr ""
+
+#: src/multiint.cpp:1750
+#, fuzzy
 msgid "Starts with advantages"
 msgstr "Start with Advanced Bases"
 
-#: src/multiint.cpp:1776
+#: src/multiint.cpp:1778
 msgid "CHOOSE AI"
 msgstr ""
 
-#: src/multiint.cpp:1792
+#: src/multiint.cpp:1794
 msgid "Allow human players to join in this slot"
 msgstr ""
 
-#: src/multiint.cpp:1800
+#: src/multiint.cpp:1802
 msgid "Leave this slot unused"
 msgstr ""
 
-#: src/multiint.cpp:2252
+#: src/multiint.cpp:2254
 msgid "Team"
 msgstr ""
 
-#: src/multiint.cpp:2295
+#: src/multiint.cpp:2297
 msgid "You cannot change difficulty in a challenge"
 msgstr ""
 
-#: src/multiint.cpp:2295
+#: src/multiint.cpp:2297
 #, fuzzy
 msgid "Click to change difficulty"
 msgstr "Radar showing player colours"
 
-#: src/multiint.cpp:2310
+#: src/multiint.cpp:2312
 #, fuzzy
 msgid "Waiting for player"
 msgstr "Sensor Power"
 
-#: src/multiint.cpp:2310
+#: src/multiint.cpp:2312
 #, fuzzy
 msgid "Player is ready"
 msgstr "Player"
 
-#: src/multiint.cpp:2310
+#: src/multiint.cpp:2312
 msgid "Click when ready"
 msgstr ""
 
-#: src/multiint.cpp:2317
+#: src/multiint.cpp:2319
 msgid "READY?"
 msgstr ""
 
-#: src/multiint.cpp:2361
+#: src/multiint.cpp:2363
 msgid "PLAYERS"
 msgstr "PLAYERS"
 
-#: src/multiint.cpp:2396
+#: src/multiint.cpp:2398
 msgid "Click to change to this slot"
 msgstr ""
 
-#: src/multiint.cpp:2424
+#: src/multiint.cpp:2426
 #, fuzzy
 msgid "Choose Team"
 msgstr "Locked Teams"
 
-#: src/multiint.cpp:2454
+#: src/multiint.cpp:2456
 #, fuzzy
 msgid "Click to change player colour"
 msgstr "Radar showing player colours"
 
-#: src/multiint.cpp:2482
+#: src/multiint.cpp:2484
 #, fuzzy
 msgid "Click to change player position"
 msgstr "Guard Position"
 
-#: src/multiint.cpp:2486
+#: src/multiint.cpp:2488
 #, fuzzy
 msgid "Click to change AI"
 msgstr "Radar showing player colours"
 
-#: src/multiint.cpp:2551
+#: src/multiint.cpp:2553
 msgid "CHAT"
 msgstr "CHAT"
 
-#: src/multiint.cpp:2583
+#: src/multiint.cpp:2585
 msgid "All players need to have the same mods to join your game."
 msgstr ""
 
-#: src/multiint.cpp:2624
+#: src/multiint.cpp:2626
 msgid "Connecting to the lobby server..."
 msgstr ""
 
-#: src/multiint.cpp:2770
+#: src/multiint.cpp:2772
 #, c-format
 msgid "*** password [%s] is now required! ***"
 msgstr ""
 
-#: src/multiint.cpp:2778
+#: src/multiint.cpp:2780
 msgid "*** password is NOT required! ***"
 msgstr ""
 
-#: src/multiint.cpp:2994
+#: src/multiint.cpp:2996
 msgid "Sorry! Failed to host the game."
 msgstr ""
 
-#: src/multiint.cpp:3116
+#: src/multiint.cpp:3118
 #, fuzzy
 msgid "'Locked Teams' mode enabled"
 msgstr "Locked Teams"
 
-#: src/multiint.cpp:3144
-#: src/multiint.cpp:3213
+#: src/multiint.cpp:3146
+#: src/multiint.cpp:3215
 #: src/multimenu.cpp:1492
 #, c-format
 msgid "The host has kicked %s from the game!"
 msgstr "The host has kicked %s from the game!"
 
-#: src/multiint.cpp:3279
+#: src/multiint.cpp:3282
 msgid "Host is Starting Game"
 msgstr "Host is Starting Game"
 
-#: src/multiint.cpp:3882
+#: src/multiint.cpp:3885
 msgid "Can't connect to lobby server!"
 msgstr ""
 
-#: src/multiint.cpp:3974
+#: src/multiint.cpp:3977
 #, c-format
 msgid "Mods: %s"
 msgstr ""
 
-#: src/multiint.cpp:3981
+#: src/multiint.cpp:3984
 msgid "Mods: None!"
 msgstr ""
 
-#: src/multiint.cpp:3991
+#: src/multiint.cpp:3994
 #, fuzzy, c-format
 msgid "Version: %s"
 msgstr "Version %s%s%s%s"
 
-#: src/multiint.cpp:4042
+#: src/multiint.cpp:4045
 #, fuzzy, c-format
 msgid "Click to take player slot %d"
 msgstr "Radar showing player colours"
 
-#: src/multiint.cpp:4051
-#: src/multiint.cpp:4253
+#: src/multiint.cpp:4054
+#: src/multiint.cpp:4256
 msgid "Open"
 msgstr ""
 
-#: src/multiint.cpp:4051
-#: src/multiint.cpp:4254
+#: src/multiint.cpp:4054
+#: src/multiint.cpp:4257
 #, fuzzy
 msgid "Closed"
 msgstr "Close"
 
-#: src/multiint.cpp:4102
+#: src/multiint.cpp:4105
 #, c-format
 msgid "Sending Map: %d%% "
 msgstr ""
 
-#: src/multiint.cpp:4110
+#: src/multiint.cpp:4113
 #, c-format
 msgid "Map: %d%% downloaded"
 msgstr ""
 
-#: src/multiint.cpp:4136
+#: src/multiint.cpp:4139
 msgid "HOST"
 msgstr ""
 
-#: src/multiint.cpp:4143
+#: src/multiint.cpp:4146
 #: src/multimenu.cpp:811
 msgid "Ping"
 msgstr "Ping"
@@ -15074,76 +15088,76 @@ msgstr ""
 msgid "Kicking player %s, because they tried to bypass data integrity check!"
 msgstr ""
 
-#: src/multiplay.cpp:1094
+#: src/multiplay.cpp:1095
 #, fuzzy
 msgid "(allies"
 msgstr "Alliances"
 
-#: src/multiplay.cpp:1102
+#: src/multiplay.cpp:1103
 msgid "(private to "
 msgstr ""
 
-#: src/multiplay.cpp:1115
+#: src/multiplay.cpp:1116
 msgid "[invalid]"
 msgstr ""
 
-#: src/multiplay.cpp:1977
+#: src/multiplay.cpp:1978
 msgid "Green"
 msgstr "Green"
 
-#: src/multiplay.cpp:1978
+#: src/multiplay.cpp:1979
 msgid "Orange"
 msgstr "Orange"
 
-#: src/multiplay.cpp:1979
+#: src/multiplay.cpp:1980
 msgid "Grey"
 msgstr "Grey"
 
-#: src/multiplay.cpp:1981
+#: src/multiplay.cpp:1982
 msgid "Red"
 msgstr "Red"
 
-#: src/multiplay.cpp:1982
+#: src/multiplay.cpp:1983
 msgid "Blue"
 msgstr "Blue"
 
-#: src/multiplay.cpp:1983
+#: src/multiplay.cpp:1984
 msgid "Pink"
 msgstr "Pink"
 
-#: src/multiplay.cpp:1984
+#: src/multiplay.cpp:1985
 msgid "Cyan"
 msgstr "Cyan"
 
-#: src/multiplay.cpp:1985
+#: src/multiplay.cpp:1986
 msgid "Yellow"
 msgstr ""
 
-#: src/multiplay.cpp:1986
+#: src/multiplay.cpp:1987
 msgid "Purple"
 msgstr ""
 
-#: src/multiplay.cpp:1987
+#: src/multiplay.cpp:1988
 msgid "White"
 msgstr ""
 
-#: src/multiplay.cpp:1988
+#: src/multiplay.cpp:1989
 msgid "Bright blue"
 msgstr ""
 
-#: src/multiplay.cpp:1989
+#: src/multiplay.cpp:1990
 msgid "Neon green"
 msgstr ""
 
-#: src/multiplay.cpp:1990
+#: src/multiplay.cpp:1991
 msgid "Infrared"
 msgstr ""
 
-#: src/multiplay.cpp:1991
+#: src/multiplay.cpp:1992
 msgid "Ultraviolet"
 msgstr ""
 
-#: src/multiplay.cpp:1992
+#: src/multiplay.cpp:1993
 msgid "Brown"
 msgstr ""
 
@@ -15293,12 +15307,12 @@ msgstr "Total Game Time - %s"
 msgid "You cheated!"
 msgstr ""
 
-#: src/scriptfuncs.cpp:9378
+#: src/scriptfuncs.cpp:9379
 #, c-format
 msgid "Beacon received from %s!"
 msgstr ""
 
-#: src/scriptfuncs.cpp:9415
+#: src/scriptfuncs.cpp:9416
 #, c-format
 msgid "Beacon %d"
 msgstr ""
@@ -15332,71 +15346,71 @@ msgstr[1] "%u units selected"
 msgid "Can't build anymore units, Command Control Limit Reached - Production Halted"
 msgstr "Command Control Limit Reached - Production Halted"
 
-#: src/structure.cpp:5652
-#: src/structure.cpp:5677
+#: src/structure.cpp:5605
+#: src/structure.cpp:5630
 #, fuzzy, c-format
 msgid "%s - %u Unit assigned - Damage %3.0f%%"
 msgid_plural "%s - %u Units assigned - Damage %3.0f%%"
 msgstr[0] "%s - %u Unit assigned"
 msgstr[1] "%s - %u Units assigned"
 
-#: src/structure.cpp:5682
-#: src/structure.cpp:5750
-#: src/structure.cpp:5765
-#: src/structure.cpp:5779
+#: src/structure.cpp:5635
+#: src/structure.cpp:5703
+#: src/structure.cpp:5718
+#: src/structure.cpp:5732
 #, fuzzy, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - Damage %3.0f%%"
 
-#: src/structure.cpp:5732
+#: src/structure.cpp:5685
 #, fuzzy, c-format
 msgid "%s - Connected %u of %u - Damage %3.0f%%"
 msgstr "%s - Connected %u of %u"
 
-#: src/structure.cpp:5896
-#: src/structure.cpp:5941
+#: src/structure.cpp:5849
+#: src/structure.cpp:5894
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Electronically Damaged"
 
-#: src/structure.cpp:6192
+#: src/structure.cpp:6145
 msgid "Electronic Reward - Visibility Report"
 msgstr "Electronic Reward - Visibility Report"
 
-#: src/structure.cpp:6232
+#: src/structure.cpp:6185
 msgid "Factory Reward - Propulsion"
 msgstr "Factory Reward - Propulsion"
 
-#: src/structure.cpp:6256
+#: src/structure.cpp:6209
 msgid "Factory Reward - Body"
 msgstr "Factory Reward - Body"
 
-#: src/structure.cpp:6280
+#: src/structure.cpp:6233
 msgid "Factory Reward - Weapon"
 msgstr "Factory Reward - Weapon"
 
-#: src/structure.cpp:6289
+#: src/structure.cpp:6242
 msgid "Factory Reward - Nothing"
 msgstr "Factory Reward - Nothing"
 
-#: src/structure.cpp:6317
+#: src/structure.cpp:6270
 msgid "Repair Facility Award - Repair"
 msgstr "Repair Facility Award - Repair"
 
-#: src/structure.cpp:6324
+#: src/structure.cpp:6277
 msgid "Repair Facility Award - Nothing"
 msgstr "Repair Facility Award - Nothing"
 
-#: src/transporter.cpp:396
-#: src/transporter.cpp:445
+#: src/transporter.cpp:385
+#: src/transporter.cpp:434
 msgid "Launch Transport"
 msgstr "Launch Transport"
 
-#: src/transporter.cpp:1407
+#: src/transporter.cpp:1380
 msgid "There is not enough room in the Transport!"
 msgstr ""
 
-#: src/transporter.cpp:1649
+#: src/transporter.cpp:1606
 msgid "Reinforcements landing"
 msgstr "Reinforcements landing"
 
@@ -16400,9 +16414,6 @@ msgstr "Version %s%s%s%s"
 
 #~ msgid "LasSats firing"
 #~ msgstr "LasSats firing"
-
-#~ msgid "Satellite Uplink"
-#~ msgstr "Satellite Uplink"
 
 #~ msgid "NASDA Central"
 #~ msgstr "NASDA Central"

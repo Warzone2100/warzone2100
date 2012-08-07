@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100-master_20110320qt\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2012-07-05 21:59+0200\n"
+"POT-Creation-Date: 2012-08-08 00:24+0200\n"
 "PO-Revision-Date: 2012-06-24 12:17+0200\n"
 "Last-Translator: Àngel Mompó <mecatxis@gmail.com>\n"
 "Language-Team: Catalan <ca@dodds.net> <>\n"
@@ -11887,20 +11887,20 @@ msgstr "La versió 1.2 del OepnGL GLSL shader no està implementada en el vostre
 
 #: lib/ivis_opengl/screen.cpp:193
 #, fuzzy
-msgid "OpenGL 1.2 + VBO + TEC is not supported by your system. The game requires this. Please upgrade your graphics drivers/hardware, if possible."
+msgid "OpenGL 1.2 + TEC is not supported by your system. The game requires this. Please upgrade your graphics drivers/hardware, if possible."
 msgstr "El vostre sistema no és compatible amb OpenGL 1.2 + TEC. Aquest joc el necessita. Si podeu, actualitzeu la vostra tarja gràfica o el controlador."
 
-#: lib/netplay/netplay.cpp:204
-#: lib/netplay/netplay.cpp:1059
+#: lib/netplay/netplay.cpp:205
+#: lib/netplay/netplay.cpp:1068
 msgid "Enter password here"
 msgstr "Fiqueu la contrasenya aquí"
 
-#: lib/netplay/netplay.cpp:2115
+#: lib/netplay/netplay.cpp:2124
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr "No s'ha pogut resoldre el nom del servidor mestre (%s)!"
 
-#: lib/netplay/netplay.cpp:2137
+#: lib/netplay/netplay.cpp:2146
 #, c-format
 msgid ""
 "Error connecting to the lobby server: %s.\n"
@@ -11913,7 +11913,7 @@ msgstr ""
 "Si feu servir un encaminador, configureu-lo per que faci servir UPnP\n"
 "o direccioneu el port al vostre sistema."
 
-#: lib/netplay/netplay.cpp:2810
+#: lib/netplay/netplay.cpp:2853
 msgid "Failed to get a lobby response!"
 msgstr "No s'ha rebut resposta de la sala!"
 
@@ -11973,9 +11973,9 @@ msgstr "Partida d'estratègia"
 #: src/loadsave.cpp:250
 #: src/multimenu.cpp:502
 #: src/multimenu.cpp:1369
-#: src/transporter.cpp:278
-#: src/transporter.cpp:359
-#: src/transporter.cpp:822
+#: src/transporter.cpp:266
+#: src/transporter.cpp:348
+#: src/transporter.cpp:808
 msgid "Close"
 msgstr "Tanca"
 
@@ -11997,147 +11997,151 @@ msgstr "El mode de depuració ara està habilitat!"
 msgid "Debug mode now disabled!"
 msgstr "El mode de depuració ara està deshabilitat!"
 
-#: src/clparse.cpp:242
+#: src/clparse.cpp:243
 msgid "Set configuration directory"
 msgstr "Estableix la carpeta de configuració"
 
-#: src/clparse.cpp:242
+#: src/clparse.cpp:243
 msgid "configuration directory"
 msgstr "carpeta-configuració"
 
-#: src/clparse.cpp:243
+#: src/clparse.cpp:244
 msgid "Set default data directory"
 msgstr "Estableix la carpeta de dades per defecte"
 
-#: src/clparse.cpp:243
+#: src/clparse.cpp:244
 msgid "data directory"
 msgstr "carpeta-dades"
 
-#: src/clparse.cpp:244
+#: src/clparse.cpp:245
 msgid "Show debug for given level"
 msgstr "Mostra la depuració al nivell indicat"
 
-#: src/clparse.cpp:244
+#: src/clparse.cpp:245
 msgid "debug level"
 msgstr "nivell de depuració"
 
-#: src/clparse.cpp:245
+#: src/clparse.cpp:246
 msgid "Log debug output to file"
 msgstr "Desa la sortida de depuració en un fitxer"
 
-#: src/clparse.cpp:245
+#: src/clparse.cpp:246
 msgid "file"
 msgstr "fitxer"
 
-#: src/clparse.cpp:246
+#: src/clparse.cpp:247
 msgid "Flush all debug output written to stderr"
 msgstr "Buida tota la sortida de depuració a stderr"
 
-#: src/clparse.cpp:247
+#: src/clparse.cpp:248
 msgid "Play in fullscreen mode"
 msgstr "Juga en mode de pantalla completa"
 
-#: src/clparse.cpp:248
+#: src/clparse.cpp:249
 msgid "Load a specific game"
 msgstr "Carrega una partida especifica"
 
-#: src/clparse.cpp:248
+#: src/clparse.cpp:249
 msgid "game-name"
 msgstr "nom-partida"
 
-#: src/clparse.cpp:249
+#: src/clparse.cpp:250
 msgid "Show this help message and exit"
 msgstr "Mostra aquesta ajuda i surt"
 
-#: src/clparse.cpp:250
+#: src/clparse.cpp:251
 msgid "Enable a global mod"
 msgstr "Habilita un mod global"
 
-#: src/clparse.cpp:250
 #: src/clparse.cpp:251
 #: src/clparse.cpp:252
+#: src/clparse.cpp:253
 msgid "mod"
 msgstr "mod"
 
-#: src/clparse.cpp:251
+#: src/clparse.cpp:252
 msgid "Enable a campaign only mod"
 msgstr "Habilita un mod només per la campanya"
 
-#: src/clparse.cpp:252
+#: src/clparse.cpp:253
 msgid "Enable a multiplay only mod"
 msgstr "Habilita un mod només pel mode multijug."
 
-#: src/clparse.cpp:253
+#: src/clparse.cpp:254
 msgid "Disable asserts"
 msgstr "Deshabilita les assercions"
 
-#: src/clparse.cpp:254
+#: src/clparse.cpp:255
 msgid "Causes a crash to test the crash handler"
 msgstr "Provoca una fallada per provar-ne el gestor"
 
-#: src/clparse.cpp:255
+#: src/clparse.cpp:256
 msgid "Load a saved game"
 msgstr "Carrega una partida desada"
 
-#: src/clparse.cpp:255
+#: src/clparse.cpp:256
 msgid "savegame"
 msgstr "partida-desada"
 
-#: src/clparse.cpp:256
+#: src/clparse.cpp:257
 msgid "Play in windowed mode"
 msgstr "Juga en mode finestra"
 
-#: src/clparse.cpp:257
+#: src/clparse.cpp:258
 msgid "Show version information and exit"
 msgstr "Mostra informació de la versió i surt"
 
-#: src/clparse.cpp:258
+#: src/clparse.cpp:259
 msgid "Set the resolution to use"
 msgstr "Estableix la resolució que es farà servir"
 
-#: src/clparse.cpp:258
+#: src/clparse.cpp:259
 msgid "WIDTHxHEIGHT"
 msgstr "AMPLADAxALÇADA"
 
-#: src/clparse.cpp:259
+#: src/clparse.cpp:260
 msgid "Enable shadows"
 msgstr "Habilita les ombres"
 
-#: src/clparse.cpp:260
+#: src/clparse.cpp:261
 msgid "Disable shadows"
 msgstr "Deshabilita les ombres"
 
-#: src/clparse.cpp:261
+#: src/clparse.cpp:262
 msgid "Enable sound"
 msgstr "Habilita el so"
 
-#: src/clparse.cpp:262
+#: src/clparse.cpp:263
 msgid "Disable sound"
 msgstr "Deshabilita el so"
 
-#: src/clparse.cpp:263
+#: src/clparse.cpp:264
 msgid "connect directly to IP/hostname"
 msgstr "Connecta directament a la IP/nom de l'amfitrió"
 
-#: src/clparse.cpp:263
+#: src/clparse.cpp:264
 msgid "host"
 msgstr "amfitrió"
 
-#: src/clparse.cpp:264
+#: src/clparse.cpp:265
 msgid "go directly to host screen"
 msgstr "Va directament a la pantalla d'amfitrió"
 
-#: src/clparse.cpp:265
+#: src/clparse.cpp:266
 msgid "Enable texture compression"
 msgstr "Habilita la compressió de textures"
 
-#: src/clparse.cpp:266
+#: src/clparse.cpp:267
 msgid "Disable texture compression"
 msgstr "Deshabilita la compressió de textures"
 
-#: src/clparse.cpp:267
-msgid "Only use OpenGL 1.5"
-msgstr ""
+#: src/clparse.cpp:268
+msgid "Disable the use of OpenGL shaders"
+msgstr "Deshabilita l'ús de OpenGL shaders"
+
+#: src/clparse.cpp:269
+msgid "Disable the use of OpenGL Vertex Buffer Objects"
+msgstr "Deshabilita l'ús de la memòria intermèdia d'objectes OpenGL Vertex"
 
 #: src/cmddroid.cpp:110
 msgid "Commander needs a higher level to command more units"
@@ -12313,34 +12317,34 @@ msgstr "Sistemes"
 msgid "Delete Template"
 msgstr "Esborra plantilla"
 
-#: src/display3d.cpp:656
+#: src/display3d.cpp:674
 msgid "Player left"
 msgstr "Ha marxat un jugador"
 
-#: src/display3d.cpp:660
+#: src/display3d.cpp:678
 msgid "Player dropped"
 msgstr "Ha caigut un jugador"
 
-#: src/display3d.cpp:664
-#: src/multiint.cpp:2310
+#: src/display3d.cpp:682
+#: src/multiint.cpp:2312
 msgid "Waiting for other players"
 msgstr "S'està esperant els altres jugadors"
 
-#: src/display3d.cpp:669
+#: src/display3d.cpp:687
 msgid "Out of sync"
 msgstr "S'ha perdut el sincronisme"
 
-#: src/display.cpp:1634
+#: src/display.cpp:1566
 msgid "Cannot Build. Oil Resource Burning."
 msgstr "No es pot construir. El pou de petroli està incendiat."
 
-#: src/display.cpp:1822
-#: src/display.cpp:2372
+#: src/display.cpp:1753
+#: src/display.cpp:2250
 #, c-format
 msgid "%s - Damage %d%% - Experience %.1f, %s"
 msgstr "%s - Desperfectes %d%% - Experiència %.1f, %s"
 
-#: src/display.cpp:1838
+#: src/display.cpp:1769
 #, c-format
 msgid "%s - Allied - Damage %d%% - Experience %d, %s"
 msgstr "%s - Aliat - Desperfectes %d%% - Experiència %d, %s"
@@ -12473,14 +12477,14 @@ msgstr "APRENENTATGE"
 #. TRANSLATORS: "Return", in this context, means "return to previous screen/menu"
 #: src/frontend.cpp:191
 #: src/frontend.cpp:253
-#: src/frontend.cpp:398
-#: src/frontend.cpp:470
-#: src/frontend.cpp:611
-#: src/frontend.cpp:757
-#: src/frontend.cpp:903
-#: src/frontend.cpp:1160
-#: src/frontend.cpp:1314
-#: src/frontend.cpp:1334
+#: src/frontend.cpp:399
+#: src/frontend.cpp:471
+#: src/frontend.cpp:612
+#: src/frontend.cpp:758
+#: src/frontend.cpp:904
+#: src/frontend.cpp:1161
+#: src/frontend.cpp:1315
+#: src/frontend.cpp:1335
 msgctxt "menu"
 msgid "Return"
 msgstr "Torna"
@@ -12513,319 +12517,319 @@ msgstr "UN JUGADOR"
 msgid "Campaign videos are missing! Get them from http://wz2100.net"
 msgstr "Falten els vídeos de la campanya! Obteniu-los a http://wz2100.net"
 
-#: src/frontend.cpp:333
+#: src/frontend.cpp:334
 #: src/ingameop.cpp:504
 msgid "Load Campaign Saved Game"
 msgstr "Carrega una campanya desada"
 
-#: src/frontend.cpp:339
+#: src/frontend.cpp:340
 #: src/ingameop.cpp:508
 msgid "Load Skirmish Saved Game"
 msgstr "Carrega una escaramussa desada"
 
-#: src/frontend.cpp:393
+#: src/frontend.cpp:394
 msgid "MULTI PLAYER"
 msgstr "JOC EN XARXA"
 
-#: src/frontend.cpp:395
+#: src/frontend.cpp:396
 msgid "Host Game"
 msgstr "Crea una partida"
 
-#: src/frontend.cpp:396
+#: src/frontend.cpp:397
 msgid "Join Game"
 msgstr "Uneix-te a una partida"
 
-#: src/frontend.cpp:401
+#: src/frontend.cpp:402
 msgid "TCP PORT 2100 MUST BE OPENED IN YOUR FIREWALL / ROUTER TO HOST GAMES!"
 msgstr "El vostre tallafocs/encaminador ha de tenir el port TCP 2100 obert per hostatjar partides!"
 
-#: src/frontend.cpp:463
-#: src/multiint.cpp:1440
+#: src/frontend.cpp:464
+#: src/multiint.cpp:1442
 msgid "OPTIONS"
 msgstr "OPCIONS"
 
-#: src/frontend.cpp:464
+#: src/frontend.cpp:465
 msgid "Game Options"
 msgstr "Opcions del joc"
 
-#: src/frontend.cpp:465
+#: src/frontend.cpp:466
 msgid "Graphics Options"
 msgstr "Opcions dels gràfics"
 
-#: src/frontend.cpp:466
+#: src/frontend.cpp:467
 msgid "Video Options"
 msgstr "Opcions dels vídeos"
 
-#: src/frontend.cpp:467
+#: src/frontend.cpp:468
 #: src/ingameop.cpp:268
 msgid "Audio Options"
 msgstr "Opcions de l'àudio"
 
-#: src/frontend.cpp:468
+#: src/frontend.cpp:469
 msgid "Mouse Options"
 msgstr "Opcions del ratolí"
 
-#: src/frontend.cpp:469
+#: src/frontend.cpp:470
 msgid "Key Mappings"
 msgstr "Mapatge de tecles"
 
-#: src/frontend.cpp:529
+#: src/frontend.cpp:530
 msgid "Video Playback"
 msgstr "Reprod. dels vídeos"
 
-#: src/frontend.cpp:533
-#: src/frontend.cpp:685
+#: src/frontend.cpp:534
+#: src/frontend.cpp:686
 msgid "1X"
 msgstr "1X"
 
-#: src/frontend.cpp:537
-#: src/frontend.cpp:675
+#: src/frontend.cpp:538
+#: src/frontend.cpp:676
 msgid "2X"
 msgstr "2X"
 
-#: src/frontend.cpp:541
-#: src/frontend.cpp:680
-#: src/frontend.cpp:831
-#: src/frontend.cpp:926
+#: src/frontend.cpp:542
+#: src/frontend.cpp:681
+#: src/frontend.cpp:832
+#: src/frontend.cpp:927
 msgid "Fullscreen"
 msgstr "Pant. completa"
 
-#: src/frontend.cpp:550
+#: src/frontend.cpp:551
 msgid "Scanlines"
 msgstr "Línies d'escaneig"
 
-#: src/frontend.cpp:554
-#: src/frontend.cpp:575
-#: src/frontend.cpp:583
-#: src/frontend.cpp:599
-#: src/frontend.cpp:629
-#: src/frontend.cpp:647
-#: src/frontend.cpp:665
-#: src/frontend.cpp:710
-#: src/frontend.cpp:856
-#: src/frontend.cpp:866
-#: src/frontend.cpp:896
-#: src/frontend.cpp:950
-#: src/frontend.cpp:1011
-#: src/frontend.cpp:1054
-#: src/frontend.cpp:1067
-#: src/frontend.cpp:1117
-#: src/frontend.cpp:1129
-#: src/frontend.cpp:1141
-#: src/frontend.cpp:1176
-#: src/frontend.cpp:1189
-#: src/frontend.cpp:1203
+#: src/frontend.cpp:555
+#: src/frontend.cpp:576
+#: src/frontend.cpp:584
+#: src/frontend.cpp:600
+#: src/frontend.cpp:630
+#: src/frontend.cpp:648
+#: src/frontend.cpp:666
+#: src/frontend.cpp:711
+#: src/frontend.cpp:857
+#: src/frontend.cpp:867
+#: src/frontend.cpp:897
+#: src/frontend.cpp:951
+#: src/frontend.cpp:1012
+#: src/frontend.cpp:1055
+#: src/frontend.cpp:1068
+#: src/frontend.cpp:1118
+#: src/frontend.cpp:1130
+#: src/frontend.cpp:1142
+#: src/frontend.cpp:1177
+#: src/frontend.cpp:1190
+#: src/frontend.cpp:1204
 msgid "Off"
 msgstr "Inactiu"
 
-#: src/frontend.cpp:558
-#: src/frontend.cpp:700
+#: src/frontend.cpp:559
+#: src/frontend.cpp:701
 msgid "50%"
 msgstr "50%"
 
-#: src/frontend.cpp:562
-#: src/frontend.cpp:705
+#: src/frontend.cpp:563
+#: src/frontend.cpp:706
 #: src/multiplay.cpp:1981
 msgid "Black"
 msgstr "Negre"
 
-#: src/frontend.cpp:568
+#: src/frontend.cpp:569
 msgid "Screen Shake"
 msgstr "Tremolor de pant."
 
-#: src/frontend.cpp:571
-#: src/frontend.cpp:587
-#: src/frontend.cpp:595
-#: src/frontend.cpp:634
-#: src/frontend.cpp:652
-#: src/frontend.cpp:661
-#: src/frontend.cpp:852
-#: src/frontend.cpp:892
-#: src/frontend.cpp:1016
-#: src/frontend.cpp:1050
-#: src/frontend.cpp:1072
-#: src/frontend.cpp:1113
-#: src/frontend.cpp:1125
-#: src/frontend.cpp:1137
-#: src/frontend.cpp:1181
-#: src/frontend.cpp:1194
-#: src/frontend.cpp:1208
+#: src/frontend.cpp:572
+#: src/frontend.cpp:588
+#: src/frontend.cpp:596
+#: src/frontend.cpp:635
+#: src/frontend.cpp:653
+#: src/frontend.cpp:662
+#: src/frontend.cpp:853
+#: src/frontend.cpp:893
+#: src/frontend.cpp:1017
+#: src/frontend.cpp:1051
+#: src/frontend.cpp:1073
+#: src/frontend.cpp:1114
+#: src/frontend.cpp:1126
+#: src/frontend.cpp:1138
+#: src/frontend.cpp:1182
+#: src/frontend.cpp:1195
+#: src/frontend.cpp:1209
 msgid "On"
 msgstr "Actiu"
 
-#: src/frontend.cpp:580
+#: src/frontend.cpp:581
 msgid "Subtitles"
 msgstr "Subtitols"
 
-#: src/frontend.cpp:592
+#: src/frontend.cpp:593
 msgid "Shadows"
 msgstr "Ombres"
 
-#: src/frontend.cpp:603
-#: src/frontend.cpp:1341
+#: src/frontend.cpp:604
+#: src/frontend.cpp:1342
 msgid "Radar"
 msgstr "Radar"
 
-#: src/frontend.cpp:604
-#: src/frontend.cpp:717
-#: src/frontend.cpp:1342
+#: src/frontend.cpp:605
+#: src/frontend.cpp:718
+#: src/frontend.cpp:1343
 msgid "Rotating"
 msgstr "Giratori"
 
-#: src/frontend.cpp:604
-#: src/frontend.cpp:717
-#: src/frontend.cpp:1342
+#: src/frontend.cpp:605
+#: src/frontend.cpp:718
+#: src/frontend.cpp:1343
 msgid "Fixed"
 msgstr "Fixe"
 
-#: src/frontend.cpp:607
+#: src/frontend.cpp:608
 msgid "GRAPHICS OPTIONS"
 msgstr "OPCIONS DELS GRÀFICS"
 
-#: src/frontend.cpp:745
+#: src/frontend.cpp:746
 #: src/ingameop.cpp:168
 msgid "Voice Volume"
 msgstr "Volum veu"
 
-#: src/frontend.cpp:749
+#: src/frontend.cpp:750
 #: src/ingameop.cpp:173
 msgid "FX Volume"
 msgstr "Volum efectes"
 
-#: src/frontend.cpp:753
+#: src/frontend.cpp:754
 #: src/ingameop.cpp:178
 msgid "Music Volume"
 msgstr "Volum música"
 
-#: src/frontend.cpp:760
+#: src/frontend.cpp:761
 msgid "AUDIO OPTIONS"
 msgstr "OPCIONS DE L'ÀUDIO"
 
-#: src/frontend.cpp:824
+#: src/frontend.cpp:825
 msgid "* Takes effect on game restart"
 msgstr "* Té efecte quan reinicieu"
 
-#: src/frontend.cpp:827
+#: src/frontend.cpp:828
 msgid "Graphics Mode*"
 msgstr "Mode gràfic*"
 
-#: src/frontend.cpp:835
-#: src/frontend.cpp:921
+#: src/frontend.cpp:836
+#: src/frontend.cpp:922
 msgid "Windowed"
 msgstr "Finestra"
 
-#: src/frontend.cpp:839
+#: src/frontend.cpp:840
 msgid "Resolution*"
 msgstr "Resolució*"
 
-#: src/frontend.cpp:844
+#: src/frontend.cpp:845
 msgid "Texture size"
 msgstr "Mida de la textura"
 
-#: src/frontend.cpp:848
+#: src/frontend.cpp:849
 msgid "Vertical sync"
 msgstr "Sincro. vertical"
 
-#: src/frontend.cpp:883
-#: src/frontend.cpp:956
+#: src/frontend.cpp:884
+#: src/frontend.cpp:957
 msgid "Unsupported"
 msgstr "No és compatible"
 
-#: src/frontend.cpp:888
+#: src/frontend.cpp:889
 msgid "Shaders"
 msgstr "Shaders"
 
-#: src/frontend.cpp:900
+#: src/frontend.cpp:901
 msgid "VIDEO OPTIONS"
 msgstr "OPCIONS DE VIDEO"
 
-#: src/frontend.cpp:1110
+#: src/frontend.cpp:1111
 msgid "Reverse Rotation"
 msgstr "Rotació inversa"
 
-#: src/frontend.cpp:1121
+#: src/frontend.cpp:1122
 msgid "Trap Cursor"
 msgstr "Captura el cursor"
 
-#: src/frontend.cpp:1134
+#: src/frontend.cpp:1135
 msgid "Switch Mouse Buttons"
 msgstr "Intercanvia els botons"
 
-#: src/frontend.cpp:1146
+#: src/frontend.cpp:1147
 msgid "Rotate Screen"
 msgstr "Rota la pantalla"
 
-#: src/frontend.cpp:1149
-#: src/frontend.cpp:1222
+#: src/frontend.cpp:1150
+#: src/frontend.cpp:1223
 msgid "Middle Mouse"
 msgstr "Botó del mig"
 
-#: src/frontend.cpp:1153
-#: src/frontend.cpp:1217
+#: src/frontend.cpp:1154
+#: src/frontend.cpp:1218
 msgid "Right Mouse"
 msgstr "Botó dret"
 
-#: src/frontend.cpp:1157
+#: src/frontend.cpp:1158
 msgid "MOUSE OPTIONS"
 msgstr "OPCIONS DEL RATOLÍ"
 
-#: src/frontend.cpp:1257
-#: src/frontend.cpp:1335
+#: src/frontend.cpp:1258
+#: src/frontend.cpp:1336
 msgid "Language"
 msgstr "Idioma"
 
-#: src/frontend.cpp:1261
-#: src/frontend.cpp:1339
+#: src/frontend.cpp:1262
+#: src/frontend.cpp:1340
 msgid "Difficulty"
 msgstr "Dificultat"
 
-#: src/frontend.cpp:1265
-#: src/frontend.cpp:1346
-#: src/frontend.cpp:1378
+#: src/frontend.cpp:1266
+#: src/frontend.cpp:1347
+#: src/frontend.cpp:1379
 #: src/multiint.cpp:214
 msgid "Easy"
 msgstr "Fàcil"
 
-#: src/frontend.cpp:1268
-#: src/frontend.cpp:1349
-#: src/frontend.cpp:1370
+#: src/frontend.cpp:1269
+#: src/frontend.cpp:1350
+#: src/frontend.cpp:1371
 msgid "Normal"
 msgstr "Normal"
 
-#: src/frontend.cpp:1272
-#: src/frontend.cpp:1352
-#: src/frontend.cpp:1374
+#: src/frontend.cpp:1273
+#: src/frontend.cpp:1353
+#: src/frontend.cpp:1375
 #: src/multiint.cpp:214
 msgid "Hard"
 msgstr "Difícil"
 
-#: src/frontend.cpp:1277
-#: src/frontend.cpp:1340
+#: src/frontend.cpp:1278
+#: src/frontend.cpp:1341
 msgid "Scroll Speed"
 msgstr "Veloc. desplaçament"
 
-#: src/frontend.cpp:1281
-#: src/frontend.cpp:1336
+#: src/frontend.cpp:1282
+#: src/frontend.cpp:1337
 msgid "Unit Colour:"
 msgstr "Color de les unitats:"
 
-#: src/frontend.cpp:1301
-#: src/frontend.cpp:1337
+#: src/frontend.cpp:1302
+#: src/frontend.cpp:1338
 msgid "Campaign"
 msgstr "Campanya"
 
-#: src/frontend.cpp:1311
-#: src/frontend.cpp:1338
+#: src/frontend.cpp:1312
+#: src/frontend.cpp:1339
 msgid "Skirmish/Multiplayer"
 msgstr "Escaramussa/multijugador"
 
-#: src/frontend.cpp:1317
-#: src/frontend.cpp:1333
+#: src/frontend.cpp:1318
+#: src/frontend.cpp:1334
 msgid "GAME OPTIONS"
 msgstr "OPCIONS DE JOC"
 
-#: src/frontend.cpp:1478
-#: src/multiint.cpp:2578
+#: src/frontend.cpp:1479
+#: src/multiint.cpp:2580
 msgid "Mod: "
 msgstr "Mod:"
 
@@ -12884,7 +12888,7 @@ msgid "Build (F3)"
 msgstr "Construcció (F3)"
 
 #: src/hci.cpp:3431
-#: src/multiint.cpp:1550
+#: src/multiint.cpp:1552
 #: src/multimenu.cpp:804
 msgid "Power"
 msgstr "Energia"
@@ -13027,7 +13031,7 @@ msgstr "Carrega una part."
 
 #: src/ingameop.cpp:277
 #: src/ingameop.cpp:284
-#: src/mission.cpp:2600
+#: src/mission.cpp:2551
 msgid "Save Game"
 msgstr "Desa la partida"
 
@@ -13481,7 +13485,7 @@ msgstr "MAPATGE DE TECLES"
 #: src/keyedit.cpp:378
 #: src/multiint.cpp:761
 #: src/multiint.cpp:1230
-#: src/multiint.cpp:1636
+#: src/multiint.cpp:1638
 msgid "Return To Previous Screen"
 msgstr "Torna a la pantalla anterior"
 
@@ -14006,42 +14010,42 @@ msgstr "Commuta el mode de conducció"
 msgid "Could not save game!"
 msgstr "No s'ha pogut desar el joc!"
 
-#: src/mission.cpp:2039
+#: src/mission.cpp:1984
 msgid "Load Transport"
 msgstr "Carrega el transport"
 
-#: src/mission.cpp:2427
+#: src/mission.cpp:2378
 msgid "OBJECTIVE ACHIEVED by cheating!"
 msgstr "HEU ASSOLIT L'OBJECTIU fent trampes!"
 
-#: src/mission.cpp:2427
+#: src/mission.cpp:2378
 msgid "OBJECTIVE ACHIEVED"
 msgstr "HEU ASSOLIT L'OBJECTIU"
 
-#: src/mission.cpp:2433
+#: src/mission.cpp:2384
 msgid "OBJECTIVE FAILED--and you cheated!"
 msgstr "HEU FRACASSAT -- i heu fet trampes!"
 
-#: src/mission.cpp:2433
+#: src/mission.cpp:2384
 msgid "OBJECTIVE FAILED"
 msgstr "HEU FRACASSAT"
 
-#: src/mission.cpp:2458
-#: src/mission.cpp:2502
-#: src/mission.cpp:2614
+#: src/mission.cpp:2409
+#: src/mission.cpp:2453
+#: src/mission.cpp:2564
 msgid "Quit To Main Menu"
 msgstr "Torna al menú principal"
 
-#: src/mission.cpp:2466
+#: src/mission.cpp:2417
 msgid "Continue Game"
 msgstr "Continua jugant"
 
-#: src/mission.cpp:2496
-#: src/mission.cpp:2597
+#: src/mission.cpp:2447
+#: src/mission.cpp:2548
 msgid "Load Saved Game"
 msgstr "Carrega una partida desada"
 
-#: src/mission.cpp:2565
+#: src/mission.cpp:2516
 msgid "GAME SAVED :"
 msgstr "S'HA DESAT LA PARTIDA:"
 
@@ -14228,280 +14232,290 @@ msgstr "Ciborgs deshabilitats"
 msgid "VTOLs disabled."
 msgstr "Convertiplans deshabilitats."
 
-#: src/multiint.cpp:1445
-#: src/multiint.cpp:1454
+#: src/multiint.cpp:1399
+#, fuzzy
+msgid "Satellite Uplink disabled."
+msgstr "Centre de connexió del satèl·lit"
+
+#: src/multiint.cpp:1400
+#, fuzzy
+msgid "Laser Satellite disabled."
+msgstr "Comand. de làser per satèl·lit"
+
+#: src/multiint.cpp:1447
+#: src/multiint.cpp:1456
 msgid "Select Game Name"
 msgstr "Selecciona el nom de la partida"
 
-#: src/multiint.cpp:1446
+#: src/multiint.cpp:1448
 msgid "One-Player Skirmish"
 msgstr "Batussa d'un jugador"
 
-#: src/multiint.cpp:1457
+#: src/multiint.cpp:1459
 msgid "Select Map"
 msgstr "Selecciona el mapa"
 
-#: src/multiint.cpp:1468
+#: src/multiint.cpp:1470
 msgid "Password is already set!"
 msgstr "Ja heu posat la contrasenya!"
 
-#: src/multiint.cpp:1476
+#: src/multiint.cpp:1478
 msgid "Click to set Password"
 msgstr "Clica per posar una contrasenya"
 
-#: src/multiint.cpp:1481
-#: src/multiint.cpp:1482
+#: src/multiint.cpp:1483
+#: src/multiint.cpp:1484
 msgid "Scavengers"
 msgstr "Carronyaires"
 
-#: src/multiint.cpp:1484
+#: src/multiint.cpp:1486
 msgid "No Scavengers"
 msgstr "Sense carronyaires"
 
-#: src/multiint.cpp:1514
+#: src/multiint.cpp:1516
 msgid "Select Player Name"
 msgstr "Selecciona el nom del jugador"
 
-#: src/multiint.cpp:1517
+#: src/multiint.cpp:1519
 #: src/multimenu.cpp:797
 msgid "Alliances"
 msgstr "Aliances"
 
-#: src/multiint.cpp:1520
+#: src/multiint.cpp:1522
 msgid "No Alliances"
 msgstr "Sense aliances"
 
-#: src/multiint.cpp:1522
+#: src/multiint.cpp:1524
 msgid "Allow Alliances"
 msgstr "Permet aliances"
 
-#: src/multiint.cpp:1526
+#: src/multiint.cpp:1528
 msgid "Locked Teams"
 msgstr "Equips tancats"
 
-#: src/multiint.cpp:1552
+#: src/multiint.cpp:1554
 msgid "Low Power Levels"
 msgstr "Nivell baix d'energia"
 
-#: src/multiint.cpp:1554
+#: src/multiint.cpp:1556
 msgid "Medium Power Levels"
 msgstr "Nivell mig d'energia"
 
-#: src/multiint.cpp:1556
+#: src/multiint.cpp:1558
 msgid "High Power Levels"
 msgstr "Nivell alt d'energia"
 
-#: src/multiint.cpp:1588
+#: src/multiint.cpp:1590
 msgid "Base"
 msgstr "Base"
 
-#: src/multiint.cpp:1590
+#: src/multiint.cpp:1592
 msgid "Start with No Bases"
 msgstr "Comença sense bases"
 
-#: src/multiint.cpp:1592
+#: src/multiint.cpp:1594
 msgid "Start with Bases"
 msgstr "Comença amb bases"
 
-#: src/multiint.cpp:1594
+#: src/multiint.cpp:1596
 msgid "Start with Advanced Bases"
 msgstr "Comença amb bases avançades"
 
-#: src/multiint.cpp:1626
+#: src/multiint.cpp:1628
 msgid "Map Preview"
 msgstr "Mostra el mapa"
 
-#: src/multiint.cpp:1628
+#: src/multiint.cpp:1630
 msgid "Click to see Map"
 msgstr "Feu clic per veure el mapa"
 
-#: src/multiint.cpp:1641
 #: src/multiint.cpp:1643
+#: src/multiint.cpp:1645
 msgid "Start Hosting Game"
 msgstr "Comença a hostatjar la partida"
 
-#: src/multiint.cpp:1650
-#: src/multiint.cpp:1654
+#: src/multiint.cpp:1652
+#: src/multiint.cpp:1656
 msgid "Show Structure Limits"
 msgstr "Mostra els límits d'estructures"
 
-#: src/multiint.cpp:1650
-#: src/multiint.cpp:1654
+#: src/multiint.cpp:1652
+#: src/multiint.cpp:1656
 msgid "Set Structure Limits"
 msgstr "Configura els límits d'estructures"
 
-#: src/multiint.cpp:1731
+#: src/multiint.cpp:1733
 msgid "DIFFICULTY"
 msgstr "DIFICULTAT"
 
-#: src/multiint.cpp:1745
+#: src/multiint.cpp:1747
 msgid "Less aggressive"
 msgstr "Poc agressiu"
 
-#: src/multiint.cpp:1746
+#: src/multiint.cpp:1748
 msgid "Plays nice"
 msgstr "Juga bé"
 
-#: src/multiint.cpp:1747
+#: src/multiint.cpp:1749
 msgid "No holds barred"
 msgstr "Sense limitacions"
 
-#: src/multiint.cpp:1748
+#: src/multiint.cpp:1750
 msgid "Starts with advantages"
 msgstr "Comença amb avançantatges"
 
-#: src/multiint.cpp:1776
+#: src/multiint.cpp:1778
 msgid "CHOOSE AI"
 msgstr "ESCULL IA"
 
-#: src/multiint.cpp:1792
+#: src/multiint.cpp:1794
 msgid "Allow human players to join in this slot"
 msgstr "Permet a jugadors humans unir-se en aquest espai"
 
-#: src/multiint.cpp:1800
+#: src/multiint.cpp:1802
 msgid "Leave this slot unused"
 msgstr "Deixa buit aquest espai"
 
-#: src/multiint.cpp:2252
+#: src/multiint.cpp:2254
 msgid "Team"
 msgstr "Equip"
 
-#: src/multiint.cpp:2295
+#: src/multiint.cpp:2297
 msgid "You cannot change difficulty in a challenge"
 msgstr "No podeu canviar la dificultat en un desafiament"
 
-#: src/multiint.cpp:2295
+#: src/multiint.cpp:2297
 msgid "Click to change difficulty"
 msgstr "Feu clic per canviar la dificultat"
 
-#: src/multiint.cpp:2310
+#: src/multiint.cpp:2312
 msgid "Waiting for player"
 msgstr "S'està esperant el jugador"
 
-#: src/multiint.cpp:2310
+#: src/multiint.cpp:2312
 msgid "Player is ready"
 msgstr "El jugador està preparat"
 
-#: src/multiint.cpp:2310
+#: src/multiint.cpp:2312
 msgid "Click when ready"
 msgstr "Feu clic quan estigueu preparat"
 
-#: src/multiint.cpp:2317
+#: src/multiint.cpp:2319
 msgid "READY?"
 msgstr "PREPARAT?"
 
-#: src/multiint.cpp:2361
+#: src/multiint.cpp:2363
 msgid "PLAYERS"
 msgstr "JUGADORS"
 
-#: src/multiint.cpp:2396
+#: src/multiint.cpp:2398
 msgid "Click to change to this slot"
 msgstr "Feu clic per canviar aquest espai"
 
-#: src/multiint.cpp:2424
+#: src/multiint.cpp:2426
 msgid "Choose Team"
 msgstr "Escolliu equip"
 
-#: src/multiint.cpp:2454
+#: src/multiint.cpp:2456
 msgid "Click to change player colour"
 msgstr "Feu clic per canviar el color del jugador"
 
-#: src/multiint.cpp:2482
+#: src/multiint.cpp:2484
 msgid "Click to change player position"
 msgstr "Feu clic per canviar la posició del jugador"
 
-#: src/multiint.cpp:2486
+#: src/multiint.cpp:2488
 msgid "Click to change AI"
 msgstr "Feu clic per canviar la IA"
 
-#: src/multiint.cpp:2551
+#: src/multiint.cpp:2553
 msgid "CHAT"
 msgstr "XAT"
 
-#: src/multiint.cpp:2583
+#: src/multiint.cpp:2585
 msgid "All players need to have the same mods to join your game."
 msgstr "Tots els jugadors han de tenir els mateixos modificadors per unir-se a la partida."
 
-#: src/multiint.cpp:2624
+#: src/multiint.cpp:2626
 msgid "Connecting to the lobby server..."
 msgstr "S'està connectant al servidor de sales..."
 
-#: src/multiint.cpp:2770
+#: src/multiint.cpp:2772
 #, c-format
 msgid "*** password [%s] is now required! ***"
 msgstr "*** ara cal la contrassenya [%s] ***"
 
-#: src/multiint.cpp:2778
+#: src/multiint.cpp:2780
 msgid "*** password is NOT required! ***"
 msgstr "*** ara NO cal contrassenya! ***"
 
-#: src/multiint.cpp:2994
+#: src/multiint.cpp:2996
 msgid "Sorry! Failed to host the game."
 msgstr "Ho lamento! No s'ha pogut crear la partida."
 
-#: src/multiint.cpp:3116
+#: src/multiint.cpp:3118
 msgid "'Locked Teams' mode enabled"
 msgstr "S'ha habilitat el mode «equips tancats»"
 
-#: src/multiint.cpp:3144
-#: src/multiint.cpp:3213
+#: src/multiint.cpp:3146
+#: src/multiint.cpp:3215
 #: src/multimenu.cpp:1492
 #, c-format
 msgid "The host has kicked %s from the game!"
 msgstr "L'amfitrió ha fet fora %s de la partida!"
 
-#: src/multiint.cpp:3279
+#: src/multiint.cpp:3282
 msgid "Host is Starting Game"
 msgstr "L'amfitrió està iniciant la partida"
 
-#: src/multiint.cpp:3882
+#: src/multiint.cpp:3885
 msgid "Can't connect to lobby server!"
 msgstr "No s'ha pogut connectar al servidor de sales!"
 
-#: src/multiint.cpp:3974
+#: src/multiint.cpp:3977
 #, c-format
 msgid "Mods: %s"
 msgstr "Modificadors: %s"
 
-#: src/multiint.cpp:3981
+#: src/multiint.cpp:3984
 msgid "Mods: None!"
 msgstr "Modificadors: Cap!"
 
-#: src/multiint.cpp:3991
+#: src/multiint.cpp:3994
 #, c-format
 msgid "Version: %s"
 msgstr "Versió: %s"
 
-#: src/multiint.cpp:4042
+#: src/multiint.cpp:4045
 #, c-format
 msgid "Click to take player slot %d"
 msgstr "Feu clic per agafar l'espai de jugador %d"
 
-#: src/multiint.cpp:4051
-#: src/multiint.cpp:4253
+#: src/multiint.cpp:4054
+#: src/multiint.cpp:4256
 msgid "Open"
 msgstr "Obert"
 
-#: src/multiint.cpp:4051
-#: src/multiint.cpp:4254
+#: src/multiint.cpp:4054
+#: src/multiint.cpp:4257
 msgid "Closed"
 msgstr "Tancat"
 
-#: src/multiint.cpp:4102
+#: src/multiint.cpp:4105
 #, c-format
 msgid "Sending Map: %d%% "
 msgstr "S'està enviant el mapa: %d%%"
 
-#: src/multiint.cpp:4110
+#: src/multiint.cpp:4113
 #, c-format
 msgid "Map: %d%% downloaded"
 msgstr "Mapa: %d%% descarregat"
 
-#: src/multiint.cpp:4136
+#: src/multiint.cpp:4139
 msgid "HOST"
 msgstr "AMFITRIÓ"
 
-#: src/multiint.cpp:4143
+#: src/multiint.cpp:4146
 #: src/multimenu.cpp:811
 msgid "Ping"
 msgstr "Ping"
@@ -14949,16 +14963,16 @@ msgstr "Recompensa de reparació - Reparació"
 msgid "Repair Facility Award - Nothing"
 msgstr "Recompensa de reparació - Res"
 
-#: src/transporter.cpp:396
-#: src/transporter.cpp:445
+#: src/transporter.cpp:385
+#: src/transporter.cpp:434
 msgid "Launch Transport"
 msgstr "Inicia el transport"
 
-#: src/transporter.cpp:1407
+#: src/transporter.cpp:1380
 msgid "There is not enough room in the Transport!"
 msgstr "No hi ha prou espai al transport!"
 
-#: src/transporter.cpp:1650
+#: src/transporter.cpp:1606
 msgid "Reinforcements landing"
 msgstr "Estan aterrant els reforços"
 
@@ -14981,12 +14995,6 @@ msgstr " - Construcció %s"
 #, c-format
 msgid "Version %s-%s%s%s%s"
 msgstr "Versió %s-%s%s%s%s"
-
-#~ msgid "Disable the use of OpenGL shaders"
-#~ msgstr "Deshabilita l'ús de OpenGL shaders"
-
-#~ msgid "Disable the use of OpenGL Vertex Buffer Objects"
-#~ msgstr "Deshabilita l'ús de la memòria intermèdia d'objectes OpenGL Vertex"
 
 #, fuzzy
 #~ msgid "Unit Colour (SP)"
