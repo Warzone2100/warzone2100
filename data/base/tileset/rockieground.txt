@@ -7,9 +7,9 @@ r_rock,r_rock,r_rock,r_grass
 r_rock,r_rock,r_rock,r_rock
 r_rock,r_rock,r_rock,r_rock
 r_rock,r_rock,r_rock,r_rock
-r_snowrock,r_snowrock,r_snowrock,r_snowrock
+r_rock,r_rock,r_rock,r_rock
 r_cliff,r_cliff,r_cliff,r_snowrock
-r_snowrock,r_snowrock,r_snowrock,r_snowrock
+r_snowrock,r_snowrock,r_snowrock,r_rock
 r_snowrock,r_rock,r_rock,r_rock
 r_snowrock,r_snowrock,r_rock,r_rock
 r_brown,r_brown,r_brown,r_brown
@@ -18,8 +18,8 @@ r_grass,r_water,r_grass,r_grass
 r_water,r_water,r_grass,r_water
 r_water,r_water,r_water,r_water
 r_cliff,r_cliff,r_cliff,r_rock
-r_tiles,r_brown,r_brown,r_brown
 r_tiles,r_tiles,r_tiles,r_brown
+r_tiles,r_brown,r_brown,r_brown
 r_tiles,r_brown,r_tiles,r_brown
 r_tiles,r_tiles,r_tiles,r_tiles
 r_snowgrass,r_snowgrass,r_snowgrass,r_snowgrass
@@ -42,7 +42,7 @@ r_brown,r_brown,r_brown,r_rock
 r_brown,r_rock,r_rock,r_rock
 r_snowrock,r_snowrock,r_snowrock,r_snowrock
 r_cliff,r_snowcliff,r_rock,r_cliff
-r_snowrock,r_snowrock,r_snowrock,r_snowrock
+r_rock,r_rock,r_rock,r_rock
 r_snowcliff,r_snowcliff,r_snowcliff,r_snowcliff
 r_cliff,r_cliff,r_rock,r_cliff
 r_cliff,r_cliff,r_cliff,r_cliff
@@ -69,12 +69,12 @@ r_snow,r_snowrock,r_snowrock,r_snowrock
 r_snow,r_snow,r_snowrock,r_snowrock
 r_snowcliff,r_snowcliff,r_cliff,r_cliff
 r_snowcliff,r_cliff,r_snowcliff,r_snowcliff
-r_snowrock,r_snowrock,r_snowrock,r_snowrock
-r_cliff,r_cliff,r_cliff,r_snow
+r_snow,r_snow,r_snow,r_snow
+r_cliff,r_cliff,r_cliff,r_cliff
 r_brown,r_brown,r_brown,r_brown
-r_snowrock,r_snowrock,r_snowrock,r_snowrock
+r_snowgrass,r_snowgrass,r_snowgrass,r_snowgrass
 r_grass,r_grass,r_grass,r_grass
-r_snowrock,r_snowrock,r_rock,r_snowrock
+r_snowrock,r_snowrock,r_snowrock,r_snowrock
 r_snowcliff,r_snowcliff,r_snowcliff,r_snowcliff
 r_snowcliff,r_cliff,r_cliff,r_cliff
 r_snowcliff,r_snowcliff,r_snowcliff,r_snowcliff
