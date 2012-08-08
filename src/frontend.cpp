@@ -1494,7 +1494,7 @@ static void displayTitleBitmap(WZ_DECL_UNUSED WIDGET *psWidget, WZ_DECL_UNUSED U
 // show warzone logo
 static void displayLogo(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
 {
-	iV_DrawImage(FrontImages,IMAGE_FE_LOGO,xOffset+psWidget->x,yOffset+psWidget->y);
+	iV_DrawImage(FrontImages, IMAGE_FE_LOGO, xOffset + psWidget->x, std::max<int>(yOffset + psWidget->y, 0));
 }
 
 
@@ -1678,10 +1678,10 @@ void addTopForm(void)
 
 	sFormInit.formID= FRONTEND_TOPFORM;
 	sFormInit.id	= FRONTEND_LOGO;
-	sFormInit.x		= (short)((sFormInit.width/2)-(FRONTEND_LOGOW/2)); //115;
-	sFormInit.y		= (short)((sFormInit.height/2)-(FRONTEND_LOGOH/2));//18;
-	sFormInit.width = FRONTEND_LOGOW;
-	sFormInit.height= FRONTEND_LOGOH;
+	sFormInit.x		= sFormInit.width/2  - iV_GetImageWidth(FrontImages, IMAGE_FE_LOGO)/2;
+	sFormInit.y		= sFormInit.height/2 - iV_GetImageHeight(FrontImages, IMAGE_FE_LOGO)/2;
+	sFormInit.width = iV_GetImageWidth(FrontImages, IMAGE_FE_LOGO);
+	sFormInit.height= iV_GetImageHeight(FrontImages, IMAGE_FE_LOGO);
 	sFormInit.pDisplay= displayLogo;
 	widgAddForm(psWScreen, &sFormInit);
 }

@@ -1395,7 +1395,9 @@ static const LimitIcon limitIcons[] =
 {
 	{"A0LightFactory",  N_("Tanks disabled!!"),  IMAGE_NO_TANK},
 	{"A0CyborgFactory", N_("Cyborgs disabled."), IMAGE_NO_CYBORG},
-	{"A0VTolFactory1",  N_("VTOLs disabled."),   IMAGE_NO_VTOL}
+	{"A0VTolFactory1",  N_("VTOLs disabled."),   IMAGE_NO_VTOL},
+	{"A0Sat-linkCentre", N_("Satellite Uplink disabled."), IMAGE_NO_UPLINK},
+	{"A0LasSatCommand",  N_("Laser Satellite disabled."),  IMAGE_NO_LASSAT},
 };
 
 void updateLimitFlags()
@@ -1667,7 +1669,7 @@ static void addGameOptions()
 			{
 				if (!skip)
 				{	// only add this once.
-					addBlueForm(MULTIOP_OPTIONS, MULTIOP_NO_SOMETHING, "", MULTIOP_HOSTX, MULTIOP_NO_SOMETHINGY, 41, 90 );
+					addBlueForm(MULTIOP_OPTIONS, MULTIOP_NO_SOMETHING, "", MULTIOP_HOSTX, MULTIOP_NO_SOMETHINGY, 41, 152);
 				}
 
 				addMultiBut(psWScreen, MULTIOP_NO_SOMETHING, MULTIOP_NO_SOMETHINGY + i, MULTIOP_NO_SOMETHINGX, y,

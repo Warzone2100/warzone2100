@@ -112,9 +112,9 @@ unsigned screenHeight = 0;  // Declared in frameint.h.
 static void inputAddBuffer(UDWORD key, utf_32_char unicode);
 static int WZkeyToQtKey(int code);
 
-void WzMainWindow::loadCursor(CURSOR cursor, int x, int y, QImage const &buffer)
+void WzMainWindow::loadCursor(CURSOR cursor, char const *name)
 {
-	cursors[cursor] = new QCursor(QPixmap::fromImage(buffer.copy(x, y, 32, 32)));
+	cursors[cursor] = new QCursor(QPixmap::fromImage(QImage(name, "PNG")));
 }
 
 WzMainWindow::WzMainWindow(QSize resolution, const QGLFormat &format, QWidget *parent) : QtGameWidget(resolution, format, parent)
@@ -133,32 +133,27 @@ WzMainWindow::WzMainWindow(QSize resolution, const QGLFormat &format, QWidget *p
 #endif
 	setWindowTitle(PACKAGE_NAME);
 
-	QImage buffer("wz::images/intfac5.png", "PNG");
-	if (buffer.isNull())
-	{
-		debug(LOG_ERROR, "Failed to read cursor image.");
-	}
-	loadCursor(CURSOR_EMBARK, 0, 128, buffer);
-	loadCursor(CURSOR_DEST, 32, 128, buffer);
-	loadCursor(CURSOR_DEFAULT, 64, 128, buffer);
-	loadCursor(CURSOR_BUILD, 96, 128, buffer);
-	loadCursor(CURSOR_SCOUT, 128, 128, buffer);
-	loadCursor(CURSOR_DISEMBARK, 160, 128, buffer);
-	loadCursor(CURSOR_ATTACK, 192, 128, buffer);
-	loadCursor(CURSOR_GUARD, 224, 128, buffer);
-	loadCursor(CURSOR_FIX, 0, 160, buffer);
-	loadCursor(CURSOR_SELECT, 32, 160, buffer);
+	loadCursor(CURSOR_EMBARK, "wz::images/intfac/image_cursor_embark.png");
+	loadCursor(CURSOR_DEST, "wz::images/intfac/image_cursor_dest.png");
+	loadCursor(CURSOR_DEFAULT, "wz::images/intfac/image_cursor_default.png");
+	loadCursor(CURSOR_BUILD, "wz::images/intfac/image_cursor_build.png");
+	loadCursor(CURSOR_SCOUT, "wz::images/intfac/image_cursor_scout.png");
+	loadCursor(CURSOR_DISEMBARK, "wz::images/intfac/image_cursor_disembark.png");
+	loadCursor(CURSOR_ATTACK, "wz::images/intfac/image_cursor_attack.png");
+	loadCursor(CURSOR_GUARD, "wz::images/intfac/image_cursor_guard.png");
+	loadCursor(CURSOR_FIX, "wz::images/intfac/image_cursor_fix.png");
+	loadCursor(CURSOR_SELECT, "wz::images/intfac/image_cursor_select.png");
 //	loadCursor(CURSOR_REPAIR, 64, 160, buffer);		// FIX ME: This IS in infac.img, but the define is MIA
-	loadCursor(CURSOR_SEEKREPAIR, 64, 160, buffer);	// FIX ME: This is NOT in infac.img!
-	loadCursor(CURSOR_PICKUP, 96, 160, buffer);
-	loadCursor(CURSOR_NOTPOSSIBLE, 128, 160, buffer);
-	loadCursor(CURSOR_MOVE, 160, 160, buffer);
-	loadCursor(CURSOR_LOCKON, 192, 160, buffer);
+	loadCursor(CURSOR_SEEKREPAIR, "wz::images/intfac/image_cursor_repair.png");  // FIX ME: This is NOT in infac.img!
+	loadCursor(CURSOR_PICKUP, "wz::images/intfac/image_cursor_pickup.png");
+	loadCursor(CURSOR_NOTPOSSIBLE, "wz::images/intfac/image_cursor_notpos.png");
+	loadCursor(CURSOR_MOVE, "wz::images/intfac/image_cursor_move.png");
+	loadCursor(CURSOR_LOCKON, "wz::images/intfac/image_cursor_lockon.png");
 //	loadCursor(CURSOR_ECM, 224, 160, buffer);		// FIX ME: Not defined yet!
-	loadCursor(CURSOR_JAM, 224, 160, buffer);		// FIX ME: This is NOT in infac.img, and is using IMAGE CURSOR ECM ?
-	loadCursor(CURSOR_ATTACH, 0, 192, buffer);
-	loadCursor(CURSOR_BRIDGE, 32, 192, buffer);
-	loadCursor(CURSOR_BOMB, 64, 192, buffer);
+	loadCursor(CURSOR_JAM, "wz::images/intfac/image_cursor_ecm.png");  // FIX ME: This is NOT in infac.img, and is using IMAGE CURSOR ECM ?
+	loadCursor(CURSOR_ATTACH, "wz::images/intfac/image_cursor_attach.png");
+	loadCursor(CURSOR_BRIDGE, "wz::images/intfac/image_cursor_bridge.png");
+	loadCursor(CURSOR_BOMB, "wz::images/intfac/image_cursor_bomb.png");
 
 	// Reused (unused) cursors
 	cursors[CURSOR_ARROW] = new QCursor(Qt::ArrowCursor);

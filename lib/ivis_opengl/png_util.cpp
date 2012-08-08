@@ -144,11 +144,11 @@ bool iV_loadImage_PNG(const char *fileName, iV_Image *image)
 // 	png_set_packing(png_ptr);
 
 	/* More transformations to ensure we end up with 32bpp, 4 channel RGBA */
-// 	png_set_gray_to_rgb(png_ptr);
- 	png_set_palette_to_rgb(png_ptr);
- 	png_set_tRNS_to_alpha(png_ptr);
+	png_set_gray_to_rgb(png_ptr);
+	png_set_palette_to_rgb(png_ptr);
+	png_set_tRNS_to_alpha(png_ptr);
 	png_set_filler(png_ptr, 0xff, PNG_FILLER_AFTER);
-// 	png_set_gray_1_2_4_to_8(png_ptr);
+//	png_set_gray_1_2_4_to_8(png_ptr);
 
 	png_read_png(png_ptr, info_ptr, PNG_TRANSFORM_IDENTITY, NULL);
 

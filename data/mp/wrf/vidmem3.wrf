@@ -3,13 +3,6 @@
 /***********************************************************/
 
 directory	"images"
-file		IMGPAGE	"intfac0.png"
-file		IMGPAGE	"intfac1.png"
-file		IMGPAGE	"intfac2.png"
-file		IMGPAGE	"intfac3.png"
-file		IMGPAGE	"intfac4.png"
-file		IMGPAGE	"intfac5.png"
-// must load resources before IMG file
 file		IMG		"intfac.img"
 directory	"texpages"
 file		TERTILES	"tertilesc3hw"

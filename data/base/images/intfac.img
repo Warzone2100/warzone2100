@@ -1,545 +1,545 @@
-0,0,0,148,11,0,0,"IMAGE PBAR EMPTY"
-0,0,24,148,11,0,0,"IMAGE PBAR AVAIL"
-0,0,12,148,11,0,0,"IMAGE PBAR USED"
-0,0,36,148,11,0,0,"IMAGE PBAR REQUIRED"
-0,0,96,60,46,0,0,"IMAGE BUT0 UP"
-0,0,49,60,46,0,0,"IMAGE BUT0 DOWN"
-0,0,195,60,52,0,0,"IMAGE BUTB0 UP"
-0,0,143,59,51,1,1,"IMAGE BUTB0 DOWN"
-3,149,0,64,50,-2,-2,"IMAGE BUT HILITE"
-0,60,137,64,56,-2,-2,"IMAGE BUTB HILITE"
-0,123,97,26,11,0,0,"IMAGE TAB1"
-0,123,97,26,11,0,0,"IMAGE TAB2"
-0,123,97,26,11,0,0,"IMAGE TAB3"
-0,123,97,26,11,0,0,"IMAGE TAB4"
-0,123,110,26,11,0,0,"IMAGE TAB1DOWN"
-0,123,110,26,11,0,0,"IMAGE TAB2DOWN"
-0,123,110,26,11,0,0,"IMAGE TAB3DOWN"
-0,123,110,26,11,0,0,"IMAGE TAB4DOWN"
-0,123,110,26,11,0,0,"IMAGE TABSELECTED"
-0,122,122,29,14,-2,-2,"IMAGE TABHILIGHT"
-0,161,102,2,2,0,0,"IMAGE FRAME C0"
-0,164,102,2,2,0,0,"IMAGE FRAME C1"
-0,164,105,2,2,0,0,"IMAGE FRAME C2"
-0,161,105,2,2,0,0,"IMAGE FRAME C3"
-0,150,97,4,11,0,0,"IMAGE PBAR TOP"
-0,155,97,4,11,0,0,"IMAGE PBAR BOTTOM"
-1,0,0,37,29,-5,1,"IMAGE INTELMAP UP"
-1,0,29,37,29,-5,1,"IMAGE INTELMAP DOWN"
-1,185,0,37,29,-5,1,"IMAGE COMMANDDROID UP"
-1,185,29,38,29,-5,1,"IMAGE COMMANDDROID DOWN"
-1,148,0,37,29,-5,1,"IMAGE DESIGN UP"
-1,148,29,37,29,-5,1,"IMAGE DESIGN DOWN"
-1,111,0,37,29,-5,1,"IMAGE BUILD UP"
-1,111,29,37,29,-5,1,"IMAGE BUILD DOWN"
-1,74,0,37,29,-5,1,"IMAGE RESEARCH UP"
-1,74,29,37,29,-5,1,"IMAGE RESEARCH DOWN"
-1,37,0,37,29,-5,1,"IMAGE MANUFACTURE UP"
-1,37,29,37,29,-5,1,"IMAGE MANUFACTURE DOWN"
-1,87,96,42,32,-8,-1,"IMAGE RETICULE HILIGHT"
-1,0,87,36,28,-5,1,"IMAGE RETICULE BUTDOWN"
-1,38,58,46,37,-5,0,"IMAGE CANCEL UP"
-1,38,58,46,37,-5,0,"IMAGE CANCEL DOWN"
-1,85,58,46,37,-5,0,"IMAGE CANCEL HILIGHT"
-0,151,121,15,15,0,0,"IMAGE CLOSE"
-0,167,121,15,15,0,0,"IMAGE CLOSEDOWN"
-0,182,119,17,17,-1,-1,"IMAGE CLOSEHILIGHT"
-0,151,110,14,10,0,3,"IMAGE SLIDER BUT"
-0,0,250,126,1,0,0,"IMAGE FRAME HT"
-0,0,252,126,1,0,0,"IMAGE FRAME HB"
-3,148,52,73,12,0,0,"IMAGE SLIDER BACK"
-1,254,0,1,255,0,0,"IMAGE FRAME VL"
-1,251,0,1,255,0,0,"IMAGE FRAME VR"
-2,0,0,45,24,0,0,"IMAGE DES TURRET"
-2,46,0,45,24,0,0,"IMAGE DES TURRETH"
-2,0,25,45,24,0,0,"IMAGE DES BODY"
-2,46,25,45,24,0,0,"IMAGE DES BODYH"
-2,0,50,45,25,0,0,"IMAGE DES PROPULSION"
-2,46,50,45,25,0,0,"IMAGE DES PROPULSIONH"
-1,37,114,38,26,-1,-1,"IMAGE DES HILIGHT"
-1,245,0,2,68,0,0,"IMAGE FRAME VL2"
-1,248,0,2,68,0,0,"IMAGE FRAME VR2"
-1,245,69,2,68,0,0,"IMAGE FRAME VLH"
-1,248,69,2,68,0,0,"IMAGE FRAME VRH"
-1,131,60,37,24,0,0,"IMAGE DES WEAPONS"
-1,131,85,37,24,0,0,"IMAGE DES WEAPONSDOWN"
-1,169,60,37,24,0,0,"IMAGE DES SYSTEMS"
-1,169,85,37,24,0,0,"IMAGE DES SYSTEMSDOWN"
-1,207,60,37,24,0,0,"IMAGE DES COMMAND"
-1,207,85,37,24,0,0,"IMAGE DES COMMANDDOWN"
-1,0,175,114,2,0,0,"IMAGE FRAME HT2"
-1,0,178,114,2,0,0,"IMAGE FRAME HB2"
-1,0,181,114,2,0,0,"IMAGE FRAME HTH"
-1,0,184,114,2,0,0,"IMAGE FRAME HBH"
-1,0,168,112,5,0,0,"IMAGE DES POWERCURR"
-1,0,188,140,11,0,0,"IMAGE DES STATSBACK"
-1,0,200,132,5,0,0,"IMAGE DES STATSCURR"
-1,0,206,120,11,0,0,"IMAGE DES POWERBACK"
-1,0,219,55,14,0,0,"IMAGE DES EDITBOXLEFT"
-1,0,235,55,14,0,0,"IMAGE DES EDITBOXLEFTH"
-1,227,29,3,3,0,0,"IMAGE FRAME VC0"
-1,227,33,3,3,0,0,"IMAGE FRAME VC1"
-1,231,29,3,3,0,0,"IMAGE FRAME VC2"
-1,231,33,3,3,0,0,"IMAGE FRAME VC3"
-1,235,29,3,3,0,0,"IMAGE FRAME HC0"
-1,235,33,3,3,0,0,"IMAGE FRAME HC1"
-1,239,29,3,3,0,0,"IMAGE FRAME HC2"
-1,239,33,3,3,0,0,"IMAGE FRAME HC3"
-1,224,37,19,19,0,0,"IMAGE DES BACK"
-1,224,29,2,7,0,0,"IMAGE DES STATSCOMP"
-1,130,111,41,28,-2,-2,"IMAGE DES EXTRAHI"
-1,42,95,26,21,0,0,"IMAGE DES TABWEAPON"
-1,42,119,26,21,0,0,"IMAGE DES TABWEAPONDOWN"
-2,235,201,20,19,0,0,"IMAGE DES BUILDRATE"
-2,235,1,20,19,0,0,"IMAGE DES RANGE"
-2,238,81,14,16,3,-2,"IMAGE DES ARMOUR EXPLOSIVE"
-2,235,161,20,19,0,0,"IMAGE DES CROSSCOUNTRY"
-2,235,141,20,19,0,0,"IMAGE DES ROAD"
-2,237,63,16,15,2,2,"IMAGE DES WEIGHT"
-2,235,21,20,19,0,0,"IMAGE DES DAMAGE"
-2,239,123,13,14,4,2,"IMAGE DES POWER"
-2,235,181,20,19,0,0,"IMAGE DES HOVER"
-2,235,41,20,19,0,0,"IMAGE DES FIRERATE"
-2,238,105,14,12,3,4,"IMAGE DES BODYPOINTS"
-2,0,210,19,19,0,0,"IMAGE ROCKET"
-2,20,210,20,19,2,2,"IMAGE CANNON"
-2,42,210,19,14,2,2,"IMAGE HOVERCRAFT"
-2,62,210,17,18,2,2,"IMAGE RES MINOR PLASSTEEL"
-2,80,210,12,12,2,2,"IMAGE ECM"
-2,93,210,17,18,2,2,"IMAGE PLASCRETE"
-2,111,210,18,18,2,2,"IMAGE RES MINOR RADAR"
-2,77,167,44,42,0,0,"IMAGE RES MAJOR PLASCRETE"
-2,122,163,47,32,0,0,"IMAGE RES MAJOR ELECTRONIC"
-2,170,165,52,44,0,0,"IMAGE RES MAJOR HEAVYWEP"
-2,0,231,51,22,0,0,"IMAGE RES MAJOR HOVER"
-1,116,168,10,6,0,0,"IMAGE 0"
-1,127,168,6,6,0,0,"IMAGE 1"
-1,134,168,10,6,0,0,"IMAGE 2"
-1,145,168,10,6,0,0,"IMAGE 3"
-1,156,168,10,6,0,0,"IMAGE 4"
-1,167,168,10,6,0,0,"IMAGE 5"
-1,178,168,10,6,0,0,"IMAGE 6"
-1,189,168,10,6,0,0,"IMAGE 7"
-1,200,168,10,6,0,0,"IMAGE 8"
-1,211,168,10,6,0,0,"IMAGE 9"
-1,162,236,80,13,0,0,"IMAGE DES BARBACK"
-1,163,198,76,9,0,0,"IMAGE DES BARBLUE"
-1,163,211,76,9,0,0,"IMAGE DES BARRED"
-1,163,224,76,9,0,0,"IMAGE DES BARYELLOW"
-3,0,0,45,30,8,8,"IMAGE INTEL RESEARCH"
-3,0,43,45,30,8,8,"IMAGE INTEL RESEARCHDOWN"
-3,48,0,55,42,2,3,"IMAGE INTEL MISSION"
-3,48,43,55,42,2,3,"IMAGE INTEL MISSIONDOWN"
-3,105,0,40,39,10,3,"IMAGE INTEL CAMPAIGN"
-3,105,43,40,39,10,3,"IMAGE INTEL CAMPAIGNDOWN"
-3,0,86,2,9,0,-8,"IMAGE ASCII33"
-3,3,86,5,3,0,-8,"IMAGE ASCII34"
-3,9,86,6,9,0,-8,"IMAGE ASCII35"
-3,16,85,5,11,0,-10,"IMAGE ASCII36"
-3,22,86,8,9,0,-8,"IMAGE ASCII37"
-3,31,86,8,9,0,-8,"IMAGE ASCII38"
-3,40,86,2,3,0,-8,"IMAGE ASCII39"
-3,43,85,3,11,0,-10,"IMAGE ASCII40"
-3,47,85,3,11,0,-10,"IMAGE ASCII41"
-3,189,88,9,6,0,-7,"IMAGE ASCII42"
-3,55,88,6,6,0,-7,"IMAGE ASCII43"
-3,62,93,2,4,0,-1,"IMAGE ASCII44"
-3,65,90,5,2,0,-4,"IMAGE ASCII45"
-3,71,93,2,2,0,-1,"IMAGE ASCII46"
-3,74,86,3,9,0,-8,"IMAGE ASCII47"
-3,78,86,6,9,0,-8,"IMAGE ASCII48"
-3,85,86,4,9,0,-8,"IMAGE ASCII49"
-3,90,86,6,9,0,-8,"IMAGE ASCII50"
-3,97,86,6,9,0,-8,"IMAGE ASCII51"
-3,104,86,6,9,0,-8,"IMAGE ASCII52"
-3,111,86,6,9,0,-8,"IMAGE ASCII53"
-3,118,86,6,9,0,-8,"IMAGE ASCII54"
-3,125,86,6,9,0,-8,"IMAGE ASCII55"
-3,132,86,6,9,0,-8,"IMAGE ASCII56"
-3,139,86,6,9,0,-8,"IMAGE ASCII57"
-3,146,87,2,7,0,-6,"IMAGE ASCII58"
-3,149,87,2,9,0,-6,"IMAGE ASCII59"
-3,152,87,6,7,0,-6,"IMAGE ASCII60"
-3,159,89,6,3,0,-5,"IMAGE ASCII61"
-3,166,87,6,7,0,-6,"IMAGE ASCII62"
-3,173,86,6,9,0,-8,"IMAGE ASCII63"
-3,199,87,7,7,0,-9,"IMAGE ASTERISK"
-3,12,98,7,9,0,-8,"IMAGE ASCII65"
-3,20,98,7,9,0,-8,"IMAGE ASCII66"
-3,28,98,7,9,0,-8,"IMAGE ASCII67"
-3,36,98,7,9,0,-8,"IMAGE ASCII68"
-3,44,98,6,9,0,-8,"IMAGE ASCII69"
-3,51,98,5,9,0,-8,"IMAGE ASCII70"
-3,57,98,7,9,0,-8,"IMAGE ASCII71"
-3,65,98,7,9,0,-8,"IMAGE ASCII72"
-3,73,98,2,9,0,-8,"IMAGE ASCII73"
-3,76,98,6,9,0,-8,"IMAGE ASCII74"
-3,83,98,7,9,0,-8,"IMAGE ASCII75"
-3,91,98,6,9,0,-8,"IMAGE ASCII76"
-3,98,98,9,9,0,-8,"IMAGE ASCII77"
-3,108,98,7,9,0,-8,"IMAGE ASCII78"
-3,116,98,8,9,0,-8,"IMAGE ASCII79"
-3,125,98,7,9,0,-8,"IMAGE ASCII80"
-3,133,98,8,10,0,-8,"IMAGE ASCII81"
-3,142,98,8,9,0,-8,"IMAGE ASCII82"
-3,151,98,7,9,0,-8,"IMAGE ASCII83"
-3,159,98,6,9,0,-8,"IMAGE ASCII84"
-3,166,98,7,9,0,-8,"IMAGE ASCII85"
-3,174,98,9,9,0,-8,"IMAGE ASCII86"
-3,184,98,13,9,0,-8,"IMAGE ASCII87"
-3,198,98,7,9,0,-8,"IMAGE ASCII88"
-3,206,98,8,9,0,-8,"IMAGE ASCII89"
-3,215,98,6,9,0,-8,"IMAGE ASCII90"
-3,223,97,3,11,0,-10,"IMAGE ASCII91"
-3,227,98,3,9,0,-8,"IMAGE ASCII92"
-3,231,97,3,11,0,-10,"IMAGE ASCII93"
-3,235,98,6,5,0,-9,"IMAGE ASCII94"
-3,242,107,7,1,0,0,"IMAGE ASCII95"
-3,0,110,3,2,0,-8,"IMAGE ASCII96"
-3,4,112,6,7,0,-6,"IMAGE ASCII97"
-3,11,110,6,9,0,-8,"IMAGE ASCII98"
-3,18,112,6,7,0,-6,"IMAGE ASCII99"
-3,25,110,6,9,0,-8,"IMAGE ASCII100"
-3,32,112,6,7,0,-6,"IMAGE ASCII101"
-3,39,110,5,9,0,-8,"IMAGE ASCII102"
-3,45,112,6,9,0,-6,"IMAGE ASCII103"
-3,52,110,6,9,0,-8,"IMAGE ASCII104"
-3,59,110,2,9,0,-8,"IMAGE ASCII105"
-3,62,110,3,11,0,-8,"IMAGE ASCII106"
-3,66,110,6,9,0,-8,"IMAGE ASCII107"
-3,73,110,2,9,0,-8,"IMAGE ASCII108"
-3,76,112,10,7,0,-6,"IMAGE ASCII109"
-3,87,112,6,7,0,-6,"IMAGE ASCII110"
-3,94,112,6,7,0,-6,"IMAGE ASCII111"
-3,101,112,6,9,0,-6,"IMAGE ASCII112"
-3,108,112,6,9,0,-6,"IMAGE ASCII113"
-3,115,112,4,7,0,-6,"IMAGE ASCII114"
-3,120,112,6,7,0,-6,"IMAGE ASCII115"
-3,127,110,4,9,0,-8,"IMAGE ASCII116"
-3,132,112,6,7,0,-6,"IMAGE ASCII117"
-3,139,112,7,7,0,-6,"IMAGE ASCII118"
-3,147,112,9,7,0,-6,"IMAGE ASCII119"
-3,157,112,6,7,0,-6,"IMAGE ASCII120"
-3,164,112,7,9,0,-6,"IMAGE ASCII121"
-3,172,112,5,7,0,-6,"IMAGE ASCII122"
-3,178,110,5,11,0,-10,"IMAGE ASCII123"
-3,184,110,1,11,0,-9,"IMAGE ASCII124"
-3,186,110,5,11,0,-10,"IMAGE ASCII125"
-3,182,87,6,2,0,-5,"IMAGE ASCII126"
-0,226,110,11,26,0,0,"IMAGE SIDETAB"
-0,107,107,14,29,-2,-2,"IMAGE SIDETABHI"
-0,213,110,11,26,0,0,"IMAGE SIDETABDOWN"
-0,213,110,11,26,0,0,"IMAGE SIDETABSEL"
-3,0,170,185,85,0,0,"IMAGE DES STATBACKLEFT"
-3,224,170,31,85,0,0,"IMAGE DES STATBACKRIGHT"
-3,184,170,41,85,0,0,"IMAGE DES STATBACKMID"
-2,0,76,179,18,0,0,"IMAGE SLIDER BIG"
-3,51,86,3,4,0,-6,"IMAGE STAR"
-2,53,245,24,9,2,2,"IMAGE TRACKS"
-2,122,196,20,13,2,2,"IMAGE RES MINOR AUTOWEAPONS"
-2,199,210,35,35,0,0,"IMAGE RES MAJOR ROCKET"
-2,130,210,40,40,0,0,"IMAGE QUESTION MARK"
-1,172,111,24,13,0,0,"IMAGE RES DROIDTECH"
-1,197,111,21,19,0,0,"IMAGE RES WEAPONTECH"
-1,219,111,13,12,0,0,"IMAGE RES COMPUTERTECH"
-1,186,132,14,16,0,0,"IMAGE RES POWERTECH"
-1,201,132,18,18,0,0,"IMAGE RES SYSTEMTECH"
-1,220,132,21,16,0,0,"IMAGE RES STRUCTURETECH"
-1,185,150,17,17,0,0,"IMAGE RES QUESTIONMARK"
-4,0,1,36,24,0,0,"IMAGE ORD DESTRUCT1UP"
-4,37,1,36,24,0,0,"IMAGE ORD DESTRUCT1DOWN"
-4,0,26,36,24,0,0,"IMAGE ORD RANGE1UP"
-4,37,26,36,24,0,0,"IMAGE ORD RANGE1DOWN"
-4,74,26,36,24,0,0,"IMAGE ORD RANGE2UP"
-4,111,26,36,24,0,0,"IMAGE ORD RANGE2DOWN"
-4,148,25,36,24,0,0,"IMAGE ORD RANGE3UP"
-4,185,25,36,24,0,0,"IMAGE ORD RANGE3DOWN"
-4,0,51,36,24,0,0,"IMAGE ORD REPAIR2UP"
-4,37,51,36,24,0,0,"IMAGE ORD REPAIR2DOWN"
-4,74,51,36,24,0,0,"IMAGE ORD REPAIR1UP"
-4,111,51,36,24,0,0,"IMAGE ORD REPAIR1DOWN"
-4,148,50,36,24,0,0,"IMAGE ORD REPAIR3UP"
-4,185,50,36,24,0,0,"IMAGE ORD REPAIR3DOWN"
-4,0,76,36,24,0,0,"IMAGE ORD FATWILLUP"
-4,37,76,36,24,0,0,"IMAGE ORD FATWILLDOWN"
-4,74,76,36,24,0,0,"IMAGE ORD RETFIREUP"
-4,111,76,36,24,0,0,"IMAGE ORD RETFIREDOWN"
-4,148,75,36,24,0,0,"IMAGE ORD HOLDFIREUP"
-4,185,75,36,24,0,0,"IMAGE ORD HOLDFIREDOWN"
-4,0,101,36,24,0,0,"IMAGE ORD HALTUP"
-4,37,101,36,24,0,0,"IMAGE ORD HALTDOWN"
-4,74,101,36,24,0,0,"IMAGE ORD GOTOHQUP"
-4,111,101,36,24,0,0,"IMAGE ORD GOTOHQDOWN"
-4,148,0,36,24,0,0,"IMAGE ORD DESTRUCT2UP"
-4,111,1,36,24,0,0,"IMAGE ORD DESTRUCT2DOWN"
-4,74,1,36,24,0,0,"IMAGE ORD DESTRUCT2GREY"
-0,167,107,14,12,0,0,"IMAGE SLIDER BIGBUT"
-1,222,168,13,6,0,0,"IMAGE SLIDER INFINITY"
-1,115,175,3,3,-1,-1,"IMAGE RAD ENMREAD"
-1,119,175,7,7,-3,-3,"IMAGE RAD ENM1"
-1,127,175,9,9,-4,-4,"IMAGE RAD ENM2"
-1,137,175,13,13,-6,-6,"IMAGE RAD ENM3"
-1,151,175,3,3,-1,-1,"IMAGE RAD RESREAD"
-1,155,175,7,7,-3,-3,"IMAGE RAD RES1"
-1,163,175,9,9,-4,-4,"IMAGE RAD RES2"
-1,173,175,13,13,-6,-6,"IMAGE RAD RES3"
-1,187,175,3,3,-1,-1,"IMAGE RAD ARTREAD"
-1,191,175,7,7,-3,-3,"IMAGE RAD ART1"
-1,199,175,9,9,-4,-4,"IMAGE RAD ART2"
-1,209,175,13,13,-6,-6,"IMAGE RAD ART3"
-4,1,155,35,24,0,0,"IMAGE MULTI NOAL"
-4,37,155,35,24,0,0,"IMAGE MULTI OFFAL"
-4,73,155,35,24,0,0,"IMAGE MULTI AL"
-4,109,155,35,24,0,0,"IMAGE MULTI NOAL HI"
-4,145,155,35,24,0,0,"IMAGE MULTI OFFAL HI"
-4,181,155,35,24,0,0,"IMAGE MULTI AL HI"
-4,1,180,31,21,0,0,"IMAGE MULTI VIS"
-4,33,180,31,21,0,0,"IMAGE MULTI POW"
-4,65,180,31,21,0,0,"IMAGE MULTI DRO"
-4,97,180,31,21,0,0,"IMAGE MULTI TEK"
-4,97,202,31,21,0,0,"IMAGE MULTI TEK HI"
-4,65,202,31,21,0,0,"IMAGE MULTI DRO HI"
-4,33,202,31,21,0,0,"IMAGE MULTI POW HI"
-4,1,202,31,21,0,0,"IMAGE MULTI VIS HI"
-3,199,87,7,7,0,0,"IMAGE CMDDROID EXP"
-1,149,144,18,17,0,0,"IMAGE NRUTER"
-4,129,180,86,17,0,0,"IMAGE MISSION CLOCK"
-4,217,180,37,17,0,0,"IMAGE LAUNCHDOWN"
-3,1,151,112,17,0,0,"IMAGE TRANSETA UP"
-4,129,198,20,17,0,0,"IMAGE ORD FAC1UP"
-4,150,198,20,17,0,0,"IMAGE ORD FAC1DOWN"
-4,171,198,20,17,0,0,"IMAGE ORD FAC2UP"
-4,192,198,20,17,0,0,"IMAGE ORD FAC2DOWN"
-4,213,198,20,17,0,0,"IMAGE ORD FAC3UP"
-4,234,198,20,17,0,0,"IMAGE ORD FAC3DOWN"
-4,129,216,20,17,0,0,"IMAGE ORD FAC4UP"
-4,150,216,20,17,0,0,"IMAGE ORD FAC4DOWN"
-4,171,216,20,17,0,0,"IMAGE ORD FAC5UP"
-4,192,216,20,17,0,0,"IMAGE ORD FAC5DOWN"
-4,212,215,22,19,-1,-1,"IMAGE ORD FACHILITE"
-1,0,58,37,28,-5,1,"IMAGE RETICULE GREY"
-3,199,68,13,12,0,0,"IMAGE INFINITE UP"
-3,213,68,13,12,0,0,"IMAGE INFINITE DOWN"
-3,227,68,13,12,0,0,"IMAGE INFINITE HI"
-2,92,0,45,24,0,0,"IMAGE DES BIN"
-2,138,0,45,24,0,0,"IMAGE DES BINH"
-2,92,25,45,24,0,0,"IMAGE AUDIO LASTSAMPLE"
-2,138,25,45,24,0,0,"IMAGE AUDIO LASTSAMPLEH"
-2,73,128,140,11,0,0,"IMAGE DES POWERBAR LEFT"
-2,73,140,140,11,0,0,"IMAGE DES POWERBAR RIGHT"
-1,55,219,52,14,0,0,"IMAGE DES EDITBOXMID"
-1,107,219,54,14,0,0,"IMAGE DES EDITBOXRIGHT"
-1,55,235,52,14,0,0,"IMAGE DES EDITBOXMIDH"
-1,107,235,54,14,0,0,"IMAGE DES EDITBOXRIGHTH"
-1,3,143,19,17,0,0,"IMAGE RES CYBORGTECH"
-3,233,37,23,13,0,0,"IMAGE LOOP UP"
-3,233,51,23,13,0,0,"IMAGE LOOP DOWN"
-3,231,81,25,15,-1,-1,"IMAGE LOOP HI"
-4,231,0,23,13,0,0,"IMAGE CDP DOWN"
-4,231,14,23,13,0,0,"IMAGE CDP UP"
-4,230,28,25,15,-1,-1,"IMAGE CDP HI"
-4,231,44,23,13,0,0,"IMAGE FDP DOWN"
-4,231,58,23,13,0,0,"IMAGE FDP UP"
-4,230,72,25,15,-1,-1,"IMAGE FDP HI"
-4,231,88,23,13,0,0,"IMAGE VDP DOWN"
-4,231,102,23,13,0,0,"IMAGE VDP UP"
-4,230,116,25,15,-1,-1,"IMAGE VDP HI"
-2,49,99,4,5,0,0,"IMAGE GN STAR"
-2,183,0,4,5,0,0,"IMAGE GN 15"
-2,187,0,4,5,0,0,"IMAGE GN 14"
-2,191,0,4,5,0,0,"IMAGE GN 13"
-2,195,0,4,5,0,0,"IMAGE GN 12"
-2,199,0,4,5,0,0,"IMAGE GN 11"
-2,203,0,4,5,0,0,"IMAGE GN 10"
-2,44,99,4,5,0,0,"IMAGE GN 9"
-2,39,99,4,5,0,0,"IMAGE GN 8"
-2,34,99,4,5,0,0,"IMAGE GN 7"
-2,29,99,4,5,0,0,"IMAGE GN 6"
-2,24,99,4,5,0,0,"IMAGE GN 5"
-2,19,99,4,5,0,0,"IMAGE GN 4"
-2,14,99,4,5,0,0,"IMAGE GN 3"
-2,9,99,4,5,0,0,"IMAGE GN 2"
-2,5,99,2,5,1,0,"IMAGE GN 1"
-2,0,99,4,5,0,0,"IMAGE GN 0"
-4,74,126,36,24,0,0,"IMAGE ORD CIRCLEUP"
-4,111,126,36,24,0,0,"IMAGE ORD CIRCLEDOWN"
-4,0,126,36,24,0,0,"IMAGE ORD PURSUEUP"
-4,37,126,36,24,0,0,"IMAGE ORD PURSUEDOWN"
-4,148,125,36,24,0,0,"IMAGE ORD GUARDUP"
-4,185,125,36,24,0,0,"IMAGE ORD GUARDDOWN"
-4,217,155,36,24,0,0,"IMAGE ORD RTRUP"
-4,185,0,36,24,0,0,"IMAGE ORD RTRDOWN"
-4,148,100,36,24,0,0,"IMAGE ORD EMBARKUP"
-4,185,100,36,24,0,0,"IMAGE ORD EMBARKDOWN"
-2,93,50,35,24,0,0,"IMAGE MULTI NOCHAN"
-2,129,50,35,24,0,0,"IMAGE MULTI CHAN"
-2,37,131,35,24,0,0,"IMAGE CDCHANGE OK"
-2,1,131,35,24,0,0,"IMAGE CDCHANGE CANCEL"
-2,57,105,6,5,0,0,"IMAGE LEV 0"
-2,64,102,6,8,0,0,"IMAGE LEV 1"
-2,71,102,6,8,0,0,"IMAGE LEV 2"
-2,78,99,6,11,0,0,"IMAGE LEV 3"
-2,85,99,6,11,0,0,"IMAGE LEV 4"
-2,92,96,6,14,0,0,"IMAGE LEV 5"
-2,99,105,6,5,0,0,"IMAGE LEV 6"
-2,106,104,6,6,0,0,"IMAGE LEV 7"
-1,26,146,17,12,0,0,"IMAGE RES DEFENCE"
-3,192,110,9,9,0,-8,"IMAGE ASCII188"
-3,202,110,9,9,0,-8,"IMAGE ASCII189"
-3,212,110,6,10,0,-9,"IMAGE ASCII224"
-3,219,110,6,10,0,-9,"IMAGE ASCII225"
-3,226,110,6,10,0,-9,"IMAGE ASCII226"
-3,233,110,6,10,0,-9,"IMAGE ASCII227"
-3,240,110,6,10,0,-9,"IMAGE ASCII228"
-3,247,110,6,10,0,-9,"IMAGE ASCII229"
-3,0,125,10,7,0,-6,"IMAGE ASCII230"
-3,11,125,6,9,0,-6,"IMAGE ASCII231"
-3,18,123,6,10,0,-9,"IMAGE ASCII232"
-3,25,123,6,10,0,-9,"IMAGE ASCII233"
-3,32,123,6,10,0,-9,"IMAGE ASCII234"
-3,39,123,6,10,0,-9,"IMAGE ASCII235"
-3,46,123,4,10,0,-9,"IMAGE ASCII236"
-3,51,123,4,10,0,-9,"IMAGE ASCII237"
-3,56,123,4,10,0,-9,"IMAGE ASCII238"
-3,61,123,4,10,0,-9,"IMAGE ASCII239"
-3,81,123,6,10,0,-9,"IMAGE ASCII242"
-3,88,123,6,10,0,-9,"IMAGE ASCII243"
-3,95,123,6,10,0,-9,"IMAGE ASCII244"
-3,102,123,6,10,0,-9,"IMAGE ASCII245"
-3,109,123,6,10,0,-9,"IMAGE ASCII246"
-3,123,123,6,10,0,-9,"IMAGE ASCII249"
-3,130,123,6,10,0,-9,"IMAGE ASCII250"
-3,137,123,6,10,0,-9,"IMAGE ASCII251"
-3,144,123,6,10,0,-9,"IMAGE ASCII252"
-3,151,123,7,11,0,-10,"IMAGE ASCII253"
-3,66,122,6,10,0,-9,"IMAGE ASCII241"
-3,116,126,6,6,0,-5,"IMAGE ASCII248"
-3,167,123,8,9,0,-8,"IMAGE ASCII223"
-3,239,136,8,11,0,-10,"IMAGE ASCII221"
-3,215,136,7,11,0,-10,"IMAGE ASCII218"
-3,223,136,7,11,0,-10,"IMAGE ASCII219"
-3,231,136,7,11,0,-10,"IMAGE ASCII217"
-3,235,123,7,11,0,-10,"IMAGE ASCII220"
-3,243,123,8,9,0,-8,"IMAGE ASCII216"
-3,181,136,8,11,0,-10,"IMAGE ASCII212"
-3,206,136,8,11,0,-10,"IMAGE ASCII213"
-3,226,123,8,11,0,-10,"IMAGE ASCII214"
-3,164,136,8,11,0,-10,"IMAGE ASCII211"
-3,190,136,8,11,0,-10,"IMAGE ASCII210"
-3,85,136,7,11,0,-10,"IMAGE ASCII192"
-3,69,136,7,11,0,-10,"IMAGE ASCII193"
-3,77,136,7,11,0,-10,"IMAGE ASCII194"
-3,93,136,7,11,0,-10,"IMAGE ASCII195"
-3,196,123,7,11,0,-10,"IMAGE ASCII196"
-3,204,123,7,12,0,-11,"IMAGE ASCII197"
-3,176,123,7,11,0,-7,"IMAGE ASCII198"
-3,132,136,6,11,0,-10,"IMAGE ASCII200"
-3,212,123,6,11,0,-10,"IMAGE ASCII201"
-3,118,136,6,11,0,-10,"IMAGE ASCII202"
-3,125,136,6,11,0,-10,"IMAGE ASCII203"
-3,159,136,4,11,0,-10,"IMAGE ASCII204"
-3,143,136,5,11,0,-10,"IMAGE ASCII205"
-3,149,136,4,11,0,-10,"IMAGE ASCII206"
-3,154,136,4,11,0,-10,"IMAGE ASCII207"
-3,108,136,9,9,0,-8,"IMAGE ASCII208"
-3,25,137,6,10,0,-9,"IMAGE ASCII191"
-3,32,137,2,10,0,-9,"IMAGE ASCII161"
-3,7,137,6,10,0,-9,"IMAGE ASCII131"
-1,172,140,12,12,0,0,"IMAGE RES GRPUPG"
-1,170,153,14,13,0,0,"IMAGE RES GRPREP"
-1,203,151,15,10,0,0,"IMAGE RES GRPROF"
-1,219,149,14,14,0,0,"IMAGE RES GRPACC"
-1,172,127,13,12,0,0,"IMAGE RES GRPDAM"
-1,51,146,86,17,0,0,"IMAGE MISSION CLOCK UP"
-0,62,55,27,27,-13,-13,"IMAGE TARGET1"
-0,90,56,25,25,-12,-12,"IMAGE TARGET2"
-0,118,55,28,28,-13,-13,"IMAGE TARGET3"
-0,149,50,38,38,-18,-18,"IMAGE TARGET4"
-0,191,50,38,38,-18,-18,"IMAGE TARGET5"
-0,91,96,13,11,0,0,"IMAGE TAB1 SM"
-0,91,109,13,11,0,0,"IMAGE TAB1SELECTED SM"
-0,91,109,13,11,0,0,"IMAGE TAB1DOWN SM"
-0,90,122,16,14,-2,-2,"IMAGE TABHILIGHT SM"
-2,222,79,13,18,3,-2,"IMAGE DES ARMOUR KINETIC"
-0,64,220,28,28,-14,-14,"IMAGE BLUE1"
-0,94,220,28,28,-14,-14,"IMAGE BLUE2"
-0,125,220,28,28,-14,-14,"IMAGE BLUE3"
-0,156,220,28,28,-14,-14,"IMAGE BLUE4"
-0,186,220,28,28,-14,-14,"IMAGE BLUE5"
-0,216,220,28,28,-14,-14,"IMAGE BLUE6"
-4,116,237,37,17,0,0,"IMAGE LAUNCHUP"
-3,114,151,112,17,0,0,"IMAGE TRANSETA DOWN"
-2,1,157,36,24,0,0,"IMAGE ORD FIREDES UP"
-2,38,157,36,24,0,0,"IMAGE ORD FIREDES DOWN"
-3,0,97,11,12,0,-9,"IMAGE ASCII64"
-0,127,152,7,10,0,0,"IMAGE LFTTAB"
-0,127,165,7,10,0,0,"IMAGE LFTTABD"
-0,126,179,9,14,0,0,"IMAGE LFTTABH"
-0,137,152,7,10,0,0,"IMAGE RGTTAB"
-0,137,165,7,10,0,0,"IMAGE RGTTABD"
-0,134,179,9,14,0,0,"IMAGE RGTTABH"
-0,134,179,9,14,0,0,"IMAGE NADDA"
-5,0,59,36,24,0,0,"IMAGE ORD PATROLUP"
-5,37,59,36,24,0,0,"IMAGE ORD PATROLDOWN"
-5,74,59,36,24,0,0,"IMAGE_DISCONNECT_LO"
-5,111,59,36,24,0,0,"IMAGE_DISCONNECT_HI"
-5,148,59,36,24,0,0,"IMAGE_PLAYER_LEFT_LO"
-5,185,59,36,24,0,0,"IMAGE_PLAYER_LEFT_HI"
-5,0,0,37,29,-5,1,"IMAGE EDIT OPTIONS UP"
-5,0,29,37,29,-5,1,"IMAGE EDIT OPTIONS DOWN"
-5,185,0,37,29,-5,1,"IMAGE EDIT TILES UP"
-5,185,29,38,29,-5,1,"IMAGE EDIT TILES DOWN"
-5,148,0,37,29,-5,1,"IMAGE EDIT DESIGN UP"
-5,148,29,37,29,-5,1,"IMAGE EDIT DESIGN DOWN"
-5,111,0,37,29,-5,1,"IMAGE EDIT BUILD UP"
-5,111,29,37,29,-5,1,"IMAGE EDIT BUILD DOWN"
-5,74,0,37,29,-5,1,"IMAGE EDIT RESEARCH UP"
-5,74,29,37,29,-5,1,"IMAGE EDIT RESEARCH DOWN"
-5,37,0,37,29,-5,1,"IMAGE EDIT MANUFACTURE UP"
-5,37,29,37,29,-5,1,"IMAGE EDIT MANUFACTURE DOWN"
-5,0,84,14,33,0,0,"RADAR NORTH"
-2,94,114,14,10,0,0,"IMAGE ORIGIN VISUAL"
-2,156,197,13,12,0,0,"IMAGE ORIGIN COMMANDER"
-2,58,114,10,10,0,0,"IMAGE ORIGIN SENSOR STANDARD"
-2,70,114,10,10,0,0,"IMAGE ORIGIN SENSOR CB"
-2,81,114,12,11,-2,-1,"IMAGE ORIGIN SENSOR AIRDEF"
-2,110,114,10,10,0,0,"IMAGE ORIGIN RADAR DETECTOR"
-5,109,232,36,24,0,0,"IMAGE WAITING LO"
-5,146,232,36,24,0,0,"IMAGE WAITING HI"
-5,183,232,36,24,0,0,"IMAGE DESYNC LO"
-5,220,232,36,24,0,0,"IMAGE DESYNC HI"
-5,0,128,32,32,-15,-15,"IMAGE CURSOR EMBARK"
-5,32,128,32,32,-15,-15,"IMAGE CURSOR DEST"
-5,64,128,32,32,-15,-15,"IMAGE CURSOR DEFAULT"
-5,96,128,32,32,-15,-15,"IMAGE CURSOR BUILD"
-5,128,128,32,32,-15,-15,"IMAGE CURSOR SCOUT"
-5,160,128,32,32,-15,-15,"IMAGE CURSOR DISEMBARK"
-5,192,128,32,32,-15,-15,"IMAGE CURSOR ATTACK"
-5,224,128,32,32,-15,-15,"IMAGE CURSOR GUARD"
-5,0,160,32,32,-15,-15,"IMAGE CURSOR FIX"
-5,32,160,32,32,-15,-15,"IMAGE CURSOR SELECT"
-5,64,160,32,32,-8,-15,"IMAGE CURSOR REPAIR"
-5,96,160,32,32,-15,-20,"IMAGE CURSOR PICKUP"
-5,128,160,32,32,-15,-15,"IMAGE CURSOR NOTPOS"
-5,160,160,32,32,-15,-15,"IMAGE CURSOR MOVE"
-5,192,160,32,32,-15,-15,"IMAGE CURSOR LOCKON"
-5,224,160,32,32,-15,-15,"IMAGE CURSOR ECM"
-5,0,192,32,32,-15,-15,"IMAGE CURSOR ATTACH"
-5,32,192,32,32,-15,-15,"IMAGE CURSOR BRIDGE"
-5,64,192,32,32,-15,-15,"IMAGE CURSOR BOMB"
-5,20,86,179,18,0,0,"IMAGE SLIDER AI"
-1,39,98,3,3,-1,-1,"IMAGE RAD BURNRESREAD"
-1,79,133,6,9,-3,-6,"IMAGE RAD BURNRES1"
-1,86,133,6,9,-3,-6,"IMAGE RAD BURNRES2"
-1,94,134,5,8,-2,-5,"IMAGE RAD BURNRES3"
-1,101,133,5,9,-2,-6,"IMAGE RAD BURNRES4"
-1,108,132,5,10,-2,-7,"IMAGE RAD BURNRES5"
-1,114,131,6,11,-3,-8,"IMAGE RAD BURNRES6"
-2,208,14,14,12,0,0,"IMAGE ALLY RESEARCH"
-2,208,26,14,12,0,0,"IMAGE ALLY RESEARCH TC"
-2,207,0,25,14,0,0,"IMAGE GENERIC TANK"
-2,183,14,25,14,0,0,"IMAGE GENERIC TANK TC"
-0,148,0,45,24,0,0,"IMAGE DES SAVE"
-0,193,0,45,24,0,0,"IMAGE DES SAVEH"
-0,148,24,45,24,0,0,"IMAGE DES DELETE"
-0,193,24,45,24,0,0,"IMAGE DES DELETEH"
+0,0,image_pbar_empty.png
+0,0,image_pbar_avail.png
+0,0,image_pbar_used.png
+0,0,image_pbar_required.png
+0,0,image_but0_up.png
+0,0,image_but0_down.png
+0,0,image_butb0_up.png
+1,1,image_butb0_down.png
+-2,-2,image_but_hilite.png
+-2,-2,image_butb_hilite.png
+0,0,image_tab1.png
+0,0,image_tab2.png
+0,0,image_tab3.png
+0,0,image_tab4.png
+0,0,image_tab1down.png
+0,0,image_tab2down.png
+0,0,image_tab3down.png
+0,0,image_tab4down.png
+0,0,image_tabselected.png
+-2,-2,image_tabhilight.png
+0,0,image_frame_c0.png
+0,0,image_frame_c1.png
+0,0,image_frame_c2.png
+0,0,image_frame_c3.png
+0,0,image_pbar_top.png
+0,0,image_pbar_bottom.png
+-5,1,image_intelmap_up.png
+-5,1,image_intelmap_down.png
+-5,1,image_commanddroid_up.png
+-5,1,image_commanddroid_down.png
+-5,1,image_design_up.png
+-5,1,image_design_down.png
+-5,1,image_build_up.png
+-5,1,image_build_down.png
+-5,1,image_research_up.png
+-5,1,image_research_down.png
+-5,1,image_manufacture_up.png
+-5,1,image_manufacture_down.png
+-8,-1,image_reticule_hilight.png
+-5,1,image_reticule_butdown.png
+-5,0,image_cancel_up.png
+-5,0,image_cancel_down.png
+-5,0,image_cancel_hilight.png
+0,0,image_close.png
+0,0,image_closedown.png
+-1,-1,image_closehilight.png
+0,3,image_slider_but.png
+0,0,image_frame_ht.png
+0,0,image_frame_hb.png
+0,0,image_slider_back.png
+0,0,image_frame_vl.png
+0,0,image_frame_vr.png
+0,0,image_des_turret.png
+0,0,image_des_turreth.png
+0,0,image_des_body.png
+0,0,image_des_bodyh.png
+0,0,image_des_propulsion.png
+0,0,image_des_propulsionh.png
+-1,-1,image_des_hilight.png
+0,0,image_frame_vl2.png
+0,0,image_frame_vr2.png
+0,0,image_frame_vlh.png
+0,0,image_frame_vrh.png
+0,0,image_des_weapons.png
+0,0,image_des_weaponsdown.png
+0,0,image_des_systems.png
+0,0,image_des_systemsdown.png
+0,0,image_des_command.png
+0,0,image_des_commanddown.png
+0,0,image_frame_ht2.png
+0,0,image_frame_hb2.png
+0,0,image_frame_hth.png
+0,0,image_frame_hbh.png
+0,0,image_des_powercurr.png
+0,0,image_des_statsback.png
+0,0,image_des_statscurr.png
+0,0,image_des_powerback.png
+0,0,image_des_editboxleft.png
+0,0,image_des_editboxlefth.png
+0,0,image_frame_vc0.png
+0,0,image_frame_vc1.png
+0,0,image_frame_vc2.png
+0,0,image_frame_vc3.png
+0,0,image_frame_hc0.png
+0,0,image_frame_hc1.png
+0,0,image_frame_hc2.png
+0,0,image_frame_hc3.png
+0,0,image_des_back.png
+0,0,image_des_statscomp.png
+-2,-2,image_des_extrahi.png
+0,0,image_des_tabweapon.png
+0,0,image_des_tabweapondown.png
+0,0,image_des_buildrate.png
+0,0,image_des_range.png
+3,-2,image_des_armour_explosive.png
+0,0,image_des_crosscountry.png
+0,0,image_des_road.png
+2,2,image_des_weight.png
+0,0,image_des_damage.png
+4,2,image_des_power.png
+0,0,image_des_hover.png
+0,0,image_des_firerate.png
+3,4,image_des_bodypoints.png
+0,0,image_rocket.png
+2,2,image_cannon.png
+2,2,image_hovercraft.png
+2,2,image_res_minor_plassteel.png
+2,2,image_ecm.png
+2,2,image_plascrete.png
+2,2,image_res_minor_radar.png
+0,0,image_res_major_plascrete.png
+0,0,image_res_major_electronic.png
+0,0,image_res_major_heavywep.png
+0,0,image_res_major_hover.png
+0,0,image_0.png
+0,0,image_1.png
+0,0,image_2.png
+0,0,image_3.png
+0,0,image_4.png
+0,0,image_5.png
+0,0,image_6.png
+0,0,image_7.png
+0,0,image_8.png
+0,0,image_9.png
+0,0,image_des_barback.png
+0,0,image_des_barblue.png
+0,0,image_des_barred.png
+0,0,image_des_baryellow.png
+8,8,image_intel_research.png
+8,8,image_intel_researchdown.png
+2,3,image_intel_mission.png
+2,3,image_intel_missiondown.png
+10,3,image_intel_campaign.png
+10,3,image_intel_campaigndown.png
+0,-8,image_ascii33.png
+0,-8,image_ascii34.png
+0,-8,image_ascii35.png
+0,-10,image_ascii36.png
+0,-8,image_ascii37.png
+0,-8,image_ascii38.png
+0,-8,image_ascii39.png
+0,-10,image_ascii40.png
+0,-10,image_ascii41.png
+0,-7,image_ascii42.png
+0,-7,image_ascii43.png
+0,-1,image_ascii44.png
+0,-4,image_ascii45.png
+0,-1,image_ascii46.png
+0,-8,image_ascii47.png
+0,-8,image_ascii48.png
+0,-8,image_ascii49.png
+0,-8,image_ascii50.png
+0,-8,image_ascii51.png
+0,-8,image_ascii52.png
+0,-8,image_ascii53.png
+0,-8,image_ascii54.png
+0,-8,image_ascii55.png
+0,-8,image_ascii56.png
+0,-8,image_ascii57.png
+0,-6,image_ascii58.png
+0,-6,image_ascii59.png
+0,-6,image_ascii60.png
+0,-5,image_ascii61.png
+0,-6,image_ascii62.png
+0,-8,image_ascii63.png
+0,-9,image_asterisk.png
+0,-8,image_ascii65.png
+0,-8,image_ascii66.png
+0,-8,image_ascii67.png
+0,-8,image_ascii68.png
+0,-8,image_ascii69.png
+0,-8,image_ascii70.png
+0,-8,image_ascii71.png
+0,-8,image_ascii72.png
+0,-8,image_ascii73.png
+0,-8,image_ascii74.png
+0,-8,image_ascii75.png
+0,-8,image_ascii76.png
+0,-8,image_ascii77.png
+0,-8,image_ascii78.png
+0,-8,image_ascii79.png
+0,-8,image_ascii80.png
+0,-8,image_ascii81.png
+0,-8,image_ascii82.png
+0,-8,image_ascii83.png
+0,-8,image_ascii84.png
+0,-8,image_ascii85.png
+0,-8,image_ascii86.png
+0,-8,image_ascii87.png
+0,-8,image_ascii88.png
+0,-8,image_ascii89.png
+0,-8,image_ascii90.png
+0,-10,image_ascii91.png
+0,-8,image_ascii92.png
+0,-10,image_ascii93.png
+0,-9,image_ascii94.png
+0,0,image_ascii95.png
+0,-8,image_ascii96.png
+0,-6,image_ascii97.png
+0,-8,image_ascii98.png
+0,-6,image_ascii99.png
+0,-8,image_ascii100.png
+0,-6,image_ascii101.png
+0,-8,image_ascii102.png
+0,-6,image_ascii103.png
+0,-8,image_ascii104.png
+0,-8,image_ascii105.png
+0,-8,image_ascii106.png
+0,-8,image_ascii107.png
+0,-8,image_ascii108.png
+0,-6,image_ascii109.png
+0,-6,image_ascii110.png
+0,-6,image_ascii111.png
+0,-6,image_ascii112.png
+0,-6,image_ascii113.png
+0,-6,image_ascii114.png
+0,-6,image_ascii115.png
+0,-8,image_ascii116.png
+0,-6,image_ascii117.png
+0,-6,image_ascii118.png
+0,-6,image_ascii119.png
+0,-6,image_ascii120.png
+0,-6,image_ascii121.png
+0,-6,image_ascii122.png
+0,-10,image_ascii123.png
+0,-9,image_ascii124.png
+0,-10,image_ascii125.png
+0,-5,image_ascii126.png
+0,0,image_sidetab.png
+-2,-2,image_sidetabhi.png
+0,0,image_sidetabdown.png
+0,0,image_sidetabsel.png
+0,0,image_des_statbackleft.png
+0,0,image_des_statbackright.png
+0,0,image_des_statbackmid.png
+0,0,image_slider_big.png
+0,-6,image_star.png
+2,2,image_tracks.png
+2,2,image_res_minor_autoweapons.png
+0,0,image_res_major_rocket.png
+0,0,image_question_mark.png
+0,0,image_res_droidtech.png
+0,0,image_res_weapontech.png
+0,0,image_res_computertech.png
+0,0,image_res_powertech.png
+0,0,image_res_systemtech.png
+0,0,image_res_structuretech.png
+0,0,image_res_questionmark.png
+0,0,image_ord_destruct1up.png
+0,0,image_ord_destruct1down.png
+0,0,image_ord_range1up.png
+0,0,image_ord_range1down.png
+0,0,image_ord_range2up.png
+0,0,image_ord_range2down.png
+0,0,image_ord_range3up.png
+0,0,image_ord_range3down.png
+0,0,image_ord_repair2up.png
+0,0,image_ord_repair2down.png
+0,0,image_ord_repair1up.png
+0,0,image_ord_repair1down.png
+0,0,image_ord_repair3up.png
+0,0,image_ord_repair3down.png
+0,0,image_ord_fatwillup.png
+0,0,image_ord_fatwilldown.png
+0,0,image_ord_retfireup.png
+0,0,image_ord_retfiredown.png
+0,0,image_ord_holdfireup.png
+0,0,image_ord_holdfiredown.png
+0,0,image_ord_haltup.png
+0,0,image_ord_haltdown.png
+0,0,image_ord_gotohqup.png
+0,0,image_ord_gotohqdown.png
+0,0,image_ord_destruct2up.png
+0,0,image_ord_destruct2down.png
+0,0,image_ord_destruct2grey.png
+0,0,image_slider_bigbut.png
+0,0,image_slider_infinity.png
+-1,-1,image_rad_enmread.png
+-3,-3,image_rad_enm1.png
+-4,-4,image_rad_enm2.png
+-6,-6,image_rad_enm3.png
+-1,-1,image_rad_resread.png
+-3,-3,image_rad_res1.png
+-4,-4,image_rad_res2.png
+-6,-6,image_rad_res3.png
+-1,-1,image_rad_artread.png
+-3,-3,image_rad_art1.png
+-4,-4,image_rad_art2.png
+-6,-6,image_rad_art3.png
+0,0,image_multi_noal.png
+0,0,image_multi_offal.png
+0,0,image_multi_al.png
+0,0,image_multi_noal_hi.png
+0,0,image_multi_offal_hi.png
+0,0,image_multi_al_hi.png
+0,0,image_multi_vis.png
+0,0,image_multi_pow.png
+0,0,image_multi_dro.png
+0,0,image_multi_tek.png
+0,0,image_multi_tek_hi.png
+0,0,image_multi_dro_hi.png
+0,0,image_multi_pow_hi.png
+0,0,image_multi_vis_hi.png
+0,0,image_cmddroid_exp.png
+0,0,image_nruter.png
+0,0,image_mission_clock.png
+0,0,image_launchdown.png
+0,0,image_transeta_up.png
+0,0,image_ord_fac1up.png
+0,0,image_ord_fac1down.png
+0,0,image_ord_fac2up.png
+0,0,image_ord_fac2down.png
+0,0,image_ord_fac3up.png
+0,0,image_ord_fac3down.png
+0,0,image_ord_fac4up.png
+0,0,image_ord_fac4down.png
+0,0,image_ord_fac5up.png
+0,0,image_ord_fac5down.png
+-1,-1,image_ord_fachilite.png
+-5,1,image_reticule_grey.png
+0,0,image_infinite_up.png
+0,0,image_infinite_down.png
+0,0,image_infinite_hi.png
+0,0,image_des_bin.png
+0,0,image_des_binh.png
+0,0,image_audio_lastsample.png
+0,0,image_audio_lastsampleh.png
+0,0,image_des_powerbar_left.png
+0,0,image_des_powerbar_right.png
+0,0,image_des_editboxmid.png
+0,0,image_des_editboxright.png
+0,0,image_des_editboxmidh.png
+0,0,image_des_editboxrighth.png
+0,0,image_res_cyborgtech.png
+0,0,image_loop_up.png
+0,0,image_loop_down.png
+-1,-1,image_loop_hi.png
+0,0,image_cdp_down.png
+0,0,image_cdp_up.png
+-1,-1,image_cdp_hi.png
+0,0,image_fdp_down.png
+0,0,image_fdp_up.png
+-1,-1,image_fdp_hi.png
+0,0,image_vdp_down.png
+0,0,image_vdp_up.png
+-1,-1,image_vdp_hi.png
+0,0,image_gn_star.png
+0,0,image_gn_15.png
+0,0,image_gn_14.png
+0,0,image_gn_13.png
+0,0,image_gn_12.png
+0,0,image_gn_11.png
+0,0,image_gn_10.png
+0,0,image_gn_9.png
+0,0,image_gn_8.png
+0,0,image_gn_7.png
+0,0,image_gn_6.png
+0,0,image_gn_5.png
+0,0,image_gn_4.png
+0,0,image_gn_3.png
+0,0,image_gn_2.png
+1,0,image_gn_1.png
+0,0,image_gn_0.png
+0,0,image_ord_circleup.png
+0,0,image_ord_circledown.png
+0,0,image_ord_pursueup.png
+0,0,image_ord_pursuedown.png
+0,0,image_ord_guardup.png
+0,0,image_ord_guarddown.png
+0,0,image_ord_rtrup.png
+0,0,image_ord_rtrdown.png
+0,0,image_ord_embarkup.png
+0,0,image_ord_embarkdown.png
+0,0,image_multi_nochan.png
+0,0,image_multi_chan.png
+0,0,image_cdchange_ok.png
+0,0,image_cdchange_cancel.png
+0,0,image_lev_0.png
+0,0,image_lev_1.png
+0,0,image_lev_2.png
+0,0,image_lev_3.png
+0,0,image_lev_4.png
+0,0,image_lev_5.png
+0,0,image_lev_6.png
+0,0,image_lev_7.png
+0,0,image_res_defence.png
+0,-8,image_ascii188.png
+0,-8,image_ascii189.png
+0,-9,image_ascii224.png
+0,-9,image_ascii225.png
+0,-9,image_ascii226.png
+0,-9,image_ascii227.png
+0,-9,image_ascii228.png
+0,-9,image_ascii229.png
+0,-6,image_ascii230.png
+0,-6,image_ascii231.png
+0,-9,image_ascii232.png
+0,-9,image_ascii233.png
+0,-9,image_ascii234.png
+0,-9,image_ascii235.png
+0,-9,image_ascii236.png
+0,-9,image_ascii237.png
+0,-9,image_ascii238.png
+0,-9,image_ascii239.png
+0,-9,image_ascii242.png
+0,-9,image_ascii243.png
+0,-9,image_ascii244.png
+0,-9,image_ascii245.png
+0,-9,image_ascii246.png
+0,-9,image_ascii249.png
+0,-9,image_ascii250.png
+0,-9,image_ascii251.png
+0,-9,image_ascii252.png
+0,-10,image_ascii253.png
+0,-9,image_ascii241.png
+0,-5,image_ascii248.png
+0,-8,image_ascii223.png
+0,-10,image_ascii221.png
+0,-10,image_ascii218.png
+0,-10,image_ascii219.png
+0,-10,image_ascii217.png
+0,-10,image_ascii220.png
+0,-8,image_ascii216.png
+0,-10,image_ascii212.png
+0,-10,image_ascii213.png
+0,-10,image_ascii214.png
+0,-10,image_ascii211.png
+0,-10,image_ascii210.png
+0,-10,image_ascii192.png
+0,-10,image_ascii193.png
+0,-10,image_ascii194.png
+0,-10,image_ascii195.png
+0,-10,image_ascii196.png
+0,-11,image_ascii197.png
+0,-7,image_ascii198.png
+0,-10,image_ascii200.png
+0,-10,image_ascii201.png
+0,-10,image_ascii202.png
+0,-10,image_ascii203.png
+0,-10,image_ascii204.png
+0,-10,image_ascii205.png
+0,-10,image_ascii206.png
+0,-10,image_ascii207.png
+0,-8,image_ascii208.png
+0,-9,image_ascii191.png
+0,-9,image_ascii161.png
+0,-9,image_ascii131.png
+0,0,image_res_grpupg.png
+0,0,image_res_grprep.png
+0,0,image_res_grprof.png
+0,0,image_res_grpacc.png
+0,0,image_res_grpdam.png
+0,0,image_mission_clock_up.png
+-13,-13,image_target1.png
+-12,-12,image_target2.png
+-13,-13,image_target3.png
+-18,-18,image_target4.png
+-18,-18,image_target5.png
+0,0,image_tab1_sm.png
+0,0,image_tab1selected_sm.png
+0,0,image_tab1down_sm.png
+-2,-2,image_tabhilight_sm.png
+3,-2,image_des_armour_kinetic.png
+-14,-14,image_blue1.png
+-14,-14,image_blue2.png
+-14,-14,image_blue3.png
+-14,-14,image_blue4.png
+-14,-14,image_blue5.png
+-14,-14,image_blue6.png
+0,0,image_launchup.png
+0,0,image_transeta_down.png
+0,0,image_ord_firedes_up.png
+0,0,image_ord_firedes_down.png
+0,-9,image_ascii64.png
+0,0,image_lfttab.png
+0,0,image_lfttabd.png
+0,0,image_lfttabh.png
+0,0,image_rgttab.png
+0,0,image_rgttabd.png
+0,0,image_rgttabh.png
+0,0,image_nadda.png
+0,0,image_ord_patrolup.png
+0,0,image_ord_patroldown.png
+0,0,image_disconnect_lo.png
+0,0,image_disconnect_hi.png
+0,0,image_player_left_lo.png
+0,0,image_player_left_hi.png
+-5,1,image_edit_options_up.png
+-5,1,image_edit_options_down.png
+-5,1,image_edit_tiles_up.png
+-5,1,image_edit_tiles_down.png
+-5,1,image_edit_design_up.png
+-5,1,image_edit_design_down.png
+-5,1,image_edit_build_up.png
+-5,1,image_edit_build_down.png
+-5,1,image_edit_research_up.png
+-5,1,image_edit_research_down.png
+-5,1,image_edit_manufacture_up.png
+-5,1,image_edit_manufacture_down.png
+0,0,radar_north.png
+0,0,image_origin_visual.png
+0,0,image_origin_commander.png
+0,0,image_origin_sensor_standard.png
+0,0,image_origin_sensor_cb.png
+-2,-1,image_origin_sensor_airdef.png
+0,0,image_origin_radar_detector.png
+0,0,image_waiting_lo.png
+0,0,image_waiting_hi.png
+0,0,image_desync_lo.png
+0,0,image_desync_hi.png
+-15,-15,image_cursor_embark.png
+-15,-15,image_cursor_dest.png
+-15,-15,image_cursor_default.png
+-15,-15,image_cursor_build.png
+-15,-15,image_cursor_scout.png
+-15,-15,image_cursor_disembark.png
+-15,-15,image_cursor_attack.png
+-15,-15,image_cursor_guard.png
+-15,-15,image_cursor_fix.png
+-15,-15,image_cursor_select.png
+-8,-15,image_cursor_repair.png
+-15,-20,image_cursor_pickup.png
+-15,-15,image_cursor_notpos.png
+-15,-15,image_cursor_move.png
+-15,-15,image_cursor_lockon.png
+-15,-15,image_cursor_ecm.png
+-15,-15,image_cursor_attach.png
+-15,-15,image_cursor_bridge.png
+-15,-15,image_cursor_bomb.png
+0,0,image_slider_ai.png
+-1,-1,image_rad_burnresread.png
+-3,-6,image_rad_burnres1.png
+-3,-6,image_rad_burnres2.png
+-2,-5,image_rad_burnres3.png
+-2,-6,image_rad_burnres4.png
+-2,-7,image_rad_burnres5.png
+-3,-8,image_rad_burnres6.png
+0,0,image_ally_research.png
+0,0,image_ally_research_tc.png
+0,0,image_generic_tank.png
+0,0,image_generic_tank_tc.png
+0,0,image_des_save.png
+0,0,image_des_saveh.png
+0,0,image_des_delete.png
+0,0,image_des_deleteh.png
