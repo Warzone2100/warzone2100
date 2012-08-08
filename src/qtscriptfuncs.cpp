@@ -377,6 +377,31 @@ QScriptValue convObj(BASE_OBJECT *psObj, QScriptEngine *engine)
 	return value;
 }
 
+QScriptValue convTemplate(DROID_TEMPLATE *psTempl, QScriptEngine *engine)
+{
+	QScriptValue value = engine->newObject();
+	ASSERT_OR_RETURN(value, psTempl, "No object for conversion");
+	value.setProperty("id", psTempl->multiPlayerID, QScriptValue::ReadOnly);
+	value.setProperty("name", psTempl->pName, QScriptValue::ReadOnly);
+	value.setProperty("points", psTempl->buildPoints, QScriptValue::ReadOnly);
+	value.setProperty("power", psTempl->powerPoints, QScriptValue::ReadOnly);
+	value.setProperty("droidType", psTempl->droidType, QScriptValue::ReadOnly);
+	value.setProperty("body", (asBodyStats + psTempl->asParts[COMP_BODY])->pName, QScriptValue::ReadOnly);
+	value.setProperty("propulsion", (asPropulsionStats + psTempl->asParts[COMP_PROPULSION])->pName, QScriptValue::ReadOnly);
+	value.setProperty("brain", (asBrainStats + psTempl->asParts[COMP_BRAIN])->pName, QScriptValue::ReadOnly);
+	value.setProperty("repair", (asRepairStats + psTempl->asParts[COMP_REPAIRUNIT])->pName, QScriptValue::ReadOnly);
+	value.setProperty("ecm", (asECMStats + psTempl->asParts[COMP_ECM])->pName, QScriptValue::ReadOnly);
+	value.setProperty("sensor", (asSensorStats + psTempl->asParts[COMP_SENSOR])->pName, QScriptValue::ReadOnly);
+	value.setProperty("construct", (asConstructStats + psTempl->asParts[COMP_CONSTRUCT])->pName, QScriptValue::ReadOnly);
+	QScriptValue weaponlist = engine->newArray(psTempl->numWeaps);
+	for (int j = 0; j < psTempl->numWeaps; j++)
+	{
+		weaponlist.setProperty(j, QScriptValue((asWeaponStats + psTempl->asWeaps[j])->pName), QScriptValue::ReadOnly);
+	}
+	value.setProperty("weapons", weaponlist);
+	return value;
+}
+
 QScriptValue convMax(BASE_OBJECT *psObj, QScriptEngine *engine)
 {
 	switch (psObj->type)
@@ -604,6 +629,22 @@ static QScriptValue js_enumGateways(QScriptContext *, QScriptEngine *engine)
 		v.setProperty("x2", psGateway->x2, QScriptValue::ReadOnly);
 		v.setProperty("y2", psGateway->y2, QScriptValue::ReadOnly);
 		result.setProperty(i++, v);
+	}
+	return result;
+}
+
+//-- \subsection{enumTemplate(player)}
+//-- Return an array containing all the buildable templates for the given player.
+static QScriptValue js_enumTemplates(QScriptContext *context, QScriptEngine *engine)
+{
+	int player = context->argument(0).toInt32();
+	int count = 0;
+	for (DROID_TEMPLATE *psCurr = apsDroidTemplates[player]; psCurr != NULL; psCurr = psCurr->psNext) count++;
+	QScriptValue result = engine->newArray(count);
+	count = 0;
+	for (DROID_TEMPLATE *psCurr = apsDroidTemplates[player]; psCurr != NULL; psCurr = psCurr->psNext)
+	{
+		result.setProperty(count++, convTemplate(psCurr, engine));
 	}
 	return result;
 }
@@ -2585,6 +2626,7 @@ bool registerFunctions(QScriptEngine *engine)
 	engine->globalObject().setProperty("label", engine->newFunction(js_label));
 	engine->globalObject().setProperty("enumLabels", engine->newFunction(js_enumLabels));
 	engine->globalObject().setProperty("enumGateways", engine->newFunction(js_enumGateways));
+	engine->globalObject().setProperty("enumTemplates", engine->newFunction(js_enumTemplates));
 	engine->globalObject().setProperty("setAlliance", engine->newFunction(js_setAlliance));
 	engine->globalObject().setProperty("setAssemblyPoint", engine->newFunction(js_setAssemblyPoint));
 
