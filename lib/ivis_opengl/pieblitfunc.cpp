@@ -158,16 +158,17 @@ void pie_UniTransBoxFill(float x0, float y0, float x1, float y1, PIELIGHT light)
 
 bool assertValidImage(IMAGEFILE *imageFile, unsigned id)
 {
-	ASSERT_OR_RETURN(false, id < (unsigned)imageFile->NumImages, "Out of range 1: %u/%d", id, imageFile->NumImages);
-	ASSERT_OR_RETURN(false, imageFile->ImageDefs[id].TPageID < MAX_NUM_TPAGEIDS, "Out of range 2: %u", imageFile->ImageDefs[id].TPageID);
+	ASSERT_OR_RETURN(false, id < imageFile->imageDefs.size(), "Out of range 1: %u/%d", id, (int)imageFile->imageDefs.size());
+	ASSERT_OR_RETURN(false, imageFile->imageDefs[id].TPageID < imageFile->pages.size(), "Out of range 2: %u", imageFile->imageDefs[id].TPageID);
 	return true;
 }
 
 static PIEIMAGE makePieImage(IMAGEFILE *imageFile, unsigned id, PIERECT *dest = NULL, int x = 0, int y = 0)
 {
-	IMAGEDEF const &image = imageFile->ImageDefs[id];
+	ImageDef const &image = imageFile->imageDefs[id];
 	PIEIMAGE pieImage;
-	pieImage.texPage = imageFile->TPageIDs[image.TPageID];
+	pieImage.texPage = imageFile->pages[image.TPageID].id;
+	pieImage.invTextureSize = 1.f / imageFile->pages[image.TPageID].size;
 	pieImage.tu = image.Tu;
 	pieImage.tv = image.Tv;
 	pieImage.tw = image.Width;
@@ -218,28 +219,16 @@ void iV_DrawImageTc(IMAGEFILE *imageFile, unsigned id, unsigned idTc, int x, int
 
 void iV_DrawImageRect(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int Width, int Height)
 {
-	IMAGEDEF *Image;
 	SDWORD hRep, hRemainder, vRep, vRemainder;
-	PIEIMAGE pieImage;
-	PIERECT dest;
 
-	ASSERT_OR_RETURN(, ID < ImageFile->NumImages, "Out of range 1: %d", (int)ID);
-	Image = &ImageFile->ImageDefs[ID];
+	assertValidImage(ImageFile, ID);
+	ImageDef *Image = &ImageFile->imageDefs[ID];
 
-	ASSERT_OR_RETURN(, Image->TPageID < MAX_NUM_TPAGEIDS, "Out of range 2: %d", (int)Image->TPageID);
 	pie_SetRendMode(REND_OPAQUE);
 	pie_SetAlphaTest(true);
 
-	pieImage.texPage = ImageFile->TPageIDs[Image->TPageID];
-	pieImage.tu = Image->Tu;
-	pieImage.tv = Image->Tv;
-	pieImage.tw = Image->Width;
-	pieImage.th = Image->Height;
-
-	dest.x = x + Image->XOffset;
-	dest.y = y + Image->YOffset;
-	dest.w = Image->Width;
-	dest.h = Image->Height;
+	PIERECT dest;
+	PIEIMAGE pieImage = makePieImage(ImageFile, ID, &dest, x, y);
 
 	vRemainder = Height % Image->Height;
 	hRemainder = Width % Image->Width;

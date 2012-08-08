@@ -1008,7 +1008,7 @@ bool structSetManufacture(STRUCTURE *psStruct, DROID_TEMPLATE *psTempl, QUEUE_MO
 	                 (int)psStruct->pStructureType->type);
 	/* psTempl might be NULL if the build is being cancelled in the middle */
 
-	ASSERT_OR_RETURN(false, (validTemplateForFactory(psTempl, psStruct, true) && researchedTemplate(psTempl, psStruct->player, true)) || psStruct->player == scavengerPlayer() || !bMultiPlayer,
+	ASSERT_OR_RETURN(false, (validTemplateForFactory(psTempl, psStruct, true) && researchedTemplate(psTempl, psStruct->player, true, true)) || psStruct->player == scavengerPlayer() || !bMultiPlayer,
 	                 "Wrong template for player %d factory, type %d.", psStruct->player, psStruct->pStructureType->type);
 
 	psFact = &psStruct->pFunctionality->factory;
@@ -7405,20 +7405,7 @@ void resetResistanceLag(STRUCTURE *psBuilding)
 		switch (psBuilding->pStructureType->type)
 		{
 			case REF_RESEARCH:
-			{
-				RESEARCH_FACILITY *psResFacility = &psBuilding->pFunctionality->researchFacility;
-
-				//if working on a topic
-				if (psResFacility->psSubject)
-				{
-					// What was this code intended to do?
-					//adjust the start time for the current subject
-					//if (psResFacility->timeStarted != ACTION_START_TIME)
-					//{
-					//	psResFacility->timeStarted += (gameTime - psBuilding->lastResistance);
-					//}
-				}
-			}
+				break;
 			case REF_FACTORY:
 			case REF_VTOL_FACTORY:
 			case REF_CYBORG_FACTORY:

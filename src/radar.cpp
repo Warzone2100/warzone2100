@@ -27,6 +27,7 @@
 #include "lib/ivis_opengl/piepalette.h"
 #include "lib/ivis_opengl/piestate.h"
 #include "lib/ivis_opengl/piefunc.h"
+#include "lib/ivis_opengl/bitimage.h"
 #include "lib/gamelib/gtime.h"
 #include "advvis.h"
 #include "objects.h"
@@ -326,7 +327,7 @@ void drawRadar(void)
 
 static void DrawNorth(void)
 {
-	iV_DrawImage(IntImages, RADAR_NORTH, -((radarWidth / 2.0) + (IntImages->ImageDefs[RADAR_NORTH].Width) + 1) , -(radarHeight / 2.0));
+	iV_DrawImage(IntImages, RADAR_NORTH, -((radarWidth / 2.0) + iV_GetImageWidth(IntImages, RADAR_NORTH) + 1), -(radarHeight / 2.0));
 }
 
 static PIELIGHT appliedRadarColour(RADAR_DRAW_MODE radarDrawMode, MAPTILE *WTile)
