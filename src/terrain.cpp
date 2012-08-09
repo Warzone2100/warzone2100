@@ -338,10 +338,10 @@ static void averagePos(Vector3i *center, Vector3i *a, Vector3i *b, Vector3i *c, 
 static bool isWater(int x, int y)
 {
 	bool result = false;
-	result = result || (tileOnMap(x  ,y  ) && mapTile(x  ,y  )->ground == waterGroundType);
-	result = result || (tileOnMap(x+1,y  ) && mapTile(x+1,y  )->ground == waterGroundType);
-	result = result || (tileOnMap(x  ,y+1) && mapTile(x  ,y+1)->ground == waterGroundType);
-	result = result || (tileOnMap(x+1,y+1) && mapTile(x+1,y+1)->ground == waterGroundType);
+	result = result || (tileOnMap(x  ,y  ) && terrainType(mapTile(x  ,y  )) == TER_WATER);
+	result = result || (tileOnMap(x-1,y  ) && terrainType(mapTile(x-1,y  )) == TER_WATER);
+	result = result || (tileOnMap(x  ,y-1) && terrainType(mapTile(x  ,y-1)) == TER_WATER);
+	result = result || (tileOnMap(x-1,y-1) && terrainType(mapTile(x-1,y-1)) == TER_WATER);
 	return result;
 }
 
