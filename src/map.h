@@ -118,7 +118,6 @@ extern MAPTILE *psMapTiles;
 extern float waterLevel;
 extern GROUND_TYPE *psGroundTypes;
 extern int numGroundTypes;
-extern int waterGroundType;
 extern int cliffGroundType;
 extern char *tileset;
 
@@ -346,7 +345,6 @@ extern MAPTILE *psMapTiles;
 
 extern GROUND_TYPE *psGroundTypes;
 extern int numGroundTypes;
-extern int waterGroundType;
 extern int cliffGroundType;
 extern char *tileset;
 

@@ -118,7 +118,6 @@ static void init_tileNames(int type);
 /// The different ground types
 GROUND_TYPE *psGroundTypes;
 int numGroundTypes;
-int waterGroundType;
 int cliffGroundType;
 char *tileset = NULL;
 static int numTile_names;
@@ -356,7 +355,6 @@ fallback:
 			psGroundTypes[getTextureType(textureType)].textureSize = textureSize ;
 		}
 
-		waterGroundType = getTextureType("a_water");
 		cliffGroundType = getTextureType("a_cliff");
 
 		SetGroundForTile("tileset/arizonaground.txt", "arizona_ground");
@@ -398,7 +396,6 @@ fallback:
 			psGroundTypes[getTextureType(textureType)].textureSize = textureSize;
 		}
 
-		waterGroundType = getTextureType("u_water");
 		cliffGroundType = getTextureType("u_cliff");
 
 		SetGroundForTile("tileset/urbanground.txt", "urban_ground");
@@ -440,7 +437,6 @@ fallback:
 			psGroundTypes[getTextureType(textureType)].textureSize = textureSize;
 		}
 
-		waterGroundType = getTextureType("r_water");
 		cliffGroundType = getTextureType("r_cliff");
 
 		SetGroundForTile("tileset/rockieground.txt", "rockie_ground");
@@ -881,7 +877,7 @@ bool mapLoad(char *filename, bool preview)
 			// FIXME: magic number
 			mapTile(i, j)->waterLevel = mapTile(i, j)->height - world_coord(1) / 3;
 			// lower riverbed
-			if (mapTile(i, j)->ground == waterGroundType)
+			if (terrainType(mapTile(i, j)) == TER_WATER && terrainType(mapTile(i-1, j)) == TER_WATER && terrainType(mapTile(i, j-1)) == TER_WATER && terrainType(mapTile(i-1, j-1)) == TER_WATER)
 			{
 				mapTile(i, j)->height -= WATER_MIN_DEPTH - mt.u32()%(WATER_MAX_DEPTH + 1 - WATER_MIN_DEPTH);
 			}
@@ -994,7 +990,7 @@ bool mapSave(char **ppFileData, UDWORD *pFileSize)
 	for (int i = 0; i < mapWidth*mapHeight; i++)
 	{
 		psTileData->texture = psTile->texture;
-		if (psTile->ground == waterGroundType)
+		if (terrainType(psTile) == TER_WATER)
 		{
 			psTileData->height = (psTile->waterLevel + world_coord(1) / 3) / ELEVATION_SCALE;
 		}
