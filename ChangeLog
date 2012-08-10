@@ -2,7 +2,7 @@
  * General:
    * Change: Allow multiple AIs with similar names (commit:ee95d785bdfd72a490863d7cdb3f504f88f9eecd)
    * Change: Increase the maximum number of terrain tiles (commit:ab44eafb7bd1daa2d0f4efe367673b4c2985a05d)
-   * Change: No longer save last map played (ticket:3618)
+   * Change: No longer save last map played (ticket:3618, commit:398f77ede082063bd1bc607d5814e9630f663967)
    * Fix: Saving the game might crash it (ticket:3620, commit:fdb1c0b52153d3368ae79e8f0befdd2744b43692)
    * Fix: Qt backend compatibility with Qt 4.8.2 (ticket:3562, commit:df32833ab8b17e6db5815b7eca9f5fe01a5b7f8f)
    * Fix: Scavengers in challenges were always disabled (ticket:3630, commit:95677b02b9959b05372e7dc10286fe184bfd6cdd)
@@ -13,6 +13,7 @@
    * Fix: Various memory issues (commit:032956e649e69aa51edd80787c9c94bf2c08d164, commit:88e94391669e54808b2d6f40cba994d3501efb08)
    * Fix: Possible crash when delivery points are removed (commit:6382bbb08ea7e6ca93a0ba83fdb65952778c962a, ticket:2041)
    * Fix: Fix loading of campaign savegames (commit:1461b3a5a81b72381bc3cc3dbc57bbd2f5ce22a7, commit:9784c655af2a66bd541268e2c9e6f19fcd1ac200)
+   * Fix: Terrain rendering should now be more visually accurate (ticket:3621, commit:087ab8c5058730925c747dcdf14c8319319b3929)
 
 2012-06-20: Version 3.1 beta11
  * General:

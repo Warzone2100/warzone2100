@@ -57,7 +57,7 @@ u_gray,u_gray,u_gray,u_gray
 u_gray,u_gray,u_gray,u_gray
 u_stone,u_stone,u_stone,u_stone
 u_blue,u_blue,u_blue,u_blue
-u_gray,u_gray,u_gray,u_gray
+u_gray,u_gray,u_green,u_gray
 u_stone,u_stone,u_stone,u_stone
 u_brown,u_gray,u_brown,u_gray
 u_mstone,u_mstone,u_mstone,u_mstone
