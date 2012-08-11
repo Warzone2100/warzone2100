@@ -26,7 +26,7 @@
        </attribute>
        <layout class="QVBoxLayout" name="verticalLayout">
         <item>
-         <widget class="QTableView" name="tableView"/>
+         <widget class="QTableView" name="tableViewBodies"/>
         </item>
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_2">
