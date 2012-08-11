@@ -66,7 +66,7 @@ inline void ImageMerge::arrange()
 	{
 		--r;
 
-		std::set<ImageMergeRectangle>::iterator f = freeSpace.lower_bound(*r);  // Find smallest free rectangle which is large enough.
+		std::multiset<ImageMergeRectangle>::iterator f = freeSpace.lower_bound(*r);  // Find smallest free rectangle which is large enough.
 		while (f != freeSpace.end() && (f->siz.x < r->siz.x || f->siz.y < r->siz.y))
 		{
 			++f;  // Rectangle has wrong shape.
