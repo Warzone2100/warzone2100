@@ -177,17 +177,8 @@ static bool actionInAttackRange(DROID *psDroid, BASE_OBJECT *psObj, int weapon_s
 	ASSERT_OR_RETURN( false, compIndex < numWeaponStats, "Invalid range referenced for numWeaponStats, %d > %d", compIndex, numWeaponStats);
 	psStats = asWeaponStats + compIndex;
 
-	if (psDroid->order.type == DORDER_ATTACKTARGET
-		&& secondaryGetState(psDroid, DSO_HALTTYPE) == DSS_HALT_HOLD)
-	{
-		longRange = proj_GetLongRange(psStats);
-		rangeSq = longRange * longRange;
-	}
-	else
-	{
-		longRange = proj_GetLongRange(psStats);
-		rangeSq = longRange * longRange;
-	}
+	longRange = proj_GetLongRange(psStats);
+	rangeSq = longRange * longRange;
 
 	/* check max range */
 	if ( radSq <= rangeSq )
@@ -1855,7 +1846,6 @@ void actionUpdateDroid(DROID *psDroid)
 					}
 				}
 			}
-		//}
 		break;
 	case DACTION_DESTRUCT:
 		if ((psDroid->actionStarted + ACTION_DESTRUCT_TIME) < gameTime)
@@ -1948,17 +1938,6 @@ void actionUpdateDroid(DROID *psDroid)
 		{
 			if (secondaryGetState(psDroid, DSO_HALTTYPE) != DSS_HALT_HOLD || order->type == DORDER_REPAIR)
 			{
-				/*once started - don't allow the Repair droid to follow the
-				damaged droid for too long*/
-				/*if (psDroid->actionPoints)
-				{
-					if (gameTime - psDroid->actionStarted > KEEP_TRYING_REPAIR)
-					{
-						addConsoleMessage("Repair Droid has given up!",DEFAULT_JUSTIFY);
-						psDroid->action = DACTION_NONE;
-						break;
-					}
-				}*/
 				// damaged droid has moved off - follow if we're not holding position!
 				psDroid->actionPos = psDroid->psActionTarget[0]->pos;
 				psDroid->action = DACTION_MOVETODROIDREPAIR;
@@ -2291,8 +2270,6 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 		moveDroidTo(psDroid, psAction->x, psAction->y);
 		break;
 	case DACTION_REPAIR:
-		//ASSERT( order->type == DORDER_REPAIR,
-		//	"actionDroidBase: cannot start repair action without a repair order" );
 		psDroid->action = DACTION_MOVETOREPAIR;
 		psDroid->actionPos.x = psAction->x;
 		psDroid->actionPos.y = psAction->y;
@@ -2336,10 +2313,8 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 		{
 			moveDroidTo(psDroid, order->psObj->pos.x, order->psObj->pos.y);		// movetotarget.
 		}
-
 		break;
 	case DACTION_SULK:
-// 		debug( LOG_NEVER, "Go with sulk ... %p", psDroid );
 		psDroid->action = DACTION_SULK;
 		// hmmm, hope this doesn't cause any problems!
 		psDroid->actionStarted = gameTime + MIN_SULK_TIME + (gameRand(MAX_SULK_TIME - MIN_SULK_TIME));
@@ -2377,8 +2352,6 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 		ensureRearmPadClear((STRUCTURE *)psAction->psObj, psDroid);
 		break;
 	case DACTION_DROIDREPAIR:
-//		ASSERT( order->type == DORDER_DROIDREPAIR,
-//			"actionDroidBase: cannot start droid repair action without a repair order" );
 		psDroid->action = DACTION_MOVETODROIDREPAIR;
 		psDroid->actionPos.x = psAction->x;
 		psDroid->actionPos.y = psAction->y;
