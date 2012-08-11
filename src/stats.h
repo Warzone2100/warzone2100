@@ -161,7 +161,7 @@ extern bool loadBrainStats(const char *pBrainData, UDWORD bufferSize);
 //extern bool loadPowerStats(void);
 
 /*Load the propulsion stats from the file exported from Access*/
-extern bool loadPropulsionStats(const char *pPropulsionData, UDWORD bufferSize);
+extern bool loadPropulsionStats(const char *pFileName);
 
 /*Load the sensor stats from the file exported from Access*/
 extern bool loadSensorStats(const char *pSensorData, UDWORD bufferSize);

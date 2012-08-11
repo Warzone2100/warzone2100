@@ -154,6 +154,7 @@ static bool bufferSBODYLoad(const char* fileName, void** ppData)
 
 static void dataReleaseStats(WZ_DECL_UNUSED void *pData)
 {
+	// FIXME, huge hack, is called many times!
 	freeComponentLists();
 	statsShutDown();
 }
@@ -208,18 +209,15 @@ static bool bufferSECMLoad(const char *pBuffer, UDWORD size, void **ppData)
 }
 
 /* Load the Propulsion stats */
-static bool bufferSPROPLoad(const char *pBuffer, UDWORD size, void **ppData)
+static bool bufferSPROPLoad(const char* fileName, void** ppData)
 {
-	calcDataHash((uint8_t *)pBuffer, size, DATA_SPROP);
-
-	if (!loadPropulsionStats(pBuffer, size)
-	 || !allocComponentList(COMP_PROPULSION, numPropulsionStats))
+	if (!loadPropulsionStats(fileName) || !allocComponentList(COMP_PROPULSION, numPropulsionStats))
 	{
 		return false;
 	}
 
 	//not interested in this value
-	*ppData = NULL;
+	*ppData = (void *)1;
 	return true;
 }
 
@@ -1080,7 +1078,6 @@ static const RES_TYPE_MIN_BUF BufferResourceTypes[] =
 {
 	{"SWEAPON", bufferSWEAPONLoad, NULL},
 	{"SBRAIN", bufferSBRAINLoad, NULL},
-	{"SPROP", bufferSPROPLoad, NULL},
 	{"SSENSOR", bufferSSENSORLoad, NULL},
 	{"SECM", bufferSECMLoad, NULL},
 	{"SREPAIR", bufferSREPAIRLoad, NULL},
@@ -1121,6 +1118,7 @@ struct RES_TYPE_MIN_FILE
 static const RES_TYPE_MIN_FILE FileResourceTypes[] =
 {
 	{"WAV", dataAudioLoad, (RES_FREE)sound_ReleaseTrack},
+	{"SPROP", bufferSPROPLoad, dataReleaseStats},
 	{"SBODY", bufferSBODYLoad, dataReleaseStats},
 	{"AUDIOCFG", dataAudioCfgLoad, NULL},
 	{"ANI", dataAnimLoad, dataAnimRelease},

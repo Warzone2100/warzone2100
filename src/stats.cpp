@@ -441,7 +441,6 @@ void statsDealloc(COMPONENT_STATS* pStats, UDWORD listSize, UDWORD structureSize
 static bool allocateStatName(BASE_STATS* pStat, const char *Name)
 {
 	pStat->pName = allocateName(Name);
-
 	return pStat != NULL;
 }
 
@@ -459,13 +458,13 @@ static void deallocBodyStats(void)
 	}
 	free(asBodyStats);
 	asBodyStats = NULL;
+	numBodyStats = 0;
 }
 
 /*Deallocate all the stats assigned from input data*/
 bool statsShutDown(void)
 {
 	STATS_DEALLOC(asWeaponStats, numWeaponStats, WEAPON_STATS);
-	//STATS_DEALLOC(asBodyStats, numBodyStats, BODY_STATS);
 	deallocBodyStats();
 	STATS_DEALLOC(asBrainStats, numBrainStats, BRAIN_STATS);
 	STATS_DEALLOC(asPropulsionStats, numPropulsionStats, PROPULSION_STATS);
@@ -1034,7 +1033,7 @@ bool loadBodyStats(const char *pFileName)
 	for (int i = 0; i < list.size(); ++i)
 	{
 		ini.beginGroup(list[i]);
-		memset(psStats, 0, sizeof(BODY_STATS));
+		memset(psStats, 0, sizeof(*psStats));
 		psStats->pName = strdup(list[i].toUtf8().constData());
 		psStats->weight = ini.value("weight", 0).toInt();
 		psStats->buildPower = ini.value("buildPower", 0).toInt();
@@ -1230,96 +1229,63 @@ bool getPropulsionType(const char* typeName, PROPULSION_TYPE* type)
 }
 
 /*Load the Propulsion stats from the file exported from Access*/
-bool loadPropulsionStats(const char *pPropulsionData, UDWORD bufferSize)
+bool loadPropulsionStats(const char *pFileName)
 {
-	const unsigned int NumPropulsion = numCR(pPropulsionData, bufferSize);
-	PROPULSION_STATS	sStats, * const psStats = &sStats;
-	unsigned int i = 0, designable;
-	char				PropulsionName[MAX_STR_LENGTH], imdName[MAX_STR_LENGTH],
-						dummy[MAX_STR_LENGTH], type[MAX_STR_LENGTH];
-	UDWORD dummyVal;
-
-	if (!statsAllocPropulsion(NumPropulsion))
+	PROPULSION_STATS sStats, *const psStats = &sStats;
+	WzConfig ini(pFileName);
+	if (ini.status() != QSettings::NoError)
 	{
-		return false;
+		debug(LOG_ERROR, "Could not open %s", pFileName);
 	}
-
-	for (i = 0; i < NumPropulsion; i++)
+	QStringList list = ini.childGroups();
+	statsAllocPropulsion(list.size());
+	for (int i = 0; i < list.size(); ++i)
 	{
-		memset(psStats, 0, sizeof(PROPULSION_STATS));
-
-		PropulsionName[0] = '\0';
-		imdName[0] = '\0';
-
-		//read the data into the storage - the data is delimeted using comma's
-		sscanf(pPropulsionData,"%255[^,'\r\n],%255[^,'\r\n],%d,%d,%d,%d,%d,%d,%255[^,'\r\n],\
-			%255[^,'\r\n],%d,%d",
-			PropulsionName, dummy, &psStats->buildPower,&psStats->buildPoints,
-			&psStats->weight, &dummyVal, &dummyVal,
-			&psStats->body, imdName, type, &psStats->maxSpeed, &designable);
-
-		if (!allocateStatName((BASE_STATS *)psStats, PropulsionName))
+		ini.beginGroup(list[i]);
+		memset(psStats, 0, sizeof(*psStats));
+		psStats->pName = strdup(list[i].toUtf8().constData());
+		psStats->buildPower = ini.value("buildPower").toInt();
+		psStats->buildPoints = ini.value("buildPoints").toInt();
+		psStats->weight = ini.value("weight").toInt();
+		psStats->body = ini.value("hitpoints").toInt();
+		psStats->maxSpeed = ini.value("speed").toInt();
+		psStats->designable = ini.value("designable").toBool();
+		psStats->ref = REF_PROPULSION_START + list.size() - 1 - i;
+		psStats->pIMD = NULL;
+		if (ini.contains("model"))
 		{
+			psStats->pIMD = (iIMDShape *) resGetData("IMD", ini.value("model").toString().toUtf8().constData());
+			ASSERT_OR_RETURN(false, psStats->pIMD, "Cannot find the propulsion PIE for record %s", getStatName(psStats));
+		}
+		if (!getPropulsionType(ini.value("type").toString().toUtf8().constData(), &psStats->propulsionType))
+		{
+			debug(LOG_FATAL, "loadPropulsionStats: Invalid Propulsion type for %s", getStatName(psStats));
 			return false;
 		}
+		ini.endGroup();
 
-		psStats->ref = REF_PROPULSION_START + i;
+		// save the stats
+		statsSetPropulsion(psStats, list.size() - 1 - i);	// save the stats (and reorder list, so that ZNULLPROP is zero)
 
-		//set design flag
-		psStats->designable = (designable != 0);
-
-		//deal with imd - stored so that got something to see in Design Screen!
-		if (strcmp(imdName, "0"))
-		{
-			psStats->pIMD = (iIMDShape *) resGetData("IMD", imdName);
-			if (psStats->pIMD == NULL)
-			{
-				debug( LOG_FATAL, "Cannot find the propulsion PIE for record %s", getStatName(psStats) );
-				abort();
-				return false;
-			}
-		}
-		else
-		{
-			psStats->pIMD = NULL;
-		}
-
-		//set up the stats type
-		if (!getPropulsionType(type, &psStats->propulsionType))
-		{
-			debug( LOG_FATAL, "loadPropulsionStats: Invalid Propulsion type for %s", getStatName(psStats) );
-			abort();
-			return false;
-		}
-
-		//save the stats
-		statsSetPropulsion(psStats, i);
-
-		//set the max stat values for the design screen
+		// set the max stat values for the design screen
 		if (psStats->designable)
 		{
 			setMaxPropulsionSpeed(psStats->maxSpeed);
-			//setMaxComponentWeight(psStats->weight);
 		}
-
-		//increment the pointer to the start of the next record
-		pPropulsionData = strchr(pPropulsionData,'\n') + 1;
 	}
 
-	/*since propulsion weight is a multiple of body weight we may need to
-	adjust the max component weight value*/
-	//check we've loaded them both in
-	if (asBodyStats && asPropulsionStats)
+	/* since propulsion weight is a multiple of body weight we may need to adjust the max component weight value */
+	if (asBodyStats && asPropulsionStats)	// check we've loaded them both in
 	{
 		//check against each body stat
-		for (i = 0; i < numBodyStats; i++)
+		for (int i = 0; i < numBodyStats; i++)
 		{
 			//check stat is designable
 			if (asBodyStats[i].designable)
 			{
 				unsigned int j = 0;
 				//check against each propulsion stat
-				for (j = 0; j < numPropulsionStats; j++)
+				for (int j = 0; j < numPropulsionStats; j++)
 				{
 					//check stat is designable
 					if (asPropulsionStats[j].designable)
