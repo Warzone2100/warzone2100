@@ -19,7 +19,7 @@ public:
 private:
 	Ui::StatsEditor *ui;
 	QString mPath;
-	QStandardItemModel mBodyModel;
+	QStandardItemModel mBodyModel, mPropModel;
 };
 
 #endif // STATSEDITOR_H
