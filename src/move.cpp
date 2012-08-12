@@ -119,53 +119,6 @@
 // how far to move for a shuffle
 #define SHUFFLE_MOVE		(2*TILE_UNITS/2)
 
-/***********************************************************************************/
-/*             Tracked model defines                                               */
-
-// The magnitude of direction change required for a droid to spin on the spot
-#define TRACKED_SPIN_ANGLE              DEG(45)
-// How fast a tracked droid accelerates
-#define TRACKED_ACCEL			250
-// How fast a tracked droid decelerates
-#define TRACKED_DECEL			800
-// How fast a tracked droid decelerates
-#define TRACKED_SKID_DECEL		600
-// How fast a wheeled droid decelerates
-#define WHEELED_SKID_DECEL		350
-// How fast a hover droid decelerates
-#define HOVER_SKID_DECEL		120
-
-/************************************************************************************/
-/*             Person model defines                                                 */
-
-// The magnitude of direction change required for a person to spin on the spot
-#define PERSON_SPIN_ANGLE               DEG(45)
-// The speed at which people spin
-#define PERSON_SPIN_SPEED		DEG(500)
-// The speed at which people turn while going forward
-#define PERSON_TURN_SPEED		DEG(250)
-// How fast a person accelerates
-#define PERSON_ACCEL			250
-// How fast a person decelerates
-#define PERSON_DECEL			450
-
-
-/************************************************************************************/
-/*             VTOL model defines                                                 */
-
-// The magnitude of direction change required for a vtol to spin on the spot
-#define VTOL_SPIN_ANGLE                 DEG(180)
-// The speed at which vtols spin (zero means can't spin)
-#define VTOL_SPIN_SPEED                 DEG(200)
-// The minimum speed at which vtols turn while going forward
-#define VTOL_TURN_SPEED			DEG(100)
-// How fast vtols accelerate
-#define VTOL_ACCEL				200
-// How fast vtols decelerate
-#define VTOL_DECEL				200
-// How fast vtols 'skid'
-#define VTOL_SKID_DECEL			600
-
 /// Extra precision added to movement calculations.
 #define EXTRA_BITS                              8
 #define EXTRA_PRECISION                         (1 << EXTRA_BITS)
@@ -1630,33 +1583,9 @@ static void moveUpdateGroundModel(DROID *psDroid, SDWORD speed, uint16_t directi
 	uint16_t                iDroidDir;
 	uint16_t                slideDir;
 	PROPULSION_STATS	*psPropStats;
-	int32_t                 spinSpeed, turnSpeed, spinAngle, skidDecel, dx, dy, bx, by;
+	int32_t                 spinSpeed, spinAngle, turnSpeed, dx, dy, bx, by;
 
 	CHECK_DROID(psDroid);
-
-	psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
-	switch (psPropStats->propulsionType)
-	{
-	case PROPULSION_TYPE_HOVER:
-		spinSpeed = psDroid->baseSpeed * DEG(3)/4;
-		turnSpeed = psDroid->baseSpeed * DEG(1)/4;
-		spinAngle = DEG(180);
-		skidDecel = HOVER_SKID_DECEL;
-		break;
-	case PROPULSION_TYPE_WHEELED:
-		spinSpeed = psDroid->baseSpeed * DEG(3)/4;
-		turnSpeed = psDroid->baseSpeed * DEG(1)/3;
-		spinAngle = DEG(180);
-		skidDecel = WHEELED_SKID_DECEL;
-		break;
-	case PROPULSION_TYPE_TRACKED:
-	default:
-		spinSpeed = psDroid->baseSpeed * DEG(3)/4;
-		turnSpeed = psDroid->baseSpeed * DEG(1)/3;
-		spinAngle = TRACKED_SPIN_ANGLE;
-		skidDecel = TRACKED_SKID_DECEL;
-		break;
-	}
 
 	// nothing to do if the droid is stopped
 	if ( moveDroidStopped( psDroid, speed ) == true )
@@ -1664,14 +1593,17 @@ static void moveUpdateGroundModel(DROID *psDroid, SDWORD speed, uint16_t directi
 		return;
 	}
 
-	// Used to update some kind of weird neighbour list here.
+	psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
+	spinSpeed = psDroid->baseSpeed * psPropStats->spinSpeed;
+	turnSpeed = psDroid->baseSpeed * psPropStats->turnSpeed;
+	spinAngle = DEG(psPropStats->spinAngle);
 
 	moveCheckFinalWaypoint( psDroid, &speed );
 
 	moveUpdateDroidDirection(psDroid, &speed, direction, spinAngle, spinSpeed, turnSpeed, &iDroidDir);
 
-	fNormalSpeed = moveCalcNormalSpeed(psDroid, speed, iDroidDir, TRACKED_ACCEL, TRACKED_DECEL);
-	fPerpSpeed   = moveCalcPerpSpeed(psDroid, iDroidDir, skidDecel);
+	fNormalSpeed = moveCalcNormalSpeed(psDroid, speed, iDroidDir, psPropStats->acceleration, psPropStats->deceleration);
+	fPerpSpeed   = moveCalcPerpSpeed(psDroid, iDroidDir, psPropStats->skidDeceleration);
 
 	moveCombineNormalAndPerpSpeeds(psDroid, fNormalSpeed, fPerpSpeed, iDroidDir);
 	moveGetDroidPosDiffs(psDroid, &dx, &dy);
@@ -1698,9 +1630,10 @@ static void moveUpdateGroundModel(DROID *psDroid, SDWORD speed, uint16_t directi
 static void moveUpdatePersonModel(DROID *psDroid, SDWORD speed, uint16_t direction)
 {
 	int			fPerpSpeed, fNormalSpeed;
-	int32_t			dx, dy;
+	int32_t                 spinSpeed, turnSpeed, dx, dy;
 	uint16_t                iDroidDir;
 	uint16_t                slideDir;
+	PROPULSION_STATS	*psPropStats;
 
 	CHECK_DROID(psDroid);
 
@@ -1742,11 +1675,13 @@ static void moveUpdatePersonModel(DROID *psDroid, SDWORD speed, uint16_t directi
 		return;
 	}
 
-	// Used to update some kind of weird neighbour list here.
+	psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
+	spinSpeed = psDroid->baseSpeed * psPropStats->spinSpeed;
+	turnSpeed = psDroid->baseSpeed * psPropStats->turnSpeed;
 
-	moveUpdateDroidDirection(psDroid, &speed, direction, PERSON_SPIN_ANGLE, PERSON_SPIN_SPEED, PERSON_TURN_SPEED, &iDroidDir);
+	moveUpdateDroidDirection(psDroid, &speed, direction, DEG(psPropStats->spinAngle), spinSpeed, turnSpeed, &iDroidDir);
 
-	fNormalSpeed = moveCalcNormalSpeed(psDroid, speed, iDroidDir, PERSON_ACCEL, PERSON_DECEL);
+	fNormalSpeed = moveCalcNormalSpeed(psDroid, speed, iDroidDir, psPropStats->acceleration, psPropStats->deceleration);
 
 	/* people don't skid at the moment so set zero perpendicular speed */
 	fPerpSpeed = 0;
@@ -1854,8 +1789,9 @@ static void moveUpdateVtolModel(DROID *psDroid, SDWORD speed, uint16_t direction
 	int fPerpSpeed, fNormalSpeed;
 	uint16_t   iDroidDir;
 	uint16_t   slideDir;
-	int32_t iMapZ, iSpinSpeed, iTurnSpeed, dx, dy;
+	int32_t spinSpeed, turnSpeed, iMapZ, iSpinSpeed, iTurnSpeed, dx, dy;
 	uint16_t targetRoll;
+	PROPULSION_STATS	*psPropStats;
 
 	CHECK_DROID(psDroid);
 
@@ -1865,21 +1801,25 @@ static void moveUpdateVtolModel(DROID *psDroid, SDWORD speed, uint16_t direction
 		return;
 	}
 
+	psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
+	spinSpeed = psDroid->baseSpeed * psPropStats->spinSpeed;
+	turnSpeed = psDroid->baseSpeed * psPropStats->turnSpeed;
+
 	moveCheckFinalWaypoint( psDroid, &speed );
 
 	if (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER)
 	{
-		moveUpdateDroidDirection(psDroid, &speed, direction, VTOL_SPIN_ANGLE, VTOL_SPIN_SPEED, VTOL_TURN_SPEED, &iDroidDir);
+		moveUpdateDroidDirection(psDroid, &speed, direction, psPropStats->spinAngle, spinSpeed, turnSpeed, &iDroidDir);
 	}
 	else
 	{
-		iSpinSpeed = std::max<int>(psDroid->baseSpeed*DEG(1)/2, VTOL_SPIN_SPEED);
-		iTurnSpeed = std::max<int>(psDroid->baseSpeed*DEG(1)/8, VTOL_TURN_SPEED);
-		moveUpdateDroidDirection(psDroid, &speed, direction, VTOL_SPIN_ANGLE, iSpinSpeed, iTurnSpeed, &iDroidDir);
+		iSpinSpeed = std::max<int>(psDroid->baseSpeed*DEG(1)/2, spinSpeed);
+		iTurnSpeed = std::max<int>(psDroid->baseSpeed*DEG(1)/8, turnSpeed);
+		moveUpdateDroidDirection(psDroid, &speed, direction, psPropStats->spinAngle, iSpinSpeed, iTurnSpeed, &iDroidDir);
 	}
 
-	fNormalSpeed = moveCalcNormalSpeed(psDroid, speed, iDroidDir, VTOL_ACCEL, VTOL_DECEL);
-	fPerpSpeed   = moveCalcPerpSpeed(psDroid, iDroidDir, VTOL_SKID_DECEL);
+	fNormalSpeed = moveCalcNormalSpeed(psDroid, speed, iDroidDir, psPropStats->acceleration, psPropStats->deceleration);
+	fPerpSpeed   = moveCalcPerpSpeed(psDroid, iDroidDir, psPropStats->skidDeceleration);
 
 	moveCombineNormalAndPerpSpeeds(psDroid, fNormalSpeed, fPerpSpeed, iDroidDir);
 
@@ -1950,11 +1890,11 @@ static void moveUpdateJumpCyborgModel(DROID *psDroid, SDWORD speed, uint16_t dir
 		return;
 	}
 
-	// Used to update some kind of weird neighbour list here.
+	// FIXME, fix hardcoded values -- or remove this mis-feature
 
-	moveUpdateDroidDirection(psDroid, &speed, direction, VTOL_SPIN_ANGLE, psDroid->baseSpeed*DEG(1), psDroid->baseSpeed*DEG(1)/3, &iDroidDir);
+	moveUpdateDroidDirection(psDroid, &speed, direction, DEG(180), psDroid->baseSpeed*DEG(1), psDroid->baseSpeed*DEG(1)/3, &iDroidDir);
 
-	fNormalSpeed = moveCalcNormalSpeed(psDroid, speed, iDroidDir, VTOL_ACCEL, VTOL_DECEL);
+	fNormalSpeed = moveCalcNormalSpeed(psDroid, speed, iDroidDir, 200, 200);
 	fPerpSpeed   = 0;
 	moveCombineNormalAndPerpSpeeds(psDroid, fNormalSpeed, fPerpSpeed, iDroidDir);
 

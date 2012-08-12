@@ -414,6 +414,12 @@ struct PROPULSION_STATS : public COMPONENT_STATS
 {
 	UDWORD			maxSpeed;		///< Max speed for the droid
 	PROPULSION_TYPE propulsionType; ///< Type of propulsion used - index into PropulsionTable
+	UDWORD		turnSpeed;
+	UDWORD		spinSpeed;
+	UDWORD		spinAngle;
+	UDWORD		skidDeceleration;
+	UDWORD		deceleration;
+	UDWORD		acceleration;
 };
 
 struct SENSOR_STATS : public COMPONENT_STATS

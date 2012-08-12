@@ -1249,8 +1249,14 @@ bool loadPropulsionStats(const char *pFileName)
 		psStats->weight = ini.value("weight").toInt();
 		psStats->body = ini.value("hitpoints").toInt();
 		psStats->maxSpeed = ini.value("speed").toInt();
-		psStats->designable = ini.value("designable").toBool();
+		psStats->designable = ini.value("designable", false).toBool();
 		psStats->ref = REF_PROPULSION_START + list.size() - 1 - i;
+		psStats->turnSpeed = ini.value("turnSpeed", DEG(1)/3).toInt();
+		psStats->spinSpeed = ini.value("spinSpeed", DEG(3)/4).toInt();
+		psStats->spinAngle = ini.value("spinAngle", 180).toInt();
+		psStats->acceleration = ini.value("acceleration", 250).toInt();
+		psStats->deceleration = ini.value("deceleration", 800).toInt();
+		psStats->skidDeceleration = ini.value("skidDeceleration", 600).toInt();
 		psStats->pIMD = NULL;
 		if (ini.contains("model"))
 		{
@@ -1283,7 +1289,6 @@ bool loadPropulsionStats(const char *pFileName)
 			//check stat is designable
 			if (asBodyStats[i].designable)
 			{
-				unsigned int j = 0;
 				//check against each propulsion stat
 				for (int j = 0; j < numPropulsionStats; j++)
 				{
