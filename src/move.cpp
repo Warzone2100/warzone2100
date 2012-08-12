@@ -1802,20 +1802,20 @@ static void moveUpdateVtolModel(DROID *psDroid, SDWORD speed, uint16_t direction
 	}
 
 	psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
-	spinSpeed = psDroid->baseSpeed * psPropStats->spinSpeed;
-	turnSpeed = psDroid->baseSpeed * psPropStats->turnSpeed;
+	spinSpeed = DEG(psPropStats->spinSpeed);
+	turnSpeed = DEG(psPropStats->turnSpeed);
 
 	moveCheckFinalWaypoint( psDroid, &speed );
 
 	if (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER)
 	{
-		moveUpdateDroidDirection(psDroid, &speed, direction, psPropStats->spinAngle, spinSpeed, turnSpeed, &iDroidDir);
+		moveUpdateDroidDirection(psDroid, &speed, direction, DEG(psPropStats->spinAngle), spinSpeed, turnSpeed, &iDroidDir);
 	}
 	else
 	{
 		iSpinSpeed = std::max<int>(psDroid->baseSpeed*DEG(1)/2, spinSpeed);
 		iTurnSpeed = std::max<int>(psDroid->baseSpeed*DEG(1)/8, turnSpeed);
-		moveUpdateDroidDirection(psDroid, &speed, direction, psPropStats->spinAngle, iSpinSpeed, iTurnSpeed, &iDroidDir);
+		moveUpdateDroidDirection(psDroid, &speed, direction, DEG(psPropStats->spinAngle), iSpinSpeed, iTurnSpeed, &iDroidDir);
 	}
 
 	fNormalSpeed = moveCalcNormalSpeed(psDroid, speed, iDroidDir, psPropStats->acceleration, psPropStats->deceleration);
