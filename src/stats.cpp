@@ -1030,6 +1030,13 @@ bool loadBodyStats(const char *pFileName)
 	}
 	QStringList list = ini.childGroups();
 	statsAllocBody(list.size());
+	// Hack to make sure ZNULLBODY is always first in list
+	int nullbody = list.indexOf("ZNULLBODY");
+	ASSERT_OR_RETURN(false, nullbody >= 0, "ZNULLBODY is mandatory");
+	if (nullbody > 0)
+	{
+		list.swap(nullbody, 0);
+	}
 	for (int i = 0; i < list.size(); ++i)
 	{
 		ini.beginGroup(list[i]);
@@ -1070,7 +1077,7 @@ bool loadBodyStats(const char *pFileName)
 		{
 			psStats->droidTypeOverride = DROID_CYBORG_REPAIR;
 		}
-		psStats->ref = REF_BODY_START + list.size() - 1 - i;
+		psStats->ref = REF_BODY_START + i;
 		if (!getBodySize(ini.value("size").toString().toUtf8().constData(), &psStats->size))
 		{
 			ASSERT(false, "Unknown body size for %s", getStatName(psStats));
@@ -1088,7 +1095,7 @@ bool loadBodyStats(const char *pFileName)
 		}
 		ini.endGroup();
 
-		statsSetBody(psStats, list.size() - 1 - i);	// save the stats (and reorder list, so that ZNULLBODY is zero)
+		statsSetBody(psStats, i);	// save the stats
 
 		//set the max stat values for the design screen
 		if (psStats->designable)
@@ -1239,6 +1246,13 @@ bool loadPropulsionStats(const char *pFileName)
 	}
 	QStringList list = ini.childGroups();
 	statsAllocPropulsion(list.size());
+	// Hack to make sure ZNULLPROP is always first in list
+	int nullbody = list.indexOf("ZNULLPROP");
+	ASSERT_OR_RETURN(false, nullbody >= 0, "ZNULLPROP is mandatory");
+	if (nullbody > 0)
+	{
+		list.swap(nullbody, 0);
+	}
 	for (int i = 0; i < list.size(); ++i)
 	{
 		ini.beginGroup(list[i]);
@@ -1250,7 +1264,7 @@ bool loadPropulsionStats(const char *pFileName)
 		psStats->body = ini.value("hitpoints").toInt();
 		psStats->maxSpeed = ini.value("speed").toInt();
 		psStats->designable = ini.value("designable", false).toBool();
-		psStats->ref = REF_PROPULSION_START + list.size() - 1 - i;
+		psStats->ref = REF_PROPULSION_START + i;
 		psStats->turnSpeed = ini.value("turnSpeed", DEG(1)/3).toInt();
 		psStats->spinSpeed = ini.value("spinSpeed", DEG(3)/4).toInt();
 		psStats->spinAngle = ini.value("spinAngle", 180).toInt();
@@ -1271,7 +1285,7 @@ bool loadPropulsionStats(const char *pFileName)
 		ini.endGroup();
 
 		// save the stats
-		statsSetPropulsion(psStats, list.size() - 1 - i);	// save the stats (and reorder list, so that ZNULLPROP is zero)
+		statsSetPropulsion(psStats, i);
 
 		// set the max stat values for the design screen
 		if (psStats->designable)
