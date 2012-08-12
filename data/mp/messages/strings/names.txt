@@ -316,22 +316,10 @@ Spade1Mk1				_("Truck")
 /* PROPULSION */
 ZNULLPROP				"Z NULL PROP"
 wheeled01				_("Wheels")
-wheeled02				_("Wheels II")
-wheeled03				_("Wheels III")
 tracked01				_("Tracks")
-tracked02				_("Tracks II")
-tracked03				_("Tracks III")
 hover01					_("Hover")
-hover02					_("Hover II")
-hover03					_("Hover III")
 V-Tol					_("VTOL")
-V-Tol02					_("VTOL II")
-V-Tol03					_("VTOL III")
 HalfTrack				_("Half-tracks")
-HalfTrack02				_("Half-tracks II")
-HalfTrack03				_("Half-tracks III")
-CyborgLegs02				_("Cyborg Propulsion II")
-CyborgLegs03				_("Cyborg Propulsion III")
 Naval					_("Naval")
 
 /*BABARIAN PROPULSIONS*/
@@ -340,7 +328,6 @@ BaBaLegs				"BaBaLegs"
 
 /*CYBORG PROPULSIONS*/
 CyborgLegs				_("Cyborg Propulsion")
-//CyborgJets				_("Cyborg Jump Pack")
 
 /* VEHICLE AUTO-REPAIR */
 ZNULLREPAIR				"Z NULL REPAIR"
