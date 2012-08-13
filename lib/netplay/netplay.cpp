@@ -151,7 +151,6 @@ static struct IGDdatas data;
 
 // local ip address
 static char lanaddr[16];
-
 /**
  * Used for connections with clients.
  */
@@ -176,8 +175,8 @@ unsigned NET_PlayerConnectionStatus[CONNECTIONSTATUS_NORMAL][MAX_PLAYERS];
  ************************************************************************************
 **/
 static char const *versionString = version_getVersionString();
-static int NETCODE_VERSION_MAJOR = 100;
-static int NETCODE_VERSION_MINOR = 1;
+static int NETCODE_VERSION_MAJOR = 6;
+static int NETCODE_VERSION_MINOR = 5;
 
 bool NETisCorrectVersion(uint32_t game_version_major, uint32_t game_version_minor)
 {
@@ -675,7 +674,7 @@ static bool NETsendGAMESTRUCT(Socket* sock, const GAMESTRUCT* ourgamestruct)
 	// memory content across the network.
 	char buf[sizeof(ourgamestruct->GAMESTRUCT_VERSION) + sizeof(ourgamestruct->name) + sizeof(ourgamestruct->desc.host) + (sizeof(int32_t) * 8) +
 		sizeof(ourgamestruct->secondaryHosts) + sizeof(ourgamestruct->extra) + sizeof(ourgamestruct->mapname) + sizeof(ourgamestruct->hostname) + sizeof(ourgamestruct->versionstring) +
-		sizeof(ourgamestruct->modlist) + (sizeof(uint32_t) * 9) + sizeof(ourgamestruct->Clientnames) + sizeof(ourgamestruct->ClientIPs) ] = { 0 };
+		sizeof(ourgamestruct->modlist) + (sizeof(uint32_t) * 9) ] = { 0 };
 	char *buffer = buf;
 	unsigned int i;
 	ssize_t result;
@@ -766,18 +765,12 @@ static bool NETsendGAMESTRUCT(Socket* sock, const GAMESTRUCT* ourgamestruct)
 	buffer += sizeof(uint32_t);
 
 	// Copy 32bit large big endian numbers
-	*(uint32_t*)buffer = htonl(ourgamestruct->os);
+	*(uint32_t*)buffer = htonl(ourgamestruct->future3);
 	buffer += sizeof(uint32_t);
 
 	// Copy 32bit large big endian numbers
 	*(uint32_t*)buffer = htonl(ourgamestruct->future4);
 	buffer += sizeof(uint32_t);
-
-	// block copy strings
-	strlcpy(buffer, gamestruct.Clientnames, sizeof(ourgamestruct->Clientnames));
-	buffer += sizeof(ourgamestruct->Clientnames);
-	strlcpy(buffer, gamestruct.ClientIPs, sizeof(ourgamestruct->ClientIPs));
-	buffer += sizeof(ourgamestruct->ClientIPs);
 
 	debug(LOG_NET, "sending GAMESTRUCT, size: %u", (unsigned int)sizeof(buf));
 
@@ -795,8 +788,6 @@ static bool NETsendGAMESTRUCT(Socket* sock, const GAMESTRUCT* ourgamestruct)
 		return false;
 	}
 
-	debug(LOG_NET, "sent GAMESTRUCT size=%u game is=%u", (unsigned int)sizeof(buf), (unsigned int)sizeof(GAMESTRUCT));
-
 	return true;
 }
 
@@ -813,7 +804,7 @@ static bool NETrecvGAMESTRUCT(GAMESTRUCT* ourgamestruct)
 	// circumvents struct padding, which could pose a problem).
 	char buf[sizeof(ourgamestruct->GAMESTRUCT_VERSION) + sizeof(ourgamestruct->name) + sizeof(ourgamestruct->desc.host) + (sizeof(int32_t) * 8) +
 		sizeof(ourgamestruct->secondaryHosts) + sizeof(ourgamestruct->extra) + sizeof(ourgamestruct->mapname) + sizeof(ourgamestruct->hostname) + sizeof(ourgamestruct->versionstring) +
-		sizeof(ourgamestruct->modlist) + (sizeof(uint32_t) * 9) + sizeof(ourgamestruct->Clientnames) + sizeof(ourgamestruct->ClientIPs) ] = { 0 };
+		sizeof(ourgamestruct->modlist) + (sizeof(uint32_t) * 9) ] = { 0 };
 	char* buffer = buf;
 	unsigned int i;
 	ssize_t result = 0;
@@ -909,7 +900,7 @@ static bool NETrecvGAMESTRUCT(GAMESTRUCT* ourgamestruct)
 	buffer += sizeof(uint32_t);
 	ourgamestruct->limits = ntohl(*(uint32_t*)buffer);
 	buffer += sizeof(uint32_t);
-	ourgamestruct->os = ntohl(*(uint32_t*)buffer);
+	ourgamestruct->future3 = ntohl(*(uint32_t*)buffer);
 	buffer += sizeof(uint32_t);
 	ourgamestruct->future4 = ntohl(*(uint32_t*)buffer);
 	buffer += sizeof(uint32_t);
@@ -2151,7 +2142,7 @@ static void NETregisterServer(int state)
 				}
 
 				// Get a game ID
-				if (writeAll(rs_socket, "hellowz", sizeof("hellowz")) == SOCKET_ERROR
+				if (writeAll(rs_socket, "gaId", sizeof("gaId")) == SOCKET_ERROR
 				 || readAll(rs_socket, &gameId, sizeof(gameId), 10000) != sizeof(gameId))
 				{
 					free(NetPlay.MOTD);
@@ -2170,7 +2161,7 @@ static void NETregisterServer(int state)
 				debug(LOG_NET, "Using game ID: %u", (unsigned int)gamestruct.gameId);
 
 				// Register our game with the server
-				if (writeAll(rs_socket, "addgame", sizeof("addgame")) == SOCKET_ERROR
+				if (writeAll(rs_socket, "addg", sizeof("addg")) == SOCKET_ERROR
 				 // and now send what the server wants
 				 || !NETsendGAMESTRUCT(rs_socket, &gamestruct))
 				{
@@ -2190,29 +2181,7 @@ static void NETregisterServer(int state)
 				registered = state;
 			}
 			break;
-			case WZ_SERVER_LAUNCH:
-			{
-					// Copy strings to struct and send them to server
-					for (int i = 0; i < MAX_PLAYERS; ++i)
-					{
-						strlcpy(gamestruct.Clientnames +  (i * StringSize), NetPlay.players[i].name, StringSize);
-						strlcpy(gamestruct.ClientIPs + (i * IPSize), NetPlay.players[i].IPtextAddress, IPSize);
-					}
 
-					if (writeAll(rs_socket, "launch_", sizeof("launch_")) == SOCKET_ERROR
-						// and now send what the server wants
-						|| !NETsendGAMESTRUCT(rs_socket, &gamestruct) )
-					{
-						debug(LOG_ERROR, "Failed to upload (final) gamestruct to server: %s", strSockError(getSockErr()));
-						socketClose(rs_socket);
-						rs_socket = NULL;
-						return;
-					}
-					socketClose(rs_socket);	//clean up, we are done talking to server
-					rs_socket = NULL;
-					debug(LOG_NET, "==> All data was sent to server");
-			}
-			break;
 			// Unregister the game (close the socket)
 			case WZ_SERVER_DISCONNECT:
 			{
@@ -2229,16 +2198,6 @@ static void NETregisterServer(int state)
 			}
 			break;
 		}
-	}
-}
-
-// ////////////////////////////////////////////////////////////////////////
-// Final communications with the server. We are launching the game now
-void NETlaunched(void)
-{
-	if (NetPlay.bComms)
-	{
-		NETregisterServer(WZ_SERVER_LAUNCH);
 	}
 }
 
@@ -2676,7 +2635,7 @@ bool NEThostGame(const char* SessionName, const char* PlayerName,
 	sstrcpy(gamestruct.hostname, PlayerName);
 	sstrcpy(gamestruct.versionstring, versionString);		// version (string)
 	sstrcpy(gamestruct.modlist, getModList());				// List of mods
-	gamestruct.GAMESTRUCT_VERSION = 10;						// version of this structure
+	gamestruct.GAMESTRUCT_VERSION = 3;						// version of this structure
 	gamestruct.game_version_major = NETCODE_VERSION_MAJOR;	// Netcode Major version
 	gamestruct.game_version_minor = NETCODE_VERSION_MINOR;	// NetCode Minor version
 //	gamestruct.privateGame = 0;								// if true, it is a private game
@@ -2684,10 +2643,8 @@ bool NEThostGame(const char* SessionName, const char* PlayerName,
 	gamestruct.Mods = 0;										// number of concatenated mods?
 	gamestruct.gameId  = 0;
 	gamestruct.limits = 0x0;									// used for limits
-	gamestruct.os = HOST_PLATFORM;								// what OS we are on
+	gamestruct.future3 = 0xBAD03;								// for future use
 	gamestruct.future4 = 0xBAD04;								// for future use
-	memset(&gamestruct.Clientnames, 0, sizeof(gamestruct.Clientnames));	// for server use
-	memset(&gamestruct.ClientIPs, 0, sizeof(gamestruct.ClientIPs));		// for server use
 
 	selectedPlayer= NET_CreatePlayer(PlayerName);
 	realSelectedPlayer = selectedPlayer;
@@ -2794,9 +2751,9 @@ bool NETfindGame(void)
 
 	SocketSet_AddSocket(socket_set, tcp_socket);
 
-	debug(LOG_NET, "Sending listing cmd");
+	debug(LOG_NET, "Sending list cmd");
 
-	if (writeAll(tcp_socket, "listing", sizeof("listing")) != SOCKET_ERROR
+	if (writeAll(tcp_socket, "list", sizeof("list")) != SOCKET_ERROR
 	 && (result = readAll(tcp_socket, &gamesavailable, sizeof(gamesavailable), NET_TIMEOUT_DELAY)) == sizeof(gamesavailable))
 	{
 		gamesavailable = MIN(ntohl(gamesavailable), ARRAY_SIZE(NetPlay.games));
