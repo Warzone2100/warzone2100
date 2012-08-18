@@ -1,7 +1,10 @@
 AC_PREREQ([2.56])
 AC_INIT([Warzone 2100],[master],[http://wz2100.net/],[warzone2100])
 
-AM_INIT_AUTOMAKE([1.10 tar-ustar])
+AM_INIT_AUTOMAKE([1.10 tar-ustar no-dist-gzip dist-xz])
+
+# Set to the default or stupid automake will use the much slower but useless -e(xtreme!!!) option.
+AC_SUBST([XZ_OPT], ["-6"])
 
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_SRCDIR([lib/framework/frame.cpp])
