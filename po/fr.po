@@ -1,12 +1,9 @@
-# Gesierfou <gesierfou@yahoo.fr>, 2009.
-# Gilles J. Séguin <segg2@videotron.ca>, 2011.
-# Amiral JCDG <freddys3@hotmail.fr>, 2012.
 msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2012-08-18 12:42+0200\n"
-"PO-Revision-Date: 2012-05-29 14:57+0100\n"
+"PO-Revision-Date: 2012-08-01 12:10+0100\n"
 "Last-Translator: AM <a@a.fr>\n"
 "Language-Team: French <warzone2100-project@lists.sourceforge.net>\n"
 "Language: fr\n"
@@ -510,7 +507,7 @@ msgstr "Pont défensif à lance-missile anti-char"
 #: data/mp/messages/resmessages23.rmsg:33
 #: data/mp/messages/resmessages3.rmsg:393
 msgid "Research Breakthrough Improves Construction Rates"
-msgstr "Une découverte tchnologique permet d'augmenter la vitesse de construction"
+msgstr "Une découverte technologique permet d'augmenter la vitesse de construction"
 
 #: data/base/messages/resmessages12.rmsg:49
 #: data/base/messages/resmessages23.rmsg:38
@@ -14429,7 +14426,7 @@ msgstr "CHAT"
 
 #: src/multiint.cpp:2585
 msgid "All players need to have the same mods to join your game."
-msgstr "Tout les joueurs doivent avoir les mêmes modes pour jouer une partie ensemble."
+msgstr "Tous les joueurs doivent avoir les mêmes modes pour jouer une partie ensemble."
 
 #: src/multiint.cpp:2626
 msgid "Connecting to the lobby server..."

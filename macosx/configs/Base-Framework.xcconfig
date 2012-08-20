@@ -1,7 +1,5 @@
 // Global settings for all Framework configurations
 
-#include "CS-ID.xcconfig"
-
 
 INSTALL_PATH = @rpath
 DYLIB_COMPATIBILITY_VERSION = 1
