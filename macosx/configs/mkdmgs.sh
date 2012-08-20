@@ -27,16 +27,17 @@ signd () {
 		local resrul="${SRCROOT}/configs/ResourceRules.plist"
 		local appth="/Volumes/Warzone 2100/Warzone.app"
 		
-		# Sign app
+		# Sign and verify the app
 		cp -a "${resrul}" "${appth}/"
 		/usr/bin/codesign -f -s "${idetd}" --resource-rules="${appth}/ResourceRules.plist" -vvv "${appth}"
 		rm "${appth}/ResourceRules.plist"
 		/usr/bin/codesign -vvv --verify "${appth}"
 		
-		# Verify the frameworks
+		# Sign and verify the frameworks
 		local framelst=`\ls -1 "${appth}/Contents/Frameworks" | sed -n 's:.framework$:&:p'`
 		for fsignd in ${framelst}; do
 			if [ -d "${appth}/Contents/Frameworks/${fsignd}/Versions/A" ]; then
+				/usr/bin/codesign -f -s "${idetd}" -vvv "${appth}/Contents/Frameworks/${fsignd}/Versions/A"
 				/usr/bin/codesign -vvv --verify "${appth}/Contents/Frameworks/${fsignd}/Versions/A"
 			fi
 		done
