@@ -928,6 +928,21 @@ bool sendResearchStatus(STRUCTURE *psBuilding, uint32_t index, uint8_t player, b
 	return true;
 }
 
+STRUCTURE *findResearchingFacilityByResearchIndex(unsigned player, unsigned index)
+{
+	// Go through the structs to find the one doing this topic
+	for (STRUCTURE *psBuilding = apsStructLists[player]; psBuilding; psBuilding = psBuilding->psNext)
+	{
+		if (psBuilding->pStructureType->type == REF_RESEARCH
+		 && ((RESEARCH_FACILITY *)psBuilding->pFunctionality)->psSubject
+		 && ((RESEARCH_FACILITY *)psBuilding->pFunctionality)->psSubject->ref - REF_RESEARCH_START == index)
+		{
+			return psBuilding;
+		}
+	}
+	return NULL;  // Not found.
+}
+
 bool recvResearchStatus(NETQUEUE queue)
 {
 	STRUCTURE			*psBuilding;
@@ -986,6 +1001,22 @@ bool recvResearchStatus(NETQUEUE queue)
 				cancelResearch(psBuilding, ModeImmediate);
 			}
 
+			if (IsResearchStarted(pPlayerRes))
+			{
+				STRUCTURE *psOtherBuilding = findResearchingFacilityByResearchIndex(player, index);
+				ASSERT(psOtherBuilding != NULL, "Something researched but no facility.");
+				if (psOtherBuilding != NULL)
+				{
+					cancelResearch(psOtherBuilding, ModeImmediate);
+				}
+			}
+
+			if (!researchAvailable(index, player, ModeImmediate) && bMultiPlayer)
+			{
+				debug(LOG_ERROR, "Player %d researching impossible topic \"%s\".", player, asResearch[index].pName);
+				return false;
+			}
+
 			// Set the subject up
 			pResearch				= &asResearch[index];
 			psResFacilty->psSubject = pResearch;
@@ -1007,17 +1038,7 @@ bool recvResearchStatus(NETQUEUE queue)
 		// If they did not say what facility it was, look it up orselves
 		if (!structRef)
 		{
-			// Go through the structs to find the one doing this topic
-			for (psBuilding = apsStructLists[player]; psBuilding; psBuilding = psBuilding->psNext)
-			{
-				if (psBuilding->pStructureType->type == REF_RESEARCH
-				 && psBuilding->status == SS_BUILT
-				 && ((RESEARCH_FACILITY *) psBuilding->pFunctionality)->psSubject
-				 && ((RESEARCH_FACILITY *) psBuilding->pFunctionality)->psSubject->ref - REF_RESEARCH_START == index)
-				{
-					break;
-				}
-			}
+			psBuilding = findResearchingFacilityByResearchIndex(player, index);
 		}
 		else
 		{
