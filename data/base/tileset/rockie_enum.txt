@@ -1,11 +1,11 @@
 rockie_enum,10
-r_grass
-r_rock
+r_water
 r_cliff
 r_snowcliff
-r_snowrock
-r_brown
-r_water
-r_snowgrass
 r_tiles
+r_snowgrass
 r_snow
+r_brown
+r_snowrock
+r_rock
+r_grass
