@@ -805,7 +805,7 @@ static QScriptValue js_pursueResearch(QScriptContext *context, QScriptEngine *en
 	int iterations = 0;  // Only used to assert we're not stuck in the loop.
 	while (cur)
 	{
-		if (researchAvailable(cur->index, player))
+		if (researchAvailable(cur->index, player, ModeQueue))
 		{
 			bool started = false;
 			for (int i = 0; i < game.maxPlayers; i++)
@@ -875,7 +875,7 @@ static QScriptValue js_enumResearch(QScriptContext *context, QScriptEngine *engi
 	for (int i = 0; i < asResearch.size(); i++)
 	{
 		RESEARCH *psResearch = &asResearch[i];
-		if (!IsResearchCompleted(&asPlayerResList[player][i]) && researchAvailable(i, player))
+		if (!IsResearchCompleted(&asPlayerResList[player][i]) && researchAvailable(i, player, ModeQueue))
 		{
 			reslist += psResearch;
 		}
