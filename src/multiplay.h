@@ -231,4 +231,6 @@ extern	bool multiplayPlayersReady	(bool bNotifyStatus);
 extern	void startMultiplayerGame	(void);
 extern	void resetReadyStatus		(bool bSendOptions);
 
+STRUCTURE *findResearchingFacilityByResearchIndex(unsigned player, unsigned index);
+
 #endif // __INCLUDED_SRC_MULTIPLAY_H__

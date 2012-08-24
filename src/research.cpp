@@ -597,13 +597,22 @@ bool loadResearchFunctions(const char *pFunctionData, UDWORD bufferSize)
 	return true;
 }
 
-bool researchAvailable(int inc, int playerID)
+bool researchAvailable(int inc, int playerID, QUEUE_MODE mode)
 {
+	// Decide whether to use IsResearchCancelledPending/IsResearchStartedPending or IsResearchCancelled/IsResearchStarted.
+	bool (*IsResearchCancelledFunc)(PLAYER_RESEARCH const *) = IsResearchCancelledPending;
+	bool (*IsResearchStartedFunc)(PLAYER_RESEARCH const *) = IsResearchStartedPending;
+	if (mode == ModeImmediate)
+	{
+		IsResearchCancelledFunc = IsResearchCancelled;
+		IsResearchStartedFunc = IsResearchStarted;
+	}
+
 	UDWORD				incPR, incS;
 	bool				bPRFound, bStructFound;
 
 	// if its a cancelled topic - add to list
-	if (IsResearchCancelledPending(&asPlayerResList[playerID][inc]))
+	if (IsResearchCancelledFunc(&asPlayerResList[playerID][inc]))
 	{
 		return true;
 	}
@@ -611,7 +620,7 @@ bool researchAvailable(int inc, int playerID)
 	if ((IsResearchPossible(&asPlayerResList[playerID][inc])))
 	{
 		if (!IsResearchCompleted(&asPlayerResList[playerID][inc])
-		    && !IsResearchStartedPending(&asPlayerResList[playerID][inc]))
+		    && !IsResearchStartedFunc(&asPlayerResList[playerID][inc]))
 		{
 			return true;
 		}
@@ -623,8 +632,18 @@ bool researchAvailable(int inc, int playerID)
 		return false;
 	}
 
+	bool researchStarted = IsResearchStartedFunc(&asPlayerResList[playerID][inc]);
+	if (researchStarted)
+	{
+		STRUCTURE *psBuilding = findResearchingFacilityByResearchIndex(playerID, inc);  // May fail to find the structure here, if the research is merely pending, not actually started.
+		if (psBuilding != NULL && psBuilding->status == SS_BEING_BUILT)
+		{
+			researchStarted = false;  // Although research is started, the facility is currently being upgraded or demolished, so we want to be able to research this elsewhere.
+		}
+	}
+
 	// make sure that the research is not completed  or started by another researchfac
-	if (!IsResearchCompleted(&asPlayerResList[playerID][inc]) && !IsResearchStartedPending(&asPlayerResList[playerID][inc]))
+	if (!IsResearchCompleted(&asPlayerResList[playerID][inc]) && !researchStarted)
 	{
 		// Research is not completed  ... also  it has not been started by another researchfac
 
@@ -695,7 +714,7 @@ UWORD fillResearchList(UWORD *plist, UDWORD playerID, UWORD topic, UWORD limit)
 	for (inc=0; inc < asResearch.size(); inc++)
 	{
 		// if the inc matches the 'topic' - automatically add to the list
-		if (inc == topic || researchAvailable(inc, playerID))
+		if (inc == topic || researchAvailable(inc, playerID, ModeQueue))
 		{
 			*plist++ = inc;
 			count++;

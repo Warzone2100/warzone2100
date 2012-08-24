@@ -149,6 +149,6 @@ void CancelAllResearch(UDWORD pl);
 
 extern bool researchInitVars(void);
 
-bool researchAvailable(int inc, int playerID);
+bool researchAvailable(int inc, int playerID, QUEUE_MODE mode);
 
 #endif // __INCLUDED_SRC_RESEARCH_H__
