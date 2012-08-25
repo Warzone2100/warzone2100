@@ -252,7 +252,7 @@ struct STRUCTURE : public BASE_OBJECT
 
 	STRUCTURE_STATS     *pStructureType;            /* pointer to the structure stats for this type of building */
 	STRUCT_STATES       status;                     /* defines whether the structure is being built, doing nothing or performing a function */
-	SWORD               currentBuildPts;            /* the build points currently assigned to this structure */
+	int32_t             currentBuildPts;            /* the build points currently assigned to this structure */
 	SWORD               resistance;                 /* current resistance points, 0 = cannot be attacked electrically */
 	UDWORD              lastResistance;             /* time the resistance was last increased*/
 	FUNCTIONALITY       *pFunctionality;            /* pointer to structure that contains fields necessary for functionality */
