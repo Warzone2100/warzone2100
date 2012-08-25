@@ -669,7 +669,7 @@ static void closeMultiRequester(void)
 {
 	widgDelete(psRScreen,M_REQUEST);
 	multiRequestUp = false;
-	resetReadyStatus(false); //Give us back our players list if we close our nick chooser box. -Subsentient
+	resetReadyStatus(false);
 	widgReleaseScreen(psRScreen);		// move this to the frontend shutdown...
 	return;
 }
