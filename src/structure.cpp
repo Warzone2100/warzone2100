@@ -5433,7 +5433,7 @@ void buildingComplete(STRUCTURE *psBuilding)
 		prevState = intGetResearchState();
 	}
 
-	psBuilding->currentBuildPts = (SWORD)psBuilding->pStructureType->buildPoints;
+	psBuilding->currentBuildPts = psBuilding->pStructureType->buildPoints;
 	psBuilding->status = SS_BUILT;
 
 	visTilesUpdate(psBuilding);
