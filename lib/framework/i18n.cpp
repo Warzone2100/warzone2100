@@ -53,6 +53,7 @@
 #define LANG_NAME_FRENCH "Français"
 #define LANG_NAME_FRISIAN_NETHERLANDS "frysk"
 #define LANG_NAME_GERMAN "Deutsch"
+#define LANG_NAME_GREEK "Ελληνικά"
 #define LANG_NAME_HUNGARIAN "magyar"
 #define LANG_NAME_IRISH "Imruagadh"
 #define LANG_NAME_ITALIAN "Italiano"
@@ -111,6 +112,7 @@ static const struct
 	 */
 	{ "fy", LANG_NAME_FRISIAN_NETHERLANDS, LANG_FRISIAN, SUBLANG_FRISIAN_NETHERLANDS },
 	{ "ga", LANG_NAME_IRISH, LANG_IRISH, SUBLANG_IRISH_IRELAND },
+	{ "el", LANG_NAME_GREEK, LANG_GREEK, SUBLANG_DEFAULT ),
 	{ "hr", LANG_NAME_CROATIAN, LANG_CROATIAN, SUBLANG_DEFAULT },
 	{ "hu", LANG_NAME_HUNGARIAN, LANG_HUNGARIAN, SUBLANG_DEFAULT },
 	{ "it", LANG_NAME_ITALIAN, LANG_ITALIAN, SUBLANG_ITALIAN },
@@ -156,6 +158,7 @@ static const struct
 	{ "cs_CZ", LANG_NAME_CZECH, "cs_CZ.UTF-8", "cs" },
 	{ "da", LANG_NAME_DANISH, "da_DK.UTF-8", "da_DK" },
 	{ "de", LANG_NAME_GERMAN, "de_DE.UTF-8", "de_DE" },
+	{ "el_GR", LANG_NAME_GREEK, "el_GR.UTF-8", "el" },
 	{ "en", LANG_NAME_ENGLISH, "en_US.UTF-8", "en_US" },
 	{ "en_GB", LANG_NAME_ENGLISH_UK, "en_GB.UTF-8", "en_GB" },
 	{ "es", LANG_NAME_SPANISH, "es_ES.UTF-8", "es_ES" },
