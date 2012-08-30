@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2012-08-18 12:42+0200\n"
-"PO-Revision-Date: 2012-06-25 22:06+0100\n"
+"POT-Creation-Date: 2012-08-30 15:29+0200\n"
+"PO-Revision-Date: 2012-08-26 15:53+0100\n"
 "Last-Translator: Michał D. aka Emdek <emdeck@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
 "Language: pl\n"
@@ -12645,7 +12645,7 @@ msgstr "50%"
 
 #: src/frontend.cpp:563
 #: src/frontend.cpp:706
-#: src/multiplay.cpp:1981
+#: src/multiplay.cpp:2002
 msgid "Black"
 msgstr "Czarny"
 
@@ -14249,14 +14249,12 @@ msgid "VTOLs disabled."
 msgstr "Jednostki VTOL wyłączone."
 
 #: src/multiint.cpp:1399
-#, fuzzy
 msgid "Satellite Uplink disabled."
-msgstr "Przekaźnik satelitarny"
+msgstr "Przekaźnik satelitarny wyłączony."
 
 #: src/multiint.cpp:1400
-#, fuzzy
 msgid "Laser Satellite disabled."
-msgstr "Przekaźnik satelity laserowego"
+msgstr "Satelita laserowy wyłączony."
 
 #: src/multiint.cpp:1447
 #: src/multiint.cpp:1456
@@ -14670,75 +14668,75 @@ msgstr "%s : %s został wyrzucony z gry i dodany do listy banicji!"
 msgid "Kicking player %s, because they tried to bypass data integrity check!"
 msgstr "Gracz %s wyrzucony z powodu próby pominięcia sprawdzenia integralności danych!"
 
-#: src/multiplay.cpp:1095
+#: src/multiplay.cpp:1116
 msgid "(allies"
 msgstr "(sojusznicy"
 
-#: src/multiplay.cpp:1103
+#: src/multiplay.cpp:1124
 msgid "(private to "
 msgstr "(prywatny dla"
 
-#: src/multiplay.cpp:1116
+#: src/multiplay.cpp:1137
 msgid "[invalid]"
 msgstr "[nieprawidłowy]"
 
-#: src/multiplay.cpp:1978
+#: src/multiplay.cpp:1999
 msgid "Green"
 msgstr "Zielony"
 
-#: src/multiplay.cpp:1979
+#: src/multiplay.cpp:2000
 msgid "Orange"
 msgstr "Pomarańczowy"
 
-#: src/multiplay.cpp:1980
+#: src/multiplay.cpp:2001
 msgid "Grey"
 msgstr "Szary"
 
-#: src/multiplay.cpp:1982
+#: src/multiplay.cpp:2003
 msgid "Red"
 msgstr "Czerwony"
 
-#: src/multiplay.cpp:1983
+#: src/multiplay.cpp:2004
 msgid "Blue"
 msgstr "Niebieski"
 
-#: src/multiplay.cpp:1984
+#: src/multiplay.cpp:2005
 msgid "Pink"
 msgstr "Różowy"
 
-#: src/multiplay.cpp:1985
+#: src/multiplay.cpp:2006
 msgid "Cyan"
 msgstr "Turkusowy"
 
-#: src/multiplay.cpp:1986
+#: src/multiplay.cpp:2007
 msgid "Yellow"
 msgstr "Zółty"
 
-#: src/multiplay.cpp:1987
+#: src/multiplay.cpp:2008
 msgid "Purple"
 msgstr "Purpurowy"
 
-#: src/multiplay.cpp:1988
+#: src/multiplay.cpp:2009
 msgid "White"
 msgstr "Biały"
 
-#: src/multiplay.cpp:1989
+#: src/multiplay.cpp:2010
 msgid "Bright blue"
 msgstr "Jasnoniebieski"
 
-#: src/multiplay.cpp:1990
+#: src/multiplay.cpp:2011
 msgid "Neon green"
 msgstr "Neonowa zieleń"
 
-#: src/multiplay.cpp:1991
+#: src/multiplay.cpp:2012
 msgid "Infrared"
 msgstr "Podczerwień"
 
-#: src/multiplay.cpp:1992
+#: src/multiplay.cpp:2013
 msgid "Ultraviolet"
 msgstr "Ultrafiolet"
 
-#: src/multiplay.cpp:1993
+#: src/multiplay.cpp:2014
 msgid "Brown"
 msgstr "Brązowy"
 
@@ -14756,16 +14754,16 @@ msgstr "ZWYCIĘŻYŁEŚ!"
 msgid "YOU WERE DEFEATED!"
 msgstr "ZOSTAŁEŚ POKONANY!"
 
-#: src/research.cpp:1151
+#: src/research.cpp:1170
 #, c-format
 msgid "Research completed: %s"
 msgstr "Badania ukończone: %s"
 
-#: src/research.cpp:1156
+#: src/research.cpp:1175
 msgid "Research Completed"
 msgstr "Badania ukończone"
 
-#: src/research.cpp:1880
+#: src/research.cpp:1899
 msgid "Research Award"
 msgstr "Technologia skradziona"
 
