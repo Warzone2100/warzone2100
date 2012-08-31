@@ -561,6 +561,11 @@ static void check_Physfs(void)
 		debug(LOG_FATAL, "At least version 2 of PhysicsFS required!");
 		exit(-1);
 	}
+	if (linked.major == 2 && linked.minor == 0 && linked.patch == 2)
+	{
+		debug(LOG_ERROR, "You have PhysicsFS 2.0.2, which is buggy. You may experience random errors/crashes due to spuriously missing files.");
+		debug(LOG_ERROR, "Please upgrade/downgrade PhysicsFS to a different version, such as 2.0.3 or 2.0.1.");
+	}
 
     for (i = PHYSFS_supportedArchiveTypes(); *i != NULL; i++)
     {
