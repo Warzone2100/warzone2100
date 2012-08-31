@@ -1,7 +1,7 @@
 AC_PREREQ([2.56])
 AC_INIT([Warzone 2100],[3.1git],[http://wz2100.net/],[warzone2100])
 
-AM_INIT_AUTOMAKE([1.10 tar-ustar no-dist-gzip dist-xz])
+AM_INIT_AUTOMAKE([1.11 tar-ustar no-dist-gzip dist-xz])
 
 # Set to the default or stupid automake will use the much slower but useless -e(xtreme!!!) option.
 AC_SUBST([XZ_OPT], ["-6"])
