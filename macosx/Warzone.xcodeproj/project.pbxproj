@@ -426,6 +426,9 @@
 		437D3360150A53E000B45AAE /* qslint in Copy Additional Executables */ = {isa = PBXBuildFile; fileRef = 437D32D9150A47A800B45AAE /* qslint */; };
 		437DABE714C3345B00DB5F94 /* swapinterval.mm in Sources */ = {isa = PBXBuildFile; fileRef = 437DABE614C3345B00DB5F94 /* swapinterval.mm */; };
 		438BDDF31129DC9A00998660 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 438BDDD71129DC9A00998660 /* InfoPlist.strings */; };
+		439B604415F3981700B09DB2 /* COPYING.README.txt in Resources */ = {isa = PBXBuildFile; fileRef = 439B603D15F3981700B09DB2 /* COPYING.README.txt */; };
+		439B604515F3981700B09DB2 /* COPYING.txt in Resources */ = {isa = PBXBuildFile; fileRef = 439B603F15F3981700B09DB2 /* COPYING.txt */; };
+		439B604915F3999900B09DB2 /* COPYING.NONGPL.txt in Resources */ = {isa = PBXBuildFile; fileRef = 439B604715F3999900B09DB2 /* COPYING.NONGPL.txt */; };
 		43A6285B13A6C4A400C6B786 /* geometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43A6285913A6C4A400C6B786 /* geometry.cpp */; };
 		43A8417811028EDD00733CCB /* pointtree.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43A8417611028EDD00733CCB /* pointtree.cpp */; };
 		43B8F285127C8F9D006F5A13 /* crc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43B8F282127C8F9D006F5A13 /* crc.cpp */; };
@@ -1670,6 +1673,14 @@
 		438BDDF01129DC9A00998660 /* uk_UA */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = uk_UA; path = Resources/wzlocal/uk_UA.lproj/InfoPlist.strings; sourceTree = SOURCE_ROOT; };
 		438BDDF11129DC9A00998660 /* zh_CN */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = zh_CN; path = Resources/wzlocal/zh_CN.lproj/InfoPlist.strings; sourceTree = SOURCE_ROOT; };
 		438BDDF21129DC9A00998660 /* zh_TW */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = zh_TW; path = Resources/wzlocal/zh_TW.lproj/InfoPlist.strings; sourceTree = SOURCE_ROOT; };
+		439B600315F395E500B09DB2 /* ca_ES */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ca_ES; path = ca_ES.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		439B600415F395E500B09DB2 /* el */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = el; path = el.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		439B600515F395E500B09DB2 /* hu */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hu; path = hu.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		439B600615F395E500B09DB2 /* sk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sk; path = sk.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		439B600715F395E500B09DB2 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		439B603E15F3981700B09DB2 /* English */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = English; path = COPYING.README.txt; sourceTree = "<group>"; };
+		439B604015F3981700B09DB2 /* English */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = English; path = COPYING.txt; sourceTree = "<group>"; };
+		439B604815F3999900B09DB2 /* English */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = English; path = English.lproj/COPYING.NONGPL.txt; sourceTree = "<group>"; };
 		43A29BF51503C9F700E66094 /* piestate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = piestate.h; path = ../lib/ivis_opengl/piestate.h; sourceTree = SOURCE_ROOT; };
 		43A29BF61503C9F700E66094 /* pietypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = pietypes.h; path = ../lib/ivis_opengl/pietypes.h; sourceTree = SOURCE_ROOT; };
 		43A6285913A6C4A400C6B786 /* geometry.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = geometry.cpp; path = ../lib/framework/geometry.cpp; sourceTree = SOURCE_ROOT; };
@@ -2759,6 +2770,9 @@
 		43025C2B111FB072006C49B1 /* wzlocal */ = {
 			isa = PBXGroup;
 			children = (
+				439B604715F3999900B09DB2 /* COPYING.NONGPL.txt */,
+				439B603D15F3981700B09DB2 /* COPYING.README.txt */,
+				439B603F15F3981700B09DB2 /* COPYING.txt */,
 				438BDDD71129DC9A00998660 /* InfoPlist.strings */,
 			);
 			name = wzlocal;
@@ -3927,6 +3941,11 @@
 				et_EE,
 				ga,
 				ko,
+				ca_ES,
+				el,
+				hu,
+				sk,
+				tr,
 			);
 			mainGroup = 02356D640BD3BB2600E9A019;
 			productRefGroup = 02356D760BD3BB3400E9A019 /* Products */;
@@ -4044,6 +4063,9 @@
 				0246A05D0BD3C975004D1C70 /* Warzone.icns in Resources */,
 				438BDDF31129DC9A00998660 /* InfoPlist.strings in Resources */,
 				435AE7B014B55C3400B01C85 /* WarzoneHelp in Resources */,
+				439B604415F3981700B09DB2 /* COPYING.README.txt in Resources */,
+				439B604515F3981700B09DB2 /* COPYING.txt in Resources */,
+				439B604915F3999900B09DB2 /* COPYING.NONGPL.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5165,9 +5187,42 @@
 				438BDDF11129DC9A00998660 /* zh_CN */,
 				438BDDF21129DC9A00998660 /* zh_TW */,
 				43D6167F12048D2D004B9630 /* ko */,
+				439B600315F395E500B09DB2 /* ca_ES */,
+				439B600415F395E500B09DB2 /* el */,
+				439B600515F395E500B09DB2 /* hu */,
+				439B600615F395E500B09DB2 /* sk */,
+				439B600715F395E500B09DB2 /* tr */,
 			);
 			name = InfoPlist.strings;
-			sourceTree = "<group>";
+			path = Resources/wzlocal;
+			sourceTree = SOURCE_ROOT;
+		};
+		439B603D15F3981700B09DB2 /* COPYING.README.txt */ = {
+			isa = PBXVariantGroup;
+			children = (
+				439B603E15F3981700B09DB2 /* English */,
+			);
+			name = COPYING.README.txt;
+			path = Resources/wzlocal/English.lproj;
+			sourceTree = SOURCE_ROOT;
+		};
+		439B603F15F3981700B09DB2 /* COPYING.txt */ = {
+			isa = PBXVariantGroup;
+			children = (
+				439B604015F3981700B09DB2 /* English */,
+			);
+			name = COPYING.txt;
+			path = Resources/wzlocal/English.lproj;
+			sourceTree = SOURCE_ROOT;
+		};
+		439B604715F3999900B09DB2 /* COPYING.NONGPL.txt */ = {
+			isa = PBXVariantGroup;
+			children = (
+				439B604815F3999900B09DB2 /* English */,
+			);
+			name = COPYING.NONGPL.txt;
+			path = Resources/wzlocal;
+			sourceTree = SOURCE_ROOT;
 		};
 /* End PBXVariantGroup section */
 
