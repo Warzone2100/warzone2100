@@ -87,7 +87,6 @@ UDWORD	current_numplayers = 4;
 #define MULTIMENU_FORM_X		10 + D_W
 #define MULTIMENU_FORM_Y		23 + D_H
 #define MULTIMENU_FORM_W		620
-#define MULTIMENU_FORM_H		295
 
 #define MULTIMENU_PLAYER_H		32
 #define MULTIMENU_FONT_OSET		20
@@ -826,19 +825,19 @@ static void displayExtraGubbins(UDWORD height)
 
 		char const *srText[2] = {_("Sent/Received per sec —"), _("Total Sent/Received —")};
 		sprintf(str, srText[q]);
-		iV_DrawText(str, MULTIMENU_FORM_X + xPos, MULTIMENU_FORM_Y + MULTIMENU_FORM_H + yPos);
+		iV_DrawText(str, MULTIMENU_FORM_X + xPos, MULTIMENU_FORM_Y + height + yPos);
 		xPos += iV_GetTextWidth(str) + 20;
 
 		sprintf(str, _("Traf: %u/%u"), NETgetStatistic(NetStatisticRawBytes, true, isTotal), NETgetStatistic(NetStatisticRawBytes, false, isTotal));
-		iV_DrawText(str, MULTIMENU_FORM_X + xPos, MULTIMENU_FORM_Y + MULTIMENU_FORM_H + yPos);
+		iV_DrawText(str, MULTIMENU_FORM_X + xPos, MULTIMENU_FORM_Y + height + yPos);
 		xPos += iV_GetTextWidth(str) + 20;
 
 		sprintf(str, _("Uncompressed: %u/%u"), NETgetStatistic(NetStatisticUncompressedBytes, true, isTotal), NETgetStatistic(NetStatisticUncompressedBytes, false, isTotal));
-		iV_DrawText(str, MULTIMENU_FORM_X + xPos, MULTIMENU_FORM_Y + MULTIMENU_FORM_H + yPos);
+		iV_DrawText(str, MULTIMENU_FORM_X + xPos, MULTIMENU_FORM_Y + height + yPos);
 		xPos += iV_GetTextWidth(str) + 20;
 
 		sprintf(str, _("Pack: %u/%u"), NETgetStatistic(NetStatisticPackets, true, isTotal), NETgetStatistic(NetStatisticPackets, false, isTotal));
-		iV_DrawText(str, MULTIMENU_FORM_X + xPos, MULTIMENU_FORM_Y + MULTIMENU_FORM_H + yPos);
+		iV_DrawText(str, MULTIMENU_FORM_X + xPos, MULTIMENU_FORM_Y + height + yPos);
 	}
 #endif
 	return;
@@ -1261,7 +1260,7 @@ bool addDebugMenu(bool bAdd)
 	sFormInit.x				  =(SWORD)(DEBUGMENU_FORM_X);
 	sFormInit.y				  =(SWORD)(DEBUGMENU_FORM_Y);
 	sFormInit.width			  = DEBUGMENU_FORM_W;
-	sFormInit.height		  = (UWORD)formHeight;			//MULTIMENU_FORM_H;
+	sFormInit.height          = formHeight;
 	sFormInit.pDisplay		  = intOpenPlainForm;
 	sFormInit.disableChildren = true;
 
@@ -1340,7 +1339,7 @@ bool intAddMultiMenu(void)
 	sFormInit.x				  =(SWORD)(MULTIMENU_FORM_X);
 	sFormInit.y				  =(SWORD)(MULTIMENU_FORM_Y);
 	sFormInit.width			  = MULTIMENU_FORM_W;
-	sFormInit.height		  = (UWORD)(MULTIMENU_PLAYER_H*game.maxPlayers + MULTIMENU_PLAYER_H+7);	//MULTIMENU_FORM_H;
+	sFormInit.height          = MULTIMENU_PLAYER_H*game.maxPlayers + MULTIMENU_PLAYER_H + 7;
 	sFormInit.pDisplay		  = intOpenPlainForm;
 	sFormInit.disableChildren = true;
 

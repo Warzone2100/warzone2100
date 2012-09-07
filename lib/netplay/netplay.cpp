@@ -186,7 +186,13 @@ bool NETisCorrectVersion(uint32_t game_version_major, uint32_t game_version_mino
 void NETGameLocked( bool flag)
 {
 	NetPlay.GamePassworded = flag;
+	bool flagChanged = gamestruct.privateGame != flag;
 	gamestruct.privateGame = flag;
+	if (allow_joining && NetPlay.isHost && flagChanged)
+	{
+		debug(LOG_NET, "Updating game locked status.");
+		NETregisterServer(WZ_SERVER_UPDATE);
+	}
 	NETlogEntry("Password is", SYNC_FLAG, NetPlay.GamePassworded);
 	debug(LOG_NET, "Passworded game is %s", NetPlay.GamePassworded ? "TRUE" : "FALSE" );
 }
