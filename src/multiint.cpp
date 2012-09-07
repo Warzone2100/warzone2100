@@ -1464,18 +1464,14 @@ static void addGameOptions()
 		widgSetButtonState(psWScreen, MULTIOP_MAP_ICON, WBUT_DISABLE);
 	}
 	// password box
-	if (NetPlay.GamePassworded && ingame.bHostSetup && bHosted)
+	if (ingame.bHostSetup && NetPlay.bComms)
 	{
-		// FIXME: we can't force the state down (it gets reset), so we must handle it this way for now
-		addMultiEditBox(MULTIOP_OPTIONS, MULTIOP_PASSWORD_EDIT, MCOL0, MROW4, _("Password is already set!"), NetPlay.gamePassword, IMAGE_LOCK_BLUE, IMAGE_LOCK_BLUE, MULTIOP_PASSWORD_BUT);
-		// force the state down if a locked game
-		widgSetButtonState(psWScreen, MULTIOP_PASSWORD_BUT, WBUT_LOCK);
-		widgSetButtonState(psWScreen, MULTIOP_PASSWORD_EDIT, WEDBS_DISABLE);
-	}
-	else if (ingame.bHostSetup && !bHosted && NetPlay.bComms)
-	{
-		// only show this when we are not hosting a game
 		addMultiEditBox(MULTIOP_OPTIONS, MULTIOP_PASSWORD_EDIT, MCOL0, MROW4, _("Click to set Password"), NetPlay.gamePassword, IMAGE_UNLOCK_BLUE, IMAGE_LOCK_BLUE, MULTIOP_PASSWORD_BUT);
+		if (NetPlay.GamePassworded)
+		{
+			widgSetButtonState(psWScreen, MULTIOP_PASSWORD_BUT, WBUT_CLICKLOCK);
+			widgSetButtonState(psWScreen, MULTIOP_PASSWORD_EDIT, WEDBS_DISABLE);
+		}
 	}
 
 	// buttons
@@ -2635,12 +2631,6 @@ static void disableMultiButs(void)
 	// edit box icons.
 	widgSetButtonState(psWScreen, MULTIOP_GNAME_ICON, WBUT_DISABLE);
 	widgSetButtonState(psWScreen, MULTIOP_MAP_ICON, WBUT_DISABLE);
-	if (NetPlay.GamePassworded)
-	{
-		// force the state down if a locked game
-		widgSetButtonState(psWScreen, MULTIOP_PASSWORD_BUT, WBUT_LOCK);
-		widgSetButtonState(psWScreen, MULTIOP_PASSWORD_BUT, WBUT_DISABLE);
-	}
 
 	// edit boxes
 	widgSetButtonState(psWScreen,MULTIOP_GNAME,WEDBS_DISABLE);
@@ -2752,39 +2742,6 @@ static void processMultiopWidgets(UDWORD id)
 
 			debug(LOG_WZ, "processMultiopWidgets[MULTIOP_MAP_ICON]: %s.wrf", MultiCustomMapsPath);
 			addMultiRequest(MultiCustomMapsPath, ".wrf", MULTIOP_MAP, current_tech, current_numplayers);
-			break;
-
-		case MULTIOP_PASSWORD_BUT:
-			{
-				char game_password[64];
-				char buf[255];
-				int32_t result = 0;
-
-				result = widgGetButtonState(psWScreen, MULTIOP_PASSWORD_BUT);
-				debug(LOG_NET, "Password button hit, %d", result);
-				if (result == 0)
-				{
-					sstrcpy(game_password, widgGetString(psWScreen, MULTIOP_PASSWORD_EDIT));
-					NETsetGamePassword(game_password);
-					widgSetButtonState(psWScreen, MULTIOP_PASSWORD_BUT, WBUT_CLICKLOCK);
-					widgSetButtonState(psWScreen, MULTIOP_PASSWORD_EDIT, WEDBS_DISABLE);
-					// say password is now required to join games?
-					ssprintf(buf, _("*** password [%s] is now required! ***"), NetPlay.gamePassword);
-					addConsoleMessage(buf, DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
-					NETGameLocked(true);
-				}
-				else
-				{
-					widgSetButtonState(psWScreen, MULTIOP_PASSWORD_BUT , 0);
-					widgSetButtonState(psWScreen, MULTIOP_PASSWORD_EDIT, 0);
-					ssprintf(buf, _("*** password is NOT required! ***"));
-					addConsoleMessage(buf, DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
-					NETresetGamePassword();
-					NETGameLocked(false);
-					break;
-				}
-
-			}
 			break;
 
 		case MULTIOP_MAP_BUT:
@@ -2937,6 +2894,42 @@ static void processMultiopWidgets(UDWORD id)
 			if(bHosted)
 			{
 				sendOptions();
+			}
+			break;
+
+		case MULTIOP_PASSWORD_EDIT:
+			{
+				unsigned result = widgGetButtonState(psWScreen, MULTIOP_PASSWORD_BUT);
+				if (result != 0)
+				{
+					break;
+				}
+			}
+			// Continue, do not break, since we just set a password.
+		case MULTIOP_PASSWORD_BUT:
+			{
+				char buf[255];
+
+				bool willSet = widgGetButtonState(psWScreen, MULTIOP_PASSWORD_BUT) == 0;
+				debug(LOG_NET, "Password button hit, %d", (int)willSet);
+				widgSetButtonState(psWScreen, MULTIOP_PASSWORD_BUT,  willSet? WBUT_CLICKLOCK : 0);
+				widgSetButtonState(psWScreen, MULTIOP_PASSWORD_EDIT, willSet? WEDBS_DISABLE  : 0);
+				if (willSet)
+				{
+					char game_password[64];
+					sstrcpy(game_password, widgGetString(psWScreen, MULTIOP_PASSWORD_EDIT));
+					NETsetGamePassword(game_password);
+					// say password is now required to join games?
+					ssprintf(buf, _("*** password [%s] is now required! ***"), NetPlay.gamePassword);
+					addConsoleMessage(buf, DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
+				}
+				else
+				{
+					NETresetGamePassword();
+					ssprintf(buf, _("*** password is NOT required! ***"));
+					addConsoleMessage(buf, DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
+				}
+				NETGameLocked(willSet);
 			}
 			break;
 		}
