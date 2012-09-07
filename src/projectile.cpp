@@ -779,24 +779,39 @@ static void proj_InFlightFunc(PROJECTILE *psProj)
 				}
 				psProj->dst.x = clip(psProj->dst.x, 0, world_coord(mapWidth) - 1);
 				psProj->dst.y = clip(psProj->dst.y, 0, world_coord(mapHeight) - 1);
-				if (psStats->movementModel == MM_HOMINGINDIRECT)
+			}
+			if (psStats->movementModel == MM_HOMINGINDIRECT)
+			{
+				if (psProj->psDest == NULL)
 				{
-					int horizontalTargetDistance = iHypot(removeZ(psProj->dst - psProj->pos));
-					int terrainHeight = std::max(map_Height(removeZ(psProj->pos)), map_Height(removeZ(psProj->pos) + iSinCosR(iAtan2(removeZ(psProj->dst - psProj->pos)), psStats->flightSpeed*2*deltaProjectileTime/GAME_TICKS_PER_SEC)));
-					int desiredMinHeight = terrainHeight + std::min(horizontalTargetDistance/4, HOMINGINDIRECT_HEIGHT_MIN);
-					int desiredMaxHeight = std::max(psProj->dst.z, terrainHeight + HOMINGINDIRECT_HEIGHT_MAX);
-					int heightError = psProj->pos.z - clip(psProj->pos.z, desiredMinHeight, desiredMaxHeight);
-					psProj->dst.z -= horizontalTargetDistance*heightError*2/HOMINGINDIRECT_HEIGHT_MIN;
+					psProj->dst.z = map_Height(removeZ(psProj->pos)) - 1;  // Target missing, so just home in on the ground under where the target was.
 				}
+				int horizontalTargetDistance = iHypot(removeZ(psProj->dst - psProj->pos));
+				int terrainHeight = std::max(map_Height(removeZ(psProj->pos)), map_Height(removeZ(psProj->pos) + iSinCosR(iAtan2(removeZ(psProj->dst - psProj->pos)), psStats->flightSpeed*2*deltaProjectileTime/GAME_TICKS_PER_SEC)));
+				int desiredMinHeight = terrainHeight + std::min(horizontalTargetDistance/4, HOMINGINDIRECT_HEIGHT_MIN);
+				int desiredMaxHeight = std::max(psProj->dst.z, terrainHeight + HOMINGINDIRECT_HEIGHT_MAX);
+				int heightError = psProj->pos.z - clip(psProj->pos.z, desiredMinHeight, desiredMaxHeight);
+				psProj->dst.z -= horizontalTargetDistance*heightError*2/HOMINGINDIRECT_HEIGHT_MIN;
 			}
 			Vector3i delta = psProj->dst - psProj->pos;
 			int targetDistance = std::max(iHypot(delta), 1);
-			if (psProj->psDest == NULL && targetDistance < 10000)
+			if (psProj->psDest == NULL && targetDistance < 10000 && psStats->movementModel == MM_HOMINGDIRECT)
 			{
 				psProj->dst = psProj->pos + delta*10;  // Target missing, so just keep going in a straight line.
 			}
 			currentDistance = timeSoFar * psStats->flightSpeed / GAME_TICKS_PER_SEC;
 			Vector3i step = quantiseFraction(delta * psStats->flightSpeed, GAME_TICKS_PER_SEC*targetDistance, psProj->time, psProj->prevSpacetime.time);
+			if (psStats->movementModel == MM_HOMINGINDIRECT && psProj->psDest != NULL)
+			{
+				for (int tries = 0; tries < 10 && map_LineIntersect(psProj->prevSpacetime.pos, psProj->pos + step, iHypot(step)) < targetDistance - 1u; ++tries)
+				{
+					psProj->dst.z += iHypot(removeZ(psProj->dst - psProj->pos));  // Would collide with terrain this tick, change trajectory.
+					// Recalculate delta, targetDistance and step.
+					delta = psProj->dst - psProj->pos;
+					targetDistance = std::max(iHypot(delta), 1);
+					step = quantiseFraction(delta * psStats->flightSpeed, GAME_TICKS_PER_SEC*targetDistance, psProj->time, psProj->prevSpacetime.time);
+				}
+			}
 			psProj->pos += step;
 			psProj->rot.direction = iAtan2(removeZ(delta));
 			psProj->rot.pitch = iAtan2(delta.z, targetDistance);
