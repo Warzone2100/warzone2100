@@ -67,6 +67,7 @@ extern void pie_BoxFill(int x0,int y0, int x1, int y1, PIELIGHT colour);
 extern void iV_DrawImage(IMAGEFILE *ImageFile, UWORD ID, int x, int y);
 void iV_DrawImageTc(IMAGEFILE *imageFile, unsigned id, unsigned idTc, int x, int y, PIELIGHT colour);
 extern void iV_DrawImageRect(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int Width, int Height);
+void iV_DrawImageScaled(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int w, int h);
 
 extern void iV_TransBoxFill(float x0, float y0, float x1, float y1);
 extern void pie_UniTransBoxFill(float x0, float y0, float x1, float y1, PIELIGHT colour);
