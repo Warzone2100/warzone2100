@@ -1494,7 +1494,7 @@ static void displayTitleBitmap(WZ_DECL_UNUSED WIDGET *psWidget, WZ_DECL_UNUSED U
 // show warzone logo
 static void displayLogo(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
 {
-	iV_DrawImage(FrontImages, IMAGE_FE_LOGO, xOffset + psWidget->x, std::max<int>(yOffset + psWidget->y, 0));
+	iV_DrawImageScaled(FrontImages, IMAGE_FE_LOGO, xOffset + psWidget->x, yOffset + psWidget->y, psWidget->width, psWidget->height);
 }
 
 
@@ -1678,10 +1678,22 @@ void addTopForm(void)
 
 	sFormInit.formID= FRONTEND_TOPFORM;
 	sFormInit.id	= FRONTEND_LOGO;
-	sFormInit.x		= sFormInit.width/2  - iV_GetImageWidth(FrontImages, IMAGE_FE_LOGO)/2;
-	sFormInit.y		= sFormInit.height/2 - iV_GetImageHeight(FrontImages, IMAGE_FE_LOGO)/2;
-	sFormInit.width = iV_GetImageWidth(FrontImages, IMAGE_FE_LOGO);
-	sFormInit.height= iV_GetImageHeight(FrontImages, IMAGE_FE_LOGO);
+	int imgW = iV_GetImageWidth(FrontImages, IMAGE_FE_LOGO);
+	int imgH = iV_GetImageHeight(FrontImages, IMAGE_FE_LOGO);
+	int dstW = sFormInit.width;
+	int dstH = sFormInit.height;
+	if (imgW*dstH < imgH*dstW)  // Want to set aspect ratio dstW/dstH = imgW/imgH.
+	{
+		dstW = imgW * dstH/imgH;  // Too wide.
+	}
+	else if (imgW*dstH > imgH*dstW)
+	{
+		dstH = imgH * dstW/imgW;  // Too high.
+	}
+	sFormInit.x = (sFormInit.width  - dstW)/2;
+	sFormInit.y = (sFormInit.height - dstH)/2;
+	sFormInit.width  = dstW;
+	sFormInit.height = dstH;
 	sFormInit.pDisplay= displayLogo;
 	widgAddForm(psWScreen, &sFormInit);
 }

@@ -283,6 +283,24 @@ void iV_DrawImageRect(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int Width, i
 	}
 }
 
+void iV_DrawImageScaled(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int w, int h)
+{
+	if (!assertValidImage(ImageFile, ID))
+	{
+		return;
+	}
+
+	PIERECT dest;
+	PIEIMAGE pieImage = makePieImage(ImageFile, ID, &dest, x, y);
+	dest.w = w;
+	dest.h = h;
+
+	pie_SetRendMode(REND_ALPHA);
+	pie_SetAlphaTest(true);
+
+	pie_DrawImage(&pieImage, &dest);
+}
+
 /* FIXME: WTF is this supposed to do? Looks like some other functionality
  * was retrofitted onto something else. - Per */
 void pie_UploadDisplayBuffer()
