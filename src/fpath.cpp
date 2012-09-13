@@ -353,7 +353,7 @@ void fpathRemoveDroidData(int id)
 }
 
 static FPATH_RETVAL fpathRoute(MOVE_CONTROL *psMove, int id, int startX, int startY, int tX, int tY, PROPULSION_TYPE propulsionType, 
-                               DROID_TYPE droidType, FPATH_MOVETYPE moveType, int owner, bool acceptNearest, BASE_OBJECT *dstStructure)
+                               DROID_TYPE droidType, FPATH_MOVETYPE moveType, int owner, bool acceptNearest, StructureBounds const &dstStructure)
 {
 	objTrace(id, "called(*,id=%d,sx=%d,sy=%d,ex=%d,ey=%d,prop=%d,type=%d,move=%d,owner=%d)", id, startX, startY, tX, tY, (int)propulsionType, (int)droidType, (int)moveType, owner);
 
@@ -432,7 +432,7 @@ queuePathfinding:
 	job.droidID = id;
 	job.destX = tX;
 	job.destY = tY;
-	job.dstStructure = getStructureBounds(dstStructure);
+	job.dstStructure = dstStructure;
 	job.droidType = droidType;
 	job.propulsion = propulsionType;
 	job.moveType = moveType;
@@ -481,9 +481,9 @@ FPATH_RETVAL fpathDroidRoute(DROID* psDroid, SDWORD tX, SDWORD tY, FPATH_MOVETYP
 	// Check whether the start and end points of the route are blocking tiles and find an alternative if they are.
 	Position startPos = psDroid->pos;
 	Position endPos = Position(tX, tY, 0);
-	BASE_OBJECT *dstStructure = worldTile(endPos)->psObject;
+	StructureBounds dstStructure = getStructureBounds(worldTile(endPos)->psObject);
 	startPos = findNonblockingPosition(startPos, getPropulsionStats(psDroid)->propulsionType, psDroid->player, moveType);
-	if (dstStructure == NULL)  // If there's a structure over the destination, ignore it, otherwise pathfind from somewhere around the obstruction.
+	if (!dstStructure.valid())  // If there's a structure over the destination, ignore it, otherwise pathfind from somewhere around the obstruction.
 	{
 		endPos   = findNonblockingPosition(endPos,   getPropulsionStats(psDroid)->propulsionType, psDroid->player, moveType);
 	}
@@ -491,8 +491,10 @@ FPATH_RETVAL fpathDroidRoute(DROID* psDroid, SDWORD tX, SDWORD tY, FPATH_MOVETYP
 	switch (psDroid->order.type)
 	{
 	case DORDER_BUILD:
+	case DORDER_LINEBUILD:                       // build a number of structures in a row (walls + bridges)
+		dstStructure = getStructureBounds(psDroid->order.psStats, psDroid->order.pos, psDroid->order.direction);  // Just need to get close enough to build (can be diagonally), do not need to reach the destination tile.
+		// Continue, do not break.
 	case DORDER_HELPBUILD:                       // help to build a structure
-	case DORDER_LINEBUILD:                       // 6 - build a number of structures in a row (walls + bridges)
 	case DORDER_DEMOLISH:                        // demolish a structure
 	case DORDER_REPAIR:
 		acceptNearest = false;
@@ -574,7 +576,7 @@ static int fpathResultQueueLength(void)
 // Only used by fpathTest.
 static FPATH_RETVAL fpathSimpleRoute(MOVE_CONTROL *psMove, int id, int startX, int startY, int tX, int tY)
 {
-	return fpathRoute(psMove, id, startX, startY, tX, tY, PROPULSION_TYPE_WHEELED, DROID_WEAPON, FMT_BLOCK, 0, true, NULL);
+	return fpathRoute(psMove, id, startX, startY, tX, tY, PROPULSION_TYPE_WHEELED, DROID_WEAPON, FMT_BLOCK, 0, true, getStructureBounds((BASE_OBJECT *)NULL));
 }
 
 void fpathTest(int x, int y, int x2, int y2)
