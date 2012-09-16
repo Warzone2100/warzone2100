@@ -203,7 +203,7 @@ static Vector3f alteredPoints[iV_IMD_MAX_POINTS];
 /** Number of tiles visible
  * \todo This should become dynamic! (A function of resolution, angle and zoom maybe.)
  */
-Vector2i visibleTiles(VISIBLE_XTILES, VISIBLE_YTILES);
+const Vector2i visibleTiles(VISIBLE_XTILES, VISIBLE_YTILES);
 
 /// The tile we use for drawing the bottom of a body of water
 static unsigned int underwaterTile = WATER_TILE;
