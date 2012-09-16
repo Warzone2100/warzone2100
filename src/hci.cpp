@@ -5436,7 +5436,7 @@ static BASE_STATS *getResearchStats(BASE_OBJECT *psObj)
 	psBuilding = (STRUCTURE *)psObj;
 	psResearchFacility = &psBuilding->pFunctionality->researchFacility;
 
-	if (psResearchFacility->psSubjectPending != NULL)
+	if (psResearchFacility->psSubjectPending != NULL && !IsResearchCompleted(&asPlayerResList[psObj->player][psResearchFacility->psSubjectPending->index]))
 	{
 		return psResearchFacility->psSubjectPending;
 	}

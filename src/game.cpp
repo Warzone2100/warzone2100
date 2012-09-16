@@ -4312,7 +4312,17 @@ static bool loadSaveDroid(const char *pFileName, DROID **ppsCurrentDroidLists)
 		}
 		else
 		{
-			psDroid->psGroup = NULL;
+			if (psDroid->droidType == DROID_TRANSPORTER
+			    || psDroid->droidType == DROID_SUPERTRANSPORTER
+			    || psDroid->droidType == DROID_COMMAND)
+			{
+				DROID_GROUP *psGroup = grpCreate();
+				psGroup->add(psDroid);
+			}
+			else
+			{
+				psDroid->psGroup = NULL;
+			}
 		}
 		psDroid->died = ini.value("died", 0).toInt();
 		psDroid->lastEmission = ini.value("lastEmission", 0).toInt();
