@@ -1747,11 +1747,21 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		}
 		break;
 	case DORDER_EMBARK:
+	{
+		DROID *embarkee = castDroid(psOrder->psObj);
+		if (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER  // Embarker must not be transporter.
+		    || embarkee == NULL || !(embarkee->droidType == DROID_TRANSPORTER || embarkee->droidType == DROID_SUPERTRANSPORTER))  // Embarkee must be a transporter.
+		{
+			debug(LOG_ERROR, "Sorry, can only load things that aren't transporters into things that are.");
+			psDroid->order = DroidOrder(DORDER_NONE);
+			break;
+		}
 		// move the droid to the transporter location
 		psDroid->order = *psOrder;
 		psDroid->order.pos = removeZ(psOrder->psObj->pos);
 		actionDroid(psDroid, DACTION_MOVE, psOrder->psObj->pos.x, psOrder->psObj->pos.y);
 		break;
+	}
 	case DORDER_DISEMBARK:
 		//only valid in multiPlayer mode
 		if (bMultiPlayer)
