@@ -1,3 +1,17 @@
+2012-09-NN: Version 3.1 rc3
+ * General:
+   * Change: Pathfind to area around queued structure to be built (commit:88c1a3c3703d2ba260a101bb24cde419fe009afe, ticket:3576)
+   * Change: Improve HOMING-INDIRECT terrain avoidance (commit:b256d995b8b23bd4742d7cd8d876d6e0655e6d14)
+   * Change: Allow setting/clearing game password after game is hosted (commit:9575cf93e2a0b39c11d7bd2f51aef100fe4dae57)
+   * Change: Allow researching topics which labs being upgraded are already researching (commit:5bac6e4273fbdbd43acaf4a0042b373d4c9dec7c)
+   * Fix: Crash when placing transporters on the map in a map editor (ticket:3714, commit:508f26a174fd356b778419dd7c4eeaacfd27d8ac)
+   * Fix: Never add completed researches to research menu (ticket:3454, commit:d37f5276a17bbff963e5d59d1fcb2e744b494ac2)
+   * Fix: Don't try to remove unfinished off-world structures (ticket:3653, commit:594b8a6c631b160fda06f9ffca4b9f227c97c3f8)
+   * Fix: Scale logo to fit box (ticket:3667, commit:47011db59eb0c6254ed1626c4b9c8f32ee5a289c)
+   * Fix: Overflow effect creating very long progress bar (ticket:3685, commit:5b3163b9433604a470a9b4b3758081e2cdbb3755)
+   * Fix: Bug where the players list vanishes after we close our nick chooser (commit:11f19fbdb7a8f1ced43fcf24a80857da6eb63225)
+   * Warning: Warn on apparently buggy PhysFS version 2.0.2 (ticket:3700, commits:408be743f017cce1519cd955767abf0e697ab7f7)
+
 2012-08-05: Version 3.1 rc1
  * General:
    * Change: Allow multiple AIs with similar names (commit:ee95d785bdfd72a490863d7cdb3f504f88f9eecd)
