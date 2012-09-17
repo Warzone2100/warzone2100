@@ -253,22 +253,8 @@ void CalcRadarPosition(int mX, int mY, int *PosX, int *PosY)
 #endif
 
 	// old safety code -- still necessary?
-	if (sPosX < scrollMinX)
-	{
-		sPosX = scrollMinX;
-	}
-	else if (sPosX > scrollMaxX)
-	{
-		sPosX = scrollMaxX;
-	}
-	if (sPosY < scrollMinY)
-	{
-		sPosY = scrollMinY;
-	}
-	else if (sPosY > scrollMaxY)
-	{
-		sPosY = scrollMaxY;
-	}
+	sPosX = clip(sPosX, scrollMinX, scrollMaxX);
+	sPosY = clip(sPosY, scrollMinY, scrollMaxY);
 
 	*PosX = sPosX;
 	*PosY = sPosY;
@@ -582,8 +568,7 @@ static void RotateVector2D(Vector3i *Vector, Vector3i *TVector, Vector3i *Pos, i
 
 static SDWORD getDistanceAdjust( void )
 {
-	UDWORD	origDistance = MAXDISTANCE;
-	SDWORD	dif = MAX(origDistance - getViewDistance(), 0);
+	int dif = std::max<int>(MAXDISTANCE - getViewDistance(), 0);
 
 	return dif / 100;
 }
@@ -631,8 +616,8 @@ static void drawViewingWindow(float radarX, float radarY, int x, int y, float pi
 	v[3].x = -shortX;
 	v[3].y = yDrop;
 
-	centre.x = radarX + x - scrollMinX*pixSizeH/2;
-	centre.y = radarY + y - scrollMinY*pixSizeV/2;
+	centre.x = radarX + x - scrollMinX*pixSizeH;
+	centre.y = radarY + y - scrollMinY*pixSizeV;
 
 	RotateVector2D(v,tv,&centre,player.r.y,4);
 
@@ -666,8 +651,8 @@ static void drawViewingWindow(float radarX, float radarY, int x, int y, float pi
 
 static void DrawRadarExtras(float radarX, float radarY, float pixSizeH, float pixSizeV)
 {
-	int	viewX = (player.p.x / TILE_UNITS) * pixSizeH;
-	int	viewY = (player.p.z / TILE_UNITS) * pixSizeV;
+	int viewX = player.p.x*pixSizeH / TILE_UNITS;
+	int viewY = player.p.z*pixSizeV / TILE_UNITS;
 
 	drawViewingWindow(radarX, radarY, viewX, viewY, pixSizeH, pixSizeV);
 	RenderWindowFrame(FRAME_RADAR, radarX - 1, radarY - 1, radarWidth + 2, radarHeight + 2);

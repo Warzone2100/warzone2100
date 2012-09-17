@@ -122,7 +122,7 @@ extern Vector2i mousePos;
 extern bool bRender3DOnly;
 extern bool showGateways;
 extern bool showPath;
-extern Vector2i visibleTiles;
+extern const Vector2i visibleTiles;
 
 /*returns the graphic ID for a droid rank*/
 extern UDWORD  getDroidRankGraphic(DROID *psDroid);
