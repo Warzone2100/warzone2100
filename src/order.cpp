@@ -1570,6 +1570,12 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		actionDroid(psDroid, DACTION_OBSERVE, psOrder->psObj);
 		break;
 	case DORDER_FIRESUPPORT:
+		if (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER)
+		{
+			debug(LOG_ERROR, "Sorry, transports cannot be assigned to commanders.");
+			psDroid->order = DroidOrder(DORDER_NONE);
+			break;
+		}
 		if (psDroid->asWeaps[0].nStat == 0)
 		{
 			break;
@@ -1587,6 +1593,12 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		}
 		break;
 	case DORDER_COMMANDERSUPPORT:
+		if (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER)
+		{
+			debug(LOG_ERROR, "Sorry, transports cannot be assigned to commanders.");
+			psDroid->order = DroidOrder(DORDER_NONE);
+			break;
+		}
 		cmdDroidAddDroid((DROID *)psOrder->psObj, psDroid);
 		break;
 	case DORDER_RETREAT:
