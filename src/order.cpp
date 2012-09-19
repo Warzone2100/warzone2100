@@ -2600,19 +2600,19 @@ DroidOrder chooseOrderObj(DROID *psDroid, BASE_OBJECT *psObj, bool altOrder)
 
 	if (altOrder && (psObj->type == OBJ_DROID || psObj->type == OBJ_STRUCTURE) && psDroid->player == psObj->player)
 	{
-		if ((psDroid->droidType == DROID_WEAPON) || cyborgDroid(psDroid) ||
-			(psDroid->droidType == DROID_COMMAND))
-		{
-			return DroidOrder(DORDER_ATTACK, psObj);
-		}
-		else if (psDroid->droidType == DROID_SENSOR)
+		if (psDroid->droidType == DROID_SENSOR)
 		{
 			return DroidOrder(DORDER_OBSERVE, psObj);
 		}
 		else if ((psDroid->droidType == DROID_REPAIR ||
 		         psDroid->droidType == DROID_CYBORG_REPAIR) && psObj->type == OBJ_DROID)
 		{
-			return DroidOrder(DORDER_REPAIR, psObj);
+			return DroidOrder(DORDER_DROIDREPAIR, psObj);
+		}
+		else if ((psDroid->droidType == DROID_WEAPON) || cyborgDroid(psDroid) ||
+			(psDroid->droidType == DROID_COMMAND))
+		{
+			return DroidOrder(DORDER_ATTACK, psObj);
 		}
 	}
 	//check for transporters first
