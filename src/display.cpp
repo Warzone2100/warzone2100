@@ -2607,17 +2607,9 @@ STRUCTURE	*psStructure;
 				}
 				// If this building is a factory/power generator/research facility
 				// which isn't upgraded. Make the build icon available.
-				else if(((psStructure->pStructureType->type == REF_FACTORY
-				       || psStructure->pStructureType->type == REF_VTOL_FACTORY)
-				      && psStructure->pFunctionality->factory.capacity < NUM_FACTORY_MODULES)
-
-				     || (psStructure->pStructureType->type  == REF_POWER_GEN
-				      && psStructure->pFunctionality->powerGenerator.capacity < NUM_POWER_MODULES)
-
-				     || (psStructure->pStructureType->type  == REF_RESEARCH
-				      && psStructure->pFunctionality->researchFacility.capacity < NUM_RESEARCH_MODULES))
+				else if (nextModuleToBuild(psStructure, -1) > 0)
 				{
-						retVal = MT_OWNSTRINCOMP;
+					retVal = MT_OWNSTRINCOMP;
 				}
 				else
 				{
