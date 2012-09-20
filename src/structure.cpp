@@ -2525,13 +2525,19 @@ static bool structPlaceDroid(STRUCTURE *psStructure, DROID_TEMPLATE *psTempl,
 
 static bool IsFactoryCommanderGroupFull(const FACTORY* psFactory)
 {
+	if (bMultiPlayer)
+	{
+		// TODO: Synchronise .psCommander. Have to return false here, to avoid desynch.
+		return false;
+	}
+
 	unsigned int DroidsInGroup;
 
 	// If we don't have a commander return false (group not full)
 	if (psFactory->psCommander==NULL) return false;
 
 	// allow any number of IDF droids
-	if (templateIsIDF((DROID_TEMPLATE *)psFactory->psSubject))
+	if (templateIsIDF(psFactory->psSubject) || asPropulsionStats[psFactory->psSubject->asParts[COMP_PROPULSION]].propulsionType == PROPULSION_TYPE_LIFT)
 	{
 		return false;
 	}
