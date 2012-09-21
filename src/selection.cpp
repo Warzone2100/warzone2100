@@ -115,7 +115,7 @@ static unsigned int selSelectAllSameDroid(unsigned int player, DROID_TYPE droidT
 		if (!bOnScreen || droidOnScreen(psDroid, 0))
 		{
 			/* Same as the droid type asked for*/
-			if (psDroid->droidType == droidType)
+			if (psDroid->droidType == droidType || (droidType == DROID_TRANSPORTER && psDroid->droidType == DROID_SUPERTRANSPORTER))
 			{
 				SelectDroid(psDroid);
 				count++;

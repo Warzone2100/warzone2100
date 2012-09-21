@@ -2479,9 +2479,11 @@ static void kfsf_SetSelectedDroidsState( SECONDARY_ORDER sec, SECONDARY_STATE st
 	// This is a function to set unit orders via keyboard shortcuts. It should
 	// _not_ be disallowed in multiplayer games.
 
+	// This code is similar to SetSecondaryState() in intorder.cpp. Unfortunately, it seems hard to un-duplicate the code.
 	for(psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
 	{
-		if(psDroid->selected)
+		// Only set the state if it's not a transporter.
+		if (psDroid->selected && psDroid->droidType != DROID_TRANSPORTER && psDroid->droidType != DROID_SUPERTRANSPORTER)
 		{
 			secondarySetState(psDroid,sec,state);
 		}

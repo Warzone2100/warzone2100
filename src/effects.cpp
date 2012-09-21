@@ -1092,7 +1092,6 @@ static void updateGraviton(EFFECT *psEffect)
 {
 	float	accel;
 	Vector3i dv;
-	UDWORD	groundHeight;
 	MAPTILE	*psTile;
 	LIGHT	light;
 
@@ -1125,7 +1124,7 @@ static void updateGraviton(EFFECT *psEffect)
 		return;
 	}
 
-	groundHeight = map_Height(psEffect->position.x, psEffect->position.z);
+	int groundHeight = map_Height(psEffect->position.x, psEffect->position.z);
 
 	/* If it's going up and it's still under the landscape, then remove it... */
 	if (psEffect->position.y<groundHeight
