@@ -1570,6 +1570,12 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		actionDroid(psDroid, DACTION_OBSERVE, psOrder->psObj);
 		break;
 	case DORDER_FIRESUPPORT:
+		if (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER)
+		{
+			debug(LOG_ERROR, "Sorry, transports cannot be assigned to commanders.");
+			psDroid->order = DroidOrder(DORDER_NONE);
+			break;
+		}
 		if (psDroid->asWeaps[0].nStat == 0)
 		{
 			break;
@@ -1587,6 +1593,12 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		}
 		break;
 	case DORDER_COMMANDERSUPPORT:
+		if (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER)
+		{
+			debug(LOG_ERROR, "Sorry, transports cannot be assigned to commanders.");
+			psDroid->order = DroidOrder(DORDER_NONE);
+			break;
+		}
 		cmdDroidAddDroid((DROID *)psOrder->psObj, psDroid);
 		break;
 	case DORDER_RETREAT:
@@ -1747,11 +1759,21 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		}
 		break;
 	case DORDER_EMBARK:
+	{
+		DROID *embarkee = castDroid(psOrder->psObj);
+		if (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER  // Embarker must not be transporter.
+		    || embarkee == NULL || !(embarkee->droidType == DROID_TRANSPORTER || embarkee->droidType == DROID_SUPERTRANSPORTER))  // Embarkee must be a transporter.
+		{
+			debug(LOG_ERROR, "Sorry, can only load things that aren't transporters into things that are.");
+			psDroid->order = DroidOrder(DORDER_NONE);
+			break;
+		}
 		// move the droid to the transporter location
 		psDroid->order = *psOrder;
 		psDroid->order.pos = removeZ(psOrder->psObj->pos);
 		actionDroid(psDroid, DACTION_MOVE, psOrder->psObj->pos.x, psOrder->psObj->pos.y);
 		break;
+	}
 	case DORDER_DISEMBARK:
 		//only valid in multiPlayer mode
 		if (bMultiPlayer)
@@ -2578,19 +2600,19 @@ DroidOrder chooseOrderObj(DROID *psDroid, BASE_OBJECT *psObj, bool altOrder)
 
 	if (altOrder && (psObj->type == OBJ_DROID || psObj->type == OBJ_STRUCTURE) && psDroid->player == psObj->player)
 	{
-		if ((psDroid->droidType == DROID_WEAPON) || cyborgDroid(psDroid) ||
-			(psDroid->droidType == DROID_COMMAND))
-		{
-			return DroidOrder(DORDER_ATTACK, psObj);
-		}
-		else if (psDroid->droidType == DROID_SENSOR)
+		if (psDroid->droidType == DROID_SENSOR)
 		{
 			return DroidOrder(DORDER_OBSERVE, psObj);
 		}
 		else if ((psDroid->droidType == DROID_REPAIR ||
 		         psDroid->droidType == DROID_CYBORG_REPAIR) && psObj->type == OBJ_DROID)
 		{
-			return DroidOrder(DORDER_REPAIR, psObj);
+			return DroidOrder(DORDER_DROIDREPAIR, psObj);
+		}
+		else if ((psDroid->droidType == DROID_WEAPON) || cyborgDroid(psDroid) ||
+			(psDroid->droidType == DROID_COMMAND))
+		{
+			return DroidOrder(DORDER_ATTACK, psObj);
 		}
 	}
 	//check for transporters first

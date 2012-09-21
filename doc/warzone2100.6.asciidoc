@@ -10,7 +10,7 @@ SYNOPSIS
 --------
 *warzone2100* ['OPTIONS']
 
-DESCIPTION
+DESCRIPTION
 ----------
 
 This manual page documents briefly the warzone2100 command.

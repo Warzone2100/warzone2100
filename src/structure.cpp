@@ -2094,7 +2094,8 @@ void assignFactoryCommandDroid(STRUCTURE *psStruct, DROID *psCommander)
 		}
 
 		psFact->psCommander = NULL;
-		syncDebug("Removed commander from factory %d", psStruct->id);
+		// TODO: Synchronise .psCommander.
+		//syncDebug("Removed commander from factory %d", psStruct->id);
 		if (!missionIsOffworld())
 		{
 			addFlagPosition(psFact->psAssemblyPoint);	// add the assembly point back into the list
@@ -2422,18 +2423,29 @@ static bool structPlaceDroid(STRUCTURE *psStructure, DROID_TEMPLATE *psTempl,
 			assignCommander = true;
 		}
 
-		if ( psFact->psCommander != NULL )
+		bool isTransporter = psNewDroid->droidType == DROID_TRANSPORTER || psNewDroid->droidType == DROID_SUPERTRANSPORTER;
+		if (isVtolDroid(psNewDroid) && !isTransporter)
 		{
-			syncDebug("Has commander.");
-			if (idfDroid(psNewDroid) ||
+			moveToRearm(psNewDroid);
+		}
+		if (psFact->psCommander != NULL && myResponsibility(psStructure->player))
+		{
+			// TODO: Should synchronise .psCommander in all cases.
+			//syncDebug("Has commander.");
+			if (isTransporter)
+			{
+				// Transporters can't be assigned to commanders, due to abuse of .psGroup. Try to land on the commander instead. Hopefully the transport is heavy enough to crush the commander.
+				orderDroidLoc(psNewDroid, DORDER_MOVE, psFact->psCommander->pos.x, psFact->psCommander->pos.y, ModeQueue);
+			}
+			else if (idfDroid(psNewDroid) ||
 				isVtolDroid(psNewDroid))
 			{
-				orderDroidObj(psNewDroid, DORDER_FIRESUPPORT, psFact->psCommander, ModeImmediate);
-				moveToRearm(psNewDroid);
+				orderDroidObj(psNewDroid, DORDER_FIRESUPPORT, psFact->psCommander, ModeQueue);
+				//moveToRearm(psNewDroid);
 			}
 			else
 			{
-				orderDroidObj(psNewDroid, DORDER_COMMANDERSUPPORT, psFact->psCommander, ModeImmediate);
+				orderDroidObj(psNewDroid, DORDER_COMMANDERSUPPORT, psFact->psCommander, ModeQueue);
 			}
 		}
 		else
@@ -2450,10 +2462,6 @@ static bool structPlaceDroid(STRUCTURE *psStructure, DROID_TEMPLATE *psTempl,
 			}
 			//if vtol droid - send it to ReArm Pad if one exists
 			placed = false;
-			if (isVtolDroid(psNewDroid) && (psNewDroid->droidType != DROID_TRANSPORTER && psNewDroid->droidType != DROID_SUPERTRANSPORTER))
-			{
-				moveToRearm(psNewDroid);
-			}
 			if (!placed)
 			{
 				//find flag in question.
@@ -2498,13 +2506,19 @@ static bool structPlaceDroid(STRUCTURE *psStructure, DROID_TEMPLATE *psTempl,
 
 static bool IsFactoryCommanderGroupFull(const FACTORY* psFactory)
 {
+	if (bMultiPlayer)
+	{
+		// TODO: Synchronise .psCommander. Have to return false here, to avoid desynch.
+		return false;
+	}
+
 	unsigned int DroidsInGroup;
 
 	// If we don't have a commander return false (group not full)
 	if (psFactory->psCommander==NULL) return false;
 
 	// allow any number of IDF droids
-	if (templateIsIDF((DROID_TEMPLATE *)psFactory->psSubject))
+	if (templateIsIDF(psFactory->psSubject) || asPropulsionStats[psFactory->psSubject->asParts[COMP_PROPULSION]].propulsionType == PROPULSION_TYPE_LIFT)
 	{
 		return false;
 	}

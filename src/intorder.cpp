@@ -984,6 +984,7 @@ void intRunOrder(void)
 //
 static bool SetSecondaryState(SECONDARY_ORDER sec, unsigned State)
 {
+	// This code is similar to kfsf_SetSelectedDroidsState() in keybind.cpp. Unfortunately, it seems hard to un-duplicate the code.
 	for (unsigned i = 0; i < SelectedDroids.size(); ++i)
 	{
 		if (SelectedDroids[i])

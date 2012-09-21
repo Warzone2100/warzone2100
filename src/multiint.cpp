@@ -1449,12 +1449,12 @@ static void addGameOptions()
 		                IMAGE_EDIT_GAME_HI, MULTIOP_GNAME_ICON);
 		// disable for one-player skirmish
 		widgSetButtonState(psWScreen, MULTIOP_GNAME, WEDBS_DISABLE);
-		widgSetButtonState(psWScreen, MULTIOP_GNAME_ICON, WBUT_DISABLE);
 	}
 	else
 	{
 		addMultiEditBox(MULTIOP_OPTIONS, MULTIOP_GNAME, MCOL0, MROW2, _("Select Game Name"), game.name, IMAGE_EDIT_GAME, IMAGE_EDIT_GAME_HI, MULTIOP_GNAME_ICON);
 	}
+	widgSetButtonState(psWScreen, MULTIOP_GNAME_ICON, WBUT_DISABLE);
 	// map chooser
 	addMultiEditBox(MULTIOP_OPTIONS, MULTIOP_MAP  , MCOL0, MROW3, _("Select Map"), game.map, IMAGE_EDIT_MAP, IMAGE_EDIT_MAP_HI, MULTIOP_MAP_ICON);
 	// disable for challenges
