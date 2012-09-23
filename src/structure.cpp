@@ -967,9 +967,9 @@ void structureDemolish(STRUCTURE *psStruct, DROID *psDroid, int buildPoints)
 	structureBuild(psStruct, psDroid, -buildPoints);
 }
 
-bool structureRepair(STRUCTURE *psStruct, DROID *psDroid, int buildPoints)
+void structureRepair(STRUCTURE *psStruct, DROID *psDroid, int buildRate)
 {
-	int repairAmount = (buildPoints * structureBody(psStruct))/psStruct->pStructureType->buildPoints;
+	int repairAmount = gameTimeAdjustedAverage(buildRate*structureBody(psStruct), psStruct->pStructureType->buildPoints);
 	/*	(droid construction power * current max hitpoints [incl. upgrades])
 			/ construction power that was necessary to build structure in the first place
 	
@@ -978,21 +978,7 @@ bool structureRepair(STRUCTURE *psStruct, DROID *psDroid, int buildPoints)
 		This happens with expensive, but weak buildings like mortar pits. In this case, do nothing
 		and notify the caller (read: droid) of your idleness by returning false.
 	*/
-	if (repairAmount != 0)  // didn't get truncated to zero
-	{
-		psStruct->body += repairAmount;
-		psStruct->body = MIN(psStruct->body, structureBody(psStruct));
-		if (psStruct->body == 0)
-		{
-			removeStruct(psStruct, true);
-		}
-		return true;
-	} 
-	else
-	{
-		// got truncated to zero; wait until droid has accumulated enough buildpoints
-		return false;
-	}
+	psStruct->body = clip(psStruct->body + repairAmount, 0, structureBody(psStruct));
 }
 
 /* Set the type of droid for a factory to build */

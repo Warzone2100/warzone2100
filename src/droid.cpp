@@ -1122,27 +1122,16 @@ bool droidStartDemolishing( DROID *psDroid )
 
 bool droidUpdateDemolishing( DROID *psDroid )
 {
-	STRUCTURE	*psStruct;
-	UDWORD		pointsToAdd, constructPoints;
-
 	CHECK_DROID(psDroid);
 
 	ASSERT_OR_RETURN(false, psDroid->action == DACTION_DEMOLISH, "unit is not demolishing");
-	psStruct = (STRUCTURE *)psDroid->order.psObj;
+	STRUCTURE *psStruct = (STRUCTURE *)psDroid->order.psObj;
 	ASSERT_OR_RETURN(false, psStruct->type == OBJ_STRUCTURE, "target is not a structure");
 
-	//constructPoints = (asConstructStats + psDroid->asBits[COMP_CONSTRUCT].nStat)->
-	//	constructPoints;
-	constructPoints = 5 * constructorPoints(asConstructStats + psDroid->
-		asBits[COMP_CONSTRUCT].nStat, psDroid->player);
+	int constructRate = 5 * constructorPoints(asConstructStats + psDroid->asBits[COMP_CONSTRUCT].nStat, psDroid->player);
+	int pointsToAdd = gameTimeAdjustedAverage(constructRate);
 
-	pointsToAdd = constructPoints * (gameTime - psDroid->actionStarted) /
-		GAME_TICKS_PER_SEC;
-
-	structureDemolish(psStruct, psDroid, pointsToAdd - psDroid->actionPoints);
-
-	//store the amount just subtracted
-	psDroid->actionPoints = pointsToAdd;
+	structureDemolish(psStruct, psDroid, pointsToAdd);
 
 	addConstructorEffect(psStruct);
 
@@ -1301,27 +1290,16 @@ int getRecoil(WEAPON const &weapon)
 
 bool droidUpdateRepair( DROID *psDroid )
 {
-	STRUCTURE	*psStruct;
-	UDWORD		iPointsToAdd, iRepairPoints;
-
 	CHECK_DROID(psDroid);
 
 	ASSERT_OR_RETURN(false, psDroid->action == DACTION_REPAIR, "unit does not have repair order");
-	psStruct = (STRUCTURE *)psDroid->psActionTarget[0];
+	STRUCTURE *psStruct = (STRUCTURE *)psDroid->psActionTarget[0];
 
 	ASSERT_OR_RETURN(false, psStruct->type == OBJ_STRUCTURE, "target is not a structure");
-	iRepairPoints = constructorPoints(asConstructStats + psDroid->asBits[COMP_CONSTRUCT].nStat, psDroid->player);
-	iPointsToAdd = iRepairPoints * (gameTime - psDroid->actionStarted) / GAME_TICKS_PER_SEC;
+	int iRepairRate = constructorPoints(asConstructStats + psDroid->asBits[COMP_CONSTRUCT].nStat, psDroid->player);
 
 	/* add points to structure */
-	if (iPointsToAdd - psDroid->actionPoints > 0)
-	{
-		if (structureRepair(psStruct, psDroid, iPointsToAdd - psDroid->actionPoints))
-		{
-			/* store the amount just added */
-			psDroid->actionPoints = iPointsToAdd;
-		}
-	}
+	structureRepair(psStruct, psDroid, iRepairRate);
 
 	/* if not finished repair return true else complete repair and return false */
 	if (psStruct->body < structureBody(psStruct))
@@ -1330,8 +1308,7 @@ bool droidUpdateRepair( DROID *psDroid )
 	}
 	else
 	{
-		objTrace(psDroid->id, "Repaired of %s all done with %u - %u points", objInfo((BASE_OBJECT *)psStruct), iPointsToAdd, psDroid->actionPoints);
-		psStruct->body = (UWORD)structureBody(psStruct);
+		objTrace(psDroid->id, "Repaired of %s all done with %u", objInfo(psStruct), iRepairRate);
 		return false;
 	}
 }
@@ -1339,51 +1316,32 @@ bool droidUpdateRepair( DROID *psDroid )
 /*Updates a Repair Droid working on a damaged droid*/
 bool droidUpdateDroidRepair(DROID *psRepairDroid)
 {
-	DROID		*psDroidToRepair;
-	UDWORD		iPointsToAdd, iRepairPoints;
-	Vector3i iVecEffect;
-
 	CHECK_DROID(psRepairDroid);
 
 	ASSERT_OR_RETURN(false, psRepairDroid->action == DACTION_DROIDREPAIR, "Unit does not have unit repair order");
 	ASSERT_OR_RETURN(false, psRepairDroid->asBits[COMP_REPAIRUNIT].nStat != 0, "Unit does not have a repair turret");
 
-	psDroidToRepair = (DROID *)psRepairDroid->psActionTarget[0];
+	DROID *psDroidToRepair = (DROID *)psRepairDroid->psActionTarget[0];
 	ASSERT_OR_RETURN(false, psDroidToRepair->type == OBJ_DROID, "Target is not a unit");
 
-	iRepairPoints = repairPoints(asRepairStats + psRepairDroid->
-		asBits[COMP_REPAIRUNIT].nStat, psRepairDroid->player);
+	int iRepairRateNumerator = repairPoints(asRepairStats + psRepairDroid->asBits[COMP_REPAIRUNIT].nStat, psRepairDroid->player);
+	int iRepairRateDenominator = 1;
 
 	//if self repair then add repair points depending on the time delay for the stat
 	if (psRepairDroid == psDroidToRepair)
 	{
-		iPointsToAdd = iRepairPoints * (gameTime - psRepairDroid->actionStarted) /
-			(asRepairStats + psRepairDroid->asBits[COMP_REPAIRUNIT].nStat)->time;
-	}
-	else
-	{
-		iPointsToAdd = iRepairPoints * (gameTime - psRepairDroid->actionStarted) /
-			GAME_TICKS_PER_SEC;
+		iRepairRateNumerator *= GAME_TICKS_PER_SEC;
+		iRepairRateDenominator *= (asRepairStats + psRepairDroid->asBits[COMP_REPAIRUNIT].nStat)->time;
 	}
 
-	iPointsToAdd -= psRepairDroid->actionPoints;
+	int iPointsToAdd = gameTimeAdjustedAverage(iRepairRateNumerator, iRepairRateDenominator);
 
-        //just add the points if the power cost is negligable
-        //if these points would make the droid healthy again then just add
-        if (psDroidToRepair->body + iPointsToAdd >= psDroidToRepair->originalBody)
-        {
-            //anothe HACK but sorts out all the rounding errors when values get small
-		iPointsToAdd = psDroidToRepair->originalBody - psDroidToRepair->body;
-        }
-	psDroidToRepair->body += iPointsToAdd;
-	psRepairDroid->actionPoints += iPointsToAdd;
+	psDroidToRepair->body = clip(psDroidToRepair->body + iPointsToAdd, 0, psDroidToRepair->originalBody);
 
 	/* add plasma repair effect whilst being repaired */
 	if ((ONEINFIVE) && (psDroidToRepair->visible[selectedPlayer]))
 	{
-		iVecEffect.x = psDroidToRepair->pos.x + DROID_REPAIR_SPREAD;
-		iVecEffect.y = psDroidToRepair->pos.z + rand()%8;;
-		iVecEffect.z = psDroidToRepair->pos.y + DROID_REPAIR_SPREAD;
+		Vector3i iVecEffect = swapYZ(psDroidToRepair->pos + Vector3i(DROID_REPAIR_SPREAD, DROID_REPAIR_SPREAD, rand()%8));
 		effectGiveAuxVar(90+rand()%20);
 		addEffect(&iVecEffect, EFFECT_EXPLOSION, EXPLOSION_TYPE_LASER, false, NULL, 0, gameTime - deltaGameTime + 1 + rand()%deltaGameTime);
 		droidAddWeldSound( iVecEffect );
