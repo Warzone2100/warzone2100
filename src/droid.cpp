@@ -104,9 +104,11 @@ extern DROID_TEMPLATE	sDefaultDesignTemplate;
 DROID	*psLastDroidHit;
 
 //determines the best IMD to draw for the droid - A TEMP MEASURE!
-void	groupConsoleInformOfSelection( UDWORD groupNumber );
-void	groupConsoleInformOfCreation( UDWORD groupNumber );
-void	groupConsoleInformOfCentering( UDWORD groupNumber );
+static void groupConsoleInformOfSelection(UDWORD groupNumber);
+static void groupConsoleInformOfCreation(UDWORD groupNumber);
+static void groupConsoleInformOfCentering(UDWORD groupNumber);
+
+static void droidUpdateDroidSelfRepair(DROID *psRepairDroid);
 
 void cancelBuild(DROID *psDroid)
 {
@@ -826,6 +828,12 @@ void droidUpdate(DROID *psDroid)
 	}
 	// -----------------
 
+	// See if we can and need to self repair.
+	if (!isVtolDroid(psDroid) && psDroid->body < psDroid->originalBody && psDroid->asBits[COMP_REPAIRUNIT].nStat != 0 && selfRepairEnabled(psDroid->player))
+	{
+		droidUpdateDroidSelfRepair(psDroid);
+	}
+
 	/* Update the fire damage data */
 	if (psDroid->burnStart != 0 && psDroid->burnStart != gameTime - deltaGameTime)  // -deltaGameTime, since projectiles are updated after droids.
 	{
@@ -1176,29 +1184,6 @@ bool droidStartDroidRepair( DROID *psDroid )
 	return true;
 }
 
-/*checks a droids current body points to see if need to self repair*/
-void droidSelfRepair(DROID *psDroid)
-{
-	CHECK_DROID(psDroid);
-
-	if (!isVtolDroid(psDroid))
-	{
-		if (psDroid->body < psDroid->originalBody)
-		{
-			if (psDroid->asBits[COMP_REPAIRUNIT].nStat != 0)
-			{
-				psDroid->action = DACTION_DROIDREPAIR;
-				setDroidActionTarget(psDroid, (BASE_OBJECT *)psDroid, 0);
-				psDroid->actionStarted = gameTime;
-				psDroid->actionPoints  = 0;
-			}
-		}
-	}
-
-	CHECK_DROID(psDroid);
-}
-
-
 /*Start a EW weapon droid working on a low resistance structure*/
 bool droidStartRestore( DROID *psDroid )
 {
@@ -1314,15 +1299,9 @@ bool droidUpdateRepair( DROID *psDroid )
 }
 
 /*Updates a Repair Droid working on a damaged droid*/
-bool droidUpdateDroidRepair(DROID *psRepairDroid)
+static bool droidUpdateDroidRepairBase(DROID *psRepairDroid, DROID *psDroidToRepair)
 {
 	CHECK_DROID(psRepairDroid);
-
-	ASSERT_OR_RETURN(false, psRepairDroid->action == DACTION_DROIDREPAIR, "Unit does not have unit repair order");
-	ASSERT_OR_RETURN(false, psRepairDroid->asBits[COMP_REPAIRUNIT].nStat != 0, "Unit does not have a repair turret");
-
-	DROID *psDroidToRepair = (DROID *)psRepairDroid->psActionTarget[0];
-	ASSERT_OR_RETURN(false, psDroidToRepair->type == OBJ_DROID, "Target is not a unit");
 
 	int iRepairRateNumerator = repairPoints(asRepairStats + psRepairDroid->asBits[COMP_REPAIRUNIT].nStat, psRepairDroid->player);
 	int iRepairRateDenominator = 1;
@@ -1351,6 +1330,22 @@ bool droidUpdateDroidRepair(DROID *psRepairDroid)
 
 	/* if not finished repair return true else complete repair and return false */
 	return psDroidToRepair->body < psDroidToRepair->originalBody;
+}
+
+bool droidUpdateDroidRepair(DROID *psRepairDroid)
+{
+	ASSERT_OR_RETURN(false, psRepairDroid->action == DACTION_DROIDREPAIR, "Unit does not have unit repair order");
+	ASSERT_OR_RETURN(false, psRepairDroid->asBits[COMP_REPAIRUNIT].nStat != 0, "Unit does not have a repair turret");
+
+	DROID *psDroidToRepair = (DROID *)psRepairDroid->psActionTarget[0];
+	ASSERT_OR_RETURN(false, psDroidToRepair->type == OBJ_DROID, "Target is not a unit");
+
+	return droidUpdateDroidRepairBase(psRepairDroid, psDroidToRepair);
+}
+
+static void droidUpdateDroidSelfRepair(DROID *psRepairDroid)
+{
+	droidUpdateDroidRepairBase(psRepairDroid, psRepairDroid);
 }
 
 // return whether a droid is IDF

@@ -157,9 +157,6 @@ extern bool droidStartDroidRepair( DROID *psDroid );
 /*Updates a Repair Droid working on a damaged droid - returns true whilst repairing*/
 extern bool droidUpdateDroidRepair(DROID *psRepairDroid);
 
-/*checks a droids current body points to see if need to self repair*/
-extern void droidSelfRepair(DROID *psDroid);
-
 /* Update a construction droid while it is building
    returns true while building continues */
 extern bool droidUpdateBuild(DROID *psDroid);
