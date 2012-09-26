@@ -1648,6 +1648,33 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 		{
 			psBuilding->asWeaps[0].ammo = 1; // ready to trigger the fire button
 		}
+
+		// Move any delivery points under the new structure.
+		StructureBounds bounds = getStructureBounds(psBuilding);
+		for (unsigned player = 0; player < MAX_PLAYERS; ++player)
+		{
+			for (STRUCTURE *psStruct = apsStructLists[player]; psStruct != NULL; psStruct = psStruct->psNext)
+			{
+				FLAG_POSITION *fp = NULL;
+				if (StructIsFactory(psStruct))
+				{
+					fp = psStruct->pFunctionality->factory.psAssemblyPoint;
+				}
+				else if (psStruct->pStructureType->type == REF_REPAIR_FACILITY)
+				{
+					fp = psStruct->pFunctionality->repairFacility.psDeliveryPoint;
+				}
+				if (fp != NULL)
+				{
+					Vector2i pos = map_coord(removeZ(fp->coords));
+					if (unsigned(pos.x - bounds.map.x) < unsigned(bounds.size.x) && unsigned(pos.y - bounds.map.y) < unsigned(bounds.size.y))
+					{
+						// Delivery point fp is under the new structure. Need to move it.
+						setAssemblyPoint(fp, fp->coords.x, fp->coords.y, player, true);
+					}
+				}
+			}
+		}
 	}
 	else //its an upgrade
 	{
