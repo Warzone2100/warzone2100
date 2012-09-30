@@ -315,7 +315,7 @@ function buildFundamentals2()
 		}
 	}
 	// Build as many factories as we can afford
-	if ((factlist.length < 2 || (factlist.length < 4 && playerPower(me) > factlist.length * 1000))
+	if ((factlist.length < 2 || (factlist.length < 4 && playerPower(me) > factlist.length * 750))
 	    && isStructureAvailable(factory) && grabTrucksAndBuild(20, factory, 1))
 	{
 		return; // done here
