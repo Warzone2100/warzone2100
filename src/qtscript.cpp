@@ -33,6 +33,7 @@
 #include <QtCore/QList>
 #include <QtCore/QString>
 #include <QtCore/QStringList>
+#include <QtCore/QFileInfo>
 
 #include "lib/framework/wzapp.h"
 #include "lib/framework/wzconfig.h"
@@ -440,6 +441,11 @@ bool loadPlayerScript(QString path, int player, int difficulty)
 	ASSERT_OR_RETURN(false, !engine->hasUncaughtException(), "Uncaught exception at line %d, file %s: %s", 
 	                 engine->uncaughtExceptionLineNumber(), path.toAscii().constData(), result.toString().toAscii().constData());
 
+	// We also need to save the special 'scriptName' variable.
+	//== \item[scriptName] Base name of the script that is running.
+	QFileInfo basename(path);
+	engine->globalObject().setProperty("scriptName", basename.baseName(), QScriptValue::ReadOnly | QScriptValue::Undeletable);
+
 	// Register script
 	scripts.push_back(engine);
 
@@ -480,6 +486,7 @@ bool saveScriptStates(const char *filename)
 		timerNode node = timers.at(i);
 		ini.beginGroup(QString("triggers_") + QString::number(i));
 		ini.setValue("player", node.player);
+		ini.setValue("scriptName", node.engine->globalObject().property("scriptName").toString().toUtf8().constData());
 		ini.setValue("function", node.function.toUtf8().constData());
 		if (!node.baseobj >= 0)
 		{
@@ -493,18 +500,20 @@ bool saveScriptStates(const char *filename)
 	return true;
 }
 
-static QScriptEngine *findEngineForPlayer(int match)
+static QScriptEngine *findEngineForPlayer(int match, QString scriptName)
 {
 	for (int i = 0; i < scripts.size(); ++i)
 	{
 		QScriptEngine *engine = scripts.at(i);
 		int player = engine->globalObject().property("me").toInt32();
-		if (match == player)
+		QString matchName = engine->globalObject().property("scriptName").toString();
+		if (match == player && (matchName.compare(scriptName, Qt::CaseInsensitive) == 0 || scriptName.isEmpty()))
 		{
 			return engine;
 		}
 	}
-	ASSERT(false, "Script context for player %d not found", match);
+	ASSERT(false, "Script context for player %d and script name %s not found", 
+	       match, scriptName.toUtf8().constData());
 	return NULL;
 }
 
@@ -522,8 +531,10 @@ bool loadScriptStates(const char *filename)
 			node.player = ini.value("player").toInt();
 			node.ms = ini.value("ms").toInt();
 			node.frameTime = ini.value("frame").toInt();
-			debug(LOG_SAVE, "Registering trigger %d for player %d", i, node.player);
-			node.engine = findEngineForPlayer(node.player);
+			QString scriptName = ini.value("scriptName").toString();
+			debug(LOG_SAVE, "Registering trigger %d for player %d, script %s", 
+			      i, node.player, scriptName.toUtf8().constData());
+			node.engine = findEngineForPlayer(node.player, scriptName);
 			if (node.engine)
 			{
 				node.function = ini.value("function").toString();
@@ -537,9 +548,11 @@ bool loadScriptStates(const char *filename)
 		{
 			ini.beginGroup(list[i]);
 			int player = ini.value("me").toInt();
+			QString scriptName = ini.value("scriptName").toString();
 			QStringList keys = ini.childKeys();
-			debug(LOG_SAVE, "Loading script globals for player %d -- found %d values", player, keys.size());
-			QScriptEngine *engine = findEngineForPlayer(player);
+			debug(LOG_SAVE, "Loading script globals for player %d, script %s -- found %d values", 
+			      player, scriptName.toUtf8().constData(), keys.size());
+			QScriptEngine *engine = findEngineForPlayer(player, scriptName);
 			if (engine)
 			{
 				for (int j = 0; j < keys.size(); ++j)
