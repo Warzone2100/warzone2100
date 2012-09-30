@@ -486,7 +486,6 @@ struct WEAPON_STATS : public COMPONENT_STATS
 	bool			penetrate;				///< flag to indicate whether pentrate droid or not
 
 	/* Graphics control stats */
-	UDWORD			directLife;				///< How long a direct fire weapon is visible. Measured in 1/100 sec.
 	UDWORD			radiusLife;				///< How long a blast radius is visible
 
 	/* Graphics used for the weapon */

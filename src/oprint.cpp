@@ -183,9 +183,9 @@ static void printWeaponInfo(const WEAPON_STATS* psStats)
 				psStats->flightSpeed, psStats->fireOnMove ? "fireOnMove" : "not fireOnMove"));
 	CONPRINTF(ConsoleString,(ConsoleString,"   %s %s %s\n", pWC, pWSC, pMM));
 	CONPRINTF(ConsoleString,(ConsoleString,"   %srotate recoil %d\n"
-			  "   dLife %d radLife %d\n",
+			  "   radLife %d\n",
 			  psStats->rotate ? "" : "not ",
-			  psStats->recoilValue, psStats->directLife, psStats->radiusLife));
+			  psStats->recoilValue, psStats->radiusLife));
 }
 
 /** print out information about a droid and it's components

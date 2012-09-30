@@ -679,7 +679,7 @@ bool loadWeaponStats(const char *pWeaponData, UDWORD bufferSize)
 			&psStats->firePause, &psStats->numExplosions, &numRounds,
 			&psStats->reloadTime, &psStats->damage, &psStats->radius,
 			&psStats->radiusHit, &psStats->radiusDamage, &psStats->incenTime,
-			&psStats->incenDamage, &psStats->incenRadius, &psStats->directLife,
+			&psStats->incenDamage, &psStats->incenRadius, &dummyVal,
 			&psStats->radiusLife, &psStats->flightSpeed, &dummyVal,
 			fireOnMove, weaponClass, weaponSubClass, movement, weaponEffect,
 			&rotate, &maxElevation, &minElevation, facePlayer, faceInFlight,
@@ -720,7 +720,6 @@ bool loadWeaponStats(const char *pWeaponData, UDWORD bufferSize)
 		//multiply time stats
 		psStats->firePause *= WEAPON_TIME;
 		psStats->incenTime *= WEAPON_TIME;
-		psStats->directLife *= WEAPON_TIME;
 		psStats->radiusLife *= WEAPON_TIME;
 		psStats->reloadTime *= WEAPON_TIME;
 
