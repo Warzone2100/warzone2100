@@ -90,7 +90,8 @@ function eventGameInit()
 		"R-Wpn-Rocket05-MiniPod",
 		"R-Wpn-MG-Damage01",
 		"R-Wpn-Rocket-Damage01",
-		"R-Defense-WallTower01");
+		"R-Defense-WallTower01",
+		"R-Defense-Tower06");
 
 	for (var playnum = 0; playnum < maxPlayers; playnum++)
 	{
@@ -102,9 +103,10 @@ function eventGameInit()
 		makeComponentAvailable("CyborgSpade", playnum);
 		makeComponentAvailable("CyborgRepair", playnum);
 
+		setPower(2000, playnum);
+
 		if (baseType == CAMP_CLEAN)
 		{
-			setPower(1300, playnum);
 			for (var count = 0; count < numCleanTech; count++)
 			{
 				completeResearch(techlist[count], playnum);
@@ -124,7 +126,6 @@ function eventGameInit()
 		}
 		else if (baseType == CAMP_BASE)
 		{
-			setPower(2500, playnum);
 			for (var count = 0; count < numBaseTech; count++)
 			{
 				completeResearch(techlist[count], playnum);
@@ -143,7 +144,6 @@ function eventGameInit()
 		}
 		else // CAMP_WALLS
 		{
-			setPower(2500, playnum);
 			for (var count = 0; count < techlist.length; count++)
 			{
 				completeResearch(techlist[count], playnum);
