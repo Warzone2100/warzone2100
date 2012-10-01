@@ -1,16 +1,93 @@
 2012-09-NN: Version 3.1 rc3
  * General:
-   * Change: Pathfind to area around queued structure to be built (commit:88c1a3c3703d2ba260a101bb24cde419fe009afe, ticket:3576)
-   * Change: Improve HOMING-INDIRECT terrain avoidance (commit:b256d995b8b23bd4742d7cd8d876d6e0655e6d14)
-   * Change: Allow setting/clearing game password after game is hosted (commit:9575cf93e2a0b39c11d7bd2f51aef100fe4dae57)
-   * Change: Allow researching topics which labs being upgraded are already researching (commit:5bac6e4273fbdbd43acaf4a0042b373d4c9dec7c)
-   * Fix: Crash when placing transporters on the map in a map editor (ticket:3714, commit:508f26a174fd356b778419dd7c4eeaacfd27d8ac)
-   * Fix: Never add completed researches to research menu (ticket:3454, commit:d37f5276a17bbff963e5d59d1fcb2e744b494ac2)
-   * Fix: Don't try to remove unfinished off-world structures (ticket:3653, commit:594b8a6c631b160fda06f9ffca4b9f227c97c3f8)
-   * Fix: Scale logo to fit box (ticket:3667, commit:47011db59eb0c6254ed1626c4b9c8f32ee5a289c)
-   * Fix: Overflow effect creating very long progress bar (ticket:3685, commit:5b3163b9433604a470a9b4b3758081e2cdbb3755)
-   * Fix: Bug where the players list vanishes after we close our nick chooser (commit:11f19fbdb7a8f1ced43fcf24a80857da6eb63225)
-   * Warning: Warn on apparently buggy PhysFS version 2.0.2 (ticket:3700, commits:408be743f017cce1519cd955767abf0e697ab7f7)
+   * Warning: Warn players to downgrade/upgrade PhysFS package from a buggy version 2.0.2 (ticket:3700, commit:408be743f017cce1519cd955767abf0e697ab7f7)
+   * Change: Patch PhysFS in the Mac build until there is a new release (commit:a05e8c980bc42fa66ed1b81ae40793645df8efbf)
+   * Change: Updated license and string files for Mac builds (commit:7720aa641da1a8236029949cad05e8bf985ed6e6)
+   * Change: HOMING-INDIRECT projectiles no longer collide with large cliffs. Also, if the target is missing, or if it disappears, then the projectile will home in on the terrain where the target was last seen (commit:b256d995b8b23bd4742d7cd8d876d6e0655e6d14)
+   * Change: Simplify repair logic, where a droid is repairing a droid or structure (commit:240256248c51cfa39c73e7c22703c5500b82f178)
+   * Change: Auto-repair now works all the time, not just when droids are stopped (commit:8c83693ba6b96b1810853448370d62e7023a62a7)
+   * Fix: Pathfind to area around queued structure to be built, instead of to tile under structure (ticket:3576, commit:88c1a3c3703d2ba260a101bb24cde419fe009afe)
+   * Fix: Fixed an overflow effect in structure build points which caused a very long progress bar (ticket:3685, commit:5b3163b9433604a470a9b4b3758081e2cdbb3755)
+   * Fix: Never add completely researched research topics back again to the list of available research topics (ticket:3454, commit:d37f5276a17bbff963e5d59d1fcb2e744b494ac2)
+   * Fix: Fixed a crash when the map included transporters which were placed on it by the map editor (ticket:3714, commit:508f26a174fd356b778419dd7c4eeaacfd27d8ac)
+   * Fix: Fixed assertion on scavengers with more than 5 factories (commit:667b54b402abdd6812b5c24f66e1ed297c111883)
+   * Fix: Do not crash on pressing 'T' with a transporter selected (ticket:3683, commit:f395be71850cf28f7ab03bf235ba221d8eaf6ca1)
+   * Fix: Fixed commander-related desynch and crash (ticket:1924, ticket:3296, ticket:3676, commit:e1178b57e9c53f031139f18d36d8158a27e64f39)
+   * Fix: Select both Super Transports and Cyborg Transports with Shift+P (ticket:3644, commit:9f7f7c665b70a244509caf211c67e29904e0fbd8)
+   * Fix: Fixed failure to repair commanders on Alt+click (ticket:1997, commit:56001781bcfcbecbd93831499a539d66b50d27d9)
+   * Fix: No longer halt factory production assigned to commanders in skirmish on commander limit, or for VTOLs (ticket:2138, commit:0773a9ff6cfc344def015f349e39fa62d09fe697)
+   * Fix: Automatically relocate delivery points when new structures are going to be built on top of them (ticket:2998, commit:1cc0d533f4edf33e672da3b55eb8f3d741db81e1)
+ * Graphics:
+   * Change: Update png to 1.5.13 in the mac build (commit:2d3c39e660110f35eb2da0ac5d63f4c2ec9bcea7)
+   * Fix: Droid parts now properly fly away from a droid which explodes above water (ticket:3681, commit:60c235ab3ff835edb60b0e0c020923351c893893)
+   * Fix: Turrets no longer appear to bounce when firing from atop a tower (ticket:2789, commit:d608f37fadfa969c225fef8149eaa700cc878a46)
+ * UI:
+   * Change: Updated disabled Satellite Uplink and Laser Satellite Command Post icons (commit:0d333a1a0661244015bb8c825e889135d20fac01)
+   * Change: Player list no longer vanishes after the nickname chooser is closed (commit:11f19fbdb7a8f1ced43fcf24a80857da6eb63225)
+   * Change: Scale Warzone2100 logo on the main menu to fit box (ticket:3667, commit:47011db59eb0c6254ed1626c4b9c8f32ee5a289c)
+   * Change: Only show build cursor over structures for building modules which have been researched (ticket:3327, commit:4f85a5eaa12ea88d7055e3430577d7dec9391a05)
+   * Fix: Fixed location of centre of viewport rendered on radar window (ticket:3619, commit:0dde269379507a897ef2945ca76f840a8994f04a)
+   * Fix: Fixed bug which caused a weird behavior in the way menus worked (ticket:3653, commit:594b8a6c631b160fda06f9ffca4b9f227c97c3f8)
+ * Multiplayer:
+   * Change: Make available again research topics if the Research Facilities researching these particular topics are out-of-order temporarily for construction of Research Modules (commit:5bac6e4273fbdbd43acaf4a0042b373d4c9dec7c)
+   * Change: Allow setting/clearing game password even after a game is hosted. Also, if typing password and pressing Enter, will actually set the password (commit:9575cf93e2a0b39c11d7bd2f51aef100fe4dae57)
+   * Change: Disabled game name icon in multiplayer, since it didn't do anything anyway (ticket:1231, commit:831d22c7d26930872a9ec766177f8a00b63ace98)
+ * Build System:
+   * Change: Check for automake v1.11, for dist-xz support (commit:c3ba9625b96fea6ceb036cd387a511a98523bd86)
+ * Translations:
+   * Change: New Greek translation added (ticket:3703, commit:5ae125c40d7f7c9c5ff872dc3a46d068d38cbb68, commit:a2c7be0febf6e9d154763c6f16804b695878d3f9, commit:0a381b3300a438b2bc0bb4d1fa6653a34deeb2a0)
+   * Update: Polish (ticket:1347, commit:8299d11fab753c7ecb7865f2fbe22d8444be35bb)
+
+2012-08-21: Version 3.1 rc2
+ * General:
+   * Change: Clear any remaining pathfinding job for the unit on loading into a transporter. Also fixes minor memory leaks (commit:032956e649e69aa51edd80787c9c94bf2c08d164, commit:88e94391669e54808b2d6f40cba994d3501efb08)
+   * Change: Log and error reporting improvements (commit:845903e5b60292d2a15a2f442120122ea1ff90e7, commit:3640b024f28b0fc264e2d33ea516687fc41ffccc)
+   * Change: Added checks to detect hard drive failures (commit:134c51c8902bf80c699d29a8db1c71fea9a4e85d)
+   * Change: Do not halt production in factories on unit template becoming redundant (commit:7621581c8f76f3b7a774182cd3b5eee8e26b7954)
+   * Change: Don't rename AI players when there are multiple bots of the same type (commit:ee95d785bdfd72a490863d7cdb3f504f88f9eecd)
+   * Change: Make available again some of the decals from the Rockies tileset (commit:087ab8c5058730925c747dcdf14c8319319b3929)
+   * Change: Use codesigning for the mac builds (commit:c4edfed60de7edf88a5bbf334c85beef6d3c813a, commit:93f54a45316d76e3505e66143f5c84369ec665c1, commit:0c9769dd83410ea7f1b9b303fc0957a8111062b7)
+   * Fix: Do not reload VTOLs automatically when unloaded from a Transport (ticket:3554, commit:e1dcb241abcfd42ef988bf88bb1c44dd8cd89d1f)
+   * Fix: Fixed dangling pointer when structures are destroyed and you are repositioning the delivery point (ticket:2041, commit:6382bbb08ea7e6ca93a0ba83fdb65952778c962a)
+   * Fix: Destroyed research facilities can no longer permanently hog a research topic (ticket:3570, commit:6a04b6ad677678e1d824209dda45a70f85b64a96)
+   * Fix: Relocation of Repair Facility delivery point made possible again (ticket:3581, commit:caabd96741fb3113dc96127ae32826ada643992a)
+   * Fix: Fixed reverse balanced tree lookup (ticket:3589, commit:64173cbd0826a67dafb9293c9bc2ac3bdf44ff73)
+   * Fix: Scavengers are now correctly enabled in Challenges (ticket:3630, commit:95677b02b9959b05372e7dc10286fe184bfd6cdd)
+   * Fix: Rework on the hash checking of maps (ticket:3618, ticket:3614, ticket:3615, ticket:3616, ticket:3617, commit:398f77ede082063bd1bc607d5814e9630f663967)
+   * Fix: Certain ground type tiles in the Urban and Rockies tilesets to resemble the old 2.3 version terrain more accurately (ticket:3621, commit:087ab8c5058730925c747dcdf14c8319319b3929)
+   * Cleanup: Various dead code removal and minor enhancements to code readability (commit:9d82dea37ae9ed2662ccf26ad1614ed386106972, commit:06f10ca89fb7d020b6b2cac4a6f533b016ac0175, commit:44947ad4a831f4bc31fe3abc526175f37b539456, commit:adc13fe9fa8f83dbb23abff4d9d0a86b54a2e904)
+ * Graphics:
+   * Change: Don't require OpenGL extensions to be reported, if present in the reported OpenGL version (commit:e8ee5e6f431d03def032659d4f19856176d4df26)
+   * Change: Bump MAX_TERRAIN_TILES from 100 to 512 (commit:ab44eafb7bd1daa2d0f4efe367673b4c2985a05d)
+   * Change: Update png to 1.5.12 (commit:d2a8a134a6c3a08d20e461425a9714ab52ee78b8)
+   * Change: Update GLEW to 1.8.0 (commit:62c8c727dc1919c35c7f20cc3dc262f9170572f0)
+   * Fix: Align the blueprint of a module correctly with the respective structure (ticket:3466, commit:581d65411e714bec6c5b0e783dbaa705ff6a38c4)
+   * Fix: Don't require texture_env_crossbar for shaders (ticket:3575, ticket:3629, commit:64a3cc13deda9a59aae2cf0705c68dbe3eadeaa8, commit:e8ee5e6f431d03def032659d4f19856176d4df26)
+   * Enhancement: Minor openGL enhancement (commit:5b9a496b1a5dd3f1d63e0f035561bd750266d2da, commit:2ca39e5fc776019a6d5e315e674397a915f860bb)
+ * Savegames:
+   * Fix: Savegames are now possible again in Skirmish and Campaign (ticket:3620, ticket:3636, commit:fdb1c0b52153d3368ae79e8f0befdd2744b43692)
+ * UI:
+   * Change: Add settings / UI support for shaders (commit:7e3be754d4daddd771de1e115ed6845652300638, commit:ef2b23681b2840478a4203b8bd3a75b8882bd9f0)
+   * Change: Correctly handle interface image texture pages which are not 256x256, and also simplify adding/removing of images (commit:f879b83605a601080e3bdd902996e50575ca9706, commit:26bb10588511f74b2ce60d7243752eb66d5754e2)
+   * Change: Warn when Satellite Uplink Center and/or Laser Satellite Command Post are disabled (commit:1e5fafabb39f76762ab7a560be7770595bc60a8c, commit:552a60b099a5bc4a9b571056dde7afbf5723047c)
+   * Fix: Bitmap cursor now drawn correctly with Qt backend (ticket:3562, commit:df32833ab8b17e6db5815b7eca9f5fe01a5b7f8f)
+ * Multiplayer:
+   * Change: Prevent a zero hash from being sent by the host when the user has not selected the map between starting the program and hosting (commit:9784c655af2a66bd541268e2c9e6f19fcd1ac200)
+   * Change: Minor improvement over silently retrieving the wrong resource on filename hash collisions (commit:74c153cf7bcc823ce1ace112cb9ce96d527c9f97)
+ * Scripting:
+   * Change: Add new function that returns unit limit(s) (commit:67b2a6210afa4306e813489d7cf2288c7ff4211f)
+   * Change: Included NoQ's Nullbot AI (commit:646f6d7b8248dedb5686d86199519d4e75a30493, commit:feb7476af63d0715cf989b8174babced8f3d7eda)
+ * Build System:
+   * Change: Default to xz compression for make dist (ticket:3492, commit:512ef27f4d4185d004977e0be4b972bfa130c57d)
+   * Fix: Fixes compilation on non-x86 platforms (ticket:3558, commit:6c6180495cc791afe9f818b7070f8a6bc3b13fae)
+ * Translations:
+   * Change: Update custom translations (commit:0800da0d25d1b6e509b84435ec80cda176e046c0, commit:92ce0bca3696da0da41e0e8c5a6ef80090b4871d)
+   * Change: Disable translations below 80% (ticket:3136, commit:a39f61281c2703a6d952da27b750b60c6706f6be, commit:16b06c03923dc371418b8e056fdddc59b41ce3fe)
+   * Update: Polish (ticket:1347, commit:0cec33c0fceeb65fac3c26412a3d2d3667c04886)
+   * Update: German (ticket:3564, commit:44c810bc73ca8f17bdbf8fc28bcbae8ec81233ab)
+   * Update: French (ticket:3577, ticket:3671, commit:875be5fda1b9ecf4aae3ece1fa5639904f3c06ab, commit:674ca3edd22b74508c49d11cff7bf6b62720657e)
+   * Update: Catalan (ticket:3582, commit:3b261c24d2dfe39eae6f51f3a4827bc3b67e927f)
+   * Update: Turkish (ticket:3591, commit:da43686ad35b33850a97ffcb8023c60e5ff55f83)
 
 2012-08-05: Version 3.1 rc1
  * General:
