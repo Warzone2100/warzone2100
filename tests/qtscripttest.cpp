@@ -21,7 +21,7 @@ int main(int argc, char **argv)
 
 	while (!feof(fp))
 	{
-		fscanf(fp, "%s\n", &filename);
+		fscanf(fp, "%256s\n", filename);
 		printf("Testing script: %s\n", filename);
 		strcpy(fullpath, datapath);
 		strcat(fullpath, filename);

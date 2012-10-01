@@ -25,6 +25,7 @@
 #include <errno.h>
 #include <stdint.h>
 #include <stdbool.h>
+#include <unistd.h>
 
 #ifndef WIN32
 #include <stdbool.h>
@@ -124,7 +125,7 @@ static void check_pie(const char *input)
 		for (j = 0; j < points; j++)
 		{
 			double a, b, c;
-			num = fscanf(fp, "%f %f %f\n", &a, &b, &c);
+			num = fscanf(fp, "%lf %lf %lf\n", &a, &b, &c);
 			if (num != 3)
 			{
 				fprintf(stderr, "File %s. Bad POINTS entry level %d, number %d.\n", input, level, j);
@@ -198,7 +199,7 @@ static void check_pie(const char *input)
 			for (k = 0; k < 3; k++)
 			{
 				double t, u;
-				num = fscanf(fp, "%f %f", &t, &u);
+				num = fscanf(fp, "%lf %lf", &t, &u);
 				if (num != 2)
 				{
 					fprintf(stderr, "File %s. Bad texture coordinate entry level %d, number %d\n", input, level, j);
@@ -244,7 +245,7 @@ int main(int argc, char **argv)
 	{
 		char filename[PATH_MAX];
 
-		fscanf(fp, "%s\n", &filename);
+		fscanf(fp, "%256s\n", filename);
 		printf("Testing model: %s\n", filename);
 		strcpy(fullpath, datapath);
 		strcat(fullpath, filename);
