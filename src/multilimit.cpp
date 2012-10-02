@@ -439,7 +439,7 @@ static void displayStructureBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset
 	// draw image
 	pie_SetGeometricOffset( x+35 ,y+(psWidget->height/2)+9);
 	rotation.x = -15;
-	rotation.y = ((gameTime2/45)%360) ; //45
+	rotation.y = ((realTime/45)%360) ; //45
 	rotation.z = 0;
 	position.x = 0;
 	position.y = 0;

@@ -1701,13 +1701,13 @@ static void NETcheckPlayers(void)
 		if (NetPlay.players[i].allocated == 0) continue;		// not allocated means that it most likely it is a AI player
 		if (NetPlay.players[i].heartbeat == 0 && NetPlay.players[i].heartattacktime == 0)	// looks like they are dead
 		{
-			NetPlay.players[i].heartattacktime = gameTime2;		// mark when this occured
+			NetPlay.players[i].heartattacktime = realTime;		// mark when this occured
 		}
 		else
 		{
 			if (NetPlay.players[i].heartattacktime)
 			{
-				if (NetPlay.players[i].heartattacktime + (15 * GAME_TICKS_PER_SEC) <  gameTime2) // wait 15 secs
+				if (NetPlay.players[i].heartattacktime + (15 * GAME_TICKS_PER_SEC) <  realTime) // wait 15 secs
 				{
 					debug(LOG_NET, "Kicking due to client heart attack");
 					NetPlay.players[i].kick = true;		// if still dead, then kick em.

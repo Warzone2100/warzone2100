@@ -47,13 +47,8 @@ extern UDWORD gameTime;
 /// The current time in the graphical display of the game world.
 /// Should be close to gameTime, up to GAME_UNITS_PER_TICK behind.
 extern UDWORD graphicsTime;
-/** The current time in the game world - never stops.
- * FIXME Then isn't it the real time, not the game time? Rename from gameTime2 to realTime?
- * Think it did stop (opposite of what the above comment says), if the graphics rendering couldn't keep up. If needed, that feature can be added back.
- * And it was previously affected by the game speed modifier, which explains how the game speed modifier affected the GUI speed...
- */
+/// The current time in the real world - never stops, and not reset between games.
 extern UDWORD realTime;
-#define gameTime2 realTime
 
 /// The difference between the previous and current gameTime.
 extern UDWORD deltaGameTime;
