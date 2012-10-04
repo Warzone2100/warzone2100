@@ -4118,20 +4118,7 @@ static void showWeaponRange(BASE_OBJECT *psObj)
 
 static void showSensorRange2(BASE_OBJECT *psObj)
 {
-	uint32_t sensorRange;
-
-	if(psObj->type == OBJ_DROID)
-	{
-		DROID *psDroid = (DROID*)psObj;
-		sensorRange = asSensorStats[psDroid->asBits[COMP_SENSOR].nStat].range;
-	}
-	else
-	{
-		STRUCTURE *psStruct = (STRUCTURE*)psObj;
-		sensorRange = structSensorRange(psStruct);
-	}
-
-	showEffectCircle(psObj->pos, sensorRange, 80, EFFECT_EXPLOSION, EXPLOSION_TYPE_LASER);
+	showEffectCircle(psObj->pos, psObj->sensorRange, 80, EFFECT_EXPLOSION, EXPLOSION_TYPE_LASER);
 	showWeaponRange(psObj);
 }
 
