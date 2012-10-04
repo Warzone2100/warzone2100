@@ -959,6 +959,7 @@ void researchResult(UDWORD researchIndex, UBYTE player, bool bDisplay, STRUCTURE
 				for (psCurr = apsStructLists[player]; psCurr != NULL; psCurr = psCurr->psNext)
 				{
 					structureSensorUpgrade(psCurr);
+					visTilesUpdate(psCurr);
 				}
 				for (psCurr = mission.apsStructLists[player]; psCurr != NULL; psCurr = psCurr->psNext)
 				{
@@ -968,6 +969,7 @@ void researchResult(UDWORD researchIndex, UBYTE player, bool bDisplay, STRUCTURE
 				for (psDroid = apsDroidLists[player]; psDroid != NULL; psDroid = psDroid->psNext)
 				{
 					droidSensorUpgrade(psDroid);
+					visTilesUpdate(psDroid);
 					if (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER)
 					{
 						upgradeTransporterDroids(psDroid, droidSensorUpgrade);
