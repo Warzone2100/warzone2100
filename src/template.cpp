@@ -113,12 +113,17 @@ bool researchedTemplate(DROID_TEMPLATE *psCurr, int player, bool allowRedundant)
 	return researchedEverything;
 }
 
+static char const *templatesFilename()
+{
+	return bMultiPlayer? "templates.ini" : "templatesCampaign.ini";
+}
+
 bool initTemplates()
 {
-	WzConfig ini("templates.ini");
+	WzConfig ini(templatesFilename());
 	if (ini.status() != QSettings::NoError)
 	{
-		debug(LOG_FATAL, "Could not open templates.ini");
+		debug(LOG_FATAL, "Could not open %s", templatesFilename());
 		return false;
 	}
 	QStringList list = ini.childGroups();
@@ -188,10 +193,10 @@ bool initTemplates()
 bool storeTemplates()
 {
 	// Write stored templates (back) to file
-	WzConfig ini("templates.ini");
+	WzConfig ini(templatesFilename());
 	if (ini.status() != QSettings::NoError || !ini.isWritable())
 	{
-		debug(LOG_FATAL, "Could not open templates.ini");
+		debug(LOG_FATAL, "Could not open %s", templatesFilename());
 		return false;
 	}
 	for (DROID_TEMPLATE *psCurr = apsDroidTemplates[selectedPlayer]; psCurr != NULL; psCurr = psCurr->psNext)
