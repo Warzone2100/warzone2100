@@ -293,7 +293,7 @@ bool addConsoleMessage(const char *Text, CONSOLE_TEXT_JUSTIFICATION jusType, SDW
 		sstrcpy(consoleStorage[messageIndex].text, messageText);
 
 		/* Set the time when it was added - this might not be needed */
-		consoleStorage[messageIndex].timeAdded = gameTime2;
+		consoleStorage[messageIndex].timeAdded = realTime;
 
 		/* This is the present newest message */
 		consoleStorage[messageIndex].psNext = NULL;
@@ -380,7 +380,7 @@ void	updateConsoleMessages( void )
 	}
 
 	/* Time to kill the top one ?*/
-	if(gameTime2 - consoleMessages->timeAdded > messageDuration)
+	if(realTime - consoleMessages->timeAdded > messageDuration)
 	{
 		consoleMessages->id = messageId++;
 		/* Is this the only message? */

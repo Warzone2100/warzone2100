@@ -295,7 +295,7 @@ UDWORD	width,height;
 	if(!bDispStarted)
 	{
 		bDispStarted = true;
-		dispST = gameTime2;
+		dispST = realTime;
 		audio_PlayTrack(ID_SOUND_BUTTON_CLICK_5);
 	}
 
@@ -337,11 +337,11 @@ UDWORD	width,height;
 			/* Draw the interior grey */
 			pie_BoxFill(x, y, x + width, y + height, WZCOL_MENU_SCORES_INTERIOR);
 
-			if( ((gameTime2 - dispST) > infoBars[index].queTime) )
+			if( ((realTime - dispST) > infoBars[index].queTime) )
 			{
 				/* Now draw amount filled */
-				const float mul = (gameTime2 - dispST < BAR_CRAWL_TIME) ?
-				                   (float)(gameTime2 - dispST) / (float)BAR_CRAWL_TIME
+				const float mul = (realTime - dispST < BAR_CRAWL_TIME) ?
+				                   (float)(realTime - dispST) / (float)BAR_CRAWL_TIME
 				                  : 1.f;
 
 				const float length = (float)infoBars[index].percent / 100.f * (float)infoBars[index].width * mul;
@@ -401,7 +401,7 @@ void	dispAdditionalInfo( void )
 	if (Cheated)
 	{
 		// A quick way to flash the text
-		((gameTime2 / 250) % 2) ? iV_SetTextColour(WZCOL_RED) : iV_SetTextColour(WZCOL_YELLOW);
+		((realTime / 250) % 2) ? iV_SetTextColour(WZCOL_RED) : iV_SetTextColour(WZCOL_YELLOW);
 		sprintf( text, _("You cheated!"));
 		iV_DrawText( text, (pie_GetVideoBufferWidth() - iV_GetTextWidth(text))/2, 360 + D_H );
 		iV_SetTextColour(WZCOL_TEXT_BRIGHT);

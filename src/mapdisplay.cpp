@@ -58,7 +58,7 @@ void renderResearchToBuffer(RESEARCH *psResearch, UDWORD OriginX, UDWORD OriginY
 
 	// Rotate round
 	// full rotation once every 2 seconds..
-	angle = (gameTime2 % ROTATE_TIME) * 360 / ROTATE_TIME;
+	angle = (realTime % ROTATE_TIME) * 360 / ROTATE_TIME;
 
 	Position.x = 0;
 	Position.y = 0;
