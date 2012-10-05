@@ -3260,16 +3260,16 @@ function bool attemptToHelp(int _playerToHelp, int _x, int _y)
 		if(haveHelpers() or _DEBUG)
 		{
 			dbg("got attackers", me);
-			if(allyBaseAtLoc(_playerToHelp, _x, _y))	//is he just trying to misuse us?
-			{
+			//if(allyBaseAtLoc(_playerToHelp, _x, _y))	//is he just trying to misuse us?
+			//{
 				helpPlayer(_playerToHelp, _x, _y);
 				return TRUE;
-			}
-			else
-			{
-				dbg("ally needs no help", me);
-				messagePlayer(ALL_ALLIES, M_ANNOYED, MAX_PROBABILITY / 2);
-			}
+			//}
+			//else
+			//{
+			//	dbg("ally needs no help", me);
+			//	messagePlayer(ALL_ALLIES, M_ANNOYED, MAX_PROBABILITY / 2);
+			//}
 		}
 		else
 		{
@@ -3431,9 +3431,9 @@ function bool canStopHelpingAlly()
 	}
 
 	/* Nothing to defend anymore */
-	if(!allyBaseAtLoc(lastHelpPlayer, helpX, helpY)){
-		return TRUE;
-	}
+	//if(!allyBaseAtLoc(lastHelpPlayer, helpX, helpY)){
+	//	return TRUE;
+	//}
 
 	return FALSE;
 }
