@@ -733,7 +733,9 @@ bool triggerEventAttacked(BASE_OBJECT *psVictim, BASE_OBJECT *psAttacker, int la
 
 //__ \subsection{eventResearched(research[, structure])}
 //__ An event that is run whenever a new research is available. The structure
-//__ parameter is set if the research comes from a research lab.
+//__ parameter is set if the research comes from a research lab owned by the
+//__ current player. If an ally does the research, the structure parameter will
+//__ be set to null.
 bool triggerEventResearched(RESEARCH *psResearch, STRUCTURE *psStruct, int player)
 {
 	for (int i = 0; i < scripts.size() && psStruct; ++i)
