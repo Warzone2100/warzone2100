@@ -776,3 +776,75 @@ players 2
 type    19
 dataset MULTI_T3_C3
 game    "multiplay/maps/2c-Vision.gam"
+
+level   Emergence-T1
+players 10
+type    14
+dataset MULTI_CAM_3
+game    "multiplay/maps/10c-Emergence.gam"
+
+level   Emergence-T2
+players 10
+type    18
+dataset MULTI_T2_C3
+game    "multiplay/maps/10c-Emergence.gam"
+
+level   Emergence-T3
+players 10
+type    19
+dataset MULTI_T3_C3
+game    "multiplay/maps/10c-Emergence.gam"
+
+level   Monocot-T1
+players 3
+type    14
+dataset MULTI_CAM_2
+game    "multiplay/maps/3c-Monocot_i.gam"
+
+level   Monocot-T2
+players 3
+type    18
+dataset MULTI_T2_C2
+game    "multiplay/maps/3c-Monocot_i.gam"
+
+level   Monocot-T3
+players 3
+type    19
+dataset MULTI_T3_C2
+game    "multiplay/maps/3c-Monocot_i.gam"
+
+level   Bloat-T1
+players 5
+type    14
+dataset MULTI_CAM_2
+game    "multiplay/maps/5c-bloat.gam"
+
+level   Bloat-T2
+players 5
+type    18
+dataset MULTI_T2_C2
+game    "multiplay/maps/5c-bloat.gam"
+
+level   Bloat-T3
+players 5
+type    19
+dataset MULTI_T3_C2
+game    "multiplay/maps/5c-bloat.gam"
+
+level   WindFury-T1
+players 9
+type    14
+dataset MULTI_CAM_3
+game    "multiplay/maps/9c-WindFury.gam"
+
+level   WindFury-T2
+players 9
+type    18
+dataset MULTI_T2_C3
+game    "multiplay/maps/9c-WindFury.gam"
+
+level   WindFury-T3
+players 9
+type    19
+dataset MULTI_T3_C3
+game    "multiplay/maps/9c-WindFury.gam"

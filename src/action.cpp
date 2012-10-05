@@ -329,12 +329,10 @@ bool actionTargetTurret(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, WEAPON *
 	WEAPON_STATS *psWeapStats = asWeaponStats + psWeapon->nStat;
 	uint16_t tRotation, tPitch;
 	int32_t  rotRate, pitchRate;
-	uint16_t targetRotation, targetPitch;
-	int32_t  pitchError;
-	int32_t  rotationError, dx, dy, dz;
+	uint16_t targetRotation;
+	int32_t  rotationError;
 	int32_t  rotationTolerance = 0;
 	bool     onTarget;
-	int32_t  dxy;
 	int32_t  pitchLowerLimit, pitchUpperLimit;
 	bool     bRepair;
 
@@ -363,14 +361,20 @@ bool actionTargetTurret(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, WEAPON *
 
 	//set the pitch limits based on the weapon stats of the attacker
 	pitchLowerLimit = pitchUpperLimit = 0;
+	Vector3i attackerMuzzlePos = psAttacker->pos;  // Using for calculating the pitch, but not the direction, in case using the exact direction causes bugs somewhere.
 	if (psAttacker->type == OBJ_STRUCTURE)
 	{
+		STRUCTURE *psStructure = (STRUCTURE *)psAttacker;
+		int weapon_slot = psWeapon - psStructure->asWeaps;  // Should probably be passed weapon_slot instead of psWeapon.
+		calcStructureMuzzleLocation(psStructure, &attackerMuzzlePos, weapon_slot);
 		pitchLowerLimit = DEG(psWeapStats->minElevation);
 		pitchUpperLimit = DEG(psWeapStats->maxElevation);
 	}
 	else if (psAttacker->type == OBJ_DROID)
 	{
 		DROID *psDroid = (DROID *)psAttacker;
+		int weapon_slot = psWeapon - psDroid->asWeaps;  // Should probably be passed weapon_slot instead of psWeapon.
+		calcDroidMuzzleLocation(psDroid, &attackerMuzzlePos, weapon_slot);
 
 		if (psDroid->droidType == DROID_WEAPON || psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER
 			|| psDroid->droidType == DROID_COMMAND || psDroid->droidType == DROID_CYBORG
@@ -415,16 +419,13 @@ bool actionTargetTurret(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, WEAPON *
 	/* Set muzzle pitch if not repairing or outside minimum range */
 	if (!bRepair && objPosDiffSq(psAttacker, psTarget) > psWeapStats->minRange * psWeapStats->minRange)
 	{
-		dx = psTarget->pos.x - psAttacker->pos.x;
-		dy = psTarget->pos.y - psAttacker->pos.y;
-		dz = psTarget->pos.z - psAttacker->pos.z;
-
 		/* get target distance */
-		dxy = iHypot(dx, dy);
+		Vector3i delta = psTarget->pos - attackerMuzzlePos;
+		int32_t dxy = iHypot(delta.x, delta.y);
 
-		targetPitch = iAtan2(dz, dxy);
+		uint16_t targetPitch = iAtan2(delta.z, dxy);
 		targetPitch = (uint16_t)clip(angleDelta(targetPitch), pitchLowerLimit, pitchUpperLimit);  // Cast wrapping intended.
-		pitchError = angleDelta(targetPitch - tPitch);
+		int pitchError = angleDelta(targetPitch - tPitch);
 
 		tPitch += clip(pitchError, -pitchRate, pitchRate);  // Addition wrapping intended.
 		onTarget = onTarget && targetPitch == tPitch;
@@ -790,12 +791,6 @@ void actionUpdateDroid(DROID *psDroid)
 					}
 				}
 			}
-		}
-		// Still not doing anything? See if we need to self repair.
-		if ((psDroid->action == DACTION_NONE || psDroid->action == DACTION_WAITFORREPAIR)
-		    && selfRepairEnabled(psDroid->player))
-		{
-			droidSelfRepair(psDroid);
 		}
 		break;
 	case DACTION_WAITDURINGREPAIR:

@@ -1062,12 +1062,6 @@ void aiUpdateDroid(DROID *psDroid)
 	{
 		lookForTarget = false;
 	}
-	// except when self-repairing
-	if (psDroid->action == DACTION_DROIDREPAIR &&
-	    psDroid->psActionTarget[0] == (BASE_OBJECT *)psDroid)
-	{
-		lookForTarget = true;
-	}
 	// don't look for a target if sulking
 	if (psDroid->action == DACTION_SULK)
 	{

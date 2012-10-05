@@ -116,7 +116,7 @@ int gateCurrentOpenHeight(STRUCTURE const *psStructure, uint32_t time, int minim
 int32_t structureDamage(STRUCTURE *psStructure, unsigned damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, unsigned impactTime, bool isDamagePerSecond);
 extern void structureBuild(STRUCTURE *psStructure, DROID *psDroid, int buildPoints, int buildRate = 1);
 extern void structureDemolish(STRUCTURE *psStructure, DROID *psDroid, int buildPoints);
-extern bool structureRepair(STRUCTURE *psStruct, DROID *psDroid, int buildPoints);
+void structureRepair(STRUCTURE *psStruct, DROID *psDroid, int buildRate);
 /* Set the type of droid for a factory to build */
 extern bool structSetManufacture(STRUCTURE *psStruct, DROID_TEMPLATE *psTempl, QUEUE_MODE mode);
 

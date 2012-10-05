@@ -967,9 +967,9 @@ void structureDemolish(STRUCTURE *psStruct, DROID *psDroid, int buildPoints)
 	structureBuild(psStruct, psDroid, -buildPoints);
 }
 
-bool structureRepair(STRUCTURE *psStruct, DROID *psDroid, int buildPoints)
+void structureRepair(STRUCTURE *psStruct, DROID *psDroid, int buildRate)
 {
-	int repairAmount = (buildPoints * structureBody(psStruct))/psStruct->pStructureType->buildPoints;
+	int repairAmount = gameTimeAdjustedAverage(buildRate*structureBody(psStruct), psStruct->pStructureType->buildPoints);
 	/*	(droid construction power * current max hitpoints [incl. upgrades])
 			/ construction power that was necessary to build structure in the first place
 	
@@ -978,21 +978,7 @@ bool structureRepair(STRUCTURE *psStruct, DROID *psDroid, int buildPoints)
 		This happens with expensive, but weak buildings like mortar pits. In this case, do nothing
 		and notify the caller (read: droid) of your idleness by returning false.
 	*/
-	if (repairAmount != 0)  // didn't get truncated to zero
-	{
-		psStruct->body += repairAmount;
-		psStruct->body = MIN(psStruct->body, structureBody(psStruct));
-		if (psStruct->body == 0)
-		{
-			removeStruct(psStruct, true);
-		}
-		return true;
-	} 
-	else
-	{
-		// got truncated to zero; wait until droid has accumulated enough buildpoints
-		return false;
-	}
+	psStruct->body = clip(psStruct->body + repairAmount, 0, structureBody(psStruct));
 }
 
 /* Set the type of droid for a factory to build */
@@ -1662,6 +1648,33 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 		if (isLasSat(psBuilding->pStructureType))
 		{
 			psBuilding->asWeaps[0].ammo = 1; // ready to trigger the fire button
+		}
+
+		// Move any delivery points under the new structure.
+		StructureBounds bounds = getStructureBounds(psBuilding);
+		for (unsigned player = 0; player < MAX_PLAYERS; ++player)
+		{
+			for (STRUCTURE *psStruct = apsStructLists[player]; psStruct != NULL; psStruct = psStruct->psNext)
+			{
+				FLAG_POSITION *fp = NULL;
+				if (StructIsFactory(psStruct))
+				{
+					fp = psStruct->pFunctionality->factory.psAssemblyPoint;
+				}
+				else if (psStruct->pStructureType->type == REF_REPAIR_FACILITY)
+				{
+					fp = psStruct->pFunctionality->repairFacility.psDeliveryPoint;
+				}
+				if (fp != NULL)
+				{
+					Vector2i pos = map_coord(removeZ(fp->coords));
+					if (unsigned(pos.x - bounds.map.x) < unsigned(bounds.size.x) && unsigned(pos.y - bounds.map.y) < unsigned(bounds.size.y))
+					{
+						// Delivery point fp is under the new structure. Need to move it.
+						setAssemblyPoint(fp, fp->coords.x, fp->coords.y, player, true);
+					}
+				}
+			}
 		}
 	}
 	else //its an upgrade
