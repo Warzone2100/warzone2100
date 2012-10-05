@@ -1192,47 +1192,6 @@ void researchResult(UDWORD researchIndex, UBYTE player, bool bDisplay, STRUCTURE
 
 		triggerEventResearched(pResearch, psResearchFacility, player);
 	}
-
-#ifdef DEBUG
-    /*this just checks that there are not more than 32 weapons now available for
-    the design screen - it'll give us grief in the design screen (which we may HAVE TO fix)!*/
-    //only check if selectedPlayer has done the research
-    if (player == selectedPlayer)
-    {
-        UDWORD    vtolCompInc;
-
-        compInc = vtolCompInc =0;
-	    for (inc = 0; inc < numWeaponStats; inc++)
-	    {
-		    if (apCompLists[selectedPlayer][COMP_WEAPON][inc] == AVAILABLE &&
-                asWeaponStats[inc].designable)
-            {
-                if (asWeaponStats[inc].vtolAttackRuns)
-                {
-                    vtolCompInc++;
-                }
-                else
-                {
-                    compInc++;
-                }
-                if (compInc >= 128)
-                {
-					debug(LOG_ERROR, "researchResult - more than 128 weapons now available");
-                   
-					//don't bother checking any more
-                    break;
-                }
-                if (vtolCompInc >= 128)
-                {
-					debug(LOG_ERROR, "researchResult - more than 128 vtol weapons now available");
-                    
-					//don't bother checking any more
-                    break;
-                }
-            }
-	    }
-    }
-#endif
 }
 
 /*This function is called when the research files are reloaded*/
