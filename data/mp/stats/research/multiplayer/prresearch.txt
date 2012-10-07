@@ -587,5 +587,6 @@ R-Wpn-Rocket06-IDF,R-Sys-CBSensor-Tower01,295
 R-Wpn-Rocket07-Tank-Killer,R-Wpn-RocketSlow-Accuracy01,630
 R-Wpn-Rocket07-Tank-Killer,R-Wpn-Rocket-Damage06,630
 R-Sys-RadarDetector01,R-Sys-Sensor-Upgrade01,945
+R-Sys-ECM-Upgrade01,R-Sys-Sensor-Upgrade01,0
 R-Wpn-Sunburst,R-Wpn-Rocket01-LtAT,0
 R-Defense-Sunburst,R-Wpn-Sunburst,0

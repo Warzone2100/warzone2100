@@ -83,4 +83,5 @@ R-Sys-VTOLCBS-Tower01,Sys-VTOL-CB-Tower01,0,211
 R-Sys-VTOLStrike-Tower01,Sys-VTOL-RadarTower01,0,212
 R-Wpn-LasSat,A0LasSatCommand,0,328
 R-Sys-RadarDetector01,Sys-RadarDetector01,0,0
+R-Sys-ECM-Upgrade01,ECM1PylonMk1,0,0
 R-Defense-Sunburst,P0-AASite-Sunburst,0,0
