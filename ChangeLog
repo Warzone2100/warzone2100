@@ -1,4 +1,4 @@
-2012-09-NN: Version 3.1 rc3
+2012-10-NN: Version 3.1 rc3
  * General:
    * Warning: Warn players to downgrade/upgrade PhysFS package from a buggy version 2.0.2 (ticket:3700, commit:408be743f017cce1519cd955767abf0e697ab7f7)
    * Change: Patch PhysFS in the Mac build until there is a new release (commit:a05e8c980bc42fa66ed1b81ae40793645df8efbf)
@@ -17,8 +17,9 @@
    * Fix: Fixed failure to repair commanders on Alt+click (ticket:1997, commit:56001781bcfcbecbd93831499a539d66b50d27d9)
    * Fix: No longer halt factory production assigned to commanders in skirmish on commander limit, or for VTOLs (ticket:2138, commit:0773a9ff6cfc344def015f349e39fa62d09fe697)
    * Fix: Automatically relocate delivery points when new structures are going to be built on top of them (ticket:2998, commit:1cc0d533f4edf33e672da3b55eb8f3d741db81e1)
+   * Fix: Update visible tiles immediately when researching sensor upgrades (ticket:3450, commit:b1a1a8e445d29bc2ea5b1ea8b36d93e80d8c656d)
+   * Fix: Use separate stored-template file for skirmish and campaign (ticket:3702, commit:d969dd7756859b0daea5ac2fe16422511f6876e0)
  * Graphics:
-   * Change: Update png to 1.5.13 in the mac build (commit:2d3c39e660110f35eb2da0ac5d63f4c2ec9bcea7)
    * Fix: Droid parts now properly fly away from a droid which explodes above water (ticket:3681, commit:60c235ab3ff835edb60b0e0c020923351c893893)
    * Fix: Turrets no longer appear to bounce when firing from atop a tower (ticket:2789, commit:d608f37fadfa969c225fef8149eaa700cc878a46)
  * UI:
@@ -29,6 +30,7 @@
    * Fix: Fixed location of centre of viewport rendered on radar window (ticket:3619, commit:0dde269379507a897ef2945ca76f840a8994f04a)
    * Fix: Fixed bug which caused a weird behavior in the way menus worked (ticket:3653, commit:594b8a6c631b160fda06f9ffca4b9f227c97c3f8)
  * Multiplayer:
+   * New: Add new maps by NoQ: Emergence (10p), Monocot (3p), Bloat (5p) and WindFury (9p) (commit:858664124de97921a551367656c0ba7cf4aecf3d)
    * Change: Make available again research topics if the Research Facilities researching these particular topics are out-of-order temporarily for construction of Research Modules (commit:5bac6e4273fbdbd43acaf4a0042b373d4c9dec7c)
    * Change: Allow setting/clearing game password even after a game is hosted. Also, if typing password and pressing Enter, will actually set the password (commit:9575cf93e2a0b39c11d7bd2f51aef100fe4dae57)
    * Change: Disabled game name icon in multiplayer, since it didn't do anything anyway (ticket:1231, commit:831d22c7d26930872a9ec766177f8a00b63ace98)
@@ -169,7 +171,6 @@
    * Update: Hungarian (ticket:3485, commit:d74ebad6a32dbe49771223c347ad9515a101976b)
    * Update: Turkish (ticket:3486, commit:a400fe055fd5d176cd809bcfdc0973cf839a4a2c)
    * Update: Dutch (ticket:3484, commit:c46d2d56ea3cbfe9d7ba7516f5b1962a2fef2d37)
-
 
 2012-05-13: Version 3.1 beta10
  * General:
