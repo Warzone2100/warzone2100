@@ -4413,7 +4413,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cd ${SRCROOT}/external/physfs\n\nif [ -f \"882cdbd7d0a3.diff\" ]; then\n\texit 0\nfi\n\nif ! curl -LfC - --connect-timeout \"30\" -o \"882cdbd7d0a3.diff\" \"http://hg.icculus.org/icculus/physfs/raw-rev/882cdbd7d0a3\"; then\n\tif ! curl -LfOC - --connect-timeout \"30\" \"http://wz2100.net/~dak180/BuildTools/Mac/882cdbd7d0a3.diff\"; then\n\t\techo \"error: Unable to fetch vorbis.diff\" >&2\n\t\texit 1\n\tfi\nfi\n\nif ! cat \"882cdbd7d0a3.diff\" | patch --posix -sNfp1; then\n\techo \"error: Unable to apply vorbis.diff\" >&2\n\texit 1\nfi\n\nexit 0\n";
+			shellScript = "cd ${SRCROOT}/external/physfs\n\nif [[ -f \"882cdbd7d0a3.diff\" ]]  && [[ -f \"8qzAkGJa.diff\" ]]; then\n\texit 0\nfi\n\nif ! curl -LfC - --connect-timeout \"30\" -o \"882cdbd7d0a3.diff\" \"http://hg.icculus.org/icculus/physfs/raw-rev/882cdbd7d0a3\"; then\n\tif ! curl -LfOC - --connect-timeout \"30\" \"http://wz2100.net/~dak180/BuildTools/Mac/882cdbd7d0a3.diff\"; then\n\t\techo \"error: Unable to fetch 882cdbd7d0a3.diff\" >&2\n\t\texit 1\n\tfi\nfi\n\nif ! curl -LfC - --connect-timeout \"30\" -o \"8qzAkGJa.diff\" \"http://pastebin.com/raw.php?i=8qzAkGJa\"; then\n\tif ! curl -LfOC - --connect-timeout \"30\" \"http://wz2100.net/~dak180/BuildTools/Mac/8qzAkGJa.diff\"; then\n\t\techo \"error: Unable to fetch 8qzAkGJa.diff\" >&2\n\t\texit 1\n\tfi\nfi\nperl -pi -e 's/\\r\\n/\\n/g' 8qzAkGJa.diff\nsed -i -e '$a\\' \"8qzAkGJa.diff\"\n\nif ! cat \"882cdbd7d0a3.diff\" \"8qzAkGJa.diff\" `echo ` | patch --posix -sNfp1; then\n\techo \"error: Unable to apply vorbis.diff\" >&2\n\texit 1\nfi\n\nexit 0\n";
 		};
 		43964E45150EDCE2007BCC60 /* Vorbis - Patch */ = {
 			isa = PBXShellScriptBuildPhase;
