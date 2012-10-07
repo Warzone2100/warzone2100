@@ -658,6 +658,12 @@
 #endif
 #define WZ_ASSERT_ARRAY(a) (void)WZ_ASSERT_ARRAY_EXPR(a)
 
-
+#ifdef HAVE___BUILTIN_EXPECT
+# define unlikely(expr) __builtin_expect(!!(expr),0)
+# define likely(expr)	__builtin_expect(!!(expr),1)
+#else
+# define unlikely(expr) (expr)
+# define likely(expr)	(expr)
+#endif
 
 #endif /* WZGLOBAL_H */

@@ -90,7 +90,7 @@ extern bool assertEnabled;
  */
 #define ASSERT_HELPER(expr, location_description, function, ...) \
 ( \
-	(expr) ? /* if (expr) */ \
+	likely(expr) ? /* if (expr) */ \
 		(void)0 \
 	: /* else */\
 	ASSERT_FAILURE(expr, #expr, location_description, function, __VA_ARGS__) \
@@ -112,7 +112,7 @@ extern bool assertEnabled;
  * and also provides asserts and debug output for debugging.
  */
 #define ASSERT_OR_RETURN(retval, expr, ...) \
-	do { bool _wzeval = (expr); if (!_wzeval) { ASSERT_FAILURE(expr, #expr, AT_MACRO, __FUNCTION__, __VA_ARGS__); return retval; } } while (0)
+	do { bool _wzeval = likely(expr); if (!_wzeval) { ASSERT_FAILURE(expr, #expr, AT_MACRO, __FUNCTION__, __VA_ARGS__); return retval; } } while (0)
 
 
 /**
