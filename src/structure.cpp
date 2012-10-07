@@ -5917,35 +5917,10 @@ bool electronicDamage(BASE_OBJECT *psTarget, UDWORD damage, UBYTE attackPlayer)
 						addEffect(&pos, EFFECT_EXPLOSION, EXPLOSION_TYPE_FLAMETHROWER, false, NULL, 0, gameTime - deltaGameTime);
 					}
 				}
-
-				giftSingleDroid(psDroid, attackPlayer);
-
-				// tell the world!
-				// If the world is in synch, the world already knows, though.
-				if (bMultiMessages)
+				if (!giftSingleDroid(psDroid, attackPlayer) && !isDead(psDroid))
 				{
-					uint8_t giftType = DROID_GIFT;
-
-					NETbeginEncode(NETgameQueue(selectedPlayer), GAME_GIFT);
-					{
-						// We need to distinguish between gift types
-						NETuint8_t(&giftType);
-
-						// send the player originally owning this droid
-						// and the new owner
-						NETuint8_t(&psDroid->player);
-						NETuint8_t(&attackPlayer);
-
-						// followed by the droid's ID
-						NETuint32_t(&psDroid->id);
-					}
-					NETend();
-				}
-
-				//check to see if droid limit reached, if so recycle.
-				// don't check for transporter/mission coz multiplayer only issue.
-				if( (getNumDroids(attackPlayer)+1 ) > getMaxDroids(attackPlayer) )
-				{
+					// droid limit reached, recycle
+					// don't check for transporter/mission coz multiplayer only issue.
 					recycleDroid(psDroid);
 				}
 			}

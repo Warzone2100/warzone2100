@@ -1790,17 +1790,7 @@ DROID *reallyBuildDroid(DROID_TEMPLATE *pTemplate, Position pos, UDWORD player, 
 	// Don't use this assertion in single player, since droids can finish building while on an away mission
 	ASSERT(!bMultiPlayer || worldOnMap(pos.x, pos.y), "the build locations are not on the map");
 
-	//allocate memory
 	psDroid = new DROID(generateSynchronisedObjectId(), player);
-	if (psDroid == NULL)
-	{
-		debug(LOG_NEVER, "unit build: unable to create");
-		ASSERT(!"out of memory", "Cannot get the memory for the unit");
-		return NULL;
-	}
-
-	//fill in other details
-
 	droidSetName(psDroid, pTemplate->aName);
 
 	// Set the droids type
@@ -3290,197 +3280,59 @@ bool standardSensorDroid(DROID *psDroid)
 }
 
 // ////////////////////////////////////////////////////////////////////////////
-// give a droid from one player to another - used in Electronic Warfare and multiplayer
-//returns the droid created - for single player
-DROID * giftSingleDroid(DROID *psD, UDWORD to)
+// Give a droid from one player to another - used in Electronic Warfare and multiplayer.
+// Got to destroy the droid and build another since there are too many complications otherwise.
+// Returns the droid created.
+DROID *giftSingleDroid(DROID *psD, UDWORD to)
 {
-	DROID_TEMPLATE	sTemplate;
-	DROID		*psNewDroid, *psCurr;
-	STRUCTURE	*psStruct;
-	UDWORD		body, armourK, armourH;
-	int them = 0, from = psD->player;
+	DROID_TEMPLATE sTemplate;
+	DROID *psNewDroid;
 
 	CHECK_DROID(psD);
+	ASSERT_OR_RETURN(NULL, !isDead(psD), "Cannot gift dead unit");
+	ASSERT_OR_RETURN(psD, psD->player != to, "Cannot gift to self");
 
-	if(psD->player == to)
+	// Check unit limits (multiplayer only)
+	if (bMultiPlayer
+            && (getNumDroids(to) + 1 > getMaxDroids(to)
+	        || ((psD->droidType == DROID_CYBORG_CONSTRUCT || psD->droidType == DROID_CONSTRUCT)
+		    && getNumConstructorDroids(to) + 1 > MAX_CONSTRUCTOR_DROIDS)
+	        || (psD->droidType == DROID_COMMAND && getNumCommandDroids(to) + 1 > MAX_COMMAND_DROIDS)))
 	{
-		return psD;
+		if (to == selectedPlayer || psD->player == selectedPlayer)
+		{
+			CONPRINTF(ConsoleString, (ConsoleString, _("Unit transfer failed -- unit limits exceeded")));
+		}
+		return NULL;
 	}
-
-	// FIXME: why completely separate code paths for multiplayer and single player?? - Per
-
-	if (bMultiPlayer)
+	templateSetParts(psD, &sTemplate);	// create a template based on the droid
+	sstrcpy(sTemplate.aName, psD->aName);	// copy the name across
+	// only play the nexus sound if unit being taken over is selectedPlayer's but not going to the selectedPlayer
+	if (psD->player == selectedPlayer && to != selectedPlayer && !bMultiPlayer)
 	{
-		bool tooMany = false;
-
-		incNumDroids(to);
-		tooMany = tooMany || getNumDroids(to) > getMaxDroids(to);
-		if (psD->droidType == DROID_CYBORG_CONSTRUCT || psD->droidType == DROID_CONSTRUCT)
-		{
-			incNumConstructorDroids(to);
-			tooMany = tooMany || getNumConstructorDroids(to) > MAX_CONSTRUCTOR_DROIDS;
-		}
-		else if (psD->droidType == DROID_COMMAND)
-		{
-			incNumCommandDroids(to);
-			tooMany = tooMany || getNumCommandDroids(to) > MAX_COMMAND_DROIDS;
-		}
-
-		if (tooMany)
-		{
-			if (to == selectedPlayer)
-			{
-				CONPRINTF(ConsoleString, (ConsoleString, _("%s wanted to give you a %s but you have too many!"), getPlayerName(psD->player), psD->aName));
-			}
-			else if(psD->player == selectedPlayer)
-			{
-				CONPRINTF(ConsoleString, (ConsoleString, _("You wanted to give %s a %s but they have too many!"), getPlayerName(to), psD->aName));
-			}
-			return NULL;
-		}
-
-		// reset order
-		orderDroid(psD, DORDER_STOP, ModeQueue);
-
-		visRemoveVisibility((BASE_OBJECT *)psD);
-
-		if (droidRemove(psD, apsDroidLists)) 		// remove droid from one list
-		{
-			if (!isHumanPlayer(psD->player))
-			{
-				droidSetName(psD, "Enemy Unit");
-			}
-
-			// if successfully removed the droid from the players list add it to new player's list
-			psD->selected	= false;
-			psD->player	= to;		// move droid
-
-			addDroid(psD, apsDroidLists);	// add to other list.
-
-			// the new player may have different default sensor/ecm/repair components
-			if ((asSensorStats + psD->asBits[COMP_SENSOR].nStat)->location == LOC_DEFAULT)
-			{
-				if (psD->asBits[COMP_SENSOR].nStat != aDefaultSensor[psD->player])
-				{
-					psD->asBits[COMP_SENSOR].nStat = (UBYTE)aDefaultSensor[psD->player];
-				}
-			}
-			if ((asECMStats + psD->asBits[COMP_ECM].nStat)->location == LOC_DEFAULT)
-			{
-				if (psD->asBits[COMP_ECM].nStat != aDefaultECM[psD->player])
-				{
-					psD->asBits[COMP_ECM].nStat = (UBYTE)aDefaultECM[psD->player];
-				}
-			}
-			if ((asRepairStats + psD->asBits[COMP_REPAIRUNIT].nStat)->location == LOC_DEFAULT)
-			{
-				if (psD->asBits[COMP_REPAIRUNIT].nStat != aDefaultRepair[psD->player])
-				{
-					psD->asBits[COMP_REPAIRUNIT].nStat = (UBYTE)aDefaultRepair[psD->player];
-				}
-			}
-		}
-		else
-		{
-			// if we couldn't remove it, then get rid of it.
-			return NULL;
-		}
-		// add back into cluster system
-		clustNewDroid(psD);
-
-		// Update visibility
-		visTilesUpdate((BASE_OBJECT*)psD);
-
-		// check through the players, and our allies, list of droids to see if any are targetting it
-		for (them = 0; them < MAX_PLAYERS; them++)
-		{
-			if (!aiCheckAlliances(them, to))	// scan all the droid list for ALLIANCE_FORMED (yes, we have a alliance with ourselves)
-			{
-				continue;
-			}
-
-			for (psCurr = apsDroidLists[them]; psCurr != NULL; psCurr = psCurr->psNext)
-			{
-				if (psCurr->order.psObj == psD || psCurr->psActionTarget[0] == psD)
-				{
-					orderDroid(psCurr, DORDER_STOP, ModeQueue);
-				}
-				// check through order list
-				orderClearTargetFromDroidList(psCurr, (BASE_OBJECT *)psD);
-			}
-		}
-
-		for (them = 0; them < MAX_PLAYERS; them++)
-		{
-			if (!aiCheckAlliances(them, to))	// scan all the droid list for ALLIANCE_FORMED (yes, we have a alliance with ourselves)
-			{
-				continue;
-			}
-
-			// check through the players list, and our allies, of structures to see if any are targetting it
-			for (psStruct = apsStructLists[them]; psStruct != NULL; psStruct = psStruct->psNext)
-			{
-				if (psStruct->psTarget[0] == (BASE_OBJECT *)psD)
-				{
-					psStruct->psTarget[0] = NULL;
-				}
-			}
-		}
-		// skirmish callback!
+		scoreUpdateVar(WD_UNITS_LOST);
+		audio_QueueTrackPos(ID_SOUND_NEXUS_UNIT_ABSORBED, psD->pos.x, psD->pos.y, psD->pos.z);
+	}
+	// make the old droid vanish (but is not deleted until next tick)
+	vanishDroid(psD);
+	// create a new droid
+	psNewDroid = reallyBuildDroid(&sTemplate, Position(psD->pos.x, psD->pos.y, 0), to, false, psD->rot);
+	ASSERT_OR_RETURN(NULL, psNewDroid, "Unable to build unit");
+	addDroid(psNewDroid, apsDroidLists);
+	psNewDroid->body = psD->body;
+	psNewDroid->experience = psD->experience;
+	if (!(psNewDroid->droidType == DROID_PERSON || cyborgDroid(psNewDroid) || (psNewDroid->droidType == DROID_TRANSPORTER || psNewDroid->droidType == DROID_SUPERTRANSPORTER)))
+	{
+		updateDroidOrientation(psNewDroid);
+	}
+	if (bMultiPlayer)	// skirmish callback!
+	{
 		psScrCBDroidTaken = psD;
 		eventFireCallbackTrigger((TRIGGER_TYPE)CALL_UNITTAKEOVER);
 		psScrCBDroidTaken = NULL;
-		triggerEventObjectTransfer(psD, from);
-
-		return NULL;
 	}
-	else
-	{
-		uint32_t numKills;
-		int32_t x, y;
-		uint16_t direction;
-
-		// got to destroy the droid and build another since there are too many complications re order/action!
-
-		// create a template based on the droid
-		templateSetParts(psD, &sTemplate);
-
-		// copy the name across
-		sstrcpy(sTemplate.aName, psD->aName);
-
-		x = psD->pos.x;
-		y = psD->pos.y;
-		body = psD->body;
-		armourK = psD->armour[WC_KINETIC];
-		armourH = psD->armour[WC_HEAT];
-		numKills = psD->experience;
-		direction = psD->rot.direction;
-		// only play the sound if unit being taken over is selectedPlayer's but not going to the selectedPlayer
-		if (psD->player == selectedPlayer && to != selectedPlayer)
-		{
-			scoreUpdateVar(WD_UNITS_LOST);
-			audio_QueueTrackPos( ID_SOUND_NEXUS_UNIT_ABSORBED, x, y, psD->pos.z );
-		}
-		// make the old droid vanish
-		vanishDroid(psD);
-		// create a new droid
-		psNewDroid = buildDroid(&sTemplate, x, y, to, false, NULL);
-		ASSERT(psNewDroid != NULL, "unable to build a unit");
-		if (psNewDroid)
-		{
-			addDroid(psNewDroid, apsDroidLists);
-			psNewDroid->body = body;
-			psNewDroid->armour[WC_KINETIC] = armourK;
-			psNewDroid->armour[WC_HEAT] = armourH;
-			psNewDroid->experience = numKills;
-			psNewDroid->rot.direction = direction;
-			if (!(psNewDroid->droidType == DROID_PERSON || cyborgDroid(psNewDroid) || (psNewDroid->droidType == DROID_TRANSPORTER || psNewDroid->droidType == DROID_SUPERTRANSPORTER)))
-			{
-				updateDroidOrientation(psNewDroid);
-			}
-		}
-		return psNewDroid;
-	}
+	triggerEventObjectTransfer(psNewDroid, psD->player);
+	return psNewDroid;
 }
 
 /*calculates the electronic resistance of a droid based on its experience level*/
