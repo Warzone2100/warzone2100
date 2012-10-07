@@ -115,7 +115,7 @@ bool loadResearch(const char *pResearchData, UDWORD bufferSize)
 	unsigned int researchCount = numCR(pResearchData, bufferSize);
 	COMPONENT_STATS *psComp;
 	SDWORD structID;
-	UDWORD i, keyTopic, techCode, resPoints;
+	UDWORD i, keyTopic, techCode, resPoints, dummyVal;
 	char ResearchName[MAX_STR_LENGTH];
 	char msgName[MAX_STR_LENGTH], iconID[MAX_STR_LENGTH];
 	char imdName[MAX_STR_LENGTH], imdName2[MAX_STR_LENGTH];
@@ -184,34 +184,13 @@ bool loadResearch(const char *pResearchData, UDWORD bufferSize)
 		compName[0] = '\0';
 		compType[0] = '\0';
 
-		{
-			UDWORD numPRRequired;
-			UDWORD numFunctions;
-			UDWORD numStructures;
-			UDWORD numRedStructs;
-			UDWORD numStructResults;
-			UDWORD numRedArtefacts;
-			UDWORD numArteResults;
+		sscanf(pResearchData,"%d,%255[^,'\r\n],%255[^,'\r\n],%255[^,'\r\n],%255[^,'\r\n],%255[^,'\r\n], \
+		       %255[^,'\r\n],%255[^,'\r\n],%d,%d,%d,%d,%d,%d,%d,%d,%d",
+			&techCode, iconID, imdName, imdName2, msgName,
+		        structName, compName, compType, &resPoints, &keyTopic, &dummyVal,
+			&dummyVal, &dummyVal, &dummyVal, &dummyVal, &dummyVal, &dummyVal);
 
-			sscanf(pResearchData,"%d,%255[^,'\r\n],%255[^,'\r\n],%255[^,'\r\n],%255[^,'\r\n],%255[^,'\r\n], \
-			       %255[^,'\r\n],%255[^,'\r\n],%d,%d,%d,%d,%d,%d,%d,%d,%d",
-				&techCode, iconID, imdName, imdName2, msgName,
-			       structName, compName, compType,
-				&resPoints, &keyTopic, &numPRRequired,
-				&numFunctions, &numStructures,
-				&numRedStructs, &numStructResults,
-				&numRedArtefacts, &numArteResults);
-		}
-
-		//set keytopic flag
-		if (keyTopic)
-		{
-			research.keyTopic = true;
-		}
-		else
-		{
-			research.keyTopic = false;
-		}
+		research.keyTopic = keyTopic;
 
 		//check the tech code is valid
 		ASSERT_OR_RETURN(false, techCode <= 1, "Invalid tech code for research topic - %s ", getResearchName(&research));
@@ -302,7 +281,6 @@ bool loadResearch(const char *pResearchData, UDWORD bufferSize)
 
 	return true;
 }
-
 
 //Load the pre-requisites for a research list
 bool loadResearchPR(const char *pPRData, UDWORD bufferSize)
