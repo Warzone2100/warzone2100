@@ -1,4 +1,7 @@
-2012-10-NN: Version 3.1 rc3
+2012-10-NN: Version 3.1.0
+ * General:
+
+2012-10-08: Version 3.1 rc3
  * General:
    * Warning: Warn players to downgrade/upgrade PhysFS package from a buggy version 2.0.2 (ticket:3700, commit:408be743f017cce1519cd955767abf0e697ab7f7)
    * Change: Patch PhysFS in the Mac build until there is a new release (commit:a05e8c980bc42fa66ed1b81ae40793645df8efbf)
@@ -30,7 +33,7 @@
    * Fix: Fixed location of centre of viewport rendered on radar window (ticket:3619, commit:0dde269379507a897ef2945ca76f840a8994f04a)
    * Fix: Fixed bug which caused a weird behavior in the way menus worked (ticket:3653, commit:594b8a6c631b160fda06f9ffca4b9f227c97c3f8)
  * Multiplayer:
-   * New: Add new maps by NoQ: Emergence (10p), Monocot (3p), Bloat (5p) and WindFury (9p) (commit:858664124de97921a551367656c0ba7cf4aecf3d)
+   * New: Add new maps by NoQ: Emergence (10p), Monocot (3p), by tmp500: Bloat (5p) and by Ertox: WindFury (9p) (commit:858664124de97921a551367656c0ba7cf4aecf3d)
    * Change: Make available again research topics if the Research Facilities researching these particular topics are out-of-order temporarily for construction of Research Modules (commit:5bac6e4273fbdbd43acaf4a0042b373d4c9dec7c)
    * Change: Allow setting/clearing game password even after a game is hosted. Also, if typing password and pressing Enter, will actually set the password (commit:9575cf93e2a0b39c11d7bd2f51aef100fe4dae57)
    * Change: Disabled game name icon in multiplayer, since it didn't do anything anyway (ticket:1231, commit:831d22c7d26930872a9ec766177f8a00b63ace98)

@@ -6163,7 +6163,7 @@ static bool writeMessageFile(const char *pFileName)
 			else
 			{
 				VIEWDATA *pViewData = (VIEWDATA*)psMessage->pViewData;
-				ini.setValue("name", pViewData->pName);
+				ini.setValue("name", pViewData != NULL? pViewData->pName : "NULL");
 			}
 			ini.setValue("read", psMessage->read);	// flag to indicate whether message has been read; not that this is/was _not_ read by loading code!?
 			ASSERT(player == psMessage->player, "Bad player number (%d == %d)", player, psMessage->player);
