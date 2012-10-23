@@ -1,10 +1,10 @@
 #!/bin/sh
 
-DirectorY="physfs-2.0.2"
 OutDir="physfs"
-FileName="physfs-2.0.2.tar.gz"
-SourceDLP="http://icculus.org/physfs/downloads/physfs-2.0.2.tar.gz"
-MD5Sum="4e8927c3d30279b03e2592106eb9184a"
+DirectorY="${OutDir}-2.0.3"
+FileName="${DirectorY}.tar.bz2"
+SourceDLP="http://icculus.org/physfs/downloads/${FileName}"
+MD5Sum="c2c727a8a8deb623b521b52d0080f613"
 
 configs/FetchSource.sh "${DirectorY}" "${OutDir}" "${FileName}" "${SourceDLP}" "${MD5Sum}"
 exit ${?}
