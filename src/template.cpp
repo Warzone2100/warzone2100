@@ -126,10 +126,10 @@ bool researchedTemplate(DROID_TEMPLATE *psCurr, int player, bool allowRedundant,
 
 bool initTemplates()
 {
-	WzConfig ini("userdata/" + QString(rulesettag) + "/storedtemplates.ini");
+	WzConfig ini("userdata/" + QString(rulesettag) + "/templates.ini");
 	if (ini.status() != QSettings::NoError)
 	{
-		debug(LOG_FATAL, "Could not open storedtemplates.ini");
+		debug(LOG_FATAL, "Could not open templates.ini");
 		return false;
 	}
 	QStringList list = ini.childGroups();
@@ -199,10 +199,10 @@ bool initTemplates()
 bool storeTemplates()
 {
 	// Write stored templates (back) to file
-	WzConfig ini("userdata/" + QString(rulesettag) + "/storedtemplates.ini");
+	WzConfig ini("userdata/" + QString(rulesettag) + "/templates.ini");
 	if (ini.status() != QSettings::NoError || !ini.isWritable())
 	{
-		debug(LOG_FATAL, "Could not open storedtemplates.ini");
+		debug(LOG_FATAL, "Could not open templates.ini");
 		return false;
 	}
 	for (DROID_TEMPLATE *psCurr = apsDroidTemplates[selectedPlayer]; psCurr != NULL; psCurr = psCurr->psNext)

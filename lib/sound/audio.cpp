@@ -192,7 +192,7 @@ bool audio_GetPreviousQueueTrackRadarBlipPos( SDWORD *iX, SDWORD *iY )
 		return false;
 	}
 	
-	if (gameTime2 > g_iPreviousSampleTime + 5*GAME_TICKS_PER_SEC)
+	if (realTime > g_iPreviousSampleTime + 5*GAME_TICKS_PER_SEC)
 	{
 		return false;
 	}
@@ -539,7 +539,7 @@ static void audio_UpdateQueue( void )
 		g_sPreviousSample.y = psSample->y;
 		g_sPreviousSample.z = psSample->z;
 		g_sPreviousSample.iTrack = psSample->iTrack;
-		g_iPreviousSampleTime = gameTime2;
+		g_iPreviousSampleTime = realTime;
 	}
 }
 

@@ -511,7 +511,7 @@ void	camAllignWithTarget(BASE_OBJECT *psTarget)
 	trackingCamera.oldDistance = getViewDistance();	//distance;
 
 	/* Store away when we started */
-	trackingCamera.lastUpdate = gameTime2;
+	trackingCamera.lastUpdate = realTime;
 }
 
 #define GROUP_SELECTED 0xFFFFFFFF
@@ -1014,7 +1014,7 @@ bool	bFlying;
 	CheckScrollLimits();
 
 	/* Store away our last update as acceleration and velocity are all fn()/dt */
-	trackingCamera.lastUpdate = gameTime2;
+	trackingCamera.lastUpdate = realTime;
 	if(bFullInfo)
 	{
 		flushConsoleMessages();

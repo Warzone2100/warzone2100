@@ -653,6 +653,7 @@ void fpathTest(int x, int y, int x2, int y2)
 	}
 	//assert(pathJobs.empty()); // can now be marked .deleted as well
 	assert(pathResults.empty());
+	(void)r;  // Squelch unused-but-set warning.
 }
 
 bool fpathCheck(Position orig, Position dest, PROPULSION_TYPE propulsion)

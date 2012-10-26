@@ -657,7 +657,7 @@ void intDisplayPowerBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DEC
 	if (Avail < 0)
 	{
 		const char *need = _("Need more resources!");
-		if ((gameTime2 / 1250) % 5 == 0 )
+		if ((realTime / 1250) % 5 == 0 )
 		{
 			iV_SetTextColour(WZCOL_BLACK);
 			iV_SetFont(font_small);
@@ -871,7 +871,7 @@ void intDisplayStatusButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ
 	//need to flash the button if a factory is on hold production
 	if (bOnHold)
 	{
-		if (((gameTime2/250) % 2) == 0)
+		if (((realTime/250) % 2) == 0)
 		{
 			iV_DrawImage(IntImages,IMAGE_BUT0_DOWN,xOffset+Form->x,yOffset+Form->y);
 		}
@@ -1197,7 +1197,7 @@ void intOpenPlainForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_
 		Form->Ax1 = (UWORD)Tx1;
 		Form->Ay0 = (UWORD)(Ty0 + (Form->height/2) - 4);
 		Form->Ay1 = (UWORD)(Ty0 + (Form->height/2) + 4);
-		Form->startTime = gameTime2;
+		Form->startTime = realTime;
 	} else {
 		FormOpenCount = 0;
 	}
@@ -1207,7 +1207,7 @@ void intOpenPlainForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_
 	Form->animCount++;
 
 	Range = (Form->height/2)-4;
-	Duration = (gameTime2 - Form->startTime) << 16 ;
+	Duration = (realTime - Form->startTime) << 16 ;
 	APos = (Range * (Duration / FORM_OPEN_ANIM_DURATION) ) >> 16;
 
 	Ay0 = Ty0 + (Form->height/2) - 4 - APos;
@@ -1264,7 +1264,7 @@ void intClosePlainForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL
 		Form->Ay0 = (UWORD)(yOffset+Form->y);
 		Form->Ax1 = (UWORD)(Form->Ax0 + Form->width);
 		Form->Ay1 = (UWORD)(Form->Ay0 + Form->height);
-		Form->startTime = gameTime2;
+		Form->startTime = realTime;
 	} else {
 		FormCloseCount = 0;
 	}
@@ -1274,7 +1274,7 @@ void intClosePlainForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL
 	Form->animCount++;
 
 	Range = (Form->height/2)-4;
-	Duration = (gameTime2 - Form->startTime) << 16 ;
+	Duration = (realTime - Form->startTime) << 16 ;
 	APos = (Range * (Duration / FORM_OPEN_ANIM_DURATION) ) >> 16;
 
 	Form->Ay0 = (UWORD)(yOffset + Form->y + APos);
@@ -1346,7 +1346,7 @@ void intDisplayMissionClock(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ
 	iV_DrawImage(IntImages, UNPACKDWORD_TRI_B(psWidget->UserData), x, y);
 	// Need to flash the timer when < 5 minutes remaining, but > 4 minutes
 	flash = UNPACKDWORD_TRI_A(psWidget->UserData);
-	if (flash && ((gameTime2 / 250) % 2) == 0)
+	if (flash && ((realTime / 250) % 2) == 0)
 	{
 		iV_DrawImage(IntImages, UNPACKDWORD_TRI_C(psWidget->UserData), x, y);
 	}
@@ -1395,7 +1395,7 @@ void intDisplayImageHilight(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ
 	flash = UNPACKDWORD_TRI_A(psWidget->UserData);
 	if (flash && psWidget->id == IDTRANS_LAUNCH)
 	{
-		if (((gameTime2/250) % 2) == 0)
+		if (((realTime/250) % 2) == 0)
 		{
     		iV_DrawImage(IntImages,UNPACKDWORD_TRI_B(psWidget->UserData),x,y);
 		}
@@ -1496,7 +1496,7 @@ void intDisplayButtonFlash(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_
 
 	ASSERT( psWidget->type == WIDG_BUTTON,"intDisplayButtonFlash : Not a button" );
 
-	if ((gameTime2 / 250) % 2 == 0)
+	if ((realTime / 250) % 2 == 0)
 	{
 		ImageID = UNPACKDWORD_TRI_B(psWidget->UserData);
 	}
@@ -2921,10 +2921,10 @@ void WidgetAudioCallback(int AudioID)
 
 		// Don't allow a widget beep if one was made in the last WIDGETBEEPGAP milliseconds
 		// This stops double beeps happening (which seems to happen all the time)
-		TimeSinceLastWidgetBeep=gameTime2-LastTimeAudio;
+		TimeSinceLastWidgetBeep=realTime-LastTimeAudio;
 		if (TimeSinceLastWidgetBeep<0 || TimeSinceLastWidgetBeep>WIDGETBEEPGAP)
 		{
-			LastTimeAudio=gameTime2;
+			LastTimeAudio=realTime;
 			audio_PlayTrack(AudioID);
 		}
 	}

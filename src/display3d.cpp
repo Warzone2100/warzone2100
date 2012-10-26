@@ -332,7 +332,7 @@ void NotifyUserOfError(char *msg)
 {
 	errorWaiting = true;
 	ssprintf(errorMessage, "%s", msg);
-	lastErrorTime = gameTime2;
+	lastErrorTime = realTime;
 }
 
 static Blueprint getTileBlueprint(int mapX, int mapY)
@@ -532,7 +532,7 @@ static void NetworkDisplayImage(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset
 	ASSERT( psWidget->type == WIDG_BUTTON,"Not a button" );
 
 	// cheap way to do a button flash
-	if ( (gameTime2/250) % 2 == 0 )
+	if ( (realTime/250) % 2 == 0 )
 	{
 		ImageID = UNPACKDWORD_TRI_B(psWidget->UserData);
 	}
@@ -754,7 +754,7 @@ void draw3DScene( void )
 	}
 	if (errorWaiting)
 	{
-		if (lastErrorTime + (60 * GAME_TICKS_PER_SEC) < gameTime2)
+		if (lastErrorTime + (60 * GAME_TICKS_PER_SEC) < realTime)
 		{
 			char trimMsg[255];
 			audio_PlayTrack(ID_SOUND_BUILD_FAIL);
@@ -3784,7 +3784,7 @@ ENERGY_BAR toggleEnergyBars(void)
 void assignSensorTarget( BASE_OBJECT *psObj )
 {
 	bSensorTargetting = true;
-	lastTargetAssignation = gameTime2;
+	lastTargetAssignation = realTime;
 	psSensorObj = psObj;
 }
 
@@ -3792,7 +3792,7 @@ void assignSensorTarget( BASE_OBJECT *psObj )
 void	assignDestTarget( void )
 {
 	bDestTargetting = true;
-	lastDestAssignation = gameTime2;
+	lastDestAssignation = realTime;
 	destTargetX = mouseX();
 	destTargetY = mouseY();
 	destTileX = mouseTileX;
@@ -3810,7 +3810,7 @@ static void	processSensorTarget( void )
 
 	if(bSensorTargetting)
 	{
-		if( (gameTime2 - lastTargetAssignation) < TARGET_TO_SENSOR_TIME)
+		if( (realTime - lastTargetAssignation) < TARGET_TO_SENSOR_TIME)
 		{
 			if(!psSensorObj->died && psSensorObj->sDisplay.frameNumber == currentGameFrame)
 			{
@@ -3826,7 +3826,7 @@ static void	processSensorTarget( void )
 				}
 				iV_DrawImage(IntImages,index,x,y);
 
-				offset = (SWORD)(12+ ((TARGET_TO_SENSOR_TIME)-(gameTime2-
+				offset = (SWORD)(12+ ((TARGET_TO_SENSOR_TIME)-(realTime-
 					lastTargetAssignation))/2);
 
 				x0 = (SWORD)(x-offset);
@@ -3869,12 +3869,12 @@ static void	processDestinationTarget( void )
 
 	if(bDestTargetting)
 	{
-		if( (gameTime2 - lastDestAssignation) < DEST_TARGET_TIME)
+		if( (realTime - lastDestAssignation) < DEST_TARGET_TIME)
 		{
 				x = (SWORD)destTargetX;
 				y = (SWORD)destTargetY;
 
-				offset = (SWORD)(((DEST_TARGET_TIME)-(gameTime2-lastDestAssignation))/2);
+				offset = (SWORD)(((DEST_TARGET_TIME)-(realTime-lastDestAssignation))/2);
 
 				x0 = (SWORD)(x-offset);
 				y0 = (SWORD)(y-offset);
@@ -4125,20 +4125,7 @@ static void showWeaponRange(BASE_OBJECT *psObj)
 
 static void showSensorRange2(BASE_OBJECT *psObj)
 {
-	uint32_t sensorRange;
-
-	if(psObj->type == OBJ_DROID)
-	{
-		DROID *psDroid = (DROID*)psObj;
-		sensorRange = asSensorStats[psDroid->asBits[COMP_SENSOR].nStat].range;
-	}
-	else
-	{
-		STRUCTURE *psStruct = (STRUCTURE*)psObj;
-		sensorRange = structSensorRange(psStruct);
-	}
-
-	showEffectCircle(psObj->pos, sensorRange, 80, EFFECT_EXPLOSION, EXPLOSION_TYPE_LASER);
+	showEffectCircle(psObj->pos, psObj->sensorRange, 80, EFFECT_EXPLOSION, EXPLOSION_TYPE_LASER);
 	showWeaponRange(psObj);
 }
 

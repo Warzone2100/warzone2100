@@ -317,8 +317,8 @@ featfailure:
 	else
 	{
 		debug(LOG_ERROR, "Unknown terrain signature in %s: %u %u %u", path,
-			  terrainTypes[0], terrainTypes[1], terrainTypes[2]);
-		goto failure;
+		      terrainTypes[0], terrainTypes[1], terrainTypes[2]);
+		map->tileset = TILESET_ARIZONA;  // Set something random. Why just have 3 tilesets, anyway?
 	}
 	
 	PHYSFS_close(fp);

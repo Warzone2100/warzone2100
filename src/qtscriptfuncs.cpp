@@ -1417,7 +1417,7 @@ static QScriptValue js_debug(QScriptContext *context, QScriptEngine *engine)
 
 //-- \subsection{pickStructLocation(droid, structure type, x, y)}
 //-- Pick a location for constructing a certain type of building near some given position.
-//-- Returns a position object containing "x" and "y" values, if successful.
+//-- Returns an object containing "type" POSITION, and "x" and "y" values, if successful.
 static QScriptValue js_pickStructLocation(QScriptContext *context, QScriptEngine *engine)
 {
 	QScriptValue droidVal = context->argument(0);
@@ -1507,6 +1507,7 @@ endstructloc:
 		QScriptValue retval = engine->newObject();
 		retval.setProperty("x", x + map_coord(offset.x), QScriptValue::ReadOnly);
 		retval.setProperty("y", y + map_coord(offset.y), QScriptValue::ReadOnly);
+		retval.setProperty("type", SCRIPT_POSITION, QScriptValue::ReadOnly);
 		return retval;
 	}
 	else

@@ -183,7 +183,7 @@ void buttonRun(W_BUTTON *psButton)
 {
 	if (psButton->state & WBUTS_FLASH)
 	{
-		if (((gameTime2/250) % 2) == 0) {
+		if (((realTime/250) % 2) == 0) {
 			psButton->state &= ~WBUTS_FLASHON;
 		} else {
 			psButton->state |= WBUTS_FLASHON;
