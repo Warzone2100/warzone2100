@@ -1403,7 +1403,7 @@ static QScriptValue js_orderDroidObj(QScriptContext *context, QScriptEngine *)
 	return true;
 }
 
-//-- \subsection{orderDroidBuild(droid, order, structure type, x, y)}
+//-- \subsection{orderDroidBuild(droid, order, structure type, x, y[, direction])}
 //-- Give a droid an order to build someting at the given position. Returns true if allowed.
 static QScriptValue js_orderDroidBuild(QScriptContext *context, QScriptEngine *)
 {
@@ -1417,14 +1417,18 @@ static QScriptValue js_orderDroidBuild(QScriptContext *context, QScriptEngine *)
 	STRUCTURE_STATS	*psStats = &asStructureStats[index];
 	int x = context->argument(3).toInt32();
 	int y = context->argument(4).toInt32();
+	uint16_t direction = 0;
 
 	SCRIPT_ASSERT(context, order == DORDER_BUILD, "Invalid order");
 	SCRIPT_ASSERT(context, strcmp(psStats->pName, "A0ADemolishStructure") != 0, "Cannot build demolition");
-
+	if (context->argumentCount() > 5)
+	{
+		direction = DEG(context->argument(5).toNumber());
+	}
 	// Don't allow scripts to order structure builds if players structure limit has been reached.
 	if (!IsPlayerStructureLimitReached(psDroid->player))
 	{
-		orderDroidStatsLocDir(psDroid, order, psStats, world_coord(x) + TILE_UNITS / 2, world_coord(y) + TILE_UNITS / 2, 0, ModeQueue);
+		orderDroidStatsLocDir(psDroid, order, psStats, world_coord(x) + TILE_UNITS / 2, world_coord(y) + TILE_UNITS / 2, direction, ModeQueue);
 		return QScriptValue(false);
 	}
 	return QScriptValue(true);
