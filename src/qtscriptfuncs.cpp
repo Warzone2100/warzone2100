@@ -1946,6 +1946,43 @@ static QScriptValue js_addStructure(QScriptContext *context, QScriptEngine *)
 	return QScriptValue(psStruct != NULL);
 }
 
+//-- \subsection{getStructureLimit(structure type[, player])}
+//-- Create a structure on the given position. Returns true on success.
+static QScriptValue js_getStructureLimit(QScriptContext *context, QScriptEngine *engine)
+{
+	QString building = context->argument(0).toString();
+	int index = getStructStatFromName(building.toUtf8().constData());
+	int player;
+	if (context->argumentCount() > 1)
+	{
+		player = context->argument(1).toInt32();
+	}
+	else
+	{
+		player = engine->globalObject().property("me").toInt32();
+	}
+	return QScriptValue(asStructLimits[player][index].limit);
+}
+
+//-- \subsection{getStructureCount(structure type[, player])}
+//-- Create a structure on the given position. Returns true on success.
+static QScriptValue js_getStructureCount(QScriptContext *context, QScriptEngine *engine)
+{
+	QString building = context->argument(0).toString();
+	int index = getStructStatFromName(building.toUtf8().constData());
+	int player;
+	if (context->argumentCount() > 1)
+	{
+		player = context->argument(1).toInt32();
+	}
+	else
+	{
+		player = engine->globalObject().property("me").toInt32();
+	}
+	SCRIPT_ASSERT(context, index < numStructureStats && index >= 0, "Structure %s not found", building.toUtf8().constData());
+	return QScriptValue(asStructLimits[player][index].currentQuantity);
+}
+
 //-- \subsection{setNoGoArea(x1, y1, x2, y2, player)}
 //-- Creates an area on the map on which nothing can be built. If player is zero,
 //-- then landing lights are placed. If player is -1, then a limbo landing zone
@@ -2151,6 +2188,8 @@ bool registerFunctions(QScriptEngine *engine)
 	engine->globalObject().setProperty("removeStruct", engine->newFunction(js_removeStruct));
 	engine->globalObject().setProperty("setScrollParams", engine->newFunction(js_setScrollParams));
 	engine->globalObject().setProperty("addStructure", engine->newFunction(js_addStructure));
+	engine->globalObject().setProperty("getStructureLimit", engine->newFunction(js_getStructureLimit));
+	engine->globalObject().setProperty("getStructureCount", engine->newFunction(js_getStructureCount));
 	engine->globalObject().setProperty("loadLevel", engine->newFunction(js_loadLevel));
 	engine->globalObject().setProperty("setDroidExperience", engine->newFunction(js_setDroidExperience));
 	engine->globalObject().setProperty("setNoGoArea", engine->newFunction(js_setNoGoArea));
