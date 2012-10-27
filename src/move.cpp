@@ -759,11 +759,18 @@ static bool moveBlocked(DROID *psDroid)
 		// Stopped long enough - blocked
 		psDroid->sMove.bumpTime = 0;
 		psDroid->sMove.lastBump = 0;
-
-		objTrace(psDroid->id, "BLOCKED");
+		if (!isHumanPlayer(psDroid->player) && bMultiPlayer)
+		{
+			psDroid->lastFrustratedTime = gameTime;
+			objTrace(psDroid->id, "FRUSTRATED");
+		}
+		else
+		{
+			objTrace(psDroid->id, "BLOCKED");
+		}
 		// if the unit cannot see the next way point - reroute it's got stuck
-		if ((bMultiPlayer || psDroid->player == selectedPlayer) &&
-		     psDroid->sMove.pathIndex != psDroid->sMove.numPoints)
+		if ((bMultiPlayer || psDroid->player == selectedPlayer || psDroid->lastFrustratedTime == gameTime)
+		    && psDroid->sMove.pathIndex != psDroid->sMove.numPoints)
 		{
 			objTrace(psDroid->id, "Trying to reroute to (%d,%d)", psDroid->sMove.destination.x, psDroid->sMove.destination.y);
 			moveDroidTo(psDroid, psDroid->sMove.destination.x, psDroid->sMove.destination.y);
@@ -1138,6 +1145,12 @@ static void moveCalcDroidSlide(DROID *psDroid, int *pmx, int *pmy)
 			{
 				// everything else doesn't avoid people
 				continue;
+			}
+			if (psObj->player == psDroid->player
+			    && psDroid->lastFrustratedTime > 0
+			    && gameTime - psDroid->lastFrustratedTime < FRUSTRATED_TIME)
+			{
+				continue; // clip straight through own units when sufficient frustrated -- using cheat codes!
 			}
 		}
 		else

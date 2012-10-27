@@ -307,6 +307,7 @@ DROID::DROID(uint32_t id, unsigned player)
 
 	sMove.asPath = NULL;
 	sMove.Status = MOVEINACTIVE;
+	lastFrustratedTime = 0;		// make sure we do not start the game frustrated
 }
 
 /* DROID::~DROID: release all resources associated with a droid -
@@ -1803,8 +1804,6 @@ DROID *reallyBuildDroid(DROID_TEMPLATE *pTemplate, Position pos, UDWORD player, 
 		psGrp = grpCreate();
 		psGrp->add(psDroid);
 	}
-
-	psDroid->lastFrustratedTime = -UINT16_MAX;	// make sure we do not start the game frustrated
 
 	psDroid->listSize = 0;
 	psDroid->listPendingBegin = 0;

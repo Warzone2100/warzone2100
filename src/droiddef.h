@@ -152,7 +152,7 @@ struct DROID : public BASE_OBJECT
 	UDWORD          originalBody;                   ///< the original body points
 	uint32_t        experience;
 
-	int		lastFrustratedTime;		///< Set when eg being stuck; used for eg firing indiscriminately at map features to clear the way (note: signed, so wrap arounds after 24.9 days)
+	UDWORD          lastFrustratedTime;		///< Set when eg being stuck; used for eg firing indiscriminately at map features to clear the way
 
 	SWORD           resistance;                     ///< used in Electronic Warfare
 
