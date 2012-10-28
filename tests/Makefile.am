@@ -24,7 +24,7 @@ CLEANFILES = \
 
 EXTRA_DIST = \
 	configs \
-	Tests.xcodeproj \
+	Tests.xcodeproj
 
 TESTS = maptest modeltest qtscripttest
 

@@ -7,7 +7,7 @@ AM_YFLAGS = -d
 .PHONY: autorevision.h
 
 autorevision.h:
-	(cd $(top_srcdir) && ./build_tools/autorevision -t xcode -o  $(abs_top_builddir)/autorevision.tmp > $(abs_top_builddir)src/autorevision.h)
+	(cd $(top_srcdir) && ./build_tools/autorevision -t h -o  $(abs_top_builddir)/autorevision.tmp > $(abs_top_builddir)/src/autorevision.h)
 
 BUILT_SOURCES = \
 	autorevision.h \
