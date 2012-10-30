@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2012-09-30 15:36+0200\n"
+"POT-Creation-Date: 2012-10-30 16:57+0100\n"
 "PO-Revision-Date: 2012-09-13 15:18+0100\n"
 "Last-Translator: Daniel Vijande <nsa_server@hotmail.com>\n"
 "Language-Team: Spanish <warzone2100-project@lists.sourceforge.net>\n"
@@ -12353,81 +12353,81 @@ msgstr "%s - Aliado - Daño %d%% - Experiencia %d, %s"
 msgid "Unit Lost!"
 msgstr "¡Unidad Perdida!"
 
-#: src/droid.cpp:1250
+#: src/droid.cpp:1251
 msgid "Structure Restored"
 msgstr "Estructura Restaurada"
 
-#: src/droid.cpp:2192
+#: src/droid.cpp:2191
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
 msgstr[0] "Grupo %u seleccionado - %u Unidad"
 msgstr[1] "Grupo %u seleccionado - %u Unidades"
 
-#: src/droid.cpp:2205
+#: src/droid.cpp:2204
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
 msgstr[0] "%u unidad asignada al Grupo %u"
 msgstr[1] "%u unidades asignadas al Grupo %u"
 
-#: src/droid.cpp:2218
+#: src/droid.cpp:2217
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
 msgstr[0] "Centrado en el Grupo %u - %u Unidad"
 msgstr[1] "Centrado en el Grupo %u - %u Unidades"
 
-#: src/droid.cpp:2222
+#: src/droid.cpp:2221
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] "Alineando con el Grupo %u - %u Unidad"
 msgstr[1] "Alineando con el Grupo %u - %u Unidades"
 
-#: src/droid.cpp:2404
+#: src/droid.cpp:2403
 msgid "Rookie"
 msgstr "Novato"
 
-#: src/droid.cpp:2405
+#: src/droid.cpp:2404
 msgctxt "rank"
 msgid "Green"
 msgstr "Principiante"
 
-#: src/droid.cpp:2406
+#: src/droid.cpp:2405
 msgid "Trained"
 msgstr "Entrenado"
 
-#: src/droid.cpp:2407
+#: src/droid.cpp:2406
 msgid "Regular"
 msgstr "Regular"
 
-#: src/droid.cpp:2408
+#: src/droid.cpp:2407
 msgid "Professional"
 msgstr "Profesional"
 
-#: src/droid.cpp:2409
+#: src/droid.cpp:2408
 msgid "Veteran"
 msgstr "Veterano"
 
-#: src/droid.cpp:2410
+#: src/droid.cpp:2409
 msgid "Elite"
 msgstr "Élite"
 
-#: src/droid.cpp:2411
+#: src/droid.cpp:2410
 msgid "Special"
 msgstr "Especial"
 
-#: src/droid.cpp:2412
+#: src/droid.cpp:2411
 msgid "Hero"
 msgstr "Héroe"
 
-#: src/droid.cpp:3346
+#: src/droid.cpp:3345
 #, c-format
 msgid "%s wanted to give you a %s but you have too many!"
 msgstr "¡%s quiso darte un %s pero tienes demasiados!"
 
-#: src/droid.cpp:3350
+#: src/droid.cpp:3349
 #, c-format
 msgid "You wanted to give %s a %s but they have too many!"
 msgstr "¡Intentaste dar a %s un %s pero tiene demasiados!"
@@ -14049,7 +14049,7 @@ msgstr "Cargar Partida Guardada"
 msgid "GAME SAVED :"
 msgstr "¡PARTIDA GUARDADA!"
 
-#: src/move.cpp:2279
+#: src/move.cpp:2292
 #, c-format
 msgid "You found %u power in an oil drum."
 msgstr "Encontraste %u de energía en un barril de petróleo"
@@ -14723,26 +14723,26 @@ msgstr "Marrón"
 msgid "We can't do that! We must be a Cyborg unit to use a Cyborg Transport!"
 msgstr "¡No podemos hacer eso! ¡Debemos ser una unidad cyborg para usar el transporte Cyborg!"
 
-#: src/qtscriptfuncs.cpp:1586
+#: src/qtscriptfuncs.cpp:1591
 #: src/scriptfuncs.cpp:3263
 msgid "YOU ARE VICTORIOUS!"
 msgstr "¡ERES EL GANADOR!"
 
-#: src/qtscriptfuncs.cpp:1591
+#: src/qtscriptfuncs.cpp:1596
 #: src/scriptfuncs.cpp:3267
 msgid "YOU WERE DEFEATED!"
 msgstr "¡HAS SIDO DERROTADO!"
 
-#: src/research.cpp:1170
+#: src/research.cpp:1172
 #, c-format
 msgid "Research completed: %s"
 msgstr "Investigación completada: %s"
 
-#: src/research.cpp:1175
+#: src/research.cpp:1177
 msgid "Research Completed"
 msgstr "Investigación Completada"
 
-#: src/research.cpp:1899
+#: src/research.cpp:1901
 msgid "Research Award"
 msgstr "Premio de Investigación"
 
@@ -14970,24 +14970,24 @@ msgstr "¡No hay espacio suficiente en el transporte!"
 msgid "Reinforcements landing"
 msgstr "Refuerzos aterrizando"
 
-#: src/version.cpp:131
+#: src/version.cpp:121
 msgid " (modified locally)"
 msgstr " (modificado localmente)"
 
-#: src/version.cpp:138
+#: src/version.cpp:128
 msgid " - DEBUG"
 msgstr " - DEPURACIÓN"
 
-#: src/version.cpp:147
+#: src/version.cpp:137
 #, c-format
 msgid " - Built %s"
 msgstr " - Construido %s"
 
 #. TRANSLATORS: This string looks as follows when expanded.
 #. "Version <version name/number> <working copy state><BUILD DATE><BUILD TYPE>"
-#: src/version.cpp:157
-#, c-format
-msgid "Version %s-%s%s%s%s"
+#: src/version.cpp:147
+#, fuzzy, c-format
+msgid "Version %s%s%s%s"
 msgstr "Versión: %s-%s%s%s%s"
 
 #~ msgid "Password is already set!"
