@@ -36,6 +36,9 @@
 #define ALLIANCES			1
 #define	ALLIANCES_TEAMS		2			//locked teams
 
+/// Amount of time to rage at the world when frustrated (10 seconds)
+#define FRUSTRATED_TIME (1000 * 10)
+
 // alliances
 extern uint8_t alliances[MAX_PLAYER_SLOTS][MAX_PLAYER_SLOTS];
 extern PlayerMask alliancebits[MAX_PLAYER_SLOTS];

@@ -4285,6 +4285,7 @@ static bool loadSaveDroid(const char *pFileName, DROID **ppsCurrentDroidLists)
 		psDroid->actionStarted = ini.value("actionStarted", 0).toInt();
 		psDroid->actionPoints = ini.value("actionPoints", 0).toInt();
 		psDroid->resistance = ini.value("resistance", 0).toInt(); // zero resistance == no electronic damage
+		psDroid->lastFrustratedTime = ini.value("lastFrustratedTime", 0).toInt();
 
 		// copy the droid's weapon stats
 		for (int j = 0; j < psDroid->numWeaps; j++)
