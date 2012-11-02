@@ -254,12 +254,9 @@ static bool bufferSREPAIRLoad(const char *pBuffer, UDWORD size, void **ppData)
 }
 
 /* Load the Brain stats */
-static bool bufferSBRAINLoad(const char *pBuffer, UDWORD size, void **ppData)
+static bool bufferSBRAINLoad(const char *fileName, void **ppData)
 {
-	calcDataHash((uint8_t *)pBuffer, size, DATA_SBRAIN);
-
-	if (!loadBrainStats(pBuffer, size)
-	 || !allocComponentList(COMP_BRAIN, numBrainStats))
+    if (!loadBrainStats(fileName) || !allocComponentList(COMP_BRAIN, numBrainStats))
 	{
 		return false;
 	}
