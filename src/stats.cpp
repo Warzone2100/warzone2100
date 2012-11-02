@@ -1028,7 +1028,10 @@ bool loadBodyStats(const char *pFileName)
 		debug(LOG_ERROR, "Could not open %s", pFileName);
 	}
 	QStringList list = ini.childGroups();
-	statsAllocBody(list.size());
+	if (!statsAllocBody(list.size()))
+	{
+		return false;
+	}
 	// Hack to make sure ZNULLBODY is always first in list
 	int nullbody = list.indexOf("ZNULLBODY");
 	ASSERT_OR_RETURN(false, nullbody >= 0, "ZNULLBODY is mandatory");
@@ -1113,48 +1116,52 @@ bool loadBodyStats(const char *pFileName)
 bool loadBrainStats(const char *pFileName)
 {
 	BRAIN_STATS sStats, * const psStats = &sStats;
-    char *weaponName;
-    WzConfig ini(pFileName);
-    if (ini.status() != QSettings::NoError)
-    {
-        debug(LOG_ERROR, "Could not open %s", pFileName);
-    }
+	char *weaponName;
+	WzConfig ini(pFileName);
+	if (ini.status() != QSettings::NoError)
+	{
+		debug(LOG_ERROR, "Could not open %s", pFileName);
+	}
 
-    QStringList list = ini.childGroups();
-    statsAllocBrain(list.size());
-    // Hack to make sure ZNULLBRAIN is always first in list
-    ASSERT_OR_RETURN(false, nullbrain >= 0, "ZNULLBRAIN is mandatory");
-    if (nullbrain > 0)
-    {
-        list.swap(nullbrain, 0);
-    }
-    for (int i = 0; i < list.size(); ++i)
-    {
-        ini.beginGroup(list[i]);
-        memset(psStats, 0, sizeof(BRAIN_STATS));
+	QStringList list = ini.childGroups();
+	if (!statsAllocBrain(list.size()))
+	{
+		return false;
+	}
+	// Hack to make sure ZNULLBRAIN is always first in list
+	int nullbrain = list.indexOf("ZNULLBRAIN");
+	ASSERT_OR_RETURN(false, nullbrain >= 0, "ZNULLBRAIN is mandatory");
+	if (nullbrain > 0)
+	{
+		list.swap(nullbrain, 0);
+	}
+	for (int i = 0; i < list.size(); ++i)
+	{
+		ini.beginGroup(list[i]);
+        	memset(psStats, 0, sizeof(BRAIN_STATS));
 
-        psStats->pName =  strdup(list[i].toUtf8().constData());
-        psStats->buildPower = ini.value("buildPower", 0).toInt();
-        psStats->buildPoints = ini.value("buildPoints", 0).toInt();
-        psStats->weight = ini.value("weight", 0).toInt();
-        psStats->minDroids = ini.value("nDroid").toInt();
-        psStats->dMult = ini.value("droidMult").toInt();
-        weaponName = ini.value("turret").toString().toUtf8().data();
-        psStats->ref = REF_BRAIN_START + i;
+		psStats->pName =  strdup(list[i].toUtf8().constData());
+		psStats->buildPower = ini.value("buildPower", 0).toInt();
+		psStats->buildPoints = ini.value("buildPoints", 0).toInt();
+		psStats->weight = ini.value("weight", 0).toInt();
+		psStats->minDroids = ini.value("nDroid").toInt();
+		psStats->dMult = ini.value("droidMult").toInt();
+		weaponName = ini.value("turret").toString().toUtf8().data();
+		psStats->ref = REF_BRAIN_START + i;
 
 		//check weapon attached
-        if (!strcmp(weaponName, "0"))
+        	if (!strcmp(weaponName, "0"))
 		{
 			psStats->psWeaponStat = NULL;
 		}
 		else
 		{
-            int weapon = getCompFromName(COMP_WEAPON, weaponName);
+		int weapon = getCompFromName(COMP_WEAPON, weaponName);
 
-			//if weapon not found - error
-            if (weapon == -1)
+		//if weapon not found - error
+		if (weapon == -1)
 			{
-                debug( LOG_FATAL, "Unable to find Weapon %s for brain %s", weaponName, psStats->pName);
+				debug( LOG_FATAL, "Unable to find Weapon %s for brain %s", weaponName, psStats->pName);
 				abort();
 				return false;
 			}
@@ -1166,7 +1173,7 @@ bool loadBrainStats(const char *pFileName)
 		}
 
 		// All brains except ZNULLBRAIN available in design screen
-        if ( strcmp( psStats->pName, "ZNULLBRAIN" ) == 0 )
+        	if ( strcmp( psStats->pName, "ZNULLBRAIN" ) == 0 )
 		{
 			psStats->designable = false;
 		}
@@ -1174,9 +1181,9 @@ bool loadBrainStats(const char *pFileName)
 		{
 			psStats->designable = true;
 		}
-        ini.endGroup();
+        	ini.endGroup();
 		//save the stats
-        statsSetBrain(psStats, i);
+		statsSetBrain(psStats, i);
 
 	}
 	return true;
