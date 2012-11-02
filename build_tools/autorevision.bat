@@ -3,7 +3,7 @@ cd %1..\
 echo %1
 echo %cd%
 IF EXIST autorevision.h del autorevision.h
-sh.exe %1..\build_tools\autorevision.sh src\autorevision.h.lf
+sh.exe %1../build_tools/autorevision -t h > src/autorevision.h.lf
 IF NOT EXIST src\autorevision.h.lf goto failed:
 echo "converting file to CRLF from LF"
 perl -p -e 's/\n/\r\n/' < src\autorevision.h.lf > src\autorevision.h
