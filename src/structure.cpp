@@ -2336,8 +2336,7 @@ bool placeDroid(STRUCTURE *psStructure, UDWORD *droidX, UDWORD *droidY)
 
 /* Place a newly manufactured droid next to a factory  and then send if off
 to the assembly point, returns true if droid was placed successfully */
-static bool structPlaceDroid(STRUCTURE *psStructure, DROID_TEMPLATE *psTempl,
-							DROID **ppsDroid)
+static bool structPlaceDroid(STRUCTURE *psStructure, DROID_TEMPLATE *psTempl, DROID **ppsDroid)
 {
 	UDWORD			x,y;
 	bool			placed;//bTemp = false;
@@ -2473,30 +2472,26 @@ static bool structPlaceDroid(STRUCTURE *psStructure, DROID_TEMPLATE *psTempl,
 			{
 				factoryType = VTOL_FLAG;
 			}
+			//find flag in question.
+			for (psFlag = apsFlagPosLists[psFact->psAssemblyPoint->player];
+			     psFlag
+			     && !(psFlag->factoryInc == psFact->psAssemblyPoint->factoryInc // correct fact.
+			          && psFlag->factoryType == factoryType); // correct type
+			     psFlag = psFlag->psNext) {}
+			ASSERT(psFlag, "No flag found for %s at (%d, %d)", objInfo(psStructure), psStructure->pos.x, psStructure->pos.y);
 			//if vtol droid - send it to ReArm Pad if one exists
-			placed = false;
-			if (!placed)
+			if (psFlag && isVtolDroid(psNewDroid))
 			{
-				//find flag in question.
-				for(psFlag = apsFlagPosLists[psFact->psAssemblyPoint->player];
-						!( (psFlag->factoryInc == psFact->psAssemblyPoint->factoryInc) // correct fact.
-						&&(psFlag->factoryType == factoryType)); // correct type
-					psFlag = psFlag->psNext) {}
-
-				if (isVtolDroid(psNewDroid))
-				{
-					Vector2i pos = removeZ(psFlag->coords);
-					//find a suitable location near the delivery point
-					actionVTOLLandingPos(psNewDroid, &pos);
-					orderDroidLoc(psNewDroid, DORDER_MOVE, pos.x, pos.y, ModeQueue);
-				}
-				else
-				{
-					orderDroidLoc(psNewDroid, DORDER_MOVE, psFlag->coords.x, psFlag->coords.y, ModeQueue);
-				}
+				Vector2i pos = removeZ(psFlag->coords);
+				//find a suitable location near the delivery point
+				actionVTOLLandingPos(psNewDroid, &pos);
+				orderDroidLoc(psNewDroid, DORDER_MOVE, pos.x, pos.y, ModeQueue);
+			}
+			else if (psFlag)
+			{
+				orderDroidLoc(psNewDroid, DORDER_MOVE, psFlag->coords.x, psFlag->coords.y, ModeQueue);
 			}
 		}
-
 		if (assignCommander)
 		{
 			assignFactoryCommandDroid(psStructure, psNewDroid);
@@ -2505,14 +2500,12 @@ static bool structPlaceDroid(STRUCTURE *psStructure, DROID_TEMPLATE *psTempl,
 		{
 			eventFireCallbackTrigger((TRIGGER_TYPE)CALL_DROIDBUILT);
 		}
-
 		return true;
 	}
 	else
 	{
 		*ppsDroid = NULL;
 	}
-
 	return false;
 }
 

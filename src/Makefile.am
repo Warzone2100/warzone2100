@@ -6,18 +6,19 @@ AM_YFLAGS = -d
 
 .PHONY: autorevision.h
 
-autorevision.h:
-	(cd $(top_srcdir) && ./build_tools/autorevision.sh $(abs_top_builddir)/src/autorevision.h || true)
+autorevision.h autorevision.cache:
+	(cd $(top_srcdir) && ./build_tools/autorevision -t h -o  $(abs_top_builddir)/src/autorevision.cache > $(abs_top_builddir)/src/autorevision.h)
 
 BUILT_SOURCES = \
-	autorevision.h \
 	$(CLEANFILES)
 
 CLEANFILES = \
+	autorevision.cache \
+	autorevision.h \
 	scriptvals_parser.h
 
 EXTRA_DIST = \
-	autorevision.h \
+	autorevision.cache \
 	cursorselection
 
 bin_PROGRAMS = warzone2100

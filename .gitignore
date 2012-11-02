@@ -85,6 +85,7 @@ win32/__BUILD_CONFIG.USER
 *lexer.[ch]
 *parser.[ch]
 /src/autorevision.h
+/autorevision.tmp
 *moc.h
 *moc.cpp
 
@@ -97,7 +98,6 @@ win32/__BUILD_CONFIG.USER
 /doc/objects.tex
 
 # Generated executables:
-/build_tools/autorevision/autorevision
 /src/warzone2100
 /tests/astartest
 /tests/maptest
