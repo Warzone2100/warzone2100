@@ -53,6 +53,9 @@
 #include "scriptextern.h"
 
 #define FAKE_REF_LASSAT 999
+#define ALL_PLAYERS -1
+#define ALLIES -2
+#define ENEMIES -3
 
 // hack, this is used from scriptfuncs.cpp -- and we don't want to include any stinkin' wzscript headers here!
 // TODO, move this stuff into a script common subsystem
@@ -1964,13 +1967,15 @@ static QScriptValue js_getStructureLimit(QScriptContext *context, QScriptEngine 
 	return QScriptValue(asStructLimits[player][index].limit);
 }
 
-//-- \subsection{getStructureCount(structure type[, player])}
-//-- Create a structure on the given position. Returns true on success.
-static QScriptValue js_getStructureCount(QScriptContext *context, QScriptEngine *engine)
+//-- \subsection{countStruct(structure type[, player])}
+//-- Count the number of structures of a given type.
+//-- The player parameter can be a specific player, ALL_PLAYERS, ALLIES or ENEMIES.
+static QScriptValue js_countStruct(QScriptContext *context, QScriptEngine *engine)
 {
 	QString building = context->argument(0).toString();
 	int index = getStructStatFromName(building.toUtf8().constData());
 	int player;
+	int quantity = 0;
 	if (context->argumentCount() > 1)
 	{
 		player = context->argument(1).toInt32();
@@ -1980,7 +1985,43 @@ static QScriptValue js_getStructureCount(QScriptContext *context, QScriptEngine 
 		player = engine->globalObject().property("me").toInt32();
 	}
 	SCRIPT_ASSERT(context, index < numStructureStats && index >= 0, "Structure %s not found", building.toUtf8().constData());
-	return QScriptValue(asStructLimits[player][index].currentQuantity);
+	for (int i = 0; i < MAX_PLAYERS; i++)
+	{
+		if (player == i || player == ALL_PLAYERS
+		    || (player == ALLIES && aiCheckAlliances(i, player))
+		    || (player == ENEMIES && !aiCheckAlliances(i, player)))
+		{
+			quantity += asStructLimits[i][index].currentQuantity;
+		}
+	}
+	return QScriptValue(quantity);
+}
+
+//-- \subsection{countDroid([player])}
+//-- Count the number of droids that a given player has.
+//-- The player parameter can be a specific player, ALL_PLAYERS, ALLIES or ENEMIES.
+static QScriptValue js_countDroid(QScriptContext *context, QScriptEngine *engine)
+{
+	int player;
+	int quantity = 0;
+	if (context->argumentCount() > 1)
+	{
+		player = context->argument(1).toInt32();
+	}
+	else
+	{
+		player = engine->globalObject().property("me").toInt32();
+	}
+	for (int i = 0; i < MAX_PLAYERS; i++)
+	{
+		if (player == i || player == ALL_PLAYERS
+		    || (player == ALLIES && aiCheckAlliances(i, player))
+		    || (player == ENEMIES && !aiCheckAlliances(i, player)))
+		{
+			quantity += getNumDroids(i);
+		}
+	}
+	return QScriptValue(quantity);
 }
 
 //-- \subsection{setNoGoArea(x1, y1, x2, y2, player)}
@@ -2189,7 +2230,8 @@ bool registerFunctions(QScriptEngine *engine)
 	engine->globalObject().setProperty("setScrollParams", engine->newFunction(js_setScrollParams));
 	engine->globalObject().setProperty("addStructure", engine->newFunction(js_addStructure));
 	engine->globalObject().setProperty("getStructureLimit", engine->newFunction(js_getStructureLimit));
-	engine->globalObject().setProperty("getStructureCount", engine->newFunction(js_getStructureCount));
+	engine->globalObject().setProperty("countStruct", engine->newFunction(js_countStruct));
+	engine->globalObject().setProperty("countDroid", engine->newFunction(js_countDroid));
 	engine->globalObject().setProperty("loadLevel", engine->newFunction(js_loadLevel));
 	engine->globalObject().setProperty("setDroidExperience", engine->newFunction(js_setDroidExperience));
 	engine->globalObject().setProperty("setNoGoArea", engine->newFunction(js_setNoGoArea));
@@ -2254,6 +2296,9 @@ bool registerFunctions(QScriptEngine *engine)
 	engine->globalObject().setProperty("STRUCTURE", OBJ_STRUCTURE, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("DROID", OBJ_DROID, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("FEATURE", OBJ_FEATURE, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("ALL_PLAYERS", ALL_PLAYERS, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("ALLIES", ALLIES, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("ENEMIES", ENEMIES, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("POSITION", SCRIPT_POSITION, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("AREA", SCRIPT_AREA, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("PLAYER_DATA", SCRIPT_PLAYER, QScriptValue::ReadOnly | QScriptValue::Undeletable);

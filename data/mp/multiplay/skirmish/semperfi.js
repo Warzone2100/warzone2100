@@ -245,7 +245,6 @@ function sortByDistToBase(obj1, obj2)
 function buildFundamentals()
 {
 	var needPwGen = false;
-	var factlist = enumStruct(me, factory);
 	var droids = enumDroid(me, DROID_CONSTRUCT);
 
 	// Do we need power generators?
@@ -304,30 +303,30 @@ function buildFundamentals()
 function buildFundamentals2()
 {
 	// Need factories? FIXME, check real limits
-	var factlist = enumStruct(me, factory);
-	var reslist = enumStruct(me, resLab);
-	var hqlist = enumStruct(me, playerHQ);
+	var factcount = countStruct(factory);
+	var rescount = countStruct(resLab);
+	var hqcount = countStruct(playerHQ);
 	// Build as many research labs as factories
-	if (reslist.length < factlist.length && grabTrucksAndBuild(20, resLab, 1))
+	if (rescount < factcount && grabTrucksAndBuild(20, resLab, 1))
 	{
 		return;
 	}
 	// Build as many factories as we can afford
-	if ((factlist.length < 2 || (factlist.length < 4 && playerPower(me) > factlist.length * 1000))
+	if ((factcount < 2 || (factcount < 4 && playerPower(me) > factcount * 1000))
 	    && grabTrucksAndBuild(20, factory, 1))
 	{
 		return; // done here
 	}
 	// Build HQ if missing
-	if (hqlist.length == 0 && grabTrucksAndBuild(20, playerHQ, 1))
+	if (hqcount == 0 && grabTrucksAndBuild(20, playerHQ, 1))
 	{
 		return;
 	}
 	// Build cyborg factory if we don't have one
 	if (isStructureAvailable(cybFactory, me))
 	{
-		var cyblist = enumStruct(me, cybFactory);
-		if (cyblist.length == 0 && playerPower(me) > 250 && grabTrucksAndBuild(20, cybFactory, 1))
+		var cybcount = countStruct(cybFactory);
+		if (cybcount == 0 && playerPower(me) > 250 && grabTrucksAndBuild(20, cybFactory, 1))
 		{
 			return;
 		}
@@ -335,8 +334,8 @@ function buildFundamentals2()
 	// Build VTOL factory if we don't have one
 	if (isStructureAvailable(me, vtolFactory))
 	{
-		var vfaclist = enumStruct(me, vtolFactory);
-		if (vfaclist.length == 0 && playerPower(me) > 500 && grabTrucksAndBuild(20, vtolFactory, 1))
+		var vfaccount = countStruct(vtolFactory);
+		if (vfaccount == 0 && playerPower(me) > 500 && grabTrucksAndBuild(20, vtolFactory, 1))
 		{
 			return;
 		}
