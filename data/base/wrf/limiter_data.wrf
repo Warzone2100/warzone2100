@@ -8,7 +8,7 @@ file		IMD	"blderik.pie"
 
 directory	"stats"
 file		SWEAPON		"weapons.txt"
-file		SSENSOR		"sensor.txt"
+file		SSENSOR		"sensor.ini"
 file		SECM		"ecm.txt"
 file		SREPAIR		"repair.txt"
 file		SSTRUCT		"structures.txt"

@@ -1314,53 +1314,58 @@ bool loadPropulsionStats(const char *pFileName)
 }
 
 /*Load the Sensor stats from the file exported from Access*/
-bool loadSensorStats(const char *pSensorData, UDWORD bufferSize)
+bool loadSensorStats(const char *pFileName)
 {
-	unsigned int NumSensor = numCR(pSensorData, bufferSize);
 	SENSOR_STATS sStats, * const psStats = &sStats;
-	unsigned int i = 0, designable;
-	char			SensorName[MAX_STR_LENGTH], location[MAX_STR_LENGTH],
-					GfxFile[MAX_STR_LENGTH],type[MAX_STR_LENGTH];
-	char			mountGfx[MAX_STR_LENGTH], dummy[MAX_STR_LENGTH];
-	UDWORD dummyVal;
+	char *GfxFile, *mountGfx, *location, *type;
 
-	// Skip descriptive header
-	if (strncmp(pSensorData,"Sensor ",7)==0)
+	WzConfig ini(pFileName);
+	if (ini.status() != QSettings::NoError)
 	{
-		pSensorData = strchr(pSensorData,'\n') + 1;
-		NumSensor--;
+		debug(LOG_ERROR, "Could not open %s", pFileName);
 	}
-	
-	if (!statsAllocSensor(NumSensor))
+	QStringList list = ini.childGroups();
+	if (!statsAllocSensor(list.size()))
 	{
 		return false;
 	}
-
-	for (i = 0; i < NumSensor; i++)
+	// Hack to make sure ZNULLBRAIN is always first in list
+	int nullsensor = list.indexOf("ZNULLSENSOR");
+	ASSERT_OR_RETURN(false, nullsensor >= 0, "ZNULLSENSOR is mandatory");
+	if (nullsensor > 0)
 	{
+		list.swap(nullsensor, 0);
+	}
+
+	for (int i = 0; i < nullsensor; ++i)
+	{
+		ini.beginGroup(list[i]);
 		memset(psStats, 0, sizeof(SENSOR_STATS));
+		psStats->pName = strdup(list[i].toUtf8().constData());
+		psStats->buildPower = ini.value("buildPower", 0).toInt();
+		psStats->buildPoints = ini.value("buildPoints", 0).toInt();
+		psStats->weight = ini.value("weight", 0).toInt();
+		psStats->body = ini.value("bodyPoints", 0).toInt();
+		psStats->range = ini.value("range").toInt();
+		GfxFile = strdup(ini.value("sensorModel").toString().toUtf8().constData());
+		mountGfx = strdup(ini.value("mountModel").toString().toUtf8().constData());
+		location = strdup(ini.value("location").toString().toUtf8().constData());
+		type = strdup(ini.value("type").toString().toUtf8().constData());
+		psStats->time = ini.value("time").toInt();
+		psStats->power = ini.value("power").toInt();
+		psStats->designable = ini.value("designable").toBool();
+		debug(LOG_WARNING, "loading sensor %i", i);
+		debug(LOG_WARNING, "Name %s", psStats->pName);
+		debug(LOG_WARNING, "Pie >%s<", GfxFile);
+		debug(LOG_WARNING, "Location %s", location);
 
-		SensorName[0] = '\0';
-		GfxFile[0] = '\0';
-		mountGfx[0] = '\0';
-		location[0] = '\0';
-		type[0] = '\0';
-		//read the data into the storage - the data is delimeted using comma's
-		sscanf(pSensorData,"%255[^,'\r\n],%255[^,'\r\n],%d,%d,%d,%d,%d,%d,%255[^,'\r\n],\
-			%255[^,'\r\n],%d,%255[^,'\r\n],%255[^,'\r\n],%d,%d,%d",
-			SensorName, dummy, &psStats->buildPower,&psStats->buildPoints,
-			&psStats->weight, &dummyVal, &dummyVal,
-			&psStats->body, GfxFile, mountGfx,
-			&psStats->range, location, type, &psStats->time, &psStats->power, &designable);
-
-		if (!allocateStatName((BASE_STATS *)psStats, SensorName))
+		if (!allocateStatName((BASE_STATS *)psStats, psStats->pName))
 		{
 			return false;
 		}
-
 		psStats->ref = REF_SENSOR_START + i;
 
-		if (!strcmp(location,"DEFAULT"))
+		if (!strcmp(location, "DEFAULT"))
 		{
 			psStats->location = LOC_DEFAULT;
 		}
@@ -1370,10 +1375,10 @@ bool loadSensorStats(const char *pSensorData, UDWORD bufferSize)
 		}
 		else
 		{
+			debug(LOG_ERROR, "Location >%s<", location);
 			ASSERT( false, "Invalid Sensor location" );
 		}
-
-		if (!strcmp(type,"STANDARD"))
+		if (!strcmp(type, "STANDARD"))
 		{
 			psStats->type = STANDARD_SENSOR;
 		}
@@ -1401,15 +1406,10 @@ bool loadSensorStats(const char *pSensorData, UDWORD bufferSize)
 		{
 			ASSERT( false, "Invalid Sensor type" );
 		}
-
 		//multiply time stats
 		psStats->time *= WEAPON_TIME;
 
-		//set design flag
-		psStats->designable = (designable != 0);
-
-		//get the IMD for the component
-		if (strcmp(GfxFile, "0"))
+		if (strcoll(GfxFile, "0"))
 		{
 			psStats->pIMD = (iIMDShape *) resGetData("IMD", GfxFile);
 			if (psStats->pIMD == NULL)
@@ -1423,8 +1423,7 @@ bool loadSensorStats(const char *pSensorData, UDWORD bufferSize)
 		{
 			psStats->pIMD = NULL;
 		}
-
-		if (strcmp(mountGfx, "0"))
+		if (strcoll(mountGfx, "0"))
 		{
 			psStats->pMountGraphic = (iIMDShape *) resGetData("IMD", mountGfx);
 			if (psStats->pMountGraphic == NULL)
@@ -1438,19 +1437,22 @@ bool loadSensorStats(const char *pSensorData, UDWORD bufferSize)
 		{
 			psStats->pMountGraphic = NULL;
 		}
+		//set design flag
+		//psStats->designable = (designable != 0);
 
+		//get the IMD for the component
+
+		ini.endGroup();
 		//save the stats
 		statsSetSensor(psStats, i);
 
- 		// set the max stat values for the design screen
+		// set the max stat values for the design screen
 		if (psStats->designable)
 		{
 			setMaxSensorRange(psStats->range);
 			setMaxComponentWeight(psStats->weight);
 		}
 
-		//increment the pointer to the start of the next record
-		pSensorData = strchr(pSensorData,'\n') + 1;
 	}
 	return true;
 }

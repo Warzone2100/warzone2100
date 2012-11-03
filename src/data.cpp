@@ -221,15 +221,12 @@ static bool bufferSPROPLoad(const char* fileName, void** ppData)
 	return true;
 }
 
-/* Load the Sensor stats */
-static bool bufferSSENSORLoad(const char *pBuffer, UDWORD size, void **ppData)
+static bool bufferSSENSORLoad(const char *fileName, void **ppData)
 {
-	calcDataHash((uint8_t *)pBuffer, size, DATA_SSENSOR);
-
-	if (!loadSensorStats(pBuffer, size)
+	if (!loadSensorStats(fileName)
 	 || !allocComponentList(COMP_SENSOR, numSensorStats))
 	{
-		return false;
+	        return false;
 	}
 
 	//not interested in this value
@@ -256,11 +253,7 @@ static bool bufferSREPAIRLoad(const char *pBuffer, UDWORD size, void **ppData)
 /* Load the Brain stats */
 static bool bufferSBRAINLoad(const char *fileName, void **ppData)
 {
-<<<<<<< HEAD
-    if (!loadBrainStats(fileName) || !allocComponentList(COMP_BRAIN, numBrainStats))
-=======
 	if (!loadBrainStats(fileName) || !allocComponentList(COMP_BRAIN, numBrainStats))
->>>>>>> ee6da7ce13f73ab47c8e83a1c59658d2d2408ac1
 	{
 		return false;
 	}
@@ -1077,7 +1070,6 @@ struct RES_TYPE_MIN_BUF
 static const RES_TYPE_MIN_BUF BufferResourceTypes[] =
 {
 	{"SWEAPON", bufferSWEAPONLoad, NULL},
-	{"SSENSOR", bufferSSENSORLoad, NULL},
 	{"SECM", bufferSECMLoad, NULL},
 	{"SREPAIR", bufferSREPAIRLoad, NULL},
 	{"SCONSTR", bufferSCONSTRLoad, NULL},
@@ -1118,6 +1110,7 @@ static const RES_TYPE_MIN_FILE FileResourceTypes[] =
 {
 	{"WAV", dataAudioLoad, (RES_FREE)sound_ReleaseTrack},
 	{"SBRAIN", bufferSBRAINLoad, dataReleaseStats},
+	{"SSENSOR", bufferSSENSORLoad, dataReleaseStats},
 	{"SPROP", bufferSPROPLoad, dataReleaseStats},
 	{"SBODY", bufferSBODYLoad, dataReleaseStats},
 	{"AUDIOCFG", dataAudioCfgLoad, NULL},
