@@ -38,9 +38,6 @@
 
 #define DROID_RESISTANCE_FACTOR     30
 
-#define MAX_MP_DROIDS 150
-#define MAX_SP_DROIDS 100
-#define MAX_SP_AI_DROIDS 999
 // Changing this breaks campaign saves!
 #define MAX_RECYCLED_DROIDS 450
 

@@ -174,6 +174,9 @@ static int structureTotalReturn(STRUCTURE *psStruct);
 // last time the maximum units message was displayed
 static UDWORD	lastMaxUnitMessage;
 
+/// max number of units
+static int droidLimit[MAX_PLAYERS];
+
 #define MAX_UNIT_MESSAGE_PAUSE 20000
 
 /*
@@ -286,6 +289,7 @@ void structureInitVars(void)
 
 	for (i = 0; i < MAX_PLAYERS; i++)
 	{
+		droidLimit[i] = INT16_MAX;
 		asStructLimits[i] = NULL;
 		for (j = 0; j < NUM_FLAG_TYPES; j++)
 		{
@@ -2545,26 +2549,21 @@ static bool IsFactoryCommanderGroupFull(const FACTORY* psFactory)
 // doesn't mean that these numbers can't be exceeded if units are
 // put down in the editor or by the scripts.
 
-bool IsPlayerStructureLimitReached(UDWORD PlayerNumber)
+void setMaxDroids(int player, int value)
 {
-	// PC currently doesn't limit number of structures a player can build.
-	return false;
+	droidLimit[player] = value;
 }
 
-
-UDWORD getMaxDroids(UDWORD PlayerNumber)
+int getMaxDroids(int player)
 {
-	return bMultiPlayer? MAX_MP_DROIDS : PlayerNumber == 0? MAX_SP_DROIDS : MAX_SP_AI_DROIDS;
+	return droidLimit[player];
 }
 
-
-bool IsPlayerDroidLimitReached(UDWORD PlayerNumber)
+bool IsPlayerDroidLimitReached(int player)
 {
-	unsigned int numDroids = getNumDroids(PlayerNumber) + getNumMissionDroids(PlayerNumber) + getNumTransporterDroids(PlayerNumber);
-
-	return numDroids >= getMaxDroids(PlayerNumber);
+	unsigned int numDroids = getNumDroids(player) + getNumMissionDroids(player) + getNumTransporterDroids(player);
+	return numDroids >= getMaxDroids(player);
 }
-
 
 static bool maxDroidsByTypeReached(STRUCTURE *psStructure)
 {
@@ -2587,7 +2586,6 @@ static bool maxDroidsByTypeReached(STRUCTURE *psStructure)
 
 	return false;
 }
-
 
 // Check for max number of units reached and halt production.
 //

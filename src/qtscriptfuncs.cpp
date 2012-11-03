@@ -1760,12 +1760,7 @@ static QScriptValue js_orderDroidBuild(QScriptContext *context, QScriptEngine *)
 	{
 		direction = DEG(context->argument(5).toNumber());
 	}
-	// Don't allow scripts to order structure builds if players structure limit has been reached.
-	if (!IsPlayerStructureLimitReached(psDroid->player))
-	{
-		orderDroidStatsLocDir(psDroid, order, psStats, world_coord(x) + TILE_UNITS / 2, world_coord(y) + TILE_UNITS / 2, direction, ModeQueue);
-		return QScriptValue(false);
-	}
+	orderDroidStatsLocDir(psDroid, order, psStats, world_coord(x) + TILE_UNITS / 2, world_coord(y) + TILE_UNITS / 2, direction, ModeQueue);
 	return QScriptValue(true);
 }
 
@@ -2658,6 +2653,16 @@ static QScriptValue js_getDroidLimit(QScriptContext *context, QScriptEngine *eng
 	return QScriptValue(getMaxDroids(engine->globalObject().property("me").toInt32()));
 }
 
+//-- \subsection{setDroidLimit(player, value)}
+//-- Set the maximum number of droids that this player can produce.
+static QScriptValue js_setDroidLimit(QScriptContext *context, QScriptEngine *)
+{
+	int player = context->argument(0).toInt32();
+	int value = context->argument(1).toInt32();
+	setMaxDroids(player, value);
+	return QScriptValue();
+}
+
 // ----------------------------------------------------------------------------------------
 // Register functions with scripting system
 
@@ -2716,6 +2721,7 @@ bool registerFunctions(QScriptEngine *engine)
 	engine->globalObject().setProperty("chat", engine->newFunction(js_chat));
 	engine->globalObject().setProperty("getDroidProduction", engine->newFunction(js_getDroidProduction));
 	engine->globalObject().setProperty("getDroidLimit", engine->newFunction(js_getDroidLimit));
+	engine->globalObject().setProperty("setDroidLimit", engine->newFunction(js_setDroidLimit));
 
 	// Functions that operate on the current player only
 	engine->globalObject().setProperty("centreView", engine->newFunction(js_centreView));
