@@ -59,9 +59,6 @@
 /* Misc accuracy modifiers */
 #define	FOM_PARTIAL_ACCURACY_PENALTY	50	// penalty for not being fully able to fire while moving, in %
 
-/* Minumum number of droids a commander can control in its group */
-#define	MIN_CMD_GROUP_DROIDS	6
-
 enum PICKTILE
 {
 	NO_FREE_TILE,

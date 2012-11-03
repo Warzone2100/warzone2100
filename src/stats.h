@@ -155,7 +155,7 @@ extern bool loadWeaponStats(const char *pWeaponData, UDWORD bufferSize);
 extern bool loadBodyStats(const char *pFileName);
 
 /*Load the brain stats from the file exported from Access*/
-extern bool loadBrainStats(const char *pBrainData, UDWORD bufferSize);
+extern bool loadBrainStats(const char *pFileName);
 
 /*Load the power stats from the file exported from Access*/
 //extern bool loadPowerStats(void);

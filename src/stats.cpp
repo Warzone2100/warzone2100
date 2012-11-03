@@ -1110,52 +1110,51 @@ bool loadBodyStats(const char *pFileName)
 }
 
 /*Load the Brain stats from the file exported from Access*/
-bool loadBrainStats(const char *pBrainData, UDWORD bufferSize)
+bool loadBrainStats(const char *pFileName)
 {
 	BRAIN_STATS sStats, * const psStats = &sStats;
-	const unsigned int NumBrain = numCR(pBrainData, bufferSize);
-	unsigned int i = 0, weapon = 0;
-	char		BrainName[MAX_STR_LENGTH], dummy[MAX_STR_LENGTH],
-				weaponName[MAX_STR_LENGTH];
-	UDWORD dummyVal;
-
-	if (!statsAllocBrain(NumBrain))
+	char *weaponName;
+	WzConfig ini(pFileName);
+	if (ini.status() != QSettings::NoError)
 	{
-		return false;
+		debug(LOG_ERROR, "Could not open %s", pFileName);
 	}
 
-	for (i = 0; i < NumBrain; i++)
+	QStringList list = ini.childGroups();
+	statsAllocBrain(list.size());
+	// Hack to make sure ZNULLBRAIN is always first in list
+	int nullbrain = list.indexOf("ZNULLBRAIN");
+	ASSERT_OR_RETURN(false, nullbrain >= 0, "ZNULLBRAIN is mandatory");
+	if (nullbrain > 0)
 	{
+		list.swap(nullbrain, 0);
+	}
+	for (int i = 0; i < list.size(); ++i)
+	{
+		ini.beginGroup(list[i]);
 		memset(psStats, 0, sizeof(BRAIN_STATS));
 
-		BrainName[0] = '\0';
-		weaponName[0] = '\0';
-		//read the data into the storage - the data is delimeted using comma's
-		sscanf(pBrainData,"%255[^,'\r\n],%255[^,'\r\n],%d,%d,%d,%d,%d,%255[^,'\r\n],%d",
-			BrainName, dummy, &psStats->buildPower,&psStats->buildPoints,
-			&psStats->weight, &dummyVal, &dummyVal,
-			weaponName, &dummyVal);
-
-		if (!allocateStatName((BASE_STATS *)psStats, BrainName))
-		{
-			return false;
-		}
-
+		psStats->pName =  strdup(list[i].toUtf8().constData());
+		psStats->buildPower = ini.value("buildPower", 0).toInt();
+		psStats->buildPoints = ini.value("buildPoints", 0).toInt();
+		psStats->weight = ini.value("weight", 0).toInt();
+		psStats->maxDroids = ini.value("maxDroids").toInt();
+		psStats->maxDroidsMult = ini.value("maxDroidsMult").toInt();
+		weaponName = ini.value("turret").toString().toUtf8().data();
 		psStats->ref = REF_BRAIN_START + i;
 
-		//check weapon attached
+		// check weapon attached
 		if (!strcmp(weaponName, "0"))
 		{
 			psStats->psWeaponStat = NULL;
 		}
 		else
 		{
-			weapon = getCompFromName(COMP_WEAPON, weaponName);
-
-			//if weapon not found - error
+			int weapon = getCompFromName(COMP_WEAPON, weaponName);
+			// if weapon not found - error
 			if (weapon == -1)
 			{
-				debug( LOG_FATAL, "Unable to find Weapon %s for brain %s", weaponName, BrainName );
+				debug( LOG_FATAL, "Unable to find Weapon %s for brain %s", weaponName, psStats->pName);
 				abort();
 				return false;
 			}
@@ -1165,9 +1164,8 @@ bool loadBrainStats(const char *pBrainData, UDWORD bufferSize)
 				psStats->psWeaponStat = asWeaponStats + weapon;
 			}
 		}
-
 		// All brains except ZNULLBRAIN available in design screen
-		if ( strcmp( BrainName, "ZNULLBRAIN" ) == 0 )
+		if (strcmp(psStats->pName, "ZNULLBRAIN") == 0)
 		{
 			psStats->designable = false;
 		}
@@ -1175,12 +1173,9 @@ bool loadBrainStats(const char *pBrainData, UDWORD bufferSize)
 		{
 			psStats->designable = true;
 		}
-
-		//save the stats
+		ini.endGroup();
+		// save the stats
 		statsSetBrain(psStats, i);
-
-		//increment the pointer to the start of the next record
-		pBrainData = strchr(pBrainData, '\n') + 1;
 	}
 	return true;
 }
