@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2012-09-30 15:36+0200\n"
+"POT-Creation-Date: 2012-10-30 16:57+0100\n"
 "PO-Revision-Date: 2012-09-03 21:33+0400\n"
 "Last-Translator: vadim s. sabinich <vadim@sabini.ch>\n"
 "Language-Team: Russian <>\n"
@@ -12354,11 +12354,11 @@ msgstr "%s - союзник %d%% - опыт %d, %s"
 msgid "Unit Lost!"
 msgstr "Юнит потерян!"
 
-#: src/droid.cpp:1250
+#: src/droid.cpp:1251
 msgid "Structure Restored"
 msgstr "Постройка восстановлена"
 
-#: src/droid.cpp:2192
+#: src/droid.cpp:2191
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
@@ -12366,7 +12366,7 @@ msgstr[0] "Выбрана группа %u - %u юнит"
 msgstr[1] "Выбрана группа %u - %u юнита"
 msgstr[2] "Выбрана группа %u - %u юнитов"
 
-#: src/droid.cpp:2205
+#: src/droid.cpp:2204
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
@@ -12374,7 +12374,7 @@ msgstr[0] "%u юнит назначен группе %u"
 msgstr[1] "%u юнита назначено группе %u"
 msgstr[2] "%u юнитов назначено группе %u"
 
-#: src/droid.cpp:2218
+#: src/droid.cpp:2217
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
@@ -12382,7 +12382,7 @@ msgstr[0] "Фокус на группе %u - %u юнит"
 msgstr[1] "Фокус на группе %u - %u юнита"
 msgstr[2] "Фокус на группе %u - %u юнитов"
 
-#: src/droid.cpp:2222
+#: src/droid.cpp:2221
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
@@ -12390,49 +12390,49 @@ msgstr[0] "Соединить с группой %u - %u юнит"
 msgstr[1] "Соединить с группой %u - %u юнита"
 msgstr[2] "Соединить с группой %u - %u юнитов"
 
-#: src/droid.cpp:2404
+#: src/droid.cpp:2403
 msgid "Rookie"
 msgstr "Новобранец"
 
-#: src/droid.cpp:2405
+#: src/droid.cpp:2404
 msgctxt "rank"
 msgid "Green"
 msgstr "Молодой"
 
-#: src/droid.cpp:2406
+#: src/droid.cpp:2405
 msgid "Trained"
 msgstr "Тренированный"
 
-#: src/droid.cpp:2407
+#: src/droid.cpp:2406
 msgid "Regular"
 msgstr "Опытный"
 
-#: src/droid.cpp:2408
+#: src/droid.cpp:2407
 msgid "Professional"
 msgstr "Профессионал"
 
-#: src/droid.cpp:2409
+#: src/droid.cpp:2408
 msgid "Veteran"
 msgstr "Ветеран"
 
-#: src/droid.cpp:2410
+#: src/droid.cpp:2409
 msgid "Elite"
 msgstr "Элита"
 
-#: src/droid.cpp:2411
+#: src/droid.cpp:2410
 msgid "Special"
 msgstr "Специалист"
 
-#: src/droid.cpp:2412
+#: src/droid.cpp:2411
 msgid "Hero"
 msgstr "Герой"
 
-#: src/droid.cpp:3346
+#: src/droid.cpp:3345
 #, c-format
 msgid "%s wanted to give you a %s but you have too many!"
 msgstr "%s хочет дать вам %s но у вас их слишком много"
 
-#: src/droid.cpp:3350
+#: src/droid.cpp:3349
 #, c-format
 msgid "You wanted to give %s a %s but they have too many!"
 msgstr "Вы хотите дать %s %s но у их их слишком много"
@@ -14054,7 +14054,7 @@ msgstr "Загрузить Игру"
 msgid "GAME SAVED :"
 msgstr "ИГРА СОХРАНЕНА:"
 
-#: src/move.cpp:2279
+#: src/move.cpp:2292
 #, c-format
 msgid "You found %u power in an oil drum."
 msgstr "Ты нашел %u энергии в бочке с горючим."
@@ -14730,26 +14730,26 @@ msgstr "Коричневый"
 msgid "We can't do that! We must be a Cyborg unit to use a Cyborg Transport!"
 msgstr "Мы не киборги, чтобы использовать Транспорт киборгов."
 
-#: src/qtscriptfuncs.cpp:1586
+#: src/qtscriptfuncs.cpp:1591
 #: src/scriptfuncs.cpp:3263
 msgid "YOU ARE VICTORIOUS!"
 msgstr "ПОБЕДА!"
 
-#: src/qtscriptfuncs.cpp:1591
+#: src/qtscriptfuncs.cpp:1596
 #: src/scriptfuncs.cpp:3267
 msgid "YOU WERE DEFEATED!"
 msgstr "ВЫ ПРОИГРАЛИ!"
 
-#: src/research.cpp:1170
+#: src/research.cpp:1172
 #, c-format
 msgid "Research completed: %s"
 msgstr "Завершено исследование: %s"
 
-#: src/research.cpp:1175
+#: src/research.cpp:1177
 msgid "Research Completed"
 msgstr "Исследование закончено"
 
-#: src/research.cpp:1899
+#: src/research.cpp:1901
 msgid "Research Award"
 msgstr "Награда исследования"
 
@@ -14980,24 +14980,24 @@ msgstr "Недостаточно места для посадки юнитов �
 msgid "Reinforcements landing"
 msgstr "Высадка подкрепления"
 
-#: src/version.cpp:131
+#: src/version.cpp:121
 msgid " (modified locally)"
 msgstr "(модифицировано локально)"
 
-#: src/version.cpp:138
+#: src/version.cpp:128
 msgid " - DEBUG"
 msgstr " - ОТЛАДКА"
 
-#: src/version.cpp:147
+#: src/version.cpp:137
 #, c-format
 msgid " - Built %s"
 msgstr " - сборка %s"
 
 #. TRANSLATORS: This string looks as follows when expanded.
 #. "Version <version name/number> <working copy state><BUILD DATE><BUILD TYPE>"
-#: src/version.cpp:157
-#, c-format
-msgid "Version %s-%s%s%s%s"
+#: src/version.cpp:147
+#, fuzzy, c-format
+msgid "Version %s%s%s%s"
 msgstr "Версия %s-%s%s%s%s"
 
 #~ msgid "Password is already set!"

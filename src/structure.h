@@ -98,9 +98,10 @@ extern STRUCTSTRENGTH_MODIFIER		asStructStrengthModifier[WE_NUMEFFECTS][
 
 extern void handleAbandonedStructures(void);
 
-extern bool IsPlayerDroidLimitReached(UDWORD PlayerNumber);
-extern bool IsPlayerStructureLimitReached(UDWORD PlayerNumber);
-extern bool CheckHaltOnMaxUnitsReached(STRUCTURE *psStructure);
+int getMaxDroids(int player);
+void setMaxDroids(int player, int value);
+bool IsPlayerDroidLimitReached(int player);
+bool CheckHaltOnMaxUnitsReached(STRUCTURE *psStructure);
 
 extern bool loadStructureStats(const char *pStructData, UDWORD bufferSize);
 extern bool loadStructureWeapons(const char *pWeaponData, UDWORD bufferSize);
@@ -392,8 +393,6 @@ extern bool checkStructureStats(void);
 
 /*returns the power cost to build this structure*/
 extern UDWORD structPowerToBuild(const STRUCTURE* psStruct);
-
-extern UDWORD getMaxDroids(UDWORD PlayerNumber);
 
 // check whether a factory of a certain number and type exists
 extern bool checkFactoryExists(UDWORD player, UDWORD factoryType, UDWORD inc);

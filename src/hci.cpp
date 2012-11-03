@@ -1831,22 +1831,18 @@ INT_RETVAL intRunWidgets(void)
 					structX2 = world_coord(structX2) + TILE_UNITS / 2;
 					structY2 = world_coord(structY2) + TILE_UNITS / 2;
 
-					if (!IsPlayerStructureLimitReached(selectedPlayer))
+					// Set the droid order
+					if (intNumSelectedDroids(DROID_CONSTRUCT) == 0
+					    && intNumSelectedDroids(DROID_CYBORG_CONSTRUCT) == 0
+					    && psObjSelected != NULL && isConstructionDroid(psObjSelected))
 					{
-						// Set the droid order
-						if (intNumSelectedDroids(DROID_CONSTRUCT) == 0
-						    && intNumSelectedDroids(DROID_CYBORG_CONSTRUCT) == 0
-						    && psObjSelected != NULL && isConstructionDroid(psObjSelected))
-						{
-							orderDroidStatsTwoLocDir((DROID *)psObjSelected, DORDER_LINEBUILD, (STRUCTURE_STATS *)psPositionStats, structX, structY, structX2, structY2, player.r.y, ModeQueue);
-						}
-						else
-						{
-							orderSelectedStatsTwoLocDir(selectedPlayer, DORDER_LINEBUILD, (STRUCTURE_STATS *)psPositionStats, structX, structY, structX2, structY2, player.r.y, ctrlShiftDown());
-						}
+						orderDroidStatsTwoLocDir((DROID *)psObjSelected, DORDER_LINEBUILD, (STRUCTURE_STATS *)psPositionStats, structX, structY, structX2, structY2, player.r.y, ModeQueue);
+					}
+					else
+					{
+						orderSelectedStatsTwoLocDir(selectedPlayer, DORDER_LINEBUILD, (STRUCTURE_STATS *)psPositionStats, structX, structY, structX2, structY2, player.r.y, ctrlShiftDown());
 					}
 				}
-
 				if (!quickQueueMode)
 				{
 					// Clear the object screen, only if we aren't immediately building something else
@@ -1872,22 +1868,18 @@ INT_RETVAL intRunWidgets(void)
 							AddDerrickBurningMessage();
 						}
 					}
-
 					if (CanBuild)
 					{
-						if (!IsPlayerStructureLimitReached(selectedPlayer))
+						// Set the droid order
+						if (intNumSelectedDroids(DROID_CONSTRUCT) == 0
+						    && intNumSelectedDroids(DROID_CYBORG_CONSTRUCT) == 0
+						    && psObjSelected != NULL)
 						{
-							// Set the droid order
-							if (intNumSelectedDroids(DROID_CONSTRUCT) == 0
-							    && intNumSelectedDroids(DROID_CYBORG_CONSTRUCT) == 0
-							    && psObjSelected != NULL)
-							{
-								orderDroidStatsLocDir((DROID *)psObjSelected, DORDER_BUILD, (STRUCTURE_STATS *)psPositionStats, structX, structY, player.r.y, ModeQueue);
-							}
-							else
-							{
-								orderSelectedStatsLocDir(selectedPlayer, DORDER_BUILD, (STRUCTURE_STATS *)psPositionStats, structX, structY, player.r.y, ctrlShiftDown());
-							}
+							orderDroidStatsLocDir((DROID *)psObjSelected, DORDER_BUILD, (STRUCTURE_STATS *)psPositionStats, structX, structY, player.r.y, ModeQueue);
+						}
+						else
+						{
+							orderSelectedStatsLocDir(selectedPlayer, DORDER_BUILD, (STRUCTURE_STATS *)psPositionStats, structX, structY, player.r.y, ctrlShiftDown());
 						}
 					}
 				}

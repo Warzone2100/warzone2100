@@ -643,11 +643,6 @@ bool scrOrderDroidStatsLoc(void)
 		ASSERT( false, "Invalid order" );
 		return false;
 	}
-
-	// Don't allow scripts to order structure builds if players structure
-	// limit has been reached.
-	if (!IsPlayerStructureLimitReached(psDroid->player))
-	{
 		// HACK: FIXME: Looks like a script error in the player*.slo files
 		// buildOnExactLocation() which references previously destroyed buildings from
 		// _stat = rebuildStructStat[_count]  causes this.
@@ -658,7 +653,6 @@ bool scrOrderDroidStatsLoc(void)
 		}
 
 		orderDroidStatsLocDir(psDroid, order, psStats, x, y, 0, ModeQueue);
-	}
 
 	return true;
 }

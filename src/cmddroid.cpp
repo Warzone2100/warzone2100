@@ -169,9 +169,8 @@ bool cmdGetDroidMultiExpBoost()
 /** This function returns the maximum group size of the command droid.*/
 unsigned int cmdDroidMaxGroup(const DROID* psCommander)
 {
-    return getDroidLevel(psCommander) *
-            getBrainStats(const_cast<DROID*>(psCommander))->dMult +
-            getBrainStats(const_cast<DROID*>(psCommander))->minDroids;
+	return getDroidLevel(psCommander) * getBrainStats(const_cast<DROID*>(psCommander))->maxDroidsMult
+	       + getBrainStats(const_cast<DROID*>(psCommander))->maxDroids;
 }
 
 /** This function adds experience to the command droid of the psKiller's command group.*/

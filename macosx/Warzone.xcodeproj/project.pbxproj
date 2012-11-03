@@ -4482,7 +4482,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Config\nexport PATH=$PATH:/sw/bin:/opt/local/bin\nsauto=\"src/autorevision.h\"\ntauto=\"${OBJROOT}/autorev/autorevision.h\"\nfunction hfilter {\n\trm -f \"${OBJROOT}/autorevision.h\"\n\tsed -e 's:refs/heads/:branch/:' -e 's:refs/remotes/:remote/:' -e 's:branch/master:Master:' -e 's:\tv:\t:' -e 's:v/::' \"${sauto}\" | sed -e 's:_beta: Beta :' -e 's:_rc: RC :' > \"${OBJROOT}/autorevision.h\"\n}\nfunction bauto {\n\tif ! ./build_tools/autorevision.sh \"${tauto}\"; then\n\t\techo \"error: Could not run Autorevision\"\n\t\texit 1\n\tfi\n}\n\ncd ..\n\nif [[ ! -d \".git\" ]] && [[ ! -d \".hg\" ]] && [[ -f \"${sauto}\" ]]; then\n\t# Do not run if we will not get useful information\n\techo \"Not a repo.\"\n\thfilter\n\texit 0\nelif [ -d \"${OBJROOT}/autorev/\" ]; then\n\t# Only update src/autorevision.h if something has changed\n\tbauto\n\tmdck1=`md5 -q \"${sauto}\"`\n\tmdck2=`md5 -q \"${tauto}\"`\n\tif [ \"${mdck1}\" = \"${mdck2}\" ]; then\n\t\texit 0\n\tfi\nelse\n\tmkdir \"${OBJROOT}/autorev/\"\n\tbauto\nfi\n\ncp -a \"${tauto}\" \"${sauto}\"\nhfilter\nexit 0\n";
+			shellScript = ". configs/autorevision.sh";
 		};
 		43F77C7610F0125E00E04615 /* Make DMG(s) */ = {
 			isa = PBXShellScriptBuildPhase;

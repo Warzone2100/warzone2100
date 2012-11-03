@@ -1,5 +1,11 @@
 2012-10-NN: Version 3.1.0
- * General:
+ * Build system:
+   * New version of autorevision fixes MSVC builds (ticket:3765)
+ * Multiplayer:
+   * Change: AI droids shoot at blocking features again, and can move through each other when jammed (commit:a19e41c15d78106c7128e63662e8824454b8900c)
+ * Scripting:
+   * New: Functions getStructureLimit() and getStructureCount() (commit:af757d28bd082384355272f890fe6d79fd5369a8)
+   * New: orderDroidBuild() now takes an optional direction parameter for rotation (commit:24414caa0c6a8db7459e7204a1c12546d27f7441)
 
 2012-10-08: Version 3.1 rc3
  * General:

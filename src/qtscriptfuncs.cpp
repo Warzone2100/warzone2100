@@ -1738,7 +1738,7 @@ static QScriptValue js_orderDroidObj(QScriptContext *context, QScriptEngine *)
 	return QScriptValue(true);
 }
 
-//-- \subsection{orderDroidBuild(droid, order, structure type, x, y)}
+//-- \subsection{orderDroidBuild(droid, order, structure type, x, y[, direction])}
 //-- Give a droid an order to build someting at the given position. Returns true if allowed.
 static QScriptValue js_orderDroidBuild(QScriptContext *context, QScriptEngine *)
 {
@@ -1752,16 +1752,15 @@ static QScriptValue js_orderDroidBuild(QScriptContext *context, QScriptEngine *)
 	STRUCTURE_STATS	*psStats = &asStructureStats[index];
 	int x = context->argument(3).toInt32();
 	int y = context->argument(4).toInt32();
+	uint16_t direction = 0;
 
 	SCRIPT_ASSERT(context, order == DORDER_BUILD, "Invalid order");
 	SCRIPT_ASSERT(context, strcmp(psStats->pName, "A0ADemolishStructure") != 0, "Cannot build demolition");
-
-	// Don't allow scripts to order structure builds if players structure limit has been reached.
-	if (!IsPlayerStructureLimitReached(psDroid->player))
+	if (context->argumentCount() > 5)
 	{
-		orderDroidStatsLocDir(psDroid, order, psStats, world_coord(x) + TILE_UNITS / 2, world_coord(y) + TILE_UNITS / 2, 0, ModeQueue);
-		return QScriptValue(false);
+		direction = DEG(context->argument(5).toNumber());
 	}
+	orderDroidStatsLocDir(psDroid, order, psStats, world_coord(x) + TILE_UNITS / 2, world_coord(y) + TILE_UNITS / 2, direction, ModeQueue);
 	return QScriptValue(true);
 }
 
@@ -2290,6 +2289,43 @@ static QScriptValue js_addStructure(QScriptContext *context, QScriptEngine *)
 	return QScriptValue(psStruct != NULL);
 }
 
+//-- \subsection{getStructureLimit(structure type[, player])}
+//-- Create a structure on the given position. Returns true on success.
+static QScriptValue js_getStructureLimit(QScriptContext *context, QScriptEngine *engine)
+{
+	QString building = context->argument(0).toString();
+	int index = getStructStatFromName(building.toUtf8().constData());
+	int player;
+	if (context->argumentCount() > 1)
+	{
+		player = context->argument(1).toInt32();
+	}
+	else
+	{
+		player = engine->globalObject().property("me").toInt32();
+	}
+	return QScriptValue(asStructLimits[player][index].limit);
+}
+
+//-- \subsection{getStructureCount(structure type[, player])}
+//-- Create a structure on the given position. Returns true on success.
+static QScriptValue js_getStructureCount(QScriptContext *context, QScriptEngine *engine)
+{
+	QString building = context->argument(0).toString();
+	int index = getStructStatFromName(building.toUtf8().constData());
+	int player;
+	if (context->argumentCount() > 1)
+	{
+		player = context->argument(1).toInt32();
+	}
+	else
+	{
+		player = engine->globalObject().property("me").toInt32();
+	}
+	SCRIPT_ASSERT(context, index < numStructureStats && index >= 0, "Structure %s not found", building.toUtf8().constData());
+	return QScriptValue(asStructLimits[player][index].currentQuantity);
+}
+
 //-- \subsection{setNoGoArea(x1, y1, x2, y2, player)}
 //-- Creates an area on the map on which nothing can be built. If player is zero,
 //-- then landing lights are placed. If player is -1, then a limbo landing zone
@@ -2617,6 +2653,16 @@ static QScriptValue js_getDroidLimit(QScriptContext *context, QScriptEngine *eng
 	return QScriptValue(getMaxDroids(engine->globalObject().property("me").toInt32()));
 }
 
+//-- \subsection{setDroidLimit(player, value)}
+//-- Set the maximum number of droids that this player can produce.
+static QScriptValue js_setDroidLimit(QScriptContext *context, QScriptEngine *)
+{
+	int player = context->argument(0).toInt32();
+	int value = context->argument(1).toInt32();
+	setMaxDroids(player, value);
+	return QScriptValue();
+}
+
 // ----------------------------------------------------------------------------------------
 // Register functions with scripting system
 
@@ -2675,6 +2721,7 @@ bool registerFunctions(QScriptEngine *engine)
 	engine->globalObject().setProperty("chat", engine->newFunction(js_chat));
 	engine->globalObject().setProperty("getDroidProduction", engine->newFunction(js_getDroidProduction));
 	engine->globalObject().setProperty("getDroidLimit", engine->newFunction(js_getDroidLimit));
+	engine->globalObject().setProperty("setDroidLimit", engine->newFunction(js_setDroidLimit));
 
 	// Functions that operate on the current player only
 	engine->globalObject().setProperty("centreView", engine->newFunction(js_centreView));
@@ -2703,6 +2750,8 @@ bool registerFunctions(QScriptEngine *engine)
 	engine->globalObject().setProperty("removeObject", engine->newFunction(js_removeObject));
 	engine->globalObject().setProperty("setScrollParams", engine->newFunction(js_setScrollParams));
 	engine->globalObject().setProperty("addStructure", engine->newFunction(js_addStructure));
+	engine->globalObject().setProperty("getStructureLimit", engine->newFunction(js_getStructureLimit));
+	engine->globalObject().setProperty("getStructureCount", engine->newFunction(js_getStructureCount));
 	engine->globalObject().setProperty("loadLevel", engine->newFunction(js_loadLevel));
 	engine->globalObject().setProperty("setDroidExperience", engine->newFunction(js_setDroidExperience));
 	engine->globalObject().setProperty("setNoGoArea", engine->newFunction(js_setNoGoArea));

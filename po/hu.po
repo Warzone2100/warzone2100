@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Warzone 2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2012-09-30 15:36+0200\n"
+"POT-Creation-Date: 2012-10-30 16:57+0100\n"
 "PO-Revision-Date: 2012-09-10 17:58+0100\n"
 "Last-Translator: Mészáros Tamás <meszaros.tomi@hotmail.com>\n"
 "Language-Team: Magyar (Hungary) <meszaros.tomi@hotmail.com>\n"
@@ -12348,81 +12348,81 @@ msgstr "%s - szövetséges - kár %d%% - tapasztalat %d, %s"
 msgid "Unit Lost!"
 msgstr "Egység Elveszett!"
 
-#: src/droid.cpp:1250
+#: src/droid.cpp:1251
 msgid "Structure Restored"
 msgstr "Szerkezet Helyrállítva"
 
-#: src/droid.cpp:2192
+#: src/droid.cpp:2191
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
 msgstr[0] "csoport %u kiválasztott - %u egység"
 msgstr[1] "csoport %u kiválasztott - %u egységek"
 
-#: src/droid.cpp:2205
+#: src/droid.cpp:2204
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
 msgstr[0] "%u egység hozzárendelve a %u csoporthoz"
 msgstr[1] "%u egységek hozzárendelve a %u csoporthoz"
 
-#: src/droid.cpp:2218
+#: src/droid.cpp:2217
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
 msgstr[0] "csoport középen %u - %u egység"
 msgstr[1] "csoport középen %u - %u egységek"
 
-#: src/droid.cpp:2222
+#: src/droid.cpp:2221
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] "csoport igazítás %u - %u egység"
 msgstr[1] "csoport igazítás %u - %u egységek"
 
-#: src/droid.cpp:2404
+#: src/droid.cpp:2403
 msgid "Rookie"
 msgstr "Újonc"
 
-#: src/droid.cpp:2405
+#: src/droid.cpp:2404
 msgctxt "rank"
 msgid "Green"
 msgstr "Zöldfülű"
 
-#: src/droid.cpp:2406
+#: src/droid.cpp:2405
 msgid "Trained"
 msgstr "Edzett"
 
-#: src/droid.cpp:2407
+#: src/droid.cpp:2406
 msgid "Regular"
 msgstr "Reguláris"
 
-#: src/droid.cpp:2408
+#: src/droid.cpp:2407
 msgid "Professional"
 msgstr "Professzionális"
 
-#: src/droid.cpp:2409
+#: src/droid.cpp:2408
 msgid "Veteran"
 msgstr "Veterán"
 
-#: src/droid.cpp:2410
+#: src/droid.cpp:2409
 msgid "Elite"
 msgstr "Elit"
 
-#: src/droid.cpp:2411
+#: src/droid.cpp:2410
 msgid "Special"
 msgstr "Speciális"
 
-#: src/droid.cpp:2412
+#: src/droid.cpp:2411
 msgid "Hero"
 msgstr "Hős"
 
-#: src/droid.cpp:3346
+#: src/droid.cpp:3345
 #, c-format
 msgid "%s wanted to give you a %s but you have too many!"
 msgstr "%s %s-t akart neked adni, de neked már így is túl sok van!"
 
-#: src/droid.cpp:3350
+#: src/droid.cpp:3349
 #, c-format
 msgid "You wanted to give %s a %s but they have too many!"
 msgstr "%s-t akartál adni %s de neki már így is túl sok van."
@@ -14042,7 +14042,7 @@ msgstr "Mentett játék betöltése"
 msgid "GAME SAVED :"
 msgstr "JÁTÉK MENTVE:"
 
-#: src/move.cpp:2279
+#: src/move.cpp:2292
 #, c-format
 msgid "You found %u power in an oil drum."
 msgstr "%u energiát találtál egy olajkúton."
@@ -14716,26 +14716,26 @@ msgstr "Barna"
 msgid "We can't do that! We must be a Cyborg unit to use a Cyborg Transport!"
 msgstr "Ez nem lehetséges! Cyborg egységnek kell lennünk, hogy használhassuk a Cyborg szállítást!"
 
-#: src/qtscriptfuncs.cpp:1586
+#: src/qtscriptfuncs.cpp:1591
 #: src/scriptfuncs.cpp:3263
 msgid "YOU ARE VICTORIOUS!"
 msgstr "GYŐZTÉL!"
 
-#: src/qtscriptfuncs.cpp:1591
+#: src/qtscriptfuncs.cpp:1596
 #: src/scriptfuncs.cpp:3267
 msgid "YOU WERE DEFEATED!"
 msgstr "VERESÉGET SZENVEDETT!"
 
-#: src/research.cpp:1170
+#: src/research.cpp:1172
 #, c-format
 msgid "Research completed: %s"
 msgstr "Kutatás befejezett: %s"
 
-#: src/research.cpp:1175
+#: src/research.cpp:1177
 msgid "Research Completed"
 msgstr "Kutatás befejezett"
 
-#: src/research.cpp:1899
+#: src/research.cpp:1901
 msgid "Research Award"
 msgstr "Kutatói díj"
 
@@ -14963,26 +14963,26 @@ msgstr "Nincs elegendő férőhely a szállításhoz!"
 msgid "Reinforcements landing"
 msgstr "Utánpótlás leszállt"
 
-#: src/version.cpp:131
+#: src/version.cpp:121
 msgid " (modified locally)"
 msgstr " (helyileg módosította)"
 
 # It's same... (ugyanaz) IT Word
-#: src/version.cpp:138
+#: src/version.cpp:128
 msgid " - DEBUG"
 msgstr " - HIBÁK"
 
 # It's same... (ugyanaz) IT Word
-#: src/version.cpp:147
+#: src/version.cpp:137
 #, c-format
 msgid " - Built %s"
 msgstr " - Épített %s"
 
 #. TRANSLATORS: This string looks as follows when expanded.
 #. "Version <version name/number> <working copy state><BUILD DATE><BUILD TYPE>"
-#: src/version.cpp:157
-#, c-format
-msgid "Version %s-%s%s%s%s"
+#: src/version.cpp:147
+#, fuzzy, c-format
+msgid "Version %s%s%s%s"
 msgstr "Verzió %s-%s%s%s%s"
 
 #~ msgid "Password is already set!"

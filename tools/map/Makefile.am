@@ -4,7 +4,10 @@ AM_CXXFLAGS = $(WZ_CXXFLAGS) $(QT4_CFLAGS) -I../..
 
 BUILT_SOURCES = 
 CLEANFILES = $(BUILT_SOURCES)
-EXTRA_DIST = 
+EXTRA_DIST = \
+	configs \
+	MapUtilities.xcodeproj
+
 noinst_PROGRAMS = mapconv mapinfo map2lnd map2preview map2png
 noinst_HEADERS = maplib.h mapload.h pngsave.h vector.h
 

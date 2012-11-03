@@ -511,8 +511,8 @@ struct CONSTRUCT_STATS : public COMPONENT_STATS
 struct BRAIN_STATS : public COMPONENT_STATS
 {
        WEAPON_STATS	*psWeaponStat;	///< weapon stats associated with this brain - for Command Droids
-       UDWORD          minDroids;
-       UDWORD          dMult;
+       UDWORD          maxDroids;       ///< base maximum number of droids that the commander can control
+       UDWORD          maxDroidsMult;   ///< maximum number of controlled droids multiplied by level
 };
 
 

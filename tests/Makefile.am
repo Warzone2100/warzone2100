@@ -23,6 +23,10 @@ noinst_HEADERS = ../tools/map/mapload.h lint.h
 CLEANFILES = \
 	$(BUILT_SOURCES)
 
+EXTRA_DIST = \
+	configs \
+	Tests.xcodeproj
+
 TESTS = maptest modeltest qtscripttest
 
 maplist.txt:

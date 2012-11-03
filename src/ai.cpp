@@ -34,8 +34,6 @@
 #include "map.h"
 #include "projectile.h"
 
-#define FRUSTRATED_TIME (1000 * 5)
-
 /* Weights used for target selection code,
  * target distance is used as 'common currency'
  */
@@ -635,11 +633,13 @@ int aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot, i
 				}
 			}
 			else if (targetInQuestion->type == OBJ_FEATURE
+			         && psDroid->lastFrustratedTime > 0
 			         && gameTime - psDroid->lastFrustratedTime < FRUSTRATED_TIME
 			         && ((FEATURE *)targetInQuestion)->psStats->damageable
 			         && psDroid->player != scavengerPlayer())  // hack to avoid scavs blowing up their nice feature walls
 			{
 				psTarget = targetInQuestion;
+				objTrace(psDroid->id, "considering shooting at %s in frustration", objInfo(targetInQuestion));
 			}
 
 			/* Check if our weapon is most effective against this object */

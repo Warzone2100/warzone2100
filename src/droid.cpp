@@ -306,7 +306,6 @@ DROID::DROID(uint32_t id, unsigned player)
 	order.psStats = NULL;
 	sMove.asPath = NULL;
 	sMove.Status = MOVEINACTIVE;
-	lastFrustratedTime = -UINT16_MAX;	// make sure we do not start the game frustrated
 	listSize = 0;
 	listPendingBegin = 0;
 	iAudioID = NO_SOUND;
@@ -327,6 +326,7 @@ DROID::DROID(uint32_t id, unsigned player)
 	sDisplay.screenR = 0;
 	illumination = UBYTE_MAX;
 	resistance = ACTION_START_TIME;	// init the resistance to indicate no EW performed on this droid
+	lastFrustratedTime = 0;		// make sure we do not start the game frustrated
 }
 
 /* DROID::~DROID: release all resources associated with a droid -
