@@ -1997,13 +1997,15 @@ static QScriptValue js_countStruct(QScriptContext *context, QScriptEngine *engin
 	return QScriptValue(quantity);
 }
 
-//-- \subsection{countDroid([player])}
-//-- Count the number of droids that a given player has.
+//-- \subsection{countDroid(droid type[, player])}
+//-- Count the number of droids that a given player has. Droid type must be either
+//-- DROID_ANY, DROID_COMMAND or DROID_CONSTRUCT.
 //-- The player parameter can be a specific player, ALL_PLAYERS, ALLIES or ENEMIES.
 static QScriptValue js_countDroid(QScriptContext *context, QScriptEngine *engine)
 {
 	int player;
 	int quantity = 0;
+	int type = context->argument(0).toInt32();
 	if (context->argumentCount() > 1)
 	{
 		player = context->argument(1).toInt32();
@@ -2018,7 +2020,18 @@ static QScriptValue js_countDroid(QScriptContext *context, QScriptEngine *engine
 		    || (player == ALLIES && aiCheckAlliances(i, player))
 		    || (player == ENEMIES && !aiCheckAlliances(i, player)))
 		{
-			quantity += getNumDroids(i);
+			if (type == DROID_ANY)
+			{
+				quantity += getNumDroids(i);
+			}
+			else if (type == DROID_CONSTRUCT)
+			{
+				quantity += getNumConstructorDroids(i);
+			}
+			else if (type == DROID_COMMAND)
+			{
+				quantity += getNumCommandDroids(i);
+			}
 		}
 	}
 	return QScriptValue(quantity);

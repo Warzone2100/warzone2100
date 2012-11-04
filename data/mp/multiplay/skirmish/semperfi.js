@@ -129,9 +129,7 @@ function buildVTOL(struct)
 // If negative, we have too many power generator (usually not a problem in itself).
 function numUnusedDerricks()
 {
-	var derricklist = enumStruct(me, derrick);
-	var powgenlist = enumStruct(me, powGen);
-	return derricklist.length - powgenlist.length * 4;
+	return countStruct(derrick) - countStruct(powGen) * 4;
 }
 
 function conCanHelp(mydroid, bx, by)
@@ -462,8 +460,7 @@ function eventDroidBuilt(droid, struct)
 	{
 		if (struct.stattype == FACTORY)
 		{
-			var trucklist = enumDroid(me, DROID_CONSTRUCT);
-			if (trucklist.length < 6)
+			if (countDroid(DROID_CONSTRUCT) < 6)
 			{
 				buildTruck(struct);
 			}
@@ -594,17 +591,6 @@ function eventStartLevel()
 
 	// Maintenance calls - to fix quirks
 	setTimer("maintenance", 1000 * 60 * 2); // every 2 minutes, call it to check if anything left to do
-
-	/*
-	if (numFactories() > 1 && isStructureAvailable(defStructs[0], me) && playerData[me].difficulty > MEDIUM)
-	{
-		dbgPlr("TRUCK RUSH!");
-		queue("truckRush");
-	}
-	else
-	{
-		queue("buildFundamentals");
-	}*/
 }
 
 function eventDroidIdle(droid)
