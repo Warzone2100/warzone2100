@@ -130,9 +130,7 @@ function buildVTOL(struct)
 // If negative, we have too many power generator (usually not a problem in itself).
 function numUnusedDerricks()
 {
-	var derricklist = enumStruct(me, derrick);
-	var powgenlist = enumStruct(me, powGen);
-	return derricklist.length - powgenlist.length * 4;
+	return countStruct(derrick) - countStruct(powGen) * 4;
 }
 
 function conCanHelp(mydroid, bx, by)
@@ -246,7 +244,6 @@ function sortByDistToBase(obj1, obj2)
 function buildFundamentals()
 {
 	var needPwGen = false;
-	var factlist = enumStruct(me, factory);
 	var droids = enumDroid(me, DROID_CONSTRUCT);
 
 	// Do we need power generators?
@@ -304,33 +301,30 @@ function buildFundamentals()
 
 function buildFundamentals2()
 {
-	var factlist = enumStruct(me, factory);
+	var factcount = countStruct(factory);
 	// Build as many research labs as factories
 	if (!researchDone && isStructureAvailable(resLab))
 	{
-		var reslist = enumStruct(me, resLab);
-		if (reslist.length < factlist.length && grabTrucksAndBuild(20, resLab, 1))
+		if (countStruct(resLab) < factcount && grabTrucksAndBuild(20, resLab, 1))
 		{
 			return;	// done here
 		}
 	}
 	// Build as many factories as we can afford
-	if ((factlist.length < 2 || (factlist.length < 4 && playerPower(me) > factlist.length * 750))
+	if ((factcount < 2 || (factcount < 4 && playerPower(me) > factcount * 750))
 	    && isStructureAvailable(factory) && grabTrucksAndBuild(20, factory, 1))
 	{
 		return; // done here
 	}
 	// Build HQ if missing
-	var hqlist = enumStruct(me, playerHQ);
-	if (isStructureAvailable(playerHQ) && hqlist.length == 0 && grabTrucksAndBuild(20, playerHQ, 1))
+	if (isStructureAvailable(playerHQ) && countStruct(playerHQ) == 0 && grabTrucksAndBuild(20, playerHQ, 1))
 	{
 		return;
 	}
 	// Build cyborg factory if we don't have one
 	if (isStructureAvailable(cybFactory))
 	{
-		var cyblist = enumStruct(me, cybFactory);
-		if (cyblist.length == 0 && playerPower(me) > 250 && grabTrucksAndBuild(20, cybFactory, 1))
+		if (countStruct(cybFactory) == 0 && playerPower(me) > 250 && grabTrucksAndBuild(20, cybFactory, 1))
 		{
 			return;
 		}
@@ -338,8 +332,7 @@ function buildFundamentals2()
 	// Build VTOL factory if we don't have one
 	if (isStructureAvailable(vtolFactory))
 	{
-		var vfaclist = enumStruct(me, vtolFactory);
-		if (vfaclist.length == 0 && playerPower(me) > 500 && grabTrucksAndBuild(20, vtolFactory, 1))
+		if (countStruct(vtolFactory) == 0 && playerPower(me) > 500 && grabTrucksAndBuild(20, vtolFactory, 1))
 		{
 			return;
 		}
@@ -467,8 +460,7 @@ function eventDroidBuilt(droid, struct)
 	{
 		if (struct.stattype == FACTORY)
 		{
-			var trucklist = enumDroid(me, DROID_CONSTRUCT);
-			if (trucklist.length < 6)
+			if (countDroid(DROID_CONSTRUCT) < 6)
 			{
 				buildTruck(struct);
 			}

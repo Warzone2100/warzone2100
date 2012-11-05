@@ -4836,7 +4836,6 @@ static bool loadSaveStructure2(const char *pFileName, STRUCTURE **ppList)
 			psFactory->buildPointsRemaining = ini.value("Factory/buildPointsRemaining", psFactory->buildPointsRemaining).toInt();
 			psFactory->timeStartHold = ini.value("Factory/timeStartHold", psFactory->timeStartHold).toInt();
 			psFactory->loopsPerformed = ini.value("Factory/loopsPerformed", psFactory->loopsPerformed).toInt();
-			psFactory->productionOutput = ini.value("Factory/productionOutput", psFactory->productionOutput).toInt();
 			// statusPending and pendingCount belong to the GUI, not the game state.
 			psFactory->secondaryOrder = ini.value("Factory/secondaryOrder", psFactory->secondaryOrder).toInt();
 			//adjust the module structures IMD
@@ -5111,7 +5110,6 @@ bool writeStructFile(const char *pFileName)
 					ini.setValue("Factory/buildPointsRemaining", psFactory->buildPointsRemaining);
 					ini.setValue("Factory/timeStartHold", psFactory->timeStartHold);
 					ini.setValue("Factory/loopsPerformed", psFactory->loopsPerformed);
-					ini.setValue("Factory/productionOutput", psFactory->productionOutput);
 					// statusPending and pendingCount belong to the GUI, not the game state.
 					ini.setValue("Factory/secondaryOrder", psFactory->secondaryOrder);
 

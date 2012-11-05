@@ -2307,13 +2307,15 @@ static QScriptValue js_getStructureLimit(QScriptContext *context, QScriptEngine 
 	return QScriptValue(asStructLimits[player][index].limit);
 }
 
-//-- \subsection{getStructureCount(structure type[, player])}
-//-- Create a structure on the given position. Returns true on success.
-static QScriptValue js_getStructureCount(QScriptContext *context, QScriptEngine *engine)
+//-- \subsection{countStruct(structure type[, player])}
+//-- Count the number of structures of a given type.
+//-- The player parameter can be a specific player, ALL_PLAYERS, ALLIES or ENEMIES.
+static QScriptValue js_countStruct(QScriptContext *context, QScriptEngine *engine)
 {
 	QString building = context->argument(0).toString();
 	int index = getStructStatFromName(building.toUtf8().constData());
 	int player;
+	int quantity = 0;
 	if (context->argumentCount() > 1)
 	{
 		player = context->argument(1).toInt32();
@@ -2323,7 +2325,56 @@ static QScriptValue js_getStructureCount(QScriptContext *context, QScriptEngine 
 		player = engine->globalObject().property("me").toInt32();
 	}
 	SCRIPT_ASSERT(context, index < numStructureStats && index >= 0, "Structure %s not found", building.toUtf8().constData());
-	return QScriptValue(asStructLimits[player][index].currentQuantity);
+	for (int i = 0; i < MAX_PLAYERS; i++)
+	{
+		if (player == i || player == ALL_PLAYERS
+		    || (player == ALLIES && aiCheckAlliances(i, player))
+		    || (player == ENEMIES && !aiCheckAlliances(i, player)))
+		{
+			quantity += asStructLimits[i][index].currentQuantity;
+		}
+	}
+	return QScriptValue(quantity);
+}
+
+//-- \subsection{countDroid(droid type[, player])}
+//-- Count the number of droids that a given player has. Droid type must be either
+//-- DROID_ANY, DROID_COMMAND or DROID_CONSTRUCT.
+//-- The player parameter can be a specific player, ALL_PLAYERS, ALLIES or ENEMIES.
+static QScriptValue js_countDroid(QScriptContext *context, QScriptEngine *engine)
+{
+	int player;
+	int quantity = 0;
+	int type = context->argument(0).toInt32();
+	if (context->argumentCount() > 1)
+	{
+		player = context->argument(1).toInt32();
+	}
+	else
+	{
+		player = engine->globalObject().property("me").toInt32();
+	}
+	for (int i = 0; i < MAX_PLAYERS; i++)
+	{
+		if (player == i || player == ALL_PLAYERS
+		    || (player == ALLIES && aiCheckAlliances(i, player))
+		    || (player == ENEMIES && !aiCheckAlliances(i, player)))
+		{
+			if (type == DROID_ANY)
+			{
+				quantity += getNumDroids(i);
+			}
+			else if (type == DROID_CONSTRUCT)
+			{
+				quantity += getNumConstructorDroids(i);
+			}
+			else if (type == DROID_COMMAND)
+			{
+				quantity += getNumCommandDroids(i);
+			}
+		}
+	}
+	return QScriptValue(quantity);
 }
 
 //-- \subsection{setNoGoArea(x1, y1, x2, y2, player)}
@@ -2751,7 +2802,8 @@ bool registerFunctions(QScriptEngine *engine)
 	engine->globalObject().setProperty("setScrollParams", engine->newFunction(js_setScrollParams));
 	engine->globalObject().setProperty("addStructure", engine->newFunction(js_addStructure));
 	engine->globalObject().setProperty("getStructureLimit", engine->newFunction(js_getStructureLimit));
-	engine->globalObject().setProperty("getStructureCount", engine->newFunction(js_getStructureCount));
+	engine->globalObject().setProperty("countStruct", engine->newFunction(js_countStruct));
+	engine->globalObject().setProperty("countDroid", engine->newFunction(js_countDroid));
 	engine->globalObject().setProperty("loadLevel", engine->newFunction(js_loadLevel));
 	engine->globalObject().setProperty("setDroidExperience", engine->newFunction(js_setDroidExperience));
 	engine->globalObject().setProperty("setNoGoArea", engine->newFunction(js_setNoGoArea));
@@ -2802,6 +2854,7 @@ bool registerFunctions(QScriptEngine *engine)
 	engine->globalObject().setProperty("DROID_TRANSPORTER", DROID_TRANSPORTER, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("DROID_SUPERTRANSPORTER", DROID_SUPERTRANSPORTER, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("DROID_COMMAND", DROID_COMMAND, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("DROID_ANY", DROID_ANY, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("HQ", REF_HQ, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("FACTORY", REF_FACTORY, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("POWER_GEN", REF_POWER_GEN, QScriptValue::ReadOnly | QScriptValue::Undeletable);
