@@ -55,6 +55,8 @@
 #include "scriptextern.h"
 #include "gateway.h"
 #include "mapgrid.h"
+#include "lighting.h"
+#include "atmos.h"
 
 #define FAKE_REF_LASSAT 999
 #define ALL_PLAYERS -1
@@ -2714,6 +2716,40 @@ static QScriptValue js_setDroidLimit(QScriptContext *context, QScriptEngine *)
 	return QScriptValue();
 }
 
+//-- \subsection{setSunPosition(x, y, z)}
+//-- Move the position of the Sun, which in turn moves where shadows are cast.
+static QScriptValue js_setSunPosition(QScriptContext *context, QScriptEngine *)
+{
+	float x = context->argument(0).toNumber();
+	float y = context->argument(1).toNumber();
+	float z = context->argument(2).toNumber();
+	setTheSun(Vector3f(x, y, z));
+	return QScriptValue();
+}
+
+//-- \subsection{setSunIntensity(ambient r, g, b, diffuse r, g, b, specular r, g, b)}
+//-- Set the ambient, diffuse and specular colour intensities of the Sun lighting source.
+static QScriptValue js_setSunIntensity(QScriptContext *context, QScriptEngine *)
+{
+	float ambient[4] = { context->argument(0).toNumber(), context->argument(1).toNumber(), context->argument(2).toNumber(), 1.0f };
+	float diffuse[4] = { context->argument(2).toNumber(), context->argument(3).toNumber(), context->argument(4).toNumber(), 1.0f };
+	float specular[4] = { context->argument(5).toNumber(), context->argument(6).toNumber(), context->argument(7).toNumber(), 1.0f };
+	pie_Lighting0(LIGHT_AMBIENT, ambient);
+	pie_Lighting0(LIGHT_DIFFUSE, diffuse);
+	pie_Lighting0(LIGHT_SPECULAR, specular);
+	return QScriptValue();
+}
+
+//-- \subsection{setWeather(weather type)}
+//-- Set the current weather. This should be one of WEATHER_RAIN, WEATHER_SNOW or WEATHER_CLEAR.
+static QScriptValue js_setWeather(QScriptContext *context, QScriptEngine *)
+{
+	WT_CLASS weather = (WT_CLASS)context->argument(0).toInt32();
+	SCRIPT_ASSERT(context, weather >= 0 && weather <= WT_NONE, "Bad weather type");
+	atmosSetWeatherType(weather);
+	return QScriptValue();
+}
+
 // ----------------------------------------------------------------------------------------
 // Register functions with scripting system
 
@@ -2727,6 +2763,9 @@ bool registerFunctions(QScriptEngine *engine)
 	engine->globalObject().setProperty("enumTemplates", engine->newFunction(js_enumTemplates));
 	engine->globalObject().setProperty("setAlliance", engine->newFunction(js_setAlliance));
 	engine->globalObject().setProperty("setAssemblyPoint", engine->newFunction(js_setAssemblyPoint));
+	engine->globalObject().setProperty("setSunPosition", engine->newFunction(js_setSunPosition));
+	engine->globalObject().setProperty("setSunIntensity", engine->newFunction(js_setSunIntensity));
+	engine->globalObject().setProperty("setWeather", engine->newFunction(js_setWeather));
 
 	// horrible hacks follow -- do not rely on these being present!
 	engine->globalObject().setProperty("hackNetOff", engine->newFunction(js_hackNetOff));
@@ -2809,6 +2848,9 @@ bool registerFunctions(QScriptEngine *engine)
 	engine->globalObject().setProperty("setNoGoArea", engine->newFunction(js_setNoGoArea));
 
 	// Set some useful constants
+	engine->globalObject().setProperty("WEATHER_CLEAR", WT_NONE, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("WEATHER_RAIN", WT_RAINING, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("WEATHER_SNOW", WT_SNOWING, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("DORDER_ATTACK", DORDER_ATTACK, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("DORDER_OBSERVE", DORDER_OBSERVE, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("DORDER_RECOVER", DORDER_RECOVER, QScriptValue::ReadOnly | QScriptValue::Undeletable);
