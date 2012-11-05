@@ -2498,7 +2498,7 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 	//put any widgets back on for the missions
 	resetMissionWidgets();
 
-	debug( LOG_NEVER, "loadGame: done\n" );
+	debug(LOG_NEVER, "Done loading");
 
 	return true;
 
@@ -2526,6 +2526,8 @@ bool saveGame(char *aFileName, GAME_TYPE saveType)
 	UDWORD			fileExtension;
 	DROID			*psDroid, *psNext;
 	char			CurrentFileName[PATH_MAX] = {'\0'};
+
+	triggerEvent(TRIGGER_GAME_SAVING);
 
 	ASSERT_OR_RETURN(false, aFileName && strlen(aFileName) > 4, "Bad savegame filename");
 	sstrcpy(CurrentFileName, aFileName);
@@ -2806,6 +2808,7 @@ bool saveGame(char *aFileName, GAME_TYPE saveType)
 	CurrentFileName[fileExtension-1] = '\0';
 
 	/* Start the game clock */
+	triggerEvent(TRIGGER_GAME_SAVED);
 	gameTimeStart();
 	return true;
 

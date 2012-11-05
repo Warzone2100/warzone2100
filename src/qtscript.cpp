@@ -583,6 +583,12 @@ bool loadScriptStates(const char *filename)
 //__ An event that is run when the mission timer has run out.
 //__ \subsection{eventVideoDone()}
 //__ An event that is run when a video show stopped playing.
+//__ \subsection{eventGameLoaded()}
+//__ An event that is run when game is loaded from a saved game. There is usually no need to use this event.
+//__ \subsection{eventGameSaving()}
+//__ An event that is run before game is saved. There is usually no need to use this event.
+//__ \subsection{eventGameSaved()}
+//__ An event that is run after game is saved. There is usually no need to use this event.
 bool triggerEvent(SCRIPT_TRIGGER_TYPE trigger)
 {
 	for (int i = 0; i < scripts.size(); ++i)
@@ -609,6 +615,15 @@ bool triggerEvent(SCRIPT_TRIGGER_TYPE trigger)
 			break;
 		case TRIGGER_VIDEO_QUIT:
 			callFunction(engine, "eventVideoDone", QScriptValueList());
+			break;
+		case TRIGGER_GAME_LOADED:
+			callFunction(engine, "eventGameLoaded", QScriptValueList());
+			break;
+		case TRIGGER_GAME_SAVING:
+			callFunction(engine, "eventGameSaving", QScriptValueList());
+			break;
+		case TRIGGER_GAME_SAVED:
+			callFunction(engine, "eventGameSaved", QScriptValueList());
 			break;
 		}
 	}
