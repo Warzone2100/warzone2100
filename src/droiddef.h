@@ -76,7 +76,7 @@ enum DROID_TYPE
 	DROID_CYBORG_REPAIR,    ///< cyborg repair droid - new for update 28/5/99
 	DROID_CYBORG_SUPER,     ///< cyborg repair droid - new for update 7/6/99
 	DROID_SUPERTRANSPORTER,	///< SuperTransport (MP)
-	DROID_ANY,              ///< Any droid. Only used as a parameter for intGotoNextDroidType(DROID_TYPE).
+	DROID_ANY,              ///< Any droid
 };
 
 struct COMPONENT
