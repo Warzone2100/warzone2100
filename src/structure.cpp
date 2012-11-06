@@ -1949,8 +1949,7 @@ static bool setFunctionality(STRUCTURE	*psBuilding, STRUCTURE_TYPE functionType)
 			psFactory->psSubject = NULL;
 
 			// Default the secondary order - AB 22/04/99
-			psFactory->secondaryOrder = DSS_ARANGE_DEFAULT | DSS_REPLEV_NEVER
-									  | DSS_ALEV_ALWAYS | DSS_HALT_GUARD;
+			psFactory->secondaryOrder = DSS_REPLEV_NEVER | DSS_ALEV_ALWAYS | DSS_HALT_GUARD;
 
 			// Create the assembly point for the factory
 			if (!createFlagPosition(&psFactory->psAssemblyPoint, psBuilding->player))
