@@ -55,6 +55,8 @@
 #include "scriptextern.h"
 #include "gateway.h"
 #include "mapgrid.h"
+#include "lighting.h"
+#include "atmos.h"
 
 #define FAKE_REF_LASSAT 999
 #define ALL_PLAYERS -1
@@ -2307,13 +2309,15 @@ static QScriptValue js_getStructureLimit(QScriptContext *context, QScriptEngine 
 	return QScriptValue(asStructLimits[player][index].limit);
 }
 
-//-- \subsection{getStructureCount(structure type[, player])}
-//-- Create a structure on the given position. Returns true on success.
-static QScriptValue js_getStructureCount(QScriptContext *context, QScriptEngine *engine)
+//-- \subsection{countStruct(structure type[, player])}
+//-- Count the number of structures of a given type.
+//-- The player parameter can be a specific player, ALL_PLAYERS, ALLIES or ENEMIES.
+static QScriptValue js_countStruct(QScriptContext *context, QScriptEngine *engine)
 {
 	QString building = context->argument(0).toString();
 	int index = getStructStatFromName(building.toUtf8().constData());
 	int player;
+	int quantity = 0;
 	if (context->argumentCount() > 1)
 	{
 		player = context->argument(1).toInt32();
@@ -2323,7 +2327,56 @@ static QScriptValue js_getStructureCount(QScriptContext *context, QScriptEngine 
 		player = engine->globalObject().property("me").toInt32();
 	}
 	SCRIPT_ASSERT(context, index < numStructureStats && index >= 0, "Structure %s not found", building.toUtf8().constData());
-	return QScriptValue(asStructLimits[player][index].currentQuantity);
+	for (int i = 0; i < MAX_PLAYERS; i++)
+	{
+		if (player == i || player == ALL_PLAYERS
+		    || (player == ALLIES && aiCheckAlliances(i, player))
+		    || (player == ENEMIES && !aiCheckAlliances(i, player)))
+		{
+			quantity += asStructLimits[i][index].currentQuantity;
+		}
+	}
+	return QScriptValue(quantity);
+}
+
+//-- \subsection{countDroid(droid type[, player])}
+//-- Count the number of droids that a given player has. Droid type must be either
+//-- DROID_ANY, DROID_COMMAND or DROID_CONSTRUCT.
+//-- The player parameter can be a specific player, ALL_PLAYERS, ALLIES or ENEMIES.
+static QScriptValue js_countDroid(QScriptContext *context, QScriptEngine *engine)
+{
+	int player;
+	int quantity = 0;
+	int type = context->argument(0).toInt32();
+	if (context->argumentCount() > 1)
+	{
+		player = context->argument(1).toInt32();
+	}
+	else
+	{
+		player = engine->globalObject().property("me").toInt32();
+	}
+	for (int i = 0; i < MAX_PLAYERS; i++)
+	{
+		if (player == i || player == ALL_PLAYERS
+		    || (player == ALLIES && aiCheckAlliances(i, player))
+		    || (player == ENEMIES && !aiCheckAlliances(i, player)))
+		{
+			if (type == DROID_ANY)
+			{
+				quantity += getNumDroids(i);
+			}
+			else if (type == DROID_CONSTRUCT)
+			{
+				quantity += getNumConstructorDroids(i);
+			}
+			else if (type == DROID_COMMAND)
+			{
+				quantity += getNumCommandDroids(i);
+			}
+		}
+	}
+	return QScriptValue(quantity);
 }
 
 //-- \subsection{setNoGoArea(x1, y1, x2, y2, player)}
@@ -2663,6 +2716,40 @@ static QScriptValue js_setDroidLimit(QScriptContext *context, QScriptEngine *)
 	return QScriptValue();
 }
 
+//-- \subsection{setSunPosition(x, y, z)}
+//-- Move the position of the Sun, which in turn moves where shadows are cast.
+static QScriptValue js_setSunPosition(QScriptContext *context, QScriptEngine *)
+{
+	float x = context->argument(0).toNumber();
+	float y = context->argument(1).toNumber();
+	float z = context->argument(2).toNumber();
+	setTheSun(Vector3f(x, y, z));
+	return QScriptValue();
+}
+
+//-- \subsection{setSunIntensity(ambient r, g, b, diffuse r, g, b, specular r, g, b)}
+//-- Set the ambient, diffuse and specular colour intensities of the Sun lighting source.
+static QScriptValue js_setSunIntensity(QScriptContext *context, QScriptEngine *)
+{
+	float ambient[4] = { context->argument(0).toNumber(), context->argument(1).toNumber(), context->argument(2).toNumber(), 1.0f };
+	float diffuse[4] = { context->argument(3).toNumber(), context->argument(4).toNumber(), context->argument(5).toNumber(), 1.0f };
+	float specular[4] = { context->argument(6).toNumber(), context->argument(7).toNumber(), context->argument(8).toNumber(), 1.0f };
+	pie_Lighting0(LIGHT_AMBIENT, ambient);
+	pie_Lighting0(LIGHT_DIFFUSE, diffuse);
+	pie_Lighting0(LIGHT_SPECULAR, specular);
+	return QScriptValue();
+}
+
+//-- \subsection{setWeather(weather type)}
+//-- Set the current weather. This should be one of WEATHER_RAIN, WEATHER_SNOW or WEATHER_CLEAR.
+static QScriptValue js_setWeather(QScriptContext *context, QScriptEngine *)
+{
+	WT_CLASS weather = (WT_CLASS)context->argument(0).toInt32();
+	SCRIPT_ASSERT(context, weather >= 0 && weather <= WT_NONE, "Bad weather type");
+	atmosSetWeatherType(weather);
+	return QScriptValue();
+}
+
 // ----------------------------------------------------------------------------------------
 // Register functions with scripting system
 
@@ -2676,6 +2763,9 @@ bool registerFunctions(QScriptEngine *engine)
 	engine->globalObject().setProperty("enumTemplates", engine->newFunction(js_enumTemplates));
 	engine->globalObject().setProperty("setAlliance", engine->newFunction(js_setAlliance));
 	engine->globalObject().setProperty("setAssemblyPoint", engine->newFunction(js_setAssemblyPoint));
+	engine->globalObject().setProperty("setSunPosition", engine->newFunction(js_setSunPosition));
+	engine->globalObject().setProperty("setSunIntensity", engine->newFunction(js_setSunIntensity));
+	engine->globalObject().setProperty("setWeather", engine->newFunction(js_setWeather));
 
 	// horrible hacks follow -- do not rely on these being present!
 	engine->globalObject().setProperty("hackNetOff", engine->newFunction(js_hackNetOff));
@@ -2751,12 +2841,16 @@ bool registerFunctions(QScriptEngine *engine)
 	engine->globalObject().setProperty("setScrollParams", engine->newFunction(js_setScrollParams));
 	engine->globalObject().setProperty("addStructure", engine->newFunction(js_addStructure));
 	engine->globalObject().setProperty("getStructureLimit", engine->newFunction(js_getStructureLimit));
-	engine->globalObject().setProperty("getStructureCount", engine->newFunction(js_getStructureCount));
+	engine->globalObject().setProperty("countStruct", engine->newFunction(js_countStruct));
+	engine->globalObject().setProperty("countDroid", engine->newFunction(js_countDroid));
 	engine->globalObject().setProperty("loadLevel", engine->newFunction(js_loadLevel));
 	engine->globalObject().setProperty("setDroidExperience", engine->newFunction(js_setDroidExperience));
 	engine->globalObject().setProperty("setNoGoArea", engine->newFunction(js_setNoGoArea));
 
 	// Set some useful constants
+	engine->globalObject().setProperty("WEATHER_CLEAR", WT_NONE, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("WEATHER_RAIN", WT_RAINING, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("WEATHER_SNOW", WT_SNOWING, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("DORDER_ATTACK", DORDER_ATTACK, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("DORDER_OBSERVE", DORDER_OBSERVE, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("DORDER_RECOVER", DORDER_RECOVER, QScriptValue::ReadOnly | QScriptValue::Undeletable);
@@ -2802,6 +2896,7 @@ bool registerFunctions(QScriptEngine *engine)
 	engine->globalObject().setProperty("DROID_TRANSPORTER", DROID_TRANSPORTER, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("DROID_SUPERTRANSPORTER", DROID_SUPERTRANSPORTER, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("DROID_COMMAND", DROID_COMMAND, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("DROID_ANY", DROID_ANY, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("HQ", REF_HQ, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("FACTORY", REF_FACTORY, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("POWER_GEN", REF_POWER_GEN, QScriptValue::ReadOnly | QScriptValue::Undeletable);

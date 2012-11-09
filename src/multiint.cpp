@@ -418,6 +418,30 @@ static void loadEmptyMapPreview()
 	free(imageData);
 }
 
+static void loadMapSettings()
+{
+	char aFileName[256];
+	LEVEL_DATASET *psLevel = levFindDataSet(game.map, &game.hash);
+	ASSERT_OR_RETURN(, psLevel, "No level found for %s", game.map);
+	sstrcpy(aFileName, psLevel->apDataFiles[0]);
+	aFileName[strlen(aFileName) - 4] = '\0';
+	sstrcat(aFileName, "/map.ini");
+	if (PHYSFS_exists(aFileName))
+	{
+		WzConfig ini(aFileName);
+		ini.beginGroup("teams");
+		for (int i = 0; i < MAX_PLAYERS; i++)
+		{
+			QString key("player_" + QString::number(i));
+			if (ini.contains(key))
+			{
+				NetPlay.players[i].team = ini.value(key).toInt() - 1;
+			}
+		}
+		ini.endGroup();
+	}
+}
+
 /// Loads the entire map just to show a picture of it
 void loadMapPreview(bool hideInterface)
 {
@@ -3002,6 +3026,7 @@ static void processMultiopWidgets(UDWORD id)
 		disableMultiButs();
 
 		addPlayerBox(!ingame.bHostSetup || bHosted);	//to make sure host can't skip player selection menu (sets game.skdiff to UBYTE_MAX for humans)
+		loadMapSettings();
 		break;
 
 	case MULTIOP_CHATEDIT:

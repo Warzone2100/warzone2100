@@ -100,9 +100,6 @@ enum SECONDARY_ORDER
 enum SECONDARY_STATE
 {
 	DSS_NONE            = 0x000000,	/**< no state. */
-	DSS_ARANGE_SHORT    = 0x000001,	/**< state referred to secondary order DSO_ATTACK_RANGE. Droid can only attack with short range. */
-	DSS_ARANGE_LONG     = 0x000002,	/**< state referred to secondary order DSO_ATTACK_RANGE. Droid can only attack with long range. */
-	DSS_ARANGE_DEFAULT  = 0x000003,	/**< state referred to secondary order DSO_ATTACK_RANGE. Droid can attacks with short or long range depending on what is the best hit chance. */
 	DSS_REPLEV_LOW      = 0x000004,	/**< state referred to secondary order DSO_REPAIR_LEVEL. Droid falls back if its health decrease below 25%. */
 	DSS_REPLEV_HIGH     = 0x000008,	/**< state referred to secondary order DSO_REPAIR_LEVEL. Droid falls back if its health decrease below 50%. */
 	DSS_REPLEV_NEVER    = 0x00000c,	/**< state referred to secondary order DSO_REPAIR_LEVEL. Droid never falls back. */

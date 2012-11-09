@@ -51,6 +51,7 @@
 #include "effects.h"
 #include "main.h"
 #include "multiint.h"
+#include "qtscript.h"
 
 extern int lev_get_lineno(void);
 extern char* lev_get_text(void);
@@ -1065,7 +1066,7 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 		ssprintf(buf, "Current Level/map is %s", psCurrLevel->pName);
 		addDumpInfo(buf);
 	}
-
+	triggerEvent(TRIGGER_GAME_LOADED);
 
 	return true;
 }
