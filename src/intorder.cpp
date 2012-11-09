@@ -57,11 +57,6 @@
 #define IDORDER_ASSIGN_VTOL_PRODUCTION		8110
 #define IDORDER_CIRCLE						8120
 
-//#define IDORDER_RETURN_TO_BASE		8050
-//#define IDORDER_DESTRUCT				8060
-//#define IDORDER_RETURN_TO_REPAIR		8080
-//#define IDORDER_EMBARK				8100
-
 enum ORDBUTTONTYPE
 {
 	ORD_BTYPE_RADIO,			// Only one state allowed.
@@ -75,7 +70,6 @@ enum ORDBUTTONTYPE
 enum ORDBUTTONCLASS
 {
 	ORDBUTCLASS_NORMAL,			// A normal button, one order type per line.
-//	ORDBUTCLASS_NORMALMIXED,	// A normal button but multiple order types on one line.
 	ORDBUTCLASS_FACTORY,		// A factory assignment button.
 	ORDBUTCLASS_CYBORGFACTORY,	// A cyborg factory assignment button.
 	ORDBUTCLASS_VTOLFACTORY, 	// A VTOL factory assignment button.
@@ -236,7 +230,6 @@ ORDERBUTTONS OrderButtons[NUM_ORDERS]=
 		{STR_DORD_FIREDES,	0,	0},
 		{DSS_FIREDES_SET,	0,	0}
 	},
-
 	{
 		ORDBUTCLASS_NORMAL,
 		DSO_PATROL,
@@ -251,7 +244,6 @@ ORDERBUTTONS OrderButtons[NUM_ORDERS]=
 		{STR_DORD_PATROL,	0,	0},
 		{DSS_PATROL_SET,	0,	0}
 	},
-
 	{
 		ORDBUTCLASS_NORMAL,
 		DSO_CIRCLE,
@@ -266,7 +258,6 @@ ORDERBUTTONS OrderButtons[NUM_ORDERS]=
 		{STR_DORD_CIRCLE,	0,	0},
 		{DSS_CIRCLE_SET,	0,	0}
 	},
-
 	{
 		ORDBUTCLASS_NORMAL,
 		DSO_HALTTYPE,
@@ -297,90 +288,6 @@ ORDERBUTTONS OrderButtons[NUM_ORDERS]=
 		{STR_DORD_RETREPAIR,	STR_DORD_RETBASE,	STR_DORD_EMBARK},
 		{DSS_RTL_REPAIR,	DSS_RTL_BASE,	DSS_RTL_TRANSPORT},
 	},
-/*	{
-		ORDBUTCLASS_NORMAL,
-		DSO_HOLD,
-		DSS_HOLD_MASK,
-		ORD_BTYPE_BOOLEAN,
-		ORD_JUSTIFY_CENTER | ORD_JUSTIFY_NEWLINE,
-		IDORDER_HOLD,
-		1,0,
-		{IMAGE_ORD_HALTUP,	0,	0},
-		{IMAGE_ORD_HALTUP,	0,	0},
-		{IMAGE_DES_HILIGHT,	0,	0},
-		{STR_DORD_HOLDPOS,	0,	0},
-		{DSS_HOLD_SET,	0,	0}
-	},
-//	{
-//		ORDBUTCLASS_NORMALMIXED,
-//		DSO_RETURN_TO_BASE, DSO_EMBARK,		 DSO_RETURN_TO_REPAIR,
-//		DSS_RTB_MASK,		DSS_EMBARK_MASK, DSS_RTR_MASK,
-//		ORD_BTYPE_BOOLEAN,
-//		ORD_JUSTIFY_CENTER,
-//		IDORDER_RETURN_TO_BASE,IDORDER_EMBARK,IDORDER_RETURN_TO_REPAIR,
-//		3,0,
-//		{IMAGE_ORD_GOTOHQUP,	IMAGE_ORD_GOTOHQUP,	IMAGE_ORD_GOTOHQUP},
-//		{IMAGE_ORD_GOTOHQUP,	IMAGE_ORD_GOTOHQUP,	IMAGE_ORD_GOTOHQUP},
-//		{IMAGE_DES_HILIGHT,	IMAGE_DES_HILIGHT,	IMAGE_DES_HILIGHT},
-//		{STR_DORD_RETBASE,	STR_DORD_RETBASE,	STR_DORD_RETREPAIR},
-//		{DSS_RTB_SET,	DSS_EMBARK_SET,	DSS_RTR_SET}
-//	},
-	{
-		ORDBUTCLASS_NORMAL,
-		DSO_RETURN_TO_BASE,
-		DSS_RTB_MASK,
-		ORD_BTYPE_BOOLEAN,
-		ORD_JUSTIFY_CENTER | ORD_JUSTIFY_NEWLINE,
-		IDORDER_RETURN_TO_BASE,
-		1,0,
-		{IMAGE_ORD_GOTOHQUP,	0,	0},
-		{IMAGE_ORD_GOTOHQUP,	0,	0},
-		{IMAGE_DES_HILIGHT,	0,	0},
-		{STR_DORD_RETBASE,	0,	0},
-		{DSS_RTB_SET,	0,	0}
-	},
-	{
-		ORDBUTCLASS_NORMAL,
-		DSO_EMBARK,
-		DSS_EMBARK_MASK,
-		ORD_BTYPE_BOOLEAN,
-		ORD_JUSTIFY_CENTER,
-		IDORDER_EMBARK,
-		1,0,
-		{IMAGE_ORD_GOTOHQUP,	0,	0},
-		{IMAGE_ORD_GOTOHQUP,	0,	0},
-		{IMAGE_DES_HILIGHT,	0,	0},
-		{STR_DORD_EMBARK,	0,	0},
-		{DSS_EMBARK_SET,	0,	0}
-	},
-	{
-		ORDBUTCLASS_NORMAL,
-		DSO_RETURN_TO_REPAIR,
-		DSS_RTR_MASK,
-		ORD_BTYPE_BOOLEAN,
-		ORD_JUSTIFY_CENTER,
-		IDORDER_RETURN_TO_REPAIR,
-		1,0,
-		{IMAGE_ORD_GOTOHQUP,	0,	0},
-		{IMAGE_ORD_GOTOHQUP,	0,	0},
-		{IMAGE_DES_HILIGHT,	0,	0},
-		{STR_DORD_RETREPAIR,	0,	0},
-		{DSS_RTR_SET,	0,	0}
-	},
-//	{
-//		ORDBUTCLASS_NORMAL,
-//		DSO_DESTRUCT,
-//		DSS_DESTRUCT_MASK,
-//		ORD_BTYPE_BOOLEAN_DEPEND,
-//		ORD_JUSTIFY_CENTER | ORD_JUSTIFY_NEWLINE,
-//		IDORDER_DESTRUCT,
-//		2,0,
-//		{IMAGE_ORD_DESTRUCT1UP,	IMAGE_ORD_DESTRUCT2UP,	0},
-//		{IMAGE_ORD_DESTRUCT1UP,	IMAGE_ORD_DESTRUCT2GREY,	0},
-//		{IMAGE_DES_HILIGHT,	IMAGE_DES_HILIGHT,	0},
-//		{STR_DORD_ARMDESTRUCT,	STR_DORD_DESTRUCT,	0},
-//		{DSS_DESTRUCT_SET,	DSS_DESTRUCT_SET,	0}
-//	},*/
 	{
 		ORDBUTCLASS_NORMAL,
 		DSO_RECYCLE,
@@ -449,21 +356,6 @@ static std::vector<AVORDER> AvailableOrders;
 
 
 bool OrderUp = false;
-
-// update the order interface only if it is already open.
-// NOTE: Unused! bool intUpdateOrder(DROID *psDroid)
-bool intUpdateOrder(DROID *psDroid)
-{
-	if(widgGetFromID(psWScreen,IDORDER_FORM) != NULL && OrderUp)
-	{
-		widgDelete(psWScreen, IDORDER_CLOSE);
-        //changed to a BASE_OBJECT to accomodate the factories - AB 21/04/99
-		//intAddOrder(psDroid);
-        intAddOrder((BASE_OBJECT *)psDroid);
-	}
-
-	return true;
-}
 
 // Build a list of currently selected droids.
 // Returns true if droids were selected.
@@ -756,16 +648,6 @@ bool intAddOrder(BASE_OBJECT *psObj)
 		sButInit.id = OrderButtons[OrdIndex].ButBaseID;
 
 		NumJustifyButs = NumButs;
-//		for(k=j; k<NumAvailableOrders; k++) {
-//	   		UWORD Index = AvailableOrders[j].OrderIndex;
-//			if(OrderButtons[OrdIndex].ButJustify & ORD_JUSTIFY_NEWLINE) {
-//				DBPRINTF(("NewLine %d \n",k);
-//				break;
-//			} else {
-//				DBPRINTF(("SameLine %d \n",k);
-//			}
-//		}
-
 		bLastCombine = false;
 
 		switch (OrderButtons[OrdIndex].ButJustify & ORD_JUSTIFY_MASK) {
@@ -780,9 +662,6 @@ bool intAddOrder(BASE_OBJECT *psObj)
 				break;
 
 			case ORD_JUSTIFY_CENTER:
-//				sButInit.x = (SWORD)((sFormInit.width / 2) -
-//						( ((NumJustifyButs * GetImageWidth(IntImages,OrderButtons[OrdIndex].ButImageID[0])) +
-//						((NumJustifyButs-1) * ORDER_BUTGAP ) ) / 2 ));
 				sButInit.x = ((SWORD)((sFormInit.width ) -
 						( ((NumJustifyButs * GetImageWidth(IntImages,OrderButtons[OrdIndex].ButImageID[0])) +
 						((NumJustifyButs-1) * ORDER_BUTGAP ) ))))/2;

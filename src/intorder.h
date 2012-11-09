@@ -29,7 +29,6 @@
 
 extern bool OrderUp;
 
-bool intUpdateOrder(DROID *psDroid);	// update already open order form
 bool intAddOrder(BASE_OBJECT *psObj);			// create and open order form
 void intRunOrder(void);					
 void intProcessOrder(UDWORD id);

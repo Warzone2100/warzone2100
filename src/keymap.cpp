@@ -480,36 +480,6 @@ void	keyInitMappings( bool bForceDefaults )
 	keyAddMapping(KEYMAP__DEBUG, KEY_LCTRL,  KEY_L, KEYMAP_PRESSED, kf_TraceObject,       N_("Trace a game object"));
 	keyAddMapping(KEYMAP__DEBUG, KEY_LSHIFT, KEY_D, KEYMAP_PRESSED, kf_ToggleDrivingMode, N_("Toggle Driving Mode"));
 	saveKeyMap();	// save out the default key mappings.
-
-//  ------------------------ OLD STUFF - Store here!
-	/*
-	keyAddMapping(KEYMAP__DEBUG, KEY_LSHIFT, KEY_D, KEYMAP_PRESSED, kf_ToggleDrivingMode, 			"Toggle Driving Mode");
-	keyAddMapping(KEYMAP__DEBUG, KEY_IGNORE, KEY_E, KEYMAP_PRESSED, kf_ToggleDroidInfo,"Display droid info whilst tracking");
-	keyAddMapping(KEYMAP__DEBUG, KEY_IGNORE, KEY_I, KEYMAP_PRESSED, kf_ToggleWidgets,"Toggle Widgets");
-	keyAddMapping(KEYMAP__DEBUG, KEY_IGNORE, KEY_J, KEYMAP_PRESSED, kf_ToggleRadarAllign,"Toggles Radar allignment");
-	keyAddMapping(KEYMAP__DEBUG, KEY_IGNORE, KEY_R, KEYMAP_PRESSED, kf_ShowNumObjects,"Show number of Objects");
-	keyAddMapping(KEYMAP_ALWAYS, KEY_IGNORE, KEY_T, KEYMAP_PRESSED, kf_SendTextMessage,"Send Text Message");
-	keyAddMapping(KEYMAP_ALWAYS, KEY_IGNORE, KEY_U, KEYMAP_PRESSED, kf_ToggleBackgroundFog,"Toggle Background Fog");
-	keyAddMapping(KEYMAP__DEBUG, KEY_IGNORE, KEY_V, KEYMAP_PRESSED, kf_BuildInfo,"Build date and time");
-	keyAddMapping(KEYMAP__DEBUG, KEY_IGNORE, KEY_Y, KEYMAP_PRESSED, kf_ToggleDemoMode,"Toggles on/off DEMO Mode");
-	keyAddMapping(KEYMAP__DEBUG, KEY_IGNORE, KEY_Z, KEYMAP_PRESSED, kf_ShowGridInfo,"DBPRINTF map grid coverage");
-
-	keyAddMapping(KEYMAP__DEBUG, KEY_IGNORE, KEY_SCROLLLOCK, KEYMAP_PRESSED, kf_TogglePauseMode,	_("Toggle Pause Mode"));		//not needed, done with KEY_ESC
-	keyAddMapping(KEYMAP__DEBUG, KEY_IGNORE, KEY_J, KEYMAP_PRESSED, kf_MaxScrollLimits,				"Maximum scroll limits");
-	keyAddMapping(KEYMAP__DEBUG, KEY_IGNORE, KEY_N, KEYMAP_PRESSED, kf_GiveTemplateSet,				"Give template set(s) to player 0 ");
-	keyAddMapping(KEYMAP__DEBUG, KEY_LCTRL, KEY_KP_MINUS, KEYMAP_PRESSED, kf_SystemClose,			"System Close (EXIT)");			//not working right now
-	keyAddMapping(KEYMAP__DEBUG, KEY_LCTRL, KEY_I, KEYMAP_PRESSED, kf_RecalcLighting,				"Recalculate lighting");
-
-	// This is not needed, use ctrl-o
-	keyAddMapping(KEYMAP__DEBUG, KEY_LALT, KEY_F1, KEYMAP_PRESSED, kf_SelectPlayer,					"Select player  0");
-	keyAddMapping(KEYMAP__DEBUG, KEY_LALT, KEY_F2, KEYMAP_PRESSED, kf_SelectPlayer,					"Select player  1");
-	keyAddMapping(KEYMAP__DEBUG, KEY_LALT, KEY_F3, KEYMAP_PRESSED, kf_SelectPlayer,					"Select player  2");
-	keyAddMapping(KEYMAP__DEBUG, KEY_LALT, KEY_F4, KEYMAP_PRESSED, kf_SelectPlayer,					"Select player  3");
-	keyAddMapping(KEYMAP__DEBUG, KEY_LALT, KEY_F5, KEYMAP_PRESSED, kf_SelectPlayer,					"Select player  4");
-	keyAddMapping(KEYMAP__DEBUG, KEY_LALT, KEY_F6, KEYMAP_PRESSED, kf_SelectPlayer,					"Select player  5");
-	keyAddMapping(KEYMAP__DEBUG, KEY_LALT, KEY_F7, KEYMAP_PRESSED, kf_SelectPlayer,					"Select player  6");
-	keyAddMapping(KEYMAP__DEBUG, KEY_LALT, KEY_F8, KEYMAP_PRESSED, kf_SelectPlayer,					"Select player  7");
-	*/
 }
 
 // ----------------------------------------------------------------------------------
