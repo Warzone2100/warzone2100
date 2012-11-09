@@ -1456,26 +1456,38 @@ bool loadSensorStats(const char *pSensorData, UDWORD bufferSize)
 }
 
 /*Load the ECM stats from the file exported from Access*/
-bool loadECMStats(const char *pECMData, UDWORD bufferSize)
+bool loadECMStats(const char *fileName)
 {
-	const unsigned int NumECM = numCR(pECMData, bufferSize);
+	// const unsigned int NumECM = numCR(pECMData, bufferSize);
 	ECM_STATS	sStats, * const psStats = &sStats;
-	unsigned int i = 0, designable;
+	// unsigned int i = 0, designable;
 	char		ECMName[MAX_STR_LENGTH], location[MAX_STR_LENGTH],
 				GfxFile[MAX_STR_LENGTH];
 	char		mountGfx[MAX_STR_LENGTH], dummy[MAX_STR_LENGTH];
-	UDWORD dummyVal;
+	//UDWORD dummyVal;
 
-	if (!statsAllocECM(NumECM))
+	WzConfig ini(pFileName);
+	if (ini.status() != QSettings::NoError)
+	{
+		debug(LOG_ERROR, "Could not open %s", pFileName);
+	}
+	if (!statsAllocECM(list.size()))
 	{
 		return false;
 	}
-
-	for (i=0; i < NumECM; i++)
+	// Hack to make sure ZNULLECM is always first in list
+	int nullecm = list.indexOf("ZNULLECM");
+	ASSERT_OR_RETURN(false, nullbrain >= 0, "ZNULLECM is mandatory");
+	if (nullecm > 0)
 	{
+		list.swap(nullecm, 0);
+	}
+	for (int i=0; i < list.size(); i++)
+	{
+		ini.beginGroup(list[i]);
 		memset(psStats, 0, sizeof(ECM_STATS));
 
-		ECMName[0] = '\0';
+		/* ECMName[0] = '\0';
 		GfxFile[0] = '\0';
 		mountGfx[0] = '\0';
 		location[0] = '\0';
@@ -1486,7 +1498,8 @@ bool loadECMStats(const char *pECMData, UDWORD bufferSize)
 			&psStats->weight, &dummyVal, &dummyVal,
 			&psStats->body, GfxFile, mountGfx, location, &psStats->power,
 			&psStats->range, &designable);
-
+*/
+		psStats->pName = strdup(list[i].toUtf8().constData());
 		if (!allocateStatName((BASE_STATS *)psStats, ECMName))
 		{
 			return false;

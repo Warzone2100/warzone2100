@@ -167,7 +167,7 @@ extern bool loadPropulsionStats(const char *pFileName);
 extern bool loadSensorStats(const char *pSensorData, UDWORD bufferSize);
 
 /*Load the ecm stats from the file exported from Access*/
-extern bool loadECMStats(const char *pECMData, UDWORD bufferSize);
+extern bool loadECMStats(const char *fileName);
 
 /*Load the repair stats from the file exported from Access*/
 extern bool loadRepairStats(const char *pRepairData, UDWORD bufferSize);

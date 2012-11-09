@@ -193,11 +193,11 @@ static bool bufferSCONSTRLoad(const char *pBuffer, UDWORD size, void **ppData)
 }
 
 /* Load the ECM stats */
-static bool bufferSECMLoad(const char *pBuffer, UDWORD size, void **ppData)
+static bool bufferSECMLoad(const char *fileName, void **ppData)
 {
 	calcDataHash((uint8_t *)pBuffer, size, DATA_SECM);
 
-	if (!loadECMStats(pBuffer, size)
+	if (!loadECMStats(fileName)
 	 || !allocComponentList(COMP_ECM, numECMStats))
 	{
 		return false;
