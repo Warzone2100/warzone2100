@@ -10,8 +10,13 @@ file		SWEAPON	"weapons.txt"
 file		SBODY	"body.ini"
 file		SBRAIN	"brain.ini"
 file		SPROP	"propulsion.ini"
+<<<<<<< HEAD
 file		SSENSOR	"sensor.txt"
 file		SECM	"ecm.ini"
+=======
+file		SSENSOR	"sensor.ini"
+file		SECM	"ecm.txt"
+>>>>>>> sensors
 file		SREPAIR	"repair.txt"
 file		SCONSTR	"construction.txt"
 file		SPROPTYPES	"propulsiontype.txt"
