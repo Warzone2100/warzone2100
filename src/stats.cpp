@@ -1337,7 +1337,7 @@ bool loadSensorStats(const char *pFileName)
 		list.swap(nullsensor, 0);
 	}
 
-	for (int i = 0; i < nullsensor; ++i)
+	for (int i = 0; i < list.size(); ++i)
 	{
 		ini.beginGroup(list[i]);
 		memset(psStats, 0, sizeof(SENSOR_STATS));
@@ -1354,10 +1354,6 @@ bool loadSensorStats(const char *pFileName)
 		psStats->time = ini.value("time").toInt();
 		psStats->power = ini.value("power").toInt();
 		psStats->designable = ini.value("designable").toBool();
-		debug(LOG_WARNING, "loading sensor %i", i);
-		debug(LOG_WARNING, "Name %s", psStats->pName);
-		debug(LOG_WARNING, "Pie >%s<", GfxFile);
-		debug(LOG_WARNING, "Location %s", location);
 
 		if (!allocateStatName((BASE_STATS *)psStats, psStats->pName))
 		{
@@ -1375,7 +1371,6 @@ bool loadSensorStats(const char *pFileName)
 		}
 		else
 		{
-			debug(LOG_ERROR, "Location >%s<", location);
 			ASSERT( false, "Invalid Sensor location" );
 		}
 		if (!strcmp(type, "STANDARD"))
