@@ -1404,7 +1404,7 @@ bool loadSensorStats(const char *pFileName)
 		//multiply time stats
 		psStats->time *= WEAPON_TIME;
 
-		if (strcoll(GfxFile, "0"))
+		if (strcmp(GfxFile, "0"))
 		{
 			psStats->pIMD = (iIMDShape *) resGetData("IMD", GfxFile);
 			if (psStats->pIMD == NULL)
@@ -1418,7 +1418,7 @@ bool loadSensorStats(const char *pFileName)
 		{
 			psStats->pIMD = NULL;
 		}
-		if (strcoll(mountGfx, "0"))
+		if (strcmp(mountGfx, "0"))
 		{
 			psStats->pMountGraphic = (iIMDShape *) resGetData("IMD", mountGfx);
 			if (psStats->pMountGraphic == NULL)
@@ -1432,8 +1432,6 @@ bool loadSensorStats(const char *pFileName)
 		{
 			psStats->pMountGraphic = NULL;
 		}
-		//set design flag
-		//psStats->designable = (designable != 0);
 
 		//get the IMD for the component
 
@@ -1453,14 +1451,12 @@ bool loadSensorStats(const char *pFileName)
 }
 
 /*Load the ECM stats from the file exported from Access*/
-bool loadECMStats(const char *fileName)
+bool loadECMStats(const char *pFileName)
 {
 	// const unsigned int NumECM = numCR(pECMData, bufferSize);
 	ECM_STATS	sStats, * const psStats = &sStats;
 	// unsigned int i = 0, designable;
-	char		ECMName[MAX_STR_LENGTH], location[MAX_STR_LENGTH],
-				GfxFile[MAX_STR_LENGTH];
-	char		mountGfx[MAX_STR_LENGTH], dummy[MAX_STR_LENGTH];
+	char	*ECMName, *location, *GfxFile, *mountGfx;
 	//UDWORD dummyVal;
 
 	WzConfig ini(pFileName);
@@ -1468,40 +1464,39 @@ bool loadECMStats(const char *fileName)
 	{
 		debug(LOG_ERROR, "Could not open %s", pFileName);
 	}
+	QStringList list = ini.childGroups();
 	if (!statsAllocECM(list.size()))
 	{
 		return false;
 	}
 	// Hack to make sure ZNULLECM is always first in list
 	int nullecm = list.indexOf("ZNULLECM");
-	ASSERT_OR_RETURN(false, nullbrain >= 0, "ZNULLECM is mandatory");
+	ASSERT_OR_RETURN(false, nullecm >= 0, "ZNULLECM is mandatory");
 	if (nullecm > 0)
 	{
 		list.swap(nullecm, 0);
 	}
-	for (int i=0; i < list.size(); i++)
+	for (int i=0; i < list.size(); ++i)
 	{
 		ini.beginGroup(list[i]);
 		memset(psStats, 0, sizeof(ECM_STATS));
 
-		/* ECMName[0] = '\0';
-		GfxFile[0] = '\0';
-		mountGfx[0] = '\0';
-		location[0] = '\0';
-		//read the data into the storage - the data is delimeted using comma's
-		sscanf(pECMData,"%255[^,'\r\n],%255[^,'\r\n],%d,%d,%d,%d,%d,%d,%255[^,'\r\n],%255[^,'\r\n],\
-			%255[^,'\r\n],%d,%d,%d",
-			ECMName, dummy, &psStats->buildPower,&psStats->buildPoints,
-			&psStats->weight, &dummyVal, &dummyVal,
-			&psStats->body, GfxFile, mountGfx, location, &psStats->power,
-			&psStats->range, &designable);
-*/
-		psStats->pName = strdup(list[i].toUtf8().constData());
+		ECMName = strdup(list[i].toUtf8().constData());
+		psStats->buildPower = ini.value("buildPower", 0).toInt();
+		psStats->buildPoints = ini.value("buildPoints", 0).toInt();
+		psStats->weight = ini.value("weight", 0).toInt();
+		psStats->body = ini.value("bodyPoints", 0).toInt();
+		psStats->range = ini.value("range").toInt();
+		GfxFile = strdup(ini.value("sensorModel").toString().toUtf8().constData());
+		mountGfx = strdup(ini.value("mountModel").toString().toUtf8().constData());
+		location = strdup(ini.value("location").toString().toUtf8().constData());
+		psStats->power = ini.value("power").toInt();
+		psStats->designable = ini.value("designable").toBool();
+
 		if (!allocateStatName((BASE_STATS *)psStats, ECMName))
 		{
 			return false;
 		}
-
 		psStats->ref = REF_ECM_START + i;
 
 		if (!strcmp(location,"DEFAULT"))
@@ -1516,9 +1511,6 @@ bool loadECMStats(const char *fileName)
 		{
 			ASSERT( false, "Invalid ECM location" );
 		}
-
-		//set design flag
-		psStats->designable = (designable != 0);
 
 		//get the IMD for the component
 		if (strcmp(GfxFile, "0"))
@@ -1548,10 +1540,10 @@ bool loadECMStats(const char *fileName)
 		}
 		else
 		{
-			//set to NULL
 			psStats->pMountGraphic = NULL;
 		}
 
+		ini.endGroup();
 		//save the stats
 		statsSetECM(psStats, i);
 
@@ -1561,11 +1553,7 @@ bool loadECMStats(const char *fileName)
 			setMaxECMRange(psStats->range);
 			setMaxComponentWeight(psStats->weight);
 		}
-
-		//increment the pointer to the start of the next record
-		pECMData = strchr(pECMData,'\n') + 1;
 	}
-
 	return true;
 }
 

@@ -195,8 +195,6 @@ static bool bufferSCONSTRLoad(const char *pBuffer, UDWORD size, void **ppData)
 /* Load the ECM stats */
 static bool bufferSECMLoad(const char *fileName, void **ppData)
 {
-	calcDataHash((uint8_t *)pBuffer, size, DATA_SECM);
-
 	if (!loadECMStats(fileName)
 	 || !allocComponentList(COMP_ECM, numECMStats))
 	{
@@ -1070,7 +1068,6 @@ struct RES_TYPE_MIN_BUF
 static const RES_TYPE_MIN_BUF BufferResourceTypes[] =
 {
 	{"SWEAPON", bufferSWEAPONLoad, NULL},
-	{"SECM", bufferSECMLoad, NULL},
 	{"SREPAIR", bufferSREPAIRLoad, NULL},
 	{"SCONSTR", bufferSCONSTRLoad, NULL},
 	{"SPROPTYPES", bufferSPROPTYPESLoad, NULL},
@@ -1111,6 +1108,7 @@ static const RES_TYPE_MIN_FILE FileResourceTypes[] =
 	{"WAV", dataAudioLoad, (RES_FREE)sound_ReleaseTrack},
 	{"SBRAIN", bufferSBRAINLoad, dataReleaseStats},
 	{"SSENSOR", bufferSSENSORLoad, dataReleaseStats},
+	{"SECM", bufferSECMLoad, dataReleaseStats},
 	{"SPROP", bufferSPROPLoad, dataReleaseStats},
 	{"SBODY", bufferSBODYLoad, dataReleaseStats},
 	{"AUDIOCFG", dataAudioCfgLoad, NULL},
