@@ -177,11 +177,9 @@ static bool bufferSWEAPONLoad(const char *pBuffer, UDWORD size, void **ppData)
 }
 
 /* Load the constructor stats */
-static bool bufferSCONSTRLoad(const char *pBuffer, UDWORD size, void **ppData)
+static bool bufferSCONSTRLoad(const char *fileName, void **ppData)
 {
-	calcDataHash((uint8_t *)pBuffer, size, DATA_SCONSTR);
-
-	if (!loadConstructStats(pBuffer, size)
+	if (!loadConstructStats(fileName)
 	 || !allocComponentList(COMP_CONSTRUCT, numConstructStats))
 	{
 		return false;
@@ -1065,7 +1063,6 @@ struct RES_TYPE_MIN_BUF
 static const RES_TYPE_MIN_BUF BufferResourceTypes[] =
 {
 	{"SWEAPON", bufferSWEAPONLoad, NULL},
-	{"SCONSTR", bufferSCONSTRLoad, NULL},
 	{"SPROPTYPES", bufferSPROPTYPESLoad, NULL},
 	{"SPROPSND", bufferSPROPSNDLoad, NULL},
 	{"STERRTABLE", bufferSTERRTABLELoad, NULL},
@@ -1106,6 +1103,7 @@ static const RES_TYPE_MIN_FILE FileResourceTypes[] =
 	{"SSENSOR", bufferSSENSORLoad, dataReleaseStats},
 	{"SECM", bufferSECMLoad, dataReleaseStats},
 	{"SREPAIR", bufferSREPAIRLoad, dataReleaseStats},
+	{"SCONSTR", bufferSCONSTRLoad, dataReleaseStats},
 	{"SPROP", bufferSPROPLoad, dataReleaseStats},
 	{"SBODY", bufferSBODYLoad, dataReleaseStats},
 	{"AUDIOCFG", dataAudioCfgLoad, NULL},

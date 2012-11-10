@@ -1560,15 +1560,7 @@ bool loadECMStats(const char *pFileName)
 /*Load the Repair stats from the file exported from Access*/
 bool loadRepairStats(const char *pFileName)
 {
-	//const unsigned int NumRepair = numCR(pRepairData, bufferSize);
 	REPAIR_STATS sStats, * const psStats = &sStats;
-	/* unsigned int i = 0, designable, repairArmour;
-	char			RepairName[MAX_STR_LENGTH], dummy[MAX_STR_LENGTH],
-					GfxFile[MAX_STR_LENGTH],	mountGfx[MAX_STR_LENGTH],
-					location[MAX_STR_LENGTH];
-	UDWORD dummyVal;
-*/
-	unsigned int repairArmour;
 	char *RepairName, *location, *GfxFile, *mountGfx;
 
 	WzConfig ini(pFileName);
@@ -1587,19 +1579,6 @@ bool loadRepairStats(const char *pFileName)
 		ini.beginGroup(list[i]);
 		memset(psStats, 0, sizeof(REPAIR_STATS));
 
-		/* RepairName[0] = '\0';
-		GfxFile[0] = '\0';
-		mountGfx[0] = '\0';
-		location[0] = '\0';
-
-	//read the data into the storage - the data is delimeted using comma's
-		sscanf(pRepairData,"%255[^,'\r\n],%255[^,'\r\n],%d,%d,%d,%d,%d,%d,%255[^,'\r\n],\
-			%255[^,'\r\n],%255[^,'\r\n],%d,%d,%d",
-			RepairName, dummy, &psStats->buildPower,&psStats->buildPoints,
-			&psStats->weight, &dummyVal, &dummyVal,
-			&repairArmour, location, GfxFile, mountGfx,
-			&psStats->repairPoints, &psStats->time,&designable);
-*/
 		RepairName = strdup(list[i].toUtf8().constData());
 		psStats->buildPower = ini.value("buildPower", 0).toInt();
 		psStats->buildPoints = ini.value("buildPoints", 0).toInt();
@@ -1645,11 +1624,6 @@ bool loadRepairStats(const char *pFileName)
 			psStats->time = 1;
 		}
 
-		// psStats->repairArmour = (repairArmour != 0);
-
-		//set design flag
-		// psStats->designable = (designable != 0);
-
 		//get the IMD for the component
 		if (strcmp(GfxFile, "0"))
 		{
@@ -1693,34 +1667,35 @@ bool loadRepairStats(const char *pFileName)
 			setMaxComponentWeight(psStats->weight);
 		}
 
-		//increment the pointer to the start of the next record
-		//pRepairData = strchr(pRepairData,'\n') + 1;
 	}
-//	free(pData);
-//	free(psStats);
 	return true;
 }
 
 /*Load the Construct stats from the file exported from Access*/
-bool loadConstructStats(const char *pConstructData, UDWORD bufferSize)
+bool loadConstructStats(const char *pFileName)
 {
-	const unsigned int NumConstruct = numCR(pConstructData, bufferSize);
+	//const unsigned int NumConstruct = numCR(pConstructData, bufferSize);
 	CONSTRUCT_STATS sStats, * const psStats = &sStats;
-	unsigned int i = 0, designable;
-	char			ConstructName[MAX_STR_LENGTH], GfxFile[MAX_STR_LENGTH];
-	char			mountGfx[MAX_STR_LENGTH], dummy[MAX_STR_LENGTH];
-	UDWORD dummyVal;
+	//unsigned int i = 0, designable;
+	char	*ConstructName, *GfxFile, *mountGfx;
 
-	if (!statsAllocConstruct(NumConstruct))
+	WzConfig ini(pFileName);
+	if (ini.status() != QSettings::NoError)
+	{
+		debug(LOG_ERROR, "Could not open %s", pFileName);
+	}
+	QStringList list = ini.childGroups();
+	if (!statsAllocConstruct(list.size()))
 	{
 		return false;
 	}
 
-	for (i=0; i < NumConstruct; i++)
+	for (int i=0; i < list.size(); ++i)
 	{
+		ini.beginGroup(list[i]);
 		memset(psStats, 0, sizeof(CONSTRUCT_STATS));
 
-		ConstructName[0] = '\0';
+/*		ConstructName[0] = '\0';
 		GfxFile[0] = '\0';
 		mountGfx[0] = '\0';
 		//read the data into the storage - the data is delimeted using comma's
@@ -1730,6 +1705,16 @@ bool loadConstructStats(const char *pConstructData, UDWORD bufferSize)
 			&psStats->weight, &dummyVal, &dummyVal,
 			&psStats->body, GfxFile, mountGfx,
 			&psStats->constructPoints,&designable);
+*/
+		ConstructName = strdup(list[i].toUtf8().constData());
+		psStats->buildPower = ini.value("buildPower", 0).toInt();
+		psStats->buildPoints = ini.value("buildPoints", 0).toInt();
+		psStats->weight = ini.value("weight", 0).toInt();
+		psStats->body = ini.value("bodyPoints", 0).toInt();
+		GfxFile = strdup(ini.value("sensorModel").toString().toUtf8().constData());
+		mountGfx = strdup(ini.value("mountModel").toString().toUtf8().constData());
+		psStats->constructPoints = ini.value("constructPoints").toInt();
+		psStats->designable = ini.value("designable").toBool();
 
 		if (!allocateStatName((BASE_STATS *)psStats, ConstructName))
 		{
@@ -1737,16 +1722,6 @@ bool loadConstructStats(const char *pConstructData, UDWORD bufferSize)
 		}
 
 		psStats->ref = REF_CONSTRUCT_START + i;
-
-		//set design flag
-		if (designable)
-		{
-			psStats->designable = true;
-		}
-		else
-		{
-			psStats->designable = false;
-		}
 
 		//get the IMD for the component
 		if (strcmp(GfxFile, "0"))
@@ -1780,6 +1755,7 @@ bool loadConstructStats(const char *pConstructData, UDWORD bufferSize)
 			psStats->pMountGraphic = NULL;
 		}
 
+		ini.endGroup();
 		//save the stats
 		statsSetConstruct(psStats, i);
 
@@ -1789,11 +1765,7 @@ bool loadConstructStats(const char *pConstructData, UDWORD bufferSize)
 			setMaxConstPoints(psStats->constructPoints);
 			setMaxComponentWeight(psStats->weight);
 		}
-
-		//increment the pointer to the start of the next record
-		pConstructData = strchr(pConstructData,'\n') + 1;
 	}
-
 	return true;
 }
 

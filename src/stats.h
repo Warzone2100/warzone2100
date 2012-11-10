@@ -173,7 +173,7 @@ extern bool loadECMStats(const char *fileName);
 extern bool loadRepairStats(const char *pFileName);
 
 /*Load the construct stats from the file exported from Access*/
-extern bool loadConstructStats(const char *pConstructData, UDWORD bufferSize);
+extern bool loadConstructStats(const char *pFileName);
 
 /*Load the Propulsion Types from the file exported from Access*/
 extern bool loadPropulsionTypes(const char *pPropTypeData, UDWORD bufferSize);
