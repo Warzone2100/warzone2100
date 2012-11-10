@@ -1558,26 +1558,36 @@ bool loadECMStats(const char *pFileName)
 }
 
 /*Load the Repair stats from the file exported from Access*/
-bool loadRepairStats(const char *pRepairData, UDWORD bufferSize)
+bool loadRepairStats(const char *pFileName)
 {
-	const unsigned int NumRepair = numCR(pRepairData, bufferSize);
+	//const unsigned int NumRepair = numCR(pRepairData, bufferSize);
 	REPAIR_STATS sStats, * const psStats = &sStats;
-	unsigned int i = 0, designable, repairArmour;
+	/* unsigned int i = 0, designable, repairArmour;
 	char			RepairName[MAX_STR_LENGTH], dummy[MAX_STR_LENGTH],
 					GfxFile[MAX_STR_LENGTH],	mountGfx[MAX_STR_LENGTH],
 					location[MAX_STR_LENGTH];
 	UDWORD dummyVal;
+*/
+	unsigned int repairArmour;
+	char *RepairName, *location, *GfxFile, *mountGfx;
 
-	if (!statsAllocRepair(NumRepair))
+	WzConfig ini(pFileName);
+	if (ini.status() != QSettings::NoError)
+	{
+		debug(LOG_ERROR, "Could not open %s", pFileName);
+	}
+	QStringList list = ini.childGroups();
+	if (!statsAllocRepair(list.size()))
 	{
 		return false;
 	}
 
-	for (i=0; i < NumRepair; i++)
+	for (int i=0; i < list.size(); ++i)
 	{
+		ini.beginGroup(list[i]);
 		memset(psStats, 0, sizeof(REPAIR_STATS));
 
-		RepairName[0] = '\0';
+		/* RepairName[0] = '\0';
 		GfxFile[0] = '\0';
 		mountGfx[0] = '\0';
 		location[0] = '\0';
@@ -1589,6 +1599,18 @@ bool loadRepairStats(const char *pRepairData, UDWORD bufferSize)
 			&psStats->weight, &dummyVal, &dummyVal,
 			&repairArmour, location, GfxFile, mountGfx,
 			&psStats->repairPoints, &psStats->time,&designable);
+*/
+		RepairName = strdup(list[i].toUtf8().constData());
+		psStats->buildPower = ini.value("buildPower", 0).toInt();
+		psStats->buildPoints = ini.value("buildPoints", 0).toInt();
+		psStats->weight = ini.value("weight", 0).toInt();
+		psStats->repairArmour = ini.value("repairArmour").toBool();
+		GfxFile = strdup(ini.value("sensorModel").toString().toUtf8().constData());
+		mountGfx = strdup(ini.value("mountModel").toString().toUtf8().constData());
+		location = strdup(ini.value("location").toString().toUtf8().constData());
+		psStats->repairPoints = ini.value("repairPoints").toInt();
+		psStats->time = ini.value("time", 0).toInt();
+		psStats->designable = ini.value("designable").toBool();
 
 		if (!allocateStatName((BASE_STATS *)psStats, RepairName))
 		{
@@ -1623,10 +1645,10 @@ bool loadRepairStats(const char *pRepairData, UDWORD bufferSize)
 			psStats->time = 1;
 		}
 
-		psStats->repairArmour = (repairArmour != 0);
+		// psStats->repairArmour = (repairArmour != 0);
 
 		//set design flag
-		psStats->designable = (designable != 0);
+		// psStats->designable = (designable != 0);
 
 		//get the IMD for the component
 		if (strcmp(GfxFile, "0"))
@@ -1660,18 +1682,19 @@ bool loadRepairStats(const char *pRepairData, UDWORD bufferSize)
 			psStats->pMountGraphic = NULL;
 		}
 
+		ini.endGroup();
 		//save the stats
 		statsSetRepair(psStats, i);
 
-        //set the max stat values for the design screen
-        if (psStats->designable)
-        {
-            setMaxRepairPoints(psStats->repairPoints);
-            setMaxComponentWeight(psStats->weight);
-        }
+		//set the max stat values for the design screen
+		if (psStats->designable)
+		{
+			setMaxRepairPoints(psStats->repairPoints);
+			setMaxComponentWeight(psStats->weight);
+		}
 
 		//increment the pointer to the start of the next record
-		pRepairData = strchr(pRepairData,'\n') + 1;
+		//pRepairData = strchr(pRepairData,'\n') + 1;
 	}
 //	free(pData);
 //	free(psStats);

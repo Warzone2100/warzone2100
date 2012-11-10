@@ -233,12 +233,9 @@ static bool bufferSSENSORLoad(const char *fileName, void **ppData)
 }
 
 /* Load the Repair stats */
-static bool bufferSREPAIRLoad(const char *pBuffer, UDWORD size, void **ppData)
+static bool bufferSREPAIRLoad(const char *fileName, void **ppData)
 {
-	calcDataHash((uint8_t *)pBuffer, size, DATA_SREPAIR);
-
-	if (!loadRepairStats(pBuffer, size)
-	 || !allocComponentList(COMP_REPAIRUNIT, numRepairStats))
+	if (!loadRepairStats(fileName) || !allocComponentList(COMP_REPAIRUNIT, numRepairStats))
 	{
 		return false;
 	}
@@ -1068,7 +1065,6 @@ struct RES_TYPE_MIN_BUF
 static const RES_TYPE_MIN_BUF BufferResourceTypes[] =
 {
 	{"SWEAPON", bufferSWEAPONLoad, NULL},
-	{"SREPAIR", bufferSREPAIRLoad, NULL},
 	{"SCONSTR", bufferSCONSTRLoad, NULL},
 	{"SPROPTYPES", bufferSPROPTYPESLoad, NULL},
 	{"SPROPSND", bufferSPROPSNDLoad, NULL},
@@ -1109,6 +1105,7 @@ static const RES_TYPE_MIN_FILE FileResourceTypes[] =
 	{"SBRAIN", bufferSBRAINLoad, dataReleaseStats},
 	{"SSENSOR", bufferSSENSORLoad, dataReleaseStats},
 	{"SECM", bufferSECMLoad, dataReleaseStats},
+	{"SREPAIR", bufferSREPAIRLoad, dataReleaseStats},
 	{"SPROP", bufferSPROPLoad, dataReleaseStats},
 	{"SBODY", bufferSBODYLoad, dataReleaseStats},
 	{"AUDIOCFG", dataAudioCfgLoad, NULL},

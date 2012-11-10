@@ -170,7 +170,7 @@ extern bool loadSensorStats(const char *pFileName);
 extern bool loadECMStats(const char *fileName);
 
 /*Load the repair stats from the file exported from Access*/
-extern bool loadRepairStats(const char *pRepairData, UDWORD bufferSize);
+extern bool loadRepairStats(const char *pFileName);
 
 /*Load the construct stats from the file exported from Access*/
 extern bool loadConstructStats(const char *pConstructData, UDWORD bufferSize);
