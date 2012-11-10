@@ -62,6 +62,9 @@
 
 #define TOO_CLOSE_PENALTY_F             20
 
+#define TARGET_DOOMED_PENALTY_F		10	// Targets that have a lot of damage incoming are less attractive
+#define TARGET_DOOMED_SLOW_RELOAD_T	21	// Weapon ROF threshold for above penalty. per minute.
+
 //Some weights for the units attached to a commander
 #define	WEIGHT_CMD_RANK				(WEIGHT_DIST_TILE * 4)			//A single rank is as important as 4 tiles distance
 #define	WEIGHT_CMD_SAME_TARGET		WEIGHT_DIST_TILE				//Don't want this to be too high, since a commander can have many units assigned
@@ -208,7 +211,7 @@ static BASE_OBJECT *aiSearchSensorTargets(BASE_OBJECT *psObj, int weapon_slot, W
 			isCB = structCBSensor(psCStruct);
 			isRD = objRadarDetector((BASE_OBJECT *)psCStruct);
 		}
-		if (!psTemp || aiObjectIsProbablyDoomed(psTemp) || !validTarget(psObj, psTemp, 0) || aiCheckAlliances(psTemp->player, psObj->player))
+		if (!psTemp || psTemp->died || !validTarget(psObj, psTemp, 0) || aiCheckAlliances(psTemp->player, psObj->player))
 		{
 			continue;
 		}
@@ -257,7 +260,7 @@ static SDWORD targetAttackWeight(BASE_OBJECT *psTarget, BASE_OBJECT *psAttacker,
 	WEAPON_STATS	*attackerWeapon;
 	bool			bEmpWeap=false,bCmdAttached=false,bTargetingCmd=false;
 
-	if (psTarget == NULL || psAttacker == NULL || aiObjectIsProbablyDoomed(psTarget))
+	if (psTarget == NULL || psAttacker == NULL || psTarget->died)
 	{
 		return noTarget;
 	}
@@ -466,6 +469,18 @@ static SDWORD targetAttackWeight(BASE_OBJECT *psTarget, BASE_OBJECT *psAttacker,
 		attackWeight /= TOO_CLOSE_PENALTY_F;
 	}
 
+	/* Penalty for units that are already considered doomed (but the missile might miss!) */
+	if (aiObjectIsProbablyDoomed(psTarget))
+	{
+		/* indirect firing units have slow reload times, so give the target a chance to die,
+		 * and give a different unit a chance to get in range, too. */
+		if (weaponROF(attackerWeapon, psAttacker->player) < TARGET_DOOMED_SLOW_RELOAD_T) {
+			debug(LOG_NEVER,"Not killing unit - doomed. My ROF: %i (%s)", weaponROF(attackerWeapon, psAttacker->player), attackerWeapon->pName);
+			return noTarget;
+		}
+		attackWeight /= TARGET_DOOMED_PENALTY_F;
+	}
+
 	/* Commander-related criterias */
 	if(bCmdAttached)	//attached to a commander and don't have a target assigned by some order
 	{
@@ -558,7 +573,7 @@ int aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot, i
 
 					/* See if friendly droid has a target */
 					tempTarget = friendlyDroid->psActionTarget[0];
-					if(tempTarget && !aiObjectIsProbablyDoomed(tempTarget))
+					if(tempTarget && !tempTarget->died)
 					{
 						//make sure a weapon droid is targeting it
 						if(friendlyDroid->numWeaps > 0)
@@ -574,7 +589,7 @@ int aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot, i
 				else if(friendlyObj->type == OBJ_STRUCTURE)
 				{
 					tempTarget = ((STRUCTURE*)friendlyObj)->psTarget[0];
-					if (tempTarget && !aiObjectIsProbablyDoomed(tempTarget))
+					if (tempTarget && !tempTarget->died)
 					{
 						targetInQuestion = tempTarget;
 					}
@@ -845,7 +860,7 @@ bool aiChooseTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget, int weapon_slot
 
 			if (psCommander->action == DACTION_ATTACK
 			    && psCommander->psActionTarget[0] != NULL
-			    && !aiObjectIsProbablyDoomed(psCommander->psActionTarget[0]))
+			    && !psCommander->psActionTarget[0]->died)
 			{
 				// the commander has a target to fire on
 				if (aiStructHasRange((STRUCTURE *)psObj, psCommander->psActionTarget[0], weapon_slot))
@@ -885,7 +900,7 @@ bool aiChooseTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget, int weapon_slot
 			for (BASE_OBJECT *psCurr = gridIterate(); psCurr != NULL; psCurr = gridIterate())
 			{
 				/* Check that it is a valid target */
-				if (psCurr->type != OBJ_FEATURE && !aiObjectIsProbablyDoomed(psCurr)
+				if (psCurr->type != OBJ_FEATURE && !psCurr->died
 				    && !aiCheckAlliances(psCurr->player, psObj->player)
 				    && validTarget(psObj, psCurr, weapon_slot) && psCurr->visible[psObj->player] == UBYTE_MAX
 				    && aiStructHasRange((STRUCTURE *)psObj, psCurr, weapon_slot))
@@ -967,7 +982,7 @@ bool aiChooseSensorTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget)
 		while (psCurr != NULL)
 		{
 			// Don't target features or doomed/dead objects
-			if (psCurr->type != OBJ_FEATURE && !aiObjectIsProbablyDoomed(psCurr))
+			if (psCurr->type != OBJ_FEATURE && !psCurr->died)
 			{
 				if (!aiCheckAlliances(psCurr->player,psObj->player) && !aiObjIsWall(psCurr))
 				{
@@ -1077,7 +1092,7 @@ void aiUpdateDroid(DROID *psDroid)
 		updateTarget = true;
 	}
 	if ((orderState(psDroid, DORDER_OBSERVE) || orderState(psDroid, DORDER_ATTACKTARGET)) &&
-	    psDroid->order.psObj && aiObjectIsProbablyDoomed(psDroid->order.psObj))
+	    psDroid->order.psObj && psDroid->order.psObj->died)
 	{
 		lookForTarget = true;
 		updateTarget = false;
