@@ -1453,11 +1453,8 @@ bool loadSensorStats(const char *pFileName)
 /*Load the ECM stats from the file exported from Access*/
 bool loadECMStats(const char *pFileName)
 {
-	// const unsigned int NumECM = numCR(pECMData, bufferSize);
 	ECM_STATS	sStats, * const psStats = &sStats;
-	// unsigned int i = 0, designable;
 	char	*ECMName, *location, *GfxFile, *mountGfx;
-	//UDWORD dummyVal;
 
 	WzConfig ini(pFileName);
 	if (ini.status() != QSettings::NoError)
@@ -1674,9 +1671,7 @@ bool loadRepairStats(const char *pFileName)
 /*Load the Construct stats from the file exported from Access*/
 bool loadConstructStats(const char *pFileName)
 {
-	//const unsigned int NumConstruct = numCR(pConstructData, bufferSize);
 	CONSTRUCT_STATS sStats, * const psStats = &sStats;
-	//unsigned int i = 0, designable;
 	char	*ConstructName, *GfxFile, *mountGfx;
 
 	WzConfig ini(pFileName);
@@ -1695,17 +1690,6 @@ bool loadConstructStats(const char *pFileName)
 		ini.beginGroup(list[i]);
 		memset(psStats, 0, sizeof(CONSTRUCT_STATS));
 
-/*		ConstructName[0] = '\0';
-		GfxFile[0] = '\0';
-		mountGfx[0] = '\0';
-		//read the data into the storage - the data is delimeted using comma's
-		sscanf(pConstructData,"%255[^,'\r\n],%255[^,'\r\n],%d,%d,%d,%d,%d,%d,%255[^,'\r\n],\
-			%255[^,'\r\n],%d,%d",
-			ConstructName, dummy, &psStats->buildPower,&psStats->buildPoints,
-			&psStats->weight, &dummyVal, &dummyVal,
-			&psStats->body, GfxFile, mountGfx,
-			&psStats->constructPoints,&designable);
-*/
 		ConstructName = strdup(list[i].toUtf8().constData());
 		psStats->buildPower = ini.value("buildPower", 0).toInt();
 		psStats->buildPoints = ini.value("buildPoints", 0).toInt();
