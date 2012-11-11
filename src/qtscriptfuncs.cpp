@@ -834,7 +834,7 @@ static QScriptValue js_pursueResearch(QScriptContext *context, QScriptEngine *en
 		}
 		RESEARCH *prev = cur;
 		cur = NULL;
-		if (prev->pPRList.size())
+		if (!prev->pPRList.empty())
 		{
 			cur = &asResearch[prev->pPRList[0]]; // get first pre-req
 		}
@@ -843,7 +843,7 @@ static QScriptValue js_pursueResearch(QScriptContext *context, QScriptEngine *en
 			// push any other pre-reqs on the stack
 			reslist += &asResearch[prev->pPRList[i]];
 		}
-		if (!cur && reslist.size())
+		if (!cur && !reslist.empty())
 		{
 			cur = reslist.takeFirst(); // retrieve options from the stack
 		}
