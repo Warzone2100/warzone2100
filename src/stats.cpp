@@ -1314,53 +1314,54 @@ bool loadPropulsionStats(const char *pFileName)
 }
 
 /*Load the Sensor stats from the file exported from Access*/
-bool loadSensorStats(const char *pSensorData, UDWORD bufferSize)
+bool loadSensorStats(const char *pFileName)
 {
-	unsigned int NumSensor = numCR(pSensorData, bufferSize);
 	SENSOR_STATS sStats, * const psStats = &sStats;
-	unsigned int i = 0, designable;
-	char			SensorName[MAX_STR_LENGTH], location[MAX_STR_LENGTH],
-					GfxFile[MAX_STR_LENGTH],type[MAX_STR_LENGTH];
-	char			mountGfx[MAX_STR_LENGTH], dummy[MAX_STR_LENGTH];
-	UDWORD dummyVal;
+	char *GfxFile, *mountGfx, *location, *type;
 
-	// Skip descriptive header
-	if (strncmp(pSensorData,"Sensor ",7)==0)
+	WzConfig ini(pFileName);
+	if (ini.status() != QSettings::NoError)
 	{
-		pSensorData = strchr(pSensorData,'\n') + 1;
-		NumSensor--;
+		debug(LOG_ERROR, "Could not open %s", pFileName);
 	}
-	
-	if (!statsAllocSensor(NumSensor))
+	QStringList list = ini.childGroups();
+	if (!statsAllocSensor(list.size()))
 	{
 		return false;
 	}
-
-	for (i = 0; i < NumSensor; i++)
+	// Hack to make sure ZNULLBRAIN is always first in list
+	int nullsensor = list.indexOf("ZNULLSENSOR");
+	ASSERT_OR_RETURN(false, nullsensor >= 0, "ZNULLSENSOR is mandatory");
+	if (nullsensor > 0)
 	{
+		list.swap(nullsensor, 0);
+	}
+
+	for (int i = 0; i < list.size(); ++i)
+	{
+		ini.beginGroup(list[i]);
 		memset(psStats, 0, sizeof(SENSOR_STATS));
+		psStats->pName = strdup(list[i].toUtf8().constData());
+		psStats->buildPower = ini.value("buildPower", 0).toInt();
+		psStats->buildPoints = ini.value("buildPoints", 0).toInt();
+		psStats->weight = ini.value("weight", 0).toInt();
+		psStats->body = ini.value("bodyPoints", 0).toInt();
+		psStats->range = ini.value("range").toInt();
+		GfxFile = strdup(ini.value("sensorModel").toString().toUtf8().constData());
+		mountGfx = strdup(ini.value("mountModel").toString().toUtf8().constData());
+		location = strdup(ini.value("location").toString().toUtf8().constData());
+		type = strdup(ini.value("type").toString().toUtf8().constData());
+		psStats->time = ini.value("time").toInt();
+		psStats->power = ini.value("power").toInt();
+		psStats->designable = ini.value("designable").toBool();
 
-		SensorName[0] = '\0';
-		GfxFile[0] = '\0';
-		mountGfx[0] = '\0';
-		location[0] = '\0';
-		type[0] = '\0';
-		//read the data into the storage - the data is delimeted using comma's
-		sscanf(pSensorData,"%255[^,'\r\n],%255[^,'\r\n],%d,%d,%d,%d,%d,%d,%255[^,'\r\n],\
-			%255[^,'\r\n],%d,%255[^,'\r\n],%255[^,'\r\n],%d,%d,%d",
-			SensorName, dummy, &psStats->buildPower,&psStats->buildPoints,
-			&psStats->weight, &dummyVal, &dummyVal,
-			&psStats->body, GfxFile, mountGfx,
-			&psStats->range, location, type, &psStats->time, &psStats->power, &designable);
-
-		if (!allocateStatName((BASE_STATS *)psStats, SensorName))
+		if (!allocateStatName((BASE_STATS *)psStats, psStats->pName))
 		{
 			return false;
 		}
-
 		psStats->ref = REF_SENSOR_START + i;
 
-		if (!strcmp(location,"DEFAULT"))
+		if (!strcmp(location, "DEFAULT"))
 		{
 			psStats->location = LOC_DEFAULT;
 		}
@@ -1372,8 +1373,7 @@ bool loadSensorStats(const char *pSensorData, UDWORD bufferSize)
 		{
 			ASSERT( false, "Invalid Sensor location" );
 		}
-
-		if (!strcmp(type,"STANDARD"))
+		if (!strcmp(type, "STANDARD"))
 		{
 			psStats->type = STANDARD_SENSOR;
 		}
@@ -1401,14 +1401,9 @@ bool loadSensorStats(const char *pSensorData, UDWORD bufferSize)
 		{
 			ASSERT( false, "Invalid Sensor type" );
 		}
-
 		//multiply time stats
 		psStats->time *= WEAPON_TIME;
 
-		//set design flag
-		psStats->designable = (designable != 0);
-
-		//get the IMD for the component
 		if (strcmp(GfxFile, "0"))
 		{
 			psStats->pIMD = (iIMDShape *) resGetData("IMD", GfxFile);
@@ -1423,7 +1418,6 @@ bool loadSensorStats(const char *pSensorData, UDWORD bufferSize)
 		{
 			psStats->pIMD = NULL;
 		}
-
 		if (strcmp(mountGfx, "0"))
 		{
 			psStats->pMountGraphic = (iIMDShape *) resGetData("IMD", mountGfx);
@@ -1439,59 +1433,67 @@ bool loadSensorStats(const char *pSensorData, UDWORD bufferSize)
 			psStats->pMountGraphic = NULL;
 		}
 
+		//get the IMD for the component
+
+		ini.endGroup();
 		//save the stats
 		statsSetSensor(psStats, i);
 
- 		// set the max stat values for the design screen
+		// set the max stat values for the design screen
 		if (psStats->designable)
 		{
 			setMaxSensorRange(psStats->range);
 			setMaxComponentWeight(psStats->weight);
 		}
 
-		//increment the pointer to the start of the next record
-		pSensorData = strchr(pSensorData,'\n') + 1;
 	}
 	return true;
 }
 
 /*Load the ECM stats from the file exported from Access*/
-bool loadECMStats(const char *pECMData, UDWORD bufferSize)
+bool loadECMStats(const char *pFileName)
 {
-	const unsigned int NumECM = numCR(pECMData, bufferSize);
 	ECM_STATS	sStats, * const psStats = &sStats;
-	unsigned int i = 0, designable;
-	char		ECMName[MAX_STR_LENGTH], location[MAX_STR_LENGTH],
-				GfxFile[MAX_STR_LENGTH];
-	char		mountGfx[MAX_STR_LENGTH], dummy[MAX_STR_LENGTH];
-	UDWORD dummyVal;
+	char	*ECMName, *location, *GfxFile, *mountGfx;
 
-	if (!statsAllocECM(NumECM))
+	WzConfig ini(pFileName);
+	if (ini.status() != QSettings::NoError)
+	{
+		debug(LOG_ERROR, "Could not open %s", pFileName);
+	}
+	QStringList list = ini.childGroups();
+	if (!statsAllocECM(list.size()))
 	{
 		return false;
 	}
-
-	for (i=0; i < NumECM; i++)
+	// Hack to make sure ZNULLECM is always first in list
+	int nullecm = list.indexOf("ZNULLECM");
+	ASSERT_OR_RETURN(false, nullecm >= 0, "ZNULLECM is mandatory");
+	if (nullecm > 0)
 	{
+		list.swap(nullecm, 0);
+	}
+	for (int i=0; i < list.size(); ++i)
+	{
+		ini.beginGroup(list[i]);
 		memset(psStats, 0, sizeof(ECM_STATS));
 
-		ECMName[0] = '\0';
-		GfxFile[0] = '\0';
-		mountGfx[0] = '\0';
-		location[0] = '\0';
-		//read the data into the storage - the data is delimeted using comma's
-		sscanf(pECMData,"%255[^,'\r\n],%255[^,'\r\n],%d,%d,%d,%d,%d,%d,%255[^,'\r\n],%255[^,'\r\n],\
-			%255[^,'\r\n],%d,%d,%d",
-			ECMName, dummy, &psStats->buildPower,&psStats->buildPoints,
-			&psStats->weight, &dummyVal, &dummyVal,
-			&psStats->body, GfxFile, mountGfx, location, &psStats->power,
-			&psStats->range, &designable);
+		ECMName = strdup(list[i].toUtf8().constData());
+		psStats->buildPower = ini.value("buildPower", 0).toInt();
+		psStats->buildPoints = ini.value("buildPoints", 0).toInt();
+		psStats->weight = ini.value("weight", 0).toInt();
+		psStats->body = ini.value("bodyPoints", 0).toInt();
+		psStats->range = ini.value("range").toInt();
+		GfxFile = strdup(ini.value("sensorModel").toString().toUtf8().constData());
+		mountGfx = strdup(ini.value("mountModel").toString().toUtf8().constData());
+		location = strdup(ini.value("location").toString().toUtf8().constData());
+		psStats->power = ini.value("power").toInt();
+		psStats->designable = ini.value("designable").toBool();
 
 		if (!allocateStatName((BASE_STATS *)psStats, ECMName))
 		{
 			return false;
 		}
-
 		psStats->ref = REF_ECM_START + i;
 
 		if (!strcmp(location,"DEFAULT"))
@@ -1506,9 +1508,6 @@ bool loadECMStats(const char *pECMData, UDWORD bufferSize)
 		{
 			ASSERT( false, "Invalid ECM location" );
 		}
-
-		//set design flag
-		psStats->designable = (designable != 0);
 
 		//get the IMD for the component
 		if (strcmp(GfxFile, "0"))
@@ -1538,10 +1537,10 @@ bool loadECMStats(const char *pECMData, UDWORD bufferSize)
 		}
 		else
 		{
-			//set to NULL
 			psStats->pMountGraphic = NULL;
 		}
 
+		ini.endGroup();
 		//save the stats
 		statsSetECM(psStats, i);
 
@@ -1551,46 +1550,43 @@ bool loadECMStats(const char *pECMData, UDWORD bufferSize)
 			setMaxECMRange(psStats->range);
 			setMaxComponentWeight(psStats->weight);
 		}
-
-		//increment the pointer to the start of the next record
-		pECMData = strchr(pECMData,'\n') + 1;
 	}
-
 	return true;
 }
 
 /*Load the Repair stats from the file exported from Access*/
-bool loadRepairStats(const char *pRepairData, UDWORD bufferSize)
+bool loadRepairStats(const char *pFileName)
 {
-	const unsigned int NumRepair = numCR(pRepairData, bufferSize);
 	REPAIR_STATS sStats, * const psStats = &sStats;
-	unsigned int i = 0, designable, repairArmour;
-	char			RepairName[MAX_STR_LENGTH], dummy[MAX_STR_LENGTH],
-					GfxFile[MAX_STR_LENGTH],	mountGfx[MAX_STR_LENGTH],
-					location[MAX_STR_LENGTH];
-	UDWORD dummyVal;
+	char *RepairName, *location, *GfxFile, *mountGfx;
 
-	if (!statsAllocRepair(NumRepair))
+	WzConfig ini(pFileName);
+	if (ini.status() != QSettings::NoError)
+	{
+		debug(LOG_ERROR, "Could not open %s", pFileName);
+	}
+	QStringList list = ini.childGroups();
+	if (!statsAllocRepair(list.size()))
 	{
 		return false;
 	}
 
-	for (i=0; i < NumRepair; i++)
+	for (int i=0; i < list.size(); ++i)
 	{
+		ini.beginGroup(list[i]);
 		memset(psStats, 0, sizeof(REPAIR_STATS));
 
-		RepairName[0] = '\0';
-		GfxFile[0] = '\0';
-		mountGfx[0] = '\0';
-		location[0] = '\0';
-
-	//read the data into the storage - the data is delimeted using comma's
-		sscanf(pRepairData,"%255[^,'\r\n],%255[^,'\r\n],%d,%d,%d,%d,%d,%d,%255[^,'\r\n],\
-			%255[^,'\r\n],%255[^,'\r\n],%d,%d,%d",
-			RepairName, dummy, &psStats->buildPower,&psStats->buildPoints,
-			&psStats->weight, &dummyVal, &dummyVal,
-			&repairArmour, location, GfxFile, mountGfx,
-			&psStats->repairPoints, &psStats->time,&designable);
+		RepairName = strdup(list[i].toUtf8().constData());
+		psStats->buildPower = ini.value("buildPower", 0).toInt();
+		psStats->buildPoints = ini.value("buildPoints", 0).toInt();
+		psStats->weight = ini.value("weight", 0).toInt();
+		psStats->repairArmour = ini.value("repairArmour").toBool();
+		GfxFile = strdup(ini.value("sensorModel").toString().toUtf8().constData());
+		mountGfx = strdup(ini.value("mountModel").toString().toUtf8().constData());
+		location = strdup(ini.value("location").toString().toUtf8().constData());
+		psStats->repairPoints = ini.value("repairPoints").toInt();
+		psStats->time = ini.value("time", 0).toInt();
+		psStats->designable = ini.value("designable").toBool();
 
 		if (!allocateStatName((BASE_STATS *)psStats, RepairName))
 		{
@@ -1625,11 +1621,6 @@ bool loadRepairStats(const char *pRepairData, UDWORD bufferSize)
 			psStats->time = 1;
 		}
 
-		psStats->repairArmour = (repairArmour != 0);
-
-		//set design flag
-		psStats->designable = (designable != 0);
-
 		//get the IMD for the component
 		if (strcmp(GfxFile, "0"))
 		{
@@ -1662,53 +1653,52 @@ bool loadRepairStats(const char *pRepairData, UDWORD bufferSize)
 			psStats->pMountGraphic = NULL;
 		}
 
+		ini.endGroup();
 		//save the stats
 		statsSetRepair(psStats, i);
 
-        //set the max stat values for the design screen
-        if (psStats->designable)
-        {
-            setMaxRepairPoints(psStats->repairPoints);
-            setMaxComponentWeight(psStats->weight);
-        }
+		//set the max stat values for the design screen
+		if (psStats->designable)
+		{
+			setMaxRepairPoints(psStats->repairPoints);
+			setMaxComponentWeight(psStats->weight);
+		}
 
-		//increment the pointer to the start of the next record
-		pRepairData = strchr(pRepairData,'\n') + 1;
 	}
-//	free(pData);
-//	free(psStats);
 	return true;
 }
 
 /*Load the Construct stats from the file exported from Access*/
-bool loadConstructStats(const char *pConstructData, UDWORD bufferSize)
+bool loadConstructStats(const char *pFileName)
 {
-	const unsigned int NumConstruct = numCR(pConstructData, bufferSize);
 	CONSTRUCT_STATS sStats, * const psStats = &sStats;
-	unsigned int i = 0, designable;
-	char			ConstructName[MAX_STR_LENGTH], GfxFile[MAX_STR_LENGTH];
-	char			mountGfx[MAX_STR_LENGTH], dummy[MAX_STR_LENGTH];
-	UDWORD dummyVal;
+	char	*ConstructName, *GfxFile, *mountGfx;
 
-	if (!statsAllocConstruct(NumConstruct))
+	WzConfig ini(pFileName);
+	if (ini.status() != QSettings::NoError)
+	{
+		debug(LOG_ERROR, "Could not open %s", pFileName);
+	}
+	QStringList list = ini.childGroups();
+	if (!statsAllocConstruct(list.size()))
 	{
 		return false;
 	}
 
-	for (i=0; i < NumConstruct; i++)
+	for (int i=0; i < list.size(); ++i)
 	{
+		ini.beginGroup(list[i]);
 		memset(psStats, 0, sizeof(CONSTRUCT_STATS));
 
-		ConstructName[0] = '\0';
-		GfxFile[0] = '\0';
-		mountGfx[0] = '\0';
-		//read the data into the storage - the data is delimeted using comma's
-		sscanf(pConstructData,"%255[^,'\r\n],%255[^,'\r\n],%d,%d,%d,%d,%d,%d,%255[^,'\r\n],\
-			%255[^,'\r\n],%d,%d",
-			ConstructName, dummy, &psStats->buildPower,&psStats->buildPoints,
-			&psStats->weight, &dummyVal, &dummyVal,
-			&psStats->body, GfxFile, mountGfx,
-			&psStats->constructPoints,&designable);
+		ConstructName = strdup(list[i].toUtf8().constData());
+		psStats->buildPower = ini.value("buildPower", 0).toInt();
+		psStats->buildPoints = ini.value("buildPoints", 0).toInt();
+		psStats->weight = ini.value("weight", 0).toInt();
+		psStats->body = ini.value("bodyPoints", 0).toInt();
+		GfxFile = strdup(ini.value("sensorModel").toString().toUtf8().constData());
+		mountGfx = strdup(ini.value("mountModel").toString().toUtf8().constData());
+		psStats->constructPoints = ini.value("constructPoints").toInt();
+		psStats->designable = ini.value("designable").toBool();
 
 		if (!allocateStatName((BASE_STATS *)psStats, ConstructName))
 		{
@@ -1716,16 +1706,6 @@ bool loadConstructStats(const char *pConstructData, UDWORD bufferSize)
 		}
 
 		psStats->ref = REF_CONSTRUCT_START + i;
-
-		//set design flag
-		if (designable)
-		{
-			psStats->designable = true;
-		}
-		else
-		{
-			psStats->designable = false;
-		}
 
 		//get the IMD for the component
 		if (strcmp(GfxFile, "0"))
@@ -1759,6 +1739,7 @@ bool loadConstructStats(const char *pConstructData, UDWORD bufferSize)
 			psStats->pMountGraphic = NULL;
 		}
 
+		ini.endGroup();
 		//save the stats
 		statsSetConstruct(psStats, i);
 
@@ -1768,11 +1749,7 @@ bool loadConstructStats(const char *pConstructData, UDWORD bufferSize)
 			setMaxConstPoints(psStats->constructPoints);
 			setMaxComponentWeight(psStats->weight);
 		}
-
-		//increment the pointer to the start of the next record
-		pConstructData = strchr(pConstructData,'\n') + 1;
 	}
-
 	return true;
 }
 

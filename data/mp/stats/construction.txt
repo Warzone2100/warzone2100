@@ -1,3 +1,0 @@
-ZNULLCONSTRUCT,Level All,0,0,0,0,0,0,TRLCON.PIE,TRLCON.PIE,0,0
-Spade1Mk1,Level All,17,85,800,20,5,25,TRLCON.PIE,0,8,1
-CyborgSpade,Level All,10,65,150,20,5,35,cy_con.pie,cybody.pie,5,0

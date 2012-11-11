@@ -164,16 +164,16 @@ extern bool loadBrainStats(const char *pFileName);
 extern bool loadPropulsionStats(const char *pFileName);
 
 /*Load the sensor stats from the file exported from Access*/
-extern bool loadSensorStats(const char *pSensorData, UDWORD bufferSize);
+extern bool loadSensorStats(const char *pFileName);
 
 /*Load the ecm stats from the file exported from Access*/
-extern bool loadECMStats(const char *pECMData, UDWORD bufferSize);
+extern bool loadECMStats(const char *fileName);
 
 /*Load the repair stats from the file exported from Access*/
-extern bool loadRepairStats(const char *pRepairData, UDWORD bufferSize);
+extern bool loadRepairStats(const char *pFileName);
 
 /*Load the construct stats from the file exported from Access*/
-extern bool loadConstructStats(const char *pConstructData, UDWORD bufferSize);
+extern bool loadConstructStats(const char *pFileName);
 
 /*Load the Propulsion Types from the file exported from Access*/
 extern bool loadPropulsionTypes(const char *pPropTypeData, UDWORD bufferSize);
