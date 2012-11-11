@@ -31,6 +31,7 @@
 #include "keybind.h"
 #include "keymap.h"
 #include "multiplay.h"
+#include "qtscript.h"
 
 struct CHEAT_ENTRY
 {
@@ -174,9 +175,11 @@ void recvProcessDebugMappings(NETQUEUE queue)
 	{
 		addConsoleMessage(_("Debug mode now enabled!"), DEFAULT_JUSTIFY,  SYSTEM_MESSAGE);
 		Cheated = true;
+		triggerEventCheatMode(true);
 	}
 	else if (oldDebugMode && !newDebugMode)
 	{
 		addConsoleMessage(_("Debug mode now disabled!"), DEFAULT_JUSTIFY,  SYSTEM_MESSAGE);
+		triggerEventCheatMode(false);
 	}
 }

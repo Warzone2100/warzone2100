@@ -88,5 +88,6 @@ bool triggerEventSeen(BASE_OBJECT *psViewer, BASE_OBJECT *psSeen);
 bool triggerEventObjectTransfer(BASE_OBJECT *psObj, int from);
 bool triggerEventChat(int from, int to, const char *message);
 bool triggerEventPickup(FEATURE *psFeat, DROID *psDroid);
+bool triggerEventCheatMode(bool entered);
 
 #endif

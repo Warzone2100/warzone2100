@@ -630,6 +630,20 @@ bool triggerEvent(SCRIPT_TRIGGER_TYPE trigger)
 	return true;
 }
 
+//__ \subsection{eventCheatMode(entered)} Game entered or left cheat/debug mode.
+//__ The entered parameter is true if cheat mode entered, false otherwise.
+bool triggerEventCheatMode(bool entered)
+{
+	for (int i = 0; i < scripts.size(); ++i)
+	{
+		QScriptEngine *engine = scripts.at(i);
+		QScriptValueList args;
+		args += entered;
+		callFunction(engine, "eventCheatMode", args);
+	}
+	return true;
+}
+
 //__ \subsection{eventDroidIdle(droid)} A droid should be given new orders.
 bool triggerEventDroidIdle(DROID *psDroid)
 {
