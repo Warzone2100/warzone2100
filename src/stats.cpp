@@ -123,6 +123,21 @@ static void updateMaxConstStats(UWORD maxValue);
 
 static bool getWeaponEffect(const char* weaponEffect, WEAPON_EFFECT* effect);  // Kill this function, when rewriting stats.cpp.
 
+static void loadStatsIni(WzConfig &ini, const char *pFileName, QStringList &list, const char *nullEntry)
+{
+	if (ini.status() != QSettings::NoError)
+	{
+		debug(LOG_ERROR, "Could not open %s", pFileName);
+	}
+	list = ini.childGroups();
+	// Hack to make sure null entry is always first in list
+	int nullitem = list.indexOf(nullEntry);
+	ASSERT(nullitem >= 0, "%s is mandatory", nullEntry);
+	if (nullitem > 0)
+	{
+		list.swap(nullitem, 0);
+	}
+}
 
 BASE_STATS::BASE_STATS(unsigned ref, std::string const &str)
 	: ref(ref)
@@ -1023,19 +1038,9 @@ bool loadBodyStats(const char *pFileName)
 {
 	BODY_STATS sStats, * const psStats = &sStats;
 	WzConfig ini(pFileName);
-	if (ini.status() != QSettings::NoError)
-	{
-		debug(LOG_ERROR, "Could not open %s", pFileName);
-	}
-	QStringList list = ini.childGroups();
+	QStringList list;
+	loadStatsIni(ini, pFileName, list, "ZNULLBODY");
 	statsAllocBody(list.size());
-	// Hack to make sure ZNULLBODY is always first in list
-	int nullbody = list.indexOf("ZNULLBODY");
-	ASSERT_OR_RETURN(false, nullbody >= 0, "ZNULLBODY is mandatory");
-	if (nullbody > 0)
-	{
-		list.swap(nullbody, 0);
-	}
 	for (int i = 0; i < list.size(); ++i)
 	{
 		ini.beginGroup(list[i]);
@@ -1115,20 +1120,9 @@ bool loadBrainStats(const char *pFileName)
 	BRAIN_STATS sStats, * const psStats = &sStats;
 	char *weaponName;
 	WzConfig ini(pFileName);
-	if (ini.status() != QSettings::NoError)
-	{
-		debug(LOG_ERROR, "Could not open %s", pFileName);
-	}
-
-	QStringList list = ini.childGroups();
+	QStringList list;
+	loadStatsIni(ini, pFileName, list, "ZNULLBRAIN");
 	statsAllocBrain(list.size());
-	// Hack to make sure ZNULLBRAIN is always first in list
-	int nullbrain = list.indexOf("ZNULLBRAIN");
-	ASSERT_OR_RETURN(false, nullbrain >= 0, "ZNULLBRAIN is mandatory");
-	if (nullbrain > 0)
-	{
-		list.swap(nullbrain, 0);
-	}
 	for (int i = 0; i < list.size(); ++i)
 	{
 		ini.beginGroup(list[i]);
@@ -1234,19 +1228,9 @@ bool loadPropulsionStats(const char *pFileName)
 {
 	PROPULSION_STATS sStats, *const psStats = &sStats;
 	WzConfig ini(pFileName);
-	if (ini.status() != QSettings::NoError)
-	{
-		debug(LOG_ERROR, "Could not open %s", pFileName);
-	}
-	QStringList list = ini.childGroups();
+	QStringList list;
+	loadStatsIni(ini, pFileName, list, "ZNULLPROP");
 	statsAllocPropulsion(list.size());
-	// Hack to make sure ZNULLPROP is always first in list
-	int nullbody = list.indexOf("ZNULLPROP");
-	ASSERT_OR_RETURN(false, nullbody >= 0, "ZNULLPROP is mandatory");
-	if (nullbody > 0)
-	{
-		list.swap(nullbody, 0);
-	}
 	for (int i = 0; i < list.size(); ++i)
 	{
 		ini.beginGroup(list[i]);
@@ -1320,23 +1304,9 @@ bool loadSensorStats(const char *pFileName)
 	char *GfxFile, *mountGfx, *location, *type;
 
 	WzConfig ini(pFileName);
-	if (ini.status() != QSettings::NoError)
-	{
-		debug(LOG_ERROR, "Could not open %s", pFileName);
-	}
-	QStringList list = ini.childGroups();
-	if (!statsAllocSensor(list.size()))
-	{
-		return false;
-	}
-	// Hack to make sure ZNULLBRAIN is always first in list
-	int nullsensor = list.indexOf("ZNULLSENSOR");
-	ASSERT_OR_RETURN(false, nullsensor >= 0, "ZNULLSENSOR is mandatory");
-	if (nullsensor > 0)
-	{
-		list.swap(nullsensor, 0);
-	}
-
+	QStringList list;
+	loadStatsIni(ini, pFileName, list, "ZNULLSENSOR");
+	statsAllocSensor(list.size());
 	for (int i = 0; i < list.size(); ++i)
 	{
 		ini.beginGroup(list[i]);
@@ -1455,24 +1425,10 @@ bool loadECMStats(const char *pFileName)
 {
 	ECM_STATS	sStats, * const psStats = &sStats;
 	char	*ECMName, *location, *GfxFile, *mountGfx;
-
 	WzConfig ini(pFileName);
-	if (ini.status() != QSettings::NoError)
-	{
-		debug(LOG_ERROR, "Could not open %s", pFileName);
-	}
-	QStringList list = ini.childGroups();
-	if (!statsAllocECM(list.size()))
-	{
-		return false;
-	}
-	// Hack to make sure ZNULLECM is always first in list
-	int nullecm = list.indexOf("ZNULLECM");
-	ASSERT_OR_RETURN(false, nullecm >= 0, "ZNULLECM is mandatory");
-	if (nullecm > 0)
-	{
-		list.swap(nullecm, 0);
-	}
+	QStringList list;
+	loadStatsIni(ini, pFileName, list, "ZNULLECM");
+	statsAllocECM(list.size());
 	for (int i=0; i < list.size(); ++i)
 	{
 		ini.beginGroup(list[i]);
@@ -1559,18 +1515,10 @@ bool loadRepairStats(const char *pFileName)
 {
 	REPAIR_STATS sStats, * const psStats = &sStats;
 	char *RepairName, *location, *GfxFile, *mountGfx;
-
 	WzConfig ini(pFileName);
-	if (ini.status() != QSettings::NoError)
-	{
-		debug(LOG_ERROR, "Could not open %s", pFileName);
-	}
-	QStringList list = ini.childGroups();
-	if (!statsAllocRepair(list.size()))
-	{
-		return false;
-	}
-
+	QStringList list;
+	loadStatsIni(ini, pFileName, list, "ZNULLREPAIR");
+	statsAllocRepair(list.size());
 	for (int i=0; i < list.size(); ++i)
 	{
 		ini.beginGroup(list[i]);
@@ -1673,18 +1621,10 @@ bool loadConstructStats(const char *pFileName)
 {
 	CONSTRUCT_STATS sStats, * const psStats = &sStats;
 	char	*ConstructName, *GfxFile, *mountGfx;
-
 	WzConfig ini(pFileName);
-	if (ini.status() != QSettings::NoError)
-	{
-		debug(LOG_ERROR, "Could not open %s", pFileName);
-	}
-	QStringList list = ini.childGroups();
-	if (!statsAllocConstruct(list.size()))
-	{
-		return false;
-	}
-
+	QStringList list;
+	loadStatsIni(ini, pFileName, list, "ZNULLCONSTRUCT");
+	statsAllocConstruct(list.size());
 	for (int i=0; i < list.size(); ++i)
 	{
 		ini.beginGroup(list[i]);
