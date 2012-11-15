@@ -22,7 +22,8 @@ function constructPersonality() {
 	const FR = 2; // flamers/rockets
 	const FC = 3; // flamers/cannons
 	const MF = 4; // mg/flamers (uses flamers as AT weapon)
-	var subpersonality = random(5);
+	
+	var subpersonality = (teamIdentifier()+getTime())%5; // pseudo-random choice, equal for all team members
 	
 	this.tankBodies = [ standardTankBodiesLight, ];
 	
