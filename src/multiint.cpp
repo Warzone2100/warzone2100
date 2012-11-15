@@ -2638,6 +2638,9 @@ static void disableMultiButs(void)
 
 	if (!NetPlay.isHost)
 	{
+		if(game.scavengers)  widgSetButtonState(psWScreen, MULTIOP_SKIRMISH, WBUT_DISABLE);
+		if(!game.scavengers) widgSetButtonState(psWScreen, MULTIOP_CAMPAIGN, WBUT_DISABLE);
+
 			if(game.base != CAMP_CLEAN)	widgSetButtonState(psWScreen,MULTIOP_CLEAN ,WBUT_DISABLE);	// camapign subtype.
 			if(game.base != CAMP_BASE)	widgSetButtonState(psWScreen,MULTIOP_BASE ,WBUT_DISABLE);
 			if(game.base != CAMP_WALLS)	widgSetButtonState(psWScreen,MULTIOP_DEFENCE,WBUT_DISABLE);
