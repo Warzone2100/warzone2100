@@ -174,8 +174,8 @@ function eventGameInit()
 // END CONDITIONS
 function checkEndConditions()
 {
-	var factories = enumStruct(me, "A0LightFactory").length + enumStruct(me, "A0CyborgFactory").length;
-	var droids = enumDroid(me).length;
+	var factories = countStruct("A0LightFactory") + countStruct("A0CyborgFactory");
+	var droids = countDroid();
 
 	// Losing Conditions
 	if (droids == 0 && factories == 0)
@@ -189,8 +189,8 @@ function checkEndConditions()
 			{
 				if (playnum != me && allianceExistsBetween(me, playnum))
 				{
-					factories = enumStruct(playnum, "A0LightFactory").length + enumStruct(playnum, "A0CyborgFactory").length;
-					droids = enumDroid(playnum).length;
+					factories = countStruct("A0LightFactory", playnum) + enumStruct("A0CyborgFactory", playnum);
+					droids = countDroid(DROID_ANY, playnum);
 					if (droids > 0 || factories > 0)
 					{
 						gameLost = false;	// someone from our team still alive
@@ -216,8 +216,8 @@ function checkEndConditions()
 	{
 		if (playnum != me && !allianceExistsBetween(me, playnum))	// checking enemy player
 		{
-			factories = enumStruct(playnum, "A0LightFactory").length + enumStruct(playnum, "A0CyborgFactory").length; // nope
-			droids = enumDroid(playnum).length;
+			factories = countStruct("A0LightFactory", playnum) + countStruct("A0CyborgFactory", playnum); // nope
+			droids = countDroid(DROID_ANY, playnum);
 			if (droids > 0 || factories > 0)
 			{
 				gamewon = false;	//one of the enemies still alive
