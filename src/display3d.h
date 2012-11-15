@@ -130,6 +130,8 @@ extern UDWORD  getDroidRankGraphic(DROID *psDroid);
 /* Visualize radius at position */
 extern void showRangeAtPos(SDWORD centerX, SDWORD centerY, SDWORD radius);
 
+void setSkyBox(const char *page, float mywind, float myscale);
+
 #define	BASE_MUZZLE_FLASH_DURATION	(GAME_TICKS_PER_SEC/10)
 #define	EFFECT_MUZZLE_ADDITIVE		128
 

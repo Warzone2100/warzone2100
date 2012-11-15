@@ -27,6 +27,7 @@
 #include "lib/sound/audio.h"
 #include "lib/netplay/netplay.h"
 #include "qtscriptfuncs.h"
+#include "lib/ivis_opengl/tex.h"
 
 #include <QtScript/QScriptValue>
 #include <QtCore/QStringList>
@@ -34,6 +35,7 @@
 #include "action.h"
 #include "console.h"
 #include "design.h"
+#include "display3d.h"
 #include "map.h"
 #include "mission.h"
 #include "group.h"
@@ -2744,6 +2746,21 @@ static QScriptValue js_setWeather(QScriptContext *context, QScriptEngine *)
 	return QScriptValue();
 }
 
+//-- \subsection{setSky(texture page, wind speed, skybox scale)}
+//-- Change the skybox. Default values are "page-25", 0.5, and 10000.0. Returns true on success.
+static QScriptValue js_setSky(QScriptContext *context, QScriptEngine *)
+{
+	QString page = context->argument(0).toString();
+	float wind = context->argument(1).toNumber();
+	float scale = context->argument(2).toNumber();
+	bool found = iV_GetTexture(page.toUtf8().constData()) >= 0;
+	if (found)
+	{
+		setSkyBox(page.toUtf8().constData(), wind, scale);
+	}
+	return QScriptValue(found);
+}
+
 // ----------------------------------------------------------------------------------------
 // Register functions with scripting system
 
@@ -2760,6 +2777,7 @@ bool registerFunctions(QScriptEngine *engine)
 	engine->globalObject().setProperty("setSunPosition", engine->newFunction(js_setSunPosition));
 	engine->globalObject().setProperty("setSunIntensity", engine->newFunction(js_setSunIntensity));
 	engine->globalObject().setProperty("setWeather", engine->newFunction(js_setWeather));
+	engine->globalObject().setProperty("setSky", engine->newFunction(js_setSky));
 
 	// horrible hacks follow -- do not rely on these being present!
 	engine->globalObject().setProperty("hackNetOff", engine->newFunction(js_hackNetOff));

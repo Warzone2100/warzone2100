@@ -45,7 +45,6 @@
 #include "lib/script/script.h"
 #include "lib/sound/audio.h"
 #include "lib/sound/audio_id.h"
-
 #include "lib/netplay/netplay.h"
 
 #include "e3demo.h"
@@ -152,6 +151,9 @@ bool	showPath = false;
 
 /// The name of the texture page used to draw the skybox
 static char skyboxPageName[PATH_MAX] = "page-25";
+static float wind = 0.0f;
+static float windSpeed = 0.0f;
+static float skybox_scale = 10000.0f;
 
 /// When to display HP bars
 UWORD barMode;
@@ -317,6 +319,15 @@ static std::vector<Blueprint> blueprints;
 static const int BLUEPRINT_OPACITY=120;
 
 /********************  Functions  ********************/
+
+void setSkyBox(const char *page, float mywind, float myscale)
+{
+	sstrcpy(skyboxPageName, page);
+	windSpeed = mywind;
+	wind = 0.0f;
+	skybox_scale = myscale;
+	pie_InitSkybox(iV_GetTexture(skyboxPageName));
+}
 
 static inline void rotateSomething(int &x, int &y, uint16_t angle)
 {
@@ -1144,7 +1155,7 @@ bool init3DView(void)
 
 	bRender3DOnly = false;
 
-	pie_InitSkybox(iV_GetTexture(skyboxPageName));
+	setSkyBox("page-25", 0.0f, 10000.0f);
 
 	// distance is not saved, so initialise it now
 	distance = START_DISTANCE; // distance
@@ -3647,9 +3658,6 @@ static void locateMouse(void)
 /// Render the sky and surroundings
 static void renderSurroundings(void)
 {
-	static float wind = 0.0f;
-	const float skybox_scale = 10000.0f;
-
 	// Push current matrix onto stack
 	pie_MatBegin();
 
@@ -3665,7 +3673,7 @@ static void renderSurroundings(void)
 
 	if(!gamePaused())
 	{
-		wind = wrapf(wind + graphicsTimeAdjustedIncrement(0.5f), 360.0f);
+		wind = wrapf(wind + graphicsTimeAdjustedIncrement(windSpeed), 360.0f);
 	}
 	pie_DrawSkybox(skybox_scale, 0, 0, 1, 1);
 
