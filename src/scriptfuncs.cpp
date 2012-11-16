@@ -5733,67 +5733,35 @@ bool scrSetPlayerColour(void)
 bool scrTakeOverDroidsInArea(void)
 {
 	SDWORD		fromPlayer, toPlayer, x1, x2, y1, y2, numChanged;
-    DROID       *psDroid, *psNext;
+	DROID       *psDroid, *psNext;
 
-	if (!stackPopParams(6, VAL_INT, &fromPlayer, VAL_INT, &toPlayer,
-        VAL_INT, &x1, VAL_INT, &y1, VAL_INT, &x2, VAL_INT, &y2))
+	if (!stackPopParams(6, VAL_INT, &fromPlayer, VAL_INT, &toPlayer, VAL_INT, &x1, VAL_INT, &y1, VAL_INT, &x2, VAL_INT, &y2))
 	{
 		return false;
 	}
-
-	if (fromPlayer >= MAX_PLAYERS || toPlayer >= MAX_PLAYERS)
+	ASSERT_OR_RETURN(false, fromPlayer < MAX_PLAYERS && toPlayer < MAX_PLAYERS, "player number is too high");
+	ASSERT_OR_RETURN(false, x1 < world_coord(MAP_MAXWIDTH) && x2 < world_coord(MAP_MAXWIDTH) && y1 < world_coord(MAP_MAXHEIGHT)
+	                        && y2 < world_coord(MAP_MAXHEIGHT), "coordinate outside map");
+	numChanged = 0;
+	for (psDroid = apsDroidLists[fromPlayer]; psDroid != NULL; psDroid = psNext)
 	{
-		ASSERT( false, "scrTakeOverUnitsInArea:player number is too high" );
-		return false;
+		psNext = psDroid->psNext;
+		// check if within area specified
+		if (psDroid->pos.x >= x1 && psDroid->pos.x <= x2 && psDroid->pos.y >= y1 && psDroid->pos.y <= y2
+		    && psDroid->player != toPlayer)
+		{
+			if (giftSingleDroid(psDroid, toPlayer))	// give the droid away
+			{
+				numChanged++;
+			}
+		}
 	}
-
-	if (x1 > world_coord(MAP_MAXWIDTH))
-	{
-		ASSERT( false, "scrTakeOverUnitsInArea: x1 is greater than max mapWidth" );
-		return false;
-	}
-
-    if (x2 > world_coord(MAP_MAXWIDTH))
-	{
-		ASSERT( false, "scrTakeOverUnitsInArea: x2 is greater than max mapWidth" );
-		return false;
-	}
-
-    if (y1 > world_coord(MAP_MAXHEIGHT))
-	{
-		ASSERT( false, "scrTakeOverUnitsInArea: y1 is greater than max mapHeight" );
-		return false;
-	}
-
-    if (y2 > world_coord(MAP_MAXHEIGHT))
-	{
-		ASSERT( false, "scrTakeOverUnitsInArea: y2 is greater than max mapHeight" );
-		return false;
-	}
-
-    numChanged = 0;
-    for (psDroid = apsDroidLists[fromPlayer]; psDroid != NULL; psDroid = psNext)
-    {
-        psNext = psDroid->psNext;
-        //check if within area specified
-        if (psDroid->pos.x >= x1 && psDroid->pos.x <= x2 &&
-            psDroid->pos.y >= y1 && psDroid->pos.y <= y2)
-        {
-            //give the droid away
-            if (giftSingleDroid(psDroid, toPlayer))
-            {
-                numChanged++;
-            }
-        }
-    }
-
 	scrFunctionResult.v.ival = numChanged;
 	if (!stackPushResult(VAL_INT, &scrFunctionResult))
 	{
 		return false;
 	}
-
-    return true;
+	return true;
 }
 
 /*this takes over a single droid and passes a pointer back to the new one*/
