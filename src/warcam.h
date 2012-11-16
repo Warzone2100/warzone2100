@@ -38,7 +38,7 @@
 #define ROT_VELOCITY_CONSTANT 2.5f
 
 /* The different tracking states */
-enum
+enum WARSTATUS
 {
 CAM_INACTIVE,
 CAM_REQUEST,
@@ -51,21 +51,21 @@ CAM_TRACK_LOCATION
 /* Storage for old viewnagles etc */
 struct WARCAM
 {
-UDWORD	status;
-UDWORD	trackClass;
-UDWORD	lastUpdate;
-iView	oldView;
+	WARSTATUS status;
+	UDWORD trackClass;
+	UDWORD lastUpdate;
+	iView oldView;
 
-Vector3f	acceleration;
-Vector3f	velocity;
-Vector3f	position;
+	Vector3f acceleration;
+	Vector3f velocity;
+	Vector3f position;
 
-Vector3f	rotation;
-Vector3f	rotVel;
-Vector3f	rotAccel;
+	Vector3f rotation;
+	Vector3f rotVel;
+	Vector3f rotAccel;
 
-UDWORD	oldDistance;
-BASE_OBJECT *target;
+	UDWORD oldDistance;
+	BASE_OBJECT *target;
 };
 
 /* Externally referenced functions */
