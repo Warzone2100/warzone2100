@@ -2,18 +2,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2012-10-30 16:57+0100\n"
-"PO-Revision-Date: 2012-04-21 17:45-0300\n"
+"POT-Creation-Date: 2012-11-16 15:06+0100\n"
+"PO-Revision-Date: 2012-11-10 00:45-0300\n"
 "Last-Translator: Tucalipe <tucalipe@hotmail.com>\n"
 "Language-Team: Brazilian Portugese <warzone2100-project@lists.sourceforge.net>\n"
-"Language: \n"
+"Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Launchpad-Export-Date: 2008-05-10 13:56+0000\n"
-"X-Generator: Launchpad (build Unknown)\n"
-"X-Poedit-Language: Portuguese\n"
+"X-Generator: Poedit 1.5.4\n"
 "X-Poedit-SourceCharset: utf-8\n"
 "X-Poedit-Basepath: ..\n"
 
@@ -529,7 +528,7 @@ msgstr "Aumenta a velocidade de construção"
 #: data/mp/messages/resmessages23.rmsg:36
 #: data/mp/messages/resmessages3.rmsg:396
 msgid "All trucks upgraded automatically"
-msgstr "Todos os caminhões melhorados automaticamente"
+msgstr "Todos os caminhões atualizados automaticamente"
 
 #: data/base/messages/resmessages12.rmsg:59
 #: data/base/messages/resmessages1.rmsg:4
@@ -564,7 +563,7 @@ msgstr "O fogo de artilharia continua até a artilharia inimiga ser destruída"
 #: data/mp/messages/resmessages23.rmsg:43
 #: data/mp/messages/resmessages3.rmsg:403
 msgid "CB Sensor Improved"
-msgstr "Sensor AB Melhorado"
+msgstr "Sensor AB atualizado"
 
 #: data/base/messages/resmessages12.rmsg:71
 #: data/base/messages/resmessages2.rmsg:379
@@ -591,7 +590,7 @@ msgstr "Aumenta o alcance dos sensores AB"
 #: data/mp/messages/resmessages23.rmsg:46
 #: data/mp/messages/resmessages3.rmsg:406
 msgid "All CB sensors upgraded automatically"
-msgstr "Todos os sensores AB melhorados automaticamente"
+msgstr "Todos os sensores AB atualizados automaticamente"
 
 #: data/base/messages/resmessages12.rmsg:81
 #: data/base/messages/resmessages12.rmsg:180
@@ -608,7 +607,7 @@ msgstr "Todos os sensores AB melhorados automaticamente"
 #: data/mp/messages/resmessages3.rmsg:683
 #: data/mp/messages/resmessagesall.rmsg:163
 msgid "Cannon Upgrade"
-msgstr "Melhora de Canhão"
+msgstr "Melhoria de Canhão"
 
 #: data/base/messages/resmessages12.rmsg:82
 #: data/mp/messages/resmessages12.rmsg:74
@@ -618,7 +617,7 @@ msgstr "Calcula a distância ao alvo"
 #: data/base/messages/resmessages12.rmsg:83
 #: data/base/messages/resmessagesall.rmsg:149
 msgid "Increases Cannon accuracy"
-msgstr "Aumenta a exatidão do Canhão"
+msgstr "Aumenta a precisão do Canhão"
 
 #: data/base/messages/resmessages12.rmsg:84
 #: data/base/messages/resmessages12.rmsg:183
@@ -635,7 +634,7 @@ msgstr "Aumenta a exatidão do Canhão"
 #: data/mp/messages/resmessages3.rmsg:686
 #: data/mp/messages/resmessagesall.rmsg:166
 msgid "All cannons upgraded automatically"
-msgstr "Todos os canhões melhorados automaticamente"
+msgstr "Todos os canhões atualizados automaticamente"
 
 #: data/base/messages/resmessages12.rmsg:92
 #: data/base/messages/resmessages1.rmsg:510
@@ -647,7 +646,7 @@ msgstr "Todos os canhões melhorados automaticamente"
 #: data/mp/messages/resmessagesall.rmsg:603
 #: data/mp/messages/strings/resstrings.txt:804
 msgid "Flamer Upgrade"
-msgstr "Melhora de Incendiário"
+msgstr "Melhoria de Incendiário"
 
 #: data/base/messages/resmessages12.rmsg:93
 #: data/base/messages/resmessages12.rmsg:181
@@ -674,7 +673,7 @@ msgstr "Aumenta a TDT do Incendiário"
 #: data/mp/messages/resmessagesall.rmsg:606
 #: data/mp/messages/strings/resstrings.txt:807
 msgid "All flamers upgraded automatically"
-msgstr "Todos os incendiários melhorados automaticamente"
+msgstr "Todos os incendiários atualizados automaticamente"
 
 #: data/base/messages/resmessages12.rmsg:103
 #: data/base/messages/resmessages1.rmsg:455
@@ -852,7 +851,7 @@ msgstr "Pontos de Vida: Médio"
 #: data/mp/messages/strings/resstrings.txt:888
 #: data/mp/messages/strings/resstrings.txt:900
 msgid "Machinegun Upgrade"
-msgstr "Melhora de Metralhadora"
+msgstr "Melhoria de Metralhadora"
 
 #: data/base/messages/resmessages12.rmsg:115
 #: data/mp/messages/resmessages12.rmsg:104
@@ -991,7 +990,7 @@ msgstr "Pontos de Vida: Baixo"
 #: data/mp/messages/resmessages3.rmsg:913
 #: data/mp/messages/strings/resstrings.txt:950
 msgid "Mortar Upgrade"
-msgstr "Melhora de Morteiro"
+msgstr "Melhoria de Morteiro"
 
 #: data/base/messages/resmessages12.rmsg:137
 #: data/mp/messages/resmessages12.rmsg:124
@@ -1002,7 +1001,7 @@ msgstr "Sistemas de mira compensam a distância e condições ambientais"
 #: data/base/messages/resmessages23.rmsg:160
 #: data/base/messages/resmessages3.rmsg:996
 msgid "Increases Mortar accuracy"
-msgstr "Aumenta a exatidão dos Morteiros"
+msgstr "Aumenta a precisão dos Morteiros"
 
 #: data/base/messages/resmessages12.rmsg:139
 #: data/base/messages/resmessages12.rmsg:150
@@ -1021,7 +1020,7 @@ msgstr "Aumenta a exatidão dos Morteiros"
 #: data/mp/messages/resmessages3.rmsg:916
 #: data/mp/messages/strings/resstrings.txt:953
 msgid "All mortars upgraded automatically"
-msgstr "Todos os morteiros melhorados automaticamente"
+msgstr "Todos os morteiros atualizados automaticamente"
 
 #: data/base/messages/resmessages12.rmsg:148
 #: data/mp/messages/resmessages12.rmsg:134
@@ -1077,7 +1076,7 @@ msgstr "Alvo: Veículos e Defesas"
 #: data/mp/messages/resmessagesall.rmsg:133
 #: data/mp/messages/strings/resstrings.txt:1010
 msgid "Rocket Upgrade"
-msgstr "Melhora de Foguetes"
+msgstr "Melhoria de Foguetes"
 
 #: data/base/messages/resmessages12.rmsg:170
 #: data/mp/messages/resmessages12.rmsg:154
@@ -1107,7 +1106,7 @@ msgstr "Aumenta a TDT dos Foguetes"
 #: data/mp/messages/resmessagesall.rmsg:136
 #: data/mp/messages/strings/resstrings.txt:1013
 msgid "All rockets upgraded automatically"
-msgstr "Todos os foguetes melhorados automaticamente"
+msgstr "Todos os foguetes atualizados automaticamente"
 
 #: data/base/messages/resmessages12.rmsg:182
 #: data/base/messages/resmessages3.rmsg:754
@@ -1117,7 +1116,7 @@ msgstr "Aumenta a TDT dos Canhões"
 #: data/base/messages/resmessages12.rmsg:192
 #: data/mp/messages/resmessages12.rmsg:174
 msgid "Armor-Piercing Fin-Stabilized Discarding Sabot"
-msgstr "Munição Perfurante Estabilizada e Melhorada"
+msgstr "Cartucho Estabilizado de Munição Perfurante"
 
 #: data/base/messages/resmessages12.rmsg:193
 #: data/base/messages/resmessages1.rmsg:490
@@ -1134,7 +1133,7 @@ msgstr "O foguete segue o designador laser até o alvo"
 #: data/base/messages/resmessages1.rmsg:633
 #: data/base/messages/resmessagesall.rmsg:116
 msgid "Increases Rocket accuracy"
-msgstr "Aumenta a exatidão do foguete"
+msgstr "Aumenta a precisão do foguete"
 
 #: data/base/messages/resmessages12.rmsg:214
 #: data/mp/messages/resmessages12.rmsg:194
@@ -1286,7 +1285,7 @@ msgstr "Aumenta os pontos de vida e a armadura cinética"
 #: data/mp/messages/strings/resstrings.txt:38
 #: data/mp/messages/strings/resstrings.txt:48
 msgid "All Cyborgs upgraded automatically"
-msgstr "Todos os Ciborgues melhorados automaticamente"
+msgstr "Todos os Ciborgues atualizados automaticamente"
 
 #: data/base/messages/resmessages1.rmsg:37
 #: data/base/messages/resmessages1.rmsg:48
@@ -1412,7 +1411,7 @@ msgstr "Defesas Melhoradas"
 #: data/base/messages/resmessages1.rmsg:82
 #: data/mp/messages/resmessages1.rmsg:74
 msgid "Improved Titanium-reinforced concrete"
-msgstr "Concreto reforçado com titânio melhorado"
+msgstr "Concreto reforçado com titânio atualizado"
 
 #: data/base/messages/resmessages1.rmsg:83
 msgid "Increases Armour and Body Points"
@@ -1429,7 +1428,7 @@ msgstr "Aumenta Integridade e Pontos de Vida"
 #: data/mp/messages/resmessages3.rmsg:176
 #: data/mp/messages/strings/resstrings.txt:126
 msgid "All defenses and walls upgraded automatically"
-msgstr "Todas as defesas e muros melhorados automaticamente"
+msgstr "Todas as defesas e muros atualizados automaticamente"
 
 #: data/base/messages/resmessages1.rmsg:93
 #: data/mp/messages/resmessages1.rmsg:84
@@ -1530,7 +1529,7 @@ msgstr "Ou indique o Centro como alvo da unidade"
 #: data/mp/messages/resmessages3.rmsg:323
 #: data/mp/messages/strings/resstrings.txt:361
 msgid "Repair Facility Improved"
-msgstr "Melhora no Centro de Reparos"
+msgstr "Melhoria no Centro de Reparos"
 
 #: data/base/messages/resmessages1.rmsg:214
 #: data/mp/messages/resmessages1.rmsg:194
@@ -1554,7 +1553,7 @@ msgstr "Aumenta a velocidade de reparo"
 #: data/mp/messages/resmessages3.rmsg:326
 #: data/mp/messages/strings/resstrings.txt:364
 msgid "All repair facilities upgraded automatically"
-msgstr "Todos os centros melhorados automaticamente"
+msgstr "Todos os centros atualizados automaticamente"
 
 #: data/base/messages/resmessages1.rmsg:225
 #: data/mp/messages/resmessages1.rmsg:204
@@ -1761,7 +1760,7 @@ msgstr "Análise da conexão sináptica"
 #: data/mp/messages/resmessages3.rmsg:346
 #: data/mp/messages/strings/resstrings.txt:420
 msgid "All research facilities upgraded automatically"
-msgstr "Todas os centros de pesquisas melhorados automaticamente"
+msgstr "Todas os centros de pesquisas atualizados automaticamente"
 
 #: data/base/messages/resmessages1.rmsg:312
 #: data/base/messages/resmessages2.rmsg:323
@@ -1912,7 +1911,7 @@ msgstr "Serve como tanques pesados e plataformas de artilharia"
 #: data/base/messages/resmessages1.rmsg:370
 #: data/mp/messages/resmessages1.rmsg:336
 msgid "Very high power costs and very slow to produce"
-msgstr "Altos custos de produção e produção lerda"
+msgstr "Altos custos de produção e produção lenta"
 
 #: data/base/messages/resmessages1.rmsg:378
 #: data/mp/messages/resmessages1.rmsg:343
@@ -1947,7 +1946,7 @@ msgstr "Custo e tempo de produção são os memos do Píton"
 #: data/mp/messages/resmessages3.rmsg:523
 #: data/mp/messages/strings/resstrings.txt:594
 msgid "Vehicle Engine Upgrade"
-msgstr "Melhora no Motor de Veículos"
+msgstr "Melhoria no Motor de Veículos"
 
 #: data/base/messages/resmessages1.rmsg:390
 #: data/base/messages/strings/names.txt:942
@@ -1963,7 +1962,7 @@ msgstr "Motor de Injeção de Combustível"
 #: data/base/messages/strings/resstrings.txt:561
 #: data/mp/messages/strings/resstrings.txt:596
 msgid "Improves vehicle speed"
-msgstr "Melhora a velocidade do veículo"
+msgstr "Melhoria a velocidade do veículo"
 
 #: data/base/messages/resmessages1.rmsg:392
 #: data/base/messages/resmessages1.rmsg:403
@@ -1993,7 +1992,7 @@ msgstr "Melhora a velocidade do veículo"
 #: data/mp/messages/strings/resstrings.txt:609
 #: data/mp/messages/strings/resstrings.txt:619
 msgid "All vehicles upgraded automatically"
-msgstr "Todos os veículos melhorados automaticamente"
+msgstr "Todos os veículos atualizados automaticamente"
 
 #: data/base/messages/resmessages1.rmsg:400
 #: data/base/messages/resmessages2.rmsg:433
@@ -2006,7 +2005,7 @@ msgstr "Todos os veículos melhorados automaticamente"
 #: data/mp/messages/resmessages3.rmsg:543
 #: data/mp/messages/strings/resstrings.txt:606
 msgid "Vehicle Bodies Improved"
-msgstr "Chassis Melhorados"
+msgstr "Chassis atualizados"
 
 #: data/base/messages/resmessages1.rmsg:402
 #: data/base/messages/resmessages2.rmsg:435
@@ -2041,7 +2040,7 @@ msgstr "Velocidade: Média"
 #: data/base/messages/resmessages1.rmsg:423
 #: data/mp/messages/resmessages1.rmsg:384
 msgid "Amphibious hover propulsion"
-msgstr "Propulsão anfíbia de hovercraft"
+msgstr "Propulsão anfíbia de aerobarco"
 
 #: data/base/messages/resmessages1.rmsg:424
 #: data/base/messages/resmessages1.rmsg:446
@@ -2146,7 +2145,7 @@ msgstr "Lança-Chamas de Gel de Óxido Propileno"
 #: data/mp/messages/resmessagesall.rmsg:295
 #: data/mp/messages/strings/resstrings.txt:798
 msgid "Best Targets: Bunkers, wheeled and hover vehicles"
-msgstr "Alvo: Defesas, 4x4 e hovercrafts"
+msgstr "Alvo: Defesas, 4x4 e aerobarcos"
 
 #: data/base/messages/resmessages1.rmsg:502
 #: data/mp/messages/resmessages1.rmsg:456
@@ -2179,7 +2178,7 @@ msgstr "Metralhadora dupla de 7.62mm"
 #: data/base/messages/resmessages1.rmsg:544
 #: data/mp/messages/resmessages1.rmsg:494
 msgid "Hardened case machinegun bullets"
-msgstr "Balas endurecidas"
+msgstr "Cartuchos de metralhadora endurecidss"
 
 #: data/base/messages/resmessages1.rmsg:545
 #: data/base/messages/resmessages1.rmsg:556
@@ -2194,7 +2193,7 @@ msgstr "Aumenta o dano da metralhadora"
 #: data/base/messages/resmessages1.rmsg:555
 #: data/mp/messages/resmessages1.rmsg:504
 msgid "Armor-Piercing Discard Sabot Bullets"
-msgstr "Balas perfuradoras"
+msgstr "Cartuchos de Balas perfuradoras"
 
 #: data/base/messages/resmessages1.rmsg:566
 #: data/mp/messages/resmessages1.rmsg:514
@@ -2222,7 +2221,7 @@ msgstr "Foguetes anti-veículos de alta TDT"
 #: data/base/messages/resmessages1.rmsg:589
 #: data/mp/messages/resmessages1.rmsg:535
 msgid "Best Targets: Wheeled and hover vehicles"
-msgstr "Alvo: 4x4 e hovercrafts"
+msgstr "Alvo: 4x4 e aerobarcos"
 
 #: data/base/messages/resmessages1.rmsg:598
 #: data/base/messages/resmessages1.rmsg:609
@@ -2233,16 +2232,16 @@ msgstr "Alvo: 4x4 e hovercrafts"
 #: data/mp/messages/strings/resstrings.txt:988
 #: data/mp/messages/strings/resstrings.txt:996
 msgid "Mini-Rocket Upgrade"
-msgstr "Melhora de Mini-Foguetes"
+msgstr "Melhoria de Mini-Foguetes"
 
 #: data/base/messages/resmessages1.rmsg:599
 #: data/mp/messages/resmessages1.rmsg:544
 msgid "Fin-stabilization improves flight trajectory"
-msgstr "Estabilização por aletas melhora a trajetória de vôo"
+msgstr "Estabilização por aletas melhoria a trajetória de vôo"
 
 #: data/base/messages/resmessages1.rmsg:600
 msgid "Increases Mini-Rocket accuracy"
-msgstr "Aumenta a exatidão dos Mini-Foguetes"
+msgstr "Aumenta a precisão dos Mini-Foguetes"
 
 #: data/base/messages/resmessages1.rmsg:601
 #: data/base/messages/resmessages1.rmsg:612
@@ -2253,7 +2252,7 @@ msgstr "Aumenta a exatidão dos Mini-Foguetes"
 #: data/mp/messages/strings/resstrings.txt:991
 #: data/mp/messages/strings/resstrings.txt:999
 msgid "All mini-rockets upgraded automatically"
-msgstr "Todos os Mini-Foguetes melhorados automaticamente"
+msgstr "Todos os Mini-Foguetes atualizados automaticamente"
 
 #: data/base/messages/resmessages1.rmsg:610
 #: data/mp/messages/resmessages1.rmsg:554
@@ -2382,7 +2381,7 @@ msgstr "Turbina a Gás aumenta a produção"
 #: data/mp/messages/resmessages23.rmsg:26
 #: data/mp/messages/resmessages3.rmsg:336
 msgid "All power generators upgraded automatically"
-msgstr "Todos os geradores melhorados automaticamente"
+msgstr "Todos os geradores atualizados automaticamente"
 
 #: data/base/messages/resmessages23.rmsg:49
 #: data/base/messages/resmessages23.rmsg:71
@@ -2391,7 +2390,7 @@ msgstr "Todos os geradores melhorados automaticamente"
 #: data/mp/messages/resmessages23.rmsg:64
 #: data/mp/messages/resmessages3.rmsg:404
 msgid "Improved fire detection systems"
-msgstr "Sistemas de detecção de tiro melhorados"
+msgstr "Sistemas de detecção de tiro atualizados"
 
 #: data/base/messages/resmessages23.rmsg:59
 #: data/base/messages/resmessages23.rmsg:81
@@ -2408,7 +2407,7 @@ msgstr "Nova Torre de Sistemas Disponível"
 #: data/base/messages/resmessages23.rmsg:60
 #: data/mp/messages/resmessages23.rmsg:54
 msgid "VTOL CB Tower detects enemy indirect fire batteries"
-msgstr "Torre de Contra-Baterias para PDV calcula a localização das baterias de artilharia"
+msgstr "Torre de Contra-Baterias para VTOL calcula a localização das baterias de artilharia"
 
 #: data/base/messages/resmessages23.rmsg:61
 #: data/base/messages/resmessages2.rmsg:369
@@ -2417,7 +2416,7 @@ msgstr "Torre de Contra-Baterias para PDV calcula a localização das baterias d
 #: data/mp/messages/resmessages2.rmsg:335
 #: data/mp/messages/strings/resstrings.txt:511
 msgid "Orders assigned VTOLs to attack the enemy batteries"
-msgstr "Comanda PDV's designados a atirarem nas artilharias inimigas"
+msgstr "Comanda VTOL's designados a atirarem nas artilharias inimigas"
 
 #: data/base/messages/resmessages23.rmsg:62
 #: data/base/messages/resmessages2.rmsg:370
@@ -2426,7 +2425,7 @@ msgstr "Comanda PDV's designados a atirarem nas artilharias inimigas"
 #: data/mp/messages/resmessages2.rmsg:336
 #: data/mp/messages/strings/resstrings.txt:512
 msgid "VTOLs attack until enemy battery is suppressed"
-msgstr "Os PDV's atacam até a artilharia inimiga ser destruída"
+msgstr "Os VTOL's atacam até a artilharia inimiga ser destruída"
 
 #: data/base/messages/resmessages23.rmsg:70
 #: data/base/messages/resmessages2.rmsg:378
@@ -2437,7 +2436,7 @@ msgstr "Os PDV's atacam até a artilharia inimiga ser destruída"
 #: data/mp/messages/resmessages3.rmsg:413
 #: data/mp/messages/strings/resstrings.txt:515
 msgid "VTOL CB Improved"
-msgstr "Torre AB para PDV Melhorada"
+msgstr "Torre AB para VTOL Melhorada"
 
 #: data/base/messages/resmessages23.rmsg:72
 #: data/base/messages/resmessages2.rmsg:380
@@ -2448,7 +2447,7 @@ msgstr "Torre AB para PDV Melhorada"
 #: data/mp/messages/resmessages3.rmsg:415
 #: data/mp/messages/strings/resstrings.txt:517
 msgid "Extends VTOL CB Range"
-msgstr "Aumenta o alcance dos sensores AB para PDV"
+msgstr "Aumenta o alcance dos sensores AB para VTOL"
 
 #: data/base/messages/resmessages23.rmsg:73
 #: data/base/messages/resmessages2.rmsg:381
@@ -2459,17 +2458,17 @@ msgstr "Aumenta o alcance dos sensores AB para PDV"
 #: data/mp/messages/resmessages3.rmsg:416
 #: data/mp/messages/strings/resstrings.txt:518
 msgid "All VTOL CB sensors upgraded automatically"
-msgstr "Todos os sensores AB para PDV melhorados automaticamente"
+msgstr "Todos os sensores AB para VTOL atualizados automaticamente"
 
 #: data/base/messages/resmessages23.rmsg:82
 #: data/mp/messages/resmessages23.rmsg:74
 msgid "VTOL Strike Tower detects approaching enemies"
-msgstr "Torre PDV detecta inimigos em aproximação"
+msgstr "Torre VTOL detecta inimigos em aproximação"
 
 #: data/base/messages/resmessages23.rmsg:83
 #: data/mp/messages/resmessages23.rmsg:75
 msgid "Assigned VTOLs attack the enemy units"
-msgstr "PDV's designados atacam as unidades inimigas"
+msgstr "VTOL's designados atacam as unidades inimigas"
 
 #: data/base/messages/resmessages23.rmsg:84
 #: data/mp/messages/resmessages23.rmsg:76
@@ -2496,12 +2495,12 @@ msgstr "Novo Torrete de Sistemas Disponível"
 #: data/base/messages/resmessages23.rmsg:93
 #: data/mp/messages/resmessages23.rmsg:84
 msgid "VTOL Strike turret used to spot targets"
-msgstr "Torrete PDV usado para mirante de alvos"
+msgstr "Torrete VTOL usado para mirante de alvos"
 
 #: data/base/messages/resmessages23.rmsg:94
 #: data/mp/messages/resmessages23.rmsg:85
 msgid "Assigned VTOLs attack the designated targets"
-msgstr "PDV's designados atacam os alvos designados"
+msgstr "VTOL's designados atacam os alvos designados"
 
 #: data/base/messages/resmessages23.rmsg:95
 #: data/mp/messages/resmessages23.rmsg:86
@@ -2517,12 +2516,12 @@ msgstr "Selecione novos alvos para continuar os bombardeios"
 #: data/mp/messages/resmessages3.rmsg:423
 #: data/mp/messages/strings/resstrings.txt:529
 msgid "VTOL Strike Improved"
-msgstr "Torre PDV Melhorada"
+msgstr "Torre VTOL Melhorada"
 
 #: data/base/messages/resmessages23.rmsg:104
 #: data/mp/messages/resmessages23.rmsg:94
 msgid "Improved target recognition systems"
-msgstr "Sistemas de reconhecimento de alvos melhorados"
+msgstr "Sistemas de reconhecimento de alvos atualizados"
 
 #: data/base/messages/resmessages23.rmsg:105
 #: data/base/messages/resmessages2.rmsg:391
@@ -2533,7 +2532,7 @@ msgstr "Sistemas de reconhecimento de alvos melhorados"
 #: data/mp/messages/resmessages3.rmsg:425
 #: data/mp/messages/strings/resstrings.txt:531
 msgid "Extends VTOL Strike Range"
-msgstr "Aumenta o alcance dos sensores PDV"
+msgstr "Aumenta o alcance dos sensores VTOL"
 
 #: data/base/messages/resmessages23.rmsg:106
 #: data/base/messages/resmessages2.rmsg:392
@@ -2544,7 +2543,7 @@ msgstr "Aumenta o alcance dos sensores PDV"
 #: data/mp/messages/resmessages3.rmsg:426
 #: data/mp/messages/strings/resstrings.txt:532
 msgid "All VTOL Strike sensors upgraded automatically"
-msgstr "Todos os sensores PDV's melhorados automaticamente"
+msgstr "Todos os sensores VTOL's atualizados automaticamente"
 
 #: data/base/messages/resmessages23.rmsg:114
 #: data/base/messages/resmessages2.rmsg:543
@@ -2561,7 +2560,7 @@ msgstr "Todos os sensores PDV's melhorados automaticamente"
 #: data/mp/messages/strings/resstrings.txt:694
 #: data/mp/messages/strings/resstrings.txt:712
 msgid "AA Upgrade"
-msgstr "Melhora de armas AA"
+msgstr "Melhoria de armas AA"
 
 #: data/base/messages/resmessages23.rmsg:115
 #: data/base/messages/resmessages2.rmsg:709
@@ -2578,7 +2577,7 @@ msgstr "Munição auto-propulsionada auto-direcionada"
 #: data/base/messages/strings/resstrings.txt:661
 #: data/mp/messages/strings/resstrings.txt:696
 msgid "Increases AA accuracy"
-msgstr "Aumenta a exatidão das armas AA"
+msgstr "Aumenta a precisão das armas AA"
 
 #: data/base/messages/resmessages23.rmsg:117
 #: data/base/messages/resmessages2.rmsg:546
@@ -2629,7 +2628,7 @@ msgstr "Alvos: Defesas"
 #: data/base/messages/strings/resstrings.txt:713
 #: data/mp/messages/strings/resstrings.txt:748
 msgid "Bombsight Upgrade"
-msgstr "Melhora da Mira de Bomba"
+msgstr "Melhoria da Mira de Bombas"
 
 #: data/base/messages/resmessages23.rmsg:137
 msgid "Laser designator paints and guides bombs to the target"
@@ -2641,7 +2640,7 @@ msgstr "Designador a laser guia a bomba ao alvo"
 #: data/base/messages/strings/resstrings.txt:715
 #: data/mp/messages/strings/resstrings.txt:750
 msgid "Increases Bombing accuracy"
-msgstr "Aumenta a exatidão das bombas"
+msgstr "Aumenta a precisão das bombas"
 
 #: data/base/messages/resmessages23.rmsg:139
 #: data/base/messages/resmessages2.rmsg:623
@@ -2759,7 +2758,7 @@ msgstr "Concreto de alta tensão reforçado com boro"
 #: data/mp/messages/resmessages2.rmsg:54
 #: data/mp/messages/strings/resstrings.txt:140
 msgid "AA Site with Cyclone Flak Turret"
-msgstr "Defesa AA Ciclone Explosivo"
+msgstr "Defesa AA com Flak Cyclone"
 
 #: data/base/messages/resmessages2.rmsg:61
 #: data/base/messages/resmessages2.rmsg:83
@@ -2778,35 +2777,35 @@ msgstr "Defesa AA Ciclone Explosivo"
 #: data/mp/messages/strings/resstrings.txt:141
 #: data/mp/messages/strings/resstrings.txt:153
 msgid "Automatically targets VTOLs"
-msgstr "Automaticamente mira em PDV's"
+msgstr "Automaticamente mira em VTOL's"
 
 #: data/base/messages/resmessages2.rmsg:71
 #: data/base/messages/strings/resstrings.txt:126
 #: data/mp/messages/resmessages2.rmsg:64
 #: data/mp/messages/strings/resstrings.txt:146
 msgid "AA Site with Hurricane Gun Turret"
-msgstr "Defesa AA Hurricane"
+msgstr "Defesa AA com Metralhadora Hurricane"
 
 #: data/base/messages/resmessages2.rmsg:72
 #: data/base/messages/strings/resstrings.txt:127
 #: data/mp/messages/resmessages2.rmsg:65
 #: data/mp/messages/strings/resstrings.txt:147
 msgid "Automatically targets VTOL"
-msgstr "Automaticamente mira em PDV's"
+msgstr "Automaticamente mira em VTOL's"
 
 #: data/base/messages/resmessages2.rmsg:82
 #: data/base/messages/strings/resstrings.txt:132
 #: data/mp/messages/resmessages2.rmsg:74
 #: data/mp/messages/strings/resstrings.txt:152
 msgid "AA Site with Whirlwind Gun Turret"
-msgstr "Defesa AA Whirlwind"
+msgstr "Defesa AA com Metralhadora Whirlwind"
 
 #: data/base/messages/resmessages2.rmsg:93
 #: data/base/messages/strings/resstrings.txt:114
 #: data/mp/messages/resmessages2.rmsg:84
 #: data/mp/messages/strings/resstrings.txt:134
 msgid "AA Site with Tornado Flak Turret"
-msgstr "Defesa AA Tornado Explosivo"
+msgstr "Defesa AA com Flak Tornado"
 
 #: data/base/messages/resmessages2.rmsg:104
 #: data/base/messages/strings/resstrings.txt:142
@@ -2994,7 +2993,7 @@ msgstr "Análise Dedicada de Dados da Conexão Sináptica"
 #: data/mp/messages/strings/names.txt:818
 #: data/mp/messages/strings/resstrings.txt:428
 msgid "Hardened Base Structure Materials"
-msgstr "Materiais Base de Estruturas Melhorado"
+msgstr "Materiais Base de Estruturas atualizado"
 
 #: data/base/messages/resmessages2.rmsg:335
 #: data/base/messages/strings/names.txt:851
@@ -3002,7 +3001,7 @@ msgstr "Materiais Base de Estruturas Melhorado"
 #: data/mp/messages/resmessages2.rmsg:304
 #: data/mp/messages/strings/resstrings.txt:440
 msgid "Robotic VTOL Production"
-msgstr "Produção de PDV Robótica"
+msgstr "Produção de VTOL Robótica"
 
 #: data/base/messages/resmessages2.rmsg:336
 #: data/base/messages/resmessages3.rmsg:413
@@ -3011,7 +3010,7 @@ msgstr "Produção de PDV Robótica"
 #: data/mp/messages/resmessages3.rmsg:375
 #: data/mp/messages/strings/resstrings.txt:441
 msgid "Increases VTOL factory output"
-msgstr "Aumenta a produção de PDV's"
+msgstr "Aumenta a produção de VTOL's"
 
 #: data/base/messages/resmessages2.rmsg:337
 #: data/base/messages/resmessages3.rmsg:414
@@ -3020,7 +3019,7 @@ msgstr "Aumenta a produção de PDV's"
 #: data/mp/messages/resmessages3.rmsg:376
 #: data/mp/messages/strings/resstrings.txt:442
 msgid "All VTOL factories upgraded automatically"
-msgstr "Todas as fábricas PDV melhoradas automaticamente"
+msgstr "Todas as fábricas VTOL melhoradas automaticamente"
 
 #: data/base/messages/resmessages2.rmsg:345
 #: data/base/messages/resmessages3.rmsg:422
@@ -3029,7 +3028,7 @@ msgstr "Todas as fábricas PDV melhoradas automaticamente"
 #: data/mp/messages/resmessages3.rmsg:383
 #: data/mp/messages/strings/resstrings.txt:449
 msgid "VTOL Rearming Times Reduced"
-msgstr "Tempo de Recarga de PDV's Diminuído"
+msgstr "Tempo de Recarga de VTOL's Diminuído"
 
 #: data/base/messages/resmessages2.rmsg:346
 #: data/base/messages/strings/names.txt:843
@@ -3038,7 +3037,7 @@ msgstr "Tempo de Recarga de PDV's Diminuído"
 #: data/mp/messages/strings/names.txt:853
 #: data/mp/messages/strings/resstrings.txt:450
 msgid "Automated VTOL Rearming"
-msgstr "Rearmamento de PDV Automatizado"
+msgstr "Rearmamento de VTOL Automatizado"
 
 #: data/base/messages/resmessages2.rmsg:347
 #: data/base/messages/resmessages3.rmsg:424
@@ -3093,7 +3092,7 @@ msgstr "Pode ser designado como mirante para artilharias"
 #: data/mp/messages/resmessages2.rmsg:334
 #: data/mp/messages/strings/resstrings.txt:510
 msgid "VTOL CB turret detects enemy indirect fire batteries"
-msgstr "Torrete de Contra-Baterias para PDV calcula a localização das baterias de artilharia"
+msgstr "Torrete de Contra-Baterias para VTOL calcula a localização das baterias de artilharia"
 
 #: data/base/messages/resmessages2.rmsg:390
 #: data/base/messages/strings/resstrings.txt:500
@@ -3123,14 +3122,14 @@ msgstr "Armadura e pontos de vida superiores ao Víbora"
 #: data/mp/messages/resmessages2.rmsg:365
 #: data/mp/messages/strings/resstrings.txt:564
 msgid "Slower than Viper"
-msgstr "Mais devagar que o Víbora"
+msgstr "Mais lento que o Víbora"
 
 #: data/base/messages/resmessages2.rmsg:403
 #: data/base/messages/strings/resstrings.txt:530
 #: data/mp/messages/resmessages2.rmsg:366
 #: data/mp/messages/strings/resstrings.txt:565
 msgid "High power costs and slower to produce than Viper"
-msgstr "Mais energia necessária e produção mais lerda que o Víbora"
+msgstr "Mais energia necessária e produção mais lenta que o Víbora"
 
 #: data/base/messages/resmessages2.rmsg:411
 #: data/base/messages/strings/resstrings.txt:539
@@ -3153,14 +3152,14 @@ msgstr "Mais armadura e pontos de vida que o Cobra"
 #: data/mp/messages/resmessages2.rmsg:375
 #: data/mp/messages/strings/resstrings.txt:576
 msgid "Slower than Cobra"
-msgstr "Mais devagar que o Cobra"
+msgstr "Mais lento  que o Cobra"
 
 #: data/base/messages/resmessages2.rmsg:414
 #: data/base/messages/strings/resstrings.txt:542
 #: data/mp/messages/resmessages2.rmsg:376
 #: data/mp/messages/strings/resstrings.txt:577
 msgid "High power costs and slower to produce than Cobra"
-msgstr "Mais energia necessária e produção mais lerda que o Cobra"
+msgstr "Mais energia necessária e produção mais lenta que o Cobra"
 
 #: data/base/messages/resmessages2.rmsg:423
 #: data/base/messages/strings/names.txt:945
@@ -3236,7 +3235,7 @@ msgstr "Propulsão Veicular Melhorada"
 #: data/mp/messages/resmessages3.rmsg:566
 #: data/mp/messages/strings/resstrings.txt:629
 msgid "All half-tracks upgraded automatically"
-msgstr "Todos os híbridos melhorados automaticamente"
+msgstr "Todos os híbridos atualizados automaticamente"
 
 #: data/base/messages/resmessages2.rmsg:469
 #: data/base/messages/resmessages3.rmsg:634
@@ -3245,7 +3244,7 @@ msgstr "Todos os híbridos melhorados automaticamente"
 #: data/mp/messages/resmessages3.rmsg:576
 #: data/mp/messages/strings/resstrings.txt:639
 msgid "All hovers upgraded automatically"
-msgstr "Todos os hovercrafts melhorados automaticamente"
+msgstr "Todos os hovercrafts atualizados automaticamente"
 
 #: data/base/messages/resmessages2.rmsg:480
 #: data/base/messages/resmessages3.rmsg:645
@@ -3254,7 +3253,7 @@ msgstr "Todos os hovercrafts melhorados automaticamente"
 #: data/mp/messages/resmessages3.rmsg:586
 #: data/mp/messages/strings/resstrings.txt:649
 msgid "All tracks upgraded automatically"
-msgstr "Todos os tanques melhorados automaticamente"
+msgstr "Todos os tanques atualizados automaticamente"
 
 #: data/base/messages/resmessages2.rmsg:491
 #: data/base/messages/resmessages3.rmsg:656
@@ -3263,7 +3262,7 @@ msgstr "Todos os tanques melhorados automaticamente"
 #: data/mp/messages/resmessages3.rmsg:596
 #: data/mp/messages/strings/resstrings.txt:659
 msgid "All wheels upgraded automatically"
-msgstr "Todos os 4x4 melhorados automaticamente"
+msgstr "Todos os 4x4 atualizados automaticamente"
 
 #: data/base/messages/resmessages2.rmsg:499
 #: data/base/messages/resmessages2.rmsg:510
@@ -3340,7 +3339,7 @@ msgstr "Metralhadora Quádrupla 30mm Anti-Aérea"
 #: data/mp/messages/resmessages2.rmsg:494
 #: data/mp/messages/strings/resstrings.txt:695
 msgid "Detects and locks-on to VTOL engine emissions"
-msgstr "Detecta e trava nas emissões dos motores PDV"
+msgstr "Detecta e trava nas emissões dos motores VTOL"
 
 #: data/base/messages/resmessages2.rmsg:554
 #: data/base/messages/resmessages3.rmsg:697
@@ -3349,21 +3348,21 @@ msgstr "Detecta e trava nas emissões dos motores PDV"
 #: data/mp/messages/resmessages3.rmsg:633
 #: data/mp/messages/strings/resstrings.txt:704
 msgid "AA Flak Upgrade"
-msgstr "Melhora da Explosão AA"
+msgstr "Melhoria do Flak AA"
 
 #: data/base/messages/resmessages2.rmsg:555
 #: data/base/messages/strings/resstrings.txt:670
 #: data/mp/messages/resmessages2.rmsg:504
 #: data/mp/messages/strings/resstrings.txt:705
 msgid "High Explosive Flak shards"
-msgstr "Munição fragmentária AE"
+msgstr "Munição Flak AE"
 
 #: data/base/messages/resmessages2.rmsg:556
 #: data/base/messages/resmessages3.rmsg:699
 #: data/base/messages/strings/resstrings.txt:671
 #: data/mp/messages/strings/resstrings.txt:706
 msgid "Increases AA Flak damage"
-msgstr "Aumenta o dano das armas AA"
+msgstr "Aumenta o dano das armas Flak AA"
 
 #: data/base/messages/resmessages2.rmsg:557
 #: data/base/messages/resmessages3.rmsg:700
@@ -3372,7 +3371,7 @@ msgstr "Aumenta o dano das armas AA"
 #: data/mp/messages/resmessages3.rmsg:636
 #: data/mp/messages/strings/resstrings.txt:707
 msgid "All AA flak weapons upgraded automatically"
-msgstr "Todas as armas explosivas AA melhoradas automaticamente"
+msgstr "Todas as armas Flak AA melhoradas automaticamente"
 
 #: data/base/messages/resmessages2.rmsg:566
 #: data/base/messages/strings/resstrings.txt:678
@@ -3541,14 +3540,14 @@ msgstr "Alvo: Estruturas, Defesas"
 #: data/mp/messages/strings/resstrings.txt:842
 #: data/mp/messages/strings/resstrings.txt:850
 msgid "Howitzer Upgrade"
-msgstr "Melhora de Obus"
+msgstr "Melhoria de Obus"
 
 #: data/base/messages/resmessages2.rmsg:710
 #: data/base/messages/resmessages3.rmsg:765
 #: data/base/messages/strings/resstrings.txt:795
 #: data/mp/messages/strings/resstrings.txt:836
 msgid "Increases Howitzer accuracy"
-msgstr "Aumenta a exatidão do Obus"
+msgstr "Aumenta a precisão do Obus"
 
 #: data/base/messages/resmessages2.rmsg:711
 #: data/base/messages/resmessages2.rmsg:722
@@ -3569,7 +3568,7 @@ msgstr "Aumenta a exatidão do Obus"
 #: data/mp/messages/strings/resstrings.txt:845
 #: data/mp/messages/strings/resstrings.txt:853
 msgid "All howitzers upgraded automatically"
-msgstr "Todos os Obus melhorados automaticamente"
+msgstr "Todos os Obus atualizados automaticamente"
 
 #: data/base/messages/resmessages2.rmsg:720
 #: data/base/messages/strings/resstrings.txt:802
@@ -3605,7 +3604,7 @@ msgstr "Balas perfuradoras com ponta de tungstênio"
 #: data/mp/messages/resmessages2.rmsg:684
 #: data/mp/messages/strings/resstrings.txt:901
 msgid "Improved chaingun mechanism"
-msgstr "Mecanismo de Correia Melhorado"
+msgstr "Mecanismo de Correia atualizado"
 
 #: data/base/messages/resmessages2.rmsg:775
 #: data/base/messages/strings/resstrings.txt:906
@@ -3764,12 +3763,12 @@ msgstr "Laminados conjugados em muros e defesas"
 #: data/base/messages/resmessages3.rmsg:203
 #: data/mp/messages/resmessages3.rmsg:184
 msgid "SAM site with Avenger missiles"
-msgstr "Defesa AA com mísseis Avenger"
+msgstr "Defesa MTA com mísseis Avenger"
 
 #: data/base/messages/resmessages3.rmsg:214
 #: data/mp/messages/resmessages3.rmsg:194
 msgid "SAM site with Vindicator missiles"
-msgstr "Defesa AA com mísseis Vindicator"
+msgstr "Defesa MTA com mísseis Vindicator"
 
 #: data/base/messages/resmessages3.rmsg:225
 #: data/mp/messages/resmessages3.rmsg:204
@@ -3863,14 +3862,14 @@ msgstr "Materiais Estruturais de Alta Densidade"
 #: data/base/messages/strings/names.txt:854
 #: data/mp/messages/resmessages3.rmsg:374
 msgid "Advanced VTOL Production"
-msgstr "Produção de PDV Avançada"
+msgstr "Produção de VTOL Avançada"
 
 #: data/base/messages/resmessages3.rmsg:423
 #: data/base/messages/strings/names.txt:846
 #: data/mp/messages/resmessages3.rmsg:384
 #: data/mp/messages/strings/names.txt:856
 msgid "Robotic VTOL Rearming"
-msgstr "Rearmamento Robótico de PDV"
+msgstr "Rearmamento Robótico de VTOL"
 
 #: data/base/messages/resmessages3.rmsg:434
 #: data/mp/messages/resmessages3.rmsg:394
@@ -3952,22 +3951,22 @@ msgstr "Sistemas de diagnóstico e reparo implantados"
 #: data/base/messages/resmessages3.rmsg:502
 #: data/mp/messages/resmessages3.rmsg:456
 msgid "Enables self-repair in all base structures"
-msgstr "Permite o aut-reparo em todos as Estruturas"
+msgstr "Permite o auto-reparo em todos as Estruturas"
 
 #: data/base/messages/resmessages3.rmsg:513
 #: data/mp/messages/resmessages3.rmsg:466
 msgid "Enables self-repair in all defenses"
-msgstr "Permite o aut-reparo em todos as Defesas"
+msgstr "Permite o auto-reparo em todos as Defesas"
 
 #: data/base/messages/resmessages3.rmsg:524
 #: data/mp/messages/resmessages3.rmsg:476
 msgid "Enables self-repair in all vehicles"
-msgstr "Permite o aut-reparo em todos as Unidades"
+msgstr "Permite o auto-reparo em todos as Unidades"
 
 #: data/base/messages/resmessages3.rmsg:532
 #: data/mp/messages/resmessages3.rmsg:483
 msgid "NEXUS Light Body"
-msgstr "Chassis Leve de NEXUS"
+msgstr "Chassis Leve do NEXUS"
 
 #: data/base/messages/resmessages3.rmsg:535
 #: data/mp/messages/resmessages3.rmsg:486
@@ -3977,12 +3976,12 @@ msgstr "Produção cara"
 #: data/base/messages/resmessages3.rmsg:543
 #: data/mp/messages/resmessages3.rmsg:493
 msgid "NEXUS Medium Body"
-msgstr "Chassis Médio de NEXUS"
+msgstr "Chassis Médio do NEXUS"
 
 #: data/base/messages/resmessages3.rmsg:546
 #: data/mp/messages/resmessages3.rmsg:496
 msgid "Expensive and slow to produce"
-msgstr "Produção cara e lerda"
+msgstr "Produção cara e lenta"
 
 #: data/base/messages/resmessages3.rmsg:554
 #: data/mp/messages/resmessages3.rmsg:503
@@ -4001,7 +4000,7 @@ msgstr "Mais armadura e pontos de vida que o Píton"
 #: data/mp/messages/resmessagesall.rmsg:566
 #: data/mp/messages/resmessagesall.rmsg:576
 msgid "Very expensive to produce"
-msgstr "Pródução muito dispendiosa"
+msgstr "Pródução muito cara"
 
 #: data/base/messages/resmessages3.rmsg:566
 #: data/base/messages/strings/names.txt:948
@@ -4013,7 +4012,7 @@ msgstr "Motor à Gás"
 #: data/base/messages/resmessages3.rmsg:577
 #: data/mp/messages/resmessages3.rmsg:524
 msgid "Ionizing Turbine Engine"
-msgstr "Motor de Turbina de Íons"
+msgstr "Motor de Turbina Ionizante"
 
 #: data/base/messages/resmessages3.rmsg:665
 #: data/base/messages/resmessages3.rmsg:676
@@ -4034,7 +4033,7 @@ msgstr "Pontos de vida e velocidade aumentadas"
 #: data/mp/messages/resmessages3.rmsg:606
 #: data/mp/messages/resmessages3.rmsg:616
 msgid "All VTOLs upgraded automatically"
-msgstr "Todos os PDV's melhorados automaticamente"
+msgstr "Todos os VTOL's atualizados automaticamente"
 
 #: data/base/messages/resmessages3.rmsg:687
 #: data/mp/messages/resmessages3.rmsg:624
@@ -4044,17 +4043,17 @@ msgstr "Computador calcula e guia a munição à posição do alvo"
 #: data/base/messages/resmessages3.rmsg:698
 #: data/mp/messages/resmessages3.rmsg:634
 msgid "High Explosive Armor Piercing Flak"
-msgstr "Munição AE perfuradora"
+msgstr "Munição Flak AE Perfuradora"
 
 #: data/base/messages/resmessages3.rmsg:709
 #: data/mp/messages/resmessages3.rmsg:644
 msgid "Chainfeed loader eradicates jams and improves performance"
-msgstr "Carregamento por correia impede travamentos e melhora a performance"
+msgstr "Carregamento por correia impede travamentos e melhoria a performance"
 
 #: data/base/messages/resmessages3.rmsg:720
 #: data/mp/messages/resmessages3.rmsg:654
 msgid "Drops high intensity thermite bombs"
-msgstr "Bomas de Termite"
+msgstr "Bombas de Termite"
 
 #: data/base/messages/resmessages3.rmsg:721
 #: data/base/messages/resmessages3.rmsg:886
@@ -4073,7 +4072,7 @@ msgstr "Bombas travam e guiam-se ao alvo"
 #: data/base/messages/resmessages3.rmsg:742
 #: data/mp/messages/resmessages3.rmsg:674
 msgid "High-Velocity Armor-Piercing Fin-Stabilised Discarding Sabot"
-msgstr "Munição Pesada Perfurante Estabilizada e Melhorada"
+msgstr "Cartucho de Alta Velocidade Perfurante e Estabilizado"
 
 #: data/base/messages/resmessages3.rmsg:753
 #: data/base/messages/resmessages3.rmsg:786
@@ -4126,7 +4125,7 @@ msgstr "Atira pulsos laser"
 #: data/mp/messages/resmessages3.rmsg:753
 #: data/mp/messages/resmessages3.rmsg:763
 msgid "Laser Upgrade"
-msgstr "Melhora de Laser"
+msgstr "Melhoria de Laser"
 
 #: data/base/messages/resmessages3.rmsg:819
 #: data/mp/messages/resmessages3.rmsg:744
@@ -4135,7 +4134,7 @@ msgstr "Melhoria nas lentes reduz a dispersão da luz"
 
 #: data/base/messages/resmessages3.rmsg:820
 msgid "Increases Laser accuracy"
-msgstr "Aumenta a exatidão dos Lasers"
+msgstr "Aumenta a precisão dos Lasers"
 
 #: data/base/messages/resmessages3.rmsg:821
 #: data/base/messages/resmessages3.rmsg:832
@@ -4144,12 +4143,12 @@ msgstr "Aumenta a exatidão dos Lasers"
 #: data/mp/messages/resmessages3.rmsg:756
 #: data/mp/messages/resmessages3.rmsg:766
 msgid "All lasers upgraded automatically"
-msgstr "Todos os lasers melhorados automaticamente"
+msgstr "Todos os lasers atualizados automaticamente"
 
 #: data/base/messages/resmessages3.rmsg:830
 #: data/mp/messages/resmessages3.rmsg:754
 msgid "Improvement in laser emission density"
-msgstr "Melhora na densidade na emissão laser"
+msgstr "Melhoria na densidade da emissão laser"
 
 #: data/base/messages/resmessages3.rmsg:831
 msgid "Increases Laser damage"
@@ -4158,7 +4157,7 @@ msgstr "Aumenta o dano dos Lasers"
 #: data/base/messages/resmessages3.rmsg:841
 #: data/mp/messages/resmessages3.rmsg:764
 msgid "Improved Energizer reduces laser recharge time"
-msgstr "Energizador melhorado diminui o tempo de recarga"
+msgstr "Energizador atualizado diminui o tempo de recarga"
 
 #: data/base/messages/resmessages3.rmsg:842
 msgid "Increases Laser ROF"
@@ -4167,12 +4166,12 @@ msgstr "Aumenta a TDT dos Lasers"
 #: data/base/messages/resmessages3.rmsg:852
 #: data/mp/messages/resmessages3.rmsg:774
 msgid "Depleted uranium kinetic energy bullets"
-msgstr "Balas de urânio empobrecido descartado"
+msgstr "Balas de urânio empobrecido"
 
 #: data/base/messages/resmessages3.rmsg:863
 #: data/mp/messages/resmessages3.rmsg:784
 msgid "Collapsing Plutonium kinetic energy bullets"
-msgstr "Balas de plutônio em colapso"
+msgstr "Balas de plutônio colapsante"
 
 #: data/base/messages/resmessages3.rmsg:873
 #: data/base/messages/resmessages3.rmsg:884
@@ -4202,7 +4201,7 @@ msgstr "Míssil Arrasa Defesas"
 #: data/mp/messages/resmessages3.rmsg:883
 #: data/mp/messages/resmessages3.rmsg:893
 msgid "Missile Upgrade"
-msgstr "Melhora de Míssil"
+msgstr "Melhoria de Míssil"
 
 #: data/base/messages/resmessages3.rmsg:896
 #: data/mp/messages/resmessages3.rmsg:814
@@ -4212,7 +4211,7 @@ msgstr "Computador de bordo prevê o movimento do alvo"
 #: data/base/messages/resmessages3.rmsg:897
 #: data/base/messages/resmessages3.rmsg:908
 msgid "Increases Missile accuracy"
-msgstr "Aumenta a exatidão dos mísseis"
+msgstr "Aumenta a precisão dos mísseis"
 
 #: data/base/messages/resmessages3.rmsg:898
 #: data/base/messages/resmessages3.rmsg:909
@@ -4225,7 +4224,7 @@ msgstr "Aumenta a exatidão dos mísseis"
 #: data/mp/messages/resmessages3.rmsg:886
 #: data/mp/messages/resmessages3.rmsg:896
 msgid "All missiles upgraded automatically"
-msgstr "Todos os mísseis melhorados automaticamente"
+msgstr "Todos os mísseis atualizados automaticamente"
 
 #: data/base/messages/resmessages3.rmsg:907
 #: data/mp/messages/resmessages3.rmsg:824
@@ -4236,7 +4235,7 @@ msgstr "O Míssil procura e segue o alvo"
 #: data/mp/messages/resmessages3.rmsg:664
 #: data/mp/messages/resmessages3.rmsg:834
 msgid "Low yield thermonuclear warhead"
-msgstr "Ogiva termonuclear de baixa intensidade"
+msgstr "Ogiva termonuclear de baixa capacidade"
 
 #: data/base/messages/resmessages3.rmsg:919
 msgid "Increases Missile damage"
@@ -4345,7 +4344,7 @@ msgstr "Acelerador de partículas pesado disparando dardos de alta energia ciné
 #: data/mp/messages/resmessages3.rmsg:963
 #: data/mp/messages/resmessages3.rmsg:973
 msgid "Rail Gun Upgrade"
-msgstr "Melhora de Acelerador de Partículas"
+msgstr "Melhoria de Acelerador de Partículas"
 
 #: data/base/messages/resmessages3.rmsg:1050
 #: data/mp/messages/resmessages3.rmsg:954
@@ -4354,7 +4353,7 @@ msgstr "Computador prevê e compensa o movimento do alvo"
 
 #: data/base/messages/resmessages3.rmsg:1051
 msgid "Increases Rail Gun accuracy"
-msgstr "Aumenta a exatidão dos Aceleradores de Partículas"
+msgstr "Aumenta a precisão dos Aceleradores de Partículas"
 
 #: data/base/messages/resmessages3.rmsg:1052
 #: data/base/messages/resmessages3.rmsg:1063
@@ -4363,12 +4362,12 @@ msgstr "Aumenta a exatidão dos Aceleradores de Partículas"
 #: data/mp/messages/resmessages3.rmsg:966
 #: data/mp/messages/resmessages3.rmsg:976
 msgid "All rail guns upgraded automatically"
-msgstr "Todos os aceleradores de partículas melhorados automaticamente"
+msgstr "Todos os aceleradores de partículas atualizados automaticamente"
 
 #: data/base/messages/resmessages3.rmsg:1061
 #: data/mp/messages/resmessages3.rmsg:964
 msgid "Improved armor-piercing dart"
-msgstr "Dardo perfurante melhorado"
+msgstr "Dardo perfurante atualizado"
 
 #: data/base/messages/resmessages3.rmsg:1062
 msgid "Increases Rail Gun damage"
@@ -4401,12 +4400,12 @@ msgstr "Permite muros de Durocreto"
 #: data/base/messages/resmessagesall.rmsg:16
 #: data/mp/messages/resmessagesall.rmsg:14
 msgid "VTOL factory enables VTOL production"
-msgstr "Fábrica PDv permite a produção de PDV's"
+msgstr "Fábrica VTOL permite a produção de VTOL's"
 
 #: data/base/messages/resmessagesall.rmsg:17
 #: data/mp/messages/resmessagesall.rmsg:15
 msgid "VTOL rearming pads required to keep VTOLs flying"
-msgstr "Áreas de Rearmamento são necessárias para a manutenção dos PDV's"
+msgstr "Áreas de Rearmamento são necessárias para a manutenção dos VTOL's"
 
 #: data/base/messages/resmessagesall.rmsg:18
 #: data/mp/messages/resmessagesall.rmsg:16
@@ -4416,17 +4415,17 @@ msgstr "Pode ter módulos de fábrica adicionados"
 #: data/base/messages/resmessagesall.rmsg:27
 #: data/mp/messages/resmessagesall.rmsg:24
 msgid "Refuels, rearms and repairs VTOLs"
-msgstr "Reabastece, recarrega e repara PDV's"
+msgstr "Reabastece, recarrega e repara VTOL's"
 
 #: data/base/messages/resmessagesall.rmsg:28
 #: data/mp/messages/resmessagesall.rmsg:25
 msgid "Assign a VTOL by selecting the rearming pad as its target"
-msgstr "Designe um PDV marcando a área como seu alvo"
+msgstr "Designe um VTOL marcando a área como seu alvo"
 
 #: data/base/messages/resmessagesall.rmsg:29
 #: data/mp/messages/resmessagesall.rmsg:26
 msgid "The VTOL returns to the selected pad for rearming"
-msgstr "O PDV retorna à area para recarga"
+msgstr "O VTOL retorna à area para recarga"
 
 #: data/base/messages/resmessagesall.rmsg:38
 #: data/mp/messages/resmessagesall.rmsg:34
@@ -4484,7 +4483,7 @@ msgstr "Mantêm áreas do mapa sob constante supervisão"
 #: data/mp/messages/resmessagesall.rmsg:73
 #: data/mp/messages/resmessagesall.rmsg:83
 msgid "Sensors Improved"
-msgstr "Sensores Melhorados"
+msgstr "Sensores atualizados"
 
 #: data/base/messages/resmessagesall.rmsg:71
 #: data/mp/messages/resmessagesall.rmsg:64
@@ -4500,7 +4499,7 @@ msgstr "Aumenta o alcance do sensor"
 #: data/mp/messages/resmessagesall.rmsg:76
 #: data/mp/messages/resmessagesall.rmsg:86
 msgid "All sensors upgraded automatically"
-msgstr "Todos os sensores melhorados automaticamente"
+msgstr "Todos os sensores atualizados automaticamente"
 
 #: data/base/messages/resmessagesall.rmsg:82
 #: data/mp/messages/resmessagesall.rmsg:94
@@ -4515,12 +4514,12 @@ msgstr "Chassis Pesado da Coletividade"
 #: data/base/messages/resmessagesall.rmsg:94
 #: data/mp/messages/resmessagesall.rmsg:115
 msgid "Slower than Python"
-msgstr "Mais lerdo que o Píton"
+msgstr "Mais lento que o Píton"
 
 #: data/base/messages/resmessagesall.rmsg:95
 #: data/mp/messages/resmessagesall.rmsg:116
 msgid "High power costs and slow to produce"
-msgstr "Mais energia necessária e produção mais lerda"
+msgstr "Mais energia necessária e produção mais lenta"
 
 #: data/base/messages/resmessagesall.rmsg:103
 #: data/mp/messages/resmessagesall.rmsg:123
@@ -4535,7 +4534,7 @@ msgstr "Propulsão de Pouso e Decolagem Vertical"
 #: data/base/messages/resmessagesall.rmsg:105
 #: data/mp/messages/resmessagesall.rmsg:125
 msgid "Speed: VTOL"
-msgstr "Velocidade: PDV"
+msgstr "Velocidade: VTOL"
 
 #: data/base/messages/resmessagesall.rmsg:115
 #: data/mp/messages/resmessagesall.rmsg:134
@@ -4603,7 +4602,7 @@ msgstr "MISSÃO-BASE ALFA: O Novo Paradigma"
 
 #: data/base/messages/strings/cam1strings.txt:16
 msgid "The New Paradigm control superior weapons technology."
-msgstr "O Novo Paradigma possue tecnologia balística superior."
+msgstr "O Novo Paradigma possui armamento superior."
 
 #: data/base/messages/strings/cam1strings.txt:17
 msgid "They may have the synaptic link technology, it's vital we retrieve it."
@@ -4623,7 +4622,7 @@ msgstr "Ao pousar, explore as ruínas e recupere qualquer artefato."
 
 #: data/base/messages/strings/cam1strings.txt:23
 msgid "TRANSPORT MISSION: Investigate Research Center"
-msgstr "MISSÃO-TRANSPORTE: Investigar Edifício de Pesquisas"
+msgstr "MISSÃO-TRANSPORTE: Investigar Centro de Pesquisas"
 
 #: data/base/messages/strings/cam1strings.txt:24
 msgid "Investigate the area and recover any artifacts present."
@@ -4746,7 +4745,7 @@ msgstr "Congratulações, Comandante."
 
 #: data/base/messages/strings/cam1strings.txt:67
 msgid "We now have a further task for you."
-msgstr "Temos mais uma tarefa para você."
+msgstr "Agora temos mais uma tarefa para você."
 
 #: data/base/messages/strings/cam1strings.txt:70
 msgid "ALPHA BASE MISSION: Locate and Recover Artifacts"
@@ -4830,7 +4829,7 @@ msgstr "Suplemento"
 
 #: data/base/messages/strings/cam1strings.txt:109
 msgid "The synaptic link technology was at this location but was removed."
-msgstr "A tecnologia da conexão sináptica estava na localidade, porém foi extraída."
+msgstr "A tecnologia da conexão sináptica estava no local, porém foi extraída."
 
 #: data/base/messages/strings/cam1strings.txt:111
 msgid "Establish a forward base then continue the search for the synaptic link."
@@ -4922,7 +4921,7 @@ msgstr "Obtivemos duas gravações, e a extraímos:"
 
 #: data/base/messages/strings/cam1strings.txt:155
 msgid "We'll keep you informed of further developments"
-msgstr "Mante-te-emos informados de quaisquer atualizações."
+msgstr "Manteremos você informado de quaisquer atualizações."
 
 #: data/base/messages/strings/cam1strings.txt:157
 #: data/base/sequenceaudio/cam1/c001end.txt:7
@@ -4993,7 +4992,7 @@ msgstr "INFORMAÇÕES EM-VÔO"
 
 #: data/base/messages/strings/cam2strings.txt:28
 msgid "Team Beta are searching for Vertical Takeoff and Landing (VTOL) technology."
-msgstr "Time Beta está procurando por tecnologia Pouso e Decolagem Vertical (PDV)."
+msgstr "Time Beta está procurando por tecnologia Pouso e Decolagem Vertical (VTOL)."
 
 #: data/base/messages/strings/cam2strings.txt:29
 msgid "It's believed to be at a pre-Collapse airbase in this area."
@@ -5070,7 +5069,7 @@ msgstr "Você deve interceptá-lo e recuperar sua carga."
 
 #: data/base/messages/strings/cam2strings.txt:65
 msgid "Enemy VTOLs are likely to be flying close escort."
-msgstr "Há a alta probabilidade de PDV's inimigos estarem escoltando."
+msgstr "Há a alta probabilidade de VTOL's inimigos estarem escoltando."
 
 #: data/base/messages/strings/cam2strings.txt:68
 #: data/base/messages/strings/cam2strings.txt:72
@@ -5091,15 +5090,15 @@ msgstr "Então, destrua o campo."
 
 #: data/base/messages/strings/cam2strings.txt:77
 msgid "BETA BASE MISSION: Destroy Enemy Air Base and Recover VTOLs."
-msgstr "MISSÃO-BASE BETA: Destruir Base Aérea Inimiga e Recuperar PDV's."
+msgstr "MISSÃO-BASE BETA: Destruir Base Aérea Inimiga e Recuperar VTOL's."
 
 #: data/base/messages/strings/cam2strings.txt:78
 msgid "Analysis of flight paths indicate that The Collective's VTOLs originate from here."
-msgstr "A análise das rotas de vôo indicam que os PDV's da Coletividade vêm dessa área."
+msgstr "A análise das rotas de vôo indicam que os VTOL's da Coletividade vêm dessa área."
 
 #: data/base/messages/strings/cam2strings.txt:81
 msgid "BETA BASE MISSION: Destroy Enemy Air Base and Recover VTOLs"
-msgstr "MISSÃO-BASE BETA: Destruir Base Aérea Inimiga e Recuperar PDV's."
+msgstr "MISSÃO-BASE BETA: Destruir Base Aérea Inimiga e Recuperar VTOL's."
 
 #: data/base/messages/strings/cam2strings.txt:82
 msgid "The location of the enemy airbase is here; this is your primary objective."
@@ -5281,7 +5280,7 @@ msgstr "Ao chegar nas montanhas, assegure uma AP. Em seguida, estabeleça uma ba
 #: data/base/messages/strings/cam3strings.txt:11
 #: data/base/sequenceaudio/cam3/c003.txa:16
 msgid "Team Gamma will contact you there."
-msgstr "Time Gamma irá contatá-lo lá."
+msgstr "Time Gama irá contatá-lo lá."
 
 #: data/base/messages/strings/cam3strings.txt:14
 msgid "TRANSPORT MISSION: Establish A Forward Base"
@@ -5346,11 +5345,11 @@ msgstr "O vale é nossa única chance de escapar."
 
 #: data/base/messages/strings/cam3strings.txt:43
 msgid "AWAY TEAM UPDATE"
-msgstr "TIME EXTERIOR: ATUALIZE:"
+msgstr "ATUALIZAÇÂO DO GRUPO AVANÇADO"
 
 #: data/base/messages/strings/cam3strings.txt:44
 msgid "All communication with the away team was lost after the nuclear explosions."
-msgstr "Todas as comunicações com o time exterior foram interrompidas após as explosões nucleares."
+msgstr "Todas as comunicações com o grupo avançado foram interrompidas após as explosões nucleares."
 
 #: data/base/messages/strings/cam3strings.txt:45
 msgid "Their last transmission indicated they were heading back to base."
@@ -5454,7 +5453,7 @@ msgstr "Designe uma força de ataque e faça uma armadilha para as forças de NE
 
 #: data/base/messages/strings/cam3strings.txt:94
 msgid "TRANSPORT MISSION: Away Team"
-msgstr "MISSÃO-TRANSPORTE: Time Exterior"
+msgstr "MISSÃO-TRANSPORTE: Grupo Avançado"
 
 #: data/base/messages/strings/cam3strings.txt:95
 msgid "Commander, your attack on ...."
@@ -5466,7 +5465,7 @@ msgstr "NEXUS saindo do sistema."
 
 #: data/base/messages/strings/cam3strings.txt:101
 msgid "Incoming transmission from away team."
-msgstr "Recebendo transmissão do time exterior."
+msgstr "Recebendo transmissão do grupo avançado."
 
 #: data/base/messages/strings/cam3strings.txt:104
 msgid "Commander, we are attempting to return to base."
@@ -5567,7 +5566,7 @@ msgstr "NEXUS está impendindo nosso acesso ao código de controle dos mísseis.
 
 #: data/base/messages/strings/cam3strings.txt:148
 msgid "NEXUS is present in our systems."
-msgstr "NEXUS está emnossos sistemas."
+msgstr "NEXUS está em nossos sistemas."
 
 #: data/base/messages/strings/cam3strings.txt:149
 msgid "To defeat NEXUS we must research the Nexus Intruder Program."
@@ -6142,32 +6141,32 @@ msgstr "Tanque III"
 #: data/base/messages/strings/names.txt:321
 #: data/mp/messages/strings/names.txt:324
 msgid "Hover"
-msgstr "Hovercraft"
+msgstr "Aerobarco"
 
 #: data/base/messages/strings/names.txt:322
 #: data/mp/messages/strings/names.txt:325
 msgid "Hover II"
-msgstr "Hovercraft II"
+msgstr "Aerobarco II"
 
 #: data/base/messages/strings/names.txt:323
 #: data/mp/messages/strings/names.txt:326
 msgid "Hover III"
-msgstr "Hovercraft III"
+msgstr "Aerobarco III"
 
 #: data/base/messages/strings/names.txt:324
 #: data/mp/messages/strings/names.txt:327
 msgid "VTOL"
-msgstr "PDV"
+msgstr "VTOL"
 
 #: data/base/messages/strings/names.txt:325
 #: data/mp/messages/strings/names.txt:328
 msgid "VTOL II"
-msgstr "PDV II"
+msgstr "VTOL II"
 
 #: data/base/messages/strings/names.txt:326
 #: data/mp/messages/strings/names.txt:329
 msgid "VTOL III"
-msgstr "PDV III"
+msgstr "VTOL III"
 
 #: data/base/messages/strings/names.txt:327
 #: data/mp/messages/strings/names.txt:330
@@ -6245,7 +6244,7 @@ msgstr "Torrete de Sensor"
 #: data/mp/messages/strings/names.txt:368
 #: data/mp/messages/strings/names.txt:369
 msgid "VTOL CB Radar Tower"
-msgstr "Torre Radar AB para PDV"
+msgstr "Torre Radar AB para VTOL"
 
 #: data/base/messages/strings/names.txt:373
 #: data/mp/messages/strings/names.txt:370
@@ -6262,12 +6261,12 @@ msgstr "Torre Radar AB"
 #: data/mp/messages/strings/names.txt:374
 #: data/mp/messages/strings/names.txt:918
 msgid "VTOL Strike Turret"
-msgstr "Torre PDV"
+msgstr "Torre VTOL"
 
 #: data/base/messages/strings/names.txt:377
 #: data/mp/messages/strings/names.txt:375
 msgid "VTOL CB Radar Turret"
-msgstr "Torre Radar AB para PDV"
+msgstr "Torre Radar AB para VTOL"
 
 #: data/base/messages/strings/names.txt:378
 msgid "NEXUS Link"
@@ -6356,7 +6355,7 @@ msgstr "Muro de Durocreto"
 #: data/mp/messages/strings/names.txt:397
 #: data/mp/messages/strings/names.txt:860
 msgid "VTOL Factory"
-msgstr "Fábrica de PDV"
+msgstr "Fábrica de VTOL"
 
 #: data/base/messages/strings/names.txt:402
 #: data/base/messages/strings/names.txt:721
@@ -6389,26 +6388,26 @@ msgstr "Defesa Hellstorm"
 #: data/base/messages/strings/names.txt:715
 #: data/mp/messages/strings/names.txt:725
 msgid "Tornado AA Flak Site"
-msgstr "Defesa AA Tornado Explosivo"
+msgstr "Defesa AA Flak Tornado"
 
 #: data/base/messages/strings/names.txt:410
 #: data/base/messages/strings/names.txt:712
 msgid "Cyclone AA Flak Site"
-msgstr "Defesa AA Cyclone Explosivo"
+msgstr "Defesa AA Flak Cyclone"
 
 #: data/base/messages/strings/names.txt:411
 #: data/base/messages/strings/names.txt:713
 #: data/mp/messages/strings/names.txt:410
 #: data/mp/messages/strings/names.txt:723
 msgid "Hurricane AA Site"
-msgstr "Defesa AA Hurricane"
+msgstr "Defesa AA Metralh. Hurricane"
 
 #: data/base/messages/strings/names.txt:412
 #: data/base/messages/strings/names.txt:714
 #: data/mp/messages/strings/names.txt:411
 #: data/mp/messages/strings/names.txt:724
 msgid "Whirlwind AA Site"
-msgstr "Defesa AA Whirlwind"
+msgstr "Defesa AA Metralh. Whirlwind"
 
 #: data/base/messages/strings/names.txt:414
 #: data/base/messages/strings/names.txt:726
@@ -6453,11 +6452,11 @@ msgstr "Torre AB"
 #: data/mp/messages/strings/names.txt:426
 #: data/mp/messages/strings/names.txt:911
 msgid "VTOL CB Tower"
-msgstr "Torre AB para PDV"
+msgstr "Torre AB para VTOL"
 
 #: data/base/messages/strings/names.txt:428
 msgid "VTOL Radar Tower"
-msgstr "Torre PDV"
+msgstr "Torre VTOL"
 
 #: data/base/messages/strings/names.txt:431
 #: data/base/messages/strings/names.txt:764
@@ -6606,7 +6605,7 @@ msgstr "Dentes de Dragão"
 #: data/mp/messages/strings/names.txt:459
 #: data/mp/messages/strings/names.txt:852
 msgid "VTOL Rearming Pad"
-msgstr "Área de Rearmamento de PDV"
+msgstr "Área de Rearmamento de VTOL"
 
 #: data/base/messages/strings/names.txt:463
 #: data/base/messages/strings/names.txt:484
@@ -6615,7 +6614,7 @@ msgstr "Área de Rearmamento de PDV"
 #: data/mp/messages/strings/names.txt:483
 #: data/mp/messages/strings/names.txt:729
 msgid "Howitzer Emplacement"
-msgstr "Defesa Howitzer"
+msgstr "Defesa Obus"
 
 #: data/base/messages/strings/names.txt:464
 #: data/base/messages/strings/names.txt:740
@@ -6704,7 +6703,7 @@ msgstr "Inferno"
 #: data/mp/messages/strings/names.txt:482
 #: data/mp/messages/strings/names.txt:1073
 msgid "Howitzer"
-msgstr "Howitzer"
+msgstr "Obus"
 
 #: data/base/messages/strings/names.txt:485
 #: data/mp/messages/strings/names.txt:484
@@ -6798,7 +6797,7 @@ msgstr "MTA Avenger"
 #: data/base/messages/strings/names.txt:511
 #: data/mp/messages/strings/names.txt:510
 msgid "VTOL Scourge Missile"
-msgstr "PDV Míssil Scouge"
+msgstr "Míssil VTOL Scouge"
 
 #: data/base/messages/strings/names.txt:513
 #: data/base/messages/strings/names.txt:1138
@@ -6885,98 +6884,98 @@ msgstr "Destruidor de Tanques"
 #: data/base/messages/strings/names.txt:529
 #: data/mp/messages/strings/names.txt:528
 msgid "VTOL Bunker Buster"
-msgstr "Arrasa-Defesas PDV"
+msgstr "Arrasa-Defesas VTOL"
 
 #: data/base/messages/strings/names.txt:530
 #: data/mp/messages/strings/names.txt:529
 msgid "VTOL Mini-Rocket"
-msgstr "PDV Mini-Foguetes"
+msgstr "Mini-Foguetes VTOL"
 
 #: data/base/messages/strings/names.txt:531
 #: data/mp/messages/strings/names.txt:530
 msgid "VTOL Lancer"
-msgstr "Lançadeiro PDV"
+msgstr "Lançadeiro VTOL"
 
 #: data/base/messages/strings/names.txt:532
 #: data/mp/messages/strings/names.txt:531
 msgid "VTOL Tank Killer"
-msgstr "Destruidor de Tanques PDV"
+msgstr "Destruidor de Tanques VTOL"
 
 #: data/base/messages/strings/names.txt:544
 #: data/base/messages/strings/names.txt:980
 #: data/mp/messages/strings/names.txt:543
 #: data/mp/messages/strings/names.txt:992
 msgid "Tornado Flak Turret"
-msgstr "Torrete AA Tornado Explosivo"
+msgstr "Torrete AA Flak Tornado"
 
 #: data/base/messages/strings/names.txt:545
 #: data/base/messages/strings/names.txt:981
 msgid "Cyclone Flak Turret"
-msgstr "Torrete AA Cyclone Explosivo"
+msgstr "Torrete AA Flak Cyclone"
 
 #: data/base/messages/strings/names.txt:550
 #: data/base/messages/strings/names.txt:983
 #: data/mp/messages/strings/names.txt:550
 #: data/mp/messages/strings/names.txt:995
 msgid "Whirlwind AA Turret"
-msgstr "Torrete AA Whirlwind"
+msgstr "Torrete AA Metralh. Whirlwind"
 
 #: data/base/messages/strings/names.txt:551
 #: data/base/messages/strings/names.txt:982
 #: data/mp/messages/strings/names.txt:551
 #: data/mp/messages/strings/names.txt:994
 msgid "Hurricane AA Turret"
-msgstr "Torrete AA Hurricane"
+msgstr "Torrete AA Metralh. Hurricane"
 
 #: data/base/messages/strings/names.txt:560
 #: data/mp/messages/strings/names.txt:560
 msgid "VTOL Cannon"
-msgstr "Canhão PDV"
+msgstr "Canhão VTOL"
 
 #: data/base/messages/strings/names.txt:561
 #: data/mp/messages/strings/names.txt:561
 msgid "VTOL Hyper Velocity Cannon"
-msgstr "Canhão de Hiper-Velocidade PDV"
+msgstr "Canhão de Hiper-Velocidade VTOL"
 
 #: data/base/messages/strings/names.txt:562
 #: data/mp/messages/strings/names.txt:562
 msgid "VTOL Assault Cannon"
-msgstr "Canhão de Assalto PDV"
+msgstr "Canhão de Assalto VTOL"
 
 #: data/base/messages/strings/names.txt:563
 #: data/mp/messages/strings/names.txt:563
 msgid "VTOL Pulse Laser"
-msgstr "Pulso Laser PDV"
+msgstr "Pulso Laser VTOL"
 
 #: data/base/messages/strings/names.txt:565
 #: data/mp/messages/strings/names.txt:565
 msgid "VTOL Machinegun"
-msgstr "Metralhadora PDV"
+msgstr "Metralhadora VTOL"
 
 #: data/base/messages/strings/names.txt:566
 #: data/mp/messages/strings/names.txt:566
 msgid "VTOL Twin Machinegun"
-msgstr "Metralhadora Dupla PDV"
+msgstr "Metralhadora Dupla VTOL"
 
 #: data/base/messages/strings/names.txt:567
 #: data/mp/messages/strings/names.txt:567
 msgid "VTOL Heavy Machinegun"
-msgstr "Metralhadora Pesada PDV"
+msgstr "Metralhadora Pesada VTOL"
 
 #: data/base/messages/strings/names.txt:568
 #: data/mp/messages/strings/names.txt:568
 msgid "VTOL Assault Gun"
-msgstr "Metralhadora de Assalto PDV"
+msgstr "Metralhadora de Assalto VTOL"
 
 #: data/base/messages/strings/names.txt:569
 #: data/mp/messages/strings/names.txt:569
 msgid "VTOL Needle Gun"
-msgstr "Perfuratriz PDV"
+msgstr "Perfuratriz VTOL"
 
 #: data/base/messages/strings/names.txt:570
 #: data/mp/messages/strings/names.txt:570
 msgid "VTOL Rail Gun"
-msgstr "Acelerador de Partículas PDV"
+msgstr "Acelerador de Partículas VTOL"
 
 #: data/base/messages/strings/names.txt:572
 #: data/mp/messages/strings/names.txt:572
@@ -6990,22 +6989,22 @@ msgstr "Torrete de Super Bomba de Proximidade"
 
 #: data/base/messages/strings/names.txt:575
 msgid "VTOL Cluster Bombs Bay"
-msgstr "Bombas Fragmentárias PDV"
+msgstr "Bombas Fragmentárias VTOL"
 
 #: data/base/messages/strings/names.txt:576
 #: data/mp/messages/strings/names.txt:576
 msgid "VTOL Heap Bomb Bay"
-msgstr "Bombas Explosivas PDV"
+msgstr "Bombas Explosivas VTOL"
 
 #: data/base/messages/strings/names.txt:577
 #: data/mp/messages/strings/names.txt:577
 msgid "VTOL Phosphor Bomb Bay"
-msgstr "Bombas de Fósforo PDV"
+msgstr "Bombas de Fósforo VTOL"
 
 #: data/base/messages/strings/names.txt:578
 #: data/mp/messages/strings/names.txt:578
 msgid "VTOL Thermite Bomb Bay"
-msgstr "Bombas de Termite PDV"
+msgstr "Bombas de Termite VTOL"
 
 #: data/base/messages/strings/names.txt:581
 #: data/mp/messages/strings/names.txt:581
@@ -7027,7 +7026,7 @@ msgstr "CMuro de NEXUS"
 #: data/base/messages/strings/names.txt:623
 #: data/mp/messages/strings/names.txt:623
 msgid "CAM1 RESEARCH"
-msgstr "CAM1 RESEARCH"
+msgstr "CAM1 PESQUISAS"
 
 #: data/base/messages/strings/names.txt:624
 #: data/mp/messages/strings/names.txt:624
@@ -7037,67 +7036,67 @@ msgstr "PESQUISAS AVANÇADAS"
 #: data/base/messages/strings/names.txt:625
 #: data/mp/messages/strings/names.txt:625
 msgid "CAM1 VEHICLES"
-msgstr "CAM1 VEHICLES"
+msgstr "CAM1 VEÍCULOS"
 
 #: data/base/messages/strings/names.txt:626
 #: data/mp/messages/strings/names.txt:626
 msgid "CAM1 WEAPONS"
-msgstr "CAM1 WEAPONS"
+msgstr "CAM1 ARMAS"
 
 #: data/base/messages/strings/names.txt:627
 #: data/mp/messages/strings/names.txt:627
 msgid "CAM1 SYSTEMS"
-msgstr "CAM1 SYSTEMS"
+msgstr "CAM1 SISTEMAS"
 
 #: data/base/messages/strings/names.txt:628
 #: data/mp/messages/strings/names.txt:628
 msgid "CAM1 DEFENSES"
-msgstr "CAM1 DEFENSES"
+msgstr "CAM1 DEFESAS"
 
 #: data/base/messages/strings/names.txt:629
 #: data/mp/messages/strings/names.txt:629
 msgid "CAM1 STRUCTURES"
-msgstr "CAM1 STRUCTURES"
+msgstr "CAM1 ESTRUTURAS"
 
 #: data/base/messages/strings/names.txt:630
 #: data/mp/messages/strings/names.txt:630
 msgid "CAM2 RESEARCH"
-msgstr "CAM2 RESEARCH"
+msgstr "CAM2 PESQUISAS"
 
 #: data/base/messages/strings/names.txt:631
 #: data/mp/messages/strings/names.txt:631
 msgid "CAM2 VEHICLES"
-msgstr "CAM2 VEHICLES"
+msgstr "CAM2 VEÍCULOS"
 
 #: data/base/messages/strings/names.txt:632
 #: data/mp/messages/strings/names.txt:632
 msgid "CAM2 CYBORGS"
-msgstr "CAM2 CYBORGS"
+msgstr "CAM2 CIBORGUES"
 
 #: data/base/messages/strings/names.txt:633
 #: data/mp/messages/strings/names.txt:633
 msgid "CAM2 WEAPONS"
-msgstr "CAM2 WEAPONS"
+msgstr "CAM2 ARMAS"
 
 #: data/base/messages/strings/names.txt:634
 #: data/mp/messages/strings/names.txt:634
 msgid "CAM2 SYSTEMS"
-msgstr "CAM2 SYSTEMS"
+msgstr "CAM2 SISTEMAS"
 
 #: data/base/messages/strings/names.txt:635
 #: data/mp/messages/strings/names.txt:635
 msgid "CAM2 DEFENSES"
-msgstr "CAM2 DEFENSES"
+msgstr "CAM2 DEFESAS"
 
 #: data/base/messages/strings/names.txt:636
 #: data/mp/messages/strings/names.txt:636
 msgid "CAM2 STRUCTURES"
-msgstr "CAM2 STRUCTURES"
+msgstr "CAM2 ESTRUTURAS"
 
 #: data/base/messages/strings/names.txt:638
 #: data/mp/messages/strings/names.txt:638
 msgid "CAM3 RESEARCH"
-msgstr "CAM3 RESEARCH"
+msgstr "CAM3 PESQUISAS"
 
 #: data/base/messages/strings/names.txt:649
 #: data/mp/messages/strings/names.txt:649
@@ -7287,17 +7286,17 @@ msgstr "Durocreto-NP"
 #: data/base/messages/strings/names.txt:701
 #: data/mp/messages/strings/names.txt:707
 msgid "Improved Hardcrete"
-msgstr "Durocreto Melhorado"
+msgstr "Durocreto atualizado"
 
 #: data/base/messages/strings/names.txt:702
 #: data/mp/messages/strings/names.txt:708
 msgid "Improved Hardcrete Mk2"
-msgstr "Durocreto Melhorado Mk2"
+msgstr "Durocreto atualizado Mk2"
 
 #: data/base/messages/strings/names.txt:703
 #: data/mp/messages/strings/names.txt:709
 msgid "Improved Hardcrete Mk3"
-msgstr "Durocreto Melhorado Mk3"
+msgstr "Durocreto atualizado Mk3"
 
 #: data/base/messages/strings/names.txt:704
 #: data/mp/messages/strings/names.txt:710
@@ -7522,12 +7521,12 @@ msgstr "Materiais Base de Estruturas Reforçado Mk3"
 #: data/base/messages/strings/names.txt:809
 #: data/mp/messages/strings/names.txt:819
 msgid "Hardened Base Structure Materials Mk2"
-msgstr "Materiais Base de Estruturas Melhorado Mk2"
+msgstr "Materiais Base de Estruturas atualizado Mk2"
 
 #: data/base/messages/strings/names.txt:810
 #: data/mp/messages/strings/names.txt:820
 msgid "Hardened Base Structure Materials Mk3"
-msgstr "Materiais Base de Estruturas Melhorado Mk3"
+msgstr "Materiais Base de Estruturas atualizado Mk3"
 
 #: data/base/messages/strings/names.txt:812
 #: data/mp/messages/strings/names.txt:822
@@ -7631,43 +7630,43 @@ msgstr "Pesquisa das Sinapses Neurais em Cérebros Mk3"
 #: data/base/messages/strings/names.txt:844
 #: data/mp/messages/strings/names.txt:854
 msgid "Automated VTOL Rearming Mk2"
-msgstr "Rearmamento de PDV Automatizado Mk2"
+msgstr "Rearmamento de VTOL Automatizado Mk2"
 
 #: data/base/messages/strings/names.txt:845
 #: data/mp/messages/strings/names.txt:855
 msgid "Automated VTOL Rearming Mk3"
-msgstr "Rearmamento de PDV Automatizado Mk3"
+msgstr "Rearmamento de VTOL Automatizado Mk3"
 
 #: data/base/messages/strings/names.txt:847
 #: data/mp/messages/strings/names.txt:857
 msgid "Robotic VTOL Rearming Mk2"
-msgstr "Rearmamento Robótico de PDV Mk2"
+msgstr "Rearmamento Robótico de VTOL Mk2"
 
 #: data/base/messages/strings/names.txt:848
 #: data/mp/messages/strings/names.txt:858
 msgid "Robotic VTOL Rearming Mk3"
-msgstr "Rearmamento Robótico de PDV Mk3"
+msgstr "Rearmamento Robótico de VTOL Mk3"
 
 #: data/base/messages/strings/names.txt:849
 #: data/mp/messages/strings/names.txt:859
 msgid "Robotic VTOL Rearming Mk4"
-msgstr "Rearmamento Robótico de PDV Mk4"
+msgstr "Rearmamento Robótico de VTOL Mk4"
 
 #: data/base/messages/strings/names.txt:852
 msgid "Robotic VTOL Production Mk2"
-msgstr "Produção de PDV Robótica Mk2"
+msgstr "Produção de VTOL Robótica Mk2"
 
 #: data/base/messages/strings/names.txt:853
 msgid "Robotic VTOL Production Mk3"
-msgstr "Produção de PDV Robótica Mk3"
+msgstr "Produção de VTOL Robótica Mk3"
 
 #: data/base/messages/strings/names.txt:855
 msgid "Advanced VTOL Production Mk2"
-msgstr "Produção de PDV Avançada Mk2"
+msgstr "Produção de VTOL Avançada Mk2"
 
 #: data/base/messages/strings/names.txt:856
 msgid "Advanced VTOL Production Mk3"
-msgstr "Produção de PDV Avançada Mk3"
+msgstr "Produção de VTOL Avançada Mk3"
 
 #: data/base/messages/strings/names.txt:858
 #: data/mp/messages/strings/names.txt:868
@@ -7732,7 +7731,7 @@ msgstr "Auto-Reparo de Veículos Mk3"
 #: data/base/messages/strings/names.txt:874
 #: data/mp/messages/strings/names.txt:886
 msgid "Sensor Upgrade"
-msgstr "Melhora do Sensor"
+msgstr "Melhoria do Sensor"
 
 #: data/base/messages/strings/names.txt:876
 #: data/mp/messages/strings/names.txt:888
@@ -7768,12 +7767,12 @@ msgstr "Torrete Móvel de Reparos Pesado"
 #: data/mp/messages/strings/names.txt:896
 #: data/mp/messages/strings/resstrings.txt:480
 msgid "Mobile Repair Upgrade"
-msgstr "Melhora no Torrete Móvel de Reparos"
+msgstr "Melhoria no Torrete Móvel de Reparos"
 
 #: data/base/messages/strings/names.txt:885
 #: data/mp/messages/strings/names.txt:897
 msgid "Mobile Repair Upgrade Mk2"
-msgstr "Melhora do Torrete Móvel de Reparos Mk2"
+msgstr "Melhoria do Torrete Móvel de Reparos Mk2"
 
 #: data/base/messages/strings/names.txt:891
 #: data/mp/messages/strings/names.txt:903
@@ -7783,63 +7782,63 @@ msgstr "Torrete AB"
 #: data/base/messages/strings/names.txt:893
 #: data/mp/messages/strings/names.txt:905
 msgid "CB Sensor Upgrade"
-msgstr "Melhora no Torrete AB"
+msgstr "Melhoria no Torrete AB"
 
 #: data/base/messages/strings/names.txt:894
 #: data/mp/messages/strings/names.txt:906
 msgid "CB Sensor Upgrade 2"
-msgstr "Melhora do Torrete AB Mk2"
+msgstr "Melhoria do Torrete AB Mk2"
 
 #: data/base/messages/strings/names.txt:895
 #: data/mp/messages/strings/names.txt:907
 msgid "CB Sensor Upgrade 3"
-msgstr "Melhora do Torrete AB Mk3"
+msgstr "Melhoria do Torrete AB Mk3"
 
 #: data/base/messages/strings/names.txt:897
 #: data/mp/messages/strings/names.txt:909
 msgid "VTOL CB Turret"
-msgstr "Torrete AB PDV"
+msgstr "Torrete AB VTOL"
 
 #: data/base/messages/strings/names.txt:900
 #: data/mp/messages/strings/names.txt:912
 msgid "VTOL CB Upgrade"
-msgstr "Melhora do Torrete AB PDV"
+msgstr "Melhoria do Torrete AB VTOL"
 
 #: data/base/messages/strings/names.txt:901
 #: data/mp/messages/strings/names.txt:913
 msgid "VTOL CB Upgrade 2"
-msgstr "Melhora do Torrete AB PDV Mk2"
+msgstr "Melhoria do Torrete AB VTOL Mk2"
 
 #: data/base/messages/strings/names.txt:902
 #: data/mp/messages/strings/names.txt:914
 msgid "VTOL CB Upgrade 3"
-msgstr "Melhora do Torrete AB PDV Mk3"
+msgstr "Melhoria do Torrete AB VTOL Mk3"
 
 #: data/base/messages/strings/names.txt:903
 #: data/mp/messages/strings/names.txt:915
 msgid "VTOL Strike Upgrade"
-msgstr "Melhora de Torre PDV"
+msgstr "Melhoria de Torre VTOL"
 
 #: data/base/messages/strings/names.txt:904
 #: data/mp/messages/strings/names.txt:916
 msgid "VTOL Strike Upgrade Mk2"
-msgstr "Melhora de Torre PDV Mk2"
+msgstr "Melhoria de Torre VTOL Mk2"
 
 #: data/base/messages/strings/names.txt:905
 #: data/mp/messages/strings/names.txt:917
 msgid "VTOL Strike Upgrade Mk3"
-msgstr "Melhora de Torre PDV Mk3"
+msgstr "Melhoria de Torre VTOL Mk3"
 
 #: data/base/messages/strings/names.txt:907
 #: data/mp/messages/strings/names.txt:427
 #: data/mp/messages/strings/names.txt:919
 msgid "VTOL Strike Tower"
-msgstr "Torre PDV"
+msgstr "Torre VTOL"
 
 #: data/base/messages/strings/names.txt:910
 #: data/mp/messages/strings/names.txt:922
 msgid "Improved Scrambler"
-msgstr "Gerador de Interferência Melhorado"
+msgstr "Gerador de Interferência atualizado"
 
 #: data/base/messages/strings/names.txt:911
 #: data/mp/messages/strings/names.txt:923
@@ -8035,12 +8034,12 @@ msgstr "Ligas compostas Super Densas Mk3"
 #: data/base/messages/strings/names.txt:964
 #: data/mp/messages/strings/names.txt:976
 msgid "Hover Propulsion"
-msgstr "Propulsão Hovercraft"
+msgstr "Propulsão Aerobarco"
 
 #: data/base/messages/strings/names.txt:965
 #: data/mp/messages/strings/names.txt:977
 msgid "Hover Propulsion II"
-msgstr "Propulsão Hovercraft II"
+msgstr "Propulsão Aerobarco II"
 
 #: data/base/messages/strings/names.txt:967
 #: data/mp/messages/strings/names.txt:979
@@ -8065,12 +8064,12 @@ msgstr "Propulsão Tanque II"
 #: data/base/messages/strings/names.txt:973
 #: data/mp/messages/strings/names.txt:985
 msgid "VTOL Propulsion"
-msgstr "Propulsão PDV"
+msgstr "Propulsão VTOL"
 
 #: data/base/messages/strings/names.txt:974
 #: data/mp/messages/strings/names.txt:986
 msgid "VTOL Propulsion II"
-msgstr "Propulsão PDV II"
+msgstr "Propulsão VTOL II"
 
 #: data/base/messages/strings/names.txt:977
 #: data/mp/messages/strings/names.txt:989
@@ -8271,17 +8270,17 @@ msgstr "Recarregamento Rápido de Canhões Mk3"
 #: data/base/messages/strings/names.txt:1039
 #: data/mp/messages/strings/names.txt:1051
 msgid "Improved Laser Focusing"
-msgstr "Foco de Laser Melhorado"
+msgstr "Foco de Laser atualizado"
 
 #: data/base/messages/strings/names.txt:1040
 #: data/mp/messages/strings/names.txt:1052
 msgid "Improved Laser Focusing Mk2"
-msgstr "Foco de Laser Melhorado Mk2"
+msgstr "Foco de Laser atualizado Mk2"
 
 #: data/base/messages/strings/names.txt:1041
 #: data/mp/messages/strings/names.txt:1053
 msgid "Improved Laser Focusing Mk3"
-msgstr "Foco de Laser Melhorado Mk3"
+msgstr "Foco de Laser atualizado Mk3"
 
 #: data/base/messages/strings/names.txt:1042
 #: data/mp/messages/strings/names.txt:1054
@@ -8559,7 +8558,7 @@ msgstr "Ogiva de Mìssil EP Mk3"
 #: data/base/messages/strings/names.txt:1114
 #: data/mp/messages/strings/names.txt:1126
 msgid "Improved Missile Loading System"
-msgstr "Sistema de Recarregamento de Mísseis Melhorado"
+msgstr "Sistema de Recarregamento de Mísseis atualizado"
 
 #: data/base/messages/strings/names.txt:1125
 #: data/mp/messages/strings/names.txt:1137
@@ -8732,7 +8731,7 @@ msgstr "Mini-Foguetes de Lançamento Rápido Mk3"
 #: data/base/messages/strings/names.txt:1167
 #: data/mp/messages/strings/names.txt:1166
 msgid "Improved Rocket Wire Guidance"
-msgstr "Melhora no Direcionamento dos Foguetes"
+msgstr "Melhoria no Direcionamento dos Foguetes"
 
 #: data/base/messages/strings/names.txt:1168
 #: data/mp/messages/strings/names.txt:1167
@@ -8922,7 +8921,7 @@ msgstr "Ferro-Velho"
 #: data/base/messages/strings/names.txt:1295
 #: data/mp/messages/strings/names.txt:1310
 msgid "Wrecked Tank"
-msgstr "Tanque Ferro-Velho"
+msgstr "Tanque Quebrada"
 
 #: data/base/messages/strings/names.txt:1313
 #: data/mp/messages/strings/names.txt:1328
@@ -8932,17 +8931,17 @@ msgstr "Ponte Quebrada"
 #: data/base/messages/strings/names.txt:1314
 #: data/mp/messages/strings/names.txt:1329
 msgid "Wrecked Van"
-msgstr "Van Ferro-Velho"
+msgstr "Van Quebrada"
 
 #: data/base/messages/strings/names.txt:1315
 #: data/mp/messages/strings/names.txt:1330
 msgid "Wrecked Vehicle"
-msgstr "Carro Ferro-Velho"
+msgstr "Carro Quebrada"
 
 #: data/base/messages/strings/names.txt:1316
 #: data/mp/messages/strings/names.txt:1331
 msgid "Wrecked Tanker"
-msgstr "Caminhão Ferro-Velho"
+msgstr "Caminhão Quebrada"
 
 #: data/base/messages/strings/names.txt:1320
 #: data/base/messages/strings/names.txt:1336
@@ -9069,7 +9068,7 @@ msgstr "Tanque Canhão de Alta Velocidade Píton"
 
 #: data/base/messages/strings/names.txt:1460
 msgid "Cyclone AA Python Half-tracks"
-msgstr "Híbrido AA Cicolne Píton"
+msgstr "Híbrido AA Cyclone Píton"
 
 #: data/base/messages/strings/names.txt:1461
 #: data/mp/messages/strings/names.txt:1476
@@ -9084,7 +9083,7 @@ msgstr "Laser Médio"
 #: data/base/messages/strings/names.txt:1468
 #: data/mp/messages/strings/names.txt:1483
 msgid "VTOL Flashlight"
-msgstr "Laser Médio PDV"
+msgstr "Laser Médio VTOL"
 
 #: data/base/messages/strings/names.txt:1471
 #: data/base/messages/strings/names.txt:1472
@@ -9144,7 +9143,7 @@ msgstr "Unidade de reparos pesada"
 #: data/base/messages/strings/resstrings.txt:449
 #: data/mp/messages/strings/resstrings.txt:479
 msgid "Research Breakthrough Improves Repair Speeds"
-msgstr "Avanço nas Pesquisas Melhora a Velocidade de Reparo"
+msgstr "Avanço nas Pesquisas Melhoria a Velocidade de Reparo"
 
 #: data/base/messages/strings/resstrings.txt:451
 #: data/mp/messages/strings/resstrings.txt:481
@@ -9159,12 +9158,12 @@ msgstr "Todas as unidades móveis de reparo melhoradas automaticamente"
 #: data/base/messages/strings/resstrings.txt:511
 #: data/mp/messages/strings/resstrings.txt:541
 msgid "Scrambler Improved"
-msgstr "Gerador de Interferência Melhorado"
+msgstr "Gerador de Interferência atualizado"
 
 #: data/base/messages/strings/resstrings.txt:512
 #: data/mp/messages/strings/resstrings.txt:542
 msgid "Improvement in synaptic link technology"
-msgstr "Melhora na tecnologia da conexão sináptica"
+msgstr "Melhoria na tecnologia da conexão sináptica"
 
 #: data/base/messages/strings/resstrings.txt:513
 #: data/mp/messages/strings/resstrings.txt:543
@@ -9174,7 +9173,7 @@ msgstr "Aumenta a velocidade da interferência"
 #: data/base/messages/strings/resstrings.txt:514
 #: data/mp/messages/strings/resstrings.txt:544
 msgid "All scramblers upgraded automatically"
-msgstr "Todos os geradores de interferência melhorados automaticamente"
+msgstr "Todos os geradores de interferência atualizados automaticamente"
 
 #: data/base/messages/strings/resstrings.txt:952
 #: data/mp/messages/strings/resstrings.txt:997
@@ -9473,15 +9472,15 @@ msgstr "Seus ataques contra nós não ficarão impunes."
 #: data/base/sequenceaudio/cam1/cam1cnp.txt:5
 #: data/base/sequenceaudio/cam1/sub13np2.txt:5
 msgid "You are in contravention of the New Paradigm."
-msgstr "Tu estás de encontro ao Novo Paradigma."
+msgstr "Você está em contravenção ao Novo Paradigma."
 
 #: data/base/sequenceaudio/cam1/cam1dnp.txt:4
 msgid "All attack groups commence attack on enemy."
-msgstr "Todos os grupos de ataque iniciar ataque ao inimigo."
+msgstr "Todos os grupos de ataque, iniciar ataque ao inimigo."
 
 #: data/base/sequenceaudio/cam1/cam1dnp.txt:5
 msgid "They are in contravention of the New Paradigm."
-msgstr "Eles estão de encontro ao Novo Paradigma."
+msgstr "Eles estão em contravenção ao Novo Paradigma."
 
 #: data/base/sequenceaudio/cam1/cam1dnp.txt:7
 msgid "They must be eradicated."
@@ -9590,15 +9589,15 @@ msgstr "Atencão!"
 
 #: data/base/sequenceaudio/cam1/sub13np1.txt:5
 msgid "You are entering a restricted area."
-msgstr "Tu estás entrando em uma área restrita."
+msgstr "Você está entrando em uma área restrita."
 
 #: data/base/sequenceaudio/cam1/sub13np1.txt:7
 msgid "Return to your designated zone or be destroyed."
-msgstr "Retorna à tua zona designada ou serás destruído."
+msgstr "Retorne à sua zona designada ou será destruído."
 
 #: data/base/sequenceaudio/cam1/sub13np1.txt:8
 msgid "Repeat. Return to your designated zone or be destroyed."
-msgstr "Repetimos. Retorna à tua zona designada ou serás destruído."
+msgstr "Repetimos. Retorne à sua zona designada ou será destruído."
 
 #: data/base/sequenceaudio/cam1/sub13np1.txt:9
 msgid "Message Ends."
@@ -9606,7 +9605,7 @@ msgstr "Fim da mensagem."
 
 #: data/base/sequenceaudio/cam1/sub13np2.txt:8
 msgid "You will be destroyed."
-msgstr "Serás destruído."
+msgstr "Você será destruído."
 
 #: data/base/sequenceaudio/cam1/sub14anp.txt:4
 msgid "NEXUS, the synaptic technology you required has been recovered and sent for collection."
@@ -9734,7 +9733,7 @@ msgstr "Ela está em algum lugar no seu território."
 
 #: data/base/sequenceaudio/cam2/cam2_2n.txt:4
 msgid "Find it for me and I shall provide you with further weapons to aid you in your war against the Project."
-msgstr "Achem-na, e eu proverei mais armas para te ajudar na sua guerra contra o Projeto."
+msgstr "Achem-na, e eu proverei mais armas para lhes ajudar na sua guerra contra o Projeto."
 
 #: data/base/sequenceaudio/cam2/cam22pl2.txt:1
 msgid "NASDA Briefing follows..."
@@ -9898,7 +9897,7 @@ msgstr "O Time Gama está atualmente explorando a região do silo e monitorando 
 
 #: data/base/sequenceaudio/cam3/c3ad2n2.txt:1
 msgid "Time's up commander!!"
-msgstr "Acabou seu tempo, comandante!!"
+msgstr "Acabou o tempo, comandante!!"
 
 #: data/base/sequenceaudio/cam3/c3ad2pl3.txt:1
 msgid "Commander, we are detecting NEXUS forces from these coordinates..."
@@ -9934,7 +9933,7 @@ msgstr "Que bom que você conseguiu, Comandante."
 
 #: data/base/sequenceaudio/cam3/cam32a2.txt:4
 msgid "Enemy strike VTOLs have got us pinned down. We've managed to hold off cyborgs and tanks, but we haven't been able to make any progress along the valley."
-msgstr "Ataques de PDV's inimigos nos acuaram. Conseguimos repelir ciborgues e tanques, mas não conseguimos nenhum processo pelo vale."
+msgstr "Ataques de VTOL's inimigos nos acuaram. Conseguimos repelir ciborgues e tanques, mas não conseguimos nenhum processo pelo vale."
 
 #: data/base/sequenceaudio/cam3/cam32a2.txt:7
 msgid "Can you try and reach us with anti-aircraft units?"
@@ -9946,7 +9945,7 @@ msgstr "Aqui é o Time Alfa. Repito, aqui é o Time Alfa. Precisamos de ajuda im
 
 #: data/base/sequenceaudio/cam3/cam32alp.txt:4
 msgid "We are under heavy attack from cyborgs, laser tanks, and strike VTOLs."
-msgstr "Estamos sob ataque pesado de ciborgues, tanques laser e PDV's de ataque."
+msgstr "Estamos sob ataque pesado de ciborgues, tanques laser e VTOL's de ataque."
 
 #: data/base/sequenceaudio/cam3/cam32alp.txt:6
 msgid "We were trying to reach your position, but have been ambushed."
@@ -10046,7 +10045,7 @@ msgstr "Comandante, estamos sob ataque de ciborgues e tanques NEXUS. Por favor a
 
 #: data/base/sequenceaudio/cam3/cam3bg.txt:3
 msgid "...cannot hold out much longer.  Repeat, please help, we cannot hold out much longer...."
-msgstr "...podemos aguentar maus. Repetindo, por favor ajude, não podemos aguentar por muito tempo..."
+msgstr "...podemos aguentar mais. Repetindo, por favor ajude, não podemos aguentar por muito tempo..."
 
 #: data/base/sequenceaudio/cam3/cam3_bn.txt:1
 msgid "Ah, Commander, so good of you to join us here at Nexus base."
@@ -10054,7 +10053,7 @@ msgstr "Ah, Comandante, que bom que você pode se juntar a nós aqui na base Nex
 
 #: data/base/sequenceaudio/cam3/cam3_bn.txt:3
 msgid "It was very useful having Gamma Team set up here in the mountains."
-msgstr "Foi bem últi ter o Time Gama se estabelecer aqui nas montanhas."
+msgstr "Foi bem útil ter o Time Gama se estabelecer aqui nas montanhas."
 
 #: data/base/sequenceaudio/cam3/cam3_bn.txt:4
 msgid "Their absorption was such a pleasure."
@@ -10381,7 +10380,7 @@ msgstr "Precisão de AA +10%"
 #: data/mp/messages/resmessages2.rmsg:563
 #: data/mp/messages/resmessages3.rmsg:663
 msgid "Bomb Upgrade"
-msgstr "Melhora de Bomba"
+msgstr "Melhoria de Bomba"
 
 #: data/mp/messages/resmessages23.rmsg:124
 msgid "Improved trinitramine explosive formula"
@@ -10547,7 +10546,7 @@ msgstr "Armado com Metralhadora"
 #: data/mp/messages/resmessagesall.rmsg:176
 #: data/mp/messages/resmessagesall.rmsg:186
 msgid "Requires heavy VTOL factory to produce"
-msgstr "Precisa de uma Fábrica PDV Lv3"
+msgstr "Precisa de uma Fábrica VTOL Lv3"
 
 #: data/mp/messages/resmessagesall.rmsg:183
 msgid "Super Transport Available"
@@ -10747,7 +10746,7 @@ msgstr "Mais armadura e pontos de vida que o Vingança"
 
 #: data/mp/messages/resmessagesall.rmsg:565
 msgid "Slow moving Body"
-msgstr "Lerdo"
+msgstr "Chassis lento"
 
 #: data/mp/messages/resmessagesall.rmsg:573
 msgid "Large Super Heavy Body"
@@ -10759,7 +10758,7 @@ msgstr "Máximo de armadura e pontos de vida"
 
 #: data/mp/messages/resmessagesall.rmsg:575
 msgid "Very slow moving Body"
-msgstr "Extremamente lerdo"
+msgstr "Extremamente lento"
 
 #: data/mp/messages/resmessagesall.rmsg:583
 msgid "Hardpoint Vindicator SAM Site Available"
@@ -10808,7 +10807,7 @@ msgstr "Bombas de Plasmite de Alta Intensidade"
 
 #: data/mp/messages/resmessagesall.rmsg:713
 msgid "New VTOL Missile Launcher"
-msgstr "Novo Míssil PDV"
+msgstr "Novo Míssil VTOL"
 
 #: data/mp/messages/resmessagesall.rmsg:714
 msgid "Fires Electronic Magnetic Pulse Missiles"
@@ -10824,7 +10823,7 @@ msgstr "Torrete de Comando mais reforçado disponível para projeto"
 #: data/mp/messages/resmessagesall.rmsg:734
 #: data/mp/messages/resmessagesall.rmsg:744
 msgid "Upgraded battlefield computer system"
-msgstr "Sistema de computador de guerra melhorado"
+msgstr "Sistema de computador de guerra atualizado"
 
 #: data/mp/messages/strings/names.txt:15
 #: data/mp/messages/strings/names.txt:673
@@ -10931,7 +10930,7 @@ msgstr "Canhão AA Explosivo"
 
 #: data/mp/messages/strings/names.txt:545
 msgid "VTOL Flak Cannon"
-msgstr "Canhão AA Explosivo PDV"
+msgstr "Canhão AA Explosivo VTOL"
 
 #: data/mp/messages/strings/names.txt:558
 #: data/mp/messages/strings/names.txt:1694
@@ -10941,7 +10940,7 @@ msgstr "Centro de Commando do Satélite Laser"
 
 #: data/mp/messages/strings/names.txt:575
 msgid "VTOL Cluster Bomb Bay"
-msgstr "Bombas Fragmentárias PDV"
+msgstr "Bombas Fragmentárias VTOL"
 
 #: data/mp/messages/strings/names.txt:582
 msgid "Collective Corner Wall"
@@ -11125,15 +11124,15 @@ msgstr "Híbrido Canhão AA Explosivo Píton"
 
 #: data/mp/messages/strings/names.txt:1513
 msgid "Bunker Buster Cobra Hover"
-msgstr "Hovercraft Arrasa-Defesas Cobra"
+msgstr "Aerobarco Arrasa-Defesas Cobra"
 
 #: data/mp/messages/strings/names.txt:1515
 msgid "Sensor Upgrade Mk2"
-msgstr "Melhora do Sensor Mk2"
+msgstr "Melhoria do Sensor Mk2"
 
 #: data/mp/messages/strings/names.txt:1516
 msgid "Sensor Upgrade Mk3"
-msgstr "Melhora do Sensor Mk3"
+msgstr "Melhoria do Sensor Mk3"
 
 #: data/mp/messages/strings/names.txt:1517
 msgid "Vapor Turbine Generator Mk2"
@@ -11256,7 +11255,7 @@ msgstr "Laser Pesado"
 
 #: data/mp/messages/strings/names.txt:1681
 msgid "VTOL Heavy Laser"
-msgstr "PDV Laser Pesado"
+msgstr "Laser Pesado VTOL"
 
 #: data/mp/messages/strings/names.txt:1682
 #: data/mp/messages/strings/names.txt:1683
@@ -11309,7 +11308,7 @@ msgstr "AA Sunburst"
 
 #: data/mp/messages/strings/names.txt:1724
 msgid "VTOL Sunburst AA"
-msgstr "AA Sunburst PDV"
+msgstr "AA Sunburst VTOL"
 
 #: data/mp/messages/strings/names.txt:1725
 #: data/mp/messages/strings/names.txt:1726
@@ -11459,7 +11458,7 @@ msgstr "Defesa de Metralhadora de Assalto Dupla"
 
 #: data/mp/messages/strings/names.txt:1807
 msgid "VTOL Plasmite Bomb Bay"
-msgstr "Bombas de Plasmite PDV"
+msgstr "Bombas de Plasmite VTOL"
 
 #: data/mp/messages/strings/names.txt:1808
 msgid "Plasmite Bomb"
@@ -11467,7 +11466,7 @@ msgstr "Bomba de Plasmite"
 
 #: data/mp/messages/strings/names.txt:1809
 msgid "VTOL EMP Missile Launcher"
-msgstr "PDV Lançador de Mísseis PEM"
+msgstr "Lançador de Mísseis PEM VTOL"
 
 #: data/mp/messages/strings/names.txt:1810
 msgid "EMP Missile Launcher"
@@ -11490,7 +11489,7 @@ msgstr "Torrete de Comando IV"
 
 #: data/mp/messages/strings/names.txt:1829
 msgid "Heavy Repair Turret Cobra Hover"
-msgstr "Hovercraft Torrete de Reparos Pesado Cobra"
+msgstr "Aerobarco Torrete de Reparos Pesado Cobra"
 
 #: data/mp/messages/strings/names.txt:1830
 #: data/mp/messages/strings/names.txt:1841
@@ -11499,11 +11498,11 @@ msgstr "4x4 Metralhadora Pesada Víbora"
 
 #: data/mp/messages/strings/names.txt:1831
 msgid "Scourge Mantis Hover"
-msgstr "Hovercraft Scourge Mantis"
+msgstr "Aerobarco Scourge Mantis"
 
 #: data/mp/messages/strings/names.txt:1832
 msgid "Tank Killer Mantis Hover"
-msgstr "Hovercraft Destruidor de Tanques Mantis"
+msgstr "Aerobarco Destruidor de Tanques Mantis"
 
 #: data/mp/messages/strings/names.txt:1833
 #: data/mp/messages/strings/names.txt:1848
@@ -11512,7 +11511,7 @@ msgstr "Tanque Metralhadora Pesada Cobra"
 
 #: data/mp/messages/strings/names.txt:1834
 msgid "Heavy Cannon Cobra Hover"
-msgstr "Hovercraft Canhão Pesado Cobra"
+msgstr "Aerobarco Canhão Pesado Cobra"
 
 #: data/mp/messages/strings/names.txt:1842
 msgid "Heavy Machinegun Cobra Wheels"
@@ -11520,7 +11519,7 @@ msgstr "4x4 Metralhadora Pesada Cobra"
 
 #: data/mp/messages/strings/names.txt:1843
 msgid "Heavy Machinegun Cobra Hover"
-msgstr "Hovercraft Metralhadora Pesada Cobra"
+msgstr "Aerobarco Metralhadora Pesada Cobra"
 
 #: data/mp/messages/strings/names.txt:1845
 msgid "Machinegun Viper Tracks"
@@ -11532,11 +11531,11 @@ msgstr "Tanque Metralhadora Dupla Víbora"
 
 #: data/mp/messages/strings/names.txt:1850
 msgid "Medium Cannon Cobra Hover"
-msgstr "Hovercraft Canhão Médio Cobra"
+msgstr "Aerobarco Canhão Médio Cobra"
 
 #: data/mp/messages/strings/names.txt:1851
 msgid "Medium Cannon Scorpion Hover"
-msgstr "Hovercraft Canhão Médio Escorpião"
+msgstr "Aerobarco Canhão Médio Escorpião"
 
 #: data/mp/messages/strings/names.txt:1852
 msgid "Medium Cannon Scorpion Tracks"
@@ -11544,11 +11543,11 @@ msgstr "Tanque Canhão Médio Escorpião"
 
 #: data/mp/messages/strings/names.txt:1853
 msgid "Medium Cannon Python Hover"
-msgstr "Hovercraft Canhão Médio Píton"
+msgstr "Aerobarco Canhão Médio Píton"
 
 #: data/mp/messages/strings/names.txt:1854
 msgid "Heavy Cannon Python Hover"
-msgstr "Hovercraft Canhão Pesado Píton"
+msgstr "Aerobarco Canhão Pesado Píton"
 
 #: data/mp/messages/strings/names.txt:1856
 msgid "Rail Gun Mantis Tracks"
@@ -11600,43 +11599,43 @@ msgstr "Tanque Gauss-Scourge Vingança"
 
 #: data/mp/messages/strings/names.txt:1874
 msgid "VTOL Cluster Bomb Bay Bug VTOL"
-msgstr "Bombas Fragmentárias PDV"
+msgstr "Bombas Fragmentárias VTOL"
 
 #: data/mp/messages/strings/names.txt:1875
 msgid "VTOL Bunker Buster Bug VTOL"
-msgstr "PDV Arrasa-Defesas Inseto"
+msgstr "VTOL Arrasa-Defesas Inseto"
 
 #: data/mp/messages/strings/names.txt:1876
 msgid "VTOL Cluster Bomb Bay Scorpion VTOL"
-msgstr "PDV Bombas Fragmentárias Escorpião"
+msgstr "VTOL Bombas Fragmentárias Escorpião"
 
 #: data/mp/messages/strings/names.txt:1877
 msgid "VTOL Bunker Buster Scorpion VTOL"
-msgstr "PDV Arrasa-Defesas Escorpião"
+msgstr "VTOL Arrasa-Defesas Escorpião"
 
 #: data/mp/messages/strings/names.txt:1880
 msgid "VTOL Lancer Bug VTOL"
-msgstr "PDV Lançadeiro Inseto"
+msgstr "VTOL Lançadeiro Inseto"
 
 #: data/mp/messages/strings/names.txt:1881
 msgid "VTOL Hyper Velocity Cannon Bug VTOL"
-msgstr "PDV Canhão de Hiper Velocidade Inseto"
+msgstr "VTOL Canhão de Hiper Velocidade Inseto"
 
 #: data/mp/messages/strings/names.txt:1882
 msgid "VTOL Lancer Scorpion VTOL"
-msgstr "PDV Lançadeiro Escorpião"
+msgstr "VTOL Lançadeiro Escorpião"
 
 #: data/mp/messages/strings/names.txt:1883
 msgid "VTOL Hyper Velocity Cannon Scorpion VTOL"
-msgstr "PDV Canhão de Hiper Velocidade Escorpião"
+msgstr "VTOL Canhão de Hiper Velocidade Escorpião"
 
 #: data/mp/messages/strings/names.txt:1884
 msgid "VTOL Lancer Mantis VTOL"
-msgstr "PDV Lançadeiro Mantis"
+msgstr "VTOL Lançadeiro Mantis"
 
 #: data/mp/messages/strings/names.txt:1885
 msgid "VTOL Hyper Velocity Cannon Mantis VTOL"
-msgstr "PDV Canhão de Hiper Velocidade Mantis"
+msgstr "VTOL Canhão de Hiper Velocidade Mantis"
 
 #: data/mp/messages/strings/names.txt:1889
 msgid "Repair Turret Mantis Tracks"
@@ -11652,11 +11651,11 @@ msgstr "Tanque Canhão Pesado Escorpião"
 
 #: data/mp/messages/strings/names.txt:1893
 msgid "Lancer Scorpion VTOL"
-msgstr "PDV Lancçadeiro Escorpião"
+msgstr "VTOL Lancçadeiro Escorpião"
 
 #: data/mp/messages/strings/names.txt:1894
 msgid "Bunker Buster Scorpion VTOL"
-msgstr "PDV Arrasa-Defesas Inseto"
+msgstr "VTOL Arrasa-Defesas Inseto"
 
 #: data/mp/messages/strings/names.txt:1896
 msgid "Command Turret Viper Tracks"
@@ -11700,19 +11699,19 @@ msgstr "Tanque Torrete de Reparos Escorpião"
 
 #: data/mp/messages/strings/names.txt:1908
 msgid "Heavy Repair Scorpion Hover"
-msgstr "Hovercraft Reparos Pesado Escorpião"
+msgstr "Aerobarco Reparos Pesado Escorpião"
 
 #: data/mp/messages/strings/names.txt:1911
 msgid "Truck Cobra Hover"
-msgstr "Hovercraft Caminhão Cobra"
+msgstr "Aerobarco Caminhão Cobra"
 
 #: data/mp/messages/strings/names.txt:1912
 msgid "Truck Scorpion Hover"
-msgstr "Hovercraft Caminhão Escorpião"
+msgstr "Aerobarco Caminhão Escorpião"
 
 #: data/mp/messages/strings/names.txt:1913
 msgid "Truck Mantis Hover"
-msgstr "Hovercraft Caminhão Mantis"
+msgstr "Aerobarco Caminhão Mantis"
 
 #: data/mp/messages/strings/names.txt:1916
 msgid "Bunker Buster Cobra Tracks"
@@ -11748,7 +11747,7 @@ msgstr "Híbrido Inferno Cobra"
 
 #: data/mp/messages/strings/names.txt:1927
 msgid "Hyper Velocity Cannon Python Hover"
-msgstr "Hovercraft Canhão de Hiper Velocidade Píton"
+msgstr "Aerobarco Canhão de Hiper Velocidade Píton"
 
 #: data/mp/messages/strings/names.txt:1931
 msgid "Scourge Python Tracks"
@@ -11792,7 +11791,7 @@ msgstr "Híbrido Incendiário Víbora"
 
 #: data/mp/messages/strings/names.txt:1944
 msgid "Inferno Cobra Hover"
-msgstr "Hovercraft Inferno Cobra"
+msgstr "Aerobarco Inferno Cobra"
 
 #: data/mp/messages/strings/names.txt:1945
 msgid "Medium Cannon Cobra Half Track"
@@ -11800,11 +11799,11 @@ msgstr "Híbrido Canhão Médio Cobra"
 
 #: data/mp/messages/strings/names.txt:1946
 msgid "Inferno Python Hover"
-msgstr "Hovercraft Inferno Píton"
+msgstr "Aerobarco Inferno Píton"
 
 #: data/mp/messages/strings/names.txt:1947
 msgid "Assault Gun Python Hover"
-msgstr "Hovercraft Metralhadora de Assalto Píton"
+msgstr "Aerobarco Metralhadora de Assalto Píton"
 
 #: data/mp/messages/strings/names.txt:1948
 msgid "Assault Gun Python Half Track"
@@ -11816,23 +11815,23 @@ msgstr "Híbrido Metralhadora Pesada Escorpião"
 
 #: data/mp/messages/strings/names.txt:1950
 msgid "Assault Cannon Mantis Hover"
-msgstr "Hovercraft Canhão de Assalto Mantis"
+msgstr "Aerobarco Canhão de Assalto Mantis"
 
 #: data/mp/messages/strings/names.txt:1951
 msgid "Pulse Laser Leopard Hover"
-msgstr "Hovercraft Pulso Laser Leopardo"
+msgstr "Aerobarco Pulso Laser Leopardo"
 
 #: data/mp/messages/strings/names.txt:1952
 msgid "Pulse Laser Panther Hover"
-msgstr "Hovercraft Pulso Laser Pantera"
+msgstr "Aerobarco Pulso Laser Pantera"
 
 #: data/mp/messages/strings/names.txt:1953
 msgid "Rail Gun Tiger Hover"
-msgstr "Hovercraft Acelerador de Partículas Tigre"
+msgstr "Aerobarco Acelerador de Partículas Tigre"
 
 #: data/mp/messages/strings/names.txt:1954
 msgid "Pulse Laser Tiger Hover"
-msgstr "Hovercraft Pulso Laser Tigre"
+msgstr "Aerobarco Pulso Laser Tigre"
 
 #: data/mp/messages/strings/names.txt:1955
 msgid "Plasma Cannon Wyvern Tracks"
@@ -11844,7 +11843,7 @@ msgstr "Tanque Míssil Scourge Dragonete"
 
 #: data/mp/messages/strings/names.txt:1957
 msgid "Flashlight Retribution Hover"
-msgstr "Hovercraft Laser Médio Retribuição "
+msgstr "Aerobarco Laser Médio Retribuição "
 
 #: data/mp/messages/strings/names.txt:1958
 msgid "Mini-Rocket Viper Half Track"
@@ -11856,23 +11855,23 @@ msgstr "Híbrido Artilharia de Mini-Foguetes Víbora"
 
 #: data/mp/messages/strings/names.txt:1960
 msgid "Phosphor Bomb Bay Mantis VTOL"
-msgstr "PDV Bombas de Fósforo Mantis"
+msgstr "VTOL Bombas de Fósforo Mantis"
 
 #: data/mp/messages/strings/names.txt:1961
 msgid "Heap Bomb Bay Mantis VTOL"
-msgstr "PDV Bombas Explosivas Mantis"
+msgstr "VTOL Bombas Explosivas Mantis"
 
 #: data/mp/messages/strings/names.txt:1962
 msgid "Heap Bomb Bay Retribution VTOL"
-msgstr "PDV Bombas Explosivas Retribuição"
+msgstr "VTOL Bombas Explosivas Retribuição"
 
 #: data/mp/messages/strings/names.txt:1963
 msgid "Scourge Retaliation VTOL"
-msgstr "PDV Míssil Scourge Retaliação"
+msgstr "VTOL Míssil Scourge Retaliação"
 
 #: data/mp/messages/strings/names.txt:1964
 msgid "Plasmite Retribution VTOL"
-msgstr "PDV Plasmite Retribuição"
+msgstr "VTOL Plasmite Retribuição"
 
 #: lib/framework/i18n.cpp:93
 #: lib/framework/i18n.cpp:155
@@ -11880,14 +11879,12 @@ msgid "System locale"
 msgstr "Localização do Sistema"
 
 #: lib/ivis_opengl/screen.cpp:187
-#, fuzzy
 msgid "OpenGL GLSL shader version 1.20 is not supported by your system. Some things may look wrong. Please upgrade your graphics driver/hardware, if possible."
-msgstr "OpenGL 1.5/2.0 não é suportado pelo seu sistema. Algumas coisas podem aparentar erradas. Favor atualizar seu hardware gráfico, se possível."
+msgstr "O Shader GLSL 1.20 da OpenGL não é suportado pelo seu sistema.  Algumas coisas podem aparecer erradas. Favor atualizar seu hardware gráfico, se possível."
 
 #: lib/ivis_opengl/screen.cpp:193
-#, fuzzy
 msgid "OpenGL 1.2 + VBO + TEC is not supported by your system. The game requires this. Please upgrade your graphics drivers/hardware, if possible."
-msgstr "OpengGL 1.4 + Ext. VBO não são suportados pelo seu sistema. Esse jogo requer-los. Favor atualizar seu hardware gráfico, se possível."
+msgstr "OpengGL 1.2 + VBO + TEC não são suportados pelo seu sistema. Esse jogo os requer. Favor atualizar seu hardware gráfico, se possível."
 
 #: lib/netplay/netplay.cpp:210
 #: lib/netplay/netplay.cpp:1065
@@ -12140,7 +12137,7 @@ msgstr "Usar apenas OpenGL 1.5"
 
 #: src/cmddroid.cpp:110
 msgid "Commander needs a higher level to command more units"
-msgstr ""
+msgstr "O comandante precisa de um nível maior para comandar mais unidades"
 
 #: src/configuration.cpp:96
 msgid "My Game"
@@ -12497,14 +12494,12 @@ msgid "Challenges"
 msgstr "Desafios"
 
 #: src/frontend.cpp:249
-#, fuzzy
 msgid "Load Campaign Game"
-msgstr "Carregar Jogo"
+msgstr "Carregar Jogo de Campanha"
 
 #: src/frontend.cpp:250
-#, fuzzy
 msgid "Load Skirmish Game"
-msgstr "Iniciar Jogo vs. Computador"
+msgstr "Carregar Jogo vs. Computador"
 
 #: src/frontend.cpp:252
 msgid "SINGLE PLAYER"
@@ -12512,19 +12507,17 @@ msgstr "UM JOGADOR"
 
 #: src/frontend.cpp:257
 msgid "Campaign videos are missing! Get them from http://wz2100.net"
-msgstr ""
+msgstr "Vídeos da campanha faltando! Pegue-os em http://wz2100.net"
 
 #: src/frontend.cpp:334
 #: src/ingameop.cpp:504
-#, fuzzy
 msgid "Load Campaign Saved Game"
-msgstr "Carregar Jogo Salvo"
+msgstr "Carregar Jogo de Campanha Salvo"
 
 #: src/frontend.cpp:340
 #: src/ingameop.cpp:508
-#, fuzzy
 msgid "Load Skirmish Saved Game"
-msgstr "Carregar Jogo Salvo"
+msgstr "Carregar Jogo Salvo vs. Computador"
 
 #: src/frontend.cpp:394
 msgid "MULTI PLAYER"
@@ -12735,7 +12728,6 @@ msgid "Unsupported"
 msgstr "Não suportado"
 
 #: src/frontend.cpp:889
-#, fuzzy
 msgid "Shaders"
 msgstr "Sombras"
 
@@ -13048,14 +13040,12 @@ msgid "-->  QUIT  <--"
 msgstr "--> SAIR <--"
 
 #: src/ingameop.cpp:512
-#, fuzzy
 msgid "Save Campaign Game"
-msgstr "Nova Campanha"
+msgstr "Salvar Jogo de Campanha"
 
 #: src/ingameop.cpp:516
-#, fuzzy
 msgid "Save Skirmish Game"
-msgstr "Iniciar Jogo vs. Computador"
+msgstr "Salvar Jogo vs. Computador"
 
 #: src/init.cpp:421
 #, c-format
@@ -13210,7 +13200,7 @@ msgstr "Designar Suporte de Artilharia"
 
 #: src/intorder.cpp:187
 msgid "Assign VTOL Factory Production"
-msgstr "Designar Produção de PDV"
+msgstr "Designar Produção de VTOL"
 
 #: src/intorder.cpp:188
 msgid "Circle"
@@ -13241,9 +13231,9 @@ msgid "Fine, weapon & sensor display is off!"
 msgstr "Está bem, alcances não serão exibidos!"
 
 #: src/keybind.cpp:423
-#, fuzzy, c-format
+#, c-format
 msgid "Player %u is cheating a new droid army of: %s."
-msgstr "Jogador %u está trapaceando, dando a ele/ela mesma uma nova armada dróide de %s(s)."
+msgstr "Jogador %u está trapaceando, obtendo uma nova armada dróide de %s."
 
 #: src/keybind.cpp:461
 #: src/keybind.cpp:491
@@ -13861,7 +13851,7 @@ msgstr "Selecionar TODAS as unidades"
 
 #: src/keymap.cpp:438
 msgid "Select all VTOLs"
-msgstr "Selecionar todos os PDV's"
+msgstr "Selecionar todos os VTOL's"
 
 #: src/keymap.cpp:439
 msgid "Select all Wheels"
@@ -14154,7 +14144,7 @@ msgstr "[Sem Ciborgues]"
 
 #: src/multiint.cpp:992
 msgid "[No VTOLs]"
-msgstr "[Sem PDVs]"
+msgstr "[Sem VTOLs]"
 
 #: src/multiint.cpp:996
 #, c-format
@@ -14232,17 +14222,15 @@ msgstr "Ciborgues desativados."
 
 #: src/multiint.cpp:1398
 msgid "VTOLs disabled."
-msgstr "PDV's desativados."
+msgstr "VTOL's desativados."
 
 #: src/multiint.cpp:1399
-#, fuzzy
 msgid "Satellite Uplink disabled."
-msgstr "Centro de Monitoramento Via Satélite"
+msgstr "Monitoramento Via Satélite desativado."
 
 #: src/multiint.cpp:1400
-#, fuzzy
 msgid "Laser Satellite disabled."
-msgstr "Centro de Commando do Satélite Laser"
+msgstr "Satélite Laser desativado."
 
 #: src/multiint.cpp:1447
 #: src/multiint.cpp:1455
@@ -14596,26 +14584,26 @@ msgstr "Estruturas"
 
 #: src/multimenu.cpp:826
 msgid "Sent/Received per sec —"
-msgstr ""
+msgstr "Env./Receb. por seg. —"
 
 #: src/multimenu.cpp:826
 msgid "Total Sent/Received —"
-msgstr ""
+msgstr "Tot. Env./Receb. —"
 
 #: src/multimenu.cpp:831
-#, fuzzy, c-format
+#, c-format
 msgid "Traf: %u/%u"
-msgstr "Cabos: %u"
+msgstr "Traf: %u/%u"
 
 #: src/multimenu.cpp:835
 #, c-format
 msgid "Uncompressed: %u/%u"
-msgstr ""
+msgstr "Descompactado: %u/%u"
 
 #: src/multimenu.cpp:839
 #, c-format
 msgid "Pack: %u/%u"
-msgstr ""
+msgstr "Compactado: %u/%u"
 
 #: src/multimenu.cpp:1141
 msgid "Channel"
@@ -14727,12 +14715,12 @@ msgstr "Marrom"
 msgid "We can't do that! We must be a Cyborg unit to use a Cyborg Transport!"
 msgstr "Não podemos fazer isso! Devemos ser um Ciborgue para usar um Transporte Ciborgue!"
 
-#: src/qtscriptfuncs.cpp:1591
+#: src/qtscriptfuncs.cpp:1594
 #: src/scriptfuncs.cpp:3263
 msgid "YOU ARE VICTORIOUS!"
 msgstr "VOCÊ FOI VITORIOSO!"
 
-#: src/qtscriptfuncs.cpp:1596
+#: src/qtscriptfuncs.cpp:1599
 #: src/scriptfuncs.cpp:3267
 msgid "YOU WERE DEFEATED!"
 msgstr "VOCÊ FOI DERROTADO!"
@@ -14902,63 +14890,62 @@ msgid_plural "%u units selected"
 msgstr[0] "%u unidade selecionada"
 msgstr[1] "%u unidades selecionadas"
 
-#: src/structure.cpp:2632
-#, fuzzy
+#: src/structure.cpp:2625
 msgid "Can't build anymore units, Command Control Limit Reached - Production Halted"
-msgstr "Limite de Controle de Comando - Produção Interrompida"
+msgstr "Impossível construir mais unidades, Limite de Controle de Comando - Produção Interrompida"
 
-#: src/structure.cpp:5625
-#: src/structure.cpp:5650
+#: src/structure.cpp:5618
+#: src/structure.cpp:5643
 #, c-format
 msgid "%s - %u Unit assigned - Damage %3.0f%%"
 msgid_plural "%s - %u Units assigned - Damage %3.0f%%"
 msgstr[0] "%s - %u Unidade designada - Dano %3.0f%%"
 msgstr[1] "%s - %u Unidades designadas - Dano %3.0f%%"
 
-#: src/structure.cpp:5655
-#: src/structure.cpp:5723
-#: src/structure.cpp:5738
-#: src/structure.cpp:5752
+#: src/structure.cpp:5648
+#: src/structure.cpp:5716
+#: src/structure.cpp:5731
+#: src/structure.cpp:5745
 #, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - Dano %3.0f%%"
 
-#: src/structure.cpp:5705
+#: src/structure.cpp:5698
 #, c-format
 msgid "%s - Connected %u of %u - Damage %3.0f%%"
 msgstr "%s - %u de %u conectados - Dano %3.0f%%"
 
-#: src/structure.cpp:5869
-#: src/structure.cpp:5914
+#: src/structure.cpp:5862
+#: src/structure.cpp:5907
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Danificado Eletronicamente"
 
-#: src/structure.cpp:6165
+#: src/structure.cpp:6158
 msgid "Electronic Reward - Visibility Report"
 msgstr "Prêmio - Eletrônico - Relatório de Visibilidade"
 
-#: src/structure.cpp:6205
+#: src/structure.cpp:6198
 msgid "Factory Reward - Propulsion"
 msgstr "Prêmio - Fábrica - Propulsão"
 
-#: src/structure.cpp:6229
+#: src/structure.cpp:6222
 msgid "Factory Reward - Body"
 msgstr "Prêmio - Fábrica - Chassis"
 
-#: src/structure.cpp:6253
+#: src/structure.cpp:6246
 msgid "Factory Reward - Weapon"
 msgstr "Prêmio - Fábrica - Arma"
 
-#: src/structure.cpp:6262
+#: src/structure.cpp:6255
 msgid "Factory Reward - Nothing"
 msgstr "Prêmio - Fábrica - Nada"
 
-#: src/structure.cpp:6290
+#: src/structure.cpp:6283
 msgid "Repair Facility Award - Repair"
 msgstr "Prêmio - Centro de Reparos - Reparo"
 
-#: src/structure.cpp:6297
+#: src/structure.cpp:6290
 msgid "Repair Facility Award - Nothing"
 msgstr "Prêmio - Centro de Reparos - Nada"
 
@@ -14991,9 +14978,9 @@ msgstr " - Finalizado em %s"
 #. TRANSLATORS: This string looks as follows when expanded.
 #. "Version <version name/number> <working copy state><BUILD DATE><BUILD TYPE>"
 #: src/version.cpp:147
-#, fuzzy, c-format
+#, c-format
 msgid "Version %s%s%s%s"
-msgstr "Versão %s-%s%s%s%s"
+msgstr "Versão %s%s%s%s"
 
 #~ msgid "Password is already set!"
 #~ msgstr "Senha já definida!"
@@ -15010,19 +14997,19 @@ msgstr "Versão %s-%s%s%s%s"
 #~ msgstr "Cor das Unidades"
 
 #~ msgid "VTOL HPV Cannon Bug VTOL"
-#~ msgstr "PDV Canhão de Hiper Velocidade Inseto"
+#~ msgstr "VTOL Canhão de Hiper Velocidade Inseto"
 
 #~ msgid "VTOL HPV Cannon Scorpion VTOL"
-#~ msgstr "PDV Canhão de Hiper Velocidade Escorpião"
+#~ msgstr "VTOL Canhão de Hiper Velocidade Escorpião"
 
 #~ msgid "VTOL HPV Cannon Mantis VTOL"
-#~ msgstr "PDV Canhão de Hiper Velocidade Mantis"
+#~ msgstr "VTOL Canhão de Hiper Velocidade Mantis"
 
 #~ msgid "Mini-Rocket Artillery Cobra Tracks"
 #~ msgstr "Tanque Artilharia de Mini-Foguetes Cobra"
 
 #~ msgid "HPV Cannon Python Hover"
-#~ msgstr "Hovercraft Canhão Píton"
+#~ msgstr "Aerobarco Canhão Píton"
 
 #~ msgid "CHEATS ARE NOW ENABLED!"
 #~ msgstr "TRAPAÇAS ATIVADAS!"
@@ -15194,19 +15181,19 @@ msgstr "Versão %s-%s%s%s%s"
 #~ msgstr " (definido localmente)"
 
 #~ msgid "Cobra Hover Heavy-Repair"
-#~ msgstr "Hovercraft Reparo Pesado Cobra"
+#~ msgstr "Aerobarco Reparo Pesado Cobra"
 
 #~ msgid "Viper HMG Wheels"
 #~ msgstr "4x4 Metralhadora Pesada Víbora"
 
 #~ msgid "TK Mantis Hover"
-#~ msgstr "Hovercraft Destruidor de Tanques Mantis"
+#~ msgstr "Aerobarco Destruidor de Tanques Mantis"
 
 #~ msgid "Cobra HMG Tracks"
 #~ msgstr "Tanque Metralhadora Pesada Cobra"
 
 #~ msgid "Cobra Hover HC"
-#~ msgstr "Hovercraft Canhão Pesado Cobra"
+#~ msgstr "Aerobarco Canhão Pesado Cobra"
 
 #~ msgid "Scorpion Lancer Tracks"
 #~ msgstr "Tanque Lançadeiro Escorpião"
@@ -15215,10 +15202,10 @@ msgstr "Versão %s-%s%s%s%s"
 #~ msgstr "Tanque Canhão Pesado Escorpião"
 
 #~ msgid "Scorpion Lancer VTOL"
-#~ msgstr "PDV Lançadeiro Escorpião"
+#~ msgstr "VTOL Lançadeiro Escorpião"
 
 #~ msgid "Scorpion BB VTOL"
-#~ msgstr "PDV Arrasa-Defesas Escorpião"
+#~ msgstr "VTOL Arrasa-Defesas Escorpião"
 
 #~ msgid "Viper Command Turret Tracks"
 #~ msgstr "Tanque Comandante Víbora"
@@ -15251,16 +15238,16 @@ msgstr "Versão %s-%s%s%s%s"
 #~ msgstr "Tanque Reparo Escorpião"
 
 #~ msgid "Scorpion Heavy Repair Hover"
-#~ msgstr "Hovercraft Reparos Pesado Escorpião"
+#~ msgstr "Aerobarco Reparos Pesado Escorpião"
 
 #~ msgid "Cobra Hover Truck"
-#~ msgstr "Hovercraft Caminhão CObra"
+#~ msgstr "Aerobarco Caminhão CObra"
 
 #~ msgid "Scorpion Hover Truck"
-#~ msgstr "Hovercraft Caminhão Escorpião"
+#~ msgstr "Aerobarco Caminhão Escorpião"
 
 #~ msgid "Mantis Hover Truck"
-#~ msgstr "Hovercraft Caminhão Mantis"
+#~ msgstr "Aerobarco Caminhão Mantis"
 
 #~ msgid "Cobra Bunker Buster Tracks"
 #~ msgstr "Tanque Arrasa-Defesas Cobra"
@@ -15287,7 +15274,7 @@ msgstr "Versão %s-%s%s%s%s"
 #~ msgstr "Híbrido Inferno Cobra"
 
 #~ msgid "Python HVC Hover"
-#~ msgstr "Hovercraft Canhão de Velocidade Píton"
+#~ msgstr "Aerobarco Canhão de Velocidade Píton"
 
 #~ msgid "Python Scourge Tracks"
 #~ msgstr "Tanque Scourge Píton"
