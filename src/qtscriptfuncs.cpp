@@ -2729,9 +2729,21 @@ static QScriptValue js_setSunPosition(QScriptContext *context, QScriptEngine *)
 //-- Set the ambient, diffuse and specular colour intensities of the Sun lighting source.
 static QScriptValue js_setSunIntensity(QScriptContext *context, QScriptEngine *)
 {
-	float ambient[4] = { context->argument(0).toNumber(), context->argument(1).toNumber(), context->argument(2).toNumber(), 1.0f };
-	float diffuse[4] = { context->argument(3).toNumber(), context->argument(4).toNumber(), context->argument(5).toNumber(), 1.0f };
-	float specular[4] = { context->argument(6).toNumber(), context->argument(7).toNumber(), context->argument(8).toNumber(), 1.0f };
+	float ambient[4];
+	float diffuse[4];
+	float specular[4];
+	ambient[0] = context->argument(0).toNumber();
+	ambient[1] = context->argument(1).toNumber();
+	ambient[2] = context->argument(2).toNumber();
+	ambient[3] = 1.0f;
+	diffuse[0] = context->argument(3).toNumber();
+	diffuse[1] = context->argument(4).toNumber();
+	diffuse[2] = context->argument(5).toNumber();
+	diffuse[3] = 1.0f;
+	specular[0] = context->argument(6).toNumber();
+	specular[1] = context->argument(7).toNumber();
+	specular[2] = context->argument(8).toNumber();
+	specular[3] = 1.0f;
 	pie_Lighting0(LIGHT_AMBIENT, ambient);
 	pie_Lighting0(LIGHT_DIFFUSE, diffuse);
 	pie_Lighting0(LIGHT_SPECULAR, specular);
