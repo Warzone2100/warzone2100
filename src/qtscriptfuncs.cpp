@@ -569,7 +569,7 @@ static QScriptValue js_label(QScriptContext *context, QScriptEngine *engine)
 		if (p.type == SCRIPT_AREA)
 		{
 			ret.setProperty("x2", map_coord(p.p2.x), QScriptValue::ReadOnly);
-			ret.setProperty("xy", map_coord(p.p2.y), QScriptValue::ReadOnly);
+			ret.setProperty("y2", map_coord(p.p2.y), QScriptValue::ReadOnly);
 		}
 		else if (p.type == OBJ_DROID)
 		{
