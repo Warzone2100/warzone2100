@@ -241,7 +241,6 @@ src/display3d.cpp
 src/display.cpp
 src/drive.cpp
 src/droid.cpp
-src/e3demo.cpp
 src/edit3d.cpp
 src/effects.cpp
 src/feature.cpp
