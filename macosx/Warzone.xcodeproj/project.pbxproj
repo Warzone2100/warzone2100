@@ -200,7 +200,6 @@
 		0246A2A60BD3CCDC004D1C70 /* display3d.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0246A1CF0BD3CCDB004D1C70 /* display3d.cpp */; };
 		0246A2A70BD3CCDC004D1C70 /* drive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0246A1D30BD3CCDB004D1C70 /* drive.cpp */; };
 		0246A2A80BD3CCDC004D1C70 /* droid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0246A1D50BD3CCDB004D1C70 /* droid.cpp */; };
-		0246A2A90BD3CCDC004D1C70 /* e3demo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0246A1D80BD3CCDB004D1C70 /* e3demo.cpp */; };
 		0246A2AB0BD3CCDC004D1C70 /* edit3d.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0246A1DC0BD3CCDB004D1C70 /* edit3d.cpp */; };
 		0246A2AC0BD3CCDC004D1C70 /* effects.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0246A1DE0BD3CCDB004D1C70 /* effects.cpp */; };
 		0246A2AE0BD3CCDC004D1C70 /* feature.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0246A1E20BD3CCDB004D1C70 /* feature.cpp */; };
@@ -1295,8 +1294,6 @@
 		0246A1D50BD3CCDB004D1C70 /* droid.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = droid.cpp; path = ../src/droid.cpp; sourceTree = SOURCE_ROOT; };
 		0246A1D60BD3CCDB004D1C70 /* droid.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = droid.h; path = ../src/droid.h; sourceTree = SOURCE_ROOT; };
 		0246A1D70BD3CCDB004D1C70 /* droiddef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = droiddef.h; path = ../src/droiddef.h; sourceTree = SOURCE_ROOT; };
-		0246A1D80BD3CCDB004D1C70 /* e3demo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = e3demo.cpp; path = ../src/e3demo.cpp; sourceTree = SOURCE_ROOT; };
-		0246A1D90BD3CCDB004D1C70 /* e3demo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = e3demo.h; path = ../src/e3demo.h; sourceTree = SOURCE_ROOT; };
 		0246A1DC0BD3CCDB004D1C70 /* edit3d.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = edit3d.cpp; path = ../src/edit3d.cpp; sourceTree = SOURCE_ROOT; };
 		0246A1DD0BD3CCDB004D1C70 /* edit3d.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = edit3d.h; path = ../src/edit3d.h; sourceTree = SOURCE_ROOT; };
 		0246A1DE0BD3CCDB004D1C70 /* effects.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = effects.cpp; path = ../src/effects.cpp; sourceTree = SOURCE_ROOT; };
@@ -2474,8 +2471,6 @@
 				0246A1D50BD3CCDB004D1C70 /* droid.cpp */,
 				0246A1D60BD3CCDB004D1C70 /* droid.h */,
 				0246A1D70BD3CCDB004D1C70 /* droiddef.h */,
-				0246A1D80BD3CCDB004D1C70 /* e3demo.cpp */,
-				0246A1D90BD3CCDB004D1C70 /* e3demo.h */,
 				0246A1DC0BD3CCDB004D1C70 /* edit3d.cpp */,
 				0246A1DD0BD3CCDB004D1C70 /* edit3d.h */,
 				0246A1DE0BD3CCDB004D1C70 /* effects.cpp */,
@@ -4624,7 +4619,6 @@
 				0246A2A60BD3CCDC004D1C70 /* display3d.cpp in Sources */,
 				0246A2A70BD3CCDC004D1C70 /* drive.cpp in Sources */,
 				0246A2A80BD3CCDC004D1C70 /* droid.cpp in Sources */,
-				0246A2A90BD3CCDC004D1C70 /* e3demo.cpp in Sources */,
 				0246A2AB0BD3CCDC004D1C70 /* edit3d.cpp in Sources */,
 				0246A2AC0BD3CCDC004D1C70 /* effects.cpp in Sources */,
 				0246A2AE0BD3CCDC004D1C70 /* feature.cpp in Sources */,
