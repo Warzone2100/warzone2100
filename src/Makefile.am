@@ -54,7 +54,6 @@ noinst_HEADERS = \
 	drive.h \
 	droiddef.h \
 	droid.h \
-	e3demo.h \
 	edit3d.h \
 	effects.h \
 	featuredef.h \
@@ -177,7 +176,6 @@ warzone2100_SOURCES = \
 	display.cpp \
 	drive.cpp \
 	droid.cpp \
-	e3demo.cpp \
 	edit3d.cpp \
 	effects.cpp \
 	feature.cpp \

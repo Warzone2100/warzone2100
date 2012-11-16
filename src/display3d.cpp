@@ -47,7 +47,6 @@
 #include "lib/sound/audio_id.h"
 #include "lib/netplay/netplay.h"
 
-#include "e3demo.h"
 #include "loop.h"
 #include "atmos.h"
 #include "levels.h"
@@ -431,7 +430,7 @@ static PIELIGHT structureBrightness(STRUCTURE *psStructure)
 			}
 			buildingBrightness = pal_SetBrightness(200 + brightVar);
 		}
-		if (!demoGetStatus() && !getRevealStatus())
+		if (!getRevealStatus())
 		{
 			buildingBrightness = pal_SetBrightness(avGetObjLightLevel((BASE_OBJECT*)psStructure, buildingBrightness.byte.r));
 		}
@@ -823,7 +822,7 @@ void draw3DScene( void )
 		getAsciiTime(buildInfo, graphicsTime);
 		iV_DrawText( buildInfo, RET_X + 134, 422 + E_H );
 
-		if (getDebugMappingStatus() && !demoGetStatus())
+		if (getDebugMappingStatus())
 		{
 			iV_DrawText( "DEBUG ", RET_X + 134, 436 + E_H );
 		}
@@ -846,16 +845,6 @@ void draw3DScene( void )
 		processWarCam();
 	}
 
-	if(demoGetStatus())
-	{
-		flushConsoleMessages();
-		setConsolePermanence(true, true);
-		permitNewConsoleMessages(true);
-		addConsoleMessage("Warzone 2100 : Pumpkin Studios ", RIGHT_JUSTIFY,SYSTEM_MESSAGE);
-		permitNewConsoleMessages(false);
-	}
-
-	processDemoCam();
 	processSensorTarget();
 	processDestinationTarget();
 
@@ -1146,8 +1135,6 @@ bool init3DView(void)
 	// Set the initial fog distance
 	UpdateFogDistance(distance);
 
-	initDemoCamera();
-
 	/* No initial rotations */
 	imdRot2.x = 0;
 	imdRot.y = 0;
@@ -1405,8 +1392,7 @@ void	renderAnimComponent( const COMPONENT_OBJECT *psObj )
 	ASSERT( psParentObj != NULL, "renderAnimComponent: invalid parent object pointer" );
 
 	/* only draw visible bits */
-	if( (psParentObj->type == OBJ_DROID) && !demoGetStatus() &&
-		((DROID*)psParentObj)->visible[selectedPlayer] != UBYTE_MAX )
+	if (psParentObj->type == OBJ_DROID && ((DROID*)psParentObj)->visible[selectedPlayer] != UBYTE_MAX)
 	{
 		return;
 	}
@@ -1893,7 +1879,7 @@ void displayDynamicObjects( void )
 				if(clipXY(psDroid->pos.x,psDroid->pos.y))
 				{
 					/* No point in adding it if you can't see it? */
-					if(psDroid->visible[selectedPlayer] || demoGetStatus())
+					if (psDroid->visible[selectedPlayer])
 					{
 						psDroid->sDisplay.frameNumber = currentGameFrame;
 
@@ -1981,7 +1967,7 @@ void	renderFeature(FEATURE *psFeature)
 	bool bForceDraw = ( getRevealStatus() && psFeature->psStats->visibleAtStart);
 	int shadowFlags = 0;
 
-	if (!psFeature->visible[selectedPlayer] && !demoGetStatus() && !bForceDraw)
+	if (!psFeature->visible[selectedPlayer] && !bForceDraw)
 	{
 		return;
 	}
@@ -2019,7 +2005,7 @@ void	renderFeature(FEATURE *psFeature)
 		objectShimmy((BASE_OBJECT*)psFeature);
 	}
 
-	if (demoGetStatus() || bForceDraw)
+	if (bForceDraw)
 	{
 		brightness = pal_SetBrightness(200);
 	}
@@ -2194,7 +2180,7 @@ void	renderStructure(STRUCTURE *psStructure)
 		return;
 	}
 	// If the structure is not truly visible, but we know there is something there, we will instead draw a blip
-	if (psStructure->visible[selectedPlayer] < UBYTE_MAX && psStructure->visible[selectedPlayer] > 0 && !demoGetStatus())
+	if (psStructure->visible[selectedPlayer] < UBYTE_MAX && psStructure->visible[selectedPlayer] > 0)
 	{
 		dv.x = psStructure->pos.x - player.p.x;
 		dv.z = -(psStructure->pos.y - player.p.z);
@@ -2206,7 +2192,7 @@ void	renderStructure(STRUCTURE *psStructure)
 		pie_MatEnd();
 		return;
 	}
-	else if (!psStructure->visible[selectedPlayer] && !demoGetStatus())
+	else if (!psStructure->visible[selectedPlayer])
 	{
 		return;
 	}
@@ -2628,7 +2614,7 @@ static bool	renderWallSection(STRUCTURE *psStructure)
 	int				pieFlag, pieFlagData;
 	MAPTILE			*psTile = worldTile(psStructure->pos.x, psStructure->pos.y);
 
-	if(psStructure->visible[selectedPlayer] || demoGetStatus())
+	if(psStructure->visible[selectedPlayer])
 	{
 		if (psTile->jammerBits & alliancebits[psStructure->player])
 		{

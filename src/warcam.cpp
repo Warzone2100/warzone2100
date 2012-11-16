@@ -56,7 +56,6 @@
 #include "order.h"
 #include "action.h"
 #include "intdisplay.h"
-#include "e3demo.h"
 #include "display3d.h"
 #include "selection.h"
 
@@ -142,11 +141,6 @@ static void processLeaderSelection( void )
 	bool bSuccess;
 	UDWORD dif;
 	UDWORD bestSoFar;
-
-	if (demoGetStatus())
-	{
-		return;
-	}
 
 	if (getWarCamStatus())
 	{
@@ -899,7 +893,6 @@ static bool camTrackCamera()
 	/* Most importantly - see if the target we're tracking is dead! */
 	if(trackingCamera.target->died)
 	{
-		setFindNewTarget();
 		return(false);
 	}
 

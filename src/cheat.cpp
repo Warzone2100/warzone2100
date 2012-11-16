@@ -55,7 +55,6 @@ static CHEAT_ENTRY cheatCodes[] =
 	{"let me win", kf_AddMissionOffWorld},	//let me win
 	{"timedemo", kf_FrameRate},	 //timedemo
 	{"kill", kf_KillSelected},	//kill slected
-	{"demo", kf_ToggleDemoMode},	//demo mode
 	{"john kettley", kf_ToggleWeather},	//john kettley
 	{"shakey", kf_ToggleShakeStatus},	//shakey
 	{"mouseflip", kf_ToggleMouseInvert},	//mouseflip

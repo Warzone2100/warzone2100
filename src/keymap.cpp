@@ -238,7 +238,7 @@ _keymapsave keyMapSaveTable[] =
 	kf_ToggleVisibility,
 	kf_FinishResearch,
 	kf_LowerTile,
-	kf_ToggleDemoMode,
+	kf_NOOP, // unused
 	kf_ToggleGodMode,
 	kf_EndMissionOffWorld,
 	kf_SystemClose,
@@ -463,7 +463,6 @@ void	keyInitMappings( bool bForceDefaults )
 	keyAddMapping(KEYMAP__DEBUG, KEY_IGNORE, KEY_V,         KEYMAP_PRESSED, kf_ToggleVisibility,    N_("Toggle visibility"));
 	keyAddMapping(KEYMAP__DEBUG, KEY_IGNORE, KEY_W,         KEYMAP_DOWN,    kf_RaiseTile,           N_("Raise tile height"));
 	keyAddMapping(KEYMAP__DEBUG, KEY_IGNORE, KEY_A,         KEYMAP_DOWN,    kf_LowerTile,           N_("Lower tile height"));
-	keyAddMapping(KEYMAP__DEBUG, KEY_IGNORE, KEY_Y,         KEYMAP_PRESSED, kf_ToggleDemoMode,      N_("Toggles on/off DEMO Mode"));
 	keyAddMapping(KEYMAP__DEBUG, KEY_LCTRL,  KEY_B,         KEYMAP_PRESSED, kf_EndMissionOffWorld,  N_("End Mission"));
 	keyAddMapping(KEYMAP__DEBUG, KEY_LCTRL,  KEY_J,         KEYMAP_PRESSED, kf_ToggleFog,           N_("Toggles All fog"));
 	keyAddMapping(KEYMAP__DEBUG, KEY_LCTRL,  KEY_Q,         KEYMAP_PRESSED, kf_ToggleWeather,       N_("Trigger some weather"));

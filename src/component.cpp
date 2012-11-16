@@ -30,7 +30,6 @@
 #include "action.h"
 #include "component.h"
 #include "display3d.h"
-#include "e3demo.h"
 #include "effects.h"
 #include "intdisplay.h"
 #include "loop.h"
@@ -1043,7 +1042,7 @@ void displayComponentObject(DROID *psDroid)
 		addEffect(&position,EFFECT_EXPLOSION,EXPLOSION_TYPE_PLASMA,false,NULL,0);
 	}
 
-	if ((psDroid->visible[selectedPlayer] == UBYTE_MAX) || demoGetStatus())
+	if (psDroid->visible[selectedPlayer] == UBYTE_MAX)
 	{
 		//ingame not button object
 		//should render 3 mounted weapons now

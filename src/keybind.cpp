@@ -55,7 +55,6 @@
 #include "lib/ivis_opengl/screen.h"
 
 #include "cheat.h"
-#include "e3demo.h"	// will this be on PSX?
 #include "lib/netplay/netplay.h"
 #include "multiplay.h"
 #include "multimenu.h"
@@ -1549,30 +1548,6 @@ void	kf_ToggleEnergyBars( void )
 }
 
 // --------------------------------------------------------------------------
-void	kf_ToggleDemoMode( void )
-{
-	if(demoGetStatus() == false)
-	{
-		/* Switch on demo mode */
-		toggleDemoStatus();
-		enableConsoleDisplay(true);
-	}
-	else
-	{
-		toggleDemoStatus();
-		flushConsoleMessages();
-		setConsolePermanence(false,true);
-		permitNewConsoleMessages(true);
-		addConsoleMessage(_("Demo mode off - Returning to normal game mode"), LEFT_JUSTIFY, SYSTEM_MESSAGE);
-		if(getWarCamStatus())
-		{
-			camToggleStatus();
-		}
-	}
-
-}
-
-// --------------------------------------------------------------------------
 void	kf_ChooseOptions( void )
 {
 	const char* cmsg;
@@ -1767,7 +1742,7 @@ void	kf_ToggleDrivingMode( void )
 		}
 		else
 		{	// removed the MP check for this, so you can now play with in in MP games.
-			if(	(driveModeActive() == false) &&	(demoGetStatus() == false) ) // && !bMultiPlayer)
+			if (!driveModeActive())
 			{
 				StartDriverMode( NULL );
 				addConsoleMessage("DriverMode on", LEFT_JUSTIFY, SYSTEM_MESSAGE);
