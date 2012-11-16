@@ -6440,13 +6440,13 @@ bool scrMsg(void)
 		return false;
 	}
 
-	sendAIMessage(strParam1, playerFrom, playerTo);
-
+	ssprintf(tmp, "%d%s", playerTo, strParam1);
+	sendTextMessage(tmp, false, playerFrom);
 
 	//show the message we sent on our local console as well (even in skirmish, if player plays as this AI)
 	if(playerFrom == selectedPlayer)
 	{
-		sprintf(tmp,"[%d-%d] : %s",playerFrom, playerTo, strParam1);											// add message
+		ssprintf(tmp, "[%d-%d] : %s", playerFrom, playerTo, strParam1);	// add message
 		addConsoleMessage(tmp, RIGHT_JUSTIFY, playerFrom);
 	}
 

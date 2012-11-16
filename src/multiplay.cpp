@@ -105,6 +105,7 @@ static SDWORD msgStackPos = -1;				//top element pointer
 static bool recvBeacon(NETQUEUE queue);
 static bool recvDestroyTemplate(NETQUEUE queue);
 static bool recvResearch(NETQUEUE queue);
+static bool sendAIMessage(char *pStr, UDWORD player, UDWORD to);
 
 bool		multiplayPlayersReady		(bool bNotifyStatus);
 void		startMultiplayerGame		(void);
@@ -1077,7 +1078,7 @@ bool sendTextMessage(const char *pStr, bool all, uint32_t from)
 	char*				curStr = (char*)pStr;
 
 	memset(display,0x0, sizeof(display));	//clear buffer
-	memset(msg,0x0, sizeof(display));		//clear buffer
+	memset(msg,0x0, sizeof(msg));		//clear buffer
 	memset(sendto,0x0, sizeof(sendto));		//clear private flag
 	memset(posTable,0x0, sizeof(posTable));		//clear buffer
 	sstrcpy(msg, curStr);
@@ -1146,6 +1147,14 @@ bool sendTextMessage(const char *pStr, bool all, uint32_t from)
 		NETuint32_t(&from);		// who this msg is from
 		NETstring(msg,MAX_CONSOLE_STRING_LENGTH);	// the message to send
 		NETend();
+		for (i = 0; i < MAX_PLAYERS; i++)
+		{
+			if (i != from && !isHumanPlayer(i) && myResponsibility(i))
+			{
+				msgStackPush(CALL_AI_MSG, from, i, msg, -1, -1, NULL);
+				triggerEventChat(from, i, msg);
+			}
+		}
 	}
 	else if (normal)
 	{
@@ -1160,7 +1169,12 @@ bool sendTextMessage(const char *pStr, bool all, uint32_t from)
 					NETstring(msg,MAX_CONSOLE_STRING_LENGTH);	// the message to send
 					NETend();
 				}
-				else	//also send to AIs now (non-humans), needed for AI
+				else if (myResponsibility(i))
+				{
+					msgStackPush(CALL_AI_MSG, from, i, msg, -1, -1, NULL);
+					triggerEventChat(from, i, msg);
+				}
+				else	// send to AIs on different host
 				{
 					sendAIMessage(msg, from, i);
 				}
@@ -1179,6 +1193,11 @@ bool sendTextMessage(const char *pStr, bool all, uint32_t from)
 					NETuint32_t(&from);				// who this msg is from
 					NETstring(display, MAX_CONSOLE_STRING_LENGTH);	// the message to send
 					NETend();
+				}
+				else if (myResponsibility(i))
+				{
+					msgStackPush(CALL_AI_MSG, from, i, curStr, -1, -1, NULL);
+					triggerEventChat(from, i, curStr);
 				}
 				else	//also send to AIs now (non-humans), needed for AI
 				{
@@ -1214,58 +1233,37 @@ void printConsoleNameChange(const char *oldName, const char *newName)
 
 
 //AI multiplayer message, send from a certain player index to another player index
-bool sendAIMessage(char *pStr, UDWORD player, UDWORD to)
+static bool sendAIMessage(char *pStr, UDWORD player, UDWORD to)
 {
 	UDWORD	sendPlayer;
 
-	//check if this is one of the local players, don't need net send then
-	if (to == selectedPlayer || myResponsibility(to))	//(the only) human on this machine or AI on this machine
+	if (!ingame.localOptionsReceived)
 	{
-		triggerEventChat(player, to, pStr);
-
-		//Just show "him" the message
-		displayAIMessage(pStr, player, to);
-
-		//Received a console message from a player callback
-		//store and call later
-		//-------------------------------------------------
-		if (!msgStackPush(CALL_AI_MSG,player,to,pStr,-1,-1,NULL))
-		{
-			debug(LOG_ERROR, "sendAIMessage() - msgStackPush - stack failed");
-			return false;
-		}
-	}
-	else		//not a local player (use multiplayer mode)
-	{
-		if (!ingame.localOptionsReceived)
-		{
-			return true;
-		}
-
-		//find machine that is hosting this human or AI
-		sendPlayer = whosResponsible(to);
-
-		if (sendPlayer >= MAX_PLAYERS)
-		{
-			debug(LOG_ERROR, "sendAIMessage() - sendPlayer >= MAX_PLAYERS");
-			return false;
-		}
-
-		if (!isHumanPlayer(sendPlayer))		//NETsend can't send to non-humans
-		{
-			debug(LOG_ERROR, "sendAIMessage() - player is not human.");
-			return false;
-		}
-
-		//send to the player who is hosting 'to' player (might be himself if human and not AI)
-		NETbeginEncode(NETnetQueue(sendPlayer), NET_AITEXTMSG);
-			NETuint32_t(&player);			//save the actual sender
-			//save the actual player that is to get this msg on the source machine (source can host many AIs)
-			NETuint32_t(&to);				//save the actual receiver (might not be the same as the one we are actually sending to, in case of AIs)
-			NETstring(pStr, MAX_CONSOLE_STRING_LENGTH);		// copy message in.
-		NETend();
+		return true;
 	}
 
+	// find machine that is hosting this human or AI
+	sendPlayer = whosResponsible(to);
+
+	if (sendPlayer >= MAX_PLAYERS)
+	{
+		debug(LOG_ERROR, "sendAIMessage() - sendPlayer >= MAX_PLAYERS");
+		return false;
+	}
+
+	if (!isHumanPlayer(sendPlayer))		//NETsend can't send to non-humans
+	{
+		debug(LOG_ERROR, "sendAIMessage() - player is not human.");
+		return false;
+	}
+
+	//send to the player who is hosting 'to' player (might be himself if human and not AI)
+	NETbeginEncode(NETnetQueue(sendPlayer), NET_AITEXTMSG);
+		NETuint32_t(&player);			//save the actual sender
+		//save the actual player that is to get this msg on the source machine (source can host many AIs)
+		NETuint32_t(&to);				//save the actual receiver (might not be the same as the one we are actually sending to, in case of AIs)
+		NETstring(pStr, MAX_CONSOLE_STRING_LENGTH);		// copy message in.
+	NETend();
 	return true;
 }
 
@@ -1301,20 +1299,6 @@ bool sendBeacon(int32_t locX, int32_t locY, int32_t forPlayer, int32_t sender, c
 	NETend();
 
 	return true;
-}
-
-void displayAIMessage(char *pStr, SDWORD from, SDWORD to)
-{
-	char				tmp[255];
-
-	if (isHumanPlayer(to))		//display text only if receiver is the (human) host machine itself
-	{
-		strcpy(tmp, getPlayerName(from));
-		strcat(tmp, ": ");											// seperator
-		strcat(tmp, pStr);											// add message
-
-		addConsoleMessage(tmp, DEFAULT_JUSTIFY, from);
-	}
 }
 
 // Write a message to the console.
@@ -1373,7 +1357,7 @@ bool recvTextMessage(NETQUEUE queue)
 	return true;
 }
 
-//AI multiplayer message - received message from AI (from scripts)
+//AI multiplayer message - received message for AI (for hosted scripts)
 bool recvTextMessageAI(NETQUEUE queue)
 {
 	UDWORD	sender, receiver;
@@ -1391,13 +1375,8 @@ bool recvTextMessageAI(NETQUEUE queue)
 		sender = queue.index;  // Fix corrupted sender.
 	}
 
-	//sstrcpy(msg, getPlayerName(sender));  // name
-	//sstrcat(msg, " : ");                  // seperator
 	sstrcpy(msg, newmsg);
 	triggerEventChat(sender, receiver, newmsg);
-
-	//Display the message and make the script callback
-	displayAIMessage(msg, sender, receiver);
 
 	//Received a console message from a player callback
 	//store and call later
