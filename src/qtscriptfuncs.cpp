@@ -1974,22 +1974,19 @@ static QScriptValue js_countStruct(QScriptContext *context, QScriptEngine *engin
 {
 	QString building = context->argument(0).toString();
 	int index = getStructStatFromName(building.toUtf8().constData());
-	int player;
+	int me = engine->globalObject().property("me").toInt32();
+	int player = me;
 	int quantity = 0;
 	if (context->argumentCount() > 1)
 	{
 		player = context->argument(1).toInt32();
 	}
-	else
-	{
-		player = engine->globalObject().property("me").toInt32();
-	}
 	SCRIPT_ASSERT(context, index < numStructureStats && index >= 0, "Structure %s not found", building.toUtf8().constData());
 	for (int i = 0; i < MAX_PLAYERS; i++)
 	{
 		if (player == i || player == ALL_PLAYERS
-		    || (player == ALLIES && aiCheckAlliances(i, player))
-		    || (player == ENEMIES && !aiCheckAlliances(i, player)))
+		    || (player == ALLIES && aiCheckAlliances(i, me))
+		    || (player == ENEMIES && !aiCheckAlliances(i, me)))
 		{
 			quantity += asStructLimits[i][index].currentQuantity;
 		}
@@ -2003,22 +2000,19 @@ static QScriptValue js_countStruct(QScriptContext *context, QScriptEngine *engin
 //-- The player parameter can be a specific player, ALL_PLAYERS, ALLIES or ENEMIES.
 static QScriptValue js_countDroid(QScriptContext *context, QScriptEngine *engine)
 {
-	int player;
+	int me = engine->globalObject().property("me").toInt32();
+	int player = me;
 	int quantity = 0;
 	int type = context->argument(0).toInt32();
 	if (context->argumentCount() > 1)
 	{
 		player = context->argument(1).toInt32();
 	}
-	else
-	{
-		player = engine->globalObject().property("me").toInt32();
-	}
 	for (int i = 0; i < MAX_PLAYERS; i++)
 	{
 		if (player == i || player == ALL_PLAYERS
-		    || (player == ALLIES && aiCheckAlliances(i, player))
-		    || (player == ENEMIES && !aiCheckAlliances(i, player)))
+		    || (player == ALLIES && aiCheckAlliances(i, me))
+		    || (player == ENEMIES && !aiCheckAlliances(i, me)))
 		{
 			if (type == DROID_ANY)
 			{

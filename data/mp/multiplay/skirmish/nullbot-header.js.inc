@@ -9,7 +9,7 @@ const	MAX_VTOL_GROUPS = 6;		// the maximum number of VTOL groups
 const	ABS_MAX_HOVER_TRUCKS = 13;			// make sure we build at least some hover trucks
 
 const	MAX_DISPERSE = 3; 		// the maximum dispersion of the attack group
-const	RETREAT_AT = 70;		// send the unit for repair if it has this much hit point percent left
+const	RETREAT_AT = 50;		// send the unit for repair if it has this much hit point percent left
 
 const	NUM_VTOL_PADS = 1;		// this many vtols per vtol pad are allowed
 const	BASE_SIZE = 20;		// range of alertness
@@ -85,6 +85,7 @@ var	attackTargets = [
 	factory,
 	vtolfac,
 	derrick,
+	satlink,
 	lassat,
 ];
 
@@ -93,6 +94,7 @@ var allInAttackTargets = [
 	borgfac,
 	factory,
 	vtolfac,
+	satlink,
 	lassat,
 ];
 
@@ -110,6 +112,22 @@ function earlyGame(n) {
 	return (gameTime < n*60000);
 }
 
+// returns minutes of the hour; can be used as a pseudo-random number
+function getTime() {
+	var today = new Date();
+	return today.getMinutes();
+}
+
+// returns a number that is guaranteed to be different for every team
+function teamIdentifier() {
+	var j=1,s=0;
+	for (var i=0; i<maxPlayers; ++i) {
+		if (allianceExistsBetween(me,i))
+			s+=j;
+		j*=2;
+	}
+	return s;
+}
 
 // here come definitions of standard branches used by adaptive research AIs
 
@@ -381,13 +399,11 @@ const standardResearchPathElectronic = [
 
 const standardTankBodies = [
 	[
-		"Body14SUP", // dragon
-		"Body13SUP", // wyvern
 		"Body10MBT", // vengeance
 		"Body7ABT", // retribution
 		"Body9REC", // tiger
-		"Body6SUPP", // panther
 		"Body12SUP", // mantis
+		"Body6SUPP", // panther
 		"Body8MBT", // scorpion
 		"Body11ABT", // python
 		"Body3MBT", // retaliation
@@ -402,8 +418,8 @@ const standardTankBodies = [
 		"Body10MBT", // vengeance
 		"Body9REC", // tiger
 		"Body7ABT", // retribution
-		"Body12SUP", // mantis
 		"Body6SUPP", // panther
+		"Body12SUP", // mantis
 		"Body11ABT", // python
 		"Body8MBT", // scorpion
 		"Body3MBT", // retaliation
@@ -415,8 +431,6 @@ const standardTankBodies = [
 ];
 
 const standardTankBodiesLight = [
-	"Body14SUP", // dragon
-	"Body13SUP", // wyvern
 	"Body10MBT", // vengeance
 	"Body7ABT", // retribution
 	"Body12SUP", // mantis
