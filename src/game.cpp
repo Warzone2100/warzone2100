@@ -4099,9 +4099,13 @@ static bool loadSaveDroidPointers(const QString &pFileName, DROID **ppsCurrentDr
 	{
 		ini.beginGroup(list[i]);
 		DROID *psDroid;
-		int player = getPlayer(ini);
 		int id = ini.value("id").toInt();
-		ASSERT(id >= 0, "Negative droid ID in %s", pFileName.toUtf8().constData());
+		int player = getPlayer(ini);
+		if (id <= 0)
+		{
+			ini.endGroup();
+			continue; // special hack for campaign missions, cannot have targets
+		}
 
 		for (psDroid = ppsCurrentDroidLists[player]; psDroid && psDroid->id != id; psDroid = psDroid->psNext)
 		{
