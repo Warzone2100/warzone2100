@@ -146,7 +146,7 @@ extern UWORD weaponROF(WEAPON_STATS *psStat, SBYTE player);
 extern UDWORD numCR(const char *pFileBuffer, UDWORD fileSize);
 
 /*Load the weapon stats from the file exported from Access*/
-extern bool loadWeaponStats(const char *pWeaponData, UDWORD bufferSize);
+extern bool loadWeaponStats(const char *pFileName);
 
 /*Load the armour stats from the file exported from Access*/
 //extern bool loadArmourStats(void);
@@ -176,22 +176,22 @@ extern bool loadRepairStats(const char *pFileName);
 extern bool loadConstructStats(const char *pFileName);
 
 /*Load the Propulsion Types from the file exported from Access*/
-extern bool loadPropulsionTypes(const char *pPropTypeData, UDWORD bufferSize);
+extern bool loadPropulsionTypes(const char *pFileName);
 
 /*Load the propulsion sounds from the file exported from Access*/
-extern bool loadPropulsionSounds(const char *pSoundData, UDWORD bufferSize);
+extern bool loadPropulsionSounds(const char *pFileName);
 
 /*Load the Terrain Table from the file exported from Access*/
-extern bool loadTerrainTable(const char *pTerrainTableData, UDWORD bufferSize);
+extern bool loadTerrainTable(const char *pFileName);
 
 /* load the IMDs to use for each body-propulsion combination */
-extern bool loadBodyPropulsionIMDs(const char *pData, UDWORD bufferSize);
+extern bool loadBodyPropulsionIMDs(const char *pFileName);
 
 /*Load the weapon sounds from the file exported from Access*/
-extern bool loadWeaponSounds(const char *pSoundData, UDWORD bufferSize);
+extern bool loadWeaponSounds(const char *pFileName);
 
 /*Load the Weapon Effect Modifiers from the file exported from Access*/
-extern bool loadWeaponModifiers(const char *pWeapModData, UDWORD bufferSize);
+extern bool loadWeaponModifiers(const char *pFileName);
 
 /*******************************************************************************
 *		Generic stats functions

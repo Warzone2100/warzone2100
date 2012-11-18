@@ -7,7 +7,7 @@ directory	"structs"
 file		IMD	"blderik.pie"
 
 directory	"stats"
-file		SWEAPON		"weapons.txt"
+file		SWEAPON		"weapons.ini"
 file		SSENSOR		"sensor.ini"
 file		SECM		"ecm.ini"
 file		SREPAIR		"repair.ini"
