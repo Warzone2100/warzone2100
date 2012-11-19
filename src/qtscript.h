@@ -27,6 +27,8 @@
 #include "researchdef.h"
 #include "featuredef.h"
 
+class QScriptEngine;
+
 enum SCRIPT_TRIGGER_TYPE
 {
 	TRIGGER_GAME_INIT,
@@ -89,5 +91,6 @@ bool triggerEventObjectTransfer(BASE_OBJECT *psObj, int from);
 bool triggerEventChat(int from, int to, const char *message);
 bool triggerEventPickup(FEATURE *psFeat, DROID *psDroid);
 bool triggerEventCheatMode(bool entered);
+bool triggerEventGroupEmpty(int group, QScriptEngine *engine);
 
 #endif

@@ -490,9 +490,9 @@ function eventDroidBuilt(droid, struct)
 
 			// HUUUGE hack here :) -- naive attack code nested up in here, 'cos i'm so lazy
 			// Only attack once every four minutes
-			var attackers = enumGroup(attackGroup);
-			if (attackers.length > 20 && gameTime > attackRun + 4 * 60 * 1000)
+			if (groupSizes[attackGroup] > 20 && gameTime > attackRun + 4 * 60 * 1000)
 			{
+				var attackers = enumGroup(attackGroup);
 				// Attack! Find a random enemy, since that is more fun.
 				var numEnemies = 0;
 				for (var i = 0; i < maxPlayers; i++)

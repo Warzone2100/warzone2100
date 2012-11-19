@@ -31,6 +31,7 @@ enum SCRIPT_TYPES
 	SCRIPT_AREA,
 	SCRIPT_PLAYER,
 	SCRIPT_RESEARCH,
+	SCRIPT_GROUP
 };
 
 #include <QtScript/QScriptEngine>
@@ -38,8 +39,14 @@ enum SCRIPT_TYPES
 // ----------------------------------------------
 // Private to scripting module functions below
 
+void groupRemoveObject(const BASE_OBJECT *psObj);
+
 /// Register functions to engine context
 bool registerFunctions(QScriptEngine *engine);
+bool unregisterFunctions(QScriptEngine *engine);
+
+bool saveGroups(WzConfig &ini, QScriptEngine *engine);
+bool loadGroup(QScriptEngine *engine, int groupId, int droidId);
 
 // Utility conversion functions
 QScriptValue convDroid(DROID *psDroid, QScriptEngine *engine);

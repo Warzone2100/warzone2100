@@ -234,6 +234,7 @@ void scriptRemoveObject(const BASE_OBJECT *psObj)
 		}
 		i = bindings.erase(i);
 	}
+	groupRemoveObject(psObj);
 }
 
 //-- \subsection{bind(function, object[, player])}
@@ -311,6 +312,11 @@ bool initScripts()
 
 bool shutdownScripts()
 {
+	for (int i = 0; i < scripts.size(); ++i)
+	{
+		QScriptEngine *engine = scripts.at(i);
+		unregisterFunctions(engine);
+	}
 	timers.clear();
 	bindings.clear();
 	internalNamespace.clear();
@@ -471,6 +477,7 @@ bool saveScriptStates(const char *filename)
 		QScriptEngine *engine = scripts.at(i);
 		QScriptValueIterator it(engine->globalObject());
 		ini.beginGroup(QString("globals_") + QString::number(i));
+		// we save 'scriptName' and 'me' implicitly
 		while (it.hasNext())
 		{
 			it.next();
@@ -480,12 +487,19 @@ bool saveScriptStates(const char *filename)
 			}
 		}
 		ini.endGroup();
+		ini.beginGroup(QString("groups_") + QString::number(i));
+		// we have to save 'scriptName' and 'me' explicitly
+		ini.setValue("me", engine->globalObject().property("me").toInt32());
+		ini.setValue("scriptName", engine->globalObject().property("scriptName").toString().toUtf8().constData());
+		saveGroups(ini, engine);
+		ini.endGroup();
 	}
 	for (int i = 0; i < timers.size(); ++i)
 	{
 		timerNode node = timers.at(i);
 		ini.beginGroup(QString("triggers_") + QString::number(i));
-		ini.setValue("player", node.player);
+		// we have to save 'scriptName' and 'me' explicitly
+		ini.setValue("me", node.player);
 		ini.setValue("scriptName", node.engine->globalObject().property("scriptName").toString().toUtf8().constData());
 		ini.setValue("function", node.function.toUtf8().constData());
 		if (!node.baseobj >= 0)
@@ -524,44 +538,50 @@ bool loadScriptStates(const char *filename)
 	debug(LOG_SAVE, "Loading script states for %d script contexts", scripts.size());
 	for (int i = 0; i < list.size(); ++i)
 	{
-		if (list[i].startsWith("triggers_"))
+		ini.beginGroup(list[i]);
+		int player = ini.value("me").toInt();
+		QString scriptName = ini.value("scriptName").toString();
+		QScriptEngine *engine = findEngineForPlayer(player, scriptName);
+		if (engine && list[i].startsWith("triggers_"))
 		{
-			ini.beginGroup(list[i]);
 			timerNode node;
-			node.player = ini.value("player").toInt();
+			node.player = player;
 			node.ms = ini.value("ms").toInt();
 			node.frameTime = ini.value("frame").toInt();
-			QString scriptName = ini.value("scriptName").toString();
+			node.engine = engine;
 			debug(LOG_SAVE, "Registering trigger %d for player %d, script %s", 
 			      i, node.player, scriptName.toUtf8().constData());
-			node.engine = findEngineForPlayer(node.player, scriptName);
-			if (node.engine)
-			{
-				node.function = ini.value("function").toString();
-				node.baseobj = ini.value("baseobj", -1).toInt();
-				node.type = (timerType)ini.value("type", TIMER_REPEAT).toInt();
-				timers.push_back(node);
-			}
-			ini.endGroup();
+			node.function = ini.value("function").toString();
+			node.baseobj = ini.value("baseobj", -1).toInt();
+			node.type = (timerType)ini.value("type", TIMER_REPEAT).toInt();
+			timers.push_back(node);
 		}
-		else if (list[i].startsWith("globals_"))
+		else if (engine && list[i].startsWith("globals_"))
 		{
-			ini.beginGroup(list[i]);
-			int player = ini.value("me").toInt();
-			QString scriptName = ini.value("scriptName").toString();
 			QStringList keys = ini.childKeys();
 			debug(LOG_SAVE, "Loading script globals for player %d, script %s -- found %d values", 
 			      player, scriptName.toUtf8().constData(), keys.size());
-			QScriptEngine *engine = findEngineForPlayer(player, scriptName);
-			if (engine)
+			for (int j = 0; j < keys.size(); ++j)
 			{
-				for (int j = 0; j < keys.size(); ++j)
+				engine->globalObject().setProperty(keys.at(j), engine->toScriptValue(ini.value(keys.at(j))));
+			}
+		}
+		else if (engine && list[i].startsWith("groups_"))
+		{
+			QStringList keys = ini.childKeys();
+			for (int j = 0; j < keys.size(); ++j)
+			{
+				QStringList values = ini.value(keys.at(j)).toStringList();
+				bool ok = false; // check if number
+				int droidId = keys.at(j).toInt(&ok);
+				for (int k = 0; ok && k < values.size(); k++)
 				{
-					engine->globalObject().setProperty(keys.at(j), engine->toScriptValue(ini.value(keys.at(j))));
+					int groupId = values.at(k).toInt();
+					loadGroup(engine, groupId, droidId);
 				}
 			}
-			ini.endGroup();
 		}
+		ini.endGroup();
 	}
 	return true;
 }
@@ -876,7 +896,6 @@ bool triggerEventChat(int from, int to, const char *message)
 		int me = engine->globalObject().property("me").toInt32();
 		if (me == to)
 		{
-			QScriptEngine *engine = scripts.at(i);
 			QScriptValueList args;
 			args += QScriptValue(from);
 			args += QScriptValue(to);
@@ -884,5 +903,17 @@ bool triggerEventChat(int from, int to, const char *message)
 			callFunction(engine, "eventChat", args);
 		}
 	}
+	return true;
+}
+
+//__ \subsection{eventGroupEmpty(id)}
+//__ An event that is run whenever a group becomes empty. Input parameter
+//__ is the group's index.
+// Since groups are entities local to one context, we do not iterate over them here.
+bool triggerEventGroupEmpty(int group, QScriptEngine *engine)
+{
+	QScriptValueList args;
+	args += QScriptValue(group);
+	callFunction(engine, "eventGroupEmpty", args);
 	return true;
 }

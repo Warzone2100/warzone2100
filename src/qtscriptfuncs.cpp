@@ -38,7 +38,6 @@
 #include "display3d.h"
 #include "map.h"
 #include "mission.h"
-#include "group.h"
 #include "transporter.h"
 #include "message.h"
 #include "display3d.h"
@@ -71,12 +70,51 @@
 extern bool structDoubleCheck(BASE_STATS *psStat,UDWORD xx,UDWORD yy, SDWORD maxBlockingTiles);
 extern Vector2i positions[MAX_PLAYERS];
 extern std::vector<Vector2i> derricks;
+typedef QMap<DROID *, int> GROUPMAP;
+typedef QMap<QScriptEngine *, GROUPMAP *> ENGINEMAP;
+ENGINEMAP groups;
 
 #define SCRIPT_ASSERT_PLAYER(_context, _player) \
 	SCRIPT_ASSERT(_context, _player >= 0 && _player < MAX_PLAYERS, "Invalid player index %d", _player);
 
 // ----------------------------------------------------------------------------------------
 // Utility functions -- not called directly from scripts
+
+void groupRemoveObject(const BASE_OBJECT *psObj)
+{
+	for (ENGINEMAP::iterator i = groups.begin(); i != groups.end(); ++i)
+	{
+		QScriptEngine *engine = i.key();
+		GROUPMAP *psMap = i.value();
+		if (psMap->contains((DROID *)psObj))
+		{
+			int groupId = psMap->take((DROID *)psObj); // take and remove item
+			QScriptValue groupMembers = i.key()->globalObject().property("groupSizes");
+			const int newValue = groupMembers.property(groupId).toInt32() - 1;
+			ASSERT(newValue >= 0, "Bad group count in group %d (was %d)", groupId, newValue + 1);
+			groupMembers.setProperty(groupId, newValue, QScriptValue::ReadOnly);
+			if (newValue == 0)
+			{
+				triggerEventGroupEmpty(groupId, engine);
+			}
+		}
+	}
+}
+
+static bool groupAddObject(DROID *psDroid, int groupId, QScriptEngine *engine)
+{
+	ASSERT_OR_RETURN(false, psDroid && groupId >= 0 && engine, "Bad parameter");
+	GROUPMAP *psMap = groups.value(engine);
+	if (!psMap->contains(psDroid))
+	{
+		QScriptValue groupMembers = engine->globalObject().property("groupSizes");
+		int prev = groupMembers.property(QString::number(groupId)).toInt32();
+		groupMembers.setProperty(QString::number(groupId), prev + 1, QScriptValue::ReadOnly);
+		psMap->insert(psDroid, groupId);
+		return true; // inserted
+	}
+	return false; // already had it
+}
 
 //;; \subsection{Research}
 //;; Describes a research item. The following properties are defined:
@@ -335,9 +373,12 @@ QScriptValue convDroid(DROID *psDroid, QScriptEngine *engine)
 	{
 		value.setProperty("armed", QScriptValue::NullValue);
 	}
-	if (psDroid->psGroup)
+	GROUPMAP *psMap = groups.value(engine);
+	if (psMap->contains(psDroid))
 	{
-		value.setProperty("group", (int)psDroid->psGroup->id, QScriptValue::ReadOnly);
+		int group = psMap->value(psDroid, -1);
+		ASSERT(group >= 0, "%s is member of invalid group %d", objInfo(psDroid), group);
+		value.setProperty("group", group, QScriptValue::ReadOnly);
 	}
 	else
 	{
@@ -419,6 +460,34 @@ QScriptValue convMax(BASE_OBJECT *psObj, QScriptEngine *engine)
 }
 
 // ----------------------------------------------------------------------------------------
+// Group system
+//
+
+bool loadGroup(QScriptEngine *engine, int groupId, int droidId)
+{
+	DROID *psDroid = IdToDroid(droidId, ANYPLAYER);
+	return groupAddObject(psDroid, groupId, engine);
+}
+
+bool saveGroups(WzConfig &ini, QScriptEngine *engine)
+{
+	// Save group info as a list of group memberships for each droid
+	GROUPMAP *psMap = groups.value(engine);	
+	for (GROUPMAP::const_iterator i = psMap->constBegin(); i != psMap->constEnd(); ++i)
+	{
+		QStringList value;
+		DROID *psDroid = i.key();
+		if (ini.contains(QString::number(psDroid->id)))
+		{
+			value.push_back(ini.value(QString::number(psDroid->id)).toString());
+		}
+		value.push_back(QString::number(i.value()));
+		ini.setValue(QString::number(psDroid->id), value);
+	}
+	return true;
+}
+
+// ----------------------------------------------------------------------------------------
 // Label system (function defined in qtscript.h header)
 //
 
@@ -429,6 +498,8 @@ static QHash<QString, labeltype> labels;
 // Load labels
 bool loadLabels(const char *filename)
 {
+	int groupidx = -1;
+
 	if (!PHYSFS_exists(filename))
 	{
 		debug(LOG_SAVE, "No %s found -- not adding any labels", filename);
@@ -477,6 +548,27 @@ bool loadLabels(const char *filename)
 			p.player = ini.value("player").toInt();
 			labels.insert(label, p);
 		}
+		else if (list[i].startsWith("group"))
+		{
+			p.id = groupidx--;
+			p.type = SCRIPT_GROUP;
+			p.player = ini.value("player").toInt();
+			QStringList list = ini.value("members").toStringList();
+			// load the group data into every scripting context, with the same negative group id
+			for (ENGINEMAP::iterator iter = groups.begin(); iter != groups.end(); ++iter)
+			{
+				QScriptEngine *engine = iter.key();
+				QScriptValue groupMembers = iter.key()->globalObject().property("groupSizes");
+				groupMembers.setProperty(p.id, list.length(), QScriptValue::ReadOnly);
+				for (QStringList::iterator j = list.begin(); j != list.end(); j++)
+				{
+					int id = (*j).toInt();
+					DROID *psDroid = IdToDroid(id, p.player);
+					groupAddObject(psDroid, p.id, engine);
+				}
+			}
+			labels.insert(label, p);
+		}
 		else
 		{
 			debug(LOG_ERROR, "Misnamed group in %s", filename);
@@ -512,6 +604,31 @@ bool writeLabels(const char *filename)
 			ini.beginGroup("area_" + QString::number(c[1]++));
 			ini.setVector2i("pos1", l.p1);
 			ini.setVector2i("pos2", l.p2);
+			ini.setValue("label", key);
+			ini.endGroup();
+		}
+		else if (l.type == SCRIPT_GROUP)
+		{
+			ini.beginGroup("group_" + QString::number(c[1]++));
+			ini.setValue("player", l.player);
+			QStringList list;
+			// there is no way for a script to add or change labelled groups, so just
+			// take them from one scripting context, and save them as they are
+			for (ENGINEMAP::iterator iter = groups.begin(); iter != groups.end(); ++iter)
+			{
+				GROUPMAP *psMap = iter.value();
+				for (GROUPMAP::iterator j = psMap->begin(); j != psMap->end(); ++j)
+				{
+					int value = j.value();
+					DROID *key = j.key();
+					if (value < 0)
+					{
+						list += QString::number(key->id);
+					}
+				}
+				break; // only do one context
+			}
+			ini.setValue("members", list);
 			ini.setValue("label", key);
 			ini.endGroup();
 		}
@@ -570,6 +687,12 @@ static QScriptValue js_label(QScriptContext *context, QScriptEngine *engine)
 		{
 			ret.setProperty("x2", map_coord(p.p2.x), QScriptValue::ReadOnly);
 			ret.setProperty("xy", map_coord(p.p2.y), QScriptValue::ReadOnly);
+			ret.setProperty("type", p.type, QScriptValue::ReadOnly);
+		}
+		else if (p.type == SCRIPT_GROUP)
+		{
+			ret.setProperty("id", p.id, QScriptValue::ReadOnly);
+			ret.setProperty("type", p.type, QScriptValue::ReadOnly);
 		}
 		else if (p.type == OBJ_DROID)
 		{
@@ -660,13 +783,14 @@ static QScriptValue js_enumGroup(QScriptContext *context, QScriptEngine *engine)
 {
 	int groupId = context->argument(0).toInt32();
 	QList<DROID *> matches;
-	DROID_GROUP *psGroup = grpFind(groupId);
-	DROID *psCurr;
+	GROUPMAP *psMap = groups.value(engine);
 
-	SCRIPT_ASSERT(context, psGroup, "Invalid group index %d", groupId);
-	for (psCurr = psGroup->psList; psCurr != NULL; psCurr = psCurr->psGrpNext)
+	for (GROUPMAP::const_iterator i = psMap->constBegin(); i != psMap->constEnd(); ++i)
 	{
-		matches.push_back(psCurr);
+		if (i.value() == groupId)
+		{
+			matches.push_back(i.key());
+		}
 	}
 	QScriptValue result = engine->newArray(matches.size());
 	for (int i = 0; i < matches.size(); i++)
@@ -678,11 +802,11 @@ static QScriptValue js_enumGroup(QScriptContext *context, QScriptEngine *engine)
 }
 
 //-- \subsection{newGroup()}
-//-- Allocate a new group. Returns its numerical ID.
-static QScriptValue js_newGroup(QScriptContext *, QScriptEngine *)
+//-- Allocate a new group. Returns its numerical ID. DEPRECATED.
+static QScriptValue js_newGroup(QScriptContext *, QScriptEngine *engine)
 {
-	DROID_GROUP *newGrp = grpCreate();
-	return QScriptValue(newGrp->id);
+	static int i = 1; // group zero reserved
+	return QScriptValue(i++);
 }
 
 //-- \subsection{activateStructure(structure, [target[, ability]])}
@@ -1626,18 +1750,13 @@ static QScriptValue js_groupAddArea(QScriptContext *context, QScriptEngine *engi
 	int y1 = world_coord(context->argument(2).toInt32());
 	int x2 = world_coord(context->argument(3).toInt32());
 	int y2 = world_coord(context->argument(4).toInt32());
-	DROID_GROUP *psGroup = grpFind(groupId);
+	QScriptValue groups = engine->globalObject().property("groupSizes");
 
-	SCRIPT_ASSERT(context, psGroup, "Invalid group index %d", groupId);
-	SCRIPT_ASSERT(context, !psGroup->psList || psGroup->psList->player == player, 
-	              "Group %d belongs to player %d, not player %d", 
-	              groupId, psGroup->psList->player, player);
-	for (DROID *psDroid = apsDroidLists[player]; psGroup && psDroid; psDroid = psDroid->psNext)
+	for (DROID *psDroid = apsDroidLists[player]; psDroid; psDroid = psDroid->psNext)
 	{
-		if (psDroid->pos.x >= x1 && psDroid->pos.x <= x2 && psDroid->pos.y >= y1 && psDroid->pos.y <= y2
-		    && psDroid->droidType != DROID_COMMAND && (psDroid->droidType != DROID_TRANSPORTER && psDroid->droidType != DROID_SUPERTRANSPORTER))
+		if (psDroid->pos.x >= x1 && psDroid->pos.x <= x2 && psDroid->pos.y >= y1 && psDroid->pos.y <= y2)
 		{
-			psGroup->add(psDroid);
+			groupAddObject(psDroid, groupId, engine);
 		}
 	}
 	return QScriptValue();
@@ -1648,17 +1767,13 @@ static QScriptValue js_groupAddArea(QScriptContext *context, QScriptEngine *engi
 static QScriptValue js_groupAddDroid(QScriptContext *context, QScriptEngine *engine)
 {
 	int groupId = context->argument(0).toInt32();
-	DROID_GROUP *psGroup = grpFind(groupId);
 	QScriptValue droidVal = context->argument(1);
 	int droidId = droidVal.property("id").toInt32();
 	int droidPlayer = droidVal.property("player").toInt32();
 	DROID *psDroid = IdToDroid(droidId, droidPlayer);
-	SCRIPT_ASSERT(context, psGroup, "Invalid group index %d", groupId);
+	QScriptValue groups = engine->globalObject().property("groupSizes");
 	SCRIPT_ASSERT(context, psDroid, "Invalid droid index %d", droidId);
-	SCRIPT_ASSERT(context, !psGroup->psList || psGroup->psList->player == psDroid->player, 
-	              "Group %d belongs to player %d, not player %d, cannot add %s", 
-	              groupId, psGroup->psList->player, psDroid->player, objInfo(psDroid));
-	psGroup->add(psDroid);
+	groupAddObject(psDroid, groupId, engine);
 	return QScriptValue();
 }
 
@@ -1674,13 +1789,12 @@ static QScriptValue js_distBetweenTwoPoints(QScriptContext *context, QScriptEngi
 }
 
 //-- \subsection{groupSize(group)}
-//-- Return the number of droids currently in the given group.
-static QScriptValue js_groupSize(QScriptContext *context, QScriptEngine *)
+//-- Return the number of droids currently in the given group. DEPRECATED. Use groupSizes[] instead.
+static QScriptValue js_groupSize(QScriptContext *context, QScriptEngine *engine)
 {
+	QScriptValue groups = engine->globalObject().property("groupSizes");
 	int groupId = context->argument(0).toInt32();
-	DROID_GROUP *psGroup = grpFind(groupId);
-	SCRIPT_ASSERT(context, psGroup, "Group %d not found", groupId);
-	return QScriptValue(psGroup->refCount);
+	return groups.property(groupId).toInt32();
 }
 
 //-- \subsection{droidCanReach(droid, x, y)}
@@ -2812,8 +2926,21 @@ static QScriptValue js_cameraTrack(QScriptContext *context, QScriptEngine *)
 // ----------------------------------------------------------------------------------------
 // Register functions with scripting system
 
+bool unregisterFunctions(QScriptEngine *engine)
+{
+	GROUPMAP *psMap = groups.value(engine);
+	int num = groups.remove(engine);
+	delete psMap;
+	ASSERT(num == 1, "Number of engines removed from group map is %d!", num);
+	return true;
+}
+
 bool registerFunctions(QScriptEngine *engine)
 {
+	// Create group map
+	GROUPMAP *psMap = new GROUPMAP;
+	groups.insert(engine, psMap);
+
 	// Register functions to the script engine here
 	engine->globalObject().setProperty("_", engine->newFunction(js_translate));
 	engine->globalObject().setProperty("label", engine->newFunction(js_label));
@@ -2986,8 +3113,14 @@ bool registerFunctions(QScriptEngine *engine)
 	engine->globalObject().setProperty("ENEMIES", ENEMIES, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("POSITION", SCRIPT_POSITION, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("AREA", SCRIPT_AREA, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("GROUP", SCRIPT_GROUP, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("PLAYER_DATA", SCRIPT_PLAYER, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("RESEARCH_DATA", SCRIPT_RESEARCH, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+
+	/// Place to store group sizes
+	//== \item[groupSizes] A sparse array of group sizes. If a group has never been used, the entry in this array will
+	//== be undefined.
+	engine->globalObject().setProperty("groupSizes", engine->newObject());
 
 	// Static knowledge about players
 	//== \item[playerData] An array of information about the players in a game. Each item in the array is an object
