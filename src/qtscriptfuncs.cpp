@@ -663,6 +663,22 @@ static QScriptValue js_enumLabels(QScriptContext *, QScriptEngine *engine)
 	return result;
 }
 
+//-- \subsection{addLabel(object, label)}
+//-- Add a label to a game object. If the game object already has a label, it is overwritten.
+static QScriptValue js_addLabel(QScriptContext *context, QScriptEngine *engine)
+{
+	struct labeltype value;
+	QScriptValue structVal = context->argument(0);
+	value.id = structVal.property("id").toInt32();
+	value.player = structVal.property("player").toInt32();
+	value.type = OBJ_DROID;
+	BASE_OBJECT *psObj = IdToPointer(value.id, value.player);
+	SCRIPT_ASSERT(context, psObj, "Object id %d not found belonging to player %d", value.id, value.player);
+	QString key = context->argument(1).toString();
+	labels.insert(key, value);
+	return QScriptValue();
+}
+
 //-- \subsection{label(key)}
 //-- Fetch something denoted by a label. A label refers to an area, a position or a \emph{game object} on 
 //-- the map defined using the map editor and stored together with the map. The only argument
@@ -686,7 +702,7 @@ static QScriptValue js_label(QScriptContext *context, QScriptEngine *engine)
 		if (p.type == SCRIPT_AREA)
 		{
 			ret.setProperty("x2", map_coord(p.p2.x), QScriptValue::ReadOnly);
-			ret.setProperty("xy", map_coord(p.p2.y), QScriptValue::ReadOnly);
+			ret.setProperty("y2", map_coord(p.p2.y), QScriptValue::ReadOnly);
 			ret.setProperty("type", p.type, QScriptValue::ReadOnly);
 		}
 		else if (p.type == SCRIPT_GROUP)
@@ -2944,6 +2960,7 @@ bool registerFunctions(QScriptEngine *engine)
 	// Register functions to the script engine here
 	engine->globalObject().setProperty("_", engine->newFunction(js_translate));
 	engine->globalObject().setProperty("label", engine->newFunction(js_label));
+	engine->globalObject().setProperty("addLabel", engine->newFunction(js_addLabel));
 	engine->globalObject().setProperty("enumLabels", engine->newFunction(js_enumLabels));
 	engine->globalObject().setProperty("enumGateways", engine->newFunction(js_enumGateways));
 	engine->globalObject().setProperty("enumTemplates", engine->newFunction(js_enumTemplates));
