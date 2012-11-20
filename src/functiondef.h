@@ -112,7 +112,7 @@ struct PRODUCTION_UPGRADE_FUNCTION : public FUNCTION
 struct PRODUCTION_FUNCTION : public FUNCTION
 {
 	BODY_SIZE capacity;      // The max size of body the factory can produce
-	UWORD productionOutput;	 // Droid Build Points Produced Per Build Cycle
+	int productionOutput;	 // Droid Build Points Produced Per Build Cycle
 };
 
 /*To research topics available*/

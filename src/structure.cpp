@@ -1716,11 +1716,6 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 				//put any production on hold
 				holdProduction(psBuilding, ModeImmediate);
 
-				//quick check not trying to add too much
-				ASSERT_OR_RETURN(NULL, psBuilding->pFunctionality->factory.productionOutput +
-					((PRODUCTION_FUNCTION*)pStructureType->asFuncList[0])->productionOutput < UBYTE_MAX,
-					"building factory module - production Output is too big");
-
 				psBuilding->pFunctionality->factory.productionOutput += ((
 					PRODUCTION_FUNCTION*)pStructureType->asFuncList[0])->productionOutput;
 
@@ -1945,7 +1940,7 @@ static bool setFunctionality(STRUCTURE	*psBuilding, STRUCTURE_TYPE functionType)
 			FACTORY* psFactory = &psBuilding->pFunctionality->factory;
 			unsigned int x, y;
 
-			psFactory->capacity = (UBYTE) ((PRODUCTION_FUNCTION*)psBuilding->pStructureType->asFuncList[0])->capacity;
+			psFactory->capacity = ((PRODUCTION_FUNCTION*)psBuilding->pStructureType->asFuncList[0])->capacity;
 			psFactory->psSubject = NULL;
 
 			// Default the secondary order - AB 22/04/99

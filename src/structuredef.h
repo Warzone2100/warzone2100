@@ -179,7 +179,7 @@ struct FACTORY
 											   can produce*/
 	uint8_t                         productionLoops;        ///< Number of loops to perform. Not synchronised, and only meaningful for selectedPlayer.
 	UBYTE				loopsPerformed;		/* how many times the loop has been performed*/
-	UBYTE				productionOutput;	/* Droid Build Points Produced Per
+	int				productionOutput;	/* Droid Build Points Produced Per
 											   Build Cycle*/
 	DROID_TEMPLATE *                psSubject;              ///< The subject the structure is working on.
 	DROID_TEMPLATE *                psSubjectPending;       ///< The subject the structure is going to working on. (Pending = not yet synchronised.)
