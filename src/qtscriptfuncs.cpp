@@ -497,6 +497,7 @@ static QScriptValue js_enumGroup(QScriptContext *context, QScriptEngine *engine)
 static QScriptValue js_newGroup(QScriptContext *, QScriptEngine *)
 {
 	DROID_GROUP *newGrp = grpCreate();
+	newGrp->add(NULL); // prevent it from being freed when empty
 	return QScriptValue(newGrp->id);
 }
 
