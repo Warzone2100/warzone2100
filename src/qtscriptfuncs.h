@@ -46,7 +46,7 @@ bool registerFunctions(QScriptEngine *engine, QString scriptName);
 bool unregisterFunctions(QScriptEngine *engine);
 
 bool saveGroups(WzConfig &ini, QScriptEngine *engine);
-bool loadGroup(QScriptEngine *engine, int groupId, int droidId);
+bool loadGroup(QScriptEngine *engine, int groupId, int objId);
 
 // Utility conversion functions
 QScriptValue convDroid(DROID *psDroid, QScriptEngine *engine);

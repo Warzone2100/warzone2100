@@ -70,7 +70,7 @@
 extern bool structDoubleCheck(BASE_STATS *psStat,UDWORD xx,UDWORD yy, SDWORD maxBlockingTiles);
 extern Vector2i positions[MAX_PLAYERS];
 extern std::vector<Vector2i> derricks;
-typedef QMap<DROID *, int> GROUPMAP;
+typedef QMap<BASE_OBJECT *, int> GROUPMAP;
 typedef QMap<QScriptEngine *, GROUPMAP *> ENGINEMAP;
 static ENGINEMAP groups;
 
@@ -98,16 +98,16 @@ void groupRemoveObject(BASE_OBJECT *psObj)
 	}
 }
 
-static bool groupAddObject(DROID *psDroid, int groupId, QScriptEngine *engine)
+static bool groupAddObject(BASE_OBJECT *psObj, int groupId, QScriptEngine *engine)
 {
-	ASSERT_OR_RETURN(false, psDroid && groupId >= 0 && engine, "Bad parameter");
+	ASSERT_OR_RETURN(false, psObj && groupId >= 0 && engine, "Bad parameter");
 	GROUPMAP *psMap = groups.value(engine);
-	if (!psMap->contains(psDroid))
+	if (!psMap->contains(psObj))
 	{
 		QScriptValue groupMembers = engine->globalObject().property("groupSizes");
 		int prev = groupMembers.property(QString::number(groupId)).toInt32();
 		groupMembers.setProperty(QString::number(groupId), prev + 1, QScriptValue::ReadOnly);
-		psMap->insert(psDroid, groupId);
+		psMap->insert(psObj, groupId);
 		return true; // inserted
 	}
 	return false; // already had it
@@ -460,10 +460,10 @@ QScriptValue convMax(BASE_OBJECT *psObj, QScriptEngine *engine)
 // Group system
 //
 
-bool loadGroup(QScriptEngine *engine, int groupId, int droidId)
+bool loadGroup(QScriptEngine *engine, int groupId, int objId)
 {
-	DROID *psDroid = IdToDroid(droidId, ANYPLAYER);
-	return groupAddObject(psDroid, groupId, engine);
+	BASE_OBJECT *psObj = IdToPointer(objId, ANYPLAYER);
+	return groupAddObject(psObj, groupId, engine);
 }
 
 bool saveGroups(WzConfig &ini, QScriptEngine *engine)
@@ -473,13 +473,13 @@ bool saveGroups(WzConfig &ini, QScriptEngine *engine)
 	for (GROUPMAP::const_iterator i = psMap->constBegin(); i != psMap->constEnd(); ++i)
 	{
 		QStringList value;
-		DROID *psDroid = i.key();
-		if (ini.contains(QString::number(psDroid->id)))
+		BASE_OBJECT *psObj = i.key();
+		if (ini.contains(QString::number(psObj->id)))
 		{
-			value.push_back(ini.value(QString::number(psDroid->id)).toString());
+			value.push_back(ini.value(QString::number(psObj->id)).toString());
 		}
 		value.push_back(QString::number(i.value()));
-		ini.setValue(QString::number(psDroid->id), value);
+		ini.setValue(QString::number(psObj->id), value);
 	}
 	return true;
 }
@@ -560,8 +560,8 @@ bool loadLabels(const char *filename)
 				for (QStringList::iterator j = list.begin(); j != list.end(); j++)
 				{
 					int id = (*j).toInt();
-					DROID *psDroid = IdToDroid(id, p.player);
-					groupAddObject(psDroid, p.id, engine);
+					BASE_OBJECT *psObj = IdToPointer(id, p.player);
+					groupAddObject(psObj, p.id, engine);
 				}
 			}
 			labels.insert(label, p);
@@ -617,7 +617,7 @@ bool writeLabels(const char *filename)
 				for (GROUPMAP::iterator j = psMap->begin(); j != psMap->end(); ++j)
 				{
 					int value = j.value();
-					DROID *key = j.key();
+					BASE_OBJECT *key = j.key();
 					if (value < 0)
 					{
 						list += QString::number(key->id);
@@ -668,9 +668,9 @@ static QScriptValue js_addLabel(QScriptContext *context, QScriptEngine *engine)
 	QScriptValue structVal = context->argument(0);
 	value.id = structVal.property("id").toInt32();
 	value.player = structVal.property("player").toInt32();
-	value.type = OBJ_DROID;
 	BASE_OBJECT *psObj = IdToPointer(value.id, value.player);
 	SCRIPT_ASSERT(context, psObj, "Object id %d not found belonging to player %d", value.id, value.player);
+	value.type = psObj->type;
 	QString key = context->argument(1).toString();
 	labels.insert(key, value);
 	return QScriptValue();
@@ -795,7 +795,7 @@ static QScriptValue js_enumTemplates(QScriptContext *context, QScriptEngine *eng
 static QScriptValue js_enumGroup(QScriptContext *context, QScriptEngine *engine)
 {
 	int groupId = context->argument(0).toInt32();
-	QList<DROID *> matches;
+	QList<BASE_OBJECT *> matches;
 	GROUPMAP *psMap = groups.value(engine);
 
 	for (GROUPMAP::const_iterator i = psMap->constBegin(); i != psMap->constEnd(); ++i)
@@ -808,8 +808,8 @@ static QScriptValue js_enumGroup(QScriptContext *context, QScriptEngine *engine)
 	QScriptValue result = engine->newArray(matches.size());
 	for (int i = 0; i < matches.size(); i++)
 	{
-		DROID *psDroid = matches.at(i);
-		result.setProperty(i, convDroid(psDroid, engine));
+		BASE_OBJECT *psObj = matches.at(i);
+		result.setProperty(i, convMax(psObj, engine));
 	}
 	return result;
 }
@@ -1829,7 +1829,7 @@ static QScriptValue js_distBetweenTwoPoints(QScriptContext *context, QScriptEngi
 }
 
 //-- \subsection{groupSize(group)}
-//-- Return the number of droids currently in the given group. DEPRECATED. Use groupSizes[] instead.
+//-- Return the number of droids currently in the given group. Note that you can use groupSizes[] instead.
 static QScriptValue js_groupSize(QScriptContext *context, QScriptEngine *engine)
 {
 	QScriptValue groups = engine->globalObject().property("groupSizes");
