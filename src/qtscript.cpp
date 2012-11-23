@@ -218,7 +218,7 @@ static QScriptValue js_queue(QScriptContext *context, QScriptEngine *engine)
 	return QScriptValue();
 }
 
-void scriptRemoveObject(const BASE_OBJECT *psObj)
+void scriptRemoveObject(BASE_OBJECT *psObj)
 {
 	QHash<int, bindNode>::iterator i = bindings.find(psObj->id);
 	while (i != bindings.end() && i.key() == psObj->id)
@@ -906,14 +906,16 @@ bool triggerEventChat(int from, int to, const char *message)
 	return true;
 }
 
-//__ \subsection{eventGroupEmpty(id)}
+//__ \subsection{eventGroupLoss(object, group id, new size)}
 //__ An event that is run whenever a group becomes empty. Input parameter
-//__ is the group's index.
+//__ is the about to be killed object, the group's id, and the new group size.
 // Since groups are entities local to one context, we do not iterate over them here.
-bool triggerEventGroupEmpty(int group, QScriptEngine *engine)
+bool triggerEventGroupLoss(BASE_OBJECT *psObj, int group, int size, QScriptEngine *engine)
 {
 	QScriptValueList args;
+	args += convMax(psObj, engine);
 	args += QScriptValue(group);
-	callFunction(engine, "eventGroupEmpty", args);
+	args += QScriptValue(size);
+	callFunction(engine, "eventGroupLoss", args);
 	return true;
 }

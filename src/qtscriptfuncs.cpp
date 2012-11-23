@@ -80,7 +80,7 @@ static ENGINEMAP groups;
 // ----------------------------------------------------------------------------------------
 // Utility functions -- not called directly from scripts
 
-void groupRemoveObject(const BASE_OBJECT *psObj)
+void groupRemoveObject(BASE_OBJECT *psObj)
 {
 	for (ENGINEMAP::iterator i = groups.begin(); i != groups.end(); ++i)
 	{
@@ -93,10 +93,7 @@ void groupRemoveObject(const BASE_OBJECT *psObj)
 			const int newValue = groupMembers.property(groupId).toInt32() - 1;
 			ASSERT(newValue >= 0, "Bad group count in group %d (was %d)", groupId, newValue + 1);
 			groupMembers.setProperty(groupId, newValue, QScriptValue::ReadOnly);
-			if (newValue == 0)
-			{
-				triggerEventGroupEmpty(groupId, engine);
-			}
+			triggerEventGroupLoss(psObj, groupId, newValue, engine);
 		}
 	}
 }

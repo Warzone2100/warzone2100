@@ -39,7 +39,7 @@ enum SCRIPT_TYPES
 // ----------------------------------------------
 // Private to scripting module functions below
 
-void groupRemoveObject(const BASE_OBJECT *psObj);
+void groupRemoveObject(BASE_OBJECT *psObj);
 
 /// Register functions to engine context
 bool registerFunctions(QScriptEngine *engine, QString scriptName);

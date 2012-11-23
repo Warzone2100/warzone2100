@@ -70,7 +70,7 @@ bool loadLabels(const char *filename);
 bool writeLabels(const char *filename);
 
 /// Tell script system that an object has been removed.
-void scriptRemoveObject(const BASE_OBJECT *psObj);
+void scriptRemoveObject(BASE_OBJECT *psObj);
 
 // ----------------------------------------------
 // Event functions
@@ -91,6 +91,6 @@ bool triggerEventObjectTransfer(BASE_OBJECT *psObj, int from);
 bool triggerEventChat(int from, int to, const char *message);
 bool triggerEventPickup(FEATURE *psFeat, DROID *psDroid);
 bool triggerEventCheatMode(bool entered);
-bool triggerEventGroupEmpty(int group, QScriptEngine *engine);
+bool triggerEventGroupLoss(BASE_OBJECT *psObj, int group, int size, QScriptEngine *engine);
 
 #endif
