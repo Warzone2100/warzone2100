@@ -431,7 +431,8 @@ bool loadPlayerScript(QString path, int player, int difficulty)
 	engine->globalObject().setProperty("scavengerPlayer", scavengerPlayer(), QScriptValue::ReadOnly | QScriptValue::Undeletable);
 
 	// Regular functions
-	registerFunctions(engine);
+	QFileInfo basename(path);
+	registerFunctions(engine, basename.baseName());
 
 	// Remember internal, reserved names
 	QScriptValueIterator it(engine->globalObject());
@@ -449,7 +450,6 @@ bool loadPlayerScript(QString path, int player, int difficulty)
 
 	// We also need to save the special 'scriptName' variable.
 	//== \item[scriptName] Base name of the script that is running.
-	QFileInfo basename(path);
 	engine->globalObject().setProperty("scriptName", basename.baseName(), QScriptValue::ReadOnly | QScriptValue::Undeletable);
 
 	// Register script

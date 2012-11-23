@@ -72,7 +72,7 @@ extern Vector2i positions[MAX_PLAYERS];
 extern std::vector<Vector2i> derricks;
 typedef QMap<DROID *, int> GROUPMAP;
 typedef QMap<QScriptEngine *, GROUPMAP *> ENGINEMAP;
-ENGINEMAP groups;
+static ENGINEMAP groups;
 
 #define SCRIPT_ASSERT_PLAYER(_context, _player) \
 	SCRIPT_ASSERT(_context, _player >= 0 && _player < MAX_PLAYERS, "Invalid player index %d", _player);
@@ -1538,6 +1538,33 @@ static QScriptValue js_enumDroid(QScriptContext *context, QScriptEngine *engine)
 	return result;
 }
 
+//-- \subsection{dump(string...)}
+//-- Output text to a debug file.
+static QScriptValue js_dump(QScriptContext *context, QScriptEngine *engine)
+{
+	QString result;
+	for (int i = 0; i < context->argumentCount(); ++i)
+	{
+		if (i != 0)
+		{
+			result.append(QLatin1String(" "));
+		}
+		QString s = context->argument(i).toString();
+		if (context->state() == QScriptContext::ExceptionState)
+		{
+			break;
+		}
+		result.append(s);
+	}
+	result += "\n";
+	QString scriptName = engine->globalObject().property("scriptName").toString();
+	QString path = "logs/" + scriptName +".log";
+	PHYSFS_file *fp = PHYSFS_openAppend(path.toUtf8().constData());
+	PHYSFS_write(fp, result.toUtf8().constData(), 1, strlen(result.toUtf8().constData()));
+	PHYSFS_close(fp);
+	return QScriptValue();
+}
+
 //-- \subsection{debug(string...)}
 //-- Output text to the command line.
 static QScriptValue js_debug(QScriptContext *context, QScriptEngine *engine)
@@ -2951,7 +2978,7 @@ bool unregisterFunctions(QScriptEngine *engine)
 	return true;
 }
 
-bool registerFunctions(QScriptEngine *engine)
+bool registerFunctions(QScriptEngine *engine, QString scriptName)
 {
 	// Create group map
 	GROUPMAP *psMap = new GROUPMAP;
@@ -2959,6 +2986,7 @@ bool registerFunctions(QScriptEngine *engine)
 
 	// Register functions to the script engine here
 	engine->globalObject().setProperty("_", engine->newFunction(js_translate));
+	engine->globalObject().setProperty("dump", engine->newFunction(js_dump));
 	engine->globalObject().setProperty("label", engine->newFunction(js_label));
 	engine->globalObject().setProperty("addLabel", engine->newFunction(js_addLabel));
 	engine->globalObject().setProperty("enumLabels", engine->newFunction(js_enumLabels));
@@ -3184,6 +3212,9 @@ bool registerFunctions(QScriptEngine *engine)
 	}
 	engine->globalObject().setProperty("derrickPositions", derrickPositions, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("startPositions", startPositions, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+
+	// Clear previous log file
+	PHYSFS_delete(QString("logs/" + scriptName +".log").toUtf8().constData());
 
 	return true;
 }

@@ -42,7 +42,7 @@ enum SCRIPT_TYPES
 void groupRemoveObject(const BASE_OBJECT *psObj);
 
 /// Register functions to engine context
-bool registerFunctions(QScriptEngine *engine);
+bool registerFunctions(QScriptEngine *engine, QString scriptName);
 bool unregisterFunctions(QScriptEngine *engine);
 
 bool saveGroups(WzConfig &ini, QScriptEngine *engine);
