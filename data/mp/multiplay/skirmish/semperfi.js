@@ -245,9 +245,11 @@ function sortByDistToBase(obj1, obj2)
 
 function lookForOil(droids)
 {
+	var droids = enumDroid(me, DROID_CONSTRUCT);
 	var oils = enumFeature(-1, oilRes);
 	var bestDroid = null;
 	var bestDist = 99999;
+	log("looking for oil... " + oils.length + " available");
 	if (oils.length > 0)
 	{
 		oils.sort(sortByDistToBase); // grab closer oils first
@@ -271,6 +273,7 @@ function lookForOil(droids)
 			{
 				bestDroid.busy = true;
 				orderDroidBuild(bestDroid, DORDER_BUILD, derrick, oils[i].x, oils[i].y);
+				bestDist = 99999;
 			}
 		}
 	}
@@ -280,7 +283,6 @@ function lookForOil(droids)
 function buildFundamentals()
 {
 	var needPwGen = false;
-	var droids = enumDroid(me, DROID_CONSTRUCT);
 
 	// Do we need power generators?
 	if (playerPower(me) < 1000 && numUnusedDerricks() > 0)
@@ -290,7 +292,7 @@ function buildFundamentals()
 	}
 	if (!needPwGen && playerPower(me) < 500) // check for more income
 	{
-		if (lookForOil(droids))
+		if (lookForOil())
 		{
 			log("Now looking for oil");
 			return; // do not build anything else
@@ -299,6 +301,7 @@ function buildFundamentals()
 	}
 	// Help build unfinished buildings
 	var structlist = enumStruct(me);
+	var droids = enumDroid(me, DROID_CONSTRUCT);
 	for (var j = 0; j < droids.length; j++)
 	{
 		checkLocalJobs(droids[j], structlist);
@@ -351,7 +354,7 @@ function buildFundamentals2()
 	}
 	log("All fundamental buildings built -- proceed to military stuff");
 	// FIXME ... but instead look for oil
-	lookForOil(enumDroid(me, DROID_CONSTRUCT));
+	lookForOil();
 	// queue("buildDefenses");
 }
 
@@ -611,17 +614,6 @@ function eventStartLevel()
 
 	// Maintenance calls - to fix quirks
 	setTimer("maintenance", 1000 * 60 * 2); // every 2 minutes, call it to check if anything left to do
-
-	/*
-	if (numFactories() > 1 && isStructureAvailable(defStructs[0]) && playerData[me].difficulty > MEDIUM)
-	{
-		log("TRUCK RUSH!");
-		queue("truckRush");
-	}
-	else
-	{
-		queue("buildFundamentals");
-	}*/
 }
 
 function eventDroidIdle(droid)
@@ -633,6 +625,11 @@ function eventDroidIdle(droid)
 			queue("buildFundamentals"); // build something
 		}
 	}
+}
+
+function eventGroupLoss(droid, group, size)
+{
+	log("lost " + droid.id + " in group " + group + " which is now size " + size);
 }
 
 function eventChat(from, to, message)
