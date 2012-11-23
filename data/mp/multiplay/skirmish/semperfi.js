@@ -23,20 +23,22 @@ var researchDone = false;
 
 // --- utility functions
 
-function dbgPlr(message)
+function log(message)
 {
 	if (me == selectedPlayer)
 	{
 		console(message);
 	}
+	dump(me + "@" + gameTime + " : " + message);
 }
 
-function dbgObj(obj, message)
+function logObj(obj, message)
 {
 	if (obj.selected)
 	{
 		console(message);
 	}
+	dump(me + "@" + gameTime + " [" + obj.name + " id=" + obj.id + "] > " + message);
 }
 
 function buildAttacker(struct)
@@ -68,7 +70,7 @@ function buildAttacker(struct)
 	];
 	if (!buildDroid(struct, "Ranged Attacker", bodylist, proplist, null, null, weaplist, weaplist))
 	{
-		debug("Failed to construct new attacker");
+		dbg("Failed to construct new attacker");
 	}
 }
 
@@ -87,7 +89,7 @@ function buildTruck(struct)
 	];
 	if (!buildDroid(struct, "Constructor", bodylist, proplist, null, null, "Spade1Mk1"))
 	{
-		debug("Failed to construct new truck");
+		log("Failed to construct new truck");
 	}
 }
 
@@ -100,7 +102,7 @@ function buildCyborg(struct)
 		{
 			if (!buildDroid(struct, "Cyborg MG", "CyborgChain1Ground", "CyborgLegs", null, null, "CyborgChaingun"))
 			{
-				debug("Failed to construct new cyborg");
+				log("Failed to construct new cyborg");
 			}
 		}
 	}
@@ -122,7 +124,7 @@ function buildVTOL(struct)
 	];
 	if (!buildDroid(struct, "Bomber", bodylist, "V-Tol", null, null, bomblist))
 	{
-		debug("Failed to construct new VTOL");
+		log("Failed to construct new VTOL");
 	}
 }
 
@@ -158,17 +160,17 @@ function grabTrucksAndBuild(range, bstats, maxBlockingTiles)
 		{
 			if (currDist < range)
 			{
-				dbgObj(mydroid, "added to build list");
+				logObj(mydroid, "added to build list");
 				droidlist.push(mydroid);
 			}
 			else if (currDist < closestDist)
 			{
-				dbgObj(mydroid, "is closest to build");
+				logObj(mydroid, "is closest to build");
 				closestDroid = mydroid;	// record this droid as being closest so far
 				closestDist = currDist;
 			}
 		}
-		else dbgObj(mydroid, "cannot help, sorry; order is " + mydroid.order + " and can reach? " + conCanHelp(mydroid, startPositions[me].x, startPositions[me].y));
+		else logObj(mydroid, "cannot help, sorry; order is " + mydroid.order + " and can reach? " + conCanHelp(mydroid, startPositions[me].x, startPositions[me].y));
 	}
 	if (droidlist.length == 0 && closestDroid) droidlist.push(closestDroid);
 	for (i = 0; i < droidlist.length; i++)
@@ -177,14 +179,14 @@ function grabTrucksAndBuild(range, bstats, maxBlockingTiles)
 		var result = pickStructLocation(mydroid, bstats, startPositions[me].x, startPositions[me].y, maxBlockingTiles);
 		if (result)
 		{
-			dbgObj(mydroid, "Construction work");
+			logObj(mydroid, "Construction work");
 			orderDroidBuild(mydroid, DORDER_BUILD, bstats, result.x, result.y);
 			found = true;
 		}
 		else
 		{
-			dbgObj(mydroid, "Pick struct location failed");
-			debug("Pick struct location failed for droid " + mydroid.id);
+			logObj(mydroid, "Pick struct location failed");
+			log("Pick struct location failed for droid " + mydroid.id);
 		}
 	}
 	return found;
@@ -198,7 +200,7 @@ function buildPowerGenerators()
 	{
 		if (!grabTrucksAndBuild(20, powGen, 1))
 		{
-			dbgPlr("Needed power generator but could not build one");
+			log("Needed power generator but could not build one");
 		}
 	}
 }
@@ -228,7 +230,7 @@ function checkLocalJobs(truck, structlist)
 	if (bestStruct)
 	{
 		orderDroidObj(truck, DORDER_HELPBUILD, bestStruct);
-		dbgObj(truck, "Go help construction");
+		logObj(truck, "Go help construction");
 		return true;
 	}
 	return false;
@@ -241,6 +243,40 @@ function sortByDistToBase(obj1, obj2)
 	return (dist1 - dist2);
 }
 
+function lookForOil(droids)
+{
+	var oils = enumFeature(-1, oilRes);
+	var bestDroid = null;
+	var bestDist = 99999;
+	if (oils.length > 0)
+	{
+		oils.sort(sortByDistToBase); // grab closer oils first
+		for (var i = 0; i < oils.length; i++)
+		{
+			for (var j = 0; j < droids.length; j++)
+			{
+				var dist = distBetweenTwoPoints(droids[j].x, droids[j].y, oils[i].x, oils[i].y);
+				if (droidCanReach(droids[j], oils[i].x, oils[i].y)
+				    && safeDest(me, oils[i].x, oils[i].y)
+				    && droids[j].order != DORDER_BUILD  // but can snatch from HELPBUILD
+				    && droids[j].order != DORDER_LINEBUILD
+				    && bestDist > dist
+				    && !droids[j].busy)
+				{
+					bestDroid = droids[j];
+					bestDist = dist;
+				}
+			}
+			if (bestDroid)
+			{
+				bestDroid.busy = true;
+				orderDroidBuild(bestDroid, DORDER_BUILD, derrick, oils[i].x, oils[i].y);
+			}
+		}
+	}
+	return bestDroid;
+}
+
 function buildFundamentals()
 {
 	var needPwGen = false;
@@ -250,40 +286,16 @@ function buildFundamentals()
 	if (playerPower(me) < 1000 && numUnusedDerricks() > 0)
 	{
 		needPwGen = true;
-		dbgPlr("More power generators needed");
+		log("More power generators needed");
 	}
 	if (!needPwGen && playerPower(me) < 500) // check for more income
 	{
-		var oils = enumFeature(-1, oilRes);
-		if (oils.length > 0)
+		if (lookForOil(droids))
 		{
-			oils.sort(sortByDistToBase); // grab closer oils first
-			for (var i = 0; i < oils.length; i++)
-			{
-				var bestDroid = null;
-				var bestDist = 99999;
-				for (var j = 0; j < droids.length; j++)
-				{
-					var dist = distBetweenTwoPoints(droids[j].x, droids[j].y, oils[i].x, oils[i].y);
-					if (droidCanReach(droids[j], oils[i].x, oils[i].y)
-					    && safeDest(me, oils[i].x, oils[i].y)
-					    && droids[j].order != DORDER_BUILD  // but can snatch from HELPBUILD
-					    && droids[j].order != DORDER_LINEBUILD
-					    && bestDist > dist
-					    && !droids[j].busy)
-					{
-						bestDroid = droids[j];
-						bestDist = dist;
-					}
-				}
-				if (bestDroid)
-				{
-					bestDroid.busy = true;
-					orderDroidBuild(bestDroid, DORDER_BUILD, derrick, oils[i].x, oils[i].y);
-				}
-			}
+			log("Now looking for oil");
+			return; // do not build anything else
 		}
-		return; // do not build anything else
+		log("No oil found");
 	}
 	// Help build unfinished buildings
 	var structlist = enumStruct(me);
@@ -337,15 +349,21 @@ function buildFundamentals2()
 			return;
 		}
 	}
+	log("All fundamental buildings built -- proceed to military stuff");
+	// FIXME ... but instead look for oil
+	lookForOil(enumDroid(me, DROID_CONSTRUCT));
 	// queue("buildDefenses");
 }
 
 function maintenance()
 {
-	// Salvage unusable buildings?
+	log("Maintenance check");
+
 	var reslist = enumResearch();
 	if (reslist.length == 0)
 	{
+		log("Done researching - salvage unusable buildings");
+
 		// No research left, salvage res lab
 		researchDone = true; // and do not rebuild them
 		var lablist = enumStruct(me, resLab);
@@ -360,7 +378,7 @@ function maintenance()
 				if (droid.order != DORDER_DEMOLISH && droid.order != DORDER_BUILD
 				    && droid.order != DORDER_LINEBUILD && !droid.busy)
 				{
-					dbgObj(droid, "Ordered to salvage research lab");
+					logObj(droid, "Ordered to salvage research lab");
 					orderDroidObj(droid, DORDER_DEMOLISH, lab);
 					droid.busy = true;
 					break;
@@ -492,6 +510,8 @@ function eventDroidBuilt(droid, struct)
 			// Only attack once every four minutes
 			if (groupSizes[attackGroup] > 20 && gameTime > attackRun + 4 * 60 * 1000)
 			{
+				log("-- Military offensive --");
+
 				var attackers = enumGroup(attackGroup);
 				// Attack! Find a random enemy, since that is more fun.
 				var numEnemies = 0;
@@ -510,7 +530,7 @@ function eventDroidBuilt(droid, struct)
 						for (var j = 0; j < attackers.length; j++)
 						{
 							orderDroidLoc(attackers[j], DORDER_SCOUT, startPositions[i].x, startPositions[i].y);
-							dbgObj(attackers[j], "sent to attack");
+							logObj(attackers[j], "sent to attack");
 						}
 						var vtols = enumGroup(vtolGroup);
 						for (var j = 0; j < vtols.length; j++)
@@ -518,10 +538,10 @@ function eventDroidBuilt(droid, struct)
 							if (vtols[j].armed == 100) // only if fully armed
 							{
 								orderDroidLoc(vtols[j], DORDER_SCOUT, startPositions[i].x, startPositions[i].y);
-								dbgObj(vtols[j], "sent to attack");
+								logObj(vtols[j], "sent to attack");
 							}
 						}
-						dbgPlr("ATTACKING player " + i);
+						log("ATTACKING player " + i);
 						attackRun = gameTime;
 						return;
 					}
@@ -561,7 +581,7 @@ function eventAttacked(victim, attacker)
 	// TBD, for now -- SEND EVERYONE!!!
 	if (attacker && victim && victim.type == STRUCTURE && attacker.player != me)
 	{
-		dbgPlr("Defend!");
+		log("Defend!");
 		var i;
 		var defenders = enumDroid(me, DROID_WEAPON);
 		for (i = 0; i < defenders.length; i++)
@@ -595,7 +615,7 @@ function eventStartLevel()
 	/*
 	if (numFactories() > 1 && isStructureAvailable(defStructs[0]) && playerData[me].difficulty > MEDIUM)
 	{
-		dbgPlr("TRUCK RUSH!");
+		log("TRUCK RUSH!");
 		queue("truckRush");
 	}
 	else
@@ -617,5 +637,5 @@ function eventDroidIdle(droid)
 
 function eventChat(from, to, message)
 {
-	//debug(me + ": message from " + from + " to " + to + ": " + message);
+	log("message from " + from + " to " + to + ": " + message);
 }
