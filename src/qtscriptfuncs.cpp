@@ -1051,9 +1051,9 @@ static QScriptValue js_addFeature(QScriptContext *context, QScriptEngine *engine
 	{
 		SCRIPT_ASSERT(context, map_coord(psFeat->pos.x) != x || map_coord(psFeat->pos.y) != y, 
 		              "Building feature on tile already occupied");
-		return QScriptValue::NullValue;
 	}
-	return convFeature(buildFeature(psStats, world_coord(x), world_coord(y), false), engine);
+	FEATURE *psFeature = buildFeature(psStats, world_coord(x), world_coord(y), false);
+	return convFeature(psFeature, engine);
 }
 
 //-- \subsection{addDroid(player, x, y, name, body, propulsion, reserved, droid type, turrets...)}
