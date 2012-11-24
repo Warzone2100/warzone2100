@@ -1,6 +1,8 @@
 2012-10-NN: Version 3.1.0
  * General:
-   * Factories with a module addon no longer become better each save/load cycle (ticket:3732, commit:13b07b78dd85da1889843164d390ccb9d0a8f62b)
+   * Fix: Factories with a module addon no longer become better each save/load cycle (ticket:3732, commit:13b07b78dd85da1889843164d390ccb9d0a8f62b)
+   * Fix: Do not crash on build cancelations (ticket:3807, 2884e6d607d92efd329e3f34f2920851ba85636b)
+   * Fix: Try not to crash if a factory loses its production flag (ticket:3768, commit:6b4dfccb23d97e00bb6c45b0cd3edacdb05013f6)
  * Build system:
    * New version of autorevision fixes MSVC builds (ticket:3765)
  * Multiplayer:
@@ -8,6 +10,7 @@
  * Scripting:
    * New: getStructureLimit(), countDroid() and countStruct() (commit:af757d28bd082384355272f890fe6d79fd5369a8, commit:def9fb81c34a7c6d3c343c659507ed1b6f40f5ee)
    * New: orderDroidBuild() now takes an optional direction parameter for rotation (commit:24414caa0c6a8db7459e7204a1c12546d27f7441)
+   * Change: Updated Nullbot (commit:a2e69a8a2e14c7173d615a78455464a6f264b3a3)
 
 2012-10-08: Version 3.1 rc3
  * General:
