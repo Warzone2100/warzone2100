@@ -305,6 +305,12 @@ static QScriptValue js_include(QScriptContext *context, QScriptEngine *engine)
 	return QScriptValue(true);
 }
 
+bool prepareScripts()
+{
+	prepareLabels();
+	return true;
+}
+
 bool initScripts()
 {
 	return true;

@@ -487,9 +487,10 @@ bool saveGroups(WzConfig &ini, QScriptEngine *engine)
 // Label system (function defined in qtscript.h header)
 //
 
-struct labeltype { Vector2i p1, p2; int id; int type; int player; };
+struct labeltype { Vector2i p1, p2; int id; int type; int player; QList<int> idlist; };
 
-static QHash<QString, labeltype> labels;
+typedef QHash<QString, labeltype> LABELMAP;
+static LABELMAP labels;
 
 // Load labels
 bool loadLabels(const char *filename)
@@ -550,19 +551,12 @@ bool loadLabels(const char *filename)
 			p.type = SCRIPT_GROUP;
 			p.player = ini.value("player").toInt();
 			QStringList list = ini.value("members").toStringList();
-			// load the group data into every scripting context, with the same negative group id
-			for (ENGINEMAP::iterator iter = groups.begin(); iter != groups.end(); ++iter)
+			for (QStringList::iterator j = list.begin(); j != list.end(); j++)
 			{
-				QScriptEngine *engine = iter.key();
-				QScriptValue groupMembers = iter.key()->globalObject().property("groupSizes");
-				groupMembers.setProperty(p.id, list.length(), QScriptValue::ReadOnly);
-				for (QStringList::iterator j = list.begin(); j != list.end(); j++)
-				{
-					int id = (*j).toInt();
-					BASE_OBJECT *psObj = IdToPointer(id, p.player);
-					ASSERT(psObj, "Unit %d belonging to player %d not found", id, p.player);
-					groupAddObject(psObj, p.id, engine);
-				}
+				int id = (*j).toInt();
+				BASE_OBJECT *psObj = IdToPointer(id, p.player);
+				ASSERT(psObj, "Unit %d belonging to player %d not found", id, p.player);
+				p.idlist += id;
 			}
 			labels.insert(label, p);
 		}
@@ -2977,6 +2971,33 @@ bool unregisterFunctions(QScriptEngine *engine)
 	delete psMap;
 	ASSERT(num == 1, "Number of engines removed from group map is %d!", num);
 	return true;
+}
+
+// Call this just before launching game; we can't do everything in registerFunctions()
+// since all game state may not be fully loaded by then
+void prepareLabels()
+{
+	// load the label group data into every scripting context, with the same negative group id
+	for (ENGINEMAP::iterator iter = groups.begin(); iter != groups.end(); ++iter)
+	{
+		QScriptEngine *engine = iter.key();
+		for (LABELMAP::iterator i = labels.begin(); i != labels.end(); ++i)
+		{
+			struct labeltype l = i.value();
+			if (l.type == SCRIPT_GROUP)
+			{
+				QScriptValue groupMembers = iter.key()->globalObject().property("groupSizes");
+				groupMembers.setProperty(l.id, l.idlist.length(), QScriptValue::ReadOnly);
+				for (QList<int>::iterator j = l.idlist.begin(); j != l.idlist.end(); j++)
+				{
+					int id = (*j);
+					BASE_OBJECT *psObj = IdToPointer(id, l.player);
+					ASSERT(psObj, "Unit %d belonging to player %d not found", id, l.player);
+					groupAddObject(psObj, l.id, engine);
+				}
+			}
+		}
+	}
 }
 
 bool registerFunctions(QScriptEngine *engine, QString scriptName)

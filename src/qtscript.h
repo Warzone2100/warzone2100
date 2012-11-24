@@ -51,6 +51,9 @@ bool initScripts();
 /// Shutdown script system
 bool shutdownScripts();
 
+/// Run after all data is loaded, but before game is started.
+bool prepareScripts();
+
 /// Run this each logical frame to update frame-dependent script states
 bool updateScripts();
 

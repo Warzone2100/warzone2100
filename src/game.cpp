@@ -1918,11 +1918,6 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 	aFileName[fileExten - 1] = '\0';
 	strcat(aFileName, "/");
 
-	// Load labels
-	aFileName[fileExten] = '\0';
-	strcat(aFileName, "labels.ini");
-	loadLabels(aFileName);
-
 	//the terrain type WILL only change with Campaign changes (well at the moment!)
 	if (gameType != GTYPE_SCENARIO_EXPAND || UserSaveGame)
 	{
@@ -2442,6 +2437,11 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 			loadSaveStructurePointers(key, pList);
 		}
 	}
+
+	// Load labels
+	aFileName[fileExten] = '\0';
+	strcat(aFileName, "labels.ini");
+	loadLabels(aFileName);
 
 	//if user save game then reset the time - THIS SETS BOTH TIMERS - BEWARE IF YOU USE IT
 	if ((gameType == GTYPE_SAVE_START) ||
@@ -3666,7 +3666,6 @@ bool gameLoadV(PHYSFS_file* fileHandle, unsigned int version)
 		//copy the level name across
 		sstrcpy(aLevelName, saveGameData.levelName);
 		//load up the level dataset
-		//if (!levLoadData(saveGameData.sGame.map /*aLevelName*/, &saveGameData.sGame.hash, saveGameName, (GAME_TYPE)gameType))
 		// Not sure what aLevelName is, in relation to game.map. But need to use aLevelName here, to be able to start the right map for campaign, and need game.hash, to start the right non-campaign map, if there are multiple identically named maps.
 		if (!levLoadData(aLevelName, &saveGameData.sGame.hash, saveGameName, (GAME_TYPE)gameType))
 		{

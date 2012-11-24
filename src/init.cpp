@@ -1117,6 +1117,8 @@ bool stageThreeInitialise(void)
 	// Load any stored templates; these need to be available ASAP
 	initTemplates();
 
+	prepareScripts();
+
 	if (!fpathInitialise())
 	{
 		return false;

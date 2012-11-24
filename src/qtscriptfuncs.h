@@ -47,6 +47,7 @@ bool unregisterFunctions(QScriptEngine *engine);
 
 bool saveGroups(WzConfig &ini, QScriptEngine *engine);
 bool loadGroup(QScriptEngine *engine, int groupId, int objId);
+void prepareLabels();
 
 // Utility conversion functions
 QScriptValue convDroid(DROID *psDroid, QScriptEngine *engine);
