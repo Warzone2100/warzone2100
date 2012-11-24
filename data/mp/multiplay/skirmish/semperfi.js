@@ -20,6 +20,7 @@ var attackGroup;
 var vtolGroup;
 var attackRun = 0;
 var researchDone = false;
+var fundamentalsTriggered = false; // avoid triggering it multiple times
 
 // --- utility functions
 
@@ -282,7 +283,10 @@ function lookForOil(droids)
 
 function buildFundamentals()
 {
+	log("build fundamentals");
 	var needPwGen = false;
+
+	fundamentalsTriggered = false;
 
 	// Do we need power generators?
 	if (playerPower(me) < 1000 && numUnusedDerricks() > 0)
@@ -316,6 +320,7 @@ function buildFundamentals()
 
 function buildFundamentals2()
 {
+	log("build fundamentals2");
 	var factcount = countStruct(factory);
 	// Build as many research labs as factories
 	if (!researchDone && isStructureAvailable(resLab))
@@ -390,7 +395,11 @@ function maintenance()
 		}
 	}
 	// Check for idle trucks
-	queue("buildFundamentals");
+	if (!fundamentalsTriggered)
+	{
+		queue("buildFundamentals");
+		fundamentalsTriggered = true;
+	}
 	// Check for idle labs
 	queue("eventResearched");
 }
@@ -470,7 +479,11 @@ function eventStructureBuilt(struct, droid)
 			}
 		}
 	}
-	queue("buildFundamentals"); // see if we should build something else
+	if (!fundamentalsTriggered)
+	{
+		queue("buildFundamentals"); // see if we should build something else
+		fundamentalsTriggered = true;
+	}
 }
 
 function eventDroidBuilt(droid, struct)
@@ -554,9 +567,10 @@ function eventDroidBuilt(droid, struct)
 		}
 		else if (droid.droidType == DROID_CONSTRUCT)
 		{
-			if (!checkLocalJobs(droid))
+			if (!checkLocalJobs(droid) && !fundamentalsTriggered)
 			{
 				queue("buildFundamentals");
+				fundamentalsTriggered = true;
 			}
 		}
 	}
@@ -610,19 +624,26 @@ function eventStartLevel()
 	attackRun = gameTime;
 
 	// Make missing buildings
-	queue("buildFundamentals");
+	if (!fundamentalsTriggered)
+	{
+		queue("buildFundamentals");
+		fundamentalsTriggered = true;
+	}
 
 	// Maintenance calls - to fix quirks
 	setTimer("maintenance", 1000 * 60 * 2); // every 2 minutes, call it to check if anything left to do
+
+	dump("== level started ==");
 }
 
 function eventDroidIdle(droid)
 {
 	if (droid.droidType == DROID_CONSTRUCT)
 	{
-		if (!checkLocalJobs(droid))
+		if (!checkLocalJobs(droid) && !fundamentalsTriggered)
 		{
 			queue("buildFundamentals"); // build something
+			fundamentalsTriggered = true;
 		}
 	}
 }
