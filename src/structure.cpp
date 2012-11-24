@@ -993,8 +993,9 @@ bool structSetManufacture(STRUCTURE *psStruct, DROID_TEMPLATE *psTempl, QUEUE_MO
 	                 || psStruct->pStructureType->type == REF_VTOL_FACTORY, "Invalid structure type %d for factory",
 	                 (int)psStruct->pStructureType->type);
 	/* psTempl might be NULL if the build is being cancelled in the middle */
-
-	ASSERT_OR_RETURN(false, (validTemplateForFactory(psTempl, psStruct) && researchedTemplate(psTempl, psStruct->player, true)) || psStruct->player == scavengerPlayer() || !bMultiPlayer, "Wrong template for player %d factory, type %d.", psStruct->player, psStruct->pStructureType->type);
+	ASSERT_OR_RETURN(false, !psTempl || (validTemplateForFactory(psTempl, psStruct) && researchedTemplate(psTempl, psStruct->player, true)) 
+	                 || psStruct->player == scavengerPlayer() || !bMultiPlayer, 
+	                 "Wrong template for player %d factory, type %d.", psStruct->player, psStruct->pStructureType->type);
 
 	psFact = &psStruct->pFunctionality->factory;
 
@@ -1002,7 +1003,6 @@ bool structSetManufacture(STRUCTURE *psStruct, DROID_TEMPLATE *psTempl, QUEUE_MO
 	{
 		sendStructureInfo(psStruct, STRUCTUREINFO_MANUFACTURE, psTempl);
 		setStatusPendingStart(*psFact, psTempl);
-
 		return true;  // Wait for our message before doing anything.
 	}
 
