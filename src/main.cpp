@@ -764,7 +764,6 @@ static void startGameLoop(void)
 {
 	SetGameMode(GS_NORMAL);
 
-	//if (!levLoadData(game.map /*aLevelName*/, &game.hash, NULL, GTYPE_SCENARIO_START))
 	// Not sure what aLevelName is, in relation to game.map. But need to use aLevelName here, to be able to start the right map for campaign, and need game.hash, to start the right non-campaign map, if there are multiple identically named maps.
 	if (!levLoadData(aLevelName, &game.hash, NULL, GTYPE_SCENARIO_START))
 	{

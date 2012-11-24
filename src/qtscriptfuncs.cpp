@@ -86,9 +86,9 @@ void groupRemoveObject(BASE_OBJECT *psObj)
 	{
 		QScriptEngine *engine = i.key();
 		GROUPMAP *psMap = i.value();
-		if (psMap->contains((DROID *)psObj))
+		if (psMap->contains(psObj))
 		{
-			int groupId = psMap->take((DROID *)psObj); // take and remove item
+			int groupId = psMap->take(psObj); // take and remove item
 			QScriptValue groupMembers = i.key()->globalObject().property("groupSizes");
 			const int newValue = groupMembers.property(groupId).toInt32() - 1;
 			ASSERT(newValue >= 0, "Bad group count in group %d (was %d)", groupId, newValue + 1);
@@ -100,7 +100,7 @@ void groupRemoveObject(BASE_OBJECT *psObj)
 
 static bool groupAddObject(BASE_OBJECT *psObj, int groupId, QScriptEngine *engine)
 {
-	ASSERT_OR_RETURN(false, psObj && groupId >= 0 && engine, "Bad parameter");
+	ASSERT_OR_RETURN(false, psObj && engine, "Bad parameter");
 	GROUPMAP *psMap = groups.value(engine);
 	if (!psMap->contains(psObj))
 	{
@@ -373,8 +373,7 @@ QScriptValue convDroid(DROID *psDroid, QScriptEngine *engine)
 	GROUPMAP *psMap = groups.value(engine);
 	if (psMap->contains(psDroid))
 	{
-		int group = psMap->value(psDroid, -1);
-		ASSERT(group >= 0, "%s is member of invalid group %d", objInfo(psDroid), group);
+		int group = psMap->value(psDroid);
 		value.setProperty("group", group, QScriptValue::ReadOnly);
 	}
 	else
@@ -561,6 +560,7 @@ bool loadLabels(const char *filename)
 				{
 					int id = (*j).toInt();
 					BASE_OBJECT *psObj = IdToPointer(id, p.player);
+					ASSERT(psObj, "Unit %d belonging to player %d not found", id, p.player);
 					groupAddObject(psObj, p.id, engine);
 				}
 			}
@@ -2981,6 +2981,8 @@ bool unregisterFunctions(QScriptEngine *engine)
 
 bool registerFunctions(QScriptEngine *engine, QString scriptName)
 {
+	debug(LOG_WZ, "Loading functions for engine %p, script %s", engine, scriptName.toUtf8().constData());
+
 	// Create group map
 	GROUPMAP *psMap = new GROUPMAP;
 	groups.insert(engine, psMap);
