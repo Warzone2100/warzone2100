@@ -2866,6 +2866,61 @@ static QScriptValue js_setDroidLimit(QScriptContext *context, QScriptEngine *)
 	return QScriptValue();
 }
 
+//-- \subsection{hackAddMessage(message, type, player, immediate)}
+//-- See wzscript docs for info, to the extent any exist.
+static QScriptValue js_hackAddMessage(QScriptContext *context, QScriptEngine *)
+{
+	QString mess = context->argument(0).toString();
+	MESSAGE_TYPE msgType = (MESSAGE_TYPE)context->argument(1).toInt32();
+	int player = context->argument(2).toInt32();
+	bool immediate = context->argument(3).toBool();
+	MESSAGE *psMessage = addMessage(msgType, false, player);
+	if (psMessage)
+	{
+		VIEWDATA *psViewData = getViewData(mess.toUtf8().constData());
+		SCRIPT_ASSERT(context, psViewData, "Viewdata not found");
+		psMessage->pViewData = (MSG_VIEWDATA *)psViewData;
+		debug(LOG_MSG, "Adding %s pViewData=%p", psViewData->pName, psMessage->pViewData);
+		if (msgType == MSG_PROXIMITY)
+		{
+			VIEW_PROXIMITY *psProx = (VIEW_PROXIMITY *)psViewData->pData;
+			// check the z value is at least the height of the terrain
+			int height = map_Height(psProx->x, psProx->y);
+			if (psProx->z < height)
+			{
+				psProx->z = height;
+			}
+		}
+		if (immediate)
+		{
+			displayImmediateMessage(psMessage);
+		}
+	}
+	return QScriptValue();
+}
+
+//-- \subsection{hackRemoveMessage(message, type, player)}
+//-- See wzscript docs for info, to the extent any exist.
+static QScriptValue js_hackRemoveMessage(QScriptContext *context, QScriptEngine *)
+{
+	QString mess = context->argument(0).toString();
+	MESSAGE_TYPE msgType = (MESSAGE_TYPE)context->argument(1).toInt32();
+	int player = context->argument(2).toInt32();
+	VIEWDATA *psViewData = getViewData(mess.toUtf8().constData());
+	SCRIPT_ASSERT(context, psViewData, "Viewdata not found");
+	MESSAGE *psMessage = findMessage((MSG_VIEWDATA *)psViewData, msgType, player);
+	if (psMessage)
+	{
+		debug(LOG_MSG, "Removing %s", psViewData->pName);
+		removeMessage(psMessage, player);
+	}
+	else
+	{
+		debug(LOG_ERROR, "cannot find message - %s", psViewData->pName);
+	}
+	return QScriptValue();
+}
+
 //-- \subsection{setSunPosition(x, y, z)}
 //-- Move the position of the Sun, which in turn moves where shadows are cast.
 static QScriptValue js_setSunPosition(QScriptContext *context, QScriptEngine *)
@@ -3032,6 +3087,8 @@ bool registerFunctions(QScriptEngine *engine, QString scriptName)
 	// horrible hacks follow -- do not rely on these being present!
 	engine->globalObject().setProperty("hackNetOff", engine->newFunction(js_hackNetOff));
 	engine->globalObject().setProperty("hackNetOn", engine->newFunction(js_hackNetOn));
+	engine->globalObject().setProperty("hackAddMessage", engine->newFunction(js_hackAddMessage));
+	engine->globalObject().setProperty("hackRemoveMessage", engine->newFunction(js_hackRemoveMessage));
 	engine->globalObject().setProperty("objFromId", engine->newFunction(js_objFromId));
 
 	// General functions -- geared for use in AI scripts
@@ -3189,6 +3246,11 @@ bool registerFunctions(QScriptEngine *engine, QString scriptName)
 	engine->globalObject().setProperty("GROUP", SCRIPT_GROUP, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("PLAYER_DATA", SCRIPT_PLAYER, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("RESEARCH_DATA", SCRIPT_RESEARCH, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	// the constants below are subject to change without notice...
+	engine->globalObject().setProperty("PROX_MSG", MSG_PROXIMITY, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("CAMP_MSG", MSG_CAMPAIGN, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("MISS_MSG", MSG_MISSION, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("RES_MSG", MSG_RESEARCH, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 
 	/// Place to store group sizes
 	//== \item[groupSizes] A sparse array of group sizes. If a group has never been used, the entry in this array will
