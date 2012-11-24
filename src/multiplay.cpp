@@ -1076,6 +1076,7 @@ bool sendTextMessage(const char *pStr, bool all, uint32_t from)
 	char				display[MAX_CONSOLE_STRING_LENGTH];
 	char				msg[MAX_CONSOLE_STRING_LENGTH];
 	char*				curStr = (char*)pStr;
+	bool				toSelectedPlayer = false;
 
 	memset(display,0x0, sizeof(display));	//clear buffer
 	memset(msg,0x0, sizeof(msg));		//clear buffer
@@ -1149,10 +1150,18 @@ bool sendTextMessage(const char *pStr, bool all, uint32_t from)
 		NETend();
 		for (i = 0; i < MAX_PLAYERS; i++)
 		{
+			if (i == selectedPlayer && from != i)
+			{
+				toSelectedPlayer = true; // also display it
+			}
 			if (i != from && !isHumanPlayer(i) && myResponsibility(i))
 			{
 				msgStackPush(CALL_AI_MSG, from, i, msg, -1, -1, NULL);
 				triggerEventChat(from, i, msg);
+			}
+			else if (i != from && !isHumanPlayer(i) && !myResponsibility(i))
+			{
+				sendAIMessage(msg, from, i);
 			}
 		}
 	}
@@ -1162,6 +1171,10 @@ bool sendTextMessage(const char *pStr, bool all, uint32_t from)
 		{
 			if (i != from && openchannels[i])
 			{
+				if (i == selectedPlayer)
+				{
+					toSelectedPlayer = true; // also display it
+				}
 				if (isHumanPlayer(i))
 				{
 					NETbeginEncode(NETnetQueue(i), NET_TEXTMSG);
@@ -1187,6 +1200,10 @@ bool sendTextMessage(const char *pStr, bool all, uint32_t from)
 		{
 			if (sendto[i])
 			{
+				if (i == selectedPlayer)
+				{
+					toSelectedPlayer = true;
+				}
 				if (isHumanPlayer(i))
 				{
 					NETbeginEncode(NETnetQueue(i), NET_TEXTMSG);
@@ -1208,7 +1225,7 @@ bool sendTextMessage(const char *pStr, bool all, uint32_t from)
 	}
 
 	// This is for local display
-	if (from == selectedPlayer)
+	if (from == selectedPlayer || toSelectedPlayer)
 	{
 		sstrcpy(msg, NetPlay.players[from].name);		// name
 		sstrcat(msg, ": ");					// seperator
@@ -1314,7 +1331,7 @@ bool recvTextMessage(NETQUEUE queue)
 	NETbeginDecode(queue, NET_TEXTMSG);
 		// Who this msg is from
 		NETuint32_t(&playerIndex);
-		// The message to send
+		// The message to receive
 		NETstring(newmsg, MAX_CONSOLE_STRING_LENGTH);
 	NETend();
 
