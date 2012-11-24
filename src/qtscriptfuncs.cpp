@@ -2970,6 +2970,7 @@ bool unregisterFunctions(QScriptEngine *engine)
 	int num = groups.remove(engine);
 	delete psMap;
 	ASSERT(num == 1, "Number of engines removed from group map is %d!", num);
+	labels.clear();
 	return true;
 }
 
@@ -2993,7 +2994,10 @@ void prepareLabels()
 					int id = (*j);
 					BASE_OBJECT *psObj = IdToPointer(id, l.player);
 					ASSERT(psObj, "Unit %d belonging to player %d not found", id, l.player);
-					groupAddObject(psObj, l.id, engine);
+					if (psObj)
+					{
+						groupAddObject(psObj, l.id, engine);
+					}
 				}
 			}
 		}

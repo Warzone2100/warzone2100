@@ -855,11 +855,6 @@ bool stageOneInitialise(void)
 		return false;
 	}
 
-	if (!initScripts())		// Initialise the new javascript system
-	{
-		return false;
-	}
-
 	if (!gridInitialise())
 	{
 		return false;
@@ -932,11 +927,6 @@ bool stageOneShutDown(void)
 		return false;
 	}
 
-	if (!shutdownScripts())
-	{
-		return false;
-	}
-
 	debug(LOG_TEXTURE, "=== stageOneShutDown ===");
 	pie_TexShutDown();
 	// no map for the main menu
@@ -1003,6 +993,11 @@ bool stageTwoInitialise(void)
 		return false;
 	}
 
+	if (!initScripts())		// Initialise the new javascript system
+	{
+		return false;
+	}
+
 	// keymappings
 	keyClearMappings();
 	keyInitMappings(false);
@@ -1046,6 +1041,11 @@ bool stageTwoShutDown(void)
 	freeAllDroids();
 	freeAllFeatures();
 	freeAllFlagPositions();
+
+	if (!shutdownScripts())
+	{
+		return false;
+	}
 
 	if (!messageShutdown())
 	{
