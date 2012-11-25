@@ -1037,14 +1037,14 @@ static QScriptValue js_componentAvailable(QScriptContext *context, QScriptEngine
 	return QScriptValue(avail);
 }
 
-//-- \subsection{addFeature(x, y, name)}
+//-- \subsection{addFeature(name, x, y)}
 //-- Create and place a feature at the given x, y position. Will cause a desync in multiplayer.
 //-- Returns the created game object on success, null otherwise. (3.2+ only)
 static QScriptValue js_addFeature(QScriptContext *context, QScriptEngine *engine)
 {
-	int x = context->argument(0).toInt32();
-	int y = context->argument(1).toInt32();
-	QString featName = context->argument(2).toString();
+	QString featName = context->argument(0).toString();
+	int x = context->argument(1).toInt32();
+	int y = context->argument(2).toInt32();
 	int feature = getFeatureStatFromName(featName.toUtf8().constData());
 	FEATURE_STATS *psStats = &asFeatureStats[feature];
 	for (FEATURE *psFeat = apsFeatureLists[0]; psFeat; psFeat = psFeat->psNext)
