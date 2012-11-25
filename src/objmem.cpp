@@ -246,10 +246,7 @@ static inline void addObjectToFuncList(OBJECT *list[], OBJECT *object, int playe
 template <typename OBJECT>
 static inline void destroyObject(OBJECT* list[], OBJECT* object)
 {
-	ASSERT(object != NULL,
-	       "destroyObject: Invalid pointer");
-
-	scriptRemoveObject(object);
+	ASSERT(object != NULL, "Invalid pointer");
 
 	// If the message to remove is the first one in the list then mark the next one as the first
 	if (list[object->player] == object)
@@ -258,6 +255,7 @@ static inline void destroyObject(OBJECT* list[], OBJECT* object)
 		object->psNext = psDestroyedObj;
 		psDestroyedObj = (BASE_OBJECT *)object;
 		object->died = gameTime;
+		scriptRemoveObject(object);
 		return;
 	}
 
@@ -268,8 +266,7 @@ static inline void destroyObject(OBJECT* list[], OBJECT* object)
 		psPrev = psCurr;
 	}
 
-	ASSERT(psCurr != NULL,
-	       "destroyObject: object not found in list");
+	ASSERT(psCurr != NULL, "Object %s(%d) not found in list", objInfo(object), object->id);
 
 	if (psCurr != NULL)
 	{
@@ -284,6 +281,7 @@ static inline void destroyObject(OBJECT* list[], OBJECT* object)
 		// Set destruction time
 		object->died = gameTime;
 	}
+	scriptRemoveObject(object);
 }
 
 /* Remove an object from the active list
