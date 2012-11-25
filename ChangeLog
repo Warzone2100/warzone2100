@@ -1,5 +1,6 @@
 2012-10-NN: Version 3.1.0
  * General:
+   * Fix: Improved terrain rendering layout (commit:999de2af8b5787e813cefc6c4a4e396bf34dde97, commit:8e83aee47e24bb0dd1c7c2b3a1ac53be25890506)
    * Fix: Factories with a module addon no longer become better each save/load cycle (ticket:3732, commit:13b07b78dd85da1889843164d390ccb9d0a8f62b)
    * Fix: Do not crash on build cancelations (ticket:3807, 2884e6d607d92efd329e3f34f2920851ba85636b)
    * Fix: Try not to crash if a factory loses its production flag (ticket:3768, commit:6b4dfccb23d97e00bb6c45b0cd3edacdb05013f6)
