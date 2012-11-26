@@ -1,60 +1,84 @@
 Original game developed by Pumpkin Studios, and published by EIDOS Interactive.
 
-The Warzone 2100 Project team, in alphabetical order:
-
-Thomas Barlow <Mysteryem> : 3D Graphics
--- <Buginator> : Programming
-Bruce V. Edwards <cathuria> : 2D/3D Graphics
--- <Cyp> : Programming
--- <dak180> : MacOSX Packaging
-Elio Gubser <elio, ohyeh> : 2D Graphics
-Rene Jochum <fastdeath / pcdummy> : Programming and Webmaster
-Steven Koenig <kreuvf> : Documentation, translation
-Gerard Krol <gerard_> : Programming, Textures
-Guangcong Luo <Zarel> : Programming, Balancing, and Documentation
-Per I. Mathisen <per / sendai> : Programming
-Kim Metcalfe <lav-coyote25> : Documentation, Maps and Support
-Christian Ohm <cybersphinx> : Programming
-Giel van Schijndel <Giel> : Programming and Debian Linux and Windows Packaging
-Dennis Schridde <devurandom> : Programming and general Linux and Windows Packaging
-Freddie Witherden <EvilGuru> : Programming and MacOSX Packaging
-
-Former contributors to the GPL version, in alphabetical order:
-
-Scott Balneaves <sbalneav> : Programming
-Roman C. <troman> : Programming and Scripting + Scripting-engine rewrite and AI
-Denis Dupeyron <charun> : Programming
-Don Edwards : 2D Graphics support
-Mike Gilmore <Chojun> : Programming
--- <Hatsjoe> : 2D Graphics
-Carl Hee <Watermelon> : Programming + Multiturrets
-Adam Holland
-Stefan Huehner <shuehner> : Programming + original 64bit support
-Ari Johnson <iamtheari> : Programming and MacOSX Packaging + original MacOSX port
-Martin Koller <mkoller> : Programming
-Angus Lees <gus> : Debian Packaging
-Dennis Luxen <pret> : Programming
-Kevin Malec <Kevin`> : Websupport
-Dion Mendel <noid> : Programming, original Linux port
-Phil Procario <GrimMoroe, grimandmandy> : 3D Graphics
--- <Pseudonym404> : Programming + original 64bit support
-Victor Qamly <vqamly> : Programming
-Marcus Rast <charon> : Programming
-Ben Russon <grizzly> : Support
-Hylke van der Schaaf <TheNoid> : Programming
-Dmitri Shuralyov <shurcool> : Programming
-Rodolphe Suescun <rodzilla> : Programming
--- <vs2k5> : Programming
-Tim P. <kamaze> : Webmaster
+The Warzone 2100 Project team:
+Christian Ohm (cybersphinx) 	programmer
+Per I. Mathisen (per / sendai)	programmer
+- (Cyp) 	programmer
+- (dak180) 	MacOSX Packaging
+- (Safety0ff) 	programmer
+- (vexed) 	programmer
+Rene Jochum (fastdeath / pcdummy) 	Webmaster/Hosting, programmer
 
 
-Non-project members whose content has been used in Warzone, in alphabetical order:
 
-Tristan Bethe : Terrain textures
-Jennifer Boyer : Terrain textures
-Bart Everson : Terrain textures
-Mitch Featherston : Terrain textures
-Peter Kaminski : Terrain textures
-Konstantin Kleine-Niermann : Terrain textures
-Sherrie Thai : Terrain textures
-Mark A. Vargas : Terrain textures
+Current or former contributors to the GPL version:
+- (Hatsjoe) 	2D Graphics
+- (Pseudonym404) 	Programming + original 64bit support
+- (i-NoD) 	Programming
+- (vs2k5) 	Programming
+Adam Holland (coppercore) 	Testing
+Angus Lees (gus) 	Debian Packaging
+Ari Johnson (iamtheari) 	Programming and MacOSX Packaging + original MacOSX port
+Ben Russon (grizzly) 	Support
+Mr.Marney (Berg) 	Models, textures
+Ben Latimore (BlueMaxima) 	guide/manual
+Bruce V. Edwards (cathuria) 	2D/3D Graphics
+Carl Hee (Watermelon) 	Programming + Multiturrets
+Denis Dupeyron (charun) 	Programming
+Dennis Luxen (pret) 	Programming
+Dennis Schridde (devurandom) 	Programming and general Linux and Windows Packaging
+Dion Mendel (noid) 	Programming, original Linux port
+Dmitri Shuralyov (shurcool) 	Programming
+Don Edwards 	2D Graphics support
+Elio Gubser (elio, ohyeh) 	2D Graphics
+Freddie Witherden (EvilGuru) 	Programming and MacOSX Packaging
+Gerard Krol (gerard_) 	Programming, Textures
+Giel van Schijndel (Giel) 	Programming and Debian Linux and Windows Packaging
+Guangcong Luo (Zarel) 	Programming, Balancing, and Documentation
+Hylke van der Schaaf (TheNoid) 	Programming
+Kevin Malec (Kevin`) 	Websupport
+Kim Metcalfe (lav-coyote25) 	Documentation, Maps and Support
+Marcus Rast (charon) 	Programming
+Martin Koller (mkoller) 	Programming
+Mike Gilmore (Chojun) 	Programming
+Phil Procario (GrimMoroe, grimandmandy) 	3D Graphics
+Rodolphe Suescun (rodzilla) 	Programming
+Roman C. troman 	Programming
+Scott Balneaves (sbalneav) 	Programming
+Stefan Huehner (shuehner) 	Programming + original 64bit support
+Steven Koenig (kreuvf) 	Documentation, translation
+Thomas Barlow (Mysteryem) 	3D Graphics
+Tim Perrei (kamaze) 	Webmaster/Hosting, Programming
+Victor Qamly (vqamly) 	Programming
+
+
+Non-project members whose content has been used in Warzone:
+Bart Everson 	Terrain textures
+Jennifer Boyer 	Terrain textures
+Konstantin Kleine-Niermann 	Terrain textures
+Mark A. Vargas 	Terrain textures
+Mitch Featherston 	Terrain textures
+Peter Kaminski 	Terrain textures
+Sherrie Thai 	Terrain textures
+Tristan Bethe 	Terrain textures
+
+
+Pumpkin Studio--Original authors of Warzone 2100:
+Jim Bambra 	Director of Projects
+Nick Cook 	Director of Development
+Alex McLean 	Head of Software Engineering
+Annette Bell 	Software Engineer
+Tim Cannell 	Software Engineer
+Paul Dunning 	Software Engineer
+John Elliot 	Software Engineer
+Gareth Jones 	Software Engineer
+Alex Lee 	Software Engineer
+Jeremy Sallis 	Software Engineer
+Louise Anderson 	Project Coordinator
+Pete Ball 	Systems Manager
+Keith Ledger 	Designer
+Pete Johnson 	Graphic Artist
+Errol Kentli 	Graphic Artist
+Kevin Wick 	Graphic Artist
+Kevin Ayre 	Graphic Artist /Mission Designer
+Martin Severn 	Graphic Artist/Musician
