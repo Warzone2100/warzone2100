@@ -9288,7 +9288,7 @@ bool scrPlayerLoaded(void)
 }
 
 /* Add a beacon (blip) */
-bool addBeaconBlip(SDWORD locX, SDWORD locY, SDWORD forPlayer, SDWORD sender, char * textMsg)
+bool addBeaconBlip(SDWORD locX, SDWORD locY, SDWORD forPlayer, SDWORD sender, const char *textMsg)
 {
 	MESSAGE			*psMessage;
 	VIEWDATA		*pTempData;
@@ -9321,7 +9321,7 @@ bool addBeaconBlip(SDWORD locX, SDWORD locY, SDWORD forPlayer, SDWORD sender, ch
 	}
 	else
 	{
-		debug(LOG_MSG, "call failed");
+		debug(LOG_WARNING, "call failed");
 	}
 
 	//Received a blip message from a player callback
@@ -9332,7 +9332,7 @@ bool addBeaconBlip(SDWORD locX, SDWORD locY, SDWORD forPlayer, SDWORD sender, ch
 	{
 		if(!msgStackPush(CALL_BEACON,sender,forPlayer,textMsg,locX,locY,NULL))
 		{
-			debug(LOG_ERROR, "addBeaconBlip() - msgStackPush - stack failed");
+			debug(LOG_ERROR, "msgStackPush - stack failed");
 			return false;
 		}
 
@@ -9350,7 +9350,7 @@ bool addBeaconBlip(SDWORD locX, SDWORD locY, SDWORD forPlayer, SDWORD sender, ch
 	return true;
 }
 
-bool sendBeaconToPlayer(SDWORD locX, SDWORD locY, SDWORD forPlayer, SDWORD sender, char * beaconMsg)
+bool sendBeaconToPlayer(SDWORD locX, SDWORD locY, SDWORD forPlayer, SDWORD sender, const char *beaconMsg)
 {
 	if(sender == forPlayer || myResponsibility(forPlayer))	//if destination player is on this machine
 	{
