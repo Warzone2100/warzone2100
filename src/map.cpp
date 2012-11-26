@@ -118,8 +118,6 @@ static void init_tileNames(int type);
 /// The different ground types
 GROUND_TYPE *psGroundTypes;
 int numGroundTypes;
-int waterGroundType;
-int cliffGroundType;
 char *tileset = NULL;
 static int numTile_names;
 static char *Tile_names = NULL;
@@ -356,9 +354,6 @@ fallback:
 			psGroundTypes[getTextureType(textureType)].textureSize = textureSize ;
 		}
 
-		waterGroundType = getTextureType("a_water");
-		cliffGroundType = getTextureType("a_cliff");
-
 		SetGroundForTile("tileset/arizonaground.txt", "arizona_ground");
 		SetDecals("tileset/arizonadecals.txt", "arizona_decals");
 	}
@@ -398,9 +393,6 @@ fallback:
 			psGroundTypes[getTextureType(textureType)].textureSize = textureSize;
 		}
 
-		waterGroundType = getTextureType("u_water");
-		cliffGroundType = getTextureType("u_cliff");
-
 		SetGroundForTile("tileset/urbanground.txt", "urban_ground");
 		SetDecals("tileset/urbandecals.txt", "urban_decals");
 	}
@@ -439,9 +431,6 @@ fallback:
 			psGroundTypes[getTextureType(textureType)].textureName = strdup(textureName);
 			psGroundTypes[getTextureType(textureType)].textureSize = textureSize;
 		}
-
-		waterGroundType = getTextureType("r_water");
-		cliffGroundType = getTextureType("r_cliff");
 
 		SetGroundForTile("tileset/rockieground.txt", "rockie_ground");
 		SetDecals("tileset/rockiedecals.txt", "rockie_decals");
@@ -561,30 +550,16 @@ static int determineGroundType(int x, int y, const char *tileset)
 {
 	int ground[2][2];
 	int votes[2][2];
+	int weight[2][2];
 	int i,j, tile;
 	int a,b, best;
-	bool arizona, rockies, urban;
-	arizona = rockies = urban = false;
-	if (strcmp(tileset, "texpages/tertilesc1hw") == 0)
-	{
-		arizona = true;
-	} else if (strcmp(tileset, "texpages/tertilesc2hw") == 0)
-	{
-		urban = true;
-	} else if (strcmp(tileset, "texpages/tertilesc3hw") == 0)
-	{
-		rockies = true;
-	} else
-	{
-		debug(LOG_ERROR, "unknown tileset");
-		return 0;
-	}
+	MAPTILE *psTile = mapTile(x,y);
 
 	if (x < 0 || y < 0 || x >= mapWidth || y >= mapHeight)
 	{
 		return 0; // just return the first ground type
 	}
-	
+
 	// check what tiles surround this grid point
 	for(i=0;i<2;i++)
 	{
@@ -592,34 +567,31 @@ static int determineGroundType(int x, int y, const char *tileset)
 		{
 			if (x+i-1 < 0 || y+j-1 < 0 || x+i-1 >= mapWidth || y+j-1 >= mapHeight)
 			{
+				psTile = 0;
 				tile = 0;
 			}
 			else
 			{
-				tile = mapTile(x+i-1, y+j-1)->texture;
+				psTile = mapTile(x+i-1, y+j-1);
+				tile = psTile->texture;
 			}
 			a = i;
 			b = j;
 			rotFlip(tile, &a, &b);
 			ground[i][j] = groundFromMapTile(tile, a, b);
-			
-			votes[i][j] = 0;
 
-			// cliffs are so small they won't show up otherwise
-			if (urban)
+			votes[i][j] = 0;
+			// votes are weighted, some tiles have more weight than others
+			weight[i][j] = 10;
+
+			if (psTile)
 			{
-				if (ground[i][j] == getTextureType("u_cliff"))
-					return ground[i][j];
-			}
-			else if (arizona)
-			{
-				if (ground[i][j] == getTextureType("a_cliff"))
-					return ground[i][j];
-			}
-			else if (rockies)
-			{
-				if (ground[i][j] == getTextureType("r_cliff"))
-					return ground[i][j];
+				// cliff tiles have higher priority, to be clearly visible
+				if (terrainType(psTile) == TER_CLIFFFACE) 
+					weight[i][j] = 100;
+				// water bottom has lower priority, to stay inside water
+				if (terrainType(psTile) == TER_WATER) 
+					weight[i][j] = 1;
 			}
 		}
 	}
@@ -635,19 +607,21 @@ static int determineGroundType(int x, int y, const char *tileset)
 				{
 					if (ground[i][j] == ground[a][b])
 					{
-						votes[i][j]++;
+						votes[i][j] += weight[a][b];
 					}
 				}
 			}
 		}
 	}
 	// and determine the winner
-	best = -1;
+	best = -1; 
+	a = 0;
+	b = 0;
 	for(i=0;i<2;i++)
 	{
 		for(j=0;j<2;j++)
 		{
-			if (votes[i][j] > best)
+			if (votes[i][j] > best || (votes[i][j] == best && ground[i][j]<ground[a][b]))
 			{
 				best = votes[i][j];
 				a = i;
@@ -657,6 +631,7 @@ static int determineGroundType(int x, int y, const char *tileset)
 	}
 	return ground[a][b];
 }
+
 
 // SetDecals()
 // reads in the decal array for the requested tileset.
@@ -881,7 +856,7 @@ bool mapLoad(char *filename, bool preview)
 			// FIXME: magic number
 			mapTile(i, j)->waterLevel = mapTile(i, j)->height - world_coord(1) / 3;
 			// lower riverbed
-			if (mapTile(i, j)->ground == waterGroundType)
+			if (terrainType(mapTile(i, j)) == TER_WATER && terrainType(mapTile(i-1, j)) == TER_WATER && terrainType(mapTile(i, j-1)) == TER_WATER && terrainType(mapTile(i-1, j-1)) == TER_WATER)
 			{
 				mapTile(i, j)->height -= WATER_MIN_DEPTH - mt.u32()%(WATER_MAX_DEPTH + 1 - WATER_MIN_DEPTH);
 			}
@@ -994,7 +969,7 @@ bool mapSave(char **ppFileData, UDWORD *pFileSize)
 	for (int i = 0; i < mapWidth*mapHeight; i++)
 	{
 		psTileData->texture = psTile->texture;
-		if (psTile->ground == waterGroundType)
+		if (terrainType(psTile) == TER_WATER)
 		{
 			psTileData->height = (psTile->waterLevel + world_coord(1) / 3) / ELEVATION_SCALE;
 		}

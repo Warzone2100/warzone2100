@@ -83,7 +83,7 @@ bool bridgeValid(int startX, int startY, int endX, int endY)
 	{
 		for (i = minY + 1; i < maxY - 1; i++)
 		{
-			if (mapTile(startX, i)->ground != waterGroundType)
+			if (terrainType(mapTile(startX, i)) != TER_WATER)
 			{
 				debug(LOG_ERROR, "Bridge cannot cross !water - X");
 				return false;
@@ -94,7 +94,7 @@ bool bridgeValid(int startX, int startY, int endX, int endY)
 	{
 		for (i = minX + 1; i < maxX - 1; i++)
 		{
-			if (mapTile(i, startY)->ground != waterGroundType)
+			if (terrainType(mapTile(i, startY)) != TER_WATER)
 			{
 				debug(LOG_ERROR, "Bridge cannot cross !water - Y");
 				return false;
