@@ -83,6 +83,7 @@ static bool researchedWeap(DROID_TEMPLATE *psCurr, int player, int weapIndex, bo
 
 bool researchedTemplate(DROID_TEMPLATE *psCurr, int player, bool allowRedundant, bool verbose)
 {
+	ASSERT_OR_RETURN(false, psCurr, "Given a null template");
 	// super hack -- cyborgs and transports are special, only check their body
 	switch (psCurr->droidType)
 	{

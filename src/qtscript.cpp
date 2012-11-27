@@ -912,6 +912,33 @@ bool triggerEventChat(int from, int to, const char *message)
 	return true;
 }
 
+//__ \subsection{eventBeacon(x, y, from, to[, message])}
+//__ An event that is run whenever a beacon message is received. The \emph{from} parameter is the
+//__ player sending the beacon. For the moment, the \emph{to} parameter is always the script player.
+//__ Message may be undefined.
+bool triggerEventBeacon(int from, int to, const char *message, int x, int y)
+{
+	for (int i = 0; i < scripts.size() && message; ++i)
+	{
+		QScriptEngine *engine = scripts.at(i);
+		int me = engine->globalObject().property("me").toInt32();
+		if (me == to)
+		{
+			QScriptValueList args;
+			args += QScriptValue(map_coord(x));
+			args += QScriptValue(map_coord(y));
+			args += QScriptValue(from);
+			args += QScriptValue(to);
+			if (message)
+			{
+				args += QScriptValue(message);
+			}
+			callFunction(engine, "eventBeacon", args);
+		}
+	}
+	return true;
+}
+
 //__ \subsection{eventGroupLoss(object, group id, new size)}
 //__ An event that is run whenever a group becomes empty. Input parameter
 //__ is the about to be killed object, the group's id, and the new group size.

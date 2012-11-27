@@ -65,11 +65,13 @@
 #define ALLIES -2
 #define ENEMIES -3
 
-// hack, this is used from scriptfuncs.cpp -- and we don't want to include any stinkin' wzscript headers here!
 // TODO, move this stuff into a script common subsystem
+#include "scriptfuncs.h"
 extern bool structDoubleCheck(BASE_STATS *psStat,UDWORD xx,UDWORD yy, SDWORD maxBlockingTiles);
 extern Vector2i positions[MAX_PLAYERS];
 extern std::vector<Vector2i> derricks;
+
+// private qtscript bureaucracy
 typedef QMap<BASE_OBJECT *, int> GROUPMAP;
 typedef QMap<QScriptEngine *, GROUPMAP *> ENGINEMAP;
 static ENGINEMAP groups;
@@ -2723,6 +2725,50 @@ static QScriptValue js_enumArea(QScriptContext *context, QScriptEngine *engine)
 	return value;
 }
 
+//-- \subsection{addBeacon(x, y, target player, message)}
+//-- Send a beacon message to target player. Target may also be \emph{ALLIES}.
+//-- Returns a boolean that is true on success. (3.2+ only)
+static QScriptValue js_addBeacon(QScriptContext *context, QScriptEngine *engine)
+{
+	int x = world_coord(context->argument(0).toInt32());
+	int y = world_coord(context->argument(1).toInt32());
+	int target = context->argument(2).toInt32();
+	QString message = context->argument(3).toString();
+	int me = engine->globalObject().property("me").toInt32();
+	SCRIPT_ASSERT(context, target >= 0 || target == ALLIES, "Message to invalid player %d", target);
+	for (int i = 0; i < MAX_PLAYERS; i++)
+	{
+		if (i != me && (i == target || (target == ALLIES && aiCheckAlliances(i, me))))
+		{
+			debug(LOG_MSG, "adding script beacon to %d from %d", i, me);
+			sendBeaconToPlayer(x, y, i, me, message.toUtf8().constData());
+		}
+	}
+	return QScriptValue(true);
+}
+
+//-- \subsection{removeBeacon(target player)}
+//-- Remove a beacon message sent to target player. Target may also be \emph{ALLIES}.
+//-- Returns a boolean that is true on success. (3.2+ only)
+static QScriptValue js_removeBeacon(QScriptContext *context, QScriptEngine *engine)
+{
+	int me = engine->globalObject().property("me").toInt32();
+	int target = context->argument(0).toInt32();
+	SCRIPT_ASSERT(context, target >= 0 || target == ALLIES, "Message to invalid player %d", target);
+	for (int i = 0; i < MAX_PLAYERS; i++)
+	{
+		if (i == target || (target == ALLIES && aiCheckAlliances(i, me)))
+		{
+			MESSAGE *psMessage = findBeaconMsg(i, me);
+			if (psMessage)
+			{
+				removeMessage(psMessage, i);
+			}
+		}
+	}
+	return QScriptValue(true);
+}
+
 //-- \subsection{chat(target player, message)}
 //-- Send a message to target player. Target may also be \emph{ALL_PLAYERS} or \emph{ALLIES}.
 //-- Returns a boolean that is true on success. (3.2+ only)
@@ -2731,7 +2777,6 @@ static QScriptValue js_chat(QScriptContext *context, QScriptEngine *engine)
 	int player = engine->globalObject().property("me").toInt32();
 	int target = context->argument(0).toInt32();
 	QString message = context->argument(1).toString();
-	SCRIPT_ASSERT_PLAYER(context, player);
 	SCRIPT_ASSERT(context, target >= 0 || target == ALL_PLAYERS || target == ALLIES, "Message to invalid player %d", target);
 	if (target == ALL_PLAYERS) // all
 	{
@@ -3130,6 +3175,8 @@ bool registerFunctions(QScriptEngine *engine, QString scriptName)
 	engine->globalObject().setProperty("safeDest", engine->newFunction(js_safeDest));
 	engine->globalObject().setProperty("activateStructure", engine->newFunction(js_activateStructure));
 	engine->globalObject().setProperty("chat", engine->newFunction(js_chat));
+	engine->globalObject().setProperty("addBeacon", engine->newFunction(js_addBeacon));
+	engine->globalObject().setProperty("removeBeacon", engine->newFunction(js_removeBeacon));
 	engine->globalObject().setProperty("getDroidProduction", engine->newFunction(js_getDroidProduction));
 	engine->globalObject().setProperty("getDroidLimit", engine->newFunction(js_getDroidLimit));
 	engine->globalObject().setProperty("setDroidLimit", engine->newFunction(js_setDroidLimit));
