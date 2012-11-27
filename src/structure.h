@@ -99,7 +99,12 @@ extern STRUCTSTRENGTH_MODIFIER		asStructStrengthModifier[WE_NUMEFFECTS][
 extern void handleAbandonedStructures(void);
 
 int getMaxDroids(int player);
+int getMaxCommanders(int player);
+int getMaxConstructors(int player);
 void setMaxDroids(int player, int value);
+void setMaxCommanders(int player, int value);
+void setMaxConstructors(int player, int value);
+
 bool IsPlayerDroidLimitReached(int player);
 bool CheckHaltOnMaxUnitsReached(STRUCTURE *psStructure);
 

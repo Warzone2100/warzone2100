@@ -2888,11 +2888,11 @@ static QScriptValue js_getDroidLimit(QScriptContext *context, QScriptEngine *eng
 		DROID_TYPE type = (DROID_TYPE)context->argument(1).toInt32();
 		if (type == DROID_COMMAND)
 		{
-			return QScriptValue(MAX_COMMAND_DROIDS);
+			return QScriptValue(getMaxCommanders(context->argument(1).toInt32()));
 		}
 		else if (type == DROID_CONSTRUCT)
 		{
-			return QScriptValue(MAX_CONSTRUCTOR_DROIDS);
+			return QScriptValue(getMaxConstructors(context->argument(1).toInt32()));
 		}
 		// else return general unit limit
 	}
@@ -2910,6 +2910,26 @@ static QScriptValue js_setDroidLimit(QScriptContext *context, QScriptEngine *)
 	int player = context->argument(0).toInt32();
 	int value = context->argument(1).toInt32();
 	setMaxDroids(player, value);
+	return QScriptValue();
+}
+
+//-- \subsection{setCommanderLimit(player, value)}
+//-- Set the maximum number of commanders that this player can produce.
+static QScriptValue js_setCommanderLimit(QScriptContext *context, QScriptEngine *)
+{
+	int player = context->argument(0).toInt32();
+	int value = context->argument(1).toInt32();
+	setMaxCommanders(player, value);
+	return QScriptValue();
+}
+
+//-- \subsection{setConstructorLimit(player, value)}
+//-- Set the maximum number of constructors that this player can produce.
+static QScriptValue js_setConstructorLimit(QScriptContext *context, QScriptEngine *)
+{
+	int player = context->argument(0).toInt32();
+	int value = context->argument(1).toInt32();
+	setMaxConstructors(player, value);
 	return QScriptValue();
 }
 
@@ -3180,6 +3200,8 @@ bool registerFunctions(QScriptEngine *engine, QString scriptName)
 	engine->globalObject().setProperty("getDroidProduction", engine->newFunction(js_getDroidProduction));
 	engine->globalObject().setProperty("getDroidLimit", engine->newFunction(js_getDroidLimit));
 	engine->globalObject().setProperty("setDroidLimit", engine->newFunction(js_setDroidLimit));
+	engine->globalObject().setProperty("setCommanderLimit", engine->newFunction(js_setCommanderLimit));
+	engine->globalObject().setProperty("setConstructorLimit", engine->newFunction(js_setConstructorLimit));
 
 	// Functions that operate on the current player only
 	engine->globalObject().setProperty("centreView", engine->newFunction(js_centreView));

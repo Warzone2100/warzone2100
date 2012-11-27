@@ -44,10 +44,6 @@
 //used to stop structures being built too near the edge and droids being placed down
 #define TOO_NEAR_EDGE	3
 
-/* Define max number of allowed droids per droid type */
-#define MAX_COMMAND_DROIDS		10		// max number of commanders a player can have
-#define MAX_CONSTRUCTOR_DROIDS	15		// max number of constructors a player can have
-
 /* Experience modifies */
 #define EXP_REDUCE_DAMAGE		6		// damage of a droid is reduced by this value per experience level, in %
 #define EXP_ACCURACY_BONUS		5		// accuracy of a droid is increased by this value per experience level, in %

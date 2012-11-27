@@ -14,6 +14,8 @@ function eventGameInit()
 	for (var playnum = 0; playnum < maxPlayers; playnum++)
 	{
 		setDroidLimit(playnum, 150);
+		setCommanderLimit(playnum, 10);
+		setConstructorLimit(playnum, 15);
 
 		enableStructure("A0CommandCentre", playnum);		// make structures available to build
 		enableStructure("A0LightFactory", playnum);

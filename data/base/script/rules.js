@@ -8,6 +8,8 @@ function eventStartLevel()
 	setMiniMap(false);
 	setDesign(false);
 	setDroidLimit(0, 100);
+	setCommanderLimit(0, 10);
+	setConstructorLimit(0, 15);
 
 	var structlist = enumStruct(me, HQ);
 	for (var i = 0; i < structlist.length; i++)

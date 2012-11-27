@@ -3294,10 +3294,10 @@ DROID *giftSingleDroid(DROID *psD, UDWORD to)
 
 	// Check unit limits (multiplayer only)
 	if (bMultiPlayer
-            && (getNumDroids(to) + 1 > getMaxDroids(to)
-	        || ((psD->droidType == DROID_CYBORG_CONSTRUCT || psD->droidType == DROID_CONSTRUCT)
-		    && getNumConstructorDroids(to) + 1 > MAX_CONSTRUCTOR_DROIDS)
-	        || (psD->droidType == DROID_COMMAND && getNumCommandDroids(to) + 1 > MAX_COMMAND_DROIDS)))
+		&& (getNumDroids(to) + 1 > getMaxDroids(to)
+			|| ((psD->droidType == DROID_CYBORG_CONSTRUCT || psD->droidType == DROID_CONSTRUCT)
+			&& getNumConstructorDroids(to) + 1 > getMaxConstructors(to))
+			|| (psD->droidType == DROID_COMMAND && getNumCommandDroids(to) + 1 > getMaxCommanders(to))))
 	{
 		if (to == selectedPlayer || psD->player == selectedPlayer)
 		{
