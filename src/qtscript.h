@@ -92,6 +92,7 @@ bool triggerEventStructureReady(STRUCTURE *psStruct);
 bool triggerEventSeen(BASE_OBJECT *psViewer, BASE_OBJECT *psSeen);
 bool triggerEventObjectTransfer(BASE_OBJECT *psObj, int from);
 bool triggerEventChat(int from, int to, const char *message);
+bool triggerEventBeacon(int from, int to, const char *message, int x, int y);
 bool triggerEventPickup(FEATURE *psFeat, DROID *psDroid);
 bool triggerEventCheatMode(bool entered);
 bool triggerEventGroupLoss(BASE_OBJECT *psObj, int group, int size, QScriptEngine *engine);

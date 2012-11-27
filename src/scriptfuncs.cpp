@@ -97,6 +97,7 @@
 #include "design.h"
 #include "random.h"
 #include "template.h"
+#include "qtscript.h" // this is fun...
 
 static INTERP_VAL	scrFunctionResult;	//function return value to be pushed to stack
 
@@ -9330,6 +9331,8 @@ bool addBeaconBlip(SDWORD locX, SDWORD locY, SDWORD forPlayer, SDWORD sender, co
 	//call beacon callback only if not adding for ourselves
 	if(forPlayer != sender)
 	{
+		triggerEventBeacon(sender, forPlayer, textMsg, locX, locY);
+
 		if(!msgStackPush(CALL_BEACON,sender,forPlayer,textMsg,locX,locY,NULL))
 		{
 			debug(LOG_ERROR, "msgStackPush - stack failed");
