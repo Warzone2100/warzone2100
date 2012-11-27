@@ -2723,9 +2723,9 @@ static QScriptValue js_enumArea(QScriptContext *context, QScriptEngine *engine)
 	return value;
 }
 
-//-- \subsection{addBeacon(x, y, target player, message)}
+//-- \subsection{addBeacon(x, y, target player[, message])}
 //-- Send a beacon message to target player. Target may also be \emph{ALLIES}.
-//-- Returns a boolean that is true on success. (3.2+ only)
+//-- Message is currently unused. Returns a boolean that is true on success. (3.2+ only)
 static QScriptValue js_addBeacon(QScriptContext *context, QScriptEngine *engine)
 {
 	int x = world_coord(context->argument(0).toInt32());
