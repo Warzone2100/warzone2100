@@ -238,6 +238,7 @@ QScriptValue convStructure(STRUCTURE *psStruct, QScriptEngine *engine)
 //;; In addition, the following properties are defined:
 //;; \begin{description}
 //;; \item[type] It will always be FEATURE.
+//;; \item[stattype] The type of feature. Defined types are OIL_RESOURCE, OIL_DRUM and ARTIFACT.
 //;; \item[damageable] Can this feature be damaged?
 //;; \end{description}
 QScriptValue convFeature(FEATURE *psFeature, QScriptEngine *engine)
@@ -245,6 +246,7 @@ QScriptValue convFeature(FEATURE *psFeature, QScriptEngine *engine)
 	QScriptValue value = convObj(psFeature, engine);
 	value.setProperty("health", 100 * psFeature->psStats->body / MAX(1, psFeature->body), QScriptValue::ReadOnly);
 	value.setProperty("damageable", psFeature->psStats->damageable, QScriptValue::ReadOnly);
+	value.setProperty("stattype", psFeature->psStats->subType, QScriptValue::ReadOnly);
 	return value;
 }
 
@@ -3263,6 +3265,9 @@ bool registerFunctions(QScriptEngine *engine, QString scriptName)
 	engine->globalObject().setProperty("DROID_SUPERTRANSPORTER", DROID_SUPERTRANSPORTER, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("DROID_COMMAND", DROID_COMMAND, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("DROID_ANY", DROID_ANY, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("OIL_RESOURCE", FEAT_OIL_RESOURCE, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("OIL_DRUM", FEAT_OIL_DRUM, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("ARTIFACT", FEAT_GEN_ARTE, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("HQ", REF_HQ, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("FACTORY", REF_FACTORY, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("POWER_GEN", REF_POWER_GEN, QScriptValue::ReadOnly | QScriptValue::Undeletable);
