@@ -54,6 +54,9 @@ PROJECTILE *proj_GetNext(void);		///< Get next projectile in the list.
 
 void	proj_FreeAllProjectiles(void);	///< Free all projectiles in the list.
 
+void setExpGain(int player, int gain);
+int getExpGain(int player);
+
 /// Calculate the initial velocities of an indirect projectile. Returns the flight time.
 int32_t projCalcIndirectVelocities(const int32_t dx, const int32_t dz, int32_t v, int32_t *vx, int32_t *vz, int min_angle);
 

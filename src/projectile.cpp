@@ -68,6 +68,7 @@
 #define HOMINGINDIRECT_HEIGHT_MIN 200
 #define HOMINGINDIRECT_HEIGHT_MAX 450
 
+static int experienceGain[MAX_PLAYERS];
 
 struct INTERVAL
 {
@@ -185,7 +186,10 @@ proj_InitSystem( void )
 {
 	psProjectileList.clear();
 	psProjectileNext = psProjectileList.end();
-
+	for (int x = 0; x<MAX_PLAYERS; ++x)
+	{
+		experienceGain[x] = 100;
+	}
 	return true;
 }
 
@@ -247,6 +251,16 @@ static uint32_t qualityFactor(DROID *psAttacker, DROID *psVictim)
 	return (powerRatio + pointsRatio) / 2;
 }
 
+void setExpGain(int player, int gain)
+{
+	experienceGain[player] = gain;
+}
+
+int getExpGain(int player)
+{
+	return experienceGain[player];
+}
+
 // update the kills after a target is damaged/destroyed
 static void proj_UpdateKills(PROJECTILE *psObj, int32_t experienceInc)
 {
@@ -268,7 +282,7 @@ static void proj_UpdateKills(PROJECTILE *psObj, int32_t experienceInc)
 	}
 
 	// Since we are no longer interested if it was killed or not, abs it
-	experienceInc = abs(experienceInc);
+	experienceInc = abs(experienceInc)*getExpGain(psObj->psSource->player)/100;
 
 	if (psObj->psSource->type == OBJ_DROID)			/* update droid kills */
 	{
