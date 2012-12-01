@@ -2544,6 +2544,8 @@ void moveUpdateDroid(DROID *psDroid)
 
 		// object moved from one tile to next, check to see if droid is near stuff.(oil)
 		checkLocalFeatures(psDroid);
+
+		triggerEventDroidMoved(psDroid, oldx, oldy);
 	}
 
 	// See if it's got blocked

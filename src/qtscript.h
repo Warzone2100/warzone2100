@@ -96,5 +96,7 @@ bool triggerEventBeacon(int from, int to, const char *message, int x, int y);
 bool triggerEventPickup(FEATURE *psFeat, DROID *psDroid);
 bool triggerEventCheatMode(bool entered);
 bool triggerEventGroupLoss(BASE_OBJECT *psObj, int group, int size, QScriptEngine *engine);
+bool triggerEventDroidMoved(DROID *psDroid, int oldx, int oldy);
+bool triggerEventArea(QString label, DROID *psDroid);
 
 #endif

@@ -952,3 +952,27 @@ bool triggerEventGroupLoss(BASE_OBJECT *psObj, int group, int size, QScriptEngin
 	callFunction(engine, "eventGroupLoss", args);
 	return true;
 }
+
+// This is not a trigger yet.
+bool triggerEventDroidMoved(DROID *psDroid, int oldx, int oldy)
+{
+	return areaLabelCheck(psDroid);
+}
+
+//__ \subsection{eventArea<label>(droid)}
+//__ An event that is run whenever a droid enters an area label. The area is then
+//__ deactived. Call resetArea() to reactivate it. The name of the event is 
+//__ eventArea + the name of the label.
+bool triggerEventArea(QString label, DROID *psDroid)
+{
+	for (int i = 0; i < scripts.size(); ++i)
+	{
+		QScriptEngine *engine = scripts.at(i);
+		QScriptValueList args;
+		args += QScriptValue(label);
+		args += convDroid(psDroid, engine);
+		callFunction(engine, QString("eventArea" + label), args);
+	}
+	return true;
+}
+

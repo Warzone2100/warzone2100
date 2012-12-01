@@ -77,11 +77,34 @@ typedef QMap<BASE_OBJECT *, int> GROUPMAP;
 typedef QMap<QScriptEngine *, GROUPMAP *> ENGINEMAP;
 static ENGINEMAP groups;
 
+struct labeltype { Vector2i p1, p2; int id; int type; int player; QList<int> idlist; };
+typedef QMap<QString, labeltype> LABELMAP;
+static LABELMAP labels;
+
 #define SCRIPT_ASSERT_PLAYER(_context, _player) \
 	SCRIPT_ASSERT(_context, _player >= 0 && _player < MAX_PLAYERS, "Invalid player index %d", _player);
 
 // ----------------------------------------------------------------------------------------
 // Utility functions -- not called directly from scripts
+
+bool areaLabelCheck(DROID *psDroid)
+{
+	int x = psDroid->pos.x;
+	int y = psDroid->pos.y;
+	for (LABELMAP::iterator i = labels.begin(); i != labels.end(); i++)
+	{
+		labeltype &l = (*i);
+		if (l.id == -1 && l.p1.x < x && l.p1.y < y && l.p2.x > x && l.p2.y > y
+		    && (l.player == ALL_PLAYERS || l.player == psDroid->player))
+		{
+			// We're inside an untriggered area
+			l.id = 1; // deactivate it
+			triggerEventArea(i.key(), psDroid);
+			return true;
+		}
+	}
+	return false;
+}
 
 void groupRemoveObject(BASE_OBJECT *psObj)
 {
@@ -492,11 +515,6 @@ bool saveGroups(WzConfig &ini, QScriptEngine *engine)
 // Label system (function defined in qtscript.h header)
 //
 
-struct labeltype { Vector2i p1, p2; int id; int type; int player; QList<int> idlist; };
-
-typedef QHash<QString, labeltype> LABELMAP;
-static LABELMAP labels;
-
 // Load labels
 bool loadLabels(const char *filename)
 {
@@ -530,7 +548,7 @@ bool loadLabels(const char *filename)
 			p.p1 = ini.vector2i("pos");
 			p.p2 = p.p1;
 			p.type = SCRIPT_POSITION;
-			p.player = -1;
+			p.player = ALL_PLAYERS;
 			p.id = -1;
 			labels.insert(label, p);
 		}
@@ -539,8 +557,8 @@ bool loadLabels(const char *filename)
 			p.p1 = ini.vector2i("pos1");
 			p.p2 = ini.vector2i("pos2");
 			p.type = SCRIPT_AREA;
-			p.player = -1;
-			p.id = -1;
+			p.player = ini.value("player", ALL_PLAYERS).toInt();
+			p.id = ini.value("triggered", -1).toInt();
 			labels.insert(label, p);
 		}
 		else if (list[i].startsWith("object"))
@@ -584,7 +602,7 @@ bool writeLabels(const char *filename)
 		debug(LOG_ERROR, "Could not open %s", filename);
 		return false;
 	}
-	for (QHash<QString, labeltype>::const_iterator i = labels.constBegin(); i != labels.constEnd(); i++)
+	for (LABELMAP::const_iterator i = labels.constBegin(); i != labels.constEnd(); i++)
 	{
 		QString key = i.key();
 		labeltype l = i.value();
@@ -601,6 +619,8 @@ bool writeLabels(const char *filename)
 			ini.setVector2i("pos1", l.p1);
 			ini.setVector2i("pos2", l.p2);
 			ini.setValue("label", key);
+			ini.setValue("player", l.player);
+			ini.setValue("triggered", l.id);
 			ini.endGroup();
 		}
 		else if (l.type == SCRIPT_GROUP)
@@ -645,6 +665,23 @@ bool writeLabels(const char *filename)
 // Script functions
 //
 // All script functions should be prefixed with "js_" then followed by same name as in script.
+
+//-- \subsection{resetArea(label[, filter])}
+//-- Reset the trigger on an area. Next time a unit enters the area, it will trigger
+//-- an area event. Optionally add a filter on it in the second parameter, which can
+//-- be a specific player to watch for, or ALL_PLAYERS by default.
+static QScriptValue js_resetArea(QScriptContext *context, QScriptEngine *engine)
+{
+	QString labelName = context->argument(0).toString();
+	SCRIPT_ASSERT(context, labels.contains(labelName), "Label %s not found", labelName.toUtf8().constData());
+	labeltype &l = labels[labelName];
+	l.id = -1; // make active again
+	if (context->argumentCount() > 1)
+	{
+		l.player = context->argument(1).toInt32();
+	}
+	return QScriptValue();
+}
 
 //-- \subsection{enumLabels()}
 //-- Returns a string list of labels that exist for this map. (3.2+ only)
@@ -3192,6 +3229,7 @@ bool registerFunctions(QScriptEngine *engine, QString scriptName)
 	engine->globalObject().setProperty("setSky", engine->newFunction(js_setSky));
 	engine->globalObject().setProperty("cameraSlide", engine->newFunction(js_cameraSlide));
 	engine->globalObject().setProperty("cameraTrack", engine->newFunction(js_cameraTrack));
+	engine->globalObject().setProperty("resetArea", engine->newFunction(js_resetArea));
 
 	// horrible hacks follow -- do not rely on these being present!
 	engine->globalObject().setProperty("hackNetOff", engine->newFunction(js_hackNetOff));

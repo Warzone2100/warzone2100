@@ -49,6 +49,8 @@ bool saveGroups(WzConfig &ini, QScriptEngine *engine);
 bool loadGroup(QScriptEngine *engine, int groupId, int objId);
 void prepareLabels();
 
+bool areaLabelCheck(DROID *psDroid);
+
 // Utility conversion functions
 QScriptValue convDroid(DROID *psDroid, QScriptEngine *engine);
 QScriptValue convStructure(STRUCTURE *psStruct, QScriptEngine *engine);
