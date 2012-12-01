@@ -2880,7 +2880,7 @@ static QScriptValue js_getDroidProduction(QScriptContext *context, QScriptEngine
 //-- fixed throughout a game and the same for all players. If no arguments are passed,
 //-- returns general unit limit for the current player. If a second, unit type argument 
 //-- is passed, the limit for this unit type is returned, which may be different from
-//-- the general unit limit (eg for commanders and construction droids).
+//-- the general unit limit (eg for commanders and construction droids). (3.2+ only)
 static QScriptValue js_getDroidLimit(QScriptContext *context, QScriptEngine *engine)
 {
 	if (context->argumentCount() > 1)
@@ -2903,18 +2903,39 @@ static QScriptValue js_getDroidLimit(QScriptContext *context, QScriptEngine *eng
 	return QScriptValue(getMaxDroids(engine->globalObject().property("me").toInt32()));
 }
 
-//-- \subsection{setDroidLimit(player, value)}
-//-- Set the maximum number of droids that this player can produce.
+//-- \subsection{setDroidLimit(player, value[, droid type])}
+//-- Set the maximum number of droids that this player can produce. If a third
+//-- parameter is added, this is the droid type to limit. It can be DROID_ANY
+//-- for droids in general, DROID_CONSTRUCT for constructors, or DROID_COMMAND
+//-- for commanders. (3.2+ only)
 static QScriptValue js_setDroidLimit(QScriptContext *context, QScriptEngine *)
 {
 	int player = context->argument(0).toInt32();
 	int value = context->argument(1).toInt32();
-	setMaxDroids(player, value);
+	DROID_TYPE type = DROID_ANY;
+	if (context->argumentCount() > 1)
+	{
+		type = (DROID_TYPE)context->argument(2).toInt32();
+	}
+	switch (type)
+	{
+	case DROID_CONSTRUCT:
+		setMaxConstructors(player, value);
+		break;
+	case DROID_COMMAND:
+		setMaxCommanders(player, value);
+		break;
+	default:
+	case DROID_ANY:
+		setMaxDroids(player, value);
+		break;
+	}
 	return QScriptValue();
 }
 
 //-- \subsection{setCommanderLimit(player, value)}
 //-- Set the maximum number of commanders that this player can produce.
+//-- THIS FUNCTION IS DEPRECATED AND WILL BE REMOVED!
 static QScriptValue js_setCommanderLimit(QScriptContext *context, QScriptEngine *)
 {
 	int player = context->argument(0).toInt32();
@@ -2925,6 +2946,7 @@ static QScriptValue js_setCommanderLimit(QScriptContext *context, QScriptEngine 
 
 //-- \subsection{setConstructorLimit(player, value)}
 //-- Set the maximum number of constructors that this player can produce.
+//-- THIS FUNCTION IS DEPRECATED AND WILL BE REMOVED!
 static QScriptValue js_setConstructorLimit(QScriptContext *context, QScriptEngine *)
 {
 	int player = context->argument(0).toInt32();
@@ -2934,7 +2956,7 @@ static QScriptValue js_setConstructorLimit(QScriptContext *context, QScriptEngin
 }
 
 //-- \subsection{hackAddMessage(message, type, player, immediate)}
-//-- See wzscript docs for info, to the extent any exist.
+//-- See wzscript docs for info, to the extent any exist. (3.2+ only)
 static QScriptValue js_hackAddMessage(QScriptContext *context, QScriptEngine *)
 {
 	QString mess = context->argument(0).toString();
@@ -2967,7 +2989,7 @@ static QScriptValue js_hackAddMessage(QScriptContext *context, QScriptEngine *)
 }
 
 //-- \subsection{hackRemoveMessage(message, type, player)}
-//-- See wzscript docs for info, to the extent any exist.
+//-- See wzscript docs for info, to the extent any exist. (3.2+ only)
 static QScriptValue js_hackRemoveMessage(QScriptContext *context, QScriptEngine *)
 {
 	QString mess = context->argument(0).toString();
@@ -2989,7 +3011,7 @@ static QScriptValue js_hackRemoveMessage(QScriptContext *context, QScriptEngine 
 }
 
 //-- \subsection{setSunPosition(x, y, z)}
-//-- Move the position of the Sun, which in turn moves where shadows are cast.
+//-- Move the position of the Sun, which in turn moves where shadows are cast. (3.2+ only)
 static QScriptValue js_setSunPosition(QScriptContext *context, QScriptEngine *)
 {
 	float x = context->argument(0).toNumber();
@@ -3000,7 +3022,7 @@ static QScriptValue js_setSunPosition(QScriptContext *context, QScriptEngine *)
 }
 
 //-- \subsection{setSunIntensity(ambient r, g, b, diffuse r, g, b, specular r, g, b)}
-//-- Set the ambient, diffuse and specular colour intensities of the Sun lighting source.
+//-- Set the ambient, diffuse and specular colour intensities of the Sun lighting source. (3.2+ only)
 static QScriptValue js_setSunIntensity(QScriptContext *context, QScriptEngine *)
 {
 	float ambient[4];
@@ -3025,7 +3047,7 @@ static QScriptValue js_setSunIntensity(QScriptContext *context, QScriptEngine *)
 }
 
 //-- \subsection{setWeather(weather type)}
-//-- Set the current weather. This should be one of WEATHER_RAIN, WEATHER_SNOW or WEATHER_CLEAR.
+//-- Set the current weather. This should be one of WEATHER_RAIN, WEATHER_SNOW or WEATHER_CLEAR. (3.2+ only)
 static QScriptValue js_setWeather(QScriptContext *context, QScriptEngine *)
 {
 	WT_CLASS weather = (WT_CLASS)context->argument(0).toInt32();
@@ -3035,7 +3057,7 @@ static QScriptValue js_setWeather(QScriptContext *context, QScriptEngine *)
 }
 
 //-- \subsection{setSky(texture page, wind speed, skybox scale)}
-//-- Change the skybox. Default values are "page-25", 0.5, and 10000.0. Returns true on success.
+//-- Change the skybox. Default values are "page-25", 0.5, and 10000.0. Returns true on success. (3.2+ only)
 static QScriptValue js_setSky(QScriptContext *context, QScriptEngine *)
 {
 	QString page = context->argument(0).toString();
@@ -3050,7 +3072,7 @@ static QScriptValue js_setSky(QScriptContext *context, QScriptEngine *)
 }
 
 //-- \subsection{cameraSlide(x, y)}
-//-- Slide the camera over to the given position on the map.
+//-- Slide the camera over to the given position on the map. (3.2+ only)
 static QScriptValue js_cameraSlide(QScriptContext *context, QScriptEngine *)
 {
 	int x = context->argument(0).toNumber();
@@ -3060,7 +3082,7 @@ static QScriptValue js_cameraSlide(QScriptContext *context, QScriptEngine *)
 }
 
 //-- \subsection{cameraTrack(droid)}
-//-- Make the camera follow the given droid object around. Pass in a null object to stop.
+//-- Make the camera follow the given droid object around. Pass in a null object to stop. (3.2+ only)
 static QScriptValue js_cameraTrack(QScriptContext *context, QScriptEngine *)
 {
 	if (context->argument(0).isNull())

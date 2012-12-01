@@ -13,9 +13,9 @@ function eventGameInit()
 	hackNetOff();
 	for (var playnum = 0; playnum < maxPlayers; playnum++)
 	{
-		setDroidLimit(playnum, 150);
-		setCommanderLimit(playnum, 10);
-		setConstructorLimit(playnum, 15);
+		setDroidLimit(playnum, 150, DROID_ANY);
+		setDroidLimit(playnum, 10, DROID_COMMAND);
+		setDroidLimit(playnum, 15, DROID_CONSTRUCT);
 
 		enableStructure("A0CommandCentre", playnum);		// make structures available to build
 		enableStructure("A0LightFactory", playnum);
