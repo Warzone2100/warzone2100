@@ -2789,7 +2789,8 @@ static QScriptValue js_chat(QScriptContext *context, QScriptEngine *engine)
 	}
 	else // specific player
 	{
-		return QScriptValue(sendTextMessage(QString(QString::number(target) + " " + message).toUtf8().constData(), false, player));
+		QString tmp = QString::number(NetPlay.players[target].position) + message;
+		return QScriptValue(sendTextMessage(tmp.toUtf8().constData(), false, player));
 	}
 }
 
