@@ -93,9 +93,6 @@
     <ClCompile Include="droid.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="e3demo.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="edit3d.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -438,9 +435,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="droiddef.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="e3demo.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="edit3d.h">

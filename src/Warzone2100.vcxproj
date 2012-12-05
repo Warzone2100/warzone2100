@@ -431,7 +431,6 @@
     <ClCompile Include="display3d.cpp" />
     <ClCompile Include="drive.cpp" />
     <ClCompile Include="droid.cpp" />
-    <ClCompile Include="e3demo.cpp" />
     <ClCompile Include="edit3d.cpp" />
     <ClCompile Include="effects.cpp" />
     <ClCompile Include="feature.cpp" />
@@ -548,7 +547,6 @@
     <ClInclude Include="drive.h" />
     <ClInclude Include="droid.h" />
     <ClInclude Include="droiddef.h" />
-    <ClInclude Include="e3demo.h" />
     <ClInclude Include="edit3d.h" />
     <ClInclude Include="effects.h" />
     <ClInclude Include="feature.h" />
