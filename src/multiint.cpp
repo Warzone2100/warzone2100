@@ -1792,20 +1792,41 @@ static void addAiChooser(int player)
 	sButInit.formID = MULTIOP_AI_FORM;
 	sButInit.x = 7;
 	sButInit.width = MULTIOP_PLAYERWIDTH + 1;
-	sButInit.height = MULTIOP_PLAYERHEIGHT;
+	// Try to fit as many as possible, just got to make sure text fits in the 'box'.
+	// NOTE: Correct way would be to get the actual font size, render the text, and see what fits.
+	if (aidata.size() > 8)
+	{
+		sButInit.height = MULTIOP_PLAYERHEIGHT - 7;
+	}
+	else
+	{
+		sButInit.height = MULTIOP_PLAYERHEIGHT;
+	}
 	sButInit.pDisplay = displayAi;
 
-	int y = 4;
-	const int step = (MULTIOP_PLAYERHEIGHT + 5);
+	// only need this button in (true) mp games
+	int mpbutton = NetPlay.bComms ? 1 : 0;
+	// cap AI's that are shown, since it looks a bit ugly.  *FIXME*
+	int capAIs = aidata.size();
+	if (aidata.size() > 8)
+	{
+		debug(LOG_INFO, "You have too many AI's loaded for the GUI to handle.  Only the first 8 will be shown.");
+		addConsoleMessage("You have too many AI's loaded for the GUI to handle.  Only the first 8 will be shown.", DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
+		capAIs = 10;
+	}
+
+	// button height * how many AI + possible buttons (openclosed)
+	int gap = MULTIOP_PLAYERSH - ((sButInit.height)* (capAIs + 1 + mpbutton));
+	int gapDiv = capAIs - 1;
+	gap = std::min(gap, 5*gapDiv);
 
 	// Open button
-	if (NetPlay.bComms)
+	if (mpbutton)
 	{
 		sButInit.id = MULTIOP_AI_OPEN;
 		sButInit.pTip = _("Allow human players to join in this slot");
 		sButInit.UserData = (UDWORD)AI_OPEN;
-		sButInit.y = y;
-		y += step;
+		sButInit.y = 3;	//Top most position
 		widgAddButton(psWScreen, &sButInit);
 	}
 
@@ -1813,14 +1834,19 @@ static void addAiChooser(int player)
 	sButInit.pTip = _("Leave this slot unused");
 	sButInit.id = MULTIOP_AI_CLOSED;
 	sButInit.UserData = (UDWORD)AI_CLOSED;
-	sButInit.y = y;
-	y += step + 8;
+	if (mpbutton)
+	{
+		sButInit.y = sButInit.height;
+	}
+	else
+	{
+		sButInit.y = 0; //since we don't have the lone mpbutton, we can start at position 0
+	}
 	widgAddButton(psWScreen, &sButInit);
 
-	for (int i = 0; i < aidata.size(); i++)
+	for (int i = 0; i < capAIs; i++)
 	{
-		sButInit.y = y;
-		y += step;
+		sButInit.y = (sButInit.height*gapDiv + gap)*(i+1+mpbutton)/gapDiv; // +1 for 'closed', and possible +1 more for 'open' for MP games)
 		sButInit.pTip = aidata[i].tip;
 		sButInit.id = MULTIOP_AI_START + i;
 		sButInit.UserData = i;
