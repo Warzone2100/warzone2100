@@ -148,6 +148,11 @@ not_version ()
 # Chdir to the srcdir, then run auto* tools.
 cd "$SRCDIR"
 
+version_check 0 "automake" "ftp://ftp.gnu.org/pub/gnu/automake/" 1 12 && {
+  echo "Sorry, automake 1.12+ is not supported yet, please use 1.11."
+  exit 1
+}
+
 version_check 1 "autoconf" "ftp://ftp.gnu.org/pub/gnu/autoconf/" 2 56 || DIE=1
 version_check 1 "automake" "ftp://ftp.gnu.org/pub/gnu/automake/" 1 11 || DIE=1
 if [ "$DIE" -eq 1 ]; then
