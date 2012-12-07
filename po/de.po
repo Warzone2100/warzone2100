@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2012-10-30 16:57+0100\n"
-"PO-Revision-Date: 2012-06-22 19:42+0100\n"
+"POT-Creation-Date: 2012-11-16 15:06+0100\n"
+"PO-Revision-Date: 2012-11-24 19:32+0100\n"
 "Last-Translator: Steven 'Kreuvf' Koenig <translations@kreuvf.de>\n"
 "Language-Team: Deutsch <warzone2100-project@lists.sourceforge.net>\n"
 "Language: \n"
@@ -14280,14 +14280,12 @@ msgid "VTOLs disabled."
 msgstr "VTOLs abgeschaltet."
 
 #: src/multiint.cpp:1399
-#, fuzzy
 msgid "Satellite Uplink disabled."
-msgstr "Satellitenkontrolle"
+msgstr "Satellitenkontrollzentrale abgeschaltet."
 
 #: src/multiint.cpp:1400
-#, fuzzy
 msgid "Laser Satellite disabled."
-msgstr "Lasersatelliten-Kommandozentrale"
+msgstr "Lasersatelliten abgeschaltet."
 
 #: src/multiint.cpp:1447
 #: src/multiint.cpp:1455
@@ -14774,12 +14772,12 @@ msgstr "Braun"
 msgid "We can't do that! We must be a Cyborg unit to use a Cyborg Transport!"
 msgstr "Wir können das nicht! Wir müssen ein Cyborg sein, um den Cyborgtransporter benutzen zu können!"
 
-#: src/qtscriptfuncs.cpp:1591
+#: src/qtscriptfuncs.cpp:1594
 #: src/scriptfuncs.cpp:3263
 msgid "YOU ARE VICTORIOUS!"
 msgstr "SIE HABEN GEWONNEN!"
 
-#: src/qtscriptfuncs.cpp:1596
+#: src/qtscriptfuncs.cpp:1599
 #: src/scriptfuncs.cpp:3267
 msgid "YOU WERE DEFEATED!"
 msgstr "SIE WURDEN BESIEGT!"
@@ -14949,64 +14947,64 @@ msgid_plural "%u units selected"
 msgstr[0] "%u Einheit ausgewählt"
 msgstr[1] "%u Einheiten ausgewählt"
 
-#: src/structure.cpp:2632
+#: src/structure.cpp:2625
 msgid "Can't build anymore units, Command Control Limit Reached - Production Halted"
 msgstr "Kann keine weiteren Einheiten mehr bauen, Commandereinheit hat Kontrollgrenze erreicht - Produktion angehalten"
 
 # nix Gruppe! -Kreuvf
-#: src/structure.cpp:5625
-#: src/structure.cpp:5650
+#: src/structure.cpp:5618
+#: src/structure.cpp:5643
 #, c-format
 msgid "%s - %u Unit assigned - Damage %3.0f%%"
 msgid_plural "%s - %u Units assigned - Damage %3.0f%%"
 msgstr[0] "%s - %u Einheit hinzugefügt - Schaden %3.0f%%"
 msgstr[1] "%s - %u Einheiten hinzugefügt - Schaden %3.0f%%"
 
-#: src/structure.cpp:5655
-#: src/structure.cpp:5723
-#: src/structure.cpp:5738
-#: src/structure.cpp:5752
+#: src/structure.cpp:5648
+#: src/structure.cpp:5716
+#: src/structure.cpp:5731
+#: src/structure.cpp:5745
 #, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - Schaden %3.0f%%"
 
-#: src/structure.cpp:5705
+#: src/structure.cpp:5698
 #, c-format
 msgid "%s - Connected %u of %u - Damage %3.0f%%"
 msgstr "%s - %u von %u verbunden - Schaden %3.0f%%"
 
-#: src/structure.cpp:5869
-#: src/structure.cpp:5914
+#: src/structure.cpp:5862
+#: src/structure.cpp:5907
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Elektronisch beschädigt"
 
 # Reward ist zwar nicht Beute, aber im Krieg erbeutet man eben Dinge -Kreuvf
-#: src/structure.cpp:6165
+#: src/structure.cpp:6158
 msgid "Electronic Reward - Visibility Report"
 msgstr "Elektronische Beute - Sichtbarkeitsbericht"
 
-#: src/structure.cpp:6205
+#: src/structure.cpp:6198
 msgid "Factory Reward - Propulsion"
 msgstr "Fabrikbeute - Antrieb"
 
-#: src/structure.cpp:6229
+#: src/structure.cpp:6222
 msgid "Factory Reward - Body"
 msgstr "Fabrikbeute - Rumpf"
 
-#: src/structure.cpp:6253
+#: src/structure.cpp:6246
 msgid "Factory Reward - Weapon"
 msgstr "Fabrikbeute - Waffe"
 
-#: src/structure.cpp:6262
+#: src/structure.cpp:6255
 msgid "Factory Reward - Nothing"
 msgstr "Fabrikbeute - Nichts"
 
-#: src/structure.cpp:6290
+#: src/structure.cpp:6283
 msgid "Repair Facility Award - Repair"
 msgstr "Beute aus Reparatureinrichtung - Reparatur"
 
-#: src/structure.cpp:6297
+#: src/structure.cpp:6290
 msgid "Repair Facility Award - Nothing"
 msgstr "Beute aus Reparatureinrichtung - Nichts"
 
@@ -15039,9 +15037,9 @@ msgstr " - %s gebaut"
 #. TRANSLATORS: This string looks as follows when expanded.
 #. "Version <version name/number> <working copy state><BUILD DATE><BUILD TYPE>"
 #: src/version.cpp:147
-#, fuzzy, c-format
+#, c-format
 msgid "Version %s%s%s%s"
-msgstr "Version %s-%s%s%s%s"
+msgstr "Version %s%s%s%s"
 
 #~ msgid "Password is already set!"
 #~ msgstr "Passwort ist schon gesetzt!"
