@@ -6,9 +6,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Warzone 2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2012-10-30 16:57+0100\n"
-"PO-Revision-Date: 2012-09-10 17:58+0100\n"
-"Last-Translator: Mészáros Tamás <meszaros.tomi@hotmail.com>\n"
+"POT-Creation-Date: 2012-11-16 15:06+0100\n"
+"PO-Revision-Date: 2012-11-13 17:18+0100\n"
+"Last-Translator: Kálmán „KAMI” Szalai <kami911@gmail.com>\n"
 "Language-Team: Magyar (Hungary) <meszaros.tomi@hotmail.com>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -256,7 +256,7 @@ msgstr "Páncélozott aknavető árok"
 #: data/mp/messages/strings/resstrings.txt:205
 #: data/mp/messages/strings/resstrings.txt:211
 msgid "Assigned automatically to nearest sensor or CB tower"
-msgstr "Automatikusan kijelölt legközelebbi érzékelõ vagy CB Torony"
+msgstr "Automatikusan a legközelebbi érzékelőt vagy CB tornyot rendeli hozzá"
 
 #: data/base/messages/resmessages12.rmsg:7
 #: data/base/messages/resmessages12.rmsg:18
@@ -503,7 +503,7 @@ msgstr "Védekező erő: magas"
 #: data/base/messages/resmessages12.rmsg:38
 #: data/mp/messages/resmessages12.rmsg:34
 msgid "Armored hardpoint with Lancer AT missile"
-msgstr "Páncélozott talapzat tankelhárító rakétával"
+msgstr "Páncélozott fegyverfelfüggesztő csomópont tankelhárító rakétával"
 
 #: data/base/messages/resmessages12.rmsg:48
 #: data/base/messages/resmessages23.rmsg:37
@@ -541,7 +541,7 @@ msgstr "Munkagépek automatikusan fejlesztve"
 #: data/mp/messages/resmessages12.rmsg:53
 #: data/mp/messages/resmessages1.rmsg:3
 msgid "New Systems Turret Available for Design"
-msgstr "A tervezéshez újrendszerű lövegtorony érhető el"
+msgstr "A tervezéshez új rendszerű lövegtorony érhető el"
 
 #: data/base/messages/resmessages12.rmsg:60
 #: data/mp/messages/resmessages12.rmsg:54
@@ -578,7 +578,7 @@ msgstr "CB érzékelő fejlesztve"
 #: data/mp/messages/resmessages2.rmsg:344
 #: data/mp/messages/strings/resstrings.txt:516
 msgid "New fire detection systems"
-msgstr "Új tűz érzékelő rendszerek"
+msgstr "Új tűzérzékelő rendszerek"
 
 #: data/base/messages/resmessages12.rmsg:72
 #: data/base/messages/resmessages23.rmsg:50
@@ -652,7 +652,7 @@ msgstr "Lövegek automatikusan fejlesztve"
 #: data/mp/messages/resmessagesall.rmsg:603
 #: data/mp/messages/strings/resstrings.txt:804
 msgid "Flamer Upgrade"
-msgstr "Lángvető fejlesztés"
+msgstr "Lángszóró fejlesztés"
 
 #: data/base/messages/resmessages12.rmsg:93
 #: data/base/messages/resmessages12.rmsg:181
@@ -667,7 +667,7 @@ msgstr "Automatikus újratöltés felváltja a kézi újratöltést"
 
 #: data/base/messages/resmessages12.rmsg:94
 msgid "Increases Flamer ROF"
-msgstr "Megnövekedett lángvető tűzgyorsaság"
+msgstr "Megnövekedett lángszóró tűzgyorsaság"
 
 #: data/base/messages/resmessages12.rmsg:95
 #: data/base/messages/resmessages1.rmsg:513
@@ -679,7 +679,7 @@ msgstr "Megnövekedett lángvető tűzgyorsaság"
 #: data/mp/messages/resmessagesall.rmsg:606
 #: data/mp/messages/strings/resstrings.txt:807
 msgid "All flamers upgraded automatically"
-msgstr "Lángvetők automatikusan fejlesztve"
+msgstr "Lángszóró automatikusan továbbfejlesztve"
 
 #: data/base/messages/resmessages12.rmsg:103
 #: data/base/messages/resmessages1.rmsg:455
@@ -1394,7 +1394,7 @@ msgstr "Cyborg ágyúval felszerelt"
 #: data/base/messages/resmessages1.rmsg:60
 #: data/mp/messages/resmessages1.rmsg:54
 msgid "Armed with Cyborg Flamer"
-msgstr "Cyborg lángvetővel felszerelt"
+msgstr "Cyborg lángszóróval felszerelt"
 
 #: data/base/messages/resmessages1.rmsg:71
 #: data/mp/messages/resmessages1.rmsg:64
@@ -1462,7 +1462,7 @@ msgstr "Páncélozott bunker tankelhárító rakétával"
 #: data/base/messages/resmessages1.rmsg:137
 #: data/mp/messages/resmessages1.rmsg:124
 msgid "Armored bunker with Flamer"
-msgstr "Páncélozott bunker lángvetővel"
+msgstr "Páncélozott bunker lánszóróval"
 
 #: data/base/messages/resmessages1.rmsg:148
 #: data/mp/messages/resmessages1.rmsg:134
@@ -2141,7 +2141,7 @@ msgstr "Nagy hatóerejű tankelhárító gránát"
 #: data/base/messages/resmessages1.rmsg:500
 #: data/mp/messages/resmessages1.rmsg:454
 msgid "Flame-thrower firing Propylene Oxide gel"
-msgstr "Lángvető Propilén-oxiddal tüzel"
+msgstr "Lángszóró Propilén-oxiddal tüzel"
 
 #: data/base/messages/resmessages1.rmsg:501
 #: data/base/messages/resmessages2.rmsg:655
@@ -2169,7 +2169,7 @@ msgstr "Propilén-oxid kezelése a magasabb égési hőmérséklet eléréséhez
 #: data/base/messages/strings/resstrings.txt:767
 #: data/mp/messages/strings/resstrings.txt:806
 msgid "Increases Flamer damage"
-msgstr "Megnövekedett lángvető sebzés"
+msgstr "Megnövekedett lángszóró sebzés"
 
 #: data/base/messages/resmessages1.rmsg:522
 #: data/mp/messages/resmessages1.rmsg:474
@@ -2911,7 +2911,7 @@ msgstr "Páncélozott erőd nagysebességű ágyúval"
 #: data/mp/messages/resmessages2.rmsg:184
 #: data/mp/messages/strings/resstrings.txt:228
 msgid "Armored strongpoint with Inferno Flamer"
-msgstr "Páncélozott erőd Inferno lángvetővel"
+msgstr "Páncélozott erőd Inferno lángszóróval"
 
 #: data/base/messages/resmessages2.rmsg:214
 #: data/base/messages/strings/resstrings.txt:218
@@ -2946,7 +2946,7 @@ msgstr "Páncélozott talapzat ostromágyúval"
 #: data/mp/messages/resmessages2.rmsg:234
 #: data/mp/messages/strings/resstrings.txt:330
 msgid "Armored hardpoint with Inferno flamer"
-msgstr "Páncélozott talapzat Inferno lángvetővel"
+msgstr "Páncélozott talapzat Inferno lángszóróval"
 
 #: data/base/messages/resmessages2.rmsg:269
 #: data/base/messages/strings/resstrings.txt:308
@@ -3489,7 +3489,7 @@ msgstr "76mm-es nagy sebességű négycsöves automataágyú"
 #: data/mp/messages/resmessages2.rmsg:594
 #: data/mp/messages/strings/resstrings.txt:797
 msgid "Heavy Flame-thrower firing Propylene Oxide gel"
-msgstr "Nehéz lángvető Propilén-oxiddal tüzel"
+msgstr "Nehéz lángszóróval Propilén-oxiddal tüzel"
 
 #: data/base/messages/resmessages2.rmsg:665
 #: data/base/messages/strings/resstrings.txt:766
@@ -5764,7 +5764,7 @@ msgstr "Viper könnyű ágyú"
 #: data/base/messages/strings/names.txt:144
 #: data/mp/messages/strings/names.txt:145
 msgid "Flamer Viper Wheels"
-msgstr "Viper lángvető"
+msgstr "Viper lángszóró"
 
 #: data/base/messages/strings/names.txt:145
 #: data/mp/messages/strings/names.txt:146
@@ -5873,7 +5873,7 @@ msgstr "Cobra féllánctalpas érzékelő"
 #: data/mp/messages/strings/names.txt:190
 #: data/mp/messages/strings/names.txt:1360
 msgid "Flamer Cobra Tracks"
-msgstr "Cobra lánctalpas lángvető"
+msgstr "Cobra lánctalpas lángszóró"
 
 #: data/base/messages/strings/names.txt:188
 #: data/mp/messages/strings/names.txt:191
@@ -5995,7 +5995,7 @@ msgstr "Gépfegyveres"
 #: data/mp/messages/strings/names.txt:537
 #: data/mp/messages/strings/names.txt:1070
 msgid "Flamer"
-msgstr "Lángvetős"
+msgstr "Lángszóró"
 
 #: data/base/messages/strings/names.txt:214
 #: data/base/messages/strings/names.txt:221
@@ -6020,7 +6020,7 @@ msgstr "Nehézfegyveres"
 #: data/base/messages/strings/names.txt:219
 #: data/mp/messages/strings/names.txt:222
 msgid "Cyborg Flamer"
-msgstr "Cyborg lángvetős"
+msgstr "Cyborg lángszóró"
 
 #: data/base/messages/strings/names.txt:222
 #: data/mp/messages/strings/names.txt:155
@@ -6366,13 +6366,13 @@ msgstr "VTOL gyár"
 #: data/base/messages/strings/names.txt:402
 #: data/base/messages/strings/names.txt:721
 msgid "Inferno Emplacement"
-msgstr "Inferno lángvető állás"
+msgstr "Inferno lángszóró állás"
 
 #: data/base/messages/strings/names.txt:403
 #: data/base/messages/strings/names.txt:773
 #: data/mp/messages/strings/names.txt:402
 msgid "Inferno Hardpoint"
-msgstr "Inferno lángvető talapzat"
+msgstr "Inferno lángszóró talapzat"
 
 #: data/base/messages/strings/names.txt:404
 #: data/base/messages/strings/names.txt:747
@@ -6497,7 +6497,7 @@ msgstr "Nehéz ágyú talapzat"
 #: data/mp/messages/strings/names.txt:434
 #: data/mp/messages/strings/names.txt:778
 msgid "Flamer Hardpoint"
-msgstr "Lángvető talapzat"
+msgstr "Lángszóró talapzat"
 
 #: data/base/messages/strings/names.txt:436
 #: data/base/messages/strings/names.txt:769
@@ -6528,7 +6528,7 @@ msgstr "Nehéz gépfegyveres torony"
 #: data/base/messages/strings/names.txt:757
 #: data/mp/messages/strings/names.txt:440
 msgid "Flamer Guard Tower"
-msgstr "Lángvető őrtorony"
+msgstr "Lángszóró őrtorony"
 
 #: data/base/messages/strings/names.txt:442
 #: data/mp/messages/strings/names.txt:441
@@ -6580,7 +6580,7 @@ msgstr "Könnyű ágyú bunker"
 #: data/mp/messages/strings/names.txt:449
 #: data/mp/messages/strings/names.txt:746
 msgid "Flamer Bunker"
-msgstr "Lángvető Bunker"
+msgstr "Lángszóró bunker"
 
 #: data/base/messages/strings/names.txt:451
 #: data/base/messages/strings/names.txt:737
@@ -6702,7 +6702,7 @@ msgstr "Ostromágyú"
 #: data/base/messages/strings/names.txt:481
 #: data/mp/messages/strings/names.txt:480
 msgid "Inferno"
-msgstr "Inferno lángvető"
+msgstr "Inferno lángszóró"
 
 #: data/base/messages/strings/names.txt:483
 #: data/base/messages/strings/names.txt:1061
@@ -7212,7 +7212,7 @@ msgstr "Cyborg nehéz ágyú"
 #: data/base/messages/strings/names.txt:675
 #: data/mp/messages/strings/names.txt:681
 msgid "Flamer Cyborg"
-msgstr "Cyborg lángvető"
+msgstr "Cyborg lángszóró"
 
 #: data/base/messages/strings/names.txt:676
 #: data/mp/messages/strings/names.txt:682
@@ -8321,52 +8321,52 @@ msgstr "Hő újrahasznosító Mk3"
 #: data/base/messages/strings/names.txt:1049
 #: data/mp/messages/strings/names.txt:1061
 msgid "High Temperature Flamer Gel"
-msgstr "Magas hőfokú lángvető gél"
+msgstr "Magas hőfokú lángszóró gél"
 
 #: data/base/messages/strings/names.txt:1050
 #: data/mp/messages/strings/names.txt:1062
 msgid "High Temperature Flamer Gel Mk2"
-msgstr "Magas hőfokú lángvető gél Mk2"
+msgstr "Magas hőfokú lángszóró gél Mk2"
 
 #: data/base/messages/strings/names.txt:1051
 #: data/mp/messages/strings/names.txt:1063
 msgid "High Temperature Flamer Gel Mk3"
-msgstr "Magas hőfokú lángvető gél Mk3"
+msgstr "Magas hőfokú lángszóró gél Mk3"
 
 #: data/base/messages/strings/names.txt:1052
 #: data/mp/messages/strings/names.txt:1064
 msgid "Superhot Flamer Gel"
-msgstr "Szuperforró lángvető gél"
+msgstr "Szuperforró lángszóró gél"
 
 #: data/base/messages/strings/names.txt:1053
 #: data/mp/messages/strings/names.txt:1065
 msgid "Superhot Flamer Gel Mk2"
-msgstr "Szuperforró lángvető gél Mk2"
+msgstr "Szuperforró lángszóró gél Mk2"
 
 #: data/base/messages/strings/names.txt:1054
 #: data/mp/messages/strings/names.txt:1066
 msgid "Superhot Flamer Gel Mk3"
-msgstr "Szuperforró lángvető gél Mk3"
+msgstr "Szuperforró lángszóró gél Mk3"
 
 #: data/base/messages/strings/names.txt:1055
 #: data/mp/messages/strings/names.txt:1067
 msgid "Flamer Autoloader"
-msgstr "Automatikus lángvető töltés"
+msgstr "Automatikus lángszóró töltés"
 
 #: data/base/messages/strings/names.txt:1056
 #: data/mp/messages/strings/names.txt:1068
 msgid "Flamer Autoloader Mk2"
-msgstr "Automatikus lángvető töltés Mk2"
+msgstr "Automatikus lángszóró töltés Mk2"
 
 #: data/base/messages/strings/names.txt:1057
 #: data/mp/messages/strings/names.txt:1069
 msgid "Flamer Autoloader Mk3"
-msgstr "Automatikus lángvető töltés Mk3"
+msgstr "Automatikus lángszóró töltés Mk3"
 
 #: data/base/messages/strings/names.txt:1059
 #: data/mp/messages/strings/names.txt:1071
 msgid "Heavy Flamer - Inferno"
-msgstr "Nehéz lángvető - Inferno"
+msgstr "Nehéz lágszóró - Inferno"
 
 #: data/base/messages/strings/names.txt:1062
 #: data/mp/messages/strings/names.txt:1074
@@ -8867,12 +8867,12 @@ msgstr "Dögevő körfal"
 #: data/base/messages/strings/names.txt:1209
 #: data/mp/messages/strings/names.txt:1224
 msgid "Scavenger Flame Tower"
-msgstr "Dögevő lángvetőtorony"
+msgstr "Dögevő lángszóró-torony"
 
 #: data/base/messages/strings/names.txt:1210
 #: data/mp/messages/strings/names.txt:1225
 msgid "Scavenger Flame Tower End"
-msgstr "Dögevő lángvetőtorony vége"
+msgstr "Dögevő lángszóró-torony vége"
 
 #: data/base/messages/strings/names.txt:1211
 #: data/mp/messages/strings/names.txt:1226
@@ -9005,7 +9005,7 @@ msgstr "Python lánctalpas nehéz ágyú"
 
 #: data/base/messages/strings/names.txt:1345
 msgid "Cobra Flamer Tracks"
-msgstr "Cobra lánctalpas lángvető"
+msgstr "Cobra lánctalpas lángszóró"
 
 #: data/base/messages/strings/names.txt:1346
 msgid "Cobra Medium Cannon Tracks"
@@ -9113,7 +9113,7 @@ msgstr "Páncélozott őrtorony nehéz gépfegyverrel"
 #: data/base/messages/strings/resstrings.txt:240
 #: data/mp/messages/strings/resstrings.txt:268
 msgid "Armored guard tower with Flamer"
-msgstr "Páncélozott őrtorony lángvetővel"
+msgstr "Páncélozott őrtorony lángszóróval"
 
 #: data/base/messages/strings/resstrings.txt:246
 #: data/mp/messages/strings/resstrings.txt:274
@@ -9128,7 +9128,7 @@ msgstr "Páncélozott bunker nehéz gépfegyverrel"
 #: data/base/messages/strings/resstrings.txt:280
 #: data/mp/messages/strings/resstrings.txt:308
 msgid "Armored hardpoint with Flamer"
-msgstr "Páncélozott talapzat lángvetővel"
+msgstr "Páncélozott talapzat lángszóróval"
 
 #: data/base/messages/strings/resstrings.txt:356
 #: data/mp/messages/strings/resstrings.txt:384
@@ -10226,7 +10226,7 @@ msgstr "Löveg célpontosság +10%"
 
 #: data/mp/messages/resmessages12.rmsg:85
 msgid "Flamer reload time -15%"
-msgstr "Lángvető újratöltési idő -15%"
+msgstr "Lángszóró újratöltési idő -15%"
 
 #: data/mp/messages/resmessages12.rmsg:105
 #: data/mp/messages/resmessages23.rmsg:135
@@ -10346,7 +10346,7 @@ msgstr "Célok: járművek, fegyvertartó talapzatok"
 #: data/mp/messages/resmessages2.rmsg:605
 #: data/mp/messages/resmessagesall.rmsg:605
 msgid "Flamer damage +25%"
-msgstr "Lángvető sebzés +25%"
+msgstr "Lángszóró sebzés +25%"
 
 #: data/mp/messages/resmessages1.rmsg:495
 #: data/mp/messages/resmessages1.rmsg:505
@@ -10573,7 +10573,7 @@ msgstr "Páncélozott erőd plazmavetővel"
 
 #: data/mp/messages/resmessagesall.rmsg:224
 msgid "Armed with Cyborg Thermite Flamer"
-msgstr "Cyborg termit lángvetővel felszerelt"
+msgstr "Cyborg termit lángszóróval felszerelt"
 
 #: data/mp/messages/resmessagesall.rmsg:234
 msgid "Armed with grenades"
@@ -10863,7 +10863,7 @@ msgstr "Cobra féllánctalpas kisrakéta sor"
 
 #: data/mp/messages/strings/names.txt:351
 msgid "Jammer Tower"
-msgstr "Lángvető torony"
+msgstr "Lángszóró torony"
 
 #: data/mp/messages/strings/names.txt:352
 msgid "Jammer Turret"
@@ -10899,7 +10899,7 @@ msgstr "Vasbeton kapu"
 #: data/mp/messages/strings/names.txt:401
 #: data/mp/messages/strings/names.txt:731
 msgid "Inferno Bunker"
-msgstr "Inferno lángvető bunker"
+msgstr "Inferno lángszóró bunker"
 
 #: data/mp/messages/strings/names.txt:408
 msgid "Tornado AA Site"
@@ -10995,7 +10995,7 @@ msgstr "Seraph rakéta üteg"
 
 #: data/mp/messages/strings/names.txt:767
 msgid "Flamer Tower"
-msgstr "Lángvető torony"
+msgstr "Lángszóró torony"
 
 #: data/mp/messages/strings/names.txt:785
 #: data/mp/messages/strings/names.txt:1396
@@ -11159,7 +11159,7 @@ msgstr "Gőzturbina generátor Mk3"
 
 #: data/mp/messages/strings/names.txt:1613
 msgid "Thermite Flamer"
-msgstr "Termit lángvető"
+msgstr "Termit lángszóró"
 
 #: data/mp/messages/strings/names.txt:1618
 msgid "Grenadier"
@@ -11750,11 +11750,11 @@ msgstr "Cobra lánctalpas kisrakéta sor"
 
 #: data/mp/messages/strings/names.txt:1926
 msgid "Inferno Cobra Half-Tracks"
-msgstr "Cobra féllánctalpas Inferno lángvető"
+msgstr "Cobra féllánctalpas Inferno lángszóró"
 
 #: data/mp/messages/strings/names.txt:1927
 msgid "Hyper Velocity Cannon Python Hover"
-msgstr "Python légpárnás nagysebességű ágyú"
+msgstr "Python légpárnás nagy sebességű ágyú"
 
 #: data/mp/messages/strings/names.txt:1931
 msgid "Scourge Python Tracks"
@@ -11794,11 +11794,11 @@ msgstr "Viper féllánctalpas gépfegyver"
 
 #: data/mp/messages/strings/names.txt:1941
 msgid "Flamer Viper Half-Tracks"
-msgstr "Viper féllánctalpas lángvető"
+msgstr "Viper féllánctalpas lángszóró"
 
 #: data/mp/messages/strings/names.txt:1944
 msgid "Inferno Cobra Hover"
-msgstr "Cobra légpárnás Inferno lángvető"
+msgstr "Cobra légpárnás Inferno lángszóró"
 
 #: data/mp/messages/strings/names.txt:1945
 msgid "Medium Cannon Cobra Half Track"
@@ -11806,7 +11806,7 @@ msgstr "Cobra féllánctalpas löveg"
 
 #: data/mp/messages/strings/names.txt:1946
 msgid "Inferno Python Hover"
-msgstr "Python légpárnás Inferno lángvető"
+msgstr "Python légpárnás Inferno lángszóró"
 
 #: data/mp/messages/strings/names.txt:1947
 msgid "Assault Gun Python Hover"
@@ -13058,6 +13058,9 @@ msgid ""
 "\n"
 "Warzone will try to load the game without it."
 msgstr ""
+"A mod nem tölthető be: %s\n"
+"\n"
+"A Warzone megpróbálja elindítani a játékot nélküle."
 
 #: src/intdisplay.cpp:205
 msgid "Waiting for Power"
@@ -14171,7 +14174,7 @@ msgstr "Kiütöttek!"
 
 #: src/multiint.cpp:1030
 msgid "Wrong Game Version!"
-msgstr "Rossz játékverzió!"
+msgstr "Rossz játékverzió."
 
 #: src/multiint.cpp:1033
 msgid "You have an incompatible mod."
@@ -14183,15 +14186,15 @@ msgstr "Gazdagép nem tudott fájlt küldeni?"
 
 #: src/multiint.cpp:1041
 msgid "Incorrect Password!"
-msgstr "Helytelen Jelszó!"
+msgstr "Helytelen Jelszó."
 
 #: src/multiint.cpp:1044
 msgid "Host has dropped connection!"
-msgstr "Gazdagéppel a kapcsolata elveszett!"
+msgstr "Gazdagéppel a kapcsolata elveszett."
 
 #: src/multiint.cpp:1048
 msgid "Connection Error"
-msgstr "Kapcsolódási hiba!"
+msgstr "Kapcsolódási hiba."
 
 #: src/multiint.cpp:1158
 msgid "Searching"
@@ -14211,7 +14214,7 @@ msgstr "Jelszó megadása:"
 
 #: src/multiint.cpp:1278
 msgid "OK"
-msgstr "Rendben"
+msgstr "OK"
 
 #: src/multiint.cpp:1396
 msgid "Tanks disabled!!"
@@ -14248,7 +14251,7 @@ msgstr "Térkép kiválasztása"
 
 #: src/multiint.cpp:1469
 msgid "Click to set Password"
-msgstr "Kattints ide a jelszó beállításához"
+msgstr "Kattintson ide a jelszó beállításához"
 
 #: src/multiint.cpp:1479
 #: src/multiint.cpp:1480
@@ -14333,11 +14336,11 @@ msgstr "Épületek maximális számának beállítása"
 
 #: src/multiint.cpp:1729
 msgid "DIFFICULTY"
-msgstr "Nehézség"
+msgstr "NEHÉZSÉG"
 
 #: src/multiint.cpp:1743
 msgid "Less aggressive"
-msgstr "Agresszió nélkül"
+msgstr "Kevésbé agresszív"
 
 #: src/multiint.cpp:1744
 msgid "Plays nice"
@@ -14409,7 +14412,7 @@ msgstr "Kattintson a játékos színeinek változtatásához"
 
 #: src/multiint.cpp:2480
 msgid "Click to change player position"
-msgstr "Kattintson a játékos poziciójának beállításához"
+msgstr "Kattintson a játékos pozíciójának beállításához"
 
 #: src/multiint.cpp:2484
 msgid "Click to change AI"
@@ -14430,19 +14433,19 @@ msgstr "Kapcsolódás a kiszolgáló szerverhez..."
 #: src/multiint.cpp:2923
 #, c-format
 msgid "*** password [%s] is now required! ***"
-msgstr "*** jelszót [%s] kötelező! ***"
+msgstr "*** jelszót [%s] kötelező. ***"
 
 #: src/multiint.cpp:2929
 msgid "*** password is NOT required! ***"
-msgstr " *** jelszót nem kötelező! ***"
+msgstr " *** jelszó NEM kötelező. ***"
 
 #: src/multiint.cpp:2989
 msgid "Sorry! Failed to host the game."
-msgstr "Elnézést! Nem sikerült a játékot létrehoznod."
+msgstr "Nem sikerült a játékot létrehoznia."
 
 #: src/multiint.cpp:3111
 msgid "'Locked Teams' mode enabled"
-msgstr "'Fix csapatok' mód engedélyezve"
+msgstr "„Fix csapatok” mód engedélyezve"
 
 #: src/multiint.cpp:3139
 #: src/multiint.cpp:3208
@@ -14457,7 +14460,7 @@ msgstr "A játékmester elindította a játékot"
 
 #: src/multiint.cpp:3877
 msgid "Can't connect to lobby server!"
-msgstr "Nem tud kapcsolodni a kiszolgáló szerverhez!"
+msgstr "Nem tud kapcsolódni a kiszolgáló szerverhez!"
 
 #: src/multiint.cpp:3969
 #, c-format
@@ -14714,14 +14717,14 @@ msgstr "Barna"
 
 #: src/order.cpp:803
 msgid "We can't do that! We must be a Cyborg unit to use a Cyborg Transport!"
-msgstr "Ez nem lehetséges! Cyborg egységnek kell lennünk, hogy használhassuk a Cyborg szállítást!"
+msgstr "Ezt nem teheti meg: Cyborg egységnek kell lennie, hogy használhassa a Cyborg szállítást."
 
-#: src/qtscriptfuncs.cpp:1591
+#: src/qtscriptfuncs.cpp:1594
 #: src/scriptfuncs.cpp:3263
 msgid "YOU ARE VICTORIOUS!"
-msgstr "GYŐZTÉL!"
+msgstr "GYŐZELEM!"
 
-#: src/qtscriptfuncs.cpp:1596
+#: src/qtscriptfuncs.cpp:1599
 #: src/scriptfuncs.cpp:3267
 msgid "YOU WERE DEFEATED!"
 msgstr "VERESÉGET SZENVEDETT!"
@@ -14729,11 +14732,11 @@ msgstr "VERESÉGET SZENVEDETT!"
 #: src/research.cpp:1172
 #, c-format
 msgid "Research completed: %s"
-msgstr "Kutatás befejezett: %s"
+msgstr "Kutatás befejeződött: %s"
 
 #: src/research.cpp:1177
 msgid "Research Completed"
-msgstr "Kutatás befejezett"
+msgstr "Kutatás befejeződött"
 
 #: src/research.cpp:1901
 msgid "Research Award"
@@ -14891,62 +14894,62 @@ msgid_plural "%u units selected"
 msgstr[0] "%u egység kiválasztása"
 msgstr[1] "%u egységek kiválasztása"
 
-#: src/structure.cpp:2632
+#: src/structure.cpp:2625
 msgid "Can't build anymore units, Command Control Limit Reached - Production Halted"
 msgstr "Szabályozási értéket elérték - Termelés megállt"
 
-#: src/structure.cpp:5625
-#: src/structure.cpp:5650
+#: src/structure.cpp:5618
+#: src/structure.cpp:5643
 #, c-format
 msgid "%s - %u Unit assigned - Damage %3.0f%%"
 msgid_plural "%s - %u Units assigned - Damage %3.0f%%"
 msgstr[0] "%s - %u Egység felhatalmazása - Kár %3.0f%%"
 msgstr[1] "%s - %u Egységek felhatalmazása - Kár %3.0f%%"
 
-#: src/structure.cpp:5655
-#: src/structure.cpp:5723
-#: src/structure.cpp:5738
-#: src/structure.cpp:5752
+#: src/structure.cpp:5648
+#: src/structure.cpp:5716
+#: src/structure.cpp:5731
+#: src/structure.cpp:5745
 #, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - kár %3.0f%%"
 
-#: src/structure.cpp:5705
+#: src/structure.cpp:5698
 #, c-format
 msgid "%s - Connected %u of %u - Damage %3.0f%%"
-msgstr "%s - kapcsolódott %u of %u- kár %3.0f%%"
+msgstr "%s - kapcsolódott %u, összesen: %u - kár %3.0f%%"
 
-#: src/structure.cpp:5869
-#: src/structure.cpp:5914
+#: src/structure.cpp:5862
+#: src/structure.cpp:5907
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Elektronikusan sérült"
 
-#: src/structure.cpp:6165
+#: src/structure.cpp:6158
 msgid "Electronic Reward - Visibility Report"
 msgstr "Elektronikus jutalom - Felderítési jelentés"
 
-#: src/structure.cpp:6205
+#: src/structure.cpp:6198
 msgid "Factory Reward - Propulsion"
 msgstr "Gyári jutalom - hajtómű"
 
-#: src/structure.cpp:6229
+#: src/structure.cpp:6222
 msgid "Factory Reward - Body"
 msgstr "Gyári jutalom - karosszéria"
 
-#: src/structure.cpp:6253
+#: src/structure.cpp:6246
 msgid "Factory Reward - Weapon"
 msgstr "Gyári jutalom - fegyver"
 
-#: src/structure.cpp:6262
+#: src/structure.cpp:6255
 msgid "Factory Reward - Nothing"
 msgstr "Gyári jutalom - nincs"
 
-#: src/structure.cpp:6290
+#: src/structure.cpp:6283
 msgid "Repair Facility Award - Repair"
 msgstr "Szervizüzem jutalom - javítás"
 
-#: src/structure.cpp:6297
+#: src/structure.cpp:6290
 msgid "Repair Facility Award - Nothing"
 msgstr "Szervizüzem jutalom - nincs"
 
@@ -14957,7 +14960,7 @@ msgstr "Szállítást indítása"
 
 #: src/transporter.cpp:1380
 msgid "There is not enough room in the Transport!"
-msgstr "Nincs elegendő férőhely a szállításhoz!"
+msgstr "Nincs elegendő férőhely a szállításhoz."
 
 #: src/transporter.cpp:1606
 msgid "Reinforcements landing"
@@ -14970,20 +14973,20 @@ msgstr " (helyileg módosította)"
 # It's same... (ugyanaz) IT Word
 #: src/version.cpp:128
 msgid " - DEBUG"
-msgstr " - HIBÁK"
+msgstr " - HIBAKERESÉS"
 
 # It's same... (ugyanaz) IT Word
 #: src/version.cpp:137
 #, c-format
 msgid " - Built %s"
-msgstr " - Épített %s"
+msgstr " - Felépítés %s"
 
 #. TRANSLATORS: This string looks as follows when expanded.
 #. "Version <version name/number> <working copy state><BUILD DATE><BUILD TYPE>"
 #: src/version.cpp:147
-#, fuzzy, c-format
+#, c-format
 msgid "Version %s%s%s%s"
-msgstr "Verzió %s-%s%s%s%s"
+msgstr "Verzió %s%s%s%s"
 
 #~ msgid "Password is already set!"
 #~ msgstr "Játékos kiszállt"
@@ -15235,7 +15238,7 @@ msgstr "Verzió %s-%s%s%s%s"
 #~ msgstr "Cobra lánctalpas tüzérségi kisrakéta"
 
 #~ msgid "Cobra Inferno Half-track"
-#~ msgstr "Cobra féllánctalpas Inferno lángvető"
+#~ msgstr "Cobra féllánctalpas Inferno lángszóró"
 
 #~ msgid "Python HVC Hover"
 #~ msgstr "Python lánctalpas nagysebességű ágyú"
@@ -15268,7 +15271,7 @@ msgstr "Verzió %s-%s%s%s%s"
 #~ msgstr "Viper féllánctalpas gépfegyver"
 
 #~ msgid "Viper Flamer Half-Track"
-#~ msgstr "Viper féllánctalpas lángvető"
+#~ msgstr "Viper féllánctalpas lángszóró"
 
 #~ msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
 #~ msgstr "Nem lehet elérni a lobbi szervert! A %u TCP port nyitva van a kimenő forgalom számára?"
@@ -15352,7 +15355,7 @@ msgstr "Verzió %s-%s%s%s%s"
 #~ msgstr "HE Mini-rakéta Mk3"
 
 #~ msgid "Thermite Flamer Cyborg"
-#~ msgstr "Termit lángvető Cyborg"
+#~ msgstr "Termit lángszóró Cyborg"
 
 #~ msgid "Grenadier Cyborg"
 #~ msgstr "Gránátos Cyborg"
@@ -15448,10 +15451,10 @@ msgstr "Verzió %s-%s%s%s%s"
 #~ msgstr "Gyors tűzelő Mini-Podok Mk3"
 
 #~ msgid "Rapid Fire Mini-Pods"
-#~ msgstr "Gyors tűzelő Mini Podok"
+#~ msgstr "Gyors tüzelő Mini Podok"
 
 #~ msgid "Rapid Fire Mini-Pods Mk2"
-#~ msgstr "yors tűzelő Mini Podok Mk2"
+#~ msgstr "Gyors tüzelő Mini Podok Mk2"
 
 #~ msgid "Rapid Fire Mini-Pods Mk3"
 #~ msgstr "Gyors tűzelő Mini Podok Mk3"
