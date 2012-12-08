@@ -2427,8 +2427,67 @@ static QScriptValue js_isVTOL(QScriptContext *context, QScriptEngine *engine)
 	return QScriptValue(isVtolDroid(psDroid));
 }
 
-//-- \subsection{objFromId(id)}
-//-- Function to make porting from the old scripting system easier. Do not use for new code.
+//-- \subsection{hackGetObj(type, player, id)}
+//-- Function to find and return a game object of DROID, FEATURE or STRUCTURE types, if it exists.
+//-- Otherwise, it will return null.
+static QScriptValue js_hackGetObj(QScriptContext *context, QScriptEngine *engine)
+{
+	OBJECT_TYPE type = (OBJECT_TYPE)context->argument(0).toInt32();
+	int player = context->argument(1).toInt32();
+	int id = context->argument(2).toInt32();
+	BASE_OBJECT *psObj;
+	SCRIPT_ASSERT_PLAYER(context, player);
+	switch (type)
+	{
+	case OBJ_DROID:
+		psObj = IdToDroid(id, player);
+		break;
+	case OBJ_STRUCTURE:
+		psObj = IdToStruct(id, player);
+		break;
+	case OBJ_FEATURE:
+		psObj = IdToFeature(id, player);
+		break;
+	default:
+		return QScriptValue::NullValue;
+	}
+	if (!psObj)
+	{
+		return QScriptValue::NullValue;
+	}
+	return QScriptValue(convMax(psObj, engine));
+}
+
+//-- \subsection{hackAssert(condition, message...)}
+//-- Function to perform unit testing.
+static QScriptValue js_hackAssert(QScriptContext *context, QScriptEngine *engine)
+{
+	bool condition = context->argument(0).toBool();
+	if (condition)
+	{
+		return QScriptValue(); // pass
+	}
+	// fail
+	QString result;
+	for (int i = 1; i < context->argumentCount(); ++i)
+	{
+		if (i != 1)
+		{
+			result.append(QLatin1String(" "));
+		}
+		QString s = context->argument(i).toString();
+		if (context->state() == QScriptContext::ExceptionState)
+		{
+			break;
+		}
+		result.append(s);
+	}
+	context->throwError(QScriptContext::ReferenceError, result +  " in " + QString(__FUNCTION__) + " at line " + QString::number(__LINE__));
+	return QScriptValue();
+}
+
+//-- \subsection{objFromId(fake game object)}
+//-- Broken function meant to make porting from the old scripting system easier. Do not use for new code.
 //-- Instead, use labels.
 static QScriptValue js_objFromId(QScriptContext *context, QScriptEngine *engine)
 {
@@ -3237,6 +3296,8 @@ bool registerFunctions(QScriptEngine *engine, QString scriptName)
 	engine->globalObject().setProperty("hackAddMessage", engine->newFunction(js_hackAddMessage));
 	engine->globalObject().setProperty("hackRemoveMessage", engine->newFunction(js_hackRemoveMessage));
 	engine->globalObject().setProperty("objFromId", engine->newFunction(js_objFromId));
+	engine->globalObject().setProperty("hackGetObj", engine->newFunction(js_hackGetObj));
+	engine->globalObject().setProperty("hackAssert", engine->newFunction(js_hackAssert));
 
 	// General functions -- geared for use in AI scripts
 	engine->globalObject().setProperty("debug", engine->newFunction(js_debug));
