@@ -615,7 +615,6 @@ bool loadWeaponStats(const char *pFileName)
 	WEAPON_STATS	sStats, * const psStats = &sStats;
 	UDWORD			i, rotate, maxElevation, surfaceToAir;
 	SDWORD			minElevation;
-	const char *GfxFile, *mountGfx, *weaponClass, *fireOnMove;
 	UDWORD effectSize, numAttackRuns;
 	char *StatsName;
 
@@ -708,10 +707,10 @@ bool loadWeaponStats(const char *pFileName)
 		psStats->reloadTime *= WEAPON_TIME;
 
 		//get the IMD for the component
-		GfxFile = ini.value("model").toString().toUtf8().constData();
-		if (strcmp(GfxFile, "0"))
+		QString GfxFile = ini.value("model").toString();
+		if (GfxFile.compare("0") != 0)
 		{
-			psStats->pIMD = (iIMDShape *) resGetData("IMD", GfxFile);
+			psStats->pIMD = (iIMDShape *) resGetData("IMD", GfxFile.toUtf8().constData());
 			if (psStats->pIMD == NULL)
 			{
 
@@ -725,10 +724,10 @@ bool loadWeaponStats(const char *pFileName)
 			psStats->pIMD = NULL;
 		}
 		//get the rest of the imd's
-		mountGfx = ini.value("mountModel").toString().toUtf8().constData();
-		if (strcmp(mountGfx, "0"))
+		QString mountGfx = ini.value("mountModel").toString();
+		if (mountGfx.compare("0") != 0)
 		{
-			psStats->pMountGraphic = (iIMDShape *) resGetData("IMD", mountGfx);
+			psStats->pMountGraphic = (iIMDShape *) resGetData("IMD", mountGfx.toUtf8().constData());
 			if (psStats->pMountGraphic == NULL)
 			{
 				debug( LOG_FATAL, "Cannot find the mount PIE for record %s", getStatName(psStats) );
@@ -750,7 +749,6 @@ bool loadWeaponStats(const char *pFileName)
 				abort();
 				return false;
 			}
-
 
 			psStats->pInFlightGraphic = (iIMDShape *) resGetData("IMD", ini.value("flightGfx").toString().toUtf8().constData());
 			if (psStats->pInFlightGraphic == NULL)
@@ -799,17 +797,17 @@ bool loadWeaponStats(const char *pFileName)
 				psStats->pTrailGraphic = NULL;
 			}
 		}
-		fireOnMove = ini.value("fireOnMove").toString().toUtf8().data();
+		QString fireOnMove = ini.value("fireOnMove").toString();
 		//set the fireOnMove
-		if (!strcmp(fireOnMove, "NO"))
+		if (fireOnMove.compare("NO") == 0)
 		{
 			psStats->fireOnMove = FOM_NO;
 		}
-		else if (!strcmp(fireOnMove,"PARTIAL"))
+		else if (fireOnMove.compare("PARTIAL") == 0)
 		{
 			psStats->fireOnMove = FOM_PARTIAL;
 		}
-		else if (!strcmp(fireOnMove,"YES"))
+		else if (fireOnMove.compare("YES") == 0)
 		{
 			psStats->fireOnMove = FOM_YES;
 		}
@@ -819,22 +817,22 @@ bool loadWeaponStats(const char *pFileName)
 			psStats->fireOnMove = FOM_YES;
 		}
 
-		weaponClass = ini.value("weaponClass").toString().toUtf8().data();
+		QString weaponClass = ini.value("weaponClass").toString();
 		//set the weapon class
-		if (!strcmp(weaponClass, "KINETIC"))
+		if (weaponClass.compare("KINETIC") == 0)
 		{
 			psStats->weaponClass = WC_KINETIC;
 		}
-		else if (!strcmp(weaponClass,"EXPLOSIVE"))
+		else if (weaponClass.compare("EXPLOSIVE") == 0)
 		{
 			//psStats->weaponClass = WC_EXPLOSIVE;
 			psStats->weaponClass = WC_KINETIC; 	// explosives were removed from release version of Warzone
 		}
-		else if (!strcmp(weaponClass,"HEAT"))
+		else if (weaponClass.compare("HEAT") == 0)
 		{
 			psStats->weaponClass = WC_HEAT;
 		}
-		else if (!strcmp(weaponClass,"MISC"))
+		else if (weaponClass.compare("MISC") == 0)
 		{
 			//psStats->weaponClass = WC_MISC;
 			psStats->weaponClass = WC_HEAT;		// removed from release version of Warzone
@@ -1006,7 +1004,6 @@ bool loadBodyStats(const char *pFileName)
 	{
 		ini.beginGroup(list[i]);
 		memset(psStats, 0, sizeof(*psStats));
-		psStats->pName = strdup(list[i].toUtf8().constData());
 		psStats->weight = ini.value("weight", 0).toInt();
 		psStats->buildPower = ini.value("buildPower", 0).toInt();
 		psStats->buildPoints = ini.value("buildPoints", 0).toInt();
@@ -1060,6 +1057,7 @@ bool loadBodyStats(const char *pFileName)
 		}
 		ini.endGroup();
 
+		allocateStatName((BASE_STATS *)psStats, list[i].toUtf8().constData());
 		statsSetBody(psStats, i);	// save the stats
 
 		//set the max stat values for the design screen
@@ -1079,7 +1077,6 @@ bool loadBodyStats(const char *pFileName)
 bool loadBrainStats(const char *pFileName)
 {
 	BRAIN_STATS sStats, * const psStats = &sStats;
-	const char *weaponName;
 	WzConfig ini(pFileName);
 	if (ini.status() != QSettings::NoError)
 	{
@@ -1100,27 +1097,27 @@ bool loadBrainStats(const char *pFileName)
 		ini.beginGroup(list[i]);
 		memset(psStats, 0, sizeof(BRAIN_STATS));
 
-		psStats->pName =  strdup(list[i].toUtf8().constData());
 		psStats->buildPower = ini.value("buildPower", 0).toInt();
 		psStats->buildPoints = ini.value("buildPoints", 0).toInt();
 		psStats->weight = ini.value("weight", 0).toInt();
 		psStats->maxDroids = ini.value("maxDroids").toInt();
 		psStats->maxDroidsMult = ini.value("maxDroidsMult").toInt();
-		weaponName = ini.value("turret").toString().toUtf8().constData();
 		psStats->ref = REF_BRAIN_START + i;
+		allocateStatName((BASE_STATS *)psStats, list[i].toUtf8().constData());
 
 		// check weapon attached
-		if (!strcmp(weaponName, "0"))
+		QString weaponName = ini.value("turret").toString();
+		if (weaponName.compare("0") == 0)
 		{
 			psStats->psWeaponStat = NULL;
 		}
 		else
 		{
-			int weapon = getCompFromName(COMP_WEAPON, weaponName);
+			int weapon = getCompFromName(COMP_WEAPON, weaponName.toUtf8().constData());
 			// if weapon not found - error
 			if (weapon == -1)
 			{
-				debug( LOG_FATAL, "Unable to find Weapon %s for brain %s", weaponName, psStats->pName);
+				debug( LOG_FATAL, "Unable to find Weapon %s for brain %s", weaponName.toUtf8().constData(), psStats->pName);
 				abort();
 				return false;
 			}
@@ -1217,7 +1214,6 @@ bool loadPropulsionStats(const char *pFileName)
 	{
 		ini.beginGroup(list[i]);
 		memset(psStats, 0, sizeof(*psStats));
-		psStats->pName = strdup(list[i].toUtf8().constData());
 		psStats->buildPower = ini.value("buildPower").toInt();
 		psStats->buildPoints = ini.value("buildPoints").toInt();
 		psStats->weight = ini.value("weight").toInt();
@@ -1244,6 +1240,7 @@ bool loadPropulsionStats(const char *pFileName)
 		}
 		ini.endGroup();
 
+		allocateStatName((BASE_STATS *)psStats, list[i].toUtf8().constData());
 		// save the stats
 		statsSetPropulsion(psStats, i);
 
@@ -1283,8 +1280,6 @@ bool loadPropulsionStats(const char *pFileName)
 bool loadSensorStats(const char *pFileName)
 {
 	SENSOR_STATS sStats, * const psStats = &sStats;
-	const char *GfxFile, *mountGfx, *location, *type;
-
 	WzConfig ini(pFileName);
 	if (ini.status() != QSettings::NoError)
 	{
@@ -1322,12 +1317,12 @@ bool loadSensorStats(const char *pFileName)
 		}
 		psStats->ref = REF_SENSOR_START + i;
 
-		location = ini.value("location").toString().toUtf8().constData();
-		if (!strcmp(location, "DEFAULT"))
+		QString location = ini.value("location").toString();
+		if (location.compare("DEFAULT") == 0)
 		{
 			psStats->location = LOC_DEFAULT;
 		}
-		else if(!strcmp(location, "TURRET"))
+		else if (location.compare("TURRET") == 0)
 		{
 			psStats->location = LOC_TURRET;
 		}
@@ -1335,28 +1330,28 @@ bool loadSensorStats(const char *pFileName)
 		{
 			ASSERT( false, "Invalid Sensor location" );
 		}
-		type = ini.value("type").toString().toUtf8().constData();
-		if (!strcmp(type, "STANDARD"))
+		QString type = ini.value("type").toString();
+		if (type.compare("STANDARD") == 0)
 		{
 			psStats->type = STANDARD_SENSOR;
 		}
-		else if(!strcmp(type, "INDIRECT CB"))
+		else if (type.compare("INDIRECT CB") == 0)
 		{
 			psStats->type = INDIRECT_CB_SENSOR;
 		}
-		else if(!strcmp(type, "VTOL CB"))
+		else if (type.compare("VTOL CB") == 0)
 		{
 			psStats->type = VTOL_CB_SENSOR;
 		}
-		else if(!strcmp(type, "VTOL INTERCEPT"))
+		else if (type.compare("VTOL INTERCEPT") == 0)
 		{
 			psStats->type = VTOL_INTERCEPT_SENSOR;
 		}
-		else if(!strcmp(type, "SUPER"))
+		else if (type.compare("SUPER") == 0)
 		{
 			psStats->type = SUPER_SENSOR;
 		}
-		else if (!strcmp(type, "RADAR DETECTOR"))
+		else if (type.compare("RADAR DETECTOR") == 0)
 		{
 			psStats->type = RADAR_DETECTOR_SENSOR;
 		}
@@ -1368,10 +1363,10 @@ bool loadSensorStats(const char *pFileName)
 		psStats->time *= WEAPON_TIME;
 
 		//get the IMD for the component
-		GfxFile = ini.value("sensorModel").toString().toUtf8().constData();
-		if (strcmp(GfxFile, "0"))
+		QString GfxFile = ini.value("sensorModel").toString();
+		if (GfxFile.compare("0") != 0)
 		{
-			psStats->pIMD = (iIMDShape *) resGetData("IMD", GfxFile);
+			psStats->pIMD = (iIMDShape *) resGetData("IMD", GfxFile.toUtf8().constData());
 			if (psStats->pIMD == NULL)
 			{
 				debug( LOG_FATAL, "Cannot find the sensor PIE for record %s", getStatName(psStats) );
@@ -1383,10 +1378,10 @@ bool loadSensorStats(const char *pFileName)
 		{
 			psStats->pIMD = NULL;
 		}
-		mountGfx = ini.value("mountModel").toString().toUtf8().constData();
-		if (strcmp(mountGfx, "0"))
+		QString mountGfx = ini.value("mountModel").toString();
+		if (mountGfx.compare("0") != 0)
 		{
-			psStats->pMountGraphic = (iIMDShape *) resGetData("IMD", mountGfx);
+			psStats->pMountGraphic = (iIMDShape *) resGetData("IMD", mountGfx.toUtf8().constData());
 			if (psStats->pMountGraphic == NULL)
 			{
 				debug( LOG_FATAL, "Cannot find the mount PIE for record %s", getStatName(psStats) );
@@ -1418,8 +1413,6 @@ bool loadSensorStats(const char *pFileName)
 bool loadECMStats(const char *pFileName)
 {
 	ECM_STATS sStats, * const psStats = &sStats;
-	const char *location, *GfxFile, *mountGfx;
-
 	WzConfig ini(pFileName);
 	if (ini.status() != QSettings::NoError)
 	{
@@ -1456,12 +1449,12 @@ bool loadECMStats(const char *pFileName)
 		}
 		psStats->ref = REF_ECM_START + i;
 
-		location = ini.value("location").toString().toUtf8().constData();
-		if (!strcmp(location,"DEFAULT"))
+		QString location = ini.value("location").toString();
+		if (location.compare("DEFAULT") == 0)
 		{
 			psStats->location = LOC_DEFAULT;
 		}
-		else if(!strcmp(location, "TURRET"))
+		else if (location.compare("TURRET") == 0)
 		{
 			psStats->location = LOC_TURRET;
 		}
@@ -1471,10 +1464,10 @@ bool loadECMStats(const char *pFileName)
 		}
 
 		//get the IMD for the component
-		GfxFile = ini.value("sensorModel").toString().toUtf8().constData();
-		if (strcmp(GfxFile, "0"))
+		QString GfxFile = ini.value("sensorModel").toString();
+		if (GfxFile.compare("0") != 0)
 		{
-			psStats->pIMD = (iIMDShape *) resGetData("IMD", GfxFile);
+			psStats->pIMD = (iIMDShape *) resGetData("IMD", GfxFile.toUtf8().constData());
 			if (psStats->pIMD == NULL)
 			{
 				debug( LOG_FATAL, "Cannot find the ECM PIE for record %s", getStatName(psStats) );
@@ -1487,10 +1480,10 @@ bool loadECMStats(const char *pFileName)
 			psStats->pIMD = NULL;
 		}
 
-		mountGfx = ini.value("mountModel").toString().toUtf8().constData();
-		if (strcmp(mountGfx, "0"))
+		QString mountGfx = ini.value("mountModel").toString();
+		if (mountGfx.compare("0") != 0)
 		{
-			psStats->pMountGraphic = (iIMDShape *) resGetData("IMD", mountGfx);
+			psStats->pMountGraphic = (iIMDShape *) resGetData("IMD", mountGfx.toUtf8().constData());
 			if (psStats->pMountGraphic == NULL)
 			{
 				debug( LOG_FATAL, "Cannot find the mount PIE for record %s", getStatName(psStats) );
@@ -1521,8 +1514,6 @@ bool loadECMStats(const char *pFileName)
 bool loadRepairStats(const char *pFileName)
 {
 	REPAIR_STATS sStats, * const psStats = &sStats;
-	const char *location, *GfxFile, *mountGfx;
-
 	WzConfig ini(pFileName);
 	if (ini.status() != QSettings::NoError)
 	{
@@ -1561,12 +1552,12 @@ bool loadRepairStats(const char *pFileName)
 
 		psStats->ref = REF_REPAIR_START + i;
 
-		location = ini.value("location").toString().toUtf8().constData();
-		if (!strcmp(location,"DEFAULT"))
+		QString location = ini.value("location").toString();
+		if (location.compare("DEFAULT") == 0)
 		{
 			psStats->location = LOC_DEFAULT;
 		}
-		else if(!strcmp(location, "TURRET"))
+		else if (location.compare("TURRET") == 0)
 		{
 			psStats->location = LOC_TURRET;
 		}
@@ -1589,10 +1580,10 @@ bool loadRepairStats(const char *pFileName)
 		}
 
 		//get the IMD for the component
-		GfxFile = ini.value("model").toString().toUtf8().constData();
-		if (strcmp(GfxFile, "0"))
+		QString GfxFile = ini.value("model").toString();
+		if (GfxFile.compare("0") != 0)
 		{
-			psStats->pIMD = (iIMDShape *) resGetData("IMD", GfxFile);
+			psStats->pIMD = (iIMDShape *) resGetData("IMD", GfxFile.toUtf8().constData());
 			if (psStats->pIMD == NULL)
 			{
 				debug( LOG_FATAL, "Cannot find the Repair PIE for record %s", getStatName(psStats) );
@@ -1605,10 +1596,10 @@ bool loadRepairStats(const char *pFileName)
 			psStats->pIMD = NULL;
 		}
 
-		mountGfx = ini.value("mountModel").toString().toUtf8().constData();
-		if (strcmp(mountGfx, "0"))
+		QString mountGfx = ini.value("mountModel").toString();
+		if (mountGfx.compare("0") != 0)
 		{
-			psStats->pMountGraphic = (iIMDShape *) resGetData("IMD", mountGfx);
+			psStats->pMountGraphic = (iIMDShape *) resGetData("IMD", mountGfx.toUtf8().constData());
 			if (psStats->pMountGraphic == NULL)
 			{
 				debug( LOG_FATAL, "Cannot find the Repair mount PIE for record %s", getStatName(psStats) );
@@ -1641,8 +1632,6 @@ bool loadRepairStats(const char *pFileName)
 bool loadConstructStats(const char *pFileName)
 {
 	CONSTRUCT_STATS sStats, * const psStats = &sStats;
-	const char *GfxFile, *mountGfx;
-
 	WzConfig ini(pFileName);
 	if (ini.status() != QSettings::NoError)
 	{
@@ -1680,10 +1669,10 @@ bool loadConstructStats(const char *pFileName)
 		psStats->ref = REF_CONSTRUCT_START + i;
 
 		//get the IMD for the component
-		GfxFile = ini.value("sensorModel").toString().toUtf8().constData();
-		if (strcmp(GfxFile, "0"))
+		QString GfxFile = ini.value("sensorModel").toString();
+		if (GfxFile.compare("0") != 0)
 		{
-			psStats->pIMD = (iIMDShape *) resGetData("IMD", GfxFile);
+			psStats->pIMD = (iIMDShape *) resGetData("IMD", GfxFile.toUtf8().constData());
 			if (psStats->pIMD == NULL)
 			{
 				debug( LOG_FATAL, "Cannot find the constructor PIE for record %s", getStatName(psStats) );
@@ -1696,10 +1685,10 @@ bool loadConstructStats(const char *pFileName)
 			psStats->pIMD = NULL;
 		}
 
-		mountGfx = ini.value("mountModel").toString().toUtf8().constData();
-		if (strcmp(mountGfx, "0"))
+		QString mountGfx = ini.value("mountModel").toString();
+		if (mountGfx.compare("0") != 0)
 		{
-			psStats->pMountGraphic = (iIMDShape *) resGetData("IMD", mountGfx);
+			psStats->pMountGraphic = (iIMDShape *) resGetData("IMD", mountGfx.toUtf8().constData());
 			if (psStats->pMountGraphic == NULL)
 			{
 				debug( LOG_FATAL, "Cannot find the mount PIE for record %s", getStatName(psStats) );
@@ -1735,7 +1724,6 @@ bool loadPropulsionTypes(const char *pFileName)
 	PROPULSION_TYPES *pPropType;
 	unsigned int multiplier;
 	PROPULSION_TYPE type;
-	const char *PropulsionName, *flightName;
 
 	//allocate storage for the stats
 	asPropulsionTypes = (PROPULSION_TYPES *)malloc(sizeof(PROPULSION_TYPES)*NumTypes);
@@ -1757,25 +1745,24 @@ bool loadPropulsionTypes(const char *pFileName)
 	for (int i=0; i < NumTypes; ++i)
 	{
 		ini.beginGroup(list[i]);
-		PropulsionName = strdup(list[i].toUtf8().constData());
 		multiplier = ini.value("multiplier").toInt();
 
 		//set the pointer for this record based on the name
-		if (!getPropulsionType(PropulsionName, &type))
+		if (!getPropulsionType(list[i].toUtf8().constData(), &type))
 		{
-			debug( LOG_FATAL, "loadPropulsionTypes: Invalid Propulsion type - %s", PropulsionName );
+			debug(LOG_FATAL, "Invalid Propulsion type - %s", list[i].toUtf8().constData());
 			abort();
 			return false;
 		}
 
 		pPropType = asPropulsionTypes + type;
 
-		flightName = ini.value("flightName").toString().toUtf8().constData();
-		if (!strcmp(flightName, "GROUND"))
+		QString flightName = ini.value("flightName").toString();
+		if (flightName.compare("GROUND") == 0)
 		{
 			pPropType->travel = GROUND;
 		}
-		else if (!strcmp(flightName, "AIR"))
+		else if (flightName.compare("AIR") == 0)
 		{
 			pPropType->travel = AIR;
 		}
@@ -1882,7 +1869,6 @@ bool loadBodyPropulsionIMDs(const char *pFileName)
 	BODY_STATS *psBodyStat = asBodyStats;
 	PROPULSION_STATS *psPropulsionStat = asPropulsionStats;
 	unsigned int i, numStats;
-	const char *bodyName;
 	QString propulsionName, leftIMD, rightIMD;
 	iIMDShape **startIMDs;
 	bool found;
@@ -1923,7 +1909,6 @@ bool loadBodyPropulsionIMDs(const char *pFileName)
 		QStringList leftIMDs = leftIMD.split(",");
 		rightIMD = ini.value("rightIMD").toString();
 		QStringList rightIMDs = rightIMD.split(",");
-		bodyName = list[i].toUtf8().constData();
 
 		//get the body stats
 		found = false;
@@ -1938,7 +1923,7 @@ bool loadBodyPropulsionIMDs(const char *pFileName)
 		}
 		if (!found)
 		{
-			debug( LOG_FATAL, "loadBodyPropulsionPIEs: Invalid body name %s", bodyName );
+			debug(LOG_FATAL, "Invalid body name %s", list[i].toUtf8().constData());
 			abort();
 			return false;
 		}
@@ -1971,7 +1956,7 @@ bool loadBodyPropulsionIMDs(const char *pFileName)
 				*psBodyStat->ppIMDList = (iIMDShape *) resGetData("IMD", leftIMDs[x].toUtf8().constData());
 				if (*psBodyStat->ppIMDList == NULL)
 				{
-					debug( LOG_FATAL, "Cannot find the left propulsion PIE for body %s", bodyName );
+					debug(LOG_FATAL, "Cannot find the left propulsion PIE for body %s", list[i].toUtf8().constData());
 					abort();
 					return false;
 				}
@@ -1988,7 +1973,7 @@ bool loadBodyPropulsionIMDs(const char *pFileName)
 				*psBodyStat->ppIMDList = (iIMDShape *) resGetData("IMD", rightIMDs[x].toUtf8().constData());
 				if (*psBodyStat->ppIMDList == NULL)
 				{
-					debug( LOG_FATAL, "Cannot find the right propulsion PIE for body %s", bodyName );
+					debug(LOG_FATAL, "Cannot find the right propulsion PIE for body %s", list[i].toUtf8().constData());
 					abort();
 					return false;
 				}
@@ -2009,8 +1994,7 @@ bool loadBodyPropulsionIMDs(const char *pFileName)
 
 
 
-static bool
-statsGetAudioIDFromString( char *szStatName, char *szWavName, SDWORD *piWavID )
+static bool statsGetAudioIDFromString(const char *szStatName, const char *szWavName, SDWORD *piWavID)
 {
 	if ( strcmp( szWavName, "-1" ) == 0 )
 	{
@@ -2020,7 +2004,7 @@ statsGetAudioIDFromString( char *szStatName, char *szWavName, SDWORD *piWavID )
 	{
 		if ( (*piWavID = audio_GetIDFromStr(szWavName)) == NO_SOUND )
 		{
-			debug( LOG_FATAL, "statsGetAudioIDFromString: couldn't get ID %d for sound %s", *piWavID, szWavName );
+			debug(LOG_FATAL, "Could not get ID %d for sound %s", *piWavID, szWavName);
 			abort();
 			return false;
 		}
@@ -2029,7 +2013,7 @@ statsGetAudioIDFromString( char *szStatName, char *szWavName, SDWORD *piWavID )
 	  || *piWavID > ID_MAX_SOUND)
 	 && *piWavID != NO_SOUND)
 	{
-		debug( LOG_FATAL, "statsGetAudioIDFromString: Invalid ID - %d for sound %s", *piWavID, szStatName );
+		debug(LOG_FATAL, "Invalid ID - %d for sound %s", *piWavID, szStatName);
 		abort();
 		return false;
 	}
@@ -2043,7 +2027,6 @@ statsGetAudioIDFromString( char *szStatName, char *szWavName, SDWORD *piWavID )
 bool loadWeaponSounds(const char *pFileName)
 {
 	SDWORD weaponSoundID, explosionSoundID, inc;
-	char *WeaponName;
 	QString szWeaponWav, szExplosionWav;
 
 	ASSERT( asWeaponStats != NULL, "loadWeaponSounds: Weapon stats not loaded" );
@@ -2057,34 +2040,31 @@ bool loadWeaponSounds(const char *pFileName)
 	for (int i=0; i < list.size(); ++i)
 	{
 		ini.beginGroup(list[i]);
-		szWeaponWav = ini.value("szWeaponWav").toString().toUtf8().constData();
+		szWeaponWav = ini.value("szWeaponWav").toString();
 		QStringList szWeaponWavs = szWeaponWav.split(",");
-		szExplosionWav = ini.value("szExplosionWav").toString().toUtf8().constData();
+		szExplosionWav = ini.value("szExplosionWav").toString();
 		QStringList szExplosionWavs = szExplosionWav.split(",");
-		WeaponName = strdup(list[i].toUtf8().constData());
 
 		for (int x=0; x< szWeaponWavs.size(); ++x)
 		{
-			if ( statsGetAudioIDFromString( WeaponName, szWeaponWavs[x].toUtf8().data(), &weaponSoundID ) == false )
+			if (!statsGetAudioIDFromString(list[i].toUtf8().constData(), szWeaponWavs[x].toUtf8().constData(), &weaponSoundID))
 			{
 				return false;
 			}
-
-			if ( statsGetAudioIDFromString( WeaponName, szExplosionWavs[x].toUtf8().data(), &explosionSoundID) == false )
+			if (!statsGetAudioIDFromString(list[i].toUtf8().constData(), szExplosionWavs[x].toUtf8().constData(), &explosionSoundID))
 			{
 				return false;
 			}
-
 			for (inc = 0; inc < (SDWORD)numWeaponStats; ++inc)
 			{
-				if (!strcmp(asWeaponStats[inc].pName, WeaponName))
+				if (list[i].compare(asWeaponStats[inc].pName) == 0)
 				{
 					asWeaponStats[inc].iAudioFireID = weaponSoundID;
 					asWeaponStats[inc].iAudioImpactID = explosionSoundID;
 					break;
 				}
 			}
-			ASSERT_OR_RETURN(false, inc != (SDWORD)numWeaponStats, "Weapon stat not found - %s", WeaponName);
+			ASSERT_OR_RETURN(false, inc != (SDWORD)numWeaponStats, "Weapon stat not found - %s", list[i].toUtf8().constData());
 		}
 		ini.endGroup();
 	}
@@ -2098,7 +2078,6 @@ bool loadWeaponModifiers(const char *pFileName)
 	PROPULSION_TYPE propInc;
 	WEAPON_EFFECT effectInc;
 	UDWORD i, j;
-	char *weaponEffectName;
 	QString modifier, propulsionName;
 
 	//initialise to 100%
@@ -2126,19 +2105,19 @@ bool loadWeaponModifiers(const char *pFileName)
 		QStringList propulsionNames = propulsionName.split(",");
 		modifier = ini.value("modifier").toString();
 		QStringList modifiers = modifier.split(",");
-		weaponEffectName = strdup(list[i].toUtf8().constData());
 
 		//get the weapon effect inc
-		if (!getWeaponEffect(weaponEffectName, &effectInc))
+		if (!getWeaponEffect(list[i].toUtf8().constData(), &effectInc))
 		{
-			debug(LOG_FATAL, "Invalid Weapon Effect - %s", weaponEffectName);
+			debug(LOG_FATAL, "Invalid Weapon Effect - %s", list[i].toUtf8().constData());
 			continue;
 		}
 		for (int x = 0; x < propulsionNames.size(); ++x)
 		{
 			if (modifiers[x].toUInt() > UWORD_MAX)
 			{
-				debug(LOG_FATAL, "Modifier for effect %s, prop type %s is too large", weaponEffectName, propulsionNames[x].toUtf8().data());
+				debug(LOG_FATAL, "Modifier for effect %s, prop type %s is too large", 
+				      list[i].toUtf8().constData(), propulsionNames[x].toUtf8().data());
 				continue;
 			}
 			//get the propulsion inc
@@ -2169,7 +2148,6 @@ bool loadWeaponModifiers(const char *pFileName)
 bool loadPropulsionSounds(const char *pFileName)
 {
 	SDWORD	i, startID, idleID, moveOffID, moveID, hissID, shutDownID;
-	char	*propulsionName;
 	PROPULSION_TYPE type;
 	PROPULSION_TYPES *pPropType;
 
@@ -2184,41 +2162,33 @@ bool loadPropulsionSounds(const char *pFileName)
 	for (i=0; i < list.size(); ++i)
 	{
 		ini.beginGroup(list[i]);
-		propulsionName = strdup(list[i].toUtf8().constData());
-
-		if ( statsGetAudioIDFromString( propulsionName, ini.value("szStart").toString().toUtf8().data(), &startID ) == false )
+		if (!statsGetAudioIDFromString(list[i].toUtf8().constData(), ini.value("szStart").toString().toUtf8().constData(), &startID))
 		{
 			return false;
 		}
-
-		if ( statsGetAudioIDFromString( propulsionName, ini.value("szIdle").toString().toUtf8().data(), &idleID ) == false )
+		if (!statsGetAudioIDFromString(list[i].toUtf8().constData(), ini.value("szIdle").toString().toUtf8().constData(), &idleID))
 		{
 			return false;
 		}
-
-		if ( statsGetAudioIDFromString( propulsionName, ini.value("szMoveOff").toString().toUtf8().data(), &moveOffID ) == false )
+		if (!statsGetAudioIDFromString(list[i].toUtf8().constData(), ini.value("szMoveOff").toString().toUtf8().constData(), &moveOffID))
 		{
 			return false;
 		}
-
-		if ( statsGetAudioIDFromString( propulsionName, ini.value("szMove").toString().toUtf8().data(), &moveID ) == false )
+		if (!statsGetAudioIDFromString(list[i].toUtf8().constData(), ini.value("szMove").toString().toUtf8().constData(), &moveID))
 		{
 			return false;
 		}
-
-		if ( statsGetAudioIDFromString( propulsionName, ini.value("szHiss").toString().toUtf8().data(), &hissID ) == false )
+		if (!statsGetAudioIDFromString(list[i].toUtf8().constData(), ini.value("szHiss").toString().toUtf8().constData(), &hissID))
 		{
 			return false;
 		}
-
-		if ( statsGetAudioIDFromString( propulsionName, ini.value("szShutDown").toString().toUtf8().data(), &shutDownID ) == false )
+		if (!statsGetAudioIDFromString(list[i].toUtf8().constData(), ini.value("szShutDown").toString().toUtf8().constData(), &shutDownID))
 		{
 			return false;
 		}
-
-		if (!getPropulsionType(propulsionName, &type))
+		if (!getPropulsionType(list[i].toUtf8().constData(), &type))
 		{
-			debug( LOG_FATAL, "loadPropulsionSounds: Invalid Propulsion type - %s", propulsionName );
+			debug(LOG_FATAL, "Invalid Propulsion type - %s", list[i].toUtf8().constData());
 			abort();
 			return false;
 		}
