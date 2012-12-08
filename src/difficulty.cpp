@@ -56,25 +56,19 @@ void	setDifficultyLevel(DIFFICULTY_LEVEL lev)
 		fDifEnemyModifier = 100;
 		break;
 	case	DL_HARD:
+	case	DL_INSANE:
 		fDifPlayerModifier = 80;
 		fDifEnemyModifier = 100;
-		break;
-	case	DL_KILLER:
-		fDifPlayerModifier = 999;  // 10 times
-		fDifEnemyModifier = 1;     // almost nothing
 		break;
 	case	DL_TOUGH:
 		fDifPlayerModifier = 100;
 		fDifEnemyModifier = 50;    // they do less damage!
 		break;
-	default:
-		debug( LOG_ERROR, "Invalid difficulty level selected - forcing NORMAL" );
-		fDifPlayerModifier = 100;
-		fDifEnemyModifier = 100;
-		lev = DL_NORMAL;
+	case	DL_KILLER:
+		fDifPlayerModifier = 999;  // 10 times
+		fDifEnemyModifier = 1;     // almost nothing
 		break;
 	}
-
 	presDifLevel = lev;
 }
 

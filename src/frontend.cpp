@@ -1352,9 +1352,10 @@ bool runGameOptionsMenu(void)
 		case DL_HARD:
 			widgSetString(psWScreen,FRONTEND_DIFFICULTY_R, _("Hard") );
 			break;
+		case DL_INSANE:
 		case DL_TOUGH:
 		case DL_KILLER:
-			debug(LOG_ERROR, "runGameOptionsMenu: Unused difficulty level selected!");
+			debug(LOG_ERROR, "Unused difficulty level selected!");
 			break;
 		}
 		break;

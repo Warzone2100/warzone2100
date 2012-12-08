@@ -2215,6 +2215,25 @@ static QScriptValue js_setPower(QScriptContext *context, QScriptEngine *engine)
 	return QScriptValue();
 }
 
+//-- \subsection{setPowerModifier(power[, player])}
+//-- Set a player's power modifier percentage. (Do not use this in an AI script.)
+static QScriptValue js_setPowerModifier(QScriptContext *context, QScriptEngine *engine)
+{
+	int power = context->argument(0).toInt32();
+	int player;
+	if (context->argumentCount() > 1)
+	{
+		player = context->argument(1).toInt32();
+		SCRIPT_ASSERT_PLAYER(context, player);
+	}
+	else
+	{
+		player = engine->globalObject().property("me").toInt32();
+	}
+	setPowerModifier(player, power);
+	return QScriptValue();
+}
+
 //-- \subsection{enableStructure(structure type[, player])}
 //-- The given structure type is made available to the given player. It will appear in the
 //-- player's build list.
@@ -3363,6 +3382,7 @@ bool registerFunctions(QScriptEngine *engine, QString scriptName)
 	engine->globalObject().setProperty("completeResearch", engine->newFunction(js_completeResearch));
 	engine->globalObject().setProperty("enableResearch", engine->newFunction(js_enableResearch));
 	engine->globalObject().setProperty("setPower", engine->newFunction(js_setPower));
+	engine->globalObject().setProperty("setPowerModifier", engine->newFunction(js_setPowerModifier));
 	engine->globalObject().setProperty("setTutorialMode", engine->newFunction(js_setTutorialMode));
 	engine->globalObject().setProperty("setDesign", engine->newFunction(js_setDesign));
 	engine->globalObject().setProperty("enableTemplate", engine->newFunction(js_enableTemplate));

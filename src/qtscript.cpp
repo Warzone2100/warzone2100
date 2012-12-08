@@ -41,6 +41,7 @@
 #include "lib/gamelib/gtime.h"
 #include "multiplay.h"
 #include "map.h"
+#include "difficulty.h"
 
 #include "qtscriptfuncs.h"
 
@@ -416,7 +417,14 @@ bool loadPlayerScript(QString path, int player, int difficulty)
 	engine->globalObject().setProperty("gameTime", gameTime, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	//== \item[difficulty] The currently set campaign difficulty, or the current AI's difficulty setting. It will be one of
 	//== EASY, MEDIUM, HARD or INSANE.
-	engine->globalObject().setProperty("difficulty", difficulty, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	if (game.type == SKIRMISH)
+	{
+		engine->globalObject().setProperty("difficulty", difficulty, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	}
+	else // campaign
+	{
+		engine->globalObject().setProperty("difficulty", (int)getDifficultyLevel(), QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	}
 	//== \item[mapName] The name of the current map.
 	engine->globalObject().setProperty("mapName", game.map, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	//== \item[baseType] The type of base that the game starts with. It will be one of CAMP_CLEAN, CAMP_BASE or CAMP_WALLS.

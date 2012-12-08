@@ -13,6 +13,12 @@ function eventGameInit()
 	hackNetOff();
 	for (var playnum = 0; playnum < maxPlayers; playnum++)
 	{
+		// insane difficulty is meant to be insane...
+		if (playerData[playnum].difficulty == INSANE)
+		{
+			setPowerModifier(200, playnum);
+		}
+
 		setDroidLimit(playnum, 150, DROID_ANY);
 		setDroidLimit(playnum, 10, DROID_COMMAND);
 		setDroidLimit(playnum, 15, DROID_CONSTRUCT);

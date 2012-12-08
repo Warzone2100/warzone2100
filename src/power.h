@@ -60,6 +60,8 @@ extern void updatePlayerPower(UDWORD player);
 void setPower(unsigned player, int32_t power);
 void setPrecisePower(unsigned player, int64_t power);
 
+void setPowerModifier(int player, int modifier);
+
 /** Get the amount of power current held by the given player. */
 int32_t getPower(unsigned player);
 int64_t getPrecisePower(unsigned player);

@@ -46,9 +46,6 @@
 
 
 #define EXTRACT_POINTS      1
-#define EASY_POWER_MOD      110
-#define NORMAL_POWER_MOD    100
-#define HARD_POWER_MOD      90
 #define MAX_POWER           1000000
 
 #define FP_ONE ((int64_t)1 << 32)
@@ -74,9 +71,15 @@ struct PlayerPower
 	// All fields are 32.32 fixed point.
 	int64_t currentPower;                  ///< The current amount of power available to the player.
 	std::vector<PowerRequest> powerQueue;  ///< Requested power.
+	int powerModifier;                 ///< Percentage modifier on power from each derrick.
 };
 
 static PlayerPower asPower[MAX_PLAYERS];
+
+void setPowerModifier(int player, int modifier)
+{
+	asPower[player].powerModifier = modifier;
+}
 
 /*allocate the space for the playerPower*/
 bool allocPlayerPower()
@@ -92,6 +95,7 @@ void clearPlayerPower()
 	for (unsigned player = 0; player < MAX_PLAYERS; player++)
 	{
 		asPower[player].currentPower = 0;
+		asPower[player].powerModifier = 100;
 		asPower[player].powerQueue.clear();
 	}
 }
@@ -213,7 +217,6 @@ void powerCalc(bool on)
 static int64_t updateExtractedPower(STRUCTURE *psBuilding)
 {
 	RES_EXTRACTOR		*pResExtractor;
-	int                     modifier = NORMAL_POWER_MOD;
 	int64_t                 extractedPoints;
 
 	pResExtractor = (RES_EXTRACTOR *) psBuilding->pFunctionality;
@@ -223,18 +226,8 @@ static int64_t updateExtractedPower(STRUCTURE *psBuilding)
 	//and has got some power to extract
 	if (pResExtractor->active)
 	{
-		// Add modifier according to difficulty level
-		if (game.type == CAMPAIGN)  // other types do not make sense
-		{
-			switch (getDifficultyLevel())
-			{
-				case DL_EASY: modifier = EASY_POWER_MOD; break;
-				case DL_HARD: modifier = HARD_POWER_MOD; break;
-				default: break;
-			}
-		}
 		// include modifier as a %
-		extractedPoints = modifier * EXTRACT_POINTS * FP_ONE / (100 * GAME_UPDATES_PER_SEC);
+		extractedPoints = asPower[psBuilding->player].powerModifier * EXTRACT_POINTS * FP_ONE / (100 * GAME_UPDATES_PER_SEC);
 		syncDebug("updateExtractedPower%d = %"PRId64"", psBuilding->player, extractedPoints);
 	}
 	ASSERT(extractedPoints >= 0, "extracted negative amount of power");

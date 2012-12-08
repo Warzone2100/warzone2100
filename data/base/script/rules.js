@@ -22,6 +22,16 @@ function eventStartLevel()
 	{
 		eventStructureBuilt(structlist[i]);
 	}
+
+	// set income modifier for player 0 (human)
+	if (difficulty == EASY)
+	{
+		setPowerModifier(110);
+	}
+	else if (difficulty == HARD)
+	{
+		setPowerModifier(90);
+	}
 }
 
 function eventStructureBuilt(struct)
