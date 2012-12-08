@@ -474,7 +474,6 @@ void loadMapPreview(bool hideInterface)
 		loadEmptyMapPreview();
 		return;
 	}
-	setCurrentMap(psLevel->realFileName, psLevel->players);
 	if (psLevel->realFileName == NULL)
 	{
 		debug(LOG_INFO, "Loading map preview: \"%s\" builtin t%d", psLevel->pName, psLevel->dataDir);
@@ -483,7 +482,7 @@ void loadMapPreview(bool hideInterface)
 	{
 		debug(LOG_INFO, "Loading map preview: \"%s\" in (%s)\"%s\"  %s t%d", psLevel->pName, PHYSFS_getRealDir(psLevel->realFileName), psLevel->realFileName, psLevel->realFileHash.toString().c_str(), psLevel->dataDir);
 	}
-	rebuildSearchPath(psLevel->dataDir, false);
+	rebuildSearchPath(psLevel->dataDir, false, psLevel->realFileName);
 	sstrcpy(aFileName,psLevel->apDataFiles[0]);
 	aFileName[strlen(aFileName)-4] = '\0';
 	sstrcat(aFileName, "/ttypes.ttp");

@@ -115,8 +115,6 @@ char * override_mods[MAX_MODS] = { NULL };
 char * override_mod_list = NULL;
 bool use_override_mods = false;
 
-char *current_map = NULL;
-
 char * loaded_mods[MAX_MODS] = { NULL };
 char * mod_list = NULL;
 int num_loaded_mods = 0;
@@ -270,12 +268,6 @@ void setOverrideMods(char * modlist)
 	override_mods[i+1] = NULL;
 	override_mod_list = modlist;
 	use_override_mods = true;
-}
-
-void setCurrentMap(char* map, int maxPlayers)
-{
-	free(current_map);
-	current_map = map != NULL? strdup(map) : NULL;
 }
 
 void clearOverrideMods(void)

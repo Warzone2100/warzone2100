@@ -58,7 +58,7 @@ enum searchPathMode { mod_clean, mod_campaign, mod_multiplay, mod_override };
 
 void cleanSearchPath( void );
 void registerSearchPath( const char path[], unsigned int priority );
-bool rebuildSearchPath( searchPathMode mode, bool force );
+bool rebuildSearchPath(searchPathMode mode, bool force, const char *current_map = NULL);
 
 bool buildMapList(void);
 

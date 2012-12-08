@@ -722,8 +722,7 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 		}
 	}
 
-	setCurrentMap(psNewLevel->realFileName, psNewLevel->players);
-	if (!rebuildSearchPath(psNewLevel->dataDir, true))
+	if (!rebuildSearchPath(psNewLevel->dataDir, true, psNewLevel->realFileName))
 	{
 		debug(LOG_ERROR, "Failed to rebuild search path");
 		return false;

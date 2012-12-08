@@ -239,7 +239,7 @@ void registerSearchPath( const char path[], unsigned int priority )
  * Priority:
  * maps > mods > base > base.wz
  */
-bool rebuildSearchPath( searchPathMode mode, bool force )
+bool rebuildSearchPath(searchPathMode mode, bool force, const char *current_map)
 {
 	static searchPathMode current_mode = mod_clean;
 	static std::string current_current_map;
@@ -929,8 +929,7 @@ bool stageOneShutDown(void)
 
 	debug(LOG_TEXTURE, "=== stageOneShutDown ===");
 	pie_TexShutDown();
-	// no map for the main menu
-	setCurrentMap(NULL, 1);
+
 	// Use mod_multiplay as the default (campaign might have set it to mod_singleplayer)
 	rebuildSearchPath( mod_multiplay, true );
 	pie_TexInit(); // restart it
