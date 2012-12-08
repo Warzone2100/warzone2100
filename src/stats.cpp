@@ -384,12 +384,6 @@ unsigned LineView::eu(unsigned int index, std::vector<std::pair<char const *, un
 	"allocStats: number of stats entries too large for " #type );\
 	if ((list))	free((list));	\
 	(list) = (type *)malloc(sizeof(type) * (numEntries)); \
-	if ((list) == NULL) \
-	{ \
-		debug( LOG_FATAL, "Out of memory" ); \
-		abort(); \
-		return false; \
-	} \
 	(listSize) = (numEntries); \
 	return true
 
@@ -713,9 +707,7 @@ bool loadWeaponStats(const char *pFileName)
 			psStats->pIMD = (iIMDShape *) resGetData("IMD", GfxFile.toUtf8().constData());
 			if (psStats->pIMD == NULL)
 			{
-
-				debug( LOG_FATAL, "Cannot find the weapon PIE for record %s", getStatName(psStats) );
-				abort();
+				debug(LOG_FATAL, "Cannot find the weapon PIE for record %s", getStatName(psStats));
 				return false;
 			}
 		}
@@ -730,8 +722,7 @@ bool loadWeaponStats(const char *pFileName)
 			psStats->pMountGraphic = (iIMDShape *) resGetData("IMD", mountGfx.toUtf8().constData());
 			if (psStats->pMountGraphic == NULL)
 			{
-				debug( LOG_FATAL, "Cannot find the mount PIE for record %s", getStatName(psStats) );
-				abort();
+				debug(LOG_FATAL, "Cannot find the mount PIE for record %s", getStatName(psStats));
 				return false;
 			}
 		}
@@ -745,40 +736,35 @@ bool loadWeaponStats(const char *pFileName)
 			psStats->pMuzzleGraphic = (iIMDShape *) resGetData("IMD", ini.value("muzzleGfx").toString().toUtf8().constData());
 			if (psStats->pMuzzleGraphic == NULL)
 			{
-				debug( LOG_FATAL, "Cannot find the muzzle PIE for record %s", getStatName(psStats) );
-				abort();
+				debug(LOG_FATAL, "Cannot find the muzzle PIE for record %s", getStatName(psStats));
 				return false;
 			}
 
 			psStats->pInFlightGraphic = (iIMDShape *) resGetData("IMD", ini.value("flightGfx").toString().toUtf8().constData());
 			if (psStats->pInFlightGraphic == NULL)
 			{
-				debug( LOG_FATAL, "Cannot find the flight PIE for record %s", getStatName(psStats) );
-				abort();
+				debug(LOG_FATAL, "Cannot find the flight PIE for record %s", getStatName(psStats));
 				return false;
 			}
 
 			psStats->pTargetHitGraphic = (iIMDShape *) resGetData("IMD", ini.value("hitGfx").toString().toUtf8().constData());
 			if (psStats->pTargetHitGraphic == NULL)
 			{
-				debug( LOG_FATAL, "Cannot find the target hit PIE for record %s", getStatName(psStats) );
-				abort();
+				debug(LOG_FATAL, "Cannot find the target hit PIE for record %s", getStatName(psStats));
 				return false;
 			}
 
 			psStats->pTargetMissGraphic = (iIMDShape *) resGetData("IMD", ini.value("missGfx").toString().toUtf8().constData());
 			if (psStats->pTargetMissGraphic == NULL)
 			{
-				debug( LOG_FATAL, "Cannot find the target miss PIE for record %s", getStatName(psStats) );
-				abort();
+				debug(LOG_FATAL, "Cannot find the target miss PIE for record %s", getStatName(psStats));
 				return false;
 			}
 
 			psStats->pWaterHitGraphic = (iIMDShape *) resGetData("IMD", ini.value("waterGfx").toString().toUtf8().constData());
 			if (psStats->pWaterHitGraphic == NULL)
 			{
-				debug( LOG_FATAL, "Cannot find the water hit PIE for record %s", getStatName(psStats) );
-				abort();
+				debug(LOG_FATAL, "Cannot find the water hit PIE for record %s", getStatName(psStats));
 				return false;
 			}
 			//trail graphic can be null
@@ -787,8 +773,7 @@ bool loadWeaponStats(const char *pFileName)
 				psStats->pTrailGraphic = (iIMDShape *) resGetData("IMD", ini.value("trailGfx").toString().toUtf8().constData());
 				if (psStats->pTrailGraphic == NULL)
 				{
-					debug( LOG_FATAL, "Cannot find the trail PIE for record %s", getStatName(psStats) );
-					abort();
+					debug(LOG_FATAL, "Cannot find the trail PIE for record %s", getStatName(psStats));
 					return false;
 				}
 			}
@@ -857,8 +842,7 @@ bool loadWeaponStats(const char *pFileName)
 		//set the weapon effect
 		if (!getWeaponEffect(ini.value("weaponEffect").toString().toUtf8().constData(), &psStats->weaponEffect))
 		{
-			debug( LOG_FATAL, "loadWepaonStats: Invalid weapon effect for weapon %s", getStatName(psStats) );
-			abort();
+			debug(LOG_FATAL, "loadWepaonStats: Invalid weapon effect for weapon %s", getStatName(psStats));
 			return false;
 		}
 
@@ -1117,8 +1101,7 @@ bool loadBrainStats(const char *pFileName)
 			// if weapon not found - error
 			if (weapon == -1)
 			{
-				debug( LOG_FATAL, "Unable to find Weapon %s for brain %s", weaponName.toUtf8().constData(), psStats->pName);
-				abort();
+				debug(LOG_FATAL, "Unable to find Weapon %s for brain %s", weaponName.toUtf8().constData(), psStats->pName);
 				return false;
 			}
 			else
@@ -1369,8 +1352,7 @@ bool loadSensorStats(const char *pFileName)
 			psStats->pIMD = (iIMDShape *) resGetData("IMD", GfxFile.toUtf8().constData());
 			if (psStats->pIMD == NULL)
 			{
-				debug( LOG_FATAL, "Cannot find the sensor PIE for record %s", getStatName(psStats) );
-				abort();
+				debug(LOG_FATAL, "Cannot find the sensor PIE for record %s", getStatName(psStats));
 				return false;
 			}
 		}
@@ -1384,8 +1366,7 @@ bool loadSensorStats(const char *pFileName)
 			psStats->pMountGraphic = (iIMDShape *) resGetData("IMD", mountGfx.toUtf8().constData());
 			if (psStats->pMountGraphic == NULL)
 			{
-				debug( LOG_FATAL, "Cannot find the mount PIE for record %s", getStatName(psStats) );
-				abort();
+				debug(LOG_FATAL, "Cannot find the mount PIE for record %s", getStatName(psStats));
 				return false;
 			}
 		}
@@ -1470,8 +1451,7 @@ bool loadECMStats(const char *pFileName)
 			psStats->pIMD = (iIMDShape *) resGetData("IMD", GfxFile.toUtf8().constData());
 			if (psStats->pIMD == NULL)
 			{
-				debug( LOG_FATAL, "Cannot find the ECM PIE for record %s", getStatName(psStats) );
-				abort();
+				debug(LOG_FATAL, "Cannot find the ECM PIE for record %s", getStatName(psStats));
 				return false;
 			}
 		}
@@ -1486,8 +1466,7 @@ bool loadECMStats(const char *pFileName)
 			psStats->pMountGraphic = (iIMDShape *) resGetData("IMD", mountGfx.toUtf8().constData());
 			if (psStats->pMountGraphic == NULL)
 			{
-				debug( LOG_FATAL, "Cannot find the mount PIE for record %s", getStatName(psStats) );
-				abort();
+				debug(LOG_FATAL, "Cannot find the mount PIE for record %s", getStatName(psStats));
 				return false;
 			}
 		}
@@ -1586,8 +1565,7 @@ bool loadRepairStats(const char *pFileName)
 			psStats->pIMD = (iIMDShape *) resGetData("IMD", GfxFile.toUtf8().constData());
 			if (psStats->pIMD == NULL)
 			{
-				debug( LOG_FATAL, "Cannot find the Repair PIE for record %s", getStatName(psStats) );
-				abort();
+				debug(LOG_FATAL, "Cannot find the Repair PIE for record %s", getStatName(psStats));
 				return false;
 			}
 		}
@@ -1602,8 +1580,7 @@ bool loadRepairStats(const char *pFileName)
 			psStats->pMountGraphic = (iIMDShape *) resGetData("IMD", mountGfx.toUtf8().constData());
 			if (psStats->pMountGraphic == NULL)
 			{
-				debug( LOG_FATAL, "Cannot find the Repair mount PIE for record %s", getStatName(psStats) );
-				abort();
+				debug(LOG_FATAL, "Cannot find the Repair mount PIE for record %s", getStatName(psStats));
 				return false;
 			}
 		}
@@ -1675,8 +1652,7 @@ bool loadConstructStats(const char *pFileName)
 			psStats->pIMD = (iIMDShape *) resGetData("IMD", GfxFile.toUtf8().constData());
 			if (psStats->pIMD == NULL)
 			{
-				debug( LOG_FATAL, "Cannot find the constructor PIE for record %s", getStatName(psStats) );
-				abort();
+				debug(LOG_FATAL, "Cannot find the constructor PIE for record %s", getStatName(psStats));
 				return false;
 			}
 		}
@@ -1691,8 +1667,7 @@ bool loadConstructStats(const char *pFileName)
 			psStats->pMountGraphic = (iIMDShape *) resGetData("IMD", mountGfx.toUtf8().constData());
 			if (psStats->pMountGraphic == NULL)
 			{
-				debug( LOG_FATAL, "Cannot find the mount PIE for record %s", getStatName(psStats) );
-				abort();
+				debug(LOG_FATAL, "Cannot find the mount PIE for record %s", getStatName(psStats));
 				return false;
 			}
 		}
@@ -1727,13 +1702,6 @@ bool loadPropulsionTypes(const char *pFileName)
 
 	//allocate storage for the stats
 	asPropulsionTypes = (PROPULSION_TYPES *)malloc(sizeof(PROPULSION_TYPES)*NumTypes);
-	if (asPropulsionTypes == NULL)
-	{
-		debug( LOG_FATAL, "PropulsionTypes - Out of memory" );
-		abort();
-		return false;
-	}
-
 	memset(asPropulsionTypes, 0, (sizeof(PROPULSION_TYPES)*NumTypes));
 	WzConfig ini(pFileName);
 	if (ini.status() != QSettings::NoError)
@@ -1751,7 +1719,6 @@ bool loadPropulsionTypes(const char *pFileName)
 		if (!getPropulsionType(list[i].toUtf8().constData(), &type))
 		{
 			debug(LOG_FATAL, "Invalid Propulsion type - %s", list[i].toUtf8().constData());
-			abort();
 			return false;
 		}
 
@@ -1806,13 +1773,6 @@ bool loadTerrainTable(const char *pFileName)
 	//allocate storage for the stats
 	asTerrainTable = (TERRAIN_TABLE *)malloc(sizeof(*asTerrainTable) * PROPULSION_TYPE_NUM * TER_MAX);
 
-	if (asTerrainTable == NULL)
-	{
-		debug( LOG_FATAL, "Terrain Types - Out of memory" );
-		abort();
-		return false;
-	}
-
 	//initialise the storage to 100
 	for (i = 0; i < TER_MAX; ++i)
 	{
@@ -1853,8 +1813,7 @@ bool loadTerrainTable(const char *pFileName)
 			TERRAIN_TABLE * const pTerrainTable = asTerrainTable + (i * PROPULSION_TYPE_NUM + j);
 			if (pTerrainTable->speedFactor == 0)
 			{
-				debug( LOG_FATAL, "loadTerrainTable: Invalid propulsion/terrain table entry" );
-				abort();
+				debug(LOG_FATAL, "Invalid propulsion/terrain table entry");
 				return false;
 			}
 		}
@@ -1883,11 +1842,6 @@ bool loadBodyPropulsionIMDs(const char *pFileName)
 	{
 		psBodyStat = &asBodyStats[numStats];
 		psBodyStat->ppIMDList = (iIMDShape **) malloc(numPropulsionStats * NUM_PROP_SIDES * sizeof(iIMDShape *));
-		if (psBodyStat->ppIMDList == NULL)
-		{
-			debug( LOG_FATAL, "Out of memory" );
-			abort();
-		}
 		//initialise the pointer space
 		memset(psBodyStat->ppIMDList, 0, (numPropulsionStats *
 			NUM_PROP_SIDES * sizeof(iIMDShape *)));
@@ -1924,7 +1878,6 @@ bool loadBodyPropulsionIMDs(const char *pFileName)
 		if (!found)
 		{
 			debug(LOG_FATAL, "Invalid body name %s", list[i].toUtf8().constData());
-			abort();
 			return false;
 		}
 
@@ -1943,8 +1896,7 @@ bool loadBodyPropulsionIMDs(const char *pFileName)
 			}
 			if (!found)
 			{
-				debug( LOG_FATAL, "Invalid propulsion name %s", propulsionNames[x].toUtf8().constData() );
-				abort();
+				debug(LOG_FATAL, "Invalid propulsion name %s", propulsionNames[x].toUtf8().constData());
 				return false;
 			}
 
@@ -1957,7 +1909,6 @@ bool loadBodyPropulsionIMDs(const char *pFileName)
 				if (*psBodyStat->ppIMDList == NULL)
 				{
 					debug(LOG_FATAL, "Cannot find the left propulsion PIE for body %s", list[i].toUtf8().constData());
-					abort();
 					return false;
 				}
 			}
@@ -1974,7 +1925,6 @@ bool loadBodyPropulsionIMDs(const char *pFileName)
 				if (*psBodyStat->ppIMDList == NULL)
 				{
 					debug(LOG_FATAL, "Cannot find the right propulsion PIE for body %s", list[i].toUtf8().constData());
-					abort();
 					return false;
 				}
 			}
@@ -2005,7 +1955,6 @@ static bool statsGetAudioIDFromString(const char *szStatName, const char *szWavN
 		if ( (*piWavID = audio_GetIDFromStr(szWavName)) == NO_SOUND )
 		{
 			debug(LOG_FATAL, "Could not get ID %d for sound %s", *piWavID, szWavName);
-			abort();
 			return false;
 		}
 	}
@@ -2014,7 +1963,6 @@ static bool statsGetAudioIDFromString(const char *szStatName, const char *szWavN
 	 && *piWavID != NO_SOUND)
 	{
 		debug(LOG_FATAL, "Invalid ID - %d for sound %s", *piWavID, szStatName);
-		abort();
 		return false;
 	}
 
@@ -2189,7 +2137,6 @@ bool loadPropulsionSounds(const char *pFileName)
 		if (!getPropulsionType(list[i].toUtf8().constData(), &type))
 		{
 			debug(LOG_FATAL, "Invalid Propulsion type - %s", list[i].toUtf8().constData());
-			abort();
 			return false;
 		}
 		pPropType = asPropulsionTypes + type;
@@ -2346,8 +2293,7 @@ UDWORD statRefStart(UDWORD stat)
 		default:
 		{
 			//COMP_UNKNOWN should be an error
-			debug( LOG_FATAL, "Invalid stat type" );
-			abort();
+			debug(LOG_FATAL, "Invalid stat type");
 			start = 0;
 		}
 	}
@@ -2408,9 +2354,7 @@ bool compareYes(const char* strToCompare, const char* strOwner)
 	else
 	{
 		//set default to false but continue
-		//DBERROR(("Invalid yes/no for record %s", strOwner));
-		debug( LOG_FATAL, "Invalid yes/no for record %s", getName(strOwner) );
-		abort();
+		debug(LOG_FATAL, "Invalid yes/no for record %s", getName(strOwner));
 		return false;
 	}
 }
@@ -2470,8 +2414,7 @@ static void getStatsDetails(UDWORD compType, BASE_STATS **ppsStats, UDWORD *pnum
 		break;
 	default:
 		//COMP_UNKNOWN should be an error
-		debug( LOG_FATAL, "Invalid component type - game.c" );
-		abort();
+		debug(LOG_FATAL, "Invalid component type");
 	}
 }
 
@@ -2715,27 +2658,15 @@ and stores the name. Eventually ALL names will be 'resourced' for translation
 */
 char* allocateName(const char* name)
 {
-	char * storeName;
-
 	/* Check whether the given string has a string resource associated with
 	 * it.
 	 */
 	if (!strresGetString(psStringRes, name))
 	{
 		debug(LOG_FATAL, "Unable to find string resource for %s", name);
-		abort();
 		return NULL;
 	}
-
-	storeName = strdup(name);
-	if (!storeName)
-	{
-		debug(LOG_FATAL, "Out of memory");
-		abort();
-		return NULL;
-	}
-
-	return storeName;
+	return strdup(name);
 }
 
 
