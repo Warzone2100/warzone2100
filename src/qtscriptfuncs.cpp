@@ -1503,7 +1503,7 @@ static QScriptValue js_enumStructOffWorld(QScriptContext *context, QScriptEngine
 	return result;
 }
 
-//-- \subsection{enumFeature(player, name)}
+//-- \subsection{enumFeature(player[, name])}
 //-- Returns an array of all features seen by player of given name, as defined in "features.txt".
 //-- If player is \emph{ALL_PLAYERS}, it will return all features irrespective of visibility to any player. If
 //-- name is empty, it will return any feature.
@@ -1511,7 +1511,11 @@ static QScriptValue js_enumFeature(QScriptContext *context, QScriptEngine *engin
 {
 	QList<FEATURE *> matches;
 	int looking = context->argument(0).toInt32();
-	QString statsName = context->argument(1).toString();
+	QString statsName;
+	if (context->argumentCount() > 1)
+	{
+		statsName = context->argument(1).toString();
+	}
 	SCRIPT_ASSERT(context, looking < MAX_PLAYERS && looking >= -1, "Looking player index out of range: %d", looking);
 	for (FEATURE *psFeat = apsFeatureLists[0]; psFeat; psFeat = psFeat->psNext)
 	{
