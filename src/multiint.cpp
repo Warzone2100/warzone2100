@@ -3051,7 +3051,7 @@ static void processMultiopWidgets(UDWORD id)
 		addPlayerBox(!ingame.bHostSetup || bHosted);
 	}
 
-	if (id >= MULTIOP_DIFFICULTY_CHOOSE_START && id <= MULTIOP_DIFFICULTY_CHOOSE_END)
+	if (id >= MULTIOP_DIFFICULTY_CHOOSE_START && id <= MULTIOP_DIFFICULTY_CHOOSE_END && difficultyChooserUp != -1)
 	{
 		int idx = id - MULTIOP_DIFFICULTY_CHOOSE_START;
 		NetPlay.players[difficultyChooserUp].difficulty = idx;
@@ -3061,7 +3061,7 @@ static void processMultiopWidgets(UDWORD id)
 		addPlayerBox(!ingame.bHostSetup || bHosted);
 	}
 
-	if (id >= MULTIOP_AI_START && id <= MULTIOP_AI_END)
+	if (id >= MULTIOP_AI_START && id <= MULTIOP_AI_END && aiChooserUp != -1)
 	{
 		int idx = id - MULTIOP_AI_START;
 		NetPlay.players[aiChooserUp].ai = idx;
