@@ -3210,6 +3210,62 @@ static QScriptValue js_setSky(QScriptContext *context, QScriptEngine *)
 	return QScriptValue(found);
 }
 
+//-- \subsection{hackMarkTiles([label | x, y[, x2, y2]])}
+//-- Mark the given tile(s) on the map. Either give a POSITION or AREA label,
+//-- or a tile x, y position, or four positions for a square area. If no parameter 
+//-- is given, all marked tiles are cleared.
+static QScriptValue js_hackMarkTiles(QScriptContext *context, QScriptEngine *)
+{
+	if (context->argumentCount() == 4) // square area
+	{
+		int x1 = context->argument(0).toInt32();
+		int y1 = context->argument(1).toInt32();
+		int x2 = context->argument(2).toInt32();
+		int y2 = context->argument(3).toInt32();
+		for (int x = x1; x < x2; x++)
+		{
+			for (int y = y1; y < y2; y++)
+			{
+				MAPTILE *psTile = mapTile(x, y);
+				psTile->tileInfoBits |= BITS_MARKED;
+			}
+		}
+	}
+	else if (context->argumentCount() == 2) // single tile
+	{
+		int x = context->argument(0).toInt32();
+		int y = context->argument(1).toInt32();
+		MAPTILE *psTile = mapTile(x, y);
+		psTile->tileInfoBits |= BITS_MARKED;
+	}
+	else if (context->argumentCount() == 1) // label
+	{
+		QString label = context->argument(0).toString();
+		SCRIPT_ASSERT(context, labels.contains(label), "Label %s not found", label.toUtf8().constData());
+		labeltype &l = labels[label];
+		for (int x = l.p1.x; x < l.p2.x; x++)
+		{
+			for (int y = l.p1.y; y < l.p2.y; y++)
+			{
+				MAPTILE *psTile = mapTile(x, y);
+				psTile->tileInfoBits |= BITS_MARKED;
+			}
+		}
+	}
+	else // clear all marks
+	{
+		for (int x = 0; x < mapWidth; x++)
+		{
+			for (int y = 0; y < mapHeight; y++)
+			{
+				MAPTILE *psTile = mapTile(x, y);
+				psTile->tileInfoBits &= ~BITS_MARKED;
+			}
+		}
+	}
+	return QScriptValue();
+}
+
 //-- \subsection{cameraSlide(x, y)}
 //-- Slide the camera over to the given position on the map. (3.2+ only)
 static QScriptValue js_cameraSlide(QScriptContext *context, QScriptEngine *)
@@ -3321,6 +3377,7 @@ bool registerFunctions(QScriptEngine *engine, QString scriptName)
 	engine->globalObject().setProperty("objFromId", engine->newFunction(js_objFromId));
 	engine->globalObject().setProperty("hackGetObj", engine->newFunction(js_hackGetObj));
 	engine->globalObject().setProperty("hackAssert", engine->newFunction(js_hackAssert));
+	engine->globalObject().setProperty("hackMarkTiles", engine->newFunction(js_hackMarkTiles));
 
 	// General functions -- geared for use in AI scripts
 	engine->globalObject().setProperty("debug", engine->newFunction(js_debug));

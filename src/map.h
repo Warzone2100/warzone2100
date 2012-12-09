@@ -78,6 +78,7 @@ static inline unsigned short TileNumber_texture(unsigned short tilenumber)
 	return tilenumber & ~TILE_NUMMASK;
 }
 
+#define BITS_MARKED		0x01	///< Is this tile marked?
 #define BITS_DECAL		0x02	///< Does this tile has a decal? If so, the tile from "texture" is drawn on top of the terrain.
 #define BITS_FPATHBLOCK		0x10	///< Bit set temporarily by find path to mark a blocking tile
 #define BITS_ON_FIRE            0x20    ///< Whether tile is burning

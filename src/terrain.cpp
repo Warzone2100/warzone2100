@@ -219,6 +219,7 @@ PIELIGHT getTileColour(int x, int y)
 {
 	return mapTile(x, y)->colour;
 }
+
 /// Set the colour of the tile at the specified position
 void setTileColour(int x, int y, PIELIGHT colour)
 {
@@ -397,36 +398,6 @@ static inline void averageColour(PIELIGHT *average, PIELIGHT a, PIELIGHT b,
 	average->byte.r = (a.byte.r + b.byte.r + c.byte.r + d.byte.r)/4;
 	average->byte.g = (a.byte.g + b.byte.g + c.byte.g + d.byte.g)/4;
 	average->byte.b = (a.byte.b + b.byte.b + c.byte.b + d.byte.b)/4;
-}
-
-/// Get the tiles colour
-static inline void getColour(PIELIGHT *colour, int x, int y, bool center)
-{
-	MAPTILE *psTile;
-	
-	if (center)
-	{
-		PIELIGHT a,b,c,d;
-		getColour(&a, x  , y  , false);
-		getColour(&b, x+1, y  , false);
-		getColour(&c, x  , y+1, false);
-		getColour(&d, x+1, y+1, false);
-		averageColour(colour, a, b, c, d);
-		return;
-	}
-	
-	*colour = WZCOL_BLACK;
-	if (x < 0 || y < 0 || x > mapWidth - 1 || y > mapHeight - 1)
-	{
-		return;
-	}
-	psTile = mapTile(x, y);
-	*colour = psTile->colour;
-
-	if (psTile->tileInfoBits & BITS_GATEWAY && showGateways)
-	{
-		colour->byte.g = 255;
-	}
 }
 
 /**
@@ -1116,7 +1087,18 @@ void drawTerrain(void)
 		{
 			for (i = 0; i < mapWidth; ++i)
 			{
-				const PIELIGHT colour = getTileColour(i, j);
+				MAPTILE *psTile = mapTile(i, j);
+				PIELIGHT colour = psTile->colour;
+
+				if (psTile->tileInfoBits & BITS_GATEWAY && showGateways)
+				{
+					colour.byte.g = 255;
+				}
+				if (psTile->tileInfoBits & BITS_MARKED)
+				{
+					int m = getModularScaledGraphicsTime(2048, 255);
+					colour.byte.r = MAX(m, 255 - m);
+				}
 
 				lightmapPixmap[(i + j * lightmapWidth) * 3 + 0] = colour.byte.r;
 				lightmapPixmap[(i + j * lightmapWidth) * 3 + 1] = colour.byte.g;
