@@ -114,7 +114,7 @@ static bool startTitleMenu(void)
 	addTextButton(FRONTEND_QUIT, FRONTEND_POS7X, FRONTEND_POS7Y, _("Quit Game"), WBUT_TXTCENTRE);
 	addSideText(FRONTEND_SIDETEXT, FRONTEND_SIDEX, FRONTEND_SIDEY, _("MAIN MENU"));
 
-	addSmallTextButton(FRONTEND_HYPERLINK, FRONTEND_POS8X, FRONTEND_POS8Y, _("Warzone 2100 is completely free and open source (FLOSS). Official site: http://wz2100.net/"), 0);
+	addSmallTextButton(FRONTEND_HYPERLINK, FRONTEND_POS8X, FRONTEND_POS8Y, _("Official site: http://wz2100.net/"), 0);
 
 	return true;
 }
@@ -254,7 +254,7 @@ static void startSinglePlayerMenu(void)
 	// show this only when the video sequences are not installed
 	if (!PHYSFS_exists("sequences/devastation.ogg"))
 	{
-		addSmallTextButton(FRONTEND_HYPERLINK, FRONTEND_POS1X, FRONTEND_POS7Y + 12, _("Campaign videos are missing! Get them from http://wz2100.net"), 0);
+		addSmallTextButton(FRONTEND_HYPERLINK, FRONTEND_POS8X, FRONTEND_POS8Y, _("Campaign videos are missing! Get them from http://wz2100.net"), 0);
 	}
 }
 
@@ -399,7 +399,7 @@ static bool startMultiPlayerMenu(void)
 	addMultiBut(psWScreen, FRONTEND_BOTFORM, FRONTEND_QUIT, 10, 10, 30, 29, P_("menu", "Return"), IMAGE_RETURN, IMAGE_RETURN_HI, IMAGE_RETURN_HI);
 
 	// This isn't really a hyperlink for now... perhaps link to the wiki ?
-	addSmallTextButton(FRONTEND_HYPERLINK, FRONTEND_POS8X, FRONTEND_POS8Y, _("TCP PORT 2100 MUST BE OPENED IN YOUR FIREWALL / ROUTER TO HOST GAMES!"), 0);
+	addSmallTextButton(FRONTEND_HYPERLINK, FRONTEND_POS8X, FRONTEND_POS8Y, _("TCP port 2100 must be opened in your firewall or router to host games!"), 0);
 
 	return true;
 }
