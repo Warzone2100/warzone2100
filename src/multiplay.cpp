@@ -1084,6 +1084,8 @@ bool sendTextMessage(const char *pStr, bool all, uint32_t from)
 	memset(posTable,0x0, sizeof(posTable));		//clear buffer
 	sstrcpy(msg, curStr);
 
+	triggerEventChat(from, from, pStr); // send to self
+
 	if (!all)
 	{
 		// create a position table

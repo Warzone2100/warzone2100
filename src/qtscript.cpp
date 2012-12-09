@@ -96,7 +96,7 @@ static QHash<QString, int> internalNamespace;
 // Call a function by name
 static bool callFunction(QScriptEngine *engine, const QString &function, const QScriptValueList &args, bool required = false)
 {
-	code_part level = required ? LOG_ERROR : LOG_WARNING;
+	code_part level = required ? LOG_ERROR : LOG_SCRIPT;
 	QScriptValue value = engine->globalObject().property(function);
 	if (!value.isValid() || !value.isFunction())
 	{
@@ -504,7 +504,7 @@ bool saveScriptStates(const char *filename)
 		ini.beginGroup(QString("groups_") + QString::number(i));
 		// we have to save 'scriptName' and 'me' explicitly
 		ini.setValue("me", engine->globalObject().property("me").toInt32());
-		ini.setValue("scriptName", engine->globalObject().property("scriptName").toString().toUtf8().constData());
+		ini.setValue("scriptName", engine->globalObject().property("scriptName").toString());
 		saveGroups(ini, engine);
 		ini.endGroup();
 	}
@@ -514,8 +514,8 @@ bool saveScriptStates(const char *filename)
 		ini.beginGroup(QString("triggers_") + QString::number(i));
 		// we have to save 'scriptName' and 'me' explicitly
 		ini.setValue("me", node.player);
-		ini.setValue("scriptName", node.engine->globalObject().property("scriptName").toString().toUtf8().constData());
-		ini.setValue("function", node.function.toUtf8().constData());
+		ini.setValue("scriptName", node.engine->globalObject().property("scriptName").toString());
+		ini.setValue("function", node.function);
 		if (!node.baseobj >= 0)
 		{
 			ini.setValue("object", QVariant(node.baseobj));
@@ -979,7 +979,10 @@ bool triggerEventArea(QString label, DROID *psDroid)
 		QScriptValueList args;
 		args += QScriptValue(label);
 		args += convDroid(psDroid, engine);
-		callFunction(engine, QString("eventArea" + label), args);
+		QString funcname = QString("eventArea" + label);
+		debug(LOG_SCRIPT, "Triggering %s for %s", funcname.toUtf8().constData(),
+		      engine->globalObject().property("scriptName").toString().toUtf8().constData());
+		callFunction(engine, funcname, args);
 	}
 	return true;
 }

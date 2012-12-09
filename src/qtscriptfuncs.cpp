@@ -95,7 +95,8 @@ bool areaLabelCheck(DROID *psDroid)
 	{
 		labeltype &l = (*i);
 		if (l.id == -1 && l.p1.x < x && l.p1.y < y && l.p2.x > x && l.p2.y > y
-		    && (l.player == ALL_PLAYERS || l.player == psDroid->player))
+		    && (l.player == ALL_PLAYERS || l.player == psDroid->player)
+		    && l.type == SCRIPT_AREA)
 		{
 			// We're inside an untriggered area
 			l.id = 1; // deactivate it
@@ -2817,11 +2818,11 @@ static QScriptValue js_enumArea(QScriptContext *context, QScriptEngine *engine)
 	}
 	if (context->argumentCount() > nextparam++)
 	{
-		filter = context->argument(3).toInt32();
+		filter = context->argument(nextparam - 1).toInt32();
 	}
 	if (context->argumentCount() > nextparam++)
 	{
-		seen = context->argument(4).toBool();
+		seen = context->argument(nextparam - 1).toBool();
 	}
 	gridStartIterateArea(x1, y1, x2, y2);
 	QList<BASE_OBJECT *> list;
@@ -3243,9 +3244,9 @@ static QScriptValue js_hackMarkTiles(QScriptContext *context, QScriptEngine *)
 		QString label = context->argument(0).toString();
 		SCRIPT_ASSERT(context, labels.contains(label), "Label %s not found", label.toUtf8().constData());
 		labeltype &l = labels[label];
-		for (int x = l.p1.x; x < l.p2.x; x++)
+		for (int x = map_coord(l.p1.x); x < map_coord(l.p2.x); x++)
 		{
-			for (int y = l.p1.y; y < l.p2.y; y++)
+			for (int y = map_coord(l.p1.y); y < map_coord(l.p2.y); y++)
 			{
 				MAPTILE *psTile = mapTile(x, y);
 				psTile->tileInfoBits |= BITS_MARKED;
