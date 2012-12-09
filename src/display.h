@@ -226,4 +226,9 @@ extern bool ctrlShiftDown(void);
 
 extern UDWORD getTargetType(void);
 
+void setZoom(float zoomSpeed, float zoomTarget);
+float getZoom();
+float getZoomSpeed();
+void zoom();
+
 #endif // __INCLUDED_SRC_DISPLAY_H__

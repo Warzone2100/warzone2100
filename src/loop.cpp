@@ -212,6 +212,7 @@ static GAMECODE renderLoop()
 		if (!scrollPaused() && dragBox3D.status != DRAG_DRAGGING && intMode != INT_INGAMEOP )
 		{
 			scroll();
+			zoom();
 		}
 	}
 	else  // paused
@@ -222,6 +223,7 @@ static GAMECODE renderLoop()
 		if(dragBox3D.status != DRAG_DRAGGING)
 		{
 			scroll();
+			zoom();
 		}
 
 		if(InGameOpUp || isInGamePopupUp)		// ingame options menu up, run it!

@@ -54,8 +54,8 @@ extern bool showORDERS;
 extern bool showLevelName;
 
 extern void	setViewAngle(SDWORD angle);
-extern UDWORD getViewDistance(void);
-extern void	setViewDistance(UDWORD dist);
+extern float getViewDistance(void);
+extern void setViewDistance(float dist);
 extern bool	radarOnScreen;
 extern bool	radarPermitted;
 extern bool rangeOnScreen; // Added to get sensor/gun range on screen.  -Q 5-10-05

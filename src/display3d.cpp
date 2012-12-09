@@ -167,7 +167,7 @@ iView	player;
 static Vector3i	imdRot,imdRot2;
 
 /// How far away are we from the terrain
-static UDWORD distance;
+static float distance;
 
 /// Stores the screen coordinates of the transformed terrain tiles
 static Vector3i tileScreenInfo[VISIBLE_YTILES+1][VISIBLE_XTILES+1];
@@ -1947,13 +1947,13 @@ void	setViewAngle(SDWORD angle)
 }
 
 /// Get the distance at which the player views the world
-UDWORD getViewDistance(void)
+float getViewDistance(void)
 {
 	return distance;
 }
 
 /// Set the distance at which the player views the world
-void	setViewDistance(UDWORD dist)
+void setViewDistance(float dist)
 {
 	distance = dist;
 }

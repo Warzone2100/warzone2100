@@ -2065,12 +2065,11 @@ static QScriptValue js_setStructureLimits(QScriptContext *context, QScriptEngine
 
 //-- \subsection{centreView(x, y)}
 //-- Center the player's camera at the given position.
-static QScriptValue js_centreView(QScriptContext *context, QScriptEngine *engine)
+static QScriptValue js_centreView(QScriptContext *context, QScriptEngine *)
 {
 	int x = context->argument(0).toInt32();
 	int y = context->argument(1).toInt32();
 	setViewPos(x, y, false);
-	Q_UNUSED(engine);
 	return QScriptValue();
 }
 
@@ -3271,9 +3270,19 @@ static QScriptValue js_hackMarkTiles(QScriptContext *context, QScriptEngine *)
 //-- Slide the camera over to the given position on the map. (3.2+ only)
 static QScriptValue js_cameraSlide(QScriptContext *context, QScriptEngine *)
 {
-	int x = context->argument(0).toNumber();
-	int y = context->argument(1).toNumber();
+	float x = context->argument(0).toNumber();
+	float y = context->argument(1).toNumber();
 	requestRadarTrack(x, y);
+	return QScriptValue();
+}
+
+//-- \subsection{cameraZoom(z, speed)}
+//-- Slide the camera to the given zoom distance. Normal camera zoom ranges between 500 and 5000.
+static QScriptValue js_cameraZoom(QScriptContext *context, QScriptEngine *)
+{
+	float z = context->argument(0).toNumber();
+	float speed = context->argument(1).toNumber();
+	setZoom(speed, z);
 	return QScriptValue();
 }
 
@@ -3368,6 +3377,7 @@ bool registerFunctions(QScriptEngine *engine, QString scriptName)
 	engine->globalObject().setProperty("setSky", engine->newFunction(js_setSky));
 	engine->globalObject().setProperty("cameraSlide", engine->newFunction(js_cameraSlide));
 	engine->globalObject().setProperty("cameraTrack", engine->newFunction(js_cameraTrack));
+	engine->globalObject().setProperty("cameraZoom", engine->newFunction(js_cameraZoom));
 	engine->globalObject().setProperty("resetArea", engine->newFunction(js_resetArea));
 
 	// horrible hacks follow -- do not rely on these being present!

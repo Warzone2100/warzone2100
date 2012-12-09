@@ -56,6 +56,7 @@
 #include "keymap.h"
 #include "intimage.h"
 #include "mechanics.h"
+#include "lighting.h"
 #include "ingameop.h"
 #include "oprint.h"
 #include "warcam.h"
@@ -91,6 +92,10 @@ static const CURSOR arnMPointers[POSSIBLE_TARGETS][POSSIBLE_SELECTIONS] =
 
 /// acceleration on scrolling. Game Option.
 UDWORD	scroll_speed_accel;
+
+/// Control zoom. Add an amount to zoom this much each second.
+static float zoom_speed = 0.0f;
+static float zoom_target = 0.0f;
 
 static bool	buildingDamaged(STRUCTURE *psStructure);
 static bool	repairDroidSelected(UDWORD player);
@@ -163,6 +168,40 @@ static bool bLasSatStruct;
 // Local prototypes
 static MOUSE_TARGET	itemUnderMouse(BASE_OBJECT **ppObjUnderCursor);
 static bool	bShakingPermitted = true;
+
+float getZoom()
+{
+	return zoom_target;
+}
+
+float getZoomSpeed()
+{
+	return fabsf(zoom_speed);
+}
+
+void setZoom(float zoomSpeed, float zoomTarget)
+{
+	float zoom_origin = getViewDistance();
+	zoom_speed = zoomSpeed;
+	zoom_target = zoomTarget;
+	zoom_speed *= zoom_target > zoom_origin ? 1 : -1; // get direction
+}
+
+void zoom()
+{
+	if (zoom_speed != 0.0f)
+	{
+		float distance = getViewDistance();
+		distance += graphicsTimeAdjustedIncrement(zoom_speed);
+		if ((zoom_speed > 0.0f && distance > zoom_target) || (zoom_speed <= 0.0f && distance < zoom_target))
+		{
+			distance = zoom_target; // reached target
+			zoom_speed = 0.0f;
+		}
+		setViewDistance(distance);
+		UpdateFogDistance(distance);
+	}
+}
 
 bool isMouseOverRadar()
 {
