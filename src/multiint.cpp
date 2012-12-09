@@ -2501,7 +2501,7 @@ static void SendFireUp(void)
 	NETbeginEncode(NETbroadcastQueue(), NET_FIREUP);
 		NETuint32_t(&randomSeed);
 	NETend();
-
+	printSearchPath();
 	gameSRand(randomSeed);  // Set the seed for the synchronised random number generator. The clients will use the same seed.
 }
 
