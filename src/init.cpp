@@ -368,8 +368,9 @@ bool rebuildSearchPath(searchPathMode mode, bool force, const char *current_map)
 				// Add the selected map first, for mapmod support
 				if (current_map != NULL)
 				{
-					std::string realPathAndDir = std::string(PHYSFS_getRealDir(current_map)) + current_map;
-					PHYSFS_addToSearchPath(realPathAndDir.c_str(), PHYSFS_APPEND);
+					QString realPathAndDir = QString::fromUtf8(PHYSFS_getRealDir(current_map)) + current_map;
+					realPathAndDir.replace('/', PHYSFS_getDirSeparator()); // Windows fix
+					PHYSFS_addToSearchPath(realPathAndDir.toUtf8().constData(), PHYSFS_APPEND);
 				}
 				curSearchPath = searchPathRegistry;
 				while (curSearchPath->lowerPriority)

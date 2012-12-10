@@ -395,8 +395,8 @@ void addDroid(DROID *psDroidToAdd, DROID *pList[MAX_PLAYERS])
 			addObjectToFuncList(apsSensorList, (BASE_OBJECT*)psDroidToAdd, 0);
 		}
 
-		// commanders have to get their group back
-		if (psDroidToAdd->droidType == DROID_COMMAND)
+		// commanders have to get their group back if not already loaded
+		if (psDroidToAdd->droidType == DROID_COMMAND && !psDroidToAdd->psGroup)
 		{
 			psGroup = grpCreate();
 			psGroup->add(psDroidToAdd);

@@ -27,7 +27,8 @@ EXTRA_DIST = \
 	configs \
 	Tests.xcodeproj
 
-TESTS = maptest modeltest qtscripttest
+# qtscripttest commented out for 3.1
+TESTS = maptest modeltest 
 
 maplist.txt:
 	(cd $(abs_top_srcdir)/data ; find base mp -name game.map > $(abs_top_builddir)/tests/maplist.txt )
