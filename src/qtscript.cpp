@@ -926,7 +926,7 @@ bool triggerEventChat(int from, int to, const char *message)
 //__ Message may be undefined.
 bool triggerEventBeacon(int from, int to, const char *message, int x, int y)
 {
-	for (int i = 0; i < scripts.size() && message; ++i)
+	for (int i = 0; i < scripts.size(); ++i)
 	{
 		QScriptEngine *engine = scripts.at(i);
 		int me = engine->globalObject().property("me").toInt32();
@@ -942,6 +942,26 @@ bool triggerEventBeacon(int from, int to, const char *message, int x, int y)
 				args += QScriptValue(message);
 			}
 			callFunction(engine, "eventBeacon", args);
+		}
+	}
+	return true;
+}
+
+//__ \subsection{eventBeaconRemoved(from, to)}
+//__ An event that is run whenever a beacon message is removed. The \emph{from} parameter is the
+//__ player sending the beacon. For the moment, the \emph{to} parameter is always the script player.
+bool triggerEventBeaconRemoved(int from, int to)
+{
+	for (int i = 0; i < scripts.size(); ++i)
+	{
+		QScriptEngine *engine = scripts.at(i);
+		int me = engine->globalObject().property("me").toInt32();
+		if (me == to)
+		{
+			QScriptValueList args;
+			args += QScriptValue(from);
+			args += QScriptValue(to);
+			callFunction(engine, "eventBeaconRemoved", args);
 		}
 	}
 	return true;

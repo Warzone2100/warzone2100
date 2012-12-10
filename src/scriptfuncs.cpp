@@ -9497,6 +9497,7 @@ bool scrRemoveBeacon(void)
 	{
 		//delete it
 		removeMessage(psMessage, player);
+		triggerEventBeaconRemoved(sender, player);
 	}
 
 	return true;

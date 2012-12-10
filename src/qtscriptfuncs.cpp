@@ -2883,6 +2883,7 @@ static QScriptValue js_removeBeacon(QScriptContext *context, QScriptEngine *engi
 			if (psMessage)
 			{
 				removeMessage(psMessage, i);
+				triggerEventBeaconRemoved(me, i);
 			}
 		}
 	}
