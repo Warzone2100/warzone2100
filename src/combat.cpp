@@ -203,23 +203,10 @@ bool combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 
 	}
 
-	// fire while moving modifiers
-	if (psAttacker->type == OBJ_DROID &&
-		((DROID *)psAttacker)->sMove.Status != MOVEINACTIVE)
+	if (psAttacker->type == OBJ_DROID && ((DROID *)psAttacker)->sMove.Status != MOVEINACTIVE
+	    && !psStats->fireOnMove)
 	{
-		switch (psStats->fireOnMove)
-		{
-		case FOM_NO:
-			// Can't fire while moving
-			return false;
-			break;
-		case FOM_PARTIAL:
-			resultHitChance = FOM_PARTIAL_ACCURACY_PENALTY * resultHitChance / 100;
-			break;
-		case FOM_YES:
-			// can fire while moving
-			break;
-		}
+		return false;	// Can't fire while moving
 	}
 
 	/* -------!!! From that point we are sure that we are firing !!!------- */

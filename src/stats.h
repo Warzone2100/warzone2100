@@ -200,14 +200,6 @@ extern bool loadWeaponModifiers(const char *pFileName);
 /*calls the STATS_DEALLOC macro for each set of stats*/
 extern bool statsShutDown(void);
 
-/*Deallocate the stats passed in as parameter */
-extern void statsDealloc(COMPONENT_STATS* pStats, UDWORD listSize,
-						 UDWORD structureSize);
-
-extern void deallocPropulsionTypes(void);
-extern void deallocTerrainTypes(void);
-extern void deallocTerrainTable(void);
-
 extern UDWORD getSpeedFactor(UDWORD terrainType, UDWORD propulsionType);
 //return the type of stat this ref refers to!
 extern UDWORD statType(UDWORD ref);

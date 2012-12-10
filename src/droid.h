@@ -49,9 +49,6 @@
 #define EXP_ACCURACY_BONUS		5		// accuracy of a droid is increased by this value per experience level, in %
 #define EXP_SPEED_BONUS			5		// speed of a droid is increased by this value per experience level, in %
 
-/* Misc accuracy modifiers */
-#define	FOM_PARTIAL_ACCURACY_PENALTY	50	// penalty for not being fully able to fire while moving, in %
-
 enum PICKTILE
 {
 	NO_FREE_TILE,

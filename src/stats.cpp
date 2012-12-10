@@ -95,7 +95,6 @@ UBYTE		*apCompLists[MAX_PLAYERS][COMP_NUMCOMPONENTS];
 //store for each players Structure states
 UBYTE		*apStructTypeLists[MAX_PLAYERS];
 
-static bool compareYes(const char *strToCompare, const char *strOwner);
 static bool getMovementModel(const char* movementModel, MOVEMENT_MODEL* model);
 static void storeSpeedFactor(UDWORD terrainType, UDWORD propulsionType, UDWORD speedFactor);
 
@@ -373,6 +372,22 @@ unsigned LineView::eu(unsigned int index, std::vector<std::pair<char const *, un
 	return 0;
 }
 
+/***********************************************************************************
+*	Dealloc the extra storage tables
+***********************************************************************************/
+//Deallocate the storage assigned for the Propulsion Types table
+static void deallocPropulsionTypes(void)
+{
+	free(asPropulsionTypes);
+	asPropulsionTypes = NULL;
+}
+
+//dealloc the storage assigned for the terrain table
+static void deallocTerrainTable(void)
+{
+	free(asTerrainTable);
+	asTerrainTable = NULL;
+}
 
 /*******************************************************************************
 *		Generic stats macros/functions
@@ -387,12 +402,11 @@ unsigned LineView::eu(unsigned int index, std::vector<std::pair<char const *, un
 	(listSize) = (numEntries); \
 	return true
 
-
 /*Macro to Deallocate stats*/
-#define STATS_DEALLOC(list, listSize, type) \
-	statsDealloc((COMPONENT_STATS*)(list), (listSize), sizeof(type)); \
+#define STATS_DEALLOC(list, listSize) \
+	free((COMPONENT_STATS*)(list)); \
+	listSize = 0; \
 	(list) = NULL 
-
 
 void statsInitVars(void)
 {
@@ -421,23 +435,10 @@ void statsInitVars(void)
 		maxPropulsionSpeed = 0;
 }
 
-
-/*Deallocate all the stats assigned from input data*/
-void statsDealloc(COMPONENT_STATS* pStats, UDWORD listSize, UDWORD structureSize)
-{
-	if (pStats)
-	{
-		free(pStats);
-	}
-}
-
-
-static bool allocateStatName(BASE_STATS* pStat, const char *Name)
+static void allocateStatName(BASE_STATS* pStat, const char *Name)
 {
 	pStat->pName = allocateName(Name);
-	return pStat != NULL;
 }
-
 
 /* body stats need the extra list removing */
 static void deallocBodyStats(void)
@@ -458,14 +459,14 @@ static void deallocBodyStats(void)
 /*Deallocate all the stats assigned from input data*/
 bool statsShutDown(void)
 {
-	STATS_DEALLOC(asWeaponStats, numWeaponStats, WEAPON_STATS);
+	STATS_DEALLOC(asWeaponStats, numWeaponStats);
 	deallocBodyStats();
-	STATS_DEALLOC(asBrainStats, numBrainStats, BRAIN_STATS);
-	STATS_DEALLOC(asPropulsionStats, numPropulsionStats, PROPULSION_STATS);
-	STATS_DEALLOC(asSensorStats, numSensorStats, SENSOR_STATS);
-	STATS_DEALLOC(asECMStats, numECMStats, ECM_STATS);
-	STATS_DEALLOC(asRepairStats, numRepairStats, REPAIR_STATS);
-	STATS_DEALLOC(asConstructStats, numConstructStats, CONSTRUCT_STATS);
+	STATS_DEALLOC(asBrainStats, numBrainStats);
+	STATS_DEALLOC(asPropulsionStats, numPropulsionStats);
+	STATS_DEALLOC(asSensorStats, numSensorStats);
+	STATS_DEALLOC(asECMStats, numECMStats);
+	STATS_DEALLOC(asRepairStats, numRepairStats);
+	STATS_DEALLOC(asConstructStats, numConstructStats);
 	deallocPropulsionTypes();
 	deallocTerrainTable();
 
@@ -603,14 +604,26 @@ const char *getStatName(const void * Stat)
 *		Load stats functions
 *******************************************************************************/
 
+static iIMDShape *statsGetIMD(WzConfig &ini, BASE_STATS *psStats, QString key)
+{
+	iIMDShape *retval = NULL;
+	if (ini.contains(key))
+	{
+		QString model = ini.value(key).toString();
+		retval = (iIMDShape *)resGetData("IMD", model.toUtf8().constData());
+		ASSERT(retval != NULL, "Cannot find the PIE model %s for stat %s in %s", 
+		       model.toUtf8().constData(), getStatName(psStats), ini.fileName().toUtf8().constData());
+	}
+	return retval;
+}
+
 /*Load the weapon stats from the file exported from Access*/
 bool loadWeaponStats(const char *pFileName)
 {
 	WEAPON_STATS	sStats, * const psStats = &sStats;
 	UDWORD			i, rotate, maxElevation, surfaceToAir;
 	SDWORD			minElevation;
-	UDWORD effectSize, numAttackRuns;
-	char *StatsName;
+	UDWORD numAttackRuns;
 
 	WzConfig ini(pFileName);
 	if (ini.status() != QSettings::NoError)
@@ -653,45 +666,23 @@ bool loadWeaponStats(const char *pFileName)
 		psStats->incenDamage = ini.value("incenDamage").toUInt();
 		psStats->incenRadius = ini.value("incenRadius").toUInt();
 		psStats->radiusLife = ini.value("radiusLife").toUInt();
-		psStats->flightSpeed = ini.value("flightSpeed").toUInt();
+		psStats->flightSpeed = ini.value("flightSpeed", 1).toUInt();
 		rotate = ini.value("rotate").toUInt();
 		minElevation = ini.value("minElevation").toInt();
 		maxElevation = ini.value("maxElevation").toUInt();
 		psStats->recoilValue = ini.value("recoilValue").toUInt();
 		psStats->minRange = ini.value("minRange").toUInt();
-		effectSize = ini.value("effectSize").toUInt();
+		psStats->effectSize = ini.value("effectSize").toUInt();
 		surfaceToAir = ini.value("surfaceToAir").toUInt();
 		numAttackRuns = ini.value("numAttackRuns").toUInt();
 		psStats->designable = ini.value("designable").toBool();
 		psStats->penetrate = ini.value("penetrate").toBool();
+		// weapon size limitation
+		psStats->weaponSize = (WEAPON_SIZE)ini.value("weaponSize", WEAPON_SIZE_ANY).toInt();
 
-//#ifdef DEBUG
-// Hack to get the current stats working... a zero flight speed value will cause an assert in projectile.c line 957
-//  I'm not sure if this should be on debug only...
-//    ... the last thing we want is for a zero value to get through on release (with no asserts!)
-//
-// Anyway if anyone has a problem with this, take it up with Tim ... we have a frank and open discussion about it.
-#define DEFAULT_FLIGHTSPEED (500)
-		if (psStats->flightSpeed==0)
-		{
-			debug( LOG_NEVER, "STATS: Zero Flightspeed for %s - using default of %d\n", list[i].toUtf8().constData(), DEFAULT_FLIGHTSPEED );
-			psStats->flightSpeed=DEFAULT_FLIGHTSPEED;
-		}
+		ASSERT(psStats->flightSpeed > 0, "Invalid flight speed for %s", list[i].toUtf8().constData());
 
-		if (ini.value("weaponSize", 0).toInt() < 0) // neat hack to avoid breaking existing mods while introducing new functionality
-		{
-			psStats->weaponSize = (WEAPON_SIZE)abs(ini.value("weaponSize", 0).toInt() + 1);
-		}
-		else
-		{
-			psStats->weaponSize = WEAPON_SIZE_ANY; // meaning no limitations
-		}
-
-		if (!allocateStatName((BASE_STATS *)psStats, list[i].toUtf8().constData()))
-		{
-			return false;
-		}
-
+		allocateStatName((BASE_STATS *)psStats, list[i].toUtf8().constData());
 		psStats->ref = REF_WEAPON_START + i;
 
 		//multiply time stats
@@ -701,106 +692,18 @@ bool loadWeaponStats(const char *pFileName)
 		psStats->reloadTime *= WEAPON_TIME;
 
 		//get the IMD for the component
-		QString GfxFile = ini.value("model").toString();
-		if (GfxFile.compare("0") != 0)
+		psStats->pIMD = statsGetIMD(ini, psStats, "model");
+		psStats->pMountGraphic = statsGetIMD(ini, psStats, "mountModel");
+		if (GetGameMode() == GS_NORMAL)
 		{
-			psStats->pIMD = (iIMDShape *) resGetData("IMD", GfxFile.toUtf8().constData());
-			if (psStats->pIMD == NULL)
-			{
-				debug(LOG_FATAL, "Cannot find the weapon PIE for record %s", getStatName(psStats));
-				return false;
-			}
+			psStats->pMuzzleGraphic = statsGetIMD(ini, psStats, "muzzleGfx");
+			psStats->pInFlightGraphic = statsGetIMD(ini, psStats, "flightGfx");
+			psStats->pTargetHitGraphic = statsGetIMD(ini, psStats, "hitGfx");
+			psStats->pTargetMissGraphic = statsGetIMD(ini, psStats, "missGfx");
+			psStats->pWaterHitGraphic = statsGetIMD(ini, psStats, "waterGfx");
+			psStats->pTrailGraphic = statsGetIMD(ini, psStats, "trailGfx");
 		}
-		else
-		{
-			psStats->pIMD = NULL;
-		}
-		//get the rest of the imd's
-		QString mountGfx = ini.value("mountModel").toString();
-		if (mountGfx.compare("0") != 0)
-		{
-			psStats->pMountGraphic = (iIMDShape *) resGetData("IMD", mountGfx.toUtf8().constData());
-			if (psStats->pMountGraphic == NULL)
-			{
-				debug(LOG_FATAL, "Cannot find the mount PIE for record %s", getStatName(psStats));
-				return false;
-			}
-		}
-		else
-		{
-			psStats->pMountGraphic = NULL;
-		}
-
-		if(GetGameMode() == GS_NORMAL)
-		{
-			psStats->pMuzzleGraphic = (iIMDShape *) resGetData("IMD", ini.value("muzzleGfx").toString().toUtf8().constData());
-			if (psStats->pMuzzleGraphic == NULL)
-			{
-				debug(LOG_FATAL, "Cannot find the muzzle PIE for record %s", getStatName(psStats));
-				return false;
-			}
-
-			psStats->pInFlightGraphic = (iIMDShape *) resGetData("IMD", ini.value("flightGfx").toString().toUtf8().constData());
-			if (psStats->pInFlightGraphic == NULL)
-			{
-				debug(LOG_FATAL, "Cannot find the flight PIE for record %s", getStatName(psStats));
-				return false;
-			}
-
-			psStats->pTargetHitGraphic = (iIMDShape *) resGetData("IMD", ini.value("hitGfx").toString().toUtf8().constData());
-			if (psStats->pTargetHitGraphic == NULL)
-			{
-				debug(LOG_FATAL, "Cannot find the target hit PIE for record %s", getStatName(psStats));
-				return false;
-			}
-
-			psStats->pTargetMissGraphic = (iIMDShape *) resGetData("IMD", ini.value("missGfx").toString().toUtf8().constData());
-			if (psStats->pTargetMissGraphic == NULL)
-			{
-				debug(LOG_FATAL, "Cannot find the target miss PIE for record %s", getStatName(psStats));
-				return false;
-			}
-
-			psStats->pWaterHitGraphic = (iIMDShape *) resGetData("IMD", ini.value("waterGfx").toString().toUtf8().constData());
-			if (psStats->pWaterHitGraphic == NULL)
-			{
-				debug(LOG_FATAL, "Cannot find the water hit PIE for record %s", getStatName(psStats));
-				return false;
-			}
-			//trail graphic can be null
-			if (strcmp(ini.value("trailGfx").toString().toUtf8().constData(), "0"))
-			{
-				psStats->pTrailGraphic = (iIMDShape *) resGetData("IMD", ini.value("trailGfx").toString().toUtf8().constData());
-				if (psStats->pTrailGraphic == NULL)
-				{
-					debug(LOG_FATAL, "Cannot find the trail PIE for record %s", getStatName(psStats));
-					return false;
-				}
-			}
-			else
-			{
-				psStats->pTrailGraphic = NULL;
-			}
-		}
-		QString fireOnMove = ini.value("fireOnMove").toString();
-		//set the fireOnMove
-		if (fireOnMove.compare("NO") == 0)
-		{
-			psStats->fireOnMove = FOM_NO;
-		}
-		else if (fireOnMove.compare("PARTIAL") == 0)
-		{
-			psStats->fireOnMove = FOM_PARTIAL;
-		}
-		else if (fireOnMove.compare("YES") == 0)
-		{
-			psStats->fireOnMove = FOM_YES;
-		}
-		else
-		{
-			debug( LOG_ERROR, "Invalid fire on move flag for weapon %s - assuming YES", getStatName(psStats) );
-			psStats->fireOnMove = FOM_YES;
-		}
+		psStats->fireOnMove = ini.value("fireOnMove", true).toBool();
 
 		QString weaponClass = ini.value("weaponClass").toString();
 		//set the weapon class
@@ -846,46 +749,14 @@ bool loadWeaponStats(const char *pFileName)
 			return false;
 		}
 
-		StatsName=psStats->pName;
+		// set the face Player value
+		psStats->facePlayer = ini.value("facePlayer", false).toBool();
 
-		//set the face Player value
-		if (compareYes(ini.value("facePlayer").toString().toUtf8().constData(), StatsName))
-		{
-			psStats->facePlayer = true;
-		}
-		else
-		{
-			psStats->facePlayer = false;
-		}
-
-		//set the In flight face Player value
-		if (compareYes(ini.value("faceInFlight").toString().toUtf8().constData(), StatsName))
-		{
-			psStats->faceInFlight = true;
-		}
-		else
-		{
-			psStats->faceInFlight = false;
-		}
+		// set the In flight face Player value
+		psStats->faceInFlight = ini.value("faceInFlight", false).toBool();
 
 		//set the light world value
-		if (compareYes(ini.value("lightWorld").toString().toUtf8().constData(), StatsName))
-		{
-			psStats->lightWorld = true;
-		}
-		else
-		{
-			psStats->lightWorld = false;
-		}
-
-		//set the effect size
-		if (effectSize > UBYTE_MAX)
-		{
-			ASSERT( false,"loadWeaponStats: effectSize is greater than 255 for weapon %s",
-				getStatName(psStats) );
-			return false;
-		}
-		psStats->effectSize = (UBYTE)effectSize;
+		psStats->lightWorld = ini.value("lightWorld").toBool();
 
 		//set the rotate angle
 		if (rotate > UBYTE_MAX)
@@ -942,7 +813,6 @@ bool loadWeaponStats(const char *pFileName)
 			return false;
 		}
 		psStats->vtolAttackRuns = (UBYTE)numAttackRuns;
-
 
 		//set the weapon sounds to default value
 		psStats->iAudioFireID = NO_SOUND;
@@ -1029,16 +899,9 @@ bool loadBodyStats(const char *pFileName)
 			ASSERT(false, "Unknown body size for %s", getStatName(psStats));
 			return false;
 		}
-		if (ini.contains("model"))
-		{
-			psStats->pIMD = (iIMDShape *)resGetData("IMD", ini.value("model").toString().toUtf8().constData());
-			ASSERT_OR_RETURN(false, psStats->pIMD, "Cannot find the body PIE for record %s", getStatName(psStats));
-		}
-		if (ini.contains("flameModel"))
-		{
-			psStats->pFlameIMD = (iIMDShape *)resGetData("IMD", ini.value("flameModel").toString().toUtf8().constData());
-			ASSERT_OR_RETURN(false, psStats->pIMD, "Cannot find the flame PIE for record %s", getStatName(psStats));
-		}
+		psStats->pIMD = statsGetIMD(ini, psStats, "model");
+		psStats->pFlameIMD = statsGetIMD(ini, psStats, "flameModel");
+
 		ini.endGroup();
 
 		allocateStatName((BASE_STATS *)psStats, list[i].toUtf8().constData());
@@ -1090,35 +953,14 @@ bool loadBrainStats(const char *pFileName)
 		allocateStatName((BASE_STATS *)psStats, list[i].toUtf8().constData());
 
 		// check weapon attached
-		QString weaponName = ini.value("turret").toString();
-		if (weaponName.compare("0") == 0)
+		psStats->psWeaponStat = NULL;
+		if (ini.contains("turret"))
 		{
-			psStats->psWeaponStat = NULL;
+			int weapon = getCompFromName(COMP_WEAPON, ini.value("turret").toString().toUtf8().constData());
+			ASSERT_OR_RETURN(false, weapon >= 0, "Unable to find weapon for brain %s", psStats->pName);
+			psStats->psWeaponStat = asWeaponStats + weapon;
 		}
-		else
-		{
-			int weapon = getCompFromName(COMP_WEAPON, weaponName.toUtf8().constData());
-			// if weapon not found - error
-			if (weapon == -1)
-			{
-				debug(LOG_FATAL, "Unable to find Weapon %s for brain %s", weaponName.toUtf8().constData(), psStats->pName);
-				return false;
-			}
-			else
-			{
-				//Weapon found, alloc this to the brain
-				psStats->psWeaponStat = asWeaponStats + weapon;
-			}
-		}
-		// All brains except ZNULLBRAIN available in design screen
-		if (strcmp(psStats->pName, "ZNULLBRAIN") == 0)
-		{
-			psStats->designable = false;
-		}
-		else
-		{
-			psStats->designable = true;
-		}
+		psStats->designable = ini.value("designable", false).toBool();
 		ini.endGroup();
 		// save the stats
 		statsSetBrain(psStats, i);
@@ -1211,11 +1053,7 @@ bool loadPropulsionStats(const char *pFileName)
 		psStats->deceleration = ini.value("deceleration", 800).toInt();
 		psStats->skidDeceleration = ini.value("skidDeceleration", 600).toInt();
 		psStats->pIMD = NULL;
-		if (ini.contains("model"))
-		{
-			psStats->pIMD = (iIMDShape *) resGetData("IMD", ini.value("model").toString().toUtf8().constData());
-			ASSERT_OR_RETURN(false, psStats->pIMD, "Cannot find the propulsion PIE for record %s", getStatName(psStats));
-		}
+		psStats->pIMD = statsGetIMD(ini, psStats, "model");
 		if (!getPropulsionType(ini.value("type").toString().toUtf8().constData(), &psStats->propulsionType))
 		{
 			debug(LOG_FATAL, "loadPropulsionStats: Invalid Propulsion type for %s", getStatName(psStats));
@@ -1294,10 +1132,7 @@ bool loadSensorStats(const char *pFileName)
 		psStats->power = ini.value("power").toInt();
 		psStats->designable = ini.value("designable", false).toBool();
 
-		if (!allocateStatName((BASE_STATS *)psStats, list[i].toUtf8().constData()))
-		{
-			return false;
-		}
+		allocateStatName((BASE_STATS *)psStats, list[i].toUtf8().constData());
 		psStats->ref = REF_SENSOR_START + i;
 
 		QString location = ini.value("location").toString();
@@ -1346,34 +1181,8 @@ bool loadSensorStats(const char *pFileName)
 		psStats->time *= WEAPON_TIME;
 
 		//get the IMD for the component
-		QString GfxFile = ini.value("sensorModel").toString();
-		if (GfxFile.compare("0") != 0)
-		{
-			psStats->pIMD = (iIMDShape *) resGetData("IMD", GfxFile.toUtf8().constData());
-			if (psStats->pIMD == NULL)
-			{
-				debug(LOG_FATAL, "Cannot find the sensor PIE for record %s", getStatName(psStats));
-				return false;
-			}
-		}
-		else
-		{
-			psStats->pIMD = NULL;
-		}
-		QString mountGfx = ini.value("mountModel").toString();
-		if (mountGfx.compare("0") != 0)
-		{
-			psStats->pMountGraphic = (iIMDShape *) resGetData("IMD", mountGfx.toUtf8().constData());
-			if (psStats->pMountGraphic == NULL)
-			{
-				debug(LOG_FATAL, "Cannot find the mount PIE for record %s", getStatName(psStats));
-				return false;
-			}
-		}
-		else
-		{
-			psStats->pMountGraphic = NULL;
-		}
+		psStats->pIMD = statsGetIMD(ini, psStats, "sensorModel");
+		psStats->pMountGraphic = statsGetIMD(ini, psStats, "mountModel");
 
 		ini.endGroup();
 		//save the stats
@@ -1424,10 +1233,7 @@ bool loadECMStats(const char *pFileName)
 		psStats->power = ini.value("power").toInt();
 		psStats->designable = ini.value("designable", false).toBool();
 
-		if (!allocateStatName((BASE_STATS *)psStats, list[i].toUtf8().constData()))
-		{
-			return false;
-		}
+		allocateStatName((BASE_STATS *)psStats, list[i].toUtf8().constData());
 		psStats->ref = REF_ECM_START + i;
 
 		QString location = ini.value("location").toString();
@@ -1445,35 +1251,8 @@ bool loadECMStats(const char *pFileName)
 		}
 
 		//get the IMD for the component
-		QString GfxFile = ini.value("sensorModel").toString();
-		if (GfxFile.compare("0") != 0)
-		{
-			psStats->pIMD = (iIMDShape *) resGetData("IMD", GfxFile.toUtf8().constData());
-			if (psStats->pIMD == NULL)
-			{
-				debug(LOG_FATAL, "Cannot find the ECM PIE for record %s", getStatName(psStats));
-				return false;
-			}
-		}
-		else
-		{
-			psStats->pIMD = NULL;
-		}
-
-		QString mountGfx = ini.value("mountModel").toString();
-		if (mountGfx.compare("0") != 0)
-		{
-			psStats->pMountGraphic = (iIMDShape *) resGetData("IMD", mountGfx.toUtf8().constData());
-			if (psStats->pMountGraphic == NULL)
-			{
-				debug(LOG_FATAL, "Cannot find the mount PIE for record %s", getStatName(psStats));
-				return false;
-			}
-		}
-		else
-		{
-			psStats->pMountGraphic = NULL;
-		}
+		psStats->pIMD = statsGetIMD(ini, psStats, "sensorModel");
+		psStats->pMountGraphic = statsGetIMD(ini, psStats, "mountModel");
 
 		ini.endGroup();
 		//save the stats
@@ -1521,14 +1300,10 @@ bool loadRepairStats(const char *pFileName)
 		psStats->weight = ini.value("weight", 0).toInt();
 		psStats->repairArmour = ini.value("repairArmour").toBool();
 		psStats->repairPoints = ini.value("repairPoints").toInt();
-		psStats->time = ini.value("time", 0).toInt();
+		psStats->time = ini.value("time", 0).toInt() * WEAPON_TIME;
 		psStats->designable = ini.value("designable", false).toBool();
 
-		if (!allocateStatName((BASE_STATS *)psStats, list[i].toUtf8().constData()))
-		{
-			return false;
-		}
-
+		allocateStatName((BASE_STATS *)psStats, list[i].toUtf8().constData());
 		psStats->ref = REF_REPAIR_START + i;
 
 		QString location = ini.value("location").toString();
@@ -1545,50 +1320,12 @@ bool loadRepairStats(const char *pFileName)
 			ASSERT( false, "Invalid Repair location" );
 		}
 
-		//multiply time stats
-		psStats->time *= WEAPON_TIME;
-
 		//check its not 0 since we will be dividing by it at a later stage
-		if (psStats->time == 0)
-		{
-
-			ASSERT( false, "loadRepairStats: the delay time cannot be zero for %s",
-				psStats->pName );
-
-			psStats->time = 1;
-		}
+		ASSERT_OR_RETURN(false, psStats->time > 0, "Repair delay cannot be zero for %s", getStatName(psStats));
 
 		//get the IMD for the component
-		QString GfxFile = ini.value("model").toString();
-		if (GfxFile.compare("0") != 0)
-		{
-			psStats->pIMD = (iIMDShape *) resGetData("IMD", GfxFile.toUtf8().constData());
-			if (psStats->pIMD == NULL)
-			{
-				debug(LOG_FATAL, "Cannot find the Repair PIE for record %s", getStatName(psStats));
-				return false;
-			}
-		}
-		else
-		{
-			psStats->pIMD = NULL;
-		}
-
-		QString mountGfx = ini.value("mountModel").toString();
-		if (mountGfx.compare("0") != 0)
-		{
-			psStats->pMountGraphic = (iIMDShape *) resGetData("IMD", mountGfx.toUtf8().constData());
-			if (psStats->pMountGraphic == NULL)
-			{
-				debug(LOG_FATAL, "Cannot find the Repair mount PIE for record %s", getStatName(psStats));
-				return false;
-			}
-		}
-		else
-		{
-			//set to NULL
-			psStats->pMountGraphic = NULL;
-		}
+		psStats->pIMD = statsGetIMD(ini, psStats, "model");
+		psStats->pMountGraphic = statsGetIMD(ini, psStats, "mountModel");
 
 		ini.endGroup();
 		//save the stats
@@ -1638,44 +1375,12 @@ bool loadConstructStats(const char *pFileName)
 		psStats->constructPoints = ini.value("constructPoints").toInt();
 		psStats->designable = ini.value("designable", false).toBool();
 
-		if (!allocateStatName((BASE_STATS *)psStats, list[i].toUtf8().constData()))
-		{
-			return false;
-		}
-
+		allocateStatName((BASE_STATS *)psStats, list[i].toUtf8().constData());
 		psStats->ref = REF_CONSTRUCT_START + i;
 
 		//get the IMD for the component
-		QString GfxFile = ini.value("sensorModel").toString();
-		if (GfxFile.compare("0") != 0)
-		{
-			psStats->pIMD = (iIMDShape *) resGetData("IMD", GfxFile.toUtf8().constData());
-			if (psStats->pIMD == NULL)
-			{
-				debug(LOG_FATAL, "Cannot find the constructor PIE for record %s", getStatName(psStats));
-				return false;
-			}
-		}
-		else
-		{
-			psStats->pIMD = NULL;
-		}
-
-		QString mountGfx = ini.value("mountModel").toString();
-		if (mountGfx.compare("0") != 0)
-		{
-			psStats->pMountGraphic = (iIMDShape *) resGetData("IMD", mountGfx.toUtf8().constData());
-			if (psStats->pMountGraphic == NULL)
-			{
-				debug(LOG_FATAL, "Cannot find the mount PIE for record %s", getStatName(psStats));
-				return false;
-			}
-		}
-		else
-		{
-			//set to NULL
-			psStats->pMountGraphic = NULL;
-		}
+		psStats->pIMD = statsGetIMD(ini, psStats, "sensorModel");
+		psStats->pMountGraphic = statsGetIMD(ini, psStats, "mountModel");
 
 		ini.endGroup();
 		//save the stats
@@ -2020,22 +1725,16 @@ bool loadWeaponSounds(const char *pFileName)
 	return true;
 }
 
-/*Load the Weapon Effect Modifiers from the file exported from Access*/
 bool loadWeaponModifiers(const char *pFileName)
 {
-	PROPULSION_TYPE propInc;
-	WEAPON_EFFECT effectInc;
-	UDWORD i, j;
-	QString modifier, propulsionName;
-
 	//initialise to 100%
-	for (i=0; i < WE_NUMEFFECTS; i++)
+	for (int i = 0; i < WE_NUMEFFECTS; i++)
 	{
-		for (j=0; j < PROPULSION_TYPE_NUM; j++)
+		for (int j = 0; j < PROPULSION_TYPE_NUM; j++)
 		{
 			asWeaponModifier[i][j] = 100;
 		}
-		for (j = 0; j < SIZE_NUM; j++)
+		for (int j = 0; j < SIZE_NUM; j++)
 		{
 			asWeaponModifierBody[i][j] = 100;
 		}
@@ -2046,49 +1745,41 @@ bool loadWeaponModifiers(const char *pFileName)
 		debug(LOG_ERROR, "Could not open %s", pFileName);
 	}
 	QStringList list = ini.childGroups();
-	for (i=0; i < list.size(); i++)
+	for (int i = 0; i < list.size(); i++)
 	{
-		ini.beginGroup(list[i]);
-		propulsionName = ini.value("propulsionName").toString();
-		QStringList propulsionNames = propulsionName.split(",");
-		modifier = ini.value("modifier").toString();
-		QStringList modifiers = modifier.split(",");
+		WEAPON_EFFECT effectInc;
+		PROPULSION_TYPE propInc;
 
+		ini.beginGroup(list[i]);
 		//get the weapon effect inc
 		if (!getWeaponEffect(list[i].toUtf8().constData(), &effectInc))
 		{
 			debug(LOG_FATAL, "Invalid Weapon Effect - %s", list[i].toUtf8().constData());
 			continue;
 		}
-		for (int x = 0; x < propulsionNames.size(); ++x)
+		QStringList keys = ini.childKeys();
+		for (int j = 0; j < keys.size(); j++)
 		{
-			if (modifiers[x].toUInt() > UWORD_MAX)
+			QString propulsion = keys.at(j);
+			int modifier = ini.value(keys.at(j)).toInt();
+			if (!getPropulsionType(keys.at(j).toUtf8().data(), &propInc))
 			{
-				debug(LOG_FATAL, "Modifier for effect %s, prop type %s is too large", 
-				      list[i].toUtf8().constData(), propulsionNames[x].toUtf8().data());
-				continue;
-			}
-			//get the propulsion inc
-			if (!getPropulsionType(propulsionNames[x].toUtf8().data(), &propInc))
-			{
-				BODY_SIZE body = SIZE_NUM;
 				// If not propulsion, must be body
-				if (!getBodySize(propulsionNames[x].toUtf8().data(), &body))
+				BODY_SIZE body = SIZE_NUM;
+				if (!getBodySize(keys.at(j).toUtf8().data(), &body))
 				{
-					debug(LOG_FATAL, "Invalid Propulsion or Body type - %s", propulsionNames[x].toUtf8().constData());
+					debug(LOG_FATAL, "Invalid Propulsion or Body type - %s", keys.at(j).toUtf8().constData());
 					continue;
 				}
-				asWeaponModifierBody[effectInc][body] = modifiers[x].toDouble();
+				asWeaponModifierBody[effectInc][body] = modifier;
 			}
-			else
+			else // is propulsion
 			{
-				//store in the appropriate index
-				asWeaponModifier[effectInc][propInc] = (UWORD)modifiers[x].toDouble();
+				asWeaponModifier[effectInc][propInc] = modifier;
 			}
 		}
 		ini.endGroup();
 	}
-
 	return true;
 }
 
@@ -2151,23 +1842,6 @@ bool loadPropulsionSounds(const char *pFileName)
 	}
 
 	return(true);
-}
-
-/***********************************************************************************
-*	Dealloc the extra storage tables
-***********************************************************************************/
-//Deallocate the storage assigned for the Propulsion Types table
-void deallocPropulsionTypes(void)
-{
-	free(asPropulsionTypes);
-	asPropulsionTypes = NULL;
-}
-
-//dealloc the storage assigned for the terrain table
-void deallocTerrainTable(void)
-{
-	free(asTerrainTable);
-	asTerrainTable = NULL;
 }
 
 //store the speed Factor in the terrain table
@@ -2338,25 +2012,6 @@ unsigned int componentType(const char* pType)
 
 	ASSERT( false, "Unknown Component Type" );
 	return 0; // Should never get here.
-}
-
-//function to compare a value with yes/no - if neither warns player!
-bool compareYes(const char* strToCompare, const char* strOwner)
-{
-	if (!strcmp(strToCompare, "YES"))
-	{
-		return true;
-	}
-	else if (!strcmp(strToCompare, "NO"))
-	{
-		return false;
-	}
-	else
-	{
-		//set default to false but continue
-		debug(LOG_FATAL, "Invalid yes/no for record %s", getName(strOwner));
-		return false;
-	}
 }
 
 //get the component Inc for a stat based on the Resource name and type

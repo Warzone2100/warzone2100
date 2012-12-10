@@ -882,7 +882,7 @@ void actionUpdateDroid(DROID *psDroid)
 					if (!isVtolDroid(psDroid)
 					 && psDroid->asWeaps[i].nStat > 0
 					 && psWeapStats->rotate
-					 && psWeapStats->fireOnMove != FOM_NO
+					 && psWeapStats->fireOnMove
 					 && aiBestNearestTarget(psDroid, &psTemp, i) >= 0)
 					{
 						if (secondaryGetState(psDroid, DSO_ATTACK_LEVEL) == DSS_ALEV_ALWAYS)
@@ -1260,7 +1260,7 @@ void actionUpdateDroid(DROID *psDroid)
 						if (!isVtolDroid(psDroid) &&
 							psDroid->psActionTarget[0]->type == OBJ_DROID &&
 							((DROID *)psDroid->psActionTarget[0])->droidType == DROID_PERSON &&
-							psWeapStats->fireOnMove != FOM_NO)
+							psWeapStats->fireOnMove)
 						{
 							chaseBloke = true;
 						}
@@ -1269,10 +1269,6 @@ void actionUpdateDroid(DROID *psDroid)
 						if (actionInAttackRange(psDroid, psDroid->psActionTarget[0], i)
 						 && !chaseBloke)
 						{
-							/* Stop the droid moving any closer */
-		//				    ASSERT( psDroid->pos.x != 0 && psDroid->pos.y != 0,
-		//						"moveUpdateUnit: Unit at (0,0)" );
-
 							/* init vtol attack runs count if necessary */
 							if ( psPropStats->propulsionType == PROPULSION_TYPE_LIFT )
 							{

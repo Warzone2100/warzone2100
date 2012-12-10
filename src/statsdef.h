@@ -367,13 +367,6 @@ enum SENSOR_TYPE
 	RADAR_DETECTOR_SENSOR,
 };
 
-enum FIREONMOVE
-{
-	FOM_NO,			///< no capability - droid must stop
-	FOM_PARTIAL,	///< partial capability - droid has 50% chance to hit
-	FOM_YES,		///< full capability - droid fires normally on move
-};
-
 enum TRAVEL_MEDIUM
 {
 	GROUND,
@@ -467,7 +460,7 @@ struct WEAPON_STATS : public COMPONENT_STATS
 	UDWORD			incenDamage;			///< Damage done each burn cycle
 	UDWORD			incenRadius;			///< Burn radius of	the round
 	UDWORD			flightSpeed;			///< speed ammo travels at
-	FIREONMOVE		fireOnMove;				///< indicates whether the droid has to stop before firing
+	bool			fireOnMove;				///< indicates whether the droid has to stop before firing
 	WEAPON_CLASS	weaponClass;			///< the class of weapon
 	WEAPON_SUBCLASS weaponSubClass;			///< the subclass to which the weapon belongs
 	MOVEMENT_MODEL	movementModel;			///< which projectile model to use for the bullet
@@ -479,7 +472,7 @@ struct WEAPON_STATS : public COMPONENT_STATS
 	SBYTE			minElevation;			///< min amount the	turret can be elevated down
 	UBYTE			facePlayer;				///< flag to make the (explosion) effect face the	player when	drawn
 	UBYTE			faceInFlight;			///< flag to make the inflight effect	face the player when drawn
-	UBYTE			effectSize;				///< size of the effect 100 = normal,	50 = half etc
+	uint16_t		effectSize;				///< size of the effect 100 = normal,	50 = half etc
 	bool			lightWorld;				///< flag to indicate whether the effect lights up the world
 	UBYTE			surfaceToAir;			///< indicates how good in the air - SHOOT_ON_GROUND, SHOOT_IN_AIR or both
 	UBYTE			vtolAttackRuns;			///< number of attack runs a VTOL droid can	do with this weapon
