@@ -1532,119 +1532,90 @@ bool loadBodyPropulsionIMDs(const char *pFileName)
 	unsigned int i, numStats;
 	QString propulsionName, leftIMD, rightIMD;
 	iIMDShape **startIMDs;
-	bool found;
 
-	//check that the body and propulsion stats have already been read in
-
+	// check that the body and propulsion stats have already been read in
 	ASSERT( asBodyStats != NULL, "Body Stats have not been set up" );
 	ASSERT( asPropulsionStats != NULL, "Propulsion Stats have not been set up" );
 
-	//allocate space
+	// allocate space
 	for (numStats = 0; numStats < numBodyStats; ++numStats)
 	{
 		psBodyStat = &asBodyStats[numStats];
 		psBodyStat->ppIMDList = (iIMDShape **) malloc(numPropulsionStats * NUM_PROP_SIDES * sizeof(iIMDShape *));
-		//initialise the pointer space
-		memset(psBodyStat->ppIMDList, 0, (numPropulsionStats *
-			NUM_PROP_SIDES * sizeof(iIMDShape *)));
+		memset(psBodyStat->ppIMDList, 0, (numPropulsionStats * NUM_PROP_SIDES * sizeof(iIMDShape *)));
 	}
-
 	WzConfig ini(pFileName);
 	if (ini.status() != QSettings::NoError)
 	{
 		debug(LOG_ERROR, "Could not open %s", pFileName);
 	}
 	QStringList list = ini.childGroups();
-
 	for (i=0; i < list.size(); ++i)
 	{
 		ini.beginGroup(list[i]);
-		propulsionName = ini.value("propulsion").toString();
-		QStringList propulsionNames = propulsionName.split(",");
-		leftIMD = ini.value("leftIMD").toString();
-		QStringList leftIMDs = leftIMD.split(",");
-		rightIMD = ini.value("rightIMD").toString();
-		QStringList rightIMDs = rightIMD.split(",");
-
 		//get the body stats
-		found = false;
 		for (numStats = 0; numStats < numBodyStats; ++numStats)
 		{
 			psBodyStat = &asBodyStats[numStats];
-			if (!strcmp(psBodyStat->pName, list[i].toUtf8().constData()))
+			if (list[i].compare(psBodyStat->pName) == 0)
 			{
-				found = true;
 				break;
 			}
 		}
-		if (!found)
+		if (numStats == numBodyStats) // not found
 		{
 			debug(LOG_FATAL, "Invalid body name %s", list[i].toUtf8().constData());
 			return false;
 		}
-
-		for (int x=0; x< propulsionNames.size(); ++x)
+		QStringList keys = ini.childKeys();
+		for (int j = 0; j < keys.size(); j++)
 		{
-			//get the propulsion stats
-			found = false;
 			for (numStats = 0; numStats < numPropulsionStats; numStats++)
 			{
 				psPropulsionStat = &asPropulsionStats[numStats];
-				if (!strcmp(psPropulsionStat->pName, propulsionNames[x].toUtf8().constData()))
+				if (keys[j].compare(psPropulsionStat->pName) == 0)
 				{
-					found = true;
 					break;
 				}
 			}
-			if (!found)
+			if (numStats == numPropulsionStats)
 			{
-				debug(LOG_FATAL, "Invalid propulsion name %s", propulsionNames[x].toUtf8().constData());
+				debug(LOG_FATAL, "Invalid propulsion name %s", keys[j].toUtf8().constData());
 				return false;
 			}
-
 			//allocate the left and right propulsion IMDs
 			startIMDs = psBodyStat->ppIMDList;
 			psBodyStat->ppIMDList += (numStats * NUM_PROP_SIDES);
-			if (strcmp(leftIMDs[x].toUtf8().constData(), "0"))
+			QStringList values = ini.value(keys[j]).toStringList();
+			*psBodyStat->ppIMDList = NULL;
+			if (values[0].compare("0") != 0)
 			{
-				*psBodyStat->ppIMDList = (iIMDShape *) resGetData("IMD", leftIMDs[x].toUtf8().constData());
+				*psBodyStat->ppIMDList = (iIMDShape *) resGetData("IMD", values[0].toUtf8().constData());
 				if (*psBodyStat->ppIMDList == NULL)
 				{
 					debug(LOG_FATAL, "Cannot find the left propulsion PIE for body %s", list[i].toUtf8().constData());
 					return false;
 				}
 			}
-			else
-			{
-				*psBodyStat->ppIMDList = NULL;
-			}
-
 			psBodyStat->ppIMDList++;
+			*psBodyStat->ppIMDList = NULL;
 			//right IMD might not be there
-			if (strcmp(rightIMDs[x].toUtf8().constData(), "0"))
+			if (values[1].compare("0") != 0)
 			{
-				*psBodyStat->ppIMDList = (iIMDShape *) resGetData("IMD", rightIMDs[x].toUtf8().constData());
+				*psBodyStat->ppIMDList = (iIMDShape *) resGetData("IMD", values[1].toUtf8().constData());
 				if (*psBodyStat->ppIMDList == NULL)
 				{
 					debug(LOG_FATAL, "Cannot find the right propulsion PIE for body %s", list[i].toUtf8().constData());
 					return false;
 				}
 			}
-			else
-			{
-				*psBodyStat->ppIMDList = NULL;
-			}
-
 			//reset the IMDList pointer
 			psBodyStat->ppIMDList = startIMDs;
 		}
 		ini.endGroup();
 	}
-
 	return(true);
 }
-
-
 
 static bool statsGetAudioIDFromString(const char *szStatName, const char *szWavName, SDWORD *piWavID)
 {
@@ -1670,8 +1641,6 @@ static bool statsGetAudioIDFromString(const char *szStatName, const char *szWavN
 
 	return true;
 }
-
-
 
 /*Load the weapon sounds from the file exported from Access*/
 bool loadWeaponSounds(const char *pFileName)
