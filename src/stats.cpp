@@ -120,9 +120,6 @@ static void updateMaxECMStats(UWORD maxValue);
 static void updateMaxBodyStats(UWORD maxBody, UWORD maxPower, UWORD maxArmour);
 static void updateMaxConstStats(UWORD maxValue);
 
-static bool getWeaponEffect(const char* weaponEffect, WEAPON_EFFECT* effect);  // Kill this function, when rewriting stats.cpp.
-
-
 BASE_STATS::BASE_STATS(unsigned ref, std::string const &str)
 	: ref(ref)
 	, pName(allocateName(str.c_str()))
@@ -1760,7 +1757,6 @@ bool loadWeaponModifiers(const char *pFileName)
 		QStringList keys = ini.childKeys();
 		for (int j = 0; j < keys.size(); j++)
 		{
-			QString propulsion = keys.at(j);
 			int modifier = ini.value(keys.at(j)).toInt();
 			if (!getPropulsionType(keys.at(j).toUtf8().data(), &propInc))
 			{
@@ -2271,7 +2267,7 @@ const StringToEnum<WEAPON_EFFECT> mapUnsorted_WEAPON_EFFECT[] =
 };
 const StringToEnumMap<WEAPON_EFFECT> map_WEAPON_EFFECT = mapUnsorted_WEAPON_EFFECT;
 
-static bool getWeaponEffect(const char* weaponEffect, WEAPON_EFFECT* effect)
+bool getWeaponEffect(const char* weaponEffect, WEAPON_EFFECT* effect)
 {
 	if      (strcmp(weaponEffect, "ANTI PERSONNEL") == 0)
 	{

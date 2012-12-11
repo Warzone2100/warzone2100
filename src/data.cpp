@@ -424,11 +424,9 @@ static bool bufferSSTRFUNCLoad(const char *pBuffer, UDWORD size, void **ppData)
 }
 
 /* Load the Structure strength modifier stats */
-static bool bufferSSTRMODLoad(const char *pBuffer, UDWORD size, void **ppData)
+static bool bufferSSTRMODLoad(const char *fileName, void **ppData)
 {
-	calcDataHash((uint8_t *)pBuffer, size, DATA_SSTRMOD);
-
-	if (!loadStructureStrengthModifiers(pBuffer, size))
+	if (!loadStructureStrengthModifiers(fileName))
 	{
 		return false;
 	}
@@ -1059,7 +1057,6 @@ static const RES_TYPE_MIN_BUF BufferResourceTypes[] =
 	{"SSTRUCT", bufferSSTRUCTLoad, dataSSTRUCTRelease},            //structure stats and associated files
 	{"SSTRFUNC", bufferSSTRFUNCLoad, NULL},
 	{"SSTRWEAP", bufferSSTRWEAPLoad, NULL},
-	{"SSTRMOD", bufferSSTRMODLoad, NULL},
 	{"SFEAT", bufferSFEATLoad, dataSFEATRelease},                  //feature stats file
 	{"SFUNC", bufferSFUNCLoad, dataSFUNCRelease},                  //function stats file
 	{"RESCH", bufferRESCHLoad, dataRESCHRelease},                  //research stats files
@@ -1110,6 +1107,7 @@ static const RES_TYPE_MIN_FILE FileResourceTypes[] =
 	{"SCRIPTVAL", dataScriptLoadVals, NULL},
 	{"STR_RES", dataStrResLoad, dataStrResRelease},
 	{"RESEARCHMSG", dataResearchMsgLoad, dataSMSGRelease },
+	{"SSTRMOD", bufferSSTRMODLoad, NULL},
 	{"JAVASCRIPT", jsLoad, NULL},
 };
 

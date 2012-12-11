@@ -112,7 +112,7 @@ extern bool loadStructureStats(const char *pStructData, UDWORD bufferSize);
 extern bool loadStructureWeapons(const char *pWeaponData, UDWORD bufferSize);
 extern bool loadStructureFunctions(const char *pFunctionData, UDWORD bufferSize);
 /*Load the Structure Strength Modifiers from the file exported from Access*/
-extern bool loadStructureStrengthModifiers(const char *pStrengthModData, UDWORD bufferSize);
+extern bool loadStructureStrengthModifiers(const char *pFileName);
 
 extern bool	structureStatsShutDown(void);
 

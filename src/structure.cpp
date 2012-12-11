@@ -32,6 +32,7 @@
 #include "lib/framework/geometry.h"
 #include "lib/framework/strres.h"
 #include "lib/framework/frameresource.h"
+#include "lib/framework/wzconfig.h"
 #include "objects.h"
 #include "ai.h"
 #include "map.h"
@@ -686,7 +687,7 @@ bool loadStructureFunctions(const char *pFunctionData, UDWORD bufferSize)
 }
 
 /*Load the Structure Strength Modifiers from the file exported from Access*/
-bool loadStructureStrengthModifiers(const char *pStrengthModData, UDWORD bufferSize)
+bool loadStructureStrengthModifiers(const char *pFileName)
 {
 	//initialise to 100%
 	for (unsigned i = 0; i < WE_NUMEFFECTS; ++i)
@@ -696,22 +697,49 @@ bool loadStructureStrengthModifiers(const char *pStrengthModData, UDWORD bufferS
 			asStructStrengthModifier[i][j] = 100;
 		}
 	}
-
-	TableView table(pStrengthModData, bufferSize);
-
-	for (unsigned i = 0; i < table.size(); ++i)
+	WzConfig ini(pFileName);
+	if (ini.status() != QSettings::NoError)
 	{
-		LineView line(table, i);
-
-		asStructStrengthModifier[line.e(0, map_WEAPON_EFFECT)][line.e(1, map_STRUCT_STRENGTH)] = line.u16(2);
-
-		if (table.isError())
+		debug(LOG_ERROR, "Could not open %s", pFileName);
+	}
+	QStringList list = ini.childGroups();
+	for (int i = 0; i < list.size(); i++)
+	{
+		WEAPON_EFFECT effectInc;
+		ini.beginGroup(list[i]);
+		if (!getWeaponEffect(list[i].toUtf8().constData(), &effectInc))
 		{
-			debug(LOG_ERROR, "%s", table.getError().toUtf8().constData());
-			return false;
+			debug(LOG_FATAL, "Invalid Weapon Effect - %s", list[i].toUtf8().constData());
+			continue;
+		}
+		QStringList keys = ini.childKeys();
+		for (int j = 0; j < keys.size(); j++)
+		{
+			QString strength = keys.at(j);
+			int modifier = ini.value(strength).toInt();
+			// FIXME - add support for dynamic categories
+			if (strength.compare("SOFT") == 0)
+			{
+				asStructStrengthModifier[effectInc][0] = modifier;
+			}
+			else if (strength.compare("MEDIUM") == 0)
+			{
+				asStructStrengthModifier[effectInc][1] = modifier;
+			}
+			else if (strength.compare("HARD") == 0)
+			{
+				asStructStrengthModifier[effectInc][2] = modifier;
+			}
+			else if (strength.compare("BUNKER") == 0)
+			{
+				asStructStrengthModifier[effectInc][3] = modifier;
+			}
+			else
+			{
+				debug(LOG_ERROR, "Unsupported structure strength %s", strength.toUtf8().constData());
+			}
 		}
 	}
-
 	return true;
 }
 

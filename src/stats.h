@@ -302,6 +302,8 @@ extern bool objHasWeapon(const BASE_OBJECT *psObj);
 
 extern void statsInitVars(void);
 
+bool getWeaponEffect(const char* weaponEffect, WEAPON_EFFECT* effect);
+
 /* Wrappers */
 
 /** If object is an active radar (has sensor turret), then return a pointer to its sensor stats. If not, return NULL. */
