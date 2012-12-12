@@ -18,6 +18,10 @@ function eventGameInit()
 		{
 			setPowerModifier(200, playnum);
 		}
+		else if (playerData[playnum].difficulty == EASY)
+		{
+			setPowerModifier(75, playnum);
+		}
 
 		setDroidLimit(playnum, 150, DROID_ANY);
 		setDroidLimit(playnum, 10, DROID_COMMAND);
@@ -113,7 +117,8 @@ function eventGameInit()
 		makeComponentAvailable("CyborgSpade", playnum);
 		makeComponentAvailable("CyborgRepair", playnum);
 
-		setPower(2000, playnum);
+		// set starting power for players
+		setPower(1000, playnum);
 
 		if (baseType == CAMP_CLEAN)
 		{

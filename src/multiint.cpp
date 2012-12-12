@@ -1763,7 +1763,7 @@ static void addDifficultyChooser(int player)
 		sButInit.pTip = NULL;
 		switch (i)
 		{
-		case 0: sButInit.pTip = _("Less aggressive"); break;
+		case 0: sButInit.pTip = _("Starts disadvantaged"); break;
 		case 1: sButInit.pTip = _("Plays nice"); break;
 		case 2: sButInit.pTip = _("No holds barred"); break;
 		case 3: sButInit.pTip = _("Starts with advantages"); break;
