@@ -515,11 +515,11 @@ function eventDroidBuilt(droid, struct)
 	{
 		if (isVTOL(droid))
 		{
-			groupAddDroid(vtolGroup, droid);
+			groupAdd(vtolGroup, droid);
 		}
 		else if (droid.droidType == DROID_WEAPON || droid.droidType == DROID_CYBORG)
 		{
-			groupAddDroid(attackGroup, droid);
+			groupAdd(attackGroup, droid);
 
 			// HUUUGE hack here :) -- naive attack code nested up in here, 'cos i'm so lazy
 			// Only attack once every four minutes

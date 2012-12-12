@@ -862,7 +862,7 @@ static QScriptValue js_enumTemplates(QScriptContext *context, QScriptEngine *eng
 }
 
 //-- \subsection{enumGroup(group)}
-//-- Return an array containing all the droid members of a given group.
+//-- Return an array containing all the members of a given group.
 static QScriptValue js_enumGroup(QScriptContext *context, QScriptEngine *engine)
 {
 	int groupId = context->argument(0).toInt32();
@@ -886,7 +886,8 @@ static QScriptValue js_enumGroup(QScriptContext *context, QScriptEngine *engine)
 }
 
 //-- \subsection{newGroup()}
-//-- Allocate a new group. Returns its numerical ID. DEPRECATED.
+//-- Allocate a new group. Returns its numerical ID. Deprecated since 3.2 - you should now 
+//-- use your own number scheme for groups.
 static QScriptValue js_newGroup(QScriptContext *, QScriptEngine *engine)
 {
 	static int i = 1; // group zero reserved
@@ -1878,7 +1879,7 @@ static QScriptValue js_groupAddArea(QScriptContext *context, QScriptEngine *engi
 }
 
 //-- \subsection{groupAddDroid(group, droid)}
-//-- Add given droid to given group.
+//-- Add given droid to given group. Deprecated since 3.2 - use groupAdd() instead.
 static QScriptValue js_groupAddDroid(QScriptContext *context, QScriptEngine *engine)
 {
 	int groupId = context->argument(0).toInt32();
@@ -1889,6 +1890,37 @@ static QScriptValue js_groupAddDroid(QScriptContext *context, QScriptEngine *eng
 	QScriptValue groups = engine->globalObject().property("groupSizes");
 	SCRIPT_ASSERT(context, psDroid, "Invalid droid index %d", droidId);
 	groupAddObject(psDroid, groupId, engine);
+	return QScriptValue();
+}
+
+//-- \subsection{groupAdd(group, object)}
+//-- Add given game object to the given group.
+static QScriptValue js_groupAdd(QScriptContext *context, QScriptEngine *engine)
+{
+	int groupId = context->argument(0).toInt32();
+	QScriptValue val = context->argument(1);
+	int id = val.property("id").toInt32();
+	int player = val.property("player").toInt32();
+	OBJECT_TYPE type = (OBJECT_TYPE)val.property("type").toInt32();
+	BASE_OBJECT *psObj = NULL;
+	switch (type)
+	{
+	case OBJ_DROID:
+		psObj = IdToDroid(id, player);
+		break;
+	case OBJ_STRUCTURE:
+		psObj = IdToStruct(id, player);
+		break;
+	case OBJ_FEATURE:
+		psObj = IdToFeature(id, player);
+		break;
+	default:
+		SCRIPT_ASSERT(context, false, "Invalid object type");
+		break;
+	}
+	SCRIPT_ASSERT(context, psObj, "Invalid object index %d", id);
+	QScriptValue groups = engine->globalObject().property("groupSizes");
+	groupAddObject(psObj, groupId, engine);
 	return QScriptValue();
 }
 
@@ -3447,6 +3479,7 @@ bool registerFunctions(QScriptEngine *engine, QString scriptName)
 	engine->globalObject().setProperty("newGroup", engine->newFunction(js_newGroup));
 	engine->globalObject().setProperty("groupAddArea", engine->newFunction(js_groupAddArea));
 	engine->globalObject().setProperty("groupAddDroid", engine->newFunction(js_groupAddDroid));
+	engine->globalObject().setProperty("groupAdd", engine->newFunction(js_groupAdd));
 	engine->globalObject().setProperty("groupSize", engine->newFunction(js_groupSize));
 	engine->globalObject().setProperty("orderDroidLoc", engine->newFunction(js_orderDroidLoc));
 	engine->globalObject().setProperty("playerPower", engine->newFunction(js_playerPower));
