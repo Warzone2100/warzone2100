@@ -409,16 +409,6 @@ QScriptValue convDroid(DROID *psDroid, QScriptEngine *engine)
 	{
 		value.setProperty("armed", QScriptValue::NullValue);
 	}
-	GROUPMAP *psMap = groups.value(engine);
-	if (psMap->contains(psDroid))
-	{
-		int group = psMap->value(psDroid);
-		value.setProperty("group", group, QScriptValue::ReadOnly);
-	}
-	else
-	{
-		value.setProperty("group", QScriptValue::NullValue);
-	}
 	return value;
 }
 
@@ -455,6 +445,16 @@ QScriptValue convObj(BASE_OBJECT *psObj, QScriptEngine *engine)
 	value.setProperty("selected", psObj->selected, QScriptValue::ReadOnly);
 	value.setProperty("name", objInfo(psObj), QScriptValue::ReadOnly);
 	value.setProperty("born", psObj->born, QScriptValue::ReadOnly);
+	GROUPMAP *psMap = groups.value(engine);
+	if (psMap->contains(psObj))
+	{
+		int group = psMap->value(psObj);
+		value.setProperty("group", group, QScriptValue::ReadOnly);
+	}
+	else
+	{
+		value.setProperty("group", QScriptValue::NullValue);
+	}
 	return value;
 }
 
