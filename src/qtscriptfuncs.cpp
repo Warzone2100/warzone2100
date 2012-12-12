@@ -2455,6 +2455,7 @@ static QScriptValue js_playerPower(QScriptContext *context, QScriptEngine *engin
 }
 
 //-- \subsection{isStructureAvailable(structure type[, player])}
+//-- Returns true if given structure can be built. It checks both research and unit limits.
 static QScriptValue js_isStructureAvailable(QScriptContext *context, QScriptEngine *engine)
 {
 	QString building = context->argument(0).toString();
@@ -2516,7 +2517,7 @@ static QScriptValue js_hackGetObj(QScriptContext *context, QScriptEngine *engine
 }
 
 //-- \subsection{hackAssert(condition, message...)}
-//-- Function to perform unit testing.
+//-- Function to perform unit testing. It will throw a script error and a game assert.
 static QScriptValue js_hackAssert(QScriptContext *context, QScriptEngine *engine)
 {
 	bool condition = context->argument(0).toBool();
@@ -3060,7 +3061,7 @@ static QScriptValue js_getDroidLimit(QScriptContext *context, QScriptEngine *eng
 }
 
 //-- \subsection{getExperienceModifier(player)}
-//-- Get the % of experience this player droids are going to gain.
+//-- Get the % of experience this player droids are going to gain. (3.2+ only)
 static QScriptValue js_getExperienceModifier(QScriptContext *context, QScriptEngine *)
 {
 	int player = context->argument(0).toInt32();
@@ -3068,7 +3069,7 @@ static QScriptValue js_getExperienceModifier(QScriptContext *context, QScriptEng
 }
 
 //-- \subsection{setExperienceModifier(player, percent)}
-//-- Set the % of experience this player droids are going to gain.
+//-- Set the % of experience this player droids are going to gain. (3.2+ only)
 static QScriptValue js_setExperienceModifier(QScriptContext *context, QScriptEngine *)
 {
 	int player = context->argument(0).toInt32();
