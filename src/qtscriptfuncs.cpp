@@ -755,42 +755,48 @@ static QScriptValue js_getLabel(QScriptContext *context, QScriptEngine *engine)
 //-- This is a fast operation of O(log n) algorithmic complexity.
 static QScriptValue js_label(QScriptContext *context, QScriptEngine *engine)
 {
+	DROID *psDroid;
+	STRUCTURE *psStruct;
+	FEATURE *psFeature;
 	QString label = context->argument(0).toString();
 	QScriptValue ret = engine->newObject();
 	if (labels.contains(label))
 	{
 		labeltype p = labels.value(label);
-		if (p.type == SCRIPT_AREA || p.type == SCRIPT_POSITION)
+		switch (p.type)
 		{
-			ret.setProperty("x", map_coord(p.p1.x), QScriptValue::ReadOnly);
-			ret.setProperty("y", map_coord(p.p1.y), QScriptValue::ReadOnly);
-			ret.setProperty("type", p.type, QScriptValue::ReadOnly);
-		}
-		if (p.type == SCRIPT_AREA)
-		{
+		case SCRIPT_AREA:
 			ret.setProperty("x2", map_coord(p.p2.x), QScriptValue::ReadOnly);
 			ret.setProperty("y2", map_coord(p.p2.y), QScriptValue::ReadOnly);
 			ret.setProperty("type", p.type, QScriptValue::ReadOnly);
-		}
-		else if (p.type == SCRIPT_GROUP)
-		{
+			// fall through
+		case SCRIPT_POSITION:
+			ret.setProperty("x", map_coord(p.p1.x), QScriptValue::ReadOnly);
+			ret.setProperty("y", map_coord(p.p1.y), QScriptValue::ReadOnly);
+			ret.setProperty("type", p.type, QScriptValue::ReadOnly);
+			break;
+		case SCRIPT_GROUP:
 			ret.setProperty("id", p.id, QScriptValue::ReadOnly);
 			ret.setProperty("type", p.type, QScriptValue::ReadOnly);
-		}
-		else if (p.type == OBJ_DROID)
-		{
-			DROID *psDroid = IdToDroid(p.id, p.player);
-			if (psDroid) ret = convDroid(psDroid, engine);
-		}
-		else if (p.type == OBJ_STRUCTURE)
-		{
-			STRUCTURE *psStruct = IdToStruct(p.id, p.player);
-			if (psStruct) ret = convStructure(psStruct, engine);
-		}
-		else if (p.type == OBJ_FEATURE)
-		{
-			FEATURE *psFeature = IdToFeature(p.id, p.player);
-			if (psFeature) ret = convFeature(psFeature, engine);
+			break;
+		case OBJ_DROID:
+			psDroid = IdToDroid(p.id, p.player);
+			SCRIPT_ASSERT(context, psDroid, "Droid [%s] not found!", label.toUtf8().constData());
+			ret = convDroid(psDroid, engine);
+			break;
+		case OBJ_STRUCTURE:
+			psStruct = IdToStruct(p.id, p.player);
+			SCRIPT_ASSERT(context, psStruct, "Structure [%s] not found!", label.toUtf8().constData());
+			ret = convStructure(psStruct, engine);
+			break;
+		case OBJ_FEATURE:
+			psFeature = IdToFeature(p.id, p.player);
+			SCRIPT_ASSERT(context, psFeature, "Feature [%s] not found!", label.toUtf8().constData());
+			ret = convFeature(psFeature, engine);
+			break;
+		default:
+			ASSERT(false, "Bad object label type found for label %s!", label.toUtf8().constData());
+			break;
 		}
 	}
 	else debug(LOG_ERROR, "label %s not found!", label.toUtf8().constData());
@@ -2151,7 +2157,9 @@ static QScriptValue js_playSound(QScriptContext *context, QScriptEngine *engine)
 	QString sound = context->argument(0).toString();
 	int soundID = audio_GetTrackID(sound.toUtf8().constData());
 	if (soundID == SAMPLE_NOT_FOUND)
+	{
 		soundID = audio_SetTrackVals(sound.toUtf8().constData(), false, 100, 1800);
+	}
 	if (context->argumentCount() > 1)
 	{
 		int x = world_coord(context->argument(1).toInt32());

@@ -856,9 +856,9 @@ bool triggerEventPickup(FEATURE *psFeat, DROID *psDroid)
 }
 
 //__ \subsection{eventObjectSeen(viewer, seen)}
-//__ An event that is run whenever an object goes from not seen to seen.
+//__ An event that is run sometimes when an object goes from not seen to seen.
 //__ First parameter is \emph{game object} doing the seeing, the next the game
-//__ object being seen.
+//__ object being seen. This is event is throttled, and so is not called every time.
 bool triggerEventSeen(BASE_OBJECT *psViewer, BASE_OBJECT *psSeen)
 {
 	for (int i = 0; i < scripts.size() && psSeen && psViewer; ++i)
