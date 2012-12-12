@@ -331,8 +331,7 @@ function buildFundamentals2()
 		}
 	}
 	// Build as many factories as we can afford
-	if ((factcount < 2 || (factcount < 4 && playerPower(me) > factcount * 750))
-	    && isStructureAvailable(factory) && grabTrucksAndBuild(20, factory, 1))
+	if (playerPower(me) > factcount * 750 && isStructureAvailable(factory) && grabTrucksAndBuild(20, factory, 1))
 	{
 		return; // done here
 	}
@@ -344,7 +343,7 @@ function buildFundamentals2()
 	// Build cyborg factory if we don't have one
 	if (isStructureAvailable(cybFactory))
 	{
-		if (countStruct(cybFactory) == 0 && playerPower(me) > 250 && grabTrucksAndBuild(20, cybFactory, 1))
+		if (countStruct(cybFactory) == 0 && playerPower(me) > 500 && grabTrucksAndBuild(20, cybFactory, 1))
 		{
 			return;
 		}
@@ -352,7 +351,7 @@ function buildFundamentals2()
 	// Build VTOL factory if we don't have one
 	if (isStructureAvailable(vtolFactory))
 	{
-		if (countStruct(vtolFactory) == 0 && playerPower(me) > 500 && grabTrucksAndBuild(20, vtolFactory, 1))
+		if (countStruct(vtolFactory) == 0 && playerPower(me) > 750 && grabTrucksAndBuild(20, vtolFactory, 1))
 		{
 			return;
 		}
@@ -494,7 +493,7 @@ function eventDroidBuilt(droid, struct)
 	{
 		if (struct.stattype == FACTORY)
 		{
-			if (countDroid(DROID_CONSTRUCT) < 6)
+			if (countDroid(DROID_CONSTRUCT) < 5)
 			{
 				buildTruck(struct);
 			}
