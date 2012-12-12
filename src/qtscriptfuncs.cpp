@@ -84,7 +84,8 @@ struct labeltype
 	int type;
 	int player;
 	QList<int> idlist;
-	bool operator==(const class labeltype &other) const { return id == other.id && type == other.type && player == other.player; }
+
+	bool operator==(const labeltype &o) const { return id == o.id && type == o.type && player == o.player; }
 };
 typedef QMap<QString, labeltype> LABELMAP;
 static LABELMAP labels;
@@ -732,11 +733,10 @@ static QScriptValue js_addLabel(QScriptContext *context, QScriptEngine *engine)
 static QScriptValue js_getLabel(QScriptContext *context, QScriptEngine *engine)
 {
 	struct labeltype value;
-	QScriptValue structVal = context->argument(0);
-	value.id = structVal.property("id").toInt32();
-	value.player = structVal.property("player").toInt32();
-	BASE_OBJECT *psObj = IdToPointer(value.id, value.player);
-	SCRIPT_ASSERT(context, psObj, "Object id %d not found belonging to player %d", value.id, value.player);
+	QScriptValue objparam = context->argument(0);
+	value.id = objparam.property("id").toInt32();
+	value.player = objparam.property("player").toInt32();
+	value.type = OBJ_FEATURE;
 	QString label = labels.key(value, QString());
 	if (!label.isEmpty())
 	{
@@ -3595,6 +3595,7 @@ bool registerFunctions(QScriptEngine *engine, QString scriptName)
 	engine->globalObject().setProperty("OIL_RESOURCE", FEAT_OIL_RESOURCE, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("OIL_DRUM", FEAT_OIL_DRUM, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("ARTIFACT", FEAT_GEN_ARTE, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("BUILDING", FEAT_BUILDING, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("HQ", REF_HQ, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("FACTORY", REF_FACTORY, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("POWER_GEN", REF_POWER_GEN, QScriptValue::ReadOnly | QScriptValue::Undeletable);
