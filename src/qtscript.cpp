@@ -306,8 +306,10 @@ static QScriptValue js_include(QScriptContext *context, QScriptEngine *engine)
 	return QScriptValue(true);
 }
 
+// do not want to call this 'init', since scripts are often loaded before we get here
 bool prepareScripts()
 {
+	debug(LOG_WZ, "Scripts prepared");
 	prepareLabels();
 	return true;
 }

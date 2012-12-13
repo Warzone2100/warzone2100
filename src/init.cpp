@@ -1042,11 +1042,6 @@ bool stageTwoShutDown(void)
 	freeAllFeatures();
 	freeAllFlagPositions();
 
-	if (!shutdownScripts())
-	{
-		return false;
-	}
-
 	if (!messageShutdown())
 	{
 		return false;
@@ -1184,6 +1179,13 @@ bool stageThreeInitialise(void)
 bool stageThreeShutDown(void)
 {
 	debug(LOG_WZ, "== stageThreeShutDown ==");
+
+	// There is an assymetry in scripts initialization and destruction, due
+	// the many different ways scripts get loaded.
+	if (!shutdownScripts())
+	{
+		return false;
+	}
 
 	challengesUp = false;
 	challengeActive = false;

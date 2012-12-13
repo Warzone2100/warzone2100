@@ -12,12 +12,13 @@ file		SMSG		"prox1a.txt"
 /* Directory for uncompiled script files */
 directory       "script/text"
 
-file		SCRIPT		"cam1a.slo"
 file		SCRIPT		"cam1a-ai.slo"
 file		SCRIPT		"cam1daynight.slo"
 
 /* Directory for script value files*/
 directory       "script/data"
-file            SCRIPTVAL       "cam1a.vlo"
 file            SCRIPTVAL       "cam1a-ai.vlo"
 file            SCRIPTVAL       "cam1day.vlo"
+
+directory       "script/campaign"
+file		JAVASCRIPT	"cam1a.js"
