@@ -13,6 +13,11 @@ data/base/messages/strings/genstrings.txt
 data/base/messages/strings/names.txt
 data/base/messages/strings/resstrings.txt
 data/base/messages/strings/scrstrings.txt
+data/base/multiplay/script/multilim.slo
+data/base/multiplay/script/scavfact.js
+data/base/multiplay/skirmish/nexus.slo
+data/base/multiplay/skirmish/rules.js
+data/base/multiplay/skirmish/semperfi.slo
 data/base/script/fastplay/fastdemo.slo
 data/base/script/fastplay/start.slo
 data/base/script/rules.js
@@ -135,6 +140,7 @@ data/mp/multiplay/script/camtech.slo
 data/mp/multiplay/script/multilim.slo
 data/mp/multiplay/script/scavfact.js
 data/mp/multiplay/skirmish/nexus.slo
+data/mp/multiplay/skirmish/nullbot.js
 data/mp/multiplay/skirmish/rules.js
 data/mp/multiplay/skirmish/semperfi.js
 data/mp/multiplay/skirmish/semperfi.slo
