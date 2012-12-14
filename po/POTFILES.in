@@ -18,6 +18,7 @@ data/base/multiplay/script/scavfact.js
 data/base/multiplay/skirmish/nexus.slo
 data/base/multiplay/skirmish/rules.js
 data/base/multiplay/skirmish/semperfi.slo
+data/base/script/campaign/cam1a.js
 data/base/script/fastplay/fastdemo.slo
 data/base/script/fastplay/start.slo
 data/base/script/rules.js
@@ -39,7 +40,6 @@ data/base/script/text/cam1-7.slo
 data/base/script/text/cam1-7s.slo
 data/base/script/text/cam1a-ai.slo
 data/base/script/text/cam1a-c.slo
-data/base/script/text/cam1a.slo
 data/base/script/text/cam1b-ai.slo
 data/base/script/text/cam1b.slo
 data/base/script/text/cam1bx.slo
