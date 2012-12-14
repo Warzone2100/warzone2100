@@ -519,15 +519,17 @@ void __glcSaveGLState(__GLCglState* inGLState, const __GLCcontext* inContext,
 	  && inContext->enableState.glObjects
 	  && GLEW_ARB_vertex_buffer_object)) {
     inGLState->vertexArray = glIsEnabled(GL_VERTEX_ARRAY);
-    glGetIntegerv(GL_VERTEX_ARRAY_SIZE, &inGLState->vertexArraySize);
-    glGetIntegerv(GL_VERTEX_ARRAY_TYPE, &inGLState->vertexArrayType);
-    glGetIntegerv(GL_VERTEX_ARRAY_STRIDE, &inGLState->vertexArrayStride);
-    glGetPointerv(GL_VERTEX_ARRAY_POINTER, &inGLState->vertexArrayPointer);
+    if (inGLState->vertexArray == GL_TRUE) {
+      glGetIntegerv(GL_VERTEX_ARRAY_SIZE, &inGLState->vertexArraySize);
+      glGetIntegerv(GL_VERTEX_ARRAY_TYPE, &inGLState->vertexArrayType);
+      glGetIntegerv(GL_VERTEX_ARRAY_STRIDE, &inGLState->vertexArrayStride);
+      glGetPointerv(GL_VERTEX_ARRAY_POINTER, &inGLState->vertexArrayPointer);
+    }
     inGLState->normalArray = glIsEnabled(GL_NORMAL_ARRAY);
     inGLState->colorArray = glIsEnabled(GL_COLOR_ARRAY);
     inGLState->indexArray = glIsEnabled(GL_INDEX_ARRAY);
     inGLState->texCoordArray = glIsEnabled(GL_TEXTURE_COORD_ARRAY);
-    if (inAll || inContext->renderState.renderStyle == GLC_TEXTURE) {
+    if ((inAll || inContext->renderState.renderStyle == GLC_TEXTURE) && inGLState->texCoordArray == GL_TRUE) {
       glGetIntegerv(GL_TEXTURE_COORD_ARRAY_SIZE, &inGLState->texCoordArraySize);
       glGetIntegerv(GL_TEXTURE_COORD_ARRAY_TYPE, &inGLState->texCoordArrayType);
       glGetIntegerv(GL_TEXTURE_COORD_ARRAY_STRIDE,

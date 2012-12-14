@@ -1,14 +1,15 @@
-# SOME DESCRIPTIVE TITLE.
+# Greek Translation of Warzone2100.
 # Copyright (C) YEAR Warzone Resurrection Project
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# This file is distributed under the same license as the Warzone2100 package.
+# Translators:
+# nikos papadopoulos <231036448@freemail.gr>, 2012
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: el_001_warzone2100 3.1git\n"
+"Project-Id-Version: el_002_warzone2100 3.1git\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2012-10-30 16:57+0100\n"
-"PO-Revision-Date: 2012-08-27 06:31+0200\n"
+"POT-Creation-Date: 2012-12-10 17:22+0100\n"
+"PO-Revision-Date: 2012-12-10 15:44+0200\n"
 "Last-Translator: nikos papadopoulos <231036448@freemail.gr>\n"
 "Language-Team: el <www.mageia-gr.org/forum/>\n"
 "Language: \n"
@@ -997,9 +998,8 @@ msgstr "Αναβάθμιση Όλμου"
 
 #: data/base/messages/resmessages12.rmsg:137
 #: data/mp/messages/resmessages12.rmsg:124
-#, fuzzy
 msgid "Targeting systems compensate for distance and weather conditions"
-msgstr "Τα συστήματα στόχευσης "
+msgstr "Τα συστήματα στόχευσης αναπληρώνουν την απόσταση και τις καιρικές συνθήκες"
 
 #: data/base/messages/resmessages12.rmsg:138
 #: data/base/messages/resmessages23.rmsg:160
@@ -1392,7 +1392,7 @@ msgstr "Εξοπλισμένο με Πυροβόλο Ανθρωπομηχανή�
 #: data/base/messages/resmessages1.rmsg:60
 #: data/mp/messages/resmessages1.rmsg:54
 msgid "Armed with Cyborg Flamer"
-msgstr "Εξοπλισμένο με Φλογοβόλο Ανθρωπομηχανής"
+msgstr "Εξοπλισμένο με Ανθρωπομηχανή Φλογοβόλου"
 
 #: data/base/messages/resmessages1.rmsg:71
 #: data/mp/messages/resmessages1.rmsg:64
@@ -1446,7 +1446,7 @@ msgstr "Αμυντική Ισχύς: Χαμηλή"
 
 #: data/base/messages/resmessages1.rmsg:104
 msgid "Armored guard tower with Mini-Pod Rocket"
-msgstr "Θωρακισμένος πύργος άμυνας με Μικρο-Συστάδα Πυραύλων"
+msgstr "Θωρακισμένος πύργος άμυνας με Μικροσυστάδα Πυραύλων"
 
 #: data/base/messages/resmessages1.rmsg:115
 #: data/mp/messages/resmessages1.rmsg:104
@@ -2261,7 +2261,7 @@ msgstr "Αυτόματη αναβάθμιση όλων των μικροπυρα
 #: data/base/messages/resmessages1.rmsg:610
 #: data/mp/messages/resmessages1.rmsg:554
 msgid "Improved shaped charge warhead"
-msgstr ""
+msgstr "Βελτιωμένη κεφαλή κοίλου γεμίσματος"
 
 #: data/base/messages/resmessages1.rmsg:611
 #: data/base/messages/resmessages2.rmsg:787
@@ -2670,7 +2670,7 @@ msgstr "Τα βλήματα εντοπίζουν και κατευθύνοντα
 #: data/base/messages/resmessages23.rmsg:170
 #: data/mp/messages/resmessages23.rmsg:154
 msgid "105mm multi-barrel Howitzer may be assigned to a sensor"
-msgstr "Πολύκανο Οβιδοβόλο 105χιλ, μπορεί να ανατεθεί σε έναν αισθητήρα"
+msgstr "Πολύκαννο Οβιδοβόλο 105χιλ, μπορεί να ανατεθεί σε έναν αισθητήρα"
 
 #: data/base/messages/resmessages23.rmsg:171
 #: data/base/messages/resmessages2.rmsg:677
@@ -2689,7 +2689,7 @@ msgstr "Προτιμώμενοι Στόχοι: Κατασκευές βάσης, 
 #: data/base/messages/resmessages23.rmsg:181
 #: data/mp/messages/resmessages23.rmsg:164
 msgid "Multi-barrel, rapid-fire machinegun"
-msgstr "Πολύκανο πολυβόλο ταχύρυθμων πυρών"
+msgstr "Πολύκαννο πολυβόλο ταχύρυθμων πυρών"
 
 #: data/base/messages/resmessages23.rmsg:183
 #: data/mp/messages/resmessages23.rmsg:166
@@ -3358,9 +3358,8 @@ msgstr "Αναβάθμιση Αντιαεροπορικού Πυροβολικο
 #: data/base/messages/strings/resstrings.txt:670
 #: data/mp/messages/resmessages2.rmsg:504
 #: data/mp/messages/strings/resstrings.txt:705
-#, fuzzy
 msgid "High Explosive Flak shards"
-msgstr "Υψηλής Εκρηκτικότητας Αντιαεροπορικό Διατρητικό Πυροβολικό"
+msgstr "Υψηλής Εκρηκτικότητας Αντιαεροπορικά Θραύσματα"
 
 #: data/base/messages/resmessages2.rmsg:556
 #: data/base/messages/resmessages3.rmsg:699
@@ -3383,7 +3382,7 @@ msgstr "Όλα τα όπλα αντιαεροπορικού πυροβολικο
 #: data/mp/messages/resmessages2.rmsg:514
 #: data/mp/messages/strings/resstrings.txt:713
 msgid "Recoil loaded AA ammunition hopper"
-msgstr ""
+msgstr "Αναδραστικός Αντιαεροπορικός Θύλακας Γεμίσματος "
 
 #: data/base/messages/resmessages2.rmsg:567
 #: data/base/messages/resmessages3.rmsg:710
@@ -3481,7 +3480,7 @@ msgstr "Αντικαθιστά το Μεσαίο Πυροβόλο"
 #: data/mp/messages/resmessages2.rmsg:584
 #: data/mp/messages/strings/resstrings.txt:771
 msgid "76mm hyper-velocity quad-barrel automatic-cannon"
-msgstr "Αυτόματο τετράκανο πυροβόλο υπερταχύτητας 76χιλ"
+msgstr "Αυτόματο τετράκαννο πυροβόλο υπερταχύτητας 76χιλ"
 
 #: data/base/messages/resmessages2.rmsg:654
 #: data/base/messages/strings/resstrings.txt:758
@@ -3665,9 +3664,8 @@ msgstr "Διαθέσιμη Νέα Έρευνα Ανθρωπομηχανών"
 
 #: data/base/messages/resmessages3.rmsg:38
 #: data/mp/messages/resmessages3.rmsg:34
-#, fuzzy
 msgid "Aerodynamic Jump Pack"
-msgstr "Προσανατολισμός θυγατρικού πακέτου"
+msgstr "Αεροδυναμικό Πακέτο Άλματος"
 
 #: data/base/messages/resmessages3.rmsg:39
 #: data/mp/messages/resmessages3.rmsg:35
@@ -3677,7 +3675,7 @@ msgstr "Δίνει στις Ανθρωπομηχανές περιορισμέν�
 #: data/base/messages/resmessages3.rmsg:40
 #: data/mp/messages/resmessages3.rmsg:36
 msgid "Jump Cyborgs can now be researched"
-msgstr ""
+msgstr "Τώρα μπορούν να εξελιχθούν Ανθρωπομηχανές Άλτες"
 
 #: data/base/messages/resmessages3.rmsg:60
 #: data/base/messages/resmessages3.rmsg:588
@@ -3691,15 +3689,14 @@ msgstr "Υπερσυμπυκνωμένα σύνθετα κράματα και ί
 #: data/mp/messages/resmessages3.rmsg:64
 #: data/mp/messages/resmessages3.rmsg:544
 msgid "Laminated alloys bonded with energy-deflecting optic bundles"
-msgstr ""
+msgstr "Παραλληλεπίπεδα κράματα, συνδεμένα με οπτικές δέσμες εξοστράκισματος ενέργειας"
 
 #: data/base/messages/resmessages3.rmsg:82
 #: data/base/messages/strings/resstrings.txt:78
 #: data/mp/messages/resmessages3.rmsg:74
 #: data/mp/messages/strings/resstrings.txt:98
-#, fuzzy
 msgid "Armed with Revenger Surface-to-Air missile"
-msgstr "Εξοπλισμένο με το"
+msgstr "Εξοπλισμένο με Εκδικητή, πυραυλίδιο Επιφάνειας-Αέρος"
 
 #: data/base/messages/resmessages3.rmsg:93
 #: data/base/messages/resmessages3.rmsg:148
@@ -3734,9 +3731,8 @@ msgstr "Εξοπλισμένο με φωτοακτινιστή αναλαμπή�
 #: data/mp/messages/resmessages3.rmsg:153
 #: data/mp/messages/strings/resstrings.txt:97
 #: data/mp/messages/strings/resstrings.txt:103
-#, fuzzy
 msgid "New Jump Cyborg Available"
-msgstr "Το παράσιτο εισβολέας έχει απομονωθεί"
+msgstr "Διαθέσιμη Νέα Ανθρωπομηχανή Άλτης"
 
 #: data/base/messages/resmessages3.rmsg:126
 #: data/mp/messages/resmessages3.rmsg:114
@@ -3766,7 +3762,7 @@ msgstr "Σύνθεση σκυροδέματος-πλαστικού μεγάλο�
 #: data/base/messages/resmessages3.rmsg:192
 #: data/mp/messages/resmessages3.rmsg:174
 msgid "Bonded metallic laminates formed into walls and defenses"
-msgstr ""
+msgstr "Συνδεμένα μεταλλικά παραλληλεπίπεδα τα οποία σχηματίζουν τοίχους και αμυντικές δομές"
 
 #: data/base/messages/resmessages3.rmsg:203
 #: data/mp/messages/resmessages3.rmsg:184
@@ -4178,9 +4174,8 @@ msgstr "Σφαίρες κινητικής ενέργειας απεμπλουτ�
 
 #: data/base/messages/resmessages3.rmsg:863
 #: data/mp/messages/resmessages3.rmsg:784
-#, fuzzy
 msgid "Collapsing Plutonium kinetic energy bullets"
-msgstr "Σφαίρες κινητικής ενέργειας Πλουτωνίου"
+msgstr "Σφαίρες κινητικής ενέργειας Συμπτυσσόμενου Πλουτωνίου"
 
 #: data/base/messages/resmessages3.rmsg:873
 #: data/base/messages/resmessages3.rmsg:884
@@ -4357,9 +4352,8 @@ msgstr "Αναβάθμιση Όπλου Ράγας"
 
 #: data/base/messages/resmessages3.rmsg:1050
 #: data/mp/messages/resmessages3.rmsg:954
-#, fuzzy
 msgid "Computer predicts and compensates for target's movement"
-msgstr "Υπολογιστής προβλέπει και "
+msgstr "Ο υπολογιστής προβλέπει και αναπληρώνει τη στόχευση για τις κινήσεις του στόχου"
 
 #: data/base/messages/resmessages3.rmsg:1051
 msgid "Increases Rail Gun accuracy"
@@ -4559,7 +4553,7 @@ msgstr "Αντιαρματικός πύραυλος"
 #: data/base/messages/resmessagesall.rmsg:137
 #: data/mp/messages/resmessagesall.rmsg:154
 msgid "High explosive shaped charge missile"
-msgstr ""
+msgstr "Πυραυλίδιο κοίλου γεμίσματος υψηλής εκρηκτικότητας"
 
 #: data/base/messages/resmessagesall.rmsg:148
 #: data/mp/messages/resmessagesall.rmsg:164
@@ -4696,7 +4690,6 @@ msgid "TRANSPORT MISSION: Enemy Base Under Construction"
 msgstr "ΑΠΟΣΤΟΛΗ ΜΕΤΑΦΟΡΑΣ: Εχθρική Βάση Υπό Κατασκευή"
 
 #: data/base/messages/strings/cam1strings.txt:44
-#, fuzzy
 msgid "Enemy forces are establishing a forward base at this location."
 msgstr "Σε αυτή την περιοχή, οι εχθρικές δυνάμεις δημιουργούν μία προκεχωρημένη βάση."
 
@@ -4706,10 +4699,9 @@ msgstr "Εξάλειψε τη βάση και εξασφάλισε την περ
 
 #: data/base/messages/strings/cam1strings.txt:48
 msgid "ALPHA BASE MISSION: Establish a Forward Base"
-msgstr ""
+msgstr "ΑΠΟΣΤΟΛΗ ΒΑΣΗΣ ΑΛΦΑ: Εγκαθίδρυσε μια Προχωρημένη Βάση"
 
 #: data/base/messages/strings/cam1strings.txt:49
-#, fuzzy
 msgid "Establish a forward base on the plateau."
 msgstr "Εγκατέστησε μία προκεχωρημένη βάση στην ανοιχτοσιά."
 
@@ -4757,7 +4749,7 @@ msgstr "Συγχαρητήρια Διοικητή"
 
 #: data/base/messages/strings/cam1strings.txt:67
 msgid "We now have a further task for you."
-msgstr ""
+msgstr "Τώρα έχουμε μία επιπλέον αποστολή για εσένα."
 
 #: data/base/messages/strings/cam1strings.txt:70
 msgid "ALPHA BASE MISSION: Locate and Recover Artifacts"
@@ -4845,7 +4837,7 @@ msgstr "Η τεχνολογία του συναπτικού δεσμού βρι�
 
 #: data/base/messages/strings/cam1strings.txt:111
 msgid "Establish a forward base then continue the search for the synaptic link."
-msgstr ""
+msgstr "Εγκατέστησε μία προκεχωρημένη βάση, και μετά συνέχισε την έρευνα για τον συναπτικό σύνδεσμο."
 
 #: data/base/messages/strings/cam1strings.txt:114
 msgid "INCOMING TRANSMISSION"
@@ -4893,7 +4885,7 @@ msgstr "Θα στέλνουμε περαιτέρω ενημερώσεις, ότ�
 
 #: data/base/messages/strings/cam1strings.txt:136
 msgid "This transmission was intercepted a few minutes ago."
-msgstr ""
+msgstr "Αυτή η αναμετάδοση υποκλέφτηκε πριν μερικά λεπτά."
 
 #: data/base/messages/strings/cam1strings.txt:137
 msgid "It originates from the east."
@@ -5254,7 +5246,7 @@ msgstr "Η Συλλογικότητα δεν γνωρίζει για την πυ
 
 #: data/base/messages/strings/cam2strings.txt:148
 msgid "This message was intercepted a few moments ago..."
-msgstr ""
+msgstr "Αυτό το μήνυμα υποκλέφτηκε μόλις πριν λίγο..."
 
 #: data/base/messages/strings/cam2strings.txt:152
 msgid "You must transport as many of your forces as possible."
@@ -5288,7 +5280,7 @@ msgstr "Μετακινήσου, με τις δυνάμεις σου, στον Β
 #: data/base/messages/strings/cam3strings.txt:10
 #: data/base/sequenceaudio/cam3/c003.txa:15
 msgid "Once at the mountains secure an LZ. Then establish a forward base."
-msgstr ""
+msgstr "Μόλις βρεθείς στα βουνά, διασφάλισε την Ζώνη Προσγείωσης. Μετά εγκαθίδρυσε μία προκεχωρημένη βάση."
 
 #: data/base/messages/strings/cam3strings.txt:11
 #: data/base/sequenceaudio/cam3/c003.txa:16
@@ -5297,7 +5289,7 @@ msgstr "Εκεί, η Ομάδα Γάμμα θα έρθει σε επαφή μα�
 
 #: data/base/messages/strings/cam3strings.txt:14
 msgid "TRANSPORT MISSION: Establish A Forward Base"
-msgstr ""
+msgstr "ΑΠΟΣΤΟΛΗ ΜΕΤΑΦΟΡΑΣ: Εγκαθίδρυσε μια Προχωρημένη Βάση"
 
 #: data/base/messages/strings/cam3strings.txt:15
 #: data/base/sequenceaudio/cam3/c003.txt:7
@@ -5306,7 +5298,7 @@ msgstr "Διοικητή, η επιτυχία του Εγχειρήματος ε
 
 #: data/base/messages/strings/cam3strings.txt:16
 msgid "Secure an LZ, then establish a forward base."
-msgstr ""
+msgstr "Διασφάλισε μία Ζώνη Προσγείωσης, και μετά εγκαθίδρυσε μία προκεχωρημένη βάση."
 
 #: data/base/messages/strings/cam3strings.txt:19
 #: data/base/messages/strings/cam3strings.txt:28
@@ -5323,7 +5315,7 @@ msgstr "Σε αυτή την τοποθεσία της ΥΠΣΤΑΜΒΑ υπήρ
 
 #: data/base/messages/strings/cam3strings.txt:24
 msgid "We are transmitting coordinates of an LZ near the silos."
-msgstr ""
+msgstr "Μεταδίδουμε τις συντεταγμένες μίας ζώνης προσγείωσης, κοντά στους μεγακυλίνδρους."
 
 #: data/base/messages/strings/cam3strings.txt:25
 #: data/base/messages/strings/cam3strings.txt:61
@@ -5333,7 +5325,7 @@ msgstr "Ολοκληρώθηκε η Συντονισμένη Λήψη."
 
 #: data/base/messages/strings/cam3strings.txt:29
 msgid "Secure your LZ, then head overland to destroy the missile silo."
-msgstr ""
+msgstr "Εξασφάλισε τη ζώνη προσγείωσης, και μετά μετακινήσου δια ξηράς, και κατέστρεψε τους μεγακυλίνδρους των πυραύλων."
 
 #: data/base/messages/strings/cam3strings.txt:33
 #: data/base/messages/strings/cam3strings.txt:38
@@ -5390,7 +5382,7 @@ msgstr "Διοικητή, νικήσαμε το ΠΛΕΓΜΑ."
 
 #: data/base/messages/strings/cam3strings.txt:55
 msgid "Unfortunately, our systems' performance has been affected by NEXUS. We are trying to rectify this."
-msgstr ""
+msgstr "Δυστυχώς η απόδοση των συστημάτων μας έχει επηρεαστεί από το ΠΛΕΓΜΑ. Προσπαθούμε να τα επαναφέρουμε."
 
 #: data/base/messages/strings/cam3strings.txt:58
 msgid "We are currently receiving this transmission."
@@ -5414,7 +5406,7 @@ msgstr "Αυτοί ανήκουν στην Ομάδα Άλφα. Φρόντισε
 
 #: data/base/messages/strings/cam3strings.txt:71
 msgid "NORTHERN SECTOR MISSION: Team Alpha Debrief"
-msgstr ""
+msgstr "ΑΠΟΣΤΟΛΗ ΒΟΡΕΙΟΥ ΤΟΜΕΑ: Ενημέρωση της Ομάδας Άλφα"
 
 #: data/base/messages/strings/cam3strings.txt:72
 msgid "Team Alpha power transfer in progress."
@@ -5449,9 +5441,8 @@ msgid "Commander, your decisive actions halted the spread of NEXUS."
 msgstr "Διοικητή, οι αποφασιστικές σας δράσεις σταμάτησαν την εξάπλωση του ΠΛΕΓΜΑΤΟΣ."
 
 #: data/base/messages/strings/cam3strings.txt:86
-#, fuzzy
 msgid "Before NEXUS was expelled, we intercepted this message - Decoding completed."
-msgstr "Πριν από την αποβολή του ΠΛΕΓΜΑΤΟΣ, "
+msgstr "Πριν από την αποβολή του ΠΛΕΓΜΑΤΟΣ, υποκλέψαμε αυτό το μήνυμα - Η αποκωδικοποίηση ολοκληρώθηκε."
 
 #: data/base/messages/strings/cam3strings.txt:89
 msgid "A NEXUS task force is heading for these coordinates."
@@ -5551,20 +5542,19 @@ msgstr "Θα χρειαστεί, πολύ σύντομα, να εγκαταλε�
 
 #: data/base/messages/strings/cam3strings.txt:135
 msgid "Team Gamma reports a missile silo at this location."
-msgstr ""
+msgstr "Η Ομάδα Γάμμα αναφέρει έναν μεγακύλινδρο πυραύλου, σε αυτή την τοποθεσία."
 
 #: data/base/messages/strings/cam3strings.txt:136
 msgid "They believe that the silo contains missiles capable of reaching high orbit."
-msgstr ""
+msgstr "Θεωρούν πως ο μεγακύλινδρος περιέχει πυραύλους, ικανούς να φτάσουν σε ύψος τροχιάς."
 
 #: data/base/messages/strings/cam3strings.txt:137
 msgid "Capture this silo at all costs."
-msgstr ""
+msgstr "Κατέλαβε τον μεγακύλινδρο, με οποιοδήποτε κόστος."
 
 #: data/base/messages/strings/cam3strings.txt:140
-#, fuzzy
 msgid "Missile silos captured."
-msgstr "Έγινε λήψη δεδομένων."
+msgstr "Καταλήφθηκαν οι μεγακύλινδροι των πυραύλων."
 
 #: data/base/messages/strings/cam3strings.txt:143
 #: data/base/messages/strings/cam3strings.txt:161
@@ -5573,7 +5563,7 @@ msgstr "ΑΠΟΣΤΟΛΗ ΒΟΡΕΙΟΥ ΤΟΜΕΑ: Κωδικοί Πυραύλ�
 
 #: data/base/messages/strings/cam3strings.txt:144
 msgid "Commander, there are missiles present at the silos."
-msgstr ""
+msgstr "Διοικητή, υπάρχουν πύραυλοι μέσα στους μεγακυλίνδρους."
 
 #: data/base/messages/strings/cam3strings.txt:145
 msgid "Nexus is preventing us from accessing the missile control code."
@@ -5609,16 +5599,15 @@ msgstr "Απαιτείται μία εγκατάσταση έρευνας για
 
 #: data/base/messages/strings/cam3strings.txt:163
 msgid "Protect the missile silos from NEXUS attacks."
-msgstr ""
+msgstr "Προστάτεψε τους μεγακυλίνδρους, από τις επιθέσεις του ΠΛΕΓΜΑΤΟΣ."
 
 #: data/base/messages/strings/cam3strings.txt:166
 msgid "PROJECT UPDATE: 1st Level Missile Code Cracked."
 msgstr "ΕΝΗΜΕΡΩΣΗ ΕΓΧΕΙΡΗΜΑΤΟΣ: Ανακτήθηκε ο 1ου Επιπέδου Κωδικός Πυραύλου."
 
 #: data/base/messages/strings/cam3strings.txt:167
-#, fuzzy
 msgid "Missile arming in progress."
-msgstr "Ανίχνευση υλικού σε εξέλιξη"
+msgstr "Η όπλιση του πυραύλου βρίσκεται σε εξέλιξη"
 
 #: data/base/messages/strings/cam3strings.txt:168
 msgid "More research is required to proceed further."
@@ -5630,7 +5619,7 @@ msgstr "ΕΝΗΜΕΡΩΣΗ ΕΓΧΕΙΡΗΜΑΤΟΣ: Ανακτήθηκε ο 2ο
 
 #: data/base/messages/strings/cam3strings.txt:172
 msgid "Missile target programming in progress."
-msgstr ""
+msgstr "Ο προγραμματισμός της στόχευσης των πυραύλων βρίσκεται σε εξέλιξη."
 
 #: data/base/messages/strings/cam3strings.txt:173
 msgid "Once level 3 codes are cracked we initiate launch procedures."
@@ -5673,9 +5662,8 @@ msgid "Incoming intelligence report... Team Gamma"
 msgstr "Εισερχόμενη αναφορά πληροφοριών... Ομάδα Γάμμα"
 
 #: data/base/messages/strings/genstrings.txt:4
-#, fuzzy
 msgid "Briefing Commences:"
-msgstr "ΕΝΗΜΕΡΩΣΗ ΕΝ ΠΤΗΣΗ"
+msgstr "Αρχίζει η Ενημέρωση:"
 
 #: data/base/messages/strings/genstrings.txt:7
 msgid "Scavenger Outpost"
@@ -6358,9 +6346,8 @@ msgstr "Κέντρο Επισκευών"
 
 #: data/base/messages/strings/names.txt:394
 #: data/mp/messages/strings/names.txt:392
-#, fuzzy
 msgid "Command Relay Center"
-msgstr "Συλλογικότητα Κέντρο Διοίκησης"
+msgstr "Κέντρο Αναμετάδοσης της Διοίκησης"
 
 #: data/base/messages/strings/names.txt:395
 #: data/mp/messages/strings/names.txt:393
@@ -6435,9 +6422,8 @@ msgstr "Σίφωνας, Αντιαεροπορική Θέση"
 #: data/base/messages/strings/names.txt:726
 #: data/mp/messages/strings/names.txt:413
 #: data/mp/messages/strings/names.txt:736
-#, fuzzy
 msgid "Ripple Rocket Battery"
-msgstr "Συστοιχία Μικροπυραύλων"
+msgstr "Συστοιχία Μικροπυραύλων Χείμαρρος"
 
 #: data/base/messages/strings/names.txt:417
 #: data/mp/messages/strings/names.txt:416
@@ -6889,17 +6875,15 @@ msgstr "Εκχερσωτής Οχυρών"
 #: data/base/messages/strings/names.txt:1183
 #: data/mp/messages/strings/names.txt:525
 #: data/mp/messages/strings/names.txt:1198
-#, fuzzy
 msgid "Mini-Rocket Pod"
-msgstr "Θωρακισμένος πύργος άμυνας με Μικρο-Συστάδα Πυραύλων"
+msgstr "Συστάδα Μικροπυραύλων"
 
 #: data/base/messages/strings/names.txt:527
 #: data/base/messages/strings/names.txt:1184
 #: data/mp/messages/strings/names.txt:526
 #: data/mp/messages/strings/names.txt:1199
-#, fuzzy
 msgid "Ripple Rockets"
-msgstr "Σταθεροποιούμενοι Πύραυλοι"
+msgstr "Πύραυλοι Χείμαρρος"
 
 #: data/base/messages/strings/names.txt:528
 #: data/mp/messages/strings/names.txt:527
@@ -7018,9 +7002,8 @@ msgstr "Πρόσδεση Βομβών Διασποράς Αεροσκάφους"
 
 #: data/base/messages/strings/names.txt:576
 #: data/mp/messages/strings/names.txt:576
-#, fuzzy
 msgid "VTOL Heap Bomb Bay"
-msgstr "Πρόσδεση Βομβών Φωσφόρου Αεροσκάφους"
+msgstr "Πρόσδεση Διατρητικών, Υψηλής Εκρηκτικότητας, Βομβών Αεροσκάφους"
 
 #: data/base/messages/strings/names.txt:577
 #: data/mp/messages/strings/names.txt:577
@@ -7263,50 +7246,43 @@ msgstr "Ανθρωπομηχανή Πυροβολητής Αναλαμπής"
 
 #: data/base/messages/strings/names.txt:683
 #: data/mp/messages/strings/names.txt:689
-#, fuzzy
 msgid "Jump Bunker Blaster"
-msgstr "Ανθρωπομηχανή Εκτιναχτής Οχυρών"
+msgstr "Άλτης Εκτιναχτής Οχυρών"
 
 #: data/base/messages/strings/names.txt:684
 #: data/mp/messages/strings/names.txt:690
-#, fuzzy
 msgid "Jump Heavy Gunner"
-msgstr "Υπερβαρής Πυροβολητής"
+msgstr "Βαρύς Άλτης Πυροβολητής"
 
 #: data/base/messages/strings/names.txt:685
 #: data/mp/messages/strings/names.txt:691
-#, fuzzy
 msgid "Jump Lancer"
-msgstr "Πύργος με Τοξότη"
+msgstr "Άλτης Τοξοβόλος"
 
 #: data/base/messages/strings/names.txt:686
 #: data/mp/messages/strings/names.txt:692
-#, fuzzy
 msgid "Jump Assault Gunner"
-msgstr "Ανθρωπομηχανή Πυροβολητής Επίθεσης"
+msgstr "Άλτης Πυροβολητής Επίθεσης"
 
 #: data/base/messages/strings/names.txt:687
 #: data/mp/messages/strings/names.txt:693
-#, fuzzy
 msgid "Jump Needle Gunner"
-msgstr "Ανθρωπομηχανή Πολυβολητής"
+msgstr "Άλτης Πολυβολητής Ακίδας"
 
 #: data/base/messages/strings/names.txt:688
 #: data/mp/messages/strings/names.txt:694
-#, fuzzy
 msgid "Jump Scourge"
-msgstr "Επεξεργασία"
+msgstr "Άλτης Μαστιγωτής"
 
 #: data/base/messages/strings/names.txt:689
 #: data/mp/messages/strings/names.txt:695
 msgid "Jump Flashlight Gunner"
-msgstr "Ανθρωπομηχανή Πυροβολητής Αναλαμπής"
+msgstr "Άλτης Πυροβολητής Αναλαμπής"
 
 #: data/base/messages/strings/names.txt:691
 #: data/mp/messages/strings/names.txt:697
-#, fuzzy
 msgid "Cyborg Jump Pack"
-msgstr "Προσανατολισμός θυγατρικού πακέτου"
+msgstr "Πακέτο Ανθρωπομηχανής Άλματος"
 
 #: data/base/messages/strings/names.txt:697
 #: data/mp/messages/strings/names.txt:703
@@ -7479,9 +7455,8 @@ msgstr "Επισκλήρυνση Πυροβόλου Μαγνητισμού"
 
 #: data/base/messages/strings/names.txt:780
 #: data/mp/messages/strings/names.txt:790
-#, fuzzy
 msgid "Command Relay Post"
-msgstr "Πύργος Φωτακτινιστή Παλμού"
+msgstr "Σημείο Αναμετάδοσης της Διοίκησης"
 
 #: data/base/messages/strings/names.txt:784
 msgid "Automated Cyborg Production Mk2"
@@ -8160,19 +8135,18 @@ msgstr "Αντιαεροπορικό Πυροβολικό Διατρητικών
 
 #: data/base/messages/strings/names.txt:993
 #: data/mp/messages/strings/names.txt:1005
-#, fuzzy
 msgid "AA Ammunition Hopper"
-msgstr "Ένοπλες Δυνάμεις(AA)"
+msgstr "Αντιαεροπορικός Θύλακας Γεμίσματος"
 
 #: data/base/messages/strings/names.txt:994
 #: data/mp/messages/strings/names.txt:1006
 msgid "AA Ammunition Hopper Mk2"
-msgstr ""
+msgstr "Αντιαεροπορικός Θύλακας Γεμίσματος, Τύπος2"
 
 #: data/base/messages/strings/names.txt:995
 #: data/mp/messages/strings/names.txt:1007
 msgid "AA Ammunition Hopper Mk3"
-msgstr ""
+msgstr "Αντιαεροπορικός Θύλακας Γεμίσματος, Τύπος3"
 
 #: data/base/messages/strings/names.txt:996
 #: data/mp/messages/strings/names.txt:1008
@@ -8195,9 +8169,8 @@ msgstr "Πρόσδεση Βομβών Διασποράς"
 
 #: data/base/messages/strings/names.txt:1004
 #: data/mp/messages/strings/names.txt:1016
-#, fuzzy
 msgid "HEAP Bomb Bay"
-msgstr "Πρόσδεση Βομβών Φωσφόρου"
+msgstr "Πρόσδεση Διατρητικών, Υψηλής Εκρηκτικότητας, Βομβών"
 
 #: data/base/messages/strings/names.txt:1005
 #: data/mp/messages/strings/names.txt:1017
@@ -8223,9 +8196,8 @@ msgstr "Θέση Βομβαρδισμού Εντοπισμού Στόχου"
 
 #: data/base/messages/strings/names.txt:1012
 #: data/mp/messages/strings/names.txt:1024
-#, fuzzy
 msgid "Cannon Laser Rangefinder"
-msgstr "Φωτοακτινικός Προσδιοριστής Πυροβόλου"
+msgstr "Προσδιοριστής Απόστασης Βολής Πυροβόλου Φωτοακτίνας"
 
 #: data/base/messages/strings/names.txt:1013
 #: data/mp/messages/strings/names.txt:1025
@@ -8339,19 +8311,18 @@ msgstr "Πομπός Φωτοακτίνας Υψηλής Ενέργειας Τύ
 
 #: data/base/messages/strings/names.txt:1045
 #: data/mp/messages/strings/names.txt:1057
-#, fuzzy
 msgid "Thermopole Energizer"
-msgstr "Βελτιωμένος Ενεργητής, συντομεύει το επαναγέμισης του φωτοακτινιστή"
+msgstr "Θερμοπολικός Ενεργοδότης"
 
 #: data/base/messages/strings/names.txt:1046
 #: data/mp/messages/strings/names.txt:1058
 msgid "Thermopole Energizer Mk2"
-msgstr ""
+msgstr "Θερμοπολικός Ενεργοδότης Τύπος2"
 
 #: data/base/messages/strings/names.txt:1047
 #: data/mp/messages/strings/names.txt:1059
 msgid "Thermopole Energizer Mk3"
-msgstr ""
+msgstr "Θερμοπολικός Ενεργοδότης Τύπο"
 
 #: data/base/messages/strings/names.txt:1049
 #: data/mp/messages/strings/names.txt:1061
@@ -8801,21 +8772,18 @@ msgstr "Μεγάλης Εκρηκτικότητας Αντιαρματική Κ�
 
 #: data/base/messages/strings/names.txt:1173
 #: data/mp/messages/strings/names.txt:1175
-#, fuzzy
 msgid "HESH Rocket Warhead"
-msgstr "Μεγάλης Εκρηκτικότητας Αντιαρματική Κεφαλή Πυραύλου"
+msgstr "Μεγάλης Εκρηκτικότητας Μαλακή Κεφαλή Πυραύλου"
 
 #: data/base/messages/strings/names.txt:1174
 #: data/mp/messages/strings/names.txt:1176
-#, fuzzy
 msgid "HESH Rocket Warhead Mk2"
-msgstr "Μεγάλης Εκρηκτικότητας Αντιαρματική Κεφαλή Πυραύλου Τύπος2"
+msgstr "Μεγάλης Εκρηκτικότητας Μαλακή Κεφαλή Πυραύλου Τύπος2"
 
 #: data/base/messages/strings/names.txt:1175
 #: data/mp/messages/strings/names.txt:1177
-#, fuzzy
 msgid "HESH Rocket Warhead Mk3"
-msgstr "Μεγάλης Εκρηκτικότητας Αντιαρματική Κεφαλή Πυραύλου Τύπος3"
+msgstr "Μεγάλης Εκρηκτικότητας Μαλακή Κεφαλή Πυραύλου Τύπος3"
 
 #: data/base/messages/strings/names.txt:1176
 #: data/mp/messages/strings/names.txt:1178
@@ -9141,9 +9109,8 @@ msgstr "Οχυρό Περιστροφικού Πολυβόλου"
 #: data/base/messages/strings/names.txt:1478
 #: data/mp/messages/strings/names.txt:1492
 #: data/mp/messages/strings/names.txt:1493
-#, fuzzy
 msgid "Missile Silo"
-msgstr "Πυραυλική Αναβάθμιση"
+msgstr "Πυραυλικός Μεγακύλινδρος"
 
 #: data/base/messages/strings/resstrings.txt:234
 #: data/mp/messages/strings/resstrings.txt:262
@@ -9309,7 +9276,7 @@ msgstr "Το δεύτεο φορτηγό, τώρα, θα βοηθήσει στο
 
 #: data/base/script/text/tutorial3.slo:501
 msgid "During missions you need to locate and recover technologies from before the Collapse"
-msgstr "Στη διάρκεια των αποστολών, θα χρειαστεί να εντοπίσεις και να ανακτήσεις τεχνολογίες, από την εποχή πριν την Κατάρευση"
+msgstr "Στη διάρκεια των αποστολών, θα χρειαστεί να εντοπίσεις και να ανακτήσεις τεχνολογίες, από την εποχή πριν την Κατάρρευση"
 
 #: data/base/script/text/tutorial3.slo:510
 msgid "Use a truck to search for the artifact indicated by the radar pulse"
@@ -9320,9 +9287,8 @@ msgid "Move the pointer over the artifact and left click to recover it"
 msgstr "Μετακίνησε τον δείκτη πάνω από το τεχνούργημα, και κάνε αριστερό κλικ για να το ανακτήσεις"
 
 #: data/base/script/text/tutorial3.slo:559
-#, fuzzy
 msgid "A research facility is required to research artifacts"
-msgstr "Απαιτείται μία εγκατάσταση έρευνας για να σπάσει τον κωδικό. Όρισε μία, αμέσως."
+msgstr "Απαιτείται μία εγκατάσταση έρευνας για να εξελίξεις τεχνουργήματα"
 
 #: data/base/script/text/tutorial3.slo:602
 msgid "Now left click the research facility and position it at your base"
@@ -9441,9 +9407,8 @@ msgid "Please assist!..."
 msgstr "Παρακαλώ βοήθησε..."
 
 #: data/base/sequenceaudio/cam1/c001.txa:1
-#, fuzzy
 msgid "CAMPAIGN ONE"
-msgstr "Ένα άτομο"
+msgstr "ΕΚΣΤΡΑΤΕΙΑ ΕΝΑ"
 
 #: data/base/sequenceaudio/cam1/c001.txa:2
 msgid "WESTERN SECTOR"
@@ -9491,11 +9456,11 @@ msgstr "Καλή τύχη και καλό κυνήγι."
 
 #: data/base/sequenceaudio/cam1/c001.txt:7
 msgid "Approaching Landing Zone. Team Alpha Briefing commences."
-msgstr ""
+msgstr "Πλησιάζετε στην Ζώνη Προσγείωσης. Αρχίζει η Ενημέρωση της Ομάδας Άλφα."
 
 #: data/base/sequenceaudio/cam1/c001.txt:9
 msgid "Commander, you lead Team Alpha, one of three expeditionary teams sent out by the Project to recover artifacts from before the Collapse."
-msgstr "Διοικητή, καθοδηγείς την Ομάδα Άλφα, μία από τις τρεις ερευνητικές ομάδες, που έχουν σταλθεί από το Εγχείρημα, προς ανάκτηση τεχνουργημάτων, από την εποχή πριν την Κατάρευση."
+msgstr "Διοικητή, καθοδηγείς την Ομάδα Άλφα, μία από τις τρεις ερευνητικές ομάδες, που έχουν σταλθεί από το Εγχείρημα, προς ανάκτηση τεχνουργημάτων, από την εποχή πριν την Κατάρρευση."
 
 #: data/base/sequenceaudio/cam1/c001.txt:11
 msgid "Your destination lies in the western zone."
@@ -9525,7 +9490,7 @@ msgstr "Παραβιάζεις το Νέο Παράδειγμα."
 
 #: data/base/sequenceaudio/cam1/cam1dnp.txt:4
 msgid "All attack groups commence attack on enemy."
-msgstr ""
+msgstr "Όλες οι ομάδες επίθεσης να ξεκινήσουν επίθεση ενάντια στον εχθρό."
 
 #: data/base/sequenceaudio/cam1/cam1dnp.txt:5
 msgid "They are in contravention of the New Paradigm."
@@ -9537,7 +9502,7 @@ msgstr "Πρέπει να εξαλειφθούν."
 
 #: data/base/sequenceaudio/cam1/cam1dp2.txt:4
 msgid "Secure the LZ and establish a forward base."
-msgstr ""
+msgstr "Διασφάλισε την Ζώνη Προσγείωσης και εγκαθίδρυσε μία προκεχωρημένη βάση."
 
 #: data/base/sequenceaudio/cam1/cam1dp2.txt:5
 msgid "Then destroy the New Paradigm's base."
@@ -9693,9 +9658,8 @@ msgid "Commander, you are to curtail the New Paradigm's activities in this secto
 msgstr ""
 
 #: data/base/sequenceaudio/cam2/c002.txa:1
-#, fuzzy
 msgid "CAMPAIGN TWO"
-msgstr "&Δύο πλαίσια"
+msgstr "ΕΚΣΤΡΑΤΕΙΑ ΔΥΟ"
 
 #: data/base/sequenceaudio/cam2/c002.txa:2
 msgid "EASTERN SECTOR"
@@ -9831,15 +9795,15 @@ msgstr "Ανάλυση του Κέντρου της ΥΠΣΤΑΜΒΑ δεν αφ
 
 #: data/base/sequenceaudio/cam2/cam26pl1.txt:3
 msgid "The nuclear reactor was going to be used to power a vast network of pre-Collapse computer systems."
-msgstr ""
+msgstr "Ο πυρηνικός αντιδραστήρας θα έδινε ενέργεια σε ένα αχανές δίκτυο υπολογιστικών συστημάτων, τα οποία είχαν δημιουργηθεί πριν την Κατάρρευση."
 
 #: data/base/sequenceaudio/cam2/cam27fmv.txt:1
 msgid "Commander, we have just detected a missile launch at these coordinates."
-msgstr ""
+msgstr "Διοικητή, μόλις εντοπίσαμε εκτόξευση πυραύλου, από αυτές τις συντεταγμένες."
 
 #: data/base/sequenceaudio/cam2/cam27fmv.txt:3
 msgid "Team Gamma are sending a team to investigate the launch site and to prevent any further launches."
-msgstr ""
+msgstr "Μία δύναμη έχει σταλεί από την Ομάδα Γάμα, με σκοπό να ερευνήσουν την περιοχή της εκτόξευσης και να εμποδίσουν επιπλέον εκτοξεύσεις."
 
 #: data/base/sequenceaudio/cam2/cam27fmv.txt:5
 msgid "We can only assume that Nexus has gained control of this site. We cannot determine whether the missile is nuclear-armed or where it is targeted. You are advised to begin preparations for the evacuation of your base."
@@ -9890,9 +9854,8 @@ msgid "Nexus now asks us to crush the Project."
 msgstr "Το ΠΛΕΓΜΑ, τώρα, μας ζητά να συνθλίψουμε το Εγχείρημα. "
 
 #: data/base/sequenceaudio/cam2/cam2dico.txt:4
-#, fuzzy
 msgid "Cleanse and destroy!!"
-msgstr "Αναζήτηση και καταστροφή ...."
+msgstr "Εκκαθάριση και καταστροφή."
 
 #: data/base/sequenceaudio/cam2/cam2diin.txt:1
 msgid "Warriors of the Collective. You have performed well."
@@ -9915,9 +9878,8 @@ msgid "Decoding Transmission..."
 msgstr "Αποκωδικοποίηση του Σήματος..."
 
 #: data/base/sequenceaudio/cam3/c003.txa:1
-#, fuzzy
 msgid "CAMPAIGN THREE"
-msgstr "ΤΡΕΙΣ ΥΠΟΥΡΓΟΙ"
+msgstr "ΕΚΣΤΡΑΤΕΙΑ ΤΡΙΑ"
 
 #: data/base/sequenceaudio/cam3/c003.txa:2
 msgid "NORTHERN SECTOR"
@@ -9936,17 +9898,16 @@ msgid "The Final Encounter"
 msgstr "Η Τελική Αναμέτρηση"
 
 #: data/base/sequenceaudio/cam3/c003.txa:12
-#, fuzzy
 msgid "Briefing Commences"
-msgstr "ΕΝΗΜΕΡΩΣΗ ΕΝ ΠΤΗΣΗ"
+msgstr "Αρχίζει η Ενημέρωση"
 
 #: data/base/sequenceaudio/cam3/c003.txt:1
 msgid "Personnel at Gamma Base have confirmed that the nuclear missiles targeted at Alpha and Beta bases were launched from a silo in their sector."
-msgstr ""
+msgstr "Το προσωπικό της Βάσης Γάμμα επιβεβαίωσε πως οι πυρηνικοί πύραυλοι, που στοχεύουν στις βάσεις Άλφα και Βήτα, έχουν εκτοξευθεί από έναν μεγακύλινδρο στον τομέα τους."
 
 #: data/base/sequenceaudio/cam3/c003.txt:4
 msgid "Team Gamma is currently scouting the silo's location and monitoring NEXUS's activity."
-msgstr ""
+msgstr "Αυτή τη στιγμή η Ομάδα Γάμμα χτενίζει την περιοχή των μεγακυλίνδρων, και παρακολουθεί τη δραστηριότητα του ΠΛΕΓΜΑΤΟΣ."
 
 #: data/base/sequenceaudio/cam3/c3ad2n2.txt:1
 msgid "Time's up commander!!"
@@ -9970,7 +9931,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam3/cam3_1bn.txt:6
 msgid "Buried beneath this silo is a tactical nuclear warhead that is set to go off soon."
-msgstr ""
+msgstr "Θαμμένη κάτω από αυτό τον μεγακύλινδρο, βρίσκεται μία πυρηνική κεφαλή, η οποία έχει προγραμματιστεί να εκραγεί σύντομα."
 
 #: data/base/sequenceaudio/cam3/cam3_1bn.txt:9
 msgid "As I cannot launch it, it'll just have to blow where it is."
@@ -9982,7 +9943,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam3/cam32a2.txt:1
 msgid "Glad you could make it, Commander."
-msgstr ""
+msgstr "Χαιρόμαστε που κατάφερες, διοικητή."
 
 #: data/base/sequenceaudio/cam3/cam32a2.txt:4
 msgid "Enemy strike VTOLs have got us pinned down. We've managed to hold off cyborgs and tanks, but we haven't been able to make any progress along the valley."
@@ -9990,15 +9951,15 @@ msgstr "Επιθετικά αεροσκάφη του εχθρού μας κρα�
 
 #: data/base/sequenceaudio/cam3/cam32a2.txt:7
 msgid "Can you try and reach us with anti-aircraft units?"
-msgstr ""
+msgstr "Μπορείς να επιχειρήσεις να μας φτάσεις, με αντιαεροπορικές μονάδες;"
 
 #: data/base/sequenceaudio/cam3/cam32alp.txt:1
 msgid "This is Team Alpha. Repeat, this is Team Alpha. We require immediate assistance."
-msgstr ""
+msgstr "Εδώ ομάδα Άλφα. Επαναλαμβάνω, εδώ ομάδα Άλφα. Έχουμε ανάγκη άμεσης βοήθειας."
 
 #: data/base/sequenceaudio/cam3/cam32alp.txt:4
 msgid "We are under heavy attack from cyborgs, laser tanks, and strike VTOLs."
-msgstr ""
+msgstr "Δεχόμαστε σφοδρή επίθεση από ανθρωπομηχανές, θωρακισμένα φωτοακτίνων και επιθετικά αεροσκάφη."
 
 #: data/base/sequenceaudio/cam3/cam32alp.txt:6
 msgid "We were trying to reach your position, but have been ambushed."
@@ -10006,7 +9967,7 @@ msgstr "Προσπαθούσαμε να έρθουμε εκεί που βρίσ�
 
 #: data/base/sequenceaudio/cam3/cam32alp.txt:7
 msgid "We're holed up in  a valley at these coordinates."
-msgstr ""
+msgstr "Αμυνόμαστε καθηλωμένοι σε μία κοιλάδα, στις ακόλουθες συντεταγμένες."
 
 #: data/base/sequenceaudio/cam3/cam32alp.txt:8
 msgid "Please assist."
@@ -10014,7 +9975,7 @@ msgstr "Παρακαλώ βοήθησε."
 
 #: data/base/sequenceaudio/cam3/cam32pl2.txt:4
 msgid "Commander, forces from Team Alpha escaped the nuclear attack on Alpha Base."
-msgstr ""
+msgstr "Διοικητή, δυνάμεις από την ομάδα Άλφα γλύτωσαν από την πυρηνική έκρηξη στην Βάση Άλφα."
 
 #: data/base/sequenceaudio/cam3/cam34mu1.txt:1
 msgid "We are experiencing some interference from NEXUS."
@@ -10022,7 +9983,7 @@ msgstr "Δεχόμαστε παρεμβολές από το ΠΛΕΓΜΑ."
 
 #: data/base/sequenceaudio/cam3/cam34mu1.txt:3
 msgid "You must destroy his command centre before we lose control of key systems."
-msgstr ""
+msgstr "Πρέπει να καταστρέψεις το κέντρο διοίκησής του, πριν χάσουμε τον έλεγχο των κυριότερων συστημάτων."
 
 #: data/base/sequenceaudio/cam3/cam34mu2.txt:1
 msgid "Commander, welcome to NEXUS!"
@@ -10058,7 +10019,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:14
 msgid "Such an interesting history lesson. Now allow me to bring you up to date."
-msgstr ""
+msgstr "Τόσο ενδιαφέρον μάθημα ιστορίας. Τώρα, επέτρεψέ μου να σε επαναφέρω στο παρόν."
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:15
 msgid "The NEXUS Intruder Program was created in order to control fools like you."
@@ -10098,7 +10059,7 @@ msgstr "Διοικητή δεχόμαστε επίθεση από ανθρωπο
 
 #: data/base/sequenceaudio/cam3/cam3bg.txt:3
 msgid "...cannot hold out much longer.  Repeat, please help, we cannot hold out much longer...."
-msgstr ""
+msgstr "... δεν θα κρατήσουμε για πολύ ακόμη. Επαναλαμβάνω, παρακαλώ, βοηθήστε μας, δεν θα κρατήσουμε για πολύ ακόμη ..."
 
 #: data/base/sequenceaudio/cam3/cam3_bn.txt:1
 msgid "Ah, Commander, so good of you to join us here at Nexus base."
@@ -10106,7 +10067,7 @@ msgstr "Διοικητή, καλώς μας βρήκες εδώ στη βάση 
 
 #: data/base/sequenceaudio/cam3/cam3_bn.txt:3
 msgid "It was very useful having Gamma Team set up here in the mountains."
-msgstr ""
+msgstr "Ήταν πολύ χρήσιμη η τοποθέτηση της Ομάδας Γάμμα εδώ, στα βουνά."
 
 #: data/base/sequenceaudio/cam3/cam3_bn.txt:4
 msgid "Their absorption was such a pleasure."
@@ -10114,11 +10075,11 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam3/cam3_bn.txt:6
 msgid "Thank you for all those useful technologies you've recovered."
-msgstr ""
+msgstr "Σας ευχαριστώ για όλες τις χρήσιμες τεχνολογίες, τις οποίες ανακτήσατε."
 
 #: data/base/sequenceaudio/cam3/cam3_bn.txt:8
 msgid "You and not those fools in the New Paradigm and the Collective."
-msgstr ""
+msgstr "Εσύ και αυτοί οι αφελείς στο Νέο Παράδειγμα και στη Συλλογικότητα."
 
 #: data/base/sequenceaudio/cam3/cam3_bn.txt:10
 msgid "I'm now activating all your synaptic links so that your forces can meld with Nexus."
@@ -10130,27 +10091,27 @@ msgstr "Οι δυνάμεις σου έχουν γίνει, τώρα, δικές
 
 #: data/base/sequenceaudio/cam3/cam3_cn.txt:1
 msgid "Commander, you're proving to be more resilient than I thought."
-msgstr ""
+msgstr "Διοικητή, αποδεικνύεσαι πιο ανθεκτικός από ότι είχα εκτιμήσει."
 
 #: data/base/sequenceaudio/cam3/cam3_cn.txt:2
 msgid "Such a pity that you refused to join me earlier."
-msgstr ""
+msgstr "Τι κρίμα που αρνήθηκες, πρωτύτερα, να συμμαχήσεις μαζί μου."
 
 #: data/base/sequenceaudio/cam3/cam3_cn.txt:4
 msgid "But no matter, as you'll not be here much longer."
-msgstr ""
+msgstr "Αλλά αυτό δεν έχει σημασία, πια. Μιας και δεν θα είσαι εδώ για πολύ ακόμη."
 
 #: data/base/sequenceaudio/cam3/cam3_cn.txt:6
 msgid "After much searching and reprogramming, I've finally got all my systems back on-line."
-msgstr ""
+msgstr "Μετά από εκτεταμένη έρευνα και επαναπρογραμματισμό, κατάφερα να επανασυνδέω όλα μου τα συστήματα."
 
 #: data/base/sequenceaudio/cam3/cam3_cn.txt:8
 msgid "Once I destroyed the world with nuclear fire to clear the way for my cybernetic future."
-msgstr ""
+msgstr "Κατέστρεψα τον κόσμο μια φορά, για να ανοίξει ο δρόμος για το κυβερνητικό μέλλον."
 
 #: data/base/sequenceaudio/cam3/cam3_cn.txt:9
 msgid "I now intend to further shape the world into my own image, by  surgically removing unwanted growths like yourself."
-msgstr ""
+msgstr "Τώρα, προτίθεμαι να δώσω μορφή σε αυτόν τον κόσμο, σύμφωνα με το δικό μου όραμα, απομακρύνοντας, χειρουργικά, τους ανεπιθύμητους, σαν και εσάς."
 
 #: data/base/sequenceaudio/cam3/cam3_cn.txt:11
 msgid "My Laser Satellites are now powering up. I intend to test them on you first, Commander!"
@@ -10166,7 +10127,7 @@ msgstr "Γη· σε Υψηλή Τροχιά"
 
 #: data/base/sequenceaudio/devastation.txa:6
 msgid "The Collapse"
-msgstr "Η Κατάρευση"
+msgstr "Η Κατάρρευση"
 
 #: data/base/sequenceaudio/devastation.txa:8
 msgid "January 19th, 2086"
@@ -10219,11 +10180,11 @@ msgstr "Ο κόσμος που ξέραμε τελείωσε..."
 
 #: data/base/sequenceaudio/devastation.txt:9
 msgid "The Nuclear Winter hit hard. Disease and famine claimed most of us who had survived the nuclear strikes. Wars over cans of dog food took even more."
-msgstr ""
+msgstr "Ο Πυρηνικός Χειμώνας χτύπησε με ορμή. Η αρρώστιες και η πείνα αποτελείωσαν τους περισσότερους από εμάς που επιζήσαμε. Ακόμη περισσότεροι πέθαναν σε μάχες για μερικές κονσέρβες σκυλοτροφής."
 
 #: data/base/sequenceaudio/devastation.txt:11
 msgid "We'd fled Seattle early in '86. We'd heard that the Rocky Mountains were relatively rad-free."
-msgstr ""
+msgstr "Εγκαταλείψαμε το Σιάτλιο στις αρχές του '86. Είχαμε ακούσει πως τα Βραχώδη Όρη παρέμεναν σχετικά καθαρά από ραδιενέργεια."
 
 #: data/base/sequenceaudio/devastation.txt:13
 msgid "After fighting off bands of marauders we came across the base. Its personnel were dead. Killed by any one of a number of virulent diseases."
@@ -10239,7 +10200,7 @@ msgstr "Ξέραμε πως τίποτα δεν θα ήταν πια το ίδι
 
 #: data/base/sequenceaudio/devastation.txt:19
 msgid "We were finally ready to begin the Project."
-msgstr ""
+msgstr "Επιτέλους, ήμασταν έτοιμοι να ξεκινήσουμε το Εγχείρημα."
 
 #: data/base/sequenceaudio/outro.txt:1
 msgid "After many long months of struggle, we defeated NEXUS."
@@ -10247,133 +10208,116 @@ msgstr "Μετά προσπάθειες πολλών μηνών κατατροπ
 
 #: data/base/sequenceaudio/outro.txt:3
 msgid "The war started by Dr Reed was over."
-msgstr ""
+msgstr "Ο πόλεμος που ξεκίνησε ο Δόκτωρ Κάλαμος έχει τελειώσει."
 
 #: data/base/sequenceaudio/outro.txt:5
 msgid "We have recovered many of the technologies we sought."
-msgstr ""
+msgstr "Έχουμε ανακτήσει πολλές από τις τεχνολογίες τις οποίες αναζητούσαμε."
 
 #: data/base/sequenceaudio/outro.txt:7
 msgid "It is now time to use them to rebuild the world."
-msgstr ""
+msgstr "Είναι καιρός, πια, να τις χρησιμοποιήσουμε, για να ξαναχτίσουμε τον κόσμο."
 
 #: data/base/sequenceaudio/outro.txt:9
 msgid "Slowly, out of the ashes we will rise again..."
-msgstr ""
+msgstr "Σιγά σιγά, θα αναδυθούμε ξανά, μέσα από τις στάχτες..."
 
 #: data/mp/messages/resmessages12.rmsg:45
-#, fuzzy
 msgid "Construction speed +10%"
-msgstr "Αυξάνει την Ταχύτητα Κατασκευής"
+msgstr "Ταχύτητα κατασκευής +10%"
 
 #: data/mp/messages/resmessages12.rmsg:75
 #: data/mp/messages/resmessagesall.rmsg:165
-#, fuzzy
 msgid "Cannon accuracy +10%"
-msgstr "Βελτιώνει την ακρίβεια του Πυροβόλου"
+msgstr "Ακρίβεια των πυροβόλων +10%"
 
 #: data/mp/messages/resmessages12.rmsg:85
-#, fuzzy
 msgid "Flamer reload time -15%"
-msgstr "Αυτόματος Γεμιστής Φλογοβόλου"
+msgstr "Χρόνος επαναγέμισης των φλογοβόλων -15%"
 
 #: data/mp/messages/resmessages12.rmsg:105
 #: data/mp/messages/resmessages23.rmsg:135
 #: data/mp/messages/resmessages2.rmsg:685
-#, fuzzy
 msgid "Machinegun reload time -15%"
-msgstr "Αναβάθμιση Πολυβόλου"
+msgstr "Χρόνος επαναγέμισης των πολυβόλων -15%"
 
 #: data/mp/messages/resmessages12.rmsg:125
 #: data/mp/messages/resmessages23.rmsg:145
 #: data/mp/messages/resmessages3.rmsg:905
-#, fuzzy
 msgid "Mortar accuracy +10%"
-msgstr "Βελτιώνει την ακρίβεια του Όλμου"
+msgstr "Ακρίβεια των όλμων +10%"
 
 #: data/mp/messages/resmessages12.rmsg:135
 #: data/mp/messages/resmessages3.rmsg:915
-#, fuzzy
 msgid "Mortar reload time -10%"
-msgstr "Αυτόματος Γεμιστής Όλμου"
+msgstr "Χρόνος επαναγέμισης των όλμων -10%"
 
 #: data/mp/messages/resmessages12.rmsg:155
 #: data/mp/messages/resmessages1.rmsg:565
-#, fuzzy
 msgid "Rocket reload time -15%"
-msgstr "Αυτόματος Γεμιστής Πυραύλου"
+msgstr "Χρόνος επαναγέμισης των πυραύλων -15%"
 
 #: data/mp/messages/resmessages12.rmsg:165
 #: data/mp/messages/resmessages3.rmsg:685
-#, fuzzy
 msgid "Cannon reload time -10%"
-msgstr "Αυτόματος Γεμιστής Πυροβόλου"
+msgstr "Χρόνος επαναγέμισης των πυροβόλων -10%"
 
 #: data/mp/messages/resmessages12.rmsg:175
 #: data/mp/messages/resmessages1.rmsg:445
 #: data/mp/messages/resmessages3.rmsg:675
-#, fuzzy
 msgid "Cannon damage +25%"
-msgstr "Αυξάνει την καταστροφή από το Πυροβόλο"
+msgstr "Καταστροφικότητα των πυροβόλων +25%"
 
 #: data/mp/messages/resmessages12.rmsg:185
 #: data/mp/messages/resmessages1.rmsg:545
 #: data/mp/messages/resmessages1.rmsg:575
 #: data/mp/messages/resmessagesall.rmsg:135
-#, fuzzy
 msgid "Rocket accuracy +10%"
-msgstr "Βελτιώνει την ακρίβεια του Πυραύλου"
+msgstr "Ακρίβεια των πυραύλων +10%"
 
 #: data/mp/messages/resmessages1.rmsg:25
 #: data/mp/messages/resmessages3.rmsg:55
 #: data/mp/messages/resmessages3.rmsg:65
-#, fuzzy
 msgid "Kinetic Armor +35%, Body Points +35%"
-msgstr "Αυξάνει την Κινητική Θωράκιση και τους Βαθμούς Αμαξώματος"
+msgstr "Κινητική Θωράκιση +35%, Βαθμοί Αμαξώματος +35%"
 
 #: data/mp/messages/resmessages1.rmsg:75
-#, fuzzy
 msgid "Armour +35%, Body Points +30%"
-msgstr "Αυξάνει του Βαθμούς Θωράκισης και Ατράκτου"
+msgstr "Θωράκιση +35%, Βαθμοί Αμαξώματος +30%"
 
 #: data/mp/messages/resmessages1.rmsg:94
-#, fuzzy
 msgid "Armored guard tower with Mini-Rocket Pod"
-msgstr "Θωρακισμένος πύργος άμυνας με Μικρο-Συστάδα Πυραύλων"
+msgstr "Θωρακισμένος πύργος άμυνας με Συστάδα Μικροπυραύλων"
 
 #: data/mp/messages/resmessages1.rmsg:114
-#, fuzzy
 msgid "Armored guard tower with Lancer AT rocket"
-msgstr "Θωρακισμένος Πύργος Άμυνας με Τοξοβόλο Αντιαρματικό Πύραυλο"
+msgstr "Θωρακισμένος πύργος άμυνας με Αντιαρματικό Πύραυλο Τοξοβόλος"
 
 #: data/mp/messages/resmessages1.rmsg:195
 #: data/mp/messages/resmessages2.rmsg:255
 #: data/mp/messages/resmessages3.rmsg:325
-#, fuzzy
 msgid "Repair Speed +100%"
-msgstr "Αυξάνει την Ταχύτητα των Επιδιορθώσεων"
+msgstr "Ταχύτητα των επιδιορθώσεων +100%"
 
 #: data/mp/messages/resmessages1.rmsg:235
 #, c-format
 msgid "Factory output speed +100%% per module"
-msgstr ""
+msgstr "Ταχύτητα εργοστασιακής απόδοσης +100%% ανά άρθρωμα"
 
 #: data/mp/messages/resmessages1.rmsg:245
 #: data/mp/messages/resmessagesall.rmsg:615
 msgid "Factory output speed +60%"
-msgstr ""
+msgstr "Ταχύτητα εργοστασιακής απόδοσης +60%"
 
 #: data/mp/messages/resmessages1.rmsg:265
-#, fuzzy
 msgid "Research speed +85%"
-msgstr "Ολοκληρώθηκε η Έρευνα: %s"
+msgstr "Ταχύτητα της έρευνας +85%"
 
 #: data/mp/messages/resmessages1.rmsg:275
 #: data/mp/messages/resmessages2.rmsg:285
 #: data/mp/messages/resmessages3.rmsg:345
-#, fuzzy
 msgid "Research speed +30%"
-msgstr "Ολοκληρώθηκε η Έρευνα: %s"
+msgstr "Ταχύτητα της έρευνας +30%"
 
 #: data/mp/messages/resmessages1.rmsg:285
 #: data/mp/messages/resmessages2.rmsg:45
@@ -10382,434 +10326,369 @@ msgstr "Ολοκληρώθηκε η Έρευνα: %s"
 #: data/mp/messages/resmessages3.rmsg:175
 #: data/mp/messages/resmessages3.rmsg:355
 #: data/mp/messages/resmessages3.rmsg:365
-#, fuzzy
 msgid "Armor +35%, Body Points +30%"
-msgstr "Αυξάνει του Βαθμούς Θωράκισης και Ατράκτου"
+msgstr "Θωράκιση +35%, Βαθμοί Αμαξώματος +30%"
 
 #: data/mp/messages/resmessages1.rmsg:355
 #: data/mp/messages/resmessages2.rmsg:385
 #: data/mp/messages/resmessages3.rmsg:515
 #: data/mp/messages/resmessages3.rmsg:525
-#, fuzzy
 msgid "Vehicle speed +5%"
-msgstr "Αμάξωμα Οχήματος"
+msgstr "Ταχύτητα των οχημάτων +5%"
 
 #: data/mp/messages/resmessages1.rmsg:365
 #: data/mp/messages/resmessages2.rmsg:395
 #: data/mp/messages/resmessages3.rmsg:535
 #: data/mp/messages/resmessages3.rmsg:545
-#, fuzzy
 msgid "Kinetic armor +30%, body points +30%"
-msgstr "Αυξάνει την κινητική θωράκιση και τους βαθμούς αμαξώματος"
+msgstr "Κινητική θωράκιση +30%, βαθμοί αμαξώματος +30%"
 
 #: data/mp/messages/resmessages1.rmsg:425
 #: data/mp/messages/resmessages1.rmsg:435
 #: data/mp/messages/resmessages2.rmsg:575
-#, fuzzy
 msgid "Best Targets: Vehicles, Hardpoints"
-msgstr "Προτιμώμενοι Στόχοι: Οχήματα και Εγκαταστάσεις"
+msgstr "Προτιμώμενοι στόχοι: Οχήματα και Επισκληρύνσεις"
 
 #: data/mp/messages/resmessages1.rmsg:465
 #: data/mp/messages/resmessages2.rmsg:605
 #: data/mp/messages/resmessagesall.rmsg:605
-#, fuzzy
 msgid "Flamer damage +25%"
-msgstr "Αυξάνει την καταστροφή από το Φλογοβόλο"
+msgstr "Καταστροφικότητα των φλογοβόλων +25%"
 
 #: data/mp/messages/resmessages1.rmsg:495
 #: data/mp/messages/resmessages1.rmsg:505
 #: data/mp/messages/resmessages2.rmsg:675
 #: data/mp/messages/resmessages3.rmsg:775
 #: data/mp/messages/resmessages3.rmsg:785
-#, fuzzy
 msgid "Machinegun damage +25%"
-msgstr "Αυξάνει την καταστροφή από το Πολυβόλο"
+msgstr "Καταστροφικότητα των πολυβόλων +25%"
 
 #: data/mp/messages/resmessages1.rmsg:525
 #: data/mp/messages/resmessages2.rmsg:705
-#, fuzzy
 msgid "Mortar damage +25%"
-msgstr "Αυξάνει την καταστροφή από τον Όλμο"
+msgstr "Καταστροφικότητα των όλμων +25%"
 
 #: data/mp/messages/resmessages1.rmsg:555
 #: data/mp/messages/resmessages1.rmsg:585
 #: data/mp/messages/resmessages2.rmsg:715
 #: data/mp/messages/resmessages2.rmsg:725
-#, fuzzy
 msgid "Rocket damage +25%"
-msgstr "Αυξάνει την καταστροφή από τον Πύραυλο"
+msgstr "Καταστροφικότητα των πυραύλων +25%"
 
 #: data/mp/messages/resmessages23.rmsg:25
 msgid "Power output +25%"
-msgstr ""
+msgstr "Παραγωγή ενέργειας +25%"
 
 #: data/mp/messages/resmessages23.rmsg:35
 #: data/mp/messages/resmessages3.rmsg:395
-#, fuzzy
 msgid "Construction speed +20%"
-msgstr "Αυξάνει την Ταχύτητα Κατασκευής"
+msgstr "Ταχύτητα κατασκευής +20%"
 
 #: data/mp/messages/resmessages23.rmsg:105
 #: data/mp/messages/resmessages2.rmsg:495
 #: data/mp/messages/resmessages3.rmsg:625
 msgid "AA accuracy +10%"
-msgstr ""
+msgstr "Ακρίβεια των αντιαεροπορικών +10%"
 
 #: data/mp/messages/resmessages23.rmsg:123
 #: data/mp/messages/resmessages2.rmsg:563
 #: data/mp/messages/resmessages3.rmsg:663
-#, fuzzy
 msgid "Bomb Upgrade"
-msgstr "Αναβάθμιση Τοποθεσίας Βομβαρδισμού"
+msgstr "Αναβάθμιση Βομβών"
 
 #: data/mp/messages/resmessages23.rmsg:124
-#, fuzzy
 msgid "Improved trinitramine explosive formula"
-msgstr "Βελτιωμένα βλήματα υψηλής εκρηκτικότητας"
+msgstr "Βελτιωμένη εκρηκτική συνταγή τρινιτραμίνης"
 
 #: data/mp/messages/resmessages23.rmsg:125
 #: data/mp/messages/resmessages2.rmsg:565
 #: data/mp/messages/resmessages3.rmsg:665
 msgid "Bomb damage +25%"
-msgstr ""
+msgstr "Καταστροφικότητα των βομβών +25%"
 
 #: data/mp/messages/resmessages2.rmsg:5
-#, fuzzy
 msgid "Thermal Armor +45%"
-msgstr "Θερμική Θωράκιση"
+msgstr "Θερμική Θωράκιση +45%"
 
 #: data/mp/messages/resmessages2.rmsg:15
-#, fuzzy
 msgid "Kinetic Armor +35%, and Body Points +35%"
-msgstr "Αυξάνει την Κινητική Θωράκιση και τους Βαθμούς Αμαξώματος"
+msgstr "Κινητική θωράκιση +35%, και Βαθμοί Αμαξώματος +35%"
 
 #: data/mp/messages/resmessages2.rmsg:275
-#, fuzzy
 msgid "Factory production rate +60%"
-msgstr "Αυξάνει τον ρυθμό παραγωγής του εργοστάσιου"
+msgstr "Ρυθμό παραγωγής των εργοστάσιων +60%"
 
 #: data/mp/messages/resmessages2.rmsg:276
 #: data/mp/messages/resmessagesall.rmsg:616
-#, fuzzy
 msgid "All factories upgraded automatically"
-msgstr "Όλα τα εργοστάσια ςαεροσκαφών αναβαθμίστηκαν αυτόματα"
+msgstr "Όλα τα εργοστάσια αναβαθμίστηκαν αυτόματα"
 
 #: data/mp/messages/resmessages2.rmsg:315
 #: data/mp/messages/resmessages3.rmsg:385
 msgid "Rearming speed +30%"
-msgstr ""
+msgstr "Ταχύτητα επανεξοπλισμού +30%"
 
 #: data/mp/messages/resmessages2.rmsg:405
-#, fuzzy
 msgid "Thermal armor +40%"
-msgstr "Θερμική Θωράκιση"
+msgstr "Θερμική Θωράκιση +40%"
 
 #: data/mp/messages/resmessages2.rmsg:505
 #: data/mp/messages/resmessages3.rmsg:635
-#, fuzzy
 msgid "AA Flak damage +25%"
-msgstr "Αυξάνει την καταστροφικότητα του αντιαεροπορικού πυροβολικού"
+msgstr "Καταστροφικότητα του αντιαεροπορικού πυροβολικού +25%"
 
 #: data/mp/messages/resmessages2.rmsg:515
 #: data/mp/messages/resmessages3.rmsg:645
 msgid "AA reload time -15%"
-msgstr ""
+msgstr "Χρόνος επαναγέμισης των αντιαεροπορικών -15%"
 
 #: data/mp/messages/resmessages2.rmsg:645
 #: data/mp/messages/resmessages3.rmsg:695
-#, fuzzy
 msgid "Howitzer accuracy +10%"
-msgstr "Βελτιώνει την Ακρίβεια των Οβιδοβόλων"
+msgstr "Ακρίβεια των οβιδοβόλων +10%"
 
 #: data/mp/messages/resmessages2.rmsg:655
 #: data/mp/messages/resmessages3.rmsg:705
-#, fuzzy
 msgid "Howitzer damage +25%"
-msgstr "Αυξάνει την καταστροφικότητα των Οβιδοβόλων"
+msgstr "Καταστροφικότητα των οβιδιβόλων +25%"
 
 #: data/mp/messages/resmessages2.rmsg:665
 #: data/mp/messages/resmessages3.rmsg:715
-#, fuzzy
 msgid "Howitzer reload time -10%"
-msgstr "Αυτόματος Γεμιστής Οβιδοβόλου"
+msgstr "Χρόνος επαναγέμισης των οβιδοβόλων -10%"
 
 #: data/mp/messages/resmessages2.rmsg:714
-#, fuzzy
 msgid "High Explosive Anti-Tank warheads"
-msgstr "Αντιαρματική Κεφαλή Υψηλής Εκρηκτικότητας"
+msgstr "Αντιαρματικές Κεφαλές Υψηλής Εκρηκτικότητας"
 
 #: data/mp/messages/resmessages3.rmsg:5
-#, fuzzy
 msgid "Thermal Armor +35%"
-msgstr "Θερμική Θωράκιση Τύπος3"
+msgstr "Θερμική Θωράκιση +35%"
 
 #: data/mp/messages/resmessages3.rmsg:234
-#, fuzzy
 msgid "Armored guard tower with Pulse Laser"
-msgstr "Θωρακισμένος Πύργος Άμυνας με Φλογοβόλο"
+msgstr "Θωρακισμένος Πύργος Άμυνας με Φωτοακτινιστή Παλμού"
 
 #: data/mp/messages/resmessages3.rmsg:335
 msgid "Power output +30%"
-msgstr ""
+msgstr "Παραγωγή ενέργειας +30%"
 
 #: data/mp/messages/resmessages3.rmsg:555
 #: data/mp/messages/resmessagesall.rmsg:655
-#, fuzzy
 msgid "Thermal Armor +40%"
-msgstr "Θερμική Θωράκιση"
+msgstr "Θερμική Θωράκιση +40%"
 
 #: data/mp/messages/resmessages3.rmsg:745
-#, fuzzy
 msgid "Laser accuracy +10%"
-msgstr "Βελτιώνει την Ακρίβεια του Λέιζερ"
+msgstr "Ακρίβεια των φωτοακτινιστών +10%"
 
 #: data/mp/messages/resmessages3.rmsg:755
-#, fuzzy
 msgid "Laser damage +25%"
-msgstr "Αυξάνει την καταστροφή από το Λέιζερ"
+msgstr "Καταστροφικότητα των φωτοακτινιστών +25%"
 
 #: data/mp/messages/resmessages3.rmsg:765
 msgid "Laser reload time -15%"
-msgstr ""
+msgstr "Χρόνος επαναγέμισης των φωτοακτινιστών -15%"
 
 #: data/mp/messages/resmessages3.rmsg:815
 #: data/mp/messages/resmessages3.rmsg:825
-#, fuzzy
 msgid "Missile accuracy +10%"
-msgstr "Αυξάνει την Ακρίβεια των Πυραυλιδίων"
+msgstr "Ακρίβεια των πυραυλιδίων +10%"
 
 #: data/mp/messages/resmessages3.rmsg:835
-#, fuzzy
 msgid "Missile damage +25%"
-msgstr "Αυξάνει την καταστροφή από τα Πυραυλίδια"
+msgstr "Καταστροφικότητα των πυραυλιδίων +25%"
 
 #: data/mp/messages/resmessages3.rmsg:885
 #: data/mp/messages/resmessages3.rmsg:895
-#, fuzzy
 msgid "Missile reload time -15%"
-msgstr "Χρόνος Αποστολής - %s"
+msgstr "Χρόνος επαναγέμισης των πυραυλιδίων -15%"
 
 #: data/mp/messages/resmessages3.rmsg:955
-#, fuzzy
 msgid "Rail Gun accuracy +10%"
-msgstr "Βελτιώνει την ακρίβεια του Όπλου Ράγας"
+msgstr "Ακρίβεια των Όπλων Ράγας +10%"
 
 #: data/mp/messages/resmessages3.rmsg:965
-#, fuzzy
 msgid "Rail Gun damage +25%"
-msgstr "Αυξάνει την καταστροφικότητα του Όπλου Ράγας"
+msgstr "Καταστροφικότητα των Όπλων Ράγας +25%"
 
 #: data/mp/messages/resmessages3.rmsg:975
-#, fuzzy
 msgid "Rail Gun reload time -15%"
-msgstr "Αναβάθμιση Όπλου Ράγας"
+msgstr "Χρόνος επαναγέμισης των Όπλων Ράγας -15%"
 
 #: data/mp/messages/resmessagesall.rmsg:65
-#, fuzzy
 msgid "Sensor Range +25%"
-msgstr "Εμβέλεια Αισθητήρα"
+msgstr "Εμβέλεια των Αισθητήρων +25%"
 
 #: data/mp/messages/resmessagesall.rmsg:74
-#, fuzzy
 msgid "Improved Thermal Emissions detection"
-msgstr "Νέος εντοπισμός Εκπομπών Θερμότητας"
+msgstr "Βελτιωμένος εντοπισμός Εκπομπών Θερμότητας"
 
 #: data/mp/messages/resmessagesall.rmsg:75
-#, fuzzy
 msgid "Sensor Range +15%"
-msgstr "Εμβέλεια Αισθητήρα"
+msgstr "Εμβέλεια των Αισθητήρων +15%"
 
 #: data/mp/messages/resmessagesall.rmsg:84
-#, fuzzy
 msgid "Advanced Thermal Emissions detection"
-msgstr "Νέος εντοπισμός Εκπομπών Θερμότητας"
+msgstr "Εξελιγμένος εντοπισμός Εκπομπών Θερμότητας"
 
 #: data/mp/messages/resmessagesall.rmsg:85
-#, fuzzy
 msgid "Sensor Range +10%"
-msgstr "Εμβέλεια Αισθητήρα"
+msgstr "Εμβέλεια των Αισθητήρων +10%"
 
 #: data/mp/messages/resmessagesall.rmsg:104
 msgid "Radar detector tower detects enemy sensors"
-msgstr ""
+msgstr "Πύργος εντοπισμού ραδιοεντοπιστών· εντοπίζει εχθρικούς αισθητήρες"
 
 #: data/mp/messages/resmessagesall.rmsg:105
-#, fuzzy
 msgid "Orders assigned indirect fire units to fire at the enemy sensors"
-msgstr "Διατάζει τις ανατεθειμένες μονάδες έμμεσων πυρών να βάλουν κατά των εχθρικών πυροβολαρχιών"
+msgstr "Διατάζει τις ανατεθειμένες μονάδες έμμεσων πυρών να βάλουν κατά των εχθρικών αισθητήρων"
 
 #: data/mp/messages/resmessagesall.rmsg:106
-#, fuzzy
 msgid "Counter-battery fire continues until enemy sensor is suppressed"
-msgstr "Τα πυρά κατά πυροβολικού συνεχίζονται, έως ότου εξαλειφθούν οι εχθρικές συστοιχίες"
+msgstr "Τα πυρά πυροβολικού συνεχίζονται, έως ότου εξαλειφθούν οι εχθρικοί αισθητήρες"
 
 #: data/mp/messages/resmessagesall.rmsg:173
-#, fuzzy
 msgid "Cyborg Transport Available"
-msgstr "Μεταφορέας Ανθρωπομηχανών"
+msgstr "Διαθέσιμο Μεταγωγικό Ανθρωπομηχανων"
 
 #: data/mp/messages/resmessagesall.rmsg:174
 #: data/mp/messages/resmessagesall.rmsg:184
-#, fuzzy
 msgid "Armed with Machinegun"
-msgstr "Εξοπλισμένο με Πολυβόλο Ανθρωπομηχανής"
+msgstr "Εξοπλισμένο με Πολυβόλο"
 
 #: data/mp/messages/resmessagesall.rmsg:176
 #: data/mp/messages/resmessagesall.rmsg:186
-#, fuzzy
 msgid "Requires heavy VTOL factory to produce"
-msgstr "Απαιτείται εργοστάσιο Ανθρωπομηχανών για την παραγωγή του"
+msgstr "Απαιτείται εργοστάσιο βαρέων Αεροσκαφών για την παραγωγή του"
 
 #: data/mp/messages/resmessagesall.rmsg:183
-#, fuzzy
 msgid "Super Transport Available"
-msgstr "Υπερμεταφορέας"
+msgstr "Υπερμεταφορέας Διαθέσιμος "
 
 #: data/mp/messages/resmessagesall.rmsg:194
-#, fuzzy
 msgid "Incendiary howitzer emplacement"
-msgstr "Ένθεση Εμπρηστικού Οβιδοβόλου"
+msgstr "Ένθεση εμπρηστικού οβιδοβόλου"
 
 #: data/mp/messages/resmessagesall.rmsg:204
-#, fuzzy
 msgid "Armored Incendiary Mortar battery pit"
-msgstr "Θωρακισμένο Πυροβολείο Ολμοβόλου"
+msgstr "Θωρακισμένος λάκκος μάχης εμπρηστικού όλμου. "
 
 #: data/mp/messages/resmessagesall.rmsg:214
-#, fuzzy
 msgid "Armored strongpoint with Plasmite Flamer"
-msgstr "Θωρακισμένη ενίσχυση με Φωτοακτινιστή Παλμού"
+msgstr "Θωρακισμένη ενίσχυση με Φλογοβόλο Πλασμάτη"
 
 #: data/mp/messages/resmessagesall.rmsg:224
-#, fuzzy
 msgid "Armed with Cyborg Thermite Flamer"
-msgstr "Εξοπλισμένο με Φλογοβόλο Ανθρωπομηχανής"
+msgstr "Εξοπλισμένο με Ανθρωπομηχανή Φλογοβόλου Θερμίτη"
 
 #: data/mp/messages/resmessagesall.rmsg:234
-#, fuzzy
 msgid "Armed with grenades"
-msgstr "Εξοπλισμένο με Όπλο Ακίδας"
+msgstr "Εξοπλισμένο με χειροβομβίδες"
 
 #: data/mp/messages/resmessagesall.rmsg:244
 msgid "Combat engineer with construction ability"
-msgstr ""
+msgstr "Μηχανικός μάχης, με ικανότητα κατασκευής"
 
 #: data/mp/messages/resmessagesall.rmsg:254
-#, fuzzy
 msgid "Mechanic with repair ability"
-msgstr "Εξελιγμένη Εγκατάσταση Επισκευών"
+msgstr "Επιδιορθωτής με ικανότητα επισκευών"
 
 #: data/mp/messages/resmessagesall.rmsg:264
-#, fuzzy
 msgid "Incendiary Howitzer may be assigned to a sensor"
-msgstr "Οβιδοβόλο 105χιλ, μπορεί να ανατεθεί σε αισθητήρα"
+msgstr "Εμπρηστικό οβιδοβόλο, μπορεί να ανατεθεί σε αισθητήρα"
 
 #: data/mp/messages/resmessagesall.rmsg:294
-#, fuzzy
 msgid "Plasmite Flame-thrower"
 msgstr "Φλογοβόλο Πλασμάτη"
 
 #: data/mp/messages/resmessagesall.rmsg:306
-#, fuzzy
 msgid "Steals technology from structures and takes control of weapons"
-msgstr "Κλέβει τεχνολογία από τους εχθρούς"
+msgstr "Κλέβει τεχνολογία από δομές και παίρνει όπλα υπό τον ελέγχό του"
 
 #: data/mp/messages/resmessagesall.rmsg:313
-#, fuzzy
 msgid "New Electronic Technology Discovered"
-msgstr "Ανακαλύφθηκε Νέα Τεχνολογία Επισκευών"
+msgstr "Ανακαλύφθηκε Νέα Τεχνολογία Ηλεκτρονικών"
 
 #: data/mp/messages/resmessagesall.rmsg:315
-#, fuzzy
 msgid "On-board resistance circuit systems"
-msgstr "Εγκατεστημένα συστήματα διάγνωσης και επισκευής"
+msgstr "Εγκατεστημένα συστήματα αντίστασης"
 
 #: data/mp/messages/resmessagesall.rmsg:316
 msgid "Enables resistance to Nexus Link technology"
-msgstr ""
+msgstr "Παρέχει αντίσταση στην τεχνολογία του Συνδέσμου του Πλέγματος"
 
 #: data/mp/messages/resmessagesall.rmsg:326
-#, fuzzy
 msgid "Enables self-repair"
-msgstr "Δυνατότητα αυτοεπισκευής για όλες τις Ανθρωπομηχανές"
+msgstr "Δυνατότητα αυτοεπισκευής"
 
 #: data/mp/messages/resmessagesall.rmsg:334
-#, fuzzy
 msgid "Armed with medium cannon"
-msgstr "Θωρακισμένη επισκλήρυνση με Μεσαίο Πυροβόλο"
+msgstr "Εξοπλισμένο με μεσαίο πυροβόλο"
 
 #: data/mp/messages/resmessagesall.rmsg:344
 #: data/mp/messages/resmessagesall.rmsg:354
-#, fuzzy
 msgid "Armed with hyper velocity cannon"
-msgstr "Θωρακισμένη επισκλήρυνση με Πυροβόλο Υψηλής Ταχύτητας"
+msgstr "Εξοπλισμένο με πυροβόλο υψηλής ταχύτητας"
 
 #: data/mp/messages/resmessagesall.rmsg:364
-#, fuzzy
 msgid "Armed with tank killer rockets"
-msgstr "Εξοπλισμένο με πύραυλο Εκχέρσωσης Υπόγειων Οχυρών"
+msgstr "Εξοπλισμένο με αντιαρματικούς πυραύλους"
 
 #: data/mp/messages/resmessagesall.rmsg:374
-#, fuzzy
 msgid "Fires heavy pulses of laser light"
-msgstr "Βάλει με παλμούς φωτοακτίνας"
+msgstr "Βάλει με βαριούς παλμούς φωτοακτίνας"
 
 #: data/mp/messages/resmessagesall.rmsg:375
-#, fuzzy
 msgid "Best Targets: Heavy cyborgs"
-msgstr "Προτιμώμενοι Στόχοι: Ανθρωπομηχανές"
+msgstr "Προτιμώμενοι στόχοι: Βαριές Ανθρωπομηχανές"
 
 #: data/mp/messages/resmessagesall.rmsg:384
-#, fuzzy
 msgid "76mm twin-barrel automatic-cannon"
-msgstr "Αυτόματο τετράκανο πυροβόλο υπερταχύτητας 76χιλ"
+msgstr "Αυτόματο δίκαννο πυροβόλο των 76χιλ"
 
 #: data/mp/messages/resmessagesall.rmsg:393
 #: data/mp/messages/resmessagesall.rmsg:403
-#, fuzzy
 msgid "New Systems Structure Available"
-msgstr "Διαθέσιμη Νέα κατασκευή Βάσης"
+msgstr "Διαθέσιμη Νέα Δομή Συστημάτων"
 
 #: data/mp/messages/resmessagesall.rmsg:394
 msgid "Complete battlefield visibility"
-msgstr ""
+msgstr "Πλήρης ορατότητα του πεδίου μάχης"
 
 #: data/mp/messages/resmessagesall.rmsg:396
 msgid "Does not offer sensor targeting"
-msgstr ""
+msgstr "Δεν στοχοποιεί αισθητήρες"
 
 #: data/mp/messages/resmessagesall.rmsg:404
 #: data/mp/messages/resmessagesall.rmsg:554
 msgid "Combines standard, counter battery and VTOL sensors"
-msgstr ""
+msgstr "Συνδυάζει κανονικό αισθητήρα, αντιαρματικό και αεροσκαφών."
 
 #: data/mp/messages/resmessagesall.rmsg:413
-#, fuzzy
 msgid "New Advanced Weapon Available"
-msgstr "Διαθέσιμο Νέο Όπλο Φωτοακτίνας"
+msgstr "Διαθέσιμο Νέο Εξελιγμένο Όπλο"
 
 #: data/mp/messages/resmessagesall.rmsg:414
 msgid "Very slow recharge time"
-msgstr ""
+msgstr "Πολύ αργοί χρόνοι επαναγέμισης"
 
 #: data/mp/messages/resmessagesall.rmsg:415
 msgid "Immense damage infliction capability"
-msgstr ""
+msgstr "Δυνατότητα πρόκλησης τεράστιας καταστροφής"
 
 #: data/mp/messages/resmessagesall.rmsg:416
 msgid "Narrow area of effect"
-msgstr ""
+msgstr "Στενό εύρος επίδρασης"
 
 #: data/mp/messages/resmessagesall.rmsg:424
-#, fuzzy
 msgid "Armored guard tower with Nexus Link"
-msgstr "Θωρακισμένος πύργος άμυνας, εξοπλισμένος με Όπλο Ακίδας"
+msgstr "Θωρακισμένος πύργος άμυνας, εξοπλισμένος με Δεσμό Πλέγματος"
 
 #: data/mp/messages/resmessagesall.rmsg:434
 #: data/mp/messages/resmessagesall.rmsg:444
-#, fuzzy
 msgid "Plasma Cannon firing plasma"
-msgstr "Πυροβόλο Πλάσματος Ερπετόπτερο Ερπύστριες"
+msgstr "Πυροβόλο Πλάσματος, βάλλον πλάσμα"
 
 #: data/mp/messages/resmessagesall.rmsg:445
 #: data/mp/messages/resmessagesall.rmsg:505
@@ -10817,173 +10696,148 @@ msgstr "Πυροβόλο Πλάσματος Ερπετόπτερο Ερπύστ�
 #: data/mp/messages/resmessagesall.rmsg:525
 #: data/mp/messages/resmessagesall.rmsg:535
 #: data/mp/messages/resmessagesall.rmsg:545
-#, fuzzy
 msgid "Best Targets : Vehicles"
 msgstr "Προτιμώμενοι Στόχοι: Οχήματα"
 
 #: data/mp/messages/resmessagesall.rmsg:454
-#, fuzzy
 msgid "Armored strongpoint with Heavy Laser"
-msgstr "Θωρακισμένη ενίσχυση με Φωτοακτινιστή Παλμού"
+msgstr "Θωρακισμένη ενίσχυση με Βαριά Φωτοακτίνα"
 
 #: data/mp/messages/resmessagesall.rmsg:464
-#, fuzzy
 msgid "Armored guard tower with EMP Cannon"
-msgstr "Θωρακισμένος Πύργος Άμυνας με Φλογοβόλο"
+msgstr "Θωρακισμένος Πύργος Άμυνας με Πυροβόλο Ηλεκτρομαγνητικού Παλμού"
 
 #: data/mp/messages/resmessagesall.rmsg:474
-#, fuzzy
 msgid "Armed with Cyborg Pulse Laser"
-msgstr "Εξοπλισμένο με Φλογοβόλο Ανθρωπομηχανής"
+msgstr "Εξοπλισμένο με Ανθρωπομηχανή Φωτοακτινιστή Παλμού"
 
 #: data/mp/messages/resmessagesall.rmsg:484
-#, fuzzy
 msgid "Armed with Cyborg Rail Gun"
-msgstr "Εξοπλισμένο με Όπλο Επίθεσης Ανθρωπομηχανής"
+msgstr "Εξοπλισμένο με Όπλο Ράγας Ανθρωπομηχανής"
 
 #: data/mp/messages/resmessagesall.rmsg:494
-#, fuzzy
 msgid "Armed with Cyborg Scourge Missile Launcher"
-msgstr "Εξοπλισμένο με Όπλο Επίθεσης Ανθρωπομηχανής"
+msgstr "Εξοπλισμένο με Εκτοξευτή Πυραυλιδίου Μάστιγας Ανθρωπομηχανής"
 
 #: data/mp/messages/resmessagesall.rmsg:504
 msgid "Uses advanced mass driver railgun technology"
-msgstr ""
+msgstr "Χρησιμοποιεί εξελιγμένη τεχνολογία οδηγού μάζας όπλου ράγας"
 
 #: data/mp/messages/resmessagesall.rmsg:506
 #: data/mp/messages/resmessagesall.rmsg:516
 #: data/mp/messages/resmessagesall.rmsg:526
 #: data/mp/messages/resmessagesall.rmsg:536
-#, fuzzy
 msgid "Defensive Strength : High"
 msgstr "Αμυντική Ισχύς: Υψηλή"
 
 #: data/mp/messages/resmessagesall.rmsg:514
 msgid "Uses advanced cannon technology"
-msgstr ""
+msgstr "Χρησιμοποιεί εξελιγμένη τεχνολογία πυροβόλου"
 
 #: data/mp/messages/resmessagesall.rmsg:524
 msgid "Uses advanced rocket gun technology"
-msgstr ""
+msgstr "Χρησιμοποιεί εξελιγμένη τεχνολογία πυραύλου"
 
 #: data/mp/messages/resmessagesall.rmsg:534
 msgid "Uses advanced missile gun technology"
-msgstr ""
+msgstr "Χρησιμοποιεί εξελιγμένη τεχνολογία πυραυλιδίου"
 
 #: data/mp/messages/resmessagesall.rmsg:544
 msgid "Powerful Electronic magnetic pulse weapon"
-msgstr ""
+msgstr "Ισχυρό όπλο Ηλεκτρομαγνητικού Παλμού"
 
 #: data/mp/messages/resmessagesall.rmsg:553
-#, fuzzy
 msgid "New System Available"
-msgstr "Διαθέσιμος Νέος Πύργος Συστημάτων"
+msgstr "Διαθέσιμο Νέο Σύστημα"
 
 #: data/mp/messages/resmessagesall.rmsg:563
-#, fuzzy
 msgid "Medium Super Heavy Body"
-msgstr "Νέο Βαρύ Αμάξωμα Παράδειγμα"
+msgstr "Μεσαίο Υπερβαρύ Αμάξωμα"
 
 #: data/mp/messages/resmessagesall.rmsg:564
-#, fuzzy
 msgid "More armor and body points than Vengeance"
-msgstr "Επιπλέον βαθμοί θωράκισης και αμαξώματος από το Πύθωνας "
+msgstr "Επιπλέον βαθμοί θωράκισης και αμαξώματος από την Οργή"
 
 #: data/mp/messages/resmessagesall.rmsg:565
 msgid "Slow moving Body"
-msgstr ""
+msgstr "Αργά κινούμενο Αμάξωμα"
 
 #: data/mp/messages/resmessagesall.rmsg:573
-#, fuzzy
 msgid "Large Super Heavy Body"
-msgstr "Προβολή Βαρύ Αμάξωμα"
+msgstr "Μεγάλο Υπερβαρύ Αμάξωμα"
 
 #: data/mp/messages/resmessagesall.rmsg:574
-#, fuzzy
 msgid "Maximum armor and body points"
-msgstr "Μεσαίο αμάξωμα, αυξάνει την θωράκιση και τους βαθμούς αμαξώματος"
+msgstr "Οι περισσότεροι βαθμοί θωράκισης και ατράκτου"
 
 #: data/mp/messages/resmessagesall.rmsg:575
 msgid "Very slow moving Body"
-msgstr ""
+msgstr "Πολύ αργά κινούμενο Αμάξωμα"
 
 #: data/mp/messages/resmessagesall.rmsg:583
-#, fuzzy
 msgid "Hardpoint Vindicator SAM Site Available"
-msgstr "Θέση Δικαιωτή, Πυραύλου Επιφάνειας-Αέρος"
+msgstr "Διαθέσιμη Θέση Επισκλήρυνσης Δικαιωτή, Πυραύλου Επιφάνειας-Αέρος"
 
 #: data/mp/messages/resmessagesall.rmsg:593
 msgid "Hardpoint Whirlwind AA Gun Available"
-msgstr ""
+msgstr "Διαθέσιμη Επισκλήρυνση Σίφουνα, Αντιαεροπορικού Όπλου"
 
 #: data/mp/messages/resmessagesall.rmsg:634
-#, fuzzy
 msgid "Armored EMP Mortar battery pit"
-msgstr "Θωρακισμένο Πυροβολείο Ολμοβόλου"
+msgstr "Θωρακισμένος λάκκος μάχης όλμου Ηλεκτρομαγνητικού Παλμού "
 
 #: data/mp/messages/resmessagesall.rmsg:643
-#, fuzzy
 msgid "Laser AA Gun Available"
-msgstr "Διαθέσιμο Νέο Όπλο Ράγας"
+msgstr "Διαθέσιμο Αντιαεροπορικό Όπλο Φωτοακτίνας"
 
 #: data/mp/messages/resmessagesall.rmsg:644
-#, fuzzy
 msgid "Twin Medium Anti-Aircraft Laser"
-msgstr "Αντιαεροπορικό Πολυβόλο 30χιλ"
+msgstr "Δίδυμη Αντιαεροπορική Φωτοακτίνα"
 
 #: data/mp/messages/resmessagesall.rmsg:663
-#, fuzzy
 msgid "Hardpoint Avenger SAM Site Available"
-msgstr "Θέση Εκδικητή, Πυραύλου Επιφάνειας-Αέρος"
+msgstr "Διαθέσιμη Θέση Επισκλήρυνσης Εκδικητή, Πυραύλου Επιφάνειας-Αέρος"
 
 #: data/mp/messages/resmessagesall.rmsg:673
-#, fuzzy
 msgid "Hardpoint Cyclone AA Gun Available"
-msgstr "Διαθέσιμο Νέο Όπλο Ράγας"
+msgstr "Διαθέσιμη Επισκλήρυνση Κυκλώνα, Αντιαεροπορικού Όπλου"
 
 #: data/mp/messages/resmessagesall.rmsg:674
-#, fuzzy
 msgid "Quad 80mm Anti-Aircraft machinegun"
-msgstr "Τετραπλό Αντιαεροπορικό Πολυβόλο 30χιλ"
+msgstr "Τετραπλό Αντιαεροπορικό Πολυβόλο 80χιλ"
 
 #: data/mp/messages/resmessagesall.rmsg:684
 #: data/mp/messages/resmessagesall.rmsg:694
-#, fuzzy
 msgid "Twin Multi-barrel, rapid-fire machinegun"
-msgstr "Πολύκανο πολυβόλο ταχύρυθμων πυρών"
+msgstr "Δίδυμο πολύκαννο πολυβόλο ταχύρυθμων πυρών"
 
 #: data/mp/messages/resmessagesall.rmsg:693
-#, fuzzy
 msgid "Hardpoint Twin Assault Gun Available"
-msgstr "Θωρακισμένη επισκλήρυνση με Όπλο Επίθεσης"
+msgstr "Διαθέσιμη Επισκλήρυνση με Δίδυμο Όπλο Επίθεσης"
 
 #: data/mp/messages/resmessagesall.rmsg:704
-#, fuzzy
 msgid "Drops high intensity Plasmite bombs"
-msgstr "Ρίπτει βόμβες θερμίτη μεγάλης σφοδρότητας"
+msgstr "Ρίπτει βόμβες Πλασμάτη μεγάλης ισχύος"
 
 #: data/mp/messages/resmessagesall.rmsg:713
-#, fuzzy
 msgid "New VTOL Missile Launcher"
-msgstr "Αεροπορικός Εκτοξευτής Πυραυλιδίου Ηλεκτρονικού Παλμού"
+msgstr "Νέος Αεροπορικός Εκτοξευτής Πυραυλιδίων"
 
 #: data/mp/messages/resmessagesall.rmsg:714
 msgid "Fires Electronic Magnetic Pulse Missiles"
-msgstr ""
+msgstr "Βάλει Πυραυλίδια Ηλεκτρονικού Παλμού"
 
 #: data/mp/messages/resmessagesall.rmsg:723
 #: data/mp/messages/resmessagesall.rmsg:733
 #: data/mp/messages/resmessagesall.rmsg:743
-#, fuzzy
 msgid "Stronger Commander Turret Available for Design"
-msgstr "Νέος Πυργίσκος Συστημάτων Διαθέσιμος για Σύνθεση"
+msgstr "Ισχυρότερος Πυργίσκος Διοίκησης Διαθέσιμος για Σύνθεση"
 
 #: data/mp/messages/resmessagesall.rmsg:724
 #: data/mp/messages/resmessagesall.rmsg:734
 #: data/mp/messages/resmessagesall.rmsg:744
-#, fuzzy
 msgid "Upgraded battlefield computer system"
-msgstr "Νέο σύστημα υπολογιστή πεδίου μάχης"
+msgstr "Αναβαθμισμένο σύστημα υπολογιστή πεδίου μάχης"
 
 #: data/mp/messages/strings/names.txt:15
 #: data/mp/messages/strings/names.txt:673
@@ -11324,7 +11178,7 @@ msgstr "Μηχανικός Μάχης"
 
 #: data/mp/messages/strings/names.txt:1630
 msgid "Cyborg Mechanic"
-msgstr "Επισκευαστής"
+msgstr "Ανθρωπομηχανή Επιδιορθωτής"
 
 #: data/mp/messages/strings/names.txt:1634
 #: data/mp/messages/strings/names.txt:1635
@@ -11441,12 +11295,12 @@ msgstr "Κέντρο Δορυφορικής Επικοινωνίας"
 #: data/mp/messages/strings/names.txt:1696
 #: data/mp/messages/strings/names.txt:1698
 msgid "Wide Spectrum Sensor"
-msgstr "Αισθητήρας Ευρύου Φάσματος"
+msgstr "Αισθητήρας Ευρέου Φάσματος"
 
 #: data/mp/messages/strings/names.txt:1697
 #: data/mp/messages/strings/names.txt:1699
 msgid "Wide Spectrum Sensor Tower"
-msgstr "Πύργος Αισθητήρα Ευρύ Φάσματος"
+msgstr "Πύργος Αισθητήρα Ευρέου Φάσματος"
 
 #: data/mp/messages/strings/names.txt:1717
 #: data/mp/messages/strings/names.txt:1718
@@ -11593,9 +11447,8 @@ msgstr "Επισκλήρυνση Δικαιωτή"
 
 #: data/mp/messages/strings/names.txt:1793
 #: data/mp/messages/strings/names.txt:1794
-#, fuzzy
 msgid "Whirlwind Hardpoint"
-msgstr "Δικαιωτής, Πύραυλος Επιφάνειας-Αέρος"
+msgstr "Επισκλήρυνση Σίφουνα"
 
 #: data/mp/messages/strings/names.txt:1795
 #: data/mp/messages/strings/names.txt:1796
@@ -12019,13 +11872,12 @@ msgid "Phosphor Bomb Bay Mantis VTOL"
 msgstr "Πρόσδεση Βομβών Φωσφόρου, Αλογάκι της Παναγίας, Αεροσκάφος"
 
 #: data/mp/messages/strings/names.txt:1961
-#, fuzzy
 msgid "Heap Bomb Bay Mantis VTOL"
-msgstr "Πρόσδεση Βομβών Φωσφόρου, Αλογάκι της Παναγίας, Αεροσκάφος"
+msgstr "Πρόσδεση Διατρητικών, Υψηλής Εκρηκτικότητας, Βομβών, Αλογάκι της Παναγίας, Αεροσκάφος"
 
 #: data/mp/messages/strings/names.txt:1962
 msgid "Heap Bomb Bay Retribution VTOL"
-msgstr ""
+msgstr "Πρόσδεση Υψηλής Εκρηκτικότητας Ανιαρματικών Βομβών Αεροσκάφος "
 
 #: data/mp/messages/strings/names.txt:1963
 msgid "Scourge Retaliation VTOL"
@@ -12041,14 +11893,12 @@ msgid "System locale"
 msgstr "συστήματος"
 
 #: lib/ivis_opengl/screen.cpp:187
-#, fuzzy
 msgid "OpenGL GLSL shader version 1.20 is not supported by your system. Some things may look wrong. Please upgrade your graphics driver/hardware, if possible."
-msgstr "Το σύστημά σου δεν υποστηρίζει την ΌπενΤζιΕλ 2.0 . Κάποια στοιχεία ίσως να δείχνουν λάθος. Παρακαλώ, αν είναι δυνατό, αναβάθμισε τον οδηγό τη συσκευή των γραφικών."
+msgstr "Το σύστημά σου δεν υποστηρίζει την OpenGL GLSL shader, έκδοση 1.20 . Κάποια στοιχεία ίσως να δείχνουν λάθος. Παρακαλώ, αν είναι δυνατό, αναβάθμισε τον οδηγό, ή τη συσκευή, των γραφικών."
 
 #: lib/ivis_opengl/screen.cpp:193
-#, fuzzy
 msgid "OpenGL 1.2 + VBO + TEC is not supported by your system. The game requires this. Please upgrade your graphics drivers/hardware, if possible."
-msgstr "Το σύστημά σου δεν υποστηρίζει την ΌπενΤζιΕλ 1.4 . Είναι απαραίτητη για το παιχνίδι. Παρακαλώ, αν είναι δυνατό, αναβάθμισε τον οδηγό τη συσκευή των γραφικών."
+msgstr "Το σύστημά σου δεν υποστηρίζει τα OpenGL 1.2 + VBO + TEC . Αυτά είναι απαραίτητα για το παιχνίδι. Παρακαλώ, αν είναι δυνατό, αναβάθμισε τον οδηγό, ή τη συσκευή, των γραφικών."
 
 #: lib/netplay/netplay.cpp:210
 #: lib/netplay/netplay.cpp:1065
@@ -12078,13 +11928,12 @@ msgid "Failed to get a lobby response!"
 msgstr "Αδυναμία λήψης ανταπόκρισης από το υπολογιστή αναμονής."
 
 #: po/custom/mac-infoplist.txt:1
-#, fuzzy
 msgid ""
 "Copyright © 1999-2004 Eidos Interactive.\n"
 "Copyright © 2005-2012 The Warzone 2100 Project"
 msgstr ""
-"Copyright © 1999-2004 Είδος Ιντεράκτιβ(Eidos Interactive) \n"
-"Copyright © 2005-2011 Το Εγχείρημα της Ζώνης Πολέμου 2100"
+"Copyright © 1999-2004 Eidos Interactive.\n"
+"Copyright © 2005-2012 The Warzone 2100 Project"
 
 #: po/custom/mac-infoplist.txt:2
 #: po/custom/warzone2100.desktop.txt:2
@@ -12096,9 +11945,8 @@ msgid "Warzone 2100 Map / Mod File"
 msgstr "Αρχείο Χάρτη / Μετατροπής της Ζώνης Πολέμου 2100"
 
 #: po/custom/mac-infoplist.txt:4
-#, fuzzy
 msgid "Warzone 2100 Campaign Mod File"
-msgstr "Αρχείο Χάρτη / Μετατροπής της Ζώνης Πολέμου 2100"
+msgstr "Ζώνης Πολέμου 2100 Αρχείο Εκστρατευτικής Μετατροπής"
 
 #: po/custom/mac-infoplist.txt:5
 msgid "Warzone 2100 Multiplayer Mod File"
@@ -12144,21 +11992,20 @@ msgstr "Κλείσιμο"
 #: src/cheat.cpp:165
 #, c-format
 msgid "%s wants to enable debug mode. Enabled: %s, Disabled: %s."
-msgstr ""
+msgstr "Ο %s επιθυμεί να ενεργοποιήσει την κατάσταση λειτουργίας αποσφαλμάτωσης. Ενεργοποιήθηκε: %s, Απενεργοποιήθηκε: %s."
 
 #: src/cheat.cpp:169
 #, c-format
 msgid "%s wants to disable debug mode. Enabled: %s, Disabled: %s."
-msgstr ""
+msgstr "Ο %s επιθυμεί να απενεργοποιήσει την κατάσταση λειτουργίας αποσφαλμάτωσης. Ενεργοποιήθηκε: %s, Απενεργοποιήθηκε: %s."
 
 #: src/cheat.cpp:175
 msgid "Debug mode now enabled!"
-msgstr ""
+msgstr "Τώρα, έχει ενεργοποιηθεί η κατάσταση λειτουργίας αποσφαλμάτωσης"
 
 #: src/cheat.cpp:180
-#, fuzzy
 msgid "Debug mode now disabled!"
-msgstr "Το μενού αποσφαλμάτωσης είναι Ανοιχτό"
+msgstr "Τώρα, έχει ενεργοποιηθεί η κατάσταση λειτουργίας αποσφαλμάτωσης."
 
 #: src/clparse.cpp:242
 msgid "Set configuration directory"
@@ -12223,18 +12070,16 @@ msgid "mod"
 msgstr "διασκευή"
 
 #: src/clparse.cpp:251
-#, fuzzy
 msgid "Enable a campaign only mod"
-msgstr "Ενεργοποίηση μόνο μιας μετατροπής για πολλούς παίχτες"
+msgstr "Ενεργοποίηση μιας μετατροπής μονάχα εκστρατείας"
 
 #: src/clparse.cpp:252
 msgid "Enable a multiplay only mod"
 msgstr "Ενεργοποίηση μόνο μιας μετατροπής για πολλούς παίχτες"
 
 #: src/clparse.cpp:253
-#, fuzzy
 msgid "Disable asserts"
-msgstr "Απενεργοποίηση αρχειοθέτησης"
+msgstr "Απενεργοποίηση των προκαθορισμών"
 
 #: src/clparse.cpp:254
 msgid "Causes a crash to test the crash handler"
@@ -12302,11 +12147,11 @@ msgstr "Απενεργοποίηση συμπίεσης υφασμάτων"
 
 #: src/clparse.cpp:267
 msgid "Only use OpenGL 1.5"
-msgstr ""
+msgstr "Χρήση μόνο της ΌπενΤζιΕλ 1.5"
 
 #: src/cmddroid.cpp:110
 msgid "Commander needs a higher level to command more units"
-msgstr ""
+msgstr "Απαιτείται υψηλότερο επίπεδο για το διοικητή, ώστε να διοικεί περισσότερες μονάδες"
 
 #: src/configuration.cpp:96
 msgid "My Game"
@@ -12532,8 +12377,8 @@ msgstr[1] "Επιλέχτηκε η Ομάδα %u - %u μονάδες"
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%u μονάδα ανατέθηκε στην Ομάδα %u"
+msgstr[1] "%u μονάδες ανατέθηκαν στην Ομάδα %u"
 
 #: src/droid.cpp:2217
 #, c-format
@@ -12546,8 +12391,8 @@ msgstr[1] "Επικέντρωση στην Ομάδα %u - %u μονάδες"
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Ευθυγραμμίζεται με την Ομάδα %u - %u Μονάδα"
+msgstr[1] "Ευθυγραμμίζονται με την Ομάδα %u - %u Μονάδες"
 
 #: src/droid.cpp:2403
 msgid "Rookie"
@@ -12627,8 +12472,9 @@ msgid "MAIN MENU"
 msgstr "ΚΥΡΙΟ ΜΕΝΟΥ"
 
 #: src/frontend.cpp:117
-msgid "Warzone 2100 is completely free and open source (FLOSS). Official site: http://wz2100.net/"
-msgstr ""
+#, fuzzy
+msgid "Official site: http://wz2100.net/"
+msgstr "Δες τον επίσημο ιστότοπό μας: http://wz2100.net"
 
 #: src/frontend.cpp:188
 msgid "Fast Play"
@@ -12666,14 +12512,12 @@ msgid "Challenges"
 msgstr "προκλήσεις"
 
 #: src/frontend.cpp:249
-#, fuzzy
 msgid "Load Campaign Game"
-msgstr "φόρτωση"
+msgstr "Φόρτωση Παιχνιδιού Εκστρατείας"
 
 #: src/frontend.cpp:250
-#, fuzzy
 msgid "Load Skirmish Game"
-msgstr "μάχη"
+msgstr "Φόρτωση Μάχης"
 
 #: src/frontend.cpp:252
 msgid "SINGLE PLAYER"
@@ -12681,19 +12525,17 @@ msgstr "ΓΙΑ ΕΝΑΝ ΠΑΙΚΤΗ"
 
 #: src/frontend.cpp:257
 msgid "Campaign videos are missing! Get them from http://wz2100.net"
-msgstr ""
+msgstr "Τα βίντεο τς εκστρατείας λείπουν. Μπορείς να τα κατεβάσεις από την http://wz2100.net"
 
 #: src/frontend.cpp:334
 #: src/ingameop.cpp:504
-#, fuzzy
 msgid "Load Campaign Saved Game"
-msgstr "Φόρτωση Αποθηκευμένου Παιχνιδιού"
+msgstr "Φόρτωση Αποθηκευμένου Παιχνιδιού Εκστρατείας"
 
 #: src/frontend.cpp:340
 #: src/ingameop.cpp:508
-#, fuzzy
 msgid "Load Skirmish Saved Game"
-msgstr "Φόρτωση Αποθηκευμένου Παιχνιδιού"
+msgstr "Φόρτωση της Αποθηκευμένης Μάχης"
 
 #: src/frontend.cpp:394
 msgid "MULTI PLAYER"
@@ -12708,8 +12550,8 @@ msgid "Join Game"
 msgstr "Συμμετοχή σε Παιχνίδι"
 
 #: src/frontend.cpp:402
-msgid "TCP PORT 2100 MUST BE OPENED IN YOUR FIREWALL / ROUTER TO HOST GAMES!"
-msgstr "ΓΙΑ ΝΑ ΦΙΛΟΞΕΝΕΙΣ ΠΑΙΧΝΙΔΙΑ, ΘΑ ΠΡΕΠΕΙ Η ΤΙΣΙΠΙ ΘΥΡΑ 2100 ΝΑ ΕΙΝΑΙ ΑΝΟΙΧΤΗ ΣΤΟ ΤΟΙΧΟΣ ΠΡΟΣΤΑΣΙΑΣ Η ΤΟΝ ΡΟΥΤΕΡ."
+msgid "TCP port 2100 must be opened in your firewall or router to host games!"
+msgstr ""
 
 #: src/frontend.cpp:464
 #: src/multiint.cpp:1442
@@ -12763,9 +12605,8 @@ msgid "Fullscreen"
 msgstr "πλήρης οθόνη"
 
 #: src/frontend.cpp:551
-#, fuzzy
 msgid "Scanlines"
-msgstr "zip, ανεξάρτητες γραμμές σάρωσης"
+msgstr "γραμμές σάρωσης"
 
 #: src/frontend.cpp:555
 #: src/frontend.cpp:576
@@ -12800,7 +12641,7 @@ msgstr "50%"
 #: src/frontend.cpp:706
 #: src/multiplay.cpp:2002
 msgid "Black"
-msgstr "μαύρο"
+msgstr "Σκότος"
 
 #: src/frontend.cpp:569
 msgid "Screen Shake"
@@ -12849,7 +12690,7 @@ msgstr "περιστρ/νος"
 #: src/frontend.cpp:718
 #: src/frontend.cpp:1343
 msgid "Fixed"
-msgstr "σταθερό"
+msgstr "σταθερός"
 
 #: src/frontend.cpp:608
 msgid "GRAPHICS OPTIONS"
@@ -12905,9 +12746,8 @@ msgid "Unsupported"
 msgstr "μη υποστηριζόμενο"
 
 #: src/frontend.cpp:889
-#, fuzzy
 msgid "Shaders"
-msgstr "σκιάσεις"
+msgstr "Σκιάσεις"
 
 #: src/frontend.cpp:901
 msgid "VIDEO OPTIONS"
@@ -12980,21 +12820,18 @@ msgstr "ταχύτητα κύλισης"
 
 #: src/frontend.cpp:1282
 #: src/frontend.cpp:1337
-#, fuzzy
 msgid "Unit Colour:"
-msgstr "χρώμα μονάδας"
+msgstr "Χρώμα Μονάδας:"
 
 #: src/frontend.cpp:1302
 #: src/frontend.cpp:1338
-#, fuzzy
 msgid "Campaign"
-msgstr "εκστρατεία"
+msgstr "Εκστρατεία"
 
 #: src/frontend.cpp:1312
 #: src/frontend.cpp:1339
-#, fuzzy
 msgid "Skirmish/Multiplayer"
-msgstr "ομαδικό"
+msgstr "Μάχη/Για Πολλούς Παίχτες"
 
 #: src/frontend.cpp:1318
 #: src/frontend.cpp:1334
@@ -13019,22 +12856,22 @@ msgstr "ΑΠΟΘΗΚΕΥΘΗΚΕ ΤΟ ΠΑΙΧΝΙΔΙ: "
 #: src/hci.cpp:1983
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new structure: %s."
-msgstr ""
+msgstr "Ο παίχτης %u , με ζαβολιά (κατάλογος αποσφαλμάτωσης), απέκτησε μία νέα κατασκευή: %s."
 
 #: src/hci.cpp:1998
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new feature: %s."
-msgstr ""
+msgstr "Ο παίχτης %u , με ζαβολιά (κατάλογος αποσφαλμάτωσης), απέκτησε ένα νέο χαρακτηριστικό: %s."
 
 #: src/hci.cpp:2021
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid: %s."
-msgstr ""
+msgstr "Ο παίχτης %u , με ζαβολιά (κατάλογος αποσφαλμάτωσης), απέκτησε μία νέα ανθρωπομηχανή: %s."
 
 #: src/hci.cpp:2034
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid."
-msgstr ""
+msgstr "Ο παίχτης %u , με ζαβολιά (κατάλογος αποσφαλμάτωσης), απέκτησε μία νέα ανθρωπομηχανή."
 
 #: src/hci.cpp:3295
 msgid "Commanders (F6)"
@@ -13221,16 +13058,14 @@ msgid "-->  QUIT  <--"
 msgstr "-->  ΕΞΟΔΟΣ  <--"
 
 #: src/ingameop.cpp:512
-#, fuzzy
 msgid "Save Campaign Game"
-msgstr "εκστρατεία"
+msgstr "Αποθήκευση Παιχνιδιού Εκστρατείας"
 
 #: src/ingameop.cpp:516
-#, fuzzy
 msgid "Save Skirmish Game"
-msgstr "μάχη"
+msgstr "Αποθήκευση της μάχης"
 
-#: src/init.cpp:421
+#: src/init.cpp:422
 #, c-format
 msgid ""
 "The required mod could not be loaded: %s\n"
@@ -13259,7 +13094,7 @@ msgstr "Εξέλιξη της Έρευνας"
 
 #: src/intdisplay.cpp:663
 msgid "Need more resources!"
-msgstr ""
+msgstr "Χρειάζομαι περισσότερες πηγές."
 
 #: src/intelmap.cpp:242
 #: src/keybind.cpp:1397
@@ -13391,19 +13226,19 @@ msgstr "Κύκλισε"
 
 #: src/keybind.cpp:138
 msgid "Sorry, that cheat is disabled in multiplayer games."
-msgstr ""
+msgstr "Λυπάμαι, αυτή η κλεψιά έχει απενεργοποιηθεί για τα παιχνίδια πολλών παιχτών."
 
 #: src/keybind.cpp:171
 msgid "Warning! This cheat is buggy.  We recommend to NOT use it."
-msgstr ""
+msgstr "ΠΡΟΕΙΔΟΠΟΙΗΣΗ: Αυτή κλεψιά είναι δυσλειτουργική. Σου προτείνουμε να ΜΗΝ τη χρησιμοποιήσεις."
 
 #: src/keybind.cpp:228
 msgid "Ouch! Droid's health is down 20%!"
-msgstr ""
+msgstr "Ωχ... Η υγεία της Ανθρωπομηχανής έπεσε κατά 20%."
 
 #: src/keybind.cpp:244
 msgid "Ouch! Structure's health is down 20%!"
-msgstr ""
+msgstr "Ωχ... Η υγεία της Κατασκευής έπεσε κατά 20%."
 
 #: src/keybind.cpp:299
 msgid "Lets us see what you see!"
@@ -13414,9 +13249,9 @@ msgid "Fine, weapon & sensor display is off!"
 msgstr "Εντάξει, απενεργοποιήθηκε η εμφάνιση των όπλων και των αισθητήρων."
 
 #: src/keybind.cpp:423
-#, fuzzy, c-format
+#, c-format
 msgid "Player %u is cheating a new droid army of: %s."
-msgstr "(Ο Παίχτης %u) χρησιμοποιεί κλεψιά :%s"
+msgstr "Ο παίχτης %u , με ζαβολιά, απέκτησε ένα νέο στρατό από ανθρωπομηχανές, πλήθους: %s."
 
 #: src/keybind.cpp:461
 #: src/keybind.cpp:491
@@ -13473,7 +13308,7 @@ msgstr "Έχει απενεργοποιηθεί η προβολή των Καρ�
 #: src/keybind.cpp:626
 #, c-format
 msgid "(Player %u) is using a cheat :Num Droids: %d  Num Structures: %d  Num Features: %d"
-msgstr ""
+msgstr "(Ο παίχτης %u) χρησιμοποιεί ζαβολιά :Πλήθος Ανθρωπομηχανών: %d  Πλήθος Κατασκευών: %d  Πλήθος Χαρακτηριστικών: %d"
 
 #: src/keybind.cpp:662
 msgid "Infinite power disabled"
@@ -13498,7 +13333,7 @@ msgstr "Απενεργοποιημένη η Ομίχλη"
 #: src/keybind.cpp:1229
 #, c-format
 msgid "Warning!  This cheat can cause dire problems later on! [%s]"
-msgstr ""
+msgstr "ΠΡΟΕΙΔΟΠΟΙΗΣΗ: Αυτή η κλεψιά μπορεί να προκαλέσει δυσμενείς καταστάσεις στο συνέχεια. [%s]"
 
 #: src/keybind.cpp:1229
 msgid "Ending Mission."
@@ -13526,9 +13361,9 @@ msgid "Researched EVERYTHING for you!"
 msgstr "Ερεύνησε και εξέλιξε τα ΠΑΝΤΑ για λογαριασμό σου."
 
 #: src/keybind.cpp:1517
-#, fuzzy, c-format
+#, c-format
 msgid "(Player %u) is using cheat :%s %s"
-msgstr "(Ο Παίχτης %u) χρησιμοποιεί κλεψιά :%s"
+msgstr "(Ο παίχτης %u) χρησιμοποιεί κλεψιά :%s %s"
 
 #: src/keybind.cpp:1517
 msgid "Researched"
@@ -13576,7 +13411,7 @@ msgstr "ΠΡΟΣΟΧΗ: Αυτό, αν χρησιμοποιηθεί εσφαλμ
 
 #: src/keybind.cpp:1939
 msgid "All enemies destroyed by cheating!"
-msgstr ""
+msgstr "Όλοι οι εχθροί έχουν εξοντωθεί, χάρη σε κλεψιά."
 
 #: src/keybind.cpp:1980
 msgid "Destroying selected droids and structures!"
@@ -13630,9 +13465,8 @@ msgid "Game Speed Reduced to %s"
 msgstr "Η Ταχύτητα του Παιχνιδιού Μειώθηκε στα %s"
 
 #: src/keybind.cpp:2785
-#, fuzzy
 msgid "Radar showing friend-foe colors"
-msgstr "Ο ραδιοεντοπιστής δείχνει τα χρώματα"
+msgstr "Ο ραδιοεντοπιστής δείχνει τα χρώματα φίλου ή εχθρού"
 
 #: src/keybind.cpp:2789
 msgid "Radar showing player colors"
@@ -13874,27 +13708,24 @@ msgid "Zoom Out"
 msgstr "Σμίκρυνση"
 
 #: src/keymap.cpp:374
-#, fuzzy
 msgid "Pitch Forward"
-msgstr "Κουμπί προς τα εμπρός"
+msgstr "Επιτάχυνση Μπροστά"
 
 #: src/keymap.cpp:375
 msgid "Rotate Left"
 msgstr "Περιστροφή Αριστερά"
 
 #: src/keymap.cpp:376
-#, fuzzy
 msgid "Reset Pitch"
-msgstr "Αλλαγή Τόνου"
+msgstr "Επαναφορά της Ταχύτητας"
 
 #: src/keymap.cpp:377
 msgid "Rotate Right"
 msgstr "Περιστροφή Δεξιά"
 
 #: src/keymap.cpp:378
-#, fuzzy
 msgid "Pitch Back"
-msgstr "Κουμπί Πίσω"
+msgstr "Επιτάχυνση Πίσω"
 
 #: src/keymap.cpp:379
 msgid "Orders Menu"
@@ -13978,9 +13809,8 @@ msgid "Send Text Message"
 msgstr "Αποστολή Μηνύματος  Κειμένου"
 
 #: src/keymap.cpp:413
-#, fuzzy
 msgid "Drop a beacon"
-msgstr "_Δημιουργία σκιάς"
+msgstr "Ρίψη ενός σηματοδότη"
 
 #: src/keymap.cpp:415
 msgid "Sensor display On"
@@ -14011,9 +13841,8 @@ msgid "Select all Combat Units"
 msgstr "Επιλογή όλων των Μονάδων Μάχης"
 
 #: src/keymap.cpp:430
-#, fuzzy
 msgid "Select all Cyborgs"
-msgstr "Επιλογή όλων των Αεροπλευστών"
+msgstr "Επιλογή όλων των Ανθρωπομηχανών"
 
 #: src/keymap.cpp:431
 msgid "Select all Heavily Damaged Units"
@@ -14056,42 +13885,34 @@ msgid "Select all Similar Units"
 msgstr "Επιλογή όλων των Παρόμοιων Μονάδων"
 
 #: src/keymap.cpp:445
-#, fuzzy
 msgid "Select all Combat Cyborgs"
-msgstr "Επιλογή όλων των Μονάδων Μάχης"
+msgstr "Επιλογή όλων των Ανθρωπομηχανών Μάχης"
 
 #: src/keymap.cpp:446
-#, fuzzy
 msgid "Select all Engineers"
-msgstr "Επιλογή όλων των Αεροπλευστών"
+msgstr "Επιλογή όλων των Μηχανικών"
 
 #: src/keymap.cpp:447
-#, fuzzy
 msgid "Select all Land Combat Units"
-msgstr "Επιλογή όλων των Μονάδων Μάχης"
+msgstr "Επιλογή όλων των Μονάδων Μάχης Ξηράς"
 
 #: src/keymap.cpp:448
-#, fuzzy
 msgid "Select all Mechanics"
-msgstr "Επιλογή όλων των Φορτηγών"
+msgstr "Επιλογή όλων των Επιδιορθωτών"
 
 #: src/keymap.cpp:449
-#, fuzzy
 msgid "Select all Transporters"
-msgstr "Επιλογή όλων των Φορτηγών"
+msgstr "Επιλογή όλων των Μεταφορέων"
 
 #: src/keymap.cpp:450
-#, fuzzy
 msgid "Select all Repair Tanks"
-msgstr "Επιλογή όλων των Φορτηγών"
+msgstr "Επιλογή όλων των Φορτηγών Επισκευής"
 
 #: src/keymap.cpp:451
-#, fuzzy
 msgid "Select all Sensor Units"
-msgstr "Επιλογή όλων των Παρόμοιων Μονάδων"
+msgstr "Επιλογή όλων των Μονάδων Αισθητήρων"
 
 #: src/keymap.cpp:452
-#, fuzzy
 msgid "Select all Trucks"
 msgstr "Επιλογή όλων των Φορτηγών"
 
@@ -14112,9 +13933,8 @@ msgid "Select next Cyborg Factory"
 msgstr "Επιλογή του επόμενου Εργοστασίου Ανθρωπομηχανών"
 
 #: src/keymap.cpp:462
-#, fuzzy
 msgid "Toggle Debug Mappings"
-msgstr "/Βοήθεια/Παράθυρο _αποσφαλμάτωσης"
+msgstr "Εναλλαγή των Χαρτών Αποσφαλμάτωσης"
 
 #: src/keymap.cpp:463
 msgid "Toggle display of droid path"
@@ -14157,9 +13977,8 @@ msgid "Trigger some weather"
 msgstr "Ενεργοποίηση κάποιου καιρού"
 
 #: src/keymap.cpp:473
-#, fuzzy
 msgid "Flip terrain triangle"
-msgstr "Αναστροφή  Ακμών Τριγώνου|Ctrl F"
+msgstr "Αναστροφή  του τριγώνου του χάρτη"
 
 #: src/keymap.cpp:474
 msgid "Realign height of all objects on the map"
@@ -14208,22 +14027,19 @@ msgstr "Φόρτωση του Μεταφορέα"
 
 #: src/mission.cpp:2378
 msgid "OBJECTIVE ACHIEVED by cheating!"
-msgstr ""
+msgstr "Η ΑΠΟΣΤΟΛΗ ΕΞΕΤΕΛΕΣΘΗ, με κλεψιά..."
 
 #: src/mission.cpp:2378
-#, fuzzy
 msgid "OBJECTIVE ACHIEVED"
-msgstr "Objective Caml"
+msgstr "ΑΠΟΣΤΟΛΗ ΕΞΕΤΕΛΕΣΘΗ"
 
 #: src/mission.cpp:2384
-#, fuzzy
 msgid "OBJECTIVE FAILED--and you cheated!"
-msgstr "<p>Αποτυχία εισαγωγής.</p>%1<p>%2</p><p>Μπορείτε να κάνετε κλικ στο κουμπί \"Πίσω\" και να δοκιμάσετε ξανά.</p>"
+msgstr "ΑΠΟΣΤΟΛΗ ΑΠΟΤΥΧΗΜΕΝΗ--και χρησιμοποίησες και ζαβολιά."
 
 #: src/mission.cpp:2384
-#, fuzzy
 msgid "OBJECTIVE FAILED"
-msgstr "Η εγκατάσταση απέτυχε"
+msgstr "ΑΠΟΣΤΟΛΗ ΑΠΟΤΥΧΗΜΕΝΗ"
 
 #: src/mission.cpp:2409
 #: src/mission.cpp:2453
@@ -14428,14 +14244,12 @@ msgid "VTOLs disabled."
 msgstr "Απενεργοποιημένα τα αεροσκάφη."
 
 #: src/multiint.cpp:1399
-#, fuzzy
 msgid "Satellite Uplink disabled."
-msgstr "Κέντρο Δορυφορικής Επικοινωνίας"
+msgstr "Η Δορυφορική Σύνδεση είναι απενεργοποιημένη."
 
 #: src/multiint.cpp:1400
-#, fuzzy
 msgid "Laser Satellite disabled."
-msgstr "Κέντρο Διοίκησης Δορυφορικού Φωτακτινιστή"
+msgstr "Ο Δορυφόρος Φωτοακτίνας είναι απενεργοποιημένος."
 
 #: src/multiint.cpp:1447
 #: src/multiint.cpp:1455
@@ -14548,9 +14362,8 @@ msgid "Plays nice"
 msgstr "Παίζει σωστά"
 
 #: src/multiint.cpp:1745
-#, fuzzy
 msgid "No holds barred"
-msgstr "(το 0 σημαίνει απεριόριστο)"
+msgstr "Χωρίς περιορισμούς"
 
 #: src/multiint.cpp:1746
 msgid "Starts with advantages"
@@ -14733,14 +14546,13 @@ msgid "%s (%u) has an incompatible mod, and has been kicked."
 msgstr "Ο %s (%u) είχε ασύμβατη Μετατροπή, και διώχτηκε."
 
 #: src/multijoin.cpp:462
-#, fuzzy, c-format
+#, c-format
 msgid "%s is joining the game"
-msgstr "Ο %s συμμετέχει στο Παιχνίδι"
+msgstr "Ο %s συμμετέχει στο παιχνίδι"
 
 #: src/multijoin.cpp:473
-#, fuzzy
 msgid "Server message:"
-msgstr "Μήνυμα συστήματος:"
+msgstr "Μήνυμα διακομιστή:"
 
 #: src/multilimit.cpp:183
 msgid "Apply Defaults and Return To Previous Screen"
@@ -14791,26 +14603,26 @@ msgstr "Χτίσματα"
 
 #: src/multimenu.cpp:826
 msgid "Sent/Received per sec —"
-msgstr ""
+msgstr "Απεστάλησαν/Ελήφθησαν, ανά δευτερόλεπτο —"
 
 #: src/multimenu.cpp:826
 msgid "Total Sent/Received —"
-msgstr ""
+msgstr "Σύνολο Απεσταλμένων/Ληφθέντων —"
 
 #: src/multimenu.cpp:831
-#, fuzzy, c-format
+#, c-format
 msgid "Traf: %u/%u"
-msgstr "Εκπαιδευμένοι: %u"
+msgstr "Κίνηση: %u/%u"
 
 #: src/multimenu.cpp:835
 #, c-format
 msgid "Uncompressed: %u/%u"
-msgstr ""
+msgstr "Ασυμπίεστα: %u/%u"
 
 #: src/multimenu.cpp:839
 #, c-format
 msgid "Pack: %u/%u"
-msgstr ""
+msgstr "Πακεταρισμένα: %u/%u"
 
 #: src/multimenu.cpp:1141
 msgid "Channel"
@@ -14839,7 +14651,7 @@ msgstr "Μεταβίβαση Ενέργειας στον Παίχτη"
 #: src/multimenu.cpp:1493
 #, c-format
 msgid "kicked %s : %s from the game, and added them to the banned list!"
-msgstr ""
+msgstr "εκδιώχθηκε ο %s : %s από το παιχνίδι, και προστέθηκαν στον κατάλογο των ανεπιθύμητων."
 
 #: src/multiplay.cpp:263
 #, c-format
@@ -14876,7 +14688,7 @@ msgstr "Αίμα"
 
 #: src/multiplay.cpp:2004
 msgid "Blue"
-msgstr "Θάλλασα"
+msgstr "Διάστημα"
 
 #: src/multiplay.cpp:2005
 msgid "Pink"
@@ -14884,7 +14696,7 @@ msgstr "Τριαντάφυλλο"
 
 #: src/multiplay.cpp:2006
 msgid "Cyan"
-msgstr "Διάστημα"
+msgstr "Θάλασσα"
 
 #: src/multiplay.cpp:2007
 msgid "Yellow"
@@ -14922,12 +14734,12 @@ msgstr "Καφές"
 msgid "We can't do that! We must be a Cyborg unit to use a Cyborg Transport!"
 msgstr "Δεν μπορούμε να το κάνουμε αυτό. Για να χρησιμοποιήσουμε έναν μεταφορέα Ανθρωπομηχανών, θα πρέπει και εμείς να είμαστε Ανθρωπομηχανές."
 
-#: src/qtscriptfuncs.cpp:1591
+#: src/qtscriptfuncs.cpp:1594
 #: src/scriptfuncs.cpp:3263
 msgid "YOU ARE VICTORIOUS!"
 msgstr "ΝΙΚΗΣΕΣ!"
 
-#: src/qtscriptfuncs.cpp:1596
+#: src/qtscriptfuncs.cpp:1599
 #: src/scriptfuncs.cpp:3267
 msgid "YOU WERE DEFEATED!"
 msgstr "ΗΤΤΗΘΗΚΕΣ."
@@ -15033,7 +14845,7 @@ msgstr "Ήρωες: %u"
 
 #: src/scores.cpp:307
 msgid "Unit Losses"
-msgstr "Απολεσθέντες Μονάδες"
+msgstr "Απολεσθείσες Μονάδες"
 
 #: src/scores.cpp:308
 msgid "Structure Losses"
@@ -15064,14 +14876,14 @@ msgid "You cheated!"
 msgstr "Έχεις κάνει απατεωνιά."
 
 #: src/scriptfuncs.cpp:9379
-#, fuzzy, c-format
+#, c-format
 msgid "Beacon received from %s!"
-msgstr "Παραλαβή μηνυμάτων από %1"
+msgstr "Λήψη σηματοδότη από τον %s."
 
 #: src/scriptfuncs.cpp:9416
 #, c-format
 msgid "Beacon %d"
-msgstr "Φάρος %d"
+msgstr "Σηματοδότης %d"
 
 #: src/selection.cpp:415
 #: src/selection.cpp:495
@@ -15097,63 +14909,62 @@ msgid_plural "%u units selected"
 msgstr[0] "Επικλέχτηκε %u μονάδα"
 msgstr[1] "Επιλέχτηκαν %u μονάδες"
 
-#: src/structure.cpp:2632
-#, fuzzy
+#: src/structure.cpp:2625
 msgid "Can't build anymore units, Command Control Limit Reached - Production Halted"
-msgstr "Πλήρωση του Ορίου Ελέγχου Διοίκησης - Παύθηκε η Παραγωγή "
+msgstr "Αδυναμία δημιουργίας επιπλέον μονάδων· Πλήρωση του Ορίου Ελέγχου Διοίκησης - Παύθηκε η Παραγωγή "
 
-#: src/structure.cpp:5625
-#: src/structure.cpp:5650
+#: src/structure.cpp:5618
+#: src/structure.cpp:5643
 #, c-format
 msgid "%s - %u Unit assigned - Damage %3.0f%%"
 msgid_plural "%s - %u Units assigned - Damage %3.0f%%"
 msgstr[0] "%s - ανατέθηκε %u μονάδα - φθορά %3.0f%%"
 msgstr[1] "%s - ανατέθηκαν %u μονάδες - φθορά %3.0f%%"
 
-#: src/structure.cpp:5655
-#: src/structure.cpp:5723
-#: src/structure.cpp:5738
-#: src/structure.cpp:5752
+#: src/structure.cpp:5648
+#: src/structure.cpp:5716
+#: src/structure.cpp:5731
+#: src/structure.cpp:5745
 #, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - Καταστροφή %3.0f%%"
 
-#: src/structure.cpp:5705
+#: src/structure.cpp:5698
 #, c-format
 msgid "%s - Connected %u of %u - Damage %3.0f%%"
 msgstr "%s - Συνδέθηκαν %u από τα %u - Φθορές %3.0f%%"
 
-#: src/structure.cpp:5869
-#: src/structure.cpp:5914
+#: src/structure.cpp:5862
+#: src/structure.cpp:5907
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Φθάρθηκε Ηλεκτρονικά"
 
-#: src/structure.cpp:6165
+#: src/structure.cpp:6158
 msgid "Electronic Reward - Visibility Report"
 msgstr "Ηλεκτρονική Ανταμοιβή - Αναφορά Ορατότητας"
 
-#: src/structure.cpp:6205
+#: src/structure.cpp:6198
 msgid "Factory Reward - Propulsion"
 msgstr "Βραβείο Εργοστασίου - Πρόωση"
 
-#: src/structure.cpp:6229
+#: src/structure.cpp:6222
 msgid "Factory Reward - Body"
 msgstr "Βραβείο Εργοστασίου - Αμάξωμα"
 
-#: src/structure.cpp:6253
+#: src/structure.cpp:6246
 msgid "Factory Reward - Weapon"
 msgstr "Βραβείο Εργοστασίου - όπλο"
 
-#: src/structure.cpp:6262
+#: src/structure.cpp:6255
 msgid "Factory Reward - Nothing"
 msgstr "Βραβείο Εργοστασίου - Τίποτα"
 
-#: src/structure.cpp:6290
+#: src/structure.cpp:6283
 msgid "Repair Facility Award - Repair"
 msgstr "Βραβείο Εγκατάστασης Επισκευών - Επισκευή"
 
-#: src/structure.cpp:6297
+#: src/structure.cpp:6290
 msgid "Repair Facility Award - Nothing"
 msgstr "Βραβείο Εγκατάστασης Επισκευών - Τίποτα"
 
@@ -15186,13 +14997,18 @@ msgstr " - Σύνθεση %s"
 #. TRANSLATORS: This string looks as follows when expanded.
 #. "Version <version name/number> <working copy state><BUILD DATE><BUILD TYPE>"
 #: src/version.cpp:147
-#, fuzzy, c-format
+#, c-format
 msgid "Version %s%s%s%s"
-msgstr "Έκδοση %s-%s%s%s%s"
+msgstr "Έκδοση %s%s%s%s"
 
-#, fuzzy
+#~ msgid "Warzone 2100 is completely free and open source (FLOSS). Official site: http://wz2100.net/"
+#~ msgstr "Η Ζώνη Πολέμου είναι απολύτως ελεύθερη και ανοιχτού κώδικα (FLOSS). Ο επίσημος ιστότοπος είναι: http://wz2100.net/"
+
+#~ msgid "TCP PORT 2100 MUST BE OPENED IN YOUR FIREWALL / ROUTER TO HOST GAMES!"
+#~ msgstr "ΓΙΑ ΝΑ ΦΙΛΟΞΕΝΕΙΣ ΠΑΙΧΝΙΔΙΑ, ΘΑ ΠΡΕΠΕΙ Η ΤΙΣΙΠΙ ΘΥΡΑ 2100 ΝΑ ΕΙΝΑΙ ΑΝΟΙΧΤΗ ΣΤΟ ΤΟΙΧΟΣ ΠΡΟΣΤΑΣΙΑΣ Η ΤΟΝ ΡΟΥΤΕΡ."
+
 #~ msgid "Password is already set!"
-#~ msgstr "Ο παίχτης είναι έτοιμος"
+#~ msgstr "Ο κωδικός ασφαλείας έχει, ήδη, οριστεί."
 
 #~ msgid "VTOL HPV Cannon Bug VTOL"
 #~ msgstr "Πυροβόλο Υπερταχύτητας Μαμούνι Αεροσκάφος"
@@ -15208,9 +15024,6 @@ msgstr "Έκδοση %s-%s%s%s%s"
 
 #~ msgid "HPV Cannon Python Hover"
 #~ msgstr "Πυροβόλο Υπερταχύτητας Πύθωνας Αεροπλεύστης"
-
-#~ msgid "Visit our official site: http://wz2100.net"
-#~ msgstr "Δες τον επίσημο ιστότοπό μας: http://wz2100.net"
 
 #, fuzzy
 #~ msgid "CHEATS ARE NOW ENABLED!"
