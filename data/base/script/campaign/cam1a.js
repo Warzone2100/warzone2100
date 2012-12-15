@@ -76,6 +76,14 @@ function eventCheatMode(entered)
 // proceed to next level
 function gameWon()
 {
+	enableResearch("R-Wpn-MG1Mk1"); // bonus research topic on level end
+	var bonusTime = missionTime();
+	if (bonusTime > 0)
+	{
+		setPowerModifier(125); // 25% bonus to completing fast
+		extraPowerTime(bonusTime);
+		setPowerModifier(100);
+	}
 	loadLevel("CAM_1B");
 }
 
@@ -278,7 +286,7 @@ function eventStructureBuilt(structure, droid)
 	}
 	if (timercoming == 2)
 	{
-		setMissionTime(36000);
+		setMissionTime(3600);
 	}
 }
 
@@ -300,7 +308,7 @@ function eventPickup(feature, droid)
 	}
 	else if (lab == "artifact2") // second artifact
 	{
-		enableResearch("R-Wpn-Flamer01Mk1");
+		enableResearch("R-Sys-Engineering01");
 		numArtifact++;
 	}
 	else if (lab == "artifact3") // third artifact
@@ -310,7 +318,7 @@ function eventPickup(feature, droid)
 	}
 	else if (lab == "artifact4") // final artifact
 	{
-		enableResearch("R-Sys-Engineering01");
+		enableResearch("R-Wpn-Flamer01Mk1");
 		numArtifact++;
 	}
 	else

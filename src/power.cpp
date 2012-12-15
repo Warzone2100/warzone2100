@@ -54,7 +54,7 @@
 bool	powerCalculated;
 
 /* Updates the current power based on the extracted power and a Power Generator*/
-static void updateCurrentPower(POWER_GEN *psPowerGen, UDWORD player);
+static void updateCurrentPower(POWER_GEN *psPowerGen, UDWORD player, int ticks);
 static int64_t updateExtractedPower(STRUCTURE *psBuilding);
 
 //returns the relevant list based on OffWorld or OnWorld
@@ -249,12 +249,12 @@ STRUCTURE* powerStructList(int player)
 }
 
 /* Update current power based on what Power Generators exist */
-void updatePlayerPower(UDWORD player)
+void updatePlayerPower(int player, int ticks)
 {
 	STRUCTURE		*psStruct;//, *psList;
 	int64_t powerBefore = asPower[player].currentPower;
 
-	ASSERT(player < MAX_PLAYERS, "updatePlayerPower: Bad player");
+	ASSERT(player < MAX_PLAYERS, "Bad player %d", player);
 
 	syncDebugEconomy(player, '<');
 
@@ -262,7 +262,7 @@ void updatePlayerPower(UDWORD player)
 	{
 		if (psStruct->pStructureType->type == REF_POWER_GEN && psStruct->status == SS_BUILT)
 		{
-			updateCurrentPower((POWER_GEN *)psStruct->pFunctionality, player);
+			updateCurrentPower((POWER_GEN *)psStruct->pFunctionality, player, ticks);
 		}
 	}
 	syncDebug("updatePlayerPower%u %"PRId64"->%"PRId64"", player, powerBefore, asPower[player].currentPower);
@@ -271,7 +271,7 @@ void updatePlayerPower(UDWORD player)
 }
 
 /* Updates the current power based on the extracted power and a Power Generator*/
-static void updateCurrentPower(POWER_GEN *psPowerGen, UDWORD player)
+static void updateCurrentPower(POWER_GEN *psPowerGen, UDWORD player, int ticks)
 {
 	int i;
 	int64_t extractedPower;
@@ -298,7 +298,7 @@ static void updateCurrentPower(POWER_GEN *psPowerGen, UDWORD player)
 
 	syncDebug("updateCurrentPower%d = %"PRId64",%u", player, extractedPower, psPowerGen->multiplier);
 
-	asPower[player].currentPower += (extractedPower * psPowerGen->multiplier) / 100;
+	asPower[player].currentPower += (extractedPower * psPowerGen->multiplier) / 100 * ticks;
 	ASSERT(asPower[player].currentPower >= 0, "negative power");
 	if (asPower[player].currentPower > MAX_POWER*FP_ONE)
 	{

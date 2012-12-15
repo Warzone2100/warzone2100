@@ -2055,10 +2055,11 @@ static QScriptValue js_orderDroidLoc(QScriptContext *context, QScriptEngine *)
 	return QScriptValue();
 }
 
-//-- \subsection{setMissionTime(time)} Set mission countdown.
+//-- \subsection{setMissionTime(time)} Set mission countdown in seconds.
 static QScriptValue js_setMissionTime(QScriptContext *context, QScriptEngine *)
 {
-	int value = context->argument(0).toInt32() * 100;
+	int value = context->argument(0).toInt32() * 1000;
+	mission.startTime = gameTime;
 	mission.time = value;
 	setMissionCountDown();
 	if (mission.time >= 0)
@@ -2072,6 +2073,12 @@ static QScriptValue js_setMissionTime(QScriptContext *context, QScriptEngine *)
 		mission.cheatTime = 0;
 	}
 	return QScriptValue();
+}
+
+//-- \subsection{missionTime()} Get time remaining on mission countdown in seconds.
+static QScriptValue js_missionTime(QScriptContext *, QScriptEngine *)
+{
+	return QScriptValue((mission.time - (gameTime - mission.startTime)) / 1000);
 }
 
 //-- \subsection{setReinforcementTime(time)} Set time for reinforcements to arrive. If time is
@@ -2267,6 +2274,26 @@ static QScriptValue js_enableResearch(QScriptContext *context, QScriptEngine *en
 	{
 		debug(LOG_ERROR, "Unable to enable research %s for player %d", researchName.toUtf8().constData(), player);
 	}
+	return QScriptValue();
+}
+
+//-- \subsection{extraPowerTime(time, player)}
+//-- Increase a player's power as if that player had power income equal to current income
+//-- over the given amount of extra time.
+static QScriptValue js_extraPowerTime(QScriptContext *context, QScriptEngine *engine)
+{
+	int ticks = context->argument(0).toInt32() * GAME_UPDATES_PER_SEC;
+	int player;
+	if (context->argumentCount() > 1)
+	{
+		player = context->argument(1).toInt32();
+		SCRIPT_ASSERT_PLAYER(context, player);
+	}
+	else
+	{
+		player = engine->globalObject().property("me").toInt32();
+	}
+	updatePlayerPower(player, ticks);
 	return QScriptValue();
 }
 
@@ -3524,11 +3551,13 @@ bool registerFunctions(QScriptEngine *engine, QString scriptName)
 	engine->globalObject().setProperty("setStructureLimits", engine->newFunction(js_setStructureLimits));
 	engine->globalObject().setProperty("applyLimitSet", engine->newFunction(js_applyLimitSet));
 	engine->globalObject().setProperty("setMissionTime", engine->newFunction(js_setMissionTime));
+	engine->globalObject().setProperty("missionTime", engine->newFunction(js_missionTime));
 	engine->globalObject().setProperty("setReinforcementTime", engine->newFunction(js_setReinforcementTime));
 	engine->globalObject().setProperty("completeResearch", engine->newFunction(js_completeResearch));
 	engine->globalObject().setProperty("enableResearch", engine->newFunction(js_enableResearch));
 	engine->globalObject().setProperty("setPower", engine->newFunction(js_setPower));
 	engine->globalObject().setProperty("setPowerModifier", engine->newFunction(js_setPowerModifier));
+	engine->globalObject().setProperty("extraPowerTime", engine->newFunction(js_extraPowerTime));
 	engine->globalObject().setProperty("setTutorialMode", engine->newFunction(js_setTutorialMode));
 	engine->globalObject().setProperty("setDesign", engine->newFunction(js_setDesign));
 	engine->globalObject().setProperty("enableTemplate", engine->newFunction(js_enableTemplate));
