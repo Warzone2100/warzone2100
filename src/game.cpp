@@ -47,6 +47,7 @@
 #include "game.h"
 #include "qtscript.h"
 #include "fpath.h"
+#include "difficulty.h"
 #include "map.h"
 #include "droid.h"
 #include "action.h"
@@ -4085,6 +4086,20 @@ static void setPlayer(WzConfig &ini, int player)
 	}
 }
 
+static bool skipForDifficulty(WzConfig &ini, int player)
+{
+	if (ini.contains("difficulty")) // optionally skip this object
+	{
+		int difficulty = ini.value("difficulty").toInt();
+		if ((game.type == CAMPAIGN && difficulty > (int)getDifficultyLevel())
+		    || (game.type == SKIRMISH && difficulty > NetPlay.players[player].difficulty))
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
 static bool loadSaveDroidPointers(const QString &pFileName, DROID **ppsCurrentDroidLists)
 {
 	WzConfig ini(pFileName);
@@ -4100,10 +4115,16 @@ static bool loadSaveDroidPointers(const QString &pFileName, DROID **ppsCurrentDr
 		DROID *psDroid;
 		int id = ini.value("id").toInt();
 		int player = getPlayer(ini);
+
 		if (id <= 0)
 		{
 			ini.endGroup();
 			continue; // special hack for campaign missions, cannot have targets
+		}
+		if (skipForDifficulty(ini, player))
+		{
+			ini.endGroup();
+			continue; // another hack for campaign missions, cannot have targets
 		}
 
 		for (psDroid = ppsCurrentDroidLists[player]; psDroid && psDroid->id != id; psDroid = psDroid->psNext)
@@ -4227,6 +4248,12 @@ static bool loadSaveDroid(const char *pFileName, DROID **ppsCurrentDroidLists)
 		Vector2i tmp;
 		bool onMission = ini.value("onMission", false).toBool();
 		DROID_TEMPLATE templ, *psTemplate = &templ;
+
+		if (skipForDifficulty(ini, player))
+		{
+			ini.endGroup();
+			continue;
+		}
 
 		if (ini.contains("template"))
 		{

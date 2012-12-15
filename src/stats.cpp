@@ -675,7 +675,9 @@ bool loadWeaponStats(const char *pFileName)
 		psStats->designable = ini.value("designable").toBool();
 		psStats->penetrate = ini.value("penetrate").toBool();
 		// weapon size limitation
-		psStats->weaponSize = (WEAPON_SIZE)ini.value("weaponSize", WEAPON_SIZE_ANY).toInt();
+		int weaponSize = ini.value("weaponSize", WEAPON_SIZE_ANY).toInt();
+		ASSERT(weaponSize <= WEAPON_SIZE_ANY, "Bad weapon size for %s", list[i].toUtf8().constData());
+		psStats->weaponSize = (WEAPON_SIZE)weaponSize;
 
 		ASSERT(psStats->flightSpeed > 0, "Invalid flight speed for %s", list[i].toUtf8().constData());
 

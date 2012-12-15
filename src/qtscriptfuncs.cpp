@@ -1175,7 +1175,6 @@ static QScriptValue js_addDroid(QScriptContext *context, QScriptEngine *engine)
 	psTemplate->numWeaps = 0;
 	for (int i = 0; i < numTurrets; i++)
 	{
-		context->argument(8 + i).toString();
 		int j;
 		switch (droidType)
 		{
@@ -1231,7 +1230,7 @@ static QScriptValue js_addDroid(QScriptContext *context, QScriptEngine *engine)
 	{
 		bool oldMulti = bMultiMessages;
 		bMultiMessages = false; // ugh, fixme
-		DROID *psDroid = buildDroid(psTemplate, world_coord(x), world_coord(y), player, false, NULL);
+		DROID *psDroid = buildDroid(psTemplate, world_coord(x) + TILE_UNITS / 2, world_coord(y) + TILE_UNITS / 2, player, false, NULL);
 		if (psDroid)
 		{
 			addDroid(psDroid, apsDroidLists);
@@ -2075,8 +2074,8 @@ static QScriptValue js_setMissionTime(QScriptContext *context, QScriptEngine *)
 	return QScriptValue();
 }
 
-//-- \subsection{missionTime()} Get time remaining on mission countdown in seconds.
-static QScriptValue js_missionTime(QScriptContext *, QScriptEngine *)
+//-- \subsection{getMissionTime()} Get time remaining on mission countdown in seconds.
+static QScriptValue js_getMissionTime(QScriptContext *, QScriptEngine *)
 {
 	return QScriptValue((mission.time - (gameTime - mission.startTime)) / 1000);
 }
@@ -3551,7 +3550,7 @@ bool registerFunctions(QScriptEngine *engine, QString scriptName)
 	engine->globalObject().setProperty("setStructureLimits", engine->newFunction(js_setStructureLimits));
 	engine->globalObject().setProperty("applyLimitSet", engine->newFunction(js_applyLimitSet));
 	engine->globalObject().setProperty("setMissionTime", engine->newFunction(js_setMissionTime));
-	engine->globalObject().setProperty("missionTime", engine->newFunction(js_missionTime));
+	engine->globalObject().setProperty("getMissionTime", engine->newFunction(js_getMissionTime));
 	engine->globalObject().setProperty("setReinforcementTime", engine->newFunction(js_setReinforcementTime));
 	engine->globalObject().setProperty("completeResearch", engine->newFunction(js_completeResearch));
 	engine->globalObject().setProperty("enableResearch", engine->newFunction(js_enableResearch));

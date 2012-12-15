@@ -77,7 +77,7 @@ function eventCheatMode(entered)
 function gameWon()
 {
 	enableResearch("R-Wpn-MG1Mk1"); // bonus research topic on level end
-	var bonusTime = missionTime();
+	var bonusTime = getMissionTime();
 	if (bonusTime > 0)
 	{
 		setPowerModifier(125); // 25% bonus to completing fast
@@ -265,11 +265,6 @@ function eventStartLevel()
 	addartifact("artifact1pos", "artifact2");
 	addartifact("artifact3pos", "artifact3");
 	addartifact("artifact2pos", "artifact4");
-
-	//groupAddArea(scavGroup, enemy1, 4416, 6336, 5440, 7104);
-	//setGroupRetreatPoint(scavGroup, 4416, 5440);	//retreat to crossroads
-	//setGroupRetreatForce(scavGroup, 99);			//set morale to 1%
-	//setGroupRetreatLeadership(scavGroup, 10);
 
 	setTimer("tick", 1000);
 }
