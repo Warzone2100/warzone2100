@@ -101,7 +101,7 @@ function eventChat(from, to, message)
 		{
 			removeObject(artifact);
 		}
-		queue(gameWon);
+		queue("gameWon");
 	}
 	else if (message == "status" && cheatmode)
 	{
@@ -290,8 +290,7 @@ function eventStructureBuilt(structure, droid)
 	}
 }
 
-// Called when a human droid moves close to a crate. Remove it, then
-// add another, unless we're done with pickup service for this level.
+// Called when a human droid moves close to a crate.
 function eventPickup(feature, droid)
 {
 	if (feature.stattype != ARTIFACT)
