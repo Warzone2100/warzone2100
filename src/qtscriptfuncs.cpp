@@ -2635,6 +2635,39 @@ static QScriptValue js_setDroidExperience(QScriptContext *context, QScriptEngine
 	return QScriptValue();
 }
 
+//-- \subsection{donateObject(object, to)}
+//-- Donate a game object (currently restricted to droids) to another player. Returns true if
+//-- donation was successful. May return false if this donation would push the receiving player
+//-- over unit limits.
+static QScriptValue js_donateObject(QScriptContext *context, QScriptEngine *engine)
+{
+	QScriptValue val = context->argument(0);
+	uint32_t id = val.property("id").toUInt32();
+	uint8_t player = val.property("player").toInt32();
+	OBJECT_TYPE type = (OBJECT_TYPE)val.property("type").toInt32();
+	uint8_t to = context->argument(1).toInt32();
+	if (type == OBJ_DROID)
+	{
+		// Check unit limits.
+		DROID *psDroid = IdToDroid(id, player);
+		SCRIPT_ASSERT(context, psDroid, "No such droid id %u belonging to player %u", id, player);
+		if ((psDroid->droidType == DROID_COMMAND && getNumCommandDroids(to) + 1 > getMaxCommanders(to))
+		    || (psDroid->droidType == DROID_CONSTRUCT && getNumConstructorDroids(to) + 1 > getMaxConstructors(to))
+		    || getNumDroids(to) + 1 > getMaxDroids(to))
+		{
+			return QScriptValue(false);
+		}
+		uint8_t giftType = DROID_GIFT;
+		NETbeginEncode(NETgameQueue(selectedPlayer), GAME_GIFT);
+		NETuint8_t(&giftType);
+		NETuint8_t(&player);
+		NETuint8_t(&to);
+		NETuint32_t(&id);
+		NETend();
+	}
+	return QScriptValue(true);
+}
+
 //-- \subsection{safeDest(player, x, y)} Returns true if given player is safe from hostile fire at
 //-- the given location, to the best of that player's map knowledge.
 static QScriptValue js_safeDest(QScriptContext *context, QScriptEngine *engine)
@@ -3576,6 +3609,7 @@ bool registerFunctions(QScriptEngine *engine, QString scriptName)
 	engine->globalObject().setProperty("countDroid", engine->newFunction(js_countDroid));
 	engine->globalObject().setProperty("loadLevel", engine->newFunction(js_loadLevel));
 	engine->globalObject().setProperty("setDroidExperience", engine->newFunction(js_setDroidExperience));
+	engine->globalObject().setProperty("donateObject", engine->newFunction(js_donateObject));
 	engine->globalObject().setProperty("setNoGoArea", engine->newFunction(js_setNoGoArea));
 
 	// Set some useful constants
