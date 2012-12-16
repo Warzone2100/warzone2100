@@ -183,6 +183,10 @@ TITLECODE titleLoop(void)
 			runTitleMenu();
 			break;
 
+		case CAMPAIGNS:
+			runCampaignSelector();
+			break;
+
 		case SINGLE:
 			runSinglePlayerMenu();
 			break;
@@ -191,20 +195,10 @@ TITLECODE titleLoop(void)
 			runTutorialMenu();
 			break;
 
-//		case GRAPHICS:
-//			runGraphicsOptionsMenu();
-//			break;
-
 		case CREDITS:
 			runCreditsScreen();
 			break;
 
-//		case DEMOMODE:
-//			runDemoMenu();
-//			break;
-//	case VIDEO:
-//			runVideoOptionsMenu();
-//			break;
 		case OPTIONS:
 			runOptionsMenu();
 			break;

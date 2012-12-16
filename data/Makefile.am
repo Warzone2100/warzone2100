@@ -12,6 +12,7 @@ BASELIST = \
 	palette.txt \
 	anims \
 	audio \
+	campaigns \
 	components \
 	effects \
 	features \

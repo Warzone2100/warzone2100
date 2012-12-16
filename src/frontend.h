@@ -47,6 +47,7 @@ enum tMode
 	AUDIO_OPTIONS,          // 18 audio options menu
 	VIDEO_OPTIONS,          // 19 video options menu
 	MOUSE_OPTIONS,          // 20 mouse options menu
+	CAMPAIGNS,              // 21 campaign selector
 };
 
 extern tMode titleMode;					// the global case
@@ -62,6 +63,7 @@ extern bool	bLimiterLoaded;
 void changeTitleMode(tMode mode);
 bool runTitleMenu(void);
 bool runSinglePlayerMenu(void);
+bool runCampaignSelector();
 bool runMultiPlayerMenu(void);
 bool runGameOptionsMenu(void);
 bool runOptionsMenu(void);
@@ -186,6 +188,13 @@ enum
 	FE_P7,								// player 7 buton
 	FE_MP_PR,  // Multiplayer player random button
 	FE_MP_PMAX = FE_MP_PR + MAX_PLAYERS_IN_GUI,  // Multiplayer player blah button
+
+	FRONTEND_CAMPAIGN_1,
+	FRONTEND_CAMPAIGN_2,
+	FRONTEND_CAMPAIGN_3,
+	FRONTEND_CAMPAIGN_4,
+	FRONTEND_CAMPAIGN_5,
+	FRONTEND_CAMPAIGN_6,
 
 	FRONTEND_GAMEOPTIONS = 21000,           // Game Options menu
 	FRONTEND_LANGUAGE,

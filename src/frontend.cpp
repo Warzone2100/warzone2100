@@ -31,6 +31,7 @@
 #endif
 
 #include "lib/framework/input.h"
+#include "lib/framework/wzconfig.h"
 #include "lib/ivis_opengl/bitimage.h"
 #include "lib/ivis_opengl/pieblitfunc.h"
 #include "lib/ivis_opengl/piestate.h"
@@ -64,6 +65,14 @@
 #include "warzoneconfig.h"
 #include "wrappers.h"
 
+struct CAMPAIGN_FILE
+{
+	QString name;
+	QString level;
+	QString video;
+	QString captions;
+};
+
 // ////////////////////////////////////////////////////////////////////////////
 // Global variables
 
@@ -78,7 +87,6 @@ char			aLevelName[MAX_LEVEL_NAME_SIZE+1];	//256];			// vital! the wrf file to us
 
 bool			bLimiterLoaded = false;
 
-#define DEFAULT_LEVEL "CAM_1A"
 #define TUTORIAL_LEVEL "TUTORIAL3"
 
 
@@ -258,13 +266,63 @@ static void startSinglePlayerMenu(void)
 	}
 }
 
-static void frontEndNewGame( void )
+static QList<CAMPAIGN_FILE> readCampaignFiles()
 {
-	sstrcpy(aLevelName, DEFAULT_LEVEL);
-	seq_ClearSeqList();
-	seq_AddSeqToList("cam1/c001.ogg", NULL, "cam1/c001.txa", false);
-	seq_StartNextFullScreenVideo();
+	QList<CAMPAIGN_FILE> result;
+	char **files = PHYSFS_enumerateFiles("campaigns");
+	for (char **i = files; *i != NULL; ++i)
+	{
+		CAMPAIGN_FILE c;
+		QString filename("campaigns/");
+		filename += *i;
+		WzConfig ini(filename);
+		ini.beginGroup("campaign");
+		c.name = ini.value("name").toString();
+		c.level = ini.value("level").toString();
+		ini.endGroup();
+		ini.beginGroup("intro");
+		c.video = ini.value("video").toString();
+		c.captions = ini.value("captions").toString();
+		ini.endGroup();
+		result += c;
+	}
+	PHYSFS_freeList(files);
+	return result;
+}
 
+static void startCampaignSelector()
+{
+	static char hackList[10][100]; // sigh...
+
+	addBackdrop();
+	addTopForm();
+	addBottomForm();
+
+	QList<CAMPAIGN_FILE> list = readCampaignFiles();
+	for (int i = 0; i < list.size(); i++)
+	{
+		ssprintf(hackList[i], list[i].name.toUtf8().constData()); // since widget system is crazy and takes pointers not copies
+		addTextButton(FRONTEND_CAMPAIGN_1 + i,  FRONTEND_POS1X, FRONTEND_POS2Y + 40 * i, hackList[i], WBUT_TXTCENTRE);
+	}
+	addSideText(FRONTEND_SIDETEXT, FRONTEND_SIDEX, FRONTEND_SIDEY, _("CAMPAIGNS"));
+	addMultiBut(psWScreen, FRONTEND_BOTFORM, FRONTEND_QUIT, 10, 10, 30, 29, P_("menu", "Return"), IMAGE_RETURN, IMAGE_RETURN_HI, IMAGE_RETURN_HI);
+	// show this only when the video sequences are not installed
+	if (!PHYSFS_exists("sequences/devastation.ogg"))
+	{
+		addSmallTextButton(FRONTEND_HYPERLINK, FRONTEND_POS8X, FRONTEND_POS8Y, _("Campaign videos are missing! Get them from http://wz2100.net"), 0);
+	}
+}
+
+static void frontEndNewGame(int which)
+{
+	QList<CAMPAIGN_FILE> list = readCampaignFiles();
+	sstrcpy(aLevelName, list[which].level.toUtf8().constData());
+	if (!list[which].video.isEmpty())
+	{
+		seq_ClearSeqList();
+		seq_AddSeqToList(list[which].video.toUtf8().constData(), NULL, list[which].captions.toUtf8().constData(), false);
+		seq_StartNextFullScreenVideo();
+	}
 	changeTitleMode(STARTGAME);
 }
 
@@ -303,6 +361,22 @@ static void SPinit(void)
 	game.hash.setZero();	// must reset this to zero
 }
 
+bool runCampaignSelector()
+{
+	int id = widgRunScreen(psWScreen);
+	if (id == FRONTEND_QUIT)
+	{
+		changeTitleMode(SINGLE); // go back
+	}
+	else if (id >= FRONTEND_CAMPAIGN_1 && id <= FRONTEND_CAMPAIGN_6) // chose a campaign
+	{
+		SPinit();
+		frontEndNewGame(id - FRONTEND_CAMPAIGN_1);
+	}
+	widgDisplayScreen(psWScreen); // show the widgets currently running
+	return true;
+}
+
 bool runSinglePlayerMenu(void)
 {
 	UDWORD id;
@@ -325,8 +399,7 @@ bool runSinglePlayerMenu(void)
 		switch(id)
 		{
 			case FRONTEND_NEWGAME:
-				SPinit();
-				frontEndNewGame();
+				changeTitleMode(CAMPAIGNS);
 				break;
 
 			case FRONTEND_LOADGAME_MISSION:
@@ -1911,6 +1984,9 @@ void changeTitleMode(tMode mode)
 
 	switch(mode)
 	{
+	case CAMPAIGNS:
+		startCampaignSelector();
+		break;
 	case SINGLE:
 		startSinglePlayerMenu();
 		break;
