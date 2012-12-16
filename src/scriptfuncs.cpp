@@ -1015,7 +1015,8 @@ bool scrAddDroidToMissionList(void)
 	// Don't build a new droid if player limit reached, unless it's a transporter.
 	if (IsPlayerDroidLimitReached(player) && (psTemplate->droidType != DROID_TRANSPORTER && psTemplate->droidType != DROID_SUPERTRANSPORTER))
 	{
-		debug(LOG_NEVER, "scrAddUnit : Max units reached ,player %d\n", player);
+		debug(LOG_SCRIPT, "Max units reached for player %d adding %s to mission list (type %d)", 
+		      player, psTemplate->aName, psTemplate->droidType);
 		psDroid = NULL;
 	}
 	else

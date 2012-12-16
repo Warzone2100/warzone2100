@@ -424,6 +424,7 @@ static GAMECODE renderLoop()
 	return GAMECODE_CONTINUE;
 }
 
+// Carry out the various counting operations we perform each loop
 void countUpdate()
 {	
 	for (unsigned i = 0; i < MAX_PLAYERS; i++)
@@ -433,8 +434,9 @@ void countUpdate()
 
 		numCommandDroids[i] = 0;
 		numConstructorDroids[i] = 0;
-		numDroids[i]=0;
-		numTransporterDroids[i]=0;
+		numDroids[i] = 0;
+		numMissionDroids[i] = 0;
+		numTransporterDroids[i] = 0;
 
 		for (DROID *psCurr = apsDroidLists[i]; psCurr != NULL; psCurr = psCurr->psNext)
 		{
