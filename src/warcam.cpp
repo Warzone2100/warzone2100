@@ -93,14 +93,14 @@ static	bool bFullInfo = false;
 static	bool bRadarTrackingRequested = false;
 
 /* World coordinates for a radar track/jump */
-static  float	 radarX,radarY;
+static  float	 radarX, radarY;
 
 // Prototypes
 static bool camTrackCamera(void);
 
 //-----------------------------------------------------------------------------------
 /* Sets the camera to inactive to begin with */
-void	initWarCam( void )
+void	initWarCam(void)
 {
 	/* We're not intitially following anything */
 	trackingCamera.status = CAM_INACTIVE;
@@ -111,9 +111,9 @@ void	initWarCam( void )
 
 
 /* Static function that switches off tracking - and might not be desirable? - Jim?*/
-static void camSwitchOff( void )
+static void camSwitchOff(void)
 {
- 	/* Restore the angles */
+	/* Restore the angles */
 //	player.r.x = trackingCamera.oldView.r.x;
 	player.r.z = trackingCamera.oldView.r.z;
 
@@ -132,7 +132,7 @@ static void camSwitchOff( void )
 #define	LEADER_DOWN			4
 #define LEADER_STATIC		5
 
-static void processLeaderSelection( void )
+static void processLeaderSelection(void)
 {
 	DROID *psDroid;
 	DROID *psPresent;
@@ -161,7 +161,7 @@ static void processLeaderSelection( void )
 		return;
 	}
 
-	psPresent = (DROID*)trackingCamera.target;
+	psPresent = (DROID *)trackingCamera.target;
 
 	if (keyPressed(KEY_LEFTARROW))
 	{
@@ -273,7 +273,7 @@ static void processLeaderSelection( void )
 	}
 	if (bSuccess)
 	{
-		camAllignWithTarget((BASE_OBJECT*)psNew);
+		camAllignWithTarget((BASE_OBJECT *)psNew);
 	}
 }
 
@@ -291,7 +291,7 @@ static void setUpRadarTarget(SDWORD x, SDWORD y)
 	}
 	else
 	{
-		radarTarget.pos.z = map_Height(x,y) + CAMERA_PIVOT_HEIGHT;
+		radarTarget.pos.z = map_Height(x, y) + CAMERA_PIVOT_HEIGHT;
 	}
 	radarTarget.rot.direction = calcDirection(player.p.x, player.p.z, x, y);
 	radarTarget.rot.pitch = 0;
@@ -318,79 +318,79 @@ static BASE_OBJECT *camFindTarget(void)
 
 
 /* Updates the camera position/angle along with the object movement */
-bool	processWarCam( void )
+bool	processWarCam(void)
 {
 	BASE_OBJECT *foundTarget;
 	bool Status = true;
 
 	/* Get out if the camera isn't active */
-	if(trackingCamera.status == CAM_INACTIVE)
+	if (trackingCamera.status == CAM_INACTIVE)
 	{
 		return(true);
 	}
 
 	/* Ensure that the camera only ever flips state within this routine! */
-	switch(trackingCamera.status)
+	switch (trackingCamera.status)
 	{
 	case CAM_REQUEST:
 
-			/* See if we can find the target to follow */
-			foundTarget = camFindTarget();
+		/* See if we can find the target to follow */
+		foundTarget = camFindTarget();
 
-			if(foundTarget && !foundTarget->died)
+		if (foundTarget && !foundTarget->died)
+		{
+			/* We've got one, so store away info */
+			camAllignWithTarget(foundTarget);
+			/* We're now into tracking status */
+			trackingCamera.status = CAM_TRACKING;
+			/* Inform via console */
+			if (foundTarget->type == OBJ_DROID)
 			{
-				/* We've got one, so store away info */
-				camAllignWithTarget(foundTarget);
-				/* We're now into tracking status */
-				trackingCamera.status = CAM_TRACKING;
-				/* Inform via console */
-				if(foundTarget->type == OBJ_DROID)
+				if (getWarCamStatus())
 				{
-					if(getWarCamStatus())
-					{
-						CONPRINTF(ConsoleString,(ConsoleString,"WZ/CAM  - %s",droidGetName((DROID*)foundTarget)));
-					}
+					CONPRINTF(ConsoleString, (ConsoleString, "WZ/CAM  - %s", droidGetName((DROID *)foundTarget)));
 				}
 			}
-			else
-			{
-				/* We've requested a track with no droid selected */
-				trackingCamera.status = CAM_INACTIVE;
-			}
+		}
+		else
+		{
+			/* We've requested a track with no droid selected */
+			trackingCamera.status = CAM_INACTIVE;
+		}
 		break;
 
 	case CAM_TRACKING:
-			/* Track the droid unless routine comes back false */
-			if(!camTrackCamera())
+		/* Track the droid unless routine comes back false */
+		if (!camTrackCamera())
+		{
+			/*
+				Camera track came back false, either because droid died or is
+				no longer selected, so reset to old values
+			*/
+			foundTarget = camFindTarget();
+			if (foundTarget && !foundTarget->died)
 			{
-				/*
-					Camera track came back false, either because droid died or is
-					no longer selected, so reset to old values
-				*/
-				foundTarget = camFindTarget();
-				if(foundTarget && !foundTarget->died)
-				{
-					trackingCamera.status = CAM_REQUEST;
-				}
-				else
-				{
-					trackingCamera.status = CAM_RESET;
-				}
+				trackingCamera.status = CAM_REQUEST;
 			}
+			else
+			{
+				trackingCamera.status = CAM_RESET;
+			}
+		}
 
 		processLeaderSelection();
 
 		break;
 	case CAM_RESET:
-			/* Reset camera to pre-droid tracking status */
-			if( (trackingCamera.target==NULL)
-			  ||(trackingCamera.target->type!=OBJ_TARGET))
-			{
-				camSwitchOff();
-			}
-			/* Switch to inactive mode */
-			trackingCamera.status = CAM_INACTIVE;
-			Status = false;
+		/* Reset camera to pre-droid tracking status */
+		if ((trackingCamera.target == NULL)
+		    || (trackingCamera.target->type != OBJ_TARGET))
+		{
+			camSwitchOff();
+		}
+		/* Switch to inactive mode */
+		trackingCamera.status = CAM_INACTIVE;
+		Status = false;
 		break;
 	case CAM_INACTIVE:
 	case CAM_TRACK_OBJECT:
@@ -407,16 +407,16 @@ bool	processWarCam( void )
 /* Flips states for camera active */
 void	setWarCamActive(bool status)
 {
-	debug( LOG_NEVER, "setWarCamActive(%d)\n", status );
+	debug(LOG_NEVER, "setWarCamActive(%d)\n", status);
 
 	/* We're trying to switch it on */
-	if(status == true)
+	if (status == true)
 	{
 		/* If it's not inactive then it's already in use - so return */
 		/* We're tracking a droid */
-		if(trackingCamera.status!=CAM_INACTIVE)
+		if (trackingCamera.status != CAM_INACTIVE)
 		{
-			if(bRadarTrackingRequested)
+			if (bRadarTrackingRequested)
 			{
 				trackingCamera.status = CAM_REQUEST;
 			}
@@ -435,7 +435,7 @@ void	setWarCamActive(bool status)
 		/* We trying to switch off */
 	{
 		/* Is it already off? */
-		if(trackingCamera.status == CAM_INACTIVE)
+		if (trackingCamera.status == CAM_INACTIVE)
 		{
 			return;
 		}
@@ -453,14 +453,14 @@ BASE_OBJECT	*camFindDroidTarget(void)
 {
 	DROID	*psDroid;
 
-	for(psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
+	for (psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
 	{
 
-		if(psDroid->selected)
+		if (psDroid->selected)
 
 		{
 			/* Return the first one found */
-			return( (BASE_OBJECT*)psDroid);
+			return((BASE_OBJECT *)psDroid);
 		}
 	}
 
@@ -487,7 +487,7 @@ void	camAllignWithTarget(BASE_OBJECT *psTarget)
 	trackingCamera.oldView.p.y = trackingCamera.position.y = (float)player.p.y;
 	trackingCamera.oldView.p.z = trackingCamera.position.z = (float)player.p.z;
 
-   //	trackingCamera.rotation.x = player.r.x = DEG(-90);
+	//	trackingCamera.rotation.x = player.r.x = DEG(-90);
 	/* No initial velocity for moving */
 	trackingCamera.velocity.x = trackingCamera.velocity.y = trackingCamera.velocity.z = 0.f;
 	/* Nor for rotation */
@@ -561,7 +561,7 @@ static void getTrackingConcerns(SDWORD *x, SDWORD *y, SDWORD *z, UDWORD groupNum
 
 
 //-----------------------------------------------------------------------------------
-							/* How this all works */
+/* How this all works */
 /*
 Each frame we calculate the new acceleration, velocity and positions for the location
 and rotation of the camera. The velocity is obviously based on the acceleration and this
@@ -619,9 +619,9 @@ static void updateCameraAcceleration(UBYTE update)
 	*/
 	if (trackingCamera.target->type == OBJ_DROID)
 	{
-		const int angle = 90 - abs((player.r.x/182) % 90);
+		const int angle = 90 - abs((player.r.x / 182) % 90);
 
-		const DROID *psDroid = (DROID*)trackingCamera.target;
+		const DROID *psDroid = (DROID *)trackingCamera.target;
 		const PROPULSION_STATS *psPropStats = &asPropulsionStats[psDroid->asBits[COMP_PROPULSION].nStat];
 
 		if (psPropStats->propulsionType == PROPULSION_TYPE_LIFT)
@@ -644,7 +644,7 @@ static void updateCameraAcceleration(UBYTE update)
 			behind = iSinCosR(trackingCamera.target->rot.direction, CAM_DEFAULT_OFFSET);
 		}
 
-		concern.y += angle*5;
+		concern.y += angle * 5;
 	}
 
 	Vector3i realPos = concern - Vector3i(-behind.x, 0, -behind.y);
@@ -652,12 +652,12 @@ static void updateCameraAcceleration(UBYTE update)
 	Vector3f acceleration;
 	if (!bFlying)
 	{
-		acceleration = separation*ACCEL_CONSTANT - trackingCamera.velocity*VELOCITY_CONSTANT;
+		acceleration = separation * ACCEL_CONSTANT - trackingCamera.velocity * VELOCITY_CONSTANT;
 	}
 	else
 	{
 		separation.y /= 2.0f;
-		acceleration = separation*(ACCEL_CONSTANT*4) - trackingCamera.velocity*(VELOCITY_CONSTANT*2);
+		acceleration = separation * (ACCEL_CONSTANT * 4) - trackingCamera.velocity * (VELOCITY_CONSTANT * 2);
 	}
 
 	if (update & X_UPDATE)
@@ -683,17 +683,17 @@ static void updateCameraAcceleration(UBYTE update)
 
 static void updateCameraVelocity(UBYTE update)
 {
-	if(update & X_UPDATE)
+	if (update & X_UPDATE)
 	{
 		trackingCamera.velocity.x += realTimeAdjustedIncrement(trackingCamera.acceleration.x);
 	}
 
-	if(update & Y_UPDATE)
+	if (update & Y_UPDATE)
 	{
 		trackingCamera.velocity.y += realTimeAdjustedIncrement(trackingCamera.acceleration.y);
 	}
 
-	if(update & Z_UPDATE)
+	if (update & Z_UPDATE)
 	{
 		trackingCamera.velocity.z += realTimeAdjustedIncrement(trackingCamera.acceleration.z);
 	}
@@ -703,19 +703,19 @@ static void updateCameraVelocity(UBYTE update)
 
 static void	updateCameraPosition(UBYTE update)
 {
-	if(update & X_UPDATE)
+	if (update & X_UPDATE)
 	{
 		/* Need to update position along x axis */
 		trackingCamera.position.x += realTimeAdjustedIncrement(trackingCamera.velocity.x);
 	}
 
-	if(update & Y_UPDATE)
+	if (update & Y_UPDATE)
 	{
 		/* Need to update position along y axis */
 		trackingCamera.position.y += realTimeAdjustedIncrement(trackingCamera.velocity.y);
 	}
 
-	if(update & Z_UPDATE)
+	if (update & Z_UPDATE)
 	{
 		/* Need to update position along z axis */
 		trackingCamera.position.z += realTimeAdjustedIncrement(trackingCamera.velocity.z);
@@ -724,7 +724,7 @@ static void	updateCameraPosition(UBYTE update)
 
 //-----------------------------------------------------------------------------------
 /* Calculate the acceleration that the camera spins around at */
-static void updateCameraRotationAcceleration( UBYTE update )
+static void updateCameraRotationAcceleration(UBYTE update)
 {
 	SDWORD	worldAngle;
 	float	separation;
@@ -735,11 +735,11 @@ static void updateCameraRotationAcceleration( UBYTE update )
 	SDWORD	xPos = 0, yPos = 0, zPos = 0;
 
 	bTooLow = false;
-	if(trackingCamera.target->type == OBJ_DROID)
+	if (trackingCamera.target->type == OBJ_DROID)
 	{
-		DROID *psDroid = (DROID*)trackingCamera.target;
+		DROID *psDroid = (DROID *)trackingCamera.target;
 		psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
-		if(psPropStats->propulsionType == PROPULSION_TYPE_LIFT)
+		if (psPropStats->propulsionType == PROPULSION_TYPE_LIFT)
 		{
 			int droidHeight, difHeight, droidMapHeight;
 
@@ -747,18 +747,18 @@ static void updateCameraRotationAcceleration( UBYTE update )
 			droidHeight = psDroid->pos.z;
 			droidMapHeight = map_Height(psDroid->pos.x, psDroid->pos.y);
 			difHeight = abs(droidHeight - droidMapHeight);
-			if(difHeight < MIN_TRACK_HEIGHT)
+			if (difHeight < MIN_TRACK_HEIGHT)
 			{
 				bTooLow = true;
 			}
 		}
 	}
 
-	if(update & Y_UPDATE)
+	if (update & Y_UPDATE)
 	{
 		/* Presently only y rotation being calculated - but same idea for other axes */
 		/* Check what we're tracking */
-		if(getNumDroidsSelected()>2 && trackingCamera.target->type == OBJ_DROID)
+		if (getNumDroidsSelected() > 2 && trackingCamera.target->type == OBJ_DROID)
 		{
 			unsigned group = trackingCamera.target->selected ? GROUP_SELECTED : trackingCamera.target->group;
 			yConcern = getAverageTrackAngle(group, false);
@@ -769,7 +769,7 @@ static void updateCameraRotationAcceleration( UBYTE update )
 		}
 		yConcern += DEG(180);
 
-  		while(trackingCamera.rotation.y < 0)
+		while (trackingCamera.rotation.y < 0)
 		{
 			trackingCamera.rotation.y += DEG(360);
 		}
@@ -782,9 +782,9 @@ static void updateCameraRotationAcceleration( UBYTE update )
 		trackingCamera.rotAccel.y = ROT_ACCEL_CONSTANT * separation - ROT_VELOCITY_CONSTANT * trackingCamera.rotVel.y;
 	}
 
-	if(update & X_UPDATE)
+	if (update & X_UPDATE)
 	{
-		if(trackingCamera.target->type == OBJ_DROID && !bGotFlying)
+		if (trackingCamera.target->type == OBJ_DROID && !bGotFlying)
 		{
 			uint16_t pitch;
 			unsigned group = trackingCamera.target->selected ? GROUP_SELECTED : trackingCamera.target->group;
@@ -798,7 +798,7 @@ static void updateCameraRotationAcceleration( UBYTE update )
 			xConcern = trackingCamera.target->rot.pitch;
 			xConcern += DEG(-16);
 		}
-		while(trackingCamera.rotation.x<0)
+		while (trackingCamera.rotation.x < 0)
 		{
 			trackingCamera.rotation.x += DEG(360);
 		}
@@ -807,14 +807,14 @@ static void updateCameraRotationAcceleration( UBYTE update )
 
 		/* Make new acceleration */
 		trackingCamera.rotAccel.x =
-			/* Make this really slow */
-			((ROT_ACCEL_CONSTANT)*separation - ROT_VELOCITY_CONSTANT*(float)trackingCamera.rotVel.x);
+		    /* Make this really slow */
+		    ((ROT_ACCEL_CONSTANT) * separation - ROT_VELOCITY_CONSTANT * (float)trackingCamera.rotVel.x);
 	}
 
 	/* This looks a bit arse - looks like a flight sim */
-	if(update & Z_UPDATE)
+	if (update & Z_UPDATE)
 	{
-		if(bTooLow)
+		if (bTooLow)
 		{
 			zConcern = 0;
 		}
@@ -822,25 +822,25 @@ static void updateCameraRotationAcceleration( UBYTE update )
 		{
 			zConcern = trackingCamera.target->rot.roll;
 		}
-		while(trackingCamera.rotation.z<0)
-			{
-				trackingCamera.rotation.z+=DEG(360);
-			}
-		worldAngle =  trackingCamera.rotation.z;
-		separation = (float) ((zConcern - worldAngle));
-		if(separation<DEG(-180))
+		while (trackingCamera.rotation.z < 0)
 		{
-			separation+=DEG(360);
+			trackingCamera.rotation.z += DEG(360);
 		}
-		else if(separation>DEG(180))
+		worldAngle =  trackingCamera.rotation.z;
+		separation = (float)((zConcern - worldAngle));
+		if (separation < DEG(-180))
 		{
-			separation-=DEG(360);
+			separation += DEG(360);
+		}
+		else if (separation > DEG(180))
+		{
+			separation -= DEG(360);
 		}
 
 		/* Make new acceleration */
 		trackingCamera.rotAccel.z =
-			/* Make this really slow */
-			((ROT_ACCEL_CONSTANT/1)*separation - ROT_VELOCITY_CONSTANT*(float)trackingCamera.rotVel.z);
+		    /* Make this really slow */
+		    ((ROT_ACCEL_CONSTANT / 1) * separation - ROT_VELOCITY_CONSTANT * (float)trackingCamera.rotVel.z);
 	}
 
 }
@@ -848,17 +848,17 @@ static void updateCameraRotationAcceleration( UBYTE update )
 //-----------------------------------------------------------------------------------
 /*	Calculate the velocity that the camera spins around at - just add previously
 	calculated acceleration */
-static void updateCameraRotationVelocity( UBYTE update )
+static void updateCameraRotationVelocity(UBYTE update)
 {
-	if(update & Y_UPDATE)
+	if (update & Y_UPDATE)
 	{
 		trackingCamera.rotVel.y += realTimeAdjustedIncrement(trackingCamera.rotAccel.y);
 	}
-	if(update & X_UPDATE)
+	if (update & X_UPDATE)
 	{
 		trackingCamera.rotVel.x += realTimeAdjustedIncrement(trackingCamera.rotAccel.x);
 	}
-	if(update & Z_UPDATE)
+	if (update & Z_UPDATE)
 	{
 		trackingCamera.rotVel.z += realTimeAdjustedIncrement(trackingCamera.rotAccel.z);
 	}
@@ -866,9 +866,9 @@ static void updateCameraRotationVelocity( UBYTE update )
 
 //-----------------------------------------------------------------------------------
 /* Move the camera around by adding the velocity */
-static void updateCameraRotationPosition( UBYTE update )
+static void updateCameraRotationPosition(UBYTE update)
 {
- 	if (update & Y_UPDATE)
+	if (update & Y_UPDATE)
 	{
 		trackingCamera.rotation.y += realTimeAdjustedIncrement(trackingCamera.rotVel.y);
 	}
@@ -891,7 +891,7 @@ static bool camTrackCamera()
 	bool bFlying = false;
 
 	/* Most importantly - see if the target we're tracking is dead! */
-	if(trackingCamera.target->died)
+	if (trackingCamera.target->died)
 	{
 		return(false);
 	}
@@ -906,19 +906,19 @@ static bool camTrackCamera()
 		like a flight sim, so for now just pitch and orientation */
 
 
-	if(trackingCamera.target->type == OBJ_DROID)
+	if (trackingCamera.target->type == OBJ_DROID)
 	{
-		psDroid = (DROID*)trackingCamera.target;
+		psDroid = (DROID *)trackingCamera.target;
 		psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
 		if (psPropStats->propulsionType == PROPULSION_TYPE_LIFT)
 		{
-				bFlying = true;
+			bFlying = true;
 		}
 	}
 
-	if(bRadarAllign || trackingCamera.target->type == OBJ_DROID)
+	if (bRadarAllign || trackingCamera.target->type == OBJ_DROID)
 	{
-		if(bFlying)
+		if (bFlying)
 		{
 			updateCameraRotationAcceleration(CAM_ALL);
 		}
@@ -927,9 +927,9 @@ static bool camTrackCamera()
 			updateCameraRotationAcceleration(CAM_X_AND_Y);
 		}
 	}
-	if(bFlying)
+	if (bFlying)
 	{
-	 	updateCameraRotationVelocity(CAM_ALL);
+		updateCameraRotationVelocity(CAM_ALL);
 		updateCameraRotationPosition(CAM_ALL);
 	}
 	else
@@ -949,33 +949,33 @@ static bool camTrackCamera()
 	player.r.z = trackingCamera.rotation.z;
 
 	/* There's a minimum for this - especially when John's VTOL code lets them land vertically on cliffs */
-	if(player.r.x>DEG(360+MAX_PLAYER_X_ANGLE))
-  	{
-   		player.r.x = DEG(360+MAX_PLAYER_X_ANGLE);
-   	}
+	if (player.r.x > DEG(360 + MAX_PLAYER_X_ANGLE))
+	{
+		player.r.x = DEG(360 + MAX_PLAYER_X_ANGLE);
+	}
 
 	/* Clip the position to the edge of the map */
 	CheckScrollLimits();
 
 	/* Store away our last update as acceleration and velocity are all fn()/dt */
 	trackingCamera.lastUpdate = realTime;
-	if(bFullInfo)
+	if (bFullInfo)
 	{
 		flushConsoleMessages();
-		if(trackingCamera.target->type == OBJ_DROID)
+		if (trackingCamera.target->type == OBJ_DROID)
 		{
-			printDroidInfo((DROID*)trackingCamera.target);
+			printDroidInfo((DROID *)trackingCamera.target);
 		}
 	}
 
 	/* Switch off if we're jumping to a new location and we've got there */
-	if(getRadarTrackingStatus())
+	if (getRadarTrackingStatus())
 	{
 		/*	This will ensure we come to a rest and terminate the tracking
 			routine once we're close enough
 		*/
-		if (trackingCamera.velocity*trackingCamera.velocity + trackingCamera.acceleration*trackingCamera.acceleration < 1.f &&
-		    trackingCamera.rotVel*trackingCamera.rotVel     + trackingCamera.rotAccel*trackingCamera.rotAccel         < 1.f)
+		if (trackingCamera.velocity * trackingCamera.velocity + trackingCamera.acceleration * trackingCamera.acceleration < 1.f &&
+		    trackingCamera.rotVel * trackingCamera.rotVel     + trackingCamera.rotAccel * trackingCamera.rotAccel         < 1.f)
 		{
 			setWarCamActive(false);
 		}
@@ -983,16 +983,25 @@ static bool camTrackCamera()
 	return(true);
 }
 //-----------------------------------------------------------------------------------
-DROID *getTrackingDroid( void )
+DROID *getTrackingDroid(void)
 {
-	if(!getWarCamStatus()) return(NULL);
-	if(trackingCamera.status != CAM_TRACKING) return(NULL);
-	if(trackingCamera.target->type != OBJ_DROID) return(NULL);
-	return((DROID*)trackingCamera.target);
+	if (!getWarCamStatus())
+	{
+		return(NULL);
+	}
+	if (trackingCamera.status != CAM_TRACKING)
+	{
+		return(NULL);
+	}
+	if (trackingCamera.target->type != OBJ_DROID)
+	{
+		return(NULL);
+	}
+	return((DROID *)trackingCamera.target);
 }
 
 //-----------------------------------------------------------------------------------
-SDWORD	getPresAngle( void )
+SDWORD	getPresAngle(void)
 {
 	return(presAvAngle);
 }
@@ -1000,7 +1009,7 @@ SDWORD	getPresAngle( void )
 
 
 //-----------------------------------------------------------------------------------
-UDWORD	getNumDroidsSelected( void )
+UDWORD	getNumDroidsSelected(void)
 {
 	return(selNumSelected(selectedPlayer));
 }
@@ -1008,10 +1017,10 @@ UDWORD	getNumDroidsSelected( void )
 //-----------------------------------------------------------------------------------
 
 /* Returns whether or not the tracking camera is active */
-bool	getWarCamStatus( void )
+bool	getWarCamStatus(void)
 {
 	/* Is it switched off? */
-	if(trackingCamera.status == CAM_INACTIVE)
+	if (trackingCamera.status == CAM_INACTIVE)
 	{
 		return(false);
 	}
@@ -1025,10 +1034,10 @@ bool	getWarCamStatus( void )
 //-----------------------------------------------------------------------------------
 
 /* Flips the status of tracking to the opposite of what it presently is */
-void	camToggleStatus( void )
+void	camToggleStatus(void)
 {
- 	/* If it's off */
-	if(trackingCamera.status == CAM_INACTIVE)
+	/* If it's off */
+	if (trackingCamera.status == CAM_INACTIVE)
 	{
 		/* Switch it on */
 		setWarCamActive(true);
@@ -1037,7 +1046,7 @@ void	camToggleStatus( void )
 	{
 		/* Otherwise, switch it off */
 		setWarCamActive(false);
-		if(getDrivingStatus())
+		if (getDrivingStatus())
 		{
 			StopDriverMode();
 		}
@@ -1056,18 +1065,18 @@ void	camToggleInfo(void)
 void	requestRadarTrack(SDWORD x, SDWORD y)
 {
 	radarX = (SWORD)x;
- 	radarY = (SWORD)y;
- 	bRadarTrackingRequested = true;
+	radarY = (SWORD)y;
+	bRadarTrackingRequested = true;
 	trackingCamera.status = CAM_REQUEST;
 	processWarCam();
 }
 
 /* Returns whether we're presently tracking to a new _location_ */
-bool	getRadarTrackingStatus( void )
+bool	getRadarTrackingStatus(void)
 {
 	bool retVal;
 
-	if(trackingCamera.status == CAM_INACTIVE)
+	if (trackingCamera.status == CAM_INACTIVE)
 	{
 		retVal = false;
 	}
@@ -1085,12 +1094,12 @@ bool	getRadarTrackingStatus( void )
 	return(retVal);
 }
 
-void	toggleRadarAllignment( void )
+void	toggleRadarAllignment(void)
 {
 	bRadarAllign = !bRadarAllign;
 }
 
-void	camInformOfRotation( Vector3i *rotation )
+void	camInformOfRotation(Vector3i *rotation)
 {
 	trackingCamera.rotation.x = rotation->x;
 	trackingCamera.rotation.y = rotation->y;
