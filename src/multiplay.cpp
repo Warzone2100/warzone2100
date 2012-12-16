@@ -1063,6 +1063,16 @@ bool recvResearchStatus(NETQUEUE queue)
 	return true;
 }
 
+static void printchatmsg(const char *text, int from)
+{
+	char msg[MAX_CONSOLE_STRING_LENGTH];
+
+	sstrcpy(msg, NetPlay.players[from].name);		// name
+	sstrcat(msg, ": ");					// seperator
+	sstrcat(msg, text);					// add message
+	addConsoleMessage(msg, DEFAULT_JUSTIFY, from);		// display
+}
+
 // ////////////////////////////////////////////////////////////////////////////
 // ////////////////////////////////////////////////////////////////////////////
 // Text Messaging between players. proceed string with players to send to.
@@ -1076,13 +1086,18 @@ bool sendTextMessage(const char *pStr, bool all, uint32_t from)
 	char				display[MAX_CONSOLE_STRING_LENGTH];
 	char				msg[MAX_CONSOLE_STRING_LENGTH];
 	char*				curStr = (char*)pStr;
-	bool				toSelectedPlayer = false;
 
 	memset(display,0x0, sizeof(display));	//clear buffer
 	memset(msg,0x0, sizeof(msg));		//clear buffer
 	memset(sendto,0x0, sizeof(sendto));		//clear private flag
 	memset(posTable,0x0, sizeof(posTable));		//clear buffer
 	sstrcpy(msg, curStr);
+
+	// This is for local display
+	if (from == selectedPlayer)
+	{
+		printchatmsg(normal ? curStr : display, from);
+	}
 
 	triggerEventChat(from, from, pStr); // send to self
 
@@ -1154,7 +1169,7 @@ bool sendTextMessage(const char *pStr, bool all, uint32_t from)
 		{
 			if (i == selectedPlayer && from != i)
 			{
-				toSelectedPlayer = true; // also display it
+				printchatmsg(display, from); // also display it
 			}
 			if (i != from && !isHumanPlayer(i) && myResponsibility(i))
 			{
@@ -1175,7 +1190,7 @@ bool sendTextMessage(const char *pStr, bool all, uint32_t from)
 			{
 				if (i == selectedPlayer)
 				{
-					toSelectedPlayer = true; // also display it
+					printchatmsg(curStr, from); // also display it
 				}
 				if (isHumanPlayer(i))
 				{
@@ -1204,7 +1219,7 @@ bool sendTextMessage(const char *pStr, bool all, uint32_t from)
 			{
 				if (i == selectedPlayer)
 				{
-					toSelectedPlayer = true;
+					printchatmsg(display, from); // also display it
 				}
 				if (isHumanPlayer(i))
 				{
@@ -1224,15 +1239,6 @@ bool sendTextMessage(const char *pStr, bool all, uint32_t from)
 				}
 			}
 		}
-	}
-
-	// This is for local display
-	if (from == selectedPlayer || toSelectedPlayer)
-	{
-		sstrcpy(msg, NetPlay.players[from].name);		// name
-		sstrcat(msg, ": ");					// seperator
-		sstrcat(msg, (normal ? curStr : display));		// add message
-		addConsoleMessage(msg, DEFAULT_JUSTIFY, from);		// display
 	}
 
 	return true;
