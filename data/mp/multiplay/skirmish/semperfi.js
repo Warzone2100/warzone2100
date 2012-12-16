@@ -654,5 +654,22 @@ function eventGroupLoss(droid, group, size)
 
 function eventChat(from, to, message)
 {
-	log("message from " + from + " to " + to + ": " + message);
+	if (to != me || to == from)
+	{
+		return; // not for me
+	}
+	if (message == "donatetruck" && allianceExistsBetween(from, to))
+	{
+		// donate first truck
+		var droids = enumDroid(me, DROID_CONSTRUCT);
+		for (var i = 0; i < droids.length; i++)
+		{
+			donateObject(droids[i], from);
+			return;
+		}
+	}
+	else if (message == "donatepower" && allianceExistsBetween(from, to))
+	{
+		donatePower(playerPower(me) / 2, from);
+	}
 }
