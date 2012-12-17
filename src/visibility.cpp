@@ -70,7 +70,7 @@ static Vector2i *gWall = NULL;
 // initialise the visibility stuff
 bool visInitialise(void)
 {
-	visLevelInc = 0;
+	visLevelInc = 1;
 	visLevelDec = 0;
 
 	return true;
@@ -644,7 +644,8 @@ static void processVisibilityLevel(BASE_OBJECT *psObj)
 						// play message to indicate been seen
 						audio_QueueTrackPos(type, psObj->pos.x, psObj->pos.y, psObj->pos.z);
 					}
-					debug(LOG_MSG, "Added message for oil well or artefact, pViewData=%p", psMessage->pViewData);
+					debug(LOG_MSG, "Added message for oil well or artefact, pViewData=%p at (%d, %d, %d)", 
+					      psMessage->pViewData, psObj->pos.x, psObj->pos.y, psObj->pos.z);
 				}
 			}
 		}
