@@ -360,24 +360,32 @@ void giftPower(uint8_t from, uint8_t to, uint32_t amount, bool send)
 	}
 	else
 	{
-		uint32_t gifval;
+		int value = 0;
 
-		if (from == ANYPLAYER || amount != 0)
+		if (from == ANYPLAYER && !NetPlay.bComms)
 		{
-			gifval = amount;
+			// basically cheating power, so we check that we are not in multiplayer
+			addPower(to, amount);
 		}
-		else
+		else if (from == ANYPLAYER && NetPlay.bComms)
 		{
-			// Give 1/3 of our power away
-			gifval = getPower(from) / 3;
-			usePower(from, gifval);
+			debug(LOG_WARNING, "Someone tried to cheat power in multiplayer - ignored!");
 		}
-
-		addPower(to, gifval);
-
+		else if (amount == 0) // the GUI option
+		{
+			value = getPower(from) / 3;
+			usePower(from, value);
+			addPower(to, value);
+		}
+		else // for scripts etc that can give precise amounts
+		{
+			value = MIN(getPower(from), amount);
+			usePower(from, value);
+			addPower(to, value);
+		}
 		if (from != ANYPLAYER && to == selectedPlayer)
 		{
-			CONPRINTF(ConsoleString,(ConsoleString,_("%s Gives You %u Power"),getPlayerName(from),gifval));
+			CONPRINTF(ConsoleString, (ConsoleString, _("%s Gives You %d Power"), getPlayerName(from), value));
 		}
 	}
 }
