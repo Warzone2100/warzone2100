@@ -110,7 +110,7 @@ static bool callFunction(QScriptEngine *engine, const QString &function, const Q
 	ticks = wzGetTicks() - ticks;
 	if (ticks > MAX_MS)
 	{
-		debug(LOG_SCRIPT, "%s took %d ms at time %d", function.toAscii().constData(), ticks, wzGetTicks());
+		debug(LOG_SCRIPT, "%s took %d ms at time %d", function.toUtf8().constData(), ticks, wzGetTicks());
 	}
 	if (engine->hasUncaughtException())
 	{
@@ -118,10 +118,10 @@ static bool callFunction(QScriptEngine *engine, const QString &function, const Q
 		QStringList bt = engine->uncaughtExceptionBacktrace();
 		for (int i = 0; i < bt.size(); i++)
 		{
-			debug(LOG_ERROR, "%d : %s", i, bt.at(i).toAscii().constData());
+			debug(LOG_ERROR, "%d : %s", i, bt.at(i).toUtf8().constData());
 		}
 		ASSERT(false, "Uncaught exception calling function \"%s\" at line %d: %s",
-		       function.toAscii().constData(), line, result.toString().toAscii().constData());
+		       function.toUtf8().constData(), line, result.toString().toUtf8().constData());
 		engine->clearExceptions();
 		return false;
 	}
@@ -182,7 +182,7 @@ static QScriptValue js_removeTimer(QScriptContext *context, QScriptEngine *engin
 	{
 		// Friendly warning
 		QString warnName = function.left(15) + "...";
-		debug(LOG_ERROR, "Did not find timer %s to remove", warnName.toAscii().constData());
+		debug(LOG_ERROR, "Did not find timer %s to remove", warnName.toUtf8().constData());
 	}
 	return QScriptValue();
 }
@@ -279,18 +279,18 @@ static QScriptValue js_include(QScriptContext *context, QScriptEngine *engine)
 	QString path = context->argument(0).toString();
 	UDWORD size;
 	char *bytes = NULL;
-	if (!loadFile(path.toAscii().constData(), &bytes, &size))
+	if (!loadFile(path.toUtf8().constData(), &bytes, &size))
 	{
-		debug(LOG_ERROR, "Failed to read include file \"%s\"", path.toAscii().constData());
+		debug(LOG_ERROR, "Failed to read include file \"%s\"", path.toUtf8().constData());
 		return QScriptValue(false);
 	}
-	QString source = QString::fromAscii(bytes, size);
+	QString source = QString::fromUtf8(bytes, size);
 	free(bytes);
 	QScriptSyntaxCheckResult syntax = QScriptEngine::checkSyntax(source);
 	if (syntax.state() != QScriptSyntaxCheckResult::Valid)
 	{
 		debug(LOG_ERROR, "Syntax error in include %s line %d: %s", 
-		      path.toAscii().constData(), syntax.errorLineNumber(), syntax.errorMessage().toAscii().constData());
+		      path.toUtf8().constData(), syntax.errorLineNumber(), syntax.errorMessage().toUtf8().constData());
 		return QScriptValue(false);
 	}
 	context->setActivationObject(engine->globalObject());
@@ -300,7 +300,7 @@ static QScriptValue js_include(QScriptContext *context, QScriptEngine *engine)
 	{
 		int line = engine->uncaughtExceptionLineNumber();
 		debug(LOG_ERROR, "Uncaught exception at line %d, include file %s: %s",
-		      line, path.toAscii().constData(), result.toString().toAscii().constData());
+		      line, path.toUtf8().constData(), result.toString().toUtf8().constData());
 		return QScriptValue(false);
 	}
 	return QScriptValue(true);
@@ -393,16 +393,16 @@ bool loadPlayerScript(QString path, int player, int difficulty)
 	QScriptEngine *engine = new QScriptEngine();
 	UDWORD size;
 	char *bytes = NULL;
-	if (!loadFile(path.toAscii().constData(), &bytes, &size))
+	if (!loadFile(path.toUtf8().constData(), &bytes, &size))
 	{
-		debug(LOG_ERROR, "Failed to read script file \"%s\"", path.toAscii().constData());
+		debug(LOG_ERROR, "Failed to read script file \"%s\"", path.toUtf8().constData());
 		return false;
 	}
-	QString source = QString::fromAscii(bytes, size);
+	QString source = QString::fromUtf8(bytes, size);
 	free(bytes);
 	QScriptSyntaxCheckResult syntax = QScriptEngine::checkSyntax(source);
 	ASSERT_OR_RETURN(false, syntax.state() == QScriptSyntaxCheckResult::Valid, "Syntax error in %s line %d: %s", 
-	                 path.toAscii().constData(), syntax.errorLineNumber(), syntax.errorMessage().toAscii().constData());
+	                 path.toUtf8().constData(), syntax.errorLineNumber(), syntax.errorMessage().toUtf8().constData());
 	// Special functions
 	engine->globalObject().setProperty("setTimer", engine->newFunction(js_setTimer));
 	engine->globalObject().setProperty("queue", engine->newFunction(js_queue));
@@ -462,7 +462,7 @@ bool loadPlayerScript(QString path, int player, int difficulty)
 	engine->globalObject().setProperty("me", player, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	QScriptValue result = engine->evaluate(source, path);
 	ASSERT_OR_RETURN(false, !engine->hasUncaughtException(), "Uncaught exception at line %d, file %s: %s", 
-	                 engine->uncaughtExceptionLineNumber(), path.toAscii().constData(), result.toString().toAscii().constData());
+	                 engine->uncaughtExceptionLineNumber(), path.toUtf8().constData(), result.toString().toUtf8().constData());
 
 	// We also need to save the special 'scriptName' variable.
 	//== \item[scriptName] Base name of the script that is running.

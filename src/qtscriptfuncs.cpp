@@ -1661,7 +1661,7 @@ static QScriptValue js_debug(QScriptContext *context, QScriptEngine *engine)
 		}
 		result.append(s);
 	}
-	qWarning("%s", result.toAscii().constData());
+	qWarning("%s", result.toUtf8().constData());
 	return QScriptValue();
 }
 
@@ -1855,7 +1855,7 @@ static QScriptValue js_console(QScriptContext *context, QScriptEngine *engine)
 		}
 		//permitNewConsoleMessages(true);
 		//setConsolePermanence(true,true);
-		addConsoleMessage(result.toAscii().constData(), CENTRE_JUSTIFY, SYSTEM_MESSAGE);
+		addConsoleMessage(result.toUtf8().constData(), CENTRE_JUSTIFY, SYSTEM_MESSAGE);
 		//permitNewConsoleMessages(false);
 	}
 	return QScriptValue();
@@ -2409,7 +2409,7 @@ static QScriptValue js_enableTemplate(QScriptContext *context, QScriptEngine *en
 	}
 	if (!found)
 	{
-		debug(LOG_ERROR, "Template %s was not found!", templateName.toAscii().constData());
+		debug(LOG_ERROR, "Template %s was not found!", templateName.toUtf8().constData());
 		return QScriptValue(false);
 	}
 	for (std::list<DROID_TEMPLATE>::iterator i = localTemplates.begin(); i != localTemplates.end(); ++i)
