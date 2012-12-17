@@ -180,7 +180,7 @@ function eventGameInit()
 	}
 
 	hackNetOn();
-	setTimer("checkEndConditions", 100);
+	setTimer("checkEndConditions", 3000);
 }
 
 // /////////////////////////////////////////////////////////////////
