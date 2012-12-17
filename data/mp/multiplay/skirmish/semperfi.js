@@ -30,7 +30,7 @@ function log(message)
 	{
 		console(message);
 	}
-	dump(me + "@" + gameTime + " : " + message);
+	//dump(me + "@" + gameTime + " : " + message);
 }
 
 function logObj(obj, message)
@@ -39,7 +39,7 @@ function logObj(obj, message)
 	{
 		console(message);
 	}
-	dump(me + "@" + gameTime + " [" + obj.name + " id=" + obj.id + "] > " + message);
+	//dump(me + "@" + gameTime + " [" + obj.name + " id=" + obj.id + "] > " + message);
 }
 
 function buildAttacker(struct)
@@ -218,7 +218,7 @@ function checkLocalJobs(truck, structlist)
 	for (var i = 0; i < structlist.length; i++)
 	{
 		var struct = structlist[i];
-		if (struct.status != BUILT)
+		if (struct.status != BUILT && conCanHelp(truck, struct.x, struct.y))
 		{
 			var dist = distBetweenTwoPoints(truck.x, truck.y, struct.x, struct.y);
 			if (dist < 50 && (dist < bestDist || struct.stattype == POWER_GEN))
@@ -275,6 +275,7 @@ function lookForOil(droids)
 				bestDroid.busy = true;
 				orderDroidBuild(bestDroid, DORDER_BUILD, derrick, oils[i].x, oils[i].y);
 				bestDist = 99999;
+				bestDroid = null;
 			}
 		}
 	}
@@ -308,7 +309,10 @@ function buildFundamentals()
 	var droids = enumDroid(me, DROID_CONSTRUCT);
 	for (var j = 0; j < droids.length; j++)
 	{
-		checkLocalJobs(droids[j], structlist);
+		if (droids[j].order != DORDER_BUILD)
+		{
+			checkLocalJobs(droids[j], structlist);
+		}
 	}
 	// If we need power generators, try to queue up production of them with any idle trucks
 	if (needPwGen && isStructureAvailable(powGen) && grabTrucksAndBuild(20, powGen, 1))
@@ -334,6 +338,11 @@ function buildFundamentals2()
 	if (playerPower(me) > factcount * 750 && isStructureAvailable(factory) && grabTrucksAndBuild(20, factory, 1))
 	{
 		return; // done here
+	}
+	// Build power generator if missing
+	if (isStructureAvailable(powGen) && countStruct(powGen) == 0 && grabTrucksAndBuild(20, powGen, 1))
+	{
+		return;
 	}
 	// Build HQ if missing
 	if (isStructureAvailable(playerHQ) && countStruct(playerHQ) == 0 && grabTrucksAndBuild(20, playerHQ, 1))
@@ -399,14 +408,25 @@ function maintenance()
 		queue("buildFundamentals");
 		fundamentalsTriggered = true;
 	}
-	// Check for idle labs
-	queue("eventResearched");
+	// Check for idle structures (eg factories, labs...)
+	var faclist = enumStruct(me);
+	for (var j = 0; j < faclist.length; j++)
+	{
+		if (structureIdle(faclist[j]))
+		{
+			eventStructureBuilt(faclist[j], null);
+		}
+	}
 }
 
 // --- game events
 
 function eventResearched(tech, labparam)
 {
+	if (playerPower(me) < 100)
+	{
+		return; // wait
+	}
 	var techlist = [
 		"R-Defense-Tower01",	// mg tower
 		"R-Struc-PowerModuleMk1",	// power module
@@ -491,7 +511,7 @@ function eventDroidBuilt(droid, struct)
 
 	if (struct && structureIdle(struct))
 	{
-		if (struct.stattype == FACTORY)
+		if (struct.stattype == FACTORY && playerPower(me) > 100)
 		{
 			if (countDroid(DROID_CONSTRUCT) < 5)
 			{
@@ -630,9 +650,9 @@ function eventStartLevel()
 	}
 
 	// Maintenance calls - to fix quirks
-	setTimer("maintenance", 1000 * 60 * 2); // every 2 minutes, call it to check if anything left to do
+	setTimer("maintenance", 1000 * 15); // every 15 seconds, call it to check if anything left to do
 
-	dump("== level started ==");
+	//dump("== level started ==");
 }
 
 function eventDroidIdle(droid)
