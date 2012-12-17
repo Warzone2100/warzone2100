@@ -67,6 +67,7 @@ void setPowerModifier(int player, int modifier);
 int32_t getPower(unsigned player);
 int64_t getPrecisePower(unsigned player);
 int32_t getPowerMinusQueued(unsigned player);
+int getQueuedPower(int player);
 
 /** Resets the power levels for all players when power is turned back on. */
 void powerCalc(bool on);

@@ -2512,12 +2512,21 @@ static QScriptValue js_translate(QScriptContext *context, QScriptEngine *engine)
 }
 
 //-- \subsection{playerPower(player)}
-//-- Return amount of power held by given player.
+//-- Return amount of power held by the given player.
 static QScriptValue js_playerPower(QScriptContext *context, QScriptEngine *engine)
 {
 	int player = context->argument(0).toInt32();
 	SCRIPT_ASSERT_PLAYER(context, player);
 	return QScriptValue(getPower(player));
+}
+
+//-- \subsection{queuedPower(player)}
+//-- Return amount of power queued up for production by the given player.
+static QScriptValue js_queuedPower(QScriptContext *context, QScriptEngine *engine)
+{
+	int player = context->argument(0).toInt32();
+	SCRIPT_ASSERT_PLAYER(context, player);
+	return QScriptValue(getQueuedPower(player));
 }
 
 //-- \subsection{isStructureAvailable(structure type[, player])}
@@ -3561,6 +3570,7 @@ bool registerFunctions(QScriptEngine *engine, QString scriptName)
 	engine->globalObject().setProperty("groupSize", engine->newFunction(js_groupSize));
 	engine->globalObject().setProperty("orderDroidLoc", engine->newFunction(js_orderDroidLoc));
 	engine->globalObject().setProperty("playerPower", engine->newFunction(js_playerPower));
+	engine->globalObject().setProperty("queuedPower", engine->newFunction(js_queuedPower));
 	engine->globalObject().setProperty("isStructureAvailable", engine->newFunction(js_isStructureAvailable));
 	engine->globalObject().setProperty("pickStructLocation", engine->newFunction(js_pickStructLocation));
 	engine->globalObject().setProperty("droidCanReach", engine->newFunction(js_droidCanReach));

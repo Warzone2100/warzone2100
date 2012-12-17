@@ -161,7 +161,7 @@ int32_t checkPowerRequest(STRUCTURE *psStruct)
 	return power != -1? power / FP_ONE : -1;
 }
 
-static int64_t getQueuedPower(unsigned player)
+static int64_t getPreciseQueuedPower(unsigned player)
 {
 	PlayerPower const *p = &asPower[player];
 
@@ -171,6 +171,18 @@ static int64_t getQueuedPower(unsigned player)
 		requiredPower += p->powerQueue[n].amount;
 	}
 	return requiredPower;
+}
+
+int getQueuedPower(int player)
+{
+	PlayerPower const *p = &asPower[player];
+
+	int64_t requiredPower = 0;
+	for (size_t n = 0; n < p->powerQueue.size(); ++n)
+	{
+		requiredPower += p->powerQueue[n].amount;
+	}
+	return requiredPower / FP_ONE;
 }
 
 static void syncDebugEconomy(unsigned player, char ch)
@@ -342,7 +354,7 @@ int32_t getPowerMinusQueued(unsigned player)
 {
 	ASSERT(player < MAX_PLAYERS, "Bad player (%u)", player);
 
-	return (asPower[player].currentPower - getQueuedPower(player)) / FP_ONE;
+	return (asPower[player].currentPower - getPreciseQueuedPower(player)) / FP_ONE;
 }
 
 bool requestPowerFor(STRUCTURE *psStruct, int32_t amount)
