@@ -296,14 +296,14 @@ UDWORD				intLastWidget;
 INTMODE intMode;
 
 /* Status of the positioning for the object placement */
-enum _edit_pos_mode
+static enum _edit_pos_mode
 {
 	IED_NOPOS,
 	IED_POS,
 } editPosMode;
 
 /* Which type of object screen is being displayed. Starting value is where the intMode left off*/
-enum _obj_mode
+static enum _obj_mode
 {
 	IOBJ_NONE = INT_MAXMODE,	// Nothing doing.
 	IOBJ_BUILD,			        // The build screen
@@ -325,7 +325,7 @@ typedef bool (* OBJ_SETSTATS)(BASE_OBJECT *psObj, BASE_STATS *psStats);
 
 /* functions to select and get stats from the current object list */
 static OBJ_SELECT		objSelectFunc;
-OBJ_GETSTATS		objGetStatsFunc;
+static OBJ_GETSTATS		objGetStatsFunc;
 static OBJ_SETSTATS		objSetStatsFunc;
 
 /* Whether the objects that are on the object screen have changed this frame */
@@ -2389,15 +2389,10 @@ static void intProcessObject(UDWORD id)
 			psObj = intGetObject(id);
 			if (psObj)
 			{
-				//Only do this if not offworld - only check if a structure
-				//if (!offWorldKeepLists)
-				{
-
 					if(psObj->type == OBJ_STRUCTURE && !offWorldKeepLists)
 					{
 						/* Deselect old buildings */
-						for(psStruct = apsStructLists[selectedPlayer];
-							psStruct; psStruct=psStruct->psNext)
+						for(psStruct = apsStructLists[selectedPlayer]; psStruct; psStruct=psStruct->psNext)
 						{
 							psStruct->selected = false;
 						}
@@ -2407,52 +2402,47 @@ static void intProcessObject(UDWORD id)
 					}
 
 					if(!driveModeActive())
-                    {
-                        //don't do this if offWorld and a structure object has been selected
-                        if (!(psObj->type == OBJ_STRUCTURE && offWorldKeepLists))
-                        {
-    						// set the map position - either the object position, or the position jumped from
-	    					butIndex = id - IDOBJ_OBJSTART;
+					{
+						// don't do this if offWorld and a structure object has been selected
+						if (!(psObj->type == OBJ_STRUCTURE && offWorldKeepLists))
+						{
+    							// set the map position - either the object position, or the position jumped from
+							butIndex = id - IDOBJ_OBJSTART;
 							if (butIndex >= 0 && butIndex <= IDOBJ_OBJEND - IDOBJ_OBJSTART)
-			    			{
+			    				{
 								asJumpPos.resize(IDOBJ_OBJEND - IDOBJ_OBJSTART, Vector2i(0, 0));
-				    			if (((asJumpPos[butIndex].x == 0) && (asJumpPos[butIndex].y == 0)) ||
-					    			!DrawnInLastFrame((SDWORD)psObj->sDisplay.frameNumber) ||
-						    		((psObj->sDisplay.screenX > pie_GetVideoBufferWidth()) || (psObj->sDisplay.screenY > pie_GetVideoBufferHeight())))
-							    {
+								if (((asJumpPos[butIndex].x == 0) && (asJumpPos[butIndex].y == 0)) ||
+								    !DrawnInLastFrame((SDWORD)psObj->sDisplay.frameNumber) ||
+								    ((psObj->sDisplay.screenX > pie_GetVideoBufferWidth()) ||
+								    (psObj->sDisplay.screenY > pie_GetVideoBufferHeight())))
+								{
 									asJumpPos[butIndex] = getPlayerPos();
-
-
-    								setPlayerPos(psObj->pos.x, psObj->pos.y);
-	    							if(getWarCamStatus())
-		    						{
-			    						camToggleStatus();
-				    				}
-	//							intSetMapPos(psObj->pos.x, psObj->pos.y);
-
-			    				}
-				    			else
-					    		{
-
-						    		setPlayerPos(asJumpPos[butIndex].x, asJumpPos[butIndex].y);
-							    	if(getWarCamStatus())
-								    {
-									    camToggleStatus();
-    								}
-
-					    			asJumpPos[butIndex].x = 0;
-						    		asJumpPos[butIndex].y = 0;
-							    }
-						    }
-					    }
-				    }
-                }
+									setPlayerPos(psObj->pos.x, psObj->pos.y);
+									if (getWarCamStatus())
+									{
+										camToggleStatus();
+									}
+								}
+								else
+								{
+									setPlayerPos(asJumpPos[butIndex].x, asJumpPos[butIndex].y);
+									if (getWarCamStatus())
+									{
+										camToggleStatus();
+									}
+									asJumpPos[butIndex].x = 0;
+									asJumpPos[butIndex].y = 0;
+								}
+							}
+						}
+					}
 
 				intResetWindows(psObj);
 
 				// If a construction droid button was clicked then
 				// clear all other selections and select it.
-				if(psObj->type == OBJ_DROID) {			// If it's a droid...
+				if(psObj->type == OBJ_DROID)
+				{
 					intSelectDroid(psObj);
 					psObjSelected = psObj;
 
@@ -5941,7 +5931,6 @@ void processProximityButtons(UDWORD id)
 {
 	PROXIMITY_DISPLAY	*psProxDisp;
 
-
 	if(!doWeDrawProximitys())
 	{
 		return;
@@ -5949,8 +5938,7 @@ void processProximityButtons(UDWORD id)
 
 	//find which proximity display this relates to
 	psProxDisp = NULL;
-	for(psProxDisp = apsProxDisp[selectedPlayer]; psProxDisp; psProxDisp =
-		psProxDisp->psNext)
+	for (psProxDisp = apsProxDisp[selectedPlayer]; psProxDisp; psProxDisp = psProxDisp->psNext)
 	{
 		if (psProxDisp->buttonID == id)
 		{
