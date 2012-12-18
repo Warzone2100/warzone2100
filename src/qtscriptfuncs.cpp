@@ -2057,7 +2057,7 @@ static QScriptValue js_orderDroidLoc(QScriptContext *context, QScriptEngine *)
 //-- \subsection{setMissionTime(time)} Set mission countdown in seconds.
 static QScriptValue js_setMissionTime(QScriptContext *context, QScriptEngine *)
 {
-	int value = context->argument(0).toInt32() * 1000;
+	int value = context->argument(0).toInt32() * GAME_TICKS_PER_SEC;
 	mission.startTime = gameTime;
 	mission.time = value;
 	setMissionCountDown();
@@ -2077,16 +2077,16 @@ static QScriptValue js_setMissionTime(QScriptContext *context, QScriptEngine *)
 //-- \subsection{getMissionTime()} Get time remaining on mission countdown in seconds.
 static QScriptValue js_getMissionTime(QScriptContext *, QScriptEngine *)
 {
-	return QScriptValue((mission.time - (gameTime - mission.startTime)) / 1000);
+	return QScriptValue((mission.time - (gameTime - mission.startTime)) / GAME_TICKS_PER_SEC);
 }
 
 //-- \subsection{setReinforcementTime(time)} Set time for reinforcements to arrive. If time is
-//-- negative, the reinforcement GUI is removed and the timer stopped.
+//-- negative, the reinforcement GUI is removed and the timer stopped. Time is in seconds.
 static QScriptValue js_setReinforcementTime(QScriptContext *context, QScriptEngine *)
 {
-	int value = context->argument(0).toInt32() * 100;
-	SCRIPT_ASSERT(context, value == LZ_COMPROMISED_TIME || value < 60 * 60 * GAME_TICKS_PER_SEC,
-	                 "The transport timer cannot be set to more than 1 hour!");
+	int value = context->argument(0).toInt32() * GAME_TICKS_PER_SEC;
+	SCRIPT_ASSERT(context, value == LZ_COMPROMISED_TIME || value < 60 * 60,
+	              "The transport timer cannot be set to more than 1 hour!");
 	mission.ETA = value;
 	if (missionCanReEnforce())
 	{
