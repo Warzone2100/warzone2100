@@ -4,10 +4,6 @@ var scav1group, scav2group, scav3group, scav4group; // premade groups
 var cheatmode = false;
 var stage = 0;
 var numArtifact = 0;
-var base1destroyed = false;
-var base2destroyed = false;
-var base3destroyed = false;
-var base4destroyed = false;
 
 function gameLost()
 {
@@ -96,6 +92,8 @@ function eventChat(from, to, message)
 		enableResearch("R-Sys-Engineering01");
 		enableResearch("R-Defense-Tower01");
 		enableResearch("R-Wpn-Flamer01Mk1");
+		enableResearch("R-Wpn-MG1Mk1");
+		// TODO, finish some/all of the above
 		var artifact = label("artifact");
 		if (artifact)
 		{
@@ -129,34 +127,11 @@ function tick()
 	}
 }
 
-function showbase2()
+function playDelayed374(where)
 {
-	if (!base2destroyed)
-	{
-		hackAddMessage("C1A_BASE1", PROX_MSG, 0, false);
-		var spos = label("scav2soundpos");
-		playSound("pcv374.ogg", spos.x, spos.y, 0);
-	}
-}
-
-function showbase3()
-{
-	if (!base3destroyed)
-	{
-		hackAddMessage("C1A_BASE2", PROX_MSG, 0, false);
-		var spos = label("scav3soundpos");
-		playSound("pcv374.ogg", spos.x, spos.y, 0);
-	}
-}
-
-function showbase4()
-{
-	if (!base4destroyed)
-	{
-		hackAddMessage("C1A_BASE3", PROX_MSG, 0, false);
-		var spos = label("retreat4");
-		playSound("pcv374.ogg", spos.x, spos.y, 0);
-	}
+	var spos = label("scav2soundpos");
+	var spos = label(where);
+	playSound("pcv374.ogg", spos.x, spos.y, 0);
 }
 
 function eventGroupLoss(obj, groupid, newsize)
@@ -167,10 +142,10 @@ function eventGroupLoss(obj, groupid, newsize)
 		// eliminated scav base 1
 		leftovers = enumArea("scavbase1area");
 		hackRemoveMessage("C1A_BASE0", PROX_MSG, 0);
+		hackAddMessage("C1A_BASE1", PROX_MSG, 0, false);
 		var spos = label("scav1soundpos");
 		playSound("pcv391.ogg", spos.x, spos.y, 0);
-		queue("showbase2", 2000);
-		base1destroyed = true;
+		queue("playDelayed374", 2000, "scav2soundpos");
 		stage++;
 	}
 	else if (groupid == scav2group && newsize == 0)
@@ -178,10 +153,10 @@ function eventGroupLoss(obj, groupid, newsize)
 		// eliminated scav base 2
 		leftovers = enumArea("scavbase2area");
 		hackRemoveMessage("C1A_BASE1", PROX_MSG, 0);
+		hackAddMessage("C1A_BASE2", PROX_MSG, 0, false);
 		var spos = label("scav2soundpos");
 		playSound("pcv392.ogg", spos.x, spos.y, 0);
-		queue("showbase3", 2000);
-		base2destroyed = true;
+		queue("playDelayed374", 2000, "scav3soundpos");
 		stage++;
 	}
 	else if (groupid == scav3group && newsize == 0)
@@ -189,10 +164,10 @@ function eventGroupLoss(obj, groupid, newsize)
 		// eliminated scav base 3
 		leftovers = enumArea("scavbase3area");
 		hackRemoveMessage("C1A_BASE2", PROX_MSG, 0);
+		hackAddMessage("C1A_BASE3", PROX_MSG, 0, false);
 		var spos = label("scav3soundpos");
 		playSound("pcv392.ogg", spos.x, spos.y, 0);
-		queue("showbase4", 2000);
-		base3destroyed = true;
+		queue("playDelayed374", 2000, "retreat4");
 		stage++;
 	}
 	else if (groupid == scav4group && newsize == 0)
@@ -203,7 +178,6 @@ function eventGroupLoss(obj, groupid, newsize)
 		var spos = label("retreat4");
 		playSound("pcv392.ogg", spos.x, spos.y, 0);
 		stage++;
-		base4destroyed = true;
 	}
 	// if scav group gone, nuke any leftovers, such as scav walls
 	for (var i = 0; leftovers && i < leftovers.length; i++)

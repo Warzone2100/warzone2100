@@ -58,6 +58,7 @@ QScriptValue convObj(BASE_OBJECT *psObj, QScriptEngine *engine);
 QScriptValue convFeature(FEATURE *psFeature, QScriptEngine *engine);
 QScriptValue convMax(BASE_OBJECT *psObj, QScriptEngine *engine);
 QScriptValue convResearch(RESEARCH *psResearch, QScriptEngine *engine, int player);
+BASE_OBJECT *IdToObject(OBJECT_TYPE type, int id, int player);
 
 /// Assert for scripts that give useful backtraces and other info.
 #define SCRIPT_ASSERT(context, expr, ...) \

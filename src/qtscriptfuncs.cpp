@@ -486,12 +486,27 @@ QScriptValue convTemplate(DROID_TEMPLATE *psTempl, QScriptEngine *engine)
 
 QScriptValue convMax(BASE_OBJECT *psObj, QScriptEngine *engine)
 {
+	if (!psObj)
+	{
+		return QScriptValue::NullValue;
+	}
 	switch (psObj->type)
 	{
 	case OBJ_DROID: return convDroid((DROID *)psObj, engine);
 	case OBJ_STRUCTURE: return convStructure((STRUCTURE *)psObj, engine);
 	case OBJ_FEATURE: return convFeature((FEATURE *)psObj, engine);
 	default: ASSERT(false, "No such supported object type"); return convObj(psObj, engine);
+	}
+}
+
+BASE_OBJECT *IdToObject(OBJECT_TYPE type, int id, int player)
+{
+	switch (type)
+	{
+	case OBJ_DROID: return IdToDroid(id, player);
+	case OBJ_FEATURE: return IdToFeature(id, player);
+	case OBJ_STRUCTURE: return IdToStruct(id, player);
+	default: return NULL;
 	}
 }
 
@@ -1907,22 +1922,7 @@ static QScriptValue js_groupAdd(QScriptContext *context, QScriptEngine *engine)
 	int id = val.property("id").toInt32();
 	int player = val.property("player").toInt32();
 	OBJECT_TYPE type = (OBJECT_TYPE)val.property("type").toInt32();
-	BASE_OBJECT *psObj = NULL;
-	switch (type)
-	{
-	case OBJ_DROID:
-		psObj = IdToDroid(id, player);
-		break;
-	case OBJ_STRUCTURE:
-		psObj = IdToStruct(id, player);
-		break;
-	case OBJ_FEATURE:
-		psObj = IdToFeature(id, player);
-		break;
-	default:
-		SCRIPT_ASSERT(context, false, "Invalid object type");
-		break;
-	}
+	BASE_OBJECT *psObj = IdToObject(type, id, player);
 	SCRIPT_ASSERT(context, psObj, "Invalid object index %d", id);
 	QScriptValue groups = engine->globalObject().property("groupSizes");
 	groupAddObject(psObj, groupId, engine);
@@ -2570,25 +2570,7 @@ static QScriptValue js_hackGetObj(QScriptContext *context, QScriptEngine *engine
 	int id = context->argument(2).toInt32();
 	BASE_OBJECT *psObj;
 	SCRIPT_ASSERT_PLAYER(context, player);
-	switch (type)
-	{
-	case OBJ_DROID:
-		psObj = IdToDroid(id, player);
-		break;
-	case OBJ_STRUCTURE:
-		psObj = IdToStruct(id, player);
-		break;
-	case OBJ_FEATURE:
-		psObj = IdToFeature(id, player);
-		break;
-	default:
-		return QScriptValue::NullValue;
-	}
-	if (!psObj)
-	{
-		return QScriptValue::NullValue;
-	}
-	return QScriptValue(convMax(psObj, engine));
+	return QScriptValue(convMax(IdToObject(type, id, player), engine));
 }
 
 //-- \subsection{hackAssert(condition, message...)}
