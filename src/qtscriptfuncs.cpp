@@ -2568,7 +2568,6 @@ static QScriptValue js_hackGetObj(QScriptContext *context, QScriptEngine *engine
 	OBJECT_TYPE type = (OBJECT_TYPE)context->argument(0).toInt32();
 	int player = context->argument(1).toInt32();
 	int id = context->argument(2).toInt32();
-	BASE_OBJECT *psObj;
 	SCRIPT_ASSERT_PLAYER(context, player);
 	return QScriptValue(convMax(IdToObject(type, id, player), engine));
 }
