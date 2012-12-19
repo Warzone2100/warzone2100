@@ -1982,7 +1982,7 @@ static QScriptValue js_orderDroid(QScriptContext *context, QScriptEngine *)
 	DROID *psDroid = IdToDroid(id, player);
 	SCRIPT_ASSERT(context, psDroid, "Droid id %d not found belonging to player %d", id, player);
 	DROID_ORDER order = (DROID_ORDER)context->argument(1).toInt32();
-	SCRIPT_ASSERT(context, order == DORDER_TEMP_HOLD || order == DORDER_RTR || order == DORDER_STOP
+	SCRIPT_ASSERT(context, order == DORDER_HOLD || order == DORDER_RTR || order == DORDER_STOP
 		      || order == DORDER_RTB || order == DORDER_REARM,
 	              "Invalid order: %s", getDroidOrderName(order));
 	if (order == DORDER_REARM)
@@ -3641,7 +3641,7 @@ bool registerFunctions(QScriptEngine *engine, QString scriptName)
 	engine->globalObject().setProperty("DORDER_EMBARK", DORDER_EMBARK, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("DORDER_DISEMBARK", DORDER_DISEMBARK, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("DORDER_FIRESUPPORT", DORDER_FIRESUPPORT, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("DORDER_HOLD", DORDER_TEMP_HOLD, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("DORDER_HOLD", DORDER_HOLD, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("DORDER_RTR", DORDER_RTR, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("DORDER_RTB", DORDER_RTB, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("DORDER_STOP", DORDER_STOP, QScriptValue::ReadOnly | QScriptValue::Undeletable);

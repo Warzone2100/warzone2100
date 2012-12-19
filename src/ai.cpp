@@ -1067,7 +1067,7 @@ void aiUpdateDroid(DROID *psDroid)
 	// look for a target if doing nothing
 	if (orderState(psDroid, DORDER_NONE) ||
 		orderState(psDroid, DORDER_GUARD) ||
-		orderState(psDroid, DORDER_TEMP_HOLD))
+		orderState(psDroid, DORDER_HOLD))
 	{
 		lookForTarget = true;
 	}

@@ -306,7 +306,7 @@ void orderUpdateDroid(DROID *psDroid)
 	switch (psDroid->order.type)
 	{
 	case DORDER_NONE:
-	case DORDER_TEMP_HOLD:
+	case DORDER_HOLD:
 		psObj = NULL;
 		// see if there are any orders queued up
 		if (orderDroidList(psDroid))
@@ -1420,7 +1420,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		actionDroid(psDroid, DACTION_NONE);
 		psDroid->order = DroidOrder(DORDER_NONE);
 		break;
-	case DORDER_TEMP_HOLD:
+	case DORDER_HOLD:
 		// get the droid to stop doing whatever it is doing and temp hold
 		actionDroid(psDroid, DACTION_NONE);
 		psDroid->order = *psOrder;
@@ -1887,7 +1887,7 @@ void orderDroid(DROID *psDroid, DROID_ORDER order, QUEUE_MODE mode)
 			order == DORDER_RUNBURN ||
 			order == DORDER_TRANSPORTIN ||
 			order == DORDER_STOP ||		// Added this PD.
-			order == DORDER_TEMP_HOLD,
+			order == DORDER_HOLD,
 		"orderUnit: Invalid order" );
 
 	DROID_ORDER_DATA sOrder(order);
@@ -2269,7 +2269,7 @@ void orderDroidAdd(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 	     psDroid->order.type == DORDER_GUARD ||
 	     psDroid->order.type == DORDER_PATROL ||
 	     psDroid->order.type == DORDER_CIRCLE ||
-	     psDroid->order.type == DORDER_TEMP_HOLD))
+	     psDroid->order.type == DORDER_HOLD))
 	{
 		orderDroidList(psDroid);
 	}
@@ -3104,7 +3104,7 @@ SECONDARY_STATE secondaryGetState(DROID *psDroid, SECONDARY_ORDER sec, QUEUE_MOD
 		return (SECONDARY_STATE)(state & DSS_CIRCLE_MASK);
 		break;
 	case DSO_HALTTYPE:
-		if (psDroid->order.type == DORDER_TEMP_HOLD)
+		if (psDroid->order.type == DORDER_HOLD)
 		{
 			return DSS_HALT_HOLD;
 		}
@@ -4158,7 +4158,7 @@ const char* getDroidOrderName(DROID_ORDER order)
 		case DORDER_LEAVEMAP:                 return "DORDER_LEAVEMAP";
 		case DORDER_RTR_SPECIFIED:            return "DORDER_RTR_SPECIFIED";
 		case DORDER_CIRCLE:                   return "DORDER_CIRCLE";
-		case DORDER_TEMP_HOLD:                return "DORDER_TEMP_HOLD";
+		case DORDER_HOLD:                return "DORDER_HOLD";
 	};
 
 	ASSERT(false, "DROID_ORDER out of range: %u", order);

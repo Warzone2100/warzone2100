@@ -770,7 +770,7 @@ void actionUpdateDroid(DROID *psDroid)
 		// doing nothing
 		// see if there's anything to shoot.
 		if (psDroid->numWeaps > 0 && !isVtolDroid(psDroid)
-		    && (order->type == DORDER_NONE || order->type == DORDER_TEMP_HOLD || order->type == DORDER_RTR))
+		    && (order->type == DORDER_NONE || order->type == DORDER_HOLD || order->type == DORDER_RTR))
 		{
 			for (i = 0;i < psDroid->numWeaps;i++)
 			{
@@ -1115,7 +1115,7 @@ void actionUpdateDroid(DROID *psDroid)
 			 || (!isVtolDroid(psDroid)
 			  && (psTarget = orderStateObj(psDroid, DORDER_FIRESUPPORT))
 			  && psTarget->type == OBJ_STRUCTURE)
-			  || (order->type == DORDER_NONE) || (order->type == DORDER_TEMP_HOLD)
+			  || (order->type == DORDER_NONE) || (order->type == DORDER_HOLD)
 			  || (order->type == DORDER_RTR))
 			{
 				// don't move if on hold or firesupport for a sensor tower
@@ -1634,7 +1634,7 @@ void actionUpdateDroid(DROID *psDroid)
 		if (DROID_STOPPED(psDroid) && !actionReachedBuildPos(psDroid, psDroid->actionPos.x, psDroid->actionPos.y, ((STRUCTURE *)psDroid->psActionTarget[0])->rot.direction, order->psStats))
 		{
 			if (secondaryGetState(psDroid, DSO_HALTTYPE) != DSS_HALT_HOLD ||
-			    (order->type != DORDER_NONE && order->type != DORDER_TEMP_HOLD))
+			    (order->type != DORDER_NONE && order->type != DORDER_HOLD))
 			{
 				objTrace(psDroid->id, "Secondary order: Go to construction site");
 				moveDroidToNoFormation(psDroid, psDroid->actionPos.x, psDroid->actionPos.y);
@@ -1755,7 +1755,7 @@ void actionUpdateDroid(DROID *psDroid)
 			 || xdiff * xdiff + ydiff * ydiff >= rangeSq)
 			{
 				if (secondaryGetState(psDroid, DSO_HALTTYPE) == DSS_HALT_HOLD &&
-					(order->type == DORDER_NONE || order->type == DORDER_TEMP_HOLD))
+					(order->type == DORDER_NONE || order->type == DORDER_HOLD))
 				{
 					psDroid->action = DACTION_NONE;
 				}
@@ -1897,7 +1897,7 @@ void actionUpdateDroid(DROID *psDroid)
 		// Just self-repairing.
 		// See if there's anything to shoot.
 		else if (psDroid->numWeaps > 0 && !isVtolDroid(psDroid)
-		          && (order->type == DORDER_NONE || order->type == DORDER_TEMP_HOLD || order->type == DORDER_RTR))
+		          && (order->type == DORDER_NONE || order->type == DORDER_HOLD || order->type == DORDER_RTR))
 		{
 			for (i = 0;i < psDroid->numWeaps;i++)
 			{
@@ -2150,7 +2150,7 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 
 		if (((order->type == DORDER_ATTACKTARGET
 		   || order->type == DORDER_NONE
-		   || order->type == DORDER_TEMP_HOLD
+		   || order->type == DORDER_HOLD
 		   || order->type == DORDER_FIRESUPPORT)
 		  && secondaryGetState(psDroid, DSO_HALTTYPE) == DSS_HALT_HOLD)
 		   || (!isVtolDroid(psDroid)
@@ -2270,7 +2270,7 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 			"invalid target for demolish order" );
 		order->psStats = ((STRUCTURE *)psDroid->psActionTarget[0])->pStructureType;
 		if (secondaryGetState(psDroid, DSO_HALTTYPE) == DSS_HALT_HOLD &&
-		    (order->type == DORDER_NONE || order->type == DORDER_TEMP_HOLD))
+		    (order->type == DORDER_NONE || order->type == DORDER_HOLD))
 		{
 			psDroid->action = DACTION_REPAIR;
 		}
@@ -2285,7 +2285,7 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 		psDroid->actionPos.x = psDroid->pos.x;
 		psDroid->actionPos.y = psDroid->pos.y;
 		if ((secondaryGetState(psDroid, DSO_HALTTYPE) == DSS_HALT_HOLD &&
-		    (order->type == DORDER_NONE || order->type == DORDER_TEMP_HOLD)) ||
+		    (order->type == DORDER_NONE || order->type == DORDER_HOLD)) ||
 			cbSensorDroid(psDroid) || objRadarDetector(psDroid))
 		{
 			psDroid->action = DACTION_OBSERVE;
@@ -2351,7 +2351,7 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 		psDroid->actionPoints  = 0;
 		psDroid->actionStarted = gameTime;
 		if (secondaryGetState(psDroid, DSO_HALTTYPE) == DSS_HALT_HOLD &&
-		    (order->type == DORDER_NONE || order->type == DORDER_TEMP_HOLD))
+		    (order->type == DORDER_NONE || order->type == DORDER_HOLD))
 		{
 			psDroid->action = DACTION_DROIDREPAIR;
 		}

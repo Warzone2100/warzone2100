@@ -74,7 +74,7 @@ enum DroidOrderType
 	DORDER_LEAVEMAP,        /**< 34 - vtol flying off the map. */
 	DORDER_RTR_SPECIFIED,   /**< return to repair at a specified repair center. */
 	DORDER_CIRCLE = 40,     /**< circles target location and engage. */
-	DORDER_TEMP_HOLD,       /**< hold position until given next order. */
+	DORDER_HOLD,            /**< hold position until given next order. */
 };
 typedef DroidOrderType DROID_ORDER;
 
