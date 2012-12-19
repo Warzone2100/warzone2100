@@ -2327,15 +2327,21 @@ void	kf_SetDroidAttackCease( void )
 }
 
 // --------------------------------------------------------------------------
-void	kf_SetDroidMoveHold( void )
+void	kf_SetDroidOrderHold()
 {
-	DROID	*psDroid;
+	for (DROID *psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
+	{
+		if (psDroid->selected)
+		{
+			orderDroid(psDroid, DORDER_HOLD, ModeQueue);
+		}
+	}
+}
 
-	// NOT A CHEAT CODE
-	// This is a function to set unit orders via keyboard shortcuts. It should
-	// _not_ be disallowed in multiplayer games.
-
-	for (psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
+// --------------------------------------------------------------------------
+void	kf_SetDroidOrderStop()
+{
+	for (DROID *psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
 	{
 		if (psDroid->selected)
 		{

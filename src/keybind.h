@@ -152,7 +152,9 @@ extern void	kf_SetDroidAttackAtWill( void );
 extern void	kf_SetDroidAttackReturn( void );
 extern void	kf_SetDroidAttackCease( void );
 
-extern void	kf_SetDroidMoveHold( void );
+void kf_SetDroidOrderHold();
+void kf_SetDroidOrderStop();
+
 extern void	kf_SetDroidMoveGuard( void );
 extern void	kf_SetDroidMovePursue( void ); //not there?
 extern void	kf_SetDroidMovePatrol( void ); // not there?
