@@ -1650,11 +1650,18 @@ static QScriptValue js_dump(QScriptContext *context, QScriptEngine *engine)
 		result.append(s);
 	}
 	result += "\n";
+
 	QString scriptName = engine->globalObject().property("scriptName").toString();
-	QString path = "logs/" + scriptName +".log";
-	PHYSFS_file *fp = PHYSFS_openAppend(path.toUtf8().constData());
-	PHYSFS_write(fp, result.toUtf8().constData(), 1, strlen(result.toUtf8().constData()));
-	PHYSFS_close(fp);
+	int me = engine->globalObject().property("me").toInt32();
+	QString path = PHYSFS_getWriteDir();
+	SCRIPT_ASSERT(context, !path.isEmpty(), "No write dir set for game!");
+	path += "/logs/" + scriptName + "." + QString::number(me) + ".log";
+	FILE *fp = fopen(path.toUtf8().constData(), "a");
+	if (fp)
+	{
+		fputs(result.toUtf8().constData(), fp);
+		fclose(fp);
+	}
 	return QScriptValue();
 }
 

@@ -30,7 +30,7 @@ function log(message)
 	{
 		console(message);
 	}
-	//dump(me + "@" + gameTime + " : " + message);
+	dump(gameTime + " : " + message);
 }
 
 function logObj(obj, message)
@@ -39,7 +39,7 @@ function logObj(obj, message)
 	{
 		console(message);
 	}
-	//dump(me + "@" + gameTime + " [" + obj.name + " id=" + obj.id + "] > " + message);
+	dump(gameTime + " [" + obj.name + " id=" + obj.id + "] > " + message);
 }
 
 function buildAttacker(struct)
@@ -652,7 +652,7 @@ function eventStartLevel()
 	// Maintenance calls - to fix quirks
 	setTimer("maintenance", 1000 * 15); // every 15 seconds, call it to check if anything left to do
 
-	//dump("== level started ==");
+	dump("== level started ==");
 }
 
 function eventDroidIdle(droid)
