@@ -2351,18 +2351,6 @@ void	kf_SetDroidOrderStop()
 }
 
 // --------------------------------------------------------------------------
-void	kf_SetDroidMoveGuard( void )
-{
-	kfsf_SetSelectedDroidsState(DSO_HALTTYPE,DSS_HALT_GUARD);
-}
-
-// --------------------------------------------------------------------------
-void	kf_SetDroidMovePursue( void )
-{
-	kfsf_SetSelectedDroidsState(DSO_HALTTYPE,DSS_HALT_PURSUE);	// ASK?
-}
-
-// --------------------------------------------------------------------------
 void	kf_SetDroidMovePatrol( void )
 {
 	kfsf_SetSelectedDroidsState(DSO_PATROL,DSS_PATROL_SET);	// ASK

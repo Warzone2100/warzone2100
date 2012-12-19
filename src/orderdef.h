@@ -89,7 +89,7 @@ enum SECONDARY_ORDER
 	DSO_CLEAR_PRODUCTION,           /**< Removes the production from a command droid. */
 	DSO_RECYCLE,                    /**< If can be recicled or not. */
 	DSO_PATROL,                     /**< If it is assigned to patrol between current pos and next move target. */
-	DSO_HALTTYPE,                   /**< The type of halt. It can be hold, guard or pursue. Used with DSS_HALT_HOLD, DSS_HALT_GUARD,  DSS_HALT_PURSUE. */
+	DSO_UNUSED2,                    /**< The type of halt. It can be hold, guard or pursue. Used with DSS_HALT_HOLD, DSS_HALT_GUARD,  DSS_HALT_PURSUE. */
 	DSO_RETURN_TO_LOC,              /**< Generic secondary order to return to a location. Will depend on the secondary state DSS_RTL* to be specific. */
 	DSO_FIRE_DESIGNATOR,            /**< Assigns a droid to be a target designator. */
 	DSO_ASSIGN_VTOL_PRODUCTION,     /**< Assigns a vtol factory to a command droid - the state is given by the factory number. */
@@ -106,9 +106,6 @@ enum SECONDARY_STATE
 	DSS_ALEV_ALWAYS     = 0x000010,	/**< state referred to secondary order DSO_ATTACK_LEVEL. Droid attacks by its free will everytime. */
 	DSS_ALEV_ATTACKED   = 0x000020,	/**< state referred to secondary order DSO_ATTACK_LEVEL. Droid attacks if it is attacked. */
 	DSS_ALEV_NEVER      = 0x000030,	/**< state referred to secondary order DSO_ATTACK_LEVEL. Droid never attacks. */
-	DSS_HALT_HOLD       = 0x000040,	/**< state referred to secondary order DSO_HALTTYPE. If halted, droid never moves by its free will. */
-	DSS_HALT_GUARD      = 0x000080,	/**< state referred to secondary order DSO_HALTTYPE. If halted, droid moves on a given region by its free will. */
-	DSS_HALT_PURSUE     = 0x0000c0,	/**< state referred to secondary order DSO_HALTTYPE. If halted, droid pursues the target by its free will. */
 	DSS_RECYCLE_SET     = 0x000100,	/**< state referred to secondary order DSO_RECYCLE. If set, the droid can be recycled. */
 	DSS_ASSPROD_START   = 0x000200,	/**< @todo this state is not called on the code. Consider removing it. */
 	DSS_ASSPROD_MID     = 0x002000,	/**< @todo this state is not called on the code. Consider removing it. */
@@ -124,7 +121,6 @@ enum SECONDARY_STATE
 /** masks for the secondary order state. */
 #define DSS_REPLEV_MASK             0x00000c
 #define DSS_ALEV_MASK               0x000030
-#define DSS_HALT_MASK               0x0000c0
 #define DSS_RECYCLE_MASK            0x000100
 #define DSS_ASSPROD_MASK            0x1f07fe00
 #define DSS_ASSPROD_FACT_MASK       0x003e00

@@ -257,7 +257,6 @@ static void ChangeDriver(void)
 			if (psDroid->sMove.Status == MOVEDRIVE)
 			{
 				ASSERT((psDroid->droidType != DROID_TRANSPORTER && psDroid->droidType != DROID_SUPERTRANSPORTER), "Tried to control a transporter" );
-				secondarySetState(psDroid, DSO_HALTTYPE, DSS_HALT_GUARD);
 				psDroid->sMove.Status = MOVEINACTIVE;
 			}
 		}
@@ -287,7 +286,6 @@ void StopDriverMode(void)
 			if (psDroid->sMove.Status == MOVEDRIVE)
 			{
 				ASSERT((psDroid->droidType != DROID_TRANSPORTER && psDroid->droidType != DROID_SUPERTRANSPORTER), "Tried to control a transporter");
-				secondarySetState(psDroid, DSO_HALTTYPE, DSS_HALT_GUARD);
 				psDroid->sMove.Status = MOVEINACTIVE;
 			}
 		}
@@ -466,7 +464,6 @@ static void driveMoveFollower(DROID *psDroid)
 		if(!driveInDriverRange(psDroid)) {
 
 			//psDroid->secondaryOrder&=~DSS_MOVEHOLD_SET;		// Remove secondary order ... this stops the droid from jumping back to GUARD mode ... see order.c #111 - tjc
-			secondarySetState(psDroid, DSO_HALTTYPE, DSS_HALT_GUARD);
 			// if the droid is currently guarding we need to change the order to a move
 			if (psDroid->order.type == DORDER_GUARD)
 			{

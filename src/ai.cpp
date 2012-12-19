@@ -791,10 +791,6 @@ bool aiChooseTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget, int weapon_slot
 		{
 			return false;	// Can't target without a weapon or sensor
 		}
-		if (secondaryGetState((DROID *)psObj, DSO_HALTTYPE) == DSS_HALT_HOLD)
-		{
-			return false;	// Not sure why we check this here...
-		}
 		break;
 	case OBJ_STRUCTURE:
 		if (((STRUCTURE *)psObj)->numWeaps == 0 || ((STRUCTURE *)psObj)->asWeaps[0].nStat == 0)
