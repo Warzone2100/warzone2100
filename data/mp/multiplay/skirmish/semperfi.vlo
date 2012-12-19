@@ -138,8 +138,8 @@ run
 	structs[0]		STRUCTURESTAT		"A0LightFactory"
 	structs[1]		STRUCTURESTAT		"A0ResearchFacility"
 	structs[2]		STRUCTURESTAT		"A0CommandCentre"
-	structs[3]		STRUCTURESTAT		"A0CyborgFactory"
-	structs[4]		STRUCTURESTAT		"A0PowerGenerator"
+	structs[3]		STRUCTURESTAT		"A0PowerGenerator"
+	structs[4]		STRUCTURESTAT		"A0CyborgFactory"
 
 	structs[5]		STRUCTURESTAT		"Sys-CB-Tower01"
 	structs[6]		STRUCTURESTAT		"Sys-SpyTower"

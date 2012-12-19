@@ -381,6 +381,19 @@ event initialisedEvent(CALL_GAMEINIT)
 	}
 }
 
+// check whether we have at least one structure of that type
+function bool haveStructure(STRUCTURESTAT type) 
+{
+	return getStructure(type, me) != NULLOBJECT;
+}
+
+// check if we are getting any income
+function bool havePowerSource()
+{
+	// we don't check buildings being finished here
+	return haveStructure(powGen) and haveStructure(derrick);
+}
+
 function void dbgPlr(string message)
 {
 	if (me == selectedPlayer)
@@ -685,6 +698,11 @@ event arrived(reachedTr)
 function bool tryUpgrade()
 {
 	local	STRUCTURE	struct;
+	
+	if (not havePowerSource())
+	{
+		return false;
+	}
 
 	if (isStructureAvailable(powModule, me))
 	{
@@ -1161,6 +1179,13 @@ event buildDerrick(inactive)
 	local FEATURE	_oil, _closestOil;
 	local int	_bestDist, _newDist;
 	local DROID	_search;
+
+	// what if we can't waste power on building derricks because we don't have a gen yet?
+	if (playerPower(me) < 300 and haveStructure(derrick) and not haveStructure(powGen))
+	{
+		setEventTrigger(buildDerrick, slowloadTr);
+		exit;
+	}
 
 	_bestDist = 99999;
 	_closestOil = NULLOBJECT;
@@ -2054,6 +2079,11 @@ event factoryEvent(factoryEventTr)
 
 function bool needTank()
 {
+	if(not havePowerSource())
+	{
+		return FALSE;
+	}
+	
 	if((defendGroup.members < maxDefenders[curTech]) or (maxDefenders[curTech] == UNLIMITED))
 	{
 		return TRUE;
@@ -2576,6 +2606,13 @@ event doResearch(doResearchTr)
 	local	int		_techIndex,_numResearching;
 	local bool boolResult;
 
+	// don't throw in half of your money on research in T3 no bases when we don't have any income yet
+	if (isStructureAvailable(facModule,me) and not havePowerSource())
+	{
+		setEventTrigger(doResearch, doResearchTr);
+		exit;
+	}
+	
 	_techIndex = 0;	//research start
 	_numResearching = numStructBusyByType(resLab);
 
