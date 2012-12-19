@@ -607,9 +607,11 @@ void __glcRestoreGLState(const __GLCglState* inGLState,
 	  && GLEW_ARB_vertex_buffer_object)) {
     if (!inGLState->vertexArray)
       glDisableClientState(GL_VERTEX_ARRAY);
-    glVertexPointer(inGLState->vertexArraySize, inGLState->vertexArrayType,
-		    inGLState->vertexArrayStride,
-		    inGLState->vertexArrayPointer);
+    if (inGLState->vertexArray == GL_TRUE) {
+      glVertexPointer(inGLState->vertexArraySize, inGLState->vertexArrayType,
+		      inGLState->vertexArrayStride,
+		      inGLState->vertexArrayPointer);
+    }
     if (!inGLState->normalArray)
       glDisableClientState(GL_NORMAL_ARRAY);
     if (!inGLState->colorArray)
@@ -618,7 +620,7 @@ void __glcRestoreGLState(const __GLCglState* inGLState,
       glDisableClientState(GL_INDEX_ARRAY);
     if (!inGLState->texCoordArray)
       glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-    if (inAll || inContext->renderState.renderStyle == GLC_TEXTURE)
+    if ((inAll || inContext->renderState.renderStyle == GLC_TEXTURE) && inGLState->texCoordArray == GL_TRUE)
       glTexCoordPointer(inGLState->texCoordArraySize,
 			inGLState->texCoordArrayType,
 			inGLState->texCoordArrayStride,
