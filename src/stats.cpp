@@ -1227,7 +1227,7 @@ bool loadECMStats(const char *pFileName)
 		psStats->buildPower = ini.value("buildPower", 0).toInt();
 		psStats->buildPoints = ini.value("buildPoints", 0).toInt();
 		psStats->weight = ini.value("weight", 0).toInt();
-		psStats->body = ini.value("bodyPoints", 0).toInt();
+		psStats->body = ini.value("body", 0).toInt();
 		psStats->range = ini.value("range").toInt();
 		psStats->power = ini.value("power").toInt();
 		psStats->designable = ini.value("designable", false).toBool();
