@@ -542,7 +542,7 @@ event buildFundamentals(inactive)
 
 event startLevel(startLevelTr)
 {
-	setEventTrigger(buildFundamentals, chainloadTr);
+	setEventTrigger(buildFundamentals, slowloadTr);
 	setEventTrigger(conDroids, chainloadTr);
 	setEventTrigger(doResearch, chainloadTr);
 	setEventTrigger(buildDerrick, slowloadTr);
@@ -1504,7 +1504,7 @@ event structBuilt(structBuiltTr)
 
 	// Check if available trucks need to build more absolute necessities right away. We need a trigger here because
 	// droids involved in building have not yet come out of their build orders.
-	setEventTrigger(buildFundamentals, chainloadTr);
+	setEventTrigger(buildFundamentals, slowloadTr);
 
 	//see if we have just rebuilt a destroyed structure
 	_count = 0;

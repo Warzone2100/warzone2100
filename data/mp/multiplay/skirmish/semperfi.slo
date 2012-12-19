@@ -1013,7 +1013,7 @@ event startLevel(startLevelTr)
 	}
 	else
 	{
-		setEventTrigger(buildFundamentals, chainloadTr);
+		setEventTrigger(buildFundamentals, slowloadTr);
 	}
 	setEventTrigger(startLevel, inactive);
 }
@@ -1728,7 +1728,7 @@ event droidBuilt(droidBuiltTr)
 
 	if (droid.droidType == DROID_CONSTRUCT)
 	{
-		setEventTrigger(buildFundamentals, chainloadTr);	// activate
+		setEventTrigger(buildFundamentals, slowloadTr);	// activate
 	}
 
 	/* Start building next droid */
@@ -1778,7 +1778,7 @@ event structBuilt(structBuiltTr)
 		{
 			dbgPlr("Nothing more to do for rush group - disbanding it!");
 			groupAddGroup(buildGroup, rushGroup);
-			setEventTrigger(buildFundamentals, chainloadTr);
+			setEventTrigger(buildFundamentals, slowloadTr);
 			exit;
 		}
 	}
@@ -1829,7 +1829,7 @@ event structBuilt(structBuiltTr)
 
 	// Check if available trucks need to build more absolute necessities right away. We need a trigger here because
 	// droids involved in building have not yet come out of their build orders.
-	setEventTrigger(buildFundamentals, chainloadTr);
+	setEventTrigger(buildFundamentals, slowloadTr);
 
 	//see if we have just rebuilt a destroyed structure
 	_count = 0;
