@@ -72,11 +72,11 @@ static LEVEL_DATASET	*psBaseData = NULL;
 static LEVEL_DATASET	*psCurrLevel = NULL;
 
 // dummy level data for single WRF loads
-static LEVEL_DATASET	sSingleWRF = {0, 0, 0, 0, mod_clean, {0}, 0, 0, 0, NULL, {{0}}};
+static LEVEL_DATASET	sSingleWRF = {LDS_COMPLETE, 0, 0, 0, mod_clean, {0}, 0, 0, 0, NULL, {{0}}};
 
 // return values from the lexer
 char *pLevToken;
-SDWORD levVal;
+LEVEL_TYPE levVal;
 static GAME_TYPE levelLoadType;
 
 // modes for the parser
@@ -321,7 +321,7 @@ bool levParse(const char* buffer, size_t size, searchPathMode datadir, bool igno
 					return false;
 				}
 
-				psDataSet->type = (SWORD)levVal;
+				psDataSet->type = levVal;
 			}
 			else
 			{

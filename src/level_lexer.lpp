@@ -131,7 +131,7 @@ miss_clear                                      return LTK_MCLEAR;
 							}
 
 	/* Match integer numbers */
--?[0-9]+					{ levVal = atol(yytext); return LTK_INTEGER; }
+-?[0-9]+					{ levVal = (LEVEL_TYPE)atol(yytext); return LTK_INTEGER; }
 
 	/* Skip white space */
 [ \t\n\x0d\x0a]						;

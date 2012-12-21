@@ -83,7 +83,6 @@
 //#define DEBUG_SCROLLTABS 	//enable to see tab scroll button info for buttons
 
 // Empty edit window
-//#define EDIT_OPTIONS
 bool SecondaryWindowUp = false;
 
 static UDWORD		newMapWidth, newMapHeight;
@@ -135,18 +134,6 @@ BUTSTATE ReticuleEnabled[NUMRETBUTS] = {	// Reticule button enable states.
 	{IDRET_COMMAND,false,false},
 };
 
-
-// Set the x,y members of a button widget initialiser given a reticule button index.
-//
-static void SetReticuleButPos(UWORD ButId, W_BUTINIT *sButInit)
-{
-	ASSERT( ButId < NUMRETBUTS,"SetReticuleButPos : Bad button index" );
-
-	sButInit->x = (SWORD)(ReticuleOffsets[ButId].x + RETXOFFSET);
-	sButInit->y = (SWORD)(ReticuleOffsets[ButId].y + RETYOFFSET);
-}
-
-
 static bool ClosingObject = false;
 static bool ClosingStats = false;
 static UDWORD	keyButtonMapping = 0;
@@ -156,9 +143,8 @@ bool ClosingOrder = false;
 bool ClosingTrans = false;
 bool ClosingTransCont = false;
 bool ClosingTransDroids = false;
-bool ReticuleUp = false;
+static bool ReticuleUp = false;
 bool Refreshing = false;
-
 
 /***************************************************************************************/
 /*                  Widget ID numbers                                                  */
@@ -185,9 +171,6 @@ bool Refreshing = false;
 #define IDOPT_DROID			1037		// The place droid button
 #define IDOPT_STRUCT		1038		// The place struct button
 #define IDOPT_FEATURE		1039		// The place feature button
-#define IDOPT_TILE			1040		// The place tile button
-#define IDOPT_PAUSE			1041		// The edit pause button
-#define IDOPT_ZALIGN		1042		// The z-align button
 #define IDOPT_IVISFORM		1043		// iViS engine form
 #define IDOPT_IVISLABEL		1044		// iViS form label
 
@@ -196,21 +179,6 @@ bool Refreshing = false;
 #define IDED_LABEL			2001		// The edit screen label
 #define IDED_CLOSE			2002		// The edit screen close box
 #define	IDED_STATFORM		2003		// The edit screen stats form (for droids/structs/features)
-
-//Design Screen uses		5000
-//Intelligence Map uses		6000
-//Droid order screen uses	8000
-//Transporter screen uses	9000
-//CD span screen uses		9800
-
-//MultiPlayer Frontend uses 10100/10200/10300/10400
-//Ingame Options use		10500
-//Ingame MultiMenu uses		10600
-
-//Mission Timer uses		11000
-//Frontend uses				20000
-//LOADSAVE uses				21000
-//MULTILIMITS uses			22000
 
 #define	IDPROX_START		120000		// The first proximity button
 #define	IDPROX_END		129999		// The last proximity button
@@ -234,7 +202,7 @@ bool Refreshing = false;
 #define OPT_BUTWIDTH	60
 #define OPT_BUTHEIGHT	20
 #define OPT_MAPY		25
-#define OPT_EDITY		100
+#define OPT_EDITY		50
 #define OPT_PLAYERY		150
 #define OPT_LOADY		260
 
@@ -432,7 +400,6 @@ static bool intAddResearch(STRUCTURE *psSelected);
 /* If psSelected != NULL it specifies which droid should be hilited */
 static bool intAddCommand(DROID *psSelected);
 
-
 /* Start looking for a structure location */
 static void intStartStructPosition(BASE_STATS *psStats);
 /* Stop looking for a structure location */
@@ -475,6 +442,17 @@ static SDWORD intNumSelectedDroids(UDWORD droidType);
 
 
 /***************************GAME CODE ****************************/
+
+// Set the x,y members of a button widget initialiser given a reticule button index.
+//
+static void SetReticuleButPos(UWORD ButId, W_BUTINIT *sButInit)
+{
+	ASSERT( ButId < NUMRETBUTS,"SetReticuleButPos : Bad button index" );
+
+	sButInit->x = (SWORD)(ReticuleOffsets[ButId].x + RETXOFFSET);
+	sButInit->y = (SWORD)(ReticuleOffsets[ButId].y + RETYOFFSET);
+}
+
 /* Initialise the in game interface */
 bool intInitialise(void)
 {
@@ -621,8 +599,6 @@ bool intInitialise(void)
 			}
 		}
 	}
-
-
 
 	return true;
 }
@@ -862,72 +838,11 @@ static void intHidePowerBar(void)
 	}
 }
 
-
 /* Remove the options widgets from the widget screen */
 static void intRemoveOptions(void)
 {
 	widgDelete(psWScreen, IDOPT_FORM);
 }
-
-
-#ifdef EDIT_OPTIONS
-/* Add the edit widgets to the widget screen */
-static bool intAddEdit(void)
-{
-	W_FORMINIT sFormInit;
-	W_LABINIT sLabInit;
-	W_BUTINIT sButInit;
-
-	/* Add the edit form */
-	sFormInit.formID = 0;
-	sFormInit.id = IDED_FORM;
-	sFormInit.style = WFORM_PLAIN;
-	sFormInit.x = ED_X;
-	sFormInit.y = ED_Y;
-	sFormInit.width = ED_WIDTH;
-	sFormInit.height = ED_HEIGHT;
-	if (!widgAddForm(psWScreen, &sFormInit))
-	{
-		return false;
-	}
-
-	/* Add the Option screen label */
-	sLabInit.formID = IDED_FORM;
-	sLabInit.id = IDED_LABEL;
-	sLabInit.x = ED_GAP;
-	sLabInit.y = ED_GAP;
-	sLabInit.width = ED_WIDTH;
-	sLabInit.height = ED_BUTHEIGHT;
-	sLabInit.pText = "Edit";
-	if (!widgAddLabel(psWScreen, &sLabInit))
-	{
-		return false;
-	}
-
-	/* Add the close box */
-	sButInit.formID = IDED_FORM;
-	sButInit.id = IDED_CLOSE;
-	sButInit.x = ED_WIDTH - ED_GAP - CLOSE_SIZE;
-	sButInit.y = ED_GAP;
-	sButInit.width = CLOSE_SIZE;
-	sButInit.height = CLOSE_SIZE;
-	sButInit.pText = pCloseText;
-	sButInit.pTip = _("Close");
-	if (!widgAddButton(psWScreen, &sButInit))
-	{
-		return false;
-	}
-	return true;
-}
-
-
-/* Remove the edit widgets from the widget screen */
-static void intRemoveEdit(void)
-{
-	widgDelete(psWScreen, IDED_FORM);
-}
-#endif
-
 
 /* Get  and validate the new map size from the options screen */
 static void intGetMapSize(void)
@@ -1035,7 +950,7 @@ static void intGetMapSize(void)
 /* Reset the widget screen to just the reticule */
 void intResetScreen(bool NoAnim)
 {
-//	// Ensure driver mode is turned off.
+	// Ensure driver mode is turned off.
 	StopDriverMode();
 
 	if(getWidgetsStatus() == false)
@@ -1071,12 +986,6 @@ void intResetScreen(bool NoAnim)
 			intRemoveStats();
 		}
 		break;
-
-#ifdef EDIT_OPTIONS
-	case INT_EDIT:
-		intRemoveEdit();
-		break;
-#endif
 
 	case INT_OBJECT:
 		intStopStructPosition();
@@ -1201,8 +1110,6 @@ static void intCalcStructCenter(STRUCTURE_STATS *psStats, UDWORD tilex, UDWORD t
 /* Process return codes from the Options screen */
 static void intProcessOptions(UDWORD id)
 {
-	char saveName[PATH_MAX];
-
 	if (id >= IDOPT_PLAYERSTART && id <= IDOPT_PLAYEREND)
 	{
 		int oldSelectedPlayer = selectedPlayer;
@@ -1219,49 +1126,13 @@ static void intProcessOptions(UDWORD id)
 	{
 		switch (id)
 		{
-		case IDOPT_MAPLOAD:
-			debug(LOG_ERROR, "We should call loadFile and mapLoad here");
-			{
-				/* Managed to load so quit the option screen */
-				intRemoveOptions();
-				intMode = INT_NORMAL;
-			}
-			break;
-		case IDOPT_MAPSAVE:
-			strcpy(saveName, "maps/builtin-test.gam");
-			if (saveGame(saveName, GTYPE_SAVE_START))
-			{
-				addConsoleMessage(_("MAP SAVED!"), LEFT_JUSTIFY,SYSTEM_MESSAGE);
-				intRemoveOptions();
-				intMode = INT_NORMAL;
-			}
-			break;
-
-		case IDOPT_MAPNEW:
-			intGetMapSize();
-			if (mapNew(newMapWidth, newMapHeight))
-			{
-				// Set pause
-				editMode = true;
-				setEditPause(true);
-				/* Managed to create a new map so quit the option screen */
-				intRemoveOptions();
-				intMode = INT_NORMAL;
-			}
-			break;
 		case IDOPT_MAPWIDTH:
 			intGetMapSize();
 			break;
 		case IDOPT_MAPHEIGHT:
 			intGetMapSize();
 			break;
-#ifdef EDIT_OPTIONS
-		case IDOPT_EDIT:
-			intRemoveOptions();
-			intAddEdit();
-			intMode = INT_EDIT;
-			break;
-#endif
+
 			/* The add object buttons */
 		case IDOPT_DROID:
 			intRemoveOptions();
@@ -1300,27 +1171,6 @@ static void intProcessOptions(UDWORD id)
 			editPosMode = IED_NOPOS;
 			break;
 			/* Close window buttons */
-		case IDOPT_TILE:
-			intRemoveOptions();
-			intMode = INT_NORMAL;
-			break;
-		case IDOPT_PAUSE:
-			if (editMode)
-			{
-				widgSetButtonState(psWScreen, IDOPT_PAUSE, 0);
-				editMode = false;
-				setEditPause(false);
-			}
-			else
-			{
-				widgSetButtonState(psWScreen, IDOPT_PAUSE, WBUT_CLICKLOCK);
-				editMode = true;
-				setEditPause(true);
-			}
-			break;
-		case IDOPT_ZALIGN:
-			kf_MapCheck();
-			break;
 		case IDOPT_CLOSE:
 			intRemoveOptions();
 			intMode = INT_NORMAL;
@@ -1420,7 +1270,6 @@ static void intProcessEditStats(UDWORD id)
 			psTForm->TabMultiplier -= 1;					// to signify past max?
 			audio_PlayTrack(ID_SOUND_BUILD_FAIL);
 		}
-	//add routine to update tab widgets now...
 		psTForm->majorT += TAB_SEVEN;					// set tab # to next "page"
 		if (psTForm->majorT >= psTForm->numMajor)
 		{
@@ -1432,28 +1281,6 @@ static void intProcessEditStats(UDWORD id)
 #endif
 	}
 }
-
-
-#ifdef EDIT_OPTIONS
-/* Process return codes from the edit screen */
-static void intProcessEdit(UDWORD id)
-{
-	switch (id)
-	{
-	case IDED_CLOSE:
-		intRemoveEdit();
-		intMode = INT_NORMAL;
-		break;
-	case IDED_FORM:
-	case IDED_LABEL:
-		break;
-	default:
-		ASSERT( false, "intProcessEdit: Unknown return code" );
-		break;
-	}
-}
-#endif
-
 
 /* Run the widgets for the in game interface */
 INT_RETVAL intRunWidgets(void)
@@ -1767,11 +1594,6 @@ INT_RETVAL intRunWidgets(void)
 		case INT_EDITSTAT:
 			intProcessEditStats(retID);
 			break;
-#ifdef EDIT_OPTIONS
-		case INT_EDIT:
-			intProcessEdit(retID);
-			break;
-#endif
 		case INT_STAT:
 		case INT_CMDORDER:
 			/* In stat mode ids get passed to processObject
@@ -2144,7 +1966,6 @@ static void intAddObjectStats(BASE_OBJECT *psObj, UDWORD id)
 	SDWORD			iconNumber, entryIN;
 	W_TABFORM	    *psForm;
 
-
 	/* Clear a previous structure pos if there is one */
 	intStopStructPosition();
 
@@ -2170,7 +1991,6 @@ static void intAddObjectStats(BASE_OBJECT *psObj, UDWORD id)
 
 	// note the object for the screen
 	apsPreviousObj[objMode] = psObj;
-
 
 	// NOTE! The below functions populate our list (building/units...)
 	// up to MAX____.  We have unlimited potential, but it is capped at 200 now.
@@ -3437,7 +3257,6 @@ bool intAddOptions(void)
 	W_BUTINIT	sButInit;
 	W_LABINIT	sLabInit;
 	UDWORD		player;
-	char		aText[WIDG_MAXSTR];
 
 	/* Add the option form */
 
@@ -3483,125 +3302,12 @@ bool intAddOptions(void)
 		return false;
 	}
 
-	/* Add the map form */
-	sFormInit.formID = IDOPT_FORM;
-	sFormInit.id = IDOPT_MAPFORM;
-	sFormInit.style = WFORM_PLAIN;
-	sFormInit.x = OPT_GAP;
-	sFormInit.y = OPT_MAPY;
-	sFormInit.width = OPT_WIDTH - OPT_GAP*2;
-	sFormInit.height = OPT_BUTHEIGHT*2 + OPT_GAP*3;
-	if (!widgAddForm(psWScreen, &sFormInit))
-	{
-		return false;
-	}
-
-	/* Add the map label */
-	sLabInit.formID = IDOPT_MAPFORM;
-	sLabInit.id = IDOPT_MAPLABEL;
-	sLabInit.x = OPT_GAP;
-	sLabInit.y = OPT_GAP;
-	sLabInit.pText = _("Map:");
-	if (!widgAddLabel(psWScreen, &sLabInit))
-	{
-		return false;
-	}
-
-	/* Add the load save and new buttons */
-	sButInit.formID = IDOPT_MAPFORM;
-	sButInit.id = IDOPT_MAPLOAD;
-	sButInit.x = OPT_GAP*2 + OPT_BUTWIDTH;
-	sButInit.y = OPT_GAP;
-	sButInit.width = OPT_BUTWIDTH;
-	sButInit.height = OPT_BUTHEIGHT;
-	sButInit.pText = _("Load");
-	sButInit.pTip = _("Load Map File");
-	if (!widgAddButton(psWScreen, &sButInit))
-	{
-		return false;
-	}
-	if (NetPlay.bComms)
-	{
-		widgSetButtonState(psWScreen, sButInit.id, WBUT_DISABLE);
-	}
-	sButInit.id = IDOPT_MAPSAVE;
-	sButInit.x += OPT_GAP + OPT_BUTWIDTH;
-	sButInit.pText = _("Save");
-	sButInit.pTip = _("Save Map File");
-	if (!widgAddButton(psWScreen, &sButInit))
-	{
-		return false;
-	}
-	if (NetPlay.bComms)
-	{
-		widgSetButtonState(psWScreen, sButInit.id, WBUT_DISABLE);
-	}
-	sButInit.id = IDOPT_MAPNEW;
-	sButInit.x = OPT_GAP;
-	sButInit.y = OPT_GAP*2 + OPT_BUTHEIGHT;
-	sButInit.pText = _("New");
-	sButInit.pTip = _("New Blank Map");
-	if (!widgAddButton(psWScreen, &sButInit))
-	{
-		return false;
-	}
-	if (NetPlay.bComms)
-	{
-		widgSetButtonState(psWScreen, sButInit.id, WBUT_DISABLE);
-	}
-
-	/* Add the map size edit boxes */
-	newMapWidth = mapWidth;
-	newMapHeight = mapHeight;
-	sEdInit.formID = IDOPT_MAPFORM;
-	sEdInit.id = IDOPT_MAPWIDTH;
-	sEdInit.x = OPT_GAP*2 + OPT_BUTWIDTH;
-	sEdInit.y = OPT_GAP*2 + OPT_BUTHEIGHT;
-	sEdInit.width = OPT_BUTWIDTH;
-	sEdInit.height = OPT_BUTHEIGHT;
-	sEdInit.pText = aText;
-	sprintf(aText, "%d", mapWidth);
-	if (!widgAddEditBox(psWScreen, &sEdInit))
-	{
-		return false;
-	}
-	if (NetPlay.bComms)
-	{
-		widgSetButtonState(psWScreen, sButInit.id, WBUT_DISABLE);
-	}
-	sEdInit.id = IDOPT_MAPHEIGHT;
-	sEdInit.x += OPT_GAP + OPT_BUTWIDTH;
-	sprintf(aText, "%d", mapHeight);
-	if (!widgAddEditBox(psWScreen, &sEdInit))
-	{
-		return false;
-	}
-	if (NetPlay.bComms)
-	{
-		widgSetButtonState(psWScreen, sButInit.id, WBUT_DISABLE);
-	}
-
-	/* Add the edit buttons */
-	sButInit.formID = IDOPT_FORM;
+	/* Add the add object buttons */
+	sButInit.id = IDOPT_DROID;
 	sButInit.width = OPT_BUTWIDTH;
 	sButInit.height = OPT_BUTHEIGHT;
 	sButInit.x = OPT_GAP;
 	sButInit.y = OPT_EDITY;
-	sButInit.id = IDOPT_TILE;
-	sButInit.pText = _("Tile");
-	sButInit.pTip = _("Place tiles on map");
-	if (!widgAddButton(psWScreen, &sButInit))
-	{
-		return false;
-	}
-	if (NetPlay.bComms)
-	{
-		widgSetButtonState(psWScreen, sButInit.id, WBUT_DISABLE);
-	}
-
-	/* Add the add object buttons */
-	sButInit.id = IDOPT_DROID;
-	sButInit.x += OPT_GAP + OPT_BUTWIDTH;
 	sButInit.pText = _("Unit");
 	sButInit.pTip = _("Place Unit on map");
 	if (!widgAddButton(psWScreen, &sButInit))
@@ -3630,50 +3336,6 @@ bool intAddOptions(void)
 	{
 		widgSetButtonState(psWScreen, sButInit.id, WBUT_DISABLE);
 	}
-
-	/* Edit pause */
-	sButInit.x = OPT_GAP;
-	sButInit.y = OPT_EDITY + OPT_BUTHEIGHT + OPT_GAP;
-	sButInit.id = IDOPT_PAUSE;
-	sButInit.pText = _("Pause");
-	sButInit.pTip = _("Pause or unpause the game");
-	if (!widgAddButton(psWScreen, &sButInit))
-	{
-		return false;
-	}
-	if (NetPlay.bComms)
-	{
-		widgSetButtonState(psWScreen, sButInit.id, WBUT_DISABLE);
-	}
-	if (editMode)
-	{
-		widgSetButtonState(psWScreen, IDOPT_PAUSE, WBUT_CLICKLOCK);
-	}
-
-	/* Z-align map objects */
-	sButInit.x += OPT_GAP + OPT_BUTWIDTH;
-	sButInit.id = IDOPT_ZALIGN;
-	sButInit.pText = "Z-Align";
-	sButInit.pTip = _("Align height of all map objects");
-	if (!widgAddButton(psWScreen, &sButInit))
-	{
-		return false;
-	}
-	if (NetPlay.bComms)
-	{
-		widgSetButtonState(psWScreen, sButInit.id, WBUT_DISABLE);
-	}
-#ifdef EDIT_OPTIONS
-	/* Open the edit window - whatever that is supposed to be */
-	sButInit.x += OPT_GAP;
-	sButInit.id = IDOPT_EDIT;
-	sButInit.pText = _("Edit");
-	sButInit.pTip = _("Start Edit Mode");
-	if (!widgAddButton(psWScreen, &sButInit))
-	{
-		return false;
-	}
-#endif
 
 	/* Add the quit button */
 	sButInit.formID = IDOPT_FORM;
@@ -3852,10 +3514,10 @@ static bool intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,b
 			break;
 		case IOBJ_BUILD:
 			psSelected = (BASE_OBJECT *)intCheckForDroid(DROID_CONSTRUCT);
-            if (!psSelected)
-            {
-                psSelected = (BASE_OBJECT *)intCheckForDroid(DROID_CYBORG_CONSTRUCT);
-            }
+			if (!psSelected)
+			{
+				psSelected = (BASE_OBJECT *)intCheckForDroid(DROID_CYBORG_CONSTRUCT);
+			}
 			break;
 		case IOBJ_COMMAND:
 			psSelected = (BASE_OBJECT *)intCheckForDroid(DROID_COMMAND);
@@ -3882,9 +3544,6 @@ static bool intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,b
 				psSelected = psFirst;
 			}
 		}
-		//make sure this matches in game once decided - DON'T!
-		//clearSelection();
-		//psSelected->selected = true;
 	}
 
 	/* Reset the current object and store the current list */
@@ -3921,7 +3580,6 @@ static bool intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,b
 	{
 		return false;
 	}
-
 
 	/*add the tabbed form */
 	sFormInit = W_FORMINIT();
@@ -4236,7 +3894,6 @@ static bool intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,b
 
 			sBFormInit2.pDisplay = intDisplayStatusButton;
 
-
 			if (!widgAddForm(psWScreen, &sBFormInit2))
 			{
 				return false;
@@ -4298,7 +3955,6 @@ static bool intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,b
 			{
 				return false;
 			}
-
 
 			/* If this matches psSelected note which form to display */
 			if (psSelected == psObj)
@@ -4384,8 +4040,6 @@ static bool intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,b
 		intMode = INT_OBJECT;
 	}
 
-
-
 	if (objMode == IOBJ_BUILD || objMode == IOBJ_MANUFACTURE || objMode == IOBJ_RESEARCH)
 	{
 		intShowPowerBar();
@@ -4425,7 +4079,6 @@ static bool intUpdateObject(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,bool
 /* Remove the build widgets from the widget screen */
 void intRemoveObject(void)
 {
-
 	W_TABFORM *Form;
 
 	widgDelete(psWScreen, IDOBJ_TABFORM);
@@ -4440,8 +4093,6 @@ void intRemoveObject(void)
 		ClosingObject = true;
 	}
 
-
-
 	ClearObjectBuffers();
 	ClearTopicBuffers();
 
@@ -4452,7 +4103,6 @@ void intRemoveObject(void)
 		debug( LOG_NEVER, "Go with object close callback!\n" );
 	 	eventFireCallbackTrigger((TRIGGER_TYPE)CALL_OBJECTCLOSE);
 	}
-
 }
 
 
@@ -4894,7 +4544,6 @@ static bool intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 			return false;
 		}
 
-
 		/* store the common values for the text labels for the quantity
 		to produce (on each button).*/
 		sLabInit = W_LABINIT();
@@ -4907,7 +4556,6 @@ static bool intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 		sLabInit.width = 12;
 		sLabInit.height = 15;
 		sLabInit.pCallback = intAddProdQuantity;
-
 	}
 
 	/* Add the close button */
@@ -5029,7 +4677,6 @@ static bool intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 	sBarInit.size = 50;
 	sBarInit.sCol = WZCOL_ACTION_PROGRESS_BAR_MAJOR;
 	sBarInit.sMinorCol = WZCOL_ACTION_PROGRESS_BAR_MINOR;
-	//sBarInit.pTip = _("Power Usage");
 
 	statID = 0;
 	statForm = 0;
@@ -5117,7 +4764,6 @@ static bool intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 		else if(Stat->ref >= REF_RESEARCH_START &&
 				Stat->ref < REF_RESEARCH_START + REF_RANGE)				// It's a Research topic.
 		{
-            //new icon in for groups - AB 12/01/99
 			sLabInit = W_LABINIT();
 			sLabInit.formID = sBFormInit.id ;
 			sLabInit.id = IDSTAT_RESICONSTART+(sBFormInit.id - IDSTAT_START);
@@ -5134,7 +4780,6 @@ static bool intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 			//add power bar as well
 			sBarInit.size = (UWORD)(((RESEARCH *)Stat)->researchPower /
 				POWERPOINTS_DROIDDIV);
-			//sBarInit.pTip = _("Power Usage");
 			if(sBarInit.size > 100) sBarInit.size = 100;
 
 			// if multiplayer, if research topic is being done by another ally then mark as such..
@@ -5172,7 +4817,6 @@ static bool intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 								ASSERT(allyResearchIconCount < IDSTAT_ALLYEND - IDSTAT_ALLYSTART, " ");
 							}
 						}
-
 					}
 				}
 				if (labsDone > 0)
@@ -5234,8 +4878,6 @@ static bool intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 		widgSetButtonState(psWScreen, statID, WBUT_CLICKLOCK);
 	}
 
-
-
 	StatsUp = true;
 
 	// call the tutorial callbacks if necessary
@@ -5264,25 +4906,12 @@ static bool intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 /* Select a command droid */
 static bool selectCommand(BASE_OBJECT *psObj)
 {
-	DROID	*psDroid;
-
-	ASSERT( psObj != NULL && psObj->type == OBJ_DROID,
-		"selectConstruction: invalid droid pointer" );
-	psDroid = (DROID *)psObj;
-
-	//check the droid type
-	if ( (psDroid->droidType == DROID_COMMAND) && (psDroid->died == 0) )
+	ASSERT(psObj && psObj->type == OBJ_DROID, "Invalid droid pointer");
+	DROID *psDroid = (DROID *)psObj;
+	if (psDroid->droidType == DROID_COMMAND && psDroid->died == 0)
 	{
 		return true;
 	}
-
-	/*for (i=0; i < psDroid->numProgs; i++)
-	{
-		if (psDroid->asProgs[i].psStats->order == ORDER_BUILD)
-		{
-			return true;
-		}
-	}*/
 	return false;
 }
 

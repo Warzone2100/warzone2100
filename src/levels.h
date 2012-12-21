@@ -58,7 +58,7 @@ enum LEVEL_TYPE
 
 struct LEVEL_DATASET
 {
-	SWORD	type;					// type of map
+	LEVEL_TYPE type;				// type of map
 	SWORD	players;				// number of players for the map
 	SWORD	game;					// index of WRF/WDG that loads the scenario file
 	char	*pName;					// title for the level

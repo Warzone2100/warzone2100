@@ -120,7 +120,6 @@ struct PAUSE_STATE
 	bool scriptPause;
 	bool scrollPause;
 	bool consolePause;
-	bool editPause;
 };
 
 static PAUSE_STATE	pauseState;
@@ -135,7 +134,7 @@ static SDWORD videoMode = 0;
 LOOP_MISSION_STATE		loopMissionState = LMS_NORMAL;
 
 // this is set by scrStartMission to say what type of new level is to be started
-SDWORD	nextMissionType = LDS_NONE;//MISSION_NONE;
+LEVEL_TYPE nextMissionType = LDS_NONE;
 
  /* Force 3D display */
 UDWORD	mcTime;
@@ -560,7 +559,7 @@ static void gameStateUpdate()
 	sendPlayerGameTime();
 	NETflush();  // Make sure the game time tick message is really sent over the network.
 
-	if (!paused && !scriptPaused() && !editPaused())
+	if (!paused && !scriptPaused())
 	{
 		/* Update the event system */
 		if (!bInTutorial)
@@ -685,7 +684,7 @@ GAMECODE gameLoop(void)
 			break;  // Not doing a game state update.
 		}
 
-		ASSERT(!paused && !gameUpdatePaused() && !editPaused(), "Nonsensical pause values.");
+		ASSERT(!paused && !gameUpdatePaused(), "Nonsensical pause values.");
 
 		unsigned before = wzGetTicks();
 		syncDebug("Begin game state update, gameTime = %d", gameTime);
@@ -796,16 +795,6 @@ SDWORD loop_GetVideoMode(void)
 bool loop_GetVideoStatus(void)
 {
 	return video;
-}
-
-bool editPaused(void)
-{
-	return pauseState.editPause;
-}
-
-void setEditPause(bool state)
-{
-	pauseState.editPause = state;
 }
 
 bool gamePaused( void )

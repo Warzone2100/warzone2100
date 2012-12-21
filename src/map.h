@@ -410,9 +410,6 @@ static inline void clip_world_offmap(int* worldX, int* worldY)
 /* Shutdown the map module */
 extern bool mapShutdown(void);
 
-/* Create a new map of a specified size */
-extern bool mapNew(UDWORD width, UDWORD height);
-
 /* Load the map data */
 extern bool mapLoad(char *filename, bool preview);
 
