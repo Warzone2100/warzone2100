@@ -55,7 +55,6 @@
 #define	IDTRANTIMER_BUTTON		11012	//transporter button on timer display
 
 
-
 /* Object screen IDs */
 
 #define IDOBJ_FORM			3000		// The object back form for build/manufacture/research
@@ -193,11 +192,7 @@
 #define UNPACKDWORD_QUAD_C(a) ( ((a)>>8) & 0xff )
 #define UNPACKDWORD_QUAD_D(a) ( (a) & 0xff)
 
-
-//#define BUILDPOINTS_STRUCTDIV 1
-//#define BUILDPOINTS_DROIDDIV 5
-//#define POWERPOINTS_STRUCTDIV 1
-#define POWERPOINTS_DROIDDIV	5 //3
+#define POWERPOINTS_DROIDDIV	5
 
 #define OBJ_BUTWIDTH		60		// Button width.
 #define OBJ_BUTHEIGHT		46		// Button height.
@@ -244,7 +239,6 @@ enum INTMODE
 	INT_INTELMAP,	// Intelligence Map
 	INT_ORDER,
 	INT_INGAMEOP,	// in game options.
-	//INT_TUTORIAL,	// Tutorial mode - message display
 	INT_TRANSPORTER, //Loading/unloading a Transporter
 	INT_MISSIONRES,	// Results of a mission display.
 	INT_MULTIMENU,	// multiplayer only, player stats etc...
@@ -264,8 +258,7 @@ extern UDWORD			intLastWidget;
 
 /* The button ID of the objects stat when the stat screen is displayed */
 extern UDWORD			objStatID;
-// when the window for building / whatever else is up...
-extern bool SecondaryWindowUp;
+
 /* The current template for the design screen to start with*/
 extern std::vector<DROID_TEMPLATE *> apsTemplateList;  ///< Either a list of templates a factory can build or a list of designable templates, for UI use only.
 extern std::list<DROID_TEMPLATE> localTemplates;       ///< Unsychnronised list, for UI use only.
@@ -299,12 +292,6 @@ enum INT_RETVAL
 {
 	INT_NONE,		// no key clicks have been intercepted
 	INT_INTERCEPT,	// key clicks have been intercepted
-	//INT_FULLSCREENPAUSE,	// The widget interface is full screen and
-							// the rest of the game should pause
-	//INT_INTELPAUSE,			// The Intelligence Map is up and all update
-							// routines should pause - hopefully!
-	INT_INTELNOSCROLL,		//The 3DView of the intelligence screen is up
-							// and we don't want scroll (or update!)
 	INT_QUIT,		// The game should quit
 };
 
@@ -355,7 +342,6 @@ void intCommanderSelected(DROID *psDroid);
 extern UWORD numForms(UDWORD total, UDWORD perForm);
 
 //sets up the Intelligence Screen as far as the interface is concerned
-//extern void addIntelScreen(bool playImmediate);
 extern void addIntelScreen(void);
 
 /* Reset the widget screen to just the reticule */
@@ -403,14 +389,13 @@ extern void intRemoveProximityButton(PROXIMITY_DISPLAY *psProxDisp);
 /* Allows us to fool the widgets with a keypress */
 void	setKeyButtonMapping( UDWORD	val );
 
-
-
 STRUCTURE *intFindAStructure(void);
 STRUCTURE* intGotoNextStructureType(UDWORD structType,bool JumpTo,bool CancelDrive);
-DROID *intGotoNextDroidType(DROID *CurrDroid,UDWORD droidType,bool AllowGroup);
+DROID *intGotoNextDroidType(DROID *CurrDroid, DROID_TYPE droidType, bool AllowGroup);
 
 /// Returns the number of researches that selectedPlayer is not already researching, or 0 if there are no free laboratories.
 int intGetResearchState();
+
 /// Flashes the button if the research button should flash, and more researches are available to research than before.
 /// Stops the button from flashing, if the research button shouldn't flash, and prevState is non-zero.
 void intNotifyResearchButton(int prevState);
