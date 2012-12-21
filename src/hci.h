@@ -358,9 +358,6 @@ extern UWORD numForms(UDWORD total, UDWORD perForm);
 //extern void addIntelScreen(bool playImmediate);
 extern void addIntelScreen(void);
 
-// update shadow...
-extern void intSetShadowPower(UDWORD quantity);
-
 /* Reset the widget screen to just the reticule */
 extern void intResetScreen(bool NoAnim);
 
@@ -393,9 +390,6 @@ extern void togglePowerBar(void);
 
 //displays the Power Bar
 extern void intShowPowerBar(void);
-
-//hides the power bar from the display
-//extern void intHidePowerBar(void);
 
 //hides the power bar from the display - regardless of what player requested!
 extern void forceHidePowerBar(void);

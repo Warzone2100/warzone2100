@@ -2297,7 +2297,6 @@ static void missionResetInGameState(void)
 	// Add the background
 	// get rid of reticule etc..
 	intResetScreen(false);
-	//intHidePowerBar();
 	forceHidePowerBar();
 	intRemoveReticule();
 	intRemoveMissionTimer();

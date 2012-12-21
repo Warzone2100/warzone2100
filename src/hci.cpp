@@ -431,7 +431,6 @@ static void intObjStatRMBPressed(UDWORD id);
 //proximity display stuff
 static void processProximityButtons(UDWORD id);
 
-static void intInitialiseReticule(void);
 static DROID* intCheckForDroid(UDWORD droidType);
 static STRUCTURE* intCheckForStructure(UDWORD structType);
 
@@ -458,7 +457,10 @@ bool intInitialise(void)
 {
 	UDWORD			comp, inc;
 
-	intInitialiseReticule();
+	for (int i = 0; i < NUMRETBUTS; i++)
+	{
+		ReticuleEnabled[i].Hidden = false;
+	}
 
 	widgSetTipColour(WZCOL_TOOLTIP_TEXT);
 
@@ -2733,7 +2735,6 @@ static void intStopStructPosition(void)
 /* Display the widgets for the in game interface */
 void intDisplayWidgets(void)
 {
-	// God only knows...
 	if (ReticuleUp && !bInTutorial)
 	{
 		intCheckReticuleButtons();
@@ -3063,7 +3064,6 @@ bool intAddReticule(void)
 {
 	if (!ReticuleUp)
 	{
-
 		/* Create the basic form */
 
 		W_FORMINIT sFormInit;
@@ -3240,14 +3240,6 @@ bool intAddPower(void)
 	powerBarUp = true;
 	return true;
 }
-
-/* Set the shadow power for the selected player */
-// Now just sets the global variable ManuPower which is used in the power bar display callback. PD
-void intSetShadowPower(UDWORD quantity)
-{
-	ManuPower = quantity;
-}
-
 
 /* Add the options widgets to the widget screen */
 bool intAddOptions(void)
@@ -5664,16 +5656,6 @@ static SDWORD intNumSelectedDroids(UDWORD droidType)
 
 	return num;
 }
-
-static void intInitialiseReticule(void)
-{
-	int i;
-
-	for (i=0; i<NUMRETBUTS; i++) {
-		ReticuleEnabled[i].Hidden = false;
-	}
-}
-
 
 // Check that each reticule button has the structure or droid required for it and
 // enable/disable accordingly.

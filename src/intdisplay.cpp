@@ -106,7 +106,7 @@ BASE_STATS *CurrentStatsTemplate = NULL;
 #define BUT_TRANSPORTER_SCALE (20)
 #define BUT_TRANSPORTER_ALT (-50)
 
-UDWORD ManuPower = 0;	// Power required to manufacture the current item.
+static UDWORD ManuPower = 0;	// Power required to manufacture the current item.
 
 
 // Display surfaces for rendered buttons.
@@ -704,7 +704,6 @@ void intDisplayStatusButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ
 
 	Down = Form->state & (WCLICK_DOWN | WCLICK_LOCKED | WCLICK_CLICKLOCK);
 
-	{
 		Hilight = Form->state & WCLICK_HILITE;
 
 		if(Hilight) {
@@ -864,7 +863,6 @@ void intDisplayStatusButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ
 		} else {
 			RenderBlankToButton(Buffer,Down,TOPBUTTON);
 		}
-	}
 
 	CloseButtonRender();
 
@@ -907,7 +905,6 @@ void intDisplayObjectButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ
 
 	Down = Form->state & (WCLICK_DOWN | WCLICK_LOCKED | WCLICK_CLICKLOCK);
 
-	{
 		Hilight = Form->state & WCLICK_HILITE;
 
 		if(Hilight) {
@@ -949,16 +946,13 @@ void intDisplayObjectButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ
 
 		ButtonDrawXOffset = ButtonDrawYOffset = 0;
 
-
 		if(Object) {
 			RenderToButton(NULL,0,Object,selectedPlayer,Buffer,Down,IMDType,BTMBUTTON);	// ajl, changed from 0 to selectedPlayer
 		} else {
 			RenderBlankToButton(Buffer,Down,BTMBUTTON);
 		}
 
-
 		RENDERBUTTON_INITIALISED(Buffer);
-	}
 
 	CloseButtonRender();
 
@@ -988,7 +982,6 @@ void intDisplayStatsButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_
 
 	Down = Form->state & (WCLICK_DOWN | WCLICK_LOCKED | WCLICK_CLICKLOCK);
 
-	{
 		Hilight = Form->state & WCLICK_HILITE;
 
 		if(Hilight) {
@@ -1117,7 +1110,6 @@ void intDisplayStatsButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_
 		}
 
 		RENDERBUTTON_INITIALISED(Buffer);
-	}
 
 	CloseButtonRender();
 
@@ -1761,8 +1753,6 @@ void intDisplayNumber(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_
 	UDWORD		y = Label->y + yOffset;
 	UDWORD		Quantity = 1;
 
-	unsigned int i;
-
 	//Quantity depends on the factory
 	if (Label->pUserData != NULL)
 	{
@@ -1783,7 +1773,7 @@ void intDisplayNumber(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_
 	{
 		snprintf(Label->aText, sizeof(Label->aText), "%02u", Quantity);
 
-		for (i = 0; Label->aText[i]; ++i)
+		for (int i = 0; Label->aText[i]; ++i)
 		{
 			iV_DrawImage(IntImages, (UWORD)(IMAGE_0 + (Label->aText[i] - '0')), x, y);
 			x += iV_GetImageWidth(IntImages, (UWORD)(IMAGE_0 + (Label->aText[i]-'0'))) + 1;
@@ -1851,7 +1841,6 @@ void InitialiseButtonData(void)
 	UDWORD Height = iV_GetImageHeight(IntImages,IMAGE_BUT0_UP);
 	UDWORD WidthTopic = (iV_GetImageWidth(IntImages,IMAGE_BUTB0_UP)+3) & 0xfffffffc;	// Ensure width is whole number of dwords.
 	UDWORD HeightTopic = iV_GetImageHeight(IntImages,IMAGE_BUTB0_UP);
-
 	UDWORD i;
 
 	for(i=0; i<NUM_OBJECTSURFACES; i++) {
@@ -2952,7 +2941,6 @@ void intDisplayTransportButton(WIDGET *psWidget, UDWORD xOffset,
 	// There should always be a droid associated with the button
 	ASSERT(psDroid != NULL, "Invalid droid pointer");
 
-	{
 		Hilight = Form->state & WCLICK_HILITE;
 
 		if(Hilight)
@@ -2973,7 +2961,6 @@ void intDisplayTransportButton(WIDGET *psWidget, UDWORD xOffset,
 			RenderBlankToButton(Buffer,Down,TOPBUTTON);
 		}
 		RENDERBUTTON_INITIALISED(Buffer);
-	}
 
 	CloseButtonRender();
 
@@ -3318,4 +3305,10 @@ void intDisplayAllyBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGH
 		setBarGraphValue(psBar, psBar->majorCol, researchPowerCost - bestPowerNeeded, researchPowerCost);
 	}
 	barGraphDisplayTrough(psWidget, xOffset, yOffset, pColours);
+}
+
+/* Set the shadow power for the selected player */
+void intSetShadowPower(int quantity)
+{
+	ManuPower = quantity;
 }

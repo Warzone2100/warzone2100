@@ -2080,8 +2080,8 @@ bool scrActionDroidObj(void)
 
 //<script function - improved version
 // variables for the group iterator
-DROID_GROUP		*psScrIterateGroupB[MAX_PLAYERS];
-DROID			*psScrIterateGroupDroidB[MAX_PLAYERS];
+static DROID_GROUP *psScrIterateGroupB[MAX_PLAYERS];
+static DROID *psScrIterateGroupDroidB[MAX_PLAYERS];
 
 // initialise iterating a groups members
 bool scrInitIterateGroupB(void)

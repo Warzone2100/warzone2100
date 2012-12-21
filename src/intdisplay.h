@@ -92,7 +92,6 @@ extern RENDERED_BUTTON ObjectBuffers[NUM_OBJECTBUFFERS];
 extern RENDERED_BUTTON StatBuffers[NUM_STATBUFFERS];
 extern RENDERED_BUTTON System0Buffers[NUM_SYSTEM0BUFFERS];
 
-extern UDWORD ManuPower;		// Power required to manufacture the current item.
 extern BASE_STATS *CurrentStatsTemplate;
 
 // Set audio IDs for form opening/closing anims.
@@ -280,5 +279,7 @@ extern void intDisplayMissionClock(WIDGET *psWidget, UDWORD xOffset, UDWORD yOff
 
 extern void intDisplayAllyIcon(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 void intDisplayAllyBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
+
+void intSetShadowPower(int quantity);
 
 #endif // __INCLUDED_SRC_INTDISPLAY_H__

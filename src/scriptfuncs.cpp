@@ -1971,7 +1971,6 @@ bool scrEnumStruct(void)
 
 	while (psStruct)	// find a visible structure of required type.
 	{
-//		if(	(structfindany || (psStruct->pStructureType->type == psStructStatToFind->type))
 		if ((structfindany || (psStruct->pStructureType->ref == psStructStatToFind->ref))
 		    &&
 		    ((playerVisibleStruct < 0) || (psStruct->visible[playerVisibleStruct]))	//fix: added playerVisibleStruct for visibility test
