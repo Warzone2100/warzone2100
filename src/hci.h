@@ -245,7 +245,7 @@ enum INTMODE
 	INT_CDCHANGE,		// CD Change message box
 	INT_POPUPMSG,	// Adds a popup message to user
 
-    INT_MAXMODE,   //leave as last so we can start the objMode at this value
+	INT_MAXMODE,   //leave as last so we can start the objMode at this value
 };
 
 extern INTMODE intMode;
@@ -360,7 +360,7 @@ extern void intRemoveStats(void);
 extern void intRemoveStatsNoAnim(void);
 
 /*sets which list of structures to use for the interface*/
-extern STRUCTURE* interfaceStructList(void);
+extern STRUCTURE *interfaceStructList(void);
 
 //sets up the Transporter Screen as far as the interface is concerned
 extern void addTransporterInterface(DROID *psSelected, bool onMission);
@@ -387,10 +387,10 @@ extern bool intAddProximityButton(PROXIMITY_DISPLAY *psProxDisp, UDWORD inc);
 extern void intRemoveProximityButton(PROXIMITY_DISPLAY *psProxDisp);
 
 /* Allows us to fool the widgets with a keypress */
-void	setKeyButtonMapping( UDWORD	val );
+void	setKeyButtonMapping(UDWORD	val);
 
 STRUCTURE *intFindAStructure(void);
-STRUCTURE* intGotoNextStructureType(UDWORD structType,bool JumpTo,bool CancelDrive);
+STRUCTURE *intGotoNextStructureType(UDWORD structType, bool JumpTo, bool CancelDrive);
 DROID *intGotoNextDroidType(DROID *CurrDroid, DROID_TYPE droidType, bool AllowGroup);
 
 /// Returns the number of researches that selectedPlayer is not already researching, or 0 if there are no free laboratories.
@@ -404,7 +404,7 @@ void intNotifyResearchButton(int prevState);
 extern bool intCheckReticuleButEnabled(UDWORD id);
 
 //access function for selected object in the interface
-extern BASE_OBJECT * getCurrentSelected(void);
+extern BASE_OBJECT *getCurrentSelected(void);
 
 //initialise all the previous obj - particularly useful for when go Off world!
 extern void intResetPreviousObj(void);
