@@ -135,7 +135,7 @@ static SDWORD ButtonDrawYOffset;
 // Set audio IDs for form opening/closing anims.
 // Use -1 to dissable audio.
 //
-void SetFormAudioIDs(int OpenID,int CloseID)
+void SetFormAudioIDs(int OpenID, int CloseID)
 {
 	FormOpenAudioID = OpenID;
 	FormCloseAudioID = CloseID;
@@ -159,7 +159,7 @@ static void formatEmpty(W_BARGRAPH *barGraph)
 static void formatTimeText(W_BARGRAPH *barGraph, int time)
 {
 	char timeText[20];
-	ssprintf(timeText, "%d:%02d", time/60, time%60);
+	ssprintf(timeText, "%d:%02d", time / 60, time % 60);
 	barGraph->text = timeText;
 	barGraph->textCol = WZCOL_CONSTRUCTION_BARTEXT;
 }
@@ -212,9 +212,9 @@ void intUpdateProgressBar(WIDGET *psWidget, W_CONTEXT *psContext)
 	STRUCTURE			*Structure;
 	FACTORY				*Manufacture;
 	RESEARCH_FACILITY	*Research;
-	W_BARGRAPH			*BarGraph = (W_BARGRAPH*)psWidget;
+	W_BARGRAPH			*BarGraph = (W_BARGRAPH *)psWidget;
 
-	psObj = (BASE_OBJECT*)BarGraph->pUserData;	// Get the object associated with this widget.
+	psObj = (BASE_OBJECT *)BarGraph->pUserData;	// Get the object associated with this widget.
 
 	if (psObj == NULL)
 	{
@@ -232,78 +232,78 @@ void intUpdateProgressBar(WIDGET *psWidget, W_CONTEXT *psContext)
 
 	switch (psObj->type)
 	{
-		case OBJ_DROID:						// If it's a droid and...
-			Droid = (DROID*)psObj;
+	case OBJ_DROID:						// If it's a droid and...
+		Droid = (DROID *)psObj;
 
-			if(DroidIsBuilding(Droid))  // Is it a building.
+		if (DroidIsBuilding(Droid)) // Is it a building.
+		{
+			ASSERT(Droid->asBits[COMP_CONSTRUCT].nStat, "Invalid droid type");
+
+			Structure = DroidGetBuildStructure(Droid);  // Get the structure's building.
+
+			if (Structure)
 			{
-				ASSERT(Droid->asBits[COMP_CONSTRUCT].nStat, "intUpdateProgressBar: invalid droid type" );
-
-				Structure = DroidGetBuildStructure(Droid);  // Get the structure's building.
-
-				if (Structure)
+				//show progress of build
+				if (Structure->currentBuildPts != 0)
 				{
-					//show progress of build
-					if (Structure->currentBuildPts != 0)
-					{
-						formatTime(BarGraph, Structure->currentBuildPts, Structure->pStructureType->buildPoints, Structure->lastBuildRate, _("Build Progress"));
-					}
-					else
-					{
-						formatPower(BarGraph, checkPowerRequest(Structure), Structure->pStructureType->powerToBuild);
-					}
-				}
-			}
-			break;
-
-		case OBJ_STRUCTURE:					// If it's a structure and...
-			Structure = (STRUCTURE*)psObj;
-
-			if (StructureIsManufacturingPending(Structure))  // Is it manufacturing.
-			{
-				Manufacture = StructureGetFactory(Structure);
-
-				if (Manufacture->psSubject != NULL && Manufacture->buildPointsRemaining < Manufacture->psSubject->buildPoints)
-				{
-					// Started production. Set the colour of the bar to yellow.
-					int buildPointsTotal = FactoryGetTemplate(Manufacture)->buildPoints;
-					int buildRate = Manufacture->timeStartHold == 0? Manufacture->productionOutput : 0;
-					formatTime(BarGraph, buildPointsTotal - Manufacture->buildPointsRemaining, buildPointsTotal, buildRate, _("Construction Progress"));
+					formatTime(BarGraph, Structure->currentBuildPts, Structure->pStructureType->buildPoints, Structure->lastBuildRate, _("Build Progress"));
 				}
 				else
 				{
-					// Not yet started production.
-					int neededPower = checkPowerRequest(Structure);
-					int powerToBuild = Manufacture->psSubject != NULL? Manufacture->psSubject->powerPoints : 0;
-					formatPower(BarGraph, neededPower, powerToBuild);
+					formatPower(BarGraph, checkPowerRequest(Structure), Structure->pStructureType->powerToBuild);
 				}
 			}
-			else if(structureIsResearchingPending(Structure))  // Is it researching.
+		}
+		break;
+
+	case OBJ_STRUCTURE:					// If it's a structure and...
+		Structure = (STRUCTURE *)psObj;
+
+		if (StructureIsManufacturingPending(Structure))  // Is it manufacturing.
+		{
+			Manufacture = StructureGetFactory(Structure);
+
+			if (Manufacture->psSubject != NULL && Manufacture->buildPointsRemaining < Manufacture->psSubject->buildPoints)
 			{
-				Research = StructureGetResearch(Structure);
-				unsigned currentPoints = 0;
-				if (Research->psSubject != NULL)
-				{
-					currentPoints = asPlayerResList[selectedPlayer][Research->psSubject->index].currentPoints;
-				}
-				if (currentPoints != 0)
-				{
-					int researchRate = Research->timeStartHold == 0? Research->researchPoints : 0;
-					formatTime(BarGraph, currentPoints, Research->psSubject->researchPoints, researchRate, _("Research Progress"));
-				}
-				else
-				{
-					// Not yet started production.
-					int neededPower = checkPowerRequest(Structure);
-					int powerToBuild = Research->psSubject != NULL? Research->psSubject->researchPower : 0;
-					formatPower(BarGraph, neededPower, powerToBuild);
-				}
+				// Started production. Set the colour of the bar to yellow.
+				int buildPointsTotal = FactoryGetTemplate(Manufacture)->buildPoints;
+				int buildRate = Manufacture->timeStartHold == 0 ? Manufacture->productionOutput : 0;
+				formatTime(BarGraph, buildPointsTotal - Manufacture->buildPointsRemaining, buildPointsTotal, buildRate, _("Construction Progress"));
 			}
+			else
+			{
+				// Not yet started production.
+				int neededPower = checkPowerRequest(Structure);
+				int powerToBuild = Manufacture->psSubject != NULL ? Manufacture->psSubject->powerPoints : 0;
+				formatPower(BarGraph, neededPower, powerToBuild);
+			}
+		}
+		else if (structureIsResearchingPending(Structure)) // Is it researching.
+		{
+			Research = StructureGetResearch(Structure);
+			unsigned currentPoints = 0;
+			if (Research->psSubject != NULL)
+			{
+				currentPoints = asPlayerResList[selectedPlayer][Research->psSubject->index].currentPoints;
+			}
+			if (currentPoints != 0)
+			{
+				int researchRate = Research->timeStartHold == 0 ? Research->researchPoints : 0;
+				formatTime(BarGraph, currentPoints, Research->psSubject->researchPoints, researchRate, _("Research Progress"));
+			}
+			else
+			{
+				// Not yet started production.
+				int neededPower = checkPowerRequest(Structure);
+				int powerToBuild = Research->psSubject != NULL ? Research->psSubject->researchPower : 0;
+				formatPower(BarGraph, neededPower, powerToBuild);
+			}
+		}
 
-			break;
+		break;
 
-		default:
-			ASSERT( false, "intUpdateProgressBar: invalid object type" );
+	default:
+		ASSERT(false, "Invalid object type");
 	}
 }
 
@@ -312,15 +312,15 @@ void intUpdateQuantity(WIDGET *psWidget, W_CONTEXT *psContext)
 {
 	BASE_OBJECT		*psObj;
 	STRUCTURE		*Structure;
-	DROID_TEMPLATE *        psTemplate;
-	W_LABEL			*Label = (W_LABEL*)psWidget;
+	DROID_TEMPLATE         *psTemplate;
+	W_LABEL			*Label = (W_LABEL *)psWidget;
 
-	psObj = (BASE_OBJECT*)Label->pUserData;  // Get the object associated with this widget.
-	Structure = (STRUCTURE*)psObj;
+	psObj = (BASE_OBJECT *)Label->pUserData; // Get the object associated with this widget.
+	Structure = (STRUCTURE *)psObj;
 
 	if (psObj != NULL && psObj->type == OBJ_STRUCTURE && StructureIsManufacturingPending(Structure))
 	{
-		ASSERT(!isDead(psObj),"intUpdateQuantity: object is dead");
+		ASSERT(!isDead(psObj), "Object is dead");
 
 		psTemplate = FactoryGetTemplate(StructureGetFactory(Structure));
 		int remaining = getProduction(Structure, psTemplate).numRemaining();
@@ -336,19 +336,19 @@ void intUpdateQuantity(WIDGET *psWidget, W_CONTEXT *psContext)
 //callback to display the factory number
 void intAddFactoryInc(WIDGET *psWidget, W_CONTEXT *psContext)
 {
-	W_LABEL         *Label = (W_LABEL*)psWidget;
-	BASE_OBJECT     *psObj = (BASE_OBJECT*)Label->pUserData;
+	W_LABEL         *Label = (W_LABEL *)psWidget;
+	BASE_OBJECT     *psObj = (BASE_OBJECT *)Label->pUserData;
 
 	// Get the object associated with this widget.
 	if (psObj != NULL && !isDead(psObj))
 	{
-		STRUCTURE	*Structure = (STRUCTURE*)psObj;
+		STRUCTURE	*Structure = (STRUCTURE *)psObj;
 		FACTORY		*Factory = &Structure->pFunctionality->factory;
 
-		ASSERT( (Structure->pStructureType->type == REF_FACTORY ||
-			Structure->pStructureType->type == REF_CYBORG_FACTORY ||
-			Structure->pStructureType->type == REF_VTOL_FACTORY),
-			"intAddFactoryInc: structure is not a factory" );
+		ASSERT((Structure->pStructureType->type == REF_FACTORY ||
+		        Structure->pStructureType->type == REF_CYBORG_FACTORY ||
+		        Structure->pStructureType->type == REF_VTOL_FACTORY),
+		       "Structure is not a factory");
 
 		snprintf(Label->aText, sizeof(Label->aText), "%u", Factory->psAssemblyPoint->factoryInc + 1);
 		Label->style &= ~WIDG_HIDDEN;
@@ -363,8 +363,8 @@ void intAddFactoryInc(WIDGET *psWidget, W_CONTEXT *psContext)
 //callback to display the production quantity number for a template
 void intAddProdQuantity(WIDGET *psWidget, W_CONTEXT *psContext)
 {
-	W_LABEL				*Label = (W_LABEL*)psWidget;
-	DROID_TEMPLATE *                psTemplate = (DROID_TEMPLATE *)Label->pUserData;
+	W_LABEL				*Label = (W_LABEL *)psWidget;
+	DROID_TEMPLATE                 *psTemplate = (DROID_TEMPLATE *)Label->pUserData;
 
 	// Get the object associated with this widget.
 	if (psTemplate != NULL)
@@ -407,7 +407,7 @@ void intAddProdQuantity(WIDGET *psWidget, W_CONTEXT *psContext)
 //callback to display the production loop quantity number for a factory
 void intAddLoopQuantity(WIDGET *psWidget, W_CONTEXT *psContext)
 {
-	W_LABEL		*Label = (W_LABEL*)psWidget;
+	W_LABEL		*Label = (W_LABEL *)psWidget;
 	STRUCTURE	*psStruct = (STRUCTURE *)Label->pUserData;
 
 	//loop depends on the factory
@@ -440,16 +440,16 @@ void intAddLoopQuantity(WIDGET *psWidget, W_CONTEXT *psContext)
 // callback to update the command droid size label
 void intUpdateCommandSize(WIDGET *psWidget, W_CONTEXT *psContext)
 {
-	W_LABEL				*Label = (W_LABEL*)psWidget;
-	BASE_OBJECT			*psObj = (BASE_OBJECT*)Label->pUserData;
+	W_LABEL				*Label = (W_LABEL *)psWidget;
+	BASE_OBJECT			*psObj = (BASE_OBJECT *)Label->pUserData;
 
 	// Get the object associated with this widget.
 	if (psObj != NULL && !isDead(psObj))
 	{
 		DROID	*psDroid = (DROID *)psObj;
 
-		ASSERT( psDroid->droidType == DROID_COMMAND,
-			"intUpdateCommandSize: droid is not a command droid" );
+		ASSERT(psDroid->droidType == DROID_COMMAND,
+		       "Droid is not a command droid");
 
 		ssprintf(Label->aText, "%u/%u", psDroid->psGroup ? psDroid->psGroup->getNumMembers() : 0, cmdDroidMaxGroup(psDroid));
 		Label->style &= ~WIDG_HIDDEN;
@@ -464,8 +464,8 @@ void intUpdateCommandSize(WIDGET *psWidget, W_CONTEXT *psContext)
 // callback to update the command droid experience
 void intUpdateCommandExp(WIDGET *psWidget, W_CONTEXT *psContext)
 {
-	W_LABEL				*Label = (W_LABEL*)psWidget;
-	BASE_OBJECT			*psObj = (BASE_OBJECT*)Label->pUserData;
+	W_LABEL				*Label = (W_LABEL *)psWidget;
+	BASE_OBJECT			*psObj = (BASE_OBJECT *)Label->pUserData;
 	SDWORD				i, numStars;
 
 	// Get the object associated with this widget.
@@ -473,12 +473,12 @@ void intUpdateCommandExp(WIDGET *psWidget, W_CONTEXT *psContext)
 	{
 		DROID	*psDroid = (DROID *)psObj;
 
-		ASSERT(psObj->type == OBJ_DROID, "intUpdateCommandExp: invalid droid pointer");
-		ASSERT(psDroid->droidType == DROID_COMMAND, "intUpdateCommandExp: droid is not a command droid");
+		ASSERT(psObj->type == OBJ_DROID, "Invalid droid pointer");
+		ASSERT(psDroid->droidType == DROID_COMMAND, "Droid is not a command droid");
 
 		numStars = getDroidLevel(psDroid);
 		numStars = (numStars >= 1) ? (numStars - 1) : 0;
-		for(i=0; i<numStars; i++)
+		for (i = 0; i < numStars; i++)
 		{
 			Label->aText[i] = '*';
 		}
@@ -495,17 +495,17 @@ void intUpdateCommandExp(WIDGET *psWidget, W_CONTEXT *psContext)
 // callback to update the command droid factories
 void intUpdateCommandFact(WIDGET *psWidget, W_CONTEXT *psContext)
 {
-	W_LABEL				*Label = (W_LABEL*)psWidget;
-	BASE_OBJECT			*psObj = (BASE_OBJECT*)Label->pUserData;
-	SDWORD				i,cIndex, start;
+	W_LABEL				*Label = (W_LABEL *)psWidget;
+	BASE_OBJECT			*psObj = (BASE_OBJECT *)Label->pUserData;
+	SDWORD				i, cIndex, start;
 
 	// Get the object associated with this widget.
 	if (psObj != NULL && !isDead(psObj))
 	{
 		DROID		*psDroid = (DROID *)psObj;
 
-		ASSERT(psObj->type == OBJ_DROID, "intUpdateCommandFact: invalid droid pointer");
-		ASSERT(psDroid->droidType == DROID_COMMAND, "intUpdateCommandFact: droid is not a command droid");
+		ASSERT(psObj->type == OBJ_DROID, "Invalid droid pointer");
+		ASSERT(psDroid->droidType == DROID_COMMAND, "Droid is not a command droid");
 
 		// see which type of factory this is for
 		if (Label->id >= IDOBJ_COUNTSTART && Label->id < IDOBJ_COUNTEND)
@@ -524,9 +524,9 @@ void intUpdateCommandFact(WIDGET *psWidget, W_CONTEXT *psContext)
 		cIndex = 0;
 		for (i = 0; i < 5; ++i)  // TODO Support up to MAX_FACTORY (which won't fit in the ugly secondaryOrder bitmask hack).
 		{
-			if ( psDroid->secondaryOrder & (1 << (i + start)) )
+			if (psDroid->secondaryOrder & (1 << (i + start)))
 			{
-				Label->aText[cIndex] = (char) ('0' + i + 1);
+				Label->aText[cIndex] = (char)('0' + i + 1);
 				cIndex += 1;
 			}
 		}
@@ -547,18 +547,18 @@ void intUpdateCommandFact(WIDGET *psWidget, W_CONTEXT *psContext)
 // !!!!!!!!!!!!!!!!!!!!!!ONLY WORKS ON A SIDEWAYS POWERBAR!!!!!!!!!!!!!!!!!
 void intDisplayPowerBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
 {
-	W_BARGRAPH *BarGraph = (W_BARGRAPH*)psWidget;
-	SDWORD		x0,y0;
-	SDWORD		Avail,ManPow,realPower;
+	W_BARGRAPH *BarGraph = (W_BARGRAPH *)psWidget;
+	SDWORD		x0, y0;
+	SDWORD		Avail, ManPow, realPower;
 	SDWORD		Empty;
 	SDWORD		BarWidth, textWidth = 0;
-	SDWORD		iX,iY;
+	SDWORD		iX, iY;
 	static char		szVal[8];
 
 	double desiredPower = getPowerMinusQueued(selectedPlayer);
 	static double displayPower;
 	static unsigned lastRealTime;
-	displayPower = desiredPower + (displayPower - desiredPower)*exp((realTime - lastRealTime) / -80.);  // If realTime < lastRealTime, then exp() returns 0 due to unsigned overflow.
+	displayPower = desiredPower + (displayPower - desiredPower) * exp((realTime - lastRealTime) / -80.); // If realTime < lastRealTime, then exp() returns 0 due to unsigned overflow.
 	lastRealTime = realTime;
 
 	ManPow = ManuPower / POWERBAR_SCALE;
@@ -567,8 +567,8 @@ void intDisplayPowerBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DEC
 
 	BarWidth = BarGraph->width;
 	iV_SetFont(font_regular);
-	sprintf( szVal, "%d", realPower );
-	textWidth = iV_GetTextWidth( szVal );
+	sprintf(szVal, "%d", realPower);
+	textWidth = iV_GetTextWidth(szVal);
 	BarWidth -= textWidth;
 
 	if (ManPow > Avail)
@@ -582,7 +582,7 @@ void intDisplayPowerBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DEC
 
 	if (Avail > BarWidth)
 	{
-		ManPow = PERNUM(BarWidth,ManPow,Avail);
+		ManPow = PERNUM(BarWidth, ManPow, Avail);
 		Avail = BarWidth;
 		Empty = 0;
 	}
@@ -601,19 +601,19 @@ void intDisplayPowerBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DEC
 	pie_SetFogStatus(false);
 
 
-	iV_DrawImage(IntImages,IMAGE_PBAR_TOP,x0,y0);
+	iV_DrawImage(IntImages, IMAGE_PBAR_TOP, x0, y0);
 
 	iX = x0 + 3;
 	iY = y0 + 10;
 
-	x0 += iV_GetImageWidth(IntImages,IMAGE_PBAR_TOP);
+	x0 += iV_GetImageWidth(IntImages, IMAGE_PBAR_TOP);
 
 	//fill in the empty section behind text
-	if(textWidth > 0)
+	if (textWidth > 0)
 	{
-		iV_DrawImageRect(IntImages,IMAGE_PBAR_EMPTY,
-							x0,y0,
-							textWidth, iV_GetImageHeight(IntImages,IMAGE_PBAR_EMPTY));
+		iV_DrawImageRect(IntImages, IMAGE_PBAR_EMPTY,
+		        x0, y0,
+		        textWidth, iV_GetImageHeight(IntImages, IMAGE_PBAR_EMPTY));
 		x0 += textWidth;
 	}
 
@@ -621,54 +621,54 @@ void intDisplayPowerBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DEC
 	if (ManPow > Avail)
 	{
 		//draw the required in red
-		iV_DrawImageRect(IntImages,IMAGE_PBAR_USED,
-							x0,y0,
-							ManPow, iV_GetImageHeight(IntImages,IMAGE_PBAR_USED));
+		iV_DrawImageRect(IntImages, IMAGE_PBAR_USED,
+		        x0, y0,
+		        ManPow, iV_GetImageHeight(IntImages, IMAGE_PBAR_USED));
 	}
 	else
 	{
-		iV_DrawImageRect(IntImages,IMAGE_PBAR_REQUIRED,
-							x0,y0,
-							ManPow, iV_GetImageHeight(IntImages,IMAGE_PBAR_REQUIRED));
+		iV_DrawImageRect(IntImages, IMAGE_PBAR_REQUIRED,
+		        x0, y0,
+		        ManPow, iV_GetImageHeight(IntImages, IMAGE_PBAR_REQUIRED));
 	}
 
 	x0 += ManPow;
 
 	//draw the available section if any!
-	if(Avail-ManPow > 0)
+	if (Avail - ManPow > 0)
 	{
-		iV_DrawImageRect(IntImages,IMAGE_PBAR_AVAIL,
-							x0,y0,
-							Avail-ManPow, iV_GetImageHeight(IntImages,IMAGE_PBAR_AVAIL));
+		iV_DrawImageRect(IntImages, IMAGE_PBAR_AVAIL,
+		        x0, y0,
+		        Avail - ManPow, iV_GetImageHeight(IntImages, IMAGE_PBAR_AVAIL));
 
-		x0 += Avail-ManPow;
+		x0 += Avail - ManPow;
 	}
 
 	//fill in the rest with empty section
-	if(Empty > 0)
+	if (Empty > 0)
 	{
-		iV_DrawImageRect(IntImages,IMAGE_PBAR_EMPTY,
-							x0,y0,
-							Empty, iV_GetImageHeight(IntImages,IMAGE_PBAR_EMPTY));
+		iV_DrawImageRect(IntImages, IMAGE_PBAR_EMPTY,
+		        x0, y0,
+		        Empty, iV_GetImageHeight(IntImages, IMAGE_PBAR_EMPTY));
 		x0 += Empty;
 	}
 
-	iV_DrawImage(IntImages,IMAGE_PBAR_BOTTOM,x0,y0);
+	iV_DrawImage(IntImages, IMAGE_PBAR_BOTTOM, x0, y0);
 	if (Avail < 0)
 	{
 		const char *need = _("Need more resources!");
-		if ((realTime / 1250) % 5 == 0 )
+		if ((realTime / 1250) % 5 == 0)
 		{
 			iV_SetTextColour(WZCOL_BLACK);
 			iV_SetFont(font_small);
-			iV_DrawText(need, iX + 102, iY - 1  );
+			iV_DrawText(need, iX + 102, iY - 1);
 			iV_SetTextColour(WZCOL_RED);
 		}
 		else
 		{
 			iV_SetTextColour(WZCOL_RED);
 			iV_SetFont(font_small);
-			iV_DrawText(need, iX + 102, iY - 1  );
+			iV_DrawText(need, iX + 102, iY - 1);
 		}
 	}
 	else
@@ -677,7 +677,7 @@ void intDisplayPowerBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DEC
 	}
 	// draw text value
 	iV_SetFont(font_regular);
-	iV_DrawText( szVal, iX, iY );
+	iV_DrawText(szVal, iX, iY);
 }
 
 
@@ -686,7 +686,7 @@ void intDisplayPowerBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DEC
 //
 void intDisplayStatusButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
 {
-	W_CLICKFORM         *Form = (W_CLICKFORM*)psWidget;
+	W_CLICKFORM         *Form = (W_CLICKFORM *)psWidget;
 	BASE_OBJECT         *psObj;
 	STRUCTURE           *Structure;
 	DROID               *Droid;
@@ -694,188 +694,208 @@ void intDisplayStatusButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ
 	SDWORD              Image;
 	bool                Hilight = false;
 	BASE_STATS          *Stats, *psResGraphic;
-	RENDERED_BUTTON     *Buffer = (RENDERED_BUTTON*)Form->pUserData;
+	RENDERED_BUTTON     *Buffer = (RENDERED_BUTTON *)Form->pUserData;
 	UDWORD              IMDType = 0, compID;
 	UDWORD              Player = selectedPlayer;			// changed by AJL for multiplayer.
 	void                *Object;
 	bool	            bOnHold = false;
 
-	OpenButtonRender((UWORD)(xOffset+Form->x), (UWORD)(yOffset+Form->y),(UWORD)Form->width,(UWORD)Form->height);
+	OpenButtonRender((UWORD)(xOffset + Form->x), (UWORD)(yOffset + Form->y), (UWORD)Form->width, (UWORD)Form->height);
 
 	Down = Form->state & (WCLICK_DOWN | WCLICK_LOCKED | WCLICK_CLICKLOCK);
 
-		Hilight = Form->state & WCLICK_HILITE;
+	Hilight = Form->state & WCLICK_HILITE;
 
-		if(Hilight) {
-			Buffer->ImdRotation += realTimeAdjustedAverage(BUTTONOBJ_ROTSPEED);
-		}
+	if (Hilight)
+	{
+		Buffer->ImdRotation += realTimeAdjustedAverage(BUTTONOBJ_ROTSPEED);
+	}
 
-		Hilight = formIsHilite(Form);	// Hilited or flashing.
+	Hilight = formIsHilite(Form);	// Hilited or flashing.
 
-		Buffer->State = Form->state;
+	Buffer->State = Form->state;
 
-		Object = NULL;
-		Image = -1;
-		psObj = (BASE_OBJECT*)Buffer->Data;	// Get the object associated with this widget.
+	Object = NULL;
+	Image = -1;
+	psObj = (BASE_OBJECT *)Buffer->Data;	// Get the object associated with this widget.
 
-		if (psObj && isDead(psObj))
+	if (psObj && isDead(psObj))
+	{
+		// this may catch this horrible crash bug we've been having,
+		// who knows?.... Shipping tomorrow, la de da :-)
+		psObj = NULL;
+		Buffer->Data = NULL;
+		intRefreshScreen();
+	}
+
+	if (psObj)
+	{
+		switch (psObj->type)
 		{
-			// this may catch this horrible crash bug we've been having,
-			// who knows?.... Shipping tomorrow, la de da :-)
-			psObj = NULL;
-			Buffer->Data = NULL;
-			intRefreshScreen();
-		}
+		case OBJ_DROID:						// If it's a droid...
+			Droid = (DROID *)psObj;
 
-		if(psObj) {
-			switch (psObj->type) {
-				case OBJ_DROID:						// If it's a droid...
-					Droid = (DROID*)psObj;
+			if (DroidIsBuilding(Droid))
+			{
+				Structure = DroidGetBuildStructure(Droid);
+				if (Structure)
+				{
+					Object = Structure;
+					IMDType = IMDTYPE_STRUCTURE;
+					RENDERBUTTON_INITIALISED(Buffer);
+				}
+			}
+			else if (DroidGoingToBuild(Droid))
+			{
+				Stats = DroidGetBuildStats(Droid);
+				ASSERT(Stats != NULL, "NULL Stats pointer.");
+				Object = (void *)Stats;
+				Player = selectedPlayer;
+				IMDType = IMDTYPE_STRUCTURESTAT;
+				RENDERBUTTON_INITIALISED(Buffer);
+			}
+			else if (orderState(Droid, DORDER_DEMOLISH))
+			{
+				Stats = (BASE_STATS *)structGetDemolishStat();
+				ASSERT(Stats != NULL, "NULL Stats pointer.");
+				Object = (void *)Stats;
+				Player = selectedPlayer;
+				IMDType = IMDTYPE_STRUCTURESTAT;
+				RENDERBUTTON_INITIALISED(Buffer);
+			}
+			else if (Droid->droidType == DROID_COMMAND)
+			{
+				Structure = droidGetCommandFactory(Droid);
+				if (Structure)
+				{
+					Object = Structure;
+					IMDType = IMDTYPE_STRUCTURE;
+					RENDERBUTTON_INITIALISED(Buffer);
+				}
+			}
+			break;
 
-					if(DroidIsBuilding(Droid)) {
-						Structure = DroidGetBuildStructure(Droid);
-						if(Structure) {
-							Object = Structure;
-							IMDType = IMDTYPE_STRUCTURE;
-							RENDERBUTTON_INITIALISED(Buffer);
-						}
-					} else if (DroidGoingToBuild(Droid)) {
-						Stats = DroidGetBuildStats(Droid);
-						ASSERT( Stats!=NULL,"intDisplayStatusButton : NULL Stats pointer." );
-						Object = (void*)Stats;	//StatGetStructureIMD(Stats,selectedPlayer);
-						Player = selectedPlayer;
-						IMDType = IMDTYPE_STRUCTURESTAT;
-						RENDERBUTTON_INITIALISED(Buffer);
-					} else if (orderState(Droid, DORDER_DEMOLISH)) {
-						Stats = (BASE_STATS *)structGetDemolishStat();
-						ASSERT( Stats!=NULL,"intDisplayStatusButton : NULL Stats pointer." );
-						Object = (void*)Stats;
-						Player = selectedPlayer;
-						IMDType = IMDTYPE_STRUCTURESTAT;
-						RENDERBUTTON_INITIALISED(Buffer);
-					} else if (Droid->droidType == DROID_COMMAND) {
-						Structure = droidGetCommandFactory(Droid);
-						if (Structure) {
-							Object = Structure;
-							IMDType = IMDTYPE_STRUCTURE;
-							RENDERBUTTON_INITIALISED(Buffer);
-						}
-					}
-					break;
+		case OBJ_STRUCTURE:					// If it's a structure...
+			Structure = (STRUCTURE *)psObj;
+			switch (Structure->pStructureType->type)
+			{
+			case REF_FACTORY:
+			case REF_CYBORG_FACTORY:
+			case REF_VTOL_FACTORY:
+				if (StructureIsManufacturingPending(Structure))
+				{
+					IMDType = IMDTYPE_DROIDTEMPLATE;
+					Object = (void *)FactoryGetTemplate(StructureGetFactory(Structure));
+					RENDERBUTTON_INITIALISED(Buffer);
+					bOnHold = StructureIsOnHoldPending(Structure);
+				}
 
-				case OBJ_STRUCTURE:					// If it's a structure...
-					Structure = (STRUCTURE*)psObj;
-					switch(Structure->pStructureType->type)
+				break;
+
+			case REF_RESEARCH:
+				if (structureIsResearchingPending(Structure))
+				{
+					iIMDShape *shape = (iIMDShape *)Object;
+					Stats = (BASE_STATS *)Buffer->Data2;
+					if (!Stats)
 					{
-						case REF_FACTORY:
-						case REF_CYBORG_FACTORY:
-						case REF_VTOL_FACTORY:
-							if (StructureIsManufacturingPending(Structure))
-							{
-								IMDType = IMDTYPE_DROIDTEMPLATE;
-								Object = (void*)FactoryGetTemplate(StructureGetFactory(Structure));
-								RENDERBUTTON_INITIALISED(Buffer);
-								bOnHold = StructureIsOnHoldPending(Structure);
-							}
-
-							break;
-
-						case REF_RESEARCH:
-							if (structureIsResearchingPending(Structure))
-							{
-								iIMDShape *shape = (iIMDShape *)Object;
-								Stats = (BASE_STATS*)Buffer->Data2;
-								if (!Stats)
-								{
-									break;
-								}
-								bOnHold = StructureIsOnHoldPending(Structure);
-								StatGetResearchImage(Stats,&Image,&shape, &psResGraphic, false);
-								Object = shape;
-								if (psResGraphic)
-								{
-									// we have a Stat associated with this research topic
-									if (StatIsStructure(psResGraphic))
-									{
-										// overwrite the Object pointer
-										Object = (void*)psResGraphic;
-										Player = selectedPlayer;
-										// this defines how the button is drawn
-										IMDType = IMDTYPE_STRUCTURESTAT;
-									}
-									else
-									{
-										compID = StatIsComponent(psResGraphic);
-										if (compID != COMP_UNKNOWN)
-										{
-											// this defines how the button is drawn
-											IMDType = IMDTYPE_COMPONENT;
-											// overwrite the Object pointer
-											Object = (void*)psResGraphic;
-										}
-										else
-										{
-											ASSERT(false, "intDisplayStatsButton:Invalid Stat for research button");
-											Object = NULL;
-											IMDType = IMDTYPE_RESEARCH;
-										}
-									}
-								}
-								else
-								{
-									// no Stat for this research topic so just use the graphic provided
-									// if Object != NULL the there must be a IMD so set the object to
-									// equal the Research stat
-									if (Object != NULL)
-									{
-										Object = (void*)Stats;
-										IMDType = IMDTYPE_RESEARCH;
-									}
-								}
-								RENDERBUTTON_INITIALISED(Buffer);
-							}
-							break;
-						default:
-							break;
+						break;
 					}
-					break;
-
-				default:
-					ASSERT( false, "intDisplayObjectButton: invalid structure type" );
+					bOnHold = StructureIsOnHoldPending(Structure);
+					StatGetResearchImage(Stats, &Image, &shape, &psResGraphic, false);
+					Object = shape;
+					if (psResGraphic)
+					{
+						// we have a Stat associated with this research topic
+						if (StatIsStructure(psResGraphic))
+						{
+							// overwrite the Object pointer
+							Object = (void *)psResGraphic;
+							Player = selectedPlayer;
+							// this defines how the button is drawn
+							IMDType = IMDTYPE_STRUCTURESTAT;
+						}
+						else
+						{
+							compID = StatIsComponent(psResGraphic);
+							if (compID != COMP_UNKNOWN)
+							{
+								// this defines how the button is drawn
+								IMDType = IMDTYPE_COMPONENT;
+								// overwrite the Object pointer
+								Object = (void *)psResGraphic;
+							}
+							else
+							{
+								ASSERT(false, "Invalid Stat for research button");
+								Object = NULL;
+								IMDType = IMDTYPE_RESEARCH;
+							}
+						}
+					}
+					else
+					{
+						// no Stat for this research topic so just use the graphic provided
+						// if Object != NULL the there must be a IMD so set the object to
+						// equal the Research stat
+						if (Object != NULL)
+						{
+							Object = (void *)Stats;
+							IMDType = IMDTYPE_RESEARCH;
+						}
+					}
+					RENDERBUTTON_INITIALISED(Buffer);
+				}
+				break;
+			default:
+				break;
 			}
-		} else
+			break;
+
+		default:
+			ASSERT(false, "Invalid structure type");
+		}
+	}
+	else
+	{
+		RENDERBUTTON_INITIALISED(Buffer);
+	}
+
+	ButtonDrawXOffset = ButtonDrawYOffset = 0;
+
+	// Render the object into the button.
+	if (Object)
+	{
+		if (Image >= 0)
 		{
-			RENDERBUTTON_INITIALISED(Buffer);
+			RenderToButton(IntImages, (UWORD)Image, Object, Player, Buffer, Down, IMDType, TOPBUTTON);
 		}
-
-		ButtonDrawXOffset = ButtonDrawYOffset = 0;
-
-
-		// Render the object into the button.
-		if(Object) {
-			if(Image >= 0) {
-				RenderToButton(IntImages,(UWORD)Image,Object,Player,Buffer,Down,IMDType,TOPBUTTON);
-			} else {
-				RenderToButton(NULL,0,Object,Player,Buffer,Down,IMDType,TOPBUTTON);
-			}
-		} else if(Image >= 0) {
-			RenderImageToButton(IntImages,(UWORD)Image,Buffer,Down,TOPBUTTON);
-		} else {
-			RenderBlankToButton(Buffer,Down,TOPBUTTON);
+		else
+		{
+			RenderToButton(NULL, 0, Object, Player, Buffer, Down, IMDType, TOPBUTTON);
 		}
+	}
+	else if (Image >= 0)
+	{
+		RenderImageToButton(IntImages, (UWORD)Image, Buffer, Down, TOPBUTTON);
+	}
+	else
+	{
+		RenderBlankToButton(Buffer, Down, TOPBUTTON);
+	}
 
 	CloseButtonRender();
 
 	//need to flash the button if a factory is on hold production
 	if (bOnHold)
 	{
-		if (((realTime/250) % 2) == 0)
+		if (((realTime / 250) % 2) == 0)
 		{
-			iV_DrawImage(IntImages,IMAGE_BUT0_DOWN,xOffset+Form->x,yOffset+Form->y);
+			iV_DrawImage(IntImages, IMAGE_BUT0_DOWN, xOffset + Form->x, yOffset + Form->y);
 		}
 		else
 		{
-			iV_DrawImage(IntImages,IMAGE_BUT_HILITE,xOffset+Form->x,yOffset+Form->y);
+			iV_DrawImage(IntImages, IMAGE_BUT_HILITE, xOffset + Form->x, yOffset + Form->y);
 		}
 	}
 	else
@@ -883,7 +903,7 @@ void intDisplayStatusButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ
 		if (Hilight)
 		{
 
-			iV_DrawImage(IntImages,IMAGE_BUT_HILITE,xOffset+Form->x,yOffset+Form->y);
+			iV_DrawImage(IntImages, IMAGE_BUT_HILITE, xOffset + Form->x, yOffset + Form->y);
 		}
 	}
 }
@@ -893,73 +913,77 @@ void intDisplayStatusButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ
 //
 void intDisplayObjectButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
 {
-	W_CLICKFORM *Form = (W_CLICKFORM*)psWidget;
+	W_CLICKFORM *Form = (W_CLICKFORM *)psWidget;
 	BASE_OBJECT *psObj;
 	bool Down;
 	bool Hilight = false;
-	RENDERED_BUTTON *Buffer = (RENDERED_BUTTON*)Form->pUserData;
+	RENDERED_BUTTON *Buffer = (RENDERED_BUTTON *)Form->pUserData;
 	UDWORD IMDType = 0;
 	void *Object;
 
-	OpenButtonRender((UWORD)(xOffset+Form->x), (UWORD)(yOffset+Form->y),(UWORD)Form->width,(UWORD)(Form->height+9));
+	OpenButtonRender((UWORD)(xOffset + Form->x), (UWORD)(yOffset + Form->y), (UWORD)Form->width, (UWORD)(Form->height + 9));
 
 	Down = Form->state & (WCLICK_DOWN | WCLICK_LOCKED | WCLICK_CLICKLOCK);
 
-		Hilight = Form->state & WCLICK_HILITE;
+	Hilight = Form->state & WCLICK_HILITE;
 
-		if(Hilight) {
-			Buffer->ImdRotation += realTimeAdjustedAverage(BUTTONOBJ_ROTSPEED);
-		}
+	if (Hilight)
+	{
+		Buffer->ImdRotation += realTimeAdjustedAverage(BUTTONOBJ_ROTSPEED);
+	}
 
-		Hilight = formIsHilite(Form);	// Hilited or flashing.
+	Hilight = formIsHilite(Form);	// Hilited or flashing.
 
-		Buffer->State = Form->state;
+	Buffer->State = Form->state;
 
-		Object = NULL;
-		psObj = (BASE_OBJECT*)Buffer->Data;	// Get the object associated with this widget.
+	Object = NULL;
+	psObj = (BASE_OBJECT *)Buffer->Data;	// Get the object associated with this widget.
 
-		if (psObj && isDead(psObj))
+	if (psObj && isDead(psObj))
+	{
+		// this may catch this horrible crash bug we've been having,
+		// who knows?.... Shipping tomorrow, la de da :-)
+		psObj = NULL;
+		Buffer->Data = NULL;
+		intRefreshScreen();
+	}
+
+	if (psObj)
+	{
+		switch (psObj->type)
 		{
-			// this may catch this horrible crash bug we've been having,
-			// who knows?.... Shipping tomorrow, la de da :-)
-			psObj = NULL;
-			Buffer->Data = NULL;
-			intRefreshScreen();
+		case OBJ_DROID:						// If it's a droid...
+			IMDType = IMDTYPE_DROID;
+			Object = (void *)psObj;
+			break;
+		case OBJ_STRUCTURE:					// If it's a structure...
+			IMDType = IMDTYPE_STRUCTURE;
+			Object = (void *)psObj;
+			break;
+		default:
+			ASSERT(false, "Invalid structure type");
 		}
+	}
 
-		if(psObj) {
-			switch (psObj->type) {
-				case OBJ_DROID:						// If it's a droid...
-					IMDType = IMDTYPE_DROID;
-					Object = (void*)psObj;
-					break;
+	ButtonDrawXOffset = ButtonDrawYOffset = 0;
 
-				case OBJ_STRUCTURE:					// If it's a structure...
-					IMDType = IMDTYPE_STRUCTURE;
-					Object = (void*)psObj;
-					break;
+	if (Object)
+	{
+		RenderToButton(NULL, 0, Object, selectedPlayer, Buffer, Down, IMDType, BTMBUTTON);	// ajl, changed from 0 to selectedPlayer
+	}
+	else
+	{
+		RenderBlankToButton(Buffer, Down, BTMBUTTON);
+	}
 
-				default:
-					ASSERT( false, "intDisplayStatusButton: invalid structure type" );
-			}
-		}
-
-		ButtonDrawXOffset = ButtonDrawYOffset = 0;
-
-		if(Object) {
-			RenderToButton(NULL,0,Object,selectedPlayer,Buffer,Down,IMDType,BTMBUTTON);	// ajl, changed from 0 to selectedPlayer
-		} else {
-			RenderBlankToButton(Buffer,Down,BTMBUTTON);
-		}
-
-		RENDERBUTTON_INITIALISED(Buffer);
+	RENDERBUTTON_INITIALISED(Buffer);
 
 	CloseButtonRender();
 
 	if (Hilight)
 	{
 
-		iV_DrawImage(IntImages,IMAGE_BUTB_HILITE,xOffset+Form->x,yOffset+Form->y);
+		iV_DrawImage(IntImages, IMAGE_BUTB_HILITE, xOffset + Form->x, yOffset + Form->y);
 	}
 }
 
@@ -968,197 +992,217 @@ void intDisplayObjectButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ
 //
 void intDisplayStatsButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
 {
-	W_CLICKFORM     *Form = (W_CLICKFORM*)psWidget;
+	W_CLICKFORM     *Form = (W_CLICKFORM *)psWidget;
 	BASE_STATS      *Stat, *psResGraphic;
 	bool            Down;
 	SDWORD          Image, compID;
 	bool            Hilight = false;
-	RENDERED_BUTTON *Buffer = (RENDERED_BUTTON*)Form->pUserData;
+	RENDERED_BUTTON *Buffer = (RENDERED_BUTTON *)Form->pUserData;
 	UDWORD          IMDType = 0;
 	UDWORD          Player = selectedPlayer;		// ajl, changed for multiplayer (from 0)
 	void            *Object;
 
-	OpenButtonRender((UWORD)(xOffset+Form->x), (UWORD)(yOffset+Form->y),(UWORD)Form->width,(UWORD)Form->height);
+	OpenButtonRender((UWORD)(xOffset + Form->x), (UWORD)(yOffset + Form->y), (UWORD)Form->width, (UWORD)Form->height);
 
 	Down = Form->state & (WCLICK_DOWN | WCLICK_LOCKED | WCLICK_CLICKLOCK);
 
-		Hilight = Form->state & WCLICK_HILITE;
+	Hilight = Form->state & WCLICK_HILITE;
 
-		if(Hilight) {
-			Buffer->ImdRotation += realTimeAdjustedAverage(BUTTONOBJ_ROTSPEED);
-		}
+	if (Hilight)
+	{
+		Buffer->ImdRotation += realTimeAdjustedAverage(BUTTONOBJ_ROTSPEED);
+	}
 
-		Hilight = formIsHilite(Form);
+	Hilight = formIsHilite(Form);
 
-		Buffer->State = Form->state;
+	Buffer->State = Form->state;
 
-		Object = NULL;
-		Image = -1;
+	Object = NULL;
+	Image = -1;
 
-		Stat = (BASE_STATS*)Buffer->Data;
+	Stat = (BASE_STATS *)Buffer->Data;
 
-		ButtonDrawXOffset = ButtonDrawYOffset = 0;
+	ButtonDrawXOffset = ButtonDrawYOffset = 0;
 
-		if(Stat)
+	if (Stat)
+	{
+		if (StatIsStructure(Stat))
 		{
-			if(StatIsStructure(Stat))
+			Object = (void *)Stat;
+			Player = selectedPlayer;
+			IMDType = IMDTYPE_STRUCTURESTAT;
+		}
+		else if (StatIsTemplate(Stat))
+		{
+			IMDType = IMDTYPE_DROIDTEMPLATE;
+			Object = (void *)Stat;
+		}
+		else
+		{
+			//if(StatIsComponent(Stat))
+			//{
+			//	IMDType = IMDTYPE_COMPONENT;
+			//	Shape = StatGetComponentIMD(Stat);
+			//}
+			compID = StatIsComponent(Stat); // This failes for viper body.
+			if (compID != COMP_UNKNOWN)
 			{
-				Object = (void*)Stat;
-				Player = selectedPlayer;
-				IMDType = IMDTYPE_STRUCTURESTAT;
+				IMDType = IMDTYPE_COMPONENT;
+				Object = (void *)Stat;	//StatGetComponentIMD(Stat, compID);
 			}
-			else if(StatIsTemplate(Stat))
+			else if (StatIsResearch(Stat))
 			{
-				IMDType = IMDTYPE_DROIDTEMPLATE;
-				Object = (void*)Stat;
-			}
-			else
-			{
-				//if(StatIsComponent(Stat))
-				//{
-				//	IMDType = IMDTYPE_COMPONENT;
-				//	Shape = StatGetComponentIMD(Stat);
-				//}
-				compID = StatIsComponent(Stat); // This failes for viper body.
-				if (compID != COMP_UNKNOWN)
+				iIMDShape *shape = (iIMDShape *)Object;
+				/*IMDType = IMDTYPE_RESEARCH;
+				StatGetResearchImage(Stat,&Image,(iIMDShape**)&Object,true);
+				//if Object != NULL the there must be a IMD so set the object to
+				//equal the Research stat
+				if (Object != NULL)
 				{
-					IMDType = IMDTYPE_COMPONENT;
-					Object = (void*)Stat;	//StatGetComponentIMD(Stat, compID);
+					Object = (void*)Stat;
+				}*/
+				StatGetResearchImage(Stat, &Image, &shape, &psResGraphic, true);
+				Object = shape;
+				if (psResGraphic)
+				{
+					//we have a Stat associated with this research topic
+					if (StatIsStructure(psResGraphic))
+					{
+						//overwrite the Object pointer
+						Object = (void *)psResGraphic;
+						Player = selectedPlayer;
+						//this defines how the button is drawn
+						IMDType = IMDTYPE_STRUCTURESTAT;
+					}
+					else
+					{
+						compID = StatIsComponent(psResGraphic);
+						if (compID != COMP_UNKNOWN)
+						{
+							//this defines how the button is drawn
+							IMDType = IMDTYPE_COMPONENT;
+							//overwrite the Object pointer
+							Object = (void *)psResGraphic;
+						}
+						else
+						{
+							ASSERT(false, "Invalid Stat for research button");
+							Object = NULL;
+							IMDType = IMDTYPE_RESEARCH;
+						}
+					}
 				}
-				else if(StatIsResearch(Stat))
+				else
 				{
-					iIMDShape *shape = (iIMDShape *)Object;
-					/*IMDType = IMDTYPE_RESEARCH;
-					StatGetResearchImage(Stat,&Image,(iIMDShape**)&Object,true);
+					//no Stat for this research topic so just use the graphic provided
 					//if Object != NULL the there must be a IMD so set the object to
 					//equal the Research stat
 					if (Object != NULL)
 					{
-						Object = (void*)Stat;
-					}*/
-                    StatGetResearchImage(Stat,&Image,&shape, &psResGraphic, true);
-					Object = shape;
-                    if (psResGraphic)
-                    {
-                        //we have a Stat associated with this research topic
-                        if  (StatIsStructure(psResGraphic))
-                        {
-                            //overwrite the Object pointer
-                            Object = (void*)psResGraphic;
-				            Player = selectedPlayer;
-                            //this defines how the button is drawn
-				            IMDType = IMDTYPE_STRUCTURESTAT;
-                        }
-                        else
-                        {
-            				compID = StatIsComponent(psResGraphic);
-				            if (compID != COMP_UNKNOWN)
-				            {
-                                //this defines how the button is drawn
-					            IMDType = IMDTYPE_COMPONENT;
-                                //overwrite the Object pointer
-					            Object = (void*)psResGraphic;
-				            }
-                            else
-                            {
-                                ASSERT( false,
-                                    "intDisplayStatsButton:Invalid Stat for research button" );
-                                Object = NULL;
-                                IMDType = IMDTYPE_RESEARCH;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        //no Stat for this research topic so just use the graphic provided
-                        //if Object != NULL the there must be a IMD so set the object to
-                        //equal the Research stat
-                        if (Object != NULL)
-                        {
-                            Object = (void*)Stat;
-                            IMDType = IMDTYPE_RESEARCH;
-                        }
-                    }
+						Object = (void *)Stat;
+						IMDType = IMDTYPE_RESEARCH;
+					}
 				}
 			}
+		}
 
-			if(Down)
-			{
-				CurrentStatsTemplate = Stat;
-			}
+		if (Down)
+		{
+			CurrentStatsTemplate = Stat;
+		}
 
+	}
+	else
+	{
+		IMDType = IMDTYPE_COMPONENT;
+		//BLANK button for now - AB 9/1/98
+		Object = NULL;
+		CurrentStatsTemplate = NULL;
+	}
+
+
+	if (Object)
+	{
+		if (Image >= 0)
+		{
+			RenderToButton(IntImages, (UWORD)Image, Object, Player, Buffer, Down, IMDType, TOPBUTTON);
 		}
 		else
 		{
-			IMDType = IMDTYPE_COMPONENT;
-			//BLANK button for now - AB 9/1/98
-			Object = NULL;
-			CurrentStatsTemplate = NULL;
+			RenderToButton(NULL, 0, Object, Player, Buffer, Down, IMDType, TOPBUTTON);
 		}
+	}
+	else if (Image >= 0)
+	{
+		RenderImageToButton(IntImages, (UWORD)Image, Buffer, Down, TOPBUTTON);
+	}
+	else
+	{
+		RenderBlankToButton(Buffer, Down, TOPBUTTON);
+	}
 
-
-		if(Object) {
-			if(Image >= 0) {
-				RenderToButton(IntImages,(UWORD)Image,Object,Player,Buffer,Down,IMDType,TOPBUTTON);
-  			} else {
-				RenderToButton(NULL,0,Object,Player,Buffer,Down,IMDType,TOPBUTTON);
-			}
-		} else if(Image >= 0) {
-			RenderImageToButton(IntImages,(UWORD)Image,Buffer,Down,TOPBUTTON);
-		} else {
-			RenderBlankToButton(Buffer,Down,TOPBUTTON);
-		}
-
-		RENDERBUTTON_INITIALISED(Buffer);
+	RENDERBUTTON_INITIALISED(Buffer);
 
 	CloseButtonRender();
 
 	if (Hilight)
 	{
 
-		iV_DrawImage(IntImages,IMAGE_BUT_HILITE,xOffset+Form->x,yOffset+Form->y);
+		iV_DrawImage(IntImages, IMAGE_BUT_HILITE, xOffset + Form->x, yOffset + Form->y);
 	}
 }
 
 
-void RenderToButton(IMAGEFILE *ImageFile,UWORD ImageID,void *Object,UDWORD Player,
-					RENDERED_BUTTON *Buffer,bool Down, UDWORD IMDType, UDWORD buttonType)
+void RenderToButton(IMAGEFILE *ImageFile, UWORD ImageID, void *Object, UDWORD Player,
+        RENDERED_BUTTON *Buffer, bool Down, UDWORD IMDType, UDWORD buttonType)
 {
-	CreateIMDButton(ImageFile,ImageID,Object,Player,Buffer,Down,IMDType,buttonType);
+	CreateIMDButton(ImageFile, ImageID, Object, Player, Buffer, Down, IMDType, buttonType);
 }
 
-void RenderImageToButton(IMAGEFILE *ImageFile,UWORD ImageID,RENDERED_BUTTON *Buffer,bool Down, UDWORD buttonType)
+void RenderImageToButton(IMAGEFILE *ImageFile, UWORD ImageID, RENDERED_BUTTON *Buffer, bool Down, UDWORD buttonType)
 {
-	CreateImageButton(ImageFile,ImageID,Buffer,Down,buttonType);
+	CreateImageButton(ImageFile, ImageID, Buffer, Down, buttonType);
 }
 
-void RenderBlankToButton(RENDERED_BUTTON *Buffer,bool Down, UDWORD buttonType)
+void RenderBlankToButton(RENDERED_BUTTON *Buffer, bool Down, UDWORD buttonType)
 {
-	CreateBlankButton(Buffer,Down,buttonType);
+	CreateBlankButton(Buffer, Down, buttonType);
 }
 
 
-void AdjustTabFormSize(W_TABFORM *Form,UDWORD *x0,UDWORD *y0,UDWORD *x1,UDWORD *y1)
+void AdjustTabFormSize(W_TABFORM *Form, UDWORD *x0, UDWORD *y0, UDWORD *x1, UDWORD *y1)
 {
 	/* Adjust for where the tabs are */
-	if(Form->majorPos == WFORM_TABLEFT) {
+	if (Form->majorPos == WFORM_TABLEFT)
+	{
 		*x0 += Form->tabMajorThickness - Form->tabHorzOffset;
-	} else if(Form->minorPos == WFORM_TABLEFT) {
+	}
+	else if (Form->minorPos == WFORM_TABLEFT)
+	{
 		*x0 += Form->tabMinorThickness - Form->tabHorzOffset;
 	}
-	if(Form->majorPos == WFORM_TABRIGHT) {
+	if (Form->majorPos == WFORM_TABRIGHT)
+	{
 		*x1 -= Form->tabMajorThickness - Form->tabHorzOffset;
-	} else if(Form->minorPos == WFORM_TABRIGHT) {
+	}
+	else if (Form->minorPos == WFORM_TABRIGHT)
+	{
 		*x1 -= Form->tabMinorThickness - Form->tabHorzOffset;
 	}
-	if(Form->majorPos == WFORM_TABTOP) {
+	if (Form->majorPos == WFORM_TABTOP)
+	{
 		*y0 += Form->tabMajorThickness - Form->tabVertOffset;
-	} else if(Form->minorPos == WFORM_TABTOP) {
+	}
+	else if (Form->minorPos == WFORM_TABTOP)
+	{
 		*y0 += Form->tabMinorThickness - Form->tabVertOffset;
 	}
-	if(Form->majorPos == WFORM_TABBOTTOM) {
+	if (Form->majorPos == WFORM_TABBOTTOM)
+	{
 		*y1 -= Form->tabMajorThickness - Form->tabVertOffset;
-	} else if(Form->minorPos == WFORM_TABBOTTOM) {
+	}
+	else if (Form->minorPos == WFORM_TABBOTTOM)
+	{
 		*y1 -= Form->tabMinorThickness - Form->tabVertOffset;
 	}
 }
@@ -1168,29 +1212,33 @@ void AdjustTabFormSize(W_TABFORM *Form,UDWORD *x0,UDWORD *y0,UDWORD *x1,UDWORD *
 //
 void intOpenPlainForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
 {
-	W_TABFORM	*Form = (W_TABFORM*)psWidget;
-	UDWORD		Tx0,Ty0,Tx1,Ty1;
+	W_TABFORM	*Form = (W_TABFORM *)psWidget;
+	UDWORD		Tx0, Ty0, Tx1, Ty1;
 	UDWORD		Range;
 	UDWORD		Duration;
 	UDWORD		APos;
-	SDWORD		Ay0,Ay1;
+	SDWORD		Ay0, Ay1;
 
-	Tx0 = xOffset+Form->x;
-	Ty0 = yOffset+Form->y;
+	Tx0 = xOffset + Form->x;
+	Ty0 = yOffset + Form->y;
 	Tx1 = Tx0 + Form->width;
 	Ty1 = Ty0 + Form->height;
 
-	if(Form->animCount == 0) {
-		if( (FormOpenAudioID >= 0) && (FormOpenCount == 0) ) {
+	if (Form->animCount == 0)
+	{
+		if ((FormOpenAudioID >= 0) && (FormOpenCount == 0))
+		{
 			audio_PlayTrack(FormOpenAudioID);
 			FormOpenCount++;
 		}
 		Form->Ax0 = (UWORD)Tx0;
 		Form->Ax1 = (UWORD)Tx1;
-		Form->Ay0 = (UWORD)(Ty0 + (Form->height/2) - 4);
-		Form->Ay1 = (UWORD)(Ty0 + (Form->height/2) + 4);
+		Form->Ay0 = (UWORD)(Ty0 + (Form->height / 2) - 4);
+		Form->Ay1 = (UWORD)(Ty0 + (Form->height / 2) + 4);
 		Form->startTime = realTime;
-	} else {
+	}
+	else
+	{
 		FormOpenCount = 0;
 	}
 
@@ -1198,26 +1246,26 @@ void intOpenPlainForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_
 
 	Form->animCount++;
 
-	Range = (Form->height/2)-4;
+	Range = (Form->height / 2) - 4;
 	Duration = (realTime - Form->startTime) << 16 ;
-	APos = (Range * (Duration / FORM_OPEN_ANIM_DURATION) ) >> 16;
+	APos = (Range * (Duration / FORM_OPEN_ANIM_DURATION)) >> 16;
 
-	Ay0 = Ty0 + (Form->height/2) - 4 - APos;
-	Ay1 = Ty0 + (Form->height/2) + 4 + APos;
+	Ay0 = Ty0 + (Form->height / 2) - 4 - APos;
+	Ay1 = Ty0 + (Form->height / 2) + 4 + APos;
 
-	if(Ay0 <= (SDWORD)Ty0)
+	if (Ay0 <= (SDWORD)Ty0)
 	{
 		Ay0 = Ty0;
 	}
 
-	if(Ay1 >= (SDWORD)Ty1)
+	if (Ay1 >= (SDWORD)Ty1)
 	{
 		Ay1 = Ty1;
 	}
 	Form->Ay0 = (UWORD)Ay0;
 	Form->Ay1 = (UWORD)Ay1;
 
-	if((Form->Ay0 == Ty0) && (Form->Ay1 == Ty1))
+	if ((Form->Ay0 == Ty0) && (Form->Ay1 == Ty1))
 	{
 		if (Form->pUserData != NULL)
 		{
@@ -1238,26 +1286,30 @@ void intOpenPlainForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_
 //
 void intClosePlainForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
 {
-	W_TABFORM *Form = (W_TABFORM*)psWidget;
+	W_TABFORM *Form = (W_TABFORM *)psWidget;
 	UDWORD Ty0, Ty1;
 	UDWORD Range;
 	UDWORD Duration;
 	UDWORD APos;
 
-	Ty0 = yOffset+Form->y + (Form->height/2) - 4;
-	Ty1 = yOffset+Form->y + (Form->height/2) + 4;
+	Ty0 = yOffset + Form->y + (Form->height / 2) - 4;
+	Ty1 = yOffset + Form->y + (Form->height / 2) + 4;
 
-	if(Form->animCount == 0) {
-		if( (FormCloseAudioID >= 0) && (FormCloseCount == 0) ){
+	if (Form->animCount == 0)
+	{
+		if ((FormCloseAudioID >= 0) && (FormCloseCount == 0))
+		{
 			audio_PlayTrack(FormCloseAudioID);
 			FormCloseCount++;
 		}
-		Form->Ax0 = (UWORD)(xOffset+Form->x);
-		Form->Ay0 = (UWORD)(yOffset+Form->y);
+		Form->Ax0 = (UWORD)(xOffset + Form->x);
+		Form->Ay0 = (UWORD)(yOffset + Form->y);
 		Form->Ax1 = (UWORD)(Form->Ax0 + Form->width);
 		Form->Ay1 = (UWORD)(Form->Ay0 + Form->height);
 		Form->startTime = realTime;
-	} else {
+	}
+	else
+	{
 		FormCloseCount = 0;
 	}
 
@@ -1265,22 +1317,25 @@ void intClosePlainForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL
 
 	Form->animCount++;
 
-	Range = (Form->height/2)-4;
+	Range = (Form->height / 2) - 4;
 	Duration = (realTime - Form->startTime) << 16 ;
-	APos = (Range * (Duration / FORM_OPEN_ANIM_DURATION) ) >> 16;
+	APos = (Range * (Duration / FORM_OPEN_ANIM_DURATION)) >> 16;
 
 	Form->Ay0 = (UWORD)(yOffset + Form->y + APos);
 	Form->Ay1 = (UWORD)(yOffset + Form->y + Form->height - APos);
 
-	if(Form->Ay0 >= Ty0) {
+	if (Form->Ay0 >= Ty0)
+	{
 		Form->Ay0 = (UWORD)Ty0;
 	}
-	if(Form->Ay1 <= Ty1) {
+	if (Form->Ay1 <= Ty1)
+	{
 		Form->Ay1 = (UWORD)Ty1;
 	}
 
-	if((Form->Ay0 == Ty0) && (Form->Ay1 == Ty1)) {
-		Form->pUserData = (void*)1;
+	if ((Form->Ay0 == Ty0) && (Form->Ay1 == Ty1))
+	{
+		Form->pUserData = (void *)1;
 		Form->animCount = 0;
 	}
 }
@@ -1288,11 +1343,11 @@ void intClosePlainForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL
 
 void intDisplayPlainForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
 {
-	W_TABFORM *Form = (W_TABFORM*)psWidget;
-	UDWORD x0,y0,x1,y1;
+	W_TABFORM *Form = (W_TABFORM *)psWidget;
+	UDWORD x0, y0, x1, y1;
 
-	x0 = xOffset+Form->x;
-	y0 = yOffset+Form->y;
+	x0 = xOffset + Form->x;
+	y0 = yOffset + Form->y;
 	x1 = x0 + Form->width;
 	y1 = y0 + Form->height;
 
@@ -1302,15 +1357,15 @@ void intDisplayPlainForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DE
 
 void intDisplayStatsForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
 {
-	W_TABFORM *Form = (W_TABFORM*)psWidget;
-	UDWORD x0,y0,x1,y1;
+	W_TABFORM *Form = (W_TABFORM *)psWidget;
+	UDWORD x0, y0, x1, y1;
 
-	x0 = xOffset+Form->x;
-	y0 = yOffset+Form->y;
+	x0 = xOffset + Form->x;
+	y0 = yOffset + Form->y;
 	x1 = x0 + Form->width;
 	y1 = y0 + Form->height;
 
-	AdjustTabFormSize(Form,&x0,&y0,&x1,&y1);
+	AdjustTabFormSize(Form, &x0, &y0, &x1, &y1);
 
 	RenderWindowFrame(FRAME_NORMAL, x0, y0, x1 - x0, y1 - y0);
 }
@@ -1320,18 +1375,18 @@ void intDisplayStatsForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DE
 //
 void intDisplayImage(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
 {
-	UDWORD x = xOffset+psWidget->x;
-	UDWORD y = yOffset+psWidget->y;
+	UDWORD x = xOffset + psWidget->x;
+	UDWORD y = yOffset + psWidget->y;
 
-	iV_DrawImage(IntImages,psWidget->UserData,x,y);
+	iV_DrawImage(IntImages, psWidget->UserData, x, y);
 }
 
 
 //draws the mission clock - flashes when below a predefined time
 void intDisplayMissionClock(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
 {
-	UDWORD  x = xOffset+psWidget->x;
-	UDWORD  y = yOffset+psWidget->y;
+	UDWORD  x = xOffset + psWidget->x;
+	UDWORD  y = yOffset + psWidget->y;
 	UDWORD  flash;
 
 	// Draw the background image
@@ -1345,39 +1400,41 @@ void intDisplayMissionClock(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ
 }
 
 
-
 // Display one of two images depending on if the widget is hilighted by the mouse.
 //
 void intDisplayImageHilight(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
 {
-	UDWORD x = xOffset+psWidget->x;
-	UDWORD y = yOffset+psWidget->y, flash;
+	UDWORD x = xOffset + psWidget->x;
+	UDWORD y = yOffset + psWidget->y, flash;
 	UWORD ImageID;
 	bool Hilight = false;
 
-	switch(psWidget->type) {
-		case WIDG_FORM:
-			Hilight = formIsHilite(psWidget);
-			break;
+	switch (psWidget->type)
+	{
+	case WIDG_FORM:
+		Hilight = formIsHilite(psWidget);
+		break;
 
-		case WIDG_BUTTON:
-			Hilight = buttonIsHilite(psWidget);
-			break;
+	case WIDG_BUTTON:
+		Hilight = buttonIsHilite(psWidget);
+		break;
 
-		case WIDG_EDITBOX:
-			if( ((W_EDITBOX*)psWidget)->state & WEDBS_HILITE) {
-				Hilight = true;
-			}
-			break;
+	case WIDG_EDITBOX:
+		if (((W_EDITBOX *)psWidget)->state & WEDBS_HILITE)
+		{
+			Hilight = true;
+		}
+		break;
 
-		case WIDG_SLIDER:
-			if( ((W_SLIDER*)psWidget)->state & SLD_HILITE) {
-				Hilight = true;
-			}
-			break;
+	case WIDG_SLIDER:
+		if (((W_SLIDER *)psWidget)->state & SLD_HILITE)
+		{
+			Hilight = true;
+		}
+		break;
 
-		default:
-			Hilight = false;
+	default:
+		Hilight = false;
 	}
 
 	ImageID = UNPACKDWORD_TRI_C(psWidget->UserData);
@@ -1387,66 +1444,74 @@ void intDisplayImageHilight(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ
 	flash = UNPACKDWORD_TRI_A(psWidget->UserData);
 	if (flash && psWidget->id == IDTRANS_LAUNCH)
 	{
-		if (((realTime/250) % 2) == 0)
+		if (((realTime / 250) % 2) == 0)
 		{
-    		iV_DrawImage(IntImages,UNPACKDWORD_TRI_B(psWidget->UserData),x,y);
+			iV_DrawImage(IntImages, UNPACKDWORD_TRI_B(psWidget->UserData), x, y);
 		}
 		else
 		{
-        	iV_DrawImage(IntImages,ImageID,x,y);
+			iV_DrawImage(IntImages, ImageID, x, y);
 		}
 	}
 	else
 	{
-		iV_DrawImage(IntImages,ImageID,x,y);
+		iV_DrawImage(IntImages, ImageID, x, y);
 		if (Hilight)
 		{
-			iV_DrawImage(IntImages,UNPACKDWORD_TRI_B(psWidget->UserData),x,y);
+			iV_DrawImage(IntImages, UNPACKDWORD_TRI_B(psWidget->UserData), x, y);
 		}
 	}
 }
 
 
-static void GetButtonState(WIDGET *psWidget,bool *Hilight,UDWORD *Down,bool *Grey)
+static void GetButtonState(WIDGET *psWidget, bool *Hilight, UDWORD *Down, bool *Grey)
 {
-	switch(psWidget->type) {
-		case WIDG_FORM:
-			*Hilight = formIsHilite(psWidget);
-			if( ((W_CLICKFORM*)psWidget)->state & (WCLICK_DOWN | WCLICK_LOCKED | WCLICK_CLICKLOCK)) {
-				*Down = 1;
-			}
-			if( ((W_CLICKFORM*)psWidget)->state & WCLICK_GREY) {
-				*Grey = true;
-			}
-			break;
+	switch (psWidget->type)
+	{
+	case WIDG_FORM:
+		*Hilight = formIsHilite(psWidget);
+		if (((W_CLICKFORM *)psWidget)->state & (WCLICK_DOWN | WCLICK_LOCKED | WCLICK_CLICKLOCK))
+		{
+			*Down = 1;
+		}
+		if (((W_CLICKFORM *)psWidget)->state & WCLICK_GREY)
+		{
+			*Grey = true;
+		}
+		break;
 
-		case WIDG_BUTTON:
-			*Hilight = buttonIsHilite(psWidget);
-			if( ((W_BUTTON*)psWidget)->state & (WBUTS_DOWN | WBUTS_LOCKED | WBUTS_CLICKLOCK)) {
-				*Down = 1;
-			}
-			if( ((W_BUTTON*)psWidget)->state & WBUTS_GREY) {
-				*Grey = true;
-			}
-			break;
+	case WIDG_BUTTON:
+		*Hilight = buttonIsHilite(psWidget);
+		if (((W_BUTTON *)psWidget)->state & (WBUTS_DOWN | WBUTS_LOCKED | WBUTS_CLICKLOCK))
+		{
+			*Down = 1;
+		}
+		if (((W_BUTTON *)psWidget)->state & WBUTS_GREY)
+		{
+			*Grey = true;
+		}
+		break;
 
-		case WIDG_EDITBOX:
-			if( ((W_EDITBOX*)psWidget)->state & WEDBS_HILITE) {
-				*Hilight = true;
-			}
-			break;
+	case WIDG_EDITBOX:
+		if (((W_EDITBOX *)psWidget)->state & WEDBS_HILITE)
+		{
+			*Hilight = true;
+		}
+		break;
 
-		case WIDG_SLIDER:
-			if( ((W_SLIDER*)psWidget)->state & SLD_HILITE) {
-				*Hilight = true;
-			}
-			if( ((W_SLIDER*)psWidget)->state & (WCLICK_DOWN | WCLICK_LOCKED | WCLICK_CLICKLOCK)) {
-				*Down = 1;
-			}
-			break;
+	case WIDG_SLIDER:
+		if (((W_SLIDER *)psWidget)->state & SLD_HILITE)
+		{
+			*Hilight = true;
+		}
+		if (((W_SLIDER *)psWidget)->state & (WCLICK_DOWN | WCLICK_LOCKED | WCLICK_CLICKLOCK))
+		{
+			*Down = 1;
+		}
+		break;
 
-		default:
-			*Hilight = false;
+	default:
+		*Hilight = false;
 	}
 }
 
@@ -1455,24 +1520,28 @@ static void GetButtonState(WIDGET *psWidget,bool *Hilight,UDWORD *Down,bool *Gre
 //
 void intDisplayButtonHilight(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
 {
-	UDWORD x = xOffset+psWidget->x;
-	UDWORD y = yOffset+psWidget->y;
+	UDWORD x = xOffset + psWidget->x;
+	UDWORD y = yOffset + psWidget->y;
 	bool Hilight = false;
 	bool Grey = false;
 	UDWORD Down = 0;
 	UWORD ImageID;
 
-	GetButtonState(psWidget,&Hilight,&Down,&Grey);
-	if(Grey) {
+	GetButtonState(psWidget, &Hilight, &Down, &Grey);
+	if (Grey)
+	{
 		ImageID = UNPACKDWORD_TRI_A(psWidget->UserData);
 		Hilight = false;
-	} else {
+	}
+	else
+	{
 		ImageID = UNPACKDWORD_TRI_C(psWidget->UserData) + Down;
 	}
 
-	iV_DrawImage(IntImages,ImageID,x,y);
-	if(Hilight) {
-		iV_DrawImage(IntImages,UNPACKDWORD_TRI_B(psWidget->UserData),x,y);
+	iV_DrawImage(IntImages, ImageID, x, y);
+	if (Hilight)
+	{
+		iV_DrawImage(IntImages, UNPACKDWORD_TRI_B(psWidget->UserData), x, y);
 	}
 
 }
@@ -1482,11 +1551,11 @@ void intDisplayButtonHilight(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, W
 // flash depend on whether or not the button is highlighted.
 void intDisplayButtonFlash(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
 {
-	UDWORD x = xOffset+psWidget->x;
-	UDWORD y = yOffset+psWidget->y;
+	UDWORD x = xOffset + psWidget->x;
+	UDWORD y = yOffset + psWidget->y;
 	UWORD ImageID;
 
-	ASSERT( psWidget->type == WIDG_BUTTON,"intDisplayButtonFlash : Not a button" );
+	ASSERT(psWidget->type == WIDG_BUTTON, "Not a button");
 
 	if ((realTime / 250) % 2 == 0)
 	{
@@ -1497,13 +1566,13 @@ void intDisplayButtonFlash(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_
 		ImageID = UNPACKDWORD_TRI_C(psWidget->UserData);
 	}
 
-	iV_DrawImage(IntImages,ImageID,x,y);
+	iV_DrawImage(IntImages, ImageID, x, y);
 }
 
 void intDisplayReticuleButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
 {
-	UDWORD	x = xOffset+psWidget->x;
-	UDWORD	y = yOffset+psWidget->y;
+	UDWORD	x = xOffset + psWidget->x;
+	UDWORD	y = yOffset + psWidget->y;
 	bool	Hilight = false;
 	bool	Down = false;
 	UBYTE	DownTime = UNPACKDWORD_QUAD_C(psWidget->UserData);
@@ -1514,24 +1583,24 @@ void intDisplayReticuleButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, 
 
 	ASSERT(psWidget->type == WIDG_BUTTON, "Not a button");
 
-	if (((W_BUTTON*)psWidget)->state & WBUTS_GREY)
+	if (((W_BUTTON *)psWidget)->state & WBUTS_GREY)
 	{
-		iV_DrawImage(IntImages,IMAGE_RETICULE_GREY,x,y);
+		iV_DrawImage(IntImages, IMAGE_RETICULE_GREY, x, y);
 		return;
 	}
 
-	Down = ((W_BUTTON*)psWidget)->state & (WBUTS_DOWN | WBUTS_CLICKLOCK);
+	Down = ((W_BUTTON *)psWidget)->state & (WBUTS_DOWN | WBUTS_CLICKLOCK);
 	Hilight = buttonIsHilite(psWidget);
 
-	if(Down)
+	if (Down)
 	{
-		if((DownTime < 1) && (Index != IMAGE_CANCEL_UP))
+		if ((DownTime < 1) && (Index != IMAGE_CANCEL_UP))
 		{
 			ImageID = IMAGE_RETICULE_BUTDOWN;	// Do the button flash.
 		}
 		else
 		{
-			ImageID = (UWORD)(Index+1);					// It's down.
+			ImageID = (UWORD)(Index + 1);					// It's down.
 		}
 		DownTime++;
 		//stop the reticule from flashing if it was
@@ -1542,13 +1611,13 @@ void intDisplayReticuleButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, 
 		//flashing button?
 		if (flashing)
 		{
-			if (((realTime/250) % 2) == 0)
+			if (((realTime / 250) % 2) == 0)
 			{
 				ImageID = (UWORD)(Index);//IMAGE_RETICULE_BUTDOWN;//a step in the right direction JPS 27-4-98
 			}
 			else
 			{
-				ImageID = (UWORD)(Index+1);
+				ImageID = (UWORD)(Index + 1);
 				flashTime = 0;
 			}
 			flashTime++;
@@ -1560,45 +1629,53 @@ void intDisplayReticuleButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, 
 		}
 	}
 
-	iV_DrawImage(IntImages,ImageID,x,y);
+	iV_DrawImage(IntImages, ImageID, x, y);
 
-	if(Hilight)
+	if (Hilight)
 	{
 		if (Index == IMAGE_CANCEL_UP)
 		{
-			iV_DrawImage(IntImages,IMAGE_CANCEL_HILIGHT,x,y);
+			iV_DrawImage(IntImages, IMAGE_CANCEL_HILIGHT, x, y);
 		}
 		else
 		{
-			iV_DrawImage(IntImages,IMAGE_RETICULE_HILIGHT,x,y);
+			iV_DrawImage(IntImages, IMAGE_RETICULE_HILIGHT, x, y);
 		}
 	}
 
-	psWidget->UserData = PACKDWORD_QUAD(flashTime,flashing,DownTime,Index);
+	psWidget->UserData = PACKDWORD_QUAD(flashTime, flashing, DownTime, Index);
 }
 
 
-void intDisplayTab(WIDGET *psWidget,UDWORD TabType, UDWORD Position,
-				   UDWORD Number,bool Selected,bool Hilight,UDWORD x,UDWORD y,UDWORD Width,UDWORD Height)
+void intDisplayTab(WIDGET *psWidget, UDWORD TabType, UDWORD Position,
+        UDWORD Number, bool Selected, bool Hilight, UDWORD x, UDWORD y, UDWORD Width, UDWORD Height)
 {
-	TABDEF *Tab = (TABDEF*)psWidget->pUserData;
+	TABDEF *Tab = (TABDEF *)psWidget->pUserData;
 
-	if(TabType == TAB_MAJOR)
+	if (TabType == TAB_MAJOR)
 	{
 		iV_DrawImage(IntImages, (UWORD)Tab->MajorUp, x, y);
 
-		if(Hilight) {
-			iV_DrawImage(IntImages,(UWORD)Tab->MajorHilight,x,y);
-		} else if(Selected) {
-			iV_DrawImage(IntImages,(UWORD)Tab->MajorSelected,x,y);
+		if (Hilight)
+		{
+			iV_DrawImage(IntImages, (UWORD)Tab->MajorHilight, x, y);
 		}
-	} else {
+		else if (Selected)
+		{
+			iV_DrawImage(IntImages, (UWORD)Tab->MajorSelected, x, y);
+		}
+	}
+	else
+	{
 		iV_DrawImage(IntImages, (UWORD)(Tab->MinorUp), x, y);
 
-		if(Hilight) {
-			iV_DrawImage(IntImages,Tab->MinorHilight,x,y);
-		} else if(Selected) {
-			iV_DrawImage(IntImages,Tab->MinorSelected,x,y);
+		if (Hilight)
+		{
+			iV_DrawImage(IntImages, Tab->MinorHilight, x, y);
+		}
+		else if (Selected)
+		{
+			iV_DrawImage(IntImages, Tab->MinorSelected, x, y);
 		}
 	}
 }
@@ -1606,11 +1683,11 @@ void intDisplayTab(WIDGET *psWidget,UDWORD TabType, UDWORD Position,
 // Display one of three images depending on if the widget is currently depressed (ah!).
 //
 void intDisplayButtonPressed(WIDGET *psWidget, UDWORD xOffset,
-							 UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
+        UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
 {
-	W_BUTTON	*psButton = (W_BUTTON*)psWidget;
-	UDWORD		x = xOffset+psButton->x;
-	UDWORD		y = yOffset+psButton->y;
+	W_BUTTON	*psButton = (W_BUTTON *)psWidget;
+	UDWORD		x = xOffset + psButton->x;
+	UDWORD		y = yOffset + psButton->y;
 	UBYTE		Hilight = 0;
 	UWORD		ImageID;
 
@@ -1625,28 +1702,27 @@ void intDisplayButtonPressed(WIDGET *psWidget, UDWORD xOffset,
 
 	Hilight = (UBYTE)buttonIsHilite(psButton);
 
-	iV_DrawImage(IntImages,ImageID,x,y);
+	iV_DrawImage(IntImages, ImageID, x, y);
 	if (Hilight)
 	{
-		iV_DrawImage(IntImages,UNPACKDWORD_TRI_B(psWidget->UserData),x,y);
+		iV_DrawImage(IntImages, UNPACKDWORD_TRI_B(psWidget->UserData), x, y);
 	}
 }
 
 // Display DP images depending on factory and if the widget is currently depressed
 void intDisplayDPButton(WIDGET *psWidget, UDWORD xOffset,
-						UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
+        UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
 {
-	W_BUTTON	*psButton = (W_BUTTON*)psWidget;
-	STRUCTURE	*psStruct = (STRUCTURE*)psButton->pUserData;
-	UDWORD		x = xOffset+psButton->x;
-	UDWORD		y = yOffset+psButton->y;
+	W_BUTTON	*psButton = (W_BUTTON *)psWidget;
+	STRUCTURE	*psStruct = (STRUCTURE *)psButton->pUserData;
+	UDWORD		x = xOffset + psButton->x;
+	UDWORD		y = yOffset + psButton->y;
 	UBYTE		hilight = 0, down = 0;
 	UWORD		imageID;
 
 	if (psStruct)
 	{
-		ASSERT( StructIsFactory(psStruct),
-			"intDisplayDPButton: structure is not a factory" );
+		ASSERT(StructIsFactory(psStruct), "Structure is not a factory");
 
 		if (psButton->state & (WBUTS_DOWN | WBUTS_LOCKED | WBUTS_CLICKLOCK))
 		{
@@ -1655,7 +1731,7 @@ void intDisplayDPButton(WIDGET *psWidget, UDWORD xOffset,
 
 		hilight = (UBYTE)buttonIsHilite(psButton);
 
-		switch(psStruct->pStructureType->type)
+		switch (psStruct->pStructureType->type)
 		{
 		case REF_FACTORY:
 			imageID = IMAGE_FDP_UP;
@@ -1671,16 +1747,16 @@ void intDisplayDPButton(WIDGET *psWidget, UDWORD xOffset,
 		}
 
 
-		iV_DrawImage(IntImages,imageID,x,y);
+		iV_DrawImage(IntImages, imageID, x, y);
 		if (hilight)
 		{
 			imageID++;
-			iV_DrawImage(IntImages,(UWORD)imageID,x,y);
+			iV_DrawImage(IntImages, (UWORD)imageID, x, y);
 		}
 		else if (down)
 		{
 			imageID--;
-			iV_DrawImage(IntImages,(UWORD)imageID,x,y);
+			iV_DrawImage(IntImages, (UWORD)imageID, x, y);
 		}
 
 	}
@@ -1689,17 +1765,17 @@ void intDisplayDPButton(WIDGET *psWidget, UDWORD xOffset,
 
 void intDisplaySlider(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
 {
-	W_SLIDER *Slider = (W_SLIDER*)psWidget;
-	UDWORD x = xOffset+psWidget->x;
-	UDWORD y = yOffset+psWidget->y;
+	W_SLIDER *Slider = (W_SLIDER *)psWidget;
+	UDWORD x = xOffset + psWidget->x;
+	UDWORD y = yOffset + psWidget->y;
 	SWORD sx;
 
-	iV_DrawImage(IntImages,IMAGE_SLIDER_BACK,x+STAT_SLD_OX,y+STAT_SLD_OY);
+	iV_DrawImage(IntImages, IMAGE_SLIDER_BACK, x + STAT_SLD_OX, y + STAT_SLD_OY);
 
 	sx = (SWORD)((Slider->width - Slider->barSize)
-	 			 * Slider->pos / Slider->numStops);
+	        * Slider->pos / Slider->numStops);
 
-	iV_DrawImage(IntImages,IMAGE_SLIDER_BUT,x+sx,y-2);
+	iV_DrawImage(IntImages, IMAGE_SLIDER_BUT, x + sx, y - 2);
 }
 
 
@@ -1711,9 +1787,9 @@ void intDisplayEditBox(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL
 	UWORD		iImageIDLeft, iImageIDMid, iImageIDRight;
 	UDWORD		iX, iY, iDX, iXRight;
 	UDWORD		iXLeft = xOffset + psWidget->x,
-				iYLeft = yOffset + psWidget->y;
+	            iYLeft = yOffset + psWidget->y;
 
-	if ( psEditBox->state & WEDBS_HILITE )
+	if (psEditBox->state & WEDBS_HILITE)
 	{
 		iImageIDLeft  = IMAGE_DES_EDITBOXLEFTH;
 		iImageIDMid   = IMAGE_DES_EDITBOXMIDH;
@@ -1729,26 +1805,26 @@ void intDisplayEditBox(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL
 	/* draw left side of bar */
 	iX = iXLeft;
 	iY = iYLeft;
-	iV_DrawImage( IntImages, iImageIDLeft, iX, iY );
+	iV_DrawImage(IntImages, iImageIDLeft, iX, iY);
 
 	/* draw middle of bar */
-	iX += iV_GetImageWidth( IntImages, iImageIDLeft );
-	iDX = iV_GetImageWidth( IntImages, iImageIDMid );
-	iXRight = xOffset + psWidget->width - iV_GetImageWidth( IntImages, iImageIDRight );
-	while ( iX < iXRight )
+	iX += iV_GetImageWidth(IntImages, iImageIDLeft);
+	iDX = iV_GetImageWidth(IntImages, iImageIDMid);
+	iXRight = xOffset + psWidget->width - iV_GetImageWidth(IntImages, iImageIDRight);
+	while (iX < iXRight)
 	{
-		iV_DrawImage( IntImages, iImageIDMid, iX, iY );
+		iV_DrawImage(IntImages, iImageIDMid, iX, iY);
 		iX += iDX;
 	}
 
 	/* draw right side of bar */
-	iV_DrawImage( IntImages, iImageIDRight, iXRight, iY );
+	iV_DrawImage(IntImages, iImageIDRight, iXRight, iY);
 }
 
 
 void intDisplayNumber(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
 {
-	W_LABEL		*Label = (W_LABEL*)psWidget;
+	W_LABEL		*Label = (W_LABEL *)psWidget;
 	UDWORD		x = Label->x + xOffset;
 	UDWORD		y = Label->y + yOffset;
 	UDWORD		Quantity = 1;
@@ -1765,9 +1841,9 @@ void intDisplayNumber(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_
 		}
 	}
 
-	if(Quantity >= STAT_SLDSTOPS)
+	if (Quantity >= STAT_SLDSTOPS)
 	{
-		iV_DrawImage(IntImages,IMAGE_SLIDER_INFINITY,x+4,y);
+		iV_DrawImage(IntImages, IMAGE_SLIDER_INFINITY, x + 4, y);
 	}
 	else
 	{
@@ -1776,7 +1852,7 @@ void intDisplayNumber(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_
 		for (int i = 0; Label->aText[i]; ++i)
 		{
 			iV_DrawImage(IntImages, (UWORD)(IMAGE_0 + (Label->aText[i] - '0')), x, y);
-			x += iV_GetImageWidth(IntImages, (UWORD)(IMAGE_0 + (Label->aText[i]-'0'))) + 1;
+			x += iV_GetImageWidth(IntImages, (UWORD)(IMAGE_0 + (Label->aText[i] - '0'))) + 1;
 		}
 	}
 }
@@ -1802,28 +1878,28 @@ void interfaceDeleteGraphics(void)
 
 	// Setting all these pointers may, or may not be necessary, but it surely is safe
 	// Look above (near the declaration of .*Surfaces) for a detailed description of why this .*Surfaces stuff is bad
-	for(i = 0; i < NUM_OBJECTSURFACES; ++i)
+	for (i = 0; i < NUM_OBJECTSURFACES; ++i)
 	{
 		free(ObjectSurfaces[i].Buffer);
 		ObjectSurfaces[i].Buffer = NULL;
 		iV_SurfaceDestroy(ObjectSurfaces[i].Surface);
 	}
 
-	for(i = 0; i < NUM_TOPICSURFACES; ++i)
+	for (i = 0; i < NUM_TOPICSURFACES; ++i)
 	{
 		free(TopicSurfaces[i].Buffer);
 		TopicSurfaces[i].Buffer = NULL;
 		iV_SurfaceDestroy(TopicSurfaces[i].Surface);
 	}
 
-	for(i = 0; i < NUM_STATSURFACES; ++i)
+	for (i = 0; i < NUM_STATSURFACES; ++i)
 	{
 		free(StatSurfaces[i].Buffer);
 		StatSurfaces[i].Buffer = NULL;
 		iV_SurfaceDestroy(StatSurfaces[i].Surface);
 	}
 
-	for(i = 0; i < NUM_SYSTEM0SURFACES; ++i)
+	for (i = 0; i < NUM_SYSTEM0SURFACES; ++i)
 	{
 		free(System0Surfaces[i].Buffer);
 		System0Surfaces[i].Buffer = NULL;
@@ -1837,58 +1913,66 @@ void interfaceDeleteGraphics(void)
 void InitialiseButtonData(void)
 {
 	// Allocate surfaces for rendered buttons.
-	UDWORD Width = (iV_GetImageWidth(IntImages,IMAGE_BUT0_UP)+3) & 0xfffffffc;	// Ensure width is whole number of dwords.
-	UDWORD Height = iV_GetImageHeight(IntImages,IMAGE_BUT0_UP);
-	UDWORD WidthTopic = (iV_GetImageWidth(IntImages,IMAGE_BUTB0_UP)+3) & 0xfffffffc;	// Ensure width is whole number of dwords.
-	UDWORD HeightTopic = iV_GetImageHeight(IntImages,IMAGE_BUTB0_UP);
+	UDWORD Width = (iV_GetImageWidth(IntImages, IMAGE_BUT0_UP) + 3) & 0xfffffffc;	// Ensure width is whole number of dwords.
+	UDWORD Height = iV_GetImageHeight(IntImages, IMAGE_BUT0_UP);
+	UDWORD WidthTopic = (iV_GetImageWidth(IntImages, IMAGE_BUTB0_UP) + 3) & 0xfffffffc;	// Ensure width is whole number of dwords.
+	UDWORD HeightTopic = iV_GetImageHeight(IntImages, IMAGE_BUTB0_UP);
 	UDWORD i;
 
-	for(i=0; i<NUM_OBJECTSURFACES; i++) {
-		ObjectSurfaces[i].Buffer = (UBYTE*)malloc(Width*Height);
-		ASSERT( ObjectSurfaces[i].Buffer!=NULL,"intInitialise : Failed to allocate Object surface" );
-		ObjectSurfaces[i].Surface = iV_SurfaceCreate(Width,Height);
-		ASSERT( ObjectSurfaces[i].Surface!=NULL,"intInitialise : Failed to create Object surface" );
+	for (i = 0; i < NUM_OBJECTSURFACES; i++)
+	{
+		ObjectSurfaces[i].Buffer = (UBYTE *)malloc(Width * Height);
+		ASSERT(ObjectSurfaces[i].Buffer != NULL, "Failed to allocate Object surface");
+		ObjectSurfaces[i].Surface = iV_SurfaceCreate(Width, Height);
+		ASSERT(ObjectSurfaces[i].Surface != NULL, "Failed to create Object surface");
 	}
 
-	for(i=0; i<NUM_OBJECTBUFFERS; i++) {
+	for (i = 0; i < NUM_OBJECTBUFFERS; i++)
+	{
 		RENDERBUTTON_NOTINUSE(&ObjectBuffers[i]);
-		ObjectBuffers[i].ButSurf = &ObjectSurfaces[i%NUM_OBJECTSURFACES];
+		ObjectBuffers[i].ButSurf = &ObjectSurfaces[i % NUM_OBJECTSURFACES];
 	}
 
-	for(i=0; i<NUM_SYSTEM0SURFACES; i++) {
-		System0Surfaces[i].Buffer = (UBYTE*)malloc(Width*Height);
-		ASSERT( System0Surfaces[i].Buffer!=NULL,"intInitialise : Failed to allocate System0 surface" );
-		System0Surfaces[i].Surface = iV_SurfaceCreate(Width,Height);
-		ASSERT( System0Surfaces[i].Surface!=NULL,"intInitialise : Failed to create System0 surface" );
+	for (i = 0; i < NUM_SYSTEM0SURFACES; i++)
+	{
+		System0Surfaces[i].Buffer = (UBYTE *)malloc(Width * Height);
+		ASSERT(System0Surfaces[i].Buffer != NULL, "Failed to allocate System0 surface");
+		System0Surfaces[i].Surface = iV_SurfaceCreate(Width, Height);
+		ASSERT(System0Surfaces[i].Surface != NULL, "Failed to create System0 surface");
 	}
 
-	for(i=0; i<NUM_SYSTEM0BUFFERS; i++) {
+	for (i = 0; i < NUM_SYSTEM0BUFFERS; i++)
+	{
 		RENDERBUTTON_NOTINUSE(&System0Buffers[i]);
-		System0Buffers[i].ButSurf = &System0Surfaces[i%NUM_SYSTEM0SURFACES];
+		System0Buffers[i].ButSurf = &System0Surfaces[i % NUM_SYSTEM0SURFACES];
 	}
 
-	for(i=0; i<NUM_TOPICSURFACES; i++) {
-		TopicSurfaces[i].Buffer = (UBYTE*)malloc(WidthTopic*HeightTopic);
-		ASSERT( TopicSurfaces[i].Buffer!=NULL,"intInitialise : Failed to allocate Topic surface" );
-		TopicSurfaces[i].Surface = iV_SurfaceCreate(WidthTopic,HeightTopic);
-		ASSERT( TopicSurfaces[i].Surface!=NULL,"intInitialise : Failed to create Topic surface" );
+	for (i = 0; i < NUM_TOPICSURFACES; i++)
+	{
+		TopicSurfaces[i].Buffer = (UBYTE *)malloc(WidthTopic * HeightTopic);
+		ASSERT(TopicSurfaces[i].Buffer != NULL, "Failed to allocate Topic surface");
+		TopicSurfaces[i].Surface = iV_SurfaceCreate(WidthTopic, HeightTopic);
+		ASSERT(TopicSurfaces[i].Surface != NULL, "Failed to create Topic surface");
 	}
 
-	for(i=0; i<NUM_TOPICBUFFERS; i++) {
+	for (i = 0; i < NUM_TOPICBUFFERS; i++)
+	{
 		RENDERBUTTON_NOTINUSE(&TopicBuffers[i]);
-		TopicBuffers[i].ButSurf = &TopicSurfaces[i%NUM_TOPICSURFACES];
+		TopicBuffers[i].ButSurf = &TopicSurfaces[i % NUM_TOPICSURFACES];
 	}
 
-	for(i=0; i<NUM_STATSURFACES; i++) {
-		StatSurfaces[i].Buffer = (UBYTE*)malloc(Width*Height);
-		ASSERT( StatSurfaces[i].Buffer!=NULL,"intInitialise : Failed to allocate Stats surface" );
-		StatSurfaces[i].Surface = iV_SurfaceCreate(Width,Height);
-		ASSERT( StatSurfaces[i].Surface!=NULL,"intInitialise : Failed to create Stat surface" );
+	for (i = 0; i < NUM_STATSURFACES; i++)
+	{
+		StatSurfaces[i].Buffer = (UBYTE *)malloc(Width * Height);
+		ASSERT(StatSurfaces[i].Buffer != NULL, "Failed to allocate Stats surface");
+		StatSurfaces[i].Surface = iV_SurfaceCreate(Width, Height);
+		ASSERT(StatSurfaces[i].Surface != NULL, "Failed to create Stat surface");
 	}
 
-	for(i=0; i<NUM_STATBUFFERS; i++) {
+	for (i = 0; i < NUM_STATBUFFERS; i++)
+	{
 		RENDERBUTTON_NOTINUSE(&StatBuffers[i]);
-		StatBuffers[i].ButSurf = &StatSurfaces[i%NUM_STATSURFACES];
+		StatBuffers[i].ButSurf = &StatSurfaces[i % NUM_STATSURFACES];
 	}
 }
 
@@ -1897,7 +1981,8 @@ void RefreshObjectButtons(void)
 {
 	UDWORD i;
 
-	for(i=0; i<NUM_OBJECTBUFFERS; i++) {
+	for (i = 0; i < NUM_OBJECTBUFFERS; i++)
+	{
 		RENDERBUTTON_NOTINITIALISED(&ObjectBuffers[i]);
 	}
 }
@@ -1906,7 +1991,8 @@ void RefreshSystem0Buttons(void)
 {
 	UDWORD i;
 
-	for(i=0; i<NUM_SYSTEM0BUFFERS; i++) {
+	for (i = 0; i < NUM_SYSTEM0BUFFERS; i++)
+	{
 		RENDERBUTTON_NOTINITIALISED(&System0Buffers[i]);
 	}
 }
@@ -1914,7 +2000,8 @@ void RefreshTopicButtons(void)
 {
 	UDWORD i;
 
-	for(i=0; i<NUM_TOPICBUFFERS; i++) {
+	for (i = 0; i < NUM_TOPICBUFFERS; i++)
+	{
 		RENDERBUTTON_NOTINITIALISED(&TopicBuffers[i]);
 	}
 }
@@ -1924,7 +2011,8 @@ void RefreshStatsButtons(void)
 {
 	UDWORD i;
 
-	for(i=0; i<NUM_STATBUFFERS; i++) {
+	for (i = 0; i < NUM_STATBUFFERS; i++)
+	{
 		RENDERBUTTON_NOTINITIALISED(&StatBuffers[i]);
 	}
 }
@@ -1934,7 +2022,8 @@ void ClearObjectBuffers(void)
 {
 	UDWORD i;
 
-	for(i=0; i<NUM_OBJECTBUFFERS; i++) {
+	for (i = 0; i < NUM_OBJECTBUFFERS; i++)
+	{
 		ClearObjectButtonBuffer(i);
 	}
 }
@@ -1943,7 +2032,8 @@ void ClearTopicBuffers(void)
 {
 	UDWORD i;
 
-	for(i=0; i<NUM_TOPICBUFFERS; i++) {
+	for (i = 0; i < NUM_TOPICBUFFERS; i++)
+	{
 		ClearTopicButtonBuffer(i);
 	}
 }
@@ -1970,8 +2060,9 @@ SDWORD GetObjectBuffer(void)
 {
 	SDWORD i;
 
-	for(i=0; i<NUM_OBJECTBUFFERS; i++) {
-		if( IsBufferInUse(&ObjectBuffers[i])==false )
+	for (i = 0; i < NUM_OBJECTBUFFERS; i++)
+	{
+		if (IsBufferInUse(&ObjectBuffers[i]) == false)
 		{
 			return i;
 		}
@@ -1984,7 +2075,8 @@ void ClearStatBuffers(void)
 {
 	UDWORD i;
 
-	for(i=0; i<NUM_STATBUFFERS; i++) {
+	for (i = 0; i < NUM_STATBUFFERS; i++)
+	{
 		RENDERBUTTON_NOTINITIALISED(&StatBuffers[i]);	//  what have I done
 		RENDERBUTTON_NOTINUSE(&StatBuffers[i]);
 		StatBuffers[i].Data = NULL;
@@ -1996,10 +2088,11 @@ SDWORD GetStatBuffer(void)
 {
 	SDWORD i;
 
-	for(i=0; i<NUM_STATBUFFERS; i++) {
-		if( IsBufferInUse(&StatBuffers[i])==false )
- 		{
-	 		return i;
+	for (i = 0; i < NUM_STATBUFFERS; i++)
+	{
+		if (IsBufferInUse(&StatBuffers[i]) == false)
+		{
+			return i;
 		}
 	}
 
@@ -2012,7 +2105,8 @@ void ClearSystem0Buffers(void)
 {
 	UDWORD i;
 
-	for(i=0; i<NUM_SYSTEM0BUFFERS; i++) {
+	for (i = 0; i < NUM_SYSTEM0BUFFERS; i++)
+	{
 		ClearSystem0ButtonBuffer(i);
 	}
 }
@@ -2030,9 +2124,9 @@ SDWORD GetSystem0Buffer(void)
 {
 	SDWORD i;
 
-	for(i=0; i<NUM_SYSTEM0BUFFERS; i++)
+	for (i = 0; i < NUM_SYSTEM0BUFFERS; i++)
 	{
-		if( IsBufferInUse(&System0Buffers[i])==false )
+		if (IsBufferInUse(&System0Buffers[i]) == false)
 		{
 			return i;
 		}
@@ -2046,7 +2140,7 @@ static UWORD ButXPos = 0;
 static UWORD ButYPos = 0;
 static UWORD ButWidth, ButHeight;
 
-void OpenButtonRender(UWORD XPos,UWORD YPos,UWORD Width,UWORD Height)
+void OpenButtonRender(UWORD XPos, UWORD YPos, UWORD Width, UWORD Height)
 {
 	ButXPos = XPos;
 	ButYPos = YPos;
@@ -2061,15 +2155,15 @@ void CloseButtonRender(void)
 
 // Clear a button bitmap. ( copy the button background ).
 //
-void ClearButton(bool Down,UDWORD Size, UDWORD buttonType)
+void ClearButton(bool Down, UDWORD Size, UDWORD buttonType)
 {
-	if(Down)
+	if (Down)
 	{
-		iV_DrawImage(IntImages,(UWORD)(IMAGE_BUT0_DOWN+(buttonType*2)),ButXPos,ButYPos);
+		iV_DrawImage(IntImages, (UWORD)(IMAGE_BUT0_DOWN + (buttonType * 2)), ButXPos, ButYPos);
 	}
 	else
 	{
-		iV_DrawImage(IntImages,(UWORD)(IMAGE_BUT0_UP+(buttonType*2)),ButXPos,ButYPos);
+		iV_DrawImage(IntImages, (UWORD)(IMAGE_BUT0_UP + (buttonType * 2)), ButXPos, ButYPos);
 	}
 }
 
@@ -2079,12 +2173,12 @@ void CreateIMDButton(IMAGEFILE *ImageFile, UWORD ImageID, void *Object, UDWORD P
 {
 	UDWORD Size;
 	Vector3i Rotation, Position, NullVector;
-	UDWORD ox,oy;
+	UDWORD ox, oy;
 	UDWORD Radius;
 	UDWORD basePlateSize;
 	SDWORD scale;
 
-	if(Down)
+	if (Down)
 	{
 		ox = oy = 2;
 	}
@@ -2094,21 +2188,22 @@ void CreateIMDButton(IMAGEFILE *ImageFile, UWORD ImageID, void *Object, UDWORD P
 	}
 
 	if ((IMDType == IMDTYPE_DROID) || (IMDType == IMDTYPE_DROIDTEMPLATE))
-	{	// The case where we have to render a composite droid.
-		if(Down)
+	{
+		// The case where we have to render a composite droid.
+		if (Down)
 		{
 			//the top button is smaller than the bottom button
 			if (buttonType == TOPBUTTON)
 			{
 				pie_SetGeometricOffset(
-					(ButXPos + iV_GetImageWidth(IntImages,IMAGE_BUT0_DOWN)/2) + ButtonDrawXOffset + 2,
-					(ButYPos + iV_GetImageHeight(IntImages,IMAGE_BUT0_DOWN)/2) + 2 + 8 + ButtonDrawYOffset);
+				    (ButXPos + iV_GetImageWidth(IntImages, IMAGE_BUT0_DOWN) / 2) + ButtonDrawXOffset + 2,
+				    (ButYPos + iV_GetImageHeight(IntImages, IMAGE_BUT0_DOWN) / 2) + 2 + 8 + ButtonDrawYOffset);
 			}
 			else
 			{
 				pie_SetGeometricOffset(
-					(ButXPos + iV_GetImageWidth(IntImages,IMAGE_BUTB0_DOWN)/2) + ButtonDrawXOffset + 2,
-					(ButYPos + iV_GetImageHeight(IntImages,IMAGE_BUTB0_DOWN)/2) + 2 + 12 + ButtonDrawYOffset);
+				    (ButXPos + iV_GetImageWidth(IntImages, IMAGE_BUTB0_DOWN) / 2) + ButtonDrawXOffset + 2,
+				    (ButYPos + iV_GetImageHeight(IntImages, IMAGE_BUTB0_DOWN) / 2) + 2 + 12 + ButtonDrawYOffset);
 			}
 		}
 		else
@@ -2117,29 +2212,29 @@ void CreateIMDButton(IMAGEFILE *ImageFile, UWORD ImageID, void *Object, UDWORD P
 			if (buttonType == TOPBUTTON)
 			{
 				pie_SetGeometricOffset(
-					(ButXPos + iV_GetImageWidth(IntImages,IMAGE_BUT0_UP)/2) + ButtonDrawXOffset,
-					(ButYPos + iV_GetImageHeight(IntImages,IMAGE_BUT0_UP)/2) + 8  + ButtonDrawYOffset);
+				    (ButXPos + iV_GetImageWidth(IntImages, IMAGE_BUT0_UP) / 2) + ButtonDrawXOffset,
+				    (ButYPos + iV_GetImageHeight(IntImages, IMAGE_BUT0_UP) / 2) + 8  + ButtonDrawYOffset);
 			}
 			else
 			{
 				pie_SetGeometricOffset(
-					(ButXPos + iV_GetImageWidth(IntImages,IMAGE_BUT0_UP)/2) + ButtonDrawXOffset,
-					(ButYPos + iV_GetImageHeight(IntImages,IMAGE_BUTB0_UP)/2) + 12  + ButtonDrawYOffset);
+				    (ButXPos + iV_GetImageWidth(IntImages, IMAGE_BUT0_UP) / 2) + ButtonDrawXOffset,
+				    (ButYPos + iV_GetImageHeight(IntImages, IMAGE_BUTB0_UP) / 2) + 12  + ButtonDrawYOffset);
 			}
 		}
 
 		if (IMDType == IMDTYPE_DROID)
 		{
-			Radius = getComponentDroidRadius((DROID*)Object);
+			Radius = getComponentDroidRadius((DROID *)Object);
 		}
 		else
 		{
-			Radius = getComponentDroidTemplateRadius((DROID_TEMPLATE*)Object);
+			Radius = getComponentDroidTemplateRadius((DROID_TEMPLATE *)Object);
 		}
 
 		Size = 2;
 		scale = DROID_BUT_SCALE;
-		ASSERT( Radius <= 128,"create PIE button big component found" );
+		ASSERT(Radius <= 128, "create PIE button big component found");
 
 		ClearButton(Down, Size, buttonType);
 
@@ -2151,20 +2246,20 @@ void CreateIMDButton(IMAGEFILE *ImageFile, UWORD ImageID, void *Object, UDWORD P
 		NullVector.y = 0;
 		NullVector.z = 0;
 
-		if(IMDType == IMDTYPE_DROID)
+		if (IMDType == IMDTYPE_DROID)
 		{
-			if (((DROID*)Object)->droidType == DROID_TRANSPORTER || ((DROID*)Object)->droidType == DROID_SUPERTRANSPORTER)
+			if (((DROID *)Object)->droidType == DROID_TRANSPORTER || ((DROID *)Object)->droidType == DROID_SUPERTRANSPORTER)
 			{
 				Position.x = 0;
 				Position.y = 0;//BUT_TRANSPORTER_ALT;
 				Position.z = BUTTON_DEPTH;
-				if (((DROID*)Object)->droidType == DROID_TRANSPORTER)
+				if (((DROID *)Object)->droidType == DROID_TRANSPORTER)
 				{
-					scale = DROID_BUT_SCALE/2;
+					scale = DROID_BUT_SCALE / 2;
 				}
 				else
 				{
-					scale = DROID_BUT_SCALE/3;
+					scale = DROID_BUT_SCALE / 3;
 				}
 			}
 			else
@@ -2175,18 +2270,18 @@ void CreateIMDButton(IMAGEFILE *ImageFile, UWORD ImageID, void *Object, UDWORD P
 		}
 		else//(IMDType == IMDTYPE_DROIDTEMPLATE)
 		{
-			if (((DROID_TEMPLATE*)Object)->droidType == DROID_TRANSPORTER || ((DROID_TEMPLATE*)Object)->droidType == DROID_SUPERTRANSPORTER)
+			if (((DROID_TEMPLATE *)Object)->droidType == DROID_TRANSPORTER || ((DROID_TEMPLATE *)Object)->droidType == DROID_SUPERTRANSPORTER)
 			{
 				Position.x = 0;
 				Position.y = 0;//BUT_TRANSPORTER_ALT;
 				Position.z = BUTTON_DEPTH;
-				if (((DROID_TEMPLATE*)Object)->droidType == DROID_TRANSPORTER)
+				if (((DROID_TEMPLATE *)Object)->droidType == DROID_TRANSPORTER)
 				{
-					scale = DROID_BUT_SCALE/2;
+					scale = DROID_BUT_SCALE / 2;
 				}
 				else
 				{
-					scale = DROID_BUT_SCALE/3;
+					scale = DROID_BUT_SCALE / 3;
 				}
 			}
 			else
@@ -2199,29 +2294,30 @@ void CreateIMDButton(IMAGEFILE *ImageFile, UWORD ImageID, void *Object, UDWORD P
 		//lefthand display droid buttons
 		if (IMDType == IMDTYPE_DROID)
 		{
-			displayComponentButtonObject((DROID*)Object,&Rotation,&Position,true, scale);
+			displayComponentButtonObject((DROID *)Object, &Rotation, &Position, true, scale);
 		}
 		else
 		{
-			displayComponentButtonTemplate((DROID_TEMPLATE*)Object,&Rotation,&Position,true, scale);
+			displayComponentButtonTemplate((DROID_TEMPLATE *)Object, &Rotation, &Position, true, scale);
 		}
 	}
 	else
-	{	// Just drawing a single IMD.
+	{
+		// Just drawing a single IMD.
 
-		if(Down)
+		if (Down)
 		{
 			if (buttonType == TOPBUTTON)
 			{
 				pie_SetGeometricOffset(
-					(ButXPos + iV_GetImageWidth(IntImages,IMAGE_BUT0_DOWN)/2) + ButtonDrawXOffset + 2,
-					(ButYPos + iV_GetImageHeight(IntImages,IMAGE_BUT0_DOWN)/2) + 2 + 8 + ButtonDrawYOffset);
+				    (ButXPos + iV_GetImageWidth(IntImages, IMAGE_BUT0_DOWN) / 2) + ButtonDrawXOffset + 2,
+				    (ButYPos + iV_GetImageHeight(IntImages, IMAGE_BUT0_DOWN) / 2) + 2 + 8 + ButtonDrawYOffset);
 			}
 			else
 			{
 				pie_SetGeometricOffset(
-					(ButXPos + iV_GetImageWidth(IntImages,IMAGE_BUTB0_DOWN)/2) + ButtonDrawXOffset + 2,
-					(ButYPos + iV_GetImageHeight(IntImages,IMAGE_BUTB0_DOWN)/2) + 2 + 12 + ButtonDrawYOffset);
+				    (ButXPos + iV_GetImageWidth(IntImages, IMAGE_BUTB0_DOWN) / 2) + ButtonDrawXOffset + 2,
+				    (ButYPos + iV_GetImageHeight(IntImages, IMAGE_BUTB0_DOWN) / 2) + 2 + 12 + ButtonDrawYOffset);
 			}
 		}
 		else
@@ -2229,28 +2325,25 @@ void CreateIMDButton(IMAGEFILE *ImageFile, UWORD ImageID, void *Object, UDWORD P
 			if (buttonType == TOPBUTTON)
 			{
 				pie_SetGeometricOffset(
-					(ButXPos + iV_GetImageWidth(IntImages,IMAGE_BUT0_UP)/2) + ButtonDrawXOffset,
-					(ButYPos + iV_GetImageHeight(IntImages,IMAGE_BUT0_UP)/2) + 8  + ButtonDrawYOffset);
+				    (ButXPos + iV_GetImageWidth(IntImages, IMAGE_BUT0_UP) / 2) + ButtonDrawXOffset,
+				    (ButYPos + iV_GetImageHeight(IntImages, IMAGE_BUT0_UP) / 2) + 8  + ButtonDrawYOffset);
 			}
 			else
 			{
 				pie_SetGeometricOffset(
-					(ButXPos + iV_GetImageWidth(IntImages,IMAGE_BUTB0_UP)/2) + ButtonDrawXOffset,
-					(ButYPos + iV_GetImageHeight(IntImages,IMAGE_BUTB0_UP)/2) + 12  + ButtonDrawYOffset);
+				    (ButXPos + iV_GetImageWidth(IntImages, IMAGE_BUTB0_UP) / 2) + ButtonDrawXOffset,
+				    (ButYPos + iV_GetImageHeight(IntImages, IMAGE_BUTB0_UP) / 2) + 12  + ButtonDrawYOffset);
 			}
 		}
 
-	// Decide which button grid size to use.
-		if(IMDType == IMDTYPE_COMPONENT)
+		// Decide which button grid size to use.
+		if (IMDType == IMDTYPE_COMPONENT)
 		{
-			Radius = getComponentRadius((BASE_STATS*)Object);
+			Radius = getComponentRadius((BASE_STATS *)Object);
 			Size = 2;//small structure
 			scale = rescaleButtonObject(Radius, COMP_BUT_SCALE, COMPONENT_RADIUS);
-			//scale = COMP_BUT_SCALE;
-			//ASSERT( Radius <= OBJECT_RADIUS,"Object too big for button - %s",
-			//		((BASE_STATS*)Object)->pName );
 			// NOTE: The Super transport is huge, and is considered a component type, so refit it to inside the button.
-			const char * const name = ((BASE_STATS*)Object)->pName;
+			const char *const name = ((BASE_STATS *)Object)->pName;
 			if (!strcmp(name, "SuperTransportBody"))
 			{
 				scale *= .4;
@@ -2260,9 +2353,9 @@ void CreateIMDButton(IMAGEFILE *ImageFile, UWORD ImageID, void *Object, UDWORD P
 				scale *= .6;
 			}
 		}
-		else if(IMDType == IMDTYPE_RESEARCH)
+		else if (IMDType == IMDTYPE_RESEARCH)
 		{
-			Radius = getResearchRadius((BASE_STATS*)Object);
+			Radius = getResearchRadius((BASE_STATS *)Object);
 			if (Radius <= 100)
 			{
 				Size = 2;//small structure
@@ -2287,7 +2380,7 @@ void CreateIMDButton(IMAGEFILE *ImageFile, UWORD ImageID, void *Object, UDWORD P
 		}
 		else if (IMDType == IMDTYPE_STRUCTURE)
 		{
-			basePlateSize = getStructureSizeMax((STRUCTURE*)Object);
+			basePlateSize = getStructureSizeMax((STRUCTURE *)Object);
 			if (basePlateSize == 1)
 			{
 				Size = 2;//small structure
@@ -2306,7 +2399,7 @@ void CreateIMDButton(IMAGEFILE *ImageFile, UWORD ImageID, void *Object, UDWORD P
 		}
 		else if (IMDType == IMDTYPE_STRUCTURESTAT)
 		{
-			basePlateSize = getStructureStatSizeMax((STRUCTURE_STATS*)Object);
+			basePlateSize = getStructureStatSizeMax((STRUCTURE_STATS *)Object);
 			if (basePlateSize == 1)
 			{
 				Size = 2;//small structure
@@ -2326,7 +2419,7 @@ void CreateIMDButton(IMAGEFILE *ImageFile, UWORD ImageID, void *Object, UDWORD P
 		else
 		{
 
-			Radius = ((iIMDShape*)Object)->sradius;
+			Radius = ((iIMDShape *)Object)->sradius;
 
 			if (Radius <= 128)
 			{
@@ -2345,10 +2438,10 @@ void CreateIMDButton(IMAGEFILE *ImageFile, UWORD ImageID, void *Object, UDWORD P
 			}
 		}
 
-		ClearButton(Down,Size, buttonType);
+		ClearButton(Down, Size, buttonType);
 
 		Rotation.x = -30;
-		Rotation.y = (UWORD ) Buffer->ImdRotation;
+		Rotation.y = (UWORD) Buffer->ImdRotation;
 		Rotation.z = 0;
 
 		NullVector.x = 0;
@@ -2361,7 +2454,7 @@ void CreateIMDButton(IMAGEFILE *ImageFile, UWORD ImageID, void *Object, UDWORD P
 
 		if (ImageFile)
 		{
-			iV_DrawImage(ImageFile,ImageID,ButXPos+ox,ButYPos+oy);
+			iV_DrawImage(ImageFile, ImageID, ButXPos + ox, ButYPos + oy);
 		}
 
 		pie_SetDepthBufferStatus(DEPTH_CMP_LEQ_WRT_ON);
@@ -2369,23 +2462,23 @@ void CreateIMDButton(IMAGEFILE *ImageFile, UWORD ImageID, void *Object, UDWORD P
 		/* all non droid buttons */
 		if (IMDType == IMDTYPE_COMPONENT)
 		{
-			displayComponentButton((BASE_STATS*)Object,&Rotation,&Position,true, scale);
+			displayComponentButton((BASE_STATS *)Object, &Rotation, &Position, true, scale);
 		}
 		else if (IMDType == IMDTYPE_RESEARCH)
 		{
-			displayResearchButton((BASE_STATS*)Object,&Rotation,&Position,true, scale);
+			displayResearchButton((BASE_STATS *)Object, &Rotation, &Position, true, scale);
 		}
 		else if (IMDType == IMDTYPE_STRUCTURE)
 		{
-			displayStructureButton((STRUCTURE*)Object,&Rotation,&Position,true, scale);
+			displayStructureButton((STRUCTURE *)Object, &Rotation, &Position, true, scale);
 		}
 		else if (IMDType == IMDTYPE_STRUCTURESTAT)
 		{
-			displayStructureStatButton((STRUCTURE_STATS*)Object, &Rotation, &Position, true, scale);
+			displayStructureStatButton((STRUCTURE_STATS *)Object, &Rotation, &Position, true, scale);
 		}
 		else
 		{
-			displayIMDButton((iIMDShape*)Object,&Rotation,&Position,true, scale);
+			displayIMDButton((iIMDShape *)Object, &Rotation, &Position, true, scale);
 		}
 
 		pie_SetDepthBufferStatus(DEPTH_CMP_ALWAYS_WRT_ON);
@@ -2395,29 +2488,32 @@ void CreateIMDButton(IMAGEFILE *ImageFile, UWORD ImageID, void *Object, UDWORD P
 
 // Create a button by rendering an image into it.
 //
-void CreateImageButton(IMAGEFILE *ImageFile,UWORD ImageID,RENDERED_BUTTON *Buffer,bool Down, UDWORD buttonType)
+void CreateImageButton(IMAGEFILE *ImageFile, UWORD ImageID, RENDERED_BUTTON *Buffer, bool Down, UDWORD buttonType)
 {
-	ClearButton(Down,0, buttonType);
+	ClearButton(Down, 0, buttonType);
 	iV_DrawImage(ImageFile, ImageID, ButXPos, ButYPos);
 }
 
 
 // Create a blank button.
 //
-void CreateBlankButton(RENDERED_BUTTON *Buffer,bool Down, UDWORD buttonType)
+void CreateBlankButton(RENDERED_BUTTON *Buffer, bool Down, UDWORD buttonType)
 {
-	UDWORD ox,oy;
+	UDWORD ox, oy;
 
-	if(Down) {
+	if (Down)
+	{
 		ox = oy = 1;
-	} else {
+	}
+	else
+	{
 		ox = oy = 0;
 	}
 
-	ClearButton(Down,0, buttonType);
+	ClearButton(Down, 0, buttonType);
 
 	// Draw a question mark, bit of quick hack this.
-	iV_DrawImage(IntImages,IMAGE_QUESTION_MARK,ButXPos+ox+10,ButYPos+oy+3);
+	iV_DrawImage(IntImages, IMAGE_QUESTION_MARK, ButXPos + ox + 10, ButYPos + oy + 3);
 }
 
 // Returns true if the droid is currently demolishing something or moving to demolish something.
@@ -2425,15 +2521,15 @@ void CreateBlankButton(RENDERED_BUTTON *Buffer,bool Down, UDWORD buttonType)
 bool DroidIsDemolishing(DROID *Droid)
 {
 	BASE_STATS	*Stats;
-	UDWORD x,y;
+	UDWORD x, y;
 
 	if (!(droidType(Droid) == DROID_CONSTRUCT ||
-		droidType(Droid) == DROID_CYBORG_CONSTRUCT))
+	      droidType(Droid) == DROID_CYBORG_CONSTRUCT))
 	{
 		return false;
 	}
 
-	if(orderStateStatsLoc(Droid, DORDER_DEMOLISH,&Stats,&x,&y)) // Moving to demolish location?
+	if (orderStateStatsLoc(Droid, DORDER_DEMOLISH, &Stats, &x, &y)) // Moving to demolish location?
 	{
 		return true;
 	}
@@ -2449,7 +2545,7 @@ bool DroidIsDemolishing(DROID *Droid)
 bool DroidIsRepairing(DROID *Droid)
 {
 	if (!(droidType(Droid) == DROID_REPAIR
-	   || droidType(Droid) == DROID_CYBORG_REPAIR))
+	      || droidType(Droid) == DROID_CYBORG_REPAIR))
 	{
 		return false;
 	}
@@ -2467,13 +2563,13 @@ bool DroidIsRepairing(DROID *Droid)
 bool DroidIsBuilding(DROID *Droid)
 {
 	BASE_STATS	*Stats;
-	UDWORD x,y;
+	UDWORD x, y;
 
-    if (!(droidType(Droid) == DROID_CONSTRUCT ||
-        droidType(Droid) == DROID_CYBORG_CONSTRUCT))
-    {
-        return false;
-    }
+	if (!(droidType(Droid) == DROID_CONSTRUCT ||
+	      droidType(Droid) == DROID_CYBORG_CONSTRUCT))
+	{
+		return false;
+	}
 
 	if (orderStateStatsLoc(Droid, DORDER_BUILD, &Stats, &x, &y))
 	{
@@ -2481,7 +2577,7 @@ bool DroidIsBuilding(DROID *Droid)
 		return false;
 	}
 	else if (orderStateObj(Droid, DORDER_BUILD)
-	      || orderStateObj(Droid, DORDER_HELPBUILD)) // Is building or helping?
+	        || orderStateObj(Droid, DORDER_HELPBUILD)) // Is building or helping?
 	{
 		return true;
 	}
@@ -2495,15 +2591,16 @@ bool DroidIsBuilding(DROID *Droid)
 bool DroidGoingToBuild(DROID *Droid)
 {
 	BASE_STATS	*Stats;
-	UDWORD x,y;
+	UDWORD x, y;
 
-    if (!(droidType(Droid) == DROID_CONSTRUCT ||
-        droidType(Droid) == DROID_CYBORG_CONSTRUCT))
-    {
-        return false;
-    }
+	if (!(droidType(Droid) == DROID_CONSTRUCT ||
+	      droidType(Droid) == DROID_CYBORG_CONSTRUCT))
+	{
+		return false;
+	}
 
-	if(orderStateStatsLoc(Droid, DORDER_BUILD,&Stats,&x,&y)) {	// Moving to build location?
+	if (orderStateStatsLoc(Droid, DORDER_BUILD, &Stats, &x, &y))  	// Moving to build location?
+	{
 		return true;
 	}
 
@@ -2522,7 +2619,7 @@ STRUCTURE *DroidGetBuildStructure(DROID *Droid)
 		Structure = orderStateObj(Droid, DORDER_HELPBUILD);
 	}
 
-	return (STRUCTURE*)Structure;
+	return (STRUCTURE *)Structure;
 }
 
 // Get the first factory assigned to a command droid
@@ -2531,42 +2628,42 @@ STRUCTURE *droidGetCommandFactory(DROID *psDroid)
 	SDWORD		inc;
 	STRUCTURE	*psCurr;
 
-	for(inc = 0; inc < MAX_FACTORY; inc++)
+	for (inc = 0; inc < MAX_FACTORY; inc++)
 	{
-		if ( psDroid->secondaryOrder & (1 << (inc + DSS_ASSPROD_SHIFT)) )
+		if (psDroid->secondaryOrder & (1 << (inc + DSS_ASSPROD_SHIFT)))
 		{
 			// found an assigned factory - look for it in the lists
 			for (psCurr = apsStructLists[psDroid->player]; psCurr; psCurr = psCurr->psNext)
 			{
-				if ( (psCurr->pStructureType->type == REF_FACTORY) &&
-					 ( ((FACTORY *)psCurr->pFunctionality)->
-								psAssemblyPoint->factoryInc == inc ) )
+				if ((psCurr->pStructureType->type == REF_FACTORY) &&
+				    (((FACTORY *)psCurr->pFunctionality)->
+				     psAssemblyPoint->factoryInc == inc))
 				{
 					return psCurr;
 				}
 			}
 		}
-		if ( psDroid->secondaryOrder & (1 << (inc + DSS_ASSPROD_CYBORG_SHIFT)) )
+		if (psDroid->secondaryOrder & (1 << (inc + DSS_ASSPROD_CYBORG_SHIFT)))
 		{
 			// found an assigned factory - look for it in the lists
 			for (psCurr = apsStructLists[psDroid->player]; psCurr; psCurr = psCurr->psNext)
 			{
-				if ( (psCurr->pStructureType->type == REF_CYBORG_FACTORY) &&
-					 ( ((FACTORY *)psCurr->pFunctionality)->
-								psAssemblyPoint->factoryInc == inc ) )
+				if ((psCurr->pStructureType->type == REF_CYBORG_FACTORY) &&
+				    (((FACTORY *)psCurr->pFunctionality)->
+				     psAssemblyPoint->factoryInc == inc))
 				{
 					return psCurr;
 				}
 			}
 		}
-		if ( psDroid->secondaryOrder & (1 << (inc + DSS_ASSPROD_VTOL_SHIFT)) )
+		if (psDroid->secondaryOrder & (1 << (inc + DSS_ASSPROD_VTOL_SHIFT)))
 		{
 			// found an assigned factory - look for it in the lists
 			for (psCurr = apsStructLists[psDroid->player]; psCurr; psCurr = psCurr->psNext)
 			{
-				if ( (psCurr->pStructureType->type == REF_VTOL_FACTORY) &&
-					 ( ((FACTORY *)psCurr->pFunctionality)->
-								psAssemblyPoint->factoryInc == inc ) )
+				if ((psCurr->pStructureType->type == REF_VTOL_FACTORY) &&
+				    (((FACTORY *)psCurr->pFunctionality)->
+				     psAssemblyPoint->factoryInc == inc))
 				{
 					return psCurr;
 				}
@@ -2582,9 +2679,10 @@ STRUCTURE *droidGetCommandFactory(DROID *psDroid)
 BASE_STATS *DroidGetBuildStats(DROID *Droid)
 {
 	BASE_STATS *Stats;
-	UDWORD x,y;
+	UDWORD x, y;
 
-	if(orderStateStatsLoc(Droid, DORDER_BUILD,&Stats,&x,&y)) {	// Moving to build location?
+	if (orderStateStatsLoc(Droid, DORDER_BUILD, &Stats, &x, &y))  	// Moving to build location?
+	{
 		return Stats;
 	}
 
@@ -2610,12 +2708,12 @@ bool StructureIsManufacturingPending(STRUCTURE *structure)
 {
 	switch (structure->pStructureType->type)
 	{
-		case REF_FACTORY:
-		case REF_CYBORG_FACTORY:
-		case REF_VTOL_FACTORY:
-			return _structureIsManufacturingPending(structure->pFunctionality->factory);
-		default:
-			return false;
+	case REF_FACTORY:
+	case REF_CYBORG_FACTORY:
+	case REF_VTOL_FACTORY:
+		return _structureIsManufacturingPending(structure->pFunctionality->factory);
+	default:
+		return false;
 	}
 }
 
@@ -2643,15 +2741,15 @@ bool StructureIsOnHoldPending(STRUCTURE *structure)
 {
 	switch (structure->pStructureType->type)
 	{
-		case REF_FACTORY:
-		case REF_CYBORG_FACTORY:
-		case REF_VTOL_FACTORY:
-			return structureIsOnHoldPending(structure->pFunctionality->factory);
-		case REF_RESEARCH:
-			return structureIsOnHoldPending(structure->pFunctionality->researchFacility);
-		default:
-			ASSERT(false, "Huh?");
-			return false;
+	case REF_FACTORY:
+	case REF_CYBORG_FACTORY:
+	case REF_VTOL_FACTORY:
+		return structureIsOnHoldPending(structure->pFunctionality->factory);
+	case REF_RESEARCH:
+		return structureIsOnHoldPending(structure->pFunctionality->researchFacility);
+	default:
+		ASSERT(false, "Huh?");
+		return false;
 	}
 }
 
@@ -2674,73 +2772,81 @@ DROID_TEMPLATE *FactoryGetTemplate(FACTORY *Factory)
 bool StatIsStructure(BASE_STATS const *Stat)
 {
 	return (Stat->ref >= REF_STRUCTURE_START && Stat->ref <
-				REF_STRUCTURE_START + REF_RANGE);
+	        REF_STRUCTURE_START + REF_RANGE);
 }
 
 bool StatIsFeature(BASE_STATS const *Stat)
 {
 	return (Stat->ref >= REF_FEATURE_START && Stat->ref <
-				REF_FEATURE_START + REF_RANGE);
+	        REF_FEATURE_START + REF_RANGE);
 }
 
-iIMDShape *StatGetStructureIMD(BASE_STATS *Stat,UDWORD Player)
+iIMDShape *StatGetStructureIMD(BASE_STATS *Stat, UDWORD Player)
 {
 	(void)Player;
-	return ((STRUCTURE_STATS*)Stat)->pIMD[0];
+	return ((STRUCTURE_STATS *)Stat)->pIMD[0];
 }
 
 bool StatIsTemplate(BASE_STATS *Stat)
 {
 	return (Stat->ref >= REF_TEMPLATE_START &&
-				 Stat->ref < REF_TEMPLATE_START + REF_RANGE);
+	        Stat->ref < REF_TEMPLATE_START + REF_RANGE);
 }
 
 SDWORD StatIsComponent(BASE_STATS *Stat)
 {
-	if(Stat->ref >= REF_BODY_START &&
-				 Stat->ref < REF_BODY_START + REF_RANGE) {
+	if (Stat->ref >= REF_BODY_START &&
+	    Stat->ref < REF_BODY_START + REF_RANGE)
+	{
 		return COMP_BODY;
 	}
 
-	if(Stat->ref >= REF_BRAIN_START &&
-				 Stat->ref < REF_BRAIN_START + REF_RANGE) {
+	if (Stat->ref >= REF_BRAIN_START &&
+	    Stat->ref < REF_BRAIN_START + REF_RANGE)
+	{
 		return COMP_BRAIN;
 	}
 
-	if(Stat->ref >= REF_PROPULSION_START &&
-				 Stat->ref < REF_PROPULSION_START + REF_RANGE) {
+	if (Stat->ref >= REF_PROPULSION_START &&
+	    Stat->ref < REF_PROPULSION_START + REF_RANGE)
+	{
 		return COMP_PROPULSION;
 	}
 
-	if(Stat->ref >= REF_WEAPON_START &&
-				 Stat->ref < REF_WEAPON_START + REF_RANGE) {
+	if (Stat->ref >= REF_WEAPON_START &&
+	    Stat->ref < REF_WEAPON_START + REF_RANGE)
+	{
 		return COMP_WEAPON;
 	}
 
-	if(Stat->ref >= REF_SENSOR_START &&
-				 Stat->ref < REF_SENSOR_START + REF_RANGE) {
+	if (Stat->ref >= REF_SENSOR_START &&
+	    Stat->ref < REF_SENSOR_START + REF_RANGE)
+	{
 		return COMP_SENSOR;
 	}
 
-	if(Stat->ref >= REF_ECM_START &&
-				 Stat->ref < REF_ECM_START + REF_RANGE) {
+	if (Stat->ref >= REF_ECM_START &&
+	    Stat->ref < REF_ECM_START + REF_RANGE)
+	{
 		return COMP_ECM;
 	}
 
-	if(Stat->ref >= REF_CONSTRUCT_START &&
-				 Stat->ref < REF_CONSTRUCT_START + REF_RANGE) {
+	if (Stat->ref >= REF_CONSTRUCT_START &&
+	    Stat->ref < REF_CONSTRUCT_START + REF_RANGE)
+	{
 		return COMP_CONSTRUCT;
 	}
 
-	if(Stat->ref >= REF_REPAIR_START &&
-				 Stat->ref < REF_REPAIR_START + REF_RANGE) {
+	if (Stat->ref >= REF_REPAIR_START &&
+	    Stat->ref < REF_REPAIR_START + REF_RANGE)
+	{
 		return COMP_REPAIRUNIT;
 	}
 
 	return COMP_UNKNOWN;
 }
 
-bool StatGetComponentIMD(BASE_STATS *Stat, SDWORD compID,iIMDShape **CompIMD,iIMDShape **MountIMD)
+bool StatGetComponentIMD(BASE_STATS *Stat, SDWORD compID, iIMDShape **CompIMD, iIMDShape **MountIMD)
 {
 	WEAPON_STATS		*psWStat;
 
@@ -2760,22 +2866,22 @@ bool StatGetComponentIMD(BASE_STATS *Stat, SDWORD compID,iIMDShape **CompIMD,iIM
 		return true;
 
 	case COMP_WEAPON:
-		*MountIMD = ((WEAPON_STATS*)Stat)->pMountGraphic;
+		*MountIMD = ((WEAPON_STATS *)Stat)->pMountGraphic;
 		*CompIMD = ((COMPONENT_STATS *)Stat)->pIMD;
 		return true;
 
 	case COMP_SENSOR:
-		*MountIMD = ((SENSOR_STATS*)Stat)->pMountGraphic;
+		*MountIMD = ((SENSOR_STATS *)Stat)->pMountGraphic;
 		*CompIMD = ((COMPONENT_STATS *)Stat)->pIMD;
 		return true;
 
 	case COMP_ECM:
-		*MountIMD = ((ECM_STATS*)Stat)->pMountGraphic;
+		*MountIMD = ((ECM_STATS *)Stat)->pMountGraphic;
 		*CompIMD = ((COMPONENT_STATS *)Stat)->pIMD;
 		return true;
 
 	case COMP_CONSTRUCT:
-		*MountIMD = ((CONSTRUCT_STATS*)Stat)->pMountGraphic;
+		*MountIMD = ((CONSTRUCT_STATS *)Stat)->pMountGraphic;
 		*CompIMD = ((COMPONENT_STATS *)Stat)->pIMD;
 		return true;
 
@@ -2784,13 +2890,13 @@ bool StatGetComponentIMD(BASE_STATS *Stat, SDWORD compID,iIMDShape **CompIMD,iIM
 		return true;
 
 	case COMP_REPAIRUNIT:
-		*MountIMD = ((REPAIR_STATS*)Stat)->pMountGraphic;
+		*MountIMD = ((REPAIR_STATS *)Stat)->pMountGraphic;
 		*CompIMD = ((COMPONENT_STATS *)Stat)->pIMD;
 		return true;
 
 	default:
 		//COMP_UNKNOWN should be an error
-		ASSERT( false, "StatGetComponent : Unknown component" );
+		ASSERT(false, "Unknown component");
 	}
 
 	return false;
@@ -2800,11 +2906,11 @@ bool StatGetComponentIMD(BASE_STATS *Stat, SDWORD compID,iIMDShape **CompIMD,iIM
 bool StatIsResearch(BASE_STATS *Stat)
 {
 	return (Stat->ref >= REF_RESEARCH_START && Stat->ref <
-				REF_RESEARCH_START + REF_RANGE);
+	        REF_RESEARCH_START + REF_RANGE);
 }
 
 void StatGetResearchImage(BASE_STATS *psStat, SDWORD *Image, iIMDShape **Shape,
-                          BASE_STATS **ppGraphicData, bool drawTechIcon)
+        BASE_STATS **ppGraphicData, bool drawTechIcon)
 {
 	*Image = -1;
 	if (drawTechIcon)
@@ -2814,20 +2920,20 @@ void StatGetResearchImage(BASE_STATS *psStat, SDWORD *Image, iIMDShape **Shape,
 			*Image = ((RESEARCH *)psStat)->iconID;
 		}
 	}
-    //if the research has a Stat associated with it - use this as display in the button
-    if (((RESEARCH *)psStat)->psStat)
-    {
-        *ppGraphicData = ((RESEARCH *)psStat)->psStat;
-        //make sure the IMDShape is initialised
-        *Shape = NULL;
-    }
-    else
-    {
-        //no stat so just just the IMD associated with the research
-	    *Shape = ((RESEARCH *)psStat)->pIMD;
-        //make sure the stat is initialised
-        *ppGraphicData = NULL;
-    }
+	//if the research has a Stat associated with it - use this as display in the button
+	if (((RESEARCH *)psStat)->psStat)
+	{
+		*ppGraphicData = ((RESEARCH *)psStat)->psStat;
+		//make sure the IMDShape is initialised
+		*Shape = NULL;
+	}
+	else
+	{
+		//no stat so just just the IMD associated with the research
+		*Shape = ((RESEARCH *)psStat)->pIMD;
+		//make sure the stat is initialised
+		*ppGraphicData = NULL;
+	}
 }
 
 static void intDisplayBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, bool isPowerBar)
@@ -2855,7 +2961,7 @@ static void intDisplayBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, bool
 
 	/* indent to allow text value */
 	iX = x0 + iV_GetTextWidth(szCheckWidth);
-	iY = y0 + (iV_GetImageHeight(IntImages, IMAGE_DES_STATSCURR) - iV_GetTextLineSize())/2 - iV_GetTextAboveBase();
+	iY = y0 + (iV_GetImageHeight(IntImages, IMAGE_DES_STATSCURR) - iV_GetTextLineSize()) / 2 - iV_GetTextAboveBase();
 
 	if (isPowerBar)
 	{
@@ -2872,8 +2978,8 @@ static void intDisplayBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, bool
 	{
 		precisionFactor *= 10;
 	}
-	value = (BarGraph->iOriginal * precisionFactor + BarGraph->denominator/2) / BarGraph->denominator;
-	sprintf(szVal, "%d%s%.*d", value/precisionFactor, precisionFactor == 1? "" : ".", BarGraph->precision, value%precisionFactor);
+	value = (BarGraph->iOriginal * precisionFactor + BarGraph->denominator / 2) / BarGraph->denominator;
+	sprintf(szVal, "%d%s%.*d", value / precisionFactor, precisionFactor == 1 ? "" : ".", BarGraph->precision, value % precisionFactor);
 	iV_SetTextColour(WZCOL_TEXT_BRIGHT);
 	iV_DrawText(szVal, x0, iY);
 
@@ -2904,16 +3010,17 @@ void intDisplayDesignPowerBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, 
 void WidgetAudioCallback(int AudioID)
 {
 	static	SDWORD LastTimeAudio;
-	if(AudioID >= 0) {
+	if (AudioID >= 0)
+	{
 
 		SDWORD TimeSinceLastWidgetBeep;
 
 		// Don't allow a widget beep if one was made in the last WIDGETBEEPGAP milliseconds
 		// This stops double beeps happening (which seems to happen all the time)
-		TimeSinceLastWidgetBeep=realTime-LastTimeAudio;
-		if (TimeSinceLastWidgetBeep<0 || TimeSinceLastWidgetBeep>WIDGETBEEPGAP)
+		TimeSinceLastWidgetBeep = realTime - LastTimeAudio;
+		if (TimeSinceLastWidgetBeep < 0 || TimeSinceLastWidgetBeep > WIDGETBEEPGAP)
 		{
-			LastTimeAudio=realTime;
+			LastTimeAudio = realTime;
 			audio_PlayTrack(AudioID);
 		}
 	}
@@ -2922,51 +3029,51 @@ void WidgetAudioCallback(int AudioID)
 
 // Widget callback to display a contents button for the Transporter
 void intDisplayTransportButton(WIDGET *psWidget, UDWORD xOffset,
-						  UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
+        UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
 {
-	W_CLICKFORM		*Form = (W_CLICKFORM*)psWidget;
+	W_CLICKFORM		*Form = (W_CLICKFORM *)psWidget;
 	bool			Down;
 	bool			Hilight = false;
-	RENDERED_BUTTON		*Buffer = (RENDERED_BUTTON*)Form->pUserData;
+	RENDERED_BUTTON		*Buffer = (RENDERED_BUTTON *)Form->pUserData;
 	DROID			*psDroid = NULL;
 	UDWORD			gfxId;
 
-	OpenButtonRender((UWORD)(xOffset+Form->x), (UWORD)(yOffset+Form->y),(UWORD)Form->width,
-		(UWORD)Form->height);
+	OpenButtonRender((UWORD)(xOffset + Form->x), (UWORD)(yOffset + Form->y), (UWORD)Form->width,
+	        (UWORD)Form->height);
 
 	Down = Form->state & (WCLICK_DOWN | WCLICK_LOCKED | WCLICK_CLICKLOCK);
 
 	// Allocate this outside of the if so the rank icons are always draw
-	psDroid = (DROID*)Buffer->Data;
+	psDroid = (DROID *)Buffer->Data;
 	// There should always be a droid associated with the button
 	ASSERT(psDroid != NULL, "Invalid droid pointer");
 
-		Hilight = Form->state & WCLICK_HILITE;
+	Hilight = Form->state & WCLICK_HILITE;
 
-		if(Hilight)
-		{
-			Buffer->ImdRotation += realTimeAdjustedAverage(BUTTONOBJ_ROTSPEED);
-		}
+	if (Hilight)
+	{
+		Buffer->ImdRotation += realTimeAdjustedAverage(BUTTONOBJ_ROTSPEED);
+	}
 
-		Hilight = formIsHilite(Form);
+	Hilight = formIsHilite(Form);
 
-		Buffer->State = Form->state;
+	Buffer->State = Form->state;
 
-		if (psDroid)
-		{
-			RenderToButton(NULL,0,psDroid,psDroid->player,Buffer,Down,IMDTYPE_DROID,TOPBUTTON);
-		}
-		else
-		{
-			RenderBlankToButton(Buffer,Down,TOPBUTTON);
-		}
-		RENDERBUTTON_INITIALISED(Buffer);
+	if (psDroid)
+	{
+		RenderToButton(NULL, 0, psDroid, psDroid->player, Buffer, Down, IMDTYPE_DROID, TOPBUTTON);
+	}
+	else
+	{
+		RenderBlankToButton(Buffer, Down, TOPBUTTON);
+	}
+	RENDERBUTTON_INITIALISED(Buffer);
 
 	CloseButtonRender();
 
 	if (Hilight)
 	{
-		iV_DrawImage(IntImages,IMAGE_BUT_HILITE,xOffset+Form->x,yOffset+Form->y);
+		iV_DrawImage(IntImages, IMAGE_BUT_HILITE, xOffset + Form->x, yOffset + Form->y);
 	}
 
 	if (psDroid && missionForReInforcements())
@@ -2976,7 +3083,7 @@ void intDisplayTransportButton(WIDGET *psWidget, UDWORD xOffset,
 		if (gfxId != UDWORD_MAX)
 		{
 			/* Render the rank graphic at the correct location */
-			iV_DrawImage(IntImages, (UWORD)gfxId, xOffset+Form->x + 50, yOffset+Form->y + 30);
+			iV_DrawImage(IntImages, (UWORD)gfxId, xOffset + Form->x + 50, yOffset + Form->y + 30);
 		}
 	}
 }
@@ -3006,7 +3113,7 @@ void drawRadarBlips(int radarX, int radarY, float pixSizeH, float pixSizeV)
 		/* Go through all the proximity Displays*/
 		for (psProxDisp = apsProxDisp[i]; psProxDisp != NULL; psProxDisp = psProxDisp->psNext)
 		{
-			if(psProxDisp->psMessage->dataType == MSG_DATA_BEACON)
+			if (psProxDisp->psMessage->dataType == MSG_DATA_BEACON)
 			{
 				MESSAGE		*psCurrMsg = psProxDisp->psMessage;
 				VIEWDATA	*pViewData = (VIEWDATA *)psCurrMsg->pViewData;
@@ -3040,7 +3147,7 @@ void drawRadarBlips(int radarX, int radarY, float pixSizeH, float pixSizeV)
 
 		if (psProxDisp->type == POS_PROXDATA)
 		{
-			PROX_TYPE proxType = ((VIEW_PROXIMITY*)((VIEWDATA *)psProxDisp->psMessage->pViewData)->pData)->proxType;
+			PROX_TYPE proxType = ((VIEW_PROXIMITY *)((VIEWDATA *)psProxDisp->psMessage->pViewData)->pData)->proxType;
 			images = imagesProxTypes[proxType];
 		}
 		else
@@ -3101,8 +3208,8 @@ void drawRadarBlips(int radarX, int radarY, float pixSizeH, float pixSizeV)
 		// NOTE:  On certain missions (limbo & expand), there is still valid data that is stored outside the
 		// normal radar/mini-map view.  We must now calculate the radar/mini-map's bounding box, and clip
 		// everything outside the box.
-		if ( (x+radarX) < width*pixSizeV/2 && (x+radarX) > -width*pixSizeV/2
-			&& (y+radarY) < height*pixSizeH/2 && (y+radarY) > -height*pixSizeH/2)
+		if ((x + radarX) < width * pixSizeV / 2 && (x + radarX) > -width * pixSizeV / 2
+		    && (y + radarY) < height * pixSizeH / 2 && (y + radarY) > -height * pixSizeH / 2)
 		{
 			// Draw the 'blip'
 			iV_DrawImage(IntImages, imageID, x + radarX, y + radarY);
@@ -3111,7 +3218,7 @@ void drawRadarBlips(int radarX, int radarY, float pixSizeH, float pixSizeV)
 	if (audio_GetPreviousQueueTrackRadarBlipPos(&x, &y))
 	{
 		unsigned        animationLength = ARRAY_SIZE(imagesEnemy) - 1;
-		int             strobe = (realTime/delay) % animationLength;
+		int             strobe = (realTime / delay) % animationLength;
 		x = (x / TILE_UNITS - scrollMinX) * pixSizeH;
 		y = (y / TILE_UNITS - scrollMinY) * pixSizeV;
 		imageID = imagesEnemy[strobe];
@@ -3119,8 +3226,8 @@ void drawRadarBlips(int radarX, int radarY, float pixSizeH, float pixSizeV)
 		// NOTE:  On certain missions (limbo & expand), there is still valid data that is stored outside the
 		// normal radar/mini-map view.  We must now calculate the radar/mini-map's bounding box, and clip
 		// everything outside the box.
-		if ( (x+radarX) < width*pixSizeV/2 && (x+radarX) > -width*pixSizeV/2
-			&& (y+radarY) < height*pixSizeH/2 && (y+radarY) > -height*pixSizeH/2)
+		if ((x + radarX) < width * pixSizeV / 2 && (x + radarX) > -width * pixSizeV / 2
+		    && (y + radarY) < height * pixSizeH / 2 && (y + radarY) > -height * pixSizeH / 2)
 		{
 			// Draw the 'blip'
 			iV_DrawImage(IntImages, imageID, x + radarX, y + radarY);
@@ -3131,14 +3238,14 @@ void drawRadarBlips(int radarX, int radarY, float pixSizeH, float pixSizeV)
 
 /*Displays the proximity messages blips over the world*/
 void intDisplayProximityBlips(WIDGET *psWidget, WZ_DECL_UNUSED UDWORD xOffset,
-					WZ_DECL_UNUSED UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
+        WZ_DECL_UNUSED UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
 {
-	W_CLICKFORM			*psButton = (W_CLICKFORM*)psWidget;
+	W_CLICKFORM			*psButton = (W_CLICKFORM *)psWidget;
 	PROXIMITY_DISPLAY	*psProxDisp = (PROXIMITY_DISPLAY *)psButton->pUserData;
 	MESSAGE				*psMsg = psProxDisp->psMessage;
 	SDWORD				x = 0, y = 0;
 
-	ASSERT( psMsg->type == MSG_PROXIMITY, "Invalid message type" );
+	ASSERT(psMsg->type == MSG_PROXIMITY, "Invalid message type");
 
 	//if no data - ignore message
 	if (psMsg->pViewData == NULL || psMsg->player != selectedPlayer)
@@ -3147,8 +3254,8 @@ void intDisplayProximityBlips(WIDGET *psWidget, WZ_DECL_UNUSED UDWORD xOffset,
 	}
 	if (psProxDisp->type == POS_PROXDATA)
 	{
-		x = ((VIEW_PROXIMITY*)((VIEWDATA *)psProxDisp->psMessage->pViewData)->pData)->x;
-		y = ((VIEW_PROXIMITY*)((VIEWDATA *)psProxDisp->psMessage->pViewData)->pData)->y;
+		x = ((VIEW_PROXIMITY *)((VIEWDATA *)psProxDisp->psMessage->pViewData)->pData)->x;
+		y = ((VIEW_PROXIMITY *)((VIEWDATA *)psProxDisp->psMessage->pViewData)->pData)->y;
 	}
 	else if (psProxDisp->type == POS_PROXOBJ)
 	{
@@ -3166,16 +3273,16 @@ void intDisplayProximityBlips(WIDGET *psWidget, WZ_DECL_UNUSED UDWORD xOffset,
 	if (!psMsg->read)
 	{
 		//set the button's x/y so that can be clicked on
-		psButton->x = (SWORD)(psProxDisp->screenX - psButton->width/2);
-		psButton->y = (SWORD)(psProxDisp->screenY - psButton->height/2);
+		psButton->x = (SWORD)(psProxDisp->screenX - psButton->width / 2);
+		psButton->y = (SWORD)(psProxDisp->screenY - psButton->height / 2);
 	}
 }
 
 
-static UDWORD sliderMousePos(	W_SLIDER *Slider )
+static UDWORD sliderMousePos(W_SLIDER *Slider)
 {
-	return (widgGetFromID(psWScreen,Slider->formID)->x + Slider->x)
-			+ ((Slider->pos * Slider->width) / Slider->numStops );
+	return (widgGetFromID(psWScreen, Slider->formID)->x + Slider->x)
+	       + ((Slider->pos * Slider->width) / Slider->numStops);
 }
 
 
@@ -3183,40 +3290,40 @@ static UWORD sliderMouseUnit(W_SLIDER *Slider)
 {
 	UWORD posStops = (UWORD)(Slider->numStops / 20);
 
-	if(posStops==0 || Slider->pos == 0 || Slider->pos == Slider->numStops)
+	if (posStops == 0 || Slider->pos == 0 || Slider->pos == Slider->numStops)
 	{
 		return 1;
 	}
 
-	if(Slider->pos < posStops)
+	if (Slider->pos < posStops)
 	{
 		return (Slider->pos);
 	}
 
-	if(Slider->pos > (Slider->numStops-posStops))
+	if (Slider->pos > (Slider->numStops - posStops))
 	{
-		return (UWORD)(Slider->numStops-Slider->pos);
+		return (UWORD)(Slider->numStops - Slider->pos);
 	}
 	return posStops;
 }
 
 void intUpdateQuantitySlider(WIDGET *psWidget, W_CONTEXT *psContext)
 {
-	W_SLIDER *Slider = (W_SLIDER*)psWidget;
+	W_SLIDER *Slider = (W_SLIDER *)psWidget;
 
-	if(Slider->state & SLD_HILITE)
+	if (Slider->state & SLD_HILITE)
 	{
-		if(keyDown(KEY_LEFTARROW))
+		if (keyDown(KEY_LEFTARROW))
 		{
-			if(Slider->pos > 0)
+			if (Slider->pos > 0)
 			{
 				Slider->pos = (UWORD)(Slider->pos - sliderMouseUnit(Slider));
 				setMousePos(sliderMousePos(Slider), mouseY());	// move mouse
 			}
 		}
-		else if(keyDown(KEY_RIGHTARROW))
+		else if (keyDown(KEY_RIGHTARROW))
 		{
-			if(Slider->pos < Slider->numStops)
+			if (Slider->pos < Slider->numStops)
 			{
 				Slider->pos = (UWORD)(Slider->pos + sliderMouseUnit(Slider));
 				setMousePos(sliderMousePos(Slider), mouseY());	// move mouse
@@ -3227,7 +3334,7 @@ void intUpdateQuantitySlider(WIDGET *psWidget, W_CONTEXT *psContext)
 
 void intDisplayResSubGroup(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
 {
-	W_LABEL		*Label = (W_LABEL*)psWidget;
+	W_LABEL		*Label = (W_LABEL *)psWidget;
 	UDWORD		x = Label->x + xOffset;
 	UDWORD		y = Label->y + yOffset;
 	RESEARCH    *psResearch = (RESEARCH *)Label->pUserData;
@@ -3240,7 +3347,7 @@ void intDisplayResSubGroup(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_
 
 void intDisplayAllyIcon(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
 {
-	W_LABEL		*Label =  (W_LABEL*)psWidget;
+	W_LABEL		*Label = (W_LABEL *)psWidget;
 	UDWORD		x = Label->x + xOffset;
 	UDWORD		y = Label->y + yOffset;
 
@@ -3262,7 +3369,7 @@ void intDisplayAllyBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGH
 			// Check each research facility to see if they are doing this topic. (As opposed to having started the topic, but stopped researching it.)
 			for (STRUCTURE *psOtherStruct = apsStructLists[player]; psOtherStruct; psOtherStruct = psOtherStruct->psNext)
 			{
-				RESEARCH_FACILITY *res = (RESEARCH_FACILITY*)psOtherStruct->pFunctionality;
+				RESEARCH_FACILITY *res = (RESEARCH_FACILITY *)psOtherStruct->pFunctionality;
 				if (psOtherStruct->pStructureType->type == REF_RESEARCH && psOtherStruct->status == SS_BUILT &&
 				    res->psSubject && res->psSubject->ref == asResearch[psWidget->UserData].ref)
 				{
