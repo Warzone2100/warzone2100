@@ -47,12 +47,7 @@
 	<key>CFBundleHelpBookName</key>
 	<string>net.wz2100.Warzone.help</string>
 	<key>LSMinimumSystemVersion</key>
-	<string>10.5.0</string>
-	<key>LSMinimumSystemVersionByArchitecture</key>
-	<dict>
-		<key>x86_64</key>
-		<string>10.6.0</string>
-	</dict>
+	<string>$(MACOSX_DEPLOYMENT_TARGET).0</string>
 	<key>LSRequiresNativeExecution</key>
 	<true/>
 	<key>UTExportedTypeDeclarations</key>
