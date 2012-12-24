@@ -1,10 +1,10 @@
 #!/bin/sh
 
 # Config
-export PATH=$PATH:/sw/bin:/opt/local/bin
+export PATH=${PATH}:/sw/bin:/opt/local/bin:/usr/local/bin:/usr/local/git/bin
 sauto="${SRCROOT}/../src/autorevision.h"
 bauto="${OBJROOT}/autorevision.h"
-tauto="${SRCROOT}/../autorevision.tmp"
+tauto="${SRCROOT}/../src/autorevision.cache"
 tautoo="${OBJROOT}/autorevision.tmp"
 
 cd "${SRCROOT}/.."
