@@ -86,6 +86,7 @@ win32/__BUILD_CONFIG.USER
 *parser.[ch]
 /src/autorevision.h
 /autorevision.tmp
+/src/autorevision.cache
 *moc.h
 *moc.cpp
 

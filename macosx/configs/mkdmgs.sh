@@ -1,17 +1,25 @@
 #!/bin/bash
 
 # Config
-simgfl="http://downloads.sf.net/project/warzone2100/build-tools/mac/wztemplate.sparseimage"
+bsurl="http://downloads.sf.net/project/warzone2100"
+
 simgflnme="wztemplate.sparseimage"
+simgfl="${bsurl}/build-tools/mac/${simgflnme}"
 simgflmd5="da10e06f2b9b2b565e70dd8e98deaaad"
-sequence="http://downloads.sf.net/project/warzone2100/warzone2100/Videos/high-quality-en/sequences.wz"
+
 sequencenme="sequences.wz"
+sequence="${bsurl}/warzone2100/Videos/high-quality-en/${sequencenme}"
 sequencemd5="9a1ee8e8e054a0ad5ef5efb63e361bcc"
-sequencelo="http://downloads.sf.net/project/warzone2100/warzone2100/Videos/standard-quality-en/sequences.wz"
+
 sequencelonme="sequences-lo.wz"
+sequencelo="${bsurl}/warzone2100/Videos/standard-quality-en/${sequencenme}"
 sequencelomd5="ab2bbc28cef2a3f2ea3c186e18158acd"
-relbuild="${CONFIGURATION_BUILD_DIR}/"
-dmgout="build/dmgout"
+
+relbuild="${CONFIGURATION_BUILD_DIR}"
+dmgout="${OBJROOT}/dmgout"
+
+. "${OBJROOT}/autorevision.tmp"
+bldtg="$(echo "${VCS_TAG}" | sed 's:/:_:g')_[${VCS_SHORT_HASH}]"
 
 # Fail if not release
 if [ ! "${CONFIGURATION}" = "Release" ]; then
@@ -107,17 +115,17 @@ fi
 # Copy over the app
 cd ../../
 echo "Copying the app cleanly."
-rm -r -f ${dmgout}/Warzone.app
-if ! tar -c --exclude '*.svg' --exclude 'Makefile*' --exclude 'makefile*' --exclude '.DS_Store' --exclude '.MD5SumLoc' -C "${CONFIGURATION_BUILD_DIR}" Warzone.app | tar -xC ${dmgout}; then
+rm -r -f "${dmgout}/Warzone.app"
+if ! tar -c --exclude '*.svg' --exclude 'Makefile*' --exclude 'makefile*' --exclude '.DS_Store' --exclude '.MD5SumLoc' -C "${relbuild}" Warzone.app | tar -xC "${dmgout}"; then
 	echo "error: Unable to copy the app" >&2
 	exit 1
 fi
 
 # Make the dSYM Bundle
-mkdir -p "${dmgout}/warzone2100-dSYM"
-cp -a ${relbuild}*.dSYM "${dmgout}/warzone2100-dSYM"
-cd "$dmgout"
-tar -czf warzone2100-dSYM.tar.gz --exclude '.DS_Store' warzone2100-dSYM
+mkdir -p "${dmgout}/warzone2100-${bldtg}-dSYM"
+cp -a "${relbuild}"/*.dSYM "${dmgout}/warzone2100-${bldtg}-dSYM"
+cd "${dmgout}"
+tar -czf "warzone2100-${bldtg}-dSYM.tgz" --exclude '.DS_Store' "warzone2100-${bldtg}-dSYM"
 
 # mkredist.bash
 
@@ -170,13 +178,13 @@ for moddr in ${modlst}; do
 	fi
 done
 
-cd ../../../../../
+cd "${dmgout}"
 
 rm -rf ./out ./temp
 mkdir temp/
 mkdir out/
-mv warzone2100-dSYM temp/warzone2100-dSYM
-mv warzone2100-dSYM.tar.gz out/warzone2100-dSYM.tar.gz
+mv warzone2100-${bldtg}-dSYM temp/warzone2100-${bldtg}-dSYM
+mv warzone2100-${bldtg}-dSYM.tgz out/warzone2100-${bldtg}-dSYM.tgz
 
 echo "== Creating DMG =="
 cp -a wztemplate.sparseimage temp/wztemplatecopy.sparseimage
@@ -187,7 +195,7 @@ mountpth="$(echo "${hdiutilOut}" | sed -E 's:(/dev/disk[0-9])( +)::')"
 cp -a Warzone.app/* "${mountpth}/Warzone.app"
 signd
 hdiutil detach "${mountpnt}"
-hdiutil convert temp/wztemplatecopy.sparseimage -format UDZO -o out/warzone2100-novideo.dmg
+hdiutil convert temp/wztemplatecopy.sparseimage -format UDZO -o out/warzone2100-${bldtg}-novideo.dmg
 
 if [ -f "${sequencelonme}" ]; then
 	echo "== Creating LQ DMG =="
@@ -199,7 +207,7 @@ if [ -f "${sequencelonme}" ]; then
 	cp -a sequences-lo.wz "${mountpth}/Warzone.app/Contents/Resources/data/sequences.wz"
 	signd
 	hdiutil detach "${mountpnt}"
-	hdiutil convert temp/wztemplatecopy.sparseimage -format UDZO -o out/warzone2100-lqvideo.dmg
+	hdiutil convert temp/wztemplatecopy.sparseimage -format UDZO -o out/warzone2100-${bldtg}-lqvideo.dmg
 else
 	echo "${sequencelonme} does not exist, skipping"
 fi
@@ -215,7 +223,7 @@ if [ -f "${sequencenme}" ]; then
 	cp -a sequences-lo.wz "${mountpth}/Warzone.app/Contents/Resources/data/sequences.wz"
 	signd
 	hdiutil detach "${mountpnt}"
-	hdiutil convert temp/wztemplatecopy.sparseimage -format UDZO  -o out/warzone2100-hqvideo.dmg
+	hdiutil convert temp/wztemplatecopy.sparseimage -format UDZO  -o out/warzone2100-${bldtg}-hqvideo.dmg
 else
 	echo "${sequencenme} does not exist, skipping"
 fi
