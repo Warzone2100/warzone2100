@@ -310,15 +310,13 @@ void pie_UploadDisplayBuffer()
 
 bool pie_InitRadar(void)
 {
-	radarTexture = _TEX_INDEX;
-	glGenTextures(1, &_TEX_PAGE[_TEX_INDEX].id);
-	_TEX_INDEX++;
+	glGenTextures(1, &radarTexture);
 	return true;
 }
 
 bool pie_ShutdownRadar(void)
 {
-	glDeleteTextures(1, &_TEX_PAGE[radarTexture].id);
+	glDeleteTextures(1, &radarTexture);
 	return true;
 }
 
@@ -332,7 +330,8 @@ void pie_DownLoadRadar(UDWORD *buffer, int width, int height, bool filter)
 	while (width > (w *= 2)) {}
 	while (height > (h *= 2)) {}
 
-	pie_SetTexturePage(radarTexture);
+	pie_SetTexturePage(TEXPAGE_EXTERN);
+	glBindTexture(GL_TEXTURE_2D, radarTexture);
 	black = (char *)calloc(1, w * h * 4);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, black);
 	free(black);
@@ -359,9 +358,9 @@ void pie_DownLoadRadar(UDWORD *buffer, int width, int height, bool filter)
 /** Display radar texture using the given height and width, depending on zoom level. */
 void pie_RenderRadar(int x, int y, int width, int height)
 {
-	pie_SetTexturePage(radarTexture);
+	pie_SetTexturePage(TEXPAGE_EXTERN);
+	glBindTexture(GL_TEXTURE_2D, radarTexture);
 	pie_SetRendMode(REND_ALPHA);
-
 	glColor4ubv(WZCOL_WHITE.vector);
 	glBegin(GL_TRIANGLE_STRIP);
 		glTexCoord2f(0, 0);			glVertex2f(x, y);

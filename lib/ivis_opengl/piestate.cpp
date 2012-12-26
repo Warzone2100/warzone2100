@@ -397,7 +397,7 @@ void pie_ActivateFallback(SHADER_MODE, iIMDShape* shape, PIELIGHT teamcolour, PI
 	// TU1
 	glActiveTexture(GL_TEXTURE1);
 	glEnable(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, _TEX_PAGE[shape->tcmaskpage].id);
+	glBindTexture(GL_TEXTURE_2D, pie_Texture(shape->tcmaskpage));
 	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE,	GL_COMBINE);
 
 	// TU1 RGB
@@ -482,12 +482,12 @@ void pie_ActivateShader(SHADER_MODE shaderMode, iIMDShape* shape, PIELIGHT teamc
 	if (maskpage != iV_TEX_INVALID)
 	{
 		glActiveTexture(GL_TEXTURE1);
-		glBindTexture(GL_TEXTURE_2D, _TEX_PAGE[maskpage].id);
+		glBindTexture(GL_TEXTURE_2D, pie_Texture(maskpage));
 	}
 	if (normalpage != iV_TEX_INVALID)
 	{
 		glActiveTexture(GL_TEXTURE2);
-		glBindTexture(GL_TEXTURE_2D, _TEX_PAGE[normalpage].id);
+		glBindTexture(GL_TEXTURE_2D, pie_Texture(normalpage));
 	}
 	glActiveTexture(GL_TEXTURE0);
 
@@ -614,8 +614,7 @@ void pie_SetTexturePage(SDWORD num)
 				{
 					glEnable(GL_TEXTURE_2D);
 				}
-				ASSERT_OR_RETURN(, num < iV_TEX_MAX, "Index out of bounds: %d", num);
-				glBindTexture(GL_TEXTURE_2D, _TEX_PAGE[num].id);
+				glBindTexture(GL_TEXTURE_2D, pie_Texture(num));
 		}
 		rendStates.texPage = num;
 	}

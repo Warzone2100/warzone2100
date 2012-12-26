@@ -1433,7 +1433,7 @@ void drawWater(void)
 
 	// second texture unit
 	glActiveTexture(GL_TEXTURE1);
-	glBindTexture(GL_TEXTURE_2D, iV_NativeTexID(iV_GetTexture("page-81")));
+	glBindTexture(GL_TEXTURE_2D, pie_Texture(iV_GetTexture("page-81")));
 	glError();
 	glEnable(GL_TEXTURE_2D);
 	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);

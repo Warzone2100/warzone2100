@@ -66,7 +66,6 @@ bool pie_Initialise(void)
 	}
 
 	pie_MatInit();
-	_TEX_INDEX = 0;
 
 	rendSurface.width	= pie_GetVideoBufferWidth();
 	rendSurface.height	= pie_GetVideoBufferHeight();

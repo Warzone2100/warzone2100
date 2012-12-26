@@ -28,17 +28,42 @@
 #include "lib/ivis_opengl/piepalette.h"
 #include "lib/ivis_opengl/png_util.h"
 
+#include <QList>
 #include "screen.h"
 
 //*************************************************************************
 
-iTexPage _TEX_PAGE[iV_TEX_MAX];
-unsigned int _TEX_INDEX;
+struct iTexPage
+{
+	char name[iV_TEXNAME_MAX];
+	GLuint id;
+};
+
+QList<iTexPage> _TEX_PAGE;
 
 static void pie_PrintLoadedTextures(void);
 
 //*************************************************************************
 
+GLuint pie_Texture(int page)
+{
+	return _TEX_PAGE[page].id;
+}
+
+int pie_NumberOfPages()
+{
+	return _TEX_PAGE.size();
+}
+
+// Add a new texture page to the list
+int pie_ReserveTexture(const char *name)
+{
+	iTexPage tex;
+	glGenTextures(1, &tex.id);
+	sstrcpy(tex.name, name);
+	_TEX_PAGE.append(tex);
+	return _TEX_PAGE.size() - 1;
+}
 
 /**************************************************************************
 	Add an image buffer given in s as a new texture page in the texture
@@ -57,9 +82,13 @@ int pie_AddTexPage(iV_Image *s, const char* filename, int slot, int maxTextureSi
 	void *bmp;
 	bool scaleDown = false;
 	GLint minfilter;
+	iTexPage tex;
+	int page = -1;
+
+	ASSERT(s && filename, "Bad input parameter");
 
 	/* Have we already loaded this one? Should not happen here. */
-	while (i < _TEX_INDEX)
+	while (i < _TEX_PAGE.size())
 	{
 		if (strncmp(filename, _TEX_PAGE[i].name, iV_TEXNAME_MAX) == 0)
 		{
@@ -71,24 +100,17 @@ int pie_AddTexPage(iV_Image *s, const char* filename, int slot, int maxTextureSi
 		i++;
 	}
 
-	/* Use first unused slot */
-	for (i = slot; i < iV_TEX_MAX && _TEX_PAGE[i].name[0] != '\0'; i++) {}
-
-	if (i == _TEX_INDEX)
-	{
-		_TEX_INDEX++; // increase table
-	}
-	ASSERT(i != iV_TEX_MAX, "pie_AddTexPage: too many texture pages");
-
-	debug(LOG_TEXTURE, "pie_AddTexPage: %s page=%d", filename, _TEX_INDEX);
-	assert(s != NULL);
+	page = _TEX_PAGE.size();
+	debug(LOG_TEXTURE, "pie_AddTexPage: %s page=%d", filename, page);
 
 	/* Stick the name into the tex page structures */
-	sstrcpy(_TEX_PAGE[i].name, filename);
+	sstrcpy(tex.name, filename);
 
-	glGenTextures(1, &_TEX_PAGE[i].id);
-	// FIXME: This function is used instead of glBindTexture, but we're juggling with difficult to trace global state here. Look into pie_SetTexturePage's definition for details.
-	pie_SetTexturePage(i);
+	glGenTextures(1, &tex.id);
+
+	_TEX_PAGE.append(tex);
+
+	pie_SetTexturePage(page);
 
 	width = s->width;
 	height = s->height;
@@ -161,10 +183,7 @@ int pie_AddTexPage(iV_Image *s, const char* filename, int slot, int maxTextureSi
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
 
 	/* Send back the texpage number so we can store it in the IMD */
-
-	_TEX_INDEX++;
-
-	return i;
+	return page;
 }
 
 
@@ -214,11 +233,8 @@ void pie_MakeTexPageTCMaskName(char * filename)
  */
 static void pie_PrintLoadedTextures(void)
 {
-	unsigned int i = 0;
-
-	debug(LOG_ERROR, "Available texture pages in memory (%d out of %d max):", _TEX_INDEX, iV_TEX_MAX);
-
-	for ( i = 0; i < iV_TEX_MAX && _TEX_PAGE[i].name[0] != '\0'; i++ )
+	debug(LOG_ERROR, "Texture pages in memory: %u", _TEX_PAGE.size());
+	for (int i = 0; i < _TEX_PAGE.size() && _TEX_PAGE[i].name[0] != '\0'; i++ )
 	{
 		debug(LOG_ERROR, "%02d : %s", i, _TEX_PAGE[i].name);
 	}
@@ -243,7 +259,7 @@ int iV_GetTexture(const char *filename)
 	/* Have we already loaded this one then? */
 	sstrcpy(path, filename);
 	pie_MakeTexPageName(path);
-	for (i = 0; i < iV_TEX_MAX; i++)
+	for (i = 0; i < _TEX_PAGE.size(); i++)
 	{
 		if (strncmp(path, _TEX_PAGE[i].name, iV_TEXNAME_MAX) == 0)
 		{
@@ -290,34 +306,21 @@ int pie_ReplaceTexPage(iV_Image *s, const char *texPage, int maxTextureSize, boo
 	return i;
 }
 
-
-/*
-	Alex - fixed this so it doesn't try to free up the memory if it got the page from resource
-	handler - this is because the resource handler will deal with freeing it, and in all probability
-	will have already done so by the time this is called, thus avoiding an 'already freed' moan.
-*/
 void pie_TexShutDown(void)
 {
-	unsigned int i = 0;
-
-	while (i < _TEX_INDEX)
+	// TODO, lazy deletions for faster loading of next level
+	debug(LOG_TEXTURE, "Cleaning out %u textures", _TEX_PAGE.size());
+	int _TEX_INDEX = _TEX_PAGE.size() - 1;
+	while (_TEX_INDEX > 0)
 	{
-		glDeleteTextures(1, &_TEX_PAGE[i].id);
-		i++;
+		glDeleteTextures(1, &_TEX_PAGE[_TEX_INDEX--].id);
 	}
-
-	debug(LOG_TEXTURE, "pie_TexShutDown successful - did free %u texture pages", i);
+	_TEX_PAGE.clear();
 }
 
 void pie_TexInit(void)
 {
-	int i = 0;
-
-	while (i < iV_TEX_MAX) {
-		_TEX_PAGE[i].name[0] = '\0';
-		i++;
-	}
-	debug(LOG_TEXTURE, "pie_TexInit successful - initialized %d texture pages\n", i);
+	debug(LOG_TEXTURE, "pie_TexInit successful");
 }
 
 

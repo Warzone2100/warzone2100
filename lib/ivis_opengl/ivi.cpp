@@ -23,10 +23,8 @@
 #include "lib/ivis_opengl/tex.h"
 #include "lib/ivis_opengl/textdraw.h"
 
-// pass in true to reset the palette too.
 void iV_Reset()
 {
-	_TEX_INDEX = 0;
 }
 
 void iV_ShutDown(void)

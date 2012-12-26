@@ -23,8 +23,6 @@
 #include "lib/framework/opengl.h"
 #include "png_util.h"
 
-
-#define iV_TEX_MAX 255
 #define iV_TEX_INVALID 0
 #define iV_TEXNAME_MAX 64
 
@@ -32,28 +30,9 @@
 
 //*************************************************************************
 
-struct iTexPage
-{
-	char name[iV_TEXNAME_MAX];
-	GLuint id;
-};
-
-//*************************************************************************
-
-extern unsigned int _TEX_INDEX;
-extern iTexPage _TEX_PAGE[iV_TEX_MAX];
-
-//*************************************************************************
-
-static inline char * iV_TexName(SDWORD pageNum)
-{
-	return _TEX_PAGE[pageNum].name;
-}
-
-static inline GLuint iV_NativeTexID(SDWORD pageNum)
-{
-	return _TEX_PAGE[pageNum].id;
-}
+GLuint pie_Texture(int page);
+int pie_NumberOfPages();
+int pie_ReserveTexture(const char *name);
 
 //*************************************************************************
 
