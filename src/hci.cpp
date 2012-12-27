@@ -113,7 +113,7 @@ struct BUTOFFSET
 	SWORD y;
 };
 
-BUTOFFSET ReticuleOffsets[NUMRETBUTS] =  	// Reticule button form relative positions.
+static BUTOFFSET ReticuleOffsets[NUMRETBUTS] =  	// Reticule button form relative positions.
 {
 	{48, 47},	// RETBUT_CANCEL,
 	{53, 15},	// RETBUT_FACTORY,
@@ -124,7 +124,7 @@ BUTOFFSET ReticuleOffsets[NUMRETBUTS] =  	// Reticule button form relative posit
 	{19, 33},	// RETBUT_COMMAND,
 };
 
-BUTSTATE ReticuleEnabled[NUMRETBUTS] =  	// Reticule button enable states.
+static BUTSTATE ReticuleEnabled[NUMRETBUTS] =  	// Reticule button enable states.
 {
 	{IDRET_CANCEL, false, false},
 	{IDRET_MANUFACTURE, false, false},
@@ -145,7 +145,7 @@ bool ClosingTrans = false;
 bool ClosingTransCont = false;
 bool ClosingTransDroids = false;
 static bool ReticuleUp = false;
-bool Refreshing = false;
+static bool Refreshing = false;
 
 /***************************************************************************************/
 /*                  Widget ID numbers                                                  */
@@ -428,12 +428,25 @@ static SDWORD intNumSelectedDroids(UDWORD droidType);
 
 // Set the x,y members of a button widget initialiser given a reticule button index.
 //
-static void SetReticuleButPos(UWORD ButId, W_BUTINIT *sButInit)
+static void setReticuleBut(UWORD ButId, const char *tip, INTFAC_TYPE image, int style)
 {
-	ASSERT(ButId < NUMRETBUTS, "SetReticuleButPos : Bad button index");
-
-	sButInit->x = (SWORD)(ReticuleOffsets[ButId].x + RETXOFFSET);
-	sButInit->y = (SWORD)(ReticuleOffsets[ButId].y + RETYOFFSET);
+	/* Default button data */
+	W_BUTINIT sButInit;
+	sButInit.formID = IDRET_FORM;
+	sButInit.id = ReticuleEnabled[ButId].id;
+	sButInit.width = RET_BUTWIDTH;
+	sButInit.height = RET_BUTHEIGHT;
+	sButInit.style = WBUT_PLAIN;
+	sButInit.pDisplay = intDisplayReticuleButton;
+	sButInit.x = ReticuleOffsets[ButId].x + RETXOFFSET;
+	sButInit.y = ReticuleOffsets[ButId].y + RETYOFFSET;
+	sButInit.pTip = _("Commanders (F6)");
+	sButInit.UserData = image;
+	sButInit.style = style;
+	if (!widgAddButton(psWScreen, &sButInit))
+	{
+		debug(LOG_ERROR, "Failed to add reticule button");
+	}
 }
 
 /* Initialise the in game interface */
@@ -806,12 +819,9 @@ void intResetScreen(bool NoAnim)
 	/* Remove whatever extra screen was displayed */
 	switch (intMode)
 	{
-
 	case INT_OPTION:
 		intRemoveOptions();
 		break;
-
-
 	case INT_EDITSTAT:
 		intStopStructPosition();
 		if (NoAnim)
@@ -823,7 +833,6 @@ void intResetScreen(bool NoAnim)
 			intRemoveStats();
 		}
 		break;
-
 	case INT_OBJECT:
 		intStopStructPosition();
 		if (NoAnim)
@@ -835,7 +844,6 @@ void intResetScreen(bool NoAnim)
 			intRemoveObject();
 		}
 		break;
-
 	case INT_STAT:
 		if (NoAnim)
 		{
@@ -861,7 +869,6 @@ void intResetScreen(bool NoAnim)
 			intRemoveObject();
 		}
 		break;
-
 	case INT_ORDER:
 		if (NoAnim)
 		{
@@ -872,7 +879,6 @@ void intResetScreen(bool NoAnim)
 			intRemoveOrder();
 		}
 		break;
-
 	case INT_INGAMEOP:
 		if (NoAnim)
 		{
@@ -883,12 +889,9 @@ void intResetScreen(bool NoAnim)
 			intCloseInGameOptions(false, true);
 		}
 		break;
-
 	case INT_MISSIONRES:
 		intRemoveMissionResultNoAnim();
 		break;
-
-
 	case INT_MULTIMENU:
 		if (NoAnim)
 		{
@@ -899,19 +902,14 @@ void intResetScreen(bool NoAnim)
 			intCloseMultiMenu();
 		}
 		break;
-
-
 	case INT_DESIGN:
 		intRemoveDesign();
 		intHidePowerBar();
-
 		if (bInTutorial)
 		{
 			eventFireCallbackTrigger((TRIGGER_TYPE)CALL_DESIGN_QUIT);
 		}
-
 		break;
-
 	case INT_INTELMAP:
 		if (NoAnim)
 		{
@@ -922,14 +920,11 @@ void intResetScreen(bool NoAnim)
 			intRemoveIntelMap();
 		}
 		intHidePowerBar();
-
 		if (!bMultiPlayer)
 		{
 			gameTimeStart();
 		}
-
 		break;
-
 	case INT_TRANSPORTER:
 		if (NoAnim)
 		{
@@ -2900,130 +2895,37 @@ UWORD numForms(UDWORD total, UDWORD perForm)
 
 
 /* Add the reticule widgets to the widget screen */
-bool intAddReticule(void)
+bool intAddReticule()
 {
-	if (!ReticuleUp)
+	if (ReticuleUp)
 	{
-		/* Create the basic form */
-
-		W_FORMINIT sFormInit;
-		sFormInit.formID = 0;
-		sFormInit.id = IDRET_FORM;
-		sFormInit.style = WFORM_PLAIN;
-		sFormInit.x = RET_X;
-		sFormInit.y = (SWORD)RET_Y;
-		sFormInit.width = RET_FORMWIDTH;
-		sFormInit.height = 	RET_FORMHEIGHT;
-		sFormInit.pDisplay = intDisplayPlainForm;
-		if (!widgAddForm(psWScreen, &sFormInit))
-		{
-			return false;
-		}
-
-		/* Now add the buttons */
-
-		//set up default button data
-		W_BUTINIT sButInit;
-		sButInit.formID = IDRET_FORM;
-		sButInit.id = IDRET_COMMAND;
-		sButInit.width = RET_BUTWIDTH;
-		sButInit.height = RET_BUTHEIGHT;
-
-		//add buttons as required...
-
-		//options button
-		SetReticuleButPos(RETBUT_COMMAND, &sButInit);
-		sButInit.style = WBUT_PLAIN;
-		sButInit.pTip = _("Commanders (F6)");
-		sButInit.pDisplay = intDisplayReticuleButton;
-		sButInit.UserData = IMAGE_COMMANDDROID_UP;
-
-		if (!widgAddButton(psWScreen, &sButInit))
-		{
-			return false;
-		}
-
-		/* Intelligence Map button - this needs to respond to RMB as well*/
-		sButInit.style = WBUT_SECONDARY;
-		sButInit.id = IDRET_INTEL_MAP;
-		SetReticuleButPos(RETBUT_INTELMAP, &sButInit);
-		sButInit.pTip = _("Intelligence Display (F5)");
-		sButInit.pDisplay = intDisplayReticuleButton;
-		sButInit.UserData = IMAGE_INTELMAP_UP;
-
-		if (!widgAddButton(psWScreen, &sButInit))
-		{
-			return false;
-		}
-
-		/* Manufacture button */
-		sButInit.style = WBUT_PLAIN;
-		sButInit.id = IDRET_MANUFACTURE;
-		SetReticuleButPos(RETBUT_FACTORY, &sButInit);
-		sButInit.pTip = _("Manufacture (F1)");
-		sButInit.pDisplay = intDisplayReticuleButton;
-		sButInit.UserData = IMAGE_MANUFACTURE_UP;
-
-		if (!widgAddButton(psWScreen, &sButInit))
-		{
-			return false;
-		}
-
-		/* Design button */
-		sButInit.style = WBUT_PLAIN;
-		sButInit.id = IDRET_DESIGN;
-		SetReticuleButPos(RETBUT_DESIGN, &sButInit);
-		sButInit.pTip = _("Design (F4)");
-		sButInit.pDisplay = intDisplayReticuleButton;
-		sButInit.UserData = IMAGE_DESIGN_UP;
-
-		if (!widgAddButton(psWScreen, &sButInit))
-		{
-			return false;
-		}
-
-		/* Research button */
-		sButInit.style = WBUT_PLAIN;
-		sButInit.id = IDRET_RESEARCH;
-		SetReticuleButPos(RETBUT_RESEARCH, &sButInit);
-		sButInit.pTip = _("Research (F2)");
-		sButInit.pDisplay = intDisplayReticuleButton;
-		sButInit.UserData = IMAGE_RESEARCH_UP;
-
-		if (!widgAddButton(psWScreen, &sButInit))
-		{
-			return false;
-		}
-
-		/* Build button */
-		sButInit.style = WBUT_PLAIN;
-		sButInit.id = IDRET_BUILD;
-		SetReticuleButPos(RETBUT_BUILD, &sButInit);
-		sButInit.pTip = _("Build (F3)");
-		sButInit.pDisplay = intDisplayReticuleButton;
-		sButInit.UserData = IMAGE_BUILD_UP;
-
-		if (!widgAddButton(psWScreen, &sButInit))
-		{
-			return false;
-		}
-
-		/* Cancel button */
-		sButInit.style = WBUT_PLAIN;
-		sButInit.id = IDRET_CANCEL;
-		SetReticuleButPos(RETBUT_CANCEL, &sButInit);
-		sButInit.width = RET_BUTWIDTH + 10;
-		sButInit.height = RET_BUTHEIGHT + 8;
-		sButInit.pTip = _("Close");
-		sButInit.pDisplay = intDisplayReticuleButton;
-		sButInit.UserData = IMAGE_CANCEL_UP;
-		if (!widgAddButton(psWScreen, &sButInit))
-		{
-			return false;
-		}
-		ReticuleUp = true;
+		return true; // all fine 
 	}
-
+	/* Create the basic form */
+	W_FORMINIT sFormInit;
+	sFormInit.formID = 0;
+	sFormInit.id = IDRET_FORM;
+	sFormInit.style = WFORM_PLAIN;
+	sFormInit.x = RET_X;
+	sFormInit.y = RET_Y;
+	sFormInit.width = RET_FORMWIDTH;
+	sFormInit.height = RET_FORMHEIGHT;
+	sFormInit.pDisplay = intDisplayPlainForm;
+	if (!widgAddForm(psWScreen, &sFormInit))
+	{
+		return false;
+	}
+	else // normal reticule
+	{
+		setReticuleBut(RETBUT_COMMAND, _("Commanders (F6)"), IMAGE_COMMANDDROID_UP, WBUT_PLAIN);
+		setReticuleBut(RETBUT_INTELMAP, _("Intelligence Display (F5)"), IMAGE_INTELMAP_UP, WBUT_SECONDARY);
+		setReticuleBut(RETBUT_FACTORY, _("Manufacture (F1)"), IMAGE_MANUFACTURE_UP, WBUT_SECONDARY);
+		setReticuleBut(RETBUT_DESIGN, _("Design (F4)"), IMAGE_DESIGN_UP, WBUT_PLAIN);
+		setReticuleBut(RETBUT_RESEARCH, _("Research (F2)"), IMAGE_RESEARCH_UP, WBUT_PLAIN);
+		setReticuleBut(RETBUT_BUILD, _("Build (F3)"), IMAGE_BUILD_UP, WBUT_PLAIN);
+		setReticuleBut(RETBUT_CANCEL, _("Close"), IMAGE_CANCEL_UP, WBUT_PLAIN);
+	}
+	ReticuleUp = true;
 	return true;
 }
 
