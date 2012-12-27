@@ -834,7 +834,8 @@ event enemyWayEvnt(inactive)
 			//hold position
 				groupAddGroup(Recovery1, Recovery2);
 				groupAddGroup(Recovery1, artGroup);
-				setGroupSecondary(Recovery1, DSO_HALTTYPE, DSS_HALT_HOLD);
+				//TODO : replace below with hold primary order
+				//setGroupSecondary(Recovery1, DSO_HALTTYPE, DSS_HALT_HOLD);
 				setEventTrigger(landTrans, landTransTrig);
 				setEventTrigger(enemyWayEvnt, inactive);
 			}

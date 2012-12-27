@@ -702,7 +702,10 @@ event startup(CALL_GAMEINIT)
 	groupAddArea(enemy1North, enemy1, 4928, 448, 5824, 1728);	//4800, 192, 5824, 3008);
 	groupAddArea(enemy1South, enemy1, 6464, 6976, 7616, 7872);	//6400, 6784, 7680, 7808);
 	groupAddArea(enemy1Hill, enemy1, 4096, 4224, 4480, 4480);
-	setGroupSecondary(enemy1Hill, DSO_HALTTYPE, DSS_HALT_HOLD);		//hold position
+
+	//TODO : replace below with hold primary order
+	//setGroupSecondary(enemy1Hill, DSO_HALTTYPE, DSS_HALT_HOLD);		//hold position
+
 	//groupAddArea(enemy1Force1, enemy1, 4288, 9024, 5568, 9920);
 	//groupAddArea(enemy1Force2, enemy1, 1600, 10048, 2624, 10816);
 	groupAddArea(scout1, enemy2, 6336, 1984, 6848, 2240);

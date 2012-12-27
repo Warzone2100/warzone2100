@@ -39,7 +39,8 @@ event start(CALL_GAMEINIT)
 	while (count < numDroids)
 	{
 		//make sure don't chase Nexus!!!
-		setDroidSecondary(droids[count], DSO_HALTTYPE, DSS_HALT_GUARD);
+		//TODO - make sure this works after removal of DSO_HALTTYPE
+		//setDroidSecondary(droids[count], DSO_HALTTYPE, DSS_HALT_GUARD);
 		if ((droids[count].droidType == DROID_WEAPON) or (droids[count].droidType == DROID_CYBORG))		//set experience
 		{
 			setDroidKills(droids[count], random(16) + 31);	//experience range 31 to 46

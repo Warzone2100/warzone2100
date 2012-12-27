@@ -37,7 +37,8 @@ event start(CALL_GAMEINIT)
 	while (count < numDroids)
 	{
 		forceDamageObject(droids[count], random(20) + 50);	//anywhere from 50% to 70% health
-		setDroidSecondary(droids[count], DSO_HALTTYPE, DSS_HALT_HOLD);
+		//TODO : replace below with hold primary order
+		//setDroidSecondary(droids[count], DSO_HALTTYPE, DSS_HALT_HOLD);
 		count = count + 1;
 	}
 		forceDamageObject(transStruct, random(20) + 30);	//anywhere from 30% to 50% health

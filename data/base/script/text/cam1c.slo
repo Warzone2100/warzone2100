@@ -621,31 +621,24 @@ event enm2cFactEvnt;
 
 event startup(CALL_GAMEINIT)	//(init)
 {
-//setass here since factory may be dead if done later!!!
+	//setass here since factory may be dead if done later!!!
 	setAssemblyPoint (enm1a, 13248, 13632);
-	//setAssemblyPoint (enm1b, 8384, 704);	//in good place
 	setAssemblyPoint (enm1c, 8384, 704);
 
 	//setAssemblyPoint (enm2a, 13504, 13248);	//12736, 14016);
 	setAssemblyPoint (enm2b, 12736, 11456);
 	setAssemblyPoint (enm2c, 9920, 3136);
-	//setAssemblyPoint (enm2d, 14528, 3776);
 
 	//make scavengers allies with NP
 	createAlliance(enemy1, enemy2);
-//set attack level for scavs
+
+	//set attack level for scavs
 	atkTot = 4;
-//make up starting forces
 
-//Send sensor droids to new positions
-	//orderDroidLoc(sensor1, DORDER_SCOUT, 6976, 13376);
-	//orderDroidLoc(sensor2, DORDER_SCOUT, 6592, 14400);
-
-//Setup Mortar group
+	//Setup Mortar group
 	groupAddArea(IDF1, enemy2, 8384, 15168, 9024, 15680);
-	//orderGroupLoc(IDF1, DORDER_SCOUT, 7232, 15168);		//then move into position (no good other way round!)
 
-//set up strike force (scout)
+	//set up strike force (scout)
 	groupAddArea(Strike1[0], enemy2, 8384, 13760, 8512, 14144);	//rocket-sensor scout force
 	groupAddArea(Strike2[0], enemy2, 8640, 13760, 8896, 14144);	//rocket-sensor  force
 	groupAddArea(Strike1[1], enemy2, 9280, 13760, 9920, 14144);	//halftrack 'scout' force
@@ -660,27 +653,21 @@ event startup(CALL_GAMEINIT)	//(init)
 	as1 = 3;	//5;		//move followup force out to 2 sectors back
 	asX = atk1SectX1[as1] + random(atk1SectX2[as1] - atk1SectX1[as1]);
 	asY = atk1SectY1[as1] + random(atk1SectY2[as1] - atk1SectY1[as1]);
-	//orderGroupLoc(Strike2[0], DORDER_SCOUT, asX, asY);
 
 	scoutSector[1] = 0;	//3;//second scout South 1B 
 	sectInc[0] = 1;			//sector increment to get to next one
 	sectInc[1] = 1;
 
-	//setGroupSecondary(Strike1, DSO_ATTACK_RANGE, DSS_ARANGE_LONG);
-//scout player's base
+	//scout player's base
 	groupAddArea(Ambush1, enemy2, 10944, 10816, 11712, 11712);
 	AmbushTot=Ambush1.members;		//keep note of max for checking casualties later
-	//orderGroupObj(Ambush1, DORDER_FIRESUPPORT, sensor1);	//use sensor droid for firesupport?
 
-	//groupAddArea(Reserve1, enemy2, 9280, 13632, 9664, 14144);
-
-//set up Scavenger forces
+	//set up Scavenger forces
 	groupAddArea(Scav1, enemy1, 13120, 13376, 12896, 13587);	//4 Jeeps
 	groupAddArea(Scav2, enemy1, 13730, 9419, 13863, 9505);		//4 Rocket Buggies
-	//setGroupSecondary(Scav2, DSO_HALTTYPE, DSS_HALT_HOLD);		//Hold position
 	Scav2Health=Scav2.health;					//keep track of casualties
 
-// player specific technology startups
+	// player specific technology startups
 	count = 0;
 	while (count < numtecE1)
 	{
