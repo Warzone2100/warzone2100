@@ -50,7 +50,6 @@
 #define IDRET_CANCEL			8		// central cancel button
 #define IDRET_COMMAND			9		// command droid button
 #define IDRET_TRANSPORTER		10		// transporter button
-#define IDRET_ORDER				11		// droid order button
 #define IDPOW_POWERBAR_T		102		// power bar - trough
 #define	IDTRANTIMER_BUTTON		11012	//transporter button on timer display
 

@@ -1690,7 +1690,6 @@ CONST_SYMBOL asConstantTable[] =
 	{ "IDRET_INTELMAP",		VAL_INT,	false,	IDRET_INTEL_MAP,	NULL, NULL, 0.0f },
 	{ "IDRET_DESIGN",		VAL_INT,	false,	IDRET_DESIGN,		NULL, NULL, 0.0f },
 	{ "IDRET_COMMAND",		VAL_INT,	false,	IDRET_COMMAND,		NULL, NULL, 0.0f },
-	{ "IDRET_ORDER",		VAL_INT,	false,	IDRET_ORDER,		NULL, NULL, 0.0f },
 	{ "IDRET_TRANSPORTER",	VAL_INT,	false,	IDRET_TRANSPORTER,	NULL, NULL, 0.0f },
 
 	    // Design screen buttons

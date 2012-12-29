@@ -440,7 +440,7 @@ static void setReticuleBut(UWORD ButId, const char *tip, INTFAC_TYPE image, int 
 	sButInit.pDisplay = intDisplayReticuleButton;
 	sButInit.x = ReticuleOffsets[ButId].x + RETXOFFSET;
 	sButInit.y = ReticuleOffsets[ButId].y + RETYOFFSET;
-	sButInit.pTip = _("Commanders (F6)");
+	sButInit.pTip = tip;
 	sButInit.UserData = image;
 	sButInit.style = style;
 	if (!widgAddButton(psWScreen, &sButInit))
@@ -1327,27 +1327,13 @@ INT_RETVAL intRunWidgets(void)
 	case IDRET_BUILD:
 		intResetScreen(true);
 		widgSetButtonState(psWScreen, IDRET_BUILD, WBUT_CLICKLOCK);
-		if (editMode)
-		{
-			intProcessOptions(IDOPT_STRUCT);
-		}
-		else
-		{
-			(void)intAddBuild(NULL);
-		}
+		intAddBuild(NULL);
 		break;
 
 	case IDRET_MANUFACTURE:
 		intResetScreen(true);
 		widgSetButtonState(psWScreen, IDRET_MANUFACTURE, WBUT_CLICKLOCK);
-		if (editMode)
-		{
-			intProcessOptions(IDOPT_DROID);
-		}
-		else
-		{
-			(void)intAddManufacture(NULL);
-		}
+		intAddManufacture(NULL);
 		break;
 
 	case IDRET_RESEARCH:
@@ -5474,12 +5460,11 @@ void intCheckReticuleButtons(void)
 {
 	STRUCTURE	*psStruct;
 	DROID	*psDroid;
-	int i;
 
 	ReticuleEnabled[RETBUT_CANCEL].Enabled = true;
-	ReticuleEnabled[RETBUT_FACTORY].Enabled = editMode;
+	ReticuleEnabled[RETBUT_FACTORY].Enabled = false;
 	ReticuleEnabled[RETBUT_RESEARCH].Enabled = false;
-	ReticuleEnabled[RETBUT_BUILD].Enabled = editMode;
+	ReticuleEnabled[RETBUT_BUILD].Enabled = false;
 	ReticuleEnabled[RETBUT_DESIGN].Enabled = allowDesign;
 	ReticuleEnabled[RETBUT_INTELMAP].Enabled = true;
 	ReticuleEnabled[RETBUT_COMMAND].Enabled = false;
@@ -5510,8 +5495,7 @@ void intCheckReticuleButtons(void)
 		}
 	}
 
-	for (psDroid = apsDroidLists[selectedPlayer]; psDroid != NULL; psDroid =
-	        psDroid->psNext)
+	for (psDroid = apsDroidLists[selectedPlayer]; psDroid != NULL; psDroid = psDroid->psNext)
 	{
 		switch (psDroid->droidType)
 		{
@@ -5527,7 +5511,7 @@ void intCheckReticuleButtons(void)
 		}
 	}
 
-	for (i = 0; i < NUMRETBUTS; i++)
+	for (int i = 0; i < NUMRETBUTS; i++)
 	{
 		WIDGET *psWidget = widgGetFromID(psWScreen, ReticuleEnabled[i].id);
 

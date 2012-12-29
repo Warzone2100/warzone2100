@@ -42,7 +42,6 @@ UDWORD	buildState = BUILD3D_NONE;
 BUILDDETAILS	sBuildDetails;
 HIGHLIGHT		buildSite;
 int brushSize = 1;
-bool editMode = false;
 bool quickQueueMode = false;
 
 // Initialisation function for statis & globals in this module.

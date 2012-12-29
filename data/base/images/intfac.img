@@ -543,3 +543,13 @@
 0,0,image_des_saveh.png
 0,0,image_des_delete.png
 0,0,image_des_deleteh.png
+-5,1,image_attack_up.png
+-5,1,image_attack_down.png
+-5,1,image_hold_up.png
+-5,1,image_hold_down.png
+-5,1,image_patrol_up.png
+-5,1,image_patrol_down.png
+-5,1,image_stop_up.png
+-5,1,image_stop_down.png
+-5,1,image_guard_up.png
+-5,1,image_guard_down.png
