@@ -44,7 +44,6 @@
 #define MAX_ORDER_BUTS 5		// Max number of buttons for a given order.
 #define NUM_ORDERS 12			// Number of orders in OrderButtons list.
 
-#define IDORDER_ATTACK_RANGE				8010
 #define IDORDER_REPAIR_LEVEL				8020
 #define IDORDER_ATTACK_LEVEL				8030
 #define IDORDER_PATROL						8040
@@ -126,9 +125,6 @@ struct AVORDER
 
 enum
 {
-	STR_DORD_RANGE1,
-	STR_DORD_RANGE2,
-	STR_DORD_RANGE3,
 	STR_DORD_REPAIR1,
 	STR_DORD_REPAIR2,
 	STR_DORD_REPAIR3,
@@ -136,9 +132,6 @@ enum
 	STR_DORD_FIRE2,
 	STR_DORD_FIRE3,
 	STR_DORD_PATROL,
-	STR_DORD_PURSUE,
-	STR_DORD_GUARD,
-	STR_DORD_HOLDPOS,
 	STR_DORD_RETREPAIR,
 	STR_DORD_RETBASE,
 	STR_DORD_EMBARK,
@@ -156,9 +149,6 @@ static const char *getDORDDescription(int id)
 {
 		switch ( id )
 		{
-			case STR_DORD_RANGE1         : return _("Short Range");
-			case STR_DORD_RANGE2         : return _("Long Range");
-			case STR_DORD_RANGE3         : return _("Optimum Range");
 			case STR_DORD_REPAIR1        : return _("Retreat at Medium Damage");
 			case STR_DORD_REPAIR2        : return _("Retreat at Heavy Damage");
 			case STR_DORD_REPAIR3        : return _("Do or Die!");
@@ -166,9 +156,6 @@ static const char *getDORDDescription(int id)
 			case STR_DORD_FIRE2          : return _("Return Fire");
 			case STR_DORD_FIRE3          : return _("Hold Fire");
 			case STR_DORD_PATROL         : return _("Patrol");
-			case STR_DORD_PURSUE         : return _("Pursue");
-			case STR_DORD_GUARD          : return _("Guard Position");
-			case STR_DORD_HOLDPOS        : return _("Hold Position");
 			case STR_DORD_RETREPAIR      : return _("Return For Repair");
 			case STR_DORD_RETBASE        : return _("Return To HQ");
 			case STR_DORD_EMBARK         : return _("Go to Transport");
@@ -185,7 +172,7 @@ static const char *getDORDDescription(int id)
 };
 
 // Define the order button groups.
-ORDERBUTTONS OrderButtons[NUM_ORDERS]=
+static ORDERBUTTONS OrderButtons[NUM_ORDERS] =
 {
 	{
 		ORDBUTCLASS_NORMAL,
@@ -573,8 +560,6 @@ bool intAddOrder(BASE_OBJECT *psObj)
 		return false;
 	}
 
-
-
 	// Add the close button.
 	W_BUTINIT sButInit;
 	sButInit.formID = IDORDER_FORM;
@@ -590,7 +575,6 @@ bool intAddOrder(BASE_OBJECT *psObj)
 	{
 		return false;
 	}
-
 
 	sButInit = W_BUTINIT();
 	sButInit.formID = IDORDER_FORM;
@@ -706,11 +690,9 @@ bool intAddOrder(BASE_OBJECT *psObj)
 			sButInit.pTip = getDORDDescription(OrderButtons[OrdIndex].ButTips[i]);
 			sButInit.width = (UWORD)GetImageWidth(IntImages,OrderButtons[OrdIndex].ButImageID[i]);
 			sButInit.height = (UWORD)GetImageHeight(IntImages,OrderButtons[OrdIndex].ButImageID[i]);
-			sButInit.UserData = PACKDWORD_TRI(
-										OrderButtons[OrdIndex].ButGreyID[i],
-										OrderButtons[OrdIndex].ButHilightID[i],
-										OrderButtons[OrdIndex].ButImageID[i]
-											 );
+			sButInit.UserData = PACKDWORD_TRI(OrderButtons[OrdIndex].ButGreyID[i],
+			                                  OrderButtons[OrdIndex].ButHilightID[i],
+			                                  OrderButtons[OrdIndex].ButImageID[i]);
 			if(!widgAddButton(psWScreen, &sButInit))
 			{
 				return false;
@@ -796,8 +778,6 @@ bool intAddOrder(BASE_OBJECT *psObj)
 	Form = (W_FORM*)widgGetFromID(psWScreen,IDORDER_FORM);
 	Form->height = (UWORD)(Height + CLOSE_HEIGHT + ORDER_BUTGAP);
 	Form->y = (SWORD)(ORDER_BOTTOMY-Form->height);
-
-
 
 	OrderUp = true;
 
