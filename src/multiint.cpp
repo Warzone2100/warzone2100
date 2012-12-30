@@ -425,7 +425,7 @@ static void loadMapSettings()
 	ASSERT_OR_RETURN(, psLevel, "No level found for %s", game.map);
 	sstrcpy(aFileName, psLevel->apDataFiles[0]);
 	aFileName[strlen(aFileName) - 4] = '\0';
-	sstrcat(aFileName, "/map.ini");
+	sstrcat(aFileName, ".ini");
 	if (PHYSFS_exists(aFileName))
 	{
 		WzConfig ini(aFileName);
