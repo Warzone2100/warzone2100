@@ -23,42 +23,11 @@
 
 #include "droid.h"
 
-extern bool DirectControl;
-extern DROID *psDrivenDroid;
-
-static inline bool driveHasDriven(void)
-{
-	return (DirectControl) && (psDrivenDroid != NULL) ? true : false;
-}
-
-
-// Returns true if drive mode is active.
-//
-static inline bool driveModeActive(void)
-{
-	return DirectControl;
-}
-
-
-// Return true if the specified droid is the driven droid.
-//
-static inline bool driveIsDriven(DROID *psDroid)
-{
-	return (DirectControl) && (psDrivenDroid != NULL) && (psDroid == psDrivenDroid) ? true : false;
-}
-
-
-static inline bool driveIsFollower(DROID *psDroid)
-{
-	return (DirectControl) && (psDrivenDroid != NULL) && (psDroid != psDrivenDroid) && psDroid->selected ? true : false;
-}
-
-
-static inline DROID *driveGetDriven(void)
-{
-	return psDrivenDroid;
-}
-
+bool driveHasDriven();
+bool driveModeActive();	// Returns true if drive mode is active.
+bool driveIsDriven(DROID *psDroid);	// Return true if the specified droid is the driven droid.
+bool driveIsFollower(DROID *psDroid);
+DROID *driveGetDriven();
 
 void driveInitVars(bool Restart);
 bool StartDriverMode(DROID *psOldDroid);
@@ -84,7 +53,6 @@ void driveStartBuild(void);
 bool driveAllowControl(void);
 void driveDisableTactical(void);
 bool driveTacticalActive(void);
-void driveTacticalSelectionChanged(void);
 void driveProcessRadarInput(int x,int y);
 bool driveWasDriving(void);
 void driveDisableDriving(void);

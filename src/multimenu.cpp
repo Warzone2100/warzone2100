@@ -389,11 +389,8 @@ void addMultiRequest(const char* searchDir, const char* fileExtension, UDWORD mo
 	char**             currFile;
 	const unsigned int extensionLength = strlen(fileExtension);
 	const unsigned int buttonsX = (mode == MULTIOP_MAP) ? 22 : 17;
-
 	unsigned int       numButtons, count, butPerForm, i;
-
 	static char		tips[NBTIPS][MAX_STR_LENGTH];
-
 
 	context = mode;
 	if(mode == MULTIOP_MAP)
@@ -402,12 +399,6 @@ void addMultiRequest(const char* searchDir, const char* fileExtension, UDWORD mo
 		current_numplayers = numPlayers;
 	}
 	fileList = PHYSFS_enumerateFiles(searchDir);
-	if (!fileList)
-	{
-		debug(LOG_FATAL, "addMultiRequest: Out of memory");
-		abort();
-		return;
-	}
 
 	// Count number of required buttons
 	numButtons = 0;
@@ -421,7 +412,7 @@ void addMultiRequest(const char* searchDir, const char* fileExtension, UDWORD mo
 			++numButtons;
 	}
 
-	if(mode == MULTIOP_MAP)									// if its a map, also look in the predone stuff.
+	if (mode == MULTIOP_MAP)	// if its a map, also look in the predone stuff.
 	{
 		bool first = true;
 		while (enumerateMultiMaps(first, mapCam, numPlayers) != NULL)
@@ -435,10 +426,7 @@ void addMultiRequest(const char* searchDir, const char* fileExtension, UDWORD mo
 	widgSetTipFont(psRScreen,font_regular);
 
 	/* Calculate how many buttons will go on a single form */
-	butPerForm = ((M_REQUEST_W - 0 - 4) /
-						(R_BUT_W +4)) *
-				 ((M_REQUEST_H - 0- 4) /
-						(R_BUT_H+ 4));
+	butPerForm = ((M_REQUEST_W - 0 - 4) / (R_BUT_W +4)) * ((M_REQUEST_H - 0- 4) / (R_BUT_H+ 4));
 
 	/* add a form to place the tabbed form on */
 	W_FORMINIT sFormInit;
@@ -533,29 +521,6 @@ void addMultiRequest(const char* searchDir, const char* fileExtension, UDWORD mo
 		sButInit.pTip		= tips[tip_index];
 		sButInit.pText		= tips[tip_index];
 
-		if(mode == MULTIOP_MAP)											// if its a map, set player flag.
-		{
-			ASSERT(false, "Confusing code, can we even get here?");
-
-			const char* mapText;
-			unsigned int mapTextLength;
-
-			sButInit.UserData = (*currFile)[0] - '0';
-
-			if( (*currFile)[1] != 'c')
-			{
-				continue;
-			}
-
-			// Chop off description
-			mapText = strrchr(*currFile, '-') + 1;
-			if (mapText - 1 == NULL)
-				continue;
-
-			mapTextLength = tipStringLength - (mapText - *currFile);
-			strlcpy(tips[tip_index], mapText, MIN(mapTextLength + 1, sizeof(tips[tip_index])));
-		}
-
 		++count;
 		widgAddButton(psRScreen, &sButInit);
 
@@ -613,7 +578,6 @@ void addMultiRequest(const char* searchDir, const char* fileExtension, UDWORD mo
 	multiRequestUp = true;
 	hoverPreviewId = 0;
 
-
 	// if it's map select then add the cam style buttons.
 	if(mode == MULTIOP_MAP)
 	{
@@ -661,7 +625,6 @@ void addMultiRequest(const char* searchDir, const char* fileExtension, UDWORD mo
 			widgAddButton(psRScreen, &sButInit);
 		}
 	}
-
 }
 
 static void closeMultiRequester(void)

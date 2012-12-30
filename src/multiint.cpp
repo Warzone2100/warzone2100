@@ -2977,7 +2977,6 @@ static void processMultiopWidgets(UDWORD id)
 		// update string.
 		widgSetString(psWScreen, MULTIOP_PNAME,sPlayer);
 
-
 		removeWildcards((char*)sPlayer);
 
 		printConsoleNameChange(NetPlay.players[selectedPlayer].name, sPlayer);
@@ -3000,8 +2999,6 @@ static void processMultiopWidgets(UDWORD id)
 		debug(LOG_NET, "MULTIOP_HOST enabled");
 		sstrcpy(game.name, widgGetString(psWScreen, MULTIOP_GNAME));	// game name
 		sstrcpy(sPlayer, widgGetString(psWScreen, MULTIOP_PNAME));	// pname
-		// Should not set game.map or game.hash here, since MULTIOP_MAP's string came from game.map in the first place, anyway. Wouldn't know what to set the hash to, and clearing it means selecting the first map with the right name.
-		//sstrcpy(game.map, widgGetString(psWScreen, MULTIOP_MAP));  // add the name
 
 		resetReadyStatus(false);
 		resetDataHash();

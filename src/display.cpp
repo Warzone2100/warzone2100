@@ -140,12 +140,13 @@ static DROID	*psSelectedVtol;
 static DROID	*psDominantSelected;
 static bool bRadarDragging = false;
 static bool mouseScroll = true;
+static UDWORD CurrentItemUnderMouse = 0;
 
 bool	rotActive = false;
 bool	gameStats = false;
 
 /* Hackety hack hack hack */
-SDWORD	screenShakeTable[100] =
+static int screenShakeTable[100] =
 {
 -2,-2,-3,-4,-3,-3,-5,-4,-4,-4,
 -4,-5,-5,-5,-5,-7,-5,-6,-8,-6,
@@ -687,8 +688,6 @@ static void HandleDrag(void)
 		}
 	}
 }
-
-static UDWORD CurrentItemUnderMouse;
 
 UDWORD getTargetType(void)
 {
@@ -1361,14 +1360,6 @@ UDWORD		dispX,dispY,dispR;
 	return(psReturn);
 }
 
-void StartTacticalScrollObj(WZ_DECL_UNUSED bool driveActive, WZ_DECL_UNUSED BASE_OBJECT* psObj)
-{
-}
-
-void CancelTacticalScroll(void)
-{
-}
-
 // Start repositioning a delivery point.
 //
 static FLAG_POSITION flagPos;
@@ -1864,9 +1855,6 @@ static void dealWithLMBStructure(STRUCTURE* psStructure, SELECTION_TYPE selectio
 				intObjectSelected((BASE_OBJECT *)psStructure);
 				FeedbackOrderGiven();
 			}
-// We don't actually wan't to select structures, just inform the interface we've clicked on it,
-// might wan't to do this on PC as well as it fixes the problem with the interface locking multiple
-// buttons in the object window.
 			if (selection == SC_INVALID)
 			{
 				STRUCTURE* psCurr;
@@ -2373,9 +2361,6 @@ static void dealWithRMB( void )
 				}
 				else if (!structureIsBlueprint(psStructure))
 				{
-// We don't actually wan't to select structures, just inform the interface weve clicked on it,
-// might wan't to do this on PC as well as it fixes the problem with the interface locking multiple
-// buttons in the object window.
 					clearSelection();
 
 					if (bRightClickOrders)
@@ -2683,7 +2668,7 @@ STRUCTURE	*psStructure;
 // enum in DroidDef.h
 //
 #define NUM_DROID_WEIGHTS (14)
-UBYTE DroidSelectionWeights[NUM_DROID_WEIGHTS] = {
+static UBYTE DroidSelectionWeights[NUM_DROID_WEIGHTS] = {
 	3,	//DROID_WEAPON,
 	1,	//DROID_SENSOR,
 	2,	//DROID_ECM,
@@ -2705,17 +2690,12 @@ UBYTE DroidSelectionWeights[NUM_DROID_WEIGHTS] = {
 	of multiple selections */
 static SELECTION_TYPE	establishSelection(UDWORD selectedPlayer)
 {
-DROID			*psDroid,*psDominant=NULL;
-	UBYTE	CurrWeight;
-bool			atLeastOne;
-SELECTION_TYPE	selectionClass;
+	DROID *psDominant = NULL;
+	UBYTE CurrWeight = UBYTE_MAX;
+	bool atLeastOne = false;
+	SELECTION_TYPE selectionClass = SC_INVALID;
 
-	atLeastOne = false;
-	selectionClass = SC_INVALID;
-	CurrWeight = UBYTE_MAX;
-
-	for(psDroid = apsDroidLists[selectedPlayer];
-			psDroid /*&& !atLeastOne*/; psDroid = psDroid->psNext)
+	for (DROID *psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
 	{
 		// This works, uses the DroidSelectionWeights[] table to priorities the different
 		// droid types and find the dominant selection.
@@ -2808,7 +2788,6 @@ bool	repairDroidSelected(UDWORD player)
 
 	for (psCurr = apsDroidLists[player]; psCurr != NULL; psCurr = psCurr->psNext)
 	{
-		//if (psCurr->selected && psCurr->droidType == DROID_REPAIR)
 		if (psCurr->selected && (
 			psCurr->droidType == DROID_REPAIR ||
 			psCurr->droidType == DROID_CYBORG_REPAIR))

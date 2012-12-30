@@ -107,10 +107,7 @@ char fileLoadBuffer[FILE_LOAD_BUFFER_SIZE];
 
 IMAGEFILE *FrontImages;
 
-bool DirectControl = false;
-
 static wzSearchPath * searchPathRegistry = NULL;
-
 
 // Each module in the game should have a call from here to initialise
 // any globals and statics to there default values each time the game

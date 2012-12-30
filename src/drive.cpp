@@ -69,7 +69,7 @@
 static	SWORD DrivingAudioTrack=-1;		// Which hardware channel are we using for the car driving noise
 
 extern UDWORD selectedPlayer;
-extern bool DirectControl;
+static bool DirectControl = false;
 
 // Driving characteristics.
 #define DRIVE_TURNSPEED	(4)
@@ -80,7 +80,13 @@ extern bool DirectControl;
 #define DRIVE_TURNDAMP	(32)	// Damping value for analogue turning.
 #define MAX_IDLE	(GAME_TICKS_PER_SEC*60)	// Start to orbit if idle for 60 seconds.
 
-DROID *psDrivenDroid = NULL;		// The droid that's being driven.
+enum CONTROLMODE_TYPE
+{
+	CONTROLMODE_POINTNCLICK,
+	CONTROLMODE_DRIVE,
+};
+
+static DROID *psDrivenDroid = NULL;		// The droid that's being driven.
 static bool bDriveMode = false;
 static SDWORD driveDir;					// Driven droid's direction.
 static SDWORD driveSpeed;				// Driven droid's speed.
@@ -93,14 +99,33 @@ static bool DriveInterfaceEnabled = false;
 static UDWORD IdleTime;
 static bool TacticalActive = false;
 static bool WasDriving = false;
-
-enum {
-	CONTROLMODE_POINTNCLICK,
-	CONTROLMODE_DRIVE,
-};
-
-static UWORD ControlMode = CONTROLMODE_DRIVE;
+static CONTROLMODE_TYPE ControlMode = CONTROLMODE_DRIVE;
 static bool TargetFeatures = false;
+
+bool driveHasDriven()
+{
+	return (DirectControl) && (psDrivenDroid != NULL) ? true : false;
+}
+
+bool driveModeActive()
+{
+	return DirectControl;
+}
+
+bool driveIsDriven(DROID *psDroid)
+{
+	return (DirectControl) && (psDrivenDroid != NULL) && (psDroid == psDrivenDroid) ? true : false;
+}
+
+bool driveIsFollower(DROID *psDroid)
+{
+	return (DirectControl) && (psDrivenDroid != NULL) && (psDroid != psDrivenDroid) && psDroid->selected ? true : false;
+}
+
+DROID *driveGetDriven(void)
+{
+	return psDrivenDroid;
+}
 
 // Intialise drive statics, call with true if coming from frontend, false if
 // coming from a mission.
@@ -240,19 +265,13 @@ bool StartDriverMode(DROID *psOldDroid)
 	return false;
 }
 
-
 static void ChangeDriver(void)
 {
-	DROID *psDroid;
-
 	if(psDrivenDroid != NULL)
 	{
 		debug( LOG_NEVER, "Driver Changed\n" );
 
-//		audio_StopObjTrack(psDrivenDroid,ID_SOUND_SMALL_DROID_RUN);
-//		psDrivenDroid = NULL;
-
-		for(psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
+		for (DROID *psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
 		{
 			if (psDroid->sMove.Status == MOVEDRIVE)
 			{
@@ -261,27 +280,20 @@ static void ChangeDriver(void)
 			}
 		}
 	}
-
-//	setDrivingStatus(false);
-//	DriveControlEnabled = false;
 }
-
 
 // Stop droid driving mode.
 //
 void StopDriverMode(void)
 {
-	DROID *psDroid;
-
 	if(psDrivenDroid != NULL)
 	{
 		debug( LOG_NEVER, "Drive mode canceled" );
 		addConsoleMessage("Driver mode canceled.", LEFT_JUSTIFY,SYSTEM_MESSAGE);
-//		audio_StopObjTrack(psDrivenDroid,ID_SOUND_SMALL_DROID_RUN);
 
 		psDrivenDroid = NULL;
 
-		for(psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
+		for (DROID *psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
 		{
 			if (psDroid->sMove.Status == MOVEDRIVE)
 			{
@@ -307,7 +319,6 @@ bool driveDroidKilled(DROID *psDroid)
 	if(driveModeActive()) {
 		if(psDroid == psDrivenDroid) {
 			ChangeDriver();
-	//		StopDriverMode();
 
 			psDrivenDroid = NULL;
 			DeSelectDroid(psDroid);
@@ -328,12 +339,9 @@ bool driveDroidKilled(DROID *psDroid)
 void driveSelectionChanged(void)
 {
 	if(driveModeActive()) {
-
 		if(psDrivenDroid) {
-	//		StopDriverMode();
 			ChangeDriver();
 			StartDriverMode(NULL);
-			driveTacticalSelectionChanged();
 		}
 	}
 }
@@ -349,11 +357,8 @@ static void driveNextDriver(void)
 	for(psDroid = psDrivenDroid; psDroid; psDroid = psDroid->psNext) {
 		if( (psDroid->selected) && (psDroid != psDrivenDroid) ) {
 			// Found one so make it the driven droid.
-//			psDrivenDroid->sMove.Status = MOVEINACTIVE;
-//			psDroid->sMove.Status = MOVEDRIVE;
 			psDrivenDroid = psDroid;
 			camAllignWithTarget((BASE_OBJECT*)psDroid);
-			driveTacticalSelectionChanged();
 			return;
 		}
 	}
@@ -364,11 +369,8 @@ static void driveNextDriver(void)
 
 			if(psDroid->selected) {
 				// Found one so make it the driven droid.
-//				psDrivenDroid->sMove.Status = MOVEINACTIVE;
-//				psDroid->sMove.Status = MOVEDRIVE;
 				psDrivenDroid = psDroid;
 				camAllignWithTarget((BASE_OBJECT*)psDroid);
-				driveTacticalSelectionChanged();
 				return;
 			}
 		}
@@ -491,10 +493,9 @@ static void driveMoveFollower(DROID *psDroid)
 
 static void driveMoveCommandFollowers(DROID *psDroid)
 {
-	DROID	*psCurr;
 	DROID_GROUP *psGroup = psDroid->psGroup;
 
-	for (psCurr = psGroup->psList; psCurr!=NULL; psCurr=psCurr->psGrpNext)
+	for (DROID *psCurr = psGroup->psList; psCurr!=NULL; psCurr=psCurr->psGrpNext)
 	{
 		driveMoveFollower(psCurr);
 	}
@@ -510,19 +511,17 @@ void driveUpdate(void)
 
 	AllInRange = true;
 
-	if (DirectControl)
+	if (!DirectControl)
 	{
+		return;
+	}
+
 		if (psDrivenDroid != NULL)
 		{
 			if (bMultiMessages && (driveBumpTime < gameTime))	// send latest info about driven droid.
 			{
 				sendDroidInfo(psDrivenDroid, DroidOrder(DORDER_MOVE, removeZ(psDrivenDroid->pos)), false);
 			}
-
-	//TO BE DONE:
-		//clear the order on taking over the droid, to stop attacks..
-		//send some sort of message when droids stopo and get inrange.
-
 
 			// Check the driven droid is still selected
 			if (psDrivenDroid->selected == false)
@@ -562,7 +561,6 @@ void driveUpdate(void)
 					if ((psDroid->selected) &&
 						(psDroid != psDrivenDroid) &&
 						(psDroid->droidType != DROID_TRANSPORTER && psDroid->droidType != DROID_SUPERTRANSPORTER) &&
-						//((psPropStats->propulsionType != PROPULSION_TYPE_LIFT) || (psDroid->droidType == DROID_CYBORG)) ) {
                         ((psPropStats->propulsionType != PROPULSION_TYPE_LIFT) || cyborgDroid(psDroid)) )
                     {
 						// Send new orders to it's followers.
@@ -575,7 +573,6 @@ void driveUpdate(void)
 			{
 				DoFollowRangeCheck = false;
 			}
-
 			if(driveBumpTime < gameTime)
 			{
 				// Send next order in 1 second.
@@ -589,7 +586,6 @@ void driveUpdate(void)
 				// nothing
 			}
 		}
-	}
 }
 
 
@@ -629,7 +625,6 @@ void driveEnableControl(void)
 	DirectControl = true;
 	DriveInterfaceEnabled = false;
 }
-
 
 
 // Return true if drive control is enabled.
@@ -689,10 +684,8 @@ void driveProcessAquireButton(void)
 //
 void driveStartBuild(void)
 {
-
 	intRemoveReticule();
 	DriveInterfaceEnabled = false;
-//	driveDisableInterface();
 	driveEnableControl();
 }
 
@@ -705,7 +698,6 @@ bool driveAllowControl(void)
 	{
 		return false;
 	}
-
 	return true;
 }
 
@@ -716,7 +708,6 @@ void driveDisableTactical(void)
 {
 	if(driveModeActive() && TacticalActive)
 	{
-		CancelTacticalScroll();
 		TacticalActive = false;
 	}
 }
@@ -727,15 +718,6 @@ void driveDisableTactical(void)
 bool driveTacticalActive(void)
 {
 	return TacticalActive;
-}
-
-
-void driveTacticalSelectionChanged(void)
-{
-	if(TacticalActive && psDrivenDroid) {
-		StartTacticalScrollObj(true,(BASE_OBJECT *)psDrivenDroid);
-		debug( LOG_NEVER, "driveTacticalSelectionChanged\n" );
-	}
 }
 
 
