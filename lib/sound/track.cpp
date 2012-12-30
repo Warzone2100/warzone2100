@@ -67,7 +67,7 @@ bool sound_Init()
 // =======================================================================================================================
 // =======================================================================================================================
 //
-bool sound_Shutdown( void )
+bool sound_Shutdown(void)
 {
 	// set inactive flag to prevent callbacks coming after shutdown
 	g_bSystemActive = false;
@@ -79,7 +79,7 @@ bool sound_Shutdown( void )
 // =======================================================================================================================
 // =======================================================================================================================
 //
-bool sound_GetSystemActive( void )
+bool sound_GetSystemActive(void)
 {
 	return g_bSystemActive;
 }
@@ -91,10 +91,10 @@ bool sound_GetSystemActive( void )
  *  \param audibleRadius the radius from the source of sound where it can be heard
  *  \return a non-zero value representing the track id number when successful, zero when the file is not found or no more tracks can be loaded (i.e. the limit is reached)
  */
-unsigned int sound_SetTrackVals(const char* fileName, bool loop, unsigned int volume, unsigned int audibleRadius)
+unsigned int sound_SetTrackVals(const char *fileName, bool loop, unsigned int volume, unsigned int audibleRadius)
 {
 	unsigned int trackID;
-	TRACK* psTrack;
+	TRACK *psTrack;
 
 	if (fileName == NULL || strlen(fileName) == 0) // check for empty filename.  This is a non fatal error.
 	{
@@ -102,7 +102,7 @@ unsigned int sound_SetTrackVals(const char* fileName, bool loop, unsigned int vo
 		return 0;
 	}
 
-	psTrack = (TRACK *)resGetData( "WAV", fileName );
+	psTrack = (TRACK *)resGetData("WAV", fileName);
 	if (psTrack == NULL)
 	{
 		debug(LOG_WARNING, "track %s resource not found", fileName);
@@ -146,15 +146,17 @@ unsigned int sound_SetTrackVals(const char* fileName, bool loop, unsigned int vo
 // =======================================================================================================================
 // =======================================================================================================================
 //
-void sound_ReleaseTrack( TRACK *psTrack )
+void sound_ReleaseTrack(TRACK *psTrack)
 {
-	TRACK** currTrack;
+	TRACK **currTrack;
 
 	// This is here to save CPU wasted by the loop below;
 	// Calling this function with psTrack = NULL is perfectly legal,
 	// with or without this check
 	if (!psTrack)
+	{
 		return;
+	}
 
 	// Run through the list of tracks and set the pointer to the track which is to be released to NULL
 	for (currTrack = &g_apTrack[0]; currTrack != &g_apTrack[MAX_TRACKS]; ++currTrack)
@@ -165,17 +167,17 @@ void sound_ReleaseTrack( TRACK *psTrack )
 		}
 	}
 
-	sound_FreeTrack( psTrack );
-	free( psTrack );
+	sound_FreeTrack(psTrack);
+	free(psTrack);
 }
 
 //*
 // =======================================================================================================================
 // =======================================================================================================================
 //
-void sound_CheckAllUnloaded( void )
+void sound_CheckAllUnloaded(void)
 {
-	TRACK** currTrack;
+	TRACK **currTrack;
 
 	for (currTrack = &g_apTrack[0]; currTrack != &g_apTrack[MAX_TRACKS]; ++currTrack)
 	{
@@ -187,9 +189,9 @@ void sound_CheckAllUnloaded( void )
 // =======================================================================================================================
 // =======================================================================================================================
 //
-bool sound_TrackLooped( SDWORD iTrack )
+bool sound_TrackLooped(SDWORD iTrack)
 {
-	sound_CheckTrack( iTrack );
+	sound_CheckTrack(iTrack);
 	return g_apTrack[iTrack]->bLoop;
 }
 
@@ -197,9 +199,9 @@ bool sound_TrackLooped( SDWORD iTrack )
 // =======================================================================================================================
 // =======================================================================================================================
 //
-SDWORD sound_GetNumPlaying( SDWORD iTrack )
+SDWORD sound_GetNumPlaying(SDWORD iTrack)
 {
-	sound_CheckTrack( iTrack );
+	sound_CheckTrack(iTrack);
 	return g_apTrack[iTrack]->iNumPlaying;
 }
 
@@ -207,15 +209,15 @@ SDWORD sound_GetNumPlaying( SDWORD iTrack )
 // =======================================================================================================================
 // =======================================================================================================================
 //
-bool sound_CheckTrack( SDWORD iTrack )
+bool sound_CheckTrack(SDWORD iTrack)
 {
-	if ( iTrack < 0 || iTrack > g_iCurTracks - 1 )
+	if (iTrack < 0 || iTrack > g_iCurTracks - 1)
 	{
 		debug(LOG_SOUND, "Track number %i outside max %i\n", iTrack, g_iCurTracks);
 		return false;
 	}
 
-	if ( g_apTrack[iTrack] == NULL )
+	if (g_apTrack[iTrack] == NULL)
 	{
 		debug(LOG_SOUND, "Track %i NULL\n", iTrack);
 		return false;
@@ -228,9 +230,9 @@ bool sound_CheckTrack( SDWORD iTrack )
 // =======================================================================================================================
 // =======================================================================================================================
 //
-SDWORD sound_GetTrackTime( SDWORD iTrack )
+SDWORD sound_GetTrackTime(SDWORD iTrack)
 {
-	sound_CheckTrack( iTrack );
+	sound_CheckTrack(iTrack);
 	return g_apTrack[iTrack]->iTime;
 }
 
@@ -238,9 +240,9 @@ SDWORD sound_GetTrackTime( SDWORD iTrack )
 // =======================================================================================================================
 // =======================================================================================================================
 //
-SDWORD sound_GetTrackVolume( SDWORD iTrack )
+SDWORD sound_GetTrackVolume(SDWORD iTrack)
 {
-	sound_CheckTrack( iTrack );
+	sound_CheckTrack(iTrack);
 	return g_apTrack[iTrack]->iVol;
 }
 
@@ -248,7 +250,7 @@ SDWORD sound_GetTrackVolume( SDWORD iTrack )
 // =======================================================================================================================
 // =======================================================================================================================
 //
-SDWORD sound_GetTrackAudibleRadius( SDWORD iTrack )
+SDWORD sound_GetTrackAudibleRadius(SDWORD iTrack)
 {
 	sound_CheckTrack(iTrack);
 	return g_apTrack[iTrack]->iAudibleRadius;
@@ -258,15 +260,15 @@ SDWORD sound_GetTrackAudibleRadius( SDWORD iTrack )
 // =======================================================================================================================
 // =======================================================================================================================
 //
-const char *sound_GetTrackName( SDWORD iTrack )
+const char *sound_GetTrackName(SDWORD iTrack)
 {
 	// If we get an invalid track ID or there are
 	// currently no tracks loaded then return NULL
 	if (iTrack <= 0
-	 || iTrack >= MAX_TRACKS
-	 || iTrack == SAMPLE_NOT_FOUND
-	 || g_apTrack == NULL
-	 || g_apTrack[iTrack] == NULL)
+	    || iTrack >= MAX_TRACKS
+	    || iTrack == SAMPLE_NOT_FOUND
+	    || g_apTrack == NULL
+	    || g_apTrack[iTrack] == NULL)
 	{
 		return NULL;
 	}
@@ -278,7 +280,7 @@ const char *sound_GetTrackName( SDWORD iTrack )
 // =======================================================================================================================
 // =======================================================================================================================
 //
-bool sound_Play2DTrack( AUDIO_SAMPLE *psSample, bool bQueued )
+bool sound_Play2DTrack(AUDIO_SAMPLE *psSample, bool bQueued)
 {
 	TRACK	*psTrack;
 
@@ -289,14 +291,14 @@ bool sound_Play2DTrack( AUDIO_SAMPLE *psSample, bool bQueued )
 	}
 
 	psTrack = g_apTrack[psSample->iTrack];
-	return sound_Play2DSample( psTrack, psSample, bQueued );
+	return sound_Play2DSample(psTrack, psSample, bQueued);
 }
 
 //*
 // =======================================================================================================================
 // =======================================================================================================================
 //
-bool sound_Play3DTrack( AUDIO_SAMPLE *psSample )
+bool sound_Play3DTrack(AUDIO_SAMPLE *psSample)
 {
 	TRACK	*psTrack;
 
@@ -307,14 +309,14 @@ bool sound_Play3DTrack( AUDIO_SAMPLE *psSample )
 	}
 
 	psTrack = g_apTrack[psSample->iTrack];
-	return sound_Play3DSample( psTrack, psSample );
+	return sound_Play3DSample(psTrack, psSample);
 }
 
 //*
 // =======================================================================================================================
 // =======================================================================================================================
 //
-void sound_StopTrack( AUDIO_SAMPLE *psSample )
+void sound_StopTrack(AUDIO_SAMPLE *psSample)
 {
 	ASSERT_OR_RETURN(, psSample != NULL, "Sample pointer invalid");
 
@@ -323,9 +325,9 @@ void sound_StopTrack( AUDIO_SAMPLE *psSample )
 #endif
 
 	// do stopped callback
-	if ( g_pStopTrackCallback != NULL && psSample->psObj != NULL )
+	if (g_pStopTrackCallback != NULL && psSample->psObj != NULL)
 	{
-		g_pStopTrackCallback( psSample->psObj );
+		g_pStopTrackCallback(psSample->psObj);
 	}
 }
 
@@ -333,7 +335,7 @@ void sound_StopTrack( AUDIO_SAMPLE *psSample )
 // =======================================================================================================================
 // =======================================================================================================================
 //
-void sound_PauseTrack( AUDIO_SAMPLE *psSample )
+void sound_PauseTrack(AUDIO_SAMPLE *psSample)
 {
 #ifndef WZ_NOSOUND
 	sound_StopSample(psSample);
@@ -344,17 +346,17 @@ void sound_PauseTrack( AUDIO_SAMPLE *psSample )
 // =======================================================================================================================
 // =======================================================================================================================
 //
-void sound_FinishedCallback( AUDIO_SAMPLE *psSample )
+void sound_FinishedCallback(AUDIO_SAMPLE *psSample)
 {
-	ASSERT( psSample != NULL, "sound_FinishedCallback: sample pointer invalid\n" );
+	ASSERT(psSample != NULL, "sound_FinishedCallback: sample pointer invalid\n");
 
-	if ( g_apTrack[psSample->iTrack] != NULL )
+	if (g_apTrack[psSample->iTrack] != NULL)
 	{
 		g_apTrack[psSample->iTrack]->iTimeLastFinished = sound_GetGameTime();
 	}
 
 	// call user callback if specified
-	if ( psSample->pCallback != NULL )
+	if (psSample->pCallback != NULL)
 	{
 		psSample->pCallback(psSample->psObj);
 		// NOTE: we must invalidate the iAudioID (iTrack) so the game knows to add the
@@ -374,7 +376,7 @@ void sound_FinishedCallback( AUDIO_SAMPLE *psSample )
 // =======================================================================================================================
 // =======================================================================================================================
 //
-SDWORD sound_GetTrackID(TRACK* psTrack)
+SDWORD sound_GetTrackID(TRACK *psTrack)
 {
 	unsigned int i;
 
@@ -413,11 +415,13 @@ SDWORD sound_GetAvailableID()
 	for (i = ID_SOUND_NEXT; i < MAX_TRACKS; ++i)
 	{
 		if (g_apTrack[i] == NULL)
+		{
 			break;
+		}
 	}
 
 	ASSERT(i < MAX_TRACKS, "sound_GetTrackID: unused track not found!");
-	if ( i >= MAX_TRACKS )
+	if (i >= MAX_TRACKS)
 	{
 		return SAMPLE_NOT_ALLOCATED;
 	}
@@ -429,7 +433,7 @@ SDWORD sound_GetAvailableID()
 // =======================================================================================================================
 // =======================================================================================================================
 //
-void sound_SetStoppedCallback( AUDIO_CALLBACK pStopTrackCallback )
+void sound_SetStoppedCallback(AUDIO_CALLBACK pStopTrackCallback)
 {
 	g_pStopTrackCallback = pStopTrackCallback;
 }
@@ -438,9 +442,9 @@ void sound_SetStoppedCallback( AUDIO_CALLBACK pStopTrackCallback )
 // =======================================================================================================================
 // =======================================================================================================================
 //
-UDWORD sound_GetTrackTimeLastFinished( SDWORD iTrack )
+UDWORD sound_GetTrackTimeLastFinished(SDWORD iTrack)
 {
-	sound_CheckTrack( iTrack );
+	sound_CheckTrack(iTrack);
 	return g_apTrack[iTrack]->iTimeLastFinished;
 }
 
@@ -448,8 +452,8 @@ UDWORD sound_GetTrackTimeLastFinished( SDWORD iTrack )
 // =======================================================================================================================
 // =======================================================================================================================
 //
-void sound_SetTrackTimeLastFinished( SDWORD iTrack, UDWORD iTime )
+void sound_SetTrackTimeLastFinished(SDWORD iTrack, UDWORD iTime)
 {
-	sound_CheckTrack( iTrack );
+	sound_CheckTrack(iTrack);
 	g_apTrack[iTrack]->iTimeLastFinished = iTime;
 }

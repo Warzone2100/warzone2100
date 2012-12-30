@@ -43,7 +43,7 @@
 /* typedefs
  */
 
-typedef bool (* AUDIO_CALLBACK)  ( void *psObj );
+typedef bool (* AUDIO_CALLBACK)(void *psObj);
 struct AUDIO_STREAM;
 
 /* structs */
@@ -65,9 +65,9 @@ struct AUDIO_SAMPLE
 	float                   fVol;           // computed volume of sample
 	bool                    bFinishedPlaying;
 	AUDIO_CALLBACK          pCallback;
-	SIMPLE_OBJECT *         psObj;
-	AUDIO_SAMPLE *          psPrev;
-	AUDIO_SAMPLE *          psNext;
+	SIMPLE_OBJECT          *psObj;
+	AUDIO_SAMPLE           *psPrev;
+	AUDIO_SAMPLE           *psNext;
 };
 
 struct TRACK
@@ -81,7 +81,7 @@ struct TRACK
 #ifndef WZ_NOSOUND
 	ALuint          iBufferName;            // OpenAL name of the buffer
 #endif
-	const char*     fileName;
+	const char     *fileName;
 };
 
 /* functions
@@ -90,50 +90,50 @@ struct TRACK
 bool	sound_Init(void);
 bool	sound_Shutdown(void);
 
-TRACK *	sound_LoadTrackFromFile(const char *fileName);
-unsigned int sound_SetTrackVals(const char* fileName, bool loop, unsigned int volume, unsigned int audibleRadius);
-void	sound_ReleaseTrack( TRACK * psTrack );
+TRACK 	*sound_LoadTrackFromFile(const char *fileName);
+unsigned int sound_SetTrackVals(const char *fileName, bool loop, unsigned int volume, unsigned int audibleRadius);
+void	sound_ReleaseTrack(TRACK *psTrack);
 
-void	sound_StopTrack( AUDIO_SAMPLE *psSample );
-void	sound_PauseTrack( AUDIO_SAMPLE *psSample );
-void	sound_UpdateSample( AUDIO_SAMPLE *psSample );
-void	sound_CheckAllUnloaded( void );
-void sound_RemoveActiveSample( AUDIO_SAMPLE *psSample );
-bool	sound_CheckTrack( SDWORD iTrack );
+void	sound_StopTrack(AUDIO_SAMPLE *psSample);
+void	sound_PauseTrack(AUDIO_SAMPLE *psSample);
+void	sound_UpdateSample(AUDIO_SAMPLE *psSample);
+void	sound_CheckAllUnloaded(void);
+void sound_RemoveActiveSample(AUDIO_SAMPLE *psSample);
+bool	sound_CheckTrack(SDWORD iTrack);
 
-SDWORD	sound_GetTrackTime( SDWORD iTrack );
-SDWORD	sound_GetTrackAudibleRadius( SDWORD iTrack );
-SDWORD	sound_GetTrackVolume( SDWORD iTrack );
-const char *	sound_GetTrackName( SDWORD iTrack );
+SDWORD	sound_GetTrackTime(SDWORD iTrack);
+SDWORD	sound_GetTrackAudibleRadius(SDWORD iTrack);
+SDWORD	sound_GetTrackVolume(SDWORD iTrack);
+const char 	*sound_GetTrackName(SDWORD iTrack);
 
-bool	sound_TrackLooped( SDWORD iTrack );
-void	sound_SetCallbackFunction( void * fn );
+bool	sound_TrackLooped(SDWORD iTrack);
+void	sound_SetCallbackFunction(void *fn);
 
-bool	sound_Play2DTrack( AUDIO_SAMPLE *psSample, bool bQueued );
-bool	sound_Play3DTrack( AUDIO_SAMPLE *psSample );
-void	sound_PlayWithCallback( AUDIO_SAMPLE *psSample, SDWORD iCurTime, AUDIO_CALLBACK pDoneFunc );
-void	sound_FinishedCallback( AUDIO_SAMPLE *psSample );
+bool	sound_Play2DTrack(AUDIO_SAMPLE *psSample, bool bQueued);
+bool	sound_Play3DTrack(AUDIO_SAMPLE *psSample);
+void	sound_PlayWithCallback(AUDIO_SAMPLE *psSample, SDWORD iCurTime, AUDIO_CALLBACK pDoneFunc);
+void	sound_FinishedCallback(AUDIO_SAMPLE *psSample);
 
-bool	sound_GetSystemActive( void );
-SDWORD	sound_GetTrackID( TRACK *psTrack );
-SDWORD	sound_GetAvailableID( void );
-SDWORD	sound_GetNumPlaying( SDWORD iTrack );
+bool	sound_GetSystemActive(void);
+SDWORD	sound_GetTrackID(TRACK *psTrack);
+SDWORD	sound_GetAvailableID(void);
+SDWORD	sound_GetNumPlaying(SDWORD iTrack);
 
-SDWORD	sound_GetGlobalVolume( void );
-void	sound_SetGlobalVolume( SDWORD iVol );
+SDWORD	sound_GetGlobalVolume(void);
+void	sound_SetGlobalVolume(SDWORD iVol);
 
-void	sound_SetStoppedCallback( AUDIO_CALLBACK pStopTrackCallback );
+void	sound_SetStoppedCallback(AUDIO_CALLBACK pStopTrackCallback);
 
-UDWORD	sound_GetTrackTimeLastFinished( SDWORD iTrack );
-void	sound_SetTrackTimeLastFinished( SDWORD iTrack, UDWORD iTime );
+UDWORD	sound_GetTrackTimeLastFinished(SDWORD iTrack);
+void	sound_SetTrackTimeLastFinished(SDWORD iTrack, UDWORD iTime);
 
 extern bool sound_isStreamPlaying(AUDIO_STREAM *stream);
-extern void sound_StopStream(AUDIO_STREAM* stream);
-extern void sound_PauseStream(AUDIO_STREAM* stream);
-extern void sound_ResumeStream(AUDIO_STREAM* stream);
-extern AUDIO_STREAM* sound_PlayStreamWithBuf(PHYSFS_file* fileHandle, float volume, void (*onFinished)(void*), void* user_data, size_t streamBufferSize, unsigned int buffer_count);
-extern float sound_GetStreamVolume(const AUDIO_STREAM* stream);
-extern void sound_SetStreamVolume(AUDIO_STREAM* stream, float volume);
+extern void sound_StopStream(AUDIO_STREAM *stream);
+extern void sound_PauseStream(AUDIO_STREAM *stream);
+extern void sound_ResumeStream(AUDIO_STREAM *stream);
+extern AUDIO_STREAM *sound_PlayStreamWithBuf(PHYSFS_file *fileHandle, float volume, void (*onFinished)(void *), void *user_data, size_t streamBufferSize, unsigned int buffer_count);
+extern float sound_GetStreamVolume(const AUDIO_STREAM *stream);
+extern void sound_SetStreamVolume(AUDIO_STREAM *stream, float volume);
 
 void soundTest(void);
 

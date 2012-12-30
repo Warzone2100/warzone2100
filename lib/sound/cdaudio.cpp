@@ -38,15 +38,15 @@ static const unsigned int buffer_count = 32;
 static bool		music_initialized = false;
 static bool		stopping = true;
 
-static AUDIO_STREAM* cdStream = NULL;
+static AUDIO_STREAM *cdStream = NULL;
 #endif
 
-bool cdAudio_Open(const char* user_musicdir)
+bool cdAudio_Open(const char *user_musicdir)
 {
 	PlayList_Init();
 
 	if (user_musicdir == NULL
-	 || !PlayList_Read(user_musicdir))
+	    || !PlayList_Read(user_musicdir))
 	{
 		return false;
 	}
@@ -74,9 +74,9 @@ void cdAudio_Close(void)
 }
 
 #if !defined(WZ_NOSOUND)
-static void cdAudio_TrackFinished(void*);
+static void cdAudio_TrackFinished(void *);
 
-static bool cdAudio_OpenTrack(const char* filename)
+static bool cdAudio_OpenTrack(const char *filename)
 {
 	if (!music_initialized)
 	{
@@ -86,9 +86,9 @@ static bool cdAudio_OpenTrack(const char* filename)
 	debug(LOG_SOUND, "called(%s)", filename);
 	cdAudio_Stop();
 
-	if (strncasecmp(filename+strlen(filename)-4, ".ogg", 4) == 0)
+	if (strncasecmp(filename + strlen(filename) - 4, ".ogg", 4) == 0)
 	{
-		PHYSFS_file* music_file = PHYSFS_openRead(filename);
+		PHYSFS_file *music_file = PHYSFS_openRead(filename);
 
 		debug(LOG_WZ, "Reading...[directory: %s] %s", PHYSFS_getRealDir(filename), filename);
 		if (music_file == NULL)
@@ -97,7 +97,7 @@ static bool cdAudio_OpenTrack(const char* filename)
 			return false;
 		}
 
-		cdStream = sound_PlayStreamWithBuf(music_file, music_volume, cdAudio_TrackFinished, (char*)filename, bufferSize, buffer_count);
+		cdStream = sound_PlayStreamWithBuf(music_file, music_volume, cdAudio_TrackFinished, (char *)filename, bufferSize, buffer_count);
 		if (cdStream == NULL)
 		{
 			PHYSFS_close(music_file);
@@ -113,7 +113,7 @@ static bool cdAudio_OpenTrack(const char* filename)
 	return false; // unhandled
 }
 
-static void cdAudio_TrackFinished(void* user_data)
+static void cdAudio_TrackFinished(void *user_data)
 {
 	const char *filename = PlayList_NextSong();
 
@@ -140,22 +140,24 @@ bool cdAudio_PlayTrack(SONG_CONTEXT context)
 	switch (context)
 	{
 #if !defined(WZ_NOSOUND)
-		case SONG_FRONTEND:
-			return cdAudio_OpenTrack("music/menu.ogg");
+	case SONG_FRONTEND:
+		return cdAudio_OpenTrack("music/menu.ogg");
 
-		case SONG_INGAME:
+	case SONG_INGAME:
 		{
 			const char *filename = PlayList_CurrentSong();
 
 			if (filename == NULL)
+			{
 				return false;
+			}
 
 			return cdAudio_OpenTrack(filename);
 		}
 #else
-		case SONG_FRONTEND:
-		case SONG_INGAME:
-			return false;
+	case SONG_FRONTEND:
+	case SONG_INGAME:
+		return false;
 #endif
 	}
 
