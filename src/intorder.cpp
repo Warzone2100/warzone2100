@@ -387,13 +387,12 @@ static std::vector<AVORDER> buildDroidOrderList(void)
 // Build a list of orders available for the selected structure.
 static std::vector<AVORDER> buildStructureOrderList(STRUCTURE *psStructure)
 {
-	//only valid for Factories (at the moment)
 	ASSERT_OR_RETURN(std::vector<AVORDER>(), StructIsFactory(psStructure), "BuildStructureOrderList: structure is not a factory");
 
 	//this can be hard-coded!
-	std::vector<AVORDER> orders(4);
-	orders[0].OrderIndex = 1;//DSO_REPAIR_LEVEL;
-	orders[1].OrderIndex = 2;//DSO_ATTACK_LEVEL;
+	std::vector<AVORDER> orders(2);
+	orders[0].OrderIndex = 0;//DSO_REPAIR_LEVEL;
+	orders[1].OrderIndex = 1;//DSO_ATTACK_LEVEL;
 
 	return orders;
 }
