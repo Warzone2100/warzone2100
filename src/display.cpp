@@ -75,6 +75,7 @@
 #include "transporter.h"
 #include "intorder.h"
 #include "multiplay.h"
+#include "qtscript.h"
 #include "warzoneconfig.h"
 
 struct	_dragBox dragBox3D,wallDrag;
@@ -1385,8 +1386,7 @@ void startDeliveryPosition(FLAG_POSITION *psFlag)
 	}
 
 	//clear the selected delivery point
-	for (psFlagPos = apsFlagPosLists[selectedPlayer]; psFlagPos;
-		psFlagPos = psFlagPos->psNext)
+	for (psFlagPos = apsFlagPosLists[selectedPlayer]; psFlagPos; psFlagPos = psFlagPos->psNext)
 	{
 		psFlagPos->selected = false;
 	}
@@ -1434,8 +1434,7 @@ void finishDeliveryPosition()
 							 flagPos.coords.x, flagPos.coords.y, selectedPlayer, true);
 		}
 		//deselect once moved
-		for (psFlagPos = apsFlagPosLists[selectedPlayer]; psFlagPos;
-			psFlagPos = psFlagPos->psNext)
+		for (psFlagPos = apsFlagPosLists[selectedPlayer]; psFlagPos; psFlagPos = psFlagPos->psNext)
 		{
 			psFlagPos->selected = false;
 		}
@@ -1660,6 +1659,7 @@ static void dealWithLMBDroid(DROID* psDroid, SELECTION_TYPE selection)
 			if (bMultiPlayer && !bRightClickOrders)
 			{
 				psDroid->selected = true;
+				triggerEventSelected();
 			}
 			else
 			{
@@ -1878,6 +1878,7 @@ static void dealWithLMBStructure(STRUCTURE* psStructure, SELECTION_TYPE selectio
 				}
 				/* Establish new one */
 				psStructure->selected = true;
+				triggerEventSelected();
 			}
 			//determine if LasSat structure has been selected
 			bLasSatStruct = lasSatStructSelected(psStructure);
@@ -1897,6 +1898,7 @@ static void dealWithLMBStructure(STRUCTURE* psStructure, SELECTION_TYPE selectio
 		}
 		/* Establish new one */
 		psStructure->selected = true;
+		triggerEventSelected();
 	}
 	bSensorAssigned = false;
 	orderSelectedObjAdd(selectedPlayer, (BASE_OBJECT*)psStructure, ctrlShiftDown());
@@ -2367,6 +2369,7 @@ static void dealWithRMB( void )
 				{
 					psStructure->selected = false;
 					intObjectSelected(NULL);
+					triggerEventSelected();
 				}
 				else if (!structureIsBlueprint(psStructure))
 				{
@@ -2389,6 +2392,7 @@ static void dealWithRMB( void )
 							FeedbackOrderGiven();
 
 							bLasSatStruct = lasSatStructSelected(psStructure);
+							triggerEventSelected();
 						}
 					}
 					else if (StructIsFactory(psStructure))
@@ -2871,27 +2875,23 @@ bool cyborgDroidSelected(UDWORD player)
 }
 
 /* Clear the selection flag for a player */
-void clearSel(void)
+void clearSel()
 {
 	DROID			*psCurrDroid;
 	STRUCTURE		*psStruct;
-	//FEATURE			*psFeat;
 	FLAG_POSITION	*psFlagPos;
 
-	for(psCurrDroid = apsDroidLists[selectedPlayer]; psCurrDroid;
-		psCurrDroid = psCurrDroid->psNext)
+	for (psCurrDroid = apsDroidLists[selectedPlayer]; psCurrDroid; psCurrDroid = psCurrDroid->psNext)
 	{
 		psCurrDroid->selected = false;
 	}
-	for(psStruct = apsStructLists[selectedPlayer]; psStruct;
-		psStruct = psStruct->psNext)
+	for (psStruct = apsStructLists[selectedPlayer]; psStruct; psStruct = psStruct->psNext)
 	{
 		psStruct->selected = false;
 	}
 	bLasSatStruct = false;
 	//clear the Deliv Point if one
-	for (psFlagPos = apsFlagPosLists[selectedPlayer]; psFlagPos;
-		psFlagPos = psFlagPos->psNext)
+	for (psFlagPos = apsFlagPosLists[selectedPlayer]; psFlagPos; psFlagPos = psFlagPos->psNext)
 	{
 		psFlagPos->selected = false;
 	}
@@ -2899,11 +2899,13 @@ void clearSel(void)
 	setSelectedGroup(UBYTE_MAX);
 	setSelectedCommander(UBYTE_MAX);
 	intRefreshScreen();
+
+	triggerEventSelected();
 }
 
 // Clear the selection and stop driver mode.
 //
-void clearSelection(void)
+void clearSelection()
 {
 	StopDriverMode();	// Cancel driver mode ( if active ).
 	clearSel();

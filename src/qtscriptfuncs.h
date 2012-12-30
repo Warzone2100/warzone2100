@@ -60,6 +60,9 @@ QScriptValue convMax(BASE_OBJECT *psObj, QScriptEngine *engine);
 QScriptValue convResearch(RESEARCH *psResearch, QScriptEngine *engine, int player);
 BASE_OBJECT *IdToObject(OBJECT_TYPE type, int id, int player);
 
+// Script functions useful also in qtscript.cpp
+QScriptValue js_enumSelected(QScriptContext *, QScriptEngine *engine);
+
 /// Assert for scripts that give useful backtraces and other info.
 #define SCRIPT_ASSERT(context, expr, ...) \
 	do { bool _wzeval = (expr); \

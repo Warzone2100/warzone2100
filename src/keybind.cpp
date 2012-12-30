@@ -1143,6 +1143,7 @@ void	kf_SelectGrouping( UDWORD	groupNumber)
 		audio_QueueTrack( ID_SOUND_REPORTING );
 		audio_QueueTrack( ID_SOUND_RADIOCLICK_1+(rand()%6) );
 	}
+	triggerEventSelected();
 }
 
 // --------------------------------------------------------------------------
@@ -1850,7 +1851,9 @@ STRUCTURE	*psCurr;
 	{
 		setKeyButtonMapping(IDRET_MANUFACTURE);
 	}
+	triggerEventSelected();
 }
+
 // --------------------------------------------------------------------------
 void	kf_SelectNextResearch(void)
 {
@@ -1859,12 +1862,16 @@ void	kf_SelectNextResearch(void)
 	{
 		setKeyButtonMapping(IDRET_RESEARCH);
 	}
+	triggerEventSelected();
 }
+
 // --------------------------------------------------------------------------
 void	kf_SelectNextPowerStation(void)
 {
 	selNextSpecifiedBuilding(REF_POWER_GEN);
+	triggerEventSelected();
 }
+
 // --------------------------------------------------------------------------
 void	kf_SelectNextCyborgFactory(void)
 {
@@ -1887,7 +1894,9 @@ STRUCTURE	*psCurr;
 	{
 		setKeyButtonMapping(IDRET_MANUFACTURE);
 	}
+	triggerEventSelected();
 }
+
 // --------------------------------------------------------------------------
 
 

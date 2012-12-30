@@ -1926,6 +1926,7 @@ static void intSelectDroid(BASE_OBJECT *psObj)
 		clearSelection();
 		((DROID *)psObj)->selected = true;
 	}
+	triggerEventSelected();
 }
 
 
@@ -2011,6 +2012,7 @@ static void intProcessObject(UDWORD id)
 			widgSetButtonState(psWScreen, statButID, WBUT_CLICKLOCK);
 			intAddObjectStats(psObj, statButID);
 		}
+		triggerEventSelected();
 	}
 	else if (id >= IDOBJ_OBJSTART && id <= IDOBJ_OBJEND)
 	{
@@ -2039,6 +2041,7 @@ static void intProcessObject(UDWORD id)
 
 				/* Select new one */
 				((STRUCTURE *)psObj)->selected = true;
+				triggerEventSelected();
 			}
 
 			if (!driveModeActive())
@@ -2130,6 +2133,7 @@ static void intProcessObject(UDWORD id)
 					psCurr->selected = false;
 				}
 				psObj->selected = true;
+				triggerEventSelected();
 			}
 		}
 	}
@@ -5401,7 +5405,7 @@ STRUCTURE *intCheckForStructure(UDWORD structType)
 			psSel = psStruct;
 		}
 	}
-
+	triggerEventSelected();
 	return psSel;
 }
 
@@ -5706,6 +5710,8 @@ STRUCTURE *intGotoNextStructureType(UDWORD structType, bool JumpTo, bool CancelD
 	{
 		intSetMapPos(CurrentStruct->pos.x, CurrentStruct->pos.y);
 	}
+
+	triggerEventSelected();
 
 	return CurrentStruct;
 }

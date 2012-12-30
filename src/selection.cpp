@@ -42,7 +42,7 @@
 #include "display3d.h"
 #include "warcam.h"
 #include "display.h"
-
+#include "qtscript.h"
 
 // ---------------------------------------------------------------------
 // Selects all units owned by the player - onscreen toggle.
@@ -543,6 +543,7 @@ void selNextSpecifiedBuilding(STRUCTURE_TYPE structType)
 			psOldStruct->selected = false;
 		}
 		psResult->selected = true;
+		triggerEventSelected();
 	}
 	else
 	{

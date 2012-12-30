@@ -47,6 +47,10 @@
 
 #define ATTACK_THROTTLE 100
 
+/// selection changes are too often and too erratic to trigger immediately,
+/// so until we have a queue system for events, delay triggering this way.
+static bool selectionChanged = false;
+
 enum timerType
 {
 	TIMER_REPEAT, TIMER_ONESHOT_READY, TIMER_ONESHOT_DONE
@@ -309,6 +313,19 @@ bool shutdownScripts()
 
 bool updateScripts()
 {
+	// Call delayed triggers here
+	if (selectionChanged)
+	{
+		for (int i = 0; i < scripts.size(); ++i)
+		{
+			QScriptEngine *engine = scripts.at(i);
+			QScriptValueList args;
+			args += js_enumSelected(NULL, engine);
+			callFunction(engine, "eventSelectionChanged", args);
+		}
+		selectionChanged = false;
+	}
+
 	// Update gameTime
 	for (int i = 0; i < scripts.size(); ++i)
 	{
@@ -936,6 +953,20 @@ bool triggerEventBeaconRemoved(int from, int to)
 			callFunction(engine, "eventBeaconRemoved", args);
 		}
 	}
+	return true;
+}
+
+//__ \subsection{eventSelectionChanged(objects)}
+//__ An event that is triggered whenever the host player selects one or more game objects. 
+//__ The \emph{objects} parameter contains an array of the currently selected game objects.
+//__ Keep in mind that the player may drag and drop select many units at once, select one
+//__ unit specifically, or even add more selections to a current selection one at a time.
+//__ This event will trigger once for each user action, not once for each selected or
+//__ deselected object. If all selected game objects are deselected, \emph{objects} will 
+//__ be empty.
+bool triggerEventSelected()
+{
+	selectionChanged = true;
 	return true;
 }
 

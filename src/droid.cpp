@@ -3407,9 +3407,6 @@ bool checkValidWeaponForProp(DROID_TEMPLATE *psTemplate)
 	return true;
 }
 
-
-
-
 // Select a droid and do any necessary housekeeping.
 //
 void SelectDroid(DROID *psDroid)
@@ -3420,8 +3417,8 @@ void SelectDroid(DROID *psDroid)
 		psDroid->selected = true;
 		intRefreshScreen();
 	}
+	triggerEventSelected();
 }
-
 
 // De-select a droid and do any necessary housekeeping.
 //
@@ -3429,6 +3426,7 @@ void DeSelectDroid(DROID *psDroid)
 {
 	psDroid->selected = false;
 	intRefreshScreen();
+	triggerEventSelected();
 }
 
 /** Callback function for stopped audio tracks

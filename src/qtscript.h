@@ -99,5 +99,6 @@ bool triggerEventCheatMode(bool entered);
 bool triggerEventGroupLoss(BASE_OBJECT *psObj, int group, int size, QScriptEngine *engine);
 bool triggerEventDroidMoved(DROID *psDroid, int oldx, int oldy);
 bool triggerEventArea(QString label, DROID *psDroid);
+bool triggerEventSelected();
 
 #endif

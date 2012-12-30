@@ -847,6 +847,34 @@ static QScriptValue js_enumBlips(QScriptContext *context, QScriptEngine *engine)
 	return result;
 }
 
+//-- \subsection{enumSelected()}
+//-- Return an array containing all game objects currently selected by the host player.
+QScriptValue js_enumSelected(QScriptContext *, QScriptEngine *engine)
+{
+	QList<BASE_OBJECT *> matches;
+	for (DROID *psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
+	{
+		if (psDroid->selected)
+		{
+			matches.push_back(psDroid);
+		}
+	}
+	for (STRUCTURE *psStruct = apsStructLists[selectedPlayer]; psStruct; psStruct = psStruct->psNext)
+	{
+		if (psStruct->selected)
+		{
+			matches.push_back(psStruct);
+		}
+	}
+	// TODO - also add selected delivery points
+	QScriptValue result = engine->newArray(matches.size());
+	for (int i = 0; i < matches.size(); i++)
+	{
+		result.setProperty(i, convMax(matches.at(i), engine));
+	}
+	return result;
+}
+
 //-- \subsection{enumGateways()}
 //-- Return an array containing all the gateways on the current map. The array contains object with the properties
 //-- x1, y1, x2 and y2.
@@ -3544,6 +3572,7 @@ bool registerFunctions(QScriptEngine *engine, QString scriptName)
 	engine->globalObject().setProperty("enumGroup", engine->newFunction(js_enumGroup));
 	engine->globalObject().setProperty("enumFeature", engine->newFunction(js_enumFeature));
 	engine->globalObject().setProperty("enumBlips", engine->newFunction(js_enumBlips));
+	engine->globalObject().setProperty("enumSelected", engine->newFunction(js_enumSelected));
 	engine->globalObject().setProperty("enumResearch", engine->newFunction(js_enumResearch));
 	engine->globalObject().setProperty("enumRange", engine->newFunction(js_enumRange));
 	engine->globalObject().setProperty("enumArea", engine->newFunction(js_enumArea));

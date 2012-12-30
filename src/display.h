@@ -46,9 +46,9 @@ extern void setMouseScroll(bool);
 extern bool DrawnInLastFrame(SDWORD Frame);
 
 // Clear all selections.
-extern void clearSel(void);
+extern void clearSel();
 // Clear all selections and stop driver mode.
-extern void clearSelection(void);
+extern void clearSelection();
 // deal with selecting a droid
 extern void dealWithDroidSelect(DROID *psDroid, bool bDragBox);
 
