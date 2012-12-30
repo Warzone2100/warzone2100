@@ -45,7 +45,10 @@ struct W_BUTTON : public WIDGET
 {
 	W_BUTTON(W_BUTINIT const *init);
 
-	void clicked(W_CONTEXT *, WIDGET_KEY key) { buttonClicked(this, key); }
+	void clicked(W_CONTEXT *, WIDGET_KEY key)
+	{
+		buttonClicked(this, key);
+	}
 
 	UDWORD		state;				// The current button state
 	const char *pText;				// The text for the button
@@ -60,7 +63,7 @@ struct W_BUTTON : public WIDGET
 extern bool buttonStartUp(void);
 
 /* Create a button widget data structure */
-extern W_BUTTON* buttonCreate(const W_BUTINIT* psInit);
+extern W_BUTTON *buttonCreate(const W_BUTINIT *psInit);
 
 /* Free the memory used by a button */
 extern void buttonFree(W_BUTTON *psWidget);
@@ -72,7 +75,7 @@ extern void buttonInitialise(W_BUTTON *psWidget);
 extern void buttonRun(W_BUTTON *psWidget);
 
 /* Respond to a mouse button up */
-extern void buttonReleased(W_SCREEN* psScreen, W_BUTTON *psWidget, UDWORD key);
+extern void buttonReleased(W_SCREEN *psScreen, W_BUTTON *psWidget, UDWORD key);
 
 /* Respond to a mouse moving over a button */
 extern void buttonHiLite(W_BUTTON *psWidget, W_CONTEXT *psContext);

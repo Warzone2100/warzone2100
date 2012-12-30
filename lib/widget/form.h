@@ -35,15 +35,18 @@ struct W_FORM : public WIDGET
 {
 	W_FORM(W_FORMINIT const *init);
 
-	void clicked(W_CONTEXT *, WIDGET_KEY key) { formClicked(this, key); }
+	void clicked(W_CONTEXT *, WIDGET_KEY key)
+	{
+		formClicked(this, key);
+	}
 
 	bool            disableChildren;        ///< Disable all child widgets if true
-	UWORD           Ax0,Ay0,Ax1,Ay1;        ///< Working coords for animations.
+	UWORD           Ax0, Ay0, Ax1, Ay1;     ///< Working coords for animations.
 	UDWORD          animCount;              ///< Animation counter.
 	UDWORD          startTime;              ///< Animation start time
 	PIELIGHT        aColours[WCOL_MAX];     ///< Colours for the form and its widgets
-	WIDGET *        psLastHiLite;           ///< The last widget to be hilited. This is used to track when the mouse moves off something.
-	WIDGET *        psWidgets;              ///< The widgets on the form
+	WIDGET         *psLastHiLite;           ///< The last widget to be hilited. This is used to track when the mouse moves off something.
+	WIDGET         *psWidgets;              ///< The widgets on the form
 };
 
 /* Information for a minor tab */
@@ -70,7 +73,7 @@ struct W_TABFORM : public W_FORM
 	W_TABFORM(W_FORMINIT const *init);
 
 	UWORD		majorPos, minorPos;		// Position of the tabs on the form
-	UWORD		majorSize,minorSize;	// the size of tabs horizontally and vertically
+	UWORD		majorSize, minorSize;	// the size of tabs horizontally and vertically
 	UWORD		tabMajorThickness;			// The thickness of the tabs
 	UWORD		tabMinorThickness;			// The thickness of the tabs
 	UWORD		tabMajorGap;					// The gap between tabs
@@ -79,7 +82,7 @@ struct W_TABFORM : public W_FORM
 	SWORD		tabHorzOffset;				// Tab form overlap offset.
 	SWORD		majorOffset;			// Tab start offset.
 	SWORD		minorOffset;			// Tab start offset.
-	UWORD		majorT,minorT;			// which tab is selected
+	UWORD		majorT, minorT;			// which tab is selected
 	UWORD		state;					// Current state of the widget
 	UWORD		tabHiLite;				// which tab is hilited.
 	/* NOTE: If tabHiLite is (UWORD)(-1) then there is no hilite.  A bit of a hack I know */
@@ -121,7 +124,7 @@ struct W_CLICKFORM : public W_FORM
 extern void formClearFlash(W_FORM *psWidget);
 
 /* Create a form widget data structure */
-extern W_FORM* formCreate(const W_FORMINIT* psInit);
+extern W_FORM *formCreate(const W_FORMINIT *psInit);
 
 /* Free the memory used by a form */
 extern void formFree(W_FORM *psWidget);

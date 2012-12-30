@@ -38,7 +38,10 @@ struct W_SLIDER : public WIDGET
 {
 	W_SLIDER(W_SLDINIT const *init);
 
-	void clicked(W_CONTEXT *context, WIDGET_KEY) { sliderClicked(this, context); }
+	void clicked(W_CONTEXT *context, WIDGET_KEY)
+	{
+		sliderClicked(this, context);
+	}
 
 	WSLD_ORIENTATION orientation;                   // The orientation of the slider
 	UWORD		numStops;			// Number of stop positions on the slider
@@ -49,7 +52,7 @@ struct W_SLIDER : public WIDGET
 };
 
 /* Create a slider widget data structure */
-extern W_SLIDER* sliderCreate(const W_SLDINIT* psInit);
+extern W_SLIDER *sliderCreate(const W_SLDINIT *psInit);
 
 /* Free the memory used by a slider */
 extern void sliderFree(W_SLIDER *psWidget);

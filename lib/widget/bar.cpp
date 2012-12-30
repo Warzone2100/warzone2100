@@ -86,7 +86,7 @@ W_BARGRAPH::W_BARGRAPH(W_BARINIT const *init)
 }
 
 /* Create a barGraph widget data structure */
-W_BARGRAPH* barGraphCreate(const W_BARINIT* psInit)
+W_BARGRAPH *barGraphCreate(const W_BARINIT *psInit)
 {
 	if (psInit->style & ~(WBAR_PLAIN | WBAR_TROUGH | WBAR_DOUBLE | WIDG_HIDDEN))
 	{
@@ -95,7 +95,7 @@ W_BARGRAPH* barGraphCreate(const W_BARINIT* psInit)
 	}
 
 	if (psInit->orientation < WBAR_LEFT
-	 || psInit->orientation > WBAR_BOTTOM)
+	    || psInit->orientation > WBAR_BOTTOM)
 	{
 		ASSERT(false, "barGraphCreate: Unknown orientation");
 		return NULL;
@@ -107,7 +107,7 @@ W_BARGRAPH* barGraphCreate(const W_BARINIT* psInit)
 		return NULL;
 	}
 	if ((psInit->style & WBAR_DOUBLE)
-	 && (psInit->minorSize > WBAR_SCALE))
+	    && (psInit->minorSize > WBAR_SCALE))
 	{
 		ASSERT(false, "barGraphCreate: Minor bar size out of range");
 		return NULL;
@@ -129,7 +129,7 @@ W_BARGRAPH* barGraphCreate(const W_BARINIT* psInit)
 /* Free the memory used by a barGraph */
 void barGraphFree(W_BARGRAPH *psWidget)
 {
-	ASSERT(psWidget != NULL,"Invalid widget pointer");
+	ASSERT(psWidget != NULL, "Invalid widget pointer");
 
 	delete psWidget;
 }
@@ -146,12 +146,12 @@ void widgSetBarSize(W_SCREEN *psScreen, UDWORD id, UDWORD iValue)
 	psBGraph = (W_BARGRAPH *)widgGetFromID(psScreen, id);
 	if (psBGraph == NULL || psBGraph->type != WIDG_BARGRAPH)
 	{
-		ASSERT( false, "widgSetBarSize: Couldn't find widget from id" );
+		ASSERT(false, "widgSetBarSize: Couldn't find widget from id");
 		return;
 	}
 
 	psBGraph->iOriginal = iValue;
-	if ( iValue < psBGraph->iRange )
+	if (iValue < psBGraph->iRange)
 	{
 		psBGraph->iValue = (UWORD) iValue;
 	}
@@ -167,7 +167,7 @@ void widgSetBarSize(W_SCREEN *psScreen, UDWORD id, UDWORD iValue)
 
 
 /* Set the current size of a minor bar on a double graph */
-void widgSetMinorBarSize(W_SCREEN *psScreen, UDWORD id, UDWORD iValue )
+void widgSetMinorBarSize(W_SCREEN *psScreen, UDWORD id, UDWORD iValue)
 {
 	W_BARGRAPH		*psBGraph;
 	UDWORD			size;
@@ -197,9 +197,9 @@ void barGraphHiLite(W_BARGRAPH *psWidget, W_CONTEXT *psContext)
 	if (psWidget->pTip)
 	{
 		tipStart((WIDGET *)psWidget, psWidget->pTip, psContext->psScreen->TipFontID,
-				 psContext->psForm->aColours,
-				 psWidget->x + psContext->xOffset, psWidget->y + psContext->yOffset,
-				 psWidget->width, psWidget->height);
+		        psContext->psForm->aColours,
+		        psWidget->x + psContext->xOffset, psWidget->y + psContext->yOffset,
+		        psWidget->width, psWidget->height);
 	}
 }
 
@@ -218,12 +218,12 @@ static void barGraphDisplayText(W_BARGRAPH *barGraph, int x0, int x1, int y1, PI
 		QByteArray utf = barGraph->text.toUtf8();
 		iV_SetFont(font_small);
 		int textWidth = iV_GetTextWidth(utf.constData());
-		Vector2i pos((x0 + x1 - textWidth)/2, y1);
+		Vector2i pos((x0 + x1 - textWidth) / 2, y1);
 		iV_SetTextColour(WZCOL_BLACK);  // Add a shadow, to make it visible against any background.
 		for (int dx = -1; dx <= 1; ++dx)
 			for (int dy = -1; dy <= 1; ++dy)
 			{
-				iV_DrawText(utf.constData(), pos.x + dx*1.25f, pos.y + dy*1.25f);
+				iV_DrawText(utf.constData(), pos.x + dx * 1.25f, pos.y + dy * 1.25f);
 			}
 		iV_SetTextColour(barGraph->textCol);
 		iV_DrawText(utf.constData(), pos.x, pos.y - 0.25f);
@@ -269,11 +269,11 @@ void barGraphDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT 
 	}
 
 	/* Now draw the graph */
-	pie_BoxFill(x0,y0, x1,y1,psBGraph->majorCol);
-	iV_Line(x0,y1, x0,y0, pColours[WCOL_LIGHT]);
-	iV_Line(x0,y0, x1,y0, pColours[WCOL_LIGHT]);
-	iV_Line(x1,y0, x1,y1, pColours[WCOL_DARK]);
-	iV_Line(x0,y1, x1,y1, pColours[WCOL_DARK]);
+	pie_BoxFill(x0, y0, x1, y1, psBGraph->majorCol);
+	iV_Line(x0, y1, x0, y0, pColours[WCOL_LIGHT]);
+	iV_Line(x0, y0, x1, y0, pColours[WCOL_LIGHT]);
+	iV_Line(x1, y0, x1, y1, pColours[WCOL_DARK]);
+	iV_Line(x0, y1, x1, y1, pColours[WCOL_DARK]);
 
 	barGraphDisplayText(psBGraph, x0, x1, y1, pColours);
 }
@@ -293,11 +293,11 @@ void barGraphDisplayDouble(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIE
 		x0 = xOffset + psWidget->x;
 		y0 = yOffset + psWidget->y;
 		x1 = x0 + psWidget->width * psBGraph->majorSize / WBAR_SCALE;
-		y1 = y0 + 2*psWidget->height/3;
+		y1 = y0 + 2 * psWidget->height / 3;
 
 		/* Calculate the minor bar */
 		x2 = x0;
-		y2 = y0 + psWidget->height/3;
+		y2 = y0 + psWidget->height / 3;
 		x3 = x2 + psWidget->width * psBGraph->minorSize / WBAR_SCALE;
 		y3 = y0 + psWidget->height;
 		break;
@@ -306,11 +306,11 @@ void barGraphDisplayDouble(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIE
 		y0 = yOffset + psWidget->y;
 		x1 = xOffset + psWidget->x + psWidget->width;
 		x0 = x1 - psWidget->width * psBGraph->majorSize / WBAR_SCALE;
-		y1 = y0 + 2*psWidget->height/3;
+		y1 = y0 + 2 * psWidget->height / 3;
 
 		/* Calculate the minor bar */
 		x3 = x1;
-		y2 = y0 + psWidget->height/3;
+		y2 = y0 + psWidget->height / 3;
 		x2 = x3 - psWidget->width * psBGraph->minorSize / WBAR_SCALE;
 		y3 = y0 + psWidget->height;
 		break;
@@ -318,11 +318,11 @@ void barGraphDisplayDouble(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIE
 		/* Calculate the major bar */
 		x0 = xOffset + psWidget->x;
 		y0 = yOffset + psWidget->y;
-		x1 = x0 + 2*psWidget->width/3;
+		x1 = x0 + 2 * psWidget->width / 3;
 		y1 = y0 + psWidget->height * psBGraph->majorSize / WBAR_SCALE;
 
 		/* Calculate the minor bar */
-		x2 = x0 + psWidget->width/3;
+		x2 = x0 + psWidget->width / 3;
 		y2 = y0;
 		x3 = x0 + psWidget->width;
 		y3 = y2 + psWidget->height * psBGraph->minorSize / WBAR_SCALE;
@@ -330,12 +330,12 @@ void barGraphDisplayDouble(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIE
 	case WBAR_BOTTOM:
 		/* Calculate the major bar */
 		x0 = xOffset + psWidget->x;
-		x1 = x0 + 2*psWidget->width/3;
+		x1 = x0 + 2 * psWidget->width / 3;
 		y1 = yOffset + psWidget->y + psWidget->height;
 		y0 = y1 - psWidget->height * psBGraph->majorSize / WBAR_SCALE;
 
 		/* Calculate the minor bar */
-		x2 = x0 + psWidget->width/3;
+		x2 = x0 + psWidget->width / 3;
 		x3 = x0 + psWidget->width;
 		y3 = y1;
 		y2 = y3 - psWidget->height * psBGraph->minorSize / WBAR_SCALE;
@@ -345,19 +345,19 @@ void barGraphDisplayDouble(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIE
 	/* Draw the minor bar graph */
 	if (psBGraph->minorSize > 0)
 	{
-		pie_BoxFill(x2,y2, x3,y3,psBGraph->minorCol);
-		iV_Line(x2,y3, x2,y2, pColours[WCOL_LIGHT]);
-		iV_Line(x2,y2, x3,y2, pColours[WCOL_LIGHT]);
-		iV_Line(x3,y2, x3,y3, pColours[WCOL_DARK]);
-		iV_Line(x2,y3, x3,y3, pColours[WCOL_DARK]);
+		pie_BoxFill(x2, y2, x3, y3, psBGraph->minorCol);
+		iV_Line(x2, y3, x2, y2, pColours[WCOL_LIGHT]);
+		iV_Line(x2, y2, x3, y2, pColours[WCOL_LIGHT]);
+		iV_Line(x3, y2, x3, y3, pColours[WCOL_DARK]);
+		iV_Line(x2, y3, x3, y3, pColours[WCOL_DARK]);
 	}
 
 	/* Draw the major bar graph */
-	pie_BoxFill(x0,y0, x1,y1,psBGraph->majorCol);
-	iV_Line(x0,y1, x0,y0, pColours[WCOL_LIGHT]);
-	iV_Line(x0,y0, x1,y0, pColours[WCOL_LIGHT]);
-	iV_Line(x1,y0, x1,y1, pColours[WCOL_DARK]);
-	iV_Line(x0,y1, x1,y1, pColours[WCOL_DARK]);
+	pie_BoxFill(x0, y0, x1, y1, psBGraph->majorCol);
+	iV_Line(x0, y1, x0, y0, pColours[WCOL_LIGHT]);
+	iV_Line(x0, y0, x1, y0, pColours[WCOL_LIGHT]);
+	iV_Line(x1, y0, x1, y1, pColours[WCOL_DARK]);
+	iV_Line(x0, y1, x1, y1, pColours[WCOL_DARK]);
 
 	barGraphDisplayText(psBGraph, x0, x1, y1, pColours);
 }
@@ -368,7 +368,7 @@ void barGraphDisplayTrough(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIE
 {
 	SDWORD		x0 = 0, y0 = 0, x1 = 0, y1 = 0;		// Position of the bar
 	SDWORD		tx0 = 0, ty0 = 0, tx1 = 0, ty1 = 0;	// Position of the trough
-	bool		showBar=true, showTrough=true;
+	bool		showBar = true, showTrough = true;
 	W_BARGRAPH	*psBGraph = (W_BARGRAPH *)psWidget;
 
 	/* figure out which way the bar graph fills */
@@ -383,7 +383,7 @@ void barGraphDisplayTrough(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIE
 		{
 			showBar = false;
 		}
-		tx0 = x1+1;
+		tx0 = x1 + 1;
 		ty0 = y0;
 		tx1 = x0 + psWidget->width;
 		ty1 = y1;
@@ -403,7 +403,7 @@ void barGraphDisplayTrough(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIE
 		}
 		tx0 = xOffset + psWidget->x;
 		ty0 = y0;
-		tx1 = x0-1;
+		tx1 = x0 - 1;
 		ty1 = y1;
 		if (tx0 >= tx1)
 		{
@@ -420,7 +420,7 @@ void barGraphDisplayTrough(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIE
 			showBar = false;
 		}
 		tx0 = x0;
-		ty0 = y1+1;
+		ty0 = y1 + 1;
 		tx1 = x1;
 		ty1 = y0 + psWidget->height;
 		if (ty0 >= ty1)
@@ -440,7 +440,7 @@ void barGraphDisplayTrough(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIE
 		tx0 = x0;
 		ty0 = yOffset + psWidget->y;
 		tx1 = x1;
-		ty1 = y0-1;
+		ty1 = y0 - 1;
 		if (ty0 >= ty1)
 		{
 			showTrough = false;
@@ -456,10 +456,10 @@ void barGraphDisplayTrough(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIE
 	if (showTrough)
 	{
 		pie_BoxFill(tx0, ty0, tx1, ty1, pColours[WCOL_BKGRND]);
-		iV_Line(tx0,ty1, tx0,ty0, pColours[WCOL_DARK]);
-		iV_Line(tx0,ty0, tx1,ty0, pColours[WCOL_DARK]);
-		iV_Line(tx1,ty0, tx1,ty1, pColours[WCOL_LIGHT]);
-		iV_Line(tx0,ty1, tx1,ty1, pColours[WCOL_LIGHT]);
+		iV_Line(tx0, ty1, tx0, ty0, pColours[WCOL_DARK]);
+		iV_Line(tx0, ty0, tx1, ty0, pColours[WCOL_DARK]);
+		iV_Line(tx1, ty0, tx1, ty1, pColours[WCOL_LIGHT]);
+		iV_Line(tx0, ty1, tx1, ty1, pColours[WCOL_LIGHT]);
 	}
 
 	barGraphDisplayText(psBGraph, x0, tx1, ty1, pColours);

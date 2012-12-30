@@ -55,13 +55,13 @@ W_LABEL::W_LABEL(W_LABINIT const *init)
 
 
 /* Create a button widget data structure */
-W_LABEL* labelCreate(const W_LABINIT* psInit)
+W_LABEL *labelCreate(const W_LABINIT *psInit)
 {
 	/* Do some validation on the initialisation struct */
 	if (psInit->style & ~(WLAB_PLAIN | WLAB_ALIGNLEFT |
-						   WLAB_ALIGNRIGHT | WLAB_ALIGNCENTRE | WIDG_HIDDEN))
+	        WLAB_ALIGNRIGHT | WLAB_ALIGNCENTRE | WIDG_HIDDEN))
 	{
-		ASSERT( false, "Unknown button style" );
+		ASSERT(false, "Unknown button style");
 		return NULL;
 	}
 
@@ -81,8 +81,8 @@ W_LABEL* labelCreate(const W_LABINIT* psInit)
 /* Free the memory used by a button */
 void labelFree(W_LABEL *psWidget)
 {
-	ASSERT( psWidget != NULL,
-		"labelFree: Invalid label pointer" );
+	ASSERT(psWidget != NULL,
+	       "labelFree: Invalid label pointer");
 
 	delete psWidget;
 }
@@ -90,7 +90,7 @@ void labelFree(W_LABEL *psWidget)
 /* label display function */
 void labelDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
 {
-	unsigned int fx,fy, fw;
+	unsigned int fx, fy, fw;
 	W_LABEL		*psLabel;
 	enum iV_fonts FontID;
 
@@ -100,22 +100,22 @@ void labelDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pC
 	iV_SetFont(FontID);
 	iV_SetTextColour(pColours[WCOL_TEXT]);
 
-    if (psLabel->style & WLAB_ALIGNCENTRE)
-    {
-       fw = iV_GetTextWidth(psLabel->aText);
-       fx = xOffset + psLabel->x + (psLabel->width - fw) / 2;
-    }
-    else if (psLabel->style & WLAB_ALIGNRIGHT)
-    {
-        fw = iV_GetTextWidth(psLabel->aText);
-        fx = xOffset + psLabel->x + psLabel->width - fw;
-    }
-    else
-    {
-        fx = xOffset + psLabel->x;
-    }
-    fy = yOffset + psLabel->y + (psLabel->height - iV_GetTextLineSize())/2 - iV_GetTextAboveBase();
-    iV_DrawText(psLabel->aText,fx,fy);
+	if (psLabel->style & WLAB_ALIGNCENTRE)
+	{
+		fw = iV_GetTextWidth(psLabel->aText);
+		fx = xOffset + psLabel->x + (psLabel->width - fw) / 2;
+	}
+	else if (psLabel->style & WLAB_ALIGNRIGHT)
+	{
+		fw = iV_GetTextWidth(psLabel->aText);
+		fx = xOffset + psLabel->x + psLabel->width - fw;
+	}
+	else
+	{
+		fx = xOffset + psLabel->x;
+	}
+	fy = yOffset + psLabel->y + (psLabel->height - iV_GetTextLineSize()) / 2 - iV_GetTextAboveBase();
+	iV_DrawText(psLabel->aText, fx, fy);
 }
 
 /* Respond to a mouse moving over a label */
@@ -125,9 +125,9 @@ void labelHiLite(W_LABEL *psWidget, W_CONTEXT *psContext)
 	if (psWidget->pTip)
 	{
 		tipStart((WIDGET *)psWidget, psWidget->pTip, psContext->psScreen->TipFontID,
-				 psContext->psForm->aColours,
-				 psWidget->x + psContext->xOffset, psWidget->y + psContext->yOffset,
-				 psWidget->width,psWidget->height);
+		        psContext->psForm->aColours,
+		        psWidget->x + psContext->xOffset, psWidget->y + psContext->yOffset,
+		        psWidget->width, psWidget->height);
 	}
 }
 

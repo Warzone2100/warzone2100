@@ -72,7 +72,7 @@ private:
 };
 
 /* Create an edit box widget data structure */
-extern W_EDITBOX* editBoxCreate(const W_EDBINIT* psInit);
+extern W_EDITBOX *editBoxCreate(const W_EDBINIT *psInit);
 
 /* Respond to a mouse moving over an edit box */
 extern void editBoxHiLite(W_EDITBOX *psWidget);

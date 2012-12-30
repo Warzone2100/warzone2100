@@ -17,7 +17,7 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/** @file 
+/** @file
  *  Internal widget library definitions
  */
 
@@ -28,7 +28,7 @@
 #include "widgbase.h"
 
 /* Set the id number for widgRunScreen to return */
-extern void widgSetReturn(W_SCREEN* psScreen, WIDGET *psWidget);
+extern void widgSetReturn(W_SCREEN *psScreen, WIDGET *psWidget);
 
 /* Release a list of widgets */
 extern void widgReleaseWidgetList(WIDGET *psWidgets);

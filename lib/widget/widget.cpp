@@ -112,11 +112,11 @@ WIDGET::WIDGET(W_INIT const *init, WIDGET_TYPE type)
 
 
 // reset psMouseOverWidget (a global) when needed
-void CheckpsMouseOverWidget( void *psWidget )
+void CheckpsMouseOverWidget(void *psWidget)
 {
 	// in formFreePlain() (and maybe the others?) it is possible to free() the form
 	// thus invalidating this pointer, causing a crash in widgDelete()
-	if ( (WIDGET *)psWidget == psMouseOverWidget )
+	if ((WIDGET *)psWidget == psMouseOverWidget)
 	{
 		debug(LOG_WARNING, "psMouseOverWidget (%p) has become dangling. Reseting.", psMouseOverWidget);
 		psMouseOverWidget = NULL;
@@ -124,7 +124,7 @@ void CheckpsMouseOverWidget( void *psWidget )
 }
 
 /* Create an empty widget screen */
-W_SCREEN* widgCreateScreen()
+W_SCREEN *widgCreateScreen()
 {
 	W_SCREEN *psScreen = new W_SCREEN;
 	if (psScreen == NULL)
@@ -162,10 +162,10 @@ void widgReleaseWidgetList(WIDGET *psWidgets)
 {
 	WIDGET	*psCurr, *psNext;
 
-	for(psCurr = psWidgets; psCurr; psCurr = psNext)
+	for (psCurr = psWidgets; psCurr; psCurr = psNext)
 	{
 		psNext = psCurr->psNext;
-		
+
 		// the mouse can't be over it anymore
 		if (psMouseOverWidget && psMouseOverWidget->id == psCurr->id)
 		{
@@ -178,8 +178,8 @@ void widgReleaseWidgetList(WIDGET *psWidgets)
 /* Release a screen and all its associated data */
 void widgReleaseScreen(W_SCREEN *psScreen)
 {
-	ASSERT( psScreen != NULL,
-		"widgReleaseScreen: Invalid screen pointer" );
+	ASSERT(psScreen != NULL,
+	       "widgReleaseScreen: Invalid screen pointer");
 
 	formFree((W_FORM *)psScreen->psForm);
 
@@ -190,7 +190,7 @@ void widgReleaseScreen(W_SCREEN *psScreen)
 /* Release a widget */
 static void widgRelease(WIDGET *psWidget)
 {
-	switch(psWidget->type)
+	switch (psWidget->type)
 	{
 	case WIDG_FORM:
 		formFree((W_FORM *)psWidget);
@@ -255,23 +255,23 @@ static bool widgCheckIDForm(W_FORM *psForm, UDWORD id)
 /* Set the tool tip font for a screen */
 void widgSetTipFont(W_SCREEN *psScreen, enum iV_fonts FontID)
 {
-	ASSERT( psScreen != NULL,
-		"widgSetTipFont: Invalid screen pointer" );
+	ASSERT(psScreen != NULL,
+	       "widgSetTipFont: Invalid screen pointer");
 
 	psScreen->TipFontID = FontID;
 }
 
 /* Add a form to the widget screen */
-bool widgAddForm(W_SCREEN *psScreen, const W_FORMINIT* psInit)
+bool widgAddForm(W_SCREEN *psScreen, const W_FORMINIT *psInit)
 {
 	W_FORM	*psParent, *psForm;
 
-	ASSERT( psScreen != NULL,
-		"widgAddForm: Invalid screen pointer" );
+	ASSERT(psScreen != NULL,
+	       "widgAddForm: Invalid screen pointer");
 
-	if (widgCheckIDForm((W_FORM *)psScreen->psForm,psInit->id))
+	if (widgCheckIDForm((W_FORM *)psScreen->psForm, psInit->id))
 	{
-		ASSERT( false, "widgAddForm: ID number has already been used (%d)", psInit->id );
+		ASSERT(false, "widgAddForm: ID number has already been used (%d)", psInit->id);
 		return false;
 	}
 
@@ -286,8 +286,8 @@ bool widgAddForm(W_SCREEN *psScreen, const W_FORMINIT* psInit)
 		psParent = (W_FORM *)widgGetFromID(psScreen, psInit->formID);
 		if (!psParent || psParent->type != WIDG_FORM)
 		{
-			ASSERT( false,
-				"widgAddForm: Could not find parent form from formID" );
+			ASSERT(false,
+			       "widgAddForm: Could not find parent form from formID");
 			return false;
 		}
 	}
@@ -295,8 +295,8 @@ bool widgAddForm(W_SCREEN *psScreen, const W_FORMINIT* psInit)
 	/* Create the form structure */
 	psForm = formCreate(psInit);
 	if (psForm == NULL
-	/* Add it to the screen */
-	 || !formAddWidget(psParent, (WIDGET *)psForm, (W_INIT *)psInit))
+	    /* Add it to the screen */
+	    || !formAddWidget(psParent, (WIDGET *)psForm, (W_INIT *)psInit))
 	{
 		return false;
 	}
@@ -306,17 +306,17 @@ bool widgAddForm(W_SCREEN *psScreen, const W_FORMINIT* psInit)
 
 
 /* Add a label to the widget screen */
-bool widgAddLabel(W_SCREEN *psScreen, const W_LABINIT* psInit)
+bool widgAddLabel(W_SCREEN *psScreen, const W_LABINIT *psInit)
 {
 	W_LABEL		*psLabel;
 	W_FORM		*psForm;
 
-	ASSERT( psScreen != NULL,
-		"widgAddLabel: Invalid screen pointer" );
+	ASSERT(psScreen != NULL,
+	       "widgAddLabel: Invalid screen pointer");
 
-	if (widgCheckIDForm((W_FORM *)psScreen->psForm,psInit->id))
+	if (widgCheckIDForm((W_FORM *)psScreen->psForm, psInit->id))
 	{
-		ASSERT( false, "widgAddLabel: ID number has already been used (%d)", psInit->id );
+		ASSERT(false, "widgAddLabel: ID number has already been used (%d)", psInit->id);
 		return false;
 	}
 
@@ -330,8 +330,8 @@ bool widgAddLabel(W_SCREEN *psScreen, const W_LABINIT* psInit)
 		psForm = (W_FORM *)widgGetFromID(psScreen, psInit->formID);
 		if (psForm == NULL || psForm->type != WIDG_FORM)
 		{
-			ASSERT( false,
-				"widgAddLabel: Could not find parent form from formID" );
+			ASSERT(false,
+			       "widgAddLabel: Could not find parent form from formID");
 			return false;
 		}
 	}
@@ -339,8 +339,8 @@ bool widgAddLabel(W_SCREEN *psScreen, const W_LABINIT* psInit)
 	/* Create the button structure */
 	psLabel = labelCreate(psInit);
 	if (psInit == NULL
-	/* Add it to the form */
-	 || !formAddWidget(psForm, (WIDGET *)psLabel, (W_INIT *)psInit))
+	    /* Add it to the form */
+	    || !formAddWidget(psForm, (WIDGET *)psLabel, (W_INIT *)psInit))
 	{
 		return false;
 	}
@@ -350,17 +350,17 @@ bool widgAddLabel(W_SCREEN *psScreen, const W_LABINIT* psInit)
 
 
 /* Add a button to the widget screen */
-bool widgAddButton(W_SCREEN *psScreen, const W_BUTINIT* psInit)
+bool widgAddButton(W_SCREEN *psScreen, const W_BUTINIT *psInit)
 {
 	W_BUTTON	*psButton;
 	W_FORM		*psForm;
 
-	ASSERT( psScreen != NULL,
-		"widgAddButton: Invalid screen pointer" );
+	ASSERT(psScreen != NULL,
+	       "widgAddButton: Invalid screen pointer");
 
-	if (widgCheckIDForm((W_FORM *)psScreen->psForm,psInit->id))
+	if (widgCheckIDForm((W_FORM *)psScreen->psForm, psInit->id))
 	{
-		ASSERT( false, "widgAddButton: ID number has already been used(%d)", psInit->id );
+		ASSERT(false, "widgAddButton: ID number has already been used(%d)", psInit->id);
 		return false;
 	}
 
@@ -374,8 +374,8 @@ bool widgAddButton(W_SCREEN *psScreen, const W_BUTINIT* psInit)
 		psForm = (W_FORM *)widgGetFromID(psScreen, psInit->formID);
 		if (psForm == NULL || psForm->type != WIDG_FORM)
 		{
-			ASSERT( false,
-				"widgAddButton: Could not find parent form from formID" );
+			ASSERT(false,
+			       "widgAddButton: Could not find parent form from formID");
 			return false;
 		}
 	}
@@ -383,8 +383,8 @@ bool widgAddButton(W_SCREEN *psScreen, const W_BUTINIT* psInit)
 	/* Create the button structure */
 	psButton = buttonCreate(psInit);
 	if (psButton == NULL
-	/* Add it to the form */
-	 || !formAddWidget(psForm, (WIDGET *)psButton, (W_INIT *)psInit))
+	    /* Add it to the form */
+	    || !formAddWidget(psForm, (WIDGET *)psButton, (W_INIT *)psInit))
 	{
 		return false;
 	}
@@ -394,17 +394,17 @@ bool widgAddButton(W_SCREEN *psScreen, const W_BUTINIT* psInit)
 
 
 /* Add an edit box to the widget screen */
-bool widgAddEditBox(W_SCREEN *psScreen, const W_EDBINIT* psInit)
+bool widgAddEditBox(W_SCREEN *psScreen, const W_EDBINIT *psInit)
 {
 	W_EDITBOX	*psEdBox;
 	W_FORM		*psForm;
 
-	ASSERT( psScreen != NULL,
-		"widgAddEditBox: Invalid screen pointer" );
+	ASSERT(psScreen != NULL,
+	       "widgAddEditBox: Invalid screen pointer");
 
-	if (widgCheckIDForm((W_FORM *)psScreen->psForm,psInit->id))
+	if (widgCheckIDForm((W_FORM *)psScreen->psForm, psInit->id))
 	{
-		ASSERT( false, "widgAddEditBox: ID number has already been used (%d)", psInit->id );
+		ASSERT(false, "widgAddEditBox: ID number has already been used (%d)", psInit->id);
 		return false;
 	}
 
@@ -418,8 +418,8 @@ bool widgAddEditBox(W_SCREEN *psScreen, const W_EDBINIT* psInit)
 		psForm = (W_FORM *)widgGetFromID(psScreen, psInit->formID);
 		if (!psForm || psForm->type != WIDG_FORM)
 		{
-			ASSERT( false,
-				"widgAddEditBox: Could not find parent form from formID" );
+			ASSERT(false,
+			       "widgAddEditBox: Could not find parent form from formID");
 			return false;
 		}
 	}
@@ -427,8 +427,8 @@ bool widgAddEditBox(W_SCREEN *psScreen, const W_EDBINIT* psInit)
 	/* Create the edit box structure */
 	psEdBox = editBoxCreate(psInit);
 	if (psEdBox == NULL
-	/* Add it to the form */
-	 || !formAddWidget(psForm, (WIDGET *)psEdBox, (W_INIT *)psInit))
+	    /* Add it to the form */
+	    || !formAddWidget(psForm, (WIDGET *)psEdBox, (W_INIT *)psInit))
 	{
 		return false;
 	}
@@ -438,17 +438,17 @@ bool widgAddEditBox(W_SCREEN *psScreen, const W_EDBINIT* psInit)
 
 
 /* Add a bar graph to the widget screen */
-bool widgAddBarGraph(W_SCREEN *psScreen, const W_BARINIT* psInit)
+bool widgAddBarGraph(W_SCREEN *psScreen, const W_BARINIT *psInit)
 {
 	W_BARGRAPH	*psBarGraph;
 	W_FORM		*psForm;
 
-	ASSERT( psScreen != NULL,
-		"widgAddEditBox: Invalid screen pointer" );
+	ASSERT(psScreen != NULL,
+	       "widgAddEditBox: Invalid screen pointer");
 
-	if (widgCheckIDForm((W_FORM *)psScreen->psForm,psInit->id))
+	if (widgCheckIDForm((W_FORM *)psScreen->psForm, psInit->id))
 	{
-		ASSERT( false, "widgAddBarGraph: ID number has already been used (%d)", psInit->id );
+		ASSERT(false, "widgAddBarGraph: ID number has already been used (%d)", psInit->id);
 		return false;
 	}
 
@@ -462,8 +462,8 @@ bool widgAddBarGraph(W_SCREEN *psScreen, const W_BARINIT* psInit)
 		psForm = (W_FORM *)widgGetFromID(psScreen, psInit->formID);
 		if (!psForm || psForm->type != WIDG_FORM)
 		{
-			ASSERT( false,
-				"widgAddBarGraph: Could not find parent form from formID" );
+			ASSERT(false,
+			       "widgAddBarGraph: Could not find parent form from formID");
 			return false;
 		}
 	}
@@ -471,8 +471,8 @@ bool widgAddBarGraph(W_SCREEN *psScreen, const W_BARINIT* psInit)
 	/* Create the bar graph structure */
 	psBarGraph = barGraphCreate(psInit);
 	if (psBarGraph == NULL
-	/* Add it to the form */
-	 || !formAddWidget(psForm, (WIDGET *)psBarGraph, (W_INIT *)psInit))
+	    /* Add it to the form */
+	    || !formAddWidget(psForm, (WIDGET *)psBarGraph, (W_INIT *)psInit))
 	{
 		return false;
 	}
@@ -482,13 +482,13 @@ bool widgAddBarGraph(W_SCREEN *psScreen, const W_BARINIT* psInit)
 
 
 /* Add a slider to a form */
-bool widgAddSlider(W_SCREEN *psScreen, const W_SLDINIT* psInit)
+bool widgAddSlider(W_SCREEN *psScreen, const W_SLDINIT *psInit)
 {
 	W_SLIDER	*psSlider;
 	W_FORM		*psForm;
 
-	ASSERT( psScreen != NULL,
-		"widgAddEditBox: Invalid screen pointer" );
+	ASSERT(psScreen != NULL,
+	       "widgAddEditBox: Invalid screen pointer");
 
 	if (widgCheckIDForm((W_FORM *)psScreen->psForm, psInit->id))
 	{
@@ -505,7 +505,7 @@ bool widgAddSlider(W_SCREEN *psScreen, const W_SLDINIT* psInit)
 	{
 		psForm = (W_FORM *)widgGetFromID(psScreen, psInit->formID);
 		if (!psForm
-		 || psForm->type != WIDG_FORM)
+		    || psForm->type != WIDG_FORM)
 		{
 			ASSERT(false, "widgAddSlider: Could not find parent form from formID");
 			return false;
@@ -515,8 +515,8 @@ bool widgAddSlider(W_SCREEN *psScreen, const W_SLDINIT* psInit)
 	/* Create the slider structure */
 	psSlider = sliderCreate(psInit);
 	if (psSlider == NULL
-	/* Add it to the form */
-	 || !formAddWidget(psForm, (WIDGET *)psSlider, (W_INIT *)psInit))
+	    /* Add it to the form */
+	    || !formAddWidget(psForm, (WIDGET *)psSlider, (W_INIT *)psInit))
 	{
 		return false;
 	}
@@ -530,7 +530,7 @@ static bool widgDeleteFromForm(W_FORM *psForm, UDWORD id, W_CONTEXT *psContext)
 {
 	WIDGET		*psPrev = NULL, *psCurr, *psNext;
 	W_TABFORM	*psTabForm;
-	UDWORD		minor,major;
+	UDWORD		minor, major;
 	W_MAJORTAB	*psMajor;
 	W_MINORTAB	*psMinor;
 	W_CONTEXT	sNewContext;
@@ -545,15 +545,15 @@ static bool widgDeleteFromForm(W_FORM *psForm, UDWORD id, W_CONTEXT *psContext)
 	if (psForm->style & WFORM_TABBED)
 	{
 		psTabForm = (W_TABFORM *)psForm;
-		ASSERT( psTabForm != NULL,
-			"widgDeleteFromForm: Invalid form pointer" );
+		ASSERT(psTabForm != NULL,
+		       "widgDeleteFromForm: Invalid form pointer");
 
 		/* loop through all the tabs */
 		psMajor = psTabForm->asMajor;
-		for(major=0; major < psTabForm->numMajor; major++)
+		for (major = 0; major < psTabForm->numMajor; major++)
 		{
 			psMinor = psMajor->asMinor;
-			for(minor=0; minor < psMajor->numMinor; minor++)
+			for (minor = 0; minor < psMajor->numMinor; minor++)
 			{
 				if (psMinor->psWidgets && psMinor->psWidgets->id == id)
 				{
@@ -566,7 +566,7 @@ static bool widgDeleteFromForm(W_FORM *psForm, UDWORD id, W_CONTEXT *psContext)
 				}
 				else
 				{
-					for(psCurr = psMinor->psWidgets; psCurr; psCurr = psCurr->psNext)
+					for (psCurr = psMinor->psWidgets; psCurr; psCurr = psCurr->psNext)
 					{
 						if (psCurr->id == id)
 						{
@@ -599,8 +599,8 @@ static bool widgDeleteFromForm(W_FORM *psForm, UDWORD id, W_CONTEXT *psContext)
 	}
 	else
 	{
-		ASSERT( psForm != NULL,
-			"widgDeleteFromForm: Invalid form pointer" );
+		ASSERT(psForm != NULL,
+		       "widgDeleteFromForm: Invalid form pointer");
 
 		/* Delete from a normal form */
 		if (psForm->psWidgets && psForm->psWidgets->id == id)
@@ -615,7 +615,7 @@ static bool widgDeleteFromForm(W_FORM *psForm, UDWORD id, W_CONTEXT *psContext)
 		else
 		{
 			/* Search the rest of the list */
-			for(psCurr = psForm->psWidgets; psCurr; psCurr = psCurr->psNext)
+			for (psCurr = psForm->psWidgets; psCurr; psCurr = psCurr->psNext)
 			{
 				if (psCurr->id == id)
 				{
@@ -652,8 +652,8 @@ void widgDelete(W_SCREEN *psScreen, UDWORD id)
 {
 	W_CONTEXT	sContext;
 
-	ASSERT( psScreen != NULL,
-			"widgDelete: Invalid screen pointer" );
+	ASSERT(psScreen != NULL,
+	       "widgDelete: Invalid screen pointer");
 
 	/* Clear the keyboard focus if necessary */
 	if ((psScreen->psFocus != NULL) && (psScreen->psFocus->id == id))
@@ -753,7 +753,7 @@ static WIDGET *widgFormGetFromID(W_FORM *psForm, UDWORD id)
 
 	/* Now search the widgets on the form */
 	psFound = NULL;
-	formInitGetAllWidgets(psForm,&sGetAll);
+	formInitGetAllWidgets(psForm, &sGetAll);
 	psCurr = formGetAllWidgets(&sGetAll);
 	while (psCurr && !psFound)
 	{
@@ -791,8 +791,8 @@ void widgHide(W_SCREEN *psScreen, UDWORD id)
 	WIDGET	*psWidget;
 
 	psWidget = widgGetFromID(psScreen, id);
-	ASSERT( psWidget != NULL,
-		"widgHide: couldn't find widget from id" );
+	ASSERT(psWidget != NULL,
+	       "widgHide: couldn't find widget from id");
 	if (psWidget)
 	{
 		psWidget->style |= WIDG_HIDDEN;
@@ -806,8 +806,8 @@ void widgReveal(W_SCREEN *psScreen, UDWORD id)
 	WIDGET	*psWidget;
 
 	psWidget = widgGetFromID(psScreen, id);
-	ASSERT( psWidget != NULL,
-		"widgReveal: couldn't find widget from id" );
+	ASSERT(psWidget != NULL,
+	       "widgReveal: couldn't find widget from id");
 	if (psWidget)
 	{
 		psWidget->style &= ~WIDG_HIDDEN;
@@ -883,7 +883,7 @@ UDWORD widgGetUserData2(W_SCREEN *psScreen, UDWORD id)
 
 
 /* Set user data for a widget */
-void widgSetUserData(W_SCREEN *psScreen, UDWORD id,void *UserData)
+void widgSetUserData(W_SCREEN *psScreen, UDWORD id, void *UserData)
 {
 	WIDGET	*psWidget;
 
@@ -895,7 +895,7 @@ void widgSetUserData(W_SCREEN *psScreen, UDWORD id,void *UserData)
 }
 
 /* Set user data for a widget */
-void widgSetUserData2(W_SCREEN *psScreen, UDWORD id,UDWORD UserData)
+void widgSetUserData2(W_SCREEN *psScreen, UDWORD id, UDWORD UserData)
 {
 	WIDGET	*psWidget;
 
@@ -911,7 +911,7 @@ void widgSetUserData2(W_SCREEN *psScreen, UDWORD id,UDWORD UserData)
 /* Return the user data for the returned widget */
 void *widgGetLastUserData(W_SCREEN *psScreen)
 {
-	assert(psScreen != NULL);	
+	assert(psScreen != NULL);
 
 	if (psScreen->psRetWidget)
 	{
@@ -922,60 +922,62 @@ void *widgGetLastUserData(W_SCREEN *psScreen)
 }
 
 /* Set tip string for a widget */
-void widgSetTip( W_SCREEN *psScreen, UDWORD id, const char *pTip )
+void widgSetTip(W_SCREEN *psScreen, UDWORD id, const char *pTip)
 {
 	WIDGET *psWidget = widgGetFromID(psScreen, id);
 
 	if (!psWidget)
+	{
 		return;
+	}
 
 	widgSetTipText(psWidget, pTip);
 }
 
-void widgSetTipText(WIDGET* psWidget, const char* pTip)
+void widgSetTipText(WIDGET *psWidget, const char *pTip)
 {
 	ASSERT(psWidget != NULL, "invalid widget pointer");
 
 	switch (psWidget->type)
 	{
-		case WIDG_FORM:
-			if (psWidget->style & WFORM_CLICKABLE)
-			{
-				((W_CLICKFORM *) psWidget)->pTip = pTip;
-			}
-			else if (psWidget->style & WFORM_TABBED)
-			{
-				ASSERT(!"tabbed forms don't have a tip", "widgSetTip: tabbed forms do not have a tip");
-			}
-			else
-			{
-				ASSERT(!"plain forms don't have a tip", "widgSetTip: plain forms do not have a tip");
-			}
-			break;
+	case WIDG_FORM:
+		if (psWidget->style & WFORM_CLICKABLE)
+		{
+			((W_CLICKFORM *) psWidget)->pTip = pTip;
+		}
+		else if (psWidget->style & WFORM_TABBED)
+		{
+			ASSERT(!"tabbed forms don't have a tip", "widgSetTip: tabbed forms do not have a tip");
+		}
+		else
+		{
+			ASSERT(!"plain forms don't have a tip", "widgSetTip: plain forms do not have a tip");
+		}
+		break;
 
-		case WIDG_LABEL:
-			((W_LABEL *) psWidget)->pTip = pTip;
-			break;
+	case WIDG_LABEL:
+		((W_LABEL *) psWidget)->pTip = pTip;
+		break;
 
-		case WIDG_BUTTON:
-			((W_BUTTON *) psWidget)->pTip = pTip;
-			break;
+	case WIDG_BUTTON:
+		((W_BUTTON *) psWidget)->pTip = pTip;
+		break;
 
-		case WIDG_BARGRAPH:
-			((W_BARGRAPH *) psWidget)->pTip = pTip;
-			break;
+	case WIDG_BARGRAPH:
+		((W_BARGRAPH *) psWidget)->pTip = pTip;
+		break;
 
-		case WIDG_SLIDER:
-			((W_SLIDER *) psWidget)->pTip = pTip;
-			break;
+	case WIDG_SLIDER:
+		((W_SLIDER *) psWidget)->pTip = pTip;
+		break;
 
-		case WIDG_EDITBOX:
-			ASSERT(!"wrong widget type", "widgSetTip: edit boxes do not have a tip");
-			break;
+	case WIDG_EDITBOX:
+		ASSERT(!"wrong widget type", "widgSetTip: edit boxes do not have a tip");
+		break;
 
-		default:
-			ASSERT(!"Unknown widget type", "Unknown widget type");
-			break;
+	default:
+		ASSERT(!"Unknown widget type", "Unknown widget type");
+		break;
 	}
 }
 
@@ -1110,47 +1112,47 @@ const char *widgGetString(W_SCREEN *psScreen, UDWORD id)
 {
 	const WIDGET *psWidget = widgGetFromID(psScreen, id);
 
-	ASSERT( psScreen != NULL, "widgGetString: Invalid screen pointer" );
+	ASSERT(psScreen != NULL, "widgGetString: Invalid screen pointer");
 
 	/* Get the widget */
 	if (psWidget != NULL)
 	{
 		switch (psWidget->type)
 		{
-			case WIDG_FORM:
-				ASSERT( false, "widgGetString: Forms do not have a string" );
+		case WIDG_FORM:
+			ASSERT(false, "widgGetString: Forms do not have a string");
+			aStringRetBuffer[0] = '\0';
+			break;
+		case WIDG_LABEL:
+			sstrcpy(aStringRetBuffer, ((W_LABEL *)psWidget)->aText);
+			break;
+		case WIDG_BUTTON:
+			if (((W_BUTTON *)psWidget)->pText)
+			{
+				sstrcpy(aStringRetBuffer, ((W_BUTTON *)psWidget)->pText);
+			}
+			else
+			{
 				aStringRetBuffer[0] = '\0';
-				break;
-			case WIDG_LABEL:
-				sstrcpy(aStringRetBuffer, ((W_LABEL *)psWidget)->aText);
-				break;
-			case WIDG_BUTTON:
-				if (((W_BUTTON *)psWidget)->pText)
-				{
-					sstrcpy(aStringRetBuffer, ((W_BUTTON *)psWidget)->pText);
-				}
-				else
-				{
-					aStringRetBuffer[0] = '\0';
-				}
-				break;
-			case WIDG_EDITBOX:
+			}
+			break;
+		case WIDG_EDITBOX:
 			{
 				sstrcpy(aStringRetBuffer, ((W_EDITBOX *)psWidget)->aText.toUtf8().constData());
 				break;
 			}
-			case WIDG_BARGRAPH:
-				ASSERT( false, "widgGetString: Bar Graphs do not have a string" );
-				aStringRetBuffer[0] = '\0';
-				break;
-			case WIDG_SLIDER:
-				ASSERT( false, "widgGetString: Sliders do not have a string" );
-				aStringRetBuffer[0] = '\0';
-				break;
-			default:
-				ASSERT(!"Unknown widget type", "Unknown widget type");
-				aStringRetBuffer[0] = '\0';
-				break;
+		case WIDG_BARGRAPH:
+			ASSERT(false, "widgGetString: Bar Graphs do not have a string");
+			aStringRetBuffer[0] = '\0';
+			break;
+		case WIDG_SLIDER:
+			ASSERT(false, "widgGetString: Sliders do not have a string");
+			aStringRetBuffer[0] = '\0';
+			break;
+		default:
+			ASSERT(!"Unknown widget type", "Unknown widget type");
+			aStringRetBuffer[0] = '\0';
+			break;
 		}
 	}
 	else
@@ -1168,8 +1170,8 @@ void widgSetString(W_SCREEN *psScreen, UDWORD id, const char *pText)
 {
 	WIDGET	*psWidget;
 
-	ASSERT( psScreen != NULL,
-		"widgSetString: Invalid screen pointer" );
+	ASSERT(psScreen != NULL,
+	       "widgSetString: Invalid screen pointer");
 
 	/* Get the widget */
 	psWidget = widgGetFromID(psScreen, id);
@@ -1181,37 +1183,37 @@ void widgSetString(W_SCREEN *psScreen, UDWORD id, const char *pText)
 
 	switch (psWidget->type)
 	{
-		case WIDG_FORM:
-			ASSERT( false, "widgSetString: forms do not have a string" );
-			break;
+	case WIDG_FORM:
+		ASSERT(false, "widgSetString: forms do not have a string");
+		break;
 
-		case WIDG_LABEL:
-			sstrcpy(((W_LABEL *)psWidget)->aText, pText);
-			break;
+	case WIDG_LABEL:
+		sstrcpy(((W_LABEL *)psWidget)->aText, pText);
+		break;
 
-		case WIDG_BUTTON:
-			((W_BUTTON *)psWidget)->pText = pText;
-			break;
+	case WIDG_BUTTON:
+		((W_BUTTON *)psWidget)->pText = pText;
+		break;
 
-		case WIDG_EDITBOX:
-			if (psScreen->psFocus == psWidget)
-			{
-				screenClearFocus(psScreen);
-			}
-			((W_EDITBOX *)psWidget)->setString(pText);
-			break;
+	case WIDG_EDITBOX:
+		if (psScreen->psFocus == psWidget)
+		{
+			screenClearFocus(psScreen);
+		}
+		((W_EDITBOX *)psWidget)->setString(pText);
+		break;
 
-		case WIDG_BARGRAPH:
-			ASSERT( !"wrong widget type", "widgGetString: Bar graphs do not have a string" );
-			break;
+	case WIDG_BARGRAPH:
+		ASSERT(!"wrong widget type", "widgGetString: Bar graphs do not have a string");
+		break;
 
-		case WIDG_SLIDER:
-			ASSERT( !"wrong widget type", "widgGetString: Sliders do not have a string" );
-			break;
+	case WIDG_SLIDER:
+		ASSERT(!"wrong widget type", "widgGetString: Sliders do not have a string");
+		break;
 
-		default:
-			ASSERT(!"Unknown widget type", "Unknown widget type");
-			break;
+	default:
+		ASSERT(!"Unknown widget type", "Unknown widget type");
+		break;
 	}
 }
 
@@ -1241,7 +1243,7 @@ static void widgProcessCallbacks(W_CONTEXT *psContext)
 	psCurr = formGetAllWidgets(&sFormCtl);
 	while (psCurr)
 	{
-		for(;psCurr; psCurr = psCurr->psNext)
+		for (; psCurr; psCurr = psCurr->psNext)
 		{
 			/* Call the callback */
 			if (psCurr->callback)
@@ -1273,7 +1275,7 @@ static void widgProcessCallbacks(W_CONTEXT *psContext)
 static void widgProcessForm(W_CONTEXT *psContext)
 {
 	WIDGET		*psCurr, *psOver;
-	SDWORD		mx,my, omx,omy, xOffset,yOffset, xOrigin,yOrigin;
+	SDWORD		mx, my, omx, omy, xOffset, yOffset, xOrigin, yOrigin;
 	W_FORM		*psForm;
 	W_CONTEXT	sFormContext, sWidgContext;
 
@@ -1306,7 +1308,7 @@ static void widgProcessForm(W_CONTEXT *psContext)
 
 	/* Process the form's widgets */
 	psOver = NULL;
-	for(psCurr = formGetWidgets(psForm); psCurr; psCurr = psCurr->psNext)
+	for (psCurr = formGetWidgets(psForm); psCurr; psCurr = psCurr->psNext)
 	{
 		/* Skip any hidden widgets */
 		if (psCurr->style & WIDG_HIDDEN)
@@ -1337,62 +1339,62 @@ static void widgProcessForm(W_CONTEXT *psContext)
 	omx = mx - xOrigin;
 	omy = my - yOrigin;
 	if (mx >= 0 && mx <= psForm->width &&
-		my >= 0 && my <= psForm->height)
+	    my >= 0 && my <= psForm->height)
 	{
-   		/* Update for the origin */
+		/* Update for the origin */
 
-   		/* Mouse is over the form - is it over any of the widgets */
-   		for(psCurr = formGetWidgets(psForm); psCurr; psCurr = psCurr->psNext)
-   		{
-   			/* Skip any hidden widgets */
-   			if (psCurr->style & WIDG_HIDDEN)
-   			{
-   				continue;
-   			}
+		/* Mouse is over the form - is it over any of the widgets */
+		for (psCurr = formGetWidgets(psForm); psCurr; psCurr = psCurr->psNext)
+		{
+			/* Skip any hidden widgets */
+			if (psCurr->style & WIDG_HIDDEN)
+			{
+				continue;
+			}
 
-   			if (omx >= psCurr->x &&
-   				omy >= psCurr->y &&
-   				omx <= psCurr->x + psCurr->width &&
-   				omy <= psCurr->y + psCurr->height)
-   			{
-   				/* Note the widget the mouse is over */
-   				if (!psMouseOverWidget)
-   				{
-   					psMouseOverWidget = (WIDGET *)psCurr;
-   				}
-   				psOver = psCurr;
+			if (omx >= psCurr->x &&
+			    omy >= psCurr->y &&
+			    omx <= psCurr->x + psCurr->width &&
+			    omy <= psCurr->y + psCurr->height)
+			{
+				/* Note the widget the mouse is over */
+				if (!psMouseOverWidget)
+				{
+					psMouseOverWidget = (WIDGET *)psCurr;
+				}
+				psOver = psCurr;
 
-   				/* Don't check the widgets if it is a clickable form */
-   				if (!(psForm->style & WFORM_CLICKABLE))
-   				{
-   					if (pressed != WKEY_NONE && psCurr->type != WIDG_FORM)
-   					{
-   						/* Tell the widget it has been clicked */
+				/* Don't check the widgets if it is a clickable form */
+				if (!(psForm->style & WFORM_CLICKABLE))
+				{
+					if (pressed != WKEY_NONE && psCurr->type != WIDG_FORM)
+					{
+						/* Tell the widget it has been clicked */
 						psCurr->clicked(&sWidgContext, pressed);
-   					}
-   					if (released != WKEY_NONE && psCurr->type != WIDG_FORM)
-   					{
-   						/* Tell the widget the mouse button has gone up */
-   						widgReleased(psCurr, released, &sWidgContext);
-   					}
-   				}
-   			}
-   		}
-   		/* Note that the mouse is over this form */
-   		if (!psMouseOverWidget)
-   		{
-   			psMouseOverWidget = (WIDGET *)psForm;
-   		}
+					}
+					if (released != WKEY_NONE && psCurr->type != WIDG_FORM)
+					{
+						/* Tell the widget the mouse button has gone up */
+						widgReleased(psCurr, released, &sWidgContext);
+					}
+				}
+			}
+		}
+		/* Note that the mouse is over this form */
+		if (!psMouseOverWidget)
+		{
+			psMouseOverWidget = (WIDGET *)psForm;
+		}
 
 		/* Only send the Clicked or Released messages if a widget didn't get the message */
 		if (pressed != WKEY_NONE &&
-			(psOver == NULL || (psForm->style & WFORM_CLICKABLE)))
+		    (psOver == NULL || (psForm->style & WFORM_CLICKABLE)))
 		{
 			/* Tell the form it has been clicked */
 			psForm->clicked(psContext, pressed);
 		}
 		if (released != WKEY_NONE &&
-			(psOver == NULL || (psForm->style & WFORM_CLICKABLE)))
+		    (psOver == NULL || (psForm->style & WFORM_CLICKABLE)))
 		{
 			/* Tell the form the mouse button has gone up */
 			widgReleased((WIDGET *)psForm, released, psContext);
@@ -1432,7 +1434,7 @@ UDWORD widgRunScreen(W_SCREEN *psScreen)
 	pressed = WKEY_NONE;
 	sContext.mx = mouseX();
 	sContext.my = mouseY();
-	if(getWidgetsStatus())
+	if (getWidgetsStatus())
 	{
 		if (mousePressed(MOUSE_LMB))
 		{
@@ -1479,7 +1481,7 @@ UDWORD widgRunScreen(W_SCREEN *psScreen)
 
 
 /* Set the id number for widgRunScreen to return */
-void widgSetReturn(W_SCREEN* psScreen, WIDGET *psWidget)
+void widgSetReturn(W_SCREEN *psScreen, WIDGET *psWidget)
 {
 	psScreen->psRetWidget = psWidget;
 }
@@ -1493,8 +1495,9 @@ static void widgDisplayForm(W_FORM *psForm, UDWORD xOffset, UDWORD yOffset)
 
 
 	/* Display the form */
-	psForm->display( (WIDGET *)psForm, xOffset, yOffset, psForm->aColours );
-	if(psForm->disableChildren == true) {
+	psForm->display((WIDGET *)psForm, xOffset, yOffset, psForm->aColours);
+	if (psForm->disableChildren == true)
+	{
 		return;
 	}
 
@@ -1504,10 +1507,11 @@ static void widgDisplayForm(W_FORM *psForm, UDWORD xOffset, UDWORD yOffset)
 	yOffset += psForm->y + yOrigin;
 
 	/* If this is a clickable form, the widgets on it have to move when it's down */
-	if(!(psForm->style & WFORM_NOCLICKMOVE)) {
+	if (!(psForm->style & WFORM_NOCLICKMOVE))
+	{
 		if ((psForm->style & WFORM_CLICKABLE) &&
-			(((W_CLICKFORM *)psForm)->state &
-					(WCLICK_DOWN | WCLICK_LOCKED | WCLICK_CLICKLOCK)))
+		    (((W_CLICKFORM *)psForm)->state &
+		     (WCLICK_DOWN | WCLICK_LOCKED | WCLICK_CLICKLOCK)))
 		{
 			xOffset += 1;
 			yOffset += 1;
@@ -1515,7 +1519,7 @@ static void widgDisplayForm(W_FORM *psForm, UDWORD xOffset, UDWORD yOffset)
 	}
 
 	/* Display the widgets on the form */
-	for(psCurr = formGetWidgets(psForm); psCurr; psCurr = psCurr->psNext)
+	for (psCurr = formGetWidgets(psForm); psCurr; psCurr = psCurr->psNext)
 	{
 		/* Skip any hidden widgets */
 		if (psCurr->style & WIDG_HIDDEN)
@@ -1543,14 +1547,14 @@ static void widgDisplayForm(W_FORM *psForm, UDWORD xOffset, UDWORD yOffset)
 void widgDisplayScreen(W_SCREEN *psScreen)
 {
 	/* Display the widgets */
-	widgDisplayForm((W_FORM *)psScreen->psForm, 0,0);
+	widgDisplayForm((W_FORM *)psScreen->psForm, 0, 0);
 
 	/* Display the tool tip if there is one */
 	tipDisplay();
 }
 
 /* Call the correct function for loss of focus */
-static void widgFocusLost(W_SCREEN* psScreen, WIDGET *psWidget)
+static void widgFocusLost(W_SCREEN *psScreen, WIDGET *psWidget)
 {
 	switch (psWidget->type)
 	{
@@ -1711,7 +1715,7 @@ static void widgRun(WIDGET *psWidget, W_CONTEXT *psContext)
 
 
 
-void WidgSetAudio(WIDGET_AUDIOCALLBACK Callback,SWORD HilightID,SWORD ClickedID)
+void WidgSetAudio(WIDGET_AUDIOCALLBACK Callback, SWORD HilightID, SWORD ClickedID)
 {
 	AudioCallback = Callback;
 	HilightAudioID = HilightID;
@@ -1742,7 +1746,7 @@ void	setWidgetsStatus(bool var)
 	bWidgetsActive = var;
 }
 
-bool	getWidgetsStatus( void )
+bool	getWidgetsStatus(void)
 {
 	return(bWidgetsActive);
 }

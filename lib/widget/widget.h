@@ -17,7 +17,7 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/** 
+/**
  *	@file lib/widget/widget.h
  *	Definitions for the Widget library
  *	@defgroup Widget Widget system
@@ -53,7 +53,7 @@
 #define WFORM_CLICKABLE		4	///< Clickable form - return form id when the form is clicked
 #define	WFORM_NOCLICKMOVE	8	///< Disable movement on a clickable form
 
-/** 
+/**
  * Control whether the primary or secondary buttons work on a clickable form.
  * Primary works by default - this turns it off.
  */
@@ -74,7 +74,7 @@
 
 
 /**
- * Control whether the primary or secondary buttons work on a button. Primary works by default - 
+ * Control whether the primary or secondary buttons work on a button. Primary works by default -
  * this turns it off.
  */
 #define WBUT_NOPRIMARY		0x10
@@ -110,7 +110,7 @@ struct W_INIT
 	UWORD                   width, height;          ///< widget size
 	WIDGET_DISPLAY          pDisplay;               ///< Optional display function
 	WIDGET_CALLBACK         pCallback;              ///< Optional callback function
-	void *                  pUserData;              ///< Optional user data pointer
+	void                   *pUserData;              ///< Optional user data pointer
 	UDWORD                  UserData;               ///< User data (if any)
 };
 
@@ -271,7 +271,7 @@ extern void widgReset(void);
 extern void widgShutDown(void);
 
 /** Create an empty widget screen */
-extern W_SCREEN* widgCreateScreen(void);
+extern W_SCREEN *widgCreateScreen(void);
 
 /** Release a screen and all its associated data */
 extern void widgReleaseScreen(W_SCREEN *psScreen);
@@ -280,22 +280,22 @@ extern void widgReleaseScreen(W_SCREEN *psScreen);
 extern void widgSetTipFont(W_SCREEN *psScreen, enum iV_fonts FontID);
 
 /** Add a form to the widget screen */
-extern bool widgAddForm(W_SCREEN *psScreen, const W_FORMINIT* psInit);
+extern bool widgAddForm(W_SCREEN *psScreen, const W_FORMINIT *psInit);
 
 /** Add a label to the widget screen */
-extern bool widgAddLabel(W_SCREEN *psScreen, const W_LABINIT* psInit);
+extern bool widgAddLabel(W_SCREEN *psScreen, const W_LABINIT *psInit);
 
 /** Add a button to a form */
-extern bool widgAddButton(W_SCREEN *psScreen, const W_BUTINIT* psInit);
+extern bool widgAddButton(W_SCREEN *psScreen, const W_BUTINIT *psInit);
 
 /** Add an edit box to a form */
-extern bool widgAddEditBox(W_SCREEN *psScreen, const W_EDBINIT* psInit);
+extern bool widgAddEditBox(W_SCREEN *psScreen, const W_EDBINIT *psInit);
 
 /** Add a bar graph to a form */
-extern bool widgAddBarGraph(W_SCREEN *psScreen, const W_BARINIT* psInit);
+extern bool widgAddBarGraph(W_SCREEN *psScreen, const W_BARINIT *psInit);
 
 /** Add a slider to a form */
-extern bool widgAddSlider(W_SCREEN *psScreen, const W_SLDINIT* psInit);
+extern bool widgAddSlider(W_SCREEN *psScreen, const W_SLDINIT *psInit);
 
 /** Delete a widget from the screen */
 extern void widgDelete(W_SCREEN *psScreen, UDWORD id);
@@ -355,7 +355,7 @@ extern void widgSetUserData(W_SCREEN *psScreen, UDWORD id, void *UserData);
 extern UDWORD widgGetUserData2(W_SCREEN *psScreen, UDWORD id);
 
 /** Set the user data for a widget */
-extern void widgSetUserData2(W_SCREEN *psScreen, UDWORD id,UDWORD UserData);
+extern void widgSetUserData2(W_SCREEN *psScreen, UDWORD id, UDWORD UserData);
 
 /** Return the user data for the returned widget */
 extern void *widgGetLastUserData(W_SCREEN *psScreen);
@@ -365,7 +365,7 @@ extern WIDGET *widgGetFromID(W_SCREEN *psScreen, UDWORD id);
 
 /** Set tip string for a widget */
 extern void widgSetTip(W_SCREEN *psScreen, UDWORD id, const char *pTip);
-extern void widgSetTipText(WIDGET* psWidget, const char* pTip);
+extern void widgSetTipText(WIDGET *psWidget, const char *pTip);
 
 /** Colour numbers */
 enum _w_colour
@@ -432,7 +432,7 @@ extern void widgDisplayScreen(W_SCREEN *psScreen);
 
 
 /** Set the current audio callback function and audio id's. */
-extern void WidgSetAudio(WIDGET_AUDIOCALLBACK Callback,SWORD HilightID,SWORD ClickedID);
+extern void WidgSetAudio(WIDGET_AUDIOCALLBACK Callback, SWORD HilightID, SWORD ClickedID);
 
 /** Get pointer to current audio callback function. */
 extern WIDGET_AUDIOCALLBACK WidgGetAudioCallback(void);
@@ -446,10 +446,10 @@ extern SWORD WidgGetClickedAudioID(void);
 /** Enable or disable all sliders. */
 extern void sliderEnableDrag(bool Enable);
 
-extern void setWidgetsStatus( bool var );
-extern bool getWidgetsStatus( void );
+extern void setWidgetsStatus(bool var);
+extern bool getWidgetsStatus(void);
 
-extern void CheckpsMouseOverWidget( void *psWidget );
+extern void CheckpsMouseOverWidget(void *psWidget);
 /** @} */
 
 #endif // __INCLUDED_LIB_WIDGET_WIDGET_H__

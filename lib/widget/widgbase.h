@@ -85,29 +85,29 @@ struct WIDGET
 	UWORD                   width, height;          ///< The size of the widget
 	WIDGET_DISPLAY          display;                ///< Display the widget
 	WIDGET_CALLBACK         callback;               ///< User callback (if any)
-	void *                  pUserData;              ///< Pointer to a user data block (if any)
+	void                   *pUserData;              ///< Pointer to a user data block (if any)
 	UDWORD                  UserData;               ///< User data (if any)
 
-	WIDGET *                psNext;                 ///< Pointer to the next widget in the screen list
+	WIDGET                 *psNext;                 ///< Pointer to the next widget in the screen list
 };
 
 
 /* The screen structure which stores all info for a widget screen */
 struct W_SCREEN
 {
-	W_FORM *         psForm;        ///< The root form of the screen
-	WIDGET*          psFocus;       ///< The widget that has keyboard focus
+	W_FORM          *psForm;        ///< The root form of the screen
+	WIDGET          *psFocus;       ///< The widget that has keyboard focus
 	enum iV_fonts    TipFontID;     ///< ID of the IVIS font to use for tool tips.
-	WIDGET*          psRetWidget;   ///< The widget to be returned by widgRunScreen
+	WIDGET          *psRetWidget;   ///< The widget to be returned by widgRunScreen
 };
 
 /* Context information to pass into the widget functions */
 struct W_CONTEXT
 {
 	W_SCREEN	*psScreen;			// Parent screen of the widget
-	W_FORM *        psForm;                 ///< Parent form of the widget
-	SDWORD		xOffset,yOffset;	// Screen offset of the parent form
-	SDWORD		mx,my;				// mouse position on the form
+	W_FORM         *psForm;                 ///< Parent form of the widget
+	SDWORD		xOffset, yOffset;	// Screen offset of the parent form
+	SDWORD		mx, my;				// mouse position on the form
 };
 
 #endif // __INCLUDED_LIB_WIDGET_WIDGBASE_H__
