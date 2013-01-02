@@ -3772,7 +3772,6 @@ bool startMultiOptions(bool bReenter)
 		if(!NetPlay.bComms)			// force skirmish if no comms.
 		{
 			game.type = SKIRMISH;
-			game.scavengers = false;
 			sstrcpy(game.map, DEFAULTSKIRMISHMAP);
 			game.hash = levGetMapNameHash(game.map);
 			game.maxPlayers = 4;

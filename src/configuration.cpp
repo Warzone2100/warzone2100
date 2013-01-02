@@ -104,6 +104,7 @@ bool loadConfig()
 	game.power = ini.value("power", LEV_MED).toInt();
 	game.base = ini.value("base", CAMP_BASE).toInt();
 	game.alliance = ini.value("alliance", NO_ALLIANCES).toInt();
+	game.scavengers = ini.value("scavengers", false).toBool();
 	memset(&ingame.phrases, 0, sizeof(ingame.phrases));
 	for (int i = 1; i < 5; i++)
 	{
@@ -210,6 +211,7 @@ bool saveConfig()
 			ini.setValue("power", game.power);				// power
 			ini.setValue("base", game.base);				// size of base
 			ini.setValue("alliance", game.alliance);		// allow alliances
+			ini.setValue("scavengers", game.scavengers);
 		}
 		ini.setValue("playerName", (char*)sPlayer);		// player name
 	}
