@@ -408,6 +408,11 @@ bool displayGameOver(bool bDidit)
 			updateMultiStatsLoses();
 		}
 	}
+	if (bMultiPlayer)
+	{
+		PLAYERSTATS st = getMultiStats(selectedPlayer);
+		saveMultiStats(getPlayerName(selectedPlayer), getPlayerName(selectedPlayer), &st);
+	}
 
 	//clear out any mission widgets - timers etc that may be on the screen
 	clearMissionWidgets();
