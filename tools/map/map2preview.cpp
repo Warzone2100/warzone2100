@@ -148,6 +148,11 @@ int main(int argc, char **argv)
 	case TILESET_ROCKIES:
 		tileColors = &pRockiesColors;
 		break;
+	default:
+		fprintf(stderr, "Unknown tileset: %d\n", (int)map->tileset);
+		mapFree(map);
+		physfs_shutdown();
+		return EXIT_FAILURE;
 	}
 
 	const int mapWidth = (int) map->width;
