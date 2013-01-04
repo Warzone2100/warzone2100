@@ -171,6 +171,8 @@ static int64_t getQueuedPower(unsigned player)
 
 static void syncDebugEconomy(unsigned player, char ch)
 {
+	ASSERT_OR_RETURN(, player < MAX_PLAYERS, "Bad player (%d)", player);
+
 	syncDebug("%c economy%u = %"PRId64"", ch, player, asPower[player].currentPower);
 }
 
