@@ -28,14 +28,10 @@
 #include "init.h"
 #include "game.h"
 
-// maximum number of WRF/WDG files
-
+/// maximum number of data files
 #define LEVEL_MAXFILES	9
 
-
-// types of level datasets
-
-
+/// types of level datasets
 enum LEVEL_TYPE
 {
 	LDS_COMPLETE,		// all data required for a stand alone level
@@ -53,9 +49,6 @@ enum LEVEL_TYPE
 	LDS_MULTI_TYPE_START,           ///< Start number for custom type numbers (as used by a `type` instruction)
 };
 
-// the WRF/WDG files needed for a particular level
-// the WRF/WDG files needed for a particular level
-
 struct LEVEL_DATASET
 {
 	LEVEL_TYPE type;				// type of map
@@ -63,7 +56,7 @@ struct LEVEL_DATASET
 	SWORD	game;					// index of WRF/WDG that loads the scenario file
 	char	*pName;					// title for the level
 	searchPathMode	dataDir;					// title for the level
-	char	*apDataFiles[LEVEL_MAXFILES];		// the WRF/WDG files for the level
+	char	*apDataFiles[LEVEL_MAXFILES];		// the WRF/GAM files for the level
 							// in load order
 	LEVEL_DATASET *psBaseData;                      // LEVEL_DATASET that must be loaded for this level to load
 	LEVEL_DATASET *psChange;                        // LEVEL_DATASET used when changing to this level from another
