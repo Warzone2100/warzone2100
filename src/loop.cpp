@@ -736,12 +736,12 @@ void videoLoop(void)
 			if (!getScriptWinLoseVideo())
 			{
 				eventFireCallbackTrigger((TRIGGER_TYPE)CALL_VIDEO_QUIT);
-				triggerEvent(TRIGGER_VIDEO_QUIT);
 			}
-			else
+			else if (!bMultiPlayer)
 			{
 				displayGameOver(getScriptWinLoseVideo() == PLAY_WIN);
 			}
+			triggerEvent(TRIGGER_VIDEO_QUIT);
 		}
 	}
 }
