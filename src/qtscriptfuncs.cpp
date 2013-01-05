@@ -2607,6 +2607,19 @@ static QScriptValue js_hackGetObj(QScriptContext *context, QScriptEngine *engine
 	return QScriptValue(convMax(IdToObject(type, id, player), engine));
 }
 
+//-- \subsection{hackChangeMe(player)}
+//-- Change the 'me' who owns this script to the given player. This needs to be run
+//-- first in \emph{eventGameInit} to make sure things do not get out of control.
+// This is only intended for use in campaign scripts until we get a way to add
+// scripts for each player.
+static QScriptValue js_hackChangeMe(QScriptContext *context, QScriptEngine *engine)
+{
+	int me = context->argument(0).toInt32();
+	SCRIPT_ASSERT_PLAYER(context, me);
+	engine->globalObject().setProperty("me", me);
+	return QScriptValue();
+}
+
 //-- \subsection{hackAssert(condition, message...)}
 //-- Function to perform unit testing. It will throw a script error and a game assert.
 static QScriptValue js_hackAssert(QScriptContext *context, QScriptEngine *engine)
@@ -3559,6 +3572,7 @@ bool registerFunctions(QScriptEngine *engine, QString scriptName)
 	engine->globalObject().setProperty("hackRemoveMessage", engine->newFunction(js_hackRemoveMessage));
 	engine->globalObject().setProperty("objFromId", engine->newFunction(js_objFromId));
 	engine->globalObject().setProperty("hackGetObj", engine->newFunction(js_hackGetObj));
+	engine->globalObject().setProperty("hackChangeMe", engine->newFunction(js_hackChangeMe));
 	engine->globalObject().setProperty("hackAssert", engine->newFunction(js_hackAssert));
 	engine->globalObject().setProperty("hackMarkTiles", engine->newFunction(js_hackMarkTiles));
 
