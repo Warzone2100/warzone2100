@@ -4083,7 +4083,6 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *p
 	UDWORD		x = xOffset+psWidget->x;
 	UDWORD		y = yOffset+psWidget->y;
 	UDWORD		j = psWidget->UserData, eval;
-	PLAYERSTATS stat;
 
 	const int nameX = 32;
 
@@ -4157,7 +4156,8 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *p
 			iV_SetTextColour(WZCOL_FORM_TEXT);
 		}
 
-		if(getMultiStats(j).played < 5)
+		PLAYERSTATS stat = getMultiStats(j);
+		if(stat.wins + stat.losses < 5)
 		{
 			iV_DrawImage(FrontImages, IMAGE_MEDAL_DUMMY, x + 4, y + 13);
 		}
@@ -4180,8 +4180,8 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *p
 				iV_DrawImage(FrontImages, IMAGE_MULTIRANK3, x + 4, y + 3);
 			}
 
-			// star 2 games played
-			eval = stat.played;
+			// star 2 games played (Cannot use stat.played, since that's just the number of times the player exited via the game menu, not the number of games played.)
+			eval = stat.wins + stat.losses;
 			if(eval >200)
 			{
 				iV_DrawImage(FrontImages, IMAGE_MULTIRANK1, x + 4, y + 13);
