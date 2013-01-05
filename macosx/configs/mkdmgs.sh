@@ -31,21 +31,24 @@ fi
 function signd {
 	if [ ! -z "${CODE_SIGN_IDENTITY}" ]; then
 		# Local Config
+		local appth="${1}"
 		local idetd="${CODE_SIGN_IDENTITY}"
 		local resrul="${SRCROOT}/configs/ResourceRules.plist"
-		local appth="/Volumes/Warzone 2100/Warzone.app"
-		
+		local csreq="${SRCROOT}/Resources/wz2100requirement.rqset"
+
 		# Sign and verify the app
-		cp -a "${resrul}" "${appth}/"
-		/usr/bin/codesign -f -s "${idetd}" --resource-rules="${appth}/ResourceRules.plist" -vvv "${appth}"
+		cp -a "${resrul}" "${appth}/ResourceRules.plist"
+		/usr/bin/codesign -f --sign "${idetd}" --resource-rules="${appth}/ResourceRules.plist" --requirements "${csreq}" -vvv "${appth}"
 		rm "${appth}/ResourceRules.plist"
-		/usr/bin/codesign -vvv --verify "${appth}"
-		
-		# Sign and verify the frameworks
-		local framelst=`\ls -1 "${appth}/Contents/Frameworks" | sed -n 's:.framework$:&:p'`
+		if ! /usr/bin/codesign --verify -vvv "${appth}"; then
+			echo "warning: Code is improperly signed!" 1>&2
+		fi
+
+		# Verify the frameworks
+		local fsignd=''
+		local framelst="$(\ls -1 "${appth}/Contents/Frameworks" | sed -n 's:.framework$:&:p')"
 		for fsignd in ${framelst}; do
 			if [ -d "${appth}/Contents/Frameworks/${fsignd}/Versions/A" ]; then
-				/usr/bin/codesign -f -s "${idetd}" -vvv "${appth}/Contents/Frameworks/${fsignd}/Versions/A"
 				/usr/bin/codesign -vvv --verify "${appth}/Contents/Frameworks/${fsignd}/Versions/A"
 			fi
 		done
@@ -110,7 +113,7 @@ fi
 # else
 # 	echo "${sequencelonme} already exists, skipping"
 # fi
-# 
+#
 
 # Copy over the app
 cd ../../
@@ -193,7 +196,7 @@ hdiutilOut="$(hdiutil mount temp/wztemplatecopy.sparseimage | tr -d "\t")"
 mountpnt="$(echo "${hdiutilOut}" | sed -E 's:(/dev/disk[0-9])( +)(/Volumes/Warzone 2100):\1:')"
 mountpth="$(echo "${hdiutilOut}" | sed -E 's:(/dev/disk[0-9])( +)::')"
 cp -a Warzone.app/* "${mountpth}/Warzone.app"
-signd
+signd "${mountpth}/Warzone.app"
 hdiutil detach "${mountpnt}"
 hdiutil convert temp/wztemplatecopy.sparseimage -format UDZO -o out/warzone2100-${bldtg}-novideo.dmg
 
@@ -205,7 +208,7 @@ if [ -f "${sequencelonme}" ]; then
 	mountpth="$(echo "${hdiutilOut}" | sed -E 's:(/dev/disk[0-9])( +)::')"
 	rm "${mountpth}/Warzone.app/Contents/Resources/data/sequences.wz"
 	cp -a sequences-lo.wz "${mountpth}/Warzone.app/Contents/Resources/data/sequences.wz"
-	signd
+	signd "${mountpth}/Warzone.app"
 	hdiutil detach "${mountpnt}"
 	hdiutil convert temp/wztemplatecopy.sparseimage -format UDZO -o out/warzone2100-${bldtg}-lqvideo.dmg
 else
@@ -221,7 +224,7 @@ if [ -f "${sequencenme}" ]; then
 	mountpth="$(echo "${hdiutilOut}" | sed -E 's:(/dev/disk[0-9])( +)::')"
 	rm "${mountpth}/Warzone.app/Contents/Resources/data/sequences.wz"
 	cp -a sequences-lo.wz "${mountpth}/Warzone.app/Contents/Resources/data/sequences.wz"
-	signd
+	signd "${mountpth}/Warzone.app"
 	hdiutil detach "${mountpnt}"
 	hdiutil convert temp/wztemplatecopy.sparseimage -format UDZO  -o out/warzone2100-${bldtg}-hqvideo.dmg
 else
