@@ -153,7 +153,6 @@ static bool disableLobbyRefresh = false;	// if we allow lobby to be refreshed or
 static UDWORD hideTime=0;
 static bool EnablePasswordPrompt = false;	// if we need the password prompt
 LOBBY_ERROR_TYPES LobbyError = ERROR_NOERROR;
-static bool allowChangePosition = true;
 static char tooltipbuffer[MaxGames][256] = {{'\0'}};
 /// end of globals.
 // ////////////////////////////////////////////////////////////////////////////
@@ -213,6 +212,17 @@ static int difficultyIcon(int difficulty);
 
 static const char *difficultyList[] = { N_("Easy"), N_("Medium"), N_("Hard"), N_("Insane") };
 static const int difficultyValue[] = { 1, 10, 15, 20 };
+static struct
+{
+	bool scavengers;
+	bool alliances;
+	bool teams;
+	bool power;
+	bool difficulty;
+	bool ai;
+	bool position;
+	bool bases;
+} locked;
 
 struct AIDATA
 {
@@ -264,6 +274,17 @@ int getNextAIAssignment(const char *name)
 void loadMultiScripts()
 {
 	bool defaultRules = true;
+	char aFileName[256];
+	char aPathName[256];
+	const char *ininame = challengeActive ? sRequestResult : aFileName;
+	const char *path = challengeActive ? "challenges/" : aPathName;
+	LEVEL_DATASET *psLevel = levFindDataSet(game.map, &game.hash);
+	ASSERT_OR_RETURN(, psLevel, "No level found for %s", game.map);
+	sstrcpy(aFileName, psLevel->apDataFiles[psLevel->game]);
+	aFileName[strlen(aFileName) - 4] = '\0';
+	sstrcpy(aPathName, aFileName);
+	sstrcat(aFileName, ".ini");
+	sstrcat(aPathName, "/");
 
 	// Reset assigned counter
 	std::vector<AIDATA>::iterator it;
@@ -272,22 +293,22 @@ void loadMultiScripts()
 		(*it).assigned = 0;
 	}
 
-	// Load extra script for challenges
-	if (challengeActive)
+	// Load map scripts
+	WzConfig ini(ininame);
+	if (PHYSFS_exists(ininame))
 	{
-		debug(LOG_SAVE, "Loading challenge scripts");
-		WzConfig challenge(sRequestResult);
-		challenge.beginGroup("scripts");
-		if (challenge.contains("extra"))
+		debug(LOG_SAVE, "Loading map scripts");
+		ini.beginGroup("scripts");
+		if (ini.contains("extra"))
 		{
-			loadGlobalScript("challenges/" + challenge.value("extra").toString());
+			loadGlobalScript(path + ini.value("extra").toString());
 		}
-		if (challenge.contains("rules"))
+		if (ini.contains("rules"))
 		{
-			loadGlobalScript("challenges/" + challenge.value("rules").toString());
+			loadGlobalScript(path + ini.value("rules").toString());
 			defaultRules = false;
 		}
-		challenge.endGroup();
+		ini.endGroup();
 	}
 
 	// Load multiplayer rules
@@ -315,14 +336,13 @@ void loadMultiScripts()
 		if (bMultiPlayer && game.type == SKIRMISH && (!NetPlay.players[i].allocated || i == selectedPlayer)
 		    && NetPlay.players[i].ai >= 0 && myResponsibility(i))
 		{
-			if (challengeActive) // challenge file may override
+			if (PHYSFS_exists(ininame)) // challenge file may override AI
 			{
-				WzConfig challenge(sRequestResult); // so inefficient, but no other way
-				challenge.beginGroup("player_" + QString::number(i + 1));
-				if (challenge.contains("ai"))
+				ini.beginGroup("player_" + QString::number(i + 1));
+				if (ini.contains("ai"))
 				{
-					QString val = challenge.value("ai").toString();
-					challenge.endGroup();
+					QString val = ini.value("ai").toString();
+					ini.endGroup();
 					if (val.compare("null") == 0)
 					{
 						continue; // no AI
@@ -331,7 +351,7 @@ void loadMultiScripts()
 					NetPlay.players[i].ai = AI_CUSTOM;
 					continue;
 				}
-				challenge.endGroup();
+				ini.endGroup();
 			}
 			if (aidata[NetPlay.players[i].ai].slo[0] != '\0')
 			{
@@ -418,30 +438,6 @@ static void loadEmptyMapPreview()
 	free(imageData);
 }
 
-static void loadMapSettings()
-{
-	char aFileName[256];
-	LEVEL_DATASET *psLevel = levFindDataSet(game.map, &game.hash);
-	ASSERT_OR_RETURN(, psLevel, "No level found for %s", game.map);
-	sstrcpy(aFileName, psLevel->apDataFiles[0]);
-	aFileName[strlen(aFileName) - 4] = '\0';
-	sstrcat(aFileName, ".ini");
-	if (PHYSFS_exists(aFileName))
-	{
-		WzConfig ini(aFileName);
-		ini.beginGroup("teams");
-		for (int i = 0; i < MAX_PLAYERS; i++)
-		{
-			QString key("player_" + QString::number(i));
-			if (ini.contains(key))
-			{
-				NetPlay.players[i].team = ini.value(key).toInt() - 1;
-			}
-		}
-		ini.endGroup();
-	}
-}
-
 /// Loads the entire map just to show a picture of it
 void loadMapPreview(bool hideInterface)
 {
@@ -483,7 +479,7 @@ void loadMapPreview(bool hideInterface)
 		debug(LOG_INFO, "Loading map preview: \"%s\" in (%s)\"%s\"  %s t%d", psLevel->pName, PHYSFS_getRealDir(psLevel->realFileName), psLevel->realFileName, psLevel->realFileHash.toString().c_str(), psLevel->dataDir);
 	}
 	rebuildSearchPath(psLevel->dataDir, false, psLevel->realFileName);
-	sstrcpy(aFileName,psLevel->apDataFiles[0]);
+	sstrcpy(aFileName, psLevel->apDataFiles[psLevel->game]);
 	aFileName[strlen(aFileName)-4] = '\0';
 	sstrcat(aFileName, "/ttypes.ttp");
 	pFileData = fileLoadBuffer;
@@ -1467,8 +1463,8 @@ static void addGameOptions()
 	// game name box
 	if (!NetPlay.bComms)
 	{
-		addMultiEditBox(MULTIOP_OPTIONS, MULTIOP_GNAME, MCOL0, MROW2, _("Select Game Name"), 
-		                challengeActive ? game.name : _("One-Player Skirmish"), IMAGE_EDIT_GAME, 
+		addMultiEditBox(MULTIOP_OPTIONS, MULTIOP_GNAME, MCOL0, MROW2, _("Game Name"),
+		                challengeActive ? game.name : _("One-Player Skirmish"), IMAGE_EDIT_GAME,
 		                IMAGE_EDIT_GAME_HI, MULTIOP_GNAME_ICON);
 		// disable for one-player skirmish
 		widgSetButtonState(psWScreen, MULTIOP_GNAME, WEDBS_DISABLE);
@@ -1511,7 +1507,7 @@ static void addGameOptions()
 	if (game.scavengers)
 	{
 		widgSetButtonState(psWScreen, MULTIOP_CAMPAIGN, WBUT_LOCK);
-		if (challengeActive)
+		if (locked.scavengers)
 		{
 			widgSetButtonState(psWScreen, MULTIOP_SKIRMISH, WBUT_DISABLE);
 		}
@@ -1519,7 +1515,7 @@ static void addGameOptions()
 	else
 	{
 		widgSetButtonState(psWScreen, MULTIOP_SKIRMISH, WBUT_LOCK);
-		if (challengeActive)
+		if (locked.scavengers)
 		{
 			widgSetButtonState(psWScreen, MULTIOP_CAMPAIGN, WBUT_DISABLE);
 		}
@@ -1549,7 +1545,7 @@ static void addGameOptions()
 		widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_N,0);				//hilight correct entry
 		widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_Y,0);
 		widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_TEAMS,0);
-		if (challengeActive)
+		if (locked.alliances)
 		{
 			widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_N, WBUT_DISABLE);
 			widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_Y, WBUT_DISABLE);
@@ -1581,7 +1577,7 @@ static void addGameOptions()
 		if (game.power <= LEV_LOW)
 		{
 			widgSetButtonState(psWScreen, MULTIOP_POWLEV_LOW,WBUT_LOCK);
-			if (challengeActive)
+			if (locked.power)
 			{
 				widgSetButtonState(psWScreen, MULTIOP_POWLEV_MED, WBUT_DISABLE);
 				widgSetButtonState(psWScreen, MULTIOP_POWLEV_HI, WBUT_DISABLE);
@@ -1590,7 +1586,7 @@ static void addGameOptions()
 		else if (game.power <= LEV_MED)
 		{
 			widgSetButtonState(psWScreen, MULTIOP_POWLEV_MED,WBUT_LOCK);
-			if (challengeActive)
+			if (locked.power)
 			{
 				widgSetButtonState(psWScreen, MULTIOP_POWLEV_LOW, WBUT_DISABLE);
 				widgSetButtonState(psWScreen, MULTIOP_POWLEV_HI, WBUT_DISABLE);
@@ -1599,7 +1595,7 @@ static void addGameOptions()
 		else
 		{
 			widgSetButtonState(psWScreen, MULTIOP_POWLEV_HI,WBUT_LOCK);
-			if (challengeActive)
+			if (locked.power)
 			{
 				widgSetButtonState(psWScreen, MULTIOP_POWLEV_LOW, WBUT_DISABLE);
 				widgSetButtonState(psWScreen, MULTIOP_POWLEV_MED, WBUT_DISABLE);
@@ -1620,7 +1616,7 @@ static void addGameOptions()
 		{
 		case 0:
 			widgSetButtonState(psWScreen, MULTIOP_CLEAN,WBUT_LOCK);
-			if (challengeActive)
+			if (locked.bases)
 			{
 				widgSetButtonState(psWScreen, MULTIOP_BASE, WBUT_DISABLE);
 				widgSetButtonState(psWScreen, MULTIOP_DEFENCE, WBUT_DISABLE);
@@ -1628,7 +1624,7 @@ static void addGameOptions()
 			break;
 		case 1:
 			widgSetButtonState(psWScreen, MULTIOP_BASE,WBUT_LOCK);
-			if (challengeActive)
+			if (locked.bases)
 			{
 				widgSetButtonState(psWScreen, MULTIOP_CLEAN, WBUT_DISABLE);
 				widgSetButtonState(psWScreen, MULTIOP_DEFENCE, WBUT_DISABLE);
@@ -1636,7 +1632,7 @@ static void addGameOptions()
 			break;
 		case 2:
 			widgSetButtonState(psWScreen, MULTIOP_DEFENCE,WBUT_LOCK);
-			if (challengeActive)
+			if (locked.bases)
 			{
 				widgSetButtonState(psWScreen, MULTIOP_CLEAN, WBUT_DISABLE);
 				widgSetButtonState(psWScreen, MULTIOP_BASE, WBUT_DISABLE);
@@ -1677,12 +1673,10 @@ static void addGameOptions()
 
 	// Add any relevant factory disabled icons.
 	updateLimitFlags();
-	{
-		int i;
+
 		int y = 2;
 		bool skip = false;
-
-		for (i = 0; i < ARRAY_SIZE(limitIcons); ++i)
+		for (int i = 0; i < ARRAY_SIZE(limitIcons); ++i)
 		{
 			if ((ingame.flags & 1<<i) != 0)
 			{
@@ -1698,7 +1692,6 @@ static void addGameOptions()
 				skip = true;
 			}
 		}
-	}
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -2313,7 +2306,7 @@ static void drawReadyButton(UDWORD player)
 	{
 		int icon = difficultyIcon(NetPlay.players[player].difficulty);
 		addMultiBut(psWScreen, MULTIOP_READY_FORM_ID + player, MULTIOP_DIFFICULTY_INIT_START + player, 6, 4, MULTIOP_READY_WIDTH, MULTIOP_READY_HEIGHT,
-		            challengeActive ? _("You cannot change difficulty in a challenge") : NetPlay.isHost? _("Click to change difficulty") : NULL, icon, icon, icon);
+		            locked.difficulty ? _("Difficulty locked") : (NetPlay.isHost ? _("Click to change difficulty") : NULL), icon, icon, icon);
 		return;
 	}
 	else if (!NetPlay.players[player].allocated)
@@ -2440,9 +2433,13 @@ void addPlayerBox(bool players)
 				sButInit.y = playerBoxHeight(i);
 				sButInit.width = MULTIOP_TEAMSWIDTH;
 				sButInit.height = MULTIOP_TEAMSHEIGHT;
-				if (canChooseTeamFor(i))
+				if (canChooseTeamFor(i) && !locked.teams)
 				{
 					sButInit.pTip = _("Choose Team");
+				}
+				else if (locked.teams)
+				{
+					sButInit.pTip = _("Teams locked");
 				}
 				else
 				{
@@ -2498,11 +2495,11 @@ void addPlayerBox(bool players)
 				sButInit.width = MULTIOP_PLAYERWIDTH - MULTIOP_TEAMSWIDTH - MULTIOP_READY_WIDTH - MULTIOP_COLOUR_WIDTH;
 				sButInit.height = MULTIOP_PLAYERHEIGHT;
 				sButInit.pTip = NULL;
-				if ((selectedPlayer == i || NetPlay.isHost) && NetPlay.players[i].allocated && allowChangePosition)
+				if ((selectedPlayer == i || NetPlay.isHost) && NetPlay.players[i].allocated && !locked.position)
 				{
 					sButInit.pTip = _("Click to change player position");
 				}
-				else if (!NetPlay.players[i].allocated && NetPlay.isHost && !challengeActive)
+				else if (!NetPlay.players[i].allocated && NetPlay.isHost && !locked.ai)
 				{
 					sButInit.pTip = _("Click to change AI");
 				}
@@ -2733,6 +2730,112 @@ static void stopJoining(void)
 		{
 				pie_LoadBackDrop(SCREEN_RANDOMBDROP);
 		}
+}
+
+static void loadMapSettings1()
+{
+	char aFileName[256];
+	const char *ininame = challengeActive ? sRequestResult : aFileName;
+	LEVEL_DATASET *psLevel = levFindDataSet(game.map, &game.hash);
+
+	ASSERT_OR_RETURN(, psLevel, "No level found for %s", game.map);
+	sstrcpy(aFileName, psLevel->apDataFiles[psLevel->game]);
+	aFileName[strlen(aFileName) - 4] = '\0';
+	sstrcat(aFileName, ".ini");
+	WzConfig ini(ininame);
+
+	if (!PHYSFS_exists(ininame))
+	{
+		return;
+	}
+
+	ini.beginGroup("locked"); // GUI lockdown
+	locked.power = ini.value("power", challengeActive).toBool();
+	locked.alliances = ini.value("alliances", challengeActive).toBool();
+	locked.teams = ini.value("teams", challengeActive).toBool();
+	locked.difficulty = ini.value("difficulty", challengeActive).toBool();
+	locked.ai = ini.value("ai", challengeActive).toBool();
+	locked.scavengers = ini.value("scavengers", challengeActive).toBool();
+	locked.position = ini.value("position", challengeActive).toBool();
+	locked.bases = ini.value("bases", challengeActive).toBool();
+	ini.endGroup();
+
+	ini.beginGroup("defaults");
+	game.scavengers = ini.value("scavengers", game.scavengers).toBool();
+	game.base = ini.value("bases", game.base).toInt();
+	game.alliance = ini.value("alliances", game.alliance).toInt();
+	if (ini.contains("power"))
+	{
+		game.power = ini.value("power", game.power).toInt();
+		switch (game.power)
+		{
+		case 0 : game.power = LEV_LOW; break;
+		case 1 : game.power = LEV_MED; break;
+		default: debug(LOG_ERROR, "Illegal power level : %d", game.power); // fall through
+		case 2 : game.power = LEV_HI; break;
+		}
+	}
+	ini.endGroup();
+}
+
+static void loadMapSettings2()
+{
+	char aFileName[256];
+	const char *ininame = challengeActive ? sRequestResult : aFileName;
+	LEVEL_DATASET *psLevel = levFindDataSet(game.map, &game.hash);
+
+	ASSERT_OR_RETURN(, psLevel, "No level found for %s", game.map);
+	sstrcpy(aFileName, psLevel->apDataFiles[psLevel->game]);
+	aFileName[strlen(aFileName) - 4] = '\0';
+	sstrcat(aFileName, ".ini");
+	WzConfig ini(ininame);
+
+	if (!PHYSFS_exists(ininame))
+	{
+		return;
+	}
+	int offbyone = 0; // for compatibility with 3.1 and earlier challenges
+
+	ini.beginGroup("challenge"); // backwards compatibility mode
+	if (challengeActive && ini.value("version", 1).toInt() <= 1)
+	{
+		offbyone = 1; // old version, counts from 1
+	}
+	ini.endGroup();
+
+	for (int i = 0; i < MAX_PLAYERS; i++)
+	{
+		ini.beginGroup("player_" + QString::number(i + offbyone));
+		if (ini.contains("team"))
+		{
+			NetPlay.players[i].team = ini.value("team").toInt() - offbyone;
+		}
+		else if (challengeActive) // team is a required key for challenges
+		{
+			NetPlay.players[i].ai = AI_CLOSED;
+		}
+		if (ini.contains("name"))
+		{
+			sstrcpy(nameOverrides[i], ini.value("name").toString().toUtf8().constData());
+		}
+		if (ini.contains("position"))
+		{
+			changePosition(i, ini.value("position", NetPlay.players[i].position).toInt());
+		}
+		if (ini.contains("difficulty"))
+		{
+			QString value = ini.value("difficulty", "Medium").toString();
+			for (int j = 0; j < ARRAY_SIZE(difficultyList); j++)
+			{
+				if (strcasecmp(difficultyList[j], value.toUtf8().constData()) == 0)
+				{
+					game.skDiff[i] = difficultyValue[j];
+					NetPlay.players[i].difficulty = j;
+				}
+			}
+		}
+		ini.endGroup();
+	}
 }
 
 /*
@@ -3010,6 +3113,7 @@ static void processMultiopWidgets(UDWORD id)
 			break;
 		}
 		bHosted = true;
+		loadMapSettings2();
 
 		widgDelete(psWScreen,MULTIOP_REFRESH);
 		widgDelete(psWScreen,MULTIOP_HOST);
@@ -3022,7 +3126,6 @@ static void processMultiopWidgets(UDWORD id)
 		disableMultiButs();
 
 		addPlayerBox(!ingame.bHostSetup || bHosted);	//to make sure host can't skip player selection menu (sets game.skdiff to UBYTE_MAX for humans)
-		loadMapSettings();
 		break;
 
 	case MULTIOP_CHATEDIT:
@@ -3094,7 +3197,7 @@ static void processMultiopWidgets(UDWORD id)
 	}
 
 	STATIC_ASSERT(MULTIOP_TEAMS_START + MAX_PLAYERS - 1 <= MULTIOP_TEAMS_END);
-	if (id >= MULTIOP_TEAMS_START && id <= MULTIOP_TEAMS_START + MAX_PLAYERS - 1 && !challengeActive)  // Clicked on a team chooser
+	if (id >= MULTIOP_TEAMS_START && id <= MULTIOP_TEAMS_START + MAX_PLAYERS - 1 && !locked.teams)  // Clicked on a team chooser
 	{
 		int clickedMenuID = id - MULTIOP_TEAMS_START;
 
@@ -3176,7 +3279,7 @@ static void processMultiopWidgets(UDWORD id)
 	// clicked on a player
 	STATIC_ASSERT(MULTIOP_PLAYER_START + MAX_PLAYERS - 1 <= MULTIOP_PLAYER_END);
 	if (id >= MULTIOP_PLAYER_START && id <= MULTIOP_PLAYER_START + MAX_PLAYERS - 1
-	    && allowChangePosition
+	    && !locked.position
 	    && (id - MULTIOP_PLAYER_START == selectedPlayer || NetPlay.isHost
 	        || (positionChooserUp >= 0 && !isHumanPlayer(id - MULTIOP_PLAYER_START))))
 	{
@@ -3199,7 +3302,7 @@ static void processMultiopWidgets(UDWORD id)
 			closePositionChooser();
 			addPlayerBox(!ingame.bHostSetup || bHosted);
 		}
-		else if (!NetPlay.players[player].allocated && !challengeActive && NetPlay.isHost
+		else if (!NetPlay.players[player].allocated && !locked.ai && NetPlay.isHost
 		         && positionChooserUp < 0 && teamChooserUp < 0 && colourChooserUp < 0)
 		{
 			addAiChooser(player);
@@ -3207,7 +3310,7 @@ static void processMultiopWidgets(UDWORD id)
 	}
 
 	if (id >= MULTIOP_DIFFICULTY_INIT_START && id <= MULTIOP_DIFFICULTY_INIT_END
-	    && !challengeActive && NetPlay.isHost && positionChooserUp < 0 && teamChooserUp < 0 && colourChooserUp < 0)
+	    && !locked.difficulty && NetPlay.isHost && positionChooserUp < 0 && teamChooserUp < 0 && colourChooserUp < 0)
 	{
 		addDifficultyChooser(id - MULTIOP_DIFFICULTY_INIT_START);
 		addPlayerBox(!ingame.bHostSetup || bHosted);
@@ -3670,6 +3773,10 @@ void runMultiOptions(void)
 					game.hash = oldGameHash;
 					game.maxPlayers = oldMaxPlayers;
 				}
+				else
+				{
+					loadMapSettings1();
+				}
 
 				widgSetString(psWScreen, MULTIOP_MAP, mapData->pName);
 				addGameOptions();
@@ -3743,7 +3850,6 @@ bool startMultiOptions(bool bReenter)
 	}
 
 	// free limiter structure
-	// challengeActive can be removed when challenge will set the limits from some config file
 	if(!bReenter || challengeActive)
 	{
 		if(ingame.numStructureLimits)
@@ -3756,12 +3862,14 @@ bool startMultiOptions(bool bReenter)
 
 	if(!bReenter)
 	{
+		memset(nameOverrides, 0, sizeof(nameOverrides));
+		memset(&locked, 0, sizeof(locked)); // nothing is locked by default
+
 		teamChooserUp = -1;
 		aiChooserUp = -1;
 		difficultyChooserUp = -1;
 		positionChooserUp = -1;
 		colourChooserUp = -1;
-		allowChangePosition = true;
 		for(i=0; i < MAX_PLAYERS; i++)
 		{
 			game.skDiff[i] = (DIFF_SLIDER_STOPS / 2);	// reset AI (turn it on again)
@@ -3780,82 +3888,48 @@ bool startMultiOptions(bool bReenter)
 		ingame.localOptionsReceived = false;
 
 		loadMultiStats((char*)sPlayer,&nullStats);
-
-		memset(nameOverrides, 0, sizeof(nameOverrides));
-		if (challengeActive)
-		{
-			WzConfig challenge(sRequestResult);
-
-			resetReadyStatus(false);
-			removeWildcards((char*)sPlayer);
-
-			if (!hostCampaign((char*)game.name,(char*)sPlayer))
-			{
-				debug(LOG_ERROR, "Failed to host the challenge.");
-				return false;
-			}
-			bHosted = true;
-
-			challenge.beginGroup("challenge");
-			sstrcpy(game.map, challenge.value("Map", game.map).toString().toAscii().constData());
-			game.hash = levGetMapNameHash(game.map);
-			game.maxPlayers = challenge.value("MaxPlayers", game.maxPlayers).toInt();	// TODO, read from map itself, not here!!
-			game.scavengers = challenge.value("Scavengers", game.scavengers).toBool();
-			game.alliance = ALLIANCES_TEAMS;
-			netPlayersUpdated = true;
-			mapDownloadProgress = 100;
-			game.power = challenge.value("Power", game.power).toInt();
-			game.base = challenge.value("Bases", game.base + 1).toInt() - 1;		// count from 1 like the humans do
-			sstrcpy(game.name, challenge.value("name").toString().toUtf8().constData());
-			allowChangePosition = challenge.value("AllowPositionChange", false).toBool();
-			challenge.endGroup();
-
-			for (int i = 0; i < MAX_PLAYERS; i++)
-			{
-				challenge.beginGroup("player_" + QString::number(i + 1));
-				if (challenge.contains("team"))
-				{
-					NetPlay.players[i].team = challenge.value("team").toInt() - 1;
-				}
-				else // team is a required key!
-				{
-					NetPlay.players[i].ai = AI_CLOSED;
-				}
-				if (challenge.contains("name"))
-				{
-					sstrcpy(nameOverrides[i], challenge.value("name").toString().toUtf8().constData());
-				}
-				if (challenge.contains("position"))
-				{
-					changePosition(i, challenge.value("position", NetPlay.players[i].position).toInt());
-				}
-				if (i != 0)	// player index zero is always the challenger
-				{
-					QString value = challenge.value("difficulty", "Medium").toString();
-					for (int j = 0; j < ARRAY_SIZE(difficultyList); j++)
-					{
-						if (strcasecmp(difficultyList[j], value.toAscii().constData()) == 0)
-						{
-							game.skDiff[i] = difficultyValue[j];
-							NetPlay.players[i].difficulty = j;
-						}
-					}
-				}
-				challenge.endGroup();
-			}
-
-			ingame.localOptionsReceived = true;
-			addGameOptions();									// update game options box.
-			addChatBox();
-			disableMultiButs();
-			addPlayerBox(true);
-		}
 	}
+	if (!bReenter && challengeActive)
+	{
+		resetReadyStatus(false);
+		removeWildcards((char*)sPlayer);
+		if (!hostCampaign((char*)game.name,(char*)sPlayer))
+		{
+			debug(LOG_ERROR, "Failed to host the challenge.");
+			return false;
+		}
+		bHosted = true;
 
-	addPlayerBox(false);								// Players
-	addGameOptions();
+		loadMapSettings1();
+		loadMapSettings2();
 
-	addChatBox();
+		WzConfig ini(sRequestResult);
+		ini.beginGroup("challenge");
+		sstrcpy(game.map, ini.value("Map", game.map).toString().toUtf8().constData());
+		game.hash = levGetMapNameHash(game.map);
+		game.maxPlayers = ini.value("MaxPlayers", game.maxPlayers).toInt();	// TODO, read from map itself, not here!!
+		game.scavengers = ini.value("Scavengers", game.scavengers).toBool();
+		game.alliance = ALLIANCES_TEAMS;
+		netPlayersUpdated = true;
+		mapDownloadProgress = 100;
+		game.power = ini.value("Power", game.power).toInt();
+		game.base = ini.value("Bases", game.base + 1).toInt() - 1;		// count from 1 like the humans do
+		sstrcpy(game.name, ini.value("name").toString().toUtf8().constData());
+		locked.position = ini.value("AllowPositionChange", locked.position).toBool();
+		ini.endGroup();
+
+		ingame.localOptionsReceived = true;
+		addGameOptions();									// update game options box.
+		addChatBox();
+		disableMultiButs();
+		addPlayerBox(true);
+	}
+	else
+	{
+		addPlayerBox(false);								// Players
+		addGameOptions();
+		addChatBox();
+	}
 
 	// going back to multiop after setting limits up..
 	if(bReenter && bHosted)
