@@ -202,7 +202,7 @@ function checkEndConditions()
 			{
 				if (playnum != me && allianceExistsBetween(me, playnum))
 				{
-					factories = countStruct("A0LightFactory", playnum) + enumStruct("A0CyborgFactory", playnum);
+					factories = countStruct("A0LightFactory", playnum) + countStruct("A0CyborgFactory", playnum);
 					droids = countDroid(DROID_ANY, playnum);
 					if (droids > 0 || factories > 0)
 					{
