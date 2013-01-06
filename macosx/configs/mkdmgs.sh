@@ -48,8 +48,10 @@ function signd {
 		local fsignd=''
 		local framelst="$(\ls -1 "${appth}/Contents/Frameworks" | sed -n 's:.framework$:&:p')"
 		for fsignd in ${framelst}; do
-			if [ -d "${appth}/Contents/Frameworks/${fsignd}/Versions/A" ]; then
-				/usr/bin/codesign -vvv --verify "${appth}/Contents/Frameworks/${fsignd}/Versions/A"
+			if [[ -d "${appth}/Contents/Frameworks/${fsignd}/Versions/A" ]] && [[ ! "${fsignd}" == "SDL.framework" ]]; then
+				if ! /usr/bin/codesign --verify -vvv "${appth}/Contents/Frameworks/${fsignd}/Versions/A"; then
+					echo "warning: ${fsignd} is not properly signed."
+				fi
 			fi
 		done
 	else
