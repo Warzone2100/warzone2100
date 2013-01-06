@@ -34,19 +34,34 @@
 class WzConfigHack
 {
 public:
-	WzConfigHack(const QString &fileName)
+	WzConfigHack(const QString &fileName, int readOnly)
 	{
-		if (PHYSFS_exists(fileName.toUtf8().constData())) return;
-		PHYSFS_file *fileHandle = PHYSFS_openWrite(fileName.toUtf8().constData());
-		if (!fileHandle) debug(LOG_ERROR, "%s could not be created: %s", fileName.toUtf8().constData(), PHYSFS_getLastError());
-		PHYSFS_close(fileHandle);
+		if (readOnly == 1 || PHYSFS_exists(fileName.toUtf8().constData())) return;
+		if (readOnly == 0)
+		{
+			PHYSFS_file *fileHandle = PHYSFS_openWrite(fileName.toUtf8().constData());
+			if (!fileHandle) debug(LOG_ERROR, "%s could not be created: %s", fileName.toUtf8().constData(), PHYSFS_getLastError());
+			PHYSFS_close(fileHandle);
+		}
+		else if (readOnly == 2 && !PHYSFS_exists(fileName.toUtf8().constData()))
+		{
+			debug(LOG_FATAL, "Could not find required file \"%s\"", fileName.toUtf8().constData());
+		}
 	}
 };
 
 class WzConfig : private WzConfigHack, public QSettings
 {
 public:
-	WzConfig(const QString &name, QObject *parent = 0) : WzConfigHack(name), QSettings(QString("wz::") + name, QSettings::IniFormat, parent) {}
+	enum warning { ReadAndWrite, ReadOnly, ReadOnlyAndRequired };
+	WzConfig(const QString &name, WzConfig::warning warning = ReadAndWrite, QObject *parent = 0)
+		: WzConfigHack(name, (int)warning), QSettings(QString("wz::") + name, QSettings::IniFormat, parent)
+	{
+		if (status() != QSettings::NoError && (warning != ReadOnly || PHYSFS_exists(name.toUtf8().constData())))
+		{
+			debug(LOG_FATAL, "Could not open \"%s\"", name.toUtf8().constData());
+		}
+	}
 	Vector3f vector3f(const QString &name);
 	void setVector3f(const QString &name, const Vector3f &v);
 	Vector3i vector3i(const QString &name);

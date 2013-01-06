@@ -354,7 +354,7 @@ bool eventSaveState(const char *pFilename)
 // Load the state of the event system
 bool eventLoadState(const char *pFilename)
 {
-	WzConfig ini(pFilename);
+	WzConfig ini(pFilename, WzConfig::ReadOnly);
 	// load the event contexts
 	if (!eventLoadContext(ini) || !eventLoadTriggerList(ini, "trig") || !eventLoadTriggerList(ini, "callback"))
 	{

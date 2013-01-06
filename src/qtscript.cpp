@@ -474,11 +474,6 @@ bool loadGlobalScript(QString path)
 bool saveScriptStates(const char *filename)
 {
 	WzConfig ini(filename);
-	if (!ini.isWritable())
-	{
-		debug(LOG_ERROR, "Savegame file not writable: %s", filename);
-		return false;
-	}
 	for (int i = 0; i < scripts.size(); ++i)
 	{
 		QScriptEngine *engine = scripts.at(i);
@@ -540,7 +535,7 @@ static QScriptEngine *findEngineForPlayer(int match, QString scriptName)
 
 bool loadScriptStates(const char *filename)
 {
-	WzConfig ini(filename);
+	WzConfig ini(filename, WzConfig::ReadOnly);
 	QStringList list = ini.childGroups();
 	debug(LOG_SAVE, "Loading script states for %d script contexts", scripts.size());
 	for (int i = 0; i < list.size(); ++i)

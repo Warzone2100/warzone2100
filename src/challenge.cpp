@@ -283,7 +283,7 @@ bool addChallenges()
 		sstrcpy(sPath, *i);
 		sPath[strlen(sPath) - 4] = '\0';	// remove .ini
 		highscore = "no score";
-		WzConfig scores(CHALLENGE_SCORES);
+		WzConfig scores(CHALLENGE_SCORES, WzConfig::ReadOnly);
 		scores.beginGroup(sPath);
 		name = scores.value("Player", "NO NAME").toString();
 		victory = scores.value("Victory", false).toBool();

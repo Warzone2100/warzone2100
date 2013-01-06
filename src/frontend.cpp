@@ -275,7 +275,7 @@ static QList<CAMPAIGN_FILE> readCampaignFiles()
 		CAMPAIGN_FILE c;
 		QString filename("campaigns/");
 		filename += *i;
-		WzConfig ini(filename);
+		WzConfig ini(filename, WzConfig::ReadOnlyAndRequired);
 		ini.beginGroup("campaign");
 		c.name = ini.value("name").toString();
 		c.level = ini.value("level").toString();

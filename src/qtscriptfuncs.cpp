@@ -552,12 +552,7 @@ bool loadLabels(const char *filename)
 		debug(LOG_SAVE, "No %s found -- not adding any labels", filename);
 		return false;
 	}
-	WzConfig ini(filename);
-	if (ini.status() != QSettings::NoError)
-	{
-		debug(LOG_ERROR, "No label file %s", filename);
-		return false;
-	}
+	WzConfig ini(filename, WzConfig::ReadOnly);
 	labels.clear();
 	QStringList list = ini.childGroups();
 	debug(LOG_SAVE, "Loading %d labels...", list.size());
@@ -624,11 +619,6 @@ bool writeLabels(const char *filename)
 	int c[3];
 	memset(c, 0, sizeof(c));
 	WzConfig ini(filename);
-	if (ini.status() != QSettings::NoError)
-	{
-		debug(LOG_ERROR, "Could not open %s", filename);
-		return false;
-	}
 	for (LABELMAP::const_iterator i = labels.constBegin(); i != labels.constEnd(); i++)
 	{
 		QString key = i.key();

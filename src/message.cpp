@@ -691,9 +691,7 @@ const char *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 const char *loadResearchViewData(const char* fileName)
 {
 	ASSERT_OR_RETURN(NULL, PHYSFS_exists(fileName), "%s not found", fileName);
-	WzConfig ini(fileName);
-	ASSERT_OR_RETURN(NULL, ini.status() == QSettings::NoError, "%s not loaded", fileName);
-
+	WzConfig ini(fileName, WzConfig::ReadOnlyAndRequired);
 	const char *filedup = strdup(fileName);
 	QStringList list = ini.childGroups();
 	for (int i = 0; i < list.size(); ++i)

@@ -622,11 +622,7 @@ bool loadWeaponStats(const char *pFileName)
 	SDWORD			minElevation;
 	UDWORD numAttackRuns;
 
-	WzConfig ini(pFileName);
-	if (ini.status() != QSettings::NoError)
-	{
-		debug(LOG_ERROR, "Could not open %s", pFileName);
-	}
+	WzConfig ini(pFileName, WzConfig::ReadOnlyAndRequired);
 	QStringList list = ini.childGroups();
 	if (!statsAllocWeapons(list.size()))
 	{
@@ -839,11 +835,7 @@ bool loadWeaponStats(const char *pFileName)
 bool loadBodyStats(const char *pFileName)
 {
 	BODY_STATS sStats, * const psStats = &sStats;
-	WzConfig ini(pFileName);
-	if (ini.status() != QSettings::NoError)
-	{
-		debug(LOG_ERROR, "Could not open %s", pFileName);
-	}
+	WzConfig ini(pFileName, WzConfig::ReadOnlyAndRequired);
 	QStringList list = ini.childGroups();
 	statsAllocBody(list.size());
 	// Hack to make sure ZNULLBODY is always first in list
@@ -923,12 +915,7 @@ bool loadBodyStats(const char *pFileName)
 bool loadBrainStats(const char *pFileName)
 {
 	BRAIN_STATS sStats, * const psStats = &sStats;
-	WzConfig ini(pFileName);
-	if (ini.status() != QSettings::NoError)
-	{
-		debug(LOG_ERROR, "Could not open %s", pFileName);
-	}
-
+	WzConfig ini(pFileName, WzConfig::ReadOnlyAndRequired);
 	QStringList list = ini.childGroups();
 	statsAllocBrain(list.size());
 	// Hack to make sure ZNULLBRAIN is always first in list
@@ -1020,11 +1007,7 @@ bool getPropulsionType(const char* typeName, PROPULSION_TYPE* type)
 bool loadPropulsionStats(const char *pFileName)
 {
 	PROPULSION_STATS sStats, *const psStats = &sStats;
-	WzConfig ini(pFileName);
-	if (ini.status() != QSettings::NoError)
-	{
-		debug(LOG_ERROR, "Could not open %s", pFileName);
-	}
+	WzConfig ini(pFileName, WzConfig::ReadOnlyAndRequired);
 	QStringList list = ini.childGroups();
 	statsAllocPropulsion(list.size());
 	// Hack to make sure ZNULLPROP is always first in list
@@ -1100,11 +1083,7 @@ bool loadPropulsionStats(const char *pFileName)
 bool loadSensorStats(const char *pFileName)
 {
 	SENSOR_STATS sStats, * const psStats = &sStats;
-	WzConfig ini(pFileName);
-	if (ini.status() != QSettings::NoError)
-	{
-		debug(LOG_ERROR, "Could not open %s", pFileName);
-	}
+	WzConfig ini(pFileName, WzConfig::ReadOnlyAndRequired);
 	QStringList list = ini.childGroups();
 	if (!statsAllocSensor(list.size()))
 	{
@@ -1202,11 +1181,7 @@ bool loadSensorStats(const char *pFileName)
 bool loadECMStats(const char *pFileName)
 {
 	ECM_STATS sStats, * const psStats = &sStats;
-	WzConfig ini(pFileName);
-	if (ini.status() != QSettings::NoError)
-	{
-		debug(LOG_ERROR, "Could not open %s", pFileName);
-	}
+	WzConfig ini(pFileName, WzConfig::ReadOnlyAndRequired);
 	QStringList list = ini.childGroups();
 	if (!statsAllocECM(list.size()))
 	{
@@ -1271,11 +1246,7 @@ bool loadECMStats(const char *pFileName)
 bool loadRepairStats(const char *pFileName)
 {
 	REPAIR_STATS sStats, * const psStats = &sStats;
-	WzConfig ini(pFileName);
-	if (ini.status() != QSettings::NoError)
-	{
-		debug(LOG_ERROR, "Could not open %s", pFileName);
-	}
+	WzConfig ini(pFileName, WzConfig::ReadOnlyAndRequired);
 	QStringList list = ini.childGroups();
 	if (!statsAllocRepair(list.size()))
 	{
@@ -1345,11 +1316,7 @@ bool loadRepairStats(const char *pFileName)
 bool loadConstructStats(const char *pFileName)
 {
 	CONSTRUCT_STATS sStats, * const psStats = &sStats;
-	WzConfig ini(pFileName);
-	if (ini.status() != QSettings::NoError)
-	{
-		debug(LOG_ERROR, "Could not open %s", pFileName);
-	}
+	WzConfig ini(pFileName, WzConfig::ReadOnlyAndRequired);
 	QStringList list = ini.childGroups();
 	if (!statsAllocConstruct(list.size()))
 	{
@@ -1407,11 +1374,7 @@ bool loadPropulsionTypes(const char *pFileName)
 	//allocate storage for the stats
 	asPropulsionTypes = (PROPULSION_TYPES *)malloc(sizeof(PROPULSION_TYPES)*NumTypes);
 	memset(asPropulsionTypes, 0, (sizeof(PROPULSION_TYPES)*NumTypes));
-	WzConfig ini(pFileName);
-	if (ini.status() != QSettings::NoError)
-	{
-		debug(LOG_ERROR, "Could not open %s", pFileName);
-	}
+	WzConfig ini(pFileName, WzConfig::ReadOnlyAndRequired);
 	QStringList list = ini.childGroups();
 
 	for (int i=0; i < NumTypes; ++i)
@@ -1486,11 +1449,7 @@ bool loadTerrainTable(const char *pFileName)
 			pTerrainTable->speedFactor = 100;
 		}
 	}
-	WzConfig ini(pFileName);
-	if (ini.status() != QSettings::NoError)
-	{
-		debug(LOG_ERROR, "Could not open %s", pFileName);
-	}
+	WzConfig ini(pFileName, WzConfig::ReadOnlyAndRequired);
 	QStringList list = ini.childGroups();
 	for (i = 0; i < list.size(); ++i)
 	{
@@ -1546,11 +1505,7 @@ bool loadBodyPropulsionIMDs(const char *pFileName)
 		psBodyStat->ppIMDList = (iIMDShape **) malloc(numPropulsionStats * NUM_PROP_SIDES * sizeof(iIMDShape *));
 		memset(psBodyStat->ppIMDList, 0, (numPropulsionStats * NUM_PROP_SIDES * sizeof(iIMDShape *)));
 	}
-	WzConfig ini(pFileName);
-	if (ini.status() != QSettings::NoError)
-	{
-		debug(LOG_ERROR, "Could not open %s", pFileName);
-	}
+	WzConfig ini(pFileName, WzConfig::ReadOnlyAndRequired);
 	QStringList list = ini.childGroups();
 	for (i=0; i < list.size(); ++i)
 	{
@@ -1652,11 +1607,7 @@ bool loadWeaponSounds(const char *pFileName)
 
 	ASSERT( asWeaponStats != NULL, "loadWeaponSounds: Weapon stats not loaded" );
 
-	WzConfig ini(pFileName);
-	if (ini.status() != QSettings::NoError)
-	{
-		debug(LOG_ERROR, "Could not open %s", pFileName);
-	}
+	WzConfig ini(pFileName, WzConfig::ReadOnlyAndRequired);
 	QStringList list = ini.childGroups();
 	for (int i=0; i < list.size(); ++i)
 	{
@@ -1707,11 +1658,7 @@ bool loadWeaponModifiers(const char *pFileName)
 			asWeaponModifierBody[i][j] = 100;
 		}
 	}
-	WzConfig ini(pFileName);
-	if (ini.status() != QSettings::NoError)
-	{
-		debug(LOG_ERROR, "Could not open %s", pFileName);
-	}
+	WzConfig ini(pFileName, WzConfig::ReadOnlyAndRequired);
 	QStringList list = ini.childGroups();
 	for (int i = 0; i < list.size(); i++)
 	{
@@ -1759,11 +1706,7 @@ bool loadPropulsionSounds(const char *pFileName)
 
 	ASSERT( asPropulsionTypes != NULL, "loadPropulsionSounds: Propulsion type stats not loaded" );
 
-	WzConfig ini(pFileName);
-	if (ini.status() != QSettings::NoError)
-	{
-		debug(LOG_ERROR, "Could not open %s", pFileName);
-	}
+	WzConfig ini(pFileName, WzConfig::ReadOnlyAndRequired);
 	QStringList list = ini.childGroups();
 	for (i=0; i < list.size(); ++i)
 	{

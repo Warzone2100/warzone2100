@@ -697,11 +697,7 @@ bool loadStructureStrengthModifiers(const char *pFileName)
 			asStructStrengthModifier[i][j] = 100;
 		}
 	}
-	WzConfig ini(pFileName);
-	if (ini.status() != QSettings::NoError)
-	{
-		debug(LOG_ERROR, "Could not open %s", pFileName);
-	}
+	WzConfig ini(pFileName, WzConfig::ReadOnlyAndRequired);
 	QStringList list = ini.childGroups();
 	for (int i = 0; i < list.size(); i++)
 	{

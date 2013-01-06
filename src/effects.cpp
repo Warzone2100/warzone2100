@@ -2542,13 +2542,8 @@ bool writeFXData(const char *fileName)
 {
 	EFFECT *it;
 	int i = 0;
-
 	WzConfig ini(fileName);
-	if (ini.status() != QSettings::NoError)
-	{
-		debug(LOG_ERROR, "Could not open %s", fileName);
-		return false;
-	}
+
 	for (it = activeList.first; it != NULL; it = it->next, i++)
 	{
 		ini.beginGroup("effect_" + QString::number(i));
@@ -2589,13 +2584,9 @@ bool readFXData(const char *fileName)
 	// Clear out anything that's there already!
 	initEffectsSystem();
 
-	WzConfig ini(fileName);
-	if (ini.status() != QSettings::NoError)
-	{
-		debug(LOG_ERROR, "Could not open %s", fileName);
-		return false;
-	}
+	WzConfig ini(fileName, WzConfig::ReadOnly);
 	QStringList list = ini.childGroups();
+
 	for (int i = 0; i < list.size(); ++i)
 	{
 		ini.beginGroup(list[i]);

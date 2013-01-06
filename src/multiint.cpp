@@ -294,7 +294,7 @@ void loadMultiScripts()
 	}
 
 	// Load map scripts
-	WzConfig ini(ininame);
+	WzConfig ini(ininame, WzConfig::ReadOnly);
 	if (PHYSFS_exists(ininame))
 	{
 		debug(LOG_SAVE, "Loading map scripts");
@@ -650,7 +650,7 @@ void readAIs()
 
 		sstrcpy(path, basepath);
 		sstrcat(path, *i);
-		WzConfig aiconf(path);
+		WzConfig aiconf(path, WzConfig::ReadOnly);
 		if (aiconf.status() != QSettings::NoError)
 		{
 			debug(LOG_ERROR, "Failed to open AI %s", path);
@@ -2742,7 +2742,7 @@ static void loadMapSettings1()
 	sstrcpy(aFileName, psLevel->apDataFiles[psLevel->game]);
 	aFileName[strlen(aFileName) - 4] = '\0';
 	sstrcat(aFileName, ".ini");
-	WzConfig ini(ininame);
+	WzConfig ini(ininame, WzConfig::ReadOnly);
 
 	if (!PHYSFS_exists(ininame))
 	{
@@ -2788,7 +2788,7 @@ static void loadMapSettings2()
 	sstrcpy(aFileName, psLevel->apDataFiles[psLevel->game]);
 	aFileName[strlen(aFileName) - 4] = '\0';
 	sstrcat(aFileName, ".ini");
-	WzConfig ini(ininame);
+	WzConfig ini(ininame, WzConfig::ReadOnly);
 
 	if (!PHYSFS_exists(ininame))
 	{
@@ -3903,7 +3903,7 @@ bool startMultiOptions(bool bReenter)
 		loadMapSettings1();
 		loadMapSettings2();
 
-		WzConfig ini(sRequestResult);
+		WzConfig ini(sRequestResult, WzConfig::ReadOnly);
 		ini.beginGroup("challenge");
 		sstrcpy(game.map, ini.value("Map", game.map).toString().toUtf8().constData());
 		game.hash = levGetMapNameHash(game.map);

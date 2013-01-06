@@ -518,11 +518,6 @@ void	fillUpStats( void )
 bool writeScoreData(const char* fileName)
 {
 	WzConfig ini(fileName);
-	if (ini.status() != QSettings::NoError)
-	{
-		debug(LOG_ERROR, "Could not open %s", fileName);
-		return false;
-	}
 
 	// Dump the scores for the current player
 	ini.setValue("unitsBuilt", missionData.unitsBuilt);
@@ -545,12 +540,7 @@ bool writeScoreData(const char* fileName)
 /* This will read in the score data */
 bool readScoreData(const char* fileName)
 {
-	WzConfig ini(fileName);
-	if (ini.status() != QSettings::NoError)
-	{
-		debug(LOG_ERROR, "Could not open %s", fileName);
-		return false;
-	}
+	WzConfig ini(fileName, WzConfig::ReadOnly);
 
 	// Retrieve the score data for the current player
 	missionData.unitsBuilt = ini.value("unitsBuilt").toInt();

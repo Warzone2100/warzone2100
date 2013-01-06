@@ -2893,8 +2893,7 @@ static bool gameLoad(const char* fileName)
 	}
 	else
 	{
-		WzConfig ruleset("ruleset.ini");
-		ASSERT_OR_RETURN(false, ruleset.status() == QSettings::NoError, "%s not loaded", fileName);
+		WzConfig ruleset("ruleset.ini", WzConfig::ReadOnly);
 		if (!ruleset.contains("ruleset/tag"))
 		{
 			debug(LOG_ERROR, "ruleset tag not found in ruleset.ini!"); // fall-through
@@ -4102,13 +4101,9 @@ static bool skipForDifficulty(WzConfig &ini, int player)
 
 static bool loadSaveDroidPointers(const QString &pFileName, DROID **ppsCurrentDroidLists)
 {
-	WzConfig ini(pFileName);
-	if (ini.status() != QSettings::NoError)
-	{
-		debug(LOG_ERROR, "Could not open %s", pFileName.toUtf8().constData());
-		return false;
-	}
+	WzConfig ini(pFileName, WzConfig::ReadOnly);
 	QStringList list = ini.childGroups();
+
 	for (int i = 0; i < list.size(); ++i)
 	{
 		ini.beginGroup(list[i]);
@@ -4211,12 +4206,7 @@ static bool loadSaveDroid(const char *pFileName, DROID **ppsCurrentDroidLists)
 		debug(LOG_SAVE, "No %s found -- use fallback method", pFileName);
 		return false;	// try to use fallback method
 	}
-	WzConfig ini(pFileName);
-	if (ini.status() != QSettings::NoError)
-	{
-		debug(LOG_ERROR, "Could not open %s", pFileName);
-		return false;
-	}
+	WzConfig ini(pFileName, WzConfig::ReadOnly);
 	QStringList list = ini.childGroups();
 	// Sort list so transports are loaded first, since they must be loaded before the droids they contain.
 	std::vector<std::pair<int, QString> > sortedList;
@@ -4548,13 +4538,9 @@ static bool writeDroid(WzConfig &ini, DROID *psCurr, bool onMission, int &counte
 static bool writeDroidFile(const char *pFileName, DROID **ppsCurrentDroidLists)
 {
 	WzConfig ini(pFileName);
-	if (ini.status() != QSettings::NoError)
-	{
-		debug(LOG_ERROR, "Could not open %s", pFileName);
-		return false;
-	}
 	int counter = 0;
 	bool onMission = (ppsCurrentDroidLists[0] == mission.apsDroidLists[0]);
+
 	for (int player = 0; player < MAX_PLAYERS; player++)
 	{
 		for (DROID *psCurr = ppsCurrentDroidLists[player]; psCurr != NULL; psCurr = psCurr->psNext)
@@ -4766,12 +4752,7 @@ static bool loadSaveStructure2(const char *pFileName, STRUCTURE **ppList)
 		debug(LOG_SAVE, "No %s found -- use fallback method", pFileName);
 		return false;	// try to use fallback method
 	}
-	WzConfig ini(pFileName);
-	if (ini.status() != QSettings::NoError)
-	{
-		debug(LOG_ERROR, "Could not open %s", pFileName);
-		return false;
-	}
+	WzConfig ini(pFileName, WzConfig::ReadOnly);
 
 	freeAllFlagPositions();		//clear any flags put in during level loads
 
@@ -5036,14 +5017,10 @@ Writes some version info
 bool writeGameInfo(const char *pFileName)
 {
 	WzConfig ini(pFileName);
-	if (ini.status() != QSettings::NoError)
-	{
-		debug(LOG_ERROR, "Could not open %s", pFileName);
-		return false;
-	}
 	char ourtime[100] = {'\0'};
 	const time_t currentTime = time(NULL);
 	std::string time(ctime(&currentTime));
+
 	ini.beginGroup("GameProperties");
 	ini.setValue("current_time", time.data());
 	getAsciiTime(ourtime, graphicsTime);
@@ -5076,12 +5053,8 @@ Writes the linked list of structure for each player to a file
 bool writeStructFile(const char *pFileName)
 {
 	WzConfig ini(pFileName);
-	if (ini.status() != QSettings::NoError)
-	{
-		debug(LOG_ERROR, "Could not open %s", pFileName);
-		return false;
-	}
 	int counter = 0;
+
 	for (int player = 0; player < MAX_PLAYERS; player++)
 	{
 		for (STRUCTURE *psCurr = apsStructLists[player]; psCurr != NULL; psCurr = psCurr->psNext)
@@ -5229,13 +5202,9 @@ bool writeStructFile(const char *pFileName)
 // -----------------------------------------------------------------------------------------
 bool loadSaveStructurePointers(QString filename, STRUCTURE **ppList)
 {
-	WzConfig ini(filename);
-	if (ini.status() != QSettings::NoError)
-	{
-		debug(LOG_ERROR, "Could not open %s", filename.toUtf8().constData());
-		return false;
-	}
+	WzConfig ini(filename, WzConfig::ReadOnly);
 	QStringList list = ini.childGroups();
+
 	for (int i = 0; i < list.size(); ++i)
 	{
 		ini.beginGroup(list[i]);
@@ -5428,14 +5397,10 @@ bool loadSaveFeature2(const char *pFileName)
 		debug(LOG_SAVE, "No %s found -- use fallback method", pFileName);
 		return false;
 	}
-	WzConfig ini(pFileName);
-	if (ini.status() != QSettings::NoError)
-	{
-		debug(LOG_ERROR, "Could not open %s", pFileName);
-		return false;
-	}
+	WzConfig ini(pFileName, WzConfig::ReadOnly);
 	QStringList list = ini.childGroups();
 	debug(LOG_SAVE, "Loading new style features (%d found)", list.size());
+
 	for (int i = 0; i < list.size(); ++i)
 	{
 		FEATURE *pFeature;
@@ -5500,12 +5465,8 @@ Writes the linked list of features to a file
 bool writeFeatureFile(const char *pFileName)
 {
 	WzConfig ini(pFileName);
-	if (ini.status() != QSettings::NoError)
-	{
-		debug(LOG_ERROR, "Could not open %s", pFileName);
-		return false;
-	}
 	int counter = 0;
+
 	for(FEATURE *psCurr = apsFeatureLists[0]; psCurr != NULL; psCurr = psCurr->psNext)
 	{
 		ini.beginGroup("feature_" + QString("%1").arg(counter++, 10, 10, QLatin1Char('0')));  // Zero padded so that alphabetical sort works.
@@ -5531,13 +5492,9 @@ bool writeFeatureFile(const char *pFileName)
 // -----------------------------------------------------------------------------------------
 bool loadSaveTemplate(const char *pFileName)
 {
-	WzConfig ini(pFileName);
-	if (ini.status() != QSettings::NoError)
-	{
-		debug(LOG_ERROR, "Could not open %s", pFileName);
-		return false;
-	}
+	WzConfig ini(pFileName, WzConfig::ReadOnly);
 	QStringList list = ini.childGroups();
+
 	for (int i = 0; i < list.size(); ++i)
 	{
 		ini.beginGroup(list[i]);
@@ -5605,11 +5562,7 @@ bool loadSaveTemplate(const char *pFileName)
 bool writeTemplateFile(const char *pFileName)
 {
 	WzConfig ini(pFileName);
-	if (ini.status() != QSettings::NoError)
-	{
-		debug(LOG_ERROR, "Could not open %s", pFileName);
-		return false;
-	}
+
 	for (int player = 0; player < MAX_PLAYERS; player++)
 	{
 		if (apsDroidLists[player] || apsStructLists[player])	// only write out templates of players that are still 'alive'
@@ -5750,12 +5703,8 @@ static bool writeTerrainTypeMapFile(char *pFileName)
 // -----------------------------------------------------------------------------------------
 bool loadSaveCompList(const char *pFileName)
 {
-	WzConfig ini(pFileName);
-	if (ini.status() != QSettings::NoError)
-	{
-		debug(LOG_ERROR, "Could not open %s", pFileName);
-		return false;
-	}
+	WzConfig ini(pFileName, WzConfig::ReadOnly);
+
 	for (int player = 0; player < MAX_PLAYERS; player++)
 	{
 		ini.beginGroup("player_" + QString::number(player));
@@ -5789,11 +5738,6 @@ bool loadSaveCompList(const char *pFileName)
 static bool writeCompListFile(const char *pFileName)
 {
 	WzConfig ini(pFileName);
-	if (ini.status() != QSettings::NoError)
-	{
-		debug(LOG_ERROR, "Could not open %s", pFileName);
-		return false;
-	}
 
 	// Save each type of struct type
 	for (int player = 0; player < MAX_PLAYERS; player++)
@@ -5856,12 +5800,8 @@ static bool writeCompListFile(const char *pFileName)
 // load up structure type list file
 static bool loadSaveStructTypeList(const char *pFileName)
 {
-	WzConfig ini(pFileName);
-	if (ini.status() != QSettings::NoError)
-	{
-		debug(LOG_ERROR, "Could not open %s", pFileName);
-		return false;
-	}
+	WzConfig ini(pFileName, WzConfig::ReadOnly);
+
 	for (int player = 0; player < MAX_PLAYERS; player++)
 	{
 		ini.beginGroup("player_" + QString::number(player));
@@ -5896,11 +5836,6 @@ static bool loadSaveStructTypeList(const char *pFileName)
 static bool writeStructTypeListFile(const char *pFileName)
 {
 	WzConfig ini(pFileName);
-	if (ini.status() != QSettings::NoError)
-	{
-		debug(LOG_ERROR, "Could not open %s", pFileName);
-		return false;
-	}
 
 	// Save each type of struct type
 	for (int player = 0; player < MAX_PLAYERS; player++)
@@ -5920,12 +5855,7 @@ static bool writeStructTypeListFile(const char *pFileName)
 // load up saved research file
 bool loadSaveResearch(const char *pFileName)
 {
-	WzConfig ini(pFileName);
-	if (ini.status() != QSettings::NoError)
-	{
-		debug(LOG_ERROR, "Could not open %s", pFileName);
-		return false;
-	}
+	WzConfig ini(pFileName, WzConfig::ReadOnly);
 	const int players = game.maxPlayers;
 	QStringList list = ini.childGroups();
 	for (int i = 0; i < list.size(); ++i)
@@ -5988,11 +5918,7 @@ bool loadSaveResearch(const char *pFileName)
 static bool writeResearchFile(char *pFileName)
 {
 	WzConfig ini(pFileName);
-	if (ini.status() != QSettings::NoError)
-	{
-		debug(LOG_ERROR, "Could not open %s", pFileName);
-		return false;
-	}
+
 	for (int i = 0; i < asResearch.size(); ++i)
 	{
 		RESEARCH *psStats = &asResearch[i];
@@ -6040,12 +5966,7 @@ bool loadSaveMessage(const char *pFileName, SWORD levelType)
 		}
 	}
 
-	WzConfig ini(pFileName);
-	if (ini.status() != QSettings::NoError)
-	{
-		debug(LOG_ERROR, "Could not open %s", pFileName);
-		return false;
-	}
+	WzConfig ini(pFileName, WzConfig::ReadOnly);
 	QStringList list = ini.childGroups();
 	for (int i = 0; i < list.size(); ++i)
 	{
@@ -6159,11 +6080,6 @@ bool loadSaveMessage(const char *pFileName, SWORD levelType)
 static bool writeMessageFile(const char *pFileName)
 {
 	WzConfig ini(pFileName);
-	if (ini.status() != QSettings::NoError)
-	{
-		debug(LOG_ERROR, "Could not open %s", pFileName);
-		return false;
-	}
 	int numMessages = 0;
 
 	// save each type of research
@@ -6235,12 +6151,8 @@ static bool writeMessageFile(const char *pFileName)
 // -----------------------------------------------------------------------------------------
 bool loadSaveStructLimits(const char *pFileName)
 {
-	WzConfig ini(pFileName);
-	if (ini.status() != QSettings::NoError)
-	{
-		debug(LOG_ERROR, "Could not open %s", pFileName);
-		return false;
-	}
+	WzConfig ini(pFileName, WzConfig::ReadOnly);
+
 	for (int player = 0; player < game.maxPlayers; player++)
 	{
 		ini.beginGroup("player_" + QString::number(player));
@@ -6274,11 +6186,6 @@ Writes the list of structure limits to a file
 bool writeStructLimitsFile(const char *pFileName)
 {
 	WzConfig ini(pFileName);
-	if (ini.status() != QSettings::NoError)
-	{
-		debug(LOG_ERROR, "Could not open %s", pFileName);
-		return false;
-	}
 
 	// Save each type of struct type
 	for (int player = 0; player < game.maxPlayers; player++)
@@ -6300,13 +6207,9 @@ bool writeStructLimitsFile(const char *pFileName)
  */
 bool readFiresupportDesignators(const char *pFileName)
 {
-	WzConfig ini(pFileName);
-	if (ini.status() != QSettings::NoError)
-	{
-		debug(LOG_ERROR, "Could not open %s", pFileName);
-		return false;
-	}
+	WzConfig ini(pFileName, WzConfig::ReadOnly);
 	QStringList list = ini.childGroups();
+
 	for (int i = 0; i < list.size(); ++i)
 	{
 		uint32_t id = ini.value("Player_" + QString::number(i) + "/id", NULL_ID).toInt();
@@ -6324,13 +6227,8 @@ bool readFiresupportDesignators(const char *pFileName)
 bool writeFiresupportDesignators(const char *pFileName)
 {
 	int player;
-
 	WzConfig ini(pFileName);
-	if (ini.status() != QSettings::NoError)
-	{
-		debug(LOG_ERROR, "Could not open %s", pFileName);
-		return false;
-	}
+
 	for (player = 0; player < MAX_PLAYERS; player++)
 	{
 		DROID *psDroid = cmdDroidGetDesignator(player);
@@ -6472,12 +6370,7 @@ bool plotStructurePreview16(char *backDropSprite, Vector2i playeridpos[])
 		strcpy(aFileName, psLevel->apDataFiles[0]);
 		aFileName[strlen(aFileName) - 4] = '\0';
 		strcat(aFileName, "/struct.ini");
-		WzConfig ini(aFileName);
-		if (ini.status() != QSettings::NoError)
-		{
-			debug(LOG_ERROR, "Could not open %s", aFileName);
-			return false;
-		}
+		WzConfig ini(aFileName, WzConfig::ReadOnly);
 		QStringList list = ini.childGroups();
 		for (int i = 0; i < list.size(); ++i)
 		{
@@ -6673,7 +6566,7 @@ static void plotFeature(char *backDropSprite)
 		strcpy(aFileName, psLevel->apDataFiles[0]);
 		aFileName[strlen(aFileName) - 4] = '\0';
 		strcat(aFileName, "/feature.ini");
-		WzConfig ini(aFileName);
+		WzConfig ini(aFileName, WzConfig::ReadOnly);
 		if (ini.status() != QSettings::NoError)
 		{
 			debug(LOG_ERROR, "Could not open %s", aFileName);
