@@ -166,12 +166,10 @@ static int frames = 0;
 static int dropped = 0;
 
 // Screen dimensions
-static int videoX1 = 0;
-static int videoX2 = 0;
-static int videoY1 = 0;
-static int videoY2 = 0;
-static int ScrnvidXpos = 0;
-static int ScrnvidYpos = 0;
+#define NUM_VERTICES 4
+static GLfloat vertices[NUM_VERTICES][2];
+static GLfloat texcoords[NUM_VERTICES][2];
+static GLfloat Scrnvidpos[3];
 
 static SCANLINE_MODE use_scanlines;
 
@@ -187,7 +185,7 @@ static int buffer_data(PHYSFS_file* in, ogg_sync_state* oy)
 	return(bytes);
 }
 
-/** helper: push a page into the appropriate steam
+/** helper: push a page into the appropriate stream
 	this can be done blindly; a stream won't accept a page
 	that doesn't belong to it
 */
@@ -281,8 +279,8 @@ static double getRelativeTime(void)
 	return((getTimeNow() - basetime) * .001);
 }
 
-static int texture_width = 1024;
-static int texture_height = 1024;
+const GLfloat texture_width = 1024.0f;
+const GLfloat texture_height = 1024.0f;
 static GLuint video_texture;
 
 /** Allocates memory to hold the decoded video frame
@@ -415,16 +413,16 @@ static void video_write(bool update)
 
 	glPushMatrix();
 
-	glTranslatef(ScrnvidXpos, ScrnvidYpos, 0.0f);
+	glTranslatef(Scrnvidpos[0], Scrnvidpos[1], Scrnvidpos[2]);
 	glBegin(GL_QUADS);
-	glTexCoord2f(0, 0);
-	glVertex2f(videoX1, videoY1);
-	glTexCoord2f((float) video_width / texture_width, 0);
-	glVertex2f(videoX2, videoY1);				//screenWidth
-	glTexCoord2f((float) video_width / texture_width, (float) video_height * height_factor / texture_height);
-	glVertex2f(videoX2, videoY2);		//screenWidth,screenHeight
-	glTexCoord2f(0, (float) video_height * height_factor / texture_height);
-	glVertex2f(videoX1, videoY2);				//screenHeight
+	glTexCoord2fv(texcoords[0]);
+	glVertex2fv(vertices[0]);
+	glTexCoord2fv(texcoords[1]);
+	glVertex2fv(vertices[1]);
+	glTexCoord2fv(texcoords[2]);
+	glVertex2fv(vertices[2]);
+	glTexCoord2fv(texcoords[3]);
+	glVertex2fv(vertices[3]);
 	glEnd();
 
 	glPopMatrix();
@@ -496,8 +494,6 @@ static void audio_write(void)
 static void seq_InitOgg(void)
 {
 	debug(LOG_VIDEO, "seq_InitOgg");
-
-	ASSERT((videoX2 && videoY2), "Screen dimensions not specified!");
 
 	stateflag = false;
 	theora_p = 0;
@@ -758,7 +754,7 @@ bool seq_Play(const char* filename)
 		char *blackframe = (char *)calloc(1, texture_width * texture_height * 4);
 
 		// disable scanlines if the video is too large for the texture or shown too small
-		if (videodata.ti.frame_height * 2 > texture_height || videoY2 < videodata.ti.frame_height * 2)
+		if (videodata.ti.frame_height * 2 > texture_height || vertices[3][1] < videodata.ti.frame_height * 2)
 			use_scanlines = SCANLINES_OFF;
 
 		Allocate_videoFrame();
@@ -771,6 +767,19 @@ bool seq_Play(const char* filename)
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
 		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+
+		// when using scanlines we need to double the height
+		const int height_factor = (use_scanlines ? 2 : 1);
+		const GLfloat vtwidth = (float)videodata.ti.frame_width / texture_width;
+		const GLfloat vtheight = (float)videodata.ti.frame_height * height_factor / texture_height;
+		texcoords[0][0] = 0.0f;
+		texcoords[0][1] = 0.0f;
+		texcoords[1][0] = vtwidth;
+		texcoords[1][1] = 0.0f;
+		texcoords[2][0] = vtwidth;
+		texcoords[2][1] = vtheight;
+		texcoords[3][0] = 0.0f;
+		texcoords[3][1] = vtheight;
 	}
 
 	/* on to the main decode loop.  We assume in this example that audio
@@ -1053,31 +1062,40 @@ double seq_GetFrameTime()
 // this controls the size of the video to display on screen
 void seq_SetDisplaySize(int sizeX, int sizeY, int posX, int posY)
 {
-	videoX1 = 0;
-	videoY1 = 0;
-	videoX2 = sizeX;
-	videoY2 = sizeY;
+	vertices[0][0] = 0.0f;
+	vertices[0][1] = 0.0f;
+	vertices[1][0] = sizeX;
+	vertices[1][1] = 0.0f;
+	vertices[2][0] = sizeX;
+	vertices[2][1] = sizeY;
+	vertices[3][0] = 0.0f;
+	vertices[3][1] = sizeY;
 
 	if (sizeX > 640 || sizeY > 480)
 	{
 		const float aspect = screenWidth / (float)screenHeight, videoAspect = 4 / (float)3;
 
-		if (aspect > videoAspect)
+		if (aspect > videoAspect) // x offset
 		{
 			int offset = (screenWidth - screenHeight * videoAspect) / 2;
-			videoX1 += offset;
-			videoX2 -= offset;
+			vertices[0][0] += offset;
+			vertices[3][0] += offset;
+			vertices[1][0] -= offset;
+			vertices[2][0] -= offset;
 		}
-		else
+		else // y offset
 		{
 			int offset = (screenHeight - screenWidth / videoAspect) / 2;
-			videoY1 += offset;
-			videoY2 -= offset;
+			vertices[0][1] += offset;
+			vertices[1][1] += offset;
+			vertices[2][1] -= offset;
+			vertices[3][1] -= offset;
 		}
 	}
 
-	ScrnvidXpos = posX;
-	ScrnvidYpos = posY;
+	Scrnvidpos[0] = posX;
+	Scrnvidpos[1] = posY;
+	Scrnvidpos[2] = 0.0f;
 }
 
 void seq_setScanlineMode(SCANLINE_MODE mode)
