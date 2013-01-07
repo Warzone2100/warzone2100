@@ -28,7 +28,7 @@
 #include "lib/ivis_opengl/piepalette.h"
 #include "lib/ivis_opengl/png_util.h"
 
-#include <QList>
+#include <QtCore/QList>
 #include "screen.h"
 
 //*************************************************************************
