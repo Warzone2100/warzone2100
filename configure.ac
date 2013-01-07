@@ -37,6 +37,7 @@ fi
 AC_PROG_VERSION_CHECK([bison], [1.31])
 
 AC_PROG_LEX
+test "x${LEX}" != "xflex" && AC_MSG_ERROR(flex not found!)
 AC_PROG_VERSION_CHECK([${LEX}], [2.5.33], [2.5.34])
 # Hack to make sure flex produces files with names ylwrap expects.
 FLEX_FLAGS="-o lex.yy.c"
