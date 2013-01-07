@@ -7,6 +7,17 @@
 	objects = {
 
 /* Begin PBXAggregateTarget section */
+		430104BC1698E449006D4583 /* CS-ID */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 430104C21698E4A3006D4583 /* Build configuration list for PBXAggregateTarget "CS-ID" */;
+			buildPhases = (
+				430104BB1698E449006D4583 /* Make CS-ID */,
+			);
+			dependencies = (
+			);
+			name = "CS-ID";
+			productName = "CS-ID";
+		};
 		438B0C05137730FE008184FC /* Fetch Third Party Sources */ = {
 			isa = PBXAggregateTarget;
 			buildConfigurationList = 438B0C0E13773146008184FC /* Build configuration list for PBXAggregateTarget "Fetch Third Party Sources" */;
@@ -42,10 +53,10 @@
 			isa = PBXAggregateTarget;
 			buildConfigurationList = 43F77C8A10F0126F00E04615 /* Build configuration list for PBXAggregateTarget "Make DMGs for Release" */;
 			buildPhases = (
-				43894A8915E17D7800CA1ECC /* Make CS-ID */,
 				43F77C7610F0125E00E04615 /* Make DMG(s) */,
 			);
 			dependencies = (
+				430104C11698E481006D4583 /* PBXTargetDependency */,
 				43AE78FD10F0F4F500FED5D3 /* PBXTargetDependency */,
 				437D32F4150A47EC00B45AAE /* PBXTargetDependency */,
 			);
@@ -731,6 +742,90 @@
 			proxyType = 1;
 			remoteGlobalIDString = 02356D820BD3BB4100E9A019;
 			remoteInfo = Zlib;
+		};
+		430104C01698E481006D4583 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 02356D660BD3BB2600E9A019 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 430104BC1698E449006D4583;
+			remoteInfo = "CS-ID";
+		};
+		430104C31698E4BB006D4583 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 02356D660BD3BB2600E9A019 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 430104BC1698E449006D4583;
+			remoteInfo = "CS-ID";
+		};
+		430104C51698E4EA006D4583 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 02356D660BD3BB2600E9A019 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 430104BC1698E449006D4583;
+			remoteInfo = "CS-ID";
+		};
+		430104C91698E541006D4583 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 02356D660BD3BB2600E9A019 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 430104BC1698E449006D4583;
+			remoteInfo = "CS-ID";
+		};
+		430104CF1698E61D006D4583 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 02356D660BD3BB2600E9A019 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 430104BC1698E449006D4583;
+			remoteInfo = "CS-ID";
+		};
+		430104D11698E629006D4583 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 02356D660BD3BB2600E9A019 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 430104BC1698E449006D4583;
+			remoteInfo = "CS-ID";
+		};
+		430104D61698E684006D4583 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 02356D660BD3BB2600E9A019 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 430104BC1698E449006D4583;
+			remoteInfo = "CS-ID";
+		};
+		430104E11698E6D1006D4583 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 02356D660BD3BB2600E9A019 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 430104BC1698E449006D4583;
+			remoteInfo = "CS-ID";
+		};
+		430104EB1698E7AF006D4583 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 02356D660BD3BB2600E9A019 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 430104BC1698E449006D4583;
+			remoteInfo = "CS-ID";
+		};
+		430104F41698E7FF006D4583 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 02356D660BD3BB2600E9A019 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 430104BC1698E449006D4583;
+			remoteInfo = "CS-ID";
+		};
+		430104FA1698E843006D4583 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 02356D660BD3BB2600E9A019 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 430104BC1698E449006D4583;
+			remoteInfo = "CS-ID";
+		};
+		4301050B1698E8AF006D4583 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 02356D660BD3BB2600E9A019 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 430104BC1698E449006D4583;
+			remoteInfo = "CS-ID";
 		};
 		431843891363954200BA2BC5 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -3642,6 +3737,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 022B2F240BD55816002E64E3 /* Build configuration list for PBXNativeTarget "Gettext" */;
 			buildPhases = (
+				430104F71698E80C006D4583 /* Designated Requirement */,
 				022B2FB70BD55BBA002E64E3 /* Generate headers */,
 				022B2F1D0BD55814002E64E3 /* Headers */,
 				022B2F1E0BD55814002E64E3 /* Resources */,
@@ -3651,6 +3747,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				430104F51698E7FF006D4583 /* PBXTargetDependency */,
 				438B0C12137731A0008184FC /* PBXTargetDependency */,
 			);
 			name = Gettext;
@@ -3696,6 +3793,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 02356D850BD3BB4200E9A019 /* Build configuration list for PBXNativeTarget "Zlib" */;
 			buildPhases = (
+				430104CC1698E553006D4583 /* Designated Requirement */,
 				02356D7E0BD3BB4100E9A019 /* Headers */,
 				02356D7F0BD3BB4100E9A019 /* Resources */,
 				02356D800BD3BB4100E9A019 /* Sources */,
@@ -3704,6 +3802,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				430104CA1698E541006D4583 /* PBXTargetDependency */,
 				438B0C1C13773237008184FC /* PBXTargetDependency */,
 			);
 			name = Zlib;
@@ -3715,6 +3814,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 02356DC40BD3BBFC00E9A019 /* Build configuration list for PBXNativeTarget "Png" */;
 			buildPhases = (
+				430104DB1698E69E006D4583 /* Designated Requirement */,
 				43119DCC1353B08F004C54BB /* Generate headers */,
 				02356DBD0BD3BBFC00E9A019 /* Headers */,
 				02356DBE0BD3BBFC00E9A019 /* Resources */,
@@ -3724,6 +3824,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				430104D71698E684006D4583 /* PBXTargetDependency */,
 				438B0C231377328D008184FC /* PBXTargetDependency */,
 				02356E020BD3BCBF00E9A019 /* PBXTargetDependency */,
 			);
@@ -3736,6 +3837,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 02356E0B0BD3BCFF00E9A019 /* Build configuration list for PBXNativeTarget "Ogg" */;
 			buildPhases = (
+				430104D41698E639006D4583 /* Designated Requirement */,
 				02356E040BD3BCFE00E9A019 /* Headers */,
 				02356E050BD3BCFE00E9A019 /* Resources */,
 				02356E060BD3BCFE00E9A019 /* Sources */,
@@ -3744,6 +3846,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				430104D21698E629006D4583 /* PBXTargetDependency */,
 				438B0C29137732D3008184FC /* PBXTargetDependency */,
 			);
 			name = Ogg;
@@ -3755,6 +3858,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 02DDA7F00BD3C03F0049AB60 /* Build configuration list for PBXNativeTarget "Vorbis" */;
 			buildPhases = (
+				430104F01698E7BE006D4583 /* Designated Requirement */,
 				02DDA7E90BD3C03F0049AB60 /* Headers */,
 				02DDA7EA0BD3C03F0049AB60 /* Resources */,
 				02DDA7EB0BD3C03F0049AB60 /* Sources */,
@@ -3763,6 +3867,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				430104EC1698E7AF006D4583 /* PBXTargetDependency */,
 				438B0C3013773399008184FC /* PBXTargetDependency */,
 				02DDA8690BD3C21E0049AB60 /* PBXTargetDependency */,
 			);
@@ -3775,6 +3880,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 02DDA8B30BD3C2F20049AB60 /* Build configuration list for PBXNativeTarget "PhysFS" */;
 			buildPhases = (
+				430104E51698E6E8006D4583 /* Designated Requirement */,
 				02DDA8AC0BD3C2F20049AB60 /* Headers */,
 				02DDA8AD0BD3C2F20049AB60 /* Resources */,
 				02DDA8AE0BD3C2F20049AB60 /* Sources */,
@@ -3783,6 +3889,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				430104E21698E6D1006D4583 /* PBXTargetDependency */,
 				438B0C37137733DE008184FC /* PBXTargetDependency */,
 				02DDA8D30BD3C3780049AB60 /* PBXTargetDependency */,
 			);
@@ -3795,6 +3902,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 431843501363942500BA2BC5 /* Build configuration list for PBXNativeTarget "MiniUPnPc" */;
 			buildPhases = (
+				430104A91698DC0C006D4583 /* Designated Requirement */,
 				431843461363942200BA2BC5 /* Headers */,
 				431843471363942200BA2BC5 /* Resources */,
 				431843481363942200BA2BC5 /* Sources */,
@@ -3803,6 +3911,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				430104C41698E4BB006D4583 /* PBXTargetDependency */,
 			);
 			name = MiniUPnPc;
 			productName = MiniUPnPc;
@@ -3813,6 +3922,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 43502D571347640800A02A1F /* Build configuration list for PBXNativeTarget "GLExtensionWrangler" */;
 			buildPhases = (
+				430104C81698E4F9006D4583 /* Designated Requirement */,
 				43502D4D1347640700A02A1F /* Headers */,
 				43502D4E1347640700A02A1F /* Resources */,
 				43502D4F1347640700A02A1F /* Sources */,
@@ -3821,6 +3931,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				430104C61698E4EA006D4583 /* PBXTargetDependency */,
 				438B0C17137731E6008184FC /* PBXTargetDependency */,
 			);
 			name = GLExtensionWrangler;
@@ -3832,6 +3943,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 4366718713D1FD5700FE85BA /* Build configuration list for PBXNativeTarget "QuesoGLC" */;
 			buildPhases = (
+				430105201698E910006D4583 /* Designated Requirement */,
 				4366717D13D1FD5600FE85BA /* Headers */,
 				4366717E13D1FD5600FE85BA /* Resources */,
 				4366717F13D1FD5600FE85BA /* Sources */,
@@ -3840,8 +3952,9 @@
 			buildRules = (
 			);
 			dependencies = (
-				43A5C28E14266DC4009A415F /* PBXTargetDependency */,
+				4301050C1698E8AF006D4583 /* PBXTargetDependency */,
 				4366718913D1FD6100FE85BA /* PBXTargetDependency */,
+				43A5C28E14266DC4009A415F /* PBXTargetDependency */,
 				43CEAE26141D71D10001637B /* PBXTargetDependency */,
 				43CCDCD814BA3E1100B21363 /* PBXTargetDependency */,
 				43CCDDBD14BA53E700B21363 /* PBXTargetDependency */,
@@ -3855,6 +3968,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 43CCDD1714BA474E00B21363 /* Build configuration list for PBXNativeTarget "Fribidi" */;
 			buildPhases = (
+				430104CE1698E5DD006D4583 /* Designated Requirement */,
 				43CCDCF914BA474E00B21363 /* Headers */,
 				43CCDD0514BA474E00B21363 /* Resources */,
 				43CCDD0614BA474E00B21363 /* Sources */,
@@ -3863,6 +3977,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				430104D01698E61D006D4583 /* PBXTargetDependency */,
 				43CCDCF714BA474E00B21363 /* PBXTargetDependency */,
 			);
 			name = Fribidi;
@@ -3874,6 +3989,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 97AEAB300E8C1B5200A10721 /* Build configuration list for PBXNativeTarget "Theora" */;
 			buildPhases = (
+				430105011698E871006D4583 /* Designated Requirement */,
 				97AEAAEE0E8C1B5200A10721 /* Headers */,
 				97AEAB160E8C1B5200A10721 /* Resources */,
 				97AEAB170E8C1B5200A10721 /* Sources */,
@@ -3882,6 +3998,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				430104FB1698E843006D4583 /* PBXTargetDependency */,
 				438B0C4113773421008184FC /* PBXTargetDependency */,
 				97AEAAEB0E8C1B5200A10721 /* PBXTargetDependency */,
 				97AEAB770E8C1C4800A10721 /* PBXTargetDependency */,
@@ -3958,6 +4075,7 @@
 			targets = (
 				02356D740BD3BB3400E9A019 /* Warzone */,
 				43D180771336B6BF001906EB /* Autorevision */,
+				430104BC1698E449006D4583 /* CS-ID */,
 				43FA570C10FF8E9B0074E914 /* Setup Prebuilt Components */,
 				438B0C05137730FE008184FC /* Fetch Third Party Sources */,
 				4318434A1363942200BA2BC5 /* MiniUPnPc */,
@@ -4171,6 +4289,185 @@
 			shellPath = /bin/sh;
 			shellScript = "# Config\nexport PATH=$PATH:/sw/bin:/opt/local/bin\ndestdata=\"${CONFIGURATION_BUILD_DIR}/Warzone.app/Contents/Resources/\"\ndatadir=\"../data\"\n\nif ! rsync -vcrlpt --del ${datadir} \"${destdata}\"; then\n    exit ${?}\nfi\n\nexit 0";
 		};
+		430104A91698DC0C006D4583 /* Designated Requirement */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Designated Requirement";
+			outputPaths = (
+				"$(CODE_SIGN_REQUIREMENTS_PATH)",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/bash;
+			shellScript = ". configs/frameworkrequirement.sh";
+		};
+		430104BB1698E449006D4583 /* Make CS-ID */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Make CS-ID";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = ". configs/fetchscripts/SetupPrebuiltComponents-CS-ID.sh";
+		};
+		430104C81698E4F9006D4583 /* Designated Requirement */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Designated Requirement";
+			outputPaths = (
+				"$(CODE_SIGN_REQUIREMENTS_PATH)",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/bash;
+			shellScript = ". configs/frameworkrequirement.sh";
+		};
+		430104CC1698E553006D4583 /* Designated Requirement */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Designated Requirement";
+			outputPaths = (
+				"$(CODE_SIGN_REQUIREMENTS_PATH)",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/bash;
+			shellScript = ". configs/frameworkrequirement.sh";
+		};
+		430104CE1698E5DD006D4583 /* Designated Requirement */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Designated Requirement";
+			outputPaths = (
+				"$(CODE_SIGN_REQUIREMENTS_PATH)",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/bash;
+			shellScript = ". configs/frameworkrequirement.sh";
+		};
+		430104D41698E639006D4583 /* Designated Requirement */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Designated Requirement";
+			outputPaths = (
+				"$(CODE_SIGN_REQUIREMENTS_PATH)",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/bash;
+			shellScript = ". configs/frameworkrequirement.sh";
+		};
+		430104DB1698E69E006D4583 /* Designated Requirement */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Designated Requirement";
+			outputPaths = (
+				"$(CODE_SIGN_REQUIREMENTS_PATH)",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/bash;
+			shellScript = ". configs/frameworkrequirement.sh";
+		};
+		430104E51698E6E8006D4583 /* Designated Requirement */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Designated Requirement";
+			outputPaths = (
+				"$(CODE_SIGN_REQUIREMENTS_PATH)",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/bash;
+			shellScript = ". configs/frameworkrequirement.sh";
+		};
+		430104F01698E7BE006D4583 /* Designated Requirement */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Designated Requirement";
+			outputPaths = (
+				"$(CODE_SIGN_REQUIREMENTS_PATH)",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/bash;
+			shellScript = ". configs/frameworkrequirement.sh";
+		};
+		430104F71698E80C006D4583 /* Designated Requirement */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Designated Requirement";
+			outputPaths = (
+				"$(CODE_SIGN_REQUIREMENTS_PATH)",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/bash;
+			shellScript = ". configs/frameworkrequirement.sh";
+		};
+		430105011698E871006D4583 /* Designated Requirement */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Designated Requirement";
+			outputPaths = (
+				"$(CODE_SIGN_REQUIREMENTS_PATH)",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/bash;
+			shellScript = ". configs/frameworkrequirement.sh";
+		};
+		430105201698E910006D4583 /* Designated Requirement */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Designated Requirement";
+			outputPaths = (
+				"$(CODE_SIGN_REQUIREMENTS_PATH)",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/bash;
+			shellScript = ". configs/frameworkrequirement.sh";
+		};
 		43025CD1111FB66E006C49B1 /* i18n */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -4268,20 +4565,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = ". configs/fetchscripts/SetupPrebuiltComponents-SDL.sh";
-		};
-		43894A8915E17D7800CA1ECC /* Make CS-ID */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Make CS-ID";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = ". configs/fetchscripts/SetupPrebuiltComponents-CS-ID.sh";
 		};
 		438B0C101377317F008184FC /* Gettext - Fetch source */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -4984,6 +5267,66 @@
 			target = 02356D820BD3BB4100E9A019 /* Zlib */;
 			targetProxy = 02DDA8D20BD3C3780049AB60 /* PBXContainerItemProxy */;
 		};
+		430104C11698E481006D4583 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 430104BC1698E449006D4583 /* CS-ID */;
+			targetProxy = 430104C01698E481006D4583 /* PBXContainerItemProxy */;
+		};
+		430104C41698E4BB006D4583 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 430104BC1698E449006D4583 /* CS-ID */;
+			targetProxy = 430104C31698E4BB006D4583 /* PBXContainerItemProxy */;
+		};
+		430104C61698E4EA006D4583 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 430104BC1698E449006D4583 /* CS-ID */;
+			targetProxy = 430104C51698E4EA006D4583 /* PBXContainerItemProxy */;
+		};
+		430104CA1698E541006D4583 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 430104BC1698E449006D4583 /* CS-ID */;
+			targetProxy = 430104C91698E541006D4583 /* PBXContainerItemProxy */;
+		};
+		430104D01698E61D006D4583 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 430104BC1698E449006D4583 /* CS-ID */;
+			targetProxy = 430104CF1698E61D006D4583 /* PBXContainerItemProxy */;
+		};
+		430104D21698E629006D4583 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 430104BC1698E449006D4583 /* CS-ID */;
+			targetProxy = 430104D11698E629006D4583 /* PBXContainerItemProxy */;
+		};
+		430104D71698E684006D4583 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 430104BC1698E449006D4583 /* CS-ID */;
+			targetProxy = 430104D61698E684006D4583 /* PBXContainerItemProxy */;
+		};
+		430104E21698E6D1006D4583 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 430104BC1698E449006D4583 /* CS-ID */;
+			targetProxy = 430104E11698E6D1006D4583 /* PBXContainerItemProxy */;
+		};
+		430104EC1698E7AF006D4583 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 430104BC1698E449006D4583 /* CS-ID */;
+			targetProxy = 430104EB1698E7AF006D4583 /* PBXContainerItemProxy */;
+		};
+		430104F51698E7FF006D4583 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 430104BC1698E449006D4583 /* CS-ID */;
+			targetProxy = 430104F41698E7FF006D4583 /* PBXContainerItemProxy */;
+		};
+		430104FB1698E843006D4583 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 430104BC1698E449006D4583 /* CS-ID */;
+			targetProxy = 430104FA1698E843006D4583 /* PBXContainerItemProxy */;
+		};
+		4301050C1698E8AF006D4583 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 430104BC1698E449006D4583 /* CS-ID */;
+			targetProxy = 4301050B1698E8AF006D4583 /* PBXContainerItemProxy */;
+		};
 		4318438A1363954200BA2BC5 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 4318434A1363942200BA2BC5 /* MiniUPnPc */;
@@ -5318,6 +5661,27 @@
 			};
 			name = Release;
 		};
+		430104BD1698E449006D4583 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "CS-ID";
+			};
+			name = Debug;
+		};
+		430104BE1698E449006D4583 /* StaticAnalyzer */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "CS-ID";
+			};
+			name = StaticAnalyzer;
+		};
+		430104BF1698E449006D4583 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "CS-ID";
+			};
+			name = Release;
+		};
 		4318434D1363942500BA2BC5 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 431843631363946800BA2BC5 /* MiniUPnPc-Debug.xcconfig */;
@@ -5645,6 +6009,16 @@
 				02DDA8B40BD3C2F20049AB60 /* Debug */,
 				4389DBDF111B0A0700B98DEF /* StaticAnalyzer */,
 				02DDA8B50BD3C2F20049AB60 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		430104C21698E4A3006D4583 /* Build configuration list for PBXAggregateTarget "CS-ID" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				430104BD1698E449006D4583 /* Debug */,
+				430104BE1698E449006D4583 /* StaticAnalyzer */,
+				430104BF1698E449006D4583 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;

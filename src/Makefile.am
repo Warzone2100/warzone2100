@@ -7,13 +7,15 @@ AM_YFLAGS = -d
 .PHONY: autorevision.h
 
 autorevision.h autorevision.cache:
-	(cd $(top_srcdir) && ./build_tools/autorevision -t h -o  $(abs_top_builddir)/src/autorevision.cache > $(abs_top_builddir)/src/autorevision.h)
-
-BUILT_SOURCES = \
-	$(CLEANFILES)
+	cd $(top_srcdir) && ./build_tools/autorevision -t h -o $(abs_builddir)/autorevision.cache > $(abs_builddir)/autorevision.h.new
+	cmp -s autorevision.h.new autorevision.h || mv -f autorevision.h.new autorevision.h
 
 CLEANFILES = \
+	$(BUILT_SOURCES) \
 	autorevision.cache \
+	autorevision.h.new
+
+BUILT_SOURCES = \
 	autorevision.h \
 	scriptvals_parser.h
 
