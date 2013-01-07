@@ -1356,7 +1356,6 @@ void actionUpdateDroid(DROID *psDroid)
 		//hmmm, hope this doesn't cause any problems!
 		if (gameTime > psDroid->actionStarted)
 		{
-// 			debug( LOG_NEVER, "sulk over.. %p", psDroid );
 			psDroid->action = DACTION_NONE;			// Sulking is over lets get back to the action ... is this all I need to do to get it back into the action?
 		}
 		break;
@@ -1416,13 +1415,7 @@ void actionUpdateDroid(DROID *psDroid)
 							if (droidStartBuild(psDroid))
 							{
 								syncDebug("Reached build target: tower");
-								debug( LOG_NEVER, "DACTION_MOVETOBUILD: start foundation");
 								psDroid->action = DACTION_BUILD;
-							}
-							else
-							{
-								syncDebug("Reached build target: wall-in-way");
-								psDroid->action = DACTION_NONE;
 							}
 					}
 					else
@@ -1438,7 +1431,7 @@ void actionUpdateDroid(DROID *psDroid)
 					objTrace(psDroid->id, "DACTION_MOVETOBUILD: !validLocation");
 					cancelBuild(psDroid);
 				}
-				else // too far away
+				else // is ok
 				{
 					syncDebug("Reached build target: build");
 					psDroid->action = DACTION_BUILD_FOUNDATION;
@@ -1473,32 +1466,26 @@ void actionUpdateDroid(DROID *psDroid)
 							// building a gun tower over a wall - OK
 							if (droidStartBuild(psDroid))
 							{
-								debug( LOG_NEVER, "DACTION_MOVETOBUILD: start foundation");
+								objTrace(psDroid->id, "DACTION_MOVETOBUILD: start building");
 								psDroid->action = DACTION_BUILD;
-							}
-							else
-							{
-								psDroid->action = DACTION_NONE;
 							}
 						}
 						else
 						{
-							psDroid->action = DACTION_NONE;
+							objTrace(psDroid->id, "DACTION_MOVETOBUILD: line build hit building");
+							cancelBuild(psDroid);
 						}
 					}
 					else
 					{
-						psDroid->action = DACTION_NONE;
+						objTrace(psDroid->id, "DACTION_MOVETOBUILD: blocked line build");
+						cancelBuild(psDroid);
 					}
 				}
 				else if (droidStartBuild(psDroid))
 				{
 					psDroid->action = DACTION_BUILD;
 					intBuildStarted(psDroid);
-				}
-				else
-				{
-					psDroid->action = DACTION_NONE;
 				}
 			}
 			else
@@ -1512,14 +1499,9 @@ void actionUpdateDroid(DROID *psDroid)
 				// continuing a partially built structure (order = helpBuild)
 				if (droidStartBuild(psDroid))
 				{
-					debug( LOG_NEVER, "DACTION_MOVETOBUILD: starting help build");
+					objTrace(psDroid->id, "DACTION_MOVETOBUILD: starting help build");
 					psDroid->action = DACTION_BUILD;
 					intBuildStarted(psDroid);
-				}
-				else
-				{
-					debug( LOG_NEVER, "DACTION_MOVETOBUILD: giving up (3)");
-					psDroid->action = DACTION_NONE;
 				}
 			}
 		}
@@ -1679,15 +1661,14 @@ void actionUpdateDroid(DROID *psDroid)
 	case DACTION_BUILD_FOUNDATION:
 		if (!order->psStats)
 		{
+			objTrace(psDroid->id, "DACTION_BUILD_FOUNDATION: lost target stats");
 			psDroid->action = DACTION_NONE;
 			break;
 		}
-		//building a structure's foundation - flattening the ground for now
+		else
 		{
 			MAPTILE* const psTile = mapTile(map_coord(order->pos.x), map_coord(order->pos.y));
-			if ((order->psObj == NULL) &&
-				(TileHasStructure(psTile) ||
-				TileHasFeature(psTile)))
+			if ((order->psObj == NULL) && (TileHasStructure(psTile) || TileHasFeature(psTile)))
 			{
 				if (TileHasStructure(psTile))
 				{
@@ -1700,30 +1681,33 @@ void actionUpdateDroid(DROID *psDroid)
 					}
 					else
 					{
-						psDroid->action = DACTION_NONE;
+						objTrace(psDroid->id, "DACTION_BUILD_FOUNDATION: blocked");
+						cancelBuild(psDroid);
+						break;
 					}
 				}
 				else if (!validLocation(order->psStats, order->pos, order->direction, psDroid->player, false))
 				{
-					psDroid->action = DACTION_NONE;
+					objTrace(psDroid->id, "DACTION_BUILD_FOUNDATION: not valid location");
+					cancelBuild(psDroid);
+					break;
 				}
 			}
 
 			//ready to start building the structure
 			DroidStartBuild dsb;
-			if ( psDroid->action != DACTION_NONE &&
-				(dsb = droidStartBuild(psDroid)))
+			if (psDroid->action != DACTION_NONE && (dsb = droidStartBuild(psDroid)))
 			{
 				if (dsb == DroidStartBuildSuccess)  // Not if waiting for oil to finish burning.
 				{
-					debug( LOG_NEVER, "DACTION_BUILD_FOUNDATION: start build");
+					objTrace(psDroid->id, "DACTION_BUILD_FOUNDATION: start build");
 					psDroid->action = DACTION_BUILD;
 				}
 			}
 			else
 			{
-				debug( LOG_NEVER, "DACTION_BUILD_FOUNDATION: giving up");
-				psDroid->action = DACTION_NONE;
+				objTrace(psDroid->id, "DACTION_BUILD_FOUNDATION: giving up");
+				cancelBuild(psDroid);
 			}
 		}
 		break;
