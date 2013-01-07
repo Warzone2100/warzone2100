@@ -2183,9 +2183,7 @@ bool orderStateStatsLoc(DROID *psDroid, DROID_ORDER order, BASE_STATS **ppsStats
 		break;
 	case DORDER_BUILD:
 	case DORDER_LINEBUILD:
-		if (psDroid->action == DACTION_MOVETOBUILD ||
-			psDroid->action == DACTION_BUILD_FOUNDATION ||
-			psDroid->action == DACTION_FOUNDATION_WANDER)
+		if (psDroid->action == DACTION_MOVETOBUILD)
 		{
 			*ppsStats = psDroid->order.psStats;
 			*pX = psDroid->order.pos.x;

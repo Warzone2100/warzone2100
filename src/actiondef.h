@@ -33,7 +33,7 @@ enum DROID_ACTION
 	DACTION_NONE,					///< 0 not doing anything
 	DACTION_MOVE,					///< 1 moving to a location
 	DACTION_BUILD,					///< 2 building a structure
-	DACTION_BUILD_FOUNDATION,			///< 3 building a foundation for a structure
+	DACTION_UNUSED3,				///< 3 used to be building a foundation for a structure
 	DACTION_DEMOLISH,				///< 4 demolishing a structure
 	DACTION_REPAIR,					///< 5 repairing a structure
 	DACTION_ATTACK,					///< 6 attacking something
@@ -55,7 +55,7 @@ enum DROID_ACTION
 	DACTION_MOVETODEMOLISH,				///< 19 moving to a new demolition location
 	DACTION_MOVETOREPAIR,				///< 20 moving to a new repair location
 	DACTION_BUILDWANDER,				///< 21 moving around while building
-	DACTION_FOUNDATION_WANDER,			///< 22 moving around while building the foundation
+	DACTION_UNUSED4,				///< 22 used to be moving around while building the foundation
 	DACTION_MOVETOATTACK,				///< 23 moving to a target to attack
 	DACTION_ROTATETOATTACK,				///< 24 rotating to a target to attack
 	DACTION_MOVETOOBSERVE,				///< 25 moving to be able to see a target

@@ -1431,10 +1431,10 @@ void actionUpdateDroid(DROID *psDroid)
 					objTrace(psDroid->id, "DACTION_MOVETOBUILD: !validLocation");
 					cancelBuild(psDroid);
 				}
-				else // is ok
+				else if (droidStartBuild(psDroid))
 				{
 					syncDebug("Reached build target: build");
-					psDroid->action = DACTION_BUILD_FOUNDATION;
+					psDroid->action = DACTION_BUILD;
 					psDroid->actionStarted = gameTime;
 					psDroid->actionPoints = 0;
 				}
@@ -1656,59 +1656,6 @@ void actionUpdateDroid(DROID *psDroid)
 		{
 			moveDroidToNoFormation(psDroid, psDroid->psActionTarget[0]->pos.x,
 						psDroid->psActionTarget[0]->pos.y);
-		}
-		break;
-	case DACTION_BUILD_FOUNDATION:
-		if (!order->psStats)
-		{
-			objTrace(psDroid->id, "DACTION_BUILD_FOUNDATION: lost target stats");
-			psDroid->action = DACTION_NONE;
-			break;
-		}
-		else
-		{
-			MAPTILE* const psTile = mapTile(map_coord(order->pos.x), map_coord(order->pos.y));
-			if ((order->psObj == NULL) && (TileHasStructure(psTile) || TileHasFeature(psTile)))
-			{
-				if (TileHasStructure(psTile))
-				{
-					// structure on the build location - see if it is the same type
-					STRUCTURE* const psStruct = getTileStructure(map_coord(order->pos.x), map_coord(order->pos.y));
-					if (psStruct->pStructureType == order->psStats)
-					{
-						// same type - do a help build
-						setDroidTarget(psDroid, psStruct);
-					}
-					else
-					{
-						objTrace(psDroid->id, "DACTION_BUILD_FOUNDATION: blocked");
-						cancelBuild(psDroid);
-						break;
-					}
-				}
-				else if (!validLocation(order->psStats, order->pos, order->direction, psDroid->player, false))
-				{
-					objTrace(psDroid->id, "DACTION_BUILD_FOUNDATION: not valid location");
-					cancelBuild(psDroid);
-					break;
-				}
-			}
-
-			//ready to start building the structure
-			DroidStartBuild dsb;
-			if (psDroid->action != DACTION_NONE && (dsb = droidStartBuild(psDroid)))
-			{
-				if (dsb == DroidStartBuildSuccess)  // Not if waiting for oil to finish burning.
-				{
-					objTrace(psDroid->id, "DACTION_BUILD_FOUNDATION: start build");
-					psDroid->action = DACTION_BUILD;
-				}
-			}
-			else
-			{
-				objTrace(psDroid->id, "DACTION_BUILD_FOUNDATION: giving up");
-				cancelBuild(psDroid);
-			}
 		}
 		break;
 	case DACTION_OBSERVE:
