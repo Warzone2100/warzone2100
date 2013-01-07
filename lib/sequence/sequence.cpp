@@ -742,7 +742,7 @@ bool seq_Play(const char* filename)
 	{
 		if (videodata.ti.frame_width > texture_width || videodata.ti.frame_height > texture_height)
 		{
-			debug(LOG_ERROR, "Video size too large, must be below %dx%d!",
+			debug(LOG_ERROR, "Video size too large, must be below %.gx%.g!",
 					texture_width, texture_height);
 			return false;
 		}
