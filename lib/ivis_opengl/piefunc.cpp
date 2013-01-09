@@ -161,43 +161,6 @@ void pie_DrawSkybox(float scale, int u, int v, int w, int h)
 	glPopAttrib();
 }
 
-/// Draws a fog colored box which is wider at the top
-void pie_DrawFogBox(float left, float right, float front, float back, float height, float wider)
-{
-	PIELIGHT fog_colour = pie_GetFogColour();
-
-	pie_SetTexturePage(TEXPAGE_NONE);
-
-	glColor4ub(fog_colour.byte.r,fog_colour.byte.g,fog_colour.byte.b,0xFF);
-
-	pie_SetRendMode(REND_OPAQUE);
-
-	glPushAttrib(GL_DEPTH_BUFFER_BIT | GL_ENABLE_BIT | GL_FOG_BIT);
-	// no use in updating the depth buffer
-	glDepthMask(GL_FALSE);
-	glDisable(GL_FOG);
-	glBegin(GL_QUAD_STRIP);
-		// Front
-		glVertex3f(-left, 0, front); // bottom left
-		glVertex3f(-left-wider, height, front+wider); // top left
-		glVertex3f( right, 0, front); // bottom right
-		glVertex3f( right+wider, height, front+wider); // top right
-
-		// Right
-		glVertex3f( right, 0,-back); // bottom r
-		glVertex3f( right+wider, height,-back-wider); // top r
-
-		// Back
-		glVertex3f(-left, 0, -back); // bottom right
-		glVertex3f(-left-wider, height, -back-wider); // top right
-
-		// Left
-		glVertex3f(-left, 0, front); // bottom r
-		glVertex3f(-left-wider, height, front+wider); // top r
-	glEnd();
-	glPopAttrib();
-}
-
 UBYTE pie_ByteScale(UBYTE a, UBYTE b)
 {
 	return ((UDWORD)a * (UDWORD)b) >> 8;

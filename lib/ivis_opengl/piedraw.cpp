@@ -404,28 +404,6 @@ static void pie_DrawShadow(iIMDShape *shape, int flag, int flag_data, Vector3f* 
 		glVertex3f(pVertices[a].x, scale_y(pVertices[a].y, flag, flag_data), pVertices[a].z);
 	}
 	glEnd();
-
-#ifdef SHOW_SHADOW_EDGES
-	glDisable(GL_DEPTH_TEST);
-	glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
-
-	glColor4ub(0xFF, 0, 0, 0xFF);
-	glBegin(GL_LINES);
-	for(i = 0; i < edge_count; i++)
-	{
-		int a = drawlist[i].from, b = drawlist[i].to;
-		if(a < 0)
-		{
-			continue;
-		}
-
-		glVertex3f(pVertices[b].x, scale_y(pVertices[b].y, flag, flag_data), pVertices[b].z);
-		glVertex3f(pVertices[a].x, scale_y(pVertices[a].y, flag, flag_data), pVertices[a].z);
-	}
-	glEnd();
-	glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
-	glEnable(GL_DEPTH_TEST);
-#endif
 }
 
 static void inverse_matrix(const float * src, float * dst)
