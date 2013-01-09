@@ -143,7 +143,6 @@ static std::vector<TranslucentShape> tshapes;
 
 static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELIGHT teamcolour, int pieFlag, int pieFlagData)
 {
-	iIMDPoly *pPolys;
 	bool light = true;
 	bool shaders = pie_GetShaderUsage();
 
@@ -232,31 +231,29 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELI
 
 	frame %= MAX(1, shape->numFrames);
 
-	glBegin(GL_TRIANGLES);
-	for (pPolys = shape->polys; pPolys < shape->polys + shape->npolys; pPolys++)
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_NORMAL_ARRAY);
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+	glVertexPointer(3, GL_FLOAT, 0, shape->vertices);
+	glNormalPointer(GL_FLOAT, 0, shape->normals);
+	glTexCoordPointer(2, GL_FLOAT, 0, shape->texcoords[frame]);
+	if (!shaders)
 	{
-		unsigned int frameidx = frame;
-
-		if (!(pPolys->flags & iV_IMD_TEXANIM))
-		{
-			frameidx = 0;
-		}
-
-		polyCount++;
-
-		glNormal3fv((GLfloat*)&pPolys->normal);
-		for (int n = 0; n < 3; n++)
-		{
-			GLfloat* texCoord = (GLfloat*)&pPolys->texCoord[frameidx * 3 + n];
-			glTexCoord2fv(texCoord);
-			if (!shaders)
-			{
-				glMultiTexCoord2fv(GL_TEXTURE1, texCoord);
-			}
-			glVertex3fv((GLfloat*)&shape->points[pPolys->pindex[n]]);
-		}
+		glClientActiveTexture(GL_TEXTURE1);
+		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+		glTexCoordPointer(2, GL_FLOAT, 0, shape->texcoords[frame]);
 	}
-	glEnd();
+	glDrawArrays(GL_TRIANGLES, 0, shape->npolys * 3);
+	if (!shaders)
+	{
+		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+		glClientActiveTexture(GL_TEXTURE0);
+	}
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_NORMAL_ARRAY);
+	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+
+	polyCount += shape->npolys;
 
 	if (light || (pieFlag & pie_BUTTON))
 	{

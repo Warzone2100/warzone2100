@@ -507,7 +507,7 @@ static iIMDShape *_imd_load_level(const char **ppFileData, const char *FileDataE
 	i = sscanf(pFileData, "%255s %n", buffer, &cnt);
 	ASSERT_OR_RETURN(NULL, i == 1, "Bad directive following LEVEL");
 
-	s = (iIMDShape*)malloc(sizeof(iIMDShape));
+	s = new iIMDShape;
 	if (s == NULL)
 	{
 		/* Failed to allocate memory for s */
@@ -581,7 +581,6 @@ static iIMDShape *_imd_load_level(const char **ppFileData, const char *FileDataE
 
 	_imd_load_polys( &pFileData, s, pieVersion);
 
-
 	// NOW load optional stuff
 	while (!AtEndOfFile(pFileData, FileDataEnd)) // check for end of file (give or take white space)
 	{
@@ -610,6 +609,58 @@ static iIMDShape *_imd_load_level(const char **ppFileData, const char *FileDataE
 			debug(LOG_ERROR, "(_load_level) unexpected directive %s %d", buffer, n);
 			break;
 		}
+	}
+
+	// FINALLY, massage the data into what can stream directly to OpenGL
+	s->vertices = (GLfloat *)malloc(sizeof(GLfloat) * 3 * s->npolys * 3);
+	s->normals = (GLfloat *)malloc(sizeof(GLfloat) * 3 * s->npolys * 3);
+	for (i = 0; i < MAX(1, s->numFrames); i++)
+	{
+		GLfloat *ptr = (GLfloat *)malloc(sizeof(GLfloat) * 2 * s->npolys * 3);
+		s->texcoords.push_back(ptr);
+	}
+	i = 0;
+	for (iIMDPoly *pPolys = s->polys; pPolys < s->polys + s->npolys; pPolys++)
+	{
+		// each of the 3 vertices has one normal coordinate in 3 dimensions (increment of 9)
+		s->normals[i * 9 + 0] = pPolys->normal.x;
+		s->normals[i * 9 + 1] = pPolys->normal.y;
+		s->normals[i * 9 + 2] = pPolys->normal.z;
+		s->normals[i * 9 + 3] = pPolys->normal.x;
+		s->normals[i * 9 + 4] = pPolys->normal.y;
+		s->normals[i * 9 + 5] = pPolys->normal.z;
+		s->normals[i * 9 + 6] = pPolys->normal.x;
+		s->normals[i * 9 + 7] = pPolys->normal.y;
+		s->normals[i * 9 + 8] = pPolys->normal.z;
+
+		// each polygon has 3 texel coordinates in 2 dimensions (increment of 6)
+		for (int j = 0; j < s->texcoords.size(); j++)
+		{
+			// if texture animation flag is present, fetch animation coordinates for this polygon
+			// otherwise just show the first set of texel coordinates
+			int k = (pPolys->flags & iV_IMD_TEXANIM) ? j : 0;
+
+			GLfloat *texcoords = s->texcoords[j];
+			texcoords[i * 6 + 0] = pPolys->texCoord[k * 3 + 0].x;
+			texcoords[i * 6 + 1] = pPolys->texCoord[k * 3 + 0].y;
+			texcoords[i * 6 + 2] = pPolys->texCoord[k * 3 + 1].x;
+			texcoords[i * 6 + 3] = pPolys->texCoord[k * 3 + 1].y;
+			texcoords[i * 6 + 4] = pPolys->texCoord[k * 3 + 2].x;
+			texcoords[i * 6 + 5] = pPolys->texCoord[k * 3 + 2].y;
+		}
+
+		// each polygon has 3 texture coordinates in 3 dimensions (increment of 9)
+		s->vertices[i * 9 + 0] = s->points[pPolys->pindex[0]].x;
+		s->vertices[i * 9 + 1] = s->points[pPolys->pindex[0]].y;
+		s->vertices[i * 9 + 2] = s->points[pPolys->pindex[0]].z;
+		s->vertices[i * 9 + 3] = s->points[pPolys->pindex[1]].x;
+		s->vertices[i * 9 + 4] = s->points[pPolys->pindex[1]].y;
+		s->vertices[i * 9 + 5] = s->points[pPolys->pindex[1]].z;
+		s->vertices[i * 9 + 6] = s->points[pPolys->pindex[2]].x;
+		s->vertices[i * 9 + 7] = s->points[pPolys->pindex[2]].y;
+		s->vertices[i * 9 + 8] = s->points[pPolys->pindex[2]].z;
+
+		i++;
 	}
 
 	*ppFileData = pFileData;

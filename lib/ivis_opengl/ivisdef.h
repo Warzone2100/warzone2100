@@ -30,6 +30,7 @@
 #define _ivisdef_h
 
 #include "lib/framework/frame.h"
+#include "lib/framework/opengl.h"
 #include "pietypes.h"
 
 #include <vector>
@@ -102,6 +103,10 @@ struct iIMDShape
 	EDGE *shadowEdgeList;
 	float material[LIGHT_MAX][4];
 	float shininess;
+
+	GLfloat *vertices;
+	GLfloat *normals;
+	std::vector<GLfloat *> texcoords;
 
 	iIMDShape *next;  // next pie in multilevel pies (NULL for non multilevel !)
 };

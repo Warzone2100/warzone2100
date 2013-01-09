@@ -61,8 +61,14 @@ void iV_IMDRelease(iIMDShape *s)
 			free(s->shadowEdgeList);
 			s->shadowEdgeList = NULL;
 		}
+		free(s->vertices);
+		free(s->normals);
+		for (i = 0; i < s->texcoords.size(); i++)
+		{
+			free(s->texcoords[i]);
+		}
 		d = s->next;
-		free(s);
+		delete s;
 		iV_IMDRelease(d);
 	}
 }
