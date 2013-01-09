@@ -1227,11 +1227,7 @@ void formDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pCo
 		x1 = x0 + psWidget->width;
 		y1 = y0 + psWidget->height;
 
-		pie_BoxFill(x0 + 1, y0 + 1, x1 - 1, y1 - 1, pColours[WCOL_BKGRND]);
-		iV_Line(x0, y1, x0, y0, pColours[WCOL_LIGHT]);
-		iV_Line(x0, y0, x1, y0, pColours[WCOL_LIGHT]);
-		iV_Line(x1, y0, x1, y1, pColours[WCOL_DARK]);
-		iV_Line(x1, y1, x0, y1, pColours[WCOL_DARK]);
+		iV_ShadowBox(x0, y0, x1, y1, 1, pColours[WCOL_LIGHT], pColours[WCOL_DARK], pColours[WCOL_BKGRND]);
 	}
 }
 
@@ -1248,25 +1244,14 @@ void formDisplayClickable(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIEL
 	x1 = x0 + psWidget->width;
 	y1 = y0 + psWidget->height;
 
-	/* Fill the background */
-	pie_BoxFill(x0 + 1, y0 + 1, x1 - 1, y1 - 1, pColours[WCOL_BKGRND]);
-
 	/* Display the border */
 	if (psForm->state & (WCLICK_DOWN | WCLICK_LOCKED | WCLICK_CLICKLOCK))
 	{
-		/* Form down */
-		iV_Line(x0, y1, x0, y0, pColours[WCOL_DARK]);
-		iV_Line(x0, y0, x1, y0, pColours[WCOL_DARK]);
-		iV_Line(x1, y0, x1, y1, pColours[WCOL_LIGHT]);
-		iV_Line(x1, y1, x0, y1, pColours[WCOL_LIGHT]);
+		iV_ShadowBox(x0, y0, x1, y1, 1, pColours[WCOL_DARK], pColours[WCOL_LIGHT], pColours[WCOL_BKGRND]);
 	}
 	else
 	{
-		/* Form up */
-		iV_Line(x0, y1, x0, y0, pColours[WCOL_LIGHT]);
-		iV_Line(x0, y0, x1, y0, pColours[WCOL_LIGHT]);
-		iV_Line(x1, y0, x1, y1, pColours[WCOL_DARK]);
-		iV_Line(x1, y1, x0, y1, pColours[WCOL_DARK]);
+		iV_ShadowBox(x0, y0, x1, y1, 1, pColours[WCOL_LIGHT], pColours[WCOL_DARK], pColours[WCOL_BKGRND]);
 	}
 }
 

@@ -269,11 +269,7 @@ void barGraphDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT 
 	}
 
 	/* Now draw the graph */
-	pie_BoxFill(x0, y0, x1, y1, psBGraph->majorCol);
-	iV_Line(x0, y1, x0, y0, pColours[WCOL_LIGHT]);
-	iV_Line(x0, y0, x1, y0, pColours[WCOL_LIGHT]);
-	iV_Line(x1, y0, x1, y1, pColours[WCOL_DARK]);
-	iV_Line(x0, y1, x1, y1, pColours[WCOL_DARK]);
+	iV_ShadowBox(x0, y0, x1, y1, 0, pColours[WCOL_LIGHT], pColours[WCOL_DARK], psBGraph->majorCol);
 
 	barGraphDisplayText(psBGraph, x0, x1, y1, pColours);
 }
@@ -345,19 +341,11 @@ void barGraphDisplayDouble(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIE
 	/* Draw the minor bar graph */
 	if (psBGraph->minorSize > 0)
 	{
-		pie_BoxFill(x2, y2, x3, y3, psBGraph->minorCol);
-		iV_Line(x2, y3, x2, y2, pColours[WCOL_LIGHT]);
-		iV_Line(x2, y2, x3, y2, pColours[WCOL_LIGHT]);
-		iV_Line(x3, y2, x3, y3, pColours[WCOL_DARK]);
-		iV_Line(x2, y3, x3, y3, pColours[WCOL_DARK]);
+		iV_ShadowBox(x2, y2, x3, y3, 0, pColours[WCOL_LIGHT], pColours[WCOL_DARK], psBGraph->minorCol);
 	}
 
 	/* Draw the major bar graph */
-	pie_BoxFill(x0, y0, x1, y1, psBGraph->majorCol);
-	iV_Line(x0, y1, x0, y0, pColours[WCOL_LIGHT]);
-	iV_Line(x0, y0, x1, y0, pColours[WCOL_LIGHT]);
-	iV_Line(x1, y0, x1, y1, pColours[WCOL_DARK]);
-	iV_Line(x0, y1, x1, y1, pColours[WCOL_DARK]);
+	iV_ShadowBox(x0, y0, x1, y1, 0, pColours[WCOL_LIGHT], pColours[WCOL_DARK], psBGraph->majorCol);
 
 	barGraphDisplayText(psBGraph, x0, x1, y1, pColours);
 }
@@ -455,11 +443,7 @@ void barGraphDisplayTrough(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIE
 	}
 	if (showTrough)
 	{
-		pie_BoxFill(tx0, ty0, tx1, ty1, pColours[WCOL_BKGRND]);
-		iV_Line(tx0, ty1, tx0, ty0, pColours[WCOL_DARK]);
-		iV_Line(tx0, ty0, tx1, ty0, pColours[WCOL_DARK]);
-		iV_Line(tx1, ty0, tx1, ty1, pColours[WCOL_LIGHT]);
-		iV_Line(tx0, ty1, tx1, ty1, pColours[WCOL_LIGHT]);
+		iV_ShadowBox(tx0, ty0, tx1, ty1, 0, pColours[WCOL_DARK], pColours[WCOL_LIGHT], pColours[WCOL_BKGRND]);
 	}
 
 	barGraphDisplayText(psBGraph, x0, tx1, ty1, pColours);

@@ -90,6 +90,26 @@ static void pie_DrawRect(float x0, float y0, float x1, float y1, PIELIGHT colour
 	glEnd();
 }
 
+void iV_ShadowBox(int x0, int y0, int x1, int y1, int pad, PIELIGHT first, PIELIGHT second, PIELIGHT fill)
+{
+	pie_SetRendMode(REND_OPAQUE);
+	pie_SetTexturePage(TEXPAGE_NONE);
+	pie_DrawRect(x0 + pad, y0 + pad, x1 - pad, y1 - pad, fill); // necessary side-effect: sets alpha test off
+	glColor4ubv(first.vector);
+	glBegin(GL_LINES);
+	glVertex2i(x0, y1);
+	glVertex2i(x0, y0);
+	glVertex2i(x0, y0);
+	glVertex2i(x1, y0);
+	glEnd();
+	glColor4ubv(second.vector);
+	glBegin(GL_LINES);
+	glVertex2i(x1, y0);
+	glVertex2i(x1, y1);
+	glVertex2i(x0, y1);
+	glVertex2i(x1, y1);
+	glEnd();
+}
 
 /***************************************************************************/
 

@@ -61,6 +61,7 @@
  *	Global ProtoTypes
  */
 /***************************************************************************/
+void iV_ShadowBox(int x0, int y0, int x1, int y1, int pad, PIELIGHT first, PIELIGHT second, PIELIGHT fill);
 extern void iV_Line(int x0, int y0, int x1, int y1, PIELIGHT colour);
 extern void iV_Box(int x0,int y0, int x1, int y1, PIELIGHT colour);
 extern void pie_BoxFill(int x0,int y0, int x1, int y1, PIELIGHT colour);

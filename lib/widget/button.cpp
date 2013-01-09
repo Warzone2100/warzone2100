@@ -292,11 +292,7 @@ void buttonDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *p
 	if (psButton->state & (WBUTS_DOWN | WBUTS_LOCKED | WBUTS_CLICKLOCK))
 	{
 		/* Display the button down */
-		pie_BoxFill(x0, y0, x1, y1, pColours[WCOL_BKGRND]);
-		iV_Line(x0, y0, x1, y0, pColours[WCOL_DARK]);
-		iV_Line(x0, y0, x0, y1, pColours[WCOL_DARK]);
-		iV_Line(x0, y1, x1, y1, pColours[WCOL_LIGHT]);
-		iV_Line(x1, y1, x1, y0, pColours[WCOL_LIGHT]);
+		iV_ShadowBox(x0, y0, x1, y1, 0, pColours[WCOL_LIGHT], pColours[WCOL_DARK], pColours[WCOL_BKGRND]);
 
 		if (psButton->pText)
 		{
@@ -319,20 +315,13 @@ void buttonDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *p
 		if (psButton->state & WBUTS_HILITE)
 		{
 			/* Display the button hilite */
-			iV_Line(x0 + 3, y0 + 3, x1 - 2, y0 + 3, pColours[WCOL_HILITE]);
-			iV_Line(x0 + 3, y0 + 3, x0 + 3, y1 - 2, pColours[WCOL_HILITE]);
-			iV_Line(x0 + 3, y1 - 2, x1 - 2, y1 - 2, pColours[WCOL_HILITE]);
-			iV_Line(x1 - 2, y1 - 2, x1 - 2, y0 + 3, pColours[WCOL_HILITE]);
+			iV_Box(x0 + 3, y0 + 3, x1 - 2, y1 - 2, pColours[WCOL_HILITE]);
 		}
 	}
 	else if (psButton->state & WBUTS_GREY)
 	{
 		/* Display the disabled button */
-		pie_BoxFill(x0, y0, x1, y1, pColours[WCOL_BKGRND]);
-		iV_Line(x0, y0, x1, y0, pColours[WCOL_LIGHT]);
-		iV_Line(x0, y0, x0, y1, pColours[WCOL_LIGHT]);
-		iV_Line(x0, y1, x1, y1, pColours[WCOL_DARK]);
-		iV_Line(x1, y1, x1, y0, pColours[WCOL_DARK]);
+		iV_ShadowBox(x0, y0, x1, y1, 0, pColours[WCOL_LIGHT], pColours[WCOL_LIGHT], pColours[WCOL_BKGRND]);
 
 		if (psButton->pText)
 		{
@@ -349,20 +338,13 @@ void buttonDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *p
 		if (psButton->state & WBUTS_HILITE)
 		{
 			/* Display the button hilite */
-			iV_Line(x0 + 2, y0 + 2, x1 - 3, y0 + 2, pColours[WCOL_HILITE]);
-			iV_Line(x0 + 2, y0 + 2, x0 + 2, y1 - 3, pColours[WCOL_HILITE]);
-			iV_Line(x0 + 2, y1 - 3, x1 - 3, y1 - 3, pColours[WCOL_HILITE]);
-			iV_Line(x1 - 3, y1 - 3, x1 - 3, y0 + 2, pColours[WCOL_HILITE]);
+			iV_Box(x0 + 2, y0 + 2, x1 - 3, y1 - 3, pColours[WCOL_HILITE]);
 		}
 	}
 	else
 	{
 		/* Display the button up */
-		pie_BoxFill(x0, y0, x1, y1, pColours[WCOL_BKGRND]);
-		iV_Line(x0, y0, x1, y0, pColours[WCOL_LIGHT]);
-		iV_Line(x0, y0, x0, y1, pColours[WCOL_LIGHT]);
-		iV_Line(x0, y1, x1, y1, pColours[WCOL_DARK]);
-		iV_Line(x1, y1, x1, y0, pColours[WCOL_DARK]);
+		iV_ShadowBox(x0, y0, x1, y1, 0, pColours[WCOL_LIGHT], pColours[WCOL_DARK], pColours[WCOL_BKGRND]);
 
 		if (psButton->pText)
 		{
@@ -377,10 +359,7 @@ void buttonDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *p
 		if (psButton->state & WBUTS_HILITE)
 		{
 			/* Display the button hilite */
-			iV_Line(x0 + 2, y0 + 2, x1 - 3, y0 + 2, pColours[WCOL_HILITE]);
-			iV_Line(x0 + 2, y0 + 2, x0 + 2, y1 - 3, pColours[WCOL_HILITE]);
-			iV_Line(x0 + 2, y1 - 3, x1 - 3, y1 - 3, pColours[WCOL_HILITE]);
-			iV_Line(x1 - 3, y1 - 3, x1 - 3, y0 + 2, pColours[WCOL_HILITE]);
+			iV_Box(x0 + 2, y0 + 2, x1 - 3, y1 - 3, pColours[WCOL_HILITE]);
 		}
 	}
 }

@@ -133,7 +133,6 @@ void tipDisplay(void)
 	SDWORD		newMX, newMY;
 	SDWORD		currTime;
 	SDWORD		fw, topGap;
-//	UDWORD		time;
 
 	switch (tipState)
 	{
@@ -200,16 +199,6 @@ void tipDisplay(void)
 		}
 		break;
 	case TIP_ACTIVE:
-		/* See if the tip still needs to be displayed */
-//		time = GetTickCount();
-//		if (mousePressed(MOUSE_LMB) ||
-//			((time - startTime) > TIP_TIME))
-//		{
-//			tipState = TIP_NONE;
-//			return;
-//		}
-
-
 		/* Draw the tool tip */
 		pie_BoxFill(tx, ty, tx + tw, ty + th, pColours[WCOL_TIPBKGRND]);
 		iV_Line(tx + 1, ty + th - 2, tx + 1,    ty + 1, pColours[WCOL_DARK]);

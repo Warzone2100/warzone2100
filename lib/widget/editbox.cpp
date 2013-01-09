@@ -576,12 +576,7 @@ void editBoxDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *
 	}
 	else
 	{
-		pie_BoxFill(x0, y0, x1, y1, pColours[WCOL_BKGRND]);
-
-		iV_Line(x0, y0, x1, y0, pColours[WCOL_DARK]);
-		iV_Line(x0, y0, x0, y1, pColours[WCOL_DARK]);
-		iV_Line(x0, y1, x1, y1, pColours[WCOL_LIGHT]);
-		iV_Line(x1, y1, x1, y0, pColours[WCOL_LIGHT]);
+		iV_ShadowBox(x0, y0, x1, y1, 0, pColours[WCOL_DARK], pColours[WCOL_LIGHT], pColours[WCOL_BKGRND]);
 	}
 
 	fx = x0 + WEDB_XGAP;// + (psEdBox->width - fw) / 2;
@@ -596,11 +591,7 @@ void editBoxDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *
 	tmp.remove(0, psEdBox->printStart);  // Erase anything there isn't room to display.
 	tmp.remove(psEdBox->printChars, tmp.length());
 
-//	if(psEdBox->pFontDisplay) {
-//		psEdBox->pFontDisplay(fx,fy, pPrint);
-//	} else {
 	iV_DrawText(tmp.toUtf8().constData(), fx, fy);
-//	}
 
 	// Display the cursor if editing
 #if CURSOR_BLINK
@@ -641,10 +632,7 @@ void editBoxDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *
 		if (psEdBox->state & WEDBS_HILITE)
 		{
 			/* Display the button hilite */
-			iV_Line(x0 - 2, y0 - 2, x1 + 2, y0 - 2, pColours[WCOL_HILITE]);
-			iV_Line(x0 - 2, y0 - 2, x0 - 2, y1 + 2, pColours[WCOL_HILITE]);
-			iV_Line(x0 - 2, y1 + 2, x1 + 2, y1 + 2, pColours[WCOL_HILITE]);
-			iV_Line(x1 + 2, y1 + 2, x1 + 2, y0 - 2, pColours[WCOL_HILITE]);
+			iV_Box(x0 - 2, y0 - 2, x1 + 2, y1 + 2, pColours[WCOL_HILITE]);
 		}
 	}
 }

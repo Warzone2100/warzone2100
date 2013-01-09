@@ -390,11 +390,7 @@ void sliderDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *p
 		y0 = (SWORD)(y0 + psSlider->y + yOffset);
 		x1 = (SWORD)(x0 + width);
 		y1 = (SWORD)(y0 + height);
-		pie_BoxFill(x0, y0, x1, y1, pColours[WCOL_BKGRND]);
-		iV_Line(x0, y0, x1, y0, pColours[WCOL_LIGHT]);
-		iV_Line(x0, y0, x0, y1, pColours[WCOL_LIGHT]);
-		iV_Line(x1, y0, x1, y1, pColours[WCOL_DARK]);
-		iV_Line(x0, y1, x1, y1, pColours[WCOL_DARK]);
+		iV_ShadowBox(x0, y0, x1, y1, 0, pColours[WCOL_LIGHT], pColours[WCOL_DARK], pColours[WCOL_BKGRND]);
 		break;
 	case WSLD_TOP:
 	case WSLD_BOTTOM:
@@ -411,11 +407,7 @@ void sliderDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *p
 		y0 = (SWORD)(y0 + psSlider->y + yOffset);
 		x1 = (SWORD)(x0 + width);
 		y1 = (SWORD)(y0 + height);
-		pie_BoxFill(x0, y0, x1, y1, pColours[WCOL_BKGRND]);
-		iV_Line(x0, y0, x1, y0, pColours[WCOL_LIGHT]);
-		iV_Line(x0, y0, x0, y1, pColours[WCOL_LIGHT]);
-		iV_Line(x1, y0, x1, y1, pColours[WCOL_DARK]);
-		iV_Line(x0, y1, x1, y1, pColours[WCOL_DARK]);
+		iV_ShadowBox(x0, y0, x1, y1, 0, pColours[WCOL_LIGHT], pColours[WCOL_DARK], pColours[WCOL_BKGRND]);
 		break;
 	}
 
@@ -425,9 +417,6 @@ void sliderDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *p
 		y0 = (SWORD)(psWidget->y + yOffset - 2);
 		x1 = (SWORD)(x0 + psWidget->width + 4);
 		y1 = (SWORD)(y0 + psWidget->height + 4);
-		iV_Line(x0, y0, x1, y0, pColours[WCOL_HILITE]);
-		iV_Line(x1, y0, x1, y1, pColours[WCOL_HILITE]);
-		iV_Line(x0, y1, x1, y1, pColours[WCOL_HILITE]);
-		iV_Line(x0, y0, x0, y1, pColours[WCOL_HILITE]);
+		iV_Box(x0, y0, x1, y1, pColours[WCOL_HILITE]);
 	}
 }
