@@ -83,7 +83,6 @@
 //
 //#define formIsHilite(p) ( (((W_CLICKFORM*)p)->state & WCLICK_HILITE) || (((W_CLICKFORM*)p)->state & WCLICK_FLASHON) )
 #define formIsHilite(p) 	(((W_CLICKFORM*)p)->state & WCLICK_HILITE)
-#define formIsFlashing(p)	(((W_CLICKFORM*)p)->state & WCLICK_FLASHON)
 
 // Is a button widget hilited, either because the cursor is over it or it is flashing.
 //
@@ -104,9 +103,6 @@ static int FormCloseCount;	// Count used to ensure only one sfx played when two 
 BASE_STATS *CurrentStatsTemplate = NULL;
 
 #define	DEFAULT_BUTTON_ROTATION (45)
-#define BUT_TRANSPORTER_DIST (5000)
-#define BUT_TRANSPORTER_SCALE (20)
-#define BUT_TRANSPORTER_ALT (-50)
 
 UDWORD ManuPower = 0;	// Power required to manufacture the current item.
 
@@ -543,9 +539,6 @@ void intUpdateCommandFact(WIDGET *psWidget, W_CONTEXT *psContext)
 		Label->style |= WIDG_HIDDEN;
 	}
 }
-
-
-#define BARXOFFSET	46
 
 // Widget callback to update and display the power bar.
 // !!!!!!!!!!!!!!!!!!!!!!ONLY WORKS ON A SIDEWAYS POWERBAR!!!!!!!!!!!!!!!!!
@@ -2221,7 +2214,7 @@ void CreateIMDButton(IMAGEFILE *ImageFile, UWORD ImageID, void *Object, UDWORD P
 			if (((DROID*)Object)->droidType == DROID_TRANSPORTER || ((DROID*)Object)->droidType == DROID_SUPERTRANSPORTER)
 			{
 				Position.x = 0;
-				Position.y = 0;//BUT_TRANSPORTER_ALT;
+				Position.y = 0;
 				Position.z = BUTTON_DEPTH;
 				if (((DROID*)Object)->droidType == DROID_TRANSPORTER)
 				{
@@ -2243,7 +2236,7 @@ void CreateIMDButton(IMAGEFILE *ImageFile, UWORD ImageID, void *Object, UDWORD P
 			if (((DROID_TEMPLATE*)Object)->droidType == DROID_TRANSPORTER || ((DROID_TEMPLATE*)Object)->droidType == DROID_SUPERTRANSPORTER)
 			{
 				Position.x = 0;
-				Position.y = 0;//BUT_TRANSPORTER_ALT;
+				Position.y = 0;
 				Position.z = BUTTON_DEPTH;
 				if (((DROID_TEMPLATE*)Object)->droidType == DROID_TRANSPORTER)
 				{

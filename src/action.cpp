@@ -46,7 +46,6 @@
 
 /* attack run distance */
 #define	VTOL_ATTACK_LENGTH		1000
-#define	VTOL_ATTACK_WIDTH		200
 #define VTOL_ATTACK_TARDIST		400
 
 // turret rotation limit

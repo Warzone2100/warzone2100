@@ -29,8 +29,6 @@
 /** Maximum number of characters in a resource type. */
 #define RESTYPE_MAXCHAR		20
 
-/** Maximum number of characters in a resource ID. */
-#define RESID_MAXCHAR		40
 
 /** Function pointer for a function that loads from a memory buffer. */
 typedef bool (*RES_BUFFERLOAD)(const char *pBuffer, UDWORD size, void **pData);

@@ -36,8 +36,6 @@
 #include "projectile.h"
 #include "random.h"
 
-// maximum random pause for firing
-#define RANDOM_PAUSE	500
 
 /* Fire a weapon at something */
 bool combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, int weapon_slot)

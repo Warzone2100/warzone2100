@@ -48,10 +48,6 @@
  */
 #define	ANIM_HASH_TABLE_SIZE	499
 
-/* Allocation sizes for the anim heap */
-#define ANIM_INIT				10
-#define ANIM_EXT				5
-
 /***************************************************************************/
 /* global variables */
 

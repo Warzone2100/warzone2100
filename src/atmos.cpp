@@ -45,8 +45,6 @@
 #define	RAIN_SPEED_DRIFT		(rand()%50)
 #define	RAIN_SPEED_FALL			(0-((rand()%300) + 700))
 
-#define	TYPE_WATER				75
-#define TYPE_LAND				76
 
 enum AP_TYPE
 {

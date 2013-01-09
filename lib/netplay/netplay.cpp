@@ -64,7 +64,6 @@ static unsigned int masterserver_port = 0, gameserver_port = 0;
 
 #define WZ_SERVER_DISCONNECT 0
 #define WZ_SERVER_CONNECT    1
-#define WZ_SERVER_LAUNCH     2
 #define WZ_SERVER_UPDATE     3
 
 #define NET_TIMEOUT_DELAY	2500		// we wait this amount of time for socket activity

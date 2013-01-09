@@ -53,10 +53,4 @@ extern iIMDShape *iV_ProcessIMD(const char **ppFileData, const char *FileDataEnd
 extern bool iV_IMDSave(char *filename, iIMDShape *s, bool PieIMD);
 extern void iV_IMDRelease(iIMDShape *s);
 
-// How high up do we want to stop looking
-#define DROID_VIS_UPPER	100
-
-// How low do we stop looking?
-#define DROID_VIS_LOWER	10
-
 #endif

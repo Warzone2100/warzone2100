@@ -33,8 +33,6 @@
 #define	RADTLY		(RET_Y + 1)									// Paul's settings (332-17)
 #define	RADWIDTH	128
 #define RADHEIGHT	128
-#define	RADBRX		(RADTLX + RADWIDTH) -1
-#define	RADBRY		(RADTLY + RADHEIGHT) -1
 
 #define SKY_MULT	1
 #define SKY_SHIMMY_BASE	((DEG(1)*SKY_MULT)/2)

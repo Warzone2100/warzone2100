@@ -133,11 +133,6 @@ extern void showRangeAtPos(SDWORD centerX, SDWORD centerY, SDWORD radius);
 #define	BASE_MUZZLE_FLASH_DURATION	(GAME_TICKS_PER_SEC/10)
 #define	EFFECT_MUZZLE_ADDITIVE		128
 
-#define BAR_FULL	0
-#define BAR_BASIC	1
-#define BAR_DOT		2
-#define BAR_NONE	3
-
 extern UWORD barMode;
 
 extern bool CauseCrash;

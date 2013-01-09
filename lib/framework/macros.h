@@ -44,7 +44,6 @@
 #define ONEINTHREE				(rand()%3==0)
 #define ONEINFOUR				(rand()%4==0)
 #define ONEINFIVE				(rand()%5==0)
-#define ONEINEIGHT				(rand()%8==0)
 #define ONEINTEN				(rand()%10==0)
 
 #define MACROS_H_STRINGIFY(x) #x

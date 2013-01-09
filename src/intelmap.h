@@ -36,8 +36,6 @@
 #define INTMAP_PIEHEIGHT		169
 
 
-#define	INTMAP_TEXTWINDOWHEIGHT	(30)
-
 // The current message being displayed
 extern MESSAGE			*psCurrentMsg;
 

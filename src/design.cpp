@@ -83,10 +83,7 @@
 
 #define FLASH_BUTTONS		// Enable flashing body part buttons.
 
-#define MAX_TABS	4
-
 #define TAB_USEMAJOR 0
-#define TAB_USEMINOR 1
 
 //how many buttons can be put on the system component form
 #define DES_BUTSPERFORM  8
@@ -121,7 +118,6 @@ static DES_SYSMODE desSysMode;
 /* The major component tabs on the design screen */
 #define IDES_MAINTAB	0
 #define IDES_EXTRATAB	1
-#define IDES_EXTRATAB2	2
 
 /* Which component type is being selected on the design screen */
 //added IDES_TURRET_A,IDES_TURRET_B,changing the name of IDES_TURRET might break exist codes
@@ -160,19 +156,9 @@ char StringBuffer[STRING_BUFFER_SIZE];
 #define DES_TABBUTGAP		2
 #define DES_TABBUTWIDTH		60
 #define DES_TABBUTHEIGHT	46
-#define DES_TITLEY			10
-#define DES_TITLEHEIGHT		20
-#define DES_NAMELABELX		10
-#define DES_NAMELABELWIDTH	100
 #define	DES_TAB_LEFTOFFSET 	OBJ_TABOFFSET
-#define	DES_TAB_RIGHTOFFSET	OBJ_TABOFFSET
-#define	DES_TAB_SYSOFFSET	0
-#define DES_TAB_SYSWIDTH	12
-#define DES_TAB_SYSHEIGHT	19
 #define DES_TAB_WIDTH		OBJ_TABWIDTH
 #define DES_TAB_HEIGHT		OBJ_TABHEIGHT
-#define DES_TAB_SYSHORZOFFSET	OBJ_TABOFFSET
-#define DES_TAB_SYSGAP		4
 
 #define DES_LEFTFORMX		RET_X
 #define DES_LEFTFORMY		DESIGN_Y
@@ -205,8 +191,6 @@ char StringBuffer[STRING_BUFFER_SIZE];
 #define DES_POWERFORMWIDTH		(DES_CENTERFORMWIDTH - 2*DES_POWERFORMX)
 #define DES_POWERFORMHEIGHT		40
 
-#define DES_RIGHTFORMX		RADTLX
-#define DES_RIGHTFORMY		DESIGN_Y
 #define DES_RIGHTFORMWIDTH	(RET_FORMWIDTH + 20)
 #define DES_RIGHTFORMHEIGHT DES_LEFTFORMHEIGHT
 #define	DES_RIGHTFORMBUTX	2
@@ -226,14 +210,6 @@ char StringBuffer[STRING_BUFFER_SIZE];
 #define DES_COMPBUTWIDTH	150
 #define DES_COMPBUTHEIGHT	85
 
-#define DES_MAINBUTWIDTH	36
-#define DES_MAINBUTHEIGHT	24
-
-#define DES_ICONX			5
-#define DES_ICONY			22//28
-#define DES_ICONWIDTH		76
-#define DES_ICONHEIGHT		53
-
 #define DES_POWERX				1
 #define DES_POWERY				6
 #define DES_POWERSEPARATIONX	4
@@ -243,7 +219,6 @@ char StringBuffer[STRING_BUFFER_SIZE];
 #define	DES_PARTSEPARATIONY		6
 
 /* Positions of stuff on the clickable boxes (Design screen) */
-#define DES_CLICKLABELHEIGHT	14
 #define DES_CLICKBARX			154
 #define DES_CLICKBARY			7
 #define DES_CLICKBARWIDTH		140

@@ -34,9 +34,6 @@
 
 #include <time.h>
 
-// Maximum ticks per frame.
-// If not reaching the goal, force graphics updates, even if we aren't doing enough game state updates to maintain game speed.
-#define MAXIMUM_TICKS_PER_FRAME (GAME_TICKS_PER_SEC / 4)
 
 /* See header file for documentation */
 UDWORD gameTime = 0, deltaGameTime = 0, graphicsTime = 0, deltaGraphicsTime = 0, realTime = 0, deltaRealTime = 0;

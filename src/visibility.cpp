@@ -48,9 +48,6 @@
 
 #include "wavecast.h"
 
-// accuracy for the height gradient
-#define GRAD_MUL	10000
-
 // rate to change visibility level
 static const int VIS_LEVEL_INC = 255 * 2;
 static const int VIS_LEVEL_DEC = 50;

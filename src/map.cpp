@@ -94,8 +94,6 @@ struct GATEWAY_SAVE
 /* Sanity check definitions for the save struct file sizes */
 #define SAVE_HEADER_SIZE	16
 #define SAVE_TILE_SIZE		3
-#define SAVE_TILE_SIZEV1	6
-#define SAVE_TILE_SIZEV2	3
 
 // Maximum expected return value from get height
 #define	MAX_HEIGHT			(256 * ELEVATION_SCALE)
