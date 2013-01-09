@@ -96,15 +96,7 @@
 #define MAX_SAVE_NAME_SIZE	60
 
 static const UDWORD NULL_ID = UDWORD_MAX;
-#define MAX_BODY			SWORD_MAX
 #define SAVEKEY_ONMISSION	0x100
-
-/*!
- * FIXME
- * The code is reusing some pointers as normal integer values apparently. This
- * should be fixed!
- */
-#define FIXME_CAST_ASSIGN(TYPE, lval, rval) memcpy(&lval, &rval, MIN(sizeof(lval), sizeof(rval)))
 
 static UDWORD RemapPlayerNumber(UDWORD OldNumber);
 static void plotFeature(char *backDropSprite);
@@ -186,7 +178,6 @@ struct TILETYPE_SAVEHEADER : public GAME_SAVEHEADER
 };
 
 /* Sanity check definitions for the save struct file sizes */
-#define GAME_HEADER_SIZE			8
 #define DROIDINIT_HEADER_SIZE		12
 #define STRUCT_HEADER_SIZE			12
 #define FEATURE_HEADER_SIZE			12
