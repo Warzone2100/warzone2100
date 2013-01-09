@@ -92,7 +92,6 @@ static bool _imd_load_polys( const char **ppFileData, iIMDShape *s, int pieVersi
 		pFileData += cnt;
 
 		poly->flags = flags;
-		poly->npnts = npnts;
 		ASSERT_OR_RETURN(false, npnts == 3, "Invalid polygon size (%d)", npnts);
 		if (sscanf(pFileData, "%d %d %d%n", &poly->pindex[0], &poly->pindex[1], &poly->pindex[2], &cnt) != 3)
 		{
@@ -114,9 +113,9 @@ static bool _imd_load_polys( const char **ppFileData, iIMDShape *s, int pieVersi
 			p1.y = s->points[poly->pindex[1]].y;
 			p1.z = s->points[poly->pindex[1]].z;
 
-			p2.x = s->points[poly->pindex[poly->npnts-1]].x;
-			p2.y = s->points[poly->pindex[poly->npnts-1]].y;
-			p2.z = s->points[poly->pindex[poly->npnts-1]].z;
+			p2.x = s->points[poly->pindex[2]].x;
+			p2.y = s->points[poly->pindex[2]].y;
+			p2.z = s->points[poly->pindex[2]].z;
 
 			poly->normal = pie_SurfaceNormal3fv(p0, p1, p2);
 		}
@@ -178,9 +177,9 @@ static bool _imd_load_polys( const char **ppFileData, iIMDShape *s, int pieVersi
 				poly->texAnim.y = 0;
 			}
 
-			poly->texCoord = (Vector2f *)malloc(sizeof(*poly->texCoord) * nFrames * poly->npnts);
+			poly->texCoord = (Vector2f *)malloc(sizeof(*poly->texCoord) * nFrames * 3);
 			ASSERT_OR_RETURN(false, poly->texCoord, "Out of memory allocating texture coordinates");
-			for (j = 0; j < poly->npnts; j++)
+			for (j = 0; j < 3; j++)
 			{
 				float VertexU, VertexV;
 
@@ -201,7 +200,7 @@ static bool _imd_load_polys( const char **ppFileData, iIMDShape *s, int pieVersi
 				{
 					const float uFrame = (frame % framesPerLine) * poly->texAnim.x;
 					const float vFrame = (frame / framesPerLine) * poly->texAnim.y;
-					Vector2f *c = &poly->texCoord[frame * poly->npnts + j];
+					Vector2f *c = &poly->texCoord[frame * 3 + j];
 
 					c->x = VertexU + uFrame;
 					c->y = VertexV + vFrame;

@@ -235,36 +235,25 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELI
 	glBegin(GL_TRIANGLES);
 	for (pPolys = shape->polys; pPolys < shape->polys + shape->npolys; pPolys++)
 	{
-		Vector3f	vertexCoords[3];
-		unsigned int	n, frameidx = frame;
-		int	*index;
+		unsigned int frameidx = frame;
 
 		if (!(pPolys->flags & iV_IMD_TEXANIM))
 		{
 			frameidx = 0;
 		}
 
-		for (n = 0, index = pPolys->pindex;
-				n < pPolys->npnts;
-				n++, index++)
-		{
-			vertexCoords[n].x = shape->points[*index].x;
-			vertexCoords[n].y = shape->points[*index].y;
-			vertexCoords[n].z = shape->points[*index].z;
-		}
-
 		polyCount++;
 
 		glNormal3fv((GLfloat*)&pPolys->normal);
-		for (n = 0; n < pPolys->npnts; n++)
+		for (int n = 0; n < 3; n++)
 		{
-			GLfloat* texCoord = (GLfloat*)&pPolys->texCoord[frameidx * pPolys->npnts + n];
+			GLfloat* texCoord = (GLfloat*)&pPolys->texCoord[frameidx * 3 + n];
 			glTexCoord2fv(texCoord);
 			if (!shaders)
 			{
 				glMultiTexCoord2fv(GL_TEXTURE1, texCoord);
 			}
-			glVertex3fv((GLfloat*)&vertexCoords[n]);
+			glVertex3fv((GLfloat*)&shape->points[pPolys->pindex[n]]);
 		}
 	}
 	glEnd();
@@ -360,13 +349,13 @@ static void pie_DrawShadow(iIMDShape *shape, int flag, int flag_data, Vector3f* 
 			Vector3f normal = crossProduct(p[2] - p[0], p[1] - p[0]);
 			if (normal * *light > 0)
 			{
-				for (n = 1; n < pPolys->npnts; n++)
+				for (n = 1; n < 3; n++)
 				{
 					// link to the previous vertex
 					addToEdgeList(pPolys->pindex[n-1], pPolys->pindex[n], edgelist);
 				}
-				// back to the first
-				addToEdgeList(pPolys->pindex[pPolys->npnts-1], pPolys->pindex[0], edgelist);
+				// back to the first (FIXME - should be 0, not 2?)
+				addToEdgeList(pPolys->pindex[2], pPolys->pindex[0], edgelist);
 			}
 		}
 

@@ -70,7 +70,6 @@ struct iIMDPoly
 {
 	uint32_t flags;
 	int32_t zcentre;
-	unsigned int npnts;
 	Vector3f normal;
 	int pindex[3];
 	Vector2f *texCoord;
