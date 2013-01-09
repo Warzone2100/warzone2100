@@ -167,12 +167,6 @@ static bool Refreshing = false;
 #define IDOPT_IVISFORM		1043		// iViS engine form
 #define IDOPT_IVISLABEL		1044		// iViS form label
 
-/* Edit screen IDs */
-#define IDED_FORM			2000		// The edit form
-#define IDED_LABEL			2001		// The edit screen label
-#define IDED_CLOSE			2002		// The edit screen close box
-#define	IDED_STATFORM		2003		// The edit screen stats form (for droids/structs/features)
-
 #define	IDPROX_START		120000		// The first proximity button
 #define	IDPROX_END		129999		// The last proximity button
 
@@ -184,8 +178,6 @@ static bool Refreshing = false;
 /* Reticule positions */
 #define RET_BUTWIDTH		25
 #define RET_BUTHEIGHT		28
-#define RET_BUTGAPX			6
-#define RET_BUTGAPY			6
 
 /* Option positions */
 #define OPT_X			(640-300)
@@ -194,7 +186,6 @@ static bool Refreshing = false;
 #define OPT_HEIGHT		350
 #define OPT_BUTWIDTH	60
 #define OPT_BUTHEIGHT	20
-#define OPT_MAPY		25
 #define OPT_EDITY		50
 #define OPT_PLAYERY		150
 
@@ -202,8 +193,6 @@ static bool Refreshing = false;
 #define STAT_BUTY				2
 
 /* Structure type screen positions */
-#define STAT_BASEWIDTH 		134	// Size of the main form.
-#define STAT_BASEHEIGHT		254
 #define STAT_GAP			2
 #define STAT_BUTWIDTH		60
 #define STAT_BUTHEIGHT		46

@@ -117,8 +117,6 @@ extern UBYTE				bDisplayMultiJoiningStatus;	// draw load progress?
 #define CAMP_BASE				1
 #define CAMP_WALLS				2
 
-#define PING_MED				200			// this ping is crawlin'
-#define PING_HI					400			// this ping just plain sucks :P
 #define PING_LIMIT                              4000                    // If ping is bigger than this, then worry and panic, and don't even try showing the ping.
 
 #define LEV_LOW					400			// how many points to allocate for res levels???
