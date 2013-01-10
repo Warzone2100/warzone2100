@@ -4169,7 +4169,7 @@ static bool loadSaveDroidPointers(const QString &pFileName, DROID **ppsCurrentDr
 	return true;
 }
 
-static int healthValue(QSettings &ini, int defaultValue)
+static int healthValue(WzConfig &ini, int defaultValue)
 {
 	QString health = ini.value("health").toString();
 	if (health.isEmpty() || defaultValue == 0)

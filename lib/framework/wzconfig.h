@@ -50,14 +50,17 @@ public:
 	}
 };
 
-class WzConfig : private WzConfigHack, public QSettings
+class WzConfig : private WzConfigHack
 {
+private:
+	QSettings m_settings;
+
 public:
 	enum warning { ReadAndWrite, ReadOnly, ReadOnlyAndRequired };
 	WzConfig(const QString &name, WzConfig::warning warning = ReadAndWrite, QObject *parent = 0)
-		: WzConfigHack(name, (int)warning), QSettings(QString("wz::") + name, QSettings::IniFormat, parent)
+		: WzConfigHack(name, (int)warning), m_settings(QString("wz::") + name, QSettings::IniFormat, parent)
 	{
-		if (status() != QSettings::NoError && (warning != ReadOnly || PHYSFS_exists(name.toUtf8().constData())))
+		if (m_settings.status() != QSettings::NoError && (warning != ReadOnly || PHYSFS_exists(name.toUtf8().constData())))
 		{
 			debug(LOG_FATAL, "Could not open \"%s\"", name.toUtf8().constData());
 		}
@@ -68,6 +71,48 @@ public:
 	void setVector3i(const QString &name, const Vector3i &v);
 	Vector2i vector2i(const QString &name);
 	void setVector2i(const QString &name, const Vector2i &v);
+	
+	void beginGroup(const QString &prefix)
+	{
+		m_settings.beginGroup(prefix);
+	}
+	QStringList childGroups() const
+	{
+		return m_settings.childGroups();
+	}
+	QStringList childKeys() const
+	{
+		return m_settings.childKeys();
+	}
+	bool contains(const QString &key) const
+	{
+		return m_settings.contains(key);
+	}
+	void endGroup()
+	{
+		m_settings.endGroup();
+	}
+	QString fileName() const
+	{
+		return m_settings.fileName();
+	}
+	bool isWritable() const
+	{
+		return m_settings.isWritable();
+	}
+	void setValue(const QString &key, const QVariant &value) 
+	{
+		m_settings.setValue(key,value);
+	}
+	QSettings::Status status() const
+	{
+		return m_settings.status();
+	}
+	QVariant value(const QString &key, const QVariant &defaultValue = QVariant()) const
+	{
+		return m_settings.value(key,defaultValue);
+	}
+	
 };
 
 #endif
