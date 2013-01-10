@@ -26,6 +26,95 @@
 // Qt headers MUST come before platform specific stuff!
 #include "wzconfig.h"
 
+WzConfig::WzConfig(const QString &name, WzConfig::warning warning, QObject *parent)
+	: WzConfigHack(name, (int)warning), m_settings(QString("wz::") + name, QSettings::IniFormat, parent), m_overrides()
+{
+	if (m_settings.status() != QSettings::NoError && (warning != ReadOnly || PHYSFS_exists(name.toUtf8().constData())))
+	{
+		debug(LOG_FATAL, "Could not open \"%s\"", name.toUtf8().constData());
+	}
+	char **diffList = PHYSFS_enumerateFiles("diffs");
+	char **i;
+	int j;
+	for (i = diffList; *i != NULL; i++) 
+	{
+		std::string str(std::string("diffs/") + *i + std::string("/") + name.toUtf8().constData());
+		if (!PHYSFS_exists(str.c_str())) 
+			continue;
+		QSettings tmp(QString("wz::") + str.c_str(), QSettings::IniFormat);
+		if (tmp.status() != QSettings::NoError)
+		{
+			debug(LOG_FATAL, "Could not read an override for \"%s\"", name.toUtf8().constData());
+		}
+		QStringList keys(tmp.allKeys());
+		for (j = 0; j < keys.length(); j++)
+		{
+			m_overrides.insert(keys[j],tmp.value(keys[j]));
+		}
+	}
+	PHYSFS_freeList(diffList);
+}
+
+QStringList WzConfig::childGroups() const
+{
+	QStringList ret(m_settings.childGroups());
+	int i,j;
+	QStringList keys(m_overrides.keys());
+	QString group = slashedGroup();
+	for (i = 0; i < keys.length(); i++)
+	{
+		if (!keys[i].startsWith(group)) 
+			continue;
+		keys[i].remove(0, group.length());
+		j = keys[i].indexOf("/");
+		if (j == -1)
+			continue;
+		keys[i].truncate(j);
+		if (ret.contains(keys[i]))
+			continue;
+		ret.append(keys[i]);
+	}
+	return ret;
+}
+
+QStringList WzConfig::childKeys() const
+{
+	QStringList ret(m_settings.childKeys());
+	int i;
+	QStringList keys(m_overrides.keys());
+	QString group = slashedGroup();
+	for (i = 0; i < keys.length(); i++)
+	{
+		if (!keys[i].startsWith(group)) 
+			continue;
+		keys[i].remove(0, group.length());
+		if (keys[i].indexOf("/") > -1)
+			continue;
+		if (ret.contains(keys[i]))
+			continue;
+		ret.append(keys[i]);
+	}
+	return ret;
+}
+
+bool WzConfig::contains(const QString &key) const
+{
+	if (m_overrides.contains(slashedGroup() + key))
+	{
+		return true;
+	}
+	return m_settings.contains(key);
+}
+
+QVariant WzConfig::value(const QString &key, const QVariant &defaultValue) const
+{
+	if (m_overrides.contains(slashedGroup() + key))
+	{
+		return m_overrides.value(slashedGroup() + key);
+	}
+	return m_settings.value(key,defaultValue);
+}
+
 void WzConfig::setVector3f(const QString &name, const Vector3f &v)
 {
 	QStringList l;
