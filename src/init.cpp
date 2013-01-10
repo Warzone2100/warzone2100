@@ -136,7 +136,7 @@ static bool InitialiseGlobals(void)
 }
 
 
-static bool loadLevFile(const char* filename, searchPathMode datadir, bool ignoreWrf, char const *realFileName)
+bool loadLevFile(const char* filename, searchPathMode datadir, bool ignoreWrf, char const *realFileName)
 {
 	char *pBuffer;
 	UDWORD size;
@@ -152,12 +152,12 @@ static bool loadLevFile(const char* filename, searchPathMode datadir, bool ignor
 
 	if (!PHYSFS_exists(filename) || !loadFile(filename, &pBuffer, &size))
 	{
-		debug(LOG_ERROR, "loadLevFile: File not found: %s\n", filename);
+		debug(LOG_ERROR, "File not found: %s\n", filename);
 		return false; // only in NDEBUG case
 	}
 	if (!levParse(pBuffer, size, datadir, ignoreWrf, realFileName))
 	{
-		debug(LOG_ERROR, "loadLevFile: Parse error in %s\n", filename);
+		debug(LOG_ERROR, "Parse error in %s\n", filename);
 		return false;
 	}
 	free(pBuffer);
@@ -166,7 +166,7 @@ static bool loadLevFile(const char* filename, searchPathMode datadir, bool ignor
 }
 
 
-void cleanSearchPath( void )
+static void cleanSearchPath()
 {
 	wzSearchPath * curSearchPath = searchPathRegistry, * tmpSearchPath = NULL;
 
@@ -271,6 +271,7 @@ bool rebuildSearchPath(searchPathMode mode, bool force, const char *current_map)
 #endif // DEBUG
 					// Remove maps and mods
 					removeSubdirs( curSearchPath->path, "maps", NULL );
+					removeSubdirs( curSearchPath->path, "campaigns", NULL );
 					removeSubdirs( curSearchPath->path, "mods/music", NULL );
 					removeSubdirs( curSearchPath->path, "mods/global", NULL );
 					removeSubdirs( curSearchPath->path, "mods/campaign", NULL );
@@ -326,6 +327,7 @@ bool rebuildSearchPath(searchPathMode mode, bool force, const char *current_map)
 					// Add global and campaign mods
 					PHYSFS_addToSearchPath( curSearchPath->path, PHYSFS_APPEND );
 
+					addSubdirs( curSearchPath->path, "campaigns", PHYSFS_APPEND, NULL, false );
 					addSubdirs( curSearchPath->path, "mods/music", PHYSFS_APPEND, NULL, false );
 					addSubdirs( curSearchPath->path, "mods/global", PHYSFS_APPEND, use_override_mods?override_mods:global_mods, true );
 					addSubdirs( curSearchPath->path, "mods", PHYSFS_APPEND, use_override_mods?override_mods:global_mods, true );

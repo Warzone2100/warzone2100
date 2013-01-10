@@ -32,6 +32,7 @@
 
 #include "lib/framework/input.h"
 #include "lib/framework/wzconfig.h"
+#include "lib/framework/physfs_ext.h"
 #include "lib/ivis_opengl/bitimage.h"
 #include "lib/ivis_opengl/pieblitfunc.h"
 #include "lib/ivis_opengl/piestate.h"
@@ -71,6 +72,8 @@ struct CAMPAIGN_FILE
 	QString level;
 	QString video;
 	QString captions;
+	QString package;
+	QString loading;
 };
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -275,10 +278,16 @@ static QList<CAMPAIGN_FILE> readCampaignFiles()
 		CAMPAIGN_FILE c;
 		QString filename("campaigns/");
 		filename += *i;
+		if (!filename.endsWith(".ini"))
+		{
+			continue;
+		}
 		WzConfig ini(filename, WzConfig::ReadOnlyAndRequired);
 		ini.beginGroup("campaign");
 		c.name = ini.value("name").toString();
 		c.level = ini.value("level").toString();
+		c.package = ini.value("package").toString();
+		c.loading = ini.value("loading").toString();
 		ini.endGroup();
 		ini.beginGroup("intro");
 		c.video = ini.value("video").toString();
@@ -323,6 +332,30 @@ static void frontEndNewGame(int which)
 		seq_AddSeqToList(list[which].video.toUtf8().constData(), NULL, list[which].captions.toUtf8().constData(), false);
 		seq_StartNextFullScreenVideo();
 	}
+	if (!list[which].package.isEmpty())
+	{
+		QString path;
+		path += PHYSFS_getWriteDir();
+		path += PHYSFS_getDirSeparator();
+		path += "campaigns";
+		path += PHYSFS_getDirSeparator();
+		path += list[which].package;
+		if (!PHYSFS_mount(path.toUtf8().constData(), NULL, PHYSFS_APPEND))
+		{
+			debug(LOG_ERROR, "Failed to load campaign mod \"%s\": %s", 
+			      path.toUtf8().constData(), PHYSFS_getLastError());
+		}
+	}
+	if (!list[which].loading.isEmpty())
+	{
+		debug(LOG_WZ, "Adding campaign mod level \"%s\"", list[which].loading.toUtf8().constData());
+		if (!loadLevFile(list[which].loading.toUtf8().constData(), mod_campaign, false, NULL))
+		{
+			debug(LOG_ERROR, "Failed to load %s", list[which].loading.toUtf8().constData());
+			return;
+		}
+	}
+	debug(LOG_WZ, "Loading campaign mod -- %s", aLevelName);
 	changeTitleMode(STARTGAME);
 }
 
