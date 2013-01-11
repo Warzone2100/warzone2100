@@ -57,12 +57,9 @@
 
 #define	BAR_CRAWL_TIME	(GAME_TICKS_PER_SEC*3)
 
-#define	MT_X_POS	(MISSIONRES_TITLE_X  + D_W + 140)
 #define MT_Y_POS	(MISSIONRES_TITLE_Y  + D_H + 80)
 
 #define DROID_LEVELS	9
-#define MAX_BAR_LENGTH	100
-#define LC_UPPER	100
 
 #define LC_X	32
 #define RC_X	320+32

@@ -130,8 +130,6 @@ enum MESSAGE_TYPES
 #define modlist_string_size	255		// For a concatenated list of mods
 #define password_string_size 64		// longer passwords slow down the join code
 
-#define SESSION_JOINDISABLED	1
-
 #define MAX_CONNECTED_PLAYERS   MAX_PLAYERS
 #define MAX_TMP_SOCKETS         16
 

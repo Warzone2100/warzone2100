@@ -92,11 +92,6 @@
 
 #include "random.h"
 
-#define STR_RECOIL_TIME	(GAME_TICKS_PER_SEC/4)
-
-// Maximum Distance allowed between a friendly structure and an assembly point.
-#define ASSEMBLY_RANGE	(10*TILE_UNITS)
-
 //Maximium slope of the terrin for building a structure
 #define MAX_INCLINE		50//80//40
 

@@ -488,16 +488,12 @@ struct BRAIN_STATS : public COMPONENT_STATS
 };
 
 
-#define NULL_COMP	(-1)
 /*
  * Stats structures type definitions
  */
 #define SHOOT_ON_GROUND 0x01
 #define SHOOT_IN_AIR	0x02
 
-//Special angles representing top or bottom hit
-#define HIT_ANGLE_TOP		361
-#define HIT_ANGLE_BOTTOM	362
 
 struct BODY_STATS : public COMPONENT_STATS
 {

@@ -23,8 +23,6 @@
 
 #include "lib/framework/input.h"
 
-#define NO_META_KEY				9999
-#define KEYFUNC_TOGGLE_RADAR	20
 
 enum KEY_ACTION
 {

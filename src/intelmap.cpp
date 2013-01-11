@@ -74,7 +74,6 @@
 #define IDINTMAP_MSGFORM		6001	//The intelligence map tabbed form
 #define IDINTMAP_CLOSE			6004	//The close button icon for the 3D view
 #define	IDINTMAP_PAUSELABEL		6005	//The paused message
-#define	IDINITMAP_TITLEVIEW		6006	//The Title view part of MSGVIEW
 #define	IDINITMAP_PIEVIEW		6007	//The PIE view part of MSGVIEW
 #define IDINTMAP_FLICVIEW		6008	//The Flic View part of MSGVIEW
 #define IDINTMAP_TEXTVIEW		6009	//The Text area of MSGVIEW
