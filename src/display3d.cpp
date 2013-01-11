@@ -163,9 +163,6 @@ bool	selectAttempt = false;
 /// Vectors that hold the player and camera directions and positions
 iView	player;
 
-/// Temporary rotation vectors to store rotations for droids etc
-static Vector3i	imdRot,imdRot2;
-
 /// How far away are we from the terrain
 static float distance;
 
@@ -1121,9 +1118,6 @@ bool init3DView(void)
 	/* There are no drag boxes */
 	dragBox3D.status = DRAG_INACTIVE;
 
-	/* Make sure and change these to comply with map.c */
-	imdRot.x = -35;
-
 	/* Get all the init stuff out of here? */
 	initWarCam();
 
@@ -1134,11 +1128,6 @@ bool init3DView(void)
 
 	// Set the initial fog distance
 	UpdateFogDistance(distance);
-
-	/* No initial rotations */
-	imdRot2.x = 0;
-	imdRot.y = 0;
-	imdRot2.z = 0;
 
 	bRender3DOnly = false;
 
@@ -1276,7 +1265,6 @@ void	renderProjectile(PROJECTILE *psCurr)
 	/*Need to draw the graphic depending on what the projectile is doing - hitting target,
 	missing target, in flight etc - JUST DO IN FLIGHT FOR NOW! */
 	pIMD = psStats->pInFlightGraphic;
-	//unsigned faceInFlight = psStats->faceInFlight;
 
 	if (clipXY(st.pos.x, st.pos.y))
 		for (; pIMD != NULL; pIMD = pIMD->next)
@@ -1326,14 +1314,12 @@ void	renderProjectile(PROJECTILE *psCurr)
 		camera -= Vector3i(dv.x, dv.y, dv.z);
 
 		/* Rotate it to the direction it's facing */
-		imdRot2.y = st.rot.direction;
-		pie_MatRotY(-imdRot2.y);
-		rotateSomething(camera.z, camera.x, -(-imdRot2.y));
+		pie_MatRotY(-st.rot.direction);
+		rotateSomething(camera.z, camera.x, -(-st.rot.direction));
 
 		/* pitch it */
-		imdRot2.x = st.rot.pitch;
-		pie_MatRotX(imdRot2.x);
-		rotateSomething(camera.y, camera.z, -imdRot2.x);
+		pie_MatRotX(st.rot.pitch);
+		rotateSomething(camera.y, camera.z, -st.rot.pitch);
 
 		if (pitchToCamera || rollToCamera)
 		{
@@ -1344,16 +1330,16 @@ void	renderProjectile(PROJECTILE *psCurr)
 
 		if (pitchToCamera)
 		{
-			imdRot2.x = iAtan2(camera.z, camera.y);
-			pie_MatRotX(imdRot2.x);
-			rotateSomething(camera.y, camera.z, -imdRot2.x);
+			int x = iAtan2(camera.z, camera.y);
+			pie_MatRotX(x);
+			rotateSomething(camera.y, camera.z, -x);
 		}
 
 		if (rollToCamera)
 		{
-			imdRot2.z = -iAtan2(camera.x, camera.y);
-			pie_MatRotZ(imdRot2.z);
-			rotateSomething(camera.x, camera.y, -imdRot2.z);
+			int z = -iAtan2(camera.x, camera.y);
+			pie_MatRotZ(z);
+			rotateSomething(camera.x, camera.y, -z);
 		}
 
 		if (pitchToCamera || rollToCamera)
@@ -1424,10 +1410,8 @@ void	renderAnimComponent( const COMPONENT_OBJECT *psObj )
 		pie_TRANSLATE(dv.x, dv.y, dv.z);
 
 		/* parent object rotations */
-		imdRot2.y = spacetime.rot.direction;
-		pie_MatRotY(-imdRot2.y);
-		imdRot2.x = spacetime.rot.pitch;
-		pie_MatRotX(imdRot2.x);
+		pie_MatRotY(-spacetime.rot.direction);
+		pie_MatRotX(spacetime.rot.pitch);
 
 		/* Set frame numbers - look into this later?? FIXME!!!!!!!! */
 		if( psParentObj->type == OBJ_DROID )
