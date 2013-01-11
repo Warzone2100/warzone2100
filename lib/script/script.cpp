@@ -28,16 +28,6 @@
 #include <assert.h>
 
 
-// Flags for storing function indexes
-#define FUNC_SETBIT	0x80000000		// set for a set function, clear otherwise
-#define FUNC_LISTMASK	0x70000000
-#define FUNC_INDEXMASK	0x0fffffff
-#define FUNC_INSTINCT	0x00000000		// instinct function
-#define FUNC_CALLBACK	0x40000000		// callback function
-#define FUNC_OBJVAR	0x10000000		// object variable
-#define FUNC_EXTERNAL	0x20000000		// external variable
-
-
 // Initialise the script library
 bool scriptInitialise()
 {

@@ -101,8 +101,6 @@
 /*contents tabbed form screen positions */
 #define TRANSCONT_TABX			STAT_TABFORMX
 #define TRANSCONT_TABY			STAT_TABFORMY
-#define TRANSCONT_TABWIDTH		STAT_TABWIDTH
-#define TRANSCONT_TABHEIGHT		STAT_TABHEIGHT
 
 /*droid form screen positions */
 #define TRANSDROID_X			RADTLX

@@ -80,21 +80,15 @@
 
 
 #define IDSTAT_FORM				14000		// The stats form for structure/droid/research type
-#define IDSTAT_TITLEFORM		14001		// The form for the close box
-#define IDSTAT_LABEL			14002		// Unused
 #define IDSTAT_CLOSE			14003		// The stats close box
 #define IDSTAT_TABFORM			14004		// The tab form with the stats buttons
 #define IDSTAT_START			14100		// The first stats ID
 #define IDSTAT_END				14999		// The last stats ID enough for 899 things
 #define IDSTAT_TABSCRL_LEFT		15000		// Our left Tab scroll button
 #define IDSTAT_TABSCRL_RIGHT	15002		// Our right Tab scroll button
-//#define IDSTAT_BARSTART		4200
-#define IDSTAT_BAREND			4299
 #define IDSTAT_TIMEBARSTART		4300
 #define IDSTAT_TIMEBAREND		4399
 #define IDSTAT_SLIDER			4400
-#define IDSTAT_SLIDERCOUNT		4401
-#define IDSTAT_INFINITE_BUTTON	4402
 #define IDSTAT_LOOP_BUTTON		4403
 #define IDSTAT_LOOP_LABEL		4404
 #define IDSTAT_DP_BUTTON		4405
@@ -102,7 +96,6 @@
 #define IDSTAT_RESICONEND		4599
 #define IDSTAT_PRODSTART		4600
 #define IDSTAT_PRODEND			4699
-#define IDSTAT_MANULIMITS		4700
 
 #define IDSTAT_ALLYSTART		4800
 #define IDSTAT_ALLYEND			5100
@@ -139,15 +132,11 @@
 #define STAT_SLDY			4	// Slider y.
 
 #define STAT_SLDWIDTH		70	// Slider width.
-#define STAT_SLDHEIGHT		12	//4	// Slider height.
 
 // Power bar position.
 #define POW_X			OBJ_BACKX + 12
 #define POW_Y			(OBJ_BACKY + OBJ_BACKHEIGHT + 6)
 #define POW_BARWIDTH	308
-
-#define POW_GAPX		5
-#define POW_GAPY		2
 
 //tab details
 #define OBJ_TABWIDTH	26
@@ -168,7 +157,6 @@
 #define STAT_WIDTH			RET_FORMWIDTH	// Width of the tab form.
 #define STAT_HEIGHT			273				// Height of the tab form.
 #define STAT_TABWIDTH		15
-#define STAT_TABHEIGHT		40
 #define STAT_TABFORMX		0	// Offset of the tab form within the main form.
 #define STAT_TABFORMY		18	// Offset of the tab form within the main form.
 
@@ -261,11 +249,6 @@ extern UDWORD			objStatID;
 /* The current template for the design screen to start with*/
 extern std::vector<DROID_TEMPLATE *> apsTemplateList;  ///< Either a list of templates a factory can build or a list of designable templates, for UI use only.
 extern std::list<DROID_TEMPLATE> localTemplates;       ///< Unsychnronised list, for UI use only.
-
-/*Message View Buffer width and height - MAXIMUM Sizes! - only need to be
-as big as Pie View in Research Msg now*/
-#define	MSG_BUFFER_WIDTH		INTMAP_PIEWIDTH//DISP_WIDTH//640
-#define	MSG_BUFFER_HEIGHT		INTMAP_PIEHEIGHT//DISP_HEIGHT//480
 
 /* pointer to hold the imd to use for a new template in the design screen */
 extern iIMDShape	*pNewDesignIMD;

@@ -83,7 +83,6 @@ static SDWORD	presAvAngle = 0;;
 /* Offset from droid's world coords */
 /* How far we track relative to the droids location - direction matters */
 #define	CAM_DEFAULT_OFFSET	-400
-#define	MINCAMROTX	-20
 
 
 /* How much info do you want when tracking a droid - this toggles full stat info */

@@ -35,7 +35,6 @@
 #define	ANIM_MAX_STR			256
 #define	ANIM_DELAYED	0xFFFE
 #define	NO_ANIM			0xFFFD
-#define	NO_IMD			0xFFFC
 
 
 enum ANIM_MODE
@@ -43,22 +42,6 @@ enum ANIM_MODE
 	ANIM_3D_FRAMES = 1,
 	ANIM_3D_TRANS
 };
-
-
-struct ANIM_STATE;
-struct BASEANIM;
-
-#define ANIM_BASE_ELEMENTS						\
-	char				szFileName[ANIM_MAX_STR];	\
-	char				animType;				\
-	UWORD				uwID;					\
-	UWORD				uwFrameRate;			\
-	UWORD				uwStates;				\
-	UWORD				uwObj;					\
-	UWORD				uwAnimTime;				\
-	ANIM_MODE			ubType;					\
-	struct ANIM_STATE	*psStates;				\
-	struct BASEANIM		*psNext;
 
 
 struct ANIM_STATE

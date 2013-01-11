@@ -53,8 +53,7 @@
 
 //defines how many times to perform the iteration on looking for a blank location
 #define LOOK_FOR_EMPTY_TILE		20
-//used to get a location next to a droid - withinh one tile
-#define LOOK_NEXT_TO_DROID		8
+
 
 struct COMPONENT
 {

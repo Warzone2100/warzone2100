@@ -49,7 +49,7 @@
 #define VERSION_10				10				//includes gateways and zones in .map file.
 #define VERSION_11				11				//newstyle save game with extending structure checked in 13 Nov.
 #define VERSION_12				12				//mission and order stuff checked in 20 Nov.
-#define VERSION_13				13				//odds and ends to 24 Nov. and hashed scripts
+//#define VERSION_13				13				//odds and ends to 24 Nov. and hashed scripts
 #define VERSION_14				14				//
 #define VERSION_15				15				//
 #define VERSION_16				16				//beta save game
@@ -73,7 +73,7 @@
 #define VERSION_34              34              //saves AI names for multiplayer (.gam file)
 #define VERSION_35              35              //uses the (de)serialization API for saving/loading games and is big-endian instead of little-endian
 #define VERSION_36              36              //saves beacon properly
-#define VERSION_37              37              //dpid changes; this had better be the last version
+//#define VERSION_37              37              //dpid changes; this had better be the last version
 #define VERSION_38              38              //mod list!
 #define VERSION_39		39		//lots of changes, breaking everything
 

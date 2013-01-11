@@ -32,9 +32,6 @@
  */
 /***************************************************************************/
 
-#define  SEQUENCE_PLAY 0//play once and exit
-#define  SEQUENCE_LOOP 1//loop till stopped externally
-#define  SEQUENCE_PAUSE 2//pause time
 #define  SEQUENCE_KILL 3//stop
 #define  SEQUENCE_HOLD 4//play once and hold last frame
 

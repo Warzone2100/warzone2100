@@ -39,14 +39,6 @@
 
 #define	STRUCTURE_DAMAGE_SCALING	400
 
-/* explosion data for when a structure is blown up - used by features as well*/
-#define	FLAME_MAX_ANIMS		4
-#define FLAME_MAX_OFFSET	50
-#define FLAME_MIN_DELAY		2000
-#define FLAME_MAX_DELAY		8000
-#define FLAME_CYCLES_MAX	10
-
-#define NON_STOP_PRODUCTION	(STAT_SLDSTOPS + 1)
 //production loop max
 #define INFINITE_PRODUCTION	 9//10
 
@@ -58,8 +50,6 @@
 //used to flag when the Factory is ready to start building
 #define ACTION_START_TIME	0
 
-//distance that VTOLs can be away from the reArm pad
-#define REARM_DIST			(TILE_UNITS*2)
 
 extern iIMDShape * factoryModuleIMDs[NUM_FACTORY_MODULES][NUM_FACMOD_TYPES];
 extern iIMDShape * researchModuleIMDs[NUM_RESEARCH_MODULES];

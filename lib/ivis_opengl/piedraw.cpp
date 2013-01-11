@@ -44,13 +44,6 @@
 
 #define SHADOW_END_DISTANCE (8000*8000) // Keep in sync with lighting.c:FOG_END
 
-#define VERTICES_PER_TRIANGLE 3
-#define COLOUR_COMPONENTS 4
-#define TEXCOORD_COMPONENTS 2
-#define VERTEX_COMPONENTS 3
-#define TRIANGLES_PER_TILE 2
-#define VERTICES_PER_TILE (TRIANGLES_PER_TILE * VERTICES_PER_TRIANGLE)
-
 extern bool drawing_interface;
 
 // Shadow stencil stuff

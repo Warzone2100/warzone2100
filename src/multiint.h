@@ -69,9 +69,6 @@ void loadMapPreview(bool hideInterface);
 // ////////////////////////////////////////////////////////////////
 // CONNECTION SCREEN
 
-#define CON_CONTYPES		10103
-#define CON_CONTYPESWIDTH	290
-#define CON_CONTYPES_FORM	10104
 #define CON_TYPESID_START	10105
 #define CON_TYPESID_END		10128
 
@@ -92,7 +89,6 @@ void loadMapPreview(bool hideInterface);
 
 #define CON_PHONE			10132
 #define CON_PHONEX			20
-#define CON_PHONEY			45
 
 #define CON_IP				10133
 #define CON_IPX				20
@@ -102,15 +98,8 @@ void loadMapPreview(bool hideInterface);
 
 //for clients
 #define CON_PASSWORD		10139
-#define CON_PASSWORDX		20
-#define CON_PASSWORDY		110
 #define CON_PASSWORDYES		10141
 #define CON_PASSWORDNO		10142
-// for hosts
-#define CON_H_PASSWORD		10140
-#define CON_H_PASSWORDX		MCOL2
-#define CON_H_PASSWORDY		MROW10 +31
-
 
 
 // ////////////////////////////////////////////////////////////////
@@ -123,7 +112,6 @@ void loadMapPreview(bool hideInterface);
 // We can have a max of 4 icons for status, current icon size if 36x25.
 #define GAMES_STATUS_START 393
 #define GAMES_GAMENAME_START 2
-#define GAMES_VERSION_START 2 + 6		// indent a bit
 #define GAMES_MAPNAME_START 173
 #define GAMES_MODNAME_START 173 + 6		// indent a bit
 #define GAMES_PLAYERS_START 360
@@ -158,8 +146,6 @@ void loadMapPreview(bool hideInterface);
 #define	MULTIOP_READY_END               (MULTIOP_READY_START + MAX_PLAYERS - 1)
 #define MULTIOP_READY_WIDTH			41
 #define MULTIOP_READY_HEIGHT		38
-#define MULTIOP_READY_IMG_OFFSET_X	3
-#define MULTIOP_READY_IMG_OFFSET_Y	6
 
 #define MULTIOP_PLAYERWIDTH		245
 #define	MULTIOP_PLAYERHEIGHT	38
@@ -198,20 +184,12 @@ void loadMapPreview(bool hideInterface);
 #define MULTIOP_PNAME			10253
 #define MULTIOP_GNAME_ICON		10254
 #define MULTIOP_GNAME			10255
-#define MULTIOP_FNAME_ICON		10256
-#define MULTIOP_FNAME			10257
 #define MULTIOP_MAP_ICON		10258
 #define MULTIOP_MAP				10259
 
-//#define MULTIOP_ARENA			10260
 #define MULTIOP_CAMPAIGN		10261
-//#define MULTIOP_TEAMPLAY		10262
 #define MULTIOP_SKIRMISH		10263
 
-
-#define MULTIOP_TECH_LOW		10264
-#define MULTIOP_TECH_MED		10265
-#define MULTIOP_TECH_HI			10266
 
 #define MULTIOP_CLEAN			10267
 #define MULTIOP_BASE			10268
@@ -226,21 +204,14 @@ void loadMapPreview(bool hideInterface);
 #define MULTIOP_POWLEV_HI		10274
 
 #define MULTIOP_REFRESH			10275
-#define MULTIOP_REFRESHX		75
-#define MULTIOP_REFRESHY		453
 
 #define MULTIOP_HOST			10276
 #define MULTIOP_HOST_BUT		0xf0f0
 #define MULTIOP_HOSTX			5
-#define MULTIOP_HOSTY			MROW3+3
 
 #define MULTIOP_STRUCTLIMITS	21277	// we are using 10277 already
 #define MULTIOP_LIMITS_BUT		0xf0d0
-#define MULTIOP_STRUCTLIMITSX	5
-#define MULTIOP_STRUCTLIMITSY	MROW2+5
 
-#define MULTIOP_OKX				MULTIOP_HOSTX
-#define MULTIOP_OKY				MULTIOP_HOSTY
 #define MULTIOP_CANCELX			6
 #define MULTIOP_CANCELY			6
 
@@ -271,17 +242,9 @@ void loadMapPreview(bool hideInterface);
 #define MULTIOP_POWER			10296
 #define MULTIOP_ALLIANCES		10298
 #define MULTIOP_BASETYPE		10300
-#define MULTIOP_TECHLEVEL		10302
-#define MULTIOP_COMPUTER		10304
-
-#define MULTIOP_COMPUTER_Y		10308
-#define MULTIOP_COMPUTER_N		10309
 
 #define MULTIOP_SKSLIDE			102842 //10313
 #define MULTIOP_SKSLIDE_END		102873 //10320
-
-//#define MULTIOP_PLAYCHOOSER             102842 //10321
-//#define MULTIOP_PLAYCHOOSER_END         102873 //10330
 
 #define MULTIOP_MAP_PREVIEW 920000
 #define MULTIOP_MAP_BUT		920002
@@ -314,17 +277,8 @@ void loadMapPreview(bool hideInterface);
 // ///////////////////////////////
 // Many Button Variations..
 
-#define CON_BUTWIDTH			60
-#define CON_BUTHEIGHT			46
-
-#define CON_CONBUTW			CON_CONTYPESWIDTH-15
-#define CON_CONBUTH			46
-
 #define	CON_NAMEBOXWIDTH		CON_SETTINGSWIDTH-CON_PHONEX
 #define	CON_NAMEBOXHEIGHT		15
-
-#define CON_COMBUTWIDTH			37
-#define CON_COMBUTHEIGHT		24
 
 #define MULTIOP_OKW			37
 #define MULTIOP_OKH			24

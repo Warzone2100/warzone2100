@@ -37,7 +37,6 @@
 
 /* Pixel gap between edge of edit box and text */
 #define WEDB_XGAP	4
-#define WEDB_YGAP	2
 
 /* Size of the overwrite cursor */
 #define WEDB_CURSORSIZE		8

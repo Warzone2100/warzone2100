@@ -93,8 +93,6 @@
 /* Transporter Timer form position */
 #define		TRAN_FORM_X			STAT_X
 #define		TRAN_FORM_Y			TIMER_Y
-#define		TRAN_FORM_WIDTH			75
-#define		TRAN_FORM_HEIGHT		25
 
 /* Transporter Timer position */
 #define		TRAN_TIMER_X			4
@@ -601,7 +599,6 @@ void addTransporterTimerInterface(void)
 	}
 }
 
-#define OFFSCREEN_RADIUS	600
 #define OFFSCREEN_HEIGHT	600
 
 #define	EDGE_SIZE	1

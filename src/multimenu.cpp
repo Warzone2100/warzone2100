@@ -78,7 +78,6 @@ UDWORD	current_tech = 1;
 UDWORD	current_numplayers = 4;
 
 #define DEBUGMENU_FORM_W		200
-#define DEBUGMENU_FORM_H		300
 #define DEBUGMENU_FORM_X		(screenWidth - DEBUGMENU_FORM_W)		//pie_GetVideoBufferWidth() ?
 #define DEBUGMENU_FORM_Y		110 + D_H
 
@@ -113,10 +112,6 @@ UDWORD	current_numplayers = 4;
 #define	MULTIMENU_GIFT_DRO		(MULTIMENU_GIFT_RES		 +MAX_PLAYERS)
 #define	MULTIMENU_GIFT_POW		(MULTIMENU_GIFT_DRO		 +MAX_PLAYERS)
 #define MULTIMENU_CHANNEL		(MULTIMENU_GIFT_POW		 +MAX_PLAYERS)
-
-#define MULTIMENU_STOPS			50
-#define MULTIMENU_MIDPOS		(MULTIMENU_STOPS/2)
-#define MULTIMENU_MULTIPLIER	((100/MULTIMENU_STOPS)*2)
 
 /// requester stuff.
 #define M_REQUEST_CLOSE (MULTIMENU+49)

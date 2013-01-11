@@ -73,7 +73,6 @@ struct BUTTON_SURFACE
 #define RENDERBUTTON_INITIALISED(x)  ((x)->Initialised=true)
 #define RENDERBUTTON_NOTINITIALISED(x)  ((x)->Initialised=false)
 
-#define IsBufferInitialised(x) ((x)->Initialised)
 #define IsBufferInUse(x) ((x)->InUse)
 
 struct RENDERED_BUTTON

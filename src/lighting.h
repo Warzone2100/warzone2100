@@ -26,8 +26,7 @@
 #define FOG_FLAGS		7
 #define FOG_BACKGROUND	1
 #define FOG_DISTANCE	2
-#define FOG_GROUND		4
-#define FOG_ENABLED		8
+
 
 extern UDWORD fogStatus;
 

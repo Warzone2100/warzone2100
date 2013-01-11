@@ -62,16 +62,6 @@ UDWORD			numFeatureStats;
 //Value is stored for easy access to this feature in destroyDroid()/destroyStruct()
 FEATURE_STATS* oilResFeature = NULL;
 
-/* other house droid to add */
-#define DROID_TEMPLINDEX	0
-#define DROID_X				(TILE_UNITS * 37 + TILE_UNITS/2)
-#define DROID_Y				(TILE_UNITS + TILE_UNITS/2)
-#define DROID_TARX			37
-#define DROID_TARY			42
-
-//specifies how far round (in tiles) a constructor droid sound look for more wreckage
-#define WRECK_SEARCH 3
-
 static const StringToEnum<FEATURE_TYPE> map_FEATURE_TYPE[] =
 {
 	{ "PROPULSION_TYPE_HOVER WRECK", FEAT_HOVER },

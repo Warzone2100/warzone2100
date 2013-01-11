@@ -29,25 +29,15 @@
 #define IDDES_STATSFORM		5001		// The design screen stats form
 #define IDDES_TEMPLFORM		5002		// The tabbed form of design templates
 #define IDDES_COMPFORM		5003		// The tabbed form of components
-#define IDDES_STATFORM		5004		// The bottom form with the overall stats
-#define IDDES_BRAINFORM		5005		// The clickable form for the brain
 #define IDDES_SYSTEMFORM	5006		// The clickable form for the weapon/ecm/sensor
 #define IDDES_BODYFORM		5007		// The clickable form for the body
 #define IDDES_PROPFORM		5008		// The clickable form for the propulsion
 #define IDDES_3DVIEW		5009		// The 3D view of the droid
-#define IDDES_BRAINVIEW		5010		// The Brain display box
 #define IDDES_BIN			5011		// The bin button
-#define IDDES_NAMELABEL		5012		// The Name label
 #define IDDES_NAMEBOX		5013		// The Name box
-#define IDDES_BRAINLAB		5014		// The Brain label
-#define IDDES_SYSTEMLAB		5015		// The System label
-#define IDDES_BODYLAB		5016		// The Body label
-#define IDDES_PROPLAB		5017		// The Propulsion label
-#define IDDES_3DVIEWLAB		5018		// The 3D view label
 #define IDDES_POWERFORM		5019		// The form for the power and points bars
 #define IDDES_TEMPLBASE		5020		// The base form for the Template (left) form
 #define IDDES_RIGHTBASE		5021		// The base form for the right form!
-#define IDDES_ICON			5022		// The form to hold the player' icon on
 #define IDDES_POWERBAR		5023		// The power bar for the template
 
 #define IDDES_WEAPONS		5024		// The weapon button for the Component form (right)

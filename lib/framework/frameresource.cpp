@@ -259,9 +259,7 @@ struct RESOURCEFILE
 };
 
 #define RESFILETYPE_EMPTY (0)			// empty entry
-#define RESFILETYPE_PC_SBL (1)			// Johns SBL stuff
 #define RESFILETYPE_LOADED (2)			// Loaded from a file (!)
-#define RESFILETYPE_WDGPTR (3)			// A pointer from the WDG cache
 
 
 #define MAXLOADEDRESOURCES (6)

@@ -207,7 +207,6 @@ extern void	setDesiredPitch(SDWORD pitch);
 
 #define CAMERA_PIVOT_HEIGHT (500)
 
-#define INITIAL_DESIRED_PITCH (-40)
 #define INITIAL_STARTING_PITCH (-40)
 #define INITIAL_DESIRED_ROTATION (-45)
 

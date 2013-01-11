@@ -67,26 +67,10 @@
 
 /* minimum distance for cyborgs to jump */
 #define	CYBORG_MIN_JUMP_DISTANCE	500
-#define	CYBORG_MIN_JUMP_HEIGHT		50
 #define	CYBORG_MAX_JUMP_HEIGHT		200
-
-/* Radius of a droid for collision detection */
-#define DROID_SIZE		64
 
 // Maximum size of an object for collision
 #define OBJ_MAXRADIUS	(TILE_UNITS * 4)
-
-// Accuracy for the boundary vector
-#define BOUND_ACC		1000
-
-/* Width and length of the droid collision box */
-#define HITBOX_WIDTH	128
-#define HITBOX_LENGTH	(HITBOX_WIDTH * 3)
-/* Angle covered by hit box at far end */
-#define HITBOX_ANGLE	36
-
-/* How close to a way point a droid has to get before going to the next */
-#define DROID_HIT_DIST	16
 
 // how long a shuffle can propagate before they all stop
 #define MOVE_SHUFFLETIME	10000

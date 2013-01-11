@@ -28,13 +28,6 @@
 #include "lib/ivis_opengl/piedef.h"
 #include "lib/ivis_opengl/textdraw.h"
 
-/* Button colours */
-#define WBUTC_TEXT		0			// Colour for button text
-#define WBUTC_BKGRND	1			// Colour for button background
-#define WBUTC_BORDER1	2			// Colour for button border
-#define WBUTC_BORDER2	3			// 2nd border colour
-#define	WBUTC_HILITE	4			// Hilite colour
-
 
 /* Forward definitions */
 struct WIDGET;
