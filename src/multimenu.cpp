@@ -949,7 +949,7 @@ static void displayMultiPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset,
 	{
 		pie_SetGeometricOffset( MULTIMENU_FORM_X+MULTIMENU_C1 ,y+MULTIMENU_PLAYER_H);
 		Vector3i rotation(-15, 45, 0);
-		Position position(0, 0, 2000);  // Scale them.
+		Position position(0, 0, BUTTON_DEPTH);  // Scale them.
 		if (displayDroid->droidType == DROID_SUPERTRANSPORTER)
 		{
 			position.z = 7850;

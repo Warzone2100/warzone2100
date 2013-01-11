@@ -186,9 +186,6 @@ bool tuiTargetOrigin = false;
 /// Temporary values for the terrain render - center of grid to be rendered
 static int playerXTile, playerZTile;
 
-/// Have we located the mouse?
-static bool	mouseLocated = true;
-
 /// The cached value of frameGetFrameNumber()
 static UDWORD currentGameFrame;
 /// The box used for multiple selection - present screen coordinates
@@ -464,19 +461,6 @@ static void displayMultiChat(void)
 	iV_DrawText(sTextToSend, RET_X + 3, 469 + E_H);
 }
 
-/// Cached values
-static SDWORD	gridCentreX,gridCentreZ,gridVarCalls;
-/// Get the cached value for the X center of the grid
-SDWORD	getCentreX( void )
-{
-	gridVarCalls++;
-	return(gridCentreX);
-}
-/// Get the cached value for the Z center of the grid
-SDWORD	getCentreZ( void )
-{
-	return(gridCentreZ);
-}
 /// Show all droid movement parts by displaying an explosion at every step
 static void showDroidPaths(void)
 {
@@ -693,10 +677,6 @@ static void setupConnectionStatusForm(void)
 /// Render the 3D world
 void draw3DScene( void )
 {
-	// the world centre - used for decaying lighting etc
-	gridCentreX = player.p.x;
-	gridCentreZ = player.p.z;
-
 	/* What frame number are we on? */
 	currentGameFrame = frameGetFrameNumber();
 
@@ -877,9 +857,6 @@ void draw3DScene( void )
 /// Draws the 3D textured terrain
 static void displayTerrain(void)
 {
-	/* We haven't yet located which tile mouse is over */
-	mouseLocated = false;
-
 	pie_PerspectiveBegin();
 
 	/* Now, draw the terrain */
@@ -1110,10 +1087,6 @@ bool init3DView(void)
 	Vector3f theSun(225.0f, -600.0f, 450.0f);
 
 	setTheSun(theSun);
-
-	// the world centre - used for decaying lighting etc
-	gridCentreX = player.p.x;
-	gridCentreZ = player.p.z;
 
 	/* There are no drag boxes */
 	dragBox3D.status = DRAG_INACTIVE;

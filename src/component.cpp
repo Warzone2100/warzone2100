@@ -882,7 +882,6 @@ static void displayCompObj(DROID *psDroid, bool bButton)
 					    psShape->nconnectors && psDroid->action == DACTION_DROIDREPAIR)
 					{
 						Spacetime st = interpolateObjectSpacetime(psDroid, graphicsTime);
-						Rotation rot = getInterpolatedWeaponRotation(psDroid, 0, graphicsTime);
 
 						pie_TRANSLATE( psShape->connectors[0].x,
 									   psShape->connectors[0].z,
