@@ -104,7 +104,6 @@ static bool	renderWallSection(STRUCTURE *psStructure);
 static void	drawDragBox(void);
 static void	calcFlagPosScreenCoords(SDWORD *pX, SDWORD *pY, SDWORD *pR);
 static void	displayTerrain(void);
-static iIMDShape *flattenImd(iIMDShape *imd, UDWORD structX, UDWORD structY, UDWORD direction, bool allPoints = false);
 static void	drawTiles(iView *player);
 static void	display3DProjectiles(void);
 static void	drawDroidSelections(void);
@@ -190,10 +189,6 @@ static int playerXTile, playerZTile;
 static UDWORD currentGameFrame;
 /// The box used for multiple selection - present screen coordinates
 static QUAD dragQuad;
-
-/// temporary buffer used for flattening IMDs
-#define iV_IMD_MAX_POINTS 500
-static Vector3f alteredPoints[iV_IMD_MAX_POINTS];
 
 /** Number of tiles visible
  * \todo This should become dynamic! (A function of resolution, angle and zoom maybe.)
@@ -2507,9 +2502,9 @@ void	renderDeliveryPoint(FLAG_POSITION *psPosition, bool blueprint)
 {
 	Vector3i	dv;
 	SDWORD		x, y, r;
-	Vector3f*	temp = NULL;
 	int pieFlag, pieFlagData;
 	PIELIGHT colour;
+
 	//store the frame number for when deciding what has been clicked on
 	psPosition->frameNumber = currentGameFrame;
 
@@ -2524,13 +2519,6 @@ void	renderDeliveryPoint(FLAG_POSITION *psPosition, bool blueprint)
 
 	//quick check for invalid data
 	ASSERT_OR_RETURN(, psPosition->factoryType < NUM_FLAG_TYPES && psPosition->factoryInc < MAX_FACTORY_FLAG_IMDS, "Invalid assembly point");
-
-	if (!blueprint && !psPosition->selected)
-	{
-		temp = pAssemblyPointIMDs[psPosition->factoryType][psPosition->factoryInc]->points;
-		flattenImd(pAssemblyPointIMDs[psPosition->factoryType][psPosition->factoryInc],
-			psPosition->coords.x, psPosition->coords.y, 0, true);
-	}
 
 	pie_MatScale(.5f); // they are all big now so make this one smaller too
 
@@ -2547,12 +2535,6 @@ void	renderDeliveryPoint(FLAG_POSITION *psPosition, bool blueprint)
 		colour = WZCOL_WHITE;
 	}
 	pie_Draw3DShape(pAssemblyPointIMDs[psPosition->factoryType][psPosition->factoryInc], 0, 0, colour, pieFlag, pieFlagData);
-
-
-	if (!blueprint && !psPosition->selected)
-	{
-		pAssemblyPointIMDs[psPosition->factoryType][psPosition->factoryInc]->points = temp;
-	}
 
 	//get the screen coords for the DP
 	calcFlagPosScreenCoords(&x, &y, &r);
@@ -3622,90 +3604,6 @@ static void renderSurroundings(void)
 
 	// Load Saved State
 	pie_MatEnd();
-}
-
-/// Flattens an imd to the landscape and handles 4 different rotations
-static iIMDShape *flattenImd(iIMDShape *imd, UDWORD structX, UDWORD structY, UDWORD direction, bool allPoints)
-{
-	UDWORD i, centreHeight;
-
-	ASSERT( imd->npoints < iV_IMD_MAX_POINTS, "flattenImd: too many points in the PIE to flatten it" );
-
-	/* Get a copy of the points */
-	memcpy(alteredPoints, imd->points, imd->npoints * sizeof(Vector3f));
-
-	/* Get the height of the centre point for reference */
-	centreHeight = map_Height(structX,structY);
-
-	/* Now we go through the shape looking for vertices on the edge */
-	/* Flip reference coords if we're on a vertical wall */
-
-	/* Little hack below 'cos sometimes they're not exactly 90 degree alligned. */
-	direction /= 90;
-	direction *= 90;
-
-	switch(direction)
-	{
-	case 0:
-		for(i = 0; i < (UDWORD)imd->npoints; i++)
-		{
-			if (abs(alteredPoints[i].x) >= 63 || abs(alteredPoints[i].z) >= 63 || allPoints)
-			{
-				UDWORD tempX = MIN(structX + alteredPoints[i].x, world_coord(mapWidth - 1));
-				UDWORD tempY = MAX(structY - alteredPoints[i].z, 0);
-				SDWORD shift = centreHeight - map_Height(tempX, tempY);
-
-				alteredPoints[i].y -= (shift - 4);
-			}
-		}
-		break;
-	case 90:
-		for(i=0; i<(UDWORD)imd->npoints; i++)
-		{
-			if (abs(alteredPoints[i].x) >= 63 || abs(alteredPoints[i].z) >= 63 || allPoints)
-			{
-				UDWORD tempX = MAX(structX - alteredPoints[i].z, 0);
-				UDWORD tempY = MAX(structY - alteredPoints[i].x, 0);
-				SDWORD shift = centreHeight - map_Height(tempX, tempY);
-
-				alteredPoints[i].y -= (shift - 4);
-			}
-		}
-		break;
-	case 180:
-		for(i=0; i<(UDWORD)imd->npoints; i++)
-		{
-			if (abs(alteredPoints[i].x) >= 63 || abs(alteredPoints[i].z) >= 63 || allPoints)
-			{
-				UDWORD tempX = MAX(structX - alteredPoints[i].x, 0);
-				UDWORD tempY = MIN(structY + alteredPoints[i].z, world_coord(mapHeight - 1));
-				SDWORD shift = centreHeight - map_Height(tempX, tempY);
-
-				alteredPoints[i].y -= (shift - 4);
-			}
-		}
-		break;
-	case 270:
-		for(i=0; i<(UDWORD)imd->npoints; i++)
-		{
-			if(abs(alteredPoints[i].x) >= 63 || abs(alteredPoints[i].z) >= 63 || allPoints)
-			{
-				UDWORD tempX = MIN(structX + alteredPoints[i].z, world_coord(mapWidth - 1));
-				UDWORD tempY = MIN(structY + alteredPoints[i].x, world_coord(mapHeight - 1));
-				SDWORD shift = centreHeight - map_Height(tempX, tempY);
-
-				alteredPoints[i].y -= (shift - 4);
-			}
-		}
-		break;
-	default:
-		debug(LOG_ERROR, "Weird direction (%u) for a structure in flattenImd", direction);
-		abort();
-		break;
-	}
-
-	imd->points = alteredPoints;
-	return imd;
 }
 
 /// Smoothly adjust player height to match the desired height
