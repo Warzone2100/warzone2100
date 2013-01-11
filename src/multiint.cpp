@@ -43,7 +43,6 @@
 #include "lib/ivis_opengl/pieclip.h"
 #include "lib/ivis_opengl/piemode.h"
 #include "lib/ivis_opengl/piepalette.h"
-#include "lib/ivis_opengl/piematrix.h"			// for setgeometricoffset
 #include "lib/ivis_opengl/screen.h"
 
 #include "lib/gamelib/gtime.h"

@@ -2165,7 +2165,7 @@ void ClearButton(bool Down, UDWORD Size, UDWORD buttonType)
 void CreateIMDButton(IMAGEFILE *ImageFile, UWORD ImageID, void *Object, UDWORD Player, RENDERED_BUTTON *Buffer, bool Down, UDWORD IMDType, UDWORD buttonType)
 {
 	UDWORD Size;
-	Vector3i Rotation, Position, NullVector;
+	Vector3i Rotation, Position;
 	UDWORD ox, oy;
 	UDWORD Radius;
 	UDWORD basePlateSize;
@@ -2234,10 +2234,6 @@ void CreateIMDButton(IMAGEFILE *ImageFile, UWORD ImageID, void *Object, UDWORD P
 		Rotation.x = -30;
 		Rotation.y = (UDWORD) Buffer->ImdRotation;
 		Rotation.z = 0;
-
-		NullVector.x = 0;
-		NullVector.y = 0;
-		NullVector.z = 0;
 
 		if (IMDType == IMDTYPE_DROID)
 		{
@@ -2436,10 +2432,6 @@ void CreateIMDButton(IMAGEFILE *ImageFile, UWORD ImageID, void *Object, UDWORD P
 		Rotation.x = -30;
 		Rotation.y = (UWORD) Buffer->ImdRotation;
 		Rotation.z = 0;
-
-		NullVector.x = 0;
-		NullVector.y = 0;
-		NullVector.z = 0;
 
 		Position.x = 0;
 		Position.y = 0;
