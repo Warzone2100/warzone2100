@@ -104,8 +104,8 @@ MAPTILE	*psMapTiles = NULL;
 uint8_t *psBlockMap[AUX_MAX];
 uint8_t *psAuxMap[MAX_PLAYERS + AUX_MAX];        // yes, we waste one element... eyes wide open... makes API nicer
 
-#define WATER_MIN_DEPTH 180
-#define WATER_MAX_DEPTH (WATER_MIN_DEPTH + 100)
+#define WATER_MIN_DEPTH 500
+#define WATER_MAX_DEPTH (WATER_MIN_DEPTH + 400)
 
 static void SetGroundForTile(const char *filename, const char *nametype);
 static int getTextureType(const char *textureType);
@@ -642,13 +642,91 @@ static bool mapSetGroundTypes(void)
 	return true;
 }
 
+static bool isWaterVertex(int x, int y)
+{
+	if (x < 1 || y < 1 || x > mapWidth - 1 || y > mapHeight - 1)
+	{
+		return false;
+	}
+	return terrainType(mapTile(x, y)) == TER_WATER && terrainType(mapTile(x-1, y)) == TER_WATER 
+		&& terrainType(mapTile(x, y-1)) == TER_WATER && terrainType(mapTile(x-1, y-1)) == TER_WATER;
+}
+
+static void generateRiverbed(void) 
+{
+	MersenneTwister mt(12345);  // 12345 = random seed.
+	int maxIdx = 1, idx[MAP_MAXWIDTH][MAP_MAXHEIGHT];
+	int i, j, l = 0;
+
+	for (i = 0; i < mapWidth; i++) 
+	{
+		for (j = 0; j < mapHeight; j++)
+		{
+			// initially set the seabed index to 0 for ground and 100 for water
+			idx[i][j] = 100 * isWaterVertex(i, j);
+			if (idx[i][j] > 0)
+			{
+				l++;
+			}
+		}
+	}
+	debug(LOG_TERRAIN, "Generating riverbed for %d water tiles.", l);
+	if (l == 0) // no water on map
+	{
+		return;
+	}
+	l = 0;
+	do
+	{
+		maxIdx = 1;
+		for (i = 1; i < mapWidth - 2; i++) 
+		{
+			for (j = 1; j < mapHeight - 2; j++)
+			{
+				
+				if (idx[i][j] > 0)
+				{
+					idx[i][j] = (idx[i-1][j] + idx[i][j-1] + idx[i][j+1] + idx[i+1][j]) / 4;
+					if (idx[i][j] > maxIdx) 
+					{
+						maxIdx=idx[i][j];
+					}
+				}
+			}
+		}
+		++l;
+		debug(LOG_TERRAIN, "%d%% completed after %d iterations", 10 * (100 - maxIdx), l);
+	} while (maxIdx > 90 && l < 20);
+
+	for (i = 0; i < mapWidth; i++)
+	{
+		for (j = 0; j < mapHeight; j++)
+		{
+			if (idx[i][j] > maxIdx)
+			{
+				idx[i][j] = maxIdx;
+			}
+			if (idx[i][j] < 1)
+			{
+				idx[i][j] = 1;
+			}
+			if (isWaterVertex(i, j))
+			{
+				l = (WATER_MAX_DEPTH + 1 - WATER_MIN_DEPTH) * (maxIdx - idx[i][j] - mt.u32() % (maxIdx / 6));
+				mapTile(i, j)->height -= WATER_MIN_DEPTH - (l / maxIdx);
+			}
+		}
+	}
+
+}
+
 /* Initialise the map structure */
 bool mapLoad(char *filename, bool preview)
 {
 	UDWORD		numGw, width, height;
 	char		aFileType[4];
 	UDWORD		version;
-	UDWORD		i, j, x, y;
+	UDWORD		i, x, y;
 	PHYSFS_file	*fp = PHYSFS_openRead(filename);
 	MersenneTwister mt(12345);  // 12345 = random seed.
 
@@ -770,21 +848,15 @@ bool mapLoad(char *filename, bool preview)
 		goto failure;
 	}
 
-	// reset the random water bottom heights
-	// set the river bed
-	for (i = 0; i < mapWidth; i++)
+	for (y = 0; y < mapHeight; y++)
 	{
-		for (j = 0; j < mapHeight; j++)
+		for (x = 0; x < mapWidth; x++)
 		{
 			// FIXME: magic number
-			mapTile(i, j)->waterLevel = mapTile(i, j)->height - world_coord(1) / 3;
-			// lower riverbed
-			if (terrainType(mapTile(i, j)) == TER_WATER && terrainType(mapTile(i-1, j)) == TER_WATER && terrainType(mapTile(i, j-1)) == TER_WATER && terrainType(mapTile(i-1, j-1)) == TER_WATER)
-			{
-				mapTile(i, j)->height -= WATER_MIN_DEPTH - mt.u32()%(WATER_MAX_DEPTH + 1 - WATER_MIN_DEPTH);
-			}
+			mapTile(x, y)->waterLevel = mapTile(x, y)->height - world_coord(1) / 3;
 		}
 	}
+	generateRiverbed();
 
 	/* set up the scroll mins and maxs - set values to valid ones for any new map */
 	scrollMinX = scrollMinY = 0;
