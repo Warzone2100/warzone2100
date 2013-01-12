@@ -34,6 +34,7 @@
 #include "pietypes.h"
 
 #include <vector>
+#include <QVector>
 
 //*************************************************************************
 //
@@ -90,12 +91,6 @@ struct iIMDShape
 	unsigned short numFrames;
 	unsigned short animInterval;
 
-	unsigned int npoints;
-	Vector3f *points;
-
-	unsigned int npolys;
-	iIMDPoly *polys;
-
 	unsigned int nconnectors;
 	Vector3i *connectors;
 
@@ -104,9 +99,18 @@ struct iIMDShape
 	float material[LIGHT_MAX][4];
 	float shininess;
 
-	GLfloat *vertices;
-	GLfloat *normals;
-	std::vector<GLfloat *> texcoords;
+	// The old rendering data
+	unsigned int npoints;
+	Vector3f *points;
+	unsigned int npolys;
+	iIMDPoly *polys;
+
+	// The new rendering data
+	int vertexCount; // gives size of vertex, normal and texel arrays
+	QVector<GLfloat> vertices;
+	QVector<GLfloat> normals;
+	QVector<GLfloat> texcoords;
+	QVector<uint16_t> indices; // size is npolys * 3 * numFrames
 
 	iIMDShape *next;  // next pie in multilevel pies (NULL for non multilevel !)
 };

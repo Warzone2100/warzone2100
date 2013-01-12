@@ -227,16 +227,16 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELI
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_NORMAL_ARRAY);
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-	glVertexPointer(3, GL_FLOAT, 0, shape->vertices);
-	glNormalPointer(GL_FLOAT, 0, shape->normals);
-	glTexCoordPointer(2, GL_FLOAT, 0, shape->texcoords[frame]);
+	glVertexPointer(3, GL_FLOAT, 0, shape->vertices.constData());
+	glNormalPointer(GL_FLOAT, 0, shape->normals.constData());
+	glTexCoordPointer(2, GL_FLOAT, 0, shape->texcoords.constData());
 	if (!shaders)
 	{
 		glClientActiveTexture(GL_TEXTURE1);
 		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-		glTexCoordPointer(2, GL_FLOAT, 0, shape->texcoords[frame]);
+		glTexCoordPointer(2, GL_FLOAT, 0, shape->texcoords.constData());
 	}
-	glDrawArrays(GL_TRIANGLES, 0, shape->npolys * 3);
+	glDrawElements(GL_TRIANGLES, shape->npolys * 3, GL_UNSIGNED_SHORT, shape->indices.constData() + frame * shape->npolys * 3);
 	if (!shaders)
 	{
 		glDisableClientState(GL_TEXTURE_COORD_ARRAY);

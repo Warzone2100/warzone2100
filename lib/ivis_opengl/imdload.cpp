@@ -480,6 +480,39 @@ static bool _imd_load_connectors(const char **ppFileData, iIMDShape *s)
 	return true;
 }
 
+static inline int addVertex(iIMDShape *s, int i, const iIMDPoly *p, int frameidx)
+{
+	// if texture animation flag is present, fetch animation coordinates for this polygon
+	// otherwise just show the first set of texel coordinates
+	int frame = (p->flags & iV_IMD_TEXANIM) ? frameidx : 0;
+
+	// See if we already have this defined, if so, return reference to it.
+	for (int j = 0; j < s->vertexCount; j++)
+	{
+		if (   s->texcoords[j * 2 + 0] == p->texCoord[frame * 3 + i].x
+		    && s->texcoords[j * 2 + 1] == p->texCoord[frame * 3 + i].y
+		    && s->vertices[j * 3 + 0] == s->points[p->pindex[i]].x
+		    && s->vertices[j * 3 + 1] == s->points[p->pindex[i]].y
+		    && s->vertices[j * 3 + 2] == s->points[p->pindex[i]].z
+		    && s->normals[j * 3 + 0] == p->normal.x
+		    && s->normals[j * 3 + 1] == p->normal.y
+		    && s->normals[j * 3 + 2] == p->normal.z)
+		{
+			return j;
+		}
+	}
+	// We don't have it, add it.
+	s->normals.append(p->normal.x);
+	s->normals.append(p->normal.y);
+	s->normals.append(p->normal.z);
+	s->texcoords.append(p->texCoord[frame * 3 + i].x);
+	s->texcoords.append(p->texCoord[frame * 3 + i].y);
+	s->vertices.append(s->points[p->pindex[i]].x);
+	s->vertices.append(s->points[p->pindex[i]].y);
+	s->vertices.append(s->points[p->pindex[i]].z);
+	s->vertexCount++;
+	return s->vertexCount - 1;
+}
 
 /*!
  * Load shape levels recursively
@@ -612,57 +645,21 @@ static iIMDShape *_imd_load_level(const char **ppFileData, const char *FileDataE
 	}
 
 	// FINALLY, massage the data into what can stream directly to OpenGL
-	s->vertices = (GLfloat *)malloc(sizeof(GLfloat) * 3 * s->npolys * 3);
-	s->normals = (GLfloat *)malloc(sizeof(GLfloat) * 3 * s->npolys * 3);
-	for (i = 0; i < MAX(1, s->numFrames); i++)
+	s->vertexCount = 0;
+	s->indices.reserve(MAX(1, s->numFrames) * s->npolys * 3);
+	for (int k = 0; k < MAX(1, s->numFrames); k++)
 	{
-		GLfloat *ptr = (GLfloat *)malloc(sizeof(GLfloat) * 2 * s->npolys * 3);
-		s->texcoords.push_back(ptr);
-	}
-	i = 0;
-	for (iIMDPoly *pPolys = s->polys; pPolys < s->polys + s->npolys; pPolys++)
-	{
-		// each of the 3 vertices has one normal coordinate in 3 dimensions (increment of 9)
-		s->normals[i * 9 + 0] = pPolys->normal.x;
-		s->normals[i * 9 + 1] = pPolys->normal.y;
-		s->normals[i * 9 + 2] = pPolys->normal.z;
-		s->normals[i * 9 + 3] = pPolys->normal.x;
-		s->normals[i * 9 + 4] = pPolys->normal.y;
-		s->normals[i * 9 + 5] = pPolys->normal.z;
-		s->normals[i * 9 + 6] = pPolys->normal.x;
-		s->normals[i * 9 + 7] = pPolys->normal.y;
-		s->normals[i * 9 + 8] = pPolys->normal.z;
-
-		// each polygon has 3 texel coordinates in 2 dimensions (increment of 6)
-		for (int j = 0; j < s->texcoords.size(); j++)
+		// Go through all polygons for each frame
+		for (int i = 0; i < s->npolys; i++)
 		{
-			// if texture animation flag is present, fetch animation coordinates for this polygon
-			// otherwise just show the first set of texel coordinates
-			int k = (pPolys->flags & iV_IMD_TEXANIM) ? j : 0;
+			const iIMDPoly *pPolys = &s->polys[i];
 
-			GLfloat *texcoords = s->texcoords[j];
-			texcoords[i * 6 + 0] = pPolys->texCoord[k * 3 + 0].x;
-			texcoords[i * 6 + 1] = pPolys->texCoord[k * 3 + 0].y;
-			texcoords[i * 6 + 2] = pPolys->texCoord[k * 3 + 1].x;
-			texcoords[i * 6 + 3] = pPolys->texCoord[k * 3 + 1].y;
-			texcoords[i * 6 + 4] = pPolys->texCoord[k * 3 + 2].x;
-			texcoords[i * 6 + 5] = pPolys->texCoord[k * 3 + 2].y;
+			// Do we already have the vertex data for this polygon?
+			s->indices.append(addVertex(s, 0, pPolys, k));
+			s->indices.append(addVertex(s, 1, pPolys, k));
+			s->indices.append(addVertex(s, 2, pPolys, k));
 		}
-
-		// each polygon has 3 texture coordinates in 3 dimensions (increment of 9)
-		s->vertices[i * 9 + 0] = s->points[pPolys->pindex[0]].x;
-		s->vertices[i * 9 + 1] = s->points[pPolys->pindex[0]].y;
-		s->vertices[i * 9 + 2] = s->points[pPolys->pindex[0]].z;
-		s->vertices[i * 9 + 3] = s->points[pPolys->pindex[1]].x;
-		s->vertices[i * 9 + 4] = s->points[pPolys->pindex[1]].y;
-		s->vertices[i * 9 + 5] = s->points[pPolys->pindex[1]].z;
-		s->vertices[i * 9 + 6] = s->points[pPolys->pindex[2]].x;
-		s->vertices[i * 9 + 7] = s->points[pPolys->pindex[2]].y;
-		s->vertices[i * 9 + 8] = s->points[pPolys->pindex[2]].z;
-
-		i++;
 	}
-
 	*ppFileData = pFileData;
 
 	return s;
@@ -678,7 +675,7 @@ static iIMDShape *_imd_load_level(const char **ppFileData, const char *FileDataE
 // ppFileData is incremented to the end of the file on exit!
 iIMDShape *iV_ProcessIMD( const char **ppFileData, const char *FileDataEnd )
 {
-	const char *pFileName = GetLastResourceFilename(); // Last loaded texture page filename
+	const char *pFileName = GetLastResourceFilename(); // Last loaded filename
 	const char *pFileData = *ppFileData;
 	char buffer[PATH_MAX], texfile[PATH_MAX], normalfile[PATH_MAX];
 	int cnt, nlevels;
