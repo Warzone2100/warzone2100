@@ -21,9 +21,6 @@
 #include <physfs.h>
 
 #ifndef WZ_NOSOUND
-#  if defined(WZ_OS_MAC)  // FIXME: this would be better if we could only have this for PPC builds, that may come later
-#    define OV_EXCLUDE_STATIC_CALLBACKS
-#  endif
 #  include <vorbis/vorbisfile.h>
 #  include <vorbis/codec.h>
 #endif
