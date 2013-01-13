@@ -673,7 +673,7 @@ static iIMDShape *_imd_load_level(const char **ppFileData, const char *FileDataE
 	glBufferData(GL_ARRAY_BUFFER, normals.size() * sizeof(GLfloat), normals.constData(), GL_STATIC_DRAW);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, s->buffers[VBO_INDEX]);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(uint16_t), indices.constData(), GL_STATIC_DRAW);
-	glBindBuffer(GL_ARRAY_BUFFER, s->buffers[VBO_TEXEL]);
+	glBindBuffer(GL_ARRAY_BUFFER, s->buffers[VBO_TEXCOORD]);
 	glBufferData(GL_ARRAY_BUFFER, texcoords.size() * sizeof(GLfloat), texcoords.constData(), GL_STATIC_DRAW);
 	glBindBuffer(GL_ARRAY_BUFFER, 0); // unbind
 

@@ -160,15 +160,14 @@ static ogg_int64_t audiobuf_granulepos = 0;	// time position of last sample
 
 static ogg_int64_t videobuf_granulepos = -1;	// time position of last video frame
 
-
 // frame & dropped frame counter
 static int frames = 0;
 static int dropped = 0;
 
 // Screen dimensions
 #define NUM_VERTICES 4
+static GLuint buffers[VBO_COUNT];
 static GLfloat vertices[NUM_VERTICES][2];
-static GLfloat texcoords[NUM_VERTICES][2];
 static GLfloat Scrnvidpos[3];
 
 static SCANLINE_MODE use_scanlines;
@@ -412,20 +411,19 @@ static void video_write(bool update)
 	glDepthMask(GL_FALSE);
 
 	glPushMatrix();
-
 	glTranslatef(Scrnvidpos[0], Scrnvidpos[1], Scrnvidpos[2]);
-	glBegin(GL_QUADS);
-	glTexCoord2fv(texcoords[0]);
-	glVertex2fv(vertices[0]);
-	glTexCoord2fv(texcoords[1]);
-	glVertex2fv(vertices[1]);
-	glTexCoord2fv(texcoords[2]);
-	glVertex2fv(vertices[2]);
-	glTexCoord2fv(texcoords[3]);
-	glVertex2fv(vertices[3]);
-	glEnd();
+
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+	glBindBuffer(GL_ARRAY_BUFFER, buffers[VBO_TEXCOORD]); glTexCoordPointer(2, GL_FLOAT, 0, NULL);
+	glBindBuffer(GL_ARRAY_BUFFER, buffers[VBO_VERTEX]); glVertexPointer(2, GL_FLOAT, 0, NULL);
+	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 	glPopMatrix();
+	glErrors();
 
 	// Make sure the current texture page is reloaded after we are finished
 	// Otherwise WZ will think it is still loaded and not load it again
@@ -738,17 +736,21 @@ bool seq_Play(const char* filename)
 #endif
 
 	/* open video */
+	glGenBuffers(VBO_MINIMAL, buffers);
+	glErrors();
 	if (theora_p)
 	{
 		if (videodata.ti.frame_width > texture_width || videodata.ti.frame_height > texture_height)
 		{
 			debug(LOG_ERROR, "Video size too large, must be below %.gx%.g!",
 					texture_width, texture_height);
+			glDeleteBuffers(VBO_MINIMAL, buffers);
 			return false;
 		}
 		if (videodata.ti.pixelformat != OC_PF_420)
 		{
 			debug(LOG_ERROR, "Video not in YUV420 format!");
+			glDeleteBuffers(VBO_MINIMAL, buffers);
 			return false;
 		}
 		char *blackframe = (char *)calloc(1, texture_width * texture_height * 4);
@@ -772,14 +774,13 @@ bool seq_Play(const char* filename)
 		const int height_factor = (use_scanlines ? 2 : 1);
 		const GLfloat vtwidth = (float)videodata.ti.frame_width / texture_width;
 		const GLfloat vtheight = (float)videodata.ti.frame_height * height_factor / texture_height;
-		texcoords[0][0] = 0.0f;
-		texcoords[0][1] = 0.0f;
-		texcoords[1][0] = vtwidth;
-		texcoords[1][1] = 0.0f;
-		texcoords[2][0] = vtwidth;
-		texcoords[2][1] = vtheight;
-		texcoords[3][0] = 0.0f;
-		texcoords[3][1] = vtheight;
+		GLfloat texcoords[NUM_VERTICES * 2] = { 0.0f, 0.0f, vtwidth, 0.0f, 0.0f, vtheight, vtwidth, vtheight };
+		glBindBuffer(GL_ARRAY_BUFFER, buffers[VBO_TEXCOORD]);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(texcoords), texcoords, GL_STATIC_DRAW);
+		glBindBuffer(GL_ARRAY_BUFFER, buffers[VBO_VERTEX]);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		glErrors();
 	}
 
 	/* on to the main decode loop.  We assume in this example that audio
@@ -1003,6 +1004,8 @@ void seq_Shutdown()
 		debug(LOG_VIDEO, "movie is not playing");
 		return;
 	}
+	glDeleteBuffers(VBO_MINIMAL, buffers);
+	glErrors();
 
 #if !defined(WZ_NOSOUND)
 	if (vorbis_p)
@@ -1066,9 +1069,9 @@ void seq_SetDisplaySize(int sizeX, int sizeY, int posX, int posY)
 	vertices[0][1] = 0.0f;
 	vertices[1][0] = sizeX;
 	vertices[1][1] = 0.0f;
-	vertices[2][0] = sizeX;
+	vertices[2][0] = 0.0f;
 	vertices[2][1] = sizeY;
-	vertices[3][0] = 0.0f;
+	vertices[3][0] = sizeX;
 	vertices[3][1] = sizeY;
 
 	if (sizeX > 640 || sizeY > 480)
