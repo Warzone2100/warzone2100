@@ -24,12 +24,10 @@
 #include "lib/framework/frame.h"
 #include <physfs.h>
 
-#ifndef WZ_NOSOUND
-# ifdef WZ_OS_MAC
-#  include <OpenAL/al.h>
-# else
-#  include <AL/al.h>
-# endif
+#ifdef WZ_OS_MAC
+#include <OpenAL/al.h>
+#else
+#include <AL/al.h>
 #endif
 
 #define ATTENUATION_FACTOR	0.0003f
@@ -53,13 +51,11 @@ struct SIMPLE_OBJECT;
 struct AUDIO_SAMPLE
 {
 	SDWORD                  iTrack;         // ID number identifying a specific sound; currently (r1182) mapped in audio_id.c
-#ifndef WZ_NOSOUND
 	ALuint                  iSample;        // OpenAL name of the sound source
 #ifdef DEBUG	// only used for debugging
 	ALboolean			isLooping;		// if	sample loops
 	ALboolean			is3d;			// if	sample is 3d (as opposed to 2d)
 	char				filename[256];	// actual filename of sample
-#endif
 #endif
 	SDWORD                  x, y, z;
 	float                   fVol;           // computed volume of sample
@@ -78,9 +74,7 @@ struct TRACK
 	SDWORD          iTime;                  // duration in milliseconds
 	UDWORD          iTimeLastFinished;      // time last finished in ms
 	UDWORD          iNumPlaying;
-#ifndef WZ_NOSOUND
 	ALuint          iBufferName;            // OpenAL name of the buffer
-#endif
 	const char     *fileName;
 };
 

@@ -69,14 +69,12 @@
 #include <theora/theora.h>
 #include <physfs.h>
 
-#if !defined(WZ_NOSOUND)
-# include <vorbis/codec.h>
-
-# if defined( WZ_OS_MAC)
-#  include <OpenAL/al.h>
-# else
-#  include <AL/al.h>
-# endif
+#include <vorbis/codec.h>
+#if defined(WZ_OS_MAC)
+#include <OpenAL/al.h>
+#else
+#include <AL/al.h>
+#endif
 
 // stick this in sequence.h perhaps?
 struct AudioData
@@ -89,8 +87,6 @@ struct AudioData
 	int audiobuf_fill;		// how full our audio buffer is
 };
 
-#endif
-
 struct VideoData
 {
 	ogg_sync_state oy;		// ogg sync state
@@ -100,52 +96,39 @@ struct VideoData
 	theora_info ti;			// theora info
 	theora_comment tc;		// theora comment
 	theora_state td;		// theora state
-#if !defined(WZ_NOSOUND)
 	vorbis_info vi;			// vorbis info
 	vorbis_dsp_state vd;	// vorbis display state
 	vorbis_block vb;		// vorbis block
 	vorbis_comment vc;		// vorbis comment
-#endif
 };
 // stick that in sequence.h perhaps?
 
-#if !defined(WZ_NOSOUND)
 // for our audio structure
 static AudioData audiodata;
 static ALint sourcestate = 0;		//Source state information
-#endif
 
 // for our video structure
 static VideoData videodata;
 
+/// are we playing a theora stream?
 static int theora_p = 0;
 
-#if !defined(WZ_NOSOUND)
+/// are we playing an ogg vorbis stream?
 static int vorbis_p = 0;
-#endif
 
 static bool stateflag = false;
 static bool videoplaying = false;
 static bool videobuf_ready = false;		// single frame video buffer ready for processing
-
-#if !defined(WZ_NOSOUND)
 static bool audiobuf_ready = false;		// single 'frame' audio buffer ready for processing
-#endif
 
 // file handle
 static PHYSFS_file* fpInfile = NULL;
 
 static uint32_t* RGBAframe = NULL;					// texture buffer
-
-#if !defined(WZ_NOSOUND)
 static ogg_int16_t* audiobuf = NULL;			// audio buffer
-#endif
-
 
 // For timing
-#if !defined(WZ_NOSOUND)
 static double audioTime = 0;
-#endif
 
 static double videobuf_time = 0;
 static double sampletimeOffset = 0;
@@ -154,10 +137,7 @@ static double last_time;
 static double timer_expire;
 static bool timer_started = false;
 
-#if !defined(WZ_NOSOUND)
 static ogg_int64_t audiobuf_granulepos = 0;	// time position of last sample
-#endif
-
 static ogg_int64_t videobuf_granulepos = -1;	// time position of last video frame
 
 // frame & dropped frame counter
@@ -195,12 +175,10 @@ static int queue_page(ogg_page *page)
 		ogg_stream_pagein(&videodata.to, page);
 	}
 
-#if !defined(WZ_NOSOUND)
 	if (vorbis_p)
 	{
 		ogg_stream_pagein(&videodata.vo, page);
 	}
-#endif
 
 	return 0;
 }
@@ -211,7 +189,6 @@ static void seq_SetFrameNumber(int frame)
 	frames = frame;
 }
 
-#if !defined(WZ_NOSOUND)
 /// @TODO FIXME:  This routine can & will fail when sources are used up!
 static void open_audio(void)
 {
@@ -257,7 +234,6 @@ static void audio_close(void)
 		audiobuf = NULL;
 	}
 }
-#endif
 
 // Retrieves the current time with millisecond accuracy
 static double getTimeNow(void)
@@ -430,7 +406,6 @@ static void video_write(bool update)
 	pie_SetTexturePage(TEXPAGE_NONE);
 }
 
-#if !defined(WZ_NOSOUND)
 // FIXME: perhaps we should use wz's routine for audio?
 // loads up the audio buffers, and calculates audio sync time.
 static void audio_write(void)
@@ -487,7 +462,6 @@ static void audio_write(void)
 		audiodata.audiobuf_fill = 0;
 	}
 }
-#endif
 
 static void seq_InitOgg(void)
 {
@@ -495,10 +469,7 @@ static void seq_InitOgg(void)
 
 	stateflag = false;
 	theora_p = 0;
-
-#if !defined(WZ_NOSOUND)
 	vorbis_p = 0;
-#endif
 
 	videoplaying = false;
 
@@ -509,26 +480,21 @@ static void seq_InitOgg(void)
 	frames = 0;
 	dropped = 0;
 
-#if !defined(WZ_NOSOUND)
 	/* single audio fragment audio buffering */
 	audiodata.audiobuf_fill = 0;
 	audiobuf_ready = false;
 
 	audiobuf_granulepos = 0;	/* time position of last sample */
-
 	audioTime = 0;
-#endif
 
 	sampletimeOffset = 0;
 
 	/* start up Ogg stream synchronization layer */
 	ogg_sync_init(&videodata.oy);
 
-#if !defined(WZ_NOSOUND)
 	/* init supporting Vorbis structures needed in header parsing */
 	vorbis_info_init(&videodata.vi);
 	vorbis_comment_init(&videodata.vc);
-#endif
 
 	/* init supporting Theora structuretotbufstarteds needed in header parsing */
 	theora_comment_init(&videodata.tc);
@@ -566,10 +532,7 @@ bool seq_Play(const char* filename)
 	}
 
 	theora_p = 0;
-
-#if !defined(WZ_NOSOUND)
 	vorbis_p = 0;
-#endif
 
 	/* Ogg file open; parse the headers */
 	/* Only interested in Vorbis/Theora streams */
@@ -606,14 +569,12 @@ bool seq_Play(const char* filename)
 				memcpy(&videodata.to, &test, sizeof(test));
 				theora_p = 1;
 			}
-#if !defined(WZ_NOSOUND)
 			else if (!vorbis_p && vorbis_synthesis_headerin(&videodata.vi, &videodata.vc, &op) >= 0)
 			{
 				/* it is vorbis */
 				memcpy(&videodata.vo, &test, sizeof(test));
 				vorbis_p = 1;
 			}
-#endif
 			else
 			{
 				/* whatever it is, we don't care about it */
@@ -624,11 +585,7 @@ bool seq_Play(const char* filename)
 	}
 
 	/* we're expecting more header packets. */
-	while ((theora_p && theora_p < 3)
-#if !defined(WZ_NOSOUND)
-	    || (vorbis_p && vorbis_p < 3)
-#endif
-	    )
+	while ((theora_p && theora_p < 3) || (vorbis_p && vorbis_p < 3))
 	{
 		int ret;
 
@@ -650,7 +607,6 @@ bool seq_Play(const char* filename)
 			theora_p++;
 		}
 
-#if !defined(WZ_NOSOUND)
 		/* look for more vorbis header packets */
 		while (vorbis_p && (vorbis_p < 3) && (ret = ogg_stream_packetout(&videodata.vo, &op)))
 		{
@@ -668,7 +624,6 @@ bool seq_Play(const char* filename)
 
 			vorbis_p++;
 		}
-#endif
 
 		/* The header pages/packets will arrive before anything else we
 				care about, or the stream is not obeying spec */
@@ -713,7 +668,6 @@ bool seq_Play(const char* filename)
 		theora_comment_clear(&videodata.tc);
 	}
 
-#if !defined(WZ_NOSOUND)
 	if (vorbis_p)
 	{
 		vorbis_synthesis_init(&videodata.vd, &videodata.vi);
@@ -733,7 +687,6 @@ bool seq_Play(const char* filename)
 	{
 		open_audio();
 	}
-#endif
 
 	/* open video */
 	glGenBuffers(VBO_MINIMAL, buffers);
@@ -806,11 +759,9 @@ bool seq_Update()
 {
 	ogg_packet op;
 	int ret;
-#if !defined(WZ_NOSOUND)
 	int i, j;
 	float **  pcm;
 	int count, maxsamples;
-#endif
 
 	/* we want a video and audio frame ready to go at all times.  If
 		   we have to buffer incoming, buffer the compressed data (ie, let
@@ -821,7 +772,6 @@ bool seq_Update()
 		return false;
 	}
 
-#if !defined(WZ_NOSOUND)
 	while (vorbis_p && !audiobuf_ready)
 	{
 		/* if there's pending, decoded audio, grab it */
@@ -883,7 +833,6 @@ bool seq_Update()
 			}
 		}
 	}
-#endif
 
 	while (theora_p && !videobuf_ready)
 	{
@@ -917,16 +866,12 @@ bool seq_Update()
 		}
 	}
 
-#if !defined(WZ_NOSOUND)
 	alGetSourcei(audiodata.source, AL_SOURCE_STATE, &sourcestate);
-#endif
 
 	if (PHYSFS_eof(fpInfile)
 		&& !videobuf_ready
-#if !defined(WZ_NOSOUND)
 		&& ((!audiobuf_ready && (audiodata.audiobuf_fill == 0)) || audio_Disabled())
 		&& sourcestate != AL_PLAYING
-#endif
 	 )
 	{
 		video_write(false);
@@ -935,11 +880,7 @@ bool seq_Update()
 		return false;
 	}
 
-	if (!videobuf_ready
-#if !defined(WZ_NOSOUND)
-	 || !audiobuf_ready
-#endif
-	 )
+	if (!videobuf_ready || !audiobuf_ready)
 	{
 		/* no data yet for somebody.  Grab another page */
 		ret = buffer_data(fpInfile, &videodata.oy);
@@ -949,7 +890,6 @@ bool seq_Update()
 		}
 	}
 
-#if !defined(WZ_NOSOUND)
 	/* If playback has begun, top audio buffer off immediately. */
 	if (vorbis_p
 	 && stateflag
@@ -959,7 +899,6 @@ bool seq_Update()
 		// play the data in pcm
 		audio_write();
 	}
-#endif
 
 	/* are we at or past time for this video frame? */
 	if (stateflag && videobuf_ready && (videobuf_time <= getRelativeTime()))
@@ -975,11 +914,7 @@ bool seq_Update()
 
 	/* if our buffers either don't exist or are ready to go,
 		   we can begin playback */
-	if ((!theora_p || videobuf_ready)
-#if !defined(WZ_NOSOUND)
-	 && (!vorbis_p || audiobuf_ready)
-#endif
-	 && !stateflag)
+	if ((!theora_p || videobuf_ready) && (!vorbis_p || audiobuf_ready) && !stateflag)
 	{
 		debug(LOG_VIDEO, "all buffers ready");
 		stateflag = true;
@@ -1007,7 +942,6 @@ void seq_Shutdown()
 	glDeleteBuffers(VBO_MINIMAL, buffers);
 	glErrors();
 
-#if !defined(WZ_NOSOUND)
 	if (vorbis_p)
 	{
 		ogg_stream_clear(&videodata.vo);
@@ -1022,7 +956,6 @@ void seq_Shutdown()
 
 		audio_close();
 	}
-#endif
 
 	if (theora_p)
 	{
@@ -1043,9 +976,7 @@ void seq_Shutdown()
 	videoplaying = false;
 	Timer_stop();
 
-#if !defined(WZ_NOSOUND)
 	audioTime = 0;
-#endif
 	sampletimeOffset = last_time = timer_expire = timer_started = 0;
 	basetime = -1;
 	pie_SetTexturePage(-1);

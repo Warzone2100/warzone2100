@@ -32,14 +32,11 @@
 
 static float		music_volume = 0.5;
 
-#if !defined(WZ_NOSOUND)
 static const size_t bufferSize = 16 * 1024;
 static const unsigned int buffer_count = 32;
 static bool		music_initialized = false;
 static bool		stopping = true;
-
 static AUDIO_STREAM *cdStream = NULL;
-#endif
 
 bool cdAudio_Open(const char *user_musicdir)
 {
@@ -53,10 +50,8 @@ bool cdAudio_Open(const char *user_musicdir)
 
 	debug(LOG_SOUND, "called(%s)", user_musicdir);
 
-#if !defined(WZ_NOSOUND)
 	music_initialized = true;
 	stopping = true;
-#endif
 
 	return true;
 }
@@ -67,13 +62,10 @@ void cdAudio_Close(void)
 	cdAudio_Stop();
 	PlayList_Quit();
 
-#if !defined(WZ_NOSOUND)
 	music_initialized = false;
 	stopping = true;
-#endif
 }
 
-#if !defined(WZ_NOSOUND)
 static void cdAudio_TrackFinished(void *);
 
 static bool cdAudio_OpenTrack(const char *filename)
@@ -131,7 +123,6 @@ static void cdAudio_TrackFinished(void *user_data)
 		debug(LOG_SOUND, "Now playing %s (was playing %s)", filename, (char *)user_data);
 	}
 }
-#endif
 
 bool cdAudio_PlayTrack(SONG_CONTEXT context)
 {
@@ -139,7 +130,6 @@ bool cdAudio_PlayTrack(SONG_CONTEXT context)
 
 	switch (context)
 	{
-#if !defined(WZ_NOSOUND)
 	case SONG_FRONTEND:
 		return cdAudio_OpenTrack("music/menu.ogg");
 
@@ -154,11 +144,6 @@ bool cdAudio_PlayTrack(SONG_CONTEXT context)
 
 			return cdAudio_OpenTrack(filename);
 		}
-#else
-	case SONG_FRONTEND:
-	case SONG_INGAME:
-		return false;
-#endif
 	}
 
 	ASSERT(!"Invalid songcontext", "Invalid song context specified for playing: %u", (unsigned int)context);
@@ -168,7 +153,6 @@ bool cdAudio_PlayTrack(SONG_CONTEXT context)
 
 void cdAudio_Stop()
 {
-#if !defined(WZ_NOSOUND)
 	stopping = true;
 	debug(LOG_SOUND, "called, cdStream=%p", cdStream);
 
@@ -178,31 +162,24 @@ void cdAudio_Stop()
 		cdStream = NULL;
 		sound_Update();
 	}
-#else
-	debug(LOG_SOUND, "called");
-#endif
 }
 
 void cdAudio_Pause()
 {
 	debug(LOG_SOUND, "called");
-#if !defined(WZ_NOSOUND)
 	if (cdStream)
 	{
 		sound_PauseStream(cdStream);
 	}
-#endif
 }
 
 void cdAudio_Resume()
 {
 	debug(LOG_SOUND, "called");
-#if !defined(WZ_NOSOUND)
 	if (cdStream)
 	{
 		sound_ResumeStream(cdStream);
 	}
-#endif
 }
 
 float sound_GetMusicVolume()
@@ -215,11 +192,9 @@ void sound_SetMusicVolume(float volume)
 	// Keep volume in the range of 0.0 - 1.0
 	music_volume = clipf(volume, 0.0f, 1.0f);
 
-#if !defined(WZ_NOSOUND)
 	// Change the volume of the current stream as well (if any)
 	if (cdStream)
 	{
 		sound_SetStreamVolume(cdStream, music_volume);
 	}
-#endif
 }

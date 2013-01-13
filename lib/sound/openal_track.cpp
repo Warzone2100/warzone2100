@@ -27,14 +27,12 @@
 #include "lib/framework/frameresource.h"
 #include "lib/exceptionhandler/dumpinfo.h"
 
-#ifndef WZ_NOSOUND
-# ifdef WZ_OS_MAC
-#  include <OpenAL/al.h>
-#  include <OpenAL/alc.h>
-# else
-#  include <AL/al.h>
-#  include <AL/alc.h>
-# endif
+#ifdef WZ_OS_MAC
+#include <OpenAL/al.h>
+#include <OpenAL/alc.h>
+#else
+#include <AL/al.h>
+#include <AL/alc.h>
 #endif
 
 #include <physfs.h>
@@ -48,18 +46,13 @@
 #include "openal_error.h"
 #include "mixer.h"
 
-
-#ifndef WZ_NOSOUND
-ALuint current_queue_sample = -1;
-#endif
+static ALuint current_queue_sample = -1;
 
 static bool openal_initialized = false;
 
 struct AUDIO_STREAM
 {
-#ifndef WZ_NOSOUND
 	ALuint                  source;        // OpenAL name of the sound source
-#endif
 	struct OggVorbisDecoderState *decoder;
 	PHYSFS_file *fileHandle;
 	float                   volume;
@@ -82,7 +75,6 @@ struct SAMPLE_LIST
 
 static SAMPLE_LIST *active_samples = NULL;
 
-#if !defined(WZ_NOSOUND)
 static AUDIO_STREAM *active_streams = NULL;
 
 static ALfloat		sfx_volume = 1.0;
@@ -90,7 +82,6 @@ static ALfloat		sfx3d_volume = 1.0;
 
 static ALCdevice *device = NULL;
 static ALCcontext *context = NULL;
-#endif
 
 
 /** Removes the given sample from the "active_samples" linked list
@@ -124,7 +115,6 @@ static void sound_RemoveSample(SAMPLE_LIST *previous, SAMPLE_LIST *to_remove)
 //
 bool sound_InitLibrary(void)
 {
-#ifndef WZ_NOSOUND
 	int err;
 	const ALfloat listenerVel[3] = { 0.0, 0.0, 0.0 };
 	const ALfloat listenerOri[6] = { 0.0, 0.0, 1.0, 0.0, 1.0, 0.0 };
@@ -207,11 +197,9 @@ bool sound_InitLibrary(void)
 	ssprintf(buf, "OpenAL Extensions: %s", alGetString(AL_EXTENSIONS));
 	addDumpInfo(buf);
 	debug(LOG_SOUND, "%s", buf);
-#endif
 
 	openal_initialized = true;
 
-#ifndef WZ_NOSOUND
 	// Clear Error Codes
 	alGetError();
 	alcGetError(device);
@@ -221,19 +209,15 @@ bool sound_InitLibrary(void)
 	alListenerfv(AL_ORIENTATION, listenerOri);
 	alDistanceModel(AL_NONE);
 	sound_GetError();
-#endif
+
 	return true;
 }
 
-#if !defined(WZ_NOSOUND)
 static void sound_UpdateStreams(void);
-#endif
 
 void sound_ShutdownLibrary(void)
 {
-#if !defined(WZ_NOSOUND)
 	AUDIO_STREAM *stream;
-#endif
 	SAMPLE_LIST *aSample = active_samples, * tmpSample = NULL;
 
 	if (!openal_initialized)
@@ -242,7 +226,6 @@ void sound_ShutdownLibrary(void)
 	}
 	debug(LOG_SOUND, "starting shutdown");
 
-#if !defined(WZ_NOSOUND)
 	// Stop all streams, sound_UpdateStreams() will deallocate all stopped streams
 	for (stream = active_streams; stream != NULL; stream = stream->next)
 	{
@@ -266,7 +249,6 @@ void sound_ShutdownLibrary(void)
 	{
 		debug(LOG_SOUND, "OpenAl could not close the audio device.");
 	}
-#endif
 
 	while (aSample)
 	{
@@ -283,14 +265,12 @@ void sound_ShutdownLibrary(void)
  */
 static void sound_DestroyIteratedSample(SAMPLE_LIST **previous, SAMPLE_LIST **sample)
 {
-#ifndef WZ_NOSOUND
 	// If an OpenAL source is associated with this sample, release it
 	if ((*sample)->curr->iSample != (ALuint)AL_INVALID)
 	{
 		alDeleteSources(1, &(*sample)->curr->iSample);
 		sound_GetError();
 	}
-#endif
 
 	// Do the cleanup of this sample
 	sound_FinishedCallback((*sample)->curr);
@@ -322,7 +302,6 @@ unsigned int sound_GetActiveSamplesCount()
 
 void sound_Update()
 {
-#ifndef WZ_NOSOUND
 	SAMPLE_LIST *node = active_samples;
 	SAMPLE_LIST *previous = NULL;
 	ALCenum err;
@@ -401,7 +380,6 @@ void sound_Update()
 	{
 		debug(LOG_ERROR, "Error while processing audio context: %s", alGetString(err));
 	}
-#endif
 }
 
 //*
@@ -410,7 +388,6 @@ void sound_Update()
 //
 bool sound_QueueSamplePlaying(void)
 {
-#ifndef WZ_NOSOUND
 	ALenum	state;
 
 	if (!openal_initialized)
@@ -460,7 +437,6 @@ bool sound_QueueSamplePlaying(void)
 		debug(LOG_ERROR, "Sample %u not deleted because it wasn't in the active queue!", current_queue_sample);
 		current_queue_sample = AL_INVALID;
 	}
-#endif
 	return false;
 }
 
@@ -471,7 +447,6 @@ bool sound_QueueSamplePlaying(void)
  */
 static inline TRACK *sound_DecodeOggVorbisTrack(TRACK *psTrack, PHYSFS_file *PHYSFS_fileHandle)
 {
-#ifndef WZ_NOSOUND
 	ALenum		format;
 	ALuint		buffer;
 	struct OggVorbisDecoderState *decoder;
@@ -525,7 +500,6 @@ static inline TRACK *sound_DecodeOggVorbisTrack(TRACK *psTrack, PHYSFS_file *PHY
 
 	// save buffer name in track
 	psTrack->iBufferName = buffer;
-#endif
 
 	return psTrack;
 }
@@ -595,13 +569,10 @@ TRACK *sound_LoadTrackFromFile(const char *fileName)
 
 void sound_FreeTrack(TRACK *psTrack)
 {
-#ifndef WZ_NOSOUND
 	alDeleteBuffers(1, &psTrack->iBufferName);
 	sound_GetError();
-#endif
 }
 
-#ifndef WZ_NOSOUND
 static void sound_AddActiveSample(AUDIO_SAMPLE *psSample)
 {
 	SAMPLE_LIST *tmp = (SAMPLE_LIST *) malloc(sizeof(SAMPLE_LIST));
@@ -611,7 +582,6 @@ static void sound_AddActiveSample(AUDIO_SAMPLE *psSample)
 	tmp->next = active_samples;
 	active_samples = tmp;
 }
-#endif
 
 /** Routine gets rid of the psObj's sound sample and reference in active_samples.
  */
@@ -642,14 +612,12 @@ void sound_RemoveActiveSample(AUDIO_SAMPLE *psSample)
 	}
 }
 
-#ifndef WZ_NOSOUND
 static bool sound_SetupChannel(AUDIO_SAMPLE *psSample)
 {
 	sound_AddActiveSample(psSample);
 
 	return sound_TrackLooped(psSample->iTrack);
 }
-#endif
 
 //*
 // =======================================================================================================================
@@ -657,7 +625,6 @@ static bool sound_SetupChannel(AUDIO_SAMPLE *psSample)
 //
 bool sound_Play2DSample(TRACK *psTrack, AUDIO_SAMPLE *psSample, bool bQueued)
 {
-#ifndef WZ_NOSOUND
 	ALfloat zero[3] = { 0.0, 0.0, 0.0 };
 	ALfloat volume;
 	ALint error;
@@ -720,7 +687,6 @@ bool sound_Play2DSample(TRACK *psTrack, AUDIO_SAMPLE *psSample, bool bQueued)
 	{
 		current_queue_sample = -1;
 	}
-#endif
 
 	return true;
 }
@@ -731,7 +697,6 @@ bool sound_Play2DSample(TRACK *psTrack, AUDIO_SAMPLE *psSample, bool bQueued)
 //
 bool sound_Play3DSample(TRACK *psTrack, AUDIO_SAMPLE *psSample)
 {
-#ifndef WZ_NOSOUND
 	ALfloat zero[3] = { 0.0, 0.0, 0.0 };
 	ALfloat volume;
 	ALint error;
@@ -786,7 +751,7 @@ bool sound_Play3DSample(TRACK *psTrack, AUDIO_SAMPLE *psSample)
 
 	alSourcePlay(psSample->iSample);
 	sound_GetError();
-#endif
+
 	return true;
 }
 
@@ -824,7 +789,6 @@ AUDIO_STREAM *sound_PlayStream(PHYSFS_file *fileHandle, float volume, void (*onF
  */
 AUDIO_STREAM *sound_PlayStreamWithBuf(PHYSFS_file *fileHandle, float volume, void (*onFinished)(void *), void *user_data, size_t streamBufferSize, unsigned int buffer_count)
 {
-#if !defined(WZ_NOSOUND)
 	AUDIO_STREAM *stream;
 	ALuint       *buffers = (ALuint *)alloca(sizeof(ALuint) * buffer_count);
 	ALint error;
@@ -953,9 +917,6 @@ AUDIO_STREAM *sound_PlayStreamWithBuf(PHYSFS_file *fileHandle, float volume, voi
 	active_streams = stream;
 
 	return stream;
-#else
-	return NULL;
-#endif
 }
 
 /** Checks if the stream is playing.
@@ -965,7 +926,6 @@ AUDIO_STREAM *sound_PlayStreamWithBuf(PHYSFS_file *fileHandle, float volume, voi
  */
 bool sound_isStreamPlaying(AUDIO_STREAM *stream)
 {
-#if !defined(WZ_NOSOUND)
 	ALint state;
 
 	if (stream)
@@ -978,8 +938,6 @@ bool sound_isStreamPlaying(AUDIO_STREAM *stream)
 		}
 	}
 	return false;
-
-#endif
 }
 
 /** Stops the current stream from playing.
@@ -993,12 +951,10 @@ void sound_StopStream(AUDIO_STREAM *stream)
 {
 	assert(stream != NULL);
 
-#if !defined(WZ_NOSOUND)
 	alGetError();	// clear error codes
 	// Tell OpenAL to stop playing on the given source
 	alSourceStop(stream->source);
 	sound_GetError();
-#endif
 }
 
 /** Pauses playing of this stream until playing is resumed with
@@ -1007,7 +963,6 @@ void sound_StopStream(AUDIO_STREAM *stream)
  */
 void sound_PauseStream(AUDIO_STREAM *stream)
 {
-#if !defined(WZ_NOSOUND)
 	ALint state;
 
 	// To be sure we won't go mutilating this OpenAL source, check wether
@@ -1023,7 +978,6 @@ void sound_PauseStream(AUDIO_STREAM *stream)
 	// Pause playing of this OpenAL source
 	alSourcePause(stream->source);
 	sound_GetError();
-#endif
 }
 
 /** Resumes playing of a stream that's paused by means of sound_PauseStream().
@@ -1031,7 +985,6 @@ void sound_PauseStream(AUDIO_STREAM *stream)
  */
 void sound_ResumeStream(AUDIO_STREAM *stream)
 {
-#if !defined(WZ_NOSOUND)
 	ALint state;
 
 	// To be sure we won't go mutilating this OpenAL source, check wether
@@ -1047,7 +1000,6 @@ void sound_ResumeStream(AUDIO_STREAM *stream)
 	// Resume playing of this OpenAL source
 	alSourcePlay(stream->source);
 	sound_GetError();
-#endif
 }
 
 /** Retrieve the playing volume of the given stream.
@@ -1059,15 +1011,11 @@ void sound_ResumeStream(AUDIO_STREAM *stream)
  */
 float sound_GetStreamVolume(const AUDIO_STREAM *stream)
 {
-#if !defined(WZ_NOSOUND)
 	ALfloat volume;
 	alGetSourcef(stream->source, AL_GAIN, &volume);
 	sound_GetError();
 
 	return volume;
-#else
-	return 1.f;
-#endif
 }
 
 /** Set the playing volume of the given stream.
@@ -1079,13 +1027,10 @@ float sound_GetStreamVolume(const AUDIO_STREAM *stream)
 void sound_SetStreamVolume(AUDIO_STREAM *stream, float volume)
 {
 	stream->volume = volume;
-#if !defined(WZ_NOSOUND)
 	alSourcef(stream->source, AL_GAIN, stream->volume);
 	sound_GetError();
-#endif
 }
 
-#if !defined(WZ_NOSOUND)
 /** Update the given stream by making sure its buffers remain full
  *  \param stream the stream to update
  *  \return true when the stream is still playing, false when it has stopped
@@ -1255,7 +1200,6 @@ static void sound_UpdateStreams()
 		stream = stream->next;
 	}
 }
-#endif
 
 //*
 // =======================================================================================================================
@@ -1263,7 +1207,6 @@ static void sound_UpdateStreams()
 //
 void sound_StopSample(AUDIO_SAMPLE *psSample)
 {
-#ifndef WZ_NOSOUND
 	if (psSample->iSample == (ALuint)SAMPLE_NOT_ALLOCATED)
 	{
 		debug(LOG_SOUND, "sound_StopSample: sample number (%u) out of range, we probably have run out of available OpenAL sources", psSample->iSample);
@@ -1273,15 +1216,12 @@ void sound_StopSample(AUDIO_SAMPLE *psSample)
 	// Tell OpenAL to stop playing the given sample
 	alSourceStop(psSample->iSample);
 	sound_GetError();
-#endif
 }
 
 void sound_SetPlayerPos(Vector3f pos)
 {
-#ifndef WZ_NOSOUND
 	alListener3f(AL_POSITION, pos.x, pos.y, pos.z);
 	sound_GetError();
-#endif
 }
 
 /**
@@ -1292,8 +1232,6 @@ void sound_SetPlayerPos(Vector3f pos)
 */
 void sound_SetPlayerOrientation(float angle)
 {
-#ifndef WZ_NOSOUND
-
 	const ALfloat ori[6] =
 	{
 		-sinf(angle), cosf(angle), 0.0f,	// forward (at) vector
@@ -1301,8 +1239,8 @@ void sound_SetPlayerOrientation(float angle)
 	};
 	alListenerfv(AL_ORIENTATION, ori);
 	sound_GetError();
-#endif
 }
+
 /**
  * Sets the player's orientation to use for sound
  * \param forward forward pointing vector
@@ -1310,7 +1248,6 @@ void sound_SetPlayerOrientation(float angle)
  */
 void sound_SetPlayerOrientationVector(Vector3f forward, Vector3f up)
 {
-#ifndef WZ_NOSOUND
 	const ALfloat ori[6] =
 	{
 		forward.x, forward.y, forward.z,
@@ -1319,7 +1256,6 @@ void sound_SetPlayerOrientationVector(Vector3f forward, Vector3f up)
 
 	alListenerfv(AL_ORIENTATION, ori);
 	sound_GetError();
-#endif
 }
 
 //*
@@ -1329,7 +1265,6 @@ void sound_SetPlayerOrientationVector(Vector3f forward, Vector3f up)
 //
 void sound_SetObjectPosition(AUDIO_SAMPLE *psSample)
 {
-#ifndef WZ_NOSOUND
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	// coordinates
 	float	listenerX, listenerY, listenerZ, dX, dY, dZ;
@@ -1369,7 +1304,7 @@ void sound_SetObjectPosition(AUDIO_SAMPLE *psSample)
 	// the alSource3i variant would be better, if it wouldn't provide linker errors however
 	alSource3f(psSample->iSample, AL_POSITION, (float)psSample->x, (float)psSample->y, (float)psSample->z);
 	sound_GetError();
-#endif
+
 	return;
 }
 
@@ -1379,10 +1314,8 @@ void sound_SetObjectPosition(AUDIO_SAMPLE *psSample)
 //
 void sound_PauseSample(AUDIO_SAMPLE *psSample)
 {
-#ifndef WZ_NOSOUND
 	alSourcePause(psSample->iSample);
 	sound_GetError();
-#endif
 }
 
 //*
@@ -1391,10 +1324,8 @@ void sound_PauseSample(AUDIO_SAMPLE *psSample)
 //
 void sound_ResumeSample(AUDIO_SAMPLE *psSample)
 {
-#ifndef WZ_NOSOUND
 	alSourcePlay(psSample->iSample);
 	sound_GetError();
-#endif
 }
 
 //*
@@ -1427,10 +1358,7 @@ void sound_StopAll(void)
 //
 bool sound_SampleIsFinished(AUDIO_SAMPLE *psSample)
 {
-#ifndef WZ_NOSOUND
-	//~~~~~~~~~~
 	ALenum	state;
-	//~~~~~~~~~~
 
 	alGetSourcei(psSample->iSample, AL_SOURCE_STATE, &state);
 	sound_GetError(); // check for an error and clear the error state for later on in this function
@@ -1445,7 +1373,7 @@ bool sound_SampleIsFinished(AUDIO_SAMPLE *psSample)
 		sound_GetError();
 		psSample->iSample = AL_INVALID;
 	}
-#endif
+
 	return true;
 }
 
@@ -1456,16 +1384,11 @@ bool sound_SampleIsFinished(AUDIO_SAMPLE *psSample)
 
 float sound_GetUIVolume()
 {
-#ifndef WZ_NOSOUND
 	return sfx_volume;
-#else
-	return 0;
-#endif
 }
 
 void sound_SetUIVolume(float volume)
 {
-#ifndef WZ_NOSOUND
 	sfx_volume = volume;
 
 	// Keep volume in the range of 0.0 - 1.0
@@ -1477,21 +1400,15 @@ void sound_SetUIVolume(float volume)
 	{
 		sfx_volume = 1.0;
 	}
-#endif
 }
 
 float sound_GetEffectsVolume()
 {
-#ifndef WZ_NOSOUND
 	return sfx3d_volume;
-#else
-	return 0;
-#endif
 }
 
 void sound_SetEffectsVolume(float volume)
 {
-#ifndef WZ_NOSOUND
 	sfx3d_volume = volume;
 
 	// Keep volume in the range of 0.0 - 1.0
@@ -1503,5 +1420,4 @@ void sound_SetEffectsVolume(float volume)
 	{
 		sfx3d_volume = 1.0;
 	}
-#endif
 }

@@ -557,13 +557,10 @@ void audio_Update()
 		return;
 	}
 
-#ifndef WZ_NOSOUND
 	alGetError();	// clear error codes
-#endif
 	audio_UpdateQueue();
-#ifndef WZ_NOSOUND
 	alGetError();	// clear error codes
-#endif
+
 	// get player position
 	playerPos = audio_GetPlayerPos();
 	audio_Get3DPlayerRotAboutVerticalAxis(&angle);
@@ -599,9 +596,7 @@ void audio_Update()
 					// update sample position
 					{
 						audio_GetObjectPos(psSample->psObj, &psSample->x, &psSample->y, &psSample->z);
-#ifndef WZ_NOSOUND
 						sound_SetObjectPosition(psSample);
-#endif
 					}
 				}
 			}
@@ -696,16 +691,12 @@ static bool audio_CheckSame3DTracksPlaying(SDWORD iTrack, SDWORD iX, SDWORD iY, 
 //
 static bool audio_Play3DTrack(SDWORD iX, SDWORD iY, SDWORD iZ, int iTrack, SIMPLE_OBJECT *psObj, AUDIO_CALLBACK pUserCallback)
 {
-	//~~~~~~~~~~~~~~~~~~~~~~
 	AUDIO_SAMPLE	*psSample;
 	// coordinates
 	float	listenerX = .0f, listenerY = .0f, listenerZ = .0f, dX, dY, dZ;
 	// calculation results
 	float	distance, gain;
-#ifndef WZ_NOSOUND
 	ALenum err;
-#endif
-	//~~~~~~~~~~~~~~~~~~~~~~
 
 	// if audio not enabled return true to carry on game without audio
 	if (g_bAudioEnabled == false || g_bAudioPaused == true)
@@ -720,14 +711,12 @@ static bool audio_Play3DTrack(SDWORD iX, SDWORD iY, SDWORD iZ, int iTrack, SIMPL
 
 	// compute distance
 	// NOTE, if this call fails, expect garbage
-#ifndef WZ_NOSOUND
 	alGetListener3f(AL_POSITION, &listenerX, &listenerY, &listenerZ);
 	err = sound_GetError();
 	if (err != AL_NO_ERROR)
 	{
 		return false;
 	}
-#endif
 	dX = (float)iX - listenerX; // distances on all axis
 	dY = (float)iY - listenerY;
 	dZ = (float)iZ - listenerZ;

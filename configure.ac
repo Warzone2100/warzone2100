@@ -257,13 +257,6 @@ if test "x$enable_static" = "xyes" ; then
 	PKG_CONFIG="${PKG_CONFIG} --static"
 fi
 
-AC_ARG_ENABLE([sound],
-	AS_HELP_STRING([--disable-sound], [Disable sound [no]]),
-	[ enable_sound="${enableval}" ], [ enable_sound="yes" ])
-AS_IF([test "x$enable_sound" != "xyes"],[
-	AC_DEFINE([WZ_NOSOUND], [], [Causes sound to be disabled])
-])
-
 # -O0 turns off all optimizations; this is necessary for accurate debugging
 # -Wno-unused-label is necessary because flex produces unused labels that we cannot fix
 # Add later for stricter checking: -Wextra -Wmissing-declarations -Wstrict-prototypes
@@ -391,12 +384,9 @@ if test "$backend" = "sdl"; then
 fi
 PKG_CHECK_MODULES([PNG], [libpng >= 1.2])
 PKG_CHECK_MODULES([THEORA], [theora >= 1.0])
-
-AS_IF([test "x$enable_sound" = "xyes"],[
-	PKG_CHECK_MODULES([OPENAL], [openal >= 0.0.8])
-	PKG_CHECK_MODULES([VORBIS], [vorbis >= 1.1])
-	PKG_CHECK_MODULES([VORBISFILE], [vorbisfile >= 1.1])
-])
+PKG_CHECK_MODULES([OPENAL], [openal >= 0.0.8])
+PKG_CHECK_MODULES([VORBIS], [vorbis >= 1.1])
+PKG_CHECK_MODULES([VORBISFILE], [vorbisfile >= 1.1])
 
 PKG_CHECK_MODULES([GLEW], [glew >= 1.5.2])
 

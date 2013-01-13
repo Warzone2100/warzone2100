@@ -23,7 +23,6 @@
 
 #include "lib/framework/stdio_ext.h"
 
-#if !defined(WZ_NOSOUND)
 #ifdef WZ_OS_MAC
 # include <OpenAL/al.h>
 # include <OpenAL/alc.h>
@@ -117,4 +116,3 @@ ALenum __sound_GetContextError(ALCdevice *device, const char *location_descripti
 
 	return error;
 }
-#endif // !defined(WZ_NOSOUND)

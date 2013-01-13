@@ -320,9 +320,7 @@ void sound_StopTrack(AUDIO_SAMPLE *psSample)
 {
 	ASSERT_OR_RETURN(, psSample != NULL, "Sample pointer invalid");
 
-#ifndef WZ_NOSOUND
 	sound_StopSample(psSample);
-#endif
 
 	// do stopped callback
 	if (g_pStopTrackCallback != NULL && psSample->psObj != NULL)
@@ -337,9 +335,7 @@ void sound_StopTrack(AUDIO_SAMPLE *psSample)
 //
 void sound_PauseTrack(AUDIO_SAMPLE *psSample)
 {
-#ifndef WZ_NOSOUND
 	sound_StopSample(psSample);
-#endif
 }
 
 //*
