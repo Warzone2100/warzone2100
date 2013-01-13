@@ -41,7 +41,7 @@
 #include <vector>
 #include <algorithm>
 
-
+#define BUFFER_OFFSET(i) ((char *)NULL + (i))
 #define SHADOW_END_DISTANCE (8000*8000) // Keep in sync with lighting.c:FOG_END
 
 extern bool drawing_interface;
@@ -227,16 +227,17 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELI
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_NORMAL_ARRAY);
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-	glVertexPointer(3, GL_FLOAT, 0, shape->vertices.constData());
-	glNormalPointer(GL_FLOAT, 0, shape->normals.constData());
-	glTexCoordPointer(2, GL_FLOAT, 0, shape->texcoords.constData());
+	glBindBuffer(GL_ARRAY_BUFFER, shape->buffers[VBO_VERTEX]); glVertexPointer(3, GL_FLOAT, 0, NULL);
+	glBindBuffer(GL_ARRAY_BUFFER, shape->buffers[VBO_NORMAL]); glNormalPointer(GL_FLOAT, 0, NULL);
+	glBindBuffer(GL_ARRAY_BUFFER, shape->buffers[VBO_TEXEL]); glTexCoordPointer(2, GL_FLOAT, 0, NULL);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, shape->buffers[VBO_INDEX]);
 	if (!shaders)
 	{
 		glClientActiveTexture(GL_TEXTURE1);
 		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-		glTexCoordPointer(2, GL_FLOAT, 0, shape->texcoords.constData());
+		glBindBuffer(GL_ARRAY_BUFFER, shape->buffers[VBO_TEXEL]); glTexCoordPointer(2, GL_FLOAT, 0, NULL);
 	}
-	glDrawElements(GL_TRIANGLES, shape->npolys * 3, GL_UNSIGNED_SHORT, shape->indices.constData() + frame * shape->npolys * 3);
+	glDrawElements(GL_TRIANGLES, shape->npolys * 3, GL_UNSIGNED_SHORT, BUFFER_OFFSET(frame * shape->npolys * 3 * sizeof(uint16_t)));
 	if (!shaders)
 	{
 		glDisableClientState(GL_TEXTURE_COORD_ARRAY);

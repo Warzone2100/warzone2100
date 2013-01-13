@@ -61,6 +61,7 @@ void iV_IMDRelease(iIMDShape *s)
 			free(s->shadowEdgeList);
 			s->shadowEdgeList = NULL;
 		}
+		glDeleteBuffers(VBO_COUNT, s->buffers);
 		d = s->next;
 		delete s;
 		iV_IMDRelease(d);

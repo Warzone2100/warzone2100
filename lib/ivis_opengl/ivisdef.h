@@ -78,6 +78,11 @@ struct iIMDPoly
 	Vector2f texAnim;
 };
 
+enum VBO_TYPE
+{
+	VBO_VERTEX, VBO_NORMAL, VBO_TEXEL, VBO_INDEX, VBO_COUNT
+};
+
 struct iIMDShape
 {
 	unsigned int flags;	
@@ -106,11 +111,7 @@ struct iIMDShape
 	iIMDPoly *polys;
 
 	// The new rendering data
-	int vertexCount; // gives size of vertex, normal and texel arrays
-	QVector<GLfloat> vertices;
-	QVector<GLfloat> normals;
-	QVector<GLfloat> texcoords;
-	QVector<uint16_t> indices; // size is npolys * 3 * numFrames
+	GLuint buffers[VBO_COUNT];
 
 	iIMDShape *next;  // next pie in multilevel pies (NULL for non multilevel !)
 };

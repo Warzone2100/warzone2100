@@ -480,6 +480,13 @@ static bool _imd_load_connectors(const char **ppFileData, iIMDShape *s)
 	return true;
 }
 
+// performance hack
+static QVector<GLfloat> vertices;
+static QVector<GLfloat> normals;
+static QVector<GLfloat> texcoords;
+static QVector<uint16_t> indices; // size is npolys * 3 * numFrames
+static int vertexCount;
+
 static inline int addVertex(iIMDShape *s, int i, const iIMDPoly *p, int frameidx)
 {
 	// if texture animation flag is present, fetch animation coordinates for this polygon
@@ -487,31 +494,31 @@ static inline int addVertex(iIMDShape *s, int i, const iIMDPoly *p, int frameidx
 	int frame = (p->flags & iV_IMD_TEXANIM) ? frameidx : 0;
 
 	// See if we already have this defined, if so, return reference to it.
-	for (int j = 0; j < s->vertexCount; j++)
+	for (int j = 0; j < vertexCount; j++)
 	{
-		if (   s->texcoords[j * 2 + 0] == p->texCoord[frame * 3 + i].x
-		    && s->texcoords[j * 2 + 1] == p->texCoord[frame * 3 + i].y
-		    && s->vertices[j * 3 + 0] == s->points[p->pindex[i]].x
-		    && s->vertices[j * 3 + 1] == s->points[p->pindex[i]].y
-		    && s->vertices[j * 3 + 2] == s->points[p->pindex[i]].z
-		    && s->normals[j * 3 + 0] == p->normal.x
-		    && s->normals[j * 3 + 1] == p->normal.y
-		    && s->normals[j * 3 + 2] == p->normal.z)
+		if (   texcoords[j * 2 + 0] == p->texCoord[frame * 3 + i].x
+		    && texcoords[j * 2 + 1] == p->texCoord[frame * 3 + i].y
+		    && vertices[j * 3 + 0] == s->points[p->pindex[i]].x
+		    && vertices[j * 3 + 1] == s->points[p->pindex[i]].y
+		    && vertices[j * 3 + 2] == s->points[p->pindex[i]].z
+		    && normals[j * 3 + 0] == p->normal.x
+		    && normals[j * 3 + 1] == p->normal.y
+		    && normals[j * 3 + 2] == p->normal.z)
 		{
 			return j;
 		}
 	}
 	// We don't have it, add it.
-	s->normals.append(p->normal.x);
-	s->normals.append(p->normal.y);
-	s->normals.append(p->normal.z);
-	s->texcoords.append(p->texCoord[frame * 3 + i].x);
-	s->texcoords.append(p->texCoord[frame * 3 + i].y);
-	s->vertices.append(s->points[p->pindex[i]].x);
-	s->vertices.append(s->points[p->pindex[i]].y);
-	s->vertices.append(s->points[p->pindex[i]].z);
-	s->vertexCount++;
-	return s->vertexCount - 1;
+	normals.append(p->normal.x);
+	normals.append(p->normal.y);
+	normals.append(p->normal.z);
+	texcoords.append(p->texCoord[frame * 3 + i].x);
+	texcoords.append(p->texCoord[frame * 3 + i].y);
+	vertices.append(s->points[p->pindex[i]].x);
+	vertices.append(s->points[p->pindex[i]].y);
+	vertices.append(s->points[p->pindex[i]].z);
+	vertexCount++;
+	return vertexCount - 1;
 }
 
 /*!
@@ -645,8 +652,8 @@ static iIMDShape *_imd_load_level(const char **ppFileData, const char *FileDataE
 	}
 
 	// FINALLY, massage the data into what can stream directly to OpenGL
-	s->vertexCount = 0;
-	s->indices.reserve(MAX(1, s->numFrames) * s->npolys * 3);
+	glGenBuffers(VBO_COUNT, s->buffers);
+	vertexCount = 0;
 	for (int k = 0; k < MAX(1, s->numFrames); k++)
 	{
 		// Go through all polygons for each frame
@@ -655,11 +662,26 @@ static iIMDShape *_imd_load_level(const char **ppFileData, const char *FileDataE
 			const iIMDPoly *pPolys = &s->polys[i];
 
 			// Do we already have the vertex data for this polygon?
-			s->indices.append(addVertex(s, 0, pPolys, k));
-			s->indices.append(addVertex(s, 1, pPolys, k));
-			s->indices.append(addVertex(s, 2, pPolys, k));
+			indices.append(addVertex(s, 0, pPolys, k));
+			indices.append(addVertex(s, 1, pPolys, k));
+			indices.append(addVertex(s, 2, pPolys, k));
 		}
 	}
+	glBindBuffer(GL_ARRAY_BUFFER, s->buffers[VBO_VERTEX]);
+	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(GLfloat), vertices.constData(), GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, s->buffers[VBO_NORMAL]);
+	glBufferData(GL_ARRAY_BUFFER, normals.size() * sizeof(GLfloat), normals.constData(), GL_STATIC_DRAW);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, s->buffers[VBO_INDEX]);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(uint16_t), indices.constData(), GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, s->buffers[VBO_TEXEL]);
+	glBufferData(GL_ARRAY_BUFFER, texcoords.size() * sizeof(GLfloat), texcoords.constData(), GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, 0); // unbind
+
+	indices.resize(0);
+	vertices.resize(0);
+	texcoords.resize(0);
+	normals.resize(0);
+
 	*ppFileData = pFileData;
 
 	return s;
