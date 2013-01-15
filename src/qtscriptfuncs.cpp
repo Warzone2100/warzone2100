@@ -715,7 +715,7 @@ static QScriptValue js_enumLabels(QScriptContext *, QScriptEngine *engine)
 }
 
 //-- \subsection{addLabel(object, label)}
-//-- Add a label to a game object. If the game object already has a label, it is overwritten.
+//-- Add a label to a game object. If there already is a label by that name, it is overwritten.
 //-- This is a fast operation of O(log n) algorithmic complexity.
 static QScriptValue js_addLabel(QScriptContext *context, QScriptEngine *engine)
 {
@@ -729,6 +729,16 @@ static QScriptValue js_addLabel(QScriptContext *context, QScriptEngine *engine)
 	QString key = context->argument(1).toString();
 	labels.insert(key, value);
 	return QScriptValue();
+}
+
+//-- \subsection{removeLabel(label)}
+//-- Remove a label from the game. Returns the number of labels removed, which should normally be
+//-- either 1 (label found) or 0 (label not found).
+static QScriptValue js_removeLabel(QScriptContext *context, QScriptEngine *engine)
+{
+	QString key = context->argument(0).toString();
+	int result = labels.remove(key);
+	return QScriptValue(result);
 }
 
 //-- \subsection{getLabel(object)}
@@ -3540,6 +3550,7 @@ bool registerFunctions(QScriptEngine *engine, QString scriptName)
 	engine->globalObject().setProperty("dump", engine->newFunction(js_dump));
 	engine->globalObject().setProperty("label", engine->newFunction(js_label));
 	engine->globalObject().setProperty("addLabel", engine->newFunction(js_addLabel));
+	engine->globalObject().setProperty("removeLabel", engine->newFunction(js_removeLabel));
 	engine->globalObject().setProperty("getLabel", engine->newFunction(js_getLabel));
 	engine->globalObject().setProperty("enumLabels", engine->newFunction(js_enumLabels));
 	engine->globalObject().setProperty("enumGateways", engine->newFunction(js_enumGateways));
