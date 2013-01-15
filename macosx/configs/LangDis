@@ -3,6 +3,7 @@ Format is one per line "<LANGCDE"
 
 <cs
 <da
+<eu
 <fi
 <fy
 <ga
@@ -10,10 +11,16 @@ Format is one per line "<LANGCDE"
 hu
 <la
 <lt
+<lv
 <nb
+<nn
 nl
 <ro
 <sk
+<sl
 <sl_SI
+<sv_SE
+<sv
+<uz
 <zh_CN
 <zh_TW
