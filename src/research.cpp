@@ -808,7 +808,7 @@ void researchResult(UDWORD researchIndex, UBYTE player, bool bDisplay, STRUCTURE
 
 		switch (pFunction->type)
 		{
-			case(PRODUCTION_UPGRADE_TYPE):
+			case PRODUCTION_UPGRADE_TYPE:
 				productionUpgrade(pFunction, player);
 				// search the list of players structures for a Factory
 				for (psCurr = apsStructLists[player]; psCurr != NULL; psCurr = psCurr->psNext)
@@ -840,7 +840,7 @@ void researchResult(UDWORD researchIndex, UBYTE player, bool bDisplay, STRUCTURE
 				}
 			   	// message/sound in here for production boost
 				break;
-			case(RESEARCH_UPGRADE_TYPE):
+			case RESEARCH_UPGRADE_TYPE:
 				researchUpgrade(pFunction, player);
 				//search the list of players structures for a Research Facility
 				for (psCurr = apsStructLists[player]; psCurr != NULL; psCurr = psCurr->psNext)
@@ -862,7 +862,7 @@ void researchResult(UDWORD researchIndex, UBYTE player, bool bDisplay, STRUCTURE
 				}
 				// Stuff a message in here/sound whatever for research boost.
 				break;
-			case(POWER_UPGRADE_TYPE):
+			case POWER_UPGRADE_TYPE:
 				powerUpgrade(pFunction, player);
 				// search the list of players structures for a Power Gens
 				for (psCurr = apsStructLists[player]; psCurr != NULL; psCurr = psCurr->psNext)
@@ -883,7 +883,7 @@ void researchResult(UDWORD researchIndex, UBYTE player, bool bDisplay, STRUCTURE
 					}
 				}
 				break;
-			case(REARM_UPGRADE_TYPE):
+			case REARM_UPGRADE_TYPE:
 				reArmUpgrade(pFunction, player);
 				// search the list of players structures for a ReArm pad
 				for (psCurr = apsStructLists[player]; psCurr != NULL; psCurr = psCurr->psNext)
@@ -904,7 +904,7 @@ void researchResult(UDWORD researchIndex, UBYTE player, bool bDisplay, STRUCTURE
 					}
 				}
 				break;
-			case(REPAIR_UPGRADE_TYPE):
+			case REPAIR_UPGRADE_TYPE:
 				repairFacUpgrade(pFunction, player);
 				// search the list of players structures for a Power Gens
 				for (psCurr = apsStructLists[player]; psCurr != NULL; psCurr = psCurr->psNext)
@@ -925,12 +925,12 @@ void researchResult(UDWORD researchIndex, UBYTE player, bool bDisplay, STRUCTURE
 					}
 				}
 				break;
-			case(WEAPON_UPGRADE_TYPE):
+			case WEAPON_UPGRADE_TYPE:
 				// for the current player, upgrade the weapon stats
 				weaponUpgrade(pFunction, player);
 				// message/sound for weapon upgrade
 				break;
-			case(DROIDSENSOR_UPGRADE_TYPE):
+			case DROIDSENSOR_UPGRADE_TYPE:
 				// for the current player, upgrade the sensor stats
 				sensorUpgrade(pFunction, player);
 				// for each structure in the player's list, upgrade the sensor stat
@@ -971,7 +971,7 @@ void researchResult(UDWORD researchIndex, UBYTE player, bool bDisplay, STRUCTURE
 				}
 				// message/sound for sensor upgrade
 				break;
-			case(DROIDECM_UPGRADE_TYPE):
+			case DROIDECM_UPGRADE_TYPE:
 				// for the current player, upgrade the ecm stats
 				ecmUpgrade(pFunction, player);
 				// for each structure in the player's list, upgrade the ecm stat
@@ -1010,17 +1010,17 @@ void researchResult(UDWORD researchIndex, UBYTE player, bool bDisplay, STRUCTURE
 				}
 				// message/sound for ecm upgrade
 				break;
-			case(DROIDREPAIR_UPGRADE_TYPE):
+			case DROIDREPAIR_UPGRADE_TYPE:
 				// for the current player, upgrade the repair stats
 				repairUpgrade(pFunction, player);
 				// message/sound for repair upgrade
 				break;
-			case(DROIDCONST_UPGRADE_TYPE):
+			case DROIDCONST_UPGRADE_TYPE:
 				// for the current player, upgrade the constructor stats
 				constructorUpgrade(pFunction, player);
 				// message/sound for constructor upgrade
 				break;
-			case(DROIDBODY_UPGRADE_TYPE):
+			case DROIDBODY_UPGRADE_TYPE:
 				// for each droid in the player's list, upgrade the body points
 				for (psDroid = apsDroidLists[player]; psDroid != NULL; psDroid = psDroid->psNext)
 				{
@@ -1047,7 +1047,7 @@ void researchResult(UDWORD researchIndex, UBYTE player, bool bDisplay, STRUCTURE
 				bodyUpgrade(pFunction, player);
 				// message/sound for body upgrade
 				break;
-			case(STRUCTURE_UPGRADE_TYPE):
+			case STRUCTURE_UPGRADE_TYPE:
 				// for each structure in the player's list, upgrade the stats
 				for (psCurr = apsStructLists[player]; psCurr != NULL; psCurr = psCurr->psNext)
 				{
@@ -1084,7 +1084,7 @@ void researchResult(UDWORD researchIndex, UBYTE player, bool bDisplay, STRUCTURE
 				structureUpgrade(pFunction, player);
 				// message/sound for structure upgrade
 				break;
-			case(WALLDEFENCE_UPGRADE_TYPE):
+			case WALLDEFENCE_UPGRADE_TYPE:
 				//for each structure in the player's list, upgrade the stats
 				for (psCurr = apsStructLists[player]; psCurr != NULL; psCurr = psCurr->psNext)
 				{
@@ -1109,9 +1109,9 @@ void researchResult(UDWORD researchIndex, UBYTE player, bool bDisplay, STRUCTURE
 				wallDefenceUpgrade(pFunction, player);
 				// message/sound for wall/defence structure upgrade
 				break;
-		//	default:
-		//		ASSERT(false,"Invalid function type");
-		//		break;
+			default:
+				ASSERT(false, "Invalid function type");
+				break;
 		}//end of switch
 	}//end of function loop
 

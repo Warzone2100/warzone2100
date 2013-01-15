@@ -26,7 +26,7 @@
 
 #include "statsdef.h"
 
-enum FUNCTION_TYPES
+enum FUNCTION_TYPE
 {
 	PRODUCTION_TYPE,
 	PRODUCTION_UPGRADE_TYPE,
@@ -58,7 +58,7 @@ enum FUNCTION_TYPES
 /*Common struct for all functions*/
 struct FUNCTION : public BASE_STATS
 {
-	UBYTE           type;                   ///< The type of Function
+	FUNCTION_TYPE           type;                   ///< The type of Function
 };
 
 

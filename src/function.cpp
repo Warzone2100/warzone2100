@@ -46,7 +46,7 @@ typedef bool (*LoadFunction)(const char *pData);
 
 
 /*Returns the Function type based on the string - used for reading in data */
-static UDWORD functionType(const char *pType)
+static FUNCTION_TYPE functionType(const char *pType)
 {
 	if (!strcmp(pType, "Production"))
 	{
@@ -128,9 +128,8 @@ static UDWORD functionType(const char *pType)
 	{
 		return REARM_UPGRADE_TYPE;
 	}
-
 	ASSERT(false, "Unknown Function Type: %s", pType);
-	return 0;
+	return NUMFUNCTIONS;
 }
 
 // Allocate storage for the name
@@ -140,12 +139,11 @@ static bool storeName(FUNCTION *pFunction, const char *pNameToStore)
 	return true;
 }
 
-
 static bool loadProduction(const char *pData)
 {
-	PRODUCTION_FUNCTION	*psFunction;
-	char					functionName[MAX_STR_LENGTH], bodySize[MAX_STR_LENGTH];
-	int					productionOutput;
+	PRODUCTION_FUNCTION *psFunction;
+	char functionName[MAX_STR_LENGTH], bodySize[MAX_STR_LENGTH];
+	int productionOutput;
 
 	psFunction = (PRODUCTION_FUNCTION *)malloc(sizeof(PRODUCTION_FUNCTION));
 	memset(psFunction, 0, sizeof(PRODUCTION_FUNCTION));
@@ -162,8 +160,7 @@ static bool loadProduction(const char *pData)
 	//read the data in
 	functionName[0] = '\0';
 	bodySize[0] = '\0';
-	sscanf(pData, "%255[^,'\r\n],%255[^,'\r\n],%d", functionName, bodySize,
-	       &productionOutput);
+	sscanf(pData, "%255[^,'\r\n],%255[^,'\r\n],%d", functionName, bodySize, &productionOutput);
 
 	//allocate storage for the name
 	storeName((FUNCTION *)psFunction, functionName);
@@ -181,14 +178,13 @@ static bool loadProduction(const char *pData)
 
 static bool loadProductionUpgradeFunction(const char *pData)
 {
-	PRODUCTION_UPGRADE_FUNCTION	*psFunction;
-	char							functionName[MAX_STR_LENGTH];
-	UDWORD							factory, cyborg, vtol;
+	PRODUCTION_UPGRADE_FUNCTION *psFunction;
+	char functionName[MAX_STR_LENGTH];
+	UDWORD factory, cyborg, vtol;
 	UDWORD outputModifier;
 
 	//allocate storage
-	psFunction = (PRODUCTION_UPGRADE_FUNCTION *)malloc(sizeof
-	        (PRODUCTION_UPGRADE_FUNCTION));
+	psFunction = (PRODUCTION_UPGRADE_FUNCTION *)malloc(sizeof(PRODUCTION_UPGRADE_FUNCTION));
 	memset(psFunction, 0, sizeof(PRODUCTION_UPGRADE_FUNCTION));
 
 	//store the pointer in the Function Array
@@ -202,8 +198,7 @@ static bool loadProductionUpgradeFunction(const char *pData)
 
 	//read the data in
 	functionName[0] = '\0';
-	sscanf(pData, "%255[^,'\r\n],%d,%d,%d,%d", functionName, &factory,
-	       &cyborg, &vtol, &outputModifier);
+	sscanf(pData, "%255[^,'\r\n],%d,%d,%d,%d", functionName, &factory, &cyborg, &vtol, &outputModifier);
 
 	psFunction->outputModifier = (UBYTE)outputModifier;
 	//allocate storage for the name
@@ -239,8 +234,8 @@ static bool loadProductionUpgradeFunction(const char *pData)
 
 static bool loadResearchFunction(const char *pData)
 {
-	RESEARCH_FUNCTION			*psFunction;
-	char						functionName[MAX_STR_LENGTH];
+	RESEARCH_FUNCTION *psFunction;
+	char functionName[MAX_STR_LENGTH];
 
 	//allocate storage
 	psFunction = (RESEARCH_FUNCTION *)malloc(sizeof(RESEARCH_FUNCTION));
@@ -267,8 +262,8 @@ static bool loadResearchFunction(const char *pData)
 
 static bool loadReArmFunction(const char *pData)
 {
-	REARM_FUNCTION				*psFunction;
-	char						functionName[MAX_STR_LENGTH];
+	REARM_FUNCTION *psFunction;
+	char functionName[MAX_STR_LENGTH];
 
 	//allocate storage
 	psFunction = (REARM_FUNCTION *)malloc(sizeof(REARM_FUNCTION));
@@ -293,13 +288,12 @@ static bool loadReArmFunction(const char *pData)
 	return true;
 }
 
-
 //generic load function for upgrade type
-static bool loadUpgradeFunction(const char *pData, UBYTE type)
+static bool loadUpgradeFunction(const char *pData, FUNCTION_TYPE type)
 {
-	char						functionName[MAX_STR_LENGTH];
-	UDWORD						modifier;
-	UPGRADE_FUNCTION			*psFunction;
+	char functionName[MAX_STR_LENGTH];
+	UDWORD modifier;
+	UPGRADE_FUNCTION *psFunction;
 
 	//allocate storage
 	psFunction = (UPGRADE_FUNCTION *)malloc(sizeof(UPGRADE_FUNCTION));
@@ -323,7 +317,7 @@ static bool loadUpgradeFunction(const char *pData, UBYTE type)
 
 	if (modifier > UWORD_MAX)
 	{
-		ASSERT(false, "loadUpgradeFunction: modifier too great for %s", functionName);
+		ASSERT(false, "Modifier too great for %s", functionName);
 		return false;
 	}
 
@@ -372,9 +366,9 @@ static bool loadReArmUpgradeFunction(const char *pData)
 
 static bool loadDroidBodyUpgradeFunction(const char *pData)
 {
-	DROIDBODY_UPGRADE_FUNCTION		*psFunction;
-	char							functionName[MAX_STR_LENGTH];
-	UDWORD	modifier, armourKinetic, armourHeat, body, droid, cyborg;
+	DROIDBODY_UPGRADE_FUNCTION *psFunction;
+	char functionName[MAX_STR_LENGTH];
+	UDWORD modifier, armourKinetic, armourHeat, body, droid, cyborg;
 
 	//allocate storage
 	psFunction = (DROIDBODY_UPGRADE_FUNCTION *)malloc(sizeof(DROIDBODY_UPGRADE_FUNCTION));
@@ -397,11 +391,9 @@ static bool loadDroidBodyUpgradeFunction(const char *pData)
 	//allocate storage for the name
 	storeName((FUNCTION *)psFunction, functionName);
 
-	if (modifier > UWORD_MAX || armourKinetic > UWORD_MAX ||
-	    armourHeat > UWORD_MAX || body > UWORD_MAX)
+	if (modifier > UWORD_MAX || armourKinetic > UWORD_MAX || armourHeat > UWORD_MAX || body > UWORD_MAX)
 	{
-		ASSERT(false,
-		       "loadUnitBodyUpgradeFunction: one or more modifiers too great");
+		ASSERT(false, "One or more modifiers too large");
 		return false;
 	}
 
@@ -432,9 +424,9 @@ static bool loadDroidBodyUpgradeFunction(const char *pData)
 
 static bool loadDroidSensorUpgradeFunction(const char *pData)
 {
-	DROIDSENSOR_UPGRADE_FUNCTION	*psFunction;
-	char							functionName[MAX_STR_LENGTH];
-	UDWORD							modifier, range;
+	DROIDSENSOR_UPGRADE_FUNCTION *psFunction;
+	char functionName[MAX_STR_LENGTH];
+	UDWORD modifier, range;
 
 	//allocate storage
 	psFunction = (DROIDSENSOR_UPGRADE_FUNCTION *)malloc(sizeof(DROIDSENSOR_UPGRADE_FUNCTION));
@@ -458,8 +450,7 @@ static bool loadDroidSensorUpgradeFunction(const char *pData)
 
 	if (modifier > UWORD_MAX || range > UWORD_MAX)
 	{
-		ASSERT(false,
-		       "loadUnitSensorUpgradeFunction: one or more modifiers too great");
+		ASSERT(false, "One or more modifiers too large");
 		return false;
 	}
 
@@ -473,10 +464,8 @@ static bool loadDroidSensorUpgradeFunction(const char *pData)
 static bool loadWeaponUpgradeFunction(const char *pData)
 {
 	WEAPON_UPGRADE_FUNCTION	*psFunction;
-	char						functionName[MAX_STR_LENGTH],
-	                            weaponSubClass[MAX_STR_LENGTH];
-	UDWORD						firePause, dummyVal, longHit, damage,
-	                            radiusDamage, incenDamage, radiusHit;
+	char functionName[MAX_STR_LENGTH], weaponSubClass[MAX_STR_LENGTH];
+	UDWORD firePause, dummyVal, longHit, damage, radiusDamage, incenDamage, radiusHit;
 
 	//allocate storage
 	psFunction = (WEAPON_UPGRADE_FUNCTION *)malloc(sizeof(WEAPON_UPGRADE_FUNCTION));
@@ -531,13 +520,12 @@ static bool loadWeaponUpgradeFunction(const char *pData)
 
 static bool loadStructureUpgradeFunction(const char *pData)
 {
-	STRUCTURE_UPGRADE_FUNCTION  *psFunction;
-	char						functionName[MAX_STR_LENGTH];
-	UDWORD						armour, body, resistance;
+	STRUCTURE_UPGRADE_FUNCTION *psFunction;
+	char functionName[MAX_STR_LENGTH];
+	UDWORD armour, body, resistance;
 
 	//allocate storage
-	psFunction = (STRUCTURE_UPGRADE_FUNCTION *)malloc(sizeof
-	        (STRUCTURE_UPGRADE_FUNCTION));
+	psFunction = (STRUCTURE_UPGRADE_FUNCTION *)malloc(sizeof(STRUCTURE_UPGRADE_FUNCTION));
 	memset(psFunction, 0, sizeof(STRUCTURE_UPGRADE_FUNCTION));
 
 	//store the pointer in the Function Array
@@ -562,7 +550,6 @@ static bool loadStructureUpgradeFunction(const char *pData)
 	    resistance > UWORD_MAX)
 	{
 		debug(LOG_ERROR, "A percentage increase for Structure Upgrade function is too large");
-
 		return false;
 	}
 
@@ -581,8 +568,7 @@ static bool loadWallDefenceUpgradeFunction(const char *pData)
 	UDWORD						armour, body;
 
 	//allocate storage
-	psFunction = (WALLDEFENCE_UPGRADE_FUNCTION *)malloc(sizeof
-	        (WALLDEFENCE_UPGRADE_FUNCTION));
+	psFunction = (WALLDEFENCE_UPGRADE_FUNCTION *)malloc(sizeof(WALLDEFENCE_UPGRADE_FUNCTION));
 	memset(psFunction, 0, sizeof(WALLDEFENCE_UPGRADE_FUNCTION));
 
 	//store the pointer in the Function Array
@@ -602,11 +588,9 @@ static bool loadWallDefenceUpgradeFunction(const char *pData)
 	storeName((FUNCTION *)psFunction, functionName);
 
 	//check none of the %increases are over UWORD max
-	if (armour > UWORD_MAX ||
-	    body > UWORD_MAX)
+	if (armour > UWORD_MAX || body > UWORD_MAX)
 	{
 		debug(LOG_ERROR, "A percentage increase for WallDefence Upgrade function is too large");
-
 		return false;
 	}
 
@@ -666,7 +650,6 @@ static bool loadPowerGenFunction(const char *pData)
 		}
 	}
 
-
 	//allocate storage for the name
 	storeName((FUNCTION *)psFunction, functionName);
 
@@ -722,8 +705,7 @@ static bool loadRepairDroidFunction(const char *pData)
 
 	//read the data in
 	functionName[0] = '\0';
-	sscanf(pData, "%255[^,'\r\n],%d", functionName,
-	       &psFunction->repairPoints);
+	sscanf(pData, "%255[^,'\r\n],%d", functionName, &psFunction->repairPoints);
 
 	//allocate storage for the name
 	storeName((FUNCTION *)psFunction, functionName);
@@ -766,7 +748,6 @@ static bool loadWallFunction(const char *pData)
 	if (!psFunction->pStructName)
 	{
 		debug(LOG_ERROR, "Structure Stats Invalid for function - %s", functionName);
-
 		return false;
 	}
 	psFunction->pCornerStat = NULL;
@@ -783,29 +764,23 @@ void productionUpgrade(FUNCTION *pFunction, UBYTE player)
 	//check upgrades increase all values
 	if (pUpgrade->factory)
 	{
-		if (asProductionUpgrade[player][FACTORY_FLAG].modifier <
-		    pUpgrade->outputModifier)
+		if (asProductionUpgrade[player][FACTORY_FLAG].modifier < pUpgrade->outputModifier)
 		{
-			asProductionUpgrade[player][FACTORY_FLAG].modifier =
-			    pUpgrade->outputModifier;
+			asProductionUpgrade[player][FACTORY_FLAG].modifier = pUpgrade->outputModifier;
 		}
 	}
 	if (pUpgrade->cyborgFactory)
 	{
-		if (asProductionUpgrade[player][CYBORG_FLAG].modifier <
-		    pUpgrade->outputModifier)
+		if (asProductionUpgrade[player][CYBORG_FLAG].modifier < pUpgrade->outputModifier)
 		{
-			asProductionUpgrade[player][CYBORG_FLAG].modifier =
-			    pUpgrade->outputModifier;
+			asProductionUpgrade[player][CYBORG_FLAG].modifier = pUpgrade->outputModifier;
 		}
 	}
 	if (pUpgrade->vtolFactory)
 	{
-		if (asProductionUpgrade[player][VTOL_FLAG].modifier <
-		    pUpgrade->outputModifier)
+		if (asProductionUpgrade[player][VTOL_FLAG].modifier < pUpgrade->outputModifier)
 		{
-			asProductionUpgrade[player][VTOL_FLAG].modifier =
-			    pUpgrade->outputModifier;
+			asProductionUpgrade[player][VTOL_FLAG].modifier = pUpgrade->outputModifier;
 		}
 	}
 }
@@ -1024,8 +999,7 @@ void structureReArmUpgrade(STRUCTURE *psBuilding)
 	ASSERT(pPad != NULL, "structureReArmUpgrade: invalid ReArm pointer");
 
 	pPadFunc = (REARM_FUNCTION *)psBuilding->pStructureType->asFuncList[0];
-	ASSERT(pPadFunc != NULL,
-	       "structureReArmUpgrade: invalid Function pointer");
+	ASSERT(pPadFunc != NULL, "Invalid function pointer");
 
 	pPad->reArmPoints = pPadFunc->reArmPoints + (pPadFunc->reArmPoints *
 	        asReArmUpgrade[psBuilding->player].modifier) / 100;
@@ -1063,8 +1037,7 @@ void structureRepairUpgrade(STRUCTURE *psBuilding)
 	ASSERT(pRepair != NULL, "structureRepairUpgrade: invalid Repair pointer");
 
 	pRepairFunc = (REPAIR_DROID_FUNCTION *)psBuilding->pStructureType->asFuncList[0];
-	ASSERT(pRepairFunc != NULL,
-	       "structureRepairUpgrade: invalid Function pointer");
+	ASSERT(pRepairFunc != NULL, "Invalid function pointer");
 
 	pRepair->power = pRepairFunc->repairPoints + (pRepairFunc->repairPoints *
 	        asRepairFacUpgrade[psBuilding->player].modifier) / 100;
@@ -1379,7 +1352,8 @@ bool loadFunctionStats(const char *pFunctionData, UDWORD bufferSize)
 	};
 
 	const unsigned int totalFunctions = numCR(pFunctionData, bufferSize);
-	UDWORD		i, type;
+	UDWORD		i;
+	FUNCTION_TYPE type;
 	char		FunctionType[MAX_STR_LENGTH];
 	FUNCTION	**pStartList;
 
@@ -1396,6 +1370,7 @@ bool loadFunctionStats(const char *pFunctionData, UDWORD bufferSize)
 		FunctionType[0] = '\0';
 		sscanf(pFunctionData, "%255[^,'\r\n]", FunctionType);
 		type = functionType(FunctionType);
+		ASSERT_OR_RETURN(false, type != NUMFUNCTIONS, "Function type not found");
 		pFunctionData += (strlen(FunctionType) + 1);
 
 		if (!(pLoadFunction[type](pFunctionData)))
