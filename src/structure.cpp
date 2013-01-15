@@ -1343,19 +1343,24 @@ void alignStructure(STRUCTURE *psBuilding)
 	}
 	else
 	{
-		iIMDShape *strImd = psBuilding->sDisplay.imd;
+		// Sample points around the structure to find a good depth for the foundation
+		iIMDShape *s = psBuilding->sDisplay.imd;
 
 		psBuilding->pos.z = TILE_MIN_HEIGHT;
 		psBuilding->foundationDepth = TILE_MAX_HEIGHT;
 
-		// Now we got through the shape looking for vertices on the edge
-                for (int i = 0; i < strImd->npoints; i++)
-		{
-			int pointHeight = map_Height(psBuilding->pos.x + strImd->points[i].x, psBuilding->pos.y - strImd->points[i].z);
-			syncDebug("pointHeight=%d", pointHeight);  // Eeek, strImd->points[i] is a Vector3f! If this causes desynchs, need to fix!
-			psBuilding->pos.z = std::max(psBuilding->pos.z, pointHeight);
-			psBuilding->foundationDepth = std::min<float>(psBuilding->foundationDepth, pointHeight);
-		}
+		int h = map_Height(psBuilding->pos.x + s->max.x, psBuilding->pos.y + s->min.z);
+		h = std::max(h, map_Height(psBuilding->pos.x + s->max.x, psBuilding->pos.y + s->max.z));
+		h = std::max(h, map_Height(psBuilding->pos.x + s->min.x, psBuilding->pos.y + s->max.z));
+		h = std::max(h, map_Height(psBuilding->pos.x + s->min.x, psBuilding->pos.y + s->min.z));
+		syncDebug("pointHeight=%d", h);  // s->max is based on floats! If this causes desynchs, need to fix!
+		psBuilding->pos.z = std::max(psBuilding->pos.z, h);
+		h = map_Height(psBuilding->pos.x + s->max.x, psBuilding->pos.y + s->min.z);
+		h = std::min(h, map_Height(psBuilding->pos.x + s->max.x, psBuilding->pos.y + s->max.z));
+		h = std::min(h, map_Height(psBuilding->pos.x + s->min.x, psBuilding->pos.y + s->max.z));
+		h = std::min(h, map_Height(psBuilding->pos.x + s->min.x, psBuilding->pos.y + s->min.z));
+		psBuilding->foundationDepth = std::min<float>(psBuilding->foundationDepth, h);
+		syncDebug("foundationDepth=%d", h);  // s->max is based on floats! If this causes desynchs, need to fix!
 	}
 }
 
