@@ -4120,68 +4120,38 @@ static	void	doConstructionLines( void )
 /// Draw the construction or demolish lines for one droid
 static void addConstructionLine(DROID *psDroid, STRUCTURE *psStructure)
 {
+	Vector3f *point;
+	Vector3f pts[3];
+	int pointIndex;
 	Vector3i each;
-	Vector3f *point, pts[3];
-	UDWORD	pointIndex;
-	SDWORD	realY;
-	Vector3i null, vec;
 	PIELIGHT colour;
 
-	null.x = null.y = null.z = 0;
-	each.x = psDroid->pos.x;
-	each.z = psDroid->pos.y;
-	each.y = psDroid->pos.z + 24;
+	pts[0] = Vector3f(psDroid->pos.x - player.p.x, psDroid->pos.z + 24, -(psDroid->pos.y - player.p.z));
 
-	vec.x = each.x - player.p.x;
-	vec.z = -(each.z - player.p.z);
-	vec.y = each.y;
-
-	pts[0] = vec;
-
-	pointIndex = rand()%(psStructure->sDisplay.imd->npoints-1);
+	pointIndex = rand() % (psStructure->sDisplay.imd->npoints - 1);
 	point = &(psStructure->sDisplay.imd->points[pointIndex]);
 
 	each.x = psStructure->pos.x + point->x;
-	realY = structHeightScale(psStructure) * point->y;
-	each.y = psStructure->pos.z + realY;
+	each.y = psStructure->pos.z + (structHeightScale(psStructure) * point->y);
 	each.z = psStructure->pos.y - point->z;
 
-	if (rand()%250 < deltaGraphicsTime)
+	if (rand() % 250 < deltaGraphicsTime)
 	{
 		effectSetSize(30);
 		addEffect(&each,EFFECT_EXPLOSION,EXPLOSION_TYPE_SPECIFIED,true,getImdFromIndex(MI_PLASMA),0);
 	}
 
-	vec.x = each.x - player.p.x;
-	vec.z = -(each.z - player.p.z);
-	vec.y = each.y;
+	pts[1] = Vector3f(each.x - player.p.x, each.y, -(each.z - player.p.z));
 
-	pts[1] = vec;
-
-	pointIndex = rand()%(psStructure->sDisplay.imd->npoints-1);
+	pointIndex = rand() % (psStructure->sDisplay.imd->npoints - 1);
 	point = &(psStructure->sDisplay.imd->points[pointIndex]);
 
 	each.x = psStructure->pos.x + point->x;
-	realY = structHeightScale(psStructure) * point->y;
-	each.y = psStructure->pos.z + realY;
+	each.y = psStructure->pos.z + (structHeightScale(psStructure) * point->y);
 	each.z = psStructure->pos.y - point->z;
 
-	vec.x = each.x - player.p.x;
-	vec.z = -(each.z - player.p.z);
-	vec.y = each.y;
+	pts[2] = Vector3f(each.x - player.p.x, each.y, -(each.z - player.p.z));
 
-	pts[2] = vec;
-
-	// set the colour
-	colour = pal_SetBrightness(UBYTE_MAX);
-
-	if (psDroid->action == DACTION_DEMOLISH)
-	{
-		colour.byte.b = 0;
-	} else {
-		colour.byte.r = 0;
-	}
-	colour.byte.g = 0;
-
+	colour = (psDroid->action == DACTION_DEMOLISH) ? WZCOL_DEMOLISH_BEAM : WZCOL_CONSTRUCTOR_BEAM;
 	pie_TransColouredTriangle(pts, colour);
 }
