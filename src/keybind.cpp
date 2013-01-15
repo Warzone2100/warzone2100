@@ -903,13 +903,27 @@ void	kf_SystemClose( void )
 /* Zooms out from display */
 void	kf_ZoomOut( void )
 {
-	setViewDistance(std::min<int>(getViewDistance() + realTimeAdjustedIncrement(MAP_ZOOM_RATE), MAXDISTANCE));
+	if (getDebugMappingStatus())
+	{
+		setViewDistance(getViewDistance() + realTimeAdjustedIncrement(MAP_ZOOM_RATE));
+	}
+	else
+	{
+		setViewDistance(std::min<int>(getViewDistance() + realTimeAdjustedIncrement(MAP_ZOOM_RATE), MAXDISTANCE));
+	}
 	UpdateFogDistance(getViewDistance());
 }
 
 void kf_ZoomOutStep(void)
 {
-	setViewDistance(std::min<int>(getViewDistance() + MAP_ZOOM_RATE/3, MAXDISTANCE));
+	if (getDebugMappingStatus())
+	{
+		setViewDistance(getViewDistance() + MAP_ZOOM_RATE / 3);
+	}
+	else
+	{
+		setViewDistance(std::min<int>(getViewDistance() + MAP_ZOOM_RATE / 3, MAXDISTANCE));
+	}
 	UpdateFogDistance(getViewDistance());
 }
 
@@ -942,13 +956,27 @@ void	kf_RadarZoomOut( void )
 /* Zooms in the map */
 void	kf_ZoomIn( void )
 {
-	setViewDistance(std::max<int>(getViewDistance() - realTimeAdjustedIncrement(MAP_ZOOM_RATE), MINDISTANCE));
+	if (getDebugMappingStatus())
+	{
+		setViewDistance(getViewDistance() - realTimeAdjustedIncrement(MAP_ZOOM_RATE));
+	}
+	else
+	{
+		setViewDistance(std::max<int>(getViewDistance() - realTimeAdjustedIncrement(MAP_ZOOM_RATE), MINDISTANCE));
+	}
 	UpdateFogDistance(getViewDistance());
 }
 
 void kf_ZoomInStep(void)
 {
-	setViewDistance(std::max<int>(getViewDistance() - MAP_ZOOM_RATE/3, MINDISTANCE));
+	if (getDebugMappingStatus())
+	{
+		setViewDistance(getViewDistance() - MAP_ZOOM_RATE / 3);
+	}
+	else
+	{
+		setViewDistance(std::max<int>(getViewDistance() - MAP_ZOOM_RATE / 3, MINDISTANCE));
+	}
 	UpdateFogDistance(getViewDistance());
 }
 
