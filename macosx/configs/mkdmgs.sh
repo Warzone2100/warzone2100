@@ -90,16 +90,16 @@ fi
 # Get the sequences
 
 # Comment out the following to skip the high qual seq
-# if [ ! -f "${sequencenme}" ]; then
-# 	echo "Fetching ${sequencenme}"
-# 	if ! curl -L --connect-timeout "30" -o "${sequencenme}" "${sequence}"; then
-# 		echo "error: Unable to fetch ${sequence}" >&2
-# 		exit 1
-# 	fi
-# 	ckmd5 "${sequencenme}" "${sequencemd5}"
-# else
-# 	echo "${sequencenme} already exists, skipping"
-# fi
+if [ ! -f "${sequencenme}" ]; then
+	echo "Fetching ${sequencenme}"
+	if ! curl -L --connect-timeout "30" -o "${sequencenme}" "${sequence}"; then
+		echo "error: Unable to fetch ${sequence}" >&2
+		exit 1
+	fi
+	ckmd5 "${sequencenme}" "${sequencemd5}"
+else
+	echo "${sequencenme} already exists, skipping"
+fi
 #
 
 # Comment out the following to skip the low qual seq
