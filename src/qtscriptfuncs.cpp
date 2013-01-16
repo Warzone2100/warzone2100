@@ -2001,6 +2001,22 @@ static QScriptValue js_droidCanReach(QScriptContext *context, QScriptEngine *)
 	return QScriptValue(fpathCheck(psDroid->pos, Vector3i(world_coord(x), world_coord(y), 0), psPropStats->propulsionType));
 }
 
+//-- \subsection{propulsionCanReach(propulsion, x1, y1, x2, y2)}
+//-- Return true if a droid with a given propulsion is able to travel from (x1, y1) to (x2, y2).
+//-- Does not take player built blockades into account.
+static QScriptValue js_propulsionCanReach(QScriptContext *context, QScriptEngine *)
+{
+	QScriptValue propulsionValue = context->argument(0);
+	int propulsion = getCompFromName(COMP_PROPULSION, propulsionValue.toString().toUtf8().constData());
+	SCRIPT_ASSERT(context, propulsion > 0, "No such propulsion: %s", propulsionValue.toString().toUtf8().constData());
+	int x1 = context->argument(1).toInt32();
+	int y1 = context->argument(2).toInt32();
+	int x2 = context->argument(3).toInt32();
+	int y2 = context->argument(4).toInt32();
+	const PROPULSION_STATS *psPropStats = asPropulsionStats + propulsion;
+	return QScriptValue(fpathCheck(Vector3i(world_coord(x1), world_coord(y1), 0), Vector3i(world_coord(x2), world_coord(y2), 0), psPropStats->propulsionType));
+}
+
 //-- \subsection{orderDroid(droid, order)}
 //-- Give a droid an order to do something.
 static QScriptValue js_orderDroid(QScriptContext *context, QScriptEngine *)
@@ -3608,6 +3624,7 @@ bool registerFunctions(QScriptEngine *engine, QString scriptName)
 	engine->globalObject().setProperty("isStructureAvailable", engine->newFunction(js_isStructureAvailable));
 	engine->globalObject().setProperty("pickStructLocation", engine->newFunction(js_pickStructLocation));
 	engine->globalObject().setProperty("droidCanReach", engine->newFunction(js_droidCanReach));
+	engine->globalObject().setProperty("propulsionCanReach", engine->newFunction(js_propulsionCanReach));
 	engine->globalObject().setProperty("orderDroidBuild", engine->newFunction(js_orderDroidBuild));
 	engine->globalObject().setProperty("orderDroidObj", engine->newFunction(js_orderDroidObj));
 	engine->globalObject().setProperty("orderDroid", engine->newFunction(js_orderDroid));
