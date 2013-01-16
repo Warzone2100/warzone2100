@@ -80,6 +80,7 @@
 #include "template.h"
 #include "multiplay.h"
 #include "multistat.h"
+#include "qtscript.h"
 
 #define FLASH_BUTTONS		// Enable flashing body part buttons.
 
@@ -4237,6 +4238,7 @@ void intProcessDesign(UDWORD id)
 		if (saveTemplate())
 		{
 			eventFireCallbackTrigger((TRIGGER_TYPE)CALL_DROIDDESIGNED);
+			triggerEventDesignCreated(&sCurrDesign);
 		}
 
 		switch ( desCompMode )

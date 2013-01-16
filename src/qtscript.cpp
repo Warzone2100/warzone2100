@@ -655,6 +655,20 @@ bool triggerEvent(SCRIPT_TRIGGER_TYPE trigger)
 	return true;
 }
 
+//__ \subsection{eventPlayerLeft(player index)}
+//__ An event that is run after a player has left the game.
+bool triggerEventPlayerLeft(int id)
+{
+	for (int i = 0; i < scripts.size(); ++i)
+	{
+		QScriptEngine *engine = scripts.at(i);
+		QScriptValueList args;
+		args += id;
+		callFunction(engine, "eventPlayerLeft", args);
+	}
+	return true;
+}
+
 //__ \subsection{eventCheatMode(entered)} Game entered or left cheat/debug mode.
 //__ The entered parameter is true if cheat mode entered, false otherwise.
 bool triggerEventCheatMode(bool entered)
@@ -1008,3 +1022,17 @@ bool triggerEventArea(QString label, DROID *psDroid)
 	return true;
 }
 
+//__ \subsection{eventDesignCreated(template)}
+//__ An event that is run whenever a new droid template is created. It is only
+//__ run on the client of the player designing the template.
+bool triggerEventDesignCreated(DROID_TEMPLATE *psTemplate)
+{
+	for (int i = 0; i < scripts.size(); ++i)
+	{
+		QScriptEngine *engine = scripts.at(i);
+		QScriptValueList args;
+		args += convTemplate(psTemplate, engine);
+		callFunction(engine, "eventDesignCreated", args);
+	}
+	return true;
+}

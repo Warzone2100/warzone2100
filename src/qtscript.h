@@ -100,5 +100,7 @@ bool triggerEventGroupLoss(BASE_OBJECT *psObj, int group, int size, QScriptEngin
 bool triggerEventDroidMoved(DROID *psDroid, int oldx, int oldy);
 bool triggerEventArea(QString label, DROID *psDroid);
 bool triggerEventSelected();
+bool triggerEventPlayerLeft(int id);
+bool triggerEventDesignCreated(DROID_TEMPLATE *psTemplate);
 
 #endif
