@@ -1186,7 +1186,7 @@ static QScriptValue js_addFeature(QScriptContext *context, QScriptEngine *engine
 //-- \subsection{addDroid(player, x, y, name, body, propulsion, reserved, droid type, turrets...)}
 //-- Create and place a droid at the given x, y position as belonging to the given player, built with
 //-- the given components. Currently does not support placing droids in multiplayer, doing so will
-//-- cause a desync. Returns a boolean that is true on success.
+//-- cause a desync. Returns the created droid on success, otherwise returns null.
 static QScriptValue js_addDroid(QScriptContext *context, QScriptEngine *engine)
 {
 	int player = context->argument(0).toInt32();
@@ -1198,7 +1198,7 @@ static QScriptValue js_addDroid(QScriptContext *context, QScriptEngine *engine)
 	DROID_TYPE droidType = (DROID_TYPE)context->argument(7).toInt32();
 	int numTurrets = context->argumentCount() - 8; // anything beyond first eight parameters, are turrets
 	COMPONENT_TYPE compType = COMP_NUMCOMPONENTS;
-	
+
 	memset(psTemplate->asParts, 0, sizeof(psTemplate->asParts)); // reset to defaults
 	memset(psTemplate->asWeaps, 0, sizeof(psTemplate->asWeaps));
 	int body = getCompFromName(COMP_BODY, context->argument(4).toString().toUtf8().constData());
@@ -1206,12 +1206,12 @@ static QScriptValue js_addDroid(QScriptContext *context, QScriptEngine *engine)
 	if (body < 0)
 	{
 		debug(LOG_ERROR, "Wanted to build %s, but body type unavailable", templName.toUtf8().constData());
-		return QScriptValue(false); // no component available
+		return QScriptValue::NullValue; // no component available
 	}
 	if (propulsion < 0)
 	{
 		debug(LOG_ERROR, "Wanted to build %s, but propulsion type unavailable", templName.toUtf8().constData());
-		return QScriptValue(false); // no component available
+		return QScriptValue::NullValue; // no component available
 	}
 	psTemplate->asParts[COMP_BODY] = body;
 	psTemplate->asParts[COMP_PROPULSION] = propulsion;
@@ -1263,7 +1263,7 @@ static QScriptValue js_addDroid(QScriptContext *context, QScriptEngine *engine)
 		if (j < 0)
 		{
 			debug(LOG_SCRIPT, "Wanted to build %s, but turret unavailable", templName.toUtf8().constData());
-			return QScriptValue(false);
+			return QScriptValue::NullValue;
 		}
 		psTemplate->asParts[compType] = j;
 	}
@@ -1284,12 +1284,13 @@ static QScriptValue js_addDroid(QScriptContext *context, QScriptEngine *engine)
 			debug(LOG_ERROR, "Invalid droid %s", templName.toUtf8().constData());
 		}
 		bMultiMessages = oldMulti; // ugh
+		return psDroid ? QScriptValue(convDroid(psDroid, engine)) : QScriptValue::NullValue;
 	}
 	else
 	{
 		debug(LOG_ERROR, "Invalid template %s", templName.toUtf8().constData());
 	}
-	return QScriptValue(valid);
+	return QScriptValue::NullValue;
 }
 
 static int get_first_available_component(STRUCTURE *psFactory, const QScriptValue &list, COMPONENT_TYPE type)
@@ -2730,8 +2731,8 @@ static QScriptValue js_safeDest(QScriptContext *context, QScriptEngine *engine)
 }
 
 //-- \subsection{addStructure(structure type, player, x, y)}
-//-- Create a structure on the given position. Returns true on success.
-static QScriptValue js_addStructure(QScriptContext *context, QScriptEngine *)
+//-- Create a structure on the given position. Returns the structure on success, null otherwise.
+static QScriptValue js_addStructure(QScriptContext *context, QScriptEngine *engine)
 {
 	QString building = context->argument(0).toString();
 	int index = getStructStatFromName(building.toUtf8().constData());
@@ -2745,8 +2746,9 @@ static QScriptValue js_addStructure(QScriptContext *context, QScriptEngine *)
 	{
 		psStruct->status = SS_BUILT;
 		buildingComplete(psStruct);
+		return QScriptValue(convStructure(psStruct, engine));
 	}
-	return QScriptValue(psStruct != NULL);
+	return QScriptValue::NullValue;
 }
 
 //-- \subsection{getStructureLimit(structure type[, player])}

@@ -42,6 +42,7 @@
 #include "multiplay.h"
 #include "map.h"
 #include "difficulty.h"
+#include "lib/netplay/netplay.h"
 
 #include "qtscriptfuncs.h"
 
@@ -436,6 +437,8 @@ bool loadPlayerScript(QString path, int player, int difficulty)
 	engine->globalObject().setProperty("mapHeight", mapHeight, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	//== \item[scavengerPlayer] Index of scavenger player. (3.2+ only)
 	engine->globalObject().setProperty("scavengerPlayer", scavengerPlayer(), QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	//== \item[isMultiplayer] If the current game is a online multiplayer game or not. (3.2+ only)
+	engine->globalObject().setProperty("isMultiplayer", NetPlay.bComms, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 
 	// Regular functions
 	QFileInfo basename(path);
