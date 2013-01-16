@@ -225,7 +225,7 @@ if [ -f "${sequencenme}" ]; then
 	mountpnt="$(echo "${hdiutilOut}" | sed -E 's:(/dev/disk[0-9])( +)(/Volumes/Warzone 2100):\1:')"
 	mountpth="$(echo "${hdiutilOut}" | sed -E 's:(/dev/disk[0-9])( +)::')"
 	rm "${mountpth}/Warzone.app/Contents/Resources/data/sequences.wz"
-	cp -a sequences-lo.wz "${mountpth}/Warzone.app/Contents/Resources/data/sequences.wz"
+	cp -a sequences.wz "${mountpth}/Warzone.app/Contents/Resources/data/sequences.wz"
 	signd "${mountpth}/Warzone.app"
 	hdiutil detach "${mountpnt}"
 	hdiutil convert temp/wztemplatecopy.sparseimage -format UDZO  -o out/warzone2100-${bldtg}-hqvideo.dmg
