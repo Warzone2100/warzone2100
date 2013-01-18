@@ -351,6 +351,8 @@ QScriptValue convDroid(DROID *psDroid, QScriptEngine *engine)
 	bool ga = false;
 	bool indirect = false;
 	int range = -1;
+	const BODY_STATS *psBodyStats = &asBodyStats[psDroid->asBits[COMP_BODY].nStat];
+
 	for (int i = 0; i < psDroid->numWeaps; i++)
 	{
 		if (psDroid->asWeaps[i].nStat)
@@ -387,6 +389,12 @@ QScriptValue convDroid(DROID *psDroid, QScriptEngine *engine)
 		type = DROID_REPAIR; break;
 	default:
 		break;
+	}
+	value.setProperty("bodySize", psBodyStats->size, QScriptValue::ReadOnly);
+	if (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER)
+	{
+		value.setProperty("cargoSlots", calcRemainingCapacity(psDroid), QScriptValue::ReadOnly);
+		value.setProperty("cargoUsed", psDroid->psGroup->getNumMembers(), QScriptValue::ReadOnly);
 	}
 	value.setProperty("isRadarDetector", objRadarDetector(psDroid), QScriptValue::ReadOnly);
 	value.setProperty("isCB", cbSensorDroid(psDroid), QScriptValue::ReadOnly);
@@ -459,6 +467,23 @@ QScriptValue convObj(BASE_OBJECT *psObj, QScriptEngine *engine)
 	return value;
 }
 
+//;; \subsection{Template}
+//;; Describes a template type. Templates are droid designs that a player has created. This type is experimental
+//;; and subject to change.
+//;; The following properties are defined:
+//;; \begin{description}
+//;; \item[id] The unique ID of this object.
+//;; \item[name] Name of the template.
+//;; \item[cost] The power cost of the template if put into production.
+//;; \item[droidType] The type of droid that would be created.
+//;; \item[body] The name of the body type.
+//;; \item[propulsion] The name of the propulsion type.
+//;; \item[brain] The name of the brain type.
+//;; \item[repair] The name of the repair type.
+//;; \item[ecm] The name of the ECM (electronic counter-measure) type.
+//;; \item[construct] The name of the construction type.
+//;; \item[weapons] An array of weapon names attached to this template.
+//;; \end{description}
 QScriptValue convTemplate(DROID_TEMPLATE *psTempl, QScriptEngine *engine)
 {
 	QScriptValue value = engine->newObject();
@@ -466,7 +491,8 @@ QScriptValue convTemplate(DROID_TEMPLATE *psTempl, QScriptEngine *engine)
 	value.setProperty("id", psTempl->multiPlayerID, QScriptValue::ReadOnly);
 	value.setProperty("name", psTempl->pName, QScriptValue::ReadOnly);
 	value.setProperty("points", psTempl->buildPoints, QScriptValue::ReadOnly);
-	value.setProperty("power", psTempl->powerPoints, QScriptValue::ReadOnly);
+	value.setProperty("power", psTempl->powerPoints, QScriptValue::ReadOnly); // deprecated
+	value.setProperty("cost", psTempl->powerPoints, QScriptValue::ReadOnly);
 	value.setProperty("droidType", psTempl->droidType, QScriptValue::ReadOnly);
 	value.setProperty("body", (asBodyStats + psTempl->asParts[COMP_BODY])->pName, QScriptValue::ReadOnly);
 	value.setProperty("propulsion", (asPropulsionStats + psTempl->asParts[COMP_PROPULSION])->pName, QScriptValue::ReadOnly);
@@ -894,7 +920,7 @@ static QScriptValue js_enumGateways(QScriptContext *, QScriptEngine *engine)
 	return result;
 }
 
-//-- \subsection{enumTemplate(player)}
+//-- \subsection{enumTemplates(player)}
 //-- Return an array containing all the buildable templates for the given player.
 static QScriptValue js_enumTemplates(QScriptContext *context, QScriptEngine *engine)
 {
@@ -905,7 +931,8 @@ static QScriptValue js_enumTemplates(QScriptContext *context, QScriptEngine *eng
 	count = 0;
 	for (DROID_TEMPLATE *psCurr = apsDroidTemplates[player]; psCurr != NULL; psCurr = psCurr->psNext)
 	{
-		result.setProperty(count++, convTemplate(psCurr, engine));
+		result.setProperty(count, convTemplate(psCurr, engine));
+		count++;
 	}
 	return result;
 }
