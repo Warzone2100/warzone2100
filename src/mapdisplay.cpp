@@ -109,11 +109,15 @@ void renderResearchToBuffer(RESEARCH *psResearch, UDWORD OriginX, UDWORD OriginY
 				//this defines how the button is drawn
 				IMDType = IMDTYPE_COMPONENT;
 				psResGraphic = psResearch->psStat;
-				// NOTE: Another kludge to deal with the superTransport to make it "fit" the display.
+				// FIXME: Another kludge to deal with the superTransport to make it "fit" the display.
 				// Using pName, should be safe to compare, pName doesn't get translated.
-				if (!strcmp("SuperTransport", psResearch->pName))
+				if (!strcmp("R-SuperTransport", psResearch->pName))
 				{
 					scale = RESEARCH_COMPONENT_SCALE / 3;
+				}
+				else if (!strcmp("R-Cyborg-Transport", psResearch->pName))
+				{
+					scale = RESEARCH_COMPONENT_SCALE / 2;
 				}
 				else
 				{

@@ -30,6 +30,7 @@
 #ifndef WIN32
 #include <stdbool.h>
 #include <limits.h>
+#include <unistd.h>
 #else
 typedef int bool;
 #define PATH_MAX 255
@@ -228,6 +229,7 @@ static void check_pie(const char *input)
 			}
 		}
 	}
+	fclose(fp);
 }
 
 int main(int argc, char **argv)
@@ -245,7 +247,11 @@ int main(int argc, char **argv)
 	{
 		char filename[PATH_MAX];
 
-		fscanf(fp, "%256s\n", filename);
+		if (fscanf(fp, "%254s\n", filename) != 1)
+		{
+			fprintf(stderr, "%s: Failed to read filename\n", argv[0]);
+			return -1;
+		}
 		printf("Testing model: %s\n", filename);
 		strcpy(fullpath, datapath);
 		strcat(fullpath, filename);

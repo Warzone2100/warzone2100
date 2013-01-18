@@ -9,8 +9,8 @@ CFBundleName = "Warzone";
 /* Warzone 2100 */ /* Name of the app bundle */
 CFBundleDisplayName = "Warzone 2100";
 
-/* Copyright © 1999-2004 Eidos Interactive.\nCopyright © 2005-2012 The Warzone 2100 Project */ /* Copyright string */
-NSHumanReadableCopyright = "Copyright © 1999-2004 Eidos Interactive.\nCopyright © 2005-2012 El projecte Warzone 2100";
+/* Copyright © 1999-2004 Eidos Interactive.\nCopyright © 2005-2013 The Warzone 2100 Project */ /* Copyright string */
+NSHumanReadableCopyright = "Copyright © 1999-2004 Eidos Interactive.\nCopyright © 2005-2013 El projecte Warzone 2100";
 
 
 /* Warzone 2100 Map / Mod File */ /* Description of .wz files */

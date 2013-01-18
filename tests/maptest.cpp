@@ -24,7 +24,11 @@ int main(int argc, char **argv)
 		GAMEMAP *map;
 		char filename[PATH_MAX], *delim;
 
-		fscanf(fp, "%256s\n", filename);
+		if (fscanf(fp, "%254s\n", filename) != 1)
+		{
+			fprintf(stderr, "maptest: Couldn't fscanf maplist.txt.\n");
+			return -1;
+		}
 
 		// Strip "/game.map"
 		delim = strrchr(filename, '/');
