@@ -22,7 +22,11 @@ int main(int argc, char **argv)
 	strcat(datapath, "/../data/");
 	while (!feof(fp))
 	{
-		fscanf(fp, "%256s\n", filename);
+		if (fscanf(fp, "%254s\n", filename) != 1)
+		{
+			fprintf(stderr, "%s: Failed to fscanf jslist.txt.\n", argv[0]);
+			return -1;
+		}
 		printf("Testing script: %s\n", filename);
 		strcpy(fullpath, datapath);
 		strcat(fullpath, filename);
