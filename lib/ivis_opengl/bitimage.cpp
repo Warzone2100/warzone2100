@@ -147,6 +147,7 @@ IMAGEFILE *iV_LoadImageFile(const char *fileName)
 	}
 	IMAGEFILE *imageFile = new IMAGEFILE;
 	imageFile->imageDefs.resize(numImages);
+	imageFile->imageNames.resize(numImages);
 	ImageMerge pageLayout;
 	pageLayout.images.resize(numImages);
 	ptr = pFileData;
@@ -163,6 +164,8 @@ IMAGEFILE *iV_LoadImageFile(const char *fileName)
 			debug(LOG_ERROR, "Bad line in \"%s\".", fileName);
 			return NULL;
 		}
+		imageFile->imageNames[numImages].first = tmpName;
+		imageFile->imageNames[numImages].second = numImages;
 		std::string spriteName = imageDir + tmpName;
 
 		ImageMergeRectangle *imageRect = &pageLayout.images[numImages];
@@ -179,6 +182,8 @@ IMAGEFILE *iV_LoadImageFile(const char *fileName)
 		while (ptr < pFileData + pFileSize && *ptr++ != '\n') {} // skip rest of line
 	}
 	free(pFileData);
+
+	std::sort(imageFile->imageNames.begin(), imageFile->imageNames.end());
 
 	pageLayout.arrange();  // Arrange all the images onto texture pages (attempt to do so with as few pages as possible).
 	imageFile->pages.resize(pageLayout.pages.size());
@@ -258,4 +263,18 @@ IMAGEFILE *iV_LoadImageFile(const char *fileName)
 void iV_FreeImageFile(IMAGEFILE *imageFile)
 {
 	delete imageFile;
+}
+
+Image IMAGEFILE::find(std::string const &name)
+{
+	Image img;
+	img.images = this;
+	img.id = 0;
+	std::pair<std::string, int> val(name, 0);
+	std::vector<std::pair<std::string, int> >::const_iterator i = std::lower_bound(imageNames.begin(), imageNames.end(), val);
+	if (i != imageNames.end() && i->first == name)
+	{
+		img.id = i->second;
+	}
+	return img;
 }

@@ -35,6 +35,8 @@
 
 #include <vector>
 #include <QtCore/QVector>
+#include <string>
+
 
 //*************************************************************************
 //
@@ -139,6 +141,8 @@ struct ImageDef
 	int YOffset;            /**< Y offset into source position */
 };
 
+struct Image;
+
 struct IMAGEFILE
 {
 	struct Page
@@ -147,8 +151,17 @@ struct IMAGEFILE
 		int size;  /// Size of texture in pixels. (Should be square.)
 	};
 
+	Image find(std::string const &name);  // Defined in bitimage.cpp.
+
 	std::vector<Page> pages;          /// Texture pages.
 	std::vector<ImageDef> imageDefs;  /// Stored images.
+	std::vector<std::pair<std::string, int> > imageNames;  ///< Names of images, sorted by name. Can lookup indices from name.
+};
+
+struct Image
+{
+	IMAGEFILE *images;
+	unsigned id;
 };
 
 #endif // _ivisdef_h
