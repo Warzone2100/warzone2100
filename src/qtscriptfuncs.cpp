@@ -2839,9 +2839,9 @@ static QScriptValue js_setNoGoArea(QScriptContext *context, QScriptEngine *)
 	return QScriptValue();
 }
 
-//-- \subsection{setScrollParams(x1, y1, x2, y2)}
+//-- \subsection{setScrollLimits(x1, y1, x2, y2)}
 //-- Limit the scrollable area of the map to the given rectangle.
-static QScriptValue js_setScrollParams(QScriptContext *context, QScriptEngine *)
+static QScriptValue js_setScrollLimits(QScriptContext *context, QScriptEngine *)
 {
 	const int minX = context->argument(0).toInt32();
 	const int minY = context->argument(1).toInt32();
@@ -2872,6 +2872,19 @@ static QScriptValue js_setScrollParams(QScriptContext *context, QScriptEngine *)
 	// need to reset radar to take into account of new size
 	resizeRadar();
 	return QScriptValue();
+}
+
+//-- \subsection{getScrollLimits()}
+//-- Get the limits of the scrollable area of the map as an area object.
+static QScriptValue js_getScrollLimits(QScriptContext *context, QScriptEngine *engine)
+{
+	QScriptValue ret = engine->newObject();
+	ret.setProperty("x", scrollMinX, QScriptValue::ReadOnly);
+	ret.setProperty("y", scrollMinY, QScriptValue::ReadOnly);
+	ret.setProperty("x2", scrollMaxX, QScriptValue::ReadOnly);
+	ret.setProperty("y2", scrollMaxY, QScriptValue::ReadOnly);
+	ret.setProperty("type", SCRIPT_AREA, QScriptValue::ReadOnly);
+	return ret;
 }
 
 //-- \subsection{loadLevel(level name)}
@@ -3628,7 +3641,9 @@ bool registerFunctions(QScriptEngine *engine, QString scriptName)
 	engine->globalObject().setProperty("allianceExistsBetween", engine->newFunction(js_allianceExistsBetween));
 	engine->globalObject().setProperty("removeStruct", engine->newFunction(js_removeStruct));
 	engine->globalObject().setProperty("removeObject", engine->newFunction(js_removeObject));
-	engine->globalObject().setProperty("setScrollParams", engine->newFunction(js_setScrollParams));
+	engine->globalObject().setProperty("setScrollParams", engine->newFunction(js_setScrollLimits)); // deprecated!!
+	engine->globalObject().setProperty("setScrollLimits", engine->newFunction(js_setScrollLimits));
+	engine->globalObject().setProperty("getScrollLimits", engine->newFunction(js_getScrollLimits));
 	engine->globalObject().setProperty("addStructure", engine->newFunction(js_addStructure));
 	engine->globalObject().setProperty("getStructureLimit", engine->newFunction(js_getStructureLimit));
 	engine->globalObject().setProperty("countStruct", engine->newFunction(js_countStruct));
