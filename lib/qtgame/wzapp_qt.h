@@ -22,12 +22,13 @@
 
 #include <QtGui/QApplication>
 #include <QtGui/QImage>
-#include <QtOpenGL/QGLWidget>
 #include <QtCore/QBuffer>
 #include <QtCore/QTime>
 #include <QtCore/QThread>
 #include <QtCore/QMutex>
 #include <QtCore/QSemaphore>
+#include "lib/framework/opengl.h"  // This may not be included after <QtOpenGL/QGLWidget> which includes <GL/gl.h>, since this includes <GL/glew.h>.
+#include <QtOpenGL/QGLWidget>
 #include <physfs.h>
 
 #include "qtgame.h"
