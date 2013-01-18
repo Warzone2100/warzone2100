@@ -51,6 +51,7 @@
 #include "template.h"
 #include "lighting.h"
 #include "radar.h"
+#include "random.h"
 #include "frontend.h"
 #include "loop.h"
 #include "scriptextern.h"
@@ -3505,6 +3506,16 @@ static QScriptValue js_cameraTrack(QScriptContext *context, QScriptEngine *)
 	return QScriptValue();
 }
 
+//-- \subsection{syncRandom(limit)}
+//-- Generate a synchronized random number in range 0...(limit - 1) that will be the same if this function is 
+//-- run on all network peers in the same game frame. If it is called on just one peer (such as would be 
+//-- the case for AIs, for instance), then game sync will break.
+static QScriptValue js_syncRandom(QScriptContext *context, QScriptEngine *)
+{
+	uint32_t limit = context->argument(0).toInt32();
+	return QScriptValue(gameRand(limit));
+}
+
 // ----------------------------------------------------------------------------------------
 // Register functions with scripting system
 
@@ -3559,6 +3570,7 @@ bool registerFunctions(QScriptEngine *engine, QString scriptName)
 	// Register functions to the script engine here
 	engine->globalObject().setProperty("_", engine->newFunction(js_translate));
 	engine->globalObject().setProperty("dump", engine->newFunction(js_dump));
+	engine->globalObject().setProperty("syncRandom", engine->newFunction(js_syncRandom));
 	engine->globalObject().setProperty("label", engine->newFunction(js_label));
 	engine->globalObject().setProperty("addLabel", engine->newFunction(js_addLabel));
 	engine->globalObject().setProperty("removeLabel", engine->newFunction(js_removeLabel));
