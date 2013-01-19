@@ -2198,7 +2198,7 @@ void	renderStructure(STRUCTURE *psStructure)
 			}
 			else
 			{
-				pieFlag = pie_TRANSLUCENT | pie_FORCE_FOG | pie_FORCE_IMMEDIATE | ecmFlag;
+				pieFlag = pie_TRANSLUCENT | pie_FORCE_FOG | ecmFlag;
 				pieFlagData = 255;
 			}
 			pie_Draw3DShape(psStructure->pStructureType->pBaseIMD, 0, colour, buildingBrightness, pieFlag, pieFlagData);

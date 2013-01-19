@@ -54,8 +54,6 @@ struct SDMATRIX
 static SDMATRIX	aMatrixStack[MATRIX_MAX];
 static SDMATRIX *psMatrix = &aMatrixStack[0];
 
-bool drawing_interface = true;
-
 //*************************************************************************
 
 static const SDMATRIX Identitymatrix = {
@@ -352,13 +350,11 @@ void pie_PerspectiveEnd(void)
 void pie_Begin3DScene(void)
 {
 	glDepthRange(0.1, 1);
-	drawing_interface = false;
 }
 
 void pie_BeginInterface(void)
 {
 	glDepthRange(0, 0.1);
-	drawing_interface = true;
 }
 
 void pie_SetGeometricOffset(int x, int y)

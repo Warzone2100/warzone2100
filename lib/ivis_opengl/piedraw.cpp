@@ -44,8 +44,6 @@
 #define BUFFER_OFFSET(i) ((char *)NULL + (i))
 #define SHADOW_END_DISTANCE (8000*8000) // Keep in sync with lighting.c:FOG_END
 
-extern bool drawing_interface;
-
 // Shadow stencil stuff
 static void ss_GL2_1pass();
 static void ss_EXT_1pass();
@@ -121,18 +119,74 @@ struct ShadowcastingShape
 	Vector3f	light;
 };
 
-struct TranslucentShape
+typedef struct
 {
 	float		matrix[16];
 	iIMDShape*	shape;
 	int		frame;
 	PIELIGHT	colour;
+	PIELIGHT	teamcolour;
 	int		flag;
 	int		flag_data;
-};
+} SHAPE;
 
 static std::vector<ShadowcastingShape> scshapes;
-static std::vector<TranslucentShape> tshapes;
+static std::vector<SHAPE> tshapes;
+static std::vector<SHAPE> shapes;
+
+static void pie_Draw3DButton2(iIMDShape *shape, const PIELIGHT &colour, const PIELIGHT &teamcolour)
+{
+	const bool shaders = pie_GetShaderUsage();
+
+	pie_SetAlphaTest(true);
+	pie_SetFogStatus(false);
+	pie_SetDepthBufferStatus(DEPTH_CMP_LEQ_WRT_ON);
+	if (shaders)
+	{
+		pie_ActivateShader(SHADER_BUTTON, shape, teamcolour, colour);
+	}
+	else
+	{
+		pie_ActivateFallback(SHADER_BUTTON, shape, teamcolour, colour);
+	}
+	pie_SetRendMode(REND_OPAQUE);
+	glColor4ubv(colour.vector);     // Only need to set once for entire model
+	pie_SetTexturePage(shape->texpage);
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_NORMAL_ARRAY);
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+	glBindBuffer(GL_ARRAY_BUFFER, shape->buffers[VBO_VERTEX]); glVertexPointer(3, GL_FLOAT, 0, NULL);
+	glBindBuffer(GL_ARRAY_BUFFER, shape->buffers[VBO_NORMAL]); glNormalPointer(GL_FLOAT, 0, NULL);
+	glBindBuffer(GL_ARRAY_BUFFER, shape->buffers[VBO_TEXCOORD]); glTexCoordPointer(2, GL_FLOAT, 0, NULL);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, shape->buffers[VBO_INDEX]);
+	if (!shaders)
+	{
+		glClientActiveTexture(GL_TEXTURE1);
+		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+		glBindBuffer(GL_ARRAY_BUFFER, shape->buffers[VBO_TEXCOORD]); glTexCoordPointer(2, GL_FLOAT, 0, NULL);
+	}
+	glDrawElements(GL_TRIANGLES, shape->npolys * 3, GL_UNSIGNED_SHORT, NULL);
+	if (!shaders)
+	{
+		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+		glClientActiveTexture(GL_TEXTURE0);
+	}
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_NORMAL_ARRAY);
+	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+
+	polyCount += shape->npolys;
+
+	if (shaders)
+	{
+		pie_DeactivateShader();
+	}
+	else
+	{
+		pie_DeactivateFallback();
+	}
+	pie_SetDepthBufferStatus(DEPTH_CMP_ALWAYS_WRT_ON);
+}
 
 static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELIGHT teamcolour, int pieFlag, int pieFlagData)
 {
@@ -142,8 +196,7 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELI
 	pie_SetAlphaTest((pieFlag & pie_PREMULTIPLIED) == 0);
 
 	/* Set fog status */
-	if (!(pieFlag & pie_FORCE_FOG) && 
-		(pieFlag & pie_ADDITIVE || pieFlag & pie_TRANSLUCENT || pieFlag & pie_BUTTON || pieFlag & pie_PREMULTIPLIED))
+	if (!(pieFlag & pie_FORCE_FOG) && (pieFlag & pie_ADDITIVE || pieFlag & pie_TRANSLUCENT || pieFlag & pie_PREMULTIPLIED))
 	{
 		pie_SetFogStatus(false);
 	}
@@ -171,19 +224,6 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELI
 	}
 	else
 	{
-		if (pieFlag & pie_BUTTON)
-		{
-			pie_SetDepthBufferStatus(DEPTH_CMP_LEQ_WRT_ON);
-			light = false;
-			if (shaders)
-			{
-				pie_ActivateShader(SHADER_BUTTON, shape, teamcolour, colour);
-			}
-			else
-			{
-				pie_ActivateFallback(SHADER_BUTTON, shape, teamcolour, colour);
-			}
-		}
 		pie_SetRendMode(REND_OPAQUE);
 	}
 	if (pieFlag & pie_ECM)
@@ -224,9 +264,6 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELI
 
 	frame %= MAX(1, shape->numFrames);
 
-	glEnableClientState(GL_VERTEX_ARRAY);
-	glEnableClientState(GL_NORMAL_ARRAY);
-	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 	glBindBuffer(GL_ARRAY_BUFFER, shape->buffers[VBO_VERTEX]); glVertexPointer(3, GL_FLOAT, 0, NULL);
 	glBindBuffer(GL_ARRAY_BUFFER, shape->buffers[VBO_NORMAL]); glNormalPointer(GL_FLOAT, 0, NULL);
 	glBindBuffer(GL_ARRAY_BUFFER, shape->buffers[VBO_TEXCOORD]); glTexCoordPointer(2, GL_FLOAT, 0, NULL);
@@ -243,13 +280,10 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELI
 		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 		glClientActiveTexture(GL_TEXTURE0);
 	}
-	glDisableClientState(GL_VERTEX_ARRAY);
-	glDisableClientState(GL_NORMAL_ARRAY);
-	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 
 	polyCount += shape->npolys;
 
-	if (light || (pieFlag & pie_BUTTON))
+	if (light)
 	{
 		if (shaders)
 		{
@@ -261,11 +295,6 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELI
 		}
 	}
 	pie_SetShaderEcmEffect(false);
-
-	if (pieFlag & pie_BUTTON)
-	{
-		pie_SetDepthBufferStatus(DEPTH_CMP_ALWAYS_WRT_ON);
-	}
 }
 
 static inline bool edgeLessThan(EDGE const &e1, EDGE const &e2)
@@ -433,37 +462,37 @@ void pie_SetUp(void)
 void pie_CleanUp( void )
 {
 	tshapes.clear();
+	shapes.clear();
 	scshapes.clear();
 }
 
 void pie_Draw3DShape(iIMDShape *shape, int frame, int team, PIELIGHT colour, int pieFlag, int pieFlagData)
 {
-	PIELIGHT teamcolour;
-
-	ASSERT_OR_RETURN(, shape, "Attempting to draw null sprite");
-
-	teamcolour = pal_GetTeamColour(team);
+	const PIELIGHT teamcolour = pal_GetTeamColour(team);
 
 	pieCount++;
 
 	ASSERT(frame >= 0, "Negative frame %d", frame);
 	ASSERT(team >= 0, "Negative team %d", team);
 
-	if (drawing_interface || !shadows)
+	if (pieFlag & pie_BUTTON)
 	{
-		pie_Draw3DShape2(shape, frame, colour, teamcolour, pieFlag, pieFlagData);
+		const PIELIGHT colour = WZCOL_WHITE;
+		pie_Draw3DButton2(shape, colour, teamcolour);
 	}
 	else
 	{
-		if (pieFlag & (pie_ADDITIVE | pie_TRANSLUCENT | pie_PREMULTIPLIED) && !(pieFlag & pie_FORCE_IMMEDIATE))
+		SHAPE tshape;
+		glGetFloatv(GL_MODELVIEW_MATRIX, tshape.matrix);
+		tshape.shape = shape;
+		tshape.frame = frame;
+		tshape.colour = colour;
+		tshape.teamcolour = teamcolour;
+		tshape.flag = pieFlag;
+		tshape.flag_data = pieFlagData;
+
+		if (pieFlag & (pie_ADDITIVE | pie_TRANSLUCENT | pie_PREMULTIPLIED))
 		{
-			TranslucentShape tshape;
-			glGetFloatv(GL_MODELVIEW_MATRIX, tshape.matrix);
-			tshape.shape = shape;
-			tshape.frame = frame;
-			tshape.colour = colour;
-			tshape.flag = pieFlag;
-			tshape.flag_data = pieFlagData;
 			tshapes.push_back(tshape);
 		}
 		else
@@ -499,8 +528,7 @@ void pie_Draw3DShape(iIMDShape *shape, int frame, int team, PIELIGHT colour, int
 					scshapes.push_back(scshape);
 				}
 			}
-
-			pie_Draw3DShape2(shape, frame, colour, teamcolour, pieFlag, pieFlagData);
+			shapes.push_back(tshape);
 		}
 	}
 }
@@ -560,27 +588,37 @@ static void pie_DrawShadows(void)
 	scshapes.clear();
 }
 
-static void pie_DrawRemainingTransShapes(void)
-{
-	glPushMatrix();
-	for (unsigned i = 0; i < tshapes.size(); ++i)
-	{
-		glLoadMatrixf(tshapes[i].matrix);
-		pie_Draw3DShape2(tshapes[i].shape, tshapes[i].frame, tshapes[i].colour, tshapes[i].colour,
-				 tshapes[i].flag, tshapes[i].flag_data);
-	}
-	glPopMatrix();
-
-	tshapes.clear();
-}
-
 void pie_RemainingPasses(void)
 {
-	if(shadows)
+	// Draw shadows
+	if (shadows)
 	{
 		pie_DrawShadows();
 	}
-	pie_DrawRemainingTransShapes();
+	// Draw models
+	// TODO, sort list to reduce state changes
+	glPushMatrix();
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_NORMAL_ARRAY);
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+	for (unsigned i = 0; i < shapes.size(); ++i)
+	{
+		glLoadMatrixf(shapes[i].matrix);
+		pie_Draw3DShape2(shapes[i].shape, shapes[i].frame, shapes[i].colour, shapes[i].teamcolour, shapes[i].flag, shapes[i].flag_data);
+	}
+	// Draw translucent models last
+	// TODO, sort list by Z order to do translucency correctly
+	for (unsigned i = 0; i < tshapes.size(); ++i)
+	{
+		glLoadMatrixf(tshapes[i].matrix);
+		pie_Draw3DShape2(tshapes[i].shape, tshapes[i].frame, tshapes[i].colour, tshapes[i].teamcolour, tshapes[i].flag, tshapes[i].flag_data);
+	}
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_NORMAL_ARRAY);
+	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+	glPopMatrix();
+	tshapes.resize(0);
+	shapes.resize(0);
 }
 
 /***************************************************************************

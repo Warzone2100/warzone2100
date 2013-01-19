@@ -65,7 +65,7 @@ UBYTE getPlayerColour(UDWORD pl)
 }
 
 
-static void setMatrix(Vector3i *Position, Vector3i *Rotation, bool RotXYZ)
+static void setMatrix(Vector3i *Position, Vector3i *Rotation, bool RotXYZ, int scale)
 {
 	pie_PerspectiveBegin();
 	pie_MatBegin();
@@ -81,6 +81,7 @@ static void setMatrix(Vector3i *Position, Vector3i *Rotation, bool RotXYZ)
 		pie_MatRotX(DEG(Rotation->x));
 		pie_MatRotZ(DEG(Rotation->z));
 	}
+	pie_MatScale(scale / 100.f);
 }
 
 
@@ -176,10 +177,7 @@ UDWORD getStructureStatHeight(STRUCTURE_STATS *psStat)
 
 void displayIMDButton(iIMDShape *IMDShape, Vector3i *Rotation, Vector3i *Position, bool RotXYZ, SDWORD scale)
 {
-	setMatrix(Position, Rotation, RotXYZ);
-	pie_MatScale(scale / 100.f);
-
-	pie_SetFogStatus(false);
+	setMatrix(Position, Rotation, RotXYZ, scale);
 	pie_Draw3DShape(IMDShape, 0, getPlayerColour(selectedPlayer), WZCOL_WHITE, pie_BUTTON, 0);
 	unsetMatrix();
 }
@@ -203,8 +201,7 @@ void displayStructureButton(STRUCTURE *psStructure, Vector3i *rotation, Vector3i
 		Position->y -= 20;
 	}
 
-	setMatrix(Position, rotation, RotXYZ);
-	pie_MatScale(scale / 100.f);
+	setMatrix(Position, rotation, RotXYZ, scale);
 
 	/* Draw the building's base first */
 	baseImd = psStructure->pStructureType->pBaseIMD;
@@ -299,8 +296,7 @@ void displayStructureStatButton(STRUCTURE_STATS *Stats, Vector3i *Rotation, Vect
 		Position->y -= 20;
 	}
 
-	setMatrix(Position, Rotation, RotXYZ);
-	pie_MatScale(scale / 100.f);
+	setMatrix(Position, Rotation, RotXYZ, scale);
 
 	/* Draw the building's base first */
 	baseImd = Stats->pBaseIMD;
@@ -397,8 +393,7 @@ void displayComponentButton(BASE_STATS *Stat, Vector3i *Rotation, Vector3i *Posi
 	iIMDShape *MountIMD = NULL;
 	SDWORD compID;
 
-	setMatrix(Position, Rotation, RotXYZ);
-	pie_MatScale(scale / 100.f);
+	setMatrix(Position, Rotation, RotXYZ, scale);
 
 	compID = StatIsComponent(Stat);
 	if (compID > 0)	{
@@ -446,8 +441,7 @@ void displayResearchButton(BASE_STATS *Stat, Vector3i *Rotation, Vector3i *Posit
 
 	if(ResearchIMD)
 	{
-		setMatrix(Position, Rotation, RotXYZ);
-		pie_MatScale(scale / 100.f);
+		setMatrix(Position, Rotation, RotXYZ, scale);
 
 		if(MountIMD) {
 			pie_Draw3DShape(MountIMD, 0, getPlayerColour(selectedPlayer), WZCOL_WHITE, pie_BUTTON, 0);
@@ -946,8 +940,7 @@ static void displayCompObj(DROID *psDroid, bool bButton)
 //
 void displayComponentButtonTemplate(DROID_TEMPLATE *psTemplate, Vector3i *Rotation, Vector3i *Position, bool RotXYZ, SDWORD scale)
 {
-	setMatrix(Position, Rotation, RotXYZ);
-	pie_MatScale(scale / 100.f);
+	setMatrix(Position, Rotation, RotXYZ, scale);
 
 	// Decide how to sort it.
 	leftFirst = angleDelta(DEG(Rotation->y)) < 0;
@@ -972,21 +965,19 @@ void displayComponentButtonObject(DROID *psDroid, Vector3i *Rotation, Vector3i *
 {
 	SDWORD		difference;
 
-	setMatrix(Position, Rotation, RotXYZ);
-	pie_MatScale(scale / 100.f);
+	setMatrix(Position, Rotation, RotXYZ, scale);
 
-// Decide how to sort it.
+	// Decide how to sort it.
 	difference = Rotation->y%360;
 
 	leftFirst = !((difference > 0 && difference < 180) || difference < -180);
 
-// And render the composite object.
+	// And render the composite object.
 	//draw multi component object as a button object
 	displayCompObj(psDroid, true);
 
 	unsetMatrix();
 }
-
 
 
 /* Assumes matrix context is already set */
