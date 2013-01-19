@@ -654,7 +654,8 @@ bool loadLabels(const char *filename)
 			{
 				int id = (*j).toInt();
 				BASE_OBJECT *psObj = IdToPointer(id, p.player);
-				ASSERT(psObj, "Unit %d belonging to player %d not found", id, p.player);
+				ASSERT(psObj, "Unit %d belonging to player %d not found from label %s", 
+				       id, p.player, list[i].toUtf8().constData());
 				p.idlist += id;
 			}
 			labels.insert(label, p);
@@ -670,7 +671,7 @@ bool loadLabels(const char *filename)
 
 bool writeLabels(const char *filename)
 {
-	int c[3];
+	int c[4]; // make unique, incremental section names
 	memset(c, 0, sizeof(c));
 	WzConfig ini(filename);
 	for (LABELMAP::const_iterator i = labels.constBegin(); i != labels.constEnd(); i++)
@@ -696,24 +697,12 @@ bool writeLabels(const char *filename)
 		}
 		else if (l.type == SCRIPT_GROUP)
 		{
-			ini.beginGroup("group_" + QString::number(c[1]++));
+			ini.beginGroup("group_" + QString::number(c[2]++));
 			ini.setValue("player", l.player);
 			QStringList list;
-			// there is no way for a script to add or change labelled groups, so just
-			// take them from one scripting context, and save them as they are
-			for (ENGINEMAP::iterator iter = groups.begin(); iter != groups.end(); ++iter)
+			for (int i = 0; i < l.idlist.size(); i++)
 			{
-				GROUPMAP *psMap = iter.value();
-				for (GROUPMAP::iterator j = psMap->begin(); j != psMap->end(); ++j)
-				{
-					int value = j.value();
-					BASE_OBJECT *key = j.key();
-					if (value < 0)
-					{
-						list += QString::number(key->id);
-					}
-				}
-				break; // only do one context
+				list += QString::number(l.idlist[i]);
 			}
 			ini.setValue("members", list);
 			ini.setValue("label", key);
@@ -721,7 +710,7 @@ bool writeLabels(const char *filename)
 		}
 		else
 		{
-			ini.beginGroup("object_" + QString::number(c[2]++));
+			ini.beginGroup("object_" + QString::number(c[3]++));
 			ini.setValue("id", l.id);
 			ini.setValue("player", l.player);
 			ini.setValue("type", l.type);
