@@ -76,6 +76,7 @@ struct timerNode
 };
 
 #define MAX_MS 50
+#define HALF_MAX_MS 25
 
 /// List of timer events for scripts. Before running them, we sort the list then run as many as we have time for.
 /// In this way, we implement load balancing of events and keep frame rates tidy for users. Since scripts run on the
@@ -87,6 +88,19 @@ static QList<QScriptEngine *> scripts;
 
 /// Remember what names are used internally in the scripting engine, we don't want to save these to the savegame
 static QHash<QString, int> internalNamespace;
+
+typedef struct monitor_bin
+{
+	int worst;
+	uint32_t worstGameTime;
+	int calls;
+	int overMaxTimeCalls;
+	int overHalfMaxTimeCalls;
+	uint64_t time;
+	monitor_bin() : worst(0),  worstGameTime(0), calls(0), overMaxTimeCalls(0), overHalfMaxTimeCalls(0), time(0) {}
+} MONITOR_BIN;
+typedef QHash<QString, MONITOR_BIN> MONITOR;
+static QHash<QScriptEngine *, MONITOR *> monitors;
 
 // Call a function by name
 static bool callFunction(QScriptEngine *engine, const QString &function, const QScriptValueList &args, bool required = false)
@@ -103,10 +117,29 @@ static bool callFunction(QScriptEngine *engine, const QString &function, const Q
 	int ticks = wzGetTicks();
 	QScriptValue result = value.call(QScriptValue(), args);
 	ticks = wzGetTicks() - ticks;
+	MONITOR *monitor = monitors.value(engine); // pick right one for this engine
+	MONITOR_BIN m;
+	if (monitor->contains(function))
+	{
+		m = monitor->value(function);
+	}
 	if (ticks > MAX_MS)
 	{
 		debug(LOG_SCRIPT, "%s took %d ms at time %d", function.toUtf8().constData(), ticks, wzGetTicks());
+		m.overMaxTimeCalls++;
 	}
+	else if (ticks > HALF_MAX_MS)
+	{
+		 m.overHalfMaxTimeCalls++;
+	}
+	m.calls++;
+	if (ticks > m.worst)
+	{
+		m.worst = ticks;
+		m.worstGameTime = gameTime;
+	}
+	m.time += ticks;
+	monitor->insert(function, m);
 	if (engine->hasUncaughtException())
 	{
 		int line = engine->uncaughtExceptionLineNumber();
@@ -301,10 +334,29 @@ bool shutdownScripts()
 	for (int i = 0; i < scripts.size(); ++i)
 	{
 		QScriptEngine *engine = scripts.at(i);
+		MONITOR *monitor = monitors.value(engine);
+		QString scriptName = engine->globalObject().property("scriptName").toString();
+		int me = engine->globalObject().property("me").toInt32();
+		dumpScriptLog(scriptName, me, "=== PERFORMANCE DATA ===\n");
+		for (MONITOR::const_iterator iter = monitor->constBegin(); iter != monitor->constEnd(); ++iter)
+		{
+			QString function = iter.key();
+			MONITOR_BIN m = iter.value();
+			QString info = function;
+			info += " : " + QString::number(m.calls) + " calls; ";
+			info += QString::number(m.time / m.calls) + "ms average; ";
+			info += QString::number(m.worst) + "ms worst (at " + QString::number(m.worstGameTime) + "); ";
+			info += QString::number(m.overMaxTimeCalls) + " calls over limit; ";
+			info += QString::number(m.overHalfMaxTimeCalls) + " calls over half limit.\n";
+			dumpScriptLog(scriptName, me, info);
+		}
+		monitor->clear();
+		delete monitor;
 		unregisterFunctions(engine);
 	}
 	timers.clear();
 	internalNamespace.clear();
+	monitors.clear();
 	while (!scripts.isEmpty())
 	{
 		delete scripts.takeFirst();
@@ -464,6 +516,9 @@ bool loadPlayerScript(QString path, int player, int difficulty)
 
 	// Register script
 	scripts.push_back(engine);
+
+	MONITOR *monitor = new MONITOR;
+	monitors.insert(engine, monitor);
 
 	debug(LOG_SAVE, "Created script engine %d for player %d from %s", scripts.size() - 1, player, path.toUtf8().constData());
 	return true;

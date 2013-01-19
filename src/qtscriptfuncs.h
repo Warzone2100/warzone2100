@@ -61,6 +61,9 @@ QScriptValue convTemplate(DROID_TEMPLATE *psTemplate, QScriptEngine *engine);
 QScriptValue convResearch(RESEARCH *psResearch, QScriptEngine *engine, int player);
 BASE_OBJECT *IdToObject(OBJECT_TYPE type, int id, int player);
 
+/// Dump script-relevant log info to separate file
+void dumpScriptLog(const QString &scriptName, int me, const QString &info);
+
 // Script functions useful also in qtscript.cpp
 QScriptValue js_enumSelected(QScriptContext *, QScriptEngine *engine);
 

@@ -1707,6 +1707,18 @@ static QScriptValue js_enumDroid(QScriptContext *context, QScriptEngine *engine)
 	return result;
 }
 
+void dumpScriptLog(const QString &scriptName, int me, const QString &info)
+{
+	QString path = PHYSFS_getWriteDir();
+	path += "/logs/" + scriptName + "." + QString::number(me) + ".log";
+	FILE *fp = fopen(path.toUtf8().constData(), "a");
+	if (fp)
+	{
+		fputs(info.toUtf8().constData(), fp);
+		fclose(fp);
+	}
+}
+
 //-- \subsection{dump(string...)}
 //-- Output text to a debug file.
 static QScriptValue js_dump(QScriptContext *context, QScriptEngine *engine)
@@ -1729,15 +1741,7 @@ static QScriptValue js_dump(QScriptContext *context, QScriptEngine *engine)
 
 	QString scriptName = engine->globalObject().property("scriptName").toString();
 	int me = engine->globalObject().property("me").toInt32();
-	QString path = PHYSFS_getWriteDir();
-	SCRIPT_ASSERT(context, !path.isEmpty(), "No write dir set for game!");
-	path += "/logs/" + scriptName + "." + QString::number(me) + ".log";
-	FILE *fp = fopen(path.toUtf8().constData(), "a");
-	if (fp)
-	{
-		fputs(result.toUtf8().constData(), fp);
-		fclose(fp);
-	}
+	dumpScriptLog(scriptName, me, result);
 	return QScriptValue();
 }
 
