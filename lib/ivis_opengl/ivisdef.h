@@ -160,6 +160,13 @@ struct IMAGEFILE
 
 struct Image
 {
+	Image(IMAGEFILE const *images = NULL, unsigned id = 0) : images(const_cast<IMAGEFILE *>(images)), id(id) {}
+
+	int width() const { return images->imageDefs[id].Width; }
+	int height() const { return images->imageDefs[id].Height; }
+	int xOffset() const { return images->imageDefs[id].XOffset; }
+	int yOffset() const { return images->imageDefs[id].YOffset; }
+
 	IMAGEFILE *images;
 	unsigned id;
 };

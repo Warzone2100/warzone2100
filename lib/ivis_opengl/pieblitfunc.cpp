@@ -219,16 +219,16 @@ void iV_DrawImage(IMAGEFILE *ImageFile, UWORD ID, int x, int y)
 	pie_DrawImage(&pieImage, &dest);
 }
 
-void iV_DrawImageTc(IMAGEFILE *imageFile, unsigned id, unsigned idTc, int x, int y, PIELIGHT colour)
+void iV_DrawImageTc(Image image, Image imageTc, int x, int y, PIELIGHT colour)
 {
-	if (!assertValidImage(imageFile, id) || !assertValidImage(imageFile, idTc))
+	if (!assertValidImage(image.images, image.id) || !assertValidImage(image.images, image.id))
 	{
 		return;
 	}
 
 	PIERECT dest;
-	PIEIMAGE pieImage   = makePieImage(imageFile, id, &dest, x, y);
-	PIEIMAGE pieImageTc = makePieImage(imageFile, idTc);
+	PIEIMAGE pieImage   = makePieImage(image.images, image.id, &dest, x, y);
+	PIEIMAGE pieImageTc = makePieImage(imageTc.images, imageTc.id);
 
 	pie_SetRendMode(REND_ALPHA);
 	pie_SetAlphaTest(true);

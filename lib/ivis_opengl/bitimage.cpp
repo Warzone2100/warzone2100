@@ -267,14 +267,11 @@ void iV_FreeImageFile(IMAGEFILE *imageFile)
 
 Image IMAGEFILE::find(std::string const &name)
 {
-	Image img;
-	img.images = this;
-	img.id = 0;
 	std::pair<std::string, int> val(name, 0);
 	std::vector<std::pair<std::string, int> >::const_iterator i = std::lower_bound(imageNames.begin(), imageNames.end(), val);
 	if (i != imageNames.end() && i->first == name)
 	{
-		img.id = i->second;
+		return Image(this, i->second);
 	}
-	return img;
+	return Image(this, 0);  // Error, image not found.
 }
