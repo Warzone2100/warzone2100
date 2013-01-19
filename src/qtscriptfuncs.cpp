@@ -267,6 +267,16 @@ QScriptValue convStructure(STRUCTURE *psStruct, QScriptEngine *engine)
 	{
 		value.setProperty("modules", QScriptValue::NullValue);
 	}
+	QScriptValue weaponlist = engine->newArray(psStruct->numWeaps);
+	for (int j = 0; j < psStruct->numWeaps; j++)
+	{
+		QScriptValue weapon = engine->newObject();
+		const WEAPON_STATS *psStats = asWeaponStats + psStruct->asWeaps[j].nStat;
+		weapon.setProperty("name", psStats->pName, QScriptValue::ReadOnly);
+		weapon.setProperty("lastFired", psStruct->asWeaps[j].lastFired, QScriptValue::ReadOnly);
+		weaponlist.setProperty(j, weapon, QScriptValue::ReadOnly);
+	}
+	value.setProperty("weapons", weaponlist, QScriptValue::ReadOnly);
 	return value;
 }
 
@@ -345,6 +355,11 @@ QScriptValue convFeature(FEATURE *psFeature, QScriptEngine *engine)
 //;; \item[range] Maximum range of its weapons. (3.2+ only)
 //;; \item[body] The body component of the droid. (3.2+ only)
 //;; \item[propulsion] The propulsion component of the droid. (3.2+ only)
+//;; \item[weapons] The weapon components of the droid, as an array. (3.2+ only)
+//;; \item[cargoCapacity] Defined for transporters only: Total cargo capacity (number of items that will fit may depend on their size). (3.2+ only)
+//;; \item[cargoSpace] Defined for transporters only: Cargo capacity left. (3.2+ only)
+//;; \item[cargoCount] Defined for transporters only: Number of individual \emph{items} in the cargo hold. (3.2+ only)
+//;; \item[cargoSize] The amount of cargo space the droid will take inside a transport. (3.2+ only)
 //;; \end{description}
 QScriptValue convDroid(DROID *psDroid, QScriptEngine *engine)
 {
@@ -394,8 +409,9 @@ QScriptValue convDroid(DROID *psDroid, QScriptEngine *engine)
 	value.setProperty("bodySize", psBodyStats->size, QScriptValue::ReadOnly);
 	if (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER)
 	{
-		value.setProperty("cargoSlots", calcRemainingCapacity(psDroid), QScriptValue::ReadOnly);
-		value.setProperty("cargoUsed", psDroid->psGroup->getNumMembers(), QScriptValue::ReadOnly);
+		value.setProperty("cargoCapacity", TRANSPORTER_CAPACITY, QScriptValue::ReadOnly);
+		value.setProperty("cargoLeft", calcRemainingCapacity(psDroid), QScriptValue::ReadOnly);
+		value.setProperty("cargoCount", psDroid->psGroup->getNumMembers(), QScriptValue::ReadOnly);
 	}
 	value.setProperty("isRadarDetector", objRadarDetector(psDroid), QScriptValue::ReadOnly);
 	value.setProperty("isCB", cbSensorDroid(psDroid), QScriptValue::ReadOnly);
@@ -419,6 +435,17 @@ QScriptValue convDroid(DROID *psDroid, QScriptEngine *engine)
 	{
 		value.setProperty("armed", QScriptValue::NullValue);
 	}
+	QScriptValue weaponlist = engine->newArray(psDroid->numWeaps);
+	for (int j = 0; j < psDroid->numWeaps; j++)
+	{
+		QScriptValue weapon = engine->newObject();
+		const WEAPON_STATS *psStats = asWeaponStats + psDroid->asWeaps[j].nStat;
+		weapon.setProperty("name", psStats->pName, QScriptValue::ReadOnly);
+		weapon.setProperty("lastFired", psDroid->asWeaps[j].lastFired, QScriptValue::ReadOnly);
+		weaponlist.setProperty(j, weapon, QScriptValue::ReadOnly);
+	}
+	value.setProperty("weapons", weaponlist, QScriptValue::ReadOnly);
+	value.setProperty("cargoSize", transporterSpaceRequired(psDroid), QScriptValue::ReadOnly);
 	return value;
 }
 
@@ -710,12 +737,29 @@ bool writeLabels(const char *filename)
 //
 // All script functions should be prefixed with "js_" then followed by same name as in script.
 
+//-- \subsection{getWeaponInfo(weapon name)}
+//-- Return information about a particular weapon type.
+// TODO, add more and document
+static QScriptValue js_getWeaponInfo(QScriptContext *context, QScriptEngine *engine)
+{
+	QString name = context->argument(0).toString();
+	WEAPON_STATS *psStats = asWeaponStats + getCompFromName(COMP_WEAPON, name.toUtf8().constData());
+	QScriptValue info = engine->newObject();
+	info.setProperty("name", name);
+	info.setProperty("fullname", getStatName(psStats));
+	info.setProperty("class", psStats->weaponClass == WC_KINETIC ? "KINETIC" : "HEAT");
+	info.setProperty("damage", psStats->damage);
+	info.setProperty("firePause", psStats->firePause);
+	info.setProperty("fireOnMove", psStats->fireOnMove);
+	return QScriptValue();
+}
+
 //-- \subsection{resetArea(label[, filter])}
 //-- Reset the trigger on an area. Next time a unit enters the area, it will trigger
 //-- an area event. Optionally add a filter on it in the second parameter, which can
 //-- be a specific player to watch for, or ALL_PLAYERS by default.
 //-- This is a fast operation of O(log n) algorithmic complexity.
-static QScriptValue js_resetArea(QScriptContext *context, QScriptEngine *engine)
+static QScriptValue js_resetArea(QScriptContext *context, QScriptEngine *)
 {
 	QString labelName = context->argument(0).toString();
 	SCRIPT_ASSERT(context, labels.contains(labelName), "Label %s not found", labelName.toUtf8().constData());
@@ -1597,6 +1641,28 @@ static QScriptValue js_enumFeature(QScriptContext *context, QScriptEngine *engin
 	{
 		FEATURE *psFeat = matches.at(i);
 		result.setProperty(i, convFeature(psFeat, engine));
+	}
+	return result;
+}
+
+//-- \subsection{enumCargo(transport droid)}
+//-- Returns an array of droid objects inside given transport.
+static QScriptValue js_enumCargo(QScriptContext *context, QScriptEngine *engine)
+{
+	QScriptValue droidVal = context->argument(0);
+	int id = droidVal.property("id").toInt32();
+	int player = droidVal.property("player").toInt32();
+	DROID *psDroid = IdToDroid(id, player);
+	SCRIPT_ASSERT(context, psDroid, "No such droid id %d belonging to player %d", id, player);
+	SCRIPT_ASSERT(context, psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER, "Wrong droid type");
+	QScriptValue result = engine->newArray(psDroid->psGroup->getNumMembers());
+	int i = 0;
+	for (DROID *psCurr = psDroid->psGroup->psList; psCurr; psCurr = psCurr->psGrpNext, i++)
+	{
+		if (psDroid != psCurr)
+		{
+			result.setProperty(i, convDroid(psCurr, engine));
+		}
 	}
 	return result;
 }
@@ -3651,6 +3717,8 @@ bool registerFunctions(QScriptEngine *engine, QString scriptName)
 	engine->globalObject().setProperty("setCommanderLimit", engine->newFunction(js_setCommanderLimit));
 	engine->globalObject().setProperty("setConstructorLimit", engine->newFunction(js_setConstructorLimit));
 	engine->globalObject().setProperty("setExperienceModifier", engine->newFunction(js_setExperienceModifier));
+	engine->globalObject().setProperty("getWeaponInfo", engine->newFunction(js_getWeaponInfo));
+	engine->globalObject().setProperty("enumCargo", engine->newFunction(js_enumCargo));
 
 	// Functions that operate on the current player only
 	engine->globalObject().setProperty("centreView", engine->newFunction(js_centreView));

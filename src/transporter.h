@@ -32,6 +32,12 @@
 #define IDTRANS_LAUNCH			9010	//The Transporter Launch button
 #define	IDTRANS_CAPACITY		9500	//The Transporter capacity label
 
+//defines how much space is on the Transporter
+#define TRANSPORTER_CAPACITY		10
+
+/// how much cargo capacity a droid takes up
+UDWORD transporterSpaceRequired(DROID const *psDroid);
+
 //initialises Transporter variables
 extern void initTransporters(void);
 // Refresh the transporter screen.

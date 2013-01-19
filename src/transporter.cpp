@@ -117,9 +117,6 @@
 //start y position of the available droids buttons
 #define AVAIL_STARTY			0
 
-//defines how much space is on the Transporter
-#define TRANSPORTER_CAPACITY		10
-
 //They all take up the same amount of space now - AB 30/10/98
 //defines how much space each sized droid takes up on the Transporter
 #define	LIGHT_DROID					1
@@ -151,7 +148,6 @@ static bool intAddTransButtonForm(void);
 static bool intAddTransContentsForm(void);
 static bool intAddDroidsAvailForm(void);
 void intRemoveTransContent(void);
-static UDWORD transporterSpaceRequired(DROID const *psDroid);
 static DROID *transInterfaceDroidList(void);
 static void intTransporterAddDroid(UDWORD id);
 static void intRemoveTransDroidsAvail(void);
@@ -1451,33 +1447,9 @@ bool checkTransporterSpace(DROID const *psTransporter, DROID const *psAssigned, 
 /*returns the space the droid occupies on a transporter based on the body size*/
 UDWORD transporterSpaceRequired(DROID const *psDroid)
 {
-	UDWORD	size;
-
-	if (!bMultiPlayer)
-	{
-		size = LIGHT_DROID;		// all droids are the same weight for SP games.
-	}
-	else
-	{
-		switch ((asBodyStats + psDroid->asBits[COMP_BODY].nStat)->size)
-		{
-		case SIZE_LIGHT:
-			size = LIGHT_DROID;
-			break;
-		case SIZE_MEDIUM:
-			size = MEDIUM_DROID;
-			break;
-		case SIZE_HEAVY:
-		case SIZE_SUPER_HEAVY:
-			size = HEAVY_DROID;
-			break;
-		default:
-			ASSERT(false, "transporterSpaceRequired: Unknown Droid size");
-			size = 0;
-			break;
-		}
-	}
-	return size;
+	// all droids are the same weight for campaign games.
+	// TODO - move this into a droid flag
+	return bMultiPlayer ? (asBodyStats + psDroid->asBits[COMP_BODY].nStat)->size : 1;
 }
 
 /*sets which list of droids to use for the transporter interface*/
