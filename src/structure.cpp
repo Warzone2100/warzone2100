@@ -701,6 +701,7 @@ bool loadStructureStrengthModifiers(const char *pFileName)
 		if (!getWeaponEffect(list[i].toUtf8().constData(), &effectInc))
 		{
 			debug(LOG_FATAL, "Invalid Weapon Effect - %s", list[i].toUtf8().constData());
+			ini.endGroup();
 			continue;
 		}
 		QStringList keys = ini.childKeys();
@@ -730,6 +731,7 @@ bool loadStructureStrengthModifiers(const char *pFileName)
 				debug(LOG_ERROR, "Unsupported structure strength %s", strength.toUtf8().constData());
 			}
 		}
+		ini.endGroup();
 	}
 	return true;
 }
