@@ -92,13 +92,13 @@ static void unsetMatrix(void)
 }
 
 
-UDWORD getComponentDroidRadius(WZ_DECL_UNUSED DROID *psDroid)
+UDWORD getComponentDroidRadius(DROID *)
 {
 	return 100;
 }
 
 
-UDWORD getComponentDroidTemplateRadius(WZ_DECL_UNUSED DROID_TEMPLATE *psDroid)
+UDWORD getComponentDroidTemplateRadius(DROID_TEMPLATE *)
 {
 	return 100;
 }
@@ -290,8 +290,7 @@ void displayStructureStatButton(STRUCTURE_STATS *Stats, Vector3i *Rotation, Vect
 	/*HACK HACK HACK!
 	if its a 'tall thin (ie tower)' structure stat with something on the top - offset the
 	position to show the object on top*/
-	if (Stats->pIMD[0]->nconnectors && scale == SMALL_STRUCT_SCALE &&
-	    getStructureStatHeight(Stats) > TOWER_HEIGHT)
+	if (Stats->pIMD[0]->nconnectors && scale == SMALL_STRUCT_SCALE && getStructureStatHeight(Stats) > TOWER_HEIGHT)
 	{
 		Position->y -= 20;
 	}
@@ -383,27 +382,23 @@ void displayStructureStatButton(STRUCTURE_STATS *Stats, Vector3i *Rotation, Vect
 }
 
 
-
 // Render a component given a BASE_STATS structure.
 //
-void displayComponentButton(BASE_STATS *Stat, Vector3i *Rotation, Vector3i *Position,
-                            bool RotXYZ, SDWORD scale)
+void displayComponentButton(BASE_STATS *Stat, Vector3i *Rotation, Vector3i *Position, bool RotXYZ, SDWORD scale)
 {
 	iIMDShape *ComponentIMD = NULL;
 	iIMDShape *MountIMD = NULL;
-	SDWORD compID;
+	int compID = StatIsComponent(Stat);
 
-	setMatrix(Position, Rotation, RotXYZ, scale);
-
-	compID = StatIsComponent(Stat);
-	if (compID > 0)	{
+	if (compID > 0)
+	{
 		StatGetComponentIMD(Stat, compID,&ComponentIMD, &MountIMD);
 	}
 	else
 	{
-		unsetMatrix();
 		return;
 	}
+	setMatrix(Position, Rotation, RotXYZ, scale);
 
 	/* VTOL bombs are only stats allowed to have NULL ComponentIMD */
 	if (StatIsComponent(Stat) != COMP_WEAPON
@@ -439,7 +434,8 @@ void displayResearchButton(BASE_STATS *Stat, Vector3i *Rotation, Vector3i *Posit
 	iIMDShape *ResearchIMD = ((RESEARCH *)Stat)->pIMD;
 	iIMDShape *MountIMD = ((RESEARCH *)Stat)->pIMD2;
 
-	if(ResearchIMD)
+	ASSERT(ResearchIMD, "ResearchIMD is NULL");
+	if (ResearchIMD)
 	{
 		setMatrix(Position, Rotation, RotXYZ, scale);
 
@@ -449,10 +445,6 @@ void displayResearchButton(BASE_STATS *Stat, Vector3i *Rotation, Vector3i *Posit
 		pie_Draw3DShape(ResearchIMD, 0, getPlayerColour(selectedPlayer), WZCOL_WHITE, pie_BUTTON, 0);
 
 		unsetMatrix();
-	}
-	else
-	{
-		debug(LOG_ERROR, "ResearchIMD == NULL");
 	}
 }
 
@@ -494,8 +486,6 @@ static iIMDShape *getRightPropulsionIMD(DROID *psDroid)
 static void displayCompObj(DROID *psDroid, bool bButton)
 {
 	iIMDShape               *psShape, *psJet, *psShapeTemp = NULL, *psMountShape;
-	Vector3i                zero(0, 0, 0);
-	Vector2i				screenCoords;
 	SDWORD				iConnector;
 	PROPULSION_STATS	*psPropStats;
 	SDWORD				frame;
@@ -605,22 +595,12 @@ static void displayCompObj(DROID *psDroid, bool bButton)
 	}
 
 	/* render vtol jet if flying - horrible hack - GJ */
-	if (((psPropStats->propulsionType == PROPULSION_TYPE_LIFT) &&
-		//(psDroid->droidType != DROID_CYBORG)) && (!bButton))
-		(!cyborgDroid(psDroid))) && (!bButton))
+	if (!bButton && psPropStats->propulsionType == PROPULSION_TYPE_LIFT && !cyborgDroid(psDroid) && psDroid->sMove.Status != MOVEINACTIVE)
 	{
-		/* show flame if above ground */
-		if ( psDroid->sMove.Status != MOVEINACTIVE )
+		psJet = asBodyStats[psDroid->asBits[COMP_BODY].nStat].pFlameIMD;
+		if (psJet)
 		{
-			/* draw flame if found  */
-
-			/* GJ TODO: add flame-finding code here */
-			psJet = asBodyStats[psDroid->asBits[COMP_BODY].nStat].pFlameIMD;
-
-			if ( psJet != NULL )
-			{
-				pie_Draw3DShape(psJet, getModularScaledGraphicsTime(psJet->animInterval, psJet->numFrames), colour, brightness, pie_ADDITIVE, 200);
-			}
+			pie_Draw3DShape(psJet, getModularScaledGraphicsTime(psJet->animInterval, psJet->numFrames), colour, brightness, pie_ADDITIVE, 200);
 		}
 	}
 
@@ -648,8 +628,6 @@ static void displayCompObj(DROID *psDroid, bool bButton)
 		iPieData = 0;
 	}
 
-	/* Indenting here is only to show new matrix context */
-	{
 		psShapeTemp = BODY_IMD(psDroid,psDroid->player);
 		if( psShapeTemp->nconnectors )
 		{
@@ -657,8 +635,7 @@ static void displayCompObj(DROID *psDroid, bool bButton)
 			 * all others to connector 1 */
 			/* VTOL's now skip the first 5 connectors(0 to 4),
 			VTOL's use 5,6,7,8 etc now */
-			if ( (psPropStats->propulsionType == PROPULSION_TYPE_LIFT) &&
-				  psDroid->droidType == DROID_WEAPON )
+			if (psPropStats->propulsionType == PROPULSION_TYPE_LIFT && psDroid->droidType == DROID_WEAPON )
 			{
 				iConnector = VTOL_CONNECTOR_START;
 			}
@@ -914,7 +891,6 @@ static void displayCompObj(DROID *psDroid, bool bButton)
 		}
 		/*	We've also got a handle on the psShape here for the weapon which has a connector to point to
 			muzzle flash attachment points - just grab it from psShape->connectors->[x|y|z] */
-	} // end of illustrative indentation - see above
 
 	/* set default components transparent */
 	if ( psDroid->asBits[COMP_PROPULSION].nStat == 0 )
