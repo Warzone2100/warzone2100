@@ -68,7 +68,7 @@ void iV_Line(int x0, int y0, int x1, int y1, PIELIGHT colour)
 	pie_SetAlphaTest(false);
 
 	glColor4ubv(colour.vector);
-	glBegin(GL_LINE_STRIP);
+	glBegin(GL_LINES);
 	glVertex2i(x0, y0);
 	glVertex2i(x1, y1);
 	glEnd();
@@ -134,12 +134,15 @@ void iV_Box(int x0,int y0, int x1, int y1, PIELIGHT colour)
 		y1 = rendSurface.clip.bottom;
 
 	glColor4ubv(colour.vector);
-	glBegin(GL_LINE_STRIP);
-	glVertex2f(x0, y0);
-	glVertex2f(x1, y0);
-	glVertex2f(x1, y1);
-	glVertex2f(x0, y1);
-	glVertex2f(x0, y0);
+	glBegin(GL_LINES);
+	glVertex2i(x0, y1);
+	glVertex2i(x0, y0);
+	glVertex2i(x0, y0);
+	glVertex2i(x1, y0);
+	glVertex2i(x1, y0);
+	glVertex2i(x1, y1);
+	glVertex2i(x0, y1);
+	glVertex2i(x1, y1);
 	glEnd();
 }
 

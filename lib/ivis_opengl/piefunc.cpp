@@ -33,6 +33,8 @@
 #include "lib/ivis_opengl/piemode.h"
 #include "lib/ivis_opengl/pieclip.h"
 
+static GLuint skyboxbuffers[VBO_MINIMAL];
+
 /*
  *	Source
  */
@@ -115,10 +117,37 @@ void pie_TransColouredTriangle(Vector3f *vrt, PIELIGHT c)
 	glEnd();
 }
 
-void pie_DrawSkybox(float scale, int u, int v, int w, int h)
+void pie_Skybox_Init()
 {
+	const int u = 0;
+	const int v = 0;
+	const int w = 1;
+	const int h = 1;
 	const float r = 1.0f; // just because it is shorter than 1.0f
+	GLfloat vert[] = { -r, 0, r, -r, r, r, r, 0, r, r, r, r, // front
+	                    r, 0,-r, r, r,-r, // right
+	                   -r, 0, -r, -r, r, -r, // back
+	                   -r, 0, r, -r, r, r };
+	GLfloat texc[] = { u + w * 0, v + h, u + w * 0, v, u + w * 2, v + h, u + w * 2, v,
+	                   u + w * 4, v + h, u + w * 4, v,
+	                   u + w * 6, v + h, u + w * 6, v,
+	                   u + w * 8, v + h, u + w * 8, v };
 
+	glGenBuffers(VBO_MINIMAL, skyboxbuffers);
+	glBindBuffer(GL_ARRAY_BUFFER, skyboxbuffers[VBO_VERTEX]);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vert), vert, GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, skyboxbuffers[VBO_TEXCOORD]);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(texc), texc, GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
+
+void pie_Skybox_Shutdown()
+{
+	glDeleteBuffers(VBO_MINIMAL, skyboxbuffers);
+}
+
+void pie_DrawSkybox(float scale)
+{
 	glPushAttrib(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT | GL_ENABLE_BIT | GL_FOG_BIT);
 	// no use in updating the depth buffer
 	glDepthMask(GL_FALSE);
@@ -138,25 +167,14 @@ void pie_DrawSkybox(float scale, int u, int v, int w, int h)
 	// Apply scale matrix
 	glScalef(scale, scale/2.0f, scale);
 
-	glBegin(GL_QUAD_STRIP);
-		// Front
-		glTexCoord2f(u + w * 0, v + h);	glVertex3f(-r, 0, r); // bottom left
-		glTexCoord2f(u + w * 0, v);		glVertex3f(-r, r, r); // top left
-		glTexCoord2f(u + w * 2, v + h);	glVertex3f( r, 0, r); // bottom right
-		glTexCoord2f(u + w * 2, v); 	glVertex3f( r, r, r); // top right
-
-		// Right
-		glTexCoord2f(u + w * 4, v + h);	glVertex3f( r, 0,-r); // bottom r
-		glTexCoord2f(u + w * 4, v); 	glVertex3f( r, r,-r); // top r
-
-		// Back
-		glTexCoord2f(u + w * 6, v + h);	glVertex3f(-r, 0, -r); // bottom right
-		glTexCoord2f(u + w * 6, v); 	glVertex3f(-r, r, -r); // top right
-
-		// Left
-		glTexCoord2f(u + w * 8, v + h);	glVertex3f(-r, 0, r); // bottom r
-		glTexCoord2f(u + w * 8, v); 	glVertex3f(-r, r, r); // top r
-	glEnd();
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+	glBindBuffer(GL_ARRAY_BUFFER, skyboxbuffers[VBO_VERTEX]); glVertexPointer(3, GL_FLOAT, 0, NULL);
+	glBindBuffer(GL_ARRAY_BUFFER, skyboxbuffers[VBO_TEXCOORD]); glTexCoordPointer(2, GL_FLOAT, 0, NULL);
+	glDrawArrays(GL_QUAD_STRIP, 0, 10);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 
 	glPopAttrib();
 }

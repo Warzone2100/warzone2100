@@ -35,8 +35,11 @@
 
 extern UBYTE pie_ByteScale(UBYTE a, UBYTE b) WZ_DECL_CONST;
 extern void pie_TransColouredTriangle(Vector3f *vrt, PIELIGHT c);
-extern void pie_DrawSkybox(float scale, int u, int v, int w, int h);
 extern void pie_DrawViewingWindow( Vector3i *v, UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y2, PIELIGHT colour);
+
+void pie_DrawSkybox(float scale);
+void pie_Skybox_Init();
+void pie_Skybox_Shutdown();
 
 void pie_ClipBegin(int x1, int y1, int x2, int y2);
 void pie_ClipEnd(void);
