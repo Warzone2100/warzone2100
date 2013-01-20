@@ -1368,7 +1368,7 @@ static QScriptValue js_groupSize(QScriptContext *context, QScriptEngine *)
 	int groupId = context->argument(0).toInt32();
 	DROID_GROUP *psGroup = grpFind(groupId);
 	SCRIPT_ASSERT(context, psGroup, "Group %d not found", groupId);
-	return QScriptValue(psGroup->refCount);
+	return QScriptValue(psGroup->getNumMembers());
 }
 
 //-- \subsection{droidCanReach(droid, x, y)}
