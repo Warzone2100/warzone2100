@@ -1382,7 +1382,7 @@ static DROID_TEMPLATE *makeTemplate(int player, int x, int y, const QString &tem
 		}
 		psTemplate->asParts[compType] = result;
 	}
-	bool valid = intValidTemplate(psTemplate, templName.toUtf8().constData(), true);
+	bool valid = intValidTemplate(psTemplate, templName.toUtf8().constData(), true, player);
 	if (valid)
 	{
 		return psTemplate;
