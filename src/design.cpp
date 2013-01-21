@@ -3284,7 +3284,6 @@ static void intSetPropulsionShadowStats(PROPULSION_STATS *psStats)
 bool intValidTemplate(DROID_TEMPLATE *psTempl, const char *newName, bool complain)
 {
 	code_part level = complain ? LOG_ERROR : LOG_NEVER;
-	UDWORD i;
 	int bodysize = (asBodyStats + psTempl->asParts[COMP_BODY])->size;
 
 	// set the weapon for a command droid
@@ -3319,7 +3318,7 @@ bool intValidTemplate(DROID_TEMPLATE *psTempl, const char *newName, bool complai
 	}
 
 	/* Check the weapons */
-	for (i = 0; i < psTempl->numWeaps; i++)
+	for (int i = 0; i < psTempl->numWeaps; i++)
 	{
 		int weaponSize = (asWeaponStats + psTempl->asWeaps[i])->weaponSize;
 
@@ -3328,6 +3327,12 @@ bool intValidTemplate(DROID_TEMPLATE *psTempl, const char *newName, bool complai
 		    || psTempl->asWeaps[i] == 0)
 		{
 			debug(level, "No weapon given for weapon droid, or wrong weapon size");
+			return false;
+		}
+		if (checkTemplateIsVtol(psTempl)
+		    && (asWeaponStats + psTempl->asWeaps[i])->vtolAttackRuns <= 0)
+		{
+			debug(level, "VTOL with non-VTOL turret, not possible");
 			return false;
 		}
 	}
@@ -3355,14 +3360,11 @@ bool intValidTemplate(DROID_TEMPLATE *psTempl, const char *newName, bool complai
 		return false;
 	}
 	
-	//can only have a weapon on a VTOL propulsion
-	if (checkTemplateIsVtol(psTempl))
+	//can only have a VTOL weapon on a VTOL propulsion
+	if (checkTemplateIsVtol(psTempl) && psTempl->numWeaps == 0)
 	{
-		if (psTempl->numWeaps == 0)
-		{
-			debug(level, "VTOL with system turret, not possible");
-			return false;
-		}
+		debug(level, "VTOL with system turret, not possible");
+		return false;
 	}
 
 	if (psTempl->asParts[COMP_SENSOR] == 0)
