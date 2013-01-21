@@ -3280,7 +3280,7 @@ static void intSetPropulsionShadowStats(PROPULSION_STATS *psStats)
 
 
 /* Check whether a droid template is valid */
-bool intValidTemplate(DROID_TEMPLATE *psTempl, const char *newName, bool complain)
+bool intValidTemplate(DROID_TEMPLATE *psTempl, const char *newName, bool complain, int player)
 {
 	code_part level = complain ? LOG_ERROR : LOG_NEVER;
 	UDWORD i;
@@ -3342,7 +3342,7 @@ bool intValidTemplate(DROID_TEMPLATE *psTempl, const char *newName, bool complai
 	if (psTempl->numWeaps != 0 &&
 	    (psTempl->asParts[COMP_SENSOR] ||
 	     psTempl->asParts[COMP_ECM] ||
-	     (psTempl->asParts[COMP_REPAIRUNIT] && psTempl->asParts[COMP_REPAIRUNIT] != aDefaultRepair[selectedPlayer]) ||
+	     (psTempl->asParts[COMP_REPAIRUNIT] && psTempl->asParts[COMP_REPAIRUNIT] != aDefaultRepair[player]) ||
 	     psTempl->asParts[COMP_CONSTRUCT]))
 	{
 		debug(level, "Cannot mix system and weapon turrets in a template!");
@@ -3367,19 +3367,19 @@ bool intValidTemplate(DROID_TEMPLATE *psTempl, const char *newName, bool complai
 	if (psTempl->asParts[COMP_SENSOR] == 0)
 	{
 		/* Set the default Sensor */
-		psTempl->asParts[COMP_SENSOR] = aDefaultSensor[selectedPlayer];
+		psTempl->asParts[COMP_SENSOR] = aDefaultSensor[player];
 	}
 
 	if (psTempl->asParts[COMP_ECM] == 0)
 	{
 		/* Set the default ECM */
-		psTempl->asParts[COMP_ECM] = aDefaultECM[selectedPlayer];
+		psTempl->asParts[COMP_ECM] = aDefaultECM[player];
 	}
 
 	if (psTempl->asParts[COMP_REPAIRUNIT] == 0)
 	{
 		/* Set the default Repair */
-		psTempl->asParts[COMP_REPAIRUNIT] = aDefaultRepair[selectedPlayer];
+		psTempl->asParts[COMP_REPAIRUNIT] = aDefaultRepair[player];
 	}
 
 	psTempl->ref = REF_TEMPLATE_START;
@@ -4269,7 +4269,7 @@ void intProcessDesign(UDWORD id)
 		widgReveal( psWScreen, IDDES_STATSFORM );
 
 		/* switch automatically to next component type if initial design */
-		if (!intValidTemplate( &sCurrDesign, aCurrName))
+		if (!intValidTemplate(&sCurrDesign, aCurrName, false, selectedPlayer))
 		{
 			/* show next component design screen */
 			switch ( desCompMode )
@@ -4530,7 +4530,7 @@ static void intDisplayDesignForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffse
 /* save the current Template if valid. Return true if stored */
 static bool saveTemplate(void)
 {
-	if (!intValidTemplate(&sCurrDesign, aCurrName))
+	if (!intValidTemplate(&sCurrDesign, aCurrName, false, selectedPlayer))
 	{
 		widgHide(psWScreen, IDDES_STOREBUTTON);
 		return false;
