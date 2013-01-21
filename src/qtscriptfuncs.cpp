@@ -1668,6 +1668,7 @@ static QScriptValue js_enumDroid(QScriptContext *context, QScriptEngine *engine)
 	QList<DROID *> matches;
 	int player = -1, looking = -1;
 	DROID_TYPE droidType = DROID_ANY;
+	DROID_TYPE droidType2;
 
 	switch (context->argumentCount())
 	{
@@ -1677,14 +1678,25 @@ static QScriptValue js_enumDroid(QScriptContext *context, QScriptEngine *engine)
 	case 1: player = context->argument(0).toInt32(); break;
 	case 0: player = engine->globalObject().property("me").toInt32();
 	}
-
+	switch (droidType) // hide some engine craziness
+	{
+	case DROID_CONSTRUCT:
+		droidType2 = DROID_CYBORG_CONSTRUCT; break;
+	case DROID_WEAPON:
+		droidType2 = DROID_CYBORG_SUPER; break;
+	case DROID_REPAIR:
+		droidType2 = DROID_CYBORG_REPAIR; break;
+	default:
+		droidType2 = droidType;
+		break;
+	}
 	SCRIPT_ASSERT_PLAYER(context, player);
 	SCRIPT_ASSERT(context, looking < MAX_PLAYERS && looking >= -1, "Looking player index out of range: %d", looking);
 	for (DROID *psDroid = apsDroidLists[player]; psDroid; psDroid = psDroid->psNext)
 	{
 		if ((looking == -1 || psDroid->visible[looking])
 		    && !psDroid->died
-		    && (droidType == DROID_ANY || droidType == psDroid->droidType))
+		    && (droidType == DROID_ANY || droidType == psDroid->droidType || droidType2 == psDroid->droidType))
 		{
 			matches.push_back(psDroid);
 		}
@@ -3005,7 +3017,7 @@ static QScriptValue js_enumRange(QScriptContext *context, QScriptEngine *engine)
 	int player = engine->globalObject().property("me").toInt32();
 	int x = world_coord(context->argument(0).toInt32());
 	int y = world_coord(context->argument(1).toInt32());
-	int range = context->argument(2).toInt32();
+	int range = world_coord(context->argument(2).toInt32());
 	int filter = ALL_PLAYERS;
 	bool seen = true;
 	if (context->argumentCount() > 3)
