@@ -5170,7 +5170,7 @@ static bool intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 					sLabInit.height = iV_GetImageHeight(IntImages, IMAGE_ALLY_RESEARCH);
 					sLabInit.x = STAT_BUTWIDTH  - (sLabInit.width + 2)*ii - sLabInit.width - 2;
 					sLabInit.y = STAT_BUTHEIGHT - sLabInit.height - 3 - STAT_PROGBARHEIGHT;
-					sLabInit.UserData = researches[ii].player;
+					sLabInit.UserData = PACKDWORD(Stat->ref - REF_RESEARCH_START, ii);
 					sLabInit.pTip = getPlayerName(researches[ii].player);
 					sLabInit.pDisplay = intDisplayAllyIcon;
 					widgAddLabel(psWScreen, &sLabInit);

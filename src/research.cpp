@@ -2103,6 +2103,7 @@ static void switchComponent(DROID *psDroid, UDWORD oldType, UDWORD oldCompInc,
 
 static inline bool allyResearchSortFunction(AllyResearch const &a, AllyResearch const &b)
 {
+	if (a.active         != b.active)         { return a.active; }
 	if (a.timeToResearch != b.timeToResearch) { return (unsigned)a.timeToResearch < (unsigned)b.timeToResearch; }  // Unsigned cast = sort -1 as infinite.
 	if (a.powerNeeded    != b.powerNeeded)    { return (unsigned)a.powerNeeded    < (unsigned)b.powerNeeded;    }
 	if (a.completion     != b.completion)     { return           a.completion     >           b.completion;     }
@@ -2131,7 +2132,7 @@ std::vector<AllyResearch> const &listAllyResearch(unsigned ref)
 			for (STRUCTURE *psStruct = apsStructLists[player]; psStruct != NULL; psStruct = psStruct->psNext)
 			{
 				RESEARCH_FACILITY *res = (RESEARCH_FACILITY *)psStruct->pFunctionality;
-				if (psStruct->pStructureType->type != REF_RESEARCH || psStruct->status != SS_BUILT || res->psSubject == NULL)
+				if (psStruct->pStructureType->type != REF_RESEARCH || res->psSubject == NULL)
 				{
 					continue;  // Not a researching research facility.
 				}
@@ -2149,6 +2150,7 @@ std::vector<AllyResearch> const &listAllyResearch(unsigned ref)
 				{
 					r.timeToResearch = (subject.researchPoints - playerRes.currentPoints) / std::max(res->researchPoints, 1u);
 				}
+				r.active = psStruct->status == SS_BUILT;
 				researches[cRef].push_back(r);
 			}
 		}

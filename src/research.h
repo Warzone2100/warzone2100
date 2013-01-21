@@ -157,6 +157,7 @@ struct AllyResearch
 	int completion;
 	int powerNeeded;
 	int timeToResearch;
+	bool active;
 };
 std::vector<AllyResearch> const &listAllyResearch(unsigned ref);
 

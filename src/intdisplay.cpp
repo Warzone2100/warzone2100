@@ -3346,7 +3346,20 @@ void intDisplayAllyIcon(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DEC
 	UDWORD		x = Label->x + xOffset;
 	UDWORD		y = Label->y + yOffset;
 
-	iV_DrawImageTc(IntImages, IMAGE_ALLY_RESEARCH, IMAGE_ALLY_RESEARCH_TC, x, y, pal_GetTeamColour(getPlayerColour(psWidget->UserData)));
+	unsigned ref = UNPACKDWORD_HI(psWidget->UserData) + REF_RESEARCH_START;
+	unsigned num = UNPACKDWORD_LOW(psWidget->UserData);
+
+	std::vector<AllyResearch> const &researches = listAllyResearch(ref);
+	if (num >= researches.size())
+	{
+		return;  // No icon to display. (Shouldn't really get here...)
+	}
+
+	if (!researches[num].active && realTime % 500 >= 250)
+	{
+		return;  // If inactive, blink the icon. (Alternatively, we could use a different icon instead.)
+	}
+	iV_DrawImageTc(IntImages, IMAGE_ALLY_RESEARCH, IMAGE_ALLY_RESEARCH_TC, x, y, pal_GetTeamColour(getPlayerColour(researches[num].player)));
 }
 
 void intDisplayAllyBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
@@ -3366,8 +3379,11 @@ void intDisplayAllyBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGH
 		if (bestCompletion < i->completion)
 		{
 			bestCompletion = i->completion;
-			bestPowerNeeded = 0;
 			psBar->majorCol = pal_GetTeamColour(getPlayerColour(i->player));
+		}
+		if (!i->active)
+		{
+			continue;  // Don't show remaining time/power, if the facility is currently being upgraded.
 		}
 		if (i->powerNeeded == -1)
 		{
@@ -3380,11 +3396,16 @@ void intDisplayAllyBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGH
 		}
 	}
 
+	setBarGraphValue(psBar, psBar->majorCol, bestCompletion, research.researchPoints);
 	if (bestTimeToResearch != researchNotStarted)
 	{
 		// Show research progress.
 		formatTimeText(psBar, bestTimeToResearch);
-		setBarGraphValue(psBar, psBar->majorCol, bestCompletion, research.researchPoints);
+	}
+	else if (bestCompletion > 0)
+	{
+		// Waiting for module...
+		psBar->text = QString::fromUtf8("—*—");
 	}
 	else if (bestPowerNeeded != researchNotStarted)
 	{
