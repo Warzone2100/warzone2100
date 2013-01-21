@@ -423,7 +423,7 @@ QScriptValue convDroid(DROID *psDroid, QScriptEngine *engine)
 	value.setProperty("experience", (double)psDroid->experience / 65536.0, QScriptValue::ReadOnly);
 	value.setProperty("health", 100.0 / (double)psDroid->originalBody * (double)psDroid->body, QScriptValue::ReadOnly);
 	value.setProperty("body", asBodyStats[psDroid->asBits[COMP_BODY].nStat].pName);
-	value.setProperty("propulsion", asBodyStats[psDroid->asBits[COMP_PROPULSION].nStat].pName);
+	value.setProperty("propulsion", asPropulsionStats[psDroid->asBits[COMP_PROPULSION].nStat].pName);
 	if (isVtolDroid(psDroid))
 	{
 		value.setProperty("armed", 100.0 / (double)MAX(asWeaponStats[psDroid->asWeaps[0].nStat].numRounds, 1)
@@ -726,21 +726,23 @@ bool writeLabels(const char *filename)
 //
 // All script functions should be prefixed with "js_" then followed by same name as in script.
 
-//-- \subsection{getWeaponInfo(weapon name)}
+//-- \subsection{getWeaponInfo(weapon id)}
 //-- Return information about a particular weapon type.
 // TODO, add more and document
 static QScriptValue js_getWeaponInfo(QScriptContext *context, QScriptEngine *engine)
 {
-	QString name = context->argument(0).toString();
-	WEAPON_STATS *psStats = asWeaponStats + getCompFromName(COMP_WEAPON, name.toUtf8().constData());
+	QString id = context->argument(0).toString();
+	int idx = getCompFromName(COMP_WEAPON, id.toUtf8().constData());
+	SCRIPT_ASSERT(context, idx >= 0, "No such weapon: %s", id.toUtf8().constData());
+	WEAPON_STATS *psStats = asWeaponStats + idx;
 	QScriptValue info = engine->newObject();
-	info.setProperty("name", name);
-	info.setProperty("fullname", getStatName(psStats));
-	info.setProperty("class", psStats->weaponClass == WC_KINETIC ? "KINETIC" : "HEAT");
+	info.setProperty("id", id);
+	info.setProperty("name", getStatName(psStats));
+	info.setProperty("impactClass", psStats->weaponClass == WC_KINETIC ? "KINETIC" : "HEAT");
 	info.setProperty("damage", psStats->damage);
 	info.setProperty("firePause", psStats->firePause);
 	info.setProperty("fireOnMove", psStats->fireOnMove);
-	return QScriptValue();
+	return QScriptValue(info);
 }
 
 //-- \subsection{resetArea(label[, filter])}
