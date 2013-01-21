@@ -151,4 +151,13 @@ extern bool researchInitVars(void);
 
 bool researchAvailable(int inc, int playerID, QUEUE_MODE mode);
 
+struct AllyResearch
+{
+	unsigned player;
+	int completion;
+	int powerNeeded;
+	int timeToResearch;
+};
+std::vector<AllyResearch> const &listAllyResearch(unsigned ref);
+
 #endif // __INCLUDED_SRC_RESEARCH_H__

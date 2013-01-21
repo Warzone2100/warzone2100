@@ -5158,42 +5158,28 @@ static bool intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 			// if multiplayer, if research topic is being done by another ally then mark as such..
 			if(bMultiPlayer)
 			{
-				int labsDone = 0;
-				for (unsigned ii = 0; ii < MAX_PLAYERS && labsDone < 4; ++ii)
+				std::vector<AllyResearch> const &researches = listAllyResearch(Stat->ref);
+				unsigned numResearches = std::min<unsigned>(researches.size(), 4);  // Only display at most 4 allies, since that's what there's room for.
+				for (unsigned ii = 0; ii < numResearches; ++ii)
 				{
-					if(ii != selectedPlayer && aiCheckAlliances(selectedPlayer,ii))
-					{
-						//check each research facility to see if they are doing this topic.
-						for (STRUCTURE *psOtherStruct = apsStructLists[ii]; psOtherStruct; psOtherStruct = psOtherStruct->psNext)
-						{
-							if(   psOtherStruct->pStructureType->type == REF_RESEARCH
-								 && psOtherStruct->status == SS_BUILT
-								 && ((RESEARCH_FACILITY *)psOtherStruct->pFunctionality)->psSubject
-								 && ((RESEARCH_FACILITY *)psOtherStruct->pFunctionality)->psSubject->ref == Stat->ref
-							  )
-							{
-								// add a label.
-								sLabInit = W_LABINIT();
-								sLabInit.formID = sBFormInit.id ;
-								sLabInit.id = IDSTAT_ALLYSTART + allyResearchIconCount;
-								sLabInit.width = iV_GetImageWidth(IntImages, IMAGE_ALLY_RESEARCH);
-								sLabInit.height = iV_GetImageHeight(IntImages, IMAGE_ALLY_RESEARCH);
-								sLabInit.x = STAT_BUTWIDTH  - (sLabInit.width + 2)*labsDone - sLabInit.width - 2;
-								sLabInit.y = STAT_BUTHEIGHT - sLabInit.height - 3 - STAT_PROGBARHEIGHT;
-								sLabInit.UserData = ii;
-								sLabInit.pTip = getPlayerName(ii);
-								sLabInit.pDisplay = intDisplayAllyIcon;
-								widgAddLabel(psWScreen, &sLabInit);
+					// add a label.
+					sLabInit = W_LABINIT();
+					sLabInit.formID = sBFormInit.id ;
+					sLabInit.id = IDSTAT_ALLYSTART + allyResearchIconCount;
+					sLabInit.width = iV_GetImageWidth(IntImages, IMAGE_ALLY_RESEARCH);
+					sLabInit.height = iV_GetImageHeight(IntImages, IMAGE_ALLY_RESEARCH);
+					sLabInit.x = STAT_BUTWIDTH  - (sLabInit.width + 2)*ii - sLabInit.width - 2;
+					sLabInit.y = STAT_BUTHEIGHT - sLabInit.height - 3 - STAT_PROGBARHEIGHT;
+					sLabInit.UserData = researches[ii].player;
+					sLabInit.pTip = getPlayerName(researches[ii].player);
+					sLabInit.pDisplay = intDisplayAllyIcon;
+					widgAddLabel(psWScreen, &sLabInit);
 
-								++labsDone;
-								++allyResearchIconCount;
-								ASSERT(allyResearchIconCount < IDSTAT_ALLYEND - IDSTAT_ALLYSTART, " ");
-							}
-						}
-
-					}
+					++allyResearchIconCount;
+					ASSERT(allyResearchIconCount < IDSTAT_ALLYEND - IDSTAT_ALLYSTART, " ");
 				}
-				if (labsDone > 0)
+
+				if (numResearches > 0)
 				{
 					W_BARINIT progress;
 					progress.formID = sBFormInit.id;
