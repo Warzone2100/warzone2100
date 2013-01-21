@@ -20,6 +20,7 @@
  * @file intfac.h
  *
  * interface enums
+ * List corresponding to the files in data/base/images/intfac.img
  */
 
 

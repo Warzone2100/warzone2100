@@ -547,9 +547,11 @@ static void NetworkDisplayImage(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset
 		}
 		players[c] = '\0';
 
+		iV_SetFont(font_regular);
 		width = iV_GetTextWidth(players) + 10;
 		height = iV_GetTextHeight(players) + 10;
 
+		iV_SetTextColour(WZCOL_TEXT_BRIGHT);
 		iV_DrawText(players, x - width, y + height);
 	}
 
