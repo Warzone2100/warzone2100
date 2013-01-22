@@ -782,12 +782,19 @@ static QScriptValue js_enumLabels(QScriptContext *, QScriptEngine *engine)
 static QScriptValue js_addLabel(QScriptContext *context, QScriptEngine *engine)
 {
 	struct labeltype value;
-	QScriptValue structVal = context->argument(0);
-	value.id = structVal.property("id").toInt32();
-	value.player = structVal.property("player").toInt32();
-	BASE_OBJECT *psObj = IdToPointer(value.id, value.player);
-	SCRIPT_ASSERT(context, psObj, "Object id %d not found belonging to player %d", value.id, value.player);
-	value.type = psObj->type;
+	QScriptValue qval = context->argument(0);
+	value.type = qval.property("type").toInt32();
+	value.id = qval.property("id").toInt32();
+	value.player = qval.property("player").toInt32();
+	value.p1.x = qval.property("x").toInt32();
+	value.p1.y = qval.property("y").toInt32();
+	value.p2.x = qval.property("x2").toInt32();
+	value.p2.x = qval.property("y2").toInt32();
+	if (value.type == OBJ_DROID || value.type == OBJ_STRUCTURE || value.type == OBJ_FEATURE)
+	{
+		BASE_OBJECT *psObj = IdToObject((OBJECT_TYPE)value.type, value.id, value.player);
+		SCRIPT_ASSERT(context, psObj, "Object id %d not found belonging to player %d", value.id, value.player);
+	}
 	QString key = context->argument(1).toString();
 	labels.insert(key, value);
 	return QScriptValue();
@@ -1020,7 +1027,8 @@ static QScriptValue js_activateStructure(QScriptContext *context, QScriptEngine 
 	QScriptValue objVal = context->argument(1);
 	int oid = objVal.property("id").toInt32();
 	int oplayer = objVal.property("player").toInt32();
-	BASE_OBJECT *psObj = IdToPointer(oid, oplayer);
+	OBJECT_TYPE otype = (OBJECT_TYPE)objVal.property("type").toInt32();
+	BASE_OBJECT *psObj = IdToObject(otype, oid, oplayer);
 	SCRIPT_ASSERT(context, psObj, "No such object id %d belonging to player %d", oid, oplayer);
 	orderStructureObj(player, psObj);
 	return QScriptValue(true);
@@ -1902,10 +1910,11 @@ static QScriptValue js_removeStruct(QScriptContext *context, QScriptEngine *)
 //-- A second, optional boolean parameter specifies whether special effects are to be applied. (3.2+ only)
 static QScriptValue js_removeObject(QScriptContext *context, QScriptEngine *)
 {
-	QScriptValue structVal = context->argument(0);
-	int id = structVal.property("id").toInt32();
-	int player = structVal.property("player").toInt32();
-	BASE_OBJECT *psObj = IdToPointer(id, player);
+	QScriptValue qval = context->argument(0);
+	int id = qval.property("id").toInt32();
+	int player = qval.property("player").toInt32();
+	OBJECT_TYPE type = (OBJECT_TYPE)qval.property("type").toInt32();
+	BASE_OBJECT *psObj = IdToObject(type, id, player);
 	SCRIPT_ASSERT(context, psObj, "Object id %d not found belonging to player %d", id, player);
 	bool sfx = false;
 	if (context->argumentCount() > 1)
@@ -2108,7 +2117,8 @@ static QScriptValue js_orderDroidObj(QScriptContext *context, QScriptEngine *)
 	QScriptValue objVal = context->argument(2);
 	int oid = objVal.property("id").toInt32();
 	int oplayer = objVal.property("player").toInt32();
-	BASE_OBJECT *psObj = IdToPointer(oid, oplayer);
+	OBJECT_TYPE otype = (OBJECT_TYPE)objVal.property("type").toInt32();
+	BASE_OBJECT *psObj = IdToObject(otype, oid, oplayer);
 	SCRIPT_ASSERT(context, psObj, "Object id %d not found belonging to player %d", oid, oplayer);
 	SCRIPT_ASSERT(context, validOrderForObj(order), "Invalid order: %s", getDroidOrderName(order));
 	orderDroidObj(psDroid, order, psObj, ModeQueue);
