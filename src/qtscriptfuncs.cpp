@@ -1222,17 +1222,41 @@ static QScriptValue js_enumResearch(QScriptContext *context, QScriptEngine *engi
 	return result;
 }
 
-//-- \subsection{componentAvailable(component type, component name)}
-//-- Checks whether a given component is available to the current player.
+//-- \subsection{componentAvailable([component type,] component name)}
+//-- Checks whether a given component is available to the current player. The first argument is
+//-- optional and deprecated.
 static QScriptValue js_componentAvailable(QScriptContext *context, QScriptEngine *engine)
 {
 	int player = engine->globalObject().property("me").toInt32();
-	COMPONENT_TYPE comp = (COMPONENT_TYPE)context->argument(0).toInt32();
-	QString compName = context->argument(1).toString();
-	int result = getCompFromName(comp, compName.toUtf8().constData());
-	SCRIPT_ASSERT(context, result >= 0, "No such component: %s", compName.toUtf8().constData());
-	bool avail = apCompLists[player][comp][result] == AVAILABLE;
-	return QScriptValue(avail);
+	if (context->argumentCount() == 1)
+	{
+		QString id = context->argument(0).toString();
+		int idx = -1;
+#define CHECK_COMPONENT(_comp) \
+		if ((idx = getCompFromName(_comp, id.toUtf8().constData())) >= 0) \
+		{ \
+			return QScriptValue(apCompLists[player][_comp][idx] == AVAILABLE); \
+		}
+		CHECK_COMPONENT(COMP_BODY);
+		CHECK_COMPONENT(COMP_BRAIN);
+		CHECK_COMPONENT(COMP_PROPULSION);
+		CHECK_COMPONENT(COMP_REPAIRUNIT);
+		CHECK_COMPONENT(COMP_ECM);
+		CHECK_COMPONENT(COMP_SENSOR);
+		CHECK_COMPONENT(COMP_CONSTRUCT);
+		CHECK_COMPONENT(COMP_WEAPON);
+#undef CHECK_COMPONENT
+		SCRIPT_ASSERT(context, false, "No such component: %s", id.toUtf8().constData());
+		return QScriptValue::NullValue; // to satisfy compiler
+	}
+	else
+	{
+		COMPONENT_TYPE comp = (COMPONENT_TYPE)context->argument(0).toInt32();
+		QString compName = context->argument(1).toString();
+		int result = getCompFromName(comp, compName.toUtf8().constData());
+		SCRIPT_ASSERT(context, result >= 0, "No such component: %s", compName.toUtf8().constData());
+		return QScriptValue(apCompLists[player][comp][result] == AVAILABLE);
+	}
 }
 
 //-- \subsection{addFeature(name, x, y)}
