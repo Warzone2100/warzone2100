@@ -3069,8 +3069,8 @@ static QScriptValue js_enumRange(QScriptContext *context, QScriptEngine *engine)
 		if ((psObj->visible[player] || !seen) && !psObj->died)
 		{
 			if ((filter >= 0 && psObj->player == filter) || filter == ALL_PLAYERS
-			    || (filter == ALLIES && aiCheckAlliances(psObj->player, player))
-			    || (filter == ENEMIES && !aiCheckAlliances(psObj->player, player)))
+			    || (filter == ALLIES && psObj->type != OBJ_FEATURE && aiCheckAlliances(psObj->player, player))
+			    || (filter == ENEMIES && psObj->type != OBJ_FEATURE && !aiCheckAlliances(psObj->player, player)))
 			{
 				list.append(psObj);
 			}
@@ -3132,8 +3132,8 @@ static QScriptValue js_enumArea(QScriptContext *context, QScriptEngine *engine)
 		if ((psObj->visible[player] || !seen) && !psObj->died)
 		{
 			if ((filter >= 0 && psObj->player == filter) || filter == ALL_PLAYERS
-			    || (filter == ALLIES && aiCheckAlliances(psObj->player, player))
-			    || (filter == ENEMIES && !aiCheckAlliances(psObj->player, player)))
+			    || (filter == ALLIES && psObj->type != OBJ_FEATURE && aiCheckAlliances(psObj->player, player))
+			    || (filter == ENEMIES && psObj->type != OBJ_FEATURE && !aiCheckAlliances(psObj->player, player)))
 			{
 				list.append(psObj);
 			}
