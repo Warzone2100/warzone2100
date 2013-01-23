@@ -117,21 +117,24 @@ bool areaLabelCheck(DROID *psDroid)
 	return false;
 }
 
+static void removeFromGroup(QScriptEngine *engine, GROUPMAP *psMap, BASE_OBJECT *psObj)
+{
+	if (psMap->contains(psObj))
+	{
+		int groupId = psMap->take(psObj); // take and remove item
+		QScriptValue groupMembers = engine->globalObject().property("groupSizes");
+		const int newValue = groupMembers.property(groupId).toInt32() - 1;
+		ASSERT(newValue >= 0, "Bad group count in group %d (was %d)", groupId, newValue + 1);
+		groupMembers.setProperty(groupId, newValue, QScriptValue::ReadOnly);
+		triggerEventGroupLoss(psObj, groupId, newValue, engine);
+	}
+}
+
 void groupRemoveObject(BASE_OBJECT *psObj)
 {
 	for (ENGINEMAP::iterator i = groups.begin(); i != groups.end(); ++i)
 	{
-		QScriptEngine *engine = i.key();
-		GROUPMAP *psMap = i.value();
-		if (psMap->contains(psObj))
-		{
-			int groupId = psMap->take(psObj); // take and remove item
-			QScriptValue groupMembers = i.key()->globalObject().property("groupSizes");
-			const int newValue = groupMembers.property(groupId).toInt32() - 1;
-			ASSERT(newValue >= 0, "Bad group count in group %d (was %d)", groupId, newValue + 1);
-			groupMembers.setProperty(groupId, newValue, QScriptValue::ReadOnly);
-			triggerEventGroupLoss(psObj, groupId, newValue, engine);
-		}
+		removeFromGroup(i.key(), i.value(), psObj);
 	}
 }
 
@@ -139,15 +142,12 @@ static bool groupAddObject(BASE_OBJECT *psObj, int groupId, QScriptEngine *engin
 {
 	ASSERT_OR_RETURN(false, psObj && engine, "Bad parameter");
 	GROUPMAP *psMap = groups.value(engine);
-	if (!psMap->contains(psObj))
-	{
-		QScriptValue groupMembers = engine->globalObject().property("groupSizes");
-		int prev = groupMembers.property(QString::number(groupId)).toInt32();
-		groupMembers.setProperty(QString::number(groupId), prev + 1, QScriptValue::ReadOnly);
-		psMap->insert(psObj, groupId);
-		return true; // inserted
-	}
-	return false; // already had it
+	removeFromGroup(engine, psMap, psObj);
+	QScriptValue groupMembers = engine->globalObject().property("groupSizes");
+	int prev = groupMembers.property(QString::number(groupId)).toInt32();
+	groupMembers.setProperty(QString::number(groupId), prev + 1, QScriptValue::ReadOnly);
+	psMap->insert(psObj, groupId);
+	return true; // inserted
 }
 
 //;; \subsection{Research}
