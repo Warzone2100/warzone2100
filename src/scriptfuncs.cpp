@@ -10592,7 +10592,7 @@ bool scrAssembleWeaponTemplate(void)
 	pNewTemplate->droidType = DROID_WEAPON;
 
 	// finalize template and set its name
-	if(!intValidTemplate(pNewTemplate, GetDefaultTemplateName(pNewTemplate)))
+	if (!intValidTemplate(pNewTemplate, GetDefaultTemplateName(pNewTemplate), false, player))
 	{
 		return false;
 	}

@@ -3798,7 +3798,6 @@ static bool intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,b
 	SDWORD			BufferID;
 	DROID			*Droid;
 	STRUCTURE		*Structure;
-	bool			IsFactory;
 	int				compIndex;
 
 	// Is the form already up?
@@ -4066,12 +4065,20 @@ static bool intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,b
 	sLabInitCmdExp.height = 16;
 	sLabInitCmdExp.pText = "@@@@@ - overrun";
 
+	W_LABINIT sAllyResearch;
+	sAllyResearch.id = IDOBJ_ALLYRESEARCHSTART;
+	sAllyResearch.width = iV_GetImageWidth(IntImages, IMAGE_ALLY_RESEARCH);
+	sAllyResearch.height = iV_GetImageHeight(IntImages, IMAGE_ALLY_RESEARCH);
+	sAllyResearch.y = 10;
+	sAllyResearch.pDisplay = intDisplayAllyIcon;
+
 	displayForm = 0;
 	for (unsigned i = 0; i < apsObjectList.size(); ++i)
 	{
 		BASE_OBJECT *psObj = apsObjectList[i];
 		if(psObj->died == 0) {	// Don't add the button if the objects dead.
-			IsFactory = false;
+			bool IsFactory = false;
+			bool isResearch = false;
 
 			/* Got an object - set the text and tip for the button */
 			switch (psObj->type)
@@ -4122,6 +4129,7 @@ static bool intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,b
 						{
 							sBarInit2.size = WBAR_SCALE;
 						}
+						isResearch = true;
 						break;
 
 					default:
@@ -4166,6 +4174,27 @@ static bool intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,b
 					return false;
 				}
 				sLabIntObjText.id++;
+			}
+			if (isResearch)
+			{
+				RESEARCH *Stat = ((RESEARCH_FACILITY *)((STRUCTURE *)psObj)->pFunctionality)->psSubject;
+				if (Stat != NULL)
+				{
+					// Show if allies are researching the same as us.
+					std::vector<AllyResearch> const &researches = listAllyResearch(Stat->ref);
+					unsigned numResearches = std::min<unsigned>(researches.size(), 4);  // Only display at most 4 allies, since that's what there's room for.
+					for (unsigned ii = 0; ii < numResearches; ++ii)
+					{
+						sAllyResearch.formID = sBFormInit.id;
+						sAllyResearch.x = STAT_BUTWIDTH  - (sAllyResearch.width + 2)*ii - sAllyResearch.width - 2;
+						sAllyResearch.UserData = PACKDWORD(Stat->ref - REF_RESEARCH_START, ii);
+						sAllyResearch.pTip = getPlayerName(researches[ii].player);
+						widgAddLabel(psWScreen, &sAllyResearch);
+
+						ASSERT(sAllyResearch.id <= IDOBJ_ALLYRESEARCHEND, " ");
+						++sAllyResearch.id;
+					}
+				}
 			}
 			// Add the power bar.
 			if (psObj->type != OBJ_DROID || (((DROID *)psObj)->droidType == DROID_CONSTRUCT || ((DROID *)psObj)->droidType == DROID_CYBORG_CONSTRUCT))
@@ -5158,42 +5187,28 @@ static bool intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 			// if multiplayer, if research topic is being done by another ally then mark as such..
 			if(bMultiPlayer)
 			{
-				int labsDone = 0;
-				for (unsigned ii = 0; ii < MAX_PLAYERS && labsDone < 4; ++ii)
+				std::vector<AllyResearch> const &researches = listAllyResearch(Stat->ref);
+				unsigned numResearches = std::min<unsigned>(researches.size(), 4);  // Only display at most 4 allies, since that's what there's room for.
+				for (unsigned ii = 0; ii < numResearches; ++ii)
 				{
-					if(ii != selectedPlayer && aiCheckAlliances(selectedPlayer,ii))
-					{
-						//check each research facility to see if they are doing this topic.
-						for (STRUCTURE *psOtherStruct = apsStructLists[ii]; psOtherStruct; psOtherStruct = psOtherStruct->psNext)
-						{
-							if(   psOtherStruct->pStructureType->type == REF_RESEARCH
-								 && psOtherStruct->status == SS_BUILT
-								 && ((RESEARCH_FACILITY *)psOtherStruct->pFunctionality)->psSubject
-								 && ((RESEARCH_FACILITY *)psOtherStruct->pFunctionality)->psSubject->ref == Stat->ref
-							  )
-							{
-								// add a label.
-								sLabInit = W_LABINIT();
-								sLabInit.formID = sBFormInit.id ;
-								sLabInit.id = IDSTAT_ALLYSTART + allyResearchIconCount;
-								sLabInit.width = iV_GetImageWidth(IntImages, IMAGE_ALLY_RESEARCH);
-								sLabInit.height = iV_GetImageHeight(IntImages, IMAGE_ALLY_RESEARCH);
-								sLabInit.x = STAT_BUTWIDTH  - (sLabInit.width + 2)*labsDone - sLabInit.width - 2;
-								sLabInit.y = STAT_BUTHEIGHT - sLabInit.height - 3 - STAT_PROGBARHEIGHT;
-								sLabInit.UserData = ii;
-								sLabInit.pTip = getPlayerName(ii);
-								sLabInit.pDisplay = intDisplayAllyIcon;
-								widgAddLabel(psWScreen, &sLabInit);
+					// add a label.
+					sLabInit = W_LABINIT();
+					sLabInit.formID = sBFormInit.id ;
+					sLabInit.id = IDSTAT_ALLYSTART + allyResearchIconCount;
+					sLabInit.width = iV_GetImageWidth(IntImages, IMAGE_ALLY_RESEARCH);
+					sLabInit.height = iV_GetImageHeight(IntImages, IMAGE_ALLY_RESEARCH);
+					sLabInit.x = STAT_BUTWIDTH  - (sLabInit.width + 2)*ii - sLabInit.width - 2;
+					sLabInit.y = STAT_BUTHEIGHT - sLabInit.height - 3 - STAT_PROGBARHEIGHT;
+					sLabInit.UserData = PACKDWORD(Stat->ref - REF_RESEARCH_START, ii);
+					sLabInit.pTip = getPlayerName(researches[ii].player);
+					sLabInit.pDisplay = intDisplayAllyIcon;
+					widgAddLabel(psWScreen, &sLabInit);
 
-								++labsDone;
-								++allyResearchIconCount;
-								ASSERT(allyResearchIconCount < IDSTAT_ALLYEND - IDSTAT_ALLYSTART, " ");
-							}
-						}
-
-					}
+					++allyResearchIconCount;
+					ASSERT(allyResearchIconCount < IDSTAT_ALLYEND - IDSTAT_ALLYSTART, " ");
 				}
-				if (labsDone > 0)
+
+				if (numResearches > 0)
 				{
 					W_BARINIT progress;
 					progress.formID = sBFormInit.id;

@@ -148,7 +148,7 @@ bool initTemplates()
 		design.numWeaps = ini.value("weapons").toInt();
 		design.prefab = false;		// not AI template
 		design.stored = true;
-		bool valid = intValidTemplate(&design, ini.value("name").toString().toUtf8().constData());
+		bool valid = intValidTemplate(&design, ini.value("name").toString().toUtf8().constData(), false, selectedPlayer);
 		if (!valid)
 		{
 			debug(LOG_ERROR, "Invalid template %d / %s from stored templates", i, list[i].toUtf8().constData());

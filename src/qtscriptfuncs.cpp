@@ -759,7 +759,7 @@ static QScriptValue js_addDroid(QScriptContext *context, QScriptEngine *engine)
 		psTemplate->asParts[compType] = j;
 	}
 	psTemplate->droidType = droidType; // may be overwritten by the call below
-	bool valid = intValidTemplate(psTemplate, templName.toUtf8().constData(), true);
+	bool valid = intValidTemplate(psTemplate, templName.toUtf8().constData(), true, player);
 	if (valid)
 	{
 		bool oldMulti = bMultiMessages;
@@ -920,7 +920,7 @@ static QScriptValue js_buildDroid(QScriptContext *context, QScriptEngine *engine
 		psTemplate->asParts[compType] = j;
 	}
 	psTemplate->droidType = droidType; // may be overwritten by the call below
-	bool valid = intValidTemplate(psTemplate, templName.toUtf8().constData(), true);
+	bool valid = intValidTemplate(psTemplate, templName.toUtf8().constData(), true, player);
 	if (valid)
 	{
 		SCRIPT_ASSERT(context, validTemplateForFactory(psTemplate, psStruct), "Invalid template %s for factory %s",

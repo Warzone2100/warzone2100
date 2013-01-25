@@ -3346,59 +3346,66 @@ void intDisplayAllyIcon(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DEC
 	UDWORD		x = Label->x + xOffset;
 	UDWORD		y = Label->y + yOffset;
 
-	iV_DrawImageTc(IntImages, IMAGE_ALLY_RESEARCH, IMAGE_ALLY_RESEARCH_TC, x, y, pal_GetTeamColour(getPlayerColour(psWidget->UserData)));
+	unsigned ref = UNPACKDWORD_HI(psWidget->UserData) + REF_RESEARCH_START;
+	unsigned num = UNPACKDWORD_LOW(psWidget->UserData);
+
+	std::vector<AllyResearch> const &researches = listAllyResearch(ref);
+	if (num >= researches.size())
+	{
+		return;  // No icon to display. (Shouldn't really get here...)
+	}
+
+	if (!researches[num].active && realTime % 500 >= 250)
+	{
+		return;  // If inactive, blink the icon. (Alternatively, we could use a different icon instead.)
+	}
+	iV_DrawImageTc(IntImages, IMAGE_ALLY_RESEARCH, IMAGE_ALLY_RESEARCH_TC, x, y, pal_GetTeamColour(getPlayerColour(researches[num].player)));
 }
 
 void intDisplayAllyBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
 {
 	W_BARGRAPH *psBar = (W_BARGRAPH *)psWidget;
+
+	RESEARCH const &research = asResearch[psWidget->UserData];
+	std::vector<AllyResearch> const &researches = listAllyResearch(research.ref);
+
 	unsigned bestCompletion = 0;
 	const int researchNotStarted = 3600000;
 	int bestPowerNeeded = researchNotStarted;
 	int bestTimeToResearch = researchNotStarted;
 	int researchPowerCost = researchNotStarted;
-	for (int player = 0; player < MAX_PLAYERS; ++player)
+	for (std::vector<AllyResearch>::const_iterator i = researches.begin(); i != researches.end(); ++i)
 	{
-		if (player != selectedPlayer && aiCheckAlliances(selectedPlayer, player))
+		if (bestCompletion < i->completion)
 		{
-			// Check each research facility to see if they are doing this topic. (As opposed to having started the topic, but stopped researching it.)
-			for (STRUCTURE *psOtherStruct = apsStructLists[player]; psOtherStruct; psOtherStruct = psOtherStruct->psNext)
-			{
-				RESEARCH_FACILITY *res = (RESEARCH_FACILITY*)psOtherStruct->pFunctionality;
-				if (psOtherStruct->pStructureType->type == REF_RESEARCH && psOtherStruct->status == SS_BUILT &&
-				    res->psSubject && res->psSubject->ref == asResearch[psWidget->UserData].ref)
-				{
-					unsigned completion = asPlayerResList[player][psWidget->UserData].currentPoints;
-					if (bestCompletion < completion)
-					{
-						bestCompletion = completion;
-						bestPowerNeeded = 0;
-						psBar->majorCol = pal_GetTeamColour(getPlayerColour(player));
-					}
-
-					int powerNeeded = checkPowerRequest(psOtherStruct);
-					if (powerNeeded == -1)
-					{
-						int rindex = res->psSubject->index;
-						int timeToResearch = (res->psSubject->researchPoints - asPlayerResList[player][rindex].currentPoints) / std::max(res->researchPoints, 1u);
-						bestTimeToResearch = std::min(bestTimeToResearch, timeToResearch);
-					}
-					else
-					{
-						bestPowerNeeded = std::min(bestPowerNeeded, powerNeeded);
-						researchPowerCost = res->psSubject->researchPower;
-					}
-					break;
-				}
-			}
+			bestCompletion = i->completion;
+			psBar->majorCol = pal_GetTeamColour(getPlayerColour(i->player));
+		}
+		if (!i->active)
+		{
+			continue;  // Don't show remaining time/power, if the facility is currently being upgraded.
+		}
+		if (i->powerNeeded == -1)
+		{
+			bestTimeToResearch = std::min<unsigned>(bestTimeToResearch, i->timeToResearch);
+		}
+		else
+		{
+			bestPowerNeeded = std::min<unsigned>(bestPowerNeeded, i->powerNeeded);
+			researchPowerCost = research.researchPower;
 		}
 	}
 
+	setBarGraphValue(psBar, psBar->majorCol, bestCompletion, research.researchPoints);
 	if (bestTimeToResearch != researchNotStarted)
 	{
 		// Show research progress.
 		formatTimeText(psBar, bestTimeToResearch);
-		setBarGraphValue(psBar, psBar->majorCol, bestCompletion, asResearch[psWidget->UserData].researchPoints);
+	}
+	else if (bestCompletion > 0)
+	{
+		// Waiting for module...
+		psBar->text = QString::fromUtf8("—*—");
 	}
 	else if (bestPowerNeeded != researchNotStarted)
 	{

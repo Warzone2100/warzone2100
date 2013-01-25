@@ -131,6 +131,6 @@ extern void intRunDesign(void);
 
 extern const char *GetDefaultTemplateName(DROID_TEMPLATE *psTemplate);
 
-bool intValidTemplate(DROID_TEMPLATE *psTempl, const char *newName, bool complain = false);
+bool intValidTemplate(DROID_TEMPLATE *psTempl, const char *newName, bool complain, int player);
 
 #endif // __INCLUDED_SRC_DESIGN_H__

@@ -24,6 +24,7 @@
  *
  */
 #include <string.h>
+#include <map>
 
 #include "lib/framework/frame.h"
 #include "lib/framework/strres.h"
@@ -46,6 +47,7 @@
 #include "multiplay.h"
 #include "template.h"
 #include "qtscript.h"
+
 
 //used to calc the research power
 #define RESEARCH_FACTOR		32
@@ -2097,4 +2099,71 @@ static void switchComponent(DROID *psDroid, UDWORD oldType, UDWORD oldCompInc,
 			abort();
 			return;
 	}
+}
+
+static inline bool allyResearchSortFunction(AllyResearch const &a, AllyResearch const &b)
+{
+	if (a.active         != b.active)         { return a.active; }
+	if (a.timeToResearch != b.timeToResearch) { return (unsigned)a.timeToResearch < (unsigned)b.timeToResearch; }  // Unsigned cast = sort -1 as infinite.
+	if (a.powerNeeded    != b.powerNeeded)    { return (unsigned)a.powerNeeded    < (unsigned)b.powerNeeded;    }
+	if (a.completion     != b.completion)     { return           a.completion     >           b.completion;     }
+	                                            return           a.player         <           b.player;
+}
+
+std::vector<AllyResearch> const &listAllyResearch(unsigned ref)
+{
+	static uint32_t lastGameTime = ~0;
+	static std::map<unsigned, std::vector<AllyResearch> > researches;
+	static const std::vector<AllyResearch> noAllyResearch;
+
+	if (gameTime != lastGameTime)
+	{
+		lastGameTime = gameTime;
+		researches.clear();
+
+		for (int player = 0; player < MAX_PLAYERS; ++player)
+		{
+			if (player == selectedPlayer || !aiCheckAlliances(selectedPlayer, player))
+			{
+				continue;  // Skip this player, not an ally.
+			}
+
+			// Check each research facility to see if they are doing this topic. (As opposed to having started the topic, but stopped researching it.)
+			for (STRUCTURE *psStruct = apsStructLists[player]; psStruct != NULL; psStruct = psStruct->psNext)
+			{
+				RESEARCH_FACILITY *res = (RESEARCH_FACILITY *)psStruct->pFunctionality;
+				if (psStruct->pStructureType->type != REF_RESEARCH || res->psSubject == NULL)
+				{
+					continue;  // Not a researching research facility.
+				}
+
+				RESEARCH const &subject = *res->psSubject;
+				PLAYER_RESEARCH const &playerRes = asPlayerResList[player][subject.index];
+				unsigned cRef = subject.ref;
+
+				AllyResearch r;
+				r.player = player;
+				r.completion = playerRes.currentPoints;
+				r.powerNeeded = checkPowerRequest(psStruct);
+				r.timeToResearch = -1;
+				if (r.powerNeeded == -1)
+				{
+					r.timeToResearch = (subject.researchPoints - playerRes.currentPoints) / std::max(res->researchPoints, 1u);
+				}
+				r.active = psStruct->status == SS_BUILT;
+				researches[cRef].push_back(r);
+			}
+		}
+		for (std::map<unsigned, std::vector<AllyResearch> >::iterator i = researches.begin(); i != researches.end(); ++i)
+		{
+			std::sort(i->second.begin(), i->second.end(), allyResearchSortFunction);
+		}
+	}
+
+	std::map<unsigned, std::vector<AllyResearch> >::const_iterator i = researches.find(ref);
+	if (i == researches.end())
+	{
+		return noAllyResearch;
+	}
+	return i->second;
 }
