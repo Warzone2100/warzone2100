@@ -75,8 +75,8 @@ struct timerNode
 	// implement operator less TODO
 };
 
-#define MAX_MS 50
-#define HALF_MAX_MS 25
+#define MAX_MS 20
+#define HALF_MAX_MS 10
 
 /// List of timer events for scripts. Before running them, we sort the list then run as many as we have time for.
 /// In this way, we implement load balancing of events and keep frame rates tidy for users. Since scripts run on the
