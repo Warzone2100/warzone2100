@@ -1078,7 +1078,6 @@ bool stageThreeInitialise(void)
 	DROID		*psDroid;
 
 	debug(LOG_WZ, "== stageThreeInitalise ==");
-	bTrackingTransporter = false;
 
 	loopMissionState = LMS_NORMAL;
 

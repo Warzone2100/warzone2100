@@ -127,9 +127,6 @@ MISSION		mission;
 
 bool		offWorldKeepLists;
 
-// Set by scrFlyInTransporter. True if were currenly tracking the transporter.
-bool		bTrackingTransporter = false;
-
 /*lists of droids that are held seperate over several missions. There should
 only be selectedPlayer's droids but have possibility for MAX_PLAYERS -
 also saves writing out list functions to cater for just one player*/
@@ -636,8 +633,6 @@ void missionFlyTransportersIn(SDWORD iPlayer, bool bTrackTransporter)
 	SDWORD	iLandX, iLandY, iDx, iDy;
 
 	ASSERT_OR_RETURN(, iPlayer < MAX_PLAYERS, "Flying nonexistent player %d's transporters in", iPlayer);
-
-	bTrackingTransporter = bTrackTransporter;
 
 	iLandX = getLandingX(iPlayer);
 	iLandY = getLandingY(iPlayer);
@@ -1763,13 +1758,6 @@ void unloadTransporter(DROID *psTransporter, UDWORD x, UDWORD y, bool goingHome)
 	//unload all the droids from within the current Transporter
 	if (psTransporter->droidType == DROID_TRANSPORTER || psTransporter->droidType == DROID_SUPERTRANSPORTER)
 	{
-		// If the scripts asked for transporter tracking then clear the "tracking a transporter" flag
-		// since the transporters landed and unloaded now.
-		if (psTransporter->player == selectedPlayer)
-		{
-			bTrackingTransporter = false;
-		}
-
 		// reset the transporter cluster
 		psTransporter->cluster = 0;
 		for (psDroid = psTransporter->psGroup->psList; psDroid != NULL && psDroid != psTransporter; psDroid = psNext)

@@ -37,9 +37,6 @@
 #define         MAX_NOGO_AREAS          (MAX_PLAYERS + 1)
 #define         LIMBO_LANDING           MAX_PLAYERS
 
-/** Set by scrFlyInTransporter. True if were currenly tracking the transporter. */
-extern bool		bTrackingTransporter;
-
 extern MISSION		mission;
 extern bool			offWorldKeepLists;
 extern DROID       *apsLimboDroids[MAX_PLAYERS];

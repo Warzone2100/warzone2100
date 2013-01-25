@@ -2220,6 +2220,34 @@ static QScriptValue js_getMissionTime(QScriptContext *, QScriptEngine *)
 	return QScriptValue((mission.time - (gameTime - mission.startTime)) / GAME_TICKS_PER_SEC);
 }
 
+//-- \subsection{setTransporterExit(x, y, player)}
+//-- Set the exit position for the mission transporter.
+static QScriptValue js_setTransporterExit(QScriptContext *context, QScriptEngine *)
+{
+	int x = context->argument(0).toInt32();
+	int y = context->argument(1).toInt32();
+	int player = context->argument(2).toInt32();
+	SCRIPT_ASSERT_PLAYER(context, player);
+	missionSetTransporterExit(player, x, y);
+	return QScriptValue();
+}
+
+//-- \subsection{startTransporterEntry(x, y, player)}
+//-- Set the entry position for the mission transporter, and make it start flying in
+//-- reinforcements. If you want the camera to follow it in, use cameraTrack() on it.
+//-- The transport needs to be set up with the mission droids, and the first transport
+//-- found will be used.
+static QScriptValue js_startTransporterEntry(QScriptContext *context, QScriptEngine *)
+{
+	int x = context->argument(0).toInt32();
+	int y = context->argument(1).toInt32();
+	int player = context->argument(2).toInt32();
+	SCRIPT_ASSERT_PLAYER(context, player);
+	missionSetTransporterEntry(player, x, y);
+	missionFlyTransportersIn(player, false);
+	return QScriptValue();
+}
+
 //-- \subsection{setReinforcementTime(time)} Set time for reinforcements to arrive. If time is
 //-- negative, the reinforcement GUI is removed and the timer stopped. Time is in seconds.
 static QScriptValue js_setReinforcementTime(QScriptContext *context, QScriptEngine *)
@@ -3801,6 +3829,8 @@ bool registerFunctions(QScriptEngine *engine, QString scriptName)
 	engine->globalObject().setProperty("donateObject", engine->newFunction(js_donateObject));
 	engine->globalObject().setProperty("donatePower", engine->newFunction(js_donatePower));
 	engine->globalObject().setProperty("setNoGoArea", engine->newFunction(js_setNoGoArea));
+	engine->globalObject().setProperty("startTransporterEntry", engine->newFunction(js_startTransporterEntry));
+	engine->globalObject().setProperty("setTransporterExit", engine->newFunction(js_setTransporterExit));
 
 	// Set some useful constants
 	engine->globalObject().setProperty("WEATHER_CLEAR", WT_NONE, QScriptValue::ReadOnly | QScriptValue::Undeletable);
