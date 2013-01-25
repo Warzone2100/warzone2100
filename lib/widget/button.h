@@ -38,14 +38,28 @@
 #define WBUTS_FLASH		0x0020		// Button flashing is enabled
 #define WBUTS_FLASHON	0x0040		// Button is flashing
 
+
 /* Respond to a mouse click */
-void buttonClicked(struct W_BUTTON *psWidget, UDWORD key);
+void buttonClicked(W_BUTTON *psWidget, UDWORD key);
+/* Respond to a mouse button up */
+void buttonReleased(W_SCREEN *psScreen, W_BUTTON *psWidget, UDWORD key);
+/* Respond to a mouse moving over a button */
+void buttonHiLite(W_BUTTON *psWidget, W_CONTEXT *psContext);
+/* Respond to the mouse moving off a button */
+void buttonHiLiteLost(W_BUTTON *psWidget);
+/* Run a button widget */
+void buttonRun(W_BUTTON *psWidget);
+
 
 struct W_BUTTON : public WIDGET
 {
 	W_BUTTON(W_BUTINIT const *init);
 
 	void clicked(W_CONTEXT *, WIDGET_KEY key) { buttonClicked(this, key); }
+	void released(W_CONTEXT *psContext, WIDGET_KEY key) { buttonReleased(psContext->psScreen, this, key); }
+	void highlight(W_CONTEXT *psContext) { buttonHiLite(this, psContext); }
+	void highlightLost(W_CONTEXT *) { buttonHiLiteLost(this); }
+	void run(W_CONTEXT *) { buttonRun(this); }
 
 	UDWORD		state;				// The current button state
 	const char *pText;				// The text for the button
@@ -67,18 +81,6 @@ extern void buttonFree(W_BUTTON *psWidget);
 
 /* Initialise a button widget before running it */
 extern void buttonInitialise(W_BUTTON *psWidget);
-
-/* Run a button widget */
-extern void buttonRun(W_BUTTON *psWidget);
-
-/* Respond to a mouse button up */
-extern void buttonReleased(W_SCREEN* psScreen, W_BUTTON *psWidget, UDWORD key);
-
-/* Respond to a mouse moving over a button */
-extern void buttonHiLite(W_BUTTON *psWidget, W_CONTEXT *psContext);
-
-/* Respond to the mouse moving off a button */
-extern void buttonHiLiteLost(W_BUTTON *psWidget);
 
 /* Get a button's state */
 extern UDWORD buttonGetState(W_BUTTON *psButton);

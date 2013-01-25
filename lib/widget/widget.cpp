@@ -49,10 +49,6 @@ static SWORD HilightAudioID = -1;
 static SWORD ClickedAudioID = -1;
 
 /* Function prototypes */
-void widgHiLite(WIDGET *psWidget, W_CONTEXT *psContext);
-void widgHiLiteLost(WIDGET *psWidget, W_CONTEXT *psContext);
-static void widgReleased(WIDGET *psWidget, UDWORD key, W_CONTEXT *psContext);
-static void widgRun(WIDGET *psWidget, W_CONTEXT *psContext);
 static void widgDisplayForm(W_FORM *psForm, UDWORD xOffset, UDWORD yOffset);
 static void widgRelease(WIDGET *psWidget);
 
@@ -538,7 +534,7 @@ static bool widgDeleteFromForm(W_FORM *psForm, UDWORD id, W_CONTEXT *psContext)
 	/* Clear the last hilite if necessary */
 	if ((psForm->psLastHiLite != NULL) && (psForm->psLastHiLite->id == id))
 	{
-		widgHiLiteLost(psForm->psLastHiLite, psContext);
+		psForm->psLastHiLite->highlightLost(psContext);
 		psForm->psLastHiLite = NULL;
 	}
 
@@ -1280,10 +1276,6 @@ static void widgProcessForm(W_CONTEXT *psContext)
 	/* Note current form */
 	psForm = psContext->psForm;
 
-//	if(psForm->disableChildren == true) {
-//		return;
-//	}
-
 	/* Note the current mouse position */
 	mx = psContext->mx;
 	my = psContext->my;
@@ -1329,7 +1321,7 @@ static void widgProcessForm(W_CONTEXT *psContext)
 		else
 		{
 			/* Run the widget */
-			widgRun(psCurr, &sWidgContext);
+			psCurr->run(&sWidgContext);
 		}
 	}
 
@@ -1373,7 +1365,7 @@ static void widgProcessForm(W_CONTEXT *psContext)
    					if (released != WKEY_NONE && psCurr->type != WIDG_FORM)
    					{
    						/* Tell the widget the mouse button has gone up */
-   						widgReleased(psCurr, released, &sWidgContext);
+						psCurr->released(&sWidgContext, released);
    					}
    				}
    			}
@@ -1395,7 +1387,7 @@ static void widgProcessForm(W_CONTEXT *psContext)
 			(psOver == NULL || (psForm->style & WFORM_CLICKABLE)))
 		{
 			/* Tell the form the mouse button has gone up */
-			widgReleased((WIDGET *)psForm, released, psContext);
+			psForm->released(psContext, released);
 		}
 	}
 
@@ -1404,17 +1396,17 @@ static void widgProcessForm(W_CONTEXT *psContext)
 	{
 		if (psOver != NULL)
 		{
-			widgHiLite(psOver, &sWidgContext);
+			psOver->highlight(&sWidgContext);
 		}
 		if (psForm->psLastHiLite != NULL)
 		{
-			widgHiLiteLost(psForm->psLastHiLite, &sWidgContext);
+			psForm->psLastHiLite->highlightLost(&sWidgContext);
 		}
 		psForm->psLastHiLite = psOver;
 	}
 
 	/* Run this form */
-	widgRun((WIDGET *)psForm, psContext);
+	psForm->run(psContext);
 }
 
 
@@ -1549,37 +1541,10 @@ void widgDisplayScreen(W_SCREEN *psScreen)
 	tipDisplay();
 }
 
-/* Call the correct function for loss of focus */
-static void widgFocusLost(W_SCREEN* psScreen, WIDGET *psWidget)
-{
-	switch (psWidget->type)
-	{
-	case WIDG_FORM:
-		break;
-	case WIDG_LABEL:
-		break;
-	case WIDG_BUTTON:
-		break;
-	case WIDG_EDITBOX:
-		((W_EDITBOX *)psWidget)->focusLost(psScreen);
-		break;
-	case WIDG_BARGRAPH:
-		break;
-	case WIDG_SLIDER:
-		break;
-	default:
-		ASSERT(!"Unknown widget type", "Unknown widget type");
-		break;
-	}
-}
-
 /* Set the keyboard focus for the screen */
 void screenSetFocus(W_SCREEN *psScreen, WIDGET *psWidget)
 {
-	if (psScreen->psFocus != NULL)
-	{
-		widgFocusLost(psScreen, psScreen->psFocus);
-	}
+	screenClearFocus(psScreen);
 	psScreen->psFocus = psWidget;
 }
 
@@ -1589,127 +1554,10 @@ void screenClearFocus(W_SCREEN *psScreen)
 {
 	if (psScreen->psFocus != NULL)
 	{
-		widgFocusLost(psScreen, psScreen->psFocus);
+		psScreen->psFocus->focusLost(psScreen);
 		psScreen->psFocus = NULL;
 	}
 }
-
-/* Call the correct function for mouse over */
-void widgHiLite(WIDGET *psWidget, W_CONTEXT *psContext)
-{
-	(void)psContext;
-	switch (psWidget->type)
-	{
-	case WIDG_FORM:
-		formHiLite((W_FORM *)psWidget, psContext);
-		break;
-	case WIDG_LABEL:
-		labelHiLite((W_LABEL *)psWidget, psContext);
-		break;
-	case WIDG_BUTTON:
-		buttonHiLite((W_BUTTON *)psWidget, psContext);
-		break;
-	case WIDG_EDITBOX:
-		editBoxHiLite((W_EDITBOX *)psWidget);
-		break;
-	case WIDG_BARGRAPH:
-		barGraphHiLite((W_BARGRAPH *)psWidget, psContext);
-		break;
-	case WIDG_SLIDER:
-		sliderHiLite((W_SLIDER *)psWidget);
-		break;
-	default:
-		ASSERT(!"Unknown widget type", "Unknown widget type");
-		break;
-	}
-}
-
-
-/* Call the correct function for mouse moving off */
-void widgHiLiteLost(WIDGET *psWidget, W_CONTEXT *psContext)
-{
-	(void)psContext;
-	switch (psWidget->type)
-	{
-	case WIDG_FORM:
-		formHiLiteLost((W_FORM *)psWidget, psContext);
-		break;
-	case WIDG_LABEL:
-		labelHiLiteLost((W_LABEL *)psWidget);
-		break;
-	case WIDG_BUTTON:
-		buttonHiLiteLost((W_BUTTON *)psWidget);
-		break;
-	case WIDG_EDITBOX:
-		editBoxHiLiteLost((W_EDITBOX *)psWidget);
-		break;
-	case WIDG_BARGRAPH:
-		barGraphHiLiteLost((W_BARGRAPH *)psWidget);
-		break;
-	case WIDG_SLIDER:
-		sliderHiLiteLost((W_SLIDER *)psWidget);
-		break;
-	default:
-		ASSERT(!"Unknown widget type", "Unknown widget type");
-		break;
-	}
-}
-
-/* Call the correct function for mouse released */
-static void widgReleased(WIDGET *psWidget, UDWORD key, W_CONTEXT *psContext)
-{
-	switch (psWidget->type)
-	{
-	case WIDG_FORM:
-		formReleased((W_FORM *)psWidget, key, psContext);
-		break;
-	case WIDG_LABEL:
-		break;
-	case WIDG_BUTTON:
-		buttonReleased(psContext->psScreen, (W_BUTTON *)psWidget, key);
-		break;
-	case WIDG_EDITBOX:
-		break;
-	case WIDG_BARGRAPH:
-		break;
-	case WIDG_SLIDER:
-		sliderReleased((W_SLIDER *)psWidget);
-		break;
-	default:
-		ASSERT(!"Unknown widget type", "Unknown widget type");
-		break;
-	}
-}
-
-
-/* Call the correct function to run a widget */
-static void widgRun(WIDGET *psWidget, W_CONTEXT *psContext)
-{
-	switch (psWidget->type)
-	{
-	case WIDG_FORM:
-		formRun((W_FORM *)psWidget, psContext);
-		break;
-	case WIDG_LABEL:
-		break;
-	case WIDG_BUTTON:
-		buttonRun((W_BUTTON *)psWidget);
-		break;
-	case WIDG_EDITBOX:
-		((W_EDITBOX *)psWidget)->run(psContext);
-		break;
-	case WIDG_BARGRAPH:
-		break;
-	case WIDG_SLIDER:
-		sliderRun((W_SLIDER *)psWidget, psContext);
-		break;
-	default:
-		ASSERT(!"Unknown widget type", "Unknown widget type");
-		break;
-	}
-}
-
-
 
 void WidgSetAudio(WIDGET_AUDIOCALLBACK Callback,SWORD HilightID,SWORD ClickedID)
 {

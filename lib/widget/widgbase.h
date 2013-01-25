@@ -34,6 +34,11 @@ struct WIDGET;
 struct W_CONTEXT;
 struct W_FORM;
 struct W_INIT;
+struct W_SCREEN;
+struct W_EDITBOX;
+struct W_BARGRAPH;
+struct W_BUTTON;
+struct W_LABEL;
 
 /* The display function prototype */
 typedef void (*WIDGET_DISPLAY)(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
@@ -69,6 +74,11 @@ struct WIDGET
 	virtual ~WIDGET() {}
 
 	virtual void clicked(W_CONTEXT *, WIDGET_KEY = WKEY_PRIMARY) {}
+	virtual void released(W_CONTEXT *, WIDGET_KEY = WKEY_PRIMARY) {}
+	virtual void highlight(W_CONTEXT *) {}
+	virtual void highlightLost(W_CONTEXT *) {}
+	virtual void focusLost(W_SCREEN *) {}
+	virtual void run(W_CONTEXT *) {}
 
 	UDWORD                  formID;                 ///< ID of the widgets base form.
 	UDWORD                  id;                     ///< The user set ID number for the widget. This is returned when e.g. a button is pressed.

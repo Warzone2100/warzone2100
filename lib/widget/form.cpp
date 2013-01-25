@@ -1169,7 +1169,7 @@ void formHiLiteLost(W_FORM *psWidget, W_CONTEXT *psContext)
 	/* If one of the widgets were hilited that has to loose it as well */
 	if (psWidget->psLastHiLite != NULL)
 	{
-		widgHiLiteLost(psWidget->psLastHiLite, psContext);
+		psWidget->psLastHiLite->highlightLost(psContext);
 	}
 	if (psWidget->style & WFORM_TABBED)
 	{

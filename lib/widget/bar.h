@@ -26,9 +26,19 @@
 
 #include "widget.h"
 
+
+/* Respond to a mouse moving over a barGraph */
+void barGraphHiLite(W_BARGRAPH *psWidget, W_CONTEXT *psContext);
+/* Respond to the mouse moving off a barGraph */
+void barGraphHiLiteLost(W_BARGRAPH *psWidget);
+
+
 struct W_BARGRAPH : public WIDGET
 {
 	W_BARGRAPH(W_BARINIT const *init);
+
+	void highlight(W_CONTEXT *psContext) { barGraphHiLite(this, psContext); }
+	void highlightLost(W_CONTEXT *) { barGraphHiLiteLost(this); }
 
 	WBAR_ORIENTATION barPos;                        // Orientation of the bar on the widget
 	UWORD		majorSize;			// Percentage of the main bar that is filled
@@ -50,12 +60,6 @@ extern W_BARGRAPH* barGraphCreate(const W_BARINIT* psInit);
 
 /* Free the memory used by a barGraph */
 extern void barGraphFree(W_BARGRAPH *psWidget);
-
-/* Respond to a mouse moving over a barGraph */
-extern void barGraphHiLite(W_BARGRAPH *psWidget, W_CONTEXT *psContext);
-
-/* Respond to the mouse moving off a barGraph */
-extern void barGraphHiLiteLost(W_BARGRAPH *psWidget);
 
 /* The bar graph display function */
 extern void barGraphDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);

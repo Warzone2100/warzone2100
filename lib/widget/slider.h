@@ -33,12 +33,24 @@
 
 /* Respond to a mouse click */
 void sliderClicked(struct W_SLIDER *psWidget, W_CONTEXT *psContext);
+/* Respond to a mouse up */
+void sliderReleased(W_SLIDER *psWidget);
+/* Respond to a mouse moving over a slider */
+void sliderHiLite(W_SLIDER *psWidget);
+/* Respond to the mouse moving off a slider */
+void sliderHiLiteLost(W_SLIDER *psWidget);
+/* Run a slider widget */
+void sliderRun(W_SLIDER *psWidget, W_CONTEXT *psContext);
 
 struct W_SLIDER : public WIDGET
 {
 	W_SLIDER(W_SLDINIT const *init);
 
 	void clicked(W_CONTEXT *context, WIDGET_KEY) { sliderClicked(this, context); }
+	void released(W_CONTEXT *, WIDGET_KEY) { sliderReleased(this); }
+	void highlight(W_CONTEXT *) { sliderHiLite(this); }
+	void highlightLost(W_CONTEXT *) { sliderHiLiteLost(this); }
+	void run(W_CONTEXT *psContext) { sliderRun(this, psContext); }
 
 	WSLD_ORIENTATION orientation;                   // The orientation of the slider
 	UWORD		numStops;			// Number of stop positions on the slider
@@ -56,18 +68,6 @@ extern void sliderFree(W_SLIDER *psWidget);
 
 /* Initialise a slider widget before running it */
 extern void sliderInitialise(W_SLIDER *psWidget);
-
-/* Run a slider widget */
-extern void sliderRun(W_SLIDER *psWidget, W_CONTEXT *psContext);
-
-/* Respond to a mouse up */
-extern void sliderReleased(W_SLIDER *psWidget);
-
-/* Respond to a mouse moving over a slider */
-extern void sliderHiLite(W_SLIDER *psWidget);
-
-/* Respond to the mouse moving off a slider */
-extern void sliderHiLiteLost(W_SLIDER *psWidget);
 
 /* The slider display function */
 extern void sliderDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);

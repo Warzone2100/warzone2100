@@ -37,15 +37,25 @@
 #define WEDBS_HILITE	0x0010		//
 #define WEDBS_DISABLE   0x0020		// disable button from selection
 
+
+/* Respond to a mouse moving over an edit box */
+void editBoxHiLite(W_EDITBOX *psWidget);
+/* Respond to the mouse moving off an edit box */
+void editBoxHiLiteLost(W_EDITBOX *psWidget);
+
+
 struct W_EDITBOX : public WIDGET
 {
 	W_EDITBOX(W_EDBINIT const *init);
 
-	void run(W_CONTEXT *psContext);
 	void initialise();  // Moves the cursor to the end.
 	void setString(char const *utf8);
+
 	void clicked(W_CONTEXT *psContext, WIDGET_KEY);
+	void highlight(W_CONTEXT *) { editBoxHiLite(this); }
+	void highlightLost(W_CONTEXT *) { editBoxHiLiteLost(this); }
 	void focusLost(W_SCREEN *psScreen);
+	void run(W_CONTEXT *psContext);
 
 	UDWORD		state;						// The current edit box state
 	QString         aText;                  // The text in the edit box
@@ -73,12 +83,6 @@ private:
 
 /* Create an edit box widget data structure */
 extern W_EDITBOX* editBoxCreate(const W_EDBINIT* psInit);
-
-/* Respond to a mouse moving over an edit box */
-extern void editBoxHiLite(W_EDITBOX *psWidget);
-
-/* Respond to the mouse moving off an edit box */
-extern void editBoxHiLiteLost(W_EDITBOX *psWidget);
 
 /* The edit box display function */
 extern void editBoxDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
