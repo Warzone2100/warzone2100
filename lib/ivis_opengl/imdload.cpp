@@ -241,31 +241,14 @@ static bool ReadPoints( const char **ppFileData, iIMDShape *s )
 	return true;
 }
 
-
-static bool _imd_load_points( const char **ppFileData, iIMDShape *s )
+void _imd_calc_bounds(iIMDShape *s, Vector3f *p, int size)
 {
-	Vector3f *p = NULL;
-	int32_t xmax, ymax, zmax;
+	int32_t xmax, ymax, zmax, count;
 	double dx, dy, dz, rad_sq, rad, old_to_p_sq, old_to_p, old_to_new;
 	double xspan, yspan, zspan, maxspan;
 	Vector3f dia1, dia2, cen;
 	Vector3f vxmin(0, 0, 0), vymin(0, 0, 0), vzmin(0, 0, 0),
-	         vxmax(0, 0, 0), vymax(0, 0, 0), vzmax(0, 0, 0);
-
-	//load the points then pass through a second time to setup bounding datavalues
-	s->points = (Vector3f*)malloc(sizeof(Vector3f) * s->npoints);
-	if (s->points == NULL)
-	{
-		return false;
-	}
-
-	// Read in points and remove duplicates (!)
-	if ( ReadPoints( ppFileData, s ) == false )
-	{
-		free(s->points);
-		s->points = NULL;
-		return false;
-	}
+		 vxmax(0, 0, 0), vymax(0, 0, 0), vzmax(0, 0, 0);
 
 	s->max.x = s->max.y = s->max.z = -FP12_MULTIPLIER;
 	s->min.x = s->min.y = s->min.z = FP12_MULTIPLIER;
@@ -274,7 +257,7 @@ static bool _imd_load_points( const char **ppFileData, iIMDShape *s )
 	vxmin.x = vymin.y = vzmin.z = FP12_MULTIPLIER;
 
 	// set up bounding data for minimum number of vertices
-	for (p = s->points; p < s->points + s->npoints; p++)
+	for (count = 0; count < size; p++, count++)
 	{
 		if (p->x > s->max.x)
 		{
@@ -435,6 +418,26 @@ static bool _imd_load_points( const char **ppFileData, iIMDShape *s )
 	s->ocen = cen;
 
 // END: tight bounding sphere
+}
+
+static bool _imd_load_points( const char **ppFileData, iIMDShape *s )
+{
+	//load the points then pass through a second time to setup bounding datavalues
+	s->points = (Vector3f*)malloc(sizeof(Vector3f) * s->npoints);
+	if (s->points == NULL)
+	{
+		return false;
+	}
+
+	// Read in points and remove duplicates (!)
+	if ( ReadPoints( ppFileData, s ) == false )
+	{
+		free(s->points);
+		s->points = NULL;
+		return false;
+	}
+
+	_imd_calc_bounds(s, s->points, s->npoints);
 
 	return true;
 }
@@ -450,19 +453,13 @@ static bool _imd_load_points( const char **ppFileData, iIMDShape *s )
  * \pre s->nconnectors set
  * \post s->connectors allocated
  */
-static bool _imd_load_connectors(const char **ppFileData, iIMDShape *s)
+bool _imd_load_connectors(const char **ppFileData, iIMDShape *s)
 {
 	const char *pFileData = *ppFileData;
 	int cnt;
 	Vector3i *p = NULL, newVector(0, 0, 0);
 
 	s->connectors = (Vector3i *)malloc(sizeof(Vector3i) * s->nconnectors);
-	if (s->connectors == NULL)
-	{
-		debug(LOG_ERROR, "(_load_connectors) MALLOC fail");
-		return false;
-	}
-
 	for (p = s->connectors; p < s->connectors + s->nconnectors; p++)
 	{
 		if (sscanf(pFileData, "%d %d %d%n",                         &newVector.x, &newVector.y, &newVector.z, &cnt) != 3 &&
@@ -484,6 +481,7 @@ static bool _imd_load_connectors(const char **ppFileData, iIMDShape *s)
 static QVector<GLfloat> vertices;
 static QVector<GLfloat> normals;
 static QVector<GLfloat> texcoords;
+static QVector<GLfloat> tangents;
 static QVector<uint16_t> indices; // size is npolys * 3 * numFrames
 static int vertexCount;
 
@@ -548,29 +546,7 @@ static iIMDShape *_imd_load_level(const char **ppFileData, const char *FileDataE
 	ASSERT_OR_RETURN(NULL, i == 1, "Bad directive following LEVEL");
 
 	s = new iIMDShape;
-	if (s == NULL)
-	{
-		/* Failed to allocate memory for s */
-		debug(LOG_ERROR, "_imd_load_level: Memory allocation error");
-		return NULL;
-	}
-	s->flags = 0;
-	s->nconnectors = 0; // Default number of connectors must be 0
-	s->npoints = 0;
-	s->npolys = 0;
-	s->points = NULL;
-	s->polys = NULL;
-	s->connectors = NULL;
-	s->next = NULL;
-	s->shadowEdgeList = NULL;
-	s->nShadowEdges = 0;
-	s->texpage = iV_TEX_INVALID;
-	s->tcmaskpage = iV_TEX_INVALID;
-	s->normalpage = iV_TEX_INVALID;
-	memset(s->material, 0, sizeof(s->material));
-	s->material[LIGHT_AMBIENT][3] = 1.0f;
-	s->material[LIGHT_DIFFUSE][3] = 1.0f;
-	s->material[LIGHT_SPECULAR][3] = 1.0f;
+
 	if (strcmp(buffer, "MATERIALS") == 0)
 	{
 		i = sscanf(pFileData, "%255s %f %f %f %f %f %f %f %f %f %f%n", buffer,
@@ -581,19 +557,8 @@ static iIMDShape *_imd_load_level(const char **ppFileData, const char *FileDataE
 		ASSERT_OR_RETURN(NULL, i == 11, "Bad MATERIALS directive");
 		pFileData += cnt;
 	}
-	else
+	else // use defaults
 	{
-		// Set default values
-		s->material[LIGHT_AMBIENT][0] = 1.0f;
-		s->material[LIGHT_AMBIENT][1] = 1.0f;
-		s->material[LIGHT_AMBIENT][2] = 1.0f;
-		s->material[LIGHT_DIFFUSE][0] = 1.0f;
-		s->material[LIGHT_DIFFUSE][1] = 1.0f;
-		s->material[LIGHT_DIFFUSE][2] = 1.0f;
-		s->material[LIGHT_SPECULAR][0] = 1.0f;
-		s->material[LIGHT_SPECULAR][1] = 1.0f;
-		s->material[LIGHT_SPECULAR][2] = 1.0f;
-		s->shininess = 10;
 		pFileData = pTmp;
 	}
 

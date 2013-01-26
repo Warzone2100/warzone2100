@@ -92,6 +92,8 @@ enum VBO_TYPE
 
 struct iIMDShape
 {
+	iIMDShape();
+
 	unsigned int flags;	
 	int texpage;
 	int tcmaskpage;
