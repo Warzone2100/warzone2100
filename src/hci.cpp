@@ -1693,7 +1693,7 @@ INT_RETVAL intRunWidgets(void)
 
 	case IDRET_INTEL_MAP:
 		// check if RMB was clicked
-		if (widgGetButtonKey(psWScreen) & WKEY_SECONDARY)
+		if (widgGetButtonKey_DEPRECATED(psWScreen) == WKEY_SECONDARY)
 		{
 			//set the current message to be the last non-proximity message added
 			setCurrentMsg();
@@ -2385,7 +2385,7 @@ static void intProcessObject(UDWORD id)
 		id <= IDOBJ_OBJEND)
 	{
 		/* deal with RMB clicks */
-		if (widgGetButtonKey(psWScreen) & WKEY_SECONDARY)
+		if (widgGetButtonKey_DEPRECATED(psWScreen) == WKEY_SECONDARY)
 		{
 			intObjectRMBPressed(id);
 		}
@@ -2473,7 +2473,7 @@ static void intProcessObject(UDWORD id)
 			 id <= IDOBJ_STATEND)
 	{
 		/* deal with RMB clicks */
-		if (widgGetButtonKey(psWScreen) & WKEY_SECONDARY)
+		if (widgGetButtonKey_DEPRECATED(psWScreen) == WKEY_SECONDARY)
 		{
 			intObjStatRMBPressed(id);
 		}
@@ -2549,7 +2549,7 @@ static void intProcessStats(UDWORD id)
 			"intProcessStructure: Invalid structure stats id" );
 
 		/* deal with RMB clicks */
-		if (widgGetButtonKey(psWScreen) & WKEY_SECONDARY)
+		if (widgGetButtonKey_DEPRECATED(psWScreen) == WKEY_SECONDARY)
 		{
 			intStatsRMBPressed(id);
 		}
@@ -2729,12 +2729,12 @@ static void intProcessStats(UDWORD id)
 		if (psStruct)
 		{
 			//LMB pressed
-			if (widgGetButtonKey(psWScreen) & WKEY_PRIMARY)
+			if (widgGetButtonKey_DEPRECATED(psWScreen) == WKEY_PRIMARY)
 			{
 				factoryLoopAdjust(psStruct, true);
 			}
 			//RMB pressed
-			else if (widgGetButtonKey(psWScreen) & WKEY_SECONDARY)
+			else if (widgGetButtonKey_DEPRECATED(psWScreen) == WKEY_SECONDARY)
 			{
 				factoryLoopAdjust(psStruct, false);
 			}
