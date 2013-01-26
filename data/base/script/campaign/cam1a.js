@@ -14,7 +14,7 @@ function gameLost()
 function eventAreaLaunchScavAttack(droid)
 {
 	stage++;
-	var spos = label("scav1soundpos");
+	var spos = getObject("scav1soundpos");
 	playSound("pcv375.ogg", spos.x, spos.y, 0);
 	playSound("pcv456.ogg");
 	hackAddMessage("MB1A_MSG", MISS_MSG, 0, true);
@@ -22,7 +22,7 @@ function eventAreaLaunchScavAttack(droid)
 	hackMarkTiles(); // clear any marked tiles from debugging
 	var droids = enumArea("ScavAttack1", ALL_PLAYERS, false);
 	// send scavengers on war path if triggered above
-	var startpos = label("playerBase");
+	var startpos = getObject("playerBase");
 	for (var i = 0; i < droids.length; i++)
 	{
 		if ((droids[i].player == 7 || droids[i].player == 6) && droids[i].type == DROID)
@@ -94,7 +94,7 @@ function eventChat(from, to, message)
 		enableResearch("R-Wpn-Flamer01Mk1");
 		enableResearch("R-Wpn-MG1Mk1");
 		// TODO, finish some/all of the above
-		var artifact = label("artifact");
+		var artifact = getObject("artifact");
 		if (artifact)
 		{
 			removeObject(artifact);
@@ -129,8 +129,8 @@ function tick()
 
 function playDelayed374(where)
 {
-	var spos = label("scav2soundpos");
-	var spos = label(where);
+	var spos = getObject("scav2soundpos");
+	var spos = getObject(where);
 	playSound("pcv374.ogg", spos.x, spos.y, 0);
 }
 
@@ -143,7 +143,7 @@ function eventGroupLoss(obj, groupid, newsize)
 		leftovers = enumArea("scavbase1area");
 		hackRemoveMessage("C1A_BASE0", PROX_MSG, 0);
 		hackAddMessage("C1A_BASE1", PROX_MSG, 0, false);
-		var spos = label("scav1soundpos");
+		var spos = getObject("scav1soundpos");
 		playSound("pcv391.ogg", spos.x, spos.y, 0);
 		queue("playDelayed374", 2000, "scav2soundpos");
 		stage++;
@@ -154,7 +154,7 @@ function eventGroupLoss(obj, groupid, newsize)
 		leftovers = enumArea("scavbase2area");
 		hackRemoveMessage("C1A_BASE1", PROX_MSG, 0);
 		hackAddMessage("C1A_BASE2", PROX_MSG, 0, false);
-		var spos = label("scav2soundpos");
+		var spos = getObject("scav2soundpos");
 		playSound("pcv392.ogg", spos.x, spos.y, 0);
 		queue("playDelayed374", 2000, "scav3soundpos");
 		stage++;
@@ -165,7 +165,7 @@ function eventGroupLoss(obj, groupid, newsize)
 		leftovers = enumArea("scavbase3area");
 		hackRemoveMessage("C1A_BASE2", PROX_MSG, 0);
 		hackAddMessage("C1A_BASE3", PROX_MSG, 0, false);
-		var spos = label("scav3soundpos");
+		var spos = getObject("scav3soundpos");
 		playSound("pcv392.ogg", spos.x, spos.y, 0);
 		queue("playDelayed374", 2000, "retreat4");
 		stage++;
@@ -175,7 +175,7 @@ function eventGroupLoss(obj, groupid, newsize)
 		// eliminated scav base 4
 		leftovers = enumArea("scavbase4area");
 		hackRemoveMessage("C1A_BASE3", PROX_MSG, 0);
-		var spos = label("retreat4");
+		var spos = getObject("retreat4");
 		playSound("pcv392.ogg", spos.x, spos.y, 0);
 		stage++;
 	}
@@ -192,20 +192,20 @@ function eventGroupLoss(obj, groupid, newsize)
 
 function addartifact(poslabel, artilabel)
 {
-	var artpos = label(poslabel);
+	var artpos = getObject(poslabel);
 	var artifact = addFeature("Crate", artpos.x, artpos.y);
 	addLabel(artifact, artilabel);
 }
 
 function eventStartLevel()
 {
-	var startpos = label("startPosition");
+	var startpos = getObject("startPosition");
 	var lz = label("landingZone");
 
-	scav1group = label("scavgroup1").id;
-	scav2group = label("scavgroup2").id;
-	scav3group = label("scavgroup3").id;
-	scav4group = label("scavgroup4").id;
+	scav1group = getObject("scavgroup1").id;
+	scav2group = getObject("scavgroup2").id;
+	scav3group = getObject("scavgroup3").id;
+	scav4group = getObject("scavgroup4").id;
 
 	centreView(startpos.x, startpos.y);
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, 0);

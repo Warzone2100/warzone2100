@@ -398,8 +398,9 @@ QScriptValue convDroid(DROID *psDroid, QScriptEngine *engine)
 	{
 	case DROID_CYBORG_CONSTRUCT:
 		type = DROID_CONSTRUCT; break;
-	case DROID_DEFAULT:
 	case DROID_CYBORG_SUPER:
+		type = DROID_CYBORG; break;
+	case DROID_DEFAULT:
 		type = DROID_WEAPON; break;
 	case DROID_CYBORG_REPAIR:
 		type = DROID_REPAIR; break;
@@ -829,16 +830,39 @@ static QScriptValue js_getLabel(QScriptContext *context, QScriptEngine *engine)
 	return QScriptValue::NullValue;
 }
 
-//-- \subsection{label(key)}
-//-- Fetch something denoted by a label. A label refers to an area, a position or a \emph{game object} on 
-//-- the map defined using the map editor and stored together with the map. The only argument
-//-- is a text label. The function returns an object that has a type variable defining what it
-//-- is (in case this is unclear). This type will be one of DROID, STRUCTURE, FEATURE, AREA
-//-- and POSITION. The AREA has defined 'x', 'y', 'x2', and 'y2', while POSITION has only
-//-- defined 'x' and 'y'.
-//-- This is a fast operation of O(log n) algorithmic complexity.
-static QScriptValue js_label(QScriptContext *context, QScriptEngine *engine)
+//-- \subsection{getObject(label | x, y | type, player, id)}
+//-- Fetch something denoted by a label, a map position or its object ID. A label refers to an area, 
+//-- a position or a \emph{game object} on the map defined using the map editor and stored 
+//-- together with the map. In this case, the only argument is a text label. The function 
+//-- returns an object that has a type variable defining what it is (in case this is 
+//-- unclear). This type will be one of DROID, STRUCTURE, FEATURE, AREA, GROUP or POSITION.
+//-- The AREA has defined 'x', 'y', 'x2', and 'y2', while POSITION has only defined 'x' and 'y'.
+//-- The GROUP type has defined 'type' and 'id' of the group, which can be passed to enumGroup().
+//-- This is a fast operation of O(log n) algorithmic complexity. You can also fetch
+//-- a STRUCTURE or DROID type game object from a given map position (if any). This is a very fast
+//-- operation of O(1) algorithmic complexity. Droids cannot be fetched in this manner,
+//-- since they do not a unique placement on map tiles. Finally, you can fetch an object using 
+//-- its ID, in which case you need to pass its type, owner and unique object ID. This is an
+//-- operation of O(n) algorithmic complexity.
+static QScriptValue js_getObject(QScriptContext *context, QScriptEngine *engine)
 {
+	if (context->argumentCount() == 2) // get at position case
+	{
+		int x = context->argument(0).toInt32();
+		int y = context->argument(1).toInt32();
+		SCRIPT_ASSERT(context, tileOnMap(x, y), "Map position (%d, %d) not on the map!", x, y);
+		const MAPTILE *psTile = mapTile(x, y);
+		return QScriptValue(convMax(psTile->psObject, engine));
+	}
+	else if (context->argumentCount() == 3) // get by ID case
+	{
+		OBJECT_TYPE type = (OBJECT_TYPE)context->argument(0).toInt32();
+		int player = context->argument(1).toInt32();
+		int id = context->argument(2).toInt32();
+		SCRIPT_ASSERT_PLAYER(context, player);
+		return QScriptValue(convMax(IdToObject(type, id, player), engine));
+	}
+	// get by label case
 	DROID *psDroid;
 	STRUCTURE *psStruct;
 	FEATURE *psFeature;
@@ -1718,6 +1742,8 @@ static QScriptValue js_enumDroid(QScriptContext *context, QScriptEngine *engine)
 		droidType2 = DROID_CYBORG_SUPER; break;
 	case DROID_REPAIR:
 		droidType2 = DROID_CYBORG_REPAIR; break;
+	case DROID_CYBORG:
+		droidType2 = DROID_CYBORG_SUPER; break;
 	default:
 		droidType2 = droidType;
 		break;
@@ -2730,7 +2756,7 @@ static QScriptValue js_isVTOL(QScriptContext *context, QScriptEngine *engine)
 
 //-- \subsection{hackGetObj(type, player, id)}
 //-- Function to find and return a game object of DROID, FEATURE or STRUCTURE types, if it exists.
-//-- Otherwise, it will return null.
+//-- Otherwise, it will return null. This function is deprecated by getObject().
 static QScriptValue js_hackGetObj(QScriptContext *context, QScriptEngine *engine)
 {
 	OBJECT_TYPE type = (OBJECT_TYPE)context->argument(0).toInt32();
@@ -3706,7 +3732,8 @@ bool registerFunctions(QScriptEngine *engine, QString scriptName)
 	engine->globalObject().setProperty("_", engine->newFunction(js_translate));
 	engine->globalObject().setProperty("dump", engine->newFunction(js_dump));
 	engine->globalObject().setProperty("syncRandom", engine->newFunction(js_syncRandom));
-	engine->globalObject().setProperty("label", engine->newFunction(js_label));
+	engine->globalObject().setProperty("label", engine->newFunction(js_getObject)); // deprecated
+	engine->globalObject().setProperty("getObject", engine->newFunction(js_getObject));
 	engine->globalObject().setProperty("addLabel", engine->newFunction(js_addLabel));
 	engine->globalObject().setProperty("removeLabel", engine->newFunction(js_removeLabel));
 	engine->globalObject().setProperty("getLabel", engine->newFunction(js_getLabel));
