@@ -122,7 +122,7 @@ RENDERED_BUTTON TopicBuffers[NUM_TOPICBUFFERS];		// References TopicSurfaces.
 RENDERED_BUTTON StatBuffers[NUM_STATBUFFERS];		// References StatSurfaces.
 
 // Get the first factory assigned to a command droid
-STRUCTURE *droidGetCommandFactory(DROID *psDroid);
+static STRUCTURE *droidGetCommandFactory(DROID *psDroid);
 
 static SDWORD ButtonDrawXOffset;
 static SDWORD ButtonDrawYOffset;
@@ -1573,17 +1573,17 @@ void intDisplayReticuleButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, 
 	UBYTE	flashing = UNPACKDWORD_QUAD_A(psWidget->UserData);
 	UBYTE	flashTime = UNPACKDWORD_QUAD_B(psWidget->UserData);
 	UWORD	ImageID;
-
 	ASSERT(psWidget->type == WIDG_BUTTON, "Not a button");
+	W_BUTTON *psButton = (W_BUTTON *)psWidget;
 
-	if (((W_BUTTON *)psWidget)->state & WBUTS_GREY)
+	if (psButton->state & WBUTS_GREY)
 	{
 		iV_DrawImage(IntImages, IMAGE_RETICULE_GREY, x, y);
 		return;
 	}
 
-	Down = ((W_BUTTON *)psWidget)->state & (WBUTS_DOWN | WBUTS_CLICKLOCK);
-	Hilight = buttonIsHilite(psWidget);
+	Down = psButton->state & (WBUTS_DOWN | WBUTS_CLICKLOCK);
+	Hilight = buttonIsHilite(psButton);
 
 	if (Down)
 	{
@@ -1606,7 +1606,7 @@ void intDisplayReticuleButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, 
 		{
 			if (((realTime / 250) % 2) == 0)
 			{
-				ImageID = (UWORD)(Index);//IMAGE_RETICULE_BUTDOWN;//a step in the right direction JPS 27-4-98
+				ImageID = Index;
 			}
 			else
 			{
@@ -2608,7 +2608,7 @@ STRUCTURE *DroidGetBuildStructure(DROID *Droid)
 }
 
 // Get the first factory assigned to a command droid
-STRUCTURE *droidGetCommandFactory(DROID *psDroid)
+static STRUCTURE *droidGetCommandFactory(DROID *psDroid)
 {
 	SDWORD		inc;
 	STRUCTURE	*psCurr;
@@ -2997,7 +2997,6 @@ void WidgetAudioCallback(int AudioID)
 	static	SDWORD LastTimeAudio;
 	if (AudioID >= 0)
 	{
-
 		SDWORD TimeSinceLastWidgetBeep;
 
 		// Don't allow a widget beep if one was made in the last WIDGETBEEPGAP milliseconds
