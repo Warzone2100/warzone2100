@@ -179,8 +179,9 @@ void buttonSetState(W_BUTTON *psButton, UDWORD state)
 
 
 /* Run a button widget */
-void buttonRun(W_BUTTON *psButton)
+void W_BUTTON::run(W_CONTEXT *)
 {
+	W_BUTTON *psButton = this;
 	if (psButton->state & WBUTS_FLASH)
 	{
 		if (((realTime/250) % 2) == 0) {
@@ -193,8 +194,9 @@ void buttonRun(W_BUTTON *psButton)
 
 
 /* Respond to a mouse click */
-void buttonClicked(W_BUTTON *psWidget, UDWORD key)
+void W_BUTTON::clicked(W_CONTEXT *, WIDGET_KEY key)
 {
+	W_BUTTON *psWidget = this;
 	/* Can't click a button if it is disabled or locked down */
 	if (!(psWidget->state & (WBUTS_GREY | WBUTS_LOCKED)))
 	{
@@ -219,8 +221,10 @@ void buttonClicked(W_BUTTON *psWidget, UDWORD key)
 }
 
 /* Respond to a mouse button up */
-void buttonReleased(W_SCREEN* psScreen, W_BUTTON* psWidget, UDWORD key)
+void W_BUTTON::released(W_CONTEXT *psContext, WIDGET_KEY key)
 {
+	W_SCREEN *psScreen = psContext->psScreen;
+	W_BUTTON *psWidget = this;
 	if (psWidget->state & WBUTS_DOWN)
 	{
 		// Check this is the correct key
@@ -235,8 +239,9 @@ void buttonReleased(W_SCREEN* psScreen, W_BUTTON* psWidget, UDWORD key)
 
 
 /* Respond to a mouse moving over a button */
-void buttonHiLite(W_BUTTON *psWidget, W_CONTEXT *psContext)
+void W_BUTTON::highlight(W_CONTEXT *psContext)
 {
+	W_BUTTON *psWidget = this;
 	psWidget->state |= WBUTS_HILITE;
 
 	if(psWidget->AudioCallback) {
@@ -255,8 +260,9 @@ void buttonHiLite(W_BUTTON *psWidget, W_CONTEXT *psContext)
 
 
 /* Respond to the mouse moving off a button */
-void buttonHiLiteLost(W_BUTTON *psWidget)
+void W_BUTTON::highlightLost(W_CONTEXT *)
 {
+	W_BUTTON *psWidget = this;
 	psWidget->state &= ~(WBUTS_DOWN | WBUTS_HILITE);
 	if (psWidget->pTip)
 	{

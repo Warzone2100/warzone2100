@@ -29,18 +29,12 @@
 #include "lib/ivis_opengl/textdraw.h"
 
 
-/* Respond to a mouse moving over a label */
-void labelHiLite(W_LABEL *psWidget, W_CONTEXT *psContext);
-/* Respond to the mouse moving off a label */
-void labelHiLiteLost(W_LABEL *psWidget);
-
-
 struct W_LABEL : public WIDGET
 {
 	W_LABEL(W_LABINIT const *init);
 
-	void highlight(W_CONTEXT *psContext) { labelHiLite(this, psContext); }
-	void highlightLost(W_CONTEXT *) { labelHiLiteLost(this); }
+	void highlight(W_CONTEXT *psContext);
+	void highlightLost(W_CONTEXT *);
 
 	char		aText[WIDG_MAXSTR];		// Text on the label
 	enum iV_fonts FontID;

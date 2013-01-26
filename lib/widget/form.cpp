@@ -968,8 +968,9 @@ static bool formPickTab(W_TABFORM *psForm, UDWORD fx, UDWORD fy,
 extern UDWORD realTime;  // FIXME Include a header...
 
 /* Run a form widget */
-void formRun(W_FORM *psWidget, W_CONTEXT *psContext)
+void W_FORM::run(W_CONTEXT *psContext)
 {
+	W_FORM *psWidget = this;
 	SDWORD		mx,my;
 	TAB_POS		sTabPos;
 	char		*pTip;
@@ -1057,8 +1058,9 @@ void formClearFlash(W_FORM *psWidget)
 
 
 /* Respond to a mouse click */
-void formClicked(W_FORM *psWidget, UDWORD key)
+void W_FORM::clicked(W_CONTEXT *, WIDGET_KEY key)
 {
+	W_FORM *psWidget = this;
 	W_CLICKFORM		*psClickForm;
 
 	/* Stop the tip if there is one */
@@ -1089,8 +1091,9 @@ void formClicked(W_FORM *psWidget, UDWORD key)
 
 
 /* Respond to a mouse form up */
-void formReleased(W_FORM *psWidget, UDWORD key, W_CONTEXT *psContext)
+void W_FORM::released(W_CONTEXT *psContext, WIDGET_KEY key)
 {
+	W_FORM *psWidget = this;
 	W_TABFORM	*psTabForm;
 	W_CLICKFORM	*psClickForm;
 	TAB_POS		sTabPos;
@@ -1137,8 +1140,9 @@ void formReleased(W_FORM *psWidget, UDWORD key, W_CONTEXT *psContext)
 
 
 /* Respond to a mouse moving over a form */
-void formHiLite(W_FORM *psWidget, W_CONTEXT *psContext)
+void W_FORM::highlight(W_CONTEXT *psContext)
 {
+	W_FORM *psWidget = this;
 	W_CLICKFORM		*psClickForm;
 
 	if (psWidget->style & WFORM_CLICKABLE)
@@ -1164,8 +1168,9 @@ void formHiLite(W_FORM *psWidget, W_CONTEXT *psContext)
 
 
 /* Respond to the mouse moving off a form */
-void formHiLiteLost(W_FORM *psWidget, W_CONTEXT *psContext)
+void W_FORM::highlightLost(W_CONTEXT *psContext)
 {
+	W_FORM *psWidget = this;
 	/* If one of the widgets were hilited that has to loose it as well */
 	if (psWidget->psLastHiLite != NULL)
 	{

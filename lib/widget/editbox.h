@@ -38,12 +38,6 @@
 #define WEDBS_DISABLE   0x0020		// disable button from selection
 
 
-/* Respond to a mouse moving over an edit box */
-void editBoxHiLite(W_EDITBOX *psWidget);
-/* Respond to the mouse moving off an edit box */
-void editBoxHiLiteLost(W_EDITBOX *psWidget);
-
-
 struct W_EDITBOX : public WIDGET
 {
 	W_EDITBOX(W_EDBINIT const *init);
@@ -51,9 +45,9 @@ struct W_EDITBOX : public WIDGET
 	void initialise();  // Moves the cursor to the end.
 	void setString(char const *utf8);
 
-	void clicked(W_CONTEXT *psContext, WIDGET_KEY);
-	void highlight(W_CONTEXT *) { editBoxHiLite(this); }
-	void highlightLost(W_CONTEXT *) { editBoxHiLiteLost(this); }
+	void clicked(W_CONTEXT *psContext, WIDGET_KEY key);
+	void highlight(W_CONTEXT *psContext);
+	void highlightLost(W_CONTEXT *psContext);
 	void focusLost(W_SCREEN *psScreen);
 	void run(W_CONTEXT *psContext);
 

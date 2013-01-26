@@ -216,8 +216,9 @@ static void sliderGetBarBox(W_SLIDER *psSlider, SWORD *pX, SWORD *pY,
 
 
 /* Run a slider widget */
-void sliderRun(W_SLIDER *psWidget, W_CONTEXT *psContext)
+void W_SLIDER::run(W_CONTEXT *psContext)
 {
+	W_SLIDER *psWidget = this;
 	SDWORD  mx,my;
 	UDWORD	stopSize;
 
@@ -228,7 +229,7 @@ void sliderRun(W_SLIDER *psWidget, W_CONTEXT *psContext)
 	}
 	else if (!(psWidget->state & SLD_DRAG) && mouseDown(MOUSE_LMB))
 	{
-		sliderClicked(psWidget, psContext);
+		clicked(psContext, WKEY_NONE);
 	}
 	if (psWidget->state & SLD_DRAG)
 	{
@@ -317,8 +318,9 @@ void sliderRun(W_SLIDER *psWidget, W_CONTEXT *psContext)
 
 
 /* Respond to a mouse click */
-void sliderClicked(W_SLIDER *psWidget, W_CONTEXT *psContext)
+void W_SLIDER::clicked(W_CONTEXT *psContext, WIDGET_KEY)
 {
+	W_SLIDER *psWidget = this;
 #if 0
 	SWORD	x,y;
 	UWORD	width,height;
@@ -344,23 +346,22 @@ void sliderClicked(W_SLIDER *psWidget, W_CONTEXT *psContext)
 
 
 /* Respond to a mouse up */
-void sliderReleased(W_SLIDER *psWidget)
+void W_SLIDER::released(W_CONTEXT *, WIDGET_KEY)
 {
-	(void)psWidget;
 }
 
 
 /* Respond to a mouse moving over a slider */
-void sliderHiLite(W_SLIDER *psWidget)
+void W_SLIDER::highlight(W_CONTEXT *)
 {
-	psWidget->state |= SLD_HILITE;
+	state |= SLD_HILITE;
 }
 
 
 /* Respond to the mouse moving off a slider */
-void sliderHiLiteLost(W_SLIDER *psWidget)
+void W_SLIDER::highlightLost(W_CONTEXT *)
 {
-	psWidget->state &= ~SLD_HILITE;
+	state &= ~SLD_HILITE;
 }
 
 /* The slider display function */

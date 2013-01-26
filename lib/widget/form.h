@@ -27,28 +27,16 @@
 #include "lib/widget/widget.h"
 
 
-/* Respond to a mouse click */
-void formClicked(W_FORM *psWidget, UDWORD key);
-/* Respond to a mouse form up */
-void formReleased(W_FORM *psWidget, UDWORD key, W_CONTEXT *psContext);
-/* Respond to a mouse moving over a form */
-void formHiLite(W_FORM *psWidget, W_CONTEXT *psContext);
-/* Respond to the mouse moving off a form */
-void formHiLiteLost(W_FORM *psWidget, W_CONTEXT *psContext);
-/* Run a form widget */
-void formRun(W_FORM *psWidget, W_CONTEXT *psContext);
-
-
 /* The standard form */
 struct W_FORM : public WIDGET
 {
 	W_FORM(W_FORMINIT const *init);
 
-	void clicked(W_CONTEXT *, WIDGET_KEY key) { formClicked(this, key); }
-	void released(W_CONTEXT *psContext, WIDGET_KEY key) { formReleased(this, key, psContext); }
-	void highlight(W_CONTEXT *psContext) { formHiLite(this, psContext); }
-	void highlightLost(W_CONTEXT *psContext) { formHiLiteLost(this, psContext); }
-	void run(W_CONTEXT *psContext) { formRun(this, psContext); }
+	void clicked(W_CONTEXT *psContext, WIDGET_KEY key);
+	void released(W_CONTEXT *psContext, WIDGET_KEY key);
+	void highlight(W_CONTEXT *psContext);
+	void highlightLost(W_CONTEXT *psContext);
+	void run(W_CONTEXT *psContext);
 
 	bool            disableChildren;        ///< Disable all child widgets if true
 	UWORD           Ax0,Ay0,Ax1,Ay1;        ///< Working coords for animations.
