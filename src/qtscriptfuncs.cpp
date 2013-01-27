@@ -2792,7 +2792,6 @@ static QScriptValue js_hackGetObj(QScriptContext *context, QScriptEngine *engine
 static QScriptValue js_hackChangeMe(QScriptContext *context, QScriptEngine *engine)
 {
 	int me = context->argument(0).toInt32();
-	SCRIPT_ASSERT_PLAYER(context, me);
 	engine->globalObject().setProperty("me", me);
 	return QScriptValue();
 }

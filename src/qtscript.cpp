@@ -782,7 +782,7 @@ bool triggerEventDroidBuilt(DROID *psDroid, STRUCTURE *psFactory)
 	{
 		QScriptEngine *engine = scripts.at(i);
 		int player = engine->globalObject().property("me").toInt32();
-		if (player == psDroid->player)
+		if (player == psDroid->player || player == -1)
 		{
 			QScriptValueList args;
 			args += convDroid(psDroid, engine);
@@ -806,7 +806,7 @@ bool triggerEventStructBuilt(STRUCTURE *psStruct, DROID *psDroid)
 	{
 		QScriptEngine *engine = scripts.at(i);
 		int player = engine->globalObject().property("me").toInt32();
-		if (player == psStruct->player)
+		if (player == psStruct->player || player == -1)
 		{
 			QScriptValueList args;
 			args += convStructure(psStruct, engine);
@@ -830,7 +830,7 @@ bool triggerEventStructureReady(STRUCTURE *psStruct)
 	{
 		QScriptEngine *engine = scripts.at(i);
 		int player = engine->globalObject().property("me").toInt32();
-		if (player == psStruct->player)
+		if (player == psStruct->player || player == -1)
 		{
 			QScriptValueList args;
 			args += convStructure(psStruct, engine);
@@ -882,7 +882,7 @@ bool triggerEventResearched(RESEARCH *psResearch, STRUCTURE *psStruct, int playe
 	{
 		QScriptEngine *engine = scripts.at(i);
 		int me = engine->globalObject().property("me").toInt32();
-		if (me == player)
+		if (me == player || me == -1)
 		{
 			QScriptValueList args;
 			args += convResearch(psResearch, engine, player);
@@ -938,7 +938,7 @@ bool triggerEventSeen(BASE_OBJECT *psViewer, BASE_OBJECT *psSeen)
 	{
 		QScriptEngine *engine = scripts.at(i);
 		int me = engine->globalObject().property("me").toInt32();
-		if (me == psViewer->player)
+		if (me == psViewer->player || me == -1)
 		{
 			QScriptValueList args;
 			args += convMax(psViewer, engine);
@@ -960,7 +960,7 @@ bool triggerEventObjectTransfer(BASE_OBJECT *psObj, int from)
 	{
 		QScriptEngine *engine = scripts.at(i);
 		int me = engine->globalObject().property("me").toInt32();
-		if (me == psObj->player || me == from)
+		if (me == psObj->player || me == from || me == -1)
 		{
 			QScriptValueList args;
 			args += convMax(psObj, engine);
@@ -981,7 +981,7 @@ bool triggerEventChat(int from, int to, const char *message)
 	{
 		QScriptEngine *engine = scripts.at(i);
 		int me = engine->globalObject().property("me").toInt32();
-		if (me == to)
+		if (me == to || me == -1)
 		{
 			QScriptValueList args;
 			args += QScriptValue(from);
@@ -1003,7 +1003,7 @@ bool triggerEventBeacon(int from, int to, const char *message, int x, int y)
 	{
 		QScriptEngine *engine = scripts.at(i);
 		int me = engine->globalObject().property("me").toInt32();
-		if (me == to)
+		if (me == to || me == -1)
 		{
 			QScriptValueList args;
 			args += QScriptValue(map_coord(x));
@@ -1029,7 +1029,7 @@ bool triggerEventBeaconRemoved(int from, int to)
 	{
 		QScriptEngine *engine = scripts.at(i);
 		int me = engine->globalObject().property("me").toInt32();
-		if (me == to)
+		if (me == to || me == -1)
 		{
 			QScriptValueList args;
 			args += QScriptValue(from);

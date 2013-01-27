@@ -172,7 +172,7 @@ function eventGameInit()
 	// This is the only template that should be enabled before design is allowed
 	enableTemplate("ConstructionDroid");
 
-	var structlist = enumStruct(me, HQ);
+	var structlist = enumStruct(selectedPlayer, HQ);
 	for (var i = 0; i < structlist.length; i++)
 	{
 		// Simulate build events to enable minimap/unit design when an HQ exists
@@ -200,7 +200,7 @@ function checkEndConditions()
 		{
 			for (var playnum = 0; playnum < maxPlayers; playnum++)
 			{
-				if (playnum != me && allianceExistsBetween(me, playnum))
+				if (playnum != selectedPlayer && allianceExistsBetween(selectedPlayer, playnum))
 				{
 					factories = countStruct("A0LightFactory", playnum) + countStruct("A0CyborgFactory", playnum);
 					droids = countDroid(DROID_ANY, playnum);
@@ -227,7 +227,7 @@ function checkEndConditions()
 	// check if all enemies defeated
 	for (var playnum = 0; playnum < maxPlayers; playnum++)
 	{
-		if (playnum != me && !allianceExistsBetween(me, playnum))	// checking enemy player
+		if (playnum != selectedPlayer && !allianceExistsBetween(selectedPlayer, playnum))	// checking enemy player
 		{
 			factories = countStruct("A0LightFactory", playnum) + countStruct("A0CyborgFactory", playnum); // nope
 			droids = countDroid(DROID_ANY, playnum);
@@ -251,7 +251,7 @@ function checkEndConditions()
 // Base Under Attack
 function eventAttacked(victimObj, attackerObj)
 {
-	if (gameTime > lastHitTime + 5000)
+	if (gameTime > lastHitTime + 5000 && victimObj.player == selectedPlayer)
 	{
 		lastHitTime = gameTime;
 		if (victimObj.type == STRUCTURE)
