@@ -1627,7 +1627,7 @@ void processLaunchTransporter(void)
 			        (void *)psCurrTransporter);
 
 			eventFireCallbackTrigger((TRIGGER_TYPE)CALL_LAUNCH_TRANSPORTER);
-			triggerEvent(TRIGGER_LAUNCH_TRANSPORTER);
+			triggerEvent(TRIGGER_TRANSPORTER_LAUNCH);
 		}
 	}
 }

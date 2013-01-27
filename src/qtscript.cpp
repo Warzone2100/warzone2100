@@ -655,10 +655,6 @@ bool loadScriptStates(const char *filename)
 //__ properly initialized by this time, so use this only to initialize script state.
 //__ \subsection{eventStartLevel()}
 //__ An event that is run once the game has started and all game data has been loaded.
-//__ \subsection{eventLaunchTransporter()}
-//__ An event that is run when the transporter has been ordered to fly off in a mission.
-//__ \subsection{eventReinforcementsArrived()}
-//__ An event that is run when the transporter has arrived with reinforcements in a mission.
 //__ \subsection{eventMissionTimeout()}
 //__ An event that is run when the mission timer has run out.
 //__ \subsection{eventVideoDone()}
@@ -669,6 +665,16 @@ bool loadScriptStates(const char *filename)
 //__ An event that is run before game is saved. There is usually no need to use this event.
 //__ \subsection{eventGameSaved()}
 //__ An event that is run after game is saved. There is usually no need to use this event.
+//__ \subsection{eventTransporterLaunch()}
+//__ An event that is run when the mission transporter has been ordered to fly off.
+//__ \subsection{eventTransporterArrived()}
+//__ An event that is run when the mission transporter has arrived at the map edge with reinforcements.
+//__ \subsection{eventTransporterExit()}
+//__ An event that is run when the mission transporter has left the map.
+//__ \subsection{eventTransporterDone()}
+//__ An event that is run when the mission transporter has no more reinforcements to deliver.
+//__ \subsection{eventTransporterLanded()}
+//__ An event that is run when the mission transporter has landed with reinforcements.
 bool triggerEvent(SCRIPT_TRIGGER_TYPE trigger)
 {
 	for (int i = 0; i < scripts.size(); ++i)
@@ -684,11 +690,22 @@ bool triggerEvent(SCRIPT_TRIGGER_TYPE trigger)
 			processVisibility(); // make sure we initialize visibility first
 			callFunction(engine, "eventStartLevel", QScriptValueList());
 			break;
-		case TRIGGER_LAUNCH_TRANSPORTER:
-			callFunction(engine, "eventLaunchTransporter", QScriptValueList());
+		case TRIGGER_TRANSPORTER_LAUNCH:
+			callFunction(engine, "eventLaunchTransporter", QScriptValueList()); // deprecated!
+			callFunction(engine, "eventTransporterLaunch", QScriptValueList());
 			break;
-		case TRIGGER_REINFORCEMENTS_ARRIVED:
-			callFunction(engine, "eventReinforcementsArrived", QScriptValueList());
+		case TRIGGER_TRANSPORTER_ARRIVED:
+			callFunction(engine, "eventReinforcementsArrived", QScriptValueList()); // deprecated!
+			callFunction(engine, "eventTransporterArrived", QScriptValueList());
+			break;
+		case TRIGGER_TRANSPORTER_EXIT:
+			callFunction(engine, "eventTransporterExit", QScriptValueList());
+			break;
+		case TRIGGER_TRANSPORTER_DONE:
+			callFunction(engine, "eventTransporterDone", QScriptValueList());
+			break;
+		case TRIGGER_TRANSPORTER_LANDED:
+			callFunction(engine, "eventTransporterLanded", QScriptValueList());
 			break;
 		case TRIGGER_MISSION_TIMEOUT:
 			callFunction(engine, "eventMissionTimeout", QScriptValueList());
