@@ -46,7 +46,7 @@
 
 #include "qtscriptfuncs.h"
 
-#define ATTACK_THROTTLE 100
+#define ATTACK_THROTTLE 1000
 
 /// selection changes are too often and too erratic to trigger immediately,
 /// so until we have a queue system for events, delay triggering this way.
