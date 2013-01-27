@@ -456,16 +456,21 @@ struct WEAPON_STATS : public COMPONENT_STATS
 	UDWORD			radius;					///< Basic blast radius of weapon
 	UDWORD			radiusHit;				///< Chance to hit in the	blast	radius
 	UDWORD			radiusDamage;			///< Damage done in	the blast radius
-	UDWORD			incenTime;				///< How long	the round burns
-	UDWORD			incenDamage;			///< Damage done each burn cycle
-	UDWORD			incenRadius;			///< Burn radius of	the round
+
+	UDWORD			periodicalDamageTime;			///< How long the round damages
+	UDWORD			periodicalDamage;				///< Damage done each time cycle (each second)
+	UDWORD			periodicalDamageRadius;			///< Radius of	the round
+	WEAPON_CLASS	periodicalDamageWeaponClass;	///< Periodical damage weapon class by damage type (KINETIC, HEAT)
+	WEAPON_SUBCLASS	periodicalDamageWeaponSubClass;	///< Periodical damage weapon subclass (research class)
+	WEAPON_EFFECT	periodicalDamageWeaponEffect;	///< Periodical damage weapon effect (propulsion/body damage modifier)
+
 	UDWORD			flightSpeed;			///< speed ammo travels at
 	bool			fireOnMove;				///< indicates whether the droid has to stop before firing
-	WEAPON_CLASS	weaponClass;			///< the class of weapon
-	WEAPON_SUBCLASS weaponSubClass;			///< the subclass to which the weapon belongs
+	WEAPON_CLASS	weaponClass;			///< the class of weapon  (KINETIC, HEAT)
+	WEAPON_SUBCLASS weaponSubClass;			///< the subclass to which the weapon belongs (research class)
 	MOVEMENT_MODEL	movementModel;			///< which projectile model to use for the bullet
-	WEAPON_EFFECT	weaponEffect;			///< which type of warhead is associated with the weapon
-	WEAPON_SIZE		weaponSize;		///< eg light weapons can be put on light bodies or as sidearms
+	WEAPON_EFFECT	weaponEffect;			///< which type of warhead is associated with the weapon (propulsion/body damage modifier)
+	WEAPON_SIZE		weaponSize;				///< eg light weapons can be put on light bodies or as sidearms
 	UDWORD			recoilValue;			///< used to compare with weight to see if recoils or not
 	UBYTE			rotate;					///< amount the weapon(turret) can rotate 0	= none
 	UBYTE			maxElevation;			///< max amount the	turret can be elevated up
@@ -559,7 +564,7 @@ struct WEAPON_UPGRADE
 	UWORD	longHit;
 	UWORD	damage;
 	UWORD	radiusDamage;
-	UWORD	incenDamage;
+	UWORD	periodicalDamage;
 	UWORD	radiusHit;
 };
 

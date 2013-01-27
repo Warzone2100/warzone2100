@@ -109,7 +109,7 @@ struct ObjectShape
 static ObjectShape establishTargetShape(BASE_OBJECT *psTarget);
 static void	proj_ImpactFunc( PROJECTILE *psObj );
 static void	proj_PostImpactFunc( PROJECTILE *psObj );
-static void proj_checkBurnDamage(PROJECTILE *psProj);
+static void proj_checkPeriodicalDamage(PROJECTILE *psProj);
 
 static int32_t objectDamage(BASE_OBJECT *psObj, unsigned damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, unsigned impactTime, bool isDamagePerSecond);
 
@@ -1037,13 +1037,13 @@ static void proj_ImpactFunc( PROJECTILE *psObj )
 		}
 
 		/* Shouldn't need to do this check but the stats aren't all at a value yet... */ // FIXME
-		if (psStats->incenRadius && psStats->incenTime)
+		if (psStats->periodicalDamageRadius && psStats->periodicalDamageTime)
 		{
 			position.x = psObj->pos.x;
 			position.z = psObj->pos.y; // z = y [sic] intentional
 			position.y = map_Height(position.x, position.z);
-			effectGiveAuxVar(psStats->incenRadius);
-			effectGiveAuxVarSec(psStats->incenTime);
+			effectGiveAuxVar(psStats->periodicalDamageRadius);
+			effectGiveAuxVarSec(psStats->periodicalDamageTime);
 			addEffect(&position, EFFECT_FIRE, FIRE_TYPE_LOCALISED, false, NULL, 0, psObj->time);
 		}
 
@@ -1061,9 +1061,9 @@ static void proj_ImpactFunc( PROJECTILE *psObj )
 		}
 	}
 
-	if (psStats->incenRadius != 0 && psStats->incenTime != 0)
+	if (psStats->periodicalDamageRadius != 0 && psStats->periodicalDamageTime != 0)
 	{
-		tileSetFire(psObj->pos.x, psObj->pos.y, psStats->incenTime);
+		tileSetFire(psObj->pos.x, psObj->pos.y, psStats->periodicalDamageTime);
 	}
 
 	// Set the effects position and radius
@@ -1195,12 +1195,12 @@ static void proj_ImpactFunc( PROJECTILE *psObj )
 
 	temp = psObj->psDest;
 	setProjectileDestination(psObj, NULL);
-	// The damage has been done, no more damage expected from this projectile. (Ignore burning.)
+	// The damage has been done, no more damage expected from this projectile. (Ignore periodical damaging.)
 	psObj->expectedDamageCaused = 0;
 	setProjectileDestination(psObj, temp);
 
 	// If the projectile does no splash damage and does not set fire to things
-	if ((psStats->radius == 0) && (psStats->incenTime == 0) )
+	if ((psStats->radius == 0) && (psStats->periodicalDamageTime == 0) )
 	{
 		psObj->state = PROJ_INACTIVE;
 		return;
@@ -1274,11 +1274,11 @@ static void proj_ImpactFunc( PROJECTILE *psObj )
 		}
 	}
 
-	if (psStats->incenTime != 0)
+	if (psStats->periodicalDamageTime != 0)
 	{
-		/* Incendiary round */
-		/* Incendiary damage gets done in the bullet update routine */
-		/* Just note when the incendiary started burning            */
+		/* Periodical damage round */
+		/* Periodical damage gets done in the bullet update routine */
+		/* Just note when started damaging          */
 		psObj->state = PROJ_POSTIMPACT;
 		psObj->born = gameTime;
 	}
@@ -1298,17 +1298,17 @@ static void proj_PostImpactFunc( PROJECTILE *psObj )
 	int age = gameTime - psObj->born;
 
 	/* Time to finish postimpact effect? */
-	if (age > (SDWORD)psStats->radiusLife && age > (SDWORD)psStats->incenTime)
+	if (age > (SDWORD)psStats->radiusLife && age > (SDWORD)psStats->periodicalDamageTime)
 	{
 		psObj->state = PROJ_INACTIVE;
 		return;
 	}
 
-	/* Burning effect */
-	if (psStats->incenTime > 0)
+	/* Periodical damage effect */
+	if (psStats->periodicalDamageTime > 0)
 	{
-		/* See if anything is in the fire and burn it */
-		proj_checkBurnDamage(psObj);
+		/* See if anything is in the fire and damage it periodically */
+		proj_checkPeriodicalDamage(psObj);
 	}
 }
 
@@ -1389,7 +1389,7 @@ void proj_UpdateAll()
 
 /***************************************************************************/
 
-static void proj_checkBurnDamage(PROJECTILE *psProj)
+static void proj_checkPeriodicalDamage(PROJECTILE *psProj)
 {
 	CHECK_PROJECTILE(psProj);
 
@@ -1398,7 +1398,7 @@ static void proj_checkBurnDamage(PROJECTILE *psProj)
 
 	WEAPON_STATS *psStats = psProj->psWStats;
 
-	gridStartIterate(psProj->pos.x, psProj->pos.y, psStats->incenRadius);
+	gridStartIterate(psProj->pos.x, psProj->pos.y, psStats->periodicalDamageRadius);
 	for (BASE_OBJECT *psCurr = gridIterate(); psCurr != NULL; psCurr = gridIterate())
 	{
 		if (psCurr->died)
@@ -1423,15 +1423,15 @@ static void proj_checkBurnDamage(PROJECTILE *psProj)
 			continue;  // Can't destroy oil wells.
 		}
 
-		if (psCurr->burnStart != gameTime)
+		if (psCurr->periodicalDamageStart != gameTime)
 		{
-			psCurr->burnStart = gameTime;
-			psCurr->burnDamage = 0;  // Reset burn damage done this tick.
+			psCurr->periodicalDamageStart = gameTime;
+			psCurr->periodicalDamage = 0;  // Reset periodical damage done this tick.
 		}
-		unsigned damageRate = weaponIncenDamage(psStats,psProj->player);
-		debug(LOG_NEVER, "Burn damage of %d per second to object %d, player %d\n", damageRate, psCurr->id, psCurr->player);
+		unsigned damageRate = calcDamage(weaponPeriodicalDamage(psStats,psProj->player), psStats->periodicalDamageWeaponEffect, psCurr);
+		debug(LOG_NEVER, "Periodical damage of %d per second to object %d, player %d\n", damageRate, psCurr->id, psCurr->player);
 
-		int relativeDamage = objectDamage(psCurr, damageRate, psStats->weaponClass, psStats->weaponSubClass, gameTime - deltaGameTime/2 + 1, true);
+		int relativeDamage = objectDamage(psCurr, damageRate, psStats->periodicalDamageWeaponClass, psStats->periodicalDamageWeaponSubClass, gameTime - deltaGameTime/2 + 1, true);
 		proj_UpdateKills(psProj, relativeDamage);
 	}
 }

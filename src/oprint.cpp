@@ -178,7 +178,7 @@ static void printWeaponInfo(const WEAPON_STATS* psStats)
 	CONPRINTF(ConsoleString,(ConsoleString,"   rad %d radHt %d radDam %d\n"
 			  "   inTime %d inDam %d inRad %d\n",
 				psStats->radius, psStats->radiusHit, psStats->radiusDamage,
-				psStats->incenTime, psStats->incenDamage, psStats->incenRadius));
+				psStats->periodicalDamageTime, psStats->periodicalDamage, psStats->periodicalDamageRadius));
 	CONPRINTF(ConsoleString,(ConsoleString,"   flSpd %d %s\n",
 				psStats->flightSpeed, psStats->fireOnMove ? "fireOnMove" : "not fireOnMove"));
 	CONPRINTF(ConsoleString,(ConsoleString,"   %s %s %s\n", pWC, pWSC, pMM));

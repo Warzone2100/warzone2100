@@ -241,8 +241,8 @@ FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,bool FromSave)
 		psFeature->rot.direction = 0;
 	}
 	psFeature->body = psStats->body;
-	psFeature->burnStart = 0;
-	psFeature->burnDamage = 0;
+	psFeature->periodicalDamageStart = 0;
+	psFeature->periodicalDamage = 0;
 	objSensorCache(psFeature, NULL);
 	objEcmCache(psFeature, NULL);
 
@@ -343,13 +343,13 @@ void featureUpdate(FEATURE *psFeat)
 {
 	syncDebugFeature(psFeat, '<');
 
-	/* Update the fire damage data */
-	if (psFeat->burnStart != 0 && psFeat->burnStart != gameTime - deltaGameTime)  // -deltaGameTime, since projectiles are updated after features.
+	/* Update the periodical damage data */
+	if (psFeat->periodicalDamageStart != 0 && psFeat->periodicalDamageStart != gameTime - deltaGameTime)  // -deltaGameTime, since projectiles are updated after features.
 	{
-		// The burnStart has been set, but is not from the previous tick, so we must be out of the fire.
-		psFeat->burnDamage = 0;  // Reset burn damage done this tick.
-		// Finished burning.
-		psFeat->burnStart = 0;
+		// The periodicalDamageStart has been set, but is not from the previous tick, so we must be out of the periodical damage.
+		psFeat->periodicalDamage = 0;  // Reset periodical damage done this tick.
+		// Finished periodical damaging
+		psFeat->periodicalDamageStart = 0;
 	}
 
 	syncDebugFeature(psFeat, '>');

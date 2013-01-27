@@ -655,19 +655,19 @@ bool loadWeaponStats(const char *pFileName)
 		psStats->radius = ini.value("radius").toUInt();
 		psStats->radiusHit = ini.value("radiusHit").toUInt();
 		psStats->radiusDamage = ini.value("radiusDamage").toUInt();
-		psStats->incenTime = ini.value("incenTime").toUInt();
-		psStats->incenDamage = ini.value("incenDamage").toUInt();
-		psStats->incenRadius = ini.value("incenRadius").toUInt();
+		psStats->periodicalDamageTime = ini.value("periodicalDamageTime", 0).toUInt();
+		psStats->periodicalDamage = ini.value("periodicalDamage", 0).toUInt();
+		psStats->periodicalDamageRadius = ini.value("periodicalDamageRadius", 0).toUInt();
 		psStats->radiusLife = ini.value("radiusLife").toUInt();
 		psStats->flightSpeed = ini.value("flightSpeed", 1).toUInt();
 		rotate = ini.value("rotate").toUInt();
 		minElevation = ini.value("minElevation").toInt();
 		maxElevation = ini.value("maxElevation").toUInt();
 		psStats->recoilValue = ini.value("recoilValue").toUInt();
-		psStats->minRange = ini.value("minRange").toUInt();
+		psStats->minRange = ini.value("minRange", 0).toUInt();
 		psStats->effectSize = ini.value("effectSize").toUInt();
-		surfaceToAir = ini.value("surfaceToAir").toUInt();
-		numAttackRuns = ini.value("numAttackRuns").toUInt();
+		surfaceToAir = ini.value("surfaceToAir", 0).toUInt();
+		numAttackRuns = ini.value("numAttackRuns", 0).toUInt();
 		psStats->designable = ini.value("designable").toBool();
 		psStats->penetrate = ini.value("penetrate").toBool();
 		// weapon size limitation
@@ -682,7 +682,7 @@ bool loadWeaponStats(const char *pFileName)
 
 		//multiply time stats
 		psStats->firePause *= WEAPON_TIME;
-		psStats->incenTime *= WEAPON_TIME;
+		psStats->periodicalDamageTime *= WEAPON_TIME;
 		psStats->radiusLife *= WEAPON_TIME;
 		psStats->reloadTime *= WEAPON_TIME;
 
@@ -700,39 +700,15 @@ bool loadWeaponStats(const char *pFileName)
 		}
 		psStats->fireOnMove = ini.value("fireOnMove", true).toBool();
 
-		QString weaponClass = ini.value("weaponClass").toString();
 		//set the weapon class
-		if (weaponClass.compare("KINETIC") == 0)
-		{
-			psStats->weaponClass = WC_KINETIC;
-		}
-		else if (weaponClass.compare("EXPLOSIVE") == 0)
-		{
-			//psStats->weaponClass = WC_EXPLOSIVE;
-			psStats->weaponClass = WC_KINETIC; 	// explosives were removed from release version of Warzone
-		}
-		else if (weaponClass.compare("HEAT") == 0)
-		{
-			psStats->weaponClass = WC_HEAT;
-		}
-		else if (weaponClass.compare("MISC") == 0)
-		{
-			//psStats->weaponClass = WC_MISC;
-			psStats->weaponClass = WC_HEAT;		// removed from release version of Warzone
-		}
-		else
+		if (!getWeaponClass(ini.value("weaponClass").toString(), &psStats->weaponClass))
 		{
 			debug( LOG_ERROR, "Invalid weapon class for weapon %s - assuming KINETIC", getStatName(psStats) );
 			psStats->weaponClass = WC_KINETIC;
 		}
+
 		//set the subClass
 		if (!getWeaponSubClass(ini.value("weaponSubClass").toString().toUtf8().data(), &psStats->weaponSubClass))
-		{
-			return false;
-		}
-
-		//set the movement model
-		if (!getMovementModel(ini.value("movement").toString().toUtf8().constData(), &psStats->movementModel))
 		{
 			return false;
 		}
@@ -744,6 +720,49 @@ bool loadWeaponStats(const char *pFileName)
 			return false;
 		}
 
+		//set periodical damage weapon class
+		QString periodicalDamageWeaponClass = ini.value("periodicalDamageWeaponClass","").toString();
+		if (periodicalDamageWeaponClass.compare("") == 0)
+		{
+			//was not setted in ini - use default value
+			psStats->periodicalDamageWeaponClass = psStats->weaponClass;
+		}else if (!getWeaponClass(periodicalDamageWeaponClass, &psStats->periodicalDamageWeaponClass))
+		{
+			debug( LOG_ERROR, "Invalid periodicalDamageWeaponClass for weapon %s - assuming same class as weapon", getStatName(psStats) );
+			psStats->periodicalDamageWeaponClass = psStats->weaponClass;
+		}
+
+		//set periodical damage weapon subclass
+		QString periodicalDamageWeaponSubClass = ini.value("periodicalDamageWeaponSubClass","").toString();
+		if (periodicalDamageWeaponSubClass.compare("") == 0) 
+		{
+			//was not setted in ini - use default value
+			psStats->periodicalDamageWeaponSubClass = psStats->weaponSubClass;
+		}else if (!getWeaponSubClass(periodicalDamageWeaponSubClass.toUtf8().data(), &psStats->periodicalDamageWeaponSubClass))
+		{
+			debug( LOG_ERROR, "Invalid periodicalDamageWeaponSubClass for weapon %s - assuming same subclass as weapon", getStatName(psStats) );
+			psStats->periodicalDamageWeaponSubClass = psStats->weaponSubClass;
+		}
+
+		//set periodical damage weapon effect
+		QString periodicalDamageWeaponEffect = ini.value("periodicalDamageWeaponEffect","").toString();
+		if (periodicalDamageWeaponSubClass.compare("") == 0) 
+		{
+			//was not setted in ini - use default value
+			psStats->periodicalDamageWeaponEffect = psStats->weaponEffect;
+		}else if (!getWeaponEffect(periodicalDamageWeaponEffect.toUtf8().data(), &psStats->periodicalDamageWeaponEffect))
+		{
+			debug( LOG_ERROR, "Invalid periodicalDamageWeaponEffect for weapon %s - assuming same effect as weapon", getStatName(psStats) );
+			psStats->periodicalDamageWeaponEffect = psStats->weaponEffect;
+		}
+
+		//set the movement model
+		if (!getMovementModel(ini.value("movement").toString().toUtf8().constData(), &psStats->movementModel))
+		{
+			return false;
+		}
+
+
 		// set the face Player value
 		psStats->facePlayer = ini.value("facePlayer", false).toBool();
 
@@ -751,7 +770,7 @@ bool loadWeaponStats(const char *pFileName)
 		psStats->faceInFlight = ini.value("faceInFlight", false).toBool();
 
 		//set the light world value
-		psStats->lightWorld = ini.value("lightWorld").toBool();
+		psStats->lightWorld = ini.value("lightWorld", false).toBool();
 
 		//set the rotate angle
 		if (rotate > UBYTE_MAX)
@@ -2216,6 +2235,32 @@ bool getWeaponEffect(const char* weaponEffect, WEAPON_EFFECT* effect)
 	return true;
 }
 
+bool getWeaponClass(QString weaponClassStr, WEAPON_CLASS *weaponClass)
+{
+	if (weaponClassStr.compare("KINETIC") == 0)
+	{
+		*weaponClass = WC_KINETIC;
+	}
+	else if (weaponClassStr.compare("EXPLOSIVE") == 0)
+	{
+		//psStats->weaponClass = WC_EXPLOSIVE;
+		*weaponClass = WC_KINETIC; 	// explosives were removed from release version of Warzone
+	}
+	else if (weaponClassStr.compare("HEAT") == 0)
+	{
+		*weaponClass = WC_HEAT;
+	}
+	else if (weaponClassStr.compare("MISC") == 0)
+	{
+		//psStats->weaponClass = WC_MISC;
+		*weaponClass = WC_HEAT;		// removed from release version of Warzone
+	}else
+	{
+		return false;
+	};
+	return true;
+}
+
 
 /*
 looks up the name to get the resource associated with it - or allocates space
@@ -2274,10 +2319,10 @@ UDWORD	weaponRadDamage(WEAPON_STATS *psStats, UBYTE player)
 		psStats->weaponSubClass].radiusDamage)/100);
 }
 
-UDWORD	weaponIncenDamage(WEAPON_STATS *psStats, UBYTE player)
+UDWORD	weaponPeriodicalDamage(WEAPON_STATS *psStats, UBYTE player)
 {
-	return (psStats->incenDamage + (psStats->incenDamage * asWeaponUpgrade[player][
-		psStats->weaponSubClass].incenDamage)/100);
+	return (psStats->periodicalDamage + (psStats->periodicalDamage * asWeaponUpgrade[player][
+		psStats->periodicalDamageWeaponSubClass].periodicalDamage)/100);
 }
 
 UDWORD	weaponRadiusHit(WEAPON_STATS *psStats, UBYTE player)

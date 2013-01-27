@@ -264,7 +264,7 @@ extern UDWORD	weaponShortHit(const WEAPON_STATS* psStats, UBYTE player);
 extern UDWORD	weaponLongHit(const WEAPON_STATS* psStats, UBYTE player);
 extern UDWORD	weaponDamage(const WEAPON_STATS* psStats, UBYTE player);
 extern UDWORD	weaponRadDamage(WEAPON_STATS *psStats, UBYTE player);
-extern UDWORD	weaponIncenDamage(WEAPON_STATS *psStats, UBYTE player);
+extern UDWORD	weaponPeriodicalDamage(WEAPON_STATS *psStats, UBYTE player);
 extern UDWORD	weaponRadiusHit(WEAPON_STATS *psStats, UBYTE player);
 /*Access functions for the upgradeable stats of a sensor*/
 extern UDWORD	sensorRange(SENSOR_STATS *psStats, UBYTE player);
@@ -303,6 +303,7 @@ extern bool objHasWeapon(const BASE_OBJECT *psObj);
 extern void statsInitVars(void);
 
 bool getWeaponEffect(const char* weaponEffect, WEAPON_EFFECT* effect);
+bool getWeaponClass(QString weaponClassStr, WEAPON_CLASS *weaponClass);
 
 /* Wrappers */
 

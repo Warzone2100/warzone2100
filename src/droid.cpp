@@ -319,8 +319,8 @@ DROID::DROID(uint32_t id, unsigned player)
 	}
 	memset(seenThisTick, 0, sizeof(seenThisTick));
 	died = 0;
-	burnStart = 0;
-	burnDamage = 0;
+	periodicalDamageStart = 0;
+	periodicalDamage = 0;
 	sDisplay.screenX = OFF_SCREEN;
 	sDisplay.screenY = OFF_SCREEN;
 	sDisplay.screenR = 0;
@@ -854,23 +854,23 @@ void droidUpdate(DROID *psDroid)
 	}
 
 	/* Update the fire damage data */
-	if (psDroid->burnStart != 0 && psDroid->burnStart != gameTime - deltaGameTime)  // -deltaGameTime, since projectiles are updated after droids.
+	if (psDroid->periodicalDamageStart != 0 && psDroid->periodicalDamageStart != gameTime - deltaGameTime)  // -deltaGameTime, since projectiles are updated after droids.
 	{
-		// The burnStart has been set, but is not from the previous tick, so we must be out of the fire.
-		psDroid->burnDamage = 0;  // Reset burn damage done this tick.
-		if (psDroid->burnStart + BURN_TIME < gameTime)
+		// The periodicalDamageStart has been set, but is not from the previous tick, so we must be out of the fire.
+		psDroid->periodicalDamage = 0;  // Reset periodical damage done this tick.
+		if (psDroid->periodicalDamageStart + BURN_TIME < gameTime)
 		{
-			// Finished burning.
-			psDroid->burnStart = 0;
+			// Finished periodical damaging.
+			psDroid->periodicalDamageStart = 0;
 		}
 		else
 		{
-			// do burn damage
+			// do hardcoded burn damage (this damage automatically applied after periodical damage finished)
 			droidDamage(psDroid, BURN_DAMAGE, WC_HEAT, WSC_FLAME, gameTime - deltaGameTime/2 + 1, true);
 		}
 	}
 
-	// At this point, the droid may be dead due to burn damage.
+	// At this point, the droid may be dead due to periodical damage or hardcoded burn damage.
 	if (isDead((BASE_OBJECT *)psDroid))
 	{
 		return;

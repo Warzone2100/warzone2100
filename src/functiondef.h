@@ -146,7 +146,7 @@ struct WEAPON_UPGRADE_FUNCTION : public FUNCTION
 	UWORD			longHit;			/*The % to increase the long range accuracy */
 	UWORD			damage;				/*The % to increase the damage*/
 	UWORD			radiusDamage;		/*The % to increase the radius damage*/
-	UWORD			incenDamage;		/*The % to increase the incendiary damage*/
+	UWORD			periodicalDamage;		/*The % to increase the periodical damage*/
 	UWORD			radiusHit;			/*The % to increase the chance to hit in blast radius*/
 
 };

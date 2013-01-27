@@ -101,8 +101,8 @@ struct BASE_OBJECT : public SIMPLE_OBJECT
 	WEAPON_SUBCLASS     lastHitWeapon;              ///< The weapon that last hit it
 	UDWORD              timeLastHit;                ///< The time the structure was last attacked
 	UDWORD              body;                       ///< Hit points with lame name
-	UDWORD              burnStart;                  ///< When the object entered the fire
-	UDWORD              burnDamage;                 ///< How much damage has been done since the object entered the fire
+	UDWORD              periodicalDamageStart;                  ///< When the object entered the fire
+	UDWORD              periodicalDamage;                 ///< How much damage has been done since the object entered the fire
 	SDWORD              sensorRange;                ///< Range of sensor
 	SDWORD              ECMMod;                     ///< Ability to conceal others from sensors
 	bool                bTargetted;                 ///< Whether object is targetted by a selectedPlayer droid sensor (quite the hack)

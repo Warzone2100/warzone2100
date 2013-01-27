@@ -193,8 +193,8 @@ struct TILETYPE_SAVEHEADER : public GAME_SAVEHEADER
 	UDWORD				direction; \
 	UDWORD				player; \
 	int32_t				inFire; \
-	UDWORD				burnStart; \
-	UDWORD				burnDamage
+	UDWORD				periodicalDamageStart; \
+	UDWORD				periodicalDamage
 
 #define OBJECT_SAVE_V20 \
 	char				name[MAX_SAVE_NAME_SIZE]; \
@@ -203,8 +203,8 @@ struct TILETYPE_SAVEHEADER : public GAME_SAVEHEADER
 	UDWORD				direction; \
 	UDWORD				player; \
 	int32_t		inFire; \
-	UDWORD				burnStart; \
-	UDWORD				burnDamage
+	UDWORD				periodicalDamageStart; \
+	UDWORD				periodicalDamage
 
 struct SAVE_POWER
 {
@@ -3968,8 +3968,8 @@ bool loadSaveDroidInit(char *pFileData, UDWORD filesize)
 		endian_udword(&pDroidInit->z);
 		endian_udword(&pDroidInit->direction);
 		endian_udword(&pDroidInit->player);
-		endian_udword(&pDroidInit->burnStart);
-		endian_udword(&pDroidInit->burnDamage);
+		endian_udword(&pDroidInit->periodicalDamageStart);
+		endian_udword(&pDroidInit->periodicalDamage);
 
 		pDroidInit->player = RemapPlayerNumber(pDroidInit->player);
 		if (pDroidInit->player >= MAX_PLAYERS)
@@ -4288,8 +4288,8 @@ static bool loadSaveDroid(const char *pFileName, DROID **ppsCurrentDroidLists)
 		}
 		ASSERT(id != 0, "Droid ID should never be zero here");
 		psDroid->body = healthValue(ini, psDroid->originalBody);
-		psDroid->burnDamage = ini.value("burnDamage", 0).toInt();
-		psDroid->burnStart = ini.value("burnStart", 0).toInt();
+		psDroid->periodicalDamage = ini.value("periodicalDamage", 0).toInt();
+		psDroid->periodicalDamageStart = ini.value("periodicalDamageStart", 0).toInt();
 		psDroid->experience = ini.value("experience", 0).toInt();
 		psDroid->timeLastHit = ini.value("timeLastHit", UDWORD_MAX).toInt();
 		psDroid->secondaryOrder = ini.value("secondaryOrder", psDroid->secondaryOrder).toInt();
@@ -4484,8 +4484,8 @@ static bool writeDroid(WzConfig &ini, DROID *psCurr, bool onMission, int &counte
 	}
 	if (psCurr->died > 0) ini.setValue("died", psCurr->died);
 	if (psCurr->resistance > 0) ini.setValue("resistance", psCurr->resistance);
-	if (psCurr->burnStart > 0) ini.setValue("burnStart", psCurr->burnStart);
-	if (psCurr->burnDamage > 0) ini.setValue("burnDamage", psCurr->burnDamage);
+	if (psCurr->periodicalDamageStart > 0) ini.setValue("periodicalDamageStart", psCurr->periodicalDamageStart);
+	if (psCurr->periodicalDamage > 0) ini.setValue("periodicalDamage", psCurr->periodicalDamage);
 	ini.setValue("droidType", psCurr->droidType);
 	ini.setValue("weapons", psCurr->numWeaps);
 	ini.setValue("parts/body", (asBodyStats + psCurr->asBits[COMP_BODY].nStat)->pName);
@@ -4569,7 +4569,7 @@ bool loadSaveStructure(char *pFileData, UDWORD filesize)
 	UDWORD				count, statInc;
 	int32_t				found;
 	UDWORD				NumberOfSkippedStructures=0;
-	UDWORD				burnTime;
+	UDWORD				periodicalDamageTime;
 
 	/* Check the file type */
 	psHeader = (STRUCT_SAVEHEADER *)pFileData;
@@ -4629,8 +4629,8 @@ bool loadSaveStructure(char *pFileData, UDWORD filesize)
 		endian_udword(&psSaveStructure->z);
 		endian_udword(&psSaveStructure->direction);
 		endian_udword(&psSaveStructure->player);
-		endian_udword(&psSaveStructure->burnStart);
-		endian_udword(&psSaveStructure->burnDamage);
+		endian_udword(&psSaveStructure->periodicalDamageStart);
+		endian_udword(&psSaveStructure->periodicalDamage);
 
 		psSaveStructure->player=RemapPlayerNumber(psSaveStructure->player);
 
@@ -4693,9 +4693,9 @@ bool loadSaveStructure(char *pFileData, UDWORD filesize)
 		// The original code here didn't work and so the scriptwriters worked round it by using the module ID - so making it work now will screw up
 		// the scripts -so in ALL CASES overwrite the ID!
 		psStructure->id = psSaveStructure->id > 0 ? psSaveStructure->id : 0xFEDBCA98; // hack to remove struct id zero
-		psStructure->burnDamage = psSaveStructure->burnDamage;
-		burnTime = psSaveStructure->burnStart;
-		psStructure->burnStart = burnTime;
+		psStructure->periodicalDamage = psSaveStructure->periodicalDamage;
+		periodicalDamageTime = psSaveStructure->periodicalDamageStart;
+		psStructure->periodicalDamageStart = periodicalDamageTime;
 		psStructure->status = (STRUCT_STATES)psSaveStructure->status;
 		if (psStructure->status == SS_BUILT)
 		{
@@ -4816,8 +4816,8 @@ static bool loadSaveStructure2(const char *pFileName, STRUCTURE **ppList)
 		{
 			psStructure->id = id;	// force correct ID
 		}
-		psStructure->burnDamage = ini.value("burnDamage", 0).toInt();
-		psStructure->burnStart = ini.value("burnStart", 0).toInt();
+		psStructure->periodicalDamage = ini.value("periodicalDamage", 0).toInt();
+		psStructure->periodicalDamageStart = ini.value("periodicalDamageStart", 0).toInt();
 		memset(psStructure->visible, 0, sizeof(psStructure->visible));
 		for (int i = 0; i < game.maxPlayers; i++)
 		{
@@ -5067,8 +5067,8 @@ bool writeStructFile(const char *pFileName)
 			}
 			if (psCurr->died > 0) ini.setValue("died", psCurr->died);
 			if (psCurr->resistance > 0) ini.setValue("resistance", psCurr->resistance);
-			if (psCurr->burnStart > 0) ini.setValue("burnStart", psCurr->burnStart);
-			if (psCurr->burnDamage > 0) ini.setValue("burnDamage", psCurr->burnDamage);
+			if (psCurr->periodicalDamageStart > 0) ini.setValue("periodicalDamageStart", psCurr->periodicalDamageStart);
+			if (psCurr->periodicalDamage > 0) ini.setValue("periodicalDamage", psCurr->periodicalDamage);
 			if (psCurr->status != SS_BUILT) ini.setValue("status", psCurr->status);
 			ini.setValue("weapons", psCurr->numWeaps);
 			for (int j = 0; j < psCurr->numWeaps; j++)
@@ -5332,8 +5332,8 @@ bool loadSaveFeature(char *pFileData, UDWORD filesize)
 		endian_udword(&psSaveFeature->z);
 		endian_udword(&psSaveFeature->direction);
 		endian_udword(&psSaveFeature->player);
-		endian_udword(&psSaveFeature->burnStart);
-		endian_udword(&psSaveFeature->burnDamage);
+		endian_udword(&psSaveFeature->periodicalDamageStart);
+		endian_udword(&psSaveFeature->periodicalDamage);
 
 		//get the stats for this feature
 		found = false;
@@ -5369,7 +5369,7 @@ bool loadSaveFeature(char *pFileData, UDWORD filesize)
 		//restore values
 		pFeature->id = psSaveFeature->id;
 		pFeature->rot.direction = DEG(psSaveFeature->direction);
-		pFeature->burnDamage = psSaveFeature->burnDamage;
+		pFeature->periodicalDamage = psSaveFeature->periodicalDamage;
 		if (psHeader->version >= VERSION_14)
 		{
 			for (i=0; i < MAX_PLAYERS; i++)
@@ -5435,8 +5435,8 @@ bool loadSaveFeature2(const char *pFileName)
 		//restore values
 		pFeature->id = ini.value("id").toInt();
 		pFeature->rot = ini.vector3i("rotation");
-		pFeature->burnDamage = ini.value("burnDamage", 0).toInt();
-		pFeature->burnStart = ini.value("burnStart", 0).toInt();
+		pFeature->periodicalDamage = ini.value("periodicalDamage", 0).toInt();
+		pFeature->periodicalDamageStart = ini.value("periodicalDamageStart", 0).toInt();
 		pFeature->born = ini.value("born", 2).toInt();
 		pFeature->timeLastHit = ini.value("timeLastHit", UDWORD_MAX).toInt();
 		pFeature->selected = ini.value("selected", false).toBool();
@@ -5466,8 +5466,8 @@ bool writeFeatureFile(const char *pFileName)
 		ini.setValue("name", psCurr->psStats->pName);
 		ini.setVector3i("position", psCurr->pos);
 		ini.setVector3i("rotation", psCurr->rot);
-		ini.setValue("burnDamage", psCurr->burnDamage);
-		ini.setValue("burnStart", psCurr->burnStart);
+		ini.setValue("periodicalDamage", psCurr->periodicalDamage);
+		ini.setValue("periodicalDamageStart", psCurr->periodicalDamageStart);
 		ini.setValue("health", psCurr->body);
 		ini.setValue("born", psCurr->born);
 		if (psCurr->selected) ini.setValue("selected", psCurr->selected);

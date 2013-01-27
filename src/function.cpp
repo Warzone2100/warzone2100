@@ -465,7 +465,7 @@ static bool loadWeaponUpgradeFunction(const char *pData)
 {
 	WEAPON_UPGRADE_FUNCTION	*psFunction;
 	char functionName[MAX_STR_LENGTH], weaponSubClass[MAX_STR_LENGTH];
-	UDWORD firePause, dummyVal, longHit, damage, radiusDamage, incenDamage, radiusHit;
+	UDWORD firePause, dummyVal, longHit, damage, radiusDamage, periodicalDamage, radiusHit;
 
 	//allocate storage
 	psFunction = (WEAPON_UPGRADE_FUNCTION *)malloc(sizeof(WEAPON_UPGRADE_FUNCTION));
@@ -485,7 +485,7 @@ static bool loadWeaponUpgradeFunction(const char *pData)
 	weaponSubClass[0] = '\0';
 	sscanf(pData, "%255[^,'\r\n],%255[^,'\r\n],%d,%d,%d,%d,%d,%d,%d", functionName,
 	       weaponSubClass, &firePause, &dummyVal, &longHit, &damage, &radiusDamage,
-	       &incenDamage, &radiusHit);
+	       &periodicalDamage, &radiusHit);
 
 	//allocate storage for the name
 	storeName((FUNCTION *)psFunction, functionName);
@@ -500,7 +500,7 @@ static bool loadWeaponUpgradeFunction(const char *pData)
 	    longHit > UWORD_MAX ||
 	    damage > UWORD_MAX ||
 	    radiusDamage > UWORD_MAX ||
-	    incenDamage > UWORD_MAX ||
+	    periodicalDamage > UWORD_MAX ||
 	    radiusHit > UWORD_MAX)
 	{
 		debug(LOG_ERROR, "A percentage increase for Weapon Upgrade function is too large");
@@ -512,7 +512,7 @@ static bool loadWeaponUpgradeFunction(const char *pData)
 	psFunction->longHit = (UWORD)longHit;
 	psFunction->damage = (UWORD)damage;
 	psFunction->radiusDamage = (UWORD)radiusDamage;
-	psFunction->incenDamage = (UWORD)incenDamage;
+	psFunction->periodicalDamage = (UWORD)periodicalDamage;
 	psFunction->radiusHit = (UWORD)radiusHit;
 
 	return true;
@@ -1122,9 +1122,9 @@ void weaponUpgrade(FUNCTION *pFunction, UBYTE player)
 	{
 		asWeaponUpgrade[player][pUpgrade->subClass].radiusDamage = pUpgrade->radiusDamage;
 	}
-	if (asWeaponUpgrade[player][pUpgrade->subClass].incenDamage < pUpgrade->incenDamage)
+	if (asWeaponUpgrade[player][pUpgrade->subClass].periodicalDamage < pUpgrade->periodicalDamage)
 	{
-		asWeaponUpgrade[player][pUpgrade->subClass].incenDamage = pUpgrade->incenDamage;
+		asWeaponUpgrade[player][pUpgrade->subClass].periodicalDamage = pUpgrade->periodicalDamage;
 	}
 	if (asWeaponUpgrade[player][pUpgrade->subClass].radiusHit < pUpgrade->radiusHit)
 	{

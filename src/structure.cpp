@@ -1542,8 +1542,8 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 			psBuilding->targetOrigin[i] = ORIGIN_UNKNOWN;
 		}
 
-		psBuilding->burnStart = 0;
-		psBuilding->burnDamage = 0;
+		psBuilding->periodicalDamageStart = 0;
+		psBuilding->periodicalDamage = 0;
 
 		psBuilding->status = SS_BEING_BUILT;
 		psBuilding->currentBuildPts = 0;
@@ -3776,12 +3776,12 @@ void structureUpdate(STRUCTURE *psBuilding, bool mission)
 	}
 
 	/* Update the fire damage data */
-	if (psBuilding->burnStart != 0 && psBuilding->burnStart != gameTime - deltaGameTime)  // -deltaGameTime, since projectiles are updated after structures.
+	if (psBuilding->periodicalDamageStart != 0 && psBuilding->periodicalDamageStart != gameTime - deltaGameTime)  // -deltaGameTime, since projectiles are updated after structures.
 	{
-		// The burnStart has been set, but is not from the previous tick, so we must be out of the fire.
-		psBuilding->burnDamage = 0;  // Reset burn damage done this tick.
+		// The periodicalDamageStart has been set, but is not from the previous tick, so we must be out of the fire.
+		psBuilding->periodicalDamage = 0;  // Reset burn damage done this tick.
 		// Finished burning.
-		psBuilding->burnStart = 0;
+		psBuilding->periodicalDamageStart = 0;
 	}
 
 	//check the resistance level of the structure

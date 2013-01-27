@@ -417,13 +417,13 @@ int32_t objDamage(BASE_OBJECT *psObj, unsigned damage, unsigned originalhp, WEAP
 
 	if (isDamagePerSecond)
 	{
-		int deltaDamageRate = actualDamage - psObj->burnDamage;
+		int deltaDamageRate = actualDamage - psObj->periodicalDamage;
 		if (deltaDamageRate <= 0)
 		{
 			return 0;  // Did this much damage already, this tick, so don't do more.
 		}
 		actualDamage = gameTimeAdjustedAverage(deltaDamageRate);
-		psObj->burnDamage += deltaDamageRate;
+		psObj->periodicalDamage += deltaDamageRate;
 	}
 
 	objTrace(psObj->id, "objDamage: Penetrated %d", actualDamage);
