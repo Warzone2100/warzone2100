@@ -333,6 +333,9 @@ bool droidOnMap(const DROID *psDroid);
 
 void droidSetPosition(DROID *psDroid, int x, int y);
 
+/// Return a percentage of how fully armed the object is, or -1 if N/A.
+int droidReloadBar(BASE_OBJECT *psObj, WEAPON *psWeap, int weapon_slot);
+
 static inline int droidSensorRange(const DROID* psDroid)
 {
 	return objSensorRange((const BASE_OBJECT*)psDroid);

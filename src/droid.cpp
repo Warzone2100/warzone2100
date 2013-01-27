@@ -143,6 +143,43 @@ bool droidInit(void)
 	return true;
 }
 
+int droidReloadBar(BASE_OBJECT *psObj, WEAPON *psWeap, int weapon_slot)
+{
+	WEAPON_STATS *psStats;
+	bool bSalvo;
+	int firingStage, interval;
+
+	if (psWeap->nStat == 0)	// no weapon
+	{
+		return -1;
+	}
+	psStats = asWeaponStats + psWeap->nStat;
+
+	/* Justifiable only when greater than a one second reload or intra salvo time  */
+	bSalvo = (psStats->numRounds > 1);
+	if ((bSalvo && psStats->reloadTime > GAME_TICKS_PER_SEC) || psStats->firePause > GAME_TICKS_PER_SEC || (psObj->type == OBJ_DROID && isVtolDroid((DROID *)psObj)))
+	{
+		if (psObj->type == OBJ_DROID && isVtolDroid((DROID *)psObj))
+		{
+			//deal with VTOLs
+			firingStage = getNumAttackRuns((DROID *)psObj, weapon_slot) - ((DROID *)psObj)->asWeaps[weapon_slot].usedAmmo;
+
+			//compare with max value
+			interval = getNumAttackRuns((DROID *)psObj, weapon_slot);
+		}
+		else
+		{
+			firingStage = gameTime - psWeap->lastFired;
+			interval = bSalvo ? weaponReloadTime(psStats, psObj->player) : weaponFirePause(psStats, psObj->player);
+		}
+		if (firingStage < interval)
+		{
+			return PERCENT(firingStage, interval);
+		}
+		return 100;
+	}
+	return -1;
+}
 
 #define UNIT_LOST_DELAY	(5*GAME_TICKS_PER_SEC)
 /* Deals damage to a droid

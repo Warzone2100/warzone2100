@@ -356,7 +356,7 @@ QScriptValue convFeature(FEATURE *psFeature, QScriptEngine *engine)
 //;; \item[range] Maximum range of its weapons. (3.2+ only)
 //;; \item[body] The body component of the droid. (3.2+ only)
 //;; \item[propulsion] The propulsion component of the droid. (3.2+ only)
-//;; \item[weapons] The weapon components of the droid, as an array. (3.2+ only)
+//;; \item[weapons] The weapon components of the droid, as an array. Contains 'name', 'id', 'armed' percentage and 'lastFired' properties. (3.2+ only)
 //;; \item[cargoCapacity] Defined for transporters only: Total cargo capacity (number of items that will fit may depend on their size). (3.2+ only)
 //;; \item[cargoSpace] Defined for transporters only: Cargo capacity left. (3.2+ only)
 //;; \item[cargoCount] Defined for transporters only: Number of individual \emph{items} in the cargo hold. (3.2+ only)
@@ -424,26 +424,18 @@ QScriptValue convDroid(DROID *psDroid, QScriptEngine *engine)
 	value.setProperty("droidType", (int)type, QScriptValue::ReadOnly);
 	value.setProperty("experience", (double)psDroid->experience / 65536.0, QScriptValue::ReadOnly);
 	value.setProperty("health", 100.0 / (double)psDroid->originalBody * (double)psDroid->body, QScriptValue::ReadOnly);
-	value.setProperty("body", asBodyStats[psDroid->asBits[COMP_BODY].nStat].pName);
-	value.setProperty("propulsion", asPropulsionStats[psDroid->asBits[COMP_PROPULSION].nStat].pName);
-	if (isVtolDroid(psDroid))
-	{
-		value.setProperty("armed", 100.0 / (double)MAX(asWeaponStats[psDroid->asWeaps[0].nStat].numRounds, 1)
-		                  * (double)psDroid->asWeaps[0].ammo);
-		if (psDroid->asWeaps[0].ammo > asWeaponStats[psDroid->asWeaps[0].nStat].numRounds)
-			debug(LOG_ERROR, "%s has %d and %d", objInfo(psDroid), psDroid->asWeaps[0].ammo, asWeaponStats[psDroid->asWeaps[0].nStat].numRounds);
-	}
-	else
-	{
-		value.setProperty("armed", QScriptValue::NullValue);
-	}
+	value.setProperty("body", asBodyStats[psDroid->asBits[COMP_BODY].nStat].pName, QScriptValue::ReadOnly);
+	value.setProperty("propulsion", asPropulsionStats[psDroid->asBits[COMP_PROPULSION].nStat].pName, QScriptValue::ReadOnly);
+	value.setProperty("armed", 0.0, QScriptValue::ReadOnly); // deprecated!
 	QScriptValue weaponlist = engine->newArray(psDroid->numWeaps);
 	for (int j = 0; j < psDroid->numWeaps; j++)
 	{
+		int armed = droidReloadBar(psDroid, &psDroid->asWeaps[j], j);
 		QScriptValue weapon = engine->newObject();
 		const WEAPON_STATS *psStats = asWeaponStats + psDroid->asWeaps[j].nStat;
 		weapon.setProperty("name", psStats->pName, QScriptValue::ReadOnly);
 		weapon.setProperty("lastFired", psDroid->asWeaps[j].lastFired, QScriptValue::ReadOnly);
+		weapon.setProperty("armed", armed, QScriptValue::ReadOnly);
 		weaponlist.setProperty(j, weapon, QScriptValue::ReadOnly);
 	}
 	value.setProperty("weapons", weaponlist, QScriptValue::ReadOnly);

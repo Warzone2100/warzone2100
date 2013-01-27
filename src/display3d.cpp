@@ -2692,14 +2692,11 @@ static void	drawDragBox( void )
 /// Display reload bars for structures and droids
 static void drawWeaponReloadBar(BASE_OBJECT *psObj, WEAPON *psWeap, int weapon_slot)
 {
-	WEAPON_STATS		*psStats;
-	bool			bSalvo;
-	UDWORD			firingStage, interval, damLevel;
 	SDWORD			scrX,scrY, scrR, scale;
 	STRUCTURE		*psStruct;
 	float			mulH;	// display unit resistance instead of reload!
 	DROID			*psDroid;
-	int				compIndex;
+	int			armed, firingStage;
 
 	if (ctrlShiftDown() && (psObj->type == OBJ_DROID))
 	{
@@ -2732,90 +2729,35 @@ static void drawWeaponReloadBar(BASE_OBJECT *psObj, WEAPON *psWeap, int weapon_s
 		return;
 	}
 
-	if (psWeap->nStat == 0)
+	armed = droidReloadBar(psObj, psWeap, weapon_slot);
+	if (armed >= 0 && armed < 100) // no need to draw if full
 	{
-		// no weapon
-		return;
-	}
-
-	compIndex = psWeap->nStat;
-	ASSERT_OR_RETURN( , compIndex < numWeaponStats, "Invalid range referenced for numWeaponStats, %d > %d", compIndex, numWeaponStats);
-	psStats = asWeaponStats + compIndex;
-
-	/* Justifiable only when greater than a one second reload or intra salvo time  */
-	bSalvo = false;
-	if(psStats->numRounds > 1)
-	{
-		bSalvo = true;
-	}
-	if( (bSalvo && (psStats->reloadTime > GAME_TICKS_PER_SEC)) ||
-		(psStats->firePause > GAME_TICKS_PER_SEC) ||
-		((psObj->type == OBJ_DROID) && isVtolDroid((DROID *)psObj)) )
-	{
-		if (psObj->type == OBJ_DROID && isVtolDroid((DROID *)psObj))
-		{
-			//deal with VTOLs
-			firingStage = getNumAttackRuns((DROID *)psObj, weapon_slot) - ((DROID *)psObj)->asWeaps[weapon_slot].usedAmmo;
-
-			//compare with max value
-			interval = getNumAttackRuns((DROID *)psObj, weapon_slot);
-		}
-		else
-		{
-			firingStage = graphicsTime - psWeap->lastFired;
-			if (bSalvo)
-			{
-				interval = weaponReloadTime(psStats, psObj->player);
-			}
-			else
-			{
-				interval = weaponFirePause(psStats, psObj->player);
-			}
-		}
-
 		scrX = psObj->sDisplay.screenX;
 		scrY = psObj->sDisplay.screenY;
 		scrR = psObj->sDisplay.screenR;
 		switch (psObj->type)
 		{
 		case OBJ_DROID:
-			damLevel = PERCENT(((DROID *)psObj)->body, ((DROID *)psObj)->originalBody);
 			scrY += scrR + 2;
 			break;
 		case OBJ_STRUCTURE:
 			psStruct = (STRUCTURE *)psObj;
-			damLevel = (1. - getStructureDamage(psStruct)/65536.f) * 100;
 			scale = MAX(psStruct->pStructureType->baseWidth, psStruct->pStructureType->baseBreadth);
 			scrY += scale * 10;
 			scrR = scale * 20;
 			break;
 		default:
-			ASSERT(!"invalid object type", "drawWeaponReloadBars: invalid object type");
-			damLevel = 100;
 			break;
 		}
-
-		//now we know what it is!!
-		if (damLevel < HEAVY_DAMAGE_LEVEL)
+		/* Scale it into an appropriate range */
+		firingStage = ((((2 * scrR) * 10000) / 100) * armed) / 10000;
+		if (firingStage >= 2 * scrR)
 		{
-			interval += interval;
+			firingStage = (2 * scrR);
 		}
-
-		if(firingStage < interval)
-		{
-			/* Get a percentage */
-			firingStage = PERCENT(firingStage,interval);
-
-			/* Scale it into an appropriate range */
-			firingStage = ((((2*scrR)*10000)/100)*firingStage)/10000;
-			if(firingStage >= (UDWORD)(2*scrR))
-			{
-				firingStage = (2*scrR);
-			}
-			/* Power bars */
-			pie_BoxFill(scrX - scrR-1, 3+scrY + 0 + (weapon_slot * 2), scrX - scrR +(2*scrR)+1,    3+scrY+3 + (weapon_slot * 2), WZCOL_RELOAD_BACKGROUND);
-			pie_BoxFill(scrX - scrR,   3+scrY + 1 + (weapon_slot * 2), scrX - scrR +firingStage, 3+scrY+2 + (weapon_slot * 2), WZCOL_RELOAD_BAR);
-		}
+		/* Power bars */
+		pie_BoxFill(scrX - scrR-1, 3+scrY + 0 + (weapon_slot * 2), scrX - scrR +(2*scrR)+1,  3+scrY+3 + (weapon_slot * 2), WZCOL_RELOAD_BACKGROUND);
+		pie_BoxFill(scrX - scrR,   3+scrY + 1 + (weapon_slot * 2), scrX - scrR +firingStage, 3+scrY+2 + (weapon_slot * 2), WZCOL_RELOAD_BAR);
 	}
 }
 
