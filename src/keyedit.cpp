@@ -236,9 +236,8 @@ static KEY_CODE scanKeyBoardForBinding(void)
 // ////////////////////////////////////////////////////////////////////////////
 bool runKeyMapEditor(void)
 {
-	UDWORD id;
-
-	id = widgRunScreen(psWScreen);						// Run the current set of widgets
+	WidgetTriggers const &triggers = widgRunScreen(psWScreen);
+	unsigned id = triggers.empty()? 0 : triggers.front().widget->id;  // Just use first click here, since the next click could be on another menu.
 
 	if(id == KM_RETURN)			// return
 	{

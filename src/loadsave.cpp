@@ -417,13 +417,13 @@ void deleteSaveGame(char* saveGameName)
 // otherwise cancel was selected..
 bool runLoadSave(bool bResetMissionWidgets)
 {
-	UDWORD		id=0;
 	static char     sDelete[PATH_MAX];
 	UDWORD		i, campaign;
 	W_CONTEXT		context;
 	char NewSaveGamePath[PATH_MAX] = {'\0'};
 
-	id = widgRunScreen(psRequestScreen);
+	WidgetTriggers const &triggers = widgRunScreen(psRequestScreen);
+	unsigned id = triggers.empty()? 0 : triggers.front().widget->id;  // Just use first click here, since the next click could be on another menu.
 
 	sstrcpy(sRequestResult, "");					// set returned filename to null;
 

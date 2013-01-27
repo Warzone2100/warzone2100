@@ -357,9 +357,6 @@ extern UDWORD widgGetUserData2(W_SCREEN *psScreen, UDWORD id);
 /** Set the user data for a widget */
 extern void widgSetUserData2(W_SCREEN *psScreen, UDWORD id,UDWORD UserData);
 
-/** Return the user data for the returned widget */
-extern void *widgGetLastUserData(W_SCREEN *psScreen);
-
 /** Get widget structure */
 extern WIDGET *widgGetFromID(W_SCREEN *psScreen, UDWORD id);
 
@@ -422,7 +419,7 @@ extern void widgEndScreen(W_SCREEN *psScreen);
 /** Execute a set of widgets for one cycle.
  * Return the id of the widget that was activated, or 0 for none.
  */
-extern UDWORD widgRunScreen(W_SCREEN *psScreen);
+WidgetTriggers const &widgRunScreen(W_SCREEN *psScreen);
 
 /** Display the screen's widgets in their current state
  * (Call after calling widgRunScreen, this allows the input

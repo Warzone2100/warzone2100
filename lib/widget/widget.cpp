@@ -905,20 +905,6 @@ void widgSetUserData2(W_SCREEN *psScreen, UDWORD id,UDWORD UserData)
 }
 
 
-
-/* Return the user data for the returned widget */
-void *widgGetLastUserData(W_SCREEN *psScreen)
-{
-	assert(psScreen != NULL);	
-
-	if (psScreen->psRetWidget)
-	{
-		return psScreen->psRetWidget->pUserData;
-	}
-
-	return NULL;
-}
-
 /* Set tip string for a widget */
 void widgSetTip( W_SCREEN *psScreen, UDWORD id, const char *pTip )
 {
@@ -1456,17 +1442,16 @@ static void widgProcessClick(W_CONTEXT &psContext, WIDGET_KEY key, bool wasPress
 
 
 /* Execute a set of widgets for one cycle.
- * Return the id of the widget that was activated, or 0 for none.
+ * Returns a list of activated widgets.
  */
-UDWORD widgRunScreen(W_SCREEN *psScreen)
+WidgetTriggers const &widgRunScreen(W_SCREEN *psScreen)
 {
-	W_CONTEXT	sContext;
-
-	psScreen->psRetWidget = NULL;
+	psScreen->retWidgets.clear();
 
 	/* Initialise the context */
+	W_CONTEXT sContext;
 	sContext.psScreen = psScreen;
-	sContext.psForm = (W_FORM *)psScreen->psForm;
+	sContext.psForm = psScreen->psForm;
 	sContext.xOffset = 0;
 	sContext.yOffset = 0;
 	psMouseOverWidget = NULL;
@@ -1511,14 +1496,16 @@ UDWORD widgRunScreen(W_SCREEN *psScreen)
 	widgProcessCallbacks(&sContext);
 
 	/* Return the ID of a pressed button or finished edit box if any */
-	return psScreen->psRetWidget ? psScreen->psRetWidget->id : 0;
+	return psScreen->retWidgets;
 }
 
 
 /* Set the id number for widgRunScreen to return */
 void widgSetReturn(W_SCREEN* psScreen, WIDGET *psWidget)
 {
-	psScreen->psRetWidget = psWidget;
+	WidgetTrigger trigger;
+	trigger.widget = psWidget;
+	psScreen->retWidgets.push_back(trigger);
 }
 
 

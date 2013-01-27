@@ -274,16 +274,15 @@ bool startLimitScreen(void)
 
 void runLimitScreen(void)
 {
-	UDWORD i, id, statid;
-
 	frontendMultiMessages();							// network stuff.
 
-	id = widgRunScreen(psWScreen);						// Run the current set of widgets
+	WidgetTriggers const &triggers = widgRunScreen(psWScreen);
+	unsigned id = triggers.empty()? 0 : triggers.front().widget->id;  // Just use first click here, since the next click could be on another menu.
 
 	// sliders
 	if((id > IDLIMITS_ENTRIES_START)  && (id< IDLIMITS_ENTRIES_END))
 	{
-		statid = widgGetFromID(psWScreen,id-1)->UserData ;
+		unsigned statid = widgGetFromID(psWScreen,id-1)->UserData;
 		if(statid)
 		{
 			asStructLimits[0][statid].limit = (UBYTE) ((W_SLIDER*)(widgGetFromID(psWScreen,id)))->pos;
@@ -296,7 +295,7 @@ void runLimitScreen(void)
 		{
 		case IDLIMITS_RETURN:
 			// reset the sliders..
-			for (i = 0; i < numStructureStats ; ++i)
+			for (unsigned i = 0; i < numStructureStats; ++i)
 			{
 				asStructLimits[0][i].limit = asStructLimits[0][i].globalLimit;
 			}

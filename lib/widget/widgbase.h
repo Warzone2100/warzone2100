@@ -95,13 +95,19 @@ struct WIDGET
 };
 
 
+struct WidgetTrigger
+{
+	WIDGET *widget;
+};
+typedef std::vector<WidgetTrigger> WidgetTriggers;
+
 /* The screen structure which stores all info for a widget screen */
 struct W_SCREEN
 {
 	W_FORM *         psForm;        ///< The root form of the screen
 	WIDGET*          psFocus;       ///< The widget that has keyboard focus
 	enum iV_fonts    TipFontID;     ///< ID of the IVIS font to use for tool tips.
-	WIDGET*          psRetWidget;   ///< The widget to be returned by widgRunScreen
+	WidgetTriggers   retWidgets;    ///< The widgets to be returned by widgRunScreen.
 };
 
 /* Context information to pass into the widget functions */
