@@ -129,8 +129,90 @@ function teamIdentifier() {
 	return s;
 }
 
+// returns the AI version, based on the file name
+function nbVersionString() {
+	var str=scriptName;
+	switch(difficulty) {
+		case EASY: str=str+" "+_("EASY"); break;
+		case MEDIUM: str=str+" "+_(" MEDIUM"); break;
+		case HARD: str=str+" "+_("HARD"); break;
+		case INSANE: str=str+" "+_(" INSANE"); break;
+	}
+	return str;
+}
+
+// returns the AI's power, as accurately as possible in the current API
+function myPower() {
+	var pwr = playerPower(me);
+	if (typeof(queuedPower) != "undefined")
+		return pwr - queuedPower(me);
+	return pwr;
+}
+
+
 // here come definitions of standard branches used by adaptive research AIs
 
+
+// vocabulary to recognize common research paths from chat
+// first column is the name of the path defined below, will be prefixed with "standardResearchPath" automatically
+// other columns are words that name it, should be lowercase
+var standardResearchPathVocabulary = [
+	[ "Nothing", "0", "null", "zero", "nothing", "empty" ],
+	[ "Unblock", "clear", "free", "anything", "unblock" ],
+	[ "Fundamental", "fn", "fun", "fnd", "fund", "fundamental", "fundamentals" ],
+	[ "Cannons", "c", "cn", "can", "cannon", "cannons" ],
+	[ "Rockets", "r", "rx", "rox", "rock", "rocket", "rockets", "msl", ",missile", "missiles" ],
+	[ "Flamers", "f", "fl", "flame", "flamer", "flamers", "burn" ],
+	[ "Machineguns", "m", "mg", "gun", "guns", "machinegun", "machineguns"],
+	[ "Lasers", "l", "ls", "las", "laser", "lasers" ],
+	[ "Hurricane", "h", "hu", "hur", "hurr", "hurricane", "hurricanes" ],
+	[ "Whirlwind", "w", "wh", "whirl", "whirlwind", "whirlwinds" ],
+	[ "Vindicator", "v", "vi", "vin", "vind", "vindicator", "vindicators" ],
+	[ "FlakCannon", "flak", "flakcannon", "flakcannons"],
+	[ "Stormbringer", "s", "st", "storm", "stormie", "stormbringer", "stormbringers" ],
+	[ "Ripples", "ri", "rip", "ripple", "ripples" ],
+	[ "Howitzers", "ho", "how", "howy", "howies", "howiez", "howitzer", "howitzers" ],
+	[ "Incendiary", "in", "inc", "plasmitebomb", "plasmitebombs", "incend", "incendiary", "incendiaries" ],
+	[ "BunkerBuster", "b", "bb", "bunkerbuster", "bunkerbusters" ],
+	[ "Electronic", "e", "el", "electronic", "n", "nexus", "emp" ],
+	[ "Noob", "noob" ],
+];
+
+function standardSwitchResearchPath(msg) {
+	if (difficulty==EASY)
+		return "Dynamic research paths are not supported on Easy difficulty.";
+	var path="";
+	var list="";
+	for (var i=0; i<standardResearchPathVocabulary.length; ++i) {
+		for (var j=1; j<standardResearchPathVocabulary[i].length; ++j) {
+			if (msg==standardResearchPathVocabulary[i][j]) {
+				path=standardResearchPathVocabulary[i][0];
+			}
+		}
+		list=list+standardResearchPathVocabulary[i][1]+" ";
+	}
+	if (path!="") {
+		eval("forcedResearchPath=standardResearchPath"+path+";");
+		return "Switched to a new research path: "+path;
+	} else {
+		return "Try one of these: "+list;
+	}
+}
+
+// find out whether the AI is told to stop researching
+function researchBlocked() {
+	if (typeof(forcedResearchPath)!="undefined")
+		return forcedResearchPath[0]=="BLOCKER";
+	else
+		return false;
+}
+
+const standardResearchPathNothing = [
+	"BLOCKER",
+];
+
+const standardResearchPathUnblock = [
+];
 
 const standardResearchPathNoob = [
 	"R-Wpn-MG3Mk1",
@@ -227,6 +309,7 @@ const standardResearchPathFundamental = [
 	"R-Struc-PowerModuleMk1",
 	"R-Vehicle-Body05",
 	"R-Struc-RprFac-Upgrade01",
+	"R-Struc-Materials01",
 	"R-Sys-Sensor-Tower02",
 	"R-Vehicle-Body08",
 	"R-Vehicle-Body11",
@@ -234,6 +317,7 @@ const standardResearchPathFundamental = [
 	"R-Struc-Power-Upgrade01c",
 	"R-Sys-CBSensor-Tower01",
 	"R-Vehicle-Prop-Tracks",
+	"R-Struc-Materials04",
 	"R-Struc-VTOLPad-Upgrade01",
 	"R-Vehicle-Body12",
 	"R-Struc-Power-Upgrade03a",
@@ -768,6 +852,23 @@ const standardCyborgMachinegunMortar = [
 
 // standard build order definitions
 
+function standardCheckLowPower() {
+	if (typeof(countStruct)!="undefined") { // start conditions changed in 3.2, so more workaround is necessary
+		var genCount = countStruct(generator,me);
+		var derrickCount = countStruct(derrick,me);
+		var factoryCount = countStruct(factory,me)+countStruct(borgfac,me);
+		if (myPower()<LOW_POWER) {
+			if (genCount==0)
+				return buildBasicStructure(generator); 
+			if (derrickCount==0)
+				if (factoryCount>0) {
+					return true; // don't do anything unless a derrick is found
+				}
+		}
+	}
+	return false;
+}
+
 function standardBuildOrderNoob() {
 	// a noob doesn't know what a build order is, so it relies
 	// on keepBuildingThings() from the start
@@ -786,11 +887,11 @@ function standardBuildOrderFRCFR() {
 	var derrickCount = enumStruct(me, derrick).length;
 	var borgCount = enumStruct(me, borgfac).length;
 	var vtolCount = enumStruct(me, vtolfac).length;
-	if (genCount < 2 && playerPower(me) < EXTREME_LOW_POWER && isStructureAvailable(generator,me))
+	if (genCount < 2 && myPower() < EXTREME_LOW_POWER && isStructureAvailable(generator,me))
 		return buildBasicStructure(generator); 
 	if (factoryCount < 1 && isStructureAvailable(factory,me))
 		return buildBasicStructure(factory); 
-	if (labCount < 1 && isStructureAvailable(lab,me))
+	if (labCount < 1 && isStructureAvailable(lab,me) && !researchBlocked())
 		return buildBasicStructure(lab); 
 	if (commandCount < 1 && isStructureAvailable(command,me))
 		return buildBasicStructure(command); 
@@ -798,13 +899,13 @@ function standardBuildOrderFRCFR() {
 		return buildBasicStructure(factory,0); 
 	if ((genCount < 1) && isStructureAvailable(generator,me))
 		return buildBasicStructure(generator); 
-	if (labCount < 2 && isStructureAvailable(lab,me))
+	if (labCount < 2 && isStructureAvailable(lab,me) && !researchBlocked())
 		return buildBasicStructure(lab,0); 
 	if (factoryCount < 3 && isStructureAvailable(factory,me))
 		return buildBasicStructure(factory,0); 
 	if ((genCount < 2) && isStructureAvailable(generator,me))
 		return buildBasicStructure(generator,0); 
-	if (labCount < 3 && isStructureAvailable(lab,me) && (!earlyGame(10)&&!UNUSUAL_SITUATION))
+	if (labCount < 3 && isStructureAvailable(lab,me) && !researchBlocked() && (!earlyGame(10)&&!UNUSUAL_SITUATION))
 		return buildBasicStructure(lab,0); 
 	if (borgCount < 2 && isStructureAvailable(borgfac,me) && RATE_TANK>0)
 		return buildBasicStructure(borgfac,0); 
@@ -826,15 +927,15 @@ function standardBuildOrderRFFRC() {
 	var derrickCount = enumStruct(me, derrick).length;
 	var borgCount = enumStruct(me, borgfac).length;
 	var vtolCount = enumStruct(me, vtolfac).length;
-	if (genCount < 2 && playerPower(me) < EXTREME_LOW_POWER && isStructureAvailable(generator,me))
+	if (genCount < 2 && myPower() < EXTREME_LOW_POWER && isStructureAvailable(generator,me))
 		return buildBasicStructure(generator);
-	if (labCount < 1 && isStructureAvailable(lab,me))
+	if (labCount < 1 && isStructureAvailable(lab,me) && !researchBlocked())
 		return buildBasicStructure(lab);
 	if (factoryCount < 1 && isStructureAvailable(factory,me))
 		return buildBasicStructure(factory);
 	if (factoryCount < 2 && isStructureAvailable(factory,me))
 		return buildBasicStructure(factory,0);
-	if (labCount < 2 && isStructureAvailable(lab,me))
+	if (labCount < 2 && isStructureAvailable(lab,me) && !researchBlocked())
 		return buildBasicStructure(lab,0);
 	if (commandCount < 1 && isStructureAvailable(command,me))
 		return buildBasicStructure(command,0);
@@ -842,7 +943,7 @@ function standardBuildOrderRFFRC() {
 		return buildBasicStructure(generator);
 	if (factoryCount < 3 && isStructureAvailable(factory,me) && (!earlyGame(8)&&!UNUSUAL_SITUATION))
 		return buildBasicStructure(factory,0);
-	if (labCount < 3 && isStructureAvailable(lab,me) && (!earlyGame(10)&&!UNUSUAL_SITUATION))
+	if (labCount < 3 && isStructureAvailable(lab,me) && !researchBlocked() && (!earlyGame(10)&&!UNUSUAL_SITUATION))
 		return buildBasicStructure(lab,0);
 	if (borgCount < 2 && isStructureAvailable(borgfac,me) && RATE_TANK>0)
 		return buildBasicStructure(borgfac,0);
@@ -863,9 +964,9 @@ function standardBuildOrderRFFCR() {
 	var derrickCount = enumStruct(me, derrick).length;
 	var borgCount = enumStruct(me, borgfac).length;
 	var vtolCount = enumStruct(me, vtolfac).length;
-	if (genCount < 2 && playerPower(me) < EXTREME_LOW_POWER && isStructureAvailable(generator,me))
+	if (genCount < 2 && myPower() < EXTREME_LOW_POWER && isStructureAvailable(generator,me))
 		return buildBasicStructure(generator);
-	if (labCount < 1 && isStructureAvailable(lab,me))
+	if (labCount < 1 && isStructureAvailable(lab,me) && !researchBlocked())
 		return buildBasicStructure(lab);
 	if (factoryCount < 1 && isStructureAvailable(factory,me))
 		return buildBasicStructure(factory);
@@ -873,13 +974,13 @@ function standardBuildOrderRFFCR() {
 		return buildBasicStructure(factory,0);
 	if (commandCount < 1 && isStructureAvailable(command,me))
 		return buildBasicStructure(command,0);
-	if (labCount < 2 && isStructureAvailable(lab,me))
+	if (labCount < 2 && isStructureAvailable(lab,me) && !researchBlocked())
 		return buildBasicStructure(lab,0);
 	if ((genCount < 2) && isStructureAvailable(generator,me))
 		return buildBasicStructure(generator);
 	if (factoryCount < 4 && isStructureAvailable(factory,me) && (!UNUSUAL_SITUATION))
 		return buildBasicStructure(factory,0);
-	if (labCount < 3 && isStructureAvailable(lab,me) && (!earlyGame(15)&&!UNUSUAL_SITUATION))
+	if (labCount < 3 && isStructureAvailable(lab,me) && !researchBlocked() && (!earlyGame(15)&&!UNUSUAL_SITUATION))
 		return buildBasicStructure(lab,0);
 	if (borgCount < 3 && isStructureAvailable(borgfac,me) && RATE_TANK>0)
 		return buildBasicStructure(borgfac,0);

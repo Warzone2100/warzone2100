@@ -3,7 +3,53 @@
 	/* Generic branch specific code */
 	/********************************/
 
-function constructPersonality() {
+const MR = 0; // mg/rockets
+const MC = 1; // mg/cannons
+const FR = 2; // flamers/rockets
+const FC = 3; // flamers/cannons
+const MF = 4; // mg/flamers (uses flamers as AT weapon)
+
+function introduceYourselfToAlly() {
+	var str=nbVersionString();
+	var substr=_("No subpersonalities available on EASY difficulty");
+	if (difficulty==EASY) {
+		return str+": "+substr;
+	}
+	switch(personality.subpersonality) {
+		case MC: substr=_("Machineguns/Cannons"); break;
+		case MR: substr=_("Machineguns/Rockets"); break;
+		case FC: substr=_("Flamers/Cannons"); break;
+		case FR: substr=_("Flamers/Rockets"); break;
+		case MF: substr=_("Machineguns/Flamers"); break;
+		default: substr=_("Unknown personality");
+	}
+	return str+": "+substr;
+}
+
+function introduceYourselfToEnemy() {
+	return nbVersionString();
+}
+
+function switchSubpersonality(msg) {
+	if (difficulty==EASY)
+		return _("Subpersonalities are not supported on Easy difficulty.");
+	switch(msg) {
+		case "mr": personality=new constructPersonality(MR); break;
+		case "mc": personality=new constructPersonality(MC); break;
+		case "fr": personality=new constructPersonality(FR); break;
+		case "fc": personality=new constructPersonality(FC); break;
+		case "mf": personality=new constructPersonality(MF); break;
+		default:
+			return _("Try one of these: mr mc fr fc mf");
+	}
+	return introduceYourselfToAlly();
+}
+
+function switchResearchPath(msg) {
+	return standardSwitchResearchPath(msg);
+}
+
+function constructPersonality(subpersonality) {
 		
 	this.MIN_BUILDERS = 2;		// the usual number of trucks that construct base structures
 	this.MAX_BUILDERS = 3;		// the maximum number of trucks that construct base structures
@@ -17,14 +63,11 @@ function constructPersonality() {
 	this.THIS_AI_MAKES_CYBORGS = true;
 	this.THIS_AI_MAKES_VTOLS = true;
 
-	const MR = 0; // mg/rockets
-	const MC = 1; // mg/cannons
-	const FR = 2; // flamers/rockets
-	const FC = 3; // flamers/cannons
-	const MF = 4; // mg/flamers (uses flamers as AT weapon)
-	
-	var subpersonality = (teamIdentifier()+getTime())%5; // pseudo-random choice, equal for all team members
-	
+	if (typeof(subpersonality)=="undefined")
+		this.subpersonality = (teamIdentifier()+getTime())%5; // pseudo-random choice, equal for all team members
+	else
+		this.subpersonality = subpersonality;
+
 	this.tankBodies = [ standardTankBodiesLight, ];
 	
 	this.vtolBodies = [
@@ -174,7 +217,6 @@ function constructPersonality() {
 	];
 	
 	if (difficulty == EASY) {
-		
 		this.researchPathPrimary = standardResearchPathNoob;
 		this.researchPathFundamental = [];
 		this.researchPathAT = [];
@@ -186,10 +228,9 @@ function constructPersonality() {
 		this.atWeapons = [ standardTankATNoobOne, standardTankATNoobTwo, ];
 		this.apCyborgStats = [ standardCyborgAPNoobOne, standardCyborgAPNoobTwo, ];
 		this.atCyborgStats = [ standardCyborgATNoobOne, standardCyborgATNoobTwo, standardCyborgATNoobThree];
-		
 	} else {
 		
-		switch(subpersonality) {
+		switch(this.subpersonality) {
 		case MR:
 			this.buildOrderIdx = 2;
 			this.tankBodiesAT = [ standardTankBodiesHeavy, ];
@@ -255,6 +296,7 @@ function constructPersonality() {
 			}
 			break;
 		case MF:
+			this.buildOrderIdx = random(3);
  			this.tankBodies = standardTankBodies;
 			this.researchPathPrimary = [ // any
 				"R-Wpn-MG3Mk1",
@@ -262,7 +304,6 @@ function constructPersonality() {
 				"R-Struc-PowerModuleMk1",
 			];
 			break;
-			this.buildOrderIdx = random(3);
 		}
 		
 		this.researchPathPrimary = this.researchPathPrimary.concat(["R-Vehicle-Body05","R-Struc-RprFac-Upgrade01",]);
@@ -271,7 +312,7 @@ function constructPersonality() {
 		this.researchPathFundamental = standardResearchPathFundamental;
 		
 
-		switch(subpersonality) {
+		switch(this.subpersonality) {
 		case MR: case FR: 
 			this.researchPathAT = standardResearchPathRockets;
 			break;
@@ -283,7 +324,7 @@ function constructPersonality() {
 			break;
 		}
 
-		switch(subpersonality) {
+		switch(this.subpersonality) {
 		case MR: case MC: case MF: 
 			this.researchPathAP = standardResearchPathMachineguns;
 			break;
@@ -293,7 +334,7 @@ function constructPersonality() {
 		}
 		this.researchPathAP = this.researchPathAP.concat(standardResearchPathLasers);
 
-		switch(subpersonality) {
+		switch(this.subpersonality) {
 		case MF: 
 			this.researchPathAA = standardResearchPathHurricane;
 			this.researchPathAA = this.researchPathAA.concat(standardResearchPathWhirlwind);
@@ -317,7 +358,7 @@ function constructPersonality() {
 		}
 		this.researchPathAA = this.researchPathAA.concat(standardResearchPathStormbringer);
 
-		switch(subpersonality) {
+		switch(this.subpersonality) {
 		case MF: 
 			this.researchPathAB = standardResearchPathIncendiary;
 			break;
@@ -355,7 +396,7 @@ function constructPersonality() {
 		],
 		];
 		
-		switch(subpersonality) {
+		switch(this.subpersonality) {
 		case MF: 
 			this.tankPropulsionsAT = this.tankPropulsionsAA;
 			break;
@@ -371,7 +412,7 @@ function constructPersonality() {
 		this.apWeapons = [
 			standardTankLaser,
 		];
-		switch(subpersonality) {
+		switch(this.subpersonality) {
 		case MR:
 			this.apWeapons[1] = standardTankAPMachinegunRocket;
 		case MC:
@@ -386,7 +427,7 @@ function constructPersonality() {
 			break;
 		}
 
-		switch(subpersonality) {
+		switch(this.subpersonality) {
 		case MF:
 			this.atWeapons = [ standardTankLaser, ];
 			this.atWeapons[0] = this.atWeapons[0].concat(standardTankFlamer);
@@ -402,7 +443,7 @@ function constructPersonality() {
 		}
 		
 		this.apCyborgStats = [ standardCyborgLaser, ];
-		switch(subpersonality) {
+		switch(this.subpersonality) {
 		case MF:
 			this.apCyborgStats[1] = standardCyborgLaser;
 			this.apCyborgStats[1] = this.apCyborgStats[1].concat(standardCyborgMachinegun);
@@ -416,7 +457,7 @@ function constructPersonality() {
 			break;
 		}
 		
-		switch(subpersonality) {
+		switch(this.subpersonality) {
 		case MF:
 			this.atCyborgStats = [ standardCyborgLaser, ];
 			this.atCyborgStats[0] = this.atCyborgStats[0].concat(standardCyborgFlamer);
@@ -430,16 +471,7 @@ function constructPersonality() {
 			this.atCyborgStats = [ standardCyborgRocket ];
 			break;
 		}
-		
-		/*if (typeof(chat)!="undefined") switch(subpersonality) {
-			case MC: chat(ALLIES, "Machineguns Cannons"); break;
-			case MR: chat(ALLIES, "Machineguns Rockets"); break;
-			case FC: chat(ALLIES, "Flamers Cannons"); break;
-			case FR: chat(ALLIES, "Flamers Rockets"); break;
-			case MF: chat(ALLIES, "Machineguns Flamers"); break;
-		}*/
 	}
-	
 }
 
 function buildOrder() {
@@ -453,5 +485,8 @@ function buildOrder() {
 		case 2: // tech
 			return standardBuildOrderRFFRC();
 	}
+}
 
+function checkLowPower() {
+	return standardCheckLowPower();
 }
