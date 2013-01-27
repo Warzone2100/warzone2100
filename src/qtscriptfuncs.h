@@ -25,13 +25,14 @@
 #include "qtscript.h"
 #include "featuredef.h"
 
-enum SCRIPT_TYPES
+enum SCRIPT_TYPE
 {
 	SCRIPT_POSITION = OBJ_NUM_TYPES,
 	SCRIPT_AREA,
 	SCRIPT_PLAYER,
 	SCRIPT_RESEARCH,
-	SCRIPT_GROUP
+	SCRIPT_GROUP,
+	SCRIPT_COUNT
 };
 
 #include <QtScript/QScriptEngine>

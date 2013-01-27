@@ -324,6 +324,7 @@ QScriptValue convFeature(FEATURE *psFeature, QScriptEngine *engine)
 //;;   \item[DORDER_REARM] Order a VTOL droid to rearm. If given a target, will go to specified rearm pad. If not, will go to nearest rearm pad. (3.2+ only)
 //;;   \item[DORDER_OBSERVE] Order a droid to keep a target in sensor view. (3.2+ only)
 //;;   \item[DORDER_RECOVER] Order a droid to pick up something. (3.2+ only)
+//;;   \item[DORDER_RECYCLE] Order a droid to factory for recycling. (3.2+ only)
 //;;  \end{description}
 //;; \item[action] The current action of the droid. This is how it intends to carry out its plan. The
 //;; C++ code may change the action frequently as it tries to carry out its order. You never want to set
@@ -764,11 +765,28 @@ static QScriptValue js_resetArea(QScriptContext *context, QScriptEngine *)
 	return QScriptValue();
 }
 
-//-- \subsection{enumLabels()}
-//-- Returns a string list of labels that exist for this map. (3.2+ only)
-static QScriptValue js_enumLabels(QScriptContext *, QScriptEngine *engine)
+//-- \subsection{enumLabels([filter])}
+//-- Returns a string list of labels that exist for this map. The optional filter
+//-- parameter can be used to only return labels of one specific type. (3.2+ only)
+static QScriptValue js_enumLabels(QScriptContext *context, QScriptEngine *engine)
 {
-	QStringList matches = labels.keys();
+	QStringList matches;
+	if (context->argumentCount() > 0) // filter
+	{
+		SCRIPT_TYPE type = (SCRIPT_TYPE)context->argument(0).toInt32();
+		for (LABELMAP::iterator i = labels.begin(); i != labels.end(); i++)
+		{
+			labeltype &l = (*i);
+			if (l.type == type)
+			{
+				matches += i.key();
+			}
+		}
+	}
+	else // fast path, give all
+	{
+		matches = labels.keys();
+	}
 	QScriptValue result = engine->newArray(matches.size());
 	for (int i = 0; i < matches.size(); i++)
 	{
@@ -2141,7 +2159,7 @@ static QScriptValue js_orderDroid(QScriptContext *context, QScriptEngine *)
 	SCRIPT_ASSERT(context, psDroid, "Droid id %d not found belonging to player %d", id, player);
 	DROID_ORDER order = (DROID_ORDER)context->argument(1).toInt32();
 	SCRIPT_ASSERT(context, order == DORDER_HOLD || order == DORDER_RTR || order == DORDER_STOP
-		      || order == DORDER_RTB || order == DORDER_REARM,
+		      || order == DORDER_RTB || order == DORDER_REARM || order == DORDER_RECYCLE,
 	              "Invalid order: %s", getDroidOrderName(order));
 	if (order == DORDER_REARM)
 	{
@@ -3883,6 +3901,7 @@ bool registerFunctions(QScriptEngine *engine, QString scriptName)
 	engine->globalObject().setProperty("DORDER_RTB", DORDER_RTB, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("DORDER_STOP", DORDER_STOP, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("DORDER_REARM", DORDER_REARM, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("DORDER_RECYCLE", DORDER_RECYCLE, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("COMMAND", IDRET_COMMAND, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("BUILD", IDRET_BUILD, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("MANUFACTURE", IDRET_MANUFACTURE, QScriptValue::ReadOnly | QScriptValue::Undeletable);
