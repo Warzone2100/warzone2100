@@ -218,7 +218,6 @@ static bool _intAddTransporter(DROID *psSelected, bool offWorld)
 		Animate = false;
 	}
 
-
 	if (intIsRefreshing())
 	{
 		Animate = false;
@@ -264,7 +263,6 @@ static bool _intAddTransporter(DROID *psSelected, bool offWorld)
 	{
 		return false;
 	}
-
 
 	if (!intAddTransButtonForm())
 	{
@@ -452,8 +450,7 @@ bool intAddTransporterLaunch(DROID *psDroid)
 	if (psCurrTransporter && psCurrTransporter->psGroup)
 	{
 		capacity = TRANSPORTER_CAPACITY;
-		for (psCurr = psCurrTransporter->psGroup->psList; psCurr != NULL;
-		     psCurr = psNext)
+		for (psCurr = psCurrTransporter->psGroup->psList; psCurr != NULL; psCurr = psNext)
 		{
 			psNext = psCurr->psGrpNext;
 			if (psCurr != psCurrTransporter)
@@ -466,8 +463,6 @@ bool intAddTransporterLaunch(DROID *psDroid)
 			flashMissionButton(IDTRANS_LAUNCH);
 		}
 	}
-
-
 
 	return true;
 }
@@ -585,7 +580,6 @@ bool intAddTransButtonForm(void)
 			sBFormInit.pUserData = &TopicBuffers[BufferID];
 			sBFormInit.pDisplay = intDisplayObjectButton;
 
-
 			if (!widgAddForm(psWScreen, &sBFormInit))
 			{
 				return false;
@@ -607,7 +601,6 @@ bool intAddTransButtonForm(void)
 			RENDERBUTTON_INUSE(&ObjectBuffers[BufferID]);
 			sBFormInit2.pUserData = &ObjectBuffers[BufferID];
 			sBFormInit2.pDisplay = intDisplayStatusButton;
-
 
 			if (!widgAddForm(psWScreen, &sBFormInit2))
 			{
@@ -662,10 +655,6 @@ bool intAddTransContentsForm(void)
 	sFormInit.majorOffset = OBJ_TABOFFSET;
 	sFormInit.tabVertOffset = (OBJ_TABHEIGHT / 2);
 	sFormInit.tabMajorThickness = OBJ_TABHEIGHT;
-
-	//set the number of tabs required
-	//sFormInit.numMajor = numForms((OBJ_BUTWIDTH + OBJ_GAP) * numButtons,
-	//							  OBJ_WIDTH - OBJ_GAP);
 
 	// TABFIXME: Looks like 10 units is max for this?
 	sFormInit.numMajor = 1;
@@ -1104,10 +1093,6 @@ static void _intProcessTransporter(UDWORD id)
 			intTransporterAddDroid(id);
 			/*don't need to explicitly refresh here since intRefreshScreen()
 			is called by intTransporterAddDroid()*/
-			/*refresh the Contents list */
-			//intAddTransporterContents();
-			/*refresh the Avail list */
-			//intAddDroidsAvailForm();
 		}
 	}
 	// Process form tab clicks.
@@ -1623,11 +1608,10 @@ void processLaunchTransporter(void)
 
 			launchTransporter(psCurrTransporter);
 			//set the data for the transporter timer
-			widgSetUserData(psWScreen, IDTRANTIMER_DISPLAY,
-			        (void *)psCurrTransporter);
+			widgSetUserData(psWScreen, IDTRANTIMER_DISPLAY, (void *)psCurrTransporter);
 
 			eventFireCallbackTrigger((TRIGGER_TYPE)CALL_LAUNCH_TRANSPORTER);
-			triggerEvent(TRIGGER_TRANSPORTER_LAUNCH);
+			triggerEvent(TRIGGER_TRANSPORTER_LAUNCH, psCurrTransporter);
 		}
 	}
 }

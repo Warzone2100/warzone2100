@@ -82,7 +82,7 @@ void scriptRemoveObject(BASE_OBJECT *psObj);
 // Event functions
 
 /// For generic, parameter-less triggers, using an enum to avoid declaring a ton of parameter-less functions
-bool triggerEvent(SCRIPT_TRIGGER_TYPE trigger);
+bool triggerEvent(SCRIPT_TRIGGER_TYPE trigger, BASE_OBJECT *psObj = NULL);
 
 // For each trigger with function parameters, a function to trigger it here
 bool triggerEventDroidBuilt(DROID *psDroid, STRUCTURE *psFactory);

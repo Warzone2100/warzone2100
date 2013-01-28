@@ -1807,7 +1807,7 @@ void unloadTransporter(DROID *psTransporter, UDWORD x, UDWORD y, bool goingHome)
 		/* trigger script callback detailing group about to disembark */
 		transporterSetScriptCurrent(psTransporter);
 		eventFireCallbackTrigger((TRIGGER_TYPE)CALL_TRANSPORTER_LANDED);
-		triggerEvent(TRIGGER_TRANSPORTER_LANDED);
+		triggerEvent(TRIGGER_TRANSPORTER_LANDED, psTransporter);
 		transporterSetScriptCurrent(NULL);
 
 		/* remove droids from transporter group if not already transferred to script group */
@@ -1848,7 +1848,7 @@ void missionMoveTransporterOffWorld(DROID *psTransporter)
 		/* trigger script callback */
 		transporterSetScriptCurrent(psTransporter);
 		eventFireCallbackTrigger((TRIGGER_TYPE)CALL_TRANSPORTER_OFFMAP);
-		triggerEvent(TRIGGER_TRANSPORTER_EXIT);
+		triggerEvent(TRIGGER_TRANSPORTER_EXIT, psTransporter);
 		transporterSetScriptCurrent(NULL);
 
 		if (droidRemove(psTransporter, apsDroidLists))
@@ -1889,7 +1889,7 @@ void missionMoveTransporterOffWorld(DROID *psTransporter)
 			if (psDroid == NULL)
 			{
 				eventFireCallbackTrigger((TRIGGER_TYPE)CALL_NO_REINFORCEMENTS_LEFT);
-				triggerEvent(TRIGGER_TRANSPORTER_DONE);
+				triggerEvent(TRIGGER_TRANSPORTER_DONE, psTransporter);
 			}
 		}
 	}
@@ -2199,7 +2199,7 @@ void intUpdateTransporterTimer(WIDGET *psWidget, W_CONTEXT *psContext)
 					{
 						missionFlyTransportersIn(selectedPlayer, false);
 						eventFireCallbackTrigger((TRIGGER_TYPE)CALL_TRANSPORTER_REINFORCE);
-						triggerEvent(TRIGGER_TRANSPORTER_ARRIVED);
+						triggerEvent(TRIGGER_TRANSPORTER_ARRIVED, psTransporter);
 					}
 				}
 			}

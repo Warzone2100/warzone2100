@@ -665,21 +665,32 @@ bool loadScriptStates(const char *filename)
 //__ An event that is run before game is saved. There is usually no need to use this event.
 //__ \subsection{eventGameSaved()}
 //__ An event that is run after game is saved. There is usually no need to use this event.
-//__ \subsection{eventTransporterLaunch()}
+//__ \subsection{eventTransporterLaunch(transport)}
 //__ An event that is run when the mission transporter has been ordered to fly off.
-//__ \subsection{eventTransporterArrived()}
+//__ \subsection{eventTransporterArrived(transport)}
 //__ An event that is run when the mission transporter has arrived at the map edge with reinforcements.
-//__ \subsection{eventTransporterExit()}
+//__ \subsection{eventTransporterExit(transport)}
 //__ An event that is run when the mission transporter has left the map.
-//__ \subsection{eventTransporterDone()}
+//__ \subsection{eventTransporterDone(transport)}
 //__ An event that is run when the mission transporter has no more reinforcements to deliver.
-//__ \subsection{eventTransporterLanded()}
+//__ \subsection{eventTransporterLanded(transport)}
 //__ An event that is run when the mission transporter has landed with reinforcements.
-bool triggerEvent(SCRIPT_TRIGGER_TYPE trigger)
+bool triggerEvent(SCRIPT_TRIGGER_TYPE trigger, BASE_OBJECT *psObj)
 {
 	for (int i = 0; i < scripts.size(); ++i)
 	{
 		QScriptEngine *engine = scripts.at(i);
+		QScriptValueList args;
+
+		if (psObj)
+		{
+			int player = engine->globalObject().property("me").toInt32();
+			if (player != psObj->player && player != -1)
+			{
+				continue;
+			}
+			args += convMax(psObj, engine);
+		}
 
 		switch (trigger)
 		{
@@ -692,20 +703,20 @@ bool triggerEvent(SCRIPT_TRIGGER_TYPE trigger)
 			break;
 		case TRIGGER_TRANSPORTER_LAUNCH:
 			callFunction(engine, "eventLaunchTransporter", QScriptValueList()); // deprecated!
-			callFunction(engine, "eventTransporterLaunch", QScriptValueList());
+			callFunction(engine, "eventTransporterLaunch", args);
 			break;
 		case TRIGGER_TRANSPORTER_ARRIVED:
 			callFunction(engine, "eventReinforcementsArrived", QScriptValueList()); // deprecated!
-			callFunction(engine, "eventTransporterArrived", QScriptValueList());
+			callFunction(engine, "eventTransporterArrived", args);
 			break;
 		case TRIGGER_TRANSPORTER_EXIT:
-			callFunction(engine, "eventTransporterExit", QScriptValueList());
+			callFunction(engine, "eventTransporterExit", args);
 			break;
 		case TRIGGER_TRANSPORTER_DONE:
-			callFunction(engine, "eventTransporterDone", QScriptValueList());
+			callFunction(engine, "eventTransporterDone", args);
 			break;
 		case TRIGGER_TRANSPORTER_LANDED:
-			callFunction(engine, "eventTransporterLanded", QScriptValueList());
+			callFunction(engine, "eventTransporterLanded", args);
 			break;
 		case TRIGGER_MISSION_TIMEOUT:
 			callFunction(engine, "eventMissionTimeout", QScriptValueList());
