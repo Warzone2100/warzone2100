@@ -348,30 +348,32 @@ bool closeChallenges()
 // slot was selected otherwise cancel was selected..
 bool runChallenges(void)
 {
-	UDWORD		id = 0;
-
-	id = widgRunScreen(psRequestScreen);
-
-	sstrcpy(sRequestResult, "");					// set returned filename to null;
-
-	// cancel this operation...
-	if (id == CHALLENGE_CANCEL || CancelPressed())
+	WidgetTriggers const &triggers = widgRunScreen(psRequestScreen);
+	for (WidgetTriggers::const_iterator trigger = triggers.begin(); trigger != triggers.end(); ++trigger)
 	{
-		goto failure;
-	}
+		unsigned id = trigger->widget->id;
 
-	// clicked a load entry
-	if (id >= CHALLENGE_ENTRY_START  &&  id <= CHALLENGE_ENTRY_END)
-	{
-		if (((W_BUTTON *)widgGetFromID(psRequestScreen, id))->pText)
+		sstrcpy(sRequestResult, "");  // set returned filename to null;
+
+		// cancel this operation...
+		if (id == CHALLENGE_CANCEL || CancelPressed())
 		{
-			sstrcpy(sRequestResult, (const char *)((W_BUTTON *)widgGetFromID(psRequestScreen, id))->pUserData);
+			goto failure;
 		}
-		else
+
+		// clicked a load entry
+		if (id >= CHALLENGE_ENTRY_START  &&  id <= CHALLENGE_ENTRY_END)
 		{
-			goto failure;				// clicked on an empty box
+			if (((W_BUTTON *)widgGetFromID(psRequestScreen, id))->pText)
+			{
+				sstrcpy(sRequestResult, (const char *)((W_BUTTON *)widgGetFromID(psRequestScreen, id))->pUserData);
+			}
+			else
+			{
+				goto failure;  // clicked on an empty box
+			}
+			goto success;
 		}
-		goto success;
 	}
 
 	return false;

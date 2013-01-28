@@ -192,22 +192,22 @@ void widgSetMinorBarSize(W_SCREEN *psScreen, UDWORD id, UDWORD iValue )
 
 
 /* Respond to a mouse moving over a barGraph */
-void barGraphHiLite(W_BARGRAPH *psWidget, W_CONTEXT *psContext)
+void W_BARGRAPH::highlight(W_CONTEXT *psContext)
 {
-	if (psWidget->pTip)
+	if (pTip)
 	{
-		tipStart((WIDGET *)psWidget, psWidget->pTip, psContext->psScreen->TipFontID,
-				 psContext->psForm->aColours,
-				 psWidget->x + psContext->xOffset, psWidget->y + psContext->yOffset,
-				 psWidget->width, psWidget->height);
+		tipStart(this, pTip, psContext->psScreen->TipFontID,
+		         psContext->psForm->aColours,
+		         x + psContext->xOffset, y + psContext->yOffset,
+		         width, height);
 	}
 }
 
 
 /* Respond to the mouse moving off a barGraph */
-void barGraphHiLiteLost(W_BARGRAPH *psWidget)
+void W_BARGRAPH::highlightLost(W_CONTEXT *psContext)
 {
-	tipStop((WIDGET *)psWidget);
+	tipStop(this);
 }
 
 

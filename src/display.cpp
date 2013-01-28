@@ -304,13 +304,13 @@ void ProcessRadarInput()
 			{
 				if (mousePressed(MOUSE_ORDER))
 				{
-					x = mousePressPos(MOUSE_ORDER).x;
-					y = mousePressPos(MOUSE_ORDER).y;
+					x = mousePressPos_DEPRECATED(MOUSE_ORDER).x;
+					y = mousePressPos_DEPRECATED(MOUSE_ORDER).y;
 				}
 				else
 				{
-					x = mousePressPos(MOUSE_MMB).x;
-					y = mousePressPos(MOUSE_MMB).y;
+					x = mousePressPos_DEPRECATED(MOUSE_MMB).x;
+					y = mousePressPos_DEPRECATED(MOUSE_MMB).y;
 				}
 				if(driveModeActive()) {
 					driveProcessRadarInput(x,y);
@@ -345,8 +345,8 @@ void ProcessRadarInput()
 			}
 			else if (mousePressed(MOUSE_SELECT))
 			{
-				x = mousePressPos(MOUSE_SELECT).x;
-				y = mousePressPos(MOUSE_SELECT).y;
+				x = mousePressPos_DEPRECATED(MOUSE_SELECT).x;
+				y = mousePressPos_DEPRECATED(MOUSE_SELECT).y;
 
 				CalcRadarPosition(x, y, &PosX, &PosY);
 

@@ -1458,8 +1458,6 @@ static void intProcessEdit(UDWORD id)
 /* Run the widgets for the in game interface */
 INT_RETVAL intRunWidgets(void)
 {
-	UDWORD			retID;
-
 	INT_RETVAL		retCode;
 	bool			quitting = false;
 	UDWORD			structX,structY, structX2,structY2;
@@ -1582,27 +1580,28 @@ INT_RETVAL intRunWidgets(void)
 	}
 
 	/* Run the current set of widgets */
+	std::vector<unsigned> retIDs;
 	if(!bLoadSaveUp)
 	{
-		retID = widgRunScreen(psWScreen);
-	}
-	else
-	{
-		retID =0;
+		WidgetTriggers const &triggers = widgRunScreen(psWScreen);
+		for (WidgetTriggers::const_iterator trigger = triggers.begin(); trigger != triggers.end(); ++trigger)
+		{
+			retIDs.push_back(trigger->widget->id);
+		}
 	}
 
 	/* We may need to trigger widgets with a key press */
 	if(keyButtonMapping)
 	{
 		/* Set the appropriate id */
-		retID = keyButtonMapping;
+		retIDs.push_back(keyButtonMapping);
 
 		/* Clear it so it doesn't trigger next time around */
 		keyButtonMapping = 0;
 	}
 
-	intLastWidget = retID;
-	if (bInTutorial && retID != 0)
+	intLastWidget = retIDs.empty()? 0 : retIDs.back();
+	if (bInTutorial && !retIDs.empty())
 	{
 		eventFireCallbackTrigger((TRIGGER_TYPE)CALL_BUTTON_PRESSED);
 	}
@@ -1626,12 +1625,6 @@ INT_RETVAL intRunWidgets(void)
 		intRunMultiMenu();
 	}
 
-	if (retID >= IDPROX_START && retID <= IDPROX_END)
-	{
-		processProximityButtons(retID);
-		return INT_NONE;
-	}
-
 	/* Extra code for the design screen to deal with the shadow bar graphs */
 	if (intMode == INT_DESIGN)
 	{
@@ -1639,182 +1632,190 @@ INT_RETVAL intRunWidgets(void)
 		intRunDesign();
 	}
 
-	/* Deal with any clicks */
-	switch (retID)
+	// Deal with any clicks.
+	for (std::vector<unsigned>::const_iterator rit = retIDs.begin(); rit != retIDs.end(); ++rit)
 	{
-	case 0:
-		/* default return value */
-		break;
-		/*****************  Reticule buttons  *****************/
+		unsigned retID = *rit;
 
-	case IDRET_OPTIONS:
-		intResetScreen(false);
-		(void)intAddOptions();
-		intMode = INT_OPTION;
-		break;
-
-	case IDRET_COMMAND:
-		intResetScreen(false);
-		widgSetButtonState(psWScreen, IDRET_COMMAND, WBUT_CLICKLOCK);
-		intAddCommand(NULL);
-		break;
-
-	case IDRET_BUILD:
-		intResetScreen(true);
-		widgSetButtonState(psWScreen, IDRET_BUILD, WBUT_CLICKLOCK);
-		if (editMode)
+		if (retID >= IDPROX_START && retID <= IDPROX_END)
 		{
-			intProcessOptions(IDOPT_STRUCT);
+			processProximityButtons(retID);
+			return INT_NONE;
 		}
-		else
-		{
-			(void)intAddBuild(NULL);
-		}
-		break;
 
-	case IDRET_MANUFACTURE:
-		intResetScreen(true);
-		widgSetButtonState(psWScreen, IDRET_MANUFACTURE, WBUT_CLICKLOCK);
-		if (editMode)
+		switch (retID)
 		{
-			intProcessOptions(IDOPT_DROID);
-		}
-		else
-		{
-			(void)intAddManufacture(NULL);
-		}
-		break;
+			/*****************  Reticule buttons  *****************/
 
-	case IDRET_RESEARCH:
-		intResetScreen(true);
-		widgSetButtonState(psWScreen, IDRET_RESEARCH, WBUT_CLICKLOCK);
-		(void)intAddResearch(NULL);
-		break;
+		case IDRET_OPTIONS:
+			intResetScreen(false);
+			(void)intAddOptions();
+			intMode = INT_OPTION;
+			break;
 
-	case IDRET_INTEL_MAP:
-		// check if RMB was clicked
-		if (widgGetButtonKey(psWScreen) & WKEY_SECONDARY)
-		{
-			//set the current message to be the last non-proximity message added
-			setCurrentMsg();
-			setMessageImmediate(true);
-		}
-		else
-		{
+		case IDRET_COMMAND:
+			intResetScreen(false);
+			widgSetButtonState(psWScreen, IDRET_COMMAND, WBUT_CLICKLOCK);
+			intAddCommand(NULL);
+			break;
+
+		case IDRET_BUILD:
+			intResetScreen(true);
+			widgSetButtonState(psWScreen, IDRET_BUILD, WBUT_CLICKLOCK);
+			if (editMode)
+			{
+				intProcessOptions(IDOPT_STRUCT);
+			}
+			else
+			{
+				(void)intAddBuild(NULL);
+			}
+			break;
+
+		case IDRET_MANUFACTURE:
+			intResetScreen(true);
+			widgSetButtonState(psWScreen, IDRET_MANUFACTURE, WBUT_CLICKLOCK);
+			if (editMode)
+			{
+				intProcessOptions(IDOPT_DROID);
+			}
+			else
+			{
+				(void)intAddManufacture(NULL);
+			}
+			break;
+
+		case IDRET_RESEARCH:
+			intResetScreen(true);
+			widgSetButtonState(psWScreen, IDRET_RESEARCH, WBUT_CLICKLOCK);
+			(void)intAddResearch(NULL);
+			break;
+
+		case IDRET_INTEL_MAP:
+			// check if RMB was clicked
+			if (widgGetButtonKey_DEPRECATED(psWScreen) == WKEY_SECONDARY)
+			{
+				//set the current message to be the last non-proximity message added
+				setCurrentMsg();
+				setMessageImmediate(true);
+			}
+			else
+			{
+				psCurrentMsg = NULL;
+			}
+			addIntelScreen();
+			break;
+
+		case IDRET_DESIGN:
+			intResetScreen(true);
+			widgSetButtonState(psWScreen, IDRET_DESIGN, WBUT_CLICKLOCK);
+			/*add the power bar - for looks! */
+			intShowPowerBar();
+			(void)intAddDesign( false );
+			intMode = INT_DESIGN;
+			break;
+
+		case IDRET_CANCEL:
+			intResetScreen(false);
 			psCurrentMsg = NULL;
-		}
-		addIntelScreen();
-		break;
+			break;
 
-	case IDRET_DESIGN:
-		intResetScreen(true);
-		widgSetButtonState(psWScreen, IDRET_DESIGN, WBUT_CLICKLOCK);
-		/*add the power bar - for looks! */
-		intShowPowerBar();
-		(void)intAddDesign( false );
-		intMode = INT_DESIGN;
-		break;
+		/*Transporter button pressed - OFFWORLD Mission Maps ONLY *********/
+		case IDTRANTIMER_BUTTON:
+			addTransporterInterface(NULL, true);
+			break;
 
-	case IDRET_CANCEL:
-		intResetScreen(false);
-		psCurrentMsg = NULL;
-		break;
+		case IDTRANS_LAUNCH:
+			processLaunchTransporter();
+			break;
 
-	/*Transporter button pressed - OFFWORLD Mission Maps ONLY *********/
-	case IDTRANTIMER_BUTTON:
-		addTransporterInterface(NULL, true);
-		break;
+		/* Catch the quit button here */
+		case INTINGAMEOP_POPUP_QUIT:
+		case IDMISSIONRES_QUIT:			// mission quit
+		case INTINGAMEOP_QUIT_CONFIRM:			// esc quit confrim
+		case IDOPT_QUIT:						// options screen quit
+			intResetScreen(false);
+			quitting = true;
+			break;
 
-	case IDTRANS_LAUNCH:
-		processLaunchTransporter();
-		break;
+		// Process form tab clicks.
+		case IDOBJ_TABFORM:		// If tab clicked on in object screen then refresh all rendered buttons.
+			RefreshObjectButtons();
+			RefreshTopicButtons();
+			break;
 
-	/* Catch the quit button here */
-	case INTINGAMEOP_POPUP_QUIT:
-	case IDMISSIONRES_QUIT:			// mission quit
-	case INTINGAMEOP_QUIT_CONFIRM:			// esc quit confrim
-	case IDOPT_QUIT:						// options screen quit
-		intResetScreen(false);
-		quitting = true;
-		break;
+		case IDSTAT_TABFORM:	// If tab clicked on in stats screen then refresh all rendered buttons.
+			RefreshStatsButtons();
+			break;
 
-	// Process form tab clicks.
-	case IDOBJ_TABFORM:		// If tab clicked on in object screen then refresh all rendered buttons.
-		RefreshObjectButtons();
-		RefreshTopicButtons();
-		break;
+		case IDDES_TEMPLFORM:	// If tab clicked on in design template screen then refresh all rendered buttons.
+			RefreshStatsButtons();
+			break;
 
-	case IDSTAT_TABFORM:	// If tab clicked on in stats screen then refresh all rendered buttons.
-		RefreshStatsButtons();
-		break;
+		case IDDES_COMPFORM:	// If tab clicked on in design component screen then refresh all rendered buttons.
+			RefreshObjectButtons();
+			RefreshSystem0Buttons();
+			break;
 
-	case IDDES_TEMPLFORM:	// If tab clicked on in design template screen then refresh all rendered buttons.
-		RefreshStatsButtons();
-		break;
-
-	case IDDES_COMPFORM:	// If tab clicked on in design component screen then refresh all rendered buttons.
-		RefreshObjectButtons();
-		RefreshSystem0Buttons();
-		break;
-
-		/* Default case passes remaining IDs to appropriate function */
-	default:
-		switch (intMode)
-		{
-		case INT_OPTION:
-			intProcessOptions(retID);
-			break;
-		case INT_EDITSTAT:
-			intProcessEditStats(retID);
-			break;
-#ifdef EDIT_OPTIONS
-		case INT_EDIT:
-			intProcessEdit(retID);
-			break;
-#endif
-		case INT_STAT:
-		case INT_CMDORDER:
-			/* In stat mode ids get passed to processObject
-			 * and then through to processStats
-			 */
-			// NO BREAK HERE! THIS IS CORRECT;
-		case INT_OBJECT:
-			intProcessObject(retID);
-			break;
-		case INT_ORDER:
-			intProcessOrder(retID);
-			break;
-		case INT_MISSIONRES:
-			intProcessMissionResult(retID);
-			break;
-		case INT_INGAMEOP:
-			intProcessInGameOptions(retID);
-			break;
-		case INT_MULTIMENU:
-			intProcessMultiMenu(retID);
-			break;
-		case INT_DESIGN:
-			intProcessDesign(retID);
-			break;
-		case INT_INTELMAP:
-			intProcessIntelMap(retID);
-			break;
-		/*case INT_TUTORIAL:
-			intProcessMessageView(retID);
-			break;*/
-		case INT_TRANSPORTER:
-			intProcessTransporter(retID);
-			break;
-		case INT_NORMAL:
-			break;
+			/* Default case passes remaining IDs to appropriate function */
 		default:
-			ASSERT( false, "intRunWidgets: unknown interface mode" );
+			switch (intMode)
+			{
+			case INT_OPTION:
+				intProcessOptions(retID);
+				break;
+			case INT_EDITSTAT:
+				intProcessEditStats(retID);
+				break;
+	#ifdef EDIT_OPTIONS
+			case INT_EDIT:
+				intProcessEdit(retID);
+				break;
+	#endif
+			case INT_STAT:
+			case INT_CMDORDER:
+				/* In stat mode ids get passed to processObject
+				* and then through to processStats
+				*/
+				// NO BREAK HERE! THIS IS CORRECT;
+			case INT_OBJECT:
+				intProcessObject(retID);
+				break;
+			case INT_ORDER:
+				intProcessOrder(retID);
+				break;
+			case INT_MISSIONRES:
+				intProcessMissionResult(retID);
+				break;
+			case INT_INGAMEOP:
+				intProcessInGameOptions(retID);
+				break;
+			case INT_MULTIMENU:
+				intProcessMultiMenu(retID);
+				break;
+			case INT_DESIGN:
+				intProcessDesign(retID);
+				break;
+			case INT_INTELMAP:
+				intProcessIntelMap(retID);
+				break;
+			/*case INT_TUTORIAL:
+				intProcessMessageView(retID);
+				break;*/
+			case INT_TRANSPORTER:
+				intProcessTransporter(retID);
+				break;
+			case INT_NORMAL:
+				break;
+			default:
+				ASSERT( false, "intRunWidgets: unknown interface mode" );
+				break;
+			}
 			break;
 		}
-		break;
 	}
 
-	if (!quitting && !retID)
+	if (!quitting && retIDs.empty())
 	{
 		if ((intMode == INT_OBJECT || intMode == INT_STAT) && objMode == IOBJ_BUILDSEL)
 		{
@@ -2051,7 +2052,7 @@ INT_RETVAL intRunWidgets(void)
 	{
 		retCode = INT_QUIT;
 	}
-	else if (retID || intMode == INT_EDIT || intMode == INT_MISSIONRES || widgOverID != 0)
+	else if (!retIDs.empty() || intMode == INT_EDIT || intMode == INT_MISSIONRES || widgOverID != 0)
 	{
 		retCode = INT_INTERCEPT;
 	}
@@ -2385,7 +2386,7 @@ static void intProcessObject(UDWORD id)
 		id <= IDOBJ_OBJEND)
 	{
 		/* deal with RMB clicks */
-		if (widgGetButtonKey(psWScreen) & WKEY_SECONDARY)
+		if (widgGetButtonKey_DEPRECATED(psWScreen) == WKEY_SECONDARY)
 		{
 			intObjectRMBPressed(id);
 		}
@@ -2473,7 +2474,7 @@ static void intProcessObject(UDWORD id)
 			 id <= IDOBJ_STATEND)
 	{
 		/* deal with RMB clicks */
-		if (widgGetButtonKey(psWScreen) & WKEY_SECONDARY)
+		if (widgGetButtonKey_DEPRECATED(psWScreen) == WKEY_SECONDARY)
 		{
 			intObjStatRMBPressed(id);
 		}
@@ -2549,7 +2550,7 @@ static void intProcessStats(UDWORD id)
 			"intProcessStructure: Invalid structure stats id" );
 
 		/* deal with RMB clicks */
-		if (widgGetButtonKey(psWScreen) & WKEY_SECONDARY)
+		if (widgGetButtonKey_DEPRECATED(psWScreen) == WKEY_SECONDARY)
 		{
 			intStatsRMBPressed(id);
 		}
@@ -2729,12 +2730,12 @@ static void intProcessStats(UDWORD id)
 		if (psStruct)
 		{
 			//LMB pressed
-			if (widgGetButtonKey(psWScreen) & WKEY_PRIMARY)
+			if (widgGetButtonKey_DEPRECATED(psWScreen) == WKEY_PRIMARY)
 			{
 				factoryLoopAdjust(psStruct, true);
 			}
 			//RMB pressed
-			else if (widgGetButtonKey(psWScreen) & WKEY_SECONDARY)
+			else if (widgGetButtonKey_DEPRECATED(psWScreen) == WKEY_SECONDARY)
 			{
 				factoryLoopAdjust(psStruct, false);
 			}

@@ -97,6 +97,7 @@ static SDWORD dragX, dragY;
 
 /* The current mouse button state */
 static INPUT_STATE aMouseState[MOUSE_BAD];
+static MousePresses mousePresses;
 
 
 /* The size of the input buffer */
@@ -707,6 +708,11 @@ UDWORD inputGetKey(utf_32_char *unicode)
 	return retVal;
 }
 
+MousePresses const &inputGetClicks()
+{
+	return mousePresses;
+}
+
 
 /*!
  * This is called once a frame so that the system can tell
@@ -744,6 +750,8 @@ void inputNewFrame(void)
 			aMouseState[i].state = KEY_UP;
 		}
 	}
+
+	mousePresses.clear();
 }
 
 /*!
@@ -803,12 +811,12 @@ bool wzMouseInWindow()
 	return mouseInWindow;
 }
 
-Vector2i mousePressPos(MOUSE_KEY_CODE code)
+Vector2i mousePressPos_DEPRECATED(MOUSE_KEY_CODE code)
 {
 	return aMouseState[code].pressPos;
 }
 
-Vector2i mouseReleasePos(MOUSE_KEY_CODE code)
+Vector2i mouseReleasePos_DEPRECATED(MOUSE_KEY_CODE code)
 {
 	return aMouseState[code].releasePos;
 }
@@ -980,9 +988,16 @@ static void inputHandleMouseButtonEvent(SDL_MouseButtonEvent * buttonEvent)
 		case SDL_BUTTON_WHEELDOWN: mouseKeyCode = MOUSE_WDN; break;
 	}
 
+	MousePress mousePress;
+	mousePress.key = mouseKeyCode;
+	mousePress.pos = Vector2i(mouseXPos, mouseYPos);
+
 	switch (buttonEvent->type)
 	{
 		case SDL_MOUSEBUTTONDOWN:
+			mousePress.action = MousePress::Press;
+			mousePresses.push_back(mousePress);
+
 			aMouseState[mouseKeyCode].pressPos.x = mouseXPos;
 			aMouseState[mouseKeyCode].pressPos.y = mouseYPos;
 			if ( aMouseState[mouseKeyCode].state == KEY_UP
@@ -1020,6 +1035,9 @@ static void inputHandleMouseButtonEvent(SDL_MouseButtonEvent * buttonEvent)
 			}
 			break;
 		case SDL_MOUSEBUTTONUP:
+			mousePress.action = MousePress::Release;
+			mousePresses.push_back(mousePress);
+
 			aMouseState[mouseKeyCode].releasePos.x = mouseXPos;
 			aMouseState[mouseKeyCode].releasePos.y = mouseYPos;
 			if (aMouseState[mouseKeyCode].state == KEY_PRESSED)
