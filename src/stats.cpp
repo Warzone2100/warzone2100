@@ -95,7 +95,7 @@ UBYTE		*apCompLists[MAX_PLAYERS][COMP_NUMCOMPONENTS];
 //store for each players Structure states
 UBYTE		*apStructTypeLists[MAX_PLAYERS];
 
-static bool getMovementModel(const char* movementModel, MOVEMENT_MODEL* model);
+static bool getMovementModel(const char *movementModel, MOVEMENT_MODEL *model);
 static void storeSpeedFactor(UDWORD terrainType, UDWORD propulsionType, UDWORD speedFactor);
 
 //Access functions for the max values to be used in the Design Screen
@@ -227,29 +227,29 @@ int64_t LineView::i(unsigned index, int64_t min, int64_t max)
 		bool negative = false;
 		switch (*cellBegin++)
 		{
-			case '-':
-				negative = true;
-				break;
-			case '+':
-				break;
-			default:
-				--cellBegin;
-				break;
+		case '-':
+			negative = true;
+			break;
+		case '+':
+			break;
+		default:
+			--cellBegin;
+			break;
 		}
 		int64_t absolutePart = 0;
-		while (cellBegin != cellEnd && absolutePart < int64_t(1000000000)*1000000000)
+		while (cellBegin != cellEnd && absolutePart < int64_t(1000000000) * 1000000000)
 		{
 			unsigned digit = *cellBegin - '0';
 			if (digit > 9)
 			{
 				break;
 			}
-			absolutePart = absolutePart*10 + digit;
+			absolutePart = absolutePart * 10 + digit;
 			++cellBegin;
 		}
 		if (cellBegin == cellEnd)
 		{
-			int64_t result = negative? -absolutePart : absolutePart;
+			int64_t result = negative ? -absolutePart : absolutePart;
 			if (result >= min && result <= max)
 			{
 				return result;  // Maybe should just have copied the string to null-terminate it, and used scanf...
@@ -335,7 +335,8 @@ std::vector<iIMDShape *> LineView::imdShapes(unsigned int index)
 			setError(index, "Expected PIE shape.");
 		}
 		begin = end + 1;
-	} while (begin != str.size() + 1);
+	}
+	while (begin != str.size() + 1);
 	return result;
 }
 
@@ -393,7 +394,7 @@ static void deallocTerrainTable(void)
 /* Macro to allocate memory for a set of stats */
 #define ALLOC_STATS(numEntries, list, listSize, type) \
 	ASSERT( (numEntries) < REF_RANGE, \
-	"allocStats: number of stats entries too large for " #type );\
+	        "allocStats: number of stats entries too large for " #type );\
 	if ((list))	free((list));	\
 	(list) = (type *)malloc(sizeof(type) * (numEntries)); \
 	(listSize) = (numEntries); \
@@ -403,7 +404,7 @@ static void deallocTerrainTable(void)
 #define STATS_DEALLOC(list, listSize) \
 	free((COMPONENT_STATS*)(list)); \
 	listSize = 0; \
-	(list) = NULL 
+	(list) = NULL
 
 void statsInitVars(void)
 {
@@ -427,12 +428,12 @@ void statsInitVars(void)
 
 	// init the max values
 	maxComponentWeight = maxBodyArmour = maxBodyPower =
-		maxBodyPoints = maxSensorRange = maxECMRange =
-		maxConstPoints = maxRepairPoints = maxWeaponRange = maxWeaponDamage =
-		maxPropulsionSpeed = 0;
+	        maxBodyPoints = maxSensorRange = maxECMRange =
+	                maxConstPoints = maxRepairPoints = maxWeaponRange = maxWeaponDamage =
+	                        maxPropulsionSpeed = 0;
 }
 
-static void allocateStatName(BASE_STATS* pStat, const char *Name)
+static void allocateStatName(BASE_STATS *pStat, const char *Name)
 {
 	pStat->pName = allocateName(Name);
 }
@@ -476,7 +477,7 @@ bool statsShutDown(void)
  */
 #define SET_STATS(stats, list, index, type, refStart) \
 	ASSERT( ((stats)->ref >= (refStart)) && ((stats)->ref < (refStart) + REF_RANGE), \
-		"setStats: Invalid " #type " ref number" ); \
+	        "setStats: Invalid " #type " ref number" ); \
 	memcpy((list) + (index), (stats), sizeof(type))
 
 /*******************************************************************************
@@ -501,7 +502,7 @@ static void statsSetBrain(BRAIN_STATS	*psStats, UDWORD index)
 static void statsSetPropulsion(PROPULSION_STATS	*psStats, UDWORD index)
 {
 	SET_STATS(psStats, asPropulsionStats, index, PROPULSION_STATS,
-		REF_PROPULSION_START);
+	        REF_PROPULSION_START);
 }
 /* Set the stats for a particular sensor type */
 static void statsSetSensor(SENSOR_STATS	*psStats, UDWORD index)
@@ -527,7 +528,7 @@ static void statsSetConstruct(CONSTRUCT_STATS	*psStats, UDWORD index)
 /* Return the number of newlines in a file buffer */
 UDWORD numCR(const char *pFileBuffer, UDWORD fileSize)
 {
-	UDWORD  lines=0;
+	UDWORD  lines = 0;
 
 	while (fileSize-- > 0)
 	{
@@ -587,9 +588,9 @@ bool statsAllocConstruct(UDWORD	numStats)
 	ALLOC_STATS(numStats, asConstructStats, numConstructStats, CONSTRUCT_STATS);
 }
 
-const char *getStatName(const void * Stat)
+const char *getStatName(const void *Stat)
 {
-	const BASE_STATS * const psStats= (const BASE_STATS*)Stat;
+	const BASE_STATS *const psStats = (const BASE_STATS *)Stat;
 
 	return getName(psStats->pName);
 }
@@ -608,7 +609,7 @@ static iIMDShape *statsGetIMD(WzConfig &ini, BASE_STATS *psStats, QString key)
 	{
 		QString model = ini.value(key).toString();
 		retval = (iIMDShape *)resGetData("IMD", model.toUtf8().constData());
-		ASSERT(retval != NULL, "Cannot find the PIE model %s for stat %s in %s", 
+		ASSERT(retval != NULL, "Cannot find the PIE model %s for stat %s in %s",
 		       model.toUtf8().constData(), getStatName(psStats), ini.fileName().toUtf8().constData());
 	}
 	return retval;
@@ -636,7 +637,7 @@ bool loadWeaponStats(const char *pFileName)
 		list.swap(nullweapon, 0);
 	}
 
-	for (i=0; i < list.size(); ++i)
+	for (i = 0; i < list.size(); ++i)
 	{
 		ini.beginGroup(list[i]);
 		memset(psStats, 0, sizeof(WEAPON_STATS));
@@ -703,7 +704,7 @@ bool loadWeaponStats(const char *pFileName)
 		//set the weapon class
 		if (!getWeaponClass(ini.value("weaponClass").toString(), &psStats->weaponClass))
 		{
-			debug( LOG_ERROR, "Invalid weapon class for weapon %s - assuming KINETIC", getStatName(psStats) );
+			debug(LOG_ERROR, "Invalid weapon class for weapon %s - assuming KINETIC", getStatName(psStats));
 			psStats->weaponClass = WC_KINETIC;
 		}
 
@@ -721,38 +722,41 @@ bool loadWeaponStats(const char *pFileName)
 		}
 
 		//set periodical damage weapon class
-		QString periodicalDamageWeaponClass = ini.value("periodicalDamageWeaponClass","").toString();
+		QString periodicalDamageWeaponClass = ini.value("periodicalDamageWeaponClass", "").toString();
 		if (periodicalDamageWeaponClass.compare("") == 0)
 		{
 			//was not setted in ini - use default value
 			psStats->periodicalDamageWeaponClass = psStats->weaponClass;
-		}else if (!getWeaponClass(periodicalDamageWeaponClass, &psStats->periodicalDamageWeaponClass))
+		}
+		else if (!getWeaponClass(periodicalDamageWeaponClass, &psStats->periodicalDamageWeaponClass))
 		{
-			debug( LOG_ERROR, "Invalid periodicalDamageWeaponClass for weapon %s - assuming same class as weapon", getStatName(psStats) );
+			debug(LOG_ERROR, "Invalid periodicalDamageWeaponClass for weapon %s - assuming same class as weapon", getStatName(psStats));
 			psStats->periodicalDamageWeaponClass = psStats->weaponClass;
 		}
 
 		//set periodical damage weapon subclass
-		QString periodicalDamageWeaponSubClass = ini.value("periodicalDamageWeaponSubClass","").toString();
-		if (periodicalDamageWeaponSubClass.compare("") == 0) 
+		QString periodicalDamageWeaponSubClass = ini.value("periodicalDamageWeaponSubClass", "").toString();
+		if (periodicalDamageWeaponSubClass.compare("") == 0)
 		{
 			//was not setted in ini - use default value
 			psStats->periodicalDamageWeaponSubClass = psStats->weaponSubClass;
-		}else if (!getWeaponSubClass(periodicalDamageWeaponSubClass.toUtf8().data(), &psStats->periodicalDamageWeaponSubClass))
+		}
+		else if (!getWeaponSubClass(periodicalDamageWeaponSubClass.toUtf8().data(), &psStats->periodicalDamageWeaponSubClass))
 		{
-			debug( LOG_ERROR, "Invalid periodicalDamageWeaponSubClass for weapon %s - assuming same subclass as weapon", getStatName(psStats) );
+			debug(LOG_ERROR, "Invalid periodicalDamageWeaponSubClass for weapon %s - assuming same subclass as weapon", getStatName(psStats));
 			psStats->periodicalDamageWeaponSubClass = psStats->weaponSubClass;
 		}
 
 		//set periodical damage weapon effect
-		QString periodicalDamageWeaponEffect = ini.value("periodicalDamageWeaponEffect","").toString();
-		if (periodicalDamageWeaponSubClass.compare("") == 0) 
+		QString periodicalDamageWeaponEffect = ini.value("periodicalDamageWeaponEffect", "").toString();
+		if (periodicalDamageWeaponSubClass.compare("") == 0)
 		{
 			//was not setted in ini - use default value
 			psStats->periodicalDamageWeaponEffect = psStats->weaponEffect;
-		}else if (!getWeaponEffect(periodicalDamageWeaponEffect.toUtf8().data(), &psStats->periodicalDamageWeaponEffect))
+		}
+		else if (!getWeaponEffect(periodicalDamageWeaponEffect.toUtf8().data(), &psStats->periodicalDamageWeaponEffect))
 		{
-			debug( LOG_ERROR, "Invalid periodicalDamageWeaponEffect for weapon %s - assuming same effect as weapon", getStatName(psStats) );
+			debug(LOG_ERROR, "Invalid periodicalDamageWeaponEffect for weapon %s - assuming same effect as weapon", getStatName(psStats));
 			psStats->periodicalDamageWeaponEffect = psStats->weaponEffect;
 		}
 
@@ -775,8 +779,8 @@ bool loadWeaponStats(const char *pFileName)
 		//set the rotate angle
 		if (rotate > UBYTE_MAX)
 		{
-			ASSERT( false,"loadWeaponStats: rotate is greater than 255 for weapon %s",
-				getStatName(psStats) );
+			ASSERT(false, "loadWeaponStats: rotate is greater than 255 for weapon %s",
+			       getStatName(psStats));
 			return false;
 		}
 		psStats->rotate = (UBYTE)rotate;
@@ -784,8 +788,8 @@ bool loadWeaponStats(const char *pFileName)
 		//set the minElevation
 		if (minElevation > SBYTE_MAX || minElevation < SBYTE_MIN)
 		{
-			ASSERT( false,"loadWeaponStats: minElevation is outside of limits for weapon %s",
-				getStatName(psStats) );
+			ASSERT(false, "loadWeaponStats: minElevation is outside of limits for weapon %s",
+			       getStatName(psStats));
 			return false;
 		}
 		psStats->minElevation = (SBYTE)minElevation;
@@ -793,8 +797,8 @@ bool loadWeaponStats(const char *pFileName)
 		//set the maxElevation
 		if (maxElevation > UBYTE_MAX)
 		{
-			ASSERT( false,"loadWeaponStats: maxElevation is outside of limits for weapon %s",
-				getStatName(psStats) );
+			ASSERT(false, "loadWeaponStats: maxElevation is outside of limits for weapon %s",
+			       getStatName(psStats));
 			return false;
 		}
 		psStats->maxElevation = (UBYTE)maxElevation;
@@ -802,8 +806,8 @@ bool loadWeaponStats(const char *pFileName)
 		//set the surfaceAir
 		if (surfaceToAir > UBYTE_MAX)
 		{
-			ASSERT( false, "loadWeaponStats: Surface to Air is outside of limits for weapon %s",
-				getStatName(psStats) );
+			ASSERT(false, "loadWeaponStats: Surface to Air is outside of limits for weapon %s",
+			       getStatName(psStats));
 			return false;
 		}
 		if (surfaceToAir == 0)
@@ -822,8 +826,8 @@ bool loadWeaponStats(const char *pFileName)
 		//set the attackRuns for VTOLs
 		if (numAttackRuns > UBYTE_MAX)
 		{
-			ASSERT( false, "loadWeaponStats: num of attack runs is outside of limits for weapon %s",
-				getStatName(psStats) );
+			ASSERT(false, "loadWeaponStats: num of attack runs is outside of limits for weapon %s",
+			       getStatName(psStats));
 			return false;
 		}
 		psStats->vtolAttackRuns = (UBYTE)numAttackRuns;
@@ -975,9 +979,9 @@ bool loadBrainStats(const char *pFileName)
 
 
 /*returns the propulsion type based on the string name passed in */
-bool getPropulsionType(const char* typeName, PROPULSION_TYPE* type)
+bool getPropulsionType(const char *typeName, PROPULSION_TYPE *type)
 {
-	if      (strcmp(typeName, "Wheeled") == 0)
+	if (strcmp(typeName, "Wheeled") == 0)
 	{
 		*type = PROPULSION_TYPE_WHEELED;
 	}
@@ -1015,7 +1019,7 @@ bool getPropulsionType(const char* typeName, PROPULSION_TYPE* type)
 	}
 	else
 	{
-		debug( LOG_ERROR, "getPropulsionType: Invalid Propulsion type %s - assuming Hover", typeName );
+		debug(LOG_ERROR, "getPropulsionType: Invalid Propulsion type %s - assuming Hover", typeName);
 		*type = PROPULSION_TYPE_HOVER;
 	}
 
@@ -1047,8 +1051,8 @@ bool loadPropulsionStats(const char *pFileName)
 		psStats->maxSpeed = ini.value("speed").toInt();
 		psStats->designable = ini.value("designable", false).toBool();
 		psStats->ref = REF_PROPULSION_START + i;
-		psStats->turnSpeed = ini.value("turnSpeed", DEG(1)/3).toInt();
-		psStats->spinSpeed = ini.value("spinSpeed", DEG(3)/4).toInt();
+		psStats->turnSpeed = ini.value("turnSpeed", DEG(1) / 3).toInt();
+		psStats->spinSpeed = ini.value("spinSpeed", DEG(3) / 4).toInt();
 		psStats->spinAngle = ini.value("spinAngle", 180).toInt();
 		psStats->acceleration = ini.value("acceleration", 250).toInt();
 		psStats->deceleration = ini.value("deceleration", 800).toInt();
@@ -1143,7 +1147,7 @@ bool loadSensorStats(const char *pFileName)
 		}
 		else
 		{
-			ASSERT( false, "Invalid Sensor location" );
+			ASSERT(false, "Invalid Sensor location");
 		}
 		QString type = ini.value("type").toString();
 		if (type.compare("STANDARD") == 0)
@@ -1172,7 +1176,7 @@ bool loadSensorStats(const char *pFileName)
 		}
 		else
 		{
-			ASSERT( false, "Invalid Sensor type" );
+			ASSERT(false, "Invalid Sensor type");
 		}
 		//multiply time stats
 		psStats->time *= WEAPON_TIME;
@@ -1213,7 +1217,7 @@ bool loadECMStats(const char *pFileName)
 	{
 		list.swap(nullecm, 0);
 	}
-	for (int i=0; i < list.size(); ++i)
+	for (int i = 0; i < list.size(); ++i)
 	{
 		ini.beginGroup(list[i]);
 		memset(psStats, 0, sizeof(ECM_STATS));
@@ -1240,7 +1244,7 @@ bool loadECMStats(const char *pFileName)
 		}
 		else
 		{
-			ASSERT( false, "Invalid ECM location" );
+			ASSERT(false, "Invalid ECM location");
 		}
 
 		//get the IMD for the component
@@ -1279,7 +1283,7 @@ bool loadRepairStats(const char *pFileName)
 		list.swap(nullrepair, 0);
 	}
 
-	for (int i=0; i < list.size(); ++i)
+	for (int i = 0; i < list.size(); ++i)
 	{
 		ini.beginGroup(list[i]);
 		memset(psStats, 0, sizeof(REPAIR_STATS));
@@ -1306,7 +1310,7 @@ bool loadRepairStats(const char *pFileName)
 		}
 		else
 		{
-			ASSERT( false, "Invalid Repair location" );
+			ASSERT(false, "Invalid Repair location");
 		}
 
 		//check its not 0 since we will be dividing by it at a later stage
@@ -1348,7 +1352,7 @@ bool loadConstructStats(const char *pFileName)
 	{
 		list.swap(nullconstruct, 0);
 	}
-	for (int i=0; i < list.size(); ++i)
+	for (int i = 0; i < list.size(); ++i)
 	{
 		ini.beginGroup(list[i]);
 		memset(psStats, 0, sizeof(CONSTRUCT_STATS));
@@ -1391,12 +1395,12 @@ bool loadPropulsionTypes(const char *pFileName)
 	PROPULSION_TYPE type;
 
 	//allocate storage for the stats
-	asPropulsionTypes = (PROPULSION_TYPES *)malloc(sizeof(PROPULSION_TYPES)*NumTypes);
+	asPropulsionTypes = (PROPULSION_TYPES *)malloc(sizeof(PROPULSION_TYPES) * NumTypes);
 	memset(asPropulsionTypes, 0, (sizeof(PROPULSION_TYPES)*NumTypes));
 	WzConfig ini(pFileName, WzConfig::ReadOnlyAndRequired);
 	QStringList list = ini.childGroups();
 
-	for (int i=0; i < NumTypes; ++i)
+	for (int i = 0; i < NumTypes; ++i)
 	{
 		ini.beginGroup(list[i]);
 		multiplier = ini.value("multiplier").toInt();
@@ -1421,14 +1425,14 @@ bool loadPropulsionTypes(const char *pFileName)
 		}
 		else
 		{
-			ASSERT( false, "Invalid travel type for Propulsion" );
+			ASSERT(false, "Invalid travel type for Propulsion");
 		}
 
 		//don't care about this anymore! AB FRIDAY 13/11/98
 		//want it back again! AB 27/11/98
 		if (multiplier > UWORD_MAX)
 		{
-			ASSERT( false, "loadPropulsionTypes: power Ratio multiplier too high" );
+			ASSERT(false, "loadPropulsionTypes: power Ratio multiplier too high");
 			//set to a default value since not life threatening!
 			multiplier = 100;
 		}
@@ -1464,7 +1468,7 @@ bool loadTerrainTable(const char *pFileName)
 	{
 		for (int j = 0; j < PROPULSION_TYPE_NUM; ++j)
 		{
-			TERRAIN_TABLE * const pTerrainTable = &asTerrainTable[i * PROPULSION_TYPE_NUM + j];
+			TERRAIN_TABLE *const pTerrainTable = &asTerrainTable[i * PROPULSION_TYPE_NUM + j];
 			pTerrainTable->speedFactor = 100;
 		}
 	}
@@ -1479,7 +1483,7 @@ bool loadTerrainTable(const char *pFileName)
 
 		QStringList propulsionTypes = propulsionType.split(",");
 		QStringList speedFactors = speedFactor.split(",");
-		for (int x=0; x< propulsionTypes.size(); ++x)
+		for (int x = 0; x < propulsionTypes.size(); ++x)
 		{
 			storeSpeedFactor(terrainType, propulsionTypes[x].toUInt(), speedFactors[x].toUInt());
 		}
@@ -1492,7 +1496,7 @@ bool loadTerrainTable(const char *pFileName)
 	{
 		for (int j = 0; j < PROPULSION_TYPE_NUM; ++j)
 		{
-			TERRAIN_TABLE * const pTerrainTable = asTerrainTable + (i * PROPULSION_TYPE_NUM + j);
+			TERRAIN_TABLE *const pTerrainTable = asTerrainTable + (i * PROPULSION_TYPE_NUM + j);
 			if (pTerrainTable->speedFactor == 0)
 			{
 				debug(LOG_FATAL, "Invalid propulsion/terrain table entry");
@@ -1514,8 +1518,8 @@ bool loadBodyPropulsionIMDs(const char *pFileName)
 	iIMDShape **startIMDs;
 
 	// check that the body and propulsion stats have already been read in
-	ASSERT( asBodyStats != NULL, "Body Stats have not been set up" );
-	ASSERT( asPropulsionStats != NULL, "Propulsion Stats have not been set up" );
+	ASSERT(asBodyStats != NULL, "Body Stats have not been set up");
+	ASSERT(asPropulsionStats != NULL, "Propulsion Stats have not been set up");
 
 	// allocate space
 	for (numStats = 0; numStats < numBodyStats; ++numStats)
@@ -1526,7 +1530,7 @@ bool loadBodyPropulsionIMDs(const char *pFileName)
 	}
 	WzConfig ini(pFileName, WzConfig::ReadOnlyAndRequired);
 	QStringList list = ini.childGroups();
-	for (i=0; i < list.size(); ++i)
+	for (i = 0; i < list.size(); ++i)
 	{
 		ini.beginGroup(list[i]);
 		//get the body stats
@@ -1595,21 +1599,21 @@ bool loadBodyPropulsionIMDs(const char *pFileName)
 
 static bool statsGetAudioIDFromString(const char *szStatName, const char *szWavName, SDWORD *piWavID)
 {
-	if ( strcmp( szWavName, "-1" ) == 0 )
+	if (strcmp(szWavName, "-1") == 0)
 	{
 		*piWavID = NO_SOUND;
 	}
 	else
 	{
-		if ( (*piWavID = audio_GetIDFromStr(szWavName)) == NO_SOUND )
+		if ((*piWavID = audio_GetIDFromStr(szWavName)) == NO_SOUND)
 		{
 			debug(LOG_FATAL, "Could not get ID %d for sound %s", *piWavID, szWavName);
 			return false;
 		}
 	}
 	if ((*piWavID < 0
-	  || *piWavID > ID_MAX_SOUND)
-	 && *piWavID != NO_SOUND)
+	     || *piWavID > ID_MAX_SOUND)
+	    && *piWavID != NO_SOUND)
 	{
 		debug(LOG_FATAL, "Invalid ID - %d for sound %s", *piWavID, szStatName);
 		return false;
@@ -1624,11 +1628,11 @@ bool loadWeaponSounds(const char *pFileName)
 	SDWORD weaponSoundID, explosionSoundID, inc;
 	QString szWeaponWav, szExplosionWav;
 
-	ASSERT( asWeaponStats != NULL, "loadWeaponSounds: Weapon stats not loaded" );
+	ASSERT(asWeaponStats != NULL, "loadWeaponSounds: Weapon stats not loaded");
 
 	WzConfig ini(pFileName, WzConfig::ReadOnlyAndRequired);
 	QStringList list = ini.childGroups();
-	for (int i=0; i < list.size(); ++i)
+	for (int i = 0; i < list.size(); ++i)
 	{
 		ini.beginGroup(list[i]);
 		szWeaponWav = ini.value("szWeaponWav").toString();
@@ -1636,7 +1640,7 @@ bool loadWeaponSounds(const char *pFileName)
 		szExplosionWav = ini.value("szExplosionWav").toString();
 		QStringList szExplosionWavs = szExplosionWav.split(",");
 
-		for (int x=0; x< szWeaponWavs.size(); ++x)
+		for (int x = 0; x < szWeaponWavs.size(); ++x)
 		{
 			if (!statsGetAudioIDFromString(list[i].toUtf8().constData(), szWeaponWavs[x].toUtf8().constData(), &weaponSoundID))
 			{
@@ -1723,11 +1727,11 @@ bool loadPropulsionSounds(const char *pFileName)
 	PROPULSION_TYPE type;
 	PROPULSION_TYPES *pPropType;
 
-	ASSERT( asPropulsionTypes != NULL, "loadPropulsionSounds: Propulsion type stats not loaded" );
+	ASSERT(asPropulsionTypes != NULL, "loadPropulsionSounds: Propulsion type stats not loaded");
 
 	WzConfig ini(pFileName, WzConfig::ReadOnlyAndRequired);
 	QStringList list = ini.childGroups();
-	for (i=0; i < list.size(); ++i)
+	for (i = 0; i < list.size(); ++i)
 	{
 		ini.beginGroup(list[i]);
 		if (!statsGetAudioIDFromString(list[i].toUtf8().constData(), ini.value("szStart").toString().toUtf8().constData(), &startID))
@@ -1778,8 +1782,8 @@ static void storeSpeedFactor(UDWORD terrainType, UDWORD propulsionType, UDWORD s
 {
 	TERRAIN_TABLE *pTerrainTable = asTerrainTable;
 
-	ASSERT( propulsionType < PROPULSION_TYPE_NUM,
-		"The propulsion type is too large" );
+	ASSERT(propulsionType < PROPULSION_TYPE_NUM,
+	       "The propulsion type is too large");
 
 	pTerrainTable += (terrainType * PROPULSION_TYPE_NUM + propulsionType);
 	pTerrainTable->speedFactor = speedFactor;
@@ -1790,8 +1794,8 @@ UDWORD getSpeedFactor(UDWORD type, UDWORD propulsionType)
 {
 	TERRAIN_TABLE *pTerrainTable = asTerrainTable;
 
-	ASSERT( propulsionType < PROPULSION_TYPE_NUM,
-		"The propulsion type is too large" );
+	ASSERT(propulsionType < PROPULSION_TYPE_NUM,
+	       "The propulsion type is too large");
 
 	pTerrainTable += (type * PROPULSION_TYPE_NUM + propulsionType);
 
@@ -1801,48 +1805,48 @@ UDWORD getSpeedFactor(UDWORD type, UDWORD propulsionType)
 //return the type of stat this stat is!
 UDWORD statType(UDWORD ref)
 {
-	if (ref >=REF_BODY_START && ref < REF_BODY_START +
-		REF_RANGE)
+	if (ref >= REF_BODY_START && ref < REF_BODY_START +
+	    REF_RANGE)
 	{
 		return COMP_BODY;
 	}
-	if (ref >=REF_BRAIN_START && ref < REF_BRAIN_START +
-		REF_RANGE)
+	if (ref >= REF_BRAIN_START && ref < REF_BRAIN_START +
+	    REF_RANGE)
 	{
 		return COMP_BRAIN;
 	}
-	if (ref >=REF_PROPULSION_START && ref <
-		REF_PROPULSION_START + REF_RANGE)
+	if (ref >= REF_PROPULSION_START && ref <
+	    REF_PROPULSION_START + REF_RANGE)
 	{
 		return COMP_PROPULSION;
 	}
-	if (ref >=REF_SENSOR_START && ref < REF_SENSOR_START +
-		REF_RANGE)
+	if (ref >= REF_SENSOR_START && ref < REF_SENSOR_START +
+	    REF_RANGE)
 	{
 		return COMP_SENSOR;
 	}
-	if (ref >=REF_ECM_START && ref < REF_ECM_START +
-		REF_RANGE)
+	if (ref >= REF_ECM_START && ref < REF_ECM_START +
+	    REF_RANGE)
 	{
 		return COMP_ECM;
 	}
-	if (ref >=REF_REPAIR_START && ref < REF_REPAIR_START +
-		REF_RANGE)
+	if (ref >= REF_REPAIR_START && ref < REF_REPAIR_START +
+	    REF_RANGE)
 	{
 		return COMP_REPAIRUNIT;
 	}
-	if (ref >=REF_WEAPON_START && ref < REF_WEAPON_START +
-		REF_RANGE)
+	if (ref >= REF_WEAPON_START && ref < REF_WEAPON_START +
+	    REF_RANGE)
 	{
 		return COMP_WEAPON;
 	}
-	if (ref >=REF_CONSTRUCT_START && ref < REF_CONSTRUCT_START +
-		REF_RANGE)
+	if (ref >= REF_CONSTRUCT_START && ref < REF_CONSTRUCT_START +
+	    REF_RANGE)
 	{
 		return COMP_CONSTRUCT;
 	}
 	//else
-	ASSERT( false, "Invalid stat pointer - cannot determine Stat Type" );
+	ASSERT(false, "Invalid stat pointer - cannot determine Stat Type");
 	return COMP_UNKNOWN;
 }
 
@@ -1853,47 +1857,47 @@ UDWORD statRefStart(UDWORD stat)
 
 	switch (stat)
 	{
-		case COMP_BODY:
+	case COMP_BODY:
 		{
 			start = REF_BODY_START;
 			break;
 		}
-		case COMP_BRAIN:
+	case COMP_BRAIN:
 		{
 			start = REF_BRAIN_START;
 			break;
 		}
-		case COMP_PROPULSION:
+	case COMP_PROPULSION:
 		{
 			start = REF_PROPULSION_START;
 			break;
 		}
-		case COMP_SENSOR:
+	case COMP_SENSOR:
 		{
 			start = REF_SENSOR_START;
 			break;
 		}
-		case COMP_ECM:
+	case COMP_ECM:
 		{
 			start = REF_ECM_START;
 			break;
 		}
-		case COMP_REPAIRUNIT:
+	case COMP_REPAIRUNIT:
 		{
 			start = REF_REPAIR_START;
 			break;
 		}
-		case COMP_WEAPON:
+	case COMP_WEAPON:
 		{
 			start = REF_WEAPON_START;
 			break;
 		}
-		case COMP_CONSTRUCT:
+	case COMP_CONSTRUCT:
 		{
 			start = REF_CONSTRUCT_START;
 			break;
 		}
-		default:
+	default:
 		{
 			//COMP_UNKNOWN should be an error
 			debug(LOG_FATAL, "Invalid stat type");
@@ -1904,7 +1908,7 @@ UDWORD statRefStart(UDWORD stat)
 }
 
 /*Returns the component type based on the string - used for reading in data */
-unsigned int componentType(const char* pType)
+unsigned int componentType(const char *pType)
 {
 	if (!strcmp(pType, "BODY"))
 	{
@@ -1939,7 +1943,7 @@ unsigned int componentType(const char* pType)
 		return COMP_CONSTRUCT;
 	}
 
-	ASSERT( false, "Unknown Component Type" );
+	ASSERT(false, "Unknown Component Type");
 	return 0; // Should never get here.
 }
 
@@ -1957,42 +1961,42 @@ static void getStatsDetails(UDWORD compType, BASE_STATS **ppsStats, UDWORD *pnum
 	switch (compType)
 	{
 	case COMP_BODY:
-		*ppsStats = (BASE_STATS*)asBodyStats;
+		*ppsStats = (BASE_STATS *)asBodyStats;
 		*pnumStats = numBodyStats;
 		*pstatSize = sizeof(BODY_STATS);
 		break;
 	case COMP_BRAIN:
-		*ppsStats = (BASE_STATS*)asBrainStats;
+		*ppsStats = (BASE_STATS *)asBrainStats;
 		*pnumStats = numBrainStats;
 		*pstatSize = sizeof(BRAIN_STATS);
 		break;
 	case COMP_PROPULSION:
-		*ppsStats = (BASE_STATS*)asPropulsionStats;
+		*ppsStats = (BASE_STATS *)asPropulsionStats;
 		*pnumStats = numPropulsionStats;
 		*pstatSize = sizeof(PROPULSION_STATS);
 		break;
 	case COMP_REPAIRUNIT:
-		*ppsStats = (BASE_STATS*)asRepairStats;
+		*ppsStats = (BASE_STATS *)asRepairStats;
 		*pnumStats = numRepairStats;
 		*pstatSize = sizeof(REPAIR_STATS);
 		break;
 	case COMP_ECM:
-		*ppsStats = (BASE_STATS*)asECMStats;
+		*ppsStats = (BASE_STATS *)asECMStats;
 		*pnumStats = numECMStats;
 		*pstatSize = sizeof(ECM_STATS);
 		break;
 	case COMP_SENSOR:
-		*ppsStats = (BASE_STATS*)asSensorStats;
+		*ppsStats = (BASE_STATS *)asSensorStats;
 		*pnumStats = numSensorStats;
 		*pstatSize = sizeof(SENSOR_STATS);
 		break;
 	case COMP_CONSTRUCT:
-		*ppsStats = (BASE_STATS*)asConstructStats;
+		*ppsStats = (BASE_STATS *)asConstructStats;
 		*pnumStats = numConstructStats;
 		*pstatSize = sizeof(CONSTRUCT_STATS);
 		break;
 	case COMP_WEAPON:
-		*ppsStats = (BASE_STATS*)asWeaponStats;
+		*ppsStats = (BASE_STATS *)asWeaponStats;
 		*pnumStats = numWeaponStats;
 		*pstatSize = sizeof(WEAPON_STATS);
 		break;
@@ -2010,16 +2014,16 @@ SDWORD getCompFromName(UDWORD compType, const char *pName)
 	BASE_STATS	*psStats = NULL;
 	UDWORD		numStats = 0, count, statSize = 0;
 
-	getStatsDetails(compType, &psStats,&numStats,&statSize);
+	getStatsDetails(compType, &psStats, &numStats, &statSize);
 
 	//find the stat with the same name
-	for(count = 0; count < numStats; count++)
+	for (count = 0; count < numStats; count++)
 	{
 		if (!strcmp(pName, psStats->pName))
 		{
 			return count;
 		}
-		psStats = (BASE_STATS*)((char*)psStats + statSize);
+		psStats = (BASE_STATS *)((char *)psStats + statSize);
 	}
 
 	//return -1 if record not found or an invalid component type is passed in
@@ -2027,15 +2031,15 @@ SDWORD getCompFromName(UDWORD compType, const char *pName)
 }
 
 /*return the name to display for the interface - valid for OBJECTS and STATS*/
-const char* getName(const char *pNameID)
+const char *getName(const char *pNameID)
 {
 	/* See if the name has a string resource associated with it by trying
 	 * to get the string resource.
 	 */
-	const char * const name = strresGetString(psStringRes, pNameID);
+	const char *const name = strresGetString(psStringRes, pNameID);
 	if (!name)
 	{
-		debug( LOG_ERROR, "Unable to find string resource for %s", pNameID );
+		debug(LOG_ERROR, "Unable to find string resource for %s", pNameID);
 		return "Name Unknown";
 	}
 
@@ -2067,14 +2071,14 @@ bool getBodySize(const char *pSize, BODY_SIZE *pStore)
 		return true;
 	}
 
-	ASSERT( false, "Invalid size - %s", pSize );
+	ASSERT(false, "Invalid size - %s", pSize);
 	return false;
 }
 
 /*returns the weapon sub class based on the string name passed in */
-bool getWeaponSubClass(const char* subClass, WEAPON_SUBCLASS* wclass)
+bool getWeaponSubClass(const char *subClass, WEAPON_SUBCLASS *wclass)
 {
-	if      (strcmp(subClass, "CANNON") == 0)
+	if (strcmp(subClass, "CANNON") == 0)
 	{
 		*wclass = WSC_CANNON;
 	}
@@ -2142,39 +2146,39 @@ bool getWeaponSubClass(const char* subClass, WEAPON_SUBCLASS* wclass)
 	{
 		*wclass = WSC_EMP;
 	}
-        else
-        {
-	    ASSERT(!"Invalid weapon sub class", "Invalid weapon sub class: %s", subClass);
-            return false;
-        }
+	else
+	{
+		ASSERT(!"Invalid weapon sub class", "Invalid weapon sub class: %s", subClass);
+		return false;
+	}
 
 	return true;
 }
 
 /*returns the movement model based on the string name passed in */
-bool getMovementModel(const char* movementModel, MOVEMENT_MODEL* model)
+bool getMovementModel(const char *movementModel, MOVEMENT_MODEL *model)
 {
-	if (strcmp(movementModel,"DIRECT") == 0)
+	if (strcmp(movementModel, "DIRECT") == 0)
 	{
 		*model = MM_DIRECT;
 	}
-	else if (strcmp(movementModel,"INDIRECT") == 0)
+	else if (strcmp(movementModel, "INDIRECT") == 0)
 	{
 		*model = MM_INDIRECT;
 	}
-	else if (strcmp(movementModel,"HOMING-DIRECT") == 0)
+	else if (strcmp(movementModel, "HOMING-DIRECT") == 0)
 	{
 		*model = MM_HOMINGDIRECT;
 	}
-	else if (strcmp(movementModel,"HOMING-INDIRECT") == 0)
+	else if (strcmp(movementModel, "HOMING-INDIRECT") == 0)
 	{
 		*model = MM_HOMINGINDIRECT;
 	}
-	else if (strcmp(movementModel,"ERRATIC-DIRECT") == 0)
+	else if (strcmp(movementModel, "ERRATIC-DIRECT") == 0)
 	{
 		*model = MM_ERRATICDIRECT;
 	}
-	else if (strcmp(movementModel,"SWEEP") == 0)
+	else if (strcmp(movementModel, "SWEEP") == 0)
 	{
 		*model = MM_SWEEP;
 	}
@@ -2200,9 +2204,9 @@ const StringToEnum<WEAPON_EFFECT> mapUnsorted_WEAPON_EFFECT[] =
 };
 const StringToEnumMap<WEAPON_EFFECT> map_WEAPON_EFFECT = mapUnsorted_WEAPON_EFFECT;
 
-bool getWeaponEffect(const char* weaponEffect, WEAPON_EFFECT* effect)
+bool getWeaponEffect(const char *weaponEffect, WEAPON_EFFECT *effect)
 {
-	if      (strcmp(weaponEffect, "ANTI PERSONNEL") == 0)
+	if (strcmp(weaponEffect, "ANTI PERSONNEL") == 0)
 	{
 		*effect = WE_ANTI_PERSONNEL;
 	}
@@ -2254,7 +2258,8 @@ bool getWeaponClass(QString weaponClassStr, WEAPON_CLASS *weaponClass)
 	{
 		//psStats->weaponClass = WC_MISC;
 		*weaponClass = WC_HEAT;		// removed from release version of Warzone
-	}else
+	}
+	else
 	{
 		return false;
 	};
@@ -2266,7 +2271,7 @@ bool getWeaponClass(QString weaponClassStr, WEAPON_CLASS *weaponClass)
 looks up the name to get the resource associated with it - or allocates space
 and stores the name. Eventually ALL names will be 'resourced' for translation
 */
-char* allocateName(const char* name)
+char *allocateName(const char *name)
 {
 	/* Check whether the given string has a string resource associated with
 	 * it.
@@ -2281,12 +2286,12 @@ char* allocateName(const char* name)
 
 
 /*Access functions for the upgradeable stats of a weapon*/
-UDWORD	weaponFirePause(const WEAPON_STATS* psStats, UBYTE player)
+UDWORD	weaponFirePause(const WEAPON_STATS *psStats, UBYTE player)
 {
-	if(psStats->reloadTime == 0)
+	if (psStats->reloadTime == 0)
 	{
 		return (psStats->firePause - (psStats->firePause * asWeaponUpgrade[player][
-			psStats->weaponSubClass].firePause)/100);
+		        psStats->weaponSubClass].firePause) / 100);
 	}
 	else
 	{
@@ -2298,70 +2303,70 @@ UDWORD	weaponFirePause(const WEAPON_STATS* psStats, UBYTE player)
 UDWORD	weaponReloadTime(WEAPON_STATS *psStats, UBYTE player)
 {
 	return (psStats->reloadTime - (psStats->reloadTime * asWeaponUpgrade[player][
-		psStats->weaponSubClass].firePause)/100);
+	        psStats->weaponSubClass].firePause) / 100);
 }
 
-UDWORD	weaponLongHit(const WEAPON_STATS* psStats, UBYTE player)
+UDWORD	weaponLongHit(const WEAPON_STATS *psStats, UBYTE player)
 {
 	return (psStats->longHit + (psStats->longHit * asWeaponUpgrade[player][
-		psStats->weaponSubClass].longHit)/100);
+	        psStats->weaponSubClass].longHit) / 100);
 }
 
-UDWORD	weaponDamage(const WEAPON_STATS* psStats, UBYTE player)
+UDWORD	weaponDamage(const WEAPON_STATS *psStats, UBYTE player)
 {
 	return (psStats->damage + (psStats->damage * asWeaponUpgrade[player][
-		psStats->weaponSubClass].damage)/100);
+	        psStats->weaponSubClass].damage) / 100);
 }
 
 UDWORD	weaponRadDamage(WEAPON_STATS *psStats, UBYTE player)
 {
-	return  (psStats->radiusDamage + (psStats->radiusDamage * asWeaponUpgrade[player][
-		psStats->weaponSubClass].radiusDamage)/100);
+	return (psStats->radiusDamage + (psStats->radiusDamage * asWeaponUpgrade[player][
+	        psStats->weaponSubClass].radiusDamage) / 100);
 }
 
 UDWORD	weaponPeriodicalDamage(WEAPON_STATS *psStats, UBYTE player)
 {
 	return (psStats->periodicalDamage + (psStats->periodicalDamage * asWeaponUpgrade[player][
-		psStats->periodicalDamageWeaponSubClass].periodicalDamage)/100);
+	        psStats->periodicalDamageWeaponSubClass].periodicalDamage) / 100);
 }
 
 UDWORD	weaponRadiusHit(WEAPON_STATS *psStats, UBYTE player)
 {
 	return (psStats->radiusHit + (psStats->radiusHit * asWeaponUpgrade[player][
-		psStats->weaponSubClass].radiusHit)/100);
+	        psStats->weaponSubClass].radiusHit) / 100);
 }
 
 UDWORD	sensorRange(SENSOR_STATS *psStats, UBYTE player)
 {
 	return (UWORD)(psStats->range + (psStats->range * asSensorUpgrade[player].
-		range)/100);
+	        range) / 100);
 }
 
 /*Access functions for the upgradeable stats of a ECM*/
 UDWORD	ecmRange(ECM_STATS *psStats, UBYTE player)
 {
-	return (UWORD)(psStats->range + (psStats->range * asECMUpgrade[player].range)/100);
+	return (UWORD)(psStats->range + (psStats->range * asECMUpgrade[player].range) / 100);
 }
 
 /*Access functions for the upgradeable stats of a repair*/
 UDWORD	repairPoints(REPAIR_STATS *psStats, UBYTE player)
 {
 	return (psStats->repairPoints + (psStats->repairPoints *
-		asRepairUpgrade[player].repairPoints)/100);
+	        asRepairUpgrade[player].repairPoints) / 100);
 }
 
 /*Access functions for the upgradeable stats of a constructor*/
 UDWORD	constructorPoints(CONSTRUCT_STATS *psStats, UBYTE player)
 {
 	return (psStats->constructPoints + (psStats->constructPoints *
-		asConstUpgrade[player].constructPoints)/100);
+	        asConstUpgrade[player].constructPoints) / 100);
 }
 
 /*Access functions for the upgradeable stats of a body*/
 UDWORD	bodyPower(BODY_STATS *psStats, UBYTE player, UBYTE bodyType)
 {
 	return (psStats->powerOutput + (psStats->powerOutput *
-		asBodyUpgrade[player][bodyType].powerOutput)/100);
+	        asBodyUpgrade[player][bodyType].powerOutput) / 100);
 }
 
 UDWORD bodyArmour(BODY_STATS *psStats, UBYTE player, UBYTE bodyType, WEAPON_CLASS weaponClass)
@@ -2369,10 +2374,10 @@ UDWORD bodyArmour(BODY_STATS *psStats, UBYTE player, UBYTE bodyType, WEAPON_CLAS
 	switch (weaponClass)
 	{
 	case WC_KINETIC:
-	//case WC_EXPLOSIVE:
+		//case WC_EXPLOSIVE:
 		return (psStats->armourValue[WC_KINETIC] + (psStats->armourValue[WC_KINETIC] * asBodyUpgrade[player][bodyType].armourValue[WC_KINETIC]) / 100);
 	case WC_HEAT:
-	//case WC_MISC:
+		//case WC_MISC:
 		return (psStats->armourValue[WC_HEAT] + (psStats->armourValue[WC_HEAT] * asBodyUpgrade[player][bodyType].armourValue[WC_HEAT]) / 100);
 	default:
 		break;
@@ -2393,7 +2398,7 @@ UWORD weaponROF(WEAPON_STATS *psStat, SBYTE player)
 		{
 			// Rounds per salvo multiplied with the number of salvos per minute
 			rof = (UWORD)(psStat->numRounds * 60 * GAME_TICKS_PER_SEC  /
-				(player >= 0 ? weaponReloadTime(psStat, player) : psStat->reloadTime) );
+			        (player >= 0 ? weaponReloadTime(psStat, player) : psStat->reloadTime));
 		}
 	}
 	if (rof == 0)
@@ -2411,58 +2416,58 @@ UWORD weaponROF(WEAPON_STATS *psStat, SBYTE player)
 //Access functions for the max values to be used in the Design Screen
 void setMaxComponentWeight(UDWORD weight)
 {
-    if (weight > maxComponentWeight)
-    {
-        maxComponentWeight = weight;
-    }
+	if (weight > maxComponentWeight)
+	{
+		maxComponentWeight = weight;
+	}
 }
 UDWORD getMaxComponentWeight(void)
 {
-    return maxComponentWeight;
+	return maxComponentWeight;
 }
 
 void setMaxBodyArmour(UDWORD armour)
 {
-    if (armour > maxBodyArmour)
-    {
-        maxBodyArmour = armour;
-    }
+	if (armour > maxBodyArmour)
+	{
+		maxBodyArmour = armour;
+	}
 }
 UDWORD getMaxBodyArmour(void)
 {
-    return maxBodyArmour;
+	return maxBodyArmour;
 }
 
 void setMaxBodyPower(UDWORD power)
 {
-    if (power > maxBodyPower)
-    {
-        maxBodyPower = power;
-    }
+	if (power > maxBodyPower)
+	{
+		maxBodyPower = power;
+	}
 }
 UDWORD getMaxBodyPower(void)
 {
-    return maxBodyPower;
+	return maxBodyPower;
 }
 
 void setMaxBodyPoints(UDWORD points)
 {
-    if (points > maxBodyPoints)
-    {
-        maxBodyPoints = points;
-    }
+	if (points > maxBodyPoints)
+	{
+		maxBodyPoints = points;
+	}
 }
 UDWORD getMaxBodyPoints(void)
 {
-    return maxBodyPoints;
+	return maxBodyPoints;
 }
 
 void setMaxSensorRange(UDWORD range)
 {
-    if (range > maxSensorRange)
-    {
-        maxSensorRange = range;
-    }
+	if (range > maxSensorRange)
+	{
+		maxSensorRange = range;
+	}
 }
 
 UDWORD getMaxSensorRange(void)
@@ -2485,110 +2490,110 @@ UDWORD getMaxECMRange(void)
 
 void setMaxConstPoints(UDWORD points)
 {
-    if (points > maxConstPoints)
-    {
-        maxConstPoints = points;
-    }
+	if (points > maxConstPoints)
+	{
+		maxConstPoints = points;
+	}
 }
 UDWORD getMaxConstPoints(void)
 {
-    return maxConstPoints;
+	return maxConstPoints;
 }
 
 void setMaxRepairPoints(UDWORD repair)
 {
-    if (repair > maxRepairPoints)
-    {
-        maxRepairPoints = repair;
-    }
+	if (repair > maxRepairPoints)
+	{
+		maxRepairPoints = repair;
+	}
 }
 UDWORD getMaxRepairPoints(void)
 {
-    return maxRepairPoints;
+	return maxRepairPoints;
 }
 
 void setMaxWeaponRange(UDWORD range)
 {
-    if (range > maxWeaponRange)
-    {
-        maxWeaponRange = range;
-    }
+	if (range > maxWeaponRange)
+	{
+		maxWeaponRange = range;
+	}
 }
 UDWORD getMaxWeaponRange(void)
 {
-    return maxWeaponRange;
+	return maxWeaponRange;
 }
 
 void setMaxWeaponDamage(UDWORD damage)
 {
-    if (damage > maxWeaponDamage)
-    {
-        maxWeaponDamage = damage;
-    }
+	if (damage > maxWeaponDamage)
+	{
+		maxWeaponDamage = damage;
+	}
 }
 UDWORD getMaxWeaponDamage(void)
 {
-    return maxWeaponDamage;
+	return maxWeaponDamage;
 }
 
 void setMaxWeaponROF(UDWORD rof)
 {
-    if (rof > maxWeaponROF)
-    {
-        maxWeaponROF = rof;
-    }
+	if (rof > maxWeaponROF)
+	{
+		maxWeaponROF = rof;
+	}
 }
 UDWORD getMaxWeaponROF(void)
 {
-    return maxWeaponROF;
+	return maxWeaponROF;
 }
 
 void setMaxPropulsionSpeed(UDWORD speed)
 {
-    if (speed > maxPropulsionSpeed)
-    {
-        maxPropulsionSpeed = speed;
-    }
+	if (speed > maxPropulsionSpeed)
+	{
+		maxPropulsionSpeed = speed;
+	}
 }
 UDWORD getMaxPropulsionSpeed(void)
 {
-    return maxPropulsionSpeed;
+	return maxPropulsionSpeed;
 }
 
 //determine the effect this upgrade would have on the max values
 void updateMaxWeaponStats(UWORD maxValue)
 {
-    UDWORD currentMaxValue = getMaxWeaponDamage();
+	UDWORD currentMaxValue = getMaxWeaponDamage();
 
-    if (currentMaxValue < (currentMaxValue + maxValue / 100))
-    {
-        currentMaxValue += currentMaxValue * maxValue / 100;
-        setMaxWeaponDamage(currentMaxValue);
-    }
+	if (currentMaxValue < (currentMaxValue + maxValue / 100))
+	{
+		currentMaxValue += currentMaxValue * maxValue / 100;
+		setMaxWeaponDamage(currentMaxValue);
+	}
 
-    //the fire pause is dealt with differently
+	//the fire pause is dealt with differently
 }
 
 void updateMaxSensorStats(UWORD maxRange)
 {
-    UDWORD currentMaxValue = getMaxSensorRange();
+	UDWORD currentMaxValue = getMaxSensorRange();
 
-    if (currentMaxValue < (currentMaxValue + currentMaxValue * maxRange / 100))
-    {
-        currentMaxValue += currentMaxValue * maxRange / 100;
-        setMaxSensorRange(currentMaxValue);
-    }
+	if (currentMaxValue < (currentMaxValue + currentMaxValue * maxRange / 100))
+	{
+		currentMaxValue += currentMaxValue * maxRange / 100;
+		setMaxSensorRange(currentMaxValue);
+	}
 }
 
 void updateMaxRepairStats(UWORD maxValue)
 {
-    UDWORD currentMaxValue = getMaxRepairPoints();
+	UDWORD currentMaxValue = getMaxRepairPoints();
 
-    if (currentMaxValue < (currentMaxValue + currentMaxValue * maxValue / 100))
-    {
-        currentMaxValue += currentMaxValue * maxValue / 100;
-        setMaxRepairPoints(currentMaxValue);
-    }
+	if (currentMaxValue < (currentMaxValue + currentMaxValue * maxValue / 100))
+	{
+		currentMaxValue += currentMaxValue * maxValue / 100;
+		setMaxRepairPoints(currentMaxValue);
+	}
 }
 
 void updateMaxECMStats(UWORD maxValue)
@@ -2604,116 +2609,116 @@ void updateMaxECMStats(UWORD maxValue)
 
 void updateMaxBodyStats(UWORD maxBody, UWORD maxPower, UWORD maxArmour)
 {
-    UDWORD currentMaxValue = getMaxBodyPoints();
+	UDWORD currentMaxValue = getMaxBodyPoints();
 
-    if (currentMaxValue < (currentMaxValue + currentMaxValue * maxBody / 100))
-    {
-        currentMaxValue += currentMaxValue * maxBody / 100;
-        setMaxBodyPoints(currentMaxValue);
-    }
+	if (currentMaxValue < (currentMaxValue + currentMaxValue * maxBody / 100))
+	{
+		currentMaxValue += currentMaxValue * maxBody / 100;
+		setMaxBodyPoints(currentMaxValue);
+	}
 
-    currentMaxValue = getMaxBodyPower();
-    if (currentMaxValue < (currentMaxValue + currentMaxValue * maxPower / 100))
-    {
-        currentMaxValue += currentMaxValue * maxPower / 100;
-        setMaxBodyPower(currentMaxValue);
-    }
+	currentMaxValue = getMaxBodyPower();
+	if (currentMaxValue < (currentMaxValue + currentMaxValue * maxPower / 100))
+	{
+		currentMaxValue += currentMaxValue * maxPower / 100;
+		setMaxBodyPower(currentMaxValue);
+	}
 
-    currentMaxValue = getMaxBodyArmour();
-    if (currentMaxValue < (currentMaxValue + currentMaxValue * maxArmour / 100))
-    {
-        currentMaxValue += currentMaxValue * maxArmour / 100;
-        setMaxBodyArmour(currentMaxValue);
-    }
+	currentMaxValue = getMaxBodyArmour();
+	if (currentMaxValue < (currentMaxValue + currentMaxValue * maxArmour / 100))
+	{
+		currentMaxValue += currentMaxValue * maxArmour / 100;
+		setMaxBodyArmour(currentMaxValue);
+	}
 }
 
 void updateMaxConstStats(UWORD maxValue)
 {
-    UDWORD currentMaxValue = getMaxConstPoints();
+	UDWORD currentMaxValue = getMaxConstPoints();
 
-    if (currentMaxValue < (currentMaxValue + currentMaxValue * maxValue / 100))
-    {
-        currentMaxValue += currentMaxValue * maxValue / 100;
-        setMaxConstPoints(currentMaxValue);
-    }
+	if (currentMaxValue < (currentMaxValue + currentMaxValue * maxValue / 100))
+	{
+		currentMaxValue += currentMaxValue * maxValue / 100;
+		setMaxConstPoints(currentMaxValue);
+	}
 }
 
 //propulsion stats are not upgradeable
 
 void adjustMaxDesignStats(void)
 {
-    UWORD       weaponDamage, sensorRange, repairPoints,
-                ecmRange, constPoints, bodyPoints, bodyPower, bodyArmour, inc;
+	UWORD       weaponDamage, sensorRange, repairPoints,
+	            ecmRange, constPoints, bodyPoints, bodyPower, bodyArmour, inc;
 
 	// init all the values
 	weaponDamage = sensorRange = repairPoints = ecmRange = constPoints = bodyPoints = bodyPower = bodyArmour = 0;
 
-    //go thru' all the functions getting the max upgrade values for the stats
-    for (inc = 0; inc < numFunctions; inc++)
-    {
-        switch(asFunctions[inc]->type)
-        {
-        case DROIDREPAIR_UPGRADE_TYPE:
-            if (repairPoints < ((UPGRADE_FUNCTION *)asFunctions[inc])->upgradePoints)
-            {
-                repairPoints = ((UPGRADE_FUNCTION *)asFunctions[inc])->upgradePoints;
-            }
-            break;
-        case DROIDECM_UPGRADE_TYPE:
-            if (ecmRange < ((UPGRADE_FUNCTION *)asFunctions[inc])->upgradePoints)
-            {
-                ecmRange = ((UPGRADE_FUNCTION *)asFunctions[inc])->upgradePoints;
-            }
-            break;
-        case DROIDBODY_UPGRADE_TYPE:
-            if (bodyPoints < ((DROIDBODY_UPGRADE_FUNCTION *)asFunctions[inc])->body)
-            {
-                bodyPoints = ((DROIDBODY_UPGRADE_FUNCTION *)asFunctions[inc])->body;
-            }
-            if (bodyPower < ((DROIDBODY_UPGRADE_FUNCTION *)asFunctions[inc])->upgradePoints)
-            {
-                bodyPower = ((DROIDBODY_UPGRADE_FUNCTION *)asFunctions[inc])->upgradePoints;
-            }
-            if (bodyArmour < ((DROIDBODY_UPGRADE_FUNCTION *)asFunctions[inc])->armourValue[WC_KINETIC])
-            {
-                bodyArmour = ((DROIDBODY_UPGRADE_FUNCTION *)asFunctions[inc])->armourValue[WC_KINETIC];
-            }
-            if (bodyArmour < ((DROIDBODY_UPGRADE_FUNCTION *)asFunctions[inc])->armourValue[WC_HEAT])
-            {
-                bodyArmour = ((DROIDBODY_UPGRADE_FUNCTION *)asFunctions[inc])->armourValue[WC_HEAT];
-            }
-            break;
-        case DROIDSENSOR_UPGRADE_TYPE:
-            if (sensorRange < ((DROIDSENSOR_UPGRADE_FUNCTION *)asFunctions[inc])->range)
-            {
-                sensorRange = ((DROIDSENSOR_UPGRADE_FUNCTION *)asFunctions[inc])->range;
-            }
-            break;
-        case DROIDCONST_UPGRADE_TYPE:
-            if (constPoints < ((UPGRADE_FUNCTION *)asFunctions[inc])->upgradePoints)
-            {
-                constPoints = ((UPGRADE_FUNCTION *)asFunctions[inc])->upgradePoints;
-            }
-            break;
-        case WEAPON_UPGRADE_TYPE:
-            if (weaponDamage < ((WEAPON_UPGRADE_FUNCTION *)asFunctions[inc])->damage)
-            {
-                weaponDamage = ((WEAPON_UPGRADE_FUNCTION *)asFunctions[inc])->damage;
-            }
-            break;
-        default:
-            //not interested in other function types
-            break;
-        }
-    }
+	//go thru' all the functions getting the max upgrade values for the stats
+	for (inc = 0; inc < numFunctions; inc++)
+	{
+		switch (asFunctions[inc]->type)
+		{
+		case DROIDREPAIR_UPGRADE_TYPE:
+			if (repairPoints < ((UPGRADE_FUNCTION *)asFunctions[inc])->upgradePoints)
+			{
+				repairPoints = ((UPGRADE_FUNCTION *)asFunctions[inc])->upgradePoints;
+			}
+			break;
+		case DROIDECM_UPGRADE_TYPE:
+			if (ecmRange < ((UPGRADE_FUNCTION *)asFunctions[inc])->upgradePoints)
+			{
+				ecmRange = ((UPGRADE_FUNCTION *)asFunctions[inc])->upgradePoints;
+			}
+			break;
+		case DROIDBODY_UPGRADE_TYPE:
+			if (bodyPoints < ((DROIDBODY_UPGRADE_FUNCTION *)asFunctions[inc])->body)
+			{
+				bodyPoints = ((DROIDBODY_UPGRADE_FUNCTION *)asFunctions[inc])->body;
+			}
+			if (bodyPower < ((DROIDBODY_UPGRADE_FUNCTION *)asFunctions[inc])->upgradePoints)
+			{
+				bodyPower = ((DROIDBODY_UPGRADE_FUNCTION *)asFunctions[inc])->upgradePoints;
+			}
+			if (bodyArmour < ((DROIDBODY_UPGRADE_FUNCTION *)asFunctions[inc])->armourValue[WC_KINETIC])
+			{
+				bodyArmour = ((DROIDBODY_UPGRADE_FUNCTION *)asFunctions[inc])->armourValue[WC_KINETIC];
+			}
+			if (bodyArmour < ((DROIDBODY_UPGRADE_FUNCTION *)asFunctions[inc])->armourValue[WC_HEAT])
+			{
+				bodyArmour = ((DROIDBODY_UPGRADE_FUNCTION *)asFunctions[inc])->armourValue[WC_HEAT];
+			}
+			break;
+		case DROIDSENSOR_UPGRADE_TYPE:
+			if (sensorRange < ((DROIDSENSOR_UPGRADE_FUNCTION *)asFunctions[inc])->range)
+			{
+				sensorRange = ((DROIDSENSOR_UPGRADE_FUNCTION *)asFunctions[inc])->range;
+			}
+			break;
+		case DROIDCONST_UPGRADE_TYPE:
+			if (constPoints < ((UPGRADE_FUNCTION *)asFunctions[inc])->upgradePoints)
+			{
+				constPoints = ((UPGRADE_FUNCTION *)asFunctions[inc])->upgradePoints;
+			}
+			break;
+		case WEAPON_UPGRADE_TYPE:
+			if (weaponDamage < ((WEAPON_UPGRADE_FUNCTION *)asFunctions[inc])->damage)
+			{
+				weaponDamage = ((WEAPON_UPGRADE_FUNCTION *)asFunctions[inc])->damage;
+			}
+			break;
+		default:
+			//not interested in other function types
+			break;
+		}
+	}
 
-    //determine the effect on the max values for the stats
-    updateMaxWeaponStats(weaponDamage);
-    updateMaxSensorStats(sensorRange);
-    updateMaxRepairStats(repairPoints);
-    updateMaxECMStats(ecmRange);
-    updateMaxBodyStats(bodyPoints, bodyPower, bodyArmour);
-    updateMaxConstStats(constPoints);
+	//determine the effect on the max values for the stats
+	updateMaxWeaponStats(weaponDamage);
+	updateMaxSensorStats(sensorRange);
+	updateMaxRepairStats(repairPoints);
+	updateMaxECMStats(ecmRange);
+	updateMaxBodyStats(bodyPoints, bodyPower, bodyArmour);
+	updateMaxConstStats(constPoints);
 }
 
 /* Check if an object has a weapon */
@@ -2721,16 +2726,16 @@ bool objHasWeapon(const BASE_OBJECT *psObj)
 {
 
 	//check if valid type
-	if(psObj->type == OBJ_DROID)
+	if (psObj->type == OBJ_DROID)
 	{
-		if ( ((DROID *)psObj)->numWeaps > 0 )
+		if (((DROID *)psObj)->numWeaps > 0)
 		{
 			return true;
 		}
 	}
-	else if(psObj->type == OBJ_STRUCTURE)
+	else if (psObj->type == OBJ_STRUCTURE)
 	{
-		if ( ((STRUCTURE *)psObj)->numWeaps > 0 )
+		if (((STRUCTURE *)psObj)->numWeaps > 0)
 		{
 			return true;
 		}
@@ -2752,7 +2757,7 @@ SENSOR_STATS *objActiveRadar(const BASE_OBJECT *psObj)
 			return NULL;
 		}
 		compIndex = ((DROID *)psObj)->asBits[COMP_SENSOR].nStat;
-		ASSERT_OR_RETURN( NULL, compIndex < numSensorStats, "Invalid range referenced for numSensorStats, %d > %d", compIndex, numSensorStats);
+		ASSERT_OR_RETURN(NULL, compIndex < numSensorStats, "Invalid range referenced for numSensorStats, %d > %d", compIndex, numSensorStats);
 		psStats = asSensorStats + compIndex;
 		break;
 	case OBJ_STRUCTURE:

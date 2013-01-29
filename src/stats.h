@@ -148,17 +148,11 @@ extern UDWORD numCR(const char *pFileBuffer, UDWORD fileSize);
 /*Load the weapon stats from the file exported from Access*/
 extern bool loadWeaponStats(const char *pFileName);
 
-/*Load the armour stats from the file exported from Access*/
-//extern bool loadArmourStats(void);
-
 /*Load the body stats from the file exported from Access*/
 extern bool loadBodyStats(const char *pFileName);
 
 /*Load the brain stats from the file exported from Access*/
 extern bool loadBrainStats(const char *pFileName);
-
-/*Load the power stats from the file exported from Access*/
-//extern bool loadPowerStats(void);
 
 /*Load the propulsion stats from the file exported from Access*/
 extern bool loadPropulsionStats(const char *pFileName);
@@ -278,9 +272,6 @@ extern UDWORD	constructorPoints(CONSTRUCT_STATS *psStats, UBYTE player);
 extern UDWORD	bodyPower(BODY_STATS *psStats, UBYTE player, UBYTE bodyType);
 extern UDWORD	bodyArmour(BODY_STATS *psStats, UBYTE player, UBYTE bodyType,
 				   WEAPON_CLASS weaponClass);
-
-/*dummy function for John*/
-extern void brainAvailable(BRAIN_STATS *psStat);
 
 extern void adjustMaxDesignStats(void);
 
