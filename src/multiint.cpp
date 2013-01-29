@@ -786,17 +786,11 @@ bool startConnectionScreen(void)
 
 void runConnectionScreen(void)
 {
-	UDWORD id;
 	static char addr[128];
 
-	if(SettingsUp == true)
-	{
-		id = widgRunScreen(psConScreen);				// Run the current set of widgets
-	}
-	else
-	{
-		id = widgRunScreen(psWScreen);					// Run the current set of widgets
-	}
+	W_SCREEN *curScreen = SettingsUp? psConScreen : psWScreen;
+	WidgetTriggers const &triggers = widgRunScreen(curScreen);
+	unsigned id = triggers.empty()? 0 : triggers.front().widget->id;  // Just use first click here, since the next click could be on another menu.
 
 	switch(id)
 	{
@@ -892,15 +886,20 @@ bool joinGame(const char* host, uint32_t port)
 				setLobbyError(ERROR_NOERROR);
 				break;
 			case ERROR_WRONGPASSWORD:
+			{
 				// Change to GAMEFIND, screen with a password dialog.
 				changeTitleMode(GAMEFIND);
 				showPasswordForm();
-				if (widgRunScreen(psWScreen) != CON_PASSWORD) // Run the current set of widgets
+				WidgetTriggers const &triggers = widgRunScreen(psWScreen);
+				unsigned id = triggers.empty()? 0 : triggers.front().widget->id;  // Just use first click here, since the next click could be on another menu.
+
+				if (id != CON_PASSWORD) // Run the current set of widgets
 				{
 					return false;
 				}
 				NETsetGamePassword(widgGetString(psWScreen, CON_PASSWORD));
 				break;
+			}
 			default:
 				break;
 		}
@@ -1099,7 +1098,6 @@ static void removeGames(void)
 
 void runGameFind(void )
 {
-	UDWORD id;
 	static UDWORD lastupdate=0;
 	static char game_password[StringSize];
 
@@ -1118,7 +1116,8 @@ void runGameFind(void )
 		addConsoleBox();
 	}
 
-	id = widgRunScreen(psWScreen);						// Run the current set of widgets
+	WidgetTriggers const &triggers = widgRunScreen(psWScreen);
+	unsigned id = triggers.empty()? 0 : triggers.front().widget->id;  // Just use first click here, since the next click could be on another menu.
 
 	if(id == CON_CANCEL)								// ok
 	{
@@ -3686,7 +3685,6 @@ void frontendMultiMessages(void)
 void runMultiOptions(void)
 {
 	static UDWORD	lastrefresh = 0;
-	UDWORD			id, i;
 	char                    sTemp[128], oldGameMap[128];
 	int                     oldMaxPlayers;
 	PLAYERSTATS		playerStats;
@@ -3698,7 +3696,7 @@ void runMultiOptions(void)
 	frontendMultiMessages();
 	if (NetPlay.isHost)
 	{
-		for (i = 0; i < MAX_PLAYERS; i++)
+		for (unsigned i = 0; i < MAX_PLAYERS; i++)
 		{
 			// send it for each player that needs it
 			if (NetPlay.players[i].wzFile.isSending)
@@ -3761,7 +3759,9 @@ void runMultiOptions(void)
 
 	if(multiRequestUp)
 	{
-		id = widgRunScreen(psRScreen);						// a requester box is up.
+		WidgetTriggers const &triggers = widgRunScreen(psRScreen);
+		unsigned id = triggers.empty()? 0 : triggers.front().widget->id;  // Just use first click here, since the next click could be on another menu.
+
 		LEVEL_DATASET *mapData;
 		bool isHoverPreview;
 		if (runMultiRequester(id, &id, (char *)&sTemp, &mapData, &isHoverPreview))
@@ -3833,7 +3833,9 @@ void runMultiOptions(void)
 			hideTime = 0;
 		}
 
-		id = widgRunScreen(psWScreen);								// run the widgets.
+		WidgetTriggers const &triggers = widgRunScreen(psWScreen);
+		unsigned id = triggers.empty()? 0 : triggers.front().widget->id;  // Just use first click here, since the next click could be on another menu.
+
 		processMultiopWidgets(id);
 	}
 

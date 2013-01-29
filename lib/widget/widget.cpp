@@ -43,21 +43,19 @@ static	bool	bWidgetsActive = true;
 /* The widget the mouse is over this update */
 static WIDGET	*psMouseOverWidget = NULL;
 
-static WIDGET_KEY pressed, released;
 static WIDGET_AUDIOCALLBACK AudioCallback = NULL;
 static SWORD HilightAudioID = -1;
 static SWORD ClickedAudioID = -1;
 
 /* Function prototypes */
-void widgHiLite(WIDGET *psWidget, W_CONTEXT *psContext);
-void widgHiLiteLost(WIDGET *psWidget, W_CONTEXT *psContext);
-static void widgReleased(WIDGET *psWidget, UDWORD key, W_CONTEXT *psContext);
-static void widgRun(WIDGET *psWidget, W_CONTEXT *psContext);
 static void widgDisplayForm(W_FORM *psForm, UDWORD xOffset, UDWORD yOffset);
 static void widgRelease(WIDGET *psWidget);
 
 /* Buffer to return strings in */
 static char aStringRetBuffer[WIDG_MAXSTR];
+
+static WIDGET_KEY lastReleasedKey_DEPRECATED = WKEY_NONE;
+
 
 /* Initialise the widget module */
 bool widgInitialise()
@@ -538,7 +536,7 @@ static bool widgDeleteFromForm(W_FORM *psForm, UDWORD id, W_CONTEXT *psContext)
 	/* Clear the last hilite if necessary */
 	if ((psForm->psLastHiLite != NULL) && (psForm->psLastHiLite->id == id))
 	{
-		widgHiLiteLost(psForm->psLastHiLite, psContext);
+		psForm->psLastHiLite->highlightLost(psContext);
 		psForm->psLastHiLite = NULL;
 	}
 
@@ -907,20 +905,6 @@ void widgSetUserData2(W_SCREEN *psScreen, UDWORD id, UDWORD UserData)
 }
 
 
-
-/* Return the user data for the returned widget */
-void *widgGetLastUserData(W_SCREEN *psScreen)
-{
-	assert(psScreen != NULL);
-
-	if (psScreen->psRetWidget)
-	{
-		return psScreen->psRetWidget->pUserData;
-	}
-
-	return NULL;
-}
-
 /* Set tip string for a widget */
 void widgSetTip(W_SCREEN *psScreen, UDWORD id, const char *pTip)
 {
@@ -982,16 +966,15 @@ void widgSetTipText(WIDGET *psWidget, const char *pTip)
 }
 
 /* Return which key was used to press the last returned widget */
-UDWORD widgGetButtonKey(W_SCREEN *psScreen)
+UDWORD widgGetButtonKey_DEPRECATED(W_SCREEN *psScreen)
 {
 	/* Don't actually need the screen parameter at the moment - but it might be
 	   handy if released needs to stop being a static and moves into
 	   the screen structure */
 	(void)psScreen;
 
-	return released;
+	return lastReleasedKey_DEPRECATED;
 }
-
 
 /* Get a button or clickable form's state */
 UDWORD widgGetButtonState(W_SCREEN *psScreen, UDWORD id)
@@ -1275,16 +1258,12 @@ static void widgProcessCallbacks(W_CONTEXT *psContext)
 static void widgProcessForm(W_CONTEXT *psContext)
 {
 	WIDGET		*psCurr, *psOver;
-	SDWORD		mx, my, omx, omy, xOffset, yOffset, xOrigin, yOrigin;
+	SDWORD		mx, my, xOffset, yOffset, xOrigin, yOrigin;
 	W_FORM		*psForm;
 	W_CONTEXT	sFormContext, sWidgContext;
 
 	/* Note current form */
 	psForm = psContext->psForm;
-
-//	if(psForm->disableChildren == true) {
-//		return;
-//	}
 
 	/* Note the current mouse position */
 	mx = psContext->mx;
@@ -1331,143 +1310,186 @@ static void widgProcessForm(W_CONTEXT *psContext)
 		else
 		{
 			/* Run the widget */
-			widgRun(psCurr, &sWidgContext);
+			psCurr->run(&sWidgContext);
 		}
-	}
-
-	/* Now check for mouse clicks */
-	omx = mx - xOrigin;
-	omy = my - yOrigin;
-	if (mx >= 0 && mx <= psForm->width &&
-	    my >= 0 && my <= psForm->height)
-	{
-		/* Update for the origin */
-
-		/* Mouse is over the form - is it over any of the widgets */
-		for (psCurr = formGetWidgets(psForm); psCurr; psCurr = psCurr->psNext)
-		{
-			/* Skip any hidden widgets */
-			if (psCurr->style & WIDG_HIDDEN)
-			{
-				continue;
-			}
-
-			if (omx >= psCurr->x &&
-			    omy >= psCurr->y &&
-			    omx <= psCurr->x + psCurr->width &&
-			    omy <= psCurr->y + psCurr->height)
-			{
-				/* Note the widget the mouse is over */
-				if (!psMouseOverWidget)
-				{
-					psMouseOverWidget = (WIDGET *)psCurr;
-				}
-				psOver = psCurr;
-
-				/* Don't check the widgets if it is a clickable form */
-				if (!(psForm->style & WFORM_CLICKABLE))
-				{
-					if (pressed != WKEY_NONE && psCurr->type != WIDG_FORM)
-					{
-						/* Tell the widget it has been clicked */
-						psCurr->clicked(&sWidgContext, pressed);
-					}
-					if (released != WKEY_NONE && psCurr->type != WIDG_FORM)
-					{
-						/* Tell the widget the mouse button has gone up */
-						widgReleased(psCurr, released, &sWidgContext);
-					}
-				}
-			}
-		}
-		/* Note that the mouse is over this form */
-		if (!psMouseOverWidget)
-		{
-			psMouseOverWidget = (WIDGET *)psForm;
-		}
-
-		/* Only send the Clicked or Released messages if a widget didn't get the message */
-		if (pressed != WKEY_NONE &&
-		    (psOver == NULL || (psForm->style & WFORM_CLICKABLE)))
-		{
-			/* Tell the form it has been clicked */
-			psForm->clicked(psContext, pressed);
-		}
-		if (released != WKEY_NONE &&
-		    (psOver == NULL || (psForm->style & WFORM_CLICKABLE)))
-		{
-			/* Tell the form the mouse button has gone up */
-			widgReleased((WIDGET *)psForm, released, psContext);
-		}
-	}
-
-	/* See if the mouse has moved onto or off a widget */
-	if (psForm->psLastHiLite != psOver)
-	{
-		if (psOver != NULL)
-		{
-			widgHiLite(psOver, &sWidgContext);
-		}
-		if (psForm->psLastHiLite != NULL)
-		{
-			widgHiLiteLost(psForm->psLastHiLite, &sWidgContext);
-		}
-		psForm->psLastHiLite = psOver;
 	}
 
 	/* Run this form */
-	widgRun((WIDGET *)psForm, psContext);
+	psForm->run(psContext);
+}
+
+static void widgProcessClick(W_CONTEXT &psContext, WIDGET_KEY key, bool wasPressed)
+{
+	W_FORM *psForm = psContext.psForm;
+	Vector2i origin;
+	formGetOrigin(psForm, &origin.x, &origin.y);
+	Vector2i pos(psContext.mx, psContext.my);
+	Vector2i oPos = pos - origin;
+	Vector2i offset(psContext.xOffset, psContext.yOffset);
+	Vector2i oOffset = offset + origin;
+
+	// Process subforms (but not widgets, yet).
+	for (WIDGET *psCurr = formGetWidgets(psForm); psCurr; psCurr = psCurr->psNext)
+	{
+		if ((psCurr->style & WIDG_HIDDEN) != 0 || psCurr->type != WIDG_FORM)
+		{
+			continue;  // Skip any hidden forms or non-form widgets.
+		}
+
+		// Found a sub form, so set up the context.
+		W_CONTEXT sFormContext;
+		sFormContext.psScreen = psContext.psScreen;
+		sFormContext.psForm = (W_FORM *)psCurr;
+		sFormContext.mx = oPos.x - psCurr->x;
+		sFormContext.my = oPos.y - psCurr->y;
+		sFormContext.xOffset = oOffset.x + psCurr->x;
+		sFormContext.yOffset = oOffset.y + psCurr->y;
+
+		// Process it (recursively).
+		widgProcessClick(sFormContext, key, wasPressed);
+	}
+
+	if (pos.x < 0 || pos.x > psForm->width || pos.y < 0 || pos.y >= psForm->height)
+	{
+		return;  // Click is somewhere else.
+	}
+
+	W_CONTEXT sWidgContext;
+	sWidgContext.psScreen = psContext.psScreen;
+	sWidgContext.psForm = psForm;
+	sWidgContext.mx = oPos.x;
+	sWidgContext.my = oPos.y;
+	sWidgContext.xOffset = oOffset.x;
+	sWidgContext.yOffset = oOffset.y;
+
+	// Process widgets.
+	WIDGET *widgetUnderMouse = NULL;
+	for (WIDGET *psCurr = formGetWidgets(psForm); psCurr; psCurr = psCurr->psNext)
+	{
+		if (psCurr->style & WIDG_HIDDEN)
+		{
+			continue;  // Skip hidden widgets.
+		}
+
+		if (oPos.x < psCurr->x || oPos.x > psCurr->x + psCurr->width || oPos.y < psCurr->y || oPos.y > psCurr->y + psCurr->height)
+		{
+			continue;  // The click missed the widget.
+		}
+
+		if (!psMouseOverWidget)
+		{
+			psMouseOverWidget = psCurr;  // Mark that the mouse is over a widget (if we haven't already).
+		}
+
+		if ((psForm->style & WFORM_CLICKABLE) != 0)
+		{
+			continue;  // Don't check the widgets if we are a clickable form.
+		}
+
+		widgetUnderMouse = psCurr;  // One (at least) of our widgets will get the click, so don't send it to us (we are the form).
+
+		if (key == WKEY_NONE)
+		{
+			continue;  // Just checking mouse position, not a click.
+		}
+
+		if (wasPressed)
+		{
+			psCurr->clicked(&sWidgContext, key);
+		}
+		else
+		{
+			psCurr->released(&sWidgContext, key);
+		}
+	}
+
+	// See if the mouse has moved onto or off a widget.
+	if (psForm->psLastHiLite != widgetUnderMouse)
+	{
+		if (psForm->psLastHiLite != NULL)
+		{
+			psForm->psLastHiLite->highlightLost(&sWidgContext);
+		}
+		if (widgetUnderMouse != NULL)
+		{
+			widgetUnderMouse->highlight(&sWidgContext);
+		}
+		psForm->psLastHiLite = widgetUnderMouse;
+	}
+
+	if (widgetUnderMouse != NULL)
+	{
+		return;  // Only send the Clicked or Released messages if a widget didn't get the message.
+	}
+
+	if (!psMouseOverWidget)
+	{
+		psMouseOverWidget = psForm;  // Note that the mouse is over this form.
+	}
+
+	if (key == WKEY_NONE)
+	{
+		return;  // Just checking mouse position, not a click.
+	}
+
+	if (wasPressed)
+	{
+		psForm->clicked(&psContext, key);
+	}
+	else
+	{
+		psForm->released(&psContext, key);
+	}
 }
 
 
-
 /* Execute a set of widgets for one cycle.
- * Return the id of the widget that was activated, or 0 for none.
+ * Returns a list of activated widgets.
  */
-UDWORD widgRunScreen(W_SCREEN *psScreen)
+WidgetTriggers const &widgRunScreen(W_SCREEN *psScreen)
 {
-	W_CONTEXT	sContext;
+	psScreen->retWidgets.clear();
 
-	psScreen->psRetWidget = NULL;
-
-	// Note which keys have been pressed
-	pressed = WKEY_NONE;
-	sContext.mx = mouseX();
-	sContext.my = mouseY();
-	if (getWidgetsStatus())
-	{
-		if (mousePressed(MOUSE_LMB))
-		{
-			pressed = WKEY_PRIMARY;
-			sContext.mx = mousePressPos(MOUSE_LMB).x;
-			sContext.my = mousePressPos(MOUSE_LMB).y;
-		}
-		else if (mousePressed(MOUSE_RMB))
-		{
-			pressed = WKEY_SECONDARY;
-			sContext.mx = mousePressPos(MOUSE_RMB).x;
-			sContext.my = mousePressPos(MOUSE_RMB).y;
-		}
-		released = WKEY_NONE;
-		if (mouseReleased(MOUSE_LMB))
-		{
-			released = WKEY_PRIMARY;
-			sContext.mx = mouseReleasePos(MOUSE_LMB).x;
-			sContext.my = mouseReleasePos(MOUSE_LMB).y;
-		}
-		else if (mouseReleased(MOUSE_RMB))
-		{
-			released = WKEY_SECONDARY;
-			sContext.mx = mouseReleasePos(MOUSE_RMB).x;
-			sContext.my = mouseReleasePos(MOUSE_RMB).y;
-		}
-	}
 	/* Initialise the context */
+	W_CONTEXT sContext;
 	sContext.psScreen = psScreen;
-	sContext.psForm = (W_FORM *)psScreen->psForm;
+	sContext.psForm = psScreen->psForm;
 	sContext.xOffset = 0;
 	sContext.yOffset = 0;
 	psMouseOverWidget = NULL;
+
+	// Note which keys have been pressed
+	lastReleasedKey_DEPRECATED = WKEY_NONE;
+	if (getWidgetsStatus())
+	{
+		MousePresses const &clicks = inputGetClicks();
+		for (MousePresses::const_iterator c = clicks.begin(); c != clicks.end(); ++c)
+		{
+			WIDGET_KEY wkey;
+			switch (c->key)
+			{
+				case MOUSE_LMB: wkey = WKEY_PRIMARY; break;
+				case MOUSE_RMB: wkey = WKEY_SECONDARY; break;
+				default: continue;  // Who cares about other mouse buttons?
+			}
+			bool pressed;
+			switch (c->action)
+			{
+				case MousePress::Press: pressed = true; break;
+				case MousePress::Release: pressed = false; break;
+				default: continue;
+			}
+			sContext.mx = c->pos.x;
+			sContext.my = c->pos.y;
+			widgProcessClick(sContext, wkey, pressed);
+
+			lastReleasedKey_DEPRECATED = wkey;
+		}
+	}
+
+	sContext.mx = mouseX();
+	sContext.my = mouseY();
+	widgProcessClick(sContext, WKEY_NONE, true);  // Update highlights and psMouseOverWidget.
 
 	/* Process the screen's widgets */
 	widgProcessForm(&sContext);
@@ -1476,14 +1498,16 @@ UDWORD widgRunScreen(W_SCREEN *psScreen)
 	widgProcessCallbacks(&sContext);
 
 	/* Return the ID of a pressed button or finished edit box if any */
-	return psScreen->psRetWidget ? psScreen->psRetWidget->id : 0;
+	return psScreen->retWidgets;
 }
 
 
 /* Set the id number for widgRunScreen to return */
 void widgSetReturn(W_SCREEN *psScreen, WIDGET *psWidget)
 {
-	psScreen->psRetWidget = psWidget;
+	WidgetTrigger trigger;
+	trigger.widget = psWidget;
+	psScreen->retWidgets.push_back(trigger);
 }
 
 
@@ -1553,37 +1577,10 @@ void widgDisplayScreen(W_SCREEN *psScreen)
 	tipDisplay();
 }
 
-/* Call the correct function for loss of focus */
-static void widgFocusLost(W_SCREEN *psScreen, WIDGET *psWidget)
-{
-	switch (psWidget->type)
-	{
-	case WIDG_FORM:
-		break;
-	case WIDG_LABEL:
-		break;
-	case WIDG_BUTTON:
-		break;
-	case WIDG_EDITBOX:
-		((W_EDITBOX *)psWidget)->focusLost(psScreen);
-		break;
-	case WIDG_BARGRAPH:
-		break;
-	case WIDG_SLIDER:
-		break;
-	default:
-		ASSERT(!"Unknown widget type", "Unknown widget type");
-		break;
-	}
-}
-
 /* Set the keyboard focus for the screen */
 void screenSetFocus(W_SCREEN *psScreen, WIDGET *psWidget)
 {
-	if (psScreen->psFocus != NULL)
-	{
-		widgFocusLost(psScreen, psScreen->psFocus);
-	}
+	screenClearFocus(psScreen);
 	psScreen->psFocus = psWidget;
 }
 
@@ -1593,127 +1590,10 @@ void screenClearFocus(W_SCREEN *psScreen)
 {
 	if (psScreen->psFocus != NULL)
 	{
-		widgFocusLost(psScreen, psScreen->psFocus);
+		psScreen->psFocus->focusLost(psScreen);
 		psScreen->psFocus = NULL;
 	}
 }
-
-/* Call the correct function for mouse over */
-void widgHiLite(WIDGET *psWidget, W_CONTEXT *psContext)
-{
-	(void)psContext;
-	switch (psWidget->type)
-	{
-	case WIDG_FORM:
-		formHiLite((W_FORM *)psWidget, psContext);
-		break;
-	case WIDG_LABEL:
-		labelHiLite((W_LABEL *)psWidget, psContext);
-		break;
-	case WIDG_BUTTON:
-		buttonHiLite((W_BUTTON *)psWidget, psContext);
-		break;
-	case WIDG_EDITBOX:
-		editBoxHiLite((W_EDITBOX *)psWidget);
-		break;
-	case WIDG_BARGRAPH:
-		barGraphHiLite((W_BARGRAPH *)psWidget, psContext);
-		break;
-	case WIDG_SLIDER:
-		sliderHiLite((W_SLIDER *)psWidget);
-		break;
-	default:
-		ASSERT(!"Unknown widget type", "Unknown widget type");
-		break;
-	}
-}
-
-
-/* Call the correct function for mouse moving off */
-void widgHiLiteLost(WIDGET *psWidget, W_CONTEXT *psContext)
-{
-	(void)psContext;
-	switch (psWidget->type)
-	{
-	case WIDG_FORM:
-		formHiLiteLost((W_FORM *)psWidget, psContext);
-		break;
-	case WIDG_LABEL:
-		labelHiLiteLost((W_LABEL *)psWidget);
-		break;
-	case WIDG_BUTTON:
-		buttonHiLiteLost((W_BUTTON *)psWidget);
-		break;
-	case WIDG_EDITBOX:
-		editBoxHiLiteLost((W_EDITBOX *)psWidget);
-		break;
-	case WIDG_BARGRAPH:
-		barGraphHiLiteLost((W_BARGRAPH *)psWidget);
-		break;
-	case WIDG_SLIDER:
-		sliderHiLiteLost((W_SLIDER *)psWidget);
-		break;
-	default:
-		ASSERT(!"Unknown widget type", "Unknown widget type");
-		break;
-	}
-}
-
-/* Call the correct function for mouse released */
-static void widgReleased(WIDGET *psWidget, UDWORD key, W_CONTEXT *psContext)
-{
-	switch (psWidget->type)
-	{
-	case WIDG_FORM:
-		formReleased((W_FORM *)psWidget, key, psContext);
-		break;
-	case WIDG_LABEL:
-		break;
-	case WIDG_BUTTON:
-		buttonReleased(psContext->psScreen, (W_BUTTON *)psWidget, key);
-		break;
-	case WIDG_EDITBOX:
-		break;
-	case WIDG_BARGRAPH:
-		break;
-	case WIDG_SLIDER:
-		sliderReleased((W_SLIDER *)psWidget);
-		break;
-	default:
-		ASSERT(!"Unknown widget type", "Unknown widget type");
-		break;
-	}
-}
-
-
-/* Call the correct function to run a widget */
-static void widgRun(WIDGET *psWidget, W_CONTEXT *psContext)
-{
-	switch (psWidget->type)
-	{
-	case WIDG_FORM:
-		formRun((W_FORM *)psWidget, psContext);
-		break;
-	case WIDG_LABEL:
-		break;
-	case WIDG_BUTTON:
-		buttonRun((W_BUTTON *)psWidget);
-		break;
-	case WIDG_EDITBOX:
-		((W_EDITBOX *)psWidget)->run(psContext);
-		break;
-	case WIDG_BARGRAPH:
-		break;
-	case WIDG_SLIDER:
-		sliderRun((W_SLIDER *)psWidget, psContext);
-		break;
-	default:
-		ASSERT(!"Unknown widget type", "Unknown widget type");
-		break;
-	}
-}
-
-
 
 void WidgSetAudio(WIDGET_AUDIOCALLBACK Callback, SWORD HilightID, SWORD ClickedID)
 {

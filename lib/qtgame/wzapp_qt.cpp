@@ -87,9 +87,7 @@ static SDWORD dragX, dragY;
 
 /** The current mouse button state */
 static INPUT_STATE aMouseState[MOUSE_BAD];
-
-/** The size of the input buffer */
-#define INPUT_MAXSTR	512
+static MousePresses mousePresses;
 
 /** The input string buffer */
 struct InputKey
@@ -371,6 +369,12 @@ void WzMainWindow::mousePressEvent(QMouseEvent *event)
 		return; // not recognized mouse button
 	}
 
+	MousePress mousePress;
+	mousePress.action = MousePress::Press;
+	mousePress.key = idx;
+	mousePress.pos = Vector2i(mouseXPos, mouseYPos);
+	mousePresses.push_back(mousePress);
+
 	aMouseState[idx].pressPos.x = mouseXPos;
 	aMouseState[idx].pressPos.y = mouseYPos;
 
@@ -434,6 +438,12 @@ void WzMainWindow::mouseReleaseEvent(QMouseEvent *event)
 	{
 		return; // not recognized mouse button
 	}
+
+	MousePress mousePress;
+	mousePress.action = MousePress::Release;
+	mousePress.key = idx;
+	mousePress.pos = Vector2i(mouseXPos, mouseYPos);
+	mousePresses.push_back(mousePress);
 
 	aMouseState[idx].releasePos.x = mouseXPos;
 	aMouseState[idx].releasePos.y = mouseYPos;
@@ -768,12 +778,12 @@ bool wzMouseInWindow()
 	return mouseInWindow;
 }
 
-Vector2i mousePressPos(MOUSE_KEY_CODE code)
+Vector2i mousePressPos_DEPRECATED(MOUSE_KEY_CODE code)
 {
 	return aMouseState[code].pressPos;
 }
 
-Vector2i mouseReleasePos(MOUSE_KEY_CODE code)
+Vector2i mouseReleasePos_DEPRECATED(MOUSE_KEY_CODE code)
 {
 	return aMouseState[code].releasePos;
 }
@@ -910,6 +920,11 @@ UDWORD inputGetKey(utf_32_char *unicode)
 	return retVal;
 }
 
+MousePresses const &inputGetClicks()
+{
+	return mousePresses;
+}
+
 /*!
  * This is called once a frame so that the system can tell
  * whether a key was pressed this turn or held down from the last frame.
@@ -946,6 +961,8 @@ void inputNewFrame(void)
 			aMouseState[i].state = KEY_UP;
 		}
 	}
+
+	mousePresses.clear();
 }
 
 /*!

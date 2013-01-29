@@ -34,6 +34,11 @@ struct WIDGET;
 struct W_CONTEXT;
 struct W_FORM;
 struct W_INIT;
+struct W_SCREEN;
+struct W_EDITBOX;
+struct W_BARGRAPH;
+struct W_BUTTON;
+struct W_LABEL;
 
 /* The display function prototype */
 typedef void (*WIDGET_DISPLAY)(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
@@ -69,6 +74,11 @@ struct WIDGET
 	virtual ~WIDGET() {}
 
 	virtual void clicked(W_CONTEXT *, WIDGET_KEY = WKEY_PRIMARY) {}
+	virtual void released(W_CONTEXT *, WIDGET_KEY = WKEY_PRIMARY) {}
+	virtual void highlight(W_CONTEXT *) {}
+	virtual void highlightLost(W_CONTEXT *) {}
+	virtual void focusLost(W_SCREEN *) {}
+	virtual void run(W_CONTEXT *) {}
 
 	UDWORD                  formID;                 ///< ID of the widgets base form.
 	UDWORD                  id;                     ///< The user set ID number for the widget. This is returned when e.g. a button is pressed.
@@ -85,13 +95,19 @@ struct WIDGET
 };
 
 
+struct WidgetTrigger
+{
+	WIDGET *widget;
+};
+typedef std::vector<WidgetTrigger> WidgetTriggers;
+
 /* The screen structure which stores all info for a widget screen */
 struct W_SCREEN
 {
 	W_FORM          *psForm;        ///< The root form of the screen
 	WIDGET          *psFocus;       ///< The widget that has keyboard focus
 	enum iV_fonts    TipFontID;     ///< ID of the IVIS font to use for tool tips.
-	WIDGET          *psRetWidget;   ///< The widget to be returned by widgRunScreen
+	WidgetTriggers   retWidgets;    ///< The widgets to be returned by widgRunScreen.
 };
 
 /* Context information to pass into the widget functions */

@@ -149,9 +149,8 @@ static void runHyperlink(void)
 
 bool runTitleMenu(void)
 {
-	UDWORD id;
-
-	id = widgRunScreen(psWScreen); // Run the current set of widgets
+	WidgetTriggers const &triggers = widgRunScreen(psWScreen);
+	unsigned id = triggers.empty()? 0 : triggers.front().widget->id;  // Just use first click here, since the next click could be on another menu.
 
 	switch(id)
 	{
@@ -206,9 +205,9 @@ static bool startTutorialMenu(void)
 
 bool runTutorialMenu(void)
 {
-	UDWORD id;
+	WidgetTriggers const &triggers = widgRunScreen(psWScreen);
+	unsigned id = triggers.empty()? 0 : triggers.front().widget->id;  // Just use first click here, since the next click could be on another menu.
 
-	id = widgRunScreen(psWScreen);						// Run the current set of widgets
 	switch(id)
 	{
 		case FRONTEND_TUTORIAL:
@@ -396,7 +395,8 @@ static void SPinit(void)
 
 bool runCampaignSelector()
 {
-	int id = widgRunScreen(psWScreen);
+	WidgetTriggers const &triggers = widgRunScreen(psWScreen);
+	unsigned id = triggers.empty()? 0 : triggers.front().widget->id;  // Just use first click here, since the next click could be on another menu.
 	if (id == FRONTEND_QUIT)
 	{
 		changeTitleMode(SINGLE); // go back
@@ -412,8 +412,6 @@ bool runCampaignSelector()
 
 bool runSinglePlayerMenu(void)
 {
-	UDWORD id;
-
 	if(bLoadSaveUp)
 	{
 		if(runLoadSave(false))// check for file name.
@@ -427,7 +425,8 @@ bool runSinglePlayerMenu(void)
 	}
 	else
 	{
-		id = widgRunScreen(psWScreen);						// Run the current set of widgets
+		WidgetTriggers const &triggers = widgRunScreen(psWScreen);
+		unsigned id = triggers.empty()? 0 : triggers.front().widget->id;  // Just use first click here, since the next click could be on another menu.
 
 		switch(id)
 		{
@@ -512,9 +511,9 @@ static bool startMultiPlayerMenu(void)
 
 bool runMultiPlayerMenu(void)
 {
-	UDWORD id;
+	WidgetTriggers const &triggers = widgRunScreen(psWScreen);
+	unsigned id = triggers.empty()? 0 : triggers.front().widget->id;  // Just use first click here, since the next click could be on another menu.
 
-	id = widgRunScreen(psWScreen);						// Run the current set of widgets
 	switch(id)
 	{
 	case FRONTEND_HOST:
@@ -581,9 +580,9 @@ static bool startOptionsMenu(void)
 
 bool runOptionsMenu(void)
 {
-	UDWORD id;
+	WidgetTriggers const &triggers = widgRunScreen(psWScreen);
+	unsigned id = triggers.empty()? 0 : triggers.front().widget->id;  // Just use first click here, since the next click could be on another menu.
 
-	id = widgRunScreen(psWScreen);						// Run the current set of widgets
 	switch(id)
 	{
 	case FRONTEND_GAMEOPTIONS:
@@ -722,10 +721,10 @@ static bool startGraphicsOptionsMenu(void)
 
 bool runGraphicsOptionsMenu(void)
 {
-	UDWORD id;
 	int mode = 0;
+	WidgetTriggers const &triggers = widgRunScreen(psWScreen);
+	unsigned id = triggers.empty()? 0 : triggers.front().widget->id;  // Just use first click here, since the next click could be on another menu.
 
-	id = widgRunScreen(psWScreen);						// Run the current set of widgets
 	switch(id)
 	{
 	case FRONTEND_SSHAKE:
@@ -872,9 +871,9 @@ static bool startAudioOptionsMenu(void)
 
 bool runAudioOptionsMenu(void)
 {
-	UDWORD id;
+	WidgetTriggers const &triggers = widgRunScreen(psWScreen);
+	unsigned id = triggers.empty()? 0 : triggers.front().widget->id;  // Just use first click here, since the next click could be on another menu.
 
-	id = widgRunScreen(psWScreen);						// Run the current set of widgets
 	switch(id)
 	{
 	case FRONTEND_FX:
@@ -1015,7 +1014,9 @@ static bool startVideoOptionsMenu(void)
 bool runVideoOptionsMenu(void)
 {
 	QList<QSize> modes = wzAvailableResolutions();
-	UDWORD id = widgRunScreen(psWScreen);
+	WidgetTriggers const &triggers = widgRunScreen(psWScreen);
+	unsigned id = triggers.empty()? 0 : triggers.front().widget->id;  // Just use first click here, since the next click could be on another menu.
+
 	int level;
 
 	switch (id)
@@ -1271,7 +1272,8 @@ static bool startMouseOptionsMenu(void)
 
 bool runMouseOptionsMenu(void)
 {
-	UDWORD id = widgRunScreen(psWScreen);
+	WidgetTriggers const &triggers = widgRunScreen(psWScreen);
+	unsigned id = triggers.empty()? 0 : triggers.front().widget->id;  // Just use first click here, since the next click could be on another menu.
 
 	switch (id)
 	{
@@ -1428,9 +1430,9 @@ static bool startGameOptionsMenu(void)
 
 bool runGameOptionsMenu(void)
 {
-	UDWORD id;
+	WidgetTriggers const &triggers = widgRunScreen(psWScreen);
+	unsigned id = triggers.empty()? 0 : triggers.front().widget->id;  // Just use first click here, since the next click could be on another menu.
 
-	id = widgRunScreen(psWScreen);						// Run the current set of widgets
 	switch(id)
 	{
 	case FRONTEND_LANGUAGE_R:

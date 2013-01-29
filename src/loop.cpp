@@ -227,7 +227,9 @@ static GAMECODE renderLoop()
 
 		if(InGameOpUp || isInGamePopupUp)		// ingame options menu up, run it!
 		{
-			unsigned widgval = widgRunScreen(psWScreen);
+			WidgetTriggers const &triggers = widgRunScreen(psWScreen);
+			unsigned widgval = triggers.empty()? 0 : triggers.front().widget->id;  // Just use first click here, since the next click could be on another menu.
+
 			intProcessInGameOptions(widgval);
 			if(widgval == INTINGAMEOP_QUIT_CONFIRM || widgval == INTINGAMEOP_POPUP_QUIT)
 			{

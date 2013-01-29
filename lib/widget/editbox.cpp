@@ -522,8 +522,9 @@ void W_EDITBOX::focusLost(W_SCREEN *psScreen)
 
 
 /* Respond to a mouse moving over an edit box */
-void editBoxHiLite(W_EDITBOX *psWidget)
+void W_EDITBOX::highlight(W_CONTEXT *)
 {
+	W_EDITBOX *psWidget = this;
 	if (psWidget->state & WEDBS_DISABLE)
 	{
 		return;
@@ -539,8 +540,9 @@ void editBoxHiLite(W_EDITBOX *psWidget)
 
 
 /* Respond to the mouse moving off an edit box */
-void editBoxHiLiteLost(W_EDITBOX *psWidget)
+void W_EDITBOX::highlightLost(W_CONTEXT *)
 {
+	W_EDITBOX *psWidget = this;
 	if (psWidget->state & WEDBS_DISABLE)
 	{
 		return;

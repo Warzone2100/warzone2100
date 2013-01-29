@@ -33,12 +33,6 @@ extern void widgSetReturn(W_SCREEN *psScreen, WIDGET *psWidget);
 /* Release a list of widgets */
 extern void widgReleaseWidgetList(WIDGET *psWidgets);
 
-/* Call the correct function for mouse over */
-extern void widgHiLite(WIDGET *psWidget, W_CONTEXT *psContext);
-
-/* Call the correct function for mouse moving off */
-extern void widgHiLiteLost(WIDGET *psWidget, W_CONTEXT *psContext);
-
 /* Set the keyboard focus for the screen */
 extern void screenSetFocus(W_SCREEN *psScreen, WIDGET *psWidget);
 

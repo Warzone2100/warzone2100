@@ -119,24 +119,24 @@ void labelDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pC
 }
 
 /* Respond to a mouse moving over a label */
-void labelHiLite(W_LABEL *psWidget, W_CONTEXT *psContext)
+void W_LABEL::highlight(W_CONTEXT *psContext)
 {
 	/* If there is a tip string start the tool tip */
-	if (psWidget->pTip)
+	if (pTip)
 	{
-		tipStart((WIDGET *)psWidget, psWidget->pTip, psContext->psScreen->TipFontID,
-		        psContext->psForm->aColours,
-		        psWidget->x + psContext->xOffset, psWidget->y + psContext->yOffset,
-		        psWidget->width, psWidget->height);
+		tipStart(this, pTip, psContext->psScreen->TipFontID,
+		         psContext->psForm->aColours,
+		         x + psContext->xOffset, y + psContext->yOffset,
+		         width, height);
 	}
 }
 
 
 /* Respond to the mouse moving off a label */
-void labelHiLiteLost(W_LABEL *psWidget)
+void W_LABEL::highlightLost(W_CONTEXT *)
 {
-	if (psWidget->pTip)
+	if (pTip)
 	{
-		tipStop((WIDGET *)psWidget);
+		tipStop(this);
 	}
 }

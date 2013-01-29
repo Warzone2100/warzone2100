@@ -27,18 +27,16 @@
 #include "lib/widget/widget.h"
 
 
-/* Respond to a mouse click */
-extern void formClicked(W_FORM *psWidget, UDWORD key);
-
 /* The standard form */
 struct W_FORM : public WIDGET
 {
 	W_FORM(W_FORMINIT const *init);
 
-	void clicked(W_CONTEXT *, WIDGET_KEY key)
-	{
-		formClicked(this, key);
-	}
+	void clicked(W_CONTEXT *psContext, WIDGET_KEY key);
+	void released(W_CONTEXT *psContext, WIDGET_KEY key);
+	void highlight(W_CONTEXT *psContext);
+	void highlightLost(W_CONTEXT *psContext);
+	void run(W_CONTEXT *psContext);
 
 	bool            disableChildren;        ///< Disable all child widgets if true
 	UWORD           Ax0, Ay0, Ax1, Ay1;     ///< Working coords for animations.
@@ -163,18 +161,6 @@ extern void formSetFlash(W_FORM *psWidget);
 
 /* Set the button state of a click form */
 extern void formSetClickState(W_CLICKFORM *psForm, UDWORD state);
-
-/* Run a form widget */
-extern void formRun(W_FORM *psWidget, W_CONTEXT *psContext);
-
-/* Respond to a mouse form up */
-extern void formReleased(W_FORM *psWidget, UDWORD key, W_CONTEXT *psContext);
-
-/* Respond to a mouse moving over a form */
-extern void formHiLite(W_FORM *psWidget, W_CONTEXT *psContext);
-
-/* Respond to the mouse moving off a form */
-extern void formHiLiteLost(W_FORM *psWidget, W_CONTEXT *psContext);
 
 /* Display function prototypes */
 extern void formDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);

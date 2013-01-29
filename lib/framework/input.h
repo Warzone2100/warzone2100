@@ -33,6 +33,8 @@
 #include "types.h"
 #include "lib/framework/utf.h"
 #include "vector.h"
+#include <vector>
+
 
 /** Defines for all the key codes used. */
 enum KEY_CODE
@@ -156,6 +158,19 @@ enum MOUSE_KEY_CODE
 	MOUSE_BAD
 };
 
+struct MousePress
+{
+	enum Action {None, Press, Release};
+
+	MousePress(Action action = None, MOUSE_KEY_CODE key = MOUSE_BAD) : action(action), key(key) {}
+	bool empty() const { return action == None; }
+
+	Action action;
+	MOUSE_KEY_CODE key;
+	Vector2i pos;
+};
+typedef std::vector<MousePress> MousePresses;
+
 /** Tell the input system that we have lost the focus. */
 extern void inputLoseFocus(void);
 
@@ -184,9 +199,9 @@ extern uint16_t mouseY(void) WZ_DECL_PURE;
 bool wzMouseInWindow();
 
 /// Return the position of the mouse where it was clicked last.
-Vector2i mousePressPos(MOUSE_KEY_CODE code) WZ_DECL_PURE;
+Vector2i mousePressPos_DEPRECATED(MOUSE_KEY_CODE code) WZ_DECL_PURE;
 /// Return the position of the mouse where it was released last.
-Vector2i mouseReleasePos(MOUSE_KEY_CODE code) WZ_DECL_PURE;
+Vector2i mouseReleasePos_DEPRECATED(MOUSE_KEY_CODE code) WZ_DECL_PURE;
 
 /** This returns true if the mouse key is currently depressed. */
 extern bool mouseDown(MOUSE_KEY_CODE code);
@@ -235,6 +250,8 @@ extern bool getMouseWarp();
  * to the key press (using the user's native layout).
  */
 extern UDWORD inputGetKey(utf_32_char *unicode);
+/// Returns all clicks/releases since last update.
+MousePresses const &inputGetClicks();
 
 /** Clear the input buffer. */
 extern void inputClearBuffer(void);

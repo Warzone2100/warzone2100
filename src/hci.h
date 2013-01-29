@@ -77,6 +77,8 @@
 #define IDOBJ_CMDFACEND		3799		// The last ID for factory number labels
 #define IDOBJ_CMDVTOLFACSTART	3800	// The first ID for VTOL factory number labels
 #define IDOBJ_CMDVTOLFACEND		3849	// The last ID for VTOL factory number labels
+#define IDOBJ_ALLYRESEARCHSTART 2637000         // The first ID for ally research labels
+#define IDOBJ_ALLYRESEARCHEND   2637099         // The last ID for ally research labels
 
 
 #define IDSTAT_FORM				14000		// The stats form for structure/droid/research type
