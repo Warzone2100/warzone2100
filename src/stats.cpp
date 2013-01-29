@@ -749,7 +749,7 @@ bool loadWeaponStats(const char *pFileName)
 
 		//set periodical damage weapon effect
 		QString periodicalDamageWeaponEffect = ini.value("periodicalDamageWeaponEffect", "").toString();
-		if (periodicalDamageWeaponSubClass.compare("") == 0)
+		if (periodicalDamageWeaponEffect.compare("") == 0)
 		{
 			//was not setted in ini - use default value
 			psStats->periodicalDamageWeaponEffect = psStats->weaponEffect;
