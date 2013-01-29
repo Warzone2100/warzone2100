@@ -578,7 +578,6 @@ struct SENSOR_UPGRADE
 /*ECM stats which can be upgraded by research*/
 struct ECM_UPGRADE
 {
-	UWORD	power;
 	UDWORD	range;
 };
 

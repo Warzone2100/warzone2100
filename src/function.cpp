@@ -1172,9 +1172,9 @@ void ecmUpgrade(FUNCTION *pFunction, UBYTE player)
 	pUpgrade = (DROIDECM_UPGRADE_FUNCTION *)pFunction;
 
 	//check upgrades increase all values!
-	if (asECMUpgrade[player].power < pUpgrade->upgradePoints)
+	if (asECMUpgrade[player].range < pUpgrade->upgradePoints)
 	{
-		asECMUpgrade[player].power = pUpgrade->upgradePoints;
+		asECMUpgrade[player].range = pUpgrade->upgradePoints;
 	}
 }
 
