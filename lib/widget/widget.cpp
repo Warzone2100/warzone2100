@@ -1257,7 +1257,7 @@ static void widgProcessCallbacks(W_CONTEXT *psContext)
  */
 static void widgProcessForm(W_CONTEXT *psContext)
 {
-	WIDGET		*psCurr, *psOver;
+	WIDGET		*psCurr;
 	SDWORD		mx, my, xOffset, yOffset, xOrigin, yOrigin;
 	W_FORM		*psForm;
 	W_CONTEXT	sFormContext, sWidgContext;
@@ -1286,7 +1286,6 @@ static void widgProcessForm(W_CONTEXT *psContext)
 	sWidgContext.yOffset = yOffset + yOrigin;
 
 	/* Process the form's widgets */
-	psOver = NULL;
 	for (psCurr = formGetWidgets(psForm); psCurr; psCurr = psCurr->psNext)
 	{
 		/* Skip any hidden widgets */
