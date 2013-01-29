@@ -29,7 +29,6 @@
 #include "lib/framework/math_ext.h"
 #include "lib/widget/label.h"
 #include "lib/widget/widget.h"
-#include "lib/ivis_opengl/textdraw.h"
 
 #include "stats.h"
 #include "hci.h"
@@ -53,9 +52,6 @@
 #include "selection.h"
 #include "lib/sound/audio.h"
 #include "lib/sound/audio_id.h"
-// FIXME Direct iVis implementation include!
-#include "lib/framework/fixedpoint.h"
-#include "lib/ivis_opengl/piematrix.h"
 #include "mapgrid.h"
 #include "visibility.h"
 #include "multiplay.h"
@@ -147,7 +143,7 @@ static void intRemoveTransContentNoAnim(void);
 static bool intAddTransButtonForm(void);
 static bool intAddTransContentsForm(void);
 static bool intAddDroidsAvailForm(void);
-void intRemoveTransContent(void);
+static void intRemoveTransContent(void);
 static DROID *transInterfaceDroidList(void);
 static void intTransporterAddDroid(UDWORD id);
 static void intRemoveTransDroidsAvail(void);
@@ -375,7 +371,6 @@ bool intAddTransporterContents(void)
 		sButFInit.width = iV_GetImageWidth(IntImages, IMAGE_LAUNCHUP);
 		sButFInit.height = iV_GetImageHeight(IntImages, IMAGE_LAUNCHUP);
 		sButFInit.pTip = _("Launch Transport");
-		//sButInit.pText = "Launch";
 		sButFInit.pDisplay = intDisplayImageHilight;
 
 		sButFInit.UserData = PACKDWORD_TRI(0, IMAGE_LAUNCHDOWN, IMAGE_LAUNCHUP);
@@ -519,8 +514,7 @@ bool intAddTransButtonForm(void)
 	}
 
 	//set the number of tabs required
-	sFormInit.numMajor = numForms((OBJ_BUTWIDTH + OBJ_GAP) * numButtons,
-	        OBJ_WIDTH - OBJ_GAP);
+	sFormInit.numMajor = numForms((OBJ_BUTWIDTH + OBJ_GAP) * numButtons, OBJ_WIDTH - OBJ_GAP);
 
 	sFormInit.pUserData = &StandardTab;
 	sFormInit.pTabDisplay = intDisplayTab;
@@ -1408,8 +1402,7 @@ bool checkTransporterSpace(DROID const *psTransporter, DROID const *psAssigned, 
 
 	//work out how much space is currently left
 	capacity = TRANSPORTER_CAPACITY;
-	for (psDroid = psTransporter->psGroup->psList; psDroid != NULL && psDroid !=
-	     psTransporter; psDroid = psNext)
+	for (psDroid = psTransporter->psGroup->psList; psDroid != NULL && psDroid != psTransporter; psDroid = psNext)
 	{
 		psNext = psDroid->psGrpNext;
 		capacity -= transporterSpaceRequired(psDroid);

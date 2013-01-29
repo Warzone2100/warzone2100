@@ -98,7 +98,6 @@ extern void swapMissionPointers(void);
 
 // status of the mission result screens.
 extern bool MissionResUp;
-extern bool ClosingMissionRes;
 
 extern void intRemoveMissionResult(void);
 extern void intRemoveMissionResultNoAnim(void);
