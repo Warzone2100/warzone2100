@@ -877,9 +877,10 @@ static QScriptValue js_getObject(QScriptContext *context, QScriptEngine *engine)
 	STRUCTURE *psStruct;
 	FEATURE *psFeature;
 	QString label = context->argument(0).toString();
-	QScriptValue ret = engine->newObject();
+	QScriptValue ret;
 	if (labels.contains(label))
 	{
+		ret = engine->newObject();
 		labeltype p = labels.value(label);
 		switch (p.type)
 		{

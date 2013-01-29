@@ -83,6 +83,15 @@ function gameWon()
 	loadLevel("CAM_1B");
 }
 
+function removeobject(name)
+{
+	var artifact = getObject(name);
+	if (artifact)
+	{
+		removeObject(artifact);
+	}
+}
+
 // listen to chat messages from player
 function eventChat(from, to, message)
 {
@@ -93,12 +102,11 @@ function eventChat(from, to, message)
 		enableResearch("R-Defense-Tower01");
 		enableResearch("R-Wpn-Flamer01Mk1");
 		enableResearch("R-Wpn-MG1Mk1");
-		// TODO, finish some/all of the above
-		var artifact = getObject("artifact");
-		if (artifact)
-		{
-			removeObject(artifact);
-		}
+		// TODO, finish some/all of the above techs
+		removeobject("artifact1");
+		removeobject("artifact2");
+		removeobject("artifact3");
+		removeobject("artifact4");
 		queue("gameWon");
 	}
 	else if (message == "status" && cheatmode)
