@@ -71,7 +71,7 @@ function buildAttacker(struct)
 	];
 	if (!buildDroid(struct, "Ranged Attacker", bodylist, proplist, null, null, weaplist, weaplist))
 	{
-		dbg("Failed to construct new attacker");
+		logObj(struct, "Failed to construct new attacker");
 	}
 }
 
