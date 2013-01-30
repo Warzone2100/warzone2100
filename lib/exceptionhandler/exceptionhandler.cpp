@@ -121,7 +121,9 @@ static LONG WINAPI windowsExceptionHandler(PEXCEPTION_POINTERS pExceptionInfo)
 # include <sys/types.h>
 # include <sys/stat.h>
 # include <sys/wait.h>
+#ifdef HAVE_SYS_UCONTEXT_H
 # include <sys/ucontext.h>
+#endif
 # include <sys/utsname.h>
 #ifdef WZ_OS_LINUX
 # include <sys/prctl.h>
