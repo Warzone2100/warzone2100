@@ -75,12 +75,6 @@ struct POWER_GEN_FUNCTION : public FUNCTION
 {
 	UDWORD		powerOutput;		/*How much power is generated per power cycle*/
 	UDWORD		powerMultiplier;	/*Multiplies the output - upgradeable*/
-	UDWORD		criticalMassChance;	/*The % chance of an explosion when the power
-									  generator has taken damage*/
-	UDWORD		criticalMassRadius;	/*The primary blast radius*/
-	UDWORD		criticalMassDamage;	/*The base amount of damage applied to targets
-									  within the primary blast area*/
-	UDWORD		radiationDecayTime;	/*How long the radiation lasts n time cycles*/
 };
 
 /*function used by walls to define which corner to use*/
@@ -94,7 +88,6 @@ struct WALL_FUNCTION : public FUNCTION
 /*function used by Resource Extractor to indicate how much resource is available*/
 struct RESOURCE_FUNCTION : public FUNCTION
 {
-	UDWORD		maxPower;			/*The max amount output from the resource*/
 };
 
 /*To increase a production facilities output*/

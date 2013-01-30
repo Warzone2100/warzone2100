@@ -606,6 +606,7 @@ static bool loadPowerGenFunction(const char *pData)
 {
 	POWER_GEN_FUNCTION			*psFunction;
 	char						functionName[MAX_STR_LENGTH];
+	int dummy;
 
 	//allocate storage
 	psFunction = (POWER_GEN_FUNCTION *)malloc(sizeof(POWER_GEN_FUNCTION));
@@ -624,9 +625,7 @@ static bool loadPowerGenFunction(const char *pData)
 	functionName[0] = '\0';
 	sscanf(pData, "%255[^,'\r\n],%d,%d,%d,%d,%d,%d", functionName,
 	       &psFunction->powerOutput, &psFunction->powerMultiplier,
-	       &psFunction->criticalMassChance, &psFunction->criticalMassRadius,
-	       &psFunction->criticalMassDamage, &psFunction->radiationDecayTime);
-
+	       &dummy, &dummy, &dummy, &dummy);
 
 	if (bMultiPlayer)
 	{
@@ -660,6 +659,7 @@ static bool loadResourceFunction(const char *pData)
 {
 	RESOURCE_FUNCTION			*psFunction;
 	char						functionName[MAX_STR_LENGTH];
+	int dummy;
 
 	//allocate storage
 	psFunction = (RESOURCE_FUNCTION *)malloc(sizeof(RESOURCE_FUNCTION));
@@ -674,9 +674,9 @@ static bool loadResourceFunction(const char *pData)
 	//set the type of function
 	psFunction->type = RESOURCE_TYPE;
 
-	//read the data in
+	//no data to read in
 	functionName[0] = '\0';
-	sscanf(pData, "%255[^,'\r\n],%d", functionName, &psFunction->maxPower);
+	sscanf(pData, "%255[^,'\r\n],%d", functionName, &dummy);
 
 	//allocate storage for the name
 	storeName((FUNCTION *)psFunction, functionName);
