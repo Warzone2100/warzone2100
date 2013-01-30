@@ -31,11 +31,11 @@ fi
 if [[ ! "${VCS_TICK}" = "0" ]]; then
 	# If we are not exactly on a tag make the branch look better and use the value for the tag too.
 	N_VCS_BRANCH="$(echo "${VCS_BRANCH}" | sed -e 's:remotes/:remote/:' -e 's:master:Master:')"
-	sed -e "s:${VCS_BRANCH}:${N_VCS_BRANCH}:" -e "s:${VCS_TAG}:${N_VCS_BRANCH}:" "${cauto}" > "${tauto}"
+	sed -e "s:\"${VCS_BRANCH}\":\"${N_VCS_BRANCH}\":" -e "s:\"${VCS_TAG}\":\"${N_VCS_BRANCH}\":" "${cauto}" > "${tauto}"
 else
 	# When exactly on a tag make the value suitable for users.
 	N_VCS_TAG="$(echo "${VCS_TAG}" | sed -e 's:^v::' -e 's:^v/::' | sed -e 's:_beta: Beta :' -e 's:_rc: RC :')"
-	sed -e "s:${VCS_TAG}:${N_VCS_TAG}:" "${cauto}" > "${tauto}"
+	sed -e "s:\"${VCS_TAG}\":\"${N_VCS_TAG}\":" "${cauto}" > "${tauto}"
 fi
 
 
