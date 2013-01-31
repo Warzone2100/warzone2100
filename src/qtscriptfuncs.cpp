@@ -848,10 +848,12 @@ static QScriptValue js_getLabel(QScriptContext *context, QScriptEngine *engine)
 //-- unclear). This type will be one of DROID, STRUCTURE, FEATURE, AREA, GROUP or POSITION.
 //-- The AREA has defined 'x', 'y', 'x2', and 'y2', while POSITION has only defined 'x' and 'y'.
 //-- The GROUP type has defined 'type' and 'id' of the group, which can be passed to enumGroup().
-//-- This is a fast operation of O(log n) algorithmic complexity. You can also fetch
-//-- a STRUCTURE or DROID type game object from a given map position (if any). This is a very fast
-//-- operation of O(1) algorithmic complexity. Droids cannot be fetched in this manner,
-//-- since they do not a unique placement on map tiles. Finally, you can fetch an object using 
+//-- This is a fast operation of O(log n) algorithmic complexity. If the label is not found, an
+//-- undefined value is returned. If whatever object the label should point at no longer exists,
+//-- a null value is returned.
+//-- You can also fetch a STRUCTURE or FEATURE type game object from a given map position (if any). 
+//-- This is a very fast operation of O(1) algorithmic complexity. Droids cannot be fetched in this
+//-- manner, since they do not a unique placement on map tiles. Finally, you can fetch an object using 
 //-- its ID, in which case you need to pass its type, owner and unique object ID. This is an
 //-- operation of O(n) algorithmic complexity.
 static QScriptValue js_getObject(QScriptContext *context, QScriptEngine *engine)
@@ -873,9 +875,7 @@ static QScriptValue js_getObject(QScriptContext *context, QScriptEngine *engine)
 		return QScriptValue(convMax(IdToObject(type, id, player), engine));
 	}
 	// get by label case
-	DROID *psDroid;
-	STRUCTURE *psStruct;
-	FEATURE *psFeature;
+	BASE_OBJECT *psObj;
 	QString label = context->argument(0).toString();
 	QScriptValue ret;
 	if (labels.contains(label))
@@ -899,20 +899,10 @@ static QScriptValue js_getObject(QScriptContext *context, QScriptEngine *engine)
 			ret.setProperty("type", p.type, QScriptValue::ReadOnly);
 			break;
 		case OBJ_DROID:
-			psDroid = IdToDroid(p.id, p.player);
-			SCRIPT_ASSERT(context, psDroid, "Droid [%s] not found!", label.toUtf8().constData());
-			ret = convDroid(psDroid, engine);
-			break;
-		case OBJ_STRUCTURE:
-			psStruct = IdToStruct(p.id, p.player);
-			SCRIPT_ASSERT(context, psStruct, "Structure [%s] not found!", label.toUtf8().constData());
-			ret = convStructure(psStruct, engine);
-			break;
 		case OBJ_FEATURE:
-			psFeature = IdToFeature(p.id, p.player);
-			SCRIPT_ASSERT(context, psFeature, "Feature [%s] not found!", label.toUtf8().constData());
-			ret = convFeature(psFeature, engine);
-			break;
+		case OBJ_STRUCTURE:
+			psObj = IdToObject((OBJECT_TYPE)p.type, p.id, p.player);
+			return convMax(psObj, engine);
 		default:
 			ASSERT(false, "Bad object label type found for label %s!", label.toUtf8().constData());
 			break;
