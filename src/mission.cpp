@@ -2010,7 +2010,7 @@ static void fillTimeDisplay(char *psText, UDWORD time, bool bHours)
 	{
 		time_t secs = time / GAME_TICKS_PER_SEC;
 		struct tm *tmp = localtime(&secs);
-		strftime(psText, WIDG_MAXSTR, bHours ? "%T" : "%R", tmp);
+		strftime(psText, WIDG_MAXSTR, bHours ? "%H:%M:%S" : "%H:%M", tmp);
 	}
 }
 
