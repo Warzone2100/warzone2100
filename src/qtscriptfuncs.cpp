@@ -800,7 +800,7 @@ static QScriptValue js_addLabel(QScriptContext *context, QScriptEngine *engine)
 	value.p1.x = qval.property("x").toInt32();
 	value.p1.y = qval.property("y").toInt32();
 	value.p2.x = qval.property("x2").toInt32();
-	value.p2.x = qval.property("y2").toInt32();
+	value.p2.y = qval.property("y2").toInt32();
 	if (value.type == OBJ_DROID || value.type == OBJ_STRUCTURE || value.type == OBJ_FEATURE)
 	{
 		BASE_OBJECT *psObj = IdToObject((OBJECT_TYPE)value.type, value.id, value.player);
@@ -831,7 +831,7 @@ static QScriptValue js_getLabel(QScriptContext *context, QScriptEngine *engine)
 	QScriptValue objparam = context->argument(0);
 	value.id = objparam.property("id").toInt32();
 	value.player = objparam.property("player").toInt32();
-	value.type = OBJ_FEATURE;
+	value.type = (OBJECT_TYPE)objparam.property("type").toInt32();
 	QString label = labels.key(value, QString());
 	if (!label.isEmpty())
 	{
