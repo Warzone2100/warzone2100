@@ -22,6 +22,8 @@
  *
  * All the stuff relevant to a mission.
  */
+#include <time.h>
+
 #include "mission.h"
 
 #include "lib/framework/frame.h"
@@ -2006,10 +2008,9 @@ static void fillTimeDisplay(char *psText, UDWORD time, bool bHours)
 	}
 	else
 	{
-		struct tm tmp;
 		time_t secs = time / GAME_TICKS_PER_SEC;
-		localtime_r(&secs, &tmp);
-		strftime(psText, WIDG_MAXSTR, bHours ? "%T" : "%R", &tmp);
+		struct tm *tmp = localtime(&secs);
+		strftime(psText, WIDG_MAXSTR, bHours ? "%T" : "%R", tmp);
 	}
 }
 
