@@ -1840,6 +1840,7 @@ static QScriptValue js_pickStructLocation(QScriptContext *context, QScriptEngine
 	DROID *psDroid = IdToDroid(id, player);
 	QString statName = context->argument(1).toString();
 	int index = getStructStatFromName(statName.toUtf8().constData());
+	SCRIPT_ASSERT(context, index >= 0, "%s not found", statName.toUtf8().constData());
 	STRUCTURE_STATS	*psStat = &asStructureStats[index];
 	const int startX = context->argument(2).toInt32();
 	const int startY = context->argument(3).toInt32();
@@ -2187,6 +2188,7 @@ static QScriptValue js_orderDroidBuild(QScriptContext *context, QScriptEngine *)
 	DROID_ORDER order = (DROID_ORDER)context->argument(1).toInt32();
 	QString statName = context->argument(2).toString();
 	int index = getStructStatFromName(statName.toUtf8().constData());
+	SCRIPT_ASSERT(context, index >= 0, "%s not found", statName.toUtf8().constData());
 	STRUCTURE_STATS	*psStats = &asStructureStats[index];
 	int x = context->argument(3).toInt32();
 	int y = context->argument(4).toInt32();
@@ -2730,6 +2732,7 @@ static QScriptValue js_isStructureAvailable(QScriptContext *context, QScriptEngi
 {
 	QString building = context->argument(0).toString();
 	int index = getStructStatFromName(building.toUtf8().constData());
+	SCRIPT_ASSERT(context, index >= 0, "%s not found", building.toUtf8().constData());
 	int player;
 	if (context->argumentCount() > 1)
 	{
@@ -2894,6 +2897,7 @@ static QScriptValue js_addStructure(QScriptContext *context, QScriptEngine *engi
 {
 	QString building = context->argument(0).toString();
 	int index = getStructStatFromName(building.toUtf8().constData());
+	SCRIPT_ASSERT(context, index >= 0, "%s not found", building.toUtf8().constData());
 	int player = context->argument(1).toInt32();
 	SCRIPT_ASSERT_PLAYER(context, player);
 	int x = context->argument(2).toInt32();
@@ -2915,6 +2919,7 @@ static QScriptValue js_getStructureLimit(QScriptContext *context, QScriptEngine 
 {
 	QString building = context->argument(0).toString();
 	int index = getStructStatFromName(building.toUtf8().constData());
+	SCRIPT_ASSERT(context, index >= 0, "%s not found", building.toUtf8().constData());
 	int player;
 	if (context->argumentCount() > 1)
 	{
