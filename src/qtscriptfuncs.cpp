@@ -908,7 +908,6 @@ static QScriptValue js_getObject(QScriptContext *context, QScriptEngine *engine)
 			break;
 		}
 	}
-	else debug(LOG_ERROR, "label %s not found!", label.toUtf8().constData());
 	return ret;
 }
 
