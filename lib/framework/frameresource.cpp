@@ -406,9 +406,9 @@ static void makeLocaleFile(char* fileName, size_t maxlen)  // given string must 
  */
 bool resLoadFile(const char *pType, const char *pFile)
 {
-	RES_TYPE	*psT;
-	void		*pData;
-	RES_DATA	*psRes;
+	RES_TYPE	*psT = NULL;
+	void		*pData = NULL;
+	RES_DATA	*psRes = NULL;
 	char		aFileName[PATH_MAX];
 	UDWORD HashedName, HashedType = HashString(pType);
 

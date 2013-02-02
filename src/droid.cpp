@@ -335,6 +335,8 @@ DROID::DROID(uint32_t id, unsigned player)
 	, actionPos(0, 0)
 	, psCurAnim(NULL)
 {
+	pos = Vector3i(0, 0, 0);
+	rot = Vector3i(0, 0, 0);
 	order.type = DORDER_NONE;
 	order.pos = Vector2i(0, 0);
 	order.pos2 = Vector2i(0, 0);
@@ -361,6 +363,7 @@ DROID::DROID(uint32_t id, unsigned player)
 	sDisplay.screenX = OFF_SCREEN;
 	sDisplay.screenY = OFF_SCREEN;
 	sDisplay.screenR = 0;
+	sDisplay.imd = NULL;
 	illumination = UBYTE_MAX;
 	resistance = ACTION_START_TIME;	// init the resistance to indicate no EW performed on this droid
 	lastFrustratedTime = 0;		// make sure we do not start the game frustrated

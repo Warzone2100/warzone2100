@@ -83,7 +83,8 @@ struct INPUT_STATE
 static INPUT_STATE aKeyState[KEY_MAXSCAN];
 
 /* The current location of the mouse */
-static Uint16 mouseXPos, mouseYPos;
+static Uint16 mouseXPos = 0;
+static Uint16 mouseYPos = 0;
 static bool mouseInWindow = true;
 
 /* How far the mouse has to move to start a drag */
@@ -93,12 +94,12 @@ static bool mouseInWindow = true;
 static MOUSE_KEY_CODE dragKey;
 
 /* The start of a possible drag by the mouse */
-static SDWORD dragX, dragY;
+static int dragX = 0;
+static int dragY = 0;
 
 /* The current mouse button state */
 static INPUT_STATE aMouseState[MOUSE_BAD];
 static MousePresses mousePresses;
-
 
 /* The size of the input buffer */
 #define INPUT_MAXSTR	512

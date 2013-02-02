@@ -3877,7 +3877,10 @@ STRUCTURE::STRUCTURE(uint32_t id, unsigned player)
 	, lastBuildRate(0)
 	, psCurAnim(NULL)
 	, prebuiltImd(NULL)
-{}
+{
+	pos = Vector3i(0, 0, 0);
+	rot = Vector3i(0, 0, 0);
+}
 
 /* Release all resources associated with a structure */
 STRUCTURE::~STRUCTURE()
