@@ -79,11 +79,14 @@ struct SEQTEXT
 
 struct SEQLIST
 {
-	const char	*pSeq;						//name of the sequence to play
-	const char	*pAudio;					//name of the wav to play
+	QString         pSeq;						//name of the sequence to play
+	QString         pAudio;					//name of the wav to play
 	bool		bSeqLoop;					//loop this sequence
-	SDWORD		currentText;				//cuurent number of text messages for this seq
+	int             currentText;			// current number of text messages for this seq
 	SEQTEXT		aText[MAX_TEXT_OVERLAYS];	//text data to display for this sequence
+
+	SEQLIST() : bSeqLoop(false), currentText(0) { memset(aText, 0, sizeof(aText)); }
+	void reset() { bSeqLoop = false; currentText = 0; memset(aText, 0, sizeof(aText)); pSeq.clear(); pAudio.clear(); }
 };
 /***************************************************************************/
 /*
@@ -95,8 +98,7 @@ static bool bAudioPlaying = false;
 static bool bHoldSeqForAudio = false;
 static bool bSeqSubtitles = true;
 static bool bSeqPlaying = false;
-static const char aHardPath[] = "sequences/";
-static char aVideoName[MAX_STR_LENGTH];
+static QString aVideoName;
 static SEQLIST aSeqList[MAX_SEQ_LIST];
 static SDWORD currentSeq = -1;
 static SDWORD currentPlaySeq = -1;
@@ -113,7 +115,7 @@ enum VIDEO_RESOLUTION
 	VIDEO_USER_CHOSEN_RESOLUTION,
 };
 
-static bool seq_StartFullScreenVideo(const char* videoName, const char* audioName, VIDEO_RESOLUTION resolution);
+static bool seq_StartFullScreenVideo(QString videoName, QString audioName, VIDEO_RESOLUTION resolution);
 
 /***************************************************************************/
 /*
@@ -146,8 +148,7 @@ bool seq_RenderVideoToBuffer(const char* sequenceName, int seqCommand)
 		return true;
 	}
 
-	if (!bSeqPlaying
-	 && frameHold == VIDEO_LOOP)
+	if (!bSeqPlaying && frameHold == VIDEO_LOOP)
 	{
 		//start the ball rolling
 
@@ -157,7 +158,7 @@ bool seq_RenderVideoToBuffer(const char* sequenceName, int seqCommand)
 		/* We do *NOT* want to use the user-choosen resolution when we
 		 * are doing intelligence videos.
 		 */
-		videoPlaying = seq_StartFullScreenVideo(sequenceName, NULL, VIDEO_PRESELECTED_RESOLUTION) ? VIDEO_PLAYING : VIDEO_FINISHED;
+		videoPlaying = seq_StartFullScreenVideo(sequenceName, QString(), VIDEO_PRESELECTED_RESOLUTION) ? VIDEO_PLAYING : VIDEO_FINISHED;
 		bSeqPlaying = true;
 	}
 
@@ -210,21 +211,12 @@ static void seq_SetUserResolution(void)
 }
 
 //full screenvideo functions
-static bool seq_StartFullScreenVideo(const char* videoName, const char* audioName, VIDEO_RESOLUTION resolution)
+static bool seq_StartFullScreenVideo(QString videoName, QString audioName, VIDEO_RESOLUTION resolution)
 {
-	const char* aAudioName = NULL;
-	int chars_printed;
+	QString aAudioName("sequenceaudio/" + audioName);
 
 	bHoldSeqForAudio = false;
-
-	chars_printed = ssprintf(aVideoName, "%s%s", aHardPath, videoName);
-	ASSERT(chars_printed < sizeof(aVideoName), "sequence path + name greater than max string");
-
-	//set audio path
-	if (audioName != NULL)
-	{
-		sasprintf((char**)&aAudioName, "sequenceaudio/%s", audioName);
-	}
+	aVideoName = QString("sequences/" + videoName);
 
 	cdAudio_Pause();
 	iV_SetFont(font_scaled);
@@ -249,13 +241,13 @@ static bool seq_StartFullScreenVideo(const char* videoName, const char* audioNam
 		seq_SetUserResolution();
 	}
 
-	if (!seq_Play(aVideoName))
+	if (!seq_Play(aVideoName.toUtf8().constData()))
 	{
 		seq_Shutdown();
 		return false;
 	}
 
-	if (audioName == NULL)
+	if (audioName.isEmpty())
 	{
 		bAudioPlaying = false;
 	}
@@ -264,8 +256,8 @@ static bool seq_StartFullScreenVideo(const char* videoName, const char* audioNam
 		// NOT controlled by sliders for now?
 		static const float maxVolume = 1.f;
 
-		bAudioPlaying = audio_PlayStream(aAudioName, maxVolume, NULL, NULL) ? true : false;
-		ASSERT(bAudioPlaying == true, "unable to initialise sound %s", aAudioName);
+		bAudioPlaying = audio_PlayStream(aAudioName.toUtf8().constData(), maxVolume, NULL, NULL) ? true : false;
+		ASSERT(bAudioPlaying == true, "unable to initialise sound %s", aAudioName.toUtf8().constData());
 	}
 
 	return true;
@@ -365,7 +357,7 @@ bool seq_UpdateFullScreenVideo(int *pbClear)
 			{
 				seq_Shutdown();
 
-				if (!seq_Play(aVideoName))
+				if (!seq_Play(aVideoName.toUtf8().constData()))
 				{
 					bHoldSeqForAudio = true;
 				}
@@ -447,7 +439,6 @@ bool seq_AddTextForVideo(const char* pText, SDWORD xOffset, SDWORD yOffset, doub
 	if (((xOffset == 0) && (yOffset == 0)) && (currentLength > 0))
 	{
 		aSeqList[currentSeq].aText[aSeqList[currentSeq].currentText].x = lastX;
-		//	aSeqList[currentSeq].aText[aSeqList[currentSeq].currentText-1].x;
 		aSeqList[currentSeq].aText[aSeqList[currentSeq].currentText].y =
 			aSeqList[currentSeq].aText[aSeqList[currentSeq].currentText-1].y + iV_GetTextLineSize();
 	}
@@ -559,9 +550,12 @@ static bool seq_AddTextFromFile(const char *pTextName, SEQ_TEXT_POSITIONING text
 //clear the sequence list
 void seq_ClearSeqList(void)
 {
-	memset(&aSeqList, 0, sizeof(aSeqList));
 	currentSeq = -1;
 	currentPlaySeq = -1;
+	for (int i = 0; i < MAX_SEQ_LIST; ++i)
+	{
+		aSeqList[i].reset();
+	}
 }
 
 //add a sequence to the list to be played
@@ -584,17 +578,15 @@ void seq_AddSeqToList(const char *pSeqName, const char *pAudioName, const char *
 	if (bSeqSubtitles)
 	{
 		char aSubtitleName[MAX_STR_LENGTH];
-		size_t check_len = sstrcpy(aSubtitleName, pSeqName);
-		char* extension;
-
-		ASSERT(check_len < sizeof(aSubtitleName), "given sequence name (%s) longer (%lu) than buffer (%lu)", pSeqName, (unsigned long) check_len, (unsigned long) sizeof(aSubtitleName));
+		sstrcpy(aSubtitleName, pSeqName);
 
 		// check for a subtitle file
-		extension = strrchr(aSubtitleName, '.');
+		char* extension = strrchr(aSubtitleName, '.');
 		if (extension)
+		{
 			*extension = '\0';
-		check_len = sstrcat(aSubtitleName, ".txt");
-		ASSERT(check_len < sizeof(aSubtitleName), "sequence name to long to attach an extension too");
+		}
+		sstrcat(aSubtitleName, ".txt");
 
 		// Subtitles should be center justified
 		seq_AddTextFromFile(aSubtitleName, SEQ_TEXT_JUSTIFY);
@@ -611,7 +603,7 @@ bool seq_AnySeqLeft(void)
 	{
 		return false;
 	}
-	return aSeqList[nextSeq].pSeq;
+	return !aSeqList[nextSeq].pSeq.isEmpty();
 }
 
 void seq_StartNextFullScreenVideo(void)
