@@ -1,6 +1,0 @@
-R-Defense-HvyArtMissile,Emplacement-Howitzer105,134
-R-Defense-MdArtMissile,Emplacement-MortarPit02,282
-R-Defense-MdArtMissile,Emplacement-MRL-pit,263
-R-Defense-Pillbox-RotMG,PillBox1,126
-R-Defense-RotHow,Emplacement-Howitzer105,134
-R-Defense-WallTower-A-Tmiss,WallTower06,163

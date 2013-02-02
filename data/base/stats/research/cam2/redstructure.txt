@@ -1,7 +1,0 @@
-R-Defense-AASite-QuadRotMg,AASite-QuadMg1,189
-R-Defense-HvyMor,Emplacement-MortarPit01,142
-R-Defense-Pillbox-RotMG,PillBox1,126
-R-Defense-RotMor,Emplacement-MortarPit01,142
-R-Defense-Wall-RotMg,WallTower01,32
-R-Defense-Wall-VulcanCan,WallTower03,102
-R-Sys-Sensor-Tower02,Sys-SensoTower01,89

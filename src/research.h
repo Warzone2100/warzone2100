@@ -83,7 +83,7 @@ extern UDWORD	aDefaultECM[MAX_PLAYERS];
 extern UDWORD	aDefaultRepair[MAX_PLAYERS];
 
 //extern bool loadResearch(void);
-extern bool loadResearch(const char *pResearchData, UDWORD bufferSize);
+extern bool loadResearch(QString filename);
 //Load the pre-requisites for a research list
 extern bool loadResearchPR(const char *pPRData, UDWORD bufferSize);
 //Load the artefacts for a research list

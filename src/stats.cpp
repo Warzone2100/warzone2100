@@ -1955,7 +1955,7 @@ SDWORD	getCompFromResName(UDWORD compType, const char *pName)
 	return getCompFromName(compType, pName);
 }
 
-static void getStatsDetails(UDWORD compType, BASE_STATS **ppsStats, UDWORD *pnumStats, UDWORD *pstatSize)
+void getStatsDetails(UDWORD compType, BASE_STATS **ppsStats, UDWORD *pnumStats, UDWORD *pstatSize)
 {
 
 	switch (compType)

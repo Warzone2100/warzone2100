@@ -489,9 +489,9 @@ static void dataRESCHRelease(WZ_DECL_UNUSED void *pData)
 }
 
 /* Load the Research stats */
-static bool bufferRESCHLoad(const char *pBuffer, UDWORD size, void **ppData)
+static bool bufferRESCHLoad(const char *fileName, void **ppData)
 {
-	calcDataHash((uint8_t *)pBuffer, size, DATA_RESCH);
+	//calcDataHash((uint8_t *)pBuffer, size, DATA_RESCH); 
 
 	//check to see if already loaded
 	if (!asResearch.empty())
@@ -500,122 +500,11 @@ static bool bufferRESCHLoad(const char *pBuffer, UDWORD size, void **ppData)
 		dataRESCHRelease(NULL);
 	}
 
-	if (!loadResearch(pBuffer, size))
+	if(!loadResearch(QString(fileName)))
 	{
 		return false;
 	}
 
-
-	/* set a dummy value so the release function gets called - the Release
-	 * function is now called when load up the next set
-	// *ppData = (void *)1;
-	 * pass back NULL so that can load the same name file for the next campaign*/
-	*ppData = NULL;
-	return true;
-}
-
-/* Load the research pre-requisites */
-static bool bufferRPREREQLoad(const char *pBuffer, UDWORD size, void **ppData)
-{
-	calcDataHash((uint8_t *)pBuffer, size, DATA_RPREREQ);
-
-	if (!loadResearchPR(pBuffer, size))
-	{
-		return false;
-	}
-
-	//not interested in this value
-	*ppData = NULL;
-	return true;
-}
-
-/* Load the research components made redundant */
-static bool bufferRCOMPREDLoad(const char *pBuffer, UDWORD size, void **ppData)
-{
-	calcDataHash((uint8_t *)pBuffer, size, DATA_RCOMPRED);
-
-	if (!loadResearchArtefacts(pBuffer, size, RED_LIST))
-	{
-		return false;
-	}
-
-	//not interested in this value
-	*ppData = NULL;
-	return true;
-}
-
-/* Load the research component results */
-static bool bufferRCOMPRESLoad(const char *pBuffer, UDWORD size, void **ppData)
-{
-	calcDataHash((uint8_t *)pBuffer, size, DATA_RCOMPRES);
-
-	if (!loadResearchArtefacts(pBuffer, size, RES_LIST))
-	{
-		return false;
-	}
-
-	//not interested in this value
-	*ppData = NULL;
-	return true;
-}
-
-/* Load the research structures required */
-static bool bufferRSTRREQLoad(const char *pBuffer, UDWORD size, void **ppData)
-{
-	calcDataHash((uint8_t *)pBuffer, size, DATA_RSTRREQ);
-
-	if (!loadResearchStructures(pBuffer, size, REQ_LIST))
-	{
-		return false;
-	}
-
-	//not interested in this value
-	*ppData = NULL;
-	return true;
-}
-
-/* Load the research structures made redundant */
-static bool bufferRSTRREDLoad(const char *pBuffer, UDWORD size, void **ppData)
-{
-	calcDataHash((uint8_t *)pBuffer, size, DATA_RSTRRED);
-
-	if (!loadResearchStructures(pBuffer, size, RED_LIST))
-	{
-		return false;
-	}
-
-	//not interested in this value
-	*ppData = NULL;
-	return true;
-}
-
-/* Load the research structure results */
-static bool bufferRSTRRESLoad(const char *pBuffer, UDWORD size, void **ppData)
-{
-	calcDataHash((uint8_t *)pBuffer, size, DATA_RSTRRES);
-
-	if (!loadResearchStructures(pBuffer, size, RES_LIST))
-	{
-		return false;
-	}
-
-	//not interested in this value
-	*ppData = NULL;
-	return true;
-}
-
-/* Load the research functions */
-static bool bufferRFUNCLoad(const char *pBuffer, UDWORD size, void **ppData)
-{
-	calcDataHash((uint8_t *)pBuffer, size, DATA_RFUNC);
-
-	if (!loadResearchFunctions(pBuffer, size))
-	{
-		return false;
-	}
-
-	//not interested in this value
-	*ppData = NULL;
 	return true;
 }
 
@@ -1059,14 +948,6 @@ static const RES_TYPE_MIN_BUF BufferResourceTypes[] =
 	{"SSTRWEAP", bufferSSTRWEAPLoad, NULL},
 	{"SFEAT", bufferSFEATLoad, dataSFEATRelease},                  //feature stats file
 	{"SFUNC", bufferSFUNCLoad, dataSFUNCRelease},                  //function stats file
-	{"RESCH", bufferRESCHLoad, dataRESCHRelease},                  //research stats files
-	{"RPREREQ", bufferRPREREQLoad, NULL},
-	{"RCOMPRED", bufferRCOMPREDLoad, NULL},
-	{"RCOMPRES", bufferRCOMPRESLoad, NULL},
-	{"RSTRREQ", bufferRSTRREQLoad, NULL},
-	{"RSTRRED", bufferRSTRREDLoad, NULL},
-	{"RSTRRES", bufferRSTRRESLoad, NULL},
-	{"RFUNC", bufferRFUNCLoad, NULL},
 	{"SMSG", bufferSMSGLoad, dataSMSGRelease},
 	{"IMD", dataIMDBufferLoad, (RES_FREE)iV_IMDRelease},
 };
@@ -1109,6 +990,7 @@ static const RES_TYPE_MIN_FILE FileResourceTypes[] =
 	{"RESEARCHMSG", dataResearchMsgLoad, dataSMSGRelease },
 	{"SSTRMOD", bufferSSTRMODLoad, NULL},
 	{"JAVASCRIPT", jsLoad, NULL},
+	{"RESCH", bufferRESCHLoad, dataRESCHRelease},                  //research stats files
 };
 
 /* Pass all the data loading functions to the framework library */

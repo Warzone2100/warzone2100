@@ -29,6 +29,7 @@
 #include "lib/framework/frame.h"
 #include "lib/framework/strres.h"
 #include "lib/framework/frameresource.h"
+#include "lib/framework/wzconfig.h"
 #include "objects.h"
 #include "lib/gamelib/gtime.h"
 #include "research.h"
@@ -47,11 +48,7 @@
 #include "multiplay.h"
 #include "template.h"
 #include "qtscript.h"
-
-
-//used to calc the research power
-#define RESEARCH_FACTOR		32
-#define RESEARCH_MAX_POWER  450
+#include "stats.h"
 
 // The stores for the research stats
 std::vector<RESEARCH> asResearch;
@@ -71,7 +68,6 @@ UDWORD					aDefaultRepair[MAX_PLAYERS];
 
 //set the iconID based on the name read in in the stats
 static UWORD setIconID(char *pIconName, char *pName);
-static COMPONENT_STATS * getComponentDetails(char *pName, char *pCompName);
 static void replaceComponent(COMPONENT_STATS *pNewComponent, COMPONENT_STATS *pOldComponent,
 					  UBYTE player);
 static bool checkResearchName(RESEARCH *psRes, UDWORD numStats);
@@ -111,91 +107,99 @@ bool researchInitVars(void)
 	return true;
 }
 
-/** Load the research stats */
-bool loadResearch(const char *pResearchData, UDWORD bufferSize)
+//searches for component with given name
+//returns NULL if record not found
+BASE_STATS* get_any_component_from_ID(QString name)
 {
-	unsigned int researchCount = numCR(pResearchData, bufferSize);
-	COMPONENT_STATS *psComp;
-	SDWORD structID;
-	UDWORD i, keyTopic, techCode, resPoints, dummyVal;
-	char ResearchName[MAX_STR_LENGTH];
-	char msgName[MAX_STR_LENGTH], iconID[MAX_STR_LENGTH];
-	char imdName[MAX_STR_LENGTH], imdName2[MAX_STR_LENGTH];
-	char structName[MAX_STR_LENGTH], compName[MAX_STR_LENGTH],
-		compType[MAX_STR_LENGTH];
-	PLAYER_RESEARCH dummy;
-
-	memset(&dummy, 0, sizeof(dummy));
-
-	// Skip descriptive header
-	if (strncmp(pResearchData,"Research ",9)==0)
+	for (int compType=0; compType<COMP_NUMCOMPONENTS; compType++)
 	{
-		pResearchData = strchr(pResearchData,'\n') + 1;
-		researchCount--;
+		if (compType == COMP_UNKNOWN)
+			continue;
+
+		BASE_STATS	*psStats = NULL;
+		UDWORD		numStats = 0, statSize = 0;
+
+		getStatsDetails(compType, &psStats, &numStats, &statSize);
+
+		//find the stat with the same name
+		for (unsigned int count = 0; count < numStats; count++)
+		{
+			if (name.compare(psStats->pName, Qt::CaseInsensitive) == 0)
+			{
+				return psStats;
+			}
+			psStats = (BASE_STATS *)((char *)psStats + statSize);
+		}
 	}
 
-	for (i = 0; i < researchCount; i++)
+	//return NULL if record not found or an invalid component type is passed in
+	return NULL;
+}
+
+//searches for function with given name
+//returns NULL if not found
+FUNCTION* find_function_by_ID(QString FunctionName)
+{
+	for (unsigned int incF = 0; incF < numFunctions; incF++)
+	{
+		if (FunctionName.compare(asFunctions[incF]->pName, Qt::CaseInsensitive) == 0)
+		{
+			return asFunctions[incF];
+		}
+	}
+	return NULL;
+}
+
+/** Load the research stats */
+bool loadResearch(QString filename)
+{
+	WzConfig ini(filename, WzConfig::ReadOnlyAndRequired);
+	QStringList list = ini.childGroups();
+	PLAYER_RESEARCH dummy;
+	memset(&dummy, 0, sizeof(dummy));
+	QVector<QStringList> preResearch;
+	preResearch.resize(list.size());
+	for (int inc = 0; inc < list.size(); ++inc)
 	{
 		// HACK FIXME: the code assumes we have empty PLAYER_RESEARCH entries to throw around
 		for (int j = 0; j < MAX_PLAYERS; j++)
 		{
 			asPlayerResList[j].push_back(dummy);
 		}
-
+		
+		ini.beginGroup(list[inc]);
 		RESEARCH research;
-
-		research.index = i;
-		//read the data into the storage - the data is delimeted using comma's
-		ResearchName[0] = '\0';
-		sscanf(pResearchData,"%255[^,'\r\n],", ResearchName);
-
-		//allocate storage for the name
-		research.pName = allocateName(ResearchName);
+		research.index = inc;
+		research.pName = allocateName(list[inc].toUtf8().constData());
 		ASSERT_OR_RETURN(false, research.pName != NULL, "Failed allocating research name");
 
 		//check the name hasn't been used already
-		ASSERT_OR_RETURN(false, checkResearchName(&research, i), "Research name %s used already", research.pName);
+		ASSERT_OR_RETURN(false, checkResearchName(&research, inc), "Research name '%s' used already", research.pName);
 
-		pResearchData += (strlen(ResearchName)+1);
-		research.ref = REF_RESEARCH_START + i;
-
-		//determine the tech level (unused, so we don't use the resulting string)
-		ResearchName[0] = '\0';
-		sscanf(pResearchData,"%255[^,'\r\n],", ResearchName);
-		pResearchData += (strlen(ResearchName)+1);
-
-		ResearchName[0] = '\0';
-		sscanf(pResearchData,"%255[^,'\r\n],", ResearchName);
-
-		if (strcmp(ResearchName, "0"))
+		research.ref = REF_RESEARCH_START + inc;
+		
+		//set subGroup icon
+		QString subGroup = ini.value("subgroupIconID", "").toString();
+		if (subGroup.compare("") != 0)
 		{
-			research.subGroup = setIconID(ResearchName, research.pName);
+			research.subGroup = setIconID(subGroup.toUtf8().data(), research.pName);
 		}
 		else
 		{
 			research.subGroup = NO_RESEARCH_ICON;
 		}
 
-		pResearchData += (strlen(ResearchName)+1);
+		//set key topic
+		unsigned int keyTopic = ini.value("keyTopic", 0).toUInt();
+		ASSERT(keyTopic <= 1, "Invalid keyTopic for research topic - '%s' ", getResearchName(&research));
+		if(keyTopic <= 1)
+			research.keyTopic = ini.value("keyTopic", 0).toUInt();
+		else 
+			research.keyTopic = 0;
 
-		iconID[0] = '\0';
-		imdName[0] = '\0';
-		imdName2[0] = '\0';
-		msgName[0] = '\0';
-		structName[0] = '\0';
-		compName[0] = '\0';
-		compType[0] = '\0';
-
-		sscanf(pResearchData,"%d,%255[^,'\r\n],%255[^,'\r\n],%255[^,'\r\n],%255[^,'\r\n],%255[^,'\r\n], \
-		       %255[^,'\r\n],%255[^,'\r\n],%d,%d,%d,%d,%d,%d,%d,%d,%d",
-			&techCode, iconID, imdName, imdName2, msgName,
-		        structName, compName, compType, &resPoints, &keyTopic, &dummyVal,
-			&dummyVal, &dummyVal, &dummyVal, &dummyVal, &dummyVal, &dummyVal);
-
-		research.keyTopic = keyTopic;
-
-		//check the tech code is valid
-		ASSERT_OR_RETURN(false, techCode <= 1, "Invalid tech code for research topic - %s ", getResearchName(&research));
+		//set tech code
+		UBYTE techCode = ini.value("techCode", 0).toUInt();
+		ASSERT(techCode <= 1, "Invalid tech code for research topic - '%s' ", getResearchName(&research));
 		if (techCode == 0)
 		{
 			research.techCode = TC_MAJOR;
@@ -206,9 +210,10 @@ bool loadResearch(const char *pResearchData, UDWORD bufferSize)
 		}
 
 		//set the iconID
-		if (strcmp(iconID, "0"))
+		QString iconID = ini.value("iconID", "").toString();
+		if (iconID.compare("") != 0)
 		{
-			research.iconID = setIconID(iconID, research.pName);
+			research.iconID = setIconID(iconID.toUtf8().data(), research.pName);
 		}
 		else
 		{
@@ -216,362 +221,202 @@ bool loadResearch(const char *pResearchData, UDWORD bufferSize)
 		}
 
 		//get the IMDs used in the interface
-		if (strcmp(structName, "0"))
+		QString statID = ini.value("statID", "").toString();
+		research.psStat = NULL;
+		if (statID.compare("") != 0)
 		{
-			//find the structure stat
-			structID = getStructStatFromName(structName);
-			ASSERT_OR_RETURN(false, structID >= 0, "Cannot find the structure Stat for Research %s", getResearchName(&research));
-			research.psStat = (BASE_STATS *)(asStructureStats + structID);
+			//try find the structure stat with given name
+			int32_t structID = getStructStatFromName(statID.toUtf8().data());
+			if (structID >= 0)
+			{
+				research.psStat = (BASE_STATS *)(asStructureStats + structID);
+			}else
+			{
+				//try find the component stat with given name
+				BASE_STATS* tmpComp = get_any_component_from_ID(statID);
+				if(tmpComp != NULL)
+				{
+					research.psStat = tmpComp;
+				}
+			}
+			ASSERT_OR_RETURN(false, research.psStat != NULL, "Cannot find the statID '%s' for Research '%s'", statID.toUtf8().data(), getResearchName(&research));
 		}
-		else if (strcmp(compName, "0"))
+
+		QString imdName = ini.value("imdName", "").toString();
+		if (imdName.compare("") != 0)
 		{
-			//find the component stat
-			psComp = getComponentDetails(compType, compName);
-			ASSERT_OR_RETURN(false, psComp != NULL, "Cannot find the component Stat for Research %s", getResearchName(&research));
-			research.psStat = (BASE_STATS *)psComp;
-		}
-		else
-		{
-			research.psStat = NULL;
-		}
-		if (strcmp(imdName, "0"))
-		{
-			research.pIMD = (iIMDShape *) resGetData("IMD", imdName);
-			ASSERT_OR_RETURN(false, research.pIMD != NULL, "Cannot find the research PIE for record %s", getResearchName(&research));
+			research.pIMD = (iIMDShape *) resGetData("IMD", imdName.toUtf8().data());
+			ASSERT(research.pIMD != NULL, "Cannot find the research PIE '%s' for record '%s'",imdName.toUtf8().data(), getResearchName(&research));
 		}
 		else
 		{
 			research.pIMD = NULL;
 		}
 
-		if (strcmp(imdName2, "0"))
+		QString imdName2 = ini.value("imdName2", "").toString();
+		if (imdName2.compare("") != 0)
 		{
-			research.pIMD2 = (iIMDShape *) resGetData("IMD", imdName2);
-			ASSERT_OR_RETURN(false, research.pIMD2 != NULL, "Cannot find the 2nd research PIE for record %s", getResearchName(&research));
+			research.pIMD2 = (iIMDShape *) resGetData("IMD", imdName2.toUtf8().data());
+			ASSERT(research.pIMD2 != NULL, "Cannot find the 2nd research '%s' PIE for record '%s'",imdName2.toUtf8().data(), getResearchName(&research));
 		}
 		else
 		{
 			research.pIMD2 = NULL;
 		}
 
-		//get the message viewdata - if any
-		if (strcmp(msgName, "0"))
+		QString msgName = ini.value("msgName", "").toString();
+		if (msgName.compare("") != 0)
 		{
 			//check its a major tech code
-			ASSERT(research.techCode == TC_MAJOR, "This research should not have a message associated with it, %s the message will be ignored!", getResearchName(&research));
+			ASSERT(research.techCode == TC_MAJOR, "This research should not have a message associated with it, '%s' the message will be ignored!", getResearchName(&research));
 			if (research.techCode == TC_MAJOR)
 			{
-				research.pViewData = getViewData(msgName);
+				research.pViewData = getViewData(msgName.toUtf8().data());
 			}
 		}
 
 		//set the researchPoints
-		ASSERT_OR_RETURN(false, resPoints <= UWORD_MAX, "Research Points too high for research topic - %s ", getResearchName(&research));
-		research.researchPoints = (UWORD)resPoints;
+		unsigned int resPoints = ini.value("researchPoints", 0).toUInt();
+		ASSERT_OR_RETURN(false, resPoints <= UWORD_MAX, "Research Points too high for research topic - '%s' ", getResearchName(&research));
+		research.researchPoints = resPoints;
 
 		//set the research power
-		research.researchPower = research.researchPoints / RESEARCH_FACTOR;
-		if (research.researchPower > RESEARCH_MAX_POWER)
+		unsigned int resPower = ini.value("researchPower", 0).toUInt();
+		ASSERT_OR_RETURN(false, resPower <= UWORD_MAX, "Research Power too high for research topic - '%s' ", getResearchName(&research));
+		research.researchPower = resPower;
+
+		//rememeber research pre-requisites for futher checking
+		preResearch[inc] = ini.value("requiredResearch").toStringList();
+
+		//set components results
+		QStringList compResults = ini.value("resultComponents").toStringList();
+		for (int j = 0; j < compResults.size(); j++)
 		{
-			research.researchPower = RESEARCH_MAX_POWER;
+			QString compID = compResults[j].trimmed();
+			BASE_STATS *pComp = get_any_component_from_ID(compID);
+			if (pComp != NULL)
+			{
+				research.componentResults.push_back((COMPONENT_STATS*)pComp);
+			}else
+			{
+				ASSERT(false, "Invalid item '%s' in list of result components of research '%s' ", compID.toUtf8().constData(), getResearchName(&research));
+			}
 		}
 
-		//increment the pointer to the start of the next record
-		pResearchData = strchr(pResearchData,'\n') + 1;
+		//set replaced components
+		QStringList replacedComp = ini.value("replacedComponents").toStringList();
+		for (int j = 0; j < replacedComp.size(); j++)
+		{
+			//read pair of components oldComponent:newComponent
+			QStringList pair = replacedComp[j].split(':');
+			ASSERT(pair.size() == 2, "Invalid item '%s' in list of replaced components of research '%s'. Required format: 'oldItem:newItem, item1:item2'", replacedComp[j].toUtf8().constData(), getResearchName(&research));
+			if (pair.size() != 2)
+			{
+				continue; //skip invalid entries
+			}
+			QString oldCompID = pair[0].trimmed();
+			QString newCompID = pair[1].trimmed();
+			COMPONENT_STATS *oldComp = (COMPONENT_STATS *)get_any_component_from_ID(oldCompID);
+			if (oldComp == NULL)
+			{
+				ASSERT(false, "Invalid item '%s' in list of replaced components of research '%s'. Wrong component code.", oldCompID.toUtf8().constData(), getResearchName(&research));
+				continue;
+			}
+			COMPONENT_STATS *newComp = (COMPONENT_STATS *)get_any_component_from_ID(newCompID);
+			if(newComp == NULL)
+			{
+				ASSERT(false, "Invalid item '%s' in list of replaced components of research '%s'. Wrong component code.", newCompID.toUtf8().constData(), getResearchName(&research));
+				continue;
+			}
+			RES_COMP_REPLACEMENT replItem;
+			replItem.pOldComponent = oldComp;
+			replItem.pNewComponent = newComp;
+			research.componentReplacement.push_back(replItem);
+		}
+
+		//set redundant components
+		QStringList redComp = ini.value("redComponents").toStringList();
+		for (int j = 0; j < redComp.size(); j++)
+		{
+			QString compID = redComp[j].trimmed();
+			BASE_STATS *pComp = get_any_component_from_ID(compID);
+			if (pComp == NULL)
+			{
+				ASSERT(false, "Invalid item '%s' in list of redundant components of research '%s' ", compID.toUtf8().constData(), getResearchName(&research));
+			}else
+			{
+				research.pRedArtefacts.push_back((COMPONENT_STATS*)pComp);
+			}
+		}
+
+		//set result structures
+		QStringList resStruct = ini.value("resultStructures").toStringList();
+		for (int j = 0; j < resStruct.size(); j++)
+		{
+			QString strucID = resStruct[j].trimmed();
+			int structIndex = getStructStatFromName(strucID.toUtf8().data());
+			ASSERT(structIndex >= 0, "Invalid item '%s' in list of result structures of research '%s' ", strucID.toUtf8().constData(), getResearchName(&research));
+			if (structIndex >= 0)
+			{
+				research.pStructureResults.push_back(structIndex);
+			}
+		}
+
+		//set required structures
+		QStringList reqStruct = ini.value("requiredStructures").toStringList();
+		for (int j = 0; j < reqStruct.size(); j++)
+		{
+			QString strucID = reqStruct[j].trimmed();
+			int structIndex = getStructStatFromName(strucID.toUtf8().data());
+			ASSERT(structIndex >= 0, "Invalid item '%s' in list of required structures of research '%s' ", strucID.toUtf8().constData(), getResearchName(&research));
+			if(structIndex >= 0)
+			{
+				research.pStructList.push_back(structIndex);
+			}
+		}
+
+		//set redundant structures
+		QStringList redStruct = ini.value("redStructures").toStringList();
+		for (int j = 0; j < redStruct.size(); j++)
+		{
+			QString strucID = redStruct[j].trimmed();
+			int structIndex = getStructStatFromName(strucID.toUtf8().data());
+			ASSERT(structIndex >= 0, "Invalid item '%s' in list of redundant structures of research '%s' ", strucID.toUtf8().constData(), getResearchName(&research));
+			if (structIndex >= 0)
+			{
+				research.pRedStructs.push_back(structIndex);
+			}
+		}
+
+		//set result functions
+		QStringList resFunc = ini.value("resultFunctions").toStringList();
+		for (int j = 0; j < resFunc.size(); j++)
+		{
+			QString funcID = resFunc[j].trimmed();
+			FUNCTION *pFunc = find_function_by_ID(funcID);
+			ASSERT(pFunc != NULL, "Invalid item '%s' in list of result functions of research '%s' ", funcID.toUtf8().constData(), getResearchName(&research));
+			if (pFunc != NULL)
+			{
+				research.pFunctionList.push_back(pFunc);
+			}
+		}
+
 		asResearch.push_back(research);
+		ini.endGroup();
 	}
 
-	return true;
-}
-
-//Load the pre-requisites for a research list
-bool loadResearchPR(const char *pPRData, UDWORD bufferSize)
-{
-	unsigned NumToAlloc = numCR(pPRData, bufferSize);
-	char				ResearchName[MAX_STR_LENGTH], PRName[MAX_STR_LENGTH];
-
-	for (int i = 0; i < NumToAlloc; i++)
+	//Load and check research pre-requisites (need do it AFTER loading research items)
+	for (int inc = 0; inc < asResearch.size(); inc++)
 	{
-		bool recFound = false;
-
-		//read the data into the storage - the data is delimited using commas
-		ResearchName[0] = '\0';
-		PRName[0] = '\0';
-		sscanf(pPRData,"%255[^,'\r\n],%255[^,'\r\n],%*d", ResearchName, PRName);
-
-		//loop through each Research to compare the name
-		for (int incR = 0; incR < asResearch.size(); incR++)
+		QStringList preRes = preResearch[inc];
+		for (int j = 0; j < preRes.size(); j++)
 		{
-			if (!(strcmp(ResearchName, asResearch[incR].pName)))
-			{
-				//Research found
-				for (int incPR = 0; incPR < asResearch.size(); incPR++)
-				{
-					if (!(strcmp(PRName, asResearch[incPR].pName)))
-					{
-						//PRresearch found alloc this to the current Research
-						asResearch[incR].pPRList.push_back(incPR);
-						recFound = true;
-						break;
-					}
-				}
-				ASSERT_OR_RETURN(false, recFound, "Unable to find Pre-requisite %s for research %s", PRName, ResearchName);
-				break;
-			}
+			QString resID = preRes[j].trimmed();
+			RESEARCH *preResItem = getResearch(resID.toUtf8().constData());
+			ASSERT(preResItem != NULL, "Invalid item '%s' in list of pre-requisites of research '%s' ", resID.toUtf8().constData(), getResearchName(&asResearch[inc]));
+			if (preResItem != NULL)
+				asResearch[inc].pPRList.push_back(preResItem->index);
 		}
-		ASSERT_OR_RETURN(false, recFound, "Unable to find Research %s", ResearchName);
-		// increment the pointer to the start of the next record
-		pPRData = strchr(pPRData,'\n') + 1;
-	}
-	return true;
-}
-
-//Load the artefacts for a research list
-bool loadResearchArtefacts(const char *pArteData, UDWORD bufferSize, UDWORD listNumber)
-{
-	unsigned NumToAlloc = numCR(pArteData, bufferSize);
-	char			ResearchName[MAX_STR_LENGTH], ArteName[MAX_STR_LENGTH], TypeName[MAX_STR_LENGTH];
-	COMPONENT_STATS		*pArtefact;
-	UDWORD				newType;
-
-	// Skip descriptive header
-	if (strncmp(pArteData, "Research ", 9) == 0)
-	{
-		pArteData = strchr(pArteData, '\n') + 1;
-		NumToAlloc--;
-	}
-
-	for (int i = 0; i < NumToAlloc; i++)
-	{
-		//read the data into the storage - the data is delimited using commas
-		ResearchName[0] = '\0';
-		ArteName[0] = '\0';
-		TypeName[0] = '\0';
-		sscanf(pArteData,"%255[^,'\r\n],%255[^,'\r\n],%255[^,'\r\n]", ResearchName, ArteName, TypeName);
-
-		//increment the data pointer
-		pArteData += (strlen(ResearchName)+1+strlen(ArteName)+1+strlen(TypeName)+1);
-
-		pArtefact = getComponentDetails(TypeName, ArteName);
-		if (pArtefact == NULL)
-		{
-			return false;
-		}
-		//get the type for comparison later
-		newType = statType(pArtefact->ref);
-
-		RESEARCH *pResearch = getResearch(ResearchName);
-		if (pResearch == NULL)
-		{
-			return false;
-		}
-
-		//ArtefactResearch found - alloc the artefact to the current Research topic
-		switch (listNumber)
-		{
-			case RED_LIST:
-				pResearch->pRedArtefacts.push_back(pArtefact);
-				break;
-			case RES_LIST:
-				pResearch->pArtefactResults.push_back(pArtefact);
-				break;
-			default:
-				debug( LOG_ERROR, "Unknown research list" );
-				abort();
-				return false;
-		}
-		//deal with extra data
-		switch (listNumber)
-		{
-			case RED_LIST:
-				//ignore the last character
-				sscanf(pArteData,",%*d");
-				break;
-			case RES_LIST:
-				ArteName[0] = '\0';
-				TypeName[0] = '\0';
-				sscanf(pArteData, "%255[^,'\r\n],%255[^,'\r\n],%*d", ArteName, TypeName);
-				if (!strcmp(ArteName, "0"))
-				{
-					pResearch->pReplacedArtefacts.push_back(NULL);
-				}
-				else
-				{
-					pArtefact = getComponentDetails(TypeName, ArteName);
-					if (pArtefact == NULL)
-					{
-						return false;
-					}
-					//check the old and new types are the same
-					if (statType(pArtefact->ref) != newType)
-					{
-						debug( LOG_ERROR, "You are trying to replace one type of component with a different type for research %s in ResultComponents.txt", ResearchName );
-						abort();
-						return false;
-					}
-					// ArtefactResearch found - alloc the artefact to the current Research topic
-					pResearch->pReplacedArtefacts.push_back(pArtefact);
-				}
-				break;
-			default:
-				debug( LOG_ERROR, "Unknown research list" );
-				abort();
-				return false;
-		}
-		//increment the pointer to the start of the next record
-		pArteData = strchr(pArteData,'\n') + 1;
-	}
-
-	return true;
-}
-
-//Load the Structures for a research list
-bool loadResearchStructures(const char *pStructData, UDWORD bufferSize,UDWORD listNumber)
-{
-	unsigned NumToAlloc = numCR(pStructData, bufferSize);
-	unsigned int i = 0;
-	char				ResearchName[MAX_STR_LENGTH], StructureName[MAX_STR_LENGTH];
-	UWORD				incR, incS;
-	STRUCTURE_STATS		*pStructure = asStructureStats;
-	bool				recFound;
-
-	// Skip descriptive header
-	if (strncmp(pStructData, "Research ", 9) == 0)
-	{
-		pStructData = strchr(pStructData, '\n') + 1;
-		NumToAlloc--;
-	}
-
-	for (i = 0; i < NumToAlloc; i++)
-	{
-		recFound = false;
-
-		//read the data into the storage - the data is delimited using comma's
-		ResearchName[0] = '\0';
-		StructureName[0] = '\0';
-		sscanf(pStructData,"%255[^,'\r\n],%255[^,'\r\n],%*d,%*d", ResearchName, StructureName);
-
-		//loop through each Research to compare the name
-		for (incR = 0; incR < asResearch.size(); incR++)
-		{
-			if (!(strcmp(ResearchName, asResearch[incR].pName)))
-			{
-				//Research found
-				for (incS = 0; incS < numStructureStats; incS++)
-				{
-					if (!(strcmp(StructureName, pStructure[incS].pName)))
-					{
-						//Structure found - alloc this to the current Research
-						switch (listNumber)
-						{
-							case REQ_LIST:
-								asResearch[incR].pStructList.push_back(incS);
-								break;
-							case RED_LIST:
-								asResearch[incR].pRedStructs.push_back(incS);
-								break;
-							case RES_LIST:
-								asResearch[incR].pStructureResults.push_back(incS);
-								break;
-							default:
-								/* NO DEFAULT CASE? Alex.... Here ya go - just for you...*/
-								debug( LOG_FATAL, "Unknown research list" );
-								abort();
-								return false;
-						}
-						recFound = true;
-						break;
-					}
-				}
-				//if Structure not found - error
-				if (!recFound)
-				{
-					debug(LOG_FATAL, "Unable to find Structure %s for research %s", StructureName, ResearchName);
-					return false;
-				}
-				else
-				{
-					break;
-				}
-			}
-		}
-		//if Research not found - error
-		if (!recFound)
-		{
-			debug(LOG_FATAL, "Unable to allocate all Research Structures for %s", ResearchName);
-			return false;
-		}
-		//increment the pointer to the start of the next record
-		pStructData = strchr(pStructData,'\n') + 1;
-	}
-
-	return true;
-}
-
-//Load the pre-requisites for a research list
-bool loadResearchFunctions(const char *pFunctionData, UDWORD bufferSize)
-{
-	unsigned NumToAlloc = numCR(pFunctionData, bufferSize);
-	unsigned int i = 0;
-	char				ResearchName[MAX_STR_LENGTH], FunctionName[MAX_STR_LENGTH];
-	UDWORD				incR, incF;
-	FUNCTION			**pFunction = asFunctions;
-	bool				recFound;
-
-	// Skip descriptive header
-	if (strncmp(pFunctionData, "Research ", 9) == 0)
-	{
-		pFunctionData = strchr(pFunctionData, '\n') + 1;
-		NumToAlloc--;
-	}
-
-	for (i=0; i < NumToAlloc; i++)
-	{
-		recFound = false;
-		//read the data into the storage - the data is delimited using comma's
-		ResearchName[0] = '\0';
-		FunctionName[0] = '\0';
-		sscanf(pFunctionData,"%255[^,'\r\n],%255[^,'\r\n],%*d", ResearchName, FunctionName);
-
-		//loop through each Research to compare the name
-		for (incR=0; incR < asResearch.size(); incR++)
-		{
-			if (!(strcmp(ResearchName, asResearch[incR].pName)))
-			{
-				//Research found
-				for (incF=0; incF < numFunctions; incF++)
-				{
-					if (!(strcmp(FunctionName, (*pFunction[incF]).pName)))
-					{
-						// Function found alloc this to the current Research
-						asResearch[incR].pFunctionList.push_back(pFunction[incF]);
-						recFound = true;
-						break;
-					}
-				}
-				//if Function not found - error
-				if (!recFound)
-				{
-					debug( LOG_ERROR, "Unable to find Function %s for research %s", FunctionName, ResearchName );
-					abort();
-					return false;
-				}
-				else
-				{
-					break;
-				}
-			}
-		}
-		//if Research not found - error
-		if (!recFound)
-		{
-			debug( LOG_ERROR, "Unable to allocate all research Functions for %s", ResearchName );
-			abort();
-			return false;
-		}
-
-		//increment the pointer to the start of the next record
-		pFunctionData = strchr(pFunctionData,'\n') + 1;
 	}
 
 	return true;
@@ -739,13 +584,28 @@ void researchResult(UDWORD researchIndex, UBYTE player, bool bDisplay, STRUCTURE
 		apStructTypeLists[player][pResearch->pRedStructs[inc]] = REDUNDANT;
 	}
 
+	//check for component replacement
+	if (pResearch->componentReplacement.size() != 0)
+	{
+		for (int ri = 0; ri < pResearch->componentReplacement.size(); ri++)
+		{
+			COMPONENT_STATS *pOldComp = pResearch->componentReplacement[ri].pOldComponent;
+			replaceComponent(pResearch->componentReplacement[ri].pNewComponent, pOldComp, player);
+			//set the 'old' component to unavailable
+			type = statType(pOldComp->ref);
+			//set the component state to REDUNDANT
+			compInc = pOldComp->ref - statRefStart(type);
+			apCompLists[player][type][compInc] = REDUNDANT;
+		}
+	}
+
 	//check for artefacts to be made available
-	for (inc = 0; inc < pResearch->pArtefactResults.size(); inc++)
+	for (inc = 0; inc < pResearch->componentResults.size(); inc++)
 	{
 		//determine the type of artefact
-		type = statType(pResearch->pArtefactResults[inc]->ref);
+		type = statType(pResearch->componentResults[inc]->ref);
 		//set the component state to AVAILABLE
-		compInc = pResearch->pArtefactResults[inc]->ref - statRefStart(type);
+		compInc = pResearch->componentResults[inc]->ref - statRefStart(type);
 		if (apCompLists[player][type][compInc] != REDUNDANT)
 		{
 			apCompLists[player][type][compInc] = AVAILABLE;
@@ -773,16 +633,6 @@ void researchResult(UDWORD researchIndex, UBYTE player, bool bDisplay, STRUCTURE
 			{
 				aDefaultRepair[player] = compInc;
 			}
-		}
-		//check if this component replaces an 'older' component
-		if (pResearch->pReplacedArtefacts[inc] != NULL)
-		{
-			replaceComponent(pResearch->pArtefactResults[inc], pResearch->pReplacedArtefacts[inc], player);
-			//set the 'old' component to unavailable
-			type = statType(pResearch->pReplacedArtefacts[inc]->ref);
-			//set the component state to REDUNDANT
-			compInc = pResearch->pReplacedArtefacts[inc]->ref - statRefStart(type);
-			apCompLists[player][type][compInc] = REDUNDANT;
 		}
 		//check if self repair has come on line
 		if (type == COMP_REPAIRUNIT)
@@ -1434,7 +1284,7 @@ static UWORD setIconID(char *pIconName, char *pName)
 	// Add more names as images are created
 	ASSERT( false, "Invalid icon graphic %s for topic %s", pIconName, pName );
 
-	return 0;	// Should never get here.
+	return NO_RESEARCH_ICON;	// Should never get here.
 }
 
 
@@ -1578,95 +1428,6 @@ SDWORD	mapIconToRID(UDWORD iconID)
 		return(-1); //pass back a value that can never have been set up
 		break;
 	}
-}
-
-/* returns a pointer to a component based on the name - used to load in the research */
-COMPONENT_STATS * getComponentDetails(char *pName, char *pCompName)
-{
-	UDWORD stat, size, quantity, inc;
-	COMPONENT_STATS		*pArtefact;
-
-	stat = componentType(pName);
-	//get the stat list
-	switch (stat)
-	{
-		case COMP_BODY:
-		{
-			pArtefact = (COMPONENT_STATS*)asBodyStats;
-			size = sizeof(BODY_STATS);
-			quantity = numBodyStats;
-			break;
-		}
-		case COMP_BRAIN:
-		{
-			pArtefact = (COMPONENT_STATS*)asBrainStats;
-			size = sizeof(BRAIN_STATS);
-			quantity = numBrainStats;
-			break;
-		}
-		case COMP_PROPULSION:
-		{
-			pArtefact = (COMPONENT_STATS*)asPropulsionStats;
-			size = sizeof(PROPULSION_STATS);
-			quantity = numPropulsionStats;
-			break;
-		}
-		case COMP_REPAIRUNIT:
-		{
-			pArtefact = (COMPONENT_STATS*)asRepairStats;
-			size = sizeof(REPAIR_STATS);
-			quantity = numRepairStats;
-			break;
-		}
-		case COMP_ECM:
-		{
-			pArtefact = (COMPONENT_STATS*)asECMStats;
-			size = sizeof(ECM_STATS);
-			quantity = numECMStats;
-			break;
-		}
-		case COMP_SENSOR:
-		{
-			pArtefact = (COMPONENT_STATS*)asSensorStats;
-			size = sizeof(SENSOR_STATS);
-			quantity = numSensorStats;
-			break;
-		}
-		case COMP_WEAPON:
-		{
-			pArtefact = (COMPONENT_STATS*)asWeaponStats;
-			size = sizeof(WEAPON_STATS);
-			quantity = numWeaponStats;
-			break;
-		}
-		case COMP_CONSTRUCT:
-		{
-			pArtefact = (COMPONENT_STATS*)asConstructStats;
-			size = sizeof(CONSTRUCT_STATS);
-			quantity = numConstructStats;
-			break;
-		}
-		default:
-		{
-			//COMP_UNKNOWN should be an error
-			debug( LOG_ERROR, "Unknown artefact type  - %s", pName );
-			abort();
-			return NULL;
-		}
-	}
-
-	for (inc = 0; inc < quantity; inc++)
-	{
-		if (!strcmp(pArtefact->pName, pCompName))
-		{
-			return pArtefact;
-		}
-		pArtefact = (COMPONENT_STATS*)((char*)pArtefact + size);
-	}
-
-	debug( LOG_ERROR, "Cannot find component %s", pCompName );
-	abort();
-	return NULL;
 }
 
 //return a pointer to a research topic based on the name
@@ -1874,9 +1635,9 @@ bool checkResearchStats(void)
 			ASSERT(asResearch[resInc].pStructureResults[inc] <= numStructureStats,
 			       "Invalid Result Structure for topic %s", asResearch[resInc].pName);
 		}
-		for (inc = 0; inc < asResearch[resInc].pArtefactResults.size(); inc++)
+		for (inc = 0; inc < asResearch[resInc].componentResults.size(); inc++)
 		{
-			ASSERT(asResearch[resInc].pArtefactResults[inc] != NULL,
+			ASSERT(asResearch[resInc].componentResults[inc] != NULL,
 			       "Invalid Comp Result for topic %s", asResearch[resInc].pName);
 		}
 		for (inc = 0; inc < asResearch[resInc].pRedArtefacts.size(); inc++)
