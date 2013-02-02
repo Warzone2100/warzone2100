@@ -82,8 +82,6 @@
 #include "multistat.h"
 #include "qtscript.h"
 
-#define FLASH_BUTTONS		// Enable flashing body part buttons.
-
 #define TAB_USEMAJOR 0
 
 //how many buttons can be put on the system component form
@@ -387,18 +385,15 @@ static bool _intAddDesign( bool bShowCentreScreen )
 	//set which states are to be paused while design screen is up
 	setDesignPauseState();
 
-	if((GetGameMode() == GS_NORMAL) && !bMultiPlayer)
-	{	// Only do this in main game.
+	if (GetGameMode() == GS_NORMAL && !bMultiPlayer)
+	{
 		bool radOnScreen = radarOnScreen;
-
 		bRender3DOnly = true;
 		radarOnScreen = false;
-
-	// Just display the 3d, no interface
+		// Just display the 3d, no interface
 		displayWorld();
-	// Upload the current display back buffer into system memory.
+		// Upload the current display back buffer into system memory.
 		pie_UploadDisplayBuffer();
-
 		radarOnScreen = radOnScreen;
 		bRender3DOnly = false;
 	}
@@ -483,11 +478,7 @@ static bool _intAddDesign( bool bShowCentreScreen )
 	sButInit.width = iV_GetImageWidth(IntImages, IMAGE_DES_BODY);
 	sButInit.height = iV_GetImageHeight(IntImages, IMAGE_DES_BODY);
 	sButInit.pTip = _("Vehicle Body");
-#ifdef FLASH_BUTTONS
 	sButInit.pDisplay = intDisplayButtonFlash;
-#else
-	sButInit.pDisplay = intDisplayButtonHilight;
-#endif
 	sButInit.UserData = PACKDWORD_TRI(1, IMAGE_DES_BODYH, IMAGE_DES_BODY);
 	if (!widgAddButton(psWScreen, &sButInit))
 	{
@@ -503,11 +494,7 @@ static bool _intAddDesign( bool bShowCentreScreen )
 	sButInit.width = iV_GetImageWidth(IntImages, IMAGE_DES_PROPULSION);
 	sButInit.height = iV_GetImageHeight(IntImages, IMAGE_DES_PROPULSION);
 	sButInit.pTip = _("Vehicle Propulsion");
-#ifdef FLASH_BUTTONS
 	sButInit.pDisplay = intDisplayButtonFlash;
-#else
-	sButInit.pDisplay = intDisplayButtonHilight;
-#endif
 	sButInit.UserData = PACKDWORD_TRI(1, IMAGE_DES_PROPULSIONH, IMAGE_DES_PROPULSION);
 	if (!widgAddButton(psWScreen, &sButInit))
 	{
@@ -524,11 +511,7 @@ static bool _intAddDesign( bool bShowCentreScreen )
 	sButInit.width = iV_GetImageWidth(IntImages, IMAGE_DES_TURRET);
 	sButInit.height = iV_GetImageHeight(IntImages, IMAGE_DES_TURRET);
 	sButInit.pTip = _("Vehicle Turret");
-#ifdef FLASH_BUTTONS
 	sButInit.pDisplay = intDisplayButtonFlash;
-#else
-	sButInit.pDisplay = intDisplayButtonHilight;
-#endif
 	sButInit.UserData = PACKDWORD_TRI(1, IMAGE_DES_TURRETH, IMAGE_DES_TURRET);
 	if (!widgAddButton(psWScreen, &sButInit))
 	{
@@ -547,11 +530,7 @@ static bool _intAddDesign( bool bShowCentreScreen )
 	sButInit.width = iV_GetImageWidth(IntImages, IMAGE_DES_TURRET);
 	sButInit.height = iV_GetImageHeight(IntImages, IMAGE_DES_TURRET);
 	sButInit.pTip = _("Vehicle Turret");
-#ifdef FLASH_BUTTONS
 	sButInit.pDisplay = intDisplayButtonFlash;
-#else
-	sButInit.pDisplay = intDisplayButtonHilight;
-#endif
 	sButInit.UserData = PACKDWORD_TRI(1, IMAGE_DES_TURRETH, IMAGE_DES_TURRET);
 	if (!widgAddButton(psWScreen, &sButInit))
 	{
@@ -571,11 +550,7 @@ static bool _intAddDesign( bool bShowCentreScreen )
 	sButInit.width = iV_GetImageWidth(IntImages, IMAGE_DES_TURRET);
 	sButInit.height = iV_GetImageHeight(IntImages, IMAGE_DES_TURRET);
 	sButInit.pTip = _("Vehicle Turret");
-#ifdef FLASH_BUTTONS
 	sButInit.pDisplay = intDisplayButtonFlash;
-#else
-	sButInit.pDisplay = intDisplayButtonHilight;
-#endif
 	sButInit.UserData = PACKDWORD_TRI(1, IMAGE_DES_TURRETH, IMAGE_DES_TURRET);
 	if (!widgAddButton(psWScreen, &sButInit))
 	{
@@ -674,13 +649,6 @@ static bool _intAddDesign( bool bShowCentreScreen )
 		return true;
 	}
 
-	//body points added AB 3/9/97
-	//sBarInit.id = IDDES_BODYPOINTS;
-	//sBarInit.y += DES_CLICKBARHEIGHT + DES_CLICKGAP;
-	//if (!widgAddBarGraph(psWScreen, &sBarInit))
-	//{
-	//	return true;
-	//}
 	sBarInit.id = IDDES_BODYPOWER;
 	sBarInit.y = DES_STATBAR_Y3;	//+= DES_CLICKBARHEIGHT + DES_CLICKGAP;
 	sBarInit.pTip = _("Engine Output");
@@ -722,17 +690,6 @@ static bool _intAddDesign( bool bShowCentreScreen )
 	{
 		return true;
 	}
-	//body points added AB 3/9/97
-	//sLabInit.id = IDDES_BODYPOINTSLAB;
-	//sLabInit.y += DES_CLICKBARHEIGHT + DES_CLICKGAP;
-	//sLabInit.pText = "Body Points";
-	//sLabInit.pTip = sLabInit.pText;
-	//sLabInit.pDisplay = intDisplayImage;
-	//sLabInit.pUserData = (void*)IMAGE_DES_BODYPOINTS;
-	//if (!widgAddLabel(psWScreen, &sLabInit))
-	//{
-	//	return true;
-	//}
 	sLabInit.id = IDDES_BODYPOWERLAB;
 	sLabInit.y += DES_CLICKBARHEIGHT + DES_CLICKGAP;
 	sLabInit.pTip = _("Engine Output");
@@ -884,7 +841,6 @@ static bool _intAddTemplateForm(DROID_TEMPLATE *psSelected)
 	UDWORD		numButtons, butPerForm;
 	UDWORD		i;
 
-
 	/* Count the number of minor tabs needed for the template form */
 	numButtons = apsTemplateList.size();
 
@@ -938,7 +894,6 @@ static bool _intAddTemplateForm(DROID_TEMPLATE *psSelected)
 		//		sFormInit.majorSize /= 2;
 		// Change MAX_TAB_STD_SHOWN to ..SMALL_SHOWN, this will give us 80 templates max.
 	}
-
 
 	for (i=0; i< sFormInit.numMajor; i++)
 	{
@@ -1081,8 +1036,10 @@ static void intSetDesignMode(DES_COMPMODE newCompMode)
 {
 	UDWORD	weaponIndex;
 
-	if (newCompMode != desCompMode)
+	if (newCompMode == desCompMode)
 	{
+		return;
+	}
 		/* Have to change the component display - remove the old one */
 		if (desCompMode != IDES_NOCOMPONENT)
 		{
@@ -1166,7 +1123,6 @@ static void intSetDesignMode(DES_COMPMODE newCompMode)
 			intAddComponentButtons((COMPONENT_STATS *)asPropulsionStats,
 								   sizeof(PROPULSION_STATS),
 								   apCompLists[selectedPlayer][COMP_PROPULSION],
-								   //NumComponents, sCurrDesign.asParts[COMP_PROPULSION],TAB_USEMAJOR);
 								   numPropulsionStats, sCurrDesign.asParts[COMP_PROPULSION],
 								   TAB_USEMAJOR);
 			widgSetButtonState(psWScreen, IDDES_PROPFORM, WBUT_LOCK);
@@ -1208,7 +1164,6 @@ static void intSetDesignMode(DES_COMPMODE newCompMode)
 			intSetButtonFlash( IDDES_WPBBUTTON,   false );
 			break;
 		}
-	}
 }
 
 static COMPONENT_STATS *
@@ -1466,8 +1421,7 @@ static bool _intSetSystemForm(COMPONENT_STATS *psStats)
 	sLabInit.pDisplay = intDisplayImage;
 
 	/* See what type of system stats we've got */
-	if (psStats->ref >= REF_SENSOR_START &&
-		psStats->ref < REF_SENSOR_START + REF_RANGE)
+	if (psStats->ref >= REF_SENSOR_START && psStats->ref < REF_SENSOR_START + REF_RANGE)
 	{
 		/* Add the bar graphs*/
 		sBarInit.id = IDDES_SENSORRANGE;
@@ -1523,8 +1477,7 @@ static bool _intSetSystemForm(COMPONENT_STATS *psStats)
 			return false;
 		}
 	}
-	else if (psStats->ref >= REF_ECM_START &&
-			 psStats->ref < REF_ECM_START + REF_RANGE)
+	else if (psStats->ref >= REF_ECM_START && psStats->ref < REF_ECM_START + REF_RANGE)
 	{
 		/* Add the bar graphs */
 		sBarInit.id = IDDES_ECMPOWER;
@@ -1560,8 +1513,7 @@ static bool _intSetSystemForm(COMPONENT_STATS *psStats)
 			return false;
 		}
 	}
-	else if (psStats->ref >= REF_CONSTRUCT_START &&
-			 psStats->ref < REF_CONSTRUCT_START + REF_RANGE)
+	else if (psStats->ref >= REF_CONSTRUCT_START && psStats->ref < REF_CONSTRUCT_START + REF_RANGE)
 	{
 		/* Add the bar graphs */
 		sBarInit.id = IDDES_CONSTPOINTS;
@@ -1597,8 +1549,7 @@ static bool _intSetSystemForm(COMPONENT_STATS *psStats)
 			return false;
 		}
 	}
-	else if (psStats->ref >= REF_REPAIR_START &&
-			 psStats->ref < REF_REPAIR_START + REF_RANGE)
+	else if (psStats->ref >= REF_REPAIR_START && psStats->ref < REF_REPAIR_START + REF_RANGE)
 	{
 		/* Add the bar graphs */
 		sBarInit.id = IDDES_REPAIRPOINTS;
@@ -1634,8 +1585,7 @@ static bool _intSetSystemForm(COMPONENT_STATS *psStats)
 			return false;
 		}
 	}
-	else if (psStats->ref >= REF_WEAPON_START &&
-			 psStats->ref < REF_WEAPON_START + REF_RANGE)
+	else if (psStats->ref >= REF_WEAPON_START && psStats->ref < REF_WEAPON_START + REF_RANGE)
 	{
 		/* Add the bar graphs */
 		sBarInit.id = IDDES_WEAPRANGE;
@@ -1944,8 +1894,7 @@ static bool intSetPropulsionForm(PROPULSION_STATS *psStats)
 
 
 // count the number of available components
-static UDWORD intNumAvailable(UBYTE *aAvailable, UDWORD numEntries,
-							  COMPONENT_STATS *asStats, UDWORD size)
+static UDWORD intNumAvailable(UBYTE *aAvailable, UDWORD numEntries, COMPONENT_STATS *asStats, UDWORD size)
 {
 	UDWORD				numButtons, i;
 	COMPONENT_STATS		*psCurrStats;
@@ -1954,8 +1903,7 @@ static UDWORD intNumAvailable(UBYTE *aAvailable, UDWORD numEntries,
 	psCurrStats = asStats;
 	for(i=0; i < numEntries; i++)
 	{
-		if (psCurrStats->designable
-                 && aAvailable[i] & AVAILABLE)
+		if (psCurrStats->designable && aAvailable[i] & AVAILABLE)
 		{
 			numButtons++;
 		}
@@ -2087,11 +2035,10 @@ static bool intAddSystemButtons(DES_COMPMODE mode)
 		return false;
 	}
 
-    //if currently got a VTOL proplusion attached then don't add the system buttons
-	//dont add the system button if mode is IDES_TURRET_A or IDES_TURRET_B
-    if (!checkTemplateIsVtol(&sCurrDesign) &&
-	    mode != IDES_TURRET_A && mode != IDES_TURRET_B)
-    {
+	// if currently got a VTOL proplusion attached then don't add the system buttons
+	// dont add the system button if mode is IDES_TURRET_A or IDES_TURRET_B
+	if (!checkTemplateIsVtol(&sCurrDesign) && mode != IDES_TURRET_A && mode != IDES_TURRET_B)
+	{
 	    // add the system button
 	    sButInit.formID = IDDES_RIGHTBASE;
 	    sButInit.id = IDDES_SYSTEMS;
@@ -2110,7 +2057,7 @@ static bool intAddSystemButtons(DES_COMPMODE mode)
 	    {
 		widgSetButtonState(psWScreen, IDDES_SYSTEMS, WBUT_LOCK);
 	    }
-    }
+	}
 
 	// lock down the correct button
 	switch (mode)
@@ -2163,8 +2110,7 @@ static bool intAddComponentButtons(COMPONENT_STATS *psStats, UDWORD size,
 	sButInit.height = DES_TABBUTHEIGHT;
 
 	//need to set max number of buttons possible
-	if (psStats->ref >=REF_WEAPON_START && psStats->ref < REF_WEAPON_START +
-		REF_RANGE)
+	if (psStats->ref >=REF_WEAPON_START && psStats->ref < REF_WEAPON_START + REF_RANGE)
 	{
 		maxComponents = MAX_SYSTEM_COMPONENTS;
 	}
@@ -2176,8 +2122,7 @@ static bool intAddComponentButtons(COMPONENT_STATS *psStats, UDWORD size,
 	/*if adding weapons - need to check if the propulsion is a VTOL*/
 	bVTol = false;
 
-	if ( (psStats->ref >= REF_WEAPON_START) &&
-		 (psStats->ref < REF_WEAPON_START + REF_RANGE) )
+	if (psStats->ref >= REF_WEAPON_START && psStats->ref < REF_WEAPON_START + REF_RANGE)
 	{
 		bWeapon = true;
 	}
@@ -2598,8 +2543,7 @@ static void intSetSystemShadowStats(COMPONENT_STATS *psStats)
 			break;
 		}
 	}
-
-	if (psStats == NULL)
+	else // if !psStats
 	{
 		switch (desSysMode)
 		{
@@ -2921,10 +2865,15 @@ static UDWORD getSystemType(DROID_TEMPLATE* droidTemplate)
 /* Set the shadow bar graphs for the template power points - psStats is new hilited stats*/
 static void intSetTemplatePowerShadowStats(COMPONENT_STATS *psStats)
 {
-	UDWORD				type;
-	UDWORD				power;
+	if (!psStats)
+	{
+		/* Reset the shadow bar */
+		widgSetMinorBarSize(psWScreen, IDDES_POWERBAR, 0);
+		return;
+	}
 
-	if (psStats != NULL) {
+	UDWORD type = statType(psStats->ref);
+	UDWORD power;
 		UDWORD bodyPower        = asBodyStats[sCurrDesign.asParts[COMP_BODY]].buildPower;
 		UDWORD brainPower       = asBrainStats[sCurrDesign.asParts[COMP_BRAIN]].buildPower;
 		UDWORD sensorPower      = asSensorStats[sCurrDesign.asParts[COMP_SENSOR]].buildPower;
@@ -2937,7 +2886,6 @@ static void intSetTemplatePowerShadowStats(COMPONENT_STATS *psStats)
 		UDWORD weaponPower3     = asWeaponStats[sCurrDesign.numWeaps>=3 ? sCurrDesign.asWeaps[2] : 0].buildPower;
 		UDWORD newComponentPower= psStats->buildPower;
 
-		type = statType(psStats->ref);
 		// Commanders receive the stats of their associated weapon.
 		if (type == COMP_BRAIN)
 		{
@@ -2986,8 +2934,6 @@ static void intSetTemplatePowerShadowStats(COMPONENT_STATS *psStats)
 				weaponPower1 = newComponentPower;
 			}
 			break;
-		//default:
-			//don't want to draw for unknown comp
 		}
 
 		// this code is from calcTemplatePower
@@ -2996,36 +2942,32 @@ static void intSetTemplatePowerShadowStats(COMPONENT_STATS *psStats)
 		power = bodyPower + brainPower + sensorPower + ECMPower + repairPower + constructPower;
 
 		/* propulsion power points are a percentage of the bodys' power points */
-		power += (propulsionPower *
-			bodyPower) / 100;
+		power += (propulsionPower * bodyPower) / 100;
 
 		//add weapon power
 		power += weaponPower1 + weaponPower2 + weaponPower3;
-		widgSetMinorBarSize( psWScreen, IDDES_POWERBAR,
-								power);
-	}
-	else
-	{
-		/* Reset the shadow bar */
-		widgSetMinorBarSize(psWScreen, IDDES_POWERBAR, 0);
-	}
+		widgSetMinorBarSize( psWScreen, IDDES_POWERBAR, power);
 }
 
 /* Sets the Body Points Bar for a given Template */
 static void intSetBodyPoints(DROID_TEMPLATE *psTemplate)
 {
 	// If total greater than Body Bar size then scale values.
-	widgSetBarSize( psWScreen, IDDES_BODYPOINTS, calcTemplateBody(psTemplate,
-		(UBYTE)selectedPlayer) );
+	widgSetBarSize( psWScreen, IDDES_BODYPOINTS, calcTemplateBody(psTemplate, selectedPlayer) );
 }
 
 /* Set the shadow bar graphs for the template Body points - psStats is new hilited stats*/
 static void intSetTemplateBodyShadowStats(COMPONENT_STATS *psStats)
 {
-	UDWORD				type;
-	UDWORD				body;
+	if (!psStats)
+	{
+		/* Reset the shadow bar */
+		widgSetMinorBarSize(psWScreen, IDDES_BODYPOINTS, 0);
+		return;
+	}
 
-	if (psStats != NULL) {
+	UDWORD type = statType(psStats->ref);
+	UDWORD body;
 		UDWORD bodyBody        = asBodyStats[sCurrDesign.asParts[COMP_BODY]].body;
 		UDWORD brainBody       = asBrainStats[sCurrDesign.asParts[COMP_BRAIN]].body;
 		UDWORD sensorBody      = asSensorStats[sCurrDesign.asParts[COMP_SENSOR]].body;
@@ -3038,7 +2980,6 @@ static void intSetTemplateBodyShadowStats(COMPONENT_STATS *psStats)
 		UDWORD weaponBody3     = asWeaponStats[sCurrDesign.numWeaps>=3 ? sCurrDesign.asWeaps[2] : 0].body;
 		UDWORD newComponentBody= psStats->body;
 
-		type = statType(psStats->ref);
 		// Commanders receive the stats of their associated weapon.
 		if (type == COMP_BRAIN)
 		{
@@ -3087,8 +3028,6 @@ static void intSetTemplateBodyShadowStats(COMPONENT_STATS *psStats)
 				weaponBody1 = newComponentBody;
 			}
 			break;
-		//default:
-			//don't want to draw for unknown comp
 		}
 		// this code is from calcTemplateBody
 
@@ -3096,30 +3035,19 @@ static void intSetTemplateBodyShadowStats(COMPONENT_STATS *psStats)
     	body = bodyBody + brainBody + sensorBody + ECMBody + repairBody + constructBody;
 
     	/* propulsion HP are a percentage of the body's HP */
-    	body += (propulsionBody *
-    		bodyBody) / 100;
+    	body += (propulsionBody * bodyBody) / 100;
 
      	//add weapon HP
         body += weaponBody1 + weaponBody2 + weaponBody3;
     	body += (body * asBodyUpgrade[selectedPlayer]->body / 100);
-   		widgSetMinorBarSize( psWScreen, IDDES_BODYPOINTS,
-								body);
-	}
-	else
-	{
-		/* Reset the shadow bar */
-		widgSetMinorBarSize(psWScreen, IDDES_BODYPOINTS, 0);
-	}
+   		widgSetMinorBarSize( psWScreen, IDDES_BODYPOINTS, body);
 }
 
 
 /* Calculate the speed of a droid over a type of terrain */
 static UDWORD intCalcSpeed(TYPE_OF_TERRAIN type, PROPULSION_STATS *psProp)
 {
-	UDWORD		weight;
-
-	/* Calculate the weight */
-	weight = calcDroidWeight(&sCurrDesign);
+	UDWORD weight = calcDroidWeight(&sCurrDesign);
 	if (weight == 0)
 	{
 		return 0;
@@ -3132,10 +3060,7 @@ static UDWORD intCalcSpeed(TYPE_OF_TERRAIN type, PROPULSION_STATS *psProp)
 			return 0;
 		}
 	}
-
-
-	return calcDroidSpeed(calcDroidBaseSpeed(&sCurrDesign, weight,
-		(UBYTE)selectedPlayer), type, psProp - asPropulsionStats, 0);
+	return calcDroidSpeed(calcDroidBaseSpeed(&sCurrDesign, weight, selectedPlayer), type, psProp - asPropulsionStats, 0);
 }
 
 
@@ -3198,7 +3123,6 @@ static void intSetPropulsionStats(PROPULSION_STATS *psStats)
 static void intSetPropulsionShadowStats(PROPULSION_STATS *psStats)
 {
 	UDWORD      weight;
-
 
 	ASSERT( psStats == NULL ||
 			((psStats->ref >= REF_PROPULSION_START) &&
@@ -3442,7 +3366,6 @@ void intRemoveDesign(void)
 /* set flashing flag for button */
 static void intSetButtonFlash( UDWORD id, bool bFlash )
 {
-#ifdef FLASH_BUTTONS
 	WIDGET	*psWidget = widgGetFromID( psWScreen, id );
 
 	ASSERT_OR_RETURN( , psWidget->type == WIDG_BUTTON, "Not a button");
@@ -3455,7 +3378,6 @@ static void intSetButtonFlash( UDWORD id, bool bFlash )
 	{
 		psWidget->display = intDisplayButtonHilight;
 	}
-#endif
 }
 
 /*
@@ -4230,8 +4152,7 @@ void intProcessDesign(UDWORD id)
 	/* show body button if component button pressed and
 	 * save template if valid
 	 */
-	if ( ( id >= IDDES_COMPSTART && id <= IDDES_COMPEND ) ||
-		 ( id >= IDDES_EXTRASYSSTART && id <= IDDES_EXTRASYSEND ) )
+	if ((id >= IDDES_COMPSTART && id <= IDDES_COMPEND) || (id >= IDDES_EXTRASYSSTART && id <= IDDES_EXTRASYSEND))
 	{
 		/* reveal body button if hidden */
 		widgReveal( psWScreen, IDDES_BODYBUTTON );
@@ -4327,7 +4248,6 @@ void intProcessDesign(UDWORD id)
 	{
 		saveTemplate();
 	}
-
 }
 
 
@@ -4409,7 +4329,6 @@ void intRunDesign(void)
 static void intDisplayStatForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
 {
 	static UDWORD	iRY = 45;
-
 	W_CLICKFORM		*Form = (W_CLICKFORM*)psWidget;
 	UWORD			x0 = xOffset+Form->x, y0 = yOffset+Form->y;
 
@@ -4431,8 +4350,7 @@ static void intDisplayStatForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset,
 	iV_DrawImage(IntImages, IMAGE_DES_STATBACKRIGHT, x0 + Form->width - iV_GetImageWidth(IntImages, IMAGE_DES_STATBACKRIGHT), y0);
 
 	/* display current component */
-	pie_SetGeometricOffset( (xOffset+psWidget->width/4),
-							(yOffset+psWidget->height/2) );
+	pie_SetGeometricOffset(xOffset+psWidget->width / 4, yOffset+psWidget->height / 2);
 
 	/* inc rotation if highlighted */
 	if ( Form->state & WCLICK_HILITE )
@@ -4460,11 +4378,10 @@ static void intDisplayViewForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset,
 	x1 = x0 + Form->width;
 	y1 = y0 + Form->height;
 
-
 	RenderWindowFrame(FRAME_NORMAL, x0, y0, x1 - x0, y1 - y0);
 
-	if(CurrentStatsTemplate) {
-
+	if (CurrentStatsTemplate)
+	{
 		pie_SetGeometricOffset(  (DES_CENTERFORMX+DES_3DVIEWX) + (DES_3DVIEWWIDTH/2),
 								(DES_CENTERFORMY+DES_3DVIEWY) + (DES_3DVIEWHEIGHT/4) + 32);
 
@@ -4500,15 +4417,10 @@ void intDisplayTemplateButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, 
 
 static void intDisplayComponentButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
 {
-//	iIMDShape *OldCurShape = CurrentStatsShape;
-//	SWORD OldCurIndex = CurrentStatsIndex;
 	BASE_STATS *OldCurStatsTemplate = CurrentStatsTemplate;
 
 	intDisplayStatsButton(psWidget, xOffset, yOffset, pColours);
-
 	CurrentStatsTemplate = OldCurStatsTemplate;
-//	CurrentStatsShape = OldCurShape;
-//	CurrentStatsIndex = OldCurIndex;
 }
 
 /* General display window for the design form  SOLID BACKGROUND - NOT TRANSPARENT*/
@@ -4521,8 +4433,6 @@ static void intDisplayDesignForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffse
 	y0 = yOffset+Form->y;
 	x1 = x0 + Form->width;
 	y1 = y0 + Form->height;
-
-	//AdjustTabFormSize(Form,&x0,&y0,&x1,&y1);
 
 	RenderWindowFrame(FRAME_NORMAL, x0, y0, x1 - x0, y1 - y0);
 }
@@ -4589,8 +4499,7 @@ static bool saveTemplate(void)
 }
 
 
-/*Function to set the shadow bars for all the stats when the mouse is over
-the Template buttons*/
+/* Function to set the shadow bars for all the stats when the mouse is over the Template buttons */
 void runTemplateShadowStats(UDWORD id)
 {
 	DROID_TEMPLATE	*psTempl = NULL;
@@ -4649,15 +4558,9 @@ void runTemplateShadowStats(UDWORD id)
 		{
 			intSetSystemShadowStats(psStats);
 		}
-		//set the template shadow stats
-		//intSetTemplateBodyShadowStats(psStats);
 		//haven't got a stat so just do the code required here...
-		widgSetMinorBarSize( psWScreen, IDDES_BODYPOINTS,
-								calcTemplateBody(psTempl, (UBYTE)selectedPlayer) );
-
-		//intSetTemplatePowerShadowStats(psStats);
-		widgSetMinorBarSize( psWScreen, IDDES_POWERBAR,
-								calcTemplatePower(psTempl) );
+		widgSetMinorBarSize(psWScreen, IDDES_BODYPOINTS, calcTemplateBody(psTempl, selectedPlayer));
+		widgSetMinorBarSize(psWScreen, IDDES_POWERBAR, calcTemplatePower(psTempl));
 	}
 }
 
