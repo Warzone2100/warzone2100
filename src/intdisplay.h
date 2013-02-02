@@ -60,13 +60,6 @@ enum {
 	IMDTYPE_STRUCTURESTAT,
 };
 
-struct BUTTON_SURFACE
-{
-	UBYTE *Buffer;		// Bitmap buffer.
-	iSurface *Surface;	// Ivis surface definition.
-};
-
-
 #define RENDERBUTTON_INUSE(x)  ((x)->InUse=true)
 #define RENDERBUTTON_NOTINUSE(x)  ((x)->InUse=false)
 
@@ -83,7 +76,6 @@ struct RENDERED_BUTTON
 	UDWORD State;		// Copy of widget's state so we know if state has changed.
 	void *Data;			// Any data we want to attach.
 	void *Data2;		// Any data we want to attach.
-	BUTTON_SURFACE *ButSurf;	// Surface to render the button into.
 };
 
 extern RENDERED_BUTTON TopicBuffers[NUM_TOPICBUFFERS];
@@ -98,12 +90,6 @@ void SetFormAudioIDs(int OpenID,int CloseID);
 
 // Initialise interface graphics.
 void intInitialiseGraphics(void);
-
-// Free up interface graphics.
-void interfaceDeleteGraphics(void);
-
-// Intialise button surfaces.
-void InitialiseButtonData(void);
 
 // Get a free RENDERED_BUTTON structure for an object window button.
 SDWORD GetObjectBuffer(void);

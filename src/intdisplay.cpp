@@ -104,17 +104,6 @@ BASE_STATS *CurrentStatsTemplate = NULL;
 
 static UDWORD ManuPower = 0;	// Power required to manufacture the current item.
 
-
-// Display surfaces for rendered buttons.
-// FIXME: These variables are never, ever referenced directly;
-//        they're always used through the below .*Buffers,
-//        so rather than declaring them here we should remove
-//        these and make them part of the below
-static BUTTON_SURFACE TopicSurfaces[NUM_TOPICSURFACES];
-static BUTTON_SURFACE ObjectSurfaces[NUM_OBJECTSURFACES];
-static BUTTON_SURFACE StatSurfaces[NUM_STATSURFACES];
-static BUTTON_SURFACE System0Surfaces[NUM_SYSTEM0SURFACES];
-
 // Working buffers for rendered buttons.
 RENDERED_BUTTON System0Buffers[NUM_SYSTEM0BUFFERS];	// References ObjectSurfaces.
 RENDERED_BUTTON ObjectBuffers[NUM_OBJECTBUFFERS];	// References ObjectSurfaces.
@@ -123,10 +112,6 @@ RENDERED_BUTTON StatBuffers[NUM_STATBUFFERS];		// References StatSurfaces.
 
 // Get the first factory assigned to a command droid
 static STRUCTURE *droidGetCommandFactory(DROID *psDroid);
-
-static SDWORD ButtonDrawXOffset;
-static SDWORD ButtonDrawYOffset;
-
 
 // Set audio IDs for form opening/closing anims.
 // Use -1 to dissable audio.
@@ -841,8 +826,6 @@ void intDisplayStatusButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ
 		RENDERBUTTON_INITIALISED(Buffer);
 	}
 
-	ButtonDrawXOffset = ButtonDrawYOffset = 0;
-
 	// Render the object into the button.
 	if (Object)
 	{
@@ -943,8 +926,6 @@ void intDisplayObjectButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ
 		}
 	}
 
-	ButtonDrawXOffset = ButtonDrawYOffset = 0;
-
 	if (Object)
 	{
 		RenderToButton(NULL, 0, Object, selectedPlayer, Buffer, Down, IMDType, BTMBUTTON);	// ajl, changed from 0 to selectedPlayer
@@ -997,8 +978,6 @@ void intDisplayStatsButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_
 	Image = -1;
 
 	Stat = (BASE_STATS *)Buffer->Data;
-
-	ButtonDrawXOffset = ButtonDrawYOffset = 0;
 
 	if (Stat)
 	{
@@ -1831,125 +1810,13 @@ void intDisplayNumber(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_
 	}
 }
 
-
 // Initialise all the surfaces,graphics etc. used by the interface.
 //
 void intInitialiseGraphics(void)
 {
 	// Initialise any bitmaps used by the interface.
 	imageInitBitmaps();
-
-	// Initialise button surfaces.
-	InitialiseButtonData();
 }
-
-
-// Free up all surfaces,graphics etc. used by the interface.
-//
-void interfaceDeleteGraphics(void)
-{
-	unsigned int i;
-
-	// Setting all these pointers may, or may not be necessary, but it surely is safe
-	// Look above (near the declaration of .*Surfaces) for a detailed description of why this .*Surfaces stuff is bad
-	for (i = 0; i < NUM_OBJECTSURFACES; ++i)
-	{
-		free(ObjectSurfaces[i].Buffer);
-		ObjectSurfaces[i].Buffer = NULL;
-		iV_SurfaceDestroy(ObjectSurfaces[i].Surface);
-	}
-
-	for (i = 0; i < NUM_TOPICSURFACES; ++i)
-	{
-		free(TopicSurfaces[i].Buffer);
-		TopicSurfaces[i].Buffer = NULL;
-		iV_SurfaceDestroy(TopicSurfaces[i].Surface);
-	}
-
-	for (i = 0; i < NUM_STATSURFACES; ++i)
-	{
-		free(StatSurfaces[i].Buffer);
-		StatSurfaces[i].Buffer = NULL;
-		iV_SurfaceDestroy(StatSurfaces[i].Surface);
-	}
-
-	for (i = 0; i < NUM_SYSTEM0SURFACES; ++i)
-	{
-		free(System0Surfaces[i].Buffer);
-		System0Surfaces[i].Buffer = NULL;
-		iV_SurfaceDestroy(System0Surfaces[i].Surface);
-	}
-}
-
-
-// Initialise data for interface buttons.
-//
-void InitialiseButtonData(void)
-{
-	// Allocate surfaces for rendered buttons.
-	UDWORD Width = (iV_GetImageWidth(IntImages, IMAGE_BUT0_UP) + 3) & 0xfffffffc;	// Ensure width is whole number of dwords.
-	UDWORD Height = iV_GetImageHeight(IntImages, IMAGE_BUT0_UP);
-	UDWORD WidthTopic = (iV_GetImageWidth(IntImages, IMAGE_BUTB0_UP) + 3) & 0xfffffffc;	// Ensure width is whole number of dwords.
-	UDWORD HeightTopic = iV_GetImageHeight(IntImages, IMAGE_BUTB0_UP);
-	UDWORD i;
-
-	for (i = 0; i < NUM_OBJECTSURFACES; i++)
-	{
-		ObjectSurfaces[i].Buffer = (UBYTE *)malloc(Width * Height);
-		ASSERT(ObjectSurfaces[i].Buffer != NULL, "Failed to allocate Object surface");
-		ObjectSurfaces[i].Surface = iV_SurfaceCreate(Width, Height);
-		ASSERT(ObjectSurfaces[i].Surface != NULL, "Failed to create Object surface");
-	}
-
-	for (i = 0; i < NUM_OBJECTBUFFERS; i++)
-	{
-		RENDERBUTTON_NOTINUSE(&ObjectBuffers[i]);
-		ObjectBuffers[i].ButSurf = &ObjectSurfaces[i % NUM_OBJECTSURFACES];
-	}
-
-	for (i = 0; i < NUM_SYSTEM0SURFACES; i++)
-	{
-		System0Surfaces[i].Buffer = (UBYTE *)malloc(Width * Height);
-		ASSERT(System0Surfaces[i].Buffer != NULL, "Failed to allocate System0 surface");
-		System0Surfaces[i].Surface = iV_SurfaceCreate(Width, Height);
-		ASSERT(System0Surfaces[i].Surface != NULL, "Failed to create System0 surface");
-	}
-
-	for (i = 0; i < NUM_SYSTEM0BUFFERS; i++)
-	{
-		RENDERBUTTON_NOTINUSE(&System0Buffers[i]);
-		System0Buffers[i].ButSurf = &System0Surfaces[i % NUM_SYSTEM0SURFACES];
-	}
-
-	for (i = 0; i < NUM_TOPICSURFACES; i++)
-	{
-		TopicSurfaces[i].Buffer = (UBYTE *)malloc(WidthTopic * HeightTopic);
-		ASSERT(TopicSurfaces[i].Buffer != NULL, "Failed to allocate Topic surface");
-		TopicSurfaces[i].Surface = iV_SurfaceCreate(WidthTopic, HeightTopic);
-		ASSERT(TopicSurfaces[i].Surface != NULL, "Failed to create Topic surface");
-	}
-
-	for (i = 0; i < NUM_TOPICBUFFERS; i++)
-	{
-		RENDERBUTTON_NOTINUSE(&TopicBuffers[i]);
-		TopicBuffers[i].ButSurf = &TopicSurfaces[i % NUM_TOPICSURFACES];
-	}
-
-	for (i = 0; i < NUM_STATSURFACES; i++)
-	{
-		StatSurfaces[i].Buffer = (UBYTE *)malloc(Width * Height);
-		ASSERT(StatSurfaces[i].Buffer != NULL, "Failed to allocate Stats surface");
-		StatSurfaces[i].Surface = iV_SurfaceCreate(Width, Height);
-		ASSERT(StatSurfaces[i].Surface != NULL, "Failed to create Stat surface");
-	}
-
-	for (i = 0; i < NUM_STATBUFFERS; i++)
-	{
-		RENDERBUTTON_NOTINUSE(&StatBuffers[i]);
-		StatBuffers[i].ButSurf = &StatSurfaces[i % NUM_STATSURFACES];
-	}
-}
-
 
 void RefreshObjectButtons(void)
 {
@@ -2162,14 +2029,14 @@ void CreateIMDButton(IMAGEFILE *ImageFile, UWORD ImageID, void *Object, UDWORD P
 			if (buttonType == TOPBUTTON)
 			{
 				pie_SetGeometricOffset(
-				    (ButXPos + iV_GetImageWidth(IntImages, IMAGE_BUT0_DOWN) / 2) + ButtonDrawXOffset + 2,
-				    (ButYPos + iV_GetImageHeight(IntImages, IMAGE_BUT0_DOWN) / 2) + 2 + 8 + ButtonDrawYOffset);
+				    (ButXPos + iV_GetImageWidth(IntImages, IMAGE_BUT0_DOWN) / 2) + 2,
+				    (ButYPos + iV_GetImageHeight(IntImages, IMAGE_BUT0_DOWN) / 2) + 2 + 8);
 			}
 			else
 			{
 				pie_SetGeometricOffset(
-				    (ButXPos + iV_GetImageWidth(IntImages, IMAGE_BUTB0_DOWN) / 2) + ButtonDrawXOffset + 2,
-				    (ButYPos + iV_GetImageHeight(IntImages, IMAGE_BUTB0_DOWN) / 2) + 2 + 12 + ButtonDrawYOffset);
+				    (ButXPos + iV_GetImageWidth(IntImages, IMAGE_BUTB0_DOWN) / 2) + 2,
+				    (ButYPos + iV_GetImageHeight(IntImages, IMAGE_BUTB0_DOWN) / 2) + 2 + 12);
 			}
 		}
 		else
@@ -2178,14 +2045,14 @@ void CreateIMDButton(IMAGEFILE *ImageFile, UWORD ImageID, void *Object, UDWORD P
 			if (buttonType == TOPBUTTON)
 			{
 				pie_SetGeometricOffset(
-				    (ButXPos + iV_GetImageWidth(IntImages, IMAGE_BUT0_UP) / 2) + ButtonDrawXOffset,
-				    (ButYPos + iV_GetImageHeight(IntImages, IMAGE_BUT0_UP) / 2) + 8  + ButtonDrawYOffset);
+				    (ButXPos + iV_GetImageWidth(IntImages, IMAGE_BUT0_UP) / 2),
+				    (ButYPos + iV_GetImageHeight(IntImages, IMAGE_BUT0_UP) / 2) + 8 );
 			}
 			else
 			{
 				pie_SetGeometricOffset(
-				    (ButXPos + iV_GetImageWidth(IntImages, IMAGE_BUT0_UP) / 2) + ButtonDrawXOffset,
-				    (ButYPos + iV_GetImageHeight(IntImages, IMAGE_BUTB0_UP) / 2) + 12  + ButtonDrawYOffset);
+				    (ButXPos + iV_GetImageWidth(IntImages, IMAGE_BUT0_UP) / 2),
+				    (ButYPos + iV_GetImageHeight(IntImages, IMAGE_BUTB0_UP) / 2) + 12);
 			}
 		}
 
@@ -2272,14 +2139,14 @@ void CreateIMDButton(IMAGEFILE *ImageFile, UWORD ImageID, void *Object, UDWORD P
 			if (buttonType == TOPBUTTON)
 			{
 				pie_SetGeometricOffset(
-				    (ButXPos + iV_GetImageWidth(IntImages, IMAGE_BUT0_DOWN) / 2) + ButtonDrawXOffset + 2,
-				    (ButYPos + iV_GetImageHeight(IntImages, IMAGE_BUT0_DOWN) / 2) + 2 + 8 + ButtonDrawYOffset);
+				    (ButXPos + iV_GetImageWidth(IntImages, IMAGE_BUT0_DOWN) / 2) + 2,
+				    (ButYPos + iV_GetImageHeight(IntImages, IMAGE_BUT0_DOWN) / 2) + 2 + 8);
 			}
 			else
 			{
 				pie_SetGeometricOffset(
-				    (ButXPos + iV_GetImageWidth(IntImages, IMAGE_BUTB0_DOWN) / 2) + ButtonDrawXOffset + 2,
-				    (ButYPos + iV_GetImageHeight(IntImages, IMAGE_BUTB0_DOWN) / 2) + 2 + 12 + ButtonDrawYOffset);
+				    (ButXPos + iV_GetImageWidth(IntImages, IMAGE_BUTB0_DOWN) / 2) + 2,
+				    (ButYPos + iV_GetImageHeight(IntImages, IMAGE_BUTB0_DOWN) / 2) + 2 + 12);
 			}
 		}
 		else
@@ -2287,14 +2154,14 @@ void CreateIMDButton(IMAGEFILE *ImageFile, UWORD ImageID, void *Object, UDWORD P
 			if (buttonType == TOPBUTTON)
 			{
 				pie_SetGeometricOffset(
-				    (ButXPos + iV_GetImageWidth(IntImages, IMAGE_BUT0_UP) / 2) + ButtonDrawXOffset,
-				    (ButYPos + iV_GetImageHeight(IntImages, IMAGE_BUT0_UP) / 2) + 8  + ButtonDrawYOffset);
+				    (ButXPos + iV_GetImageWidth(IntImages, IMAGE_BUT0_UP) / 2),
+				    (ButYPos + iV_GetImageHeight(IntImages, IMAGE_BUT0_UP) / 2) + 8 );
 			}
 			else
 			{
 				pie_SetGeometricOffset(
-				    (ButXPos + iV_GetImageWidth(IntImages, IMAGE_BUTB0_UP) / 2) + ButtonDrawXOffset,
-				    (ButYPos + iV_GetImageHeight(IntImages, IMAGE_BUTB0_UP) / 2) + 12  + ButtonDrawYOffset);
+				    (ButXPos + iV_GetImageWidth(IntImages, IMAGE_BUTB0_UP) / 2),
+				    (ButYPos + iV_GetImageHeight(IntImages, IMAGE_BUTB0_UP) / 2) + 12);
 			}
 		}
 

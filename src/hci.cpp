@@ -576,8 +576,6 @@ void interfaceShutDown(void)
 	apsComponentList = NULL;
 	apsExtraSysList = NULL;
 
-	interfaceDeleteGraphics();
-
 	//obviously!
 	ReticuleUp = false;
 }
