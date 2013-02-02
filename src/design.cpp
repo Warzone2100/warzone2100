@@ -4426,12 +4426,9 @@ static void intDisplayStatForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset,
 	SDWORD falseScale = (DESIGN_COMPONENT_SCALE * COMPONENT_RADIUS) / templateRadius / 2 + (DESIGN_COMPONENT_SCALE / 2);
 
 	iV_DrawImage(IntImages,(UWORD)(IMAGE_DES_STATBACKLEFT),x0,y0);
-	iV_DrawImageRect(IntImages,IMAGE_DES_STATBACKMID,
-				x0+iV_GetImageWidth(IntImages,IMAGE_DES_STATBACKLEFT),y0,
-				Form->width-iV_GetImageWidth(IntImages,IMAGE_DES_STATBACKLEFT)-iV_GetImageWidth(IntImages,IMAGE_DES_STATBACKRIGHT),
-				iV_GetImageHeight(IntImages,IMAGE_DES_STATBACKMID) );
-	iV_DrawImage(IntImages,IMAGE_DES_STATBACKRIGHT,
-				x0+Form->width-iV_GetImageWidth(IntImages,(UWORD)(IMAGE_DES_STATBACKRIGHT)),y0);
+	iV_DrawImageRepeatX(IntImages, IMAGE_DES_STATBACKMID, x0 + iV_GetImageWidth(IntImages, IMAGE_DES_STATBACKLEFT), y0,
+	                    Form->width - iV_GetImageWidth(IntImages, IMAGE_DES_STATBACKLEFT) - iV_GetImageWidth(IntImages, IMAGE_DES_STATBACKRIGHT));
+	iV_DrawImage(IntImages, IMAGE_DES_STATBACKRIGHT, x0 + Form->width - iV_GetImageWidth(IntImages, IMAGE_DES_STATBACKRIGHT), y0);
 
 	/* display current component */
 	pie_SetGeometricOffset( (xOffset+psWidget->width/4),

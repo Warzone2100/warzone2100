@@ -64,12 +64,12 @@ extern void iV_Box(int x0,int y0, int x1, int y1, PIELIGHT colour);
 extern void pie_BoxFill(int x0,int y0, int x1, int y1, PIELIGHT colour);
 extern void iV_DrawImage(IMAGEFILE *ImageFile, UWORD ID, int x, int y);
 void iV_DrawImageTc(Image image, Image imageTc, int x, int y, PIELIGHT colour);
-extern void iV_DrawImageRect(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int Width, int Height);
+void iV_DrawImageRepeatX(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int Width);
+void iV_DrawImageRepeatY(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int Height);
 void iV_DrawImageScaled(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int w, int h);
 
 static inline void iV_DrawImage(Image image, int x, int y) { iV_DrawImage(image.images, image.id, x, y); }
 static inline void iV_DrawImageTc(IMAGEFILE *imageFile, unsigned id, unsigned idTc, int x, int y, PIELIGHT colour) { iV_DrawImageTc(Image(imageFile, id), Image(imageFile, idTc), x, y, colour); }
-static inline void iV_DrawImageRect(Image image, int x, int y, int width, int height) { iV_DrawImageRect(image.images, image.id, x, y, width, height); }
 static inline void iV_DrawImageScaled(Image image, int x, int y, int w, int h) { iV_DrawImageScaled(image.images, image.id, x, y, w, h); }
 
 extern void iV_TransBoxFill(float x0, float y0, float x1, float y1);

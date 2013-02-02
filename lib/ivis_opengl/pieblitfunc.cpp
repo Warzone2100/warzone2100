@@ -271,12 +271,42 @@ void iV_DrawImageTc(Image image, Image imageTc, int x, int y, PIELIGHT colour)
 }
 
 // Repeat a texture
-void iV_DrawImageRect(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int Width, int Height)
+void iV_DrawImageRepeatX(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int Width)
 {
-	SDWORD hRep, hRemainder, vRep, vRemainder;
+	int hRep, hRemainder;
 
 	assertValidImage(ImageFile, ID);
-	ImageDef *Image = &ImageFile->imageDefs[ID];
+	const ImageDef *Image = &ImageFile->imageDefs[ID];
+
+	pie_SetRendMode(REND_OPAQUE);
+	pie_SetAlphaTest(true);
+
+	PIERECT dest;
+	PIEIMAGE pieImage = makePieImage(ImageFile, ID, &dest, x, y);
+
+	hRemainder = Width % Image->Width;
+
+	for (hRep = 0; hRep < Width / Image->Width; hRep++)
+	{
+		pie_DrawImage(&pieImage, &dest);
+		dest.x += Image->Width;
+	}
+
+	// draw remainder
+	if (hRemainder > 0)
+	{
+		pieImage.tw = hRemainder;
+		dest.w = hRemainder;
+		pie_DrawImage(&pieImage, &dest);
+	}
+}
+
+void iV_DrawImageRepeatY(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int Height)
+{
+	int vRep, vRemainder;
+
+	assertValidImage(ImageFile, ID);
+	const ImageDef *Image = &ImageFile->imageDefs[ID];
 
 	pie_SetRendMode(REND_OPAQUE);
 	pie_SetAlphaTest(true);
@@ -285,55 +315,19 @@ void iV_DrawImageRect(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int Width, i
 	PIEIMAGE pieImage = makePieImage(ImageFile, ID, &dest, x, y);
 
 	vRemainder = Height % Image->Height;
-	hRemainder = Width % Image->Width;
 
-	for (vRep = 0; vRep < Height/Image->Height; vRep++)
+	for (vRep = 0; vRep < Height / Image->Height; vRep++)
 	{
-		pieImage.tw = Image->Width;
-		dest.x = x + Image->XOffset;
-		dest.w = Image->Width;
-
-		for (hRep = 0; hRep < Width/Image->Width; hRep++)
-		{
-			pie_DrawImage(&pieImage, &dest);
-			dest.x += Image->Width;
-		}
-
-		//draw remainder
-		if (hRemainder > 0)
-		{
-			pieImage.tw = hRemainder;
-			dest.w = hRemainder;
-			pie_DrawImage(&pieImage, &dest);
-		}
-
+		pie_DrawImage(&pieImage, &dest);
 		dest.y += Image->Height;
 	}
 
-	//draw remainder
+	// draw remainder
 	if (vRemainder > 0)
 	{
-		//as above
-		pieImage.tw = Image->Width;
-		dest.x = x + Image->XOffset;
-		dest.w = Image->Width;
-
 		pieImage.th = vRemainder;
 		dest.h = vRemainder;
-
-		for (hRep = 0; hRep < Width/Image->Width; hRep++)
-		{
-			pie_DrawImage(&pieImage, &dest);
-			dest.x += Image->Width;
-		}
-
-		//draw remainder
-		if (hRemainder > 0)
-		{
-			pieImage.tw = hRemainder;
-			dest.w = hRemainder;
-			pie_DrawImage(&pieImage, &dest);
-		}
+		pie_DrawImage(&pieImage, &dest);
 	}
 }
 

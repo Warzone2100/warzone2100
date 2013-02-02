@@ -603,7 +603,7 @@ void intDisplayPowerBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DEC
 	//fill in the empty section behind text
 	if (textWidth > 0)
 	{
-		iV_DrawImageRect(IntImages, IMAGE_PBAR_EMPTY, x0, y0, textWidth, iV_GetImageHeight(IntImages, IMAGE_PBAR_EMPTY));
+		iV_DrawImageRepeatX(IntImages, IMAGE_PBAR_EMPTY, x0, y0, textWidth);
 		x0 += textWidth;
 	}
 
@@ -611,25 +611,25 @@ void intDisplayPowerBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DEC
 	if (ManPow > Avail)
 	{
 		//draw the required in red
-		iV_DrawImageRect(IntImages, IMAGE_PBAR_USED, x0, y0, ManPow, iV_GetImageHeight(IntImages, IMAGE_PBAR_USED));
+		iV_DrawImageRepeatX(IntImages, IMAGE_PBAR_USED, x0, y0, ManPow);
 	}
 	else
 	{
-		iV_DrawImageRect(IntImages, IMAGE_PBAR_REQUIRED, x0, y0, ManPow, iV_GetImageHeight(IntImages, IMAGE_PBAR_REQUIRED));
+		iV_DrawImageRepeatX(IntImages, IMAGE_PBAR_REQUIRED, x0, y0, ManPow);
 	}
 	x0 += ManPow;
 
 	//draw the available section if any!
 	if (Avail - ManPow > 0)
 	{
-		iV_DrawImageRect(IntImages, IMAGE_PBAR_AVAIL, x0, y0, Avail - ManPow, iV_GetImageHeight(IntImages, IMAGE_PBAR_AVAIL));
+		iV_DrawImageRepeatX(IntImages, IMAGE_PBAR_AVAIL, x0, y0, Avail - ManPow);
 		x0 += Avail - ManPow;
 	}
 
 	//fill in the rest with empty section
 	if (Empty > 0)
 	{
-		iV_DrawImageRect(IntImages, IMAGE_PBAR_EMPTY, x0, y0, Empty, iV_GetImageHeight(IntImages, IMAGE_PBAR_EMPTY));
+		iV_DrawImageRepeatX(IntImages, IMAGE_PBAR_EMPTY, x0, y0, Empty);
 		x0 += Empty;
 	}
 
@@ -2929,7 +2929,7 @@ static void intDisplayBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, bool
 
 	//draw current value section
 	width = MIN(BarGraph->majorSize * barWidth / 100, barWidth);
-	iV_DrawImageRect(IntImages, IMAGE_DES_STATSCURR, iX, y0, width, iV_GetImageHeight(IntImages, IMAGE_DES_STATSCURR));
+	iV_DrawImageRepeatX(IntImages, IMAGE_DES_STATSCURR, iX, y0, width);
 
 	/* draw text value */
 	for (i = 0; i < BarGraph->precision; ++i)

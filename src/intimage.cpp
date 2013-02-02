@@ -254,27 +254,26 @@ void RenderWindowFrame(FRAMETYPE frame, UDWORD x, UDWORD y, UDWORD Width, UDWORD
 		iV_DrawImage(IntImages,Frame->BottomLeft,x,y+Height-HBottomLeft);
 	}
 
-	if(Frame->TopEdge >= 0) {
-		iV_DrawImageRect( IntImages, Frame->TopEdge,
-							x + iV_GetImageWidth(IntImages, Frame->TopLeft), y,
-							Width - WTopLeft - WTopRight, iV_GetImageHeight(IntImages, Frame->TopEdge) );
+	if (Frame->TopEdge >= 0)
+	{
+		iV_DrawImageRepeatX(IntImages, Frame->TopEdge, x + iV_GetImageWidth(IntImages, Frame->TopLeft), y,
+		                    Width - WTopLeft - WTopRight);
 	}
 
-	if(Frame->BottomEdge >= 0) {
-		iV_DrawImageRect( IntImages, Frame->BottomEdge,
-							x + WBottomLeft, y + Height - iV_GetImageHeight(IntImages, Frame->BottomEdge),
-							Width - WBottomLeft - WBottomRight, iV_GetImageHeight(IntImages, Frame->BottomEdge) );
+	if (Frame->BottomEdge >= 0)
+	{
+		iV_DrawImageRepeatX(IntImages, Frame->BottomEdge, x + WBottomLeft, y + Height - iV_GetImageHeight(IntImages, Frame->BottomEdge), 
+		                    Width - WBottomLeft - WBottomRight);
 	}
 
-	if(Frame->LeftEdge >= 0) {
-		iV_DrawImageRect( IntImages, Frame->LeftEdge,
-							x, y + HTopLeft,
-							iV_GetImageWidth(IntImages, Frame->LeftEdge), Height - HTopLeft - HBottomLeft );
+	if (Frame->LeftEdge >= 0)
+	{
+		iV_DrawImageRepeatY(IntImages, Frame->LeftEdge, x, y + HTopLeft, Height - HTopLeft - HBottomLeft);
 	}
 
-	if(Frame->RightEdge >= 0) {
-		iV_DrawImageRect( IntImages, Frame->RightEdge,
-							x + Width - iV_GetImageWidth(IntImages, Frame->RightEdge), y + HTopRight,
-							iV_GetImageWidth(IntImages, Frame->RightEdge), Height - HTopRight - HBottomRight );
+	if (Frame->RightEdge >= 0)
+	{
+		iV_DrawImageRepeatY(IntImages, Frame->RightEdge, x + Width - iV_GetImageWidth(IntImages, Frame->RightEdge), y + HTopRight,
+		                    Height - HTopRight - HBottomRight);
 	}
 }
