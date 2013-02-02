@@ -35,6 +35,7 @@
 #include <QtGui/QTreeView>
 #include <QtGui/QTabWidget>
 #include <QtGui/QPushButton>
+#include <QtGui/QLineEdit>
 #include <QtGui/QHBoxLayout>
 #include <QtGui/QVBoxLayout>
 #include <QtGui/QStandardItemModel>
@@ -51,9 +52,13 @@ static ScriptDebugger *globalDialog = NULL;
 
 ScriptDebugger::ScriptDebugger(const MODELMAP &models, QStandardItemModel *triggerModel) : QDialog(NULL, Qt::Window)
 {
+	modelMap = models;
+	QSignalMapper *signalMapper = new QSignalMapper(this);
+
 	// Add globals
-	for (MODELMAP::const_iterator i = models.constBegin(); i != models.constEnd(); i++)
+	for (MODELMAP::const_iterator i = models.constBegin(); i != models.constEnd(); ++i)
 	{
+		QWidget *dummyWidget = new QWidget(this);
 		QScriptEngine *engine = i.key();
 		QStandardItemModel *m = i.value();
 		QTreeView *view = new QTreeView();
@@ -61,8 +66,22 @@ ScriptDebugger::ScriptDebugger(const MODELMAP &models, QStandardItemModel *trigg
 		view->setModel(m);
 		QString scriptName = engine->globalObject().property("scriptName").toString();
 		int player = engine->globalObject().property("me").toInt32();
-		tab.addTab(view, scriptName + ":" + QString::number(player));
+		QLineEdit *lineEdit = new QLineEdit(this);
+		QVBoxLayout *layout = new QVBoxLayout();
+		QHBoxLayout *layout2 = new QHBoxLayout();
+		QPushButton *button = new QPushButton("Run", this);
+		connect(button, SIGNAL(pressed()), signalMapper, SLOT(map()));
+		signalMapper->setMapping(button, engine);
+		editMap.insert(engine, lineEdit); // store this for slot
+		layout->addWidget(view);
+		layout2->addWidget(lineEdit);
+		layout2->addWidget(button);
+		layout->addLayout(layout2);
+
+		dummyWidget->setLayout(layout);
+		tab.addTab(dummyWidget, scriptName + ":" + QString::number(player));
 	}
+	connect(signalMapper, SIGNAL(mapped(QObject *)), this, SLOT(runClicked(QObject *)));
 
 	// Add triggers
 	triggerView.setModel(triggerModel);
@@ -97,18 +116,37 @@ ScriptDebugger::ScriptDebugger(const MODELMAP &models, QStandardItemModel *trigg
 	activateWindow();
 }
 
+void ScriptDebugger::runClicked(QObject *obj)
+{
+	QScriptEngine *engine = (QScriptEngine *)obj;
+	QLineEdit *line = editMap.value(engine);
+	if (line)
+	{
+		jsEvaluate(engine, line->text());
+	}
+}
+
 void ScriptDebugger::labelClicked()
 {
 	QItemSelectionModel *selected = labelView.selectionModel();
-	QModelIndex idx = selected->currentIndex();
-	QStandardItem *item = labelModel->itemFromIndex(labelModel->index(idx.row(), 0));
-	showLabel(item->text());
+	if (selected)
+	{
+		QModelIndex idx = selected->currentIndex();
+		QStandardItem *item = labelModel->itemFromIndex(labelModel->index(idx.row(), 0));
+		if (item)
+		{
+			showLabel(item->text());
+		}
+	}
 }
 
 void ScriptDebugger::labelClickedIdx(const QModelIndex &idx)
 {
 	QStandardItem *item = labelModel->itemFromIndex(labelModel->index(idx.row(), 0));
-	showLabel(item->text());
+	if (item)
+	{
+		showLabel(item->text());
+	}
 }
 
 ScriptDebugger::~ScriptDebugger()

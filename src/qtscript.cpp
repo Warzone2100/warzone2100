@@ -43,6 +43,7 @@
 #include "multiplay.h"
 #include "map.h"
 #include "difficulty.h"
+#include "console.h"
 #include "lib/netplay/netplay.h"
 
 #include "qtscriptdebug.h"
@@ -723,6 +724,26 @@ static void updateGlobalModels()
 		}
 		m->setItem(nextRow, 7, new QStandardItem(QString::number(node.calls)));
 	}
+}
+
+bool jsEvaluate(QScriptEngine *engine, const QString &text)
+{
+	QScriptSyntaxCheckResult syntax = QScriptEngine::checkSyntax(text);
+	if (syntax.state() != QScriptSyntaxCheckResult::Valid)
+	{
+		debug(LOG_ERROR, "Syntax error in %s: %s",
+		      text.toUtf8().constData(), syntax.errorMessage().toUtf8().constData());
+		return false;
+	}
+	QScriptValue result = engine->evaluate(text);
+	if (engine->hasUncaughtException())
+	{
+		debug(LOG_ERROR, "Uncaught exception in %s: %s",
+		      text.toUtf8().constData(), result.toString().toUtf8().constData());
+		return false;
+	}
+	console("%s", result.toString().toUtf8().constData());
+	return true;
 }
 
 void jsShowDebug()

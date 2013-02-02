@@ -78,7 +78,11 @@ bool writeLabels(const char *filename);
 /// Tell script system that an object has been removed.
 void scriptRemoveObject(BASE_OBJECT *psObj);
 
+/// Open debug GUI
 void jsShowDebug();
+
+/// Run-time code from user
+bool jsEvaluate(QScriptEngine *engine, const QString &text);
 
 // ----------------------------------------------
 // Event functions

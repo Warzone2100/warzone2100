@@ -30,13 +30,16 @@
 class QScriptEngine;
 class QStandardItemModel;
 class QModelIndex;
+class QLineEdit;
 
 #include <QtCore/QHash>
+#include <QtCore/QSignalMapper>
 #include <QtGui/QDialog>
 #include <QtGui/QTableWidget>
 #include <QtGui/QTreeView>
 
 typedef QHash<QScriptEngine *, QStandardItemModel *> MODELMAP;
+typedef QHash<QScriptEngine *, QLineEdit *> EDITMAP;
 
 class ScriptDebugger : public QDialog
 {
@@ -51,10 +54,13 @@ private:
 	QStandardItemModel *labelModel;
 	QTreeView labelView;
 	QTreeView triggerView;
+	MODELMAP modelMap;
+	EDITMAP editMap;
 
 protected slots:
 	void labelClickedIdx(const QModelIndex &idx);
 	void labelClicked();
+	void runClicked(QObject *obj);
 };
 
 void jsDebugCreate(const MODELMAP &models, QStandardItemModel *triggerModel);
