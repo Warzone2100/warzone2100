@@ -22,7 +22,7 @@
  * SDL backend code
  */
 
-#include <QtCore/QCoreApplication>
+#include <QtGui/QApplication>
 #include "lib/framework/wzapp.h"
 #include "lib/framework/input.h"
 #include "lib/framework/utf.h"
@@ -1087,7 +1087,7 @@ void wzMain(int &argc, char **argv)
 {
 	initKeycodes();
 
-	appPtr = new QCoreApplication(argc, argv);  // For Qt-script.
+	appPtr = new QApplication(argc, argv);  // For Qt-script.
 }
 
 bool wzMain2()
@@ -1296,6 +1296,9 @@ void wzMain3()
 				break;
 			}
 		}
+
+		appPtr->processEvents();
+
 		mainLoop();
 		inputNewFrame();
 	}

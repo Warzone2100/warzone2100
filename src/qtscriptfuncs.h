@@ -20,10 +20,11 @@
 #ifndef __INCLUDED_QTSCRIPTFUNCS_H__
 #define __INCLUDED_QTSCRIPTFUNCS_H__
 
-
 #include "lib/framework/frame.h"
 #include "qtscript.h"
 #include "featuredef.h"
+
+class QStandardItemModel;
 
 enum SCRIPT_TYPE
 {
@@ -67,6 +68,12 @@ void dumpScriptLog(const QString &scriptName, int me, const QString &info);
 
 // Script functions useful also in qtscript.cpp
 QScriptValue js_enumSelected(QScriptContext *, QScriptEngine *engine);
+
+/// Create model for labels for js debug dialog
+QStandardItemModel *createLabelModel();
+
+/// Mark and show label
+void showLabel(const QString &key);
 
 /// Assert for scripts that give useful backtraces and other info.
 #define SCRIPT_ASSERT(context, expr, ...) \

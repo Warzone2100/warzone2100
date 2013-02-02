@@ -34,6 +34,7 @@
 #include <QtCore/QString>
 #include <QtCore/QStringList>
 #include <QtCore/QFileInfo>
+#include <QtGui/QStandardItemModel>
 
 #include "lib/framework/wzapp.h"
 #include "lib/framework/wzconfig.h"
@@ -44,6 +45,7 @@
 #include "difficulty.h"
 #include "lib/netplay/netplay.h"
 
+#include "qtscriptdebug.h"
 #include "qtscriptfuncs.h"
 
 #define ATTACK_THROTTLE 1000
@@ -67,10 +69,11 @@ struct timerNode
 	int frameTime;
 	int ms;
 	int player;
+	int calls;
 	timerType type;
 	timerNode() {}
 	timerNode(QScriptEngine *caller, QString val, int plr, int frame)
-		: function(val), engine(caller), baseobj(-1), frameTime(frame + gameTime), ms(frame), player(plr), type(TIMER_REPEAT) {}
+		: function(val), engine(caller), baseobj(-1), frameTime(frame + gameTime), ms(frame), player(plr), calls(0), type(TIMER_REPEAT) {}
 	bool operator== (const timerNode &t) { return function == t.function && player == t.player; }
 	// implement operator less TODO
 };
@@ -101,6 +104,14 @@ typedef struct monitor_bin
 } MONITOR_BIN;
 typedef QHash<QString, MONITOR_BIN> MONITOR;
 static QHash<QScriptEngine *, MONITOR *> monitors;
+
+static MODELMAP models;
+static QStandardItemModel *triggerModel;
+static bool globalDialog = false;
+
+static void updateGlobalModels();
+
+// ----------------------------------------------------------
 
 // Call a function by name
 static bool callFunction(QScriptEngine *engine, const QString &function, const QScriptValueList &args, bool required = false)
@@ -331,6 +342,10 @@ bool initScripts()
 
 bool shutdownScripts()
 {
+	jsDebugShutdown();
+	globalDialog = false;
+	models.clear();
+	triggerModel = NULL;
 	for (int i = 0; i < scripts.size(); ++i)
 	{
 		QScriptEngine *engine = scripts.at(i);
@@ -403,7 +418,6 @@ bool updateScripts()
 	// TODO - load balancing
 	QList<timerNode> runlist; // make a new list here, since we might trample all over the timer list during execution
 	QList<timerNode>::iterator iter;
-	// Weed out dead timers
 	for (iter = timers.begin(); iter != timers.end(); iter++)
 	{
 		if (iter->frameTime <= gameTime)
@@ -413,6 +427,7 @@ bool updateScripts()
 			{
 				iter->type = TIMER_ONESHOT_DONE; // unless there is none
 			}
+			iter->calls++;
 			runlist.append(*iter);
 		}
 	}
@@ -429,6 +444,12 @@ bool updateScripts()
 		}
 		callFunction(iter->engine, iter->function, args, true);
 	}
+
+	if (globalDialog)
+	{
+		updateGlobalModels();
+	}	
+
 	return true;
 }
 
@@ -562,7 +583,7 @@ bool saveScriptStates(const char *filename)
 		ini.setValue("me", node.player);
 		ini.setValue("scriptName", node.engine->globalObject().property("scriptName").toString());
 		ini.setValue("function", node.function);
-		if (!node.baseobj >= 0)
+		if (node.baseobj >= 0)
 		{
 			ini.setValue("object", QVariant(node.baseobj));
 		}
@@ -644,6 +665,91 @@ bool loadScriptStates(const char *filename)
 		ini.endGroup();
 	}
 	return true;
+}
+
+static void updateGlobalModels()
+{
+	for (int i = 0; i < scripts.size(); ++i)
+	{
+		QScriptEngine *engine = scripts.at(i);
+		QScriptValueIterator it(engine->globalObject());
+		QStandardItemModel *m = models.value(engine);
+		m->setRowCount(0);
+
+		while (it.hasNext())
+		{
+			it.next();
+			if (!internalNamespace.contains(it.name()) && !it.value().isFunction())
+			{
+				int nextRow = m->rowCount();
+				m->setRowCount(nextRow);
+				m->setItem(nextRow, 0, new QStandardItem(it.name()));
+				m->setItem(nextRow, 1, new QStandardItem(it.value().toString()));
+			}
+		}
+	}
+	QStandardItemModel *m = triggerModel;
+	m->setRowCount(0);
+	for (int i = 0; i < timers.size(); ++i)
+	{
+		timerNode node = timers.at(i);
+		int nextRow = m->rowCount();
+		m->setRowCount(nextRow);
+		m->setItem(nextRow, 0, new QStandardItem(node.function));
+		m->setItem(nextRow, 1, new QStandardItem(node.player));
+		QString scriptName = node.engine->globalObject().property("scriptName").toString();
+		m->setItem(nextRow, 2, new QStandardItem(scriptName + ":" + QString::number(node.player)));
+		if (node.baseobj >= 0)
+		{
+			m->setItem(nextRow, 3, new QStandardItem(QString::number(node.baseobj)));
+		}
+		else
+		{
+			m->setItem(nextRow, 3, new QStandardItem("-"));
+		}
+		m->setItem(nextRow, 4, new QStandardItem(QString::number(node.frameTime)));
+		m->setItem(nextRow, 5, new QStandardItem(QString::number(node.ms)));
+		if (node.type == TIMER_ONESHOT_READY)
+		{
+			m->setItem(nextRow, 6, new QStandardItem("Oneshot"));
+		}
+		else if (node.type == TIMER_ONESHOT_DONE)
+		{
+			m->setItem(nextRow, 6, new QStandardItem("Done"));
+		}
+		else
+		{
+			m->setItem(nextRow, 6, new QStandardItem("Repeat"));
+		}
+		m->setItem(nextRow, 7, new QStandardItem(QString::number(node.calls)));
+	}
+}
+
+void jsShowDebug()
+{
+	// Add globals
+	for (int i = 0; i < scripts.size(); ++i)
+	{
+		QScriptEngine *engine = scripts.at(i);
+		QStandardItemModel *m = new QStandardItemModel(0, 2);
+		m->setHeaderData(0, Qt::Horizontal, QString("Name"));
+		m->setHeaderData(1, Qt::Horizontal, QString("Value"));
+		models.insert(engine, m);
+	}
+	// Add triggers
+	triggerModel = new QStandardItemModel(0, 8);
+	triggerModel->setHeaderData(0, Qt::Horizontal, QString("Function"));
+	triggerModel->setHeaderData(1, Qt::Horizontal, QString("Player"));
+	triggerModel->setHeaderData(2, Qt::Horizontal, QString("Script"));
+	triggerModel->setHeaderData(3, Qt::Horizontal, QString("Object"));
+	triggerModel->setHeaderData(4, Qt::Horizontal, QString("Time"));
+	triggerModel->setHeaderData(5, Qt::Horizontal, QString("Interval"));
+	triggerModel->setHeaderData(6, Qt::Horizontal, QString("Type"));
+	triggerModel->setHeaderData(7, Qt::Horizontal, QString("Calls"));
+
+	globalDialog = true;
+	updateGlobalModels();
+	jsDebugCreate(models, triggerModel);
 }
 
 // ----------------------------------------------------------------------------------------

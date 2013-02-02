@@ -42,6 +42,7 @@ struct CHEAT_ENTRY
 bool Cheated = false;
 static CHEAT_ENTRY cheatCodes[] =
 {
+	{"jsdebug", jsShowDebug}, // show scripting states
 	{"clone wars", kf_CloneSelected}, // clone selected units
 	{"noassert", kf_NoAssert}, // turn off asserts
 	{"count me", kf_ShowNumObjects}, // give a count of objects in the world

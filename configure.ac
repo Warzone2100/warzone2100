@@ -107,7 +107,7 @@ if test "$backend" = "qt"; then
 	PKG_CHECK_MODULES(QT4, QtCore QtGui QtOpenGL QtNetwork QtScript,,[:])
 else
 	AC_MSG_RESULT([SDL])
-	PKG_CHECK_MODULES(QT4, QtCore QtNetwork QtScript,,[:])
+	PKG_CHECK_MODULES(QT4, QtCore QtGui QtNetwork QtScript,,[:])
 fi
 if test "$pkg_failed" = "yes" ; then
 	AC_MSG_ERROR([Qt not found - required!])

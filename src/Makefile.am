@@ -4,6 +4,12 @@ AM_CXXFLAGS = $(WZ_CXXFLAGS) $(QT4_CFLAGS)
 AM_LFLAGS = $(FLEX_FLAGS)
 AM_YFLAGS = -d
 
+MOCHEADER = qtscriptdebug.h
+MOCEDFILES = $(MOCHEADER:%.h=%_moc.cpp)
+
+%_moc.cpp: %.h
+	$(MOC4) -o $@ $<
+
 .PHONY: autorevision.h
 
 autorevision.h autorevision.cache:
@@ -13,7 +19,8 @@ autorevision.h autorevision.cache:
 CLEANFILES = \
 	$(BUILT_SOURCES) \
 	autorevision.cache \
-	autorevision.h.new
+	autorevision.h.new \
+	$(MOCEDFILES)
 
 BUILT_SOURCES = \
 	autorevision.h \
@@ -118,6 +125,7 @@ noinst_HEADERS = \
 	projectiledef.h \
 	projectile.h \
 	qtscript.h \
+	qtscriptdebug.h \
 	qtscriptfuncs.h \
 	radar.h \
 	random.h \
@@ -150,7 +158,11 @@ noinst_HEADERS = \
 	warzoneconfig.h \
 	wavecast.h \
 	weapondef.h \
-	wrappers.h
+	wrappers.h \
+	$(MOCHEADER)
+
+nodist_warzone2100_SOURCES = \
+	qtscriptdebug_moc.cpp
 
 warzone2100_SOURCES = \
 	action.cpp \
@@ -231,6 +243,7 @@ warzone2100_SOURCES = \
 	power.cpp \
 	projectile.cpp \
 	qtscript.cpp \
+	qtscriptdebug.cpp \
 	qtscriptfuncs.cpp \
 	radar.cpp \
 	random.cpp \

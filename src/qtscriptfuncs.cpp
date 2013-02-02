@@ -31,6 +31,7 @@
 
 #include <QtScript/QScriptValue>
 #include <QtCore/QStringList>
+#include <QtGui/QStandardItemModel>
 
 #include "action.h"
 #include "console.h"
@@ -90,12 +91,134 @@ struct labeltype
 };
 typedef QMap<QString, labeltype> LABELMAP;
 static LABELMAP labels;
+static QStandardItemModel *labelModel = NULL;
 
 #define SCRIPT_ASSERT_PLAYER(_context, _player) \
 	SCRIPT_ASSERT(_context, _player >= 0 && _player < MAX_PLAYERS, "Invalid player index %d", _player);
 
 // ----------------------------------------------------------------------------------------
 // Utility functions -- not called directly from scripts
+
+static void updateLabelModel()
+{
+	if (!labelModel)
+	{
+		return;
+	}
+	labelModel->setRowCount(0);
+	labelModel->setRowCount(labels.size());
+	int nextRow = 0;
+	for (LABELMAP::iterator i = labels.begin(); i != labels.end(); i++)
+	{
+		labeltype &l = (*i);
+		labelModel->setItem(nextRow, 0, new QStandardItem(i.key()));
+		const char *c = "?";
+		switch (l.type)
+		{
+		case OBJ_DROID: c = "DROID"; break;
+		case OBJ_FEATURE: c = "FEATURE"; break;
+		case OBJ_STRUCTURE: c = "STRUCTURE"; break;
+		case SCRIPT_POSITION: c = "POSITION"; break;
+		case SCRIPT_AREA: c = "AREA"; break;
+		case SCRIPT_GROUP: c = "GROUP"; break;
+		case SCRIPT_PLAYER:
+		case SCRIPT_RESEARCH:
+		case OBJ_PROJECTILE:
+		case OBJ_TARGET:
+		case SCRIPT_COUNT: c = "ERROR"; break;
+		}
+		labelModel->setItem(nextRow, 1, new QStandardItem(QString(c)));
+		nextRow++;
+	}
+}
+
+QStandardItemModel *createLabelModel()
+{
+	if (labelModel)
+	{
+		delete labelModel;
+	}
+	labelModel = new QStandardItemModel(0, 2);
+	labelModel->setHeaderData(0, Qt::Horizontal, QString("Label"));
+	labelModel->setHeaderData(1, Qt::Horizontal, QString("Type"));
+	updateLabelModel();
+	return labelModel;
+}
+
+static void clearMarks()
+{
+	for (int x = 0; x < mapWidth; x++) // clear old marks
+	{
+		for (int y = 0; y < mapHeight; y++)
+		{
+			MAPTILE *psTile = mapTile(x, y);
+			psTile->tileInfoBits &= ~BITS_MARKED;
+		}
+	}
+}
+
+void showLabel(const QString &key)
+{
+	if (!labels.contains(key))
+	{
+		debug(LOG_ERROR, "label %s not found", key.toUtf8().constData());
+		return;
+	}
+	labeltype &l = labels[key];
+	if (l.type == SCRIPT_AREA || l.type == SCRIPT_POSITION)
+	{
+		setViewPos(map_coord(l.p1.x), map_coord(l.p1.y), false); // move camera position
+		clearMarks();
+		int maxx = map_coord(l.p2.x);
+		int maxy = map_coord(l.p2.y);
+		if (l.type == SCRIPT_POSITION)
+		{
+			maxx = MIN(mapWidth, maxx + 1);
+			maxy = MIN(mapHeight, maxy + 1);
+		}
+		for (int x = map_coord(l.p1.x); x < maxx; x++) // make new ones
+		{
+			for (int y = map_coord(l.p1.y); y < maxy; y++)
+			{
+				MAPTILE *psTile = mapTile(x, y);
+				psTile->tileInfoBits |= BITS_MARKED;
+			}
+		}
+	}
+	else if (l.type == OBJ_DROID || l.type == OBJ_FEATURE || l.type == OBJ_STRUCTURE)
+	{
+		clearMarks();
+		BASE_OBJECT *psObj = IdToObject((OBJECT_TYPE)l.type, l.id, l.player);
+		if (psObj)
+		{
+			setViewPos(map_coord(psObj->pos.x), map_coord(psObj->pos.y), false); // move camera position
+			MAPTILE *psTile = mapTile(map_coord(psObj->pos.x), map_coord(psObj->pos.y));
+			psTile->tileInfoBits |= BITS_MARKED;
+		}
+	}
+	else if (l.type == SCRIPT_GROUP)
+	{
+		bool cameraMoved = false;
+		clearMarks();
+		for (ENGINEMAP::iterator i = groups.begin(); i != groups.end(); ++i)
+		{
+			for (GROUPMAP::const_iterator iter = i.value()->constBegin(); iter != i.value()->constEnd(); ++iter)
+			{
+				if (iter.value() == l.id)
+				{
+					BASE_OBJECT *psObj = iter.key();
+					if (!cameraMoved)
+					{
+						setViewPos(map_coord(psObj->pos.x), map_coord(psObj->pos.y), false); // move camera position
+						cameraMoved = true;
+					}
+					MAPTILE *psTile = mapTile(map_coord(psObj->pos.x), map_coord(psObj->pos.y));
+					psTile->tileInfoBits |= BITS_MARKED;
+				}
+			}
+		}
+	}
+}
 
 bool areaLabelCheck(DROID *psDroid)
 {
@@ -808,6 +931,7 @@ static QScriptValue js_addLabel(QScriptContext *context, QScriptEngine *engine)
 	}
 	QString key = context->argument(1).toString();
 	labels.insert(key, value);
+	updateLabelModel();
 	return QScriptValue();
 }
 
@@ -818,6 +942,7 @@ static QScriptValue js_removeLabel(QScriptContext *context, QScriptEngine *engin
 {
 	QString key = context->argument(0).toString();
 	int result = labels.remove(key);
+	updateLabelModel();
 	return QScriptValue(result);
 }
 
@@ -3615,14 +3740,7 @@ static QScriptValue js_hackMarkTiles(QScriptContext *context, QScriptEngine *)
 	}
 	else // clear all marks
 	{
-		for (int x = 0; x < mapWidth; x++)
-		{
-			for (int y = 0; y < mapHeight; y++)
-			{
-				MAPTILE *psTile = mapTile(x, y);
-				psTile->tileInfoBits &= ~BITS_MARKED;
-			}
-		}
+		clearMarks();
 	}
 	return QScriptValue();
 }
@@ -3691,6 +3809,8 @@ bool unregisterFunctions(QScriptEngine *engine)
 	delete psMap;
 	ASSERT(num == 1, "Number of engines removed from group map is %d!", num);
 	labels.clear();
+	delete labelModel;
+	labelModel = NULL;
 	return true;
 }
 
@@ -3722,6 +3842,7 @@ void prepareLabels()
 			}
 		}
 	}
+	updateLabelModel();
 }
 
 bool registerFunctions(QScriptEngine *engine, QString scriptName)

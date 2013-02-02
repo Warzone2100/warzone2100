@@ -78,6 +78,8 @@ bool writeLabels(const char *filename);
 /// Tell script system that an object has been removed.
 void scriptRemoveObject(BASE_OBJECT *psObj);
 
+void jsShowDebug();
+
 // ----------------------------------------------
 // Event functions
 
