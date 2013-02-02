@@ -180,7 +180,7 @@ bool imageInitBitmaps(void)
 
 // Render a window frame.
 //
-static void RenderWindow(FRAMETYPE frame, UDWORD x, UDWORD y, UDWORD Width, UDWORD Height, bool Opaque)
+void RenderWindowFrame(FRAMETYPE frame, UDWORD x, UDWORD y, UDWORD Width, UDWORD Height)
 {
 	SWORD WTopRight = 0;
 	SWORD WTopLeft = 0;
@@ -191,119 +191,42 @@ static void RenderWindow(FRAMETYPE frame, UDWORD x, UDWORD y, UDWORD Width, UDWO
 	SWORD HBottomRight = 0;
 	SWORD HBottomLeft = 0;
 	UWORD RectI;
-	FRAMERECT *Rect;
-	bool Masked = false;
-	IMAGEFRAME *Frame;
-
-	if (frame == 0)
-	{
-		Frame = &FrameNormal;
-	}
-	else
-	{
-		Frame = &FrameRadar;
-	}
+	const FRAMERECT *Rect;
+	const IMAGEFRAME *Frame = (frame == FRAME_NORMAL) ? &FrameNormal : &FrameRadar;
 
 	x += Frame->OffsetX0;
 	y += Frame->OffsetY0;
 	Width -= Frame->OffsetX1+Frame->OffsetX0;
 	Height -= Frame->OffsetY1+Frame->OffsetY0;
 
-	for(RectI=0; RectI<5; RectI++) {
+	for (RectI = 0; RectI < 5; RectI++)
+	{
 		Rect = &Frame->FRect[RectI];
 
-		switch(Rect->Type) {
-			case FR_FRAME:
-				if(Opaque==false)
-				{
-					if(Masked == false) {
-						Width &= 0xfffc;	// Software transboxfill needs to be a multiple of 4 pixels.
-						Masked = true;
-					}
-
-
-					iV_TransBoxFill( x+Rect->TLXOffset,
-									y+Rect->TLYOffset,
-									x+Width-INCEND+Rect->BRXOffset,
-									y+Height-INCEND+Rect->BRYOffset);
-				}
-				else
-				{
-
-					pie_BoxFill(x + Rect->TLXOffset, y + Rect->TLYOffset, x + Width - INCEND + Rect->BRXOffset,
-					            y + Height - INCEND + Rect->BRYOffset, psPalette[Rect->ColourIndex]);
-				}
-				break;
-
-			case FR_LEFT:
-				if(Opaque==false) {
-					if(Masked == false) {
-						Width &= 0xfffc;	// Software transboxfill needs to be a multiple of 4 pixels.
-						Masked = true;
-					}
-					iV_TransBoxFill( x+Rect->TLXOffset,
-									y+Rect->TLYOffset,
-									x+Rect->BRXOffset,
-									y+Height-INCEND+Rect->BRYOffset);
-				} else {
-					pie_BoxFill(x + Rect->TLXOffset, y + Rect->TLYOffset, x + Rect->BRXOffset,
-					            y + Height - INCEND + Rect->BRYOffset, psPalette[Rect->ColourIndex]);
-				}
-				break;
-
-			case FR_RIGHT:
-				if(Opaque==false) {
-					if(Masked == false) {
-						Width &= 0xfffc;	// Software transboxfill needs to be a multiple of 4 pixels.
-						Masked = true;
-					}
-					iV_TransBoxFill( x+Width-INCEND+Rect->TLXOffset,
-									y+Rect->TLYOffset,
-									x+Width-INCEND+Rect->BRXOffset,
-									y+Height-INCEND+Rect->BRYOffset);
-				} else {
-					pie_BoxFill(x + Width - INCEND + Rect->TLXOffset, y + Rect->TLYOffset,
-					            x + Width - INCEND + Rect->BRXOffset, y + Height - INCEND + Rect->BRYOffset,
-					            psPalette[Rect->ColourIndex]);
-				}
-				break;
-
-			case FR_TOP:
-				if(Opaque==false) {
-					if(Masked == false) {
-						Width &= 0xfffc;	// Software transboxfill needs to be a multiple of 4 pixels.
-						Masked = true;
-					}
-					iV_TransBoxFill( x+Rect->TLXOffset,
-									y+Rect->TLYOffset,
-									x+Width-INCEND+Rect->BRXOffset,
-									y+Rect->BRYOffset);
-				} else {
-					pie_BoxFill(x + Rect->TLXOffset, y + Rect->TLYOffset, x + Width - INCEND + Rect->BRXOffset,
-					            y + Rect->BRYOffset, psPalette[Rect->ColourIndex]);
-				}
-				break;
-
-			case FR_BOTTOM:
-				if(Opaque==false)
-				{
-					if(Masked == false)
-					{
-						Width &= 0xfffc;	// Software transboxfill needs to be a multiple of 4 pixels.
-						Masked = true;
-					}
-					iV_TransBoxFill( x+Rect->TLXOffset,
-									y+Height-INCEND+Rect->TLYOffset,
-									x+Width-INCEND+Rect->BRXOffset,
-									y+Height-INCEND+Rect->BRYOffset);
-				} else {
-					pie_BoxFill(x + Rect->TLXOffset, y + Height - INCEND + Rect->TLYOffset,
-					            x + Width - INCEND + Rect->BRXOffset, y + Height - INCEND + Rect->BRYOffset,
-					            psPalette[Rect->ColourIndex]);
-				}
-				break;
-			case FR_IGNORE:
-				break; // ignored
+		switch(Rect->Type)
+		{
+		case FR_FRAME:
+			iV_TransBoxFill(x + Rect->TLXOffset, y + Rect->TLYOffset, 
+			                x + Width-INCEND+Rect->BRXOffset, y + Height - INCEND + Rect->BRYOffset);
+			break;
+		case FR_LEFT:
+			iV_TransBoxFill(x + Rect->TLXOffset, y + Rect->TLYOffset,
+			                x + Rect->BRXOffset, y + Height - INCEND+Rect->BRYOffset);
+			break;
+		case FR_RIGHT:
+			iV_TransBoxFill(x + Width-INCEND + Rect->TLXOffset, y + Rect->TLYOffset,
+			                x + Width-INCEND + Rect->BRXOffset, y + Height - INCEND + Rect->BRYOffset);
+			break;
+		case FR_TOP:
+			iV_TransBoxFill(x + Rect->TLXOffset, y + Rect->TLYOffset,
+			                x + Width - INCEND + Rect->BRXOffset, y + Rect->BRYOffset);
+			break;
+		case FR_BOTTOM:
+			iV_TransBoxFill(x + Rect->TLXOffset, y + Height - INCEND + Rect->TLYOffset,
+			                x + Width - INCEND + Rect->BRXOffset, y + Height - INCEND + Rect->BRYOffset);
+			break;
+		case FR_IGNORE:
+			break; // ignored
 		}
 	}
 
@@ -355,9 +278,3 @@ static void RenderWindow(FRAMETYPE frame, UDWORD x, UDWORD y, UDWORD Width, UDWO
 							iV_GetImageWidth(IntImages, Frame->RightEdge), Height - HTopRight - HBottomRight );
 	}
 }
-
-void RenderWindowFrame(FRAMETYPE frame, UDWORD x, UDWORD y, UDWORD Width, UDWORD Height)
-{
-	RenderWindow(frame, x, y, Width, Height, false);
-}
-

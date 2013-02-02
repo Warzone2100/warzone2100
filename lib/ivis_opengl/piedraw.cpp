@@ -621,45 +621,6 @@ void pie_RemainingPasses(void)
 	shapes.resize(0);
 }
 
-/***************************************************************************
- * pie_Drawimage
- *
- * General purpose blit function
- * Will support zbuffering, non_textured, coloured lighting and alpha effects
- *
- * replaces all ivis blit functions
- *
- ***************************************************************************/
-void pie_DrawImage(const PIEIMAGE *image, const PIERECT *dest)
-{
-	pie_DrawImage(image, dest, WZCOL_WHITE);
-}
-
-void pie_DrawImage(const PIEIMAGE *image, const PIERECT *dest, PIELIGHT colour)
-{
-	/* Set transparent color to be 0 red, 0 green, 0 blue, 0 alpha */
-	polyCount++;
-
-	pie_SetTexturePage(image->texPage);
-
-	glColor4ubv(colour.vector);
-
-	glBegin(GL_TRIANGLE_STRIP);
-		//set up 4 pie verts
-		glTexCoord2f(image->tu * image->invTextureSize, image->tv * image->invTextureSize);
-		glVertex2f(dest->x, dest->y);
-
-		glTexCoord2f((image->tu + image->tw) * image->invTextureSize, image->tv * image->invTextureSize);
-		glVertex2f(dest->x + dest->w, dest->y);
-
-		glTexCoord2f(image->tu * image->invTextureSize, (image->tv + image->th) * image->invTextureSize);
-		glVertex2f(dest->x, dest->y + dest->h);
-
-		glTexCoord2f((image->tu + image->tw) * image->invTextureSize, (image->tv + image->th) * image->invTextureSize);
-		glVertex2f(dest->x + dest->w, dest->y + dest->h);
-	glEnd();
-}
-
 void pie_GetResetCounts(unsigned int* pPieCount, unsigned int* pPolyCount, unsigned int* pStateCount)
 {
 	*pPieCount  = pieCount;

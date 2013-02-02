@@ -593,7 +593,6 @@ void intDisplayPowerBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DEC
 	pie_SetDepthBufferStatus(DEPTH_CMP_ALWAYS_WRT_ON);
 	pie_SetFogStatus(false);
 
-
 	iV_DrawImage(IntImages, IMAGE_PBAR_TOP, x0, y0);
 
 	iX = x0 + 3;
@@ -604,9 +603,7 @@ void intDisplayPowerBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DEC
 	//fill in the empty section behind text
 	if (textWidth > 0)
 	{
-		iV_DrawImageRect(IntImages, IMAGE_PBAR_EMPTY,
-		        x0, y0,
-		        textWidth, iV_GetImageHeight(IntImages, IMAGE_PBAR_EMPTY));
+		iV_DrawImageRect(IntImages, IMAGE_PBAR_EMPTY, x0, y0, textWidth, iV_GetImageHeight(IntImages, IMAGE_PBAR_EMPTY));
 		x0 += textWidth;
 	}
 
@@ -614,35 +611,25 @@ void intDisplayPowerBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DEC
 	if (ManPow > Avail)
 	{
 		//draw the required in red
-		iV_DrawImageRect(IntImages, IMAGE_PBAR_USED,
-		        x0, y0,
-		        ManPow, iV_GetImageHeight(IntImages, IMAGE_PBAR_USED));
+		iV_DrawImageRect(IntImages, IMAGE_PBAR_USED, x0, y0, ManPow, iV_GetImageHeight(IntImages, IMAGE_PBAR_USED));
 	}
 	else
 	{
-		iV_DrawImageRect(IntImages, IMAGE_PBAR_REQUIRED,
-		        x0, y0,
-		        ManPow, iV_GetImageHeight(IntImages, IMAGE_PBAR_REQUIRED));
+		iV_DrawImageRect(IntImages, IMAGE_PBAR_REQUIRED, x0, y0, ManPow, iV_GetImageHeight(IntImages, IMAGE_PBAR_REQUIRED));
 	}
-
 	x0 += ManPow;
 
 	//draw the available section if any!
 	if (Avail - ManPow > 0)
 	{
-		iV_DrawImageRect(IntImages, IMAGE_PBAR_AVAIL,
-		        x0, y0,
-		        Avail - ManPow, iV_GetImageHeight(IntImages, IMAGE_PBAR_AVAIL));
-
+		iV_DrawImageRect(IntImages, IMAGE_PBAR_AVAIL, x0, y0, Avail - ManPow, iV_GetImageHeight(IntImages, IMAGE_PBAR_AVAIL));
 		x0 += Avail - ManPow;
 	}
 
 	//fill in the rest with empty section
 	if (Empty > 0)
 	{
-		iV_DrawImageRect(IntImages, IMAGE_PBAR_EMPTY,
-		        x0, y0,
-		        Empty, iV_GetImageHeight(IntImages, IMAGE_PBAR_EMPTY));
+		iV_DrawImageRect(IntImages, IMAGE_PBAR_EMPTY, x0, y0, Empty, iV_GetImageHeight(IntImages, IMAGE_PBAR_EMPTY));
 		x0 += Empty;
 	}
 
@@ -693,7 +680,7 @@ void intDisplayStatusButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ
 	void                *Object;
 	bool	            bOnHold = false;
 
-	OpenButtonRender((UWORD)(xOffset + Form->x), (UWORD)(yOffset + Form->y), (UWORD)Form->width, (UWORD)Form->height);
+	OpenButtonRender(xOffset + Form->x, yOffset + Form->y);
 
 	Down = Form->state & (WCLICK_DOWN | WCLICK_LOCKED | WCLICK_CLICKLOCK);
 
@@ -877,8 +864,6 @@ void intDisplayStatusButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ
 		RenderBlankToButton(Buffer, Down, TOPBUTTON);
 	}
 
-	CloseButtonRender();
-
 	//need to flash the button if a factory is on hold production
 	if (bOnHold)
 	{
@@ -914,7 +899,7 @@ void intDisplayObjectButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ
 	UDWORD IMDType = 0;
 	void *Object;
 
-	OpenButtonRender((UWORD)(xOffset + Form->x), (UWORD)(yOffset + Form->y), (UWORD)Form->width, (UWORD)(Form->height + 9));
+	OpenButtonRender(xOffset + Form->x, yOffset + Form->y);
 
 	Down = Form->state & (WCLICK_DOWN | WCLICK_LOCKED | WCLICK_CLICKLOCK);
 
@@ -971,8 +956,6 @@ void intDisplayObjectButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ
 
 	RENDERBUTTON_INITIALISED(Buffer);
 
-	CloseButtonRender();
-
 	if (Hilight)
 	{
 
@@ -995,7 +978,7 @@ void intDisplayStatsButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_
 	UDWORD          Player = selectedPlayer;		// ajl, changed for multiplayer (from 0)
 	void            *Object;
 
-	OpenButtonRender((UWORD)(xOffset + Form->x), (UWORD)(yOffset + Form->y), (UWORD)Form->width, (UWORD)Form->height);
+	OpenButtonRender(xOffset + Form->x, yOffset + Form->y);
 
 	Down = Form->state & (WCLICK_DOWN | WCLICK_LOCKED | WCLICK_CLICKLOCK);
 
@@ -1135,8 +1118,6 @@ void intDisplayStatsButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_
 	}
 
 	RENDERBUTTON_INITIALISED(Buffer);
-
-	CloseButtonRender();
 
 	if (Hilight)
 	{
@@ -2129,22 +2110,14 @@ SDWORD GetSystem0Buffer(void)
 }
 
 
-static UWORD ButXPos = 0;
-static UWORD ButYPos = 0;
-static UWORD ButWidth, ButHeight;
+static int ButXPos = 0;
+static int ButYPos = 0;
 
-void OpenButtonRender(UWORD XPos, UWORD YPos, UWORD Width, UWORD Height)
+void OpenButtonRender(int XPos, int YPos)
 {
 	ButXPos = XPos;
 	ButYPos = YPos;
-	ButWidth = Width;
-	ButHeight = Height;
 }
-
-void CloseButtonRender(void)
-{
-}
-
 
 // Clear a button bitmap. ( copy the button background ).
 //
@@ -3022,8 +2995,7 @@ void intDisplayTransportButton(WIDGET *psWidget, UDWORD xOffset,
 	DROID			*psDroid = NULL;
 	UDWORD			gfxId;
 
-	OpenButtonRender((UWORD)(xOffset + Form->x), (UWORD)(yOffset + Form->y), (UWORD)Form->width,
-	        (UWORD)Form->height);
+	OpenButtonRender(xOffset + Form->x, yOffset + Form->y);
 
 	Down = Form->state & (WCLICK_DOWN | WCLICK_LOCKED | WCLICK_CLICKLOCK);
 
@@ -3052,8 +3024,6 @@ void intDisplayTransportButton(WIDGET *psWidget, UDWORD xOffset,
 		RenderBlankToButton(Buffer, Down, TOPBUTTON);
 	}
 	RENDERBUTTON_INITIALISED(Buffer);
-
-	CloseButtonRender();
 
 	if (Hilight)
 	{

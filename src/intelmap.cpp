@@ -68,8 +68,6 @@
 
 #include "multimenu.h"
 
-//#define NO_VIDEO
-
 /* Intelligence Map screen IDs */
 #define IDINTMAP_MSGFORM		6001	//The intelligence map tabbed form
 #define IDINTMAP_CLOSE			6004	//The close button icon for the 3D view
@@ -174,9 +172,7 @@ static void intDisplayMessageButton(WIDGET *psWidget, UDWORD xOffset,
 static void intIntelButtonPressed(bool proxMsg, UDWORD id);
 
 static void intDisplayPIEView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
-#ifndef NO_VIDEO
 static void intDisplayFLICView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
-#endif
 static void intDisplayTEXTView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 static void addVideoText(SEQ_DISPLAY *psSeqDisplay, UDWORD sequence);
 
@@ -648,7 +644,6 @@ bool intAddMessageView(MESSAGE * psMessage)
 		return false;
 	}
 
-#ifndef NO_VIDEO
 	/*Add the Flic box */
 	sFormInit = W_FORMINIT();
 	sFormInit.formID = IDINTMAP_MSGVIEW;
@@ -664,7 +659,6 @@ bool intAddMessageView(MESSAGE * psMessage)
 	{
 		return false;
 	}
-#endif
 
 	/*Add the text box*/
 	sFormInit = W_FORMINIT();
@@ -1141,11 +1135,10 @@ void intDisplayMessageButton(WIDGET *psWidget, UDWORD xOffset,
 	UDWORD			Down = 0, IMDType = 0, compID;
 	SDWORD			image = -1;
 	RESEARCH		*pResearch = NULL;
-    BASE_STATS      *psResGraphic = NULL;
+	BASE_STATS *psResGraphic = NULL;
 	bool MovieButton = false;
 
-	OpenButtonRender((UWORD)(xOffset+psButton->x), (UWORD)(yOffset+psButton->y),
-		psButton->width, psButton->height);
+	OpenButtonRender(xOffset + psButton->x, yOffset + psButton->y);
 
 	Down = psButton->state & (WBUTS_DOWN | WBUTS_CLICKLOCK);
 	Hilight = psButton->state & WBUTS_HILITE;
@@ -1247,8 +1240,6 @@ void intDisplayMessageButton(WIDGET *psWidget, UDWORD xOffset,
 		}
 	}
 
-	CloseButtonRender();
-
 	if (Hilight)
 	{
 
@@ -1283,8 +1274,7 @@ void intDisplayPIEView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL
 		//moved from after close render
 		RenderWindowFrame(FRAME_NORMAL, x0 - 1, y0 - 1, x1 - x0 + 2, y1 - y0 + 2);
 
-		OpenButtonRender((UWORD)(xOffset+Form->x), (UWORD)(yOffset+Form->y),
-			Form->width, Form->height);
+		OpenButtonRender(xOffset + Form->x, yOffset + Form->y);
 
 		if (((VIEWDATA *)psMessage->pViewData)->type != VIEW_RES)
 		{
@@ -1296,8 +1286,6 @@ void intDisplayPIEView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL
 		psResearch = getResearchForMsg((VIEWDATA *)psCurrentMsg->pViewData);
 		renderResearchToBuffer(psResearch, x0+(x1-x0)/2, y0+(y1-y0)/2);
 
-		CloseButtonRender();
-
 		//draw image icon in top left of window
 		image = (SWORD)getResearchForMsg((VIEWDATA *)psMessage->pViewData)->iconID;
 		if (image > 0)
@@ -1307,7 +1295,6 @@ void intDisplayPIEView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL
 	}
 }
 
-#ifndef NO_VIDEO
 /* displays the FLIC view for the current message */
 void intDisplayFLICView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
 {
@@ -1325,8 +1312,7 @@ void intDisplayFLICView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DEC
 
 	if (psMessage->pViewData)
 	{
-		OpenButtonRender((UWORD)(xOffset+Form->x), (UWORD)(yOffset+Form->y),
-			Form->width, Form->height);
+		OpenButtonRender(xOffset + Form->x, yOffset + Form->y);
 
 		x0 = xOffset+Form->x;
 		y0 = yOffset+Form->y;
@@ -1345,10 +1331,8 @@ void intDisplayFLICView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DEC
 		seq_SetDisplaySize(192, 168, x0, y0);
 		//render a frame of the current movie *must* force above resolution!
 		seq_RenderVideoToBuffer(psViewResearch->sequenceName, SEQUENCE_HOLD);
-		CloseButtonRender();
 	}
 }
-#endif
 
 /**
  * Displays the TEXT view for the current message.

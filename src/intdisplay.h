@@ -196,8 +196,7 @@ void intAddLoopQuantity(WIDGET *psWidget, W_CONTEXT *psContext);
 
 void intDisplayEditBox(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 
-void OpenButtonRender(UWORD XPos,UWORD YPos,UWORD Width,UWORD Height);
-void CloseButtonRender(void);
+void OpenButtonRender(int XPos, int YPos);
 
 void ClearButton(bool Down,UDWORD Size, UDWORD buttonType);
 

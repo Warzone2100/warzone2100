@@ -56,6 +56,17 @@ static GLuint radarTexture;
 static GLuint radarSizeX, radarSizeY;
 static GLfloat radarTexX, radarTexY;
 
+struct PIERECT  ///< Screen rectangle.
+{
+	SWORD x, y, w, h;
+};
+struct PIEIMAGE  ///< An area of texture.
+{
+	SDWORD texPage;
+	SWORD tu, tv, tw, th;
+	float invTextureSize;
+};
+
 /***************************************************************************/
 /*
  *	Source
@@ -179,11 +190,30 @@ void pie_UniTransBoxFill(float x0, float y0, float x1, float y1, PIELIGHT light)
 
 /***************************************************************************/
 
-bool assertValidImage(IMAGEFILE *imageFile, unsigned id)
+static bool assertValidImage(IMAGEFILE *imageFile, unsigned id)
 {
 	ASSERT_OR_RETURN(false, id < imageFile->imageDefs.size(), "Out of range 1: %u/%d", id, (int)imageFile->imageDefs.size());
 	ASSERT_OR_RETURN(false, imageFile->imageDefs[id].TPageID < imageFile->pages.size(), "Out of range 2: %u", imageFile->imageDefs[id].TPageID);
 	return true;
+}
+
+static void pie_DrawImage(const PIEIMAGE *image, const PIERECT *dest, PIELIGHT colour = WZCOL_WHITE)
+{
+	pie_SetTexturePage(image->texPage);
+	glColor4ubv(colour.vector);
+	glBegin(GL_TRIANGLE_STRIP);
+		glTexCoord2f(image->tu * image->invTextureSize, image->tv * image->invTextureSize);
+		glVertex2f(dest->x, dest->y);
+
+		glTexCoord2f((image->tu + image->tw) * image->invTextureSize, image->tv * image->invTextureSize);
+		glVertex2f(dest->x + dest->w, dest->y);
+
+		glTexCoord2f(image->tu * image->invTextureSize, (image->tv + image->th) * image->invTextureSize);
+		glVertex2f(dest->x, dest->y + dest->h);
+
+		glTexCoord2f((image->tu + image->tw) * image->invTextureSize, (image->tv + image->th) * image->invTextureSize);
+		glVertex2f(dest->x + dest->w, dest->y + dest->h);
+	glEnd();
 }
 
 static PIEIMAGE makePieImage(IMAGEFILE *imageFile, unsigned id, PIERECT *dest = NULL, int x = 0, int y = 0)
@@ -240,6 +270,7 @@ void iV_DrawImageTc(Image image, Image imageTc, int x, int y, PIELIGHT colour)
 	pie_DrawImage(&pieImageTc, &dest, colour);
 }
 
+// Repeat a texture
 void iV_DrawImageRect(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int Width, int Height)
 {
 	SDWORD hRep, hRemainder, vRep, vRemainder;
