@@ -330,7 +330,7 @@ function buildFundamentals2()
 		}
 	}
 	// Build VTOL factory if we don't have one
-	if (isStructureAvailable(me, vtolFactory))
+	if (isStructureAvailable(vtolFactory, me))
 	{
 		var vfaccount = countStruct(vtolFactory);
 		if (vfaccount == 0 && playerPower(me) > 500 && grabTrucksAndBuild(20, vtolFactory, 1))

@@ -81,7 +81,7 @@ AX_CHECK_STRLCAT
 AX_STACK_PROTECT_CC
 AX_STACK_PROTECT_CXX
 
-AC_CHECK_HEADERS(alloca.h)
+AC_CHECK_HEADERS(alloca.h sys/ucontext.h)
 
 # Check for gettext
 AM_GNU_GETTEXT([external])
