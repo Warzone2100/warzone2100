@@ -143,7 +143,8 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <PreBuildEvent>
       <Message>Generating the autorevison.h file...</Message>
-      <Command>call $(ProjectDir)..\build_tools\autorevision.bat $(ProjectDir)</Command>
+      <Command>$(QTDIR)\bin\moc.exe qtscriptdebug.h  -o qtscriptdebug.h.moc
+call $(ProjectDir)..\build_tools\autorevision.bat $(ProjectDir)</Command>
     </PreBuildEvent>
     <BisonParser>
       <Defines>true</Defines>
@@ -171,7 +172,7 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>libogg_static.lib;libvorbis_static.lib;libvorbisfile_static.lib;OpenAL32.lib;glc32.lib;OpenGL32.lib;GLU32.lib;shfolder.lib;winmm.lib;Iphlpapi.lib;ws2_32.lib;dbghelp.lib;physfs.lib;glew.lib;libtheora_static.lib;libpng15.lib;SDLmain.lib;SDL.lib;QtCore4.lib;QtScript4.lib;QtScriptTools4.lib;zlibstat.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libogg_static.lib;libvorbis_static.lib;libvorbisfile_static.lib;OpenAL32.lib;glc32.lib;OpenGL32.lib;GLU32.lib;shfolder.lib;winmm.lib;Iphlpapi.lib;ws2_32.lib;dbghelp.lib;physfs.lib;glew.lib;libtheora_static.lib;libpng15.lib;SDLmain.lib;SDL.lib;QtCore4.lib;QtGui4.lib;QtScript4.lib;QtScriptTools4.lib;zlibstat.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(ProjectName)-Dbg.exe</OutputFile>
       <AdditionalLibraryDirectories>$(SolutionDir)\..\devpkg\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>MSVCRT.lib;libcmt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
@@ -194,7 +195,10 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug_SDL_STLport_x32|Win32'">
     <PreBuildEvent>
       <Message>Generating the autorevison.h file...</Message>
-      <Command>call $(ProjectDir)..\build_tools\autorevision.bat $(ProjectDir)</Command>
+      <Command>$(QTDIR)\bin\moc.exe qtscriptdebug.h  -o qtscriptdebug.h.moc
+call $(ProjectDir)..\build_tools\autorevision.bat $(ProjectDir)
+
+</Command>
     </PreBuildEvent>
     <BisonParser>
       <Defines>true</Defines>
@@ -222,7 +226,7 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>libogg_static.lib;libvorbis_static.lib;libvorbisfile_static.lib;OpenAL32.lib;glc32.lib;OpenGL32.lib;GLU32.lib;shfolder.lib;winmm.lib;Iphlpapi.lib;ws2_32.lib;dbghelp.lib;physfs.lib;glew.lib;libtheora_static.lib;libpng15.lib;SDLmain.lib;SDL.lib;QtCore4.lib;QtScript4.lib;QtScriptTools4.lib;zlibstat.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libogg_static.lib;libvorbis_static.lib;libvorbisfile_static.lib;OpenAL32.lib;glc32.lib;OpenGL32.lib;GLU32.lib;shfolder.lib;winmm.lib;Iphlpapi.lib;ws2_32.lib;dbghelp.lib;physfs.lib;glew.lib;libtheora_static.lib;libpng15.lib;SDLmain.lib;SDL.lib;QtCore4.lib;QtGui4.lib;QtScript4.lib;QtScriptTools4.lib;zlibstat.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(ProjectName)-Dbg.exe</OutputFile>
       <AdditionalLibraryDirectories>$(SolutionDir)\..\devpkg\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>MSVCRT.lib;libcmt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
@@ -296,7 +300,8 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <PreBuildEvent>
       <Message>Generating the autorevison.h file...</Message>
-      <Command>call $(ProjectDir)..\build_tools\autorevision.bat $(ProjectDir)</Command>
+      <Command>$(QTDIR)\bin\moc.exe qtscriptdebug.h  -o qtscriptdebug.h.moc
+call $(ProjectDir)..\build_tools\autorevision.bat $(ProjectDir)</Command>
     </PreBuildEvent>
     <BisonParser>
       <Defines>true</Defines>
@@ -317,7 +322,7 @@
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>libogg_static.lib;libvorbis_static.lib;libvorbisfile_static.lib;OpenAL32.lib;glc32.lib;OpenGL32.lib;GLU32.lib;shfolder.lib;winmm.lib;Iphlpapi.lib;ws2_32.lib;dbghelp.lib;physfs.lib;glew.lib;libtheora_static.lib;libpng15.lib;SDLmain.lib;SDL.lib;QtCore4.lib;QtScript4.lib;QtScriptTools4.lib;zlibstat.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libogg_static.lib;libvorbis_static.lib;libvorbisfile_static.lib;OpenAL32.lib;glc32.lib;OpenGL32.lib;GLU32.lib;shfolder.lib;winmm.lib;Iphlpapi.lib;ws2_32.lib;dbghelp.lib;physfs.lib;glew.lib;libtheora_static.lib;libpng15.lib;SDLmain.lib;SDL.lib;QtCore4.lib;QtGui4.lib;QtScript4.lib;QtScriptTools4.lib;zlibstat.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)\..\devpkg\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>libcmt.lib;MSVCRTD.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -334,7 +339,8 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release_SDL_STLport_x32|Win32'">
     <PreBuildEvent>
       <Message>Generating the autorevison.h file...</Message>
-      <Command>call $(ProjectDir)..\build_tools\autorevision.bat $(ProjectDir)</Command>
+      <Command>$(QTDIR)\bin\moc.exe qtscriptdebug.h  -o qtscriptdebug.h.moc
+call $(ProjectDir)..\build_tools\autorevision.bat $(ProjectDir)</Command>
     </PreBuildEvent>
     <BisonParser>
       <Defines>true</Defines>
@@ -354,7 +360,7 @@
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>libogg_static.lib;libvorbis_static.lib;libvorbisfile_static.lib;OpenAL32.lib;glc32.lib;OpenGL32.lib;GLU32.lib;shfolder.lib;winmm.lib;Iphlpapi.lib;ws2_32.lib;dbghelp.lib;physfs.lib;glew.lib;libtheora_static.lib;libpng15.lib;SDLmain.lib;SDL.lib;QtCore4.lib;QtScript4.lib;QtScriptTools4.lib;zlibstat.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libogg_static.lib;libvorbis_static.lib;libvorbisfile_static.lib;OpenAL32.lib;glc32.lib;OpenGL32.lib;GLU32.lib;shfolder.lib;winmm.lib;Iphlpapi.lib;ws2_32.lib;dbghelp.lib;physfs.lib;glew.lib;libtheora_static.lib;libpng15.lib;SDLmain.lib;SDL.lib;QtCore4.lib;QtGui4.lib;QtScript4.lib;QtScriptTools4.lib;zlibstat.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)\..\devpkg\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>libcmt.lib;MSVCRTD.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -484,6 +490,7 @@
     <ClCompile Include="power.cpp" />
     <ClCompile Include="projectile.cpp" />
     <ClCompile Include="qtscript.cpp" />
+    <ClCompile Include="qtscriptdebug.cpp" />
     <ClCompile Include="qtscriptfuncs.cpp" />
     <ClCompile Include="radar.cpp" />
     <ClCompile Include="random.cpp" />
