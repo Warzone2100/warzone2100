@@ -2312,6 +2312,17 @@ function attackStuff() {
 	}
 }
 
+function safeArmed(droid) {
+	if (!isVTOL(droid))
+		return false;
+	if (typeof(droid.weapons) == "undefined" || droid.weapons.length <= 0)
+		return droid.armed;
+	var s = 0;
+	for (var i = 0; i < droid.weapons.length; ++i)
+		s += droid.weapons[i].armed;
+	return s / droid.weapons.length;
+}
+
 // attack things with VTOLs
 function vtolAttack() {
 	if (!personality.THIS_AI_MAKES_VTOLS)
@@ -2324,13 +2335,14 @@ function vtolAttack() {
 			var list=[];
 			for (var i=0; i<vtols.length; ++i) {
 				var vtol=vtols[i];
-				if (isNaN(vtol.armed)) {
+				var armed = safeArmed(vtol);
+				if (isNaN(armed)) {
 					if (vtolAttack.debugSent!=true) {
 						debug("vtol.armed is NaN, assuming fully rearmed - known v3.1 bug, see http://developer.wz2100.net/ticket/3178");
 						vtolAttack.debugSent=true;
 					}
-				} 
-				if (vtol.armed >= 99 || isNaN(vtol.armed)) {
+				}
+				if (armed >= 99 || isNaN(armed)) {
 					if (vtol.order != DORDER_ATTACK)
 						list[list.length]=i;
 				}
@@ -2572,7 +2584,7 @@ function eventAttacked(victim, attacker) {
 		for (var gr=0; gr<NUM_VTOL_GROUPS; ++gr) {
 			var attackers=enumGroup(vtolGroup[gr]);
 			for (var i=0; i<attackers.length; ++i)
-				if (!sendForRepair(attackers[i]) && !isNaN(attackers[i].armed) && attackers[i].armed>=99)
+				if (!sendForRepair(attackers[i]) && !isNaN(safeArmed(attackers[i])) && safeArmed(attackers[i])>=99)
 					orderDroidObj(attackers[i], DORDER_ATTACK, attacker);
 		}
 	}
