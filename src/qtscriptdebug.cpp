@@ -65,7 +65,8 @@ ScriptDebugger::ScriptDebugger(const MODELMAP &models, QStandardItemModel *trigg
 		QWidget *dummyWidget = new QWidget(this);
 		QScriptEngine *engine = i.key();
 		QStandardItemModel *m = i.value();
-		QTreeView *view = new QTreeView();
+		m->setParent(this); // take ownership to avoid memory leaks
+		QTreeView *view = new QTreeView(this);
 		view->setSelectionMode(QAbstractItemView::NoSelection);
 		view->setModel(m);
 		QString scriptName = engine->globalObject().property("scriptName").toString();
@@ -88,6 +89,7 @@ ScriptDebugger::ScriptDebugger(const MODELMAP &models, QStandardItemModel *trigg
 	connect(signalMapper, SIGNAL(mapped(QObject *)), this, SLOT(runClicked(QObject *)));
 
 	// Add triggers
+	triggerModel->setParent(this); // take ownership to avoid memory leaks
 	triggerView.setModel(triggerModel);
 	triggerView.resizeColumnToContents(0);
 	triggerView.setSelectionMode(QAbstractItemView::NoSelection);
@@ -96,6 +98,7 @@ ScriptDebugger::ScriptDebugger(const MODELMAP &models, QStandardItemModel *trigg
 
 	// Add labels
 	labelModel = createLabelModel();
+	labelModel->setParent(this); // take ownership to avoid memory leaks
 	labelView.setModel(labelModel);
 	labelView.resizeColumnToContents(0);
 	labelView.setSelectionMode(QAbstractItemView::SingleSelection);

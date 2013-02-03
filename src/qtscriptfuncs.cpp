@@ -134,10 +134,6 @@ static void updateLabelModel()
 
 QStandardItemModel *createLabelModel()
 {
-	if (labelModel)
-	{
-		delete labelModel;
-	}
 	labelModel = new QStandardItemModel(0, 2);
 	labelModel->setHeaderData(0, Qt::Horizontal, QString("Label"));
 	labelModel->setHeaderData(1, Qt::Horizontal, QString("Type"));
@@ -3809,7 +3805,6 @@ bool unregisterFunctions(QScriptEngine *engine)
 	delete psMap;
 	ASSERT(num == 1, "Number of engines removed from group map is %d!", num);
 	labels.clear();
-	delete labelModel;
 	labelModel = NULL;
 	return true;
 }

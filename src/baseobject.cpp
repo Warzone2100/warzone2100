@@ -98,7 +98,13 @@ BASE_OBJECT::BASE_OBJECT(OBJECT_TYPE type, uint32_t id, unsigned player)
 	, timeLastHit(UDWORD_MAX)
 	, bTargetted(false)
 	, watchedTiles(NULL)
-{}
+{
+	sDisplay.imd = NULL;
+	sDisplay.frameNumber = 0;
+	sDisplay.screenX = 0;
+	sDisplay.screenY = 0;
+	sDisplay.screenR = 0;
+}
 
 BASE_OBJECT::~BASE_OBJECT()
 {

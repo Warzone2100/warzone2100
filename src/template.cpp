@@ -288,6 +288,7 @@ DROID_TEMPLATE::DROID_TEMPLATE()  // This constructor replaces a memset in scrAs
 	, psNext(NULL)
 	, prefab(false)
 	, stored(false)
+	, enabled(false)
 {
 	aName[0] = '\0';
 	std::fill_n(asParts, DROID_MAXCOMP, 0);

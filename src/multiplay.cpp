@@ -1455,7 +1455,7 @@ bool sendTemplate(uint32_t player, DROID_TEMPLATE *pTempl)
 // receive a template created by another player
 bool recvTemplate(NETQUEUE queue)
 {
-	uint32_t        player;
+	uint32_t        player = 0;
 	DROID_TEMPLATE *psTempl;
 	DROID_TEMPLATE  t;
 
