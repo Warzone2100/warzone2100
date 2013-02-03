@@ -255,6 +255,7 @@ function constructPersonality() {
 			}
 			break;
 		case MF:
+			this.buildOrderIdx = random(3);
  			this.tankBodies = standardTankBodies;
 			this.researchPathPrimary = [ // any
 				"R-Wpn-MG3Mk1",
@@ -262,7 +263,6 @@ function constructPersonality() {
 				"R-Struc-PowerModuleMk1",
 			];
 			break;
-			this.buildOrderIdx = random(3);
 		}
 		
 		this.researchPathPrimary = this.researchPathPrimary.concat(["R-Vehicle-Body05","R-Struc-RprFac-Upgrade01",]);

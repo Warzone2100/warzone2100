@@ -107,7 +107,7 @@ function becomeHarder() {
 // makes sure we have at least one operational structure of that type
 function iHaveStruct(stat) {
 	var list=enumStruct(me,stat)
-	for (i=0; i<list.length; ++i)
+	for (var i=0; i<list.length; ++i)
 		if (list[i].status==BUILT)
 			return true;
 	return false;
@@ -976,7 +976,7 @@ function finishBuildings() {
 	var droidlist; 
 	var list = enumStruct(me);
 	var found = false;
-	for (j=0; j<list.length; ++j) {
+	for (var j=0; j<list.length; ++j) {
 		if (list[j].status == BEING_BUILT) {
 			if (dangerLevel(list[j].x,list[j].y)<=0) {
 				droidlist=enumGroup(oilerGroup);
@@ -1286,7 +1286,7 @@ function structureReady(struct) {
 
 // finds out which battle group contains this tank
 function groupOfTank(tank) {
-	for (i=0; i<NUM_GROUPS; ++i)
+	for (var i=0; i<NUM_GROUPS; ++i)
 		if (tank.group == battleGroup[i])
 			return i;
 }
@@ -1707,14 +1707,10 @@ function produceDroids() {
 		if (structureReady(struct)) {
 			if (!personality.fixedTemplates) {
 				if (needMoreTrucks() && truckCount<2 && (!iHaveFactories || !iHaveHovers())) { // don't build borgs when we can build hovers
-					// NOTE: cyborg engineers can't be produced at all in v3.1, see http://developer.wz2100.net/ticket/3133
-					// also, that's a very dirty version check; but we can't rely on version variable due to the problems described in 
-					// http://developer.wz2100.net/ticket/3187 
-					if (typeof(DORDER_RTB)!="undefined") {
-						buildDroid(struct, "Construction Droid", "Cyb-Bod-ComEng", "CyborgLegs", "", DROID_CONSTRUCT, "CyborgSpade");
-						++truckCount;
-						continue;
-					}
+					const DROID_CYBORG_CONSTRUCT=10; // HACK: see also http://forums.wz2100.net/viewtopic.php?f=35&t=10341&p=114181#p114184
+					buildDroid(struct, "Construction Droid", "Cyb-Bod-ComEng", "CyborgLegs", "", DROID_CYBORG_CONSTRUCT, "CyborgSpade");
+					++truckCount;
+					continue;
 				}
 			}
 			if (!personality.THIS_AI_MAKES_CYBORGS || RATE_TANK == 0)
@@ -1948,7 +1944,7 @@ function naiveFindClusters(list,size) {
 	this.yav=[];
 	this.maxIdx=0;
 	this.maxCount=0;
-	for (i=list.length-1; i>=0; --i) {
+	for (var i=list.length-1; i>=0; --i) {
 		var x=list[i].x,y=list[i].y;
 		var found=false;
 		for (var j=0; j<this.clusters.length; ++j) {
@@ -2044,11 +2040,11 @@ function regroupWarriors(gr) {
 		) {
 			for (var i=0; i<ret.clusters.length; ++i) 
 				if (i!=ret.maxIdx)  {
-					for (j=0; j<ret.clusters[i].length; ++j) 
+					for (var j=0; j<ret.clusters[i].length; ++j) 
 						if (!sendForRepair(list[ret.clusters[i][j]]) && !droidIsAtHome(list[ret.clusters[i][j]]))
 							orderDroidLoc(list[ret.clusters[i][j]], DORDER_MOVE, ret.xav[ret.maxIdx], ret.yav[ret.maxIdx]);
 				} else if (ret.maxCount < min || ret.maxCount < list.length/2) { // note: i==ret.maxIdx here
-					for (j=0; j<ret.clusters[i].length; ++j) 
+					for (var j=0; j<ret.clusters[i].length; ++j) 
 						if (!sendForRepair(list[ret.clusters[i][j]]) && !droidIsAtHome(list[ret.clusters[i][j]]))
 							stopDroid(list[ret.clusters[i][j]]);
 				}
@@ -2275,23 +2271,23 @@ function rnd() {
 }
 
 function setTimers() {
-	setTimer("updateStatus",		2000+rnd());
-	setTimer("huntForOil", 		7000+rnd());
-	setTimer("doResearch", 		12000+rnd());
-	setTimer("executeBuildOrder",	5000+rnd());
-	setTimer("attackStuff",		3000+rnd());
-	setTimer("vtolAttack",		5000+rnd());
-	setTimer("cheat",			30000+rnd());
-	setTimer("becomeHarder",		480000+rnd());
-	setTimer("adapt",			30000+rnd());
-	setTimer("sendAllForRepair",		1000+rnd());
-	setTimer("produceDroids",		3000+rnd());
-	setTimer("relaxStats",		10000+rnd());
-	setTimer("balanceGroups",		10000+rnd());
-	setTimer("returnDefendersToBase",		20000+rnd());
-	setTimer("callUpdateEnemyInfo",		2000+rnd());
-	setTimer("harassStuff",		3000+rnd());
-	setTimer("regroupRegularly",		1500+rnd());
+	setTimer("updateStatus",		2000+3*rnd());
+	setTimer("huntForOil", 		7000+7*rnd());
+	setTimer("doResearch", 		12000+12*rnd());
+	setTimer("executeBuildOrder",	5000+5*rnd());
+	setTimer("attackStuff",		3000+7*rnd());
+	setTimer("vtolAttack",		5000+5*rnd());
+	setTimer("cheat",			30000);
+	setTimer("becomeHarder",		480000);
+	setTimer("adapt",			30000+30*rnd());
+	setTimer("sendAllForRepair",		1000+2*rnd());
+	setTimer("produceDroids",		3000+3*rnd());
+	setTimer("relaxStats",		10000);
+	setTimer("balanceGroups",		10000+10*rnd());
+	setTimer("returnDefendersToBase",		20000+20*rnd());
+	setTimer("callUpdateEnemyInfo",		2000+3*rnd());
+	setTimer("harassStuff",		3000+5*rnd());
+	setTimer("regroupRegularly",		1500+3*rnd());
 }
 
 function fallBack(droid,threat) {
@@ -2488,6 +2484,8 @@ function eventStructureReady(structure) {
 
 // respond correctly on unit transfers
 function eventObjectTransfer(object, from) {
+	if (object.player != me)
+		return; // object was transfered from me, not to me
 	if (object.type == DROID) {
 		eventDroidBuilt(object,null);
 	} else {
@@ -2496,7 +2494,7 @@ function eventObjectTransfer(object, from) {
 }
 
 function eventGameInit() {
-	setTimers();
+	queue("setTimers", me * 100);
 }
 
 // all initialization happens here, apart from personality initialization
@@ -2527,13 +2525,13 @@ function eventStartLevel() {
 	oilerGroup=newGroup();
 	defendGroup=newGroup();
 	harassGroup=newGroup();
-	for (i=0; i<NUM_GROUPS; ++i)
+	for (var i=0; i<NUM_GROUPS; ++i)
 		battleGroup[i]=newGroup();
 	groupInfo[0]=new constructGroupInfo(findEnemy());
-	for (i=1; i<NUM_GROUPS; ++i)
+	for (var i=1; i<NUM_GROUPS; ++i)
 		groupInfo[i]=new constructGroupInfo(nextEnemy(groupInfo[i-1].enemy));
 	NUM_VTOL_GROUPS = MIN_VTOL_GROUPS;
-	for (i=0; i<MAX_VTOL_GROUPS; ++i)
+	for (var i=0; i<MAX_VTOL_GROUPS; ++i)
 		vtolGroup[i]=newGroup();
 	for (var i=0; i<list.length; ++i) {
 		var droid=list[i];
