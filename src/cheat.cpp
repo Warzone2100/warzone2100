@@ -75,7 +75,6 @@ static CHEAT_ENTRY cheatCodes[] =
 	{"showsamples", kf_ToggleSamples}, //displays the # of Sound samples in Queue & List
 	{"showorders", kf_ToggleOrders}, //displays unit order/action state.
 	{"showlevelname", kf_ToggleLevelName}, // shows the current level name on screen
-	{"logical", kf_ToggleLogical}, //logical game updates separated from graphics updates.
 	{"pause", kf_TogglePauseMode}, // Pause the game.
 	{"power info", kf_PowerInfo},
 	{"reload me", kf_Reload},	// reload selected weapons immediately

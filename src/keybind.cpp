@@ -2843,10 +2843,6 @@ void kf_NoAssert()
 	debug(LOG_ERROR, "Asserts turned off");
 }
 
-void kf_ToggleLogical()
-{
-	console("Logical updates can no longer be toggled.");	// TODO remove me
-}
 // rotuine to decrement the tab-scroll 'buttons'
 void kf_BuildPrevPage()
 {
