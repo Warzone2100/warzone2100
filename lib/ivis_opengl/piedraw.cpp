@@ -584,7 +584,7 @@ static void pie_DrawShadows(void)
 
 	glPopMatrix();
 
-	scshapes.clear();
+	scshapes.resize(0);
 }
 
 void pie_RemainingPasses(void)

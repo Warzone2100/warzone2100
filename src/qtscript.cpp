@@ -708,32 +708,31 @@ static void updateGlobalModels()
 		int nextRow = m->rowCount();
 		m->setRowCount(nextRow);
 		m->setItem(nextRow, 0, new QStandardItem(node.function));
-		m->setItem(nextRow, 1, new QStandardItem(node.player));
 		QString scriptName = node.engine->globalObject().property("scriptName").toString();
-		m->setItem(nextRow, 2, new QStandardItem(scriptName + ":" + QString::number(node.player)));
+		m->setItem(nextRow, 1, new QStandardItem(scriptName + ":" + QString::number(node.player)));
 		if (node.baseobj >= 0)
 		{
-			m->setItem(nextRow, 3, new QStandardItem(QString::number(node.baseobj)));
+			m->setItem(nextRow, 2, new QStandardItem(QString::number(node.baseobj)));
 		}
 		else
 		{
-			m->setItem(nextRow, 3, new QStandardItem("-"));
+			m->setItem(nextRow, 2, new QStandardItem("-"));
 		}
-		m->setItem(nextRow, 4, new QStandardItem(QString::number(node.frameTime)));
-		m->setItem(nextRow, 5, new QStandardItem(QString::number(node.ms)));
+		m->setItem(nextRow, 3, new QStandardItem(QString::number(node.frameTime)));
+		m->setItem(nextRow, 4, new QStandardItem(QString::number(node.ms)));
 		if (node.type == TIMER_ONESHOT_READY)
 		{
-			m->setItem(nextRow, 6, new QStandardItem("Oneshot"));
+			m->setItem(nextRow, 5, new QStandardItem("Oneshot"));
 		}
 		else if (node.type == TIMER_ONESHOT_DONE)
 		{
-			m->setItem(nextRow, 6, new QStandardItem("Done"));
+			m->setItem(nextRow, 5, new QStandardItem("Done"));
 		}
 		else
 		{
-			m->setItem(nextRow, 6, new QStandardItem("Repeat"));
+			m->setItem(nextRow, 5, new QStandardItem("Repeat"));
 		}
-		m->setItem(nextRow, 7, new QStandardItem(QString::number(node.calls)));
+		m->setItem(nextRow, 6, new QStandardItem(QString::number(node.calls)));
 	}
 }
 
@@ -792,15 +791,14 @@ void jsShowDebug()
 		models.insert(engine, m);
 	}
 	// Add triggers
-	triggerModel = new QStandardItemModel(0, 8);
+	triggerModel = new QStandardItemModel(0, 7);
 	triggerModel->setHeaderData(0, Qt::Horizontal, QString("Function"));
-	triggerModel->setHeaderData(1, Qt::Horizontal, QString("Player"));
-	triggerModel->setHeaderData(2, Qt::Horizontal, QString("Script"));
-	triggerModel->setHeaderData(3, Qt::Horizontal, QString("Object"));
-	triggerModel->setHeaderData(4, Qt::Horizontal, QString("Time"));
-	triggerModel->setHeaderData(5, Qt::Horizontal, QString("Interval"));
-	triggerModel->setHeaderData(6, Qt::Horizontal, QString("Type"));
-	triggerModel->setHeaderData(7, Qt::Horizontal, QString("Calls"));
+	triggerModel->setHeaderData(1, Qt::Horizontal, QString("Script"));
+	triggerModel->setHeaderData(2, Qt::Horizontal, QString("Object"));
+	triggerModel->setHeaderData(3, Qt::Horizontal, QString("Time"));
+	triggerModel->setHeaderData(4, Qt::Horizontal, QString("Interval"));
+	triggerModel->setHeaderData(5, Qt::Horizontal, QString("Type"));
+	triggerModel->setHeaderData(6, Qt::Horizontal, QString("Calls"));
 
 	globalDialog = true;
 	updateGlobalModels();
