@@ -36,7 +36,6 @@
 #include "piematrix.h"
 #include "screen.h"
 
-
 #include <string.h>
 #include <vector>
 #include <algorithm>
@@ -497,7 +496,7 @@ void pie_Draw3DShape(iIMDShape *shape, int frame, int team, PIELIGHT colour, int
 		}
 		else
 		{
-			if(pieFlag & pie_SHADOW || pieFlag & pie_STATIC_SHADOW)
+			if (shadows && (pieFlag & pie_SHADOW || pieFlag & pie_STATIC_SHADOW))
 			{
 				float distance;
 
