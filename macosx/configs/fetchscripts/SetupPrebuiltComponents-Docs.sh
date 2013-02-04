@@ -16,7 +16,6 @@ if [[ ! "0" == "$(type -aP a2x &> /dev/null; echo ${?})" ]] || [[ ! "0" == "$(ty
 	configs/FetchPrebuilt.sh "${DirectorY}" "${OutDir}" "${FileName}" "${BuiltDLP}" "${MD5Sum}"
 	exit ${?}
 fi
-test -r /sw/bin/init.sh && . /sw/bin/init.sh
 alias sed="/usr/bin/sed"
 alias grep="/usr/bin/grep"
 
