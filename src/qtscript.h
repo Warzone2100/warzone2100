@@ -62,7 +62,7 @@ bool updateScripts();
 
 // Load and evaluate the given script, kept in memory
 bool loadGlobalScript(QString path);
-bool loadPlayerScript(QString path, int player, int difficulty);
+QScriptEngine *loadPlayerScript(QString path, int player, int difficulty);
 
 // Set/write variables in the script's global context, run after loading script,
 // but before triggering any events.
@@ -80,6 +80,9 @@ void scriptRemoveObject(BASE_OBJECT *psObj);
 
 /// Open debug GUI
 void jsShowDebug();
+
+/// Choose autogame AI
+void jsAutogame();
 
 /// Run-time code from user
 bool jsEvaluate(QScriptEngine *engine, const QString &text);

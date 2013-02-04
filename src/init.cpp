@@ -271,7 +271,6 @@ bool rebuildSearchPath(searchPathMode mode, bool force, const char *current_map)
 #endif // DEBUG
 					// Remove maps and mods
 					removeSubdirs( curSearchPath->path, "maps", NULL );
-					removeSubdirs( curSearchPath->path, "campaigns", NULL );
 					removeSubdirs( curSearchPath->path, "mods/music", NULL );
 					removeSubdirs( curSearchPath->path, "mods/global", NULL );
 					removeSubdirs( curSearchPath->path, "mods/campaign", NULL );
@@ -327,7 +326,6 @@ bool rebuildSearchPath(searchPathMode mode, bool force, const char *current_map)
 					// Add global and campaign mods
 					PHYSFS_addToSearchPath( curSearchPath->path, PHYSFS_APPEND );
 
-					addSubdirs( curSearchPath->path, "campaigns", PHYSFS_APPEND, NULL, false );
 					addSubdirs( curSearchPath->path, "mods/music", PHYSFS_APPEND, NULL, false );
 					addSubdirs( curSearchPath->path, "mods/global", PHYSFS_APPEND, use_override_mods?override_mods:global_mods, true );
 					addSubdirs( curSearchPath->path, "mods", PHYSFS_APPEND, use_override_mods?override_mods:global_mods, true );

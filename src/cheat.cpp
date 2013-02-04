@@ -42,6 +42,7 @@ struct CHEAT_ENTRY
 bool Cheated = false;
 static CHEAT_ENTRY cheatCodes[] =
 {
+	{"jsload", jsAutogame}, // load an AI script for selectedPlayer
 	{"jsdebug", jsShowDebug}, // show scripting states
 	{"clone wars", kf_CloneSelected}, // clone selected units
 	{"noassert", kf_NoAssert}, // turn off asserts

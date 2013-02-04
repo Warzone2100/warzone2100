@@ -35,6 +35,7 @@
 #include <QtCore/QStringList>
 #include <QtCore/QFileInfo>
 #include <QtGui/QStandardItemModel>
+#include <QtGui/QFileDialog>
 
 #include "lib/framework/wzapp.h"
 #include "lib/framework/wzconfig.h"
@@ -294,16 +295,19 @@ void scriptRemoveObject(BASE_OBJECT *psObj)
 }
 
 //-- \subsection{include(file)}
-//-- Includes another source code file at this point. This is experimental, and breaks the
-//-- lint tool, so use with care.
+//-- Includes another source code file at this point. You should generally only specify the filename,
+//-- not try to specify its path, here.
 static QScriptValue js_include(QScriptContext *context, QScriptEngine *engine)
 {
-	QString path = context->argument(0).toString();
+	QString basePath = engine->globalObject().property("scriptPath").toString();
+	QFileInfo basename(context->argument(0).toString());
+	QString path = basePath + "/" + basename.fileName();
 	UDWORD size;
 	char *bytes = NULL;
 	if (!loadFile(path.toUtf8().constData(), &bytes, &size))
 	{
-		debug(LOG_ERROR, "Failed to read include file \"%s\"", path.toUtf8().constData());
+		debug(LOG_ERROR, "Failed to read include file \"%s\" (path=%s, name=%s)",
+		      path.toUtf8().constData(), basePath.toUtf8().constData(), basename.filePath().toUtf8().constData());
 		return QScriptValue(false);
 	}
 	QString source = QString::fromUtf8(bytes, size);
@@ -325,6 +329,7 @@ static QScriptValue js_include(QScriptContext *context, QScriptEngine *engine)
 		      line, path.toUtf8().constData(), result.toString().toUtf8().constData());
 		return QScriptValue(false);
 	}
+	debug(LOG_SCRIPT, "Included new script file %s", path.toUtf8().constData());
 	return QScriptValue(true);
 }
 
@@ -454,7 +459,7 @@ bool updateScripts()
 	return true;
 }
 
-bool loadPlayerScript(QString path, int player, int difficulty)
+QScriptEngine *loadPlayerScript(QString path, int player, int difficulty)
 {
 	ASSERT_OR_RETURN(false, player < MAX_PLAYERS, "Player index %d out of bounds", player);
 	QScriptEngine *engine = new QScriptEngine();
@@ -463,12 +468,12 @@ bool loadPlayerScript(QString path, int player, int difficulty)
 	if (!loadFile(path.toUtf8().constData(), &bytes, &size))
 	{
 		debug(LOG_ERROR, "Failed to read script file \"%s\"", path.toUtf8().constData());
-		return false;
+		return NULL;
 	}
 	QString source = QString::fromUtf8(bytes, size);
 	free(bytes);
 	QScriptSyntaxCheckResult syntax = QScriptEngine::checkSyntax(source);
-	ASSERT_OR_RETURN(false, syntax.state() == QScriptSyntaxCheckResult::Valid, "Syntax error in %s line %d: %s", 
+	ASSERT_OR_RETURN(NULL, syntax.state() == QScriptSyntaxCheckResult::Valid, "Syntax error in %s line %d: %s",
 	                 path.toUtf8().constData(), syntax.errorLineNumber(), syntax.errorMessage().toUtf8().constData());
 	// Special functions
 	engine->globalObject().setProperty("setTimer", engine->newFunction(js_setTimer));
@@ -525,16 +530,22 @@ bool loadPlayerScript(QString path, int player, int difficulty)
 		it.next();
 		internalNamespace.insert(it.name(), 1);
 	}
+
 	// We need to always save the 'me' special variable.
 	//== \item[me] The player the script is currently running as.
 	engine->globalObject().setProperty("me", player, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	QScriptValue result = engine->evaluate(source, path);
-	ASSERT_OR_RETURN(false, !engine->hasUncaughtException(), "Uncaught exception at line %d, file %s: %s", 
-	                 engine->uncaughtExceptionLineNumber(), path.toUtf8().constData(), result.toString().toUtf8().constData());
 
 	// We also need to save the special 'scriptName' variable.
 	//== \item[scriptName] Base name of the script that is running.
 	engine->globalObject().setProperty("scriptName", basename.baseName(), QScriptValue::ReadOnly | QScriptValue::Undeletable);
+
+	// We also need to save the special 'scriptPath' variable.
+	//== \item[scriptPath] Base path of the script that is running.
+	engine->globalObject().setProperty("scriptPath", basename.path(), QScriptValue::ReadOnly | QScriptValue::Undeletable);
+
+	QScriptValue result = engine->evaluate(source, path);
+	ASSERT_OR_RETURN(false, !engine->hasUncaughtException(), "Uncaught exception at line %d, file %s: %s", 
+	                 engine->uncaughtExceptionLineNumber(), path.toUtf8().constData(), result.toString().toUtf8().constData());
 
 	// Register script
 	scripts.push_back(engine);
@@ -543,7 +554,7 @@ bool loadPlayerScript(QString path, int player, int difficulty)
 	monitors.insert(engine, monitor);
 
 	debug(LOG_SAVE, "Created script engine %d for player %d from %s", scripts.size() - 1, player, path.toUtf8().constData());
-	return true;
+	return engine;
 }
 
 bool loadGlobalScript(QString path)
@@ -744,6 +755,29 @@ bool jsEvaluate(QScriptEngine *engine, const QString &text)
 	}
 	console("%s", result.toString().toUtf8().constData());
 	return true;
+}
+
+void jsAutogame()
+{
+	QString srcPath(PHYSFS_getWriteDir());
+	srcPath += PHYSFS_getDirSeparator();
+	srcPath += "scripts";
+	QString path = QFileDialog::getOpenFileName(NULL, "Choose AI script to load", srcPath, "Javascript files (*.js)");
+	QFileInfo basename(path);
+	if (path.isEmpty())
+	{
+		console("No file specified");
+		return;
+	}
+	QScriptEngine *engine = loadPlayerScript("scripts/" + basename.fileName(), selectedPlayer, DIFFICULTY_MEDIUM);
+	if (!engine)
+	{
+		console("Failed to load selected AI! Check your logs to see why.");
+		return;
+	}
+	console("Loaded the %s AI script for current player!", path.toUtf8().constData());
+	callFunction(engine, "eventGameInit", QScriptValueList());
+	callFunction(engine, "eventStartLevel", QScriptValueList());
 }
 
 void jsShowDebug()

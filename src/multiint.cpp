@@ -650,12 +650,6 @@ void readAIs()
 		sstrcpy(path, basepath);
 		sstrcat(path, *i);
 		WzConfig aiconf(path, WzConfig::ReadOnly);
-		if (aiconf.status() != QSettings::NoError)
-		{
-			debug(LOG_ERROR, "Failed to open AI %s", path);
-			continue;
-		}
-
 		AIDATA ai;
 		aiconf.beginGroup("AI");
 		sstrcpy(ai.name, aiconf.value("name", "error").toString().toAscii().constData());
