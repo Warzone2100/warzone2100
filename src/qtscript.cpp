@@ -461,7 +461,7 @@ bool updateScripts()
 
 QScriptEngine *loadPlayerScript(QString path, int player, int difficulty)
 {
-	ASSERT_OR_RETURN(false, player < MAX_PLAYERS, "Player index %d out of bounds", player);
+	ASSERT_OR_RETURN(NULL, player < MAX_PLAYERS, "Player index %d out of bounds", player);
 	QScriptEngine *engine = new QScriptEngine();
 	UDWORD size;
 	char *bytes = NULL;
@@ -544,7 +544,7 @@ QScriptEngine *loadPlayerScript(QString path, int player, int difficulty)
 	engine->globalObject().setProperty("scriptPath", basename.path(), QScriptValue::ReadOnly | QScriptValue::Undeletable);
 
 	QScriptValue result = engine->evaluate(source, path);
-	ASSERT_OR_RETURN(false, !engine->hasUncaughtException(), "Uncaught exception at line %d, file %s: %s", 
+	ASSERT_OR_RETURN(NULL, !engine->hasUncaughtException(), "Uncaught exception at line %d, file %s: %s", 
 	                 engine->uncaughtExceptionLineNumber(), path.toUtf8().constData(), result.toString().toUtf8().constData());
 
 	// Register script
