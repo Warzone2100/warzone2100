@@ -302,6 +302,15 @@ static QScriptValue js_include(QScriptContext *context, QScriptEngine *engine)
 	QString basePath = engine->globalObject().property("scriptPath").toString();
 	QFileInfo basename(context->argument(0).toString());
 	QString path = basePath + "/" + basename.fileName();
+	// allow users to use subdirectories too
+	if (PHYSFS_exists(basename.filePath().toUtf8().constData()))
+	{
+		path = basename.filePath(); // use this path instead (from read-only dir)
+	}
+	else if (PHYSFS_exists(QString("scripts/" + basename.filePath()).toUtf8().constData()))
+	{
+		path = "scripts/" + basename.filePath(); // use this path instead (in user write dir)
+	}
 	UDWORD size;
 	char *bytes = NULL;
 	if (!loadFile(path.toUtf8().constData(), &bytes, &size))
