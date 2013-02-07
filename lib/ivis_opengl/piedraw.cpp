@@ -248,6 +248,17 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELI
 			pie_ActivateFallback(SHADER_COMPONENT, shape, teamcolour, colour);
 		}
 	}
+	else
+	{
+		if (shaders)
+		{
+			pie_DeactivateShader();
+		}
+		else
+		{
+			pie_DeactivateFallback();
+		}
+	}
 
 	if (pieFlag & pie_HEIGHT_SCALED)	// construct
 	{
@@ -282,17 +293,6 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELI
 
 	polyCount += shape->npolys;
 
-	if (light)
-	{
-		if (shaders)
-		{
-			pie_DeactivateShader();
-		}
-		else
-		{
-			pie_DeactivateFallback();
-		}
-	}
 	pie_SetShaderEcmEffect(false);
 }
 
@@ -589,6 +589,7 @@ static void pie_DrawShadows(void)
 
 void pie_RemainingPasses(void)
 {
+	GL_DEBUG("Remaining passes - shadows");
 	// Draw shadows
 	if (shadows)
 	{
@@ -596,6 +597,7 @@ void pie_RemainingPasses(void)
 	}
 	// Draw models
 	// TODO, sort list to reduce state changes
+	GL_DEBUG("Remaining passes - opaque models");
 	glPushMatrix();
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_NORMAL_ARRAY);
@@ -607,6 +609,7 @@ void pie_RemainingPasses(void)
 	}
 	// Draw translucent models last
 	// TODO, sort list by Z order to do translucency correctly
+	GL_DEBUG("Remaining passes - translucent models");
 	for (unsigned i = 0; i < tshapes.size(); ++i)
 	{
 		glLoadMatrixf(tshapes[i].matrix);
@@ -615,9 +618,18 @@ void pie_RemainingPasses(void)
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_NORMAL_ARRAY);
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+	if (pie_GetShaderUsage())
+	{
+		pie_DeactivateShader();
+	}
+	else
+	{
+		pie_DeactivateFallback();
+	}
 	glPopMatrix();
 	tshapes.resize(0);
 	shapes.resize(0);
+	GL_DEBUG("Remaining passes - done");
 }
 
 void pie_GetResetCounts(unsigned int* pPieCount, unsigned int* pPolyCount, unsigned int* pStateCount)

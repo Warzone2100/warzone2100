@@ -35,21 +35,6 @@
 
 static GLuint skyboxbuffers[VBO_MINIMAL];
 
-/*
- *	Source
- */
-
-void pie_ClipBegin(int x1, int y1, int x2, int y2)
-{
-	glEnable(GL_SCISSOR_TEST);
-	glScissor(x1, screenHeight - y2, x2 - x1, y2 - y1);
-}
-
-void pie_ClipEnd()
-{
-	glDisable(GL_SCISSOR_TEST);
-}
-
 #define VW_VERTICES 5
 void pie_DrawViewingWindow(Vector3i *v, UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y2, PIELIGHT colour)
 {
@@ -133,6 +118,7 @@ void pie_Skybox_Init()
 	                   u + w * 6, v + h, u + w * 6, v,
 	                   u + w * 8, v + h, u + w * 8, v };
 
+	GL_DEBUG("Initializing skybox");
 	glGenBuffers(VBO_MINIMAL, skyboxbuffers);
 	glBindBuffer(GL_ARRAY_BUFFER, skyboxbuffers[VBO_VERTEX]);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vert), vert, GL_STATIC_DRAW);
@@ -148,6 +134,8 @@ void pie_Skybox_Shutdown()
 
 void pie_DrawSkybox(float scale)
 {
+	GL_DEBUG("Drawing skybox");
+
 	glPushAttrib(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT | GL_ENABLE_BIT | GL_FOG_BIT);
 	// no use in updating the depth buffer
 	glDepthMask(GL_FALSE);

@@ -671,6 +671,8 @@ static void setupConnectionStatusForm(void)
 /// Render the 3D world
 void draw3DScene( void )
 {
+	GL_DEBUG("Draw 3D scene - start");
+
 	/* What frame number are we on? */
 	currentGameFrame = frameGetFrameNumber();
 
@@ -845,6 +847,8 @@ void draw3DScene( void )
 	{
 		showDroidPaths();
 	}
+
+	GL_DEBUG("Draw 3D scene - end");
 }
 
 
@@ -927,6 +931,8 @@ static void drawTiles(iView *player)
 	int idx, jdx;
 	Vector3f theSun;
 
+	GL_DEBUG("Draw 3D scene - drawTiles");
+
 	/* ---------------------------------------------------------------- */
 	/* Do boundary and extent checking                                  */
 	/* ---------------------------------------------------------------- */
@@ -996,6 +1002,7 @@ static void drawTiles(iView *player)
 	avUpdateTiles();
 
 	// now we are about to draw the terrain
+	GL_DEBUG("Draw 3D scene - terrain");
 	pie_SetAlphaTest(false);
 	pie_SetFogStatus(true);
 
@@ -1013,6 +1020,7 @@ static void drawTiles(iView *player)
 	renderSurroundings();
 
 	// and prepare for rendering the models
+	GL_DEBUG("Draw 3D scene - models");
 	pie_SetRendMode(REND_OPAQUE);
 	pie_SetAlphaTest(true);
 
@@ -1029,6 +1037,7 @@ static void drawTiles(iView *player)
 	displayDelivPoints(); // bucket render implemented
 	display3DProjectiles(); // bucket render implemented
 
+	GL_DEBUG("Draw 3D scene - particles");
 	atmosDrawParticles();
 
 	// prepare for the water and the lightmap
@@ -1044,8 +1053,10 @@ static void drawTiles(iView *player)
 	// and to the warzone modelview transform
 	pie_MatEnd();
 
+	GL_DEBUG("Draw 3D scene - bucket render");
 	bucketRenderCurrentList();
 
+	GL_DEBUG("Draw 3D scene - blue prints");
 	displayBlueprints();
 
 	pie_RemainingPasses(); // draws shadows and transparent shapes
@@ -1061,6 +1072,8 @@ static void drawTiles(iView *player)
 
 	/* Clear the matrix stack */
 	pie_MatEnd();
+
+	GL_DEBUG("Draw 3D scene - end of tiles");
 }
 
 /// Initialise the fog, skybox and some other stuff

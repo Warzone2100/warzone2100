@@ -464,6 +464,10 @@ void pie_ActivateShader(SHADER_MODE shaderMode, iIMDShape* shape, PIELIGHT teamc
 		glUniform1i(locTex1, 1);
 		glUniform1i(locTex2, 2);
 
+		// These do not change during our drawing pass
+		glUniform1i(locFog, rendStates.fog);
+		glUniform1f(locTime, timeState);
+
 		currentShaderMode  = shaderMode;
 	}
 
@@ -475,8 +479,6 @@ void pie_ActivateShader(SHADER_MODE shaderMode, iIMDShape* shape, PIELIGHT teamc
 	glUniform1f(locStretch, shaderStretch);
 	glUniform1i(locTCMask, maskpage != iV_TEX_INVALID);
 	glUniform1i(locNormalMap, normalpage != iV_TEX_INVALID);
-	glUniform1i(locFog, rendStates.fog);
-	glUniform1f(locTime, timeState);
 	glUniform1i(locEcm, ecmState);
 
 	if (maskpage != iV_TEX_INVALID)

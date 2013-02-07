@@ -41,7 +41,4 @@ void pie_DrawSkybox(float scale);
 void pie_Skybox_Init();
 void pie_Skybox_Shutdown();
 
-void pie_ClipBegin(int x1, int y1, int x2, int y2);
-void pie_ClipEnd(void);
-
 #endif // _piedef_h
