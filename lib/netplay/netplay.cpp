@@ -389,32 +389,39 @@ void NETBroadcastPlayerInfo(uint32_t index)
 	NETSendPlayerInfoTo(index, NET_ALL_PLAYERS);
 }
 
-static signed int NET_CreatePlayer(const char* name)
+static int NET_CreatePlayer(char const *name)
 {
-	signed int index;
-
-	// only look for spots up to the max players allowed on the map
-	for (index = 0; index < game.maxPlayers; index++)
+	int index = -1;
+	int position = INT_MAX;
+	// Only look for spots up to the max players allowed on the map.
+	for (int i = 0; i < game.maxPlayers; ++i)
 	{
-		if (NetPlay.players[index].allocated == false && NetPlay.players[index].ai == AI_OPEN)
+		PLAYER const &p = NetPlay.players[i];
+		if (!p.allocated && p.ai == AI_OPEN && p.position < position)
 		{
-			char buf[250] = {'\0'};
-
-			ssprintf(buf, "A new player has been created. Player, %s, is set to slot %u", name, index);
-			debug(LOG_NET,"%s", buf);
-			NETlogEntry(buf, SYNC_FLAG, index);
-			NET_InitPlayer(index, false);	// re-init everything
-			NetPlay.players[index].allocated = true;
-			sstrcpy(NetPlay.players[index].name, name);
-			NetPlay.playercount++;
-			sync_counter.joins++;
-			return index;
+			index = i;
+			position = p.position;
 		}
 	}
 
-	debug(LOG_ERROR, "Could not find place for player %s", name);
-	NETlogEntry("Could not find a place for player!", SYNC_FLAG, index);
-	return -1;
+	if (index == -1)
+	{
+		debug(LOG_ERROR, "Could not find place for player %s", name);
+		NETlogEntry("Could not find a place for player!", SYNC_FLAG, index);
+		return -1;
+	}
+
+	char buf[250] = {'\0'};
+
+	ssprintf(buf, "A new player has been created. Player, %s, is set to slot %u", name, index);
+	debug(LOG_NET, "%s", buf);
+	NETlogEntry(buf, SYNC_FLAG, index);
+	NET_InitPlayer(index, false);  // re-init everything
+	NetPlay.players[index].allocated = true;
+	sstrcpy(NetPlay.players[index].name, name);
+	++NetPlay.playercount;
+	++sync_counter.joins;
+	return index;
 }
 
 static void NET_DestroyPlayer(unsigned int index)
