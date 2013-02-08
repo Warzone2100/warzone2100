@@ -916,10 +916,10 @@ static QScriptValue js_addLabel(QScriptContext *context, QScriptEngine *engine)
 	value.type = qval.property("type").toInt32();
 	value.id = qval.property("id").toInt32();
 	value.player = qval.property("player").toInt32();
-	value.p1.x = qval.property("x").toInt32();
-	value.p1.y = qval.property("y").toInt32();
-	value.p2.x = qval.property("x2").toInt32();
-	value.p2.y = qval.property("y2").toInt32();
+	value.p1.x = world_coord(qval.property("x").toInt32());
+	value.p1.y = world_coord(qval.property("y").toInt32());
+	value.p2.x = world_coord(qval.property("x2").toInt32());
+	value.p2.y = world_coord(qval.property("y2").toInt32());
 	if (value.type == OBJ_DROID || value.type == OBJ_STRUCTURE || value.type == OBJ_FEATURE)
 	{
 		BASE_OBJECT *psObj = IdToObject((OBJECT_TYPE)value.type, value.id, value.player);
