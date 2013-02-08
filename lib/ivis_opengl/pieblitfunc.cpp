@@ -60,12 +60,6 @@ struct PIERECT  ///< Screen rectangle.
 {
 	SWORD x, y, w, h;
 };
-struct PIEIMAGE  ///< An area of texture.
-{
-	SDWORD texPage;
-	SWORD tu, tv, tw, th;
-	float invTextureSize;
-};
 
 /***************************************************************************/
 /*
@@ -197,35 +191,37 @@ static bool assertValidImage(IMAGEFILE *imageFile, unsigned id)
 	return true;
 }
 
-static void pie_DrawImage(const PIEIMAGE *image, const PIERECT *dest, PIELIGHT colour = WZCOL_WHITE)
+static void pie_DrawImage(IMAGEFILE *imageFile, int id, Vector2i size, const PIERECT *dest, PIELIGHT colour = WZCOL_WHITE)
 {
-	pie_SetTexturePage(image->texPage);
+	ImageDef const &image2 = imageFile->imageDefs[id];
+	GLuint texPage = imageFile->pages[image2.TPageID].id;
+	GLfloat invTextureSize = 1.f / imageFile->pages[image2.TPageID].size;
+	int tu = image2.Tu;
+	int tv = image2.Tv;
+
+	pie_SetTexturePage(texPage);
 	glColor4ubv(colour.vector);
 	glBegin(GL_TRIANGLE_STRIP);
-		glTexCoord2f(image->tu * image->invTextureSize, image->tv * image->invTextureSize);
+		glTexCoord2f(tu * invTextureSize, tv * invTextureSize);
 		glVertex2f(dest->x, dest->y);
 
-		glTexCoord2f((image->tu + image->tw) * image->invTextureSize, image->tv * image->invTextureSize);
+		glTexCoord2f((tu + size.x) * invTextureSize, tv * invTextureSize);
 		glVertex2f(dest->x + dest->w, dest->y);
 
-		glTexCoord2f(image->tu * image->invTextureSize, (image->tv + image->th) * image->invTextureSize);
+		glTexCoord2f(tu * invTextureSize, (tv + size.y) * invTextureSize);
 		glVertex2f(dest->x, dest->y + dest->h);
 
-		glTexCoord2f((image->tu + image->tw) * image->invTextureSize, (image->tv + image->th) * image->invTextureSize);
+		glTexCoord2f((tu + size.x) * invTextureSize, (tv + size.y) * invTextureSize);
 		glVertex2f(dest->x + dest->w, dest->y + dest->h);
 	glEnd();
 }
 
-static PIEIMAGE makePieImage(IMAGEFILE *imageFile, unsigned id, PIERECT *dest = NULL, int x = 0, int y = 0)
+static Vector2i makePieImage(IMAGEFILE *imageFile, unsigned id, PIERECT *dest = NULL, int x = 0, int y = 0)
 {
 	ImageDef const &image = imageFile->imageDefs[id];
-	PIEIMAGE pieImage;
-	pieImage.texPage = imageFile->pages[image.TPageID].id;
-	pieImage.invTextureSize = 1.f / imageFile->pages[image.TPageID].size;
-	pieImage.tu = image.Tu;
-	pieImage.tv = image.Tv;
-	pieImage.tw = image.Width;
-	pieImage.th = image.Height;
+	Vector2i pieImage;
+	pieImage.x = image.Width;
+	pieImage.y = image.Height;
 	if (dest != NULL)
 	{
 		dest->x = x + image.XOffset;
@@ -244,12 +240,12 @@ void iV_DrawImage(IMAGEFILE *ImageFile, UWORD ID, int x, int y)
 	}
 
 	PIERECT dest;
-	PIEIMAGE pieImage = makePieImage(ImageFile, ID, &dest, x, y);
+	Vector2i pieImage = makePieImage(ImageFile, ID, &dest, x, y);
 
 	pie_SetRendMode(REND_ALPHA);
 	pie_SetAlphaTest(true);
 
-	pie_DrawImage(&pieImage, &dest);
+	pie_DrawImage(ImageFile, ID, pieImage, &dest);
 }
 
 void iV_DrawImageTc(Image image, Image imageTc, int x, int y, PIELIGHT colour)
@@ -260,14 +256,14 @@ void iV_DrawImageTc(Image image, Image imageTc, int x, int y, PIELIGHT colour)
 	}
 
 	PIERECT dest;
-	PIEIMAGE pieImage   = makePieImage(image.images, image.id, &dest, x, y);
-	PIEIMAGE pieImageTc = makePieImage(imageTc.images, imageTc.id);
+	Vector2i pieImage   = makePieImage(image.images, image.id, &dest, x, y);
+	Vector2i pieImageTc = makePieImage(imageTc.images, imageTc.id);
 
 	pie_SetRendMode(REND_ALPHA);
 	pie_SetAlphaTest(true);
 
-	pie_DrawImage(&pieImage, &dest);
-	pie_DrawImage(&pieImageTc, &dest, colour);
+	pie_DrawImage(image.images, image.id, pieImage, &dest);
+	pie_DrawImage(imageTc.images, imageTc.id, pieImageTc, &dest, colour);
 }
 
 // Repeat a texture
@@ -282,22 +278,22 @@ void iV_DrawImageRepeatX(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int Width
 	pie_SetAlphaTest(true);
 
 	PIERECT dest;
-	PIEIMAGE pieImage = makePieImage(ImageFile, ID, &dest, x, y);
+	Vector2i pieImage = makePieImage(ImageFile, ID, &dest, x, y);
 
 	hRemainder = Width % Image->Width;
 
 	for (hRep = 0; hRep < Width / Image->Width; hRep++)
 	{
-		pie_DrawImage(&pieImage, &dest);
+		pie_DrawImage(ImageFile, ID, pieImage, &dest);
 		dest.x += Image->Width;
 	}
 
 	// draw remainder
 	if (hRemainder > 0)
 	{
-		pieImage.tw = hRemainder;
+		pieImage.x = hRemainder;
 		dest.w = hRemainder;
-		pie_DrawImage(&pieImage, &dest);
+		pie_DrawImage(ImageFile, ID, pieImage, &dest);
 	}
 }
 
@@ -312,22 +308,22 @@ void iV_DrawImageRepeatY(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int Heigh
 	pie_SetAlphaTest(true);
 
 	PIERECT dest;
-	PIEIMAGE pieImage = makePieImage(ImageFile, ID, &dest, x, y);
+	Vector2i pieImage = makePieImage(ImageFile, ID, &dest, x, y);
 
 	vRemainder = Height % Image->Height;
 
 	for (vRep = 0; vRep < Height / Image->Height; vRep++)
 	{
-		pie_DrawImage(&pieImage, &dest);
+		pie_DrawImage(ImageFile, ID, pieImage, &dest);
 		dest.y += Image->Height;
 	}
 
 	// draw remainder
 	if (vRemainder > 0)
 	{
-		pieImage.th = vRemainder;
+		pieImage.y = vRemainder;
 		dest.h = vRemainder;
-		pie_DrawImage(&pieImage, &dest);
+		pie_DrawImage(ImageFile, ID, pieImage, &dest);
 	}
 }
 
@@ -339,14 +335,14 @@ void iV_DrawImageScaled(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int w, int
 	}
 
 	PIERECT dest;
-	PIEIMAGE pieImage = makePieImage(ImageFile, ID, &dest, x, y);
+	Vector2i pieImage = makePieImage(ImageFile, ID, &dest, x, y);
 	dest.w = w;
 	dest.h = h;
 
 	pie_SetRendMode(REND_ALPHA);
 	pie_SetAlphaTest(true);
 
-	pie_DrawImage(&pieImage, &dest);
+	pie_DrawImage(ImageFile, ID, pieImage, &dest);
 }
 
 /* FIXME: WTF is this supposed to do? Looks like some other functionality
