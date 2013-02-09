@@ -52,7 +52,6 @@ struct WARZONE_GLOBALS
 	int8_t		SPcolor;
 	int			MPcolour;
 	FSAA_LEVEL  fsaa;
-	RENDER_MODE shaders;
 	bool		Fullscreen;
 	bool		soundEnabled;
 	bool		trapCursor;
@@ -91,7 +90,6 @@ void war_SetDefaultStates(void)//Sets all states
 	war_SetMusicEnabled(true);
 	war_SetSPcolor(0);		//default color is green
 	war_setMPcolour(-1);            // Default color is random.
-	war_SetShaders(SHADERS_ON);
 }
 
 void war_SetSPcolor(int color)
@@ -137,16 +135,6 @@ void war_setFSAA(unsigned int fsaa)
 unsigned int war_getFSAA()
 {
 	return warGlobs.fsaa;
-}
-
-void war_SetShaders(unsigned shaders)
-{
-	warGlobs.shaders = (RENDER_MODE)shaders;
-}
-
-unsigned war_GetShaders()
-{
-	return warGlobs.shaders;
 }
 
 void war_SetTrapCursor(bool b)

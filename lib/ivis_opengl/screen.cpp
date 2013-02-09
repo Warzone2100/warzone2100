@@ -168,30 +168,13 @@ bool screenInitialise()
 	}
 
 	bool haveARB_vertex_buffer_object = GLEW_ARB_vertex_buffer_object || GLEW_VERSION_1_5;
-	bool haveARB_texture_env_crossbar = GLEW_ARB_texture_env_crossbar || GLEW_NV_texture_env_combine4 || GLEW_VERSION_1_4;
-	bool canRunFallback = GLEW_VERSION_1_2 && haveARB_vertex_buffer_object && haveARB_texture_env_crossbar;
 	bool canRunShaders = GLEW_VERSION_1_2 && haveARB_vertex_buffer_object && glslVersion >= std::make_pair(1, 20);  // glGetString(GL_SHADING_LANGUAGE_VERSION) >= "1.20"
 
-	pie_SetFallbackAvailability(canRunFallback);
-
-	if (canRunShaders)
+	screen_EnableMissingFunctions();  // We need to do this before pie_LoadShaders(), but the effect of this call will be undone later by iV_TextInit(), so we will need to call it again.
+	if (!canRunShaders || !pie_LoadShaders())
 	{
-		screen_EnableMissingFunctions();  // We need to do this before pie_LoadShaders(), but the effect of this call will be undone later by iV_TextInit(), so we will need to call it again.
-		if (pie_LoadShaders())
-		{
-			pie_SetShaderAvailability(true);
-		}
-	}
-	else if (canRunFallback)
-	{
-		// corner cases: vbo(core 1.5 or ARB ext), texture crossbar (core 1.4 or ARB ext)
-		debug(LOG_POPUP, _("OpenGL GLSL shader version 1.20 is not supported by your system. Some things may look wrong. Please upgrade your graphics driver/hardware, if possible."));
-	}
-	else
-	{
-		// We write this file in hopes that people will upload the information in it to us.
 		writeGameInfo("WZdebuginfo.txt");
-		debug(LOG_FATAL, _("OpenGL 1.2 + VBO + TEC is not supported by your system. The game requires this. Please upgrade your graphics drivers/hardware, if possible."));
+		debug(LOG_FATAL, _("OpenGL GLSL shader version 1.20 is not supported by your system. The game requires this. Please upgrade your graphics drivers/hardware, if possible."));
 		exit(1);
 	}
 

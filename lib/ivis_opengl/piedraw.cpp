@@ -135,19 +135,10 @@ static std::vector<SHAPE> shapes;
 
 static void pie_Draw3DButton2(iIMDShape *shape, const PIELIGHT &colour, const PIELIGHT &teamcolour)
 {
-	const bool shaders = pie_GetShaderUsage();
-
 	pie_SetAlphaTest(true);
 	pie_SetFogStatus(false);
 	pie_SetDepthBufferStatus(DEPTH_CMP_LEQ_WRT_ON);
-	if (shaders)
-	{
-		pie_ActivateShader(SHADER_BUTTON, shape, teamcolour, colour);
-	}
-	else
-	{
-		pie_ActivateFallback(SHADER_BUTTON, shape, teamcolour, colour);
-	}
+	pie_ActivateShader(SHADER_BUTTON, shape, teamcolour, colour);
 	pie_SetRendMode(REND_OPAQUE);
 	glColor4ubv(colour.vector);     // Only need to set once for entire model
 	pie_SetTexturePage(shape->texpage);
@@ -158,39 +149,18 @@ static void pie_Draw3DButton2(iIMDShape *shape, const PIELIGHT &colour, const PI
 	glBindBuffer(GL_ARRAY_BUFFER, shape->buffers[VBO_NORMAL]); glNormalPointer(GL_FLOAT, 0, NULL);
 	glBindBuffer(GL_ARRAY_BUFFER, shape->buffers[VBO_TEXCOORD]); glTexCoordPointer(2, GL_FLOAT, 0, NULL);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, shape->buffers[VBO_INDEX]);
-	if (!shaders)
-	{
-		glClientActiveTexture(GL_TEXTURE1);
-		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-		glBindBuffer(GL_ARRAY_BUFFER, shape->buffers[VBO_TEXCOORD]); glTexCoordPointer(2, GL_FLOAT, 0, NULL);
-	}
 	glDrawElements(GL_TRIANGLES, shape->npolys * 3, GL_UNSIGNED_SHORT, NULL);
-	if (!shaders)
-	{
-		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-		glClientActiveTexture(GL_TEXTURE0);
-	}
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_NORMAL_ARRAY);
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-
 	polyCount += shape->npolys;
-
-	if (shaders)
-	{
-		pie_DeactivateShader();
-	}
-	else
-	{
-		pie_DeactivateFallback();
-	}
+	pie_DeactivateShader();
 	pie_SetDepthBufferStatus(DEPTH_CMP_ALWAYS_WRT_ON);
 }
 
 static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELIGHT teamcolour, int pieFlag, int pieFlagData)
 {
 	bool light = true;
-	bool shaders = pie_GetShaderUsage();
 
 	pie_SetAlphaTest((pieFlag & pie_PREMULTIPLIED) == 0);
 
@@ -239,25 +209,11 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELI
 		glMaterialfv(GL_FRONT, GL_SPECULAR, shape->material[LIGHT_SPECULAR]);
 		glMaterialf(GL_FRONT, GL_SHININESS, shape->shininess);
 		glMaterialfv(GL_FRONT, GL_EMISSION, shape->material[LIGHT_EMISSIVE]);
-		if (shaders)
-		{
-			pie_ActivateShader(SHADER_COMPONENT, shape, teamcolour, colour);
-		}
-		else
-		{
-			pie_ActivateFallback(SHADER_COMPONENT, shape, teamcolour, colour);
-		}
+		pie_ActivateShader(SHADER_COMPONENT, shape, teamcolour, colour);
 	}
 	else
 	{
-		if (shaders)
-		{
-			pie_DeactivateShader();
-		}
-		else
-		{
-			pie_DeactivateFallback();
-		}
+		pie_DeactivateShader();
 	}
 
 	if (pieFlag & pie_HEIGHT_SCALED)	// construct
@@ -278,18 +234,7 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELI
 	glBindBuffer(GL_ARRAY_BUFFER, shape->buffers[VBO_NORMAL]); glNormalPointer(GL_FLOAT, 0, NULL);
 	glBindBuffer(GL_ARRAY_BUFFER, shape->buffers[VBO_TEXCOORD]); glTexCoordPointer(2, GL_FLOAT, 0, NULL);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, shape->buffers[VBO_INDEX]);
-	if (!shaders)
-	{
-		glClientActiveTexture(GL_TEXTURE1);
-		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-		glBindBuffer(GL_ARRAY_BUFFER, shape->buffers[VBO_TEXCOORD]); glTexCoordPointer(2, GL_FLOAT, 0, NULL);
-	}
 	glDrawElements(GL_TRIANGLES, shape->npolys * 3, GL_UNSIGNED_SHORT, BUFFER_OFFSET(frame * shape->npolys * 3 * sizeof(uint16_t)));
-	if (!shaders)
-	{
-		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-		glClientActiveTexture(GL_TEXTURE0);
-	}
 
 	polyCount += shape->npolys;
 
@@ -618,14 +563,7 @@ void pie_RemainingPasses(void)
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_NORMAL_ARRAY);
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-	if (pie_GetShaderUsage())
-	{
-		pie_DeactivateShader();
-	}
-	else
-	{
-		pie_DeactivateFallback();
-	}
+	pie_DeactivateShader();
 	glPopMatrix();
 	tshapes.resize(0);
 	shapes.resize(0);

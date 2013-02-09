@@ -44,7 +44,7 @@
 #include "radar.h"
 #include "seqdisp.h"
 #include "texture.h"
-#include "warzoneconfig.h"	// renderMode
+#include "warzoneconfig.h"
 
 // ////////////////////////////////////////////////////////////////////////////
 
@@ -117,7 +117,6 @@ bool loadConfig()
 	if (ini.contains("textureSize")) setTextureSize(ini.value("textureSize").toInt());
 	NetPlay.isUPNP = ini.value("UPnP", true).toBool();
 	if (ini.contains("FSAA")) war_setFSAA(ini.value("FSAA").toInt());
-	if (ini.contains("shaders")) war_SetShaders(ini.value("shaders").toInt());
 	// Leave this to false, some system will fail and they can't see the system popup dialog!
 	war_setFullscreen(ini.value("fullscreen", false).toBool());
 	war_SetTrapCursor(ini.value("trapCursor", false).toBool());
@@ -184,7 +183,6 @@ bool saveConfig()
 	ini.setValue("radarTerrainMode",(SDWORD)radarDrawMode);
 	ini.setValue("trapCursor", war_GetTrapCursor());
 	ini.setValue("vsync", war_GetVsync());
-	ini.setValue("shaders", war_GetShaders());
 	ini.setValue("textureSize", getTextureSize());
 	ini.setValue("FSAA", war_getFSAA());
 	ini.setValue("UPnP", (SDWORD)NetPlay.isUPNP);

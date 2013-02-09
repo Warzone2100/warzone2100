@@ -990,18 +990,6 @@ static bool startVideoOptionsMenu(void)
 			break;
 	}
 
-	// Shaders
-	addTextButton(FRONTEND_SHADERS, FRONTEND_POS6X-35, FRONTEND_POS7Y, _("Shaders"), 0);
-
-	if (war_GetShaders() == SHADERS_ON || war_GetShaders() == SHADERS_ONLY)
-	{
-		addTextButton(FRONTEND_SHADERS_R, FRONTEND_POS6M-55, FRONTEND_POS7Y, _("On"), 0);
-	}
-	else
-	{
-		addTextButton(FRONTEND_SHADERS_R, FRONTEND_POS6M-55, FRONTEND_POS7Y, _("Off"), 0);
-	}
-
 	// Add some text down the side of the form
 	addSideText(FRONTEND_SIDETEXT, FRONTEND_SIDEX, FRONTEND_SIDEY, _("VIDEO OPTIONS"));
 
@@ -1160,28 +1148,6 @@ bool runVideoOptionsMenu(void)
 			else
 			{
 				widgSetString(psWScreen, FRONTEND_VSYNC_R, _("Off"));
-			}
-			break;
-		}
-
-		case FRONTEND_SHADERS:
-		case FRONTEND_SHADERS_R:
-		{
-			switch (war_GetShaders())
-			{
-				case SHADERS_ON:
-					war_SetShaders(SHADERS_OFF);
-					pie_SetShaderUsage(false);
-					widgSetString(psWScreen, FRONTEND_SHADERS_R, _("Off"));
-					break;
-				case SHADERS_OFF:
-					war_SetShaders(SHADERS_ON);
-					pie_SetShaderUsage(true);
-					widgSetString(psWScreen, FRONTEND_SHADERS_R, _("On"));
-					break;
-				case FALLBACK:
-				case SHADERS_ONLY:
-					break;
 			}
 			break;
 		}

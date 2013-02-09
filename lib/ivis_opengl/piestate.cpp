@@ -36,9 +36,6 @@
  *	Global Variables
  */
 
-static bool shadersAvailable = false;
-static bool shaderUsage = false;
-static bool fallbackAvailable = true;
 static GLuint shaderProgram[SHADER_MAX];
 static GLfloat shaderStretch = 0;
 static GLint locTeam, locStretch, locTCMask, locFog, locNormalMap, locEcm, locTime;
@@ -129,39 +126,6 @@ void pie_SetFogColour(PIELIGHT colour)
 PIELIGHT pie_GetFogColour(void)
 {
 	return rendStates.fogColour;
-}
-
-bool pie_GetShaderAvailability(void)
-{
-	return shadersAvailable;
-}
-
-void pie_SetShaderAvailability(bool availability)
-{
-	shadersAvailable = availability;
-}
-
-bool pie_GetFallbackAvailability(void)
-{
-	return fallbackAvailable;
-}
-
-void pie_SetFallbackAvailability(bool availability)
-{
-	fallbackAvailable = availability;
-}
-
-bool pie_GetShaderUsage(void)
-{
-	return shaderUsage;
-}
-
-void pie_SetShaderUsage(bool usage)
-{
-	bool valid = !usage && pie_GetFallbackAvailability();
-	valid = valid || (usage && pie_GetShaderAvailability());
-	if (valid)
-		shaderUsage = usage;
 }
 
 // Read shader into text buffer
@@ -363,78 +327,6 @@ void pie_SetShaderEcmEffect(bool value)
 void pie_SetShaderStretchDepth(float stretch)
 {
 	shaderStretch = stretch;
-}
-
-void pie_ActivateFallback(SHADER_MODE, iIMDShape* shape, PIELIGHT teamcolour, PIELIGHT colour)
-{
-	if (shape->tcmaskpage == iV_TEX_INVALID)
-	{
-		return;
-	}
-
-	//Set the environment colour with tcmask
-	GLfloat tc_env_colour[4];
-	pal_PIELIGHTtoRGBA4f(&tc_env_colour[0], teamcolour);
-
-	// TU0
-	glActiveTexture(GL_TEXTURE0);
-	pie_SetTexturePage(shape->texpage);
-	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE,	GL_COMBINE);
-	glTexEnvfv(GL_TEXTURE_ENV, GL_TEXTURE_ENV_COLOR, tc_env_colour);
-
-	// TU0 RGB
-	glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_RGB,		GL_ADD_SIGNED);
-	glTexEnvi(GL_TEXTURE_ENV, GL_SOURCE0_RGB,		GL_TEXTURE);
-	glTexEnvi(GL_TEXTURE_ENV, GL_OPERAND0_RGB,		GL_SRC_COLOR);
-	glTexEnvi(GL_TEXTURE_ENV, GL_SOURCE1_RGB,		GL_CONSTANT);
-	glTexEnvi(GL_TEXTURE_ENV, GL_OPERAND1_RGB,		GL_SRC_COLOR);
-
-	// TU0 Alpha
-	glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_ALPHA,		GL_REPLACE);
-	glTexEnvi(GL_TEXTURE_ENV, GL_SOURCE0_ALPHA,		GL_TEXTURE);
-	glTexEnvi(GL_TEXTURE_ENV, GL_OPERAND0_ALPHA,	GL_SRC_ALPHA);
-
-	// TU1
-	glActiveTexture(GL_TEXTURE1);
-	glEnable(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, pie_Texture(shape->tcmaskpage));
-	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE,	GL_COMBINE);
-
-	// TU1 RGB
-	glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_RGB,		GL_INTERPOLATE);
-	glTexEnvi(GL_TEXTURE_ENV, GL_SOURCE0_RGB,		GL_PREVIOUS);
-	glTexEnvi(GL_TEXTURE_ENV, GL_OPERAND0_RGB,		GL_SRC_COLOR);
-	glTexEnvi(GL_TEXTURE_ENV, GL_SOURCE1_RGB,		GL_TEXTURE0);
-	glTexEnvi(GL_TEXTURE_ENV, GL_OPERAND1_RGB,		GL_SRC_COLOR);
-	glTexEnvi(GL_TEXTURE_ENV, GL_SOURCE2_RGB,		GL_TEXTURE);
-	glTexEnvi(GL_TEXTURE_ENV, GL_OPERAND2_RGB,		GL_SRC_ALPHA);
-
-	// TU1 Alpha
-	glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_ALPHA,		GL_REPLACE);
-	glTexEnvi(GL_TEXTURE_ENV, GL_SOURCE0_ALPHA,		GL_PREVIOUS);
-	glTexEnvi(GL_TEXTURE_ENV, GL_OPERAND0_ALPHA,	GL_SRC_ALPHA);
-
-	if (GLEW_ARB_imaging || GLEW_EXT_blend_color)
-	{
-		glEnable(GL_BLEND);
-		glBlendFunc(GL_CONSTANT_COLOR, GL_ZERO);
-		glBlendColor(colour.byte.r / 255.0, colour.byte.g / 255.0, colour.byte.b / 255.0, colour.byte.a / 255.0);
-	}
-
-	glActiveTexture(GL_TEXTURE0);
-}
-
-void pie_DeactivateFallback()
-{
-	glDisable(GL_BLEND);
-	rendStates.rendMode = REND_OPAQUE;
-
-	glActiveTexture(GL_TEXTURE1);
-	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-	glDisable(GL_TEXTURE_2D);
-
-	glActiveTexture(GL_TEXTURE0);
-	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 }
 
 void pie_ActivateShader(SHADER_MODE shaderMode, iIMDShape* shape, PIELIGHT teamcolour, PIELIGHT colour)
