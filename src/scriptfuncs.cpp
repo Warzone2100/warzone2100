@@ -4114,7 +4114,6 @@ bool scrMyResponsibility(void)
 bool scrStructureBuiltInRange(void)
 {
 	SDWORD		player, index, x, y, range;
-	BASE_OBJECT	*psCurr;
 	STRUCTURE	*psStruct = NULL;
 	STRUCTURE_STATS *psTarget;
 
@@ -4132,9 +4131,11 @@ bool scrStructureBuiltInRange(void)
 	// Now look through the players list of structures to see if this type exists within range
 	psTarget = &asStructureStats[index];
 
-	gridStartIterate(x, y, range);
-	for (psCurr = gridIterate(); psCurr; psCurr = gridIterate())
+	static GridList gridList;  // static to avoid allocations.
+	gridList = gridStartIterate(x, y, range);
+	for (GridIterator gi = gridList.begin(); gi != gridList.end(); ++gi)
 	{
+		BASE_OBJECT *psCurr = *gi;
 		if (psCurr->type == OBJ_STRUCTURE)
 		{
 			psStruct = (STRUCTURE *)psCurr;

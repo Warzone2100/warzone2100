@@ -24,7 +24,9 @@
 #ifndef __INCLUDED_SRC_MAPGRID_H__
 #define __INCLUDED_SRC_MAPGRID_H__
 
-extern void **gridIterator;  ///< The iterator.
+
+typedef std::vector<BASE_OBJECT *> GridList;
+typedef GridList::const_iterator GridIterator;
 
 
 // initialise the grid system
@@ -38,40 +40,15 @@ extern void gridShutDown(void);
 extern void gridReset(void);
 
 #define PREVIOUS_DEFAULT_GRID_SEARCH_RADIUS (20*TILE_UNITS)
-/// Find all objects within radius. Call gridIterate() to get the search results.
-extern void gridStartIterate(int32_t x, int32_t y, uint32_t radius);
+/// Find all objects within radius.
+GridList const &gridStartIterate(int32_t x, int32_t y, uint32_t radius);
 
 // Isn't, but could be used by some cluster system. Don't really understand what cluster.c is for.
-/// Find all objects within radius where object->type == OBJ_DROID && object->player == player. Call gridIterate() to get the search results.
-extern void gridStartIterateDroidsByPlayer(int32_t x, int32_t y, uint32_t radius, int player);
+/// Find all objects within radius where object->type == OBJ_DROID && object->player == player.
+GridList const &gridStartIterateDroidsByPlayer(int32_t x, int32_t y, uint32_t radius, int player);
 
 // Used for visibility.
-/// Find all objects within radius where object->seenThisTick[player] != 255. Call gridIterate() to get the search results.
-extern void gridStartIterateUnseen(int32_t x, int32_t y, uint32_t radius, int player);
-
-/// Get the next search result from gridStartIterate, or NULL if finished.
-static inline BASE_OBJECT *gridIterate()
-{
-	BASE_OBJECT *ret = (BASE_OBJECT *)*gridIterator++;
-	if (ret == NULL)
-	{
-		gridIterator = NULL;  // Detect (by crashing in a reproducible way) if calling gridIterate() again before gridStartIterate().
-	}
-	return ret;
-}
-
-/// Saves the list returned by gridIterate(), so that future gridStartIterate() calls will not overwrite the list.
-static inline void gridGetIterateList(std::vector<BASE_OBJECT *> *list)
-{
-	list->clear();
-	for (BASE_OBJECT *psObj = gridIterate(); psObj != NULL; psObj = gridIterate())
-	{
-		list->push_back(psObj);
-	}
-}
-
-// Isn't, but could be used by some weird recursive calls in cluster.c.
-/// Make a copy of the list. Free with free().
-BASE_OBJECT **gridIterateDup(void);
+/// Find all objects within radius where object->seenThisTick[player] != 255.
+GridList const &gridStartIterateUnseen(int32_t x, int32_t y, uint32_t radius, int player);
 
 #endif // __INCLUDED_SRC_MAPGRID_H__

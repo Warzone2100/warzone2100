@@ -538,8 +538,6 @@ static void processVisibilitySelf(BASE_OBJECT *psObj)
 // Calculate which objects we can see. Better to call after processVisibilitySelf, since that check is cheaper.
 static void processVisibilityVision(BASE_OBJECT *psViewer)
 {
-	BASE_OBJECT *psObj;
-
 	if (psViewer->type == OBJ_FEATURE)
 	{
 		return;
@@ -547,9 +545,12 @@ static void processVisibilityVision(BASE_OBJECT *psViewer)
 
 	// get all the objects from the grid the droid is in
 	// Will give inconsistent results if hasSharedVision is not an equivalence relation.
-	gridStartIterateUnseen(psViewer->pos.x, psViewer->pos.y, psViewer->sensorRange, psViewer->player);
-	while (psObj = gridIterate(), psObj != NULL)
+	static GridList gridList;  // static to avoid allocations.
+	gridList = gridStartIterateUnseen(psViewer->pos.x, psViewer->pos.y, psViewer->sensorRange, psViewer->player);
+	for (GridIterator gi = gridList.begin(); gi != gridList.end(); ++gi)
 	{
+		BASE_OBJECT *psObj = *gi;
+
 		int val = visibleObject(psViewer, psObj, false);
 
 		// If we've got ranged line of sight...
