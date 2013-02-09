@@ -368,10 +368,19 @@ void pie_ActivateShader(SHADER_MODE shaderMode, iIMDShape* shape, PIELIGHT teamc
 
 	pal_PIELIGHTtoRGBA4f(&colour4f[0], teamcolour);
 	glUniform4fv(locTeam, 1, &colour4f[0]);
-	glUniform1f(locStretch, shaderStretch);
 	glUniform1i(locTCMask, maskpage != iV_TEX_INVALID);
-	glUniform1i(locNormalMap, normalpage != iV_TEX_INVALID);
-	glUniform1i(locEcm, ecmState);
+	if (locStretch >= 0)
+	{
+		glUniform1f(locStretch, shaderStretch);
+	}
+	if (locNormalMap >= 0)
+	{
+		glUniform1i(locNormalMap, normalpage != iV_TEX_INVALID);
+	}
+	if (locEcm >= 0)
+	{
+		glUniform1i(locEcm, ecmState);
+	}
 
 	if (maskpage != iV_TEX_INVALID)
 	{

@@ -23,7 +23,6 @@
  * Originally by Alex McLean & Jeremy Sallis, Pumpkin Studios, EIDOS INTERACTIVE
  */
 
-
 #include "lib/framework/frame.h"
 #include "lib/framework/opengl.h"
 #include "lib/framework/math_ext.h"
@@ -137,7 +136,6 @@ extern bool writeGameInfo(const char *pFileName); // Used to help debug issues w
 // In model coordinates where x is east, y is up and z is north, rather than world coordinates where x is east, y is south and z is up.
 // To get the real camera position, still need to add Vector3i(player.p.x, 0, player.p.z).
 static Vector3i actualCameraPosition;
-
 
 bool	bRender3DOnly;
 static bool	bRangeDisplay = false;
@@ -1482,13 +1480,10 @@ void displayStaticObjects( void )
 					if ( psStructure->visible[selectedPlayer] )
 					{
 						//check not a resource extractors
-						if (psStructure->pStructureType->type !=
-							REF_RESOURCE_EXTRACTOR)
+						if (psStructure->pStructureType->type != REF_RESOURCE_EXTRACTOR)
 						{
 							displayAnimation( psAnimObj, false );
 						}
-						//check that a power gen exists before animationg res extrac
-						//else if (getPowerGenExists(psStructure->player))
 						/*check the building is active*/
 						else if (psStructure->pFunctionality->resourceExtractor.active)
 						{
@@ -1696,12 +1691,7 @@ void displayBlueprints(void)
 /// Draw Factory Delivery Points
 void displayDelivPoints(void)
 {
-	FLAG_POSITION	*psDelivPoint;
-
-	//only do the selected players'
-	/* go through all DPs for that player */
-	for(psDelivPoint = apsFlagPosLists[selectedPlayer]; psDelivPoint != NULL;
-		psDelivPoint = psDelivPoint->psNext)
+	for (FLAG_POSITION *psDelivPoint = apsFlagPosLists[selectedPlayer]; psDelivPoint != NULL; psDelivPoint = psDelivPoint->psNext)
 	{
 		if (clipXY(psDelivPoint->coords.x, psDelivPoint->coords.y))
 		{

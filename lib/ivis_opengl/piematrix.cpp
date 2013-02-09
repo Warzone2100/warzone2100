@@ -50,35 +50,15 @@ struct SDMATRIX
 	       d, e, f,
 	       g, h, i,
 	       j, k, l;
+
+	SDMATRIX() : a(FP12_MULTIPLIER), b(0), c(0), d(0), e(FP12_MULTIPLIER), f(0), g(0), h(0), i(FP12_MULTIPLIER), j(0), k(0), l(0) {}
 };
 static SDMATRIX	aMatrixStack[MATRIX_MAX];
 static SDMATRIX *psMatrix = &aMatrixStack[0];
 
 //*************************************************************************
 
-static const SDMATRIX Identitymatrix = {
-	FP12_MULTIPLIER,                  0,               0,
-	              0,    FP12_MULTIPLIER,               0,
-	              0,                  0, FP12_MULTIPLIER,
-	              0,                  0,               0,
-};
 static SDWORD _MATRIX_INDEX;
-
-//*************************************************************************
-//*** reset transformation matrix stack and make current identity
-//*
-//******
-
-static void pie_MatReset(void)
-{
-	psMatrix = &aMatrixStack[0];
-
-	// make 1st matrix identity
-	*psMatrix = Identitymatrix;
-
-	glLoadIdentity();
-}
-
 
 //*************************************************************************
 //*** create new matrix from current transformation matrix and make current
@@ -168,7 +148,6 @@ void pie_MatScale(float scale)
 //*** matrix rotate y (yaw) current transformation matrix
 //*
 //******
-
 void pie_MatRotY(uint16_t y)
 {
 	/*
@@ -209,7 +188,6 @@ void pie_MatRotY(uint16_t y)
 //*** matrix rotate z (roll) current transformation matrix
 //*
 //******
-
 void pie_MatRotZ(uint16_t z)
 {
 	/*
@@ -250,7 +228,6 @@ void pie_MatRotZ(uint16_t z)
 //*** matrix rotate x (pitch) current transformation matrix
 //*
 //******
-
 void pie_MatRotX(uint16_t x)
 {
 	/*
@@ -286,6 +263,14 @@ void pie_MatRotX(uint16_t x)
 	}
 }
 
+//*************************************************************************
+//*** get current transformation matrix
+//*
+//******
+void pie_GetMatrix(float *matrix)
+{
+	glGetFloatv(GL_MODELVIEW_MATRIX, matrix);
+}
 
 /*!
  * 3D vector perspective projection
@@ -363,11 +348,10 @@ void pie_SetGeometricOffset(int x, int y)
 	rendSurface.ycentre = y;
 }
 
-/** Sets up transformation matrices/quaternions and trig tables
- */
+/** Sets up transformation matrices */
 void pie_MatInit(void)
 {
-	// init matrix/quat stack
-	pie_MatReset();
+	psMatrix = &aMatrixStack[0];
+	glLoadIdentity();
 }
 

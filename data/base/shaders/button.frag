@@ -5,7 +5,6 @@ uniform sampler2D Texture0;
 uniform sampler2D Texture1;
 uniform vec4 teamcolour;
 uniform int tcmask;
-//uniform int fogEnabled;
 
 void main(void)
 {

@@ -136,9 +136,6 @@ static SDWORD bucketCalculateZ(RENDER_TYPE objectType, void* pObject)
 			position.x = psSimpObj->pos.x - player.p.x;
 			position.z = -(psSimpObj->pos.y - player.p.z);
 
-			//if((objectType == RENDER_STRUCTURE) && (((STRUCTURE*)pObject)->
-			//	pStructureType->type >= REF_DEFENSE) &&
-			//	(((STRUCTURE*)pObject)->pStructureType->type<=REF_TOWER4))
 			if((objectType == RENDER_STRUCTURE) &&
 				((((STRUCTURE*)pObject)->pStructureType->type == REF_DEFENSE) ||
 				 (((STRUCTURE*)pObject)->pStructureType->type == REF_WALL) ||

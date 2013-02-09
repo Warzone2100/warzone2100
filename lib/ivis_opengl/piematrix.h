@@ -70,6 +70,7 @@ extern void pie_MatRotX(uint16_t x);
 extern void pie_MatRotY(uint16_t y);
 extern void pie_MatRotZ(uint16_t z);
 extern int32_t pie_RotateProject(const Vector3i *src, Vector2i *dest);
+void pie_GetMatrix(float *matrix);
 
 //*************************************************************************
 

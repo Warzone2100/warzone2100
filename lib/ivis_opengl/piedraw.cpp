@@ -427,7 +427,7 @@ void pie_Draw3DShape(iIMDShape *shape, int frame, int team, PIELIGHT colour, int
 	else
 	{
 		SHAPE tshape;
-		glGetFloatv(GL_MODELVIEW_MATRIX, tshape.matrix);
+		pie_GetMatrix(tshape.matrix);
 		tshape.shape = shape;
 		tshape.frame = frame;
 		tshape.colour = colour;
@@ -447,7 +447,7 @@ void pie_Draw3DShape(iIMDShape *shape, int frame, int team, PIELIGHT colour, int
 
 				// draw a shadow
 				ShadowcastingShape scshape;
-				glGetFloatv(GL_MODELVIEW_MATRIX, scshape.matrix);
+				pie_GetMatrix(scshape.matrix);
 				distance = scshape.matrix[12] * scshape.matrix[12];
 				distance += scshape.matrix[13] * scshape.matrix[13];
 				distance += scshape.matrix[14] * scshape.matrix[14];
