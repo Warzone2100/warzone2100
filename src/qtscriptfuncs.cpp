@@ -3491,11 +3491,11 @@ static QScriptValue js_getDroidLimit(QScriptContext *context, QScriptEngine *eng
 		DROID_TYPE type = (DROID_TYPE)context->argument(1).toInt32();
 		if (type == DROID_COMMAND)
 		{
-			return QScriptValue(getMaxCommanders(context->argument(1).toInt32()));
+			return QScriptValue(getMaxCommanders(context->argument(0).toInt32()));
 		}
 		else if (type == DROID_CONSTRUCT)
 		{
-			return QScriptValue(getMaxConstructors(context->argument(1).toInt32()));
+			return QScriptValue(getMaxConstructors(context->argument(0).toInt32()));
 		}
 		// else return general unit limit
 	}
