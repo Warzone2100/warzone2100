@@ -111,7 +111,7 @@ QScriptValue convStructure(STRUCTURE *psStruct, QScriptEngine *engine)
 {
 	QScriptValue value = convObj(psStruct, engine);
 	value.setProperty("status", (int)psStruct->status, QScriptValue::ReadOnly);
-	value.setProperty("health", 100 * structureBody(psStruct) / MAX(1, psStruct->body), QScriptValue::ReadOnly);
+	value.setProperty("health", 100 * psStruct->body / MAX(1, structureBody(psStruct)), QScriptValue::ReadOnly);
 	switch (psStruct->pStructureType->type) // don't bleed our source insanities into the scripting world
 	{
 	case REF_WALL:
