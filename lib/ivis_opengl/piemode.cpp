@@ -111,7 +111,7 @@ void pie_ScreenFlip(int clearMode)
 
 	if (screen_GetBackDrop())
 	{
-		screen_Upload(NULL, screen_getMapPreview());
+		screen_Display();
 	}
 }
 

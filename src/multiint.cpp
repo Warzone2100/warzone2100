@@ -433,7 +433,7 @@ static void loadEmptyMapPreview()
 
 	screen_enableMapPreview(ex, ey, playerpos);
 
-	screen_Upload(imageData, true);
+	screen_Upload(imageData);
 	free(imageData);
 }
 
@@ -595,7 +595,7 @@ void loadMapPreview(bool hideInterface)
 
 	screen_enableMapPreview(mapWidth, mapHeight, playerpos);
 
-	screen_Upload(imageData, true);
+	screen_Upload(imageData);
 
 	free(imageData);
 
@@ -3641,8 +3641,6 @@ void frontendMultiMessages(void)
 			{
 				setLobbyError(KICK_TYPE);
 				stopJoining();
-				//screen_RestartBackDrop();
-				//changeTitleMode(TITLE);
 				pie_LoadBackDrop(SCREEN_RANDOMBDROP);
 				debug(LOG_ERROR, "You have been kicked, because %s ", reason);
 			}

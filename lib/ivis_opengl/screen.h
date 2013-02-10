@@ -49,19 +49,18 @@ extern void screen_SetBackDropFromFile(const char* filename);
 extern void screen_StopBackDrop(void);
 extern void screen_RestartBackDrop(void);
 extern bool screen_GetBackDrop(void);
-extern void screen_Upload(const char *newBackDropBmp, bool preview);
+extern void screen_Upload(const char *newBackDropBmp);
+void screen_Display();
 
 /* screendump */
 extern void screenDumpToDisk(const char* path);
 
 extern int wz_texture_compression;
 
-
 extern void screenDoDumpToDiskIfRequired(void);
 
 void screen_enableMapPreview(int width, int height, Vector2i *playerpositions);
 void screen_disableMapPreview(void);
-bool screen_getMapPreview(void);
 void screen_EnableMissingFunctions();
 
 struct OPENGL_DATA

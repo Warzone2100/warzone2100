@@ -54,6 +54,8 @@ static char		screendump_filename[PATH_MAX];
 static bool		screendump_required = false;
 static GLuint		backDropTexture = 0;
 
+static GLuint buffers[VBO_COUNT];;
+
 static int preview_width = 0, preview_height = 0;
 static Vector2i player_pos[MAX_PLAYERS];
 static bool mappreview = false;
@@ -182,6 +184,10 @@ bool screenInitialise()
 
 	pie_Skybox_Init();
 
+	// Generate backdrop buffers
+	glGenBuffers(VBO_MINIMAL, buffers);
+	glGenTextures(1, &backDropTexture);
+
 	glErrors();
 	return true;
 }
@@ -189,6 +195,9 @@ bool screenInitialise()
 void screenShutDown(void)
 {
 	pie_Skybox_Shutdown();
+
+	glDeleteBuffers(VBO_MINIMAL, buffers);
+	glDeleteTextures(1, &backDropTexture);
 
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_ACCUM_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
@@ -270,31 +279,27 @@ void screen_SetBackDropFromFile(const char* filename)
 	// Otherwise WZ will think it is still loaded and not load it again
 	pie_SetTexturePage(TEXPAGE_EXTERN);
 
-	if( strcmp(extension,".png") == 0 )
+	if (strcmp(extension, ".png") == 0)
 	{
-		if (iV_loadImage_PNG( filename, &image ) )
+		if (iV_loadImage_PNG(filename, &image))
 		{
-			if (backDropTexture == 0)
-				glGenTextures(1, &backDropTexture);
-
 			glBindTexture(GL_TEXTURE_2D, backDropTexture);
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA,
-					image.width, image.height,
-					0, iV_getPixelFormat(&image), GL_UNSIGNED_BYTE, image.bmp);
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image.width, image.height,
+			             0, iV_getPixelFormat(&image), GL_UNSIGNED_BYTE, image.bmp);
 			glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-
 			iV_unloadImage(&image);
+			screen_Upload(NULL);
 		}
-		return;
 	}
 	else
+	{
 		debug(LOG_ERROR, "Unknown extension \"%s\" for image \"%s\"!", extension, filename);
+	}
 }
-//===================================================================
 
 void screen_StopBackDrop(void)
 {
@@ -311,105 +316,44 @@ bool screen_GetBackDrop(void)
 	return bBackDrop;
 }
 
-//******************************************************************
-//slight hack to display maps (or whatever) in background.
-//bitmap MUST be (BACKDROP_HACK_WIDTH * BACKDROP_HACK_HEIGHT) for now.
-void screen_Upload(const char *newBackDropBmp, bool preview)
+void screen_Display()
 {
-	static bool processed = false;
-	int x1 = 0, x2 = screenWidth, y1 = 0, y2 = screenHeight, i, scale = 0, w = 0, h = 0;
-	float tx = 1, ty = 1;
-	const float aspect = screenWidth / (float)screenHeight, backdropAspect = 4 / (float)3;
-
-	if (aspect < backdropAspect)
-	{
-		int offset = (screenWidth - screenHeight * backdropAspect) / 2;
-		x1 += offset;
-		x2 -= offset;
-	}
-	else
-	{
-		int offset = (screenHeight - screenWidth / backdropAspect) / 2;
-		y1 += offset;
-		y2 -= offset;
-	}
-
-	if(newBackDropBmp != NULL)
-	{
-		if (processed)	// lets free a texture when we use a new one.
-		{
-			glDeleteTextures( 1, &backDropTexture );
-		}
-
-		glGenTextures(1, &backDropTexture);
-		pie_SetTexturePage(TEXPAGE_NONE);
-		glBindTexture(GL_TEXTURE_2D, backDropTexture);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB,
-			BACKDROP_HACK_WIDTH, BACKDROP_HACK_HEIGHT,
-			0, GL_RGB, GL_UNSIGNED_BYTE, newBackDropBmp);
-
-		glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-		processed = true;
-	}
-
 	pie_SetDepthBufferStatus(DEPTH_CMP_ALWAYS_WRT_OFF);
 
 	// Make sure the current texture page is reloaded after we are finished
 	// Otherwise WZ will think it is still loaded and not load it again
 	pie_SetTexturePage(TEXPAGE_EXTERN);
-
 	glBindTexture(GL_TEXTURE_2D, backDropTexture);
-	glColor3f(1, 1, 1);
 
-	if (preview)
+	// Draw backdrop
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+	glBindBuffer(GL_ARRAY_BUFFER, buffers[VBO_TEXCOORD]); glTexCoordPointer(2, GL_FLOAT, 0, NULL);
+	glBindBuffer(GL_ARRAY_BUFFER, buffers[VBO_VERTEX]); glVertexPointer(2, GL_FLOAT, 0, NULL);
+	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glErrors();
+
+	if (mappreview)
 	{
-		int s1, s2;
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		int s1 = screenWidth / preview_width;
+		int s2 = screenHeight / preview_height;
+		int scale = MIN(s1, s2);
+		int w = preview_width * scale;
+		int h = preview_height * scale;
 
-		s1 = screenWidth / preview_width;
-		s2 = screenHeight / preview_height;
-		scale = MIN(s1, s2);
-
-		w = preview_width * scale;
-		h = preview_height * scale;
-		x1 = screenWidth / 2 - w / 2;
-		x2 = screenWidth / 2 + w / 2;
-		y1 = screenHeight / 2 - h / 2;
-		y2 = screenHeight / 2 + h / 2;
-
-		tx = preview_width / (float)BACKDROP_HACK_WIDTH;
-		ty = preview_height / (float)BACKDROP_HACK_HEIGHT;
-	}
-	else
-	{
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	}
-
-	glBegin(GL_TRIANGLE_STRIP);
-		glTexCoord2f(0, 0);
-		glVertex2f(x1, y1);
-		glTexCoord2f(tx, 0);
-		glVertex2f(x2, y1);
-		glTexCoord2f(0, ty);
-		glVertex2f(x1, y2);
-		glTexCoord2f(tx, ty);
-		glVertex2f(x2, y2);
-	glEnd();
-
-	if (preview)
-	{
-		for (i = 0; i < MAX_PLAYERS; i++)
+		for (int i = 0; i < MAX_PLAYERS; i++)
 		{
 			int x = player_pos[i].x;
 			int y = player_pos[i].y;
 			char text[5];
 
 			if (x == 0x77777777)
+			{
 				continue;
+			}
 
 			x = screenWidth / 2 - w / 2 + x * scale;
 			y = screenHeight / 2 - h / 2 + y * scale;
@@ -425,6 +369,67 @@ void screen_Upload(const char *newBackDropBmp, bool preview)
 		}
 	}
 	pie_SetDepthBufferStatus(DEPTH_CMP_LEQ_WRT_ON);
+}
+
+//******************************************************************
+//slight hack to display maps (or whatever) in background.
+//bitmap MUST be (BACKDROP_HACK_WIDTH * BACKDROP_HACK_HEIGHT) for now.
+void screen_Upload(const char *newBackDropBmp)
+{
+	int x1 = 0, x2 = screenWidth, y1 = 0, y2 = screenHeight, scale = 0, w = 0, h = 0;
+	GLfloat tx = 1, ty = 1;
+	const float aspect = screenWidth / (float)screenHeight, backdropAspect = 4 / (float)3;
+
+	if (aspect < backdropAspect)
+	{
+		int offset = (screenWidth - screenHeight * backdropAspect) / 2;
+		x1 += offset;
+		x2 -= offset;
+	}
+	else
+	{
+		int offset = (screenHeight - screenWidth / backdropAspect) / 2;
+		y1 += offset;
+		y2 -= offset;
+	}
+
+	if (newBackDropBmp) // preview
+	{
+		pie_SetTexturePage(TEXPAGE_EXTERN);
+		glBindTexture(GL_TEXTURE_2D, backDropTexture);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, BACKDROP_HACK_WIDTH, BACKDROP_HACK_HEIGHT, 0, GL_RGB, GL_UNSIGNED_BYTE, newBackDropBmp);
+		glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+		int s1 = screenWidth / preview_width;
+		int s2 = screenHeight / preview_height;
+		scale = MIN(s1, s2);
+
+		w = preview_width * scale;
+		h = preview_height * scale;
+		x1 = screenWidth / 2 - w / 2;
+		x2 = screenWidth / 2 + w / 2;
+		y1 = screenHeight / 2 - h / 2;
+		y2 = screenHeight / 2 + h / 2;
+
+		tx = preview_width / (float)BACKDROP_HACK_WIDTH;
+		ty = preview_height / (float)BACKDROP_HACK_HEIGHT;
+	}
+
+	// Generate coordinates and put them into VBOs
+	GLfloat texcoords[8] = { 0.0f, 0.0f,  tx, 0.0,  0.0f, ty,  tx, ty };
+	GLfloat vertices[8] = { x1, y1,  x2, y1,  x1, y2,  x2, y2 };
+	glBindBuffer(GL_ARRAY_BUFFER, buffers[VBO_TEXCOORD]);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(texcoords), texcoords, GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, buffers[VBO_VERTEX]);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+	glErrors();
 }
 
 void screen_enableMapPreview(int width, int height, Vector2i *playerpositions)
@@ -443,11 +448,6 @@ void screen_enableMapPreview(int width, int height, Vector2i *playerpositions)
 void screen_disableMapPreview(void)
 {
 	mappreview = false;
-}
-
-bool screen_getMapPreview(void)
-{
-	return mappreview;
 }
 
 // Screenshot code goes below this
