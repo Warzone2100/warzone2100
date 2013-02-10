@@ -31,12 +31,10 @@
 #include "mapgrid.h"
 #include "pointtree.h"
 
-// the current state of the iterator
-void **gridIterator;
 
-PointTree *gridPointTree = NULL;  // A quad-tree-like object.
-PointTree::Filter *gridFiltersUnseen;
-PointTree::Filter *gridFiltersDroidsByPlayer;
+static PointTree *gridPointTree = NULL;  // A quad-tree-like object.
+static PointTree::Filter *gridFiltersUnseen;
+static PointTree::Filter *gridFiltersDroidsByPlayer;
 
 // initialise the grid system
 bool gridInitialise(void)
@@ -102,7 +100,7 @@ static bool isInRadius(int32_t x, int32_t y, uint32_t radius)
 // initialise the grid system to start iterating through units that
 // could affect a location (x,y in world coords)
 template<class Condition>
-static void gridStartIterateFiltered(int32_t x, int32_t y, uint32_t radius, PointTree::Filter *filter, Condition const &condition)
+static GridList const &gridStartIterateFiltered(int32_t x, int32_t y, uint32_t radius, PointTree::Filter *filter, Condition const &condition)
 {
 	if (filter == NULL)
 	{
@@ -127,20 +125,31 @@ static void gridStartIterateFiltered(int32_t x, int32_t y, uint32_t radius, Poin
 		}
 	}
 	gridPointTree->lastQueryResults.erase(w, i);  // Erase all points that were a bit too far.
-	gridPointTree->lastQueryResults.push_back(NULL);  // NULL-terminate the result.
-	gridIterator = &gridPointTree->lastQueryResults[0];
 	/*
 	// In case you are curious.
-	debug(LOG_WARNING, "gridStartIterateFiltered(%d, %d, %u) found %u objects", x, y, radius, (unsigned)gridPointTree->lastQueryResults.size() - 1);
+	debug(LOG_WARNING, "gridStartIterateFiltered(%d, %d, %u) found %u objects", x, y, radius, (unsigned)gridPointTree->lastQueryResults.size());
 	*/
+	static GridList gridList;
+	gridList.resize(gridPointTree->lastQueryResults.size());
+	for (unsigned n = 0; n < gridList.size(); ++n)
+	{
+		gridList[n] = (BASE_OBJECT *)gridPointTree->lastQueryResults[n];
+	}
+	return gridList;
 }
 
 template<class Condition>
-static void gridStartIterateFilteredArea(int32_t x, int32_t y, int32_t x2, int32_t y2, Condition const &condition)
+static GridList const &gridStartIterateFilteredArea(int32_t x, int32_t y, int32_t x2, int32_t y2, Condition const &condition)
 {
 	gridPointTree->query(x, y, x2, y2);
-	gridPointTree->lastQueryResults.push_back(NULL);  // NULL-terminate the result.
-	gridIterator = &gridPointTree->lastQueryResults[0];
+
+	static GridList gridList;
+	gridList.resize(gridPointTree->lastQueryResults.size());
+	for (unsigned n = 0; n < gridList.size(); ++n)
+	{
+		gridList[n] = (BASE_OBJECT *)gridPointTree->lastQueryResults[n];
+	}
+	return gridList;
 }
 
 struct ConditionTrue
@@ -151,14 +160,14 @@ struct ConditionTrue
 	}
 };
 
-void gridStartIterate(int32_t x, int32_t y, uint32_t radius)
+GridList const &gridStartIterate(int32_t x, int32_t y, uint32_t radius)
 {
-	gridStartIterateFiltered(x, y, radius, NULL, ConditionTrue());
+	return gridStartIterateFiltered(x, y, radius, NULL, ConditionTrue());
 }
 
-void gridStartIterateArea(int32_t x, int32_t y, uint32_t x2, uint32_t y2)
+GridList const &gridStartIterateArea(int32_t x, int32_t y, uint32_t x2, uint32_t y2)
 {
-	gridStartIterateFilteredArea(x, y, x2, y2, ConditionTrue());
+	return gridStartIterateFilteredArea(x, y, x2, y2, ConditionTrue());
 }
 
 struct ConditionDroidsByPlayer
@@ -171,9 +180,9 @@ struct ConditionDroidsByPlayer
 	int player;
 };
 
-void gridStartIterateDroidsByPlayer(int32_t x, int32_t y, uint32_t radius, int player)
+GridList const &gridStartIterateDroidsByPlayer(int32_t x, int32_t y, uint32_t radius, int player)
 {
-	gridStartIterateFiltered(x, y, radius, &gridFiltersDroidsByPlayer[player], ConditionDroidsByPlayer(player));
+	return gridStartIterateFiltered(x, y, radius, &gridFiltersDroidsByPlayer[player], ConditionDroidsByPlayer(player));
 }
 
 struct ConditionUnseen
@@ -186,9 +195,9 @@ struct ConditionUnseen
 	int player;
 };
 
-void gridStartIterateUnseen(int32_t x, int32_t y, uint32_t radius, int player)
+GridList const &gridStartIterateUnseen(int32_t x, int32_t y, uint32_t radius, int player)
 {
-	gridStartIterateFiltered(x, y, radius, &gridFiltersUnseen[player], ConditionUnseen(player));
+	return gridStartIterateFiltered(x, y, radius, &gridFiltersUnseen[player], ConditionUnseen(player));
 }
 
 BASE_OBJECT **gridIterateDup(void)

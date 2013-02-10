@@ -842,9 +842,11 @@ static void proj_InFlightFunc(PROJECTILE *psProj)
 	closestCollisionSpacetime.time = 0xFFFFFFFF;
 
 	/* Check nearby objects for possible collisions */
-	gridStartIterate(psProj->pos.x, psProj->pos.y, PROJ_NEIGHBOUR_RANGE);
-	for (BASE_OBJECT *psTempObj = gridIterate(); psTempObj != NULL; psTempObj = gridIterate())
+	static GridList gridList;  // static to avoid allocations.
+	gridList = gridStartIterate(psProj->pos.x, psProj->pos.y, PROJ_NEIGHBOUR_RANGE);
+	for (GridIterator gi = gridList.begin(); gi != gridList.end(); ++gi)
 	{
+		BASE_OBJECT *psTempObj = *gi;
 		CHECK_OBJECT(psTempObj);
 
 		if (std::find(psProj->psDamaged.begin(), psProj->psDamaged.end(), psTempObj) != psProj->psDamaged.end())
@@ -1214,9 +1216,11 @@ static void proj_ImpactFunc( PROJECTILE *psObj )
 		/* Note when it exploded for the explosion effect */
 		psObj->born = gameTime;
 
-		gridStartIterate(psObj->pos.x, psObj->pos.y, psStats->radius);
-		for (BASE_OBJECT *psCurr = gridIterate(); psCurr != NULL; psCurr = gridIterate())
+		static GridList gridList;  // static to avoid allocations.
+		gridList = gridStartIterate(psObj->pos.x, psObj->pos.y, psStats->radius);
+		for (GridIterator gi = gridList.begin(); gi != gridList.end(); ++gi)
 		{
+			BASE_OBJECT *psCurr = *gi;
 			if (psCurr->died)
 			{
 				continue;  // Do not damage dead objects further.
@@ -1398,9 +1402,11 @@ static void proj_checkPeriodicalDamage(PROJECTILE *psProj)
 
 	WEAPON_STATS *psStats = psProj->psWStats;
 
-	gridStartIterate(psProj->pos.x, psProj->pos.y, psStats->periodicalDamageRadius);
-	for (BASE_OBJECT *psCurr = gridIterate(); psCurr != NULL; psCurr = gridIterate())
+	static GridList gridList;  // static to avoid allocations.
+	gridList = gridStartIterate(psProj->pos.x, psProj->pos.y, psStats->periodicalDamageRadius);
+	for (GridIterator gi = gridList.begin(); gi != gridList.end(); ++gi)
 	{
+		BASE_OBJECT *psCurr = *gi;
 		if (psCurr->died)
 		{
 			continue;  // Do not damage dead objects further.

@@ -346,7 +346,7 @@ QScriptValue convStructure(STRUCTURE *psStruct, QScriptEngine *engine)
 	value.setProperty("isRadarDetector", objRadarDetector(psStruct), QScriptValue::ReadOnly);
 	value.setProperty("range", range, QScriptValue::ReadOnly);
 	value.setProperty("status", (int)psStruct->status, QScriptValue::ReadOnly);
-	value.setProperty("health", 100 * structureBody(psStruct) / MAX(1, psStruct->body), QScriptValue::ReadOnly);
+	value.setProperty("health", 100 * psStruct->body / MAX(1, structureBody(psStruct)), QScriptValue::ReadOnly);
 	value.setProperty("cost", psStruct->pStructureType->powerToBuild, QScriptValue::ReadOnly);
 	switch (psStruct->pStructureType->type) // don't bleed our source insanities into the scripting world
 	{
@@ -3241,10 +3241,12 @@ static QScriptValue js_enumRange(QScriptContext *context, QScriptEngine *engine)
 	{
 		seen = context->argument(4).toBool();
 	}
-	gridStartIterate(x, y, range);
+	static GridList gridList;  // static to avoid allocations.
+	gridList = gridStartIterate(x, y, range);
 	QList<BASE_OBJECT *> list;
-	for (BASE_OBJECT *psObj = gridIterate(); psObj != NULL; psObj = gridIterate())
+	for (GridIterator gi = gridList.begin(); gi != gridList.end(); ++gi)
 	{
+		BASE_OBJECT *psObj = *gi;
 		if ((psObj->visible[player] || !seen) && !psObj->died)
 		{
 			if ((filter >= 0 && psObj->player == filter) || filter == ALL_PLAYERS
@@ -3304,10 +3306,12 @@ static QScriptValue js_enumArea(QScriptContext *context, QScriptEngine *engine)
 	{
 		seen = context->argument(nextparam - 1).toBool();
 	}
-	gridStartIterateArea(x1, y1, x2, y2);
+	static GridList gridList;  // static to avoid allocations.
+	gridList = gridStartIterateArea(x1, y1, x2, y2);
 	QList<BASE_OBJECT *> list;
-	for (BASE_OBJECT *psObj = gridIterate(); psObj != NULL; psObj = gridIterate())
+	for (GridIterator gi = gridList.begin(); gi != gridList.end(); ++gi)
 	{
+		BASE_OBJECT *psObj = *gi;
 		if ((psObj->visible[player] || !seen) && !psObj->died)
 		{
 			if ((filter >= 0 && psObj->player == filter) || filter == ALL_PLAYERS

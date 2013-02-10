@@ -304,8 +304,6 @@ bool combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 if any support a counter battery sensor*/
 void counterBatteryFire(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget)
 {
-	BASE_OBJECT		*psViewer;
-
 	/*if a null target is passed in ignore - this will be the case when a 'miss'
 	projectile is sent - we may have to cater for these at some point*/
 	// also ignore cases where you attack your own player
@@ -319,7 +317,7 @@ void counterBatteryFire(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget)
 
 	CHECK_OBJECT(psTarget);
 
-	for (psViewer = apsSensorList[0]; psViewer; psViewer = psViewer->psNextFunc)
+	for (BASE_OBJECT *psViewer = apsSensorList[0]; psViewer; psViewer = psViewer->psNextFunc)
 	{
 		if (aiCheckAlliances(psTarget->player, psViewer->player))
 		{
