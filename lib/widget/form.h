@@ -33,10 +33,7 @@ struct W_FORM : public WIDGET
 	W_FORM(W_FORMINIT const *init);
 
 	void clicked(W_CONTEXT *psContext, WIDGET_KEY key);
-	void released(W_CONTEXT *psContext, WIDGET_KEY key);
-	void highlight(W_CONTEXT *psContext);
 	void highlightLost(W_CONTEXT *psContext);
-	void run(W_CONTEXT *psContext);
 
 	bool            disableChildren;        ///< Disable all child widgets if true
 	UWORD           Ax0, Ay0, Ax1, Ay1;     ///< Working coords for animations.
@@ -69,6 +66,10 @@ struct W_MAJORTAB
 struct W_TABFORM : public W_FORM
 {
 	W_TABFORM(W_FORMINIT const *init);
+
+	void released(W_CONTEXT *psContext, WIDGET_KEY key);
+	void highlightLost(W_CONTEXT *psContext);
+	void run(W_CONTEXT *psContext);
 
 	UWORD		majorPos, minorPos;		// Position of the tabs on the form
 	UWORD		majorSize, minorSize;	// the size of tabs horizontally and vertically
@@ -111,6 +112,12 @@ struct W_TABFORM : public W_FORM
 struct W_CLICKFORM : public W_FORM
 {
 	W_CLICKFORM(W_FORMINIT const *init);
+
+	void clicked(W_CONTEXT *psContext, WIDGET_KEY key);
+	void released(W_CONTEXT *psContext, WIDGET_KEY key);
+	void highlight(W_CONTEXT *psContext);
+	void highlightLost(W_CONTEXT *psContext);
+	void run(W_CONTEXT *psContext);
 
 	UDWORD		state;					// Button state of the form
 	const char	*pTip;					// Tip for the form

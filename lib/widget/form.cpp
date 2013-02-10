@@ -991,78 +991,67 @@ static bool formPickTab(W_TABFORM *psForm, UDWORD fx, UDWORD fy,
 extern UDWORD realTime;  // FIXME Include a header...
 
 /* Run a form widget */
-void W_FORM::run(W_CONTEXT *psContext)
+void W_TABFORM::run(W_CONTEXT *psContext)
 {
-	W_FORM *psWidget = this;
-	SDWORD		mx, my;
-	TAB_POS		sTabPos;
-	char		*pTip;
-	W_TABFORM	*psTabForm;
+	int mx = psContext->mx;
+	int my = psContext->my;
 
-	memset(&sTabPos, 0x0, sizeof(TAB_POS));
-	if (psWidget->style & WFORM_CLICKABLE)
+	// If the mouse is over the form, see if any tabs need to be highlighted.
+	if (mx < 0 || mx > width ||
+	    my < 0 || my > height)
 	{
-		if (((W_CLICKFORM *)psWidget)->state & WCLICK_FLASH)
+		return;
+	}
+
+	TAB_POS sTabPos;
+	memset(&sTabPos, 0x0, sizeof(TAB_POS));
+	if (formPickTab(this, mx, my, &sTabPos))
+	{
+		if (tabHiLite != (UWORD)sTabPos.index)
 		{
-			if (((realTime / 250) % 2) == 0)
+			// Got a new tab - start the tool tip if there is one.
+			tabHiLite = (UWORD)sTabPos.index;
+			char *pTip;
+			if (sTabPos.index >= numMajor)
 			{
-				((W_CLICKFORM *)psWidget)->state &= ~WCLICK_FLASHON;
+				pTip = asMajor[majorT].asMinor[sTabPos.index - numMajor].pTip;
 			}
 			else
 			{
-				((W_CLICKFORM *)psWidget)->state |= WCLICK_FLASHON;
+				pTip = asMajor[sTabPos.index].pTip;
+			}
+			if (pTip)
+			{
+				// Got a tip - start it off.
+				tipStart(this, pTip, psContext->psScreen->TipFontID, aColours, sTabPos.x + psContext->xOffset, sTabPos.y + psContext->yOffset, sTabPos.width, sTabPos.height);
+			}
+			else
+			{
+				// No tip - clear any old tip.
+				tipStop(this);
 			}
 		}
 	}
-
-	if (psWidget->style & WFORM_TABBED)
+	else
 	{
-		mx = psContext->mx;
-		my = psContext->my;
-		psTabForm = (W_TABFORM *)psWidget;
+		// No tab - clear the tool tip.
+		tipStop(this);
+		// And clear the highlight.
+		tabHiLite = (UWORD)(-1);
+	}
+}
 
-		/* If the mouse is over the form, see if any tabs need to be hilited */
-		if (mx >= 0 && mx <= psTabForm->width &&
-		    my >= 0 && my <= psTabForm->height)
+void W_CLICKFORM::run(W_CONTEXT *)
+{
+	if (state & WCLICK_FLASH)
+	{
+		if (((realTime / 250) % 2) == 0)
 		{
-			if (formPickTab(psTabForm, mx, my, &sTabPos))
-			{
-				if (psTabForm->tabHiLite != (UWORD)sTabPos.index)
-				{
-					/* Got a new tab - start the tool tip if there is one */
-					psTabForm->tabHiLite = (UWORD)sTabPos.index;
-					if (sTabPos.index >= psTabForm->numMajor)
-					{
-						pTip = psTabForm->asMajor[psTabForm->majorT].
-						       asMinor[sTabPos.index - psTabForm->numMajor].pTip;
-					}
-					else
-					{
-						pTip = psTabForm->asMajor[sTabPos.index].pTip;
-					}
-					if (pTip)
-					{
-						/* Got a tip - start it off */
-						tipStart((WIDGET *)psTabForm, pTip,
-						        psContext->psScreen->TipFontID, psTabForm->aColours,
-						        sTabPos.x + psContext->xOffset,
-						        sTabPos.y + psContext->yOffset,
-						        sTabPos.width, sTabPos.height);
-					}
-					else
-					{
-						/* No tip - clear any old tip */
-						tipStop((WIDGET *)psWidget);
-					}
-				}
-			}
-			else
-			{
-				/* No tab - clear the tool tip */
-				tipStop((WIDGET *)psWidget);
-				/* And clear the hilite */
-				psTabForm->tabHiLite = (UWORD)(-1);
-			}
+			state &= ~WCLICK_FLASHON;
+		}
+		else
+		{
+			state |= WCLICK_FLASHON;
 		}
 	}
 }
@@ -1087,34 +1076,31 @@ void formClearFlash(W_FORM *psWidget)
 }
 
 
-/* Respond to a mouse click */
-void W_FORM::clicked(W_CONTEXT *, WIDGET_KEY key)
+void W_FORM::clicked(W_CONTEXT *, WIDGET_KEY)
 {
-	W_FORM *psWidget = this;
-	W_CLICKFORM		*psClickForm;
+	// Stop the tip if there is one.
+	tipStop(this);
+}
 
-	/* Stop the tip if there is one */
-	tipStop((WIDGET *)psWidget);
+/* Respond to a mouse click */
+void W_CLICKFORM::clicked(W_CONTEXT *psContext, WIDGET_KEY key)
+{
+	W_FORM::clicked(psContext, key);
 
-	if (psWidget->style & WFORM_CLICKABLE)
+	// Can't click a button if it is disabled or locked down.
+	if (!(state & (WCLICK_GREY | WCLICK_LOCKED)))
 	{
-		/* Can't click a button if it is disabled or locked down */
-		if (!(((W_CLICKFORM *)psWidget)->state & (WCLICK_GREY | WCLICK_LOCKED)))
+		// Check this is the correct key
+		if ((!(style & WFORM_NOPRIMARY) && key == WKEY_PRIMARY) ||
+			((style & WFORM_SECONDARY) && key == WKEY_SECONDARY))
 		{
-			// Check this is the correct key
-			if ((!(psWidget->style & WFORM_NOPRIMARY) && key == WKEY_PRIMARY) ||
-			    ((psWidget->style & WFORM_SECONDARY) && key == WKEY_SECONDARY))
+			state &= ~WCLICK_FLASH;	// Stop it flashing
+			state &= ~WCLICK_FLASHON;
+			state |= WCLICK_DOWN;
+
+			if (AudioCallback != NULL)
 			{
-				((W_CLICKFORM *)psWidget)->state &= ~WCLICK_FLASH;	// Stop it flashing
-				((W_CLICKFORM *)psWidget)->state &= ~WCLICK_FLASHON;
-				((W_CLICKFORM *)psWidget)->state |= WCLICK_DOWN;
-
-				psClickForm = (W_CLICKFORM *)psWidget;
-
-				if (psClickForm->AudioCallback)
-				{
-					psClickForm->AudioCallback(psClickForm->ClickedAudioID);
-				}
+				AudioCallback(ClickedAudioID);
 			}
 		}
 	}
@@ -1122,79 +1108,60 @@ void W_FORM::clicked(W_CONTEXT *, WIDGET_KEY key)
 
 
 /* Respond to a mouse form up */
-void W_FORM::released(W_CONTEXT *psContext, WIDGET_KEY key)
+void W_TABFORM::released(W_CONTEXT *psContext, WIDGET_KEY)
 {
-	W_FORM *psWidget = this;
-	W_TABFORM	*psTabForm;
-	W_CLICKFORM	*psClickForm;
-	TAB_POS		sTabPos;
+	TAB_POS sTabPos;
 
-	if (psWidget->style & WFORM_TABBED)
+	/* See if a tab has been clicked on */
+	if (formPickTab(this, psContext->mx, psContext->my, &sTabPos))
 	{
-		psTabForm = (W_TABFORM *)psWidget;
-		/* See if a tab has been clicked on */
-		if (formPickTab(psTabForm, psContext->mx, psContext->my, &sTabPos))
+		if (sTabPos.index >= numMajor)
 		{
-			if (sTabPos.index >= psTabForm->numMajor)
-			{
-				/* Clicked on a minor tab */
-				psTabForm->minorT = (UWORD)(sTabPos.index - psTabForm->numMajor);
-				psTabForm->asMajor[psTabForm->majorT].lastMinor = psTabForm->minorT;
-				widgSetReturn(psContext->psScreen, (WIDGET *)psWidget);
-			}
-			else
-			{
-				/* Clicked on a major tab */
-				ASSERT(psTabForm->majorT < psTabForm->numMajor,
-				       "formReleased: invalid major id %u >= max %u", sTabPos.index, psTabForm->numMajor);
-				psTabForm->majorT = (UWORD)sTabPos.index;
-				psTabForm->minorT = psTabForm->asMajor[sTabPos.index].lastMinor;
-				widgSetReturn(psContext->psScreen, (WIDGET *)psWidget);
-			}
+			/* Clicked on a minor tab */
+			minorT = sTabPos.index - numMajor;
+			asMajor[majorT].lastMinor = minorT;
+			widgSetReturn(psContext->psScreen, this);
+		}
+		else
+		{
+			/* Clicked on a major tab */
+			ASSERT(majorT < numMajor, "invalid major id %u >= max %u", sTabPos.index, numMajor);
+			majorT = sTabPos.index;
+			minorT = asMajor[sTabPos.index].lastMinor;
+			widgSetReturn(psContext->psScreen, this);
 		}
 	}
-	else if (psWidget->style & WFORM_CLICKABLE)
+}
+
+void W_CLICKFORM::released(W_CONTEXT *psContext, WIDGET_KEY key)
+{
+	if ((state & WCLICK_DOWN) != 0)
 	{
-		psClickForm = (W_CLICKFORM *)psWidget;
-		if (psClickForm->state & WCLICK_DOWN)
+		// Check this is the correct key.
+		if ((!(style & WFORM_NOPRIMARY) && key == WKEY_PRIMARY) ||
+		    ((style & WFORM_SECONDARY) && key == WKEY_SECONDARY))
 		{
-			// Check this is the correct key
-			if ((!(psWidget->style & WFORM_NOPRIMARY) && key == WKEY_PRIMARY) ||
-			    ((psWidget->style & WFORM_SECONDARY) && key == WKEY_SECONDARY))
-			{
-				widgSetReturn(psContext->psScreen, (WIDGET *)psClickForm);
-				psClickForm->state &= ~WCLICK_DOWN;
-			}
+			widgSetReturn(psContext->psScreen, this);
+			state &= ~WCLICK_DOWN;
 		}
 	}
 }
 
 
 /* Respond to a mouse moving over a form */
-void W_FORM::highlight(W_CONTEXT *psContext)
+void W_CLICKFORM::highlight(W_CONTEXT *psContext)
 {
-	W_FORM *psWidget = this;
-	W_CLICKFORM		*psClickForm;
+	state |= WCLICK_HILITE;
 
-	if (psWidget->style & WFORM_CLICKABLE)
+	// If there is a tip string start the tool tip.
+	if (pTip)
 	{
-		psClickForm = (W_CLICKFORM *)psWidget;
+		tipStart(this, pTip, psContext->psScreen->TipFontID, psContext->psForm->aColours, x + psContext->xOffset, y + psContext->yOffset, width, height);
+	}
 
-		psClickForm->state |= WCLICK_HILITE;
-
-		/* If there is a tip string start the tool tip */
-		if (psClickForm->pTip)
-		{
-			tipStart((WIDGET *)psClickForm, psClickForm->pTip,
-			        psContext->psScreen->TipFontID, psContext->psForm->aColours,
-			        psWidget->x + psContext->xOffset, psWidget->y + psContext->yOffset,
-			        psWidget->width, psWidget->height);
-		}
-
-		if (psClickForm->AudioCallback)
-		{
-			psClickForm->AudioCallback(psClickForm->HilightAudioID);
-		}
+	if (AudioCallback != NULL)
+	{
+		AudioCallback(HilightAudioID);
 	}
 }
 
@@ -1202,22 +1169,27 @@ void W_FORM::highlight(W_CONTEXT *psContext)
 /* Respond to the mouse moving off a form */
 void W_FORM::highlightLost(W_CONTEXT *psContext)
 {
-	W_FORM *psWidget = this;
-	/* If one of the widgets were hilited that has to loose it as well */
-	if (psWidget->psLastHiLite != NULL)
+	// If one of the widgets was highlighted that has to lose it as well.
+	if (psLastHiLite != NULL)
 	{
-		psWidget->psLastHiLite->highlightLost(psContext);
+		psLastHiLite->highlightLost(psContext);
 	}
-	if (psWidget->style & WFORM_TABBED)
-	{
-		((W_TABFORM *)psWidget)->tabHiLite = (UWORD)(-1);
-	}
-	if (psWidget->style & WFORM_CLICKABLE)
-	{
-		((W_CLICKFORM *)psWidget)->state &= ~(WCLICK_DOWN | WCLICK_HILITE);
-	}
-	/* Clear the tool tip if there is one */
-	tipStop((WIDGET *)psWidget);
+	// Clear the tool tip if there is one.
+	tipStop(this);
+}
+
+void W_TABFORM::highlightLost(W_CONTEXT *psContext)
+{
+	W_FORM::highlightLost(psContext);
+
+	tabHiLite = (UWORD)(-1);
+}
+
+void W_CLICKFORM::highlightLost(W_CONTEXT *psContext)
+{
+	W_FORM::highlightLost(psContext);
+
+	state &= ~(WCLICK_DOWN | WCLICK_HILITE);
 }
 
 /* Display a form */
