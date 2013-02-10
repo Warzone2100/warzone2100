@@ -431,7 +431,7 @@ static void loadEmptyMapPreview()
 	Vector2i playerpos[MAX_PLAYERS];
 	memset(playerpos, 0x77, sizeof(playerpos));
 
-	screen_enableMapPreview((char *)"This string is written somewhere and then ignored.", ex, ey, playerpos);
+	screen_enableMapPreview(ex, ey, playerpos);
 
 	screen_Upload(imageData, true);
 	free(imageData);
@@ -593,7 +593,7 @@ void loadMapPreview(bool hideInterface)
 	// color our texture with clancolors @ correct position
 	plotStructurePreview16(imageData, playerpos);
 
-	screen_enableMapPreview(aFileName, mapWidth, mapHeight, playerpos);
+	screen_enableMapPreview(mapWidth, mapHeight, playerpos);
 
 	screen_Upload(imageData, true);
 

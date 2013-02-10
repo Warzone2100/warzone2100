@@ -345,13 +345,6 @@ void iV_DrawImageScaled(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int w, int
 	pie_DrawImage(ImageFile, ID, pieImage, &dest);
 }
 
-/* FIXME: WTF is this supposed to do? Looks like some other functionality
- * was retrofitted onto something else. - Per */
-void pie_UploadDisplayBuffer()
-{
-	screen_Upload(NULL, false);
-}
-
 bool pie_InitRadar(void)
 {
 	glGenTextures(1, &radarTexture);

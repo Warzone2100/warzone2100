@@ -57,7 +57,6 @@ static GLuint		backDropTexture = 0;
 static int preview_width = 0, preview_height = 0;
 static Vector2i player_pos[MAX_PLAYERS];
 static bool mappreview = false;
-static char mapname[256];
 OPENGL_DATA opengl;
 extern bool writeGameInfo(const char *pFileName); // Used to help debug issues when we have fatal errors.
 
@@ -428,13 +427,12 @@ void screen_Upload(const char *newBackDropBmp, bool preview)
 	pie_SetDepthBufferStatus(DEPTH_CMP_LEQ_WRT_ON);
 }
 
-void screen_enableMapPreview(char *name, int width, int height, Vector2i *playerpositions)
+void screen_enableMapPreview(int width, int height, Vector2i *playerpositions)
 {
 	int i;
 	mappreview = true;
 	preview_width = width;
 	preview_height = height;
-	sstrcpy(mapname, name);
 	for (i = 0; i < MAX_PLAYERS; i++)
 	{
 		player_pos[i].x = playerpositions[i].x;
@@ -445,7 +443,6 @@ void screen_enableMapPreview(char *name, int width, int height, Vector2i *player
 void screen_disableMapPreview(void)
 {
 	mappreview = false;
-	sstrcpy(mapname, "none");
 }
 
 bool screen_getMapPreview(void)

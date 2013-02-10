@@ -392,8 +392,6 @@ static bool _intAddDesign(bool bShowCentreScreen)
 		radarOnScreen = false;
 		// Just display the 3d, no interface
 		displayWorld();
-		// Upload the current display back buffer into system memory.
-		pie_UploadDisplayBuffer();
 		radarOnScreen = radOnScreen;
 		bRender3DOnly = false;
 	}

@@ -175,8 +175,6 @@ bool addLoadSave(LOADSAVE_MODE savemode, const char *title)
 
 				displayWorld();									// Just display the 3d, no interface
 
-				pie_UploadDisplayBuffer();			// Upload the current display back buffer into system memory.
-
 				radarOnScreen = radOnScreen;
 				bRender3DOnly = false;
 			}
