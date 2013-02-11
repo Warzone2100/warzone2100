@@ -7,13 +7,20 @@ const maxDroids = 25;		// max guys to handle.
 var attackGroup;
 var lastAttack = 0;
 
-function activateProduction(fac)
-{
-	// Remind factory to produce
-	if (structureIdle(fac))
+function produceDroid(fac1) {
+	if (fac1 && structureIdle(fac1) && groupSize(attackGroup) < maxDroids)
 	{
-		buildDroid(fac, "Trike", "B4body-sml-trike01", "BaBaProp", null, null, "bTrikeMG");
-	}
+		// We now have switch statements! And we can use the built-in Math library
+		switch (Math.floor(Math.random() * 10))
+		{
+		case 0:	buildDroid(fac1, "Trike", "B4body-sml-trike01", "BaBaProp", null, null, "bTrikeMG"); break;
+		case 1: buildDroid(fac1, "Buggy", "B3body-sml-buggy01", "BaBaProp", null, null, "BuggyMG"); break;
+		case 2: buildDroid(fac1, "Jeep", "B2JeepBody", "BaBaProp", null, null, "BJeepMG"); break;
+		case 3: buildDroid(fac1, "Cannonbus", "BusBody", "BaBaProp", null, null, "BusCannon"); break;
+		case 4: buildDroid(fac1, "Firebus", "FireBody", "BaBaProp", null, null, "BabaFlame"); break;
+		default: buildDroid(fac1, "Bloke", "B1BaBaPerson01", "BaBaLegs", null, null, "BaBaMG"); break;
+		}
+	}	
 }
 
 // Regularly check back on our scavs
@@ -25,7 +32,7 @@ function scavtick()
 	// one way of dealing with lists is running a function on each member of the list
 	if (factorylist)
 	{
-		factorylist.forEach(activateProduction);
+		factorylist.forEach(produceDroid);
 	}
 
 	if ((gameTime - lastAttack) > 9000)
@@ -75,6 +82,7 @@ function eventGameInit()
 	makeComponentAvailable("B3body-sml-buggy01", me);
 	makeComponentAvailable("B2JeepBody", me);
 	makeComponentAvailable("BusBody", me);
+	makeComponentAvailable("FireBody", me);
 	makeComponentAvailable("B1BaBaPerson01", me);
 	makeComponentAvailable("BaBaProp", me);
 	makeComponentAvailable("BaBaLegs", me);
@@ -100,19 +108,7 @@ function eventDroidBuilt(droid, fac1)
 	groupAddDroid(attackGroup, droid);
 
 	// Build another
-	if (fac1 && structureIdle(fac1) && groupSize(attackGroup) < maxDroids)
-	{
-		// We now have switch statements! And we can use the built-in Math library
-		switch (Math.floor(Math.random() * 10))
-		{
-		case 0:	buildDroid(fac1, "Trike", "B4body-sml-trike01", "BaBaProp", null, null, "bTrikeMG"); break;
-		case 1: buildDroid(fac1, "Buggy", "B3body-sml-buggy01", "BaBaProp", null, null, "BuggyMG"); break;
-		case 2: buildDroid(fac1, "Jeep", "B2JeepBody", "BaBaProp", null, null, "BJeepMG"); break;
-		case 3: buildDroid(fac1, "Cannonbus", "BusBody", "BaBaProp", null, null, "BusCannon"); break;
-		case 4: buildDroid(fac1, "Firebus", "BusBody", "BaBaProp", null, null, "BabaFlame"); break;
-		default: buildDroid(fac1, "Bloke", "B1BaBaPerson01", "BaBaLegs", null, null, "BaBaMG"); break;
-		}
-	}
+	produceDroid(fac1);
 }
 
 // watch for structures being attacked. Send the cavalry as required.
@@ -127,7 +123,7 @@ function eventAttacked(victim, attacker)
 			var droid = droidlist[i];
 			if (distBetweenTwoPoints(victim.x, victim.y, attacker.x, attacker.y) < 24)
 			{
-				orderDroidLoc(droid, DORDER_MOVE, attacker.x, attacker.y);
+				orderDroidLoc(droid, DORDER_SCOUT, attacker.x, attacker.y);
 			}
 		}
 	}
