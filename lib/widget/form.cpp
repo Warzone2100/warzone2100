@@ -1033,25 +1033,17 @@ void W_CLICKFORM::run(W_CONTEXT *)
 	}
 }
 
-
-void formSetFlash(W_FORM *psWidget)
+void W_CLICKFORM::setFlash(bool enable)
 {
-	if (psWidget->style & WFORM_CLICKABLE)
+	if (enable)
 	{
-		((W_CLICKFORM *)psWidget)->state |= WCLICK_FLASH;
+		state |= WCLICK_FLASH;
+	}
+	else
+	{
+		state &= ~(WCLICK_FLASH | WCLICK_FLASHON);
 	}
 }
-
-
-void formClearFlash(W_FORM *psWidget)
-{
-	if (psWidget->style & WFORM_CLICKABLE)
-	{
-		((W_CLICKFORM *)psWidget)->state &= ~WCLICK_FLASH;
-		((W_CLICKFORM *)psWidget)->state &= ~WCLICK_FLASHON;
-	}
-}
-
 
 void W_FORM::clicked(W_CONTEXT *, WIDGET_KEY)
 {

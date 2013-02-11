@@ -992,61 +992,27 @@ UDWORD widgGetButtonState(W_SCREEN *psScreen, UDWORD id)
 	return psWidget->getState();
 }
 
+void WIDGET::setFlash(bool)
+{
+	ASSERT(false, "Can't set widget type %u's flash.", type);
+}
 
 void widgSetButtonFlash(W_SCREEN *psScreen, UDWORD id)
 {
-	WIDGET	*psWidget;
-
 	/* Get the button */
-	psWidget = widgGetFromID(psScreen, id);
-	if (psWidget == NULL)
-	{
-		ASSERT(!"Couldn't find widget by ID", "Couldn't find button or clickable widget by ID");
-	}
-	else if (psWidget->type == WIDG_BUTTON)
-	{
-		buttonSetFlash((W_BUTTON *)psWidget);
-	}
-	else if ((psWidget->type == WIDG_FORM) && (psWidget->style & WFORM_CLICKABLE))
-	{
-		formSetFlash((W_FORM *)psWidget);
-	}
-	else if (psWidget->type == WIDG_EDITBOX)
-	{
-//		editBoxSetState((W_EDITBOX *)psWidget, state);
-	}
-	else
-	{
-		ASSERT(!"Couldn't find widget by ID", "Couldn't find button or clickable widget by ID");
-	}
-}
+	WIDGET *psWidget = widgGetFromID(psScreen, id);
+	ASSERT_OR_RETURN(, psWidget, "Couldn't find widget by ID %u", id);
 
+	psWidget->setFlash(true);
+}
 
 void widgClearButtonFlash(W_SCREEN *psScreen, UDWORD id)
 {
-	WIDGET	*psWidget;
-
 	/* Get the button */
-	psWidget = widgGetFromID(psScreen, id);
-	if (psWidget == NULL)
-	{
-		ASSERT(!"Couldn't find widget by ID", "Couldn't find button or clickable widget by ID");
-	}
-	else if (psWidget->type == WIDG_BUTTON)
-	{
-		buttonClearFlash((W_BUTTON *)psWidget);
-	}
-	else if ((psWidget->type == WIDG_FORM) && (psWidget->style & WFORM_CLICKABLE))
-	{
-		formClearFlash((W_FORM *)psWidget);
-	}
-	else if (psWidget->type == WIDG_EDITBOX)
-	{
-	}
-	else
-	{
-		ASSERT(!"Couldn't find widget by ID", "Couldn't find button or clickable widget by ID");
-	}
+	WIDGET *psWidget = widgGetFromID(psScreen, id);
+	ASSERT_OR_RETURN(, psWidget, "Couldn't find widget by ID %u", id);
+
+	psWidget->setFlash(false);
 }
 
 

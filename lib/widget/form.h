@@ -121,6 +121,7 @@ struct W_CLICKFORM : public W_FORM
 
 	unsigned getState();
 	void setState(unsigned state);
+	void setFlash(bool enable);
 
 	UDWORD		state;					// Button state of the form
 	const char	*pTip;					// Tip for the form
@@ -128,8 +129,6 @@ struct W_CLICKFORM : public W_FORM
 	SWORD ClickedAudioID;				// Audio ID for form hilighted sound
 	WIDGET_AUDIOCALLBACK AudioCallback;	// Pointer to audio callback function
 };
-
-extern void formClearFlash(W_FORM *psWidget);
 
 /* Create a form widget data structure */
 extern W_FORM *formCreate(const W_FORMINIT *psInit);
@@ -163,8 +162,6 @@ extern void formInitGetAllWidgets(W_FORM *psWidget, W_FORMGETALL *psCtrl);
  * When a NULL list is returned, all widgets have been seen.
  */
 extern WIDGET *formGetAllWidgets(W_FORMGETALL *psCtrl);
-
-extern void formSetFlash(W_FORM *psWidget);
 
 /* Display function prototypes */
 extern void formDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);

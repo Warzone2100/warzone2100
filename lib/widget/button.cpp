@@ -127,17 +127,16 @@ unsigned W_BUTTON::getState()
 	return retState;
 }
 
-
-void buttonSetFlash(W_BUTTON *psButton)
+void W_BUTTON::setFlash(bool enable)
 {
-	psButton->state |= WBUTS_FLASH;
-}
-
-
-void buttonClearFlash(W_BUTTON *psButton)
-{
-	psButton->state &= ~WBUTS_FLASH;
-	psButton->state &= ~WBUTS_FLASHON;
+	if (enable)
+	{
+		state |= WBUTS_FLASH;
+	}
+	else
+	{
+		state &= ~(WBUTS_FLASH | WBUTS_FLASHON);
+	}
 }
 
 void W_BUTTON::setState(unsigned newState)

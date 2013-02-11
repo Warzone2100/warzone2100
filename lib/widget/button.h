@@ -51,6 +51,7 @@ struct W_BUTTON : public WIDGET
 
 	unsigned getState();
 	void setState(unsigned state);
+	void setFlash(bool enable);
 
 	UDWORD		state;				// The current button state
 	const char *pText;				// The text for the button
@@ -72,9 +73,6 @@ extern void buttonFree(W_BUTTON *psWidget);
 
 /* Initialise a button widget before running it */
 extern void buttonInitialise(W_BUTTON *psWidget);
-
-extern void buttonSetFlash(W_BUTTON *psButton);
-extern void buttonClearFlash(W_BUTTON *psButton);
 
 /* The button display function */
 extern void buttonDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
