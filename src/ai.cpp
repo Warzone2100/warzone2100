@@ -502,7 +502,7 @@ static SDWORD targetAttackWeight(BASE_OBJECT *psTarget, BASE_OBJECT *psAttacker,
 int aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot, int extraRange)
 {
 	SDWORD				bestMod = 0,newMod, failure = -1;
-	BASE_OBJECT			*psTarget = NULL, *friendlyObj, *bestTarget = NULL, *iter, *targetInQuestion, *tempTarget;
+	BASE_OBJECT                     *psTarget = NULL, *bestTarget = NULL, *tempTarget;
 	bool				electronic = false;
 	STRUCTURE			*targetStructure;
 	WEAPON_EFFECT			weaponEffect;
@@ -536,11 +536,12 @@ int aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot, i
 	// Range was previously 9*TILE_UNITS. Increasing this doesn't seem to help much, though. Not sure why.
 	int droidRange = std::min(aiObjRange(psDroid, weapon_slot) + extraRange, psDroid->sensorRange + 6*TILE_UNITS);
 
-	gridStartIterate(psDroid->pos.x, psDroid->pos.y, droidRange);
-	for (iter = gridIterate(); iter != NULL; iter = gridIterate())
+	static GridList gridList;  // static to avoid allocations.
+	gridList = gridStartIterate(psDroid->pos.x, psDroid->pos.y, droidRange);
+	for (GridIterator gi = gridList.begin(); gi != gridList.end(); ++gi)
 	{
-		friendlyObj = NULL;
-		targetInQuestion = iter;
+		BASE_OBJECT *friendlyObj = NULL;
+		BASE_OBJECT *targetInQuestion = *gi;
 
 		/* This is a friendly unit, check if we can reuse its target */
 		if(aiCheckAlliances(targetInQuestion->player,psDroid->player))
@@ -873,9 +874,11 @@ bool aiChooseTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget, int weapon_slot
 			int targetValue = -1;
 			int tarDist = INT32_MAX;
 
-			gridStartIterate(psObj->pos.x, psObj->pos.y, std::min(longRange, PREVIOUS_DEFAULT_GRID_SEARCH_RADIUS));
-			for (BASE_OBJECT *psCurr = gridIterate(); psCurr != NULL; psCurr = gridIterate())
+			static GridList gridList;  // static to avoid allocations.
+			gridList = gridStartIterate(psObj->pos.x, psObj->pos.y, std::min(longRange, PREVIOUS_DEFAULT_GRID_SEARCH_RADIUS));
+			for (GridIterator gi = gridList.begin(); gi != gridList.end(); ++gi)
 			{
+				BASE_OBJECT *psCurr = *gi;
 				/* Check that it is a valid target */
 				if (psCurr->type != OBJ_FEATURE && !aiObjectIsProbablyDoomed(psCurr)
 				    && !aiCheckAlliances(psCurr->player, psObj->player)
@@ -951,13 +954,14 @@ bool aiChooseSensorTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget)
 	}
 	else	// structure
 	{
-		BASE_OBJECT	*psCurr, *psTemp = NULL;
+		BASE_OBJECT *   psTemp = NULL;
 		int		tarDist = SDWORD_MAX;
 
-		gridStartIterate(psObj->pos.x, psObj->pos.y, PREVIOUS_DEFAULT_GRID_SEARCH_RADIUS);
-		psCurr = gridIterate();
-		while (psCurr != NULL)
+		static GridList gridList;  // static to avoid allocations.
+		gridList = gridStartIterate(psObj->pos.x, psObj->pos.y, PREVIOUS_DEFAULT_GRID_SEARCH_RADIUS);
+		for (GridIterator gi = gridList.begin(); gi != gridList.end(); ++gi)
 		{
+			BASE_OBJECT *psCurr = *gi;
 			// Don't target features or doomed/dead objects
 			if (psCurr->type != OBJ_FEATURE && !aiObjectIsProbablyDoomed(psCurr))
 			{
@@ -975,7 +979,6 @@ bool aiChooseSensorTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget)
 					}
 				}
 			}
-			psCurr = gridIterate();
 		}
 
 		if (psTemp)

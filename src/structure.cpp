@@ -3651,12 +3651,12 @@ void structureUpdate(STRUCTURE *psBuilding, bool mission)
 		if (psBuilding->state == SAS_OPEN && psBuilding->lastStateTime + SAS_STAY_OPEN_TIME < gameTime)
 		{
 			bool		found = false;
-			BASE_OBJECT	*psObj;
 
-			gridStartIterate(psBuilding->pos.x, psBuilding->pos.y, TILE_UNITS);
-			while (!found && (psObj = gridIterate()))
+			static GridList gridList;  // static to avoid allocations.
+			gridList = gridStartIterate(psBuilding->pos.x, psBuilding->pos.y, TILE_UNITS);
+			for (GridIterator gi = gridList.begin(); !found && gi != gridList.end(); ++gi)
 			{
-				found = (psObj->type == OBJ_DROID);
+				found = isDroid(*gi);
 			}
 
 			if (!found)	// no droids on our tile, safe to close
