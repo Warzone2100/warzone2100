@@ -135,9 +135,9 @@ static void displayLoadSlot(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ
 
 	drawBlueBox(x, y, psWidget->width, psWidget->height);	//draw box
 
-	if (((W_BUTTON *)psWidget)->pText)
+	if (!((W_BUTTON *)psWidget)->pText.isEmpty())
 	{
-		sstrcpy(butString, ((W_BUTTON *)psWidget)->pText);
+		sstrcpy(butString, ((W_BUTTON *)psWidget)->pText.toUtf8().constData());
 
 		iV_SetFont(font_regular);									// font
 		iV_SetTextColour(WZCOL_FORM_TEXT);
@@ -364,7 +364,7 @@ bool runChallenges(void)
 		// clicked a load entry
 		if (id >= CHALLENGE_ENTRY_START  &&  id <= CHALLENGE_ENTRY_END)
 		{
-			if (((W_BUTTON *)widgGetFromID(psRequestScreen, id))->pText)
+			if (!((W_BUTTON *)widgGetFromID(psRequestScreen, id))->pText.isEmpty())
 			{
 				sstrcpy(sRequestResult, (const char *)((W_BUTTON *)widgGetFromID(psRequestScreen, id))->pUserData);
 			}

@@ -46,8 +46,8 @@ W_BUTINIT::W_BUTINIT()
 
 W_BUTTON::W_BUTTON(W_BUTINIT const *init)
 	: WIDGET(init, WIDG_BUTTON)
-	, pText(init->pText)
-	, pTip(init->pTip)
+	, pText(QString::fromUtf8(init->pText))
+	, pTip(QString::fromUtf8(init->pTip))
 	, HilightAudioID(WidgGetHilightAudioID())
 	, ClickedAudioID(WidgGetClickedAudioID())
 	, AudioCallback(WidgGetAudioCallback())
@@ -157,16 +157,15 @@ void W_BUTTON::setState(unsigned newState)
 /* Run a button widget */
 void W_BUTTON::run(W_CONTEXT *)
 {
-	W_BUTTON *psButton = this;
-	if (psButton->state & WBUTS_FLASH)
+	if (state & WBUTS_FLASH)
 	{
 		if (((realTime / 250) % 2) == 0)
 		{
-			psButton->state &= ~WBUTS_FLASHON;
+			state &= ~WBUTS_FLASHON;
 		}
 		else
 		{
-			psButton->state |= WBUTS_FLASHON;
+			state |= WBUTS_FLASHON;
 		}
 	}
 }
@@ -175,28 +174,27 @@ void W_BUTTON::run(W_CONTEXT *)
 /* Respond to a mouse click */
 void W_BUTTON::clicked(W_CONTEXT *, WIDGET_KEY key)
 {
-	W_BUTTON *psWidget = this;
 	/* Can't click a button if it is disabled or locked down */
-	if (!(psWidget->state & (WBUTS_GREY | WBUTS_LOCKED)))
+	if (!(state & (WBUTS_GREY | WBUTS_LOCKED)))
 	{
 		// Check this is the correct key
-		if ((!(psWidget->style & WBUT_NOPRIMARY) && key == WKEY_PRIMARY) ||
-		    ((psWidget->style & WBUT_SECONDARY) && key == WKEY_SECONDARY))
+		if ((!(style & WBUT_NOPRIMARY) && key == WKEY_PRIMARY) ||
+		    ((style & WBUT_SECONDARY) && key == WKEY_SECONDARY))
 		{
-			if (psWidget->AudioCallback)
+			if (AudioCallback)
 			{
-				psWidget->AudioCallback(psWidget->ClickedAudioID);
+				AudioCallback(ClickedAudioID);
 			}
-			psWidget->state &= ~WBUTS_FLASH;	// Stop it flashing
-			psWidget->state &= ~WBUTS_FLASHON;
-			psWidget->state |= WBUTS_DOWN;
+			state &= ~WBUTS_FLASH;	// Stop it flashing
+			state &= ~WBUTS_FLASHON;
+			state |= WBUTS_DOWN;
 		}
 	}
 
 	/* Kill the tip if there is one */
-	if (psWidget->pTip)
+	if (!pTip.isEmpty())
 	{
-		tipStop((WIDGET *)psWidget);
+		tipStop(this);
 	}
 }
 
@@ -204,15 +202,14 @@ void W_BUTTON::clicked(W_CONTEXT *, WIDGET_KEY key)
 void W_BUTTON::released(W_CONTEXT *psContext, WIDGET_KEY key)
 {
 	W_SCREEN *psScreen = psContext->psScreen;
-	W_BUTTON *psWidget = this;
-	if (psWidget->state & WBUTS_DOWN)
+	if (state & WBUTS_DOWN)
 	{
 		// Check this is the correct key
-		if ((!(psWidget->style & WBUT_NOPRIMARY) && key == WKEY_PRIMARY) ||
-		    ((psWidget->style & WBUT_SECONDARY) && key == WKEY_SECONDARY))
+		if ((!(style & WBUT_NOPRIMARY) && key == WKEY_PRIMARY) ||
+		    ((style & WBUT_SECONDARY) && key == WKEY_SECONDARY))
 		{
-			widgSetReturn(psScreen, (WIDGET *)psWidget);
-			psWidget->state &= ~WBUTS_DOWN;
+			widgSetReturn(psScreen, this);
+			state &= ~WBUTS_DOWN;
 		}
 	}
 }
@@ -221,21 +218,20 @@ void W_BUTTON::released(W_CONTEXT *psContext, WIDGET_KEY key)
 /* Respond to a mouse moving over a button */
 void W_BUTTON::highlight(W_CONTEXT *psContext)
 {
-	W_BUTTON *psWidget = this;
-	psWidget->state |= WBUTS_HILITE;
+	state |= WBUTS_HILITE;
 
-	if (psWidget->AudioCallback)
+	if (AudioCallback)
 	{
-		psWidget->AudioCallback(psWidget->HilightAudioID);
+		AudioCallback(HilightAudioID);
 	}
 
 	/* If there is a tip string start the tool tip */
-	if (psWidget->pTip)
+	if (!pTip.isEmpty())
 	{
-		tipStart((WIDGET *)psWidget, psWidget->pTip, psContext->psScreen->TipFontID,
-		        psContext->psForm->aColours,
-		        psWidget->x + psContext->xOffset, psWidget->y + psContext->yOffset,
-		        psWidget->width, psWidget->height);
+		tipStart(this, pTip, psContext->psScreen->TipFontID,
+		         psContext->psForm->aColours,
+		         x + psContext->xOffset, y + psContext->yOffset,
+		         width, height);
 	}
 }
 
@@ -243,11 +239,10 @@ void W_BUTTON::highlight(W_CONTEXT *psContext)
 /* Respond to the mouse moving off a button */
 void W_BUTTON::highlightLost(W_CONTEXT *)
 {
-	W_BUTTON *psWidget = this;
-	psWidget->state &= ~(WBUTS_DOWN | WBUTS_HILITE);
-	if (psWidget->pTip)
+	state &= ~(WBUTS_DOWN | WBUTS_HILITE);
+	if (!pTip.isEmpty())
 	{
-		tipStop((WIDGET *)psWidget);
+		tipStop(this);
 	}
 }
 
@@ -271,16 +266,20 @@ void buttonDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *p
 	x1 = x0 + psButton->width;
 	y1 = y0 + psButton->height;
 
+	bool haveText = !psButton->pText.isEmpty();
+	QByteArray textBytes = psButton->pText.toUtf8();
+	char const *textData = textBytes.constData();
+
 	if (psButton->state & (WBUTS_DOWN | WBUTS_LOCKED | WBUTS_CLICKLOCK))
 	{
 		/* Display the button down */
 		iV_ShadowBox(x0, y0, x1, y1, 0, pColours[WCOL_LIGHT], pColours[WCOL_DARK], pColours[WCOL_BKGRND]);
 
-		if (psButton->pText)
+		if (haveText)
 		{
 			iV_SetFont(psButton->FontID);
 			iV_SetTextColour(pColours[WCOL_TEXT]);
-			fw = iV_GetTextWidth(psButton->pText);
+			fw = iV_GetTextWidth(textData);
 			if (psButton->style & WBUT_NOCLICKMOVE)
 			{
 				fx = x0 + (psButton->width - fw) / 2 + 1;
@@ -291,7 +290,7 @@ void buttonDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *p
 				fx = x0 + (psButton->width - fw) / 2;
 				fy = y0 + (psButton->height - iV_GetTextLineSize()) / 2 - iV_GetTextAboveBase();
 			}
-			iV_DrawText(psButton->pText, fx, fy);
+			iV_DrawText(textData, fx, fy);
 		}
 
 		if (psButton->state & WBUTS_HILITE)
@@ -305,16 +304,16 @@ void buttonDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *p
 		/* Display the disabled button */
 		iV_ShadowBox(x0, y0, x1, y1, 0, pColours[WCOL_LIGHT], pColours[WCOL_LIGHT], pColours[WCOL_BKGRND]);
 
-		if (psButton->pText)
+		if (haveText)
 		{
 			iV_SetFont(psButton->FontID);
-			fw = iV_GetTextWidth(psButton->pText);
+			fw = iV_GetTextWidth(textData);
 			fx = x0 + (psButton->width - fw) / 2;
 			fy = y0 + (psButton->height - iV_GetTextLineSize()) / 2 - iV_GetTextAboveBase();
 			iV_SetTextColour(pColours[WCOL_LIGHT]);
-			iV_DrawText(psButton->pText, fx + 1, fy + 1);
+			iV_DrawText(textData, fx + 1, fy + 1);
 			iV_SetTextColour(pColours[WCOL_DISABLE]);
-			iV_DrawText(psButton->pText, fx, fy);
+			iV_DrawText(textData, fx, fy);
 		}
 
 		if (psButton->state & WBUTS_HILITE)
@@ -328,14 +327,14 @@ void buttonDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *p
 		/* Display the button up */
 		iV_ShadowBox(x0, y0, x1, y1, 0, pColours[WCOL_LIGHT], pColours[WCOL_DARK], pColours[WCOL_BKGRND]);
 
-		if (psButton->pText)
+		if (haveText)
 		{
 			iV_SetFont(psButton->FontID);
 			iV_SetTextColour(pColours[WCOL_TEXT]);
-			fw = iV_GetTextWidth(psButton->pText);
+			fw = iV_GetTextWidth(textData);
 			fx = x0 + (psButton->width - fw) / 2;
 			fy = y0 + (psButton->height - iV_GetTextLineSize()) / 2 - iV_GetTextAboveBase();
-			iV_DrawText(psButton->pText, fx, fy);
+			iV_DrawText(textData, fx, fy);
 		}
 
 		if (psButton->state & WBUTS_HILITE)

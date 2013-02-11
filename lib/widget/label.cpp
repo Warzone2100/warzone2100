@@ -38,18 +38,13 @@ W_LABINIT::W_LABINIT()
 
 W_LABEL::W_LABEL(W_LABINIT const *init)
 	: WIDGET(init, WIDG_LABEL)
+	, aText(QString::fromUtf8(init->pText))
 	, FontID(init->FontID)
-	, pTip(init->pTip)
+	, pTip(QString::fromUtf8(init->pTip))
 {
 	if (display == NULL)
 	{
 		display = labelDisplay;
-	}
-
-	aText[0] = '\0';
-	if (init->pText)
-	{
-		sstrcpy(aText, init->pText);
 	}
 }
 
@@ -100,14 +95,15 @@ void labelDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pC
 	iV_SetFont(FontID);
 	iV_SetTextColour(pColours[WCOL_TEXT]);
 
+	QByteArray text = psLabel->aText.toUtf8();
 	if (psLabel->style & WLAB_ALIGNCENTRE)
 	{
-		fw = iV_GetTextWidth(psLabel->aText);
+		fw = iV_GetTextWidth(text.constData());
 		fx = xOffset + psLabel->x + (psLabel->width - fw) / 2;
 	}
 	else if (psLabel->style & WLAB_ALIGNRIGHT)
 	{
-		fw = iV_GetTextWidth(psLabel->aText);
+		fw = iV_GetTextWidth(text.constData());
 		fx = xOffset + psLabel->x + psLabel->width - fw;
 	}
 	else
@@ -115,14 +111,14 @@ void labelDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pC
 		fx = xOffset + psLabel->x;
 	}
 	fy = yOffset + psLabel->y + (psLabel->height - iV_GetTextLineSize()) / 2 - iV_GetTextAboveBase();
-	iV_DrawText(psLabel->aText, fx, fy);
+	iV_DrawText(text.constData(), fx, fy);
 }
 
 /* Respond to a mouse moving over a label */
 void W_LABEL::highlight(W_CONTEXT *psContext)
 {
 	/* If there is a tip string start the tool tip */
-	if (pTip)
+	if (!pTip.isEmpty())
 	{
 		tipStart(this, pTip, psContext->psScreen->TipFontID,
 		         psContext->psForm->aColours,
@@ -135,7 +131,7 @@ void W_LABEL::highlight(W_CONTEXT *psContext)
 /* Respond to the mouse moving off a label */
 void W_LABEL::highlightLost(W_CONTEXT *)
 {
-	if (pTip)
+	if (!pTip.isEmpty())
 	{
 		tipStop(this);
 	}

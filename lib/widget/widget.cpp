@@ -1051,17 +1051,10 @@ const char *widgGetString(W_SCREEN *psScreen, UDWORD id)
 			aStringRetBuffer[0] = '\0';
 			break;
 		case WIDG_LABEL:
-			sstrcpy(aStringRetBuffer, ((W_LABEL *)psWidget)->aText);
+			sstrcpy(aStringRetBuffer, ((W_LABEL *)psWidget)->aText.toUtf8().constData());
 			break;
 		case WIDG_BUTTON:
-			if (((W_BUTTON *)psWidget)->pText)
-			{
-				sstrcpy(aStringRetBuffer, ((W_BUTTON *)psWidget)->pText);
-			}
-			else
-			{
-				aStringRetBuffer[0] = '\0';
-			}
+			sstrcpy(aStringRetBuffer, ((W_BUTTON *)psWidget)->pText.toUtf8().constData());
 			break;
 		case WIDG_EDITBOX:
 			{
@@ -1115,11 +1108,11 @@ void widgSetString(W_SCREEN *psScreen, UDWORD id, const char *pText)
 		break;
 
 	case WIDG_LABEL:
-		sstrcpy(((W_LABEL *)psWidget)->aText, pText);
+		((W_LABEL *)psWidget)->aText = QString::fromUtf8(pText);
 		break;
 
 	case WIDG_BUTTON:
-		((W_BUTTON *)psWidget)->pText = pText;
+		((W_BUTTON *)psWidget)->pText = QString::fromUtf8(pText);
 		break;
 
 	case WIDG_EDITBOX:

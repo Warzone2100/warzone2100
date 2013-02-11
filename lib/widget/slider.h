@@ -47,7 +47,7 @@ struct W_SLIDER : public WIDGET
 	UWORD		barSize;			// Thickness of slider bar
 	UWORD		pos;				// Current stop position of the slider
 	UWORD		state;				// Slider state
-	const char	*pTip;				// Tool tip
+	QString         pTip;                           // Tool tip
 };
 
 /* Create a slider widget data structure */

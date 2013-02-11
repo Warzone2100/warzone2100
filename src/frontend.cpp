@@ -1612,7 +1612,7 @@ static void displayText(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DEC
 	psLab = (W_LABEL *)psWidget;
 	iV_SetFont(psLab->FontID);
 
-	fw = iV_GetTextWidth(psLab->aText);
+	fw = iV_GetTextWidth(psLab->aText.toUtf8().constData());
 	fy = yOffset + psWidget->y;
 
 	if (psWidget->style & WLAB_ALIGNCENTRE)	//check for centering, calculate offset.
@@ -1625,7 +1625,7 @@ static void displayText(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DEC
 	}
 
 	iV_SetTextColour(WZCOL_TEXT_BRIGHT);
-	iV_DrawText( psLab->aText, fx, fy);
+	iV_DrawText(psLab->aText.toUtf8().constData(), fx, fy);
 
 	return;
 }
@@ -1642,12 +1642,12 @@ static void displayTextAt270(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, W
 	iV_SetFont(font_large);
 
 	fx = xOffset + psWidget->x;
-	fy = yOffset + psWidget->y + iV_GetTextWidth(psLab->aText) ;
+	fy = yOffset + psWidget->y + iV_GetTextWidth(psLab->aText.toUtf8().constData());
 
 	iV_SetTextColour(WZCOL_GREY);
-	iV_DrawTextRotated(psLab->aText, fx+2, fy+2, 270.f);
+	iV_DrawTextRotated(psLab->aText.toUtf8().constData(), fx+2, fy+2, 270.f);
 	iV_SetTextColour(WZCOL_TEXT_BRIGHT);
-	iV_DrawTextRotated(psLab->aText, fx, fy, 270.f);
+	iV_DrawTextRotated(psLab->aText.toUtf8().constData(), fx, fy, 270.f);
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -1667,7 +1667,7 @@ void displayTextOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL
 		hilight = true;
 	}
 
-  	fw = iV_GetTextWidth(psBut->pText);
+  	fw = iV_GetTextWidth(psBut->pText.toUtf8().constData());
 	fy = yOffset + psWidget->y + (psWidget->height - iV_GetTextLineSize())/2 - iV_GetTextAboveBase();
 
 	if (psWidget->style & WBUT_TXTCENTRE)							//check for centering, calculate offset.
@@ -1699,7 +1699,7 @@ void displayTextOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL
 		}
 	}
 
-	iV_DrawText( psBut->pText, fx, fy);
+	iV_DrawText(psBut->pText.toUtf8().constData(), fx, fy);
 
 	return;
 }

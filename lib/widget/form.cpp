@@ -129,7 +129,7 @@ static void formFreePlain(W_FORM *psWidget)
 W_CLICKFORM::W_CLICKFORM(W_FORMINIT const *init)
 	: W_FORM(init)
 	, state(WCLICK_NORMAL)
-	, pTip(init->pTip)
+	, pTip(QString::fromUtf8(init->pTip))
 	, HilightAudioID(WidgGetHilightAudioID())
 	, ClickedAudioID(WidgGetClickedAudioID())
 	, AudioCallback(WidgGetAudioCallback())
@@ -167,6 +167,17 @@ static void formFreeClickable(W_CLICKFORM *psWidget)
 	delete psWidget;
 }
 
+W_MINORTAB::W_MINORTAB()
+	: psWidgets(NULL)
+{
+}
+
+
+W_MAJORTAB::W_MAJORTAB()
+	: lastMinor(0)
+	, numMinor(0)
+{
+}
 
 W_TABFORM::W_TABFORM(W_FORMINIT const *init)
 	: W_FORM(init)
@@ -189,8 +200,6 @@ W_TABFORM::W_TABFORM(W_FORMINIT const *init)
 	, numButtons(init->numButtons)
 	, pTabDisplay(init->pTabDisplay)
 {
-	memset(asMajor, 0, sizeof(asMajor));
-
 	/* Allocate the memory for tool tips and copy them in */
 	/* Set up the tab data.
 	 * All widget pointers have been zeroed by the memset above.
@@ -199,14 +208,14 @@ W_TABFORM::W_TABFORM(W_FORMINIT const *init)
 	for (unsigned major = 0; major < init->numMajor; ++major)
 	{
 		/* Check for a tip for the major tab */
-		asMajor[major].pTip = init->apMajorTips[major];
+		asMajor[major].pTip = QString::fromUtf8(init->apMajorTips[major]);
 		asMajor[major].lastMinor = 0;
 
 		/* Check for tips for the minor tab */
 		asMajor[major].numMinor = init->aNumMinors[major];
 		for (unsigned minor = 0; minor < init->aNumMinors[major]; ++minor)
 		{
-			asMajor[major].asMinor[minor].pTip = init->apMinorTips[major][minor];
+			asMajor[major].asMinor[minor].pTip = QString::fromUtf8(init->apMinorTips[major][minor]);
 		}
 	}
 
@@ -988,7 +997,7 @@ void W_TABFORM::run(W_CONTEXT *psContext)
 		{
 			// Got a new tab - start the tool tip if there is one.
 			tabHiLite = (UWORD)sTabPos.index;
-			char *pTip;
+			QString pTip;
 			if (sTabPos.index >= numMajor)
 			{
 				pTip = asMajor[majorT].asMinor[sTabPos.index - numMajor].pTip;
@@ -997,7 +1006,7 @@ void W_TABFORM::run(W_CONTEXT *psContext)
 			{
 				pTip = asMajor[sTabPos.index].pTip;
 			}
-			if (pTip)
+			if (!pTip.isEmpty())
 			{
 				// Got a tip - start it off.
 				tipStart(this, pTip, psContext->psScreen->TipFontID, aColours, sTabPos.x + psContext->xOffset, sTabPos.y + psContext->yOffset, sTabPos.width, sTabPos.height);
@@ -1123,7 +1132,7 @@ void W_CLICKFORM::highlight(W_CONTEXT *psContext)
 	state |= WCLICK_HILITE;
 
 	// If there is a tip string start the tool tip.
-	if (pTip)
+	if (!pTip.isEmpty())
 	{
 		tipStart(this, pTip, psContext->psScreen->TipFontID, psContext->psForm->aColours, x + psContext->xOffset, y + psContext->yOffset, width, height);
 	}

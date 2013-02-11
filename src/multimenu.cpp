@@ -269,7 +269,7 @@ void displayRequestOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIEL
 	UDWORD	y = yOffset+psWidget->y;
 	char  butString[255];
 
-	sstrcpy(butString, ((W_BUTTON *)psWidget)->pTip);
+	sstrcpy(butString, ((W_BUTTON *)psWidget)->pTip.toUtf8().constData());
 
 	drawBlueBox(x,y,psWidget->width,psWidget->height);	//draw box
 
@@ -631,7 +631,7 @@ static void closeMultiRequester(void)
 	return;
 }
 
-bool runMultiRequester(UDWORD id, UDWORD *mode, char *chosen, LEVEL_DATASET **chosenValue, bool *isHoverPreview)
+bool runMultiRequester(UDWORD id, UDWORD *mode, QString *chosen, LEVEL_DATASET **chosenValue, bool *isHoverPreview)
 {
 	static unsigned hoverId = 0;
 	static unsigned hoverStartTime = 0;
@@ -660,7 +660,7 @@ bool runMultiRequester(UDWORD id, UDWORD *mode, char *chosen, LEVEL_DATASET **ch
 	}
 	if (id >= M_REQUEST_BUT && id <= M_REQUEST_BUTM)  // chose a file.
 	{
-		strcpy(chosen,((W_BUTTON *)widgGetFromID(psRScreen,id))->pText );
+		*chosen = ((W_BUTTON *)widgGetFromID(psRScreen,id))->pText;
 
 		*chosenValue = (LEVEL_DATASET *)((W_BUTTON *)widgGetFromID(psRScreen,id))->pUserData;
 		*mode = context;

@@ -55,7 +55,7 @@ static SDWORD		mx, my;				// Last mouse coords
 static SDWORD		wx, wy, ww, wh;		// Position and size of button to place tip by
 static SDWORD		tx, ty, tw, th;		// Position and size of the tip box
 static SDWORD		fx, fy;				// Position of the text
-static const char *pTip;				// Tip text
+static QString          pTip;                   // Tip text
 static PIELIGHT		*pColours;			// The colours for the tool tip
 static WIDGET		*psWidget;			// The button the tip is for
 static enum iV_fonts FontID = font_regular;	// ID for the Ivis Font.
@@ -85,8 +85,7 @@ void widgSetTipColour(PIELIGHT colour)
  * x,y,width,height - specify the position of the button to place the
  * tip by.
  */
-void tipStart(WIDGET *psSource, const char *pNewTip, enum iV_fonts NewFontID,
-        PIELIGHT *pNewColours, SDWORD x, SDWORD y, UDWORD width, UDWORD height)
+void tipStart(WIDGET *psSource, QString pNewTip, iV_fonts NewFontID, PIELIGHT *pNewColours, int x, int y, int width, int height)
 {
 	ASSERT(psSource != NULL,
 	       "tipStart: Invalid widget pointer");
@@ -152,7 +151,7 @@ void tipDisplay(void)
 			topGap = TIP_VGAP;
 			iV_SetFont(FontID);
 
-			fw = iV_GetTextWidth(pTip);
+			fw = iV_GetTextWidth(pTip.toUtf8().constData());
 			tw = fw + TIP_HGAP * 2;
 			th = topGap * 2 + iV_GetTextLineSize() + iV_GetTextBelowBase();
 
@@ -209,7 +208,7 @@ void tipDisplay(void)
 
 		iV_SetFont(FontID);
 		iV_SetTextColour(TipColour);
-		iV_DrawText(pTip, fx, fy);
+		iV_DrawText(pTip.toUtf8().constData(), fx, fy);
 
 		break;
 	default:

@@ -1212,7 +1212,7 @@ static void showPasswordLabel( WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset,
 	iV_SetFont(font_large);
 	iV_SetTextColour(WZCOL_FORM_TEXT);
 
-	iV_DrawText(psLab->aText, fx, fy);
+	iV_DrawText(psLab->aText.toUtf8().constData(), fx, fy);
 	iV_SetTextColour(WZCOL_TEXT_MEDIUM);
 }
 
@@ -3679,7 +3679,7 @@ void frontendMultiMessages(void)
 void runMultiOptions(void)
 {
 	static UDWORD	lastrefresh = 0;
-	char                    sTemp[128], oldGameMap[128];
+	char                    oldGameMap[128];
 	int                     oldMaxPlayers;
 	PLAYERSTATS		playerStats;
 	W_CONTEXT		context;
@@ -3758,15 +3758,16 @@ void runMultiOptions(void)
 
 		LEVEL_DATASET *mapData;
 		bool isHoverPreview;
-		if (runMultiRequester(id, &id, (char *)&sTemp, &mapData, &isHoverPreview))
+		QString sTemp;
+		if (runMultiRequester(id, &id, &sTemp, &mapData, &isHoverPreview))
 		{
 			Sha256 oldGameHash;
 
 			switch(id)
 			{
 			case MULTIOP_PNAME:
-				sstrcpy(sPlayer, sTemp);
-				widgSetString(psWScreen,MULTIOP_PNAME,sTemp);
+				sstrcpy(sPlayer, sTemp.toUtf8().constData());
+				widgSetString(psWScreen, MULTIOP_PNAME, sTemp.toUtf8().constData());
 
 				removeWildcards((char*)sPlayer);
 

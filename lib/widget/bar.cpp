@@ -58,7 +58,7 @@ W_BARGRAPH::W_BARGRAPH(W_BARINIT const *init)
 	, majorCol(init->sCol)
 	, minorCol(init->sMinorCol)
 	, textCol(WZCOL_BLACK)
-	, pTip(init->pTip)
+	, pTip(QString::fromUtf8(init->pTip))
 {
 	/* Set the display function */
 	if (display == NULL)
@@ -194,7 +194,7 @@ void widgSetMinorBarSize(W_SCREEN *psScreen, UDWORD id, UDWORD iValue)
 /* Respond to a mouse moving over a barGraph */
 void W_BARGRAPH::highlight(W_CONTEXT *psContext)
 {
-	if (pTip)
+	if (!pTip.isEmpty())
 	{
 		tipStart(this, pTip, psContext->psScreen->TipFontID,
 		         psContext->psForm->aColours,

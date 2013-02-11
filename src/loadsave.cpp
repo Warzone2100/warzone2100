@@ -446,9 +446,9 @@ bool runLoadSave(bool bResetMissionWidgets)
 
 		if (mode)								// Loading, return that entry.
 		{
-			if( ((W_BUTTON *)widgGetFromID(psRequestScreen,id))->pText )
+			if (!((W_BUTTON *)widgGetFromID(psRequestScreen,id))->pText.isEmpty())
 			{
-				sprintf(sRequestResult, "%s%s%s", NewSaveGamePath, ((W_BUTTON *)widgGetFromID(psRequestScreen,id))->pText, sExt);
+				ssprintf(sRequestResult, "%s%s%s", NewSaveGamePath, ((W_BUTTON *)widgGetFromID(psRequestScreen,id))->pText.toUtf8().constData(), sExt);
 			}
 			else
 			{
@@ -470,14 +470,15 @@ bool runLoadSave(bool bResetMissionWidgets)
 				sEdInit.y     =	widgGetFromID(psRequestScreen,id)->y;
 				sEdInit.width = widgGetFromID(psRequestScreen,id)->width;
 				sEdInit.height= widgGetFromID(psRequestScreen,id)->height;
-				sEdInit.pText = ((W_BUTTON *)widgGetFromID(psRequestScreen,id))->pText;
+				QByteArray textBytes = ((W_BUTTON *)widgGetFromID(psRequestScreen,id))->pText.toUtf8();
+				sEdInit.pText = textBytes.constData();
 				sEdInit.pBoxDisplay = displayLoadSaveEdit;
 				widgAddEditBox(psRequestScreen, &sEdInit);
 
-				if (((W_BUTTON *)widgGetFromID(psRequestScreen,id))->pText != NULL)
+				if (!((W_BUTTON *)widgGetFromID(psRequestScreen,id))->pText.isEmpty())
 				{
 					snprintf(sDelete, sizeof(sDelete), "%s%s%s", NewSaveGamePath,
-					         ((W_BUTTON *)widgGetFromID(psRequestScreen,id))->pText, sExt);
+					         ((W_BUTTON *)widgGetFromID(psRequestScreen,id))->pText.toUtf8().constData(), sExt);
 				}
 				else
 				{
@@ -524,8 +525,8 @@ bool runLoadSave(bool bResetMissionWidgets)
 			if( i != chosenSlotId)
 			{
 
-				if( ((W_BUTTON *)widgGetFromID(psRequestScreen,i))->pText
-					&& strcmp( sTemp,	((W_BUTTON *)widgGetFromID(psRequestScreen,i))->pText ) ==0)
+				if(!((W_BUTTON *)widgGetFromID(psRequestScreen,i))->pText.isEmpty()
+				   && strcmp(sTemp, ((W_BUTTON *)widgGetFromID(psRequestScreen,i))->pText.toUtf8().constData()) == 0)
 				{
 					widgDelete(psRequestScreen,SAVEENTRY_EDIT);	//unselect this box, and go back ..
 					widgReveal(psRequestScreen,chosenSlotId);
@@ -681,9 +682,9 @@ static void displayLoadSlot(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ
 
 	drawBlueBox(x,y,psWidget->width,psWidget->height);	//draw box
 
-	if(((W_BUTTON *)psWidget)->pText )
+	if (!((W_BUTTON *)psWidget)->pText.isEmpty())
 	{
-		sstrcpy(butString, ((W_BUTTON *)psWidget)->pText);
+		sstrcpy(butString, ((W_BUTTON *)psWidget)->pText.toUtf8().constData());
 
 		iV_SetFont(font_regular);									// font
 		iV_SetTextColour(WZCOL_FORM_TEXT);

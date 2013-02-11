@@ -54,8 +54,8 @@ struct W_BUTTON : public WIDGET
 	void setFlash(bool enable);
 
 	UDWORD		state;				// The current button state
-	const char *pText;				// The text for the button
-	const char *pTip;				// The tool tip for the button
+	QString         pText;                          // The text for the button
+	QString         pTip;                           // The tool tip for the button
 	SWORD HilightAudioID;				// Audio ID for form clicked sound
 	SWORD ClickedAudioID;				// Audio ID for form hilighted sound
 	WIDGET_AUDIOCALLBACK AudioCallback;	// Pointer to audio callback function

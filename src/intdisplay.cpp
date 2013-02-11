@@ -305,7 +305,9 @@ void intUpdateQuantity(WIDGET *psWidget, W_CONTEXT *psContext)
 
 		psTemplate = FactoryGetTemplate(StructureGetFactory(Structure));
 		int remaining = getProduction(Structure, psTemplate).numRemaining();
-		snprintf(Label->aText, sizeof(Label->aText), "%d", remaining);
+		char tmp[20];
+		ssprintf(tmp, "%d", remaining);
+		Label->aText = QString::fromUtf8(tmp);
 		Label->style &= ~WIDG_HIDDEN;
 	}
 	else
@@ -331,12 +333,14 @@ void intAddFactoryInc(WIDGET *psWidget, W_CONTEXT *psContext)
 		        Structure->pStructureType->type == REF_VTOL_FACTORY),
 		       "Structure is not a factory");
 
-		snprintf(Label->aText, sizeof(Label->aText), "%u", Factory->psAssemblyPoint->factoryInc + 1);
+		char tmp[20];
+		ssprintf(tmp, "%u", Factory->psAssemblyPoint->factoryInc + 1);
+		Label->aText = QString::fromUtf8(tmp);
 		Label->style &= ~WIDG_HIDDEN;
 	}
 	else
 	{
-		Label->aText[0] = '\0';
+		Label->aText.clear();
 		Label->style |= WIDG_HIDDEN;
 	}
 }
@@ -367,19 +371,21 @@ void intAddProdQuantity(WIDGET *psWidget, W_CONTEXT *psContext)
 		// now find out how many we have built
 		if (entry.isValid())
 		{
+			char tmp[40];
 			if (psStructure->pFunctionality->factory.productionLoops != 0)
 			{
-				snprintf(Label->aText, sizeof(Label->aText), "%u/%u", entry.numRemaining(), entry.quantity);
+				ssprintf(tmp, "%u/%u", entry.numRemaining(), entry.quantity);
 			}
 			else
 			{
-				snprintf(Label->aText, sizeof(Label->aText), "%u", entry.numRemaining());
+				ssprintf(tmp, "%u", entry.numRemaining());
 			}
+			Label->aText = QString::fromUtf8(tmp);
 			Label->style &= ~WIDG_HIDDEN;
 		}
 		else
 		{
-			Label->aText[0] = '\0';
+			Label->aText.clear();
 			Label->style |= WIDG_HIDDEN;
 		}
 	}
@@ -398,22 +404,24 @@ void intAddLoopQuantity(WIDGET *psWidget, W_CONTEXT *psContext)
 
 		if (psFactory->productionLoops == INFINITE_PRODUCTION)
 		{
-			sstrcpy(Label->aText, "∞");
+			Label->aText = QString::fromUtf8("∞");
 		}
 		else if (psFactory->productionLoops != 0)
 		{
-			snprintf(Label->aText, sizeof(Label->aText), "%u", psFactory->productionLoops + DEFAULT_LOOP);
+			char tmp[20];
+			ssprintf(tmp, "%u", psFactory->productionLoops + DEFAULT_LOOP);
+			Label->aText = QString::fromUtf8(tmp);
 		}
 		else
 		{
-			Label->aText[0] = '\0';  // Don't show "1" loop.
+			Label->aText.clear();  // Don't show "1" loop.
 		}
 		Label->style &= ~WIDG_HIDDEN;
 	}
 	else
 	{
 		//hide the label if no factory
-		Label->aText[0] = '\0';
+		Label->aText.clear();
 		Label->style |= WIDG_HIDDEN;
 	}
 }
@@ -432,12 +440,14 @@ void intUpdateCommandSize(WIDGET *psWidget, W_CONTEXT *psContext)
 		ASSERT(psDroid->droidType == DROID_COMMAND,
 		       "Droid is not a command droid");
 
-		ssprintf(Label->aText, "%u/%u", psDroid->psGroup ? psDroid->psGroup->getNumMembers() : 0, cmdDroidMaxGroup(psDroid));
+		char tmp[40];
+		ssprintf(tmp, "%u/%u", psDroid->psGroup ? psDroid->psGroup->getNumMembers() : 0, cmdDroidMaxGroup(psDroid));
+		Label->aText = QString::fromUtf8(tmp);
 		Label->style &= ~WIDG_HIDDEN;
 	}
 	else
 	{
-		Label->aText[0] = '\0';
+		Label->aText.clear();
 		Label->style |= WIDG_HIDDEN;
 	}
 }
@@ -447,7 +457,6 @@ void intUpdateCommandExp(WIDGET *psWidget, W_CONTEXT *psContext)
 {
 	W_LABEL				*Label = (W_LABEL *)psWidget;
 	BASE_OBJECT			*psObj = (BASE_OBJECT *)Label->pUserData;
-	SDWORD				i, numStars;
 
 	// Get the object associated with this widget.
 	if (psObj != NULL && !isDead(psObj))
@@ -457,18 +466,13 @@ void intUpdateCommandExp(WIDGET *psWidget, W_CONTEXT *psContext)
 		ASSERT(psObj->type == OBJ_DROID, "Invalid droid pointer");
 		ASSERT(psDroid->droidType == DROID_COMMAND, "Droid is not a command droid");
 
-		numStars = getDroidLevel(psDroid);
-		numStars = (numStars >= 1) ? (numStars - 1) : 0;
-		for (i = 0; i < numStars; i++)
-		{
-			Label->aText[i] = '*';
-		}
-		Label->aText[i] = '\0';
+		int numStars = std::max((int)getDroidLevel(psDroid) - 1, 0);
+		Label->aText = QString(numStars, '*');
 		Label->style &= ~WIDG_HIDDEN;
 	}
 	else
 	{
-		Label->aText[0] = '\0';
+		Label->aText.clear();
 		Label->style |= WIDG_HIDDEN;
 	}
 }
@@ -478,7 +482,7 @@ void intUpdateCommandFact(WIDGET *psWidget, W_CONTEXT *psContext)
 {
 	W_LABEL				*Label = (W_LABEL *)psWidget;
 	BASE_OBJECT			*psObj = (BASE_OBJECT *)Label->pUserData;
-	SDWORD				i, cIndex, start;
+	SDWORD                          i, start;
 
 	// Get the object associated with this widget.
 	if (psObj != NULL && !isDead(psObj))
@@ -502,21 +506,19 @@ void intUpdateCommandFact(WIDGET *psWidget, W_CONTEXT *psContext)
 			start = DSS_ASSPROD_VTOL_SHIFT;
 		}
 
-		cIndex = 0;
+		Label->aText.clear();
 		for (i = 0; i < 5; ++i)  // TODO Support up to MAX_FACTORY (which won't fit in the ugly secondaryOrder bitmask hack).
 		{
 			if (psDroid->secondaryOrder & (1 << (i + start)))
 			{
-				Label->aText[cIndex] = (char)('0' + i + 1);
-				cIndex += 1;
+				Label->aText.append((char)('0' + i + 1));
 			}
 		}
-		Label->aText[cIndex] = '\0';
 		Label->style &= ~WIDG_HIDDEN;
 	}
 	else
 	{
-		Label->aText[0] = '\0';
+		Label->aText.clear();
 		Label->style |= WIDG_HIDDEN;
 	}
 }
@@ -1800,12 +1802,14 @@ void intDisplayNumber(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_
 	}
 	else
 	{
-		snprintf(Label->aText, sizeof(Label->aText), "%02u", Quantity);
+		char tmp[20];
+		ssprintf(tmp, "%02u", Quantity);
+		Label->aText = QString::fromUtf8(tmp);
 
-		for (int i = 0; Label->aText[i]; ++i)
+		for (int i = 0; i < Label->aText.size(); ++i)
 		{
-			iV_DrawImage(IntImages, (UWORD)(IMAGE_0 + (Label->aText[i] - '0')), x, y);
-			x += iV_GetImageWidth(IntImages, (UWORD)(IMAGE_0 + (Label->aText[i] - '0'))) + 1;
+			iV_DrawImage(IntImages, (UWORD)(IMAGE_0 + (Label->aText.toUtf8()[i] - '0')), x, y);
+			x += iV_GetImageWidth(IntImages, (UWORD)(IMAGE_0 + (Label->aText.toUtf8()[i] - '0'))) + 1;
 		}
 	}
 }

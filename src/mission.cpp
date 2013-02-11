@@ -1999,8 +1999,9 @@ UDWORD  missionGetReinforcementTime(void)
 }
 
 //fills in a hours(if bHours = true), minutes and seconds display for a given time in 1000th sec
-static void fillTimeDisplay(char *psText, UDWORD time, bool bHours)
+static void fillTimeDisplay(QString &text, UDWORD time, bool bHours)
 {
+	char psText[100];
 	//this is only for the transporter timer - never have hours!
 	if (time == LZ_COMPROMISED_TIME)
 	{
@@ -2012,6 +2013,7 @@ static void fillTimeDisplay(char *psText, UDWORD time, bool bHours)
 		struct tm *tmp = localtime(&secs);
 		strftime(psText, WIDG_MAXSTR, bHours ? "%H:%M:%S" : "%H:%M", tmp);
 	}
+	text = QString::fromUtf8(psText);
 }
 
 

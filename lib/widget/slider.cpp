@@ -47,7 +47,7 @@ W_SLIDER::W_SLIDER(W_SLDINIT const *init)
 	, orientation(init->orientation)
 	, numStops(init->numStops)
 	, barSize(init->barSize)
-	, pTip(init->pTip)
+	, pTip(QString::fromUtf8(init->pTip))
 {
 	if (display == NULL)
 	{

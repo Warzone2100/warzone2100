@@ -41,8 +41,7 @@ extern void tipInitialise(void);
  * x,y,width,height - specify the position of the button to place the
  * tip by.
  */
-extern void tipStart(WIDGET *psSource, const char *pTip, enum iV_fonts NewFontID,
-        PIELIGHT *pColours, SDWORD x, SDWORD y, UDWORD width, UDWORD height);
+void tipStart(WIDGET *psSource, QString pTip, iV_fonts NewFontID, PIELIGHT *pColours, int x, int y, int width, int height);
 
 /* Stop a tool tip (e.g. if the hilite is lost on a button).
  * psSource should be the same as the widget that started the tip.

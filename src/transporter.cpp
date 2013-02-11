@@ -994,7 +994,7 @@ bool transporterIsEmpty(const DROID *psTransporter)
 	        || psTransporter->psGroup->psList == psTransporter);
 }
 
-static void intSetTransCapacityLabel(char *Label)
+static void intSetTransCapacityLabel(QString &text)
 {
 	UDWORD capacity = TRANSPORTER_CAPACITY;
 
@@ -1005,8 +1005,9 @@ static void intSetTransCapacityLabel(char *Label)
 		//change round the way the remaining capacity is displayed - show 0/10 when empty now
 		capacity = TRANSPORTER_CAPACITY - capacity;
 
-		Label[0] = (UBYTE)('0' + capacity / 10);
-		Label[1] = (UBYTE)('0' + capacity % 10);
+		char tmp[40];
+		ssprintf(tmp, "%02u/10", capacity);
+		text = QString::fromUtf8(tmp);
 	}
 }
 

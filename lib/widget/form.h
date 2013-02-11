@@ -47,19 +47,23 @@ struct W_FORM : public WIDGET
 /* Information for a minor tab */
 struct W_MINORTAB
 {
+	W_MINORTAB();
+
 	/* Graphics data for the tab will go here */
 	WIDGET		*psWidgets;			// Widgets on the tab
-	char		*pTip;				// Tool tip
+	QString         pTip;                           // Tool tip
 };
 
 /* Information for a major tab */
 struct W_MAJORTAB
 {
+	W_MAJORTAB();
+
 	/* Graphics data for the tab will go here */
 	UWORD			lastMinor;					// Store which was the last selected minor tab
 	UWORD			numMinor;
 	W_MINORTAB		asMinor[WFORM_MAXMINOR];	// Minor tab information
-	char			*pTip;
+	QString                 pTip;
 };
 
 /* The tabbed form data structure */
@@ -124,7 +128,7 @@ struct W_CLICKFORM : public W_FORM
 	void setFlash(bool enable);
 
 	UDWORD		state;					// Button state of the form
-	const char	*pTip;					// Tip for the form
+	QString         pTip;                   // Tip for the form
 	SWORD HilightAudioID;				// Audio ID for form clicked sound
 	SWORD ClickedAudioID;				// Audio ID for form hilighted sound
 	WIDGET_AUDIOCALLBACK AudioCallback;	// Pointer to audio callback function
