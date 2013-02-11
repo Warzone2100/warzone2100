@@ -153,6 +153,15 @@ void W_BUTTON::setState(unsigned newState)
 	}
 }
 
+QString W_BUTTON::getString() const
+{
+	return pText;
+}
+
+void W_BUTTON::setString(QString string)
+{
+	pText = string;
+}
 
 /* Run a button widget */
 void W_BUTTON::run(W_CONTEXT *)

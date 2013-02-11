@@ -51,9 +51,6 @@ static SWORD ClickedAudioID = -1;
 static void widgDisplayForm(W_FORM *psForm, UDWORD xOffset, UDWORD yOffset);
 static void widgRelease(WIDGET *psWidget);
 
-/* Buffer to return strings in */
-static char aStringRetBuffer[WIDG_MAXSTR];
-
 static WIDGET_KEY lastReleasedKey_DEPRECATED = WKEY_NONE;
 
 
@@ -1031,6 +1028,11 @@ void widgSetButtonState(W_SCREEN *psScreen, UDWORD id, UDWORD state)
 	psWidget->setState(state);
 }
 
+QString WIDGET::getString() const
+{
+	ASSERT(false, "Can't get widget type %u's string.", type);
+	return QString();
+}
 
 /* Return a pointer to a buffer containing the current string of a widget.
  * NOTE: The string must be copied out of the buffer
@@ -1038,103 +1040,31 @@ void widgSetButtonState(W_SCREEN *psScreen, UDWORD id, UDWORD state)
 const char *widgGetString(W_SCREEN *psScreen, UDWORD id)
 {
 	const WIDGET *psWidget = widgGetFromID(psScreen, id);
+	ASSERT_OR_RETURN("", psWidget, "Couldn't find widget by ID %u", id);
 
-	ASSERT(psScreen != NULL, "widgGetString: Invalid screen pointer");
-
-	/* Get the widget */
-	if (psWidget != NULL)
-	{
-		switch (psWidget->type)
-		{
-		case WIDG_FORM:
-			ASSERT(false, "widgGetString: Forms do not have a string");
-			aStringRetBuffer[0] = '\0';
-			break;
-		case WIDG_LABEL:
-			sstrcpy(aStringRetBuffer, ((W_LABEL *)psWidget)->aText.toUtf8().constData());
-			break;
-		case WIDG_BUTTON:
-			sstrcpy(aStringRetBuffer, ((W_BUTTON *)psWidget)->pText.toUtf8().constData());
-			break;
-		case WIDG_EDITBOX:
-			{
-				sstrcpy(aStringRetBuffer, ((W_EDITBOX *)psWidget)->aText.toUtf8().constData());
-				break;
-			}
-		case WIDG_BARGRAPH:
-			ASSERT(false, "widgGetString: Bar Graphs do not have a string");
-			aStringRetBuffer[0] = '\0';
-			break;
-		case WIDG_SLIDER:
-			ASSERT(false, "widgGetString: Sliders do not have a string");
-			aStringRetBuffer[0] = '\0';
-			break;
-		default:
-			ASSERT(!"Unknown widget type", "Unknown widget type");
-			aStringRetBuffer[0] = '\0';
-			break;
-		}
-	}
-	else
-	{
-		ASSERT(!"Couldn't find widget by ID", "widgGetString: couldn't find widget by ID");
-		aStringRetBuffer[0] = '\0';
-	}
-
-	return aStringRetBuffer;
+	static QByteArray ret;  // Must be static so it isn't immediately freed when this function returns.
+	ret = psWidget->getString().toUtf8();
+	return ret.constData();
 }
 
+void WIDGET::setString(QString)
+{
+	ASSERT(false, "Can't set widget type %u's string.", type);
+}
 
 /* Set the text in a widget */
 void widgSetString(W_SCREEN *psScreen, UDWORD id, const char *pText)
 {
-	WIDGET	*psWidget;
-
-	ASSERT(psScreen != NULL,
-	       "widgSetString: Invalid screen pointer");
-
 	/* Get the widget */
-	psWidget = widgGetFromID(psScreen, id);
-	if (psWidget == NULL)
+	WIDGET *psWidget = widgGetFromID(psScreen, id);
+	ASSERT_OR_RETURN(, psWidget, "Couldn't find widget by ID %u", id);
+
+	if (psWidget->type == WIDG_EDITBOX && psScreen->psFocus == psWidget)
 	{
-		debug(LOG_ERROR, "widgSetString: couldn't get widget from id");
-		return;
+		screenClearFocus(psScreen);
 	}
 
-	switch (psWidget->type)
-	{
-	case WIDG_FORM:
-		ASSERT(false, "widgSetString: forms do not have a string");
-		break;
-
-	case WIDG_LABEL:
-		((W_LABEL *)psWidget)->aText = QString::fromUtf8(pText);
-		break;
-
-	case WIDG_BUTTON:
-		((W_BUTTON *)psWidget)->pText = QString::fromUtf8(pText);
-		break;
-
-	case WIDG_EDITBOX:
-		if (psScreen->psFocus == psWidget)
-		{
-			screenClearFocus(psScreen);
-		}
-		((W_EDITBOX *)psWidget)->setString(pText);
-		break;
-
-	case WIDG_BARGRAPH:
-		ASSERT(!"wrong widget type", "widgGetString: Bar graphs do not have a string");
-		break;
-
-	case WIDG_SLIDER:
-		ASSERT(!"wrong widget type", "widgGetString: Sliders do not have a string");
-		break;
-
-	default:
-		ASSERT(!"Unknown widget type", "Unknown widget type");
-		break;
-	}
+	psWidget->setString(QString::fromUtf8(pText));
 }
 
 

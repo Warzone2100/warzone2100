@@ -43,7 +43,6 @@ struct W_EDITBOX : public WIDGET
 	W_EDITBOX(W_EDBINIT const *init);
 
 	void initialise();  // Moves the cursor to the end.
-	void setString(char const *utf8);
 
 	void clicked(W_CONTEXT *psContext, WIDGET_KEY key);
 	void highlight(W_CONTEXT *psContext);
@@ -52,6 +51,8 @@ struct W_EDITBOX : public WIDGET
 	void run(W_CONTEXT *psContext);
 
 	void setState(unsigned state);
+	QString getString() const;
+	void setString(QString string);
 
 	UDWORD		state;						// The current edit box state
 	QString         aText;                  // The text in the edit box

@@ -136,3 +136,13 @@ void W_LABEL::highlightLost(W_CONTEXT *)
 		tipStop(this);
 	}
 }
+
+QString W_LABEL::getString() const
+{
+	return aText;
+}
+
+void W_LABEL::setString(QString string)
+{
+	aText = string;
+}

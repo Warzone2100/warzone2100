@@ -461,11 +461,15 @@ void W_EDITBOX::run(W_CONTEXT *psContext)
 	state = (state & ~WEDBS_MASK) | editState;
 }
 
+QString W_EDITBOX::getString() const
+{
+	return aText;
+}
 
 /* Set the current string for the edit box */
-void W_EDITBOX::setString(char const *utf8)
+void W_EDITBOX::setString(QString string)
 {
-	aText = QString::fromUtf8(utf8);
+	aText = string;
 	initialise();
 }
 

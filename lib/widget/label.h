@@ -36,6 +36,9 @@ struct W_LABEL : public WIDGET
 	void highlight(W_CONTEXT *psContext);
 	void highlightLost(W_CONTEXT *);
 
+	QString getString() const;
+	void setString(QString string);
+
 	QString  aText;         // Text on the label
 	iV_fonts FontID;
 	QString  pTip;          // The tool tip for the button

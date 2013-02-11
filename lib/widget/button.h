@@ -52,6 +52,8 @@ struct W_BUTTON : public WIDGET
 	unsigned getState();
 	void setState(unsigned state);
 	void setFlash(bool enable);
+	QString getString() const;
+	void setString(QString string);
 
 	UDWORD		state;				// The current button state
 	QString         pText;                          // The text for the button

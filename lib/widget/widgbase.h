@@ -83,6 +83,8 @@ struct WIDGET
 	virtual unsigned getState();
 	virtual void setState(unsigned state);
 	virtual void setFlash(bool enable);
+	virtual QString getString() const;
+	virtual void setString(QString string);
 
 	UDWORD                  formID;                 ///< ID of the widgets base form.
 	UDWORD                  id;                     ///< The user set ID number for the widget. This is returned when e.g. a button is pressed.
