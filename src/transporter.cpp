@@ -1589,14 +1589,14 @@ void processLaunchTransporter(void)
 			psForm = (W_CLICKFORM *)widgGetFromID(psWScreen, IDTRANS_LAUNCH);
 			if (psForm)
 			{
-				formSetClickState(psForm, WBUT_LOCK);
+				psForm->setState(WBUT_LOCK);
 			}
 
 			//disable the form so can't add any more droids into the transporter
 			psForm = (W_CLICKFORM *)widgGetFromID(psWScreen, IDTRANTIMER_BUTTON);
 			if (psForm)
 			{
-				formSetClickState(psForm, WBUT_LOCK);
+				psForm->setState(WBUT_LOCK);
 			}
 
 			launchTransporter(psCurrTransporter);
@@ -1692,7 +1692,7 @@ void resetTransporter()
 	psForm = (W_CLICKFORM *)widgGetFromID(psWScreen, IDTRANS_LAUNCH);
 	if (psForm)
 	{
-		formSetClickState(psForm, 0);
+		psForm->setState(0);
 	}
 }
 

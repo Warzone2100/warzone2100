@@ -51,6 +51,8 @@ struct W_EDITBOX : public WIDGET
 	void focusLost(W_SCREEN *psScreen);
 	void run(W_CONTEXT *psContext);
 
+	void setState(unsigned state);
+
 	UDWORD		state;						// The current edit box state
 	QString         aText;                  // The text in the edit box
 	iV_fonts        FontID;
@@ -80,8 +82,5 @@ extern W_EDITBOX *editBoxCreate(const W_EDBINIT *psInit);
 
 /* The edit box display function */
 extern void editBoxDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
-
-/* set state of edit box */
-extern void editBoxSetState(W_EDITBOX *psEditBox, UDWORD state);
 
 #endif // __INCLUDED_LIB_WIDGET_EDITBOX_H__

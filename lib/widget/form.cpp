@@ -397,59 +397,36 @@ bool formAddWidget(W_FORM *psForm, WIDGET *psWidget, W_INIT *psInit)
 }
 
 
-/* Get the button state of a click form */
-UDWORD formGetClickState(W_CLICKFORM *psForm)
+static const unsigned clickFormflagMap[] = {WCLICK_GREY,      WBUT_DISABLE,
+                                            WCLICK_LOCKED,    WBUT_LOCK,
+                                            WCLICK_CLICKLOCK, WBUT_CLICKLOCK};
+
+unsigned W_CLICKFORM::getState()
 {
-	UDWORD State = 0;
-
-	if (psForm->state & WCLICK_GREY)
+	unsigned retState = 0;
+	for (unsigned i = 0; i < ARRAY_SIZE(clickFormflagMap); i += 2)
 	{
-		State |= WBUT_DISABLE;
+		if ((state & clickFormflagMap[i]) != 0)
+		{
+			retState |= clickFormflagMap[i + 1];
+		}
 	}
 
-	if (psForm->state & WCLICK_LOCKED)
-	{
-		State |= WBUT_LOCK;
-	}
-
-	if (psForm->state & WCLICK_CLICKLOCK)
-	{
-		State |= WBUT_CLICKLOCK;
-	}
-
-	return State;
+	return retState;
 }
 
-
-/* Set the button state of a click form */
-void formSetClickState(W_CLICKFORM *psForm, UDWORD state)
+void W_CLICKFORM::setState(unsigned newState)
 {
 	ASSERT(!((state & WBUT_LOCK) && (state & WBUT_CLICKLOCK)),
 	       "widgSetButtonState: Cannot have WBUT_LOCK and WBUT_CLICKLOCK");
 
-	if (state & WBUT_DISABLE)
+	for (unsigned i = 0; i < ARRAY_SIZE(clickFormflagMap); i += 2)
 	{
-		psForm->state |= WCLICK_GREY;
-	}
-	else
-	{
-		psForm->state &= ~WCLICK_GREY;
-	}
-	if (state & WBUT_LOCK)
-	{
-		psForm->state |= WCLICK_LOCKED;
-	}
-	else
-	{
-		psForm->state &= ~WCLICK_LOCKED;
-	}
-	if (state & WBUT_CLICKLOCK)
-	{
-		psForm->state |= WCLICK_CLICKLOCK;
-	}
-	else
-	{
-		psForm->state &= ~WCLICK_CLICKLOCK;
+		state &= ~clickFormflagMap[i];
+		if ((newState & clickFormflagMap[i + 1]) != 0)
+		{
+			state |= clickFormflagMap[i];
+		}
 	}
 }
 

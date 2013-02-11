@@ -639,17 +639,8 @@ void editBoxDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *
 }
 
 
-
-/* Set an edit box'sstate */
-void editBoxSetState(W_EDITBOX *psEditBox, UDWORD state)
+void W_EDITBOX::setState(unsigned newState)
 {
-	if (state & WEDBS_DISABLE)
-	{
-		psEditBox->state |= WEDBS_DISABLE;
-	}
-	else
-	{
-		psEditBox->state &= ~WEDBS_DISABLE;
-	}
-
+	unsigned mask = WEDBS_DISABLE;
+	state = (state & ~mask) | (newState & mask);
 }

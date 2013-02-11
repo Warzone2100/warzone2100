@@ -119,6 +119,9 @@ struct W_CLICKFORM : public W_FORM
 	void highlightLost(W_CONTEXT *psContext);
 	void run(W_CONTEXT *psContext);
 
+	unsigned getState();
+	void setState(unsigned state);
+
 	UDWORD		state;					// Button state of the form
 	const char	*pTip;					// Tip for the form
 	SWORD HilightAudioID;				// Audio ID for form clicked sound
@@ -161,13 +164,7 @@ extern void formInitGetAllWidgets(W_FORM *psWidget, W_FORMGETALL *psCtrl);
  */
 extern WIDGET *formGetAllWidgets(W_FORMGETALL *psCtrl);
 
-/* Get the button state of a click form */
-extern UDWORD formGetClickState(W_CLICKFORM *psForm);
-
 extern void formSetFlash(W_FORM *psWidget);
-
-/* Set the button state of a click form */
-extern void formSetClickState(W_CLICKFORM *psForm, UDWORD state);
 
 /* Display function prototypes */
 extern void formDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);

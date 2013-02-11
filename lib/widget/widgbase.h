@@ -80,6 +80,9 @@ struct WIDGET
 	virtual void focusLost(W_SCREEN *) {}
 	virtual void run(W_CONTEXT *) {}
 
+	virtual unsigned getState();
+	virtual void setState(unsigned state);
+
 	UDWORD                  formID;                 ///< ID of the widgets base form.
 	UDWORD                  id;                     ///< The user set ID number for the widget. This is returned when e.g. a button is pressed.
 	WIDGET_TYPE             type;                   ///< The widget type

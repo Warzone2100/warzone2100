@@ -49,6 +49,9 @@ struct W_BUTTON : public WIDGET
 	void highlightLost(W_CONTEXT *psContext);
 	void run(W_CONTEXT *psContext);
 
+	unsigned getState();
+	void setState(unsigned state);
+
 	UDWORD		state;				// The current button state
 	const char *pText;				// The text for the button
 	const char *pTip;				// The tool tip for the button
@@ -69,12 +72,6 @@ extern void buttonFree(W_BUTTON *psWidget);
 
 /* Initialise a button widget before running it */
 extern void buttonInitialise(W_BUTTON *psWidget);
-
-/* Get a button's state */
-extern UDWORD buttonGetState(W_BUTTON *psButton);
-
-/* Set a button's state */
-extern void buttonSetState(W_BUTTON *psWidget, UDWORD state);
 
 extern void buttonSetFlash(W_BUTTON *psButton);
 extern void buttonClearFlash(W_BUTTON *psButton);

@@ -104,32 +104,27 @@ void buttonInitialise(W_BUTTON *psWidget)
 }
 
 
-/* Get a button's state */
-UDWORD buttonGetState(W_BUTTON *psButton)
+static const unsigned buttonflagMap[] = {WBUTS_GREY,      WBUT_DISABLE,
+                                         WBUTS_LOCKED,    WBUT_LOCK,
+                                         WBUTS_CLICKLOCK, WBUT_CLICKLOCK};
+
+unsigned W_BUTTON::getState()
 {
-	UDWORD State = 0;
-
-	if (psButton->state & WBUTS_GREY)
+	unsigned retState = 0;
+	for (unsigned i = 0; i < ARRAY_SIZE(buttonflagMap); i += 2)
 	{
-		State |= WBUT_DISABLE;
+		if ((state & buttonflagMap[i]) != 0)
+		{
+			retState |= buttonflagMap[i + 1];
+		}
 	}
 
-	if (psButton->state & WBUTS_LOCKED)
+	if (state & WBUTS_FLASH)
 	{
-		State |= WBUT_LOCK;
+		retState |= WBUT_FLASH;
 	}
 
-	if (psButton->state & WBUTS_CLICKLOCK)
-	{
-		State |= WBUT_CLICKLOCK;
-	}
-
-	if (psButton->state & WBUTS_FLASH)
-	{
-		State |= WBUT_FLASH;
-	}
-
-	return State;
+	return retState;
 }
 
 
@@ -145,35 +140,17 @@ void buttonClearFlash(W_BUTTON *psButton)
 	psButton->state &= ~WBUTS_FLASHON;
 }
 
-
-/* Set a button's state */
-void buttonSetState(W_BUTTON *psButton, UDWORD state)
+void W_BUTTON::setState(unsigned newState)
 {
-	ASSERT(!((state & WBUT_LOCK) && (state & WBUT_CLICKLOCK)), "Cannot have both WBUT_LOCK and WBUT_CLICKLOCK");
+	ASSERT(!((newState & WBUT_LOCK) && (newState & WBUT_CLICKLOCK)), "Cannot have both WBUT_LOCK and WBUT_CLICKLOCK");
 
-	if (state & WBUT_DISABLE)
+	for (unsigned i = 0; i < ARRAY_SIZE(buttonflagMap); i += 2)
 	{
-		psButton->state |= WBUTS_GREY;
-	}
-	else
-	{
-		psButton->state &= ~WBUTS_GREY;
-	}
-	if (state & WBUT_LOCK)
-	{
-		psButton->state |= WBUTS_LOCKED;
-	}
-	else
-	{
-		psButton->state &= ~WBUTS_LOCKED;
-	}
-	if (state & WBUT_CLICKLOCK)
-	{
-		psButton->state |= WBUTS_CLICKLOCK;
-	}
-	else
-	{
-		psButton->state &= ~WBUTS_CLICKLOCK;
+		state &= ~buttonflagMap[i];
+		if ((newState & buttonflagMap[i + 1]) != 0)
+		{
+			state |= buttonflagMap[i];
+		}
 	}
 }
 

@@ -576,7 +576,7 @@ void addTransporterTimerInterface(void)
 				psForm = (W_CLICKFORM *)widgGetFromID(psWScreen, IDTRANTIMER_BUTTON);
 				if (psForm)
 				{
-					formSetClickState(psForm, WBUT_LOCK);
+					psForm->setState(WBUT_LOCK);
 				}
 			}
 		}
@@ -1848,7 +1848,7 @@ void missionMoveTransporterOffWorld(DROID *psTransporter)
 			psForm = (W_CLICKFORM *)widgGetFromID(psWScreen, IDTRANTIMER_BUTTON);
 			if (psForm)
 			{
-				formSetClickState(psForm, WCLICK_NORMAL);
+				psForm->setState(WCLICK_NORMAL);
 			}
 
 		}

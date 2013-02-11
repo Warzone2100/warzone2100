@@ -976,30 +976,20 @@ UDWORD widgGetButtonKey_DEPRECATED(W_SCREEN *psScreen)
 	return lastReleasedKey_DEPRECATED;
 }
 
+unsigned WIDGET::getState()
+{
+	ASSERT(false, "Can't get widget type %u's state.", type);
+	return 0;
+}
+
 /* Get a button or clickable form's state */
 UDWORD widgGetButtonState(W_SCREEN *psScreen, UDWORD id)
 {
-	WIDGET	*psWidget;
-
 	/* Get the button */
-	psWidget = widgGetFromID(psScreen, id);
-	if (psWidget == NULL)
-	{
-		ASSERT(!"Couldn't find widget by ID", "Couldn't find button or clickable widget by ID");
-	}
-	else if (psWidget->type == WIDG_BUTTON)
-	{
-		return buttonGetState((W_BUTTON *)psWidget);
-	}
-	else if ((psWidget->type == WIDG_FORM) && (psWidget->style & WFORM_CLICKABLE))
-	{
-		return formGetClickState((W_CLICKFORM *)psWidget);
-	}
-	else
-	{
-		ASSERT(!"Couldn't find widget by ID", "Couldn't find button or clickable widget by ID");
-	}
-	return 0;
+	WIDGET *psWidget = widgGetFromID(psScreen, id);
+	ASSERT_OR_RETURN(0, psWidget, "Couldn't find widget by ID %u", id);
+
+	return psWidget->getState();
 }
 
 
@@ -1060,31 +1050,19 @@ void widgClearButtonFlash(W_SCREEN *psScreen, UDWORD id)
 }
 
 
+void WIDGET::setState(unsigned)
+{
+	ASSERT(false, "Can't set widget type %u's state.", type);
+}
+
 /* Set a button or clickable form's state */
 void widgSetButtonState(W_SCREEN *psScreen, UDWORD id, UDWORD state)
 {
-	WIDGET	*psWidget;
-
 	/* Get the button */
-	psWidget = widgGetFromID(psScreen, id);
-	ASSERT_OR_RETURN(, psWidget, "Couldn't find button or clickable widget by ID %u", state);
+	WIDGET *psWidget = widgGetFromID(psScreen, id);
+	ASSERT_OR_RETURN(, psWidget, "Couldn't find widget by ID %u", id);
 
-	if (psWidget->type == WIDG_BUTTON)
-	{
-		buttonSetState((W_BUTTON *)psWidget, state);
-	}
-	else if ((psWidget->type == WIDG_FORM) && (psWidget->style & WFORM_CLICKABLE))
-	{
-		formSetClickState((W_CLICKFORM *)psWidget, state);
-	}
-	else if (psWidget->type == WIDG_EDITBOX)
-	{
-		editBoxSetState((W_EDITBOX *)psWidget, state);
-	}
-	else
-	{
-		ASSERT(false, "Couldn't find button or clickable widget by type %d", (int)psWidget->type);
-	}
+	psWidget->setState(state);
 }
 
 
