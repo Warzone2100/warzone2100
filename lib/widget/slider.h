@@ -42,6 +42,8 @@ struct W_SLIDER : public WIDGET
 	void highlightLost(W_CONTEXT *psContext);
 	void run(W_CONTEXT *psContext);
 
+	void setTip(QString string);
+
 	WSLD_ORIENTATION orientation;                   // The orientation of the slider
 	UWORD		numStops;			// Number of stop positions on the slider
 	UWORD		barSize;			// Thickness of slider bar

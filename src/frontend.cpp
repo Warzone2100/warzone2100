@@ -1406,7 +1406,7 @@ bool runGameOptionsMenu(void)
 		widgSetString(psWScreen, FRONTEND_LANGUAGE_R, getLanguageName());
 		/* Hack to reset current menu text, which looks fancy. */
 		widgSetString(psWScreen, FRONTEND_SIDETEXT, _("GAME OPTIONS"));
-		widgSetTipText(widgGetFromID(psWScreen, FRONTEND_QUIT), P_("menu", "Return"));
+		widgGetFromID(psWScreen, FRONTEND_QUIT)->setTip(P_("menu", "Return"));
 		widgSetString(psWScreen, FRONTEND_LANGUAGE, _("Language"));
 		widgSetString(psWScreen, FRONTEND_COLOUR, _("Unit Colour:"));
 		widgSetString(psWScreen, FRONTEND_COLOUR_CAM, _("Campaign"));

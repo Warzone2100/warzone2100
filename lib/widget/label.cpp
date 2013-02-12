@@ -136,3 +136,8 @@ void W_LABEL::setString(QString string)
 {
 	aText = string;
 }
+
+void W_LABEL::setTip(QString string)
+{
+	pTip = string;
+}

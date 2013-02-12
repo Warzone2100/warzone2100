@@ -128,6 +128,7 @@ struct W_CLICKFORM : public W_FORM
 	unsigned getState();
 	void setState(unsigned state);
 	void setFlash(bool enable);
+	void setTip(QString string);
 
 	UDWORD		state;					// Button state of the form
 	QString         pTip;                   // Tip for the form

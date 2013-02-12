@@ -1533,3 +1533,8 @@ void formDisplayTabbed(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGH
 		/* case WFORM_TABNONE - no minor tabs so nothing to display */
 	}
 }
+
+void W_CLICKFORM::setTip(QString string)
+{
+	pTip = string;
+}

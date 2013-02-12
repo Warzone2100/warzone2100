@@ -397,3 +397,8 @@ void sliderDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *p
 		iV_Box(x0, y0, x1, y1, pColours[WCOL_HILITE]);
 	}
 }
+
+void W_SLIDER::setTip(QString string)
+{
+	pTip = string;
+}

@@ -38,6 +38,7 @@ struct W_LABEL : public WIDGET
 
 	QString getString() const;
 	void setString(QString string);
+	void setTip(QString string);
 
 	QString  aText;         // Text on the label
 	iV_fonts FontID;

@@ -816,6 +816,10 @@ void widgSetUserData2(W_SCREEN *psScreen, UDWORD id, UDWORD UserData)
 	}
 }
 
+void WIDGET::setTip(QString)
+{
+	ASSERT(false, "Can't set widget type %u's tip.", type);
+}
 
 /* Set tip string for a widget */
 void widgSetTip(W_SCREEN *psScreen, UDWORD id, const char *pTip)
@@ -827,54 +831,7 @@ void widgSetTip(W_SCREEN *psScreen, UDWORD id, const char *pTip)
 		return;
 	}
 
-	widgSetTipText(psWidget, pTip);
-}
-
-void widgSetTipText(WIDGET *psWidget, const char *pTip)
-{
-	ASSERT(psWidget != NULL, "invalid widget pointer");
-
-	switch (psWidget->type)
-	{
-	case WIDG_FORM:
-		if (psWidget->style & WFORM_CLICKABLE)
-		{
-			((W_CLICKFORM *) psWidget)->pTip = pTip;
-		}
-		else if (psWidget->style & WFORM_TABBED)
-		{
-			ASSERT(!"tabbed forms don't have a tip", "widgSetTip: tabbed forms do not have a tip");
-		}
-		else
-		{
-			ASSERT(!"plain forms don't have a tip", "widgSetTip: plain forms do not have a tip");
-		}
-		break;
-
-	case WIDG_LABEL:
-		((W_LABEL *) psWidget)->pTip = pTip;
-		break;
-
-	case WIDG_BUTTON:
-		((W_BUTTON *) psWidget)->pTip = pTip;
-		break;
-
-	case WIDG_BARGRAPH:
-		((W_BARGRAPH *) psWidget)->pTip = pTip;
-		break;
-
-	case WIDG_SLIDER:
-		((W_SLIDER *) psWidget)->pTip = pTip;
-		break;
-
-	case WIDG_EDITBOX:
-		ASSERT(!"wrong widget type", "widgSetTip: edit boxes do not have a tip");
-		break;
-
-	default:
-		ASSERT(!"Unknown widget type", "Unknown widget type");
-		break;
-	}
+	psWidget->setTip(pTip);
 }
 
 /* Return which key was used to press the last returned widget */

@@ -85,6 +85,10 @@ struct WIDGET
 	virtual void setFlash(bool enable);
 	virtual QString getString() const;
 	virtual void setString(QString string);
+	virtual void setTip(QString string);
+
+	void setString(char const *stringUtf8) { setString(QString::fromUtf8(stringUtf8)); }
+	void setTip(char const *stringUtf8) { setTip(QString::fromUtf8(stringUtf8)); }
 
 	UDWORD                  formID;                 ///< ID of the widgets base form.
 	UDWORD                  id;                     ///< The user set ID number for the widget. This is returned when e.g. a button is pressed.

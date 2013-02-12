@@ -147,7 +147,7 @@ static void formatTimeText(W_BARGRAPH *barGraph, int time)
 
 static void formatTime(W_BARGRAPH *barGraph, int buildPointsDone, int buildPointsTotal, int buildRate, char const *toolTip)
 {
-	widgSetTipText(barGraph, toolTip);
+	barGraph->setTip(toolTip);
 
 	if (buildRate != 0)
 	{
@@ -179,7 +179,7 @@ static void formatPower(W_BARGRAPH *barGraph, int neededPower, int powerToBuild)
 		return;
 	}
 
-	widgSetTipText(barGraph, _("Waiting for Power"));
+	barGraph->setTip(_("Waiting for Power"));
 	formatPowerText(barGraph, neededPower);
 	setBarGraphValue(barGraph, WZCOL_GREEN, powerToBuild - neededPower, powerToBuild);
 }

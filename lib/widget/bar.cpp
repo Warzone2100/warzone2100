@@ -438,3 +438,8 @@ void barGraphDisplayTrough(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIE
 
 	barGraphDisplayText(psBGraph, x0, tx1, ty1, pColours);
 }
+
+void W_BARGRAPH::setTip(QString string)
+{
+	pTip = string;
+}

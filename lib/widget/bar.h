@@ -34,6 +34,8 @@ struct W_BARGRAPH : public WIDGET
 	void highlight(W_CONTEXT *psContext);
 	void highlightLost(W_CONTEXT *);
 
+	void setTip(QString string);
+
 	WBAR_ORIENTATION barPos;                        // Orientation of the bar on the widget
 	UWORD		majorSize;			// Percentage of the main bar that is filled
 	UWORD		minorSize;			// Percentage of the minor bar if there is one

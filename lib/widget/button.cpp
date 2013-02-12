@@ -135,6 +135,11 @@ void W_BUTTON::setString(QString string)
 	pText = string;
 }
 
+void W_BUTTON::setTip(QString string)
+{
+	pTip = string;
+}
+
 /* Run a button widget */
 void W_BUTTON::run(W_CONTEXT *)
 {
