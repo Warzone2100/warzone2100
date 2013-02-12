@@ -51,9 +51,6 @@ struct W_BARGRAPH : public WIDGET
 	QString         text;                           // Text on the bar.
 };
 
-/* Create a barGraph widget data structure */
-extern W_BARGRAPH *barGraphCreate(const W_BARINIT *psInit);
-
 /* The bar graph display function */
 extern void barGraphDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 

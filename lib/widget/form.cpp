@@ -95,22 +95,11 @@ W_FORM::W_FORM(W_FORMINIT const *init)
 	aColours[WCOL_CURSOR]    = WZCOL_FORM_CURSOR;
 	aColours[WCOL_TIPBKGRND] = WZCOL_FORM_TIP_BACKGROUND;
 	aColours[WCOL_DISABLE]   = WZCOL_FORM_DISABLE;
-}
 
-
-/* Create a plain form widget */
-static W_FORM *formCreatePlain(const W_FORMINIT *psInit)
-{
-	/* Allocate the required memory */
-	W_FORM *psWidget = new W_FORM(psInit);
-	if (psWidget == NULL)
-	{
-		debug(LOG_FATAL, "formCreatePlain: Out of memory");
-		abort();
-		return NULL;
-	}
-
-	return psWidget;
+	ASSERT((init->style & ~(WFORM_TABBED | WFORM_INVISIBLE | WFORM_CLICKABLE | WFORM_NOCLICKMOVE | WFORM_NOPRIMARY | WFORM_SECONDARY | WIDG_HIDDEN)) == 0, "Unknown style bit");
+	ASSERT((init->style & WFORM_TABBED) == 0 || (init->style & (WFORM_INVISIBLE | WFORM_CLICKABLE)) == 0, "Tabbed form cannot be invisible or clickable");
+	ASSERT((init->style & WFORM_INVISIBLE) == 0 || (init->style & WFORM_CLICKABLE) == 0, "Cannot have an invisible clickable form");
+	ASSERT((init->style & WFORM_CLICKABLE) != 0 || (init->style & (WFORM_NOPRIMARY | WFORM_SECONDARY)) == 0, "Cannot set keys if the form isn't clickable");
 }
 
 W_FORM::~W_FORM()
@@ -131,21 +120,6 @@ W_CLICKFORM::W_CLICKFORM(W_FORMINIT const *init)
 	{
 		display = formDisplayClickable;
 	}
-}
-
-/* Create a plain form widget */
-static W_CLICKFORM *formCreateClickable(const W_FORMINIT *psInit)
-{
-	/* Allocate the required memory */
-	W_CLICKFORM *psWidget = new W_CLICKFORM(psInit);
-	if (psWidget == NULL)
-	{
-		debug(LOG_FATAL, "formCreateClickable: Out of memory");
-		abort();
-		return NULL;
-	}
-
-	return psWidget;
 }
 
 W_MINORTAB::W_MINORTAB()
@@ -204,51 +178,15 @@ W_TABFORM::W_TABFORM(W_FORMINIT const *init)
 	{
 		display = formDisplayTabbed;
 	}
-}
 
-/* Create a tabbed form widget */
-static W_TABFORM *formCreateTabbed(const W_FORMINIT *psInit)
-{
-	if (psInit->numMajor == 0)
+	ASSERT(init->numMajor != 0, "Must have at least one major tab on a tabbed form");
+	ASSERT(init->majorPos == 0 || init->majorPos != init->minorPos, "Cannot have major and minor tabs on same side");
+	ASSERT(init->numMajor < WFORM_MAXMAJOR, "Too many Major tabs");
+	for (unsigned major = 0; major < init->numMajor; ++major)
 	{
-		ASSERT(false, "formCreateTabbed: Must have at least one major tab on a tabbed form");
-		return NULL;
+		ASSERT(init->aNumMinors[major] < WFORM_MAXMINOR, "Too many Minor tabs for Major %u", major);
+		ASSERT(init->aNumMinors[major] != 0, "Must have at least one Minor tab for each major");
 	}
-	if (psInit->majorPos != 0
-	    && psInit->majorPos == psInit->minorPos)
-	{
-		ASSERT(false, "formCreateTabbed: Cannot have major and minor tabs on same side");
-		return NULL;
-	}
-	if (psInit->numMajor >= WFORM_MAXMAJOR)
-	{
-		ASSERT(false, "formCreateTabbed: Too many Major tabs");
-		return NULL;
-	}
-	for (unsigned major = 0; major < psInit->numMajor; ++major)
-	{
-		if (psInit->aNumMinors[major] >= WFORM_MAXMINOR)
-		{
-			ASSERT(false, "formCreateTabbed: Too many Minor tabs for Major %u", major);
-			return NULL;
-		}
-		if (psInit->aNumMinors[major] == 0)
-		{
-			ASSERT(false, "formCreateTabbed: Must have at least one Minor tab for each major");
-			return NULL;
-		}
-	}
-
-	/* Allocate the required memory */
-	W_TABFORM *psWidget = new W_TABFORM(psInit);
-	if (psWidget == NULL)
-	{
-		debug(LOG_FATAL, "formCreateTabbed: Out of memory");
-		abort();
-		return NULL;
-	}
-
-	return psWidget;
 }
 
 /* Free a tabbed form widget */
@@ -262,57 +200,8 @@ W_TABFORM::~W_TABFORM()
 	}
 }
 
-
-/* Create a form widget data structure */
-W_FORM *formCreate(const W_FORMINIT *psInit)
-{
-	/* Check the style bits are OK */
-	if (psInit->style & ~(WFORM_TABBED | WFORM_INVISIBLE | WFORM_CLICKABLE
-	        | WFORM_NOCLICKMOVE | WFORM_NOPRIMARY | WFORM_SECONDARY
-	        | WIDG_HIDDEN))
-	{
-		ASSERT(false, "formCreate: Unknown style bit");
-		return NULL;
-	}
-	if ((psInit->style & WFORM_TABBED)
-	    && (psInit->style & (WFORM_INVISIBLE | WFORM_CLICKABLE)))
-	{
-		ASSERT(false, "formCreate: Tabbed form cannot be invisible or clickable");
-		return NULL;
-	}
-	if ((psInit->style & WFORM_INVISIBLE)
-	    && (psInit->style & WFORM_CLICKABLE))
-	{
-		ASSERT(false, "formCreate: Cannot have an invisible clickable form");
-		return NULL;
-	}
-	if (!(psInit->style & WFORM_CLICKABLE)
-	    && ((psInit->style & WFORM_NOPRIMARY)
-	        || (psInit->style & WFORM_SECONDARY)))
-	{
-		ASSERT(false, "formCreate: Cannot set keys if the form isn't clickable");
-		return NULL;
-	}
-
-	/* Create the correct type of form */
-	if (psInit->style & WFORM_TABBED)
-	{
-		return (W_FORM *)formCreateTabbed(psInit);
-	}
-	else if (psInit->style & WFORM_CLICKABLE)
-	{
-		return (W_FORM *)formCreateClickable(psInit);
-	}
-	else
-	{
-		return formCreatePlain(psInit);
-	}
-
-	return NULL;
-}
-
 /* Add a widget to a form */
-bool formAddWidget(W_FORM *psForm, WIDGET *psWidget, W_INIT *psInit)
+bool formAddWidget(W_FORM *psForm, WIDGET *psWidget, W_INIT const *psInit)
 {
 	W_TABFORM	*psTabForm;
 	WIDGET		**ppsList;

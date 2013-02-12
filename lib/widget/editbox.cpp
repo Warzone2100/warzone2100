@@ -83,31 +83,10 @@ W_EDITBOX::W_EDITBOX(W_EDBINIT const *init)
 	}
 
 	initialise();
+
+	ASSERT((init->style & ~(WEDB_PLAIN | WIDG_HIDDEN)) == 0, "Unknown edit box style");
 }
 
-/* Create an edit box widget data structure */
-W_EDITBOX *editBoxCreate(const W_EDBINIT *psInit)
-{
-	if (psInit->style & ~(WEDB_PLAIN | WIDG_HIDDEN))
-	{
-		ASSERT(false, "Unknown edit box style");
-		return NULL;
-	}
-
-	/* Allocate the required memory */
-	W_EDITBOX *psWidget = new W_EDITBOX(psInit);
-	if (psWidget == NULL)
-	{
-		debug(LOG_FATAL, "editBoxCreate: Out of memory");
-		abort();
-		return NULL;
-	}
-
-	return psWidget;
-}
-
-
-/* Initialise an edit box widget */
 void W_EDITBOX::initialise()
 {
 	state = WEDBS_FIXED;

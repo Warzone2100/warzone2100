@@ -137,14 +137,7 @@ W_SCREEN *widgCreateScreen()
 	sInit.width = (UWORD)(screenWidth - 1);
 	sInit.height = (UWORD)(screenHeight - 1);
 
-	W_FORM *psForm = formCreate(&sInit);
-	if (psForm == NULL)
-	{
-		delete psScreen;
-		return NULL;
-	}
-
-	psScreen->psForm = psForm;
+	psScreen->psForm = new W_FORM(&sInit);
 	psScreen->psFocus = NULL;
 	psScreen->TipFontID = font_regular;
 
@@ -232,269 +225,82 @@ void widgSetTipFont(W_SCREEN *psScreen, enum iV_fonts FontID)
 	psScreen->TipFontID = FontID;
 }
 
-/* Add a form to the widget screen */
-bool widgAddForm(W_SCREEN *psScreen, const W_FORMINIT *psInit)
+static bool widgAddWidget(W_SCREEN *psScreen, W_INIT const *psInit, WIDGET *widget)
 {
-	W_FORM	*psParent, *psForm;
-
-	ASSERT(psScreen != NULL,
-	       "widgAddForm: Invalid screen pointer");
-
-	if (widgCheckIDForm((W_FORM *)psScreen->psForm, psInit->id))
-	{
-		ASSERT(false, "widgAddForm: ID number has already been used (%d)", psInit->id);
-		return false;
-	}
-
-	/* Find the form to add the widget to */
+	ASSERT_OR_RETURN(false, widget != NULL, "Invalid widget");
+	ASSERT_OR_RETURN(false, psScreen != NULL, "Invalid screen pointer");
+	ASSERT_OR_RETURN(false, !widgCheckIDForm((W_FORM *)psScreen->psForm, psInit->id), "ID number has already been used (%d)", psInit->id);
+	// Find the form to add the widget to.
+	W_FORM *psParent;
 	if (psInit->formID == 0)
 	{
 		/* Add to the base form */
-		psParent = (W_FORM *)psScreen->psForm;
+		psParent = psScreen->psForm;
 	}
 	else
 	{
 		psParent = (W_FORM *)widgGetFromID(psScreen, psInit->formID);
-		if (!psParent || psParent->type != WIDG_FORM)
-		{
-			ASSERT(false,
-			       "widgAddForm: Could not find parent form from formID");
-			return false;
-		}
 	}
+	ASSERT_OR_RETURN(false, psParent != NULL && psParent->type == WIDG_FORM, "Could not find parent form from formID");
 
-	/* Create the form structure */
-	psForm = formCreate(psInit);
-	if (psForm == NULL
-	    /* Add it to the screen */
-	    || !formAddWidget(psParent, (WIDGET *)psForm, (W_INIT *)psInit))
-	{
-		return false;
-	}
-
-	return true;
+	bool added = formAddWidget(psParent, widget, psInit);
+	return added;  // Should be true, unless triggering an assertion.
 }
 
+/* Add a form to the widget screen */
+bool widgAddForm(W_SCREEN *psScreen, const W_FORMINIT *psInit)
+{
+	W_FORM *psForm;
+	if (psInit->style & WFORM_TABBED)
+	{
+		psForm = new W_TABFORM(psInit);
+	}
+	else if (psInit->style & WFORM_CLICKABLE)
+	{
+		psForm = new W_CLICKFORM(psInit);
+	}
+	else
+	{
+		psForm = new W_FORM(psInit);
+	}
+
+	return widgAddWidget(psScreen, psInit, psForm);
+}
 
 /* Add a label to the widget screen */
 bool widgAddLabel(W_SCREEN *psScreen, const W_LABINIT *psInit)
 {
-	W_LABEL		*psLabel;
-	W_FORM		*psForm;
-
-	ASSERT(psScreen != NULL,
-	       "widgAddLabel: Invalid screen pointer");
-
-	if (widgCheckIDForm((W_FORM *)psScreen->psForm, psInit->id))
-	{
-		ASSERT(false, "widgAddLabel: ID number has already been used (%d)", psInit->id);
-		return false;
-	}
-
-	/* Find the form to put the button on */
-	if (psInit->formID == 0)
-	{
-		psForm = (W_FORM *)psScreen->psForm;
-	}
-	else
-	{
-		psForm = (W_FORM *)widgGetFromID(psScreen, psInit->formID);
-		if (psForm == NULL || psForm->type != WIDG_FORM)
-		{
-			ASSERT(false,
-			       "widgAddLabel: Could not find parent form from formID");
-			return false;
-		}
-	}
-
-	/* Create the button structure */
-	psLabel = labelCreate(psInit);
-	if (psInit == NULL
-	    /* Add it to the form */
-	    || !formAddWidget(psForm, (WIDGET *)psLabel, (W_INIT *)psInit))
-	{
-		return false;
-	}
-
-	return true;
+	W_LABEL *psLabel = new W_LABEL(psInit);
+	return widgAddWidget(psScreen, psInit, psLabel);
 }
-
 
 /* Add a button to the widget screen */
 bool widgAddButton(W_SCREEN *psScreen, const W_BUTINIT *psInit)
 {
-	W_BUTTON	*psButton;
-	W_FORM		*psForm;
-
-	ASSERT(psScreen != NULL,
-	       "widgAddButton: Invalid screen pointer");
-
-	if (widgCheckIDForm((W_FORM *)psScreen->psForm, psInit->id))
-	{
-		ASSERT(false, "widgAddButton: ID number has already been used(%d)", psInit->id);
-		return false;
-	}
-
-	/* Find the form to put the button on */
-	if (psInit->formID == 0)
-	{
-		psForm = (W_FORM *)psScreen->psForm;
-	}
-	else
-	{
-		psForm = (W_FORM *)widgGetFromID(psScreen, psInit->formID);
-		if (psForm == NULL || psForm->type != WIDG_FORM)
-		{
-			ASSERT(false,
-			       "widgAddButton: Could not find parent form from formID");
-			return false;
-		}
-	}
-
-	/* Create the button structure */
-	psButton = buttonCreate(psInit);
-	if (psButton == NULL
-	    /* Add it to the form */
-	    || !formAddWidget(psForm, (WIDGET *)psButton, (W_INIT *)psInit))
-	{
-		return false;
-	}
-
-	return true;
+	W_BUTTON *psButton = new W_BUTTON(psInit);
+	return widgAddWidget(psScreen, psInit, psButton);
 }
-
 
 /* Add an edit box to the widget screen */
 bool widgAddEditBox(W_SCREEN *psScreen, const W_EDBINIT *psInit)
 {
-	W_EDITBOX	*psEdBox;
-	W_FORM		*psForm;
-
-	ASSERT(psScreen != NULL,
-	       "widgAddEditBox: Invalid screen pointer");
-
-	if (widgCheckIDForm((W_FORM *)psScreen->psForm, psInit->id))
-	{
-		ASSERT(false, "widgAddEditBox: ID number has already been used (%d)", psInit->id);
-		return false;
-	}
-
-	/* Find the form to put the edit box on */
-	if (psInit->formID == 0)
-	{
-		psForm = (W_FORM *)psScreen->psForm;
-	}
-	else
-	{
-		psForm = (W_FORM *)widgGetFromID(psScreen, psInit->formID);
-		if (!psForm || psForm->type != WIDG_FORM)
-		{
-			ASSERT(false,
-			       "widgAddEditBox: Could not find parent form from formID");
-			return false;
-		}
-	}
-
-	/* Create the edit box structure */
-	psEdBox = editBoxCreate(psInit);
-	if (psEdBox == NULL
-	    /* Add it to the form */
-	    || !formAddWidget(psForm, (WIDGET *)psEdBox, (W_INIT *)psInit))
-	{
-		return false;
-	}
-
-	return true;
+	W_EDITBOX *psEdBox = new W_EDITBOX(psInit);
+	return widgAddWidget(psScreen, psInit, psEdBox);
 }
-
 
 /* Add a bar graph to the widget screen */
 bool widgAddBarGraph(W_SCREEN *psScreen, const W_BARINIT *psInit)
 {
-	W_BARGRAPH	*psBarGraph;
-	W_FORM		*psForm;
-
-	ASSERT(psScreen != NULL,
-	       "widgAddEditBox: Invalid screen pointer");
-
-	if (widgCheckIDForm((W_FORM *)psScreen->psForm, psInit->id))
-	{
-		ASSERT(false, "widgAddBarGraph: ID number has already been used (%d)", psInit->id);
-		return false;
-	}
-
-	/* Find the form to put the bar graph on */
-	if (psInit->formID == 0)
-	{
-		psForm = (W_FORM *)psScreen->psForm;
-	}
-	else
-	{
-		psForm = (W_FORM *)widgGetFromID(psScreen, psInit->formID);
-		if (!psForm || psForm->type != WIDG_FORM)
-		{
-			ASSERT(false,
-			       "widgAddBarGraph: Could not find parent form from formID");
-			return false;
-		}
-	}
-
-	/* Create the bar graph structure */
-	psBarGraph = barGraphCreate(psInit);
-	if (psBarGraph == NULL
-	    /* Add it to the form */
-	    || !formAddWidget(psForm, (WIDGET *)psBarGraph, (W_INIT *)psInit))
-	{
-		return false;
-	}
-
-	return true;
+	W_BARGRAPH *psBarGraph = new W_BARGRAPH(psInit);
+	return widgAddWidget(psScreen, psInit, psBarGraph);
 }
-
 
 /* Add a slider to a form */
 bool widgAddSlider(W_SCREEN *psScreen, const W_SLDINIT *psInit)
 {
-	W_SLIDER	*psSlider;
-	W_FORM		*psForm;
-
-	ASSERT(psScreen != NULL,
-	       "widgAddEditBox: Invalid screen pointer");
-
-	if (widgCheckIDForm((W_FORM *)psScreen->psForm, psInit->id))
-	{
-		ASSERT(false, "widgSlider: ID number has already been used (%d)", psInit->id);
-		return false;
-	}
-
-	/* Find the form to put the slider on */
-	if (psInit->formID == 0)
-	{
-		psForm = (W_FORM *)psScreen->psForm;
-	}
-	else
-	{
-		psForm = (W_FORM *)widgGetFromID(psScreen, psInit->formID);
-		if (!psForm
-		    || psForm->type != WIDG_FORM)
-		{
-			ASSERT(false, "widgAddSlider: Could not find parent form from formID");
-			return false;
-		}
-	}
-
-	/* Create the slider structure */
-	psSlider = sliderCreate(psInit);
-	if (psSlider == NULL
-	    /* Add it to the form */
-	    || !formAddWidget(psForm, (WIDGET *)psSlider, (W_INIT *)psInit))
-	{
-		return false;
-	}
-
-	return true;
+	W_SLIDER *psSlider = new W_SLIDER(psInit);
+	return widgAddWidget(psScreen, psInit, psSlider);
 }
-
 
 /* Delete a widget from a form */
 static bool widgDeleteFromForm(W_FORM *psForm, UDWORD id, W_CONTEXT *psContext)

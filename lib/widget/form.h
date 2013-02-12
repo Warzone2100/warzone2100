@@ -137,11 +137,8 @@ struct W_CLICKFORM : public W_FORM
 	WIDGET_AUDIOCALLBACK AudioCallback;	// Pointer to audio callback function
 };
 
-/* Create a form widget data structure */
-extern W_FORM *formCreate(const W_FORMINIT *psInit);
-
 /* Add a widget to a form */
-extern bool formAddWidget(W_FORM *psForm, WIDGET *psWidget, W_INIT *psInit);
+bool formAddWidget(W_FORM *psForm, WIDGET *psWidget, W_INIT const *psInit);
 
 /* Return the widgets currently displayed by a form */
 extern WIDGET *formGetWidgets(W_FORM *psWidget);

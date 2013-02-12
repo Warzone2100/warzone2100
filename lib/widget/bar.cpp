@@ -83,46 +83,11 @@ W_BARGRAPH::W_BARGRAPH(W_BARINIT const *init)
 	{
 		majorCol = minorCol;
 	}
-}
 
-/* Create a barGraph widget data structure */
-W_BARGRAPH *barGraphCreate(const W_BARINIT *psInit)
-{
-	if (psInit->style & ~(WBAR_PLAIN | WBAR_TROUGH | WBAR_DOUBLE | WIDG_HIDDEN))
-	{
-		ASSERT(false, "Unknown bar graph style");
-		return NULL;
-	}
-
-	if (psInit->orientation < WBAR_LEFT
-	    || psInit->orientation > WBAR_BOTTOM)
-	{
-		ASSERT(false, "barGraphCreate: Unknown orientation");
-		return NULL;
-	}
-
-	if (psInit->size > WBAR_SCALE)
-	{
-		ASSERT(false, "barGraphCreate: Bar size out of range");
-		return NULL;
-	}
-	if ((psInit->style & WBAR_DOUBLE)
-	    && (psInit->minorSize > WBAR_SCALE))
-	{
-		ASSERT(false, "barGraphCreate: Minor bar size out of range");
-		return NULL;
-	}
-
-	/* Allocate the required memory */
-	W_BARGRAPH *psWidget = new W_BARGRAPH(psInit);
-	if (psWidget == NULL)
-	{
-		debug(LOG_FATAL, "barGraphCreate: Out of memory");
-		abort();
-		return NULL;
-	}
-
-	return psWidget;
+	ASSERT((init->style & ~(WBAR_PLAIN | WBAR_TROUGH | WBAR_DOUBLE | WIDG_HIDDEN)) == 0, "Unknown bar graph style");
+	ASSERT(init->orientation >= WBAR_LEFT || init->orientation <= WBAR_BOTTOM, "Unknown orientation");
+	ASSERT(init->size <= WBAR_SCALE, "Bar size out of range");
+	ASSERT((init->style & WBAR_DOUBLE) == 0 || init->minorSize <= WBAR_SCALE, "Minor bar size out of range");
 }
 
 /* Set the current size of a bar graph */

@@ -77,9 +77,6 @@ private:
 	void setCursorPosPixels(int xPos);
 };
 
-/* Create an edit box widget data structure */
-extern W_EDITBOX *editBoxCreate(const W_EDBINIT *psInit);
-
 /* The edit box display function */
 extern void editBoxDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 

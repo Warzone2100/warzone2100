@@ -55,63 +55,16 @@ W_SLIDER::W_SLIDER(W_SLDINIT const *init)
 	{
 		display = sliderDisplay;
 	}
-}
 
-
-/* Create a slider widget data structure */
-W_SLIDER *sliderCreate(const W_SLDINIT *psInit)
-{
-	if (psInit->style & ~(WBAR_PLAIN | WIDG_HIDDEN))
-	{
-		ASSERT(false, "sliderCreate: Unknown style");
-		return NULL;
-	}
-
-	if (psInit->orientation < WSLD_LEFT
-	    || psInit->orientation > WSLD_BOTTOM)
-	{
-		ASSERT(false, "sliderCreate: Unknown orientation");
-		return NULL;
-	}
-
-	if (((psInit->orientation == WSLD_LEFT
-	      || psInit->orientation == WSLD_RIGHT)
-	     && psInit->numStops > (psInit->width - psInit->barSize))
-	    || ((psInit->orientation == WSLD_TOP
-	            || psInit->orientation == WSLD_BOTTOM)
-	        && psInit->numStops > (psInit->height - psInit->barSize)))
-	{
-		ASSERT(false, "sliderCreate: Too many stops for slider length");
-		return NULL;
-	}
-
-	if (psInit->pos > psInit->numStops)
-	{
-		ASSERT(false, "sliderCreate: slider position greater than stops (%d/%d)", psInit->pos,  psInit->numStops);
-		return NULL;
-	}
-
-	if (((psInit->orientation == WSLD_LEFT
-	      || psInit->orientation == WSLD_RIGHT)
-	     && psInit->barSize > psInit->width)
-	    || ((psInit->orientation == WSLD_TOP
-	            || psInit->orientation == WSLD_BOTTOM)
-	        && psInit->barSize > psInit->height))
-	{
-		ASSERT(false, "sliderCreate: slider bar is larger than slider width");
-		return NULL;
-	}
-
-	/* Allocate the required memory */
-	W_SLIDER *psWidget = new W_SLIDER(psInit);
-	if (psWidget == NULL)
-	{
-		debug(LOG_FATAL, "sliderCreate: Out of memory");
-		abort();
-		return NULL;
-	}
-
-	return psWidget;
+	ASSERT((init->style & ~(WBAR_PLAIN | WIDG_HIDDEN)) == 0, "Unknown style");
+	ASSERT(init->orientation >= WSLD_LEFT || init->orientation <= WSLD_BOTTOM, "Unknown orientation");
+	bool horizontal = init->orientation == WSLD_LEFT || init->orientation == WSLD_RIGHT;
+	bool vertical = init->orientation == WSLD_TOP || init->orientation == WSLD_BOTTOM;
+	ASSERT((!horizontal || init->numStops <= init->width  - init->barSize) &&
+	       (!vertical   || init->numStops <= init->height - init->barSize), "Too many stops for slider length");
+	ASSERT(init->pos <= init->numStops, "Slider position greater than stops (%d/%d)", init->pos, init->numStops);
+	ASSERT((!horizontal || init->barSize <= init->width) &&
+	       (!vertical   || init->barSize <= init->height), "Slider bar is larger than slider width");
 }
 
 /* Get the current position of a slider bar */

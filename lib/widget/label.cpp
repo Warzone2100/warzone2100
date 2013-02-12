@@ -46,30 +46,8 @@ W_LABEL::W_LABEL(W_LABINIT const *init)
 	{
 		display = labelDisplay;
 	}
-}
 
-
-/* Create a button widget data structure */
-W_LABEL *labelCreate(const W_LABINIT *psInit)
-{
-	/* Do some validation on the initialisation struct */
-	if (psInit->style & ~(WLAB_PLAIN | WLAB_ALIGNLEFT |
-	        WLAB_ALIGNRIGHT | WLAB_ALIGNCENTRE | WIDG_HIDDEN))
-	{
-		ASSERT(false, "Unknown button style");
-		return NULL;
-	}
-
-	/* Allocate the required memory */
-	W_LABEL *psWidget = new W_LABEL(psInit);
-	if (psWidget == NULL)
-	{
-		debug(LOG_FATAL, "labelCreate: Out of memory");
-		abort();
-		return NULL;
-	}
-
-	return psWidget;
+	ASSERT((init->style & ~(WLAB_PLAIN | WLAB_ALIGNLEFT | WLAB_ALIGNRIGHT | WLAB_ALIGNCENTRE | WIDG_HIDDEN)) == 0, "Unknown button style");
 }
 
 /* label display function */

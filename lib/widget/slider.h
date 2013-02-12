@@ -52,9 +52,6 @@ struct W_SLIDER : public WIDGET
 	QString         pTip;                           // Tool tip
 };
 
-/* Create a slider widget data structure */
-extern W_SLIDER *sliderCreate(const W_SLDINIT *psInit);
-
 /* The slider display function */
 extern void sliderDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 

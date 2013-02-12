@@ -52,28 +52,8 @@ W_BUTTON::W_BUTTON(W_BUTINIT const *init)
 	{
 		display = buttonDisplay;
 	}
-}
 
-/* Create a button widget data structure */
-W_BUTTON *buttonCreate(const W_BUTINIT *psInit)
-{
-	if (psInit->style & ~(WBUT_PLAIN | WIDG_HIDDEN | WFORM_NOCLICKMOVE
-	        | WBUT_NOPRIMARY | WBUT_SECONDARY | WBUT_TXTCENTRE))
-	{
-		ASSERT(!"unknown button style", "buttonCreate: unknown button style");
-		return NULL;
-	}
-
-	/* Allocate the required memory */
-	W_BUTTON *psWidget = new W_BUTTON(psInit);
-	if (psWidget == NULL)
-	{
-		debug(LOG_FATAL, "buttonCreate: Out of memory");
-		abort();
-		return NULL;
-	}
-
-	return psWidget;
+	ASSERT((init->style & ~(WBUT_PLAIN | WIDG_HIDDEN | WFORM_NOCLICKMOVE | WBUT_NOPRIMARY | WBUT_SECONDARY | WBUT_TXTCENTRE)) == 0, "unknown button style");
 }
 
 static const unsigned buttonflagMap[] = {WBUTS_GREY,      WBUT_DISABLE,
