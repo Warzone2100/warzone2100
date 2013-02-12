@@ -64,9 +64,6 @@ struct W_BUTTON : public WIDGET
 	enum iV_fonts FontID;
 };
 
-/* Initialise the button module */
-extern bool buttonStartUp(void);
-
 /* Create a button widget data structure */
 extern W_BUTTON *buttonCreate(const W_BUTINIT *psInit);
 

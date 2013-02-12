@@ -32,12 +32,6 @@
 #include "lib/gamelib/gtime.h"
 
 
-/* Initialise the button module */
-bool buttonStartUp(void)
-{
-	return true;
-}
-
 W_BUTINIT::W_BUTINIT()
 	: pText(NULL)
 	, pTip(NULL)
