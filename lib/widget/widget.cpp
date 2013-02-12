@@ -649,67 +649,6 @@ void widgDelete(W_SCREEN *psScreen, UDWORD id)
 	(void)widgDeleteFromForm((W_FORM *)psScreen->psForm, id, &sContext);
 }
 
-
-/* Initialise a form and all it's widgets */
-static void widgStartForm(W_FORM *psForm)
-{
-	WIDGET			*psCurr;
-	W_FORMGETALL	sGetAll;
-
-	/* Initialise this form */
-	// This whole function should be redundant, since all widgets are initialised when created...
-	//formInitialise(psForm);
-
-	/*Initialise the widgets on the form */
-	formInitGetAllWidgets(psForm, &sGetAll);
-	psCurr = formGetAllWidgets(&sGetAll);
-	while (psCurr != NULL)
-	{
-		switch (psCurr->type)
-		{
-		case WIDG_FORM:
-			widgStartForm((W_FORM *)psCurr);
-			break;
-		case WIDG_LABEL:
-			break;
-		case WIDG_BUTTON:
-			buttonInitialise((W_BUTTON *)psCurr);
-			break;
-		case WIDG_EDITBOX:
-			((W_EDITBOX *)psCurr)->initialise();
-			break;
-		case WIDG_BARGRAPH:
-			break;
-		case WIDG_SLIDER:
-			sliderInitialise((W_SLIDER *)psCurr);
-			break;
-		default:
-			ASSERT(!"Unknown widget type", "Unknown widget type");
-			break;
-		}
-
-		psCurr = psCurr->psNext;
-		if (!psCurr)
-		{
-			/* Got to the end of this list see if there is another */
-			psCurr = formGetAllWidgets(&sGetAll);
-		}
-	}
-}
-
-/* Initialise the set of widgets that make up a screen */
-void widgStartScreen(W_SCREEN *psScreen)
-{
-	psScreen->psFocus = NULL;
-	widgStartForm((W_FORM *)psScreen->psForm);
-}
-
-/* Clean up after a screen has been run */
-void widgEndScreen(W_SCREEN *psScreen)
-{
-	(void)psScreen;
-}
-
 /* Find a widget on a form from it's id number */
 static WIDGET *widgFormGetFromID(W_FORM *psForm, UDWORD id)
 {

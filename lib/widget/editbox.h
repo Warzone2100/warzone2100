@@ -42,8 +42,6 @@ struct W_EDITBOX : public WIDGET
 {
 	W_EDITBOX(W_EDBINIT const *init);
 
-	void initialise();  // Moves the cursor to the end.
-
 	void clicked(W_CONTEXT *psContext, WIDGET_KEY key);
 	void highlight(W_CONTEXT *psContext);
 	void highlightLost(W_CONTEXT *psContext);
@@ -69,6 +67,7 @@ struct W_EDITBOX : public WIDGET
 	WIDGET_AUDIOCALLBACK AudioCallback;		// Pointer to audio callback function
 
 private:
+	void initialise();  // Moves the cursor to the end.
 	void delCharRight();
 	void delCharLeft();
 	void insertChar(QChar ch);

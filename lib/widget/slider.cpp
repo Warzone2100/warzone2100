@@ -47,16 +47,14 @@ W_SLIDER::W_SLIDER(W_SLDINIT const *init)
 	, orientation(init->orientation)
 	, numStops(init->numStops)
 	, barSize(init->barSize)
+	, pos(init->pos)
+	, state(0)
 	, pTip(QString::fromUtf8(init->pTip))
 {
 	if (display == NULL)
 	{
 		display = sliderDisplay;
 	}
-
-	sliderInitialise(this);
-
-	pos = init->pos;  // Must be after sliderInitialise().
 }
 
 
@@ -115,17 +113,6 @@ W_SLIDER *sliderCreate(const W_SLDINIT *psInit)
 
 	return psWidget;
 }
-
-/* Initialise a slider widget before running it */
-void sliderInitialise(W_SLIDER *psWidget)
-{
-	ASSERT(psWidget != NULL,
-	       "sliderInitialise: Invalid slider pointer");
-
-	psWidget->state = 0;
-	psWidget->pos = 0;
-}
-
 
 /* Get the current position of a slider bar */
 UDWORD widgGetSliderPos(W_SCREEN *psScreen, UDWORD id)

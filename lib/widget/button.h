@@ -67,9 +67,6 @@ struct W_BUTTON : public WIDGET
 /* Create a button widget data structure */
 extern W_BUTTON *buttonCreate(const W_BUTINIT *psInit);
 
-/* Initialise a button widget before running it */
-extern void buttonInitialise(W_BUTTON *psWidget);
-
 /* The button display function */
 extern void buttonDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 

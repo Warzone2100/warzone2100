@@ -535,8 +535,6 @@ bool intAddOrder(BASE_OBJECT *psObj)
 		}
 	}
 
-	widgEndScreen(psWScreen);
-
 	/* Create the basic form */
 
 	W_FORMINIT sFormInit;

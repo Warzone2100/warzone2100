@@ -404,18 +404,6 @@ extern void widgSetButtonState(W_SCREEN *psScreen, UDWORD id, UDWORD state);
 /** Return which key was used to press the last returned widget */
 extern UDWORD widgGetButtonKey_DEPRECATED(W_SCREEN *psScreen);
 
-/** Initialise the set of widgets that make up a screen.
- * Call this once before calling widgRunScreen and widgDisplayScreen.
- * This should only be called once before calling Run and Display as many times
- * as is required.
- */
-extern void widgStartScreen(W_SCREEN *psScreen);
-
-/** Clean up after a screen has been run.
- * Call this after the widgRunScreen / widgDisplayScreen cycle.
- */
-extern void widgEndScreen(W_SCREEN *psScreen);
-
 /** Execute a set of widgets for one cycle.
  * Return the id of the widget that was activated, or 0 for none.
  */

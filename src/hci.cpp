@@ -509,9 +509,6 @@ bool intInitialise(void)
 		}
 	}
 
-	/* Initialise the screen to be run */
-	widgStartScreen(psWScreen);
-
 	/* Note the current screen state */
 	intMode = INT_NORMAL;
 
@@ -4254,8 +4251,6 @@ static bool intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 	psStatsScreenOwner = psOwner;
 
 	ClearStatBuffers();
-
-	widgEndScreen(psWScreen);
 
 	/* Create the basic form */
 

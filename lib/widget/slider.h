@@ -53,9 +53,6 @@ struct W_SLIDER : public WIDGET
 /* Create a slider widget data structure */
 extern W_SLIDER *sliderCreate(const W_SLDINIT *psInit);
 
-/* Initialise a slider widget before running it */
-extern void sliderInitialise(W_SLIDER *psWidget);
-
 /* The slider display function */
 extern void sliderDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 

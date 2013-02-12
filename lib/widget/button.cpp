@@ -40,6 +40,7 @@ W_BUTINIT::W_BUTINIT()
 
 W_BUTTON::W_BUTTON(W_BUTINIT const *init)
 	: WIDGET(init, WIDG_BUTTON)
+	, state(WBUTS_NORMAL)
 	, pText(QString::fromUtf8(init->pText))
 	, pTip(QString::fromUtf8(init->pTip))
 	, HilightAudioID(WidgGetHilightAudioID())
@@ -51,8 +52,6 @@ W_BUTTON::W_BUTTON(W_BUTINIT const *init)
 	{
 		display = buttonDisplay;
 	}
-
-	buttonInitialise(this);
 }
 
 /* Create a button widget data structure */
@@ -76,16 +75,6 @@ W_BUTTON *buttonCreate(const W_BUTINIT *psInit)
 
 	return psWidget;
 }
-
-/* Initialise a button widget before it is run */
-void buttonInitialise(W_BUTTON *psWidget)
-{
-	ASSERT(psWidget != NULL,
-	       "buttonDisplay: Invalid widget pointer");
-
-	psWidget->state = WBUTS_NORMAL;
-}
-
 
 static const unsigned buttonflagMap[] = {WBUTS_GREY,      WBUT_DISABLE,
                                          WBUTS_LOCKED,    WBUT_LOCK,
