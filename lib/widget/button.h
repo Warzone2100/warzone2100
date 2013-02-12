@@ -70,9 +70,6 @@ extern bool buttonStartUp(void);
 /* Create a button widget data structure */
 extern W_BUTTON *buttonCreate(const W_BUTINIT *psInit);
 
-/* Free the memory used by a button */
-extern void buttonFree(W_BUTTON *psWidget);
-
 /* Initialise a button widget before running it */
 extern void buttonInitialise(W_BUTTON *psWidget);
 

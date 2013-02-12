@@ -72,16 +72,6 @@ W_LABEL *labelCreate(const W_LABINIT *psInit)
 	return psWidget;
 }
 
-
-/* Free the memory used by a button */
-void labelFree(W_LABEL *psWidget)
-{
-	ASSERT(psWidget != NULL,
-	       "labelFree: Invalid label pointer");
-
-	delete psWidget;
-}
-
 /* label display function */
 void labelDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
 {

@@ -125,16 +125,6 @@ W_BARGRAPH *barGraphCreate(const W_BARINIT *psInit)
 	return psWidget;
 }
 
-
-/* Free the memory used by a barGraph */
-void barGraphFree(W_BARGRAPH *psWidget)
-{
-	ASSERT(psWidget != NULL, "Invalid widget pointer");
-
-	delete psWidget;
-}
-
-
 /* Set the current size of a bar graph */
 void widgSetBarSize(W_SCREEN *psScreen, UDWORD id, UDWORD iValue)
 {

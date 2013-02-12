@@ -116,17 +116,6 @@ W_SLIDER *sliderCreate(const W_SLDINIT *psInit)
 	return psWidget;
 }
 
-
-/* Free the memory used by a slider */
-void sliderFree(W_SLIDER *psWidget)
-{
-	ASSERT(psWidget != NULL,
-	       "sliderFree: Invalid widget pointer");
-
-	delete psWidget;
-}
-
-
 /* Initialise a slider widget before running it */
 void sliderInitialise(W_SLIDER *psWidget)
 {

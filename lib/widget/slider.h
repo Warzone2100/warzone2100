@@ -53,9 +53,6 @@ struct W_SLIDER : public WIDGET
 /* Create a slider widget data structure */
 extern W_SLIDER *sliderCreate(const W_SLDINIT *psInit);
 
-/* Free the memory used by a slider */
-extern void sliderFree(W_SLIDER *psWidget);
-
 /* Initialise a slider widget before running it */
 extern void sliderInitialise(W_SLIDER *psWidget);
 

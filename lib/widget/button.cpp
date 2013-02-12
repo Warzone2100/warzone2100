@@ -83,17 +83,6 @@ W_BUTTON *buttonCreate(const W_BUTINIT *psInit)
 	return psWidget;
 }
 
-
-/* Free the memory used by a button */
-void buttonFree(W_BUTTON *psWidget)
-{
-	ASSERT(psWidget != NULL,
-	       "buttonFree: invalid button pointer");
-
-	delete psWidget;
-}
-
-
 /* Initialise a button widget before it is run */
 void buttonInitialise(W_BUTTON *psWidget)
 {

@@ -107,11 +107,11 @@ WIDGET::WIDGET(W_INIT const *init, WIDGET_TYPE type)
 
 
 // reset psMouseOverWidget (a global) when needed
-void CheckpsMouseOverWidget(void *psWidget)
+void CheckpsMouseOverWidget(WIDGET *psWidget)
 {
-	// in formFreePlain() (and maybe the others?) it is possible to free() the form
-	// thus invalidating this pointer, causing a crash in widgDelete()
-	if ((WIDGET *)psWidget == psMouseOverWidget)
+	// in W_FORM::~W_FORM() (and maybe the others?) it is possible to delete the form
+	// thus invalidating this pointer, causing a crash in delete.
+	if (psWidget == psMouseOverWidget)
 	{
 		debug(LOG_WARNING, "psMouseOverWidget (%p) has become dangling. Reseting.", psMouseOverWidget);
 		psMouseOverWidget = NULL;
@@ -176,8 +176,7 @@ void widgReleaseScreen(W_SCREEN *psScreen)
 	ASSERT(psScreen != NULL,
 	       "widgReleaseScreen: Invalid screen pointer");
 
-	formFree((W_FORM *)psScreen->psForm);
-
+	delete psScreen->psForm;
 	delete psScreen;
 }
 
@@ -185,30 +184,7 @@ void widgReleaseScreen(W_SCREEN *psScreen)
 /* Release a widget */
 static void widgRelease(WIDGET *psWidget)
 {
-	switch (psWidget->type)
-	{
-	case WIDG_FORM:
-		formFree((W_FORM *)psWidget);
-		break;
-	case WIDG_LABEL:
-		labelFree((W_LABEL *)psWidget);
-		break;
-	case WIDG_BUTTON:
-		buttonFree((W_BUTTON *)psWidget);
-		break;
-	case WIDG_EDITBOX:
-		delete psWidget;
-		break;
-	case WIDG_BARGRAPH:
-		barGraphFree((W_BARGRAPH *)psWidget);
-		break;
-	case WIDG_SLIDER:
-		sliderFree((W_SLIDER *)psWidget);
-		break;
-	default:
-		ASSERT(!"Unknown widget type", "Unknown widget type");
-		break;
-	}
+	delete psWidget;
 }
 
 /* Check whether an ID has been used on a form */

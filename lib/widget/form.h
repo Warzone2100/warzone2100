@@ -31,6 +31,7 @@
 struct W_FORM : public WIDGET
 {
 	W_FORM(W_FORMINIT const *init);
+	~W_FORM();
 
 	void clicked(W_CONTEXT *psContext, WIDGET_KEY key);
 	void highlightLost(W_CONTEXT *psContext);
@@ -70,6 +71,7 @@ struct W_MAJORTAB
 struct W_TABFORM : public W_FORM
 {
 	W_TABFORM(W_FORMINIT const *init);
+	~W_TABFORM();
 
 	void released(W_CONTEXT *psContext, WIDGET_KEY key);
 	void highlightLost(W_CONTEXT *psContext);
@@ -136,9 +138,6 @@ struct W_CLICKFORM : public W_FORM
 
 /* Create a form widget data structure */
 extern W_FORM *formCreate(const W_FORMINIT *psInit);
-
-/* Free the memory used by a form */
-extern void formFree(W_FORM *psWidget);
 
 /* Add a widget to a form */
 extern bool formAddWidget(W_FORM *psForm, WIDGET *psWidget, W_INIT *psInit);

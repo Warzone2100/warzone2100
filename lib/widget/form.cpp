@@ -35,7 +35,6 @@
 /* Control whether single tabs are displayed */
 #define NO_DISPLAY_SINGLE_TABS 1
 
-static inline void formFreeTips(W_TABFORM *psForm);
 
 /* Store the position of a tab */
 struct TAB_POS
@@ -114,17 +113,11 @@ static W_FORM *formCreatePlain(const W_FORMINIT *psInit)
 	return psWidget;
 }
 
-
-/* Free a plain form widget */
-static void formFreePlain(W_FORM *psWidget)
+W_FORM::~W_FORM()
 {
-	ASSERT(psWidget != NULL, "Invalid form pointer");
-
-	widgReleaseWidgetList(psWidget->psWidgets);
-	CheckpsMouseOverWidget(psWidget);			// clear global if needed
-	delete psWidget;
+	widgReleaseWidgetList(psWidgets);
+	CheckpsMouseOverWidget(this);  // clear global if needed
 }
-
 
 W_CLICKFORM::W_CLICKFORM(W_FORMINIT const *init)
 	: W_FORM(init)
@@ -153,18 +146,6 @@ static W_CLICKFORM *formCreateClickable(const W_FORMINIT *psInit)
 	}
 
 	return psWidget;
-}
-
-
-/* Free a plain form widget */
-static void formFreeClickable(W_CLICKFORM *psWidget)
-{
-	ASSERT(psWidget != NULL,
-	       "formFreePlain: Invalid form pointer");
-
-	widgReleaseWidgetList(psWidget->psWidgets);
-
-	delete psWidget;
 }
 
 W_MINORTAB::W_MINORTAB()
@@ -270,30 +251,15 @@ static W_TABFORM *formCreateTabbed(const W_FORMINIT *psInit)
 	return psWidget;
 }
 
-/* Free the tips strings for a tabbed form */
-static inline void formFreeTips(W_TABFORM *)
-{
-}
-
 /* Free a tabbed form widget */
-static void formFreeTabbed(W_TABFORM *psWidget)
+W_TABFORM::~W_TABFORM()
 {
-	WIDGET			*psCurr;
-	W_FORMGETALL	sGetAll;
-
-	ASSERT(psWidget != NULL,
-	       "formFreeTabbed: Invalid form pointer");
-
-	formFreeTips(psWidget);
-
-	formInitGetAllWidgets((W_FORM *)psWidget, &sGetAll);
-	psCurr = formGetAllWidgets(&sGetAll);
-	while (psCurr)
+	W_FORMGETALL sGetAll;
+	formInitGetAllWidgets(this, &sGetAll);
+	for (WIDGET *psCurr = formGetAllWidgets(&sGetAll); psCurr != NULL; psCurr = formGetAllWidgets(&sGetAll))
 	{
 		widgReleaseWidgetList(psCurr);
-		psCurr = formGetAllWidgets(&sGetAll);
 	}
-	delete psWidget;
 }
 
 
@@ -344,25 +310,6 @@ W_FORM *formCreate(const W_FORMINIT *psInit)
 
 	return NULL;
 }
-
-
-/* Free the memory used by a form */
-void formFree(W_FORM *psWidget)
-{
-	if (psWidget->style & WFORM_TABBED)
-	{
-		formFreeTabbed((W_TABFORM *)psWidget);
-	}
-	else if (psWidget->style & WFORM_CLICKABLE)
-	{
-		formFreeClickable((W_CLICKFORM *)psWidget);
-	}
-	else
-	{
-		formFreePlain(psWidget);
-	}
-}
-
 
 /* Add a widget to a form */
 bool formAddWidget(W_FORM *psForm, WIDGET *psWidget, W_INIT *psInit)

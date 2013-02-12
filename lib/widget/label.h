@@ -47,9 +47,6 @@ struct W_LABEL : public WIDGET
 /* Create a button widget data structure */
 extern W_LABEL *labelCreate(const W_LABINIT *psInit);
 
-/* Free the memory used by a button */
-extern void labelFree(W_LABEL *psWidget);
-
 /* label display function */
 extern void labelDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 

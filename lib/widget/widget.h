@@ -446,7 +446,7 @@ extern void sliderEnableDrag(bool Enable);
 extern void setWidgetsStatus(bool var);
 extern bool getWidgetsStatus(void);
 
-extern void CheckpsMouseOverWidget(void *psWidget);
+void CheckpsMouseOverWidget(WIDGET *psWidget);
 /** @} */
 
 #endif // __INCLUDED_LIB_WIDGET_WIDGET_H__
